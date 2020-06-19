@@ -2,58 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE09201172
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2020 17:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C66A201170
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2020 17:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394000AbgFSPle (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jun 2020 11:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S2405059AbgFSPlz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jun 2020 11:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392034AbgFSPld (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 11:41:33 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC257C06174E;
-        Fri, 19 Jun 2020 08:41:32 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id e12so7986269eds.2;
-        Fri, 19 Jun 2020 08:41:32 -0700 (PDT)
+        with ESMTP id S2394008AbgFSPlf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 11:41:35 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79D3C06174E;
+        Fri, 19 Jun 2020 08:41:34 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id gl26so10652572ejb.11;
+        Fri, 19 Jun 2020 08:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=KpGjicrxstQUYFzwH57Owwl0NACRgRYZg/C23NotbfM=;
-        b=BxpJGkQ4EyWZYKrHVs9D3CbDeJqQRk3exCmnoWFYqLtMrJrOzEmFi7JsMtRtqwOssX
-         B6q14V/pGZcaqo60fUj+FmmYx7HqLvCAZt7vEImL7miykkkNM1DnVcylTXeDNtwD9p77
-         OWl5YeyETIfxzgz98ThTioo4GiVwdSnA1Ih939YXO08Iz8CzSXUUWAkHGnsYU3YT5Leq
-         ms8exHAG2GGpOLgG5F6ofHyHzmwTw7A4Guzz+giBCPAxlfkIe1z4Z5uFgokYnl06HZqf
-         YXrJe3HoucXtNOF68hV74d66kH8hy4eGe5xVac0rvcY7aBXUNc/nvp9nMCO3B1/El8Fm
-         KsKw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=KxptnYnfHSGRIej/uEjkXn1kN63Oa8BnOXMgrYh96nA=;
+        b=aM8guXAkFbP8SbiVfoTeNX1Po93NWpTkCHyQH3/TMvLM6y+M94MbhY7XQVb5A6FWKU
+         WcFUeoCbVe3+Kfx9nACDSw6EgPHcXpF8MyAutFzm+GLhkeuu8hJ3SEtRwRv0BWC5cSSI
+         k3fXrEQv0wD5EWm5weldeM6oH3PvARJ9Txys3P2Ak5lDMiuODgproasV+9PCtwYU0aQg
+         pIk4Or7iWk4jyLaP7JrBpqK4OhDzVGe2oIdavGra9sv+b3oT5ieEIH8Cr0QmRD/SFACD
+         pgTE7f4sxnRkNZ2nleLyVfbPnvIAvnLfcKKxWyPj/A/rZMGLRq1cx35Q4fCghxvL4Bks
+         vRbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=KpGjicrxstQUYFzwH57Owwl0NACRgRYZg/C23NotbfM=;
-        b=le99rDZsmIyD4u1X4qKabwaVJCXlwHx/vrK4eTSsQDTRaLiwABb2/vlQNDYDhozQAF
-         RrZuhDTN4StQJk7ulsYw39/RtFrXVStBFq0lZI1pLgJdbaD8ZnkODt7WPorqMGedhbaB
-         zNPA+2QI5oLG2DHD4eA3Z7MeXkzGmYUsSe5Kh8lGPUkJ/tfLQghj87gALhjh3uKrjTw8
-         7Ue3ijgPbc7a9f5hehwwClG7LIyS2rIxrfwegVRkG+iFteL501ARUF4ipg3VRJV5UbFp
-         iTM8FPW4sm19fXIB9cd0g7nxeJmnNMCkumafEpZjJmmFelm1ejZH8KoMdYwl0xO+bxgl
-         VZnA==
-X-Gm-Message-State: AOAM5335r23v1UFPCZ5zzvQ5DsOJ8vnxi9QuB+uTktOjg1GdZKXcO5JC
-        HbKdwQnpXu8JWdtjk3qWR+A=
-X-Google-Smtp-Source: ABdhPJyYW80P4JxYyH5IZgoMk06IUj/9QxWDqEbg72RU4bolBoWA1gKoeJUJ8FDv5cd+n+mjcx2XrQ==
-X-Received: by 2002:aa7:c541:: with SMTP id s1mr3993960edr.167.1592581291714;
-        Fri, 19 Jun 2020 08:41:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=KxptnYnfHSGRIej/uEjkXn1kN63Oa8BnOXMgrYh96nA=;
+        b=B6sW7ACZVIxAHabJCufy84M1Aa1U1b+fKq1kgZLyNkcrvKE/uPurMRV4BYK/l+rZCa
+         IuLZXqzsYCLaDZ3XFl2xjzGusSJy1pDZ7rku0EOyudqLUknPUeu7dbW/ArRuGr9+xrmt
+         Qnfa+kSIGtO+feL2r1Ly3Q+fIRt/rvqXg0nLZSJdsx5hyz0ZP8CXaFWtzeBmj9XdqAIf
+         Vc/TpN4ZlFwoe2iLwd/OZ3ynsXBGE81jjPDQIW7INOF3IYHvASFQqCYGtguBDbPhVAKX
+         bzdnGyO34S7RQc89YTmjosJjF+6Rnx97Lfx6ki7K66IXmhBqztgQJ5mzAMesLizEDJwJ
+         E0dQ==
+X-Gm-Message-State: AOAM532jG7xl8PBpoQ1LOdrRL52hbfz7qYRMx1zFFAf6iiUzXt/RKBhj
+        KqWFcbhXcejf0zbX3C8gfeU=
+X-Google-Smtp-Source: ABdhPJzVILVefkmEhKmRh72ZLo4ICm97ZqUhUpB3InsILsQztqPmR9tULsbSQlp77mYJCa0ypg2IxA==
+X-Received: by 2002:a17:906:39a:: with SMTP id b26mr4447391eja.204.1592581293647;
+        Fri, 19 Jun 2020 08:41:33 -0700 (PDT)
 Received: from ubuntu-laptop.micron.com ([165.225.203.62])
-        by smtp.gmail.com with ESMTPSA id ew9sm4986163ejb.121.2020.06.19.08.41.29
+        by smtp.gmail.com with ESMTPSA id ew9sm4986163ejb.121.2020.06.19.08.41.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2020 08:41:31 -0700 (PDT)
+        Fri, 19 Jun 2020 08:41:33 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         bvanassche@acm.org
 Cc:     beanhuo@micron.com
-Subject: [PATCH v2 0/2] scsi: remove scsi_sdb_cache
-Date:   Fri, 19 Jun 2020 17:41:15 +0200
-Message-Id: <20200619154117.10262-1-huobean@gmail.com>
+Subject: [PATCH v2 1/2] scsi: remove scsi_sdb_cache
+Date:   Fri, 19 Jun 2020 17:41:16 +0200
+Message-Id: <20200619154117.10262-2-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200619154117.10262-1-huobean@gmail.com>
+References: <20200619154117.10262-1-huobean@gmail.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -61,20 +64,80 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Changelog:
-v1 -- v2:
-    1. split patch
-    2. fix more coding errors in the scsi_lib.c
+After 'commit f664a3cc17b7 ("scsi: kill off the legacy IO path")',
+scsi_sdb_cache not be used any more, remove it.
 
-Bean Huo (2):
-  scsi: remove scsi_sdb_cache
-  scsi: fix coding style errors in scsi_lib.c
-
+Signed-off-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+---
  drivers/scsi/scsi.c      |  3 ---
- drivers/scsi/scsi_lib.c  | 58 +++++++++++++++-------------------------
+ drivers/scsi/scsi_lib.c  | 15 ---------------
  drivers/scsi/scsi_priv.h |  1 -
- 3 files changed, 21 insertions(+), 41 deletions(-)
+ 3 files changed, 19 deletions(-)
 
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index 56c24a73e0c7..24619c3bebd5 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -754,9 +754,6 @@ static int __init init_scsi(void)
+ {
+ 	int error;
+ 
+-	error = scsi_init_queue();
+-	if (error)
+-		return error;
+ 	error = scsi_init_procfs();
+ 	if (error)
+ 		goto cleanup_queue;
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 0ba7a65e7c8d..c47650f7f0d3 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -52,7 +52,6 @@
+ #define  SCSI_INLINE_SG_CNT  2
+ #endif
+ 
+-static struct kmem_cache *scsi_sdb_cache;
+ static struct kmem_cache *scsi_sense_cache;
+ static struct kmem_cache *scsi_sense_isadma_cache;
+ static DEFINE_MUTEX(scsi_sense_cache_mutex);
+@@ -1955,24 +1954,10 @@ void scsi_unblock_requests(struct Scsi_Host *shost)
+ }
+ EXPORT_SYMBOL(scsi_unblock_requests);
+ 
+-int __init scsi_init_queue(void)
+-{
+-	scsi_sdb_cache = kmem_cache_create("scsi_data_buffer",
+-					   sizeof(struct scsi_data_buffer),
+-					   0, 0, NULL);
+-	if (!scsi_sdb_cache) {
+-		printk(KERN_ERR "SCSI: can't init scsi sdb cache\n");
+-		return -ENOMEM;
+-	}
+-
+-	return 0;
+-}
+-
+ void scsi_exit_queue(void)
+ {
+ 	kmem_cache_destroy(scsi_sense_cache);
+ 	kmem_cache_destroy(scsi_sense_isadma_cache);
+-	kmem_cache_destroy(scsi_sdb_cache);
+ }
+ 
+ /**
+diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
+index 22b6585e28b4..d12ada035961 100644
+--- a/drivers/scsi/scsi_priv.h
++++ b/drivers/scsi/scsi_priv.h
+@@ -93,7 +93,6 @@ extern struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev);
+ extern void scsi_start_queue(struct scsi_device *sdev);
+ extern int scsi_mq_setup_tags(struct Scsi_Host *shost);
+ extern void scsi_mq_destroy_tags(struct Scsi_Host *shost);
+-extern int scsi_init_queue(void);
+ extern void scsi_exit_queue(void);
+ extern void scsi_evt_thread(struct work_struct *work);
+ struct request_queue;
 -- 
 2.17.1
 
