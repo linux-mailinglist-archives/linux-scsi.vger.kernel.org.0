@@ -2,195 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A17201171
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2020 17:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8328F2014B5
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2020 18:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404848AbgFSPly (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jun 2020 11:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
+        id S2391338AbgFSQOl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jun 2020 12:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394020AbgFSPlh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 11:41:37 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB43C06174E;
-        Fri, 19 Jun 2020 08:41:36 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id dp18so10654524ejc.8;
-        Fri, 19 Jun 2020 08:41:36 -0700 (PDT)
+        with ESMTP id S2390422AbgFSPDy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 11:03:54 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BD2C06174E;
+        Fri, 19 Jun 2020 08:03:54 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id o26so7901835edq.0;
+        Fri, 19 Jun 2020 08:03:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=DponZSTc3PXadFZ/Va5z+HlpHIhGzNlZ4rlMGnjJEz8=;
-        b=QZyWYcffTCxTAou4/XDL0wFs/ac5lDwo/8AznACPc3AmiBImc+1vq2iwTECxAuhJex
-         ILxAYIS7Ex3EoQiZMwOB3xhsl8aswr8UHePRXi+Nl/oqfinyXTGKJtrS8TKVKwBgxoWl
-         jPWPS/8nw6i3tmrT2b5pJ5lcNKgUus2kUTV6ZZNzx3vMudu8g04fHJBBLuafGVuq3ZV9
-         VPLQlbfV7P1HxJiwfRIT6gZzsnO2t6M5XfElFaZ+PedcGHKmknXmXZdFae8ceJOZU8n5
-         4BofWIMkQsw8X44nTMSHEJhL3nW2HqE7taPGMVvXjEPxPryPqSBPGZ+XccR8/gEbZacw
-         tI1g==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5ADrT7jFFeW309LoBL3RGIrTXmJjwCmJqXAIhYbchGM=;
+        b=MnrHb+bhJPIiNHeaCS8a/fPwOI6wld7b4KlPZ/oOMUF1zVfizNxUckSlCB9snRURSK
+         XzbrQM04uoK4hVMgFJuCq6xAqaGH9he+9+BmJvbRtPy7JD90CBG0/Ut8Kgszpie4M5fT
+         RZJDv+1XgM+fTfk67GkWVuvYpc84l7+E2xupZasgfuHwokTqnMpTmdNGDIMaxaiOhzRq
+         xwhEGmNzE8AMGlUD/gDuw8YkDsoFXC8nBY4G62nHezapFTsIECYROvYVuQW2yXWcNpgt
+         vsDouCqgOkmOLyP21fqBslVrlg9EJyrRAH9gUt9EXeo13gSdim3xku8UW9kfb4qMPyxH
+         8azg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=DponZSTc3PXadFZ/Va5z+HlpHIhGzNlZ4rlMGnjJEz8=;
-        b=B+4cZGJTpuGxlzS+htlFz/yA3x0+YYSMk5LMAHxpL4Yxzl+js1YNeNWJ/7hO0QoiBn
-         9yFTk6ifl4Ty0Gr8towPk0q6g7+ENiYt5CUCktSRc+wVtkBsCmJTyVOp0wHnGr+8y4W9
-         /SJgVlxJQPi3D/OLEBOJoPvPH1mSFddUnvnziDiI1pRlFHknC6d3nXVRuQGjKjlz/RJf
-         BT2syRBcIafT1moiESCrHUPpkiGEHiIHEVlm5gDdw+F1M7+gSevsbcDgOhM0OkYRnUIL
-         1EIl3zCZyQdFVjvuqJUGV5UiJ8y1+Xc8wmTqkfjMY8xHpO8HjEDIRSbFJQXjt5V9svWY
-         K1jQ==
-X-Gm-Message-State: AOAM530YIEz1lRzUgR1aXJBY3kDPqbbavwtpHjUQ3d55bnML8HzJyueo
-        kaZH8v0EP0u/+uyjnaxm0lA=
-X-Google-Smtp-Source: ABdhPJwc5KBg86fF95A4Q+GvR1ansr7SgCbM42vcDpjhFxtXdUQn7fnpXSNMr7CNxA3gP5x3Tao2WQ==
-X-Received: by 2002:a17:906:f49:: with SMTP id h9mr4397827ejj.155.1592581295536;
-        Fri, 19 Jun 2020 08:41:35 -0700 (PDT)
-Received: from ubuntu-laptop.micron.com ([165.225.203.62])
-        by smtp.gmail.com with ESMTPSA id ew9sm4986163ejb.121.2020.06.19.08.41.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2020 08:41:35 -0700 (PDT)
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5ADrT7jFFeW309LoBL3RGIrTXmJjwCmJqXAIhYbchGM=;
+        b=BVJfp3D5J9H/q5IGUPrkbKsWNtN0qV72NjrqHOYjN6BqgSu/dZ+uz+AxPGoc0W64/n
+         DOQtvziWBmopQroSxXa1XnhMZ087tiKtt5qlAIAWs1Y3G5wy/YOErFH2M8NDvli4mxBg
+         8vSWJ+SZKMZ0p5f+7THyDA/MFJrYrRjP0+xWtv0VZfGUiHTzLip+sZZftf7VtZUQz0wb
+         SPfcG1mTVEUVNTAD5VSrlzvDWtqbgOWFhNeoFs3eLmJvIZ4mhYUQIILsVZRkyQJ3Fxzq
+         GlQT2ss9gLPtDcIFVDkbhgJ74GNiX3Y5sJAcWSik+upbeP9Bp87TfQ1l2aTp17ttcy3J
+         Gprg==
+X-Gm-Message-State: AOAM531H25o0KRHyUuvavk2zjtjL4j96F1rHkeRJkrVML2p31gzEfIKL
+        h0Ls5T7ESKtmpYdfAm+sPeg=
+X-Google-Smtp-Source: ABdhPJz9sH1kJUPVEXJrf2QSDqlJenKhQdl0OzUME2Zssy3LTJ1qNCFvxtzlOKQSUuWKycy8K6RLMg==
+X-Received: by 2002:a50:f289:: with SMTP id f9mr3714154edm.188.1592579033304;
+        Fri, 19 Jun 2020 08:03:53 -0700 (PDT)
+Received: from ubuntu-laptop ([2a01:598:9900:aeb5:e489:2676:2097:fdba])
+        by smtp.googlemail.com with ESMTPSA id h9sm4929016ejc.96.2020.06.19.08.03.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 19 Jun 2020 08:03:52 -0700 (PDT)
+Message-ID: <dc0c3bcf8b77b838316a0c4a53fdddaa476dd0dc.camel@gmail.com>
+Subject: Re: [RFC PATCH ] scsi: remove scsi_sdb_cache
 From:   Bean Huo <huobean@gmail.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bvanassche@acm.org
+To:     Bart Van Assche <bvanassche@acm.org>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     beanhuo@micron.com
-Subject: [PATCH v2 2/2] scsi: fix coding style errors in scsi_lib.c
-Date:   Fri, 19 Jun 2020 17:41:17 +0200
-Message-Id: <20200619154117.10262-3-huobean@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200619154117.10262-1-huobean@gmail.com>
-References: <20200619154117.10262-1-huobean@gmail.com>
+Date:   Fri, 19 Jun 2020 17:03:47 +0200
+In-Reply-To: <acdceada-b183-e41a-8645-aa3716b55236@acm.org>
+References: <20200619131042.10759-1-huobean@gmail.com>
+         <acdceada-b183-e41a-8645-aa3716b55236@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+Hi Bart
 
-Delete trailing whitespace, multiple blank lines, and make
-switch/case be at the same indent.
+Thanks.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/scsi_lib.c | 43 ++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+On Fri, 2020-06-19 at 07:31 -0700, Bart Van Assche wrote:
+> On 2020-06-19 06:10, Bean Huo wrote:
+> > @@ -2039,7 +2024,6 @@ scsi_mode_select(struct scsi_device *sdev,
+> > int pf, int sp, int modepage,
+> >  		real_buffer[1] = data->medium_type;
+> >  		real_buffer[2] = data->device_specific;
+> >  		real_buffer[3] = data->block_descriptor_length;
+> > -	
+Here delete a blank line since there are multiple blank lines.
+> > 	
+> >  
+> >  		cmd[0] = MODE_SELECT;
+> >  		cmd[4] = len;
+> > @@ -2227,7 +2211,7 @@ scsi_device_set_state(struct scsi_device
+> > *sdev, enum scsi_device_state state)
+> >  			goto illegal;
+> >  		}
+> >  		break;
+> > -			
+> > +
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index c47650f7f0d3..be8f5050f837 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -389,7 +389,7 @@ static void scsi_single_lun_run(struct scsi_device *current_sdev)
- 		spin_unlock_irqrestore(shost->host_lock, flags);
- 		scsi_kick_queue(sdev->request_queue);
- 		spin_lock_irqsave(shost->host_lock, flags);
--	
-+
- 		scsi_device_put(sdev);
- 	}
-  out:
-@@ -1455,18 +1455,18 @@ static void scsi_softirq_done(struct request *rq)
- 	scsi_log_completion(cmd, disposition);
- 
- 	switch (disposition) {
--		case SUCCESS:
--			scsi_finish_command(cmd);
--			break;
--		case NEEDS_RETRY:
--			scsi_queue_insert(cmd, SCSI_MLQUEUE_EH_RETRY);
--			break;
--		case ADD_TO_MLQUEUE:
--			scsi_queue_insert(cmd, SCSI_MLQUEUE_DEVICE_BUSY);
--			break;
--		default:
--			scsi_eh_scmd_add(cmd);
--			break;
-+	case SUCCESS:
-+		scsi_finish_command(cmd);
-+		break;
-+	case NEEDS_RETRY:
-+		scsi_queue_insert(cmd, SCSI_MLQUEUE_EH_RETRY);
-+		break;
-+	case ADD_TO_MLQUEUE:
-+		scsi_queue_insert(cmd, SCSI_MLQUEUE_DEVICE_BUSY);
-+		break;
-+	default:
-+		scsi_eh_scmd_add(cmd);
-+		break;
- 	}
- }
- 
-@@ -2024,7 +2024,6 @@ scsi_mode_select(struct scsi_device *sdev, int pf, int sp, int modepage,
- 		real_buffer[1] = data->medium_type;
- 		real_buffer[2] = data->device_specific;
- 		real_buffer[3] = data->block_descriptor_length;
--		
- 
- 		cmd[0] = MODE_SELECT;
- 		cmd[4] = len;
-@@ -2110,7 +2109,7 @@ scsi_mode_sense(struct scsi_device *sdev, int dbd, int modepage,
- 		if (scsi_sense_valid(sshdr)) {
- 			if ((sshdr->sense_key == ILLEGAL_REQUEST) &&
- 			    (sshdr->asc == 0x20) && (sshdr->ascq == 0)) {
--				/* 
-+				/*
- 				 * Invalid command operation code
- 				 */
- 				sdev->use_10_for_ms = 0;
-@@ -2119,7 +2118,7 @@ scsi_mode_sense(struct scsi_device *sdev, int dbd, int modepage,
- 		}
- 	}
- 
--	if(scsi_status_is_good(result)) {
-+	if (scsi_status_is_good(result)) {
- 		if (unlikely(buffer[0] == 0x86 && buffer[1] == 0x0b &&
- 			     (modepage == 6 || modepage == 8))) {
- 			/* Initio breakage? */
-@@ -2129,7 +2128,7 @@ scsi_mode_sense(struct scsi_device *sdev, int dbd, int modepage,
- 			data->device_specific = 0;
- 			data->longlba = 0;
- 			data->block_descriptor_length = 0;
--		} else if(use_10_for_ms) {
-+		} else if (use_10_for_ms) {
- 			data->length = buffer[0]*256 + buffer[1] + 2;
- 			data->medium_type = buffer[2];
- 			data->device_specific = buffer[3];
-@@ -2212,7 +2211,7 @@ scsi_device_set_state(struct scsi_device *sdev, enum scsi_device_state state)
- 			goto illegal;
- 		}
- 		break;
--			
-+
- 	case SDEV_RUNNING:
- 		switch (oldstate) {
- 		case SDEV_CREATED:
-@@ -2497,7 +2496,7 @@ EXPORT_SYMBOL_GPL(sdev_evt_send_simple);
-  *	(which must be a legal transition).  When the device is in this
-  *	state, only special requests will be accepted, all others will
-  *	be deferred.  Since special requests may also be requeued requests,
-- *	a successful return doesn't guarantee the device will be 
-+ *	a successful return doesn't guarantee the device will be
-  *	totally quiescent.
-  *
-  *	Must be called with user context, may sleep.
-@@ -2623,10 +2622,10 @@ int scsi_internal_device_block_nowait(struct scsi_device *sdev)
- 			return err;
- 	}
- 
--	/* 
-+	/*
- 	 * The device has transitioned to SDEV_BLOCK.  Stop the
- 	 * block layer from calling the midlayer with this device's
--	 * request queue. 
-+	 * request queue.
- 	 */
- 	blk_mq_quiesce_queue_nowait(q);
- 	return 0;
-@@ -2661,7 +2660,7 @@ static int scsi_internal_device_block(struct scsi_device *sdev)
- 
- 	return err;
- }
-- 
-+
- void scsi_start_queue(struct scsi_device *sdev)
- {
- 	struct request_queue *q = sdev->request_queue;
--- 
-2.17.1
+Here has trailing whitespace, delete it.
+
+> >  	case SDEV_RUNNING:
+> >  		switch (oldstate) {
+> >  		case SDEV_CREATED:
+> 
+> If these whitespace changes are left out, feel free to add:
+> 
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+
+Bean
 
