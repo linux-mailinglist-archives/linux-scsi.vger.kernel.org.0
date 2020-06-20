@@ -2,60 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F28B202008
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jun 2020 05:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EAD202042
+	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jun 2020 05:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732275AbgFTDIm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jun 2020 23:08:42 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:37086 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732074AbgFTDIm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 19 Jun 2020 23:08:42 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 6931AC42FBC65265554C;
-        Sat, 20 Jun 2020 11:08:39 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.487.0; Sat, 20 Jun 2020 11:08:28 +0800
-From:   Jing Xiangfeng <jingxiangfeng@huawei.com>
-To:     <achim_leubner@adaptec.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jingxiangfeng@huawei.com>
-Subject: [PATCH] scsi: gdth: remove unnecessary iounmap()
-Date:   Sat, 20 Jun 2020 11:11:50 +0800
-Message-ID: <20200620031150.152324-1-jingxiangfeng@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1732731AbgFTD2s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jun 2020 23:28:48 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:59872 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732724AbgFTD2s (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 23:28:48 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05K3IrwA195240;
+        Sat, 20 Jun 2020 03:28:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=2CzZq5GU6wgRj+8UAuT73tB62Tj9OsO+caXjTCosPng=;
+ b=n3m7OKnY07P9PV4DmDKP+ivWEMnsJKZTHvqbV2INUUxd5JtiQAFikGd0ifDeq+UtVwYZ
+ FiKi6A9hVGGa0NIuyeLjS0fRmBerfAox9qpsmgeLqL7KIz54+HZgYh+37ON055I24eMH
+ jsMTodWI0YIPZwBCH9wKfmXXmnmjmXI+JBE234UjcIHFLJMLk2cP6zyZhOU/EeFtvoNP
+ WnMMM+KYtp3jrPSe0UmgL3U37I1cEkEDHVroTfauuoTV/I8/dYgFC0oiD6hIKEHU5op+
+ SF35ctm4w/UfqLTv/4GqPoUWzeaEAo5KFB7wR9ePff0PcDQTHIWSK0W5lTp6YUB1doQt vw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 31s9vqr1yu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 20 Jun 2020 03:28:43 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05K3JI5A035764;
+        Sat, 20 Jun 2020 03:26:42 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 31s8g8c4u8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 20 Jun 2020 03:26:42 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05K3QdXq011083;
+        Sat, 20 Jun 2020 03:26:41 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 19 Jun 2020 20:26:39 -0700
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     cang@codeaurora.org, Asutosh Das <asutoshd@codeaurora.org>,
+        gregkh@google.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] Documentation:sysfs-ufs: Add WriteBooster documentation
+Date:   Fri, 19 Jun 2020 23:26:33 -0400
+Message-Id: <159262354734.7800.7343859411228839862.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <1591723067-22998-1-git-send-email-asutoshd@codeaurora.org>
+References: <1591723067-22998-1-git-send-email-asutoshd@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9657 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=895 spamscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006200022
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9657 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=929 mlxscore=0 phishscore=0 cotscore=-2147483648 spamscore=0
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006200022
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When initialization of ioremap() fails, it is not needed to do
-iounmap(). Remove this iounmap.
+On Tue, 9 Jun 2020 10:17:46 -0700, Asutosh Das wrote:
 
-Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
----
- drivers/scsi/gdth.c | 1 -
- 1 file changed, 1 deletion(-)
+> Adds sysfs documentation for WriteBooster entries.
 
-diff --git a/drivers/scsi/gdth.c b/drivers/scsi/gdth.c
-index fe03410268e6..8f077d316e8b 100644
---- a/drivers/scsi/gdth.c
-+++ b/drivers/scsi/gdth.c
-@@ -639,7 +639,6 @@ static int gdth_init_pci(struct pci_dev *pdev, gdth_pci_str *pcistr,
-         ha->brd = ioremap(pcistr->dpmem, sizeof(gdt6c_dpram_str));
-         if (ha->brd == NULL) {
-             printk("GDT-PCI: Initialization error (DPMEM remap error)\n");
--            iounmap(ha->brd);
-             return 0;
-         }
-         /* check and reset interface area */
+Applied to 5.9/scsi-queue, thanks!
+
+[1/1] scsi: ufs: docs: Add WriteBooster documentation
+      https://git.kernel.org/mkp/scsi/c/f51853fc0682
+
 -- 
-2.17.1
-
+Martin K. Petersen	Oracle Linux Engineering
