@@ -2,89 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5CA202036
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jun 2020 05:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D073202045
+	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jun 2020 05:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732641AbgFTD1C (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jun 2020 23:27:02 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:58752 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732629AbgFTD1B (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 23:27:01 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05K3IXU3194488;
-        Sat, 20 Jun 2020 03:26:45 GMT
+        id S1732754AbgFTD2z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jun 2020 23:28:55 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:59956 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732724AbgFTD2z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 23:28:55 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05K3Slbe127305;
+        Sat, 20 Jun 2020 03:28:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=PF84+gWPFaJNdwDpeizHfentgldpxqhtBTI+d6ZBfuM=;
- b=BT0qt+tc6qfjaZXXBP1CxgHKRKdWtr4bi40pftvAezuG/T58SvV25XVG0FwQXd7WSK66
- Oa+lbZsqPLpb4fgUip1qB9+jrl4nmQQpcW5rzRft6I+BU70rV0qvYWjLO50nXixBn0MC
- U26zhkmQ+WVKUcjUurKCMsHCLy3dNMaH5Cn+ollb6OywDNdP98yz38mvOfCdGQ2G2hDQ
- 8dZrtxDBokGC79EfdJA7Roxu4J8OQ/dMNAzraTRQX98F98pPGqmZICYbJC2OEkc1di8z
- 06nIzObYzRJnYYMpzDHGu2Iz32xkPfxK/MBEpKue+pEsXD8fseVlJ3zMLwVsFyuUqwUN 2A== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 31s9vqr1vs-1
+ bh=LcF2q6oMmSa7YtKuR3BDORedAB+bdACVBYOQFoloR6M=;
+ b=kn5Ey95Y5WxBO5UtguFy9Je3O7RnB9jHZHGGAQ/em5T6QadCownM5i9SJderYyyb2TP6
+ L8mFeDq9xk+EHjfWVRRdVdueRJm182WqyxW7ehfh1D54i9R8ooFKKxvMcpwvL5tb8nOE
+ 6YGJTTciM4QTlpaQChAV4Piw671T1IqCHeLFLVGxceK18gbsLmcY7duxB1OGBTFW2m8X
+ 4LxETc5Qr2Yhg9y8TmF2nt5AhXl9RzrMZW5PPZBqqDzcqRBUkC9qX0DJcg8A0p0uzHEp
+ 2pT5fG/5x/PRdKMZar03Bmn0eolyj5ZRi15A+FZSMtpxwo08WEgo5XpafC52S9lzzfGZ Kw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 31qg35fdgc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 20 Jun 2020 03:26:45 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05K3Jc0p005666;
-        Sat, 20 Jun 2020 03:26:44 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 31sa8yh28f-1
+        Sat, 20 Jun 2020 03:28:47 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05K3JH9I035722;
+        Sat, 20 Jun 2020 03:26:46 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 31s8g8c4wf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 20 Jun 2020 03:26:44 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05K3Qggp002429;
-        Sat, 20 Jun 2020 03:26:43 GMT
+        Sat, 20 Jun 2020 03:26:46 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05K3Qi5H011093;
+        Sat, 20 Jun 2020 03:26:45 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 19 Jun 2020 20:26:42 -0700
+        with ESMTP ; Fri, 19 Jun 2020 20:26:44 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Avri Altman <avri.altman@wdc.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Colin King <colin.king@canonical.com>,
-        Seungwon Jeon <essuuj@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>
+To:     bvanassche@acm.org, jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bean Huo <huobean@gmail.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: ufs: ufs-exynos: fix spelling mistake "pa_granularty" -> "pa_granularity"
-Date:   Fri, 19 Jun 2020 23:26:36 -0400
-Message-Id: <159262354734.7800.18123945491973468082.b4-ty@oracle.com>
+        beanhuo@micron.com
+Subject: Re: [PATCH v2 0/2] scsi: remove scsi_sdb_cache
+Date:   Fri, 19 Jun 2020 23:26:37 -0400
+Message-Id: <159262354734.7800.4948661939239497553.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200617084911.167359-1-colin.king@canonical.com>
-References: <20200617084911.167359-1-colin.king@canonical.com>
+In-Reply-To: <20200619154117.10262-1-huobean@gmail.com>
+References: <20200619154117.10262-1-huobean@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9657 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 adultscore=0
- malwarescore=0 spamscore=0 mlxlogscore=960 mlxscore=0 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 adultscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006200022
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9657 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011
- malwarescore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=983 mlxscore=0 phishscore=0 cotscore=-2147483648 spamscore=0
- adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 mlxscore=0
+ clxscore=1015 malwarescore=0 impostorscore=0 adultscore=0
+ cotscore=-2147483648 lowpriorityscore=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2004280000 definitions=main-2006200022
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 17 Jun 2020 09:49:11 +0100, Colin King wrote:
+On Fri, 19 Jun 2020 17:41:15 +0200, Bean Huo wrote:
 
-> There is a spelling mistake in a dev_warn message. Fix it.
+> Changelog:
+> v1 -- v2:
+>     1. split patch
+>     2. fix more coding errors in the scsi_lib.c
+> 
+> Bean Huo (2):
+>   scsi: remove scsi_sdb_cache
+>   scsi: fix coding style errors in scsi_lib.c
+> 
+> [...]
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: ufs: ufs-exynos: Fix spelling mistake "pa_granularty" -> "pa_granularity"
-      https://git.kernel.org/mkp/scsi/c/393403efc360
+[1/2] scsi: core: Remove scsi_sdb_cache
+      https://git.kernel.org/mkp/scsi/c/71df6fb976c3
+[2/2] scsi: core: Fix formatting errors in scsi_lib.c
+      https://git.kernel.org/mkp/scsi/c/4c7b4d63273d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
