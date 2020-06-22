@@ -2,118 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51378203B3E
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2020 17:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE77203BE1
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jun 2020 18:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729532AbgFVPkP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jun 2020 11:40:15 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:47838 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729250AbgFVPkN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jun 2020 11:40:13 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05MFbtfu031362;
-        Mon, 22 Jun 2020 15:40:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=c4dmr7gId2py12uyWP0rVSm+TykjfDw082cODL2KrW4=;
- b=XbuVYj9SNnnF+fZtAEQefQ9lMfPXFk8quuE20c7oe1xtHTq0prnTHIaGwsTG/5xAibE5
- mZ0hd62d1G9BCsn1NOOFZXh1bj6f0Y4VoGn0x7k+qrUck00pv+5dvNSBWhyUKMlQKicl
- K2Ml6Djai0x3/6NuA8GXoLGxsvtLk0a5ImknyFouhr3nuXQmg4lCC10sy6o+2jWmwAiI
- 7H2u5cwhKm9a2niloINgh/Z3d5Wq2FVwhuOBcndMTbSw17MV6s4MBhC7wshO1gyCDOVq
- sMZJOYeL3xthMnVJJjq/AcjE3sy69uHK1qhxRp4tD2UC652eLyHWqnJS4v8SlTpTbvDs iw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 31sebbg4ww-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 Jun 2020 15:40:07 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05MFd4VP065013;
-        Mon, 22 Jun 2020 15:40:06 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 31svcv8q94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Jun 2020 15:40:06 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05MFe5a8014046;
-        Mon, 22 Jun 2020 15:40:05 GMT
-Received: from [20.15.0.202] (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 22 Jun 2020 15:40:04 +0000
-Subject: Re: [PATCH 2/2] scsi: register sysfs for scsi/iscsi workqueues
-To:     Bob Liu <bob.liu@oracle.com>, linux-kernel@vger.kernel.org
-Cc:     tj@kernel.org, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
-        lduncan@suse.com, lduncan@suse.com, maier@linux.ibm.com,
-        bblock@linux.ibm.com
-References: <20200611100717.27506-1-bob.liu@oracle.com>
- <20200611100717.27506-2-bob.liu@oracle.com>
-From:   Mike Christie <michael.christie@oracle.com>
-Message-ID: <cf9ae940-87b2-c8a1-3dba-4d2b57ebe9dd@oracle.com>
-Date:   Mon, 22 Jun 2020 10:40:09 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729843AbgFVQCm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jun 2020 12:02:42 -0400
+Received: from sonic302-21.consmr.mail.ne1.yahoo.com ([66.163.186.147]:45615
+        "EHLO sonic302-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729565AbgFVQCW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 22 Jun 2020 12:02:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841741; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=imnMzKvnrwdEkzevY9v55JCHWrS7mFcRp2xLflBpdsWBX5v32iTt1Jwj292Sqyxc6zTWfVf6UW3RltjDxv8H8ZAxxFg96tpPBoXA2f/GRkfTuiNcUr3yDzOGiHeT9IqR//B+9C8c9YoGDJPnAeuuKcQvLl1HS8J+STK4/r0WZ3jbtWFF0MKDjydg+AbeXShoRDHqwsqAaAi7D9jDq8wNDWBIR81puaAh7APGDPK32RqjpFS85hxXrbmotW59Gm/gC9SoLB52q4udtwMI++FS4HYmIHt+kUh9tNcMAsNUvFYo0HWMN59EiLf7lYGm/4AR40adfmghUfkmt4dYpTZmZQ==
+X-YMail-OSG: AhKkJLAVM1lDQ3XPPTTJWpEw.A_YPk4v7tBrtMEv9XTYrBN0vKxPyUyPokZyCLH
+ 0NPJEnbM.Ixt5u0eXkMwZesEBqS.rCtCLJgnod2Yg.I9TXOm0suNzcmJ92mBaA3mHgRFUusjI.6E
+ 3Gu4LEq019.le8uhDgpgUZ.YgtmiKAQJK6Bd4WPLqozbdEc8urSPipLpvwJTvKec65xmptWyRiVv
+ 5wejfhjut7ltVV2EWvbGnxpPsKrHXW63gZY0z7W.qC8yTTTM6xXIAPM6OYdYDYNn.6t5yJFWlC1P
+ OIdbZEYbWLsjaYGAZ3nhw68imywZs7JgVqTzxfR4ZQQxpuo3K8t9CM9O0hpOCt10FP__XXwyrmrD
+ TCoCE7B_Edu3G.zjOUn_rksR4jYB.m1Rp.1vZ_bLxnQwCiAul5Wqfj8PNdUGzT.zvxnBCUVqWq9J
+ 8hXM6oMyn8gklCF.R8KCTVo6NRJRq4thjGWIexrpJEGu0QolvkJTIALFEd6_slAReLmAOEup3xKy
+ .77XY9y0L2WZlQcf1QY4ryEv90HkLK9R59Zd1MxuC8qefRgY6y6xUFmVBWO8SDJCCjnQpB48PRDP
+ pRTSfD8hEjxrcMoyLQRR8ik6SRBEuL1N.zoJ2juJT7TtdJItukcqyaFlw7VOC6cm49vWb13NtnZ0
+ gQ2bWEWTG5v0uAlc54_ulltpKs.Fgm6hkagBtyzunEJ52PGAuturV.LPWyLoBYPiB1KC1HlV8gI8
+ yJqtTplsyPL2eALndgi_xv5WXRslUdVun50zfx9iDK5v_kT1lyZrnl7BpPa5N7roHYs5FCR3fGlt
+ 00HJ7sf.lnan3Im8PEbT96k38NwI6o6wqQk3XTx1x0TOib38VwKLgaWNY916uiRI1upzFCMVqmW6
+ hKW.i_z2qDWeeQaZVyBhDmfLTpSCKpEZXqJt.HWEa0uB7F6lyRoT1rQEzhMY_zbISz6YbRmtNDlq
+ VLlEzjYA6uILpMVD7EkmwXGP0XOJgDIix93HShigByDXDbmOlbnVPelpKvxPRFg3gnhpf.0Rc47i
+ 08Ic.liUMCD9zHGFCga9cXgoGaM8kFbRyDB3CB8uLHuuV8rIwOstkm24RLt0t3H1wtfuP85AC7r8
+ v042NbRsPX1Mj80LTxFt.KStV8ND4Dc1.IiPBslhVUpEA9f2YrGnkjCHG4.U4j0M0U489djAouYX
+ y9F8lECiGIH30pwUi5p9NUzViYBtaTM7ID67rbGjIKdkEdFs14rCm3KSzct0U2izLUB1NerwsRiF
+ IQWasnNhp61WOxqpf4zyo6bEJMCV1B8QkTG.8HvHCcJtAwYQhWHkE5SwAzxSGopkwGBC4.Xf9
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:21 +0000
+Date:   Mon, 22 Jun 2020 16:02:19 +0000 (UTC)
+From:   Karim Zakari <kariim1960z@gmail.com>
+Reply-To: kzakari04@gmail.com
+Message-ID: <1507214802.1850985.1592841739314@mail.yahoo.com>
+Subject: URGENT REPLY.
 MIME-Version: 1.0
-In-Reply-To: <20200611100717.27506-2-bob.liu@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9659 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 adultscore=0
- malwarescore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006220116
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9659 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
- adultscore=0 impostorscore=0 cotscore=-2147483648 mlxscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
- clxscore=1011 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006220116
+References: <1507214802.1850985.1592841739314.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/11/20 5:07 AM, Bob Liu wrote:
-> This patch enable setting cpu affinity through "cpumask" for below
-> scsi/iscsi workqueues, so as to get better isolation.
-> - scsi_wq_*
-> - scsi_tmf_*
-> - iscsi_q_xx
-> - iscsi_eh
-> 
-> Signed-off-by: Bob Liu <bob.liu@oracle.com>
-> ---
->   drivers/scsi/hosts.c                | 4 ++--
->   drivers/scsi/libiscsi.c             | 2 +-
->   drivers/scsi/scsi_transport_iscsi.c | 2 +-
->   3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-> index 1d669e4..4b9f80d 100644
-> --- a/drivers/scsi/hosts.c
-> +++ b/drivers/scsi/hosts.c
-> @@ -272,7 +272,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
->   	if (shost->transportt->create_work_queue) {
->   		snprintf(shost->work_q_name, sizeof(shost->work_q_name),
->   			 "scsi_wq_%d", shost->host_no);
-> -		shost->work_q = create_singlethread_workqueue(
-> +		shost->work_q = create_singlethread_workqueue_noorder(
->   					shost->work_q_name);
->   		if (!shost->work_q) {
->   			error = -EINVAL;
 
-This patch seems ok for the iscsi, fc, tmf, and non transport class scan 
-uses. We are either heavy handed with flushes or did not need ordering.
 
-I don't know about the zfcp use though, so I cc'd  the developers listed 
-as maintainers. It looks like for zfcp we can do:
+Good-Day Friend,
 
-zfcp_scsi_rport_register->fc_remote_port_add->fc_remote_port_create->scsi_queue_work 
-to scan the scsi target on the rport.
+ Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
 
-and then zfcp_scsi_rport_register can call zfcp_unit_queue_scsi_scan->
-scsi_queue_work which will scan for a specific lun.
+Waiting for your response for more details, As you are willing to execute this business opportunity with me.
 
-It looks ok if those are not ordered, but I would get their review to 
-make sure.
+Sincerely Yours,
+Mr. Karim Zakari.
