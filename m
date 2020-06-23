@@ -2,209 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FB920545C
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 16:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D51E205853
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 19:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732836AbgFWOXh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jun 2020 10:23:37 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53622 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732830AbgFWOXg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 23 Jun 2020 10:23:36 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id EDC01B012;
-        Tue, 23 Jun 2020 14:23:33 +0000 (UTC)
-Subject: Re: [PATCH RFC v7 02/12] blk-mq: rename blk_mq_update_tag_set_depth()
-To:     John Garry <john.garry@huawei.com>, Ming Lei <ming.lei@redhat.com>
-Cc:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        don.brace@microsemi.com, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, bvanassche@acm.org, hare@suse.com,
-        hch@lst.de, shivasharan.srikanteshwara@broadcom.com,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        esc.storagedev@microsemi.com, chenxiang66@hisilicon.com,
-        Kashyap Desai <kashyap.desai@broadcom.com>
-References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
- <1591810159-240929-3-git-send-email-john.garry@huawei.com>
- <20200611025759.GA453671@T590>
- <6ef76cdf-2fb3-0ce8-5b5a-0d7af0145901@huawei.com>
- <8ef58912-d480-a7e1-f04c-da9bd85ea0ae@huawei.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <eaf188d5-dac0-da44-1c83-31ff2860d8fa@suse.de>
-Date:   Tue, 23 Jun 2020 16:23:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1733095AbgFWRNS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jun 2020 13:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733081AbgFWRNS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jun 2020 13:13:18 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8421C061795
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2020 10:13:17 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id a3so19485098oid.4
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2020 10:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=J0VpeRSOJK/TFNJp5yzWMw9fGCcpvggw0aTUG92BVzQ=;
+        b=i0uoYXqFKhL3vc8tp9C6K5GgpytnAnuC0fZClT3jh84RWiGoFjDxz39WaUpuVkv5Kt
+         SmAD30H1WPcvgrd6SExLkc0wvDrspPtVH+1PQMYezhVKK7bR7gTWCpGypXQPIWL4m5P/
+         UFpcHIAwKZqa5DVah79cTZgEa934aGrR1pZyyekUT2C2Q3FXfvUm+RudX5svn6pptMTT
+         YUdPBGfzBWetaC2UbBaKbhgDQiwJdAeAt9IEos/JG/Wjt1Ikco+AIihtHk/64mwRaTkM
+         tERL1Y9s4p6ROcotdBqAWRPz8pvuk7rPYGNRk0ct0p7vzFJC0SJE00MV5zGFRmcqW5F+
+         R6tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=J0VpeRSOJK/TFNJp5yzWMw9fGCcpvggw0aTUG92BVzQ=;
+        b=pYUs/mI7VuCnstuDfCXLQuOJh2g59gKYJOm5wZR4ogYfRP+i9ZleEilDq7Rjp7XLa5
+         I/o+MoXBmF6haT981Ezw4zhRS5VPRSzk8mpwljEdULtdodI5J4eun0itHoZQ2jlePuFc
+         9DigpeeBZBKUmN8I8jtLcYw52CC04Q6bW0dhlz3rVI4Jfw8Dszw4lPcqPecHmEIwijc+
+         9xwyEtMrP6NWMHsyixZ2gveGjiRAwyH9MQcHjVFidS7jJvGyzS9ETZFl/yxCCOSE/OKD
+         vrQ5DfUbf0DJCzDMs87yDF+v7AMz0cZGRPHv0GGgywWYIzb9EUm9Zog42VodUKlaIKqb
+         nh0w==
+X-Gm-Message-State: AOAM53314FgrB/clDZkGdDgXUtS6Ree8wHMkIrmFP3AFIolTaKmea7YN
+        X/ea67+T0zmqRITx7e4lxqqtCqF+SsbtPx1wnT8=
+X-Google-Smtp-Source: ABdhPJwFGNvc68tznvvGeV1jsg/GTZ4Rd/39o97OHBEKjwSpMzIvEuOyGqbhcOFMrzUuf9xgPL++CJubuneMvIUBBhk=
+X-Received: by 2002:a05:6808:3d3:: with SMTP id o19mr17543391oie.63.1592932396880;
+ Tue, 23 Jun 2020 10:13:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8ef58912-d480-a7e1-f04c-da9bd85ea0ae@huawei.com>
-Content-Type: multipart/mixed;
- boundary="------------87FA99FADADEA3EE2B4E056B"
-Content-Language: en-US
+Received: by 2002:a9d:1d03:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 10:13:15
+ -0700 (PDT)
+Reply-To: sctnld11170@tlen.pl
+From:   "Mr. Scott Donald" <jesseomar11@gmail.com>
+Date:   Tue, 23 Jun 2020 10:13:15 -0700
+Message-ID: <CAJs48TCdF4yNPxK7idLt-8=zPqaO9MudVK-snWMwrGxb6HXbZw@mail.gmail.com>
+Subject: Hello, Please
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------87FA99FADADEA3EE2B4E056B
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Dear Friend,
+I'm Mr. Scott Donald a Successful business Man. dealing with
+Exportation, I got your mail contact through search to let you know my
+Ugly Situation Am a dying Man here in Los Angeles California Hospital
+Bed in (USA), I Lost my Wife and my only Daughter for Covid-19 I'm
+dying with same symptoms. my Doctor open-up to me that I don't have
+enough time to live anymore, I have a project that I am about to hand
+over to you. I have already instructed the Barclays Bank of London to
+transfer my fund sum of =C2=A33,7M GBP to you as to enable you to give 50%
+to Charitable Home and take 50% I have given all I have here in
+America to Charitable home I ask my Doctor to help me keep you notice
+when I'm no more please, allow me to see you on my Doctor whats-app
+video call very urgent please, here is my Doctor Whats-app Number for
+urgent notice +13019692737
 
-On 6/23/20 1:25 PM, John Garry wrote:
-> On 11/06/2020 09:26, John Garry wrote:
->> On 11/06/2020 03:57, Ming Lei wrote:
->>> On Thu, Jun 11, 2020 at 01:29:09AM +0800, John Garry wrote:
->>>> From: Hannes Reinecke <hare@suse.de>
->>>>
->>>> The function does not set the depth, but rather transitions from
->>>> shared to non-shared queues and vice versa.
->>>> So rename it to blk_mq_update_tag_set_shared() to better reflect
->>>> its purpose.
->>>
->>> It is fine to rename it for me, however:
->>>
->>> This patch claims to rename blk_mq_update_tag_set_shared(), but also
->>> change blk_mq_init_bitmap_tags's signature.
->>
->> I was going to update the commit message here, but forgot again...
->>
->>>
->>> So suggest to split this patch into two or add comment log on changing
->>> blk_mq_init_bitmap_tags().
->>
->> I think I'll just split into 2x commits.
-> 
-> Hi Hannes,
-> 
-> Do you have any issue with splitting the undocumented changes into 
-> another patch as so:
-> 
-No, that's perfectly fine.
+Hope To Hear From You. I'm sending this email to you for the second
+time yet no response from you.
 
-Kashyap, I've also attached an updated patch for the elevator_count 
-patch; if you agree John can include it in the next version.
+My Regards.
 
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
-
---------------87FA99FADADEA3EE2B4E056B
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-elevator-count-requests-per-hctx-to-improve-performa.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename*0="0001-elevator-count-requests-per-hctx-to-improve-performa.pa";
- filename*1="tch"
-
-From d50b5f773713070208c405f7c7056eb1afed896a Mon Sep 17 00:00:00 2001
-From: Hannes Reinecke <hare@suse.de>
-Date: Tue, 23 Jun 2020 16:18:40 +0200
-Subject: [PATCH] elevator: count requests per hctx to improve performance
-
-Add a 'elevator_queued' count to the hctx to avoid triggering
-the elevator even though there are no requests queued.
-
-Suggested-by: Kashyap Desai <kashyap.desai@broadcom.com>
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- block/bfq-iosched.c    | 5 +++++
- block/blk-mq.c         | 1 +
- block/mq-deadline.c    | 5 +++++
- include/linux/blk-mq.h | 4 ++++
- 4 files changed, 15 insertions(+)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index a1123d4d586d..3d63b35f6121 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -4640,6 +4640,9 @@ static bool bfq_has_work(struct blk_mq_hw_ctx *hctx)
- {
- 	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
- 
-+	if (!atomic_read(&hctx->elevator_queued))
-+		return false;
-+
- 	/*
- 	 * Avoiding lock: a race on bfqd->busy_queues should cause at
- 	 * most a call to dispatch for nothing
-@@ -5554,6 +5557,7 @@ static void bfq_insert_requests(struct blk_mq_hw_ctx *hctx,
- 		rq = list_first_entry(list, struct request, queuelist);
- 		list_del_init(&rq->queuelist);
- 		bfq_insert_request(hctx, rq, at_head);
-+		atomic_inc(&hctx->elevator_queued)
- 	}
- }
- 
-@@ -5933,6 +5937,7 @@ static void bfq_finish_requeue_request(struct request *rq)
- 
- 		bfq_completed_request(bfqq, bfqd);
- 		bfq_finish_requeue_request_body(bfqq);
-+		atomic_dec(&rq->mq_hctx->elevator_queued);
- 
- 		spin_unlock_irqrestore(&bfqd->lock, flags);
- 	} else {
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index e06e8c9f326f..f5403fc97572 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2542,6 +2542,7 @@ blk_mq_alloc_hctx(struct request_queue *q, struct blk_mq_tag_set *set,
- 		goto free_hctx;
- 
- 	atomic_set(&hctx->nr_active, 0);
-+	atomic_set(&hctx->elevator_queued, 0);
- 	if (node == NUMA_NO_NODE)
- 		node = set->numa_node;
- 	hctx->numa_node = node;
-diff --git a/block/mq-deadline.c b/block/mq-deadline.c
-index b57470e154c8..9d753745e6be 100644
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -533,6 +533,7 @@ static void dd_insert_requests(struct blk_mq_hw_ctx *hctx,
- 		rq = list_first_entry(list, struct request, queuelist);
- 		list_del_init(&rq->queuelist);
- 		dd_insert_request(hctx, rq, at_head);
-+		atomic_inc(&hctx->elevator_queued);
- 	}
- 	spin_unlock(&dd->lock);
- }
-@@ -573,12 +574,16 @@ static void dd_finish_request(struct request *rq)
- 			blk_mq_sched_mark_restart_hctx(rq->mq_hctx);
- 		spin_unlock_irqrestore(&dd->zone_lock, flags);
- 	}
-+	atomic_dec(&rq->mq_hctx->elevator_queued);
- }
- 
- static bool dd_has_work(struct blk_mq_hw_ctx *hctx)
- {
- 	struct deadline_data *dd = hctx->queue->elevator->elevator_data;
- 
-+	if (!atomic_read(&hctx->elevator_queued))
-+		return false;
-+
- 	return !list_empty_careful(&dd->dispatch) ||
- 		!list_empty_careful(&dd->fifo_list[0]) ||
- 		!list_empty_careful(&dd->fifo_list[1]);
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index 66711c7234db..a18c506b14e7 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -139,6 +139,10 @@ struct blk_mq_hw_ctx {
- 	 * shared across request queues.
- 	 */
- 	atomic_t		nr_active;
-+	/**
-+	 * @elevator_queued: Number of queued requests on hctx.
-+	 */
-+	atomic_t                elevator_queued;
- 
- 	/** @cpuhp_online: List to store request if CPU is going to die */
- 	struct hlist_node	cpuhp_online;
--- 
-2.26.2
-
-
---------------87FA99FADADEA3EE2B4E056B--
+Mr. Scott Donald
+CEO
