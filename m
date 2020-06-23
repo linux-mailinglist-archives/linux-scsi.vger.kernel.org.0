@@ -2,200 +2,174 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D99422059F2
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 19:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B6F205B9C
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 21:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733294AbgFWRti (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jun 2020 13:49:38 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:48732 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733236AbgFWRth (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jun 2020 13:49:37 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05NHkU8U052004;
-        Tue, 23 Jun 2020 17:49:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=7K5gka4v1sYMhTHRsTe/SGfJEw5xbL/SewTNXudZia4=;
- b=EBWHr8MMpqcVTFstzB1GgfsByPNmRS6zhGgAZ+vopjVtFeOP3qyrmCHTw0425zGmADF9
- 6kCnyXBoojtjuARt/U37L8730nIf0vplQ54P9Y/8eqWsTVT5fTrqLA/yTKlr0uc8YUzn
- nPaHfXttleplKYOF4lnoqWgQ+KeeeYEJdP3UC6gBZgvat8qPZDhESgfoONtFrL6n+Ket
- TDNtP0fWgeu7nt5K1MLkw1ZD5zIeVOyUNYPlfmc6Fp6yCx2Pxd//4kvFcHuwOnQytkCj
- eWgd1ZIGF5KRfFIKp+KAxmmxODrIHWzvpdniDbyL6UmFipPIckvagY8WPyeDbQbLwr2J Zg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 31uk2rsaxy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 23 Jun 2020 17:49:31 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05NHnCSF093788;
-        Tue, 23 Jun 2020 17:49:31 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 31uk42ajje-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 Jun 2020 17:49:30 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05NHnRVS028385;
-        Tue, 23 Jun 2020 17:49:27 GMT
-Received: from [10.159.241.230] (/10.159.241.230)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 23 Jun 2020 17:49:27 +0000
-Subject: Re: [PATCH] scsi: target: tcmu: Call flush_dcache_page() with proper
- page struct
-To:     kernel test robot <lkp@intel.com>, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org
-References: <1592592105-11497-1-git-send-email-henry.willard@oracle.com>
- <202006200926.OYiV11oq%lkp@intel.com>
-From:   Henry Willard <henry.willard@oracle.com>
-Message-ID: <c5b68f83-ea07-d947-0ef0-9712942f621b@oracle.com>
-Date:   Tue, 23 Jun 2020 10:49:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1733309AbgFWTR5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jun 2020 15:17:57 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48814 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1733270AbgFWTR5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jun 2020 15:17:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592939874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+P9zuie6AFghJynlgBPJee7CZBCUK+HjLwj4LjvUfdA=;
+        b=NtD2PWwexaPULR1rZ9drxkpy0nmhAzK3GGA7PWb7VSlL5uUpmhqwkDywXEdtGKbxhOnLLq
+        iOsDgGAj5GNfIMH91dejfjAU2IvjE4yjl/HOmy2vTguE+c0lAGs5xpebMdc22c/h1K7fOI
+        5/vRmYhc9JTrX3D3/6idVWcfIrJACGg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-243-SRktsXZjOoGgfa2J1jEq8g-1; Tue, 23 Jun 2020 15:17:53 -0400
+X-MC-Unique: SRktsXZjOoGgfa2J1jEq8g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DD14D8031C2;
+        Tue, 23 Jun 2020 19:17:51 +0000 (UTC)
+Received: from sulaco.redhat.com (unknown [10.3.128.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E869C71699;
+        Tue, 23 Jun 2020 19:17:50 +0000 (UTC)
+From:   Tony Asleson <tasleson@redhat.com>
+To:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org
+Subject: [RFC PATCH v3 0/8] Add persistent durable identifier to storage log messages
+Date:   Tue, 23 Jun 2020 14:17:41 -0500
+Message-Id: <20200623191749.115200-1-tasleson@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <202006200926.OYiV11oq%lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9661 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006120000
- definitions=main-2006230124
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9661 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- phishscore=0 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
- bulkscore=0 mlxscore=0 spamscore=0 clxscore=1011 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006120000 definitions=main-2006230124
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/19/20 6:31 PM, kernel test robot wrote:
-> Hi Henry,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on mkp-scsi/for-next]
-> [also build test WARNING on scsi/for-next v5.8-rc1 next-20200618]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use  as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Henry-Willard/scsi-target-tcmu-Call-flush_dcache_page-with-proper-page-struct/20200620-024740
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-> config: xtensa-allyesconfig (attached as .config)
-> compiler: xtensa-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # save the attached .config to linux build tree
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=xtensa
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
->
-> In file included from include/linux/kernel.h:11,
-> from include/linux/list.h:9,
-> from include/linux/preempt.h:11,
-> from include/linux/spinlock.h:51,
-> from drivers/target/target_core_user.c:9:
-> include/linux/scatterlist.h: In function 'sg_set_buf':
-> arch/xtensa/include/asm/page.h:193:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-> 193 |  ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
-> |         ^~
-> include/linux/compiler.h:78:42: note: in definition of macro 'unlikely'
-> 78 | # define unlikely(x) __builtin_expect(!!(x), 0)
-> |                                          ^
-> include/linux/scatterlist.h:143:2: note: in expansion of macro 'BUG_ON'
-> 143 |  BUG_ON(!virt_addr_valid(buf));
-> |  ^~~~~~
-> arch/xtensa/include/asm/page.h:201:32: note: in expansion of macro 'pfn_valid'
-> 201 | #define virt_addr_valid(kaddr) pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
-> |                                ^~~~~~~~~
-> include/linux/scatterlist.h:143:10: note: in expansion of macro 'virt_addr_valid'
-> 143 |  BUG_ON(!virt_addr_valid(buf));
-> |          ^~~~~~~~~~~~~~~
-> In file included from ./arch/xtensa/include/generated/asm/bug.h:1,
-> from include/linux/bug.h:5,
-> from include/linux/thread_info.h:12,
-> from include/asm-generic/preempt.h:5,
-> from ./arch/xtensa/include/generated/asm/preempt.h:1,
-> from include/linux/preempt.h:78,
-> from include/linux/spinlock.h:51,
-> from drivers/target/target_core_user.c:9:
-> include/linux/dma-mapping.h: In function 'dma_map_resource':
-> arch/xtensa/include/asm/page.h:193:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-> 193 |  ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
-> |         ^~
-> include/asm-generic/bug.h:144:27: note: in definition of macro 'WARN_ON_ONCE'
-> 144 |  int __ret_warn_once = !!(condition);            |                           ^~~~~~~~~
-> include/linux/dma-mapping.h:352:19: note: in expansion of macro 'pfn_valid'
-> 352 |  if (WARN_ON_ONCE(pfn_valid(PHYS_PFN(phys_addr))))
-> |                   ^~~~~~~~~
-> In file included from include/linux/mm_types_task.h:16,
-> from include/linux/mm_types.h:5,
-> from include/linux/mmzone.h:21,
-> from include/linux/gfp.h:6,
-> from include/linux/umh.h:4,
-> from include/linux/kmod.h:9,
-> from include/linux/module.h:16,
-> from drivers/target/target_core_user.c:10:
-> drivers/target/target_core_user.c: In function 'tcmu_flush_dcache_range':
-> arch/xtensa/include/asm/page.h:193:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-> 193 |  ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
-> |         ^~
-> arch/xtensa/include/asm/page.h:201:32: note: in expansion of macro 'pfn_valid'
-> 201 | #define virt_addr_valid(kaddr) pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
-> |                                ^~~~~~~~~
-> drivers/target/target_core_user.c:605:7: note: in expansion of macro 'virt_addr_valid'
-> 605 |   if (virt_addr_valid(start))
-> |       ^~~~~~~~~~~~~~~
->>> drivers/target/target_core_user.c:600:15: warning: variable 'pg' set but not used [-Wunused-but-set-variable]
-> 600 |  struct page *pg;
-> |               ^~
->
-> vim +/pg +600 drivers/target/target_core_user.c
->
->     595	
->     596	static inline void tcmu_flush_dcache_range(void *vaddr, size_t size)
->     597	{
->     598		unsigned long offset = offset_in_page(vaddr);
->     599		void *start = vaddr - offset;
->   > 600		struct page *pg;
->     601	
->     602		size = round_up(size+offset, PAGE_SIZE);
->     603	
->     604		while (size) {
->     605			if (virt_addr_valid(start))
->     606				pg = virt_to_page(start);
->     607			else if (is_vmalloc_addr(start))
->     608				pg = vmalloc_to_page(start);
->     609			else
->     610				break;
->     611	
->     612			flush_dcache_page(pg);
->     613			start += PAGE_SIZE;
->     614			size -= PAGE_SIZE;
->     615		}
->     616	}
->     617	
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-It doesn't really matter in this case because this patch has been 
-superseded by a different fix, but the warning appears to be caused by 
-an incorrect implementation of flush_dcache_page() in 
-arch/xtensa/include/asm/cacheflush.h. Depending on the variant and 
-options, flush_dcache_page can be defined as "do { } while (0)", which 
-covers the default null implementation of flush_dcache_page().
+Today users have no easy way to correlate kernel log messages for storage
+devices across reboots, device dynamic add/remove, or when the device is
+physically or logically moved from from system to system.  This is due
+to the existing log IDs which identify how the device is attached and not
+a unique ID of what is attached.  Additionally, even when the attachment
+hasn't changed, it's not always obvious which messages belong to the
+device as the different areas in the storage stack use different
+identifiers, eg. (sda, sata1.00, sd 0:0:0:0).
 
-Thanks,
-Henry
+This change addresses this by adding a unique ID to each log
+message.  It couples the existing structured key/value logging capability
+and VPD 0x83 device identification.
+
+
+An example of logs filtered for a specific device utilizing this patch
+series.
+
+$ journalctl -b  _KERNEL_DURABLE_NAME="`cat /sys/block/sdb/device/wwid`"
+| cut -c 25- | fmt -t
+9-08-22 13:21:35 CDT, end at Wed 2020-05-13 15:40:26 CDT. --
+l: scsi 1:0:0:0: Attached scsi generic sg1 type 0
+l: sd 1:0:0:0: [sdb] 209715200 512-byte logical blocks: (107 GB/100 GiB)
+l: sd 1:0:0:0: [sdb] Write Protect is off
+l: sd 1:0:0:0: [sdb] Mode Sense: 00 3a 00 00
+l: sd 1:0:0:0: [sdb] Write cache: enabled, read cache: enabled, doesn't
+   support DPO or FUA
+l: sd 1:0:0:0: [sdb] Attached SCSI disk
+l: sd 1:0:0:0: ata2.00: exception Emask 0x0 SAct 0x800000 SErr 0x800000
+   action 0x6 frozen
+l: sd 1:0:0:0: ata2.00: failed command: READ FPDMA QUEUED
+l: sd 1:0:0:0: ata2.00: cmd 60/20:b8:10:27:00/00:00:00:00:00/40 tag 23
+            ncq dma 16384 in res 40/00:00:00:4f:c2/00:00:00:00:00/00
+            Emask 0x4 (timeout)
+l: sd 1:0:0:0: ata2.00: status: { DRDY }
+l: sd 1:0:0:0: ata2.00: configured for UDMA/100
+l: sd 1:0:0:0: [sdb] tag#23 FAILED Result: hostbyte=DID_OK
+            driverbyte=DRIVER_SENSE cmd_age=30s
+l: sd 1:0:0:0: [sdb] tag#23 Sense Key : Illegal Request [current]
+l: sd 1:0:0:0: [sdb] tag#23 Add. Sense: Unaligned write command
+l: sd 1:0:0:0: [sdb] tag#23 CDB: Read(10) 28 00 00 00 27 10 00 00 20 00
+l: block sdb: blk_update_request: I/O error, dev sdb, sector 10000 op
+            0x0:(READ) flags 0x80700 phys_seg 4 prio class 0
+l: sd 1:0:0:0: ata2.00: exception Emask 0x0 SAct 0x2 SErr 0x2 action
+            0x6 frozen
+l: sd 1:0:0:0: ata2.00: failed command: READ FPDMA QUEUED
+l: sd 1:0:0:0: ata2.00: cmd 60/08:08:10:27:00/00:00:00:00:00/40 tag 1 ncq
+            dma 4096 in res 40/00:ff:00:00:00/00:00:00:00:00/00 Emask 0x4
+            (timeout)
+l: sd 1:0:0:0: ata2.00: status: { DRDY }
+l: sd 1:0:0:0: ata2.00: configured for UDMA/100
+l: sd 1:0:0:0: ata2.00: exception Emask 0x0 SAct 0x800000 SErr 0x800000
+            action 0x6 frozen
+l: sd 1:0:0:0: ata2.00: failed command: READ FPDMA QUEUED
+l: sd 1:0:0:0: ata2.00: cmd 60/08:b8:10:27:00/00:00:00:00:00/40 tag 23 ncq
+            dma 4096 in res 40/00:00:00:4f:c2/00:00:00:00:00/00 Emask 0x4
+            (timeout)
+l: sd 1:0:0:0: ata2.00: status: { DRDY }
+l: sd 1:0:0:0: ata2.00: configured for UDMA/100
+l: sd 1:0:0:0: ata2.00: NCQ disabled due to excessive errors
+l: sd 1:0:0:0: ata2.00: exception Emask 0x0 SAct 0x4000 SErr 0x4000
+            action 0x6 frozen
+l: sd 1:0:0:0: ata2.00: failed command: READ FPDMA QUEUED
+l: sd 1:0:0:0: ata2.00: cmd 60/08:70:10:27:00/00:00:00:00:00/40 tag 14 ncq
+            dma 4096 in res 40/00:00:00:00:00/00:00:00:00:00/00 Emask 0x4
+            (timeout)
+l: sd 1:0:0:0: ata2.00: status: { DRDY }
+l: sd 1:0:0:0: ata2.00: configured for UDMA/100
+l: sd 1:0:0:0: ata2.00: device reported invalid CHS sector 0
+
+This change is incomplete.  With the plethora of different logging
+techniques utilized in the kernel it will take some coordinated effort
+and additional changes.  I tried a few different approaches, to cover
+as much as I could without resorting to changing every print statement
+in all the storage layers, but maybe there is a better,
+more elegant approach?
+
+I believe having this functionality is very useful and important for
+system configurations of all sizes.  I mentioned this change briefly in:
+https://lore.kernel.org/lkml/30f29fe6-8445-0016-8cdc-3ef99d43fbf5@redhat.com/
+
+Questions
+1. Where is the best place to put the durable_name callback function?
+2. What is best "KEY" value?
+3. Should we re-work the message contents themselves to remove any redundant
+   information that is included when using dev_printk? ref. 
+   https://lore.kernel.org/linux-scsi/e12aeb9e-fe5d-5b5e-d190-401997cecc34@redhat.com/#t
+
+
+v2:
+- Incorporated changes suggested by James Bottomley
+- Removed string function which removed leading/trailing/duplicate adjacent
+  spaces from generated id, value matches /sys/block/<device>/device/wwid
+- Remove xfs patch, limiting changes to lower block layers
+- Moved callback from struct device_type to struct device.  Struct device_type
+  is typically static const and with a number of different areas using shared
+  implementation of genhd unable to modify for each of the different areas.
+
+v3:
+- Increase the size of the buffers for NVMe id generation and
+  dev_vprintk_emit
+
+Tony Asleson (8):
+  struct device: Add function callback durable_name
+  create_syslog_header: Add durable name
+  print_req_error: Use dev_printk
+  buffer_io_error: Use dev_printk
+  ata_dev_printk: Use dev_printk
+  scsi: Add durable_name for dev_printk
+  nvme: Add durable name for dev_printk
+  dev_vprintk_emit: Increase hdr size
+
+ block/blk-core.c           |  5 ++++-
+ drivers/ata/libata-core.c  | 10 +++++++---
+ drivers/base/core.c        | 31 ++++++++++++++++++++++++++++++-
+ drivers/nvme/host/core.c   | 18 ++++++++++++++++++
+ drivers/scsi/scsi_lib.c    | 14 ++++++++++++++
+ drivers/scsi/scsi_sysfs.c  | 23 +++++++++++++++++++++++
+ drivers/scsi/sd.c          |  2 ++
+ fs/buffer.c                | 10 ++++++++--
+ include/linux/device.h     |  4 ++++
+ include/scsi/scsi_device.h |  3 +++
+ 10 files changed, 113 insertions(+), 7 deletions(-)
+
+
+base-commit: 3d77e6a8804abcc0504c904bd6e5cdf3a5cf8162
+-- 
+2.25.4
+
