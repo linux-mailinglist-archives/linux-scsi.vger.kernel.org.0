@@ -2,141 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76650206237
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 23:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8604620667D
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 23:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393051AbgFWU50 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jun 2020 16:57:26 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:37163 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390565AbgFWUmm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:42:42 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id DBA919C0;
-        Tue, 23 Jun 2020 16:42:40 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Tue, 23 Jun 2020 16:42:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hmh.eng.br; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=vrxA/FSkZCHAfFyeVNWgnBioSC9
-        BNFdUmNULPJc7l+s=; b=tIFfEnSH0ux8hs3mBttZhNV/H7Tp3TmuoALl+TSfHMn
-        llrOlKQVwfQAZqCEfEMTsu52DnOFzpAxvM4JbBVl2cHNEEkjBX81uTdVPwH5Z5sc
-        kY44YfkgsKvPV8ao+5qPKZPdK0JfNA7ohBc8P11SlojcAmQ/m+L1GRGcc0u+ZtWr
-        lSwzpRgDzpWxoq83DaOi4QvtU4B90QNnplKJLyTqj83WjVD6eBYfoLSh5FP8jycQ
-        MK8M7Efkttb5tYTCkivm+ok+Q+bJNMKs8acZUj/iALcxtzl00wMpdCECL7eFjMk4
-        JKKUkgU76lmUWpap4+TNQ8JwgOn8ecBtyRjA0PFHoJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=vrxA/F
-        SkZCHAfFyeVNWgnBioSC9BNFdUmNULPJc7l+s=; b=Wbzgfng60nrVvHeYrxCYLB
-        OTPbQdXCMlK0K6IkgencEN1GUguzmGHfqf5ibhalM7lgubN1DPcXg0GfrPqGqJEI
-        fFPAsjbMv9Yb3SjARNvecNPRahL0zMobbGrhvYxp2bSJBZAJxbPmJ1X5hYnyn2cU
-        89VWYwP4MhRk0wIMlDrTAObVg9XUkIH/IWF9/RAlHNFJPoWc3hGFBjJvYTcnnPsq
-        oaGzMg6mLRLot4y8Q98lhqiHRANivbUNDtHms0fOQZRHV/xPZLe9Z7N13Yriskco
-        t/JBFR2g8paGgmlb4Qn43EiirDx4khBAP7fR51kEZrZfrPWzEuMLWIzzheVDfuzw
-        ==
-X-ME-Sender: <xms:P2nyXpZfhuVA-rtlpQmjeIKkkUWk0vaPF-p5CpZ1MnnD_Cg_2KtYGg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudekhedguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujggfsehttddttddtredvnecuhfhrohhmpefjvghn
-    rhhiqhhuvgcuuggvucfoohhrrggvshcujfholhhstghhuhhhuceohhhmhheshhhmhhdrvg
-    hnghdrsghrqeenucggtffrrghtthgvrhhnpedtfeefvdffkeevjeeuffdvvdevveetjefg
-    vdfhffeuteefvdevgeeuueejtddutdenucffohhmrghinheplhhkmhhlrdhorhhgnecukf
-    hppedujeejrdduleegrdejrdefvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehhmhhhsehhmhhhrdgvnhhgrdgsrh
-X-ME-Proxy: <xmx:P2nyXgaTVe7lgaOYLMJ5TCvw3rOKBQXfgT_Hs1NOv8zR06bZS8tgQg>
-    <xmx:P2nyXr9VbxH5uIew4iuHlNZ3K3D4dOI1zE8sIkNTZpJOHvmDeZb2Zg>
-    <xmx:P2nyXnqIaGal6PHvEwtnSVqnBOXQKIt4q1PhoMtuMoPJFeUg3EsQ_w>
-    <xmx:QGnyXvWPipUrpgRFO-LUEZHJt8qMJBIAX21kOM4Sp71v_uRgaOgX_g>
-Received: from khazad-dum.debian.net (unknown [177.194.7.32])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7C812328005A;
-        Tue, 23 Jun 2020 16:42:39 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by localhost.khazad-dum.debian.net (Postfix) with ESMTP id CE85F340321E;
-        Tue, 23 Jun 2020 17:42:36 -0300 (-03)
-X-Virus-Scanned: Debian amavisd-new at khazad-dum.debian.net
-Received: from khazad-dum.debian.net ([127.0.0.1])
-        by localhost (khazad-dum2.khazad-dum.debian.net [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id 0ml-J_XkXns1; Tue, 23 Jun 2020 17:42:34 -0300 (-03)
-Received: by khazad-dum.debian.net (Postfix, from userid 1000)
-        id 4B208340321D; Tue, 23 Jun 2020 17:42:34 -0300 (-03)
-Date:   Tue, 23 Jun 2020 17:42:34 -0300
-From:   Henrique de Moraes Holschuh <hmh@hmh.eng.br>
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-Cc:     Simon Arlott <simon@octiron.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S2387715AbgFWVmu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jun 2020 17:42:50 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:11867 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387672AbgFWUE3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jun 2020 16:04:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1592942668; x=1624478668;
+  h=from:to:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=Np6yWb6YmYOwP601KxKtVBHOHmLBPCihT928Zpgt9yE=;
+  b=jNM1HgXBtT6L3aYvSbDUuvWplE+e9YxVf9jdfy6fDDpcKgV8/Tavw1hf
+   o0FZ92cBxJuSci9SNKyu2/YQQHU690hAy4olTyw3eqFdoZq/NBzTUdUkO
+   unZqQMAmn+WvhFOEdfnILXbtF7EDR6XJl/iOR5n2/jlRUfGlZ4wTYXMFZ
+   +nCc0BZNYrEWzn0qCXFmRc6J81lzu9KwJzMAd5Ekj8KbFaj16/aTnX0eV
+   zLCVOpspX2C2dhgbybAMQbjLmBHiYREotsTdb8W6eo95gJ9cx9mJP2jTi
+   Fm5Xslwo7QcObfvMffxoGOtiebw0DLUppeQc1uuL0WZtfRr9hFDboTHvJ
+   A==;
+IronPort-SDR: TVWi/azldYgUFItnCvJoVEgKpOeJXX107UXPJG6StlbwRqUeN5E0rWlmbxm1BBnVvE+2h5dVgQ
+ XeTuEFRpwXfuu/WU/0+T3ja0eYF16Lz8c0EVuitcFyp3G1EUzuSOQUpbGrc0QoNqDYe1oaayRi
+ w0esp+BnIPpf0Q6FiMvKkfw2uhR4SpIZlWJ3XHullZzRbfLAfXqiaadptS4EHEhMWv6i2rTx3c
+ b3dV2FMe8xREgOZcEQ2TSGn93p4dkI3moX/2YHtcQTP99hFM+rYEknDaH12ww0qH7Y0noFh8AF
+ ebI=
+X-IronPort-AV: E=Sophos;i="5.75,272,1589212800"; 
+   d="scan'208";a="140736465"
+Received: from mail-bn8nam12lp2169.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.169])
+  by ob1.hgst.iphmx.com with ESMTP; 24 Jun 2020 04:04:26 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CJny1u+3mJNqHecgnnwu2e9V9NHQ2cs8qRAySfqk+HK0zOKE7g7wzDMzeXjOOQ5ZnfWvz7H+XKutxcAZTnPCoAv8o87FbtsEKme19QLiJnBzFXPl9cnmGrdQYr9pSfzlcueDaBCOAiEAJzAx/IR9yXQv4YF8FLOIUpRZiK00DzHNvvEvJyLCHBmDgKTFBFvthBYQjLmI+wMhFLc+mofxS3CDeB9aZ9xEB3e684XvNNFuV/u2dlW3Y7yTpRq0SGWX9BfqP+bdGRqC2Uf43FYmMC3fyOyCMQZRdFaMd1g/+iBi8RN/kKYuKVgmYqm65HH4V6+rHX08V3IeTGuVmCsiPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AFsM5q5C6S5qHJP5MbkL5vQyjt0FsmZhwl+q8yIHFjc=;
+ b=cAH5m9D6hME8jQlicG/roRVuUEhvyOMssVqDbowmo+b2RxHGQySFX5nMWXD44UwpqJax3cbRTOD5yRDIUIvMsdA1+gAd3FLNA8CtFs0/nRalhTyKyYy1dDMBaTJgdZvrdWhiX6wwVveK3O0z+UxLT1Bm8DMJ05hHFf9dURBrHWnS2uAjKgOfJdpVO8NmAyx5glwwp06iFQjTrXBSvhHG6ehUqfDhXzS5O4TU4O8Hwv2wYriJ46+IofbDVNvt4lwoB+VVH1KdLTF0nOjvT9FTrb03aDyvzSsqT8NF+4g7QK95LlJ2JDusQaD7/ZsX9EVvLNoKEJzSAG6/9EG3D36HzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AFsM5q5C6S5qHJP5MbkL5vQyjt0FsmZhwl+q8yIHFjc=;
+ b=IHjZ4iL9106SvY4s4mXkIx9f1s9UqsVsAvb2FD8dsflyw4K2gHfuHPTWSb243P/NC+s/1Nb1WyRpA9ApYaXe4wCEjHK36h0haTKwtYJ0U8DyatSb5A8EHtZ35win+z/8LImLWQqUhrXQX68d3wAD3zTFL8SwYT7J6gM6JpD+X4E=
+Received: from BYAPR04MB4965.namprd04.prod.outlook.com (2603:10b6:a03:4d::25)
+ by BY5PR04MB6916.namprd04.prod.outlook.com (2603:10b6:a03:229::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Tue, 23 Jun
+ 2020 20:04:25 +0000
+Received: from BYAPR04MB4965.namprd04.prod.outlook.com
+ ([fe80::4d72:27c:c075:c5e6]) by BYAPR04MB4965.namprd04.prod.outlook.com
+ ([fe80::4d72:27c:c075:c5e6%7]) with mapi id 15.20.3131.020; Tue, 23 Jun 2020
+ 20:04:25 +0000
+From:   Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+To:     Tony Asleson <tasleson@redhat.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH] scsi: sd: stop SSD (non-rotational) disks before reboot
-Message-ID: <20200623204234.GA16156@khazad-dum.debian.net>
-References: <499138c8-b6d5-ef4a-2780-4f750ed337d3@0882a8b5-c6c3-11e9-b005-00805fc181fe>
- <CY4PR04MB37511505492E9EC6A245CFB1E79B0@CY4PR04MB3751.namprd04.prod.outlook.com>
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+Subject: Re: [RFC PATCH v3 7/8] nvme: Add durable name for dev_printk
+Thread-Topic: [RFC PATCH v3 7/8] nvme: Add durable name for dev_printk
+Thread-Index: AQHWSZMHUF+C0LyjzEmzp/5FmQjokw==
+Date:   Tue, 23 Jun 2020 20:04:25 +0000
+Message-ID: <BYAPR04MB496553DF4EB78924AAEC1F2B86940@BYAPR04MB4965.namprd04.prod.outlook.com>
+References: <20200623191749.115200-1-tasleson@redhat.com>
+ <20200623191749.115200-8-tasleson@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [199.255.45.62]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 157cfe63-9e32-4aea-ac36-08d817b0a130
+x-ms-traffictypediagnostic: BY5PR04MB6916:
+x-microsoft-antispam-prvs: <BY5PR04MB69161950F89D628D1F57647186940@BY5PR04MB6916.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:37;
+x-forefront-prvs: 04433051BF
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RhnX4W2PKFVHg66Ihp+K1ITM8va6H5/MB1CpHiZCKjghaVlMZqi+hzTIZMhXmPyXl763j/VCrt9t2ILL4+dviJGvD2/VNunRafnUbalQyseMbAvO2Tnpwd5E8qIib46nSddXSN0MdjbGCLxlgshGJ1AA/Mwx+SQ2RpizKFBESu3P5gvzLIi6bxUM/ruGOqOyBfqjXyl7DHB38HC4lN/GXj1WDSnMJKNSSuyjdc0mFKj3xJl0CrEQRfFEJJItaBqeRIL4HH2EaCDbMXOuesG2ffty5mzp9xUdgGcp+tpCfyYiTQmjhFRKQd8k/5t5iuo2
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR04MB4965.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(136003)(366004)(396003)(39850400004)(376002)(110136005)(71200400001)(9686003)(558084003)(5660300002)(76116006)(2906002)(33656002)(66556008)(64756008)(66446008)(66946007)(66476007)(52536014)(86362001)(55016002)(8676002)(26005)(7696005)(6506007)(478600001)(316002)(53546011)(186003)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: MOisWXdEWakvnJ/SnhhOhzPpqTFo4789ngUs9KJ5wo1Bi/3HHSo2DTWyk4K4pLnqTqwIUn4aHuAT//RaT1kw+zh8YOSyVZJMXGc7pK6/bH5Ia1spbE35uFR8lLThsD/yVRgk/fnkQc4nPLBMqhcaRi2mU8CvKDvW55tEi3nU9UicJU49mZmTX1oq5bpW4lQg8mva3b9vrCuZUWTf9px4p8/3KbnfVv6uLzdQ5YfbWujoM5mSLe5+Q4f2RAJOLzlryyjIzJL2ZlXNrgkBdjvXJN6k4FLRhS00n6EV7zp/JbcDsSRW0/cvxUZNiZ/aKP/sq+Nn296G3yCSfadbWTGHToWtnAnt7KQtY4/lTE7gRDhm4ql9WmTJ03upuWsTCYeVHo/bqSC0zl0P5P1Fh7VdpNN3OgyXiFEtvSoivJz6eRCKDeZhZ0RUscwzObq/D6udlXin/Xr24LyaoYeQWlrwNfXmPPX/g0T16Qb3qiQFUho=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CY4PR04MB37511505492E9EC6A245CFB1E79B0@CY4PR04MB3751.namprd04.prod.outlook.com>
-X-GPG-Fingerprint1: 4096R/0x0BD9E81139CB4807: C467 A717 507B BAFE D3C1  6092
- 0BD9 E811 39CB 4807
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 157cfe63-9e32-4aea-ac36-08d817b0a130
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2020 20:04:25.7750
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gmkGvYBXQEVZgGhXyLhRKkBxSgbG8R9AUIhJD+TjQ70xw12oilNqQvIMbtJpPVeUkaWsgJixSlzigvLi2Q8b56aY3/m5ha7YbUZjutwA7XU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6916
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 18 Jun 2020, Damien Le Moal wrote:
-> Are you experiencing data loss or corruption ? If yes, since a clean reboot or
-> shutdown issues a synchronize cache to all devices, a corruption would mean that
-> your SSD is probably not correctly processing flush cache commands.
-
-Cache flushes do not matter that much when SSDs and sudden power cuts
-are involved.  Power cuts at the wrong time harm the FLASH itself, it is
-not about still-in-flight data.
-
-Keep in mind that SSDs do a _lot_ of background writing, and power cuts
-during a FLASH write or erase can cause from weakened cells, to much
-larger damage.  It is possible to harden the chip or the design against
-this, but it is *expensive*.  And even if warded off by hardening and no
-FLASH damage happens, an erase/program cycle must be done on the whole
-erase block to clean up the incomplete program cycle.
-
-Due to this background activity, an unexpected power cut could damage
-data *anywhere* in an SSD: it could hit some filesystem area that was
-being scrubbed in background by the SSD, or internal SSD metadata.
-
-So, you want that SSD to know it must be quiescent-for-poweroff for
-*real* before you allow the system to do anything that could power it
-off.
-
-And, as I have found out the hard way years ago, you also want to give
-the SSD enough *extra* time to actually quiesce, even if it claims to be
-already prepared for poweroff [1].
-
-When you do not follow these rules, well, excellent datacenter-class
-SSDs have super-capacitor power banks that actually work.  Most SSDs do
-not, although they hopefully came a long way and hopefully modern SSDs
-are not as easily to brick as they were reported to be three or four
-years ago.
-
-
-[1] I have long lost the will and energy to pursue this, so *this* is a
-throw-away anecdote for anyone that cares: I reported here a few years
-ago that many models of *SATA* based SSDs from Crucial/Micron, Samsung
-and Intel were complaining (through their SMART attributes) that Linux
-was causing unsafe shutdowns.
-
-https://lkml.org/lkml/2017/4/10/1181
-
-TL;DR: wait one *extra* second after the SSD acknowleged the STOP
-command as complete before you trust the SSD device is safe to be
-powered down (i.e. before reboot, suspend, poweroff/shutdown, and device
-removal/detach).  This worked around the issue for every vendor and
-model of SSD we tested.
-
--- 
-  Henrique Holschuh
+On 6/23/20 12:18 PM, Tony Asleson wrote:=0A=
+> Corrections from Keith Busch review comments.=0A=
+> =0A=
+> Signed-off-by: Tony Asleson<tasleson@redhat.com>=0A=
+> ---=0A=
+>   drivers/nvme/host/core.c | 18 ++++++++++++++++++=0A=
+>   1 file changed, 18 insertions(+)=0A=
+This looks useful me, but why you still have an RFC fag ?=0A=
