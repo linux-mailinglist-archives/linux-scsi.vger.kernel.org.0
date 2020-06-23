@@ -2,65 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A9B205262
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 14:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C37E205398
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jun 2020 15:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732581AbgFWMZY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jun 2020 08:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732504AbgFWMZX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jun 2020 08:25:23 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB023C061796
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2020 05:25:22 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id k6so7846292wrn.3
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2020 05:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=N0Gm+T8euiE5zHESh+d1m58i3vhcPNLqx0qGbw9lMXupeXSREYf/kqf+2X4mdwYkRp
-         24a+lCh6aDe/S6I3s4iZBz/i/mnsvInKLy76BZ9lsD2uN0iENZYEKaiQ9FJ5NMEFf0wm
-         SrU/2gXJVDw3Z3b87NIM/clQ4G9KUold9V1eAtYB/aZS2cXarl7+906ndAd10I12K+dy
-         BZ73tTsjT/gz1LoEs5umCeo2bBAh+w8rNeGAzPGXJd6k//3v+t2cX1e9YCnXmFUkrrXJ
-         A2ImL175Zud0A8z+U9oMvmzGHLbmmWdYzEF9/u5q/Is+MCi0fxsg6VqG6Oz2zZyrRvUt
-         o01w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=J3dlLq5g3jUP7sdFYDhpy0R6raykiNtw2BhNNq7h+6VbPX9GUwzhKBPqJN5OWOx1G4
-         /d3ujmezPhg0BKk/p5JsYn9tVTdzUEcGl0zLCIjpZn30UMAtihnVfD8LzG2dzAFjUbzk
-         q9BuFH+tMRvDgO5Is8prb9KmwOKbrtYBrGZVBduYSqfLtHPPbwgDqEmnxq1MXyoN2B5h
-         yA32+XHisiG3FKWQfs5mOD6osoyx1BgEU28LgusDxK9rBWUzoNqSof4mvE9SHGy/Ntoo
-         iPKFc7Alb+8xVdqIWc5GRvvRRIE5Vcs0ROPZM0kQ4yRsfTImUQ0+bgF+ikZJAJdEystW
-         FLRw==
-X-Gm-Message-State: AOAM5312UwE/2XA5eXIYQiuoLNRE0eX3Oh/6Sj8SmTROIedRPdBZRMvQ
-        5Lh/6TLAhpaPPqVr0b/ah3/o94bEywakXC10dnw=
-X-Google-Smtp-Source: ABdhPJxB0BEb3AxEK+LY7oX/fB0keGG747WC5Yvo4439wz7hQqSFwK/ggGblL3XVtxpzTOF39GV/CMeCmntA1y+kBXg=
-X-Received: by 2002:a5d:4d8b:: with SMTP id b11mr25142624wru.341.1592915121707;
- Tue, 23 Jun 2020 05:25:21 -0700 (PDT)
+        id S1732647AbgFWNgV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jun 2020 09:36:21 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:59704 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732631AbgFWNgV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jun 2020 09:36:21 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 784331C0C0E; Tue, 23 Jun 2020 15:36:19 +0200 (CEST)
+Date:   Tue, 23 Jun 2020 15:36:18 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     Simon Arlott <simon@octiron.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH] scsi: sd: stop SSD (non-rotational) disks before reboot
+Message-ID: <20200623133618.GE2783@bug>
+References: <499138c8-b6d5-ef4a-2780-4f750ed337d3@0882a8b5-c6c3-11e9-b005-00805fc181fe>
+ <CY4PR04MB37511505492E9EC6A245CFB1E79B0@CY4PR04MB3751.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:42c4:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 05:25:21
- -0700 (PDT)
-Reply-To: bektery@outlook.com
-From:   YAVUZ BEKTER <bariskamx@gmail.com>
-Date:   Tue, 23 Jun 2020 05:25:21 -0700
-Message-ID: <CABZeqGcSUmNi4mzFCyZhiL-pJgESZKhe1T7+m--io1wRejsucw@mail.gmail.com>
-Subject: Hello.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CY4PR04MB37511505492E9EC6A245CFB1E79B0@CY4PR04MB3751.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I am the foreign operations director of Bank of Turkey.
-My name is Mr, Yavuz. I have a sensitive investment project to discuss
-with you, please reply now.
-________________________
-Ik ben de directeur buitenlandse activiteiten van de Bank of Turkey.
-Mijn naam is meneer Yavuz. Ik moet een gevoelig investeringsproject bespreken
-met u, antwoord dan nu.
+Hi!
+
+> > I need to use "reboot=p" on my desktop because one of the PCIe devices
+> > does not appear after a warm boot. This results in a very cold boot
+> > because the BIOS turns the PSU off and on.
+> > 
+> > The scsi sd shutdown process does not send a stop command to disks
+> > before the reboot happens (stop commands are only sent for a shutdown).
+> > 
+> > The result is that all of my SSDs experience a sudden power loss on
+> > every reboot, which is undesirable behaviour. These events are recorded
+> > in the SMART attributes.
+> 
+> Why is it undesirable for an SSD ? The sequence you are describing is not
+> different from doing "shutdown -h now" and then pressing down the power button
+> again immediately after power is cut...
+
+Many SSDs are buggy, and will eventually corrupt themselves if you do enough
+sudden power loss experiments.
+
+HDDs don't like their power cut, either. You can hear the difference 
+between normal power off and power cut...
+
+> > Cc: stable@vger.kernel.org
+
+This needs lot more testing before going to stable.
+
+Thanks,
+									Pavel
+-- 
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
