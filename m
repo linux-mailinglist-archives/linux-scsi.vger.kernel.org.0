@@ -2,239 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDADB206A6A
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2020 05:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919B6206B1C
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jun 2020 06:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388356AbgFXDKI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jun 2020 23:10:08 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43764 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387985AbgFXDKI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jun 2020 23:10:08 -0400
-Received: by mail-pl1-f193.google.com with SMTP id g12so409755pll.10
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2020 20:10:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jDuQ8YZ8Sw6TXaHxYXXfM3NjHzFOPF3o3eqRspL92js=;
-        b=rZqluHCspyoKpdsOdvyTxF+P6LVF59OOLHFdGJQTM9oorZmRweR3RJr9eBgAsrLO+4
-         7bW7iBACRhJ4uKLJM3N14HGBn63U907IumdOKWQmD5iJ+wQAnqGRPi8mNjPsNkYk1cQd
-         8ifNARwEvTGrR6LDamTYa83VyrPHAxBQnt1JR9rYb0l8+xLnOxjifYIAzP/LW7JBAfgU
-         y8LTirfTxr3qaSqV8Aek1n5kUKCaVDzV/AMVKbkTnl19ylBXgfxPUx6UGmmrlGTbF+FC
-         jOQBsYsM8B6hRd2tlME8UD6TFVw13zxv1lcjsqAj9ZSBtWV8ib2hd2vMb6LUkaVRgvP1
-         r1gQ==
-X-Gm-Message-State: AOAM531o2XYewnR5uHK4ojoPyGjZAIr0KsBLQywZfgxbg1OdetS8GAXc
-        GvY5EzhaVlbRXNlCpNsOwIE=
-X-Google-Smtp-Source: ABdhPJwWUvYEd71F6TOZqkAjgTIiAyQAeMkDeh/7emD/h5S6gQyWrQpOkyUVHMMyjQwyreJIsXa1Vg==
-X-Received: by 2002:a17:90a:266f:: with SMTP id l102mr1608803pje.144.1592968205797;
-        Tue, 23 Jun 2020 20:10:05 -0700 (PDT)
-Received: from [192.168.50.147] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id x8sm3801429pje.31.2020.06.23.20.10.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2020 20:10:05 -0700 (PDT)
-Subject: Re: [RFC PATCH v1 2/2] exynos-ufs: support command history
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org
-References: <1592635992-35619-1-git-send-email-kwmad.kim@samsung.com>
- <CGME20200620070047epcas2p37229d52d479df9f64ee4fc14f469acf9@epcas2p3.samsung.com>
- <1592635992-35619-2-git-send-email-kwmad.kim@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <6eaeed01-9c1b-1bf2-8375-568d24f079e3@acm.org>
-Date:   Tue, 23 Jun 2020 20:10:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728734AbgFXE3x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Jun 2020 00:29:53 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:56630 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726131AbgFXE3w (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Jun 2020 00:29:52 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05O4Lxk3030612;
+        Wed, 24 Jun 2020 04:29:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=ZiGEq8tgxFCP/EG5YJqGwbTBdHbsJ/jMej+HyBgyl34=;
+ b=e3AtLp0VLdFtJMOPr1f0xoEwAD8czsXoHF8bUInpBn9n1hqEseQD1O5zyg+6N+iB8P04
+ hDfYrAXovj059vc0TRZrqg2kyyTNx9Fltrnsgn3A7bqFhyrkwHJfHjZobMFYaYP+vD3T
+ dvlNF5jkqiZ/SwvPkkCOpofPtJ0LsYXCEUDgG6ionobEqBKyAjxFJIwyiG8ONP0LKhpv
+ WRYAh/znMQ+PfKgiAWo8GXyEkqKZw1S14DWkCRbRjWhymJh/7X/q3ndbTrQa990y3qhL
+ bHA4g8ztnAB7y1fgii4en+7Y8euo8olp/bcojLTT5NUUT98xj5GjFLZ0LPrk5v1TPf/y 2g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 31uustrkss-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 24 Jun 2020 04:29:48 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05O4NGrt113298;
+        Wed, 24 Jun 2020 04:29:47 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 31uurq6ukr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Jun 2020 04:29:47 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05O4TkUQ011156;
+        Wed, 24 Jun 2020 04:29:46 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 24 Jun 2020 04:29:45 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-scsi@vger.kernel.org, Daniel Wagner <dwagner@suse.de>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Nilesh Javali <njavali@marvell.com>
+Subject: Re: [PATCH] qla2xxx: Set NVME status code for failed NVME FCP request
+Date:   Wed, 24 Jun 2020 00:29:38 -0400
+Message-Id: <159297296072.9797.7645368338109888920.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200604100745.89250-1-dwagner@suse.de>
+References: <20200604100745.89250-1-dwagner@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <1592635992-35619-2-git-send-email-kwmad.kim@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9661 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ spamscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006240031
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9661 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ cotscore=-2147483648 malwarescore=0 mlxscore=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006240031
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> +#define EN_PRINT_UFS_LOG 1
+On Thu, 4 Jun 2020 12:07:45 +0200, Daniel Wagner wrote:
 
-Since this macro controls debug code, please make this configurable at
-runtime, e.g. as a kernel module parameter or by using the dynamic debug
-mechanism.
+> The qla2xxx driver knows when request was processed successfully or
+> not. But it always sets the NVME status code to 0/NVME_SC_SUCCESS. The
+> upper layer needs to figure out from the rcv_rsplen and
+> transferred_length variables if the request was successfully. This is
+> not always possible, e.g. when the request data length is 0, the
+> transferred_length is also set 0 which is interpreted as success in
+> nvme_fc_fcpio_done(). Let's inform the upper
+> layer (nvme_fc_fcpio_done()) when something went wrong.
+> 
+> [...]
 
-> +/* Structure for ufs cmd logging */
-> +#define MAX_CMD_LOGS    32
+Applied to 5.8/scsi-fixes, thanks!
 
-Please clarify in the comment above this constant how this constant has
-been chosen. Is this constant e.g. related to the queue depth? Is this
-constant per UFS device or is it a maximum for all UFS devices?
+[1/1] scsi: qla2xxx: Set NVMe status code for failed NVMe FCP request
+      https://git.kernel.org/mkp/scsi/c/ef2e3ec520a8
 
-> +struct cmd_data {
-> +	unsigned int tag;
-> +	unsigned int sct;
-> +	unsigned long lba;
-> +	u64 start_time;
-> +	u64 end_time;
-> +	u64 outstanding_reqs;
-> +	int retries;
-> +	unsigned char op;
-> +};
-
-Please use data types that explicitly specify the width for members like
-e.g. the lba (u64 instead of unsigned long). Please also use u8 instead
-of unsigned char for 'op' since 'op' is not used to store any kind of
-ASCII character.
-
-> +struct ufs_cmd_info {
-> +	u32 total;
-> +	u32 last;
-> +	struct cmd_data data[MAX_CMD_LOGS];
-> +	struct cmd_data *pdata[32];	/* Currently, 32 slots */
-> +};
-
-What are 'slots'? Why 32?
-
-> +#define DBG_NUM_OF_HOSTS	1
-> +struct ufs_s_dbg_mgr {
-> +	struct ufs_exynos_handle *handle;
-> +	int active;
-> +	u64 first_time;
-> +	u64 time;
-> +
-> +	/* cmd log */
-> +	struct ufs_cmd_info cmd_info;
-> +	struct cmd_data cmd_log;		/* temp buffer to put */
-> +	spinlock_t cmd_lock;
-> +};
-
-Please add a comment above this structure that explains the role of this
-data structure.
-
-> +static struct ufs_s_dbg_mgr ufs_s_dbg[DBG_NUM_OF_HOSTS];
-
-A static array? That's suspicious. Should that array perhaps be a member
-of another UFS data structure, e.g. the UFS host or device data structure?
-
-> +static int ufs_s_dbg_mgr_idx;
-
-What does this variable represent?
-
-> +	for (i = 0 ; i < max ; i++, data++) {
-> +		dev_err(dev, ": 0x%02x, %02d, 0x%08lx, 0x%04x, %d, %llu, %llu, 0x%llx %s",
-> +				data->op,
-> +				data->tag,
-> +				data->lba,
-> +				data->sct,
-> +				data->retries,
-> +				data->start_time,
-> +				data->end_time,
-> +				data->outstanding_reqs,
-> +				((last == i) ? "<--" : " "));
-
-Please follow the same coding style as elsewhere in the Linux kernel and
-specify multiple arguments per line (up to the current column limit).
-Please also align the arguments either with the opening parentheses or
-indent these by one tab as requested in the Linux kernel coding style
-document.
-
-> +/*
-> + * EXTERNAL FUNCTIONS
-> + *
-> + * There are two classes that are to initialize data structures for debug
-> + * and to define actual behavior.
-> + */
-> +void exynos_ufs_dump_info(struct ufs_exynos_handle *handle, struct device *dev)
-> +{
-> +	struct ufs_s_dbg_mgr *mgr = (struct ufs_s_dbg_mgr *)handle->private;
-> +
-> +	if (mgr->active == 0)
-> +		goto out;
-> +
-> +	mgr->time = cpu_clock(raw_smp_processor_id());
-> +
-> +#if EN_PRINT_UFS_LOG
-> +	ufs_s_print_cmd_log(mgr, dev);
-> +#endif
-> +
-> +	if (mgr->first_time == 0ULL)
-> +		mgr->first_time = mgr->time;
-> +out:
-> +	return;
-> +}
-
-Using cpu_clock() without storing the CPU on which it has been sampled
-seems wrong to me. Is higher accuracy than a single jiffy required? If
-not, how about using 'jiffies' instead? From clock.h:
-
-/*
- * As outlined in clock.c, provides a fast, high resolution, nanosecond
- * time source that is monotonic per cpu argument and has bounded drift
- * between cpus.
- *
- * ######################### BIG FAT WARNING ##########################
- * # when comparing cpu_clock(i) to cpu_clock(j) for i != j, time can #
- * # go backwards !!                                                  #
- * ####################################################################
- */
-
-> +void exynos_ufs_cmd_log_start(struct ufs_exynos_handle *handle,
-> +			      struct ufs_hba *hba, struct scsi_cmnd *cmd)
-> +{
-> +	struct ufs_s_dbg_mgr *mgr = (struct ufs_s_dbg_mgr *)handle->private;
-> +	int cpu = raw_smp_processor_id();
-> +	struct cmd_data *cmd_log = &mgr->cmd_log;	/* temp buffer to put */
-> +	unsigned long lba = (cmd->cmnd[2] << 24) |
-> +					(cmd->cmnd[3] << 16) |
-> +					(cmd->cmnd[4] << 8) |
-> +					(cmd->cmnd[5] << 0);
-> +	unsigned int sct = (cmd->cmnd[7] << 8) |
-> +					(cmd->cmnd[8] << 0);
-
-Aargh! SCSI command parsing ... Has it been considered to use
-blk_rq_pos(cmd->req) and blk_rq_bytes(cmd->req) instead?
-
-> +int exynos_ufs_init_dbg(struct ufs_exynos_handle *handle)
-> +{
-> +	struct ufs_s_dbg_mgr *mgr;
-> +
-> +	if (ufs_s_dbg_mgr_idx >= DBG_NUM_OF_HOSTS)
-> +		return -1;
-> +
-> +	mgr = &ufs_s_dbg[ufs_s_dbg_mgr_idx++];
-> +	handle->private = (void *)mgr;
-> +	mgr->handle = handle;
-> +	mgr->active = 1;
-
-Can the '(void *)' cast above be left out?
-
-> +#define UFS_VS_MMIO_VER 1
-
-What does this constant represent? Please add a comment.
-
-Thanks,
-
-Bart.
+-- 
+Martin K. Petersen	Oracle Linux Engineering
