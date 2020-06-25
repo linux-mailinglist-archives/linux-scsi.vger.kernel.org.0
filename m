@@ -2,72 +2,155 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD98209E09
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2020 14:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBEA20A076
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Jun 2020 16:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404355AbgFYMAi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 Jun 2020 08:00:38 -0400
-Received: from mga05.intel.com ([192.55.52.43]:2494 "EHLO mga05.intel.com"
+        id S2405302AbgFYOBt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 Jun 2020 10:01:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41048 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404285AbgFYMAi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 25 Jun 2020 08:00:38 -0400
-IronPort-SDR: aWyLI+QWhxZQmUh0WbLcVC45CA8YRpYR03uqWXML6m409mO1wWeZ/xWG1oZUjDiaIgH/kj+RTw
- yzHAsbQKR/0g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9662"; a="229574160"
-X-IronPort-AV: E=Sophos;i="5.75,279,1589266800"; 
-   d="scan'208";a="229574160"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 05:00:37 -0700
-IronPort-SDR: RRdd11iqzbMlhPLlbSKEAzlZoQ7FPNxJD/fE2iNg+eO0Vr/psKaGGae25jg/Kuc8pwssbLo9go
- R+k3XrugJioA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,279,1589266800"; 
-   d="scan'208";a="301965447"
-Received: from lkp-server01.sh.intel.com (HELO 538b5e3c8319) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Jun 2020 05:00:35 -0700
-Received: from kbuild by 538b5e3c8319 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1joQYU-0001ay-LX; Thu, 25 Jun 2020 12:00:34 +0000
-Date:   Thu, 25 Jun 2020 19:59:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Deepak Ukey <deepak.ukey@microchip.com>, linux-scsi@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Vasanthalakshmi.Tharmarajan@microchip.com,
-        Viswas.G@microchip.com, deepak.ukey@microchip.com,
-        jinpu.wang@profitbricks.com, martin.petersen@oracle.com,
-        dpf@google.com, yuuzheng@google.com, auradkar@google.com,
-        vishakhavc@google.com
-Subject: [RFC PATCH] pm80xx : pm8001_queue_phyup() can be static
-Message-ID: <20200625115948.GA63645@9d911e2d61d0>
-References: <20200624120322.6265-3-deepak.ukey@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200624120322.6265-3-deepak.ukey@microchip.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2404890AbgFYOBr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 25 Jun 2020 10:01:47 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 99487AD1B;
+        Thu, 25 Jun 2020 14:01:45 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        John Garry <john.garry@huawei.com>,
+        Don Brace <don.brace@microchip.de>,
+        Bart van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv4 00/22] scsi: enable reserved commands for LLDDs
+Date:   Thu, 25 Jun 2020 16:01:02 +0200
+Message-Id: <20200625140124.17201-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi all,
 
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- pm80xx_hwi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+quite some drivers use internal commands for various purposes, most
+commonly sending TMFs or querying the HBA status.
+While these commands use the same submission mechanism than normal
+I/O commands, they will not be counted as outstanding commands,
+requiring those drivers to implement their own mechanism to figure
+out outstanding commands.
+The block layer already has the concept of 'reserved' tags for
+precisely this purpose, namely non-I/O tags which live off a separate
+tag pool. That guarantees that these commands can always be sent,
+and won't be influenced by tag starvation from the I/O tag pool.
+This patchset enables the use of reserved tags for the SCSI midlayer
+by allocating a virtual LUN for the HBA itself which just serves
+as a resource to allocate valid tags from.
+This removes quite some hacks which were required for some
+drivers (eg. fnic or snic), and allows the use of tagset
+iterators within the drivers.
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 748c7a06262fb..80e992d9ea314 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -49,7 +49,7 @@
- static int pm80xx_chip_phy_ctl_req(struct pm8001_hba_info *pm8001_ha,
- 	u32 phyId, u32 phy_op);
- 
--void  pm8001_queue_phyup(struct pm8001_hba_info *pm8001_ha, int phy_id)
-+static void  pm8001_queue_phyup(struct pm8001_hba_info *pm8001_ha, int phy_id)
- {
- 	int i;
- 
+The entire patchset can be found at
+
+git://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git reserved-tags.v4
+
+As usual, comments and reviews are welcome.
+
+Changes to v3:
+- Kill gdth
+- Only convert fnic, snic, hpsa, and aacraid
+- Drop command emulation for pseudo host device
+- make 'can_queue' exclude the number or reserved tags
+- Drop persistent commands proposal
+- Sanitize host device handling
+
+Changes to v2:
+- Update patches from John Garry
+- Use virtual LUN as suggested by Christoph
+- Improve SCSI Host device to present a real SCSI device
+- Implement 'persistent' commands for AENs
+- Convert Megaraid SAS
+
+Changes to v1:
+- Make scsi_{get, put}_reserved_cmd() for Scsi host
+- Previously we separate scsi_{get, put}_reserved_cmd() for sdev
+  and scsi_host_get_reserved_cmd() for the host
+- Fix how Scsi_Host.can_queue is set in the virtio-scsi change
+- Drop Scsi_Host.use_reserved_cmd_q
+- Drop scsi_is_reserved_cmd()
+- Add support in libsas and associated HBA drivers
+- Allocate reserved command in slow task
+- Switch hisi_sas to use reserved Scsi command
+- Reorder the series a little
+- Some tidying
+	      
+Hannes Reinecke (22):
+  scsi: drop gdth driver
+  block: add flag for internal commands
+  scsi: add scsi_{get,put}_internal_cmd() helper
+  fnic: use internal commands
+  fnic: use scsi_host_busy_iter() to traverse commands
+  fnic: check for started requests in fnic_wq_copy_cleanup_handler()
+  csiostor: use internal command for LUN reset
+  scsi: implement reserved command handling
+  scsi: use real inquiry data when initialising devices
+  scsi: Use dummy inquiry data for the host device
+  scsi: revamp host device handling
+  snic: use reserved commands
+  snic: use tagset iter for traversing commands
+  snic: check for started requests in snic_hba_reset_cmpl_handler()
+  hpsa: move hpsa_hba_inquiry after scsi_add_host()
+  hpsa: use reserved commands
+  hpsa: use scsi_host_busy_iter() to traverse outstanding commands
+  hpsa: drop refcount field from CommandList
+  aacraid: move scsi_add_host()
+  aacraid: store target id in host_scribble
+  aacraid: use scsi_get_internal_cmd()
+  aacraid: use scsi_host_busy_iter() to traverse outstanding commands
+
+ Documentation/kbuild/makefiles.rst                 |    4 +-
+ Documentation/process/magic-number.rst             |    2 -
+ Documentation/scsi/scsi-parameters.rst             |    3 -
+ Documentation/userspace-api/ioctl/ioctl-number.rst |    1 -
+ block/blk-exec.c                                   |    5 +
+ drivers/scsi/Kconfig                               |   14 -
+ drivers/scsi/Makefile                              |    2 -
+ drivers/scsi/aacraid/aachba.c                      |  137 +-
+ drivers/scsi/aacraid/aacraid.h                     |    9 +-
+ drivers/scsi/aacraid/commctrl.c                    |   25 +-
+ drivers/scsi/aacraid/comminit.c                    |    2 +-
+ drivers/scsi/aacraid/commsup.c                     |  106 +-
+ drivers/scsi/aacraid/dpcsup.c                      |    2 +-
+ drivers/scsi/aacraid/linit.c                       |  175 +-
+ drivers/scsi/csiostor/csio_scsi.c                  |   48 +-
+ drivers/scsi/fnic/fnic_scsi.c                      |  944 ++---
+ drivers/scsi/gdth.c                                | 4323 --------------------
+ drivers/scsi/gdth.h                                |  981 -----
+ drivers/scsi/gdth_ioctl.h                          |  251 --
+ drivers/scsi/gdth_proc.c                           |  586 ---
+ drivers/scsi/gdth_proc.h                           |   18 -
+ drivers/scsi/hpsa.c                                |  368 +-
+ drivers/scsi/hpsa.h                                |    3 +-
+ drivers/scsi/hpsa_cmd.h                            |    1 -
+ drivers/scsi/scsi_devinfo.c                        |    1 +
+ drivers/scsi/scsi_lib.c                            |   51 +-
+ drivers/scsi/scsi_scan.c                           |   96 +-
+ drivers/scsi/scsi_sysfs.c                          |    3 +-
+ drivers/scsi/snic/snic.h                           |    4 +-
+ drivers/scsi/snic/snic_main.c                      |    7 +
+ drivers/scsi/snic/snic_scsi.c                      |  523 ++-
+ include/linux/blk_types.h                          |    2 +
+ include/linux/blkdev.h                             |    5 +
+ include/scsi/scsi_device.h                         |    3 +
+ include/scsi/scsi_host.h                           |   25 +-
+ 35 files changed, 1238 insertions(+), 7492 deletions(-)
+ delete mode 100644 drivers/scsi/gdth.c
+ delete mode 100644 drivers/scsi/gdth.h
+ delete mode 100644 drivers/scsi/gdth_ioctl.h
+ delete mode 100644 drivers/scsi/gdth_proc.c
+ delete mode 100644 drivers/scsi/gdth_proc.h
+
+-- 
+2.16.4
+
