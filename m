@@ -2,87 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D419320AE98
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jun 2020 10:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A077920AF3C
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jun 2020 11:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725925AbgFZI5o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jun 2020 04:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725792AbgFZI5o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jun 2020 04:57:44 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4662C08C5C1
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2020 01:57:43 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id f23so9024856iof.6
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2020 01:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=yLEQSFWUMY2/ddW5M82LUnr9B/iHrRNADt5kswR++hM=;
-        b=QolRM+XCpIinKVCaryl6r7M0UjQa9koDaW32c8CPJiqsJNHskJ3ljSysuqsZ+tBHJx
-         iiNYh9ZFa4GEjSTgJ/Wb0BdTuUqVBtHH4MV1SQJBJb+EpVxbyqz03gxeBdAQbCumJdL7
-         kkP+HHSwfHYwALPuQn1s5EI3EDoDvA7QAiBWMfaHjP+7IbbP6c7u5/sDHU5uFZ7YGDAl
-         MzTbIoree1Reo7ixgS8zZBRea4UYjxsbO3Z7iaPYUZtYGR06ZcxxCueI6hd/l6plQapV
-         Gj2HrA1f7WwpeSPLatektBJ6VRE+iL3RaRGYu/70knm9fnnGKSiyQF2gu0TsG7dqlIq7
-         6ZEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=yLEQSFWUMY2/ddW5M82LUnr9B/iHrRNADt5kswR++hM=;
-        b=le8P7o1uMbeQHxcrrOM7AhfEEAkvwW8nwM/6EgSkTb/JIFRQ5oyWZXr/IA2hE5NT+n
-         fU+/rCNPfojqq5nJSmRgUCKlZ/vOQtDwaSzdGJukSSqkulUXumf/7+iJah+YPPqMC0jE
-         SKKXvxzzbxI/oHzMa8l2JJmmLaybvUgESr5CZ/UsZxDhkVE2oEOLl2nOPnEj0QSoNTuW
-         iFrZP7+/1o9gck+9sOfdOHOk8MrSPBJk3dPB0FQlT0E8nGozTlV0pQQlkFGRSmm3vZJf
-         Rfs+Yvd+zDdKyoyqJA15yBlbHpqOOwcx4QZlsas6G/lVcQztDf6/AX45cAVJ8wPLQuTh
-         ne9w==
-X-Gm-Message-State: AOAM531oFionUfX/Z3L+ah7rk4X2x8MKQq3Nhgj0zdyJng0uOcV5hUt0
-        gKmctKP5fSALky1MENKHPMj7Sj26znhD0EiPOFM=
-X-Google-Smtp-Source: ABdhPJxK2WGHgCuWtse8Rao8FxP4S+PiBiMpGMPAXUbNmv+Zmnb9HHqXqdzzj191V8aQd0lZnObATryCbGITXitCpH4=
-X-Received: by 2002:a02:844d:: with SMTP id l13mr2304742jah.105.1593161862885;
- Fri, 26 Jun 2020 01:57:42 -0700 (PDT)
+        id S1726900AbgFZJwC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jun 2020 05:52:02 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:28828 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726856AbgFZJwB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Jun 2020 05:52:01 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05Q9jJHA027907
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2020 02:52:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=yxSRZMqMIsI5mZL/1KCgVW0tdAkNgjar2XrO0E1Vs6c=;
+ b=wyN3pnp1Ax0rPHP2DuDxXuTbtsGMujLC6APDwx8VbIFCX3OOxTSzSuKLEoAM+HthcoFV
+ imMfGHqKvTNaTJDncuyq1+6bu7A0SmJPu4tOlvGxCiceW4eaTmBuSobwSumQjIeXqMyv
+ gi7+24gN1uLZpuqSvYUC9iQNeAOH2t+ZxR3OUoJzKol7RAbGwhGZkyCf7LNH9Sz8/c42
+ BFMkCpa/R+sjYRBLHs06N+mFPE147lCkWiEYQrPmu+LSrm2ujCXzNHWp64+K0H02hyGm
+ R3gmBRJqSP4WpBJLrFyw8lkecTY8icwZRB1JUBy9YZfO4G8pYOxq0XfOS+xgSW66CIA7 6A== 
+Received: from sc-exch04.marvell.com ([199.233.58.184])
+        by mx0a-0016f401.pphosted.com with ESMTP id 31uuqh40aw-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jun 2020 02:52:01 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH04.marvell.com
+ (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 26 Jun
+ 2020 02:50:24 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 26 Jun 2020 02:50:24 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id D0E443F703F;
+        Fri, 26 Jun 2020 02:50:23 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 05Q9oN5g032252;
+        Fri, 26 Jun 2020 02:50:23 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 05Q9oNO7032185;
+        Fri, 26 Jun 2020 02:50:23 -0700
+From:   Javed Hasan <jhasan@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>, <jhasan@marvell.com>
+Subject: [PATCH V2] scsi: libfc: Skip additional kref updating work event.
+Date:   Fri, 26 Jun 2020 02:49:59 -0700
+Message-ID: <20200626094959.32151-1-jhasan@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Received: by 2002:a05:6602:15cd:0:0:0:0 with HTTP; Fri, 26 Jun 2020 01:57:42
- -0700 (PDT)
-Reply-To: mrsaishagaddafi168@gmail.com
-From:   Mrs A Gaddafi <laaibahyakj@gmail.com>
-Date:   Fri, 26 Jun 2020 01:57:42 -0700
-Message-ID: <CAD1wqEy=+w-PE9PXcQTcgaYB2aC-118D=UOX5NYv1eVFX=ACNA@mail.gmail.com>
-Subject: REPLY URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-26_05:2020-06-26,2020-06-26 signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+  When an rport event(RPORT_EV_READY) is updated without
+  work being queued, avoid taking an additional reference.
 
-I came across your e-mail contact prior a private search whilst in
-need of your partnership for investment assistance in your country. I
-am opportune to use this medium to exhibit my legal intentions towards
-investing to your country under your management. I am fully convinced
-that you will really be of help as a business partner.
+  This issue was leading to memory leak.
+  Below is the trace from KMEMLEAK tool.
+  unreferenced object 0xffff8888259e8780 (size 512):
+  comm "kworker/2:1", jiffies 4433237386 (age 113021.971s)
+    hex dump (first 32 bytes):
+	58 0a ec cf 83 88 ff ff 00 00 00 00 00 00 00 00
+	01 00 00 00 08 00 00 00 13 7d f0 1e 0e 00 00 10
+  backtrace:
+  [<000000006b25760f>] fc_rport_recv_req+0x3c6/0x18f0 [libfc]
+  [<00000000f208d994>] fc_lport_recv_els_req+0x120/0x8a0 [libfc]
+  [<00000000a9c437b8>] fc_lport_recv+0xb9/0x130 [libfc]
+  [<00000000a9c437b8>] fc_lport_recv+0xb9/0x130 [libfc]
+  [<00000000ad5be37b>] qedf_ll2_process_skb+0x73d/0xad0 [qedf]
+  [<00000000e0eb6893>] process_one_work+0x382/0x6c0
+  [<000000002dfd9e21>] worker_thread+0x57/0x5c0
+  [<00000000b648204f>] kthread+0x1a0/0x1c0
+  [<0000000072f5ab20>] ret_from_fork+0x35/0x40
+  [<000000001d5c05d8>] 0xffffffffffffffff
 
-My name is Aisha  Gaddafi a single Mother and a Widow and i have three
-Children. I am the only biological Daughter of late Libyan President
-(Late Colonel Muammar Gaddafi).
+  Below is the logs sequence which leads to memory leak.
+  Here we get the RPORT_EV_READY and RPORT_EV_STOP back to back,
+  which lead to overwrite the event RPORT_EV_READY by event RPORT_EV_STOP.
+  Because of this kref_count get incremented by 1.
+  kernel: host0: rport fffce5: Received PLOGI request
+  kernel: host0: rport fffce5: Received PLOGI in INIT state
+  kernel: host0: rport fffce5: Port is Ready
+  kernel: host0: rport fffce5: Received PRLI request while in state Ready
+  kernel: host0: rport fffce5: PRLI rspp type 8 active 1 passive 0
+  kernel: host0: rport fffce5: Received LOGO request while in state Ready
+  kernel: host0: rport fffce5: Delete port
+  kernel: host0: rport fffce5: Received PLOGI request
+  kernel: host0: rport fffce5: Received PLOGI in state Delete - send busy
+  kernel: host0: rport fffce5: work event 3
+  kernel: host0: rport fffce5: lld callback ev 3
+  kernel: host0: rport fffce5: work delete
 
-I have investment funds worth Seventeen Million Five Hundred Thousand
-United State Dollar ($17.500.000.00 ) and i need a trusted investment
-Manager/Partner.  I am planning to go into investment projects in your
-country of origin or present country of Location to assist me
-establish the investments project.
+  Reviewed-by: Girish Basrur <gbasrur@marvell.com>
+  Reviewed-by: Saurav Kashyap <skashyap@marvell.com>
+  Reviewed-by: Shyam Sundar <ssundar@marvell.com>
+  Signed-off-by: Javed Hasan <jhasan@marvell.com>
 
- I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
+Signed-off-by: Javed Hasan <jhasan@marvell.com>
+---
+Changes in v2:
+ - Identation fix.
+---
+ drivers/scsi/libfc/fc_rport.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more details about myself and more
-information about the release of the investment funds.
+diff --git a/drivers/scsi/libfc/fc_rport.c b/drivers/scsi/libfc/fc_rport.c
+index ca39b4b..d84de3f 100644
+--- a/drivers/scsi/libfc/fc_rport.c
++++ b/drivers/scsi/libfc/fc_rport.c
+@@ -483,10 +483,11 @@ static void fc_rport_enter_delete(struct fc_rport_priv *rdata,
+ 
+ 	fc_rport_state_enter(rdata, RPORT_ST_DELETE);
+ 
+-	kref_get(&rdata->kref);
+-	if (rdata->event == RPORT_EV_NONE &&
+-	    !queue_work(rport_event_queue, &rdata->event_work))
+-		kref_put(&rdata->kref, fc_rport_destroy);
++	if (rdata->event == RPORT_EV_NONE) {
++		kref_get(&rdata->kref);
++		if(!queue_work(rport_event_queue, &rdata->event_work))
++			kref_put(&rdata->kref, fc_rport_destroy);
++	}
+ 
+ 	rdata->event = event;
+ }
+-- 
+1.8.3.1
 
-I appreciate Your Urgent Reply to my email address:
-
-Best Regards
-Mrs Aisha Gaddafi
