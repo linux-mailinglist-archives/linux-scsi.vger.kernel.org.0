@@ -2,96 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D03720BD66
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 02:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89F020BDD8
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 05:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgF0AWG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jun 2020 20:22:06 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14922 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726028AbgF0AWG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jun 2020 20:22:06 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05R03M7i010514;
-        Fri, 26 Jun 2020 20:21:48 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31waw95326-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Jun 2020 20:21:48 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05R0FoB2022990;
-        Sat, 27 Jun 2020 00:21:47 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01wdc.us.ibm.com with ESMTP id 31uurtqk3e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 Jun 2020 00:21:47 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05R0LjAg25362816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 27 Jun 2020 00:21:45 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0706D78063;
-        Sat, 27 Jun 2020 00:21:47 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2BEF67805C;
-        Sat, 27 Jun 2020 00:21:46 +0000 (GMT)
-Received: from [153.66.254.194] (unknown [9.85.184.115])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sat, 27 Jun 2020 00:21:45 +0000 (GMT)
-Message-ID: <1593217304.10175.4.camel@linux.ibm.com>
-Subject: Re: [PATCH] scsi: Avoid unnecessary iterations on __scsi_scan_target
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Anjali Kulkarni <Anjali.K.Kulkarni@oracle.com>,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org
-Date:   Fri, 26 Jun 2020 17:21:44 -0700
-In-Reply-To: <7917b23d-0222-d0c7-42a4-b3f18ac24ec2@oracle.com>
-References: <38cee464-7320-87a9-f55c-f0db4679fc0a@oracle.com>
-         <1593216207.10175.2.camel@linux.vnet.ibm.com>
-         <7917b23d-0222-d0c7-42a4-b3f18ac24ec2@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-26_12:2020-06-26,2020-06-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 impostorscore=0 malwarescore=0 cotscore=-2147483648
- mlxscore=0 bulkscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
- adultscore=0 mlxlogscore=996 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006260166
+        id S1725930AbgF0DL1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jun 2020 23:11:27 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38864 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725828AbgF0DL1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jun 2020 23:11:27 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R37v6T140505;
+        Sat, 27 Jun 2020 03:11:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=65tMzZGkpgU13g+QkF5YudnfqI5t4N1Mep/VGwF/5h0=;
+ b=ZbTbhD9DHPaRSQIZT6hBBGeb6NE1RAN/HhaPHoF8t2AtWgAabCa0lqYai4MlQJadX4/H
+ O1nRa/s7hQ+623MsvdC3igxdmAKB2im7tPeXb44/4XoVfJ7glm7HbKd7jKQglgZlUGET
+ YtcgynnX88TQCm0fUXeGdA1+ySkpfQ5CiHaXb0ppQ21CwEjYoPgZ2EGoRfRvr3H4h/il
+ ZlsLVNBZ8nYlWA5MvmjFMWIMoGr8ZcRA4m/s7pghDyNTBi7PF+75PIf9Y42evsL2PPlR
+ OrSVrIqDN212tO9rjjYKFbLOPiYDdpjFTL94wzKZq5fyZ86rOr9HAUjSjONcnfSJspDu CQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 31wg3bkcgp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 27 Jun 2020 03:11:18 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R38JvH151041;
+        Sat, 27 Jun 2020 03:09:18 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 31wweh0vy9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 27 Jun 2020 03:09:18 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05R39Cur023857;
+        Sat, 27 Jun 2020 03:09:13 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 27 Jun 2020 03:09:12 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Darren Trapp <darren.trapp@cavium.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        GR-QLogic-Storage-Upstream@marvell.com
+Subject: Re: [PATCH] scsi: qla2xxx: Fix a condition in qla2x00_find_all_fabric_devs()
+Date:   Fri, 26 Jun 2020 23:09:09 -0400
+Message-Id: <159322725421.11274.1151779103436589073.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200619143041.GD267142@mwanda>
+References: <20200619143041.GD267142@mwanda>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=989 spamscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006270020
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
+ malwarescore=0 cotscore=-2147483648 adultscore=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1011 mlxscore=0 mlxlogscore=999 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006270020
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 2020-06-26 at 17:17 -0700, Anjali Kulkarni wrote:
-> Thanks James.
-> 
-> This is on a VM on OCI cloud, using virtio scsi.
-> 
-> Here is output of lspci on the VM:
-> 
-> 00:00.0 Host bridge: Intel Corporation 440FX - 82441FX PMC [Natoma]
-> (rev 02)
-> 00:01.0 ISA bridge: Intel Corporation 82371SB PIIX3 ISA
-> [Natoma/Triton II]
-> 00:01.1 IDE interface: Intel Corporation 82371SB PIIX3 IDE 
-> [Natoma/Triton II]
-> 00:01.2 USB controller: Intel Corporation 82371SB PIIX3 USB 
-> [Natoma/Triton II] (rev 01)
-> 00:01.3 Bridge: Intel Corporation 82371AB/EB/MB PIIX4 ACPI (rev 03)
-> 00:02.0 VGA compatible controller: Device 1234:1111 (rev 02)
-> 00:03.0 Ethernet controller: Red Hat, Inc. Virtio network device
-> 00:04.0 SCSI storage controller: Red Hat, Inc. Virtio SCSI
+On Fri, 19 Jun 2020 17:30:41 +0300, Dan Carpenter wrote:
 
-I think the right thing to do would be to fix virtio-SCSI.  It already
-has the guest to host communication to know how many targets are
-configured.  There's shouldn't be any need to do scanning.
+> This code doesn't make sense unless the correct "fcport" was found.
 
-James
+Applied to 5.8/scsi-fixes, thanks!
 
+[1/1] scsi: qla2xxx: Fix a condition in qla2x00_find_all_fabric_devs()
+      https://git.kernel.org/mkp/scsi/c/1fc98aaf7f85
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
