@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F5320BE5E
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 06:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED99F20BE55
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 06:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726003AbgF0Efc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 27 Jun 2020 00:35:32 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:42094 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725797AbgF0Ef0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 27 Jun 2020 00:35:26 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R4WxLJ045438;
-        Sat, 27 Jun 2020 04:35:17 GMT
+        id S1725980AbgF0Ef2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 27 Jun 2020 00:35:28 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:39078 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbgF0Ef1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 27 Jun 2020 00:35:27 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R4XVWm118765;
+        Sat, 27 Jun 2020 04:35:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=SktdWlZAxVirP2saH2LaktTAxFtxq4YWloWq9Ic/Vl8=;
- b=aBJI6w58y35Tq+aveT+H7XhC3IfHfUWzw3pXyWHvG8wt0ZBf0fiSTBV1bD7cnr/Ol7Xr
- RSE7EThibUxkcU4cr7Q9RRJgbbeT14SyM5kQHi83hRd0KRessyrrXMypzFov+R7bCEjo
- pQkx6QMdZwE08NE47vMcZbrLg/C+Sy+s9reUPYAxTZx3hFvLBA/yrJuIpQm66OypN0A7
- QJXytTACvqoXe2eiHpfGI0acijTpg/R38hx+hGu717GliZBXUC4d5TDjIJSEN5KvdqH4
- xLSheVLJZ7UbOgyDx+XrbB9v87C9kDIcjNoVLEZTTCivDjlq0uTbK4ZuOW91ujrLYzuY +Q== 
+ bh=UqVh+Qq45m1qyMQYABqYNg5keIO3mjWJqXi6V/qtmRI=;
+ b=HyK49OAfQsQiClDk15t9l8k5s/TepXLFf87Azz7K7GjRSSDiIhdxDvQq+Kc+rNA1mWnf
+ 6Uws4Gof8alkX1PyIOZejJM4A0e4plZlpFfvoQuClBifb97JGAhUw0Waxgsi6MBt2vpz
+ 0is0zpd44r4p+72Oj11X4172CqAbMlhVMtZWwQ0YK7rBPPYbT+DoAyhbx7VlzgWQok42
+ FIE4DCdo0YLka/QWbKEcceuJthGv7WoivvmVO2zHmPaYSmmjlu0iiYBTsgxJgHeOgUeO
+ nj4brM4vnzqXsG9CqT+2gBGvX2X9n+OnIyEkQjaHcWjugjDhr+lxvpMeaLtYAWT3sRC9 dA== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 31wx2m82g5-1
+        by userp2130.oracle.com with ESMTP id 31wwhr83sn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 27 Jun 2020 04:35:16 +0000
+        Sat, 27 Jun 2020 04:35:18 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R4YJtC122171;
-        Sat, 27 Jun 2020 04:35:16 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 31wv58v8ae-1
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R4Y9M9121984;
+        Sat, 27 Jun 2020 04:35:17 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 31wv58v8as-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 27 Jun 2020 04:35:16 +0000
+        Sat, 27 Jun 2020 04:35:17 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05R4ZGAK030605;
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05R4ZGlw010413;
         Sat, 27 Jun 2020 04:35:16 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 27 Jun 2020 04:35:15 +0000
+        with ESMTP ; Sat, 27 Jun 2020 04:35:16 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     hare@suse.de, bvanassche@acm.org, bstroesser@ts.fujitsu.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [RFC PATCH 08/10] ibm,loop,vhost,xenscsi: add close_session callouts
-Date:   Fri, 26 Jun 2020 23:35:07 -0500
-Message-Id: <1593232509-13720-9-git-send-email-michael.christie@oracle.com>
+Subject: [RFC PATCH 09/10] target: add helper to close session synchronously
+Date:   Fri, 26 Jun 2020 23:35:08 -0500
+Message-Id: <1593232509-13720-10-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1593232509-13720-1-git-send-email-michael.christie@oracle.com>
 References: <1593232509-13720-1-git-send-email-michael.christie@oracle.com>
@@ -55,314 +55,181 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 susp
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006270030
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015 adultscore=0
- impostorscore=0 cotscore=-2147483648 priorityscore=1501 malwarescore=0
- phishscore=0 suspectscore=2 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006270030
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 cotscore=-2147483648
+ mlxscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ spamscore=0 suspectscore=2 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006270030
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Call the fabric modules drop nexus functions from the close_session
-callout.
+We need to be able to delete sessions from userspace like is done for
+the ACL path or is done for other objects like tpg, lun, etc. This patch
+adds a helper function that calls the fabric module close_session
+callback and then waits for the removal to complete. It will be used
+in the next patch so userspace can remove sessions before deleting
+TPGs/ACLs.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
+ drivers/target/target_core_internal.h  |  1 +
+ drivers/target/target_core_transport.c | 90 ++++++++++++++++++++++++++++++++++
+ include/target/target_core_base.h      |  2 +
+ 3 files changed, 93 insertions(+)
 
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 14 +++++++++++---
- drivers/target/loopback/tcm_loop.c       | 17 ++++++++++++-----
- drivers/usb/gadget/function/f_tcm.c      | 17 ++++++++++++-----
- drivers/vhost/scsi.c                     | 16 ++++++++++++----
- drivers/xen/xen-scsiback.c               | 16 ++++++++++++----
- 5 files changed, 59 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-index a817524..81f9649 100644
---- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-+++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-@@ -2239,10 +2239,12 @@ static int ibmvscsis_make_nexus(struct ibmvscsis_tport *tport)
- 	return rc;
- }
+diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
+index e92dcf2..0af3844 100644
+--- a/drivers/target/target_core_internal.h
++++ b/drivers/target/target_core_internal.h
+@@ -155,6 +155,7 @@ void	transport_dump_dev_info(struct se_device *, struct se_lun *,
+ bool	target_check_fua(struct se_device *dev);
+ void	__target_execute_cmd(struct se_cmd *, bool);
+ void	target_release_session(struct se_session *);
++int	target_close_session_sync(struct se_portal_group *, int);
  
--static int ibmvscsis_drop_nexus(struct ibmvscsis_tport *tport)
-+static int ibmvscsis_drop_nexus(struct se_portal_group *se_tpg)
+ /* target_core_stat.c */
+ void	target_stat_setup_dev_default_groups(struct se_device *);
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index 8d11a8c..942b0c5 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+@@ -650,6 +650,7 @@ static int target_release_res(struct se_device *dev, void *data)
+ void transport_deregister_session(struct se_session *se_sess)
  {
--	struct se_session *se_sess;
-+	struct ibmvscsis_tport *tport =
-+		container_of(se_tpg, struct ibmvscsis_tport, se_tpg);
- 	struct ibmvscsis_nexus *nexus;
-+	struct se_session *se_sess;
+ 	struct se_portal_group *se_tpg = se_sess->se_tpg;
++	struct completion *removal_comp;
+ 	unsigned long flags;
  
- 	nexus = tport->ibmv_nexus;
- 	if (!nexus)
-@@ -2262,6 +2264,11 @@ static int ibmvscsis_drop_nexus(struct ibmvscsis_tport *tport)
- 	return 0;
+ 	if (!se_tpg) {
+@@ -660,6 +661,8 @@ void transport_deregister_session(struct se_session *se_sess)
+ 	spin_lock_irqsave(&se_tpg->session_lock, flags);
+ 	list_del(&se_sess->sess_list);
+ 	se_sess->se_tpg = NULL;
++	removal_comp = se_sess->removal_comp;
++	se_sess->removal_comp = NULL;
+ 	spin_unlock_irqrestore(&se_tpg->session_lock, flags);
+ 
+ 	/*
+@@ -680,11 +683,98 @@ void transport_deregister_session(struct se_session *se_sess)
+ 	 */
+ 
+ 	transport_free_session(se_sess);
++
++	if (removal_comp)
++		complete(removal_comp);
  }
+ EXPORT_SYMBOL(transport_deregister_session);
  
-+static int ibmvscsis_close_session(struct se_session *se_sess)
++/**
++ * target_close_session_sync - Request fabric remove session and wait removal
++ * @se_tpg: se_portal_group that is the parent of the sess to remove
++ * @sid: session id
++ */
++int target_close_session_sync(struct se_portal_group *se_tpg, int sid)
 +{
-+	return ibmvscsis_drop_nexus(se_sess->se_tpg);
++	DECLARE_COMPLETION_ONSTACK(removal_comp);
++	struct se_session *se_sess;
++	unsigned long flags;
++	int ret;
++
++retry:
++	spin_lock_irqsave(&se_tpg->session_lock, flags);
++	list_for_each_entry(se_sess, &se_tpg->tpg_sess_list, sess_list) {
++		if (se_sess->sid == sid) {
++			config_group_get(&se_sess->group);
++			goto found;
++		}
++	}
++	spin_unlock_irqrestore(&se_tpg->session_lock, flags);
++	return -ENODEV;
++
++found:
++	if (!se_sess->tfo->close_session) {
++		pr_err("Session %d does not support configfs session removal.",
++		       se_sess->sid);
++		return -EINVAL;
++	}
++
++	if (se_sess->sess_tearing_down || se_sess->sess_remove_running ||
++	    se_sess->removal_comp) {
++		spin_unlock_irqrestore(&se_tpg->session_lock, flags);
++		config_group_put(&se_sess->group);
++		/*
++		 * Either the transport started a removal already or another
++		 * caller of this function did. Wait for it to be torn down,
++		 * so caller knows it's safe to proceed with operations like
++		 * parent removals when this returns.
++		 */
++		msleep(250);
++		goto retry;
++	}
++
++	se_sess->removal_comp = &removal_comp;
++	pr_debug("Closing session-%d\n", se_sess->sid);
++	spin_unlock_irqrestore(&se_tpg->session_lock, flags);
++
++	ret = se_sess->tfo->close_session(se_sess);
++	if (ret < 0) {
++		pr_debug("Close for session-%d failed %d\n", se_sess->sid, ret);
++		if (ret != -ENODEV) {
++			spin_lock_irqsave(&se_tpg->session_lock, flags);
++			se_sess->removal_comp = NULL;
++			spin_unlock_irqrestore(&se_tpg->session_lock, flags);
++			goto put_sess;
++		}
++		/*
++		 * Raced with fabric specific nexus interface, but we set our
++		 * compeltion before they called target_remove_session, so we
++		 * can just wait below for them to call complete.
++		 */
++	}
++
++	wait_for_completion(&removal_comp);
++
++put_sess:
++	config_group_put(&se_sess->group);
++	return ret;
 +}
 +
- /**
-  * ibmvscsis_srp_login() - Process an SRP Login Request
-  * @vscsi:	Pointer to our adapter structure
-@@ -3934,7 +3941,7 @@ static void ibmvscsis_drop_tpg(struct se_portal_group *se_tpg)
- 	/*
- 	 * Release the virtual I_T Nexus for this ibmvscsis TPG
- 	 */
--	ibmvscsis_drop_nexus(tport);
-+	ibmvscsis_drop_nexus(se_tpg);
- 	/*
- 	 * Deregister the se_tpg from TCM..
- 	 */
-@@ -4036,6 +4043,7 @@ static ssize_t ibmvscsis_tpg_enable_store(struct config_item *item,
- 	.queue_status			= ibmvscsis_queue_status,
- 	.queue_tm_rsp			= ibmvscsis_queue_tm_rsp,
- 	.aborted_task			= ibmvscsis_aborted_task,
-+	.close_session			= ibmvscsis_close_session,
- 	/*
- 	 * Setup function pointers for logic in target_core_fabric_configfs.c
- 	 */
-diff --git a/drivers/target/loopback/tcm_loop.c b/drivers/target/loopback/tcm_loop.c
-index 570dff2..d5e616e 100644
---- a/drivers/target/loopback/tcm_loop.c
-+++ b/drivers/target/loopback/tcm_loop.c
-@@ -749,11 +749,12 @@ static int tcm_loop_make_nexus(
- 	return 0;
- }
- 
--static int tcm_loop_drop_nexus(
--	struct tcm_loop_tpg *tpg)
-+static int tcm_loop_drop_nexus(struct se_portal_group *se_tpg)
+ void target_remove_session(struct se_session *se_sess)
  {
--	struct se_session *se_sess;
-+	struct tcm_loop_tpg *tpg = container_of(se_tpg, struct tcm_loop_tpg,
-+						tl_se_tpg);
- 	struct tcm_loop_nexus *tl_nexus;
-+	struct se_session *se_sess;
- 
- 	mutex_lock(&tpg->tl_nexus_mutex);
- 	tl_nexus = tpg->tl_nexus;
-@@ -789,6 +790,11 @@ static int tcm_loop_drop_nexus(
- 	return 0;
- }
- 
-+static int tcm_loop_close_session(struct se_session *se_sess)
-+{
-+	return tcm_loop_drop_nexus(se_sess->se_tpg);
-+}
++	struct se_portal_group *se_tpg = se_sess->se_tpg;
++	unsigned long flags;
 +
- /* End items for tcm_loop_nexus_cit */
- 
- static ssize_t tcm_loop_tpg_nexus_show(struct config_item *item, char *page)
-@@ -826,7 +832,7 @@ static ssize_t tcm_loop_tpg_nexus_store(struct config_item *item,
- 	 * Shutdown the active I_T nexus if 'NULL' is passed..
- 	 */
- 	if (!strncmp(page, "NULL", 4)) {
--		ret = tcm_loop_drop_nexus(tl_tpg);
-+		ret = tcm_loop_drop_nexus(se_tpg);
- 		return (!ret) ? count : ret;
- 	}
- 	/*
-@@ -1017,7 +1023,7 @@ static void tcm_loop_drop_naa_tpg(
- 	/*
- 	 * Release the I_T Nexus for the Virtual target link if present
- 	 */
--	tcm_loop_drop_nexus(tl_tpg);
-+	tcm_loop_drop_nexus(se_tpg);
- 	/*
- 	 * Deregister the tl_tpg as a emulated TCM Target Endpoint
- 	 */
-@@ -1155,6 +1161,7 @@ static ssize_t tcm_loop_wwn_version_show(struct config_item *item, char *page)
- 	.queue_status			= tcm_loop_queue_status,
- 	.queue_tm_rsp			= tcm_loop_queue_tm_rsp,
- 	.aborted_task			= tcm_loop_aborted_task,
-+	.close_session			= tcm_loop_close_session,
- 	.fabric_make_wwn		= tcm_loop_make_scsi_hba,
- 	.fabric_drop_wwn		= tcm_loop_drop_scsi_hba,
- 	.fabric_make_tpg		= tcm_loop_make_naa_tpg,
-diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
-index e66884f..ed449ab 100644
---- a/drivers/usb/gadget/function/f_tcm.c
-+++ b/drivers/usb/gadget/function/f_tcm.c
-@@ -1415,7 +1415,7 @@ static struct se_portal_group *usbg_make_tpg(struct se_wwn *wwn,
- 	return ERR_PTR(ret);
- }
- 
--static int tcm_usbg_drop_nexus(struct usbg_tpg *);
-+static int tcm_usbg_drop_nexus(struct se_portal_group *);
- 
- static void usbg_drop_tpg(struct se_portal_group *se_tpg)
- {
-@@ -1424,7 +1424,7 @@ static void usbg_drop_tpg(struct se_portal_group *se_tpg)
- 	unsigned i;
- 	struct f_tcm_opts *opts;
- 
--	tcm_usbg_drop_nexus(tpg);
-+	tcm_usbg_drop_nexus(se_tpg);
- 	core_tpg_deregister(se_tpg);
- 	destroy_workqueue(tpg->workqueue);
- 
-@@ -1597,10 +1597,11 @@ static int tcm_usbg_make_nexus(struct usbg_tpg *tpg, char *name)
- 	return ret;
- }
- 
--static int tcm_usbg_drop_nexus(struct usbg_tpg *tpg)
-+static int tcm_usbg_drop_nexus(struct se_portal_group *se_tpg)
- {
--	struct se_session *se_sess;
-+	struct usbg_tpg *tpg = container_of(se_tpg, struct usbg_tpg, se_tpg);
- 	struct tcm_usbg_nexus *tv_nexus;
-+	struct se_session *se_sess;
- 	int ret = -ENODEV;
- 
- 	mutex_lock(&tpg->tpg_mutex);
-@@ -1635,6 +1636,11 @@ static int tcm_usbg_drop_nexus(struct usbg_tpg *tpg)
- 	return ret;
- }
- 
-+static int tcm_usbg_close_session(struct se_session *se_sess)
-+{
-+	return tcm_usbg_drop_nexus(se_sess->se_tpg);
-+}
++	pr_debug("Removing session-%d\n", se_sess->sid);
 +
- static ssize_t tcm_usbg_tpg_nexus_store(struct config_item *item,
- 		const char *page, size_t count)
- {
-@@ -1644,7 +1650,7 @@ static ssize_t tcm_usbg_tpg_nexus_store(struct config_item *item,
- 	int ret;
- 
- 	if (!strncmp(page, "NULL", 4)) {
--		ret = tcm_usbg_drop_nexus(tpg);
-+		ret = tcm_usbg_drop_nexus(se_tpg);
- 		return (!ret) ? count : ret;
- 	}
- 	if (strlen(page) >= USBG_NAMELEN) {
-@@ -1723,6 +1729,7 @@ static int usbg_check_stop_free(struct se_cmd *se_cmd)
- 	.queue_tm_rsp			= usbg_queue_tm_rsp,
- 	.aborted_task			= usbg_aborted_task,
- 	.check_stop_free		= usbg_check_stop_free,
-+	.close_session			= tcm_usbg_close_session,
- 
- 	.fabric_make_wwn		= usbg_make_tport,
- 	.fabric_drop_wwn		= usbg_drop_tport,
-diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-index 7896e69..d30b8da 100644
---- a/drivers/vhost/scsi.c
-+++ b/drivers/vhost/scsi.c
-@@ -1972,10 +1972,12 @@ static int vhost_scsi_make_nexus(struct vhost_scsi_tpg *tpg,
- 	return 0;
- }
- 
--static int vhost_scsi_drop_nexus(struct vhost_scsi_tpg *tpg)
-+static int vhost_scsi_drop_nexus(struct se_portal_group *se_tpg)
- {
--	struct se_session *se_sess;
-+	struct vhost_scsi_tpg *tpg = container_of(se_tpg, struct vhost_scsi_tpg,
-+						  se_tpg);
- 	struct vhost_scsi_nexus *tv_nexus;
-+	struct se_session *se_sess;
- 
- 	mutex_lock(&tpg->tv_tpg_mutex);
- 	tv_nexus = tpg->tpg_nexus;
-@@ -2022,6 +2024,11 @@ static int vhost_scsi_drop_nexus(struct vhost_scsi_tpg *tpg)
- 	return 0;
- }
- 
-+static int vhost_scsi_close_session(struct se_session *se_sess)
-+{
-+	return vhost_scsi_drop_nexus(se_sess->se_tpg);
-+}
++	spin_lock_irqsave(&se_tpg->session_lock, flags);
++	if (se_sess->sess_remove_running) {
++		spin_unlock_irqrestore(&se_tpg->session_lock, flags);
++		return;
++	}
++	se_sess->sess_remove_running = 1;
++	spin_unlock_irqrestore(&se_tpg->session_lock, flags);
 +
- static ssize_t vhost_scsi_tpg_nexus_show(struct config_item *item, char *page)
- {
- 	struct se_portal_group *se_tpg = to_tpg(item);
-@@ -2056,7 +2063,7 @@ static ssize_t vhost_scsi_tpg_nexus_store(struct config_item *item,
- 	 * Shutdown the active I_T nexus if 'NULL' is passed..
- 	 */
- 	if (!strncmp(page, "NULL", 4)) {
--		ret = vhost_scsi_drop_nexus(tpg);
-+		ret = vhost_scsi_drop_nexus(se_tpg);
- 		return (!ret) ? count : ret;
- 	}
- 	/*
-@@ -2176,7 +2183,7 @@ static void vhost_scsi_drop_tpg(struct se_portal_group *se_tpg)
- 	/*
- 	 * Release the virtual I_T Nexus for this vhost TPG
- 	 */
--	vhost_scsi_drop_nexus(tpg);
-+	vhost_scsi_drop_nexus(se_tpg);
- 	/*
- 	 * Deregister the se_tpg from TCM..
- 	 */
-@@ -2294,6 +2301,7 @@ static void vhost_scsi_drop_tport(struct se_wwn *wwn)
- 	.queue_status			= vhost_scsi_queue_status,
- 	.queue_tm_rsp			= vhost_scsi_queue_tm_rsp,
- 	.aborted_task			= vhost_scsi_aborted_task,
-+	.close_session			= vhost_scsi_close_session,
- 	/*
- 	 * Setup callers for generic logic in target_core_fabric_configfs.c
- 	 */
-diff --git a/drivers/xen/xen-scsiback.c b/drivers/xen/xen-scsiback.c
-index f0a8fc7..ffd1a7a 100644
---- a/drivers/xen/xen-scsiback.c
-+++ b/drivers/xen/xen-scsiback.c
-@@ -1538,10 +1538,12 @@ static int scsiback_make_nexus(struct scsiback_tpg *tpg,
- 	return ret;
+ 	transport_deregister_session_configfs(se_sess);
+ 	transport_deregister_session(se_sess);
  }
+diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
+index d6aca0c..690fff2 100644
+--- a/include/target/target_core_base.h
++++ b/include/target/target_core_base.h
+@@ -609,12 +609,14 @@ static inline struct se_node_acl *fabric_stat_to_nacl(struct config_item *item)
  
--static int scsiback_drop_nexus(struct scsiback_tpg *tpg)
-+static int scsiback_drop_nexus(struct se_portal_group *se_tpg)
- {
--	struct se_session *se_sess;
-+	struct scsiback_tpg *tpg = container_of(se_tpg, struct scsiback_tpg,
-+						se_tpg);
- 	struct scsiback_nexus *tv_nexus;
-+	struct se_session *se_sess;
- 
- 	mutex_lock(&tpg->tv_tpg_mutex);
- 	tv_nexus = tpg->tpg_nexus;
-@@ -1585,6 +1587,11 @@ static int scsiback_drop_nexus(struct scsiback_tpg *tpg)
- 	return 0;
- }
- 
-+static int scsiback_close_session(struct se_session *se_sess)
-+{
-+	return scsiback_drop_nexus(se_sess->se_tpg);
-+}
-+
- static ssize_t scsiback_tpg_nexus_show(struct config_item *item, char *page)
- {
- 	struct se_portal_group *se_tpg = to_tpg(item);
-@@ -1619,7 +1626,7 @@ static ssize_t scsiback_tpg_nexus_store(struct config_item *item,
- 	 * Shutdown the active I_T nexus if 'NULL' is passed.
- 	 */
- 	if (!strncmp(page, "NULL", 4)) {
--		ret = scsiback_drop_nexus(tpg);
-+		ret = scsiback_drop_nexus(se_tpg);
- 		return (!ret) ? count : ret;
- 	}
- 	/*
-@@ -1776,7 +1783,7 @@ static void scsiback_drop_tpg(struct se_portal_group *se_tpg)
- 	/*
- 	 * Release the virtual I_T Nexus for this xen-pvscsi TPG
- 	 */
--	scsiback_drop_nexus(tpg);
-+	scsiback_drop_nexus(se_tpg);
- 	/*
- 	 * Deregister the se_tpg from TCM.
- 	 */
-@@ -1814,6 +1821,7 @@ static int scsiback_check_false(struct se_portal_group *se_tpg)
- 	.queue_status			= scsiback_queue_status,
- 	.queue_tm_rsp			= scsiback_queue_tm_rsp,
- 	.aborted_task			= scsiback_aborted_task,
-+	.close_session			= scsiback_close_session,
- 	/*
- 	 * Setup callers for generic logic in target_core_fabric_configfs.c
- 	 */
+ struct se_session {
+ 	unsigned		sess_tearing_down:1;
++	unsigned		sess_remove_running:1;
+ 	u64			sess_bin_isid;
+ 	enum target_prot_op	sup_prot_ops;
+ 	enum target_prot_type	sess_prot_type;
+ 	struct se_node_acl	*se_node_acl;
+ 	struct se_portal_group *se_tpg;
+ 	void			*fabric_sess_ptr;
++	struct completion	*removal_comp;
+ 	struct percpu_ref	cmd_count;
+ 	struct list_head	sess_list;
+ 	struct list_head	sess_acl_list;
 -- 
 1.8.3.1
 
