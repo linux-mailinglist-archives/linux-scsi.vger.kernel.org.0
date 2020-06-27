@@ -2,68 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C59920BDD5
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 05:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5771420BDDE
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 05:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbgF0DJu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jun 2020 23:09:50 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:37984 "EHLO
+        id S1726005AbgF0DMC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jun 2020 23:12:02 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:39226 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgF0DJu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jun 2020 23:09:50 -0400
+        with ESMTP id S1725828AbgF0DMB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jun 2020 23:12:01 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R38NmS140600;
-        Sat, 27 Jun 2020 03:09:34 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R37vv3140502;
+        Sat, 27 Jun 2020 03:11:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=owtYMg382pvIRe6QEkYQxyD7p2+iQVUSI2A9n+iemU4=;
- b=hqBh3eYYhrYYKtOg/vOEfYCJ5JQ0Zn/rlKeVIXT6lkp0hIOwk8MIYjORVyZFZccl4VjI
- 2qj/vAUkJKAEgN1XTAqOJrVXp2IHAQAQVtV9mR/nmLpLpT8bOFmusD+2zkSTFOaKNo9M
- 4fP6nSF8mmgAyDtCZ/yv3Gi6LM8gutxDUXMoNujG8TbyVI6pWaVaT9YnfkAe6TfSkkL8
- kE5i3CdaFoNDZGzxrPP7Y6SGEToOel2SejpLQCWtYHm5EeoEt1e4Srr94qBeNlIReELG
- ylo143KLTvmK41xYRcRXTwJHDTM5/yQBSXUMDzkrchUQlQdveJMCdGrRX3r89SiZPvdL Sw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 31wg3bkcdk-1
+ bh=79n0yP2E0urM7J9cphmsH/pB5gLFdCBUFtsUNABsMDs=;
+ b=YBWQHKZnDimN8ZXp7UlFIktcS/ES8k0kyCaj5qcATH11GchXE0n5+FeAAudDMjKDuiNo
+ ms9+3G7oX2W0nxXvCPRKMyZWduJKeXuCiBE955I1G+gcHwDvqcKgQbN1TueLcYbeUsjV
+ XyqTBeBpavz3RPrlTIvsMZ+ZsUanrnkimsD2pwsVCnIfpwg5wwYlhO59D9W4sYHd0wTU
+ utObHlYkSY7IvjfCchSUG+EKWUPDB1/VOlji82ebOvX4ol9niviiP8TAkUT7NQXjplX3
+ IJU3k8L5I5xY4ZT+a9nZ5rnXsEL9L4LpJ8eouWFM6uq+1hswFsuKQDvbbgOLUJcrcj1J Mw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 31wg3bkch4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 27 Jun 2020 03:09:34 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R37ANL038440;
-        Sat, 27 Jun 2020 03:09:33 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 31wwwyr5d4-1
+        Sat, 27 Jun 2020 03:11:39 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R37eeh050996;
+        Sat, 27 Jun 2020 03:09:39 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 31wu7rmmh8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 27 Jun 2020 03:09:33 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05R39RFj011711;
-        Sat, 27 Jun 2020 03:09:27 GMT
+        Sat, 27 Jun 2020 03:09:39 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05R39UkY010863;
+        Sat, 27 Jun 2020 03:09:31 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 27 Jun 2020 03:09:27 +0000
+        with ESMTP ; Sat, 27 Jun 2020 03:09:30 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux@armlinux.org.uk
+To:     Flavio Suligoi <f.suligoi@asem.it>, Wei Liu <wei.liu@kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] scsi: cumana_2: Fix different dev_id between 'request_irq()' and 'free_irq()'
-Date:   Fri, 26 Jun 2020 23:09:22 -0400
-Message-Id: <159322718419.11145.4815572344428827274.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH 1/1] scsi: storvsc: fix spelling mistake
+Date:   Fri, 26 Jun 2020 23:09:23 -0400
+Message-Id: <159322718420.11145.17016088953064331860.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200625204730.943520-1-christophe.jaillet@wanadoo.fr>
-References: <20200530073555.577414-1-christophe.jaillet@wanadoo.fr> <20200625204730.943520-1-christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20200624135600.14274-1-f.suligoi@asem.it>
+References: <20200624135600.14274-1-f.suligoi@asem.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=894 suspectscore=0
- adultscore=0 mlxscore=0 spamscore=0 bulkscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006270020
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=989 bulkscore=0 spamscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006270020
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
  malwarescore=0 cotscore=-2147483648 adultscore=0 lowpriorityscore=0
- impostorscore=0 clxscore=1015 mlxscore=0 mlxlogscore=913 spamscore=0
+ impostorscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 spamscore=0
  priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2006270020
 Sender: linux-scsi-owner@vger.kernel.org
@@ -71,15 +73,14 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 25 Jun 2020 22:47:30 +0200, Christophe JAILLET wrote:
+On Wed, 24 Jun 2020 15:56:00 +0200, Flavio Suligoi wrote:
 
-> The dev_id used in 'request_irq()' and 'free_irq()' should match.
-> Use 'info' in both cases.
+> Fix typo: "trigerred" --> "triggered"
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: cumana_2: Fix different dev_id between request_irq() and free_irq()
-      https://git.kernel.org/mkp/scsi/c/040ab9c4fd00
+[1/1] scsi: storvsc: Fix spelling mistake
+      https://git.kernel.org/mkp/scsi/c/fbca7a04dbd8
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
