@@ -2,80 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8743720BDD1
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 05:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F38C20BDD6
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jun 2020 05:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725861AbgF0DJf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jun 2020 23:09:35 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:46150 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgF0DJf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jun 2020 23:09:35 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R39WrY181096;
-        Sat, 27 Jun 2020 03:09:32 GMT
+        id S1725930AbgF0DKB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jun 2020 23:10:01 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38094 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725828AbgF0DKB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jun 2020 23:10:01 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R387Yh140563;
+        Sat, 27 Jun 2020 03:09:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=vRRjYrM6YHTLgKFBOJ8At8bHMdUd5f9oV0CgWsrk+F0=;
- b=ppMBKks7UT4ThqBu8LRYriG0DVjP9TW0hboMHw6gjjuSiWvJIjYkQ9y8pd6ja12w7zLR
- YGHIGj71uWpiyJeB5iYuRZ2nswA1YNZ16//QQgDC72ltDOWyEhvN6T0AB+wz11BY7MmX
- 4S9Y17Wd9fvM2Ue/f1743rMFf8udolzIHHecjNlXfABC3XCi6qr/f8TbG3LPdAS8CfzT
- pQRaKA35ncmmM00wKamtJzlgBDUSgms1bLk/Edd1RQuCL9lJo+WCaCQ9VnA5iinVTLM9
- mt+rCcvI7TnpUet9PsYSB0C0xAEgtpvG436e2tskNxF8ssO2CIkOh5wb10eJ9rkZXZPY wA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 31wwhr810y-1
+ bh=xIrmrUzyhNuy2QdFNyWnEHlW+Vl1QGrjqP5R+DFTkvQ=;
+ b=UVMiQAzvzEiz+I9s1sMlK7Zv/0o3tGDno+b+cbkiEqUnyY6WUryhHGnFspBP2ldoPuSR
+ PAa5XWsxlRKf0NFWkTaKuEce7ArhmKT59dh1akNofeEdlv4fFub6+ELOxHMbhZQpVIqI
+ fkNuAUDqYGN6TJJO1W+L7Wme2qah1Z9JGttuhBC3KcEA1GlIYIGQER9S6GXWXVVsL6ot
+ 3kAskece3czHPrt+PexLMHT4TZ8sEoCxVROq/FYnPPrtBlrHWPQ1B9IGiXBhmdNYGKFE
+ PpXsm+L00VqCErJPghOokghObhEmYCnbXlLYTFrFE94QSOId1lfleE67RuwEmAPq+tyX tg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 31wg3bkcdv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 27 Jun 2020 03:09:32 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R38Jlk151086;
-        Sat, 27 Jun 2020 03:09:32 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 31wweh0w83-1
+        Sat, 27 Jun 2020 03:09:37 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05R38I2M099922;
+        Sat, 27 Jun 2020 03:09:37 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 31wv58terd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 27 Jun 2020 03:09:32 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05R39VNw011712;
-        Sat, 27 Jun 2020 03:09:31 GMT
+        Sat, 27 Jun 2020 03:09:36 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05R39Xg4010865;
+        Sat, 27 Jun 2020 03:09:33 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 27 Jun 2020 03:09:31 +0000
+        with ESMTP ; Sat, 27 Jun 2020 03:09:33 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Javed Hasan <jhasan@marvell.com>
+To:     jejb@linux.ibm.com, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: bnx2fc: Removal of unused variables.
-Date:   Fri, 26 Jun 2020 23:09:24 -0400
-Message-Id: <159322718420.11145.12589500758715701627.b4-ty@oracle.com>
+        bvanassche@acm.org, matthias.bgg@gmail.com, andy.teng@mediatek.com,
+        cc.chou@mediatek.com, kuohong.wang@mediatek.com,
+        linux-kernel@vger.kernel.org, chaotian.jing@mediatek.com,
+        cang@codeaurora.org, chun-hung.wu@mediatek.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, linux-arm-kernel@lists.infradead.org,
+        peter.wang@mediatek.com, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2] scsi: ufs: Disable WriteBooster capability in non-supported UFS device
+Date:   Fri, 26 Jun 2020 23:09:25 -0400
+Message-Id: <159322718420.11145.18067065778687552607.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200622093814.3250-1-jhasan@marvell.com>
-References: <20200622093814.3250-1-jhasan@marvell.com>
+In-Reply-To: <20200625030430.25048-1-stanley.chu@mediatek.com>
+References: <20200625030430.25048-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0
- malwarescore=0 adultscore=0 mlxlogscore=837 spamscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006270020
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=902 malwarescore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006270020
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=847 malwarescore=0
- phishscore=0 priorityscore=1501 clxscore=1015 cotscore=-2147483648
- mlxscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0
- spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
+ malwarescore=0 cotscore=-2147483648 adultscore=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1015 mlxscore=0 mlxlogscore=911 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2006270020
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 22 Jun 2020 02:38:14 -0700, Javed Hasan wrote:
+On Thu, 25 Jun 2020 11:04:30 +0800, Stanley Chu wrote:
 
-> Removed all the unused variables.
+> If UFS device is not qualified to enter the detection of WriteBooster
+> probing by disallowed UFS version or device quirks, then WriteBooster
+> capability in host shall be disabled to prevent any WriteBooster
+> operations in the future.
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: bnx2fc: Removal of unused variables
-      https://git.kernel.org/mkp/scsi/c/37d090671720
+[1/1] scsi: ufs: Disable WriteBooster capability for non-supported UFS devices
+      https://git.kernel.org/mkp/scsi/c/a7f1e69d4974
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
