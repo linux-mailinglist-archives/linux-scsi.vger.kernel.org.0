@@ -2,483 +2,188 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF6320E562
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 00:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECAE20E3B2
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 00:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391341AbgF2Vg2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 17:36:28 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:10073 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728447AbgF2Skm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 14:40:42 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200629065303epoutp01c3d7cc6b0e9a3a1a7bd85150ed5dc724~c8TY4SG2u2009520095epoutp01a
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 06:53:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200629065303epoutp01c3d7cc6b0e9a3a1a7bd85150ed5dc724~c8TY4SG2u2009520095epoutp01a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593413583;
-        bh=7bdDrtKfhDIeoE6nA3jqgvIZ53z3Zzgsj9GRaApA+3s=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=vh68/fxo0BXeKLPxfU2BSZz300/5XF1N4O65/cGh8MmE7IxnbJMTJ8TKr88+6Malh
-         zRP5406vPg949HTvlVIqszXBKgVT5Xds5qAXXCC+84rfv92amSB1oi/r7MVutEYjXx
-         vXz8me3rGiocnrJLNL83e2OTk951UOXWiugSp51M=
-Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p2.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200629065302epcas1p2eb3ffeb26eb214d361ac7007ce1b8291~c8TYc09-71437714377epcas1p25;
-        Mon, 29 Jun 2020 06:53:02 +0000 (GMT)
-Mime-Version: 1.0
-Subject: [PATCH v4 2/5] scsi: ufs: Add UFS-feature layer
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Daejun Park <daejun7.park@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        id S2390722AbgF2VQn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 17:16:43 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:57273 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729910AbgF2SzB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 14:55:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1593456903; x=1624992903;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Yu4huEp55scw/8uKXHlX4eox41kySvoBMiL3C8Je7Pg=;
+  b=oPZwb2Yja9mCWmmPHUJmUKIyvBOovEmB+gFQOf3xxQRD46s5D/PHsfha
+   /e1qQq2Z3tvphkP3Y38nyF6aKksLI7LNTgfyKsyBUrPRkc/3/Cy85Qv5K
+   eG6svGLroV62XNM0pWr0txC3S7VlTEZjLKqe/T5EIvdRLxoPKZbknPO05
+   BoQQQnTK6v1VcfXanvuye351xMTrEUXEjplt1uCLJ25VZC1SnmJunZZli
+   3ErwtsBHBkoV4mCk5DKn4u4OXpYQFm9QYv/LLVJZtcfzIf9nFpWLjYocR
+   gMqauY/bBihRJ4XV+1fDC5igWch5+2XsmijRwQJl78SbfuI0Vr5D2o3tT
+   A==;
+IronPort-SDR: TGSsAO0QifWNbSlhVttjdXOmDKeFeN8Y0yRg+FbTMrfEJJz6xO0nEvQNk1Cl9aJcpAPPqahxxH
+ 9OKqu3U9u04T8FFl+HpCzDywCoBCueaQXlqd48LA7tRTlAOKojlt8zJBLjezezURko2VUCX3+p
+ EzPNidm1vrhIzH9V+b1CAdIOzA5ME91hlitbCFb2SxhGVWnBvnL5z0K8hrzJogoLB8/WFEyWYU
+ nffpmHmgL/xqAU+t+o+YRJtHFTLeu112YGk0SFStjhtstSBFLfyRxL/LckxIPJ4oyxNgZzAgNc
+ Na4=
+X-IronPort-AV: E=Sophos;i="5.75,294,1589212800"; 
+   d="scan'208";a="244187755"
+Received: from mail-mw2nam10lp2109.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) ([104.47.55.109])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Jun 2020 17:07:31 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oaaAD9NLdDbdwiH9JNAohbs+xOd+NCEqies0bkqZtOS/oC5HGbdxd+ZB8Jj8x4U7z3wldHQzRBUvoR4GjVvjUNkXJMd1YkGyzY//z6yHMbsDVDFnK7UBq12Ujind5XX318kCB7+QTICzpWppbo8Z/9m/Y8rChNEWwzxd4kbziQ5eitETOFOtyRopSyGa3Crc0mT61CqR98NU8rls1k6vV9n48Ok9KVnSK27kdm70zMnwnxCVq23lEAP+I9qRq/dwLbREo7LaNWQ0jHQ1ipvhJ5LhpkGw3b/WhKUQHDWgvLq3x1nznDIEQw67JbbLXGBkXx4o+6MpDT+B/hq09aQ68g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0VUAnK9OH9BhI/nrF3tJ6RRdDBblXYPZR1ANsb3YIkk=;
+ b=P68amSpoXJvqof4HNwMnT55w/rP4jbpthU9fgOAkxTFlGD9Kv84oDOx8OSapbDNhi9Yw3N1h1ZCwxDSwh67bZCkT2CDU2FlmQjm6YOLcpSq1cMwNh/hu9R4wf51SPo93OwAkZ+mW3DYgEB0Bl53g9NmT3Cx3WIVlNdTgDnBxESdjdLYE+z3KQVutNsUaK7cE3Pqhzml0gzXMNtwPDioHzde2frwUZo1nvRJVzdM56rzrh5YnbJe35q1iG7WAyiSL769R3bSAjo54b8r1r86D0BWTWXjsbJwvDCaV+5+846PFlJFwfdfdpltCg49gvwnqPJgopbfm4vpocGcd0usfxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0VUAnK9OH9BhI/nrF3tJ6RRdDBblXYPZR1ANsb3YIkk=;
+ b=WNrt4J481jcF4qj6OiHgMKUXvoqIFcUBCvb1/T+Y7+sPjoyUzv+tQLefZe/5cKvpJHkVWcOvAWlBNMddWqfQw1Df5353B7N7r+CH4tIaQvkP5FXlTjy2YEa0b9Sb4lP2IuBCW218WrAXX4/OhoYNa1ogAWKemwwWUBKyLcCy7y8=
+Received: from MN2PR04MB6223.namprd04.prod.outlook.com (2603:10b6:208:db::14)
+ by MN2PR04MB6047.namprd04.prod.outlook.com (2603:10b6:208:dc::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.25; Mon, 29 Jun
+ 2020 09:07:24 +0000
+Received: from MN2PR04MB6223.namprd04.prod.outlook.com
+ ([fe80::899f:1d14:ad80:400e]) by MN2PR04MB6223.namprd04.prod.outlook.com
+ ([fe80::899f:1d14:ad80:400e%4]) with mapi id 15.20.3131.026; Mon, 29 Jun 2020
+ 09:07:24 +0000
+From:   Matias Bjorling <Matias.Bjorling@wdc.com>
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "kbusch@kernel.org" <kbusch@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <1239183618.61593413402991.JavaMail.epsvc@epcpadp1>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <963815509.21593413582881.JavaMail.epsvc@epcpadp2>
-Date:   Mon, 29 Jun 2020 15:50:52 +0900
-X-CMS-MailID: 20200629065052epcms2p3096e06bb5ac384bf6a5158996eef31c4
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
+Subject: RE: [PATCH 1/2] block: add zone_desc_ext_bytes to sysfs
+Thread-Topic: [PATCH 1/2] block: add zone_desc_ext_bytes to sysfs
+Thread-Index: AQHWTaAe7EphdXOt6kSWMdnkQNI/YajvTTIAgAAAmzA=
+Date:   Mon, 29 Jun 2020 09:07:24 +0000
+Message-ID: <MN2PR04MB6223CBCEA07D63E53B3AD244F16E0@MN2PR04MB6223.namprd04.prod.outlook.com>
+References: <20200628230102.26990-1-matias.bjorling@wdc.com>
+ <20200628230102.26990-2-matias.bjorling@wdc.com>
+ <CY4PR04MB375197387D94CE4E60E836F4E76E0@CY4PR04MB3751.namprd04.prod.outlook.com>
+ <20200629090356.GA521026@localhost.localdomain>
+In-Reply-To: <20200629090356.GA521026@localhost.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: wdc.com; dkim=none (message not signed)
+ header.d=none;wdc.com; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [185.50.194.70]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: bc8c23c9-018b-4b60-b6bd-08d81c0bd68a
+x-ms-traffictypediagnostic: MN2PR04MB6047:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR04MB6047EA7A03EAFCB0C704883AF16E0@MN2PR04MB6047.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 044968D9E1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KkPv1apo0czYDr+mVzLmL59m/23di+HkxyivFDwLu2HmUUuN6QT2w87KLh2XU0i3FD0MGNnxyymySd5a/oYHSbqVtjj2qSyCYb5Rk/Amg9OBF/yLQ24HwKRkr4qjV0Hkp022eOGrddzUgB/0rxOtkXrusdR9t/sBwPrq3YMVI7UsZYDXEOny9nRh/ntdON77e8hrkug8Xr9opZAauY3H5AU3xMcSg1JOuNBv0GS9HWk2MKfD6nmKjYGNE86orJzMZFjqVmjKgSLEUrbd4yaZ8NNO5cd026W3M+idA7aaeo3TTuC1E4opln3ED6yWFnIF5kp62mxhBP9TCHARG5yoUL43bWpwD+Ai52qtjm4Zrz566yM65kjFMiHB0d7JsdoT7H5zi4x2c0V6hj6ECrZi7w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR04MB6223.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(186003)(54906003)(110136005)(26005)(66946007)(4326008)(66476007)(86362001)(316002)(66446008)(64756008)(66556008)(6636002)(33656002)(8936002)(83380400001)(71200400001)(76116006)(6506007)(53546011)(478600001)(966005)(55016002)(2906002)(5660300002)(52536014)(7696005)(66574015)(8676002)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: aEJr4chKw98DGlaYsxZpe99z9y7iGXiJO6YdVHpwxg+KitXsow5k5RPezkLzTlq+4ITJOiYuqrvjW45/FSKeyP17Pwr+6wZvjj9yFf7Y1T7lD8MUG8BnXn3NjJ4TdDOHFWBADLrX+09kqhYUNgzobYlSBVCSsmBi2x7rkEjPKlr/IbQEg4j9jo8Q11FZIJIJ4bLhwMC3+WXboqC2E+CoMSOl7agP0QmXkURXG2mgt13oHeQBNY80Cag46ii/WYRZel0mE+2DdoiWkd35QisX7VlAOG9KuK7VRXDYIZ7tvzuPjq6dkoc+x74gNUN49LhLcdiPel9ZLomPULgFhtqCN20GV2xHUpyQmvN71Gocv9YH4Gy6muiGUoly5tm2QZzKZN9XgUCJ/rWuY47Cvd+ZjsNkZEbbwVym3/JEtmskm7/iRgk9FSnNtbZWm08FFJ631Ivq1ncurfB6Tz5IvsAvPngCQPGyJMZvzV4lj7lFnpHW8LBcjaVH8lz4FSLo6IIM
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200629064323epcms2p787baba58a416fef7fdd3927f8da701da
-References: <1239183618.61593413402991.JavaMail.epsvc@epcpadp1>
-        <231786897.01593413281727.JavaMail.epsvc@epcpadp2>
-        <CGME20200629064323epcms2p787baba58a416fef7fdd3927f8da701da@epcms2p3>
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6223.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc8c23c9-018b-4b60-b6bd-08d81c0bd68a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 09:07:24.1178
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: O3maUdE2f9GKlEBzkUuLZWehuVX8yb6T3MvC24yJRSb0dm4rlv+ghhvhsW7njbmFW0zsCaIyPebUfNGyebbgAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6047
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch is adding UFS feature layer to UFS core driver.
+> -----Original Message-----
+> From: Niklas Cassel <Niklas.Cassel@wdc.com>
+> Sent: Monday, 29 June 2020 11.04
+> To: Damien Le Moal <Damien.LeMoal@wdc.com>
+> Cc: Matias Bjorling <Matias.Bjorling@wdc.com>; axboe@kernel.dk;
+> kbusch@kernel.org; hch@lst.de; sagi@grimberg.me;
+> martin.petersen@oracle.com; Hans Holmberg <Hans.Holmberg@wdc.com>;
+> linux-scsi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> block@vger.kernel.org; linux-nvme@lists.infradead.org
+> Subject: Re: [PATCH 1/2] block: add zone_desc_ext_bytes to sysfs
+>=20
+> On Mon, Jun 29, 2020 at 12:52:46AM +0000, Damien Le Moal wrote:
+> > On 2020/06/29 8:01, Matias Bjorling wrote:
+> > > The NVMe Zoned Namespace Command Set adds support for associating
+> > > data to a zone through the Zone Descriptor Extension feature.
+> > >
+> > > The Zone Descriptor Extension size is fixed to a multiple of 64
+> > > bytes. A value of zero communicates the feature is not available.
+> > > A value larger than zero communites the feature is available, and
+> > > the specified Zone Descriptor Extension size in bytes.
+> > >
+> > > The Zone Descriptor Extension feature is only available in the NVMe
+> > > Zoned Namespaces Command Set. Devices that supports ZAC/ZBC
+> > > therefore reports this value as zero, where as the NVMe device
+> > > driver reports the Zone Descriptor Extension size from the specific
+> > > device.
+> > >
+> > > Signed-off-by: Matias Bj=F8rling <matias.bjorling@wdc.com>
+> > > ---
+> > >  Documentation/block/queue-sysfs.rst |  6 ++++++
+> > >  block/blk-sysfs.c                   | 15 ++++++++++++++-
+> > >  drivers/nvme/host/zns.c             |  1 +
+> > >  drivers/scsi/sd_zbc.c               |  1 +
+> > >  include/linux/blkdev.h              | 22 ++++++++++++++++++++++
+> > >  5 files changed, 44 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/block/queue-sysfs.rst
+> > > b/Documentation/block/queue-sysfs.rst
+> > > index f261a5c84170..c4fa195c87b4 100644
+>=20
+> (snip)
+>=20
+> > >  static struct queue_sysfs_entry queue_nomerges_entry =3D {
+> > >  	.attr =3D {.name =3D "nomerges", .mode =3D 0644 },
+> > >  	.show =3D queue_nomerges_show,
+> > > @@ -787,6 +798,7 @@ static struct attribute *queue_attrs[] =3D {
+> > >  	&queue_nr_zones_entry.attr,
+> > >  	&queue_max_open_zones_entry.attr,
+> > >  	&queue_max_active_zones_entry.attr,
+> >
+> > Which tree is this patch based on ? Not I have seen any patch
+> > introducing max active zones.
+>=20
+> The cover letter forgot to mention this patch series' dependencies.
+> I assume that it is based on the following patch series:
+> https://lore.kernel.org/linux-block/20200622162530.1287650-1-
+> kbusch@kernel.org/
+> https://lore.kernel.org/linux-block/20200616102546.491961-1-
+> niklas.cassel@wdc.com/
+>=20
 
-UFS Driver data structure (struct ufs_hba)
-=09=E2=94=82
-=E2=94=8C--------------=E2=94=90
-=E2=94=82 UFS feature  =E2=94=82 <-- HPB module
-=E2=94=82    layer     =E2=94=82 <-- other extended feature module
-=E2=94=94--------------=E2=94=98
-Each extended UFS-Feature module has a bus of ufs-ext feature type.
-The UFS feature layer manages common APIs used by each extended feature
-module. The APIs are set of UFS Query requests and UFS Vendor commands
-related to each extended feature module.
+Very true. Thanks, Niklas.
 
-Other extended features can also be implemented using the proposed APIs.
-For example, in Write Booster, "prep_fn" can be used to guarantee the
-lifetime of UFS by updating the amount of write IO.
-And reset/reset_host/suspend/resume can be used to manage the kernel task
-for checking lifetime of UFS.
+I'll rebase this work when the above patchsets have been picked up.
 
-The following 6 callback functions have been added to "ufshcd.c".
-prep_fn: called after construct upiu structure
-reset: called after proving hba
-reset_host: called before ufshcd_host_reset_and_restore
-suspend: called before ufshcd_suspend
-resume: called after ufshcd_resume
-rsp_upiu: called in ufshcd_transfer_rsp_status with SAM_STAT_GOOD state
-
-Signed-off-by: Daejun Park <daejun7.park@samsung.com>
----
- drivers/scsi/ufs/Makefile     |   2 +-
- drivers/scsi/ufs/ufsfeature.c | 148 ++++++++++++++++++++++++++++++++++
- drivers/scsi/ufs/ufsfeature.h |  69 ++++++++++++++++
- drivers/scsi/ufs/ufshcd.c     |  17 ++++
- drivers/scsi/ufs/ufshcd.h     |   3 +
- 5 files changed, 238 insertions(+), 1 deletion(-)
- create mode 100644 drivers/scsi/ufs/ufsfeature.c
- create mode 100644 drivers/scsi/ufs/ufsfeature.h
-
-diff --git a/drivers/scsi/ufs/Makefile b/drivers/scsi/ufs/Makefile
-index f0c5b95ec9cc..433b871badfa 100644
---- a/drivers/scsi/ufs/Makefile
-+++ b/drivers/scsi/ufs/Makefile
-@@ -6,7 +6,7 @@ obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) +=3D cdns-pltfrm.o
- obj-$(CONFIG_SCSI_UFS_QCOM) +=3D ufs-qcom.o
- obj-$(CONFIG_SCSI_UFS_EXYNOS) +=3D ufs-exynos.o
- obj-$(CONFIG_SCSI_UFSHCD) +=3D ufshcd-core.o
--ufshcd-core-y=09=09=09=09+=3D ufshcd.o ufs-sysfs.o
-+ufshcd-core-y=09=09=09=09+=3D ufshcd.o ufs-sysfs.o ufsfeature.o
- ufshcd-core-$(CONFIG_SCSI_UFS_BSG)=09+=3D ufs_bsg.o
- obj-$(CONFIG_SCSI_UFSHCD_PCI) +=3D ufshcd-pci.o
- obj-$(CONFIG_SCSI_UFSHCD_PLATFORM) +=3D ufshcd-pltfrm.o
-diff --git a/drivers/scsi/ufs/ufsfeature.c b/drivers/scsi/ufs/ufsfeature.c
-new file mode 100644
-index 000000000000..94c6be6babd3
---- /dev/null
-+++ b/drivers/scsi/ufs/ufsfeature.c
-@@ -0,0 +1,148 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Universal Flash Storage Feature Support
-+ *
-+ * Copyright (C) 2017-2018 Samsung Electronics Co., Ltd.
-+ *
-+ * Authors:
-+ *=09Yongmyung Lee <ymhungry.lee@samsung.com>
-+ *=09Jinyoung Choi <j-young.choi@samsung.com>
-+ */
-+
-+#include "ufshcd.h"
-+#include "ufsfeature.h"
-+
-+inline void ufsf_slave_configure(struct ufs_hba *hba,
-+=09=09=09=09 struct scsi_device *sdev)
-+{
-+=09/* skip well-known LU */
-+=09if (sdev->lun >=3D UFS_UPIU_MAX_UNIT_NUM_ID)
-+=09=09return;
-+
-+=09if (!(hba->dev_info.b_ufs_feature_sup & UFS_DEV_HPB_SUPPORT))
-+=09=09return;
-+
-+=09atomic_inc(&hba->ufsf.slave_conf_cnt);
-+
-+=09wake_up(&hba->ufsf.sdev_wait);
-+}
-+
-+inline void ufsf_ops_prep_fn(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
-+{
-+=09struct ufshpb_driver *ufshpb_drv;
-+
-+=09ufshpb_drv =3D dev_get_drvdata(&hba->ufsf.hpb_dev);
-+
-+=09if (ufshpb_drv && ufshpb_drv->ufshpb_ops.prep_fn)
-+=09=09ufshpb_drv->ufshpb_ops.prep_fn(hba, lrbp);
-+}
-+
-+inline void ufsf_ops_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp=
-)
-+{
-+=09struct ufshpb_driver *ufshpb_drv;
-+
-+=09ufshpb_drv =3D dev_get_drvdata(&hba->ufsf.hpb_dev);
-+
-+=09if (ufshpb_drv && ufshpb_drv->ufshpb_ops.rsp_upiu)
-+=09=09ufshpb_drv->ufshpb_ops.rsp_upiu(hba, lrbp);
-+}
-+
-+inline void ufsf_ops_reset_host(struct ufs_hba *hba)
-+{
-+=09struct ufshpb_driver *ufshpb_drv;
-+
-+=09ufshpb_drv =3D dev_get_drvdata(&hba->ufsf.hpb_dev);
-+
-+=09if (ufshpb_drv && ufshpb_drv->ufshpb_ops.reset_host)
-+=09=09ufshpb_drv->ufshpb_ops.reset_host(hba);
-+}
-+
-+inline void ufsf_ops_reset(struct ufs_hba *hba)
-+{
-+=09struct ufshpb_driver *ufshpb_drv;
-+
-+=09ufshpb_drv =3D dev_get_drvdata(&hba->ufsf.hpb_dev);
-+
-+=09if (ufshpb_drv && ufshpb_drv->ufshpb_ops.reset)
-+=09=09ufshpb_drv->ufshpb_ops.reset(hba);
-+}
-+
-+inline void ufsf_ops_suspend(struct ufs_hba *hba)
-+{
-+=09struct ufshpb_driver *ufshpb_drv;
-+
-+=09ufshpb_drv =3D dev_get_drvdata(&hba->ufsf.hpb_dev);
-+
-+=09if (ufshpb_drv && ufshpb_drv->ufshpb_ops.suspend)
-+=09=09ufshpb_drv->ufshpb_ops.suspend(hba);
-+}
-+
-+inline void ufsf_ops_resume(struct ufs_hba *hba)
-+{
-+=09struct ufshpb_driver *ufshpb_drv;
-+
-+=09ufshpb_drv =3D dev_get_drvdata(&hba->ufsf.hpb_dev);
-+
-+=09if (ufshpb_drv && ufshpb_drv->ufshpb_ops.resume)
-+=09=09ufshpb_drv->ufshpb_ops.resume(hba);
-+}
-+
-+struct device_type ufshpb_dev_type =3D {
-+=09.name =3D "ufshpb_device"
-+};
-+EXPORT_SYMBOL(ufshpb_dev_type);
-+
-+static int ufsf_bus_match(struct device *dev,
-+=09=09=09 struct device_driver *gendrv)
-+{
-+=09if (dev->type =3D=3D &ufshpb_dev_type)
-+=09=09return 1;
-+
-+=09return 0;
-+}
-+
-+struct bus_type ufsf_bus_type =3D {
-+=09.name =3D "ufsf_bus",
-+=09.match =3D ufsf_bus_match,
-+};
-+EXPORT_SYMBOL(ufsf_bus_type);
-+
-+static void ufsf_dev_release(struct device *dev)
-+{
-+=09put_device(dev->parent);
-+}
-+
-+void ufsf_scan_features(struct ufs_hba *hba)
-+{
-+=09int ret;
-+
-+=09init_waitqueue_head(&hba->ufsf.sdev_wait);
-+=09atomic_set(&hba->ufsf.slave_conf_cnt, 0);
-+
-+=09if (hba->dev_info.wspecversion >=3D HPB_SUPPORTED_VERSION &&
-+=09    (hba->dev_info.b_ufs_feature_sup & UFS_DEV_HPB_SUPPORT)) {
-+=09=09device_initialize(&hba->ufsf.hpb_dev);
-+
-+=09=09hba->ufsf.hpb_dev.bus =3D &ufsf_bus_type;
-+=09=09hba->ufsf.hpb_dev.type =3D &ufshpb_dev_type;
-+=09=09hba->ufsf.hpb_dev.parent =3D get_device(hba->dev);
-+=09=09hba->ufsf.hpb_dev.release =3D ufsf_dev_release;
-+
-+=09=09dev_set_name(&hba->ufsf.hpb_dev, "ufshpb");
-+=09=09ret =3D device_add(&hba->ufsf.hpb_dev);
-+=09=09if (ret)
-+=09=09=09dev_warn(hba->dev, "ufshpb: failed to add device\n");
-+=09}
-+}
-+
-+static int __init ufsf_init(void)
-+{
-+=09int ret;
-+
-+=09ret =3D bus_register(&ufsf_bus_type);
-+=09if (ret)
-+=09=09pr_err("%s bus_register failed\n", __func__);
-+
-+=09return ret;
-+}
-+device_initcall(ufsf_init);
-diff --git a/drivers/scsi/ufs/ufsfeature.h b/drivers/scsi/ufs/ufsfeature.h
-new file mode 100644
-index 000000000000..1822d9d8e745
---- /dev/null
-+++ b/drivers/scsi/ufs/ufsfeature.h
-@@ -0,0 +1,69 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Universal Flash Storage Feature Support
-+ *
-+ * Copyright (C) 2017-2018 Samsung Electronics Co., Ltd.
-+ *
-+ * Authors:
-+ *=09Yongmyung Lee <ymhungry.lee@samsung.com>
-+ *=09Jinyoung Choi <j-young.choi@samsung.com>
-+ */
-+
-+#ifndef _UFSFEATURE_H_
-+#define _UFSFEATURE_H_
-+
-+#define HPB_SUPPORTED_VERSION=09=09=090x0310
-+
-+struct ufs_hba;
-+struct ufshcd_lrb;
-+
-+/**
-+ * struct ufsf_operation - UFS feature specific callbacks
-+ * @prep_fn: called after construct upiu structure. The prep_fn should wor=
-k
-+ *=09     properly even if it processes the same SCSI command multiple
-+ *=09     times by requeuing.
-+ * @reset: called after probing hba
-+ * @reset_host: called before ufshcd_host_reset_and_restore
-+ * @suspend: called before ufshcd_suspend
-+ * @resume: called after ufshcd_resume
-+ * @rsp_upiu: called in ufshcd_transfer_rsp_status with SAM_STAT_GOOD stat=
-e
-+ */
-+struct ufsf_operation {
-+=09void (*prep_fn)(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
-+=09void (*reset)(struct ufs_hba *hba);
-+=09void (*reset_host)(struct ufs_hba *hba);
-+=09void (*suspend)(struct ufs_hba *hba);
-+=09void (*resume)(struct ufs_hba *hba);
-+=09void (*rsp_upiu)(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
-+};
-+
-+struct ufshpb_driver {
-+=09struct device_driver drv;
-+=09struct list_head lh_hpb_lu;
-+
-+=09struct ufsf_operation ufshpb_ops;
-+
-+=09/* memory management */
-+=09struct kmem_cache *ufshpb_mctx_cache;
-+=09mempool_t *ufshpb_mctx_pool;
-+=09mempool_t *ufshpb_page_pool;
-+
-+=09struct workqueue_struct *ufshpb_wq;
-+};
-+
-+struct ufsf_feature_info {
-+=09atomic_t slave_conf_cnt;
-+=09wait_queue_head_t sdev_wait;
-+=09struct device hpb_dev;
-+};
-+
-+void ufsf_slave_configure(struct ufs_hba *hba, struct scsi_device *sdev);
-+void ufsf_scan_features(struct ufs_hba *hba);
-+void ufsf_ops_prep_fn(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
-+void ufsf_ops_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
-+void ufsf_ops_reset_host(struct ufs_hba *hba);
-+void ufsf_ops_reset(struct ufs_hba *hba);
-+void ufsf_ops_suspend(struct ufs_hba *hba);
-+void ufsf_ops_resume(struct ufs_hba *hba);
-+
-+#endif /* End of Header */
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 59358bb75014..d02106bf80d8 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -2533,6 +2533,8 @@ static int ufshcd_queuecommand(struct Scsi_Host *host=
-, struct scsi_cmnd *cmd)
-=20
- =09ufshcd_comp_scsi_upiu(hba, lrbp);
-=20
-+=09ufsf_ops_prep_fn(hba, lrbp);
-+
- =09err =3D ufshcd_map_sg(hba, lrbp);
- =09if (err) {
- =09=09lrbp->cmd =3D NULL;
-@@ -4665,6 +4667,8 @@ static int ufshcd_slave_configure(struct scsi_device =
-*sdev)
- =09struct ufs_hba *hba =3D shost_priv(sdev->host);
- =09struct request_queue *q =3D sdev->request_queue;
-=20
-+=09ufsf_slave_configure(hba, sdev);
-+
- =09blk_queue_update_dma_pad(q, PRDT_DATA_BYTE_COUNT_PAD - 1);
-=20
- =09if (ufshcd_is_rpm_autosuspend_allowed(hba))
-@@ -4791,6 +4795,9 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struc=
-t ufshcd_lrb *lrbp)
- =09=09=09=09 */
- =09=09=09=09pm_runtime_get_noresume(hba->dev);
- =09=09=09}
-+
-+=09=09=09if (scsi_status =3D=3D SAM_STAT_GOOD)
-+=09=09=09=09ufsf_ops_rsp_upiu(hba, lrbp);
- =09=09=09break;
- =09=09case UPIU_TRANSACTION_REJECT_UPIU:
- =09=09=09/* TODO: handle Reject UPIU Response */
-@@ -6539,6 +6546,8 @@ static int ufshcd_host_reset_and_restore(struct ufs_h=
-ba *hba)
- =09 * Stop the host controller and complete the requests
- =09 * cleared by h/w
- =09 */
-+=09ufsf_ops_reset_host(hba);
-+
- =09ufshcd_hba_stop(hba);
-=20
- =09spin_lock_irqsave(hba->host->host_lock, flags);
-@@ -6973,6 +6982,7 @@ static int ufs_get_device_desc(struct ufs_hba *hba)
- =09/* getting Specification Version in big endian format */
- =09dev_info->wspecversion =3D desc_buf[DEVICE_DESC_PARAM_SPEC_VER] << 8 |
- =09=09=09=09      desc_buf[DEVICE_DESC_PARAM_SPEC_VER + 1];
-+=09dev_info->b_ufs_feature_sup =3D desc_buf[DEVICE_DESC_PARAM_UFS_FEAT];
-=20
- =09model_index =3D desc_buf[DEVICE_DESC_PARAM_PRDCT_NAME];
-=20
-@@ -7343,6 +7353,7 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
- =09}
-=20
- =09ufs_bsg_probe(hba);
-+=09ufsf_scan_features(hba);
- =09scsi_scan_host(hba->host);
- =09pm_runtime_put_sync(hba->dev);
-=20
-@@ -7431,6 +7442,7 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool=
- async)
- =09/* Enable Auto-Hibernate if configured */
- =09ufshcd_auto_hibern8_enable(hba);
-=20
-+=09ufsf_ops_reset(hba);
- out:
-=20
- =09trace_ufshcd_init(dev_name(hba->dev), ret,
-@@ -8188,6 +8200,8 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum u=
-fs_pm_op pm_op)
- =09=09req_link_state =3D UIC_LINK_OFF_STATE;
- =09}
-=20
-+=09ufsf_ops_suspend(hba);
-+
- =09/*
- =09 * If we can't transition into any of the low power modes
- =09 * just gate the clocks.
-@@ -8309,6 +8323,7 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum u=
-fs_pm_op pm_op)
- =09hba->clk_gating.is_suspended =3D false;
- =09hba->dev_info.b_rpm_dev_flush_capable =3D false;
- =09ufshcd_release(hba);
-+=09ufsf_ops_resume(hba);
- out:
- =09if (hba->dev_info.b_rpm_dev_flush_capable) {
- =09=09schedule_delayed_work(&hba->rpm_dev_flush_recheck_work,
-@@ -8405,6 +8420,8 @@ static int ufshcd_resume(struct ufs_hba *hba, enum uf=
-s_pm_op pm_op)
- =09/* Enable Auto-Hibernate if configured */
- =09ufshcd_auto_hibern8_enable(hba);
-=20
-+=09ufsf_ops_resume(hba);
-+
- =09if (hba->dev_info.b_rpm_dev_flush_capable) {
- =09=09hba->dev_info.b_rpm_dev_flush_capable =3D false;
- =09=09cancel_delayed_work(&hba->rpm_dev_flush_recheck_work);
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index c774012582b4..6fe5c9b3a0e7 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -46,6 +46,7 @@
- #include "ufs.h"
- #include "ufs_quirks.h"
- #include "ufshci.h"
-+#include "ufsfeature.h"
-=20
- #define UFSHCD "ufshcd"
- #define UFSHCD_DRIVER_VERSION "0.2"
-@@ -736,6 +737,8 @@ struct ufs_hba {
- =09bool wb_buf_flush_enabled;
- =09bool wb_enabled;
- =09struct delayed_work rpm_dev_flush_recheck_work;
-+
-+=09struct ufsf_feature_info ufsf;
- };
-=20
- /* Returns true if clocks can be gated. Otherwise false */
---=20
-2.17.1
-
-
+>=20
+> Kind regards,
+> Niklas
