@@ -2,60 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC97120E0DB
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 23:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F30020E10C
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 23:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731659AbgF2UuZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 16:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S2389789AbgF2Uvp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 16:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731400AbgF2TNg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:13:36 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F497C014AFA
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 00:58:19 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id z9so3895882uai.6
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 00:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=k8SMGlS7UAhbZ8UsbH6qgqhEujcykGY3/9xaQ+hWDGA=;
-        b=o4nupsTCqNxrhUoK9jydgavrAjxv3EiRTG8BknR0xUFX63uFFNhKis7YKVC0Zd/oeO
-         2yCN3sUDRJkZeEgtZR0k5TIuQLqIqKLjnemIh6mbeVVIrsjd0Uzm/QiABlU6loYsfTlW
-         kSIq8NbLbL03Pvhuche/Nly8N4plClP4DXNQ6EC2ciTPzN6pfRtuEwmLza8VH6Mo9Ici
-         3Twyiss6p/YZ8ssZL/EZ2XjyAZ4yoBCmUokksnr45p3vtSyfWyZidisEyl29aQk2FUxW
-         J4Rtx6HCCMdsLEewDDs53CsvVtqCSnD/0D0RmLE4Dz6zqybHYKnnxZ/2W2egwxAW8Zwe
-         rC9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=k8SMGlS7UAhbZ8UsbH6qgqhEujcykGY3/9xaQ+hWDGA=;
-        b=cW3SlShW9dBz041xmtUpql0aCJzV7k0i1s1xi4Cr6ry2YznHdMwbecr7cKUfmMCjEV
-         j1C2fLz7iExrqyfMHJqk31hDWygHzml/QVwu61KXfiR4di62RWS1cMd5DY0/rEEznCqy
-         ZroflSk6oOgrFacT7LjeUOuuntJaxanmCuuJvJXjrxrGjeG0WH//oxAljK7ZXkGDdmsH
-         Zi8aHRUSAvXeSsLOfuYSegJlXPhdEa12GMY4R6CizpjXRPdkR4gRjts/9MTxDMlM9aJs
-         0qvb0oDeizONsvfZf5bFJBAqChaoFO/XMzixiUz2j8CgFaiY8WoDrzFOryI2PjM4LkvI
-         AfLA==
-X-Gm-Message-State: AOAM530S4Qz7CU9S1QlX+xYM1XRO4t7s8oQ5Bs+Lf+6UlJS2ZOWQsqhS
-        sDz9K1sbNmpU2G7USyUvmXpPHyeFmCqxIDy0nkI=
-X-Google-Smtp-Source: ABdhPJxl+UBRqjWbTtyHEsBzrqx1WTKipkYgOMlosDe53ZwnRuBBcdjKe5MQMGmIwJRfgNOwnIGct0Vb49YpMs4reHw=
-X-Received: by 2002:ab0:581:: with SMTP id e1mr9530103uae.99.1593417498443;
- Mon, 29 Jun 2020 00:58:18 -0700 (PDT)
+        with ESMTP id S1731378AbgF2TN1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:13:27 -0400
+Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8697C014A47;
+        Mon, 29 Jun 2020 01:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uAiRDghuOCMpDAFAHvQM5BdGNUMLZuFGW1APRakoSus=; b=ara8FOJJmyGTsZZYwrSNPjWLqN
+        qQal0ttJBdaZfhpLC0Z/0FVu0TGsBscGI7gHKZlxfygbnCKljVmd6EliGkUjiCeua5Lqlw+SqUGri
+        YDF/uUjkMqsGFUIUIlu6dP/HMLfagIiCfP7CnCNO/HR3E0DtZg3r6JVkQbErGPJrBmWjpHJNnZqFi
+        dvaPuTG2pAlmYGYVTzI+Iei0zvDBYbJVhGbqE40iWteYnODY0StwXQAzxsjKFuSER8akZL6L3IWxR
+        XnPxi6siVqTpD8pKccFNJr5E7a4Iutb0TtgFybcU7WiUAYpmFodShSUWbg4RziXqhwwdibXeVKeVq
+        /ShvQPnw==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jporL-0007T7-3F; Mon, 29 Jun 2020 08:09:47 +0000
+Date:   Mon, 29 Jun 2020 09:09:47 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Simon Arlott <simon@octiron.net>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+Subject: Re: [PATCH (v2)] scsi: sd: add parameter to stop disks before reboot
+Message-ID: <20200629080947.GA28551@infradead.org>
+References: <e726ffd8-8897-4a79-c3d6-6271eda8aebb@0882a8b5-c6c3-11e9-b005-00805fc181fe>
 MIME-Version: 1.0
-Received: by 2002:ab0:2b7:0:0:0:0:0 with HTTP; Mon, 29 Jun 2020 00:58:18 -0700 (PDT)
-From:   Solomon Hawkins <hawkinssolomon50@gmail.com>
-Date:   Mon, 29 Jun 2020 00:58:18 -0700
-Message-ID: <CAG1UO_yUUdrhjHh3xPT40uGix5E+3xt3QM4O=KeAagYhPojG2w@mail.gmail.com>
-Subject: WITH ALL DUE RESPECT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e726ffd8-8897-4a79-c3d6-6271eda8aebb@0882a8b5-c6c3-11e9-b005-00805fc181fe>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I need your urgent assistance for the claim of US$10million as the
-next of kin to our deceased bank customer. Go through the
-website;https://www.walesonline.co.uk/news/world-news/14-killed-kenyan-plane-crash-2478765
-for infos and respond to me via my E-mail;(mr.adams.justine@gmail.com)
-to enable me give you full details and an Application letter for claim
+On Sun, Jun 28, 2020 at 07:32:51PM +0100, Simon Arlott wrote:
+> I need to use "reboot=p" on my desktop because one of the PCIe devices
+> does not appear after a warm boot. This results in a very cold boot
+> because the BIOS turns the PSU off and on.
+> 
+> The scsi sd shutdown process does not send a stop command to disks
+> before the reboot happens (stop commands are only sent for a shutdown).
+> 
+> The result is that all of my SSDs experience a sudden power loss on
+> every reboot, which is undesirable behaviour because it could cause data
+> to be corrupted. These events are recorded in the SMART attributes.
+> 
+> Add a "stop_before_reboot" module parameter that can be used to control
+> the shutdown behaviour of disks before a reboot. The default will be
+> the existing behaviour (disks are not stopped).
+> 
+>   sd_mod.stop_before_reboot=<integer>
+>     0 = disabled (default)
+>     1 = enabled
+> 
+> The behaviour on shutdown is unchanged: all disks are unconditionally
+> stopped.
+
+What happened to the suggestion to treat reboot=p like a poweroff
+instead?  That seems to be fundamentally the right thing to do.
