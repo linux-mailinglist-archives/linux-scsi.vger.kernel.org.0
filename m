@@ -2,95 +2,154 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B78AD20DB66
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4146C20D6BD
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388788AbgF2UGM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 16:06:12 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2408 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388556AbgF2UGK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 16:06:10 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id E79B67DFD74948BB7481;
-        Mon, 29 Jun 2020 17:19:59 +0100 (IST)
-Received: from [127.0.0.1] (10.210.170.8) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 29 Jun
- 2020 17:19:58 +0100
-Subject: Re: [PATCH RFC v7 02/12] blk-mq: rename blk_mq_update_tag_set_depth()
-To:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
-CC:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <don.brace@microsemi.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>, <bvanassche@acm.org>,
-        <hare@suse.com>, <hch@lst.de>,
-        Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>,
-        <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>
-References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
- <1591810159-240929-3-git-send-email-john.garry@huawei.com>
- <20200611025759.GA453671@T590>
- <6ef76cdf-2fb3-0ce8-5b5a-0d7af0145901@huawei.com>
- <8ef58912-d480-a7e1-f04c-da9bd85ea0ae@huawei.com>
- <eaf188d5-dac0-da44-1c83-31ff2860d8fa@suse.de>
- <e42da0e714c808c80e9a055f3f065e44@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <634f1564-6404-a5b9-0b27-b96b7df8df12@huawei.com>
-Date:   Mon, 29 Jun 2020 17:18:23 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1730276AbgF2TXc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732285AbgF2TWo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:22:44 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0B7C030F39;
+        Mon, 29 Jun 2020 09:56:52 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id z5so8569340pgb.6;
+        Mon, 29 Jun 2020 09:56:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=/ma/F8azHfAAlX2tIXoGzMQscfg5HcD+VaBkA6I2zHQ=;
+        b=pZER90CeOCVTshThob8SMWZGTPpq0Mux+NuRers8/6P2d0f4w05GGRSqD38aYcR8ZZ
+         12G9obczqcC1AFF562uQjh3gP+CYReqnp1GfE2ls8ZNYxhGZ8NeOzFlvLYb4fhQVTgw+
+         drDHEyhfRZQThZRHWbPqaYsosoDZyprHv0VWmIDHGBLihzGeKEW0eUIgUpLq+zjzfJEV
+         X9MSU4N34Sr3VrhXDbKxq8GarIAoqKX/BUhbleGf2EDvUpLtuhQyVdQohOUDokASKovU
+         v3hSmeogbUBwwqUUhpG8mhxfAVv22+KxEWOweLvDxOTbSO7NhguMdtjuQ0vGSyPpoGsK
+         D5GA==
+X-Gm-Message-State: AOAM533Xpd0YJw46l0YjdEqWsLVYGUk6Y0tfaYip9Hybi9VKGvLmjZ6u
+        2LYZypdyLwl/pyRziGdgk2w=
+X-Google-Smtp-Source: ABdhPJxAvEhIQPLv4qR5l3ldPDQeKRXPQEDzt66dAti3bw4uNmWPcIma5kppyybAmSHb90GeBtGz8A==
+X-Received: by 2002:a63:5110:: with SMTP id f16mr10872564pgb.377.1593449812186;
+        Mon, 29 Jun 2020 09:56:52 -0700 (PDT)
+Received: from [192.168.50.147] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id a30sm258527pfr.87.2020.06.29.09.56.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2020 09:56:51 -0700 (PDT)
+Subject: Re: [PATCH] scsi: sd: add runtime pm to open / release
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     jejb@linux.ibm.com, Can Guo <cang@codeaurora.org>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@puri.sm
+References: <20200623111018.31954-1-martin.kepplinger@puri.sm>
+ <ed9ae198-4c68-f82b-04fc-2299ab16df96@acm.org>
+ <eccacce9-393c-ca5d-e3b3-09961340e0db@puri.sm>
+ <1379e21d-c51a-3710-e185-c2d7a9681fb7@acm.org>
+ <20200626154441.GA296771@rowland.harvard.edu>
+ <c19f1938-ae47-2357-669d-5b4021aec154@puri.sm>
+ <20200629161536.GA405175@rowland.harvard.edu>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <df54c02f-dbe9-08d5-fec8-835788caf164@acm.org>
+Date:   Mon, 29 Jun 2020 09:56:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <e42da0e714c808c80e9a055f3f065e44@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20200629161536.GA405175@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.170.8]
-X-ClientProxiedBy: lhreml715-chm.china.huawei.com (10.201.108.66) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 24/06/2020 09:13, Kashyap Desai wrote:
->>> Hi Hannes,
->>>
->>> Do you have any issue with splitting the undocumented changes into
->>> another patch as so:
->>>
->> No, that's perfectly fine.
->>
->> Kashyap, I've also attached an updated patch for the elevator_count patch;
->> if
->> you agree John can include it in the next version.
+On 2020-06-29 09:15, Alan Stern wrote:
+> Aha.  Looking at this more closely, it's apparent that the code in 
+> blk-core.c contains a logic bug: It assumes that if the BLK_MQ_REQ_PREEMPT 
+> flag is set then the request can be issued regardless of the queue's 
+> runtime status.  That is not correct when the queue is suspended.
 
-ok, but I need to check it myself.
+Please clarify why this is not correct.
 
-> Hannes - Patch looks good.   Header does not include problem statement. How
-> about adding below in header ?
-> 
-> High CPU utilization on "native_queued_spin_lock_slowpath" due to lock
-> contention is possible in mq-deadline and bfq io scheduler when nr_hw_queues
-> is more than one.
-> It is because kblockd work queue can submit IO from all online CPUs (through
-> blk_mq_run_hw_queues) even though only one hctx has pending commands.
-> Elevator callback "has_work" for mq-deadline and bfq scheduler consider
-> pending work if there are any IOs on request queue and it does not account
-> hctx context.
-> 
-> I have not seen performance drop after this patch, but I will continue
-> further testing.
-> 
-> John - One more thing, I am working on megaraid_sas driver to provide both
-> host_tagset = 1 and 0 option through module parameter.
+> Index: usb-devel/block/blk-core.c
+> ===================================================================
+> --- usb-devel.orig/block/blk-core.c
+> +++ usb-devel/block/blk-core.c
+> @@ -423,7 +423,8 @@ int blk_queue_enter(struct request_queue
+>  			 * responsible for ensuring that that counter is
+>  			 * globally visible before the queue is unfrozen.
+>  			 */
+> -			if (pm || !blk_queue_pm_only(q)) {
+> +			if ((pm && q->rpm_status != RPM_SUSPENDED) ||
+> +			    !blk_queue_pm_only(q)) {
+>  				success = true;
+>  			} else {
+>  				percpu_ref_put(&q->q_usage_counter);
 
-I was hoping that we wouldn't have this, and have host_tagset = 1 
-always. Or maybe host_tagset = 1 by default, and allow module param to 
-set = 0. Your choice, though.
+Does the above change make it impossible to bring a suspended device
+back to the RPM_ACTIVE state if the BLK_MQ_REQ_NOWAIT flag is set?
+
+> @@ -448,8 +449,7 @@ int blk_queue_enter(struct request_queue
+>  
+>  		wait_event(q->mq_freeze_wq,
+>  			   (!q->mq_freeze_depth &&
+> -			    (pm || (blk_pm_request_resume(q),
+> -				    !blk_queue_pm_only(q)))) ||
+> +			    blk_pm_resume_queue(pm, q)) ||
+>  			   blk_queue_dying(q));
+>  		if (blk_queue_dying(q))
+>  			return -ENODEV;
+> Index: usb-devel/block/blk-pm.h
+> ===================================================================
+> --- usb-devel.orig/block/blk-pm.h
+> +++ usb-devel/block/blk-pm.h
+> @@ -6,11 +6,14 @@
+>  #include <linux/pm_runtime.h>
+>  
+>  #ifdef CONFIG_PM
+> -static inline void blk_pm_request_resume(struct request_queue *q)
+> +static inline int blk_pm_resume_queue(const bool pm, struct request_queue *q)
+>  {
+> -	if (q->dev && (q->rpm_status == RPM_SUSPENDED ||
+> -		       q->rpm_status == RPM_SUSPENDING))
+> -		pm_request_resume(q->dev);
+> +	if (!q->dev || !blk_queue_pm_only(q))
+> +		return 1;	/* Nothing to do */
+> +	if (pm && q->rpm_status != RPM_SUSPENDED)
+> +		return 1;	/* Request allowed */
+> +	pm_request_resume(q->dev);
+> +	return 0;
+>  }
+
+Does the above change, especially the " && q->rpm_status !=
+RPM_SUSPENDED" part, make it impossible to bring a suspended device back
+to the RPM_ACTIVE state?
 
 Thanks,
-John
 
+Bart.
