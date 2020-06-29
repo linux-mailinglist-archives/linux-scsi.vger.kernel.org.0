@@ -2,129 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5475020D3D2
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 21:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C433620D307
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 21:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730501AbgF2TCW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:02:22 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46731 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730498AbgF2TCT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:02:19 -0400
-Received: (qmail 406595 invoked by uid 1000); 29 Jun 2020 12:15:36 -0400
-Date:   Mon, 29 Jun 2020 12:15:36 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     Bart Van Assche <bvanassche@acm.org>, jejb@linux.ibm.com,
-        Can Guo <cang@codeaurora.org>, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCH] scsi: sd: add runtime pm to open / release
-Message-ID: <20200629161536.GA405175@rowland.harvard.edu>
-References: <20200623111018.31954-1-martin.kepplinger@puri.sm>
- <ed9ae198-4c68-f82b-04fc-2299ab16df96@acm.org>
- <eccacce9-393c-ca5d-e3b3-09961340e0db@puri.sm>
- <1379e21d-c51a-3710-e185-c2d7a9681fb7@acm.org>
- <20200626154441.GA296771@rowland.harvard.edu>
- <c19f1938-ae47-2357-669d-5b4021aec154@puri.sm>
+        id S1729926AbgF2SzG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 14:55:06 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:57273 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729922AbgF2SzF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 14:55:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1593456906; x=1624992906;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=ePFAFVLOzFSVrSavTTXb1e0G3zVyD5qJRsnoo6bUjCg=;
+  b=n37XHtZPxeLE99686fEXrqXfcyQn+ULDcqGLrq+TCjs1fyRJsX2y2Tb3
+   n29zLo8iwWR11rImuU7rO+QIqJZZLTNIgNCjtdcvCqlgXDyeSawPlo22+
+   fCWQ3dG+t/fgJTtG1H04l7x6xanVEHGl4HhuPRhHsbrPcjWhk/iP5Ym9k
+   CgFztW4L88MRH3O9H1XtU8kccZjn1KlMylrN1iBVrwYP3rFUGjYpBvJ2+
+   hdMsV0mxQcTeXxGNSPvzEkDKq3/MxnyRi1gpufUIBl7ExlgM393AxrTuj
+   38YHgbKucDvJVoNdFcu59o73Tsk+AG2cGHRVOAKf60z4nAfLfFcHtSP05
+   g==;
+IronPort-SDR: ZQ3ONEpYNv7HHwG3+IsEY3vYGbgwU2/YfRaD5xfdaJGVXhVloAFBypuZbkzbzmYcGsNEjDYGgx
+ 5lth9lSQaW6UTUhqr1CXdTYXqBd8v5NVpKE535M8LHoAAuYBYXHaNLLleePgL8RSm0L1P8AUTj
+ 1k4khsJDtqTtaBsaJyllhSXyQBEKpbOey9XsTxUX6lhTZLck7wMEdGOiQ6SlwOpbJ2iS32xL/x
+ hlvQi/NaF9Y57thFPJvsBhmkOoBQjO2BEcdbwNIGx2aDQQ163BPsICYT8QmSc8TZvMcQcSCJtz
+ evg=
+X-IronPort-AV: E=Sophos;i="5.75,295,1589212800"; 
+   d="scan'208";a="244213687"
+Received: from mail-co1nam11lp2169.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.169])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Jun 2020 00:17:05 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P4zEt7V1K+z7iRqC/KnOhObZaSZIkdMnfOocJx8b6diEmxpeJGv5SGAM4MRaoTRdYQQY1a/oZwnkAogY4y0TqhH7DY65caHB+ScOYg53grJZXsgsOryQhutNHxcUt8R3+jGypl5rtRM2JYDethIgjvu1sLgCIRSADHvZWx6ZfC2ups0vEIIfN3A/HJo+z4T+uJee1OPj2FnPPxw5C66QKOKW3GTwJALhFbboBP68GCZG7oSk/xxs8CbMNYngEtIIwAJRnPDvMV7mmoQbOMTeY5rSUYJ5gF08kjwePEcJ51tlasX8b/omAo/C/Ii9NMD1PcsRWF7IYNhEWZ2UORZtag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BDmNtEYs6mwnVmGJXASRmSQGO7Qas5IA432EMhu6YQY=;
+ b=SJ1SMhrXkdtD4NxjbyX9j0+x2ldPwwbT+N26gVy+PU4lWBlcYfhgAWNzxAp11qEN3Lp755HkiofBDVh5hF7Wfs64Hzc75YNQq7EtUf9HYtDipfHMDAcv03pjhZVqv0ppKNv+s1DitAjipL7OEcioC2MZYzBW3wD7O8Es99rvc0rGR6MDH2Kf7q9Z296fo0AvYMzAHLWLx2uvh0/NF1cpGWuYJTSSxxlVomRd5Z1ot8Joa4OG4h9J30sC9O+A6puXaE6E0yHuQNlz72d+TuFmkmZTy+ntqcTnmdQInEfMvOfTatcWx8gvAje8VWYnwXvMkkyoyP1fvAZ3z+yrJXxogg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BDmNtEYs6mwnVmGJXASRmSQGO7Qas5IA432EMhu6YQY=;
+ b=IjHJiPSu4wxmOsRD+m0Ejx933//L6lgX/gIeD5vRwQibfTeaSPdOaqKn7obs7Coq6pPoBo5zO7bBUC+y6cHvjMsCHtTu3ndm+gumNm/5vxWvLe7GJkBKyH5YrO5D79nrCpIlJmoRh8c7Gn7k1sb93Ts3XY8YTD9hqdtB4X2ncHg=
+Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
+ (2603:10b6:803:47::21) by SN6PR04MB4237.namprd04.prod.outlook.com
+ (2603:10b6:805:30::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21; Mon, 29 Jun
+ 2020 16:15:59 +0000
+Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
+ ([fe80::1447:186c:326e:30b2]) by SN4PR0401MB3598.namprd04.prod.outlook.com
+ ([fe80::1447:186c:326e:30b2%7]) with mapi id 15.20.3131.026; Mon, 29 Jun 2020
+ 16:15:59 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: Re: [PATCH] Make the scsi_init_io() documentation more accurate
+Thread-Topic: [PATCH] Make the scsi_init_io() documentation more accurate
+Thread-Index: AQHWTi8AwwuTe16HCUqQonN/9mpGIA==
+Date:   Mon, 29 Jun 2020 16:15:58 +0000
+Message-ID: <SN4PR0401MB3598D3C803375B92AD433D679B6E0@SN4PR0401MB3598.namprd04.prod.outlook.com>
+References: <20200629160433.14390-1-bvanassche@acm.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: acm.org; dkim=none (message not signed)
+ header.d=none;acm.org; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [2001:a62:1515:bd01:8525:1965:641f:1b27]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 2b6baa53-0c54-42ab-3eab-08d81c47b5c7
+x-ms-traffictypediagnostic: SN6PR04MB4237:
+x-microsoft-antispam-prvs: <SN6PR04MB42379EF3788A8B65343CE4D79B6E0@SN6PR04MB4237.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:3968;
+x-forefront-prvs: 044968D9E1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: v0g0ZrB2fNz7IO6v7iG5fguhDadyFLQ+674EZZSR2NjpPe4hkeLVCPuFDdeNwIbRJS7ca41kyFSpcgzpEMNRvu2UoWT/fJRVI5lACWSj+l1trTDoQbtPi5nREMKFIEufGarbwRCJVKHM0MTMzyqSzvFK/xIONEy7klGYwaoNhykK7OXgJQ55lqju0mvEj+NicLUXBsRDQPeUK3bgxOHxWjpVGrXfUZfYcZy6ICosLf1n2FVJb1ZPU/PVIH73ed8IQZpIlSo0G6KHpAj8tV+oQCcn1JmwNM14kjEz68QUQMi03r5xUBkFhcQ2bsGJRqrl
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0401MB3598.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(366004)(39860400002)(346002)(136003)(376002)(52536014)(7696005)(86362001)(2906002)(53546011)(6506007)(4326008)(478600001)(186003)(5660300002)(558084003)(71200400001)(55016002)(9686003)(54906003)(110136005)(64756008)(66556008)(66946007)(66476007)(8936002)(66446008)(8676002)(316002)(33656002)(76116006)(91956017);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: zjwrrbF3VrSxjbcAX9BFTPwCf6dikXQqTcdvVHJWTCQj5JkTZM8MIcXRfadUUoVvM+7JjJrmZx0CXCReUtmcYtopgY5+jRDRlH19fDLBSLhi8pLBldIplL8FDEIcYu0MNcx3NO11GEZbfMt218vOQYzTsjq6Pm4ItUOtOSrbP1oyN1COP7P/GFWxKBUOXNXa5Jcmr1XL9L0ytBe3ny0aXPjxL2MgNaHNL+0uJ+Xh+M8QVEhy+S1SWEZ2psoPhnFYrioSXrLKJu/Ii39XJJOeBB4i2/ez9oQw1b+UM/IcpBkgo7Ee1sdTxoC8sIbeRPw+t4lkwBJrAotMDHRpR5dn2Q9/IESlaQ/E3z1FoyK23HEasttYG0/WfRHWa5Rhk4zzNPs8ogfTDm+OVd3cDpxcdo5sjaKPZ/oX+UOvrLTVJWJ5mYHmcflD3rFhVZyHCex5eM6QA78hxJLSZXQ5uUBrwuLOFcSkoPIiP49+E+oYrCcoJ9kYy0aoHvWC0GpcpO2hQjuCrnnhOAnZzdBXMjwkm6L6zOJkCPUIfW3j8/ES9D7MiYjNFgnYQg1CxiKYNhsV
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c19f1938-ae47-2357-669d-5b4021aec154@puri.sm>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0401MB3598.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b6baa53-0c54-42ab-3eab-08d81c47b5c7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 16:15:58.8985
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4zLPdlcMLy5IiRBx8dTuMPlxzH6aWREgrzFYAEOlVSybCSnOLiuEjIoyNKcKe3lq0VtYOJbCfGbbmz3ALZ9anzQb1QVq9z73ryXq6tJ0fkk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4237
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 11:42:59AM +0200, Martin Kepplinger wrote:
-> 
-> 
-> On 26.06.20 17:44, Alan Stern wrote:
-> > Martin's best approach would be to add some debugging code to find out why 
-> > blk_queue_enter() isn't calling bkl_pm_request_resume(), or why that call 
-> > doesn't lead to pm_request_resume().
-> > 
-> > Alan Stern
-> > 
-> 
-> Hi Alan,
-> 
-> blk_queue_enter() always - especially when sd is runtime suspended and I
-> try to mount as above - sets success to be true for me, so never
-> continues down to bkl_pm_request_resume(). All I see is "PM: Removing
-> info for No Bus:sda1".
-
-Aha.  Looking at this more closely, it's apparent that the code in 
-blk-core.c contains a logic bug: It assumes that if the BLK_MQ_REQ_PREEMPT 
-flag is set then the request can be issued regardless of the queue's 
-runtime status.  That is not correct when the queue is suspended.
-
-Below is my attempt to fix this up.  I'm not sure that the patch is 
-entirely correct, but it should fix this logic bug.  I would appreciate a 
-critical review.
-
-Martin, does this fix the problem?
-
-Alan Stern
-
-
-
-Index: usb-devel/block/blk-core.c
-===================================================================
---- usb-devel.orig/block/blk-core.c
-+++ usb-devel/block/blk-core.c
-@@ -423,7 +423,8 @@ int blk_queue_enter(struct request_queue
- 			 * responsible for ensuring that that counter is
- 			 * globally visible before the queue is unfrozen.
- 			 */
--			if (pm || !blk_queue_pm_only(q)) {
-+			if ((pm && q->rpm_status != RPM_SUSPENDED) ||
-+			    !blk_queue_pm_only(q)) {
- 				success = true;
- 			} else {
- 				percpu_ref_put(&q->q_usage_counter);
-@@ -448,8 +449,7 @@ int blk_queue_enter(struct request_queue
- 
- 		wait_event(q->mq_freeze_wq,
- 			   (!q->mq_freeze_depth &&
--			    (pm || (blk_pm_request_resume(q),
--				    !blk_queue_pm_only(q)))) ||
-+			    blk_pm_resume_queue(pm, q)) ||
- 			   blk_queue_dying(q));
- 		if (blk_queue_dying(q))
- 			return -ENODEV;
-Index: usb-devel/block/blk-pm.h
-===================================================================
---- usb-devel.orig/block/blk-pm.h
-+++ usb-devel/block/blk-pm.h
-@@ -6,11 +6,14 @@
- #include <linux/pm_runtime.h>
- 
- #ifdef CONFIG_PM
--static inline void blk_pm_request_resume(struct request_queue *q)
-+static inline int blk_pm_resume_queue(const bool pm, struct request_queue *q)
- {
--	if (q->dev && (q->rpm_status == RPM_SUSPENDED ||
--		       q->rpm_status == RPM_SUSPENDING))
--		pm_request_resume(q->dev);
-+	if (!q->dev || !blk_queue_pm_only(q))
-+		return 1;	/* Nothing to do */
-+	if (pm && q->rpm_status != RPM_SUSPENDED)
-+		return 1;	/* Request allowed */
-+	pm_request_resume(q->dev);
-+	return 0;
- }
- 
- static inline void blk_pm_mark_last_busy(struct request *rq)
-@@ -44,8 +47,9 @@ static inline void blk_pm_put_request(st
- 		--rq->q->nr_pending;
- }
- #else
--static inline void blk_pm_request_resume(struct request_queue *q)
-+static inline int blk_pm_resume_queue(const bool pm, struct request_queue *q)
- {
-+	return 1;
- }
- 
- static inline void blk_pm_mark_last_busy(struct request *rq)
+On 29/06/2020 18:04, Bart Van Assche wrote:=0A=
+> + * for @cmd. Functions like scsi_sg_count(), scsi_sg_list() and scsi_buf=
+flen()=0A=
+                                  scsi_sglist() ~^ =0A=
+=0A=
+and I don't think that sentence should be included at all as these values a=
+re =0A=
+initialized in scsi_init_sgtable().=0A=
