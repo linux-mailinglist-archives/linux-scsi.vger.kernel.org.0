@@ -2,67 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E64920D68C
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5171020D910
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732155AbgF2TVN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:21:13 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2407 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732153AbgF2TVL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:21:11 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 0F2D671B550EB6D0FDA0;
-        Mon, 29 Jun 2020 16:34:19 +0100 (IST)
-Received: from [127.0.0.1] (10.210.170.8) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 29 Jun
- 2020 16:34:17 +0100
-Subject: About sbitmap_bitmap_show() and cleared bits (was Re: [PATCH RFC v7
- 07/12] blk-mq: Add support in hctx_tags_bitmap_show() for a shared sbitmap)
-To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>
-CC:     Hannes Reinecke <hare@suse.de>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <don.brace@microsemi.com>,
-        <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
-        <ming.lei@redhat.com>, <bvanassche@acm.org>, <hare@suse.com>,
-        <hch@lst.de>, <shivasharan.srikanteshwara@broadcom.com>,
-        <linux-scsi@vger.kernel.org>, <esc.storagedev@microsemi.com>,
-        <chenxiang66@hisilicon.com>, <megaraidlinux.pdl@broadcom.com>
-References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
- <1591810159-240929-8-git-send-email-john.garry@huawei.com>
- <9f4741c5-d117-d764-cf3a-a57192a788c3@suse.de>
- <aad6efa3-2d7f-ca68-d239-44ea187c8017@huawei.com>
- <7ed6ccf1-6ad9-1df7-f55d-4ed6cac1e08d@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <8ffd5c22-f644-3436-0a9f-2e08c220525e@huawei.com>
-Date:   Mon, 29 Jun 2020 16:32:42 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1733229AbgF2Tnx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387965AbgF2Tmm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:42:42 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B35C0307B8
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 09:04:40 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id l63so8481223pge.12
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 09:04:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0kgv3VlLQlGR4bY+CDvjI7NJi4C5sMhoLl8VYxZ7R24=;
+        b=MDWpgwcQxYQfxaYz6qU6zB4PfO6fiFBS7DW/FzQkLguxyZHk6eSSAEYSfNPkqEtsje
+         IZo2UAw0xiuy3RIjuxsm7ibMeACo+lyJyj2P6WM/JrVoRTLFn2iYEF/TesytLptGqYTF
+         sk950e74xyEG+CdBN4VNfB//hWhmtMJ0oDJ8EK+1gu8RAcwKlTVZHCBO0ONakZVdfJVA
+         ojFoaWcPjSDz7VqNSLDUhMNE6ONgatG+oa3F6kcAGVz9mIIxNTe4FV+1X1Ymn8bYBtZs
+         CjW+5c3V5fAdJgv7crJ05QvhlEXrLI66ofq31JOwBnLPqxQXFDWMqofs6CheQ13Mhs+Q
+         zyvg==
+X-Gm-Message-State: AOAM5334HtgE9M6QEWYnazZykqbGeHM4dwmmI8Mimsb24pBJnQwQvQ2y
+        rQtt3QnKBwyK81DnD4+8FYY=
+X-Google-Smtp-Source: ABdhPJyo8P8FOulErEszG4iC0nb+wekavfOVRKp4N9M0wP3H2P/U9hVXzGAcY/bey8NWR/sn/JKMqA==
+X-Received: by 2002:a63:920b:: with SMTP id o11mr11312285pgd.447.1593446679943;
+        Mon, 29 Jun 2020 09:04:39 -0700 (PDT)
+Received: from localhost.localdomain (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id g7sm148776pfh.210.2020.06.29.09.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 09:04:39 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH] Make the scsi_init_io() documentation more accurate
+Date:   Mon, 29 Jun 2020 09:04:33 -0700
+Message-Id: <20200629160433.14390-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <7ed6ccf1-6ad9-1df7-f55d-4ed6cac1e08d@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.170.8]
-X-ClientProxiedBy: lhreml715-chm.china.huawei.com (10.201.108.66) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi all,
+The current scsi_init_io() documentation does not accurately explain what
+this function does. Make the scsi_init_io() documentation more accurate.
 
-I noticed that sbitmap_bitmap_show() only shows set bits and does not 
-consider cleared bits. Is that the proper thing to do?
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Daniel Wagner <dwagner@suse.de>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/scsi_lib.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-I ask, as from trying to support sbitmap_bitmap_show() for hostwide 
-shared tags feature, we currently use blk_mq_queue_tag_busy_iter() to 
-find active requests (and associated tags/bits) for a particular hctx. 
-So, AFAICT, would give a change in behavior for sbitmap_bitmap_show(), 
-in that it would effectively show set and not cleared bits.
-
-Any thoughts on this?
-
-Thanks!
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 7c42c00afb0d..b2b9bbaad9fe 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -961,8 +961,12 @@ static inline bool scsi_cmd_needs_dma_drain(struct scsi_device *sdev,
+ }
+ 
+ /**
+- * scsi_init_io - SCSI I/O initialization function.
+- * @cmd:  command descriptor we wish to initialize
++ * scsi_init_io - Allocate and initialize data and integrity scatterlists
++ * @cmd: SCSI command data structure to initialize.
++ *
++ * Initializes @cmd->sdb and also @cmd->prot_sdb if data integrity is enabled
++ * for @cmd. Functions like scsi_sg_count(), scsi_sg_list() and scsi_bufflen()
++ * return the values stored by this function in the @cmd data structure.
+  *
+  * Returns:
+  * * BLK_STS_OK       - on success
