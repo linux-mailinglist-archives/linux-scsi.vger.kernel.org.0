@@ -2,19 +2,19 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1591C20D7A3
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B629720D694
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733173AbgF2Tb2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:31:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36732 "EHLO mx2.suse.de"
+        id S1731880AbgF2TVg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:21:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59540 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733156AbgF2Tb1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:31:27 -0400
+        id S1732220AbgF2TVf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:21:35 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E5CD3B053;
-        Mon, 29 Jun 2020 07:20:55 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 655B1B11F;
+        Mon, 29 Jun 2020 07:20:56 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -23,9 +23,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Don Brace <don.brace@microchip.com>,
         John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 03/22] scsi: add scsi_{get,put}_internal_cmd() helper
-Date:   Mon, 29 Jun 2020 09:20:02 +0200
-Message-Id: <20200629072021.9864-4-hare@suse.de>
+Subject: [PATCH 15/22] hpsa: move hpsa_hba_inquiry after scsi_add_host()
+Date:   Mon, 29 Jun 2020 09:20:14 +0200
+Message-Id: <20200629072021.9864-16-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200629072021.9864-1-hare@suse.de>
 References: <20200629072021.9864-1-hare@suse.de>
@@ -34,92 +34,84 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add helper functions to allow LLDDs to allocate and free
-internal commands.
+Move hpsa_hba_inquiry to after scsi_add_host() so that the host
+is fully initialized.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
+Tested-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/scsi_lib.c    | 44 ++++++++++++++++++++++++++++++++++++++++++++
- include/scsi/scsi_device.h |  4 ++++
- 2 files changed, 48 insertions(+)
+ drivers/scsi/hpsa.c | 37 +++++++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 0ba7a65e7c8d..c2277eff4e06 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1903,6 +1903,50 @@ void scsi_mq_destroy_tags(struct Scsi_Host *shost)
- 	blk_mq_free_tag_set(&shost->tag_set);
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index 81d0414e2117..db0142a16a72 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -5839,6 +5839,22 @@ static int hpsa_scsi_host_alloc(struct ctlr_info *h)
+ 	return 0;
  }
  
-+/**
-+ * scsi_get_internal_cmd - allocate an internal SCSI command
-+ * @sdev: SCSI device from which to allocate the command
-+ * @data_direction: Data direction for the allocated command
-+ * @op_flags: request allocation flags
-+ *
-+ * Allocates a SCSI command for internal LLDD use.
-+ */
-+struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
-+	enum dma_data_direction data_direction, int op_flags)
++static void hpsa_hba_inquiry(struct ctlr_info *h)
 +{
-+	struct request *rq;
-+	struct scsi_cmnd *scmd;
-+	blk_mq_req_flags_t flags = 0;
-+	unsigned int op = REQ_INTERNAL | op_flags;
++	int rc;
 +
-+	op |= (data_direction == DMA_TO_DEVICE) ?
-+		REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN;
-+	rq = blk_mq_alloc_request(sdev->request_queue, op, flags);
-+	if (IS_ERR(rq))
-+		return NULL;
-+	scmd = blk_mq_rq_to_pdu(rq);
-+	scmd->request = rq;
-+	scmd->device = sdev;
-+	return scmd;
++#define HBA_INQUIRY_BYTE_COUNT 64
++	h->hba_inquiry_data = kmalloc(HBA_INQUIRY_BYTE_COUNT, GFP_KERNEL);
++	if (!h->hba_inquiry_data)
++		return;
++	rc = hpsa_scsi_do_inquiry(h, RAID_CTLR_LUNID, 0,
++		h->hba_inquiry_data, HBA_INQUIRY_BYTE_COUNT);
++	if (rc != 0) {
++		kfree(h->hba_inquiry_data);
++		h->hba_inquiry_data = NULL;
++	}
 +}
-+EXPORT_SYMBOL_GPL(scsi_get_internal_cmd);
 +
-+/**
-+ * scsi_put_internal_cmd - free an internal SCSI command
-+ * @scmd: SCSI command to be freed
-+ *
-+ * Check if @scmd is an internal command, and call
-+ * blk_mq_free_request() if true.
-+ */
-+void scsi_put_internal_cmd(struct scsi_cmnd *scmd)
-+{
-+	struct request *rq = blk_mq_rq_from_pdu(scmd);
+ static int hpsa_scsi_add_host(struct ctlr_info *h)
+ {
+ 	int rv;
+@@ -5848,6 +5864,9 @@ static int hpsa_scsi_add_host(struct ctlr_info *h)
+ 		dev_err(&h->pdev->dev, "scsi_add_host failed\n");
+ 		return rv;
+ 	}
 +
-+	if (blk_rq_is_internal(rq))
-+		blk_mq_free_request(rq);
-+}
-+EXPORT_SYMBOL_GPL(scsi_put_internal_cmd);
++	hpsa_hba_inquiry(h);
 +
- /**
-  * scsi_device_from_queue - return sdev associated with a request_queue
-  * @q: The request queue to return the sdev from
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index bc5909033d13..2759a538adae 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -8,6 +8,7 @@
- #include <linux/blkdev.h>
- #include <scsi/scsi.h>
- #include <linux/atomic.h>
-+#include <linux/dma-direction.h>
- 
- struct device;
- struct request_queue;
-@@ -460,6 +461,9 @@ static inline int scsi_execute_req(struct scsi_device *sdev,
- 	return scsi_execute(sdev, cmd, data_direction, buffer,
- 		bufflen, NULL, sshdr, timeout, retries,  0, 0, resid);
+ 	scsi_scan_host(h->scsi_host);
+ 	return 0;
  }
-+struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
-+	enum dma_data_direction data_direction, int op_flags);
-+void scsi_put_internal_cmd(struct scsi_cmnd *scmd);
- extern void sdev_disable_disk_events(struct scsi_device *sdev);
- extern void sdev_enable_disk_events(struct scsi_device *sdev);
- extern int scsi_vpd_lun_id(struct scsi_device *, char *, size_t);
+@@ -7901,22 +7920,6 @@ static int hpsa_pci_init(struct ctlr_info *h)
+ 	return err;
+ }
+ 
+-static void hpsa_hba_inquiry(struct ctlr_info *h)
+-{
+-	int rc;
+-
+-#define HBA_INQUIRY_BYTE_COUNT 64
+-	h->hba_inquiry_data = kmalloc(HBA_INQUIRY_BYTE_COUNT, GFP_KERNEL);
+-	if (!h->hba_inquiry_data)
+-		return;
+-	rc = hpsa_scsi_do_inquiry(h, RAID_CTLR_LUNID, 0,
+-		h->hba_inquiry_data, HBA_INQUIRY_BYTE_COUNT);
+-	if (rc != 0) {
+-		kfree(h->hba_inquiry_data);
+-		h->hba_inquiry_data = NULL;
+-	}
+-}
+-
+ static int hpsa_init_reset_devices(struct pci_dev *pdev, u32 board_id)
+ {
+ 	int rc, i;
+@@ -8825,8 +8828,6 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	/* Turn the interrupts on so we can service requests */
+ 	h->access.set_intr_mask(h, HPSA_INTR_ON);
+ 
+-	hpsa_hba_inquiry(h);
+-
+ 	h->lastlogicals = kzalloc(sizeof(*(h->lastlogicals)), GFP_KERNEL);
+ 	if (!h->lastlogicals)
+ 		dev_info(&h->pdev->dev,
 -- 
 2.16.4
 
