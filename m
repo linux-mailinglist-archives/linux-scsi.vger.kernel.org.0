@@ -2,151 +2,126 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CA220E530
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 00:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BAB20E92A
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 01:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729100AbgF2VeG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 17:34:06 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:34603 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728612AbgF2Sk6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 14:40:58 -0400
-Received: (qmail 410173 invoked by uid 1000); 29 Jun 2020 13:40:55 -0400
-Date:   Mon, 29 Jun 2020 13:40:55 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>, jejb@linux.ibm.com,
-        Can Guo <cang@codeaurora.org>, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCH] scsi: sd: add runtime pm to open / release
-Message-ID: <20200629174055.GA408860@rowland.harvard.edu>
-References: <20200623111018.31954-1-martin.kepplinger@puri.sm>
- <ed9ae198-4c68-f82b-04fc-2299ab16df96@acm.org>
- <eccacce9-393c-ca5d-e3b3-09961340e0db@puri.sm>
- <1379e21d-c51a-3710-e185-c2d7a9681fb7@acm.org>
- <20200626154441.GA296771@rowland.harvard.edu>
- <c19f1938-ae47-2357-669d-5b4021aec154@puri.sm>
- <20200629161536.GA405175@rowland.harvard.edu>
- <df54c02f-dbe9-08d5-fec8-835788caf164@acm.org>
+        id S1729572AbgF2XO0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 19:14:26 -0400
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.2]:49526 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726180AbgF2XO0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jun 2020 19:14:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
+        s=200619tsfj; t=1593420813; i=@ts.fujitsu.com;
+        bh=cbG5NOwyLc3AqnYYvEsDThu3inPz53X98TvlIekIdLo=;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=vFf+Id/yazAb6ixz+MRuJQAHWSXRXxzmAukodeaJSISOZX6zW3bJE/Iim5mmsTBo5
+         Ci7jzmCf6rOA4yPpPwAgkhr3KTfWsDcM4zUYvy7T7axnNn1hA6tjKDcDrxpK1mRHmN
+         7GI9u/obKwBZT+jahwgmydM255DxTJBnzdxbuhsqerrKZv/Ts3w5TrrpJ5by4AxsWp
+         KUZ/hk8hhz2yfQ7WfLAHMAkiU+mP4h5fstwkr+CtuDyc3Jd66pMd7rmNAj5n4ruYCl
+         DglnztyHvgDJIztRuUcB/jscF9pb26StKBGgW/at7dvXxLzTDd04cmgmASicX4vXeK
+         v7cA5mTzgk/cw==
+Received: from [100.113.3.51] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-2.bemta.az-a.eu-central-1.aws.symcld.net id DE/AF-52475-D0CA9FE5; Mon, 29 Jun 2020 08:53:33 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDIsWRWlGSWpSXmKPExsViZ8MxVZd3zc8
+  4gx9PRC2mffjJbHF44Rsmi0efTzFadF/fwWYxoy3MYvnxf0wWfyfdYLVoXfqWyYHD4/IVb4+d
+  s+6yezzuOcPm8fHpLRaPz5vkAlijWDPzkvIrElgzlq+9wl6wnquic+p51gbGDRxdjJwcQgKTG
+  SXOPtXsYuQCsvsZJVYcOcDexcjBISwQILH6bi1IjYhAgsTW16tYQGqYBb4wSvyY2sAC0bCQUW
+  Jn1wxWkCo2AQOJFZPus4DYvAKOEt1Nq9lAbBYBVYkdf7aygQwVFQiXeLbCH6JEUOLkzCdg5Zw
+  CdhKt57eBlTMLmEnM2/yQGcIWl7j1ZD4ThC0vsf3tHOYJjPyzkLTPQtIyC0nLLCQtCxhZVjFa
+  JhVlpmeU5CZm5ugaGhjoGhoa6wJJYwO9xCrdRL3UUt3k1LySokSgrF5iebFecWVuck6KXl5qy
+  SZGYKSkFDI07WB89+qD3iFGSQ4mJVFeowk/44T4kvJTKjMSizPii0pzUosPMcpwcChJ8B5eCZ
+  QTLEpNT61Iy8wBRi1MWoKDR0mE9/YqoDRvcUFibnFmOkTqFKOilDiv9mqghABIIqM0D64Nlig
+  uMcpKCfMyMjAwCPEUpBblZpagyr9iFOdgVBLm7QEZz5OZVwI3/RXQYiagxQWm30AWlyQipKQa
+  mEQaFAPKnQu6X1vk3U1e2f/2d+Hd4qwCtpnJNVP0Og6EfM0KlI/ecXWeyoaLVdvYbix5em+K6
+  5Njwm75i3JU32kUaZ3oO1r1f3O6m3tI+02jrfLOAVyL14hnaNm0lEwKdRMr9FgyaduhYu5Fq1
+  4Z/b147mJZjQx3/q/E1Uv3nVfxlfBJW2Twcs//vOMno+0a0wwZd827vLG+62GQ7tF7jZani4w
+  Db2Sy3yi5ULrlbnDgE469f8NNGzdN/uOR894jOmO2ZMh8PVenmBVHm/XmR5s8LDIy2RAYE27u
+  UlaftuHKrmyzNekTMm6Lnma/1NZ8yzR93yOvWdabf2u8U9+1UyQoblfhVkXfqVEvHF5oKLEUZ
+  yQaajEXFScCAJ2Xoo2PAwAA
+X-Env-Sender: bstroesser@ts.fujitsu.com
+X-Msg-Ref: server-24.tower-232.messagelabs.com!1593420812!392557!1
+X-Originating-IP: [62.60.8.149]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.50.2; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 2952 invoked from network); 29 Jun 2020 08:53:33 -0000
+Received: from unknown (HELO mailhost2.uk.fujitsu.com) (62.60.8.149)
+  by server-24.tower-232.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Jun 2020 08:53:33 -0000
+Received: from x-serv01 ([172.17.38.52])
+        by mailhost2.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 05T8rGf4031582;
+        Mon, 29 Jun 2020 09:53:24 +0100
+Received: from [172.17.39.90] (unknown [172.17.39.90])
+        by x-serv01 (Postfix) with ESMTP id 12A96204CE;
+        Mon, 29 Jun 2020 10:53:13 +0200 (CEST)
+Subject: Re: [PATCH] scsi: target: tcmu: Fix crash on ARM during cmd
+ completion
+To:     Michael Christie <michael.christie@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        JiangYu <lnsyyj@hotmail.com>,
+        Daniel Meyerholt <dxm523@gmail.com>,
+        Henry Willard <henry.willard@oracle.com>
+References: <20200624085320.31117-1-bstroesser@ts.fujitsu.com>
+ <93e7f9ef-566e-6949-b2c7-2e822ee49f39@acm.org>
+ <15C73AF2-672A-4686-A418-0C41993E8060@oracle.com>
+From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Message-ID: <655e34b7-c6eb-728c-1352-cd87f51d80fb@ts.fujitsu.com>
+Date:   Mon, 29 Jun 2020 10:53:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <df54c02f-dbe9-08d5-fec8-835788caf164@acm.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <15C73AF2-672A-4686-A418-0C41993E8060@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 09:56:49AM -0700, Bart Van Assche wrote:
-> On 2020-06-29 09:15, Alan Stern wrote:
-> > Aha.  Looking at this more closely, it's apparent that the code in 
-> > blk-core.c contains a logic bug: It assumes that if the BLK_MQ_REQ_PREEMPT 
-> > flag is set then the request can be issued regardless of the queue's 
-> > runtime status.  That is not correct when the queue is suspended.
+
+
+On 2020-06-28 21:35, Michael Christie wrote:
 > 
-> Please clarify why this is not correct.
-
-As I understand it, BLK_MQ_REQ_PREEMPT is supposed to mean (among other 
-things) that this request may be issued as part of the procedure for 
-putting a device into a low-power state or returning it to a high-power 
-state.  Consequently, requests with that flag set must be allowed while 
-the queue is in the RPM_SUSPENDING or RPM_RESUMING runtime states -- as 
-opposed to ordinary requests, which are allowed only in the RPM_ACTIVE 
-state.
-
-In the RPM_SUSPENDED state, however, the queue is entirely inactive.  Even 
-if a request were to be issued somehow, it would fail because the system 
-would not be able to transmit it to the device.  In other words, when the 
-queue is in the RPM_SUSPENDED state, a resume must be requested before 
-_any_ request can be issued.
-
-> > Index: usb-devel/block/blk-core.c
-> > ===================================================================
-> > --- usb-devel.orig/block/blk-core.c
-> > +++ usb-devel/block/blk-core.c
-> > @@ -423,7 +423,8 @@ int blk_queue_enter(struct request_queue
-> >  			 * responsible for ensuring that that counter is
-> >  			 * globally visible before the queue is unfrozen.
-> >  			 */
-> > -			if (pm || !blk_queue_pm_only(q)) {
-> > +			if ((pm && q->rpm_status != RPM_SUSPENDED) ||
-> > +			    !blk_queue_pm_only(q)) {
-> >  				success = true;
-> >  			} else {
-> >  				percpu_ref_put(&q->q_usage_counter);
 > 
-> Does the above change make it impossible to bring a suspended device
-> back to the RPM_ACTIVE state if the BLK_MQ_REQ_NOWAIT flag is set?
-
-The only case affected by this change is when BLK_MQ_REQ_PREEMPT is set 
-and the queue is in the RPM_SUSPENDED state.  If BLK_MQ_REQ_NOWAIT was 
-also set, the original code would set "success" to true, allowing the 
-request to proceed even though it could not be carried out immediately -- 
-a bug.
-
-With the patch, such a request will fail without resuming the device.  I 
-don't know whether that is the desired behavior or not, but at least it's 
-not obviously a bug.
-
-It does seem odd that blk_queue_enter() tests the queue's pm_only status 
-and the request flag in two different spots (here and below).  Why does it 
-do this?  It seems like an invitation for bugs.
-
-> > @@ -448,8 +449,7 @@ int blk_queue_enter(struct request_queue
-> >  
-> >  		wait_event(q->mq_freeze_wq,
-> >  			   (!q->mq_freeze_depth &&
-> > -			    (pm || (blk_pm_request_resume(q),
-> > -				    !blk_queue_pm_only(q)))) ||
-> > +			    blk_pm_resume_queue(pm, q)) ||
-> >  			   blk_queue_dying(q));
-> >  		if (blk_queue_dying(q))
-> >  			return -ENODEV;
-> > Index: usb-devel/block/blk-pm.h
-> > ===================================================================
-> > --- usb-devel.orig/block/blk-pm.h
-> > +++ usb-devel/block/blk-pm.h
-> > @@ -6,11 +6,14 @@
-> >  #include <linux/pm_runtime.h>
-> >  
-> >  #ifdef CONFIG_PM
-> > -static inline void blk_pm_request_resume(struct request_queue *q)
-> > +static inline int blk_pm_resume_queue(const bool pm, struct request_queue *q)
-> >  {
-> > -	if (q->dev && (q->rpm_status == RPM_SUSPENDED ||
-> > -		       q->rpm_status == RPM_SUSPENDING))
-> > -		pm_request_resume(q->dev);
-> > +	if (!q->dev || !blk_queue_pm_only(q))
-> > +		return 1;	/* Nothing to do */
-> > +	if (pm && q->rpm_status != RPM_SUSPENDED)
-> > +		return 1;	/* Request allowed */
-> > +	pm_request_resume(q->dev);
-> > +	return 0;
-> >  }
+>> On Jun 27, 2020, at 9:31 PM, Bart Van Assche <bvanassche@acm.org> wrote:
+>>
+>> On 2020-06-24 01:53, Bodo Stroesser wrote:
+>>> The fix is to use the maximum of remaining ring space and
+>>> sizeof(struct tcmu_cmd_entry) as the length param.
+>>>
+>>
+>> [ ... ]
+>>
+>>> +		/*
+>>> +		 * Flush max. up to end of cmd ring, since current entry might
+>>> +		 * be a padding that is shorter than sizeof(*entry)
+>>> +		 */
+>>> +		size_t ring_left = head_to_end(udev->cmdr_last_cleaned,
+>>> +					       udev->cmdr_size);
+>>> +		tcmu_flush_dcache_range(entry, ring_left < sizeof(*entry) ?
+>>> +					ring_left : sizeof(*entry));
+>>>
+>>> 		if (tcmu_hdr_get_op(entry->hdr.len_op) == TCMU_OP_PAD) {
+>>> 			UPDATE_HEAD(udev->cmdr_last_cleaned,
+>>
+>> The patch description says "maximum" but the above formula calculates the
+>> minimum of "ring_left" and sizeof(*entry). Did I perhaps misread this patch?
 > 
-> Does the above change, especially the " && q->rpm_status !=
-> RPM_SUSPENDED" part, make it impossible to bring a suspended device back
-> to the RPM_ACTIVE state?
+> Ah yeah, Bodo probably meant to write what they wrote for the comment above about the max up to the end of the ring and not max of space left and entry size.
+> 
 
-Just the opposite -- the change makes it _possible_ for a 
-BLK_MQ_REQ_PREEMPT request to bring a suspended device back to the 
-RPM_ACTIVE state.
+Thank you, you both are right.
 
-Look at the existing code: If pm is true then blk_pm_request_resume() will 
-be skipped, so the device won't be resumed.  With this patch -- in 
-particular with the "&& q->rpm_status != RPM_SUSPENDED" part added -- the 
-call won't be skipped and so the resume will take place.
+While the code and the comment in the code are fine, patch description
+is misleading or even wrong.
 
-The rather complicated syntax of the wait_event() call in the existing 
-code contributes to this confusion.  One of the things my patch tries to 
-do is make the code more straightforward and easier to grasp.
+So I'm going to re-send the patch with fixed description and Mike's
+Acked-by.
 
-I admit that there are parts to this thing I don't understand.  The 
-wait_event() call in blk_queue_enter(), for example: If we are waiting for 
-the device to leave the RPM_SUSPENDED state (or enter the RPM_ACTIVE 
-state), where does q->mq_freeze_wq get woken up?  There's no obvious spot 
-in blk_{pre|post}_runtime_resume().
-
-Alan Stern
+BR, Bodo
