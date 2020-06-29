@@ -2,98 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D506620E449
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 00:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2743720E697
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 00:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388620AbgF2VXX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 17:23:23 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44648 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729590AbgF2SvY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:51:24 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2BFCFADE0;
-        Mon, 29 Jun 2020 06:32:29 +0000 (UTC)
-Subject: Re: [PATCH 03/22] scsi: add scsi_{get,put}_internal_cmd() helper
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        John Garry <john.garry@huawei.com>,
-        Don Brace <don.brace@microchip.de>, linux-scsi@vger.kernel.org
-References: <20200625140124.17201-1-hare@suse.de>
- <20200625140124.17201-4-hare@suse.de>
- <863b7da2-bbfc-a32f-87ab-648f8561314c@acm.org>
- <7a52763c-eb51-7c63-8d06-b0cc2eab6630@suse.de>
- <e5964b6d-43c1-a14d-c791-4b5826eb2ee8@acm.org>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <9793e936-cf51-2d6a-fccd-4a4b9c8cae02@suse.de>
-Date:   Mon, 29 Jun 2020 08:32:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <e5964b6d-43c1-a14d-c791-4b5826eb2ee8@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S2404325AbgF2Vsz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 17:48:55 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:64034 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726643AbgF2Sfl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 14:35:41 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200629065003epoutp011adbbcecb55c5b42a6c56e95c28b5bf0~c8QxWcV6T1796017960epoutp01S
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 06:50:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200629065003epoutp011adbbcecb55c5b42a6c56e95c28b5bf0~c8QxWcV6T1796017960epoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1593413403;
+        bh=Gf3pprKXKrcSeP86aKBRO6sfzz3FSEUrZ6VtYq5iOiA=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=Zhx8tlVZf4alD7CbADu6icHoUN1LkMfPcJ/k7csz25kpWYHTC53GSK8j4r7fqe4y2
+         ttngKi65L1+89iFYQCWV2SsDSj0db5QndEFWr98RbsUZrNLL0KzHv73+2/DQJcoyld
+         RHamEz2khA2tzNeDOrNbRveowQlkInwiR3lqXL4g=
+Received: from epcpadp1 (unknown [182.195.40.11]) by epcas1p2.samsung.com
+        (KnoxPortal) with ESMTP id
+        20200629065002epcas1p27b22a8678c41d2bcdde721adb43f5085~c8Qw6GAND1512515125epcas1p2d;
+        Mon, 29 Jun 2020 06:50:02 +0000 (GMT)
+Mime-Version: 1.0
+Subject: [PATCH v4 1/5] scsi: ufs: Add UFS feature related parameter
+Reply-To: daejun7.park@samsung.com
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Daejun Park <daejun7.park@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <231786897.01593413281727.JavaMail.epsvc@epcpadp2>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1239183618.61593413402991.JavaMail.epsvc@epcpadp1>
+Date:   Mon, 29 Jun 2020 15:48:57 +0900
+X-CMS-MailID: 20200629064857epcms2p4e4bc13826bb0079440fe011c4c105070
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20200629064323epcms2p787baba58a416fef7fdd3927f8da701da
+References: <231786897.01593413281727.JavaMail.epsvc@epcpadp2>
+        <CGME20200629064323epcms2p787baba58a416fef7fdd3927f8da701da@epcms2p4>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/28/20 5:08 PM, Bart Van Assche wrote:
-> On 2020-06-28 02:02, Hannes Reinecke wrote:
->> On 6/28/20 5:48 AM, Bart Van Assche wrote:
->>> On 2020-06-25 07:01, Hannes Reinecke wrote:
->>>> +struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
->>>> +                    int data_direction, int op_flags)
->>>
->>> How about using enum dma_data_direction for data_direction and unsigned
->>> int, or even better, a new __bitwise type for op_flags?
->>>
->> Okay for data direction, but converting op_flags into __bitwise (or even
->> a new type) should be relegated to a different patchset.
-> 
-> OK.
-> 
->>>> +/**
->>>> + * scsi_put_internal_cmd - free an internal SCSI command
->>>> + * @scmd: SCSI command to be freed
->>>> + */
->>>> +void scsi_put_internal_cmd(struct scsi_cmnd *scmd)
->>>> +{
->>>> +    struct request *rq = blk_mq_rq_from_pdu(scmd);
->>>> +
->>>> +    if (blk_rq_is_internal(rq))
->>>> +        blk_mq_free_request(rq);
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(scsi_put_internal_cmd);
->>>
->>> How about triggering a warning for the !blk_rq_is_internal(rq) case
->>> instead of silently ignoring regular SCSI commands?
->>>
->> That's by design.
->> Some drivers have a common routine for freeing up commands, so it'd be
->> quite tricky to separate these two cases out at the driver level.
->> So it's far easier to call the common routine for all commands, and
->> let this function do the right thing for all commands.
-> 
-> That sounds fair to me, but is an example available in this patch series
-> of a call to scsi_put_internal_cmd() from such a common routine? It
-> seems to me that all calls to scsi_put_internal_cmd() introduced in this
-> patch series happen from code paths that handle internal commands only?
-> 
-aacraid.
-The function aac_fib_free() is called unconditionally for every fib, and 
-doesn't have the means to differentiate between 'normal' and 'internal' 
-commands.
+This is a patch for parameters to be used for UFS features layer and HPB
+module.
 
-Cheers,
+Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+---
+ drivers/scsi/ufs/ufs.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Hannes
+diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
+index f8ab16f30fdc..ae557b8d3eba 100644
+--- a/drivers/scsi/ufs/ufs.h
++++ b/drivers/scsi/ufs/ufs.h
+@@ -122,6 +122,7 @@ enum flag_idn {
+ 	QUERY_FLAG_IDN_WB_EN                            = 0x0E,
+ 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN                 = 0x0F,
+ 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8     = 0x10,
++	QUERY_FLAG_IDN_HPB_RESET                        = 0x11,
+ };
+ 
+ /* Attribute idn for Query requests */
+@@ -195,6 +196,9 @@ enum unit_desc_param {
+ 	UNIT_DESC_PARAM_PHY_MEM_RSRC_CNT	= 0x18,
+ 	UNIT_DESC_PARAM_CTX_CAPABILITIES	= 0x20,
+ 	UNIT_DESC_PARAM_LARGE_UNIT_SIZE_M1	= 0x22,
++	UNIT_DESC_HPB_LU_MAX_ACTIVE_REGIONS	= 0x23,
++	UNIT_DESC_HPB_LU_PIN_REGION_START_OFFSET	= 0x25,
++	UNIT_DESC_HPB_LU_NUM_PIN_REGIONS	= 0x27,
+ 	UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS	= 0x29,
+ };
+ 
+@@ -235,6 +239,8 @@ enum device_desc_param {
+ 	DEVICE_DESC_PARAM_PSA_MAX_DATA		= 0x25,
+ 	DEVICE_DESC_PARAM_PSA_TMT		= 0x29,
+ 	DEVICE_DESC_PARAM_PRDCT_REV		= 0x2A,
++	DEVICE_DESC_PARAM_HPB_VER		= 0x40,
++	DEVICE_DESC_PARAM_HPB_CONTROL		= 0x42,
+ 	DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP	= 0x4F,
+ 	DEVICE_DESC_PARAM_WB_PRESRV_USRSPC_EN	= 0x53,
+ 	DEVICE_DESC_PARAM_WB_TYPE		= 0x54,
+@@ -283,6 +289,10 @@ enum geometry_desc_param {
+ 	GEOMETRY_DESC_PARAM_ENM4_MAX_NUM_UNITS	= 0x3E,
+ 	GEOMETRY_DESC_PARAM_ENM4_CAP_ADJ_FCTR	= 0x42,
+ 	GEOMETRY_DESC_PARAM_OPT_LOG_BLK_SIZE	= 0x44,
++	GEOMETRY_DESC_HPB_REGION_SIZE		= 0x48,
++	GEOMETRY_DESC_HPB_NUMBER_LU		= 0x49,
++	GEOMETRY_DESC_HPB_SUBREGION_SIZE	= 0x4A,
++	GEOMETRY_DESC_HPB_DEVICE_MAX_ACTIVE_REGIONS	= 0x4B,
+ 	GEOMETRY_DESC_PARAM_WB_MAX_ALLOC_UNITS	= 0x4F,
+ 	GEOMETRY_DESC_PARAM_WB_MAX_WB_LUNS	= 0x53,
+ 	GEOMETRY_DESC_PARAM_WB_BUFF_CAP_ADJ	= 0x54,
+@@ -327,6 +337,7 @@ enum {
+ 
+ /* Possible values for dExtendedUFSFeaturesSupport */
+ enum {
++	UFS_DEV_HPB_SUPPORT		= BIT(7),
+ 	UFS_DEV_WRITE_BOOSTER_SUP	= BIT(8),
+ };
+ 
+@@ -537,6 +548,7 @@ struct ufs_dev_info {
+ 	u8 *model;
+ 	u16 wspecversion;
+ 	u32 clk_gating_wait_us;
++	u8 b_ufs_feature_sup;
+ 	u32 d_ext_ufs_feature_sup;
+ 	u8 b_wb_buffer_type;
+ 	u32 d_wb_alloc_units;
+
+base-commit: fbca7a04dbd8271752a58594727b61307bcc85b6
 -- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.17.1
+
+
