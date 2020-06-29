@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7167F20D4CE
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 21:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960F820D4C9
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 21:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730340AbgF2TLt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:11:49 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53698 "EHLO mx2.suse.de"
+        id S1730805AbgF2TLj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:11:39 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53740 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731058AbgF2TL1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:11:27 -0400
+        id S1731073AbgF2TL3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:11:29 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 21F33B08C;
+        by mx2.suse.de (Postfix) with ESMTP id 40AEEB0B6;
         Mon, 29 Jun 2020 07:20:56 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -23,9 +23,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Don Brace <don.brace@microchip.com>,
         John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 13/22] snic: use tagset iter for traversing commands
-Date:   Mon, 29 Jun 2020 09:20:12 +0200
-Message-Id: <20200629072021.9864-14-hare@suse.de>
+Subject: [PATCH 16/22] hpsa: use reserved commands
+Date:   Mon, 29 Jun 2020 09:20:15 +0200
+Message-Id: <20200629072021.9864-17-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200629072021.9864-1-hare@suse.de>
 References: <20200629072021.9864-1-hare@suse.de>
@@ -34,534 +34,511 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the tagset iter to traverse active commands during device and
-hba reset.
+Enable the use of reserved commands, and drop the hand-crafted
+command allocation.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
+Tested-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/snic/snic_scsi.c | 366 +++++++++++++++++++++---------------------
- 1 file changed, 187 insertions(+), 179 deletions(-)
+ drivers/scsi/hpsa.c | 204 ++++++++++++++++++++--------------------------------
+ drivers/scsi/hpsa.h |   3 +-
+ 2 files changed, 78 insertions(+), 129 deletions(-)
 
-diff --git a/drivers/scsi/snic/snic_scsi.c b/drivers/scsi/snic/snic_scsi.c
-index 8aa9ae75fe89..9f9a497beb5c 100644
---- a/drivers/scsi/snic/snic_scsi.c
-+++ b/drivers/scsi/snic/snic_scsi.c
-@@ -1645,90 +1645,97 @@ snic_abort_cmd(struct scsi_cmnd *sc)
- 	return ret;
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index db0142a16a72..a3212d0e0dc2 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -244,10 +244,6 @@ static struct hpsa_scsi_dev_t
+ 	*hpsa_find_device_by_sas_rphy(struct ctlr_info *h,
+ 		struct sas_rphy *rphy);
+ 
+-#define SCSI_CMD_BUSY ((struct scsi_cmnd *)&hpsa_cmd_busy)
+-static const struct scsi_cmnd hpsa_cmd_busy;
+-#define SCSI_CMD_IDLE ((struct scsi_cmnd *)&hpsa_cmd_idle)
+-static const struct scsi_cmnd hpsa_cmd_idle;
+ static int number_of_controllers;
+ 
+ static irqreturn_t do_hpsa_intr_intx(int irq, void *dev_id);
+@@ -265,7 +261,7 @@ static int hpsa_compat_ioctl(struct scsi_device *dev, unsigned int cmd,
+ #endif
+ 
+ static void cmd_free(struct ctlr_info *h, struct CommandList *c);
+-static struct CommandList *cmd_alloc(struct ctlr_info *h);
++static struct CommandList *cmd_alloc(struct ctlr_info *h, u8 direction);
+ static void cmd_tagged_free(struct ctlr_info *h, struct CommandList *c);
+ static struct CommandList *cmd_tagged_alloc(struct ctlr_info *h,
+ 					    struct scsi_cmnd *scmd);
+@@ -346,7 +342,7 @@ static inline struct ctlr_info *shost_to_hba(struct Scsi_Host *sh)
+ 
+ static inline bool hpsa_is_cmd_idle(struct CommandList *c)
+ {
+-	return c->scsi_cmd == SCSI_CMD_IDLE;
++	return c->scsi_cmd == NULL;
  }
  
-+struct snic_cmd_pending_iter_data {
-+	struct snic *snic;
-+	struct scsi_device *sdev;
-+	int ret;
-+};
- 
--
--static int
--snic_is_abts_pending(struct snic *snic, struct scsi_cmnd *lr_sc)
-+static bool
-+snic_is_abts_pending_iter(struct scsi_cmnd *sc, void *data, bool reserved)
- {
-+	struct snic_cmd_pending_iter_data *iter_data = data;
- 	struct snic_req_info *rqi = NULL;
--	struct scsi_cmnd *sc = NULL;
--	struct scsi_device *lr_sdev = NULL;
- 	spinlock_t *io_lock = NULL;
--	u32 tag;
- 	unsigned long flags;
- 
--	if (lr_sc)
--		lr_sdev = lr_sc->device;
-+	if (reserved)
-+		return true;
- 
--	/* walk through the tag map, an dcheck if IOs are still pending in fw*/
--	for (tag = 0; tag < snic->max_tag_id; tag++) {
--		io_lock = snic_io_lock_tag(snic, tag);
--
--		spin_lock_irqsave(io_lock, flags);
--		sc = scsi_host_find_tag(snic->shost, tag);
--
--		if (!sc || (lr_sc && (sc->device != lr_sdev || sc == lr_sc))) {
--			spin_unlock_irqrestore(io_lock, flags);
-+	if (iter_data->sdev && iter_data->sdev != sc->device)
-+		return true;
- 
--			continue;
--		}
-+	io_lock = snic_io_lock_hash(iter_data->snic, sc);
-+	spin_lock_irqsave(io_lock, flags);
- 
--		rqi = (struct snic_req_info *) CMD_SP(sc);
--		if (!rqi) {
--			spin_unlock_irqrestore(io_lock, flags);
-+	rqi = (struct snic_req_info *) CMD_SP(sc);
-+	if (!rqi) {
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return true;
-+	}
- 
--			continue;
--		}
-+	/*
-+	 * Found IO that is still pending w/ firmware and belongs to
-+	 * the LUN that is under reset, if lr_sc != NULL
-+	 */
-+	SNIC_SCSI_DBG(iter_data->snic->shost, "Found IO in %s on LUN\n",
-+		      snic_ioreq_state_to_str(CMD_STATE(sc)));
- 
--		/*
--		 * Found IO that is still pending w/ firmware and belongs to
--		 * the LUN that is under reset, if lr_sc != NULL
--		 */
--		SNIC_SCSI_DBG(snic->shost, "Found IO in %s on LUN\n",
--			      snic_ioreq_state_to_str(CMD_STATE(sc)));
-+	if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING)
-+		iter_data->ret = 1;
-+	spin_unlock_irqrestore(io_lock, flags);
- 
--		if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING) {
--			spin_unlock_irqrestore(io_lock, flags);
-+	return true;
-+}
- 
--			return 1;
--		}
-+static int
-+snic_is_abts_pending(struct snic *snic, struct scsi_device *lr_sdev)
-+{
-+	struct snic_cmd_pending_iter_data iter_data = {
-+		.snic = snic,
-+		.sdev = lr_sdev,
-+		.ret = 0,
-+	};
- 
--		spin_unlock_irqrestore(io_lock, flags);
--	}
-+	/* walk through the tag map, an dcheck if IOs are still pending in fw*/
-+	scsi_host_busy_iter(snic->shost,
-+			    snic_is_abts_pending_iter, &iter_data);
- 
--	return 0;
-+	return iter_data.ret;
- } /* end of snic_is_abts_pending */
- 
--static int
--snic_dr_clean_single_req(struct snic *snic,
--			 u32 tag,
--			 struct scsi_device *lr_sdev)
-+static bool
-+snic_dr_clean_single_req(struct scsi_cmnd *sc, void *data, bool reserved)
- {
- 	struct snic_req_info *rqi = NULL;
- 	struct snic_tgt *tgt = NULL;
--	struct scsi_cmnd *sc = NULL;
- 	spinlock_t *io_lock = NULL;
- 	u32 sv_state = 0, tmf = 0;
- 	DECLARE_COMPLETION_ONSTACK(tm_done);
- 	unsigned long flags;
- 	int ret = 0;
-+	struct snic_cmd_pending_iter_data *iter_data = data;
-+	struct snic *snic = iter_data->snic;
- 
--	io_lock = snic_io_lock_tag(snic, tag);
--	spin_lock_irqsave(io_lock, flags);
--	sc = scsi_host_find_tag(snic->shost, tag);
-+	if (reserved)
-+		return true;
- 
--	/* Ignore Cmd that don't belong to Lun Reset device */
--	if (!sc || sc->device != lr_sdev)
--		goto skip_clean;
-+	if (sc->device != iter_data->sdev)
-+		return true;
- 
-+	io_lock = snic_io_lock_hash(snic, sc);
-+	spin_lock_irqsave(io_lock, flags);
- 	rqi = (struct snic_req_info *) CMD_SP(sc);
--
--	if (!rqi)
--		goto skip_clean;
-+	if (!rqi) {
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return true;
-+	}
- 
- 
--	if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING)
--		goto skip_clean;
-+	if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING) {
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return true;
-+	}
- 
- 
- 	if ((CMD_FLAGS(sc) & SNIC_DEVICE_RESET) &&
-@@ -1737,8 +1744,8 @@ snic_dr_clean_single_req(struct snic *snic,
- 		SNIC_SCSI_DBG(snic->shost,
- 			      "clean_single_req: devrst is not pending sc 0x%p\n",
- 			      sc);
--
--		goto skip_clean;
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return true;
- 	}
- 
- 	SNIC_SCSI_DBG(snic->shost,
-@@ -1781,7 +1788,7 @@ snic_dr_clean_single_req(struct snic *snic,
- 	if (ret) {
- 		SNIC_HOST_ERR(snic->shost,
- 			      "clean_single_req_err:sc %p, tag %d abt failed. tm_tag %d flags 0x%llx\n",
--			      sc, tag, rqi->tm_tag, CMD_FLAGS(sc));
-+			      sc, snic_cmd_tag(sc), rqi->tm_tag, CMD_FLAGS(sc));
- 
- 		spin_lock_irqsave(io_lock, flags);
- 		rqi = (struct snic_req_info *) CMD_SP(sc);
-@@ -1792,8 +1799,9 @@ snic_dr_clean_single_req(struct snic *snic,
- 		if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING)
- 			CMD_STATE(sc) = sv_state;
- 
--		ret = 1;
--		goto skip_clean;
-+		iter_data->ret = 1;
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return false;
- 	}
- 
- 	spin_lock_irqsave(io_lock, flags);
-@@ -1810,7 +1818,8 @@ snic_dr_clean_single_req(struct snic *snic,
- 	rqi = (struct snic_req_info *) CMD_SP(sc);
- 	if (!rqi) {
- 		CMD_FLAGS(sc) |= SNIC_IO_ABTS_TERM_REQ_NULL;
--		goto skip_clean;
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return true;;
- 	}
- 	rqi->abts_done = NULL;
- 
-@@ -1818,14 +1827,13 @@ snic_dr_clean_single_req(struct snic *snic,
- 	if (CMD_ABTS_STATUS(sc) == SNIC_INVALID_CODE) {
- 		SNIC_HOST_ERR(snic->shost,
- 			      "clean_single_req_err:sc %p tag %d abt still pending w/ fw, tm_tag %d flags 0x%llx\n",
--			      sc, tag, rqi->tm_tag, CMD_FLAGS(sc));
-+			      sc, snic_cmd_tag(sc), rqi->tm_tag, CMD_FLAGS(sc));
- 
- 		CMD_FLAGS(sc) |= SNIC_IO_ABTS_TERM_DONE;
--		ret = 1;
--
--		goto skip_clean;
-+		iter_data->ret = 1;
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return false;
- 	}
--
- 	CMD_STATE(sc) = SNIC_IOREQ_ABTS_COMPLETE;
- 	CMD_SP(sc) = NULL;
- 	spin_unlock_irqrestore(io_lock, flags);
-@@ -1835,39 +1843,31 @@ snic_dr_clean_single_req(struct snic *snic,
- 	sc->result = (DID_ERROR << 16);
- 	sc->scsi_done(sc);
- 
--	ret = 0;
--
--	return ret;
--
--skip_clean:
--	spin_unlock_irqrestore(io_lock, flags);
--
--	return ret;
-+	return true;
- } /* end of snic_dr_clean_single_req */
- 
- static int
--snic_dr_clean_pending_req(struct snic *snic, struct scsi_cmnd *lr_sc)
-+snic_dr_clean_pending_req(struct snic *snic, struct scsi_device *lr_sdev)
- {
--	struct scsi_device *lr_sdev = lr_sc->device;
--	u32 tag = 0;
- 	int ret = FAILED;
-+	struct snic_cmd_pending_iter_data iter_data = {
-+		.snic = snic,
-+		.sdev = lr_sdev,
-+		.ret = 0,
-+	};
- 
--	for (tag = 0; tag < snic->max_tag_id; tag++) {
--		if (tag == snic_cmd_tag(lr_sc))
--			continue;
-+	scsi_host_busy_iter(snic->shost,
-+			    snic_dr_clean_single_req, &iter_data);
-+	if (iter_data.ret) {
-+		SNIC_HOST_ERR(snic->shost, "clean_err = %d\n", iter_data.ret);
- 
--		ret = snic_dr_clean_single_req(snic, tag, lr_sdev);
--		if (ret) {
--			SNIC_HOST_ERR(snic->shost, "clean_err:tag = %d\n", tag);
--
--			goto clean_err;
--		}
-+		goto clean_err;
- 	}
- 
- 	schedule_timeout(msecs_to_jiffies(100));
- 
- 	/* Walk through all the cmds and check abts status. */
--	if (snic_is_abts_pending(snic, lr_sc)) {
-+	if (snic_is_abts_pending(snic, lr_sdev)) {
- 		ret = FAILED;
- 
- 		goto clean_err;
-@@ -1954,7 +1954,7 @@ snic_dr_finish(struct snic *snic, struct scsi_cmnd *sc)
- 	 * succeeds.
+ /* extract sense key, asc, and ascq from sense data.  -1 means invalid. */
+@@ -2454,7 +2450,12 @@ static void hpsa_cmd_resolve_events(struct ctlr_info *h,
+ 	 * this command has completed.  Then, check to see if the handler is
+ 	 * waiting for this command, and, if so, wake it.
  	 */
+-	c->scsi_cmd = SCSI_CMD_IDLE;
++	if (c->scsi_cmd && c->cmd_type == CMD_IOCTL_PEND) {
++		struct scsi_cmnd *scmd = c->scsi_cmd;
++
++		scsi_put_internal_cmd(scmd);
++	}
++	c->scsi_cmd = NULL;
+ 	mb();	/* Declare command idle before checking for pending events. */
+ 	if (dev) {
+ 		atomic_dec(&dev->commands_outstanding);
+@@ -2997,7 +2998,7 @@ static int hpsa_do_receive_diagnostic(struct ctlr_info *h, u8 *scsi3addr,
+ 	struct CommandList *c;
+ 	struct ErrorInfo *ei;
  
--	ret = snic_dr_clean_pending_req(snic, sc);
-+	ret = snic_dr_clean_pending_req(snic, sc->device);
- 	if (ret) {
- 		spin_lock_irqsave(io_lock, flags);
- 		SNIC_SCSI_DBG(snic->shost,
-@@ -2411,77 +2411,79 @@ snic_cmpl_pending_tmreq(struct snic *snic, struct scsi_cmnd *sc)
- 		complete(rqi->abts_done);
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 	if (fill_cmd(c, RECEIVE_DIAGNOSTIC, h, buf, bufsize,
+ 			page, scsi3addr, TYPE_CMD)) {
+ 		rc = -1;
+@@ -3049,7 +3050,7 @@ static int hpsa_scsi_do_inquiry(struct ctlr_info *h, unsigned char *scsi3addr,
+ 	struct CommandList *c;
+ 	struct ErrorInfo *ei;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 
+ 	if (fill_cmd(c, HPSA_INQUIRY, h, buf, bufsize,
+ 			page, scsi3addr, TYPE_CMD)) {
+@@ -3077,7 +3078,7 @@ static int hpsa_send_reset(struct ctlr_info *h, struct hpsa_scsi_dev_t *dev,
+ 	struct CommandList *c;
+ 	struct ErrorInfo *ei;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_NONE);
+ 	c->device = dev;
+ 
+ 	/* fill_cmd can't fail here, no data buffer to map. */
+@@ -3303,7 +3304,7 @@ static int hpsa_get_raid_map(struct ctlr_info *h,
+ 	struct CommandList *c;
+ 	struct ErrorInfo *ei;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 
+ 	if (fill_cmd(c, HPSA_GET_RAID_MAP, h, &this_device->raid_map,
+ 			sizeof(this_device->raid_map), 0,
+@@ -3345,7 +3346,7 @@ static int hpsa_bmic_sense_subsystem_information(struct ctlr_info *h,
+ 	struct CommandList *c;
+ 	struct ErrorInfo *ei;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 
+ 	rc = fill_cmd(c, BMIC_SENSE_SUBSYSTEM_INFORMATION, h, buf, bufsize,
+ 		0, RAID_CTLR_LUNID, TYPE_CMD);
+@@ -3376,7 +3377,7 @@ static int hpsa_bmic_id_controller(struct ctlr_info *h,
+ 	struct CommandList *c;
+ 	struct ErrorInfo *ei;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 
+ 	rc = fill_cmd(c, BMIC_IDENTIFY_CONTROLLER, h, buf, bufsize,
+ 		0, RAID_CTLR_LUNID, TYPE_CMD);
+@@ -3405,7 +3406,7 @@ static int hpsa_bmic_id_physical_device(struct ctlr_info *h,
+ 	struct CommandList *c;
+ 	struct ErrorInfo *ei;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 	rc = fill_cmd(c, BMIC_IDENTIFY_PHYSICAL_DEVICE, h, buf, bufsize,
+ 		0, RAID_CTLR_LUNID, TYPE_CMD);
+ 	if (rc)
+@@ -3477,7 +3478,7 @@ static void hpsa_get_enclosure_info(struct ctlr_info *h,
+ 		goto out;
+ 	}
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 
+ 	rc = fill_cmd(c, BMIC_SENSE_STORAGE_BOX_PARAMS, h, bssbp,
+ 			sizeof(*bssbp), 0, RAID_CTLR_LUNID, TYPE_CMD);
+@@ -3733,7 +3734,7 @@ static int hpsa_scsi_do_report_luns(struct ctlr_info *h, int logical,
+ 	unsigned char scsi3addr[8];
+ 	struct ErrorInfo *ei;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 
+ 	/* address the controller */
+ 	memset(scsi3addr, 0, sizeof(scsi3addr));
+@@ -3876,7 +3877,7 @@ static unsigned char hpsa_volume_offline(struct ctlr_info *h,
+ #define ASCQ_LUN_NOT_READY_FORMAT_IN_PROGRESS 0x04
+ #define ASCQ_LUN_NOT_READY_INITIALIZING_CMD_REQ 0x02
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_NONE);
+ 
+ 	(void) fill_cmd(c, TEST_UNIT_READY, h, NULL, 0, 0, scsi3addr, TYPE_CMD);
+ 	rc = hpsa_scsi_do_simple_cmd(h, c, DEFAULT_REPLY_QUEUE,
+@@ -5527,7 +5528,6 @@ static void hpsa_cmd_init(struct ctlr_info *h, int index,
+ 	c->ErrDesc.Addr = cpu_to_le64((u64) err_dma_handle);
+ 	c->ErrDesc.Len = cpu_to_le32((u32) sizeof(*c->err_info));
+ 	c->h = h;
+-	c->scsi_cmd = SCSI_CMD_IDLE;
+ }
+ 
+ static void hpsa_preinitialize_commands(struct ctlr_info *h)
+@@ -5822,12 +5822,12 @@ static int hpsa_scsi_host_alloc(struct ctlr_info *h)
+ 
+ 	sh->io_port = 0;
+ 	sh->n_io_port = 0;
+-	sh->this_id = -1;
+ 	sh->max_channel = 3;
+ 	sh->max_cmd_len = MAX_COMMAND_SIZE;
+ 	sh->max_lun = HPSA_MAX_LUN;
+ 	sh->max_id = HPSA_MAX_LUN;
+ 	sh->can_queue = h->nr_cmds - HPSA_NRESERVED_CMDS;
++	sh->nr_reserved_cmds = HPSA_NRESERVED_CMDS;
+ 	sh->cmd_per_lun = sh->can_queue;
+ 	sh->sg_tablesize = h->maxsgentries;
+ 	sh->transportt = hpsa_sas_transport_template;
+@@ -5864,30 +5864,18 @@ static int hpsa_scsi_add_host(struct ctlr_info *h)
+ 		dev_err(&h->pdev->dev, "scsi_add_host failed\n");
+ 		return rv;
+ 	}
+-
++	h->raid_ctrl_sdev = scsi_get_host_dev(h->scsi_host);
++	if (!h->raid_ctrl_sdev) {
++		dev_err(&h->pdev->dev,
++			"allocate raid controller device failed\n");
++		return -ENOMEM;
++	}
+ 	hpsa_hba_inquiry(h);
+ 
+ 	scsi_scan_host(h->scsi_host);
+ 	return 0;
  }
  
 -/*
-- * snic_scsi_cleanup: Walks through tag map and releases the reqs
+- * The block layer has already gone to the trouble of picking out a unique,
+- * small-integer tag for this request.  We use an offset from that value as
+- * an index to select our command block.  (The offset allows us to reserve the
+- * low-numbered entries for our own uses.)
 - */
--static void
--snic_scsi_cleanup(struct snic *snic)
-+static bool
-+snic_scsi_cleanup_iter(struct scsi_cmnd *sc, void *data, bool rsvd)
- {
-+	struct snic *snic = data;
- 	struct snic_req_info *rqi = NULL;
--	struct scsi_cmnd *sc = NULL;
- 	spinlock_t *io_lock = NULL;
- 	unsigned long flags;
--	int tag;
-+	int tag = snic_cmd_tag(sc);
- 	u64 st_time = 0;
- 
--	SNIC_SCSI_DBG(snic->shost, "sc_clean: scsi cleanup.\n");
+-static int hpsa_get_cmd_index(struct scsi_cmnd *scmd)
+-{
+-	int idx = scmd->request->tag;
 -
--	for (tag = 0; tag < snic->max_tag_id; tag++) {
--		io_lock = snic_io_lock_tag(snic, tag);
--		spin_lock_irqsave(io_lock, flags);
--		sc = scsi_host_find_tag(snic->shost, tag);
--		if (unlikely(snic_tmreq_pending(sc))) {
--			/*
--			 * When FW Completes reset w/o sending completions
--			 * for outstanding ios.
--			 */
--			snic_cmpl_pending_tmreq(snic, sc);
--			spin_unlock_irqrestore(io_lock, flags);
+-	if (idx < 0)
+-		return idx;
 -
--			continue;
--		}
+-	/* Offset to leave space for internal cmds. */
+-	return idx += HPSA_NRESERVED_CMDS;
+-}
 -
--		rqi = (struct snic_req_info *) CMD_SP(sc);
--		if (!rqi) {
--			spin_unlock_irqrestore(io_lock, flags);
-+	io_lock = snic_io_lock_hash(snic, sc);
-+	spin_lock_irqsave(io_lock, flags);
-+	if (unlikely(snic_tmreq_pending(sc))) {
-+		/*
-+		 * When FW Completes reset w/o sending completions
-+		 * for outstanding ios.
-+		 */
-+		snic_cmpl_pending_tmreq(snic, sc);
-+		spin_unlock_irqrestore(io_lock, flags);
- 
--			goto cleanup;
--		}
-+		return true;
-+	}
-+	rqi = (struct snic_req_info *) CMD_SP(sc);
-+	if (!rqi) {
-+		spin_unlock_irqrestore(io_lock, flags);
-+		goto cleanup;
-+	}
- 
--		SNIC_SCSI_DBG(snic->shost,
--			      "sc_clean: sc %p, rqi %p, tag %d flags 0x%llx\n",
--			      sc, rqi, tag, CMD_FLAGS(sc));
-+	SNIC_SCSI_DBG(snic->shost,
-+		      "sc_clean: sc %p, rqi %p, tag %d flags 0x%llx\n",
-+		      sc, rqi, tag, CMD_FLAGS(sc));
- 
--		CMD_SP(sc) = NULL;
--		CMD_FLAGS(sc) |= SNIC_SCSI_CLEANUP;
--		spin_unlock_irqrestore(io_lock, flags);
--		st_time = rqi->start_time;
-+	CMD_SP(sc) = NULL;
-+	CMD_FLAGS(sc) |= SNIC_SCSI_CLEANUP;
-+	spin_unlock_irqrestore(io_lock, flags);
-+	st_time = rqi->start_time;
- 
--		SNIC_HOST_INFO(snic->shost,
--			       "sc_clean: Releasing rqi %p : flags 0x%llx\n",
--			       rqi, CMD_FLAGS(sc));
-+	SNIC_HOST_INFO(snic->shost,
-+		       "sc_clean: Releasing rqi %p : flags 0x%llx\n",
-+		       rqi, CMD_FLAGS(sc));
- 
--		snic_release_req_buf(snic, rqi, sc);
-+	snic_release_req_buf(snic, rqi, sc);
- 
- cleanup:
--		sc->result = DID_TRANSPORT_DISRUPTED << 16;
--		SNIC_HOST_INFO(snic->shost,
--			       "sc_clean: DID_TRANSPORT_DISRUPTED for sc %p, Tag %d flags 0x%llx rqi %p duration %u msecs\n",
--			       sc, sc->request->tag, CMD_FLAGS(sc), rqi,
--			       jiffies_to_msecs(jiffies - st_time));
-+	sc->result = DID_TRANSPORT_DISRUPTED << 16;
-+	SNIC_HOST_INFO(snic->shost,
-+		       "sc_clean: DID_TRANSPORT_DISRUPTED for sc %p, Tag %d flags 0x%llx rqi %p duration %u msecs\n",
-+		       sc, tag, CMD_FLAGS(sc), rqi,
-+		       jiffies_to_msecs(jiffies - st_time));
- 
--		/* Update IO stats */
--		snic_stats_update_io_cmpl(&snic->s_stats);
-+	/* Update IO stats */
-+	snic_stats_update_io_cmpl(&snic->s_stats);
- 
--		if (sc->scsi_done) {
--			SNIC_TRC(snic->shost->host_no, tag, (ulong) sc,
--				 jiffies_to_msecs(jiffies - st_time), 0,
--				 SNIC_TRC_CMD(sc),
--				 SNIC_TRC_CMD_STATE_FLAGS(sc));
-+	if (sc->scsi_done) {
-+		SNIC_TRC(snic->shost->host_no, tag, (ulong) sc,
-+			 jiffies_to_msecs(jiffies - st_time), 0,
-+			 SNIC_TRC_CMD(sc),
-+			 SNIC_TRC_CMD_STATE_FLAGS(sc));
- 
--			sc->scsi_done(sc);
--		}
-+		sc->scsi_done(sc);
- 	}
-+	return true;
-+}
-+
-+/*
-+ * snic_scsi_cleanup: Walks through tag map and releases the reqs
-+ */
-+static void
-+snic_scsi_cleanup(struct snic *snic)
-+{
-+	SNIC_SCSI_DBG(snic->shost, "sc_clean: scsi cleanup.\n");
-+
-+	scsi_host_busy_iter(snic->shost, snic_scsi_cleanup_iter, snic);
- } /* end of snic_scsi_cleanup */
- 
- void
-@@ -2578,6 +2580,40 @@ snic_internal_abort_io(struct snic *snic, struct scsi_cmnd *sc, int tmf)
- 	return ret;
- } /* end of snic_internal_abort_io */
- 
-+struct snic_tgt_scsi_abort_io_iter_data {
-+	struct snic *snic;
-+	struct snic_tgt *tgt;
-+	int tmf;
-+	int abt_cnt;
-+};
-+
-+static bool
-+snic_tgt_scsi_abort_io_iter(struct scsi_cmnd *sc, void *data, bool reserved)
-+{
-+	struct snic_tgt_scsi_abort_io_iter_data *iter_data = data;
-+	struct snic_tgt *sc_tgt = NULL;
-+	int ret;
-+
-+	if (reserved)
-+		return true;
-+
-+	sc_tgt = starget_to_tgt(scsi_target(sc->device));
-+	if (sc_tgt != iter_data->tgt)
-+		return true;
-+
-+	ret = snic_internal_abort_io(iter_data->snic, sc, iter_data->tmf);
-+	if (ret < 0) {
-+		SNIC_HOST_ERR(iter_data->snic->shost,
-+			      "tgt_abt_io: Tag %x, Failed w err = %d\n",
-+			      snic_cmd_tag(sc), ret);
-+		return true;
-+	}
-+
-+	if (ret == SUCCESS)
-+		iter_data->abt_cnt++;
-+	return true;
-+}
-+
  /*
-  * snic_tgt_scsi_abort_io : called by snic_tgt_del
-  */
-@@ -2585,11 +2621,10 @@ int
- snic_tgt_scsi_abort_io(struct snic_tgt *tgt)
+  * Send a TEST_UNIT_READY command to the specified LUN using the specified
+  * reply queue; returns zero if the unit is ready, and non-zero otherwise.
+@@ -5971,7 +5959,7 @@ static int wait_for_device_to_become_ready(struct ctlr_info *h,
+ 	int rc = 0;
+ 	struct CommandList *c;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_NONE);
+ 
+ 	/*
+ 	 * If no specific reply queue was requested, then send the TUR
+@@ -6044,7 +6032,7 @@ static int hpsa_eh_device_reset_handler(struct scsi_cmnd *scsicmd)
+ 	if (lockup_detected(h)) {
+ 		snprintf(msg, sizeof(msg),
+ 			 "cmd %d RESET FAILED, lockup detected",
+-			 hpsa_get_cmd_index(scsicmd));
++			 scsicmd->request->tag);
+ 		hpsa_show_dev_msg(KERN_WARNING, h, dev, msg);
+ 		rc = FAILED;
+ 		goto return_reset_status;
+@@ -6054,7 +6042,7 @@ static int hpsa_eh_device_reset_handler(struct scsi_cmnd *scsicmd)
+ 	if (detect_controller_lockup(h)) {
+ 		snprintf(msg, sizeof(msg),
+ 			 "cmd %d RESET FAILED, new lockup detected",
+-			 hpsa_get_cmd_index(scsicmd));
++			 scsicmd->request->tag);
+ 		hpsa_show_dev_msg(KERN_WARNING, h, dev, msg);
+ 		rc = FAILED;
+ 		goto return_reset_status;
+@@ -6116,12 +6104,12 @@ static int hpsa_eh_device_reset_handler(struct scsi_cmnd *scsicmd)
+ static struct CommandList *cmd_tagged_alloc(struct ctlr_info *h,
+ 					    struct scsi_cmnd *scmd)
  {
- 	struct snic *snic = NULL;
--	struct scsi_cmnd *sc = NULL;
--	struct snic_tgt *sc_tgt = NULL;
--	spinlock_t *io_lock = NULL;
--	unsigned long flags;
--	int ret = 0, tag, abt_cnt = 0, tmf = 0;
-+	struct snic_tgt_scsi_abort_io_iter_data iter_data = {
-+		.tgt = tgt,
-+		.abt_cnt = 0,
-+	};
+-	int idx = hpsa_get_cmd_index(scmd);
++	int idx = scmd->request->tag;
+ 	struct CommandList *c = h->cmd_pool + idx;
  
- 	if (!tgt)
- 		return -1;
-@@ -2598,43 +2633,16 @@ snic_tgt_scsi_abort_io(struct snic_tgt *tgt)
- 	SNIC_SCSI_DBG(snic->shost, "tgt_abt_io: Cleaning Pending IOs.\n");
+-	if (idx < HPSA_NRESERVED_CMDS || idx >= h->nr_cmds) {
++	if (idx < 0 || idx >= h->nr_cmds) {
+ 		dev_err(&h->pdev->dev, "Bad block tag: %d not in [%d..%d]\n",
+-			idx, HPSA_NRESERVED_CMDS, h->nr_cmds - 1);
++			idx, 0, h->nr_cmds - 1);
+ 		/* The index value comes from the block layer, so if it's out of
+ 		 * bounds, it's probably not our bug.
+ 		 */
+@@ -6158,80 +6146,52 @@ static void cmd_tagged_free(struct ctlr_info *h, struct CommandList *c)
+ 	 * else to free it, because it is accessed by index.
+ 	 */
+ 	(void)atomic_dec(&c->refcount);
++	c->scsi_cmd = NULL;
+ }
  
- 	if (tgt->tdata.typ == SNIC_TGT_DAS)
--		tmf = SNIC_ITMF_ABTS_TASK;
-+		iter_data.tmf = SNIC_ITMF_ABTS_TASK;
- 	else
--		tmf = SNIC_ITMF_ABTS_TASK_TERM;
+-/*
+- * For operations that cannot sleep, a command block is allocated at init,
+- * and managed by cmd_alloc() and cmd_free() using a simple bitmap to track
+- * which ones are free or in use.  Lock must be held when calling this.
+- * cmd_free() is the complement.
+- * This function never gives up and returns NULL.  If it hangs,
+- * another thread must call cmd_free() to free some tags.
+- */
 -
--	for (tag = 0; tag < snic->max_tag_id; tag++) {
--		io_lock = snic_io_lock_tag(snic, tag);
+-static struct CommandList *cmd_alloc(struct ctlr_info *h)
++static struct CommandList *cmd_alloc(struct ctlr_info *h, u8 direction)
+ {
++	struct scsi_cmnd *scmd;
+ 	struct CommandList *c;
+-	int refcount, i;
+-	int offset = 0;
 -
--		spin_lock_irqsave(io_lock, flags);
--		sc = scsi_host_find_tag(snic->shost, tag);
--		if (!sc) {
--			spin_unlock_irqrestore(io_lock, flags);
+-	/*
+-	 * There is some *extremely* small but non-zero chance that that
+-	 * multiple threads could get in here, and one thread could
+-	 * be scanning through the list of bits looking for a free
+-	 * one, but the free ones are always behind him, and other
+-	 * threads sneak in behind him and eat them before he can
+-	 * get to them, so that while there is always a free one, a
+-	 * very unlucky thread might be starved anyway, never able to
+-	 * beat the other threads.  In reality, this happens so
+-	 * infrequently as to be indistinguishable from never.
+-	 *
+-	 * Note that we start allocating commands before the SCSI host structure
+-	 * is initialized.  Since the search starts at bit zero, this
+-	 * all works, since we have at least one command structure available;
+-	 * however, it means that the structures with the low indexes have to be
+-	 * reserved for driver-initiated requests, while requests from the block
+-	 * layer will use the higher indexes.
+-	 */
 -
+-	for (;;) {
+-		i = find_next_zero_bit(h->cmd_pool_bits,
+-					HPSA_NRESERVED_CMDS,
+-					offset);
+-		if (unlikely(i >= HPSA_NRESERVED_CMDS)) {
+-			offset = 0;
 -			continue;
 -		}
-+		iter_data.tmf = SNIC_ITMF_ABTS_TASK_TERM;
-+	iter_data.snic = snic;
- 
--		sc_tgt = starget_to_tgt(scsi_target(sc->device));
--		if (sc_tgt != tgt) {
--			spin_unlock_irqrestore(io_lock, flags);
--
+-		c = h->cmd_pool + i;
+-		refcount = atomic_inc_return(&c->refcount);
+-		if (unlikely(refcount > 1)) {
+-			cmd_free(h, c); /* already in use */
+-			offset = (i + 1) % HPSA_NRESERVED_CMDS;
 -			continue;
 -		}
--		spin_unlock_irqrestore(io_lock, flags);
--
--		ret = snic_internal_abort_io(snic, sc, tmf);
--		if (ret < 0) {
--			SNIC_HOST_ERR(snic->shost,
--				      "tgt_abt_io: Tag %x, Failed w err = %d\n",
--				      tag, ret);
--
--			continue;
--		}
--
--		if (ret == SUCCESS)
--			abt_cnt++;
--	}
-+	scsi_host_busy_iter(snic->shost,
-+			    snic_tgt_scsi_abort_io_iter, &iter_data);
+-		set_bit(i & (BITS_PER_LONG - 1),
+-			h->cmd_pool_bits + (i / BITS_PER_LONG));
+-		break; /* it's ours now. */
++	int idx;
++
++	scmd = scsi_get_internal_cmd(h->raid_ctrl_sdev,
++				     (direction & XFER_WRITE) ?
++				     DMA_TO_DEVICE : DMA_FROM_DEVICE,
++				     REQ_NOWAIT);
++	if (!scmd) {
++		dev_warn(&h->pdev->dev, "failed to allocate reserved cmd\n");
++		return NULL;
++	}
++	idx = scmd->request->tag;
++	c = cmd_tagged_alloc(h, scmd);
++	if (!c) {
++		dev_warn(&h->pdev->dev, "failed to allocate reserved cmd %u\n",
++			 idx);
++		scsi_put_internal_cmd(scmd);
++		return NULL;
+ 	}
+-	hpsa_cmd_partial_init(h, i, c);
++	hpsa_cmd_partial_init(h, idx, c);
++	c->scsi_cmd = scmd;
+ 	c->device = NULL;
++	c->cmd_type = CMD_IOCTL_PEND;
++	dev_dbg(&h->pdev->dev, "using reserved cmd %u\n", idx);
+ 	return c;
+ }
  
--	SNIC_SCSI_DBG(snic->shost, "tgt_abt_io: abt_cnt = %d\n", abt_cnt);
-+	SNIC_SCSI_DBG(snic->shost, "tgt_abt_io: abt_cnt = %d\n",
-+		      iter_data.abt_cnt);
+-/*
+- * This is the complementary operation to cmd_alloc().  Note, however, in some
+- * corner cases it may also be used to free blocks allocated by
+- * cmd_tagged_alloc() in which case the ref-count decrement does the trick and
+- * the clear-bit is harmless.
+- */
+ static void cmd_free(struct ctlr_info *h, struct CommandList *c)
+ {
+-	if (atomic_dec_and_test(&c->refcount)) {
+-		int i;
++	struct scsi_cmnd *scmd = c->scsi_cmd;
  
- 	return 0;
- } /* end of snic_tgt_scsi_abort_io */
+-		i = c - h->cmd_pool;
+-		clear_bit(i & (BITS_PER_LONG - 1),
+-			  h->cmd_pool_bits + (i / BITS_PER_LONG));
++	if (!scmd) {
++		dev_warn(&h->pdev->dev, "freeing idle cmd\n");
++		return;
++	}
++	cmd_tagged_free(h, c);
++	if (c->cmd_type == CMD_IOCTL_PEND) {
++		dev_dbg(&h->pdev->dev, "returning reserved cmd %u\n",
++			scmd->request->tag);
++		scsi_put_internal_cmd(scmd);
+ 	}
+ }
+ 
+@@ -6398,11 +6358,8 @@ static int hpsa_passthru_ioctl(struct ctlr_info *h,
+ 			memset(buff, 0, iocommand->buf_size);
+ 		}
+ 	}
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, iocommand->Request.Type.Direction);
+ 
+-	/* Fill in the command type */
+-	c->cmd_type = CMD_IOCTL_PEND;
+-	c->scsi_cmd = SCSI_CMD_BUSY;
+ 	/* Fill in Command Header */
+ 	c->Header.ReplyQueue = 0; /* unused in simple mode */
+ 	if (iocommand->buf_size > 0) {	/* buffer to fill */
+@@ -6515,10 +6472,8 @@ static int hpsa_big_passthru_ioctl(struct ctlr_info *h,
+ 		data_ptr += sz;
+ 		sg_used++;
+ 	}
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, ioc->Request.Type.Direction);
+ 
+-	c->cmd_type = CMD_IOCTL_PEND;
+-	c->scsi_cmd = SCSI_CMD_BUSY;
+ 	c->Header.ReplyQueue = 0;
+ 	c->Header.SGList = (u8) sg_used;
+ 	c->Header.SGTotal = cpu_to_le16(sg_used);
+@@ -6649,7 +6604,7 @@ static void hpsa_send_host_reset(struct ctlr_info *h, u8 reset_type)
+ {
+ 	struct CommandList *c;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_NONE);
+ 
+ 	/* fill_cmd can't fail here, no data buffer to map */
+ 	(void) fill_cmd(c, HPSA_DEVICE_RESET_MSG, h, NULL, 0, 0,
+@@ -6670,8 +6625,6 @@ static int fill_cmd(struct CommandList *c, u8 cmd, struct ctlr_info *h,
+ {
+ 	enum dma_data_direction dir = DMA_NONE;
+ 
+-	c->cmd_type = CMD_IOCTL_PEND;
+-	c->scsi_cmd = SCSI_CMD_BUSY;
+ 	c->Header.ReplyQueue = 0;
+ 	if (buff != NULL && size > 0) {
+ 		c->Header.SGList = 1;
+@@ -7984,8 +7937,6 @@ static int hpsa_init_reset_devices(struct pci_dev *pdev, u32 board_id)
+ 
+ static void hpsa_free_cmd_pool(struct ctlr_info *h)
+ {
+-	kfree(h->cmd_pool_bits);
+-	h->cmd_pool_bits = NULL;
+ 	if (h->cmd_pool) {
+ 		dma_free_coherent(&h->pdev->dev,
+ 				h->nr_cmds * sizeof(struct CommandList),
+@@ -8006,17 +7957,13 @@ static void hpsa_free_cmd_pool(struct ctlr_info *h)
+ 
+ static int hpsa_alloc_cmd_pool(struct ctlr_info *h)
+ {
+-	h->cmd_pool_bits = kcalloc(DIV_ROUND_UP(h->nr_cmds, BITS_PER_LONG),
+-				   sizeof(unsigned long),
+-				   GFP_KERNEL);
+ 	h->cmd_pool = dma_alloc_coherent(&h->pdev->dev,
+ 		    h->nr_cmds * sizeof(*h->cmd_pool),
+ 		    &h->cmd_pool_dhandle, GFP_KERNEL);
+ 	h->errinfo_pool = dma_alloc_coherent(&h->pdev->dev,
+ 		    h->nr_cmds * sizeof(*h->errinfo_pool),
+ 		    &h->errinfo_pool_dhandle, GFP_KERNEL);
+-	if ((h->cmd_pool_bits == NULL)
+-	    || (h->cmd_pool == NULL)
++	if ((h->cmd_pool == NULL)
+ 	    || (h->errinfo_pool == NULL)) {
+ 		dev_err(&h->pdev->dev, "out of memory in %s", __func__);
+ 		goto clean_up;
+@@ -8899,7 +8846,7 @@ static void hpsa_flush_cache(struct ctlr_info *h)
+ 	if (!flush_buf)
+ 		return;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_NONE);
+ 
+ 	if (fill_cmd(c, HPSA_CACHE_FLUSH, h, flush_buf, 4, 0,
+ 		RAID_CTLR_LUNID, TYPE_CMD)) {
+@@ -8934,7 +8881,7 @@ static void hpsa_disable_rld_caching(struct ctlr_info *h)
+ 	if (!options)
+ 		return;
+ 
+-	c = cmd_alloc(h);
++	c = cmd_alloc(h, XFER_READ);
+ 
+ 	/* first, get the current diag options settings */
+ 	if (fill_cmd(c, BMIC_SENSE_DIAG_OPTIONS, h, options, 4, 0,
+@@ -8984,11 +8931,10 @@ static void __hpsa_shutdown(struct pci_dev *pdev)
+ 	struct ctlr_info *h;
+ 
+ 	h = pci_get_drvdata(pdev);
+-	/* Turn board interrupts off  and send the flush cache command
+-	 * sendcmd will turn off interrupt, and send the flush...
+-	 * To write all data in the battery backed cache to disks
++	/*
++	 * Turn board interrupts off;
++	 * flush cache command has already been sent.
+ 	 */
+-	hpsa_flush_cache(h);
+ 	h->access.set_intr_mask(h, HPSA_INTR_OFF);
+ 	hpsa_free_irqs(h);			/* init_one 4 */
+ 	hpsa_disable_interrupt_mode(h);		/* pci_init 2 */
+@@ -8996,6 +8942,7 @@ static void __hpsa_shutdown(struct pci_dev *pdev)
+ 
+ static void hpsa_shutdown(struct pci_dev *pdev)
+ {
++	hpsa_flush_cache(pci_get_drvdata(pdev));
+ 	__hpsa_shutdown(pdev);
+ 	pci_disable_device(pdev);
+ }
+@@ -9040,6 +8987,7 @@ static void hpsa_remove_one(struct pci_dev *pdev)
+ 	 * when multipath is enabled. There can be SYNCHRONIZE CACHE
+ 	 * operations which cannot complete and will hang the system.
+ 	 */
++	hpsa_flush_cache(h);
+ 	if (h->scsi_host)
+ 		scsi_remove_host(h->scsi_host);		/* init_one 8 */
+ 	/* includes hpsa_free_irqs - init_one 4 */
+diff --git a/drivers/scsi/hpsa.h b/drivers/scsi/hpsa.h
+index f8c88fc7b80a..d5fcecbc4401 100644
+--- a/drivers/scsi/hpsa.h
++++ b/drivers/scsi/hpsa.h
+@@ -205,7 +205,6 @@ struct ctlr_info {
+ 	dma_addr_t		ioaccel2_cmd_pool_dhandle;
+ 	struct ErrorInfo 	*errinfo_pool;
+ 	dma_addr_t		errinfo_pool_dhandle;
+-	unsigned long  		*cmd_pool_bits;
+ 	int			scan_finished;
+ 	u8			scan_waiting : 1;
+ 	spinlock_t		scan_lock;
+@@ -215,6 +214,8 @@ struct ctlr_info {
+ 	spinlock_t devlock; /* to protect hba[ctlr]->dev[];  */
+ 	int ndevices; /* number of used elements in .dev[] array. */
+ 	struct hpsa_scsi_dev_t *dev[HPSA_MAX_DEVICES];
++	struct scsi_device *raid_ctrl_sdev;
++
+ 	/*
+ 	 * Performant mode tables.
+ 	 */
 -- 
 2.16.4
 
