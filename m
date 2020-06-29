@@ -2,124 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 938E420E931
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 01:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5DC20E8EE
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 01:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbgF2XQy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 19:16:54 -0400
-Received: from mail3.bemta25.messagelabs.com ([195.245.230.83]:45435 "EHLO
-        mail3.bemta25.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727817AbgF2XQy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 19:16:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1593423508; i=@ts.fujitsu.com;
-        bh=fs1LLzBeHp3ALlgkMNwTdXQOovck716fsAPn1mE0Zfo=;
-        h=From:To:Cc:Subject:Date:Message-Id;
-        b=ZbSJ+mvXrsWuETD5EGfX1Ocz7coUdMz0jkAAqkMzQ/nnAnoTJVEc4N+E4a9P51H9l
-         83gdAcwNKpjqODGIaSJPWxoROIPGdiU+2EIEMglxzyCbDBJIxJn4iaZ7N+Z1r0wf/M
-         d1mruXTaOrmPFp+G+6fp/547E8IXmsmBJhfKLpZQaoZ1ebcyEVJKCgz/9ccpk0P01I
-         Wlv3eZYU4gYJKyQLOngh48wveIAVcVPqYwYtyUH7oyow41hRNIirNLpV0+ylmSN6ei
-         jYFpxL6EMW5/YF1ma9gHaCL+FtuqqH+2E3U0GdLj3NYDY2x+KsXLFKwQ5cwu6A2Js4
-         GNt/sj4aYD1WQ==
-Received: from [100.112.197.196] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-b.eu-west-1.aws.symcld.net id D2/7C-06299-496B9FE5; Mon, 29 Jun 2020 09:38:28 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeJIrShJLcpLzFFi42Kxs+EI1Z287We
-  cwZm5phbTPvxktji88A2TxaPPpxgtuq/vYLOY0RZmsfz4PyaLv5NusFq0Ln3L5MDhcfmKt8fO
-  WXfZPR73nGHz+Pj0FovH501yAaxRrJl5SfkVCawZh3/tYyuYylexv+cpawPjdJ4uRi4OIYHJj
-  BLrn7xmh3CmM0rsXTuBqYuRk4NNwEBixaT7LCAJEYFbjBLHpveCVTELrGaUuH9wGgtIlbCAn8
-  SKKW2MIDaLgKrE78ZbQN0cHLwCthK9KwpBwhIC8hIdByazTGDkXMDIsIrRPKkoMz2jJDcxM0f
-  X0MBA19DQSNfQ0lLX0EIvsUo3SS+1VLc8tbhE11AvsbxYr7gyNzknRS8vtWQTIzBwUgqOC+1g
-  fPP6g94hRkkOJiVRXqMJP+OE+JLyUyozEosz4otKc1KLDzHKcHAoSfBqbAXKCRalpqdWpGXmA
-  IMYJi3BwaMkwqu8BSjNW1yQmFucmQ6ROsWoKCXO6wKSEABJZJTmwbXBIucSo6yUMC8jAwODEE
-  9BalFuZgmq/CtGcQ5GJWFefZDtPJl5JXDTXwEtZgJaXGD6DWRxSSJCSqqBaY7V1V1Z5+U/BJ8
-  VSH67RUOf6baMAeMLEdN9ccdcGU0ajBRmqN1pN5ityWi73en6cS0Rswk3p763L3l4KMrgV9BP
-  7sYPhUfPNf2/6zBBoePDpeccir0FTYvzM2scE4oyu3oZDN6WV7j8Xhv+MHlatLnO+6vr79zTF
-  sn4ezn4+bssgWP3PTfebVOJ2NZ+MzjQsl8u4LHC9U8yHV8Ty2Ua/i7dtsWOb+1h40PXfgpPSp
-  WINmyYkNpUV1q+dKmQzhSlxmtBE+L1N1g275N/KGRXcfdTQpT8zbqngav7H+xek6ErfqrfIEs
-  iiufPTQf2pbfCthr5yNrbbr8wsfDrRz+v258zj063U5/iWsUkNtlbiaU4I9FQi7moOBEAKv4V
-  ARcDAAA=
-X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-8.tower-285.messagelabs.com!1593423507!541431!1
-X-Originating-IP: [62.60.8.85]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.2; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 15427 invoked from network); 29 Jun 2020 09:38:27 -0000
-Received: from unknown (HELO mailhost4.uk.fujitsu.com) (62.60.8.85)
-  by server-8.tower-285.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Jun 2020 09:38:27 -0000
-Received: from x-serv01 ([172.17.38.52])
-        by mailhost4.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 05T9cMa5025514;
-        Mon, 29 Jun 2020 10:38:26 +0100
-Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id 579C8206B2;
-        Mon, 29 Jun 2020 11:38:22 +0200 (CEST)
-From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>,
-        JiangYu <lnsyyj@hotmail.com>,
-        Daniel Meyerholt <dxm523@gmail.com>,
-        Henry Willard <henry.willard@oracle.com>
-Subject: [PATCH v2] scsi: target: tcmu: Fix crash on ARM during cmd completion
-Date:   Mon, 29 Jun 2020 11:37:56 +0200
-Message-Id: <20200629093756.8947-1-bstroesser@ts.fujitsu.com>
-X-Mailer: git-send-email 2.12.3
+        id S1728315AbgF2WzG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 18:55:06 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:35843 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbgF2WzG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 18:55:06 -0400
+Received: by mail-pl1-f194.google.com with SMTP id j4so7677168plk.3
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 15:55:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=98jXunz1PnJssWJjku0YmZmjLInks8J/Dx0b0PkJqVE=;
+        b=ddAfuZiZ5rGR8fw7neRbZt+Xoi4JydyTEiPZ/AX6gKD8FZfMkzi0Y/Lnb96CPfEomg
+         JJmb4iKpVHSSrsUvb5Asbz9buuSKp0RcL4m6evJ98AAXjKBLiKxz2qG6hde3JLa9PfX7
+         TLsFeyExPiuI5JpXOuCV3GwRxG5ny/IvwpEYTcZb/H/WAMo77FswLz+HwAswwxU7XhtR
+         cVUPB+KwXBCxkUYo8rMxnhKu2C0/+CGfnZWwHgN4bA41K4fvgwv3x2Ve/KUiz2fKWfi4
+         d5wO6LhEM03kjMFS/2GcQ4NuiluQ4vTerySAIzW5TodU+7xgy5N6T9XXx2DLKKbo8y30
+         1wSg==
+X-Gm-Message-State: AOAM531HFXatIAicZmSopk7EYxLN2S1aIYqmcU2hb2Cp1WxuQwsA4UgJ
+        m4y//PkTglMWVlPhCoA+swy6UPzv
+X-Google-Smtp-Source: ABdhPJzs1pVxziHAIhaV+Qk2HzCDBtd5r2czh/R0QWruQ7cEpPk6xJ1m7DR1JN4QdbNm43fEAPdoIg==
+X-Received: by 2002:a17:902:c24a:: with SMTP id 10mr9093672plg.82.1593471304877;
+        Mon, 29 Jun 2020 15:55:04 -0700 (PDT)
+Received: from localhost.localdomain (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id mr8sm478379pjb.5.2020.06.29.15.55.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 15:55:04 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v2 0/9] qla2xxx patches for kernel v5.9
+Date:   Mon, 29 Jun 2020 15:54:45 -0700
+Message-Id: <20200629225454.22863-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If tcmu_handle_completions() has to process a padding shorter
-than sizeof(struct tcmu_cmd_entry), the current call to
-tcmu_flush_dcache_range() with sizeof(struct tcmu_cmd_entry) as
-length param is wrong and causes crashes on e.g. ARM, because
-tcmu_flush_dcache_range() in this case calls
-	flush_dcache_page(vmalloc_to_page(start));
-with start being an invalid address above the end of the
-vmalloc'ed area.
+Hi Martin,
 
-The fix is to use the minimum of remaining ring space and
-sizeof(struct tcmu_cmd_entry) as the length param.
+This patch series includes cleanup patches and also patches that address
+complaints from several static source code analyzers. Please consider these
+patches for kernel v5.9.
 
-The patch was tested on kernel 4.19.118.
+Thanks,
 
-See https://bugzilla.kernel.org/show_bug.cgi?id=208045#c10
+Bart.
 
-Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Tested-by: JiangYu <lnsyyj@hotmail.com>
-Acked-by: Mike Christie <michael.christie@oracle.com>
----
+Changes compared to v1:
+- Rewrote patch "Fix a Coverity complaint in qla2100_fw_dump()"
 
-v2: Description fixed (maximum --> minimum) and
-    added Acked-by.
+Bart Van Assche (9):
+  qla2xxx: Check the size of struct fcp_hdr at compile time
+  qla2xxx: Remove the __packed annotation from struct fcp_hdr and
+    fcp_hdr_le
+  qla2xxx: Make qla82xx_flash_wait_write_finish() easier to read
+  qla2xxx: Initialize 'n' before using it
+  qla2xxx: Remove a superfluous cast
+  qla2xxx: Make __qla2x00_alloc_iocbs() initialize 32 bits of
+    request_t.handle
+  qla2xxx: Fix a Coverity complaint in qla2100_fw_dump()
+  qla2xxx: Make qla2x00_restart_isp() easier to read
+  qla2xxx: Introduce a function for computing the debug message prefix
 
- drivers/target/target_core_user.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 3885ca532f8f..82e476d48194 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -1221,7 +1221,14 @@ static unsigned int tcmu_handle_completions(struct tcmu_dev *udev)
- 
- 		struct tcmu_cmd_entry *entry = (void *) mb + CMDR_OFF + udev->cmdr_last_cleaned;
- 
--		tcmu_flush_dcache_range(entry, sizeof(*entry));
-+		/*
-+		 * Flush max. up to end of cmd ring, since current entry might
-+		 * be a padding that is shorter than sizeof(*entry)
-+		 */
-+		size_t ring_left = head_to_end(udev->cmdr_last_cleaned,
-+					       udev->cmdr_size);
-+		tcmu_flush_dcache_range(entry, ring_left < sizeof(*entry) ?
-+					ring_left : sizeof(*entry));
- 
- 		if (tcmu_hdr_get_op(entry->hdr.len_op) == TCMU_OP_PAD) {
- 			UPDATE_HEAD(udev->cmdr_last_cleaned,
--- 
-2.12.3
+ drivers/scsi/qla2xxx/qla_bsg.c     |  3 +-
+ drivers/scsi/qla2xxx/qla_dbg.c     | 98 ++++++++++--------------------
+ drivers/scsi/qla2xxx/qla_dbg.h     |  1 +
+ drivers/scsi/qla2xxx/qla_init.c    | 39 ++++++------
+ drivers/scsi/qla2xxx/qla_iocb.c    |  4 +-
+ drivers/scsi/qla2xxx/qla_nx.c      | 20 +++---
+ drivers/scsi/qla2xxx/qla_target.h  |  4 +-
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c |  1 +
+ 8 files changed, 70 insertions(+), 100 deletions(-)
 
