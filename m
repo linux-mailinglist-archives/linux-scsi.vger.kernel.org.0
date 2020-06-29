@@ -2,86 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5171020D910
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78AD20DB66
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733229AbgF2Tnx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387965AbgF2Tmm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:42:42 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B35C0307B8
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 09:04:40 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id l63so8481223pge.12
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 09:04:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0kgv3VlLQlGR4bY+CDvjI7NJi4C5sMhoLl8VYxZ7R24=;
-        b=MDWpgwcQxYQfxaYz6qU6zB4PfO6fiFBS7DW/FzQkLguxyZHk6eSSAEYSfNPkqEtsje
-         IZo2UAw0xiuy3RIjuxsm7ibMeACo+lyJyj2P6WM/JrVoRTLFn2iYEF/TesytLptGqYTF
-         sk950e74xyEG+CdBN4VNfB//hWhmtMJ0oDJ8EK+1gu8RAcwKlTVZHCBO0ONakZVdfJVA
-         ojFoaWcPjSDz7VqNSLDUhMNE6ONgatG+oa3F6kcAGVz9mIIxNTe4FV+1X1Ymn8bYBtZs
-         CjW+5c3V5fAdJgv7crJ05QvhlEXrLI66ofq31JOwBnLPqxQXFDWMqofs6CheQ13Mhs+Q
-         zyvg==
-X-Gm-Message-State: AOAM5334HtgE9M6QEWYnazZykqbGeHM4dwmmI8Mimsb24pBJnQwQvQ2y
-        rQtt3QnKBwyK81DnD4+8FYY=
-X-Google-Smtp-Source: ABdhPJyo8P8FOulErEszG4iC0nb+wekavfOVRKp4N9M0wP3H2P/U9hVXzGAcY/bey8NWR/sn/JKMqA==
-X-Received: by 2002:a63:920b:: with SMTP id o11mr11312285pgd.447.1593446679943;
-        Mon, 29 Jun 2020 09:04:39 -0700 (PDT)
-Received: from localhost.localdomain (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id g7sm148776pfh.210.2020.06.29.09.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 09:04:39 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH] Make the scsi_init_io() documentation more accurate
-Date:   Mon, 29 Jun 2020 09:04:33 -0700
-Message-Id: <20200629160433.14390-1-bvanassche@acm.org>
-X-Mailer: git-send-email 2.27.0
+        id S2388788AbgF2UGM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 16:06:12 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2408 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388556AbgF2UGK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jun 2020 16:06:10 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id E79B67DFD74948BB7481;
+        Mon, 29 Jun 2020 17:19:59 +0100 (IST)
+Received: from [127.0.0.1] (10.210.170.8) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 29 Jun
+ 2020 17:19:58 +0100
+Subject: Re: [PATCH RFC v7 02/12] blk-mq: rename blk_mq_update_tag_set_depth()
+To:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <don.brace@microsemi.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>, <bvanassche@acm.org>,
+        <hare@suse.com>, <hch@lst.de>,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>,
+        <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-3-git-send-email-john.garry@huawei.com>
+ <20200611025759.GA453671@T590>
+ <6ef76cdf-2fb3-0ce8-5b5a-0d7af0145901@huawei.com>
+ <8ef58912-d480-a7e1-f04c-da9bd85ea0ae@huawei.com>
+ <eaf188d5-dac0-da44-1c83-31ff2860d8fa@suse.de>
+ <e42da0e714c808c80e9a055f3f065e44@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <634f1564-6404-a5b9-0b27-b96b7df8df12@huawei.com>
+Date:   Mon, 29 Jun 2020 17:18:23 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <e42da0e714c808c80e9a055f3f065e44@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.210.170.8]
+X-ClientProxiedBy: lhreml715-chm.china.huawei.com (10.201.108.66) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The current scsi_init_io() documentation does not accurately explain what
-this function does. Make the scsi_init_io() documentation more accurate.
+On 24/06/2020 09:13, Kashyap Desai wrote:
+>>> Hi Hannes,
+>>>
+>>> Do you have any issue with splitting the undocumented changes into
+>>> another patch as so:
+>>>
+>> No, that's perfectly fine.
+>>
+>> Kashyap, I've also attached an updated patch for the elevator_count patch;
+>> if
+>> you agree John can include it in the next version.
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: Daniel Wagner <dwagner@suse.de>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/scsi_lib.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ok, but I need to check it myself.
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 7c42c00afb0d..b2b9bbaad9fe 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -961,8 +961,12 @@ static inline bool scsi_cmd_needs_dma_drain(struct scsi_device *sdev,
- }
- 
- /**
-- * scsi_init_io - SCSI I/O initialization function.
-- * @cmd:  command descriptor we wish to initialize
-+ * scsi_init_io - Allocate and initialize data and integrity scatterlists
-+ * @cmd: SCSI command data structure to initialize.
-+ *
-+ * Initializes @cmd->sdb and also @cmd->prot_sdb if data integrity is enabled
-+ * for @cmd. Functions like scsi_sg_count(), scsi_sg_list() and scsi_bufflen()
-+ * return the values stored by this function in the @cmd data structure.
-  *
-  * Returns:
-  * * BLK_STS_OK       - on success
+> Hannes - Patch looks good.   Header does not include problem statement. How
+> about adding below in header ?
+> 
+> High CPU utilization on "native_queued_spin_lock_slowpath" due to lock
+> contention is possible in mq-deadline and bfq io scheduler when nr_hw_queues
+> is more than one.
+> It is because kblockd work queue can submit IO from all online CPUs (through
+> blk_mq_run_hw_queues) even though only one hctx has pending commands.
+> Elevator callback "has_work" for mq-deadline and bfq scheduler consider
+> pending work if there are any IOs on request queue and it does not account
+> hctx context.
+> 
+> I have not seen performance drop after this patch, but I will continue
+> further testing.
+> 
+> John - One more thing, I am working on megaraid_sas driver to provide both
+> host_tagset = 1 and 0 option through module parameter.
+
+I was hoping that we wouldn't have this, and have host_tagset = 1 
+always. Or maybe host_tagset = 1 by default, and allow module param to 
+set = 0. Your choice, though.
+
+Thanks,
+John
+
