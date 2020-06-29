@@ -2,101 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74ED520D75C
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7824720D820
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729774AbgF2T3K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:29:10 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:17495 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728802AbgF2T2j (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:28:39 -0400
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200629084907epoutp032b652c44fca85e32344a444a6e42daa1~c94uffBlu2057120571epoutp03R
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 08:49:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200629084907epoutp032b652c44fca85e32344a444a6e42daa1~c94uffBlu2057120571epoutp03R
+        id S1730915AbgF2TgV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:36:21 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:64018 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729305AbgF2TgP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:36:15 -0400
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200629100821epoutp02828f6c040b45218819f6b19df8344622~c_96k_KXn2849428494epoutp02S
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 10:08:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200629100821epoutp02828f6c040b45218819f6b19df8344622~c_96k_KXn2849428494epoutp02S
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593420547;
-        bh=xGVBQ/nFX/cdlH/spXsnzoexKPYHISawQkGvAlN7KTw=;
+        s=mail20170921; t=1593425301;
+        bh=Bz1jgn5lFYz3ryUkUY+SYpUT1f1J5ojz590MFiI3hWk=;
         h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=DhR4YqwVVn84UA+0+SErMMrHw+DaIiprRJvLjHQJUNEC8M5LJroLdvQ7wD5Jo44YM
-         pEdwdP995aJguxantXfUyV5cUNCGqdrtbxqjgMMrQP9rNcxDQwF0RAd/4pjLpKbnQT
-         K23pu1clSxdTQOg8197k4nsYn0wVo+baA90aAyeM=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20200629084906epcas2p49e8ddf4d3e5722fe676f9e9127cc1241~c94uAeIBi2112521125epcas2p4I;
-        Mon, 29 Jun 2020 08:49:06 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.40.183]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 49wLkn2Ss0zMqYks; Mon, 29 Jun
-        2020 08:49:05 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        b=l6IKyZj0+6z+CnzRnMhtF2BQ9she0SC1/WZmFIjTgTj7PfXemniuAOgBZv4jx33oV
+         T6ne8/9bDT3zY7SYUJ0BvvnansFGoIXtq2krAW8hK5mghiv+CcPhfUF1lR4WVYsBHq
+         A9DtGwDRGmSCljOxWrdgcc+EYpgQEKeKKeeb6euY=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20200629100821epcas2p178ed16b5030e9f05d40286cca58ffa30~c_96QZjud2803628036epcas2p1c
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 10:08:21 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.191]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 49wNVD1PWKzMqYkn for
+        <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 10:08:20 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
         epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6F.7D.18874.FFAA9FE5; Mon, 29 Jun 2020 17:49:03 +0900 (KST)
+        4B.7D.18874.29DB9FE5; Mon, 29 Jun 2020 19:08:18 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200629084903epcas2p23fb407e0ce458118376143153b0a076a~c94qre2eq0538305383epcas2p2u;
-        Mon, 29 Jun 2020 08:49:03 +0000 (GMT)
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20200629100818epcas2p30836dcec6f42a01d6d60342f2856bb27~c_93c3IM51068610686epcas2p3L
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 10:08:18 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200629084903epsmtrp2d7e2e1c09797fee43cd0528543962770~c94qqlFR91496214962epsmtrp2s;
-        Mon, 29 Jun 2020 08:49:03 +0000 (GMT)
-X-AuditID: b6c32a46-519ff700000049ba-11-5ef9aaffb167
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        20200629100818epsmtrp28d871e84964e77675be7093a632c2c9e~c_93cVFov2565425654epsmtrp2f
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 10:08:18 +0000 (GMT)
+X-AuditID: b6c32a46-503ff700000049ba-17-5ef9bd926cc9
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8C.89.08303.EFAA9FE5; Mon, 29 Jun 2020 17:49:02 +0900 (KST)
-Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip1.samsung.com
+        BA.63.08303.29DB9FE5; Mon, 29 Jun 2020 19:08:18 +0900 (KST)
+Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20200629084902epsmtip1ca258fc926dd4b1295944f1d1c3575de~c94qbtWv72030420304epsmtip1A;
-        Mon, 29 Jun 2020 08:49:02 +0000 (GMT)
+        20200629100818epsmtip2ff1ab8099d538087f1dd437306cd350b~c_93Vq65x0047100471epsmtip2Z
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 10:08:18 +0000 (GMT)
 From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
-To:     "'Bart Van Assche'" <bvanassche@acm.org>,
-        <linux-scsi@vger.kernel.org>, <alim.akhtar@samsung.com>,
-        <avri.altman@wdc.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
-        <asutoshd@codeaurora.org>, <cang@codeaurora.org>
+To:     <linux-scsi@vger.kernel.org>
 In-Reply-To: <6eaeed01-9c1b-1bf2-8375-568d24f079e3@acm.org>
 Subject: RE: [RFC PATCH v1 2/2] exynos-ufs: support command history
-Date:   Mon, 29 Jun 2020 17:49:02 +0900
-Message-ID: <006001d64df2$23a2e230$6ae8a690$@samsung.com>
+Date:   Mon, 29 Jun 2020 19:08:18 +0900
+Message-ID: <007101d64dfd$361ca580$a255f080$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJ/aiFPr5h6sgfcz1l8UT25RU07RwGHv1nhAhmw7q0ByhIEUKdxroDQ
+Thread-Index: AQJ/aiFPr5h6sgfcz1l8UT25RU07RwGHv1nhAhmw7q0ByhIEUKdxyX/w
 Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmue7/VT/jDM5eU7d4MG8bm8XethPs
-        Fi9/XmWzOPiwk8Vi2oefzBaf1i9jtVh0YxuTRff1HWwWy4//Y3Lg9Lh8xdvjcl8vk8eERQcY
-        Pb6v72Dz+Pj0FotH35ZVjB6fN8l5tB/oZgrgiMqxyUhNTEktUkjNS85PycxLt1XyDo53jjc1
-        MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAE6T0mhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5Ra
-        kJJTYGhYoFecmFtcmpeul5yfa2VoYGBkClSZkJMx6dk19oJtlhUHji9ib2C8ptfFyMkhIWAi
-        8fbKapYuRi4OIYEdjBIbrz5iA0kICXxilFj1TwYi8ZlR4ufOQ4wwHXfPv2GFSOxilHj1/hcz
-        hPOCUeLY9L1g7WwC2hLTHu4GqxIR+Mco8fDYH7AEp4C1xOUJJ8FGCQs4S+yd3A0WZxFQldg/
-        +zoziM0rYClxZf51NghbUOLkzCcsIDYz0NBlC18zQ5yhIPHz6TJWEFtEwE2idV8nK0SNiMTs
-        zjawiyQEVnJITNy+lhWiwUXi5Zd2dghbWOLV8S1QtpTE53cQV0sI1Evsm9rACtHcwyjxdN8/
-        qKeNJWY9aweyOYA2aEqs36UPYkoIKEscuQV1G59Ex+G/7BBhXomONiGIRmWJX5MmQw2RlJh5
-        8w5UiYfE532sExgVZyF5chaSJ2cheWYWwtoFjCyrGMVSC4pz01OLjQqMkCN7EyM46Wq57WCc
-        8vaD3iFGJg7GQ4wSHMxKIryfrb/FCfGmJFZWpRblxxeV5qQWH2I0BQb7RGYp0eR8YNrPK4k3
-        NDUyMzOwNLUwNTOyUBLnrVe8ECckkJ5YkpqdmlqQWgTTx8TBKdXAtIOXm8u72Yg3drpNtFNx
-        8Pk6kckHgjXWXJUvFbaf6rap8lyJwz4tJePjiRWq5dypl0tP59+L+X/Xq2rVgz1B01165jpc
-        6eD+t+e80v1F853aVqq5aZ/5+fHrg/RlWccX535jb5f0kLPn+aZgZPWljHfz4X2rvx5rbbtQ
-        ZPDrkNFXWRfBw2uWps3W+pGcvDSz43DC10LrhMpNEb8tJ5dpyFxn/Dzr1q/8P4ufGvb377m5
-        5eIFlb93mffH5LlWe2bWfuj+aPwmfIH3lYWCJxI0Xp/75cWTf2Ol/YzZj41+yPe92csqWX01
-        dJJz7NdFWv3FJ5VFZV9q8J5LarLI2OjWFnHdzTCOKV2p+8/yZJ/NSizFGYmGWsxFxYkAPUMO
-        9UMEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSnO6/VT/jDKZPtbF4MG8bm8XethPs
-        Fi9/XmWzOPiwk8Vi2oefzBaf1i9jtVh0YxuTRff1HWwWy4//Y3Lg9Lh8xdvjcl8vk8eERQcY
-        Pb6v72Dz+Pj0FotH35ZVjB6fN8l5tB/oZgrgiOKySUnNySxLLdK3S+DKePTrNXPBQeOKhxsW
-        MDUwblfvYuTkkBAwkbh7/g0riC0ksINR4ugsCYi4pMSJnc8ZIWxhifstR4BquIBqnjFKXGqd
-        AJZgE9CWmPZwN1hCRKCDSeJVx0Y2iKoGJondq+6ygFRxClhLXJ5wEqxDWMBZYu/kbjYQm0VA
-        VWL/7OvMIDavgKXElfnX2SBsQYmTM5+A9TIDbeh92MoIYy9b+JoZ4iQFiZ9Pl4GdLSLgJtG6
-        r5MVokZEYnZnG/MERqFZSEbNQjJqFpJRs5C0LGBkWcUomVpQnJueW2xYYJSXWq5XnJhbXJqX
-        rpecn7uJERxpWlo7GPes+qB3iJGJg/EQowQHs5II72frb3FCvCmJlVWpRfnxRaU5qcWHGKU5
-        WJTEeb/OWhgnJJCeWJKanZpakFoEk2Xi4JRqYJpSutL2d9Ucjoe2LRfOOX+xWCm0+Nu7GQde
-        xgSrzcp/N8f40rLz9vOm1qlFfz0rkr0nfGV12zftkJhzr77y2J9796/4Ql2qQp9cQDXbg0Ad
-        xecG11XV3vye52aYWDezf6/Hd4vY9Hb+yWzv81Kd7lyP+7Zs4eR/y7e63ty07+3u4ym89uY5
-        ss/Dvf+fWt7qNM0rZ1rtnU+b/lqqBh8q3iIbMz/HjTO98vBet3mej0pS535qbBC/E7JVI6GE
-        d/MDTes4Gd7CfIZwmcuPzdU1N/tpHpiatYw5fuoGtmUs8z4sCe56OrFyWedPbg5f0zj17TPD
-        mU9X7tuTGpw4fdH1yoe3+8Taub+ZpKzuWKKm6qXEUpyRaKjFXFScCACbMtrYIwMAAA==
-X-CMS-MailID: 20200629084903epcas2p23fb407e0ce458118376143153b0a076a
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGKsWRmVeSWpSXmKPExsWy7bCmhe6kvT/jDBbdtbHovr6DzYHR4/Mm
+        uQDGqBybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKCh
+        SgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCQ8MCveLE3OLSvHS95PxcK0MDAyNT
+        oMqEnIwJLS/ZC/5aVKxdP4G9gXGZXhcjJ4eEgInEq72/mLoYuTiEBHYwSpy618kK4Uxmkviy
+        YS9UZgqTRM/zKUwwLR2v50IldjFKvL70hA3C6WSSaNx8nRmkik1AW2Law92sILaIgILE37ZD
+        YHFOAWuJyxNOMoLYwgLOEnsnd7OB2CwCqhJfD29jB7F5BSwlNuy4wgJhC0qcnPkEzGYGmrls
+        4WtmiCsUJH4+XQY1303i48lrTBA1IhKzO9uYQQ6SENjFLjG74yobRIOLxM7OpVC2sMSr41vY
+        IWwpic/v9kLF6yX2TW1ghWjuYZR4uu8fI0TCWGLWs3YgmwNog6bE+l36IKaEgLLEkVtQt/FJ
+        dBz+yw4R5pXoaBOCaFSW+DVpMtQQSYmZN+9AlXhIfN7HOoFRcRaSJ2cheXIWkmdmIaxdwMiy
+        ilEstaA4Nz212KjACDmyNzGCE5yW2w7GKW8/6B1iZOJgPMQowcGsJML72fpbnBBvSmJlVWpR
+        fnxRaU5q8SFGU2CwT2SWEk3OB6bYvJJ4Q1MjMzMDS1MLUzMjCyVx3nrFC3FCAumJJanZqakF
+        qUUwfUwcnFINTI7BP+ZMyq1g6NdKX7/QdensZruLkx75ij98kPW1tZH/Sdttzrv/K/b8/7XZ
+        tmlqz4RtT9g9f66d1BzRUPK88qXwvmfXYxq7XkaJsrRVuLXlS0umGNla+btWt3olvYthbmH/
+        e/P1+nXa4nF18u/PBu81Tv216/gpptf78xzmhhn8uSDVYJl2VCTM7cbktxnq7LckvMsjzkpN
+        Ueydu6hXsSAwkKm6lisr4FVC5AeWxJJKx5icytjr2yq2infVBh7f98BWxEIu5/6cXT5VwgsM
+        uf8fubMo0mpK3XzThHLT3WdYGFPc9B6z66UZipgu2bBpE+s6U28Rp2V3VNdd9npY1LLzb+BL
+        lhneKxq//eJUYinOSDTUYi4qTgQAUD8ybPkDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGLMWRmVeSWpSXmKPExsWy7bCSvO6kvT/jDBYuk7bovr6DzYHR4/Mm
+        uQDGKC6blNSczLLUIn27BK6MzfuvMRdMMK6YueAiewPjZPUuRk4OCQETiY7Xc5m6GLk4hAR2
+        MEpMX3CUHSIhKXFi53NGCFtY4n7LEVaIonYmiamTbrOCJNgEtCWmPdwNZosIKEj8bTvEDFHU
+        wCSxe9VdFpAEp4C1xOUJJ8EmCQs4S+yd3M0GYrMIqEp8PbwNbBuvgKXEhh1XWCBsQYmTM5+A
+        2cxAC3oftjLC2MsWvmaGuEhB4ufTZVCL3SQ+nrzGBFEjIjG7s415AqPQLCSjZiEZNQvJqFlI
+        WhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAgOai2tHYx7Vn3QO8TIxMF4iFGC
+        g1lJhPez9bc4Id6UxMqq1KL8+KLSnNTiQ4zSHCxK4rxfZy2MExJITyxJzU5NLUgtgskycXBK
+        NTAdb+C5OFOyut+ttqK6P4Mh0Ti3tpyhJl/ZaddxnoSjcpoV6tVGdrLbcj3fPzlye3HA5Ncq
+        b3jmtGtINJ3PZH+0oeuaWdOKnn/ZcR4epdp7XbgS3j/a4c4j1vBf86CY7I7U3k33S/yq30Yd
+        PKFlxXt/5UX7UAP3r/+z8xecW9z95sqz95Luxky1129fXMxbdfaJ7bSULkapnF2XbEVNW9K5
+        BTN3pc5edCx6w7d7eseNzb8r/dk3X/O8vUrrzWsH+w7wLVjUeJ4vpOi3kEXp7+wdL1nMJM37
+        7b9lhJ5p6VxmeXPB5vOLeQSnat56J33gjID/93dX0mY828SjM0ujZ7u3f/ien9Vr65JsMwTf
+        8iuxFGckGmoxFxUnAgCDEwx/2QIAAA==
+X-CMS-MailID: 20200629100818epcas2p30836dcec6f42a01d6d60342f2856bb27
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
@@ -118,12 +111,12 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 > Since this macro controls debug code, please make this configurable at
 > runtime, e.g. as a kernel module parameter or by using the dynamic debug
 > mechanism.
->=20
-> > +/* Structure for ufs cmd logging */
-> > +=23define MAX_CMD_LOGS    32
 
 Got it.
 
+>=20
+> > +/* Structure for ufs cmd logging */
+> > +=23define MAX_CMD_LOGS    32
 >=20
 > Please clarify in the comment above this constant how this constant has
 > been chosen. Is this constant e.g. related to the queue depth? Is this
@@ -141,10 +134,10 @@ Got it.
 > > +=7D;
 >=20
 > Please use data types that explicitly specify the width for members like
-> e.g. the lba (u64 instead of unsigned long). Please also use u8 instead
-> of unsigned char for '
-op' since 'op' is not used to store any kind of
-> ASCII character.=20
+> e.g. the lba (u64 instead of unsigned long). Please also use u8 instead o=
+f
+> unsigned char for 'op' since 'op' is not used to store any kind of ASCII
+> character.
 
 Got it.
 
@@ -156,7 +149,7 @@ Got it.
 > > +	struct cmd_data *pdata=5B32=5D;	/* Currently, 32 slots */
 > > +=7D;
 >=20
-> What are 'slots'? Why 32?=20
+> What are 'slots'? Why 32?
 
 I meant tag number and assumed that CAP.NUTRS be 32.
 With 32, you can see all the command context with full outstanding situatio=
@@ -181,7 +174,7 @@ However, to do that, I have to add another call after enabling host.
 > > +=7D;
 >=20
 > Please add a comment above this structure that explains the role of this
-> data structure.=20
+> data structure.
 
 Got it.
 
@@ -190,17 +183,14 @@ Got it.
 >=20
 > A static array? That's suspicious. Should that array perhaps be a member
 > of another UFS data structure, e.g. the UFS host or device data structure=
-?=20
-
-Got it.
-
+?
 >=20
 > > +static int ufs_s_dbg_mgr_idx;
->=20
-> What does this variable represent?=20
 
 I considered it again and will remove.
 
+>=20
+> What does this variable represent?
 >=20
 > > +	for (i =3D 0 ; i < max ; i++, data++) =7B
 > > +		dev_err(dev, =22: 0x%02x, %02d, 0x%08lx,
@@ -219,21 +209,20 @@ I considered it again and will remove.
 > specify multiple arguments per line (up to the current column limit).
 > Please also align the arguments either with the opening parentheses or
 > indent these by one tab as requested in the Linux kernel coding style
-> document.=20
+> document.
+>=20
 
 Got it.
 
->=20
 > > +/*
 > > + * EXTERNAL FUNCTIONS
 > > + *
 > > + * There are two classes that are to initialize data structures for
-> debug
+> > +debug
 > > + * and to define actual behavior.
 > > + */
 > > +void exynos_ufs_dump_info(struct ufs_exynos_handle *handle, struct
-> device *dev)
-> > +=7B
+> > +device *dev) =7B
 > > +	struct ufs_s_dbg_mgr *mgr =3D (struct ufs_s_dbg_mgr *)handle->private=
 ;
 > > +
@@ -253,12 +242,13 @@ Got it.
 > > +=7D
 >=20
 > Using cpu_clock() without storing the CPU on which it has been sampled
-> seems wrong to me. Is higher accuracy than a single jiffy required? If
-> not, how about using 'jiffies' instead? From clock.h:
->=20
+> seems wrong to me. Is higher accuracy than a single jiffy required? If no=
+t,
+> how about using 'jiffies' instead? From clock.h:
 
 I think jiffies isn't proper for the original purpose.
 
+>=20
 > /*
 >  * As outlined in clock.c, provides a fast, high resolution, nanosecond
 >  * time source that is monotonic per cpu argument and has bounded drift
@@ -277,8 +267,7 @@ an =23
 >  */
 >=20
 > > +void exynos_ufs_cmd_log_start(struct ufs_exynos_handle *handle,
-> > +			      struct ufs_hba *hba, struct scsi_cmnd *cmd)
-> > +=7B
+> > +			      struct ufs_hba *hba, struct scsi_cmnd *cmd) =7B
 > > +	struct ufs_s_dbg_mgr *mgr =3D (struct ufs_s_dbg_mgr *)handle->private=
 ;
 > > +	int cpu =3D raw_smp_processor_id();
@@ -302,20 +291,20 @@ As I know, nothing exits.
 And blk_rq_pos doesn't represent actual lba. That represents in-partition a=
 ddressing.
 With this, I have to refer to the start address of partitions and I don=E2=
-=80=99t=20think=0D=0Athat=20isn't=20suitable=20in=20UFS=20driver.=0D=0A=0D=
-=0A>=20=0D=0A>=20>=20+int=20exynos_ufs_init_dbg(struct=20ufs_exynos_handle=
-=20*handle)=0D=0A>=20>=20+=7B=0D=0A>=20>=20+=09struct=20ufs_s_dbg_mgr=20*mg=
-r;=0D=0A>=20>=20+=0D=0A>=20>=20+=09if=20(ufs_s_dbg_mgr_idx=20>=3D=20DBG_NUM=
-_OF_HOSTS)=0D=0A>=20>=20+=09=09return=20-1;=0D=0A>=20>=20+=0D=0A>=20>=20+=
-=09mgr=20=3D=20&ufs_s_dbg=5Bufs_s_dbg_mgr_idx++=5D;=0D=0A>=20>=20+=09handle=
-->private=20=3D=20(void=20*)mgr;=0D=0A>=20>=20+=09mgr->handle=20=3D=20handl=
-e;=0D=0A>=20>=20+=09mgr->active=20=3D=201;=0D=0A>=20=0D=0A>=20Can=20the=20'=
-(void=20*)'=20cast=20above=20be=20left=20out?=20=0D=0A=0D=0AI=20didn't=20wa=
-nt=20to=20share=20the=20details=20of=20this=20structure=20with=20ufs-exynos=
-.c.=0D=0AI=20don=E2=80=99t=20feel=20that=20it's=20better.=0D=0A=0D=0A>=20=
-=0D=0A>=20>=20+=23define=20UFS_VS_MMIO_VER=201=0D=0A>=20=0D=0A>=20What=20do=
-es=20this=20constant=20represent?=20Please=20add=20a=20comment.=20=0D=0A=0D=
-=0AI=20considered=20it=20again=20and=20will=20remove.=0D=0A=0D=0A>=20=0D=0A=
->=20Thanks,=0D=0A>=20=0D=0A>=20Bart.=20=0D=0A=0D=0AThank=20you=20for=20your=
-=20comments=20even=20if=20this=20is=20a=20RFS=20patch.=0D=0A=0D=0A=0D=0ATha=
-nks.=0D=0AKiwoong=20Kim=0D=0A=0D=0A
+=80=99t=20think=20that=20isn't=20suitable=20in=20UFS=20driver.=0D=0A=0D=0A>=
+=20=0D=0A>=20>=20+int=20exynos_ufs_init_dbg(struct=20ufs_exynos_handle=20*h=
+andle)=20=7B=0D=0A>=20>=20+=09struct=20ufs_s_dbg_mgr=20*mgr;=0D=0A>=20>=20+=
+=0D=0A>=20>=20+=09if=20(ufs_s_dbg_mgr_idx=20>=3D=20DBG_NUM_OF_HOSTS)=0D=0A>=
+=20>=20+=09=09return=20-1;=0D=0A>=20>=20+=0D=0A>=20>=20+=09mgr=20=3D=20&ufs=
+_s_dbg=5Bufs_s_dbg_mgr_idx++=5D;=0D=0A>=20>=20+=09handle->private=20=3D=20(=
+void=20*)mgr;=0D=0A>=20>=20+=09mgr->handle=20=3D=20handle;=0D=0A>=20>=20+=
+=09mgr->active=20=3D=201;=0D=0A>=20=0D=0A>=20Can=20the=20'(void=20*)'=20cas=
+t=20above=20be=20left=20out?=0D=0A=0D=0AI=20didn't=20want=20to=20share=20th=
+e=20details=20of=20this=20structure=20with=20ufs-exynos.c.=0D=0AI=20don=E2=
+=80=99t=20feel=20that=20it's=20better.=0D=0A=0D=0A>=20=0D=0A>=20>=20+=23def=
+ine=20UFS_VS_MMIO_VER=201=0D=0A>=20=0D=0A>=20What=20does=20this=20constant=
+=20represent?=20Please=20add=20a=20comment.=0D=0A=0D=0AI=20considered=20it=
+=20again=20and=20will=20remove.=0D=0A=0D=0A>=20=0D=0A>=20Thanks,=0D=0A>=20=
+=0D=0A>=20Bart.=0D=0A=0D=0AThank=20you=20for=20your=20comments=20even=20if=
+=20this=20is=20a=20RFS=20patch.=0D=0A=0D=0A=0D=0AThanks.=0D=0AKiwoong=20Kim=
+=0D=0A=0D=0A
