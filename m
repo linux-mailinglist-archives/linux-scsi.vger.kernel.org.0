@@ -2,158 +2,159 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BF020D90F
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECF620D7FC
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 22:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731075AbgF2Tns (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:43:48 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:20251 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387884AbgF2Tng (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:43:36 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200629064802epoutp03e37bf8054b140ece24bb4aa48e2e0830~c8PAXLeku0599605996epoutp03F
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 06:48:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200629064802epoutp03e37bf8054b140ece24bb4aa48e2e0830~c8PAXLeku0599605996epoutp03F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593413282;
-        bh=5X4YGRD6u1tf1xanJ6XnnURVxKYSn66IhirKFzp306A=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=SPMC12hxUgafWKEWNFEiPmg9UAySkWDoyVAvbrzXlGQPmJTMtNIcmsVfOYMSfHZkW
-         3eid/LP3jYkmdG1ZWyNS4s1GNWAk18a8OBoY2IP0rKEciqHORMZQXU+N2znZ8Vrj/E
-         7PBWqyZI7Q5uOPsqlyy72B9l739OBPSFcobayJd4=
-Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p1.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200629064801epcas1p11b707090a0db8eb35b02cca951d76ea7~c8O--hFfq2909229092epcas1p1N;
-        Mon, 29 Jun 2020 06:48:01 +0000 (GMT)
-Mime-Version: 1.0
-Subject: [PATCH v4 0/5] scsi: ufs: Add Host Performance Booster Support
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <231786897.01593413281727.JavaMail.epsvc@epcpadp2>
-Date:   Mon, 29 Jun 2020 15:43:23 +0900
-X-CMS-MailID: 20200629064323epcms2p787baba58a416fef7fdd3927f8da701da
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200629064323epcms2p787baba58a416fef7fdd3927f8da701da
-References: <CGME20200629064323epcms2p787baba58a416fef7fdd3927f8da701da@epcms2p7>
+        id S1729993AbgF2Ten (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:34:43 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36630 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733145AbgF2Tb0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:31:26 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E6EB0B077;
+        Mon, 29 Jun 2020 07:20:55 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Bart van Assche <bvanassche@acm.org>,
+        Don Brace <don.brace@microchip.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv5 00/22] scsi: enable reserved commands for LLDDs
+Date:   Mon, 29 Jun 2020 09:19:59 +0200
+Message-Id: <20200629072021.9864-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi all,
 
-Changelog:
+quite some drivers use internal commands for various purposes, most
+commonly sending TMFs or querying the HBA status.
+While these commands use the same submission mechanism than normal
+I/O commands, they will not be counted as outstanding commands,
+requiring those drivers to implement their own mechanism to figure
+out outstanding commands.
+The block layer already has the concept of 'reserved' tags for
+precisely this purpose, namely non-I/O tags which live off a separate
+tag pool. That guarantees that these commands can always be sent,
+and won't be influenced by tag starvation from the I/O tag pool.
+This patchset enables the use of reserved tags for the SCSI midlayer
+by allocating a virtual LUN for the HBA itself which just serves
+as a resource to allocate valid tags from.
+This removes quite some hacks which were required for some
+drivers (eg. fnic or snic), and allows the use of tagset
+iterators within the drivers.
 
-v3 -> v4
-1. Cleanup.
+The entire patchset can be found at
 
-v2 -> v3
-1. Add checking input module parameter value.
-2. Change base commit from 5.8/scsi-queue to 5.9/scsi-queue.
-3. Cleanup for unused variables and label.
+git://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git reserved-tags.v5
 
-v1 -> v2
-1. Change the full boilerplate text to SPDX style.
-2. Adopt dynamic allocation for sub-region data structure.
-3. Cleanup.
+As usual, comments and reviews are welcome.
 
-NAND flash memory-based storage devices use Flash Translation Layer (FTL)
-to translate logical addresses of I/O requests to corresponding flash
-memory addresses. Mobile storage devices typically have RAM with
-constrained size, thus lack in memory to keep the whole mapping table.
-Therefore, mapping tables are partially retrieved from NAND flash on
-demand, causing random-read performance degradation.
+Changes to v4:
+- Fixup kbuild warning
+- Include reviews from Bart
 
-To improve random read performance, JESD220-3 (HPB v1.0) proposes HPB
-(Host Performance Booster) which uses host system memory as a cache for the
-FTL mapping table. By using HPB, FTL data can be read from host memory
-faster than from NAND flash memory. 
+Changes to v3:
+- Kill gdth
+- Only convert fnic, snic, hpsa, and aacraid
+- Drop command emulation for pseudo host device
+- make 'can_queue' exclude the number or reserved tags
+- Drop persistent commands proposal
+- Sanitize host device handling
 
-The current version only supports the DCM (device control mode).
-This patch consists of 4 parts to support HPB feature.
+Changes to v2:
+- Update patches from John Garry
+- Use virtual LUN as suggested by Christoph
+- Improve SCSI Host device to present a real SCSI device
+- Implement 'persistent' commands for AENs
+- Convert Megaraid SAS
 
-1) UFS-feature layer
-2) HPB probe and initialization process
-3) READ -> HPB READ using cached map information
-4) L2P (logical to physical) map management
+Changes to v1:
+- Make scsi_{get, put}_reserved_cmd() for Scsi host
+- Previously we separate scsi_{get, put}_reserved_cmd() for sdev
+  and scsi_host_get_reserved_cmd() for the host
+- Fix how Scsi_Host.can_queue is set in the virtio-scsi change
+- Drop Scsi_Host.use_reserved_cmd_q
+- Drop scsi_is_reserved_cmd()
+- Add support in libsas and associated HBA drivers
+- Allocate reserved command in slow task
+- Switch hisi_sas to use reserved Scsi command
+- Reorder the series a little
+- Some tidying
+	      
+Hannes Reinecke (22):
+  scsi: drop gdth driver
+  block: add flag for internal commands
+  scsi: add scsi_{get,put}_internal_cmd() helper
+  fnic: use internal commands
+  fnic: use scsi_host_busy_iter() to traverse commands
+  fnic: check for started requests in fnic_wq_copy_cleanup_handler()
+  csiostor: use internal command for LUN reset
+  scsi: implement reserved command handling
+  scsi: use real inquiry data when initialising devices
+  scsi: Use dummy inquiry data for the host device
+  scsi: revamp host device handling
+  snic: use reserved commands
+  snic: use tagset iter for traversing commands
+  snic: check for started requests in snic_hba_reset_cmpl_handler()
+  hpsa: move hpsa_hba_inquiry after scsi_add_host()
+  hpsa: use reserved commands
+  hpsa: use scsi_host_busy_iter() to traverse outstanding commands
+  hpsa: drop refcount field from CommandList
+  aacraid: move scsi_add_host()
+  aacraid: store target id in host_scribble
+  aacraid: use scsi_get_internal_cmd()
+  aacraid: use scsi_host_busy_iter() to traverse outstanding commands
 
-The UFS-feature is an additional layer to avoid the structure in which the
-UFS-core driver and the UFS-feature are entangled with each other in a 
-single module.
-By adding the layer, UFS-features composed of various combinations can be
-supported. Also, even if a new feature is added, modification of the 
-UFS-core driver can be minimized.
+ Documentation/kbuild/makefiles.rst                 |    4 +-
+ Documentation/process/magic-number.rst             |    2 -
+ Documentation/scsi/scsi-parameters.rst             |    3 -
+ Documentation/userspace-api/ioctl/ioctl-number.rst |    1 -
+ block/blk-exec.c                                   |    5 +
+ drivers/scsi/Kconfig                               |   14 -
+ drivers/scsi/Makefile                              |    2 -
+ drivers/scsi/aacraid/aachba.c                      |  137 +-
+ drivers/scsi/aacraid/aacraid.h                     |    9 +-
+ drivers/scsi/aacraid/commctrl.c                    |   25 +-
+ drivers/scsi/aacraid/comminit.c                    |    2 +-
+ drivers/scsi/aacraid/commsup.c                     |  106 +-
+ drivers/scsi/aacraid/dpcsup.c                      |    2 +-
+ drivers/scsi/aacraid/linit.c                       |  175 +-
+ drivers/scsi/csiostor/csio_scsi.c                  |   48 +-
+ drivers/scsi/fnic/fnic_scsi.c                      |  944 ++---
+ drivers/scsi/gdth.c                                | 4323 --------------------
+ drivers/scsi/gdth.h                                |  981 -----
+ drivers/scsi/gdth_ioctl.h                          |  251 --
+ drivers/scsi/gdth_proc.c                           |  586 ---
+ drivers/scsi/gdth_proc.h                           |   18 -
+ drivers/scsi/hpsa.c                                |  368 +-
+ drivers/scsi/hpsa.h                                |    3 +-
+ drivers/scsi/hpsa_cmd.h                            |    1 -
+ drivers/scsi/scsi_devinfo.c                        |    1 +
+ drivers/scsi/scsi_lib.c                            |   54 +-
+ drivers/scsi/scsi_scan.c                           |   96 +-
+ drivers/scsi/scsi_sysfs.c                          |    3 +-
+ drivers/scsi/snic/snic.h                           |    4 +-
+ drivers/scsi/snic/snic_main.c                      |    7 +
+ drivers/scsi/snic/snic_scsi.c                      |  525 ++-
+ include/linux/blk_types.h                          |    2 +
+ include/linux/blkdev.h                             |    5 +
+ include/scsi/scsi_device.h                         |    4 +
+ include/scsi/scsi_host.h                           |   25 +-
+ 35 files changed, 1243 insertions(+), 7493 deletions(-)
+ delete mode 100644 drivers/scsi/gdth.c
+ delete mode 100644 drivers/scsi/gdth.h
+ delete mode 100644 drivers/scsi/gdth_ioctl.h
+ delete mode 100644 drivers/scsi/gdth_proc.c
+ delete mode 100644 drivers/scsi/gdth_proc.h
 
-In the HPB probe and init process, the device information of the UFS is
-queried. After checking supported features, the data structure for the HPB
-is initialized according to the device information.
+-- 
+2.16.4
 
-A read I/O in the active sub-region where the map is cached is changed to
-HPB READ by the HPB module.
-
-The HPB module manages the L2P map using information received from the
-device. For active sub-region, the HPB module caches through ufshpb_map
-request. For the in-active region, the HPB module discards the L2P map.
-When a write I/O occurs in an active sub-region area, associated dirty
-bitmap checked as dirty for preventing stale read.
-
-HPB is shown to have a performance improvement of 58 - 67% for random read
-workload. [1]
-
-This series patches are based on the 5.9/scsi-queue branch.
-
-[1]:
-https://www.usenix.org/conference/hotstorage17/program/presentation/jeong
-
-Daejun park (5):
- scsi: ufs: Add UFS feature related parameter
- scsi: ufs: Add UFS feature layer
- scsi: ufs: Introduce HPB module
- scsi: ufs: L2P map management for HPB read
- scsi: ufs: Prepare HPB read for cached sub-region
- 
- drivers/scsi/ufs/Kconfig      |    9 +
- drivers/scsi/ufs/Makefile     |    3 +-
- drivers/scsi/ufs/ufs.h        |   12 +
- drivers/scsi/ufs/ufsfeature.c |  148 +++
- drivers/scsi/ufs/ufsfeature.h |   69 ++
- drivers/scsi/ufs/ufshcd.c     |   19 +
- drivers/scsi/ufs/ufshcd.h     |    3 +
- drivers/scsi/ufs/ufshpb.c     | 1997 ++++++++++++++++++++++++++++++++++++
- drivers/scsi/ufs/ufshpb.h     |  234 +++++
- 9 files changed, 2493 insertions(+), 1 deletion(-)
- created mode 100644 drivers/scsi/ufs/ufsfeature.c
- created mode 100644 drivers/scsi/ufs/ufsfeature.h
- created mode 100644 drivers/scsi/ufs/ufshpb.c
- created mode 100644 drivers/scsi/ufs/ufshpb.h
