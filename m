@@ -2,98 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4748F20D116
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 20:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE9920D556
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 21:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728025AbgF2SiZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 14:38:25 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:53135 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728001AbgF2SiX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 14:38:23 -0400
-Received: from mail-qv1-f46.google.com ([209.85.219.46]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1M76jv-1jkC6A0CnH-008baZ for <linux-scsi@vger.kernel.org>; Mon, 29 Jun
- 2020 20:33:21 +0200
-Received: by mail-qv1-f46.google.com with SMTP id el4so4027838qvb.13
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 11:33:20 -0700 (PDT)
-X-Gm-Message-State: AOAM530nD3k1TiR69D6pq4SzXGemm5WQ11hLUfq9AKKFaGO3lKqpj7Nl
-        O9r+0Bol2VZDhD54FtDBUOLPvOzbMfAbf/PnvTE=
-X-Google-Smtp-Source: ABdhPJzSDpLD8MbgKKoGIL6Ux78QrqGdouY4eul9JXJbC/4qbyhSrqbFGuvuRNZItvAXiQYRFMfjLWyUTaFzLxAxPcQ=
-X-Received: by 2002:a0c:f385:: with SMTP id i5mr16983132qvk.4.1593455599980;
- Mon, 29 Jun 2020 11:33:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200629161051.14943-1-bvanassche@acm.org>
-In-Reply-To: <20200629161051.14943-1-bvanassche@acm.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 29 Jun 2020 20:33:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1H0H82fp_kLDnE4=SihDO4PgB+jDiLjfmUsPfdFYXoCQ@mail.gmail.com>
-Message-ID: <CAK8P3a1H0H82fp_kLDnE4=SihDO4PgB+jDiLjfmUsPfdFYXoCQ@mail.gmail.com>
-Subject: Re: [PATCH] ch: Do not read past the end of vendor_labels[]
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Hannes Reinecke <hare@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:SLPDCTGARK4HOubfRadlVd2CtsymfVo+V+ydU7Ztm8LMlePTwrp
- 39sw2jslcsbhdoIwz1Dyjcq0uD0oGty+CWW0u+pC5NP62789Txx9hMN8+EROSTkFwZn7A5N
- WUQoF69QdobxKAAUPi8etC91ieo8jNwygqCaDlEAZ8icERD0sQ0O6w+WqbCYIP45WxqaXUC
- H8VAwnKDOeMuDRzKqg2Ow==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZHAY37N1Hrw=:h3v2aMnAHi538bsg0U4uBd
- ragPpblfZm+WDfwJe3YuILll7bSp5Tlze59TK3XvYkKnU94UDh9s+M+5cuCXz8LDhcWxuy9UH
- dA5GMnRu0KfbrSPQGDQCgFuwBau6Pj8IUWbJNOCo6oXjDaX+9WqV6JGCfpoh2QcCmfs06ryel
- hM9Sa/xLuGFikjU6x8ggFRE+sL3lwmoGj2epcHWdmuKD9X4cn97YCGyLQV0Inhbc1iFNG4DUR
- 8z+HC1JVLBoEnuLIzFLpCs7YK6qNRLCCldWaFgOinNB0G2FkBV1tJa9SAlQwKj4m4q26Mpl0U
- 24jhNvkLwfpbbKxxQP8qr1UGzYgEB+zTOUmai7fjrmqRejmIxcLDbZ6gyWGvfathch3FG38jk
- TbiZz+/QsBCH16D3QxvLZTgWrMyiDgQgPA6v1lV/2u3tDYGAP1k+I2pT5sD+IzsxE6vd1rdaL
- CcwhO8FRiRp6LQXZVGtc2BC6KyPx7k2CtCNgP6po5sVNnP/LZQOTF9bemkpiWqiIG+/vfQoQ+
- YDyzt4aRzvfzfXOQA/vRrAPEfLdpXiV0yyR5okHYdHzK2gCurXDW1sIeTwFh2zdomfQUbYmiw
- BMcLQ9h+qGm2722g+7svKv4BP/JNRqdHDiygeO8/KKdCyFWVE76wtWBC4nDJ61ukuz/gi2phT
- 3qj9Ru8iwrpCLmfIwGtypqAxRrsVSJ/SZiXVN0cF4pg/aFOjexZ6e2cK9VM7tG2IcGYb3ieM7
- Xu3M+v5uorUhEiXIgZwbRPwDIQwshWi4e+Yj0oaqaO89LSIbvoSIxPmRnmPiX3dzHLOCDauYF
- bYRl9C0SnEyjCUXpSNoypmPmqZqDcG6TLG4RFpsFnQg6XbJV6g=
+        id S1731931AbgF2TQT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:16:19 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:61295 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731940AbgF2TQS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 15:16:18 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200629061802epoutp02e3e973a80291db8dfca27a8010b3171d~c700runMW1235812358epoutp027
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 06:18:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200629061802epoutp02e3e973a80291db8dfca27a8010b3171d~c700runMW1235812358epoutp027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1593411482;
+        bh=sl56te2E5w+y7+MVKmFRXqGfvxaXPtWrxS7ZTJ1zL70=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=ZJ5WGy4r6qpkd52JqIUHik7f+OrNJmAR6ZXmCcfqNjspxNyfGQKJdlWJoMKAZUtmN
+         EfUS+ZLrTdvsmErApCqtdFoeBEJ4dvFt4cFnDhqp5T+LFOC0IybmNVqPgChPomkVyX
+         4H5TP9DerJ1UGkQL8xCjkDPcY2eb+tIYPMmDlCnI=
+Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p3.samsung.com
+        (KnoxPortal) with ESMTP id
+        20200629061802epcas1p373384546ae4abaa322ad435d0652c1a1~c700LLWgk2623326233epcas1p3-;
+        Mon, 29 Jun 2020 06:18:02 +0000 (GMT)
+Mime-Version: 1.0
+Subject: Re: [RFC PATCH v3 0/5] scsi: ufs: Add Host Performance Booster
+ Support
+Reply-To: daejun7.park@samsung.com
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Bean Huo <huobean@gmail.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <948f573d136b39410f7d610e5019aafc9c04fe62.camel@gmail.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <336371513.41593411482259.JavaMail.epsvc@epcpadp2>
+Date:   Mon, 29 Jun 2020 15:15:46 +0900
+X-CMS-MailID: 20200629061546epcms2p32cd92ff4570d6afb50bf9ee56623a53c
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20200623010201epcms2p11aebdf1fbc719b409968cba997507114
+References: <948f573d136b39410f7d610e5019aafc9c04fe62.camel@gmail.com>
+        <963815509.21592879582091.JavaMail.epsvc@epcpadp2>
+        <CGME20200623010201epcms2p11aebdf1fbc719b409968cba997507114@epcms2p3>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 6:11 PM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> This patch fixes the following gcc 10 compiler error:
->
-> In function 'memcpy',
->     inlined from 'ch_ioctl' at drivers/scsi/ch.c:666:4:
-> ./include/linux/string.h:377:4: error: call to '__read_overflow2' declared with attribute error: detected read beyond size of object passed as 2nd parameter
->   377 |    __read_overflow2();
->       |    ^~~~~~~~~~~~~~~~~~
->
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/ch.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/scsi/ch.c b/drivers/scsi/ch.c
-> index b81b397366db..b675a01380eb 100644
-> --- a/drivers/scsi/ch.c
-> +++ b/drivers/scsi/ch.c
-> @@ -651,19 +651,23 @@ static long ch_ioctl(struct file *file,
->                 memset(&vparams,0,sizeof(vparams));
->                 if (ch->counts[CHET_V1]) {
->                         vparams.cvp_n1  = ch->counts[CHET_V1];
-> -                       memcpy(vparams.cvp_label1,vendor_labels[0],16);
-> +                       strncpy(vparams.cvp_label1, vendor_labels[0],
-> +                               ARRAY_SIZE(vparams.cvp_label1));
->                 }
+> Seems you intentionally ignored to give you comments on my suggestion.
+> let me provide the reason.
+Sorry! I replied to your comment (https://lkml.org/lkml/2020/6/15/1492),
+but you didn't reply on that. I thought you agreed because you didn't send
+any more comments.
 
-Against which tree is this? I see in mainline the correct
 
-      strncpy(vparams.cvp_label1,vendor_labels[0],16);
+> Before submitting your next version patch, please check your L2P
+> mapping HPB reqeust submission logical algorithem. I have did
+We are also reviewing the code that you submitted before.
+It seems to be a performance improvement as it sends a map request directly.
 
-rather than the broken memcpy. If this was changed recently to the
-broken version, maybe send a revert, or add a "Fixes" tag?
+> performance comparison testing on 4KB, there are about 13% performance
+> drop. Also the hit count is lower. I don't know if this is related to
+It is interesting that there is actually a performance improvement. 
+Could you share the test environment, please? However, I think stability is
+important to HPB driver. We have tested our method with the real products and
+the HPB 1.0 driver is based on that.
+After this patch, your approach can be done as an incremental patch? I would
+like to test the patch that you submitted and verify it.
 
-        Arnd
+> your current work queue scheduling, since you didn't add the timer for
+> each HPB request.
+There was Bart's comment that it was not good add an arbitrary timeout value
+to the request. (please refer to: https://lkml.org/lkml/2020/6/11/1043)
+When no timer is added to the request, the SD timout will be set as default
+timeout at the block layer.
+
+Thanks,
+Daejun
