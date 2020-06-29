@@ -2,208 +2,179 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4594220D4D1
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 21:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED1F20D48E
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jun 2020 21:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731056AbgF2TL0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 15:11:26 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53584 "EHLO mx2.suse.de"
+        id S1730781AbgF2TJc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 15:09:32 -0400
+Received: from comms.puri.sm ([159.203.221.185]:42786 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730446AbgF2TLZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:11:25 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 8801BB122;
-        Mon, 29 Jun 2020 07:20:56 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Bart van Assche <bvanassche@acm.org>,
-        Don Brace <don.brace@microchip.com>,
-        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
-        Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 20/22] aacraid: store target id in host_scribble
-Date:   Mon, 29 Jun 2020 09:20:19 +0200
-Message-Id: <20200629072021.9864-21-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200629072021.9864-1-hare@suse.de>
-References: <20200629072021.9864-1-hare@suse.de>
+        id S1730752AbgF2TJb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:09:31 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id D1311DFFEA;
+        Mon, 29 Jun 2020 02:43:03 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6AjvMKkxQc8S; Mon, 29 Jun 2020 02:43:03 -0700 (PDT)
+Subject: Re: [PATCH] scsi: sd: add runtime pm to open / release
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     jejb@linux.ibm.com, Can Guo <cang@codeaurora.org>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@puri.sm
+References: <20200623111018.31954-1-martin.kepplinger@puri.sm>
+ <ed9ae198-4c68-f82b-04fc-2299ab16df96@acm.org>
+ <eccacce9-393c-ca5d-e3b3-09961340e0db@puri.sm>
+ <1379e21d-c51a-3710-e185-c2d7a9681fb7@acm.org>
+ <20200626154441.GA296771@rowland.harvard.edu>
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
+ 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
+ ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
+Message-ID: <c19f1938-ae47-2357-669d-5b4021aec154@puri.sm>
+Date:   Mon, 29 Jun 2020 11:42:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+In-Reply-To: <20200626154441.GA296771@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The probe_container mechanism requires a target id to be present,
-even if the device itself isn't present (yet).
-As we're now allocating internal commands the target id of the
-device is immutable, so store the requested target id in the
-host_scribble field.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/aacraid/aachba.c | 53 +++++++++++++++++++++++++++++++------------
- 1 file changed, 38 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 2b868f8db8ff..e1ba5e65a66f 100644
---- a/drivers/scsi/aacraid/aachba.c
-+++ b/drivers/scsi/aacraid/aachba.c
-@@ -608,9 +608,11 @@ static int aac_get_container_name(struct scsi_cmnd * scsicmd)
- 
- static int aac_probe_container_callback2(struct scsi_cmnd * scsicmd)
- {
--	struct fsa_dev_info *fsa_dev_ptr = ((struct aac_dev *)(scsicmd->device->host->hostdata))->fsa_dev;
-+	struct aac_dev *dev = (struct aac_dev *)(scsicmd->device->host->hostdata);
-+	struct fsa_dev_info *fsa_dev_ptr = dev->fsa_dev;
- 
--	if ((fsa_dev_ptr[scmd_id(scsicmd)].valid & 1))
-+	if (scmd_id(scsicmd) < dev->maximum_num_containers &&
-+	    (fsa_dev_ptr[scmd_id(scsicmd)].valid & 1))
- 		return aac_scsi_cmd(scsicmd);
- 
- 	scsicmd->result = DID_NO_CONNECT << 16;
-@@ -623,6 +625,7 @@ static void _aac_probe_container2(void * context, struct fib * fibptr)
- 	struct fsa_dev_info *fsa_dev_ptr;
- 	int (*callback)(struct scsi_cmnd *);
- 	struct scsi_cmnd * scsicmd = (struct scsi_cmnd *)context;
-+	int cid = scmd_id(scsicmd);
- 	int i;
- 
- 
-@@ -630,12 +633,15 @@ static void _aac_probe_container2(void * context, struct fib * fibptr)
- 		return;
- 
- 	scsicmd->SCp.Status = 0;
-+	if (scsicmd->host_scribble)
-+		cid = *(int *)scsicmd->host_scribble;
-+
- 	fsa_dev_ptr = fibptr->dev->fsa_dev;
--	if (fsa_dev_ptr) {
-+	if (fsa_dev_ptr && cid < fibptr->dev->maximum_num_containers) {
- 		struct aac_mount * dresp = (struct aac_mount *) fib_data(fibptr);
- 		__le32 sup_options2;
- 
--		fsa_dev_ptr += scmd_id(scsicmd);
-+		fsa_dev_ptr += cid;
- 		sup_options2 =
- 			fibptr->dev->supplement_adapter_info.supported_options2;
- 
-@@ -670,7 +676,6 @@ static void _aac_probe_container2(void * context, struct fib * fibptr)
- 		scsicmd->SCp.Status = le32_to_cpu(dresp->count);
- 	}
- 	aac_fib_complete(fibptr);
--	aac_fib_free(fibptr);
- 	callback = (int (*)(struct scsi_cmnd *))(scsicmd->SCp.ptr);
- 	scsicmd->SCp.ptr = NULL;
- 	(*callback)(scsicmd);
-@@ -682,6 +687,7 @@ static void _aac_probe_container1(void * context, struct fib * fibptr)
- 	struct scsi_cmnd * scsicmd;
- 	struct aac_mount * dresp;
- 	struct aac_query_mount *dinfo;
-+	int cid;
- 	int status;
- 
- 	dresp = (struct aac_mount *) fib_data(fibptr);
-@@ -694,10 +700,15 @@ static void _aac_probe_container1(void * context, struct fib * fibptr)
- 		}
- 	}
- 	scsicmd = (struct scsi_cmnd *) context;
--
- 	if (!aac_valid_context(scsicmd, fibptr))
- 		return;
--
-+	cid = scmd_id(scsicmd);
-+	if (scsicmd->host_scribble)
-+		cid = *(int *)scsicmd->host_scribble;
-+	if (cid >= fibptr->dev->maximum_num_containers) {
-+		_aac_probe_container2(context, fibptr);
-+		return;
-+	}
- 	aac_fib_init(fibptr);
- 
- 	dinfo = (struct aac_query_mount *)fib_data(fibptr);
-@@ -708,7 +719,7 @@ static void _aac_probe_container1(void * context, struct fib * fibptr)
- 	else
- 		dinfo->command = cpu_to_le32(VM_NameServe64);
- 
--	dinfo->count = cpu_to_le32(scmd_id(scsicmd));
-+	dinfo->count = cpu_to_le32(cid);
- 	dinfo->type = cpu_to_le32(FT_FILESYS);
- 	scsicmd->SCp.phase = AAC_OWNER_FIRMWARE;
- 
-@@ -731,10 +742,20 @@ static void _aac_probe_container1(void * context, struct fib * fibptr)
- 
- static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(struct scsi_cmnd *))
- {
-+	struct aac_dev * dev;
- 	struct fib * fibptr;
- 	int status = -ENOMEM;
-+	int cid = scmd_id(scsicmd);
- 
--	if ((fibptr = aac_fib_alloc((struct aac_dev *)scsicmd->device->host->hostdata))) {
-+	dev = (struct aac_dev *)scsicmd->device->host->hostdata;
-+	if (scsicmd->host_scribble) {
-+		cid = *(int *)scsicmd->host_scribble;
-+		if (cid > dev->maximum_num_containers) {
-+			status = -ENODEV;
-+			goto out_status;
-+		}
-+	}
-+	if ((fibptr = aac_fib_alloc(dev))) {
- 		struct aac_query_mount *dinfo;
- 
- 		aac_fib_init(fibptr);
-@@ -747,7 +768,7 @@ static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(stru
- 		else
- 			dinfo->command = cpu_to_le32(VM_NameServe);
- 
--		dinfo->count = cpu_to_le32(scmd_id(scsicmd));
-+		dinfo->count = cpu_to_le32(cid);
- 		dinfo->type = cpu_to_le32(FT_FILESYS);
- 		scsicmd->SCp.ptr = (char *)callback;
- 		scsicmd->SCp.phase = AAC_OWNER_FIRMWARE;
-@@ -771,10 +792,11 @@ static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(stru
- 			aac_fib_free(fibptr);
- 		}
- 	}
-+out_status:
- 	if (status < 0) {
--		struct fsa_dev_info *fsa_dev_ptr = ((struct aac_dev *)(scsicmd->device->host->hostdata))->fsa_dev;
--		if (fsa_dev_ptr) {
--			fsa_dev_ptr += scmd_id(scsicmd);
-+		struct fsa_dev_info *fsa_dev_ptr = dev->fsa_dev;
-+		if (fsa_dev_ptr && cid < dev->maximum_num_containers) {
-+			fsa_dev_ptr += cid;
- 			if ((fsa_dev_ptr->valid & 1) == 0) {
- 				fsa_dev_ptr->valid = 0;
- 				return (*callback)(scsicmd);
-@@ -794,7 +816,7 @@ static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(stru
-  */
- static int aac_probe_container_callback1(struct scsi_cmnd * scsicmd)
- {
--	scsicmd->device = NULL;
-+	scsicmd->host_scribble = NULL;
- 	return 0;
- }
- 
-@@ -815,6 +837,7 @@ int aac_probe_container(struct aac_dev *dev, int cid)
- 		return -ENOMEM;
- 	}
- 	scsicmd->scsi_done = aac_probe_container_scsi_done;
-+	scsicmd->host_scribble = (unsigned char *)&cid;
- 
- 	scsicmd->device = scsidev;
- 	scsidev->sdev_state = 0;
-@@ -822,7 +845,7 @@ int aac_probe_container(struct aac_dev *dev, int cid)
- 	scsidev->host = dev->scsi_host_ptr;
- 
- 	if (_aac_probe_container(scsicmd, aac_probe_container_callback1) == 0)
--		while (scsicmd->device == scsidev)
-+		while (scsicmd->host_scribble == (unsigned char *)&cid)
- 			schedule();
- 	kfree(scsidev);
- 	status = scsicmd->SCp.Status;
--- 
-2.16.4
+On 26.06.20 17:44, Alan Stern wrote:
+> On Fri, Jun 26, 2020 at 08:07:51AM -0700, Bart Van Assche wrote:
+>> On 2020-06-25 01:16, Martin Kepplinger wrote:
+>>> here's roughly what happens when enabling runtime PM in sysfs (again,
+>>> because sd_probe() calls autopm_put() and thus allows it:
+>>>
+>>> [   27.384446] sd 0:0:0:0: scsi_runtime_suspend
+>>> [   27.432282] blk_pre_runtime_suspend
+>>> [   27.435783] sd_suspend_common
+>>> [   27.438782] blk_post_runtime_suspend
+>>> [   27.442427] scsi target0:0:0: scsi_runtime_suspend
+>>> [   27.447303] scsi host0: scsi_runtime_suspend
+>>>
+>>> then I "mount /dev/sda1 /mnt" and none of the resume() functions get
+>>> called. To me it looks like the sd driver should initiate resuming, and
+>>> that's not implemented.
+>>>
+>>> what am I doing wrong or overlooking? how exactly does (or should) the
+>>> block layer initiate resume here?
+>>
+>> As far as I know runtime power management support in the sd driver is working
+>> fine and is being used intensively by the UFS driver. The following commit was
+>> submitted to fix a bug encountered by an UFS developer: 05d18ae1cc8a ("scsi:
+>> pm: Balance pm_only counter of request queue during system resume") # v5.7.
+> 
+> I just looked at that commit for the first time.
+> 
+> Instead of making the SCSI driver do the work of deciding what routine to 
+> call, why not redefine blk_set_runtime_active(q) to simply call 
+> blk_post_runtime_resume(q, 0)?  Or vice versa: if err == 0 have 
+> blk_post_runtime_resume call blk_set_runtime_active?
+> 
+> After all, the two routines do almost the same thing -- and the bug 
+> addressed by this commit was caused by the difference in their behaviors.
+> 
+> If the device was already runtime-active during the system suspend, doing 
+> an extra clear of the pm_only counter won't hurt anything.
+> 
+>> I'm not sure which bug is causing trouble on your setup but I think it's likely
+>> that the root cause is somewhere else than in the block layer, the SCSI core
+>> or the SCSI sd driver.
+>>
+>> Bart.
+> 
+> Martin's best approach would be to add some debugging code to find out why 
+> blk_queue_enter() isn't calling bkl_pm_request_resume(), or why that call 
+> doesn't lead to pm_request_resume().
+> 
+> Alan Stern
+> 
 
+Hi Alan,
+
+blk_queue_enter() always - especially when sd is runtime suspended and I
+try to mount as above - sets success to be true for me, so never
+continues down to bkl_pm_request_resume(). All I see is "PM: Removing
+info for No Bus:sda1".
+
+thanks,
+                                martin
