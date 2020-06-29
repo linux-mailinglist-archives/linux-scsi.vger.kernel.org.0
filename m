@@ -2,70 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE0720E884
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 00:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D7C20E5FB
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 00:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731644AbgF2WLL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jun 2020 18:11:11 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2415 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726129AbgF2WLK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jun 2020 18:11:10 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 993DB76561ED7D5AD258;
-        Mon, 29 Jun 2020 15:25:46 +0100 (IST)
-Received: from [127.0.0.1] (10.210.170.8) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 29 Jun
- 2020 15:25:45 +0100
-Subject: Re: [PATCH 03/22] scsi: add scsi_{get,put}_internal_cmd() helper
-To:     Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Don Brace <don.brace@microchip.de>,
-        <linux-scsi@vger.kernel.org>
-References: <20200625140124.17201-1-hare@suse.de>
- <20200625140124.17201-4-hare@suse.de>
- <863b7da2-bbfc-a32f-87ab-648f8561314c@acm.org>
- <7a52763c-eb51-7c63-8d06-b0cc2eab6630@suse.de>
- <e5964b6d-43c1-a14d-c791-4b5826eb2ee8@acm.org>
- <9793e936-cf51-2d6a-fccd-4a4b9c8cae02@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <9a9c6f92-8653-138b-f00b-91a3117bc9e1@huawei.com>
-Date:   Mon, 29 Jun 2020 15:24:11 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S2403977AbgF2Vn1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jun 2020 17:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727856AbgF2Sht (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jun 2020 14:37:49 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F69DC0307BF
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 09:10:58 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id d4so8513181pgk.4
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jun 2020 09:10:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RlQWlBCNOVUz5rnKN/A0l9ccTp1Tr+uhfNqQfaAVD3w=;
+        b=sa+I3ptICK2ncSZ3O3v5a7/fy1hIESZWgxAqkYg+kmo1XD9J1Owx3yZT58CXFtsUWy
+         TX89W3NV/YDY/foqSmbzMOlN5VUiczsz9OlWBLovPx2rJ2NNyeGXnN+8gr3aXE3DzVr5
+         /OIaxKO3dAAzV4CwP58RpM0QE0hCYvgUoXB0llC9wO0AXg4UYIZHNkvkuO1UbcndhhPO
+         NJn+foz5B5IKC2+jvdkbHsMZw80Yo4/9K3g/N2zniVBLLAdM82n2b85ctUmD81lKjHym
+         RGB/IlsTLmoW1ujdJGE29EElsm1rrOi1JLsrb7v2kVSHq3zrPY3RBFmKcaTd3Di3ZG5O
+         sy8A==
+X-Gm-Message-State: AOAM531U4R18aibFl//haPAwwExnl6SnGVrGXqWPsk7WsgkoE758EIxU
+        QBrK8A4kHmYbeYj3qbsFTEU=
+X-Google-Smtp-Source: ABdhPJz9aDksWYFvkX5t3mASZH1UeQfv+Qrn8X07syxTLUSuwZarzCkzTAchWvAJeMlBgVqnaEJBNQ==
+X-Received: by 2002:a65:4908:: with SMTP id p8mr10823336pgs.214.1593447057702;
+        Mon, 29 Jun 2020 09:10:57 -0700 (PDT)
+Received: from localhost.localdomain (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id 199sm238328pgc.79.2020.06.29.09.10.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 09:10:56 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.de>, Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] ch: Do not read past the end of vendor_labels[]
+Date:   Mon, 29 Jun 2020 09:10:51 -0700
+Message-Id: <20200629161051.14943-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <9793e936-cf51-2d6a-fccd-4a4b9c8cae02@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.170.8]
-X-ClientProxiedBy: lhreml715-chm.china.huawei.com (10.201.108.66) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 29/06/2020 07:32, Hannes Reinecke wrote:
->>
->> That sounds fair to me, but is an example available in this patch series
->> of a call to scsi_put_internal_cmd() from such a common routine? It
->> seems to me that all calls to scsi_put_internal_cmd() introduced in this
->> patch series happen from code paths that handle internal commands only?
->>
+This patch fixes the following gcc 10 compiler error:
 
-Ah, I commented on the same thing in your latest series.
+In function 'memcpy',
+    inlined from 'ch_ioctl' at drivers/scsi/ch.c:666:4:
+./include/linux/string.h:377:4: error: call to '__read_overflow2' declared with attribute error: detected read beyond size of object passed as 2nd parameter
+  377 |    __read_overflow2();
+      |    ^~~~~~~~~~~~~~~~~~
 
-> aacraid.
-> The function aac_fib_free() is called unconditionally for every fib, and 
-> doesn't have the means to differentiate between 'normal' and 'internal' 
-> commands.
-> 
-Surely some fib structure flag could be set in aac_fib_alloc() for this.
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/ch.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Thanks
+diff --git a/drivers/scsi/ch.c b/drivers/scsi/ch.c
+index b81b397366db..b675a01380eb 100644
+--- a/drivers/scsi/ch.c
++++ b/drivers/scsi/ch.c
+@@ -651,19 +651,23 @@ static long ch_ioctl(struct file *file,
+ 		memset(&vparams,0,sizeof(vparams));
+ 		if (ch->counts[CHET_V1]) {
+ 			vparams.cvp_n1  = ch->counts[CHET_V1];
+-			memcpy(vparams.cvp_label1,vendor_labels[0],16);
++			strncpy(vparams.cvp_label1, vendor_labels[0],
++				ARRAY_SIZE(vparams.cvp_label1));
+ 		}
+ 		if (ch->counts[CHET_V2]) {
+ 			vparams.cvp_n2  = ch->counts[CHET_V2];
+-			memcpy(vparams.cvp_label2,vendor_labels[1],16);
++			strncpy(vparams.cvp_label2, vendor_labels[1],
++				ARRAY_SIZE(vparams.cvp_label2));
+ 		}
+ 		if (ch->counts[CHET_V3]) {
+ 			vparams.cvp_n3  = ch->counts[CHET_V3];
+-			memcpy(vparams.cvp_label3,vendor_labels[2],16);
++			strncpy(vparams.cvp_label3, vendor_labels[2],
++				ARRAY_SIZE(vparams.cvp_label3));
+ 		}
+ 		if (ch->counts[CHET_V4]) {
+ 			vparams.cvp_n4  = ch->counts[CHET_V4];
+-			memcpy(vparams.cvp_label4,vendor_labels[3],16);
++			strncpy(vparams.cvp_label4, vendor_labels[3],
++				ARRAY_SIZE(vparams.cvp_label4));
+ 		}
+ 		if (copy_to_user(argp, &vparams, sizeof(vparams)))
+ 			return -EFAULT;
