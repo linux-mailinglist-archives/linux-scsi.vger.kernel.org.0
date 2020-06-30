@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C4420FF7A
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 23:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046A220FF7B
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 23:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729913AbgF3VuY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jun 2020 17:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S1729920AbgF3VuZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jun 2020 17:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726737AbgF3VuW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 17:50:22 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42343C061755
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Jun 2020 14:50:22 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id j18so20213039wmi.3
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Jun 2020 14:50:22 -0700 (PDT)
+        with ESMTP id S1726737AbgF3VuY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 17:50:24 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578E2C061755
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jun 2020 14:50:24 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id b6so21608698wrs.11
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jun 2020 14:50:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=42LZs8EO5buLaZnWw8fHdiS056ty+TQBSCdhfIgXg0w=;
-        b=rJLX6yCzASf7MZe+0D9ECK8zaUyNKAzD+uP+UDA0GjIYjYUsrs4a4kcuq9O/EHm5/V
-         sAPsyyMN4ITSbtgDhZjZWMOLA537BbAiK1I4CkZI3E66214yYYP7iLhWn3Sedu+i7jUJ
-         REL23pXb/pib2IzLc9vSre2J0nSxnrmaHYD78jC5sOtuqiveWkAy0BL5rlPYqeELK6JG
-         I6YsEzntD2/JCUqe2AcZb1kteILDkD4df9OUlfSSP9dcfPJygb59CUhKEazOoCjzpyPw
-         ki7RGSBxxUppjat5qThc58X/JNT9B7zbr11qOQU7sNjbsNke0MMnsEHGK4sKVQufOl+P
-         hKuA==
+        bh=Ysgs5bsJN9inpx5kdO0t8Nt9sp2AOD+EjZnVp499QBk=;
+        b=ZeEViz+zpJqh6Kl1dgTdSW94ew7UAQ7G6Kq8vSA47IY6gKjdz499QU//MohcmP3fmC
+         I0lGROHzzvS4gNhB7nNahO8lUgAbRg68+ymVYoVmYe0bKeS7EIJndFvIw1gGGvB//3FR
+         /S0Vi6+O/GZcniwfYmt9f/x+AS/hlA0OzoQHMDwF0nJesSOys//EkCB906rmP300lMmt
+         ACtCGv7ejGBZ4wekafO4bp/M6QqlN6904nFIqwX/XJ/1pR3O+S3HguwoMGBGlxkE4Vd4
+         7VfXvsLM5e0VYjR/FUn3wAnX/668pGMr25m0uUYR1VktAhqC8fhyXzIndjWtVvT7MNCr
+         yEKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=42LZs8EO5buLaZnWw8fHdiS056ty+TQBSCdhfIgXg0w=;
-        b=LZwgd9Pf11wp6sZsO236fK54vx+D7Yl8uEVJawRvYd6Z41ieTSeFQofkmSPAkYLEcI
-         O7AWl31KnIE75AfnJWHyQ/5BnvlciLkiRrw/QsN7s9bIjIciJ1r2zQ8mvl8VIRxsG2uG
-         c5GqazcSTkehD0tp/Vz1OG7A4cvT6R3ZOxRygDmkpETQ5OSF/mo2DfLStv+1t/K/KDbw
-         Damz2MvYKWwAKK8mmY6KbHlIhlRj2IjIPrnRJYQ8eMp167/ZPQyMtk7LjKti9Xrbuh0x
-         EcEKuy028R9fl/1LNNP1GAlKh0tqym4acdaVDz9vfpPL2fsS/pXo9hKkjbArbn0Lzyqa
-         DMCg==
-X-Gm-Message-State: AOAM530AAVT68I+s5mK5d6BAtrurBWPnLXn0syqdoSfXXUC9bpeWUcfq
-        l3i6vtCVL3yzLXY5mgm/Jdz7h5pX
-X-Google-Smtp-Source: ABdhPJyu1Qb1fBLXHWxYfQP+3UkTzSHzvipDiENiSgfDTGzNK4TtFVSOarbq90kJLfUClk1heNroqg==
-X-Received: by 2002:a05:600c:2f17:: with SMTP id r23mr22353653wmn.167.1593553819475;
-        Tue, 30 Jun 2020 14:50:19 -0700 (PDT)
+        bh=Ysgs5bsJN9inpx5kdO0t8Nt9sp2AOD+EjZnVp499QBk=;
+        b=ugaxyEcJVJQSwohNF0VlYhGJ4IZdmL2nFdPhx6MbtPDo/azof5Qm7CcEqO0xfO9/3W
+         S+dImmC3cCaXUhsBA9RIweKB3BjEaCJx8I/qaTyA+R4b96X6WnU6MeKxRdugIMj5zl/s
+         rFNgiWIj4NlbxIRGx1srUaNVrEPFAy9zcC5vaGABnNP9j+oPPk9/zRatfqKRColaNtc8
+         iRFFgCOVNT9EmUnfIDBLOyV9HNXfH7sNM7SLBhsQOxK7l+MvGzyxf/hdHi0hDzKzSPEp
+         Fmw4Fz/GGYtY0z6rW3D1dsSUHMNOQmjvyXDMXuX/61/NEsmerKVLi5t0EXloKh3KUHdO
+         GKDg==
+X-Gm-Message-State: AOAM530JdafCfdXZ79aKWvuSrhu3KRahTWAjLVCSVXUwo4IPAtP2YssO
+        Ymwgk1fenEm7+wT66ctDwTfvKDEn
+X-Google-Smtp-Source: ABdhPJyIk70c9+tUvsHUaFKH9FfSd6Lq08QenZbJvA7V2V8WT80mWs/FPWvUXwinbVa7trMKKNibTQ==
+X-Received: by 2002:adf:f608:: with SMTP id t8mr23974578wrp.308.1593553821225;
+        Tue, 30 Jun 2020 14:50:21 -0700 (PDT)
 Received: from localhost.localdomain.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f14sm5518551wro.90.2020.06.30.14.50.17
+        by smtp.gmail.com with ESMTPSA id f14sm5518551wro.90.2020.06.30.14.50.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2020 14:50:18 -0700 (PDT)
+        Tue, 30 Jun 2020 14:50:20 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 05/14] lpfc: Fix oops due to overrun when reading SLI3 data
-Date:   Tue, 30 Jun 2020 14:49:52 -0700
-Message-Id: <20200630215001.70793-6-jsmart2021@gmail.com>
+Subject: [PATCH 06/14] lpfc: Fix stack trace seen while setting rrq active
+Date:   Tue, 30 Jun 2020 14:49:53 -0700
+Message-Id: <20200630215001.70793-7-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200630215001.70793-1-jsmart2021@gmail.com>
 References: <20200630215001.70793-1-jsmart2021@gmail.com>
@@ -64,80 +64,57 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When using DUMP on SLI3 to read VPD and Port status data (config region
-23), the adapter is overruning the kmalloc'd buffer causing havoc on
-other consumers of the allocation pools.
+Call traces have been observed running different tests that involve aborts
+and setting the rrq active flag.  The lpfc_set_rrq_active routine is doing
+a mempool_alloc under the soft_irq processing level. When the mempool needs
+to get a new buffer from the free pool and has to wait for memory to become
+free it will check the flags passed in on the alloc and dump the stack if
+the thread is running in interrupt context.
 
-Rework the loops processing the dump data and validate/size memory lengths
-before performing bcopy's.
+Replace the GFP_KERNEL flag with GFP_ATOMIC so that the memory allocation
+will not attempt to sleep if there is no mem available.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 14 ++++++++------
- drivers/scsi/lpfc/lpfc_sli.c  | 14 +++++++-------
- 2 files changed, 15 insertions(+), 13 deletions(-)
+ drivers/scsi/lpfc/lpfc_mem.c | 3 ++-
+ drivers/scsi/lpfc/lpfc_sli.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 69a5249e007a..287a78185dc7 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -253,13 +253,15 @@ lpfc_config_port_prep(struct lpfc_hba *phba)
- 		 */
- 		if (mb->un.varDmp.word_cnt == 0)
- 			break;
--		if (mb->un.varDmp.word_cnt > DMP_VPD_SIZE - offset)
--			mb->un.varDmp.word_cnt = DMP_VPD_SIZE - offset;
-+
-+		i =  mb->un.varDmp.word_cnt * sizeof(uint32_t);
-+		if (offset + i >  DMP_VPD_SIZE)
-+			i =  DMP_VPD_SIZE - offset;
- 		lpfc_sli_pcimem_bcopy(((uint8_t *)mb) + DMP_RSP_OFFSET,
--				      lpfc_vpd_data + offset,
--				      mb->un.varDmp.word_cnt);
--		offset += mb->un.varDmp.word_cnt;
--	} while (mb->un.varDmp.word_cnt && offset < DMP_VPD_SIZE);
-+				      lpfc_vpd_data  + offset, i);
-+		offset += i;
-+	} while (offset < DMP_VPD_SIZE);
-+
- 	lpfc_parse_vpd(phba, lpfc_vpd_data, offset);
+diff --git a/drivers/scsi/lpfc/lpfc_mem.c b/drivers/scsi/lpfc/lpfc_mem.c
+index 726f6619230f..e8c0066eb4aa 100644
+--- a/drivers/scsi/lpfc/lpfc_mem.c
++++ b/drivers/scsi/lpfc/lpfc_mem.c
+@@ -45,6 +45,7 @@
+ #define LPFC_MBUF_POOL_SIZE     64      /* max elements in MBUF safety pool */
+ #define LPFC_MEM_POOL_SIZE      64      /* max elem in non-DMA safety pool */
+ #define LPFC_DEVICE_DATA_POOL_SIZE 64   /* max elements in device data pool */
++#define LPFC_RRQ_POOL_SIZE	256	/* max elements in non-DMA  pool */
  
- 	kfree(lpfc_vpd_data);
+ int
+ lpfc_mem_alloc_active_rrq_pool_s4(struct lpfc_hba *phba) {
+@@ -121,7 +122,7 @@ lpfc_mem_alloc(struct lpfc_hba *phba, int align)
+ 
+ 	if (phba->sli_rev == LPFC_SLI_REV4) {
+ 		phba->rrq_pool =
+-			mempool_create_kmalloc_pool(LPFC_MEM_POOL_SIZE,
++			mempool_create_kmalloc_pool(LPFC_RRQ_POOL_SIZE,
+ 						sizeof(struct lpfc_node_rrq));
+ 		if (!phba->rrq_pool)
+ 			goto fail_free_nlp_mem_pool;
 diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 3c61a6d72a1a..c598bef5cad4 100644
+index c598bef5cad4..c439cf9a82c7 100644
 --- a/drivers/scsi/lpfc/lpfc_sli.c
 +++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -19347,7 +19347,7 @@ lpfc_sli_get_config_region23(struct lpfc_hba *phba, char *rgn23_data)
- 	LPFC_MBOXQ_t *pmb = NULL;
- 	MAILBOX_t *mb;
- 	uint32_t offset = 0;
--	int rc;
-+	int i, rc;
+@@ -1079,7 +1079,7 @@ lpfc_set_rrq_active(struct lpfc_hba *phba, struct lpfc_nodelist *ndlp,
+ 		goto out;
  
- 	if (!rgn23_data)
- 		return 0;
-@@ -19377,14 +19377,14 @@ lpfc_sli_get_config_region23(struct lpfc_hba *phba, char *rgn23_data)
- 		 */
- 		if (mb->un.varDmp.word_cnt == 0)
- 			break;
--		if (mb->un.varDmp.word_cnt > DMP_RGN23_SIZE - offset)
--			mb->un.varDmp.word_cnt = DMP_RGN23_SIZE - offset;
- 
-+		i =  mb->un.varDmp.word_cnt * sizeof(uint32_t);
-+		if (offset + i >  DMP_RGN23_SIZE)
-+			i =  DMP_RGN23_SIZE - offset;
- 		lpfc_sli_pcimem_bcopy(((uint8_t *)mb) + DMP_RSP_OFFSET,
--				       rgn23_data + offset,
--				       mb->un.varDmp.word_cnt);
--		offset += mb->un.varDmp.word_cnt;
--	} while (mb->un.varDmp.word_cnt && offset < DMP_RGN23_SIZE);
-+				      rgn23_data  + offset, i);
-+		offset += i;
-+	} while (offset < DMP_RGN23_SIZE);
- 
- 	mempool_free(pmb, phba->mbox_mem_pool);
- 	return offset;
+ 	spin_unlock_irqrestore(&phba->hbalock, iflags);
+-	rrq = mempool_alloc(phba->rrq_pool, GFP_KERNEL);
++	rrq = mempool_alloc(phba->rrq_pool, GFP_ATOMIC);
+ 	if (!rrq) {
+ 		lpfc_printf_log(phba, KERN_INFO, LOG_SLI,
+ 				"3155 Unable to allocate RRQ xri:0x%x rxid:0x%x"
 -- 
 2.25.0
 
