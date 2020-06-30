@@ -2,100 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B04121006C
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 01:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DE821007D
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 01:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726346AbgF3XcC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jun 2020 19:32:02 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:35871 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726245AbgF3XcC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 19:32:02 -0400
-Received: by mail-pj1-f67.google.com with SMTP id h22so10200526pjf.1;
-        Tue, 30 Jun 2020 16:32:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=D4bNFQKvTqaRlrQMzRLTGcVLE92xZT7rS/otpfCsklU=;
-        b=BTgI41VCkM9PnVYtwnak5EaI6tQpsig9M27hQdnrJMTZWhHZZEtnZcw5fuMFu8Kh1n
-         dr+MUKlAtTzkwp9xflZCFDIdrI8emLrStOsHHyv3/m/mVnx6otVH+HA380k/b9eLdV3b
-         Vkrz0tBs/CiJYrA9pyYWK20ddPtzXnQGH+teo2t6RhfAqT6/feQ7dLFJwQQN5KIGAh8K
-         GvzDbPybCGkx7ZlIBDb3gJ9HOx0qlZ8q9NmIJqpoVb8nRVIjqMqVQVpgd1GUUt81+ZkD
-         Bq5XlkZA4bBj4IBMMcZxivyhZafwWiyUo4Q1GPP1Wr35ZavB4IovGcqoSybT+/sP37kw
-         MXxA==
-X-Gm-Message-State: AOAM533ZrzWPpaURijuIBYgungWINK7z23kKlZHI6WgmFkWW0YqJHoGq
-        O0w5mVxTqIwOHX675n0JiFEp9vSl
-X-Google-Smtp-Source: ABdhPJw8ZgO5iG258LcTHKSCDYOYGHhhsLRF4CJU9MnZ+JpUwEU39ckwQBr4f6PsWnCodMm2uWUfiw==
-X-Received: by 2002:a17:90b:213:: with SMTP id fy19mr24131066pjb.41.1593559921165;
-        Tue, 30 Jun 2020 16:32:01 -0700 (PDT)
-Received: from [192.168.50.147] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id w6sm3141299pjy.15.2020.06.30.16.31.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2020 16:32:00 -0700 (PDT)
-Subject: Re: [PATCH] scsi: sd: add runtime pm to open / release
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>, jejb@linux.ibm.com,
-        Can Guo <cang@codeaurora.org>, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-References: <20200623111018.31954-1-martin.kepplinger@puri.sm>
- <ed9ae198-4c68-f82b-04fc-2299ab16df96@acm.org>
- <eccacce9-393c-ca5d-e3b3-09961340e0db@puri.sm>
- <1379e21d-c51a-3710-e185-c2d7a9681fb7@acm.org>
- <20200626154441.GA296771@rowland.harvard.edu>
- <c19f1938-ae47-2357-669d-5b4021aec154@puri.sm>
- <20200629161536.GA405175@rowland.harvard.edu>
- <5231c57d-3f4e-1853-d4d5-cf7f04a32246@acm.org>
- <20200630180255.GA459638@rowland.harvard.edu>
- <1804723c-4aaf-a820-d3ef-e70125017cad@acm.org>
- <20200630193802.GA463609@rowland.harvard.edu>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <f17e9ebe-fc75-fb51-cc9b-851fa219f31b@acm.org>
-Date:   Tue, 30 Jun 2020 16:31:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200630193802.GA463609@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726777AbgF3Xfu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jun 2020 19:35:50 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:45572 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726734AbgF3Xfu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 19:35:50 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05UNVK5E138094;
+        Tue, 30 Jun 2020 23:35:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id; s=corp-2020-01-29;
+ bh=2j+E2s3l/0zjp1Yerexg4CEg3z4YCSYxz7bX06THGqA=;
+ b=cQXWdNphAAf/dF4k6NP5S70eZn5Be7FbfkcgngPmeSB1kMk0JlZvNOysUfUFxrkzsAKx
+ jMkggtniAXJPd2IcoXxaqnL0YjPYLs0WpDGxcuwRArqbF7KIS6ds0FKD5YOvgk8YO2yP
+ ddv2fwN+cMFAKzBs+RCUid+ldYrKdOgoFVS49hqxF+3bAx8DXEvj9nBlVUhfQ5l1Dx/K
+ tr1OgCtCjpT8OntBCdHX0iwMcEAjv8UqtAyPhu7rLYr/7Rhjq26mYGrASHWuiOtKz41F
+ 9T8HxbarFnbJz+5zRWjObULjwitM4Ft1+6hzTg5Z9rEb0gq8932ZJtOtHlUtW3jXBzi/ Bg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 31ywrbnm6x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 Jun 2020 23:35:41 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05UNXmT7069852;
+        Tue, 30 Jun 2020 23:35:41 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 31xg1xgfn6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Jun 2020 23:35:41 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05UNZZJP002860;
+        Tue, 30 Jun 2020 23:35:40 GMT
+Received: from ol2.localdomain (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 30 Jun 2020 23:35:35 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     cleech@redhat.com, lduncan@suse.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
+Subject: [PATCH 0/4] iscsi fixes/cleanups 
+Date:   Tue, 30 Jun 2020 18:35:30 -0500
+Message-Id: <1593560134-28148-1-git-send-email-michael.christie@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006300163
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ clxscore=1015 cotscore=-2147483648 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006300163
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-06-30 12:38, Alan Stern wrote:
-> Assume that BLK_MQ_REQ_PREEMPT is set in flags.  Then where exactly 
-> does blk_queue_enter(q, flags) call blk_pm_request_resume(q)?
+The following patches were made over Martin's 5.8 fixes branches.
 
-Please take a look at how the *current* implementation of runtime power
-management works. Your question is relevant for the old implementation
-of runtime power management but not for the current implementation.
+The first patch:
 
-Bart.
+[PATCH 1/4] iscsi class: make sure the block/recovery work are done
+
+fixes a regression that was just added in 5.8-rc1 with commit:
+
+commit 3ce419662dd4c9cf8db7869c4972ad51ccdf2ee3
+Author: Bob Liu <bob.liu@oracle.com>
+Date:   Tue May 5 09:19:08 2020 +0800
+
+    scsi: iscsi: Register sysfs for iscsi workqueue
+
+so it should go into 5.8-rc. With that patch we allow multple works
+to be run in parallel so it broke some assumtions the iscsi class
+was making.
+
+The other patches can just go into next. They are not critical.
 
