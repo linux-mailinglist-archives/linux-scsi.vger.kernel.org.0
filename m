@@ -2,155 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B8D20F816
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 17:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEA720F863
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 17:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389333AbgF3PRg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jun 2020 11:17:36 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41917 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729995AbgF3PRf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 11:17:35 -0400
-Received: (qmail 452401 invoked by uid 1000); 30 Jun 2020 11:17:34 -0400
-Date:   Tue, 30 Jun 2020 11:17:34 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bart Van Assche <bvanassche@acm.org>, martin.petersen@oracle.com
-Cc:     Can Guo <cang@codeaurora.org>, linux-scsi@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: [PATCH] SCSI and block: Simplify resume handling
-Message-ID: <20200630151734.GA451991@rowland.harvard.edu>
+        id S2389471AbgF3PcJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jun 2020 11:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389403AbgF3PcI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 11:32:08 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E148C061755;
+        Tue, 30 Jun 2020 08:32:08 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id t6so10129951pgq.1;
+        Tue, 30 Jun 2020 08:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version:reply-to
+         :content-transfer-encoding;
+        bh=MkaGNDtMY/NRjHtJ37AHiDdfQpm5dAJJXn18jrcf3a0=;
+        b=t81FJtYHDU1oMziHtEQddR8ifoGMD/S3rfdbwL0W9hzjL5KMbw1Rh+vhMsBDxwMQSd
+         hBf2mL5chtfCyG+W3F8V+3yjtXPlelee6+tyV4CGMYCepdnJz6CD1Ec6b9wj23zMEDHC
+         RR5pYGTPkuh8egT/qdjvZhNuatHwsR7hdVbKLmwaLSxxghv7ZCVm+CCsNljmyC72qe3P
+         GR02iT15ifnSaZJf36C+VymnzWDHNIbmih0RadoKUcvhht01bzfnNNRPwDbOhpAhrMv5
+         4wpN1l1afxo64RXLzCSpAzzU6XDdK7EpGFEwP4ayArDKfoaO8+7aHEe4Hsu61y6gF8BC
+         YLyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :reply-to:content-transfer-encoding;
+        bh=MkaGNDtMY/NRjHtJ37AHiDdfQpm5dAJJXn18jrcf3a0=;
+        b=Ewm91QXTEEOjAg5SEnS/1IKpt07shoYhe7Pf6S0mqghbHZ9zaCzl0lzdtiLtK3LHRu
+         T+zD532GKyNnJSCXt3TuRk6EzonwTZXy3N27eIvwEs8A+mCrFA2VsnTxDoR68GIR1eKB
+         hVG0NyDf9Kug++kWIafx7CBYDw0Lg89KMS3bTpDKtK+mOAYdVHn+sjVxbzBW9KDJNFiR
+         EI7uMSdyPYSuGVK6kJuGGpzoXa4KjHTFsRjX3+r8Pc0xxJiEt/pcrhIH9C3F8K4YjYP2
+         RZ3fpNo/haWMijVroJN4QtsGLWXetYSvwkQq91fjQmy0qOCPEVoBhLQ2FuEXJvQ9XKFU
+         qTLQ==
+X-Gm-Message-State: AOAM533raV7Zjo+CG7TvFZ0TV+E5fS4kvLhyHw/8OIjo68fznT9M8gZV
+        w0Rvf3RYQ3GCTS21Xgl8W3s=
+X-Google-Smtp-Source: ABdhPJwRsXEuMGybs81Dv5ER0nufXLdqv1A8Hw5GNQ9lgs8VOgl+sBpBo332N7IT3uzVbb623krG5g==
+X-Received: by 2002:a63:6e08:: with SMTP id j8mr15426916pgc.187.1593531127662;
+        Tue, 30 Jun 2020 08:32:07 -0700 (PDT)
+Received: from localhost.localdomain ([131.107.174.194])
+        by smtp.gmail.com with ESMTPSA id 140sm3067433pfz.154.2020.06.30.08.32.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 08:32:07 -0700 (PDT)
+From:   Andres Beltran <lkmlabelt@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com, parri.andrea@gmail.com,
+        skarade@microsoft.com, Andres Beltran <lkmlabelt@gmail.com>,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH v3 0/3] Drivers: hv: vmbus: vmbus_requestor data structure for VMBus hardening
+Date:   Tue, 30 Jun 2020 11:31:57 -0400
+Message-Id: <20200630153200.1537105-1-lkmlabelt@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Reply-To: t-mabelt@microsoft.com
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Commit 05d18ae1cc8a ("scsi: pm: Balance pm_only counter of request
-queue during system resume") fixed a problem in the block layer's
-runtime-PM code: blk_set_runtime_active() failed to call
-blk_clear_pm_only().  However, the commit's implementation was
-awkward; it forced the SCSI system-resume handler to choose whether to
-call blk_post_runtime_resume() or blk_set_runtime_active(), depending
-on whether or not the SCSI device had previously been runtime
-suspended.
+Currently, VMbus drivers use pointers into guest memory as request IDs
+for interactions with Hyper-V. To be more robust in the face of errors
+or malicious behavior from a compromised Hyper-V, avoid exposing
+guest memory addresses to Hyper-V. Also avoid Hyper-V giving back a
+bad request ID that is then treated as the address of a guest data
+structure with no validation. Instead, encapsulate these memory
+addresses and provide small integers as request IDs.
 
-This patch simplifies the situation considerably by adding the missing
-function call directly into blk_set_runtime_active().  This allows the
-SCSI routine to revert back to its original form.  Furthermore, making
-this change reveals that blk_post_runtime_resume() (in its success
-pathway) does exactly the same thing as blk_set_runtime_active().  The
-duplicate code is easily removed by making one routine call the other.
+The first patch creates the definitions for the data structure, provides
+helper methods to generate new IDs and retrieve data, and
+allocates/frees the memory needed for vmbus_requestor.
 
-No functional changes are intended.
+The second and third patches make use of vmbus_requestor to send request
+IDs to Hyper-V in storvsc and netvsc respectively.
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: Can Guo <cang@codeaurora.org>
-CC: Bart Van Assche <bvanassche@acm.org>
+Thanks.
+Andres Beltran
 
----
+Tested-by: Andrea Parri <parri.andrea@gmail.com>
 
-Martin:
+Cc: linux-scsi@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: David S. Miller <davem@davemloft.net>
 
-Since you merged the oritinal 05d18ae1cc8a commit, I'm submitting this to 
-you as an update.  If you would prefer to have it go by way of the 
-block-layer tree, let me know and I'll resend it.
+Andres Beltran (3):
+  Drivers: hv: vmbus: Add vmbus_requestor data structure for VMBus
+    hardening
+  scsi: storvsc: Use vmbus_requestor to generate transaction IDs for
+    VMBus hardening
+  hv_netvsc: Use vmbus_requestor to generate transaction IDs for VMBus
+    hardening
 
+ drivers/hv/channel.c              | 154 ++++++++++++++++++++++++++++++
+ drivers/net/hyperv/hyperv_net.h   |  13 +++
+ drivers/net/hyperv/netvsc.c       |  79 ++++++++++++---
+ drivers/net/hyperv/rndis_filter.c |   1 +
+ drivers/scsi/storvsc_drv.c        |  85 ++++++++++++++---
+ include/linux/hyperv.h            |  22 +++++
+ 6 files changed, 329 insertions(+), 25 deletions(-)
 
-[as1939]
-
-
- block/blk-pm.c         |   25 ++++++++++---------------
- drivers/scsi/scsi_pm.c |   10 ++--------
- 2 files changed, 12 insertions(+), 23 deletions(-)
-
-Index: usb-devel/block/blk-pm.c
-===================================================================
---- usb-devel.orig/block/blk-pm.c
-+++ usb-devel/block/blk-pm.c
-@@ -164,30 +164,21 @@ EXPORT_SYMBOL(blk_pre_runtime_resume);
-  *
-  * Description:
-  *    Update the queue's runtime status according to the return value of the
-- *    device's runtime_resume function. If it is successfully resumed, process
-- *    the requests that are queued into the device's queue when it is resuming
-- *    and then mark last busy and initiate autosuspend for it.
-+ *    device's runtime_resume function. If the resume was successful, call
-+ *    blk_set_runtime_active() to do the real work of restarting the queue.
-  *
-  *    This function should be called near the end of the device's
-  *    runtime_resume callback.
-  */
- void blk_post_runtime_resume(struct request_queue *q, int err)
- {
--	if (!q->dev)
--		return;
--
--	spin_lock_irq(&q->queue_lock);
- 	if (!err) {
--		q->rpm_status = RPM_ACTIVE;
--		pm_runtime_mark_last_busy(q->dev);
--		pm_request_autosuspend(q->dev);
--	} else {
-+		blk_set_runtime_active(q);
-+	} else if (q->dev) {
-+		spin_lock_irq(&q->queue_lock);
- 		q->rpm_status = RPM_SUSPENDED;
-+		spin_unlock_irq(&q->queue_lock);
- 	}
--	spin_unlock_irq(&q->queue_lock);
--
--	if (!err)
--		blk_clear_pm_only(q);
- }
- EXPORT_SYMBOL(blk_post_runtime_resume);
- 
-@@ -204,6 +195,9 @@ EXPORT_SYMBOL(blk_post_runtime_resume);
-  * This function can be used in driver's resume hook to correct queue
-  * runtime PM status and re-enable peeking requests from the queue. It
-  * should be called before first request is added to the queue.
-+ *
-+ * This function is also called by blk_post_runtime_resume() for successful
-+ * runtime resumes.  It does everything necessary to restart the queue.
-  */
- void blk_set_runtime_active(struct request_queue *q)
- {
-@@ -213,6 +207,7 @@ void blk_set_runtime_active(struct reque
- 		pm_runtime_mark_last_busy(q->dev);
- 		pm_request_autosuspend(q->dev);
- 		spin_unlock_irq(&q->queue_lock);
-+		blk_clear_pm_only(q);
- 	}
- }
- EXPORT_SYMBOL(blk_set_runtime_active);
-Index: usb-devel/drivers/scsi/scsi_pm.c
-===================================================================
---- usb-devel.orig/drivers/scsi/scsi_pm.c
-+++ usb-devel/drivers/scsi/scsi_pm.c
-@@ -80,10 +80,6 @@ static int scsi_dev_type_resume(struct d
- 	dev_dbg(dev, "scsi resume: %d\n", err);
- 
- 	if (err == 0) {
--		bool was_runtime_suspended;
--
--		was_runtime_suspended = pm_runtime_suspended(dev);
--
- 		pm_runtime_disable(dev);
- 		err = pm_runtime_set_active(dev);
- 		pm_runtime_enable(dev);
-@@ -97,10 +93,8 @@ static int scsi_dev_type_resume(struct d
- 		 */
- 		if (!err && scsi_is_sdev_device(dev)) {
- 			struct scsi_device *sdev = to_scsi_device(dev);
--			if (was_runtime_suspended)
--				blk_post_runtime_resume(sdev->request_queue, 0);
--			else
--				blk_set_runtime_active(sdev->request_queue);
-+
-+			blk_set_runtime_active(sdev->request_queue);
- 		}
- 	}
- 
+-- 
+2.25.1
 
