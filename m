@@ -2,156 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A57520F2FC
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 12:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C5B20F3AB
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jun 2020 13:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732647AbgF3Krm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jun 2020 06:47:42 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.4]:6067 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732635AbgF3Krj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 30 Jun 2020 06:47:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1593514057; i=@ts.fujitsu.com;
-        bh=GtsGqb8EjApcsskALx6PiG8OhUw/DlwarEoa/E44tAU=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        b=IjhHMDL7/x+uIFud06b4n/kNDFziunr832czTHq2goLv64kMCTyT3IjDzGgbh5dto
-         SXrvuUFoTYVSFD6y43NYhrQ7nZ5m8/5yYrQJQ82Y8Ns0iAis6Q5IJ+wh05d+NIDGq+
-         Zpkp/L4yWOidYO1sS89QppDDNQ4oFro88JZjGpMMerBFq8r15gpQ5nA1rjwh3IKBC1
-         2SKDl2eFY0uL6+9b9aW2sdPs538itSYfMpvs/cW+jek7aEjLL8sFp07g3+I0kLiezY
-         /YnqODb0bDEmSgUyQNCPhHXA5290EEcHdq+PKZ5sR2klvmq4K2OIH06jluw7xGjPGU
-         JNAOlUzWJPnlQ==
-Received: from [100.113.1.80] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-4.bemta.az-a.eu-central-1.aws.symcld.net id BE/F9-22706-8481BFE5; Tue, 30 Jun 2020 10:47:36 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRWlGSWpSXmKPExsViZ8MxRddD4ne
-  cwdVr2hbd13ewWSw//o/J4u+kG6wWrUvfMjmweHx8eovF4/MmuQCmKNbMvKT8igTWjI5vP9kL
-  /otU3JlV0cA4WaiLkYtDSGAyo8SR+//YIZzpjBI3/x9l7WLk5GATMJBYMek+C0hCRGANo8TKO
-  /OYQRLMAnoS0/6tYwexhQW8JU6/m8kEYrMIqErse3uGEcTmFbCTeDbpHViNhIC8RMeBySwgNq
-  eAvcTaw6fBbCGgmrWbZ7JNYORewMiwitEiqSgzPaMkNzEzR9fQwEDX0NBY10jX1FAvsUo3US+
-  1VDc5Na+kKBEoqZdYXqxXXJmbnJOil5dasokRGCYphUzGOxivvf6gd4hRkoNJSZT33r9fcUJ8
-  SfkplRmJxRnxRaU5qcWHGGU4OJQkeJ+K/44TEixKTU+tSMvMAYYsTFqCg0dJhHc/SJq3uCAxt
-  zgzHSJ1ilFRSpx3pRhQQgAkkVGaB9cGi5NLjLJSwryMDAwMQjwFqUW5mSWo8q8YxTkYlYR5E0
-  DG82TmlcBNfwW0mAlo8TWtXyCLSxIRUlINTBbtT6oyzwnpfbdjvp669sVqfecfMxmXGkX9fc6
-  qdK1jyRLnXFaOB+8+39vs/Iqb4apNgXGrQuA0+ydMGv6eu0LPTzM8weTw/vi8PWwnbwd5zenk
-  6zzdNGGr5ZzTG2y9d7Lc3zWdcy7jF+4HjtXfNe0F/l1gXH5ULu64it1yJq38nJ/fN/NEJ4m/m
-  vjspeAu9Qfhd7T7N/25sPHX1mkFEVKaPyflKShZe711O6nB5p6rKbfWPiaWZXl78c1zZh5/LE
-  QjLEtelectnh8zSTnc906zSajp9s8bls16vNnubGiqqsCTlKBTSbuWeQv9OfVT42PUfEFdiV9
-  clz26fATtVJ6wWHf5R0T6ruvYv+mIkRJLcUaioRZzUXEiAHG1/JwOAwAA
-X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-5.tower-226.messagelabs.com!1593514056!1004467!1
-X-Originating-IP: [62.60.8.148]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.2; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 14680 invoked from network); 30 Jun 2020 10:47:36 -0000
-Received: from unknown (HELO mailhost1.uk.fujitsu.com) (62.60.8.148)
-  by server-5.tower-226.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 30 Jun 2020 10:47:36 -0000
-Received: from x-serv01 ([172.17.38.52])
-        by mailhost1.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 05UAlYsT025927;
-        Tue, 30 Jun 2020 11:47:35 +0100
-Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id 9D25820251;
-        Tue, 30 Jun 2020 12:47:35 +0200 (CEST)
-From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: [RFC PATCH 8/8] scsi: target: tcmu: Make TMR notification optional
-Date:   Tue, 30 Jun 2020 12:47:09 +0200
-Message-Id: <20200630104709.23066-9-bstroesser@ts.fujitsu.com>
-X-Mailer: git-send-email 2.12.3
-In-Reply-To: <20200630104709.23066-1-bstroesser@ts.fujitsu.com>
-References: <20200630104709.23066-1-bstroesser@ts.fujitsu.com>
+        id S1731751AbgF3LiY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jun 2020 07:38:24 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2421 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731382AbgF3LiW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 30 Jun 2020 07:38:22 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 011AE30E3D89DB2688FB;
+        Tue, 30 Jun 2020 12:38:21 +0100 (IST)
+Received: from [127.0.0.1] (10.47.7.58) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 30 Jun
+ 2020 12:38:19 +0100
+Subject: Re: About sbitmap_bitmap_show() and cleared bits (was Re: [PATCH RFC
+ v7 07/12] blk-mq: Add support in hctx_tags_bitmap_show() for a shared
+ sbitmap)
+From:   John Garry <john.garry@huawei.com>
+To:     Hannes Reinecke <hare@suse.de>, <axboe@kernel.dk>,
+        <linux-block@vger.kernel.org>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <don.brace@microsemi.com>, <kashyap.desai@broadcom.com>,
+        <sumit.saxena@broadcom.com>, <ming.lei@redhat.com>,
+        <bvanassche@acm.org>, <hare@suse.com>, <hch@lst.de>,
+        <shivasharan.srikanteshwara@broadcom.com>,
+        <linux-scsi@vger.kernel.org>, <esc.storagedev@microsemi.com>,
+        <chenxiang66@hisilicon.com>, <megaraidlinux.pdl@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-8-git-send-email-john.garry@huawei.com>
+ <9f4741c5-d117-d764-cf3a-a57192a788c3@suse.de>
+ <aad6efa3-2d7f-ca68-d239-44ea187c8017@huawei.com>
+ <7ed6ccf1-6ad9-1df7-f55d-4ed6cac1e08d@suse.de>
+ <8ffd5c22-f644-3436-0a9f-2e08c220525e@huawei.com>
+ <84f9623e-961e-3c9b-eed6-795b64f1ab76@suse.de>
+ <a30ff47d-a06a-13d6-ef5d-8c90ba3261eb@huawei.com>
+Message-ID: <c95f6566-0f17-9d11-a52a-ac7433c8a2f0@huawei.com>
+Date:   Tue, 30 Jun 2020 12:36:44 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
+MIME-Version: 1.0
+In-Reply-To: <a30ff47d-a06a-13d6-ef5d-8c90ba3261eb@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.7.58]
+X-ClientProxiedBy: lhreml738-chm.china.huawei.com (10.201.108.188) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add "tmr_notification" configFS attribute to tcmu devices.
-If default value 0 of the attribute is used, tcmu only
-removes aborted commands from qfull_queue.
-If user changes tmr_notification to 1, additionally
-TMR notifications will be written to the cmd ring.
+On 30/06/2020 08:30, John Garry wrote:
+> On 30/06/2020 07:33, Hannes Reinecke wrote:
+>> On 6/29/20 5:32 PM, John Garry wrote:
+>>> Hi all,
+>>>
+>>> I noticed that sbitmap_bitmap_show() only shows set bits and does not 
+>>> consider cleared bits. Is that the proper thing to do?
+>>>
+>>> I ask, as from trying to support sbitmap_bitmap_show() for hostwide 
+>>> shared tags feature, we currently use blk_mq_queue_tag_busy_iter() to 
+>>> find active requests (and associated tags/bits) for a particular 
+>>> hctx. So, AFAICT, would give a change in behavior for 
+>>> sbitmap_bitmap_show(), in that it would effectively show set and not 
+>>> cleared bits.
+>>>
+>> Why would you need to do this?
+>> Where would be the point traversing cleared bits?
+> 
+> I'm not talking about traversing cleared bits specifically. I just think 
+> that today sbitmap_bitmap_show() only showing the bits in 
+> sbitmap_word.word may not be useful or even misleading, as in reality 
+> the "set" bits are sbitmap_word.word & ~sbitmap_word.cleared.
+> 
+> And for hostwide shared tags feature, iterating the busy rqs to find the 
+> per-hctx tags/bits would effectively give us the "set" bits, above, so 
+> there would be a difference.
+> 
 
-Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
----
- drivers/target/target_core_user.c | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+As an example, here's a sample tags_bitmap output:
 
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 8d69cfa125b2..1082c5882dc6 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -118,6 +118,7 @@ struct tcmu_dev {
- #define TCMU_DEV_BIT_OPEN 0
- #define TCMU_DEV_BIT_BROKEN 1
- #define TCMU_DEV_BIT_BLOCKED 2
-+#define TCMU_DEV_BIT_TMR_NOTIFY 3
- 	unsigned long flags;
- 
- 	struct uio_info uio_info;
-@@ -1261,6 +1262,9 @@ tcmu_tmr_notify(struct se_device *se_dev, enum tcm_tmreq_table tmf,
- 	if (unqueued)
- 		tcmu_set_next_deadline(&dev->qfull_queue, &dev->qfull_timer);
- 
-+	if (!test_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags))
-+		goto unlock;
-+
- 	pr_debug("TMR event %d on dev %s, aborted cmds %d, afflicted cmd_ids %d\n",
- 		 tcmu_tmr_type(tmf), dev->name, i, cmd_cnt);
- 
-@@ -2707,6 +2711,40 @@ static ssize_t tcmu_emulate_write_cache_store(struct config_item *item,
- }
- CONFIGFS_ATTR(tcmu_, emulate_write_cache);
- 
-+static ssize_t tcmu_tmr_notification_show(struct config_item *item,
-+					     char *page)
-+{
-+	struct se_dev_attrib *da = container_of(to_config_group(item),
-+					struct se_dev_attrib, da_group);
-+	struct tcmu_dev *dev = TCMU_DEV(da->da_dev);
-+
-+	return snprintf(page, PAGE_SIZE, "%i\n",
-+			test_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags));
-+}
-+
-+static ssize_t tcmu_tmr_notification_store(struct config_item *item,
-+					   const char *page, size_t count)
-+{
-+	struct se_dev_attrib *da = container_of(to_config_group(item),
-+					struct se_dev_attrib, da_group);
-+	struct tcmu_dev *dev = TCMU_DEV(da->da_dev);
-+	u8 val;
-+	int ret;
-+
-+	ret = kstrtou8(page, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+	if (val > 1)
-+		return -EINVAL;
-+
-+	if (val)
-+		set_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags);
-+	else
-+		clear_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags);
-+	return count;
-+}
-+CONFIGFS_ATTR(tcmu_, tmr_notification);
-+
- static ssize_t tcmu_block_dev_show(struct config_item *item, char *page)
- {
- 	struct se_device *se_dev = container_of(to_config_group(item),
-@@ -2788,6 +2826,7 @@ static struct configfs_attribute *tcmu_attrib_attrs[] = {
- 	&tcmu_attr_dev_config,
- 	&tcmu_attr_dev_size,
- 	&tcmu_attr_emulate_write_cache,
-+	&tcmu_attr_tmr_notification,
- 	&tcmu_attr_nl_reply_supported,
- 	NULL,
- };
--- 
-2.12.3
+00000000: 00f0 0fff 03c0 0000 0000 0000 efff fdff
+00000010: 0000 c0f7 7fff ffff 0000 00e0 fef7 ffff
+00000020: 0000 0000 f0ff ffff 0000 ffff 01d0 ffff
+00000030: 0f80
 
+And here's what we would have taking cleared bits into account:
+
+00000000: 00f0 0fff 03c0 0000 0000 0000 0000 0000 (20 bits set)
+00000010: 0000 0000 0000 0000 0000 0000 0000 0000
+00000020: 0000 0000 0000 0000 0000 f8ff 0110 8000 (16 bits set)
+00000030: 0f00					  (1 bit set)
+
+Here's tags file output:
+
+nr_tags=400
+nr_reserved_tags=0
+active_queues=2
+
+bitmap_tags:
+depth=400
+busy=40
+cleared=182
+bits_per_word=64
+map_nr=7
+alloc_hint={22, 0, 0, 0, 103, 389, 231, 57, 377, 167, 0, 0, 69, 24, 44, 
+50, 54,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0
+, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+wake_batch=8
+wake_index=0
+
+[snip]
+
+20+16+1=39 more closely matches with busy=40.
+
+So it seems sensible to go this way for whether hostwide tags are used 
+or not.
+
+thanks,
+John
