@@ -2,109 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C50210256
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 05:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8956210278
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 05:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbgGADIg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jun 2020 23:08:36 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:34376 "EHLO
+        id S1726444AbgGADXt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jun 2020 23:23:49 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:45322 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgGADIg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 23:08:36 -0400
+        with ESMTP id S1725862AbgGADXt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 23:23:49 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06138VIS144102;
-        Wed, 1 Jul 2020 03:08:31 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0613IBvI151984;
+        Wed, 1 Jul 2020 03:23:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=+GuHMGP7ithyKIW0X92z9lQki5JOgxvJkBJdlY6vsSA=;
- b=KmO7jwMhVPyOiKhVgFgqoylYVwKM+LdHree5FWncaH71JXPrhVltz2znMFRoNPD3Bcib
- YtB6vXWQtUgMgNmVK2XxNoZ46KPW6Ne2aeWmDBkEid3lX6iSGvwrL7i7gRruahjhJswC
- MVzZnpwAd6yOYYjGkJ/pKWRNUjBLN/jN8H7yopJ2aV8xQRamQxdyxUw2ogyGPaS+9qRf
- b2/jG4DwGaZ/HWnolxMFwvM9pFZwf9gAgCtRyCZ9d/LjA7zGu7ZRmDW7gzlArzQ+w1KP
- K3QQf70GFVb3g0niNFShy7COR53pg/jbO86fKlFntJUHBqMGvaElKYl5AYWtvPIearsN 5A== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=dg/1C3xLoyHGDDIp3rRy9JJ505zSZt2XCWqsk48jMQQ=;
+ b=ZjMmz7t4mJzdvULtnsX4hM9fw4rBBGsDBw9oPsi1gh6aZRChVlE+I8C8aSYmtWuQQJYv
+ TJneqVicGhTUvIkL/MF1s90Vej31ca4e0LaHywz1blOUwOHJ1q1EZPAXDtq+XoSOpkzI
+ B/ryWIvjqtIjMIwXNDLOL7cIdRRIFcWilcNbHFpveIb8PlZ7//XwAFhdXXiEOywJSGw7
+ xsNWazmNwLYyjDmbbvo9S4sOjkIgCLZwIlkyAe5cg4XSlCSbGV+feVZLm8nxqVIF2pco
+ TlqXgcbjS6GxOktxy1u0gtXo9JjJqKSyGFT1Hllg/aiwbQj6r4bKiSWh2AzV8IYJPYJW 3A== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 31wxrn7uxv-1
+        by userp2120.oracle.com with ESMTP id 31wxrn7wxb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 01 Jul 2020 03:08:31 +0000
+        Wed, 01 Jul 2020 03:23:44 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0612wjQT140530;
-        Wed, 1 Jul 2020 03:08:30 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 31xg1537n2-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0613IhWU056760;
+        Wed, 1 Jul 2020 03:23:44 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 31xg1544sy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 01 Jul 2020 03:08:30 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06138TRI029727;
-        Wed, 1 Jul 2020 03:08:30 GMT
-Received: from localhost.localdomain (/183.246.145.120)
+        Wed, 01 Jul 2020 03:23:44 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0613Nf9l026041;
+        Wed, 1 Jul 2020 03:23:42 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 01 Jul 2020 03:08:28 +0000
-From:   Bob Liu <bob.liu@oracle.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, open-iscsi@googlegroups.com,
-        lduncan@suse.com, michael.christie@oracle.com,
-        Bob Liu <bob.liu@oracle.com>
-Subject: [PATCH 2/2] scsi: register sysfs for scsi workqueue
-Date:   Wed,  1 Jul 2020 11:07:45 +0800
-Message-Id: <20200701030745.16897-2-bob.liu@oracle.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20200701030745.16897-1-bob.liu@oracle.com>
-References: <20200701030745.16897-1-bob.liu@oracle.com>
+        with ESMTP ; Wed, 01 Jul 2020 03:23:41 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] qla2xxx patches for kernel v5.9
+Date:   Tue, 30 Jun 2020 23:23:40 -0400
+Message-Id: <159357380640.11551.3183785758303195996.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200629225454.22863-1-bvanassche@acm.org>
+References: <20200629225454.22863-1-bvanassche@acm.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=3 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=943 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007010018
+ engine=8.12.0-2004280000 definitions=main-2007010021
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=953
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1011
  malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
- lowpriorityscore=0 suspectscore=3 spamscore=0 classifier=spam adjust=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007010019
+ definitions=main-2007010021
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-So that scsi_wq_xxx and scsi_tmf_xxx can be bind to different cpu to get better
-isolation.
+On Mon, 29 Jun 2020 15:54:45 -0700, Bart Van Assche wrote:
 
-This patch unfolded create_singlethread_workqueue(), added WQ_SYSFS and dropped
-__WQ_ORDERED_EXPLICIT since __WQ_ORDERED_EXPLICIT workqueue isn't allowed to
-change "cpumask".
+> This patch series includes cleanup patches and also patches that address
+> complaints from several static source code analyzers. Please consider these
+> patches for kernel v5.9.
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> [...]
 
-Signed-off-by: Bob Liu <bob.liu@oracle.com>
----
- drivers/scsi/hosts.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Applied to 5.9/scsi-queue, thanks!
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index 7ec91c3..37d1c55 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -272,8 +272,10 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
- 	if (shost->transportt->create_work_queue) {
- 		snprintf(shost->work_q_name, sizeof(shost->work_q_name),
- 			 "scsi_wq_%d", shost->host_no);
--		shost->work_q = create_singlethread_workqueue(
--					shost->work_q_name);
-+		shost->work_q = alloc_workqueue("%s",
-+			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
-+			1, shost->work_q_name);
-+
- 		if (!shost->work_q) {
- 			error = -EINVAL;
- 			goto out_free_shost_data;
-@@ -487,7 +489,7 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
- 	}
- 
- 	shost->tmf_work_q = alloc_workqueue("scsi_tmf_%d",
--					    WQ_UNBOUND | WQ_MEM_RECLAIM,
-+					WQ_UNBOUND | WQ_MEM_RECLAIM | WQ_SYSFS,
- 					   1, shost->host_no);
- 	if (!shost->tmf_work_q) {
- 		shost_printk(KERN_WARNING, shost,
+[1/9] scsi: qla2xxx: Check the size of struct fcp_hdr at compile time
+      https://git.kernel.org/mkp/scsi/c/a7f474542ea3
+[2/9] scsi: qla2xxx: Remove the __packed annotation from struct fcp_hdr and fcp_hdr_le
+      https://git.kernel.org/mkp/scsi/c/f1e12bee55e6
+[3/9] scsi: qla2xxx: Make qla82xx_flash_wait_write_finish() easier to read
+      https://git.kernel.org/mkp/scsi/c/2f91a0a03c2d
+[4/9] scsi: qla2xxx: Initialize 'n' before using it
+      https://git.kernel.org/mkp/scsi/c/67668b5b13c7
+[5/9] scsi: qla2xxx: Remove a superfluous cast
+      https://git.kernel.org/mkp/scsi/c/9bb013584a5e
+[6/9] scsi: qla2xxx: Make __qla2x00_alloc_iocbs() initialize 32 bits of request_t.handle
+      https://git.kernel.org/mkp/scsi/c/f8f12bda53ea
+[7/9] scsi: qla2xxx: Fix a Coverity complaint in qla2100_fw_dump()
+      https://git.kernel.org/mkp/scsi/c/57fec9f24e58
+[8/9] scsi: qla2xxx: Make qla2x00_restart_isp() easier to read
+      https://git.kernel.org/mkp/scsi/c/f85a299f5ec5
+[9/9] scsi: qla2xxx: Introduce a function for computing the debug message prefix
+      https://git.kernel.org/mkp/scsi/c/e7019c95c40d
+
 -- 
-2.9.5
-
+Martin K. Petersen	Oracle Linux Engineering
