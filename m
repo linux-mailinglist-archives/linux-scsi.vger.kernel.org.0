@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 657532113DB
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 21:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035F62113E1
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 21:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbgGATsB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 15:48:01 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:46678 "EHLO
+        id S1726287AbgGATuB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 15:50:01 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:48104 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726372AbgGATsB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 15:48:01 -0400
+        with ESMTP id S1725771AbgGATuA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 15:50:00 -0400
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 061JlOpC028715;
-        Wed, 1 Jul 2020 19:47:52 GMT
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 061JlSOb028775;
+        Wed, 1 Jul 2020 19:49:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=4A+5oamYVYQ5K0erulFWe9Yz5d1LSJG/20lN2f0CJFA=;
- b=z/xlZnmmSERbQEIAxGbMqVLnD3ahKxTsxbaksOsvX5cdCX0qyLkNjIwSIclch2E2IPYn
- 75chPFj/m79RvWrqmhMZbf8v2F2QnSSCaRPVkoQ47nlzY0JmmSc6iawPW+4IA/jXthhH
- rVeSt9Ig1eVXfYtjvBRisvhEChyg4gUCOLPryHbpDzHXPRdw3TrAaVkUYFTvRavPdGVy
- HcZRjFy3rI0667v4UNMku0sDgZiKNhDyXEMkH4HGNiy60XBRCjieV3De2FL0IwAVNCgd
- KvfRgwseE0gBO9JIVkST/dx+zniMJCBjH6+lvXL57tgXKm0l8giiSC+8lURWG2LukDtZ 1g== 
+ bh=fkeYCcDXgVQDq+HY9xVcVR87x8sP6CtE5+xjL5dbZNM=;
+ b=Xr5fLakO+YnlsVM/ZPOwmTiah45HD/xdwz0cs5EEh3HCtciEv4RhE4+DefB2cv5R0oY/
+ FkfsezqXafLoMlswGnfK4EnHOttsAFrtD8SKI9qJCkBDl6QuUeJNbuozeMgnS1tNJID3
+ Uiwkdw6o+w0RQt/rZKDk5raHhR2t582M6uoKWl9g/2U7/SvOJpDHemS/NbYbtn8+eAJf
+ EejyxKUujBm0GoQqmmT/TcNuJcgr8q0haI0/c+BSYZlK0vVv+4n2Zi86C9s7afv4k6IB
+ We4S9J6o1TRTQlemHi1jIriGc9em3xcw9rge/c2PLv84RRst4Z/qRnXBSeU5ulv/KI4+ KA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 31ywrbttuy-1
+        by userp2130.oracle.com with ESMTP id 31ywrbtu59-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 01 Jul 2020 19:47:52 +0000
+        Wed, 01 Jul 2020 19:49:53 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 061JccDx114198;
-        Wed, 1 Jul 2020 19:47:52 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 31xfvueanv-1
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 061JccOg114140;
+        Wed, 1 Jul 2020 19:47:53 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 31xfvueap0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 01 Jul 2020 19:47:52 +0000
+        Wed, 01 Jul 2020 19:47:53 +0000
 Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 061JlpFq006410;
-        Wed, 1 Jul 2020 19:47:51 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 061JlqDD023179;
+        Wed, 1 Jul 2020 19:47:52 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
         with ESMTP ; Wed, 01 Jul 2020 19:47:51 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     cleech@redhat.com, lduncan@suse.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Subject: [PATCH 2/3] iscsi class: optimize work queue flush use
-Date:   Wed,  1 Jul 2020 14:47:47 -0500
-Message-Id: <1593632868-6808-3-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 3/3] iscsi class: remove sessdestroylist
+Date:   Wed,  1 Jul 2020 14:47:48 -0500
+Message-Id: <1593632868-6808-4-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1593632868-6808-1-git-send-email-michael.christie@oracle.com>
 References: <1593632868-6808-1-git-send-email-michael.christie@oracle.com>
@@ -64,51 +64,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is no need for one session to flush the entire
-iscsi_eh_timer_workq when removing/unblocking a session. During removal
-we need to make sure our works are not running anymore. And
-iscsi_unblock_session only needs to make sure it's work is done. The
-unblock work function will flush/cancel the works it has conflicts with.
+Just delete the sess from the session list instead of adding it to some
+list we never use.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/scsi/scsi_transport_iscsi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 2cd2610ecfaf..80b442a2b4c8 100644
+index 80b442a2b4c8..60e6bde1e96c 100644
 --- a/drivers/scsi/scsi_transport_iscsi.c
 +++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1978,10 +1978,11 @@ void iscsi_unblock_session(struct iscsi_cls_session *session)
- {
- 	queue_work(iscsi_eh_timer_workq, &session->unblock_work);
- 	/*
--	 * make sure all the events have completed before tell the driver
--	 * it is safe
-+	 * Blocking the session can be done from any context so we only
-+	 * queue the block work. Make sure the unblock work has completed
-+	 * because it flushes/cancels the other works and updates the state.
- 	 */
--	flush_workqueue(iscsi_eh_timer_workq);
-+	flush_work(&session->unblock_work);
- }
- EXPORT_SYMBOL_GPL(iscsi_unblock_session);
+@@ -1623,7 +1623,6 @@ static DEFINE_MUTEX(rx_queue_mutex);
+ static DEFINE_MUTEX(conn_mutex);
  
-@@ -2205,11 +2206,9 @@ void iscsi_remove_session(struct iscsi_cls_session *session)
- 	list_del(&session->sess_list);
+ static LIST_HEAD(sesslist);
+-static LIST_HEAD(sessdestroylist);
+ static DEFINE_SPINLOCK(sesslock);
+ static LIST_HEAD(connlist);
+ static LIST_HEAD(connlist_err);
+@@ -2203,7 +2202,8 @@ void iscsi_remove_session(struct iscsi_cls_session *session)
+ 	ISCSI_DBG_TRANS_SESSION(session, "Removing session\n");
+ 
+ 	spin_lock_irqsave(&sesslock, flags);
+-	list_del(&session->sess_list);
++	if (!list_empty(&session->sess_list))
++		list_del(&session->sess_list);
  	spin_unlock_irqrestore(&sesslock, flags);
  
--	/* make sure there are no blocks/unblocks queued */
--	flush_workqueue(iscsi_eh_timer_workq);
--	/* make sure the timedout callout is not running */
--	if (!cancel_delayed_work(&session->recovery_work))
--		flush_workqueue(iscsi_eh_timer_workq);
-+	flush_work(&session->block_work);
-+	flush_work(&session->unblock_work);
-+	cancel_delayed_work_sync(&session->recovery_work);
- 	/*
- 	 * If we are blocked let commands flow again. The lld or iscsi
- 	 * layer should set up the queuecommand to fail commands.
+ 	flush_work(&session->block_work);
+@@ -3678,7 +3678,7 @@ iscsi_if_recv_msg(struct sk_buff *skb, struct nlmsghdr *nlh, uint32_t *group)
+ 
+ 			/* Prevent this session from being found again */
+ 			spin_lock_irqsave(&sesslock, flags);
+-			list_move(&session->sess_list, &sessdestroylist);
++			list_del_init(&session->sess_list);
+ 			spin_unlock_irqrestore(&sesslock, flags);
+ 
+ 			queue_work(iscsi_destroy_workq, &session->destroy_work);
 -- 
 2.18.2
 
