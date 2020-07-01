@@ -2,168 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 148762112DB
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 20:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751E32113DD
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 21:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728193AbgGAShV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 14:37:21 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:34369 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725440AbgGAShU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 14:37:20 -0400
-Received: (qmail 508077 invoked by uid 1000); 1 Jul 2020 14:37:18 -0400
-Date:   Wed, 1 Jul 2020 14:37:18 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bart Van Assche <bvanassche@acm.org>, martin.petersen@oracle.com
-Cc:     Can Guo <cang@codeaurora.org>, linux-scsi@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: [PATCH v2] SCSI and block: Simplify resume handling
-Message-ID: <20200701183718.GA507293@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726643AbgGATsB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 15:48:01 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:53864 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgGATsA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 15:48:00 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 061JcUce132879;
+        Wed, 1 Jul 2020 19:47:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id; s=corp-2020-01-29;
+ bh=PVG5KSKo1V8Qn2rizeew4jQ3Duw0SRlP8b4omgRIUw0=;
+ b=iV/yw+GkRMBF/U5TVYf9YM9TkBAKzlO5C/ioyDcmPKvkOr572KqdU83gsPfbF/6bIWax
+ NT94v3ybDwjCqcrNQ2hkVBCyA7eMwPiU84Zl8G14IwJq3rQg4qA7KxuCyA/LUukfirfG
+ N635o+ZwPaoYY0mxQyn54/NoBmW0uymfu14LelrvXJX1V4JjdPJ2v7uPlwujzP7+qRS3
+ pbBzdVrdsYq9PE9L0hnDn4tL1LiCOfd4jAb/3142pi0Ux4eW1d8l45miBIDmn67D5Vtv
+ UH417HgdaGpZhmcBj6dYqob+PJ2D2/SDEz0scURJ29afefe66WN6MrW7tOXx2kDG78Yt hg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 31wxrncjv3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 01 Jul 2020 19:47:53 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 061Jckni067799;
+        Wed, 1 Jul 2020 19:47:52 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 31y52kqbg4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 01 Jul 2020 19:47:52 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 061JloT7010334;
+        Wed, 1 Jul 2020 19:47:51 GMT
+Received: from ol2.localdomain (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 01 Jul 2020 19:47:49 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     cleech@redhat.com, lduncan@suse.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
+Subject: [PATCH 0/3] misc iscsi changes for 5.9
+Date:   Wed,  1 Jul 2020 14:47:45 -0500
+Message-Id: <1593632868-6808-1-git-send-email-michael.christie@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 mlxscore=0
+ adultscore=0 suspectscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007010137
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
+ lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007010137
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Commit 05d18ae1cc8a ("scsi: pm: Balance pm_only counter of request
-queue during system resume") fixed a problem in the block layer's
-runtime-PM code: blk_set_runtime_active() failed to call
-blk_clear_pm_only().  However, the commit's implementation was
-awkward; it forced the SCSI system-resume handler to choose whether to
-call blk_post_runtime_resume() or blk_set_runtime_active(), depending
-on whether or not the SCSI device had previously been runtime
-suspended.
+The following patches were made over Martin's 5.9 queue branch and
+Bob's wq patches in this thread:
 
-This patch simplifies the situation considerably by adding the missing
-function call directly into blk_set_runtime_active() (under the
-condition that the queue is not already in the RPM_ACTIVE state).
-This allows the SCSI routine to revert back to its original form.
-Furthermore, making this change reveals that blk_post_runtime_resume()
-(in its success pathway) does exactly the same thing as
-blk_set_runtime_active().  The duplicate code is easily removed by
-making one routine call the other.
+https://lore.kernel.org/linux-scsi/8e09f77c-ac01-358b-0451-d4107ef5cd34@oracle.com/T/#t
 
-No functional changes are intended.
-
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: Can Guo <cang@codeaurora.org>
-CC: Bart Van Assche <bvanassche@acm.org>
-
----
-
-v2:	Don't call blk_clear_pm_only() if the queue's RPM status was
-	already set to RPM_ACTIVE.  This happens during a system resume
-	if the device was not in runtime suspend beforehand.
-
-Martin:
-
-Since you merged the oritinal 05d18ae1cc8a commit, I'm submitting this to
-you as an update.  If you would prefer to have it go by way of the
-block-layer tree, let me know and I'll resend it.
-
-
-[as1939b]
-
-
- block/blk-pm.c         |   30 +++++++++++++++---------------
- drivers/scsi/scsi_pm.c |   10 ++--------
- 2 files changed, 17 insertions(+), 23 deletions(-)
-
-Index: usb-devel/block/blk-pm.c
-===================================================================
---- usb-devel.orig/block/blk-pm.c
-+++ usb-devel/block/blk-pm.c
-@@ -164,30 +164,21 @@ EXPORT_SYMBOL(blk_pre_runtime_resume);
-  *
-  * Description:
-  *    Update the queue's runtime status according to the return value of the
-- *    device's runtime_resume function. If it is successfully resumed, process
-- *    the requests that are queued into the device's queue when it is resuming
-- *    and then mark last busy and initiate autosuspend for it.
-+ *    device's runtime_resume function. If the resume was successful, call
-+ *    blk_set_runtime_active() to do the real work of restarting the queue.
-  *
-  *    This function should be called near the end of the device's
-  *    runtime_resume callback.
-  */
- void blk_post_runtime_resume(struct request_queue *q, int err)
- {
--	if (!q->dev)
--		return;
--
--	spin_lock_irq(&q->queue_lock);
- 	if (!err) {
--		q->rpm_status = RPM_ACTIVE;
--		pm_runtime_mark_last_busy(q->dev);
--		pm_request_autosuspend(q->dev);
--	} else {
-+		blk_set_runtime_active(q);
-+	} else if (q->dev) {
-+		spin_lock_irq(&q->queue_lock);
- 		q->rpm_status = RPM_SUSPENDED;
-+		spin_unlock_irq(&q->queue_lock);
- 	}
--	spin_unlock_irq(&q->queue_lock);
--
--	if (!err)
--		blk_clear_pm_only(q);
- }
- EXPORT_SYMBOL(blk_post_runtime_resume);
- 
-@@ -204,15 +195,24 @@ EXPORT_SYMBOL(blk_post_runtime_resume);
-  * This function can be used in driver's resume hook to correct queue
-  * runtime PM status and re-enable peeking requests from the queue. It
-  * should be called before first request is added to the queue.
-+ *
-+ * This function is also called by blk_post_runtime_resume() for successful
-+ * runtime resumes.  It does everything necessary to restart the queue.
-  */
- void blk_set_runtime_active(struct request_queue *q)
- {
- 	if (q->dev) {
-+		int old_status;
-+
- 		spin_lock_irq(&q->queue_lock);
-+		old_status = q->rpm_status;
- 		q->rpm_status = RPM_ACTIVE;
- 		pm_runtime_mark_last_busy(q->dev);
- 		pm_request_autosuspend(q->dev);
- 		spin_unlock_irq(&q->queue_lock);
-+
-+		if (old_status != RPM_ACTIVE)
-+			blk_clear_pm_only(q);
- 	}
- }
- EXPORT_SYMBOL(blk_set_runtime_active);
-Index: usb-devel/drivers/scsi/scsi_pm.c
-===================================================================
---- usb-devel.orig/drivers/scsi/scsi_pm.c
-+++ usb-devel/drivers/scsi/scsi_pm.c
-@@ -80,10 +80,6 @@ static int scsi_dev_type_resume(struct d
- 	dev_dbg(dev, "scsi resume: %d\n", err);
- 
- 	if (err == 0) {
--		bool was_runtime_suspended;
--
--		was_runtime_suspended = pm_runtime_suspended(dev);
--
- 		pm_runtime_disable(dev);
- 		err = pm_runtime_set_active(dev);
- 		pm_runtime_enable(dev);
-@@ -97,10 +93,8 @@ static int scsi_dev_type_resume(struct d
- 		 */
- 		if (!err && scsi_is_sdev_device(dev)) {
- 			struct scsi_device *sdev = to_scsi_device(dev);
--			if (was_runtime_suspended)
--				blk_post_runtime_resume(sdev->request_queue, 0);
--			else
--				blk_set_runtime_active(sdev->request_queue);
-+
-+			blk_set_runtime_active(sdev->request_queue);
- 		}
- 	}
- 
+They are just some cleanups and fixups and one fix for an
+issue that was found while reviewing the code (there are no
+offload and async sesison removal users).
 
