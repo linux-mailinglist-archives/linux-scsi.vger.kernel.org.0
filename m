@@ -2,160 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2031210250
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 05:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D65210258
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 05:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726035AbgGADHE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jun 2020 23:07:04 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:50612 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgGADHD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 23:07:03 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06136vQ0180635;
-        Wed, 1 Jul 2020 03:06:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=C+OQSk8SX2KjNV/BOEHQlX3V1mNEDOQ2Qwd9iZIvMHg=;
- b=gz+Cecqn0IukVu6qMxpbz8T6D7bIMqoRDj6GTQnesnHwSdWIcS4opddN7hIT1XSaa3an
- CdX9IncaylVgDZU8Van9Berq/2a2EBz/07d8wZGt2BusQP9zfWYK5a9t2+D/92H4WhMz
- 9k8/OCOnWsTEQQ2swd3+GWfI+YDF8ZWS65D9d9xadJ+tpiIfEc+VRsxtv8aGJq30mubn
- Q/6O26g/Y3eJuc0f9189LJTW8hnxw4vV4nq/OaBxX1FeylCbRFGorsdtGmL7MrnylwHU
- KRfYSnwmdmBtAPtYeK4i/FdJF0H9Ba7Gm2v8gFAZ+SiT5FYPuwKTC6QN+Nx332u3XaB/ bw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 31xx1dvr63-1
+        id S1726509AbgGADIq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jun 2020 23:08:46 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:34484 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbgGADIq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 23:08:46 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06138fAC144145;
+        Wed, 1 Jul 2020 03:08:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=a7yNOUb+wQ/nGeOPYpyTwZ5QCHRtZL32gZTofQ8o/lc=;
+ b=BWTHq9Cex1gPGAMIHRTZ/7XCtaQkt84p8DDI7kpO51xmlZp83zbR/A7uWTICOfCEpfj+
+ 4JuWxIVHV+0RD2m/+lCKL8IbglqXV9n04TSwSKzVu0YMI9FJKZuTH8pACnp+zhO6jLE1
+ M0vACtwTL7zzZXFsEX/5dAxAjIEPPaObCnuCcyfBkIm2aFxhIhGJj95sMJ91Oc5Hwfod
+ b9/Myo5iV5kB8xl3zsOQd2xkggp2yYFD+xrZBXDVk5DucuPEEh7ojxD9n24d/nTCsr7L
+ O4w25EUI9DMSiVeJgcoQjijlQc8eMHtEo8UBL2HgSAOv/yLSZDSY+P7vUMX51dW01xV7 Vw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 31wxrn7uyd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 01 Jul 2020 03:06:57 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0612wlHC085708;
-        Wed, 1 Jul 2020 03:06:56 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 31xfvtbt98-1
+        Wed, 01 Jul 2020 03:08:41 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06138ddU158080;
+        Wed, 1 Jul 2020 03:08:39 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 31y52jq9uu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 01 Jul 2020 03:06:56 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06136sV0029228;
-        Wed, 1 Jul 2020 03:06:54 GMT
-Received: from [192.168.0.110] (/183.246.145.120)
+        Wed, 01 Jul 2020 03:08:27 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06138PJf020765;
+        Wed, 1 Jul 2020 03:08:26 GMT
+Received: from localhost.localdomain (/183.246.145.120)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 01 Jul 2020 03:06:53 +0000
-Subject: Re: [PATCH 1/2] workqueue: don't always set __WQ_ORDERED implicitly
-To:     Lai Jiangshan <jiangshanlai+lkml@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        open-iscsi@googlegroups.com, lduncan@suse.com,
-        michael.christie@oracle.com
-References: <20200611100717.27506-1-bob.liu@oracle.com>
- <CAJhGHyDQLuoCkjwnze_6ZOLwXPtbNxnjxOr=fqqqsR_yxB9xtA@mail.gmail.com>
- <52fa1d81-e585-37eb-55e5-0ed07ce7adc0@oracle.com>
- <CAJhGHyBPrCr3+iu-dMe69J3+tj99ea8crCGBuXc4yoStD+dEFA@mail.gmail.com>
+        with ESMTP ; Wed, 01 Jul 2020 03:08:24 +0000
 From:   Bob Liu <bob.liu@oracle.com>
-Message-ID: <bdf25dd0-7ac3-52b5-855b-14955443c52b@oracle.com>
-Date:   Wed, 1 Jul 2020 11:06:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <CAJhGHyBPrCr3+iu-dMe69J3+tj99ea8crCGBuXc4yoStD+dEFA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, open-iscsi@googlegroups.com,
+        lduncan@suse.com, michael.christie@oracle.com,
+        Bob Liu <bob.liu@oracle.com>
+Subject: [PATCH 1/2] scsi: iscsi: change back iscsi workqueue max_active argu to 1
+Date:   Wed,  1 Jul 2020 11:07:44 +0800
+Message-Id: <20200701030745.16897-1-bob.liu@oracle.com>
+X-Mailer: git-send-email 2.9.5
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 spamscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 mlxscore=0
+ adultscore=0 suspectscore=3 bulkscore=0 malwarescore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007010018
+ definitions=main-2007010019
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015 adultscore=0
- suspectscore=0 mlxlogscore=999 cotscore=-2147483648 lowpriorityscore=0
- malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007010019
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
+ lowpriorityscore=0 suspectscore=3 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007010019
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/29/20 8:37 AM, Lai Jiangshan wrote:
-> On Mon, Jun 29, 2020 at 8:13 AM Bob Liu <bob.liu@oracle.com> wrote:
->>
->> On 6/28/20 11:54 PM, Lai Jiangshan wrote:
->>> On Thu, Jun 11, 2020 at 6:29 PM Bob Liu <bob.liu@oracle.com> wrote:
->>>>
->>>> Current code always set 'Unbound && max_active == 1' workqueues to ordered
->>>> implicitly, while this may be not an expected behaviour for some use cases.
->>>>
->>>> E.g some scsi and iscsi workqueues(unbound && max_active = 1) want to be bind
->>>> to different cpu so as to get better isolation, but their cpumask can't be
->>>> changed because WQ_ORDERED is set implicitly.
->>>
->>> Hello
->>>
->>> If I read the code correctly, the reason why their cpumask can't
->>> be changed is because __WQ_ORDERED_EXPLICIT, not __WQ_ORDERED.
->>>
->>>>
->>>> This patch adds a flag __WQ_ORDERED_DISABLE and also
->>>> create_singlethread_workqueue_noorder() to offer an new option.
->>>>
->>>> Signed-off-by: Bob Liu <bob.liu@oracle.com>
->>>> ---
->>>>  include/linux/workqueue.h | 4 ++++
->>>>  kernel/workqueue.c        | 4 +++-
->>>>  2 files changed, 7 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
->>>> index e48554e..4c86913 100644
->>>> --- a/include/linux/workqueue.h
->>>> +++ b/include/linux/workqueue.h
->>>> @@ -344,6 +344,7 @@ enum {
->>>>         __WQ_ORDERED            = 1 << 17, /* internal: workqueue is ordered */
->>>>         __WQ_LEGACY             = 1 << 18, /* internal: create*_workqueue() */
->>>>         __WQ_ORDERED_EXPLICIT   = 1 << 19, /* internal: alloc_ordered_workqueue() */
->>>> +       __WQ_ORDERED_DISABLE    = 1 << 20, /* internal: don't set __WQ_ORDERED implicitly */
->>>>
->>>>         WQ_MAX_ACTIVE           = 512,    /* I like 512, better ideas? */
->>>>         WQ_MAX_UNBOUND_PER_CPU  = 4,      /* 4 * #cpus for unbound wq */
->>>> @@ -433,6 +434,9 @@ struct workqueue_struct *alloc_workqueue(const char *fmt,
->>>>  #define create_singlethread_workqueue(name)                            \
->>>>         alloc_ordered_workqueue("%s", __WQ_LEGACY | WQ_MEM_RECLAIM, name)
->>>>
->>>> +#define create_singlethread_workqueue_noorder(name)                    \
->>>> +       alloc_workqueue("%s", WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | \
->>>> +                       WQ_UNBOUND | __WQ_ORDERED_DISABLE, 1, (name))
->>>
->>> I think using __WQ_ORDERED without __WQ_ORDERED_EXPLICIT is what you
->>> need, in which case cpumask is allowed to be changed.
->>>
->>
->> I don't think so, see function workqueue_apply_unbound_cpumask():
->>
->> wq_unbound_cpumask_store()
->>  > workqueue_set_unbound_cpumask()
->>    > workqueue_apply_unbound_cpumask() {
->>      ...
->> 5276                 /* creating multiple pwqs breaks ordering guarantee */
->> 5277                 if (wq->flags & __WQ_ORDERED)
->> 5278                         continue;
->>                           ^^^^
->>                           Here will skip apply cpumask if only __WQ_ORDERED is set.
-> 
-> wq_unbound_cpumask_store() is for changing the cpumask of
-> *all* workqueues. I don't think it can be used to make
-> scsi and iscsi workqueues bound to different cpu.
-> 
-> apply_workqueue_attrs() is for changing the cpumask of the specific
-> workqueue, which can change the cpumask of __WQ_ORDERED workqueue
-> (but without __WQ_ORDERED_EXPLICIT).
-> 
+Commit 3ce4196 (scsi: iscsi: Register sysfs for iscsi workqueue) enables
+'cpumask' support for iscsi workqueues.
 
-Yes, you are right. I made a mistake.
-Sorry for the noise.
+While there is a mistake in that commit, it's unnecessary to set
+max_active = 2 since 'cpumask' can be modified when max_active = 1.
 
-Regards,
-Bob
+This patch change back max_active to 1 so as to keep the same behaviour as
+before.
 
->>
->> 5280                 ctx = apply_wqattrs_prepare(wq, wq->unbound_attrs);
->>
->>      }
+Signed-off-by: Bob Liu <bob.liu@oracle.com>
+---
+ drivers/scsi/libiscsi.c             | 2 +-
+ drivers/scsi/scsi_transport_iscsi.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index e5a64d4..49c8a18 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -2629,7 +2629,7 @@ struct Scsi_Host *iscsi_host_alloc(struct scsi_host_template *sht,
+ 			"iscsi_q_%d", shost->host_no);
+ 		ihost->workq = alloc_workqueue("%s",
+ 			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
+-			2, ihost->workq_name);
++			1, ihost->workq_name);
+ 		if (!ihost->workq)
+ 			goto free_host;
+ 	}
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index f4cc08e..7ae5024 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -4760,7 +4760,7 @@ static __init int iscsi_transport_init(void)
+ 
+ 	iscsi_eh_timer_workq = alloc_workqueue("%s",
+ 			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
+-			2, "iscsi_eh");
++			1, "iscsi_eh");
+ 	if (!iscsi_eh_timer_workq) {
+ 		err = -ENOMEM;
+ 		goto release_nls;
+-- 
+2.9.5
+
