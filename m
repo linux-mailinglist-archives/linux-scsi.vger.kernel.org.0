@@ -2,108 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1435921007C
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 01:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A98B2100DD
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 02:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgF3Xfu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jun 2020 19:35:50 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:35496 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726093AbgF3Xft (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 19:35:49 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05UNWLe1011137;
-        Tue, 30 Jun 2020 23:35:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=vVICrlJAS2PqSjeeB2xQKLiJ2RKt33flFfhW6cec9QA=;
- b=E+qJGHobcy3fK6x9dEGLqBLaP5vdj66Z4/z5lSyB7DWhqmpkx5L2jAjo+6DEjOBlW2gs
- AAaIh9J9OaWK01ku6jIeaIMi40t/WL2z6LLpdm8n1f6VUOHws0Qo7d2TWNSSLLck0sCN
- uTfd0gc2PRIVMxig+AeeaRDsD4ZvL0nS0YNZGNYP3n+w65tlvOAQ523mUifZ8CWS6pGC
- jMk/RFoMdY2rCAlAmvc6EUA0D+gB5NTOAC9ES4xVCdW9U5tJpUy4sbNqCiH8yqH/PBIO
- wOGJWQqPtXD1wMf7W3mspKq5J13LXy+bnkPckuQUSX7Nr2ZVVDwqMPk2j0CKAg7TfmSH 3g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 31wxrn7byy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Jun 2020 23:35:41 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05UNWhgY137074;
-        Tue, 30 Jun 2020 23:35:40 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 31xg14ps0p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jun 2020 23:35:40 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05UNZbtr008588;
-        Tue, 30 Jun 2020 23:35:39 GMT
-Received: from ol2.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 30 Jun 2020 23:35:37 +0000
-From:   Mike Christie <michael.christie@oracle.com>
-To:     cleech@redhat.com, lduncan@suse.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Subject: [PATCH 4/4] iscsi class: remove sessdestroylist
-Date:   Tue, 30 Jun 2020 18:35:34 -0500
-Message-Id: <1593560134-28148-5-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1593560134-28148-1-git-send-email-michael.christie@oracle.com>
-References: <1593560134-28148-1-git-send-email-michael.christie@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006300163
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9668 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1011
- malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
- lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006300163
+        id S1726051AbgGAAKF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jun 2020 20:10:05 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:64785 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725930AbgGAAKE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jun 2020 20:10:04 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200701001002epoutp02f2928c99c5bd7be1f0a5e231ace81df9~deGFAlK000811408114epoutp02W
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Jul 2020 00:10:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200701001002epoutp02f2928c99c5bd7be1f0a5e231ace81df9~deGFAlK000811408114epoutp02W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1593562202;
+        bh=QWZJSb/2p+9cthTdrVYq6eDkK91lgMsygQOaAVOoG+s=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=EyiLEzs3KKFxtL7pF/rBLT70RK112+vS5SBCs7i3G0ErLsNWRinv2yqHrEI09w6RV
+         8G5oiAdWS5NyQ00VgCP1kLbGOCXu9Df/f9TEQHrse7r1Xl59tqI0a0KfXgPXcv5kbm
+         6HJhmTLXcQdplabnvnUpRUzTQlT9u4ztEG55bzx4=
+Received: from epcpadp1 (unknown [182.195.40.11]) by epcas1p2.samsung.com
+        (KnoxPortal) with ESMTP id
+        20200701001001epcas1p2ba55774cedc604a1bab26c99f1afa406~deGEZzUS60336103361epcas1p2c;
+        Wed,  1 Jul 2020 00:10:01 +0000 (GMT)
+Mime-Version: 1.0
+Subject: RE: [PATCH v4 3/5] scsi: ufs: Introduce HPB module
+Reply-To: daejun7.park@samsung.com
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <SN6PR04MB4640A27B0DCB321B165D59F0FC6F0@SN6PR04MB4640.namprd04.prod.outlook.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1087081975.11593562201594.JavaMail.epsvc@epcpadp1>
+Date:   Wed, 01 Jul 2020 09:07:57 +0900
+X-CMS-MailID: 20200701000757epcms2p38c0c86b2fcfc414e75a5bcaafa3222cb
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20200629064323epcms2p787baba58a416fef7fdd3927f8da701da
+References: <SN6PR04MB4640A27B0DCB321B165D59F0FC6F0@SN6PR04MB4640.namprd04.prod.outlook.com>
+        <963815509.21593413582881.JavaMail.epsvc@epcpadp2>
+        <1239183618.61593413402991.JavaMail.epsvc@epcpadp1>
+        <231786897.01593413281727.JavaMail.epsvc@epcpadp2>
+        <1239183618.61593413882377.JavaMail.epsvc@epcpadp2>
+        <CGME20200629064323epcms2p787baba58a416fef7fdd3927f8da701da@epcms2p3>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Just delete the sess from the session list instead of adding it to some
-list we never use.
+Hi Avri,
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/scsi_transport_iscsi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> +static int ufshpb_get_dev_info(struct ufs_hba *hba,
+> > +                              struct ufshpb_dev_info *hpb_dev_info,
+> > +                              u8 *desc_buf)
+> > +{
+> > +       int ret;
+> > +       int version;
+> > +       u8 hpb_mode;
+> Maybe before doing anything, first verify that all descriptors are in the proper size?
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 2b3af43..85a68cb 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1623,7 +1623,6 @@ static DECLARE_TRANSPORT_CLASS(iscsi_connection_class,
- static DEFINE_MUTEX(conn_mutex);
- 
- static LIST_HEAD(sesslist);
--static LIST_HEAD(sessdestroylist);
- static DEFINE_SPINLOCK(sesslock);
- static LIST_HEAD(connlist);
- static LIST_HEAD(connlist_err);
-@@ -2204,7 +2203,8 @@ void iscsi_remove_session(struct iscsi_cls_session *session)
- 	ISCSI_DBG_TRANS_SESSION(session, "Removing session\n");
- 
- 	spin_lock_irqsave(&sesslock, flags);
--	list_del(&session->sess_list);
-+	if (!list_empty(&session->sess_list))
-+		list_del(&session->sess_list);
- 	spin_unlock_irqrestore(&sesslock, flags);
- 
- 	flush_work(&session->block_work);
-@@ -3679,7 +3679,7 @@ static int iscsi_logout_flashnode_sid(struct iscsi_transport *transport,
- 
- 			/* Prevent this session from being found again */
- 			spin_lock_irqsave(&sesslock, flags);
--			list_move(&session->sess_list, &sessdestroylist);
-+			list_del_init(&session->sess_list);
- 			spin_unlock_irqrestore(&sesslock, flags);
- 
- 			queue_work(iscsi_destroy_workq, &session->destroy_work);
--- 
-1.8.3.1
+Before reading descriptor, ufshcd_map_desc_id_to_length() may check descriptor size.
+So I deleted size checking codes.
 
+static int ufshpb_read_desc(struct ufs_hba *hba, u8 desc_id, u8 desc_index,    
+                          u8 selector, u8 *desc_buf)                           
+{                                                                              
+        int err = 0;                                                           
+        int size;                                                              
+                                                                               
+  ->    ufshcd_map_desc_id_to_length(hba, desc_id, &size);                     
+                                                                               
+        pm_runtime_get_sync(hba->dev);                                         
+                                                                               
+        err = ufshcd_query_descriptor_retry(hba, UPIU_QUERY_OPCODE_READ_DESC,  
+                                            desc_id, desc_index,               
+                                            selector,                          
+                                            desc_buf, &size);  
+
+
+> > +#define UFSHPB_WRITE_BUFFER_ID                 0x02
+> Should be 0x01 for HPB1.0
+
+OK.
+
+Thanks,
+Daejun
