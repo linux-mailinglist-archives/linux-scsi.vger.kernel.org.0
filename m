@@ -2,28 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB4A21149F
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 22:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D912114AC
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jul 2020 23:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbgGAU6G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 16:58:06 -0400
-Received: from de-smtp-delivery-102.mimecast.com ([62.140.7.102]:37100 "EHLO
+        id S1727014AbgGAVCH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 17:02:07 -0400
+Received: from de-smtp-delivery-102.mimecast.com ([62.140.7.102]:30254 "EHLO
         de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725535AbgGAU6F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 16:58:05 -0400
-X-Greylist: delayed 304 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 Jul 2020 16:58:01 EDT
+        by vger.kernel.org with ESMTP id S1725535AbgGAVCH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 17:02:07 -0400
 Received: from EUR04-DB3-obe.outbound.protection.outlook.com
  (mail-db3eur04lp2050.outbound.protection.outlook.com [104.47.12.50]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- de-mta-10-D1xIt3YdOPGTDibQM6xoqA-1; Wed, 01 Jul 2020 22:56:42 +0200
-X-MC-Unique: D1xIt3YdOPGTDibQM6xoqA-1
+ TLS) by relay.mimecast.com with ESMTP id de-mta-1-MqM6LMamMTaZY1G7Ql4Kqg-1;
+ Wed, 01 Jul 2020 22:55:29 +0200
+X-MC-Unique: MqM6LMamMTaZY1G7Ql4Kqg-1
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AQuUArOh2fwlVVs2bOddgQaeAS4Xc6zy5xwdcUQpF/EocnIvCJS24jEHn7B61lubrDhNnY9TtrSmNmFhnVZp+B29GXr8CSGiBivLgqkASJ1cmTCoa19nkOF+TO2pwavgJPs2xKWTo2Q491Kdjbg8ar4gWD+sXueB0G/fLiFlBMU/OHE7+lwcU6xAgeUNfBEP/EhnJVALS2vdgK9YTxfgpOW4HpHQJxCRZ1e8dY352V9X+sX2pnPD04uFTzowoBSQnbXQZaqpGnbhV+XXzctGbPJzv3sbvScz2GJPW7WDhZ1DIcuwG3To7xZEQAyhHxrJZOA11h4X+XdIjgITf0Kqqw==
+ b=h27jP4+bI8xWCV3OxRnkboqQXOepv8G8sso8lljnGBP8rGDltCtr9kSeMNvWdeipezGOLg0bYCgpRJNWTqHCcTWb+zmlUV/fNFEcJD8wVVF3+eQNjlzpP8WKSOtff7nPG1pNCCkI3GDIvnw9eML7Ho3qTZH24n2dzGvAerAzvgkShzDStwkiWfTSJp2y4n92T3El5S24/rYn0iEc5bY5LsE9hG2wyH/On+y/9HOHkbrBe0vx96Hu3FLYqmeL1euTm1J5RV5RwQNC3YUpH3WI78EpY7myy9ZDW0q544W+tFen4oh1h807e96PumNrZLjEI6WobIllgIkn+sxoIXBnAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NmHxI9MSLgWNL+Iwmidty2dtUsJaNWupKHV0FzyCW3Q=;
- b=aSRQW5qQE04K/phLZTzsRjCkAYU8OPpREIFagzVbozBN+JZYC11bKlGze5Qr39gK6XwX/VsTKjzujjbCjs42e3GkOzXYjHo6udkfzh8dSxKPnpuFGFUxn3Kd5n1yz3jW2kgTeOQ1JQpUzF4D7OoppYO20T7bUneqdxdIRHd3JqtoUWb/rHcFz/aqpiLF8tHPG2L3T1hR3UCVAIe847e1NkKGkIVYpryiNYUMctPrNe6SFTJD0emHgG/15ugLw5CZ6yHMdSq4psWEobb3iAtxhrZiakUAazOsbLmBDCxBBAOB2KjiSyG/eiPzI9wCFHJN3Ghy7c9t9qMX6/bEg1g9zA==
+ bh=xZbEiP4kxNFpQZmAR8bROepWWm820nENJYEApmIad4A=;
+ b=R57btNRmxuhudyskbXHS75KIlsIGZ06GRnD+9q2TilHf9Ds7krhkp+GslMj1xVk2n4rQYoH60iEf2Oki1EFoxsmnFG4QlQoHCfSsvN/l9AtzX/DeTOxF0hvTi9IGoXmfHNxfQgQn/O9drj/to03fNca0wlxwu2HzURYEeLN7YWeNnoH5BnlS7iIcIJdxi0USU70CBJPM2r55UJKhLvopg2Gfm7kFBleawVJ81q8CK01rEmvsfL7pzqlCL/TNWsBSE4mHUHX9MNnUtYhatRzbEm+MZJEp7sQLj/obxnNB723Cy9VEgZxpLWEl7o5LZMKtVdytIsdUezz512VFC/f7qA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
@@ -34,17 +33,17 @@ Received: from AM5PR04MB3089.eurprd04.prod.outlook.com (2603:10a6:206:b::28)
  by AM6PR04MB4614.eurprd04.prod.outlook.com (2603:10a6:20b:18::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.25; Wed, 1 Jul
- 2020 20:56:41 +0000
+ 2020 20:55:28 +0000
 Received: from AM5PR04MB3089.eurprd04.prod.outlook.com
  ([fe80::b948:ad31:5db0:e954]) by AM5PR04MB3089.eurprd04.prod.outlook.com
  ([fe80::b948:ad31:5db0:e954%6]) with mapi id 15.20.3153.023; Wed, 1 Jul 2020
- 20:56:41 +0000
-Subject: Re: [PATCH 3/3] iscsi class: remove sessdestroylist
+ 20:55:28 +0000
+Subject: Re: [PATCH 2/3] iscsi class: optimize work queue flush use
 To:     Mike Christie <michael.christie@oracle.com>, cleech@redhat.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         james.bottomley@hansenpartnership.com
 References: <1593632868-6808-1-git-send-email-michael.christie@oracle.com>
- <1593632868-6808-4-git-send-email-michael.christie@oracle.com>
+ <1593632868-6808-3-git-send-email-michael.christie@oracle.com>
 From:   Lee Duncan <lduncan@suse.com>
 Autocrypt: addr=lduncan@suse.com; keydata=
  xsFNBE6ockoBEADMQ+ZJI8khyuc2jMfgf4RmARpBkZrcHSs1xTKVVBUbpFooDEVi49D/bz0G
@@ -129,42 +128,42 @@ Autocrypt: addr=lduncan@suse.com; keydata=
  iv2n7WpDcR/bT0ADCwtg8piRWMtA8Boc8w5WG06vphxLlDIe/hDMkNlgCUy84gLiRI76VaBh
  9eFpv8Bn4aZBVOiuzj4s2DSAp4G3loUsTuj4uxGgDlfhK1xdJhBvKdO8omG+A73DZ7aKxLPa
  Xd8p+B+giaT8a1b5hWuz85V0
-Message-ID: <986df663-f499-9a18-2fb2-d2f06b01c078@suse.com>
-Date:   Wed, 1 Jul 2020 13:56:36 -0700
+Message-ID: <aec9871e-838c-731c-11ff-7b7ae04bffe9@suse.com>
+Date:   Wed, 1 Jul 2020 13:55:22 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
-In-Reply-To: <1593632868-6808-4-git-send-email-michael.christie@oracle.com>
+In-Reply-To: <1593632868-6808-3-git-send-email-michael.christie@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0031.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::18) To AM5PR04MB3089.eurprd04.prod.outlook.com
+X-ClientProxiedBy: FR2P281CA0019.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:14::6) To AM5PR04MB3089.eurprd04.prod.outlook.com
  (2603:10a6:206:b::28)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.20.3] (73.25.22.216) by FR2P281CA0031.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:14::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.8 via Frontend Transport; Wed, 1 Jul 2020 20:56:39 +0000
+Received: from [192.168.20.3] (73.25.22.216) by FR2P281CA0019.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:14::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.8 via Frontend Transport; Wed, 1 Jul 2020 20:55:26 +0000
 X-Originating-IP: [73.25.22.216]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b82653f6-05fa-404d-a5bb-08d81e01413c
+X-MS-Office365-Filtering-Correlation-Id: f43e4614-1a2d-41ab-310a-08d81e0115f1
 X-MS-TrafficTypeDiagnostic: AM6PR04MB4614:
-X-Microsoft-Antispam-PRVS: <AM6PR04MB4614F9B625065950E332A71CDA6C0@AM6PR04MB4614.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
+X-Microsoft-Antispam-PRVS: <AM6PR04MB4614732FCEFD500275C85060DA6C0@AM6PR04MB4614.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-Forefront-PRVS: 04519BA941
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Vk0w4F0QKHSOsvQmgYO/K/2N6DXfPTTPk1jfKtKL2spiXLIEej7tzW2SzTt6GlFAwwx6aLWlApsqtpNbwqJ92FuiHX15P09cQ+OPamtO6G+UrOOMW8YWrRNRbC6LuX/VfBy+gWC8ZV38o1uoEFO/WKiAYrgoYOYLk6vJ1kQoJqgAqE63lkEgWsCscs85XhcWObxVlg5aXbcF+NA1iaJIXoefWjvq+dz5eqHbza0UKky61SC3J+lpxbfRveeRTtK+h7FkyLWyT8e4rNkcXHL8MHaDq+y+l4100E7rw/wQojYYP/uY8E6TDM95BMJpcPNzFvKL+URB2yz7ux2h3Zb15SubqyipmcZoGPuQdopSQUnnyCPsOIO+WqlDfbP+kKLX
+X-Microsoft-Antispam-Message-Info: sdR8/8gKyfYC+MJjH1nsriR5ovNm8bNZD3zl9Q/yLSLE2kS4qRimMWNU3w71RAsM8Zeg5xcYBEKTsARtyTaXZyc3o8b6hg+BXbWjQls+fVmKA2Y9+dEiiodWf4ROL39KY1yn6MajayLzSTOwRpD5zB+JgiyYz/OHj0eJQ6lnERx0x6BHFqthxE8yDMaG8femk/UgAC7ohZbGP6rPXWAoRDirbKgxb6BOkj8dB4IrzLLQtsb+XHQOKvVWQqqcp9relwV8SgTxLLOI5nKOa1cvYZfnyDOZn6wn8HQXbcYULVah0xmjlVc54tKq4c+21bKxjA1KUX1c+9Tgzd7oLyjcjAnuG+ZPY6Z1e97RGF51EJ+aXA6XYrALEdGVtURIMJnC
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3089.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(376002)(396003)(366004)(39860400002)(136003)(52116002)(31696002)(31686004)(66476007)(6666004)(16576012)(316002)(2906002)(5660300002)(66556008)(86362001)(36756003)(66946007)(53546011)(478600001)(956004)(2616005)(83380400001)(26005)(8936002)(8676002)(186003)(6486002)(16526019)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: JVedpXhX/Jt0X9QZd2Utt9zWbCRDXSEcvWj1yHVTF6Md8PaMpbEMr4RLgTuYkaPO3wjfe0ULazPX8MQdkVsSCH+Gcy7hC67jD+GOJQRAQhZyQXf4fHVDku07AgvAD/ZJPJTvrXFt6CrLzDjjepudILCxEQdYO3DU0JPIvJvEN25Tnanlgua0YGRJN7YLzFyQan/aPpevL2V1Nr7SRxesJ7Zm0Q+cDKw2Y0hET/X5TPLrD7/zTwWEAtuAHdAmvhKQv7ho5626F1csQ9toXOR2gExA6yJCdlgWxQnKsk2zHa31730wctSPlUYFtK6/pdBhPEorah3RtLDtKskUeCwuPkoutr/V5X2yln10zWbDFxqArpGksKKPcM/BgVMR1ew8l73bTiUdyTrL6KGWwgELBB+lu4rvwOU3ah1mk68cLRhtIh/LqoI8fwdcwdX3gvGMGLEvqjVeXL6dwVsVYlX8VrpaFyghO2R2FQpyKNmV70Y=
+X-MS-Exchange-AntiSpam-MessageData: 0K162pAKS/tdRWf3w5kxnYkf96kqJqv+rwZqeW48kvkzTQIH2lTKYHE91dxM6OXZ2DOIJVMHHV+hwEHLwmvhvlzg0/eJcRrLAdaFJI963Bjxa5+j2Z7piBTYD5Uhw7ByIywILenaXewSsM/ETkkwYPyC8m2WwIPPn+xblV6oDm3nza1NsEaOxY4Vv2EkD4qGkjBjt21Xoya02+wML56iD6UUePQhAdmK9+gCNZcv7W1lpZ0rOZ4CoC7AFk07oLK21+33w5XfhXaZHiwMgN6CVhvonw/IjcVzGY1jWxs34Nv0KgTz9MNFpAvxXxLDcWEXt57LgU+i6CRwOSYCOXP3LSo9vk74H9AU+1xKPS2ZaRkgc5tZVVQ7efm6sGMt1uOHfPOnR9B7AB/lYF2sl60CwYbOmgUe0+Nvv8UGxpN+HvMqSuEzh09bBEkSTcWIBRjKOflJaHRopD8UaeFoaIyUd2TpJ+04wECyRmTcIksE/8U=
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b82653f6-05fa-404d-a5bb-08d81e01413c
+X-MS-Exchange-CrossTenant-Network-Message-Id: f43e4614-1a2d-41ab-310a-08d81e0115f1
 X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3089.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2020 20:56:41.2478
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2020 20:55:28.6213
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V4o3rlCOQHb9JOtyHviUtYAS3hl/AjqfmL4cO3UNPMlKT/eAIB6oKeeGfch+zTk0OVQy7QK+8flm97o+gedPSw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: x0+iPZiVTM+x7vnCOUy/xor2hrWD8jApfoiMJIF6SmuuWr9lniM7fgzceub/EYGiA022AELPe3z3VCJSmuEw3g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4614
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -172,48 +171,55 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 7/1/20 12:47 PM, Mike Christie wrote:
-> Just delete the sess from the session list instead of adding it to some
-> list we never use.
+> There is no need for one session to flush the entire
+> iscsi_eh_timer_workq when removing/unblocking a session. During removal
+> we need to make sure our works are not running anymore. And
+> iscsi_unblock_session only needs to make sure it's work is done. The
+> unblock work function will flush/cancel the works it has conflicts with.
 > 
 > Signed-off-by: Mike Christie <michael.christie@oracle.com>
 > ---
->  drivers/scsi/scsi_transport_iscsi.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/scsi/scsi_transport_iscsi.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
 > 
 > diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-> index 80b442a2b4c8..60e6bde1e96c 100644
+> index 2cd2610ecfaf..80b442a2b4c8 100644
 > --- a/drivers/scsi/scsi_transport_iscsi.c
 > +++ b/drivers/scsi/scsi_transport_iscsi.c
-> @@ -1623,7 +1623,6 @@ static DEFINE_MUTEX(rx_queue_mutex);
->  static DEFINE_MUTEX(conn_mutex);
+> @@ -1978,10 +1978,11 @@ void iscsi_unblock_session(struct iscsi_cls_session *session)
+>  {
+>  	queue_work(iscsi_eh_timer_workq, &session->unblock_work);
+>  	/*
+> -	 * make sure all the events have completed before tell the driver
+> -	 * it is safe
+> +	 * Blocking the session can be done from any context so we only
+> +	 * queue the block work. Make sure the unblock work has completed
+> +	 * because it flushes/cancels the other works and updates the state.
+>  	 */
+> -	flush_workqueue(iscsi_eh_timer_workq);
+> +	flush_work(&session->unblock_work);
+>  }
+>  EXPORT_SYMBOL_GPL(iscsi_unblock_session);
 >  
->  static LIST_HEAD(sesslist);
-> -static LIST_HEAD(sessdestroylist);
->  static DEFINE_SPINLOCK(sesslock);
->  static LIST_HEAD(connlist);
->  static LIST_HEAD(connlist_err);
-> @@ -2203,7 +2202,8 @@ void iscsi_remove_session(struct iscsi_cls_session *session)
->  	ISCSI_DBG_TRANS_SESSION(session, "Removing session\n");
->  
->  	spin_lock_irqsave(&sesslock, flags);
-> -	list_del(&session->sess_list);
-> +	if (!list_empty(&session->sess_list))
-> +		list_del(&session->sess_list);
+> @@ -2205,11 +2206,9 @@ void iscsi_remove_session(struct iscsi_cls_session *session)
+>  	list_del(&session->sess_list);
 >  	spin_unlock_irqrestore(&sesslock, flags);
 >  
->  	flush_work(&session->block_work);
-> @@ -3678,7 +3678,7 @@ iscsi_if_recv_msg(struct sk_buff *skb, struct nlmsghdr *nlh, uint32_t *group)
->  
->  			/* Prevent this session from being found again */
->  			spin_lock_irqsave(&sesslock, flags);
-> -			list_move(&session->sess_list, &sessdestroylist);
-> +			list_del_init(&session->sess_list);
->  			spin_unlock_irqrestore(&sesslock, flags);
->  
->  			queue_work(iscsi_destroy_workq, &session->destroy_work);
+> -	/* make sure there are no blocks/unblocks queued */
+> -	flush_workqueue(iscsi_eh_timer_workq);
+> -	/* make sure the timedout callout is not running */
+> -	if (!cancel_delayed_work(&session->recovery_work))
+> -		flush_workqueue(iscsi_eh_timer_workq);
+> +	flush_work(&session->block_work);
+> +	flush_work(&session->unblock_work);
+> +	cancel_delayed_work_sync(&session->recovery_work);
+>  	/*
+>  	 * If we are blocked let commands flow again. The lld or iscsi
+>  	 * layer should set up the queuecommand to fail commands.
 > 
 
-So is sessdestroylist still needed?
+Is the error handler timer work queue still get flushed? (Sorry if this
+is a dumb question), or is that covered in the other flush()es?
 -- 
 Lee
 
