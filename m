@@ -2,144 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 778FB2119C7
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35012119F7
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 04:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728279AbgGBBnk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 21:43:40 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:33912 "EHLO
+        id S1726305AbgGBCKM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 22:10:12 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:48600 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726135AbgGBBna (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 21:43:30 -0400
+        with ESMTP id S1725845AbgGBCKM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 22:10:12 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621cwbn155834;
-        Thu, 2 Jul 2020 01:43:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=fK14tJ8EapNLd8Lo5gCESUlnZUEqFu1GK84uDjIBzWU=;
- b=D8GaqqeUQLYO1GfS/Ow25clYWVzgneGlXlDNoIweVSyCGwZsb2r8vS0ON5XPsQRdwsml
- XGH2Mw22iRMLTDSEAlI1xQjyARofW+XvNV32Vhdp7E6wZUYGXGVS3Mz/Rh16v+vUwblA
- UE/cW7h4/cAQ7Z6/MKR2IEQS12MPoLsjzf+r6d1ZyvAkqXWr6ZhYOlrsMZjjHvl1vLgQ
- cK/bXEr8iENAC0uMgGMv3kbuXRKB4Yzm9B/Q0tvhPAUDv/Qyw5vfEpVq9KUTnXGj79Ao
- TgjooIYqsTX6gOD/suAV99FIpouq5W1A9fVFEAyxwsLASfEQzdOZrHh98G9s0Kz3LlPd TQ== 
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06228URp007015;
+        Thu, 2 Jul 2020 02:10:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=/qt6JxeEjOZwsytjTEnroK7ou0F2WgyJtuYnT5ompZ4=;
+ b=xPUzIA5Orrp6EHZtZZeT3f+m6Sv1bzuUBLFfMV7eaTeR+ni3X1BCtX8H8s49me18hjDP
+ K4l60D9R/lyVNsBEvoTL80RS8k0p3qXPFYhpv1o08f1bh/tquSwiy+rT1cob9459RzP/
+ iRyApxX/pMlKppQb/bbfyMwV7DO7NnOq8bEbYBumAqyZoebHE7jhhMVNAWFVqjfRMY77
+ mVl2422iagBDENGWlb/9qACStlABkC231v5ejbbin5Hw0tF/xlYsLqC4EVsMlMb9WdiA
+ EcwCS81WAAmEjkbrlAF0kp2XALnClKZbyfXsnPkDBhgV6ifncD1FSEBZ7xi/XdM10WXf sg== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 31xx1e2hur-1
+        by aserp2120.oracle.com with ESMTP id 31xx1e2krd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 02 Jul 2020 01:43:28 +0000
+        Thu, 02 Jul 2020 02:10:05 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621bqLd181516;
-        Thu, 2 Jul 2020 01:43:27 GMT
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06227paE159840;
+        Thu, 2 Jul 2020 02:10:05 GMT
 Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 31xg204ty9-1
+        by userp3030.oracle.com with ESMTP id 31xg205g3y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jul 2020 01:43:27 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0621hQpD017167;
-        Thu, 2 Jul 2020 01:43:26 GMT
-Received: from ol2.localdomain (/73.88.28.6)
+        Thu, 02 Jul 2020 02:10:05 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0622A3jk027516;
+        Thu, 2 Jul 2020 02:10:03 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 02 Jul 2020 01:43:26 +0000
-From:   Mike Christie <michael.christie@oracle.com>
-To:     martin.petersen@oracle.com, bstroesser@ts.fujitsu.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH 7/7] target: handle short iSIDs
-Date:   Wed,  1 Jul 2020 20:43:23 -0500
-Message-Id: <1593654203-12442-8-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1593654203-12442-1-git-send-email-michael.christie@oracle.com>
-References: <1593654203-12442-1-git-send-email-michael.christie@oracle.com>
+        with ESMTP ; Thu, 02 Jul 2020 02:10:03 +0000
+To:     Andres Beltran <lkmlabelt@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, t-mabelt@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com, parri.andrea@gmail.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] scsi: storvsc: Use vmbus_requestor to generate
+ transaction IDs for VMBus hardening
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1tuyqacrb.fsf@ca-mkp.ca.oracle.com>
+References: <20200701001221.2540-1-lkmlabelt@gmail.com>
+        <20200701001221.2540-3-lkmlabelt@gmail.com>
+Date:   Wed, 01 Jul 2020 22:10:00 -0400
+In-Reply-To: <20200701001221.2540-3-lkmlabelt@gmail.com> (Andres Beltran's
+        message of "Tue, 30 Jun 2020 20:12:20 -0400")
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=1
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007020009
+ definitions=main-2007020013
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015 adultscore=0
- suspectscore=0 mlxlogscore=999 cotscore=-2147483648 lowpriorityscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011 adultscore=0
+ suspectscore=1 mlxlogscore=999 cotscore=-2147483648 lowpriorityscore=0
  malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 spamscore=0
  priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007020009
+ engine=8.12.0-2004280000 definitions=main-2007020014
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SPC4 has:
 
-The first ISCSI INITIATOR SESSION ID field byte containing an ASCII
-null character terminates the ISCSI INITIATOR SESSION ID field without
-regard for the specified length of the iSCSI TransportID or the contents
-of the ADDITIONAL LENGTH field.
-----------------------------------------
+Andres,
 
-which sounds like we can get an iSID shorter than 12 chars. SPC and
-the iSCSI RFC do not say how to handle that case other than just
-cutting off the iSID. This patch just makes sure that if we get an
-iSID like that, we only copy/send that string.
+> Currently, pointers to guest memory are passed to Hyper-V as
+> transaction IDs in storvsc. In the face of errors or malicious
+> behavior in Hyper-V, storvsc should not expose or trust the
+> transaction IDs returned by Hyper-V to be valid guest memory
+> addresses. Instead, use small integers generated by vmbus_requestor as
+> requests (transaction) IDs.
 
-There is no OS that does this right now, so there was no test case.
-I did test with sg utils to check it works as expected and nothing
-breaks.
+Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/target/target_core_fabric_lib.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/target/target_core_fabric_lib.c b/drivers/target/target_core_fabric_lib.c
-index 1d2762a..6600ae4 100644
---- a/drivers/target/target_core_fabric_lib.c
-+++ b/drivers/target/target_core_fabric_lib.c
-@@ -132,6 +132,7 @@ static int iscsi_get_pr_transport_id(
- 	unsigned char *buf)
- {
- 	u32 off = 4, padding = 0;
-+	int isid_len;
- 	u16 len = 0;
- 
- 	spin_lock_irq(&se_nacl->nacl_sess_lock);
-@@ -184,11 +185,11 @@ static int iscsi_get_pr_transport_id(
- 		buf[off++] = 0x2c; /* ASCII Character: "," */
- 		buf[off++] = 0x30; /* ASCII Character: "0" */
- 		buf[off++] = 0x78; /* ASCII Character: "x" */
-+		len += 5;
- 
--		memcpy(buf + off, pr_reg->pr_reg_isid, 12);
--		off += 12;
--
--		len += 17;
-+		isid_len = sprintf(buf + off, "%s", pr_reg->pr_reg_isid);
-+		off += isid_len;
-+		len += isid_len;
- 	}
- 	buf[off] = '\0';
- 	len += 1;
-@@ -234,7 +235,7 @@ static int iscsi_get_pr_transport_id_len(
- 	 */
- 	if (pr_reg->isid_present_at_reg) {
- 		len += 5; /* For ",i,0x" ASCII separator */
--		len += 12; /* For iSCSI Initiator Session ID */
-+		len += strlen(pr_reg->pr_reg_isid);
- 		*format_code = 1;
- 	} else
- 		*format_code = 0;
-@@ -318,6 +319,16 @@ static char *iscsi_parse_pr_out_transport_id(
- 		 * iscsi_target.c:lio_sess_get_initiator_sid()
- 		 */
- 		for (i = 0; i < 12; i++) {
-+			/*
-+			 * The first ISCSI INITIATOR SESSION ID field byte
-+			 * containing an ASCII null character terminates the
-+			 * ISCSI INITIATOR SESSION ID field without regard for
-+			 * the specified length of the iSCSI TransportID or the
-+			 * contents of the ADDITIONAL LENGTH field.
-+			 */
-+			if (*p == '\0')
-+				break;
-+
- 			if (isdigit(*p)) {
- 				p++;
- 				continue;
 -- 
-1.8.3.1
-
+Martin K. Petersen	Oracle Linux Engineering
