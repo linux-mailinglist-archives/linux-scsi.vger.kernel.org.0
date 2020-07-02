@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 492F521184C
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A45A211861
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729266AbgGBB0o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 21:26:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58268 "EHLO mail.kernel.org"
+        id S1729500AbgGBB1a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 21:27:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59366 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729111AbgGBB0n (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:26:43 -0400
+        id S1728997AbgGBB12 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:27:28 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2396C206BE;
-        Thu,  2 Jul 2020 01:26:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C523E20874;
+        Thu,  2 Jul 2020 01:27:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593653203;
-        bh=b9mQDorhFC7sS98onQzu+8sJwNkkUMXw0ygqhBTzCHA=;
+        s=default; t=1593653247;
+        bh=HvLjSETqSGwPJTCtt7FAZ1rCHmOP8smwQD4IRxTnFBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rrURyBMO++IxzB0S/AlbVqZ+56LmSP+c2Qgs/abjq8pVJXGgXf5vd/WR8fV9m/C9s
-         jKPeDG4wPu+ZSiJN9DlNtG27nbfkf4xxEOZ3FZvxodQY+1C+m6ZogOt7lxS1kw8ssf
-         Q2UayqYNUl7ekFqN6JjYkryxUnIi8215RyjXv3KI=
+        b=E0IZfI30Q5wESIvsbXAEdCI8CfZfs3/0uWoWXtem+Et/VqMLj1VKchMDstXbhPXAI
+         GUNiBR6YecriMPfuvLfxF2LzhJwJ6YW8BEX92jK6SBzxwO6+swmWHf5C9bkLvWNsBC
+         ocHaiw2ZCxiQfkdcKI+F4PScuKycbZcFc3IppZL4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tomas Henzl <thenzl@redhat.com>,
@@ -30,12 +30,12 @@ Cc:     Tomas Henzl <thenzl@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>,
         MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 22/27] scsi: mptscsih: Fix read sense data size
-Date:   Wed,  1 Jul 2020 21:26:10 -0400
-Message-Id: <20200702012615.2701532-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 12/13] scsi: mptscsih: Fix read sense data size
+Date:   Wed,  1 Jul 2020 21:27:11 -0400
+Message-Id: <20200702012712.2701986-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702012615.2701532-1-sashal@kernel.org>
-References: <20200702012615.2701532-1-sashal@kernel.org>
+In-Reply-To: <20200702012712.2701986-1-sashal@kernel.org>
+References: <20200702012712.2701986-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -66,7 +66,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/message/fusion/mptscsih.c b/drivers/message/fusion/mptscsih.c
-index 6ba07c7feb92b..2af7ae13449d3 100644
+index 6c9fc11efb872..e77185e143ab7 100644
 --- a/drivers/message/fusion/mptscsih.c
 +++ b/drivers/message/fusion/mptscsih.c
 @@ -118,8 +118,6 @@ int 		mptscsih_suspend(struct pci_dev *pdev, pm_message_t state);
@@ -78,7 +78,7 @@ index 6ba07c7feb92b..2af7ae13449d3 100644
  
  /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
  /*
-@@ -2420,7 +2418,7 @@ mptscsih_copy_sense_data(struct scsi_cmnd *sc, MPT_SCSI_HOST *hd, MPT_FRAME_HDR
+@@ -2427,7 +2425,7 @@ mptscsih_copy_sense_data(struct scsi_cmnd *sc, MPT_SCSI_HOST *hd, MPT_FRAME_HDR
  		/* Copy the sense received into the scsi command block. */
  		req_index = le16_to_cpu(mf->u.frame.hwhdr.msgctxu.fld.req_idx);
  		sense_data = ((u8 *)ioc->sense_buf_pool + (req_index * MPT_SENSE_BUFFER_ALLOC));
