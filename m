@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A45A211861
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F2D211877
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729500AbgGBB1a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 21:27:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59366 "EHLO mail.kernel.org"
+        id S1729551AbgGBB1j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 21:27:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59580 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728997AbgGBB12 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:27:28 -0400
+        id S1728554AbgGBB1i (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:27:38 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C523E20874;
-        Thu,  2 Jul 2020 01:27:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 97FAD20874;
+        Thu,  2 Jul 2020 01:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593653247;
+        s=default; t=1593653257;
         bh=HvLjSETqSGwPJTCtt7FAZ1rCHmOP8smwQD4IRxTnFBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E0IZfI30Q5wESIvsbXAEdCI8CfZfs3/0uWoWXtem+Et/VqMLj1VKchMDstXbhPXAI
-         GUNiBR6YecriMPfuvLfxF2LzhJwJ6YW8BEX92jK6SBzxwO6+swmWHf5C9bkLvWNsBC
-         ocHaiw2ZCxiQfkdcKI+F4PScuKycbZcFc3IppZL4=
+        b=OqRkZaoEFo7c9lLLFI6OKK0Ww2adKEqUE/Dp3NkeWrWxXWvvQkVsUpzdOBYL0Qx3i
+         HpVczDj7Rm1et5QABN/FImWQNRQZm2utAZxP0oxnR0mQdSSW/eHRbJBL7nmMIBF20M
+         aDwWnauesTYwh4MC28YgkCqjhFprZh6QqdZSSoLE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tomas Henzl <thenzl@redhat.com>,
@@ -30,12 +30,12 @@ Cc:     Tomas Henzl <thenzl@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>,
         MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 12/13] scsi: mptscsih: Fix read sense data size
-Date:   Wed,  1 Jul 2020 21:27:11 -0400
-Message-Id: <20200702012712.2701986-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 6/7] scsi: mptscsih: Fix read sense data size
+Date:   Wed,  1 Jul 2020 21:27:28 -0400
+Message-Id: <20200702012729.2702141-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702012712.2701986-1-sashal@kernel.org>
-References: <20200702012712.2701986-1-sashal@kernel.org>
+In-Reply-To: <20200702012729.2702141-1-sashal@kernel.org>
+References: <20200702012729.2702141-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
