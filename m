@@ -2,175 +2,518 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A7921178F
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEFC211821
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbgGBBGy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 21:06:54 -0400
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:20840 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727008AbgGBBGx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 21:06:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1593652013; x=1625188013;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=G3POPu+TKJuEu9/hAz5nIvWu0fU/L6mKlZDWu+2w4nk=;
-  b=UZxvhVytN/x9iDRLlQijgAdplwlBk/tw0Sr7o1nSZPGsg68h3BSUYT33
-   O17OyYO31wm6DcyL+NTHFTeXkg1nJhF+y/ZAqmux3Hbx0wmv1/tRdQx1F
-   ahfGrZ02Y89dju29DXFqfyPe/TyLuQdHB12F1KxLZfwAA+DTXQCyRtyDs
-   TJK/KEEXvNKzibMZ/NXiaDJZGxGrDff69JqNNomqNyDYAMdswArBHL5/K
-   pKvbE26VJq9TPuQ+XcYxleaOBhoSi7NBfMhr0d1/9BwPetK07suizQDJT
-   z5db0G1V6aWJLMYWOJFgxJMAHdM+3VyaTEd/cdU1j4t/o1DquIl1XyE/6
-   A==;
-IronPort-SDR: FP4knnXej6dox9N2COSvnrQjPkwQo/MHmJXr2v7szWg97rEXPv6INUeiifV96tL/M5+3AmHwHA
- jMapeYO3UnhfFZPd1zdUWad4+WTcKfCSz8qYsLZYLwWjBntpmj1CocZG+FOl1mg6iO/ku1kY2s
- rhdbYfwMuiXuccPHZ3HDGPTfKEszvBbE/MYpt8qxoSZI/SYkBK3iaCtPyAFKYPIu8QGR1LDEdI
- niPSlFsvDu2A1fSCMU+kGFnHNoYAmIJ14QFQR6ycffUA+5ZFFcwloawUIH+MgKlmtOnjAsSHjB
- VJQ=
-X-IronPort-AV: E=Sophos;i="5.75,302,1589212800"; 
-   d="scan'208";a="145764571"
-Received: from mail-bn8nam11lp2172.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.172])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Jul 2020 09:06:52 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PnHTa6snrvf8+i4YXdkp/tebCgJW7rEc8AMLIe6QpQyBZfaEWyZmGvh0I8y/b6soLPJ3rzOUf8F6cXfSLqPDfrNvr2hACPITRzti7AZbQjl9zJNdAsVPRLWusbztWxrfYpG7mOPTga+vQNtRT2HmqprDtHRNSJDNr61kIuADAFhfvrBhraKd/F1nI2tsCCoYdGb9WhcOtv7VVCaWqjR2nD/nGIXQPXMWz1D5lC7uFB1IcCesdwxPzG6nu7AUd31elvbm589J0e/5Z2Nf/JFO+/WRxmSSm55uqJpAev+xZrjKx4GAuEj3YjzEdTSchHtjKahLuT/jnCuuGtk/Ofo+wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ttbGvm80TxyBd/cs5wiLppS036Wu6Kz410iTH9JplWY=;
- b=IaorWuMhYg45U43Egs+00/WfKugD+Xjsq+aw8haCa8cngij8wr4zP/r1PpffEeMOOVfBA4I6RvhBT294p44qA0rKoqCs3M0fzLPonqJHdIfoCFEXAkESX/9l9POMCiC6GIe56CpX8IAk40oF2iv8Vto8VtQzp2puzXS2MJRU4zhFds6eNOFRrUZvQOvFIgEyK/fj8q/7ZdqgFCVBhO6o1uaNonSn/xFJn9g4XGrf+VNl+F3xpeSpGyAGhW2qlIwlGZBf01Fb5fPNnXr00NhZnW1LkYiZ83J82bK3irTXTk5+ZgTg3LCCh+/mRN7VTBu/JdhUsrSlcgHVZDyqkBqkwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ttbGvm80TxyBd/cs5wiLppS036Wu6Kz410iTH9JplWY=;
- b=0I6uq5YRSqcNbrro7fyRDrek0lg9lmZxosa1UX91W1JWI6IaFX07LID589kPA773+B8mZ8+k89sIlqOp6A77qZK92+k3WaRbOVCJlI9OC4KdLXiUKjFgSS7RQpequr5MyysrBSYIGcT9C2+bz4arZSFIHDl5QDMXJtxDx/l5apc=
-Received: from CY4PR04MB3751.namprd04.prod.outlook.com (2603:10b6:903:ec::14)
- by CY4PR0401MB3586.namprd04.prod.outlook.com (2603:10b6:910:8e::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.25; Thu, 2 Jul
- 2020 01:06:51 +0000
-Received: from CY4PR04MB3751.namprd04.prod.outlook.com
- ([fe80::c593:f271:eebe:ac7]) by CY4PR04MB3751.namprd04.prod.outlook.com
- ([fe80::c593:f271:eebe:ac7%9]) with mapi id 15.20.3153.022; Thu, 2 Jul 2020
- 01:06:51 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-CC:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH] scsi: mpt3sas: fix error returns in BRM_status_show
-Thread-Topic: [PATCH] scsi: mpt3sas: fix error returns in BRM_status_show
-Thread-Index: AQHWT6mik4YDJEAuqU2c5oRzAa63FQ==
-Date:   Thu, 2 Jul 2020 01:06:50 +0000
-Message-ID: <CY4PR04MB3751A35F8324DC1D0B949720E76D0@CY4PR04MB3751.namprd04.prod.outlook.com>
-References: <20200701131454.5255-1-johannes.thumshirn@wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: wdc.com; dkim=none (message not signed)
- header.d=none;wdc.com; dmarc=none action=none header.from=wdc.com;
-x-originating-ip: [129.253.182.57]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 656228e7-8681-4672-d845-08d81e2433d7
-x-ms-traffictypediagnostic: CY4PR0401MB3586:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CY4PR0401MB3586441DFF7DEAA1BCF72FFEE76D0@CY4PR0401MB3586.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-forefront-prvs: 0452022BE1
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: m6Nyl11ZXbNRkufe08/YvEUIr07FTedUd1Zx3Z1InKGASO7ezEuo0eFZo1UVCwuJ7YK5LC+y7mhdDpIsfBRy5cj5AljYT8O6lUB31d6gDfgzcSfk6+s5YN4HB2P/Yj8t5WgW/GcHotVDMRLRfj+ZJYRvYsniwyuHe/oj2nCtRbQKX8TCzfwnz2+YlH+Vt17VScg9rJtGTiu+JJlpytOvxDIt2EXbueb/tYKKh7wB8F4WzkiYJ1TJbFs4L5usCvBR3N2BZqIVrrGoy5EFrCB16gA8fujFhusgCsgpkP5vAKOM40jRaH0vISiMNXwgjUUudYf/KuxJtAKtuKrK3nE4T6VJMc7gTv3UMMVCM5tpVXx7h773dKqTc6LXIYYOU0Xs
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR04MB3751.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(366004)(396003)(376002)(346002)(39860400002)(66946007)(86362001)(33656002)(8676002)(8936002)(55016002)(9686003)(5660300002)(4326008)(478600001)(2906002)(52536014)(7696005)(83380400001)(53546011)(91956017)(66476007)(66556008)(76116006)(66446008)(64756008)(26005)(186003)(316002)(6506007)(110136005)(54906003)(71200400001)(32563001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: lgpexQnPu8rEd8Ys2RmWCB8Ks9zSTux4l70I3oiX+NH52Z/q0au8+T0vv2qinhS+uzeKyJLmpmOH4kQgG05wNtalkQkZ6okk5kQMRDups8BQkzwPmRbCHFdiQQ4+A1Fro/+0h8heYtQVBq/8JbUXb3jOXTWP1plePHMFzr45xT/IglNZ+E2D6O1WEwEY7DHLkykc7tRjntJFo/bVcpP3C7YowOe6rTVI5zB9x0RUwtEEUvfzeVwepxlHkoVFGLZSNLK9DrplZJmuxXQ/WvhOFfj6QdGTaJBja7m2/p6G8WggCzag3Iw1qmDp0YqL9R4LcnLXck/cQs1beD7fLRGZYJDh9KewLDato5cof5O5D/ORtbaXHlPhMKXVOHdy00FP0JqaHjd5l2/mKG7K6qH8Vb6lBstUvsac83A2k7xjNUgmvm5LKNx5aSfuob3OfRJdQfFYziJcRkYtR/Cp7p74tH/6B1wo1OIK+Mj2WJgwfyYJSMN0/1glxH9PPjGDBa33
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728756AbgGBBZO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 21:25:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54528 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728477AbgGBBXu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:23:50 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DB23C2082F;
+        Thu,  2 Jul 2020 01:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593653027;
+        bh=en/aFQJyAVRxL52Micaqa7rQFOou5quQ6lPPSK0KI4c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eiltuNEUaf2nK9fFy4954kbSCIrSPpk6dggi0e2IMIACFAGcwvnQd3QSKs95vJ8ZS
+         HgFIWFHJF/foD+R5vccTIXD457lRcfAbgJZGEs4UpNwRkBuN+NamZrsyLUfyVjrENP
+         RFuXxOR6iACLs/ULMta3Txnvm1DpM0tDvKI39F+c=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Arun Easi <aeasi@marvell.com>, kbuild test robot <lkp@intel.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 42/53] scsi: qla2xxx: Fix MPI failure AEN (8200) handling
+Date:   Wed,  1 Jul 2020 21:21:51 -0400
+Message-Id: <20200702012202.2700645-42-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200702012202.2700645-1-sashal@kernel.org>
+References: <20200702012202.2700645-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB3751.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 656228e7-8681-4672-d845-08d81e2433d7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2020 01:06:50.9924
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SIGyasY7Fe0SFutOeEdOSftsBBK/A2J1r3NrOHLxSwIChFxhFLrIxkU3p6Rvu2Y3nOPyCJE2aDmXorE6bFQiGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0401MB3586
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020/07/01 22:15, Johannes Thumshirn wrote:=0A=
-> BRM_status_show() has several error branches, but none of them record the=
-=0A=
-> error in the error return.]=0A=
-> =0A=
-> Also while at it remove the manual mutex_unlock() of the pci_access_mutex=
-=0A=
-> in case of an ongoing pci error recovery or host removal and jump to the=
-=0A=
-> cleanup lable instead.=0A=
-> =0A=
-> Note: we can safely jump to out as from here as io_unit_pg3 is initialize=
-d=0A=
-> to NULL and if it hasn't been allocated kfree() skips the NULL pointer.=
-=0A=
-> =0A=
-> Signed-off-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=
-> ---=0A=
->  drivers/scsi/mpt3sas/mpt3sas_ctl.c | 8 ++++----=0A=
->  1 file changed, 4 insertions(+), 4 deletions(-)=0A=
-> =0A=
-> diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mp=
-t3sas_ctl.c=0A=
-> index 62e552838565..70d2d0987249 100644=0A=
-> --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c=0A=
-> +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c=0A=
-> @@ -3149,20 +3149,20 @@ BRM_status_show(struct device *cdev, struct devic=
-e_attribute *attr,=0A=
->  	}=0A=
->  	/* pci_access_mutex lock acquired by sysfs show path */=0A=
->  	mutex_lock(&ioc->pci_access_mutex);=0A=
-> -	if (ioc->pci_error_recovery || ioc->remove_host) {=0A=
-> -		mutex_unlock(&ioc->pci_access_mutex);=0A=
-> -		return 0;=0A=
-> -	}=0A=
-> +	if (ioc->pci_error_recovery || ioc->remove_host)=0A=
-> +		goto out;=0A=
->  =0A=
->  	/* allocate upto GPIOVal 36 entries */=0A=
->  	sz =3D offsetof(Mpi2IOUnitPage3_t, GPIOVal) + (sizeof(u16) * 36);=0A=
->  	io_unit_pg3 =3D kzalloc(sz, GFP_KERNEL);=0A=
->  	if (!io_unit_pg3) {=0A=
-> +		rc =3D -ENOMEM;=0A=
->  		ioc_err(ioc, "%s: failed allocating memory for iounit_pg3: (%d) bytes\=
-n",=0A=
->  			__func__, sz);=0A=
->  		goto out;=0A=
->  	}=0A=
->  =0A=
-> +	rc =3D -EINVAL;=0A=
->  	if (mpt3sas_config_get_iounit_pg3(ioc, &mpi_reply, io_unit_pg3, sz) !=
-=3D=0A=
->  	    0) {=0A=
->  		ioc_err(ioc, "%s: failed reading iounit_pg3\n",=0A=
-> =0A=
-=0A=
-Looks good.=0A=
-=0A=
-Reviewed-by: Damien Le Moal <damien.lemoal@wdc.com>=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+From: Arun Easi <aeasi@marvell.com>
+
+[ Upstream commit cbb01c2f2f630f1497f703c51ff21538ae2d86b8 ]
+
+Today, upon an MPI failure AEN, on top of collecting an MPI dump, a regular
+firmware dump is also taken and then chip reset. This is disruptive to IOs
+and not required. Make the firmware dump collection, followed by chip
+reset, optional (not done by default).
+
+Firmware dump buffer and MPI dump buffer are independent of each
+other with this change and each can have dump that was taken at two
+different times for two different issues. The MPI dump is saved in a
+separate buffer and is retrieved differently from firmware dump.
+
+To collect full dump on MPI failure AEN, a module parameter is
+introduced:
+    ql2xfulldump_on_mpifail (default: 0)
+
+Link: https://lore.kernel.org/r/20200331104015.24868-2-njavali@marvell.com
+Reported-by: kbuild test robot <lkp@intel.com>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/qla2xxx/qla_attr.c |  30 +++++++-
+ drivers/scsi/qla2xxx/qla_def.h  |  13 +++-
+ drivers/scsi/qla2xxx/qla_gbl.h  |   3 +
+ drivers/scsi/qla2xxx/qla_init.c |   2 +
+ drivers/scsi/qla2xxx/qla_isr.c  |  54 +++++++++-----
+ drivers/scsi/qla2xxx/qla_os.c   |   6 ++
+ drivers/scsi/qla2xxx/qla_tmpl.c | 121 ++++++++++++++++++++++++++------
+ 7 files changed, 186 insertions(+), 43 deletions(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
+index 2c9e5ac24692d..c4917f441b10a 100644
+--- a/drivers/scsi/qla2xxx/qla_attr.c
++++ b/drivers/scsi/qla2xxx/qla_attr.c
+@@ -26,7 +26,8 @@ qla2x00_sysfs_read_fw_dump(struct file *filp, struct kobject *kobj,
+ 	struct qla_hw_data *ha = vha->hw;
+ 	int rval = 0;
+ 
+-	if (!(ha->fw_dump_reading || ha->mctp_dump_reading))
++	if (!(ha->fw_dump_reading || ha->mctp_dump_reading ||
++	      ha->mpi_fw_dump_reading))
+ 		return 0;
+ 
+ 	mutex_lock(&ha->optrom_mutex);
+@@ -42,6 +43,10 @@ qla2x00_sysfs_read_fw_dump(struct file *filp, struct kobject *kobj,
+ 	} else if (ha->mctp_dumped && ha->mctp_dump_reading) {
+ 		rval = memory_read_from_buffer(buf, count, &off, ha->mctp_dump,
+ 		    MCTP_DUMP_SIZE);
++	} else if (ha->mpi_fw_dumped && ha->mpi_fw_dump_reading) {
++		rval = memory_read_from_buffer(buf, count, &off,
++					       ha->mpi_fw_dump,
++					       ha->mpi_fw_dump_len);
+ 	} else if (ha->fw_dump_reading) {
+ 		rval = memory_read_from_buffer(buf, count, &off, ha->fw_dump,
+ 					ha->fw_dump_len);
+@@ -103,7 +108,6 @@ qla2x00_sysfs_write_fw_dump(struct file *filp, struct kobject *kobj,
+ 			qla82xx_set_reset_owner(vha);
+ 			qla8044_idc_unlock(ha);
+ 		} else {
+-			ha->fw_dump_mpi = 1;
+ 			qla2x00_system_error(vha);
+ 		}
+ 		break;
+@@ -137,6 +141,22 @@ qla2x00_sysfs_write_fw_dump(struct file *filp, struct kobject *kobj,
+ 			    vha->host_no);
+ 		}
+ 		break;
++	case 8:
++		if (!ha->mpi_fw_dump_reading)
++			break;
++		ql_log(ql_log_info, vha, 0x70e7,
++		       "MPI firmware dump cleared on (%ld).\n", vha->host_no);
++		ha->mpi_fw_dump_reading = 0;
++		ha->mpi_fw_dumped = 0;
++		break;
++	case 9:
++		if (ha->mpi_fw_dumped && !ha->mpi_fw_dump_reading) {
++			ha->mpi_fw_dump_reading = 1;
++			ql_log(ql_log_info, vha, 0x70e8,
++			       "Raw MPI firmware dump ready for read on (%ld).\n",
++			       vha->host_no);
++		}
++		break;
+ 	}
+ 	return count;
+ }
+@@ -706,7 +726,8 @@ qla2x00_sysfs_write_reset(struct file *filp, struct kobject *kobj,
+ 		scsi_unblock_requests(vha->host);
+ 		break;
+ 	case 0x2025d:
+-		if (!IS_QLA81XX(ha) && !IS_QLA83XX(ha))
++		if (!IS_QLA81XX(ha) && !IS_QLA83XX(ha) &&
++		    !IS_QLA27XX(ha) && !IS_QLA28XX(ha))
+ 			return -EPERM;
+ 
+ 		ql_log(ql_log_info, vha, 0x706f,
+@@ -724,6 +745,8 @@ qla2x00_sysfs_write_reset(struct file *filp, struct kobject *kobj,
+ 			qla83xx_idc_audit(vha, IDC_AUDIT_TIMESTAMP);
+ 			qla83xx_idc_unlock(vha, 0);
+ 			break;
++		} else if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
++			qla27xx_reset_mpi(vha);
+ 		} else {
+ 			/* Make sure FC side is not in reset */
+ 			WARN_ON_ONCE(qla2x00_wait_for_hba_online(vha) !=
+@@ -737,6 +760,7 @@ qla2x00_sysfs_write_reset(struct file *filp, struct kobject *kobj,
+ 			scsi_unblock_requests(vha->host);
+ 			break;
+ 		}
++		break;
+ 	case 0x2025e:
+ 		if (!IS_P3P_TYPE(ha) || vha != base_vha) {
+ 			ql_log(ql_log_info, vha, 0x7071,
+diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
+index 47c7a56438b54..daa9e936887bb 100644
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -3223,6 +3223,7 @@ struct isp_operations {
+ 		uint32_t);
+ 
+ 	void (*fw_dump) (struct scsi_qla_host *, int);
++	void (*mpi_fw_dump)(struct scsi_qla_host *, int);
+ 
+ 	int (*beacon_on) (struct scsi_qla_host *);
+ 	int (*beacon_off) (struct scsi_qla_host *);
+@@ -3748,6 +3749,11 @@ struct qlt_hw_data {
+ 
+ #define LEAK_EXCHG_THRESH_HOLD_PERCENT 75	/* 75 percent */
+ 
++struct qla_hw_data_stat {
++	u32 num_fw_dump;
++	u32 num_mpi_reset;
++};
++
+ /*
+  * Qlogic host adapter specific data structure.
+ */
+@@ -4230,7 +4236,6 @@ struct qla_hw_data {
+ 	uint32_t	fw_dump_len;
+ 	u32		fw_dump_alloc_len;
+ 	bool		fw_dumped;
+-	bool		fw_dump_mpi;
+ 	unsigned long	fw_dump_cap_flags;
+ #define RISC_PAUSE_CMPL		0
+ #define DMA_SHUTDOWN_CMPL	1
+@@ -4241,6 +4246,10 @@ struct qla_hw_data {
+ #define ISP_MBX_RDY		6
+ #define ISP_SOFT_RESET_CMPL	7
+ 	int		fw_dump_reading;
++	void		*mpi_fw_dump;
++	u32		mpi_fw_dump_len;
++	int		mpi_fw_dump_reading:1;
++	int		mpi_fw_dumped:1;
+ 	int		prev_minidump_failed;
+ 	dma_addr_t	eft_dma;
+ 	void		*eft;
+@@ -4454,6 +4463,8 @@ struct qla_hw_data {
+ 	uint16_t last_zio_threshold;
+ 
+ #define DEFAULT_ZIO_THRESHOLD 5
++
++	struct qla_hw_data_stat stat;
+ };
+ 
+ struct active_regions {
+diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
+index 1b93f5b4d77d9..b20c5fa122fb2 100644
+--- a/drivers/scsi/qla2xxx/qla_gbl.h
++++ b/drivers/scsi/qla2xxx/qla_gbl.h
+@@ -173,6 +173,7 @@ extern int ql2xenablemsix;
+ extern int qla2xuseresexchforels;
+ extern int ql2xexlogins;
+ extern int ql2xdifbundlinginternalbuffers;
++extern int ql2xfulldump_on_mpifail;
+ 
+ extern int qla2x00_loop_reset(scsi_qla_host_t *);
+ extern void qla2x00_abort_all_cmds(scsi_qla_host_t *, int);
+@@ -645,6 +646,7 @@ extern void qla82xx_fw_dump(scsi_qla_host_t *, int);
+ extern void qla8044_fw_dump(scsi_qla_host_t *, int);
+ 
+ extern void qla27xx_fwdump(scsi_qla_host_t *, int);
++extern void qla27xx_mpi_fwdump(scsi_qla_host_t *, int);
+ extern ulong qla27xx_fwdt_calculate_dump_size(struct scsi_qla_host *, void *);
+ extern int qla27xx_fwdt_template_valid(void *);
+ extern ulong qla27xx_fwdt_template_size(void *);
+@@ -933,5 +935,6 @@ extern void qla24xx_process_purex_list(struct purex_list *);
+ 
+ /* nvme.c */
+ void qla_nvme_unregister_remote_port(struct fc_port *fcport);
++void qla27xx_reset_mpi(scsi_qla_host_t *vha);
+ void qla_handle_els_plogi_done(scsi_qla_host_t *vha, struct event_arg *ea);
+ #endif /* _QLA_GBL_H */
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index caa6b840e4594..496ead29b51e4 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -3339,6 +3339,8 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *vha)
+ 				    dump_size / 1024);
+ 
+ 				if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
++					ha->mpi_fw_dump = (char *)fw_dump +
++						ha->fwdt[1].dump_size;
+ 					mutex_unlock(&ha->optrom_mutex);
+ 					return;
+ 				}
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index 8a78d395bbc8f..4d9ec7ee59cc7 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -756,6 +756,39 @@ qla2x00_find_fcport_by_nportid(scsi_qla_host_t *vha, port_id_t *id,
+ 	return NULL;
+ }
+ 
++/* Shall be called only on supported adapters. */
++static void
++qla27xx_handle_8200_aen(scsi_qla_host_t *vha, uint16_t *mb)
++{
++	struct qla_hw_data *ha = vha->hw;
++	bool reset_isp_needed = 0;
++
++	ql_log(ql_log_warn, vha, 0x02f0,
++	       "MPI Heartbeat stop. MPI reset is%s needed. "
++	       "MB0[%xh] MB1[%xh] MB2[%xh] MB3[%xh]\n",
++	       mb[0] & BIT_8 ? "" : " not",
++	       mb[0], mb[1], mb[2], mb[3]);
++
++	if ((mb[1] & BIT_8) == 0)
++		return;
++
++	ql_log(ql_log_warn, vha, 0x02f1,
++	       "MPI Heartbeat stop. FW dump needed\n");
++
++	if (ql2xfulldump_on_mpifail) {
++		ha->isp_ops->fw_dump(vha, 1);
++		reset_isp_needed = 1;
++	}
++
++	ha->isp_ops->mpi_fw_dump(vha, 1);
++
++	if (reset_isp_needed) {
++		vha->hw->flags.fw_init_done = 0;
++		set_bit(ISP_ABORT_NEEDED, &vha->dpc_flags);
++		qla2xxx_wake_dpc(vha);
++	}
++}
++
+ /**
+  * qla2x00_async_event() - Process aynchronous events.
+  * @vha: SCSI driver HA context
+@@ -871,9 +904,9 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
+ 			    "ISP System Error - mbx1=%xh mbx2=%xh mbx3=%xh.\n ",
+ 			    mb[1], mb[2], mb[3]);
+ 
+-		ha->fw_dump_mpi =
+-		    (IS_QLA27XX(ha) || IS_QLA28XX(ha)) &&
+-		    RD_REG_WORD(&reg24->mailbox7) & BIT_8;
++		if ((IS_QLA27XX(ha) || IS_QLA28XX(ha)) &&
++		    RD_REG_WORD(&reg24->mailbox7) & BIT_8)
++			ha->isp_ops->mpi_fw_dump(vha, 1);
+ 		ha->isp_ops->fw_dump(vha, 1);
+ 		ha->flags.fw_init_done = 0;
+ 		QLA_FW_STOPPED(ha);
+@@ -1374,20 +1407,7 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
+ 
+ 	case MBA_IDC_AEN:
+ 		if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
+-			ha->flags.fw_init_done = 0;
+-			ql_log(ql_log_warn, vha, 0xffff,
+-			    "MPI Heartbeat stop. Chip reset needed. MB0[%xh] MB1[%xh] MB2[%xh] MB3[%xh]\n",
+-			    mb[0], mb[1], mb[2], mb[3]);
+-
+-			if ((mb[1] & BIT_8) ||
+-			    (mb[2] & BIT_8)) {
+-				ql_log(ql_log_warn, vha, 0xd013,
+-				    "MPI Heartbeat stop. FW dump needed\n");
+-				ha->fw_dump_mpi = 1;
+-				ha->isp_ops->fw_dump(vha, 1);
+-			}
+-			set_bit(ISP_ABORT_NEEDED, &vha->dpc_flags);
+-			qla2xxx_wake_dpc(vha);
++			qla27xx_handle_8200_aen(vha, mb);
+ 		} else if (IS_QLA83XX(ha)) {
+ 			mb[4] = RD_REG_WORD(&reg24->mailbox4);
+ 			mb[5] = RD_REG_WORD(&reg24->mailbox5);
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 9179bb4caed84..1120d133204c2 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -35,6 +35,11 @@ static int apidev_major;
+  */
+ struct kmem_cache *srb_cachep;
+ 
++int ql2xfulldump_on_mpifail;
++module_param(ql2xfulldump_on_mpifail, int, S_IRUGO | S_IWUSR);
++MODULE_PARM_DESC(ql2xfulldump_on_mpifail,
++		 "Set this to take full dump on MPI hang.");
++
+ /*
+  * CT6 CTX allocation cache
+  */
+@@ -2518,6 +2523,7 @@ static struct isp_operations qla27xx_isp_ops = {
+ 	.read_nvram		= NULL,
+ 	.write_nvram		= NULL,
+ 	.fw_dump		= qla27xx_fwdump,
++	.mpi_fw_dump		= qla27xx_mpi_fwdump,
+ 	.beacon_on		= qla24xx_beacon_on,
+ 	.beacon_off		= qla24xx_beacon_off,
+ 	.beacon_blink		= qla83xx_beacon_blink,
+diff --git a/drivers/scsi/qla2xxx/qla_tmpl.c b/drivers/scsi/qla2xxx/qla_tmpl.c
+index 6aeb1c3fb7a87..3423638624344 100644
+--- a/drivers/scsi/qla2xxx/qla_tmpl.c
++++ b/drivers/scsi/qla2xxx/qla_tmpl.c
+@@ -12,6 +12,33 @@
+ #define IOBASE(vha)	IOBAR(ISPREG(vha))
+ #define INVALID_ENTRY ((struct qla27xx_fwdt_entry *)0xffffffffffffffffUL)
+ 
++/* hardware_lock assumed held. */
++static void
++qla27xx_write_remote_reg(struct scsi_qla_host *vha,
++			 u32 addr, u32 data)
++{
++	char *reg = (char *)ISPREG(vha);
++
++	ql_dbg(ql_dbg_misc, vha, 0xd300,
++	       "%s: addr/data = %xh/%xh\n", __func__, addr, data);
++
++	WRT_REG_DWORD(reg + IOBASE(vha), 0x40);
++	WRT_REG_DWORD(reg + 0xc4, data);
++	WRT_REG_DWORD(reg + 0xc0, addr);
++}
++
++void
++qla27xx_reset_mpi(scsi_qla_host_t *vha)
++{
++	ql_dbg(ql_dbg_misc + ql_dbg_verbose, vha, 0xd301,
++	       "Entered %s.\n", __func__);
++
++	qla27xx_write_remote_reg(vha, 0x104050, 0x40004);
++	qla27xx_write_remote_reg(vha, 0x10405c, 0x4);
++
++	vha->hw->stat.num_mpi_reset++;
++}
++
+ static inline void
+ qla27xx_insert16(uint16_t value, void *buf, ulong *len)
+ {
+@@ -997,6 +1024,62 @@ qla27xx_fwdt_template_valid(void *p)
+ 	return true;
+ }
+ 
++void
++qla27xx_mpi_fwdump(scsi_qla_host_t *vha, int hardware_locked)
++{
++	ulong flags = 0;
++	bool need_mpi_reset = 1;
++
++#ifndef __CHECKER__
++	if (!hardware_locked)
++		spin_lock_irqsave(&vha->hw->hardware_lock, flags);
++#endif
++	if (!vha->hw->mpi_fw_dump) {
++		ql_log(ql_log_warn, vha, 0x02f3, "-> mpi_fwdump no buffer\n");
++	} else if (vha->hw->mpi_fw_dumped) {
++		ql_log(ql_log_warn, vha, 0x02f4,
++		       "-> MPI firmware already dumped (%p) -- ignoring request\n",
++		       vha->hw->mpi_fw_dump);
++	} else {
++		struct fwdt *fwdt = &vha->hw->fwdt[1];
++		ulong len;
++		void *buf = vha->hw->mpi_fw_dump;
++
++		ql_log(ql_log_warn, vha, 0x02f5, "-> fwdt1 running...\n");
++		if (!fwdt->template) {
++			ql_log(ql_log_warn, vha, 0x02f6,
++			       "-> fwdt1 no template\n");
++			goto bailout;
++		}
++		len = qla27xx_execute_fwdt_template(vha, fwdt->template, buf);
++		if (len == 0) {
++			goto bailout;
++		} else if (len != fwdt->dump_size) {
++			ql_log(ql_log_warn, vha, 0x02f7,
++			       "-> fwdt1 fwdump residual=%+ld\n",
++			       fwdt->dump_size - len);
++		} else {
++			need_mpi_reset = 0;
++		}
++
++		vha->hw->mpi_fw_dump_len = len;
++		vha->hw->mpi_fw_dumped = 1;
++
++		ql_log(ql_log_warn, vha, 0x02f8,
++		       "-> MPI firmware dump saved to buffer (%lu/%p)\n",
++		       vha->host_no, vha->hw->mpi_fw_dump);
++		qla2x00_post_uevent_work(vha, QLA_UEVENT_CODE_FW_DUMP);
++	}
++
++bailout:
++	if (need_mpi_reset)
++		qla27xx_reset_mpi(vha);
++#ifndef __CHECKER__
++	if (!hardware_locked)
++		spin_unlock_irqrestore(&vha->hw->hardware_lock, flags);
++#endif
++}
++
+ void
+ qla27xx_fwdump(scsi_qla_host_t *vha, int hardware_locked)
+ {
+@@ -1015,30 +1098,25 @@ qla27xx_fwdump(scsi_qla_host_t *vha, int hardware_locked)
+ 		    vha->hw->fw_dump);
+ 	} else {
+ 		struct fwdt *fwdt = vha->hw->fwdt;
+-		uint j;
+ 		ulong len;
+ 		void *buf = vha->hw->fw_dump;
+-		uint count = vha->hw->fw_dump_mpi ? 2 : 1;
+-
+-		for (j = 0; j < count; j++, fwdt++, buf += len) {
+-			ql_log(ql_log_warn, vha, 0xd011,
+-			    "-> fwdt%u running...\n", j);
+-			if (!fwdt->template) {
+-				ql_log(ql_log_warn, vha, 0xd012,
+-				    "-> fwdt%u no template\n", j);
+-				break;
+-			}
+-			len = qla27xx_execute_fwdt_template(vha,
+-			    fwdt->template, buf);
+-			if (len == 0) {
+-				goto bailout;
+-			} else if (len != fwdt->dump_size) {
+-				ql_log(ql_log_warn, vha, 0xd013,
+-				    "-> fwdt%u fwdump residual=%+ld\n",
+-				    j, fwdt->dump_size - len);
+-			}
++
++		ql_log(ql_log_warn, vha, 0xd011, "-> fwdt0 running...\n");
++		if (!fwdt->template) {
++			ql_log(ql_log_warn, vha, 0xd012,
++			       "-> fwdt0 no template\n");
++			goto bailout;
+ 		}
+-		vha->hw->fw_dump_len = buf - (void *)vha->hw->fw_dump;
++		len = qla27xx_execute_fwdt_template(vha, fwdt->template, buf);
++		if (len == 0) {
++			goto bailout;
++		} else if (len != fwdt->dump_size) {
++			ql_log(ql_log_warn, vha, 0xd013,
++			       "-> fwdt0 fwdump residual=%+ld\n",
++				fwdt->dump_size - len);
++		}
++
++		vha->hw->fw_dump_len = len;
+ 		vha->hw->fw_dumped = 1;
+ 
+ 		ql_log(ql_log_warn, vha, 0xd015,
+@@ -1048,7 +1126,6 @@ qla27xx_fwdump(scsi_qla_host_t *vha, int hardware_locked)
+ 	}
+ 
+ bailout:
+-	vha->hw->fw_dump_mpi = 0;
+ #ifndef __CHECKER__
+ 	if (!hardware_locked)
+ 		spin_unlock_irqrestore(&vha->hw->hardware_lock, flags);
+-- 
+2.25.1
+
