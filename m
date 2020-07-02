@@ -2,167 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4FF2119BD
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8612119C3
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbgGBBne (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 21:43:34 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:33894 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727921AbgGBBna (ORCPT
+        id S1728209AbgGBBnc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 21:43:32 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:51518 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727805AbgGBBna (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 21:43:30 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621cIKZ155693;
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621cMHd153751;
         Thu, 2 Jul 2020 01:43:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=tFE1yMrA+uD5SlqaHhouo3Fj/+2xAemq79ePyl1jqkM=;
- b=Chb3hAH+DU3bdrHYH171otJywMndy3md9672rjhvcLYEbt0Bey3/12QHFEo1czMEL8kX
- wjdJ7IMP3AxTXEs/6FY8FIf1gjpOoheAf4+7MhWYRlfybKhRJfzaGjlaVyDHElYypdzi
- qu3hiYzNFfknaBWthawCoMnyQub6mnxkmtbm/ePLAYcCWSth2F9+xtvu5iFF6wKeVbg8
- bXdqNm4RlHeOHpt1zOBUHv8fFJZP5ZiFew7NyU2jDv4Iqj8/hAWIJPYuA9dKS+IsUPjb
- Vn8LcKUEspJQB58AMjJ7s+RTvhniogAYEB0uRnbxgmYuRXkc12/vF2qUlgfIvGoxBKfb ew== 
+ bh=f3kfZHXzfTx2LxdfncZVcUA3z5V5f5QIMVGhDWfe+Hs=;
+ b=Qnb7mlRBW/TMZS6wVDQQ3B0V0/AlwTvaGPf5xZZkeLduHN0TVXAauVjzKv+Q6Rq1rgFm
+ 6M4kzJrXCpEGsNTJ70SeCzx9HcTaDxGiR5eHeQ7hglU5O0vxDPXPa12D8s1dvLrC851W
+ qHEkc34dxWkwjlsJJ+m1TbpENBpI+Y1b8Ayd0JYPTVrwaG4cdMxGqTWnCDtgoFOMuPlo
+ jbfl8iuEZFH6T0rEUdNXpWE2Nf9uRQ51+xve+tj/Y+nRwSHau+DLx/iG7ORcx0cJpJmk
+ KoXn9Tt4gurS62pypsrO4zxywlPZVl+6FD6leNAPNqYrfdVwxi0f7WtbtgU73BfGftEA KA== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 31xx1e2hun-1
+        by userp2120.oracle.com with ESMTP id 31wxrndng3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
         Thu, 02 Jul 2020 01:43:26 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621gp30051099;
-        Thu, 2 Jul 2020 01:43:26 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31xg17stfw-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621glFh050725;
+        Thu, 2 Jul 2020 01:43:25 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 31xg17stfy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jul 2020 01:43:26 +0000
+        Thu, 02 Jul 2020 01:43:25 +0000
 Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0621hOfZ017085;
-        Thu, 2 Jul 2020 01:43:24 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0621hPVZ022102;
+        Thu, 2 Jul 2020 01:43:25 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 02 Jul 2020 01:43:24 +0000
+        with ESMTP ; Thu, 02 Jul 2020 01:43:25 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     martin.petersen@oracle.com, bstroesser@ts.fujitsu.com,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH 3/7] target: fix crash during SPEC_I_PT handling
-Date:   Wed,  1 Jul 2020 20:43:19 -0500
-Message-Id: <1593654203-12442-4-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 4/7] target: fix iscsi transport id parsing
+Date:   Wed,  1 Jul 2020 20:43:20 -0500
+Message-Id: <1593654203-12442-5-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1593654203-12442-1-git-send-email-michael.christie@oracle.com>
 References: <1593654203-12442-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=2 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2007020010
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015 adultscore=0
- suspectscore=2 mlxlogscore=999 cotscore=-2147483648 lowpriorityscore=0
- malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007020009
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
+ lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007020009
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-__core_scsi3_add_registration clears the t10_pr_registration
-pr_reg_deve and does a core_scsi3_lunacl_undepend_item which does an
-undepend and also does a kref_put from the get done in
-__core_scsi3_alloc_registration. So when we get to the bottom of
-core_scsi3_decode_spec_i_port the pr_reg_deve is NULL and we crash when
-trying to access the local_pr_reg's pr_reg_deve. We've also done an extra
-undepend for local_pr_reg and if we didn't crash on the NULL we would
-have done an extra kref_put too.
-
-This patch has us do a core_scsi3_lunacl_depend_item for local_pr_reg
-and then let __core_scsi3_add_registration handle the cleanup for the
-pr_reg_deve. We then just skip the undepend for the acl and tpg for the
-local pr_reg.
-
-The erorr path then works in a similar way, but we always do the
-core_scsi3_lunacl_undepend_item since we never call
-__core_scsi3_add_registration in that code path.
+The length passed in the ADDITIONAL LENGTH field includes padding and
+the terminating NULL for the last field (name or isid depending on the
+format), so we should not also try to calculate that and then double add
+that to the returned length.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/target/target_core_pr.c | 35 +++++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 16 deletions(-)
+ drivers/target/target_core_fabric_lib.c | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index 293f518..d5e6344 100644
---- a/drivers/target/target_core_pr.c
-+++ b/drivers/target/target_core_pr.c
-@@ -1521,13 +1521,16 @@ static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *se_deve)
- 		kfree(tidh_new);
- 		return TCM_INSUFFICIENT_REGISTRATION_RESOURCES;
- 	}
-+
-+	if (core_scsi3_lunacl_depend_item(local_pr_reg->pr_reg_deve)) {
-+		kfree(tidh_new);
-+		kref_put(&local_pr_reg->pr_reg_deve->pr_kref,
-+			 target_pr_kref_release);
-+		kmem_cache_free(t10_pr_reg_cache, local_pr_reg);
-+		return TCM_INSUFFICIENT_REGISTRATION_RESOURCES;
-+	}
-+
- 	tidh_new->dest_pr_reg = local_pr_reg;
--	/*
--	 * The local I_T nexus does not hold any configfs dependances,
--	 * so we set tidh_new->dest_se_deve to NULL to prevent the
--	 * configfs_undepend_item() calls in the tid_dest_list loops below.
--	 */
--	tidh_new->dest_se_deve = NULL;
- 	list_add_tail(&tidh_new->dest_list, &tid_dest_list);
- 
- 	if (cmd->data_length < 28) {
-@@ -1816,12 +1819,9 @@ static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *se_deve)
- 			dest_node_acl->initiatorname, i_buf, (dest_se_deve) ?
- 			dest_se_deve->mapped_lun : 0);
- 
--		if (!dest_se_deve) {
--			kref_put(&local_pr_reg->pr_reg_deve->pr_kref,
--				 target_pr_kref_release);
-+		if (dest_pr_reg == local_pr_reg)
- 			continue;
--		}
--		core_scsi3_lunacl_undepend_item(dest_se_deve);
-+
- 		core_scsi3_nodeacl_undepend_item(dest_node_acl);
- 		core_scsi3_tpg_undepend_item(dest_tpg);
- 	}
-@@ -1835,11 +1835,16 @@ static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *se_deve)
- 	 * including *dest_pr_reg and the configfs dependances..
+diff --git a/drivers/target/target_core_fabric_lib.c b/drivers/target/target_core_fabric_lib.c
+index 1e031d8..81bc8ec 100644
+--- a/drivers/target/target_core_fabric_lib.c
++++ b/drivers/target/target_core_fabric_lib.c
+@@ -265,9 +265,7 @@ static char *iscsi_parse_pr_out_transport_id(
+ 	char **port_nexus_ptr)
+ {
+ 	char *p;
+-	u32 tid_len, padding;
+ 	int i;
+-	u16 add_len;
+ 	u8 format_code = (buf[0] & 0xc0);
+ 	/*
+ 	 * Check for FORMAT CODE 00b or 01b from spc4r17, section 7.5.4.6:
+@@ -293,23 +291,11 @@ static char *iscsi_parse_pr_out_transport_id(
  	 */
- 	list_for_each_entry_safe(tidh, tidh_tmp, &tid_dest_list, dest_list) {
-+		bool is_local = false;
-+
- 		dest_tpg = tidh->dest_tpg;
- 		dest_node_acl = tidh->dest_node_acl;
- 		dest_se_deve = tidh->dest_se_deve;
- 		dest_pr_reg = tidh->dest_pr_reg;
- 
-+		if (dest_pr_reg == local_pr_reg)
-+			is_local = true;
-+
- 		list_del(&tidh->dest_list);
- 		kfree(tidh);
- 		/*
-@@ -1855,13 +1860,11 @@ static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *se_deve)
- 		}
- 
- 		kmem_cache_free(t10_pr_reg_cache, dest_pr_reg);
-+		core_scsi3_lunacl_undepend_item(dest_se_deve);
- 
--		if (!dest_se_deve) {
--			kref_put(&local_pr_reg->pr_reg_deve->pr_kref,
--				 target_pr_kref_release);
-+		if (is_local)
- 			continue;
--		}
--		core_scsi3_lunacl_undepend_item(dest_se_deve);
-+
- 		core_scsi3_nodeacl_undepend_item(dest_node_acl);
- 		core_scsi3_tpg_undepend_item(dest_tpg);
+ 	if (out_tid_len) {
+ 		/* The shift works thanks to integer promotion rules */
+-		add_len = get_unaligned_be16(&buf[2]);
+-
+-		tid_len = strlen(&buf[4]);
+-		tid_len += 4; /* Add four bytes for iSCSI Transport ID header */
+-		tid_len += 1; /* Add one byte for NULL terminator */
+-		padding = ((-tid_len) & 3);
+-		if (padding != 0)
+-			tid_len += padding;
+-
+-		if ((add_len + 4) != tid_len) {
+-			pr_debug("LIO-Target Extracted add_len: %hu "
+-				"does not match calculated tid_len: %u,"
+-				" using tid_len instead\n", add_len+4, tid_len);
+-			*out_tid_len = tid_len;
+-		} else
+-			*out_tid_len = (add_len + 4);
++		*out_tid_len = get_unaligned_be16(&buf[2]);
++		/* Add four bytes for iSCSI Transport ID header */
++		*out_tid_len += 4;
  	}
++
+ 	/*
+ 	 * Check for ',i,0x' separator between iSCSI Name and iSCSI Initiator
+ 	 * Session ID as defined in Table 390 - iSCSI initiator port TransportID
 -- 
 1.8.3.1
 
