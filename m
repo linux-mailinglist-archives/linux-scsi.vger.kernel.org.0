@@ -2,128 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 515792119BA
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F21D2119CB
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jul 2020 03:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbgGBBn3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jul 2020 21:43:29 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:51508 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbgGBBn2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 21:43:28 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621dQSN154856;
-        Thu, 2 Jul 2020 01:43:25 GMT
+        id S1728142AbgGBBp3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jul 2020 21:45:29 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:34922 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728131AbgGBBp3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jul 2020 21:45:29 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621d0Ek155850;
+        Thu, 2 Jul 2020 01:45:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=CpsW1stTVGUZ4N8Wn5aCehynrUWbuqkaWE2+YbLkY9I=;
- b=xfo7z3q6I0XOk8gmTjlkK/HOHWOA9AlSUn9IdJczF63oalGTbnjWqa7/4kiUBZkPH+Wf
- FEkPYYZ2YXWWAtKFh8jTnn5EJbzFzAKXttqGlZrtKaUet3vL8puLzvuw9WEVxOlrhlq2
- +Dh2jSe0wRxMpSvB9Dbw0+OwlU4Hr7u+ijq2rTlqe8bw+AKfFYk/w7YhpSw78ubOrLe9
- Wff25hjhnBKyqNVGV9WxmbFJmNj+04R0dk/NdmS9lM22j1EOoGrLbDu1LpZZOCM4IOgt
- bhAZGlMrhlnmCPWTiqh3P1h7IivPRDZxTTFNTiQLSm2zYVE5t4M4yAGMnncxflBXzCHC sQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 31wxrndng1-1
+ bh=tE3kFlaOk7xz7kinaT/6Uao6WzALtlB8cSTjFtmf16M=;
+ b=MVaCBzijXTqH6no+1xausGKUlF2NhcBh1UYdxf44E5uDfOjr4j4WN2s3wXacfmRtITEP
+ p9vLzScePY24RxlGSieoRtFE0KyFG5aQe+XHRO8NXvVw2EyP4v9mUQOt9ePP+vQReh6Z
+ e82tUIsto+S7vAYtY55QmTZu44pejzxOjCxdtyiQJBdC0J3HTsXODBf9+MycLeyTuVH+
+ m082RK6atuOgTiIBH76AZ1hF0z5MCmdkLmiCHfNgBwZJ881voqyyrUrvXOeFkS1YACxg
+ goIizCI+oem7/1g4f8n76ZMJbAhDFn6OxKXqmGvAnt3LRJt7FiP+MpmhL+sBqQqCBzzl Rg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 31xx1e2hy6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 02 Jul 2020 01:43:25 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621bpP2181445;
-        Thu, 2 Jul 2020 01:43:24 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 31xg204txj-1
+        Thu, 02 Jul 2020 01:45:25 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0621glKO050688;
+        Thu, 2 Jul 2020 01:43:25 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 31xg17stfb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jul 2020 01:43:24 +0000
+        Thu, 02 Jul 2020 01:43:25 +0000
 Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0621hNcq030498;
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0621hOlh022092;
         Thu, 2 Jul 2020 01:43:24 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 02 Jul 2020 01:43:23 +0000
+        with ESMTP ; Thu, 02 Jul 2020 01:43:24 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     martin.petersen@oracle.com, bstroesser@ts.fujitsu.com,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH 1/7] target: check enforce_pr_isids during registration
-Date:   Wed,  1 Jul 2020 20:43:17 -0500
-Message-Id: <1593654203-12442-2-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 2/7] target: fix xcopy sess release leak
+Date:   Wed,  1 Jul 2020 20:43:18 -0500
+Message-Id: <1593654203-12442-3-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1593654203-12442-1-git-send-email-michael.christie@oracle.com>
 References: <1593654203-12442-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007020009
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=2 bulkscore=0 mlxscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2007020010
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9669 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
- lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007020009
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015 adultscore=0
+ suspectscore=2 mlxlogscore=999 cotscore=-2147483648 lowpriorityscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2007020009
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Move the check for enforce_pr_isids to the registration code where we
-can fail at the time an initiator tries to register a path without an
-isid. In its current place in __core_scsi3_locate_pr_reg, it is too
-late because it can be registered and be reported in PR in commands and
-it is stuck in this state because we cannot unregister it.
+transport_init_session can allocate memory via percpu_ref_init, and
+target_xcopy_release_pt never frees it. This adds a
+transport_uninit_session function to handle cleanup of resources
+allocated in the init function.
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/target/target_core_pr.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ drivers/target/target_core_internal.h  |  1 +
+ drivers/target/target_core_transport.c |  7 ++++++-
+ drivers/target/target_core_xcopy.c     | 11 +++++++++--
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index 91e41cc..293f518 100644
---- a/drivers/target/target_core_pr.c
-+++ b/drivers/target/target_core_pr.c
-@@ -1176,15 +1176,6 @@ static struct t10_pr_registration *__core_scsi3_locate_pr_reg(
- 		 * ISID, then we have found a match.
- 		 */
- 		if (!pr_reg->isid_present_at_reg) {
--			/*
--			 * Determine if this SCSI device server requires that
--			 * SCSI Intiatior TransportID w/ ISIDs is enforced
--			 * for fabric modules (iSCSI) requiring them.
--			 */
--			if (tpg->se_tpg_tfo->sess_get_initiator_sid != NULL) {
--				if (dev->dev_attrib.enforce_pr_isids)
--					continue;
--			}
- 			atomic_inc_mb(&pr_reg->pr_res_holders);
- 			spin_unlock(&pr_tmpl->registration_lock);
- 			return pr_reg;
-@@ -1591,10 +1582,25 @@ static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *se_deve)
- 				continue;
- 			dest_rtpi = tmp_lun->lun_rtpi;
+diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
+index 8533444..e7b3c6e 100644
+--- a/drivers/target/target_core_internal.h
++++ b/drivers/target/target_core_internal.h
+@@ -138,6 +138,7 @@ struct se_node_acl *core_tpg_add_initiator_node_acl(struct se_portal_group *tpg,
+ void	release_se_kmem_caches(void);
+ u32	scsi_get_new_index(scsi_index_t);
+ void	transport_subsystem_check_init(void);
++void	transport_uninit_session(struct se_session *);
+ unsigned char *transport_dump_cmd_direction(struct se_cmd *);
+ void	transport_dump_dev_state(struct se_device *, char *, int *);
+ void	transport_dump_dev_info(struct se_device *, struct se_lun *,
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index 90ecdd7..e6e1fa6 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+@@ -236,6 +236,11 @@ int transport_init_session(struct se_session *se_sess)
+ }
+ EXPORT_SYMBOL(transport_init_session);
  
-+			iport_ptr = NULL;
- 			i_str = target_parse_pr_out_transport_id(tmp_tpg,
- 					ptr, &tid_len, &iport_ptr);
- 			if (!i_str)
- 				continue;
-+			/*
-+			 * Determine if this SCSI device server requires that
-+			 * SCSI Intiatior TransportID w/ ISIDs is enforced
-+			 * for fabric modules (iSCSI) requiring them.
-+			 */
-+			if (tpg->se_tpg_tfo->sess_get_initiator_sid &&
-+                            dev->dev_attrib.enforce_pr_isids &&
-+			    !iport_ptr) {
-+				pr_warn("SPC-PR: enforce_pr_isids is set but a isid has not been sent in the SPEC_I_PT data for %s.",
-+					i_str);
-+				ret = TCM_INVALID_PARAMETER_LIST;
-+				spin_unlock(&dev->se_port_lock);
-+				goto out_unmap;
-+			}
++void transport_uninit_session(struct se_session *se_sess)
++{
++	percpu_ref_exit(&se_sess->cmd_count);
++}
++
+ /**
+  * transport_alloc_session - allocate a session object and initialize it
+  * @sup_prot_ops: bitmask that defines which T10-PI modes are supported.
+@@ -579,7 +584,7 @@ void transport_free_session(struct se_session *se_sess)
+ 		sbitmap_queue_free(&se_sess->sess_tag_pool);
+ 		kvfree(se_sess->sess_cmd_map);
+ 	}
+-	percpu_ref_exit(&se_sess->cmd_count);
++	transport_uninit_session(se_sess);
+ 	kmem_cache_free(se_sess_cache, se_sess);
+ }
+ EXPORT_SYMBOL(transport_free_session);
+diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
+index 0d00ccb..44e15d7 100644
+--- a/drivers/target/target_core_xcopy.c
++++ b/drivers/target/target_core_xcopy.c
+@@ -474,7 +474,7 @@ int target_xcopy_setup_pt(void)
+ 	memset(&xcopy_pt_sess, 0, sizeof(struct se_session));
+ 	ret = transport_init_session(&xcopy_pt_sess);
+ 	if (ret < 0)
+-		return ret;
++		goto destroy_wq;
  
- 			atomic_inc_mb(&tmp_tpg->tpg_pr_ref_count);
- 			spin_unlock(&dev->se_port_lock);
+ 	xcopy_pt_nacl.se_tpg = &xcopy_pt_tpg;
+ 	xcopy_pt_nacl.nacl_sess = &xcopy_pt_sess;
+@@ -483,12 +483,19 @@ int target_xcopy_setup_pt(void)
+ 	xcopy_pt_sess.se_node_acl = &xcopy_pt_nacl;
+ 
+ 	return 0;
++
++destroy_wq:
++	destroy_workqueue(xcopy_wq);
++	xcopy_wq = NULL;
++	return ret;
+ }
+ 
+ void target_xcopy_release_pt(void)
+ {
+-	if (xcopy_wq)
++	if (xcopy_wq) {
+ 		destroy_workqueue(xcopy_wq);
++		transport_uninit_session(&xcopy_pt_sess);
++	}
+ }
+ 
+ /*
 -- 
 1.8.3.1
 
