@@ -2,84 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D12213284
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 06:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9EB213290
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 06:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbgGCEER (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jul 2020 00:04:17 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:47042 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGCEER (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 00:04:17 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06341T68158538;
-        Fri, 3 Jul 2020 04:04:04 GMT
+        id S1725937AbgGCEGM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jul 2020 00:06:12 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:34924 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725294AbgGCEGM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 00:06:12 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0633xR8s097771;
+        Fri, 3 Jul 2020 04:06:03 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=4L+MvHZ8M0MvEMta2g/UXgscdME5fkuFvt18ijNsUvo=;
- b=Dv0YDx32DKkhCTdrcTlPqRsXzlU7vadB3rutxYdtUFV19ufD4QAZU90xAouj8L2D7Usk
- laShj28q5iHavmbWCF8PURH/TmK1yRk4XbY/ewzXXO15GNrp0aZRlkZo8UHyeWChgTaf
- 7rIM6cKDYUMMVuM53wutvXveqdaVHvPDPrv1+tv4c4DHe0Muo0H/OJhcNZKY0mOi+5+u
- GIgW95vOHExJc6vsmV+WmytryJWZQZpfJES4QNaiZbPWOHiShiaHkQxvgVpCMxJOpuSL
- u5opThqHZYq34SAAxj8HN5yVqXwHmYIkSZ9hbzFv/ADD2+AeqiSnTAXQagJg+JYsjsNu tw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 31ywrc1wrg-1
+ bh=LeWbrm8TYj4y9U2ldIQcfga2SR1ikeuUSI76X1adpzo=;
+ b=WEljvCeFyInkhSxz1wsbIOxncCttsCl6Nj0/8JJErhXpvVop1NCwWfTzPAmxQ15zCKxJ
+ sKMW7PTdpAxa4gBwbPZeylJ1mVxUnJ30AINBySi5GGZ4gjIGZ1xJwECTk97L8xS75Dsh
+ 4v2Oy9cXQylSRubve2h9StDnWs7VAkvo6VzezRA0rEpLotNyiBLbKCYh8CTkQeZZXL2k
+ JRkz7N6nSmxEXyTLh6ipgvT+4Av0TJeNtYV8QLjuTmMZP271Sa/q8EprECG5Y+nlllly
+ 0getILNJeo5Fh7q6OhtitNHmpWlZHkeLuPyqH34RgogP9k/5P/v18SWn8FLSFtt14l+8 wQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 31wxrnkp7v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 03 Jul 2020 04:04:04 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0633wp5d161637;
-        Fri, 3 Jul 2020 04:04:03 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 31xg1b5p4f-1
+        Fri, 03 Jul 2020 04:06:03 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0633wiGU162058;
+        Fri, 3 Jul 2020 04:04:02 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 31xfvwnc8n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Jul 2020 04:04:03 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06343xPM005839;
-        Fri, 3 Jul 2020 04:03:59 GMT
+        Fri, 03 Jul 2020 04:04:02 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 063440op002587;
+        Fri, 3 Jul 2020 04:04:00 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 03 Jul 2020 04:03:58 +0000
+        with ESMTP ; Fri, 03 Jul 2020 04:04:00 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux@armlinux.org.uk,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         jejb@linux.ibm.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH V2] scsi: eesox: Fix different dev_id between 'request_irq()' and 'free_irq()'
-Date:   Fri,  3 Jul 2020 00:03:52 -0400
-Message-Id: <159374899165.14731.1540154014107361984.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH V2] scsi: powertec: Fix different dev_id between 'request_irq()' and 'free_irq()'
+Date:   Fri,  3 Jul 2020 00:03:53 -0400
+Message-Id: <159374899165.14731.13358873635382558544.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200626040553.944352-1-christophe.jaillet@wanadoo.fr>
-References: <26d388f5-be67-b643-c76c-b9fe52f111f7@wanadoo.fr> <20200626040553.944352-1-christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20200626035948.944148-1-christophe.jaillet@wanadoo.fr>
+References: <08f63617-03df-71cf-70c4-00f08a9f51d8@wanadoo.fr> <20200626035948.944148-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=907 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007030027
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 spamscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=907 bulkscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007030027
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=916
- clxscore=1015 cotscore=-2147483648 priorityscore=1501 lowpriorityscore=0
- malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007030027
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=916
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
+ lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007030027
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 26 Jun 2020 06:05:53 +0200, Christophe JAILLET wrote:
+On Fri, 26 Jun 2020 05:59:48 +0200, Christophe JAILLET wrote:
 
 > The dev_id used in 'request_irq()' and 'free_irq()' should match.
 > So use 'info' in both cases.
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: eesox: Fix different dev_id between request_irq() and free_irq()
-      https://git.kernel.org/mkp/scsi/c/86f2da1112cc
+[1/1] scsi: powertec: Fix different dev_id between request_irq() and free_irq()
+      https://git.kernel.org/mkp/scsi/c/d179f7c76324
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
