@@ -2,92 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5203221327D
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 06:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D12213284
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 06:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725968AbgGCEDK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jul 2020 00:03:10 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:33236 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725891AbgGCEDJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 00:03:09 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0633wMjv096713;
-        Fri, 3 Jul 2020 04:03:07 GMT
+        id S1726072AbgGCEER (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jul 2020 00:04:17 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:47042 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725984AbgGCEER (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 00:04:17 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06341T68158538;
+        Fri, 3 Jul 2020 04:04:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=io4O+nz9m5jtj+f2zllYgY89qZzs4U3HlfLOxp3iqns=;
- b=y1C/ebw9s45N2kgB5kEGr7fEfVtnlwkVmXbgnuh0eSsSDSKPVZYQdXSJzoWupo9QAsAF
- IwO3vha8KbbdhrFJeC8uBB0er6wFtbX2LDHHvflZWZkv2qxt/qRv6B1E9MpVWc5F2ftP
- 9fYzo7wI9Zb7X6GFuFZfrCJoZ+Td7DgndoE374DLUKOXRvvGTwe5jdDV8d59du/eHT07
- ut/ogt/qC3EPIvhj7zfSFjc0B4SDF3iqT1+sIweM706hhQd/0fWlVgkoa8S7hMNYGQYG
- lSztEFzkNt2d9WMyqf8EYuNEblK7hkj+Ea7786Tzid9vkaPjSxrLgU9YGRkIJ0jOlC+s qQ== 
+ bh=4L+MvHZ8M0MvEMta2g/UXgscdME5fkuFvt18ijNsUvo=;
+ b=Dv0YDx32DKkhCTdrcTlPqRsXzlU7vadB3rutxYdtUFV19ufD4QAZU90xAouj8L2D7Usk
+ laShj28q5iHavmbWCF8PURH/TmK1yRk4XbY/ewzXXO15GNrp0aZRlkZo8UHyeWChgTaf
+ 7rIM6cKDYUMMVuM53wutvXveqdaVHvPDPrv1+tv4c4DHe0Muo0H/OJhcNZKY0mOi+5+u
+ GIgW95vOHExJc6vsmV+WmytryJWZQZpfJES4QNaiZbPWOHiShiaHkQxvgVpCMxJOpuSL
+ u5opThqHZYq34SAAxj8HN5yVqXwHmYIkSZ9hbzFv/ADD2+AeqiSnTAXQagJg+JYsjsNu tw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 31wxrnkp2u-1
+        by userp2130.oracle.com with ESMTP id 31ywrc1wrg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 03 Jul 2020 04:03:07 +0000
+        Fri, 03 Jul 2020 04:04:04 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0633wpxc161594;
-        Fri, 3 Jul 2020 04:03:06 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31xg1b5m02-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0633wp5d161637;
+        Fri, 3 Jul 2020 04:04:03 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 31xg1b5p4f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Jul 2020 04:03:06 +0000
+        Fri, 03 Jul 2020 04:04:03 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0634348H001334;
-        Fri, 3 Jul 2020 04:03:05 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06343xPM005839;
+        Fri, 3 Jul 2020 04:03:59 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 03 Jul 2020 04:03:04 +0000
+        with ESMTP ; Fri, 03 Jul 2020 04:03:58 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Johannes Thumshirn <johannes.thumshirn@wdc.com>
+To:     linux@armlinux.org.uk,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        jejb@linux.ibm.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        linux-scsi@vger.kernel.org,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>
-Subject: Re: [PATCH] scsi: mpt3sas: fix error returns in BRM_status_show
-Date:   Fri,  3 Jul 2020 00:02:59 -0400
-Message-Id: <159374890395.14616.1650672550404224641.b4-ty@oracle.com>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH V2] scsi: eesox: Fix different dev_id between 'request_irq()' and 'free_irq()'
+Date:   Fri,  3 Jul 2020 00:03:52 -0400
+Message-Id: <159374899165.14731.1540154014107361984.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200701131454.5255-1-johannes.thumshirn@wdc.com>
-References: <20200701131454.5255-1-johannes.thumshirn@wdc.com>
+In-Reply-To: <20200626040553.944352-1-christophe.jaillet@wanadoo.fr>
+References: <26d388f5-be67-b643-c76c-b9fe52f111f7@wanadoo.fr> <20200626040553.944352-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=755 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=907 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2007030027
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=765
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
- lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007030027
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=916
+ clxscore=1015 cotscore=-2147483648 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2007030027
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 1 Jul 2020 22:14:54 +0900, Johannes Thumshirn wrote:
+On Fri, 26 Jun 2020 06:05:53 +0200, Christophe JAILLET wrote:
 
-> BRM_status_show() has several error branches, but none of them record the
-> error in the error return.]
-> 
-> Also while at it remove the manual mutex_unlock() of the pci_access_mutex
-> in case of an ongoing pci error recovery or host removal and jump to the
-> cleanup lable instead.
-> 
-> [...]
+> The dev_id used in 'request_irq()' and 'free_irq()' should match.
+> So use 'info' in both cases.
 
-Applied to 5.8/scsi-fixes, thanks!
+Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: mpt3sas: Fix error returns in BRM_status_show
-      https://git.kernel.org/mkp/scsi/c/c7e4dd5d84fc
+[1/1] scsi: eesox: Fix different dev_id between request_irq() and free_irq()
+      https://git.kernel.org/mkp/scsi/c/86f2da1112cc
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
