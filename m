@@ -2,49 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16669213ACF
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 15:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D33213ADC
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 15:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbgGCNVH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jul 2020 09:21:07 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40892 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726039AbgGCNVF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 09:21:05 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063D2dLk104163;
-        Fri, 3 Jul 2020 09:21:03 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 320wfhhp56-1
+        id S1726477AbgGCNV2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jul 2020 09:21:28 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55084 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726347AbgGCNV1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 09:21:27 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063D2YZP161748;
+        Fri, 3 Jul 2020 09:21:01 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 321cvea83n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jul 2020 09:21:02 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 063DGmPn021101;
+        Fri, 03 Jul 2020 09:21:01 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 063DJiSk019303;
         Fri, 3 Jul 2020 13:20:59 GMT
 Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 31wwcgue84-1
+        by ppma04ams.nl.ibm.com with ESMTP id 31wwr8fb3k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 03 Jul 2020 13:20:59 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 063DKu5H12583262
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 063DKu3K12583264
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 3 Jul 2020 13:20:56 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87FF7A405B;
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C899911C04C;
         Fri,  3 Jul 2020 13:20:56 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 71759A4054;
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B302311C04A;
         Fri,  3 Jul 2020 13:20:56 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.145.150.95])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Fri,  3 Jul 2020 13:20:56 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1jrLcd-005ouD-AF; Fri, 03 Jul 2020 15:20:55 +0200
+        id 1jrLcd-005ouH-M9; Fri, 03 Jul 2020 15:20:55 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>
+        "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Steffen Maier <maier@linux.ibm.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
@@ -52,11 +51,10 @@ Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Fedor Loshakov <loshakov@linux.ibm.com>,
         Julian Wiedmann <jwi@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 3/7] scsi: docs: update outdated link to IBM developerworks
-Date:   Fri,  3 Jul 2020 15:19:59 +0200
-Message-Id: <9ab0341d6ddca46cfc885e4cd9dc38f535969b02.1593780621.git.bblock@linux.ibm.com>
+        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH 4/7] scsi: docs: remove invalid link and update text for zfcp kernel config
+Date:   Fri,  3 Jul 2020 15:20:00 +0200
+Message-Id: <96069b9f4c4f056a515b37e89b2bdfccc282e3d3.1593780621.git.bblock@linux.ibm.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1593780621.git.bblock@linux.ibm.com>
 References: <cover.1593780621.git.bblock@linux.ibm.com>
@@ -66,10 +64,10 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-03_06:2020-07-02,2020-07-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- suspectscore=0 impostorscore=0 mlxlogscore=999 cotscore=-2147483648
- adultscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 spamscore=0
- mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 suspectscore=0 phishscore=0 clxscore=1011
+ bulkscore=0 malwarescore=0 adultscore=0 mlxscore=0 cotscore=-2147483648
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2004280000 definitions=main-2007030087
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -78,32 +76,56 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 IBM decided to retire a lot of the content that was previously hosted on
 "developerworks", and so some of the links we've used for documentation
-are now dead or redirect to some general landing page with no
-correlation to what the links were meant to provide.
+are now dead or redirect to some general landing page with no correlation
+to what the links were meant to provide.
 
-The s390-tools package is meanwhile also hosted on github, so we can
-link to the script directly instead of to the archive.
+Change the provided link in the Kconfig file for zfcp to rather refer to
+our device drivers book that we regularly update and publish for free,
+and whose name hasn't been changed since it was first published.
+
+Our hardware is also not called "IBM eServer zSeries" anymore - in fact,
+it hasn't been called like that since 2006. Use a broader term that
+covers different server names over time.
+
+Lastly, add a short paragraph about how our HBAs are typically named, to
+have some more tangible references.
 
 Reviewed-by: Julian Wiedmann <jwi@linux.ibm.com>
 Reviewed-by: Steffen Maier <maier@linux.ibm.com>
 Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- Documentation/scsi/scsi-parameters.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/Kconfig | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/scsi/scsi-parameters.rst b/Documentation/scsi/scsi-parameters.rst
-index 9aba897c97ac..e5f68b431f5c 100644
---- a/Documentation/scsi/scsi-parameters.rst
-+++ b/Documentation/scsi/scsi-parameters.rst
-@@ -94,7 +94,7 @@ parameters may be changed at runtime by the command
- 			(/proc/sys/dev/scsi/logging_level).
- 			There is also a nice 'scsi_logging_level' script in the
- 			S390-tools package, available for download at
--			http://www-128.ibm.com/developerworks/linux/linux390/s390-tools-1.5.4.html
-+			https://github.com/ibm-s390-tools/s390-tools/blob/master/scripts/scsi_logging_level
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index e9ff4cd5fbe9..571473a58f98 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -1469,14 +1469,19 @@ config SCSI_SUNESP
+ 	  module will be called sun_esp.
  
- 	scsi_mod.scan=	[SCSI] sync (default) scans SCSI busses as they are
- 			discovered.  async scans them in kernel threads,
+ config ZFCP
+-	tristate "FCP host bus adapter driver for IBM eServer zSeries"
++	tristate "FCP host bus adapter driver for IBM mainframes"
+ 	depends on S390 && QDIO && SCSI
+ 	depends on SCSI_FC_ATTRS
+ 	help
+-          If you want to access SCSI devices attached to your IBM eServer
+-          zSeries by means of Fibre Channel interfaces say Y.
+-          For details please refer to the documentation provided by IBM at
+-          <http://oss.software.ibm.com/developerworks/opensource/linux390>
++	  If you want to access SCSI devices attached to your IBM mainframe by
++	  means of Fibre Channel Protocol host bus adapters say Y.
++
++	  Supported HBAs include different models of the FICON Express and FCP
++	  Express I/O cards.
++
++	  For a more complete list, and for more details about setup and
++	  operation refer to the IBM publication "Device Drivers, Features, and
++	  Commands", SC33-8411.
+ 
+           This driver is also available as a module. This module will be
+           called zfcp. If you want to compile it as a module, say M here
 -- 
 2.26.2
 
