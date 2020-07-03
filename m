@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 407E4213AD5
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 15:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49D4213ADE
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 15:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbgGCNVG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jul 2020 09:21:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47414 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726382AbgGCNVG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 09:21:06 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063D3TBb120040;
-        Fri, 3 Jul 2020 09:21:01 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32121rd9um-1
+        id S1726482AbgGCNVc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jul 2020 09:21:32 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65184 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726272AbgGCNVb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 09:21:31 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063D30Jp119710;
+        Fri, 3 Jul 2020 09:21:03 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32041gxbst-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jul 2020 09:21:01 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 063DJPSp013738;
+        Fri, 03 Jul 2020 09:21:03 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 063DKIDh019843;
         Fri, 3 Jul 2020 13:20:58 GMT
 Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3217b01qaf-1
+        by ppma04ams.nl.ibm.com with ESMTP id 31wwr8fb3j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 03 Jul 2020 13:20:58 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 063DJZ8O36897112
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 063DJZ2V36897114
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 3 Jul 2020 13:19:35 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 96D1BA4062;
+        by IMSVA (Postfix) with ESMTP id DFA81A405B;
         Fri,  3 Jul 2020 13:20:55 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7FCD0A4060;
+        by IMSVA (Postfix) with ESMTP id C9CA0A4054;
         Fri,  3 Jul 2020 13:20:55 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.145.150.95])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Fri,  3 Jul 2020 13:20:55 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1jrLcc-005ou7-8i; Fri, 03 Jul 2020 15:20:54 +0200
+        id 1jrLcc-005ou9-Lb; Fri, 03 Jul 2020 15:20:54 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>
+        George Spelvin <lkml@sdf.org>
 Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Steffen Maier <maier@linux.ibm.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
@@ -52,22 +52,23 @@ Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Fedor Loshakov <loshakov@linux.ibm.com>,
         Julian Wiedmann <jwi@linux.ibm.com>,
-        George Spelvin <lkml@sdf.org>, linux-scsi@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH 0/7] zfcp: cleanups and small changes for 5.9
-Date:   Fri,  3 Jul 2020 15:19:56 +0200
-Message-Id: <cover.1593780621.git.bblock@linux.ibm.com>
+        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH 1/7] zfcp: use prandom_u32_max() for backoff
+Date:   Fri,  3 Jul 2020 15:19:57 +0200
+Message-Id: <8fc7c4c4069ff1783f4a9ccd84a923f581a09ec5.1593780621.git.bblock@linux.ibm.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1593780621.git.bblock@linux.ibm.com>
+References: <cover.1593780621.git.bblock@linux.ibm.com>
 MIME-Version: 1.0
 Organization: IBM Deutschland Research & Development GmbH, Vorsitz. AufsR. Gregor Pillen, Geschaeftsfuehrung Dirk Wittkopp, Sitz der Gesellschaft Boeblingen, Registergericht AmtsG Stuttgart, HRB 243294
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-03_09:2020-07-02,2020-07-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 impostorscore=0 cotscore=-2147483648 mlxscore=0
- malwarescore=0 clxscore=1011 mlxlogscore=999 spamscore=0
- lowpriorityscore=0 adultscore=0 bulkscore=0 suspectscore=2 classifier=spam
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 suspectscore=0 adultscore=0
+ clxscore=1015 phishscore=0 lowpriorityscore=0 mlxlogscore=999
+ malwarescore=0 impostorscore=0 cotscore=-2147483648 classifier=spam
  adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2007030090
 Sender: linux-scsi-owner@vger.kernel.org
@@ -75,48 +76,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Martin, James, Jonathan,
+From: George Spelvin <lkml@sdf.org>
 
-here are some cleanups and small changes for zfcp I'd like to include in
-5.9 if possible.
+We don't need crypto-grade random numbers for randomized backoffs.
+Instead use prandom_u32_max(ep_ro) which generates a pseudo-random
+number uniformly distributed in the interval [0, ep_ro).
 
-One of the changes touches documentation in `Documentation/scsi/`, so I
-put Jonathan on To, hope that was correct. I hope you can still pull
-this all in one go to minimize work. IBM did retire some old URLs and
-content from our public website, so we have to clean that up in the
-documentation so there are not dead links. I changed these in the hopes
-we can minimize documentation churn going forward, just to replace URLs.
+Signed-off-by: George Spelvin <lkml@sdf.org>
+Reviewed-by: Steffen Maier <maier@linux.ibm.com>
+Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
+---
+ drivers/s390/scsi/zfcp_fc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The other changes are mostly small cleanups for our driver that make at
-least parts more sane than they've been.
-
-Most of these have been in our CI for quite a while now - shame on me
-for delaying sending them upstream so long -, so I am rather confident
-that they don't break anything for us.
-
-As always, feedback and reviews are appreciated :-)
-
-Benjamin Block (2):
-  scsi: docs: update outdated link to IBM developerworks
-  scsi: docs: remove invalid link and update text for zfcp kernel config
-
-George Spelvin (1):
-  zfcp: use prandom_u32_max() for backoff
-
-Julian Wiedmann (4):
-  zfcp: fix an outdated comment for zfcp_qdio_send()
-  zfcp: clean up zfcp_erp_action_ready()
-  zfcp: replace open-coded list move
-  zfcp: avoid benign overflow of the Request Queue's free-level
-
- Documentation/scsi/scsi-parameters.rst |  2 +-
- drivers/s390/scsi/zfcp_ccw.c           |  7 +++----
- drivers/s390/scsi/zfcp_erp.c           |  2 +-
- drivers/s390/scsi/zfcp_fc.c            |  2 +-
- drivers/s390/scsi/zfcp_qdio.c          |  7 +++++--
- drivers/scsi/Kconfig                   | 15 ++++++++++-----
- 6 files changed, 21 insertions(+), 14 deletions(-)
-
+diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+index b018b61bd168..d24cafe02708 100644
+--- a/drivers/s390/scsi/zfcp_fc.c
++++ b/drivers/s390/scsi/zfcp_fc.c
+@@ -48,7 +48,7 @@ unsigned int zfcp_fc_port_scan_backoff(void)
+ {
+ 	if (!port_scan_backoff)
+ 		return 0;
+-	return get_random_int() % port_scan_backoff;
++	return prandom_u32_max(port_scan_backoff);
+ }
+ 
+ static void zfcp_fc_port_scan_time(struct zfcp_adapter *adapter)
 -- 
 2.26.2
 
