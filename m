@@ -2,97 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C13F9213375
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 07:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF19D213392
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 07:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbgGCFRA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jul 2020 01:17:00 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:53766 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725779AbgGCFRA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 01:17:00 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0635D0nS190615;
-        Fri, 3 Jul 2020 05:16:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=arddawxe/NarPsuArRlIV1nbKL4dlA3Ya1GT5IfE0IQ=;
- b=JjjTKpLpwZEvubDiFa5UmbuNbu0UEJ9tP3bP+8Lyw0FkUAwiPSeIIiaOZjoOeg9xTAyA
- iJp6M5NwafJtdK8b6zN0VMHPSWA66BKdpNGsf2AvkwYN9pJ00F7T5Q2a0BJqXevwW//P
- CRThfLAAgx0PZFBoycti3XxNubcIo+/DOu9fmqUOp8hfyLBvQAVQAt6sUhsPHecgZ7+Q
- X/o/ubCn9dfsHQeVG+7BLhu1Zdk1q3kBMDuNF6sddlEQVYQ8jVA9/NAAVi4o6NP5PFvS
- NAzkqE/iXsWzLi5+xNwfNsPv3NElbvKANHvjxdGMRc/izhMmTC8E3Dk8T4mV8ffY17KT Rg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 31xx1e8ppc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 03 Jul 2020 05:16:54 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0635CtQM017097;
-        Fri, 3 Jul 2020 05:16:53 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 31y52ns3ju-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Jul 2020 05:16:53 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0635GqAG003089;
-        Fri, 3 Jul 2020 05:16:52 GMT
-Received: from localhost.localdomain (/183.246.145.16)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 03 Jul 2020 05:16:51 +0000
-From:   Bob Liu <bob.liu@oracle.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     open-iscsi@googlegroups.com, martin.petersen@oracle.com,
-        lduncan@suse.com, cleech@redhat.com, michael.christie@oracle.com,
-        Bob Liu <bob.liu@oracle.com>
-Subject: [PATCH] scsi: iscsi: register sysfs for workqueue iscsi_destroy
-Date:   Fri,  3 Jul 2020 13:16:03 +0800
-Message-Id: <20200703051603.1473-1-bob.liu@oracle.com>
-X-Mailer: git-send-email 2.9.5
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 mlxscore=0
- adultscore=0 suspectscore=1 bulkscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007030037
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015 adultscore=0
- suspectscore=1 mlxlogscore=999 cotscore=-2147483648 lowpriorityscore=0
- malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007030037
+        id S1725915AbgGCFiB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jul 2020 01:38:01 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:26973 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725764AbgGCFiA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 01:38:00 -0400
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200703053757epoutp03cf4eeac591ae6d90d0db1893fc261fd1~eJ29vlh3Y2270522705epoutp03C
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Jul 2020 05:37:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200703053757epoutp03cf4eeac591ae6d90d0db1893fc261fd1~eJ29vlh3Y2270522705epoutp03C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1593754677;
+        bh=azxMVNyl7wcCSanLekYTVjBHM/S2RAbxbRQO5hkpxm0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=ArHGonVK+piQrkRaqJaUyRFMVopcbhYZzKUXdrcocU57+JY9QpkoJDUA4FgtpVkfD
+         8FQ/nVyGObKSa9ADhrzPXHPk9rx8ESu7TIV0vfMSjkBj6Xsd2acyPEeNKGlbaUIGr1
+         MGNpGHeavkfvhNjeIins3CcMQ87i9Wu3nbB0lLGU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20200703053757epcas2p17e1c691cf9e462c420cc463d148f70a2~eJ29RogtP2825928259epcas2p1K;
+        Fri,  3 Jul 2020 05:37:57 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.184]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 49ykJN1cqszMqYlx; Fri,  3 Jul
+        2020 05:37:56 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        23.F8.19322.334CEFE5; Fri,  3 Jul 2020 14:37:55 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200703053755epcas2p23adbc614d9a72cf3335ed1e6223709f3~eJ27XBxRP2742027420epcas2p2p;
+        Fri,  3 Jul 2020 05:37:55 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200703053755epsmtrp12d0a66a6b00ef069351bd950b20f82bc~eJ27WIz6N0400704007epsmtrp1p;
+        Fri,  3 Jul 2020 05:37:55 +0000 (GMT)
+X-AuditID: b6c32a45-7adff70000004b7a-4c-5efec4334fa9
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        65.6E.08303.234CEFE5; Fri,  3 Jul 2020 14:37:55 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200703053754epsmtip15b8b05e3fa1fac68b075a327c9677ae8~eJ27GCA9n2756827568epsmtip1D;
+        Fri,  3 Jul 2020 05:37:54 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
+        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [RFC PATCH v3 0/2] ufs: support various values per device
+Date:   Fri,  3 Jul 2020 14:30:00 +0900
+Message-Id: <cover.1593753896.git.kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpik+LIzCtJLcpLzFFi42LZdljTQtf4yL84g+ed0hYP5m1js9jbdoLd
+        4uXPq2wWBx92slhM+/CT2eLT+mWsFr/+rme3WL34AYvFohvbmCxubjnKYtF9fQebxfLj/5gs
+        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
+        VI5NRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtDdSgpl
+        iTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCQ8MCveLE3OLSvHS95PxcK0MDAyNToMqE
+        nIzdf58yFSxnqZj5cg57A+NW5i5GTg4JAROJ7zt+MXYxcnEICexglPgy8y4ThPOJUeLDpGfM
+        EM5nRolNNxYAlXGAtfx5zQoR38UoMWF3O1THD0aJju3bGUHmsgloSjy9ORUsISKwmUni1YL7
+        YAuZBdQldk04wQRiCws4SexccBbMZhFQlXjbd4wVxOYVsJBYPGM5O8SBchI3z3WCnSEh8JNd
+        4kvrHzaIhIvEh7bdjBC2sMSr41ugGqQkXva3Qdn1EvumNrBCNPcwSjzd9w+qwVhi1rN2sH+Y
+        gU5dv0sf4jVliSO3WCDu5JPoOPyXHSLMK9HRJgTRqCzxa9JkqCGSEjNv3oHa5CGxfeFpMFtI
+        IFZiyrsdbBMYZWchzF/AyLiKUSy1oDg3PbXYqMAQOZY2MYITo5brDsbJbz/oHWJk4mA8xCjB
+        wawkwpug+i9OiDclsbIqtSg/vqg0J7X4EKMpMLwmMkuJJucDU3NeSbyhqZGZmYGlqYWpmZGF
+        kjhvruKFOCGB9MSS1OzU1ILUIpg+Jg5OqQYm2b2Tz+2+Ztl98O8rzi9qyu4HxOoPJOyN1Tpw
+        z+i/427vpjxvlSzLw2GmweoWDk4P1itnyJ/qd3y4uOk1zxXBD48S/7dr7Rdf/Spdd6lIUUW9
+        6KKKP3Zd9V6PDDcrP35me/iejh7fh20Cr/eclBXKb2a7cpPx5IHNOb11D7MqpoTqTt5h1h2f
+        tiQg1GpCXfPt24F/9z2bXimw+Tu/T+qLH1/PWm0Ne5utK7b+2aIvXG9SzrBaxh1J9sp6mCGx
+        I3mdX9iuEJ1rDo2ZPz23RT2/GSkl9mjHbSeTvye8Gi//rgudv08yIOpoq/TTM0/XhBm/5lDi
+        ucLvyiuhPfHf9LK5xdJXaotP3E3aXfK4fIavEktxRqKhFnNRcSIAUQ8o4hUEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrALMWRmVeSWpSXmKPExsWy7bCSnK7xkX9xBp8WMVo8mLeNzWJv2wl2
+        i5c/r7JZHHzYyWIx7cNPZotP65exWvz6u57dYvXiBywWi25sY7K4ueUoi0X39R1sFsuP/2Oy
+        6Lp7g9Fi6b+3LA58HpeveHtc7utl8piw6ACjx/f1HWweH5/eYvHo27KK0ePzJjmP9gPdTAEc
+        UVw2Kak5mWWpRfp2CVwZu/8+ZSpYzlIx8+Uc9gbGrcxdjBwcEgImEn9es3YxcnEICexglPh5
+        eSlLFyMnUFxS4sTO54wQtrDE/ZYjUEXfGCUerO9hBUmwCWhKPL05lQkkISJwmEni/9bn7CAJ
+        ZgF1iV0TTjCB2MICThI7F5wFs1kEVCXe9h0Da+YVsJBYPGM5O8QGOYmb5zqZJzDyLGBkWMUo
+        mVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERyoWlo7GPes+qB3iJGJg/EQowQHs5IIb4Lq
+        vzgh3pTEyqrUovz4otKc1OJDjNIcLErivF9nLYwTEkhPLEnNTk0tSC2CyTJxcEo1MFmf7UqY
+        kBn4fU5jZyrLiVmilrcc3hpH+M43DKhkNb2Wkf5qYjjLnYKYnkTzO5L6+jZNr5vNP2wrDlR5
+        dTXncF5+0p/EgJYXB12+xl5qLzXsbZxY9b97pnpI1PyFrsfuXZ649fIa78scKr8SH6cVyWXu
+        inhl4rTz1KLtO4V3O28N4o1IS3Dy9Zhz8buuUICXwv4z1+t/Vd7UyCoRX/1bzel3OZ+FTMcP
+        xif/TCrjhacsLZ0pbyM7x37XqphOmeYfm5s1Zobb39/rKXRETsrp4G4bl0qpOIOqNcY2K2KP
+        dpj+KTrbvcsoW7b6xtS1vYsOxfh2KJfNfuQxhcPKMoiR+fZc5U+Lr9r5bZnWtLJKiaU4I9FQ
+        i7moOBEAf6DvK8MCAAA=
+X-CMS-MailID: 20200703053755epcas2p23adbc614d9a72cf3335ed1e6223709f3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20200703053755epcas2p23adbc614d9a72cf3335ed1e6223709f3
+References: <CGME20200703053755epcas2p23adbc614d9a72cf3335ed1e6223709f3@epcas2p2.samsung.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Register sysfs for workqueue iscsi_destroy, so that users can set cpu affinity
-through "cpumask" for this workqueue to get better isolation in cloud
-multi-tenant scenario.
+v2 -> v3
+set default fdeviceinit timeout to 1 second
+set the interval among query requests to check if it's cleared 5ms
 
-This patch unfolded create_singlethread_workqueue(), added WQ_SYSFS and drop
-__WQ_ORDERED_EXPLICIT since __WQ_ORDERED_EXPLICIT workqueue isn't allowed to
-change "cpumask".
+v1 -> v2
+change ufs_dev_values to const
+remove macros to enhance readability
 
-Suggested-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Bob Liu <bob.liu@oracle.com>
----
- drivers/scsi/scsi_transport_iscsi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Kiwoong Kim (2):
+  ufs: support various values per device
+  ufs: change the way to complete fDeviceInit
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 7ae5024..aa8d4a3 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -4766,7 +4766,9 @@ static __init int iscsi_transport_init(void)
- 		goto release_nls;
- 	}
- 
--	iscsi_destroy_workq = create_singlethread_workqueue("iscsi_destroy");
-+	iscsi_destroy_workq = alloc_workqueue("%s",
-+			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
-+			1, "iscsi_destroy");
- 	if (!iscsi_destroy_workq) {
- 		err = -ENOMEM;
- 		goto destroy_wq;
+ drivers/scsi/ufs/ufs_quirks.h | 13 ++++++++
+ drivers/scsi/ufs/ufshcd.c     | 75 ++++++++++++++++++++++++++++++++++++-------
+ drivers/scsi/ufs/ufshcd.h     |  1 +
+ 3 files changed, 77 insertions(+), 12 deletions(-)
+
 -- 
-2.9.5
+2.7.4
 
