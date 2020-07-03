@@ -2,59 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D33213ADC
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 15:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CAD213AD0
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jul 2020 15:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgGCNV2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jul 2020 09:21:28 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55084 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726347AbgGCNV1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 09:21:27 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063D2YZP161748;
-        Fri, 3 Jul 2020 09:21:01 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 321cvea83n-1
+        id S1726443AbgGCNVH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jul 2020 09:21:07 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36372 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726363AbgGCNVE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jul 2020 09:21:04 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063D2dwb104131;
+        Fri, 3 Jul 2020 09:21:02 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 320wfhhp5d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jul 2020 09:21:01 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 063DJiSk019303;
-        Fri, 3 Jul 2020 13:20:59 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 31wwr8fb3k-1
+        Fri, 03 Jul 2020 09:21:02 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 063DL00S018190;
+        Fri, 3 Jul 2020 13:21:00 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 31wwr83eu3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jul 2020 13:20:59 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 063DKu3K12583264
+        Fri, 03 Jul 2020 13:21:00 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 063DKvpp59048072
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Jul 2020 13:20:56 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C899911C04C;
-        Fri,  3 Jul 2020 13:20:56 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B302311C04A;
-        Fri,  3 Jul 2020 13:20:56 +0000 (GMT)
+        Fri, 3 Jul 2020 13:20:57 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 20F1FA404D;
+        Fri,  3 Jul 2020 13:20:57 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0B655A4040;
+        Fri,  3 Jul 2020 13:20:57 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.145.150.95])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri,  3 Jul 2020 13:20:56 +0000 (GMT)
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri,  3 Jul 2020 13:20:57 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1jrLcd-005ouH-M9; Fri, 03 Jul 2020 15:20:55 +0200
+        id 1jrLcd-005ouL-Vm; Fri, 03 Jul 2020 15:20:55 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Benjamin Block <bblock@linux.ibm.com>,
+Cc:     Julian Wiedmann <jwi@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
         Steffen Maier <maier@linux.ibm.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Fedor Loshakov <loshakov@linux.ibm.com>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
         linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH 4/7] scsi: docs: remove invalid link and update text for zfcp kernel config
-Date:   Fri,  3 Jul 2020 15:20:00 +0200
-Message-Id: <96069b9f4c4f056a515b37e89b2bdfccc282e3d3.1593780621.git.bblock@linux.ibm.com>
+Subject: [PATCH 5/7] zfcp: clean up zfcp_erp_action_ready()
+Date:   Fri,  3 Jul 2020 15:20:01 +0200
+Message-Id: <d1bb04322f240dee32f4c4a551bc93bc736f4b01.1593780621.git.bblock@linux.ibm.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1593780621.git.bblock@linux.ibm.com>
 References: <cover.1593780621.git.bblock@linux.ibm.com>
@@ -64,68 +64,42 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-03_06:2020-07-02,2020-07-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 spamscore=0 suspectscore=0 phishscore=0 clxscore=1011
- bulkscore=0 malwarescore=0 adultscore=0 mlxscore=0 cotscore=-2147483648
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 mlxlogscore=999 cotscore=-2147483648
+ adultscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2004280000 definitions=main-2007030087
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-IBM decided to retire a lot of the content that was previously hosted on
-"developerworks", and so some of the links we've used for documentation
-are now dead or redirect to some general landing page with no correlation
-to what the links were meant to provide.
+From: Julian Wiedmann <jwi@linux.ibm.com>
 
-Change the provided link in the Kconfig file for zfcp to rather refer to
-our device drivers book that we regularly update and publish for free,
-and whose name hasn't been changed since it was first published.
+We already maintain a pointer to act->adapter. Use it consistently to
+avoid any confusion about whose ->erp_ready_head and ->erp_ready_wq
+we are accessing.
 
-Our hardware is also not called "IBM eServer zSeries" anymore - in fact,
-it hasn't been called like that since 2006. Use a broader term that
-covers different server names over time.
-
-Lastly, add a short paragraph about how our HBAs are typically named, to
-have some more tangible references.
-
-Reviewed-by: Julian Wiedmann <jwi@linux.ibm.com>
+Signed-off-by: Julian Wiedmann <jwi@linux.ibm.com>
 Reviewed-by: Steffen Maier <maier@linux.ibm.com>
 Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/scsi/Kconfig | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/s390/scsi/zfcp_erp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index e9ff4cd5fbe9..571473a58f98 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1469,14 +1469,19 @@ config SCSI_SUNESP
- 	  module will be called sun_esp.
+diff --git a/drivers/s390/scsi/zfcp_erp.c b/drivers/s390/scsi/zfcp_erp.c
+index 79f6e8fb03ca..59e662df5774 100644
+--- a/drivers/s390/scsi/zfcp_erp.c
++++ b/drivers/s390/scsi/zfcp_erp.c
+@@ -68,7 +68,7 @@ static void zfcp_erp_action_ready(struct zfcp_erp_action *act)
+ {
+ 	struct zfcp_adapter *adapter = act->adapter;
  
- config ZFCP
--	tristate "FCP host bus adapter driver for IBM eServer zSeries"
-+	tristate "FCP host bus adapter driver for IBM mainframes"
- 	depends on S390 && QDIO && SCSI
- 	depends on SCSI_FC_ATTRS
- 	help
--          If you want to access SCSI devices attached to your IBM eServer
--          zSeries by means of Fibre Channel interfaces say Y.
--          For details please refer to the documentation provided by IBM at
--          <http://oss.software.ibm.com/developerworks/opensource/linux390>
-+	  If you want to access SCSI devices attached to your IBM mainframe by
-+	  means of Fibre Channel Protocol host bus adapters say Y.
-+
-+	  Supported HBAs include different models of the FICON Express and FCP
-+	  Express I/O cards.
-+
-+	  For a more complete list, and for more details about setup and
-+	  operation refer to the IBM publication "Device Drivers, Features, and
-+	  Commands", SC33-8411.
- 
-           This driver is also available as a module. This module will be
-           called zfcp. If you want to compile it as a module, say M here
+-	list_move(&act->list, &act->adapter->erp_ready_head);
++	list_move(&act->list, &adapter->erp_ready_head);
+ 	zfcp_dbf_rec_run("erardy1", act);
+ 	wake_up(&adapter->erp_ready_wq);
+ 	zfcp_dbf_rec_run("erardy2", act);
 -- 
 2.26.2
 
