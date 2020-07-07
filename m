@@ -2,90 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C362C216DC8
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 15:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC53D216E1D
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 15:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727793AbgGGNeS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jul 2020 09:34:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58560 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725944AbgGGNeR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 7 Jul 2020 09:34:17 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 38CC8AC43;
-        Tue,  7 Jul 2020 13:34:16 +0000 (UTC)
-Date:   Tue, 7 Jul 2020 15:34:15 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: lfpc: kernel BUG at arch/x86/mm/physaddr.c:28!
-Message-ID: <20200707133415.z4lvfnzraku7bioj@beryllium.lan>
+        id S1726946AbgGGN40 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jul 2020 09:56:26 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2434 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726805AbgGGN40 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 7 Jul 2020 09:56:26 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id D346FCE63AE14E4E85B7;
+        Tue,  7 Jul 2020 14:56:24 +0100 (IST)
+Received: from [127.0.0.1] (10.47.9.47) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 7 Jul 2020
+ 14:56:24 +0100
+Subject: Re: [PATCH 03/21] scsi: add scsi_{get,put}_internal_cmd() helper
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Bart van Assche <bvanassche@acm.org>,
+        Don Brace <don.brace@microchip.com>,
+        <linux-scsi@vger.kernel.org>
+References: <20200703130122.111448-1-hare@suse.de>
+ <20200703130122.111448-4-hare@suse.de>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <59afc2bc-a5e2-89d8-0843-03b082c53bb0@huawei.com>
+Date:   Tue, 7 Jul 2020 14:54:43 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20200703130122.111448-4-hare@suse.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.9.47]
+X-ClientProxiedBy: lhreml742-chm.china.huawei.com (10.201.108.192) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+On 03/07/2020 14:01, Hannes Reinecke wrote:
+> Add helper functions to allow LLDDs to allocate and free
+> internal commands.
+> 
+> Signed-off-by: Hannes Reinecke <hare@suse.de>
 
-While trying to debug something in qla2xxx I enabled KASAN. As it turns out,
-KASAN finds something in lpfc (and not qla2xxx so far).
+Not sure how Christoph feels about this now, but FWIW:
+Reviewed-by: John Garry <john.garry@huawei.com>
 
-I was able to reproduce this with v5.8-rc4 and the current mkp/queue
-branch. Almost all memory debug options are enabled. Not sure which
-one is able to trigger this:
+But a couple of comments, below.
 
- ------------[ cut here ]------------
- kernel BUG at arch/x86/mm/physaddr.c:28!
- invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN PTI
- CPU: 0 PID: 1083 Comm: kworker/0:4 Tainted: G            E     5.8.0-rc4-default+ #59
- Hardware name: HP ProLiant DL580 Gen9/ProLiant DL580 Gen9, BIOS U17 07/21/2019
- Workqueue: events work_for_cpu_fn
- RIP: 0010:__phys_addr+0x59/0x80
- Code: 4c 39 e3 72 25 48 c7 c7 55 85 e7 87 e8 00 8d 39 00 0f b6 0d 6e e7 1a 02 4c 89 e0 48 d3 e8 48 85 c0 75 07 4c 89 e$
- RSP: 0018:ffff88842b9ff990 EFLAGS: 00010202
- RAX: 0000000000000001 RBX: ffffc90086598000 RCX: 000000000000002e
- RDX: 1ffffffff0fcf0aa RSI: 0000000000000001 RDI: ffffffff87e78555
- RBP: ffffc90006598000 R08: ffffffffc109fb97 R09: 0000000000000000
- R10: 0000000000000003 R11: ffffed108573ff0c R12: 0000408006598000
- R13: 0000000000000001 R14: ffff88842baac000 R15: ffff88843bc43800
- FS:  0000000000000000(0000) GS:ffff888812800000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00007f5a28f8a4b6 CR3: 00000019b240e001 CR4: 00000000001606f0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- Call Trace:
-  set_memory_wc+0x1d/0x90
-  lpfc_wq_create+0x67e/0x920 [lpfc]
-  lpfc_create_wq_cq+0xde/0x240 [lpfc]
-  lpfc_sli4_queue_setup+0x489/0xc70 [lpfc]
-  lpfc_sli4_hba_setup+0xf4c/0x26d0 [lpfc]
-  ? kernfs_add_one+0x1b1/0x210
-  ? __kernfs_create_file+0xe3/0x120
-  ? lpfc_sli_read_link_ste+0x550/0x550 [lpfc]
-  ? lpfc_cpu_affinity_check.isra.0+0x5e3/0xa00 [lpfc]
-  ? lpfc_pci_probe_one_s4.isra.0+0x3b4/0x540 [lpfc]
-  lpfc_pci_probe_one_s4.isra.0+0x3b4/0x540 [lpfc]
-  ? lpfc_pci_probe_one_s4.isra.0+0x540/0x540 [lpfc]
-  lpfc_pci_probe_one+0xbb/0xd0 [lpfc]
-  ? lpfc_pci_probe_one_s4.isra.0+0x540/0x540 [lpfc]
-  ? __pm_runtime_resume+0x42/0x70
-  local_pci_probe+0x74/0xc0
-  ? pci_device_shutdown+0x80/0x80
-  work_for_cpu_fn+0x29/0x40
-  process_one_work+0x483/0x7e0
-  worker_thread+0x465/0x690
-  ? process_one_work+0x7e0/0x7e0
-  kthread+0x19f/0x1f0
-  ? kthread_parkme+0x40/0x40
-  ret_from_fork+0x22/0x30
- Modules linked in: mgag200(E+) drm_vram_helper(E) lpfc(E+) drm_kms_helper(E) sd_mod(E) nvmet_fc(E) syscopyarea(E) sysf$
- ---[ end trace 404edaadb5917ff2 ]---
+> ---
+>   drivers/scsi/scsi_lib.c    | 45 +++++++++++++++++++++++++++++++++++++++++++++
+>   include/scsi/scsi_device.h |  4 ++++
+>   2 files changed, 49 insertions(+)
+> 
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index 0ba7a65e7c8d..1d5c1b9a1203 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -1903,6 +1903,51 @@ void scsi_mq_destroy_tags(struct Scsi_Host *shost)
+>   	blk_mq_free_tag_set(&shost->tag_set);
+>   }
+>   
+> +/**
+> + * scsi_get_internal_cmd - allocate an internal SCSI command
+> + * @sdev: SCSI device from which to allocate the command
+> + * @data_direction: Data direction for the allocated command
+> + * @op_flags: request allocation flags
+> + *
+> + * Allocates a SCSI command for internal LLDD use.
+> + */
+> +struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
+> +	enum dma_data_direction data_direction, int op_flags)
+> +{
+> +	struct request *rq;
+> +	struct scsi_cmnd *scmd;
+> +	blk_mq_req_flags_t flags = 0;
+> +	unsigned int op = REQ_INTERNAL | op_flags;
 
-Thanks,
-Daniel
+nit: some people like ordering local variables in reverse Christmas tree 
+style when possible, but I don't really care.
+
+> +
+> +	op |= (data_direction == DMA_TO_DEVICE) ?
+> +		REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN;
+> +	rq = blk_mq_alloc_request(sdev->request_queue, op, flags);
+> +	if (IS_ERR(rq))
+> +		return NULL;
+> +	scmd = blk_mq_rq_to_pdu(rq);
+> +	scmd->request = rq;
+> +	scmd->device = sdev;
+> +	return scmd;
+> +}
+> +EXPORT_SYMBOL_GPL(scsi_get_internal_cmd);
+> +
+> +/**
+> + * scsi_put_internal_cmd - free an internal SCSI command
+> + * @scmd: SCSI command to be freed
+> + *
+> + * Check if @scmd is an internal command, and call
+> + * blk_mq_free_request() if true.
+> + */
+> +void scsi_put_internal_cmd(struct scsi_cmnd *scmd)
+> +{
+> +	struct request *rq = blk_mq_rq_from_pdu(scmd);
+> +
+> +	if (WARN_ON(!blk_rq_is_internal(rq)))
+> +		return;
+> +	blk_mq_free_request(rq);
+> +}
+> +EXPORT_SYMBOL_GPL(scsi_put_internal_cmd);
+> +
+>   /**
+>    * scsi_device_from_queue - return sdev associated with a request_queue
+>    * @q: The request queue to return the sdev from
+> diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+> index bc5909033d13..2759a538adae 100644
+> --- a/include/scsi/scsi_device.h
+> +++ b/include/scsi/scsi_device.h
+> @@ -8,6 +8,7 @@
+>   #include <linux/blkdev.h>
+>   #include <scsi/scsi.h>
+>   #include <linux/atomic.h>
+> +#include <linux/dma-direction.h>
+>   
+>   struct device;
+>   struct request_queue;
+> @@ -460,6 +461,9 @@ static inline int scsi_execute_req(struct scsi_device *sdev,
+>   	return scsi_execute(sdev, cmd, data_direction, buffer,
+>   		bufflen, NULL, sshdr, timeout, retries,  0, 0, resid);
+>   }
+> +struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
+> +	enum dma_data_direction data_direction, int op_flags);
+> +void scsi_put_internal_cmd(struct scsi_cmnd *scmd); >   extern void sdev_disable_disk_events(struct scsi_device *sdev);
+>   extern void sdev_enable_disk_events(struct scsi_device *sdev);
+>   extern int scsi_vpd_lun_id(struct scsi_device *, char *, size_t);
+
+If I go to delete all these externs so we can be consistent, will 
+someone complain?
+
+> 
+
