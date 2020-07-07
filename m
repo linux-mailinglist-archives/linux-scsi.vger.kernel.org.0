@@ -2,151 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC53D216E1D
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 15:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BFE216E39
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 16:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbgGGN40 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jul 2020 09:56:26 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2434 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726805AbgGGN40 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 7 Jul 2020 09:56:26 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id D346FCE63AE14E4E85B7;
-        Tue,  7 Jul 2020 14:56:24 +0100 (IST)
-Received: from [127.0.0.1] (10.47.9.47) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 7 Jul 2020
- 14:56:24 +0100
-Subject: Re: [PATCH 03/21] scsi: add scsi_{get,put}_internal_cmd() helper
-To:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Bart van Assche <bvanassche@acm.org>,
-        Don Brace <don.brace@microchip.com>,
-        <linux-scsi@vger.kernel.org>
-References: <20200703130122.111448-1-hare@suse.de>
- <20200703130122.111448-4-hare@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <59afc2bc-a5e2-89d8-0843-03b082c53bb0@huawei.com>
-Date:   Tue, 7 Jul 2020 14:54:43 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1727962AbgGGOBA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jul 2020 10:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727800AbgGGOBA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 10:01:00 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107B8C08C5E1
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 07:01:00 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 17so46585451wmo.1
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Jul 2020 07:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YDWmEcudqEHLtwf/RKE1CHN8JF3UPekBXjlO05WGYPU=;
+        b=YCILm8dfx6J0RRLoEJzwZEtZPGpnq2+39qZdn0I4jEdfuWxD4KC8PILlXTVNr0jsY2
+         Aoo1g8vDXHsI+EFCYTgsgs5FNAdsxnNSjlnHBhKkDHQJTUGBlkcKs5xUAj0L2hNQu5Pu
+         Yp9cTB9Dp4BsQ7L60KLZqKibBpe3L1J/b1ip8JUcAHEMg9iWSAOwoMAs0vGCHuP95FC0
+         K+B0HD35Lq2rceD5QZZV5ZW6l0NrM8PZdex/5vdWUA2GtuYoD0os3o55mKGv+2pssYWl
+         zCFoVLPaq/T1CTo/TDdfxVBl41MJ1brkS29XDIWlDGUygjDDI8Wc/9qlDXuPzNWhf3dQ
+         LuzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YDWmEcudqEHLtwf/RKE1CHN8JF3UPekBXjlO05WGYPU=;
+        b=j9OKrgtEQeZaRGAC81sC4+vx99HmsNnf7FGn8+fpY/WPsVhAuAvC+C6HAIWmW4VJsr
+         X3s0ynia5P4XXBT7jG7ETN7LauoEtWB9SsBM3eAPtWTzyA1jzocijKwfmAa0dOwmpL5c
+         cNRhjtAEjVdlIzXldJpLiTXAJo+azwdGiPhDLGp2P0RLXFdB9rLurQbdNDB7p4nkVV2h
+         UkeWisdm033drR3mXPzI/mzbC89ZGey9c1BZy4TFPJolwfpZ3k0/cDM0En72wP3sF4QP
+         FlMI/OSd8Web5BH7SUqrHC5Q4pDW+uT5oKvM+G7YutMEPppOMA2siWyxjXPlYHfCuIZW
+         G8NQ==
+X-Gm-Message-State: AOAM530RvGL0IideUeUZNO4EX8MeGafhgmzGAPnBV+3kVYJkmQVrFOHV
+        C8fxqByqhp+qdgUKoTPCfibUOg==
+X-Google-Smtp-Source: ABdhPJwiFN6Pi0XW8PKRFR8WoDwYkfTftlzPnvTlv7DFLE5xp4Rf3wPnaGdd1+C2BnYswrv9LPFNpQ==
+X-Received: by 2002:a1c:dd86:: with SMTP id u128mr4343891wmg.123.1594130458680;
+        Tue, 07 Jul 2020 07:00:58 -0700 (PDT)
+Received: from localhost.localdomain ([2.27.35.206])
+        by smtp.gmail.com with ESMTPSA id z25sm1102823wmk.28.2020.07.07.07.00.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 07:00:58 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 00/10] Fix a bunch SCSI related W=1 warnings
+Date:   Tue,  7 Jul 2020 15:00:45 +0100
+Message-Id: <20200707140055.2956235-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20200703130122.111448-4-hare@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.9.47]
-X-ClientProxiedBy: lhreml742-chm.china.huawei.com (10.201.108.192) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 03/07/2020 14:01, Hannes Reinecke wrote:
-> Add helper functions to allow LLDDs to allocate and free
-> internal commands.
-> 
-> Signed-off-by: Hannes Reinecke <hare@suse.de>
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-Not sure how Christoph feels about this now, but FWIW:
-Reviewed-by: John Garry <john.garry@huawei.com>
+There are a whole lot more of these.  More fixes to follow.
 
-But a couple of comments, below.
+Lee Jones (10):
+  scsi: megaraid: megaraid_mm: Strip excess function param description
+  scsi: megaraid: megaraid_mbox: Fix some kerneldoc bitrot
+  scsi: fdomain: Mark 'fdomain_pm_ops' as __maybe_unused
+  scsi: megaraid: megaraid_sas_fusion: Fix-up a whole myriad of
+    kerneldoc misdemeanours
+  scsi: megaraid: megaraid_sas_base: Provide prototypes for non-static
+    functions
+  scsi: aha152x: Remove unused variable 'ret'
+  scsi: pcmcia: nsp_cs: Use new __printf() format notation
+  scsi: pcmcia: nsp_cs: Remove unused variable 'dummy'
+  scsi: libfc: fc_disc: Fix-up some incorrectly referenced function
+    parameters
+  scsi: megaraid: megaraid_sas: Convert forward-declarations to
+    prototypes
 
-> ---
->   drivers/scsi/scsi_lib.c    | 45 +++++++++++++++++++++++++++++++++++++++++++++
->   include/scsi/scsi_device.h |  4 ++++
->   2 files changed, 49 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index 0ba7a65e7c8d..1d5c1b9a1203 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -1903,6 +1903,51 @@ void scsi_mq_destroy_tags(struct Scsi_Host *shost)
->   	blk_mq_free_tag_set(&shost->tag_set);
->   }
->   
-> +/**
-> + * scsi_get_internal_cmd - allocate an internal SCSI command
-> + * @sdev: SCSI device from which to allocate the command
-> + * @data_direction: Data direction for the allocated command
-> + * @op_flags: request allocation flags
-> + *
-> + * Allocates a SCSI command for internal LLDD use.
-> + */
-> +struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
-> +	enum dma_data_direction data_direction, int op_flags)
-> +{
-> +	struct request *rq;
-> +	struct scsi_cmnd *scmd;
-> +	blk_mq_req_flags_t flags = 0;
-> +	unsigned int op = REQ_INTERNAL | op_flags;
+ drivers/scsi/aha152x.c                      |   3 +-
+ drivers/scsi/fdomain.h                      |   2 +-
+ drivers/scsi/libfc/fc_disc.c                |   6 +-
+ drivers/scsi/megaraid/megaraid_mbox.c       |   4 +-
+ drivers/scsi/megaraid/megaraid_mm.c         |   1 -
+ drivers/scsi/megaraid/megaraid_sas.h        |  25 ++++-
+ drivers/scsi/megaraid/megaraid_sas_base.c   |   4 -
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 102 ++++++++------------
+ drivers/scsi/megaraid/megaraid_sas_fusion.h |   6 ++
+ drivers/scsi/pcmcia/nsp_cs.c                |   5 +-
+ 10 files changed, 81 insertions(+), 77 deletions(-)
 
-nit: some people like ordering local variables in reverse Christmas tree 
-style when possible, but I don't really care.
-
-> +
-> +	op |= (data_direction == DMA_TO_DEVICE) ?
-> +		REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN;
-> +	rq = blk_mq_alloc_request(sdev->request_queue, op, flags);
-> +	if (IS_ERR(rq))
-> +		return NULL;
-> +	scmd = blk_mq_rq_to_pdu(rq);
-> +	scmd->request = rq;
-> +	scmd->device = sdev;
-> +	return scmd;
-> +}
-> +EXPORT_SYMBOL_GPL(scsi_get_internal_cmd);
-> +
-> +/**
-> + * scsi_put_internal_cmd - free an internal SCSI command
-> + * @scmd: SCSI command to be freed
-> + *
-> + * Check if @scmd is an internal command, and call
-> + * blk_mq_free_request() if true.
-> + */
-> +void scsi_put_internal_cmd(struct scsi_cmnd *scmd)
-> +{
-> +	struct request *rq = blk_mq_rq_from_pdu(scmd);
-> +
-> +	if (WARN_ON(!blk_rq_is_internal(rq)))
-> +		return;
-> +	blk_mq_free_request(rq);
-> +}
-> +EXPORT_SYMBOL_GPL(scsi_put_internal_cmd);
-> +
->   /**
->    * scsi_device_from_queue - return sdev associated with a request_queue
->    * @q: The request queue to return the sdev from
-> diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-> index bc5909033d13..2759a538adae 100644
-> --- a/include/scsi/scsi_device.h
-> +++ b/include/scsi/scsi_device.h
-> @@ -8,6 +8,7 @@
->   #include <linux/blkdev.h>
->   #include <scsi/scsi.h>
->   #include <linux/atomic.h>
-> +#include <linux/dma-direction.h>
->   
->   struct device;
->   struct request_queue;
-> @@ -460,6 +461,9 @@ static inline int scsi_execute_req(struct scsi_device *sdev,
->   	return scsi_execute(sdev, cmd, data_direction, buffer,
->   		bufflen, NULL, sshdr, timeout, retries,  0, 0, resid);
->   }
-> +struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
-> +	enum dma_data_direction data_direction, int op_flags);
-> +void scsi_put_internal_cmd(struct scsi_cmnd *scmd); >   extern void sdev_disable_disk_events(struct scsi_device *sdev);
->   extern void sdev_enable_disk_events(struct scsi_device *sdev);
->   extern int scsi_vpd_lun_id(struct scsi_device *, char *, size_t);
-
-If I go to delete all these externs so we can be consistent, will 
-someone complain?
-
-> 
+-- 
+2.25.1
 
