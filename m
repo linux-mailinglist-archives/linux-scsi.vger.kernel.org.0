@@ -2,201 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3470F216E40
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 16:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A641216F21
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 16:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728280AbgGGOBO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jul 2020 10:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S1728066AbgGGOpl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jul 2020 10:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728264AbgGGOBN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 10:01:13 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F655C08C5E1
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 07:01:13 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id f7so42241391wrw.1
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Jul 2020 07:01:13 -0700 (PDT)
+        with ESMTP id S1727090AbgGGOpl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 10:45:41 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744CDC08C5E1
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 07:45:41 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id u12so31877845qth.12
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Jul 2020 07:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Otr0IW/lc2aubOhQuGn1p9ls5bh+wk/N6Wv8oEf4Osw=;
-        b=HBvBoIuzw1P53PX21z9xl0S2Ei5cCmdfti89y/X22YhzPD8leJdxCyYAe5MqjAAObx
-         t1E1P2P9Mt2oi9isgC0/LHnqeHNKZYWtJaO+qhuy07fzjZUTGXrc+CimfVho9ZGf/ZWU
-         FDKy8A+01W+GzzbMSh0NL/QIw5GrC1SzMU8Ku91XKRykA1P90kFf0lvjwOf9VATuJ2AA
-         9517Y+eDIrAIT5wZd8ZZtjlif5PsJkDCzQ/IYlFfSzlxY79jehb6IrMwyQxTx7/P8qGZ
-         eTJ9g4UC2LIojpNdHyExhVDGr4hCe53uRJOxLjIosZU7CLcCCZeB1c2aAfcu+QhcE4go
-         aC+Q==
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=5D+pvkC5aJUjwZoNWdXeCSBjk1BaS4KK9hwaSABQcc8=;
+        b=h9KJJm0cr1VS63a9OEj6A5qixzQ81j1c3nldTSyVIqfkTLwwvEwRiuL/Abq/ybBh5E
+         O55VEt//SAfXPkIpp9Fu/zF6QtghZ66UBzajHKiczNuNSI36f7XaKoGUMKJmzybX7vqu
+         hvASI7ZEjfaGIfPErEOi0GL8dXtj/qCebZQ8U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Otr0IW/lc2aubOhQuGn1p9ls5bh+wk/N6Wv8oEf4Osw=;
-        b=TPM6kgCBZ3vZCzFcyNoUxr4c9on2tlrN6axoelFDrMHBxvSuD76j6XzBfNzuZp8W+n
-         pXeglBd4JmoC3O0Jpu4YGkPrctDZy9vbT3ZtR5zaQn/3H0xUaRmqvG/FhBSxGEqLVGb6
-         FX+CLKmxgLPld3myMbYnWVC/4PBsVawo5EWk2OJo/sORc6vHrDjWyZJf0P/YPVWFftRZ
-         NJC2YZw5BNWmtW7r3pymi+DLMAVSLUXzjAU3LfOF1kiatCuJv5cgfxZiYRGiGwCvAyw1
-         LS16xRsZ9+bmAHlosilYsUClGY9IlRSpVREO2HpSvnjAMggoGnUxNs/V3Ic2XnjzhA8M
-         AJ4Q==
-X-Gm-Message-State: AOAM5311LFbOW8Vkjuhx7ErEp5GUjrzbX8of+gb3Go0mXZQg3wGHmP3z
-        e+w2fcjIOo5BTvsFjpNOaRMJRw==
-X-Google-Smtp-Source: ABdhPJyMIkqrJx6U0TAgCC1Ldg2yjfRozO5omk7C8zyrNAPXTCsDDxyptx/G91iGoIUhvFmHoTGxBQ==
-X-Received: by 2002:adf:e647:: with SMTP id b7mr57813003wrn.170.1594130471901;
-        Tue, 07 Jul 2020 07:01:11 -0700 (PDT)
-Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id z25sm1102823wmk.28.2020.07.07.07.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 07:01:11 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        megaraidlinux.pdl@broadcom.com
-Subject: [PATCH 10/10] scsi: megaraid: megaraid_sas: Convert forward-declarations to prototypes
-Date:   Tue,  7 Jul 2020 15:00:55 +0100
-Message-Id: <20200707140055.2956235-11-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200707140055.2956235-1-lee.jones@linaro.org>
-References: <20200707140055.2956235-1-lee.jones@linaro.org>
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=5D+pvkC5aJUjwZoNWdXeCSBjk1BaS4KK9hwaSABQcc8=;
+        b=Dl2hkHQTVvTfjB/aSQ39KjyxeZZPWbLJIIv4Xq7UaheQ6p0InlUPg8KNqecwh88YU4
+         bajJi7SPit3eKnxPtZI+8lnPPOCsolNEuuzb5K67ZVt0TkmSxswgB+x/iKfY/PQ8Umrd
+         o7BTattWv3gs+APAMHVvXDuW508Xk/9uI0S7hoJ8ORXIgq4jb21PHjzvqM236QWRoUn/
+         BrVJNjcsPeySVr3erz+xOGC55sc7r8B59KkBOkw44CmARk0FF3HH3tk/TOT9zEF746Rs
+         +7ahVeZoPvxW1GGupu+P4E0sAA3Fokshtsw2cH8PGkaQ7bl9KI98bXeEQmdAza+McPFm
+         O1Zw==
+X-Gm-Message-State: AOAM5337HFxP0tpRc+Y3hLtEE0bj3hdRo/ln8XlDkPFWy11n4ZbDOEpk
+        n0fkpUkRkhBrgakkYDC9NtHDa7oKiGkqMWb9lWgjOg==
+X-Google-Smtp-Source: ABdhPJxhcsjBQeImWRnQbmyn2NgtRg7hC21L/JP4pMQ9PEYdh6zGtLr7Url5l0IQgb5y3q9VrrA7aurSWj36VaDNego=
+X-Received: by 2002:ac8:44ad:: with SMTP id a13mr48534643qto.387.1594133140334;
+ Tue, 07 Jul 2020 07:45:40 -0700 (PDT)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-11-git-send-email-john.garry@huawei.com>
+ <d55972999b9370f947c20537e41b49bf@mail.gmail.com> <e61593f8-5ee7-5763-9d02-d0ea13aeb49f@huawei.com>
+ <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com> <10d36c09-9d5b-92e9-23ac-ea1a2628e7d9@huawei.com>
+In-Reply-To: <10d36c09-9d5b-92e9-23ac-ea1a2628e7d9@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQBVjmvxAE7FMYb7GtMRWGcwtMcECgFIs823Ad7lfqMBmFaE1AGZowweAlKrFcWruFpUEA==
+Date:   Tue, 7 Jul 2020 20:15:34 +0530
+Message-ID: <0563e53f843c97de1a5a035fae892bf8@mail.gmail.com>
+Subject: RE: [PATCH RFC v7 10/12] megaraid_sas: switch fusion adapters to MQ
+To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        don.brace@microsemi.com, Sumit Saxena <sumit.saxena@broadcom.com>,
+        ming.lei@redhat.com, bvanassche@acm.org, hare@suse.com, hch@lst.de,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        esc.storagedev@microsemi.com, chenxiang66@hisilicon.com,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+> >>>
+> >>>    #include <scsi/scsi.h>
+> >>>    #include <scsi/scsi_cmnd.h>
+> >>> @@ -113,6 +114,10 @@ unsigned int enable_sdev_max_qd;
+> >>>    module_param(enable_sdev_max_qd, int, 0444);
+> >>>    MODULE_PARM_DESC(enable_sdev_max_qd, "Enable sdev max qd as
+> >> can_queue.
+> >>> Default: 0");
+> >>>
+> >>> +int host_tagset_disabled = 0;
+> >>> +module_param(host_tagset_disabled, int, 0444);
+> >>> +MODULE_PARM_DESC(host_tagset_disabled, "Shared host tagset
+> >> enable/disable
+> >>> Default: enable(1)");
+> >> The logic seems inverted here: for passing 1, I would expect Shared
+> >> host tagset enabled, while it actually means to disable, right?
+> > No. passing 1 means shared_hosttag support will be turned off.
+>
+> Just reading "Shared host tagset enable/disable Default: enable(1)"
+> looked inconsistent to me.
 
- drivers/scsi/megaraid/megaraid_sas_base.c:240:5: warning: no previous prototype for ‘megasas_readl’ [-Wmissing-prototypes]
- 240 | u32 megasas_readl(struct megasas_instance *instance,
- | ^~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:301:21: warning: no previous prototype for ‘megasas_get_cmd’ [-Wmissing-prototypes]
- 301 | struct megasas_cmd *megasas_get_cmd(struct megasas_instance
- | ^~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:327:1: warning: no previous prototype for ‘megasas_return_cmd’ [-Wmissing-prototypes]
- 327 | megasas_return_cmd(struct megasas_instance *instance, struct megasas_cmd *cmd)
- | ^~~~~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:1088:1: warning: no previous prototype for ‘megasas_issue_polled’ [-Wmissing-prototypes]
- 1088 | megasas_issue_polled(struct megasas_instance *instance, struct megasas_cmd *cmd)
- | ^~~~~~~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:2149:6: warning: no previous prototype for ‘megaraid_sas_kill_hba’ [-Wmissing-prototypes]
- 2149 | void megaraid_sas_kill_hba(struct megasas_instance *instance)
- | ^~~~~~~~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:2186:1: warning: no previous prototype for ‘megasas_check_and_restore_queue_depth’ [-Wmissing-prototypes]
- 2186 | megasas_check_and_restore_queue_depth(struct megasas_instance *instance)
- | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:2263:6: warning: no previous prototype for ‘megasas_start_timer’ [-Wmissing-prototypes]
- 2263 | void megasas_start_timer(struct megasas_instance *instance)
- | ^~~~~~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:2579:5: warning: no previous prototype for ‘megasas_sriov_start_heartbeat’ [-Wmissing-prototypes]
- 2579 | int megasas_sriov_start_heartbeat(struct megasas_instance *instance,
- | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:4292:6: warning: no previous prototype for ‘megasas_free_cmds’ [-Wmissing-prototypes]
- 4292 | void megasas_free_cmds(struct megasas_instance *instance)
- | ^~~~~~~~~~~~~~~~~
- drivers/scsi/megaraid/megaraid_sas_base.c:4329:5: warning: no previous prototype for ‘megasas_alloc_cmds’ [-Wmissing-prototypes]
- 4329 | int megasas_alloc_cmds(struct megasas_instance *instance)
- | ^~~~~~~~~~~~~~~~~~
+I will change to "host_tagset_enable" that will be good for readability.
+Default value will of host_tagset_enable will be 1 and user can turnoff
+passing 0.
 
-Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-Cc: Sumit Saxena <sumit.saxena@broadcom.com>
-Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-Cc: megaraidlinux.pdl@broadcom.com
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/scsi/megaraid/megaraid_sas.h        | 25 +++++++++++++++++-
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 29 ---------------------
- 2 files changed, 24 insertions(+), 30 deletions(-)
+>
+> >>> +
+> >>>    MODULE_LICENSE("GPL");
+> >>>    MODULE_VERSION(MEGASAS_VERSION);
+> >>>    MODULE_AUTHOR("megaraidlinux.pdl@broadcom.com");
+> >>> @@ -3115,6 +3120,18 @@ megasas_bios_param(struct scsi_device
+> *sdev,
+> >> struct
+> >>> block_device *bdev,
+> >>>           return 0;
+> >>>    }
+> >>>
+> >>> +static int megasas_map_queues(struct Scsi_Host *shost) {
+> >>> +       struct megasas_instance *instance;
+> >>> +       instance = (struct megasas_instance *)shost->hostdata;
+> >>> +
+> >>> +       if (instance->host->nr_hw_queues == 1)
+> >>> +               return 0;
+> >>> +
+> >>> +       return
+> >>> blk_mq_pci_map_queues(&shost->tag_set.map[HCTX_TYPE_DEFAULT],
+> >>> +                       instance->pdev,
+> >>> instance->low_latency_index_start);
+> >>> +}
+> >>> +
+> >>>    static void megasas_aen_polling(struct work_struct *work);
+> >>>
+> >>>    /**
+> >>> @@ -3423,8 +3440,10 @@ static struct scsi_host_template
+> >> megasas_template =
+> >>> {
+> >>>           .eh_timed_out = megasas_reset_timer,
+> >>>           .shost_attrs = megaraid_host_attrs,
+> >>>           .bios_param = megasas_bios_param,
+> >>> +       .map_queues = megasas_map_queues,
+> >>>           .change_queue_depth = scsi_change_queue_depth,
+> >>>           .max_segment_size = 0xffffffff,
+> >>> +       .host_tagset = 1,
+> >> Is your intention to always have this set for Scsi_Host, and just
+> >> change nr_hw_queues?
+> > Actually I wanted to turn off  this feature using host_tagset and not
+> > through nr_hw_queue. I will address this.
+> >
+> > Additional request -
+> > In MR we have old controllers (called MFI_SERIES). We prefer not to
+> > change behavior for those controller.
+> > Having host_tagset in template does not allow to cherry pick different
+> > values for different type of controller.
+>
+> Ok, so it seems sensible to add host_tagset to Scsi_Host structure also,
+> to
+> allow overwriting during probe time.
+>
+> If you want to share an updated megaraid sas driver patch based on that,
+> then
+> that's fine. I can incorporate that change in the patch where we add
+> host_tagset to the scsi host template.
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index af2c7a2a95657..5c8037fca5fc6 100644
---- a/drivers/scsi/megaraid/megaraid_sas.h
-+++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -2683,8 +2683,31 @@ void megasas_return_cmd_fusion(struct megasas_instance *instance,
- 	struct megasas_cmd_fusion *cmd);
- int megasas_issue_blocked_cmd(struct megasas_instance *instance,
- 	struct megasas_cmd *cmd, int timeout);
--void __megasas_return_cmd(struct megasas_instance *instance,
-+void megasas_return_cmd(struct megasas_instance *instance,
- 	struct megasas_cmd *cmd);
-+u32 megasas_readl(struct megasas_instance *instance,
-+		  const volatile void __iomem *addr);
-+void megasas_free_cmds(struct megasas_instance *instance);
-+struct megasas_cmd *megasas_get_cmd(struct megasas_instance *instance);
-+void megaraid_sas_kill_hba(struct megasas_instance *instance);
-+void megasas_complete_cmd(struct megasas_instance *instance,
-+		     struct megasas_cmd *cmd, u8 alt_status);
-+int wait_and_poll(struct megasas_instance *instance, struct megasas_cmd *cmd,
-+		  int seconds);
-+
-+int megasas_alloc_cmds(struct megasas_instance *instance);
-+int megasas_clear_intr_fusion(struct megasas_instance *instance);
-+int megasas_issue_polled(struct megasas_instance *instance,
-+			 struct megasas_cmd *cmd);
-+void megasas_check_and_restore_queue_depth(struct megasas_instance *instance);
-+
-+int megasas_transition_to_ready(struct megasas_instance *instance, int ocr);
-+void megaraid_sas_kill_hba(struct megasas_instance *instance);
-+
-+extern u32 megasas_dbg_lvl;
-+int megasas_sriov_start_heartbeat(struct megasas_instance *instance,
-+				  int initial);
-+void megasas_start_timer(struct megasas_instance *instance);
- 
- void megasas_return_mfi_mpt_pthr(struct megasas_instance *instance,
- 	struct megasas_cmd *cmd_mfi, struct megasas_cmd_fusion *cmd_fusion);
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index a0cf55776361c..fd0f40bc1795d 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -48,34 +48,7 @@
- #include "megaraid_sas.h"
- 
- 
--extern void megasas_free_cmds(struct megasas_instance *instance);
--extern struct megasas_cmd *megasas_get_cmd(struct megasas_instance
--					   *instance);
--extern void
--megasas_complete_cmd(struct megasas_instance *instance,
--		     struct megasas_cmd *cmd, u8 alt_status);
--int
--wait_and_poll(struct megasas_instance *instance, struct megasas_cmd *cmd,
--	      int seconds);
--
--void
--megasas_return_cmd(struct megasas_instance *instance, struct megasas_cmd *cmd);
--int megasas_alloc_cmds(struct megasas_instance *instance);
--int
--megasas_clear_intr_fusion(struct megasas_instance *instance);
--int
--megasas_issue_polled(struct megasas_instance *instance,
--		     struct megasas_cmd *cmd);
--void
--megasas_check_and_restore_queue_depth(struct megasas_instance *instance);
--
--int megasas_transition_to_ready(struct megasas_instance *instance, int ocr);
--void megaraid_sas_kill_hba(struct megasas_instance *instance);
- 
--extern u32 megasas_dbg_lvl;
--int megasas_sriov_start_heartbeat(struct megasas_instance *instance,
--				  int initial);
--void megasas_start_timer(struct megasas_instance *instance);
- extern struct megasas_mgmt_info megasas_mgmt_info;
- extern unsigned int resetwaittime;
- extern unsigned int dual_qdepth_disable;
-@@ -84,8 +57,6 @@ static void megasas_free_reply_fusion(struct megasas_instance *instance);
- static inline
- void megasas_configure_queue_sizes(struct megasas_instance *instance);
- static void megasas_fusion_crash_dump(struct megasas_instance *instance);
--extern u32 megasas_readl(struct megasas_instance *instance,
--			 const volatile void __iomem *addr);
- 
- /**
-  * megasas_adp_reset_wait_for_ready -	initiate chip reset and wait for
--- 
-2.25.1
+If you share git repo link of next submission, I can send you megaraid_sas
+driver patch which you can include in series.
 
+Kashyap
+>
+> > If host_tagset is part of Scsi_Host OR we add check in scsi_lib.c that
+> > host_tagset = 1 only make sense if nr_hw_queues > 1, we can cherry
+> > pick in driver.
+> >
+> >
+>
+>
