@@ -2,101 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BFE216E39
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 16:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60D4216E33
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 16:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727962AbgGGOBA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jul 2020 10:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S1728061AbgGGOBC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jul 2020 10:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727800AbgGGOBA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 10:01:00 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107B8C08C5E1
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 07:01:00 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id 17so46585451wmo.1
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Jul 2020 07:00:59 -0700 (PDT)
+        with ESMTP id S1727090AbgGGOBB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 10:01:01 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355AEC061755
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 07:01:01 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id 17so46585551wmo.1
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Jul 2020 07:01:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YDWmEcudqEHLtwf/RKE1CHN8JF3UPekBXjlO05WGYPU=;
-        b=YCILm8dfx6J0RRLoEJzwZEtZPGpnq2+39qZdn0I4jEdfuWxD4KC8PILlXTVNr0jsY2
-         Aoo1g8vDXHsI+EFCYTgsgs5FNAdsxnNSjlnHBhKkDHQJTUGBlkcKs5xUAj0L2hNQu5Pu
-         Yp9cTB9Dp4BsQ7L60KLZqKibBpe3L1J/b1ip8JUcAHEMg9iWSAOwoMAs0vGCHuP95FC0
-         K+B0HD35Lq2rceD5QZZV5ZW6l0NrM8PZdex/5vdWUA2GtuYoD0os3o55mKGv+2pssYWl
-         zCFoVLPaq/T1CTo/TDdfxVBl41MJ1brkS29XDIWlDGUygjDDI8Wc/9qlDXuPzNWhf3dQ
-         LuzA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZLWYFu8kb1BK0vYr47DoG19cZZy4irme69VcrjTwQ6E=;
+        b=dBcHaJgD24aprqBmfheHZZJ/02Un4ePwTgSuWV0qJltGAhKjZJ+jax2Rsz4WQvNMtl
+         H3tshEqaE10oB9P9UPfJ+0JHokUGzwrnD/TWTdFkDhSdm/UCYiNJ755SDJi1rbvyWqtg
+         zk+K/Qb6/6K5QO+pBmYAMjCKVyUFD2o2NLTCmKg3oiU0g58EMzJ4wCB8Rhj8SaeLGS4k
+         csnB4Y7CWjhJy/Dgu5RYFaQOaw6Zmz/17F8Ynx5A//PAdRG7t3u2KZ2VTxynKul48+rl
+         TPIHaQhDL1AeiEMRzucUS8l4+Xr60IOFu214FcMPh3XBa1ZAr6Tcc+BuJCuZqJ0Q27i8
+         s+lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YDWmEcudqEHLtwf/RKE1CHN8JF3UPekBXjlO05WGYPU=;
-        b=j9OKrgtEQeZaRGAC81sC4+vx99HmsNnf7FGn8+fpY/WPsVhAuAvC+C6HAIWmW4VJsr
-         X3s0ynia5P4XXBT7jG7ETN7LauoEtWB9SsBM3eAPtWTzyA1jzocijKwfmAa0dOwmpL5c
-         cNRhjtAEjVdlIzXldJpLiTXAJo+azwdGiPhDLGp2P0RLXFdB9rLurQbdNDB7p4nkVV2h
-         UkeWisdm033drR3mXPzI/mzbC89ZGey9c1BZy4TFPJolwfpZ3k0/cDM0En72wP3sF4QP
-         FlMI/OSd8Web5BH7SUqrHC5Q4pDW+uT5oKvM+G7YutMEPppOMA2siWyxjXPlYHfCuIZW
-         G8NQ==
-X-Gm-Message-State: AOAM530RvGL0IideUeUZNO4EX8MeGafhgmzGAPnBV+3kVYJkmQVrFOHV
-        C8fxqByqhp+qdgUKoTPCfibUOg==
-X-Google-Smtp-Source: ABdhPJwiFN6Pi0XW8PKRFR8WoDwYkfTftlzPnvTlv7DFLE5xp4Rf3wPnaGdd1+C2BnYswrv9LPFNpQ==
-X-Received: by 2002:a1c:dd86:: with SMTP id u128mr4343891wmg.123.1594130458680;
-        Tue, 07 Jul 2020 07:00:58 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZLWYFu8kb1BK0vYr47DoG19cZZy4irme69VcrjTwQ6E=;
+        b=HpM5WC1RCXv/FwvX0mDyjqyxTaR4Hj4EW6HJuFMQ/baGP4E9TeuXQpH1Zjwsinli0T
+         Aqu10BYTw2joYk0cPh+IQTbtbuAgxnv/LWeU2zywMQk3UJj1i/2YilqPWTkLm1ic2H4R
+         z/NG0nBnijFWwL/ZGqko0+DPQGZb/MFNwTKu9MsfgODTSzzS1/kcmus+/cKkWRu3HO/l
+         aCTXBHkXgQYZTpZJVYcr+jBz3EfNgAznjHlmkWG4PdxFzehbkbT056rhlYHlx2pLlbLN
+         QuK6niXPPVCdhOXvZKaroymy1IEYt8OY7waFKlo08quUvY3U4wgDj/pKVe9Mhq+U7cAa
+         oPzw==
+X-Gm-Message-State: AOAM533+09TySn/UH7U5aU/szkNtmsSKRtwjlzFLtRqqh0CoLjSwuKAR
+        vsVrBS5+o/CTV98wyUpY+jsJIw==
+X-Google-Smtp-Source: ABdhPJzFeqLsqMW/HY0+6KXgycLe3ZNW1nII6mHUP330UVnEIVjP/xD19B92OtkG/G51zwQoFxazfg==
+X-Received: by 2002:a7b:c09a:: with SMTP id r26mr4280907wmh.176.1594130459913;
+        Tue, 07 Jul 2020 07:00:59 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id z25sm1102823wmk.28.2020.07.07.07.00.57
+        by smtp.gmail.com with ESMTPSA id z25sm1102823wmk.28.2020.07.07.07.00.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 07:00:58 -0700 (PDT)
+        Tue, 07 Jul 2020 07:00:59 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 00/10] Fix a bunch SCSI related W=1 warnings
-Date:   Tue,  7 Jul 2020 15:00:45 +0100
-Message-Id: <20200707140055.2956235-1-lee.jones@linaro.org>
+        Lee Jones <lee.jones@linaro.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        megaraidlinux.pdl@broadcom.com
+Subject: [PATCH 01/10] scsi: megaraid: megaraid_mm: Strip excess function param description
+Date:   Tue,  7 Jul 2020 15:00:46 +0100
+Message-Id: <20200707140055.2956235-2-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200707140055.2956235-1-lee.jones@linaro.org>
+References: <20200707140055.2956235-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+Fixes the following W=1 kernel build warning(s):
 
-There are a whole lot more of these.  More fixes to follow.
+ drivers/scsi/megaraid/megaraid_mm.c:105: warning: Excess function parameter 'inode' description in 'mraid_mm_ioctl'
 
-Lee Jones (10):
-  scsi: megaraid: megaraid_mm: Strip excess function param description
-  scsi: megaraid: megaraid_mbox: Fix some kerneldoc bitrot
-  scsi: fdomain: Mark 'fdomain_pm_ops' as __maybe_unused
-  scsi: megaraid: megaraid_sas_fusion: Fix-up a whole myriad of
-    kerneldoc misdemeanours
-  scsi: megaraid: megaraid_sas_base: Provide prototypes for non-static
-    functions
-  scsi: aha152x: Remove unused variable 'ret'
-  scsi: pcmcia: nsp_cs: Use new __printf() format notation
-  scsi: pcmcia: nsp_cs: Remove unused variable 'dummy'
-  scsi: libfc: fc_disc: Fix-up some incorrectly referenced function
-    parameters
-  scsi: megaraid: megaraid_sas: Convert forward-declarations to
-    prototypes
+Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+Cc: Sumit Saxena <sumit.saxena@broadcom.com>
+Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+Cc: megaraidlinux.pdl@broadcom.com
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/scsi/megaraid/megaraid_mm.c | 1 -
+ 1 file changed, 1 deletion(-)
 
- drivers/scsi/aha152x.c                      |   3 +-
- drivers/scsi/fdomain.h                      |   2 +-
- drivers/scsi/libfc/fc_disc.c                |   6 +-
- drivers/scsi/megaraid/megaraid_mbox.c       |   4 +-
- drivers/scsi/megaraid/megaraid_mm.c         |   1 -
- drivers/scsi/megaraid/megaraid_sas.h        |  25 ++++-
- drivers/scsi/megaraid/megaraid_sas_base.c   |   4 -
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 102 ++++++++------------
- drivers/scsi/megaraid/megaraid_sas_fusion.h |   6 ++
- drivers/scsi/pcmcia/nsp_cs.c                |   5 +-
- 10 files changed, 81 insertions(+), 77 deletions(-)
-
+diff --git a/drivers/scsi/megaraid/megaraid_mm.c b/drivers/scsi/megaraid/megaraid_mm.c
+index e83163c668845..8df53446641ac 100644
+--- a/drivers/scsi/megaraid/megaraid_mm.c
++++ b/drivers/scsi/megaraid/megaraid_mm.c
+@@ -95,7 +95,6 @@ mraid_mm_open(struct inode *inode, struct file *filep)
+ 
+ /**
+  * mraid_mm_ioctl - module entry-point for ioctls
+- * @inode	: inode (ignored)
+  * @filep	: file operations pointer (ignored)
+  * @cmd		: ioctl command
+  * @arg		: user ioctl packet
 -- 
 2.25.1
 
