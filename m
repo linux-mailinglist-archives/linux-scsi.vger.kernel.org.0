@@ -2,102 +2,139 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865B32166F8
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 09:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54D82167DF
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 09:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728215AbgGGHCw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jul 2020 03:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726788AbgGGHCw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 03:02:52 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7899C061755
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 00:02:51 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id h22so41477846lji.9
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Jul 2020 00:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=/zhnxpk2dcaV2Z7RgZhMmVLscfiLb1Ab4yTT4bhzF0E=;
-        b=RoSMxnh7Y+K9QsH5Val8BkexZYBj1aQzdodvlLDRmPm9syP/HUDgCe6disy7joGbNI
-         MgS32VxECijhy1pawpvLI99Va1RziwN+C9cHD9HB72P1BmCVWz4Uxm0KxrgIoYssz20u
-         NHrhzKfIhz21bHMw6x+rcOQmNTSQ1lOMlAOsrm4jF6xhcqsgC4dTTvoacc6dWgYka5i1
-         VvXdwGEwJoe2CcAnmnegGYLLRRfcYKqHpIx4S8ns4sTUaN+08gAtO6BXGWWMXDUceRyI
-         Z7rnH66xmg2GiuV4R87U4vGtLGBH2M1IXetx1gnWjQdNQsvHNeCmHlhHLvsOvHxpA9x3
-         uD3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=/zhnxpk2dcaV2Z7RgZhMmVLscfiLb1Ab4yTT4bhzF0E=;
-        b=M17P6wzvzwLRt1y6h4/8Ttfr3rwApdeLNpx5vxGvKPlnUximPWKuH8j4rwdA0KPEBc
-         j5JKLfiWdjI244DVRMCXU92/YhVccUNqjR1IewEWXkKI2GehNrIaE/4ouXZ9fBsJSI/o
-         SaOU2T9A/Lm29qOT0SITNXS6SCHDi36uxTYOv48D+aHFVayXcVgQ74wQtd/Jk5Qk1Qid
-         6Umvb5oAXUhRkL0Vt48IrKbdHi+HuvhqMZDvjxAZhSYCH4dacYYLPyTbyijZhpWLmGOY
-         BC4M/YUqnWS8B5Q99hB0YvHc3sAzuP2+RBOfRwX4rx3ypoFBqVXVJkilerr19EgnZEww
-         FXFQ==
-X-Gm-Message-State: AOAM531f/1LlC37eJp5HV9xUTcrT1d36jvFsGdG6IyHy2WsA9qSJTM8G
-        PDWt66Rt+udtwkPknoO7McWKWpAM9pLyavHm/EQ=
-X-Google-Smtp-Source: ABdhPJyyYFmClQpg0REkgBk/QwfJcm1jLtuUewiYSA6uS/hCrvVe+XO46aRseponZCSby8Isg2amlN92ffwm1OJbqFc=
-X-Received: by 2002:a2e:9855:: with SMTP id e21mr25934197ljj.424.1594105370207;
- Tue, 07 Jul 2020 00:02:50 -0700 (PDT)
+        id S1727096AbgGGH7u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jul 2020 03:59:50 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2432 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726757AbgGGH7t (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 7 Jul 2020 03:59:49 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 011B2FDC1BA9E9419402;
+        Tue,  7 Jul 2020 08:59:48 +0100 (IST)
+Received: from [127.0.0.1] (10.47.9.47) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 7 Jul 2020
+ 08:59:46 +0100
+Subject: Re: [PATCH RFC v7 10/12] megaraid_sas: switch fusion adapters to MQ
+To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <don.brace@microsemi.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        <ming.lei@redhat.com>, <bvanassche@acm.org>, <hare@suse.com>,
+        <hch@lst.de>,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>
+CC:     <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-11-git-send-email-john.garry@huawei.com>
+ <d55972999b9370f947c20537e41b49bf@mail.gmail.com>
+ <e61593f8-5ee7-5763-9d02-d0ea13aeb49f@huawei.com>
+ <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <10d36c09-9d5b-92e9-23ac-ea1a2628e7d9@huawei.com>
+Date:   Tue, 7 Jul 2020 08:58:06 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Received: by 2002:a19:5f4f:0:0:0:0:0 with HTTP; Tue, 7 Jul 2020 00:02:49 -0700 (PDT)
-Reply-To: mrs.tyttikorhonen@gmail.com
-From:   Mrs Tytti Korhonen <arckingsleyp@gmail.com>
-Date:   Tue, 7 Jul 2020 08:02:49 +0100
-Message-ID: <CAEXL3m_=eQeKzOncPppUsnfwA2GZTR12knHgUy_Fjz+JR1oG6w@mail.gmail.com>
-Subject: =?UTF-8?Q?Gr=C3=BC=C3=9Fe_dich_sehr_geehrter?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.9.47]
+X-ClientProxiedBy: lhreml742-chm.china.huawei.com (10.201.108.192) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Gr=C3=BC=C3=9Fe dich sehr geehrter,
+>>>
+>>>    #include <scsi/scsi.h>
+>>>    #include <scsi/scsi_cmnd.h>
+>>> @@ -113,6 +114,10 @@ unsigned int enable_sdev_max_qd;
+>>>    module_param(enable_sdev_max_qd, int, 0444);
+>>>    MODULE_PARM_DESC(enable_sdev_max_qd, "Enable sdev max qd as
+>> can_queue.
+>>> Default: 0");
+>>>
+>>> +int host_tagset_disabled = 0;
+>>> +module_param(host_tagset_disabled, int, 0444);
+>>> +MODULE_PARM_DESC(host_tagset_disabled, "Shared host tagset
+>> enable/disable
+>>> Default: enable(1)");
+>> The logic seems inverted here: for passing 1, I would expect Shared host
+>> tagset enabled, while it actually means to disable, right?
+> No. passing 1 means shared_hosttag support will be turned off.
 
-Ich schreibe diese Mail mit Tr=C3=A4nen und Trauer und suche Ihre Hilfe
-aufgrund meiner medizinischen Situation hier in London. Ich bin Frau
-Tytti Korhonen, finnische Staatsb=C3=BCrgerin und 83 Jahre alt. Ich war
-eine Waise, adoptiert von meinem verstorbenen Vater Engr. Pekka
-Korhonen, Vorsitzender / CEO von Pekkakorhonen Oil and Gas Services.
-Nach dem Tod meines Vaters =C3=BCbernahm ich seine Leitung und beschloss
-auch, nicht zu heiraten, weil ich sein einziges Kind bin.
+Just reading "Shared host tagset enable/disable Default: enable(1)" 
+looked inconsistent to me.
 
-Seitdem leide ich an einer Erkrankung der Herzkranzgef=C3=A4=C3=9Fe, die mi=
-ch
-viel gekostet hat und aufgrund von Komplikationen jeden Teil meines
-K=C3=B6rpers und meiner Gehirnzellen betroffen hat. Erst vor 5 Tagen sagten
-mir die britischen =C3=84rzte, dass ich jederzeit sterben k=C3=B6nnte, weil=
- mein
-Zustand ein kritisches und lebensbedrohliches Stadium erreicht hatte.
-Nachdem ich meinen medizinischen kritischen Status gekannt hatte,
-beschloss ich, Ihre dringende Hilfe / Zusammenarbeit zu nutzen, um
-mein 14,5-Millionen-Dollar-Erbe zu nutzen und Waisenh=C3=A4user in
-Erinnerung an mich zu bauen, wenn ich weg bin.
+>>> +
+>>>    MODULE_LICENSE("GPL");
+>>>    MODULE_VERSION(MEGASAS_VERSION);
+>>>    MODULE_AUTHOR("megaraidlinux.pdl@broadcom.com");
+>>> @@ -3115,6 +3120,18 @@ megasas_bios_param(struct scsi_device *sdev,
+>> struct
+>>> block_device *bdev,
+>>>           return 0;
+>>>    }
+>>>
+>>> +static int megasas_map_queues(struct Scsi_Host *shost)
+>>> +{
+>>> +       struct megasas_instance *instance;
+>>> +       instance = (struct megasas_instance *)shost->hostdata;
+>>> +
+>>> +       if (instance->host->nr_hw_queues == 1)
+>>> +               return 0;
+>>> +
+>>> +       return
+>>> blk_mq_pci_map_queues(&shost->tag_set.map[HCTX_TYPE_DEFAULT],
+>>> +                       instance->pdev,
+>>> instance->low_latency_index_start);
+>>> +}
+>>> +
+>>>    static void megasas_aen_polling(struct work_struct *work);
+>>>
+>>>    /**
+>>> @@ -3423,8 +3440,10 @@ static struct scsi_host_template
+>> megasas_template =
+>>> {
+>>>           .eh_timed_out = megasas_reset_timer,
+>>>           .shost_attrs = megaraid_host_attrs,
+>>>           .bios_param = megasas_bios_param,
+>>> +       .map_queues = megasas_map_queues,
+>>>           .change_queue_depth = scsi_change_queue_depth,
+>>>           .max_segment_size = 0xffffffff,
+>>> +       .host_tagset = 1,
+>> Is your intention to always have this set for Scsi_Host, and just change
+>> nr_hw_queues?
+> Actually I wanted to turn off  this feature using host_tagset and not
+> through nr_hw_queue. I will address this.
+> 
+> Additional request -
+> In MR we have old controllers (called MFI_SERIES). We prefer not to change
+> behavior for those controller.
+> Having host_tagset in template does not allow to cherry pick different
+> values for different type of controller.
 
-Ich habe diese mutige Entscheidung getroffen, weil ich keinen Ehemann,
-keine Familie oder Kinder habe, die dieses Geld erben k=C3=B6nnen, wenn ich
-weg bin. Wenn Sie interessiert sind, nehmen Sie 30% des Gesamtgeldes
-f=C3=BCr Ihre Hilfe und bauen Sie mit dem Rest Waisenh=C3=A4user in Erinner=
-ung
-an mich. Wenn Sie interessiert sind, kontaktieren Sie mich bitte
-dringend f=C3=BCr weitere Informationen Ich werde Ihnen die
-Einzahlungsbescheinigung und die Sterbeurkunde meines Vaters zur
-Best=C3=A4tigung ausstellen, bevor wir Sie als meinengesetzlichen
-Beg=C3=BCnstigten f=C3=BCr den Erhalt des Geldes in meinem Namen identifizi=
-eren.
+Ok, so it seems sensible to add host_tagset to Scsi_Host structure also, 
+to allow overwriting during probe time.
 
-Ich =C3=BCbersetze meine Nachricht nach Deutschland, um Ihnen das
-Verst=C3=A4ndnis zu erleichtern. Sie k=C3=B6nnen mich auf Englisch oder noc=
-h in
-Deutschland zur=C3=BCckschreiben
+If you want to share an updated megaraid sas driver patch based on that, 
+then that's fine. I can incorporate that change in the patch where we 
+add host_tagset to the scsi host template.
 
-Ich warte darauf, dringend von Ihnen zu h=C3=B6ren.
+> If host_tagset is part of Scsi_Host OR we add check in scsi_lib.c that
+> host_tagset = 1 only make sense if nr_hw_queues > 1, we can cherry pick in
+> driver.
+> 
+> 
 
-Sch=C3=B6ne Gr=C3=BC=C3=9Fe,
-Frau Tytti Korhonen.
+
+
