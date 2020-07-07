@@ -2,141 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B1E2166CC
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 08:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865B32166F8
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jul 2020 09:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgGGGuy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jul 2020 02:50:54 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:62809 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727008AbgGGGuy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 02:50:54 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200707065052epoutp048ecb8060922b5f5ad1f0de59830ed447~fZbxQY5jD1077710777epoutp04_
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 06:50:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200707065052epoutp048ecb8060922b5f5ad1f0de59830ed447~fZbxQY5jD1077710777epoutp04_
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1594104652;
-        bh=f2MLdUIYHh8CiGmeIVKXfca4KHhSF9OPDoC3dL6ALXo=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=FDolUC92W4+qR1k0D7iKJmvf5Dm+eN/1hVPU2f+MzzdXBCYfv5Nk+y46A5RtAOqaf
-         KlulShZ+Z6S/ixShSP3YBIfoAfSNyFN3OuN3MeC6/xvG0qHjVaEsL/f/RFjzhDP0tZ
-         VGKikSGE/4KbtDAfat060ea/t8COgmKosnUcPZcI=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20200707065051epcas1p45acd994d596f3659e852c3aa3428cc88~fZbwR29-30974109741epcas1p4F;
-        Tue,  7 Jul 2020 06:50:51 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.166]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4B1Ckf2Sj1zMqYkW; Tue,  7 Jul
-        2020 06:50:50 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B8.C4.29173.74B140F5; Tue,  7 Jul 2020 15:50:47 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200707065045epcas1p166c2d6094e7aa2f7b2802bd70fd8f5f2~fZbqp4hQ81794117941epcas1p1N;
-        Tue,  7 Jul 2020 06:50:45 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200707065045epsmtrp190c2f2874348308108c1be060bff69a2~fZbqpHRz00837708377epsmtrp16;
-        Tue,  7 Jul 2020 06:50:45 +0000 (GMT)
-X-AuditID: b6c32a37-9cdff700000071f5-e8-5f041b479751
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        93.B8.08303.54B140F5; Tue,  7 Jul 2020 15:50:45 +0900 (KST)
-Received: from grantjung02 (unknown [10.214.113.116]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200707065045epsmtip1286256647a36f34784aba2938f6501bd~fZbqdYVtp0207902079epsmtip1N;
-        Tue,  7 Jul 2020 06:50:45 +0000 (GMT)
-From:   "Grant Jung" <grant.jung@samsung.com>
-To:     "'Kiwoong Kim'" <kwmad.kim@samsung.com>,
-        "'Avri Altman'" <Avri.Altman@wdc.com>,
-        <linux-scsi@vger.kernel.org>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <bvanassche@acm.org>, <sc.suh@samsung.com>,
-        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>
-In-Reply-To: <000801d65425$2ce3ad50$86ab07f0$@samsung.com>
-Subject: RE: [RFC PATCH v1] ufs: introduce async ufs interface
- initialization
-Date:   Tue, 7 Jul 2020 15:50:45 +0900
-Message-ID: <524801d6542a$f0744680$d15cd380$@samsung.com>
+        id S1728215AbgGGHCw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jul 2020 03:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726788AbgGGHCw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 03:02:52 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7899C061755
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Jul 2020 00:02:51 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id h22so41477846lji.9
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Jul 2020 00:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/zhnxpk2dcaV2Z7RgZhMmVLscfiLb1Ab4yTT4bhzF0E=;
+        b=RoSMxnh7Y+K9QsH5Val8BkexZYBj1aQzdodvlLDRmPm9syP/HUDgCe6disy7joGbNI
+         MgS32VxECijhy1pawpvLI99Va1RziwN+C9cHD9HB72P1BmCVWz4Uxm0KxrgIoYssz20u
+         NHrhzKfIhz21bHMw6x+rcOQmNTSQ1lOMlAOsrm4jF6xhcqsgC4dTTvoacc6dWgYka5i1
+         VvXdwGEwJoe2CcAnmnegGYLLRRfcYKqHpIx4S8ns4sTUaN+08gAtO6BXGWWMXDUceRyI
+         Z7rnH66xmg2GiuV4R87U4vGtLGBH2M1IXetx1gnWjQdNQsvHNeCmHlhHLvsOvHxpA9x3
+         uD3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/zhnxpk2dcaV2Z7RgZhMmVLscfiLb1Ab4yTT4bhzF0E=;
+        b=M17P6wzvzwLRt1y6h4/8Ttfr3rwApdeLNpx5vxGvKPlnUximPWKuH8j4rwdA0KPEBc
+         j5JKLfiWdjI244DVRMCXU92/YhVccUNqjR1IewEWXkKI2GehNrIaE/4ouXZ9fBsJSI/o
+         SaOU2T9A/Lm29qOT0SITNXS6SCHDi36uxTYOv48D+aHFVayXcVgQ74wQtd/Jk5Qk1Qid
+         6Umvb5oAXUhRkL0Vt48IrKbdHi+HuvhqMZDvjxAZhSYCH4dacYYLPyTbyijZhpWLmGOY
+         BC4M/YUqnWS8B5Q99hB0YvHc3sAzuP2+RBOfRwX4rx3ypoFBqVXVJkilerr19EgnZEww
+         FXFQ==
+X-Gm-Message-State: AOAM531f/1LlC37eJp5HV9xUTcrT1d36jvFsGdG6IyHy2WsA9qSJTM8G
+        PDWt66Rt+udtwkPknoO7McWKWpAM9pLyavHm/EQ=
+X-Google-Smtp-Source: ABdhPJyyYFmClQpg0REkgBk/QwfJcm1jLtuUewiYSA6uS/hCrvVe+XO46aRseponZCSby8Isg2amlN92ffwm1OJbqFc=
+X-Received: by 2002:a2e:9855:: with SMTP id e21mr25934197ljj.424.1594105370207;
+ Tue, 07 Jul 2020 00:02:50 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a19:5f4f:0:0:0:0:0 with HTTP; Tue, 7 Jul 2020 00:02:49 -0700 (PDT)
+Reply-To: mrs.tyttikorhonen@gmail.com
+From:   Mrs Tytti Korhonen <arckingsleyp@gmail.com>
+Date:   Tue, 7 Jul 2020 08:02:49 +0100
+Message-ID: <CAEXL3m_=eQeKzOncPppUsnfwA2GZTR12knHgUy_Fjz+JR1oG6w@mail.gmail.com>
+Subject: =?UTF-8?Q?Gr=C3=BC=C3=9Fe_dich_sehr_geehrter?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJf3Lb61o2624A7HIYY502pzJR6wwGotN4cAhHmw+IB2c0IWqe79T+Q
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGJsWRmVeSWpSXmKPExsWy7bCmrq67NEu8wc41phYP5m1js9jbdoLd
-        4uXPq2wWBx92slhM+/CT2eLT+mWsFqsXP2CxWHRjG5PFzS1HWSy6r+9gs1h+/B+TRdfdG4wW
-        S/+9ZXHg9bh8xdvjcl8vk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5tB/oZgrgiMqxyUhN
-        TEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAE6WUmhLDGnFCgU
-        kFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYGhQoFecmFtcmpeul5yfa2VoYGBkClSZkJNxYude
-        1oJutoreu5tZGhjvsXQxcnJICJhI3D7dxtzFyMUhJLCDUeL5ni52kISQwCdGiad92hCJz4wS
-        C+fcZ4Tp+HTvDAtEYhejRNeag1DOK0aJx18+grWzCWhLTNz1mQnEFhF4xyTRN9sExOYUsJKY
-        07OXDcQWFvCX+DR3KdgdLAIqEu/utoP18gpYSiy+cpoZwhaUODnzCVgNM9DMZQtfM0NcoSDx
-        8+kyVoj5bhKXVuxkhqgRkZjdCfGPhMAJDomNLWvZIBpcJFaeWssEYQtLvDq+hR3ClpJ42d/G
-        DtHQzyixruc0C4QzAchZdxBqnbHEp8+fgQHAAbRCU2L9Ln2IsKLEzt9zGSE280m8+9rDClIi
-        IcAr0dEmBFGiInFy4y1WmF0P9s2Dmughsf7mZ7YJjIqzkPw5C8mfs5D8Mwth8QJGllWMYqkF
-        xbnpqcWGBcbI0b2JEZygtcx3ME57+0HvECMTB+MhRgkOZiUR3l5txngh3pTEyqrUovz4otKc
-        1OJDjKbAkJ/ILCWanA/MEXkl8YamRsbGxhYmZuZmpsZK4ry+VhfihATSE0tSs1NTC1KLYPqY
-        ODilGpjcP3JV3W/p+Rsf7pMWte/IIn+nm9f/F920P3ZHaNWPd/ZnhbJPaC8yFL0asfuuohP/
-        o6IZ6+6uPPmLfdrjKbvZNHJs53nd4X49+4/bir9enROFM3fKFXoaFmhGPi94fiZ6rtXrr/8P
-        hcUp/o94tprR9zPLpK8Ty5o/alQcmPxh3YIHpyWOvXy3pUlh57vlClKzU6TDKu/+/bV42t2K
-        phxn18ssB7brex9SSZngwN21+csadt/ayG+mx1dtV/xaMnFHV2ZM+n63q5d359TfeP0z7EH7
-        88tH72sdZN70KFuTe0enfwin7uN5sRPX9F1PNzY89+p547U3mwuKk4+LTlqw5K79/uxFtQW9
-        P223aK+YvkKJpTgj0VCLuag4EQCMH7vKWQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsWy7bCSnK6rNEu8wZ4NUhYP5m1js9jbdoLd
-        4uXPq2wWBx92slhM+/CT2eLT+mWsFqsXP2CxWHRjG5PFzS1HWSy6r+9gs1h+/B+TRdfdG4wW
-        S/+9ZXHg9bh8xdvjcl8vk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5tB/oZgrgiOKySUnN
-        ySxLLdK3S+DKmN8aXjCRraJ/3R2mBsYHLF2MnBwSAiYSn+6dAbK5OIQEdjBKfJ23BSohJbH4
-        8gPmLkYOIFtY4vDhYoiaF4wSpxZ9YQSpYRPQlpi46zMTSEJE4A+TxPsn31khqqYzSUyaeYwZ
-        pIpTwEpiTs9eNpBJwgK+Eo/+aoCEWQRUJN7dbWcHsXkFLCUWXznNDGELSpyc+QTsCGagBb0P
-        Wxlh7GULXzNDHKcg8fPpMlYQW0TATeLSip3MEDUiErM725gnMArNQjJqFpJRs5CMmoWkZQEj
-        yypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjOBo1NLawbhn1Qe9Q4xMHIyHGCU4mJVE
-        eHu1GeOFeFMSK6tSi/Lji0pzUosPMUpzsCiJ836dtTBOSCA9sSQ1OzW1ILUIJsvEwSnVwGT5
-        jVPCcMG6ykTfmFPO90NupExPZoucbeVXtXZPIMuBN+pbzddNd13j+/LpqRsFy5Mc60MX7Eju
-        04i122wasWryJ0O9g+kPTvKI27FJ+nutZl1oqjN/aZC540nxtKCpqReszuzIzji1JfGQ6ds5
-        x2bMyZBKdG/Tm/5kypRLL0rYbDJWtxYa/T7fXPB/QeSqd3G/putcm5oVWsV60yVOdcqm7aGT
-        5ZeJ3znuEbA7+ofVm3MOCh9jhd9M54z8wzEpR7hl5s2TMlL9ZrpNWUoce9g5HotdZniqcl/y
-        4cqrtju2JNl3FQqXNTO1G+q/Fzgk+HuVgHHtVe7/yxwXN7at/Nw/oVOtynkG0zaPuWsTlZRY
-        ijMSDbWYi4oTAVwTBn81AwAA
-X-CMS-MailID: 20200707065045epcas1p166c2d6094e7aa2f7b2802bd70fd8f5f2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200702082826epcas2p2face6d1689c2f5efc1dcdb53c19804b8
-References: <CGME20200702082826epcas2p2face6d1689c2f5efc1dcdb53c19804b8@epcas2p2.samsung.com>
-        <1593678039-139543-1-git-send-email-kwmad.kim@samsung.com>
-        <SN6PR04MB4640958B96D370146EA86334FC660@SN6PR04MB4640.namprd04.prod.outlook.com>
-        <000801d65425$2ce3ad50$86ab07f0$@samsung.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> > > When you set uic_link_state during sleep statae to
-> > > UIC_LINK_OFF_STATE, UFS driver does interface initialization that is
-> > > a series of some steps including fDeviceInit and thus, You might
-> > > feel that its latency is a little bit longer.
-> > >
-> > > This patch is run it asynchronously to reduce system wake-up time.
-> > Can you share your initial testing findings?
-> > How much time does it save?
->=20
-> Will share when I'm done. And I think you might already know and the time
-> is variant per device and its situation, particularly for fDeviceInit.
->=20
-> Thanks.
-> Kiwoong Kim
+Gr=C3=BC=C3=9Fe dich sehr geehrter,
 
-I think it depends on each platform.=20
-I has used this since years ago to reduce system wake-up time and could sav=
-e about 60ms at that time.
+Ich schreibe diese Mail mit Tr=C3=A4nen und Trauer und suche Ihre Hilfe
+aufgrund meiner medizinischen Situation hier in London. Ich bin Frau
+Tytti Korhonen, finnische Staatsb=C3=BCrgerin und 83 Jahre alt. Ich war
+eine Waise, adoptiert von meinem verstorbenen Vater Engr. Pekka
+Korhonen, Vorsitzender / CEO von Pekkakorhonen Oil and Gas Services.
+Nach dem Tod meines Vaters =C3=BCbernahm ich seine Leitung und beschloss
+auch, nicht zu heiraten, weil ich sein einziges Kind bin.
 
-BR
-Grant.
+Seitdem leide ich an einer Erkrankung der Herzkranzgef=C3=A4=C3=9Fe, die mi=
+ch
+viel gekostet hat und aufgrund von Komplikationen jeden Teil meines
+K=C3=B6rpers und meiner Gehirnzellen betroffen hat. Erst vor 5 Tagen sagten
+mir die britischen =C3=84rzte, dass ich jederzeit sterben k=C3=B6nnte, weil=
+ mein
+Zustand ein kritisches und lebensbedrohliches Stadium erreicht hatte.
+Nachdem ich meinen medizinischen kritischen Status gekannt hatte,
+beschloss ich, Ihre dringende Hilfe / Zusammenarbeit zu nutzen, um
+mein 14,5-Millionen-Dollar-Erbe zu nutzen und Waisenh=C3=A4user in
+Erinnerung an mich zu bauen, wenn ich weg bin.
 
+Ich habe diese mutige Entscheidung getroffen, weil ich keinen Ehemann,
+keine Familie oder Kinder habe, die dieses Geld erben k=C3=B6nnen, wenn ich
+weg bin. Wenn Sie interessiert sind, nehmen Sie 30% des Gesamtgeldes
+f=C3=BCr Ihre Hilfe und bauen Sie mit dem Rest Waisenh=C3=A4user in Erinner=
+ung
+an mich. Wenn Sie interessiert sind, kontaktieren Sie mich bitte
+dringend f=C3=BCr weitere Informationen Ich werde Ihnen die
+Einzahlungsbescheinigung und die Sterbeurkunde meines Vaters zur
+Best=C3=A4tigung ausstellen, bevor wir Sie als meinengesetzlichen
+Beg=C3=BCnstigten f=C3=BCr den Erhalt des Geldes in meinem Namen identifizi=
+eren.
 
+Ich =C3=BCbersetze meine Nachricht nach Deutschland, um Ihnen das
+Verst=C3=A4ndnis zu erleichtern. Sie k=C3=B6nnen mich auf Englisch oder noc=
+h in
+Deutschland zur=C3=BCckschreiben
+
+Ich warte darauf, dringend von Ihnen zu h=C3=B6ren.
+
+Sch=C3=B6ne Gr=C3=BC=C3=9Fe,
+Frau Tytti Korhonen.
