@@ -2,73 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50531218636
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 13:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BB32186DD
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728897AbgGHLdK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jul 2020 07:33:10 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2440 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728742AbgGHLdK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 8 Jul 2020 07:33:10 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id E091CFBE4E751B066A8A;
-        Wed,  8 Jul 2020 12:33:08 +0100 (IST)
-Received: from [127.0.0.1] (10.210.171.111) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1913.5; Wed, 8 Jul 2020
- 12:33:07 +0100
-Subject: Re: [PATCH RFC v7 10/12] megaraid_sas: switch fusion adapters to MQ
-To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <don.brace@microsemi.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        <ming.lei@redhat.com>, <bvanassche@acm.org>, <hare@suse.com>,
-        <hch@lst.de>,
-        Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>
-CC:     <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>,
-        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
-References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
- <1591810159-240929-11-git-send-email-john.garry@huawei.com>
- <d55972999b9370f947c20537e41b49bf@mail.gmail.com>
- <e61593f8-5ee7-5763-9d02-d0ea13aeb49f@huawei.com>
- <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <5cac073f-d930-3074-49a8-515dcd0d80d6@huawei.com>
-Date:   Wed, 8 Jul 2020 12:31:27 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1728890AbgGHMC0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jul 2020 08:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728770AbgGHMC0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:02:26 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD0EC08E6DC
+        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:02:26 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id l17so2734898wmj.0
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:02:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DEuQ0isQDZs4z6XMYzEe+OOf6ezHgXSzxswYMqwj6a4=;
+        b=kTKeuYMJiUQcuxilaT9rXVewbfHw8SfFhgcTG5QDP5p55FBn3j+/Pt2Tj5AQaT3mNc
+         jOHmQaoGDGfsJQ7GhFxVBNMbIRp48CHrWPdDJjSOrsmfHMY3rp3a+sYtj6oPuoliZzMw
+         WNdJypkf/t9nRJ9RERASarhQ3shh6G4z4rYN8VOdDhzpbXAQ3XW3fwHDjwE+9wprv0mN
+         eMWQxXxUveuWUoNRWcSvVwZF7qWOU7WC4yq4xifQoyuQ64upmvixE8vkN6ml+AKb1b8p
+         /ut5TfdlDFd1bQy4JqQK+pkath1zDxsYycX1/Re8MuRMhyan3ul2cXdcWYmeWryt3LQs
+         qO7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DEuQ0isQDZs4z6XMYzEe+OOf6ezHgXSzxswYMqwj6a4=;
+        b=Du1FcMi1VsNWI4yK5bsjuwEaAsO6TKzCsv0jCwkp5CbOoIFhQEf4P3VV2Ez8x4GdGF
+         yhhNE3Xt/sUPasn2FnZgMH6tQ0xS9oeFtYVIgs2HtkmJKwURXqtcdq0bgVcHzmRP3Chk
+         8b6l7C0Z0/9FXpnOP+dQPwNinWrZ75Tt6UGcVZeGh1LYkfsHDieaNOFc0GVIsRwBmaNL
+         7M5jEQRWtoLzD5mACJbHePQuVNIwXAIBMXUP+lduIbOV4oeCqdEg8fzRswwdC569wMiA
+         SqtwjuzPVk5JEsoJo9oH6epR4ZNtMR54PXO05u+3s+z/LeoT2HyL6FNuZs/qQ0OO3CHV
+         H8kA==
+X-Gm-Message-State: AOAM533C9XNKzwZVLlfTtb7509mz+LRHXGGK8jpFhacETUUT4cfl5gaP
+        3i8cma75jnRm8RgDk+CFvTrsZw==
+X-Google-Smtp-Source: ABdhPJx73gz4OHGK9q9TrCi5i7d6kqBovv7MtsV5YduvjgG7QbypnkpYq6Vk4YcwDOzaOFFX/3WtxQ==
+X-Received: by 2002:a7b:cf16:: with SMTP id l22mr9786555wmg.68.1594209744661;
+        Wed, 08 Jul 2020 05:02:24 -0700 (PDT)
+Received: from localhost.localdomain ([2.27.35.206])
+        by smtp.gmail.com with ESMTPSA id m62sm3964997wmm.42.2020.07.08.05.02.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jul 2020 05:02:23 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 00/30] Fix a bunch more SCSI related W=1 warnings
+Date:   Wed,  8 Jul 2020 13:01:51 +0100
+Message-Id: <20200708120221.3386672-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.171.111]
-X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 06/07/2020 20:19, Kashyap Desai wrote:
->>> My understanding is
->>> - This RFC + patch set from above link is required for it. I could not
->>> see above series is committed.
->> It is committed and part of 5.8-rc1
->>
->> The latest rc should have some scheduler fixes also.
->>
->> I also note that there has been much churn on blk-mq tag code lately, and
->> something may be broken, so I plan to verify latest rc myself soon.
-> Thanks. I will try merging 5.8-rc1 and RFC and see how CPU hot plug works.
-> 
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-JFYI, I tested 5.8-rc4 for scheduler=none and =mq-deadline (no fully 
-tested), and it looks ok
+Slowly working through the SCSI related ones.  There are many.
 
-john
+Lee Jones (30):
+  scsi: libfc: fc_exch: Supply some missing kerneldoc struct/function
+    attributes/params
+  include: scsi: scsi_transport_fc: Match HBA Attribute Length with
+    HBAAPI V2.0 definitions
+  scsi: libfc: fc_disc: trivial: Fix spelling mistake of 'discovery'
+  scsi: fcoe: fcoe: Fix various kernel-doc infringements
+  scsi: fcoe: fcoe_ctlr: Fix a myriad of documentation issues
+  scsi: fcoe: fcoe_transport: Correct some kernel-doc issues
+  scsi: bnx2fc: bnx2fc_fcoe: Repair a range of kerneldoc issues
+  scsi: qedf: qedf_main: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  scsi: qedf: qedf_main: Remove set but not checked variable 'tmp'
+  scsi: libfc: fc_lport: Repair function parameter documentation
+  scsi: libfc: fc_rport: Fix a couple of misdocumented function
+    parameters
+  scsi: libfc: fc_fcp: Provide missing and repair existing function
+    documentation
+  scsi: libfc: fc_rport: Fix bitrotted function parameter and copy/paste
+    error
+  scsi: bnx2fc: bnx2fc_hwi: Fix a couple  of bitrotted function
+    documentation headers
+  scsi: arcmsr: arcmsr_hba: Remove some set but unused variables
+  scsi: arcmsr: arcmsr_hba: Make room for the trailing NULL, even if it
+    is over-written
+  scsi: qedf: qedf_io: Remove a whole host of unused variables
+  scsi: bnx2fc: bnx2fc_tgt: Demote obvious misuse of kerneldoc to
+    standard comment blocks
+  scsi: aic7xxx: aic7xxx_osm: Remove unused variable 'tinfo'
+  scsi: aic7xxx: aic7xxx_osm: Remove unused variable 'ahc'
+  scsi: aic7xxx: aic7xxx_osm: Remove unused variable 'targ'
+  scsi: aic7xxx: aic7xxx_osm: Fix 'amount_xferred' set but not used
+    issue
+  scsi: qedf: qedf_debugfs: Demote obvious misuse of kerneldoc to
+    standard comment blocks
+  scsi: aacraid: linit: Provide suggested curly braces around empty body
+    of if()
+  scsi: aacraid: linit: Fix a couple of small kerneldoc issues
+  scsi: aic94xx: aic94xx_init: Demote seemingly unintentional kerneldoc
+    header
+  scsi: pm8001: pm8001_init: Demote obvious misuse of kerneldoc and
+    update others
+  scsi: aic94xx: aic94xx_hwi: Repair kerneldoc formatting error and
+    remove extra param
+  scsi: aacraid: aachba: Fix a bunch of function doc formatting errors
+  scsi: qla4xxx: ql4_init: Provide a missing function param description
+    and fix formatting
+
+ drivers/scsi/aacraid/aachba.c       | 17 +++-------------
+ drivers/scsi/aacraid/linit.c        |  6 +++---
+ drivers/scsi/aic7xxx/aic7xxx_osm.c  | 13 ++----------
+ drivers/scsi/aic94xx/aic94xx_hwi.c  |  3 +--
+ drivers/scsi/aic94xx/aic94xx_init.c |  2 +-
+ drivers/scsi/arcmsr/arcmsr_hba.c    | 31 ++++++++++++-----------------
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c   | 18 ++++++++---------
+ drivers/scsi/bnx2fc/bnx2fc_hwi.c    |  6 +++---
+ drivers/scsi/bnx2fc/bnx2fc_tgt.c    |  7 +++----
+ drivers/scsi/fcoe/fcoe.c            | 10 ++++------
+ drivers/scsi/fcoe/fcoe_ctlr.c       | 26 ++++++++++++------------
+ drivers/scsi/fcoe/fcoe_transport.c  |  4 +++-
+ drivers/scsi/libfc/fc_disc.c        |  2 +-
+ drivers/scsi/libfc/fc_exch.c        |  7 ++++++-
+ drivers/scsi/libfc/fc_fcp.c         | 11 ++++++----
+ drivers/scsi/libfc/fc_lport.c       |  7 +++++--
+ drivers/scsi/libfc/fc_rport.c       |  4 ++--
+ drivers/scsi/pm8001/pm8001_init.c   | 30 ++++++++++++++--------------
+ drivers/scsi/qedf/qedf_debugfs.c    | 18 ++++++++---------
+ drivers/scsi/qedf/qedf_io.c         | 30 ++++------------------------
+ drivers/scsi/qedf/qedf_main.c       | 10 ++++------
+ drivers/scsi/qla4xxx/ql4_init.c     |  7 ++++---
+ include/scsi/fc/fc_ms.h             |  4 ++--
+ 23 files changed, 115 insertions(+), 158 deletions(-)
+
+-- 
+2.25.1
 
