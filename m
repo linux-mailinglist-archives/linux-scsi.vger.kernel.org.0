@@ -2,164 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9149C217D17
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 04:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D8F217D24
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 04:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729304AbgGHCcE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jul 2020 22:32:04 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:11654 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728955AbgGHCcD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 22:32:03 -0400
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200708023200epoutp01380793191a8732e0632584f9e664fb68~fpjCE98bN1153411534epoutp01a
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 02:32:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200708023200epoutp01380793191a8732e0632584f9e664fb68~fpjCE98bN1153411534epoutp01a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1594175520;
-        bh=rJrK8YWEMIlsXw1bcpuzIBhBH2129E6jXTK3Xevwysc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:In-Reply-To:References:From;
-        b=sd3kAFGmkxq34Y9VygZz4Zg4atayw8Pq9rn7UY/wr7wndxRVl7IbNNsOaDHc3Blxt
-         D3ITZF1y8nTlVaVQ39MqR4g15ajAIqP0zZ3Jl6ZYfAaEQ0z45YUHIX7/SmADGS3c15
-         ASfbJnIvoRnyysT3CSfDqfzwJyc42qpfMn3sb+Ww=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20200708023159epcas2p26676e5db137bc73205a74f1afa3484ac~fpjBNgDPV0901609016epcas2p2F;
-        Wed,  8 Jul 2020 02:31:59 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.40.188]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4B1jxT288nzMqYkj; Wed,  8 Jul
-        2020 02:31:57 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C1.FD.27441.D10350F5; Wed,  8 Jul 2020 11:31:57 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200708023156epcas2p188781afcff94b548918326986d58a2d7~fpi_wPehM1707617076epcas2p1j;
-        Wed,  8 Jul 2020 02:31:56 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200708023156epsmtrp2b2f655cc31ab2c865d0cd8847976e824~fpi_vaF5X2368623686epsmtrp2v;
-        Wed,  8 Jul 2020 02:31:56 +0000 (GMT)
-X-AuditID: b6c32a47-fafff70000006b31-1d-5f05301d5fe4
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        28.82.08303.C10350F5; Wed,  8 Jul 2020 11:31:56 +0900 (KST)
-Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200708023156epsmtip2c495cb244fec98192ea3ad4a1b0e9ba7~fpi_jI41O0096600966epsmtip2P;
-        Wed,  8 Jul 2020 02:31:56 +0000 (GMT)
-From:   Kiwoong Kim <kwmad.kim@samsung.com>
-To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
-        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com
-Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [RESEND RFC PATCH v4 3/3] ufs: exynos: implement dbg_register_dump
-Date:   Wed,  8 Jul 2020 11:24:01 +0900
-Message-Id: <ace3fe9ebea3b82e23c6c6ebc5bd92fbdde23b51.1594174981.git.kwmad.kim@samsung.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1594174981.git.kwmad.kim@samsung.com>
-In-Reply-To: <cover.1594174981.git.kwmad.kim@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmua6sAWu8wenDXBYP5m1js9jbdoLd
-        4uXPq2wWBx92slhM+/CT2eLT+mWsFr/+rme3WL34AYvFohvbmCxubjnKYtF9fQebxfLj/5gs
-        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
-        VI5NRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtDdSgpl
-        iTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCQ8MCveLE3OLSvHS95PxcK0MDAyNToMqE
-        nIzOBw/YC5bxVDw/MJ25gXEpVxcjJ4eEgInEtc6ZrF2MXBxCAjsYJRr+7GGHcD4xSiw7sgzK
-        +cwo0XNoNRtMy5XXJxkhErsYJR7Nmc8E4fxglPi/YAVYFZuApsTTm1PBEiICm5kkXi24zwyS
-        YBZQl9g14QQTiC0s4C2xevZBsAYWAVWJ1rWT2UFsXoFoiW2nmlkg1slJ3DzXCdbLKWAp8fJH
-        FzsqmwuoZiqHxPWTu6EaXCR6nlxlh7CFJV4d3wJlS0l8frcX6od6iX1TG1ghmnsYJZ7u+8cI
-        kTCWmPWsHcjmALpUU2L9Ln0QU0JAWeLILRaI+/kkOg7/ZYcI80p0tAlBNCpL/Jo0GWqIpMTM
-        m3egtnpInDz1iwUSQECbbn+6wjyBUX4WwoIFjIyrGMVSC4pz01OLjQqMkeNvEyM4mWq572Cc
-        8faD3iFGJg7GQ4wSHMxKIrwGiqzxQrwpiZVVqUX58UWlOanFhxhNgQE5kVlKNDkfmM7zSuIN
-        TY3MzAwsTS1MzYwslMR5i60uxAkJpCeWpGanphakFsH0MXFwSjUw1bZf7DSTBkrISW1ivfI0
-        7dLj5+uXiNx9fum5bYvJLdUMxvvOMpWLOVRKXFuZmbbXWnZqu/tUbnj075aA+OLNkyc/C+Xq
-        vFMi7T3l+xIfp+pQ7mW2BYen3UzfvKxz0QVN59ouz47Lvhtu3w5RPa6x/1BXV29IXRWHpq/H
-        q7gal83z41j4z5VXHWf0frzt/Peo/HdXVs0rU//ePKVQbL5FVL50WcjlszMD1A55RxU+ftq5
-        QPWTCstXrVQL51vSxx7M7fER1o/hntZlVu3toqu2lq9wT1XM9JuhG2Wzg4/O3GowN+7kgq7j
-        HjdTBdtevJWfMbX/JkupyAwtIQm1T/fufGdYqvhaJZ93ktjGR0osxRmJhlrMRcWJAA3Jj/Ev
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrALMWRmVeSWpSXmKPExsWy7bCSvK6MAWu8wcQTehYP5m1js9jbdoLd
-        4uXPq2wWBx92slhM+/CT2eLT+mWsFr/+rme3WL34AYvFohvbmCxubjnKYtF9fQebxfLj/5gs
-        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
-        FJdNSmpOZllqkb5dAldG54MH7AXLeCqeH5jO3MC4lKuLkZNDQsBE4srrk4xdjFwcQgI7GCXe
-        Hl7GBJGQlDix8zkjhC0scb/lCCuILSTwjVFi18syEJtNQFPi6c2pTCDNIgKHmST+b33ODpJg
-        FlCX2DXhBNggYQFvidWzD7KB2CwCqhKtayeD1fAKREtsO9XMArFATuLmuU5mEJtTwFLi5Y8u
-        dohlFhL39vcz4RKfwCiwgJFhFaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+7iZGcCRoae1g
-        3LPqg94hRiYOxkOMEhzMSiK8Boqs8UK8KYmVValF+fFFpTmpxYcYpTlYlMR5v85aGCckkJ5Y
-        kpqdmlqQWgSTZeLglGpgUn+89+WOJIV2jmNK87Jspz3oXO8qkLQz5/+pviqRCVbV62xy/M6b
-        7f6ZpqwRfjtgyinPJdGhx1QmqmdsY2+98MLsZf3bLxHXri7UnuH6c5LYtIiQyuxZoS/W36m/
-        eMtDdteHnpu5P7KOFQanpDvkM3UeKHpxOIP7VKD6FN4nBiyLfq7/WfmU00Zpsv9+eRPOFalT
-        1rfdSNhiprZskQbXuo//yg5cOJlcOevPlvm3BDpmWATEura2Gjw4q8h1+VWxJOv14lmWgXvk
-        jNZ5GQvNU/328dCX5prdgh5/dqqoegievvhLQ/vVi4zV082DJVM/pd3sWyy0+GX4833ZHzWe
-        ix8oap4Xk+2xmj0/y7JgpRJLcUaioRZzUXEiAGOooLTzAgAA
-X-CMS-MailID: 20200708023156epcas2p188781afcff94b548918326986d58a2d7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200708023156epcas2p188781afcff94b548918326986d58a2d7
-References: <cover.1594174981.git.kwmad.kim@samsung.com>
-        <CGME20200708023156epcas2p188781afcff94b548918326986d58a2d7@epcas2p1.samsung.com>
+        id S1729296AbgGHCqN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jul 2020 22:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728479AbgGHCqM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jul 2020 22:46:12 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6907BC061755;
+        Tue,  7 Jul 2020 19:46:12 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id w6so48797671ejq.6;
+        Tue, 07 Jul 2020 19:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XuQXgKfjhRPfHlI6CUS9W8MpPRXyJFXM/VMcVD9TWSg=;
+        b=ZHppF9kI4mXLPuSLMpLIZJIATEcKJyXFvjR+sgZlNQVkPpRF7/UQTAW3e3oCFUefSZ
+         ZmtO5jwWdkEuY4gEkjAHdOR4nOrFhs2xLcPFyZCLFl4FibCkmmUv8TDU8of1bN2lFET5
+         UQT2mnqTzsQT5mVhSfwfs9uABpRRfYSopCH49SVJSDJXmKfshxVWJTGJZXvGz2Pd8sLB
+         rhbK/BSxfB86gfl/7qnIBnoUPUoIne9egWs1BbscFuF5I+cw9YspYJC1hS5gmPS+Okta
+         xkw2i3TcD18rjgrEPvg5UkGbReMo+p6CcJ6p+/R0AzTYz2ZINiEmkfhBe3gvP2p2B7UY
+         HGDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XuQXgKfjhRPfHlI6CUS9W8MpPRXyJFXM/VMcVD9TWSg=;
+        b=WPaDhUZ24TrpNuuQwQkWR49zBfBOhd4ChoFZOti9woh/g+3f6owQSjDiFYKME2tQfg
+         bBl8pjRrzl+NsBHw5hmAMaeladKqO+7tj3M8QpAPvBKt99p23PgSiaRAMCxl7jXs9a9V
+         oXUp8rd+ii8b0XYfO/wLVaQ1p8HcDInuOCm2wJBmSH2fan/C88AAMNxZWPCXQdOJI6OQ
+         bNY/LwvWFsWSiBGMpMBfHlfFEuMKrU/Kf3yZgS71n774EiUnrJ+TO+l23JUoMcAL9xFy
+         44MOzTmY+aF6j2uFackowPxpnW0Hhdr7M2AI0saB04DAnANYzVNITcKyLtiSCRr4rFBO
+         vRxQ==
+X-Gm-Message-State: AOAM531xfvo2jx2pcC7T/rc4E51lUlQPhfGq6hf/ejapg/GNMzv+6sfo
+        KJVIF0Hh75N0l1yJHzHRQSV4V8NVBvq49pKt1Oc=
+X-Google-Smtp-Source: ABdhPJxYdhLRcy744oW+MNtiCcL1RmFwk3vsdiHmDMArMFLyhT1qlrWXymL9oHuKbRVyql22v0GBVdidoxnHGMqGO+0=
+X-Received: by 2002:a17:906:31c8:: with SMTP id f8mr38085963ejf.269.1594176371013;
+ Tue, 07 Jul 2020 19:46:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200707180800.549b561b@canb.auug.org.au> <2f85f3c4-a58b-f225-a533-86e209a4651c@infradead.org>
+ <7ae1c7e3-ce8d-836b-1ae7-d4d00bd8f95c@broadcom.com>
+In-Reply-To: <7ae1c7e3-ce8d-836b-1ae7-d4d00bd8f95c@broadcom.com>
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Wed, 8 Jul 2020 08:16:00 +0530
+Message-ID: <CAOh2x=nGvuzicr77y-X5u8FWP7_G_UGosvdmtns01VCgtM_s=g@mail.gmail.com>
+Subject: Re: linux-next: Tree for Jul 7 (scsi/lpfc/lpfc_init.c)
+To:     James Smart <james.smart@broadcom.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        dick kennedy <dick.kennedy@broadcom.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-At present, I just add command history print and
-you can add various vendor regions.
+Hi James,
 
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
----
- drivers/scsi/ufs/ufs-exynos.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+On Tue, Jul 7, 2020 at 11:43 PM James Smart <james.smart@broadcom.com> wrote:
+>
+> On 7/7/2020 10:09 AM, Randy Dunlap wrote:
+> > On 7/7/20 1:08 AM, Stephen Rothwell wrote:
+> >> Hi all,
+> >>
+> >> Changes since 20200706:
+> >>
+> > on i386:
+> >
+> > when CONFIG_ACPI is not set/enabled:
+> >
+> >
+> > ../drivers/scsi/lpfc/lpfc_init.c:1265:15: error: implicit declaration of function 'get_cpu_idle_time'; did you mean 'get_cpu_device'? [-Werror=implicit-function-declaration]
+> >
+> >
+> > The cpufreq people want justification for using
 
-diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
-index 8c60f7d..815c361 100644
---- a/drivers/scsi/ufs/ufs-exynos.c
-+++ b/drivers/scsi/ufs/ufs-exynos.c
-@@ -1246,6 +1246,29 @@ static int exynos_ufs_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	return 0;
- }
- 
-+static void exynos_ufs_dbg_register_dump(struct ufs_hba *hba)
-+{
-+	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&ufs->dbg_lock, flags);
-+	if (ufs->under_dump == 0)
-+		ufs->under_dump = 1;
-+	else {
-+		spin_unlock_irqrestore(&ufs->dbg_lock, flags);
-+		goto out;
-+	}
-+	spin_unlock_irqrestore(&ufs->dbg_lock, flags);
-+
-+	exynos_ufs_dump_info(&ufs->handle, hba->dev);
-+
-+	spin_lock_irqsave(&ufs->dbg_lock, flags);
-+	ufs->under_dump = 0;
-+	spin_unlock_irqrestore(&ufs->dbg_lock, flags);
-+out:
-+	return;
-+}
-+
- static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
- 	.name				= "exynos_ufs",
- 	.init				= exynos_ufs_init,
-@@ -1258,6 +1281,7 @@ static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
- 	.hibern8_notify			= exynos_ufs_hibern8_notify,
- 	.suspend			= exynos_ufs_suspend,
- 	.resume				= exynos_ufs_resume,
-+	.dbg_register_dump		= exynos_ufs_dbg_register_dump,
- };
- 
- static int exynos_ufs_probe(struct platform_device *pdev)
--- 
-2.7.4
+I am one of cpufreq people :)
 
+> > get_cpu_idle_time().  Please see
+> > https://lore.kernel.org/linux-scsi/20200707030943.xkocccy6qy2c3hrx@vireshk-i7/
+> >
+>
+> The driver is using cpu utilization in order to choose between softirq
+> or work queues in handling an interrupt. Less-utilized, softirq is used.
+> higher utilized, work queue is used.  The utilization is checked
+> periodically via a heartbeat.
+
+I understand that you need to use this functionality, what I was
+rather asking was
+why do you need to use a routine that is for cpufreq related stuff only.
+
+I also see that drivers/macintosh/rack-meter.c has its own
+implementation for this.
+
+What I would suggest is that, if required, we should add/move a
+generic implementation
+of this to another file (which is available to all) and then let
+everyone use it.
+
+--
+viresh
