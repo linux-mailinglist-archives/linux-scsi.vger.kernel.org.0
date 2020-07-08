@@ -2,59 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFE32186C9
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AFD2186A5
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729081AbgGHMCo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jul 2020 08:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S1729089AbgGHMCp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jul 2020 08:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729056AbgGHMCl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:02:41 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9A8C08E763
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:02:41 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id o2so2740289wmh.2
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:02:41 -0700 (PDT)
+        with ESMTP id S1729069AbgGHMCo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:02:44 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B455AC08E876
+        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:02:43 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id q15so2726218wmj.2
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:02:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PUEEoaUyF+s08hE4dARneQxf1Covum7aHqB9FrCQqkg=;
-        b=pxXV0EYbO/Efhe2l4FrwNUHf3aw91pdWOupfVC6/0ixxbUMs5OuGizocqMJNMZzYDb
-         p99Kk593i/aTNpYlRIHL4qJnB+nMqMw5jpLA3QI34FM1tvDcip5cse0QZ0ymPnhQvGMR
-         M8yLIIYKhbXqe242v/hCKN4SQHrpvSyAO/8cRKhfaUYiksC872hREKWmbbgcoaE2vNws
-         LwiK4DKh2h8n34GK46+eoruCag26JNpB5IbScXXbhULDPH9Ukye4/J++DodbIP+z4iG7
-         AbnL2aAKpoqL44rwUWi29SoDwp/az05LGAWp7NPAznlDkT14oMqei6dkKRqkf/CvCQ2K
-         lUTw==
+        bh=DSQYT4u05u5XHMfy8CsexKzDa1uvZ/5gisr4AmMPcPk=;
+        b=P7pECm1Gy1aRGbb++bMKhwPg0A2Y4d68UaMYFhuCKyV7BMX6/bLCcJJU1aOmkTCNnR
+         ESXvFF0ZIUpyGUBlYp41i+v78s2zHN9JN7jTrQO8KRQt9mga3jI+XfLhqnrLMqCQ0Ql9
+         xM+/0JCu3uYPvksvh9FzSn57QgfB9VHwcitInoNrmizP17t+sRXsyi7hr0pIaiz+CKRJ
+         LdOaxKfUR9WU9i4gXuE2ygO0DsQsZxTXF1SoBYUkR3cBmKoi16XVhdpP5LgzttcngxtY
+         sxcZlUl0YpiKu3mokih0XocFqx5/DZ9iKJTByM1jXxN6M+DiyYpuvQLDF4odHGcRnGNy
+         7CEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PUEEoaUyF+s08hE4dARneQxf1Covum7aHqB9FrCQqkg=;
-        b=nnKWa/eF5bz2mtNd86AbeRsHO535zd/gEYWNzhwq7U4tQ9oS098lpUdJrsvkr62hJ4
-         fw1qxsjzo2eAGZembyOtSWDtuG9PmRSlOdxQK7DWhY3GEtZrVY636mXFolZvmDgOR1BM
-         oERtIQTMLdRqL8y/30MLdlHAZq6ERGYPLmfB8rzFEVH2ZsrYNGECfkYTSdORKaE920SH
-         9oyrvdWLtLf9C/Hj4BhdeISHWmrSEVALUlLBMOmONRpdHyJC1blorqhiOskrEpdX/yUf
-         YWrZLQtzjAmr6kCcq0Ak64Qe2k4u5k134LccoGWLbYG+F7YPyqd02cXP8csniPUufxtu
-         7hVA==
-X-Gm-Message-State: AOAM5339LxmYFcsxIVgbtoFbYkDh4tbimiRBnszgxsJqfyLQTXgNPztg
-        Gbi3vSQIqO0YDXaXLDcgGeqn4Q==
-X-Google-Smtp-Source: ABdhPJzxdA+vdJ9AscwTb1wWQzpErI8U1G4NExOlK6INLjHkDA9iMum4ZAxybvC6e7lyHjZyUYKJlg==
-X-Received: by 2002:a1c:6354:: with SMTP id x81mr8672065wmb.98.1594209760335;
-        Wed, 08 Jul 2020 05:02:40 -0700 (PDT)
+        bh=DSQYT4u05u5XHMfy8CsexKzDa1uvZ/5gisr4AmMPcPk=;
+        b=U4xWUE5Z/WuZt+q0RKyNgcqPFvuDeIRRbEba+YSWJaMV6tq/ICaJlkEhHZ4ugICP/y
+         D4vVcbShcmz2Zlq5NxPfcb2yT4+63Qzq5RLr2+ppQEWLMAq7kJuDS6Io3AfBMz6i+FE2
+         xQJTmtRef8i7pYzN3B5oJ09LLO3aCZzqWgZFJfhtY/oqFotKp+6nlMnMigEYKQ5+altU
+         nKLeO02TeniRn+Q3ro0L9PH56F+PkDA5+xCTctM4duMyfTlwGcvuDb5jfyu+JZyo0heB
+         nvDTz40Lx4EGbL11S7QbR3o7Zjod+sMZO8No7H04DgiDmtRO8Cc4WVQrdHwjor8cEQSP
+         3OiQ==
+X-Gm-Message-State: AOAM532xQQA1taamGZ/fvpjYlWxCbmIh35q113s6evgSCfsqjZmq4Q+e
+        ByruaR8mbcIy728KxSinY6Eb5Q==
+X-Google-Smtp-Source: ABdhPJz0/5Wm5G+Wa29qTxr1KGWCC4Ogqt6V8P6SjFAPiPZP9bxs2AwnCef6loyajt0KgPGKePrthg==
+X-Received: by 2002:a05:600c:2c0d:: with SMTP id q13mr8769318wmg.81.1594209762080;
+        Wed, 08 Jul 2020 05:02:42 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id m62sm3964997wmm.42.2020.07.08.05.02.39
+        by smtp.gmail.com with ESMTPSA id m62sm3964997wmm.42.2020.07.08.05.02.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 05:02:39 -0700 (PDT)
+        Wed, 08 Jul 2020 05:02:41 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 11/30] scsi: libfc: fc_rport: Fix a couple of misdocumented function parameters
-Date:   Wed,  8 Jul 2020 13:02:02 +0100
-Message-Id: <20200708120221.3386672-12-lee.jones@linaro.org>
+Subject: [PATCH 12/30] scsi: libfc: fc_fcp: Provide missing and repair existing function documentation
+Date:   Wed,  8 Jul 2020 13:02:03 +0100
+Message-Id: <20200708120221.3386672-13-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200708120221.3386672-1-lee.jones@linaro.org>
 References: <20200708120221.3386672-1-lee.jones@linaro.org>
@@ -65,41 +65,92 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Mostly due to descriptions not keeping up with API changes.
+
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/libfc/fc_rport.c:129: warning: Function parameter or member 'port_id' not described in 'fc_rport_create'
- drivers/scsi/libfc/fc_rport.c:129: warning: Excess function parameter 'ids' description in 'fc_rport_create'
- drivers/scsi/libfc/fc_rport.c:1452: warning: Function parameter or member 'rdata_arg' not described in 'fc_rport_logo_resp'
- drivers/scsi/libfc/fc_rport.c:1452: warning: Excess function parameter 'lport_arg' description in 'fc_rport_logo_resp'
+ drivers/scsi/libfc/fc_fcp.c:299: warning: Function parameter or member 'status_code' not described in 'fc_fcp_retry_cmd'
+ drivers/scsi/libfc/fc_fcp.c:595: warning: Function parameter or member 'seq' not described in 'fc_fcp_send_data'
+ drivers/scsi/libfc/fc_fcp.c:595: warning: Excess function parameter 'sp' description in 'fc_fcp_send_data'
+ drivers/scsi/libfc/fc_fcp.c:1289: warning: Function parameter or member 't' not described in 'fc_lun_reset_send'
+ drivers/scsi/libfc/fc_fcp.c:1289: warning: Excess function parameter 'data' description in 'fc_lun_reset_send'
+ drivers/scsi/libfc/fc_fcp.c:1422: warning: Function parameter or member 't' not described in 'fc_fcp_timeout'
+ drivers/scsi/libfc/fc_fcp.c:1422: warning: Excess function parameter 'data' description in 'fc_fcp_timeout'
+ drivers/scsi/libfc/fc_fcp.c:1696: warning: Function parameter or member 'code' not described in 'fc_fcp_recovery'
+ drivers/scsi/libfc/fc_fcp.c:1716: warning: Function parameter or member 'offset' not described in 'fc_fcp_srr'
+ drivers/scsi/libfc/fc_fcp.c:1859: warning: Function parameter or member 'sc_cmd' not described in 'fc_queuecommand'
+ drivers/scsi/libfc/fc_fcp.c:1859: warning: Excess function parameter 'cmd' description in 'fc_queuecommand'
 
 Cc: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/libfc/fc_rport.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/libfc/fc_fcp.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/libfc/fc_rport.c b/drivers/scsi/libfc/fc_rport.c
-index 278d15ff1c5ae..ea99e69d4d89c 100644
---- a/drivers/scsi/libfc/fc_rport.c
-+++ b/drivers/scsi/libfc/fc_rport.c
-@@ -121,7 +121,7 @@ EXPORT_SYMBOL(fc_rport_lookup);
+diff --git a/drivers/scsi/libfc/fc_fcp.c b/drivers/scsi/libfc/fc_fcp.c
+index bf2cc9656e191..d1ff2335f552b 100644
+--- a/drivers/scsi/libfc/fc_fcp.c
++++ b/drivers/scsi/libfc/fc_fcp.c
+@@ -289,6 +289,7 @@ static int fc_fcp_send_abort(struct fc_fcp_pkt *fsp)
  /**
-  * fc_rport_create() - Create a new remote port
-  * @lport: The local port this remote port will be associated with
-- * @ids:   The identifiers for the new remote port
-+ * @port_id:   The identifiers for the new remote port
+  * fc_fcp_retry_cmd() - Retry a fcp_pkt
+  * @fsp: The FCP packet to be retried
++ * @status_code: The FCP status code to set
   *
-  * The remote port will start in the INIT state.
+  * Sets the status code to be FC_ERROR and then calls
+  * fc_fcp_complete_locked() which in turn calls fc_io_compl().
+@@ -580,7 +581,7 @@ static void fc_fcp_recv_data(struct fc_fcp_pkt *fsp, struct fc_frame *fp)
+ /**
+  * fc_fcp_send_data() - Send SCSI data to a target
+  * @fsp:      The FCP packet the data is on
+- * @sp:	      The sequence the data is to be sent on
++ * @seq:      The sequence the data is to be sent on
+  * @offset:   The starting offset for this data request
+  * @seq_blen: The burst length for this data request
+  *
+@@ -1283,7 +1284,7 @@ static int fc_fcp_pkt_abort(struct fc_fcp_pkt *fsp)
+ 
+ /**
+  * fc_lun_reset_send() - Send LUN reset command
+- * @data: The FCP packet that identifies the LUN to be reset
++ * @t: Timer context used to fectch the FSP packet
   */
-@@ -1445,7 +1445,7 @@ static void fc_rport_recv_rtv_req(struct fc_rport_priv *rdata,
-  * fc_rport_logo_resp() - Handler for logout (LOGO) responses
-  * @sp:	       The sequence the LOGO was on
-  * @fp:	       The LOGO response frame
-- * @lport_arg: The local port
-+ * @rport_arg: The local port
+ static void fc_lun_reset_send(struct timer_list *t)
+ {
+@@ -1409,7 +1410,7 @@ static void fc_fcp_cleanup(struct fc_lport *lport)
+ 
+ /**
+  * fc_fcp_timeout() - Handler for fcp_pkt timeouts
+- * @data: The FCP packet that has timed out
++ * @t: Timer context used to fectch the FSP packet
+  *
+  * If REC is supported then just issue it and return. The REC exchange will
+  * complete or time out and recovery can continue at that point. Otherwise,
+@@ -1691,6 +1692,7 @@ static void fc_fcp_rec_error(struct fc_fcp_pkt *fsp, struct fc_frame *fp)
+ /**
+  * fc_fcp_recovery() - Handler for fcp_pkt recovery
+  * @fsp: The FCP pkt that needs to be aborted
++ * @code: The FCP status code to set
   */
- static void fc_rport_logo_resp(struct fc_seq *sp, struct fc_frame *fp,
- 			       void *rdata_arg)
+ static void fc_fcp_recovery(struct fc_fcp_pkt *fsp, u8 code)
+ {
+@@ -1709,6 +1711,7 @@ static void fc_fcp_recovery(struct fc_fcp_pkt *fsp, u8 code)
+  * fc_fcp_srr() - Send a SRR request (Sequence Retransmission Request)
+  * @fsp:   The FCP packet the SRR is to be sent on
+  * @r_ctl: The R_CTL field for the SRR request
++ * @offset: The SRR relative offset
+  * This is called after receiving status but insufficient data, or
+  * when expecting status but the request has timed out.
+  */
+@@ -1851,7 +1854,7 @@ static inline int fc_fcp_lport_queue_ready(struct fc_lport *lport)
+ /**
+  * fc_queuecommand() - The queuecommand function of the SCSI template
+  * @shost: The Scsi_Host that the command was issued to
+- * @cmd:   The scsi_cmnd to be executed
++ * @sc_cmd:   The scsi_cmnd to be executed
+  *
+  * This is the i/o strategy routine, called by the SCSI layer.
+  */
 -- 
 2.25.1
 
