@@ -2,86 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00804217F59
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 08:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE5D217F65
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 08:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728840AbgGHGHI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jul 2020 02:07:08 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:59306 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbgGHGHH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 02:07:07 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06866pLJ045649;
-        Wed, 8 Jul 2020 06:07:02 GMT
+        id S1729728AbgGHGHX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jul 2020 02:07:23 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:35420 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgGHGHX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 02:07:23 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06866XsW097277;
+        Wed, 8 Jul 2020 06:07:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=5ruWp+9PNArsGqnhm9xr7MKSa7IuE7jbRly7UNM0tks=;
- b=qoLV49LCjiG4kLhn09ZK2WoDEpSIurc739haL71rdSnRJ+Rb4e2Ki2socVeK/cjt3Jiz
- sZ1KeVIlXXFIGBAVwdPM2k+5pED3Ga3CEtqR/bD1DnEBnltYrjQ+eckcWWL7hZlxPalh
- HudL28/TrWBUlimOUj9X01qIHGNpIVk+L4NgROmZLW6qnHiVkVkYQZGnNmAI2FowAdKi
- 1tycCyWEPyleUEieK1S7bkfKzYwYPdPSuSh5LhKCw6FlhPZVCmeViT+IMvlXoUUBWkAc
- wto1M0UGPxPjmQDe5rGXeSFNsDdVkKMXsIUsXe1/6lyj0qKOSl607tVO1RZCI1Nnxz8b 2w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 322kv6g9ff-1
+ bh=zbUe8+eWeMckW3BnQP2YB70WdC5mxjWWXtoZJ2w9iFA=;
+ b=Gqw1JS5XWE2RVrhzmjiFju1+94atpFumZg+9Pc9Kx4anWQ2azONAWHNU6oRat4ArYxfH
+ LRNc1IAz0VBX9u/SOaGdYuSDVOvjPXTFf+dzoglOKyjsJuw9Qfr4dRFyVclqwwKLNCMo
+ SOBgVBb50gdO40+Se8U8vIkgiu5vGVl1pwmSZ2rC7iymE09mz8SEoAb3G1oMcMoO0qlp
+ ChirTQIgMlNWVRGElhFjMYrSDZzxDZw0cDV1wTHcv9zhML1ljwTbiKqbcihBdIcQYugy
+ vRQhaN+3gJGw/7QInhirzGkYHcJaE2qMDYaU3P3hcti53T94jh8hdBKi9xi/O2/aRSbM Zw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 323sxxvqku-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 08 Jul 2020 06:07:01 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0685xBr0063833;
-        Wed, 8 Jul 2020 06:07:01 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 3233p4k2du-1
+        Wed, 08 Jul 2020 06:07:06 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0685x9gJ145207;
+        Wed, 8 Jul 2020 06:07:06 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 324n4se4mc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 08 Jul 2020 06:07:01 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 068670xY030643;
-        Wed, 8 Jul 2020 06:07:00 GMT
+        Wed, 08 Jul 2020 06:07:06 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0686728V024859;
+        Wed, 8 Jul 2020 06:07:02 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 07 Jul 2020 23:07:00 -0700
+        with ESMTP ; Tue, 07 Jul 2020 23:07:02 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Colin King <colin.king@canonical.com>,
-        James Smart <james.smart@broadcom.com>
+To:     avri.altman@wdc.com, alim.akhtar@samsung.com,
+        asutoshd@codeaurora.org, beanhuo@micron.com, jejb@linux.ibm.com,
+        tomas.winkler@intel.com, stanley.chu@mediatek.com,
+        Bean Huo <huobean@gmail.com>, bvanassche@acm.org,
+        cang@codeaurora.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: lpfc: fix inconsistent indenting
-Date:   Wed,  8 Jul 2020 02:06:47 -0400
-Message-Id: <159418828150.5152.17012831289512414220.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: ufs: change upiu_flags to be u8
+Date:   Wed,  8 Jul 2020 02:06:48 -0400
+Message-Id: <159418828149.5152.10735454372874086994.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200707150018.823350-1-colin.king@canonical.com>
-References: <20200707150018.823350-1-colin.king@canonical.com>
+In-Reply-To: <20200706123936.24799-1-huobean@gmail.com>
+References: <20200706123936.24799-1-huobean@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9675 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=883
- mlxscore=0 spamscore=0 bulkscore=0 malwarescore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2007080041
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9675 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 bulkscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=904 phishscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 impostorscore=0 mlxscore=0 adultscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 impostorscore=0 adultscore=0 cotscore=-2147483648 phishscore=0
+ priorityscore=1501 clxscore=1015 malwarescore=0 suspectscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2007080042
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 7 Jul 2020 16:00:18 +0100, Colin King wrote:
+On Mon, 6 Jul 2020 14:39:36 +0200, Bean Huo wrote:
 
-> Fix smatch warning:
-> drivers/scsi/lpfc/lpfc_sli.c:15156 lpfc_cq_poll_hdler() warn: inconsistent
-> indenting
+> According to the UFS Spec, the Flags in the UPIU is one-byte length, not
+> 4 bytes. change it to be u8.
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: lpfc: Fix inconsistent indenting
-      https://git.kernel.org/mkp/scsi/c/26e0b9aa3578
+[1/1] scsi: ufs: Change upiu_flags to be u8
+      https://git.kernel.org/mkp/scsi/c/a23064c4123b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
