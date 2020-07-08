@@ -2,60 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0427021869F
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC022186DA
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728995AbgGHMCb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jul 2020 08:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
+        id S1729196AbgGHMEn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jul 2020 08:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728987AbgGHMCa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:02:30 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0989C08E6DC
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:02:29 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j4so46263571wrp.10
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:02:29 -0700 (PDT)
+        with ESMTP id S1728637AbgGHMCd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:02:33 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DCBC08C5DC
+        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:02:31 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z2so26408658wrp.2
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/GI6WmzBD/tXdjRqMOCJ6wEDBpBeiEpQ/v95OUrVAL8=;
-        b=bV9bLouLqxa4IS/T3dEi6X062He0tvGD4Qu/lii+sBTB4lF0PJlrBT8iLObnuSUf/d
-         htNbTUHwkzbxbY17Ti9OZOI298t98K0MS6hNsoWwMwcsCPUo3nWfTqmkMHnMbxdFDwIi
-         7cLhWhiWk7Jt+bIL+nYY7mPML81GkdliiPEbEJqIfUNk1igpLbKw/cz5TYWHDyLRjtgk
-         S//PUlCBhoQn2NoheTUiYMruF8YG+aV7399r8pLTeHV4kq8MmiDx5BTyNiAuDzBcVPId
-         n1PpGPt9MNZ2uNMMYT+7vRTd6tgVu8bpnr1hH9IbIyuKzf+P6pXBu4mNP+SiwWU1eBPv
-         C1fA==
+        bh=zj88WzcC8Hp115aJ2vlTY+pxEWRybRaihV1rme1nf/Q=;
+        b=J5+Dp0HeyJVdvuXj8D7pcksR0L060RA13hVnHzmEuUSfmb+fExnpI95v2doAH5bgpM
+         AerHZM65Y5A43lh6M1KxDXUEp7uKPcGChM5mNKuVi3J2s/d1jP9qF2+s6bEzGns8Gpbd
+         Jmgw64cyc8ozeKeyLOd/7/FBN6QkujrHYgO05n3G7zRfFHGttwVLyAcKDQ529LKnV+3x
+         BhFTJvTjrVfGMyRGZIzRGNg3ZHzByWbBxAmtupuVxhxMyhn+R5C6bbj7VYoBDPNzAJ9P
+         TxkzDB4rciwtDU4q+WjZF/2KbEI/vScIQhTbz7KWw5oVcW1vCF4ORMZ6LQZA1UHiwD23
+         atzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/GI6WmzBD/tXdjRqMOCJ6wEDBpBeiEpQ/v95OUrVAL8=;
-        b=Hjd4Ryi7TEohjER5QChbC8ayQWQq0Xi+gtp9DPIOqMZ6PpgO5Q/v3DV4GUdLyEXxds
-         5SAMV9v0j2aOG8cT4+sbDTfTpqH8PpZvKdG49yJkZRlqy4VRp8D/j26X05VilnpqcdXd
-         tYM88YZDFROneGaSgSpmEvpzIIsDVxCbObkxZpTfeM+RkP0QoKMPZNSKWKJzSYa27MXk
-         0BOEV1gnweUBiiHiskmlOvQNFgF78ikWWkIVUvOwfzNjytnIP3JN8YiunC5Al4kzA7t9
-         8ifOi81a/jgcwZKBYx41vHS9yO3p84HuMSwIJpq0FHSMzpa+Bn42SUN2rHEVkwR9HaOG
-         R/Rg==
-X-Gm-Message-State: AOAM533+/vXEbvxULYzzKKJ3fajU+IyZv4ChiFip3ZxKaQKlIqSQJyA6
-        bjWWTqb6rfEgrsTWwFkvXAdjPQ==
-X-Google-Smtp-Source: ABdhPJwVGA5JxCPrvpb0mkdsBMsuK375rqhOSlXQczWVSfrzvBV+h/UTJTX6pj2n5TmhwEwR5NyToQ==
-X-Received: by 2002:a05:6000:ca:: with SMTP id q10mr59989471wrx.135.1594209748519;
-        Wed, 08 Jul 2020 05:02:28 -0700 (PDT)
+        bh=zj88WzcC8Hp115aJ2vlTY+pxEWRybRaihV1rme1nf/Q=;
+        b=X4y+/6TPiPc4LjKujM0JVucolykGJ+pM7b/IS44T1y1Ce7xWC1dfDvcqkO5Fysgb2f
+         +NGNYAX6HwO+VqBo/JGE1ZRk8bohYDhAPib4u6XYQHwW/RwBQMgqTDXTqMYiWWk8Mq/X
+         eX6eKt3LNEYHOLzKI6daLni8FDOGhThVoIcqQ5i2TyDcPdC7Cu3iVCHlEG07ugsSCTjo
+         GBkJ7GA2Bm3xV9FHbT1QSmGozZ9vfZP6p8bo2VNXtAEslpKa6vNO7Jg8J66jARIMo8Xf
+         /mehlACNcCcxRnsNKYNeCyqsW7IFrO6TTfZbvEpiAj3lTPPrhnQsAbMG6H+2w9akKkuA
+         rnZA==
+X-Gm-Message-State: AOAM531u9Sr+b5QlL8czBf4Wlp01itlz9tW9mIo3fNbaHM+q7dVkzPKx
+        l+KCmpSq6OJLy/q2tCGANCaQCA==
+X-Google-Smtp-Source: ABdhPJzFvogyw5VWz9I19SIiKvctbL6YjQ+TmzjgqYE/dMgQrN6HrKQRPWUWFjUPI3aluSHxpvZBkA==
+X-Received: by 2002:adf:82e1:: with SMTP id 88mr37661923wrc.376.1594209750242;
+        Wed, 08 Jul 2020 05:02:30 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id m62sm3964997wmm.42.2020.07.08.05.02.27
+        by smtp.gmail.com with ESMTPSA id m62sm3964997wmm.42.2020.07.08.05.02.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 05:02:27 -0700 (PDT)
+        Wed, 08 Jul 2020 05:02:29 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Hannes Reinecke <hare@suse.de>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-Subject: [PATCH 03/30] scsi: libfc: fc_disc: trivial: Fix spelling mistake of 'discovery'
-Date:   Wed,  8 Jul 2020 13:01:54 +0100
-Message-Id: <20200708120221.3386672-4-lee.jones@linaro.org>
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 04/30] scsi: fcoe: fcoe: Fix various kernel-doc infringements
+Date:   Wed,  8 Jul 2020 13:01:55 +0100
+Message-Id: <20200708120221.3386672-5-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200708120221.3386672-1-lee.jones@linaro.org>
 References: <20200708120221.3386672-1-lee.jones@linaro.org>
@@ -66,28 +65,74 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is my fault (can't even blame copy/paste).
+A couple of headers make no attempt to document their associated function
+parameters.  Others looks as if they are suffering with a little bitrot.
+
+Fixes the following W=1 kernel build warning(s):
+
+ drivers/scsi/fcoe/fcoe.c:654: warning: Function parameter or member 'lport' not described in 'fcoe_netdev_features_change'
+ drivers/scsi/fcoe/fcoe.c:654: warning: Function parameter or member 'netdev' not described in 'fcoe_netdev_features_change'
+ drivers/scsi/fcoe/fcoe.c:2039: warning: Function parameter or member 'ctlr_dev' not described in 'fcoe_ctlr_mode'
+ drivers/scsi/fcoe/fcoe.c:2039: warning: Excess function parameter 'cdev' description in 'fcoe_ctlr_mode'
+ drivers/scsi/fcoe/fcoe.c:2144: warning: Function parameter or member 'fcoe' not described in 'fcoe_dcb_create'
+ drivers/scsi/fcoe/fcoe.c:2144: warning: Excess function parameter 'netdev' description in 'fcoe_dcb_create'
+ drivers/scsi/fcoe/fcoe.c:2144: warning: Excess function parameter 'port' description in 'fcoe_dcb_create'
+ drivers/scsi/fcoe/fcoe.c:2627: warning: Function parameter or member 'lport' not described in 'fcoe_elsct_send'
+ drivers/scsi/fcoe/fcoe.c:2627: warning: Function parameter or member 'did' not described in 'fcoe_elsct_send'
+ drivers/scsi/fcoe/fcoe.c:2627: warning: Function parameter or member 'fp' not described in 'fcoe_elsct_send'
+ drivers/scsi/fcoe/fcoe.c:2627: warning: Function parameter or member 'op' not described in 'fcoe_elsct_send'
+ drivers/scsi/fcoe/fcoe.c:2627: warning: Function parameter or member 'resp' not described in 'fcoe_elsct_send'
+ drivers/scsi/fcoe/fcoe.c:2627: warning: Function parameter or member 'arg' not described in 'fcoe_elsct_send'
+ drivers/scsi/fcoe/fcoe.c:2627: warning: Function parameter or member 'timeout' not described in 'fcoe_elsct_send'
 
 Cc: Hannes Reinecke <hare@suse.de>
-Reported-by: Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/libfc/fc_disc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/fcoe/fcoe.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/libfc/fc_disc.c b/drivers/scsi/libfc/fc_disc.c
-index 428f40cfd1c36..19721db232839 100644
---- a/drivers/scsi/libfc/fc_disc.c
-+++ b/drivers/scsi/libfc/fc_disc.c
-@@ -370,7 +370,7 @@ static void fc_disc_gpn_ft_req(struct fc_disc *disc)
+diff --git a/drivers/scsi/fcoe/fcoe.c b/drivers/scsi/fcoe/fcoe.c
+index cb41d166e0c0f..0f9274960dc6b 100644
+--- a/drivers/scsi/fcoe/fcoe.c
++++ b/drivers/scsi/fcoe/fcoe.c
+@@ -645,7 +645,7 @@ static int fcoe_lport_config(struct fc_lport *lport)
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * fcoe_netdev_features_change - Updates the lport's offload flags based
+  * on the LLD netdev's FCoE feature flags
+  */
+@@ -2029,7 +2029,7 @@ static int fcoe_ctlr_enabled(struct fcoe_ctlr_device *cdev)
  
  /**
-  * fc_disc_gpn_ft_parse() - Parse the body of the dNS GPN_FT response.
-- * @disc:  The descovery context
-+ * @disc:  The discovery context
-  * @buf:   The GPN_FT response buffer
-  * @len:   The size of response buffer
+  * fcoe_ctlr_mode() - Switch FIP mode
+- * @cdev: The FCoE Controller that is being modified
++ * @ctlr_dev: The FCoE Controller that is being modified
   *
+  * When the FIP mode has been changed we need to update
+  * the multicast addresses to ensure we get the correct
+@@ -2136,9 +2136,7 @@ static bool fcoe_match(struct net_device *netdev)
+ 
+ /**
+  * fcoe_dcb_create() - Initialize DCB attributes and hooks
+- * @netdev: The net_device object of the L2 link that should be queried
+- * @port: The fcoe_port to bind FCoE APP priority with
+- * @
++ * @fcoe:   The new FCoE interface
+  */
+ static void fcoe_dcb_create(struct fcoe_interface *fcoe)
+ {
+@@ -2609,7 +2607,7 @@ static void fcoe_logo_resp(struct fc_seq *seq, struct fc_frame *fp, void *arg)
+ 	fc_lport_logo_resp(seq, fp, lport);
+ }
+ 
+-/**
++/*
+  * fcoe_elsct_send - FCoE specific ELS handler
+  *
+  * This does special case handling of FIP encapsualted ELS exchanges for FCoE,
 -- 
 2.25.1
 
