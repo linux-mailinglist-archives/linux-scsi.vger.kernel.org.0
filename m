@@ -2,95 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E1F218771
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C99218895
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 15:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729266AbgGHMdd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jul 2020 08:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729171AbgGHMdb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:33:31 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C70AC08E81A
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:33:30 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id v8so46683949iox.2
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
-        b=CtDA46Te1kJYGFqAkgr9Vub/YrG6WB2S+VlEURQEEM4x6m9sjli+Jz/yotFRmV/AMR
-         T/h2d+e8At09eChsFX2C+mUFLH+FsdwAy78KAtzHqTPpG69rhvmbmMUpZSALFUdgKxT3
-         rKV4TF8A0J+Za5tWsTPtObTKnCJJSeTUvLM0KCUCLapZUiUA/CE0qJguNsnmAcBYT7Bw
-         PUSSiRKtit7eL05YbTu8d4vZk3Rk52mtpEQs926eluhEg6IUrqIesfOKILheZFFzZp0P
-         0kRnPxRkSyAb2gIupk6cQmoDhkGW5ga2ONIfRh7Ui0T+vXHI9OfE4hLpnUDNkQjQgdsE
-         pxTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
-        b=ZQEgSbyawvnNwAj8yM0SRZnCAMJL+brQ14eqp5+kt3pivfbsI4YpnxN3Zpg+cZpcYA
-         iykj/tGDRFS00kWkvHejb5YYuPWwaGEs17/614kCUwusxJuw8vVxzr+dOxO6k03fWEyT
-         etGjB4BW104GdWWecGiQC4v0sIxdIVrs4We03ziptsUL1CuA9jfuBzLJypwBrSHijZwR
-         VR9WRpV5qKzYE971v+SbzlOi/+S5DuqHS8wWqNZ/BmXns2Xj+nBoooUdfVDRfnDdE3kA
-         eLHuBRQOhwi57NcnTmtb4eyVPXeJkn8OMfZwGkCHAi0+lEL56/26qoEtMLDsIT/U3ynd
-         s4Zg==
-X-Gm-Message-State: AOAM533gTbaQEgF/kXt0M5FK4PNpqT3RbfiSzEARM5SW2t+9Zq/I1PBT
-        /WH0t2FDd1x6l6BUPKGQJhULnffRAGaAtH9nQiA=
-X-Google-Smtp-Source: ABdhPJy69qBRFRW2d2u+0xyGHVfmVbQRW6SQ4gKLQIvGwSNWfhZDhNcIlxNh+7AirNZFy3An0aJSkt25Q8y7juQZu8o=
-X-Received: by 2002:a05:6638:12c7:: with SMTP id v7mr64754290jas.56.1594211609022;
- Wed, 08 Jul 2020 05:33:29 -0700 (PDT)
+        id S1729393AbgGHNMe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jul 2020 09:12:34 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42164 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729299AbgGHNMd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 09:12:33 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 068D24vW039729;
+        Wed, 8 Jul 2020 09:12:26 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 325d2cbtde-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jul 2020 09:12:26 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 068DCOVK022487;
+        Wed, 8 Jul 2020 13:12:24 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 322h1ga8d9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jul 2020 13:12:24 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 068DCLs954001720
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Jul 2020 13:12:21 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3302EAE04D;
+        Wed,  8 Jul 2020 13:12:21 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 26106AE05D;
+        Wed,  8 Jul 2020 13:12:21 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.145.28.177])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  8 Jul 2020 13:12:21 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1jt9s3-000LlJ-U0; Wed, 08 Jul 2020 15:12:19 +0200
+Date:   Wed, 8 Jul 2020 15:12:19 +0200
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Julian Wiedmann <jwi@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Fedor Loshakov <loshakov@linux.ibm.com>,
+        linux-doc@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        George Spelvin <lkml@sdf.org>
+Subject: Re: [PATCH 0/7] zfcp: cleanups and small changes for 5.9
+Message-ID: <20200708131219.GA7244@t480-pf1aa2c2>
+References: <cover.1593780621.git.bblock@linux.ibm.com>
+ <159418828149.5152.2055440250302680177.b4-ty@oracle.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:1582:0:0:0:0 with HTTP; Wed, 8 Jul 2020 05:33:28
- -0700 (PDT)
-Reply-To: mmsafiatou057@gmail.com
-From:   "Mrs. Safitaou Zoungrana" <richardlaurentdr@gmail.com>
-Date:   Wed, 8 Jul 2020 12:33:28 +0000
-Message-ID: <CALJAiTVXhrKZYOHVoupnx6hmXXD0i2k4MOSO6HW+mj1BAydXhA@mail.gmail.com>
-Subject: My Dear Beloved One,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <159418828149.5152.2055440250302680177.b4-ty@oracle.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-08_11:2020-07-08,2020-07-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ suspectscore=0 cotscore=-2147483648 adultscore=0 mlxlogscore=999
+ bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2007080091
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My Dear Beloved One,
+On Wed, Jul 08, 2020 at 02:06:45AM -0400, Martin K. Petersen wrote:
+> On Fri, 3 Jul 2020 15:19:56 +0200, Benjamin Block wrote:
+> 
+> > here are some cleanups and small changes for zfcp I'd like to include in
+> > 5.9 if possible.
+> > 
+> > One of the changes touches documentation in `Documentation/scsi/`, so I
+> > put Jonathan on To, hope that was correct. I hope you can still pull
+> > this all in one go to minimize work. IBM did retire some old URLs and
+> > content from our public website, so we have to clean that up in the
+> > documentation so there are not dead links. I changed these in the hopes
+> > we can minimize documentation churn going forward, just to replace URLs.
+> > 
+> > [...]
+> 
+> Applied to 5.9/scsi-queue, thanks!
+> 
+> [1/7] scsi: zfcp: Use prandom_u32_max() for backoff
+>       https://git.kernel.org/mkp/scsi/c/0cd0e57ec858
+> [2/7] scsi: zfcp: Fix an outdated comment for zfcp_qdio_send()
+>       https://git.kernel.org/mkp/scsi/c/459ad085d87b
+> [3/7] scsi: docs: Update outdated link to IBM developerworks
+>       https://git.kernel.org/mkp/scsi/c/b9789bfbfe9d
+> [4/7] scsi: docs: Remove invalid link and update text for zfcp kernel config
+>       https://git.kernel.org/mkp/scsi/c/c06de6e28c9e
+> [5/7] scsi: zfcp: Clean up zfcp_erp_action_ready()
+>       https://git.kernel.org/mkp/scsi/c/b43cdb5ac856
+> [6/7] scsi: zfcp: Replace open-coded list move
+>       https://git.kernel.org/mkp/scsi/c/6bcb7c171a0c
+> [7/7] scsi: zfcp: Avoid benign overflow of the Request Queue's free-level
+>       https://git.kernel.org/mkp/scsi/c/c3bfffa5ec69
+> 
 
-I greet you in the name of God almighty the givers of all good things
-in life. Please kindly pardon me for any inconvenience this letter may
-cost you because I know it may come to you as a surprise as we have no
-previous correspondence.  I sent this mail praying for it to reach you
-in good health, since I myself are in a very critical health condition
-in which I sleep every night without knowing if I may be alive to see
-the next day.
+Thanks Martin!
 
-I am Mrs. Safiatou Zoungrana,  the wife of late Engineer Ralph
-Alphonso Zoungrana from Paris France but based here in Burkina Faso
-West Africa since eight years ago as a business woman dealing with
-gold exportation and Sales. We have been married for years before his
-sudden death although we were childless. I have been diagnosed with
-ovarian cancer and I have been battling with the sickness when my late
-lovely husband of a blessed memory was alive. May his soul rest in
-peace, Amen.
-
-My late Husband left the sum of =E2=82=AC7.900.000.00 Seven Million Nine
-Hundred Thousand Euros in a fix/suspense account in one of the prime
-bank here in Burkina Faso. Recently, my Doctor told me that I have few
-days to live due to the cancer problem. The one that disturbs me most
-is my blood pressure sickness.
-
-Having known my health condition I decided to seek for your kind
-assistance to transfer this fund into your account and you will use it
-to establish an orphanage home in my name. I will give you more
-details about the project as soon as I receive your reply in my
-private email (mmsafiatou057@gmail.com) to handle this project because
-I do not want to state all here until I see your reply, desire and
-commitment to handle this project.
-
-My Regards to your family.
-Mrs. Safiatou Zoungrana.
+-- 
+Best Regards, Benjamin Block  / Linux on IBM Z Kernel Development / IBM Systems
+IBM Deutschland Research & Development GmbH    /    https://www.ibm.com/privacy
+Vorsitz. AufsR.: Gregor Pillen         /        Geschäftsführung: Dirk Wittkopp
+Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
