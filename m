@@ -2,120 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2DC21872B
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E1F218771
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jul 2020 14:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729103AbgGHMZK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jul 2020 08:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S1729266AbgGHMdd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jul 2020 08:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728640AbgGHMZK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:25:10 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A1CC08E6DC
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:25:09 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id q5so48728452wru.6
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:25:09 -0700 (PDT)
+        with ESMTP id S1729171AbgGHMdb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jul 2020 08:33:31 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C70AC08E81A
+        for <linux-scsi@vger.kernel.org>; Wed,  8 Jul 2020 05:33:30 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id v8so46683949iox.2
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Jul 2020 05:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=y83T4okZmW+ewpDTi2O1QO/huCDpNe78uZke3IM8aJY=;
-        b=BYBdt3k6fueAkq+OQSB3qjNqDf8pdREW9G+LDLWcysNpn6anqqwNqRGENnn0h2yLg+
-         qAYnkh+Xr/+iASVbG/RFNkz1t8yJf8EXIrA267pEUVl5F6rws5CfZH9JkeebuOJjHoBP
-         PKh6r+l7GnCvtRwQs4REx7hphmJpBe/kSMH1QR+oEsvAvZshCyDzh8KJsSNln67awZgZ
-         OdIHF4H/MoeTMHacyw8Hzy1Lg7J0L9oa9DPGm3JumjS+LcdjdiLLeRNNmbzpAmtMi3xR
-         10Vmn9BxvpKqM7F6EjVI4CKIXi+skKjUlsQU4A8P6cAwnoIvB18Ec98x0XzrJ0uDk8BT
-         ha3w==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=CtDA46Te1kJYGFqAkgr9Vub/YrG6WB2S+VlEURQEEM4x6m9sjli+Jz/yotFRmV/AMR
+         T/h2d+e8At09eChsFX2C+mUFLH+FsdwAy78KAtzHqTPpG69rhvmbmMUpZSALFUdgKxT3
+         rKV4TF8A0J+Za5tWsTPtObTKnCJJSeTUvLM0KCUCLapZUiUA/CE0qJguNsnmAcBYT7Bw
+         PUSSiRKtit7eL05YbTu8d4vZk3Rk52mtpEQs926eluhEg6IUrqIesfOKILheZFFzZp0P
+         0kRnPxRkSyAb2gIupk6cQmoDhkGW5ga2ONIfRh7Ui0T+vXHI9OfE4hLpnUDNkQjQgdsE
+         pxTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=y83T4okZmW+ewpDTi2O1QO/huCDpNe78uZke3IM8aJY=;
-        b=pUQ9hNO+vzZ9a3EwbWESSZT41eq31opOHDbskfSQoaiZ7fXcO8cCqqv5CWmFVGglwh
-         rbQ6JPyZ74xxaSAJDpECtsNNcxUEgHdthCGcAt2I+QMJFTzu8ydAWMKobhmPUtK8BULH
-         pg8XyKsSz8kawBGOJ5NaCasDCAGqGoaLS6Yjr2E+1x3beY6H5E/78du2U/I34jGhceI9
-         H4DeIhVLbZlUYsJ1eBTwTAKE4t8fasgEqwplYaAalsEhvmFBBjiX9yHFyN4Ecwdg+3qq
-         N4YpsRZd1Q2AY4eW8zyU0V4Fxysdp3oLrjje+SbWO6GheFgHuldQSL1JWbz1HMPnqGYU
-         qWgg==
-X-Gm-Message-State: AOAM532SgTEeYmmCcK5hmey+0YRdRcPByhwbfiVPE1FyLPR6NNnq6TNT
-        Buml6ZsZTQG5PdBLqWl6TWOk5Of62gQ=
-X-Google-Smtp-Source: ABdhPJzrYRVN7Bt5f2csl02uPGc8Nk19Pk8uC329kzLpjAE1BL4Mvzp8u3qykscb4eK2L/+dHQmT0Q==
-X-Received: by 2002:adf:f546:: with SMTP id j6mr57660492wrp.167.1594211108378;
-        Wed, 08 Jul 2020 05:25:08 -0700 (PDT)
-Received: from dell ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id i67sm6052800wma.12.2020.07.08.05.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 05:25:07 -0700 (PDT)
-Date:   Wed, 8 Jul 2020 13:25:06 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-Cc:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH 13/30] scsi: libfc: fc_rport: Fix bitrotted function
- parameter and copy/paste error
-Message-ID: <20200708122506.GV3500@dell>
-References: <20200708120221.3386672-1-lee.jones@linaro.org>
- <20200708120221.3386672-14-lee.jones@linaro.org>
- <SN4PR0401MB3598A5AF95715606071A64939B670@SN4PR0401MB3598.namprd04.prod.outlook.com>
- <20200708122416.GU3500@dell>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=ZQEgSbyawvnNwAj8yM0SRZnCAMJL+brQ14eqp5+kt3pivfbsI4YpnxN3Zpg+cZpcYA
+         iykj/tGDRFS00kWkvHejb5YYuPWwaGEs17/614kCUwusxJuw8vVxzr+dOxO6k03fWEyT
+         etGjB4BW104GdWWecGiQC4v0sIxdIVrs4We03ziptsUL1CuA9jfuBzLJypwBrSHijZwR
+         VR9WRpV5qKzYE971v+SbzlOi/+S5DuqHS8wWqNZ/BmXns2Xj+nBoooUdfVDRfnDdE3kA
+         eLHuBRQOhwi57NcnTmtb4eyVPXeJkn8OMfZwGkCHAi0+lEL56/26qoEtMLDsIT/U3ynd
+         s4Zg==
+X-Gm-Message-State: AOAM533gTbaQEgF/kXt0M5FK4PNpqT3RbfiSzEARM5SW2t+9Zq/I1PBT
+        /WH0t2FDd1x6l6BUPKGQJhULnffRAGaAtH9nQiA=
+X-Google-Smtp-Source: ABdhPJy69qBRFRW2d2u+0xyGHVfmVbQRW6SQ4gKLQIvGwSNWfhZDhNcIlxNh+7AirNZFy3An0aJSkt25Q8y7juQZu8o=
+X-Received: by 2002:a05:6638:12c7:: with SMTP id v7mr64754290jas.56.1594211609022;
+ Wed, 08 Jul 2020 05:33:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200708122416.GU3500@dell>
+Received: by 2002:a05:6602:1582:0:0:0:0 with HTTP; Wed, 8 Jul 2020 05:33:28
+ -0700 (PDT)
+Reply-To: mmsafiatou057@gmail.com
+From:   "Mrs. Safitaou Zoungrana" <richardlaurentdr@gmail.com>
+Date:   Wed, 8 Jul 2020 12:33:28 +0000
+Message-ID: <CALJAiTVXhrKZYOHVoupnx6hmXXD0i2k4MOSO6HW+mj1BAydXhA@mail.gmail.com>
+Subject: My Dear Beloved One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 08 Jul 2020, Lee Jones wrote:
+My Dear Beloved One,
 
-> On Wed, 08 Jul 2020, Johannes Thumshirn wrote:
-> 
-> > On 08/07/2020 14:04, Lee Jones wrote:
-> > > Description should state 'remote' port, not 'local'.
-> > > 
-> > > Fixes the following W=1 kernel build warning(s):
-> > > 
-> > >  drivers/scsi/libfc/fc_rport.c:1452: warning: Function parameter or member 'rdata_arg' not described in 'fc_rport_logo_resp'
-> > >  drivers/scsi/libfc/fc_rport.c:1452: warning: Excess function parameter 'rport_arg' description in 'fc_rport_logo_resp'
-> > > 
-> > > Cc: Hannes Reinecke <hare@suse.de>
-> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > ---
-> > >  drivers/scsi/libfc/fc_rport.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/scsi/libfc/fc_rport.c b/drivers/scsi/libfc/fc_rport.c
-> > > index ea99e69d4d89c..18663a82865f9 100644
-> > > --- a/drivers/scsi/libfc/fc_rport.c
-> > > +++ b/drivers/scsi/libfc/fc_rport.c
-> > > @@ -1445,7 +1445,7 @@ static void fc_rport_recv_rtv_req(struct fc_rport_priv *rdata,
-> > >   * fc_rport_logo_resp() - Handler for logout (LOGO) responses
-> > >   * @sp:	       The sequence the LOGO was on
-> > >   * @fp:	       The LOGO response frame
-> > > - * @rport_arg: The local port
-> > > + * @rdata_arg: The remote port
-> > >   */
-> > >  static void fc_rport_logo_resp(struct fc_seq *sp, struct fc_frame *fp,
-> > >  			       void *rdata_arg)
-> > > 
-> > 
-> > 
-> > Please fold this into patch 11
-> 
-> Yes, will do.
+I greet you in the name of God almighty the givers of all good things
+in life. Please kindly pardon me for any inconvenience this letter may
+cost you because I know it may come to you as a surprise as we have no
+previous correspondence.  I sent this mail praying for it to reach you
+in good health, since I myself are in a very critical health condition
+in which I sleep every night without knowing if I may be alive to see
+the next day.
 
-Actually, Martin, is this something you can do when applying, or would
-you like me to do it and submit the entire set again?
+I am Mrs. Safiatou Zoungrana,  the wife of late Engineer Ralph
+Alphonso Zoungrana from Paris France but based here in Burkina Faso
+West Africa since eight years ago as a business woman dealing with
+gold exportation and Sales. We have been married for years before his
+sudden death although we were childless. I have been diagnosed with
+ovarian cancer and I have been battling with the sickness when my late
+lovely husband of a blessed memory was alive. May his soul rest in
+peace, Amen.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+My late Husband left the sum of =E2=82=AC7.900.000.00 Seven Million Nine
+Hundred Thousand Euros in a fix/suspense account in one of the prime
+bank here in Burkina Faso. Recently, my Doctor told me that I have few
+days to live due to the cancer problem. The one that disturbs me most
+is my blood pressure sickness.
+
+Having known my health condition I decided to seek for your kind
+assistance to transfer this fund into your account and you will use it
+to establish an orphanage home in my name. I will give you more
+details about the project as soon as I receive your reply in my
+private email (mmsafiatou057@gmail.com) to handle this project because
+I do not want to state all here until I see your reply, desire and
+commitment to handle this project.
+
+My Regards to your family.
+Mrs. Safiatou Zoungrana.
