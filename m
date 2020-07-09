@@ -2,69 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A77C21A3A6
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jul 2020 17:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E302F21A3E6
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jul 2020 17:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgGIP0d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Jul 2020 11:26:33 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:26007 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726410AbgGIP0c (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Jul 2020 11:26:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594308391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yld9cODJlBHmX+0+k8U+y9B+t1vzYK9Zv/haolnPDn0=;
-        b=KFOX3IMIFVymJ+c8cpvsN2z/cP1xgNw598KAXVqCJKa5mwU3a1ci5gkhGfVXY257C9bkTC
-        YczYF6mtbFMfQ1IguMoR3LEY4nzpSLSjB7n0o/GhT9j0N2oO1ZZbYF19soQsElPTOowitk
-        P1VZkKnLbr7Olq6MJCb8aSFgYirPZ08=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-444-c9i1Z7U3MiKWRS5W4TwkEw-1; Thu, 09 Jul 2020 11:26:29 -0400
-X-MC-Unique: c9i1Z7U3MiKWRS5W4TwkEw-1
-Received: by mail-wm1-f69.google.com with SMTP id v11so2498361wmb.1
-        for <linux-scsi@vger.kernel.org>; Thu, 09 Jul 2020 08:26:29 -0700 (PDT)
+        id S1727925AbgGIPjV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Jul 2020 11:39:21 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:52788 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726339AbgGIPjU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Jul 2020 11:39:20 -0400
+Received: by mail-pj1-f67.google.com with SMTP id gc9so1288527pjb.2
+        for <linux-scsi@vger.kernel.org>; Thu, 09 Jul 2020 08:39:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Yld9cODJlBHmX+0+k8U+y9B+t1vzYK9Zv/haolnPDn0=;
-        b=Wjgz7IJRb422G56iTFzaePOKLyOgx7VaiLni/suH5k7Y6ZDVsuO7ztfGvanaPnAaCg
-         Yw7hfdMla12ouCk7MacwyMdeNQ1fp1tOPDKWfHO52+JKaEw2OoghBxw9iGYKmWkcustY
-         Wi4f8QNSHJuqetihYgWStVkyvHKlN+UiYRzL2L101bCw92ORo102aD7LhrAkZIqepbdg
-         0RBsuUepf1ZFt4l9199dB4GLlTzd5QQKzUlERF4jFRFcG4FkGfUZnKdU4TabcZJGn3w+
-         HreG1vOAhkX/ewt59eOKY5Mts4uwxagqvhTwz1JyeZqKczi/3NRcmz4SMJ47blnEYk72
-         y4zg==
-X-Gm-Message-State: AOAM5316HVFxH0lA0xNA/+CNko61IDqbf8CM9LANk121/SfZCRUKE1Rc
-        n1QndwP7RhGGGLUPfU/91m9ipM6p/FNNZf8g7f/hy80FYWBjGoU8+OHj4I+lHP9GYkua4WojYsK
-        M/nbs7t/shs0m6nTRJnRRmg==
-X-Received: by 2002:a1c:7313:: with SMTP id d19mr500864wmb.147.1594308388637;
-        Thu, 09 Jul 2020 08:26:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7dLDkZ4/BZL2j48IHZwmCZYpcCKvTnAn2jv2FLYWLH187tJjjXAZRllb881rA5jAJPriTPw==
-X-Received: by 2002:a1c:7313:: with SMTP id d19mr500850wmb.147.1594308388450;
-        Thu, 09 Jul 2020 08:26:28 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:9541:9439:cb0f:89c? ([2001:b07:6468:f312:9541:9439:cb0f:89c])
-        by smtp.gmail.com with ESMTPSA id g14sm6012304wrm.93.2020.07.09.08.26.27
+        bh=c+y8KrA+UCP3CShmyqGCas45iG0VsY2dy2U+ElijnIw=;
+        b=huCu6KD6yWO3uaPzVD5PP2dnyuTsTU8ZZaVGmR58vnHDyM/SOWfEQCy6nhZNf0GEcv
+         gIN+GRBabkbkLf8TWrKSYaQSKVYKy7vmF07LZ4Kh17sl0k/PiRj0bNLaEbyI/F04h/au
+         i1Vwakc+riJO0JE1SLqVZnWJ3vs6nqYvpg4POqfmsQNJtHEUbl4R0AnfzxmjlYxi0bJf
+         JRVNiR1lj0/p7wwlXqKLYYsvVU5OSvWSGKZuQAW6nky2/I2kiP34ixBKa3Q5WBXcaB2x
+         BbrVPM9d12ow16w6MgmxTvSkq59k5Plr9/Bk3bozWNFpdZ8eUTwW4fIcZMpkO+tAv8U3
+         cgQg==
+X-Gm-Message-State: AOAM530bNjmceMfc+sdzSI+LBwuOojHtslnX6WKKDV5ICCHzGKhBxbUb
+        TshdIJ8qEOaKtw3DKoKSBBaD4/fR
+X-Google-Smtp-Source: ABdhPJy4GsuRWkKIIhL11excVp4RWJEYAzRLqSd89kF8SlKsk97qWV5+jQoat4BwiH8GN77vqZyqGQ==
+X-Received: by 2002:a17:90a:3684:: with SMTP id t4mr607490pjb.91.1594309159767;
+        Thu, 09 Jul 2020 08:39:19 -0700 (PDT)
+Received: from [192.168.50.147] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id nl8sm3303527pjb.13.2020.07.09.08.39.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jul 2020 08:26:27 -0700 (PDT)
-Subject: Re: [PATCH] scsi: virtio_scsi: remove unnecessary condition check
-To:     Xianting Tian <xianting_tian@126.com>, mst@redhat.com,
-        jasowang@redhat.com, stefanha@redhat.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1594305992-8458-1-git-send-email-xianting_tian@126.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <6e8405da-b960-f4f7-b46b-442ddab8d983@redhat.com>
-Date:   Thu, 9 Jul 2020 17:26:27 +0200
+        Thu, 09 Jul 2020 08:39:18 -0700 (PDT)
+Subject: Re: [RFC PATCH v1] sd: drain a request queue during sd_shutdown()
+To:     Lee Sang Hyun <sh425.lee@samsung.com>, linux-scsi@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org,
+        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        kwmad.kim@samsung.com
+References: <CGME20200709063102epcas2p1e2a624bd881d02b6d3f137f9955eb4b8@epcas2p1.samsung.com>
+ <1594275791-20662-1-git-send-email-sh425.lee@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <1d902c93-1b4a-0f64-ca96-1989327621ec@acm.org>
+Date:   Thu, 9 Jul 2020 08:39:17 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <1594305992-8458-1-git-send-email-xianting_tian@126.com>
+In-Reply-To: <1594275791-20662-1-git-send-email-sh425.lee@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -73,35 +81,51 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 09/07/20 16:46, Xianting Tian wrote:
-> kmem_cache_destroy can correctly handle null pointer parameter,
-> so there is no need to check if the parameter is null before
-> calling kmem_cache_destroy.
+On 2020-07-08 23:23, Lee Sang Hyun wrote:
+> Need to set a request queue like below in sd_shutdown()
+> to prevent pending IOs before UFS shutdown.
 > 
-> Signed-off-by: Xianting Tian <xianting_tian@126.com>
+> Change-Id: I2818cf95944d85baa50b626fcf538f19d06d6d54
+> Signed-off-by: Lee Sang Hyun <sh425.lee@samsung.com>
 > ---
->  drivers/scsi/virtio_scsi.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  drivers/scsi/sd.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-> index bfec84a..5bc288f 100644
-> --- a/drivers/scsi/virtio_scsi.c
-> +++ b/drivers/scsi/virtio_scsi.c
-> @@ -1007,10 +1007,8 @@ static int __init init(void)
->  		mempool_destroy(virtscsi_cmd_pool);
->  		virtscsi_cmd_pool = NULL;
->  	}
-> -	if (virtscsi_cmd_cache) {
-> -		kmem_cache_destroy(virtscsi_cmd_cache);
-> -		virtscsi_cmd_cache = NULL;
-> -	}
-> +	kmem_cache_destroy(virtscsi_cmd_cache);
-> +	virtscsi_cmd_cache = NULL;
->  	return ret;
->  }
+> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+> index d90feff..7418d27 100644
+> --- a/drivers/scsi/sd.c
+> +++ b/drivers/scsi/sd.c
+> @@ -3564,6 +3564,8 @@ static int sd_start_stop_device(struct scsi_disk *sdkp, int start)
+>  static void sd_shutdown(struct device *dev)
+>  {
+>  	struct scsi_disk *sdkp = dev_get_drvdata(dev);
+> +	struct request_queue *q = sdp->request_queue;
+> +	unsigned long flags;
 >  
-> 
+>  	if (!sdkp)
+>  		return;         /* this can happen */
+> @@ -3580,6 +3582,12 @@ static void sd_shutdown(struct device *dev)
+>  		sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
+>  		sd_start_stop_device(sdkp, 0);
+>  	}
+> +
+> +	spin_lock_irqsave(q->queue_lock, flags);
+> +	queue_flag_set(QUEUE_FLAG_DYING, q);
+> +	__blk_drain_queue(q, true);
+> +	queue_flag_set(QUEUE_FLAG_DEAD, q);
+> +	spin_unlock_irqrestore(q->queue_lock, flags);
+>  }
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+This patch is unacceptable because:
+(a) It introduces a layering violation. The code added in sd_shutdown()
+    belongs in the block layer instead of the sd driver.
+(b) A description of which problem has been observed and why the sd
+    driver is being modified is missing.
+(c) An explanation is missing why the blk_cleanup_queue() call in
+    __scsi_remove_device() is not sufficient. As you may know
+    blk_cleanup_queue() already drains the request queue.
+(d) The above patch breaks the kernel build. __blk_drain_queue() was
+    removed from the kernel almost two years ago. See also commit
+    a1ce35fa4985 ("block: remove dead elevator code") # v5.0.
 
+Bart.
