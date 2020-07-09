@@ -2,59 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1668521A61B
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jul 2020 19:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05B821A624
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jul 2020 19:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728667AbgGIRq0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Jul 2020 13:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
+        id S1728709AbgGIRqj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Jul 2020 13:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728658AbgGIRqY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Jul 2020 13:46:24 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782C4C08C5CE
-        for <linux-scsi@vger.kernel.org>; Thu,  9 Jul 2020 10:46:24 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j4so3275405wrp.10
-        for <linux-scsi@vger.kernel.org>; Thu, 09 Jul 2020 10:46:24 -0700 (PDT)
+        with ESMTP id S1728663AbgGIRqZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Jul 2020 13:46:25 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5967DC08E6DC
+        for <linux-scsi@vger.kernel.org>; Thu,  9 Jul 2020 10:46:25 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l2so2758710wmf.0
+        for <linux-scsi@vger.kernel.org>; Thu, 09 Jul 2020 10:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LaCRoLNPh8rfOtJymwBCMA+9wwfzZ0YZT8hDB5cEPf8=;
-        b=MHzyKOxtOXPmABYls8bZGdJ0/FFwgWKEjJZ2uNXDNi+1EhQXcbBGozwD1qdFSzqyHI
-         lHQK2aOSSA5ysnbzPIGEPrfDdt2pLdpRiRPeXLudDa0ShJrmZ45aQ3Tn76aMKUtFPVVS
-         7OPeyC+yoTPgPCvRt+9+oD1lWbV9xf2zuZT5Hj3VeCX/7G+N3iY23K+0kej9+5k4s2EW
-         8qKVvOJ5yKAN1RB6D0wFoTHoIkEY14bC/uhokXf4t6GTkml0v6QzRDpvIGSOfWscP03H
-         7rv0njww555uSJdnwzLb3XdBGLYsDN90x9vcFunzyMgSnCEAyTAB/uO88v/jgpb9qVc7
-         9j2g==
+        bh=npmbMmGwXmpaLu61Oedwmcs3qT0N7Ml8rtlLxMj9sy4=;
+        b=F/1o22f0o/hLVmprlDU9Qr//sGwjrN5uBf5VsCAcjtijVd/dT2CI6MVzsvcskMRGpZ
+         +7cVcba0uHIIcgEY9PEBnLie35L9sAdxl1kb5OP4V/14j6/iSyuyPkpHNPh6umlOFV5P
+         JAcC8hsTvn+aAiUw9vEP7h1rTfAOwi1xSxFifbmG7f+W9zEmx/J1szmQPv5cF9isaQz2
+         11rRmpTP/QRS6mWFSA1OvmVkmlXzipShH9+vRqUKXADfPgY9EtY61uynWcnPhndfAzSS
+         jEiICGMcO0EtQPWeUAviR025+ZT/97yCIFkrUBkeDpLOoWW52ZX0T/yiI18fZit3cQkl
+         dbqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LaCRoLNPh8rfOtJymwBCMA+9wwfzZ0YZT8hDB5cEPf8=;
-        b=C3kSIPuhFvWtaLT1eNRv9IWwYZ1mIuZcVqqnpIY+eRYLPsbvVHJ0eX+VSDqv44FgXV
-         jZMGuU98o18Pctnu+sE4LVs/MXK7llrjvWLpPsk0KoHrV8TC2duNk59+W597Q/2onUDg
-         A1TvXVQtZMe4GT7wt9FzZEYMiSBS5xzDKV91x5gpZNVnDCe1AnomGCmbm3y7sP8N58l/
-         zFjVxWW+q7p7mOMxtQvWlDCGPRxw7Kz7Dy/No2atKbt4p5poL8UApTw1MFOs1/R/VB/3
-         XqNw5z3sHY8tnLQbu1R6dHanHEuebW0EfzwIjGTc8FKDMh1DvnXL1xTSJSR6bDHMJar3
-         4Hrw==
-X-Gm-Message-State: AOAM533lXt1a2R8GUL9vy1DXfpnGySyDmk72f2ieV1NGLeVwViChFjcO
-        qvjg5EqWLnW5/chLCCZhLWQyfbectFQ=
-X-Google-Smtp-Source: ABdhPJy6LrvDQt95ybGxKacGSLi0IIOHk0vIsv/MO6uk/lJXy+lh7TszUuzy+QhVyyiBwD7oAgk4IQ==
-X-Received: by 2002:a05:6000:6:: with SMTP id h6mr63120313wrx.26.1594316783189;
-        Thu, 09 Jul 2020 10:46:23 -0700 (PDT)
+        bh=npmbMmGwXmpaLu61Oedwmcs3qT0N7Ml8rtlLxMj9sy4=;
+        b=IWMNL2hElfLeiXsuOb84ANA88M63Ct7gvMJ+ZxYdGS1ubWMWTMeAlf2dMYJnPwwIzW
+         jy3SbLNJBAdvfB7PU7Rs2QpD8fBtiNxrJVsrKDySfU1gkl+eHDmBpTcjq/fCKPGVDAtM
+         XGx5Ubiiyo6JxPnXwm66SEeiQI9v71fjpI05vQe/sg9N7jyG4EIfeec2mzsjhgN6Bw2z
+         rSDROlTWJu4GNjHZJE0DrnYqrjCKKC61CG68J1DpXfzQ8XO3FtqANM3Qsj4tIBX3VcD3
+         nIDa83J+VaSCTJ/hhfgd/bngmON846Mv28dKltQcdcmBGWwJHmNyVtSWAYEOHDJRjRWF
+         sRaA==
+X-Gm-Message-State: AOAM530xXkyytSvQj0vy3IkmnWzzVle2Grf7jtoNfZBlc4SIxgN5Qw+Z
+        //oYmhTz+EU9hZ8liEJhsTb6Tg==
+X-Google-Smtp-Source: ABdhPJyK0cTHJi/HHlU/eCy0bAteTij1tSUpRhma9IuaO7nlZzYQAcrF4E3VmyYJ9+nrGYNfRBh1Fg==
+X-Received: by 2002:a7b:ce87:: with SMTP id q7mr1170635wmj.39.1594316784135;
+        Thu, 09 Jul 2020 10:46:24 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id f15sm6063854wrx.91.2020.07.09.10.46.22
+        by smtp.gmail.com with ESMTPSA id f15sm6063854wrx.91.2020.07.09.10.46.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 10:46:22 -0700 (PDT)
+        Thu, 09 Jul 2020 10:46:23 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 21/24] scsi: aic7xxx: aic79xx_osm: Remove unused variable 'ahd'
-Date:   Thu,  9 Jul 2020 18:45:53 +0100
-Message-Id: <20200709174556.7651-22-lee.jones@linaro.org>
+Subject: [PATCH 22/24] scsi: aic7xxx: aic79xx_osm: Remove unused variables 'wait' and 'paused'
+Date:   Thu,  9 Jul 2020 18:45:54 +0100
+Message-Id: <20200709174556.7651-23-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200709174556.7651-1-lee.jones@linaro.org>
 References: <20200709174556.7651-1-lee.jones@linaro.org>
@@ -66,33 +66,42 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hasn't been used since 2005.
+It looks like they have never actually been used.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/aic7xxx/aic79xx_osm.c: In function ‘ahd_linux_slave_configure’:
- drivers/scsi/aic7xxx/aic79xx_osm.c:703:20: warning: variable ‘ahd’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/aic7xxx/aic79xx_osm.c: In function ‘ahd_linux_dev_reset’:
+ drivers/scsi/aic7xxx/aic79xx_osm.c:782:9: warning: variable ‘wait’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/aic7xxx/aic79xx_osm.c:781:9: warning: variable ‘paused’ set but not used [-Wunused-but-set-variable]
 
 Cc: Hannes Reinecke <hare@suse.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/aic7xxx/aic79xx_osm.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/scsi/aic7xxx/aic79xx_osm.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
-index dc4fe334efd01..9235b6283c0b3 100644
+index 9235b6283c0b3..8e43ff86e0a60 100644
 --- a/drivers/scsi/aic7xxx/aic79xx_osm.c
 +++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
-@@ -700,9 +700,6 @@ ahd_linux_slave_alloc(struct scsi_device *sdev)
- static int
- ahd_linux_slave_configure(struct scsi_device *sdev)
- {
--	struct	ahd_softc *ahd;
--
--	ahd = *((struct ahd_softc **)sdev->host->hostdata);
- 	if (bootverbose)
- 		sdev_printk(KERN_INFO, sdev, "Slave Configure\n");
+@@ -775,16 +775,13 @@ ahd_linux_dev_reset(struct scsi_cmnd *cmd)
+ 	struct scb *reset_scb;
+ 	u_int  cdb_byte;
+ 	int    retval = SUCCESS;
+-	int    paused;
+-	int    wait;
+ 	struct	ahd_initiator_tinfo *tinfo;
+ 	struct	ahd_tmode_tstate *tstate;
+ 	unsigned long flags;
+ 	DECLARE_COMPLETION_ONSTACK(done);
  
+ 	reset_scb = NULL;
+-	paused = FALSE;
+-	wait = FALSE;
++
+ 	ahd = *(struct ahd_softc **)cmd->device->host->hostdata;
+ 
+ 	scmd_printk(KERN_INFO, cmd,
 -- 
 2.25.1
 
