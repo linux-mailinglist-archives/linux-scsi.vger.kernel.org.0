@@ -2,489 +2,159 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA0E21B007
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2020 09:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72E821B053
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2020 09:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727820AbgGJHVz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jul 2020 03:21:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57894 "EHLO mail.kernel.org"
+        id S1726965AbgGJHkd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Jul 2020 03:40:33 -0400
+Received: from mout.web.de ([217.72.192.78]:51103 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727814AbgGJHVv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 10 Jul 2020 03:21:51 -0400
-Received: from sol.hsd1.ca.comcast.net (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E37C3207FC;
-        Fri, 10 Jul 2020 07:21:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594365710;
-        bh=JhBqNACWDKk/VbsPHF9ygT/QNTlKTXuXYzO/UkL9Bv4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B51VLTOvKnFl8CHdsN+xM+jw/4No2DujL/UdE+uXPGfkzFwmutei82HfMXBs/K0ut
-         sFkJTAEU0TVPOdQ5D3I/qULRWVaQOXJKSX3F1i11MoQU8oAh/BIR/TSmYys3VTPYM3
-         6IUdvx9cktofsoUf75n+WWoKFAuEcA1aQvpETvO8=
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-scsi@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Can Guo <cang@codeaurora.org>,
-        Elliot Berman <eberman@codeaurora.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Satya Tangirala <satyat@google.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Subject: [PATCH v6 5/5] scsi: ufs-qcom: add Inline Crypto Engine support
-Date:   Fri, 10 Jul 2020 00:20:12 -0700
-Message-Id: <20200710072013.177481-6-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200710072013.177481-1-ebiggers@kernel.org>
-References: <20200710072013.177481-1-ebiggers@kernel.org>
+        id S1726921AbgGJHkc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 10 Jul 2020 03:40:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1594366814;
+        bh=YOGMwdQg22m0AVjzIfGqr6DmFrX7EG+OknGlPZqcceA=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=T36YuZLuf7CaI3XX/chbrl1dDhwuYbGlhVrEQRZSGCGpZcNKNvxXAmttML3+D8xSV
+         pmbRR9hhubaddvvbE5ctktJvxD9WP66dU/emrU5gc/aTI6JSqsJwwtyxoFGRJGSHLd
+         jQUaiYR/zcCfyKYVCVf6vDX/YZNvlFH3Cv4pbUBY=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([93.135.129.239]) by smtp.web.de (mrweb102
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MfHfy-1kEBlc0vQg-00OlG9; Fri, 10
+ Jul 2020 09:40:14 +0200
+Subject: Re: [PATCH] scsi: virtio_scsi: Remove unnecessary condition checks
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Xianting Tian <xianting_tian@126.com>,
+        linux-scsi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E. J. Bottomley" <jejb@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+References: <a197f532-7020-0d8e-21bf-42bb66e8daec@web.de>
+ <e87746e6-813e-7c0e-e21e-5921e759da5d@redhat.com>
+ <8eb9a827-45f1-e71c-0cbf-1c29acd8e310@web.de>
+ <58e3feb8-1ffb-f77f-cf3a-75222b3cd524@redhat.com>
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <9815ef2d-d0da-d197-49d7-83559d750ff1@web.de>
+Date:   Fri, 10 Jul 2020 09:40:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <58e3feb8-1ffb-f77f-cf3a-75222b3cd524@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:H8jRkEuxmFhJoweumit1bJASWj0xwrFWXFh6DmSCubIoPH3av1E
+ pozjVfA/mj6yEs7sAOso53Mi+xc1WIVDXq/OwZaxP1J/gFj+iNilf8CCoIVPlMLSnhSpquz
+ v9/phQHhsrkGqiJTO1Xp7xFZywV34zlfPW7JHXZU6BdLYo3u/G5y8Rk3C32eONZ5AzW5Yg5
+ JLFkNEPFzpYfYp0vtiEtA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bQb8xpUkZxA=:iEu722ESegI1ZL7n+l7u4Z
+ tY5RxAI3bSO6R1rSM7etQpgB50IS69C8u8YJqAhov80LAw2VlXYtZA7tzTtNp1zVplMeG8elo
+ 4Np1DaPa3TVtkk3GNLjhxTSylUxCZDTVJQK8bMFVroEg3WRp8GbnW1QJCDG5+x8UnpRKT4v8S
+ z+s5aUMU8Dp+vtdrsTbWWCGssoYm7TBaaCsprotpvf2ae4M3YeWiasQ3lfsBwaBJlSKru9STC
+ Zj7xXQOWyIKvtCIIWK6eEN6QAKkafnWA3iVTx4TAxq9bIkfyaslOxCpyGXVlbiSesVhb6Ru9+
+ GjxyXaea8FCp6Y5jOkUGJX836vJdV+W7uZ/qdtBCL42f0rGQvnSKSaX6ui4k3Yq2izkvASMgo
+ Rp6h//A/13tJQSAhWcD/Z2zwqQtOf1YF+42I6LXYnQdVF/Wf74rxr5/SOpsIUvMK1XUqy20gF
+ MOvVC610ewNh4bxJ8Vd3Qt9tghtFcpvobyUtzw3z19+bv2JPmL5EaNSyoPZJsAULw1uPAhhAJ
+ Ezwc7mHS4NYEjG9E+1Tl2x7XJjcbIKjqytZex0kyc/3GzaVvRWrRnxfDaLK7q5e6PNDLWS2B2
+ qhG/ln9UhQHr3VWsQ0i1VPnd2v3f+klWl9WnyrTRgmjt3r/4wsQBSK8BXuLP+4tFfHxNRVqF/
+ 5B5vuZO88QAgy3/0oXX2d6CYaHLquJEVEO1fu/d4/Y1ZvapNG6EMEZpy5DQiS7rSvu8ieMhaM
+ cBIXlxddhVQ9ytZrpL+FAozNGskEJODPsGaBuCfJxz3oNDGJlLxM5Mi4sQSAFnBh52BuMef65
+ q5dL4A2gcLOG+Sy6817V3+GeTCoWtIL1353vXOMr+PMQ44vL4+MSaN5WrQGnzjlABZ2of9U+o
+ NbuWdaRc2O4prA9A+MQLTLguiGR/Scd3Mkzl1a4tRhSdI71EAT45JgNBBZ2GeyBt1EdWTAGkF
+ BXlMxf+MFhkkWs/SiEl3SH00fw73+LWYI2VTYOmtUHkPTTybziWjlCf1/O/uJLLc2Grsp+RvC
+ Dp7etfe6FPSwXVQdL9/WJ/PviGncxYGdKTrguKgjTw/NEes2S1V6pAnbaOOrhL2nLZTJhumi1
+ EX3cIGw8boKDI3BMBieBxyE9A4ay6PiYvq/IWCc8/j7l4j7ZyyQJ/RFF5CSkY9hGakzK6jk6u
+ oJhGfQU9mQbeO7E6/lj9U4FUNUGRpiDgi7eRCGKvuEueUu3fuAbLhJ4EfOKU3/mHhOEVRV1g8
+ whudaqSqP6EMMraijpg1fUawRaPiB+BxaI1oO/w==
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/scsi/virtio_scsi.c?id=3D42f82040ee66db13525dc6f14b8559890b2f4c1c#=
+n980
+>>
+>>  	if (!virtscsi_cmd_cache) {
+>>  		pr_err("kmem_cache_create() for virtscsi_cmd_cache failed\n");
+>> -		goto error;
+>> +		return -ENOMEM;
+>>  	}
+>
+> Could be doable, but I don't see a particular benefit.
 
-Add support for Qualcomm Inline Crypto Engine (ICE) to ufs-qcom.
+Can a bit more =E2=80=9Ccompliance=E2=80=9D (with the Linux coding style) =
+matter here?
 
-The standards-compliant parts, such as querying the crypto capabilities
-and enabling crypto for individual UFS requests, are already handled by
-ufshcd-crypto.c, which itself is wired into the blk-crypto framework.
-However, ICE requires vendor-specific init, enable, and resume logic,
-and it requires that keys be programmed and evicted by vendor-specific
-SMC calls.  Make the ufs-qcom driver handle these details.
 
-I tested this on Dragonboard 845c, which is a publicly available
-development board that uses the Snapdragon 845 SoC and runs the upstream
-Linux kernel.  This is the same SoC used in the Pixel 3 and Pixel 3 XL
-phones.  This testing included (among other things) verifying that the
-expected ciphertext was produced, both manually using ext4 encryption
-and automatically using a block layer self-test I've written.
+> Having a single error loop is an advantage by itself.
 
-I've also tested that this driver works nearly as-is on the Snapdragon
-765 and Snapdragon 865 SoCs.  And others have tested it on Snapdragon
-850, Snapdragon 855, and Snapdragon 865 (see the Tested-by tags).
+I do not see that a loop is involved in the implementation of the function=
+ =E2=80=9Cinit=E2=80=9D.
 
-This is based very loosely on the vendor-provided driver in the kernel
-source code for the Pixel 3, but I've greatly simplified it.  Also, for
-now I've only included support for major version 3 of ICE, since that's
-all I have the hardware to test with the mainline kernel.  Plus it
-appears that version 3 is easier to use than older versions of ICE.
 
-For now, only allow using AES-256-XTS.  The hardware also declares
-support for AES-128-XTS, AES-{128,256}-ECB, and AES-{128,256}-CBC
-(BitLocker variant).  But none of these others are really useful, and
-they'd need to be individually tested to be sure they worked properly.
+>> destroy_pool:
+>> 	mempool_destroy(virtscsi_cmd_pool);
+>> 	virtscsi_cmd_pool =3D NULL;
+>> destroy_cache:
+>> 	kmem_cache_destroy(virtscsi_cmd_cache);
+>> 	virtscsi_cmd_cache =3D NULL;
+>> 	return ret;
+>
+> ... while there's no advantage in this.
 
-This commit also changes the name of the loadable module from "ufs-qcom"
-to "ufs_qcom", as this is necessary to compile it from multiple source
-files (unless we were to rename ufs-qcom.c).
+I propose again to improve the affected exception handling another bit
+by using appropriate labels.
+Will further software improvements be achieved by a corresponding patch se=
+ries?
 
-Tested-by: Steev Klimaszewski <steev@kali.org> # Lenovo Yoga C630
-Tested-by: Thara Gopinath <thara.gopinath@linaro.org> # db845c, sm8150-mtp, sm8250-mtp
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- MAINTAINERS                     |   2 +-
- drivers/scsi/ufs/Kconfig        |   1 +
- drivers/scsi/ufs/Makefile       |   4 +-
- drivers/scsi/ufs/ufs-qcom-ice.c | 245 ++++++++++++++++++++++++++++++++
- drivers/scsi/ufs/ufs-qcom.c     |  12 +-
- drivers/scsi/ufs/ufs-qcom.h     |  27 ++++
- 6 files changed, 288 insertions(+), 3 deletions(-)
- create mode 100644 drivers/scsi/ufs/ufs-qcom-ice.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 68f21d46614c..aa9c924facc6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2271,7 +2271,7 @@ F:	drivers/pci/controller/dwc/pcie-qcom.c
- F:	drivers/phy/qualcomm/
- F:	drivers/power/*/msm*
- F:	drivers/reset/reset-qcom-*
--F:	drivers/scsi/ufs/ufs-qcom.*
-+F:	drivers/scsi/ufs/ufs-qcom*
- F:	drivers/spi/spi-geni-qcom.c
- F:	drivers/spi/spi-qcom-qspi.c
- F:	drivers/spi/spi-qup.c
-diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
-index 46a4542f37eb..f6394999b98c 100644
---- a/drivers/scsi/ufs/Kconfig
-+++ b/drivers/scsi/ufs/Kconfig
-@@ -99,6 +99,7 @@ config SCSI_UFS_DWC_TC_PLATFORM
- config SCSI_UFS_QCOM
- 	tristate "QCOM specific hooks to UFS controller platform driver"
- 	depends on SCSI_UFSHCD_PLATFORM && ARCH_QCOM
-+	select QCOM_SCM
- 	select RESET_CONTROLLER
- 	help
- 	  This selects the QCOM specific additions to UFSHCD platform driver.
-diff --git a/drivers/scsi/ufs/Makefile b/drivers/scsi/ufs/Makefile
-index 9810963bc049..4679af1b564e 100644
---- a/drivers/scsi/ufs/Makefile
-+++ b/drivers/scsi/ufs/Makefile
-@@ -3,7 +3,9 @@
- obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) += tc-dwc-g210-pci.o ufshcd-dwc.o tc-dwc-g210.o
- obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) += tc-dwc-g210-pltfrm.o ufshcd-dwc.o tc-dwc-g210.o
- obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) += cdns-pltfrm.o
--obj-$(CONFIG_SCSI_UFS_QCOM) += ufs-qcom.o
-+obj-$(CONFIG_SCSI_UFS_QCOM) += ufs_qcom.o
-+ufs_qcom-y += ufs-qcom.o
-+ufs_qcom-$(CONFIG_SCSI_UFS_CRYPTO) += ufs-qcom-ice.o
- obj-$(CONFIG_SCSI_UFS_EXYNOS) += ufs-exynos.o
- obj-$(CONFIG_SCSI_UFSHCD) += ufshcd-core.o
- ufshcd-core-y				+= ufshcd.o ufs-sysfs.o
-diff --git a/drivers/scsi/ufs/ufs-qcom-ice.c b/drivers/scsi/ufs/ufs-qcom-ice.c
-new file mode 100644
-index 000000000000..bbb0ad7590ec
---- /dev/null
-+++ b/drivers/scsi/ufs/ufs-qcom-ice.c
-@@ -0,0 +1,245 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Qualcomm ICE (Inline Crypto Engine) support.
-+ *
-+ * Copyright (c) 2014-2019, The Linux Foundation. All rights reserved.
-+ * Copyright 2019 Google LLC
-+ */
-+
-+#include <linux/platform_device.h>
-+#include <linux/qcom_scm.h>
-+
-+#include "ufshcd-crypto.h"
-+#include "ufs-qcom.h"
-+
-+#define AES_256_XTS_KEY_SIZE			64
-+
-+/* QCOM ICE registers */
-+
-+#define QCOM_ICE_REG_CONTROL			0x0000
-+#define QCOM_ICE_REG_RESET			0x0004
-+#define QCOM_ICE_REG_VERSION			0x0008
-+#define QCOM_ICE_REG_FUSE_SETTING		0x0010
-+#define QCOM_ICE_REG_PARAMETERS_1		0x0014
-+#define QCOM_ICE_REG_PARAMETERS_2		0x0018
-+#define QCOM_ICE_REG_PARAMETERS_3		0x001C
-+#define QCOM_ICE_REG_PARAMETERS_4		0x0020
-+#define QCOM_ICE_REG_PARAMETERS_5		0x0024
-+
-+/* QCOM ICE v3.X only */
-+#define QCOM_ICE_GENERAL_ERR_STTS		0x0040
-+#define QCOM_ICE_INVALID_CCFG_ERR_STTS		0x0030
-+#define QCOM_ICE_GENERAL_ERR_MASK		0x0044
-+
-+/* QCOM ICE v2.X only */
-+#define QCOM_ICE_REG_NON_SEC_IRQ_STTS		0x0040
-+#define QCOM_ICE_REG_NON_SEC_IRQ_MASK		0x0044
-+
-+#define QCOM_ICE_REG_NON_SEC_IRQ_CLR		0x0048
-+#define QCOM_ICE_REG_STREAM1_ERROR_SYNDROME1	0x0050
-+#define QCOM_ICE_REG_STREAM1_ERROR_SYNDROME2	0x0054
-+#define QCOM_ICE_REG_STREAM2_ERROR_SYNDROME1	0x0058
-+#define QCOM_ICE_REG_STREAM2_ERROR_SYNDROME2	0x005C
-+#define QCOM_ICE_REG_STREAM1_BIST_ERROR_VEC	0x0060
-+#define QCOM_ICE_REG_STREAM2_BIST_ERROR_VEC	0x0064
-+#define QCOM_ICE_REG_STREAM1_BIST_FINISH_VEC	0x0068
-+#define QCOM_ICE_REG_STREAM2_BIST_FINISH_VEC	0x006C
-+#define QCOM_ICE_REG_BIST_STATUS		0x0070
-+#define QCOM_ICE_REG_BYPASS_STATUS		0x0074
-+#define QCOM_ICE_REG_ADVANCED_CONTROL		0x1000
-+#define QCOM_ICE_REG_ENDIAN_SWAP		0x1004
-+#define QCOM_ICE_REG_TEST_BUS_CONTROL		0x1010
-+#define QCOM_ICE_REG_TEST_BUS_REG		0x1014
-+
-+/* BIST ("built-in self-test"?) status flags */
-+#define QCOM_ICE_BIST_STATUS_MASK		0xF0000000
-+
-+#define QCOM_ICE_FUSE_SETTING_MASK		0x1
-+#define QCOM_ICE_FORCE_HW_KEY0_SETTING_MASK	0x2
-+#define QCOM_ICE_FORCE_HW_KEY1_SETTING_MASK	0x4
-+
-+#define qcom_ice_writel(host, val, reg)	\
-+	writel((val), (host)->ice_mmio + (reg))
-+#define qcom_ice_readl(host, reg)	\
-+	readl((host)->ice_mmio + (reg))
-+
-+static bool qcom_ice_supported(struct ufs_qcom_host *host)
-+{
-+	struct device *dev = host->hba->dev;
-+	u32 regval = qcom_ice_readl(host, QCOM_ICE_REG_VERSION);
-+	int major = regval >> 24;
-+	int minor = (regval >> 16) & 0xFF;
-+	int step = regval & 0xFFFF;
-+
-+	/* For now this driver only supports ICE version 3. */
-+	if (major != 3) {
-+		dev_warn(dev, "Unsupported ICE version: v%d.%d.%d\n",
-+			 major, minor, step);
-+		return false;
-+	}
-+
-+	dev_info(dev, "Found QC Inline Crypto Engine (ICE) v%d.%d.%d\n",
-+		 major, minor, step);
-+
-+	/* If fuses are blown, ICE might not work in the standard way. */
-+	regval = qcom_ice_readl(host, QCOM_ICE_REG_FUSE_SETTING);
-+	if (regval & (QCOM_ICE_FUSE_SETTING_MASK |
-+		      QCOM_ICE_FORCE_HW_KEY0_SETTING_MASK |
-+		      QCOM_ICE_FORCE_HW_KEY1_SETTING_MASK)) {
-+		dev_warn(dev, "Fuses are blown; ICE is unusable!\n");
-+		return false;
-+	}
-+	return true;
-+}
-+
-+int ufs_qcom_ice_init(struct ufs_qcom_host *host)
-+{
-+	struct ufs_hba *hba = host->hba;
-+	struct device *dev = hba->dev;
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct resource *res;
-+	int err;
-+
-+	if (!(ufshcd_readl(hba, REG_CONTROLLER_CAPABILITIES) &
-+	      MASK_CRYPTO_SUPPORT))
-+		return 0;
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ice");
-+	if (!res) {
-+		dev_warn(dev, "ICE registers not found\n");
-+		goto disable;
-+	}
-+
-+	if (!qcom_scm_ice_available()) {
-+		dev_warn(dev, "ICE SCM interface not found\n");
-+		goto disable;
-+	}
-+
-+	host->ice_mmio = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(host->ice_mmio)) {
-+		err = PTR_ERR(host->ice_mmio);
-+		dev_err(dev, "Failed to map ICE registers; err=%d\n", err);
-+		return err;
-+	}
-+
-+	if (!qcom_ice_supported(host))
-+		goto disable;
-+
-+	return 0;
-+
-+disable:
-+	dev_warn(dev, "Disabling inline encryption support\n");
-+	hba->caps &= ~UFSHCD_CAP_CRYPTO;
-+	return 0;
-+}
-+
-+static void qcom_ice_low_power_mode_enable(struct ufs_qcom_host *host)
-+{
-+	u32 regval;
-+
-+	regval = qcom_ice_readl(host, QCOM_ICE_REG_ADVANCED_CONTROL);
-+	/*
-+	 * Enable low power mode sequence
-+	 * [0]-0, [1]-0, [2]-0, [3]-E, [4]-0, [5]-0, [6]-0, [7]-0
-+	 */
-+	regval |= 0x7000;
-+	qcom_ice_writel(host, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
-+}
-+
-+static void qcom_ice_optimization_enable(struct ufs_qcom_host *host)
-+{
-+	u32 regval;
-+
-+	/* ICE Optimizations Enable Sequence */
-+	regval = qcom_ice_readl(host, QCOM_ICE_REG_ADVANCED_CONTROL);
-+	regval |= 0xD807100;
-+	/* ICE HPG requires delay before writing */
-+	udelay(5);
-+	qcom_ice_writel(host, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
-+	udelay(5);
-+}
-+
-+int ufs_qcom_ice_enable(struct ufs_qcom_host *host)
-+{
-+	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
-+		return 0;
-+	qcom_ice_low_power_mode_enable(host);
-+	qcom_ice_optimization_enable(host);
-+	return ufs_qcom_ice_resume(host);
-+}
-+
-+/* Poll until all BIST bits are reset */
-+static int qcom_ice_wait_bist_status(struct ufs_qcom_host *host)
-+{
-+	int count;
-+	u32 reg;
-+
-+	for (count = 0; count < 100; count++) {
-+		reg = qcom_ice_readl(host, QCOM_ICE_REG_BIST_STATUS);
-+		if (!(reg & QCOM_ICE_BIST_STATUS_MASK))
-+			break;
-+		udelay(50);
-+	}
-+	if (reg)
-+		return -ETIMEDOUT;
-+	return 0;
-+}
-+
-+int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
-+{
-+	int err;
-+
-+	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
-+		return 0;
-+
-+	err = qcom_ice_wait_bist_status(host);
-+	if (err) {
-+		dev_err(host->hba->dev, "BIST status error (%d)\n", err);
-+		return err;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Program a key into a QC ICE keyslot, or evict a keyslot.  QC ICE requires
-+ * vendor-specific SCM calls for this; it doesn't support the standard way.
-+ */
-+int ufs_qcom_ice_program_key(struct ufs_hba *hba,
-+			     const union ufs_crypto_cfg_entry *cfg, int slot)
-+{
-+	union ufs_crypto_cap_entry cap;
-+	union {
-+		u8 bytes[AES_256_XTS_KEY_SIZE];
-+		u32 words[AES_256_XTS_KEY_SIZE / sizeof(u32)];
-+	} key;
-+	int i;
-+	int err;
-+
-+	if (!(cfg->config_enable & UFS_CRYPTO_CONFIGURATION_ENABLE))
-+		return qcom_scm_ice_invalidate_key(slot);
-+
-+	/* Only AES-256-XTS has been tested so far. */
-+	cap = hba->crypto_cap_array[cfg->crypto_cap_idx];
-+	if (cap.algorithm_id != UFS_CRYPTO_ALG_AES_XTS ||
-+	    cap.key_size != UFS_CRYPTO_KEY_SIZE_256) {
-+		dev_err_ratelimited(hba->dev,
-+				    "Unhandled crypto capability; algorithm_id=%d, key_size=%d\n",
-+				    cap.algorithm_id, cap.key_size);
-+		return -EINVAL;
-+	}
-+
-+	memcpy(key.bytes, cfg->crypto_key, AES_256_XTS_KEY_SIZE);
-+
-+	/*
-+	 * The SCM call byte-swaps the 32-bit words of the key.  So we have to
-+	 * do the same, in order for the final key be correct.
-+	 */
-+	for (i = 0; i < ARRAY_SIZE(key.words); i++)
-+		__cpu_to_be32s(&key.words[i]);
-+
-+	err = qcom_scm_ice_set_key(slot, key.bytes, AES_256_XTS_KEY_SIZE,
-+				   QCOM_SCM_ICE_CIPHER_AES_256_XTS,
-+				   cfg->data_unit_size);
-+	memzero_explicit(&key, sizeof(key));
-+	return err;
-+}
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index bd0b4ed7b37a..139c3ae05e95 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -365,7 +365,7 @@ static int ufs_qcom_hce_enable_notify(struct ufs_hba *hba,
- 		/* check if UFS PHY moved from DISABLED to HIBERN8 */
- 		err = ufs_qcom_check_hibern8(hba);
- 		ufs_qcom_enable_hw_clk_gating(hba);
--
-+		ufs_qcom_ice_enable(host);
- 		break;
- 	default:
- 		dev_err(hba->dev, "%s: invalid status %d\n", __func__, status);
-@@ -613,6 +613,10 @@ static int ufs_qcom_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 			return err;
- 	}
- 
-+	err = ufs_qcom_ice_resume(host);
-+	if (err)
-+		return err;
-+
- 	hba->is_sys_suspended = false;
- 	return 0;
- }
-@@ -1071,6 +1075,7 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	hba->caps |= UFSHCD_CAP_CLK_SCALING;
- 	hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
- 	hba->caps |= UFSHCD_CAP_WB_EN;
-+	hba->caps |= UFSHCD_CAP_CRYPTO;
- 
- 	if (host->hw_ver.major >= 0x2) {
- 		host->caps = UFS_QCOM_CAP_QUNIPRO |
-@@ -1298,6 +1303,10 @@ static int ufs_qcom_init(struct ufs_hba *hba)
- 	ufs_qcom_set_caps(hba);
- 	ufs_qcom_advertise_quirks(hba);
- 
-+	err = ufs_qcom_ice_init(host);
-+	if (err)
-+		goto out_variant_clear;
-+
- 	ufs_qcom_set_bus_vote(hba, true);
- 	ufs_qcom_setup_clocks(hba, true, POST_CHANGE);
- 
-@@ -1736,6 +1745,7 @@ static const struct ufs_hba_variant_ops ufs_hba_qcom_vops = {
- 	.dbg_register_dump	= ufs_qcom_dump_dbg_regs,
- 	.device_reset		= ufs_qcom_device_reset,
- 	.config_scaling_param = ufs_qcom_config_scaling_param,
-+	.program_key		= ufs_qcom_ice_program_key,
- };
- 
- /**
-diff --git a/drivers/scsi/ufs/ufs-qcom.h b/drivers/scsi/ufs/ufs-qcom.h
-index 2d95e7cc7187..97247d17e258 100644
---- a/drivers/scsi/ufs/ufs-qcom.h
-+++ b/drivers/scsi/ufs/ufs-qcom.h
-@@ -227,6 +227,9 @@ struct ufs_qcom_host {
- 	void __iomem *dev_ref_clk_ctrl_mmio;
- 	bool is_dev_ref_clk_enabled;
- 	struct ufs_hw_version hw_ver;
-+#ifdef CONFIG_SCSI_UFS_CRYPTO
-+	void __iomem *ice_mmio;
-+#endif
- 
- 	u32 dev_ref_clk_en_mask;
- 
-@@ -264,4 +267,28 @@ static inline bool ufs_qcom_cap_qunipro(struct ufs_qcom_host *host)
- 		return false;
- }
- 
-+/* ufs-qcom-ice.c */
-+
-+#ifdef CONFIG_SCSI_UFS_CRYPTO
-+int ufs_qcom_ice_init(struct ufs_qcom_host *host);
-+int ufs_qcom_ice_enable(struct ufs_qcom_host *host);
-+int ufs_qcom_ice_resume(struct ufs_qcom_host *host);
-+int ufs_qcom_ice_program_key(struct ufs_hba *hba,
-+			     const union ufs_crypto_cfg_entry *cfg, int slot);
-+#else
-+static inline int ufs_qcom_ice_init(struct ufs_qcom_host *host)
-+{
-+	return 0;
-+}
-+static inline int ufs_qcom_ice_enable(struct ufs_qcom_host *host)
-+{
-+	return 0;
-+}
-+static inline int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
-+{
-+	return 0;
-+}
-+#define ufs_qcom_ice_program_key NULL
-+#endif /* !CONFIG_SCSI_UFS_CRYPTO */
-+
- #endif /* UFS_QCOM_H_ */
--- 
-2.27.0
-
+Regards,
+Markus
