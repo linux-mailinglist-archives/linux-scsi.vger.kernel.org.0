@@ -2,148 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2805321B109
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2020 10:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D4121B366
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2020 12:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbgGJILY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jul 2020 04:11:24 -0400
-Received: from mout.web.de ([212.227.17.12]:49261 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725802AbgGJILY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 10 Jul 2020 04:11:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1594368661;
-        bh=zWhIWqfCmDxTGjMuULUDFC+ehkme1KzqUP/xhZCGJ9Y=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=jyc8rN4tsIXvFe9nsmr8L5jFkMAifoKc+x60GkqbftxOxpVoBEjYqgw/mu0Fqckak
-         0QubrqGo+EklK6yG4vlJAwzTUh2VkesVF9Z4SBTJfc1tdjasIPkef8ko+gXB1QeNGs
-         e1Q4VRo7yB9kdIXkfNkBhry76tWi/K/3slNQDN4I=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.135.129.239]) by smtp.web.de (mrweb103
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MQ6H9-1jz32s0gIF-005F7e; Fri, 10
- Jul 2020 10:11:01 +0200
-Subject: Re: scsi: virtio_scsi: Remove unnecessary condition checks
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Xianting Tian <xianting_tian@126.com>,
-        linux-scsi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E. J. Bottomley" <jejb@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-References: <a197f532-7020-0d8e-21bf-42bb66e8daec@web.de>
- <e87746e6-813e-7c0e-e21e-5921e759da5d@redhat.com>
- <8eb9a827-45f1-e71c-0cbf-1c29acd8e310@web.de>
- <58e3feb8-1ffb-f77f-cf3a-75222b3cd524@redhat.com>
- <9815ef2d-d0da-d197-49d7-83559d750ff1@web.de>
- <d052b441-cc4d-4b2b-1442-b1a30bed2fdb@redhat.com>
-From:   Markus Elfring <Markus.Elfring@web.de>
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
- +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
- mpVJgXGKkNJ1ey+QOXouzlErVvE2fRh+KXXN1Q7fSmTJlAW9XJYHS3BDHb0uRpymRSX3O+E2
- lA87C7R8qAigPDZi6Z7UmwIA83ZMKXQ5stA0lhPyYgQcM7fh7V4ZYhnR0I5/qkUoxKpqaYLp
- YHBczVP+Zx/zHOM0KQphOMbU7X3c1pmMruoe6ti9uZzqZSLsF+NKXFEPBS665tQr66HJvZvY
- GMDlntZFAZ6xQvCC1r3MGoxEC1tuEa24vPCC9RZ9wk2sY5Csbva0WwYv3WKRZZBv8eIhGMxs
- rcpeGShRFyZ/0BYO53wZAPV1pEhGLLxd8eLN/nEWjJE0ejakPC1H/mt5F+yQBJAzz9JzbToU
- 5jKLu0SugNI18MspJut8AiA1M44CIWrNHXvWsQ+nnBKHDHHYZu7MoXlOmB32ndsfPthR3GSv
- jN7YD4Ad724H8fhRijmC1+RpuSce7w2JLj5cYj4MlccmNb8YUxsE8brY2WkXQYS8Ivse39MX
- BE66MQN0r5DQ6oqgoJ4gHIVBUv/ZwgcmUNS5gQkNCFA0dWXznQARAQABtCZNYXJrdXMgRWxm
- cmluZyA8TWFya3VzLkVsZnJpbmdAd2ViLmRlPokCVAQTAQgAPhYhBHDP0hzibeXjwQ/ITuU9
- Figxg9azBQJYNvsQAhsjBQkJZgGABQsJCAcCBhUICQoLAgQWAgMBAh4BAheAAAoJEOU9Figx
- g9azcyMP/iVihZkZ4VyH3/wlV3nRiXvSreqg+pGPI3c8J6DjP9zvz7QHN35zWM++1yNek7Ar
- OVXwuKBo18ASlYzZPTFJZwQQdkZSV+atwIzG3US50ZZ4p7VyUuDuQQVVqFlaf6qZOkwHSnk+
- CeGxlDz1POSHY17VbJG2CzPuqMfgBtqIU1dODFLpFq4oIAwEOG6fxRa59qbsTLXxyw+PzRaR
- LIjVOit28raM83Efk07JKow8URb4u1n7k9RGAcnsM5/WMLRbDYjWTx0lJ2WO9zYwPgRykhn2
- sOyJVXk9xVESGTwEPbTtfHM+4x0n0gC6GzfTMvwvZ9G6xoM0S4/+lgbaaa9t5tT/PrsvJiob
- kfqDrPbmSwr2G5mHnSM9M7B+w8odjmQFOwAjfcxoVIHxC4Cl/GAAKsX3KNKTspCHR0Yag78w
- i8duH/eEd4tB8twcqCi3aCgWoIrhjNS0myusmuA89kAWFFW5z26qNCOefovCx8drdMXQfMYv
- g5lRk821ZCNBosfRUvcMXoY6lTwHLIDrEfkJQtjxfdTlWQdwr0mM5ye7vd83AManSQwutgpI
- q+wE8CNY2VN9xAlE7OhcmWXlnAw3MJLW863SXdGlnkA3N+U4BoKQSIToGuXARQ14IMNvfeKX
- NphLPpUUnUNdfxAHu/S3tPTc/E/oePbHo794dnEm57LuuQINBFg2+xABEADZg/T+4o5qj4cw
- nd0G5pFy7ACxk28mSrLuva9tyzqPgRZ2bdPiwNXJUvBg1es2u81urekeUvGvnERB/TKekp25
- 4wU3I2lEhIXj5NVdLc6eU5czZQs4YEZbu1U5iqhhZmKhlLrhLlZv2whLOXRlLwi4jAzXIZAu
- 76mT813jbczl2dwxFxcT8XRzk9+dwzNTdOg75683uinMgskiiul+dzd6sumdOhRZR7YBT+xC
- wzfykOgBKnzfFscMwKR0iuHNB+VdEnZw80XGZi4N1ku81DHxmo2HG3icg7CwO1ih2jx8ik0r
- riIyMhJrTXgR1hF6kQnX7p2mXe6K0s8tQFK0ZZmYpZuGYYsV05OvU8yqrRVL/GYvy4Xgplm3
- DuMuC7/A9/BfmxZVEPAS1gW6QQ8vSO4zf60zREKoSNYeiv+tURM2KOEj8tCMZN3k3sNASfoG
- fMvTvOjT0yzMbJsI1jwLwy5uA2JVdSLoWzBD8awZ2X/eCU9YDZeGuWmxzIHvkuMj8FfX8cK/
- 2m437UA877eqmcgiEy/3B7XeHUipOL83gjfq4ETzVmxVswkVvZvR6j2blQVr+MhCZPq83Ota
- xNB7QptPxJuNRZ49gtT6uQkyGI+2daXqkj/Mot5tKxNKtM1Vbr/3b+AEMA7qLz7QjhgGJcie
- qp4b0gELjY1Oe9dBAXMiDwARAQABiQI8BBgBCAAmFiEEcM/SHOJt5ePBD8hO5T0WKDGD1rMF
- Alg2+xACGwwFCQlmAYAACgkQ5T0WKDGD1rOYSw/+P6fYSZjTJDAl9XNfXRjRRyJSfaw6N1pA
- Ahuu0MIa3djFRuFCrAHUaaFZf5V2iW5xhGnrhDwE1Ksf7tlstSne/G0a+Ef7vhUyeTn6U/0m
- +/BrsCsBUXhqeNuraGUtaleatQijXfuemUwgB+mE3B0SobE601XLo6MYIhPh8MG32MKO5kOY
- hB5jzyor7WoN3ETVNQoGgMzPVWIRElwpcXr+yGoTLAOpG7nkAUBBj9n9TPpSdt/npfok9ZfL
- /Q+ranrxb2Cy4tvOPxeVfR58XveX85ICrW9VHPVq9sJf/a24bMm6+qEg1V/G7u/AM3fM8U2m
- tdrTqOrfxklZ7beppGKzC1/WLrcr072vrdiN0icyOHQlfWmaPv0pUnW3AwtiMYngT96BevfA
- qlwaymjPTvH+cTXScnbydfOQW8220JQwykUe+sHRZfAF5TS2YCkQvsyf7vIpSqo/ttDk4+xc
- Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
- x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
- pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <39c76c43-cd5f-40cb-7225-e2e143f8c131@web.de>
-Date:   Fri, 10 Jul 2020 10:11:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <d052b441-cc4d-4b2b-1442-b1a30bed2fdb@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KrDYJSLOj6orqhKlBmXpRYOniDHXAICtpRQx/Oq4OB9mqj5Yhc/
- /fPb+t6hy6ADOyH+q5mPxAEGeU91mxKZtoESPTI4i14A085Myi1OaiSsF9EZerVDst76QNP
- 92A11CAN5utSyNeDKLAU9riA9J2Pzs8xtS9mEfmGxfqPSouJNMIrpwNDr6JhSM6wYXFOn9P
- 2m/erNeAyt6LazSlViBQA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cFkFiyL49Dw=:CndEjmWHfQAU4nKBVIJA9W
- I2YVdifx7OyGrJI2AMuqMm6Cl0Rg3Z3BdDf0uk1U4RNLvyLCsgUAF81w3Qis0SqRNf0IVxUt/
- OHIo8lLsFWKVMhmoapaot94uDcHlUg3vz3HCDgi09nRg364cK8SAfe9ZBqiyayD+bksAXzNbO
- IjzibzXZZd0kzsBg9eqqUDsLXLCxTvd9MIK3e85RrAJXKiCygaoaMJf5cH7eQu0ks3TCHQsyu
- zKvYektto6Vm2wGpuiQymOGp2qkK/kMJLdvBgtC6SJ1QCox81H7WFFAGTaeEfdtCfAvWFpvjr
- PpYiGRPz/10hwDy2ICyjJqeutcoeFsvPXeAB/7jegc9lrxsOQzzF1+P4RoIq5LgWL3cCvcY6D
- EiRDXO46og5KqNOdeViBCOeRs/tbAHaBWqephYZQj2fNzQVO/NxLzpkC6nqyq4oPYg4zmda8/
- AtaNTGbQVdoZ3YNiS1qReJ/dRt+e4UCoPbOTGSID5qkpVSWWRBwNVVYSp/tIoUKVFBZdh2VFx
- 1m2kjKxRgBuKllgLRQAohaWInyj9OunI34r4jOh9KVOd2xsY4Y+75EKYwRZL140lhgRH28Olv
- kMQdYT9Jm6BuP/7tL+cNwzXI4XqO0GkF9PP7huFhJ9sXUKzv+9IxYoDOh8iEHz7s4JvybPv4R
- 2ZEflDhkHjFEkj/srBDXmOUdIsdHL++hHbtv2lVnxa4SckgsqgamnWuxNtrvZu5QWggkZ96Wl
- yI3lW5r7wcSXTt8MiimYE8nrArTlI1+bcDTWZhYDjA23q0wSRH5O/d82v1XnlWq6MAcgPcAsL
- oyi/6c8Jm3uFH0+KJULH9EdWd0O+Uhlqi58HKHZVqis2VoaO4UMOTmBL1gRRF/70fLoinTtMy
- WNvhlxgT53Yzige7JHef/lYrOiPEQfz1EUXy5ijsSyPVo0X3jh1AvhRc4XESCZ74rtXYixqoW
- J3kziuWhYDaBsyK+CFboDtqnTGx+FfjG5I/WMIf4yJL3BdMoVUmP7vscsULUe8VShy0vJ/+d8
- LoMLopBLi3KPrJry8lR7NCsjUID8x786EumAaBUfb8jiFGYR22r23rA8fIK/MwS0wGQ7G+3by
- tQOm3eH+T4eSrTNzAP64h5PHCoTpWWEqMprsj2Gi0VLmgvb+2/FZEAZtWQpvoydIY9LyMOp0s
- BeyavWxJqDm/0Z+vdWe5M/a+OTQoVx6gD2MyLmEmFY+nyDF+L43Wy/9RI0H347JCCtAtH3P4n
- WCnzxsBuK356JV+hJMqW4RJtBEgTiF5U4Zp8qaw==
+        id S1727873AbgGJKsw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Jul 2020 06:48:52 -0400
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.115]:22376 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726774AbgGJKss (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 10 Jul 2020 06:48:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
+        s=200619tsfj; t=1594378124; i=@ts.fujitsu.com;
+        bh=v4Pm/rLBWqPUqO04eZ1RpQiUC1Z4Qfk8vZt/HeiQxfA=;
+        h=From:To:Cc:Subject:Date:Message-Id;
+        b=o2BaLbDA/0EgPlKDvNxSPzkrBNUWBt6L2p+XEqbhcw6DUmZeM4l0v1L2ikHOxH8RF
+         3vSglNX2qDa2s2zyIVu5HjZ9mAFuS4kRS1OfYKZyRuti5QnFHWsac469zNamwIllrC
+         VwWWHW8TwENed79vW/tnBBXGBpBRftnArtmpyrgG85N2DFWqr2L6jrCbL8GJHbZZJM
+         x94gFYkMs1XbDwfWhjeMIzLNPmtLHuFajNzRvmUrz4KyrvjUR7vtMm1BI5SNvy0/v/
+         sUlCtRB4G/CvdTfeFstj1nq8oHRLaAm9Gxuud8blShGoVBMj6hWQxJdvQEoS2SX9bW
+         zGezwhAV1touA==
+Received: from [100.113.4.60] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-4.bemta.az-b.eu-central-1.aws.symcld.net id 6B/16-24114-C87480F5; Fri, 10 Jul 2020 10:48:44 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHLMWRWlGSWpSXmKPExsViZ8MRotvtzhF
+  v8G+jmkX39R1sFsuP/2Oy+DvpBqtF69K3TA4sHh+f3mLx+LxJLoApijUzLym/IoE14+fD2ewF
+  f2Urjj+/xtrAeFeii5GLQ0hgMqPEw/U/2LsYOYGc6YwS3ybygthsAgYSKybdZwEpEhFYwyix8
+  s48ZpAEs4CexLR/68AahAXcJKZMOQtkc3CwCKhK7P5qBBLmFbCTuDnlPliJhIC8RMeBySwTGD
+  kXMDKsYrRIKspMzyjJTczM0TU0MNA1NDTWNQOy9BKrdJP0Ukt1k1PzSooSgZJ6ieXFesWVuck
+  5KXp5qSWbGIFeTylk49rB+PT1B71DjJIcTEqivNM+sscL8SXlp1RmJBZnxBeV5qQWH2KU4eBQ
+  kuB1cOWIFxIsSk1PrUjLzAEGIExagoNHSYR3vgtQmre4IDG3ODMdInWKUZfj5vsli5iFWPLy8
+  1KlxHn/OQMVCYAUZZTmwY2ARcMlRlkpYV5GBgYGIZ6C1KLczBJU+VeM4hyMSkAVIJfwZOaVwG
+  16BXQEE9ARRznYQI4oSURISTUwpV49d9dFQZ2fn83oM/e90jQZiTvzvCKmxLcLej+Ut4tzWbN
+  EvYvVauL/tIL8CQKFHEfELzQzvRS1P8qdEX7+SN3Nnk7/wlrVMjmW3J+JL5k2KtZONOaYWKq6
+  SDKm7+exh4fkF334FjXj1INdBcdOMaRMSbM04Tf58Cmk+EJJ7EHlkNVL366uvfioIvn4nFPZV
+  Xs2VLLxOd3fPr/cc/HWUsaI5wdf9umfz+M/t/Bm4xQ/H/XPMSH2YZcd3u4RML7zQ2vf16la+U
+  xXhKZOvC45OfYKz0r/aY4SHEc2/Vf7Kfh2wpb9BWuW5Cz/dLb5oZkHT+2C+cutG/7PNwx9/df
+  lQnjvo1wJBfNH/O2O9/boKrEUZyQaajEXFScCAO+NjBoBAwAA
+X-Env-Sender: bstroesser@ts.fujitsu.com
+X-Msg-Ref: server-29.tower-245.messagelabs.com!1594378122!1671433!1
+X-Originating-IP: [62.60.8.84]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.50.2; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 1539 invoked from network); 10 Jul 2020 10:48:43 -0000
+Received: from unknown (HELO mailhost3.uk.fujitsu.com) (62.60.8.84)
+  by server-29.tower-245.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 10 Jul 2020 10:48:43 -0000
+Received: from x-serv01 ([172.17.38.52])
+        by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 06AAmg6T017883;
+        Fri, 10 Jul 2020 11:48:42 +0100
+Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
+        by x-serv01 (Postfix) with ESMTP id 4ABF720057;
+        Fri, 10 Jul 2020 12:48:42 +0200 (CEST)
+From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Subject: [PATCH 0/8] scsi: target: tcmu: Add TMR notification for tcmu
+Date:   Fri, 10 Jul 2020 12:48:09 +0200
+Message-Id: <20200710104817.19462-1-bstroesser@ts.fujitsu.com>
+X-Mailer: git-send-email 2.12.3
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->> Can a bit more =E2=80=9Ccompliance=E2=80=9D (with the Linux coding styl=
-e) matter here?
->
-> No.
+This patch series is made on top of Martin's for-next branch.
+I already sent it as "RFC PATCH" 10 days ago. Since there is
+no response yet, I decided to be optimistic and re-send the
+series as normal patch, just rebased to current for-next.
 
-Please take another look at the corresponding software documentation.
+TCM/LIO core handles TMRs without involving backends.
+But TMR completion message is sent to initiator only after
+commands aborted by the TMR are completed by the backend.
+Especially in case of tcmu backend, if userspace executes long
+running commands and therefore initiator sends ABORT_TASK on
+timeout, the ABORT itself can time out if core still waits for
+userspace/tcmu to complete the command.
 
+It would be very helpful for userspace to get a notification
+about received TMR and which commands were aborted by that TMR.
+Then userspace can decide whether to cancel command processing,
+and it can send command completion earlier than it would without
+TMR notification.
+It is also helpful for userspace traces and device emulation to
+get notification about TMR events.
 
->>> Having a single error loop is an advantage by itself.
->>
->> I do not see that a loop is involved in the implementation of the funct=
-ion =E2=80=9Cinit=E2=80=9D.
->
-> s/loop/label/ sorry.
+So this patch series in the first two patches implements in
+core the usage of a new optional backend callback for TMR
+notifications. The core calls it before core waits for
+completion of aborted commands (params: se_dev, TMR type,
+and list of se_cmds aborted by this TMR).
+Of course other backends than tcmu can use this part of the
+series also to implement their own TMR notification if
+necessary.
 
-Thanks for this information.
+The further six patches implement the TMR notify callback for
+tcmu. The new configFS attribute tmr_notification allows to
+switch on TMR messages on the cmd ring. The default of the
+attribute is the old behavior without TMR info on the ring, but
+with following changes:
+ - if tcmu receives an already aborted command, it immediately
+   rejects it. So it will never appear in userspace.
+ - if tcmu finds, that according to TMR notification a cmd on
+   the qfull_queue was aborted, tcmu removes it from qfull_queue
+   and completes it immediately. So userspace will not 'see'
+   those commands.
 
-Can the development attention grow for corresponding implementation detail=
-s
-around the specifcation of efficient exception handling?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/coding-style.rst?id=3D42f82040ee66db13525dc6f14b855989=
-0b2f4c1c#n465
+When attribute tmr_notification is set to 1, tcmu additionally
+prepares a list of cmd_ids from those commands, that are aborted
+by the TMR and are active in cmd ring (not timed out).
+This list together with the TMR type is either immediately
+written to cmd ring (new TMR entry type) or queued in a separate
+tmr queue if ring space is too small.
+TMRs in the tmr queue do not time out. If ring space becomes
+available, tcmu moves TMRs from tmr queue to ring with higher
+priority than cmds from qfull queue.
 
-Regards,
-Markus
+This mechanism makes sure that userspace receives TMR
+notifications as early as possible. Userspace can use the
+list of cmd_ids attached to the TMR notification to identify
+aborted commands from its list of received and not yet completed
+commands. In case userspace has meanwhile completed some of the
+cmd_ids on the list, it can just ignore these cmd_ids.
+A possible new command having the same cmd_id as one of the
+aborted commands will always appear on the ring after the TMR
+notification.
+
+Bodo Stroesser (8):
+  scsi: target: Modify core_tmr_abort_task()
+  scsi: target: Add tmr_notify backend function
+  scsi: target: tcmu: Use priv pointer in se_cmd
+  scsi: target: tcmu: Do not queue aborted commands
+  scsi: target: tcmu: Factor out new helper ring_insert_padding
+  scsi: target: tcmu: Fix and simplify timeout handling
+  scsi: target: tcmu: Implement tmr_notify callback
+  scsi: target: tcmu: Make TMR notification optional
+
+ drivers/target/target_core_tmr.c       |  36 +++-
+ drivers/target/target_core_transport.c |   1 +
+ drivers/target/target_core_user.c      | 375 +++++++++++++++++++++++++++------
+ include/target/target_core_backend.h   |   2 +
+ include/target/target_core_base.h      |   1 +
+ include/uapi/linux/target_core_user.h  |  25 +++
+ 6 files changed, 368 insertions(+), 72 deletions(-)
+
+-- 
+2.12.3
+
