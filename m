@@ -2,107 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD5821B07D
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2020 09:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029E621B10C
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jul 2020 10:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726560AbgGJHrB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jul 2020 03:47:01 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:29312 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725802AbgGJHrA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 10 Jul 2020 03:47:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594367218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JdHl2OiH4p6Iz0SiMtzkS/pKFwgmTmJSXShGkd+cqo8=;
-        b=LaBraUAAu855uHZIJ53FP5j90b46GkV/PUb2FpBWXyYeuJI49n/q5DGc7l/3p53+yjagc2
-        YP8WH8hWSNG9+OdJeYexv+KrADPXaPlgx6uMQWwsCsj/+ipxQTLVP7oN310WZvVTg+EqLt
-        rYp/VSfqr5JfCSeGukwWRmcvWKYIbnE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-32-ivvSpSNwNL-yo1y4dilb_w-1; Fri, 10 Jul 2020 03:46:57 -0400
-X-MC-Unique: ivvSpSNwNL-yo1y4dilb_w-1
-Received: by mail-wr1-f70.google.com with SMTP id o12so5020614wrj.23
-        for <linux-scsi@vger.kernel.org>; Fri, 10 Jul 2020 00:46:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JdHl2OiH4p6Iz0SiMtzkS/pKFwgmTmJSXShGkd+cqo8=;
-        b=SjBPe1/fvBpal4jV8/1bPdE9ZwbN9ZNtiPEUNJk93koTLeljgfc1DMG2bjt9uXRGa8
-         JJ6Mv2nNokPg9t9AKumIVyIPCEOtdsn3iYCmOUf3yxr+q8bpE4Cdygh3A9Dh1oXcUCtl
-         IqVQ0tTSH/7y8ViiHAT6N04VR8z7QmmUfN9RDY+bIxwXtARbxRST2sR3OfosD8kI1vF+
-         gWCChMr0YJczPRLnAg/pQvr3fgYmzorySZL7+gGynIPISGGkL9HP6LSl1+ZytdOkLmaG
-         ayJAzKjHgK51//JbOMv1vmYOeYodg7+PLMEV186f+ujqnLAjlHkPw7xDpf0LrzYzdvLo
-         E8XQ==
-X-Gm-Message-State: AOAM530xX5a2vrsnT696x/mrebt0Fc6JMJtnum1P3r4dAXU7ZFKc2z5D
-        unjcY9RGcIRkV6jX5TVMUHKs6QiCs+Kvbs0sSImXfLOOaXuJ4S6z3Y4YzJzbaWlRRxsU9mG7N0H
-        CbYIFG8TqIaHDP21T3H6xvw==
-X-Received: by 2002:a1c:b686:: with SMTP id g128mr3986794wmf.145.1594367215830;
-        Fri, 10 Jul 2020 00:46:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyuGy1axXIP4NvsxIBSy6jkXMCqPU4GtMCNiYKIfYo8qhu5JkSK8NP7Ezs/ydWQoVmvN6gUlw==
-X-Received: by 2002:a1c:b686:: with SMTP id g128mr3986767wmf.145.1594367215569;
-        Fri, 10 Jul 2020 00:46:55 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:9541:9439:cb0f:89c? ([2001:b07:6468:f312:9541:9439:cb0f:89c])
-        by smtp.gmail.com with ESMTPSA id k18sm8954712wrx.34.2020.07.10.00.46.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2020 00:46:55 -0700 (PDT)
-Subject: Re: [PATCH] scsi: virtio_scsi: Remove unnecessary condition checks
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        Xianting Tian <xianting_tian@126.com>,
-        linux-scsi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E. J. Bottomley" <jejb@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-References: <a197f532-7020-0d8e-21bf-42bb66e8daec@web.de>
- <e87746e6-813e-7c0e-e21e-5921e759da5d@redhat.com>
- <8eb9a827-45f1-e71c-0cbf-1c29acd8e310@web.de>
- <58e3feb8-1ffb-f77f-cf3a-75222b3cd524@redhat.com>
- <9815ef2d-d0da-d197-49d7-83559d750ff1@web.de>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <d052b441-cc4d-4b2b-1442-b1a30bed2fdb@redhat.com>
-Date:   Fri, 10 Jul 2020 09:46:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1726774AbgGJIMJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Jul 2020 04:12:09 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2451 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726496AbgGJIMI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 10 Jul 2020 04:12:08 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 05DA8F45D4E6DACBDC9E;
+        Fri, 10 Jul 2020 09:12:07 +0100 (IST)
+Received: from [127.0.0.1] (10.47.5.154) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Fri, 10 Jul
+ 2020 09:12:05 +0100
+Subject: Re: [PATCH RFC v7 10/12] megaraid_sas: switch fusion adapters to MQ
+To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <don.brace@microsemi.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        <ming.lei@redhat.com>, <bvanassche@acm.org>, <hare@suse.com>,
+        <hch@lst.de>,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>
+CC:     <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-11-git-send-email-john.garry@huawei.com>
+ <d55972999b9370f947c20537e41b49bf@mail.gmail.com>
+ <e61593f8-5ee7-5763-9d02-d0ea13aeb49f@huawei.com>
+ <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com>
+ <10d36c09-9d5b-92e9-23ac-ea1a2628e7d9@huawei.com>
+ <0563e53f843c97de1a5a035fae892bf8@mail.gmail.com>
+ <61299951-97dc-b2be-c66c-024dfbd3a1cb@huawei.com>
+ <b49c33ebda36b8f116a51bc5c430eb9d@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <13d6b63e-3aa8-68fa-29ab-a4c202024280@huawei.com>
+Date:   Fri, 10 Jul 2020 09:10:21 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <9815ef2d-d0da-d197-49d7-83559d750ff1@web.de>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <b49c33ebda36b8f116a51bc5c430eb9d@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.5.154]
+X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/07/20 09:40, Markus Elfring wrote:
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/virtio_scsi.c?id=42f82040ee66db13525dc6f14b8559890b2f4c1c#n980
->>>
->>>  	if (!virtscsi_cmd_cache) {
->>>  		pr_err("kmem_cache_create() for virtscsi_cmd_cache failed\n");
->>> -		goto error;
->>> +		return -ENOMEM;
->>>  	}
+
 >>
->> Could be doable, but I don't see a particular benefit.
+>> https://github.com/hisilicon/kernel-dev/commits/private-topic-blk-mq-
+>> shared-tags-rfc-v8
+> I tested this repo + megaraid_sas shared hosttag driver. This repo (5.8-rc)
+> has CPU hotplug patch.
+> " bf0beec0607d blk-mq: drain I/O when all CPUs in a hctx are offline"
 > 
-> Can a bit more “compliance” (with the Linux coding style) matter here?
-
-No.
-
->> Having a single error loop is an advantage by itself.
+> Looking at description of above patch and changes, it looks like
+> megaraid_sas driver can still work without shared host tag for this feature.
 > 
-> I do not see that a loop is involved in the implementation of the function “init”.
+> I observe CPU hotplug works irrespective of shared host tag
 
-s/loop/label/ sorry.
+Can you be clear exactly what you mean by "irrespective of shared host tag"?
 
-Paolo
+Do you mean that for your test Scsi_Host.nr_hw_queues is set to expose 
+hw queues and scsi_host_template.map_queues = blk_mq_pci_map_queues(), 
+but you just don't set the host_tagset flag?
+
+  in megaraid_sas
+> on 5.8-rc.
+> 
+> Without shared host tag, megaraid driver will expose single hctx and all the
+> CPU will be mapped to hctx0.
+
+right
+
+> Any CPU offline event will have " blk_mq_hctx_notify_offline" callback in
+> blk-mq module. If we do not have this callback/patch, we will see IO
+> timeout.
+> blk_mq_hctx_notify_offline callback will make sure all the outstanding on
+> hctx0 is cleared and only after it is cleared, CPU will go offline.
+
+But that is only for when the last CPU for the hctx is going offline. If 
+nr_hw_queues == 1, then hctx0 would cover all CPUs, so that would never 
+occur during normal operation. See initial check in 
+blk_mq_hctx_notify_offline():
+
+static int blk_mq_hctx_notify_offline(unsigned int cpu, struct 
+hlist_node *node)
+{
+	if (!cpumask_test_cpu(cpu, hctx->cpumask) ||
+	    !blk_mq_last_cpu_in_hctx(cpu, hctx))
+		return 0;
+
+> 
+> megaraid_sas driver has  internal reply_queue mapping which helps to get IO
+> completion on same cpu.  Driver get msix index from that table based on "
+> raw_smp_processor_id".
+> If table is mapped correctly at probe time,  It is not possible to pick
+> entry of offline CPU.
+> 
+> Am I missing anything ?
+
+Not sure, I think I need to be clear exactly what you're doing.
+
+> 
+> If you can help me to understand why we need shared host tag for CPU
+> hotplug, I can try to frame some test case for possible reproduction.
+
+I think it's best explained in cover letter for "blk-mq: Facilitate a 
+shared sbitmap per tagset".
+
+See points "HBA HW queues are required to be mapped to that of the 
+blk-mq hctx", "HBA LLDD would have to generate this tag internally", and 
+"blk-mq assumes the host may accept (Scsi_host.can_queue * #hw queue) 
+commands".
+> 
+>> I just updated to include the change to have Scsi_Host.host_tagset in
+>> 4291f617a02b commit ("scsi: Add host and host template flag
+>> 'host_tagset'")
+>>
+>> megaraid sas support is not on the branch yet, but I think everything else
+>> required is. And it is mutable, so I'd clone it now if I were you - or
+>> just replace
+>> the required patch onto your v7 branch.
+> I am working on this.
+> 
+
+Great, thanks
 
