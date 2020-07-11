@@ -2,108 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF17B21C243
-	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2020 06:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB45F21C26D
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jul 2020 07:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbgGKEcs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Jul 2020 00:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726671AbgGKEcs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Jul 2020 00:32:48 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679B9C08C5DD
-        for <linux-scsi@vger.kernel.org>; Fri, 10 Jul 2020 21:32:48 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id w2so3404581pgg.10
-        for <linux-scsi@vger.kernel.org>; Fri, 10 Jul 2020 21:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=l/lknVZA7xLb5vkFR7iTTs6QyV0YszDWbtySuYnMON8=;
-        b=kyAHf7JjPHGE0nC/fbROFuQ7UOLNGZV6DZ2gRbTwk8wfjmA0iOaD51U6Qb0OMlxF2J
-         6Fj0P4SXnLo1C377cDYNkNRZMiW9kuaB+1l0VyjR44p4H7/vbvY6lBXHLquW8sT7qg6q
-         ZGlYZBYBJ7OBDnaPDtcukaG12yuR4grCg/CEmh4gw0rtXwYwg2gFyeuzDYc+SmhS1qKA
-         sd1zZoo4f3u/vECSAoAaFxGbotz3t9znraisFegtENqH1Oxilg/9y5Za7V3th6XdAbU1
-         5/Be/ZfPxf/iryl8x30RI9rxYfn6Qn6J51NN8blgIcM3v+XgFe1AtmZT4EOZMd3ZCNlI
-         cc5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=l/lknVZA7xLb5vkFR7iTTs6QyV0YszDWbtySuYnMON8=;
-        b=AR3o2nUPbTYvPpV52y8JYnRC8js82cCcIgkazviNPOShMZNqxxrD5qj8v6Xek0PzQM
-         t8Mw4skzKSw7RY8JKukxjRJ8ViwH0J3uDg4rWOX+304CcCsYmzUw9a940Xe9xhL2m755
-         729UKuuK9AAYzRb+NYXGEIcYcybgGf+qb2p8/WpArHJXgb3xKxRUALK4k32E5T61G9Z/
-         w1XEIIkFzwz6pbs/5Gm1PQoISZo9WiBLVO+poFr7W6VxnUolOi+PUiODdEyEnN4/Kl3B
-         TwnXuznzbiLzKf9s1QJRn3mygmqLXKerHlHy3PpqrPRzVi0Ac6djkOnSeqogdTs+O8pi
-         54aw==
-X-Gm-Message-State: AOAM533RC1rsWn/QbjceWQ8URO2+XVUfpmoq7Nahvi8RnSfxQm1NrkBp
-        bLnqv8It6wT4zsfCF6v0pbPC3G/ZOTLi2eZj5o0=
-X-Google-Smtp-Source: ABdhPJyQYVyG2Nrpj7v4X2LzadfdJlIjq4xsdzjeJgihFc0kETctnjfbzmVGoNPT4H8c/qme3H2i6bZ7ssJAtPzN8bI=
-X-Received: by 2002:a65:60ce:: with SMTP id r14mr61864235pgv.85.1594441967797;
- Fri, 10 Jul 2020 21:32:47 -0700 (PDT)
+        id S1727028AbgGKFnS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 11 Jul 2020 01:43:18 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:64447 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbgGKFnQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Jul 2020 01:43:16 -0400
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200711054314epoutp01d3ce3855213a2495a809a2fb188ab51f~gnF25JpjH0343603436epoutp01S
+        for <linux-scsi@vger.kernel.org>; Sat, 11 Jul 2020 05:43:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200711054314epoutp01d3ce3855213a2495a809a2fb188ab51f~gnF25JpjH0343603436epoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1594446194;
+        bh=Fc+G9cEgRDAwtZnC6nL4FEzG8Xh1h8wSRMJLnh4bITg=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=AYg1cCwcPNZMO+DDixJSGdS3ALl1AMJwLC+WD4hN26Fr/i/ihIdYNsWIJdIs/m4qP
+         gvr/9V0xyBhB3LbgLltzhh8qAfySDWivLY4qdKu9+5Klv4lUrMDDjXulVEjbKrz2Sf
+         cegAfNGBWc4pBYn2fUnrzdSCKKQ/jypJCbuFE8ww=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20200711054313epcas2p3fb9cdb0cc07294499b347f1752cd7bff~gnF2DuMe11901419014epcas2p3U;
+        Sat, 11 Jul 2020 05:43:13 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.187]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4B3f2k1blXzMqYm0; Sat, 11 Jul
+        2020 05:43:10 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EF.23.18874.C61590F5; Sat, 11 Jul 2020 14:43:08 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20200711054307epcas2p38f68f112590c51489b67bd98a67c4a65~gnFwn6U0R1649216492epcas2p3P;
+        Sat, 11 Jul 2020 05:43:07 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200711054307epsmtrp18c25909e7bd8138a76689398bee27e75~gnFwnDpbJ2970129701epsmtrp1c;
+        Sat, 11 Jul 2020 05:43:07 +0000 (GMT)
+X-AuditID: b6c32a46-503ff700000049ba-8a-5f09516c1a31
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        02.5D.08303.B61590F5; Sat, 11 Jul 2020 14:43:07 +0900 (KST)
+Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20200711054307epsmtip2334d8cfdeba503b1e6e12fd2e6a4e25d~gnFwVL-Ri2005520055epsmtip2I;
+        Sat, 11 Jul 2020 05:43:07 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     "'Avri Altman'" <Avri.Altman@wdc.com>,
+        <linux-scsi@vger.kernel.org>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <bvanassche@acm.org>,
+        <grant.jung@samsung.com>, <sc.suh@samsung.com>,
+        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>
+In-Reply-To: <BYAPR04MB4629BA9BFCD4C40BCB9EB920FC640@BYAPR04MB4629.namprd04.prod.outlook.com>
+Subject: RE: [RESEND RFC PATCH v4 1/3] ufs: introduce a callback to get info
+ of command completion
+Date:   Sat, 11 Jul 2020 14:43:07 +0900
+Message-ID: <000801d65746$276bed00$7643c700$@samsung.com>
 MIME-Version: 1.0
-Received: by 2002:a17:90a:3aec:0:0:0:0 with HTTP; Fri, 10 Jul 2020 21:32:46
- -0700 (PDT)
-Reply-To: evanaprso@gmail.com
-From:   EVANA PRSO <rm2568590@gmail.com>
-Date:   Sat, 11 Jul 2020 06:32:46 +0200
-Message-ID: <CADgyfhaTiJrmUic1aKhC4saVxqJuAmmXfzyEgsOiyosaEDsbeQ@mail.gmail.com>
-Subject: please i need your co-operation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJ3IuC2j48zjcAhrcL1upjrEzI4TgJByUvjAi5JfYQBvtHU0qeOzvAw
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKJsWRmVeSWpSXmKPExsWy7bCmmW5OIGe8wfQmUYsH87axWextO8Fu
+        8fLnVTaLgw87WSymffjJbPFp/TJWi19/17NbrF78gMVi0Y1tTBbd13ewWSw//o/JouvuDUaL
+        pf/esjjwely+4u1xua+XyWPCogOMHt/Xd7B5fHx6i8Wjb8sqRo/Pm+Q82g90MwVwROXYZKQm
+        pqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gCdrKRQlphTChQK
+        SCwuVtK3synKLy1JVcjILy6xVUotSMkpMDQs0CtOzC0uzUvXS87PtTI0MDAyBapMyMk4dXo5
+        a8F+toqVZw+yNjBOZe1i5OSQEDCRuL73KVsXIxeHkMAORokdl+8xQzifGCWWPvgO5XxmlFjY
+        tx+u5duxiSwQiV2MEhNP/YZyXjBKPJg6mwmkik1AW2Law92sIAkRgftMEkd2PmABSXAKxEp8
+        2vcIbJSwQIrEzDcv2EFsFgFViY/3foA18wpYSmw50wRlC0qcnPkErJdZQF5i+9s5zBBnKEj8
+        fLoMbI6IgJvE6UcHmCFqRCRmd7aB3S0hcIZDouHIISaIBheJXY/fQDULS7w6voUdwpaSeNnf
+        BmXXS+yb2sAK0dzDKPF03z9GiISxxKxn7UA2B9AGTYn1u/RBTAkBZYkjt6Bu45PoOPyXHSLM
+        K9HRJgTRqCzxa9JkqCGSEjNv3oEq8ZC4v1FxAqPiLCRPzkLy5Cwkz8xCWLuAkWUVo1hqQXFu
+        emqxUYERcmxvYgSnZy23HYxT3n7QO8TIxMF4iFGCg1lJhDdalDNeiDclsbIqtSg/vqg0J7X4
+        EKMpMNgnMkuJJucDM0ReSbyhqZGZmYGlqYWpmZGFkjhvveKFOCGB9MSS1OzU1ILUIpg+Jg5O
+        qQam/o+B63debLnx1cq5ofbnoxlbZvvuWslZ4j6BR9X59RyRrGWTowKtLnt099dF/P019f6q
+        oDZLs+Jfu/9f8xYXXcnIphI3w+n6UdY72s9Xbq7R59s84ZVfiuE5y+CFdZtvLVbf7hsn/XTX
+        +pBPjxMXXGl9p745+6WFSOuWW88t4m6uW7HE/OLy2cqvRBqvZrJyysxPSzhu/EBWonOn9cvP
+        rSKcBWu45HqF54W8ufdi59+gDQlrUybMu/731JLS7n8dMtc4rwUmr7SI4PEOUp5mdeOe90/N
+        4/v6/7dwXNT/f2jtq0lmCU/Y686W3w5Y/v/7m6fLa4uOLD33Nm/LqvScM4yeR6Q2C6qLdgRr
+        TjnX8lKJpTgj0VCLuag4EQCtr/6mWAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKIsWRmVeSWpSXmKPExsWy7bCSvG52IGe8wb1jihYP5m1js9jbdoLd
+        4uXPq2wWBx92slhM+/CT2eLT+mWsFr/+rme3WL34AYvFohvbmCy6r+9gs1h+/B+TRdfdG4wW
+        S/+9ZXHg9bh8xdvjcl8vk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5tB/oZgrgiOKySUnN
+        ySxLLdK3S+DKOHV6OWvBfraKlWcPsjYwTmXtYuTkkBAwkfh2bCJLFyMXh5DADkaJhUufs0Ek
+        JCVO7HzOCGELS9xvOcIKUfSMUWLSwY/sIAk2AW2JaQ93gyVEBN4ySdy5fZkJomo1k8TnLRNY
+        QKo4BWIlPu17BLZPWCBJYsWldWDdLAKqEh/v/WACsXkFLCW2nGmCsgUlTs58AtbLDLSh92Er
+        I4QtL7H97RxmiJMUJH4+XQY2U0TATeL0owPMEDUiErM725gnMArNQjJqFpJRs5CMmoWkZQEj
+        yypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjOCY1NLawbhn1Qe9Q4xMHIyHGCU4mJVE
+        eKNFOeOFeFMSK6tSi/Lji0pzUosPMUpzsCiJ836dtTBOSCA9sSQ1OzW1ILUIJsvEwSnVwDTz
+        yD7taEm7qesTzUryGr4VWPyP03i1qXJO9b7ZArKlmZf9jXj2Zrq9uXNLqv9P3PzY7mNWM5fr
+        vfujzXIkaKF08vSn23z/ajseZo7q/djCyNFpnN7b0bBq2qtXXIutSltVL65caqzMumvn+nf7
+        LjT1vDozYVL8goOGBQ3/dBqDd7ZH79kTxeS8y/2x1rKAr8/fzq47+vjU7JerLy3+Wfz04/XA
+        tOPmx387Tn4o0cSov4D9UpyB8REJ2xVvVStuSWrwqc/9wvPMN3RehussTUnRB7HztzBNsPZ0
+        i/2ydPKl5lX9nUYzyufwzsvxbZl4oT3zfEbRYe0beklh1a05+5SOfpk695Dvshlpdc4p6g5K
+        LMUZiYZazEXFiQCN8YQLOAMAAA==
+X-CMS-MailID: 20200711054307epcas2p38f68f112590c51489b67bd98a67c4a65
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20200708023155epcas2p3ac30e4b0c24855e0a3466126bba9c612
+References: <cover.1594174981.git.kwmad.kim@samsung.com>
+        <CGME20200708023155epcas2p3ac30e4b0c24855e0a3466126bba9c612@epcas2p3.samsung.com>
+        <89b90646c310fb0048701f219eb23c4b35ef7dcf.1594174981.git.kwmad.kim@samsung.com>
+        <BYAPR04MB4629BA9BFCD4C40BCB9EB920FC640@BYAPR04MB4629.namprd04.prod.outlook.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My Dear friend,
+> > Some SoC specific might need command history for various reasons, such
+> > as stacking command contexts in system memory to check for debugging
+> > in the future or scaling some DVFS knobs to boost IO throughput.
+> >
+> > What you would do with the information could be variant per SoC
+> > vendor.
+> >
+> > Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+> > Acked-By: Stanley Chu <stanley.chu@mediatek.com>
+> Reviewed-by: Avri Altman <avri.altman@wdc.com>
+> 
+> It will require another spin however, because you'll need to rebase it
+> After Stanley's (scsi: ufs: Fix and simplify setup_xfer_req vop and
+> request's completion timestamp) Is accepted.
+> 
+> Thanks,
+> Avri
 
+Got it.
+And is there any way that you can recommend to rebase, not by hand?
+I tried to find how but failed.
 
- My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
-will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
-A gold merchant who owns a small gold Mine in Syria; He died of
-Cardiovascular Disease in mid-March 2011. During his life time he
-deposited the sum of (=E2=82=AC16.1 Million Euro) sixteen million, one hund=
-red
-thousand Euros in a bank in Ouagadougou the capital city of Burkina
-Faso in West Africa. The deposited money was from the sale of the
-shares, death benefits payment and entitlements of my deceased husband
-by his company. I am sending this message to you praying that it will
-reach you in good health, since I am not in good health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day.
+Thanks.
+Kiwoong Kim
 
-
- I am suffering from long time cancer and presently i am partially
-suffering from a stroke illness which has become almost impossible for
-me to move around. I am married to my late husband for over 4 years
-before he died and is unfortunately that we don't have a child, my
-doctor confinded in me that i have less chance to live. Having known
-my health condition, I decided to contact you to claim the fund since
-I don't have any relation I grew up from the orphanage home, I have
-decided to donate what I have to you for the support of helping
-Motherless babies/Less privileged/Widows' because I am dying and
-diagnosed of cancer for about 2 years ago. I have been touched by God
-Almighty to donate from what I have inherited from my late husband to
-you for good work of God Almighty. I have asked Almighty God to
-forgive me and believe he has, because He is a Merciful God I will be
-going in for an operation surgery soon
-.
-
- This is the reason i need your services to stand as my next of kin or
-an executor to claim the funds for charity purposes. If this money
-remains unclaimed after my death, the bank executives or the
-government will take the money as unclaimed fund and maybe use it for
-selfish and worthless ventures, I need a very honest person who can
-claim this money and use it for Charity works, for orphanages, widows
-and also build schools for less privilege that will be named after my
-late husband and my name; I need your urgent answer to know if you
-will be able to execute this project, and I will give you more
-information on how the fund will be transferred to your bank account.
-
-
-Thanks,
-Mrs. Evana Prso.
