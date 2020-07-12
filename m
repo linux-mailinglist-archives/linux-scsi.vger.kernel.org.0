@@ -2,119 +2,219 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA7921C6F1
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2020 03:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8403121C7D8
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2020 09:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728110AbgGLBbP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Jul 2020 21:31:15 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:17546 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726948AbgGLBbP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Jul 2020 21:31:15 -0400
-X-UUID: 0d3889cf5fdb4d0fbdada934b5b2d504-20200712
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=IqgD/1yeFLs6o/vFQu2a3JKBQxZLmFNOwwCR3zm/zLc=;
-        b=CKyckvdYdjnbffxVwD6Vmi1I9L+JZwUI177D0Ohb/xyvqsR7yZl39ov90Bzt6p20zZdWvNb7AR1oFzyeE39DI64EGuLQ08r4s3PwDzEMY7UpMnWDhIfXEC1WPF1R28zuQod2hiT0569K0abgJjSh0igrW5mhjsXxhlTzM5OD/EE=;
-X-UUID: 0d3889cf5fdb4d0fbdada934b5b2d504-20200712
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 222224388; Sun, 12 Jul 2020 09:31:09 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sun, 12 Jul 2020 09:31:07 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 12 Jul 2020 09:31:07 +0800
-Message-ID: <1594517468.10600.35.camel@mtkswgap22>
-Subject: Re: [RFC PATCH v3] scsi: ufs: Quiesce all scsi devices before
- shutdown
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>
-CC:     <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
-        <bvanassche@acm.org>, <beanhuo@micron.com>,
-        <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
-        <matthias.bgg@gmail.com>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <cc.chou@mediatek.com>
-Date:   Sun, 12 Jul 2020 09:31:08 +0800
-In-Reply-To: <20200706132218.21171-1-stanley.chu@mediatek.com>
-References: <20200706132218.21171-1-stanley.chu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1728010AbgGLHW1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 12 Jul 2020 03:22:27 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:36303 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725974AbgGLHW1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Jul 2020 03:22:27 -0400
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200712072222epoutp028b3d342ab697021fa4232fb7ea3c8493~g8FsSNLX_1557415574epoutp020
+        for <linux-scsi@vger.kernel.org>; Sun, 12 Jul 2020 07:22:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200712072222epoutp028b3d342ab697021fa4232fb7ea3c8493~g8FsSNLX_1557415574epoutp020
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1594538542;
+        bh=2VOYhEkfmNjOCXCJBU10sgoNXdtdoQFwB5ky+ZxAajw=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=uyVy2Par09lVmLdLyTDd7xcPkLGoqjUa7BxyKIbHSEIW1hADjiFUUW9vfE8UK5crg
+         6Ld0UCEDlRGsvehw9JrdDFjeNSO7XtDbrjHPrhHYgEUfS8Mu+9EfNX3NGKNAToIBXq
+         iWgbuEZtG6rqXT0rTqY2dAMudDoRL2sCSjbrM7bE=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20200712072221epcas5p413abc6e136eaef67d67fff81d1cac891~g8Fr1BVR52144521445epcas5p4e;
+        Sun, 12 Jul 2020 07:22:21 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9D.16.09467.D2ABA0F5; Sun, 12 Jul 2020 16:22:21 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20200712015541epcas5p4623c06331d837f7aefef7ee0658ebeaf~g3oeEAHmg1944819448epcas5p4c;
+        Sun, 12 Jul 2020 01:55:41 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200712015541epsmtrp16172aa0e6d43fefc4e298a60810c30f5~g3oeDEpLi1447314473epsmtrp11;
+        Sun, 12 Jul 2020 01:55:41 +0000 (GMT)
+X-AuditID: b6c32a49-a3fff700000024fb-1c-5f0aba2de3ef
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F2.D8.08303.D9D6A0F5; Sun, 12 Jul 2020 10:55:41 +0900 (KST)
+Received: from alimakhtar02 (unknown [107.108.234.165]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200712015538epsmtip16012df5251c5d621e27c2d62358ad728~g3oa2hAH42275322753epsmtip1F;
+        Sun, 12 Jul 2020 01:55:38 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Kiwoong Kim'" <kwmad.kim@samsung.com>,
+        <linux-scsi@vger.kernel.org>, <avri.altman@wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <bvanassche@acm.org>,
+        <grant.jung@samsung.com>, <sc.suh@samsung.com>,
+        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>
+Cc:     "'Alim Akhtar'" <alim.akhtar@samsung.com>
+In-Reply-To: <71f2a8e3fdfcf9f60cc8b5e14acf3a57cf22d4f8.1594450408.git.kwmad.kim@samsung.com>
+Subject: RE: [RFC PATCH v5 2/3] ufs: exynos: introduce command history
+Date:   Sun, 12 Jul 2020 07:25:36 +0530
+Message-ID: <000001d657ef$8c084200$a418c600$@samsung.com>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIueMtDWjJeafEhyFhDluPRduUJOgLIn2wwAYGYW/OoMJhMEA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIKsWRmVeSWpSXmKPExsWy7bCmuq7uLq54g1dNMhYP5m1js9jbdoLd
+        4uXPq2wWBx92slhM+/CT2eLT+mWsFr/+rme3WL34AYvFohvbmCxubjnKYtF9fQebxfLj/5gs
+        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
+        FJdNSmpOZllqkb5dAlfG8YbXLAVfZComdK1kbWD8Id7FyMkhIWAicejhd7YuRi4OIYHdjBLX
+        3yxih3A+MUocnrqYGcL5zCjR+uolO0zLyRkXoFp2MUo83fKVFcJ5wyixasEbFpAqNgFdiR2L
+        28CqRARuM0msPdoJ1s4MlDj5ZCkTiM0pECOxZfs0sAZhATeJU227wGwWAVWJGde2sILYvAKW
+        Ev9nbGeGsAUlTs58wgIxR1ti2cLXzBAnKUj8fLoMrF5EwEliffNrqF3iEkd/9oD9ICFwh0Pi
+        8pXfQM0cQI6LxP2HORC9whKvjm+Bek1K4mV/GztESbZEzy5jiHCNxNJ5x1ggbHuJA1fmgE1h
+        FtCUWL9LHyIsKzH11DomiK18Er2/nzBBxHkldsyDsVUlmt9dhRojLTGxu5t1AqPSLCSPzULy
+        2CwkD8xC2LaAkWUVo2RqQXFuemqxaYFhXmq5XnFibnFpXrpecn7uJkZwqtPy3MF498EHvUOM
+        TByMhxglOJiVRHijRTnjhXhTEiurUovy44tKc1KLDzFKc7AoifMq/TgTJySQnliSmp2aWpBa
+        BJNl4uCUamBaf5Z1sZHl1k0mzbJh/5VncblG5k27/Pt1ttXCVE/u0n/XmBkXaHvtYLjJ9yro
+        YG6o13mToppV8cHT+xNUNggZHWiRLBOwaIm46z9nae6LpsVZYrmPhWW6Az5dLsj6NVmv7LtC
+        I4u9+xvFyNdp06pe2lSqnFjb6zTlu+iaMpetE0JP3G+4/SmvY5dS4NZNakuEvN7dYq6TmSom
+        4Gi59vkpQ628v4uYjXLcGj/GPEv+f3C7uV3RqhBTLvfsL0mRRns3m1fxeAbzeS3u+aJ09dLX
+        J/0/HabbzOxinqim1siac25BmPzHxdofrttwe0mznT8yx+s4832dJOcrTsF/5JsN+NY/KT+3
+        73OjRpzECiWW4oxEQy3mouJEAPbVt37kAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCIsWRmVeSWpSXmKPExsWy7bCSnO7cXK54g4sfVSwezNvGZrG37QS7
+        xcufV9ksDj7sZLGY9uEns8Wn9ctYLX79Xc9usXrxAxaLRTe2MVnc3HKUxaL7+g42i+XH/zFZ
+        dN29wWix9N9bFgc+j8tXvD0u9/UyeUxYdIDR4/v6DjaPj09vsXj0bVnF6PF5k5xH+4FupgCO
+        KC6blNSczLLUIn27BK6Mxh83WAqmyVS8+naLqYFxkngXIyeHhICJxMkZF9hAbCGBHYwSr69a
+        QsSlJa5vnMAOYQtLrPz3HMjmAqp5xSixe+E7RpAEm4CuxI7FbWwgCRGB10wS9878YgJJMAMl
+        Tj5ZygQx9RajxOx1xiA2p0CMxJbt01hAbGEBN4lTbbvAbBYBVYkZ17awgti8ApYS/2dsZ4aw
+        BSVOznzCAjFTW+Lpzadw9rKFr5khrlOQ+Pl0GViviICTxPrm1+wQNeISR3/2ME9gFJ6FZNQs
+        JKNmIRk1C0nLAkaWVYySqQXFuem5xYYFRnmp5XrFibnFpXnpesn5uZsYwRGrpbWDcc+qD3qH
+        GJk4GA8xSnAwK4nwRotyxgvxpiRWVqUW5ccXleakFh9ilOZgURLn/TprYZyQQHpiSWp2ampB
+        ahFMlomDU6qBacncKEbP/bdXtM2Tmz3zv2aK1qNnvdf3ZWtKKfe3HypSs9Hz7nm+bNXLwN4N
+        C9nPGlScX3ykWdNpks2kvWY7beOWHJ18LPBIzJPnH+4bKWjbv7D8+n/VxM29ddkNk5+ExHy/
+        eV09Zsbd9TbpcbWfLM9HW+2uvHv7WtuUBLUvX8yuSf+Z8EtrS/h+A/lpcSsy/vUEB0pc3uf4
+        OyvnmQ/33qqgT/NP+DvNttx6p/Hsxx3sE/g6T+xRWvd67fnAj86fzgYZrZ25/GfShZj/222l
+        mx5c8l3WHXqeq3gLe7/25GvVj9+f3qHmZ/bSwz9m5ZVrhxgbm1wnvMrdd07+8e8J89KF07oc
+        97P63/i+1zSRqXGyEktxRqKhFnNRcSIAMYFSCkcDAAA=
+X-CMS-MailID: 20200712015541epcas5p4623c06331d837f7aefef7ee0658ebeaf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200711070544epcas2p4d3a75d2f56b8162c09efa0eeaf012fa2
+References: <cover.1594450408.git.kwmad.kim@samsung.com>
+        <CGME20200711070544epcas2p4d3a75d2f56b8162c09efa0eeaf012fa2@epcas2p4.samsung.com>
+        <71f2a8e3fdfcf9f60cc8b5e14acf3a57cf22d4f8.1594450408.git.kwmad.kim@samsung.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgQmFydCwgQXZyaSwNCg0KTWF5IEkga25vdyBpZiB5b3UgaGF2ZSBhbnkgc3VnZ2VzdGlvbiBm
-b3IgdGhpcyBSRkMgZml4Pw0KDQpWZXJ5IGFwcHJlY2lhdGVkIDogKQ0KDQpPbiBNb24sIDIwMjAt
-MDctMDYgYXQgMjE6MjIgKzA4MDAsIFN0YW5sZXkgQ2h1IHdyb3RlOg0KPiBDdXJyZW50bHkgSS9P
-IHJlcXVlc3QgY291bGQgYmUgc3RpbGwgc3VibWl0dGVkIHRvIFVGUyBkZXZpY2Ugd2hpbGUNCj4g
-VUZTIGlzIHdvcmtpbmcgb24gc2h1dGRvd24gZmxvdy4gVGhpcyBtYXkgbGVhZCB0byByYWNpbmcg
-YXMgYmVsb3cNCj4gc2NlbmFyaW9zIGFuZCBmaW5hbGx5IHN5c3RlbSBtYXkgY3Jhc2ggZHVlIHRv
-IHVuY2xvY2tlZCByZWdpc3Rlcg0KPiBhY2Nlc3Nlcy4NCj4gDQo+IFRvIGZpeCB0aGlzIGtpbmQg
-b2YgaXNzdWVzLCBzcGVjaWZpY2FsbHkgcXVpZXNjZSBhbGwgU0NTSSBkZXZpY2VzDQo+IGJlZm9y
-ZSBVRlMgc2h1dGRvd24gdG8gYmxvY2sgYWxsIEkvTyByZXF1ZXN0IHNlbmRpbmcgZnJvbSBibG9j
-aw0KPiBsYXllci4NCj4gDQo+IEV4YW1wbGUgb2YgcmFjaW5nIHNjZW5hcmlvOiBXaGlsZSBVRlMg
-ZGV2aWNlIGlzIHJ1bnRpbWUtc3VzcGVuZGVkDQo+IA0KPiBUaHJlYWQgIzE6IEV4ZWN1dGluZyBV
-RlMgc2h1dGRvd24gZmxvdywgZS5nLiwNCj4gICAgICAgICAgICB1ZnNoY2Rfc3VzcGVuZChVRlNf
-U0hVVERPV05fUE0pDQo+IFRocmVhZCAjMjogRXhlY3V0aW5nIHJ1bnRpbWUgcmVzdW1lIGZsb3cg
-dHJpZ2dlcmVkIGJ5IEkvTyByZXF1ZXN0LA0KPiAgICAgICAgICAgIGUuZy4sIHVmc2hjZF9yZXN1
-bWUoVUZTX1JVTlRJTUVfUE0pDQo+IA0KPiBUaGlzIGJyZWFrcyB0aGUgYXNzdW1wdGlvbiB0aGF0
-IFVGUyBQTSBmbG93cyBjYW4gbm90IGJlIHJ1bm5pbmcNCj4gY29uY3VycmVudGx5IGFuZCBzb21l
-IHVuZXhwZWN0ZWQgcmFjaW5nIGJlaGF2aW9yIG1heSBoYXBwZW4uDQo+IA0KPiBTaWduZWQtb2Zm
-LWJ5OiBTdGFubGV5IENodSA8c3RhbmxleS5jaHVAbWVkaWF0ZWsuY29tPg0KPiAtLS0NCj4gIGRy
-aXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMgfCAzOCArKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDM4IGluc2VydGlvbnMoKykNCj4gDQo+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jIGIvZHJpdmVycy9zY3NpL3Vmcy91
-ZnNoY2QuYw0KPiBpbmRleCA1OTM1OGJiNzUwMTQuLjEwNDE3M2MwMzQ5MiAxMDA2NDQNCj4gLS0t
-IGEvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYw0KPiArKysgYi9kcml2ZXJzL3Njc2kvdWZzL3Vm
-c2hjZC5jDQo+IEBAIC0xNTgsNiArMTU4LDEyIEBAIHN0cnVjdCB1ZnNfcG1fbHZsX3N0YXRlcyB1
-ZnNfcG1fbHZsX3N0YXRlc1tdID0gew0KPiAgCXtVRlNfUE9XRVJET1dOX1BXUl9NT0RFLCBVSUNf
-TElOS19PRkZfU1RBVEV9LA0KPiAgfTsNCj4gIA0KPiArI2RlZmluZSB1ZnNoY2Rfc2NzaV9mb3Jf
-ZWFjaF9zZGV2KGZuKSBcDQo+ICsJbGlzdF9mb3JfZWFjaF9lbnRyeShzdGFyZ2V0LCAmaGJhLT5o
-b3N0LT5fX3RhcmdldHMsIHNpYmxpbmdzKSB7IFwNCj4gKwkJX19zdGFyZ2V0X2Zvcl9lYWNoX2Rl
-dmljZShzdGFyZ2V0LCBOVUxMLCBcDQo+ICsJCQkJCSAgZm4pOyBcDQo+ICsJfQ0KPiArDQo+ICBz
-dGF0aWMgaW5saW5lIGVudW0gdWZzX2Rldl9wd3JfbW9kZQ0KPiAgdWZzX2dldF9wbV9sdmxfdG9f
-ZGV2X3B3cl9tb2RlKGVudW0gdWZzX3BtX2xldmVsIGx2bCkNCj4gIHsNCj4gQEAgLTg1ODgsNiAr
-ODU5NCwxOSBAQCBpbnQgdWZzaGNkX3J1bnRpbWVfaWRsZShzdHJ1Y3QgdWZzX2hiYSAqaGJhKQ0K
-PiAgfQ0KPiAgRVhQT1JUX1NZTUJPTCh1ZnNoY2RfcnVudGltZV9pZGxlKTsNCj4gIA0KPiArc3Rh
-dGljIHZvaWQgdWZzaGNkX2NsZWFudXBfcXVldWUoc3RydWN0IHNjc2lfZGV2aWNlICpzZGV2LCB2
-b2lkICpkYXRhKQ0KPiArew0KPiArCWlmIChzZGV2LT5yZXF1ZXN0X3F1ZXVlKQ0KPiArCQlibGtf
-Y2xlYW51cF9xdWV1ZShzZGV2LT5yZXF1ZXN0X3F1ZXVlKTsNCj4gK30NCj4gKw0KPiArc3RhdGlj
-IHZvaWQgdWZzaGNkX3F1aWVjZV9zZGV2KHN0cnVjdCBzY3NpX2RldmljZSAqc2Rldiwgdm9pZCAq
-ZGF0YSkNCj4gK3sNCj4gKwkvKiBTdXNwZW5kZWQgZGV2aWNlcyBhcmUgYWxyZWFkeSBxdWllY3Nl
-ZCBhbmQgc2hhbGwgYmUgc2tpcHBlZCAqLw0KPiArCWlmICghcG1fcnVudGltZV9zdXNwZW5kZWQo
-JnNkZXYtPnNkZXZfZ2VuZGV2KSkNCj4gKwkJc2NzaV9kZXZpY2VfcXVpZXNjZShzZGV2KTsNCj4g
-K30NCj4gKw0KPiAgLyoqDQo+ICAgKiB1ZnNoY2Rfc2h1dGRvd24gLSBzaHV0ZG93biByb3V0aW5l
-DQo+ICAgKiBAaGJhOiBwZXIgYWRhcHRlciBpbnN0YW5jZQ0KPiBAQCAtODU5OSw2ICs4NjE4LDcg
-QEAgRVhQT1JUX1NZTUJPTCh1ZnNoY2RfcnVudGltZV9pZGxlKTsNCj4gIGludCB1ZnNoY2Rfc2h1
-dGRvd24oc3RydWN0IHVmc19oYmEgKmhiYSkNCj4gIHsNCj4gIAlpbnQgcmV0ID0gMDsNCj4gKwlz
-dHJ1Y3Qgc2NzaV90YXJnZXQgKnN0YXJnZXQ7DQo+ICANCj4gIAlpZiAoIWhiYS0+aXNfcG93ZXJl
-ZCkNCj4gIAkJZ290byBvdXQ7DQo+IEBAIC04NjEyLDcgKzg2MzIsMjUgQEAgaW50IHVmc2hjZF9z
-aHV0ZG93bihzdHJ1Y3QgdWZzX2hiYSAqaGJhKQ0KPiAgCQkJZ290byBvdXQ7DQo+ICAJfQ0KPiAg
-DQo+ICsJLyoNCj4gKwkgKiBRdWllc2NlIGFsbCBTQ1NJIGRldmljZXMgdG8gcHJldmVudCBhbnkg
-bm9uLVBNIHJlcXVlc3RzIHNlbmRpbmcNCj4gKwkgKiBmcm9tIGJsb2NrIGxheWVyIGR1cmluZyBh
-bmQgYWZ0ZXIgc2h1dGRvd24uDQo+ICsJICoNCj4gKwkgKiBIZXJlIHdlIGNhbiBub3QgdXNlIGJs
-a19jbGVhbnVwX3F1ZXVlKCkgc2luY2UgUE0gcmVxdWVzdHMNCj4gKwkgKiAod2l0aCBCTEtfTVFf
-UkVRX1BSRUVNUFQgZmxhZykgYXJlIHN0aWxsIHJlcXVpcmVkIHRvIGJlIHNlbnQNCj4gKwkgKiB0
-aHJvdWdoIGJsb2NrIGxheWVyLiBUaGVyZWZvcmUgU0NTSSBjb21tYW5kIHF1ZXVlZCBhZnRlciB0
-aGUNCj4gKwkgKiBzY3NpX3RhcmdldF9xdWllc2NlKCkgY2FsbCByZXR1cm5lZCB3aWxsIGJsb2Nr
-IHVudGlsDQo+ICsJICogYmxrX2NsZWFudXBfcXVldWUoKSBpcyBjYWxsZWQuDQo+ICsJICoNCj4g
-KwkgKiBCZXNpZGVzLCBzY3NpX3RhcmdldF8idW4icXVpZXNjZSAoZS5nLiwgc2NzaV90YXJnZXRf
-cmVzdW1lKSBjYW4NCj4gKwkgKiBiZSBpZ25vcmVkIHNpbmNlIHNodXRkb3duIGlzIG9uZS13YXkg
-Zmxvdy4NCj4gKwkgKi8NCj4gKwl1ZnNoY2Rfc2NzaV9mb3JfZWFjaF9zZGV2KHVmc2hjZF9xdWll
-Y2Vfc2Rldik7DQo+ICsNCj4gIAlyZXQgPSB1ZnNoY2Rfc3VzcGVuZChoYmEsIFVGU19TSFVURE9X
-Tl9QTSk7DQo+ICsNCj4gKwkvKiBTZXQgcXVldWUgYXMgZHlpbmcgdG8gbm90IGJsb2NrIHF1ZXVl
-aW5nIGNvbW1hbmRzICovDQo+ICsJdWZzaGNkX3Njc2lfZm9yX2VhY2hfc2Rldih1ZnNoY2RfY2xl
-YW51cF9xdWV1ZSk7DQo+ICBvdXQ6DQo+ICAJaWYgKHJldCkNCj4gIAkJZGV2X2VycihoYmEtPmRl
-diwgIiVzIGZhaWxlZCwgZXJyICVkXG4iLCBfX2Z1bmNfXywgcmV0KTsNCg0K
+Hi Kiwoong,
+
+> -----Original Message-----
+> From: Kiwoong Kim <kwmad.kim=40samsung.com>
+> Sent: 11 July 2020 12:28
+> To: linux-scsi=40vger.kernel.org; alim.akhtar=40samsung.com;
+> avri.altman=40wdc.com; jejb=40linux.ibm.com; martin.petersen=40oracle.com=
+;
+> beanhuo=40micron.com; asutoshd=40codeaurora.org; cang=40codeaurora.org;
+> bvanassche=40acm.org; grant.jung=40samsung.com; sc.suh=40samsung.com;
+> hy50.seo=40samsung.com; sh425.lee=40samsung.com
+> Cc: Kiwoong Kim <kwmad.kim=40samsung.com>
+> Subject: =5BRFC PATCH v5 2/3=5D ufs: exynos: introduce command history
+>=20
+> This includes functions to record contexts of incoming commands in a circ=
+ular
+> queue. ufshcd.c has already some function tracer calls to get command his=
+tory
+> but ftrace would be gone when system dies before you get the information,
+> such as panic cases.
+>=20
+> This patch also implements callbacks compl_xfer_req to store IO contexts =
+at
+> completion times.
+>=20
+> When you turn on CONFIG_SCSI_UFS_EXYNOS_CMD_LOG, the driver collects
+> the information from incoming commands in the circular queue.
+>=20
+> Signed-off-by: Kiwoong Kim <kwmad.kim=40samsung.com>
+> +void exynos_ufs_cmd_log_start(struct ufs_exynos_handle *handle,
+> +			      struct ufs_hba *hba, int tag)
+> +=7B
+> +	struct ufs_s_dbg_mgr *mgr =3D (struct ufs_s_dbg_mgr *)handle->private;
+> +	struct scsi_cmnd *cmd =3D hba->lrb=5Btag=5D.cmd;
+> +	int cpu =3D raw_smp_processor_id();
+> +	struct cmd_data *cmd_log =3D &mgr->cmd_log;	/* temp buffer to put
+> */
+> +	u64 lba =3D 0;
+> +	u32 sct =3D 0;
+> +
+> +	if (mgr->active =3D=3D 0)
+> +		return;
+> +
+> +	cmd_log->start_time =3D cpu_clock(cpu);
+> +	cmd_log->op =3D cmd->cmnd=5B0=5D;
+> +	cmd_log->tag =3D tag;
+> +
+> +	/* This function runtime is protected by spinlock from outside */
+> +	cmd_log->outstanding_reqs =3D hba->outstanding_reqs;
+> +
+> +	/* Now assume using WRITE_10 and READ_10 */
+> +	put_unaligned(cpu_to_le32(*(u32 *)cmd->cmnd=5B2=5D), (u32 *)&lba);
+This gives compilation error, you need to include <asm-generic/unaligned.h>
+Also type casting to u32 is not needed, will give build warnings.
+
+> +	put_unaligned(cpu_to_le16(*(u16 *)cmd->cmnd=5B7=5D), (u16 *)&sct);
+Type casting to u16 is not needed.
+
+> +	if (cmd->cmnd=5B0=5D =21=3D UNMAP)
+> +		cmd_log->lba =3D lba;
+> +
+> +	cmd_log->sct =3D sct;
+> +	cmd_log->retries =3D cmd->allowed;
+> +
+> +	ufs_s_put_cmd_log(mgr, cmd_log);
+> +=7D
+> +
+> +void exynos_ufs_cmd_log_end(struct ufs_exynos_handle *handle,
+> +			    struct ufs_hba *hba, int tag)
+> +=7B
+> +	struct ufs_s_dbg_mgr *mgr =3D (struct ufs_s_dbg_mgr *)handle->private;
+> +	struct scsi_cmnd *cmd =3D hba->lrb=5Btag=5D.cmd;
+Unused variable =22cmd=22
+
+> +	struct ufs_cmd_info *cmd_info =3D &mgr->cmd_info;
+> +	int cpu =3D raw_smp_processor_id();
+> +
+> +	if (mgr->active =3D=3D 0)
+> +		return;
+> +
+> +	cmd_info->pdata=5Btag=5D->end_time =3D cpu_clock(cpu); =7D
+> +
+> +int exynos_ufs_init_dbg(struct ufs_exynos_handle *handle, struct device
+> +*dev) =7B
+> +	struct ufs_s_dbg_mgr *mgr;
+> +
+> +	mgr =3D devm_kzalloc(dev, sizeof(struct ufs_s_dbg_mgr), GFP_KERNEL);
+> +	if (=21mgr)
+> +		return -ENOMEM;
+> +	handle->private =3D (void *)mgr;
+> +	mgr->handle =3D handle;
+> +	mgr->active =3D 1;
+> +
+> +	/* cmd log */
+> +	spin_lock_init(&mgr->cmd_lock);
+> +
+> +	return 0;
+> +=7D
+> +MODULE_AUTHOR(=22Kiwoong Kim <kwmad.kim=40samsung.com>=22);
+> +MODULE_DESCRIPTION(=22Exynos UFS debug information=22);
+> +MODULE_LICENSE(=22GPL=22); MODULE_VERSION(=220.1=22);
+May be =22GPL v2=22
+
+> diff --git a/drivers/scsi/ufs/ufs-exynos-if.h b/drivers/scsi/ufs/ufs-exyn=
+os-if.h
+> new file mode 100644
+> 2.7.4
+
 
