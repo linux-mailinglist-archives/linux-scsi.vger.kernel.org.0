@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A7821CAC8
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2020 19:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A8C21CAF0
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jul 2020 20:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729322AbgGLRkD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 12 Jul 2020 13:40:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40904 "EHLO mail.kernel.org"
+        id S1729235AbgGLS3h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 12 Jul 2020 14:29:37 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:50597 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729213AbgGLRkD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 12 Jul 2020 13:40:03 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.8-rc4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594575603;
-        bh=j81XFCc7+65cO2feCABXAVRBTsguNQfr1fhvqG91BGc=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Jj9qLctsWOotC+HaPA+iwhpn8cMPLkkSPt099JfBxRNjMZX3D0iL0tfDvq2IlArwM
-         HjPnPEqVASA+HcJG81bc6sm+dqy4m11PbQmcdkdP/m0y2hdn6iZO068h94wIdxYlGU
-         hL4dCc3SKKg5n9VghoM4cdG2lS+bx0eHYq8NhyIA=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1594495523.8494.5.camel@HansenPartnership.com>
-References: <1594495523.8494.5.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1594495523.8494.5.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: e094fd346021b820f37188aaa6b502c7490ab5b5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9599e9e7e3ee3a5afcdf00b05d4e86d256a98ae3
-Message-Id: <159457560314.22698.6084914334718791002.pr-tracker-bot@kernel.org>
-Date:   Sun, 12 Jul 2020 17:40:03 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1729104AbgGLS3h (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 12 Jul 2020 14:29:37 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 7B0A7204255;
+        Sun, 12 Jul 2020 20:29:35 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 74jjYyN7puPu; Sun, 12 Jul 2020 20:29:30 +0200 (CEST)
+Received: from xtwo70.bingwo.ca (host-45-78-251-166.dyn.295.ca [45.78.251.166])
+        by smtp.infotech.no (Postfix) with ESMTPA id 35351204164;
+        Sun, 12 Jul 2020 20:29:28 +0200 (CEST)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
+Subject: [PATCH 0/2] scsi_debug: every_nth cleanup, url + version
+Date:   Sun, 12 Jul 2020 14:29:25 -0400
+Message-Id: <20200712182927.72044-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 11 Jul 2020 12:25:23 -0700:
+It was becoming hard to follow exactly when to expect the error
+injection facilities in this driver to fire. Sometimes injected
+errors just didn't seem to happen.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+The error injection design was too complicated for what was
+required. Simplify it and make it more consistent. The second
+patch in this set does some housekeeping.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9599e9e7e3ee3a5afcdf00b05d4e86d256a98ae3
+Douglas Gilbert (2):
+  scsi_debug: every_nth triggered error injection
+  scsi_debug: update documentation url and bump version
 
-Thank you!
+ drivers/scsi/scsi_debug.c | 237 +++++++++++++++++---------------------
+ 1 file changed, 104 insertions(+), 133 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.25.1
+
