@@ -2,59 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D09D21D10F
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4694E21D125
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729304AbgGMIAY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 04:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
+        id S1729564AbgGMIBL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 04:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729272AbgGMIAX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 04:00:23 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3672EC061794
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:23 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id q15so12352772wmj.2
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:23 -0700 (PDT)
+        with ESMTP id S1729299AbgGMIAY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 04:00:24 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4EC061794
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:24 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id r12so14702183wrj.13
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=C5nB3Mt8dSammYcSx/DeGO6fJUxNEtSbs7LNv2ZUITw=;
-        b=NjKr/QMsSjWfSO/JOmYC84C++guFd+WrL/eGfj3JVVdCNTjdwTfdKFL9YTmY/5SHUy
-         KCO/MIRUrzZ1BEGCsbfhP1qRr2N7nVLGi/R+2ygcqF1CR5w08/8Jf653kIwLuqYfeTn7
-         U/3BIeOrHfhHjCz11ZZZIBa6v+H/yDoLElJQ7G9rCSBP+JtRs2PyLBIMVPJg5yZ1Da5A
-         N9iztupbtEz54GTddfIoqpuVn3/rgSg1qF3rIxLUnMxnYjfybObBUNCMSOvL2XMgSlcq
-         EwpQZ5T2VpxX+JfNHLNyqfwUfQasb4LrLq2ZyRebBAdEAbgVs7IslxW2KlrNnLNpYKvU
-         Vkig==
+        bh=s1f2VykJlM3ygLpY+EskgDzDL15LmxoT0Iv4BzUdNoA=;
+        b=qt186vtKt/PK9OFVozF2ZRakTSgUeJRV1rrbbqIKCx7/qsazwzFJ+7UmD1xgA05o3z
+         KOIGkNlEK6gM72mGnM8EMNzSKe5sNFw/q+a4vwVXV1vgV3v2qpKkgLosG42A5Bz/cURJ
+         n/TVPhX3q/sgAGqeyi+cUZcinU7LHM57nf8ED48+sziFHwCaPxn8y23NfGnk5FoLkcdP
+         vE9V9B5h3JcgZSk5p1mtloek9yXl7FDeDPWQHmaFlMsphXUqByWh4fXfs/W1yZT8iDcI
+         AYoPpHCJ2pAFp/vTiK5O1N3FCTLTP8DywpDNAn1wy8PLNgkNno80PYS+ZaxIqW2ndN4k
+         R4Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=C5nB3Mt8dSammYcSx/DeGO6fJUxNEtSbs7LNv2ZUITw=;
-        b=BlxLr5jIZKDYtN1GT78YKv0AzrwcYU6DgOKPijXQmUfXRz/6u/dFQ0jHXkWatgW1n2
-         mxtTXRZolI+IBhVUEiMQ3i0eK/sZvHitNfyqS6lUIO3oDW9/A6G3KHRlWKiwf6S08IaM
-         UX6MA6m66c3vy8xD14XJJl9krc8sLBy6drTFC+nS6ZqzNxbt05uDjfvQmBR+PBybr/rg
-         BOwNA9D7Tw/SayUB6CAw60gUYS4A5MFLQg5WpE/LNBkVNVaeS5AkwSl3VoEZ+BP01Jo7
-         5Bijp9xflyfI841fE1KhiJHJGaZ+L+bT8DR1Cxu8QcftxgZHbzi+2UDntmG63XQm57dm
-         zQiA==
-X-Gm-Message-State: AOAM533psJWsbU02xiHNYgn9+YNV7eWMGTWY1Cev19EKewDF8H+qxsxF
-        LFWvHvNKOMcr0NNOi2YQl72mnQ==
-X-Google-Smtp-Source: ABdhPJwdUokMvqL7sikcMv8bqMd5aZXm73mSqk4KvPAjc+r5Fjyx6Saf9GETthw87muoS4x2d3OhJA==
-X-Received: by 2002:a1c:a589:: with SMTP id o131mr16640575wme.12.1594627221961;
-        Mon, 13 Jul 2020 01:00:21 -0700 (PDT)
+        bh=s1f2VykJlM3ygLpY+EskgDzDL15LmxoT0Iv4BzUdNoA=;
+        b=r7ogOAgTmIHg0a+gOscehj5TRq+fW/yn0FNBbyBSdJQDxWi06q3VHXaJwG90jksDtI
+         C5q9YUYjdoTJ2baNve9TdTWXMhyAZfnPit+sNLXCnwFOgo3Thz4GdB6M1hittigWSMZH
+         0RgP5oav8/GM3lxDFCtSmyf6bOJvYILyBDvQItBMDyoHH7yZ1ERjA3q+I7HbwuOvZlD3
+         OPc72fNl8cS0I9zE8cneJVVEc8bkLmjYUJQaqsz9pFEHaDIHbL2CkdnETP4n9jYzci60
+         2C8ELq6Lurs4T2NXclzOO4QgquydLv9sCcplN3fzaJh27KkdsnFuEnaI2fu3izLnse2u
+         K/tA==
+X-Gm-Message-State: AOAM533Pn5PcWcAYd86OvS1P1d+Org0I3PIIXWQsWdJviCgkDdWjDSnX
+        +I2tIeV5B5FBGpMnDHqQa1L2NA==
+X-Google-Smtp-Source: ABdhPJxH84D/9opvqFIODJ7EdCyqyBHoMySBXyJRPSJ95zQfXyDTcQoDqv0ufs9OhvaubRyrArzOog==
+X-Received: by 2002:adf:80c7:: with SMTP id 65mr50742755wrl.246.1594627223033;
+        Mon, 13 Jul 2020 01:00:23 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.6])
-        by smtp.gmail.com with ESMTPSA id 33sm24383549wri.16.2020.07.13.01.00.20
+        by smtp.gmail.com with ESMTPSA id 33sm24383549wri.16.2020.07.13.01.00.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 01:00:21 -0700 (PDT)
+        Mon, 13 Jul 2020 01:00:22 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Brian King <brking@us.ibm.com>
-Subject: [PATCH v2 13/24] scsi: ipr: Remove a bunch of set but checked variables
-Date:   Mon, 13 Jul 2020 08:59:50 +0100
-Message-Id: <20200713080001.128044-14-lee.jones@linaro.org>
+        Brian King <brking@us.ibm.com>,
+        Alan Cox <alan@lxorguk.ukuu.org.uk>
+Subject: [PATCH v2 14/24] scsi: ipr: Fix struct packed-not-aligned issues
+Date:   Mon, 13 Jul 2020 08:59:51 +0100
+Message-Id: <20200713080001.128044-15-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200713080001.128044-1-lee.jones@linaro.org>
 References: <20200713080001.128044-1-lee.jones@linaro.org>
@@ -68,121 +69,42 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
-In file included from  drivers/scsi/ipr.c:73:
- drivers/scsi/ipr.c: In function ‘ipr_mask_and_clear_interrupts’:
- drivers/scsi/ipr.c:740:15: warning: variable ‘int_reg’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/ipr.c: In function ‘ipr_cancel_op’:
- drivers/scsi/ipr.c:5497:13: warning: variable ‘int_reg’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/ipr.c: In function ‘ipr_iopoll’:
- drivers/scsi/ipr.c:5765:22: warning: variable ‘ioa_cfg’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/ipr.c: In function ‘ipr_reset_restore_cfg_space’:
- drivers/scsi/ipr.c:8662:6: warning: variable ‘int_reg’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/ipr.c: In function ‘ipr_test_msi’:
+ drivers/scsi/ipr.h:1687:1: warning: alignment 1 of ‘struct ipr_dump_location_entry’ is less than 4 [-Wpacked-not-aligned]
+ 1687 | }__attribute__((packed));
+ | ^
+ drivers/scsi/ipr.h:1711:1: warning: alignment 1 of ‘struct ipr_driver_dump’ is less than 4 [-Wpacked-not-aligned]
+ 1711 | }__attribute__((packed));
+ | ^
 
 Cc: Brian King <brking@us.ibm.com>
+Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/ipr.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/scsi/ipr.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index f85020904099e..b0aa58d117cc9 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -738,7 +738,6 @@ struct ipr_cmnd *ipr_get_free_ipr_cmnd(struct ipr_ioa_cfg *ioa_cfg)
- static void ipr_mask_and_clear_interrupts(struct ipr_ioa_cfg *ioa_cfg,
- 					  u32 clr_ints)
- {
--	volatile u32 int_reg;
- 	int i;
+diff --git a/drivers/scsi/ipr.h b/drivers/scsi/ipr.h
+index 9a0d3d7293206..783ee03ad9ea2 100644
+--- a/drivers/scsi/ipr.h
++++ b/drivers/scsi/ipr.h
+@@ -1684,7 +1684,7 @@ struct ipr_dump_entry_header {
+ struct ipr_dump_location_entry {
+ 	struct ipr_dump_entry_header hdr;
+ 	u8 location[20];
+-}__attribute__((packed));
++}__attribute__((packed, aligned (4)));
  
- 	/* Stop new interrupts */
-@@ -758,7 +757,7 @@ static void ipr_mask_and_clear_interrupts(struct ipr_ioa_cfg *ioa_cfg,
- 	if (ioa_cfg->sis64)
- 		writel(~0, ioa_cfg->regs.clr_interrupt_reg);
- 	writel(clr_ints, ioa_cfg->regs.clr_interrupt_reg32);
--	int_reg = readl(ioa_cfg->regs.sense_interrupt_reg);
-+	readl(ioa_cfg->regs.sense_interrupt_reg);
- }
+ struct ipr_dump_trace_entry {
+ 	struct ipr_dump_entry_header hdr;
+@@ -1708,7 +1708,7 @@ struct ipr_driver_dump {
+ 	struct ipr_dump_location_entry location_entry;
+ 	struct ipr_dump_ioa_type_entry ioa_type_entry;
+ 	struct ipr_dump_trace_entry trace_entry;
+-}__attribute__((packed));
++}__attribute__((packed, aligned (4)));
  
- /**
-@@ -5510,7 +5509,7 @@ static int ipr_cancel_op(struct scsi_cmnd *scsi_cmd)
- 	struct ipr_ioa_cfg *ioa_cfg;
- 	struct ipr_resource_entry *res;
- 	struct ipr_cmd_pkt *cmd_pkt;
--	u32 ioasc, int_reg;
-+	u32 ioasc;
- 	int i, op_found = 0;
- 	struct ipr_hrr_queue *hrrq;
- 
-@@ -5533,7 +5532,7 @@ static int ipr_cancel_op(struct scsi_cmnd *scsi_cmd)
- 	 * by a still not detected EEH error. In such cases, reading a register will
- 	 * trigger the EEH recovery infrastructure.
- 	 */
--	int_reg = readl(ioa_cfg->regs.sense_interrupt_reg);
-+	readl(ioa_cfg->regs.sense_interrupt_reg);
- 
- 	if (!ipr_is_gscsi(res))
- 		return FAILED;
-@@ -5780,7 +5779,6 @@ static int ipr_process_hrrq(struct ipr_hrr_queue *hrr_queue, int budget,
- 
- static int ipr_iopoll(struct irq_poll *iop, int budget)
- {
--	struct ipr_ioa_cfg *ioa_cfg;
- 	struct ipr_hrr_queue *hrrq;
- 	struct ipr_cmnd *ipr_cmd, *temp;
- 	unsigned long hrrq_flags;
-@@ -5788,7 +5786,6 @@ static int ipr_iopoll(struct irq_poll *iop, int budget)
- 	LIST_HEAD(doneq);
- 
- 	hrrq = container_of(iop, struct ipr_hrr_queue, iopoll);
--	ioa_cfg = hrrq->ioa_cfg;
- 
- 	spin_lock_irqsave(hrrq->lock, hrrq_flags);
- 	completed_ops = ipr_process_hrrq(hrrq, budget, &doneq);
-@@ -8681,7 +8678,6 @@ static int ipr_dump_mailbox_wait(struct ipr_cmnd *ipr_cmd)
- static int ipr_reset_restore_cfg_space(struct ipr_cmnd *ipr_cmd)
- {
- 	struct ipr_ioa_cfg *ioa_cfg = ipr_cmd->ioa_cfg;
--	u32 int_reg;
- 
- 	ENTER;
- 	ioa_cfg->pdev->state_saved = true;
-@@ -8697,7 +8693,7 @@ static int ipr_reset_restore_cfg_space(struct ipr_cmnd *ipr_cmd)
- 	if (ioa_cfg->sis64) {
- 		/* Set the adapter to the correct endian mode. */
- 		writel(IPR_ENDIAN_SWAP_KEY, ioa_cfg->regs.endian_swap_reg);
--		int_reg = readl(ioa_cfg->regs.endian_swap_reg);
-+		readl(ioa_cfg->regs.endian_swap_reg);
- 	}
- 
- 	if (ioa_cfg->ioa_unit_checked) {
-@@ -10120,7 +10116,6 @@ static irqreturn_t ipr_test_intr(int irq, void *devp)
- static int ipr_test_msi(struct ipr_ioa_cfg *ioa_cfg, struct pci_dev *pdev)
- {
- 	int rc;
--	volatile u32 int_reg;
- 	unsigned long lock_flags = 0;
- 	int irq = pci_irq_vector(pdev, 0);
- 
-@@ -10131,7 +10126,7 @@ static int ipr_test_msi(struct ipr_ioa_cfg *ioa_cfg, struct pci_dev *pdev)
- 	ioa_cfg->msi_received = 0;
- 	ipr_mask_and_clear_interrupts(ioa_cfg, ~IPR_PCII_IOA_TRANS_TO_OPER);
- 	writel(IPR_PCII_IO_DEBUG_ACKNOWLEDGE, ioa_cfg->regs.clr_interrupt_mask_reg32);
--	int_reg = readl(ioa_cfg->regs.sense_interrupt_mask_reg);
-+	readl(ioa_cfg->regs.sense_interrupt_mask_reg);
- 	spin_unlock_irqrestore(ioa_cfg->host->host_lock, lock_flags);
- 
- 	rc = request_irq(irq, ipr_test_intr, 0, IPR_NAME, ioa_cfg);
-@@ -10142,7 +10137,7 @@ static int ipr_test_msi(struct ipr_ioa_cfg *ioa_cfg, struct pci_dev *pdev)
- 		dev_info(&pdev->dev, "IRQ assigned: %d\n", irq);
- 
- 	writel(IPR_PCII_IO_DEBUG_ACKNOWLEDGE, ioa_cfg->regs.sense_interrupt_reg32);
--	int_reg = readl(ioa_cfg->regs.sense_interrupt_reg);
-+	readl(ioa_cfg->regs.sense_interrupt_reg);
- 	wait_event_timeout(ioa_cfg->msi_wait_q, ioa_cfg->msi_received, HZ);
- 	spin_lock_irqsave(ioa_cfg->host->host_lock, lock_flags);
- 	ipr_mask_and_clear_interrupts(ioa_cfg, ~IPR_PCII_IOA_TRANS_TO_OPER);
+ struct ipr_ioa_dump {
+ 	struct ipr_dump_entry_header hdr;
 -- 
 2.25.1
 
