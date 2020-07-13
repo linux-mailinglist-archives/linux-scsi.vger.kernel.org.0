@@ -2,159 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7B321CF8D
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 08:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69F921D0DB
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729094AbgGMGT4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 02:19:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43290 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729007AbgGMGT4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 13 Jul 2020 02:19:56 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7E530AD3F;
-        Mon, 13 Jul 2020 06:19:56 +0000 (UTC)
-Subject: Re: [PATCH] scsi: allow state transitions BLOCK -> BLOCK
-To:     Bart Van Assche <bvanassche@acm.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org
-References: <20200702142436.98336-1-hare@suse.de>
- <1593700443.9652.2.camel@HansenPartnership.com>
- <0c1ce7fc-98ba-0a14-d1a7-889bf1ce794f@suse.de>
- <2dd291ba-1e59-5e88-de96-5d3965f20317@acm.org>
- <819ce023-93c3-249d-2221-97438f229e03@suse.de>
- <b4842dfd-f385-64a9-6421-03765f60d0d9@acm.org>
- <97d4882d-2f26-de93-672a-6395e8fedf0c@suse.de>
- <a2db3f6a-44de-2d2c-6dd1-69d5af8f7e84@acm.org>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <b31a9be0-1e42-f49f-d5e7-e4568dafa8b2@suse.de>
-Date:   Mon, 13 Jul 2020 08:19:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728672AbgGMHqt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 03:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727834AbgGMHqt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:46:49 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D242C061794
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:46:49 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id l2so12173421wmf.0
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=25A0DNh94uDAwTRVOnoqazisStMi7w4KenkXTOS40VY=;
+        b=FMscau92B/Kn9iOgY9/nhvxdFFGi5eYsGXjuJHfYIPqyqyyXGBmKaLgaD7dlArcrIX
+         g32DbvicFtnn2dVQMo5lFmwtjbLAQcqc77myliOR2N/vpvFEnvScvYlR43tJwqx05loI
+         TM0Bzy094tngfkKpYgxZSJykLb1gn8XLrguoMlrxuVGOkBiCSKbhznRZ6uY5DE9jP3MT
+         jfVrh+kqyCNbK94P9QNYhOxQP2xOMBReQSlBnQZvlqKRdPeKMK1+StVUiOnd57VofXIU
+         Ne2f5YwcgXZHkcGV+Anm7i/WJ1oTRId/VDVlshUJSC1+UDudau5fbRIorlzFR6khwhGK
+         cKrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=25A0DNh94uDAwTRVOnoqazisStMi7w4KenkXTOS40VY=;
+        b=QS1qdWdrCisB2dtAzgzmkFq5tGg5COJydmbWzs0IBgwUEnUyGvLcuz0kKcz0hWJpvd
+         K2+O4UID4PtKbSYPKdLFX61iPxAMqB7SOZIm7ccHoTsR+UEfbLTwVDFRoM5gM1LxhNQW
+         qehHaEiKGxTg6Pi3TE4s01fl+PKYXJ9bOsaKRLnZ95L2W0/FLUMfRVj2ELtwCz3gNYBN
+         NqBN/DPq2CiFku5HH6wiqVXM7lYaG91zx5WE0RJgHB39Hq0QLrKsdQcWk/CE3u+KPZ/a
+         88Zx3RG0oJ1jO7/gTrpyEsvq1SB0EQcBlA/oiWiDonLGP6plnEei3jCpbpbsG1FHTItv
+         R7Cw==
+X-Gm-Message-State: AOAM533iCSM6dq5tSE61gHAxzaQrVcL3TLX4OhZxelyP9K3jcEGnY+Yv
+        Wjb4tOJuQ9/UhkLprjkLQE8hnw==
+X-Google-Smtp-Source: ABdhPJwHHQGD+YW9ySoK+Fa+ZTUh/gG5Athu/oAFZbb9J4bQHGlzJPMTOFjVx1fCHoOeke6LoMzZ7A==
+X-Received: by 2002:a1c:9c89:: with SMTP id f131mr9910553wme.126.1594626407933;
+        Mon, 13 Jul 2020 00:46:47 -0700 (PDT)
+Received: from localhost.localdomain ([2.31.163.6])
+        by smtp.gmail.com with ESMTPSA id k11sm25142488wrd.23.2020.07.13.00.46.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 00:46:47 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH v2 00/29] Fix a bunch more SCSI related W=1 warnings
+Date:   Mon, 13 Jul 2020 08:46:16 +0100
+Message-Id: <20200713074645.126138-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <a2db3f6a-44de-2d2c-6dd1-69d5af8f7e84@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/12/20 6:13 AM, Bart Van Assche wrote:
-> On 2020-07-05 23:22, Hannes Reinecke wrote:
->> That will still have a duplicate call as scsi_target_block() has been called already (cf scsi_target_block() in line 539 right at the start of srp_reconnect_rport()).
->>
->> (And I don't think we need the WARN_ON_ONCE() here; we are checking for rport->state == SRP_RPORT_BLOCKED just before that line...)
-> 
-> How about the patch below? The approach implemented by that
-> patch is only to call scsi_target_block() after a successful
-> transition to the SRP_RPORT_BLOCKED state and to only call
-> scsi_target_unblock() when leaving the SRP_RPORT_BLOCKED state.
-> 
-> Thanks,
-> 
-> Bart.
-> 
-> diff --git a/drivers/scsi/scsi_transport_srp.c b/drivers/scsi/scsi_transport_srp.c
-> index d4d1104fac99..0334f86f0879 100644
-> --- a/drivers/scsi/scsi_transport_srp.c
-> +++ b/drivers/scsi/scsi_transport_srp.c
-> @@ -402,13 +402,9 @@ static void __rport_fail_io_fast(struct srp_rport *rport)
-> 
->   	lockdep_assert_held(&rport->mutex);
-> 
-> +	WARN_ON_ONCE(rport->state != SRP_RPORT_BLOCKED);
->   	if (srp_rport_set_state(rport, SRP_RPORT_FAIL_FAST))
->   		return;
-> -	/*
-> -	 * Call scsi_target_block() to wait for ongoing shost->queuecommand()
-> -	 * calls before invoking i->f->terminate_rport_io().
-> -	 */
-> -	scsi_target_block(rport->dev.parent);
->   	scsi_target_unblock(rport->dev.parent, SDEV_TRANSPORT_OFFLINE);
-> 
->   	/* Involve the LLD if possible to terminate all I/O on the rport. */
-> @@ -541,7 +537,8 @@ int srp_reconnect_rport(struct srp_rport *rport)
->   	res = mutex_lock_interruptible(&rport->mutex);
->   	if (res)
->   		goto out;
-> -	scsi_target_block(&shost->shost_gendev);
-> +	if (srp_rport_set_state(rport, SRP_RPORT_BLOCKED) == 0)
-> +		scsi_target_block(&shost->shost_gendev);
->   	res = rport->state != SRP_RPORT_LOST ? i->f->reconnect(rport) : -ENODEV;
->   	pr_debug("%s (state %d): transport.reconnect() returned %d\n",
->   		 dev_name(&shost->shost_gendev), rport->state, res);
-> @@ -569,9 +566,9 @@ int srp_reconnect_rport(struct srp_rport *rport)
->   		 * and dev_loss off. Mark the port as failed and start the TL
->   		 * failure timers if these had not yet been started.
->   		 */
-> +		WARN_ON_ONCE(srp_rport_set_state(rport, SRP_RPORT_BLOCKED));
-> +		scsi_target_block(rport->dev.parent);
->   		__rport_fail_io_fast(rport);
-> -		scsi_target_unblock(&shost->shost_gendev,
-> -				    SDEV_TRANSPORT_OFFLINE);
->   		__srp_start_tl_fail_timers(rport);
->   	} else if (rport->state != SRP_RPORT_BLOCKED) {
->   		scsi_target_unblock(&shost->shost_gendev,
-> 
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-That doesn't look correct.
-We just set the portstate to 'blocked' in the first hunk.
-So the only way for this bit to make any sense would be if the portstate 
-would _not_ blocked, _and_ we have a valid state transition to 'blocked'.
-But this cannot happen, as the state can't change in between those two 
-calls, and the first state change didn't succeed. So this state change 
-won't succeed, either, and the WARN_ON will always trigger here.
+Slowly working through the SCSI related ones.  There are many.
 
-Plus this whole hunk is reached from an if condition:
+Change-log:
 
-	} else if (rport->state == SRP_RPORT_RUNNING) {
+v1 => v2
+ - Collected *-by tags
+ - Squashed patch 13 => 11
+   - Suggested by Johannes Thumshirn
 
-which (after the first hunk) is never viable, as the transition RUNNINNG 
--> BLOCKED is allowed. Hence the first hunk will always transition to 
-BLOCKED, and this whole block can never be reached.
+Lee Jones (29):
+  scsi: libfc: fc_exch: Supply some missing kerneldoc struct/function
+    attributes/params
+  include: scsi: scsi_transport_fc: Match HBA Attribute Length with
+    HBAAPI V2.0 definitions
+  scsi: libfc: fc_disc: trivial: Fix spelling mistake of 'discovery'
+  scsi: fcoe: fcoe: Fix various kernel-doc infringements
+  scsi: fcoe: fcoe_ctlr: Fix a myriad of documentation issues
+  scsi: fcoe: fcoe_transport: Correct some kernel-doc issues
+  scsi: bnx2fc: bnx2fc_fcoe: Repair a range of kerneldoc issues
+  scsi: qedf: qedf_main: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  scsi: qedf: qedf_main: Remove set but not checked variable 'tmp'
+  scsi: libfc: fc_lport: Repair function parameter documentation
+  scsi: libfc: fc_rport: Fix a couple of misdocumented function
+    parameters
+  scsi: libfc: fc_fcp: Provide missing and repair existing function
+    documentation
+  scsi: bnx2fc: bnx2fc_hwi: Fix a couple  of bitrotted function
+    documentation headers
+  scsi: arcmsr: arcmsr_hba: Remove some set but unused variables
+  scsi: arcmsr: arcmsr_hba: Make room for the trailing NULL, even if it
+    is over-written
+  scsi: qedf: qedf_io: Remove a whole host of unused variables
+  scsi: bnx2fc: bnx2fc_tgt: Demote obvious misuse of kerneldoc to
+    standard comment blocks
+  scsi: aic7xxx: aic7xxx_osm: Remove unused variable 'tinfo'
+  scsi: aic7xxx: aic7xxx_osm: Remove unused variable 'ahc'
+  scsi: aic7xxx: aic7xxx_osm: Remove unused variable 'targ'
+  scsi: aic7xxx: aic7xxx_osm: Fix 'amount_xferred' set but not used
+    issue
+  scsi: qedf: qedf_debugfs: Demote obvious misuse of kerneldoc to
+    standard comment blocks
+  scsi: aacraid: linit: Provide suggested curly braces around empty body
+    of if()
+  scsi: aacraid: linit: Fix a couple of small kerneldoc issues
+  scsi: aic94xx: aic94xx_init: Demote seemingly unintentional kerneldoc
+    header
+  scsi: pm8001: pm8001_init: Demote obvious misuse of kerneldoc and
+    update others
+  scsi: aic94xx: aic94xx_hwi: Repair kerneldoc formatting error and
+    remove extra param
+  scsi: aacraid: aachba: Fix a bunch of function doc formatting errors
+  scsi: qla4xxx: ql4_init: Provide a missing function param description
+    and fix formatting
 
-I think this should be sufficient:
+ drivers/scsi/aacraid/aachba.c       | 17 +++-------------
+ drivers/scsi/aacraid/linit.c        |  6 +++---
+ drivers/scsi/aic7xxx/aic7xxx_osm.c  | 13 ++----------
+ drivers/scsi/aic94xx/aic94xx_hwi.c  |  3 +--
+ drivers/scsi/aic94xx/aic94xx_init.c |  2 +-
+ drivers/scsi/arcmsr/arcmsr_hba.c    | 31 ++++++++++++-----------------
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c   | 18 ++++++++---------
+ drivers/scsi/bnx2fc/bnx2fc_hwi.c    |  6 +++---
+ drivers/scsi/bnx2fc/bnx2fc_tgt.c    |  7 +++----
+ drivers/scsi/fcoe/fcoe.c            | 10 ++++------
+ drivers/scsi/fcoe/fcoe_ctlr.c       | 26 ++++++++++++------------
+ drivers/scsi/fcoe/fcoe_transport.c  |  4 +++-
+ drivers/scsi/libfc/fc_disc.c        |  2 +-
+ drivers/scsi/libfc/fc_exch.c        |  7 ++++++-
+ drivers/scsi/libfc/fc_fcp.c         | 11 ++++++----
+ drivers/scsi/libfc/fc_lport.c       |  7 +++++--
+ drivers/scsi/libfc/fc_rport.c       |  4 ++--
+ drivers/scsi/pm8001/pm8001_init.c   | 30 ++++++++++++++--------------
+ drivers/scsi/qedf/qedf_debugfs.c    | 18 ++++++++---------
+ drivers/scsi/qedf/qedf_io.c         | 30 ++++------------------------
+ drivers/scsi/qedf/qedf_main.c       | 10 ++++------
+ drivers/scsi/qla4xxx/ql4_init.c     |  7 ++++---
+ include/scsi/fc/fc_ms.h             |  4 ++--
+ 23 files changed, 115 insertions(+), 158 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_srp.c 
-b/drivers/scsi/scsi_transport_srp.c
-index d4d1104fac99..180b323f46b8 100644
---- a/drivers/scsi/scsi_transport_srp.c
-+++ b/drivers/scsi/scsi_transport_srp.c
-@@ -404,11 +404,6 @@ static void __rport_fail_io_fast(struct srp_rport 
-*rport)
-
-         if (srp_rport_set_state(rport, SRP_RPORT_FAIL_FAST))
-                 return;
--       /*
--        * Call scsi_target_block() to wait for ongoing 
-shost->queuecommand()
--        * calls before invoking i->f->terminate_rport_io().
--        */
--       scsi_target_block(rport->dev.parent);
-         scsi_target_unblock(rport->dev.parent, SDEV_TRANSPORT_OFFLINE);
-
-         /* Involve the LLD if possible to terminate all I/O on the 
-rport. */
-@@ -570,8 +565,6 @@ int srp_reconnect_rport(struct srp_rport *rport)
-                  * failure timers if these had not yet been started.
-                  */
-                 __rport_fail_io_fast(rport);
--               scsi_target_unblock(&shost->shost_gendev,
--                                   SDEV_TRANSPORT_OFFLINE);
-                 __srp_start_tl_fail_timers(rport);
-         } else if (rport->state != SRP_RPORT_BLOCKED) {
-                 scsi_target_unblock(&shost->shost_gendev,
-
-
-Cheers,
-
-Hannes
 -- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.25.1
+
