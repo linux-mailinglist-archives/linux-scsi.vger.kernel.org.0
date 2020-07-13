@@ -2,78 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 600DA21D09D
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DA121D0BD
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729107AbgGMHq6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 03:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S1729155AbgGMHrB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 03:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729085AbgGMHq5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:46:57 -0400
+        with ESMTP id S1729115AbgGMHq7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:46:59 -0400
 Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7768AC061755
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:46:57 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id a6so14659796wrm.4
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:46:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E91AC061794
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:46:58 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id f7so14681547wrw.1
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CbDIhrckRx3GTebLwLuoUtbus6UaS40hQs+7mAaRUqY=;
-        b=Dgdv43SMguTbFfpAEBrGAMFtotvNXSMP4bcEVucw8MOl/jsg7uMMgAe8AQXfW3dk2j
-         Mf2ROLifHH1Vr3gSBOFKsCZ25nrUuOMaIBLZyItBlBHNZ7hC3RCd7ue5F+kjuCvW+PGD
-         tSlROBZdMCQIL8T3OY3Is5S0gX7ZyuEXZI1uCCoygGC4g/7sG7lNkkRbba7uDZuudODp
-         sTWYN4RJr/u+Mjd41GbT52bHNLEi8SlaiuWkLnpbB2/X9mufq8Gi5mjY1ryxPjCdqNe2
-         ngHRRdC73MUn5Q6BpVu/Dsbk+ICGMc+aJVOYQjydWVsOzdBHdM3gIdBqz3mwFbevoVDz
-         ts6w==
+        bh=8R5JqiLjYcza4fbV6goyYqcdxR7v8Q2JkVSQFyfGqhI=;
+        b=udRqTFtVMJHrG8FeYyUiq433O2fFQWC945bPEuJp10f4RrlpzSBC3G1uT3JrWYA1z+
+         KkuTTQHCBdHe1LYCAy/Iu3gl9yKuqzR0//GRW+h8lH+KZWAZK605JeIx5pB2kAKHOSXI
+         V335Wh3pK7UbDMZzCDpcb1FmsQkI8K+4bAYGhygGqjF9tBjGZSaj7UJQVmYRRKniBfXr
+         SCBIkyICY6k35WAoLl9qqCFZJfpliOIQY1ByScnoV6kBjLvUTTfL9aJVq/QlI5KXWYzP
+         VMQdVskZjbYEcfJ7cJY+OgjrxcgZjB6XG39HbAY8rYrFvKZnFv+LkC0PtP30tOSv65uW
+         AZqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CbDIhrckRx3GTebLwLuoUtbus6UaS40hQs+7mAaRUqY=;
-        b=MGB+Pi030sLWbBmP4JS0ahT3/PIDWDx9OHAhxyqb3ZjWkKCwEqMhz0IOwYDReP7+mq
-         RhntzAjbeAVWoVEbQDDmdXxbno8VxNy3WfOyxgb5THo/SyGNejtjEXx8cikT5+zPuHWU
-         xkOzupJ6HQ0JPvJxlyoKxq+PpRuPWqn2wfgHOvfX5V8t3rACERC+6xUEiAgD+PNZM4d0
-         cToTasjrIRtWvN+wbQDVHOO6wuLVU3YoWTKoFPP6OCX8vExHNSpYxBJNYftc1NbZohP/
-         z2+Jt5W/6paxgLIbG4Fvzym0QtfdGQdaKSP1BzpgF2RqHiDBVezdFOLKPPz90j3KsXUM
-         ejKQ==
-X-Gm-Message-State: AOAM531CTo4ZM/y8dLNQTWC4bPScSReo+PrmqDnmh//iadGaewSskS2t
-        z5nzfLaRB0HOVLpXEvBCmaGtUQ==
-X-Google-Smtp-Source: ABdhPJxNjGlKKAba0B1VMYG/5vUA34uYc5xVMQo7SYVX64LCfQfLFDRbnQ3uxd7YvKo9aYvgj1yRpw==
-X-Received: by 2002:a5d:658a:: with SMTP id q10mr78336227wru.220.1594626416215;
-        Mon, 13 Jul 2020 00:46:56 -0700 (PDT)
+        bh=8R5JqiLjYcza4fbV6goyYqcdxR7v8Q2JkVSQFyfGqhI=;
+        b=PpZq4lRDyzHjvrQeJOZ4qyHwpb6InMpr8mTh+HUHGKWWgSOAOWNiUdcy56eXCNLy6D
+         8sCfehgjiwMmNjGxhkU2y1VxzmYpaRW6VsbblBGNHh1S7rrR/mXjh32SzS6yDQsxs953
+         Xzz90DVcJz9UUcWgGarPJjQ20BvW/tyc0Xz0WHTWyxtWQ8ygZXaBQSQW6L9ZtWQimllf
+         qbWAMCqaBvh2IxQOANKecZSDq96ua2Wn0mma2XqVvJdsoY0bukiIXtyPaI6aeSuHi3d6
+         UOggFl62Wcdv3k9kjCjfUsyQ2JsRVpVzQrOIvJk1dVKanvA206XeVjMVGrAcxK5pTI3R
+         E3vQ==
+X-Gm-Message-State: AOAM532W4LRghZ2637WujTOTBOPpb88FLZviXZZ9KolBminA3cEQAGtS
+        HIyheMSGtC92x8Hwu2R7e1FcR8jbRYk=
+X-Google-Smtp-Source: ABdhPJzSaAiAW3pCxf6bHROZk6HR9qPvG3gRkewkP6qZUrfb7C/flDBz3JdziBfir+fa/ZfAKDVxNQ==
+X-Received: by 2002:a5d:664e:: with SMTP id f14mr78870952wrw.6.1594626417338;
+        Mon, 13 Jul 2020 00:46:57 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.6])
-        by smtp.gmail.com with ESMTPSA id k11sm25142488wrd.23.2020.07.13.00.46.55
+        by smtp.gmail.com with ESMTPSA id k11sm25142488wrd.23.2020.07.13.00.46.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 00:46:55 -0700 (PDT)
+        Mon, 13 Jul 2020 00:46:56 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
         QLogic-Storage-Upstream@cavium.com
-Subject: [PATCH v2 08/29] scsi: qedf: qedf_main: Demote obvious misuse of kerneldoc to standard comment blocks
-Date:   Mon, 13 Jul 2020 08:46:24 +0100
-Message-Id: <20200713074645.126138-9-lee.jones@linaro.org>
+Subject: [PATCH v2 09/29] scsi: qedf: qedf_main: Remove set but not checked variable 'tmp'
+Date:   Mon, 13 Jul 2020 08:46:25 +0100
+Message-Id: <20200713074645.126138-10-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200713074645.126138-1-lee.jones@linaro.org>
 References: <20200713074645.126138-1-lee.jones@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-No attempt has been made to document either of the demoted functions here.
+Looks like the return value of readw() has never been checked.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/qedf/qedf_main.c:1027: warning: Function parameter or member 'lport' not described in 'qedf_xmit'
- drivers/scsi/qedf/qedf_main.c:1027: warning: Function parameter or member 'fp' not described in 'qedf_xmit'
- drivers/scsi/qedf/qedf_main.c:1426: warning: Function parameter or member 'lport' not described in 'qedf_rport_event_handler'
- drivers/scsi/qedf/qedf_main.c:1426: warning: Function parameter or member 'rdata' not described in 'qedf_rport_event_handler'
- drivers/scsi/qedf/qedf_main.c:1426: warning: Function parameter or member 'event' not described in 'qedf_rport_event_handler'
+ drivers/scsi/qedf/qedf_main.c: In function ‘__qedf_probe’:
+ drivers/scsi/qedf/qedf_main.c:3203:6: warning: variable ‘tmp’ set but not used [-Wunused-but-set-variable]
 
 Cc: QLogic-Storage-Upstream@cavium.com
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
@@ -82,29 +80,29 @@ Signed-off-by: Lee Jones <lee.jones@linaro.org>
  1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 36b1ca2dadbb5..a77a74fad6a7e 100644
+index a77a74fad6a7e..47fc14f5ed9d7 100644
 --- a/drivers/scsi/qedf/qedf_main.c
 +++ b/drivers/scsi/qedf/qedf_main.c
-@@ -1019,9 +1019,8 @@ static int qedf_xmit_l2_frame(struct qedf_rport *fcport, struct fc_frame *fp)
- 	return rc;
- }
+@@ -3199,7 +3199,6 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ 	void *task_start, *task_end;
+ 	struct qed_slowpath_params slowpath_params;
+ 	struct qed_probe_params qed_params;
+-	u16 tmp;
  
--/**
-+/*
-  * qedf_xmit - qedf FCoE frame transmit function
-- *
-  */
- static int qedf_xmit(struct fc_lport *lport, struct fc_frame *fp)
- {
-@@ -1415,7 +1414,7 @@ static void qedf_cleanup_fcport(struct qedf_ctx *qedf,
- 	kref_put(&rdata->kref, fc_rport_destroy);
- }
+ 	/*
+ 	 * When doing error recovery we didn't reap the lport so don't try
+@@ -3393,9 +3392,9 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ 	    "Writing %d to primary and secondary BDQ doorbell registers.\n",
+ 	    qedf->bdq_prod_idx);
+ 	writew(qedf->bdq_prod_idx, qedf->bdq_primary_prod);
+-	tmp = readw(qedf->bdq_primary_prod);
++	readw(qedf->bdq_primary_prod);
+ 	writew(qedf->bdq_prod_idx, qedf->bdq_secondary_prod);
+-	tmp = readw(qedf->bdq_secondary_prod);
++	readw(qedf->bdq_secondary_prod);
  
--/**
-+/*
-  * This event_callback is called after successful completion of libfc
-  * initiated target login. qedf can proceed with initiating the session
-  * establishment.
+ 	qed_ops->common->set_power_state(qedf->cdev, PCI_D0);
+ 
 -- 
 2.25.1
 
