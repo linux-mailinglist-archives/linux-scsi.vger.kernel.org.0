@@ -2,62 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D25EF21D0B2
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D577621D0A6
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729259AbgGMHrq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 03:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        id S1729418AbgGMHrT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 03:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729405AbgGMHrR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:47:17 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2F3C061794
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:47:16 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j4so14665429wrp.10
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:47:16 -0700 (PDT)
+        with ESMTP id S1729408AbgGMHrS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:47:18 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7640C061755
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:47:17 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id a6so14662136wrm.4
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:47:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=n+FlrssXUyf+27P3zqpNeadQUF1GbyakCHuF+5DpqII=;
-        b=JAI1K0VTERudzk6GJ1ZmjdlChl5VoIE7Y7GxSc4kx/Mp7jK189qmRbjTzXPPWyPtBY
-         b2/xN3dpP92Euf1dKwauNt1jek56KN1dDgEcjAFt6koBMEkdeyYYhasSyUc6OiwfhhlU
-         2aIOjw0mTVor6dH/45+rkWwB8qo9wJg5/u4iyHNZYpuHLXob8gFIULGhEJZmi4EGIb6e
-         WD+71pgeSs+GchHyaqU0D4YKXqq2kWIsgxayA7MGvA65ANYLwCBaMEuEf7R6fvikYQmU
-         DMp1IiEoR9NdwYpw6sR6XLUx6f1i8V4IpWqUtGmEtJqQ+hBr6MD9da6y1PJjRLkwQKUr
-         1QQQ==
+        bh=3sXxKpQgrnotRyFJvyRPk0Xs+GRdftij+k/kTivXzV0=;
+        b=LZAtex/WvZHUpRfBeIZuZKGHFkUEF40F92oWBBEHmfCNjAnSVVxMm34PN6BoS2WVBR
+         KYr1bV+zFda1yL2IObHPGtXWzfFJEGpKUzjdRuvs3HDedNofLTE6NLNjnzxRcOd+Ards
+         wA7tDnCIGATq+LFB7AgoBTKCJ0tsXjcRqLrFmjdYvkXpCT1sLQ7Vpp9gi+pLf2sWWWfG
+         sR39e13edBAyWagxr31HeBUwhCgNqplIi15GyHABbVhdMFjB7/TBZAzAn1rPM7pP82hL
+         UVraZPM3LCSfFxR+7TY1H46QW8UjSKNRhVcy1bSB6JY+4Ip/HZexJKDyijDXIgcEdqh7
+         XAWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n+FlrssXUyf+27P3zqpNeadQUF1GbyakCHuF+5DpqII=;
-        b=mYbAqsQLgNDbDA8ylpe5abpP2XgYRAQWxDP/D9MSF8hLqbpLc7XcmunbU4Rr8HJZAR
-         rVYA4MSbssJO/pqLR8ZWDJ9AhZZuLdYQbU+6Ja2loCQZIEwpSlvGG/ZQckuMKPiF+Iph
-         Khi6E/PcJK3tcKlx0J0Y4FLM8lnCs2nNK/BMZSD56iihRuu+wJWx0xHBZKF74qez1cpq
-         GY1OD4wBx16OeArW8w7Wgu3ws17Ix+IsydEwNZq3qAZqi1p7VJCV04FhY/zRci6eZjsG
-         uJD8+md/BTEhrukzHmq7Izy/+RQNYy4trY6TxiqdjLWXMlk99gqfgN564iEaidB6PxKe
-         poUQ==
-X-Gm-Message-State: AOAM533PEHV3Ks/2L5SoVzAxM2A/ubZfFNzbIvVSOdnMLkl5D9t1QSam
-        UEJNgB8Fy/1tR8fhAqjwMnKm6A==
-X-Google-Smtp-Source: ABdhPJxY/puDN7AjiJdu7oEeFlKR/U/nu85jzFcw+vDAll5/rYagejuABbOtGf4N+Wuh8Nm1BWl6tQ==
-X-Received: by 2002:a5d:5642:: with SMTP id j2mr78271778wrw.19.1594626435718;
-        Mon, 13 Jul 2020 00:47:15 -0700 (PDT)
+        bh=3sXxKpQgrnotRyFJvyRPk0Xs+GRdftij+k/kTivXzV0=;
+        b=RqfW+/eR5JLgeWLHxDmPlU61R24FoUCMXE8ZAgHrx/6C3vVkcyHU5dFjvJk7J2ECKp
+         MiJQ624BE3znLzrgEHGhZjuPPUDzh1T6YHhd4/cH2N3CsVJLU4JUfxT3VXqZMG0b6n9c
+         OvSiFgG+ySwMj8YZo4E/7IzcJYMq3u6632hGmdnSH3gSkDKgPwyh6ohJPvw9nkWGdryZ
+         jM/7AVyjMmeJlXyJW+58dU5GUfmxzkpUybJJ8F0nuICUKayDPYKQpxUCULx79RVfLeXl
+         zYQCDyLL7kiyCf0ltwV0IpPUIUPGJpRQDAzSLqsFyepeHS4JUH9xScfD89fIV31iHQHS
+         lv5g==
+X-Gm-Message-State: AOAM531eC/8lTCVD9FrfgtSF18tnVgvXkUSb+XelQ9bHCWY4qig+p0yW
+        mP3Rwj1N/MYI3lWYyrNqyj+29A==
+X-Google-Smtp-Source: ABdhPJyJUEE2qprj118VrHMoVD4MJ7gID9qoJfCl9yCER6q4U+8w9qO0a1w6J+az2L3+e7K3DtVznQ==
+X-Received: by 2002:adf:f20a:: with SMTP id p10mr83083836wro.41.1594626436567;
+        Mon, 13 Jul 2020 00:47:16 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.6])
-        by smtp.gmail.com with ESMTPSA id k11sm25142488wrd.23.2020.07.13.00.47.14
+        by smtp.gmail.com with ESMTPSA id k11sm25142488wrd.23.2020.07.13.00.47.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 00:47:15 -0700 (PDT)
+        Mon, 13 Jul 2020 00:47:16 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Kumar Santhanam <AnandKumar.Santhanam@pmcs.com>,
-        Sangeetha Gnanasekaran <Sangeetha.Gnanasekaran@pmcs.com>,
-        Nikith Ganigarakoppal <Nikith.Ganigarakoppal@pmcs.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH v2 26/29] scsi: pm8001: pm8001_init: Demote obvious misuse of kerneldoc and update others
-Date:   Mon, 13 Jul 2020 08:46:42 +0100
-Message-Id: <20200713074645.126138-27-lee.jones@linaro.org>
+        Luben Tuikov <luben_tuikov@adaptec.com>
+Subject: [PATCH v2 27/29] scsi: aic94xx: aic94xx_hwi: Repair kerneldoc formatting error and remove extra param
+Date:   Mon, 13 Jul 2020 08:46:43 +0100
+Message-Id: <20200713074645.126138-28-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200713074645.126138-1-lee.jones@linaro.org>
 References: <20200713074645.126138-1-lee.jones@linaro.org>
@@ -68,144 +65,42 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-More bitrot issues with function documentation not keeping up with API changes.
+Function parameters need to be documented with format '@.*: '.
+
+'to' is not longer asd_start_timers()'s function parameter.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/pm8001/pm8001_init.c:64: warning: cannot understand function prototype: 'const struct pm8001_chip_info pm8001_chips[] = '
- drivers/scsi/pm8001/pm8001_init.c:86: warning: cannot understand function prototype: 'struct scsi_host_template pm8001_sht = '
- drivers/scsi/pm8001/pm8001_init.c:115: warning: cannot understand function prototype: 'struct sas_domain_function_template pm8001_transport_ops = '
- drivers/scsi/pm8001/pm8001_init.c:212: warning: Function parameter or member 'irq' not described in 'pm8001_interrupt_handler_msix'
- drivers/scsi/pm8001/pm8001_init.c:237: warning: Function parameter or member 'irq' not described in 'pm8001_interrupt_handler_intx'
- drivers/scsi/pm8001/pm8001_init.c:265: warning: Function parameter or member 'ent' not described in 'pm8001_alloc'
- drivers/scsi/pm8001/pm8001_init.c:624: warning: Function parameter or member 'pm8001_ha' not described in 'pm8001_init_sas_add'
- drivers/scsi/pm8001/pm8001_init.c:624: warning: Excess function parameter 'chip_info' description in 'pm8001_init_sas_add'
- drivers/scsi/pm8001/pm8001_init.c:900: warning: Function parameter or member 'pm8001_ha' not described in 'pm8001_setup_msix'
- drivers/scsi/pm8001/pm8001_init.c:900: warning: Excess function parameter 'chip_info' description in 'pm8001_setup_msix'
- drivers/scsi/pm8001/pm8001_init.c:900: warning: Excess function parameter 'irq_handler' description in 'pm8001_setup_msix'
- drivers/scsi/pm8001/pm8001_init.c:981: warning: Function parameter or member 'pm8001_ha' not described in 'pm8001_request_irq'
- drivers/scsi/pm8001/pm8001_init.c:981: warning: Excess function parameter 'chip_info' description in 'pm8001_request_irq'
+ drivers/scsi/aic94xx/aic94xx_hwi.c:589: warning: Function parameter or member 'asd_ha' not described in 'asd_init_ctxmem'
+ drivers/scsi/aic94xx/aic94xx_hwi.c:1157: warning: Excess function parameter 'to' description in 'asd_start_scb_timers'
 
-Cc: Kumar Santhanam <AnandKumar.Santhanam@pmcs.com>
-Cc: Sangeetha Gnanasekaran <Sangeetha.Gnanasekaran@pmcs.com>
-Cc: Nikith Ganigarakoppal <Nikith.Ganigarakoppal@pmcs.com>
+Cc: Luben Tuikov <luben_tuikov@adaptec.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
 ---
- drivers/scsi/pm8001/pm8001_init.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/scsi/aic94xx/aic94xx_hwi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
-index 9e99262a2b9dd..20fa96cbc9d3d 100644
---- a/drivers/scsi/pm8001/pm8001_init.c
-+++ b/drivers/scsi/pm8001/pm8001_init.c
-@@ -57,7 +57,7 @@ MODULE_PARM_DESC(link_rate, "Enable link rate.\n"
- 
- static struct scsi_transport_template *pm8001_stt;
- 
--/**
-+/*
-  * chip info structure to identify chip key functionality as
-  * encryption available/not, no of ports, hw specific function ref
-  */
-@@ -80,7 +80,7 @@ LIST_HEAD(hba_list);
- 
- struct workqueue_struct *pm8001_wq;
- 
--/**
-+/*
-  * The main structure which LLDD must register for scsi core.
-  */
- static struct scsi_host_template pm8001_sht = {
-@@ -109,7 +109,7 @@ static struct scsi_host_template pm8001_sht = {
- 	.track_queue_depth	= 1,
- };
- 
--/**
-+/*
-  * Sas layer call this function to execute specific task.
-  */
- static struct sas_domain_function_template pm8001_transport_ops = {
-@@ -129,9 +129,9 @@ static struct sas_domain_function_template pm8001_transport_ops = {
- };
+diff --git a/drivers/scsi/aic94xx/aic94xx_hwi.c b/drivers/scsi/aic94xx/aic94xx_hwi.c
+index c5a46c59d4f80..9256ab7b25227 100644
+--- a/drivers/scsi/aic94xx/aic94xx_hwi.c
++++ b/drivers/scsi/aic94xx/aic94xx_hwi.c
+@@ -575,7 +575,7 @@ static int asd_extend_cmdctx(struct asd_ha_struct *asd_ha)
  
  /**
-- *pm8001_phy_init - initiate our adapter phys
-- *@pm8001_ha: our hba structure.
-- *@phy_id: phy id.
-+ * pm8001_phy_init - initiate our adapter phys
-+ * @pm8001_ha: our hba structure.
-+ * @phy_id: phy id.
-  */
- static void pm8001_phy_init(struct pm8001_hba_info *pm8001_ha, int phy_id)
- {
-@@ -155,9 +155,8 @@ static void pm8001_phy_init(struct pm8001_hba_info *pm8001_ha, int phy_id)
- }
- 
- /**
-- *pm8001_free - free hba
-- *@pm8001_ha:	our hba structure.
-- *
-+ * pm8001_free - free hba
-+ * @pm8001_ha:	our hba structure.
-  */
- static void pm8001_free(struct pm8001_hba_info *pm8001_ha)
- {
-@@ -205,6 +204,7 @@ static void pm8001_tasklet(unsigned long opaque)
-  * pm8001_interrupt_handler_msix - main MSIX interrupt handler.
-  * It obtains the vector number and calls the equivalent bottom
-  * half or services directly.
-+ * @irq: interrupt number
-  * @opaque: the passed outbound queue/vector. Host structure is
-  * retrieved from the same.
-  */
-@@ -230,6 +230,7 @@ static irqreturn_t pm8001_interrupt_handler_msix(int irq, void *opaque)
- 
- /**
-  * pm8001_interrupt_handler_intx - main INTx interrupt handler.
-+ * @irq: interrupt number
-  * @dev_id: sas_ha structure. The HBA is retrieved from sas_has structure.
-  */
- 
-@@ -257,8 +258,8 @@ static u32 pm8001_request_irq(struct pm8001_hba_info *pm8001_ha);
- 
- /**
-  * pm8001_alloc - initiate our hba structure and 6 DMAs area.
-- * @pm8001_ha:our hba structure.
-- *
-+ * @pm8001_ha: our hba structure.
-+ * @ent: PCI device ID structure to match on
-  */
- static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
- 			const struct pci_device_id *ent)
-@@ -615,7 +616,7 @@ static void  pm8001_post_sas_ha_init(struct Scsi_Host *shost,
- 
- /**
-  * pm8001_init_sas_add - initialize sas address
-- * @chip_info: our ha struct.
-+ * @pm8001_ha: our ha struct.
+  * asd_init_ctxmem -- initialize context memory
+- * asd_ha: pointer to host adapter structure
++ * @asd_ha: pointer to host adapter structure
   *
-  * Currently we just set the fixed SAS address to our HBA,for manufacture,
-  * it should read from the EEPROM
-@@ -893,8 +894,7 @@ static int pm8001_configure_phy_settings(struct pm8001_hba_info *pm8001_ha)
- #ifdef PM8001_USE_MSIX
+  * This function sets the maximum number of SCBs and
+  * DDBs which can be used by the sequencer.  This is normally
+@@ -1146,7 +1146,6 @@ static void asd_swap_head_scb(struct asd_ha_struct *asd_ha,
  /**
-  * pm8001_setup_msix - enable MSI-X interrupt
-- * @chip_info: our ha struct.
-- * @irq_handler: irq_handler
-+ * @pm8001_ha: our ha struct.
-  */
- static u32 pm8001_setup_msix(struct pm8001_hba_info *pm8001_ha)
- {
-@@ -975,7 +975,7 @@ static u32 pm8001_setup_irq(struct pm8001_hba_info *pm8001_ha)
- 
- /**
-  * pm8001_request_irq - register interrupt
-- * @chip_info: our ha struct.
-+ * @pm8001_ha: our ha struct.
-  */
- static u32 pm8001_request_irq(struct pm8001_hba_info *pm8001_ha)
- {
+  * asd_start_timers -- (add and) start timers of SCBs
+  * @list: pointer to struct list_head of the scbs
+- * @to: timeout in jiffies
+  *
+  * If an SCB in the @list has no timer function, assign the default
+  * one,  then start the timer of the SCB.  This function is
 -- 
 2.25.1
 
