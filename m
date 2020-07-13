@@ -2,59 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9255221D13D
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4980421D135
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729636AbgGMIBk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 04:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        id S1729218AbgGMIAU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 04:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729175AbgGMIAR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 04:00:17 -0400
+        with ESMTP id S1729198AbgGMIAS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 04:00:18 -0400
 Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83762C061755
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:17 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id r12so14701421wrj.13
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4DCC061794
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:18 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a6so14742534wrm.4
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kZ+k2VRrvfDu4ASYD2+0hveDy1rv8dVhxsnPb7NP+X0=;
-        b=F40StJ0JDEughnyCZdC4zD4CADMmCEX+GdBEWIJkmZ4vaNaxG08FHoT+/Ef3TpqKA3
-         7Et7t+js1PLlhqegkg0tIN0YJqr48NIpDRJnspa8qwGRfPXtK8InR88gY+tBDjmthXWu
-         LdsNkMqwMVf+7qtfHRX0VC4ySJSllCd8lDC+WBL/rn8wYOuCXOY9g9zAsdjX7QWTrHab
-         5JGTxWMne7/Mw0z5Qm+5dy2eGxyP6uTW90jT+krRISw7A0f4KcCD/Iz8yX2++EC+XHLK
-         jgSWFQv0ZnAfzNgc+sLHNl/IxNWRhKtqbHR30Seku+m8gD3eN1XR0y4U5brZNTEVvL94
-         pspw==
+        bh=uh7jTGgLUvWvRRLhz59nl6r+4sZq+HqjUUSpbbMrHCY=;
+        b=NPfPymXXgeCvbsIcOSveuB8RE/oz+R82JSmYA3ZI4olCsfegJRLZAAQhll84hISKim
+         cdPBITN6oejfxhDnkp5CX8roTgmpUAWG5ARcpoA99lcxInO06+Ei2nsZoLaXZtKlcZqs
+         dY8ppdHawM4k/eG56eXRXOJFsL6/lgZgO3CS82LXKFK7Xi5SjeuP9C4fDwvHRnFIUvKB
+         ylpoPu02xpJ2xFxJzY7qsiTFtRGJDA9oGgii0we30RzcaHk7R4kfJpMFRI9yPOBNNyke
+         cUM9/aOExlgfmUxysWpH+tBB9veZyKyqKr00hEDHt5CiXAvurtY+PkGUOrPKXoR2Z6zv
+         6xrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kZ+k2VRrvfDu4ASYD2+0hveDy1rv8dVhxsnPb7NP+X0=;
-        b=KrZAN8fWi4EJmwCzzWr1SmMlqQCcjrXHynJpocr1Xsf91YDI03w7KIxRrks/LB1azF
-         wLAHvmq0hDccbCKS4duiK4vZRUcxDqs44j+GdcXNiDFROJLxvfaBgKlxvhkuGknFNmc+
-         WDonaOwDi0K/g6BLVAGnEWms/w0rUzd/FcBQHvVJsB2SUUe38Mjawlhve8jNHc3wROvW
-         W8ezmZ3gUKwnwXDaswbf/yAglnDwTe4z8OcJY8ATO9kHI28ay6FVDGr+OrQLMEzfqxcu
-         1Nt5JO5oIbV4mnTsk1Whwkq3fKWYSUlZ5GMSmEP/UipcqmWe5M1btEZ+cuqQI8H7d7vC
-         jRIw==
-X-Gm-Message-State: AOAM533T//6Vi02PL57/Qymqh3CM/koe6k7Y9PeH4NN9mTBMsjqFfypQ
-        jEwLA4RiDbAuGp/7Ymo/AKgdWw==
-X-Google-Smtp-Source: ABdhPJwEk2RTfsYPZCrwW/6JZss9ehBe6X5OJOmh5OKgO1/Gr7DZGwQlNRj0NwRoqP3KYf6vv5xpoQ==
-X-Received: by 2002:a5d:6a04:: with SMTP id m4mr76716494wru.418.1594627216305;
-        Mon, 13 Jul 2020 01:00:16 -0700 (PDT)
+        bh=uh7jTGgLUvWvRRLhz59nl6r+4sZq+HqjUUSpbbMrHCY=;
+        b=f/gBcz40FHP3lszdRYnmAKYfwiebe5kob7j3fRMMaIXbgFwP90KQzn5Gf3vB4eHe7F
+         1n7fay45XQJTiAkKoc29NZMnjKMHm4WG42fBy1SOLaR04ODhXAOaOr9MZ4zWbpnb1UAh
+         2kktIRlywZHKs6M+81FXyMU7VHkFCySO44nFSDVNyBuBIl2hzEOXvhE75hw9cau5rFhV
+         O/Ve/SL9QB33YY/VoimPyAf/WUKalvzvuHDmYojRwBoqkwbu06gQiBpC33w7Kxrlh/Dx
+         ulBMlGUa43ue8cpa726e26bcb+rGeJwcMud/NGI3mwjk0C2K4XqB/qkexBtz2Drz1U2j
+         sEuQ==
+X-Gm-Message-State: AOAM533bb5NUYfiyHDxvIrLkJ4SB45Imobp4AIaizxQuP35Hb8uaNQG7
+        jcSMu9w5qkIryiLTZlFtHOFtHA==
+X-Google-Smtp-Source: ABdhPJzGhGCbIvtDoNNaNoQzXKPNNMJctLfEI5QYuLStqKwwHjDsDS6TmAYE3PR02E3/kNadJO1jsQ==
+X-Received: by 2002:a5d:464e:: with SMTP id j14mr78277693wrs.393.1594627217314;
+        Mon, 13 Jul 2020 01:00:17 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.6])
-        by smtp.gmail.com with ESMTPSA id 33sm24383549wri.16.2020.07.13.01.00.15
+        by smtp.gmail.com with ESMTPSA id 33sm24383549wri.16.2020.07.13.01.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 01:00:15 -0700 (PDT)
+        Mon, 13 Jul 2020 01:00:16 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Luben Tuikov <luben_tuikov@adaptec.com>
-Subject: [PATCH v2 08/24] scsi: aic94xx: aic94xx_scb: Fix a couple of formatting and bitrot issues
-Date:   Mon, 13 Jul 2020 08:59:45 +0100
-Message-Id: <20200713080001.128044-9-lee.jones@linaro.org>
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "PMC-Sierra, Inc" <aacraid@pmc-sierra.com>
+Subject: [PATCH v2 09/24] scsi: aacraid: rx: Fill in the very parameter descriptions for rx_sync_cmd()
+Date:   Mon, 13 Jul 2020 08:59:46 +0100
+Message-Id: <20200713080001.128044-10-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200713080001.128044-1-lee.jones@linaro.org>
 References: <20200713080001.128044-1-lee.jones@linaro.org>
@@ -65,45 +66,60 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Kerneldoc format should be '@.*: ', else the checker gets confused.
+... and document aac_rx_ioremap() 'dev' param.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/aic94xx/aic94xx_scb.c:137: warning: Function parameter or member 'phy' not described in 'asd_get_attached_sas_addr'
- drivers/scsi/aic94xx/aic94xx_scb.c:137: warning: Function parameter or member 'sas_addr' not described in 'asd_get_attached_sas_addr'
- drivers/scsi/aic94xx/aic94xx_scb.c:860: warning: Function parameter or member 't' not described in 'asd_ascb_timedout'
- drivers/scsi/aic94xx/aic94xx_scb.c:860: warning: Excess function parameter 'data' description in 'asd_ascb_timedout'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'p2' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'p3' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'p4' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'p5' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'p6' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'status' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'r1' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'r2' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'r3' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Function parameter or member 'r4' not described in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:156: warning: Excess function parameter 'ret' description in 'rx_sync_cmd'
+ drivers/scsi/aacraid/rx.c:450: warning: Function parameter or member 'dev' not described in 'aac_rx_ioremap'
 
-Cc: Luben Tuikov <luben_tuikov@adaptec.com>
+Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Cc: "PMC-Sierra, Inc" <aacraid@pmc-sierra.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/aic94xx/aic94xx_scb.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/aacraid/rx.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/aic94xx/aic94xx_scb.c b/drivers/scsi/aic94xx/aic94xx_scb.c
-index 4a80ec08f0c96..c264b4b56970b 100644
---- a/drivers/scsi/aic94xx/aic94xx_scb.c
-+++ b/drivers/scsi/aic94xx/aic94xx_scb.c
-@@ -123,8 +123,8 @@ static unsigned ord_phy(struct asd_ha_struct *asd_ha, struct asd_phy *phy)
+diff --git a/drivers/scsi/aacraid/rx.c b/drivers/scsi/aacraid/rx.c
+index 3dea348bd25d2..cdccf9abcdc40 100644
+--- a/drivers/scsi/aacraid/rx.c
++++ b/drivers/scsi/aacraid/rx.c
+@@ -144,7 +144,16 @@ static void aac_rx_enable_interrupt_message(struct aac_dev *dev)
+  *	@dev: Adapter
+  *	@command: Command to execute
+  *	@p1: first parameter
+- *	@ret: adapter status
++ *	@p2: second parameter
++ *	@p3: third parameter
++ *	@p4: forth parameter
++ *	@p5: fifth parameter
++ *	@p6: sixth parameter
++ *	@status: adapter status
++ *	@r1: first return value
++ *	@r2: second return value
++ *	@r3: third return value
++ *	@r4: forth return value
+  *
+  *	This routine will send a synchronous command to the adapter and wait 
+  *	for its	completion.
+@@ -443,6 +452,7 @@ static int aac_rx_deliver_message(struct fib * fib)
  
  /**
-  * asd_get_attached_sas_addr -- extract/generate attached SAS address
-- * phy: pointer to asd_phy
-- * sas_addr: pointer to buffer where the SAS address is to be written
-+ * @phy: pointer to asd_phy
-+ * @sas_addr: pointer to buffer where the SAS address is to be written
+  *	aac_rx_ioremap
++ *	@dev: adapter
+  *	@size: mapping resize request
   *
-  * This function extracts the SAS address from an IDENTIFY frame
-  * received.  If OOB is SATA, then a SAS address is generated from the
-@@ -847,7 +847,7 @@ void asd_build_initiate_link_adm_task(struct asd_ascb *ascb, int phy_id,
- 
- /**
-  * asd_ascb_timedout -- called when a pending SCB's timer has expired
-- * @data: unsigned long, a pointer to the ascb in question
-+ * @t: Timer context used to fetch the SCB
-  *
-  * This is the default timeout function which does the most necessary.
-  * Upper layers can implement their own timeout function, say to free
+  */
 -- 
 2.25.1
 
