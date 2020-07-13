@@ -2,118 +2,142 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC4C21D0AA
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D894D21D0F8
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729478AbgGMHrb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 03:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S1726380AbgGMHzm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 03:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729430AbgGMHrU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:47:20 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DD4C08C5DB
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:47:20 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id o8so12308042wmh.4
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:47:20 -0700 (PDT)
+        with ESMTP id S1725818AbgGMHzm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:55:42 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89582C061755
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:55:42 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id c139so11318584qkg.12
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XQHRlmYiMy5z0WnxtNKRalmwQyJTVSmo3hN7/2Qvzas=;
-        b=KHL9TfqHuic2Hz/gCGjHqEV4aXb+rqiIxhW2H0SIf95PQRa4bMGKzxcKNY/V0HaQCh
-         FV3WMI7KMqZvdJMZLQIqhkncE2ybjODT8FbtRsxDnKV+4nRN9UaArVXi4PibDxnCCBgh
-         Ga86GDhHwA3vJDwJOPNCgFmgF2wgxvnOjM7T1IXrGAtLr5AN6fKxkJGta0KvX7tr0g/v
-         08KZHR0URgb652sx8tDibXdv/bjWR5rZvhMtIpKtL+K9M+MoW+jJe8/n9qMF8rmDJq6A
-         bDBxqpp+t/g4wU79ff6v94+pBQFa0Pz5/QlwG64QEbTWP7WxFnU32Eiml8L1gkX7+TQF
-         NRGw==
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=ShBbu9sSYjap4DNNY3AXNyJIdESjeWRe5yF7SlDXnuM=;
+        b=dWXhlmpWo5QoCPI2izE2yTmGwoKzRlwOsgOZwO875I7HbgY5tyXt+83r4yacOebEBs
+         u+YeHsZHh9nuo05CLbNQk9lDe6gs/lgBcxcg0moedib5WQizGbTxfZNsplw8/xK5cVru
+         2VWdTpnmGVW+kqHX1dwLe9ZdCEm6Ayrjz2hDg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XQHRlmYiMy5z0WnxtNKRalmwQyJTVSmo3hN7/2Qvzas=;
-        b=f/fFJc0DWSkl/TXn1o8HPvro3zJEAx8jUwypUjvqw4y2G/f0OVo6ImUelH5li71GFd
-         tOe/shE5P2tKk0WwOaxwXTsakTK3acBHWLP1017o92ifZKhWBOyaZA6Np87BaF/M6d9g
-         3t6PAYIrgCMk3Rw1SLoOoyowwONgjJJ4xIQVh32vq5ypXhglyNi9LSPimz+erLhtqoxO
-         +GvbekU+DkEvnIR1RRAauZBJVcc4drZSlgAr2Dlf8sL07pL2PnZtdNiw4gxAElLUTAoz
-         2Yv6H4jj0U2AXwJCL9WR8oEzovSAyD3bwdRYbpwe+7d58E4bJJLpudz26hYtCuZhWGYq
-         8R1A==
-X-Gm-Message-State: AOAM533+NvWi0QnrNw2jHTDlxDSmr0I/UfFJWp2cJVUFMkKBdRoRGUXi
-        bBzo7KU50g7WTT8Hw1gOtqSYL2heGOo=
-X-Google-Smtp-Source: ABdhPJzgwrMYUQqLwI6VoW0qfTZcKcx1xciX4lkFCkQBG7dWKtjqLa9Y5l1ZR3O6y0+SbRr5gKv1Lg==
-X-Received: by 2002:a1c:4d11:: with SMTP id o17mr17319246wmh.134.1594626438923;
-        Mon, 13 Jul 2020 00:47:18 -0700 (PDT)
-Received: from localhost.localdomain ([2.31.163.6])
-        by smtp.gmail.com with ESMTPSA id k11sm25142488wrd.23.2020.07.13.00.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 00:47:18 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        QLogic-Storage-Upstream@qlogic.com
-Subject: [PATCH v2 29/29] scsi: qla4xxx: ql4_init: Provide a missing function param description and fix formatting
-Date:   Mon, 13 Jul 2020 08:46:45 +0100
-Message-Id: <20200713074645.126138-30-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200713074645.126138-1-lee.jones@linaro.org>
-References: <20200713074645.126138-1-lee.jones@linaro.org>
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=ShBbu9sSYjap4DNNY3AXNyJIdESjeWRe5yF7SlDXnuM=;
+        b=nXMg04eaiAEPC67n1Iq+D6ePf7FRAtPxLdlajco5/oim1cQ2Ueqghb27uew08hpca8
+         UpcYJEGY9QxNOQREa7pqGINcbmVXm61nqppjPZxJg+YMXrHCKJkSsRi3xdFFBg3bhvka
+         edyWVe7FFxXPoVHfXUUB1DDQpAB5w/lmoaIZIbqNVfCuvChENOHOWsnKf4bcMmgZeW9z
+         wl8E0aWP9PIesb3TQjCUR3Qtrth+oxVMl+73aWg46gF3oZGgRRXHTZLxqf0dzdeFtnq1
+         R/oyK8stG8ImkEtblqX/z9TtE0++1PczKlZeMJlM1mQnurvT9NSXNOQ7wghWjEgIl0dd
+         quXw==
+X-Gm-Message-State: AOAM530x5FroMRN93LXccKoDLbw0WBASkgU8g5bmTJVI+3Oz4+AggKGe
+        aoMWxCjE50z/Fjt8m7XKsafDbhLqtXh56UVr614M2w==
+X-Google-Smtp-Source: ABdhPJy2hEhEZRa0fM9TYLsRxdVxdjIA2gv9Xrbar7MUzaUTDRZ/fV2dWEMyqlQiRZC2SKNDqA3BYHY52EIFKXPyBG8=
+X-Received: by 2002:a37:aa87:: with SMTP id t129mr80362516qke.70.1594626941585;
+ Mon, 13 Jul 2020 00:55:41 -0700 (PDT)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-11-git-send-email-john.garry@huawei.com>
+ <d55972999b9370f947c20537e41b49bf@mail.gmail.com> <e61593f8-5ee7-5763-9d02-d0ea13aeb49f@huawei.com>
+ <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com> <10d36c09-9d5b-92e9-23ac-ea1a2628e7d9@huawei.com>
+ <0563e53f843c97de1a5a035fae892bf8@mail.gmail.com> <61299951-97dc-b2be-c66c-024dfbd3a1cb@huawei.com>
+ <b49c33ebda36b8f116a51bc5c430eb9d@mail.gmail.com> <13d6b63e-3aa8-68fa-29ab-a4c202024280@huawei.com>
+In-Reply-To: <13d6b63e-3aa8-68fa-29ab-a4c202024280@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQBVjmvxAE7FMYb7GtMRWGcwtMcECgFIs823Ad7lfqMBmFaE1AGZowweAlKrFcUB/hGY5AG4aoXNAvsHUMYCeW9VQ6t3/AoA
+Date:   Mon, 13 Jul 2020 13:25:36 +0530
+Message-ID: <34a832717fef4702b143ea21aa12b79e@mail.gmail.com>
+Subject: RE: [PATCH RFC v7 10/12] megaraid_sas: switch fusion adapters to MQ
+To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        don.brace@microsemi.com, Sumit Saxena <sumit.saxena@broadcom.com>,
+        ming.lei@redhat.com, bvanassche@acm.org, hare@suse.com, hch@lst.de,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        esc.storagedev@microsemi.com, chenxiang66@hisilicon.com,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Kerneldoc function parameter references need to be in the format '@.*: ',
-else the kerneldoc checker gets confused.
+> > Looking at description of above patch and changes, it looks like
+> > megaraid_sas driver can still work without shared host tag for this
+> > feature.
+> >
+> > I observe CPU hotplug works irrespective of shared host tag
+>
+> Can you be clear exactly what you mean by "irrespective of shared host
+> tag"?
+>
+> Do you mean that for your test Scsi_Host.nr_hw_queues is set to expose hw
+> queues and scsi_host_template.map_queues = blk_mq_pci_map_queues(),
+> but you just don't set the host_tagset flag?
 
-Fixes the following W=1 kernel build warning(s):
+Yes. I only disabled "host_tagset". <map_queue> is still hooked.
 
- drivers/scsi/qla4xxx/ql4_init.c: In function ‘ql4xxx_set_mac_number’:
- drivers/scsi/qla4xxx/ql4_init.c:17:10: warning: variable ‘func_number’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/qla4xxx/ql4_init.c: In function ‘qla4xxx_pci_config’:
- drivers/scsi/qla4xxx/ql4_init.c:664:6: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
-from  drivers/scsi/qla4xxx/ql4_init.c:9:
-from  drivers/scsi/qla4xxx/ql4_init.c:9:
- drivers/scsi/qla4xxx/ql4_init.c:953: warning: Function parameter or member 'is_reset' not described in 'qla4xxx_initialize_adapter'
- drivers/scsi/qla4xxx/ql4_init.c:1168: warning: Function parameter or member 'ha' not described in 'qla4xxx_process_ddb_changed'
- drivers/scsi/qla4xxx/ql4_init.c:1168: warning: Function parameter or member 'fw_ddb_index' not described in 'qla4xxx_process_ddb_changed'
- drivers/scsi/qla4xxx/ql4_init.c:1168: warning: Function parameter or member 'state' not described in 'qla4xxx_process_ddb_changed'
- drivers/scsi/qla4xxx/ql4_init.c:1168: warning: Function parameter or member 'conn_err' not described in 'qla4xxx_process_ddb_changed'
+>
+>   in megaraid_sas
+> > on 5.8-rc.
+> >
+> > Without shared host tag, megaraid driver will expose single hctx and
+> > all the CPU will be mapped to hctx0.
+>
+> right
+>
+> > Any CPU offline event will have " blk_mq_hctx_notify_offline" callback
+> > in blk-mq module. If we do not have this callback/patch, we will see
+> > IO timeout.
+> > blk_mq_hctx_notify_offline callback will make sure all the outstanding
+> > on
+> > hctx0 is cleared and only after it is cleared, CPU will go offline.
+>
+> But that is only for when the last CPU for the hctx is going offline. If
+> nr_hw_queues == 1, then hctx0 would cover all CPUs, so that would never
+> occur during normal operation. See initial check in
+> blk_mq_hctx_notify_offline():
+>
+> static int blk_mq_hctx_notify_offline(unsigned int cpu, struct hlist_node
+> *node) {
+> 	if (!cpumask_test_cpu(cpu, hctx->cpumask) ||
+> 	    !blk_mq_last_cpu_in_hctx(cpu, hctx))
+> 		return 0;
+>
 
-Cc: QLogic-Storage-Upstream@qlogic.com
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/scsi/qla4xxx/ql4_init.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Thanks John for this pointer. I missed this part and now I understood what
+was happening in my testing.
+There were more than one CPU mapped to one msix index in my earlier testing
+and because of that I could see Interrupt migration happens on available CPU
+from affinity mask. So my earlier testing was incorrect.
 
-diff --git a/drivers/scsi/qla4xxx/ql4_init.c b/drivers/scsi/qla4xxx/ql4_init.c
-index 2bf5e3e639e1a..5963127f7d2ef 100644
---- a/drivers/scsi/qla4xxx/ql4_init.c
-+++ b/drivers/scsi/qla4xxx/ql4_init.c
-@@ -945,6 +945,7 @@ void qla4xxx_free_ddb_index(struct scsi_qla_host *ha)
- /**
-  * qla4xxx_initialize_adapter - initiailizes hba
-  * @ha: Pointer to host adapter structure.
-+ * @is_reset: Is this init path or reset path
-  *
-  * This routine parforms all of the steps necessary to initialize the adapter.
-  *
-@@ -1156,9 +1157,9 @@ int qla4xxx_flash_ddb_change(struct scsi_qla_host *ha, uint32_t fw_ddb_index,
- 
- /**
-  * qla4xxx_process_ddb_changed - process ddb state change
-- * @ha - Pointer to host adapter structure.
-- * @fw_ddb_index - Firmware's device database index
-- * @state - Device state
-+ * @ha: Pointer to host adapter structure.
-+ * @fw_ddb_index: Firmware's device database index
-+ * @state: Device state
-  *
-  * This routine processes a Decive Database Changed AEN Event.
-  **/
--- 
-2.25.1
+Now I am consistently able to reproduce issue - Best setup is have 1:1
+mapping of CPU to MSIX vector mapping. I used 128 logical CPU and 128 msix
+vectors and I noticed IO timeout without this RFC (without host_tagset).
+I did not noticed IO timeout with RFC (with host_tagset.) I will update this
+data in Driver's commit message.
 
+Just for my understanding -
+What if we have below code in blk_mq_hctx_notify_offline, CPU hotplug should
+work for megaraid_sas driver without this RFC (without shared host tagset).
+Right ?
+If answer is yes, will there be any side effect of having below code in
+block layer ?
+
+static int blk_mq_hctx_notify_offline(unsigned int cpu, struct hlist_node
+ *node) {
+ 	if (hctx->queue->nr_hw_queues > 1
+	    && (!cpumask_test_cpu(cpu, hctx->cpumask) ||
+ 	    !blk_mq_last_cpu_in_hctx(cpu, hctx)))
+ 		return 0;
+
+I also noticed nr_hw_queues are now exposed in sysfs -
+
+/sys/devices/pci0000:85/0000:85:00.0/0000:86:00.0/0000:87:04.0/0000:8b:00.0/0000:8c:00.0/0000:8d:00.0/host14/scsi_host/host14/nr_hw_queues:128
