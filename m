@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0128621D162
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E744F21D15E
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729197AbgGMIIn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 04:08:43 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7841 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728974AbgGMIIi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1729064AbgGMIIi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 13 Jul 2020 04:08:38 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7842 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728833AbgGMIIh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Jul 2020 04:08:37 -0400
 Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id AD91AC4288777DB34407;
+        by Forcepoint Email with ESMTP id A88EE6C494C7A4DF989A;
         Mon, 13 Jul 2020 16:08:35 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
@@ -20,12 +20,10 @@ Received: from localhost.localdomain (10.69.192.58) by
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>,
-        Luo Jiaxing <luojiaxing@huawei.com>,
-        "John Garry" <john.garry@huawei.com>
-Subject: [PATCH 1/2] scsi: hisi_sas: Directly trigger SCSI error handling for completion errors
-Date:   Mon, 13 Jul 2020 16:04:30 +0800
-Message-ID: <1594627471-235395-2-git-send-email-john.garry@huawei.com>
+        <linux-kernel@vger.kernel.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH 2/2] scsi: hisi_sas: Remove one kerneldoc comment
+Date:   Mon, 13 Jul 2020 16:04:31 +0800
+Message-ID: <1594627471-235395-3-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1594627471-235395-1-git-send-email-john.garry@huawei.com>
 References: <1594627471-235395-1-git-send-email-john.garry@huawei.com>
@@ -38,73 +36,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Luo Jiaxing <luojiaxing@huawei.com>
+The comment for interrupt_init_v2_hw() should not be a kerneldoc comment,
+so remove it.
 
-We used timeout mechanism of SCSI mid-layer to trigger some IO's error
-handle, this type of abnormal IO require driver to enter error handle to
-clear the residue in the hardware.
-
-But timeout mechanism caught error handle time to be longer, some threads
-need to wait for tens of seconds until block layer detect timeout and wake
-up SCSI error handle thread. So we try to trigger error handling directly
-for some specific IOs to save time.
-
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 4 +++-
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 4 +++-
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 4 +++-
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index 2e1718f9ade2..53e1f517efe9 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1258,8 +1258,10 @@ static void slot_complete_v1_hw(struct hisi_hba *hisi_hba,
- 		!(cmplt_hdr_data & CMPLT_HDR_RSPNS_XFRD_MSK)) {
- 
- 		slot_err_v1_hw(hisi_hba, task, slot);
--		if (unlikely(slot->abort))
-+		if (unlikely(slot->abort)) {
-+			sas_task_abort(task);
- 			return;
-+		}
- 		goto out;
- 	}
- 
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index e7e7849a4c14..4151b2c04923 100644
+index 4151b2c04923..ce84f2ba7f68 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -2404,8 +2404,10 @@ static void slot_complete_v2_hw(struct hisi_hba *hisi_hba,
- 				 error_info[0], error_info[1],
- 				 error_info[2], error_info[3]);
+@@ -3302,7 +3302,7 @@ static irq_handler_t fatal_interrupts[HISI_SAS_FATAL_INT_NR] = {
+ 	fatal_axi_int_v2_hw
+ };
  
--		if (unlikely(slot->abort))
-+		if (unlikely(slot->abort)) {
-+			sas_task_abort(task);
- 			return;
-+		}
- 		goto out;
- 	}
- 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 3e6b78a1f993..d2488d27ff8f 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2235,8 +2235,10 @@ static void slot_complete_v3_hw(struct hisi_hba *hisi_hba,
- 				 dw0, dw1, complete_hdr->act, dw3,
- 				 error_info[0], error_info[1],
- 				 error_info[2], error_info[3]);
--		if (unlikely(slot->abort))
-+		if (unlikely(slot->abort)) {
-+			sas_task_abort(task);
- 			return;
-+		}
- 		goto out;
- 	}
- 
+-/**
++/*
+  * There is a limitation in the hip06 chipset that we need
+  * to map in all mbigen interrupts, even if they are not used.
+  */
 -- 
 2.26.2
 
