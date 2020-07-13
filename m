@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C6A21D116
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DE121D123
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729360AbgGMIA3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 04:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S1729543AbgGMIBF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 04:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729350AbgGMIA2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 04:00:28 -0400
+        with ESMTP id S1729353AbgGMIA3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 04:00:29 -0400
 Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3027C061755
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:27 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id z2so14768716wrp.2
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD78C08C5DB
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:28 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a6so14743700wrm.4
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bOkk/AOE4a1rIKIblem9cC9W1YA+YYErwB4kADkbA6U=;
-        b=ivoW9LuiqFryL5aujmOFCwfClhS0ODYgoFhI6l1yi1CHg//IVHm2ugcAs+/VhXZeAV
-         dxPbFvu0tGc8lIoZxq1kmj45ehBJpZYF1C3M/CjwYxWkygqc40oilXBB/gAmTY95yyNd
-         skd1c+bXcGfOSeZVqJVM1DRzzqP3/teEpAjWRWIiFMv0mEF3sLpat+UOWUJTsR481VxT
-         4148aRlBKjJwdM7NzB7IxpS8nwRq5zkpcvoiIb+BO5vRmzz6H5kb1+yY8kVtB1rQE4K+
-         kFSESLOpv6cuYA0qFQWJVkVSFvOt7TwbF0u4zCB4hfQGqVq3UxWPge/o/aCT9BRyUOZd
-         7k2g==
+        bh=9ZgkQ7bdc1wuAXRYHhS8n4ys9/FLwMulTL97bGrK6Pg=;
+        b=baJtv+z+i4BdwY1fkELNipK3Dnb5fnGWphS0Xgl7xgPQoanLW/l0N/wuHE0Ktb2aC8
+         oZG/F0tbD7fS7sCeVK6xguclTpNWCxHyxsh/29qRaCm9jld5xT4LT3B4riMznNeH7+q9
+         VWEN0Arkpaw8BzFJ01UWbsK19U67y4UkEkcvByynvlIKeUuQaRC49nKAHicBCCTkaa2b
+         NT7zn2rMDd5xXHZVLzMJjji4yQSvW03xcLrfm/WV5q3Rs4V4eoyvBPRhrUGl/Ju/FNhF
+         VCFPOda9DRUnL7uqPv/r9binxhL1Dt1CBLVgtho/8Ce/yI+ZRNNpbkcGTf7QEdE/J8Ms
+         IKzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bOkk/AOE4a1rIKIblem9cC9W1YA+YYErwB4kADkbA6U=;
-        b=FVd7z+bl+cjn+4ucM/by0gatcCE8JXjuK9abGDEA1yB1UnIS9ciD8OYYZWWkGH0Evg
-         k90//e0Y7BIpCmNZOASRR9vkZ12eje0Z8HQo6x4Nypzfvt09CNfN4vGea/RcX+VvCQV/
-         zjrreLDyRbINo0Ei09rv7Xw7dUC4U3lm8zdRR2W81g/NG++mbiPl3JjcOA9oRm94pS/O
-         R55cEFiHG0XRz8OcWWZop1VJbGuQvhPaMd/8OaQzpGznNX3GC7gpf4wHiW4Irx3NR87B
-         Y4tNnBk1jI7bcEQ83wWVghce5DRRzu9PV/1SSRdGfhDmQtmVI+rb2MXhViU7qfiM85Q4
-         flLQ==
-X-Gm-Message-State: AOAM5338v6f1I6bFyPcoA0RPnBeSa56p0/SSPCu82D88loMH6M8xvIMq
-        HYb52cOEzR1Z3uiEEvrpIpGWnFc7yc4=
-X-Google-Smtp-Source: ABdhPJzHD/4IVzBNdJENKx1a6mXcOPjXpA6cothz9YdYC7Zo+cS9T082RvQ7n9AJqR6XQqvEe1YA2A==
-X-Received: by 2002:adf:8024:: with SMTP id 33mr84296402wrk.117.1594627226531;
-        Mon, 13 Jul 2020 01:00:26 -0700 (PDT)
+        bh=9ZgkQ7bdc1wuAXRYHhS8n4ys9/FLwMulTL97bGrK6Pg=;
+        b=e7QUAf8Wtv2eS2GofkiVLMd9WvsPYZ+IWq5gqIZ8l8iPeJlQr4wL+yPgaGod2lJ5RT
+         m9ZklYc1++opJAXmNdfPjdBYmikVHZxZQgY/r6a3Xi5KyyBURJTqI+CtFH7HUNAA5MvX
+         KAk3WonVvpeSrjH5wSrNzRHyMvB9MqZuoTJIaYxgAi/E/g2ov+tB1OFWOqBrFkmHREvQ
+         /43ADBHPmzjec0WrtwM9WKR4ot64t2tuVRQHF6xcfmLj91637HI18XgcYr52I9JLHxub
+         iKTXpu8jQeK9vP99EmzSjNLlfaaVN700JMEMKQdGsOKYzsWk9/Rqk1q8a8+d9cZOenK5
+         N1QQ==
+X-Gm-Message-State: AOAM532YtjBwBPTkSlnSWe+n5iZosM7vC47y62qcMiz33UpW+fY0XjPg
+        oS7xvYov9GS/t16BGJPLTX2fRw==
+X-Google-Smtp-Source: ABdhPJxd3p7O61j7UOZQOlPtiEVXjyxjCLg/KpD1jSQ/g2VyxYglRfGMmYsYvWB1ofWoVaYUwh3q7w==
+X-Received: by 2002:a5d:6288:: with SMTP id k8mr76209953wru.373.1594627227678;
+        Mon, 13 Jul 2020 01:00:27 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.6])
-        by smtp.gmail.com with ESMTPSA id 33sm24383549wri.16.2020.07.13.01.00.25
+        by smtp.gmail.com with ESMTPSA id 33sm24383549wri.16.2020.07.13.01.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 01:00:26 -0700 (PDT)
+        Mon, 13 Jul 2020 01:00:27 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Ketan Mukadam <ketan.mukadam@broadcom.com>,
         Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
         linux-drivers@broadcom.com
-Subject: [PATCH v2 17/24] scsi: be2iscsi: be_iscsi: Fix API/documentation slip
-Date:   Mon, 13 Jul 2020 08:59:54 +0100
-Message-Id: <20200713080001.128044-18-lee.jones@linaro.org>
+Subject: [PATCH v2 18/24] scsi: be2iscsi: be_main: Fix misdocumentation of 'pcontext'
+Date:   Mon, 13 Jul 2020 08:59:55 +0100
+Message-Id: <20200713080001.128044-19-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200713080001.128044-1-lee.jones@linaro.org>
 References: <20200713080001.128044-1-lee.jones@linaro.org>
@@ -68,19 +68,16 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-And add descriptions for a couple of missing function parameters.
+Also demote unintentional kerneldoc header.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/be2iscsi/be_iscsi.c:38: warning: Function parameter or member 'ep' not described in 'beiscsi_session_create'
- drivers/scsi/be2iscsi/be_iscsi.c:173: warning: Function parameter or member 'is_leading' not described in 'beiscsi_conn_bind'
- drivers/scsi/be2iscsi/be_iscsi.c:998: warning: Function parameter or member 'beiscsi_ep' not described in 'beiscsi_free_ep'
- drivers/scsi/be2iscsi/be_iscsi.c:998: warning: Excess function parameter 'ep' description in 'beiscsi_free_ep'
- drivers/scsi/be2iscsi/be_iscsi.c:1039: warning: Function parameter or member 'non_blocking' not described in 'beiscsi_open_conn'
- drivers/scsi/be2iscsi/be_iscsi.c:1135: warning: Function parameter or member 'shost' not described in 'beiscsi_ep_connect'
- drivers/scsi/be2iscsi/be_iscsi.c:1135: warning: Excess function parameter 'scsi_host' description in 'beiscsi_ep_connect'
- drivers/scsi/be2iscsi/be_iscsi.c:1236: warning: Function parameter or member 'beiscsi_ep' not described in 'beiscsi_conn_close'
- drivers/scsi/be2iscsi/be_iscsi.c:1236: warning: Excess function parameter 'ep' description in 'beiscsi_conn_close'
+ drivers/scsi/be2iscsi/be_main.c:986: warning: Function parameter or member 'pcontext' not described in 'alloc_wrb_handle'
+ drivers/scsi/be2iscsi/be_main.c:986: warning: Excess function parameter 'pwrb_context' description in 'alloc_wrb_handle'
+ drivers/scsi/be2iscsi/be_main.c:1409: warning: Function parameter or member 'beiscsi_conn' not described in 'beiscsi_complete_pdu'
+ drivers/scsi/be2iscsi/be_main.c:1409: warning: Function parameter or member 'phdr' not described in 'beiscsi_complete_pdu'
+ drivers/scsi/be2iscsi/be_main.c:1409: warning: Function parameter or member 'pdata' not described in 'beiscsi_complete_pdu'
+ drivers/scsi/be2iscsi/be_main.c:1409: warning: Function parameter or member 'dlen' not described in 'beiscsi_complete_pdu'
 
 Cc: Subbu Seetharaman <subbu.seetharaman@broadcom.com>
 Cc: Ketan Mukadam <ketan.mukadam@broadcom.com>
@@ -88,68 +85,31 @@ Cc: Jitendra Bhivare <jitendra.bhivare@broadcom.com>
 Cc: linux-drivers@broadcom.com
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/be2iscsi/be_iscsi.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/scsi/be2iscsi/be_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/be2iscsi/be_iscsi.c b/drivers/scsi/be2iscsi/be_iscsi.c
-index 2058d50d62e12..fe10575bce7f0 100644
---- a/drivers/scsi/be2iscsi/be_iscsi.c
-+++ b/drivers/scsi/be2iscsi/be_iscsi.c
-@@ -27,6 +27,7 @@ extern struct iscsi_transport beiscsi_iscsi_transport;
- 
- /**
-  * beiscsi_session_create - creates a new iscsi session
-+ * @ep: pointer to iscsi ep
-  * @cmds_max: max commands supported
-  * @qdepth: max queue depth supported
-  * @initial_cmdsn: initial iscsi CMDSN
-@@ -164,6 +165,7 @@ beiscsi_conn_create(struct iscsi_cls_session *cls_session, u32 cid)
-  * @cls_session: pointer to iscsi cls session
-  * @cls_conn: pointer to iscsi cls conn
-  * @transport_fd: EP handle(64 bit)
-+ * @is_leading: indicate if this is the session leading connection (MCS)
+diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
+index 9b81cfbbc5c53..8dc2e0824ad78 100644
+--- a/drivers/scsi/be2iscsi/be_main.c
++++ b/drivers/scsi/be2iscsi/be_main.c
+@@ -977,7 +977,7 @@ beiscsi_get_wrb_handle(struct hwi_wrb_context *pwrb_context,
+  * alloc_wrb_handle - To allocate a wrb handle
+  * @phba: The hba pointer
+  * @cid: The cid to use for allocation
+- * @pwrb_context: ptr to ptr to wrb context
++ * @pcontext: ptr to ptr to wrb context
   *
-  * This function binds the TCP Conn with iSCSI Connection and Session.
+  * This happens under session_lock until submission to chip
   */
-@@ -992,7 +994,7 @@ static void beiscsi_put_cid(struct beiscsi_hba *phba, unsigned short cid)
+@@ -1394,7 +1394,7 @@ static void hwi_complete_cmd(struct beiscsi_conn *beiscsi_conn,
+ 	spin_unlock_bh(&session->back_lock);
+ }
  
- /**
-  * beiscsi_free_ep - free endpoint
-- * @ep:	pointer to iscsi endpoint structure
-+ * @beiscsi_ep: pointer to device endpoint struct
-  */
- static void beiscsi_free_ep(struct beiscsi_endpoint *beiscsi_ep)
- {
-@@ -1027,9 +1029,10 @@ static void beiscsi_free_ep(struct beiscsi_endpoint *beiscsi_ep)
- 
- /**
-  * beiscsi_open_conn - Ask FW to open a TCP connection
-- * @ep:	endpoint to be used
-+ * @beiscsi_ep: pointer to device endpoint struct
-  * @src_addr: The source IP address
-  * @dst_addr: The Destination  IP address
-+ * @non_blocking: blocking or non-blocking call
-  *
-  * Asks the FW to open a TCP connection
-  */
-@@ -1123,7 +1126,7 @@ static int beiscsi_open_conn(struct iscsi_endpoint *ep,
- 
- /**
-  * beiscsi_ep_connect - Ask chip to create TCP Conn
-- * @scsi_host: Pointer to scsi_host structure
-+ * @shost: Pointer to scsi_host structure
-  * @dst_addr: The IP address of Target
-  * @non_blocking: blocking or non-blocking call
-  *
-@@ -1228,7 +1231,7 @@ static void beiscsi_flush_cq(struct beiscsi_hba *phba)
- 
- /**
-  * beiscsi_conn_close - Invalidate and upload connection
-- * @ep: The iscsi endpoint
-+ * @beiscsi_ep: pointer to device endpoint struct
-  *
-  * Returns 0 on success,  -1 on failure.
-  */
+-/**
++/*
+  * ASYNC PDUs include
+  * a. Unsolicited NOP-In (target initiated NOP-In)
+  * b. ASYNC Messages
 -- 
 2.25.1
 
