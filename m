@@ -2,142 +2,136 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D894D21D0F8
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 09:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0130821D130
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jul 2020 10:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgGMHzm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jul 2020 03:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S1726571AbgGMIAK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jul 2020 04:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725818AbgGMHzm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 03:55:42 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89582C061755
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:55:42 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id c139so11318584qkg.12
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 00:55:42 -0700 (PDT)
+        with ESMTP id S1725969AbgGMIAK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jul 2020 04:00:10 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED20AC061755
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:09 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id f7so14761048wrw.1
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jul 2020 01:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:references:in-reply-to:mime-version:thread-index:date
-         :message-id:subject:to:cc;
-        bh=ShBbu9sSYjap4DNNY3AXNyJIdESjeWRe5yF7SlDXnuM=;
-        b=dWXhlmpWo5QoCPI2izE2yTmGwoKzRlwOsgOZwO875I7HbgY5tyXt+83r4yacOebEBs
-         u+YeHsZHh9nuo05CLbNQk9lDe6gs/lgBcxcg0moedib5WQizGbTxfZNsplw8/xK5cVru
-         2VWdTpnmGVW+kqHX1dwLe9ZdCEm6Ayrjz2hDg=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g0025PyTY/eWJewtXJ8I/jkg/HPx62AopbKf5qsThd0=;
+        b=shosgGIqEV5Mi43/el0Qv3n5SrwGOeatsv60Jx9hdx9avXnYhxdW+EndMvsg1rCMjv
+         shGen7E57TNPkoGMqud+THaV6Pxm5a1cFSN6eJHKBEgy7yv4jFRHSFf7f/eI9o8m9zNx
+         fQ6UB5BXKUASSQZX4ijyMpS7qqQ7EtQqCB4U4PFCY5Z3UAtutQ3ZPu9eccfAugAxDvzy
+         A7cVnIeVlLgB7VEEpche2qEH/rMQNUvpv+jsED0gn2TRhxSWffJUk5M/R2dbASwUvjaF
+         X1lLwy4wo3Bv//etcDgghdkUqRB+Xy1/GjvCTbSuCMnajegNbsvInGm5DwUue+WQJFea
+         0ZXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:references:in-reply-to:mime-version
-         :thread-index:date:message-id:subject:to:cc;
-        bh=ShBbu9sSYjap4DNNY3AXNyJIdESjeWRe5yF7SlDXnuM=;
-        b=nXMg04eaiAEPC67n1Iq+D6ePf7FRAtPxLdlajco5/oim1cQ2Ueqghb27uew08hpca8
-         UpcYJEGY9QxNOQREa7pqGINcbmVXm61nqppjPZxJg+YMXrHCKJkSsRi3xdFFBg3bhvka
-         edyWVe7FFxXPoVHfXUUB1DDQpAB5w/lmoaIZIbqNVfCuvChENOHOWsnKf4bcMmgZeW9z
-         wl8E0aWP9PIesb3TQjCUR3Qtrth+oxVMl+73aWg46gF3oZGgRRXHTZLxqf0dzdeFtnq1
-         R/oyK8stG8ImkEtblqX/z9TtE0++1PczKlZeMJlM1mQnurvT9NSXNOQ7wghWjEgIl0dd
-         quXw==
-X-Gm-Message-State: AOAM530x5FroMRN93LXccKoDLbw0WBASkgU8g5bmTJVI+3Oz4+AggKGe
-        aoMWxCjE50z/Fjt8m7XKsafDbhLqtXh56UVr614M2w==
-X-Google-Smtp-Source: ABdhPJy2hEhEZRa0fM9TYLsRxdVxdjIA2gv9Xrbar7MUzaUTDRZ/fV2dWEMyqlQiRZC2SKNDqA3BYHY52EIFKXPyBG8=
-X-Received: by 2002:a37:aa87:: with SMTP id t129mr80362516qke.70.1594626941585;
- Mon, 13 Jul 2020 00:55:41 -0700 (PDT)
-From:   Kashyap Desai <kashyap.desai@broadcom.com>
-References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
- <1591810159-240929-11-git-send-email-john.garry@huawei.com>
- <d55972999b9370f947c20537e41b49bf@mail.gmail.com> <e61593f8-5ee7-5763-9d02-d0ea13aeb49f@huawei.com>
- <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com> <10d36c09-9d5b-92e9-23ac-ea1a2628e7d9@huawei.com>
- <0563e53f843c97de1a5a035fae892bf8@mail.gmail.com> <61299951-97dc-b2be-c66c-024dfbd3a1cb@huawei.com>
- <b49c33ebda36b8f116a51bc5c430eb9d@mail.gmail.com> <13d6b63e-3aa8-68fa-29ab-a4c202024280@huawei.com>
-In-Reply-To: <13d6b63e-3aa8-68fa-29ab-a4c202024280@huawei.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g0025PyTY/eWJewtXJ8I/jkg/HPx62AopbKf5qsThd0=;
+        b=j7Zir4O/FHAQMO4d3f1VctoF/8rEw8wn8nUfRSoYqzLEi27LJO9LY7jGqbiuu4t/A2
+         W/daA3+vhXysyEIbhl9r9f2rsRzsxhWapQmVFXY1GomBP+VCVhB1TW5Aa5O8ZnHUXARy
+         ytIkjwpRWdLeq7tYHd/cWbDSrR/mH41tgVkbCARWZQzjePOuAOvQLA4LAilU3w2MaPqs
+         ZeJKIuDelVrBicIB8ZBCWQmhcxL9YoRd2AYK7iMmYHTuxx/1Jvj2PhJRgfDWNA40oQgn
+         e6FlgW35PN69hoz+O0ix5BGBWPuOjEkBrnkq2Im5WoPDYHMs+CMi0E9pUwIzQ4WlAi3g
+         5v8g==
+X-Gm-Message-State: AOAM530+ciUDKR6Y+/D98vp65kKCceYj9/Xve59tXWe1UVEwgNgkR3rH
+        StVrGazVlnB1VZwYbyKeO9CxNA==
+X-Google-Smtp-Source: ABdhPJwOcTyhG/RhUEn4cJVs5ajgV1jbVXvClhi9FjHPoCdiHUpma4xUuuP55L87YUuycheYAyP02A==
+X-Received: by 2002:a5d:464e:: with SMTP id j14mr78277009wrs.393.1594627207673;
+        Mon, 13 Jul 2020 01:00:07 -0700 (PDT)
+Received: from localhost.localdomain ([2.31.163.6])
+        by smtp.gmail.com with ESMTPSA id 33sm24383549wri.16.2020.07.13.01.00.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 01:00:06 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH v2 00/24] Set 3: Fix another set of SCSI related W=1 warnings
+Date:   Mon, 13 Jul 2020 08:59:37 +0100
+Message-Id: <20200713080001.128044-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQBVjmvxAE7FMYb7GtMRWGcwtMcECgFIs823Ad7lfqMBmFaE1AGZowweAlKrFcUB/hGY5AG4aoXNAvsHUMYCeW9VQ6t3/AoA
-Date:   Mon, 13 Jul 2020 13:25:36 +0530
-Message-ID: <34a832717fef4702b143ea21aa12b79e@mail.gmail.com>
-Subject: RE: [PATCH RFC v7 10/12] megaraid_sas: switch fusion adapters to MQ
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        don.brace@microsemi.com, Sumit Saxena <sumit.saxena@broadcom.com>,
-        ming.lei@redhat.com, bvanassche@acm.org, hare@suse.com, hch@lst.de,
-        Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        esc.storagedev@microsemi.com, chenxiang66@hisilicon.com,
-        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> > Looking at description of above patch and changes, it looks like
-> > megaraid_sas driver can still work without shared host tag for this
-> > feature.
-> >
-> > I observe CPU hotplug works irrespective of shared host tag
->
-> Can you be clear exactly what you mean by "irrespective of shared host
-> tag"?
->
-> Do you mean that for your test Scsi_Host.nr_hw_queues is set to expose hw
-> queues and scsi_host_template.map_queues = blk_mq_pci_map_queues(),
-> but you just don't set the host_tagset flag?
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-Yes. I only disabled "host_tagset". <map_queue> is still hooked.
+Slowly working through the SCSI related ones.  There are many.
 
->
->   in megaraid_sas
-> > on 5.8-rc.
-> >
-> > Without shared host tag, megaraid driver will expose single hctx and
-> > all the CPU will be mapped to hctx0.
->
-> right
->
-> > Any CPU offline event will have " blk_mq_hctx_notify_offline" callback
-> > in blk-mq module. If we do not have this callback/patch, we will see
-> > IO timeout.
-> > blk_mq_hctx_notify_offline callback will make sure all the outstanding
-> > on
-> > hctx0 is cleared and only after it is cleared, CPU will go offline.
->
-> But that is only for when the last CPU for the hctx is going offline. If
-> nr_hw_queues == 1, then hctx0 would cover all CPUs, so that would never
-> occur during normal operation. See initial check in
-> blk_mq_hctx_notify_offline():
->
-> static int blk_mq_hctx_notify_offline(unsigned int cpu, struct hlist_node
-> *node) {
-> 	if (!cpumask_test_cpu(cpu, hctx->cpumask) ||
-> 	    !blk_mq_last_cpu_in_hctx(cpu, hctx))
-> 		return 0;
->
+This brings the total of W=1 SCSI wanings from 1690 in v5.8-rc1 to 1109.
 
-Thanks John for this pointer. I missed this part and now I understood what
-was happening in my testing.
-There were more than one CPU mapped to one msix index in my earlier testing
-and because of that I could see Interrupt migration happens on available CPU
-from affinity mask. So my earlier testing was incorrect.
+Changelog:
 
-Now I am consistently able to reproduce issue - Best setup is have 1:1
-mapping of CPU to MSIX vector mapping. I used 128 logical CPU and 128 msix
-vectors and I noticed IO timeout without this RFC (without host_tagset).
-I did not noticed IO timeout with RFC (with host_tagset.) I will update this
-data in Driver's commit message.
+v1 => v2
+ - Collected *-bys
+ - Removed inert function-calls when removing unused variables
+   - As suggested by James Bottomley
+ 
+Lee Jones (24):
+  scsi: aacraid: aachba: Repair two kerneldoc headers
+  scsi: aacraid: commctrl: Fix a few kerneldoc issues
+  scsi: aacraid: dpcsup: Fix logical bug when !DBG
+  scsi: aacraid: dpcsup: Remove unused variable 'status'
+  scsi: aacraid: dpcsup: Demote partially documented function header
+  scsi: aic94xx: aic94xx_seq: Document 'lseq' and repair
+    asd_update_port_links() header
+  scsi: aacraid: commsup: Fix a bunch of function header issues
+  scsi: aic94xx: aic94xx_scb: Fix a couple of formatting and bitrot
+    issues
+  scsi: aacraid: rx: Fill in the very parameter descriptions for
+    rx_sync_cmd()
+  scsi: pm8001: pm8001_ctl: Provide descriptions for the many
+    undocumented 'attr's
+  scsi: ipr: Fix a mountain of kerneldoc misdemeanours
+  scsi: virtio_scsi: Demote seemingly unintentional kerneldoc header
+  scsi: ipr: Remove a bunch of set but checked variables
+  scsi: ipr: Fix struct packed-not-aligned issues
+  scsi: myrs: Demote obvious misuse of kerneldoc to standard comment
+    blocks
+  scsi: megaraid: Fix a whole bunch of function header formatting issues
+  scsi: be2iscsi: be_iscsi: Fix API/documentation slip
+  scsi: be2iscsi: be_main: Fix misdocumentation of 'pcontext'
+  scsi: be2iscsi: be_mgmt: Add missing function parameter description
+  scsi: lpfc: lpfc_nvme: Correct some pretty obvious misdocumentation
+  scsi: aic7xxx: aic79xx_osm: Remove unused variable 'ahd'
+  scsi: aic7xxx: aic79xx_osm: Remove unused variables 'wait' and
+    'paused'
+  scsi: aic7xxx: aic79xx_osm: Fix 'amount_xferred' set but not used
+    issue
+  scsi: aic7xxx: aic79xx_osm: Remove set but unused variabes
+    'saved_scsiid' and 'saved_modes'
 
-Just for my understanding -
-What if we have below code in blk_mq_hctx_notify_offline, CPU hotplug should
-work for megaraid_sas driver without this RFC (without shared host tagset).
-Right ?
-If answer is yes, will there be any side effect of having below code in
-block layer ?
+ drivers/scsi/aacraid/aachba.c      |   5 +-
+ drivers/scsi/aacraid/commctrl.c    |  14 +-
+ drivers/scsi/aacraid/commsup.c     |  12 +-
+ drivers/scsi/aacraid/dpcsup.c      |  15 +-
+ drivers/scsi/aacraid/rx.c          |  12 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.c |  14 +-
+ drivers/scsi/aic94xx/aic94xx_scb.c |   6 +-
+ drivers/scsi/aic94xx/aic94xx_seq.c |   6 +-
+ drivers/scsi/be2iscsi/be_iscsi.c   |  11 +-
+ drivers/scsi/be2iscsi/be_main.c    |   4 +-
+ drivers/scsi/be2iscsi/be_mgmt.c    |   3 +-
+ drivers/scsi/ipr.c                 |  90 +++++++-----
+ drivers/scsi/ipr.h                 |   4 +-
+ drivers/scsi/lpfc/lpfc_nvme.c      |  38 +++--
+ drivers/scsi/megaraid.c            | 218 ++++++++++++++---------------
+ drivers/scsi/myrs.c                |  34 ++---
+ drivers/scsi/pm8001/pm8001_ctl.c   |  14 ++
+ drivers/scsi/virtio_scsi.c         |   2 +-
+ 18 files changed, 273 insertions(+), 229 deletions(-)
 
-static int blk_mq_hctx_notify_offline(unsigned int cpu, struct hlist_node
- *node) {
- 	if (hctx->queue->nr_hw_queues > 1
-	    && (!cpumask_test_cpu(cpu, hctx->cpumask) ||
- 	    !blk_mq_last_cpu_in_hctx(cpu, hctx)))
- 		return 0;
+-- 
+2.25.1
 
-I also noticed nr_hw_queues are now exposed in sysfs -
-
-/sys/devices/pci0000:85/0000:85:00.0/0000:86:00.0/0000:87:04.0/0000:8b:00.0/0000:8c:00.0/0000:8d:00.0/host14/scsi_host/host14/nr_hw_queues:128
