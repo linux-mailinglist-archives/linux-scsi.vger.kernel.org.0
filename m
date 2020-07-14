@@ -2,65 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0828921E72A
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 06:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD6921E730
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 06:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725906AbgGNE7B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jul 2020 00:59:01 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:37574 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgGNE7A (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 00:59:00 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4vVSk172890;
-        Tue, 14 Jul 2020 04:58:53 GMT
+        id S1726282AbgGNE7D (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jul 2020 00:59:03 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:43408 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgGNE7C (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 00:59:02 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4vDtj135818;
+        Tue, 14 Jul 2020 04:58:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=RLaIa/I6HqRzn5xMEjyR5F2vSVuUvzsasBEBKIz7svU=;
- b=zhsoOm3NZNSSQMgisgcq6QD2vVXgA/S6vynvztS2yl26tIUafm+61Jf5q2TRQaiBBR0w
- CCmbqDRmIdWZEfGNwEoQ+sExJSEZxqvsJI/yvSlIYadJQLUfMqoTPKzRn5AI/OFIkNDY
- Enx6+Spd5SkD/bNw50cEthoUHa319RHzRkDGuK8HRWhenoPxm8qTFExXazkbxZrdga5+
- mSAJgEv1kRYCFTbomIuMFG2ZsCfNW/JoE9OamvzNjYoLiqe+Wt/4xPWgGp1dTz8XtL2x
- FR5SKHPbsZJ3jRPRHsi+1boI77K4CyeV+YgZy7hb9Ki1d0uIsuN/z/j7oRjpgBgl6A2t ww== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 3275cm2x2x-1
+ bh=7we77lG6mlkFBYcBEmWuLFpucXzC2Q6WUj/T0ePlPLU=;
+ b=Q8GHasOodycTHzQuLkCXln/zHIXI9j2E+176fx0CNcwrRo2ckIyUP1iNbKqiONerCBHm
+ GxDeQaRu92eDuZio5XVnuTkNOrI1nzCk1ZH3zEFCgVBaPA9b4pyPr+MIkEvk6AU5iJBv
+ axt3+7k9G0EPiMatzZJ1f0D4aiv6Ir7gUvJjSd0orEoLF5Q6U7i+djjEML8kSHnRfYQh
+ USwKUmYKsph1atXBeBjZK7DEdJ5Ji2sEvcFcbzPtyk8rStTovsHe0Li7YFx5LkiyS602
+ 2r9Di508tG+7B/CVui/1vlzfn/DhacX85xdj137+RjWXhfNLJ3X+NJrKviNp7JpluEHa UA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 32762natk1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Jul 2020 04:58:53 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4vXi2174066;
-        Tue, 14 Jul 2020 04:58:53 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 327qb2nuhr-1
+        Tue, 14 Jul 2020 04:58:55 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4waKZ098640;
+        Tue, 14 Jul 2020 04:58:54 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 327qbwquu6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jul 2020 04:58:53 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06E4wpuq025057;
-        Tue, 14 Jul 2020 04:58:51 GMT
+        Tue, 14 Jul 2020 04:58:54 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06E4wqIM022054;
+        Tue, 14 Jul 2020 04:58:53 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 13 Jul 2020 21:58:51 -0700
+        with ESMTP ; Mon, 13 Jul 2020 21:58:52 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>, hare@suse.de,
-        jejb@linux.vnet.ibm.com
-Subject: Re: [PATCH 0/2] scsi_debug: every_nth cleanup, url + version
-Date:   Tue, 14 Jul 2020 00:58:41 -0400
-Message-Id: <159470266468.11195.13663399469617326524.b4-ty@oracle.com>
+To:     John Garry <john.garry@huawei.com>, jejb@linux.vnet.ibm.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 0/2] hisi_sas: A couple of misc patches
+Date:   Tue, 14 Jul 2020 00:58:42 -0400
+Message-Id: <159470266468.11195.1920177105269481206.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200712182927.72044-1-dgilbert@interlog.com>
-References: <20200712182927.72044-1-dgilbert@interlog.com>
+In-Reply-To: <1594627471-235395-1-git-send-email-john.garry@huawei.com>
+References: <1594627471-235395-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 malwarescore=0 mlxscore=0 phishscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007140037
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
- bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
+ clxscore=1011 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 adultscore=0 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007140037
 Sender: linux-scsi-owner@vger.kernel.org
@@ -68,24 +69,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 12 Jul 2020 14:29:25 -0400, Douglas Gilbert wrote:
+On Mon, 13 Jul 2020 16:04:29 +0800, John Garry wrote:
 
-> It was becoming hard to follow exactly when to expect the error
-> injection facilities in this driver to fire. Sometimes injected
-> errors just didn't seem to happen.
+> Includes a patch to speed up error handling and a kerneldoc clean-up.
 > 
-> The error injection design was too complicated for what was
-> required. Simplify it and make it more consistent. The second
-> patch in this set does some housekeeping.
+> John Garry (1):
+>   scsi: hisi_sas: Remove one kerneldoc comment
+> 
+> Luo Jiaxing (1):
+>   scsi: hisi_sas: Directly trigger SCSI error handling for completion
+>     errors
 > 
 > [...]
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/2] scsi: scsi_debug: every_nth triggered error injection
-      https://git.kernel.org/mkp/scsi/c/3a90a63d02b8
-[2/2] scsi: scsi_debug: Update documentation url and bump version
-      https://git.kernel.org/mkp/scsi/c/30f67481a18b
+[1/2] scsi: hisi_sas: Directly trigger SCSI error handling for completion errors
+      https://git.kernel.org/mkp/scsi/c/05d91b557af9
+[2/2] scsi: hisi_sas: Remove one kerneldoc comment
+      https://git.kernel.org/mkp/scsi/c/3d570a28ee8d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
