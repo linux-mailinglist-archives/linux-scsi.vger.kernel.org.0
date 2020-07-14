@@ -2,113 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F4621FFC8
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 23:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21DF21FFE1
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 23:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728173AbgGNVOV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jul 2020 17:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726446AbgGNVOV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 17:14:21 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D61DC061755
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2020 14:14:21 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id z13so227638wrw.5
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2020 14:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iwiT9c4LDOVCcAvxNOxfc0Jd80MIawIXX0zc+oc7oWQ=;
-        b=BZ+Y8AQ2QjAHb1K8Sn4cRMwWNhkV4n+/kotccRvx1Is7rU1TLTV21OWTIpKxwPXqqW
-         uKeOdDb0G8iG3PJXUrQzgU1YVA1vMQNYkbU0e3Wwo3oGvCWgzq3oFOM9hJIcB0Op9990
-         QSUvp8zpp4UvegOKTOnBmvI5Wbm2E9bn8bcftL/ZRs2aDkLfCJnZg6flaUL+hY8L9BOn
-         FphUrTSMSchwSjZA1WSz2APShDq67kKyBYdMwNSTeMgTediFAEhHTCU6NkWpaOTeGTgD
-         eGgNvOGl5ptP0TshYKL4sFirmEStyFPzb1NcgBz+acNsgVApDagJk0I2jzA63pldWmTU
-         BF5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iwiT9c4LDOVCcAvxNOxfc0Jd80MIawIXX0zc+oc7oWQ=;
-        b=uDnO3mdhBFRfawNf6Yq7ngiZSMYaEUPJatzNadCxw8WqUiXOz0cnoyBZngmr3SzhZA
-         HJj5P5VB7Bp1WK1UpApX+GqLa+BsXiAqFAE5ijfINnAqeMXtI54TdIJcz88XNBt04dFX
-         xyKad/yPt7MbX/3NqiGY+fFKf9h/eXmPtdzNJCjq42urAnOHeYS0In+V8DeTRU9l5ueG
-         6EG79Hiu4IK79Ac/3PVthNPomkXmIvz/HVMxG2zWEPpnmZaannJA4mJ7SA5cnKO4ZTfa
-         yVT5Li2MK9cmdMGDbXOSEsvslCHLKYqEq0Q3ZfTTJxgCcMvcndBKqnrSKSBs5TokWxOP
-         kRwQ==
-X-Gm-Message-State: AOAM53283cX1zLnGtS+aWIdcE27Ay0qMpfbkgtiWckqiO7ftovEiDYnQ
-        DUE6yOidhXwiB6PBsPfISewtyj9D
-X-Google-Smtp-Source: ABdhPJwPncDeHeFSOLqk4ykP8NQT/G8YV3xtZ4W9eTMSsERp1SBR+zKsw5dWtgyJw1EG8PvCJEGjpg==
-X-Received: by 2002:a5d:40c9:: with SMTP id b9mr7640486wrq.425.1594761259531;
-        Tue, 14 Jul 2020 14:14:19 -0700 (PDT)
-Received: from localhost.localdomain.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v5sm76692wmh.12.2020.07.14.14.14.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 14:14:18 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Martin George <Martin.George@netapp.com>
-Subject: [PATCH] lpfc: nvme remote port devloss_tmo from lldd
-Date:   Tue, 14 Jul 2020 14:14:12 -0700
-Message-Id: <20200714211412.11773-1-jsmart2021@gmail.com>
+        id S1728294AbgGNVSh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jul 2020 17:18:37 -0400
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:20892 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726446AbgGNVSh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 17:18:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1594761517; x=1626297517;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Eii7FmfTiwjXtaWeM5VI3cqCVXCyz8WbJm0iTlMDWJs=;
+  b=kVVHus2PHjq3i+ziCcrND1PXldELov17MAses7XbS5ikQM1FDMPUReQp
+   DdFlEdc8VJ2JA6+Cm3FTYtd0N+p9YlzHdCmZiD3I2asKdAoLYwIebJcgq
+   yOX4DkP25MRDEvfLw+c00AcX/kAHM3Y45heqTmYQTv6zXc2nOL8QTasNB
+   1owWw5wpNoNmfEHO+uArk88sGTvWuGxQtBY77GT1b1sVdh9jT50zjUj8N
+   +1iKN1sDq1606AR7XdMwyYk1et1Y/3kerp7YDqAyCxnVYxaV4h8p3I+z3
+   zIjwQ/LnWLjTWZzPW3VR4vM9ngT8Rd7QjKt+GJO4/qRZs5lby7TLVHxPF
+   A==;
+IronPort-SDR: vIkvKDXrQogmZl1IHB4mazvAyLWTQxPlvpOhWHJHojCsDp4S5gnBvH6gLNEP5rsjxgLizVeutd
+ 8K8kaRYrQQqUECpt+cxcgiXYX/Sib/CAkXaG1z/jC1A8VqkC2d71XXBtUfYbKv47zZJhC/9Z2n
+ lhG0860Rt1F28gH5WtA1ClrMCU5dYmJORnZe3D6ws5TRaw+UYUa62v6dKm2203xF1NNj8ErrYT
+ xtJzk7XrQPXchZ07AYOEnDyVxbzDedyNGoIOQDtpENdGynJweHwbbdVmEUEFjczZZZUZz0X7PK
+ iGw=
+X-IronPort-AV: E=Sophos;i="5.75,352,1589212800"; 
+   d="scan'208";a="251722322"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Jul 2020 05:18:36 +0800
+IronPort-SDR: yxCyiQCl6J9TlnWkcAbuSiL9Zeudg4ZC2C+rIlriLM9PmnrYVB9/rsUA3yW/3UI3vENUOQCQrm
+ MV+iIri0AQphI8KBy2Eg1wx1PrlIFzNg8=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 14:07:02 -0700
+IronPort-SDR: k7z3BG/rBj8iFCvPyvk0k3PKbnvggxnH2BwR5yWdE3n5oHKB7mt35lSX0qKzIUfr8NJIC1e2Oq
+ dUHvmegCmbjw==
+WDCIronportException: Internal
+Received: from usa003306.ad.shared (HELO localhost.hgst.com) ([10.86.57.226])
+  by uls-op-cesaip01.wdc.com with ESMTP; 14 Jul 2020 14:18:33 -0700
+From:   Niklas Cassel <niklas.cassel@wdc.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Niklas Cassel <niklas.cassel@wdc.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH v3 0/2] Export max open zones and max active zones to sysfs
+Date:   Tue, 14 Jul 2020 23:18:22 +0200
+Message-Id: <20200714211824.759224-1-niklas.cassel@wdc.com>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Nvme-fc allows the driver to specify a default devloss_tmo value when
-registering the remote port. The lpfc driver is currently not doing so
-although it is implementing a driver internal node loss value of 30s
-which also is used on the scsi fc remote port. As no devloss_tmo is set,
-the nvme-fc transport defaults to 60s. So there's competing timers.
+Export max open zones and max active zones to sysfs.
 
-Additionally, due to the competing timers, its possible the nvme rport
-is removed but the scsi rport remains. Its possible that the scsi fc
-rport, which was registered for the nvme port even if it doesn't utilize
-the scsi protocol, had been tuned to not match either the 60s (nvme-fc
-default) or 30s (lldd default), it gets out of whack. The lldd will
-defer to the scsi fc rport as long as the scsi fc rport has not had its
-devloss_tmo expire.
+This patch series in based on Jens's linux-block/for-next branch.
 
-Correct the situation by specifying a default devloss_tmo to the nvme-fc
-transport when registering the rport.  Take the value from the scsi
-fc rport if it exists, otherwise use the driver default.
+All zoned block devices in the kernel utilize the "zoned block device
+support" (CONFIG_BLK_DEV_ZONED).
 
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Tested-by: Martin George <Martin.George@netapp.com>
----
- drivers/scsi/lpfc/lpfc_nvme.c | 5 +++++
- 1 file changed, 5 insertions(+)
+The Zoned Namespace Command Set Specification defines two different
+resource limits: Max Open Resources and Max Active Resources.
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index fdfca02704dc..793388fff332 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -2423,6 +2423,7 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- 	struct nvme_fc_remote_port *remote_port;
- 	struct nvme_fc_port_info rpinfo;
- 	struct lpfc_nodelist *prev_ndlp = NULL;
-+	struct fc_rport *srport = ndlp->rport;
- 
- 	lpfc_printf_vlog(ndlp->vport, KERN_INFO, LOG_NVME_DISC,
- 			 "6006 Register NVME PORT. DID x%06x nlptype x%x\n",
-@@ -2452,6 +2453,10 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- 
- 	rpinfo.port_name = wwn_to_u64(ndlp->nlp_portname.u.wwn);
- 	rpinfo.node_name = wwn_to_u64(ndlp->nlp_nodename.u.wwn);
-+	if (srport)
-+		rpinfo.dev_loss_tmo = srport->dev_loss_tmo;
-+	else
-+		rpinfo.dev_loss_tmo = vport->cfg_devloss_tmo;
- 
- 	spin_lock_irq(&vport->phba->hbalock);
- 	oldrport = lpfc_ndlp_get_nrport(ndlp);
+The ZAC and ZBC standards define a MAXIMUM NUMBER OF OPEN SEQUENTIAL WRITE
+REQUIRED ZONES field.
+
+
+Since the ZNS Max Open Resources field has the same purpose as the ZAC/ZBC
+field, (the ZNS field is 0's based, the ZAC/ZBC field isn't), create a
+common "max_open_zones" definition in the sysfs documentation, and export
+both the ZNS field and the ZAC/ZBC field according to this new common
+definition.
+
+The ZNS Max Active Resources field does not have an equivalent field in
+ZAC/ZBC, however, since both ZAC/ZBC and ZNS utilize the "zoned block
+device support" in the kernel, create a "max_active_zones" definition in
+the sysfs documentation, similar to "max_open_zones", and export it
+according to this new definition. For ZAC/ZBC devices, this field will be
+exported as 0, meaning "no limit".
+
+Changes since v2:
+-Picked up Damien's Reviewed-by tags.
+-Update Documentation/ABI/testing/sysfs-block in addition to
+ Documentation/block/queue-sysfs.rst (Greg).
+-Added bdev_max_open_zones()/bdev_max_active_zones() helpers
+ (Johannes).
+
+Niklas Cassel (2):
+  block: add max_open_zones to blk-sysfs
+  block: add max_active_zones to blk-sysfs
+
+ Documentation/ABI/testing/sysfs-block | 18 ++++++++++
+ Documentation/block/queue-sysfs.rst   | 14 ++++++++
+ block/blk-sysfs.c                     | 27 +++++++++++++++
+ drivers/nvme/host/zns.c               |  2 ++
+ drivers/scsi/sd_zbc.c                 |  5 +++
+ include/linux/blkdev.h                | 50 +++++++++++++++++++++++++++
+ 6 files changed, 116 insertions(+)
+
 -- 
 2.26.2
 
