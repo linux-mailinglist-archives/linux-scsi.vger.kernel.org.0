@@ -2,122 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B524D21EA8B
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 09:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6738521EAAA
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 09:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbgGNHrq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jul 2020 03:47:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35106 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725816AbgGNHrq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 Jul 2020 03:47:46 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A4DFCAD68;
-        Tue, 14 Jul 2020 07:47:46 +0000 (UTC)
-Subject: Re: [PATCH v2 21/24] scsi: aic7xxx: aic79xx_osm: Remove unused
- variable 'ahd'
-To:     Lee Jones <lee.jones@linaro.org>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Hannes Reinecke <hare@suse.com>
-References: <20200713080001.128044-1-lee.jones@linaro.org>
- <20200713080001.128044-22-lee.jones@linaro.org>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <f9f25f97-ec01-f1b1-ca4e-074838141606@suse.de>
-Date:   Tue, 14 Jul 2020 09:47:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726282AbgGNHyZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jul 2020 03:54:25 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2472 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725793AbgGNHyZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 Jul 2020 03:54:25 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 06052CAAB23C2DAE9FC3;
+        Tue, 14 Jul 2020 08:54:24 +0100 (IST)
+Received: from [127.0.0.1] (10.47.10.169) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 14 Jul
+ 2020 08:54:22 +0100
+Subject: Re: [PATCH RFC v7 12/12] hpsa: enable host_tagset and switch to MQ
+To:     Hannes Reinecke <hare@suse.de>, <don.brace@microsemi.com>
+CC:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <kashyap.desai@broadcom.com>,
+        <sumit.saxena@broadcom.com>, <ming.lei@redhat.com>,
+        <bvanassche@acm.org>, <hare@suse.com>, <hch@lst.de>,
+        <shivasharan.srikanteshwara@broadcom.com>,
+        <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>,
+        <megaraidlinux.pdl@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-13-git-send-email-john.garry@huawei.com>
+ <939891db-a584-1ff7-d6a0-3857e4257d3e@huawei.com>
+ <3b3ead84-5d2f-dcf2-33d5-6aa12d5d9f7e@suse.de>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <4319615a-220b-3629-3bf4-1e7fd2d27b92@huawei.com>
+Date:   Tue, 14 Jul 2020 08:52:36 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <20200713080001.128044-22-lee.jones@linaro.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <3b3ead84-5d2f-dcf2-33d5-6aa12d5d9f7e@suse.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.10.169]
+X-ClientProxiedBy: lhreml738-chm.china.huawei.com (10.201.108.188) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/13/20 9:59 AM, Lee Jones wrote:
-> Hasn't been used since 2005.
+On 14/07/2020 08:41, Hannes Reinecke wrote:
+> On 7/14/20 9:37 AM, John Garry wrote:
+>> On 10/06/2020 18:29, John Garry wrote:
+>>> From: Hannes Reinecke <hare@suse.de>
+>>>
+>>> The smart array HBAs can steer interrupt completion, so this
+>>> patch switches the implementation to use multiqueue and enables
+>>> 'host_tagset' as the HBA has a shared host-wide tagset.
+>>>
+>>
+>> Hi Don,
+>>
+>> I am preparing the next iteration of this series, and we're getting
+>> close to dropping the RFC tags. The series has grown a bit, and I am not
+>> sure what to do with hpsa support.
+>>
+>> The latest versions of this series have not been tested for hpsa, AFAIK.
+>> Can you let me know if you can test and review this patch? Or someone
+>> else let me know it's tested (Hannes?)
+>> I'll give it a go.
 > 
-> Fixes the following W=1 kernel build warning(s):
-> 
->  drivers/scsi/aic7xxx/aic79xx_osm.c: In function ‘ahd_linux_slave_configure’:
->  drivers/scsi/aic7xxx/aic79xx_osm.c:703:20: warning: variable ‘ahd’ set but not used [-Wunused-but-set-variable]
-> 
-> Cc: Hannes Reinecke <hare@suse.com>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/scsi/aic7xxx/aic79xx_osm.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
-> index dc4fe334efd01..9235b6283c0b3 100644
-> --- a/drivers/scsi/aic7xxx/aic79xx_osm.c
-> +++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
-> @@ -700,9 +700,6 @@ ahd_linux_slave_alloc(struct scsi_device *sdev)
->  static int
->  ahd_linux_slave_configure(struct scsi_device *sdev)
->  {
-> -	struct	ahd_softc *ahd;
-> -
-> -	ahd = *((struct ahd_softc **)sdev->host->hostdata);
->  	if (bootverbose)
->  		sdev_printk(KERN_INFO, sdev, "Slave Configure\n");
->  
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> Which git repository should I base the tests on?
 
-Cheers,
+v7 is here:
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+https://github.com/hisilicon/kernel-dev/commits/private-topic-blk-mq-shared-tags-rfc-v7
+
+So that should be good to test with for now.
+
+And I was going to ask this same question about smartpqi, so can you 
+please let me know about this one?
+
+Thanks,
+John
