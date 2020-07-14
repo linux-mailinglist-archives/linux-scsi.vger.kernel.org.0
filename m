@@ -2,64 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 392C621EED6
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 13:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F4721EF89
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 13:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgGNLOo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jul 2020 07:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        id S1726431AbgGNLl3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jul 2020 07:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726041AbgGNLOn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 07:14:43 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1B7C061755
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2020 04:14:43 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id r12so13859938ilh.4
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2020 04:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JezJJkgdXBwVyisASMkVRIOPvqyji0NLBmRUJynRbSg=;
-        b=ogp1VT5m3ylB9F22mEX/wCWoUcDkCNrTciEJejRGRzw7wJBrU9L6RtkgKvgVOq6iH8
-         tLT2xpa7AaHGy9bPxKF38nj4RRA5oW1QGGH+X+J2Cbhow3+cszyyzrbxQyswMTH/HfOl
-         EY+LzB8kOoPU6cEomW3FRaAI+3bCQkl3IscjZQ5hMPTdybyPAYDhvaOv+Hmu0Ab3nA0W
-         N6Ig31H7MblCzxdg/sn3WjlzvWrPFjeW7abWtjQHrSrO7mIIHRVXEz+UQepvlUnG+k0j
-         xPyHoD/JddGYBIOZq83t1PvXoNE2N3VDkSRhri2B/3/Iw5dbuJbqxjIvf8et1Hz0aegN
-         wCFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JezJJkgdXBwVyisASMkVRIOPvqyji0NLBmRUJynRbSg=;
-        b=eqeaKMfc3xNGRUXibgmf0QQGlXppp/4iTHYEvIF6p5Ss37CRkjHLNfvrWK/D8goCkH
-         DCCLHEumiVCh3aZzh6IdufDA5pGmdMY9kyxsJx+vZh0NH/l/4XQ7yZgTZKPTU+RBNIE0
-         wEflweIUa1wL6+cAN8ReOYphhzlQxdY56alzsqy5VVbWVX0AzCwtDllNObqWhMUQhzO2
-         9EZjNxJzXDfyBLNyia05eqUzI6tj0W9/fn9z4hGPbB0OzzHoL21lO/rSRqFHb7RVHrwu
-         nw8vMlnyd+R1wPXBbwFfayVHMrkd2e0o474avJ9MFbmNZkoYWntkdijYbSI2VFH3xRyR
-         9hTw==
-X-Gm-Message-State: AOAM531cbIen6Qe7iZ2qsXUx1tEw01MD8c2gGyiadcEXmlVKEaoIQ2iz
-        9QflZLvkLxGO6Q3Zwx7/yjfP1oKw2HGGtoPMvuA=
-X-Google-Smtp-Source: ABdhPJxsIc6DijuE9CYFFHF79lWNLEdJAgxOZaJe/PDOpA6j+Gbet7Z2XyO5GzRRIJShaWGvqehNtE7ZqxEzKg+lEvM=
-X-Received: by 2002:a92:c6c7:: with SMTP id v7mr4384195ilm.4.1594725282374;
- Tue, 14 Jul 2020 04:14:42 -0700 (PDT)
+        with ESMTP id S1726332AbgGNLl3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 07:41:29 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08707C061755
+        for <linux-scsi@vger.kernel.org>; Tue, 14 Jul 2020 04:41:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=W0uP5OtIAUnRAOSsv9mZUTtRrqIXBcSYHKHXkgH+zcU=; b=UaU0W+oQnktbZ+jzn1GQ3zkWP+
+        yI0Q/AasO1ZkfnI7GhMT0bLwTfaNDok2j7KUgIh0SwogAZAxMRHBCk4E09kGkLgCmehFE0EuL7R55
+        FMx8EZvE+sSVPmIpsI/LgwX1WvBXRRGnAYOzV65XsdDZkajlvLIdSiWeOmeRPX6q3ub/99zWcyZvr
+        GFJc9QKBxXMQZWo+eMLXiFcWBnb6HoqLXwExiOnvDjQmibaCKz79R3T4Pw8rCqQgTjoFnltXj6eRW
+        9ZLrP62rYIdisaVSp/4gLJZbZNE8SLJ7ht6wVxDQ374yF5rnMDqlYd7i3uqa/StT4o8HRG55b8q7s
+        vZBlanIw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jvJJL-0007xb-0i; Tue, 14 Jul 2020 11:41:23 +0000
+Date:   Tue, 14 Jul 2020 12:41:22 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Benjamin Block <bblock@linux.ibm.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Fedor Loshakov <loshakov@linux.ibm.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 3/3] scsi: Rename slave_configure to sdev_configure
+Message-ID: <20200714114122.GA12769@casper.infradead.org>
+References: <20200706193920.6897-1-willy@infradead.org>
+ <20200706193920.6897-4-willy@infradead.org>
+ <20200714082631.GB7244@t480-pf1aa2c2>
 MIME-Version: 1.0
-Received: by 2002:a5e:8905:0:0:0:0:0 with HTTP; Tue, 14 Jul 2020 04:14:41
- -0700 (PDT)
-Reply-To: kristiandaniels15@gmail.com
-From:   Kristian Daniels <zamba19999@gmail.com>
-Date:   Tue, 14 Jul 2020 12:14:41 +0100
-Message-ID: <CAMsQSZmQpzhSuv=dwuEcJO1+LztB8KEpq6ZEsAjDWRHugszidw@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200714082631.GB7244@t480-pf1aa2c2>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+On Tue, Jul 14, 2020 at 10:26:31AM +0200, Benjamin Block wrote:
+> > @@ -428,7 +428,7 @@ static struct scsi_host_template zfcp_scsi_host_template = {
+> >  	.eh_target_reset_handler = zfcp_scsi_eh_target_reset_handler,
+> >  	.eh_host_reset_handler	 = zfcp_scsi_eh_host_reset_handler,
+> >  	.sdev_prep		 = zfcp_scsi_sdev_prep,
+> > -	.slave_configure	 = zfcp_scsi_slave_configure,
+> > +	.sdev_configure	 = zfcp_scsi_sdev_configure,
+> 
+> Please fix the alignment.
 
-Kristian Daniels solicitor at law, please kindly get back to me sothat
-Ican give you details of the fund transfer of my deceased client to
-youvalue at ($19.5.Get back to me on : kristiandaniels15@gmail.com
-Mr Kristian Daniels
+sed doesn't kow how to do that.
