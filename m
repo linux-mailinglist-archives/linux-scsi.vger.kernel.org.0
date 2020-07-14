@@ -2,65 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD6921E730
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 06:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 651A221E734
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 06:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbgGNE7D (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jul 2020 00:59:03 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:43408 "EHLO
+        id S1726568AbgGNE7M (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jul 2020 00:59:12 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:43496 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgGNE7C (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 00:59:02 -0400
+        with ESMTP id S1725884AbgGNE7K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jul 2020 00:59:10 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4vDtj135818;
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4vDrj135825;
         Tue, 14 Jul 2020 04:58:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=7we77lG6mlkFBYcBEmWuLFpucXzC2Q6WUj/T0ePlPLU=;
- b=Q8GHasOodycTHzQuLkCXln/zHIXI9j2E+176fx0CNcwrRo2ckIyUP1iNbKqiONerCBHm
- GxDeQaRu92eDuZio5XVnuTkNOrI1nzCk1ZH3zEFCgVBaPA9b4pyPr+MIkEvk6AU5iJBv
- axt3+7k9G0EPiMatzZJ1f0D4aiv6Ir7gUvJjSd0orEoLF5Q6U7i+djjEML8kSHnRfYQh
- USwKUmYKsph1atXBeBjZK7DEdJ5Ji2sEvcFcbzPtyk8rStTovsHe0Li7YFx5LkiyS602
- 2r9Di508tG+7B/CVui/1vlzfn/DhacX85xdj137+RjWXhfNLJ3X+NJrKviNp7JpluEHa UA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 32762natk1-1
+ bh=JdgDMF59wpVnVy2Cr8T/w66WwAVdhNNEMAkHpUr/M7E=;
+ b=uiGNM7mrX8xt4jCqpRkGnUh9co5Qclh9Jl3uYc96Qe0ATTkrebGmgdbdiO6XQ2ak62r+
+ efoO5IRlVikaw3V3KD+6yQ6w8fgiPAA+4c63h2Ol5dDhHXQpC1TsXM++G37LUL90Fi1u
+ bBNem4KkbQX3VAu0mL6KuGFcU/bV97agkw4gfbmVfWcHt9PKiCbAHQ6ChxxNoK3d1FJ3
+ xX6RbmsjB/vY3R/lqGh7TR2Zx1uCDuv68evZHEB7lJyFWX/A/8G96QKsRpgh1bEv+oLl
+ gZk9fqXeeGlIxfM44hSQm3FdEvB0oYXHeBB6yfjyn7caJH32z8kednaeaBj7bo6je+SD hw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 32762natk2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 14 Jul 2020 04:58:55 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4waKZ098640;
-        Tue, 14 Jul 2020 04:58:54 GMT
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06E4vYoC185803;
+        Tue, 14 Jul 2020 04:58:55 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 327qbwquu6-1
+        by aserp3030.oracle.com with ESMTP id 327q0nc9jc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 14 Jul 2020 04:58:54 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06E4wqIM022054;
-        Tue, 14 Jul 2020 04:58:53 GMT
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06E4wrTx022057;
+        Tue, 14 Jul 2020 04:58:54 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 13 Jul 2020 21:58:52 -0700
+        with ESMTP ; Mon, 13 Jul 2020 21:58:53 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     John Garry <john.garry@huawei.com>, jejb@linux.vnet.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 0/2] hisi_sas: A couple of misc patches
-Date:   Tue, 14 Jul 2020 00:58:42 -0400
-Message-Id: <159470266468.11195.1920177105269481206.b4-ty@oracle.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>, hare@suse.com,
+        linux-scsi@vger.kernel.org, kashyap.desai@broadcom.com,
+        dgilbert@interlog.com, ming.lei@redhat.com
+Subject: Re: [PATCH v2 0/2] scsi: scsi_debug: Support hostwide tags and a fix
+Date:   Tue, 14 Jul 2020 00:58:43 -0400
+Message-Id: <159470266468.11195.3600852323660522464.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <1594627471-235395-1-git-send-email-john.garry@huawei.com>
-References: <1594627471-235395-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1594297400-24756-1-git-send-email-john.garry@huawei.com>
+References: <1594297400-24756-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 malwarescore=0 mlxscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007140037
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007140037
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- clxscore=1011 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
  bulkscore=0 suspectscore=0 phishscore=0 adultscore=0 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007140037
@@ -69,25 +69,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 13 Jul 2020 16:04:29 +0800, John Garry wrote:
+On Thu, 9 Jul 2020 20:23:18 +0800, John Garry wrote:
 
-> Includes a patch to speed up error handling and a kerneldoc clean-up.
+> This series includes hostwide tags support, so we can mimic some SCSI HBAs,
+> like megaraid sas or hisi_sas.
 > 
-> John Garry (1):
->   scsi: hisi_sas: Remove one kerneldoc comment
+> There is also a fix for an out-of-range module param.
 > 
-> Luo Jiaxing (1):
->   scsi: hisi_sas: Directly trigger SCSI error handling for completion
->     errors
+> Differences to v1:
+> - add Doug's Ack for patch 1/2
+> - sort params alphabetically
+> - fix max queue at host max queue (when non-zero)
+> - drop host max queue file write permission
 > 
 > [...]
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/2] scsi: hisi_sas: Directly trigger SCSI error handling for completion errors
-      https://git.kernel.org/mkp/scsi/c/05d91b557af9
-[2/2] scsi: hisi_sas: Remove one kerneldoc comment
-      https://git.kernel.org/mkp/scsi/c/3d570a28ee8d
+[1/2] scsi: scsi_debug: Add check for sdebug_max_queue during module init
+      https://git.kernel.org/mkp/scsi/c/c87bf24cfb60
+[2/2] scsi: scsi_debug: Support hostwide tags
+      https://git.kernel.org/mkp/scsi/c/c10fa55f5e7a
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
