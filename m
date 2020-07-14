@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8C321EA84
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 09:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016F321EA87
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 09:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725841AbgGNHq2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jul 2020 03:46:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34528 "EHLO mx2.suse.de"
+        id S1725906AbgGNHrD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jul 2020 03:47:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:34702 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgGNHq1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 Jul 2020 03:46:27 -0400
+        id S1725821AbgGNHrD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 Jul 2020 03:47:03 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D7D9DAD68;
-        Tue, 14 Jul 2020 07:46:27 +0000 (UTC)
-Subject: Re: [PATCH v2 24/24] scsi: aic7xxx: aic79xx_osm: Remove set but
- unused variabes 'saved_scsiid' and 'saved_modes'
+        by mx2.suse.de (Postfix) with ESMTP id 682BEAD68;
+        Tue, 14 Jul 2020 07:47:03 +0000 (UTC)
+Subject: Re: [PATCH v2 23/24] scsi: aic7xxx: aic79xx_osm: Fix 'amount_xferred'
+ set but not used issue
 To:     Lee Jones <lee.jones@linaro.org>, jejb@linux.ibm.com,
         martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Hannes Reinecke <hare@suse.com>
 References: <20200713080001.128044-1-lee.jones@linaro.org>
- <20200713080001.128044-25-lee.jones@linaro.org>
+ <20200713080001.128044-24-lee.jones@linaro.org>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -68,12 +68,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <559e47de-fa26-9ae5-a3c5-4adeae606309@suse.de>
-Date:   Tue, 14 Jul 2020 09:46:25 +0200
+Message-ID: <3d7e9489-5e07-2cb6-058c-c63194056b5a@suse.de>
+Date:   Tue, 14 Jul 2020 09:47:00 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200713080001.128044-25-lee.jones@linaro.org>
+In-Reply-To: <20200713080001.128044-24-lee.jones@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -83,55 +83,40 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 7/13/20 10:00 AM, Lee Jones wrote:
-> Haven't been used since 2006.
+> 'amount_xferred' is used, but only in certain circumstances.  Place
+> the same stipulations on the defining/allocating of 'amount_xferred'
+> as is placed when using it.
+> 
+> We've been careful not to change any of the ordering semantics here.
 > 
 > Fixes the following W=1 kernel build warning(s):
 > 
->  drivers/scsi/aic7xxx/aic79xx_osm.c: In function ‘ahd_linux_queue_abort_cmd’:
->  drivers/scsi/aic7xxx/aic79xx_osm.c:2155:17: warning: variable ‘saved_modes’ set but not used [-Wunused-but-set-variable]
->  drivers/scsi/aic7xxx/aic79xx_osm.c:2148:9: warning: variable ‘saved_scsiid’ set but not used [-Wunused-but-set-variable]
+>  drivers/scsi/aic7xxx/aic79xx_osm.c: In function ‘ahd_done’:
+>  drivers/scsi/aic7xxx/aic79xx_osm.c:1796:12: warning: variable ‘amount_xferred’ set but not used [-Wunused-but-set-variable]
 > 
 > Cc: Hannes Reinecke <hare@suse.com>
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/scsi/aic7xxx/aic79xx_osm.c | 4 ----
->  1 file changed, 4 deletions(-)
+>  drivers/scsi/aic7xxx/aic79xx_osm.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 > diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
-> index 3782a20d58885..140c4e74ddd7e 100644
+> index 8e43ff86e0a60..3782a20d58885 100644
 > --- a/drivers/scsi/aic7xxx/aic79xx_osm.c
 > +++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
-> @@ -2141,14 +2141,12 @@ ahd_linux_queue_abort_cmd(struct scsi_cmnd *cmd)
->  	u_int  saved_scbptr;
->  	u_int  active_scbptr;
->  	u_int  last_phase;
-> -	u_int  saved_scsiid;
->  	u_int  cdb_byte;
->  	int    retval;
->  	int    was_paused;
->  	int    paused;
->  	int    wait;
->  	int    disconnected;
-> -	ahd_mode_state saved_modes;
->  	unsigned long flags;
->  
->  	pending_scb = NULL;
-> @@ -2239,7 +2237,6 @@ ahd_linux_queue_abort_cmd(struct scsi_cmnd *cmd)
->  		goto done;
->  	}
->  
-> -	saved_modes = ahd_save_modes(ahd);
->  	ahd_set_modes(ahd, AHD_MODE_SCSI, AHD_MODE_SCSI);
->  	last_phase = ahd_inb(ahd, LASTPHASE);
->  	saved_scbptr = ahd_get_scbptr(ahd);
-> @@ -2257,7 +2254,6 @@ ahd_linux_queue_abort_cmd(struct scsi_cmnd *cmd)
->  	 * passed in command.  That command is currently active on the
->  	 * bus or is in the disconnected state.
+> @@ -1787,10 +1787,12 @@ ahd_done(struct ahd_softc *ahd, struct scb *scb)
 >  	 */
-> -	saved_scsiid = ahd_inb(ahd, SAVED_SCSIID);
->  	if (last_phase != P_BUSFREE
->  	    && SCB_GET_TAG(pending_scb) == active_scbptr) {
+>  	cmd->sense_buffer[0] = 0;
+>  	if (ahd_get_transaction_status(scb) == CAM_REQ_INPROG) {
+> +#ifdef AHD_REPORT_UNDERFLOWS
+>  		uint32_t amount_xferred;
 >  
+>  		amount_xferred =
+>  		    ahd_get_transfer_length(scb) - ahd_get_residual(scb);
+> +#endif
+>  		if ((scb->flags & SCB_TRANSMISSION_ERROR) != 0) {
+>  #ifdef AHD_DEBUG
+>  			if ((ahd_debug & AHD_SHOW_MISC) != 0) {
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 
