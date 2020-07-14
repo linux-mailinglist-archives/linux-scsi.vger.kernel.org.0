@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CE821F4B8
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 16:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167E621F4A6
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jul 2020 16:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729309AbgGNOkQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jul 2020 10:40:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56026 "EHLO mail.kernel.org"
+        id S1729468AbgGNOk7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jul 2020 10:40:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728838AbgGNOkP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 Jul 2020 10:40:15 -0400
+        id S1729375AbgGNOk2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 Jul 2020 10:40:28 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 150322256F;
-        Tue, 14 Jul 2020 14:40:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F85B22248;
+        Tue, 14 Jul 2020 14:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594737614;
+        s=default; t=1594737628;
         bh=8/u2v9f1AS4A+vYFzNeZgTlwKWH2MAHgTKw+YPnZWRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L3eF37xBzGYYoG7g6zhdotkeDzVW73SGrLw4ndH/urk9V+sETbOcp67bT2TZ0RWXG
-         hWcWBsuBUBbMsOkyk73TK/GGZw2gfcTuM0tWv7/YAP9NCLc+jsyR19HqqsPYt3JTkw
-         aVZYCkn5WKx2HtXCgw1lkfzhJnix1EAOn9ALOCmE=
+        b=Ss019hXWgrOf4tIPazNCgre28tsRnq87h+dSJpgrVjfLMqSZZkC7Nl4kj6nVKR2Sj
+         mT/b2BHf9iLhELhKSMY5lLcRIItOPLlQfvIe3iEgA/uKNsKQIhVB1m6ONdgNzdebPU
+         EXmoxcp/3npUEb4TJNavC6itinDxNFZJt1HW1wZk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tom Rix <trix@redhat.com>, James Bottomley <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.9 03/10] scsi: scsi_transport_spi: Fix function pointer check
-Date:   Tue, 14 Jul 2020 10:40:03 -0400
-Message-Id: <20200714144010.4035987-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 3/9] scsi: scsi_transport_spi: Fix function pointer check
+Date:   Tue, 14 Jul 2020 10:40:17 -0400
+Message-Id: <20200714144024.4036118-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200714144010.4035987-1-sashal@kernel.org>
-References: <20200714144010.4035987-1-sashal@kernel.org>
+In-Reply-To: <20200714144024.4036118-1-sashal@kernel.org>
+References: <20200714144024.4036118-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
