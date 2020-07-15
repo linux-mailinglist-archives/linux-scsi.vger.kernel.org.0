@@ -2,65 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 602FE22179E
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jul 2020 00:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BB12217A4
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jul 2020 00:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgGOWOw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Jul 2020 18:14:52 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:47624 "EHLO
+        id S1726765AbgGOWQu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Jul 2020 18:16:50 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:48876 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726356AbgGOWOr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jul 2020 18:14:47 -0400
+        with ESMTP id S1726370AbgGOWQu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jul 2020 18:16:50 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FMD0R9130200;
-        Wed, 15 Jul 2020 22:14:45 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FMCxEA130179;
+        Wed, 15 Jul 2020 22:16:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=6ABihcnl9ArYEF+iR0+jb342UUR1x7boxOxZTCxrTBg=;
- b=I2pdeThFJuracK98fLqVL93UQN9Jh+806oaJAvkGnXDhDtfbxSpFfDGge3OAy+B1Is4O
- WoBmmnOtP1Z1muHaolmeGVwTy5pQn08IymSw1AXhlCIKCv2My6bYuDhaeMOjd+Zi+VKx
- 32fAxA15l5LhDy0ULZpSd+6xA/vGcuHu/HOVc+8FUGNINrZiVrc05UFe1ClR5qmnJN7V
- FGd/eJW8uOTe/FQRhnUxdNzNhCnNBE/Vv6AQ9v0xsQMEQqIya37k2VC5I+r7+Sm16nWC
- 5dyBLuvYw0/bE0+2KJfwXFLmjAfa5+Qc44KO7Brkysqh7uXGVe40LHfL2IoUvEvV1Tpo Rw== 
+ bh=ZTEoeqQxmm4dhcQdAZtmh+8bzjPkKJAUNzF1UbYAQpM=;
+ b=HMTEnfH/UglWXVl27gq8bgStTZoi49FD6OSWZUWIVdvZzSvidDuv1cKhchLgG2SAZVHn
+ veJJHy8DNeX0OYDGkKwTfjYfKu6kurndDDvCQy0s0z4T9za48hkWgQH3/6wJU4wTyWRN
+ Bmb7P2NkS18pGfxKu9WDWUoyx0e/uFIjDFmWiT3dxG/DyFE05FIv+7WgDGP208yyURWQ
+ 0OwJb/3iMi/xrFv/19nILMubapXXeJHAAapcc5zGwXKO0qz/V8to+cs0nV+nWtgp3QCZ
+ DprlW6QcRzW9hTxiQQlp39Epd+3+dxMJ3ieroKT44qB4ssG1dDDQy2SCxRk51JxNx1QV bA== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 3275cme19s-1
+        by aserp2120.oracle.com with ESMTP id 3275cme1fu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Jul 2020 22:14:44 +0000
+        Wed, 15 Jul 2020 22:16:46 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FMDfxI152223;
-        Wed, 15 Jul 2020 22:14:44 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 327q0s3mkc-1
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FMDflL152348;
+        Wed, 15 Jul 2020 22:14:46 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 327q0s3mm6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jul 2020 22:14:44 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06FMEhmO001056;
-        Wed, 15 Jul 2020 22:14:43 GMT
+        Wed, 15 Jul 2020 22:14:46 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06FMEi8R004658;
+        Wed, 15 Jul 2020 22:14:44 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 15 Jul 2020 15:14:42 -0700
+        with ESMTP ; Wed, 15 Jul 2020 15:14:44 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Nilesh Javali <njavali@marvell.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com
-Subject: Re: [PATCH v2] qla2xxx: Address a set of sparse warnings.
-Date:   Wed, 15 Jul 2020 18:14:35 -0400
-Message-Id: <159484884354.21107.3310997545783057055.b4-ty@oracle.com>
+To:     Varun Prakash <varun@chelsio.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>, dt@chelsio.com,
+        dan.carpenter@oracle.com, linux-scsi@vger.kernel.org,
+        ganji.aravind@chelsio.com
+Subject: Re: [next] scsi: cxgb4i: remove an unnecessary NULL check for 'cconn' pointer
+Date:   Wed, 15 Jul 2020 18:14:36 -0400
+Message-Id: <159484884354.21107.11845539351380758591.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200715043358.21668-1-njavali@marvell.com>
-References: <20200715043358.21668-1-njavali@marvell.com>
+In-Reply-To: <1594741751-3323-1-git-send-email-varun@chelsio.com>
+References: <1594741751-3323-1-git-send-email-varun@chelsio.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- mlxlogscore=952 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=986 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007150165
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
  bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=974 clxscore=1015 mlxscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007150165
 Sender: linux-scsi-owner@vger.kernel.org
@@ -68,20 +69,15 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 14 Jul 2020 21:33:58 -0700, Nilesh Javali wrote:
+On Tue, 14 Jul 2020 21:19:11 +0530, Varun Prakash wrote:
 
-> v1->v2:
-> - Rebase on 5.9/scsi-queue
-> 
-> Fix sparse warnings,
-> drivers/scsi/qla2xxx/qla_isr.c:881:23: warning: restricted __le16 degrades
-> to integer
-> drivers/scsi/qla2xxx/qla_isr.c:881:23: warning: cast to restricted __le16
+> 'cconn' will never be NULL in cxgbi_conn_alloc_pdu() so
+> remove NULL check.
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: qla2xxx: Address a set of sparse warnings
-      https://git.kernel.org/mkp/scsi/c/58101f1504ad
+[1/1] scsi: cxgb4i: Remove an unnecessary NULL check for 'cconn' pointer
+      https://git.kernel.org/mkp/scsi/c/ba8ca097089b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
