@@ -2,170 +2,219 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D992214AC
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2020 20:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B3122144F
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jul 2020 20:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726929AbgGOSqf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Jul 2020 14:46:35 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:47516 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbgGOSqf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jul 2020 14:46:35 -0400
-X-Greylist: delayed 1342 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Jul 2020 14:46:34 EDT
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FIHt6R157655;
-        Wed, 15 Jul 2020 18:24:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=5G0BjHWUZxMdn9E6mO29m9CW3V2ay0SjzvoKoZdc+kA=;
- b=wxOhec9HTklACdHIkRD+Ze2e2v8sac4hGH4Glfj5j/W+QfwWKwZFOrsKfgsv0SwswCq/
- mKC5eMhVxyS5+iVDZ528oAOi0Ox87+uRpbd1FFgyO6wKkuHU39+RkUG1hqSHnf0PDyPP
- 2wXgepdcPIWs07GUsAXgINo1/Kb81MER3F5zKJnG8Fy9iMiw+8rSGNwnDoseMJrv4eex
- sWlYmzlAIBNhinVyTlTcjSKenChYW6ry2OEZxHFqtXfAtmIjrRIq4dXTOL586zfx02RM
- ItZalVOvKs6CFTSvsvsjDNpdOFfO5QyyY8zERevPLDTxnji7uE1xdvZYlS5hS8hMK/M9 4g== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 327s65kaqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Jul 2020 18:24:09 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FIDf8O016092;
-        Wed, 15 Jul 2020 18:24:09 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 327q0rr6r8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jul 2020 18:24:09 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06FIO8GC026106;
-        Wed, 15 Jul 2020 18:24:08 GMT
-Received: from [20.15.0.202] (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 15 Jul 2020 11:24:08 -0700
-Subject: Re: [PATCH 1/8] scsi: target: Modify core_tmr_abort_task()
-To:     Bodo Stroesser <bstroesser@ts.fujitsu.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-References: <20200710104817.19462-1-bstroesser@ts.fujitsu.com>
- <20200710104817.19462-2-bstroesser@ts.fujitsu.com>
- <ea36fcc0-d01c-eba1-748f-d5cfa39fa105@oracle.com>
- <0f660dc9-40ee-75a4-2924-761769d9cd38@ts.fujitsu.com>
- <e4d54aed-88fa-eeed-fe9a-20e627c3841a@oracle.com>
- <980ec328-f604-556b-400a-1404c56e34ae@ts.fujitsu.com>
-From:   Mike Christie <michael.christie@oracle.com>
-Message-ID: <a263f857-a582-d262-b347-20687502ee91@oracle.com>
-Date:   Wed, 15 Jul 2020 13:24:19 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <980ec328-f604-556b-400a-1404c56e34ae@ts.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1726898AbgGOSea (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Jul 2020 14:34:30 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:4584 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726034AbgGOSe3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jul 2020 14:34:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1594838067; x=1626374067;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=aJAto6yulfA2fEAcqtje6fPA91WmUXDlMyM3X1buPoA=;
+  b=gyVflu1v9F/fnIPtDWW/oWjKlYkbq9oIc/S5ASzEEmP/5N1tWjZ8vjO1
+   4Sv95ghGcDxWGcnTz6Gv1JRXhHprRmw9mvGsR/7geGmJ2QgXP9HtytdIy
+   A2p90lXv/DhnP6ICuPmGhYciu6BlcXl5PUG83/TRU+TaIIa629V2TU2pu
+   Koj2MTXX1BSCq2APmWd4dL6hnUQN/EsVe42AbZmnwy9MjeiB6rWXJhyl/
+   0kwOky1Ep0TdZ6EOLf12Ruwg7KnenEXwHimmDi7SnboTugX9f1PDk1a83
+   0FN2NILTisVSP4DZ1xB/vIsFvKnSu4PKqX7jTTE1rurJroVKFG8U//JvQ
+   g==;
+IronPort-SDR: rHvRiXZgsEc8/wUpQRlpO8CI8NvRmlLVgjJ7ucbx0zOfElgcFdfZTZOds2jxiEruNCq4vlJ/rQ
+ p0U7oNtF5SmchRr9Uuyapt7oLHMK2fTY9QwUaDhQXOubpS+fOGmrIonFMkaI5zyDIM6SrSjer0
+ zPlJRt1r0OPYJ0aTWF8Mcz4t9p68MZwC7RK1HNGJi1JpLckYu8xUnQkf1Gyu25w6dRcX/39cjG
+ eobYC/9u321R9BVJ2JIoBi+xxKGuYJCRhhsShuwkjj/TqBuxfxWNpHzSeUrs72vjMxpNFK+js1
+ CW8=
+X-IronPort-AV: E=Sophos;i="5.75,356,1589212800"; 
+   d="scan'208";a="142537293"
+Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Jul 2020 02:34:25 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IdddXIHNihUAirS7nxEp2hE5x1vUfOGORV2kVFXFc/M3cz95aButQHd90xPTWbuXs6WhlRI4mvRJVIt32+FfjrkJYuvRulA/dMNNFBt19e3LmPmzvRliNK721nt+I9yyUrVHXvZMnHpITh1BKXbw4sDTP1HdNeSgfmJs7Mj2cFcO5ra9c//PRXkhdRVVNBvJMUf1iQ9jD1mj+UqnwZYNCaPYw9xCse+tei5Ax0J+HhQ7b+/d8vevJDZOn1Wz/C1fAUgV3ylBDUFnKQVrl9/ldZC08OMjJ0/JPcLc0Hl5zNbeWqacNuo0Oa1fXQPErEYRUfip9+AWx/u2GtrGbtzHoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aJAto6yulfA2fEAcqtje6fPA91WmUXDlMyM3X1buPoA=;
+ b=GqXWWotCd/VAs3RzlHhk9niR9x6Xj48F38JmCvKyAvJTloO+7gsEBecpbvDuUP6QTwHG4hfThNrSTr6AFB+MQoCWDoizA6N/DWKIp8za18QOMbnizJIheVB7/2cG4oZfbSuqR0sPJo6YMtLXxXhX2T/b8D0MFdLExRKpLOMjKSKxbfhRFeccLZMQyI5SHoYmmERje3G6ewPoPs6NNdChHZzkjcIjzhcs1dNsavpkJWJC0F+a/SRb+mvPfTqWZG5EGlpCdLzhQ2s/hUdE4Vz13O9OGgO5P3n5Sy7J7+SBDgXyt62AmaG9Zf8HXguxpnDKaEqKliiqxBaQDSOExXs0cA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aJAto6yulfA2fEAcqtje6fPA91WmUXDlMyM3X1buPoA=;
+ b=Oj3a+b2xZgsSeH3zVLr3nSmW84D/KCdaGnJdbkhDNIKhOP4+XjTb531uPeqF0wGdx1SrmLxCjgHsjtd1j3XfISqYX3iwnHmTdclScmjNEKaUrfFgU24rRuCgXLIgqMyRkXbUU5fHlZ3Vfqg+VU6P/8rRQLhNlKtfoo2GRpDgz9Y=
+Received: from SN6PR04MB3872.namprd04.prod.outlook.com (2603:10b6:805:50::31)
+ by SN6PR04MB4526.namprd04.prod.outlook.com (2603:10b6:805:a8::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22; Wed, 15 Jul
+ 2020 18:34:23 +0000
+Received: from SN6PR04MB3872.namprd04.prod.outlook.com
+ ([fe80::f02c:697e:85b2:526b]) by SN6PR04MB3872.namprd04.prod.outlook.com
+ ([fe80::f02c:697e:85b2:526b%6]) with mapi id 15.20.3174.026; Wed, 15 Jul 2020
+ 18:34:23 +0000
+From:   Avi Shchislowski <Avi.Shchislowski@wdc.com>
+To:     "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+Subject: RE: [PATCH v6 0/5] scsi: ufs: Add Host Performance Booster Support
+Thread-Topic: [PATCH v6 0/5] scsi: ufs: Add Host Performance Booster Support
+Thread-Index: AQHWWQG2N4YY5117HE6tFmBTUW/alKkI+uYQ
+Date:   Wed, 15 Jul 2020 18:34:23 +0000
+Message-ID: <SN6PR04MB38720C3D8FC176C3C7FB51B89A7E0@SN6PR04MB3872.namprd04.prod.outlook.com>
+References: <CGME20200713103423epcms2p8442ee7cc22395e4a4cedf224f95c45e8@epcms2p8>
+ <963815509.21594636682161.JavaMail.epsvc@epcpadp2>
+In-Reply-To: <963815509.21594636682161.JavaMail.epsvc@epcpadp2>
+Accept-Language: he-IL, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007150142
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- phishscore=0 mlxscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- clxscore=1015 bulkscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007150142
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: samsung.com; dkim=none (message not signed)
+ header.d=none;samsung.com; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [37.142.4.216]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 31eeaf3e-dcb6-4661-4099-08d828edb226
+x-ms-traffictypediagnostic: SN6PR04MB4526:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SN6PR04MB4526F4FCAE4A9FC6B92DFF7F9A7E0@SN6PR04MB4526.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L8Z/j2gbgH588TAozO3m5IHkOt8BImotFNUXVhC5ZUxok/vb3JhPLBOP6TAY+jj6bvYenfKq0R1eaTJC5wBqX0F/RKnuwsotpcnUmEq0G6nU556MbWYZf13HDZK0nz5jpfTjFdEn3JY5v6ZI5C9rc+PWCrBvAL4sJl0diGryJiUdC0ptO8f1/6WuP0pe4vhE7QhtCXWLe9nWeDn6qcHg8v/r/yy5Ogjj/q5bblp2BVMe89hLpoDX8NXCyg7NgW7W1V1b+bYlPqbRZ5mhhvBOgBCZ6L4tZ5+Otl9ThQVfTmg+rDdSVZgCuc/gUylwW8xZrqsjPrbEnhveaxG8kvGFgbI+hH1OMTKqTo/GrmgCHkl9D8TTdt3U5jEE60GWSy26nIPDfQTMZ0wwNMn0dqYBq2jiKmplPa/h29iQ+kCQWf/PI1sLq/n8x8TDTgvqRFc3R6LEPIRvAZPi9X5Vl5aCNg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR04MB3872.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(39860400002)(376002)(346002)(136003)(316002)(966005)(110136005)(54906003)(76116006)(53546011)(9686003)(4326008)(6506007)(55016002)(7696005)(66946007)(83380400001)(66446008)(64756008)(26005)(186003)(66476007)(66556008)(52536014)(5660300002)(478600001)(8936002)(86362001)(71200400001)(7416002)(2906002)(8676002)(33656002)(921003)(36394004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: Eu3em5S8zbZKKhvl1PoyBfG7q5dQsOqDgZYH880AV79eVfo27vHEsMLgHAEgWpfHUo+kZRKYDlMWZlkdlcPsQMC9eXXZQ5fRFkq8nQmKgirqLWCHSXRdDZjxZ9DK8KWIa1RB/Idp+9l2RL3GxVFEQU8wrgHomlVs6yaUtSNPnqsbSOWbnDyGzOaL3krOjwAIxG3vQAjoYyO6zA8O+DGwtC3+V8PIGmjZxp37pa2zUADyRKMHkvOs/IOc8vPTtfBlzxg610EGI7+JCOQM+Xs3gjfAARhW5gWSO42ajcxpZlmsprXp348BSpZxSfM0NZh9AYTkLinALNBVCEZALsDnCzbNLgc2/rNUhQUtyjinAXGtjkHSJV/oXCXNYS+k+50BlyrtwjLVvU9zSC/jo58ranHAfZSObDGsU7H89I4POFAmT2DbtsZ2/J6tje/o7+UoxLWksPapRKdEU/TQt/H3HoquBQaeGaO9bXdXynrhyWI=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR04MB3872.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31eeaf3e-dcb6-4661-4099-08d828edb226
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2020 18:34:23.2597
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xuW5PTgVqmb2yYI6jRM48NBo3J4cex/gwhpMJyUp2FK9JQOWiFIcHz9E8p9k+z3IUtF37wI3b9nNaFIQxsgmZrIpAOmmkGcZkSljKIOqjJE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4526
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/15/20 9:25 AM, Bodo Stroesser wrote:
-> On 2020-07-14 19:43, Mike Christie wrote:
->> On 7/13/20 6:39 AM, Bodo Stroesser wrote:
->>> On 2020-07-12 02:49, Mike Christie wrote:
->>>> On 7/10/20 5:48 AM, Bodo Stroesser wrote:
->>>
->>> ...
->>>
->>>>> @@ -137,11 +138,16 @@ void core_tmr_abort_task(
->>>>>           printk("ABORT_TASK: Found referenced %s task_tag: %llu\n",
->>>>>               se_cmd->se_tfo->fabric_name, ref_tag);
->>>>> -        if (!__target_check_io_state(se_cmd, se_sess,
->>>>> -                         dev->dev_attrib.emulate_tas))
->>>>> +        spin_lock_irqsave(&se_sess->sess_cmd_lock, flags);
->>>>> +        rc = __target_check_io_state(se_cmd, se_sess, 0);
->>>>> +        spin_unlock_irqrestore(&se_sess->sess_cmd_lock, flags);
->>>>> +        if (!rc)
->>>>>               continue;
->>>>> -        spin_unlock_irqrestore(&se_sess->sess_cmd_lock, flags);
->>>>> +        list_del_init(&se_cmd->state_list);
->>>>
->>>> Do we only want to do this if in the next patch tmr_notify can 
->>>> successfully accept the tmr?
->>>
->>> This change does not modify behavior of the core. Please see how
->>> core_tmr_drain_state_list() uses state_list to queue commands after
->>> successfully calling __target_check_io_state() for later call of 
->>> target_put_cmd_and_wait().
->>>
->>> This patch just unifies ABORT_TASK and LUN_RESET handling such,
->>> that in next patch we can call tmr_notify handler with a list of
->>> aborted commands in both cases. The list uses the state_list list_head
->>> in the se_cmd.
->>>
->>>>
->>>> If tmr_notify can't allocate memory for the abort case, we would 
->>>> delete it from the list. Later the initiator would send a LUN_RESET 
->>>> but core_tmr_drain_state_list won't see it and pass it to the 
->>>> tmr_notify call.
->>>>
->>>
->>> tmr_notify handler will not and must not modify the list of aborted
->>> cmds. So if backend just does nothing for whatever reason we will end
->>> up with the "old" behavior of the core as it was before the change.
->>>
->>> The general idea is to send info about received TMRs together with the
->>> list of aborted commands to the backend, to allow TMR tracing and
->>> canceling of aborted commands. But backend must not interfere with TMR
->>> processing in core.
->>
->> I don't think we are talking about the same thing.
-> 
-> Yeah, probably I misunderstood.
-> 
->>
->> For the abort case, let's say tmr_notify fails.So for the tcmu case, 
->> the tmr does not get queued and userspace never knows about it.
-> 
-> True.
-> 
-> For the tcmu case tmr_notify can fail only if kmalloc(..., GFP_KERNEL)
-> fails.
-> 
->> The initiator then sends a LUN reset. For the reset, the tmr_notify 
->> call's list will be missing the command that got the abort, right?
-> 
-> Yes.
-> 
-> In core, the LUN RESET will wait in core_tmr_drain_tmr_list for the
-> previous ABORT_TASK to complete, while the ABORT_TASK itself waits for
-> the aborted command to complete in core_tmr_abort_task.
-> 
-> So, when LUN_RESET handling comes to calling core_tmr_drain_state_list,
-> the aborted command will definitely already be done.
-> 
->> How will the backend know to clean up that command during the LUN 
->> reset handling?
->>
-> 
-> It will not know, so core just has to wait until backend completes the
-> aborted cmd - maybe after long time - just like it always did before my
-> change.
-
-Ah I see. When I made the original comment and was asking about if the 
-callback was supposed to perform some of the TMF operations I was 
-thinking we were going to change up a lot of this code.
-
-I think your idea where it's more of a way to notify the modules and we 
-are not changing any of this behavior is better since no one wants to 
-get into that :)
-
-Seems ok to me.
+SGVsbG8gQWxsLA0KTXkgbmFtZSBpcyBBdmkgU2hjaGlzbG93c2tpLCBJIGFtIG1hbmFnaW5nIHRo
+ZSBXREMncyBMaW51eCBIb3N0IFImRCB0ZWFtIGluIHdoaWNoIEF2cmkgaXMgYSBtZW1iZXIgb2Yu
+DQpBcyB0aGUgcmV2aWV3IHByb2Nlc3Mgb2YgSFBCIGlzIHByb2dyZXNzaW5nIHZlcnkgY29uc3Ry
+dWN0aXZlbHksIHdlIGFyZSBnZXR0aW5nIG1vcmUgYW5kIG1vcmUgcmVxdWVzdHMgZnJvbSBPRU1z
+LCBJbnF1aXJpbmcgYWJvdXQgSFBCIGluIGdlbmVyYWwsIGFuZCBob3N0IGNvbnRyb2wgbW9kZSBp
+biBwYXJ0aWN1bGFyLg0KDQpUaGVpciBtYWluIGNvbmNlcm4gaXMgdGhhdCBIUEIgd2lsbCBtYWtl
+IGl0IHRvIDUuOSBtZXJnZSB3aW5kb3csIGJ1dCB0aGUgaG9zdCBjb250cm9sIG1vZGUgcGF0Y2hl
+cyB3aWxsIG5vdC4NClRodXMsIGJlY2F1c2Ugb2YgcmVjZW50IEdvb2dsZSdzIEdLSSwgdGhlIG5l
+eHQgQW5kcm9pZCBMVFMgbWlnaHQgbm90IGluY2x1ZGUgSFBCIHdpdGggaG9zdCBjb250cm9sIG1v
+ZGUuDQoNCkFzaWRlIG9mIHRob3NlIHJlcXVlc3RzLCBpbml0aWFsIGhvc3QgY29udHJvbCBtb2Rl
+IHRlc3RpbmcgYXJlIHNob3dpbmcgcHJvbWlzaW5nIHByb3NwZWN0aXZlIHdpdGggcmVzcGVjdCBv
+ZiBwZXJmb3JtYW5jZSBnYWluLg0KDQpXaGF0IHdvdWxkIGJlLCBpbiB5b3VyIG9waW5pb24sIHRo
+ZSBiZXN0IHBvbGljeSB0aGF0IGhvc3QgY29udHJvbCBtb2RlIGlzIGluY2x1ZGVkIGluIG5leHQg
+QW5kcm9pZCBMVFM/DQoNClRoYW5rcywNCkF2aQ0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0t
+LQ0KRnJvbTogbGludXgtc2NzaS1vd25lckB2Z2VyLmtlcm5lbC5vcmcgPGxpbnV4LXNjc2ktb3du
+ZXJAdmdlci5rZXJuZWwub3JnPiBPbiBCZWhhbGYgT2YgRGFlanVuIFBhcmsNClNlbnQ6IE1vbmRh
+eSwgSnVseSAxMywgMjAyMCAxOjM0IFBNDQpUbzogQXZyaSBBbHRtYW4gPEF2cmkuQWx0bWFuQHdk
+Yy5jb20+OyBqZWpiQGxpbnV4LmlibS5jb207IG1hcnRpbi5wZXRlcnNlbkBvcmFjbGUuY29tOyBh
+c3V0b3NoZEBjb2RlYXVyb3JhLm9yZzsgYmVhbmh1b0BtaWNyb24uY29tOyBzdGFubGV5LmNodUBt
+ZWRpYXRlay5jb207IGNhbmdAY29kZWF1cm9yYS5vcmc7IGJ2YW5hc3NjaGVAYWNtLm9yZzsgdG9t
+YXMud2lua2xlckBpbnRlbC5jb207IEFMSU0gQUtIVEFSIDxhbGltLmFraHRhckBzYW1zdW5nLmNv
+bT47IERhZWp1biBQYXJrIDxkYWVqdW43LnBhcmtAc2Ftc3VuZy5jb20+DQpDYzogbGludXgtc2Nz
+aUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFNhbmcteW9v
+biBPaCA8c2FuZ3lvb24ub2hAc2Ftc3VuZy5jb20+OyBTdW5nLUp1biBQYXJrIDxzdW5nanVuMDcu
+cGFya0BzYW1zdW5nLmNvbT47IHlvbmdteXVuZyBsZWUgPHltaHVuZ3J5LmxlZUBzYW1zdW5nLmNv
+bT47IEppbnlvdW5nIENIT0kgPGoteW91bmcuY2hvaUBzYW1zdW5nLmNvbT47IEFkZWwgQ2hvaSA8
+YWRlbC5jaG9pQHNhbXN1bmcuY29tPjsgQm9SYW0gU2hpbiA8Ym9yYW0uc2hpbkBzYW1zdW5nLmNv
+bT4NClN1YmplY3Q6IFtQQVRDSCB2NiAwLzVdIHNjc2k6IHVmczogQWRkIEhvc3QgUGVyZm9ybWFu
+Y2UgQm9vc3RlciBTdXBwb3J0DQoNCkNBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9t
+IG91dHNpZGUgb2YgV2VzdGVybiBEaWdpdGFsLiBEbyBub3QgY2xpY2sgb24gbGlua3Mgb3Igb3Bl
+biBhdHRhY2htZW50cyB1bmxlc3MgeW91IHJlY29nbml6ZSB0aGUgc2VuZGVyIGFuZCBrbm93IHRo
+YXQgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCg0KDQpDaGFuZ2Vsb2c6DQoNCnY1IC0+IHY2DQpDaGFu
+Z2UgYmFzZSBjb21taXQgdG8gYjUzMjkzZmE2NjJlMjhhZTBjZGQ0MDgyOGRjNjQxYzA5ZjEzMzQw
+NQ0KDQp2NCAtPiB2NQ0KRGVsZXRlIHVudXNlZCBtYWNybyBkZWZpbmUuDQoNCnYzIC0+IHY0DQox
+LiBDbGVhbnVwLg0KDQp2MiAtPiB2Mw0KMS4gQWRkIGNoZWNraW5nIGlucHV0IG1vZHVsZSBwYXJh
+bWV0ZXIgdmFsdWUuDQoyLiBDaGFuZ2UgYmFzZSBjb21taXQgZnJvbSA1Ljgvc2NzaS1xdWV1ZSB0
+byA1Ljkvc2NzaS1xdWV1ZS4NCjMuIENsZWFudXAgZm9yIHVudXNlZCB2YXJpYWJsZXMgYW5kIGxh
+YmVsLg0KDQp2MSAtPiB2Mg0KMS4gQ2hhbmdlIHRoZSBmdWxsIGJvaWxlcnBsYXRlIHRleHQgdG8g
+U1BEWCBzdHlsZS4NCjIuIEFkb3B0IGR5bmFtaWMgYWxsb2NhdGlvbiBmb3Igc3ViLXJlZ2lvbiBk
+YXRhIHN0cnVjdHVyZS4NCjMuIENsZWFudXAuDQoNCk5BTkQgZmxhc2ggbWVtb3J5LWJhc2VkIHN0
+b3JhZ2UgZGV2aWNlcyB1c2UgRmxhc2ggVHJhbnNsYXRpb24gTGF5ZXIgKEZUTCkgdG8gdHJhbnNs
+YXRlIGxvZ2ljYWwgYWRkcmVzc2VzIG9mIEkvTyByZXF1ZXN0cyB0byBjb3JyZXNwb25kaW5nIGZs
+YXNoIG1lbW9yeSBhZGRyZXNzZXMuIE1vYmlsZSBzdG9yYWdlIGRldmljZXMgdHlwaWNhbGx5IGhh
+dmUgUkFNIHdpdGggY29uc3RyYWluZWQgc2l6ZSwgdGh1cyBsYWNrIGluIG1lbW9yeSB0byBrZWVw
+IHRoZSB3aG9sZSBtYXBwaW5nIHRhYmxlLg0KVGhlcmVmb3JlLCBtYXBwaW5nIHRhYmxlcyBhcmUg
+cGFydGlhbGx5IHJldHJpZXZlZCBmcm9tIE5BTkQgZmxhc2ggb24gZGVtYW5kLCBjYXVzaW5nIHJh
+bmRvbS1yZWFkIHBlcmZvcm1hbmNlIGRlZ3JhZGF0aW9uLg0KDQpUbyBpbXByb3ZlIHJhbmRvbSBy
+ZWFkIHBlcmZvcm1hbmNlLCBKRVNEMjIwLTMgKEhQQiB2MS4wKSBwcm9wb3NlcyBIUEIgKEhvc3Qg
+UGVyZm9ybWFuY2UgQm9vc3Rlcikgd2hpY2ggdXNlcyBob3N0IHN5c3RlbSBtZW1vcnkgYXMgYSBj
+YWNoZSBmb3IgdGhlIEZUTCBtYXBwaW5nIHRhYmxlLiBCeSB1c2luZyBIUEIsIEZUTCBkYXRhIGNh
+biBiZSByZWFkIGZyb20gaG9zdCBtZW1vcnkgZmFzdGVyIHRoYW4gZnJvbSBOQU5EIGZsYXNoIG1l
+bW9yeS4NCg0KVGhlIGN1cnJlbnQgdmVyc2lvbiBvbmx5IHN1cHBvcnRzIHRoZSBEQ00gKGRldmlj
+ZSBjb250cm9sIG1vZGUpLg0KVGhpcyBwYXRjaCBjb25zaXN0cyBvZiA0IHBhcnRzIHRvIHN1cHBv
+cnQgSFBCIGZlYXR1cmUuDQoNCjEpIFVGUy1mZWF0dXJlIGxheWVyDQoyKSBIUEIgcHJvYmUgYW5k
+IGluaXRpYWxpemF0aW9uIHByb2Nlc3MNCjMpIFJFQUQgLT4gSFBCIFJFQUQgdXNpbmcgY2FjaGVk
+IG1hcCBpbmZvcm1hdGlvbg0KNCkgTDJQIChsb2dpY2FsIHRvIHBoeXNpY2FsKSBtYXAgbWFuYWdl
+bWVudA0KDQpUaGUgVUZTLWZlYXR1cmUgaXMgYW4gYWRkaXRpb25hbCBsYXllciB0byBhdm9pZCB0
+aGUgc3RydWN0dXJlIGluIHdoaWNoIHRoZSBVRlMtY29yZSBkcml2ZXIgYW5kIHRoZSBVRlMtZmVh
+dHVyZSBhcmUgZW50YW5nbGVkIHdpdGggZWFjaCBvdGhlciBpbiBhIHNpbmdsZSBtb2R1bGUuDQpC
+eSBhZGRpbmcgdGhlIGxheWVyLCBVRlMtZmVhdHVyZXMgY29tcG9zZWQgb2YgdmFyaW91cyBjb21i
+aW5hdGlvbnMgY2FuIGJlIHN1cHBvcnRlZC4gQWxzbywgZXZlbiBpZiBhIG5ldyBmZWF0dXJlIGlz
+IGFkZGVkLCBtb2RpZmljYXRpb24gb2YgdGhlIFVGUy1jb3JlIGRyaXZlciBjYW4gYmUgbWluaW1p
+emVkLg0KDQpJbiB0aGUgSFBCIHByb2JlIGFuZCBpbml0IHByb2Nlc3MsIHRoZSBkZXZpY2UgaW5m
+b3JtYXRpb24gb2YgdGhlIFVGUyBpcyBxdWVyaWVkLiBBZnRlciBjaGVja2luZyBzdXBwb3J0ZWQg
+ZmVhdHVyZXMsIHRoZSBkYXRhIHN0cnVjdHVyZSBmb3IgdGhlIEhQQiBpcyBpbml0aWFsaXplZCBh
+Y2NvcmRpbmcgdG8gdGhlIGRldmljZSBpbmZvcm1hdGlvbi4NCg0KQSByZWFkIEkvTyBpbiB0aGUg
+YWN0aXZlIHN1Yi1yZWdpb24gd2hlcmUgdGhlIG1hcCBpcyBjYWNoZWQgaXMgY2hhbmdlZCB0byBI
+UEIgUkVBRCBieSB0aGUgSFBCIG1vZHVsZS4NCg0KVGhlIEhQQiBtb2R1bGUgbWFuYWdlcyB0aGUg
+TDJQIG1hcCB1c2luZyBpbmZvcm1hdGlvbiByZWNlaXZlZCBmcm9tIHRoZSBkZXZpY2UuIEZvciBh
+Y3RpdmUgc3ViLXJlZ2lvbiwgdGhlIEhQQiBtb2R1bGUgY2FjaGVzIHRocm91Z2ggdWZzaHBiX21h
+cCByZXF1ZXN0LiBGb3IgdGhlIGluLWFjdGl2ZSByZWdpb24sIHRoZSBIUEIgbW9kdWxlIGRpc2Nh
+cmRzIHRoZSBMMlAgbWFwLg0KV2hlbiBhIHdyaXRlIEkvTyBvY2N1cnMgaW4gYW4gYWN0aXZlIHN1
+Yi1yZWdpb24gYXJlYSwgYXNzb2NpYXRlZCBkaXJ0eSBiaXRtYXAgY2hlY2tlZCBhcyBkaXJ0eSBm
+b3IgcHJldmVudGluZyBzdGFsZSByZWFkLg0KDQpIUEIgaXMgc2hvd24gdG8gaGF2ZSBhIHBlcmZv
+cm1hbmNlIGltcHJvdmVtZW50IG9mIDU4IC0gNjclIGZvciByYW5kb20gcmVhZCB3b3JrbG9hZC4g
+WzFdDQoNClRoaXMgc2VyaWVzIHBhdGNoZXMgYXJlIGJhc2VkIG9uIHRoZSA1Ljkvc2NzaS1xdWV1
+ZSBicmFuY2guDQoNClsxXToNCmh0dHBzOi8vd3d3LnVzZW5peC5vcmcvY29uZmVyZW5jZS9ob3Rz
+dG9yYWdlMTcvcHJvZ3JhbS9wcmVzZW50YXRpb24vamVvbmcNCg0KRGFlanVuIHBhcmsgKDUpOg0K
+IHNjc2k6IHVmczogQWRkIFVGUyBmZWF0dXJlIHJlbGF0ZWQgcGFyYW1ldGVyDQogc2NzaTogdWZz
+OiBBZGQgVUZTIGZlYXR1cmUgbGF5ZXINCiBzY3NpOiB1ZnM6IEludHJvZHVjZSBIUEIgbW9kdWxl
+DQogc2NzaTogdWZzOiBMMlAgbWFwIG1hbmFnZW1lbnQgZm9yIEhQQiByZWFkDQogc2NzaTogdWZz
+OiBQcmVwYXJlIEhQQiByZWFkIGZvciBjYWNoZWQgc3ViLXJlZ2lvbg0KDQogZHJpdmVycy9zY3Np
+L3Vmcy9LY29uZmlnICAgICAgfCAgICA5ICsNCiBkcml2ZXJzL3Njc2kvdWZzL01ha2VmaWxlICAg
+ICB8ICAgIDMgKy0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy5oICAgICAgICB8ICAgMTIgKw0KIGRy
+aXZlcnMvc2NzaS91ZnMvdWZzZmVhdHVyZS5jIHwgIDE0OCArKysNCiBkcml2ZXJzL3Njc2kvdWZz
+L3Vmc2ZlYXR1cmUuaCB8ICAgNjkgKysNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jICAgICB8
+ICAgMTkgKw0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmggICAgIHwgICAgMiArDQogZHJpdmVy
+cy9zY3NpL3Vmcy91ZnNocGIuYyAgICAgfCAxOTk3ICsrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKw0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzaHBiLmggICAgIHwgIDIzMiArKysrKw0K
+IDkgZmlsZXMgY2hhbmdlZCwgMjQ5MCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pICBjcmVh
+dGVkIG1vZGUgMTAwNjQ0IGRyaXZlcnMvc2NzaS91ZnMvdWZzZmVhdHVyZS5jICBjcmVhdGVkIG1v
+ZGUgMTAwNjQ0IGRyaXZlcnMvc2NzaS91ZnMvdWZzZmVhdHVyZS5oICBjcmVhdGVkIG1vZGUgMTAw
+NjQ0IGRyaXZlcnMvc2NzaS91ZnMvdWZzaHBiLmMgIGNyZWF0ZWQgbW9kZSAxMDA2NDQgZHJpdmVy
+cy9zY3NpL3Vmcy91ZnNocGIuaA0K
