@@ -2,56 +2,144 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51690221FF9
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jul 2020 11:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A64221FC1
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jul 2020 11:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727025AbgGPJpU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jul 2020 05:45:20 -0400
-Received: from mailrelay.armstrong.synacor.com ([64.8.71.22]:8712 "EHLO
-        smtp.zoominternet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgGPJpU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jul 2020 05:45:20 -0400
-X-Greylist: delayed 1216 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Jul 2020 05:45:20 EDT
-DKIM-Signature: v=1; a=rsa-sha1; d=zoominternet.net; s=20180516; c=relaxed/simple;
-        q=dns/txt; i=@zoominternet.net; t=1594891503;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=9H6mIHY0KqDHMLL4LqkLLWUrgDY=;
-        b=RGYXvYqCRY+97gUqbIFMcr7MEtbX7W7eto01BJvmqTFqd2AwkGJ1LPb+AAg6mwHw
-        MzCtqoZwm14zHNm8Rd25WX8izouPGddWR/8/JS0LYkUI7xImf5qcqrvcxEjVYMzz
-        zPSB0be8O9EqL/C5isN0sFBcw95QZB2VseUxVRFerczJpLK1z4rZzTonkMD+2kym
-        rQdrievC/ai41WIFun+RDs/GfgwuYbqqMALAub3ejk/V8UKbnZG7dKNOyQg9W6Ge
-        QhcgLMEnHHI35/3enwFn8QBhmJ/8lwk9kUno5tyqhrgHhpWf9AQp3o5bctPHPr6s
-        t4hcf1rHdMSwvu7hsRqAJA==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.3 cv=H9SlPNQi c=1 sm=1 tr=0 a=VM7KJ31e1KNGh6xkEGse4A==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=PJS9qEZKnNwA:10 a=IkcTkHD0fZMA:10 a=_RQrkK6FrEwA:10 a=OirutkuoYOMA:10 a=R0eIVPL1rM4A:10 a=QwuuhjdnAAAA:8 a=mg0QT4ct15kTEZzOOeQA:9 a=QEXdDO2ut3YA:10 a=lSz4obFp_rgA:10 a=nSmHb-GnRAYA:10 a=-FEs8UIgK8oA:10 a=VxAk22fqlfwA:10 a=NWVoK91CQyQA:10 a=ZpP24Yj66TXli5MajnOD:22 a=xGIkrBXCkqNFDDDOJSQg:22 a=4nfBGtV56Pt7G6Qk4joU:22 a=p-dnK0njbqwfn1k4-x12:22 a=MURpYVOlrLSSKvKaDb7l:22
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: YXBfaG9zcGl0YWxAem9vbWludGVybmV0Lm5ldA==
-X_CMAE_Category: , ,
-X-CNFS-Analysis: 
-X-CM-Score: 
-X-Scanned-by: Cloudmark Authority Engine
-Received: from [10.35.66.1] ([10.35.66.1:48082] helo=md05.armstrong.cmh.synacor.com)
-        by smtp.zoominternet.net (envelope-from <ap_hospital@zoominternet.net>)
-        (ecelerity 3.6.2.43620 r(Platform:3.6.2.0)) with ESMTP
-        id 4E/31-02415-CEC101F5; Thu, 16 Jul 2020 05:25:01 -0400
-Date:   Thu, 16 Jul 2020 05:25:00 -0400 (EDT)
-From:   ap_hospital@zoominternet.net
-Message-ID: <2119467535.88156924.1594891500667.JavaMail.zimbra@zoominternet.net>
-Subject: Re:
+        id S1726080AbgGPJez (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jul 2020 05:34:55 -0400
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:20963 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726027AbgGPJex (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jul 2020 05:34:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1594892093; x=1626428093;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=gyuB6KpyOXxOrIkzdjEOc+YIwBqnXPLRPF0fZKkBQkk=;
+  b=TX9dC0/KuSniibEtYEF/emG31XpovhyH6XI9XFQr10huDz/WH9MNu/hB
+   Rohru9YaBF6ZTXvYPiUS5Jhvksv/qXR+bktaZWN7Q68WoMOI6marKHqYG
+   aYLn2OI4XXbxw1bF26u12NF9bQnjM/K14CmeHrtdpsAXEL3mRXo90A1o8
+   cIAfbc9ad3dIgTFMcUMB3V/uVsuNzGqXjlNeAr6E9fdX+d76DFZanJNX3
+   W2AJf5/zaf2ZEn0XfQ4QK9NDxwLFbhsPvdKSvq3xswrPWEBCpShIAPo25
+   Pnhv32QCHe+1G5kkA6WqMS1IAkpyVW2cJoOhZkSB+V5XALFOnGWof8xz2
+   g==;
+IronPort-SDR: UTbB2UeEb2hZRX/rrrCS8QBaW1yu2DUpDuANdhXIyohph/Q/9K8gX2PvhlXZmGb+D2qBbLIWpv
+ nllg7XMOd7HK1Ky8P1qxUe0qVbHn3CeKCvHz1859N5aw6z1yX8whZF2mKXhUmvBHBk5m/ZoTCI
+ Wi9zcl/mi+A1iNG3ydG6U5U6dj434xxktajsHRSain99kr2+oSq+MITlRq6IqAH42nAbE7UNFU
+ cO5pcFbdNDY3ciSrXUzx6diQ0UifIcbll1vTzX3mf64H0sUdgd0vD6vcuDgm+wq9tRk37F2C++
+ XTg=
+X-IronPort-AV: E=Sophos;i="5.75,358,1589212800"; 
+   d="scan'208";a="143894434"
+Received: from mail-bn3nam04lp2054.outbound.protection.outlook.com (HELO NAM04-BN3-obe.outbound.protection.outlook.com) ([104.47.46.54])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Jul 2020 17:34:53 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sp8Vi8/R2+XP2WWMR/aFHBQZrcGmYKivzK3dTe1lk9rOmD4Xca0ADBF4IWIogruZ4Sqzqg0hjVx9Oqb/1qj7GA+j2MNbwaCHGhdRNd3DVd7xem+jSwdNzPMmDTaWpGIxXrUckXzHuImBvI0jppj8ImWn8ZbFztywqIreAvYuECACyDT891ay7jkk355O9529YbfuJ0G/al6xUMID8WNevBmglSfnqieKXGw/dA1d4/mtECGAU5xGTlnEopc1gBz+CB3V/wv+wH5Ce6Sv5r7XPLZshmVe2QdpY+k3LY7xbiuLGF6PiLP7fU2ZYoIFRY3zyH7so+QZe5K0bZL7X4uHbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I1I/ES/r6MDV3JjodMScIRonNbW7RstwnMVPzAUZ9/g=;
+ b=SP4jfG6KH3EC7jaDLl0VH+2JBPXYYE49475subkgA7VmQf2oV+U6051GF+5wusm2cXGpa6wZp8o/uuLeFc/KM1911lWIUhCu/iWTqHhXNp1dwCdYGKHxmbFCjgiJxsarInZ64NiPjokmXGz+WaG95+azEQhHQsxc+1iW9ELODo+ROeU89kdJZasl1550dl6bH9PgP/lYfdrg512ni+Mw1mEH/HgvTSUclfeyIH2b7W0moNihekD94LEyBFiHsUOUSZhT6jFjhl+Ba436o2rOjjCDJdFVcCKJxyiDXKUWqffTOu1xSDo7X49znaW7rv0IrpVoXmholvUJlBMmAk663g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I1I/ES/r6MDV3JjodMScIRonNbW7RstwnMVPzAUZ9/g=;
+ b=z7wt+tPLf6mXKsN4czyuUppLIFbsUQghdRmqFdu957ye9v75tmef+OU/RF/Vz/cVIQaJbzoFuOMMh0dMzxRiCLFVgc2EXDtbWGUt/5pAcel1vfjpbLKLbP6mRZBh7NgZnSVQ9RPgFik0YhzdQXUVd2fONFfYG6gltI8uGfl0cf0=
+Received: from CY4PR04MB3751.namprd04.prod.outlook.com (2603:10b6:903:ec::14)
+ by CY4PR04MB0727.namprd04.prod.outlook.com (2603:10b6:903:e5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17; Thu, 16 Jul
+ 2020 09:34:51 +0000
+Received: from CY4PR04MB3751.namprd04.prod.outlook.com
+ ([fe80::d9e5:135e:cfd9:4de0]) by CY4PR04MB3751.namprd04.prod.outlook.com
+ ([fe80::d9e5:135e:cfd9:4de0%7]) with mapi id 15.20.3174.022; Thu, 16 Jul 2020
+ 09:34:51 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH] scsi: sd_zbc: don't check max zone append sectors for max
+ hw sectors
+Thread-Topic: [PATCH] scsi: sd_zbc: don't check max zone append sectors for
+ max hw sectors
+Thread-Index: AQHWW1HCI10BzQvyP0aM5P+L416gmQ==
+Date:   Thu, 16 Jul 2020 09:34:50 +0000
+Message-ID: <CY4PR04MB3751B27C9E6AFE0CE90DD85BE77F0@CY4PR04MB3751.namprd04.prod.outlook.com>
+References: <20200716091606.38316-1-johannes.thumshirn@wdc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: wdc.com; dkim=none (message not signed)
+ header.d=none;wdc.com; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [129.253.182.57]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 20fc9aa2-f2a0-4145-169e-08d8296b7d22
+x-ms-traffictypediagnostic: CY4PR04MB0727:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CY4PR04MB07273351D49345BFF717C0A8E77F0@CY4PR04MB0727.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ruWLJrUmcu7e66UToqCtyxuCj3BLYGb4H7UWfn5TMCFHtbsn3u3B4dASOwGdEtYG+FZ01MR7a7UN++Pe/kp2dwxJ3RYovyjczCSDtICWCY3rVfDV7PKSEuheR0Tb2V5V2nOERsU1CNzbKx1sbqGL0ou/Ekg+Px5cPN4rH9T+hBjjuqr6T9gkaAj4eWoG9ci27vajHQZrhzKUslf/O2j6CYbJSIKAumGF8M+PgKXq8EKA/0j0HSL3l4nuEgeh0nWvzJuCUp87EwI4vR9TRDzeR/yeWUOHDprvi50/EuShU30NYHXRvm9p8k2+QrdrkxlcRKeVaytOj3l4phYAZhxxow==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR04MB3751.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(39860400002)(366004)(396003)(376002)(136003)(7696005)(316002)(33656002)(110136005)(9686003)(83380400001)(52536014)(2906002)(66446008)(66476007)(66946007)(478600001)(4744005)(64756008)(55016002)(91956017)(66556008)(5660300002)(76116006)(4326008)(71200400001)(186003)(26005)(86362001)(6506007)(8936002)(8676002)(53546011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: li7L8Wp0U19UStUvioefz+7EoZGNKRGXOeu2WlXPizuf4p32Rg3AGT3f5HXPLMZ52u7DagTdJTQ2Yxf8BhFqSnYcOM1ircy/AlaasG/n3XSrdFFPCWIdgasi0p7zNAkvllZRWKTS/Bs3/FWv/OKlgnjqyQW/S5VxTxV7oU3cScmD0ZIt110LaUOPF6cVXuQ6UMQsZYBrm4Ev4t9DxWsZ4/He8EaA/cCgsxg7CDAG81HMgUcE/QJs0IfJZNQMJjvO6IFPpCfRQiYgr2ixZJJagzJ9XpyXI1G/AoJNtyfZQr2/TO0abrFfSu4Br/diBONR0NyWce+1OTBdkPu5knqOaaXMwguaZtXIxqVmiyxxfFc5oRF/liMphcVjSAzOYmQJDbch0z95NMPnbWgbrjkUqBAd8W0OXnDzc1a/gV63yh1/Sus2e2dhr9gsDFyPuGkjmJVFoGtTK/s3fj63k3tmiW1KDLlBiM9upOAX+Qco435pKwr1SsBHI8+rfWGmLgUh
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [64.62.187.80]
-X-Mailer: Zimbra 8.0.7_GA_6021 (zclient/8.0.7_GA_6021)
-Thread-Topic: 
-Thread-Index: BXrfchB2/q3eUlBuPYjATnnIgB+J7A==
-To:     unlisted-recipients:; (no To-header on input)
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB3751.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20fc9aa2-f2a0-4145-169e-08d8296b7d22
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2020 09:34:50.9791
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: myssQvspL3M+BHQYYWoTlhbrA7symFJSS+bQNDNS6PuqqWIVjN7oV1FDbrnD/XuOB81YRP3eF65THifEK9BkaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR04MB0727
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Do you want to sell your kidney for money? contact us via email:(info@/kidneyshub.space) OR https://www.kidneyshub.space
-Dr Steevens .
-whatsApp +91-9585623470 .
+On 2020/07/16 18:16, Johannes Thumshirn wrote:=0A=
+> Don't check for the maximum zone append sectors to be not bigger than the=
+=0A=
+> maximum hardware sectors in sd, as the block layer is already enforcing=
+=0A=
+> this limit when setting the max zone append sectors.=0A=
+> =0A=
+> Signed-off-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=
+> ---=0A=
+>  drivers/scsi/sd_zbc.c | 1 -=0A=
+>  1 file changed, 1 deletion(-)=0A=
+> =0A=
+> diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c=0A=
+> index 6f7eba66687e..4c90911545b6 100644=0A=
+> --- a/drivers/scsi/sd_zbc.c=0A=
+> +++ b/drivers/scsi/sd_zbc.c=0A=
+> @@ -736,7 +736,6 @@ int sd_zbc_read_zones(struct scsi_disk *sdkp, unsigne=
+d char *buf)=0A=
+>  =0A=
+>  	max_append =3D min_t(u32, logical_to_sectors(sdkp->device, zone_blocks)=
+,=0A=
+>  			   q->limits.max_segments << (PAGE_SHIFT - 9));=0A=
+> -	max_append =3D min_t(u32, max_append, queue_max_hw_sectors(q));=0A=
+>  =0A=
+>  	blk_queue_max_zone_append_sectors(q, max_append);=0A=
+>  =0A=
+> =0A=
+=0A=
+Looks good.=0A=
+=0A=
+Reviewed-by: Damien Le Moal <damien.lemoal@wdc.com>=0A=
+=0A=
+-- =0A=
+Damien Le Moal=0A=
+Western Digital Research=0A=
