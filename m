@@ -2,171 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2353D2218CD
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jul 2020 02:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5834D2218B4
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jul 2020 02:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbgGPA1Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Jul 2020 20:27:25 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:56663 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726479AbgGPA1Y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jul 2020 20:27:24 -0400
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200716002721epoutp02bc9171b38bb3d9d724c9f87040e48178~iFAfWOI5W0985909859epoutp02i
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Jul 2020 00:27:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200716002721epoutp02bc9171b38bb3d9d724c9f87040e48178~iFAfWOI5W0985909859epoutp02i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1594859241;
-        bh=3+ccxZmxOKKjD+qACON/DRmLamaCcOQyZMOiME9hmgI=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=LKuyCYAFtoun6DN0YqPQ0APfBUR7pgUNHP2NQpi5CgOEm01rXZ16dH+IdqvtSBpu5
-         3cyyCeNR2eZgyX1n8Py3fp04HOqKSGDPjpUWDMk8eHXHrR/iqdC6YZSu83d7Z9DczN
-         pmuCLYw47qxAU2Xgxgq1D9ODUGMiUPP+HNFM+IdI=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20200716002721epcas5p2f3c66ca084ed0f5b5b6f5f27c17f4108~iFAemzUhr3009330093epcas5p2K;
-        Thu, 16 Jul 2020 00:27:21 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        30.E8.09703.9EE9F0F5; Thu, 16 Jul 2020 09:27:21 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200715182604epcas5p1ec9a4e49ab8499c0cfdb3044e8bd7c60~iAFDCOB6w3082830828epcas5p1B;
-        Wed, 15 Jul 2020 18:26:04 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200715182604epsmtrp2f2864d015dc8accbae9c0050ff6c91d3~iAFC_ohTF0427404274epsmtrp2Y;
-        Wed, 15 Jul 2020 18:26:04 +0000 (GMT)
-X-AuditID: b6c32a4a-4b5ff700000025e7-a3-5f0f9ee94311
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5D.39.08303.C3A4F0F5; Thu, 16 Jul 2020 03:26:04 +0900 (KST)
-Received: from alimakhtar02 (unknown [107.108.234.165]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200715182559epsmtip2af529e172b3c953d9e6ddd437a496f67~iAE_F2oqk0899808998epsmtip2f;
-        Wed, 15 Jul 2020 18:25:58 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Kiwoong Kim'" <kwmad.kim@samsung.com>,
-        <linux-scsi@vger.kernel.org>, <avri.altman@wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <bvanassche@acm.org>,
-        <grant.jung@samsung.com>, <sc.suh@samsung.com>,
-        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>
-In-Reply-To: <cover.1594798514.git.kwmad.kim@samsung.com>
-Subject: RE: [PATCH v6 0/3] ufs: exynos: introduce the way to get cmd info
-Date:   Wed, 15 Jul 2020 23:55:56 +0530
-Message-ID: <075101d65ad5$66348460$329d8d20$@samsung.com>
+        id S1726908AbgGPAGp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Jul 2020 20:06:45 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43850 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726479AbgGPAGp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jul 2020 20:06:45 -0400
+Received: by mail-pl1-f195.google.com with SMTP id x8so3068850plm.10
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Jul 2020 17:06:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6hstUTN+dzsWN4v+Y1/ZILmFhM55ptpmRwlsWFtPUg0=;
+        b=L62NW/ZGBb0kJJXD4cIgCRJlDueeNF+EdZD4Iz2gSa1ONuRzilViRYP5bqsL2F4Mno
+         dnGHKpS9PjzfyKoVH5GBWxeAi1FmCwmCRiGC6hZuUevOhChOUdcOjbhqouiMH8g8mrqd
+         oJvlRtL0JSZJcWN4TCwXsW93YZFIQA9hFxROHypqZH3yPvi8jKGpQA0vdlnKGdGfpfyY
+         8oPqLwah6GQURxCt47ENM58YEKyuP8cTzAzQHkqKBhggLcCppPHrCvq7bMV+TZf4YmpM
+         n9BqMGwUu69hPpePzShOndQkzL6jVFylRjupjB7jbr8MlGqGcsxzENy4ilLlvWCgja/k
+         gw7A==
+X-Gm-Message-State: AOAM533xxqKOGVPDk65xVptXYx53fD+p+mKqi57WRmInd1q/aQ4EotqH
+        XdlPUcWdTYOX2rmm/CCuOAAq0sP0
+X-Google-Smtp-Source: ABdhPJy4jj63IHjI/NSGKVNRG9Jq0XimULgadVZgZw/XY36FjkvBPK467LBNOwPyUUSOCm8R96Rhow==
+X-Received: by 2002:a17:902:7688:: with SMTP id m8mr1577147pll.12.1594858003934;
+        Wed, 15 Jul 2020 17:06:43 -0700 (PDT)
+Received: from [192.168.50.147] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id w17sm3134233pge.10.2020.07.15.17.06.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jul 2020 17:06:43 -0700 (PDT)
+Subject: Re: LIO Scsi Target
+To:     Lee Duncan <lduncan@suse.com>,
+        Sadegh Ali <sadegh.ali.2084@gmail.com>,
+        linux-scsi@vger.kernel.org
+References: <CA+RHgKLt=ZOu_nnL6oX=LJVtJWE9i+ARE6A_VmGLeJaU1mYtSg@mail.gmail.com>
+ <43b31e85-9d9c-c3ef-a008-83510a968ee7@suse.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <416369e6-236e-7c15-48f0-5e7045501397@acm.org>
+Date:   Wed, 15 Jul 2020 17:06:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHAd02kf0hzbk2A6kTf3xoH16zPTwGHGd1aqSiC/5A=
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLKsWRmVeSWpSXmKPExsWy7bCmuu7LefzxBnPusFjsbTvBbvHy51U2
-        i4MPO1kspn34yWzxaf0yVotff9ezW6xe/IDFYtGNbUwWN7ccZbHovr6DzWL58X9MFl13bzBa
-        LP33lsWB1+PyFW+Py329TB4TFh1g9Pi+voPN4+PTWywefVtWMXp83iTn0X6gmymAI4rLJiU1
-        J7MstUjfLoErY9vXbuaCiwIVG78uYWtgPMTbxcjJISFgIrHt33rWLkYuDiGB3YwS6352QDmf
-        GCV+rZsF5XxmlPi2ZBorTMv54/ugErsYJa4t62SCcN4wSpz+doURpIpNQFdix+I2NpCEiMBt
-        Jom1RzvZQRKcApYS6yadB7OFBbwkvvavZgaxWQRUJc53ngezeYFqvs3fwAphC0qcnPmEBcRm
-        FtCWWLbwNTPEGQoSP58uA6sREbCSeLjjAhtEjbjE0Z89zCCLJQROcEj07jrIBtHgIjHr+SYW
-        CFtY4tXxLewQtpTE53d7gWo4gOxsiZ5dxhDhGoml845BldtLHLgyhwWkhFlAU2L9Ln2IsKzE
-        1FPrmCDW8kn0/n7CBBHnldgxD8ZWlWh+dxVqjLTExO5uaCh6SLzqOsY0gVFxFpIvZyH5chaS
-        b2YhbF7AyLKKUTK1oDg3PbXYtMAoL7Vcrzgxt7g0L10vOT93EyM4xWl57WB8+OCD3iFGJg7G
-        Q4wSHMxKIrw8XLzxQrwpiZVVqUX58UWlOanFhxilOViUxHmVfpyJExJITyxJzU5NLUgtgsky
-        cXBKNTD12+3+YuUqKXhpskytq+RxBjVV18/uYgI5zvWqv0QVJOZ4TAqs2yDtnOlVmrdJyfLn
-        XLXfVesezHKaPP9mtM1iNcN2sYLk+9H6PnNPlW5eczc/+MLsU+rvyuaXitmqXLqRJnl4tXTk
-        gr2HrI+YbNMU0G94oXr268SfrbMu3D2795l2SMt2X/WElvl/FD1vG+y5YWLwlG3yvm0f826H
-        lG6fHDvt+dOtn67PZ3rwYu/Cjnsblq45yN735cOErNNl859KCGyx4bIVf3ht+uyIaTz6H3+2
-        3VNiEpq/ntulft6Xuu0Gx0SfVJ7nr59St3Sylyzf7djGNbXWi8WuHPGI2GPrcCApKT15e8S5
-        SbvW1FTnKbEUZyQaajEXFScCAJ4TOqXgAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKIsWRmVeSWpSXmKPExsWy7bCSvK6NF3+8wbfPmhZ7206wW7z8eZXN
-        4uDDThaLaR9+Mlt8Wr+M1eLX3/XsFqsXP2CxWHRjG5PFzS1HWSy6r+9gs1h+/B+TRdfdG4wW
-        S/+9ZXHg9bh8xdvjcl8vk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5tB/oZgrgiOKySUnN
-        ySxLLdK3S+DKWLvtG0vBLIGK1ivH2RoYe3m7GDk5JARMJM4f38faxcjFISSwg1Hi/vpn7BAJ
-        aYnrGydA2cISK/89Z4coesUo0X1hCgtIgk1AV2LH4jY2kISIwGsmiXtnfjFBVHUxSqxY+p8Z
-        pIpTwFJi3aTzYKOEBbwkvvavBouzCKhKnO88D2bzAtV8m7+BFcIWlDg58wnYBmYBbYmnN5/C
-        2csWvmaGOElB4ufTZWD1IgJWEg93XGCDqBGXOPqzh3kCo9AsJKNmIRk1C8moWUhaFjCyrGKU
-        TC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93ECI5JLa0djHtWfdA7xMjEwXiIUYKDWUmEl4eL
-        N16INyWxsiq1KD++qDQntfgQozQHi5I479dZC+OEBNITS1KzU1MLUotgskwcnFINTPs8p845
-        xnryfuWLrI/S904Utm8236HVtSrxzUmDrL2b97YUaoUFtvPvDXhQcnS3veKKKT3cC9/ulNgY
-        dZrx8IXax+d9xO3lGlZHx7Lfi/J94PQm4E3h9CVvVJgF1XfOuhlXtb9pv9bq6g6jE43yU3ef
-        UtotFhGa31vT9+9+yoeOlandd/tyL68X/zvvTVmwf8LKQ+9N9CdY3WtdH/Xgk/6kub5fX29W
-        /TSv7OoG1am6J+PmT75SyW+69v7PD18bw9V6A1KCjz2fGC5568f3yauXMnz7rLZ8a3+cxv0f
-        jrYZ/5l2xr5JmH56FZviY8f117Q8Es2/sxtu/e8lJ3+5V/RW2pXqCz3T93GvLp7O/0hLiaU4
-        I9FQi7moOBEAyDDvGTgDAAA=
-X-CMS-MailID: 20200715182604epcas5p1ec9a4e49ab8499c0cfdb3044e8bd7c60
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20200715074757epcas2p344b4e188af3221655c1697405b9e17f4
-References: <CGME20200715074757epcas2p344b4e188af3221655c1697405b9e17f4@epcas2p3.samsung.com>
-        <cover.1594798514.git.kwmad.kim@samsung.com>
+In-Reply-To: <43b31e85-9d9c-c3ef-a008-83510a968ee7@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Kiwoong,
+On 2020-07-15 11:16, Lee Duncan wrote:
+> SCST is still around, but I believe it's user-space only. (Forgive me if
+> I'm wrong here, but it's been a while since I looked at SCST.)
 
-> -----Original Message-----
-> From: Kiwoong Kim <kwmad.kim=40samsung.com>
-> Sent: 15 July 2020 13:10
-> To: linux-scsi=40vger.kernel.org; alim.akhtar=40samsung.com;
-> avri.altman=40wdc.com; jejb=40linux.ibm.com; martin.petersen=40oracle.com=
-;
-> beanhuo=40micron.com; asutoshd=40codeaurora.org; cang=40codeaurora.org;
-> bvanassche=40acm.org; grant.jung=40samsung.com; sc.suh=40samsung.com;
-> hy50.seo=40samsung.com; sh425.lee=40samsung.com
-> Cc: Kiwoong Kim <kwmad.kim=40samsung.com>
-> Subject: =5BPATCH v6 0/3=5D ufs: exynos: introduce the way to get cmd inf=
-o
->=20
-> v5 -> v6
-> replace put_aligned with get_unaligned_be32 to set lba and sct fix null p=
-ointer
-> access symptom
->=20
-> v4 -> v5
-> Rebased on Stanley's patch (scsi: ufs: Fix and simplify ..
-> Change cmd history print order
-> rename config to SCSI_UFS_EXYNOS_DBG
-> feature functions in ufs-exynos-dbg.c by SCSI_UFS_EXYNOS_DBG
->=20
-> v3 -> v4
-> seperate respective implementations of the callbacks change the location =
-of
-> compl_xfer_req related stuffs fix null pointer access
->=20
-> v2 -> v3
-> fix build errors
->=20
-> v1 -> v2
-> change callbacks
-> allocate memory for ufs_s_dbg_mgr dynamically, not static way
->=20
-> Kiwoong Kim (3):
->   ufs: introduce a callback to get info of command completion
->   ufs: exynos: introduce command history
->   ufs: exynos: implement dbg_register_dump
->=20
->  drivers/scsi/ufs/Kconfig          =7C  14 +++
->  drivers/scsi/ufs/Makefile         =7C   1 +
->  drivers/scsi/ufs/ufs-exynos-dbg.c =7C 198
-> ++++++++++++++++++++++++++++++++++++++
->  drivers/scsi/ufs/ufs-exynos-if.h  =7C  17 ++++
->  drivers/scsi/ufs/ufs-exynos.c     =7C  38 ++++++++
->  drivers/scsi/ufs/ufs-exynos.h     =7C  35 +++++++
->  drivers/scsi/ufs/ufshcd.c         =7C   1 +
->  drivers/scsi/ufs/ufshcd.h         =7C   8 ++
->  8 files changed, 312 insertions(+)
->  create mode 100644 drivers/scsi/ufs/ufs-exynos-dbg.c  create mode 100644
-> drivers/scsi/ufs/ufs-exynos-if.h
->=20
-This series looks good to me.
-Reviewed-by: Alim Akhtar <alim.akhtar=40samsung.com>
-Thanks,
-> --
-> 2.7.4
+Hi Lee,
+
+That may be a misunderstanding :-) Almost all of SCST runs in the
+kernel, except the code for accepting connections from an iSCSI
+initiator. The SCST configuration tool (scstadmin) is a user space tool
+that interacts with the SCST kernel modules through the SCST sysfs
+interface. SCST still has a significant user base despite not being
+upstream.
+
+> There is also a cool new extension to targetcli called tcmu-runner, that
+> allows you to add new functionality to targetcli without having to hack
+> on the kernel.
+
+My understanding is that the design of tcmu-runner is strongly inspired
+by the design of the scst_user driver. Something that's unfortunate is
+that we can't ask Shaohua Li anymore about the design of tcmu-runner
+(see also
+https://lore.kernel.org/lkml/398a74fa-6566-8d0d-6434-e68ff3763656@kernel.dk/).
+
+Bart.
 
 
