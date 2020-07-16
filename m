@@ -2,47 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37489229941
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jul 2020 15:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756A6229ADD
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jul 2020 16:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732180AbgGVNcg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Jul 2020 09:32:36 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:45358 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbgGVNcf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jul 2020 09:32:35 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06MDBLs6026245;
-        Wed, 22 Jul 2020 13:27:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type; s=corp-2020-01-29;
- bh=SGDxiMkv+K/gRs79Axes9Aq4nm/uxe/9Z6BhER1gB0Q=;
- b=M17jaN2xoPQjyzcbNIh3EyAt4L6vYmmCoIqfNEMXNxXt0vzVBRus39mqoBEim2QS4gl0
- ZEADhZS2JBt2F7fKfyR+8i2sOHwxVi7BaCCMheuAGRRXQqWB1nWcDgM5X14uo35sG05r
- zlijQgQbwaef/JC4O3F/g7yEqPNfaQNKx2aCWkHFu1gDe7esOn1Gkr3dq25D71GBzEPQ
- 6KS+bJgLAQJnq85Fp3AC5Jeo7nvKeGNeWXiAf1kbeFGXNrLprBeiotYq1hiftxnJR1QC
- wkrlIGy9zAxq9hiRWdKeuXUijIaHYeH2b6QaPXkn5408mQU4LsrY4KDUVXU+jmFwIFfa Ug== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 32bs1mk8c3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 22 Jul 2020 13:27:16 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06MDPlCB151849;
-        Wed, 22 Jul 2020 13:27:16 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 32epb584vv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jul 2020 13:27:16 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06MDRBYJ029023;
-        Wed, 22 Jul 2020 13:27:11 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 22 Jul 2020 13:27:11 +0000
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Daejun Park <daejun7.park@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        id S1732775AbgGVO7o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Jul 2020 10:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730870AbgGVO7o (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jul 2020 10:59:44 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD99C0619DC;
+        Wed, 22 Jul 2020 07:59:44 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id a21so2526029ejj.10;
+        Wed, 22 Jul 2020 07:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:in-reply-to:references:mime-version
+         :date:content-transfer-encoding;
+        bh=URRzOHpgQhWz8k04t/0LNtBaTy9pE9Bui1vrbzjXhfI=;
+        b=e7uwKCVt6D3jSem4PO+P9pzhJVScJ7gidvn9qlcv2TgMZh4TtkZ2Nlxv2iZbVr0QT1
+         I5ur5Gxim9UapTLNIomFJ53fYjqFeqf7cVoEkGCCz2PUynwz/5jhzyz3QA7xIRbSVXyl
+         ZugspPMGasrEZvItvBiZbvc7XTZT4L4d2cfXcjb4Wu8KMTfHa7tN7Q9ht4xyj42HkOXO
+         gjoMQr4yNH3A0fQo3VOqyOw+EYiS38uvxBMKG0ttAiURk/pOZda47DLf3uTs8mfK6Mw6
+         fTo6nt5bF0U/obvwSAH8K2NRoRdtXnnOalZIevQDaiKHtbFeyBiA4yenH1ELOoAPA07i
+         XdIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:in-reply-to
+         :references:mime-version:date:content-transfer-encoding;
+        bh=URRzOHpgQhWz8k04t/0LNtBaTy9pE9Bui1vrbzjXhfI=;
+        b=NbSLniTT6GqokBzY66UQ9cF1YWZsQR6TmhGD+MrRdVlzXfoMTEdLRsOK3gVyMDjJku
+         caYBCJXtxUDsUl541g77DYjqsbFnGbia+qxkHKSYFpTbNIc7XjGJHC9KAnUAQNzeFBgC
+         XlxXvzbQc47ZHzkexShveqkeqiYlVwmbvxGOY3tOPtUVpK3HWZt3iabF5RVIjynAJi5a
+         Mfbq0XBy1b4Gpu/6cx2DgVEP7csiC9ewXhqvZnTRMWYhEQEfYm9Mz5yUEICMp6foJVal
+         ldoQEq+PT21LIS3EKO0bTfUgu3HqNDDr+Ji7NlLQ+OVgZl1Y+dr+OpScRHOtQFuWrUi8
+         vXpA==
+X-Gm-Message-State: AOAM532dITZ14N9J8d8gt1/nnaQYT1r7XGasm6V8sP6+ABp8f4UDoXNe
+        ba702ivP1m5T7JP2x4Ma820=
+X-Google-Smtp-Source: ABdhPJy7OGFfe2ZmIbIPJgSKdIxz7vpB5TeN9Z25EU/fegE+4BuZZsw1np3Tb5T0TkZ8dgiUZTy26A==
+X-Received: by 2002:a17:906:6558:: with SMTP id u24mr26724151ejn.364.1595429982763;
+        Wed, 22 Jul 2020 07:59:42 -0700 (PDT)
+Received: from ubuntu-laptop (ip5f5bee3d.dynamic.kabel-deutschland.de. [95.91.238.61])
+        by smtp.googlemail.com with ESMTPSA id d12sm65543edx.80.2020.07.22.07.59.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 Jul 2020 07:59:42 -0700 (PDT)
+Message-ID: <c2450609677d4b3df172545a9aaad5373402e23c.camel@gmail.com>
+Subject: Re: [PATCH v6 0/5] scsi: ufs: Add Host Performance Booster Support
+From:   Bean Huo <huobean@gmail.com>
+To:     Avi Shchislowski <Avi.Shchislowski@wdc.com>,
+        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
         "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
         "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
@@ -51,8 +61,8 @@ Cc:     Daejun Park <daejun7.park@samsung.com>,
         "cang@codeaurora.org" <cang@codeaurora.org>,
         "bvanassche@acm.org" <bvanassche@acm.org>,
         "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Sang-yoon Oh <sangyoon.oh@samsung.com>,
         Sung-Jun Park <sungjun07.park@samsung.com>,
@@ -60,55 +70,52 @@ Cc:     Daejun Park <daejun7.park@samsung.com>,
         Jinyoung CHOI <j-young.choi@samsung.com>,
         Adel Choi <adel.choi@samsung.com>,
         BoRam Shin <boram.shin@samsung.com>
-Subject: Re: [PATCH v6 0/5] scsi: ufs: Add Host Performance Booster Support
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1blk7g1jd.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <SN6PR04MB38720C3D8FC176C3C7FB51B89A7E0@SN6PR04MB3872.namprd04.prod.outlook.com>
 References: <CGME20200713103423epcms2p8442ee7cc22395e4a4cedf224f95c45e8@epcms2p8>
-        <963815509.21594636682161.JavaMail.epsvc@epcpadp2>
-        <20200722063937.GA21117@infradead.org>
-Date:   Wed, 22 Jul 2020 09:27:07 -0400
-In-Reply-To: <20200722063937.GA21117@infradead.org> (Christoph Hellwig's
-        message of "Wed, 22 Jul 2020 07:39:37 +0100")
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- suspectscore=1 spamscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007220097
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 bulkscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
- spamscore=0 mlxscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007220097
+         <963815509.21594636682161.JavaMail.epsvc@epcpadp2>
+         <SN6PR04MB38720C3D8FC176C3C7FB51B89A7E0@SN6PR04MB3872.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Date:   Thu, 16 Jul 2020 10:13:33 +0200
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Wed, 2020-07-15 at 18:34 +0000, Avi Shchislowski wrote:
+> Hello All,
+> My name is Avi Shchislowski, I am managing the WDC's Linux Host R&D
+> team in which Avri is a member of.
+> As the review process of HPB is progressing very constructively, we
+> are getting more and more requests from OEMs, Inquiring about HPB in
+> general, and host control mode in particular.
+> 
+> Their main concern is that HPB will make it to 5.9 merge window, but
+> the host control mode patches will not.
+> Thus, because of recent Google's GKI, the next Android LTS might not
+> include HPB with host control mode.
+> 
+> Aside of those requests, initial host control mode testing are
+> showing promising prospective with respect of performance gain.
+> 
+> What would be, in your opinion, the best policy that host control
+> mode is included in next Android LTS?
+> 
+> Thanks,
+> Avi
+> 
 
-Christoph,
+Hi Avi
+IMO, no matter how did the driver implement, if you truly want the HPB
+host mode driver you mentioned to be mainlined in the upstream Linux,
+the best policy is that you should first post the driver in the SCSI
+maillist community, let us firstly review here. I didn't see your
+driver, I don't know how to provide the correct answer.
 
-> As this monster seesm to come back again and again let me re-iterate
-> my statement:
->
-> I do not think Linux should support a broken standards extensions that
-> creates a huge share state between the Linux initator and the target
-> device like this with all its associated problems.
+Thanks,
+Bean
 
-I spent a couple of hours looking at this series again last night. And
-while the code has improved, I do remain concerned about the general
-concept.
 
-I understand how caching the FTL in host memory can improve performance
-from a theoretical perspective. However, I am not sure how much a
-difference this is going to make outside of synthetic benchmarks. What
-are the workloads that keep reading the same blocks from media? Or does
-the performance improvement exclusively come from the second order
-pre-fetching effect for larger I/Os? If so, why is the device's internal
-L2P SRAM cache ineffective at handling that case?
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
