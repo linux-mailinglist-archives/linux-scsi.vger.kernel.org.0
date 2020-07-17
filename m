@@ -2,156 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E8722404B
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jul 2020 18:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEE522432A
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jul 2020 20:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbgGQQMf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Jul 2020 12:12:35 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.3]:13165 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726715AbgGQQMe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 17 Jul 2020 12:12:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1595002351; i=@ts.fujitsu.com;
-        bh=dZhFODA67iOeAY5hp0b1fuqO9uOJIOpZU4v8VMP7G3s=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        b=PB0C8Z3qNTg2TGIz1jNZ3yWbcVE/5yzTYPtfkISg712X/N7HzEblNovOHbYz568W9
-         bhbP8sPLNonsjZienPKPwJ4hF3QNZ5JW2XgJzf7IF2hESYWvoXuVtqx5aDjPr21CpD
-         0+rbE/Lj3hEqiqKrhulyDIxD77glWtr8TmxZgakoUdp34hBY5zKp3txy2j3MtthkEr
-         XPK88Retm4aU93LY9UW4eBNStjTsd3RYnZO5HBd9oetXSQ5n+lXZfiiM/BZdpkAB7t
-         gTawVJGtwcr8bH2Y7Ec7FiQYwrVN0RcuzQSE2atDNNUJ8Q5cbmAb4G5EVgc1Gbmp5X
-         b2zo7jcnPRcYw==
-Received: from [100.113.2.186] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-a.eu-central-1.aws.symcld.net id C0/57-21639-EEDC11F5; Fri, 17 Jul 2020 16:12:30 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRWlGSWpSXmKPExsViZ8MRovvurGC
-  8QXu/nEX39R1sFsuP/2Oy+DvpBqtF69K3TA4sHh+f3mLx+LxJLoApijUzLym/IoE14/9NmYL/
-  IhUPlh1ibWCcLNTFyMUhJDCZUeLZubssEM50Rom/77cydTFycrAJGEismHQfLCEisIZRYuWde
-  cwgCWYBPYlp/9axg9jCAl4Sb59tYu1i5OBgEVCV+H0nHiTMK2An0f5rJ1i5hIC8RMeBySwgNq
-  eAvcTsbwcZQWwhoJoH694yT2DkXsDIsIrRMqkoMz2jJDcxM0fX0MBA19DQWBdIGhvoJVbpJuq
-  lluomp+aVFCUCZfUSy4v1iitzk3NS9PJSSzYxAsMkpZChaQfju1cf9A4xSnIwKYnytq0SjBfi
-  S8pPqcxILM6ILyrNSS0+xCjDwaEkwSt+CignWJSanlqRlpkDDFmYtAQHj5IIr/EZoDRvcUFib
-  nFmOkTqFKOilDivGEhCACSRUZoH1waLk0uMslLCvIwMDAxCPAWpRbmZJajyrxjFORiVhHnDQK
-  bwZOaVwE1/BbSYCWjxxs+8IItLEhFSUg1MMw4dnf/8943bTz6kTeiZIctZ8FKhqM1icU6qp7H
-  UirV+lxbGndYyfWW6mmmufOpsMcbuldsCz53XVJw7W2377M9Hc6IEf1ou6Pp3R/oX48f/R1w0
-  HOdYZt8L7tFpPPBVbpm2xap9k5Rb83V1n3QtCr/ZZLCxaXY3W8/Frotf7t/06N6SHXPt1ZtXR
-  6XbxE4XnTmeWaR6u/iVeP4pTcWLC4M3mnka/M1eOafUfYO11zXnlUeeXZxpGluqselMhMCbYw
-  fPMhmrmThNXsvv//PoJMbmDQ5nglvfLyr5ry2s1uZ92u7BYk/ZvntcyaGbJ++8pmcyqyUxas2
-  ZoMXbNtSneax4kuYm37MituF6/5wTn5VYijMSDbWYi4oTAeVcYtQOAwAA
-X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-34.tower-232.messagelabs.com!1595002349!1121731!1
-X-Originating-IP: [62.60.8.84]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.2; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 18996 invoked from network); 17 Jul 2020 16:12:30 -0000
-Received: from unknown (HELO mailhost3.uk.fujitsu.com) (62.60.8.84)
-  by server-34.tower-232.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jul 2020 16:12:30 -0000
-Received: from x-serv01 ([172.17.38.52])
-        by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 06HGCTom009897;
-        Fri, 17 Jul 2020 17:12:29 +0100
-Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id 37A6120918;
-        Fri, 17 Jul 2020 18:12:21 +0200 (CEST)
-From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: [PATCH v2 8/8] scsi: target: tcmu: Make TMR notification optional
-Date:   Fri, 17 Jul 2020 18:12:12 +0200
-Message-Id: <20200717161212.10731-9-bstroesser@ts.fujitsu.com>
-X-Mailer: git-send-email 2.12.3
-In-Reply-To: <20200717161212.10731-1-bstroesser@ts.fujitsu.com>
-References: <20200717161212.10731-1-bstroesser@ts.fujitsu.com>
+        id S1728089AbgGQSb6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Jul 2020 14:31:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46986 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726322AbgGQSb6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 17 Jul 2020 14:31:58 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B7E7E20759;
+        Fri, 17 Jul 2020 18:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595010717;
+        bh=YHFPycUTgsDF1UJGgyC7LWsiRop+4nEUMYmTmNXt6f0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uY9z5GFL5wr9rt4JseHttadmmmHwUKrbMZC7HgrilpDBbLcfMJ2gEvc+V/2fDE5eb
+         F5GgYkSlQGORe/913kjxedtpgOCqZlw2b6Kyim2kaNlGn/FNl35LVOk8YiJE7P9a+M
+         pgiizxg6DiK9ve2OxtLVmUGdWpfoYYOSFGSWrsWA=
+Date:   Fri, 17 Jul 2020 11:31:55 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Igor Russkikh <irusskikh@marvell.com>
+Cc:     Alexander Lobakin <alobakin@marvell.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michal Kalderon <mkalderon@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
+        Denis Bolotin <dbolotin@marvell.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        GR-everest-linux-l2 <GR-everest-linux-l2@marvell.com>,
+        <QLogic-Storage-Upstream@cavium.com>, <netdev@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH net-next 10/13] qed: add support for new port
+ modes
+Message-ID: <20200717113155.1a9234b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <27939848-7e83-2897-36f9-44f47d1bfb9c@marvell.com>
+References: <20200716115446.994-1-alobakin@marvell.com>
+        <20200716115446.994-11-alobakin@marvell.com>
+        <20200716181853.502dd619@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <27939848-7e83-2897-36f9-44f47d1bfb9c@marvell.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add "tmr_notification" configFS attribute to tcmu devices.
-If default value 0 of the attribute is used, tcmu only
-removes aborted commands from qfull_queue.
-If user changes tmr_notification to 1, additionally
-TMR notifications will be written to the cmd ring.
+On Fri, 17 Jul 2020 13:49:33 +0300 Igor Russkikh wrote:
+> > ----------------------------------------------------------------------
+> > On Thu, 16 Jul 2020 14:54:43 +0300 Alexander Lobakin wrote:  
+> >> These ports ship on new boards revisions and are supported by newer
+> >> firmware versions.
+> >>
+> >> Signed-off-by: Alexander Lobakin <alobakin@marvell.com>
+> >> Signed-off-by: Igor Russkikh <irusskikh@marvell.com>  
+> > 
+> > What is the driver actually doing with them, tho?
+> > 
+> > Looks like you translate some firmware specific field to a driver
+> > specific field, but I can't figure out what part of the code cares
+> > about hw_info.port_mode  
+> 
+> Hi Jakub,
+> 
+> You are right, this info is never used/reported.
+> 
+> Alexander is extending already existing non used field with new values from
+> our latest hardware revisions.
+> 
+> I thought devlink info could be a good place to output such kind of information.
+> 
+> Thats basically a layout of *Physical* ports on device - quite useful info I
+> think.
+> 
+> Important thing is these ports may not be directly mapped to PCI PFs. So
+> reading `ethtool eth*` may not explain you the real device capabilities.
+> 
+> Do you think it makes sense adding such info to `devlink info` then?
 
-Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
----
- drivers/target/target_core_user.c | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Devlink port has information about physical port, which don't have to
+map 1:1 to netdevs. It also has lanes and port splitting which you may
+want to report.
 
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 92b7a2e84e64..95e66b707373 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -118,6 +118,7 @@ struct tcmu_dev {
- #define TCMU_DEV_BIT_OPEN 0
- #define TCMU_DEV_BIT_BROKEN 1
- #define TCMU_DEV_BIT_BLOCKED 2
-+#define TCMU_DEV_BIT_TMR_NOTIFY 3
- 	unsigned long flags;
- 
- 	struct uio_info uio_info;
-@@ -1260,6 +1261,9 @@ tcmu_tmr_notify(struct se_device *se_dev, enum tcm_tmreq_table tmf,
- 	if (unqueued)
- 		tcmu_set_next_deadline(&dev->qfull_queue, &dev->qfull_timer);
- 
-+	if (!test_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags))
-+		goto unlock;
-+
- 	pr_debug("TMR event %d on dev %s, aborted cmds %d, afflicted cmd_ids %d\n",
- 		 tcmu_tmr_type(tmf), dev->name, i, cmd_cnt);
- 
-@@ -2706,6 +2710,40 @@ static ssize_t tcmu_emulate_write_cache_store(struct config_item *item,
- }
- CONFIGFS_ATTR(tcmu_, emulate_write_cache);
- 
-+static ssize_t tcmu_tmr_notification_show(struct config_item *item,
-+					     char *page)
-+{
-+	struct se_dev_attrib *da = container_of(to_config_group(item),
-+					struct se_dev_attrib, da_group);
-+	struct tcmu_dev *dev = TCMU_DEV(da->da_dev);
-+
-+	return snprintf(page, PAGE_SIZE, "%i\n",
-+			test_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags));
-+}
-+
-+static ssize_t tcmu_tmr_notification_store(struct config_item *item,
-+					   const char *page, size_t count)
-+{
-+	struct se_dev_attrib *da = container_of(to_config_group(item),
-+					struct se_dev_attrib, da_group);
-+	struct tcmu_dev *dev = TCMU_DEV(da->da_dev);
-+	u8 val;
-+	int ret;
-+
-+	ret = kstrtou8(page, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+	if (val > 1)
-+		return -EINVAL;
-+
-+	if (val)
-+		set_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags);
-+	else
-+		clear_bit(TCMU_DEV_BIT_TMR_NOTIFY, &dev->flags);
-+	return count;
-+}
-+CONFIGFS_ATTR(tcmu_, tmr_notification);
-+
- static ssize_t tcmu_block_dev_show(struct config_item *item, char *page)
- {
- 	struct se_device *se_dev = container_of(to_config_group(item),
-@@ -2787,6 +2825,7 @@ static struct configfs_attribute *tcmu_attrib_attrs[] = {
- 	&tcmu_attr_dev_config,
- 	&tcmu_attr_dev_size,
- 	&tcmu_attr_emulate_write_cache,
-+	&tcmu_attr_tmr_notification,
- 	&tcmu_attr_nl_reply_supported,
- 	NULL,
- };
--- 
-2.12.3
 
+For now please make sure to not include any dead code in your
+submissions (register defines etc. may be okay), perhaps try:
+
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+index d929556247a5..4bad836d0f74 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+@@ -4026,6 +4026,21 @@ static int qed_hw_get_nvm_info(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt)
+ 	case NVM_CFG1_GLOB_NETWORK_PORT_MODE_4X25G:
+ 		p_hwfn->hw_info.port_mode = QED_PORT_MODE_DE_4X25G;
+ 		break;
++	case NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_2X50G_R1:
++	case NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_4X50G_R1:
++	case NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_1X100G_R2:
++	case NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_2X100G_R2:
++	case NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_1X100G_R4:
++		/* TODO: set port_mode when it's actually used */
++		break;
+ 	default:
+ 		DP_NOTICE(p_hwfn, "Unknown port mode in 0x%08x\n", core_cfg);
+ 		break;
+
+And see if it will pass the muster.
+
+Dead code makes it harder to review the patches.
