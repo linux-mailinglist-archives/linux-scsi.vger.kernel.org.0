@@ -2,66 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15233224057
+	by mail.lfdr.de (Postfix) with ESMTP id EE218224059
 	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jul 2020 18:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgGQQMr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1727849AbgGQQMr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Fri, 17 Jul 2020 12:12:47 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.1]:31588 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726736AbgGQQMj (ORCPT
+Received: from mail3.bemta25.messagelabs.com ([195.245.230.81]:50536 "EHLO
+        mail3.bemta25.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727114AbgGQQMj (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 17 Jul 2020 12:12:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
         s=200619tsfj; t=1595002355; i=@ts.fujitsu.com;
-        bh=RLWTXTWFyHAGnk+WtQu0/qy0qd9euXFeGbDkGp5OEXQ=;
+        bh=ovzdZWVboKUhNlzkplbxqJCfqX9OXFqspWfAsmRf0os=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        b=Gd54Fv9WN5j2W2ENvOvs6ohghsepDuuOeJzerWZAEa6mjGzUtuBzwC6faUkQ286ZQ
-         UdwKLHEssDVd6g0WO9dXSFx52q7yfQfY6difbuL0kSQ8DNAgf2bMXixwkLiYZoyEaS
-         MtSzi/blrf9OXRXlH1EzoYAT2kccVbHXEJgojFAqU9ooZkq/hXtavch2pgBcN5AeyW
-         BBSxXd63OXcVpUthzdFmLsnMd1lBDzy6cKyA+CudSkVIM21MZJrar5EZm70by6TD/u
-         6pBiVdJzlTQ6SnCReJI9z8hiindv5RxnsX35SgyYs6L/1Kxl9t093ev1IbJ6+Ay4Y1
-         OXBdJMj5HnDfg==
-Received: from [100.113.2.186] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-1.bemta.az-a.eu-central-1.aws.symcld.net id 77/BB-07993-3FDC11F5; Fri, 17 Jul 2020 16:12:35 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFLMWRWlGSWpSXmKPExsViZ8MxVffzWcF
-  4g+ebZC26r+9gs1h+/B+Txd9JN1gtWpe+ZXJg8fj49BaLx+dNcgFMUayZeUn5FQmsGS+7LjIW
-  HJSqOPtasYHxiFgXIxeHkMBkRol73w6yQDjTGSVObFvB1MXIycEmYCCxYtJ9sISIwBpGiZV35
-  jGDJJgF9CSm/VvHDmILC4RKXD65iAXEZhFQlbi/chdQMwcHr4CdxLaGapCwhIC8RMeByWAlnA
-  L2ErO/HWQEsYWASh6se8s8gZF7ASPDKkaLpKLM9IyS3MTMHF1DAwNdQ0NjXSNdU0O9xCrdRL3
-  UUt3k1LySokSgpF5iebFecWVuck6KXl5qySZGYJCkFDIZ72C89vqD3iFGSQ4mJVHetlWC8UJ8
-  SfkplRmJxRnxRaU5qcWHGGU4OJQkeMVPAeUEi1LTUyvSMnOAAQuTluDgURLhNT4DlOYtLkjML
-  c5Mh0idYlSUEucVA0kIgCQySvPg2mBRcolRVkqYl5GBgUGIpyC1KDezBFX+FaM4B6OSMG8YyB
-  SezLwSuOmvgBYzAS3e+JkXZHFJIkJKqoHJ1HH58yfGG9MdFpW+jYpknCSzKDltr8zsPW7/C+Z
-  //7ZfQqLwML9dp+mr7FOPuyP7dmst2LM/7mK4adXyxkstypmVVTPv8HNryF5w2qXTUPDwrJ7V
-  7OrY/46fOZjn7Nsk8ZlDd6PfRf6A34ZCXu5ZKW+uLfLPPmj9fK5mSe2vFhst/n/3Ymr8c3Mtd
-  FfWObyaMLW4Z9+O+b6X4iOPF0cEbFKLOT69/uTNnIjMcP8bb/4s7Vty+cnuFecuLpK7pJZ1uG
-  OWoYCEpHyb4Cd2qSm9dzl3zjmueObYvClz2u7M1lo9x/kOy8yNbT3uV6VVRYO8tatCFlhuvjv
-  FO+CFV2qanW9I8c7GECGJslyBMHklluKMREMt5qLiRADadkB1DQMAAA==
+        b=iuQJePinHJ9G2HP+zUL/tHPxJxxL3XOOIcPY5dw7VL+ewadL/g48yJgyDVYNsn6m4
+         xvmRQW56ar4aysKQhEXOeG/J0ahPLfT0CgNaUJ1N8hCrcSHWGsndWY1L1WYgfpywOX
+         LvOLXx1rUQuNcW3d6/xh8BBQWJtqqTkI8YKQXfYaSIKEjjc+//l0En2DB99KnMx7QZ
+         g54qcj1/mgASNWuQpCwudQu9512syY+ZZvkic8Z9BDNv2mS0KWwZvsRvJsMMax2I8X
+         GKDxBHHoEcNHLXaoYG2wRERaZGmwWni1oAk8vEWRn8HddGr+LEBIOhmlDCh6oNRLLb
+         A0vS+Z3VJgR/Q==
+Received: from [100.112.197.196] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-b.eu-west-1.aws.symcld.net id 33/50-01492-3FDC11F5; Fri, 17 Jul 2020 16:12:35 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRWlGSWpSXmKPExsViZ8MxVffzWcF
+  4g4WXpSy6r+9gs1h+/B+Txd9JN1gtWpe+ZXJg8fj49BaLx+dNcgFMUayZeUn5FQmsGT/mPWEt
+  WKlacW2SYAPjYfkuRi4OIYHJjBLtS78yQTjTGSX2drxm7GLk5GATMJBYMek+C0hCRGANo8TKO
+  /OYQRLMAnoS0/6tYwexhQV8Jc7dmM0CYrMIqErcPb2fDcTmFbCTOHxtPli9hIC8RMeByWA1nA
+  L2ErO/HQRbIARU82DdW+YJjNwLGBlWMVokFWWmZ5TkJmbm6BoaGOgaGhrpGlpa6BoZmuolVuk
+  m6aWW6panFpfoGuollhfrFVfmJuek6OWllmxiBIZJSsGx6zsYr77+oHeIUZKDSUmUt22VYLwQ
+  X1J+SmVGYnFGfFFpTmrxIUYZDg4lCV7xU0A5waLU9NSKtMwcYMjCpCU4eJREeI3PAKV5iwsSc
+  4sz0yFSpxgVpcR5xUASAiCJjNI8uDZYnFxilJUS5mVkYGAQ4ilILcrNLEGVf8UozsGoJMwbBj
+  KFJzOvBG76K6DFTECLN37mBVlckoiQkmpgYg7xTQmNuJ0+V8Bo1iVFPq6fN3laVbUSncPOduy
+  7I/e1+xJvEq+0euWjmr87maPaX693eZ98oOXdqtPHvJqeMrw0Lz9RpxC3eemF23nLpyum8JzN
+  PNb6ur++RulPjTpfwQ7xz58ufCny5Q/M6bzq1x3wmo273MBF5PuD18y39b9d0fFMcBGarPaB9
+  avvVx62/7wfJBi38TpsiWZbncCTvuWV/7Joznv5z7u+aL2z4tuyXut8ft+/2cx37tps3uZg2K
+  +jyX8zZOO+qd/UEsOiLBYk3doRvrM4JXQ654XDz9VfhxWe/XLYSEhCpkcq9KltbYBU93L2q4Z
+  zdkSWeWU9bF8wZ5Mfz64j6pncN98osRRnJBpqMRcVJwIAAzK0kg4DAAA=
 X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-17.tower-232.messagelabs.com!1595002354!1123521!1
+X-Msg-Ref: server-16.tower-285.messagelabs.com!1595002354!315561!1
 X-Originating-IP: [62.60.8.149]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.50.2; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 29003 invoked from network); 17 Jul 2020 16:12:35 -0000
+Received: (qmail 20947 invoked from network); 17 Jul 2020 16:12:35 -0000
 Received: from unknown (HELO mailhost2.uk.fujitsu.com) (62.60.8.149)
-  by server-17.tower-232.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jul 2020 16:12:35 -0000
+  by server-16.tower-285.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jul 2020 16:12:35 -0000
 Received: from x-serv01 ([172.17.38.52])
-        by mailhost2.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 06HGCT3x010090;
+        by mailhost2.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 06HGCTiX010089;
         Fri, 17 Jul 2020 17:12:29 +0100
 Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id 0FB3820800;
+        by x-serv01 (Postfix) with ESMTP id 1C60F208F1;
         Fri, 17 Jul 2020 18:12:21 +0200 (CEST)
 From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Mike Christie <michael.christie@oracle.com>,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: [PATCH v2 5/8] scsi: target: tcmu: Factor out new helper ring_insert_padding
-Date:   Fri, 17 Jul 2020 18:12:09 +0200
-Message-Id: <20200717161212.10731-6-bstroesser@ts.fujitsu.com>
+Subject: [PATCH v2 6/8] scsi: target: tcmu: Fix and simplify timeout handling
+Date:   Fri, 17 Jul 2020 18:12:10 +0200
+Message-Id: <20200717161212.10731-7-bstroesser@ts.fujitsu.com>
 X-Mailer: git-send-email 2.12.3
 In-Reply-To: <20200717161212.10731-1-bstroesser@ts.fujitsu.com>
 References: <20200717161212.10731-1-bstroesser@ts.fujitsu.com>
@@ -70,99 +70,147 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The new helper ring_insert_padding is split off from and then
-called by queue_cmd_ring. It inserts a padding if necessary.
-The new helper will in a further patch be used during writing
-of TMR notifications to command ring.
+During cmd timeout handling in check_timedout_devices() due to
+a race it can happen, that tcmu_set_next_deadline() does not
+start a timer as expected:
+ 1) Either tcmu_check_expired_ring_cmd() checks the
+    inflight_queue or tcmu_check_expired_queue_cmd() checks the
+    qfull_queue while jiffies has the value X
+ 2) At the end of the check the queue contains one remaining
+    command with deadline X (time_after(X, X) is false and
+    thus the command is not handled as being timed out).
+ 3) After tcmu_check_expired_xxxxx_cmd() a timer interrupt
+    happens and jiffies is incremented to X+1.
+ 4) Now tcmu_set_next_deadline() is called, but it skips
+    the command, since time_after(X+1, X) is true. Therefore
+    tcmu_set_next_deadline() finds no new deadline and stops
+    the timer, which it shouldn't.
+
+Since commands that time out are removed from inflight_queue
+or qfull_queue, we don't need the check with time_after() in
+tcmu_set_next_deadline(), but can use the deadline from the
+first cmd in the queue.
+
+Additionally I replaced the remaining time_after() calls in
+tcmu_check_expired_xxxxx_cmd() with time_after_eq(), because
+it is not useful to set the timeout to deadline, but then check
+for jiffies being greater than deadline.
+
+Next I simplified the end of tcmu_handle_completions() and
+changed the check for no more pending commands from
+ "mb->cmd_tail == mb->cmd_head"
+to
+ "idr_is_empty(&udev->commands)"
+because the old check doesn't work correctly if paddings or in
+the future TMRs are in the ring.
+
+Finally tcmu_set_next_deadline() was shifted in the source as
+preparation for later implementation of tmr_notify callback.
 
 Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
 ---
- drivers/target/target_core_user.c | 51 +++++++++++++++++++++++----------------
- 1 file changed, 30 insertions(+), 21 deletions(-)
+ drivers/target/target_core_user.c | 59 +++++++++++++++------------------------
+ 1 file changed, 23 insertions(+), 36 deletions(-)
 
 diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 25c480fde9ee..7a27e838a7d3 100644
+index 7a27e838a7d3..6adf4e7cc00b 100644
 --- a/drivers/target/target_core_user.c
 +++ b/drivers/target/target_core_user.c
-@@ -926,6 +926,34 @@ static int add_to_qfull_queue(struct tcmu_cmd *tcmu_cmd)
- 	return 0;
+@@ -1129,6 +1129,18 @@ tcmu_queue_cmd(struct se_cmd *se_cmd)
+ 	return scsi_ret;
  }
  
-+static uint32_t ring_insert_padding(struct tcmu_dev *dev, size_t cmd_size)
++static void tcmu_set_next_deadline(struct list_head *queue,
++				   struct timer_list *timer)
 +{
-+	struct tcmu_cmd_entry_hdr *hdr;
-+	struct tcmu_mailbox *mb = dev->mb_addr;
-+	uint32_t cmd_head = mb->cmd_head % dev->cmdr_size; /* UAM */
++	struct tcmu_cmd *cmd;
 +
-+	/* Insert a PAD if end-of-ring space is too small */
-+	if (head_to_end(cmd_head, dev->cmdr_size) < cmd_size) {
-+		size_t pad_size = head_to_end(cmd_head, dev->cmdr_size);
-+
-+		hdr = (void *) mb + CMDR_OFF + cmd_head;
-+		tcmu_hdr_set_op(&hdr->len_op, TCMU_OP_PAD);
-+		tcmu_hdr_set_len(&hdr->len_op, pad_size);
-+		hdr->cmd_id = 0; /* not used for PAD */
-+		hdr->kflags = 0;
-+		hdr->uflags = 0;
-+		tcmu_flush_dcache_range(hdr, sizeof(*hdr));
-+
-+		UPDATE_HEAD(mb->cmd_head, pad_size, dev->cmdr_size);
-+		tcmu_flush_dcache_range(mb, sizeof(*mb));
-+
-+		cmd_head = mb->cmd_head % dev->cmdr_size; /* UAM */
-+		WARN_ON(cmd_head != 0);
-+	}
-+
-+	return cmd_head;
++	if (!list_empty(queue)) {
++		cmd = list_first_entry(queue, struct tcmu_cmd, queue_entry);
++		mod_timer(timer, cmd->deadline);
++	} else
++		del_timer(timer);
 +}
 +
- /**
-  * queue_cmd_ring - queue cmd to ring or internally
-  * @tcmu_cmd: cmd to queue
-@@ -941,7 +969,7 @@ static int queue_cmd_ring(struct tcmu_cmd *tcmu_cmd, sense_reason_t *scsi_err)
- 	struct tcmu_dev *udev = tcmu_cmd->tcmu_dev;
- 	struct se_cmd *se_cmd = tcmu_cmd->se_cmd;
- 	size_t base_command_size, command_size;
--	struct tcmu_mailbox *mb;
-+	struct tcmu_mailbox *mb = udev->mb_addr;
- 	struct tcmu_cmd_entry *entry;
- 	struct iovec *iov;
- 	int iov_cnt, cmd_id;
-@@ -980,8 +1008,6 @@ static int queue_cmd_ring(struct tcmu_cmd *tcmu_cmd, sense_reason_t *scsi_err)
- 	if (!list_empty(&udev->qfull_queue))
- 		goto queue;
+ static void tcmu_handle_completion(struct tcmu_cmd *cmd, struct tcmu_cmd_entry *entry)
+ {
+ 	struct se_cmd *se_cmd = cmd->se_cmd;
+@@ -1196,25 +1208,6 @@ static void tcmu_handle_completion(struct tcmu_cmd *cmd, struct tcmu_cmd_entry *
+ 	tcmu_free_cmd(cmd);
+ }
  
--	mb = udev->mb_addr;
--	cmd_head = mb->cmd_head % udev->cmdr_size; /* UAM */
- 	if ((command_size > (udev->cmdr_size / 2)) ||
- 	    data_length > udev->data_size) {
- 		pr_warn("TCMU: Request of size %zu/%zu is too big for %u/%zu "
-@@ -1001,24 +1027,7 @@ static int queue_cmd_ring(struct tcmu_cmd *tcmu_cmd, sense_reason_t *scsi_err)
- 		goto queue;
+-static void tcmu_set_next_deadline(struct list_head *queue,
+-				   struct timer_list *timer)
+-{
+-	struct tcmu_cmd *tcmu_cmd, *tmp_cmd;
+-	unsigned long deadline = 0;
+-
+-	list_for_each_entry_safe(tcmu_cmd, tmp_cmd, queue, queue_entry) {
+-		if (!time_after(jiffies, tcmu_cmd->deadline)) {
+-			deadline = tcmu_cmd->deadline;
+-			break;
+-		}
+-	}
+-
+-	if (deadline)
+-		mod_timer(timer, deadline);
+-	else
+-		del_timer(timer);
+-}
+-
+ static unsigned int tcmu_handle_completions(struct tcmu_dev *udev)
+ {
+ 	struct tcmu_mailbox *mb;
+@@ -1267,22 +1260,16 @@ static unsigned int tcmu_handle_completions(struct tcmu_dev *udev)
+ 		handled++;
  	}
  
--	/* Insert a PAD if end-of-ring space is too small */
--	if (head_to_end(cmd_head, udev->cmdr_size) < command_size) {
--		size_t pad_size = head_to_end(cmd_head, udev->cmdr_size);
+-	if (mb->cmd_tail == mb->cmd_head) {
+-		/* no more pending commands */
+-		del_timer(&udev->cmd_timer);
 -
--		entry = (void *) mb + CMDR_OFF + cmd_head;
--		tcmu_hdr_set_op(&entry->hdr.len_op, TCMU_OP_PAD);
--		tcmu_hdr_set_len(&entry->hdr.len_op, pad_size);
--		entry->hdr.cmd_id = 0; /* not used for PAD */
--		entry->hdr.kflags = 0;
--		entry->hdr.uflags = 0;
--		tcmu_flush_dcache_range(entry, sizeof(entry->hdr));
--
--		UPDATE_HEAD(mb->cmd_head, pad_size, udev->cmdr_size);
--		tcmu_flush_dcache_range(mb, sizeof(*mb));
--
--		cmd_head = mb->cmd_head % udev->cmdr_size; /* UAM */
--		WARN_ON(cmd_head != 0);
--	}
-+	cmd_head = ring_insert_padding(udev, command_size);
+-		if (list_empty(&udev->qfull_queue)) {
+-			/*
+-			 * no more pending or waiting commands so try to
+-			 * reclaim blocks if needed.
+-			 */
+-			if (atomic_read(&global_db_count) >
+-			    tcmu_global_max_blocks)
+-				schedule_delayed_work(&tcmu_unmap_work, 0);
+-		}
+-	} else if (udev->cmd_time_out) {
+-		tcmu_set_next_deadline(&udev->inflight_queue, &udev->cmd_timer);
++	if (atomic_read(&global_db_count) > tcmu_global_max_blocks &&
++	    idr_is_empty(&udev->commands) && list_empty(&udev->qfull_queue)) {
++		/*
++		 * Allocated blocks exceeded global block limit, currently no
++		 * more pending or waiting commands so try to reclaim blocks.
++		 */
++		schedule_delayed_work(&tcmu_unmap_work, 0);
+ 	}
++	if (udev->cmd_time_out)
++		tcmu_set_next_deadline(&udev->inflight_queue, &udev->cmd_timer);
  
- 	entry = (void *) mb + CMDR_OFF + cmd_head;
- 	memset(entry, 0, command_size);
+ 	return handled;
+ }
+@@ -1291,7 +1278,7 @@ static void tcmu_check_expired_ring_cmd(struct tcmu_cmd *cmd)
+ {
+ 	struct se_cmd *se_cmd;
+ 
+-	if (!time_after(jiffies, cmd->deadline))
++	if (!time_after_eq(jiffies, cmd->deadline))
+ 		return;
+ 
+ 	set_bit(TCMU_CMD_BIT_EXPIRED, &cmd->flags);
+@@ -1310,7 +1297,7 @@ static void tcmu_check_expired_queue_cmd(struct tcmu_cmd *cmd)
+ {
+ 	struct se_cmd *se_cmd;
+ 
+-	if (!time_after(jiffies, cmd->deadline))
++	if (!time_after_eq(jiffies, cmd->deadline))
+ 		return;
+ 
+ 	pr_debug("Timing out queued cmd %p on dev %s.\n",
 -- 
 2.12.3
 
