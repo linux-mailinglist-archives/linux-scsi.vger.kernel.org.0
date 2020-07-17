@@ -2,66 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A71A224051
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jul 2020 18:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A151224048
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jul 2020 18:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgGQQMk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Jul 2020 12:12:40 -0400
-Received: from mail1.bemta25.messagelabs.com ([195.245.230.1]:49573 "EHLO
+        id S1727094AbgGQQMe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Jul 2020 12:12:34 -0400
+Received: from mail1.bemta25.messagelabs.com ([195.245.230.68]:33401 "EHLO
         mail1.bemta25.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727115AbgGQQMi (ORCPT
+        by vger.kernel.org with ESMTP id S1726633AbgGQQMd (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 17 Jul 2020 12:12:38 -0400
+        Fri, 17 Jul 2020 12:12:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1595002355; i=@ts.fujitsu.com;
-        bh=2Frq/UoMo2ZmRBbp04/5Qkl6kYBSP2A4sdzcLM8oql8=;
+        s=200619tsfj; t=1595002350; i=@ts.fujitsu.com;
+        bh=egmweCa5pZm/0eaUhgjJ9HDsMmuNSgWkgH65Ktkuo60=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        b=E6gCXV+RoFX34k0r5E0ItfiRwKlaTqgSNlzjlin3g62m2cII8CS5nswV/OVacXOCu
-         n2hzactIesX2HkG8vfBEamHQB0sci5twF7I9xUgdpDdI5mAeilM7o5+avXxfxGLPGa
-         2HI68HVwzYvsHUTUiq8QHQmZXIr4ByPaN7qA/LXaJXT1M9Mc+7S2eT2M+FdT8ffjWQ
-         hroCYlnK3kOO1qv3zr25G+Ah33I/sf2ginhggw9KRA5tS4NLtMKd6sWy/wvqpQrpQo
-         b3uO8PmdBh+Bbdf3yLbv+/TTQZ19idgzWTc82WAnATHOVEaW79utkXtG0ed9Ub9g1l
-         9146/jdswsVIw==
-Received: from [100.112.192.94] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-1.bemta.az-a.eu-west-1.aws.symcld.net id 39/CB-19802-3FDC11F5; Fri, 17 Jul 2020 16:12:35 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDLMWRWlGSWpSXmKPExsViZ8MxVffzWcF
-  4g8c3ZC26r+9gs1h+/B+Txd9JN1gtWpe+ZXJg8fj49BaLx+dNcgFMUayZeUn5FQmsGRt/LGYr
-  +CVU8bD1AmsD41aBLkYuDiGByYwSh17PZIRwpjNKHJ3+ga2LkZODTcBAYsWk+ywgCRGBNYwSK
-  +/MYwZJMAvoSUz7t44dxBYWcJKYs2MjC4jNIqAqcWbqVVYQm1fATuLu8ZNggyQE5CU6DkwGq+
-  EUsJeY/e0gI4gtBFTzYN1b5gmM3AsYGVYxWiQVZaZnlOQmZuboGhoY6BoaGukaWhrpGhmY6CV
-  W6SbqpZbqlqcWl+ga6iWWF+sVV+Ym56To5aWWbGIEBkpKwYEzOxhPvf6gd4hRkoNJSZS3bZVg
-  vBBfUn5KZUZicUZ8UWlOavEhRhkODiUJXvFTQDnBotT01Iq0zBxg0MKkJTh4lER4W4GBK8RbX
-  JCYW5yZDpE6xagoJc7bA5IQAElklObBtcEi5RKjrJQwLyMDA4MQT0FqUW5mCar8K0ZxDkYlYd
-  69IFN4MvNK4Ka/AlrMBLR442dekMUliQgpqQamIBfN9puC1tM8z0q8cxJeu7/RRNa3eOHsh1M
-  u9fdmPKljkmT5+W1fPfO/+KPdTybxXtnuvefSO/Ebfg/nRZxjNf+fN2nP5nhZ7szdTb8jTYru
-  i0rcMf8XOHt32Bf9B5IHzwZ/OHR0tVYBB5vRhY7/ByM3qMhuu2txvf2/7qOSW/4irQemxM4Pn
-  1W++p/cqvz3He4PNsWsv9QtdeaiUf3R6xM4+UQcs5Nj/iesvrioNpTb5MuXqddaDhs4ichbBR
-  38kOG0NTIt6nGh1v/uafJ3vnjYnZxTUz95fuXbixpBW+QZ5HkDvnx/KFZydvYuUV3nohcSgSG
-  /RBcbaR2wX7ciXWyRhNFMRoO9vTPuLMq0VGIpzkg01GIuKk4EAPcYxQcPAwAA
+        b=CSO3KqOJaayWskJ3mCWrDoUxAGQYXUqDHBhr0iGq6mKnm+V1rTxDM9qf8H1WVqL6u
+         mTYVoHZwYMx084qgji3mmb54JJvY8F+w8Awyhz7bZn7BAcYaWpDVVnrkwc0wJiyhPx
+         3+JrC+YDELzU9pU3eXkyY4DD1o0l08/ER4igYH3YLEOuB46ugDROhRqrKxuAtJDX4m
+         nX8o4wvAu+eP3KU2LWKh2WafXtROUU+0xRIRJJQ0X2JFg0ZHQRLxbi4+L+7T0Ze9zQ
+         /FQ3vVZYV2QltNiW0Ebddk0SI3MLe8QI8Sut87VPOfibLFRKKxqln/k7n6ySgZHMSO
+         ZmFBYCLT3PI4g==
+Received: from [100.112.197.196] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-4.bemta.az-b.eu-west-1.aws.symcld.net id 0B/BA-16187-EEDC11F5; Fri, 17 Jul 2020 16:12:30 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRWlGSWpSXmKPExsViZ8MRovvurGC
+  8waTtrBbd13ewWSw//o/J4u+kG6wWrUvfMjmweHx8eovF4/MmuQCmKNbMvKT8igTWjAdrGpgL
+  HslX3Jns28B4TrqLkYtDSGAyo8SeWcdZIZzpjBJLrneydTFycrAJGEismHSfBSQhIrCGUWLln
+  XnMIAlmAT2Jaf/WsYPYwgKuErPefGcCsVkEVCUOdC5nBbF5Bewk3m45zwhiSwjIS3QcmMwCYn
+  MK2EvM/nYQLC4EVPNg3VvmCYzcCxgZVjFaJBVlpmeU5CZm5ugaGhjoGhoa6RpaWugamhvrJVb
+  pJumlluqWpxaX6BrqJZYX6xVX5ibnpOjlpZZsYgSGSUrBsbU7GHvefNA7xCjJwaQkytu2SjBe
+  iC8pP6UyI7E4I76oNCe1+BCjDAeHkgSv+CmgnGBRanpqRVpmDjBkYdISHDxKIrzGZ4DSvMUFi
+  bnFmekQqVOMilLivGIgCQGQREZpHlwbLE4uMcpKCfMyMjAwCPEUpBblZpagyr9iFOdgVBLmDQ
+  OZwpOZVwI3/RXQYiagxRs/84IsLklESEk1ME3k5y9c4u2xN3hBsdnWZ7J2dxcE5Owy2K3bdtd
+  z9gLPm9PZZ2zf5ijMNk18K8/Mq66zzsqdenFe7tE8Fn6Xv3eN0qIcz1uGN7S0eP6+WnHbyMFk
+  c2SpNXPUdQWpuS7bQv6rZetPitB2zblV/mVyg3kf302BE2+SfiixGhqZ39tiu/6o5qH8MieZR
+  /t9dn10f90SfO1bPNOrq3MF1kXMuWSRvTDg/vtJegqHONUWPA//0LJizURjznVep6KmHcrjOZ
+  X23iLuzMeEc5cOdl/9ez2wmF0+W0bY7tzEiq//p86eJncztiRq2qKXTL+M7veeL8mWKq4XuHR
+  +6QQ3sR3/H14rk37ZoRorXb+da0bGxXNKLMUZiYZazEXFiQCbAK+BDgMAAA==
 X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-28.tower-265.messagelabs.com!1595002354!89497!1
-X-Originating-IP: [62.60.8.149]
+X-Msg-Ref: server-17.tower-287.messagelabs.com!1595002349!316577!1
+X-Originating-IP: [62.60.8.84]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.50.2; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 28885 invoked from network); 17 Jul 2020 16:12:35 -0000
-Received: from unknown (HELO mailhost2.uk.fujitsu.com) (62.60.8.149)
-  by server-28.tower-265.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jul 2020 16:12:35 -0000
+Received: (qmail 24145 invoked from network); 17 Jul 2020 16:12:29 -0000
+Received: from unknown (HELO mailhost3.uk.fujitsu.com) (62.60.8.84)
+  by server-17.tower-287.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Jul 2020 16:12:29 -0000
 Received: from x-serv01 ([172.17.38.52])
-        by mailhost2.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 06HGCQFD010041;
-        Fri, 17 Jul 2020 17:12:26 +0100
+        by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 06HGCNg3009778;
+        Fri, 17 Jul 2020 17:12:23 +0100
 Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id E545520468;
+        by x-serv01 (Postfix) with ESMTP id F226C20489;
         Fri, 17 Jul 2020 18:12:20 +0200 (CEST)
 From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Mike Christie <michael.christie@oracle.com>,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: [PATCH v2 1/8] scsi: target: Modify core_tmr_abort_task()
-Date:   Fri, 17 Jul 2020 18:12:05 +0200
-Message-Id: <20200717161212.10731-2-bstroesser@ts.fujitsu.com>
+Subject: [PATCH v2 2/8] scsi: target: Add tmr_notify backend function
+Date:   Fri, 17 Jul 2020 18:12:06 +0200
+Message-Id: <20200717161212.10731-3-bstroesser@ts.fujitsu.com>
 X-Mailer: git-send-email 2.12.3
 In-Reply-To: <20200717161212.10731-1-bstroesser@ts.fujitsu.com>
 References: <20200717161212.10731-1-bstroesser@ts.fujitsu.com>
@@ -70,75 +70,113 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch modifies core_tmr_abort_task() to use same looping
-and locking scheme as core_tmr_drain_state_list() does.
-
-This frees the state_list element in se_cmd for later use
-by tmr notification handling.
-
-Note: __target_check_io_state() now is called with param 0
-instead of dev->dev_attrib.emulate_tas, because tas is not
-relevant since we always get ABRT on same session like the
-aborted command.
+Target core is modified to call an optional backend
+callback function if a TMR is received or commands
+are aborted implicitly after a PR command was received.
+The backend function takes as parameters the se_dev, the
+type of the TMR, and the list of aborted commands.
+If no commands were aborted, an empty list is supplied.
 
 Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
 ---
- drivers/target/target_core_tmr.c | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ drivers/target/target_core_tmr.c       | 16 +++++++++++++++-
+ drivers/target/target_core_transport.c |  1 +
+ include/target/target_core_backend.h   |  2 ++
+ include/target/target_core_base.h      |  1 +
+ 4 files changed, 19 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/target/target_core_tmr.c b/drivers/target/target_core_tmr.c
-index 89c84d472cd7..b65d7a0a5df1 100644
+index b65d7a0a5df1..39d93357db65 100644
 --- a/drivers/target/target_core_tmr.c
 +++ b/drivers/target/target_core_tmr.c
-@@ -116,14 +116,15 @@ void core_tmr_abort_task(
+@@ -116,6 +116,7 @@ void core_tmr_abort_task(
  	struct se_tmr_req *tmr,
  	struct se_session *se_sess)
  {
--	struct se_cmd *se_cmd;
-+	struct se_cmd *se_cmd, *next;
++	LIST_HEAD(aborted_list);
+ 	struct se_cmd *se_cmd, *next;
  	unsigned long flags;
-+	bool rc;
- 	u64 ref_tag;
- 
--	spin_lock_irqsave(&se_sess->sess_cmd_lock, flags);
--	list_for_each_entry(se_cmd, &se_sess->sess_cmd_list, se_cmd_list) {
-+	spin_lock_irqsave(&dev->execute_task_lock, flags);
-+	list_for_each_entry_safe(se_cmd, next, &dev->state_list, state_list) {
- 
--		if (dev != se_cmd->se_dev)
-+		if (se_sess != se_cmd->se_sess)
+ 	bool rc;
+@@ -144,7 +145,7 @@ void core_tmr_abort_task(
+ 		if (!rc)
  			continue;
  
- 		/* skip task management functions, including tmr->task_cmd */
-@@ -137,11 +138,16 @@ void core_tmr_abort_task(
- 		printk("ABORT_TASK: Found referenced %s task_tag: %llu\n",
- 			se_cmd->se_tfo->fabric_name, ref_tag);
+-		list_del_init(&se_cmd->state_list);
++		list_move_tail(&se_cmd->state_list, &aborted_list);
+ 		se_cmd->state_active = false;
  
--		if (!__target_check_io_state(se_cmd, se_sess,
--					     dev->dev_attrib.emulate_tas))
-+		spin_lock_irqsave(&se_sess->sess_cmd_lock, flags);
-+		rc = __target_check_io_state(se_cmd, se_sess, 0);
-+		spin_unlock_irqrestore(&se_sess->sess_cmd_lock, flags);
-+		if (!rc)
- 			continue;
+ 		spin_unlock_irqrestore(&dev->execute_task_lock, flags);
+@@ -157,6 +158,11 @@ void core_tmr_abort_task(
+ 			WARN_ON_ONCE(transport_lookup_tmr_lun(tmr->task_cmd) <
+ 					0);
  
--		spin_unlock_irqrestore(&se_sess->sess_cmd_lock, flags);
-+		list_del_init(&se_cmd->state_list);
-+		se_cmd->state_active = false;
++		if (dev->transport->tmr_notify)
++			dev->transport->tmr_notify(dev, TMR_ABORT_TASK,
++						   &aborted_list);
 +
-+		spin_unlock_irqrestore(&dev->execute_task_lock, flags);
++		list_del_init(&se_cmd->state_list);
+ 		target_put_cmd_and_wait(se_cmd);
  
- 		/*
- 		 * Ensure that this ABORT request is visible to the LU RESET
-@@ -159,7 +165,7 @@ void core_tmr_abort_task(
- 		atomic_long_inc(&dev->aborts_complete);
- 		return;
+ 		printk("ABORT_TASK: Sending TMR_FUNCTION_COMPLETE for"
+@@ -167,6 +173,9 @@ void core_tmr_abort_task(
  	}
--	spin_unlock_irqrestore(&se_sess->sess_cmd_lock, flags);
-+	spin_unlock_irqrestore(&dev->execute_task_lock, flags);
+ 	spin_unlock_irqrestore(&dev->execute_task_lock, flags);
  
++	if (dev->transport->tmr_notify)
++		dev->transport->tmr_notify(dev, TMR_ABORT_TASK, &aborted_list);
++
  	printk("ABORT_TASK: Sending TMR_TASK_DOES_NOT_EXIST for ref_tag: %lld\n",
  			tmr->ref_task_tag);
+ 	tmr->response = TMR_TASK_DOES_NOT_EXIST;
+@@ -318,6 +327,11 @@ static void core_tmr_drain_state_list(
+ 	}
+ 	spin_unlock_irqrestore(&dev->execute_task_lock, flags);
+ 
++	if (dev->transport->tmr_notify)
++		dev->transport->tmr_notify(dev, preempt_and_abort_list ?
++					   TMR_LUN_RESET_PRO : TMR_LUN_RESET,
++					   &drain_task_list);
++
+ 	while (!list_empty(&drain_task_list)) {
+ 		cmd = list_entry(drain_task_list.next, struct se_cmd, state_list);
+ 		list_del_init(&cmd->state_list);
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index e6e1fa68de54..9fb0be0aa620 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+@@ -2946,6 +2946,7 @@ static const char *target_tmf_name(enum tcm_tmreq_table tmf)
+ 	case TMR_LUN_RESET:		return "LUN_RESET";
+ 	case TMR_TARGET_WARM_RESET:	return "TARGET_WARM_RESET";
+ 	case TMR_TARGET_COLD_RESET:	return "TARGET_COLD_RESET";
++	case TMR_LUN_RESET_PRO:		return "LUN_RESET_PRO";
+ 	case TMR_UNKNOWN:		break;
+ 	}
+ 	return "(?)";
+diff --git a/include/target/target_core_backend.h b/include/target/target_core_backend.h
+index f51452e3b984..6336780d83a7 100644
+--- a/include/target/target_core_backend.h
++++ b/include/target/target_core_backend.h
+@@ -40,6 +40,8 @@ struct target_backend_ops {
+ 	ssize_t (*show_configfs_dev_params)(struct se_device *, char *);
+ 
+ 	sense_reason_t (*parse_cdb)(struct se_cmd *cmd);
++	void (*tmr_notify)(struct se_device *se_dev, enum tcm_tmreq_table,
++			   struct list_head *aborted_cmds);
+ 	u32 (*get_device_type)(struct se_device *);
+ 	sector_t (*get_blocks)(struct se_device *);
+ 	sector_t (*get_alignment_offset_lbas)(struct se_device *);
+diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
+index 18c3f277b770..549947d407cf 100644
+--- a/include/target/target_core_base.h
++++ b/include/target/target_core_base.h
+@@ -207,6 +207,7 @@ enum tcm_tmreq_table {
+ 	TMR_LUN_RESET		= 5,
+ 	TMR_TARGET_WARM_RESET	= 6,
+ 	TMR_TARGET_COLD_RESET	= 7,
++	TMR_LUN_RESET_PRO	= 0x80,
+ 	TMR_UNKNOWN		= 0xff,
+ };
+ 
 -- 
 2.12.3
 
