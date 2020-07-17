@@ -2,69 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9CE223760
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jul 2020 10:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCB52237D3
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jul 2020 11:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726104AbgGQIvR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Jul 2020 04:51:17 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:54168 "EHLO huawei.com"
+        id S1726463AbgGQJJD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Jul 2020 05:09:03 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8317 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725970AbgGQIvR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 17 Jul 2020 04:51:17 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 937D9A3AC8D0FF4393C1;
-        Fri, 17 Jul 2020 16:51:14 +0800 (CST)
-Received: from linux-ibm.site (10.175.102.37) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 17 Jul 2020 16:51:03 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.garry@huawei.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <guohanjun@huawei.com>, <wangxiongfeng2@huawei.com>
-Subject: [PATCH v2] scsi: scsi_transport_sas: add missing newline when printing 'enable' by sysfs
-Date:   Fri, 17 Jul 2020 16:44:32 +0800
-Message-ID: <1594975472-12486-1-git-send-email-wangxiongfeng2@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
+        id S1726037AbgGQJJC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 17 Jul 2020 05:09:02 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id A91A7461920954F64C90;
+        Fri, 17 Jul 2020 17:08:57 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Fri, 17 Jul 2020
+ 17:08:46 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>
+CC:     <bvanassche@acm.org>, <sashal@kernel.org>,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH] scsi: core: Fix "scsi: core: add scsi_host_(block,unblock) helper function"
+Date:   Fri, 17 Jul 2020 17:09:20 +0800
+Message-ID: <20200717090921.29243-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
 X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When I cat sysfs file 'enable' below 'sas_phy', it displays as follows.
-It's better to add a newline for easy reading.
+In commit 4dea170f4fb2 ("scsi: core: Fix incorrect usage of shost_for_each_device")
+fix usage of shost_for_each_device in function scsi_host_block.
 
-[root@localhost ~]# cat /sys/devices/pci0000:00/0000:00:0d.0/0000:0f:00.0/host3/phy-3:2/sas_phy/phy-3:2/enable
-1[root@localhost ~]#
-
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
-
+Fix: 2bb955840c1d("scsi: core: add scsi_host_(block,unblock) helper function")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
-v1 -> v2:
-	modify commit subject.
-	add Reviewed-by tag.
----
- drivers/scsi/scsi_transport_sas.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/scsi_lib.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
-index 182fd25..e443dee 100644
---- a/drivers/scsi/scsi_transport_sas.c
-+++ b/drivers/scsi/scsi_transport_sas.c
-@@ -563,7 +563,7 @@ static ssize_t do_sas_phy_enable(struct device *dev,
- {
- 	struct sas_phy *phy = transport_class_to_phy(dev);
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index f3bf2648105c..65fde27b8b08 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -2811,8 +2811,10 @@ scsi_host_block(struct Scsi_Host *shost)
+ 		mutex_lock(&sdev->state_mutex);
+ 		ret = scsi_internal_device_block_nowait(sdev);
+ 		mutex_unlock(&sdev->state_mutex);
+-		if (ret)
++		if (ret) {
++			scsi_device_put(sdev);
+ 			break;
++		}
+ 	}
  
--	return snprintf(buf, 20, "%d", phy->enabled);
-+	return snprintf(buf, 20, "%d\n", phy->enabled);
- }
- 
- static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR, show_sas_phy_enable,
+ 	/*
 -- 
-1.7.12.4
+2.25.4
 
