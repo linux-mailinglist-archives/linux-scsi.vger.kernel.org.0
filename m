@@ -2,28 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B74222486B
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Jul 2020 06:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5817A22486F
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Jul 2020 06:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbgGRENU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Jul 2020 00:13:20 -0400
+        id S1726087AbgGRENY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Jul 2020 00:13:24 -0400
 Received: from labrats.qualcomm.com ([199.106.110.90]:38944 "EHLO
         labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbgGRENU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Jul 2020 00:13:20 -0400
-IronPort-SDR: Q1lRdZgW4Gu7pv+dBZUFmr7jVIFHAExgHTtQ4rfdoJ6aVa8KvbEYnkLHg4Xd3HIOb0/BHO1Bur
- ODCflAt4ZRc1fyYeUK2S+tJmn/QSDHscnnzK6athuHmekX4U2hoj2z6zbHf1rJFWvSgzfJR/0j
- J+ClTF3U3x6oiPu2/ujbxmrnyk1nZXMeRmisju9ApVg2CkIwiwd0xwiB6eNr9+HzBKymcDHbJF
- iFDdjRKZI18ccb5tyjOEqiycYGfqtwVSXm/3VEnps/mx7rtAmfZx/CpGmTkQaXC7LuobW8ib1B
- aDc=
+        with ESMTP id S1725763AbgGRENY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Jul 2020 00:13:24 -0400
+IronPort-SDR: qUTFuhNRZj84fLLA3LVw5IQFRyjDdZH8LWq1yILR+s7hHAOR7fBTWyJ4r0pUFsyuu1NsEzN2y3
+ L5XIaItW1WGJ19+K+k6qh07DdyYLenuSQUrFLN4CvbXmPsI5VRQZ9pMk6QzD7vRUMzSU+J+zmn
+ u+fp9AYxPUiHr7ZGbBPHw+H02ipzR3KbVr4eXwoQL2XHrnlSBqKZuZYkZsl4S5N2Y3D5ZGs7VY
+ f4UIsEErv+b2DIgbsOtQ3d/8KxbSipiLuGVAkSkQqlh7/qEiRGuLwf021/1XsV1zYas2FCB9OK
+ iqY=
 X-IronPort-AV: E=Sophos;i="5.75,365,1589266800"; 
-   d="scan'208";a="47222742"
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by labrats.qualcomm.com with ESMTP; 17 Jul 2020 21:13:20 -0700
+   d="scan'208";a="47222743"
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by labrats.qualcomm.com with ESMTP; 17 Jul 2020 21:13:24 -0700
 Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
-  by ironmsg04-sd.qualcomm.com with ESMTP; 17 Jul 2020 21:13:19 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP; 17 Jul 2020 21:13:22 -0700
 Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
-        id 402F822D61; Fri, 17 Jul 2020 21:13:19 -0700 (PDT)
+        id A631C22D61; Fri, 17 Jul 2020 21:13:22 -0700 (PDT)
 From:   Can Guo <cang@codeaurora.org>
 To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
         hongwus@codeaurora.org, rnayak@codeaurora.org,
@@ -38,9 +38,9 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         Bean Huo <beanhuo@micron.com>,
         Bart Van Assche <bvanassche@acm.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 1/4] scsi: ufs: Add checks before setting clk-gating states
-Date:   Fri, 17 Jul 2020 21:13:01 -0700
-Message-Id: <1595045585-16402-2-git-send-email-cang@codeaurora.org>
+Subject: [PATCH v3 2/4] scsi: ufs: Fix imbalanced scsi_block_reqs_cnt caused by ufshcd_hold()
+Date:   Fri, 17 Jul 2020 21:13:02 -0700
+Message-Id: <1595045585-16402-3-git-send-email-cang@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1595045585-16402-1-git-send-email-cang@codeaurora.org>
 References: <1595045585-16402-1-git-send-email-cang@codeaurora.org>
@@ -49,64 +49,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Clock gating features can be turned on/off selectively which means its
-state information is only important if it is enabled. This change makes
-sure that we only look at state of clk-gating if it is enabled.
+The scsi_block_reqs_cnt increased in ufshcd_hold() is supposed to be
+decreased back in ufshcd_ungate_work() in a paired way. However, if
+specific ufshcd_hold/release sequences are met, it is possible that
+scsi_block_reqs_cnt is increased twice but only one ungate work is
+queued. To make sure scsi_block_reqs_cnt is handled by ufshcd_hold() and
+ufshcd_ungate_work() in a paired way, increase it only if queue_work()
+returns true.
 
 Signed-off-by: Can Guo <cang@codeaurora.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index efc0a6c..9ddfd13 100644
+index 9ddfd13..4a34f2a 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1839,6 +1839,8 @@ static void ufshcd_init_clk_gating(struct ufs_hba *hba)
- 	if (!ufshcd_is_clkgating_allowed(hba))
- 		return;
- 
-+	hba->clk_gating.state = CLKS_ON;
-+
- 	hba->clk_gating.delay_ms = 150;
- 	INIT_DELAYED_WORK(&hba->clk_gating.gate_work, ufshcd_gate_work);
- 	INIT_WORK(&hba->clk_gating.ungate_work, ufshcd_ungate_work);
-@@ -2538,7 +2540,8 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 		err = SCSI_MLQUEUE_HOST_BUSY;
- 		goto out;
- 	}
--	WARN_ON(hba->clk_gating.state != CLKS_ON);
-+	WARN_ON(ufshcd_is_clkgating_allowed(hba) &&
-+		(hba->clk_gating.state != CLKS_ON));
- 
- 	lrbp = &hba->lrb[tag];
- 
-@@ -8315,8 +8318,11 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 		/* If link is active, device ref_clk can't be switched off */
- 		__ufshcd_setup_clocks(hba, false, true);
- 
--	hba->clk_gating.state = CLKS_OFF;
--	trace_ufshcd_clk_gating(dev_name(hba->dev), hba->clk_gating.state);
-+	if (ufshcd_is_clkgating_allowed(hba)) {
-+		hba->clk_gating.state = CLKS_OFF;
-+		trace_ufshcd_clk_gating(dev_name(hba->dev),
-+					hba->clk_gating.state);
-+	}
- 
- 	/* Put the host controller in low power mode if possible */
- 	ufshcd_hba_vreg_set_lpm(hba);
-@@ -8456,6 +8462,11 @@ static int ufshcd_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	if (hba->clk_scaling.is_allowed)
- 		ufshcd_suspend_clkscaling(hba);
- 	ufshcd_setup_clocks(hba, false);
-+	if (ufshcd_is_clkgating_allowed(hba)) {
-+		hba->clk_gating.state = CLKS_OFF;
-+		trace_ufshcd_clk_gating(dev_name(hba->dev),
-+					hba->clk_gating.state);
-+	}
- out:
- 	hba->pm_op_in_progress = 0;
- 	if (ret)
+@@ -1611,12 +1611,12 @@ int ufshcd_hold(struct ufs_hba *hba, bool async)
+ 		 */
+ 		/* fallthrough */
+ 	case CLKS_OFF:
+-		ufshcd_scsi_block_requests(hba);
+ 		hba->clk_gating.state = REQ_CLKS_ON;
+ 		trace_ufshcd_clk_gating(dev_name(hba->dev),
+ 					hba->clk_gating.state);
+-		queue_work(hba->clk_gating.clk_gating_workq,
+-			   &hba->clk_gating.ungate_work);
++		if (queue_work(hba->clk_gating.clk_gating_workq,
++			       &hba->clk_gating.ungate_work))
++			ufshcd_scsi_block_requests(hba);
+ 		/*
+ 		 * fall through to check if we should wait for this
+ 		 * work to be done or not.
 -- 
 Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
