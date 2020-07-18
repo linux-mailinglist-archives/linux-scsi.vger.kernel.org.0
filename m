@@ -2,106 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E697224B74
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Jul 2020 15:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5E7224C71
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Jul 2020 17:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726611AbgGRNYx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Jul 2020 09:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S1728045AbgGRPYh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Jul 2020 11:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726569AbgGRNYx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Jul 2020 09:24:53 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E41AC0619D2;
-        Sat, 18 Jul 2020 06:24:53 -0700 (PDT)
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 94017BC07E;
-        Sat, 18 Jul 2020 13:24:48 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     don.brace@microsemi.com, corbet@lwn.net,
-        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] scsi: smartpqi: Replace HTTP links with HTTPS ones
-Date:   Sat, 18 Jul 2020 15:24:42 +0200
-Message-Id: <20200718132442.24208-1-grandmaster@al2klimov.de>
+        with ESMTP id S1726551AbgGRPYh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Jul 2020 11:24:37 -0400
+X-Greylist: delayed 616 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Jul 2020 08:24:36 PDT
+Received: from 151.80.89.196 (unknown [IPv6:2001:41d0:303:46d2::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23160C0619D3;
+        Sat, 18 Jul 2020 08:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=click; d=offenline.biz;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID;
+ bh=WrCb5nGko31fd5GUgjGBj5htdBM=;
+ b=KivB7bvJopap2kMJp9AS0eYkPTlU+UuM8AjvdHV7TInCQ1+lc7Jzvz11XZ2qbuubjORurXMGX5Hu
+   pUk7EufDXnStxzxwMSB4+SbkZARAFOOdEjmh59Wow8CA67Zkbjf1Nw94yvSgxCg3qs5GIM9HeGnv
+   NWbjLv9+aaRw/b0cfN8=
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Why continued silence 2 
+To:     Recipients <info@lee.org>
+From:   "convy" <info@lee.org>
+Date:   Sat, 18 Jul 2020 15:34:40 +0100
+Reply-To: convy442121@gmail.com
+Message-ID: <0.0.7E.DD.1D65D10D564A35A.0@151.80.89.196>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
-
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
-
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
-
- If there are any URLs to be removed completely
- or at least not (just) HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
-
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
-
- If you apply the patch, please let me know.
-
- Sorry again to all maintainers who complained about subject lines.
- Now I realized that you want an actually perfect prefixes,
- not just subsystem ones.
- I tried my best...
- And yes, *I could* (at least half-)automate it.
- Impossible is nothing! :)
-
-
- Documentation/scsi/smartpqi.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/scsi/smartpqi.rst b/Documentation/scsi/smartpqi.rst
-index a7de27352c6f..38dafc70b4cd 100644
---- a/Documentation/scsi/smartpqi.rst
-+++ b/Documentation/scsi/smartpqi.rst
-@@ -5,7 +5,7 @@ SMARTPQI - Microsemi Smart PQI Driver
- =====================================
- 
- This file describes the smartpqi SCSI driver for Microsemi
--(http://www.microsemi.com) PQI controllers. The smartpqi driver
-+(https://www.microsemi.com) PQI controllers. The smartpqi driver
- is the next generation SCSI driver for Microsemi Corp. The smartpqi
- driver is the first SCSI driver to implement the PQI queuing model.
- 
-@@ -19,8 +19,8 @@ when configuring the kernel.
- 
- For more information on the PQI Queuing Interface, please see:
- 
--- http://www.t10.org/drafts.htm
--- http://www.t10.org/members/w_pqi2.htm
-+- https://www.t10.org/drafts.htm
-+- https://www.t10.org/members/w_pqi2.htm
- 
- Supported devices
- =================
--- 
-2.27.0
-
+Did you receive my previous email regarding your family inheritance?
+Reply strictly through: convy0090@gmail.com
+Best Regards,
+Ruben CONVY
