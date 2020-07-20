@@ -2,148 +2,186 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 228B0225606
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jul 2020 04:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5732E225777
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jul 2020 08:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726775AbgGTC6A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Jul 2020 22:58:00 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:42987 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726612AbgGTC57 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 19 Jul 2020 22:57:59 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 5711A204259;
-        Mon, 20 Jul 2020 04:57:58 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BXsHtHzXluDp; Mon, 20 Jul 2020 04:57:56 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-45-78-251-166.dyn.295.ca [45.78.251.166])
-        by smtp.infotech.no (Postfix) with ESMTPA id EE14420425C;
-        Mon, 20 Jul 2020 04:57:54 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: [PATCH v5 9/9] scsi_host: switch ida to idr to hold shost ptr
-Date:   Sun, 19 Jul 2020 22:57:42 -0400
-Message-Id: <20200720025742.349296-10-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200720025742.349296-1-dgilbert@interlog.com>
-References: <20200720025742.349296-1-dgilbert@interlog.com>
+        id S1726015AbgGTGQ4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Jul 2020 02:16:56 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:48380 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725805AbgGTGQ4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 20 Jul 2020 02:16:56 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id F053821341B1D8D5B252;
+        Mon, 20 Jul 2020 14:16:53 +0800 (CST)
+Received: from [127.0.0.1] (10.74.219.194) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Mon, 20 Jul 2020
+ 14:16:45 +0800
+Subject: Re: [PATCH v1 07/15] scsi: hisi_sas_v3_hw: use generic power
+ management
+To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Helgaas <bjorn@helgaas.com>,
+        Adam Radford <aradford@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        John Garry <john.garry@huawei.com>,
+        Don Brace <don.brace@microsemi.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Dick Kennedy" <dick.kennedy@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        Vaibhav Gupta <vaibhav.varodek@gmail.com>
+References: <20200717063438.175022-1-vaibhavgupta40@gmail.com>
+ <20200717063438.175022-8-vaibhavgupta40@gmail.com>
+CC:     Shuah Khan <skhan@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        <linux-scsi@vger.kernel.org>, <esc.storagedev@microsemi.com>,
+        <megaraidlinux.pdl@broadcom.com>,
+        <MPT-FusionLinux.pdl@broadcom.com>
+From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <367bd5d3-f0a6-2bd7-2945-3095c827dbe6@hisilicon.com>
+Date:   Mon, 20 Jul 2020 14:16:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
+In-Reply-To: <20200717063438.175022-8-vaibhavgupta40@gmail.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.74.219.194]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Previously the scsi_host code was using a global static "ida"
-array to make sure host numbers where unique and issued in a
-predictable ascending integer order. Extend that ida to an
-idr array so that it can additionally hold the pointer to
-the scsi_host object. This enables scsi_host_lookup() to do
-a O(ln(n)) search replacing class_find_device() which is O(n).
-This makes all the SCSI exported " lookup" functions O(ln(n)).
+Hi Vaibhav,
 
-iSCSI seems to be the largest user of scsi_host_lookup().
+ÔÚ 2020/7/17 14:34, Vaibhav Gupta Ð´µÀ:
+> With legacy PM, drivers themselves were responsible for managing the
+> device's power states and takes care of register states.
+>
+> After upgrading to the generic structure, PCI core will take care of
+> required tasks and drivers should do only device-specific operations.
+>
+> The driver was calling pci_save/restore_state(), pci_choose_state(),
+> pci_enable/disable_device() and pci_set_power_state() which is no more
+> needed.
+>
+> Compile-tested only.
+>
+> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/hosts.c | 37 +++++++++++--------------------------
- 1 file changed, 11 insertions(+), 26 deletions(-)
+Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
+Just a small comment, below.
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index aebef37684e8..7734dc63606d 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -50,7 +50,7 @@ module_param_named(eh_deadline, shost_eh_deadline, int, S_IRUGO|S_IWUSR);
- MODULE_PARM_DESC(eh_deadline,
- 		 "SCSI EH timeout in seconds (should be between 0 and 2^31-1)");
- 
--static DEFINE_IDA(host_index_ida);
-+static DEFINE_IDR(host_index_idr);	/* store index and shost pointer */
- 
- 
- static void scsi_host_cls_release(struct device *dev)
-@@ -343,7 +343,7 @@ static void scsi_host_dev_release(struct device *dev)
- 
- 	kfree(shost->shost_data);
- 
--	ida_simple_remove(&host_index_ida, shost->host_no);
-+	idr_remove(&host_index_idr, shost->host_no);
- 
- 	if (parent)
- 		put_device(parent);
-@@ -390,8 +390,8 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
- 	init_waitqueue_head(&shost->host_wait);
- 	mutex_init(&shost->scan_mutex);
- 
--	index = ida_simple_get(&host_index_ida, 0, 0, GFP_KERNEL);
--	if (index < 0)
-+	index = idr_alloc(&host_index_idr, shost, 0, 0, GFP_KERNEL);
-+	if (unlikely(index < 0))
- 		goto fail_kfree;
- 	shost->host_no = index;
- 
-@@ -501,22 +501,13 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
-  fail_kthread:
- 	kthread_stop(shost->ehandler);
-  fail_index_remove:
--	ida_simple_remove(&host_index_ida, shost->host_no);
-+	idr_remove(&host_index_idr, shost->host_no);
-  fail_kfree:
- 	kfree(shost);
- 	return NULL;
- }
- EXPORT_SYMBOL(scsi_host_alloc);
- 
--static int __scsi_host_match(struct device *dev, const void *data)
--{
--	struct Scsi_Host *p;
--	const unsigned short *hostnum = data;
--
--	p = class_to_shost(dev);
--	return p->host_no == *hostnum;
--}
--
- /**
-  * scsi_host_lookup - get a reference to a Scsi_Host by host no
-  * @hostnum:	host number to locate
-@@ -525,20 +516,14 @@ static int __scsi_host_match(struct device *dev, const void *data)
-  *	A pointer to located Scsi_Host or NULL.
-  *
-  *	The caller must do a scsi_host_put() to drop the reference
-- *	that scsi_host_get() took. The put_device() below dropped
-- *	the reference from class_find_device().
-+ *	that scsi_host_get() took.
-  **/
- struct Scsi_Host *scsi_host_lookup(unsigned short hostnum)
- {
--	struct device *cdev;
--	struct Scsi_Host *shost = NULL;
--
--	cdev = class_find_device(&shost_class, NULL, &hostnum,
--				 __scsi_host_match);
--	if (cdev) {
--		shost = scsi_host_get(class_to_shost(cdev));
--		put_device(cdev);
--	}
-+	struct Scsi_Host *shost = idr_find(&host_index_idr, hostnum);
-+
-+	if (shost)
-+		shost = scsi_host_get(shost);
- 	return shost;
- }
- EXPORT_SYMBOL(scsi_host_lookup);
-@@ -600,7 +585,7 @@ int scsi_init_hosts(void)
- void scsi_exit_hosts(void)
- {
- 	class_unregister(&shost_class);
--	ida_destroy(&host_index_ida);
-+	idr_destroy(&host_index_idr);
- }
- 
- int scsi_is_host_device(const struct device *dev)
--- 
-2.25.1
+> ---
+>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 32 ++++++++------------------
+>   1 file changed, 10 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> index 55e2321a65bc..45605a520bc8 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> @@ -3374,13 +3374,13 @@ enum {
+>   	hip08,
+>   };
+>   
+> -static int hisi_sas_v3_suspend(struct pci_dev *pdev, pm_message_t state)
+> +static int __maybe_unused hisi_sas_v3_suspend(struct device *dev_d)
+>   {
+> +	struct pci_dev *pdev = to_pci_dev(dev_d);
+>   	struct sas_ha_struct *sha = pci_get_drvdata(pdev);
+>   	struct hisi_hba *hisi_hba = sha->lldd_ha;
+>   	struct device *dev = hisi_hba->dev;
+>   	struct Scsi_Host *shost = hisi_hba->shost;
+> -	pci_power_t device_state;
+>   	int rc;
+>   
+>   	if (!pdev->pm_cap) {
+> @@ -3406,21 +3406,15 @@ static int hisi_sas_v3_suspend(struct pci_dev *pdev, pm_message_t state)
+>   
+>   	hisi_sas_init_mem(hisi_hba);
+>   
+> -	device_state = pci_choose_state(pdev, state);
+> -	dev_warn(dev, "entering operating state [D%d]\n",
+> -			device_state);
+
+Please retain above print to keep consistence with the print in function 
+hisi_sas_v3_resume().
+
+> -	pci_save_state(pdev);
+> -	pci_disable_device(pdev);
+> -	pci_set_power_state(pdev, device_state);
+> -
+>   	hisi_sas_release_tasks(hisi_hba);
+>   
+>   	sas_suspend_ha(sha);
+>   	return 0;
+>   }
+>   
+> -static int hisi_sas_v3_resume(struct pci_dev *pdev)
+> +static int __maybe_unused hisi_sas_v3_resume(struct device *dev_d)
+>   {
+> +	struct pci_dev *pdev = to_pci_dev(dev_d);
+>   	struct sas_ha_struct *sha = pci_get_drvdata(pdev);
+>   	struct hisi_hba *hisi_hba = sha->lldd_ha;
+>   	struct Scsi_Host *shost = hisi_hba->shost;
+> @@ -3430,16 +3424,8 @@ static int hisi_sas_v3_resume(struct pci_dev *pdev)
+>   
+>   	dev_warn(dev, "resuming from operating state [D%d]\n",
+>   		 device_state);
+> -	pci_set_power_state(pdev, PCI_D0);
+> -	pci_enable_wake(pdev, PCI_D0, 0);
+> -	pci_restore_state(pdev);
+> -	rc = pci_enable_device(pdev);
+> -	if (rc) {
+> -		dev_err(dev, "enable device failed during resume (%d)\n", rc);
+> -		return rc;
+> -	}
+> +	device_wakeup_disable(dev_d);
+>   
+> -	pci_set_master(pdev);
+>   	scsi_unblock_requests(shost);
+>   	clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
+>   
+> @@ -3447,7 +3433,6 @@ static int hisi_sas_v3_resume(struct pci_dev *pdev)
+>   	rc = hw_init_v3_hw(hisi_hba);
+>   	if (rc) {
+>   		scsi_remove_host(shost);
+> -		pci_disable_device(pdev);
+>   		return rc;
+>   	}
+>   	hisi_hba->hw->phys_init(hisi_hba);
+> @@ -3468,13 +3453,16 @@ static const struct pci_error_handlers hisi_sas_err_handler = {
+>   	.reset_done	= hisi_sas_reset_done_v3_hw,
+>   };
+>   
+> +static SIMPLE_DEV_PM_OPS(hisi_sas_v3_pm_ops,
+> +			 hisi_sas_v3_suspend,
+> +			 hisi_sas_v3_resume);
+> +
+>   static struct pci_driver sas_v3_pci_driver = {
+>   	.name		= DRV_NAME,
+>   	.id_table	= sas_v3_pci_table,
+>   	.probe		= hisi_sas_v3_probe,
+>   	.remove		= hisi_sas_v3_remove,
+> -	.suspend	= hisi_sas_v3_suspend,
+> -	.resume		= hisi_sas_v3_resume,
+> +	.driver.pm	= &hisi_sas_v3_pm_ops,
+>   	.err_handler	= &hisi_sas_err_handler,
+>   };
+>   
+
 
