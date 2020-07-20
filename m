@@ -2,211 +2,181 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F72257ED
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jul 2020 08:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DDC225862
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jul 2020 09:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbgGTGhC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Jul 2020 02:37:02 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:33360 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726952AbgGTGhC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jul 2020 02:37:02 -0400
-IronPort-SDR: PW3PFm9GuydKmYMWns7DxNIfl9M8JrVSW1bTtIuMhEmOaV9GGRE7NaSQjwFQDbRO7nIRO5s3HI
- so3B1yzxR9h2QIPYFNSm7AQauoxVRZAQrWNnVdLSMvLnKHKM+Lm+HEwXZY9sulGHNpjlZA2cqg
- Q3+bBnc9qzVnuKuLq3MhnqLA6J4x6h8mjLq2uwTmP4FZDhiQwoqiWp0jEaGg9x4Mnpqjvdz8E+
- BzY+JgMyGnTw4P+7KlCOZsb3X3w1qqRTLlw+2A+qrbdQLJ8O5ZNoCRH+xccaf1LpN+Bwl+0F6v
- XXA=
-X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
-   d="scan'208";a="47226986"
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by labrats.qualcomm.com with ESMTP; 19 Jul 2020 23:37:00 -0700
-Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 19 Jul 2020 23:36:59 -0700
-Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
-        id ADCDB22DA5; Sun, 19 Jul 2020 23:36:59 -0700 (PDT)
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        sh425.lee@samsung.com, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
-        cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 8/8] scsi: ufs: Fix a racing problem btw error handler and runtime PM ops
-Date:   Sun, 19 Jul 2020 23:35:55 -0700
-Message-Id: <1595226956-7779-9-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1595226956-7779-1-git-send-email-cang@codeaurora.org>
-References: <1595226956-7779-1-git-send-email-cang@codeaurora.org>
+        id S1726254AbgGTHX7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Jul 2020 03:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726428AbgGTHX7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jul 2020 03:23:59 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42AFC0619D2
+        for <linux-scsi@vger.kernel.org>; Mon, 20 Jul 2020 00:23:58 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id b4so14329076qkn.11
+        for <linux-scsi@vger.kernel.org>; Mon, 20 Jul 2020 00:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=1ZdvEQtoQTsKklRiOdXXItC7m6E8GxiS/j8poJfLDnY=;
+        b=c4C6aSfti0IzUz0ofptAt99y9cY5kbATBCWjB1eFadVNIVMywhilXgbAw10qSFeF1v
+         rXSxtRLA8g+6n2WwPzEXmrsYvdTSKCi9jjCdWHFF8rt3uArMNsNoLRkrAMy4PxNc33Hc
+         3f8lIHdmfOj2U9XqSp8bGzIxD1rRPlKmIEWQk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=1ZdvEQtoQTsKklRiOdXXItC7m6E8GxiS/j8poJfLDnY=;
+        b=aQJR8pRj3T/FXsZ867Ad+Fg7rgBLUC6E0JLWnL3H2IkOaN6uNvq0A08WE2wF3La4zT
+         3f/8xqGo/+dzitKPayhRlmzZHgPZ+BXUVvPpBDCmNRFx9VOWwEARAT/NATpyv6c0ly00
+         2hFi7Qm+VxqLeLayLVABHB5o7+3r2hS8CP68q6m+EJc4jeN87P278G0QkD5aV2mjw6CN
+         TQ57RkuMlcwm73jo6wiy5peReMYRcnDfz9zbOgptPJ8QrClHpu3HSgOyCXuWBIEf2RRw
+         WnFKSdLopoiRz2lJWJDqRlOgTnS2xINjyw/TXC8++PZVC7rHVENbwJtdKcNttaneGozb
+         XL0A==
+X-Gm-Message-State: AOAM531NgSoQ3qv0MUKqwzpuk6V9+9/zX5GfgP6o/5MZjRv2TLUqQv+x
+        dpcQZ+VXgNM3SbsT0t1IrwwzLm2+1YNEEyzweH/7tA==
+X-Google-Smtp-Source: ABdhPJwehSaPP8tkR31fqFSCdrhnoxs1mA1h5JvYNpb/U7dDFm+ZCEY+fJEURvlvM2QIxVYuJ1pLpKZkS33zdz74Ros=
+X-Received: by 2002:a37:d0e:: with SMTP id 14mr19177747qkn.27.1595229837769;
+ Mon, 20 Jul 2020 00:23:57 -0700 (PDT)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <1591810159-240929-11-git-send-email-john.garry@huawei.com>
+ <d55972999b9370f947c20537e41b49bf@mail.gmail.com> <e61593f8-5ee7-5763-9d02-d0ea13aeb49f@huawei.com>
+ <92ba1829c9e822e4239a7cdfd94acbce@mail.gmail.com> <10d36c09-9d5b-92e9-23ac-ea1a2628e7d9@huawei.com>
+ <0563e53f843c97de1a5a035fae892bf8@mail.gmail.com> <61299951-97dc-b2be-c66c-024dfbd3a1cb@huawei.com>
+ <b49c33ebda36b8f116a51bc5c430eb9d@mail.gmail.com> <13d6b63e-3aa8-68fa-29ab-a4c202024280@huawei.com>
+ <34a832717fef4702b143ea21aa12b79e@mail.gmail.com> <1dcf2bb9-142c-7bb8-9207-5a1b792eb3f9@huawei.com>
+ 2314e216d1d546e2072d09bd111b4b58@mail.gmail.com
+In-Reply-To: 2314e216d1d546e2072d09bd111b4b58@mail.gmail.com
+MIME-Version: 1.0
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQBVjmvxAE7FMYb7GtMRWGcwtMcECgFIs823Ad7lfqMBmFaE1AGZowweAlKrFcUB/hGY5AG4aoXNAvsHUMYCeW9VQwH6WrIOAzKzW+yrWLxrUIAAzqMQ
+Date:   Mon, 20 Jul 2020 12:53:55 +0530
+Message-ID: <e69dc243174664efd414a4cd0176e59d@mail.gmail.com>
+Subject: RE: [PATCH RFC v7 10/12] megaraid_sas: switch fusion adapters to MQ
+To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        don.brace@microsemi.com, Sumit Saxena <sumit.saxena@broadcom.com>,
+        ming.lei@redhat.com, bvanassche@acm.org, hare@suse.com, hch@lst.de,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        esc.storagedev@microsemi.com, chenxiang66@hisilicon.com,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Current IRQ handler blocks scsi requests before scheduling eh_work, when
-error handler calls pm_runtime_get_sync, if ufshcd_suspend/resume sends a
-scsi cmd, most likely the SSU cmd, since scsi requests are blocked,
-pm_runtime_get_sync() will never return because ufshcd_suspend/reusme is
-blocked by the scsi cmd. Some changes and code re-arrangement can be made
-to resolve it.
+> > > I also noticed nr_hw_queues are now exposed in sysfs -
+> > >
+> > >
+> /sys/devices/pci0000:85/0000:85:00.0/0000:86:00.0/0000:87:04.0/0000:8b
+> > >
+> >
+> :00.0/0000:8c:00.0/0000:8d:00.0/host14/scsi_host/host14/nr_hw_queues:1
+> > > 28
+> > > .
+> >
+> > That's on my v8 wip branch, so I guess you're picking it up from there.
+>
+> John - I did more testing on v8 wip branch.  CPU hotplug is working as
+> expected, but I still see some performance issue on Logical Volumes.
+>
+> I created 8 Drives Raid-0 VD on MR controller and below is performance
+> impact of this RFC. Looks like contention is on single <sdev>.
+>
+> I used command - "numactl -N 1  fio 1vd.fio --iodepth=128 --bs=4k --
+> rw=randread --cpus_allowed_policy=split --ioscheduler=none --
+> group_reporting --runtime=200 --numjobs=1"
+> IOPS without RFC = 300K IOPS with RFC = 230K.
+>
+> Perf top (shared host tag. IOPS = 230K)
+>
+> 13.98%  [kernel]        [k] sbitmap_any_bit_set
+>      6.43%  [kernel]        [k] blk_mq_run_hw_queue
 
-o In queuecommand path, hba->ufshcd_state check and ufshcd_send_command
-  should stay into the same spin lock. This is to make sure that no more
-  commands leak into doorbell after hba->ufshcd_state is changed.
-o Don't block scsi requests before scheduling eh_work, let error handler
-  block scsi requests when it is ready to start error recovery.
-o Don't let scsi layer keep requeuing the scsi cmds sent from hba runtime
-  PM ops, let them pass or fail them. Let them pass if eh_work is scheduled
-  due to non-fatal errors. Fail them fail if eh_work is scheduled due to
-  fatal errors, otherwise the cmds may eventually time out since UFS is in
-  bad state, which gets error handler blocked for too long. If we fail the
-  scsi cmds sent from hba runtime PM ops, hba runtime PM ops fails too, but
-  it does not hurt since error handler can recover hba runtime PM error.
+blk_mq_run_hw_queue function take more CPU which is called from "
+scsi_end_request"
+It looks like " blk_mq_hctx_has_pending" handles only elevator (scheduler)
+case. If  queue has ioscheduler=none, we can skip. I case of scheduler=none,
+IO will be pushed to hardware queue and it by pass software queue.
+Based on above understanding, I added below patch and I can see performance
+scale back to expectation.
 
-Signed-off-by: Can Guo <cang@codeaurora.org>
----
- drivers/scsi/ufs/ufshcd.c | 84 +++++++++++++++++++++++++++--------------------
- 1 file changed, 49 insertions(+), 35 deletions(-)
+Ming mentioned that - we cannot remove blk_mq_run_hw_queues() from IO
+completion path otherwise we may see IO hang. So I have just modified
+completion path assuming it is only required for IO scheduler case.
+https://www.spinics.net/lists/linux-block/msg55049.html
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index ae78d5d..e9d8c4f 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -126,7 +126,8 @@ enum {
- 	UFSHCD_STATE_RESET,
- 	UFSHCD_STATE_ERROR,
- 	UFSHCD_STATE_OPERATIONAL,
--	UFSHCD_STATE_EH_SCHEDULED,
-+	UFSHCD_STATE_EH_SCHEDULED_FATAL,
-+	UFSHCD_STATE_EH_SCHEDULED_NON_FATAL,
- };
- 
- /* UFSHCD error handling flags */
-@@ -2515,34 +2516,6 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 	if (!down_read_trylock(&hba->clk_scaling_lock))
- 		return SCSI_MLQUEUE_HOST_BUSY;
- 
--	spin_lock_irqsave(hba->host->host_lock, flags);
--	switch (hba->ufshcd_state) {
--	case UFSHCD_STATE_OPERATIONAL:
--		break;
--	case UFSHCD_STATE_EH_SCHEDULED:
--	case UFSHCD_STATE_RESET:
--		err = SCSI_MLQUEUE_HOST_BUSY;
--		goto out_unlock;
--	case UFSHCD_STATE_ERROR:
--		set_host_byte(cmd, DID_ERROR);
--		cmd->scsi_done(cmd);
--		goto out_unlock;
--	default:
--		dev_WARN_ONCE(hba->dev, 1, "%s: invalid state %d\n",
--				__func__, hba->ufshcd_state);
--		set_host_byte(cmd, DID_BAD_TARGET);
--		cmd->scsi_done(cmd);
--		goto out_unlock;
--	}
--
--	/* if error handling is in progress, don't issue commands */
--	if (ufshcd_eh_in_progress(hba)) {
--		set_host_byte(cmd, DID_ERROR);
--		cmd->scsi_done(cmd);
--		goto out_unlock;
--	}
--	spin_unlock_irqrestore(hba->host->host_lock, flags);
--
- 	hba->req_abort_count = 0;
- 
- 	err = ufshcd_hold(hba, true);
-@@ -2578,11 +2551,50 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 	/* Make sure descriptors are ready before ringing the doorbell */
- 	wmb();
- 
--	/* issue command to the controller */
- 	spin_lock_irqsave(hba->host->host_lock, flags);
-+	switch (hba->ufshcd_state) {
-+	case UFSHCD_STATE_OPERATIONAL:
-+	case UFSHCD_STATE_EH_SCHEDULED_NON_FATAL:
-+		break;
-+	case UFSHCD_STATE_EH_SCHEDULED_FATAL:
-+		/*
-+		 * If we are here, eh_work is either scheduled or running.
-+		 * Before eh_work sets ufshcd_state to STATE_RESET, it flushes
-+		 * runtime PM ops by calling pm_runtime_get_sync(). If a scsi
-+		 * cmd, e.g. the SSU cmd, is sent by PM ops, it can never be
-+		 * finished if we let SCSI layer keep retrying it, which gets
-+		 * eh_work stuck forever. Neither can we let it pass, because
-+		 * ufs now is not in good status, so the SSU cmd may eventually
-+		 * time out, blocking eh_work for too long. So just let it fail.
-+		 */
-+		if (hba->pm_op_in_progress) {
-+			hba->force_reset = true;
-+			set_host_byte(cmd, DID_BAD_TARGET);
-+			goto out_compl_cmd;
-+		}
-+	case UFSHCD_STATE_RESET:
-+		err = SCSI_MLQUEUE_HOST_BUSY;
-+		goto out_compl_cmd;
-+	case UFSHCD_STATE_ERROR:
-+		set_host_byte(cmd, DID_ERROR);
-+		goto out_compl_cmd;
-+	default:
-+		dev_WARN_ONCE(hba->dev, 1, "%s: invalid state %d\n",
-+				__func__, hba->ufshcd_state);
-+		set_host_byte(cmd, DID_BAD_TARGET);
-+		goto out_compl_cmd;
-+	}
- 	ufshcd_send_command(hba, tag);
--out_unlock:
- 	spin_unlock_irqrestore(hba->host->host_lock, flags);
-+	goto out;
+Please review and let me know if this is good or we have to address with
+proper fix.
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 1be7ac5a4040..b6a5b41b7fc2 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -1559,6 +1559,9 @@ void blk_mq_run_hw_queues(struct request_queue *q,
+bool async)
+        struct blk_mq_hw_ctx *hctx;
+        int i;
+
++       if (!q->elevator)
++               return;
 +
-+out_compl_cmd:
-+	scsi_dma_unmap(lrbp->cmd);
-+	lrbp->cmd = NULL;
-+	spin_unlock_irqrestore(hba->host->host_lock, flags);
-+	ufshcd_release(hba);
-+	if (!err)
-+		cmd->scsi_done(cmd);
- out:
- 	up_read(&hba->clk_scaling_lock);
- 	return err;
-@@ -5553,7 +5565,11 @@ static inline void ufshcd_schedule_eh_work(struct ufs_hba *hba)
- {
- 	/* handle fatal errors only when link is not in error state */
- 	if (hba->ufshcd_state != UFSHCD_STATE_ERROR) {
--		hba->ufshcd_state = UFSHCD_STATE_EH_SCHEDULED;
-+		if (hba->force_reset || ufshcd_is_link_broken(hba) ||
-+		    ufshcd_is_saved_err_fatal(hba))
-+			hba->ufshcd_state = UFSHCD_STATE_EH_SCHEDULED_FATAL;
-+		else
-+			hba->ufshcd_state = UFSHCD_STATE_EH_SCHEDULED_NON_FATAL;
- 		queue_work(hba->eh_wq, &hba->eh_work);
- 	}
- }
-@@ -5658,6 +5674,7 @@ static void ufshcd_err_handler(struct work_struct *work)
- 	spin_unlock_irqrestore(hba->host->host_lock, flags);
- 	ufshcd_err_handler_prepare(hba);
- 	spin_lock_irqsave(hba->host->host_lock, flags);
-+	ufshcd_scsi_block_requests(hba);
- 	hba->ufshcd_state = UFSHCD_STATE_RESET;
- 
- 	/* Complete requests that have door-bell cleared by h/w */
-@@ -5911,9 +5928,6 @@ static irqreturn_t ufshcd_check_errors(struct ufs_hba *hba)
- 		 */
- 		hba->saved_err |= hba->errors;
- 		hba->saved_uic_err |= hba->uic_error;
--
--		/* block commands from scsi mid-layer */
--		ufshcd_scsi_block_requests(hba);
- 		ufshcd_schedule_eh_work(hba);
- 		retval |= IRQ_HANDLED;
- 	}
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+        queue_for_each_hw_ctx(q, hctx, i) {
+                if (blk_mq_hctx_stopped(hctx))
+                        continue;
 
+Kashyap
+
+>      6.00%  [kernel]        [k] __audit_syscall_exit
+>      3.47%  [kernel]        [k] read_tsc
+>      3.19%  [megaraid_sas]  [k] complete_cmd_fusion
+>      3.19%  [kernel]        [k] irq_entries_start
+>      2.75%  [kernel]        [k] blk_mq_run_hw_queues
+>      2.45%  fio             [.] fio_gettime
+>      1.76%  [kernel]        [k] entry_SYSCALL_64
+>      1.66%  [kernel]        [k] add_interrupt_randomness
+>      1.48%  [megaraid_sas]  [k] megasas_build_and_issue_cmd_fusion
+>      1.42%  [kernel]        [k] copy_user_generic_string
+>      1.36%  [kernel]        [k] scsi_queue_rq
+>      1.03%  [kernel]        [k] kmem_cache_alloc
+>      1.03%  [kernel]        [k] internal_get_user_pages_fast
+>      1.01%  [kernel]        [k] swapgs_restore_regs_and_return_to_usermode
+>      0.96%  [kernel]        [k] kmem_cache_free
+>      0.88%  [kernel]        [k] blkdev_direct_IO
+>      0.84%  fio             [.] td_io_queue
+>      0.83%  [kernel]        [k] __get_user_4
+>
+> Perf top (shared host tag. IOPS = 300K)
+>
+>     6.36%  [kernel]        [k] unroll_tree_refs
+>      5.77%  [kernel]        [k] __do_softirq
+>      4.56%  [kernel]        [k] irq_entries_start
+>      4.38%  [kernel]        [k] read_tsc
+>      3.95%  [megaraid_sas]  [k] complete_cmd_fusion
+>      3.21%  fio             [.] fio_gettime
+>      2.98%  [kernel]        [k] add_interrupt_randomness
+>      1.79%  [kernel]        [k] entry_SYSCALL_64
+>      1.61%  [kernel]        [k] copy_user_generic_string
+>      1.61%  [megaraid_sas]  [k] megasas_build_and_issue_cmd_fusion
+>      1.34%  [kernel]        [k] scsi_queue_rq
+>      1.11%  [kernel]        [k] kmem_cache_free
+>      1.05%  [kernel]        [k] blkdev_direct_IO
+>      1.05%  [kernel]        [k] internal_get_user_pages_fast
+>      1.00%  [kernel]        [k] __memset
+>      1.00%  fio             [.] td_io_queue
+>      0.98%  [kernel]        [k] kmem_cache_alloc
+>      0.94%  [kernel]        [k] __get_user_4
+>      0.93%  [kernel]        [k] lookup_ioctx
+>      0.88%  [kernel]        [k] sbitmap_any_bit_set
+>
+> Kashyap
+>
+> >
+> > Thanks,
+> > John
