@@ -2,509 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCAA22852B
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B3B228611
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728443AbgGUQS2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jul 2020 12:18:28 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:13638 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726890AbgGUQS2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 21 Jul 2020 12:18:28 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1595348306; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: To:
- Subject: Sender; bh=D0JRDdY3vGfOJd4W/NS+sOExftjUlzeyBwYuJ1y5IUE=; b=Ltn6KmiBGwqZ3GhDi9ylmBaHwUosDuefxNwlnsUmoyk4lr1gIFq8irCqjXk8Hvui4zV/xiLX
- JIBh2ipeRtSoO5Aph3B+B+Prc+QWODvx7zdml17TnarY7naw1/HWgiAzVI6+ginU0oXBFIMz
- XgRssrXihpap79kGz/uMl3yQ6JM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
- 5f1715485b75bcda604beadf (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 21 Jul 2020 16:18:16
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D62CAC433CA; Tue, 21 Jul 2020 16:18:15 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.8.168] (cpe-70-95-149-85.san.res.rr.com [70.95.149.85])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: asutoshd)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 728BFC433C9;
-        Tue, 21 Jul 2020 16:18:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 728BFC433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=asutoshd@codeaurora.org
-Subject: Re: [RFC PATCH v2 3/3] scsi: ufs: add vendor specific write booster
- To support the fuction of writebooster by vendor. The WB behavior that the
- vendor wants is slightly different. But we have to support it
-To:     =?UTF-8?B?7ISc7Zi47JiB?= <hy50.seo@samsung.com>,
-        linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        cang@codeaurora.org, bvanassche@acm.org, grant.jung@samsung.com
-References: <cover.1595240433.git.hy50.seo@samsung.com>
- <CGME20200720103951epcas2p246072985a70a459f0acb31d339298a47@epcas2p2.samsung.com>
- <5be595eb83365ec97a8ee0ddafb748029ee8cdf9.1595240433.git.hy50.seo@samsung.com>
- <588c1a29-38b9-8c5f-d9c5-899272b9f3a3@codeaurora.org>
- <02dd01d65f43$fc837710$f58a6530$@samsung.com>
-From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
-Message-ID: <91b86407-c9ee-9d3a-c01c-654deba72e75@codeaurora.org>
-Date:   Tue, 21 Jul 2020 09:18:12 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730085AbgGUQlz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jul 2020 12:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728281AbgGUQly (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:41:54 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE14C0619DA
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:41:54 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id o2so3548970wmh.2
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jrvp4Bz5UjZdR7iMsUpWTUDT01MaTtGC3shuBGmqGX4=;
+        b=cq2Bp7+9rqaPiy5mR4WAheJe9dB5/w6mx7Ww01A0+6be4T9ijK1oakrf2zcNFuIgKv
+         SGcsaq/jIhei8ZKPDj63Sq6wfNxVIKPgjKh7ktng3nRGkYUxBL2SmBwZshlZ192ukxc0
+         Gd4oShMtvs0zcXOjRWQ7JlP77WgeYU45Q0+/mzTb4s03m8SHNHpDAhKIitVTPr1fYDCa
+         uQs1XqOm1uVPvZP0co5dWrGEUBenKzzZ8rdfPuSbTe/Zwc3nJtTpI9hcA6ImQyX6HAGt
+         ZxOeGQFTh06eDbDffF8O38AFZDaSN5NVSXFSQJ/+MYNK6zUdX4hBx8lhLVJu6UFvMKVh
+         FkPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jrvp4Bz5UjZdR7iMsUpWTUDT01MaTtGC3shuBGmqGX4=;
+        b=egG807Tm8cWfJyTAR0LvCmec/+BhZkLBkC87xu5BXpwNTJlRnTRKmf8C1RiAY+vqbH
+         D2ChgxZyll2zr/767orR/pAP+FaMpCCPejXIBsiqP8QO++iM1EJarlsr7Cpzf0qeXHHn
+         5zs4E352AcFLWQBTL4FhwMBsdxhJtxSVn5rj+ZicB+gklv8dYow0mC8qQzgmrS9ikdct
+         FiGt+w7L6vMqJfWrnCZ2/InpjDXLYA8qhy8I9UiMam1VYbp7trDQlQGe8Nx4kqYB7VmS
+         2p66K3Z9/S1f7+6k3x7ekhOeWP9Uill5wrB4cWIv8rISKKyVTPd3QpocDKR1b1w4rZQG
+         lpdQ==
+X-Gm-Message-State: AOAM532+ggfamOdhlMGO84/nEqT3QcjHORlwnh0smgHaj9TrfLLG61Ee
+        JFNcspKgdijR/OwHdUsq1Qf+NQ==
+X-Google-Smtp-Source: ABdhPJwqpB/xgGKxh9mMbx2FeeMx09BX/Qf45xrz0kDMEwlxCTngZxpLp0rmn72u1p2sEJK03SeATA==
+X-Received: by 2002:a1c:3504:: with SMTP id c4mr4795113wma.177.1595349712779;
+        Tue, 21 Jul 2020 09:41:52 -0700 (PDT)
+Received: from localhost.localdomain ([2.27.167.94])
+        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 09:41:52 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 00/40] Set 4: Next set of SCSI related W=1 warnings
+Date:   Tue, 21 Jul 2020 17:41:08 +0100
+Message-Id: <20200721164148.2617584-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <02dd01d65f43$fc837710$f58a6530$@samsung.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/21/2020 2:47 AM, 서호영 wrote:
-> 
-> 
->> -----Original Message-----
->> From: asutoshd=codeaurora.org@mg.codeaurora.org
->> [mailto:asutoshd=codeaurora.org@mg.codeaurora.org] On Behalf Of Asutosh
->> Das (asd)
->> Sent: Tuesday, July 21, 2020 1:55 AM
->> To: SEO HOYOUNG; linux-scsi@vger.kernel.org; alim.akhtar@samsung.com;
->> avri.altman@wdc.com; jejb@linux.ibm.com; martin.petersen@oracle.com;
->> beanhuo@micron.com; cang@codeaurora.org; bvanassche@acm.org;
->> grant.jung@samsung.com
->> Subject: Re: [RFC PATCH v2 3/3] scsi: ufs: add vendor specific write
->> booster To support the fuction of writebooster by vendor. The WB behavior
->> that the vendor wants is slightly different. But we have to support it
->>
->> On 7/20/2020 3:40 AM, SEO HOYOUNG wrote:
->>> Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
->>> ---
->>>    drivers/scsi/ufs/Makefile     |   1 +
->>>    drivers/scsi/ufs/ufs-exynos.c |   6 +
->>>    drivers/scsi/ufs/ufs_ctmwb.c  | 279 ++++++++++++++++++++++++++++++++++
->>>    drivers/scsi/ufs/ufs_ctmwb.h  |  27 ++++
->>>    4 files changed, 313 insertions(+)
->>>    create mode 100644 drivers/scsi/ufs/ufs_ctmwb.c
->>>    create mode 100644 drivers/scsi/ufs/ufs_ctmwb.h
->>>
->>> diff --git a/drivers/scsi/ufs/Makefile b/drivers/scsi/ufs/Makefile
->>> index 9810963bc049..b1ba36c7d66f 100644
->>> --- a/drivers/scsi/ufs/Makefile
->>> +++ b/drivers/scsi/ufs/Makefile
->>> @@ -5,6 +5,7 @@ obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) += tc-dwc-g210-
->> pltfrm.o ufshcd-dwc.o tc-d
->>>    obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) += cdns-pltfrm.o
->>>    obj-$(CONFIG_SCSI_UFS_QCOM) += ufs-qcom.o
->>>    obj-$(CONFIG_SCSI_UFS_EXYNOS) += ufs-exynos.o
->>> +obj-$(CONFIG_SCSI_UFS_VENDOR_WB) += ufs_ctmwb.o
->>>    obj-$(CONFIG_SCSI_UFSHCD) += ufshcd-core.o
->>>    ufshcd-core-y				+= ufshcd.o ufs-sysfs.o
->>>    ufshcd-core-$(CONFIG_SCSI_UFS_BSG)	+= ufs_bsg.o
->>> diff --git a/drivers/scsi/ufs/ufs-exynos.c
->>> b/drivers/scsi/ufs/ufs-exynos.c index 32b61ba77241..f127f5f2bf36
->>> 100644
->>> --- a/drivers/scsi/ufs/ufs-exynos.c
->>> +++ b/drivers/scsi/ufs/ufs-exynos.c
->>> @@ -22,6 +22,9 @@
->>>
->>
->> To me it looks like, you want to have your own flush policy &
->> initializations etc, is that understanding correct?
->> I don't understand why though. The current implementation is spec
->> compliant. If there're benefits that you see in this implementation,
->> please highlight those. It'd be interesting to see that.
-> 
-> Yes. I want to own flush policy, initialization..
-> I already know current implementation is spec compliant.
-> But some vendor want to change flush policy.
-Ok. It'd be interesting to know the benefits of your flush policy over 
-the current one. If it's better, we can replace the current policy, perhaps?
-So please can you highlight those benefits.
-> So we modify below code.
-> Additionally when use below code, we can use WB without UFS 3.1 devices
-I guess non-standard stuff should be kept out of ufshcd.c to vendor 
-specific files, which I guess you're doing.
->>
->>
->>>    #include "ufs-exynos.h"
->>>
->>> +#ifdef CONFIG_SCSI_UFS_VENDOR_WB
->>> +#include "ufs_ctmwb.h"
->>> +#endif
->>>    /*
->>>     * Exynos's Vendor specific registers for UFSHCI
->>>     */
->>> @@ -989,6 +992,9 @@ static int exynos_ufs_init(struct ufs_hba *hba)
->>>    		goto phy_off;
->>>
->>>    	ufs->hba = hba;
->>> +#ifdef CONFIG_SCSI_UFS_VENDOR_WB
->>> +	ufs->hba->wb_ops = ufshcd_ctmwb_init(); #endif
->>>    	ufs->opts = ufs->drv_data->opts;
->>>    	ufs->rx_sel_idx = PA_MAXDATALANES;
->>>    	if (ufs->opts & EXYNOS_UFS_OPT_BROKEN_RX_SEL_IDX) diff --git
->>> a/drivers/scsi/ufs/ufs_ctmwb.c b/drivers/scsi/ufs/ufs_ctmwb.c new file
->>> mode 100644 index 000000000000..ab39f40721ae
->>> --- /dev/null
->>> +++ b/drivers/scsi/ufs/ufs_ctmwb.c
->>> @@ -0,0 +1,279 @@
->>> +#include "ufshcd.h"
->>> +#include "ufshci.h"
->>> +#include "ufs_ctmwb.h"
->>> +
->>> +static struct ufshba_ctmwb hba_ctmwb;
->>> +
->>> +/* Query request retries */
->>> +#define QUERY_REQ_RETRIES 3
->>> +
->>> +static int ufshcd_query_attr_retry(struct ufs_hba *hba,
->>> +	enum query_opcode opcode, enum attr_idn idn, u8 index, u8 selector,
->>> +	u32 *attr_val)
->>> +{
->>> +	int ret = 0;
->>> +	u32 retries;
->>> +
->>> +	 for (retries = QUERY_REQ_RETRIES; retries > 0; retries--) {
->>> +		ret = ufshcd_query_attr(hba, opcode, idn, index,
->>> +						selector, attr_val);
->>> +		if (ret)
->>> +			dev_dbg(hba->dev, "%s: failed with error %d,
->> retries %d\n",
->>> +				__func__, ret, retries);
->>> +		else
->>> +			break;
->>> +	}
->>> +
->>> +	if (ret)
->>> +		dev_err(hba->dev,
->>> +			"%s: query attribute, idn %d, failed with error %d
->> after %d retires\n",
->>> +			__func__, idn, ret, QUERY_REQ_RETRIES);
->>> +	return ret;
->>> +}
->>> +
->>> +static int ufshcd_query_flag_retry(struct ufs_hba *hba,
->>> +	enum query_opcode opcode, enum flag_idn idn, bool *flag_res) {
->>> +	int ret;
->>> +	int retries;
->>> +
->>> +	for (retries = 0; retries < QUERY_REQ_RETRIES; retries++) {
->>> +		ret = ufshcd_query_flag(hba, opcode, idn, flag_res);
->>> +		if (ret)
->>> +			dev_dbg(hba->dev,
->>> +				"%s: failed with error %d, retries %d\n",
->>> +				__func__, ret, retries);
->>> +		else
->>> +			break;
->>> +	}
->>> +
->>> +	if (ret)
->>> +		dev_err(hba->dev,
->>> +			"%s: query attribute, opcode %d, idn %d, failed with
->> error %d after %d retries\n",
->>> +			__func__, (int)opcode, (int)idn, ret, retries);
->>> +	return ret;
->>> +}
->>> +
->>> +static int ufshcd_reset_ctmwb(struct ufs_hba *hba, bool force) {
->>> +	int err = 0;
->>> +
->>> +	if (!hba_ctmwb.support_ctmwb)
->>> +		return 0;
->>> +
->>> +	if (ufshcd_is_ctmwb_off(hba_ctmwb)) {
->>> +		dev_info(hba->dev, "%s: turbo write already disabled.
->> ctmwb_state = %d\n",
->>> +			__func__, hba_ctmwb.ufs_ctmwb_state);
->>> +		return 0;
->>> +	}
->>> +
->>> +	if (ufshcd_is_ctmwb_err(hba_ctmwb))
->>> +		dev_err(hba->dev, "%s: previous turbo write control was
->> failed.\n",
->>> +			__func__);
->>> +
->>> +	if (force)
->>> +		err = ufshcd_query_flag_retry(hba,
->> UPIU_QUERY_OPCODE_CLEAR_FLAG,
->>> +				QUERY_FLAG_IDN_WB_EN, NULL);
->>> +
->>> +	if (err) {
->>> +		ufshcd_set_ctmwb_err(hba_ctmwb);
->>> +		dev_err(hba->dev, "%s: disable turbo write failed. err
->> = %d\n",
->>> +			__func__, err);
->>> +	} else {
->>> +		ufshcd_set_ctmwb_off(hba_ctmwb);
->>> +		dev_info(hba->dev, "%s: ufs turbo write disabled \n",
->> __func__);
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int ufshcd_get_ctmwb_buf_status(struct ufs_hba *hba, u32
->>> +*status) {
->>> +	return ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
->>> +			QUERY_ATTR_IDN_AVAIL_WB_BUFF_SIZE, 0, 0, status); }
->>> +
->>> +static int ufshcd_ctmwb_manual_flush_ctrl(struct ufs_hba *hba, int
->>> +en) {
->>> +	int err = 0;
->>> +
->>> +	dev_info(hba->dev, "%s: %sable turbo write manual flush\n",
->>> +				__func__, en ? "en" : "dis");
->>> +	if (en) {
->>> +		err = ufshcd_query_flag_retry(hba,
->> UPIU_QUERY_OPCODE_SET_FLAG,
->>> +					QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN, NULL);
->>> +		if (err)
->>> +			dev_err(hba->dev, "%s: enable turbo write failed. err
->> = %d\n",
->>> +				__func__, err);
->>> +	} else {
->>> +		err = ufshcd_query_flag_retry(hba,
->> UPIU_QUERY_OPCODE_CLEAR_FLAG,
->>> +					QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN, NULL);
->>> +		if (err)
->>> +			dev_err(hba->dev, "%s: disable turbo write failed. err
->> = %d\n",
->>> +				__func__, err);
->>> +	}
->>> +
->>> +	return err;
->>> +}
->>> +
->>> +static int ufshcd_ctmwb_flush_ctrl(struct ufs_hba *hba) {
->>> +	int err = 0;
->>> +	u32 curr_status = 0;
->>> +
->>> +	err = ufshcd_get_ctmwb_buf_status(hba, &curr_status);
->>> +
->>> +	if (!err && (curr_status <= UFS_WB_MANUAL_FLUSH_THRESHOLD)) {
->>> +		dev_info(hba->dev, "%s: enable ctmwb manual flush, buf
->> status : %d\n",
->>> +				__func__, curr_status);
->>> +		scsi_block_requests(hba->host);
->>> +		err = ufshcd_ctmwb_manual_flush_ctrl(hba, 1);
->>> +		if (!err) {
->>> +			mdelay(100);
->>> +			err = ufshcd_ctmwb_manual_flush_ctrl(hba, 0);
->>> +			if (err)
->>> +				dev_err(hba->dev, "%s: disable ctmwb manual
->> flush failed. err = %d\n",
->>> +						__func__, err);
->>> +		} else
->>> +			dev_err(hba->dev, "%s: enable ctmwb manual flush
->> failed. err = %d\n",
->>> +					__func__, err);
->>> +		scsi_unblock_requests(hba->host);
->>> +	}
->>> +	return err;
->>> +}
->>> +
->>> +static int ufshcd_ctmwb_ctrl(struct ufs_hba *hba, bool enable) {
->>> +	int err;
->>> +#if 0
->> Did you miss removing these #if 0?
-> I will modify this code.
->>
->>> +	if (!hba->support_ctmwb)
->>> +		return;
->>> +
->>> +	if (hba->pm_op_in_progress) {
->>> +		dev_err(hba->dev, "%s: ctmwb ctrl during pm operation is not
->> allowed.\n",
->>> +			__func__);
->>> +		return;
->>> +	}
->>> +
->>> +	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL) {
->>> +		dev_err(hba->dev, "%s: ufs host is not available.\n",
->>> +			__func__);
->>> +		return;
->>> +	}
->>> +	if (ufshcd_is_ctmwb_err(hba_ctmwb))
->>> +		dev_err(hba->dev, "%s: previous turbo write control was
->> failed.\n",
->>> +			__func__);
->>> +#endif
->>> +	if (enable) {
->>> +		if (ufshcd_is_ctmwb_on(hba_ctmwb)) {
->>> +			dev_err(hba->dev, "%s: turbo write already enabled.
->> ctmwb_state = %d\n",
->>> +				__func__, hba_ctmwb.ufs_ctmwb_state);
->>> +			return 0;
->>> +		}
->>> +		pm_runtime_get_sync(hba->dev);
->>> +		err = ufshcd_query_flag_retry(hba,
->> UPIU_QUERY_OPCODE_SET_FLAG,
->>> +					QUERY_FLAG_IDN_WB_EN, NULL);
->>> +		if (err) {
->>> +			ufshcd_set_ctmwb_err(hba_ctmwb);
->>> +			dev_err(hba->dev, "%s: enable turbo write failed. err
->> = %d\n",
->>> +				__func__, err);
->>> +		} else {
->>> +			ufshcd_set_ctmwb_on(hba_ctmwb);
->>> +			dev_info(hba->dev, "%s: ufs turbo write enabled \n",
->> __func__);
->>> +		}
->>> +	} else {
->>> +		if (ufshcd_is_ctmwb_off(hba_ctmwb)) {
->>> +			dev_err(hba->dev, "%s: turbo write already disabled.
->> ctmwb_state = %d\n",
->>> +				__func__, hba_ctmwb.ufs_ctmwb_state);
->>> +			return 0;
->>> +		}
->>> +		pm_runtime_get_sync(hba->dev);
->>> +		err = ufshcd_query_flag_retry(hba,
->> UPIU_QUERY_OPCODE_CLEAR_FLAG,
->>> +					QUERY_FLAG_IDN_WB_EN, NULL);
->>> +		if (err) {
->>> +			ufshcd_set_ctmwb_err(hba_ctmwb);
->>> +			dev_err(hba->dev, "%s: disable turbo write failed. err
->> = %d\n",
->>> +				__func__, err);
->>> +		} else {
->>> +			ufshcd_set_ctmwb_off(hba_ctmwb);
->>> +			dev_info(hba->dev, "%s: ufs turbo write disabled \n",
->> __func__);
->> What is 'turbo write'?
-> I wrote it wrong. I will collect it.
-> 
->>> +		}
->>> +	}
->>> +
->>> +	pm_runtime_put_sync(hba->dev);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +/**
->>> + * ufshcd_get_ctmwbbuf_unit - get ctmwb buffer alloc units
->>> + * @sdev: pointer to SCSI device
->>> + *
->>> + * Read dLUNumTurboWriteBufferAllocUnits in UNIT Descriptor
->>> + * to check if LU supports turbo write feature  */ static int
->>> +ufshcd_get_ctmwbbuf_unit(struct ufs_hba *hba) {
->>> +	struct scsi_device *sdev = hba->sdev_ufs_device;
->>> +	struct ufshba_ctmwb *hba_ctmwb = (struct ufshba_ctmwb *)hba->wb_ops;
->>> +	int ret = 0;
->>> +
->>> +	u32 dLUNumTurboWriteBufferAllocUnits = 0;
->>> +	u8 desc_buf[4];
->>> +
->>> +	if (!hba_ctmwb->support_ctmwb)
->>> +		return 0;
->>> +
->>> +	ret = ufshcd_read_unit_desc_param(hba,
->>> +			ufshcd_scsi_to_upiu_lun(sdev->lun),
->>> +			UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS,
->>> +			desc_buf,
->>> +			sizeof(dLUNumTurboWriteBufferAllocUnits));
->>> +
->>> +	/* Some WLUN doesn't support unit descriptor */
->>> +	if ((ret == -EOPNOTSUPP) || scsi_is_wlun(sdev->lun)){
->>> +		hba_ctmwb->support_ctmwb_lu = false;
->>> +		dev_info(hba->dev,"%s: do not support WB\n", __func__);
->>> +		return 0;
->>> +	}
->>> +
->>> +	dLUNumTurboWriteBufferAllocUnits = ((desc_buf[0] << 24)|
->>> +			(desc_buf[1] << 16) |
->>> +			(desc_buf[2] << 8) |
->>> +			desc_buf[3]);
->>> +
->>> +	if (dLUNumTurboWriteBufferAllocUnits) {
->>> +		hba_ctmwb->support_ctmwb_lu = true;
->>> +		dev_info(hba->dev, "%s: LU %d supports ctmwb, ctmwbbuf unit :
->> 0x%x\n",
->>> +				__func__, (int)sdev->lun,
->> dLUNumTurboWriteBufferAllocUnits);
->>> +	} else
->>> +		hba_ctmwb->support_ctmwb_lu = false;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static inline int ufshcd_ctmwb_toggle_flush(struct ufs_hba *hba, enum
->>> +ufs_pm_op pm_op) {
->>> +	ufshcd_ctmwb_flush_ctrl(hba);
->>> +
->>> +	if (ufshcd_is_system_pm(pm_op))
->>> +		ufshcd_reset_ctmwb(hba, true);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static struct ufs_wb_ops exynos_ctmwb_ops = {
->>> +	.wb_toggle_flush_vendor = ufshcd_ctmwb_toggle_flush,
->>> +	.wb_alloc_units_vendor = ufshcd_get_ctmwbbuf_unit,
->>> +	.wb_ctrl_vendor = ufshcd_ctmwb_ctrl,
->>> +	.wb_reset_vendor = ufshcd_reset_ctmwb, };
->>> +
->>> +struct ufs_wb_ops *ufshcd_ctmwb_init(void) {
->>> +	hba_ctmwb.support_ctmwb = 1;
->>> +
->>> +	return &exynos_ctmwb_ops;
->>> +}
->>> +EXPORT_SYMBOL_GPL(ufshcd_ctmwb_init);
->>> +
->>> diff --git a/drivers/scsi/ufs/ufs_ctmwb.h
->>> b/drivers/scsi/ufs/ufs_ctmwb.h new file mode 100644 index
->>> 000000000000..073e21a4900b
->>> --- /dev/null
->>> +++ b/drivers/scsi/ufs/ufs_ctmwb.h
->>> @@ -0,0 +1,27 @@
->>> +#ifndef _UFS_CTMWB_H_
->>> +#define _UFS_CTMWB_H_
->>> +
->>> +enum ufs_ctmwb_state {
->>> +       UFS_WB_OFF_STATE	= 0,    /* turbo write disabled state */
->>> +       UFS_WB_ON_STATE	= 1,            /* turbo write enabled state */
->>> +       UFS_WB_ERR_STATE	= 2,            /* turbo write error state */
->>> +};
->>> +
->>> +#define ufshcd_is_ctmwb_off(hba) ((hba).ufs_ctmwb_state ==
->>> +UFS_WB_OFF_STATE) #define ufshcd_is_ctmwb_on(hba)
->>> +((hba).ufs_ctmwb_state == UFS_WB_ON_STATE) #define
->>> +ufshcd_is_ctmwb_err(hba) ((hba).ufs_ctmwb_state == UFS_WB_ERR_STATE)
->>> +#define ufshcd_set_ctmwb_off(hba) ((hba).ufs_ctmwb_state =
->>> +UFS_WB_OFF_STATE) #define ufshcd_set_ctmwb_on(hba)
->>> +((hba).ufs_ctmwb_state = UFS_WB_ON_STATE) #define
->>> +ufshcd_set_ctmwb_err(hba) ((hba).ufs_ctmwb_state = UFS_WB_ERR_STATE)
->>> +
->>> +#define UFS_WB_MANUAL_FLUSH_THRESHOLD	5
->>> +
->>> +struct ufshba_ctmwb {
->>> +	enum ufs_ctmwb_state ufs_ctmwb_state;
->>> +	bool support_ctmwb;
->>> +
->>> +	bool support_ctmwb_lu;
->>> +};
->>> +
->>> +struct ufs_wb_ops *ufshcd_ctmwb_init(void); #endif
->>>
->>
->> -Asutosh
->>
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> Linux Foundation Collaborative Project
-> 
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
--Asutosh
+This brings the total of W=1 SCSI wanings from 1690 in v5.8-rc1 to 817.
+
+Lee Jones (40):
+  scsi: arcmsr: arcmsr_hba: Remove statement with no effect
+  scsi: aic7xxx: aic79xx_core: Remove a bunch of unused variables
+  scsi: aacraid: sa: Add descriptions for missing parameters
+  scsi: aacraid: rkt: Add missing description for 'dev'
+  scsi: aacraid: nark: Add missing description for 'dev'
+  scsi: aic94xx: aic94xx_dev: Fix a couple of kerneldoc formatting
+    issues
+  scsi: aacraid: src: Add descriptions for missing parameters
+  scsi: aic94xx: aic94xx_tmf: Fix kerneldoc formatting issue with 'task'
+  scsi: pm8001: pm8001_sas: Fix strncpy() warning
+  scsi: pm8001: pm8001_sas: Mover function header and supply some
+    missing parameter descriptions
+  scsi: pm8001: pm8001_ctl: Add descriptions for unused 'attr' function
+    parameters
+  scsi: qla4xxx: ql4_init: Remove set but unused variable 'func_number'
+  scsi: qla4xxx: ql4_init: Check return value of pci_set_mwi()
+  scsi: qla4xxx: ql4_83xx: Move 'qla4_83xx_reg_tbl' from shared header
+  scsi: aic7xxx: aic79xx_core: Remove set but unused variables
+    'targ_info' and 'value'
+  scsi: pm8001: pm8001_hwi: Fix a bunch of kerneldoc issues
+  scsi: pm8001: pm80xx_hwi: Fix some function documentation issues
+  scsi: pm8001: pm8001_hwi: Remove a bunch of set but unused variables
+  scsi: qla4xxx: ql4_nx: Move 'qla4_82xx_reg_tbl' to the only place its
+    used
+  scsi: lpfc: lpfc_sli: Remove unused variable 'pg_addr'
+  scsi: qla4xxx: ql4_mbx: Fix-up incorrectly documented parameter
+  scsi: qla4xxx: ql4_iocb: Fix incorrectly named function parameter
+  scsi: lpfc: lpfc_sli: Fix-up around 120 documentation issues
+  scsi: pm8001: pm8001_hwi: Remove unused variable 'value'
+  scsi: pm8001: pm80xx_hwi: Staticify 'pm80xx_pci_mem_copy' and
+    'mpi_set_phy_profile_req'
+  scsi: qla4xxx: ql4_os: Fix some kerneldoc parameter documentation
+    issues
+  scsi: qla4xxx: ql4_isr: Repair function documentation headers
+  scsi: lpfc: lpfc_mem: Provide description for lpfc_mem_alloc()'s
+    'align' param
+  scsi: qla4xxx: ql4_init: Document qla4xxx_process_ddb()'s 'conn_err'
+  scsi: lpfc: lpfc_ct: Fix-up formatting/docrot where appropriate
+  scsi: csiostor: csio_init: Fix misnamed function parameter
+  scsi: qla4xxx: ql4_nx: Remove three set but unused variables
+  scsi: qla4xxx: ql4_nx: Supply description for 'code'
+  scsi: csiostor: csio_lnode: Demote kerneldoc that fails to meet the
+    criteria
+  scsi: bfa: bfad_bsg: Staticify all local functions
+  scsi: lpfc: lpfc_sli: Ensure variable has the same stipulations as
+    code using it
+  scsi: sym53c8xx_2: sym_glue: Add missing description for 'pdev'
+  scsi: sym53c8xx_2: sym_hipd: Ensure variable has the same stipulations
+    as code using it
+  scsi: mvsas: mv_init: Move 'core_nr' inside #ifdef and remove unused
+    variable 'res_flag'
+  scsi: cxgbi: cxgb3i: cxgb3i: Remove bad documentation and demote
+    kerneldoc header
+
+ drivers/scsi/aacraid/nark.c         |   1 +
+ drivers/scsi/aacraid/rkt.c          |   5 +-
+ drivers/scsi/aacraid/sa.c           |  19 ++-
+ drivers/scsi/aacraid/src.c          |  13 +-
+ drivers/scsi/aic7xxx/aic79xx_core.c |  20 +--
+ drivers/scsi/aic94xx/aic94xx_dev.c  |   4 +-
+ drivers/scsi/aic94xx/aic94xx_tmf.c  |   2 +-
+ drivers/scsi/arcmsr/arcmsr_hba.c    |   3 -
+ drivers/scsi/bfa/bfad_bsg.c         | 222 ++++++++++++++--------------
+ drivers/scsi/csiostor/csio_init.c   |   2 +-
+ drivers/scsi/csiostor/csio_lnode.c  |   3 +-
+ drivers/scsi/cxgbi/cxgb3i/cxgb3i.c  |  13 +-
+ drivers/scsi/lpfc/lpfc_ct.c         |  10 +-
+ drivers/scsi/lpfc/lpfc_mem.c        |   1 +
+ drivers/scsi/lpfc/lpfc_sli.c        | 125 ++++++++++------
+ drivers/scsi/mvsas/mv_init.c        |   9 +-
+ drivers/scsi/pm8001/pm8001_ctl.c    |   9 +-
+ drivers/scsi/pm8001/pm8001_hwi.c    |  30 ++--
+ drivers/scsi/pm8001/pm8001_sas.c    |  11 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c    |  23 +--
+ drivers/scsi/qla4xxx/ql4_83xx.h     |  17 ---
+ drivers/scsi/qla4xxx/ql4_init.c     |   6 +-
+ drivers/scsi/qla4xxx/ql4_iocb.c     |   2 +-
+ drivers/scsi/qla4xxx/ql4_isr.c      |   6 +-
+ drivers/scsi/qla4xxx/ql4_mbx.c      |   7 +-
+ drivers/scsi/qla4xxx/ql4_nx.c       |  18 +--
+ drivers/scsi/qla4xxx/ql4_nx.h       |  17 ---
+ drivers/scsi/qla4xxx/ql4_os.c       |  58 ++++++--
+ drivers/scsi/sym53c8xx_2/sym_glue.c |   1 +
+ drivers/scsi/sym53c8xx_2/sym_hipd.c |   8 +
+ 30 files changed, 354 insertions(+), 311 deletions(-)
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-Linux Foundation Collaborative Project
+2.25.1
+
