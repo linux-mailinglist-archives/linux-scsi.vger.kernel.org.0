@@ -2,59 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97073228617
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B80E228649
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730674AbgGUQm1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jul 2020 12:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S1730311AbgGUQoT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jul 2020 12:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730648AbgGUQmY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:24 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475D5C0619DB
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:24 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id s10so21794757wrw.12
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:24 -0700 (PDT)
+        with ESMTP id S1730663AbgGUQmZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:25 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5141DC0619DA
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:25 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id f18so3544924wml.3
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+BNT6pR3iXdTuvzrvWJoNW4LL9aAGyArixYAAs3SVfo=;
-        b=kOVThYqS4yrsztYfQMK4WkDJ+dRESJUdyY2fVVUcmFahGQBcT964S08WxQn1SNR/W5
-         MYuQrl4Z0rI+RPW4zyjR4kP1eXNO139CgGBwkhVgZqelTlSMaV3g2YJvxXgGswC8WSLC
-         9u1rpWJy0FpdAx7GHuHY0XeEv7K+wjNzLr7TaGUajXyluWH0K0yR0I9VXJZYfq/ON6k6
-         4PuxeOQrdHYcryiqB/UiHKXp5SI45Q41KKr8MxhyDaw1PmNGZncSLvJQrKvwklFBUN5j
-         RDv/JxwhSAvn/JComyExGNzqIkA/AHQbY3pQrVbC8Q4qn1EV7zR+ewi2FahcQ8acL5Qx
-         QqMw==
+        bh=/DfSYRPuRwDcPXXqc0SkXKNuKhOq3WxfJnslE6gkykI=;
+        b=OobXBbuj8BXy7mxmqZ9lX3C6YZTdndsi68EQRxDPxDSwvzxVt94A1vr9qebthKSX1E
+         BSkIMCjgIQ6E6GmrSI09RyBhj1JSIZ/hBcjTF79Sc5FY5DjB7JmuHTqPmliMEs15EPqu
+         oQmSniWokczz+cHa6qzQWZNx3zxSwq6kKvgTv5WGCC02AvUm7R4/J7jpiJ8LYNBrt9jQ
+         EKyXMgmeSAGjBa5g9d1vvyqa8lF+2334CXDSHWnN/YyCNFnxnVjan8hn1ezjAV7WngP+
+         fX2D6NI4rvxEim8PZUjsFVI8kBUttfPPpK4M5RIQ87JxJoNLgQH7xFiJY9HhNVwXEP7Y
+         /6zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+BNT6pR3iXdTuvzrvWJoNW4LL9aAGyArixYAAs3SVfo=;
-        b=buimAwt2UEQstr7Xx1CAG9fUBQ/U1T2LZzaBdblsJDBWPrHWWR39TaOlUL4oEL9lOg
-         p6vy1NrK0f9TzlxknToJJ6Hc44tWzwwarP3FIsv0iw7f7H8cM1vqQ5wka3nt4FchKf/F
-         7UjyNUXaSWQ/0pQt6OdO3tJosv9MDosQnAKa5pJy0++g2jyi6g5w8qT0+WwxC9MocnLi
-         xiw6cUPnAZ2Q9UV42KrNGbDXVWCjuTe5FZbUuCpPLNx8JuqA6OBKrI2N23N9q/JPbfaO
-         B+tIw4PdY+yUQoPqlJ2p8nCqOOvJPMsV7waWCRvbERPLYYPMnpMgvN8X2apHlUJC6jqW
-         N1+A==
-X-Gm-Message-State: AOAM531ho5DAE1R9rQ4d5wSQkBJt4XdvOrkB372wN5cM3Hmx7Y0XrRu0
-        OZdUrlOX2IDQfBRPhtnhTSZ8ag==
-X-Google-Smtp-Source: ABdhPJxW4wIYZae30lJ/B/5lcB8ro2G9uBJInQe10hYgvhmCBO2KX138JkDYVQscjAh2tF3Ti7yx+g==
-X-Received: by 2002:adf:9e8b:: with SMTP id a11mr4950997wrf.309.1595349743028;
-        Tue, 21 Jul 2020 09:42:23 -0700 (PDT)
+        bh=/DfSYRPuRwDcPXXqc0SkXKNuKhOq3WxfJnslE6gkykI=;
+        b=RGyuls5MlnFRMW5gqR2uwKThHLVow80mhFOEzwk1LpbMYYGzc6I3KisIv9Y4Cav6Zz
+         lhXCafSIlV49dPmCd/StFmZa3+qK9GtqtsxyrOrC4yKVxseUkNL0Hn0+qvjimYSNSTmC
+         mByysqVN2E8pellHcqVsyv9h655i6lWwR5cXAs7f8pL3wYv3XEMMDgZS89pCXcekHhFg
+         xSRWGIlQqOc9svyCOUGjttdsaCpNXvMfW94otgyvQ+ovJwjcYugRlUhCV7IZOPeAlXo6
+         aqPMLEMq9vHtoJgmaYdP3IoeQqymZiWoRweVsKZD2E5kcEgBdxOutH8X/cSjCyDYR7xV
+         49zw==
+X-Gm-Message-State: AOAM530so2RCK+dMdLrBaMm69mvj2Thj3GdtEp669GImXMkCNKFsDuSY
+        tspjOQGLmofQxY6HUUy/c7+dcR2cVeM=
+X-Google-Smtp-Source: ABdhPJydaVuSz6VEZdqx4BxqlWT6OyeufNBNKbKgo2Mb6MJzngrznAqYt3BAmNRT2WLVVJ7G+2OS4Q==
+X-Received: by 2002:a05:600c:204d:: with SMTP id p13mr4778452wmg.88.1595349744035;
+        Tue, 21 Jul 2020 09:42:24 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.22
+        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:42:22 -0700 (PDT)
+        Tue, 21 Jul 2020 09:42:23 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH 18/40] scsi: pm8001: pm8001_hwi: Remove a bunch of set but unused variables
-Date:   Tue, 21 Jul 2020 17:41:26 +0100
-Message-Id: <20200721164148.2617584-19-lee.jones@linaro.org>
+        QLogic-Storage-Upstream@qlogic.com
+Subject: [PATCH 19/40] scsi: qla4xxx: ql4_nx: Move 'qla4_82xx_reg_tbl' to the only place its used
+Date:   Tue, 21 Jul 2020 17:41:27 +0100
+Message-Id: <20200721164148.2617584-20-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200721164148.2617584-1-lee.jones@linaro.org>
 References: <20200721164148.2617584-1-lee.jones@linaro.org>
@@ -68,124 +68,77 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/qla4xxx/ql4_os.c: In function ‘qla4xxx_eh_cmd_timed_out’:
- drivers/scsi/qla4xxx/ql4_os.c:1865:24: warning: variable ‘sess’ set but not used [-Wunused-but-set-variable]
- 1865 | struct iscsi_session *sess;
- | ^~~~
- drivers/scsi/qla4xxx/ql4_os.c: In function ‘qla4xxx_session_create’:
- drivers/scsi/qla4xxx/ql4_os.c:3079:19: warning: variable ‘dst_addr’ set but not used [-Wunused-but-set-variable]
- 3079 | struct sockaddr *dst_addr;
- | ^~~~~~~~
- drivers/scsi/qla4xxx/ql4_os.c: In function ‘qla4_8xxx_iospace_config’:
- drivers/scsi/qla4xxx/ql4_os.c:5512:44: warning: variable ‘db_len’ set but not used [-Wunused-but-set-variable]
- 5512 | unsigned long mem_base, mem_len, db_base, db_len;
- | ^~~~~~
- drivers/scsi/qla4xxx/ql4_os.c:5512:35: warning: variable ‘db_base’ set but not used [-Wunused-but-set-variable]
- 5512 | unsigned long mem_base, mem_len, db_base, db_len;
- | ^~~~~~~
- drivers/scsi/qla4xxx/ql4_os.c: In function ‘qla4xxx_get_param_ddb’:
- drivers/scsi/qla4xxx/ql4_os.c:6269:24: warning: variable ‘ha’ set but not used [-Wunused-but-set-variable]
- 6269 | struct scsi_qla_host *ha;
- | ^~
+ In file included from drivers/scsi/qla4xxx/ql4_def.h:43,
+ from drivers/scsi/qla4xxx/ql4_mbx.c:9:
+ drivers/scsi/qla4xxx/ql4_nx.h:602:23: warning: ‘qla4_82xx_reg_tbl’ defined but not used [-Wunused-const-variable=]
+ 602 | static const uint32_t qla4_82xx_reg_tbl[] = {
+ | ^~~~~~~~~~~~~~~~~
+ [...]
+ NB: Lots of these
 
-Cc: Jack Wang <jinpu.wang@cloud.ionos.com>
+Cc: QLogic-Storage-Upstream@qlogic.com
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c |  6 +++---
- drivers/scsi/qla4xxx/ql4_os.c    | 11 +----------
- 2 files changed, 4 insertions(+), 13 deletions(-)
+ drivers/scsi/qla4xxx/ql4_nx.h | 17 -----------------
+ drivers/scsi/qla4xxx/ql4_os.c | 17 +++++++++++++++++
+ 2 files changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 6323016e1304e..e9a939230b152 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4645,8 +4645,8 @@ int pm8001_chip_dereg_dev_req(struct pm8001_hba_info *pm8001_ha,
- /**
-  * pm8001_chip_phy_ctl_req - support the local phy operation
-  * @pm8001_ha: our hba card information.
-- * @phy_id: the phy id which we wanted to operate
-- * @phy_op:
-+ * @phyId: the phy id which we wanted to operate
-+ * @phy_op: the phy operation to request
-  */
- static int pm8001_chip_phy_ctl_req(struct pm8001_hba_info *pm8001_ha,
- 	u32 phyId, u32 phy_op)
-@@ -4682,7 +4682,7 @@ static u32 pm8001_chip_is_our_interrupt(struct pm8001_hba_info *pm8001_ha)
- /**
-  * pm8001_chip_isr - PM8001 isr handler.
-  * @pm8001_ha: our hba card information.
-- * @stat: stat.
-+ * @vec: IRQ number
-  */
- static irqreturn_t
- pm8001_chip_isr(struct pm8001_hba_info *pm8001_ha, u8 vec)
+diff --git a/drivers/scsi/qla4xxx/ql4_nx.h b/drivers/scsi/qla4xxx/ql4_nx.h
+index 98fe78613eb7b..b7a6e7f169ca9 100644
+--- a/drivers/scsi/qla4xxx/ql4_nx.h
++++ b/drivers/scsi/qla4xxx/ql4_nx.h
+@@ -599,23 +599,6 @@ enum qla_regs {
+ 	QLA8XXX_CRB_TEMP_STATE,
+ };
+ 
+-static const uint32_t qla4_82xx_reg_tbl[] = {
+-	QLA82XX_PEG_HALT_STATUS1,
+-	QLA82XX_PEG_HALT_STATUS2,
+-	QLA82XX_PEG_ALIVE_COUNTER,
+-	QLA82XX_CRB_DRV_ACTIVE,
+-	QLA82XX_CRB_DEV_STATE,
+-	QLA82XX_CRB_DRV_STATE,
+-	QLA82XX_CRB_DRV_SCRATCH,
+-	QLA82XX_CRB_DEV_PART_INFO,
+-	QLA82XX_CRB_DRV_IDC_VERSION,
+-	QLA82XX_FW_VERSION_MAJOR,
+-	QLA82XX_FW_VERSION_MINOR,
+-	QLA82XX_FW_VERSION_SUB,
+-	CRB_CMDPEG_STATE,
+-	CRB_TEMP_STATE,
+-};
+-
+ /* Every driver should use these Device State */
+ #define QLA8XXX_DEV_COLD		1
+ #define QLA8XXX_DEV_INITIALIZING	2
 diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 97fa290cf295f..27064c602dc70 100644
+index 27064c602dc70..2572f7aef8f88 100644
 --- a/drivers/scsi/qla4xxx/ql4_os.c
 +++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -1862,12 +1862,10 @@ static void qla4xxx_conn_get_stats(struct iscsi_cls_conn *cls_conn,
- static enum blk_eh_timer_return qla4xxx_eh_cmd_timed_out(struct scsi_cmnd *sc)
- {
- 	struct iscsi_cls_session *session;
--	struct iscsi_session *sess;
- 	unsigned long flags;
- 	enum blk_eh_timer_return ret = BLK_EH_DONE;
+@@ -188,6 +188,23 @@ static int qla4xxx_sysfs_ddb_logout_sid(struct iscsi_cls_session *cls_sess);
+ static struct qla4_8xxx_legacy_intr_set legacy_intr[] =
+     QLA82XX_LEGACY_INTR_CONFIG;
  
- 	session = starget_to_session(scsi_target(sc->device));
--	sess = session->dd_data;
- 
- 	spin_lock_irqsave(&session->lock, flags);
- 	if (session->state == ISCSI_SESSION_FAILED)
-@@ -3076,7 +3074,6 @@ qla4xxx_session_create(struct iscsi_endpoint *ep,
- 	struct ddb_entry *ddb_entry;
- 	uint16_t ddb_index;
- 	struct iscsi_session *sess;
--	struct sockaddr *dst_addr;
- 	int ret;
- 
- 	if (!ep) {
-@@ -3085,7 +3082,6 @@ qla4xxx_session_create(struct iscsi_endpoint *ep,
- 	}
- 
- 	qla_ep = ep->dd_data;
--	dst_addr = (struct sockaddr *)&qla_ep->dst_addr;
- 	ha = to_qla_host(qla_ep->host);
- 	DEBUG2(ql4_printk(KERN_INFO, ha, "%s: host: %ld\n", __func__,
- 			  ha->host_no));
-@@ -5509,7 +5505,7 @@ static void qla4xxx_free_adapter(struct scsi_qla_host *ha)
- int qla4_8xxx_iospace_config(struct scsi_qla_host *ha)
- {
- 	int status = 0;
--	unsigned long mem_base, mem_len, db_base, db_len;
-+	unsigned long mem_base, mem_len;
- 	struct pci_dev *pdev = ha->pdev;
- 
- 	status = pci_request_regions(pdev, DRIVER_NAME);
-@@ -5553,9 +5549,6 @@ int qla4_8xxx_iospace_config(struct scsi_qla_host *ha)
- 				    ((uint8_t *)ha->nx_pcibase);
- 	}
- 
--	db_base = pci_resource_start(pdev, 4);  /* doorbell is on bar 4 */
--	db_len = pci_resource_len(pdev, 4);
--
- 	return 0;
- iospace_error_exit:
- 	return -ENOMEM;
-@@ -6266,14 +6259,12 @@ static int qla4xxx_setup_boot_info(struct scsi_qla_host *ha)
- static void qla4xxx_get_param_ddb(struct ddb_entry *ddb_entry,
- 				  struct ql4_tuple_ddb *tddb)
- {
--	struct scsi_qla_host *ha;
- 	struct iscsi_cls_session *cls_sess;
- 	struct iscsi_cls_conn *cls_conn;
- 	struct iscsi_session *sess;
- 	struct iscsi_conn *conn;
- 
- 	DEBUG2(printk(KERN_INFO "Func: %s\n", __func__));
--	ha = ddb_entry->ha;
- 	cls_sess = ddb_entry->sess;
- 	sess = cls_sess->dd_data;
- 	cls_conn = ddb_entry->conn;
++static const uint32_t qla4_82xx_reg_tbl[] = {
++	QLA82XX_PEG_HALT_STATUS1,
++	QLA82XX_PEG_HALT_STATUS2,
++	QLA82XX_PEG_ALIVE_COUNTER,
++	QLA82XX_CRB_DRV_ACTIVE,
++	QLA82XX_CRB_DEV_STATE,
++	QLA82XX_CRB_DRV_STATE,
++	QLA82XX_CRB_DRV_SCRATCH,
++	QLA82XX_CRB_DEV_PART_INFO,
++	QLA82XX_CRB_DRV_IDC_VERSION,
++	QLA82XX_FW_VERSION_MAJOR,
++	QLA82XX_FW_VERSION_MINOR,
++	QLA82XX_FW_VERSION_SUB,
++	CRB_CMDPEG_STATE,
++	CRB_TEMP_STATE,
++};
++
+ static const uint32_t qla4_83xx_reg_tbl[] = {
+ 	QLA83XX_PEG_HALT_STATUS1,
+ 	QLA83XX_PEG_HALT_STATUS2,
 -- 
 2.25.1
 
