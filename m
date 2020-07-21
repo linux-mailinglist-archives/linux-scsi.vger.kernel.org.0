@@ -2,86 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD46B22772A
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 05:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF2F227741
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 05:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728223AbgGUDo2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Jul 2020 23:44:28 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:43748 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727119AbgGUDo2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jul 2020 23:44:28 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L3iEK8127778;
-        Tue, 21 Jul 2020 03:44:17 GMT
+        id S1726891AbgGUDxm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Jul 2020 23:53:42 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:60536 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726483AbgGUDxl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jul 2020 23:53:41 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L3qA24112249;
+        Tue, 21 Jul 2020 03:53:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=neQ4XfqsxRwdm6YAtu4KmClGsgD9mTg2Tn9ai9iUPZE=;
- b=VZHdCFFgjFbh42TbNSVn4ExE6480VECyAGb4qLnol4rdBCJvPKg3QHlfv8TGC0VDTpr6
- yPkbWxUi8oF2sFobG/rD/a/iYhC8UDlsIElqcj+ID8CrVpZzuGX1ATxpRSrJnfC4NgH/
- gOdAfwwGPDAdfA+pr1HNxDBXdEmwFXkQuTYVeLd09hSX9Q4ImVWVoQrZKa25tXoJA6WG
- WQUVWRew61ldDpgVVZVVbKBvV5exmAFd9eCQgZg1tvgtcfFN6ueTeUL6LCHngIULUsWw
- XpM73FuyQuZe/dsVqgQxE4PgDYGm1zHBKTiSTg/AI2n1epbarylVoLI6KHF1SEgPJ9pl 3Q== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 32bs1mae4u-1
+ bh=Hae8qZiU6oxGkWbIdmeIVzwih5cB0PyxfAehCZi0GKk=;
+ b=fIQAccwUl2oSiF+OzhKCU8k129xAJ4VBoqwDhelw0R4nWaOr1bSJxtLuhp37rdCPG1+s
+ Gs4JQHp2QiUufWDvYicmRMKoFxBHFAGGthbIvHMKYUZITIiMAmnPkHDrAHPPA87O5WT3
+ TEjuRwxhjsC0JY8vvyEcFzpAEsC+0G/3tW7CiRBvkdziXbcR812gAxmX8s9abpFpWhXc
+ aeBZT6ovQF1/9sTTU4/sKrlrv6KfRFuP5okn9Avg5Y56L/iUBzK8Xd84rF8+j2yRVGwH
+ cvzElihnbxL5v+DDADsdvzwHdDJo/GDzxE/aU9ogCXbTxfQ3UXdq6F6PCeBLekg1VqJd qA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 32bpkb2p91-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Jul 2020 03:44:17 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L3cFIY150340;
-        Tue, 21 Jul 2020 03:42:16 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 32dnfnqr90-1
+        Tue, 21 Jul 2020 03:53:19 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L3gxYE027396;
+        Tue, 21 Jul 2020 03:51:18 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 32dnmqfhyd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jul 2020 03:42:16 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06L3gEqL015562;
-        Tue, 21 Jul 2020 03:42:15 GMT
+        Tue, 21 Jul 2020 03:51:18 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06L3pFpg029749;
+        Tue, 21 Jul 2020 03:51:15 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 Jul 2020 03:42:14 +0000
+        with ESMTP ; Mon, 20 Jul 2020 20:51:15 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, john.garry@huawei.com,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     scott.teel@microchip.com, gerry.morong@microchip.com,
+        POSWALD@suse.com, Justin.Lindley@microchip.com,
+        scott.benesh@microchip.com, bader.alisaleh@microchip.com,
+        Kevin.Barnett@microchip.com, jejb@linux.vnet.ibm.com,
+        joseph.szczypek@hpe.com, Don Brace <don.brace@microsemi.com>,
+        hch@infradead.org, mahesh.rajashekhara@microchip.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        guohanjun@huawei.com
-Subject: Re: [PATCH v2] scsi: scsi_transport_sas: add missing newline when printing 'enable' by sysfs
-Date:   Mon, 20 Jul 2020 23:42:09 -0400
-Message-Id: <159530290480.22526.16753171296577291668.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 0/4] hpsa updates
+Date:   Mon, 20 Jul 2020 23:51:14 -0400
+Message-Id: <159530346022.8195.14374929657475608298.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <1594975472-12486-1-git-send-email-wangxiongfeng2@huawei.com>
-References: <1594975472-12486-1-git-send-email-wangxiongfeng2@huawei.com>
+In-Reply-To: <159528193513.24772.2142294136346611232.stgit@brunhilda>
+References: <159528193513.24772.2142294136346611232.stgit@brunhilda>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=845 suspectscore=0
- malwarescore=0 mlxscore=0 adultscore=0 spamscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007210023
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=862 malwarescore=0 clxscore=1011
- spamscore=0 mlxscore=0 impostorscore=0 phishscore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 suspectscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007210024
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 malwarescore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007210025
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 17 Jul 2020 16:44:32 +0800, Xiongfeng Wang wrote:
+On Mon, 20 Jul 2020 16:52:46 -0500, Don Brace wrote:
 
-> When I cat sysfs file 'enable' below 'sas_phy', it displays as follows.
-> It's better to add a newline for easy reading.
+> These patches are based on Linus's tree
 > 
-> [root@localhost ~]# cat /sys/devices/pci0000:00/0000:00:0d.0/0000:0f:00.0/host3/phy-3:2/sas_phy/phy-3:2/enable
-> 1[root@localhost ~]#
+> The changes are:
+> hpsa-correct-rare-oob-condition
+>  - Rare condition where a spare is first in
+>    PHYS LUN list.
+> hpsa-increase-qd-for-external-luns
+>  - Improve performance for PTRAID devices
+>    - Such as MSA devices.
+> hpsa-increase-ctlr-eh-timeout
+>  - Increase timeout for commands issued to
+>    controller device.
+>  - Improve multipath failover handling.
+> hpsa-bump-version
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: scsi_transport_sas: Add missing newline in sysfs 'enable' attribute
-      https://git.kernel.org/mkp/scsi/c/38364267251f
+[1/4] scsi: hpsa: Correct rare oob condition
+      https://git.kernel.org/mkp/scsi/c/a1cc279c246a
+[2/4] scsi: hpsa: Increase queue depth for external LUNs
+      https://git.kernel.org/mkp/scsi/c/3fcb972bc1d7
+[3/4] scsi: hpsa: Increase controller error handling timeout
+      https://git.kernel.org/mkp/scsi/c/c73deaf3b001
+[4/4] scsi: hpsa: Bump version
+      https://git.kernel.org/mkp/scsi/c/afea24189508
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
