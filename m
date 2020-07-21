@@ -2,126 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A1D22862A
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307452287AE
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 19:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730813AbgGUQm6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jul 2020 12:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730807AbgGUQmy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:54 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46294C0619DB
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:54 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id 22so3481837wmg.1
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eqUDrvqp47gD9IcVnzMp1ejaV+Kp3xiawYLE5j2QDM4=;
-        b=BmkVY0fv9v0/nDQ2O9/Z4PhE/KjvOh31PPQoFLXaiJK9CJzVEos9o1gVkAvQsqUSPA
-         QwVzEpu+r0bTUmxG515TI9eXFGA95IiPDbxD4g7+zLSsllv0eLWaPv1Wnfol0yyI5pRM
-         E9Bvd0a9sMISnVs2KSG4V0PJGZenB0N8C23+jHJo4WP2ztN+63/j9E4eVhRt7ntdUYzS
-         PuK+5V5F92vBYRk9GvroDMvQBTI+0OgwP8DRoNEeiEjDCDir0q/06G2XmI9oo8nebPf4
-         n6TZj/yLggcoyLyucMOhGACv+IAYw316esHeRq+4xVtiPqUy3SJXU8UuwjMmMNuo+vOr
-         Ny7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eqUDrvqp47gD9IcVnzMp1ejaV+Kp3xiawYLE5j2QDM4=;
-        b=iYitKYHbOXJH8ajtxCz2o1NxESQjAeII9EzW84HhT4e5Z6yeFlJZ5EbWdkXWxjfVXH
-         CTtBUqzSzvR/U+i6Ddr3SxJCZmE7MpqWpUZ/E48ui8OomW8y91y0nrWbkTwViSbB6bbx
-         Uv4lWbsSRKl0forPkz8mr1HXxFmEndF+z6JT/KpJSzh9DOLV11X3JE1ilOaRM4p/3i91
-         d0edx3JicxxkX2IGm5dgEhsMDLPhPMdN5gKeUF4R43h7o/YzXHl5GOHL6Bjm4YON4JV8
-         3S+7srtm/zhQQoEc8bVnBd0MLzMwhYnDS5NFu7OW7YME92nJ++iGeHpPMR8eTx4T0OFG
-         iSmw==
-X-Gm-Message-State: AOAM530Oy3bm2fxzBf5HQbaWxdAmfnR+Jsvu8Rk4ppjPvVGny5oO1nIx
-        +GpFXtWBUwgdwPIdJ65Gc6bFOw==
-X-Google-Smtp-Source: ABdhPJx0B8Wdrsoo7SAmS8qt/qKe11hLMQ1sM9yMXdqkvY9Eyz/wo+eMOYd+Tcxm7w7qCPq6Tf5NBw==
-X-Received: by 2002:a7b:c116:: with SMTP id w22mr4584794wmi.97.1595349773040;
-        Tue, 21 Jul 2020 09:42:53 -0700 (PDT)
-Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:42:52 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, Karen Xie <kxie@chelsio.com>,
-        Dimitris Michailidis <dm@chelsio.com>
-Subject: [PATCH 40/40] scsi: cxgbi: cxgb3i: cxgb3i: Remove bad documentation and demote kerneldoc header
-Date:   Tue, 21 Jul 2020 17:41:48 +0100
-Message-Id: <20200721164148.2617584-41-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200721164148.2617584-1-lee.jones@linaro.org>
-References: <20200721164148.2617584-1-lee.jones@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1730065AbgGURnP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jul 2020 13:43:15 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:21492 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727873AbgGURnN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 13:43:13 -0400
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200721174311epoutp026e24d98ad5b6999f0906105bfedd4bbc~j1XUBYLo10033500335epoutp02t
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 17:43:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200721174311epoutp026e24d98ad5b6999f0906105bfedd4bbc~j1XUBYLo10033500335epoutp02t
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1595353391;
+        bh=ZwShZO+a014PmzFpaNLdKgRd8zKHz3dFayyZSE6/gEY=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=J8tZUgfPdN9+uvSNrzLtVKBtSYRj2KjJn3va4Xh5GY51MuCYn91VGAmyOsXRT1f13
+         gn5TcsOB4s1qcLyD7gkxSKwPtQYP5LSc5pDQbC1FxQYPze4+OBO5rE0PLlQvWOLL0w
+         KxXTPYWc4oV8Tu8QRXz3v8C6B4Urs741QrDuJBa8=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20200721174310epcas5p335ed36a6c3d8824f09eed1e504140cef~j1XTascMm2150421504epcas5p3J;
+        Tue, 21 Jul 2020 17:43:10 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E0.AE.09475.E29271F5; Wed, 22 Jul 2020 02:43:10 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200721174310epcas5p2a448e38c6e4d5e36e9f0417f5ddced6d~j1XS6wqD00695306953epcas5p2X;
+        Tue, 21 Jul 2020 17:43:10 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200721174310epsmtrp28e2598294da7cb61cade478620ec7117~j1XS6InEC1645216452epsmtrp2S;
+        Tue, 21 Jul 2020 17:43:10 +0000 (GMT)
+X-AuditID: b6c32a4b-389ff70000002503-cb-5f17292e4e1e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F3.0F.08303.E29271F5; Wed, 22 Jul 2020 02:43:10 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200721174309epsmtip1a926f9aacd2120d4a58cfd5150322e5f~j1XR9CuGi1048510485epsmtip1E;
+        Tue, 21 Jul 2020 17:43:09 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     martin.petersen@oracle.com
+Cc:     rdunlap@infradead.org, avri.altman@wdc.com,
+        linux-scsi@vger.kernel.org, sfr@canb.auug.org.au,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH -next] scsi: ufs: Fix 'unmet direct dependencies' config
+ warning
+Date:   Tue, 21 Jul 2020 22:50:21 +0530
+Message-Id: <20200721172021.28922-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNIsWRmVeSWpSXmKPExsWy7bCmlq6epni8wafzehYP5m1js3j58yqb
+        Rff1HWwWy4//Y7J4e2c6i8XWvVfZHdg8Gm/cYPPYvELL4+PTWywefVtWMXp83iTn0X6gmymA
+        LYrLJiU1J7MstUjfLoEr4+70TraCA5wV/04dZm5g/MnexcjJISFgInH87ku2LkYuDiGB3YwS
+        Z9dvYoVwPjFKdJx/ww7hfGaUuLtgGlzL2vaPzBCJXYwSJ8/+h+pvYZJYtbmPEaSKTUBb4u70
+        LUwgtoiAnMSk19+YQIqYBToZJR593wxWJCwQJNF+/hobiM0ioCrx+PFuVhCbV8BG4vOtHawQ
+        6+QlVm84ALZOQmAVu8TBBaeZIBIuEtvObICyhSVeHd8CdZ+UxOd3e4GGcgDZ2RI9u4whwjUS
+        S+cdY4Gw7SUOXJnDAlLCLKApsX6XPkiYWYBPovf3EyaITl6JjjYhiGpVieZ3V6E6pSUmdndD
+        XeYhMWPbSbDrhQRiJT59u8s6gVFmFsLQBYyMqxglUwuKc9NTi00LjPNSy/WKE3OLS/PS9ZLz
+        czcxguNby3sH46MHH/QOMTJxMB5ilOBgVhLh1WEUjxfiTUmsrEotyo8vKs1JLT7EKM3BoiTO
+        q/TjTJyQQHpiSWp2ampBahFMlomDU6qBScRL4khzOyuvX9FSrRrtNE6uE2ZlOy1m7ioS7bPk
+        W/byX3FX6L+WhgnRT6SdP/fvXOzMdViUdXO29M+Tm+q3vfUvWBj6ziHg7r6TLP72bSKbj0x5
+        wCCXK1GzcpV61YJejSqWE78W1Tl+k5Y+nXpr9+Kcr9U7s/le7NgbzTtb+mvEvX9H3GWj7009
+        MGPKlil9Ey+U2zTfmvR1dftHL8f4qwGnvWJtsxvaTHa73pDccvneAsm0xYueLknpOuFXzWjC
+        vf7Tsuh3lstWHReOjN54fLNCkMu5lWJn/25hZf564KeWonD7h4tCjYwrnt/K9z4v0aJ9wuHg
+        +rJTmfIF5S+rjgdkW2/VuHR0atXJ4PI355VYijMSDbWYi4oTAQwcLGBeAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHJMWRmVeSWpSXmKPExsWy7bCSnK6epni8weS3AhYP5m1js3j58yqb
+        Rff1HWwWy4//Y7J4e2c6i8XWvVfZHdg8Gm/cYPPYvELL4+PTWywefVtWMXp83iTn0X6gmymA
+        LYrLJiU1J7MstUjfLoEr4+70TraCA5wV/04dZm5g/MnexcjJISFgIrG2/SMziC0ksINRYvFt
+        XYi4tMT1jROgaoQlVv57DmRzAdU0MUlcv7McrIFNQFvi7vQtTCC2iICcxKTX35hAipgF+hkl
+        Hq7/D9YtLBAg8eLaF7AiFgFVicePd7OC2LwCNhKfb+1ghdggL7F6wwHmCYw8CxgZVjFKphYU
+        56bnFhsWGOWllusVJ+YWl+al6yXn525iBAeRltYOxj2rPugdYmTiYDzEKMHBrCTCq8MoHi/E
+        m5JYWZValB9fVJqTWnyIUZqDRUmc9+ushXFCAumJJanZqakFqUUwWSYOTqkGJuaEhuPMCl7l
+        p/+y2x/Qe8QT0cn1bbPac85SneeW8XzpEv+5+SU3tO/Yk/v72APZtl+Mk2e37joW3nnt3BXl
+        P3bCqckXD1ltuKdWLaI6ceJP5YfVWabnPWxtnLuu5q6Y7XpGTHP+PanOdUGPOnsMFOo1P0+I
+        8ymoNTDxl0liSZ9h993uRIio9vvZrG3n49UYToVH26tN1fxiFWMaeUXh0YQuowuVy9y4N+wW
+        iI+Z37D4dJhG+QRv43e3jztzhn1y1ZwpoHPMWfOc+IwSbtXcr+Uvlon+LPwxszFG4b2/7LOI
+        uQJNfHfKFY9+n2HtaOzA9+TUW8fJxoxLy1JTE7pkkmrcv39VM1iYWXYhzFqJpTgj0VCLuag4
+        EQAJPADCkQIAAA==
+X-CMS-MailID: 20200721174310epcas5p2a448e38c6e4d5e36e9f0417f5ddced6d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200721174310epcas5p2a448e38c6e4d5e36e9f0417f5ddced6d
+References: <CGME20200721174310epcas5p2a448e38c6e4d5e36e9f0417f5ddced6d@epcas5p2.samsung.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Also move the header block above the correct function.
+With !CONFIG_OF and SCSI_UFS_EXYNOS selected, the below
+warning is given:
 
-Fixes the following W=1 kernel build warning(s):
+WARNING: unmet direct dependencies detected for PHY_SAMSUNG_UFS
+  Depends on [n]: OF [=n] && (ARCH_EXYNOS || COMPILE_TEST [=y])
+  Selected by [y]:
+  - SCSI_UFS_EXYNOS [=y] && SCSI_LOWLEVEL [=y] && SCSI [=y] && SCSI_UFSHCD_PLATFORM [=y] && (ARCH_EXYNOS || COMPILE_TEST [=y])
 
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c:390: warning: Function parameter or member 'dev' not described in 'arp_failure_skb_discard'
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c:390: warning: Function parameter or member 'skb' not described in 'arp_failure_skb_discard'
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c:390: warning: Excess function parameter 'c3cn' description in 'arp_failure_skb_discard'
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c:390: warning: Excess function parameter 'req_completion' description in 'arp_failure_skb_discard'
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c:895: warning: Function parameter or member 'csk' not described in 'l2t_put'
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c:895: warning: Excess function parameter 'c3cn' description in 'l2t_put'
+Fix it by removing PHY_SAMSUNG_UFS dependency.
 
-Cc: Karen Xie <kxie@chelsio.com>
-Cc: Dimitris Michailidis <dm@chelsio.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 ---
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/scsi/ufs/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-index f2714c54a5196..2b48954b6b1ef 100644
---- a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-+++ b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-@@ -375,10 +375,8 @@ static inline void make_tx_data_wr(struct cxgbi_sock *csk, struct sk_buff *skb,
- 	}
- }
- 
--/**
-+/*
-  * push_tx_frames -- start transmit
-- * @c3cn: the offloaded connection
-- * @req_completion: request wr_ack or not
-  *
-  * Prepends TX_DATA_WR or CPL_CLOSE_CON_REQ headers to buffers waiting in a
-  * connection's send queue and sends them on to T3.  Must be called with the
-@@ -886,11 +884,6 @@ static int alloc_cpls(struct cxgbi_sock *csk)
- 	return -ENOMEM;
- }
- 
--/**
-- * release_offload_resources - release offload resource
-- * @c3cn: the offloaded iscsi tcp connection.
-- * Release resources held by an offload connection (TID, L2T entry, etc.)
-- */
- static void l2t_put(struct cxgbi_sock *csk)
- {
- 	struct t3cdev *t3dev = (struct t3cdev *)csk->cdev->lldev;
-@@ -902,6 +895,10 @@ static void l2t_put(struct cxgbi_sock *csk)
- 	}
- }
- 
-+/*
-+ * release_offload_resources - release offload resource
-+ * Release resources held by an offload connection (TID, L2T entry, etc.)
-+ */
- static void release_offload_resources(struct cxgbi_sock *csk)
- {
- 	struct t3cdev *t3dev = (struct t3cdev *)csk->cdev->lldev;
+diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
+index 46a4542f37eb..590768758fc6 100644
+--- a/drivers/scsi/ufs/Kconfig
++++ b/drivers/scsi/ufs/Kconfig
+@@ -164,7 +164,6 @@ config SCSI_UFS_BSG
+ config SCSI_UFS_EXYNOS
+ 	tristate "EXYNOS specific hooks to UFS controller platform driver"
+ 	depends on SCSI_UFSHCD_PLATFORM && (ARCH_EXYNOS || COMPILE_TEST)
+-	select PHY_SAMSUNG_UFS
+ 	help
+ 	  This selects the EXYNOS specific additions to UFSHCD platform driver.
+ 	  UFS host on EXYNOS includes HCI and UNIPRO layer, and associates with
+
+base-commit: ab8be66e724ecf4bffb2895c9c91bbd44fa687c7
 -- 
-2.25.1
+2.17.1
 
