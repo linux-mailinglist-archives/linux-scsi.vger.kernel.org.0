@@ -2,59 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F041622864F
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01EC2285FC
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730470AbgGUQoh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jul 2020 12:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S1730550AbgGUQmL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jul 2020 12:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730516AbgGUQmJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:09 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344F4C0619DA
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:09 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id f139so3530686wmf.5
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:09 -0700 (PDT)
+        with ESMTP id S1730541AbgGUQmK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:10 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3190BC0619DA
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:10 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id z2so21895121wrp.2
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=U4057VEQknR+gIhh04CnggTUTUY/8B8thVt6VLtwHGM=;
-        b=QnpTahW57R2FYzZg5OTn+jcF7DBe+JUfkRNtuX/j6vG2VdCGebKk+uprWqRD3AQPIW
-         ckJNHjucJKxw8tmkIMiaubdO8mTyW8pP2rVfkXYaoX84NHjQ9q6Mtburk2fuJm0M0FMs
-         /i6t127QWh+yBV/n66Lws+cepy+3id+i35GSOpRdU0o3kBSkSMY6LrXRyuesjKFwk52K
-         RBBedq5iblML9Evk7n1yVEXEQ/KNHcu5ieB8Rld2MHzWxcIx07pJvnxfLM3G6IyTU0xK
-         DKFaMWRC5L6hs3kWWaRIREs8NUak0Cz1qQw5/Hri6CcXTsJAI5I5lODXfkoSBJhZEEET
-         2G4A==
+        bh=Mle0K9iX1gOzfM2GRPPq3JQOM3T1CbFjbMy5ihSTAjg=;
+        b=LwF/uDv9JjgJ6tOJDx9S19wxQq0K6WzNDZpCbUVAZqOOS4y3+/5IW8fzBsD9ffptOr
+         araaDs712E4vRx4iVqouJIqbT0hz8TmRmJFwDH6WUhlb2lhB+qBVJrpFGTxYqoriFtY7
+         sdTVukS7onnFT5Dutv6rIEaRH96jGqfuZtG8d4MaMQGdDiTEjckB+NEZGn2rVqBjLwK9
+         IO7zAAtGbAhX6FSwfcC43CZxI1pKxJsEuxAn/U67EpRRrAw4JaioxOqiv1YkXSt395xz
+         AtSn3vm150mDHFLZUFql5vPIx787guBzfBPvxl9e6b75Av29txcSzx9LQLc8zADJSRZ5
+         uTvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=U4057VEQknR+gIhh04CnggTUTUY/8B8thVt6VLtwHGM=;
-        b=hPnlFD282LnOHC4/fC0+q6aqT77QfGpp1R/LMKsTcgezelx/Y1VuE8V+xTOhxWTnpe
-         BjdJrJcvK9vQLO55S3rKglUh3Ft8UHP/cj4daEB4k7/jFX92c5+NWqqesoatf2/jvwTW
-         0+oC0yvJ4XEelYe++uj+0WU+8ssR9cb2fdDBP3IzS4kbEvJJ9Wfhk3Ew4bBbkcouc6aj
-         XPmx67YJq8XfHZ1PTQEb3ReQ3xuDydxYOyoXLyyJc+o7CZP40TxuThoeVIDd5+An80nh
-         5oYpTH7X6i/RBJFj53k2gIHjnnqypXV+n/UP1gOXZGAUtqFsfFcDA/l7ncS5A1pmVhgg
-         C02w==
-X-Gm-Message-State: AOAM531vMBJkAhqHY/8F571PQOjhHHrgWxBg0K8Sn3nZSznZ8TcugRBw
-        T1gO9IEbXdII5v273OBB5GlYeA==
-X-Google-Smtp-Source: ABdhPJzrnwafVPORG1U4Vm6Oo3cqf4RKcBMVvuECB86C2Exrw3p7dALwOlz4y3sFIDuWRdtAM+zaMA==
-X-Received: by 2002:a1c:3954:: with SMTP id g81mr4796624wma.73.1595349727915;
-        Tue, 21 Jul 2020 09:42:07 -0700 (PDT)
+        bh=Mle0K9iX1gOzfM2GRPPq3JQOM3T1CbFjbMy5ihSTAjg=;
+        b=eOiaVQq148pIjDwDuXoppk2D+e7DIiZeuflrTu+6A+EKwwgoJj4eeVSTJpFoBlaZzH
+         rWc46YavJfDwrGMyqeWslO6hW611FkQbuwOSU6TlkD0WwGnL4UjRELgOxhXrAjzNZAYh
+         1Y5K6my3FQq9WXnGqZAR1kh1YmD8nN127BxPwYcF2TInpY3rkauu8blhzmPwEFIE63pZ
+         iLA5anwIBGBYI43Hxue9EURfZui/7huW3vpf/Z/cF3xYf8vlS5QELhTkpHxIgwCeic/a
+         ePNv1F2Ymz2+eAzcduvadrrN1ES/MAZbG+0y6fyRXSfR+CVCP+y0kPDALgUYJODJZiSs
+         Uz4w==
+X-Gm-Message-State: AOAM531/aK3GyQmONf9RbnaGQlSTS6Jyw/bIZqaQJKUZ+nhWjAysGgf8
+        c4c+y4bBUAGcI4rLh043scJwQg==
+X-Google-Smtp-Source: ABdhPJzSwRhnH3gmodgCQ9XqPBRP74SZfFE69iCmRfmpUeEdOUcZLk5iKSqwTxLYt3eTZxT+rj5U5Q==
+X-Received: by 2002:a5d:6651:: with SMTP id f17mr29595659wrw.29.1595349728890;
+        Tue, 21 Jul 2020 09:42:08 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.06
+        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:42:07 -0700 (PDT)
+        Tue, 21 Jul 2020 09:42:08 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
         Jack Wang <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH 09/40] scsi: pm8001: pm8001_sas: Fix strncpy() warning
-Date:   Tue, 21 Jul 2020 17:41:17 +0100
-Message-Id: <20200721164148.2617584-10-lee.jones@linaro.org>
+Subject: [PATCH 10/40] scsi: pm8001: pm8001_sas: Mover function header and supply some missing parameter descriptions
+Date:   Tue, 21 Jul 2020 17:41:18 +0100
+Message-Id: <20200721164148.2617584-11-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200721164148.2617584-1-lee.jones@linaro.org>
 References: <20200721164148.2617584-1-lee.jones@linaro.org>
@@ -66,41 +66,75 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We're assuming that the string should be NUL terminated here.
-
-If not, then memcpy() might be more appropriate.
+Functions must follow directly after the header that documents them.
 
 Fixes the following W=1 kernel build warning(s):
 
- from drivers/scsi/pm8001/pm8001_sas.c:41:
- In function ‘strncpy’,
- inlined from ‘pm8001_issue_ssp_tmf’ at drivers/scsi/pm8001/pm8001_sas.c:919:2:
- include/linux/string.h:297:30: warning: ‘__builtin_strncpy’ specified bound 8 equals destination size [-Wstringop-truncation]
- 297 | #define __underlying_strncpy __builtin_strncpy
- | ^
- include/linux/string.h:307:9: note: in expansion of macro ‘__underlying_strncpy’
- 307 | return __underlying_strncpy(p, q, size);
- | ^~~~~~~~~~~~~~~~~~~~
+from  drivers/scsi/pm8001/pm8001_sas.c:41:
+inlined from ‘pm8001_issue_ssp_tmf’ at  drivers/scsi/pm8001/pm8001_sas.c:919:2:
+ drivers/scsi/pm8001/pm8001_sas.c:379: warning: Function parameter or member 'pm8001_dev' not described in 'DEV_IS_GONE'
+ drivers/scsi/pm8001/pm8001_sas.c:379: warning: Excess function parameter 'task' description in 'DEV_IS_GONE'
+ drivers/scsi/pm8001/pm8001_sas.c:379: warning: Excess function parameter 'num' description in 'DEV_IS_GONE'
+ drivers/scsi/pm8001/pm8001_sas.c:379: warning: Excess function parameter 'gfp_flags' description in 'DEV_IS_GONE'
+ drivers/scsi/pm8001/pm8001_sas.c:379: warning: Excess function parameter 'is_tmf' description in 'DEV_IS_GONE'
+ drivers/scsi/pm8001/pm8001_sas.c:379: warning: Excess function parameter 'tmf' description in 'DEV_IS_GONE'
+ drivers/scsi/pm8001/pm8001_sas.c:583: warning: Function parameter or member 'device_id' not described in 'pm8001_find_dev'
+ drivers/scsi/pm8001/pm8001_sas.c:1000: warning: Function parameter or member 'dev' not described in 'pm8001_I_T_nexus_reset'
 
 Cc: Jack Wang <jinpu.wang@cloud.ionos.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/pm8001/pm8001_sas.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm8001_sas.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-index b7cbc312843e9..941f783897d8e 100644
+index 941f783897d8e..bcf169b26e31a 100644
 --- a/drivers/scsi/pm8001/pm8001_sas.c
 +++ b/drivers/scsi/pm8001/pm8001_sas.c
-@@ -916,7 +916,7 @@ static int pm8001_issue_ssp_tmf(struct domain_device *dev,
- 	if (!(dev->tproto & SAS_PROTOCOL_SSP))
- 		return TMF_RESP_FUNC_ESUPP;
- 
--	strncpy((u8 *)&ssp_task.LUN, lun, 8);
-+	strscpy((u8 *)&ssp_task.LUN, lun, sizeof(ssp_task.LUN));
- 	return pm8001_exec_internal_tmf_task(dev, &ssp_task, sizeof(ssp_task),
- 		tmf);
+@@ -129,6 +129,7 @@ int pm8001_mem_alloc(struct pci_dev *pdev, void **virt_addr,
+ 	*pphys_addr_lo = lower_32_bits(phys_align);
+ 	return 0;
  }
++
+ /**
+   * pm8001_find_ha_by_dev - from domain device which come from sas layer to
+   * find out our hba struct.
+@@ -366,17 +367,15 @@ static int sas_find_local_port_id(struct domain_device *dev)
+ 	return 0;
+ }
+ 
++#define DEV_IS_GONE(pm8001_dev)	\
++	((!pm8001_dev || (pm8001_dev->dev_type == SAS_PHY_UNUSED)))
+ /**
+   * pm8001_task_exec - queue the task(ssp, smp && ata) to the hardware.
+   * @task: the task to be execute.
+-  * @num: if can_queue great than 1, the task can be queued up. for SMP task,
+-  * we always execute one one time.
+   * @gfp_flags: gfp_flags.
+   * @is_tmf: if it is task management task.
+   * @tmf: the task management IU
+   */
+-#define DEV_IS_GONE(pm8001_dev)	\
+-	((!pm8001_dev || (pm8001_dev->dev_type == SAS_PHY_UNUSED)))
+ static int pm8001_task_exec(struct sas_task *task,
+ 	gfp_t gfp_flags, int is_tmf, struct pm8001_tmf_task *tmf)
+ {
+@@ -577,6 +576,7 @@ static struct pm8001_device *pm8001_alloc_dev(struct pm8001_hba_info *pm8001_ha)
+ /**
+   * pm8001_find_dev - find a matching pm8001_device
+   * @pm8001_ha: our hba card information
++  * @device_id: device ID to match against
+   */
+ struct pm8001_device *pm8001_find_dev(struct pm8001_hba_info *pm8001_ha,
+ 					u32 device_id)
+@@ -995,6 +995,7 @@ void pm8001_open_reject_retry(
+ /**
+   * Standard mandates link reset for ATA  (type 0) and hard reset for
+   * SSP (type 1) , only for RECOVERY
++  * @dev: the device structure for the device to reset.
+   */
+ int pm8001_I_T_nexus_reset(struct domain_device *dev)
+ {
 -- 
 2.25.1
 
