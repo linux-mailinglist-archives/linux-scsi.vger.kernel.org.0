@@ -2,128 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BE92285F5
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D154228656
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730311AbgGUQl4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jul 2020 12:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S1730418AbgGUQoz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jul 2020 12:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730224AbgGUQlz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:41:55 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DE7C0619DA
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:41:55 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id f2so21819024wrp.7
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:41:55 -0700 (PDT)
+        with ESMTP id S1730267AbgGUQl4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:41:56 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8EDC061794
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:41:56 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id s10so21793490wrw.12
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:41:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=GSRBp5WStd9Y481S5Og1e8mziqqocuxpn4+5CH6s/V4=;
-        b=Egp5H4pu2L6EzccLlHAMIwLTK50EpvvWcuSavl6dxS+o+rUQRPDp2XpTYnTjUS+KUi
-         uWcXXe2s/Ehz/WZYWK2zGL15XByi2KO1f61XaLxkMeIDIT6YezDvsqTSLn0cpcs0b5Eu
-         kvPRw32tr4a3i05MdWTSX7LKYf9m30098UCHy2q6dMk7VTOVwfgnXeBjXhBultigxuwp
-         JZo16vd/sGh2ag2xaKw/9nNAVBmihuOg6m+UxZsxeeN1B0T/jgcOA8YIh3thO5XR5/fu
-         khqpOmb/LS+svniR+y9VvCrP1z5dJnmhYAt49FVHboj+QnXVIAb28S4oHvg0xgmu1agu
-         Z2QA==
+        bh=MFwQcwbTCB4l24rfJy2kTJtSqlwy97lYiWoNwLDhtXE=;
+        b=Bv94QDt4unIJ9g6Le3faZvrFcIGk8efu0t9DqrS9Xe08GS0yPhgYLxpm3bthoS7g55
+         nQNup9hMbn2X2yPbAOWhgH8tQDdAyWHw1prXNyp7r9c8ppXY8cpTAHc7CraqSCTcZG1i
+         1WBRGKsTma+ozlyHK+r7tVJXIMgXQDd5/7aT4O9iV5mpG3WG27LUu0UgQpStGfpKOMQK
+         +550kpZLqGZJTiGepFqNu1W7hEw9EhUmL3gAf3/gML+wuw8aGgI6R52np4j913upCqnT
+         vICorkCyskx2FcuQNX7m5S8QYF2CtPvzLGAh6f4udf8kBVn8/OQWLtFynPs5vppYtOfO
+         twuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GSRBp5WStd9Y481S5Og1e8mziqqocuxpn4+5CH6s/V4=;
-        b=KnCCuBXJSh6MZTdfZx5ZVXrNJ50nqHDTiz47z0Zlag6UpY2stpkmospbR5XVW2vmRg
-         K7r53Vv4cxelfWFtmbj90/ZGyus3WXiOA5uzp1kLHv8IUZRHPgpVINeUsVtyH/FTaYZw
-         zDZfR5aDwwrRu14pbDN+x87MiDkOolvgXX62SMpzstfjKod2TtkswM7EPC7prlalgKDr
-         bF7xA1Axc/dXRR8aJhxEdXY16NE4HiFLK9e764ME6iYRy+bgjsjNcDg9Q8n6A3RFceX5
-         KVeaHd1OC8VP+DAaS9LMlhjGYG14MPOMF4OGErr+LSGo8jT/vPICWg8GrYllgvyhPNwC
-         XZoQ==
-X-Gm-Message-State: AOAM530K3KTEdshQZsNAqFFHtSeMK25ILnW5Y9M60irpVjM9Fgfu4qh3
-        CVRHGrwyxez/E5RBrDABdwE62w==
-X-Google-Smtp-Source: ABdhPJwR9PfgqrQM6xiiXqEdTd0R303eL546jC1FrUf25+Zxk9wVW2r7JsLFudeclns7p1DZw05OZQ==
-X-Received: by 2002:a05:6000:10c4:: with SMTP id b4mr25734756wrx.50.1595349714031;
-        Tue, 21 Jul 2020 09:41:54 -0700 (PDT)
+        bh=MFwQcwbTCB4l24rfJy2kTJtSqlwy97lYiWoNwLDhtXE=;
+        b=G1MIbDfxB/mZffpavPG/GYzllO3uSfFzKUES8EMTSIzNKon5yNApRu/xykfTIsgVhN
+         uRcYh8EmRL9znRThzKuVGdiMUD4FNqmaLzvkRIabQR6XGwcg8JnW6W15TAZxf0dGGShu
+         JfeNpxaE0Sqyb8TTajq3mOJwOI9izf1SqYV3EzsmQWC6+YKqUdOk6JBoQLj/H4uqL7PF
+         lW+7fjjD3AQDDZYksiSLHBv8aKLt7lPAefCezFozOgwILxcuzemrN1KDvjZXzk1KHpMB
+         KblmJbQomebq5HMxDSryGv0Ar8Gid2moRmeQP5dXgGlfteg50cEf6FKhsDUyAtWZYQgy
+         D++w==
+X-Gm-Message-State: AOAM530Avb5mcV9pB0QkUWvsoc4mtNpD/GcMfLcaPdYr/49JBV/STh52
+        goGtjmiLWgMwlrszl3VpYuIuCw==
+X-Google-Smtp-Source: ABdhPJziFCqK2L01y45cgu4AI91SmHbfPnd9DnO0wdmDYr2+DTfRQR7mUrBTtZTp8tF2s3kh4I46rw==
+X-Received: by 2002:adf:df91:: with SMTP id z17mr964095wrl.149.1595349715049;
+        Tue, 21 Jul 2020 09:41:55 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.41.53
+        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.41.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:41:53 -0700 (PDT)
+        Tue, 21 Jul 2020 09:41:54 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, support@areca.com.tw,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 01/40] scsi: arcmsr: arcmsr_hba: Remove statement with no effect
-Date:   Tue, 21 Jul 2020 17:41:09 +0100
-Message-Id: <20200721164148.2617584-2-lee.jones@linaro.org>
+        Lee Jones <lee.jones@linaro.org>,
+        Hannes Reinecke <hare@suse.com>
+Subject: [PATCH 02/40] scsi: aic7xxx: aic79xx_core: Remove a bunch of unused variables
+Date:   Tue, 21 Jul 2020 17:41:10 +0100
+Message-Id: <20200721164148.2617584-3-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200721164148.2617584-1-lee.jones@linaro.org>
 References: <20200721164148.2617584-1-lee.jones@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-According to LKP, commit [no upstream SHA yet] ("scsi: arcmsr: Remove
-some set but unused variables") can be furthered to remove the entire
-statement and not just the unused variable read into.
+Question: Can 'ahd_inb(ahd, LQISTAT2);' also be safely removed?
 
-Snipped LKP report:
+Fixes the following W=1 kernel build warning(s):
 
- config: x86_64-randconfig-m001-20200719
- compiler: gcc-9 (Debian 9.3.0-14) 9.3.0
+ drivers/scsi/aic7xxx/aic79xx_core.c: In function ‘ahd_dump_sglist’:
+ drivers/scsi/aic7xxx/aic79xx_core.c:1738:14: warning: variable ‘len’ set but not used [-Wunused-but-set-variable]
+ 1738 | uint32_t len;
+ | ^~~
+ drivers/scsi/aic7xxx/aic79xx_core.c: In function ‘ahd_handle_seqint’:
+ drivers/scsi/aic7xxx/aic79xx_core.c:1911:26: warning: variable ‘tinfo’ set but not used [-Wunused-but-set-variable]
+ 1911 | struct ahd_transinfo *tinfo;
+ | ^~~~~
+ drivers/scsi/aic7xxx/aic79xx_core.c: In function ‘ahd_handle_transmission_error’:
+ drivers/scsi/aic7xxx/aic79xx_core.c:2672:8: warning: variable ‘lqistat2’ set but not used [-Wunused-but-set-variable]
+ 2672 | u_int lqistat2;
+ | ^~~~~~~~
+ drivers/scsi/aic7xxx/aic79xx_core.c: In function ‘ahd_update_pending_scbs’:
+ drivers/scsi/aic7xxx/aic79xx_core.c:4221:31: warning: variable ‘tinfo’ set but not used [-Wunused-but-set-variable]
+ 4221 | struct ahd_initiator_tinfo *tinfo;
+ | ^~~~~
 
- New smatch warnings:
-  drivers/scsi/arcmsr/arcmsr_hba.c:1490 arcmsr_done4abort_postqueue() warn: statement has no effect 8
-  drivers/scsi/arcmsr/arcmsr_hba.c:2459 arcmsr_hbaD_postqueue_isr() warn: statement has no effect 8
-  drivers/scsi/arcmsr/arcmsr_hba.c:3526 arcmsr_hbaD_polling_ccbdone() warn: statement has no effect 8
-
- 1a4f550a09f89e Nick Cheng  2007-09-13  1401  static void arcmsr_done4abort_postqueue(struct AdapterControlBlock *acb)
- 1a4f550a09f89e Nick Cheng  2007-09-13  1402  {
- [...]
- 18bc435e0a1de2 Lee Jones   2020-07-13 @1490                             pmu->done_qbuffer[doneq_index & 0xFFF].addressHigh;
-                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- Delete this line.
- [...]
-
-Cc: support@areca.com.tw
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: Hannes Reinecke <hare@suse.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/arcmsr/arcmsr_hba.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/scsi/aic7xxx/aic79xx_core.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
-index 5feed135eb26c..23e9e12d588f6 100644
---- a/drivers/scsi/arcmsr/arcmsr_hba.c
-+++ b/drivers/scsi/arcmsr/arcmsr_hba.c
-@@ -1487,7 +1487,6 @@ static void arcmsr_done4abort_postqueue(struct AdapterControlBlock *acb)
- 					((toggle ^ 0x4000) + 1);
- 				doneq_index = pmu->doneq_index;
- 				spin_unlock_irqrestore(&acb->doneq_lock, flags);
--				pmu->done_qbuffer[doneq_index & 0xFFF].addressHigh;
- 				addressLow = pmu->done_qbuffer[doneq_index &
- 					0xFFF].addressLow;
- 				ccb_cdb_phy = (addressLow & 0xFFFFFFF0);
-@@ -2456,7 +2455,6 @@ static void arcmsr_hbaD_postqueue_isr(struct AdapterControlBlock *acb)
- 			pmu->doneq_index = index_stripped ? (index_stripped | toggle) :
- 				((toggle ^ 0x4000) + 1);
- 			doneq_index = pmu->doneq_index;
--			pmu->done_qbuffer[doneq_index & 0xFFF].addressHigh;
- 			addressLow = pmu->done_qbuffer[doneq_index &
- 				0xFFF].addressLow;
- 			ccb_cdb_phy = (addressLow & 0xFFFFFFF0);
-@@ -3523,7 +3521,6 @@ static int arcmsr_hbaD_polling_ccbdone(struct AdapterControlBlock *acb,
- 				((toggle ^ 0x4000) + 1);
- 		doneq_index = pmu->doneq_index;
- 		spin_unlock_irqrestore(&acb->doneq_lock, flags);
--		pmu->done_qbuffer[doneq_index & 0xFFF].addressHigh;
- 		flag_ccb = pmu->done_qbuffer[doneq_index & 0xFFF].addressLow;
- 		ccb_cdb_phy = (flag_ccb & 0xFFFFFFF0);
- 		if (acb->cdb_phyadd_hipart)
+diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic79xx_core.c
+index e4a09b93d00ce..243e763085a61 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_core.c
++++ b/drivers/scsi/aic7xxx/aic79xx_core.c
+@@ -1735,10 +1735,8 @@ ahd_dump_sglist(struct scb *scb)
+ 			sg_list = (struct ahd_dma64_seg*)scb->sg_list;
+ 			for (i = 0; i < scb->sg_count; i++) {
+ 				uint64_t addr;
+-				uint32_t len;
+ 
+ 				addr = ahd_le64toh(sg_list[i].addr);
+-				len = ahd_le32toh(sg_list[i].len);
+ 				printk("sg[%d] - Addr 0x%x%x : Length %d%s\n",
+ 				       i,
+ 				       (uint32_t)((addr >> 32) & 0xFFFFFFFF),
+@@ -1908,7 +1906,6 @@ ahd_handle_seqint(struct ahd_softc *ahd, u_int intstat)
+ 			struct	scb *scb;
+ 			struct	ahd_initiator_tinfo *targ_info;
+ 			struct	ahd_tmode_tstate *tstate;
+-			struct	ahd_transinfo *tinfo;
+ 			u_int	scbid;
+ 
+ 			/*
+@@ -1941,7 +1938,6 @@ ahd_handle_seqint(struct ahd_softc *ahd, u_int intstat)
+ 							devinfo.our_scsiid,
+ 							devinfo.target,
+ 							&tstate);
+-			tinfo = &targ_info->curr;
+ 			ahd_set_width(ahd, &devinfo, MSG_EXT_WDTR_BUS_8_BIT,
+ 				      AHD_TRANS_ACTIVE, /*paused*/TRUE);
+ 			ahd_set_syncrate(ahd, &devinfo, /*period*/0,
+@@ -2669,7 +2665,6 @@ ahd_handle_transmission_error(struct ahd_softc *ahd)
+ 	struct	scb *scb;
+ 	u_int	scbid;
+ 	u_int	lqistat1;
+-	u_int	lqistat2;
+ 	u_int	msg_out;
+ 	u_int	curphase;
+ 	u_int	lastphase;
+@@ -2680,7 +2675,7 @@ ahd_handle_transmission_error(struct ahd_softc *ahd)
+ 	scb = NULL;
+ 	ahd_set_modes(ahd, AHD_MODE_SCSI, AHD_MODE_SCSI);
+ 	lqistat1 = ahd_inb(ahd, LQISTAT1) & ~(LQIPHASE_LQ|LQIPHASE_NLQ);
+-	lqistat2 = ahd_inb(ahd, LQISTAT2);
++	ahd_inb(ahd, LQISTAT2);
+ 	if ((lqistat1 & (LQICRCI_NLQ|LQICRCI_LQ)) == 0
+ 	 && (ahd->bugs & AHD_NLQICRC_DELAYED_BUG) != 0) {
+ 		u_int lqistate;
+@@ -4218,13 +4213,11 @@ ahd_update_pending_scbs(struct ahd_softc *ahd)
+ 	pending_scb_count = 0;
+ 	LIST_FOREACH(pending_scb, &ahd->pending_scbs, pending_links) {
+ 		struct ahd_devinfo devinfo;
+-		struct ahd_initiator_tinfo *tinfo;
+ 		struct ahd_tmode_tstate *tstate;
+ 
+ 		ahd_scb_devinfo(ahd, &devinfo, pending_scb);
+-		tinfo = ahd_fetch_transinfo(ahd, devinfo.channel,
+-					    devinfo.our_scsiid,
+-					    devinfo.target, &tstate);
++		ahd_fetch_transinfo(ahd, devinfo.channel, devinfo.our_scsiid,
++				    devinfo.target, &tstate);
+ 		if ((tstate->auto_negotiate & devinfo.target_mask) == 0
+ 		 && (pending_scb->flags & SCB_AUTO_NEGOTIATE) != 0) {
+ 			pending_scb->flags &= ~SCB_AUTO_NEGOTIATE;
 -- 
 2.25.1
 
