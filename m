@@ -2,63 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA17228637
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04ECF228621
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730867AbgGUQng (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jul 2020 12:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S1730764AbgGUQmp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jul 2020 12:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730752AbgGUQmm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:42 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4980EC0619DB
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:42 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id b6so21834539wrs.11
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:42 -0700 (PDT)
+        with ESMTP id S1730761AbgGUQmn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:43 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90072C0619DA
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:43 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id z15so21825649wrl.8
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7qx4BAfYgDhhPFQDU/HlyqhYfKsFS4W9mjWfkuFuELo=;
-        b=UQ2hj2xg+Ir7KK2smznJVWTNOEUecpXzU+TAPLzCs6aF3Wyo8+OYyOfbAvGh5Gxmac
-         s2GKxxFFysDjGsh2Z7jd2ZE416w9W8E2GolsKMgXWJx1IfSOlFbdPGHM8jljcMIyjDRl
-         mDxD2wZ0uC1LO0xOeui+6tWArVFjAIJDSTnP7F0kiLOqlLtdaA4BNpiTD+5wE1yAvAdz
-         tIQ4LT1G/dlRmBxhY6HEzD+xNDZZ5RS439RU+8GAzFHUD1aij52J0VjE+Pl8fgmzGj4D
-         apYHyYOKUhJlUG3H9CPtP5W5UYPfyMPQfsKYMU64oqjbiEi5r29DpgXY8ZP7oX2aLJqn
-         cyvA==
+        bh=qn9xXUDZHQaT9nTTtPEVxD+FwQe9TWDeZ0uqEDuohOE=;
+        b=jHqbXmHlBY0jg9OxAkf7coZvBnjoJ5+HWr9UYOwlzfzO0uTspX5+fawbUnHCncpdu7
+         jBFMI1g95ZmjbUWGtOxLrhp366xIam9TCuPFypC7HRKHeZhEFT4PQXbG9Q0vyUiNOBqH
+         kAv0hTgxGhIWgaB+zGYul2Z9iQ4onTT1MBoOmL86DMWCjJKLPJ5C6xFcyLgB2o66jKpQ
+         7jaPjWa9h+nS3cNcKEJZTx1+JtT8bofhNj6/BY194n3tRHCt5B+rjN7rPmoH/+nx2vGb
+         JpOd6d8m2rVdZtKEkmvlNhhVXx7QtJPewW0xSUCXl6aLd1mDAVR+tSDrIQrc/Q7UkLbW
+         iGnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7qx4BAfYgDhhPFQDU/HlyqhYfKsFS4W9mjWfkuFuELo=;
-        b=Am3oZuXm8wsMG02/YUVUf7/0UXmNSENgxKN+eSF2Fkn0TGjr98ppobHG4zCfxvr/qc
-         2GOjZbr0TKLtjEM92GUZRkYfXeYqq9zg9Aqb76PIdHihRfAIXpQ40CeLEejiGfa0plbg
-         fVpFuuenrIDdxU5cJMRrNhJC3mKJzs5/lDtkiQMEpiEzChxU9/dJWiU2tZYC02fFZ25f
-         RC0o4Jx3I7EdY9+Kx4UqnyWv0WmEfQOv6KRmuaottWCb13Ta5/Ki0SGV9KgOpDB+wqCE
-         zMdX9lT6oWotRuNwm6vKlDyK3dlIIdEMG0NmbMz493pO0OVj0189Obnydlf6C8kQc0rq
-         T9cQ==
-X-Gm-Message-State: AOAM533QwDPv3t/1pX7B2b5fPcwRKubVHlcWEnY/hFNSMB7G7rlnU76O
-        3P84fGYf/dvICuDk5pbLb72Slg==
-X-Google-Smtp-Source: ABdhPJza5eVdSeLB7HzXvhvbIEwD9pYzG9hkDzvYndt+77Ma1UqLtJqNJ76R7lpCbMqX/7lkigosJw==
-X-Received: by 2002:a5d:6651:: with SMTP id f17mr29597442wrw.29.1595349761060;
-        Tue, 21 Jul 2020 09:42:41 -0700 (PDT)
+        bh=qn9xXUDZHQaT9nTTtPEVxD+FwQe9TWDeZ0uqEDuohOE=;
+        b=EAN95JRTk1eIUmbR95pivSyNn7Gprxz3yI/LrREiJCKzD/w0mvjsZcuHC+1jj279Xx
+         xDo5s8E7wEVIgj6bcMUh0pxfAeOxMs4Xn3JXu7+Mhjs84lMCcqEGbEDbwssr98x1M9kR
+         2q8jVi7tdOhZVjfuu9/emkJMyL+ABj8Gj/SRtaYfTUNICYfQivaSc15WvHJrlJkzEdw7
+         26ohrc72pomMKdHG0CVXy8lTLCSwOq/c+rrLjRcfaGeDaGCv2k2vhYW4fu4u4rWSJWr5
+         Pz/eAKl4wopgieFiIS9Huu84HIazRZrWQqZYsKI2vHXtWONFaU4HBxqLFJsvbR6SLDkD
+         ENBQ==
+X-Gm-Message-State: AOAM533bpAQAz8m3Lhjb6FtOI69PygZS7coPrb1ExmgC8LzsDWL4ZjhP
+        sYQNqEVpWVrSrlKOyIo4drYH8w==
+X-Google-Smtp-Source: ABdhPJyVp/cegKtF3XzYY2EmcgU0BhxEKpDgMPPwWXIWeJmhctgaqJ+it0wmwgALENMsHqgVHORClQ==
+X-Received: by 2002:adf:fa8b:: with SMTP id h11mr27362168wrr.391.1595349762321;
+        Tue, 21 Jul 2020 09:42:42 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.40
+        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:42:40 -0700 (PDT)
+        Tue, 21 Jul 2020 09:42:41 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>
-Subject: [PATCH 31/40] scsi: csiostor: csio_init: Fix misnamed function parameter
-Date:   Tue, 21 Jul 2020 17:41:39 +0100
-Message-Id: <20200721164148.2617584-32-lee.jones@linaro.org>
+        QLogic-Storage-Upstream@qlogic.com
+Subject: [PATCH 32/40] scsi: qla4xxx: ql4_nx: Remove three set but unused variables
+Date:   Tue, 21 Jul 2020 17:41:40 +0100
+Message-Id: <20200721164148.2617584-33-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200721164148.2617584-1-lee.jones@linaro.org>
 References: <20200721164148.2617584-1-lee.jones@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -67,28 +68,80 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/csiostor/csio_init.c:595: warning: Function parameter or member 'pln' not described in 'csio_shost_init'
- drivers/scsi/csiostor/csio_init.c:595: warning: Excess function parameter 'os_pln' description in 'csio_shost_init'
+ drivers/scsi/qla4xxx/ql4_nx.c: In function ‘qla4_84xx_minidump_process_rddfe’:
+ drivers/scsi/qla4xxx/ql4_nx.c:2648:23: warning: variable ‘data_size’ set but not used [-Wunused-but-set-variable]
+ 2648 | uint32_t poll, mask, data_size, modify_mask;
+ | ^~~~~~~~~
+ drivers/scsi/qla4xxx/ql4_nx.c: In function ‘qla4_84xx_minidump_process_rdmdio’:
+ drivers/scsi/qla4xxx/ql4_nx.c:2745:11: warning: variable ‘poll’ set but not used [-Wunused-but-set-variable]
+ 2745 | uint32_t poll, mask;
+ | ^~~~
+ drivers/scsi/qla4xxx/ql4_nx.c: In function ‘qla4_84xx_minidump_process_pollwr’:
+ drivers/scsi/qla4xxx/ql4_nx.c:2816:47: warning: variable ‘mask’ set but not used [-Wunused-but-set-variable]
+ 2816 | uint32_t addr1, addr2, value1, value2, poll, mask, r_value;
+ | ^~~~
 
-Cc: Saurav Girepunje <saurav.girepunje@gmail.com>
+Cc: QLogic-Storage-Upstream@qlogic.com
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/csiostor/csio_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qla4xxx/ql4_nx.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/csiostor/csio_init.c b/drivers/scsi/csiostor/csio_init.c
-index 8dea7d53788a9..390b07bf92b97 100644
---- a/drivers/scsi/csiostor/csio_init.c
-+++ b/drivers/scsi/csiostor/csio_init.c
-@@ -582,7 +582,7 @@ csio_hw_free(struct csio_hw *hw)
-  * @hw:		The HW module.
-  * @dev:	The device associated with this invocation.
-  * @probe:	Called from probe context or not?
-- * @os_pln:	Parent lnode if any.
-+ * @pln:	Parent lnode if any.
-  *
-  * Allocates lnode structure via scsi_host_alloc, initializes
-  * shost, initializes lnode module and registers with SCSI ML
+diff --git a/drivers/scsi/qla4xxx/ql4_nx.c b/drivers/scsi/qla4xxx/ql4_nx.c
+index 5a31877c9d04f..85666fb5471b1 100644
+--- a/drivers/scsi/qla4xxx/ql4_nx.c
++++ b/drivers/scsi/qla4xxx/ql4_nx.c
+@@ -2645,7 +2645,7 @@ static uint32_t qla4_84xx_minidump_process_rddfe(struct scsi_qla_host *ha,
+ 	uint32_t addr1, addr2, value, data, temp, wrval;
+ 	uint8_t stride, stride2;
+ 	uint16_t count;
+-	uint32_t poll, mask, data_size, modify_mask;
++	uint32_t poll, mask, modify_mask;
+ 	uint32_t wait_count = 0;
+ 	uint32_t *data_ptr = *d_ptr;
+ 	struct qla8044_minidump_entry_rddfe *rddfe;
+@@ -2661,7 +2661,6 @@ static uint32_t qla4_84xx_minidump_process_rddfe(struct scsi_qla_host *ha,
+ 	poll = le32_to_cpu(rddfe->poll);
+ 	mask = le32_to_cpu(rddfe->mask);
+ 	modify_mask = le32_to_cpu(rddfe->modify_mask);
+-	data_size = le32_to_cpu(rddfe->data_size);
+ 
+ 	addr2 = addr1 + stride;
+ 
+@@ -2742,7 +2741,7 @@ static uint32_t qla4_84xx_minidump_process_rdmdio(struct scsi_qla_host *ha,
+ 	uint8_t stride1, stride2;
+ 	uint32_t addr3, addr4, addr5, addr6, addr7;
+ 	uint16_t count, loop_cnt;
+-	uint32_t poll, mask;
++	uint32_t mask;
+ 	uint32_t *data_ptr = *d_ptr;
+ 	struct qla8044_minidump_entry_rdmdio *rdmdio;
+ 
+@@ -2754,7 +2753,6 @@ static uint32_t qla4_84xx_minidump_process_rdmdio(struct scsi_qla_host *ha,
+ 	stride2 = le32_to_cpu(rdmdio->stride_2);
+ 	count = le32_to_cpu(rdmdio->count);
+ 
+-	poll = le32_to_cpu(rdmdio->poll);
+ 	mask = le32_to_cpu(rdmdio->mask);
+ 	value2 = le32_to_cpu(rdmdio->value_2);
+ 
+@@ -2813,7 +2811,7 @@ static uint32_t qla4_84xx_minidump_process_pollwr(struct scsi_qla_host *ha,
+ 				struct qla8xxx_minidump_entry_hdr *entry_hdr,
+ 				uint32_t **d_ptr)
+ {
+-	uint32_t addr1, addr2, value1, value2, poll, mask, r_value;
++	uint32_t addr1, addr2, value1, value2, poll, r_value;
+ 	struct qla8044_minidump_entry_pollwr *pollwr_hdr;
+ 	uint32_t wait_count = 0;
+ 	uint32_t rval = QLA_SUCCESS;
+@@ -2825,7 +2823,6 @@ static uint32_t qla4_84xx_minidump_process_pollwr(struct scsi_qla_host *ha,
+ 	value2 = le32_to_cpu(pollwr_hdr->value_2);
+ 
+ 	poll = le32_to_cpu(pollwr_hdr->poll);
+-	mask = le32_to_cpu(pollwr_hdr->mask);
+ 
+ 	while (wait_count < poll) {
+ 		ha->isp_ops->rd_reg_indirect(ha, addr1, &r_value);
 -- 
 2.25.1
 
