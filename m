@@ -2,122 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F9822863F
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1393E22860A
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jul 2020 18:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730905AbgGUQn5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jul 2020 12:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        id S1730695AbgGUQma (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jul 2020 12:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730684AbgGUQm2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:28 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48298C0619DF
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:28 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id z15so21825011wrl.8
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:28 -0700 (PDT)
+        with ESMTP id S1730691AbgGUQm3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jul 2020 12:42:29 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7930CC0619DA
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:29 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id w3so3534599wmi.4
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Jul 2020 09:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XGTsDAIvYg7OoXRgnP3n/W6+fXiTQfVQsRFU0wHYrcE=;
-        b=mjULXsS+2dTrdCLkuMlJ2woTYq6hqIau2y6VEUHF8aT9eWMLiH4W//CdsBJRoCQvP3
-         xHUdpwQ8WlRgcf6LuuTjIPBJTAECVhXmWla3NRyPtEHp/uPxm13MgH5fJFzygR73Dnac
-         4WV4CevyfD8n3Vwt0PSVfnHWEKfit4Pml3BZRVDv0LxRK1JAnxw4Ng4FFSB/SAZCfg+c
-         L44fbzar46IgCbXiXXZJsG50oMsh2LeqIAMyK0a6vrnKQtdrYcuOnvHetsmBhUw81fCo
-         c7ilCsxZBvGaNY0H2o+kvNlGIAm35wFuRgbP1fGCcPrgU4QTM0qaZbRuZYQJP5zQeV+6
-         metg==
+        bh=K90vcy/o25tlbqMsi3dOYtFzefeQDnF1S4V8+JehAOE=;
+        b=kSBNkzIgN4rXdVJ2lPl48mG5ud+1RxKIJoRnCAzUm7zOtw6he03uDCVu6aUHAz0P/2
+         xypcS8bzJNMrOGZs+yaPvHsv+iAMDRxK3bVXzJ79M9PVq2X9cHJbGnDSDLK2LqY0zQhm
+         rl6VKnqZRkifrpQRV9ZBRunLKpGE9o4tmm6GylhKpMCS9jwWbUrBa88Fju4SK796150V
+         PQtmbVpoBCPHuYUnXK2HPsWhcoXY9BKuqxs/pAa2OWnbtfp9qI+UQyyH7Kyb2ZS3gJUg
+         zMpDIdHwy0qGqJRjXV/lbCmfFOkuC6nCRdx9EkVyIisfhJMVZqDpzzPv+4g+p8EMghGk
+         gDYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XGTsDAIvYg7OoXRgnP3n/W6+fXiTQfVQsRFU0wHYrcE=;
-        b=dYVsXDykEBmzwFzKCcdsoPD7IPVddF6hFQE20BFd3CNba9pV/zitW4ceaRJp1+nI3n
-         eWGrkxXbnJqXeGxkIT4D9/R0j2OuhRhESqphm1yMcEYwnk4MKAMFT1X3klAdHbs3Me4Q
-         fuXBepmA4J+khIq9VsvPvju+IONBRPZ7B/mAB+CO9kMeAVgT6Lh6Q/8rc/y00K45wwKz
-         6dHl+dfztzDPJucAV4mU8PGbIjbQ+5QTGOw0wXJlkEJp18wALlAtJjDVh6Y1Qlwze/MI
-         ReuJGbAG8v2GpNNBU5uOBXfpmTu8Mg6gMN+5PwDaKX4jBbM2sfZI3ZMuu3tuyffvbU8T
-         XjoA==
-X-Gm-Message-State: AOAM533FTdwz3rI8uZrfS+OVEbuupIh5Q1uMlh5pLe+Plue01dJsRey+
-        lHaNKcUHfPjsyqv3AD5Y2SDTiQ==
-X-Google-Smtp-Source: ABdhPJwG1OE906l5grFbQNBoCjJKAoJlImEF+s33J6yAwy5+NJjSpIyLKLC+omAwKoTc1S+6F5ikrA==
-X-Received: by 2002:adf:f10a:: with SMTP id r10mr26815356wro.406.1595349747035;
-        Tue, 21 Jul 2020 09:42:27 -0700 (PDT)
+        bh=K90vcy/o25tlbqMsi3dOYtFzefeQDnF1S4V8+JehAOE=;
+        b=QUohhsfNP+43rjDvU49GUOP8a2Xtevh2gzaxMrTgUeSdRfuHWm57dnjroSj/GQW2zO
+         FkbKJYgWfYSU7y9Is8FV8MJlPJmvFCk1WUWoPPZe0TgFPkOh9k8Fbmr4BK+k/eUUfUT3
+         a4h/C0lAqwFkICSyo2DBQ0pjk1y8saHJ84PQd8PxpMIwRTaEMvLUIS/aS1sx//LhDwTe
+         e8wshRwzR5xjkzq5dCJNiaHGsAj9PvTjc4nrnSev7w/tnpobzKTa4v7pIvv6eWYGJfDI
+         2TbRrV8PPGN2lKam7zrQ0nNEuGU7FrFTNE/Ju6fyuPqbzZj1iXy2yuBJzr1YpiG3m4nD
+         1OTg==
+X-Gm-Message-State: AOAM530KU2v8LDRywWiG40CukMvvpzJd56aXW7E5aDmrM3CVNDDwHZAi
+        nV/DcpfQ7PrGQ2Cfh0/nqtP0VQ==
+X-Google-Smtp-Source: ABdhPJzJeQquSCZ32VcLdoqaRDKTdnfQqG9/uBWmvXER/GCrpEN/vLpo9JDj7ONFNsTzu6wJGulixQ==
+X-Received: by 2002:a1c:4e08:: with SMTP id g8mr4974710wmh.77.1595349748188;
+        Tue, 21 Jul 2020 09:42:28 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.25
+        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:42:26 -0700 (PDT)
+        Tue, 21 Jul 2020 09:42:27 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
         QLogic-Storage-Upstream@qlogic.com
-Subject: [PATCH 21/40] scsi: qla4xxx: ql4_mbx: Fix-up incorrectly documented parameter
-Date:   Tue, 21 Jul 2020 17:41:29 +0100
-Message-Id: <20200721164148.2617584-22-lee.jones@linaro.org>
+Subject: [PATCH 22/40] scsi: qla4xxx: ql4_iocb: Fix incorrectly named function parameter
+Date:   Tue, 21 Jul 2020 17:41:30 +0100
+Message-Id: <20200721164148.2617584-23-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200721164148.2617584-1-lee.jones@linaro.org>
 References: <20200721164148.2617584-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Also demote incomplete header from kerneldoc.
-
 Fixes the following W=1 kernel build warning(s):
 
-from  drivers/scsi/qla4xxx/ql4_mbx.c:9:
- drivers/scsi/qla4xxx/ql4_mbx.c:53: warning: Excess function parameter 'ret' description in 'qla4xxx_is_intr_poll_mode'
- drivers/scsi/qla4xxx/ql4_mbx.c:832: warning: Function parameter or member 'fw_ddb_entry_dma' not described in 'qla4xxx_get_fwddb_entry'
- drivers/scsi/qla4xxx/ql4_mbx.c:832: warning: Function parameter or member 'conn_err_detail' not described in 'qla4xxx_get_fwddb_entry'
- drivers/scsi/qla4xxx/ql4_mbx.c:832: warning: Function parameter or member 'tcp_source_port_num' not described in 'qla4xxx_get_fwddb_entry'
- drivers/scsi/qla4xxx/ql4_mbx.c:832: warning: Function parameter or member 'connection_id' not described in 'qla4xxx_get_fwddb_entry'
- drivers/scsi/qla4xxx/ql4_mbx.c:1271: warning: Function parameter or member 'ddb_entry' not described in 'qla4xxx_reset_target'
- drivers/scsi/qla4xxx/ql4_mbx.c:1271: warning: Excess function parameter 'db_entry' description in 'qla4xxx_reset_target'
- drivers/scsi/qla4xxx/ql4_mbx.c:1271: warning: Excess function parameter 'un_entry' description in 'qla4xxx_reset_target'
+from  drivers/scsi/qla4xxx/ql4_iocb.c:8:
+ drivers/scsi/qla4xxx/ql4_iocb.c:87: warning: Function parameter or member 'mrkr_mod' not described in 'qla4xxx_send_marker_iocb'
+ drivers/scsi/qla4xxx/ql4_iocb.c:87: warning: Excess function parameter 'marker_type' description in 'qla4xxx_send_marker_iocb'
 
 Cc: QLogic-Storage-Upstream@qlogic.com
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/qla4xxx/ql4_mbx.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/scsi/qla4xxx/ql4_iocb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_mbx.c b/drivers/scsi/qla4xxx/ql4_mbx.c
-index 02636b4785c58..bc8de7d402d58 100644
---- a/drivers/scsi/qla4xxx/ql4_mbx.c
-+++ b/drivers/scsi/qla4xxx/ql4_mbx.c
-@@ -47,7 +47,7 @@ void qla4xxx_process_mbox_intr(struct scsi_qla_host *ha, int out_count)
- /**
-  * qla4xxx_is_intr_poll_mode – Are we allowed to poll for interrupts?
+diff --git a/drivers/scsi/qla4xxx/ql4_iocb.c b/drivers/scsi/qla4xxx/ql4_iocb.c
+index 17222eb497622..a8df2d7eb0699 100644
+--- a/drivers/scsi/qla4xxx/ql4_iocb.c
++++ b/drivers/scsi/qla4xxx/ql4_iocb.c
+@@ -78,7 +78,7 @@ static int qla4xxx_get_req_pkt(struct scsi_qla_host *ha,
   * @ha: Pointer to host adapter structure.
-- * @ret: 1=polling mode, 0=non-polling mode
-+ * returns: 1=polling mode, 0=non-polling mode
-  **/
- static int qla4xxx_is_intr_poll_mode(struct scsi_qla_host *ha)
- {
-@@ -810,7 +810,7 @@ int qla4xxx_get_firmware_status(struct scsi_qla_host * ha)
- 	return QLA_SUCCESS;
- }
- 
--/**
-+/*
-  * qla4xxx_get_fwddb_entry - retrieves firmware ddb entry
-  * @ha: Pointer to host adapter structure.
-  * @fw_ddb_index: Firmware's device database index
-@@ -1259,8 +1259,7 @@ int qla4xxx_reset_lun(struct scsi_qla_host * ha, struct ddb_entry * ddb_entry,
- /**
-  * qla4xxx_reset_target - issues target Reset
-  * @ha: Pointer to host adapter structure.
-- * @db_entry: Pointer to device database entry
-- * @un_entry: Pointer to lun entry structure
-+ * @ddb_entry: Pointer to device database entry
+  * @ddb_entry: Pointer to device database entry
+  * @lun: SCSI LUN
+- * @marker_type: marker identifier
++ * @mrkr_mod: marker identifier
   *
-  * This routine performs a TARGET RESET on the specified target.
-  * The caller must ensure that the ddb_entry pointers
+  * This routine issues a marker IOCB.
+  **/
 -- 
 2.25.1
 
