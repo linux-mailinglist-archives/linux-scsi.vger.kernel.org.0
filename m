@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919FC229108
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jul 2020 08:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43C622910D
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jul 2020 08:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbgGVGkN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Jul 2020 02:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S1729360AbgGVGld (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Jul 2020 02:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726736AbgGVGkM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jul 2020 02:40:12 -0400
+        with ESMTP id S1726736AbgGVGld (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jul 2020 02:41:33 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8957AC061794;
-        Tue, 21 Jul 2020 23:40:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6833DC061794;
+        Tue, 21 Jul 2020 23:41:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=m06dMY8C1+OctIPfkwKshJveyuCGYqiBQURJOBQ19Sc=; b=Fzx1/hUg6z8v9yIJyc6Ha4szsO
-        RVzRhT5F9kRm+he2KvuSJXT1BiWqrRfmkPUj2st988DYjND72lHB8iWcTCO5zntyo4FFm7Kq1Lqjd
-        O4DmstLJKCycANbVFQGkVCkFVdASb8IHm/H5QVyFyksv0vSAcCp3xiFD7NRypuYsN34jJDECsRaQ3
-        eCcffOYriv0uWHYtomNlEOvR+J4HZ4sGLVBRPx8+9xskL1ZGmjCnPCbLBxGeLqlBnr9q1Q3f5+Gnh
-        8u/IF7yT34TR6kFa45zTD4G62s1OGPPGZMg/1FwN6LUS0cZKLQIor3Nt3Igoompc9VrY7vUtZKduZ
-        PV1+C9oA==;
+        bh=QBlT0rHy766TwjM3WcKRo2rpVMbBP9MM+KvXAGU8B1U=; b=j/H04SbnJSgNEzPiUMiUaBgDbK
+        0qYuXCf5XchuQ3KQWNP+I2RRJdOTDs/ci0ecLLjA+FOHXIlT/TWuC0YcdnmbjzYbG2ggKEKYFvYfC
+        suWD0aVodyFljngeBigiglu4KK5XeN4klkCbfTE/lQsFHhsFQhFoUOkc56R6QHyCZ1WEd4VDA+ZWl
+        yf8zweSeVZzdizInaTNxn0gXnpWrlbRi8f9VWvYhF2JakKSqY8jDhkQy07JRmRfMMYi+AHVWC4Jbp
+        l9Mo0O+VkhRfTm9vd1pAI5XzkuoRtafEHmbLZXXiASAEXrxN9SYWKtNgHfsKzVs0y2BWyctFLrHnT
+        ZjTIpL8Q==;
 Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jy8Ph-0005Zt-L9; Wed, 22 Jul 2020 06:39:37 +0000
-Date:   Wed, 22 Jul 2020 07:39:37 +0100
+        id 1jy8RE-0005hr-Dv; Wed, 22 Jul 2020 06:41:12 +0000
+Date:   Wed, 22 Jul 2020 07:41:12 +0100
 From:   Christoph Hellwig <hch@infradead.org>
 To:     Daejun Park <daejun7.park@samsung.com>
 Cc:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
@@ -47,25 +47,30 @@ Cc:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
         Jinyoung CHOI <j-young.choi@samsung.com>,
         Adel Choi <adel.choi@samsung.com>,
         BoRam Shin <boram.shin@samsung.com>
-Subject: Re: [PATCH v6 0/5] scsi: ufs: Add Host Performance Booster Support
-Message-ID: <20200722063937.GA21117@infradead.org>
-References: <CGME20200713103423epcms2p8442ee7cc22395e4a4cedf224f95c45e8@epcms2p8>
+Subject: Re: [PATCH v6 2/5] scsi: ufs: Add UFS-feature layer
+Message-ID: <20200722064112.GB21117@infradead.org>
+References: <231786897.01594636801601.JavaMail.epsvc@epcpadp1>
  <963815509.21594636682161.JavaMail.epsvc@epcpadp2>
+ <CGME20200713103423epcms2p8442ee7cc22395e4a4cedf224f95c45e8@epcms2p4>
+ <231786897.01594637401708.JavaMail.epsvc@epcpadp1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <963815509.21594636682161.JavaMail.epsvc@epcpadp2>
+In-Reply-To: <231786897.01594637401708.JavaMail.epsvc@epcpadp1>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As this monster seesm to come back again and again let me re-iterate
-my statement:
+On Mon, Jul 13, 2020 at 07:40:40PM +0900, Daejun Park wrote:
+> This patch is adding UFS feature layer to UFS core driver.
+> 
+> UFS Driver data structure (struct ufs_hba)
 
-I do not think Linux should support a broken standards extensions that
-creates a huge share state between the Linux initator and the target
-device like this with all its associated problems.
+Independent of the problems with the concept of HPB, this patch is
+just really bad software architecture.  Don't just add random
+indirection layers that do represent an actual real abstraction.
+As-is it is just another crap hook layer without a proper absteaction.
 
-Nacked-by: Christoph Hellwig <hch@lst.de>
+Nacked^2-by: Christoph Hellwig <hch@lst.de>
