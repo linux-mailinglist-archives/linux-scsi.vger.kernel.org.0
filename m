@@ -2,124 +2,142 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C0922A34E
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 01:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E51B22A32A
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 01:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733217AbgGVXuR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Jul 2020 19:50:17 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:45140 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733213AbgGVXuR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jul 2020 19:50:17 -0400
-Received: by kvm5.telegraphics.com.au (Postfix, from userid 502)
-        id 7C5572A2A0; Wed, 22 Jul 2020 19:50:16 -0400 (EDT)
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        id S1729401AbgGVXgb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Jul 2020 19:36:31 -0400
+Received: from mail-dm6nam10on2093.outbound.protection.outlook.com ([40.107.93.93]:64672
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726447AbgGVXga (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 Jul 2020 19:36:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DOJR7fbLwpEwaEaKmKTE7PRQO0ZPaW6nVtVSyyLczOSLnJVdvftDTQp02lk72xvIW8FKRWPNzB0+sFKgUEQNgWHEHYvefBpdrKbW+X356QUcs/950fat9H0vYci0PjZdnPqYKCyTuGzc/K4BQsew8IVobwhjcGwhpAmtyFo3Hznpxi4jSYp57WXKqH4Y6uvtdiyOpiko+LE0e/HWhV8QoUu+d49F2gj9Fijjx8P15iYaVZeuAQm+LHRlBoztB9+GTvkXwUE07DOmJo5uru9NyeUEnzqUqnhU+8Sz9EkSGYYBO+4JGCUVZsrVT+Dg1WUI6RMyIG31HwCPs4jbv0DkWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GwVZouGpBSEgbqRjpcHlHpYAkJzK9W/s6rqvMshw0Y4=;
+ b=IQ/t9EO7v0twslPA+PQcoXFJ3XDfK452uSO03nYMzZI9Y3MXv1+YYj/Z4j/HRxm6wOvB0CVrtlgYmC9ajamhR4crJJiNMixE7XHtgfWY3plKr95PzGW2cZj42wg/UaCdnUOi1EhhGopyekujFrwGkkSGCOSuIrqLJSi5R4LMDCcUGJY//vH/FL5qK9qHzxPSju2spYRNUllKjfLLmPVMs/QR9cuswdEtw+XfULZfNyIQPe5hSMqqLzkaLk/r+bg+yeH7UJHPY30VrvLfJIi6BMioXeiOoZw+jfDrN8CoXlNl1JyEgiGJRL2MZb4OilICom4XM2vNz0f6sDfZpdauCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GwVZouGpBSEgbqRjpcHlHpYAkJzK9W/s6rqvMshw0Y4=;
+ b=hDqogZ5tIS6tT/H45FgRNOvahoOS/NyHnlsTal36WMIx6g0tE8zSWTAD+uqcMFFNFPcTEI1hs8rN9nY5e7TQg46938MlHlBiPgMmw8Z+jeDHKqpZ99P3JxcuiyZTeuVBRcYSUAM84LGzWJ4F4lx2Yw4HPHJWa0JLW7zulq+0QAY=
+Received: from MW2PR2101MB1052.namprd21.prod.outlook.com (2603:10b6:302:a::16)
+ by MW2PR2101MB1849.namprd21.prod.outlook.com (2603:10b6:302:7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.5; Wed, 22 Jul
+ 2020 23:36:20 +0000
+Received: from MW2PR2101MB1052.namprd21.prod.outlook.com
+ ([fe80::fc14:3ca6:8a8:7407]) by MW2PR2101MB1052.namprd21.prod.outlook.com
+ ([fe80::fc14:3ca6:8a8:7407%8]) with mapi id 15.20.3239.005; Wed, 22 Jul 2020
+ 23:36:20 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     Boqun Feng <boqun.feng@gmail.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     "Paul Mackerras" <paulus@ozlabs.org>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <3952bc691e150a7128b29120999b6092071b039a.1595460351.git.fthain@telegraphics.com.au>
-From:   Finn Thain <fthain@telegraphics.com.au>
-Subject: [PATCH] scsi/mesh: Fix panic after host or bus reset
-Date:   Thu, 23 Jul 2020 09:25:51 +1000
+Subject: RE: [RFC 09/11] HID: hyperv: Make ringbuffer at least take two pages
+Thread-Topic: [RFC 09/11] HID: hyperv: Make ringbuffer at least take two pages
+Thread-Index: AQHWXwAnmlUu9XIV40S6+D4F8ioDMqkUQ2XQ
+Date:   Wed, 22 Jul 2020 23:36:15 +0000
+Message-ID: <MW2PR2101MB10524E4C2DB9FBADEF887165D7790@MW2PR2101MB1052.namprd21.prod.outlook.com>
+References: <20200721014135.84140-1-boqun.feng@gmail.com>
+ <20200721014135.84140-10-boqun.feng@gmail.com>
+In-Reply-To: <20200721014135.84140-10-boqun.feng@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2020-07-22T23:36:13Z;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=b5faba3b-3e0f-4702-9b21-bf88bb383024;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=microsoft.com;
+x-originating-ip: [24.22.167.197]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 4d9d3e7a-160b-4fca-7c86-08d82e9809c3
+x-ms-traffictypediagnostic: MW2PR2101MB1849:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MW2PR2101MB18498D9714F4864EBF43AD67D7790@MW2PR2101MB1849.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: e3Ejb98qkyTLx5H2U9E9JLmq2aabRzEE9gMj4WvkJaoMRFmssKHSJU8rwLPxxpN5wq+gJcot8/99ZLK92SkjfVgfu7lXYEXGb2LmOVjHrMUXLVna5ug/+qcPO3JY5H70VOZQI9e+Xfv6lul+2+HewT8U0+hkvrlTosYzRNJjQ0VMV7O/6y4hao5MJzCuCfvB5DuiTf4fNSvxXIIhATOGV7LmKfE9tB1PON4AdqOiWdnfBko+qbfk9sdjGTv8Oo5cPfO5NG6Umq2quBfLWkCrkyHGSeivsJkosbA2s0QvcJM1O+iNPAp9NY9he4Ai7KmeeG5d45H/m1x3N4cWFOzqRw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR2101MB1052.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(71200400001)(54906003)(110136005)(5660300002)(4326008)(2906002)(316002)(6666004)(8990500004)(86362001)(55016002)(52536014)(7416002)(9686003)(76116006)(66946007)(64756008)(66556008)(66476007)(66446008)(8936002)(26005)(83380400001)(186003)(82950400001)(10290500003)(33656002)(6506007)(7696005)(478600001)(8676002)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: wsliCfEwL1oec4M+7Zm3Rk4IXaGUS7Oq/tzV03hXNu/8oWj2K+1tqheTELOTIcf8jQoImKStKoTOga/rUfOw0fMnAdSSCpo7JvwWwIPmzTf/nq2XAkbHXtlXYI2yNw0cHf+J9ONe8A9Q2xV/bZNGxIjjnlvZHeCZyICDTHirPqPE6eBWkTNJlvOWIAT2nGiD1eM/17bNCkww0j3vSMSDWrJt1sdCy3c5wrM9aVxYGxZAlYUblX9bpafoeR4kjVGu6sHObchucrXQ+I0ImUuvPdssY1nuk8k3z1ZjUT8cwRy30p9h6oXXrz/k/Y9Ii2+0+BaFISzMoDu6icm8Zn+Xs4nd6GPh6eeVyZFmugphfAjO3weq0SfQaxgA9llUZmSf9ZdVr83NLxfabsZHBQZAIampcLHRRohyptX0ko9PK1R48BQIn5nV/XJzJX6ddd21a+1tCFTYxvgjSVzFIRjvsbkygXwSeRwnvorwCU98xeBpleszEbex0ob/KYaisWiKGmGTKPlwb+u9+LaLiRh1FPVyf0JXlTXh0kajCaKivvLXXIVKeblziF8cRyGmfVJTrL649YC61SLaFKBjZ4qKoo1yOtrm/oRNwoLEzWAOPRgcuOZqCuB7elnaHbD6/EqCZlAfUwI9iyR9kv/4+aiLPw==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR2101MB1052.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d9d3e7a-160b-4fca-7c86-08d82e9809c3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2020 23:36:15.8845
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: j4mFeE/6btu381LIiOMjbXPWNHoNh9jqpStGRLgHHObRAa0cBQRRH+3lwrfVmfMTs5yeub+YeKUw/2jC7PCOD9PJKS/9/rjWNY9fC8Ae1Kk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB1849
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Booting Linux with a Conner CP3200 drive attached to the MESH SCSI bus
-results in EH measures and a panic:
+From: Boqun Feng <boqun.feng@gmail.com> Sent: Monday, July 20, 2020 6:42 PM
+>=20
+> When PAGE_SIZE > HV_HYP_PAGE_SIZE, we need the ringbuffer size to be at
+> least 2 * PAGE_SIZE: one page for the header and at least one page of
+> the data part (because of the alignment requirement for double mapping).
+>=20
+> So make sure the ringbuffer sizes to be at least 2 * PAGE_SIZE when
+> using vmbus_open() to establish the vmbus connection.
+>=20
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+>  drivers/hid/hid-hyperv.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/hid/hid-hyperv.c b/drivers/hid/hid-hyperv.c
+> index 0b6ee1dee625..36c5e157c691 100644
+> --- a/drivers/hid/hid-hyperv.c
+> +++ b/drivers/hid/hid-hyperv.c
+> @@ -104,8 +104,8 @@ struct synthhid_input_report {
+>=20
+>  #pragma pack(pop)
+>=20
+> -#define INPUTVSC_SEND_RING_BUFFER_SIZE		(40 * 1024)
+> -#define INPUTVSC_RECV_RING_BUFFER_SIZE		(40 * 1024)
+> +#define INPUTVSC_SEND_RING_BUFFER_SIZE		(128 * 1024)
+> +#define INPUTVSC_RECV_RING_BUFFER_SIZE		(128 * 1024)
 
-[   25.499838] mesh: configured for synchronous 5 MB/s
-[   25.787154] mesh: performing initial bus reset...
-[   29.867115] scsi host0: MESH
-[   29.929527] mesh: target 0 synchronous at 3.6 MB/s
-[   29.998763] scsi 0:0:0:0: Direct-Access     CONNER   CP3200-200mb-3.5 4040 PQ: 0 ANSI: 1 CCS
-[   31.989975] sd 0:0:0:0: [sda] 415872 512-byte logical blocks: (213 MB/203 MiB)
-[   32.070975] sd 0:0:0:0: [sda] Write Protect is off
-[   32.137197] sd 0:0:0:0: [sda] Mode Sense: 5b 00 00 08
-[   32.209661] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-[   32.332708]  sda: [mac] sda1 sda2 sda3
-[   32.417733] sd 0:0:0:0: [sda] Attached SCSI disk
-... snip ...
-[   76.687067] mesh_abort((ptrval))
-[   76.743606] mesh: state at (ptrval), regs at (ptrval), dma at (ptrval)
-[   76.810798]     ct=6000 seq=86 bs=4017 fc= 0 exc= 0 err= 0 im= 7 int= 0 sp=85
-[   76.880720]     dma stat=84e0 cmdptr=1f73d000
-[   76.941387]     phase=4 msgphase=0 conn_tgt=0 data_ptr=24576
-[   77.005567]     dma_st=1 dma_ct=0 n_msgout=0
-[   77.065456]     target 0: req=(ptrval) goes_out=0 saved_ptr=0
-[   77.130512] mesh_abort((ptrval))
-[   77.187670] mesh: state at (ptrval), regs at (ptrval), dma at (ptrval)
-[   77.255594]     ct=6000 seq=86 bs=4017 fc= 0 exc= 0 err= 0 im= 7 int= 0 sp=85
-[   77.325778]     dma stat=84e0 cmdptr=1f73d000
-[   77.387239]     phase=4 msgphase=0 conn_tgt=0 data_ptr=24576
-[   77.453665]     dma_st=1 dma_ct=0 n_msgout=0
-[   77.515900]     target 0: req=(ptrval) goes_out=0 saved_ptr=0
-[   77.582902] mesh_host_reset
-[   88.187083] Kernel panic - not syncing: mesh: double DMA start !
-[   88.254510] CPU: 0 PID: 358 Comm: scsi_eh_0 Not tainted 5.6.13-pmac #1
-[   88.323302] Call Trace:
-[   88.378854] [e16ddc58] [c0027080] panic+0x13c/0x308 (unreliable)
-[   88.446221] [e16ddcb8] [c02b2478] mesh_start.part.12+0x130/0x414
-[   88.513298] [e16ddcf8] [c02b2fc8] mesh_queue+0x54/0x70
-[   88.577097] [e16ddd18] [c02a1848] scsi_send_eh_cmnd+0x374/0x384
-[   88.643476] [e16dddc8] [c02a1938] scsi_eh_tur+0x5c/0xb8
-[   88.707878] [e16dddf8] [c02a1ab8] scsi_eh_test_devices+0x124/0x178
-[   88.775663] [e16dde28] [c02a2094] scsi_eh_ready_devs+0x588/0x8a8
-[   88.843124] [e16dde98] [c02a31d8] scsi_error_handler+0x344/0x520
-[   88.910697] [e16ddf08] [c00409c8] kthread+0xe4/0xe8
-[   88.975166] [e16ddf38] [c000f234] ret_from_kernel_thread+0x14/0x1c
-[   89.044112] Rebooting in 180 seconds..
+Use max(40 * 1024, 2 * PAGE_SIZE) like in patch 8 of the series?
 
-In theory, a panic can happen after a bus or host reset with dma_started
-flag set. Fix this by halting the DMA before reinitializing the host.
-Don't assume that ms->current_req is set when halt_dma() is invoked as
-it may not hold for bus or host reset.
-
-BTW, this particular Conner drive can be made to work by inhibiting
-disconnect/reselect with 'mesh.resel_targets=0'.
-
-Cc: Paul Mackerras <paulus@ozlabs.org>
-Fixes: 1da177e4c3f41 ("Linux-2.6.12-rc2")
-Reported-and-tested-by: Stan Johnson <userm57@yahoo.com>
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
----
- drivers/scsi/mesh.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/mesh.c b/drivers/scsi/mesh.c
-index 74fb50644678d..4dd50db906779 100644
---- a/drivers/scsi/mesh.c
-+++ b/drivers/scsi/mesh.c
-@@ -1045,6 +1045,8 @@ static void handle_error(struct mesh_state *ms)
- 		while ((in_8(&mr->bus_status1) & BS1_RST) != 0)
- 			udelay(1);
- 		printk("done\n");
-+		if (ms->dma_started)
-+			halt_dma(ms);
- 		handle_reset(ms);
- 		/* request_q is empty, no point in mesh_start() */
- 		return;
-@@ -1357,7 +1359,8 @@ static void halt_dma(struct mesh_state *ms)
- 		       ms->conn_tgt, ms->data_ptr, scsi_bufflen(cmd),
- 		       ms->tgts[ms->conn_tgt].data_goes_out);
- 	}
--	scsi_dma_unmap(cmd);
-+	if (cmd)
-+		scsi_dma_unmap(cmd);
- 	ms->dma_started = 0;
- }
- 
-@@ -1712,6 +1715,9 @@ static int mesh_host_reset(struct scsi_cmnd *cmd)
- 
- 	spin_lock_irqsave(ms->host->host_lock, flags);
- 
-+	if (ms->dma_started)
-+		halt_dma(ms);
-+
- 	/* Reset the controller & dbdma channel */
- 	out_le32(&md->control, (RUN|PAUSE|FLUSH|WAKE) << 16);	/* stop dma */
- 	out_8(&mr->exception, 0xff);	/* clear all exception bits */
--- 
-2.26.2
+>=20
+>=20
+>  enum pipe_prot_msg_type {
+> --
+> 2.27.0
 
