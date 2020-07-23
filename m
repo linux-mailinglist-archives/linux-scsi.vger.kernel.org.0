@@ -2,98 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F7D22AF01
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0798722AF49
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728911AbgGWMZE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Jul 2020 08:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S1729354AbgGWM1T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Jul 2020 08:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728898AbgGWMZD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:03 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36CEC0619DC
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:02 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id f139so4997922wmf.5
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:02 -0700 (PDT)
+        with ESMTP id S1728909AbgGWMZE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:04 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F54C0619DC
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:04 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id 9so4773072wmj.5
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RyWxawKp9Typ2OK2kYwM9lNUQGGOHxUK9uVUiznh4iw=;
-        b=m9JWVP+mBsEvLIFtV/f+vnUB7TStzaLFXhdln3XW9MyO5nMKj0mhqVrEsOr3/72ZOg
-         D/gGVJfmAT1LBe8gluCI9Rj5JyMXIy/ch7m3aFLuSg8qzbymEE8ZtshvIfPebbZmdVzH
-         Guu3lK4HK0mbufcMXCqgHPttP6wxh6tQAxmyzvhsjKYcqx0zCuQppXVov3h8yhGIz0s4
-         9oZKNeheT38TzMxfXcm3DNYW2m010bQqp55Nz+KfdC2YevYApztjwcNRhISXpj+aNryK
-         b8B4XTvhcKZF8wa8WHDgpqZ7eCVDFiIqlx/dKmcvgw3hk2PrgHXI7egNAByIHcbGXRwK
-         zASw==
+        bh=7GXuG63I+zXiW2iHeDq1l75A8cqfuCvVf5oH88+KFWQ=;
+        b=WJkfBBhhXpIiweagpu7YHnZJQkDUqh5Kgxr7h0JfR09J0THKrxTwLrDPG3qNeBF5+H
+         IaYyNQ+m00fhuxZF5R+FcPBCB3ZWObUSnW1x2IULVBmAVFECIsnDSGhXgbhmeFicpqtj
+         98A2/p6zqBusuPVpMN9EC4INcbiKmdJ47v2tSIcD5J6CG6zypzMfufnW5GyLfasRvmD7
+         NTUHAV7TswgxUNokIWKvumdbieEcOx+3b2DVzGxhsFaVzu4l3ZSBqzJeKjnVcAl6Spjc
+         JRaSp8E7RRxrEfLZYQ71AYXu6ZDcZNGloGlVcQI85RQ36CByWCmWbnBjZZ6obrfSJZK6
+         6Ang==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RyWxawKp9Typ2OK2kYwM9lNUQGGOHxUK9uVUiznh4iw=;
-        b=ttjYQiOuHeh4JkN1BZmpoReL/MiR/gwlpZz5Be1gQdfDTn18tKEL6pNlLUZutpQzlx
-         4yQ34Vi8tJ5UsdHHOHjm/ZXxaC2QephWQ2OlDZ+/ZE6arN2yiDcI5u11BzUUjJViGf3k
-         W3eQXjTRmoZZmNAoAVoUBuD3oCRDzGRBUZh4bICV698hObCVmUdEj+pMQVMocvk6RYIn
-         QNIGz+Gxld74FjPzA01j0GJN4+kU/wiMCy3bkqN9i65YJhLs0dJiaH4MWZmYR5qwZ0eH
-         8Yde28WtBdfoJQnLrlE8nyVC7wD0FgvtDNHDcrUnA4TWr4jW9nlpkzfn62Acg11fJSeg
-         iDNQ==
-X-Gm-Message-State: AOAM531fK96LU7KE66zYgdoLdMYJikmSKDKHCM0qBHqGo+5crDXnBlGL
-        Nqw6BKkl5no4DHggFpkNImD0fA==
-X-Google-Smtp-Source: ABdhPJyWYbvequ+SPWxMPfV21jB7z9+Xdz0970BgnkdBLiAkCSe0A8XOOpulClfgQGvnYSA5HZfnow==
-X-Received: by 2002:a1c:14e:: with SMTP id 75mr4153379wmb.151.1595507101637;
-        Thu, 23 Jul 2020 05:25:01 -0700 (PDT)
+        bh=7GXuG63I+zXiW2iHeDq1l75A8cqfuCvVf5oH88+KFWQ=;
+        b=PshFnbDL0uOxjqcsmoKP+TFl94pnELo6DdFKhXDCe+WImqB66Mu5awypt0Arf6/l2M
+         CeVilshi759WJy6iAkOJdkf04e/Shqibijbxt1oTC89xs7v8t0ng63MuenE8agOgFJqb
+         N39qDq4Zodx/eb7zsspMbw0VLmyjnAHlDIoNfi4ivua38sXMhtihARddx9BSig5v+gu4
+         ezRmT1Wmgb2VBjQVin5uUNCioh759IpUZJSHuCI714TNshZZhuJsIr8zCHcIgv9ebE39
+         Qyy+DthEnkkrCz7qQllZHo6X6yUxaUyfD4k7+pCxT3b9VkxhRHnOCu/jEAli4T9IOToE
+         2BIg==
+X-Gm-Message-State: AOAM530rQjMAONIU4c3/02es5QMIz9lP5+zk75QzagPkWrn54n60mneG
+        +q+mw3juSB2IRiZXuijvu1hxF5RfmH8=
+X-Google-Smtp-Source: ABdhPJxU96+k6AAXNc4TzOnx/0IOTErBWda93TNlxgsOHGe2FcOFrrlYZvW48DUn0NkMAUlVtbl3AQ==
+X-Received: by 2002:a1c:2041:: with SMTP id g62mr3919099wmg.172.1595507102891;
+        Thu, 23 Jul 2020 05:25:02 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.00
+        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 05:25:01 -0700 (PDT)
+        Thu, 23 Jul 2020 05:25:02 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
-Subject: [PATCH 10/40] scsi: bfa: bfa_fcpim: Demote seemingly unintentional kerneldoc header
-Date:   Thu, 23 Jul 2020 13:24:16 +0100
-Message-Id: <20200723122446.1329773-11-lee.jones@linaro.org>
+        QLogic-Storage-Upstream@cavium.com
+Subject: [PATCH 11/40] scsi: qedi: qedi_main: Remove 2 set but unused variables
+Date:   Thu, 23 Jul 2020 13:24:17 +0100
+Message-Id: <20200723122446.1329773-12-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200723122446.1329773-1-lee.jones@linaro.org>
 References: <20200723122446.1329773-1-lee.jones@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is the only use of kerneldoc in the source file and no
-descriptions are provided.
-
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/bfa/bfa_fcpim.c:3829: warning: Function parameter or member 'bfa' not described in 'bfa_fcpim_get_throttle_cfg'
- drivers/scsi/bfa/bfa_fcpim.c:3829: warning: Function parameter or member 'drv_cfg_param' not described in 'bfa_fcpim_get_throttle_cfg'
+ drivers/scsi/qedi/qedi_main.c: In function ‘qedi_queue_cqe’:
+ drivers/scsi/qedi/qedi_main.c:1158:21: warning: variable ‘conn’ set but not used [-Wunused-but-set-variable]
+ 1158 | struct iscsi_conn *conn;
+ | ^~~~
+ drivers/scsi/qedi/qedi_main.c: In function ‘__qedi_probe’:
+ drivers/scsi/qedi/qedi_main.c:2432:6: warning: variable ‘tmp’ set but not used [-Wunused-but-set-variable]
+ 2432 | u16 tmp;
+ | ^~~
 
-Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>
-Cc: Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
+Cc: QLogic-Storage-Upstream@cavium.com
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/bfa/bfa_fcpim.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qedi/qedi_main.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/bfa/bfa_fcpim.c b/drivers/scsi/bfa/bfa_fcpim.c
-index f6bf24084a47a..29f99561dfc3a 100644
---- a/drivers/scsi/bfa/bfa_fcpim.c
-+++ b/drivers/scsi/bfa/bfa_fcpim.c
-@@ -3812,7 +3812,7 @@ bfa_iotag_attach(struct bfa_fcp_mod_s *fcp)
- }
+diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
+index 81a307695cc91..1a7791164de8c 100644
+--- a/drivers/scsi/qedi/qedi_main.c
++++ b/drivers/scsi/qedi/qedi_main.c
+@@ -1155,7 +1155,6 @@ static int qedi_queue_cqe(struct qedi_ctx *qedi, union iscsi_cqe *cqe,
+ {
+ 	struct qedi_work *qedi_work;
+ 	struct qedi_conn *q_conn;
+-	struct iscsi_conn *conn;
+ 	struct qedi_cmd *qedi_cmd;
+ 	u32 iscsi_cid;
+ 	int rc = 0;
+@@ -1168,7 +1167,6 @@ static int qedi_queue_cqe(struct qedi_ctx *qedi, union iscsi_cqe *cqe,
+ 			  iscsi_cid);
+ 		return -1;
+ 	}
+-	conn = q_conn->cls_conn->dd_data;
  
+ 	switch (cqe->cqe_common.cqe_type) {
+ 	case ISCSI_CQE_TYPE_SOLICITED:
+@@ -2429,7 +2427,6 @@ static int __qedi_probe(struct pci_dev *pdev, int mode)
+ 	struct qed_probe_params qed_params;
+ 	void *task_start, *task_end;
+ 	int rc;
+-	u16 tmp;
  
--/**
-+/*
-  * To send config req, first try to use throttle value from flash
-  * If 0, then use driver parameter
-  * We need to use min(flash_val, drv_val) because
+ 	if (mode != QEDI_MODE_RECOVERY) {
+ 		qedi = qedi_host_alloc(pdev);
+@@ -2528,9 +2525,9 @@ static int __qedi_probe(struct pci_dev *pdev, int mode)
+ 		  "Writing %d to primary and secondary BDQ doorbell registers.\n",
+ 		  qedi->bdq_prod_idx);
+ 	writew(qedi->bdq_prod_idx, qedi->bdq_primary_prod);
+-	tmp = readw(qedi->bdq_primary_prod);
++	readw(qedi->bdq_primary_prod);
+ 	writew(qedi->bdq_prod_idx, qedi->bdq_secondary_prod);
+-	tmp = readw(qedi->bdq_secondary_prod);
++	readw(qedi->bdq_secondary_prod);
+ 
+ 	ether_addr_copy(qedi->mac, qedi->dev_info.common.hw_mac);
+ 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_DISC, "MAC address is %pM.\n",
 -- 
 2.25.1
 
