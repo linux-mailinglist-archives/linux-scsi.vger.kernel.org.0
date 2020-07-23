@@ -2,59 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BBD22AF33
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2086322AF14
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728987AbgGWM0f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Jul 2020 08:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
+        id S1728989AbgGWMZS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Jul 2020 08:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728971AbgGWMZQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:16 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E5FC0619DC
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:15 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id o8so4783277wmh.4
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:15 -0700 (PDT)
+        with ESMTP id S1728960AbgGWMZR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:17 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D32C0619DC
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:16 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id 88so4978210wrh.3
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Va/Ff5G2hEmAhvKYYGy2WjvjWoULU+Qfw6mOj+wkLgk=;
-        b=GrbtluSJbKvXB3XVk94LANq0j8olHPMHyQJC8heK46kTGaizDW8xkyyCRV2sy9pwlO
-         NasEXqqYQqCkCgZO0ZucEKCaIWJnxD/tqbrOLCncdpe4cvDbP7k6BQRTtUbG/NSQe+oT
-         L83Mn0nJOjCPAmTCkeQMCxWoiPpP8Inh6/UGZZpWCOy25u2GUSx2WhoqplwC6orcnj0M
-         aM9oFpQj+subQFcUjh2krxgDuvQf1dbVE6y1/+jQjR2YEbKkQoRikCw/CEL3QFjkPURz
-         0o1bHAHoxtzm8Huk5Gx3SI+LnKiR0z+DwrgcwFjez73AGGZ15h7Vy8jhvbTFO18BKka1
-         xTIQ==
+        bh=KuXFDEYVsnsDfXIKt9wKPHYtC5k1C4IDk7HQmnmIHX4=;
+        b=xFC5+L6qTksxCecGRt3nk4ZWSrIfiJ5KB8fRopA2KjkpV8FmkuJa0jtIZRe/PclS1a
+         /4M87SpuupjQwVaqi01RBVgXJOs5dZDHD7Uuik52ZLmXYonwu+Hr2hgN20b8+D66Bqxh
+         2Zesy56tksWGu5NWopASjeu6yF+zoGxk0PRr5O6eYmqqGpl0i02ozM/sLvikCsSdKJ3K
+         SNtVxe9K8vzqtiJRA595fYK+tDZ5N95wcXGNptCKciO7aSs34z5mGknLQAKaJ/T33nr+
+         QYSatN0QX3DXlIcbKV+D/IeXyMfxhJCd0e30ZyyDCJJu/v/tyMvmpnW706QoSu9E1XSu
+         823A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Va/Ff5G2hEmAhvKYYGy2WjvjWoULU+Qfw6mOj+wkLgk=;
-        b=ebU6l5Li/u6jHU9TvFQVeQOw2QjrCU8zzMSqXyDEEp6YTq19DALsUYXT9mRhfDEh75
-         fYLYhvKcJLLUPXTbQLd9in+prrv0b+L+pCxNFLZwHbLLEU2OY3AmjHZNjsySd56kLQyQ
-         i6h1pM14XvkbHhCZh7Q9zcWg6wYkppwMT7scXOGbxQgai9L4H9H3pKQPqD8I+CZxU1Qa
-         z2sWc0X/XCEngGcDST23sRroK7FJHcHocoW2TeFvBirlWhv1Y47YcfO60rksqpw1saJD
-         A5VKvUGYUGWbPjbpqZ0x2xCnL7a4AcEDrwvnQnTeQtkKOfoCYaoNjVyVEL7Ua9T0JlC8
-         wRoA==
-X-Gm-Message-State: AOAM531bpDhNYt6WDZeNwAy+NFRt5Zd2EVt6S2Nirhu9ejj7hzaBAD3U
-        v6hnzxPwC60GuE3ILQ3SWR596Q==
-X-Google-Smtp-Source: ABdhPJxYMy4WI54kPr1zV3EGU+isVVMYiwRBNr7dqikp5ChiLWLv5GhFemXzv/nugVl78RxJzX5jXg==
-X-Received: by 2002:a1c:790c:: with SMTP id l12mr3922082wme.50.1595507114637;
-        Thu, 23 Jul 2020 05:25:14 -0700 (PDT)
+        bh=KuXFDEYVsnsDfXIKt9wKPHYtC5k1C4IDk7HQmnmIHX4=;
+        b=Xvs2n3nOCFmZqu029Am//koTFr0uwUUJijC4xQGVjRIdlFaEoY5sLGeNCu9ugGZun8
+         19lrGxjm3GSkklebiHmM36/FYc9jmrL1nkI/etv7g9uFdE5y/Nyd0T7QhCTjsJWl5NT4
+         WT/4Mvgp8NVdcXJPyBNrsrebuwj1nv9pMRpxFn1d3HrNl12drzJ4VJQp1gMRvkZ9Utg+
+         xQOWGK6BFhIqDEY68RbW874WXX4RAOSkjzUnyXEWiDvFC8iVDRLfvz8uB1t41zU0S+lK
+         UY9TJllBIO0+FVgnA20fBWXx/QnBu3b6aOnKXmF0VJUmQdtvj0E0mHHqkiXWnOxuEpK6
+         RO5g==
+X-Gm-Message-State: AOAM531FhhW+3hEcwSRCsKacHFCQET1j28VueJhbq4w5X1eENx6YWJM9
+        /GOQWZVKHBsofStwEbCvbo/Nkg==
+X-Google-Smtp-Source: ABdhPJxCnxCGnN7MmoQVRH8Z3jCjXBAJHu7Hl1DfZ7kT2ofsa6YfNX2BVf1YuitsN9T7DAfEI8Gn7w==
+X-Received: by 2002:adf:df06:: with SMTP id y6mr3706057wrl.89.1595507115674;
+        Thu, 23 Jul 2020 05:25:15 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.13
+        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 05:25:14 -0700 (PDT)
+        Thu, 23 Jul 2020 05:25:15 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Arkadiusz Drabczyk <arkadiusz@drabczyk.org>
-Subject: [PATCH 21/40] scsi: csiostor: csio_hw: Mark known unused variable as __always_unused
-Date:   Thu, 23 Jul 2020 13:24:27 +0100
-Message-Id: <20200723122446.1329773-22-lee.jones@linaro.org>
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 22/40] scsi: csiostor: csio_hw_t5: Remove 2 unused variables {mc,edc}_bist_status_rdata_reg
+Date:   Thu, 23 Jul 2020 13:24:28 +0100
+Message-Id: <20200723122446.1329773-23-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200723122446.1329773-1-lee.jones@linaro.org>
 References: <20200723122446.1329773-1-lee.jones@linaro.org>
@@ -68,28 +67,55 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/csiostor/csio_hw.c: In function ‘csio_hw_get_vpd_params’:
- drivers/scsi/csiostor/csio_hw.c:309:8: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/csiostor/csio_hw_t5.c: In function ‘csio_t5_mc_read’:
+ drivers/scsi/csiostor/csio_hw_t5.c:151:11: warning: variable ‘mc_bist_status_rdata_reg’ set but not used [-Wunused-but-set-variable]
+ 151 | uint32_t mc_bist_status_rdata_reg, mc_bist_data_pattern_reg;
+ | ^~~~~~~~~~~~~~~~~~~~~~~~
+ drivers/scsi/csiostor/csio_hw_t5.c: In function ‘csio_t5_edc_read’:
+ drivers/scsi/csiostor/csio_hw_t5.c:199:38: warning: variable ‘edc_bist_status_rdata_reg’ set but not used [-Wunused-but-set-variable]
+ 199 | uint32_t edc_bist_cmd_data_pattern, edc_bist_status_rdata_reg;
+ | ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cc: Arkadiusz Drabczyk <arkadiusz@drabczyk.org>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/csiostor/csio_hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/csiostor/csio_hw_t5.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/csiostor/csio_hw.c b/drivers/scsi/csiostor/csio_hw.c
-index 950f9cdf0577f..98d4d39aaa572 100644
---- a/drivers/scsi/csiostor/csio_hw.c
-+++ b/drivers/scsi/csiostor/csio_hw.c
-@@ -306,7 +306,7 @@ csio_hw_get_vpd_params(struct csio_hw *hw, struct csio_vpd *p)
- 	uint8_t *vpd, csum;
- 	const struct t4_vpd_hdr *v;
- 	/* To get around compilation warning from strstrip */
--	char *s;
-+	char __always_unused *s;
+diff --git a/drivers/scsi/csiostor/csio_hw_t5.c b/drivers/scsi/csiostor/csio_hw_t5.c
+index f24def6c6fd1e..1df8891d37251 100644
+--- a/drivers/scsi/csiostor/csio_hw_t5.c
++++ b/drivers/scsi/csiostor/csio_hw_t5.c
+@@ -148,12 +148,11 @@ csio_t5_mc_read(struct csio_hw *hw, int idx, uint32_t addr, __be32 *data,
+ {
+ 	int i;
+ 	uint32_t mc_bist_cmd_reg, mc_bist_cmd_addr_reg, mc_bist_cmd_len_reg;
+-	uint32_t mc_bist_status_rdata_reg, mc_bist_data_pattern_reg;
++	uint32_t mc_bist_data_pattern_reg;
  
- 	if (csio_is_valid_vpd(hw))
- 		return 0;
+ 	mc_bist_cmd_reg = MC_REG(MC_P_BIST_CMD_A, idx);
+ 	mc_bist_cmd_addr_reg = MC_REG(MC_P_BIST_CMD_ADDR_A, idx);
+ 	mc_bist_cmd_len_reg = MC_REG(MC_P_BIST_CMD_LEN_A, idx);
+-	mc_bist_status_rdata_reg = MC_REG(MC_P_BIST_STATUS_RDATA_A, idx);
+ 	mc_bist_data_pattern_reg = MC_REG(MC_P_BIST_DATA_PATTERN_A, idx);
+ 
+ 	if (csio_rd_reg32(hw, mc_bist_cmd_reg) & START_BIST_F)
+@@ -196,7 +195,7 @@ csio_t5_edc_read(struct csio_hw *hw, int idx, uint32_t addr, __be32 *data,
+ {
+ 	int i;
+ 	uint32_t edc_bist_cmd_reg, edc_bist_cmd_addr_reg, edc_bist_cmd_len_reg;
+-	uint32_t edc_bist_cmd_data_pattern, edc_bist_status_rdata_reg;
++	uint32_t edc_bist_cmd_data_pattern;
+ 
+ /*
+  * These macro are missing in t4_regs.h file.
+@@ -208,7 +207,6 @@ csio_t5_edc_read(struct csio_hw *hw, int idx, uint32_t addr, __be32 *data,
+ 	edc_bist_cmd_addr_reg = EDC_REG_T5(EDC_H_BIST_CMD_ADDR_A, idx);
+ 	edc_bist_cmd_len_reg = EDC_REG_T5(EDC_H_BIST_CMD_LEN_A, idx);
+ 	edc_bist_cmd_data_pattern = EDC_REG_T5(EDC_H_BIST_DATA_PATTERN_A, idx);
+-	edc_bist_status_rdata_reg = EDC_REG_T5(EDC_H_BIST_STATUS_RDATA_A, idx);
+ #undef EDC_REG_T5
+ #undef EDC_STRIDE_T5
+ 
 -- 
 2.25.1
 
