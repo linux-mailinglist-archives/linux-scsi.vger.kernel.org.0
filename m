@@ -2,58 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA1522AF15
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1FE22AF0C
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgGWMZX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1729015AbgGWMZX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 23 Jul 2020 08:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728985AbgGWMZU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:20 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2675C0619DC
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:19 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id f7so4995154wrw.1
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:19 -0700 (PDT)
+        with ESMTP id S1729000AbgGWMZV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:21 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D918C0619E5
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:21 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id y3so4978011wrl.4
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=euKwHTd5nmGQirdNec0wmJhbD/rOPWNyEyTyNJ+qI+A=;
-        b=JuFdS5y710xg7RFc7xoZiCn3DzeYwplfD9eeT3fvU2DpPlQMshxBMlcev/VDriTtJJ
-         lKufu0zDWWI/ezb59IYeT/E+7wBz15on/r6th+k5L/Za/YFBwe9mI6wtT3PSaU+s2T4G
-         myg2wIS9618YPDyhloZNL2Shbjd+1eEqJswxvbHS0/zjY7xN5toWF1RZNhmbgURGYfQx
-         kw6ANS46TLW3b31RdSdoX6gKzbPQ0T0n4/1CWWeM9GPx31A5eNNnvRyK+AHP8ml3YamA
-         6yAD7+vqbH+BOwdtHWk3Jbm36PhITyiTmBYNHVleZfKr/ZjjTHFRPNqhR1fS3xHhDtm/
-         pvLQ==
+        bh=3pqGsbWZalxf7KD6RyeDaCfLDso/eIrkBstcO2+vgts=;
+        b=K/pgA01jiliZZhOHrTKN8/Zxz79yXSGEiM6AmI+DmQHdjzWTJVTI6ok71y2wKeRqwa
+         CxjUa/HChksPObKRNeCFic2v5Nby3SkIwvVOUNAtbwnpK0Nn6TjFEWeAFkTW5NYKRYQ4
+         9kng0uv0+/p3q4PPKqBneNXfvbmkYugMlhxqfqPM3PUOGwZuRQ6D2CG8mw0QB8cmx7nr
+         TywdbyleGx5DHbaEBZJdD2FZ8gbxqxS7BjMuVpWMbvXb2t9OWFiTa17DBiX7jDOJkAUm
+         0iN/hQ2M5eT/CPWfy7XK/UX3W03y8Zg9jfMD3O0mA554r5EeeTVETiIXUjOOUSaqbxor
+         v6ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=euKwHTd5nmGQirdNec0wmJhbD/rOPWNyEyTyNJ+qI+A=;
-        b=skdbGjxnmBZrqSzMGJahbDLyCl0zUs1qd0piR99LfWffVL2pOPJK3XF+phwH3QxlNl
-         QRa0RL0qwALAApkfY+C3QH4Edwto/OzKdMO84H0u4kob49uvhmDaSJTL7p41O/jMDslV
-         ZxBVWT4co65WDSejL2GHwJBnTpD/Y50Y8EPdnzzADo9SlcCdyU+I7Yx4EwEynaJwtrkK
-         ai8ctxIziR8DGs4yPpeCOhF3TA18aNeG/QJ+A4FBtk+OMzMEaleAdIMVrAE9OIZjx7iM
-         /RvsaPSIGWqjy7mGpbW9nShC6rhZ8GVz5K9FRzmpKiJC5PUEdGc8c3p+LMetzwtE5Wpg
-         iPVQ==
-X-Gm-Message-State: AOAM5316Y92LMYZaJL2xWyvK5sVeTLdum1FW5RP9frrfVFCGryBK6PO/
-        lbOsUbi1/DtjORGz5PscyYtoUg==
-X-Google-Smtp-Source: ABdhPJzSBVHJ88f6m8bQEuFIRyRwgvryu7g4a5wAFl3g7lEWHef74sdfGzIDj1FOc+h2tgj3hX3Itg==
-X-Received: by 2002:adf:ec8b:: with SMTP id z11mr3736372wrn.51.1595507118682;
-        Thu, 23 Jul 2020 05:25:18 -0700 (PDT)
+        bh=3pqGsbWZalxf7KD6RyeDaCfLDso/eIrkBstcO2+vgts=;
+        b=omVnTGGwjuOYsdVn9i8BPjF4Xz64Ib9aBv+8+Xin0pOWuNnV8fjI2iwX/DL1xjfy24
+         hSw6mnyvRdLFFvN7OlXN8MbKYy1HDktDscI3Yu4eSj683FGpUGsHIGO7fkpLZ07IoSSV
+         Zt+ZSzZgeyswrymlufV/Ut4bDhNwgKsCZfhCqYxi6hAhtO2Xzx7idn7tyoA1lqicyuey
+         +R+b4b3i9DqR3y8t931jV6E737uYGW1gcpmU1TMM5isgkpjPpQKhmtfZ9gHaobfIoSTj
+         MoYT9MURjXaJcxq0tKGNuqc8QDm/5xW4CamNgqTpi1Wm/X3i+KHQj9+O2NFHD5dUoGCk
+         C2tA==
+X-Gm-Message-State: AOAM531Ze/jeZETPMI4uMx1mk+R6g+TnNJLZyu6CKf2+THgQ4nJ3W+59
+        Ykpcyjv3N0Cq3Jfio+cCo0NoGg==
+X-Google-Smtp-Source: ABdhPJzsoSMrqlqygUNaU5qbgYVAr1Wofya/CH5bMUGwoO5FJdONJmyvmo/qMhP/CfRfi1y2LNMtmg==
+X-Received: by 2002:adf:e98c:: with SMTP id h12mr3774551wrm.3.1595507119836;
+        Thu, 23 Jul 2020 05:25:19 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.17
+        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 05:25:18 -0700 (PDT)
+        Thu, 23 Jul 2020 05:25:19 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 24/40] scsi: csiostor: csio_rnode: Add missing description for csio_rnode_fwevt_handler()'s 'fwevt' param
-Date:   Thu, 23 Jul 2020 13:24:30 +0100
-Message-Id: <20200723122446.1329773-25-lee.jones@linaro.org>
+        Lee Jones <lee.jones@linaro.org>,
+        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
+Subject: [PATCH 25/40] scsi: bfa: bfa_ioc_ct: Demote non-compliant kerneldoc headers to standard comments
+Date:   Thu, 23 Jul 2020 13:24:31 +0100
+Message-Id: <20200723122446.1329773-26-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200723122446.1329773-1-lee.jones@linaro.org>
 References: <20200723122446.1329773-1-lee.jones@linaro.org>
@@ -66,26 +68,49 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/csiostor/csio_rnode.c:869: warning: Function parameter or member 'fwevt' not described in 'csio_rnode_fwevt_handler'
+ drivers/scsi/bfa/bfa_ioc_ct.c:504: warning: Function parameter or member 'ioc' not described in 'bfa_ioc_set_ctx_hwif'
+ drivers/scsi/bfa/bfa_ioc_ct.c:504: warning: Function parameter or member 'hwif' not described in 'bfa_ioc_set_ctx_hwif'
+ drivers/scsi/bfa/bfa_ioc_ct.c:525: warning: Function parameter or member 'ioc' not described in 'bfa_ioc_set_ct_hwif'
+ drivers/scsi/bfa/bfa_ioc_ct.c:540: warning: Function parameter or member 'ioc' not described in 'bfa_ioc_set_ct2_hwif'
 
+Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>
+Cc: Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/csiostor/csio_rnode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/bfa/bfa_ioc_ct.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/csiostor/csio_rnode.c b/drivers/scsi/csiostor/csio_rnode.c
-index e9c3b045f5875..713e13adf4dcc 100644
---- a/drivers/scsi/csiostor/csio_rnode.c
-+++ b/drivers/scsi/csiostor/csio_rnode.c
-@@ -862,7 +862,7 @@ csio_rnode_devloss_handler(struct csio_rnode *rn)
- /**
-  * csio_rnode_fwevt_handler - Event handler for firmware rnode events.
-  * @rn:		rnode
-- *
-+ * @fwevt:	firmware event to handle
+diff --git a/drivers/scsi/bfa/bfa_ioc_ct.c b/drivers/scsi/bfa/bfa_ioc_ct.c
+index 6fd3383ee5381..fb748291676b6 100644
+--- a/drivers/scsi/bfa/bfa_ioc_ct.c
++++ b/drivers/scsi/bfa/bfa_ioc_ct.c
+@@ -496,7 +496,7 @@ bfa_ioc_ct_sync_complete(struct bfa_ioc_s *ioc)
+ 	return BFA_FALSE;
+ }
+ 
+-/**
++/*
+  * Called from bfa_ioc_attach() to map asic specific calls.
+  */
+ static void
+@@ -517,7 +517,7 @@ bfa_ioc_set_ctx_hwif(struct bfa_ioc_s *ioc, struct bfa_ioc_hwif_s *hwif)
+ 	hwif->ioc_get_alt_fwstate = bfa_ioc_ct_get_alt_ioc_fwstate;
+ }
+ 
+-/**
++/*
+  * Called from bfa_ioc_attach() to map asic specific calls.
   */
  void
- csio_rnode_fwevt_handler(struct csio_rnode *rn, uint8_t fwevt)
+@@ -532,7 +532,7 @@ bfa_ioc_set_ct_hwif(struct bfa_ioc_s *ioc)
+ 	ioc->ioc_hwif = &hwif_ct;
+ }
+ 
+-/**
++/*
+  * Called from bfa_ioc_attach() to map asic specific calls.
+  */
+ void
 -- 
 2.25.1
 
