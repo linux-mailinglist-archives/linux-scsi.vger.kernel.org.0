@@ -2,64 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CB822AF3B
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD6122AEFC
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728820AbgGWMY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1728828AbgGWMY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 23 Jul 2020 08:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728794AbgGWMYy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:24:54 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C545C0619E3
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:24:54 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id f2so4964370wrp.7
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:24:54 -0700 (PDT)
+        with ESMTP id S1728824AbgGWMY4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:24:56 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E231CC0619E2
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:24:55 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id f1so4425834wro.2
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=w5l35wuUCv0+znhq/VnSUhgz/EG/YdhUiwAApvAIamk=;
-        b=r6ge4Ti8+kXThHu3tpFrY2Ryo0k3bAW1ptY+IUg7BKnhP9feLqbB4Ki0VPkdi4Rfvh
-         qiERb1MCbRVWRbqpr7Li7FdfNx7sNXcrZZKQ+ZYrZN9Q/wXNqcAOCgwy/xPcjVmHEwHS
-         SjZDEHqnvq2ZirIeFiV8qz605QE95ZmTRcZHXYEmR8UknIZC1GxppBcSd1EAo+bXchNf
-         p5TCHVosIiUnxOj1mPS2h0O9qK7hcFZu1MdueLtyLnnPUdd0Ld1xbJoIGkcmxW8osJbq
-         OsFQnujym60qi7zEglAXs6H9nCYvCE7quvmqEBO9TWEnoz0xOy8mjr/cKra0Rcz4LUXV
-         Mb/A==
+        bh=7dnMCO3O7GWoEhpbi22iSF6SZebDl2BeuDMdc7cp9fI=;
+        b=Qy0EsRHgGsQAG/Sjohwyb0UEINUjI26GTuGt0maBG/rSohVeuyGgXngFFOxD+uDcc9
+         JpUn/jP6ivol2esKfmNSeEMEbPDORThVBi6ZKA2DE1zm/mvjL3MYceytPPf9asN/ZsBt
+         md9wB/BQrFkmcZh7pRodZLkBY80Vgl9dvoQCJa/h66Ug+75oTzYeZkPPcfUEirU1YkqR
+         KFyGEC59BcksYRSYONQPHiW7dPaiMxEKHSphQ1yymwqvv5CsSGpfy2vBWi9bwncRoZsV
+         IzCRABJPY/jfBK0N5GAfoTqF0I+RxdsRuU8uHwucusH1A5f+NUonnZor48KRQE0fDcWq
+         A7WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=w5l35wuUCv0+znhq/VnSUhgz/EG/YdhUiwAApvAIamk=;
-        b=hDyyy2+yy3FY1w42QGJFZ280mmk7QEATCOpnOm0Kb5KHnJb3mMI+2cMGl0xUCprkPr
-         PGf+5zlp1lx3T7H2be6S9LziIoqv7C57fXb1ngWX9PidSrxhCD5YcWDS3z6RFeJE5w/V
-         d/ehT0HweJyOc9dvCAOPOTzCS1uKG3k0YIShK3wgxpZ9xrEqkj1xAMzsjBBIXAeopDms
-         3oDXSsUkuukNUothISYc9bezuAORWlLre37KDxSlpkH3LD6Ga79zBpJtXvSfYE2bvspX
-         g2eRWCQFHz+DWAbngFsDSzfHu+Vp8Xgy+RaR0P6aDyFG3jQOHenflIr24WGT7tmmKIyj
-         Y6Qw==
-X-Gm-Message-State: AOAM533uid5zTjeFp3HGSwlcBT9b7F9bLGq4g9uiLZ0gqxhu+WRCI8rM
-        Tqb1TJ7ybmndCZZ5rIe7FFtZUQ==
-X-Google-Smtp-Source: ABdhPJw7cFW8uyR4m7st3tXI308gCTAkeFzpp+TnCDHQ3/qHkQMnoiCpCil6wZfPRUOhm/y+04iOjQ==
-X-Received: by 2002:a5d:6248:: with SMTP id m8mr181272wrv.317.1595507093339;
-        Thu, 23 Jul 2020 05:24:53 -0700 (PDT)
+        bh=7dnMCO3O7GWoEhpbi22iSF6SZebDl2BeuDMdc7cp9fI=;
+        b=XaNTbAt1zA2g57YMQIrH172yg3QkZP0EZsVCaMThLgsvMUKQ/AofyI5Y2ifme14Opi
+         nHrzXjYU8+DDLV2mtV3oCYwZVcDTEBUW2Ip/59i9pV4sdmdzF1HR96eKUCE/P+XK13mp
+         +7FSIVpxa2ioxyfi6d5RV6dwILRMSHSV7U8kcwnbwU5VCMY6Ysy9HmwFrgGIxoJ+HS/D
+         072QtipI21OwS9sMf2elU3zS3nUOEMKxyfM1/UdfTPVpUbHym2JCxG99QQtlih0PA3bE
+         Y+vXsijm7oKrEELnTWCqRx8wcLjc37tMQsyjtm47zpJ9aym3LZDC0Y8zwjU0/EUrNzt5
+         qFag==
+X-Gm-Message-State: AOAM533d7lv6nVgIv4EmnZfzLUTq89cY4gU39d6ysRNycfrb5UEYd5ud
+        0XKIJcJDksPuuZwcIFzBtu55jg==
+X-Google-Smtp-Source: ABdhPJxvJtb9jfW8iP6bc5G3PPp6fA3LbXTfHuuM3/YmpiAPWdEPQQh60ILfJ1qd8H/5g1F7ndgHxw==
+X-Received: by 2002:adf:8b1a:: with SMTP id n26mr4102997wra.182.1595507094598;
+        Thu, 23 Jul 2020 05:24:54 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.24.52
+        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.24.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 05:24:52 -0700 (PDT)
+        Thu, 23 Jul 2020 05:24:53 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 03/40] scsi: ufs: ufs-qcom: Demote nonconformant kerneldoc headers
-Date:   Thu, 23 Jul 2020 13:24:09 +0100
-Message-Id: <20200723122446.1329773-4-lee.jones@linaro.org>
+        QLogic-Storage-Upstream@qlogic.com,
+        Anil Veerabhadrappa <anilgv@broadcom.com>,
+        Eddie Wai <eddie.wai@broadcom.com>
+Subject: [PATCH 04/40] scsi: bnx2i: bnx2i_init: Fix parameter misnaming in function header
+Date:   Thu, 23 Jul 2020 13:24:10 +0100
+Message-Id: <20200723122446.1329773-5-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200723122446.1329773-1-lee.jones@linaro.org>
 References: <20200723122446.1329773-1-lee.jones@linaro.org>
@@ -72,56 +69,30 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/ufs/ufs-qcom.c:253: warning: Function parameter or member 'hba' not described in 'ufs_qcom_host_reset'
- drivers/scsi/ufs/ufs-qcom.c:383: warning: Function parameter or member 'hba' not described in 'ufs_qcom_cfg_timers'
- drivers/scsi/ufs/ufs-qcom.c:383: warning: Function parameter or member 'gear' not described in 'ufs_qcom_cfg_timers'
- drivers/scsi/ufs/ufs-qcom.c:383: warning: Function parameter or member 'hs' not described in 'ufs_qcom_cfg_timers'
- drivers/scsi/ufs/ufs-qcom.c:383: warning: Function parameter or member 'rate' not described in 'ufs_qcom_cfg_timers'
- drivers/scsi/ufs/ufs-qcom.c:383: warning: Function parameter or member 'update_link_startup_timer' not described in 'ufs_qcom_cfg_timers'
- drivers/scsi/ufs/ufs-qcom.c:1738: error: Cannot parse struct or union!
+ drivers/scsi/bnx2i/bnx2i_init.c:83: warning: Function parameter or member 'dev' not described in 'bnx2i_identify_device'
+ drivers/scsi/bnx2i/bnx2i_init.c:83: warning: Excess function parameter 'cnic' description in 'bnx2i_identify_device'
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Avri Altman <avri.altman@wdc.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-arm-msm@vger.kernel.org
+Cc: QLogic-Storage-Upstream@qlogic.com
+Cc: Anil Veerabhadrappa <anilgv@broadcom.com>
+Cc: Eddie Wai <eddie.wai@broadcom.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/ufs/ufs-qcom.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/bnx2i/bnx2i_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 139c3ae05e956..d0d75527830e9 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -246,7 +246,7 @@ static void ufs_qcom_select_unipro_mode(struct ufs_qcom_host *host)
- 	mb();
- }
- 
--/**
-+/*
-  * ufs_qcom_host_reset - reset host controller and PHY
-  */
- static int ufs_qcom_host_reset(struct ufs_hba *hba)
-@@ -375,7 +375,7 @@ static int ufs_qcom_hce_enable_notify(struct ufs_hba *hba,
- 	return err;
- }
- 
--/**
-+/*
-  * Returns zero for success and non-zero in case of a failure
-  */
- static int ufs_qcom_cfg_timers(struct ufs_hba *hba, u32 gear,
-@@ -1723,7 +1723,7 @@ static void ufs_qcom_config_scaling_param(struct ufs_hba *hba,
- }
- #endif
- 
--/**
-+/*
-  * struct ufs_hba_qcom_vops - UFS QCOM specific variant operations
+diff --git a/drivers/scsi/bnx2i/bnx2i_init.c b/drivers/scsi/bnx2i/bnx2i_init.c
+index 4ebcda8d95004..6018cdd177022 100644
+--- a/drivers/scsi/bnx2i/bnx2i_init.c
++++ b/drivers/scsi/bnx2i/bnx2i_init.c
+@@ -73,7 +73,7 @@ DEFINE_PER_CPU(struct bnx2i_percpu_s, bnx2i_percpu);
+ /**
+  * bnx2i_identify_device - identifies NetXtreme II device type
+  * @hba: 		Adapter structure pointer
+- * @cnic:		Corresponding cnic device
++ * @dev:		Corresponding cnic device
   *
-  * The variant operations configure the necessary controller and PHY
+  * This function identifies the NX2 device type and sets appropriate
+  *	queue mailbox register access method, 5709 requires driver to
 -- 
 2.25.1
 
