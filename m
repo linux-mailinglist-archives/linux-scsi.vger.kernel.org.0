@@ -2,60 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7C422AF3F
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C31A22AF41
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728933AbgGWMZH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Jul 2020 08:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S1729317AbgGWM06 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Jul 2020 08:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728928AbgGWMZG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:06 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8615EC0619E2
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:06 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id 184so5021851wmb.0
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:06 -0700 (PDT)
+        with ESMTP id S1728940AbgGWMZI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:08 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13D1C0619DC
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:07 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id f139so4998184wmf.5
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=h63LOgt+Dy9g/r9ZLeRwkVpd9spngRolp7BRUfjs04E=;
-        b=gPiSTZgQ6RVOnxc4T+m87zsgevXZ4/vwi6Yf3OWh3UnlrG/cYxRyuV8MqeTtANSA7V
-         nTPngr5LxGg1E9sY/xI/ULZ0VKbIHJqPl5mtUSEdz9tqIzywwy61U5+ShcSBPALBQL5z
-         lGWbxgDDdHb1OdvVc9Tya9fpObNJ4Bs/kP/DKylzQksw8IQqHt8g/g2sNQDmV+sLERNj
-         n0yXuZfidePc2w2gaZ4gdwasSMoIt0Me7VTOHm+E4enkBrVAlHvplwxLABQFbAEycqVq
-         bRxxmtcJewIv1+idmOiIFaeIv7CXcDrC6kVgs9bRTRdA/cR4wQMO7lq/AOYldXtTBHtV
-         ribg==
+        bh=/UGwSSOfVJ61ieGuJp/ke+Vy79kXqOUhlL6mzdoMYJw=;
+        b=HB08PN5OpZSPQg8TKcCyb9s+OvOQTkDdUf13RCod8CSlkh4gkBoNHy7qbGNR5E5TO4
+         bxhN/ORl9XKEt9TAYCm8ePdCpHQfuRfreiRN0lraY+8t8nOYVI8xD+et9nuvfv6fPMRa
+         O4NBBI0KQyJJ7iK5d1G2X/sjUq0ROZ2Wdd8XBzMmINzzs/dXTs3Azq/6GsXSZB9cuyfm
+         DoxW05DgTVX04SVdwwCM+kvxJqJxb+UU6UZtWcg5Ivn5I1SZvYW9nSP+ksHgw3bNyj6+
+         RpdeMM0Ahh+aYDYmkwCPq5sbCf76U8OoqVaPtGXy60YTfg07xmJyHJHnGn/8KnO94LQf
+         gQoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=h63LOgt+Dy9g/r9ZLeRwkVpd9spngRolp7BRUfjs04E=;
-        b=tA2TfnWelbrtwd39jDF/vzV3uf11Uyf/Q8uGNiwEruh1qqE8BCXDKU5pzDhKKI3LTA
-         JqiG7shd08yks4AkYwnlqqDQ/zZvWBh7SY0Ya5gE3Ndh+9EP3qM80lPlKJlgpDQe9VSl
-         yDFpLOaspMuCtRoZwSTGWLPP1RAupemDSh4BOpLOgDLlgwqocHw1YJLgoGdStU4DV1dm
-         3sEjjz23R2+T9KggXa/Xf5Zp7LpptBb34X5/kv4YiBkAz2IdEaAOtvD9indS80/a8SqU
-         kmn/wP8e2zdxwlzuIDWyRHLLStEGuQtJ/Ta6xlDZX2Nz+TOy3Jcf3ZrhBrjT8B4UmbBn
-         ePmw==
-X-Gm-Message-State: AOAM531o+wZeLKQ9rOYsY1v1jfLY3j3C9rhpZvd3FH9vh+QPm0WXFjUz
-        OVVhaLiuHuIjzBI83wsqywY3+g==
-X-Google-Smtp-Source: ABdhPJwsIcwNe8dwuwe2OJqfzn2ZQ57y3/4mQvClR7t7daFL5f+jr6Jc5OuDYirzpKLdZtUGoAfWyw==
-X-Received: by 2002:a1c:7719:: with SMTP id t25mr4164947wmi.144.1595507105238;
-        Thu, 23 Jul 2020 05:25:05 -0700 (PDT)
+        bh=/UGwSSOfVJ61ieGuJp/ke+Vy79kXqOUhlL6mzdoMYJw=;
+        b=dBYFgVlW4PJkX29JLq4+cAwIsbxQY339u2FuWlOIJFUr30LBjKLb+MuEBJBPw5VjXf
+         74RRIkWTa9GduAIdJyaLnoFM1aykoUNqd2gpLCbvGHdgrmYC/kr0+CVaLPXmjA9HPGnj
+         6anIZUqnhV/BCJqUrLMTUzgbJeEFN4Mwashup3S/UhphEuu30qj94kqfxZ4wF4l0B8T1
+         P7FH0Ouilp8pAWOMOHFpRZX020vxCOBflpGfZarJJNc6JM2noyjMs2WpYqFzC9Djix8v
+         1ETo9OHlXjSCtTocsfLLdITKbfTKRdFWF2XcZBC7LULJ2yHMDCxoLZaUOipeCKU2z5Ci
+         7/Dg==
+X-Gm-Message-State: AOAM533lkbTu77kkVd6RUhyjuWkai09Wr5mcNQ7c3AGaAHcG5bXkvsxJ
+        Kb/Is+yq2NRDyNYVQ6vbaDb5WQ==
+X-Google-Smtp-Source: ABdhPJwkcZxfhjTTuWg1EVk/SSAtzNi4LdaonYB/co3209eDkArEedg76asRWzhwyDp3QgBLXYUkLg==
+X-Received: by 2002:a1c:2183:: with SMTP id h125mr4212886wmh.83.1595507106549;
+        Thu, 23 Jul 2020 05:25:06 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.04
+        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 05:25:04 -0700 (PDT)
+        Thu, 23 Jul 2020 05:25:05 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        ipslinux@adaptec.com, Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH 13/40] scsi: ips: Convert strnlen() to memcpy() since result should not be NUL terminated
-Date:   Thu, 23 Jul 2020 13:24:19 +0100
-Message-Id: <20200723122446.1329773-14-lee.jones@linaro.org>
+        QLogic-Storage-Upstream@qlogic.com
+Subject: [PATCH 14/40] scsi: qla4xxx: ql4_83xx: Remove set but unused variable 'status'
+Date:   Thu, 23 Jul 2020 13:24:20 +0100
+Message-Id: <20200723122446.1329773-15-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200723122446.1329773-1-lee.jones@linaro.org>
 References: <20200723122446.1329773-1-lee.jones@linaro.org>
@@ -69,83 +68,115 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- In file included from arch/arm/include/asm/io.h:23,
- from drivers/scsi/ips.c:164:
- In function ‘strncpy’,
- inlined from ‘ips_send_cmd’ at drivers/scsi/ips.c:3522:6:
- include/linux/string.h:297:30: warning: ‘__builtin_strncpy’ output
- truncated before terminating nul cop ying 4 bytes from a string of the same length [-Wstringop-truncation]
- 297 | #define __underlying_strncpy __builtin_strncpy
- | ^
- include/linux/string.h:307:9: note: in expansion of macro ‘__underlying_strncpy’
- 307 | return __underlying_strncpy(p, q, size);
- | ^~~~~~~~~~~~~~~~~~~~
- NB: Lots of these - snipping for brevity
+ drivers/scsi/qla4xxx/ql4_83xx.c: In function ‘qla4_83xx_dump_pause_control_regs’:
+ drivers/scsi/qla4xxx/ql4_83xx.c:1409:9: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
+ 1409 | int i, status = QLA_SUCCESS;
+ | ^~~~~~
 
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Cc: ipslinux@adaptec.com
-Cc: Christoph Hellwig <hch@infradead.org>
+Cc: QLogic-Storage-Upstream@qlogic.com
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/ips.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/scsi/qla4xxx/ql4_83xx.c | 34 ++++++++++++---------------------
+ 1 file changed, 12 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
-index ec85ccce96647..2e6077c502fc7 100644
---- a/drivers/scsi/ips.c
-+++ b/drivers/scsi/ips.c
-@@ -2239,7 +2239,7 @@ ips_get_bios_version(ips_ha_t * ha, int intr)
- 	major = 0;
- 	minor = 0;
+diff --git a/drivers/scsi/qla4xxx/ql4_83xx.c b/drivers/scsi/qla4xxx/ql4_83xx.c
+index 638f72c5ab052..de10e67de8c01 100644
+--- a/drivers/scsi/qla4xxx/ql4_83xx.c
++++ b/drivers/scsi/qla4xxx/ql4_83xx.c
+@@ -1406,16 +1406,16 @@ int qla4_83xx_isp_reset(struct scsi_qla_host *ha)
+ static void qla4_83xx_dump_pause_control_regs(struct scsi_qla_host *ha)
+ {
+ 	u32 val = 0, val1 = 0;
+-	int i, status = QLA_SUCCESS;
++	int i;
  
--	strncpy(ha->bios_version, "       ?", 8);
-+	memcpy(ha->bios_version, "       ?", 8);
+-	status = qla4_83xx_rd_reg_indirect(ha, QLA83XX_SRE_SHIM_CONTROL, &val);
++	qla4_83xx_rd_reg_indirect(ha, QLA83XX_SRE_SHIM_CONTROL, &val);
+ 	DEBUG2(ql4_printk(KERN_INFO, ha, "SRE-Shim Ctrl:0x%x\n", val));
  
- 	if (ha->pcidev->device == IPS_DEVICEID_COPPERHEAD) {
- 		if (IPS_USE_MEMIO(ha)) {
-@@ -3515,11 +3515,11 @@ ips_send_cmd(ips_ha_t * ha, ips_scb_t * scb)
- 					inquiry.Flags[1] =
- 					    IPS_SCSI_INQ_WBus16 |
- 					    IPS_SCSI_INQ_Sync;
--					strncpy(inquiry.VendorId, "IBM     ",
-+					memcpy(inquiry.VendorId, "IBM     ",
- 						8);
--					strncpy(inquiry.ProductId,
-+					memcpy(inquiry.ProductId,
- 						"SERVERAID       ", 16);
--					strncpy(inquiry.ProductRevisionLevel,
-+					memcpy(inquiry.ProductRevisionLevel,
- 						"1.00", 4);
+ 	/* Port 0 Rx Buffer Pause Threshold Registers. */
+ 	DEBUG2(ql4_printk(KERN_INFO, ha,
+ 		"Port 0 Rx Buffer Pause Threshold Registers[TC7..TC0]:"));
+ 	for (i = 0; i < 8; i++) {
+-		status = qla4_83xx_rd_reg_indirect(ha,
++		qla4_83xx_rd_reg_indirect(ha,
+ 				QLA83XX_PORT0_RXB_PAUSE_THRS + (i * 0x4), &val);
+ 		DEBUG2(pr_info("0x%x ", val));
+ 	}
+@@ -1426,7 +1426,7 @@ static void qla4_83xx_dump_pause_control_regs(struct scsi_qla_host *ha)
+ 	DEBUG2(ql4_printk(KERN_INFO, ha,
+ 		"Port 1 Rx Buffer Pause Threshold Registers[TC7..TC0]:"));
+ 	for (i = 0; i < 8; i++) {
+-		status = qla4_83xx_rd_reg_indirect(ha,
++		qla4_83xx_rd_reg_indirect(ha,
+ 				QLA83XX_PORT1_RXB_PAUSE_THRS + (i * 0x4), &val);
+ 		DEBUG2(pr_info("0x%x  ", val));
+ 	}
+@@ -1437,7 +1437,7 @@ static void qla4_83xx_dump_pause_control_regs(struct scsi_qla_host *ha)
+ 	DEBUG2(ql4_printk(KERN_INFO, ha,
+ 		"Port 0 RxB Traffic Class Max Cell Registers[3..0]:"));
+ 	for (i = 0; i < 4; i++) {
+-		status = qla4_83xx_rd_reg_indirect(ha,
++		qla4_83xx_rd_reg_indirect(ha,
+ 			       QLA83XX_PORT0_RXB_TC_MAX_CELL + (i * 0x4), &val);
+ 		DEBUG2(pr_info("0x%x  ", val));
+ 	}
+@@ -1448,7 +1448,7 @@ static void qla4_83xx_dump_pause_control_regs(struct scsi_qla_host *ha)
+ 	DEBUG2(ql4_printk(KERN_INFO, ha,
+ 		"Port 1 RxB Traffic Class Max Cell Registers[3..0]:"));
+ 	for (i = 0; i < 4; i++) {
+-		status = qla4_83xx_rd_reg_indirect(ha,
++		qla4_83xx_rd_reg_indirect(ha,
+ 			       QLA83XX_PORT1_RXB_TC_MAX_CELL + (i * 0x4), &val);
+ 		DEBUG2(pr_info("0x%x  ", val));
+ 	}
+@@ -1459,15 +1459,11 @@ static void qla4_83xx_dump_pause_control_regs(struct scsi_qla_host *ha)
+ 	DEBUG2(ql4_printk(KERN_INFO, ha,
+ 			  "Port 0 RxB Rx Traffic Class Stats [TC7..TC0]"));
+ 	for (i = 7; i >= 0; i--) {
+-		status = qla4_83xx_rd_reg_indirect(ha,
+-						   QLA83XX_PORT0_RXB_TC_STATS,
+-						   &val);
++		qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT0_RXB_TC_STATS, &val);
+ 		val &= ~(0x7 << 29);    /* Reset bits 29 to 31 */
+ 		qla4_83xx_wr_reg_indirect(ha, QLA83XX_PORT0_RXB_TC_STATS,
+ 					  (val | (i << 29)));
+-		status = qla4_83xx_rd_reg_indirect(ha,
+-						   QLA83XX_PORT0_RXB_TC_STATS,
+-						   &val);
++		qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT0_RXB_TC_STATS, &val);
+ 		DEBUG2(pr_info("0x%x  ", val));
+ 	}
  
- 					ips_scmd_buf_write(scb->scsi_cmd,
-@@ -4036,9 +4036,9 @@ ips_inquiry(ips_ha_t * ha, ips_scb_t * scb)
- 	inquiry.Flags[0] = IPS_SCSI_INQ_Address16;
- 	inquiry.Flags[1] =
- 	    IPS_SCSI_INQ_WBus16 | IPS_SCSI_INQ_Sync | IPS_SCSI_INQ_CmdQue;
--	strncpy(inquiry.VendorId, "IBM     ", 8);
--	strncpy(inquiry.ProductId, "SERVERAID       ", 16);
--	strncpy(inquiry.ProductRevisionLevel, "1.00", 4);
-+	memcpy(inquiry.VendorId, "IBM     ", 8);
-+	memcpy(inquiry.ProductId, "SERVERAID       ", 16);
-+	memcpy(inquiry.ProductRevisionLevel, "1.00", 4);
+@@ -1477,24 +1473,18 @@ static void qla4_83xx_dump_pause_control_regs(struct scsi_qla_host *ha)
+ 	DEBUG2(ql4_printk(KERN_INFO, ha,
+ 			  "Port 1 RxB Rx Traffic Class Stats [TC7..TC0]"));
+ 	for (i = 7; i >= 0; i--) {
+-		status = qla4_83xx_rd_reg_indirect(ha,
+-						   QLA83XX_PORT1_RXB_TC_STATS,
+-						   &val);
++		qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT1_RXB_TC_STATS, &val);
+ 		val &= ~(0x7 << 29);    /* Reset bits 29 to 31 */
+ 		qla4_83xx_wr_reg_indirect(ha, QLA83XX_PORT1_RXB_TC_STATS,
+ 					  (val | (i << 29)));
+-		status = qla4_83xx_rd_reg_indirect(ha,
+-						   QLA83XX_PORT1_RXB_TC_STATS,
+-						   &val);
++		qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT1_RXB_TC_STATS, &val);
+ 		DEBUG2(pr_info("0x%x  ", val));
+ 	}
  
- 	ips_scmd_buf_write(scb->scsi_cmd, &inquiry, sizeof (inquiry));
+ 	DEBUG2(pr_info("\n"));
  
-@@ -5620,10 +5620,10 @@ ips_write_driver_status(ips_ha_t * ha, int intr)
- 	/* change values (as needed) */
- 	ha->nvram->operating_system = IPS_OS_LINUX;
- 	ha->nvram->adapter_type = ha->ad_type;
--	strncpy((char *) ha->nvram->driver_high, IPS_VERSION_HIGH, 4);
--	strncpy((char *) ha->nvram->driver_low, IPS_VERSION_LOW, 4);
--	strncpy((char *) ha->nvram->bios_high, ha->bios_version, 4);
--	strncpy((char *) ha->nvram->bios_low, ha->bios_version + 4, 4);
-+	memcpy((char *) ha->nvram->driver_high, IPS_VERSION_HIGH, 4);
-+	memcpy((char *) ha->nvram->driver_low, IPS_VERSION_LOW, 4);
-+	memcpy((char *) ha->nvram->bios_high, ha->bios_version, 4);
-+	memcpy((char *) ha->nvram->bios_low, ha->bios_version + 4, 4);
+-	status = qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT2_IFB_PAUSE_THRS,
+-					   &val);
+-	status = qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT3_IFB_PAUSE_THRS,
+-					   &val1);
++	qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT2_IFB_PAUSE_THRS, &val);
++	qla4_83xx_rd_reg_indirect(ha, QLA83XX_PORT3_IFB_PAUSE_THRS, &val1);
  
- 	ha->nvram->versioning = 0;	/* Indicate the Driver Does Not Support Versioning */
- 
+ 	DEBUG2(ql4_printk(KERN_INFO, ha,
+ 			  "IFB-Pause Thresholds: Port 2:0x%x, Port 3:0x%x\n",
 -- 
 2.25.1
 
