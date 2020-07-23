@@ -2,140 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF0822AF1E
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 14:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E261B22B0EA
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jul 2020 16:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729083AbgGWMZo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Jul 2020 08:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729139AbgGWMZl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 08:25:41 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFBCC0619E3
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:41 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id y3so4978952wrl.4
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 05:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=e/a+n7xeT+4IypaMdZEOHPtxjDCXYhdWbia6WF8lJXM=;
-        b=U90SFM2XfntMbbnKnpL8NIcPeMt35ipcq6Dn11/o5syJemNsgkTGwnAef33kj+uNTc
-         DriqRPXhk78sPhGfpXjcZZS0kOou3ET6f+Fg46iKHmQFE6TldgHGr3BZLU39n7/6axET
-         occ6OmfpC459wp/wuL3KZveW9siDSXs9DeDZDtxDAHdaPC+LA5Rk10BtDHusbCXXJD9N
-         5wyAabHHnCEHOtiq7veQY85rYVYHMf6M384luLNiB4AwwZVbh7zSDXTXY0KmshygRX4v
-         b7QeGD4rVWoFSZZ/zITPdb8scodvtQdKCCVCQxmRvSru02xmEIUJRWhbH7lMrRH800as
-         zh2Q==
+        id S1729388AbgGWOB6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Jul 2020 10:01:58 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:25627 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728002AbgGWOB6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Jul 2020 10:01:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595512917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FNrI3J22ipRhrW25TFVKILW4WyC6tvsphPA0SNAITiY=;
+        b=fCUdGbqdMELt11S6ZNezOB8epB5kWmuw96xhiOXdjYILe6JnIgpN7119UqV5Os1UCjsWNv
+        veKxIPgqDmDUvcBVD//8/xLd3DTEMJLW7w4Dr+jgneOBhTIrAafmWjbeCfUgpuOymCSm3G
+        e3n3B6HFXEpFQVVdGxV7NUEoc+z480s=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-458-CBy3nl1cP1GAwPiBJIfuRA-1; Thu, 23 Jul 2020 10:01:54 -0400
+X-MC-Unique: CBy3nl1cP1GAwPiBJIfuRA-1
+Received: by mail-qv1-f70.google.com with SMTP id y7so923778qvj.11
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Jul 2020 07:01:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=e/a+n7xeT+4IypaMdZEOHPtxjDCXYhdWbia6WF8lJXM=;
-        b=BmDNLFE2jywRgsG9AeC0s7MubJzwv0mDORCKvmiDEGqj2yFtup5vRnSKc4n4+cEFws
-         TCX1yi7ol4mQQsC7dqdrsLM7Xp8je8iZozi2ZbqD2KqKTGGBumtOMQQtiobHItW1thIH
-         hH535KqYEdBS+X8ybr14H9oj8YEJfFWEu1Yri/Qi8IhFYAV7OTnOJfj55hXv7TVQMqaT
-         IOQyempvc5tNI4V28MKTuKTW5zsjATj0HGUy3PfgcISyp+svhvOPj0syzS87yPto8MK8
-         xDlc+9GkexV4QGqkLum4bGeANuJoNvpiWNiqbHuzPBPYqqteOm5RoP64cULUZg2MhH11
-         3CtQ==
-X-Gm-Message-State: AOAM53145jeqPKtBZsBQqaCf6vXmsdIFriFfQ7WptRwdnNy+KwevllqK
-        4w5YFTq4p3OvYEEfyzPQFNty4w==
-X-Google-Smtp-Source: ABdhPJy4d9ZY4EAHaWXH/a0t/Z9kXHv2xcUkY8FSTT7ZehgX4cv+QGUBUbgxKGPINTm00P6AAbNzyA==
-X-Received: by 2002:adf:e704:: with SMTP id c4mr4196356wrm.81.1595507139735;
-        Thu, 23 Jul 2020 05:25:39 -0700 (PDT)
-Received: from localhost.localdomain ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id j5sm3510651wma.45.2020.07.23.05.25.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FNrI3J22ipRhrW25TFVKILW4WyC6tvsphPA0SNAITiY=;
+        b=lJhawoL2ahQDd3M2GmRX1F/2u1kQtox1Apb3PS88rW0xg7xpci9fFG8lz5YU5LM68a
+         YhtjdBv8ospbDLb/MBDCZculmRpnumEKbgZ3QI6suh+TN3b6uJ5kGcyPdAtN0/VbCWiK
+         IQRnM3/pRxMC27ApoFbW4csamIdFCgy0d+rdUE+HxocFjUUQ7SPuVdStR8GJWuoSYJRj
+         yD6g9BOwJ/qucklTV+mhe8Na8pknup3gPYq2sDREGvrZXi0qaEgnLQ/39TOzaHDlb5ve
+         K5sXipCpJBK/s47pjGNlyWbGMD7wD8lx+tUShtxuBEEQWHx2U/n6HeeMMddI+dFVDGBx
+         QqXw==
+X-Gm-Message-State: AOAM5327R5O154ED6idnC859r8BnPZ6u/bbwGkQMqOwaTDK271K0UhuD
+        F2alEE6WiJd9D+KAB5dZAice8DqlXCtJTNLmPKOLTppvjk+IvoO0t5+rMF/4LiZM+aBjQ39b6Ra
+        OJ2knHxe1XBD5FBVKFrxkuA==
+X-Received: by 2002:a0c:8583:: with SMTP id o3mr5013026qva.108.1595512914215;
+        Thu, 23 Jul 2020 07:01:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy4KIDq8nFjc8M+Ayc6oKKZhshXVGfh68xoXhfmaMHK6Mfi6bMcdpiPnoy+C+NIwEpmBPfoig==
+X-Received: by 2002:a0c:8583:: with SMTP id o3mr5013000qva.108.1595512913943;
+        Thu, 23 Jul 2020 07:01:53 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id z60sm2534085qtc.30.2020.07.23.07.01.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 05:25:39 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
+        Thu, 23 Jul 2020 07:01:53 -0700 (PDT)
+From:   trix@redhat.com
 To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Bradley Grove <linuxdrivers@attotech.com>
-Subject: [PATCH 40/40] scsi: esas2r: esas2r_log: Demote a few non-conformant kerneldoc headers
-Date:   Thu, 23 Jul 2020 13:24:46 +0100
-Message-Id: <20200723122446.1329773-41-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200723122446.1329773-1-lee.jones@linaro.org>
-References: <20200723122446.1329773-1-lee.jones@linaro.org>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] scsi: lpfc: add depends CPU_FREQ to SCSI_LPFC configury
+Date:   Thu, 23 Jul 2020 07:01:36 -0700
+Message-Id: <20200723140136.18367-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+From: Tom Rix <trix@redhat.com>
 
- drivers/scsi/esas2r/esas2r_log.c:86: warning: Function parameter or member 'level' not described in 'translate_esas2r_event_level_to_kernel'
- drivers/scsi/esas2r/esas2r_log.c:120: warning: Function parameter or member 'level' not described in 'esas2r_log_master'
- drivers/scsi/esas2r/esas2r_log.c:120: warning: Function parameter or member 'dev' not described in 'esas2r_log_master'
- drivers/scsi/esas2r/esas2r_log.c:120: warning: Function parameter or member 'format' not described in 'esas2r_log_master'
- drivers/scsi/esas2r/esas2r_log.c:120: warning: Function parameter or member 'args' not described in 'esas2r_log_master'
- drivers/scsi/esas2r/esas2r_log.c:183: warning: Function parameter or member 'level' not described in 'esas2r_log'
- drivers/scsi/esas2r/esas2r_log.c:183: warning: Function parameter or member 'format' not described in 'esas2r_log'
- drivers/scsi/esas2r/esas2r_log.c:211: warning: Function parameter or member 'level' not described in 'esas2r_log_dev'
- drivers/scsi/esas2r/esas2r_log.c:211: warning: Function parameter or member 'dev' not described in 'esas2r_log_dev'
- drivers/scsi/esas2r/esas2r_log.c:211: warning: Function parameter or member 'format' not described in 'esas2r_log_dev'
- drivers/scsi/esas2r/esas2r_log.c:237: warning: Function parameter or member 'level' not described in 'esas2r_log_hexdump'
- drivers/scsi/esas2r/esas2r_log.c:237: warning: Function parameter or member 'buf' not described in 'esas2r_log_hexdump'
- drivers/scsi/esas2r/esas2r_log.c:237: warning: Function parameter or member 'len' not described in 'esas2r_log_hexdump'
+A compile error
 
-Cc: Bradley Grove <linuxdrivers@attotech.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+drivers/scsi/lpfc/lpfc_sli.c:7329:26: error: implicit
+  declaration of function ‘get_cpu_idle_time’; did you
+  mean ‘set_cpu_active’? [-Werror=implicit-function-declaration]
+   idle_stat->prev_idle = get_cpu_idle_time(i, &wall, 1);
+
+lpfc_init_idle_stat_hb depends on CPU_FREQ
+
+So add depends CPU_FREQ to the configury.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/scsi/esas2r/esas2r_log.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/esas2r/esas2r_log.c b/drivers/scsi/esas2r/esas2r_log.c
-index 65fdf22b0ba9a..b545798e400c4 100644
---- a/drivers/scsi/esas2r/esas2r_log.c
-+++ b/drivers/scsi/esas2r/esas2r_log.c
-@@ -75,7 +75,7 @@ static char event_buffer[EVENT_LOG_BUFF_SIZE];
- /* A lock to protect the shared buffer used for formatting messages. */
- static DEFINE_SPINLOCK(event_buffer_lock);
- 
--/**
-+/*
-  * translates an esas2r-defined logging event level to a kernel logging level.
-  *
-  * @param [in] level the esas2r-defined logging event level to translate
-@@ -101,7 +101,7 @@ static const char *translate_esas2r_event_level_to_kernel(const long level)
- 	}
- }
- 
--/**
-+/*
-  * the master logging function.  this function will format the message as
-  * outlined by the formatting string, the input device information and the
-  * substitution arguments and output the resulting string to the system log.
-@@ -170,7 +170,7 @@ static int esas2r_log_master(const long level,
- 	return 0;
- }
- 
--/**
-+/*
-  * formats and logs a message to the system log.
-  *
-  * @param [in] level  the event level of the message
-@@ -193,7 +193,7 @@ int esas2r_log(const long level, const char *format, ...)
- 	return retval;
- }
- 
--/**
-+/*
-  * formats and logs a message to the system log.  this message will include
-  * device information.
-  *
-@@ -221,7 +221,7 @@ int esas2r_log_dev(const long level,
- 	return retval;
- }
- 
--/**
-+/*
-  * formats and logs a message to the system log.  this message will include
-  * device information.
-  *
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index 571473a58f98..004dcda07d49 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -1157,6 +1157,7 @@ config SCSI_LPFC
+ 	depends on SCSI_FC_ATTRS
+ 	depends on NVME_TARGET_FC || NVME_TARGET_FC=n
+ 	depends on NVME_FC || NVME_FC=n
++	depends on CPU_FREQ
+ 	select CRC_T10DIF
+ 	help
+           This lpfc driver supports the Emulex LightPulse
 -- 
-2.25.1
+2.18.1
 
