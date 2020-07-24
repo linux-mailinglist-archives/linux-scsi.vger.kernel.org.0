@@ -2,103 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF9322C2B7
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Jul 2020 12:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F04F22C2F5
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Jul 2020 12:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726800AbgGXKDu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Jul 2020 06:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726182AbgGXKDu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Jul 2020 06:03:50 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D68DC0619D3
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Jul 2020 03:03:50 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id s16so6476770qtn.7
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Jul 2020 03:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=WrA+9ve3/Dqcix5f7nCMaE/s2sxhoKsksExTOYQrc+Y=;
-        b=XJxyvKjc0klCOJf7g21qLWTwgtJKITtuUb6cHF267RaFWZre6yV0z7vRVs9OJcFQgI
-         0GfmyvTVHnMyGsbJsbABMRW1TQKYHyB2j4LJFV0DqbVsm0ibcHHvSIQNHFHhPhD8FOb5
-         3840a+zy4W+oEFmesWj0ddCdhEN9ElNEEw9Faj+frqrd9pLAvxxbUJMdYpbT7t8cjeMK
-         nLflnqWeggRWDbCzYKrAwNeqTvpsLbY0QeZtDeNIGUpASdrnvaPDXyRybPQ6OgR2rxbu
-         J77UEj2vA8fFhY1U42aBnAlsgvMEOOSi3lhNPVRFgqL+itmbyrgjYGeQT1Y43uqmFlZ3
-         jxzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=WrA+9ve3/Dqcix5f7nCMaE/s2sxhoKsksExTOYQrc+Y=;
-        b=tXh9pG4EcgI/+hnOr65NMw0DMbbout0lpIB/Ds46EgyIJwYqrFaicp6WDtniCLqKWV
-         SefMS3lY3zjDLwBa9Nga+/YDQJ/QkIr8xb1G3bbovyAHc0L0dB+FUaIyhXz13MxiaGNK
-         pdgsi1bkoOIAa9rJGwVkeN9lMmNYNU+AK31t5DmnPCzFYG/WRKmY71w59s5NkatMAYGM
-         nbth7HTae5CSn6ruX9QwgkwYAiyduE2XjweJZZHSMSy+geJZPNZhIcPBZbrV+xcodTWo
-         d/R7RbVo+abjktsE/p9aRIGCERgNbbTmy4sUEkHba3tgKvxunx00QspFSOGcDRqTZHdT
-         mlcQ==
-X-Gm-Message-State: AOAM53062BnmdXtTP97o/mJGvmpf4wHvMxcXlVY44dR7dSV2kExwbc5E
-        QksgPU6fAQvYkeCt1SptcsqZrti8i1nDsFMaT3c=
-X-Google-Smtp-Source: ABdhPJxqSwzKv3VWTjCGnwZhElU++Jx8USI1qLToW7dV68wZ9aHQjCG+p8YfmKEoN0hAUssRdHJ179HpuG/91hreLDE=
-X-Received: by 2002:ac8:1907:: with SMTP id t7mr8418068qtj.160.1595585028478;
- Fri, 24 Jul 2020 03:03:48 -0700 (PDT)
+        id S1726742AbgGXKTu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Jul 2020 06:19:50 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:49492 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726114AbgGXKTu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Jul 2020 06:19:50 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06OAGbka019953;
+        Fri, 24 Jul 2020 10:19:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=bi7uRtj9UbRbPZIsGZYNbyAvEN8zForiw/cFVhf4GDI=;
+ b=zb78n5gdhe+xdpZm6rsYAyaGHYZWZ0MERshQBqZ1xxaUGBhhK3pHcSkvr+H9McAChMuz
+ Hk/ICDmpyoJGt1BpYbwhxBhOc+LEUm1ory1Cxw058Am5ftvkK4vyY4g/n+wZyFWdu62h
+ 396FzWjg46ckBk6zh2RR/ZjqNW5ja1OOfin4tZXEHOLc3Qw5v5cQrarjZv2VTUpntY9K
+ 4zyRLY+GLnSE6ZMh5VToGwgjR4e1KvXxOX0h36WHbjkwfZP5rJ8m8PNZgq/nqO72AvAN
+ 0dtj1L1WuxPTBMyktC0EO0ztYjuVDF60IWoyqvU8dGqF29ba8dvLYlKhulpBQF3LxxU/ dw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 32brgrxddg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 24 Jul 2020 10:19:45 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06OAIDMn183123;
+        Fri, 24 Jul 2020 10:19:44 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 32ft2v2ptr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Jul 2020 10:19:44 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06OAJhVQ023856;
+        Fri, 24 Jul 2020 10:19:43 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 24 Jul 2020 10:19:42 +0000
+Date:   Fri, 24 Jul 2020 13:19:36 +0300
+From:   <dan.carpenter@oracle.com>
+To:     kwmad.kim@samsung.com
+Cc:     linux-scsi@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [bug report] scsi: ufs: exynos: Implement dbg_register_dump
+Message-ID: <20200724101936.GA318943@mwanda>
 MIME-Version: 1.0
-Received: by 2002:ac8:f24:0:0:0:0:0 with HTTP; Fri, 24 Jul 2020 03:03:48 -0700 (PDT)
-From:   Marina Bagni <marinadanielsbagni@gmail.com>
-Date:   Fri, 24 Jul 2020 03:03:48 -0700
-X-Google-Sender-Auth: n4O99jvJZslnIoj4qD2J5EpEO7w
-Message-ID: <CAAaL_j1DXC2qWsP9ShKmx_EFM=wkbooxKymfAbq_jngfZv5YKQ@mail.gmail.com>
-Subject: Hello Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9691 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 spamscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=783 adultscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007240077
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9691 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
+ impostorscore=0 suspectscore=3 adultscore=0 clxscore=1015 mlxlogscore=799
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007240077
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings Dear Friend,
-How are you today? With hope you are found in good condition of
-health, together with your beloved family?
-My dear, I know you may be wondering and very surprised how and why i
-chooses to contact you through this medium haven=E2=80=99t know each other =
-or
-meet with you before, but to be honest and sincere with you i believed
-that You and I can cooperate together in this service of the Lord,
-which I pray that God will touch your heart to assist me out in this
-humanitarian Investment project in your country.
-My names are Mrs. Marina Bagni, I deal in gold exportation, I am a
-widow diagnosed with brain tumor disease which has gotten to a very
-bad stage, Please I want you to understand the most important reason
-why I am contacting you through this means is because I need your
-sincerity and ability to carry out this transaction and fulfill my
-final wish in implementing this humanitarian project in your country
-as it requires absolute trust and devotion without any failure, I
-believe that you will not expose this to anyone or betray this trust
-and confident that I am about to entrust on you for the mutual benefit
-of the orphans, gives justice and help to the poor, needy, elderly
-ones, disables and to promote the words of God and the effort that the
-house of God will be maintained says The Lord. Jeremiah 22:15-16.
-I made a substantial deposit with the bank which I have decided to
-hand over and entrust the sum of ($ 9,650,000.00) in my account to you
-to Invest into the charitable project in your country. Based on my
-present health status I am permanently indisposed to handle finances
-or any financial related project following my diagnoses for Idiopathic
-Pulmonary Fibrosis. As my health has deteriorated so badly that was
-what prompted me to take this necessary decision from my sick bed in
-contacting you to assist me carry out this transaction and implement
-the humanitarian project with my fund only for honor and glory of God
-as I have indicated to you.
-However It will be my pleasure to compensate you as my Investment
-Manager/Partner with 50% percent of the total money for your effort in
-handling the transaction, while 50% of the fund will be invested into
-the charity project there in your country.
-Therefore I am waiting for your prompt response now I have access to
-the Internet in the hospital, if only you are interested I will give
-you further details and my data. Please always check your e-mail as I
-have only a few days to leave on this earth. Your early response will
-be appreciated.
+Hello Kiwoong Kim,
 
-Best Regards.
-Mrs. Marina Bagni.
+The patch 957ee40d413b: "scsi: ufs: exynos: Implement
+dbg_register_dump" from Jul 15, 2020, leads to the following static
+checker warning:
+
+	drivers/scsi/ufs/ufs-exynos.c:1242 exynos_ufs_dbg_register_dump()
+	warn: test_bit() takes a bit number
+
+drivers/scsi/ufs/ufs-exynos.c
+  1238  static void exynos_ufs_dbg_register_dump(struct ufs_hba *hba)
+  1239  {
+  1240          struct exynos_ufs *ufs = ufshcd_get_variant(hba);
+  1241  
+  1242          if (!test_and_set_bit(EXYNOS_UFS_DBG_DUMP_CXT, &ufs->dbg_flag)) {
+                                      ^^^^^^^^^^^^^^^^^^^^^^^
+This is BIT(0) but test_and_set_bit should just take 0, otherwise it's
+a double shift.
+
+  1243                  exynos_ufs_dump_info(&ufs->handle, hba->dev);
+  1244                  clear_bit(EXYNOS_UFS_DBG_DUMP_CXT, &ufs->dbg_flag);
+  1245          }
+  1246  }
+
+regards,
+dan carpenter
