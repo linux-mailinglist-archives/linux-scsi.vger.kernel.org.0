@@ -2,69 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC0522D3D2
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Jul 2020 04:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C48222D3D4
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Jul 2020 04:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgGYCuz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Jul 2020 22:50:55 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:39754 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbgGYCuz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Jul 2020 22:50:55 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06P2lqma077467;
-        Sat, 25 Jul 2020 02:50:49 GMT
+        id S1726782AbgGYCvA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Jul 2020 22:51:00 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:56342 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726593AbgGYCvA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Jul 2020 22:51:00 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06P2m6DT043209;
+        Sat, 25 Jul 2020 02:50:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=7ITJjm2fpobkStlRyL+N0QntRph87b3fvjPsqfCvWKQ=;
- b=p1WKVnkym1SfZ5CRQUYAfnNT5kSJfZ21ZedELMkhm1btMXDHJWDT/h83Zwohb7tbm4SV
- 6rleCERsYFgRsIys5/kN2UwP0i1KKkrVBSjvvvPL+1t/NIdTHzkb9l81FRUIlwBrQtgo
- 7PCyiRYB0YGtqu4CDEGzDsAqWfIrZ4D0dil6QWd3M9kPeg63DbXxDe4Hjk/5RKmeGfWf
- P2C1oxyHs2POLyGuyCtMx9sU5BJt34S7asnPPNa14Ee+jsbcHOBChnBznUF8IepKalo1
- MNdzbRO+CaRlgqQq3gghmQIenM9YGPMM18Nfkfm36qyiVzjnIIiXqjxrHaPh6NmjPXbj zA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 32gc5qr0cv-1
+ bh=2LEmVzP0v4CwHYaFbrCprZ1/Tu1tf4ykG9L6AB5ahF8=;
+ b=d/WjhKYhYSxCg0L9wHHC7+sL33vCWwEBbemqv11TbSRigrrbLAcBIxBAwD9pr6oXnXuk
+ CTU2ap/5KdxKn5MVEvDcMhNir+VdVbwj7vayNS7bG3n+wW4oVqvfNVZI4dz03BP/XLfY
+ kHI3eUnI1uFzKDPDGB5oi0f9wHOGHQZtXiER63NG/12Nv3bPmIBeooiG+tbZCLFucjx+
+ HhIz3l5fOrrJbvr9a7gTY/A/EGAon1mtD83rksZxPFTGmRzXY6QeLgijs5wNGijXrzuc
+ o+nb/DEa3yPQXDvqvvxdZVsCGAEZUqefdYMuNEpO500Em7Qtgpv1JLfMx9iKtXR/0c90 uQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 32bs1n1ur0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 25 Jul 2020 02:50:49 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06P2nBPm024109;
-        Sat, 25 Jul 2020 02:50:49 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 32g9uu6p3d-1
+        Sat, 25 Jul 2020 02:50:51 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06P2mVb1092367;
+        Sat, 25 Jul 2020 02:50:51 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 32gaseas1j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 25 Jul 2020 02:50:49 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06P2olm3014714;
-        Sat, 25 Jul 2020 02:50:47 GMT
+        Sat, 25 Jul 2020 02:50:51 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06P2onfK010052;
+        Sat, 25 Jul 2020 02:50:49 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 25 Jul 2020 02:50:47 +0000
+        with ESMTP ; Sat, 25 Jul 2020 02:50:48 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
-        linux-scsi@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Intel SCU Linux support <intel-linux-scu@intel.com>,
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
         Colin King <colin.king@canonical.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] scsi: isci: remove redundant initialization of variable status
-Date:   Fri, 24 Jul 2020 22:50:33 -0400
-Message-Id: <159564519423.31464.662630080230658791.b4-ty@oracle.com>
+Subject: Re: [PATCH] scsi: libsas: remove redundant assignment to variable res
+Date:   Fri, 24 Jul 2020 22:50:34 -0400
+Message-Id: <159564519422.31464.3717823298731100505.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200723142614.991416-1-colin.king@canonical.com>
-References: <20200723142614.991416-1-colin.king@canonical.com>
+In-Reply-To: <20200722154404.959267-1-colin.king@canonical.com>
+References: <20200722154404.959267-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9692 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- adultscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007250020
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007250020
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9692 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
- lowpriorityscore=0 clxscore=1011 impostorscore=0 suspectscore=0
- phishscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
+ spamscore=0 mlxscore=0 impostorscore=0 phishscore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007250020
 Sender: linux-scsi-owner@vger.kernel.org
@@ -72,16 +70,16 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 23 Jul 2020 15:26:14 +0100, Colin King wrote:
+On Wed, 22 Jul 2020 16:44:04 +0100, Colin King wrote:
 
-> The variable status is being initialized with a value that is never read
-> and it is being updated later with a new value.  The initialization is
-> redundant and can be removed.
+> The variable res is being initialized with a value that is
+> never read and it is being updated later with a new value. The
+> initialization is redundant and can be removed.
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: isci: Remove redundant initialization of variable 'status'
-      https://git.kernel.org/mkp/scsi/c/584d902eb10e
+[1/1] scsi: libsas: Remove redundant assignment to variable res
+      https://git.kernel.org/mkp/scsi/c/55eb809f5e1c
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
