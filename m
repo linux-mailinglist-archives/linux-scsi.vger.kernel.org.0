@@ -2,160 +2,223 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AD622E20D
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 Jul 2020 20:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A955322E22B
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 Jul 2020 21:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbgGZSi3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 26 Jul 2020 14:38:29 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:42968 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726824AbgGZSi2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 Jul 2020 14:38:28 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06QIbx0C082867;
-        Sun, 26 Jul 2020 18:38:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=VyREZUMBrtWdFUD+uUI7DsAjSnDNv5MTuIfaBrWgI4o=;
- b=wDW/3vjEnyP64aF/LNjMsm8v55xnUqcOwKfXmkCAeu20hknu02F/pf9wArYRGVNmtAZ1
- 2fl1XHzGH/1znmBGmRMbdE+nal0qdWW3KLJB4x7tCuES254MGhtXWGpIpG04kbFMUulj
- mmxKEkbpCSF0OxTOSFQQZls+REeX3ptEgcnvmiEnOzEbiYlspCJDv3PSmgVdcpKnbZIw
- V5vtIRjonDlh4ugmltQG+tOyPOi2RVXPtCtAAyTLrAWt9jFZ8QtBf3ogUiN64akJtYZ/
- G4bJE44v1IxDPByhEv3YbjsfBK+JA8R8cvrw959ld3ffW0aAUvmypFGNbsKUhFecS3Nt gw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 32gxd3hn6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 26 Jul 2020 18:38:24 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06QIJF1Y093057;
-        Sun, 26 Jul 2020 18:38:23 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 32hdppbhem-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 26 Jul 2020 18:38:23 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06QIcMMS017549;
-        Sun, 26 Jul 2020 18:38:22 GMT
-Received: from [20.15.0.8] (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 26 Jul 2020 11:38:22 -0700
-Subject: Re: [PATCH v3 0/8] scsi: target: tcmu: Add TMR notification for tcmu
-To:     Bodo Stroesser <bstroesser@ts.fujitsu.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-References: <20200726153510.13077-1-bstroesser@ts.fujitsu.com>
-From:   Mike Christie <michael.christie@oracle.com>
-Message-ID: <283dd5a6-b925-a33a-f481-f4b7bff2517b@oracle.com>
-Date:   Sun, 26 Jul 2020 13:38:21 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.10.0
+        id S1726983AbgGZTOc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 26 Jul 2020 15:14:32 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:48969 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726081AbgGZTOb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 26 Jul 2020 15:14:31 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 085F45C00C8;
+        Sun, 26 Jul 2020 15:14:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 26 Jul 2020 15:14:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=VOhMjOAiZA1wifu6qUjLj1Le2c
+        cLjZ8L6RqmU8fJDw4=; b=F0Lhu1J/QbtriID4mC5qTKcyyLqhBTxa+SMyVU2C+g
+        W4Yl7lD0AKEVPeYeamxZMkbUpPxMNKnUl1uKVYiu1wEgSVG9aydZuskRZvxJHNX/
+        gezzDYpSxiPnZkq4sLmPrWy7FRP6d3h7kXqKM13U1OxnKX73ItrFFyI7eO/TTzpn
+        AV8Vfk3wjp6G8f6H91/IwWwWccLPLkq+SdNOZ258H9VMJ1/HT9+6Qe7bQTvuzO5d
+        Ad5RXuEXJb4wOM1Ed/vm80plKRzO3wQvMd9zlgUQq4Mch7xJ2t7V6XSTULl7BfPO
+        uqOi3VrbFhVEYyYn+j4takQMw+PydYXrlP4qpfVSYCBg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=VOhMjOAiZA1wifu6q
+        UjLj1Le2ccLjZ8L6RqmU8fJDw4=; b=E85XbM4hy7pnLnb+ygSQs7Z89WIIohXwQ
+        AIebVeU04AZMTSxjr5JvcJUShBWF2r/vE59fU/0cS36IUZWGod+zXWZQEWVDC58A
+        4gvo23QDp7wicexRQHZ3Dzroky3J0LTX4Rke3WzEdqEozQfYygqp20x9A7Avi7JO
+        kAKnNB3pyZfzNPHLGIJv2WK+dJZxkkf1DF3pnYznLHjI6A8F0Fi8MH1/uNVnzGZw
+        xT7ewl1444EPCh6V/b+a1HGLelP5k4F1mzG+P9BCyJVf2CXxFAqrM7bDelUd61BH
+        MBdz2B62KdPlWnp8UwKTMCMLZOdcMhSUdzDfvCYIwFEhmsQ9VDpTg==
+X-ME-Sender: <xms:FdYdXyAylV8-bVmXT4FrpTjuuTt_owNwiPG3THGs845xUrZcFvHF3g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrheejgddufeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpefhgedvieeuveejuefhudfhjeevffeiveevtdejleeftefgvddufeeuleff
+    gefgleenucffohhmrghinhepnhgvfigtohhmmhgrnhgurdhsghenucfkphepjedtrddufe
+    ehrddugeekrdduhedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
+    lhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:FdYdX8gzBfte9AJlglhs1gvwvQuVzRn8Z3qaMSOHPfruGS51X4vDrw>
+    <xmx:FdYdX1kUfbGPccHr-a0jhuXlrHrPjJjQxYwlO6orKUCR931FIi4D-g>
+    <xmx:FdYdXwwMeSeSpzE2RIqXETdnCT3b0YWuasdEKsWTv9jDRCz2_z4nGw>
+    <xmx:FtYdXyd1ELv4eSLURyzwHdLuf13dJW-J5Ret4G0fV3g19Cao0sCbeQ>
+Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6AA2930600A9;
+        Sun, 26 Jul 2020 15:14:29 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Adam Radford <aradford@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH] scsi: 3w-9xxx: Fix endianness issues found by sparse
+Date:   Sun, 26 Jul 2020 14:14:28 -0500
+Message-Id: <20200726191428.26767-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20200726153510.13077-1-bstroesser@ts.fujitsu.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9694 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 adultscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007260145
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9694 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- bulkscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007260146
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/26/20 10:35 AM, Bodo Stroesser wrote:
-> This patch series is made on top of Martin's for-next branch.
-> 
-> ChangeLog:
-> 
-> v2: in patch "scsi: target: tcmu: Implement tmr_notify callback"
->     changed new comment's style from "// ..." to "/* ... */"
->     and correctly use "/** " for function doc.
-> 
-> V3:
->  - Patch 1 "scsi: target: Modify core_tmr_abort_task()":
->    fixed wrong spin_lock handling. Nested calls to
->    spin_lock_irqsave and spin_lock_irqrestore used the same
->    flags field. Inner pair replaced by spin_lock / spin_unlock
->     
->  - Patches 5,7,8:
->    "scsi: target: tcmu: Factor out new helper ring_insert_padding"
->    "scsi: target: tcmu: Implement tmr_notify callback"
->    "scsi: target: tcmu: Make TMR notification optional"
->    New definitions of struct tcmu_dev *dev renamed to *udev.
-> 
->  - Patch 8 "scsi: target: tcmu: Make TMR notification optional"
->    Spacing fixed at function definition.
-> 
-> ---
-> 
-> TCM/LIO core handles TMRs without involving backends.
-> But TMR completion message is sent to initiator only after
-> commands aborted by the TMR are completed by the backend.
-> Especially in case of tcmu backend, if userspace executes long
-> running commands and therefore initiator sends ABORT_TASK on
-> timeout, the ABORT itself can time out if core still waits for
-> userspace/tcmu to complete the command.
-> 
-> It would be very helpful for userspace to get a notification
-> about received TMR and which commands were aborted by that TMR.
-> Then userspace can decide whether to cancel command processing,
-> and it can send command completion earlier than it would without
-> TMR notification.
-> It is also helpful for userspace traces and device emulation to
-> get notification about TMR events.
-> 
-> So this patch series in the first two patches implements in
-> core the usage of a new optional backend callback for TMR
-> notifications. The core calls it before core waits for
-> completion of aborted commands (params: se_dev, TMR type,
-> and list of se_cmds aborted by this TMR).
-> Of course other backends than tcmu can use this part of the
-> series also to implement their own TMR notification if
-> necessary.
-> 
-> The further six patches implement the TMR notify callback for
-> tcmu. The new configFS attribute tmr_notification allows to
-> switch on TMR messages on the cmd ring. The default of the
-> attribute is the old behavior without TMR info on the ring, but
-> with following changes:
->  - if tcmu receives an already aborted command, it immediately
->    rejects it. So it will never appear in userspace.
->  - if tcmu finds, that according to TMR notification a cmd on
->    the qfull_queue was aborted, tcmu removes it from qfull_queue
->    and completes it immediately. So userspace will not 'see'
->    those commands.
-> 
-> When attribute tmr_notification is set to 1, tcmu additionally
-> prepares a list of cmd_ids from those commands, that are aborted
-> by the TMR and are active in cmd ring (not timed out).
-> This list together with the TMR type is either immediately
-> written to cmd ring (new TMR entry type) or queued in a separate
-> tmr queue if ring space is too small.
-> TMRs in the tmr queue do not time out. If ring space becomes
-> available, tcmu moves TMRs from tmr queue to ring with higher
-> priority than cmds from qfull queue.
-> 
-> This mechanism makes sure that userspace receives TMR
-> notifications as early as possible. Userspace can use the
-> list of cmd_ids attached to the TMR notification to identify
-> aborted commands from its list of received and not yet completed
-> commands. In case userspace has meanwhile completed some of the
-> cmd_ids on the list, it can just ignore these cmd_ids.
-> A possible new command having the same cmd_id as one of the
-> aborted commands will always appear on the ring after the TMR
-> notification.
-> 
+The main issue observed was at the call to scsi_set_resid, where the
+byteswapped parameter would eventually trigger the alignment check at
+drivers/scsi/sd.c:2009. At that point, the kernel would continuously
+complain about an "Unaligned partial completion", and no further I/O
+could occur.
 
-Thanks for all the work on this.
+This gets the controller working on big endian powerpc64.
 
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+ drivers/scsi/3w-9xxx.c | 35 +++++++++++++++++------------------
+ drivers/scsi/3w-9xxx.h |  6 +++++-
+ 2 files changed, 22 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
+index 3337b1e80412..95e25fda1f90 100644
+--- a/drivers/scsi/3w-9xxx.c
++++ b/drivers/scsi/3w-9xxx.c
+@@ -303,10 +303,10 @@ static int twa_aen_drain_queue(TW_Device_Extension *tw_dev, int no_check_reset)
+ 
+ 	/* Initialize sglist */
+ 	memset(&sglist, 0, sizeof(TW_SG_Entry));
+-	sglist[0].length = TW_SECTOR_SIZE;
+-	sglist[0].address = tw_dev->generic_buffer_phys[request_id];
++	sglist[0].length = cpu_to_le32(TW_SECTOR_SIZE);
++	sglist[0].address = TW_CPU_TO_SGL(tw_dev->generic_buffer_phys[request_id]);
+ 
+-	if (sglist[0].address & TW_ALIGNMENT_9000_SGL) {
++	if (tw_dev->generic_buffer_phys[request_id] & TW_ALIGNMENT_9000_SGL) {
+ 		TW_PRINTK(tw_dev->host, TW_DRIVER, 0x1, "Found unaligned address during AEN drain");
+ 		goto out;
+ 	}
+@@ -440,8 +440,8 @@ static int twa_aen_read_queue(TW_Device_Extension *tw_dev, int request_id)
+ 
+ 	/* Initialize sglist */
+ 	memset(&sglist, 0, sizeof(TW_SG_Entry));
+-	sglist[0].length = TW_SECTOR_SIZE;
+-	sglist[0].address = tw_dev->generic_buffer_phys[request_id];
++	sglist[0].length = cpu_to_le32(TW_SECTOR_SIZE);
++	sglist[0].address = TW_CPU_TO_SGL(tw_dev->generic_buffer_phys[request_id]);
+ 
+ 	/* Mark internal command */
+ 	tw_dev->srb[request_id] = NULL;
+@@ -501,7 +501,7 @@ static void twa_aen_sync_time(TW_Device_Extension *tw_dev, int request_id)
+            Sunday 12:00AM */
+ 	local_time = (ktime_get_real_seconds() - (sys_tz.tz_minuteswest * 60));
+ 	div_u64_rem(local_time - (3 * 86400), 604800, &schedulertime);
+-	schedulertime = cpu_to_le32(schedulertime % 604800);
++	cpu_to_le32p(&schedulertime);
+ 
+ 	memcpy(param->data, &schedulertime, sizeof(u32));
+ 
+@@ -1004,7 +1004,7 @@ static int twa_fill_sense(TW_Device_Extension *tw_dev, int request_id, int copy_
+ 			       full_command_packet->header.status_block.error,
+ 			       error_str[0] == '\0' ?
+ 			       twa_string_lookup(twa_error_table,
+-						 full_command_packet->header.status_block.error) : error_str,
++						 le16_to_cpu(full_command_packet->header.status_block.error)) : error_str,
+ 			       full_command_packet->header.err_specific_desc);
+ 		else
+ 			printk(KERN_WARNING "3w-9xxx: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+@@ -1012,7 +1012,7 @@ static int twa_fill_sense(TW_Device_Extension *tw_dev, int request_id, int copy_
+ 			       full_command_packet->header.status_block.error,
+ 			       error_str[0] == '\0' ?
+ 			       twa_string_lookup(twa_error_table,
+-						 full_command_packet->header.status_block.error) : error_str,
++						 le16_to_cpu(full_command_packet->header.status_block.error)) : error_str,
+ 			       full_command_packet->header.err_specific_desc);
+ 	}
+ 
+@@ -1129,12 +1129,11 @@ static int twa_initconnection(TW_Device_Extension *tw_dev, int message_credits,
+ 	tw_initconnect->opcode__reserved = TW_OPRES_IN(0, TW_OP_INIT_CONNECTION);
+ 	tw_initconnect->request_id = request_id;
+ 	tw_initconnect->message_credits = cpu_to_le16(message_credits);
+-	tw_initconnect->features = set_features;
+ 
+ 	/* Turn on 64-bit sgl support if we need to */
+-	tw_initconnect->features |= sizeof(dma_addr_t) > 4 ? 1 : 0;
++	set_features |= sizeof(dma_addr_t) > 4 ? 1 : 0;
+ 
+-	tw_initconnect->features = cpu_to_le32(tw_initconnect->features);
++	tw_initconnect->features = cpu_to_le32(set_features);
+ 
+ 	if (set_features & TW_EXTENDED_INIT_CONNECT) {
+ 		tw_initconnect->size = TW_INIT_COMMAND_PACKET_SIZE_EXTENDED;
+@@ -1347,8 +1346,8 @@ static irqreturn_t twa_interrupt(int irq, void *dev_instance)
+ 
+ 				/* Report residual bytes for single sgl */
+ 				if ((scsi_sg_count(cmd) <= 1) && (full_command_packet->command.newcommand.status == 0)) {
+-					if (full_command_packet->command.newcommand.sg_list[0].length < scsi_bufflen(tw_dev->srb[request_id]))
+-						scsi_set_resid(cmd, scsi_bufflen(cmd) - full_command_packet->command.newcommand.sg_list[0].length);
++					if (le32_to_cpu(full_command_packet->command.newcommand.sg_list[0].length) < scsi_bufflen(tw_dev->srb[request_id]))
++						scsi_set_resid(cmd, scsi_bufflen(cmd) - le32_to_cpu(full_command_packet->command.newcommand.sg_list[0].length));
+ 				}
+ 
+ 				/* Now complete the io */
+@@ -1390,13 +1389,13 @@ static void twa_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_comm
+ 	if (TW_OP_OUT(full_command_packet->command.newcommand.opcode__reserved) == TW_OP_EXECUTE_SCSI) {
+ 		newcommand = &full_command_packet->command.newcommand;
+ 		newcommand->request_id__lunl =
+-			cpu_to_le16(TW_REQ_LUN_IN(TW_LUN_OUT(newcommand->request_id__lunl), request_id));
++			cpu_to_le16(TW_REQ_LUN_IN(TW_LUN_OUT(le16_to_cpu(newcommand->request_id__lunl)), request_id));
+ 		if (length) {
+ 			newcommand->sg_list[0].address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache) - 1);
+ 			newcommand->sg_list[0].length = cpu_to_le32(length);
+ 		}
+ 		newcommand->sgl_entries__lunh =
+-			cpu_to_le16(TW_REQ_LUN_IN(TW_LUN_OUT(newcommand->sgl_entries__lunh), length ? 1 : 0));
++			cpu_to_le16(TW_REQ_LUN_IN(TW_LUN_OUT(le16_to_cpu(newcommand->sgl_entries__lunh)), length ? 1 : 0));
+ 	} else {
+ 		oldcommand = &full_command_packet->command.oldcommand;
+ 		oldcommand->request_id = request_id;
+@@ -1877,8 +1876,8 @@ static int twa_scsiop_execute_scsi(TW_Device_Extension *tw_dev, int request_id,
+ 	} else {
+ 		/* Internal cdb post */
+ 		for (i = 0; i < use_sg; i++) {
+-			command_packet->sg_list[i].address = TW_CPU_TO_SGL(sglistarg[i].address);
+-			command_packet->sg_list[i].length = cpu_to_le32(sglistarg[i].length);
++			command_packet->sg_list[i].address = sglistarg[i].address;
++			command_packet->sg_list[i].length = sglistarg[i].length;
+ 			if (command_packet->sg_list[i].address & TW_CPU_TO_SGL(TW_ALIGNMENT_9000_SGL)) {
+ 				TW_PRINTK(tw_dev->host, TW_DRIVER, 0x2f, "Found unaligned sgl address during internal post");
+ 				goto out;
+@@ -2109,7 +2108,7 @@ static int twa_probe(struct pci_dev *pdev, const struct pci_device_id *dev_id)
+ 				     TW_PARAM_FWVER, TW_PARAM_FWVER_LENGTH),
+ 	       (char *)twa_get_param(tw_dev, 1, TW_VERSION_TABLE,
+ 				     TW_PARAM_BIOSVER, TW_PARAM_BIOSVER_LENGTH),
+-	       le32_to_cpu(*(int *)twa_get_param(tw_dev, 2, TW_INFORMATION_TABLE,
++	       le32_to_cpu(*(__le32 *)twa_get_param(tw_dev, 2, TW_INFORMATION_TABLE,
+ 				     TW_PARAM_PORTCOUNT, TW_PARAM_PORTCOUNT_LENGTH)));
+ 
+ 	/* Try to enable MSI */
+diff --git a/drivers/scsi/3w-9xxx.h b/drivers/scsi/3w-9xxx.h
+index d88cd3499bd5..1e0430eb3b40 100644
+--- a/drivers/scsi/3w-9xxx.h
++++ b/drivers/scsi/3w-9xxx.h
+@@ -469,7 +469,11 @@ printk(KERN_WARNING "3w-9xxx: ERROR: (0x%02X:0x%04X): %s.\n",a,b,c); \
+ #define TW_APACHE_MAX_SGL_LENGTH (sizeof(dma_addr_t) > 4 ? 72 : 109)
+ #define TW_ESCALADE_MAX_SGL_LENGTH (sizeof(dma_addr_t) > 4 ? 41 : 62)
+ #define TW_PADDING_LENGTH (sizeof(dma_addr_t) > 4 ? 8 : 0)
+-#define TW_CPU_TO_SGL(x) (sizeof(dma_addr_t) > 4 ? cpu_to_le64(x) : cpu_to_le32(x))
++#if IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT)
++#define TW_CPU_TO_SGL(x) cpu_to_le64(x)
++#else
++#define TW_CPU_TO_SGL(x) cpu_to_le32(x)
++#endif
+ 
+ #pragma pack(1)
+ 
+-- 
+2.26.2
 
