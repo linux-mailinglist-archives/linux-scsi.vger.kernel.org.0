@@ -2,32 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4F122F899
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 21:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D02222F89B
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 21:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727979AbgG0TBc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Jul 2020 15:01:32 -0400
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:46739 "EHLO
+        id S1728079AbgG0TBv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Jul 2020 15:01:51 -0400
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:46966 "EHLO
         esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbgG0TBc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jul 2020 15:01:32 -0400
-IronPort-SDR: 6liB8DI4vt9HNL+gjdQAhTUCmqC9SEQWGwzsgURWR+9gJPuxHojKjyUG9Eq69a7jExe0K1W4BO
- bNv9kPzFWuH9xyg+MKIse4gOI7xQMVVJCKmbmOaOAzLA1OB/pCCN38zHubKV6F5u1R5W/IOaSC
- fcUILvCd2uljnqKLyxA7WmVp0jWQZQCcMhrXnFMQlQSqJrvCtgi2eJ1uTGbCOnv+IuD596xG1j
- qCDK+9Mgl0hBx1Kde/WasCY4n/IffxSVtc50OYGh3fx0dZaSAWU9lC/AQfLCZX9PS0kSiHiadF
- 0w4=
+        with ESMTP id S1726897AbgG0TBu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jul 2020 15:01:50 -0400
+IronPort-SDR: 5K/4ulH65MVllY/URDBcD24nitCdwxuF0bozNlXs6+EIwzLzqZvJrdUdcaS3zhFYsoQO6RWfvw
+ UtPZjdKbq7nXYS/SXDihiMYihQ76g3eiUb/N6N0NDCQO6jfRFkDLUUeXSMT2gMsCIs8NoO/ohc
+ BnrS/v+qO3x8UuTTzlhuyISWoGYboKqMd/InyW1LNNAcG+aagqT4Bdpj5j/sX+zlN4wfomuOHA
+ brSJ2b0du0jmLB31SpJjjbAGDK6T9dM100PuAxrgXy20cuSdlFad/8JvJCdL9gC14TYHCiNWai
+ waU=
 X-IronPort-AV: E=Sophos;i="5.75,403,1589266800"; 
-   d="scan'208";a="89293777"
+   d="scan'208";a="89294021"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jul 2020 12:01:31 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jul 2020 12:01:49 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 27 Jul 2020 12:01:21 -0700
+ 15.1.1979.3; Mon, 27 Jul 2020 12:01:32 -0700
 Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Mon, 27 Jul 2020 12:01:20 -0700
-Subject: [PATCH 2/4] hpsa: increase qd for external luns
+ Transport; Mon, 27 Jul 2020 12:01:32 -0700
+Subject: [PATCH 3/4] hpsa: increase ctlr eh timeout
 From:   Don Brace <don.brace@microsemi.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -36,8 +36,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
         <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Mon, 27 Jul 2020 14:01:21 -0500
-Message-ID: <159587648175.27787.13355905888342708678.stgit@brunhilda>
+Date:   Mon, 27 Jul 2020 14:01:33 -0500
+Message-ID: <159587649303.27787.8370512556225680281.stgit@brunhilda>
 In-Reply-To: <159587636236.27787.16970342225988726638.stgit@brunhilda>
 References: <159587636236.27787.16970342225988726638.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -49,28 +49,62 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-- increase queue_depth for PTRAID devices
-   - improves performance.
+Increase the timeout value for commands sent to
+the controller device.
+
+- controller can become slow to respond to INQUIRIES
+  resulting in the SML off-lining the controller
+  device.
+- when large RAID volumes are created along with
+  I/O stress, the controller can be slow to respond
+  to INQUIRIES.
+  - set/sense config along with device resets
+    can delay controller responses.
 
 Reviewed-by: Scott Teel <scott.teel@microsemi.com>
 Reviewed-by: Scott Benesh <scott.benesh@microsemi.com>
 Reviewed-by: Kevin Barnett <kevin.barnett@microsemi.com>
 Signed-off-by: Don Brace <don.brace@microsemi.com>
 ---
- drivers/scsi/hpsa.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/hpsa.c |   13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/hpsa.h b/drivers/scsi/hpsa.h
-index f8c88fc7b80a..6b87d9815b35 100644
---- a/drivers/scsi/hpsa.h
-+++ b/drivers/scsi/hpsa.h
-@@ -57,7 +57,7 @@ struct hpsa_sas_phy {
- 	bool added_to_port;
- };
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index 9b1edc541ed0..9286e60b8cc4 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -2134,6 +2134,7 @@ static int hpsa_slave_alloc(struct scsi_device *sdev)
+ }
  
--#define EXTERNAL_QD 7
-+#define EXTERNAL_QD 128
- struct hpsa_scsi_dev_t {
- 	unsigned int devtype;
- 	int bus, target, lun;		/* as presented to the OS */
+ /* configure scsi device based on internal per-device structure */
++#define CTLR_TIMEOUT (120 * HZ)
+ static int hpsa_slave_configure(struct scsi_device *sdev)
+ {
+ 	struct hpsa_scsi_dev_t *sd;
+@@ -2144,17 +2145,21 @@ static int hpsa_slave_configure(struct scsi_device *sdev)
+ 
+ 	if (sd) {
+ 		sd->was_removed = 0;
++		queue_depth = sd->queue_depth != 0 ?
++				sd->queue_depth : sdev->host->can_queue;
+ 		if (sd->external) {
+ 			queue_depth = EXTERNAL_QD;
+ 			sdev->eh_timeout = HPSA_EH_PTRAID_TIMEOUT;
+ 			blk_queue_rq_timeout(sdev->request_queue,
+ 						HPSA_EH_PTRAID_TIMEOUT);
+-		} else {
+-			queue_depth = sd->queue_depth != 0 ?
+-					sd->queue_depth : sdev->host->can_queue;
+ 		}
+-	} else
++		if (is_hba_lunid(sd->scsi3addr)) {
++			sdev->eh_timeout = CTLR_TIMEOUT;
++			blk_queue_rq_timeout(sdev->request_queue, CTLR_TIMEOUT);
++		}
++	} else {
+ 		queue_depth = sdev->host->can_queue;
++	}
+ 
+ 	scsi_change_queue_depth(sdev, queue_depth);
+ 
 
