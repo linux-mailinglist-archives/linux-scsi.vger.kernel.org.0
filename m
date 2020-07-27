@@ -2,147 +2,216 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 619B222F0B3
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 16:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0700722F2CF
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 16:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732610AbgG0O01 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Jul 2020 10:26:27 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.113]:40833 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732592AbgG0O0Z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 Jul 2020 10:26:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1595859981; i=@ts.fujitsu.com;
-        bh=4E27zNem+Z9EGkXpiHjf/1zOwy1imGa6yfZ6czr2aGA=;
-        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=IelngzuUlVzfTNtAGVr4xqibdaV+nG6aUVdczneiZMW3cCzfxODZcsTEHdrlPVN3A
-         EghQXut3iOcE8mwmtdPfRbnpe7qyGxY42aclgfl6681Xoz5e8Y0n3yXyfeWfAY+V49
-         6rtTs1VFQbQz5XA2n/Jw66oyGkiLhwjXUT30osjuzCrFB6d5816OlVSHEiLD/xv4Yn
-         Qfb8BfVqu6HZNepU2gI6KR29i/HSVfls1wNxlD7s0kwowPxY8Qd9cUXbQd7gxDQFk6
-         JiiV4Yb48PL9ZQ/SmW6qpPcwpsG2ot8Lbhyu6TvDY1rB3nvgVQkxi+70Aw7od7I1Ym
-         BD/8oGXk9/pxw==
-Received: from [100.113.7.116] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-b.eu-central-1.aws.symcld.net id B1/C2-35251-D04EE1F5; Mon, 27 Jul 2020 14:26:21 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRWlGSWpSXmKPExsViZ8MxVZfniVy
-  8wYL7lhbd13ewWSw//o/J4u+kG6wWrUvfMjmweHx8eovF4/MmuQCmKNbMvKT8igTWjCs3JjEW
-  PJWpuHTzPWMDY49YFyMXh5DAZEaJjj+32CCcfkaJzuanjF2MnBzCAq4Sq9ddZwFJiAisYZRY9
-  HopE0TVbUaJO4t2s4BUsQkYSKyYdB/M5hVwlNj4vY8NxGYRUJW4fn0b0CQODlGBcIlnK/whSg
-  QlTs58AlbOKWAnsW7pXFYQm1lAXeLPvEvMELa4xK0n85kgbHmJ7W/nME9g5JuFpH0WkpZZSFp
-  mIWlZwMiyitEiqSgzPaMkNzEzR9fQwEDX0NBY10zXwlwvsUo3SS+1VDc5Na+kKBEoqZdYXqxX
-  XJmbnJOil5dasokRGNAphWzhOxjPvP6gd4hRkoNJSZT332K5eCG+pPyUyozE4oz4otKc1OJDj
-  DIcHEoSvEoPgXKCRanpqRVpmTnA6IJJS3DwKInwWj8CSvMWFyTmFmemQ6ROMepyXL4+bxGzEE
-  tefl6qlDivLUiRAEhRRmke3AhYpF9ilJUS5mVkYGAQ4ilILcrNLEGVf8UozsGoJMw7G+QSnsy
-  8ErhNr4COYAI6ovG4LMgRJYkIKakGppn/ytKmOk6OyJijcW+Ga86zNdts/3D85Ig7oevpE1T9
-  S6G3jPVGRkKpz2K5N5UyJq5X7bqy+6+b1SRP/i2m9ntH+MSszpN5/xtfTL3/N212/80tveqdL
-  2L22+6JVH3NdmiOt2NXwdHOxd5RQicDfn0SuNdfl8sQmavaLa/TtP/E1IpJs3rdeGP87xdeN5
-  izu7+u8Mrpsgg/qXubIq6L2Ndrt1sr3ytX+PG/5HTN22/tC1nbUyzuP3ELjDu8c9nt7TkNSsJ
-  /7VeYl2lZ5Vs6bur2Yn3ZIt21mYt9BfNN1ZMT1mqnWh7fvm5dzZOAkMfJ/88fPf1i+vqlQpxL
-  HSvEdq+LW3/q9rOt1WoSN1ZvVGIpzkg01GIuKk4EAHDDHnpvAwAA
-X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-20.tower-248.messagelabs.com!1595859980!272158!1
-X-Originating-IP: [62.60.8.149]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.2; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 25483 invoked from network); 27 Jul 2020 14:26:20 -0000
-Received: from unknown (HELO mailhost2.uk.fujitsu.com) (62.60.8.149)
-  by server-20.tower-248.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Jul 2020 14:26:20 -0000
-Received: from x-serv01 ([172.17.38.52])
-        by mailhost2.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 06REQDK1028624;
-        Mon, 27 Jul 2020 15:26:13 +0100
-Received: from [172.17.39.90] (unknown [172.17.39.90])
-        by x-serv01 (Postfix) with ESMTP id 26B50201DA;
-        Mon, 27 Jul 2020 16:26:09 +0200 (CEST)
-Subject: Re: [PATCH] scsi: target: loop: Fix handling of aborted TMRs
-To:     Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-References: <20200715160403.12578-1-bstroesser@ts.fujitsu.com>
- <795a006d-6d66-a635-7e76-601cb7807f5b@oracle.com>
- <2694d1fc-8792-0fe2-4dec-78f15d3b4ec5@ts.fujitsu.com>
- <90048ea8-3b8f-cc06-7869-dca645cd68f2@oracle.com>
-From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Message-ID: <7c2d8052-fb5e-0a3b-a894-df8bfab44f21@ts.fujitsu.com>
-Date:   Mon, 27 Jul 2020 16:26:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1729022AbgG0OGy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Jul 2020 10:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729005AbgG0OGx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jul 2020 10:06:53 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48261C0619D2;
+        Mon, 27 Jul 2020 07:06:53 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id c6so2812845pje.1;
+        Mon, 27 Jul 2020 07:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=/dlgd3xXF2wViyMH4/dVOyKUUCfyX+RzmgXdSrfRYJs=;
+        b=llKbCc1Jzqqo+R2xnbeoSk/TDJIw41decVAgoX43zZVyuP/6dBJRdvVkOESBSZdY3L
+         A96qMW2LreOn6cizUXAumgXb4phDCe+3Wmp0SCjIhtrMbZc9/XlXNsuZ42Mkxi9onWUN
+         e/kI4+z14oylOT5JCyzHeS2a6YKqMRmH64petkoLdwnt4KWGFluP0k0YrufbbbybYjjW
+         v5/tH2Z311vFwPIgGNRMCNKM9yR9GKhUEmjyiPAtXXp2VBPT9GelUDEFlRgNgWDpxgrC
+         jgiGlAuMF/8reRfi4rxL91Xiz0S4wZvgvqDfkIyyLp3PWYjaVoEGxqU3u7qlC5u448EM
+         KVWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/dlgd3xXF2wViyMH4/dVOyKUUCfyX+RzmgXdSrfRYJs=;
+        b=fwcOMntVLKtYfuIQN39cugOgI9Sl8ZrPUU2VxdvMk8f+PzqUkaZHdWnVN8iJOiJ48i
+         SWirCozrdo/XcxeTcZ08Sj0HHqW01Xe4IdAIMB1FX6vuBYGoacBIEtYWE4ajB8qZx2j+
+         fvClJ/gJCoZu+TFuI3mqU+q0VebrM9fNBGTk7mQGIeIwvg/U93u1ElhuLZJ+hcFxqFd9
+         Hoh1nIPwhRvr0RMKiX13rx2WpyqdQJnohVsECFuNXXXuLfR7CHn0QuCrnWjH1mXUmdLB
+         7PlKdxX9L6/r9Mn39Xc7Onb/7TlkTRa+MI33wZbWd44yGeCg9Z/SE3HVbPwqK1OCg0Sg
+         /oJw==
+X-Gm-Message-State: AOAM532gr8j+dFs7miW1gU70ENr0+MMMati3d4R9GlBpoAJTJ2AJWyUo
+        thdE0iNNqDDX/6R8BsgMaS0PL/QR+j4=
+X-Google-Smtp-Source: ABdhPJyNjZQimFQYsPZZojsGgdduUxnpmtCXQWSqh9MJ9HkwSZ8ELCmS6a/9rrVk9cGhiLpy+DgT6A==
+X-Received: by 2002:a17:90a:2d8b:: with SMTP id p11mr13163026pjd.10.1595858812742;
+        Mon, 27 Jul 2020 07:06:52 -0700 (PDT)
+Received: from blackclown ([103.88.82.91])
+        by smtp.gmail.com with ESMTPSA id y18sm15372647pff.10.2020.07.27.07.06.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 27 Jul 2020 07:06:51 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 19:36:40 +0530
+From:   Suraj Upadhyay <usuraj35@gmail.com>
+To:     hare@suse.com, jejb@linux.ibm.com, martin.peterson@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] scsi: aic7xxx: Remove pci-dma-compat wrapper APIs.
+Message-ID: <20200727140640.GA14759@blackclown>
 MIME-Version: 1.0
-In-Reply-To: <90048ea8-3b8f-cc06-7869-dca645cd68f2@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UugvWAfsgieZRqgk"
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-07-26 20:37, Mike Christie wrote:
-> On 7/26/20 6:02 AM, Bodo Stroesser wrote:
->> On 2020-07-26 07:16, Mike Christie wrote:
->>> On 7/15/20 11:04 AM, Bodo Stroesser wrote:
->>>> Fix:
->>>> After calling the aborted_task callback the core immediately
->>>> releases the se_cmd that represents the ABORT_TASK. The woken
->>>> up thread (tcm_loop_issue_tmr) therefore must not access se_cmd
->>>> and tl_cmd in case of aborted TMRs.
->>>
->>> The code and fix description below look ok. I didn't get the above part though. If we have TARGET_SCF_ACK_KREF set then doesn't the se_cmd and tl_cmd stay around until we do the target_put_sess_cmd in tcm_loop_issue_tmr?
->>
->> No. For an aborted ABORT_TASK, target_handle_abort is called.
->> If tas is not set, it executes this code:
->>
->>          } else {
->>                  /*
->>                   * Allow the fabric driver to unmap any resources before
->>                   * releasing the descriptor via TFO->release_cmd().
->>                   */
->>                  cmd->se_tfo->aborted_task(cmd);
->>                  if (ack_kref)
->>                          WARN_ON_ONCE(target_put_sess_cmd(cmd) != 0);
->>                  /*
->>                   * To do: establish a unit attention condition on the I_T
->>                   * nexus associated with cmd. See also the paragraph "Aborting
->>                   * commands" in SAM.
->>                   */
->>          }
->>
->>          WARN_ON_ONCE(kref_read(&cmd->cmd_kref) == 0);
->>
->>          transport_lun_remove_cmd(cmd);
->>
->>          transport_cmd_check_stop_to_fabric(cmd);
->>
->> That means: no matter whether SCF_ACK_REF is set in the cmd or not:
->> 1) fabric's aborted_task handler and a waiter woken up by aborted_task must not call target_put_sess_cmd.
->> 2) a waiter woken up by aborted_task() must not access se_cmd (or tl_cmd) since target_handle_abort
->>     might have released it completely meanwhile.
->>
-> 
-> Oh no, so xen has the same cmd lifetime issue as loop right?
 
-To me it looks like xen uses nearly the same code like tcm_loop did before my patch.
-There is nothing wrong with that code regarding the cmd lifetime.
-The problem instead is, that the thread which started a TMR (ABORT_TASK) will sleep forever if that TMR itself is aborted by a further TMR (LUN_RESET).
-This is because tcm_loop_aborted_task() misses the complete() call.
- 
-But if we just add the complete() call to XXXX_aborted_task(), we run into trouble because what core expects from fabric handlers is different:
-1) If core calls XXXX_queue_tm_rsp(), then fabric has to release one ref count only if SCF_ACK_REF is set. Otherwise it must not.
-2) If core calls XXXX_aborted_task(), then fabric must not release ref count, no matter whether SCF_ACK_REF is set.
+--UugvWAfsgieZRqgk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So I decided for my patch to no longer use TARGET_SCF_ACK_KREF, since then we can handle both situation the same way.
-After that it was a short step to move the data fields used by the thread after wakeup() from tl_cmd to stack, because then the woken up theqard has no need to access tl_cmd, which can be freed meanwhile.
+The legacy API wrappers in include/linux/pci-dma-compat.h
+should go away as it creates unnecessary midlayering
+for include/linux/dma-mapping.h APIs, instead use dma-mapping.h
+APIs directly.
 
-I think, the same way to fix the problem would be fine for xen also, but I'm still wondering why the thread there does not call target_put_sess_cmd, but calls transport_generic_free_cmd.
+The patch has been generated with the coccinelle script below
+and has been hand modified to replace GFP_ with correct flag.
 
-> 
-> And, it looks like iscsi has an issue too. I can hit both of those WARNs.
-> 
-> I'm ok with your patch, but is there a way to fix this in core for everyone?
-> 
-> It seems like something that must have worked at some point for everyone, but we broke. I'll try to get some time today and git bisect this to see if it's a regression.
-> 
+Compile-tested only.
 
-I'm wondering whether aborting an Abort ever was tested at least for these drivers.
+@@@@
+- PCI_DMA_BIDIRECTIONAL
++ DMA_BIDIRECTIONAL
+
+@@@@
+- PCI_DMA_TODEVICE
++ DMA_TO_DEVICE
+
+@@@@
+- PCI_DMA_FROMDEVICE
++ DMA_FROM_DEVICE
+
+@@@@
+- PCI_DMA_NONE
++ DMA_NONE
+
+@@ expression E1, E2, E3; @@
+- pci_alloc_consistent(E1, E2, E3)
++ dma_alloc_coherent(&E1->dev, E2, E3, GFP_)
+
+@@ expression E1, E2, E3; @@
+- pci_zalloc_consistent(E1, E2, E3)
++ dma_alloc_coherent(&E1->dev, E2, E3, GFP_)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_free_consistent(E1, E2, E3, E4)
++ dma_free_coherent(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_map_single(E1, E2, E3, E4)
++ dma_map_single(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_unmap_single(E1, E2, E3, E4)
++ dma_unmap_single(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4, E5; @@
+- pci_map_page(E1, E2, E3, E4, E5)
++ dma_map_page(&E1->dev, E2, E3, E4, E5)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_unmap_page(E1, E2, E3, E4)
++ dma_unmap_page(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_map_sg(E1, E2, E3, E4)
++ dma_map_sg(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_unmap_sg(E1, E2, E3, E4)
++ dma_unmap_sg(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_dma_sync_single_for_cpu(E1, E2, E3, E4)
++ dma_sync_single_for_cpu(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_dma_sync_single_for_device(E1, E2, E3, E4)
++ dma_sync_single_for_device(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_dma_sync_sg_for_cpu(E1, E2, E3, E4)
++ dma_sync_sg_for_cpu(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2, E3, E4; @@
+- pci_dma_sync_sg_for_device(E1, E2, E3, E4)
++ dma_sync_sg_for_device(&E1->dev, E2, E3, E4)
+
+@@ expression E1, E2; @@
+- pci_dma_mapping_error(E1, E2)
++ dma_mapping_error(&E1->dev, E2)
+
+@@ expression E1, E2; @@
+- pci_set_consistent_dma_mask(E1, E2)
++ dma_set_coherent_mask(&E1->dev, E2)
+
+@@ expression E1, E2; @@
+- pci_set_dma_mask(E1, E2)
++ dma_set_mask(&E1->dev, E2)
+
+Signed-off-by: Suraj Upadhyay <usuraj35@gmail.com>
+---
+ drivers/scsi/aic7xxx/aic79xx_osm.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic7=
+9xx_osm.c
+index 3782a20d5888..2998d70e1987 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_osm.c
++++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
+@@ -952,8 +952,8 @@ int
+ ahd_dmamem_alloc(struct ahd_softc *ahd, bus_dma_tag_t dmat, void** vaddr,
+ 		 int flags, bus_dmamap_t *mapp)
+ {
+-	*vaddr =3D pci_alloc_consistent(ahd->dev_softc,
+-				      dmat->maxsize, mapp);
++	*vaddr =3D dma_alloc_coherent(&ahd->dev_softc->dev, dmat->maxsize, mapp,
++				    GFP_ATOMIC);
+ 	if (*vaddr =3D=3D NULL)
+ 		return (ENOMEM);
+ 	return(0);
+@@ -963,8 +963,7 @@ void
+ ahd_dmamem_free(struct ahd_softc *ahd, bus_dma_tag_t dmat,
+ 		void* vaddr, bus_dmamap_t map)
+ {
+-	pci_free_consistent(ahd->dev_softc, dmat->maxsize,
+-			    vaddr, map);
++	dma_free_coherent(&ahd->dev_softc->dev, dmat->maxsize, vaddr, map);
+ }
+=20
+ int
+--=20
+2.17.1
+
+
+--UugvWAfsgieZRqgk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE7AbCa0kOsMJ4cx0j+gRsbIfe744FAl8e32UACgkQ+gRsbIfe
+744KDw/7BpO7VI4xx9d2wmnGAwifaIX6neKoXzHs8RxWHssVDdZHn0PVd07wcNTZ
+2GYQ3gr9HVZJKe3GGwLY1naLzK2Ee28bHvfUro/DEdcJHjF5oyVgCwYEJT5vxdrU
+0wO2SvP3uUha3INyogAqUecWIdhqo6sGJ4LPnoeu93vp/RIK81CELKebxP9vkY9s
+Lq2l+BxeXyMMTxxfUWNMRTurf3FqqOnmRuN9uqM9hH+wMmM6WgY0BYDKam4fVecw
+/AwSrHQVyDzRle/zMnGUgJhV50KPwJbkmm2de2aqAUkwwrYYpOan5VgU5A+hRQJO
+7ry9jBXRxZn1rBz8T/v9IXD2UZ705/o6tDm51YrUrNY+Kk7JOI1rp2pTHV2ITpIQ
+aGp7SBUSEeXELdjrkgD/BSC0iopZ+apeiIh87qZEJ3VqS7xvrB05b8xm0XPKXDNy
+i3O3Vc5aOAypnb7GhBWxvKaM962WGhnH2AvRvxrPDbFRycsafwnkVa7QPU4P1Xs4
+xZG8HYg8SSJ3uLLpxb00SrtvDL9lyzR1cMWVU42eEDUeB0W9N/fY3rPvpB28iJ37
+CeAaJu8purH1u/+2B80S/p0933lWpih07cmnIx12q3R1MiFY2z5PlyJDiUGxeIbq
+YGsKrIMLMgPAHmNt5/I9LyAyoA1TaVsgiHwRKOY2jHFOWCHc+n0=
+=yJ/4
+-----END PGP SIGNATURE-----
+
+--UugvWAfsgieZRqgk--
