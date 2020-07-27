@@ -2,63 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 972F322F2CC
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 16:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EE922F2BB
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 16:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730238AbgG0OmW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Jul 2020 10:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        id S1733094AbgG0Olz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Jul 2020 10:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729232AbgG0OHZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jul 2020 10:07:25 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B98C061794;
-        Mon, 27 Jul 2020 07:07:25 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id l2so2788348pff.0;
-        Mon, 27 Jul 2020 07:07:25 -0700 (PDT)
+        with ESMTP id S1729307AbgG0OHt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jul 2020 10:07:49 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F95C061794;
+        Mon, 27 Jul 2020 07:07:49 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id m8so2264074pfh.3;
+        Mon, 27 Jul 2020 07:07:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=rRa+fNv/h1FLu+e0oE4gptqf0fEaL6gJEA3JJuU10DI=;
-        b=peHWGC30Cc4mA3aNsP0q1simXnVE+JXDG/VGM4rr2LjgWNKoOR7WolOdacYFzdz6bU
-         Iue6nCpY7k7ThnLX3f2gtK1eVj27P5VSL4dXkrDAvRQBgl8SgaNxxv/D4Eds4TXdqYmg
-         jbrRzyRDLN8JUq4CD9qD9ja7U8+wZWQwybqxr+yYtV4ZcXdr8xrPnGBitLIoeGGB/X+v
-         9nqpEItJUw5nWDi4Z3mCh35jqpRjjlPFatlFkicfeHbjbqiVObU1UyYfG6YAHf4GUj9t
-         vojKLcNOOV+Whq2u7UWhAzh9+8iyAB/daxYBQH6hJTgCSnBCZnAdlfbZriKVkn1pzoKr
-         oqww==
+        bh=uIYJyuYiiW/t79IJASfjSgsvyr6JgQfUGj/U1kW1+kM=;
+        b=uQqOKwTqim7etj66QoEBbgwOnFx1TiubnxWdmHhLlW2/NBcuHbHGgFC4UGurNd5Zd7
+         sDFMqveMEGq0Tc5m5xFLKqMkBzkuXGxQBdIEFYCqkM9mJ9eOiGNV4q5AqerLbkIp9fXg
+         dCaVMlBcNJ0MI9PKsxy0ui/psLd1hq1k3teM6xJfyL2pCAQZEQz46S8rqiEPLLzMPmvK
+         SpLzzpdk0j/hgeeJ/WGAilck3JuMQV3+jhkWvS6uJ2Xn4/HVJKdGW+Cq5vfrlp/G1O1v
+         3T18HVgB1QNtBj1XIUILJ8CVPx3z4EvYpCx1VnB4pTqa9lKy3bFg0XTu6AMKU0YIWXhV
+         N4gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=rRa+fNv/h1FLu+e0oE4gptqf0fEaL6gJEA3JJuU10DI=;
-        b=I7IoomyFVkzi7fwzg2rCnKM6srqnetTQuNsaSowOXBopEeFLDdgmPJC8HoAX4GqRWu
-         3rBXxmU+tDuoZktNL1uy18w3VfupdJVga68utFv8O9NLXq6k5LYGzCZOa3k/SHVKTa42
-         hdB+c/BhqRZPUV9qoWQxnG/V8X6u7bFiHCTS1vxprTaX/FMe8prKuMFRyhqVdla0LYqp
-         LlUukqOLDeIu3INxghEPTU/9KXalgimjIti4ty9/usglZbT0B+JJ5IIYJoW/sHRJdUnF
-         FH+w3z+2wZsx3JiOXrKdMEMAun3mN5vspZLrd/gYMa0NolyUn4jeI0qrQa0D88upj2qm
-         ZIzQ==
-X-Gm-Message-State: AOAM530o/rTFUAFbO2DrICdBlylIZlZlccyQ4lVzL5rkHyBFG28XX00F
-        gb4hraNtJ5HSxT+BSox8Gk7xaT3+8oQ=
-X-Google-Smtp-Source: ABdhPJwyQG7PnT2nCaXWxsHbL2qpIG3kNtO1WyEmRdXQAB+5YOW+5gNsYZR0JpVmHGErRsOzZv3g7w==
-X-Received: by 2002:a62:164a:: with SMTP id 71mr20981392pfw.266.1595858844659;
-        Mon, 27 Jul 2020 07:07:24 -0700 (PDT)
+        bh=uIYJyuYiiW/t79IJASfjSgsvyr6JgQfUGj/U1kW1+kM=;
+        b=Qc3b0lscX7I/QhOlMO2H3OixNVaChor2Y88M/ux/wGe5b/F9zPcVyUvuCpDAn3+yoD
+         Sk/OXxaBAhGLof6/1xYhTXJr7f5Hd1t13cMEwKvLVBCJX52g9g0AGl8e4svtYLe+p2zg
+         sHrjwFZd0I6JWYmA0L7J4G11cgASrgGTYIpvRMN92I9lidr7AQu7M/+nTthrqjxW19J1
+         pc4nQsFZVB2yRxlmnPQPgNgb72rzZOLtEjcAELVW0wF0PMGiuxm9aTH5NidtTNtsx6TG
+         974B9fv4X+2FurxikLyhKuyg9cy8EiinuCdBmUe12qV4LFYCX4zfhFLwCl4Rgs2bLVxK
+         fJ/w==
+X-Gm-Message-State: AOAM530MfenwKNDX7fUd4S8n7LTtUBWWeoS8Kkr5/QTqh6rhWFKafFCm
+        cK7BAsJ7oVPp0CcvdnJbgqo=
+X-Google-Smtp-Source: ABdhPJxYdZe/awyfdH3IV3SnkfRGrqi3dP6UndHQAjFe3FqxzT8p1Pwotl6hs6Qcb4z8Jil1TIhDYw==
+X-Received: by 2002:a62:3204:: with SMTP id y4mr19769998pfy.50.1595858868906;
+        Mon, 27 Jul 2020 07:07:48 -0700 (PDT)
 Received: from blackclown ([103.88.82.91])
-        by smtp.gmail.com with ESMTPSA id n137sm15266576pfd.194.2020.07.27.07.07.21
+        by smtp.gmail.com with ESMTPSA id h194sm15164853pfe.201.2020.07.27.07.07.45
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 27 Jul 2020 07:07:23 -0700 (PDT)
-Date:   Mon, 27 Jul 2020 19:37:18 +0530
+        Mon, 27 Jul 2020 07:07:48 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 19:37:42 +0530
 From:   Suraj Upadhyay <usuraj35@gmail.com>
-To:     oliver@neukum.org, aliakc@web.de, lenehan@twibble.org,
-        jejb@linux.ibm.com, don.brace@microsemi.com
-Cc:     dc395x@twibble.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, esc.storagedev@microsemi.com
-Subject: [PATCH RESEND] scsi: hpsa and dc395x: Remove pci_dma_compat wrapper
- APIs.
-Message-ID: <20200727140718.GB14759@blackclown>
+To:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, jejb@linux.ibm.com
+Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] scsi: mpt3sas: Remove pci-dma-compat wrapper APIs.
+Message-ID: <20200727140742.GC14759@blackclown>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pvezYHf7grwyp3Bc"
+        protocol="application/pgp-signature"; boundary="hOcCNbCCxyk/YU74"
 Content-Disposition: inline
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-scsi-owner@vger.kernel.org
@@ -67,7 +66,7 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
---pvezYHf7grwyp3Bc
+--hOcCNbCCxyk/YU74
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -162,102 +161,53 @@ and compile-tested.
 
 Signed-off-by: Suraj Upadhyay <usuraj35@gmail.com>
 ---
- drivers/scsi/dc395x.c |  6 +++---
- drivers/scsi/hpsa.c   | 16 ++++++++--------
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index 37c6cc374079..58d4acdb0447 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -902,7 +902,7 @@ static void build_srb(struct scsi_cmnd *cmd, struct Dev=
-iceCtlBlk *dcb,
- 	nseg =3D scsi_dma_map(cmd);
- 	BUG_ON(nseg < 0);
-=20
--	if (dir =3D=3D PCI_DMA_NONE || !nseg) {
-+	if (dir =3D=3D DMA_NONE || !nseg) {
- 		dprintkdbg(DBG_0,
- 			"build_srb: [0] len=3D%d buf=3D%p use_sg=3D%d !MAP=3D%08x\n",
- 			   cmd->bufflen, scsi_sglist(cmd), scsi_sg_count(cmd),
-@@ -3135,7 +3135,7 @@ static void pci_unmap_srb(struct AdapterCtlBlk *acb, =
-struct ScsiReqBlk *srb)
- 	struct scsi_cmnd *cmd =3D srb->cmd;
- 	enum dma_data_direction dir =3D cmd->sc_data_direction;
-=20
--	if (scsi_sg_count(cmd) && dir !=3D PCI_DMA_NONE) {
-+	if (scsi_sg_count(cmd) && dir !=3D DMA_NONE) {
- 		/* unmap DC395x SG list */
- 		dprintkdbg(DBG_SG, "pci_unmap_srb: list=3D%08x(%05x)\n",
- 			srb->sg_bus_addr, SEGMENTX_LEN);
-@@ -3333,7 +3333,7 @@ static void srb_done(struct AdapterCtlBlk *acb, struc=
-t DeviceCtlBlk *dcb,
-=20
- 		if (!ckc_only && (cmd->result & RES_DID) =3D=3D 0
- 		    && cmd->cmnd[2] =3D=3D 0 && scsi_bufflen(cmd) >=3D 8
--		    && dir !=3D PCI_DMA_NONE && ptr && (ptr->Vers & 0x07) >=3D 2)
-+		    && dir !=3D DMA_NONE && ptr && (ptr->Vers & 0x07) >=3D 2)
- 			dcb->inquiry7 =3D ptr->Flags;
-=20
- 	/*if( srb->cmd->cmnd[0] =3D=3D INQUIRY && */
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 81d0414e2117..ef90391a0269 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -9310,10 +9310,10 @@ static int hpsa_enter_performant_mode(struct ctlr_i=
-nfo *h, u32 trans_support)
- static void hpsa_free_ioaccel1_cmd_and_bft(struct ctlr_info *h)
- {
- 	if (h->ioaccel_cmd_pool) {
--		pci_free_consistent(h->pdev,
--			h->nr_cmds * sizeof(*h->ioaccel_cmd_pool),
--			h->ioaccel_cmd_pool,
--			h->ioaccel_cmd_pool_dhandle);
-+		dma_free_coherent(&h->pdev->dev,
-+				  h->nr_cmds * sizeof(*h->ioaccel_cmd_pool),
-+				  h->ioaccel_cmd_pool,
-+				  h->ioaccel_cmd_pool_dhandle);
- 		h->ioaccel_cmd_pool =3D NULL;
- 		h->ioaccel_cmd_pool_dhandle =3D 0;
- 	}
-@@ -9363,10 +9363,10 @@ static void hpsa_free_ioaccel2_cmd_and_bft(struct c=
-tlr_info *h)
- 	hpsa_free_ioaccel2_sg_chain_blocks(h);
-=20
- 	if (h->ioaccel2_cmd_pool) {
--		pci_free_consistent(h->pdev,
--			h->nr_cmds * sizeof(*h->ioaccel2_cmd_pool),
--			h->ioaccel2_cmd_pool,
--			h->ioaccel2_cmd_pool_dhandle);
-+		dma_free_coherent(&h->pdev->dev,
-+				  h->nr_cmds * sizeof(*h->ioaccel2_cmd_pool),
-+				  h->ioaccel2_cmd_pool,
-+				  h->ioaccel2_cmd_pool_dhandle);
- 		h->ioaccel2_cmd_pool =3D NULL;
- 		h->ioaccel2_cmd_pool_dhandle =3D 0;
- 	}
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3=
+sas_ctl.c
+index 43260306668c..94698ad1cad7 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -3384,12 +3384,10 @@ host_trace_buffer_enable_store(struct device *cdev,
+ 			    &&
+ 			    (ioc->diag_buffer_status[MPI2_DIAG_BUF_TYPE_TRACE] &
+ 			    MPT3_DIAG_BUFFER_IS_APP_OWNED)) {
+-				pci_free_consistent(ioc->pdev,
+-				    ioc->diag_buffer_sz[
+-				    MPI2_DIAG_BUF_TYPE_TRACE],
+-				    ioc->diag_buffer[MPI2_DIAG_BUF_TYPE_TRACE],
+-				    ioc->diag_buffer_dma[
+-				    MPI2_DIAG_BUF_TYPE_TRACE]);
++				dma_free_coherent(&ioc->pdev->dev,
++						  ioc->diag_buffer_sz[MPI2_DIAG_BUF_TYPE_TRACE],
++						  ioc->diag_buffer[MPI2_DIAG_BUF_TYPE_TRACE],
++						  ioc->diag_buffer_dma[MPI2_DIAG_BUF_TYPE_TRACE]);
+ 				ioc->diag_buffer[MPI2_DIAG_BUF_TYPE_TRACE] =3D
+ 				    NULL;
+ 			}
 --=20
 2.17.1
 
 
---pvezYHf7grwyp3Bc
+--hOcCNbCCxyk/YU74
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE7AbCa0kOsMJ4cx0j+gRsbIfe744FAl8e35YACgkQ+gRsbIfe
-745LERAArCx2Ge07lVIKLK0+ZHYsHsU+GUJH4CMIJ6cWPDmY3kPrWA68T9/RwPhv
-T39sW+NRyr4qrQL15WFOST8/x1xXIZKh76wGu8LMsan+UFwzxN57cAq2dzCQJ7Cp
-o55GkPNParldjorb4EcE3lKHIG2Yx1O05kUJ4WV/Zfllq0L2cT7BFYf0ggqFmnLo
-0pqh6TPH+yP8DdeADX0fe99/wLHr9jZSy/DnwNkfS4fU5VyAIUcDjdlDTX8gQ72r
-m8etjUazpEhWQK5rDP1vX0QOY2RM7g1gunAKR3J0x+/5shEmWFnkkfJrrCcAz37R
-JZMG4mXA1Tgb2bFtYtRo2bZgJlyPtDGr+LegnW5TiWLUGhTOXx+z282mids0P65E
-tsdel8P3gHgRuYrp7rC4a+QVqhJLEDLYB8Tfj3T3j46tykf3CA5nLZoJ12uJGxRK
-CgPyYNtt0r0YHEGvgEBnRrO06jc8e5Of+mGCFGQYtc+FNXOHmE8C/A0u8b2hqPeE
-03IAkIhCLTqefsGn+fFkIraZtTiA7Et81znkBh0bY5W5loYWUTl3agGgJ+rv/VpM
-v1nwVCu3jwvOoPOHVzfELC8pu/rpgkrO/36XEbjMbQ8eIMDh/4036yGiBjx+Cw+/
-EXpiQQQ7wo8+OvvWg9x050ql4JxGq0h36KrBLLnxhGqGWxwRCxQ=
-=myJW
+iQIzBAABCgAdFiEE7AbCa0kOsMJ4cx0j+gRsbIfe744FAl8e364ACgkQ+gRsbIfe
+7476hRAApZApUEz0Q+bHrUSIr02pBFKMxPO96/elIDLN8mhzeEq0Qs2vinqshnfV
+7S2Nh4Dz8BT3wCUp+9QgypHjo3IrTozzThr7ZzPZF+hLlpXt59ccmNCpdiYhcJ3w
+kZEOiQREPcR/8b78GjQ+AX35/W3PiW0BSA4Vb5kyfs2858l+QzsSxG+HZ8raI3E2
+KWJX81lhG4hlVW+fYUaGKYPiI7mB6GNFln9hIWnN+0ngks7ACoWf0o1+HA3bzjS6
+gzrp2uIXqqj+2l76/Yj/2t1laQ9dDbz3PmNolb2KWpJiEMplesksVUYMSrQklrXd
+4utN/4K6RWtwbFogTXEBHds2pfun7/Dvv2/EmJEY1quNu/CPfGHXzz8lGW/ul0Md
+HedX2B4e3VN6YHIGFQf3UOLbpqadcXLtbii/adpyJbTDjJdO1PjaAVuxKykn/ax0
+pT4k4ZxGiOsAYkuDy6P/eSvvDAOzf/6nfIJyhYqNn3VzInyohnn8x/ENZ+1Zt8vN
+2HF+Oo5hGXzU0MdTBRQR/7i1k7I55UVfBZQNP9oepOJMGPKqwpQ7VarVOrnD9YDn
+VLXGeHgwR5SkmwPg3hj9iSABLbgE/BvqTXidoqkMxjuV58oIfhBzcL7pFlmlXBOK
+dzDmp+O8xuMi8QwRKaG2sI1duRgqc+/a0CZlbx0gtmmghruVf10=
+=R3fx
 -----END PGP SIGNATURE-----
 
---pvezYHf7grwyp3Bc--
+--hOcCNbCCxyk/YU74--
