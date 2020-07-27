@@ -2,62 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0E822F2C7
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 16:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7D622F40C
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Jul 2020 17:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729792AbgG0OmS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Jul 2020 10:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733131AbgG0OmQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jul 2020 10:42:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B236C061794
-        for <linux-scsi@vger.kernel.org>; Mon, 27 Jul 2020 07:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/Gfn9oRrSDuMojNIgYXtbopxuSKzqPdHmPavNt1mDa8=; b=dEXoxPUdijbfGhMXlXMEobBcrR
-        K7mGxqX4P35J7IYy12gWnCErB36iwjNxgXsFD5V6gbMVPEFyImQopMvvB3rlPH9m7wW80iFOq78jn
-        ssEEngPPF5aPn729RccjOarU3BpNgZAOkPhbIqT9hGpZvZmcRQq59BoZUqXa+PisBNpuvbGaM+WGR
-        cLpEplBDuRRWS3WR+grpqbS5y+aGRRs2QXWFL9DsshLkjI2fIn8p7IDP/xTLgrSM8kFD79ERhQtE7
-        byAGtKgdu/+C91QB+z+JPurq0NWWkk35EMHQ/AdmOs3xMhn5rh8Ychuyxb/F9TgBt8uss9JAWHGUX
-        OKdg80jw==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k04KP-0006rX-Uy; Mon, 27 Jul 2020 14:42:10 +0000
-Date:   Mon, 27 Jul 2020 15:42:09 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     SEO HOYOUNG <hy50.seo@samsung.com>
-Cc:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
-        grant.jung@samsung.com, junwoo80.lee@samsung.com
-Subject: Re: [RFC PATCH v4 2/2] scsi: ufs: add vendor specific write booster
-Message-ID: <20200727144209.GA24271@infradead.org>
-References: <cover.1595850338.git.hy50.seo@samsung.com>
- <CGME20200727121708epcas2p17a1fc75b9737ee32d1de64f2fdfcdf9b@epcas2p1.samsung.com>
- <8fd7173a76d3508a9470fa49c736a3326bbe59fd.1595850338.git.hy50.seo@samsung.com>
+        id S1729040AbgG0Ppj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Jul 2020 11:45:39 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48915 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726932AbgG0Ppi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jul 2020 11:45:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595864738;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ehKZE7hXFk/qNeJii6krvpOJtqjgsejGlg6rhFX8+M=;
+        b=M0JHIb1RazOKNTcC+H13bXeiqc3AJpK3ztzn2bP1Cddx7/sftdpAecIlm2y1VN+FK3QKNX
+        uYHS56aTl5/1+zfs3qhh7yOx8NT7Icqe4xtwm2tRQfnAWaCqanrku815EHcJnTaliYAyFY
+        plQIanMNY0806MBltO9uWIHGX/ioxOA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-158-ht2TwzmtM9COOM4_UkitGw-1; Mon, 27 Jul 2020 11:45:35 -0400
+X-MC-Unique: ht2TwzmtM9COOM4_UkitGw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 55C5D8005B0;
+        Mon, 27 Jul 2020 15:45:34 +0000 (UTC)
+Received: from [10.3.128.8] (unknown [10.3.128.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F077460BF4;
+        Mon, 27 Jul 2020 15:45:32 +0000 (UTC)
+Reply-To: tasleson@redhat.com
+Subject: Re: [v4 00/11] Add persistent durable identifier to storage log
+ messages
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-scsi@vger.kernel.org, b.zolnierkie@samsung.com,
+        axboe@kernel.dk
+References: <20200724171706.1550403-1-tasleson@redhat.com>
+ <20200726151035.GC20628@infradead.org>
+From:   Tony Asleson <tasleson@redhat.com>
+Organization: Red Hat
+Message-ID: <e3184753-bda1-fcfd-5cc2-7aa865d420fd@redhat.com>
+Date:   Mon, 27 Jul 2020 10:45:31 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fd7173a76d3508a9470fa49c736a3326bbe59fd.1595850338.git.hy50.seo@samsung.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200726151035.GC20628@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 09:17:24PM +0900, SEO HOYOUNG wrote:
-> To support the fuction of writebooster by vendor.
-> The WB behavior that the vendor wants is slightly different.
-> But we have to support it
+On 7/26/20 10:10 AM, Christoph Hellwig wrote:
+> FYI, I think these identifiers are absolutely horrible and have no
+> business in dmesg:
 
-And why would we give a f*%k what the so called vendor (of what
-anyway) wants?  Either the policy makes sense and we should adopt it,
-or it depends on device parameters and we need to take them into
-account.
+The identifiers are structured data, they're not visible unless you go
+looking for them.
 
-But these stupid overrides don't make any sense at all.  Even less than
-all the other ufs crap.
+I'm open to other suggestions on how we can positively identify storage
+devices over time, across reboots, replacement, and dynamic reconfiguration.
+
+My home system has 4 disks, 2 are identical except for serial number.
+Even with this simple configuration, it's not trivial to identify which
+message goes with which disk across reboots.
+
+-Tony
+
