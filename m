@@ -2,65 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CB8231864
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jul 2020 06:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D49231867
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jul 2020 06:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbgG2EKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Jul 2020 00:10:52 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:43276 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgG2EKw (ORCPT
+        id S1726707AbgG2EKy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Jul 2020 00:10:54 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:52692 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726588AbgG2EKw (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Jul 2020 00:10:52 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T42uRx073257;
-        Wed, 29 Jul 2020 04:10:44 GMT
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T41eCM178590;
+        Wed, 29 Jul 2020 04:10:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=XueOXxLQeIjV+JoPeqbJC3BcZPWy2GOjTuyUdd0mwx8=;
- b=njcRa/yOy4SdlqV2A8J/f8IaUk2rAp5kYSBrmqUSEMIqdXEa6tgTbC8y+XN2CaWhdqpD
- d4e5nhgPePErHepvyTl65mxz4Gu4mZJ7148wDsATfGVSl3HW+owLuP6ImUFCaNBHejfq
- xtPHzmmbP1ANMl5MdwYWE7st+ay1wqfMZxdxwXJ6Q3Ak0OQh5Vx95ncN6mpjeO3vquRo
- KGf1O/bb5aBYAmc09A4u2w37h5n6bLJCcKU54INEmb4K8S6WTbJyK06EW5GQgyLycFIE
- yxzWout0e+B6vjSAtf3aX+T9CD0F3l4bMQfC80aDe0NAFuVipUbLfqrTZpMBOlGu2StM CQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 32hu1jb6df-1
+ bh=k/wA48ninh3O4LNW4aoOyCLxoTQokP10S79obE2M3XU=;
+ b=C9o1hsfmDzHESrOEsBrqQQMRoYJLTPMymnmGIl4T2ME4W7WEfo63qztqF4l8ZjO4OX3u
+ NsjzxnUkyS/MXG7OfXrtfjWiCiqrVNA70sOweR1Tu5PnweDfer5xR8ov5QlDtXoi34/2
+ uBbh23rU9Lt2JAwGKC75sp54zg4znTGs/fHHOdpCxltAtR3zHExYSMKFR6AWsI3CcaVp
+ eu9rr8xvCx9U3sM/HSm/JnpoduV7ELzn0CCdPt6UyJ/JH271rt/pq6+GFuU9PWwy2PJq
+ cQftc9gHnvDmZNCNyTpfCZDN1825voZIg0yU7WHNyxWz/FRsh7koE3EqcgxiSud6BncE gg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 32hu1jk62e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
         Wed, 29 Jul 2020 04:10:43 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T42jNj150822;
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T42a8I023765;
         Wed, 29 Jul 2020 04:10:43 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 32hu5v59p1-1
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 32hu5u1pvv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 29 Jul 2020 04:10:43 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06T4AfIf024992;
-        Wed, 29 Jul 2020 04:10:41 GMT
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06T4Ag2W011190;
+        Wed, 29 Jul 2020 04:10:42 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
         with ESMTP ; Tue, 28 Jul 2020 21:10:41 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux-scsi@vger.kernel.org, Douglas Gilbert <dgilbert@interlog.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: Re: [PATCH] scsi_debug: fix request sense
-Date:   Wed, 29 Jul 2020 00:10:33 -0400
-Message-Id: <159599579269.11289.9432858399966383235.b4-ty@oracle.com>
+        kernel test robot <lkp@intel.com>, jejb@linux.vnet.ibm.com,
+        hare@suse.de
+Subject: Re: [PATCH v2] scsi_debug: tur_ms_to_ready parameter
+Date:   Wed, 29 Jul 2020 00:10:34 -0400
+Message-Id: <159599579270.11289.12476844514299239357.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200723194819.545573-1-dgilbert@interlog.com>
-References: <20200723194819.545573-1-dgilbert@interlog.com>
+In-Reply-To: <20200724155531.668144-1-dgilbert@interlog.com>
+References: <20200724155531.668144-1-dgilbert@interlog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9696 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxscore=0 adultscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007290027
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007290027
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9696 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 clxscore=1015
- malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 mlxlogscore=999
+ malwarescore=0 impostorscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007290027
 Sender: linux-scsi-owner@vger.kernel.org
@@ -68,20 +69,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 23 Jul 2020 15:48:19 -0400, Douglas Gilbert wrote:
+On Fri, 24 Jul 2020 11:55:31 -0400, Douglas Gilbert wrote:
 
-> The SCSI REQUEST SENSE command emulation was found to be broken.
-> It is a quite complex command so try and make it do a subset of
-> what it should do. Remove the attempt to mimic SCSI-1 REQUEST
-> SENSE (i.e. return the sense data for the previous failed
-> command). Add some reporting of "pollable" sense data [see
-> spc6r02: 5.12.2]. Keep the IEC mode page MRIE=6 TEST=1
-> predictive failure reporting.
+> The current driver responds to TEST UNIT READY (TUR) with a GOOD
+> status immediately after a scsi_debug device (LU) is created. This is
+> unrealistic as even SSDs take some time after power-on before
+> accepting media access commands.
+> 
+> Add the tur_ms_to_ready parameter whose unit is milliseconds (default
+> 0) and is the period before which a TUR (or any media access command)
+> will set the CHECK CONDITION status with a sense key of NOT READY and
+> an additional sense of "Logical unit is in process of becoming ready".
+> The period starts when each scsi_debug device is created.
+> 
+> [...]
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/1] scsi: scsi_debug: Fix request sense
-      https://git.kernel.org/mkp/scsi/c/84905d34f149
+[1/1] scsi: scsi_debug: Implement tur_ms_to_ready parameter
+      https://git.kernel.org/mkp/scsi/c/fc13638ae92e
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
