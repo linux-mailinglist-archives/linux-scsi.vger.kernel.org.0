@@ -2,91 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D3A231866
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jul 2020 06:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C7A23186D
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jul 2020 06:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbgG2EKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Jul 2020 00:10:52 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:45504 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726548AbgG2EKw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Jul 2020 00:10:52 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T41dmo159218;
-        Wed, 29 Jul 2020 04:10:48 GMT
+        id S1726341AbgG2ENG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Jul 2020 00:13:06 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:53944 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgG2ENG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Jul 2020 00:13:06 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T4CLf8185406;
+        Wed, 29 Jul 2020 04:12:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=mriZwRXIHonAt6bhurHKpqs0Cl4KXgEcu8ISDCpfmc4=;
- b=xY2yF6hp6KDHK2Jotxq6nztFRfiKg8PUYZyekmlqmiwdv6frHrK+gCnMpM/CXWNth9V2
- +mQTkHIL2rBsnsGreOoFkE5a9ttaWw17rwrF/JWyNI7a/1EqKyLZNxXoupzfRuwA8cw7
- pBS956jVdn/lP5DIOynaPQnw1LrpOXywMB/DkTJ4kcGoDtKq77vJcEARBAwG5a4gdQBu
- 8Bo/UVI5xVWbiATgfSDYPWJEWMRsNAWrbxMUWIbnyIo7Y170i25oRDtRGayUkpQ8PAbp
- 0KydUzSmXUC4CeAQY8VOnRHyH+0PrdBJ+u0lXijzBZeRGEZSlCm2cW0SWEg1YXpwJCkz uQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 32hu1jb5r7-1
+ bh=LawUWswJxsYW16Uo1LM0iQFVAkkF5ZnMSyZcX63eLck=;
+ b=iuvdQaA9pwr585uvi0CKtmp2ZmIvTOvZU6zXb0ZrmVgznT4fEnbf84feXYcrbOFaEn0j
+ mdcu+DZat5CmigzKzI6B4bEu6ZzwVQf2HqnfhzqN2LwcdYiN8ixW8xqLupuZCwdlrMlW
+ drIzfpX9bcezHomVOrJ9co5GfDzKqK3YazCxpyKAdMapq9YHPUzDLo6u5r4cpAd9hteX
+ xTDWEl6sTyvu2ZooPyRjWTy01eGRammTRPhm0qdTIrloF0tyR+b2KZ7vjGYDQ6Mu51xT
+ I3RuD4n4M6d3UoOV816LwPMHF0bLxUAHtpULmY+mT1uAPVMD9RcvMQAxLqmmc1vYxp5V 3w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 32hu1jk668-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 29 Jul 2020 04:10:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T42bbe023836;
-        Wed, 29 Jul 2020 04:10:47 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 32hu5u1pwr-1
+        Wed, 29 Jul 2020 04:12:48 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06T43M81182563;
+        Wed, 29 Jul 2020 04:10:48 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 32hu5u15rf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Jul 2020 04:10:47 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06T4AjLl030755;
-        Wed, 29 Jul 2020 04:10:46 GMT
+        Wed, 29 Jul 2020 04:10:48 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06T4AlNm024998;
+        Wed, 29 Jul 2020 04:10:47 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 28 Jul 2020 21:10:45 -0700
+        with ESMTP ; Tue, 28 Jul 2020 21:10:46 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        Hou Pu <houpu@bytedance.com>
+To:     Jing Xiangfeng <jingxiangfeng@huawei.com>, jejb@linux.ibm.com,
+        cleech@redhat.com, lduncan@suse.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        mchristi@redhat.com
-Subject: Re: [PATCH v4 0/2] iscsi-target: fix login error when receiving is too fast
-Date:   Wed, 29 Jul 2020 00:10:37 -0400
-Message-Id: <159599579268.11289.2746650835004823983.b4-ty@oracle.com>
+        open-iscsi@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] scsi: iscsi: Do not put host in iscsi_set_flashnode_param()
+Date:   Wed, 29 Jul 2020 00:10:38 -0400
+Message-Id: <159599579269.11289.8326075241681410079.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200716100212.4237-1-houpu@bytedance.com>
-References: <20200716100212.4237-1-houpu@bytedance.com>
+In-Reply-To: <20200615081226.183068-1-jingxiangfeng@huawei.com>
+References: <20200615081226.183068-1-jingxiangfeng@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9696 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
- malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=857 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=953 mlxscore=0
+ suspectscore=0 bulkscore=0 malwarescore=0 spamscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007290027
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9696 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=873
- lowpriorityscore=0 malwarescore=0 clxscore=1011 mlxscore=0 impostorscore=0
- phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 mlxlogscore=976
+ malwarescore=0 impostorscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007290027
+ definitions=main-2007290028
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 16 Jul 2020 06:02:10 -0400, Hou Pu wrote:
+On Mon, 15 Jun 2020 16:12:26 +0800, Jing Xiangfeng wrote:
 
-> We encountered "iSCSI Login negotiation failed" several times.
-> After enable debug log in iscsi_target_nego.c of iSCSI target.
-> Error shows:
->   "Got LOGIN_FLAGS_READ_ACTIVE=1, conn: xxxxxxxxxx >>>>"
-> 
-> Patch 1 is trying to fix this problem. Please see comment in patch 1
-> for details.
-> 
-> [...]
+> If scsi_host_lookup() failes we will jump to put_host, which may
+> cause panic. Jump to exit_set_fnode to fix it.
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/2] scsi: target: iscsi: Fix login error when receiving
-      https://git.kernel.org/mkp/scsi/c/4e108d4f2816
-[2/2] scsi: target: iscsi: Fix inconsistent debug message
-      https://git.kernel.org/mkp/scsi/c/df2de6f28629
+[1/1] scsi: iscsi: Do not put host in iscsi_set_flashnode_param()
+      https://git.kernel.org/mkp/scsi/c/68e12e5f6135
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
