@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7316D232A6E
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jul 2020 05:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FFF232A70
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jul 2020 05:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728343AbgG3Dan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Jul 2020 23:30:43 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:8297 "EHLO huawei.com"
+        id S1728530AbgG3Dar (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Jul 2020 23:30:47 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8856 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726367AbgG3Dan (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 Jul 2020 23:30:43 -0400
+        id S1728518AbgG3Daq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 Jul 2020 23:30:46 -0400
 Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 73647A6AC142276B3404;
+        by Forcepoint Email with ESMTP id BAE0D8972AE3E401777C;
         Thu, 30 Jul 2020 11:30:41 +0800 (CST)
 Received: from huawei.com (10.175.104.57) by DGGEMS407-HUB.china.huawei.com
  (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Thu, 30 Jul 2020
@@ -21,9 +21,9 @@ From:   Li Heng <liheng40@huawei.com>
 To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
 CC:     <MPT-FusionLinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next 2/3] scsi: Remove superfluous memset()
-Date:   Thu, 30 Jul 2020 11:31:57 +0800
-Message-ID: <1596079918-41115-3-git-send-email-liheng40@huawei.com>
+Subject: [PATCH -next 3/3] scsi: Remove superfluous memset()
+Date:   Thu, 30 Jul 2020 11:31:58 +0800
+Message-ID: <1596079918-41115-4-git-send-email-liheng40@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1596079918-41115-1-git-send-email-liheng40@huawei.com>
 References: <1596079918-41115-1-git-send-email-liheng40@huawei.com>
@@ -38,28 +38,27 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes coccicheck warning:
 
-./drivers/scsi/qla2xxx/qla_mbx.c:4928:15-33: WARNING: dma_alloc_coherent use in els_cmd_map already zeroes out memory,  so memset is not needed
+./drivers/scsi/mpt3sas/mpt3sas_base.c:5247:16-34: WARNING: dma_alloc_coherent use in ioc -> request already zeroes out memory,  so memset is not needed
 
 dma_alloc_coherent use in status already zeroes out memory, so memset is not needed
 
 Signed-off-by: Li Heng <liheng40@huawei.com>
 ---
- drivers/scsi/qla2xxx/qla_mbx.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 7388343..14656da 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -4933,8 +4933,6 @@ qla25xx_set_els_cmds_supported(scsi_qla_host_t *vha)
- 		return QLA_MEMORY_ALLOC_FAILED;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 1d64524..61219ad 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -5257,7 +5257,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 		_base_release_memory_pools(ioc);
+ 		goto retry_allocation;
  	}
+-	memset(ioc->request, 0, sz);
  
--	memset(els_cmd_map, 0, ELS_CMD_MAP_SIZE);
--
- 	/* List of Purex ELS */
- 	cmd_opcode[0] = ELS_FPIN;
- 	cmd_opcode[1] = ELS_RDP;
+ 	if (retry_sz)
+ 		ioc_err(ioc, "request pool: dma_alloc_coherent succeed: hba_depth(%d), chains_per_io(%d), frame_sz(%d), total(%d kb)\n",
 -- 
 2.7.4
 
