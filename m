@@ -2,70 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF842333AF
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jul 2020 15:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AF82334A5
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jul 2020 16:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729478AbgG3N65 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Jul 2020 09:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729496AbgG3N6q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Jul 2020 09:58:46 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E2DC061757
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Jul 2020 06:58:45 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id g26so25667382qka.3
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Jul 2020 06:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=QcYaplpioI9MLsAnqd4iIIXoRVUu0Gh7RceGnF833lA=;
-        b=N4Z4RakBM2wV4gC7nQk0xwWWVeN3klc8op0Mk2CW0asWsybhcYjcqG9tXF5CAp34+C
-         /48qr3maDPv/t630d0nk8A9IC9nLLSt3V9v/4EwGV7gmnDsCOjHc4+wE6u+uH7D42skO
-         JViIBTEm+Kn39mD4B4EE60RBY8x1IhEU/ALZ4XHQpuLrT58O4vSu9i000u87K9I7xafn
-         6Nm7wuoCSz7ugstbB8mXdHoesEC21V5gMIJfqBtpjIQfTucJ8Q0mY+wh8227ElItbQ1+
-         UYObLJKFLeQw0iFto8QqK9nwOrdMAPSDoJE7eCmJu0RaBTjqB/0Mvi2KeHL8Cat3pgA/
-         Q1QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=QcYaplpioI9MLsAnqd4iIIXoRVUu0Gh7RceGnF833lA=;
-        b=OAB6g+GfgB0iEYdepdW/a2BLRPqgEJkqz0RDPsw3LLbYQc3S/vPpC4XSoG+kP/VqAg
-         VI6F/x/Oy5dWeEzJNpxAg/eL0L7TrqryOXd6DPDM460ZGFUFdyT+EcQlDzKzEwnB5OVv
-         MvNd9vk3IYkpw/yYAHq7DOqti/cC8+U4azbVBDH5T9cJExotb1oaNLi++g5vY1xVIb0M
-         7PL3yXqnyODYqhNJXRJnzLrjmoTkj0nKV2GvxsVnQmRLVh86v80uxYuS/U+y/Oj8HCFU
-         AKMgbxX1f/WSHJEyLGiFnOZym6gP9znTgP63R/4P6KoAzuRq/ib7OfkVZtsVeV8b/c1Y
-         yTJg==
-X-Gm-Message-State: AOAM5332LPkHeADyQkSo7Me/aFnGKrfkWqe3Z+oxd8udT8YW+QqTP7xI
-        puJFT+KlBGk3zDdZ1YFudRSEIcoxgxALEULJUh0=
-X-Google-Smtp-Source: ABdhPJxXRtIkxPR5QyGlU6RL+jTImtmyLwSd5A22K8DCRm4H/4H0zglJszZ1qXhvAGqYCVC8G0WMAskSvM4A8JHJWDw=
-X-Received: by 2002:a37:e315:: with SMTP id y21mr4173746qki.129.1596117525129;
- Thu, 30 Jul 2020 06:58:45 -0700 (PDT)
+        id S1729668AbgG3OlN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Jul 2020 10:41:13 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40929 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729092AbgG3OlN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Jul 2020 10:41:13 -0400
+Received: (qmail 1607017 invoked by uid 1000); 30 Jul 2020 10:41:12 -0400
+Date:   Thu, 30 Jul 2020 10:41:12 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     SCSI development list <linux-scsi@vger.kernel.org>
+Subject: Re: UAS-3 and the removable bit (RMB)
+Message-ID: <20200730144112.GA1604718@rowland.harvard.edu>
+References: <74a8caf7-710c-45f1-5b9d-3661ccc50815@interlog.com>
 MIME-Version: 1.0
-Received: by 2002:aed:24ba:0:0:0:0:0 with HTTP; Thu, 30 Jul 2020 06:58:44
- -0700 (PDT)
-Reply-To: godardchambers1@yandex.com
-From:   "Luis F. Godard" <veronicadeerow@gmail.com>
-Date:   Thu, 30 Jul 2020 15:58:44 +0200
-Message-ID: <CAOXWAkNbNaLQRf3=+tJ-wVuQxCuLfwS+PkyxihhBK01tbCStbA@mail.gmail.com>
-Subject: =?UTF-8?B?SmUgdG8gbmFsw6loYXbDoSB6cHLDoXZhLA==?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74a8caf7-710c-45f1-5b9d-3661ccc50815@interlog.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SmUgdG8gbmFsw6loYXbDoSB6cHLDoXZhLA0KDQpKYWsgb2JlY27Emz8gRG91ZsOhbSwgxb5lIHNl
-IHRhdG8genByw6F2YSBzIHbDoW1pIGRvYsWZZSBzZXRrw6F2w6EuDQpOZXphcG9tZcWIdGUgcHJv
-c8OtbSB0dXRvIHpwcsOhdnUgbmEgcm96ZMOtbCBvZCBkxZnDrXbEm2rFocOtY2gsIHByb3Rvxb5l
-IHbDocWhDQpkxJtkaWNrw70gZm9uZCB2ZSB2w73FoWkgOSwyIG1pbGlvbnUgVVNEIG55bsOtIG9k
-aGFsdWplIHZhxaFpIG9rYW3Fvml0b3UNCnBveml0aXZuw60gb2Rwb3bEm8SPLiBWeXrDvXbDoW0g
-dsOhcyB2xaFhaywgYWJ5c3RlIGxhc2thdsSbIHDFmWVkYWxpIHN2w6kgY2Vsw6kNCmptw6lubzog
-WmVtxJs6IEFkcmVzYTogUG92b2zDoW7DrTogUm9kaW5uw70gc3RhdjogUG9obGF2w606IFbEm2s6
-IFNvdWtyb23DqQ0KxI3DrXNsbzoga29uZcSNbsSbLCBQbGF0bsOhIGtvcGllIGlkZW50aXR5Og0K
-DQpTIMO6Y3RvdSBWw6HFoS4NCkJhcnJpc3RlciBMdWlzIEZlcm7DoW5kZXogR29kYXJkIChFc3Ep
-DQo=
+On Wed, Jul 29, 2020 at 10:10:40PM -0400, Douglas Gilbert wrote:
+> Hi,
+> T10 are working on a new UAS-3 standard. It is not that ambitious
+> with no ability to exploit USB4 capabilities (e.g. 40 Gbps (for
+> a few inches)). They are setting the bar at about the USB-3
+> level (i.e. about 10 years old). One thing that has been discussed
+> recently on the T10 reflector is the RMB (removable device) bit in
+> the INQUIRY response of USB devices.
+> 
+> There is agreement of what RMB means in the case of tape systems:
+> it has a tape cartridge that can be removed _and_ the tape _drive_
+> can still respond to SCSI commands. So it can set RMB=1 .
+> 
+> So what about USB memory keys? Well the USB mass storage default
+> seems to be to set it.
+
+This is very much _not_ the default.  The US_FL_FIX_INQUIRY flag is set 
+only for the small percentage of USB mass-storage devices that can't 
+handle the INQUIRY command themselves; the default is to use the data 
+provided by the device.
+
+>                 /*
+>                  * Handle those devices which need us to fake
+>                  * their inquiry data
+>                  */
+>                 else if ((srb->cmnd[0] == INQUIRY) &&
+>                             (us->fflags & US_FL_FIX_INQUIRY)) {
+>                         unsigned char data_ptr[36] = {
+>                             0x00, 0x80, 0x02, 0x02,
+>                             0x1F, 0x00, 0x00, 0x00};
+> 
+>                         usb_stor_dbg(us, "Faking INQUIRY command\n");
+>                         fill_inquiry_response(us, data_ptr, 36);
+>                         srb->result = SAM_STAT_GOOD;
+>                 }
+> 
+> That is from usb_stor_control_thread() in drivers/usb/storage/usb.c .
+> That seems to be for the case in which the USB storage device doesn't
+> supply any INQUIRY response data.
+
+Correct.
+
+> Grabbing the nearest USB stick on my desk I see:
+> 
+> # sg_inq /dev/sg4
+> invalid VPD response; probably a STANDARD INQUIRY response
+> standard INQUIRY:
+>   PQual=0  Device_type=0  RMB=1  LU_CONG=0  version=0x00  [no conformance claimed]
+>   [AERC=0]  [TrmTsk=0]  NormACA=0  HiSUP=0  Resp_data_format=1
+>   SCCS=0  ACC=1  TPGS=3  3PC=0  Protect=1  [BQue=0]
+>   EncServ=1  MultiP=0  [MChngr=1]  [ACKREQQ=1]  Addr16=1
+>   [RelAdr=0]  WBus16=1  Sync=0  [Linked=1]  [TranDis=0]  CmdQue=0
+>     length=36 (0x24)   Peripheral device type: disk
+>  Vendor identification: Lexar
+>  Product identification: JD FireFly
+>  Product revision level: 1100
+
+Looks like this reply was generated by the USB stick and not by the 
+driver (none of the unusual*.h files in the source directory include 
+the string "JD Firefly").
+
+There's nothing really wrong with setting the RMB bit for devices that 
+don't have removable media, is there?  They will simply act as though 
+the medium is always present.
+
+> There was a T10 proposal today (20-082r0) saying that if a device
+> server in the target (i.e. logic in the USB storage device) can't
+> answer a TEST UNIT READY (TUR) appropriately when the "medium" is
+> absent then that device should _not_ be setting the RMB bit.
+> 
+> If that gets approved, what are the ramifications in changing USB
+> mass storage, UAS(-1) and UAS-3 code be to RMB=0 for most of its
+> cases? A USB SD card reader might validly set RMB=1 as it
+> could (should) respond with NOT READY, MEDIUM NOT PRESENT to TUR
+> when there is no SD card in the addressed slot.
+
+I don't know of any cases where a USB mass-storage device fails to 
+handle TUR correctly when the medium is absent.  This isn't to say there 
+are none at all, but there can't be very many.
+
+In any case, it seems unlikely that this change will have any impact on 
+the drivers.  Perhaps some of the sub-drivers for usb-storage (files 
+like jumpshot.c or sddr09.c) might need to be adjusted a little, but the 
+devices that these files were meant for are becoming less and less 
+common.
+
+Furthermore, in all cases where usb-storage manufactures INQUIRY 
+information for devices that can't provide it, the ANSI-approved version 
+number field is set to 2, meaning that we claim to be conformant only 
+with a very early version of the spec.  Changes made in newer versions 
+are therefore irrelevant.  The uas driver doesn't manufacture INQUIRY 
+responses at all.
+
+> Thoughts?
+
+In the vast majority of cases, usb-storage and uas just return the 
+INQUIRY data that was sent by the device.  Surely that wouldn't need to 
+change (any more than some other SCSI host adapter driver would need to 
+change), even if the devices themselves are rendered non-compliant by a 
+change to the spec.
+
+Alan Stern
+
+> Doug Gilbert
+> 
+> 
+> BTW A recent approved addition to SPC-6 is to allow a device (disk)
+> that responds to a TUR with NOT READY, "in process of becoming ready",
+> to place an estimate (in milliseconds) in the INFO field of how
+> long before it will first respond to a TUR with GOOD status.
