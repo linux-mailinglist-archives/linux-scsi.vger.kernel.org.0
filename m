@@ -2,183 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2295234E51
-	for <lists+linux-scsi@lfdr.de>; Sat,  1 Aug 2020 01:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E68234EFA
+	for <lists+linux-scsi@lfdr.de>; Sat,  1 Aug 2020 02:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbgGaXRM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 Jul 2020 19:17:12 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:63105 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726099AbgGaXRM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 31 Jul 2020 19:17:12 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1596237430; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Type: MIME-Version: Sender;
- bh=1zsJhq/goG5jxNbt1w2QIRo86ReaWeQ6QGLznVlr6Jk=; b=lz98SC0u/J/t0okJYxrcYKTqfSF/zZabwQFLWHF2UIyVrode7uCSfIUS2tsSCtpk/pGqkgAE
- nC4v5Zw4f4bN5nElJFdIFyfWBR/+Qp/ufl3SfTRJIq1jm1o5oTaQryyQJ/VCPEJ/FgUdi3bG
- 4V5mgUeRFBU36UAjcTNBW02t4No=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n19.prod.us-west-2.postgun.com with SMTP id
- 5f24a676e7a13aa2041a72e2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 31 Jul 2020 23:17:10
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2CA68C433B1; Fri, 31 Jul 2020 23:17:10 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BF5A5C433CA;
-        Fri, 31 Jul 2020 23:17:08 +0000 (UTC)
+        id S1726671AbgHAA6d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 Jul 2020 20:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbgHAA6d (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Jul 2020 20:58:33 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB08C06174A
+        for <linux-scsi@vger.kernel.org>; Fri, 31 Jul 2020 17:58:33 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id f1so28862757wro.2
+        for <linux-scsi@vger.kernel.org>; Fri, 31 Jul 2020 17:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=UgTcJtv3XI0RN4lWxlwQSlVLa4pEB8K0Tva8uiPBER4=;
+        b=AeKAEq8BaCJ10BZQbTS0nBppi+46oNgrDAR2Xx3Casg5XulQJp+TTrehlYOB7FzHIm
+         cszkXAzd8jc6ewGYoKd1zmyF1Q3/RwIzu97w6uM9imvUAig5goVkzLoREdKLuLjnLvqm
+         dVxPRCAqMg2Cqhqr6nHkYZ+BVlPEAQt7T65jY1dYF1TPpw9xAk5qtFG7vHnax9uPr5DU
+         bBMrQnY9v6b8PTW9JKhG0FMHMCgMejND63mfyD5T492oOZtvIn9XKaunxFqRDM0xKsY6
+         8ZNX7QenDO3sE9ARzM6jDxHVhJJYOvw0KEjjKSydnxHzJBe80tAylC7lOArOK8qvkV4R
+         ABCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=UgTcJtv3XI0RN4lWxlwQSlVLa4pEB8K0Tva8uiPBER4=;
+        b=HXC67M8TDga5Lxp3xKj0Mu7IxoiZG/JD8R0SSTCnBuO54uhD7nNthayx295/PJoeFM
+         XKwuojjnHDqYzK/1eYAhhUoJfm+YPubLcNZHLHUg8PKZyRAzJSEt6om0UOa4eaHyJiz8
+         vgeiYD3iGS6xwROaUmJBO1ahS3HJICMJvSgsQUIQtabeVRE0VA5hviO3KxME82Fhnclm
+         gHMyqd3q4x5zK2uukfjPtCb4Fo06GbVytvYTSsJRgt+wttBQ161PetGx9demjVJhjcF3
+         ZIAj7FgeJkhGR57288cGp7/7ONhaBx0qMMQrUPhB9ZZ43dOhgUccH7lqPAvoBygMumrS
+         qFwA==
+X-Gm-Message-State: AOAM533jjAixflQ+nsDZWnbEtJfNAOnYnfQTNR0md/TGbP0RhR3/5rUd
+        SHBEgZuv6WAqYghhSjINNqCYPUkbUUPO4kn2l14=
+X-Google-Smtp-Source: ABdhPJzOcGMrmCy7x9xMO1TL8rxGHTpq4wY+yx86KqI9XWW8xlHruWkg++4MPP2fZob6JN8Jj/A/lb1/mhNMv46Z1h4=
+X-Received: by 2002:adf:fe50:: with SMTP id m16mr5719318wrs.27.1596243510439;
+ Fri, 31 Jul 2020 17:58:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="=_5c3e63ea4c7ecc7e8e595b7c9d9d7f3e"
-Date:   Sat, 01 Aug 2020 07:17:08 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Stanley Chu <stanley.chu@mediatek.com>,
-        Avri Altman <Avri.Altman@wdc.com>, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, alim.akhtar@samsung.com,
-        jejb@linux.ibm.com, beanhuo@micron.com, asutoshd@codeaurora.org,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kuohong.wang@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, andy.teng@mediatek.com,
-        chaotian.jing@mediatek.com, cc.chou@mediatek.com
-Subject: Re: [PATCH v4] scsi: ufs: Cleanup completed request without interrupt
- notification
-In-Reply-To: <f45c6c47-ffc5-3f8e-3234-9e5989dbf996@acm.org>
-References: <20200724140246.19434-1-stanley.chu@mediatek.com>
- <SN6PR04MB4640B5FC06968244DDACB8BEFC720@SN6PR04MB4640.namprd04.prod.outlook.com>
- <1596159018.17247.53.camel@mtkswgap22>
- <97f1dfb0-41b6-0249-3e82-cae480b0efb6@acm.org>
- <8b0a158a7c3ee2165e09290996521ffc@codeaurora.org>
- <f45c6c47-ffc5-3f8e-3234-9e5989dbf996@acm.org>
-Message-ID: <548b602daa1e15415625cb8d1f81a208@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Received: by 2002:a5d:4047:0:0:0:0:0 with HTTP; Fri, 31 Jul 2020 17:58:29
+ -0700 (PDT)
+From:   Marina Bagni <marinadanielsbagni1@gmail.com>
+Date:   Fri, 31 Jul 2020 17:58:29 -0700
+X-Google-Sender-Auth: suiLkbdHFJEZIwuTk-dXhBVaSsU
+Message-ID: <CAEtDg5Ae9_=rHJzamfCM7d3_J9SuGzCb-vmFVqqz=73Z+Pm13g@mail.gmail.com>
+Subject: I need your assistance,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=_5c3e63ea4c7ecc7e8e595b7c9d9d7f3e
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Hello my Dear
 
-Hi Bart,
+ I am sending the same message to you. My names are Mrs. Marina Bagni,
+I deal in gold exportation. I am a widow diagnosed with brain tumor
+disease which has gotten to a very bad stage, Please I want you to
+understand the most important reason why I am contacting you through
+this medium is because I need your urgent sincerity and ability to
+carry out this transaction and fulfill my final wish in implementing
+the charitable investment project in your country as it requires
+absolute trust and devotion without any failure, which i believe that
+you will not expose this to anyone or betray this trust and confident
+that I am about to entrust on you for the mutual benefit of the
+orphans and the less privileges ones. I made a substantial deposit
+with the Ecobank which I have decided to hand over and entrust the sum
+of ($ 9,650,000.00, Nine Million Six Hundred and Fifty Thousand
+Dollars) in my account to you to Invest into the charitable project in
+your country. Based on my present health status I am permanently
+indisposed to handle finances or any financial related project
+following my diagnoses for Idiopathic Pulmonary Fibrosis. As my health
+has deteriorated so badly that was what prompted me to take this
+necessary decision from my sick bed in contacting you to assist me
+carry out this transaction and implement the humanitarian project with
+my fund in your country.
 
-On 2020-08-01 00:51, Bart Van Assche wrote:
-> On 2020-07-31 01:00, Can Guo wrote:
->> AFAIK, sychronization of scsi_done is not a problem here, because scsi
->> layer
->> use the atomic state, namely SCMD_STATE_COMPLETE, of a scsi cmd to 
->> prevent
->> the concurrency of abort and real completion of it.
->> 
->> Check func scsi_times_out(), hope it helps.
->> 
->> enum blk_eh_timer_return scsi_times_out(struct request *req)
->> {
->> ...
->>         if (rtn == BLK_EH_DONE) {
->>                 /*
->>                  * Set the command to complete first in order to 
->> prevent
->> a real
->>                  * completion from releasing the command while error
->> handling
->>                  * is using it. If the command was already completed,
->> then the
->>                  * lower level driver beat the timeout handler, and it
->> is safe
->>                  * to return without escalating error recovery.
->>                  *
->>                  * If timeout handling lost the race to a real
->> completion, the
->>                  * block layer may ignore that due to a fake timeout
->> injection,
->>                  * so return RESET_TIMER to allow error handling 
->> another
->> shot
->>                  * at this command.
->>                  */
->>                 if (test_and_set_bit(SCMD_STATE_COMPLETE, 
->> &scmd->state))
->>                         return BLK_EH_RESET_TIMER;
->>                 if (scsi_abort_command(scmd) != SUCCESS) {
->>                         set_host_byte(scmd, DID_TIME_OUT);
->>                         scsi_eh_scmd_add(scmd);
->>                 }
->>         }
->> }
-> 
-> I am familiar with this mechanism. My concern is that both the regular
-> completion path and the abort handler must call scsi_dma_unmap() before
-> calling cmd->scsi_done(cmd). I don't see how
-> test_and_set_bit(SCMD_STATE_COMPLETE, &scmd->state) could prevent that
-> the regular completion path and the abort handler call scsi_dma_unmap()
-> concurrently since both calls happen before the SCMD_STATE_COMPLETE bit
-> is set?
-> 
-> Thanks,
-> 
-> Bart.
+It will be my pleasure to compensate you as my Investment
+Manager/Partner with 50% percent of the total money for your effort in
+handling the transaction, while 50% of the fund will be invested into
+the charity project there in your country. Therefore I am waiting for
+your prompt response now I have access to the Internet in the
+hospital, if only you are interested I will give you further details
+and my data. Please always check your e-mail as I have only a few days
+to leave on this earth. Your early response will be appreciated.
 
-For scsi_dma_unmap() part, that is true - we should make it serialized 
-with
-any other completion paths. I've found it during my fault injection 
-test, so
-I've made a patch to fix it, but it only comes in my next error recovery
-enhancement patch series. Please check the attachment.
-
-Thanks,
-
-Can Guo.
-
-
---=_5c3e63ea4c7ecc7e8e595b7c9d9d7f3e
-Content-Transfer-Encoding: base64
-Content-Type: text/x-diff;
- name=0005-scsi-ufs-Properly-release-resources-if-a-task-is-abo.patch
-Content-Disposition: attachment;
- filename=0005-scsi-ufs-Properly-release-resources-if-a-task-is-abo.patch;
- size=1473
-
-RnJvbSBlZjg3ODMyYjVmNmZmNmFmMjlhYzliYWM3ZmRlYTFlMjQ1YzgxNjJiIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBDYW4gR3VvIDxjYW5nQGNvZGVhdXJvcmEub3JnPgpEYXRlOiBT
-dW4sIDcgSnVuIDIwMjAgMTI6MTY6MDEgKzA4MDAKU3ViamVjdDogW1BBVENIIDUvNl0gc2NzaTog
-dWZzOiBQcm9wZXJseSByZWxlYXNlIHJlc291cmNlcyBpZiBhIHRhc2sgaXMKIGFib3J0ZWQgc3Vj
-Y2Vzc2Z1bGx5CgpJbiBjdXJyZW50IFVGUyB0YXNrIGFib3J0IGhvb2ssIG5hbWVseSB1ZnNoY2Rf
-YWJvcnQoKSwgaWYgYSB0YXNrIGlzCmFib3J0ZWQgc3VjY2Vzc2Z1bGx5LCBjbG9jayBzY2FsaW5n
-IGJ1c3kgdGltZSBzdGF0aXN0aWNzIGlzIG5vdCB1cGRhdGVkCmFuZCwgbW9zdCBpbXBvcnRhbnQs
-IGNsa19nYXRpbmcuYWN0aXZlX3JlcXMgaXMgbm90IGRlY3JlYXNlZCwgd2hpY2ggbWFrZXMKY2xr
-X2dhdGluZy5hY3RpdmVfcmVxcyBzdGF5IGFib3ZlIHplcm8gZm9yZXZlciwgbWVhbmluZyBjbG9j
-ayBnYXRpbmcgd291bGQKbmV2ZXIgaGFwcGVuLiBUbyBmaXggaXQsIGluc3RlYWQgb2YgcmVsZWFz
-aW5nIHJlc291cmNlcyAibWFubnVhbGx5IiwgdXNlCnRoZSBleGlzdGluZyBmdW5jIF9fdWZzaGNk
-X3RyYW5zZmVyX3JlcV9jb21wbCgpLgoKQ2hhbmdlLUlkOiBJYThjYzQ5NmY1M2JiNDI4ZWFjN2Nm
-YTc4NGU0MzFhMmIzN2E0NTM3NQpTaWduZWQtb2ZmLWJ5OiBDYW4gR3VvIDxjYW5nQGNvZGVhdXJv
-cmEub3JnPgoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMgYi9kcml2ZXJz
-L3Njc2kvdWZzL3Vmc2hjZC5jCmluZGV4IDNjNDZmNzQuLjg3YjkxMWYgMTAwNjQ0Ci0tLSBhL2Ry
-aXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMKKysrIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYwpA
-QCAtNjg3NiwxNiArNjg3NiwxMCBAQCBzdGF0aWMgaW50IHVmc2hjZF9hYm9ydChzdHJ1Y3Qgc2Nz
-aV9jbW5kICpjbWQpCiAJCWdvdG8gb3V0OwogCX0KIAotCXNjc2lfZG1hX3VubWFwKGNtZCk7Ci0K
-IAlzcGluX2xvY2tfaXJxc2F2ZShob3N0LT5ob3N0X2xvY2ssIGZsYWdzKTsKLQl1ZnNoY2Rfb3V0
-c3RhbmRpbmdfcmVxX2NsZWFyKGhiYSwgdGFnKTsKLQloYmEtPmxyYlt0YWddLmNtZCA9IE5VTEw7
-CisJX191ZnNoY2RfdHJhbnNmZXJfcmVxX2NvbXBsKGhiYSwgKDFVTCA8PCB0YWcpKTsKIAlzcGlu
-X3VubG9ja19pcnFyZXN0b3JlKGhvc3QtPmhvc3RfbG9jaywgZmxhZ3MpOwogCi0JY2xlYXJfYml0
-X3VubG9jayh0YWcsICZoYmEtPmxyYl9pbl91c2UpOwotCXdha2VfdXAoJmhiYS0+ZGV2X2NtZC50
-YWdfd3EpOwotCiBvdXQ6CiAJaWYgKCFlcnIpIHsKIAkJZXJyID0gU1VDQ0VTUzsKLS0gClF1YWxj
-b21tIElubm92YXRpb24gQ2VudGVyLCBJbmMuIGlzIGEgbWVtYmVyIG9mIENvZGUgQXVyb3JhIEZv
-cnVtLCBhIExpbnV4IEZvdW5kYXRpb24gQ29sbGFib3JhdGl2ZSBQcm9qZWN0LgoK
---=_5c3e63ea4c7ecc7e8e595b7c9d9d7f3e--
+Best Regards.
+Sincerely Mrs. Marina Bagni.
