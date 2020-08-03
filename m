@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA4823AF66
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 23:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DC123AF68
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 23:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729052AbgHCVCr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Aug 2020 17:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        id S1729167AbgHCVCs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Aug 2020 17:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729009AbgHCVCq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Aug 2020 17:02:46 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5467DC06174A
-        for <linux-scsi@vger.kernel.org>; Mon,  3 Aug 2020 14:02:46 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id c19so784646wmd.1
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Aug 2020 14:02:46 -0700 (PDT)
+        with ESMTP id S1729009AbgHCVCs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Aug 2020 17:02:48 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7CEC06174A
+        for <linux-scsi@vger.kernel.org>; Mon,  3 Aug 2020 14:02:48 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id 3so895619wmi.1
+        for <linux-scsi@vger.kernel.org>; Mon, 03 Aug 2020 14:02:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9gWZ6B+baCzXX0ozkzR1zdM+vYtRLSawroM9ySFBAwM=;
-        b=u+yB2Bpum/JKYUW90+kheoWWCIAGXNQ9B1SnZcfJU9K5mNjv6FRTfOKh1yXwUE4jb0
-         KqgVqDbF+jJm/8i94XVy9915zXB1AttwUuna0mTFK5JH3DPa0kjGDKsnMdPJmkz40MC+
-         64jIcnTXedHoyf8fsxxZCnF6KL9fI71kO34GKo0QUm7tGaqldWtuqW3XGFm0KHcQj6Pq
-         nnYtwEvbaRtw59UxtpPkNsy2MSfoXBJ+ZBuwLH//L+OyTEK678gM8SNrlnjH0LP+pckM
-         LesBD6PtqhRiEbmGT8D5KWGrCS3Jlrd8OdvZGv6r76aYZZBERRU86RKehnMRFqKE/weY
-         n2Mg==
+        bh=DUkAJZkFY7n+19RfWv/Bd/8LC96PMNQVYdS2KsDgCIg=;
+        b=ESC1C7FTRNDqP1vfHN38dSsRRXRx+6xxShmJhwMU+GkrLR2lr9WLIO9iBmq1hAvDt7
+         wpI0mGoVMRKjg7veF1CblPdctW9BjkTHgW1hcHHYeZHpvgj3Z02beOo3gqf0d7lPtoSf
+         HgPNkmYpp7hcRU9yxFlUFYYCorbAKc7umX7W5K9/GokaoyTzT05OxqM/1gPqkvotObRE
+         oHrZWFFdb0fWl4vWTeKrK1RE/TEoRlb4epQ3y88pVuYLclYLEphOHpjy0qOyEJQhFUZN
+         huAxuwOC8E2RB57fDik4LxKJ1Ij9xe0UQ1VKtRU3FX7j/ZxOTMONiThm2McO2lz2Abmv
+         jsNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9gWZ6B+baCzXX0ozkzR1zdM+vYtRLSawroM9ySFBAwM=;
-        b=Se7lOsbcyvlLN8OMU9n10JsCfEjNXdjhNyzroYSZgLim6gGZ4i3DBy0jBicyHalbde
-         baRghas+QNj4Rmlsjq0kZURtoA4HOQPSn6DFM0QmBNIY8c9aAELU67J8V1H2YcjxfZZu
-         37NJyIZEG/CesEftYQY9xbI/5zsLYN3aRKghqyufSu02xaxgStNWeRUhpInsr8l8JNOP
-         RiKRSFaTKXpueCfEEAhfmlgnW3PMpofAIZPi6jK5JTbpDJczM7cG/KAb9h7qx71UtJi6
-         /qoIk+SnqSlxRtqq1CGdiEQtIASHrlm1RECk9jXAFyaQINyfsanuZORISmVQtVzdis4Z
-         HOgg==
-X-Gm-Message-State: AOAM533+vlJTRuFc3l5WOKgPyfJMeiu/74DThYqqY1f5KNyW4Tard8hv
-        p2pWFTTJejmfon83CLpIgYyMvXJn
-X-Google-Smtp-Source: ABdhPJy+a9FSNCc6fey5XaIs6T8xmVyZrqmrKihWLqBlLK0pufA5ranMD0meK8vQbr0EcKuDVFxO0Q==
-X-Received: by 2002:a1c:a3c4:: with SMTP id m187mr867459wme.43.1596488564754;
-        Mon, 03 Aug 2020 14:02:44 -0700 (PDT)
+        bh=DUkAJZkFY7n+19RfWv/Bd/8LC96PMNQVYdS2KsDgCIg=;
+        b=MIiqeED59SxVeiGVEj56QGnTF3otPrFTHjTD4DAl5adfEz3VHZZmq5Yovyw4oACaFV
+         GepZzJBVN6SjlhnLsuLUXQZHyVkXlEy8+q+ll10YkeuseuaxRsIzd5Vj/sI8xSTw6oPj
+         s0/stszqHuTFvq4M9r2HEAH+cwnoNa2kWEiQuTaKSzPvf5pe6i6prFAdkQOPtzTEnf6j
+         VDLFcGp6j+/FwQd9xNRHwN1+36jcdMElsk8cWYFlN/2dP9cS5yBIO+NsE2bl9N8qBtUz
+         hVjvPce8eqUqFKF7Jb6VembuKg83P7Qi0ftMa+ngyTV8P+weDoCe/QZ6IfatFp/MD+Cx
+         FK7w==
+X-Gm-Message-State: AOAM533cxbhoTJeVNUmmZb+kLQI5Bs4AKDPkzWKbZ9dMvADAqyJZEmwl
+        YsEJ9bPpA+5kwnykl+iHPBZbYiKq
+X-Google-Smtp-Source: ABdhPJwVeP7kT3+VbUoc9+8MoqOt0eJnqL43FC9DnmH6LT3gxatQIu09BVfy0TkFSm1TK4P5rjaFAQ==
+X-Received: by 2002:a1c:c906:: with SMTP id f6mr967741wmb.5.1596488566603;
+        Mon, 03 Aug 2020 14:02:46 -0700 (PDT)
 Received: from localhost.localdomain.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v15sm26649040wrm.23.2020.08.03.14.02.43
+        by smtp.gmail.com with ESMTPSA id v15sm26649040wrm.23.2020.08.03.14.02.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2020 14:02:44 -0700 (PDT)
+        Mon, 03 Aug 2020 14:02:45 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 4/8] lpfc: Fix oops when unloading driver while running mds diags
-Date:   Mon,  3 Aug 2020 14:02:25 -0700
-Message-Id: <20200803210229.23063-5-jsmart2021@gmail.com>
+Subject: [PATCH 5/8] lpfc: Fix retry of PRLI when status indicates its unsupported
+Date:   Mon,  3 Aug 2020 14:02:26 -0700
+Message-Id: <20200803210229.23063-6-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200803210229.23063-1-jsmart2021@gmail.com>
 References: <20200803210229.23063-1-jsmart2021@gmail.com>
@@ -64,50 +64,48 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-While mds diagnostic tests are running, if the driver is requested to be
-unloaded, oops or hangs are observed.  The driver doesn't terminate the
-processing of diag frames when the unload is started. As such: oops may
-be seen for __lpfc_sli_release_iocbq_s4 because ring memory is referenced
-that was already freed; or hangs see in lpfc_nvme_wait_for_io_drain as
-ios no longer complete.
+With port bounce/address swaps and timing between initiator GID queries
+vs remote port FC4 support registrations, the driver may be in a situation
+where it sends PRLIs for both FCP and NVME even though the target may not
+support one of the protocols. In this case, the remote port will reject
+the PRLI and usually indicate it does not support the request. However,
+the driver currently ignores the status of the failure and immediately
+retries the PRLI, which is pointless. In the case of this one remote port,
+the reception of the PRLI retry caused it to decide to send a LOGO.
+The LOGO restarted the process and the same results happened. It made
+the remote port undiscoverable to either protocol.
 
-If unloading, don't process diag frames. Just clean them up.
+Add logic to detect the non-support status and not attempt the retry
+of the PRLI.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 8582b51b0613..4cd7ded656b7 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -13650,7 +13650,11 @@ lpfc_sli4_sp_handle_rcqe(struct lpfc_hba *phba, struct lpfc_rcqe *rcqe)
- 		    fc_hdr->fh_r_ctl == FC_RCTL_DD_UNSOL_DATA) {
- 			spin_unlock_irqrestore(&phba->hbalock, iflags);
- 			/* Handle MDS Loopback frames */
--			lpfc_sli4_handle_mds_loopback(phba->pport, dma_buf);
-+			if  (!(phba->pport->load_flag & FC_UNLOADING))
-+				lpfc_sli4_handle_mds_loopback(phba->pport,
-+							      dma_buf);
-+			else
-+				lpfc_in_buf_free(phba, &dma_buf->dbuf);
- 			break;
- 		}
- 
-@@ -18363,7 +18367,10 @@ lpfc_sli4_handle_received_buffer(struct lpfc_hba *phba,
- 	    fc_hdr->fh_r_ctl == FC_RCTL_DD_UNSOL_DATA) {
- 		vport = phba->pport;
- 		/* Handle MDS Loopback frames */
--		lpfc_sli4_handle_mds_loopback(vport, dmabuf);
-+		if  (!(phba->pport->load_flag & FC_UNLOADING))
-+			lpfc_sli4_handle_mds_loopback(vport, dmabuf);
-+		else
-+			lpfc_in_buf_free(phba, &dmabuf->dbuf);
- 		return;
- 	}
- 
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 85d4e4000c25..48dc63f22cca 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -3937,10 +3937,14 @@ lpfc_els_retry(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		case LSRJT_UNABLE_TPC:
+ 			/* The driver has a VALID PLOGI but the rport has
+ 			 * rejected the PRLI - can't do it now.  Delay
+-			 * for 1 second and try again - don't care about
+-			 * the explanation.
++			 * for 1 second and try again.
++			 *
++			 * However, if explanation is REQ_UNSUPPORTED there's
++			 * no point to retry PRLI.
+ 			 */
+-			if (cmd == ELS_CMD_PRLI || cmd == ELS_CMD_NVMEPRLI) {
++			if ((cmd == ELS_CMD_PRLI || cmd == ELS_CMD_NVMEPRLI) &&
++			    stat.un.b.lsRjtRsnCodeExp !=
++			    LSEXP_REQ_UNSUPPORTED) {
+ 				delay = 1000;
+ 				maxretry = lpfc_max_els_tries + 1;
+ 				retry = 1;
 -- 
 2.26.2
 
