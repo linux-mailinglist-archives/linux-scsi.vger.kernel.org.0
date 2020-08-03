@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DC123AF68
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 23:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1993223AF69
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 23:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729167AbgHCVCs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Aug 2020 17:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S1729157AbgHCVCv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Aug 2020 17:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729009AbgHCVCs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Aug 2020 17:02:48 -0400
+        with ESMTP id S1729009AbgHCVCu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Aug 2020 17:02:50 -0400
 Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7CEC06174A
-        for <linux-scsi@vger.kernel.org>; Mon,  3 Aug 2020 14:02:48 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id 3so895619wmi.1
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Aug 2020 14:02:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D847C06174A
+        for <linux-scsi@vger.kernel.org>; Mon,  3 Aug 2020 14:02:50 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id g8so799199wmk.3
+        for <linux-scsi@vger.kernel.org>; Mon, 03 Aug 2020 14:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DUkAJZkFY7n+19RfWv/Bd/8LC96PMNQVYdS2KsDgCIg=;
-        b=ESC1C7FTRNDqP1vfHN38dSsRRXRx+6xxShmJhwMU+GkrLR2lr9WLIO9iBmq1hAvDt7
-         wpI0mGoVMRKjg7veF1CblPdctW9BjkTHgW1hcHHYeZHpvgj3Z02beOo3gqf0d7lPtoSf
-         HgPNkmYpp7hcRU9yxFlUFYYCorbAKc7umX7W5K9/GokaoyTzT05OxqM/1gPqkvotObRE
-         oHrZWFFdb0fWl4vWTeKrK1RE/TEoRlb4epQ3y88pVuYLclYLEphOHpjy0qOyEJQhFUZN
-         huAxuwOC8E2RB57fDik4LxKJ1Ij9xe0UQ1VKtRU3FX7j/ZxOTMONiThm2McO2lz2Abmv
-         jsNA==
+        bh=u55z9bcq+J6rq7uqGinlGbUrA/EMY41lFFoVd349Cn0=;
+        b=j3PDCXOl0scRLh0fhSeBi8Dzhp5xi13a3xCUJUBKVKhvoDJ4JlFOZ9G7OThWwmx4mb
+         C8TByN3azLKdV4Ep3erGMR1p3G12k00MF9gpvw3e0beTPbled9L/jI3DAoir+Dyhmh9T
+         SB/BEMfA9wLCC59bZpwGj9dbiVusdM8sai8zwOhtnO/ma1Xofxq+ArBDShg3Xftk6864
+         lmI27J1SUuIccBKhTv9dUnb01pL7uT1wOCPoaxp9c83/HiWvQ7FnCx5EwPXxGD2FEObx
+         gD6c3c1ftqBeDCQ1dWX/CzTOs4dMNeCQFNdXC8ikOFncLIK8MqH5FrGSXvaq9/d4BnrR
+         A/qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DUkAJZkFY7n+19RfWv/Bd/8LC96PMNQVYdS2KsDgCIg=;
-        b=MIiqeED59SxVeiGVEj56QGnTF3otPrFTHjTD4DAl5adfEz3VHZZmq5Yovyw4oACaFV
-         GepZzJBVN6SjlhnLsuLUXQZHyVkXlEy8+q+ll10YkeuseuaxRsIzd5Vj/sI8xSTw6oPj
-         s0/stszqHuTFvq4M9r2HEAH+cwnoNa2kWEiQuTaKSzPvf5pe6i6prFAdkQOPtzTEnf6j
-         VDLFcGp6j+/FwQd9xNRHwN1+36jcdMElsk8cWYFlN/2dP9cS5yBIO+NsE2bl9N8qBtUz
-         hVjvPce8eqUqFKF7Jb6VembuKg83P7Qi0ftMa+ngyTV8P+weDoCe/QZ6IfatFp/MD+Cx
-         FK7w==
-X-Gm-Message-State: AOAM533cxbhoTJeVNUmmZb+kLQI5Bs4AKDPkzWKbZ9dMvADAqyJZEmwl
-        YsEJ9bPpA+5kwnykl+iHPBZbYiKq
-X-Google-Smtp-Source: ABdhPJwVeP7kT3+VbUoc9+8MoqOt0eJnqL43FC9DnmH6LT3gxatQIu09BVfy0TkFSm1TK4P5rjaFAQ==
-X-Received: by 2002:a1c:c906:: with SMTP id f6mr967741wmb.5.1596488566603;
-        Mon, 03 Aug 2020 14:02:46 -0700 (PDT)
+        bh=u55z9bcq+J6rq7uqGinlGbUrA/EMY41lFFoVd349Cn0=;
+        b=VtEyCxL0+yUAVVDwDYJz8Q4f3C1R8kRdVgRvndcq15SeS44BC1U13xlRy4kfxJGH5a
+         OxLuX9htghqf4JoP51LIN47Fu+dvVQehbZWa95oQfS3VfV03Jd8TT+Py99TW+zn0wu1a
+         536wAt9rVdsKk3S8gagym3DwZ4bD/z+eWgWz6sTJF9/nVKg5/hu5pH4rrRBO0tnf2S+O
+         pnHnW8NW70wS8IoEwGaJjUQnLHg4A5dZMaHAWSrtX9snepqlqKQVtT+gZ71kphiU3tj1
+         gafZbDaZwE9MvwaX9bpXgd2ep8hr/jx5ynBAPQn0hh3ZF/9QVz/z2EiG0we9a17GZW/e
+         4wfw==
+X-Gm-Message-State: AOAM533eFT8hgjlMPfLY7eOk+4nyJvAd3vZwuiePig4/94WKEGWeaCJP
+        XGHP9+8cObgDNu/Zg8ZZ5/rTUh3j
+X-Google-Smtp-Source: ABdhPJzFq/UMls9soQo037wHbONW4LUSklK/pxeSWXjfJwcUr6wPu+rOoSZfJ+hnMQ14t2+fEnFFjA==
+X-Received: by 2002:a7b:c084:: with SMTP id r4mr888485wmh.23.1596488568630;
+        Mon, 03 Aug 2020 14:02:48 -0700 (PDT)
 Received: from localhost.localdomain.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v15sm26649040wrm.23.2020.08.03.14.02.44
+        by smtp.gmail.com with ESMTPSA id v15sm26649040wrm.23.2020.08.03.14.02.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2020 14:02:45 -0700 (PDT)
+        Mon, 03 Aug 2020 14:02:48 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 5/8] lpfc: Fix retry of PRLI when status indicates its unsupported
-Date:   Mon,  3 Aug 2020 14:02:26 -0700
-Message-Id: <20200803210229.23063-6-jsmart2021@gmail.com>
+Subject: [PATCH 6/8] lpfc: Fix validation of bsg reply lengths
+Date:   Mon,  3 Aug 2020 14:02:27 -0700
+Message-Id: <20200803210229.23063-7-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200803210229.23063-1-jsmart2021@gmail.com>
 References: <20200803210229.23063-1-jsmart2021@gmail.com>
@@ -64,48 +64,81 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-With port bounce/address swaps and timing between initiator GID queries
-vs remote port FC4 support registrations, the driver may be in a situation
-where it sends PRLIs for both FCP and NVME even though the target may not
-support one of the protocols. In this case, the remote port will reject
-the PRLI and usually indicate it does not support the request. However,
-the driver currently ignores the status of the failure and immediately
-retries the PRLI, which is pointless. In the case of this one remote port,
-the reception of the PRLI retry caused it to decide to send a LOGO.
-The LOGO restarted the process and the same results happened. It made
-the remote port undiscoverable to either protocol.
+There are a couple of code areas which validate sufficient reply buffer
+length, but the checks are using the request elements rather than
+the reply elements.
 
-Add logic to detect the non-support status and not attempt the retry
-of the PRLI.
+Rework to validate using the reply structures.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/scsi/lpfc/lpfc_bsg.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 85d4e4000c25..48dc63f22cca 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -3937,10 +3937,14 @@ lpfc_els_retry(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		case LSRJT_UNABLE_TPC:
- 			/* The driver has a VALID PLOGI but the rport has
- 			 * rejected the PRLI - can't do it now.  Delay
--			 * for 1 second and try again - don't care about
--			 * the explanation.
-+			 * for 1 second and try again.
-+			 *
-+			 * However, if explanation is REQ_UNSUPPORTED there's
-+			 * no point to retry PRLI.
- 			 */
--			if (cmd == ELS_CMD_PRLI || cmd == ELS_CMD_NVMEPRLI) {
-+			if ((cmd == ELS_CMD_PRLI || cmd == ELS_CMD_NVMEPRLI) &&
-+			    stat.un.b.lsRjtRsnCodeExp !=
-+			    LSEXP_REQ_UNSUPPORTED) {
- 				delay = 1000;
- 				maxretry = lpfc_max_els_tries + 1;
- 				retry = 1;
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index 1d88fedaf3f0..6f9d648a9b9c 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -2494,13 +2494,12 @@ lpfc_sli4_bsg_link_diag_test(struct bsg_job *job)
+ 	diag_status_reply = (struct diag_status *)
+ 			    bsg_reply->reply_data.vendor_reply.vendor_rsp;
+ 
+-	if (job->reply_len <
+-	    sizeof(struct fc_bsg_request) + sizeof(struct diag_status)) {
++	if (job->reply_len < sizeof(*bsg_reply) + sizeof(*diag_status_reply)) {
+ 		lpfc_printf_log(phba, KERN_WARNING, LOG_LIBDFC,
+ 				"3012 Received Run link diag test reply "
+ 				"below minimum size (%d): reply_len:%d\n",
+-				(int)(sizeof(struct fc_bsg_request) +
+-				sizeof(struct diag_status)),
++				(int)(sizeof(*bsg_reply) +
++				sizeof(*diag_status_reply)),
+ 				job->reply_len);
+ 		rc = -EINVAL;
+ 		goto job_error;
+@@ -3418,8 +3417,7 @@ lpfc_bsg_get_dfc_rev(struct bsg_job *job)
+ 	event_reply = (struct get_mgmt_rev_reply *)
+ 		bsg_reply->reply_data.vendor_reply.vendor_rsp;
+ 
+-	if (job->reply_len <
+-	    sizeof(struct fc_bsg_request) + sizeof(struct get_mgmt_rev_reply)) {
++	if (job->reply_len < sizeof(*bsg_reply) + sizeof(*event_reply)) {
+ 		lpfc_printf_log(phba, KERN_WARNING, LOG_LIBDFC,
+ 				"2741 Received GET_DFC_REV reply below "
+ 				"minimum size\n");
+@@ -5202,8 +5200,8 @@ lpfc_menlo_cmd(struct bsg_job *job)
+ 		goto no_dd_data;
+ 	}
+ 
+-	if (job->reply_len <
+-	    sizeof(struct fc_bsg_request) + sizeof(struct menlo_response)) {
++	if (job->reply_len < sizeof(*bsg_reply) +
++				sizeof(struct menlo_response)) {
+ 		lpfc_printf_log(phba, KERN_WARNING, LOG_LIBDFC,
+ 				"2785 Received MENLO_CMD reply below "
+ 				"minimum size\n");
+@@ -5359,9 +5357,7 @@ lpfc_forced_link_speed(struct bsg_job *job)
+ 	forced_reply = (struct forced_link_speed_support_reply *)
+ 		bsg_reply->reply_data.vendor_reply.vendor_rsp;
+ 
+-	if (job->reply_len <
+-	    sizeof(struct fc_bsg_request) +
+-	    sizeof(struct forced_link_speed_support_reply)) {
++	if (job->reply_len < sizeof(*bsg_reply) + sizeof(*forced_reply)) {
+ 		lpfc_printf_log(phba, KERN_WARNING, LOG_LIBDFC,
+ 				"0049 Received FORCED_LINK_SPEED reply below "
+ 				"minimum size\n");
+@@ -5715,8 +5711,7 @@ lpfc_get_trunk_info(struct bsg_job *job)
+ 	event_reply = (struct lpfc_trunk_info *)
+ 		bsg_reply->reply_data.vendor_reply.vendor_rsp;
+ 
+-	if (job->reply_len <
+-	    sizeof(struct fc_bsg_request) + sizeof(struct lpfc_trunk_info)) {
++	if (job->reply_len < sizeof(*bsg_reply) + sizeof(*event_reply)) {
+ 		lpfc_printf_log(phba, KERN_WARNING, LOG_LIBDFC,
+ 				"2728 Received GET TRUNK _INFO reply below "
+ 				"minimum size\n");
 -- 
 2.26.2
 
