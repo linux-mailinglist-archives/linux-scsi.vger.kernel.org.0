@@ -2,105 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F4B23A277
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 12:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB6023A3A1
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 13:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgHCKE4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Aug 2020 06:04:56 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:52034 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726007AbgHCKE4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Aug 2020 06:04:56 -0400
-X-UUID: 64283b4175cc439f8301b6859f390715-20200803
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9uXB7CfOtYtYRWovnKzlo2DYGcJuja1YS8PgGiAgL68=;
-        b=Z9X8s/amDLga6k7+LnXM2iukGWAhlzT/xf1AJmLCUmX69BC7pHY/XQjXs0cXvFcXYLkKDv2qaYzYd+Ugd6GmYQO8mz1Gr2hUUClJgcAJACrV1Gr9WLmFdcGA//iC1hhLuZHY+KCdnC6aCTp8O1iQCUDzzX8RlvlQ4C8p/UHHBjI=;
-X-UUID: 64283b4175cc439f8301b6859f390715-20200803
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 193023054; Mon, 03 Aug 2020 18:04:51 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 3 Aug 2020 18:04:47 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 3 Aug 2020 18:04:47 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>, <cang@codeaurora.org>, <bvanassche@acm.org>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <matthias.bgg@gmail.com>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v7] scsi: ufs: Quiesce all scsi devices before shutdown
-Date:   Mon, 3 Aug 2020 18:04:48 +0800
-Message-ID: <20200803100448.2738-1-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S1726645AbgHCLyj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Aug 2020 07:54:39 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:41710 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726624AbgHCLyW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Aug 2020 07:54:22 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 9EFB1DF5C1EA0A586B97;
+        Mon,  3 Aug 2020 19:38:00 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 3 Aug 2020 19:37:52 +0800
+From:   chenxiang <chenxiang66@hisilicon.com>
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <john.garry@huawei.com>,
+        Xiang Chen <chenxiang66@hisilicon.com>
+Subject: [PATCH] scsi: scsi_transport_sas: add spaces around binary operator "|"
+Date:   Mon, 3 Aug 2020 19:34:02 +0800
+Message-ID: <1596454442-220565-1-git-send-email-chenxiang66@hisilicon.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 0752CF73C08E36F99AA4AE3C4C4439F01E08ABB0F4EB780CBF1B73425E7CBCF92000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Q3VycmVudGx5IEkvTyByZXF1ZXN0IGNvdWxkIGJlIHN0aWxsIHN1Ym1pdHRlZCB0byBVRlMgZGV2
-aWNlIHdoaWxlDQpVRlMgaXMgd29ya2luZyBvbiBzaHV0ZG93biBmbG93LiBUaGlzIG1heSBsZWFk
-IHRvIHJhY2luZyBhcyBiZWxvdw0Kc2NlbmFyaW9zIGFuZCBmaW5hbGx5IHN5c3RlbSBtYXkgY3Jh
-c2ggZHVlIHRvIHVuY2xvY2tlZCByZWdpc3Rlcg0KYWNjZXNzZXMuDQoNClRvIGZpeCB0aGlzIGtp
-bmQgb2YgaXNzdWVzLCBpbiB1ZnNoY2Rfc2h1dGRvd24oKSwNCg0KMS4gVXNlIHBtX3J1bnRpbWVf
-Z2V0X3N5bmMoKSBpbnN0ZWFkIG9mIHJlc3VtaW5nIFVGUyBkZXZpY2UgYnkNCiAgIHVmc2hjZF9y
-dW50aW1lX3Jlc3VtZSgpICJpbnRlcm5hbGx5IiB0byBsZXQgcnVudGltZSBQTSBmcmFtZXdvcmsN
-CiAgIG1hbmFnZSBhbmQgcHJldmVudCBjb25jdXJyZW50IHJ1bnRpbWUgb3BlcmF0aW9ucyBieSBp
-bmNvbWluZyBJL08NCiAgIHJlcXVlc3RzLg0KDQoyLiBTcGVjaWZpY2FsbHkgcXVpZXNjZSBhbGwg
-U0NTSSBkZXZpY2VzIHRvIGJsb2NrIGFsbCBJL08gcmVxdWVzdHMNCiAgIGFmdGVyIGRldmljZSBp
-cyByZXN1bWVkLg0KDQpFeGFtcGxlIG9mIHJhY2luZyBzY2VuYXJpbzogV2hpbGUgVUZTIGRldmlj
-ZSBpcyBydW50aW1lLXN1c3BlbmRlZA0KDQpUaHJlYWQgIzE6IEV4ZWN1dGluZyBVRlMgc2h1dGRv
-d24gZmxvdywgZS5nLiwNCiAgICAgICAgICAgdWZzaGNkX3N1c3BlbmQoVUZTX1NIVVRET1dOX1BN
-KQ0KDQpUaHJlYWQgIzI6IEV4ZWN1dGluZyBydW50aW1lIHJlc3VtZSBmbG93IHRyaWdnZXJlZCBi
-eSBJL08gcmVxdWVzdCwNCiAgICAgICAgICAgZS5nLiwgdWZzaGNkX3Jlc3VtZShVRlNfUlVOVElN
-RV9QTSkNCg0KVGhpcyBicmVha3MgdGhlIGFzc3VtcHRpb24gdGhhdCBVRlMgUE0gZmxvd3MgY2Fu
-IG5vdCBiZSBydW5uaW5nDQpjb25jdXJyZW50bHkgYW5kIHNvbWUgdW5leHBlY3RlZCByYWNpbmcg
-YmVoYXZpb3IgbWF5IGhhcHBlbi4NCg0KU2lnbmVkLW9mZi1ieTogU3RhbmxleSBDaHUgPHN0YW5s
-ZXkuY2h1QG1lZGlhdGVrLmNvbT4NCi0tLQ0KQ2hhbmdlczoNCiAgLSBTaW5jZSB2NjoNCgktIERv
-IHF1aWVzY2UgdG8gYWxsIFNDU0kgZGV2aWNlcy4NCiAgLSBTaW5jZSB2NDoNCgktIFVzZSBwbV9y
-dW50aW1lX2dldF9zeW5jKCkgaW5zdGVhZCBvZiByZXN1bWluZyBVRlMgZGV2aWNlIGJ5IHVmc2hj
-ZF9ydW50aW1lX3Jlc3VtZSgpICJpbnRlcm5hbGx5Ii4NCi0tLQ0KIGRyaXZlcnMvc2NzaS91ZnMv
-dWZzaGNkLmMgfCAyNyArKysrKysrKysrKysrKysrKysrKysrLS0tLS0NCiAxIGZpbGUgY2hhbmdl
-ZCwgMjIgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvc2NzaS91ZnMvdWZzaGNkLmMgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQppbmRleCAz
-MDc2MjIyODQyMzkuLjdjYjIyMGIzZmRlMCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMv
-dWZzaGNkLmMNCisrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMNCkBAIC04NjQwLDYgKzg2
-NDAsNyBAQCBFWFBPUlRfU1lNQk9MKHVmc2hjZF9ydW50aW1lX2lkbGUpOw0KIGludCB1ZnNoY2Rf
-c2h1dGRvd24oc3RydWN0IHVmc19oYmEgKmhiYSkNCiB7DQogCWludCByZXQgPSAwOw0KKwlzdHJ1
-Y3Qgc2NzaV90YXJnZXQgKnN0YXJnZXQ7DQogDQogCWlmICghaGJhLT5pc19wb3dlcmVkKQ0KIAkJ
-Z290byBvdXQ7DQpAQCAtODY0NywxMSArODY0OCwyNyBAQCBpbnQgdWZzaGNkX3NodXRkb3duKHN0
-cnVjdCB1ZnNfaGJhICpoYmEpDQogCWlmICh1ZnNoY2RfaXNfdWZzX2Rldl9wb3dlcm9mZihoYmEp
-ICYmIHVmc2hjZF9pc19saW5rX29mZihoYmEpKQ0KIAkJZ290byBvdXQ7DQogDQotCWlmIChwbV9y
-dW50aW1lX3N1c3BlbmRlZChoYmEtPmRldikpIHsNCi0JCXJldCA9IHVmc2hjZF9ydW50aW1lX3Jl
-c3VtZShoYmEpOw0KLQkJaWYgKHJldCkNCi0JCQlnb3RvIG91dDsNCi0JfQ0KKwkvKg0KKwkgKiBM
-ZXQgcnVudGltZSBQTSBmcmFtZXdvcmsgbWFuYWdlIGFuZCBwcmV2ZW50IGNvbmN1cnJlbnQgcnVu
-dGltZQ0KKwkgKiBvcGVyYXRpb25zIHdpdGggc2h1dGRvd24gZmxvdy4NCisJICovDQorCXBtX3J1
-bnRpbWVfZ2V0X3N5bmMoaGJhLT5kZXYpOw0KKw0KKwkvKg0KKwkgKiBRdWllc2NlIGFsbCBTQ1NJ
-IGRldmljZXMgdG8gcHJldmVudCBhbnkgbm9uLVBNIHJlcXVlc3RzIHNlbmRpbmcNCisJICogZnJv
-bSBibG9jayBsYXllciBkdXJpbmcgYW5kIGFmdGVyIHNodXRkb3duLg0KKwkgKg0KKwkgKiBIZXJl
-IHdlIGNhbiBub3QgdXNlIGJsa19jbGVhbnVwX3F1ZXVlKCkgc2luY2UgUE0gcmVxdWVzdHMNCisJ
-ICogKHdpdGggQkxLX01RX1JFUV9QUkVFTVBUIGZsYWcpIGFyZSBzdGlsbCByZXF1aXJlZCB0byBi
-ZSBzZW50DQorCSAqIHRocm91Z2ggYmxvY2sgbGF5ZXIuIFRoZXJlZm9yZSBTQ1NJIGNvbW1hbmQg
-cXVldWVkIGFmdGVyIHRoZQ0KKwkgKiBzY3NpX3RhcmdldF9xdWllc2NlKCkgY2FsbCByZXR1cm5l
-ZCB3aWxsIGJsb2NrIHVudGlsDQorCSAqIGJsa19jbGVhbnVwX3F1ZXVlKCkgaXMgY2FsbGVkLg0K
-KwkgKg0KKwkgKiBCZXNpZGVzLCBzY3NpX3RhcmdldF8idW4icXVpZXNjZSAoZS5nLiwgc2NzaV90
-YXJnZXRfcmVzdW1lKSBjYW4NCisJICogYmUgaWdub3JlZCBzaW5jZSBzaHV0ZG93biBpcyBvbmUt
-d2F5IGZsb3cuDQorCSAqLw0KKwlsaXN0X2Zvcl9lYWNoX2VudHJ5KHN0YXJnZXQsICZoYmEtPmhv
-c3QtPl9fdGFyZ2V0cywgc2libGluZ3MpDQorCQlzY3NpX3RhcmdldF9xdWllc2NlKHN0YXJnZXQp
-Ow0KIA0KIAlyZXQgPSB1ZnNoY2Rfc3VzcGVuZChoYmEsIFVGU19TSFVURE9XTl9QTSk7DQogb3V0
-Og0KLS0gDQoyLjE4LjANCg==
+From: Xiang Chen <chenxiang66@hisilicon.com>
+
+According to coding style, need to use one space around binary operator "|",
+so add spaces around it.
+
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+---
+ drivers/scsi/scsi_transport_sas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
+index 182fd25..d1c0a21 100644
+--- a/drivers/scsi/scsi_transport_sas.c
++++ b/drivers/scsi/scsi_transport_sas.c
+@@ -1526,7 +1526,7 @@ int sas_rphy_add(struct sas_rphy *rphy)
+ 	list_add_tail(&rphy->list, &sas_host->rphy_list);
+ 	if (identify->device_type == SAS_END_DEVICE &&
+ 	    (identify->target_port_protocols &
+-	     (SAS_PROTOCOL_SSP|SAS_PROTOCOL_STP|SAS_PROTOCOL_SATA)))
++	     (SAS_PROTOCOL_SSP | SAS_PROTOCOL_STP | SAS_PROTOCOL_SATA)))
+ 		rphy->scsi_target_id = sas_host->next_target_id++;
+ 	else if (identify->device_type == SAS_END_DEVICE)
+ 		rphy->scsi_target_id = -1;
+-- 
+2.8.1
 
