@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A30B523AF62
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 23:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BBC23AF64
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Aug 2020 23:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729136AbgHCVCl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Aug 2020 17:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S1729476AbgHCVCn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Aug 2020 17:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728570AbgHCVCl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Aug 2020 17:02:41 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C73C06174A
-        for <linux-scsi@vger.kernel.org>; Mon,  3 Aug 2020 14:02:40 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id d190so789198wmd.4
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Aug 2020 14:02:40 -0700 (PDT)
+        with ESMTP id S1729146AbgHCVCm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Aug 2020 17:02:42 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873F7C061756
+        for <linux-scsi@vger.kernel.org>; Mon,  3 Aug 2020 14:02:42 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id x5so800005wmi.2
+        for <linux-scsi@vger.kernel.org>; Mon, 03 Aug 2020 14:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vAzd1Rs6kPJC0+xwhesVCGthy6geg8aulcpmBjUNiXU=;
-        b=kvNt0xLjhDfar8IwyN2Y6VSyNCJXOWo7k9XnnVxNU4SbExaJ/Z7Y4PxCphtIujfPGB
-         Qj/xmzXUwMOT6k2sf79ujimFVNODlpVm1QsPAKnPNilt4/ZnuCrBMu6HcncZHwqADVkI
-         r9AbwMYBydCK3QgLP/pTxX69jSHl84Jmkq9zj07eeQynFx5OscVPWLliAoer0Wexlp5F
-         QrQdNWOdlY3cdjlnEcnL5AdPI+3S43ignKIAa7KNdXdTW63dHQWL7qmznmEQlTnfl1Kv
-         hI09uYoEOb2SpHDDRNidfDQwyQNWTNOGeswu/yFJFB0sn+jMMVmyDKzgltMlRYtlTsvF
-         Hhqw==
+        bh=uiJ8hbbvoWIZLtDuMURdnNyi1mA+H8kk9tt2C8ROgFM=;
+        b=mcsWAKSq6EnuQjzEobSeDRI97F6ZxDo67E/TbnjV1DSXcBb/MFtDcEt9aZaUesoBo2
+         I37akjuMlRQ3gYTV2kyjPdBti5dpcYrFXAQt1bINMcam/cFHfGzxNBzA9WNHGN+rI4vM
+         xtvH7MHpbMxBpaoRwlR1APuupATZ5sEhddqCey+HVjh46uQqXlWT9QmyW4sXHM/9G7r9
+         PYNgtSRtwGoNkE0zvxzLI/oJ0uTHozCoF1c/tpIIyaFmeGJl3G/PWu9oFh2zon4oDZn2
+         kDTNMu1dvyEow5Q6m9hPxMSol6E5/fiIiXDbaGVR8qoSXB4LPfAOoNGv/m7kY9zKkM6K
+         TdpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vAzd1Rs6kPJC0+xwhesVCGthy6geg8aulcpmBjUNiXU=;
-        b=LN6wZkXDml8oMmZTlujwj9WmgTwjFxt7kMzfSEHRxJxS1cgAqsx7ZK6a/Si3wDvlMD
-         Esx4wDuTFTXx24Tdh4m82gmqSjPFFxqjqgPuqrDL8BdEj/NuOT1/iq8ePGv6LuddC1SO
-         IXLJuS6F1s3Cyla9rwls6VQIHgBz7liDiLzchPoUerh9cB6D8kj+X+u2Dj9qS7Llq+7R
-         I0jUTI2In/ObgzulXXk3AyAXW2h5bfHeiNLSBPUA/VzbOKFnCGMGdTrfXQdBhTzwqWMH
-         EKJuEgMRiFT5CNI1oVczVYXtDdUxfkBbJDsJ0iQRYuvS00in3LLXTbp763C8KG5qvVUP
-         TfKw==
-X-Gm-Message-State: AOAM53154QPnoGIQfjDb8pJ9s4PVXTGQpyq/6nxSLeCUGVFW7t1ICzO+
-        38J+nN2dEe6jVRANTaZRzTdWu9nX
-X-Google-Smtp-Source: ABdhPJxWbJDpilWh/Yn4Ka01/YBXPmdbv2YrWRRHL2ebg6l69lr/b/0mvBHLAxYWOW1NW/Ypdv0lgg==
-X-Received: by 2002:a1c:283:: with SMTP id 125mr993946wmc.12.1596488559291;
-        Mon, 03 Aug 2020 14:02:39 -0700 (PDT)
+        bh=uiJ8hbbvoWIZLtDuMURdnNyi1mA+H8kk9tt2C8ROgFM=;
+        b=ralJGk00nHSw0RUx5YjxpUz1aTURw3phx3fAamgHOfEnAGCud/dELhtmM5/kmA4NIs
+         7FRE1x/RytjknXXRqtx6NIRA2amD7KQqfSTStpcVpYudXIZd6+yrAdBp8dmpyzp9pIOA
+         MZOkWBK396ygNtU6cBQo98yQGuUWgSf2voPlIq2zhb6jmkQ17yafv5/EP4uJ8tTXtNsN
+         Czo77rvKaGSVF87LDNxj3qwBXG5QwLCF/TuDvaYsjW60if80Acy2mWlNPUMyo3c2yNDC
+         CC7Mds/sKoe4KvZRescJkmLaNWZ2cjNHrMZWkAOIUHyI+gAODovX5fvUxVrrHKhjkgjP
+         wYSQ==
+X-Gm-Message-State: AOAM533FbzUcibVfgFKTWZ4R+u08GNbcUFZh2hNAaAcjnFjdt9QEv8Hj
+        xfwx7YfYxlnQ+iHC/BD9CcYbyOHI
+X-Google-Smtp-Source: ABdhPJzDN9hoVVAFLO3RKe+IhKv5ugccm8/Ck12A25kNeysdaDetZy9Icef4nDhvGFetUD/YWEk72w==
+X-Received: by 2002:a1c:7315:: with SMTP id d21mr887175wmb.108.1596488561030;
+        Mon, 03 Aug 2020 14:02:41 -0700 (PDT)
 Received: from localhost.localdomain.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v15sm26649040wrm.23.2020.08.03.14.02.37
+        by smtp.gmail.com with ESMTPSA id v15sm26649040wrm.23.2020.08.03.14.02.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2020 14:02:38 -0700 (PDT)
+        Mon, 03 Aug 2020 14:02:40 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 1/8] lpfc: Fix FCoE speed reporting
-Date:   Mon,  3 Aug 2020 14:02:22 -0700
-Message-Id: <20200803210229.23063-2-jsmart2021@gmail.com>
+Subject: [PATCH 2/8] lpfc: Fix no message shown for lpfc_hdw_queue out of range value
+Date:   Mon,  3 Aug 2020 14:02:23 -0700
+Message-Id: <20200803210229.23063-3-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200803210229.23063-1-jsmart2021@gmail.com>
 References: <20200803210229.23063-1-jsmart2021@gmail.com>
@@ -64,93 +64,67 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Current Link speed was shown as "unknown" in sysfs for FCoE ports
-In this scenario, the port was working in 20G speed, which happens to
-not be a speed handled by the driver.
+If module parameters override the default configuration settings for
+hardware queues or irqs, the driver was not notifying the change from
+defaults.
 
-Add support for all possible link speeds that could get reported from
-port_speed field in link state ACQE.
-
-Additionally, as supported_speeds can't be manipulated via the fcoe driver
-on a converged ethernet port (it must be managed by the nic function),
-don't fill out the supported_speeds field for the fc host object in sysfs.
-
-Revise debug logging to report Link speed mgmt valuess.
+Revise such that any changes will result in a kernel log message.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_attr.c |  6 ++++++
- drivers/scsi/lpfc/lpfc_init.c | 15 +++++++++++++--
- 2 files changed, 19 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_attr.c | 20 +++++++++++++++++---
+ drivers/scsi/lpfc/lpfc_init.c |  3 ++-
+ 2 files changed, 19 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index a62c60ca6477..cc2c907777d2 100644
+index cc2c907777d2..ece6c250ebaf 100644
 --- a/drivers/scsi/lpfc/lpfc_attr.c
 +++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -6679,9 +6679,15 @@ lpfc_get_host_speed(struct Scsi_Host *shost)
- 		}
- 	} else if (lpfc_is_link_up(phba) && (phba->hba_flag & HBA_FCOE_MODE)) {
- 		switch (phba->fc_linkspeed) {
-+		case LPFC_ASYNC_LINK_SPEED_1GBPS:
-+			fc_host_speed(shost) = FC_PORTSPEED_1GBIT;
-+			break;
- 		case LPFC_ASYNC_LINK_SPEED_10GBPS:
- 			fc_host_speed(shost) = FC_PORTSPEED_10GBIT;
- 			break;
-+		case LPFC_ASYNC_LINK_SPEED_20GBPS:
-+			fc_host_speed(shost) = FC_PORTSPEED_20GBIT;
-+			break;
- 		case LPFC_ASYNC_LINK_SPEED_25GBPS:
- 			fc_host_speed(shost) = FC_PORTSPEED_25GBIT;
- 			break;
+@@ -7412,12 +7412,26 @@ lpfc_get_cfgparam(struct lpfc_hba *phba)
+ void
+ lpfc_nvme_mod_param_dep(struct lpfc_hba *phba)
+ {
+-	if (phba->cfg_hdw_queue > phba->sli4_hba.num_present_cpu)
++	int  logit = 0;
++
++	if (phba->cfg_hdw_queue > phba->sli4_hba.num_present_cpu) {
+ 		phba->cfg_hdw_queue = phba->sli4_hba.num_present_cpu;
+-	if (phba->cfg_irq_chann > phba->sli4_hba.num_present_cpu)
++		logit = 1;
++	}
++	if (phba->cfg_irq_chann > phba->sli4_hba.num_present_cpu) {
+ 		phba->cfg_irq_chann = phba->sli4_hba.num_present_cpu;
+-	if (phba->cfg_irq_chann > phba->cfg_hdw_queue)
++		logit = 1;
++	}
++	if (phba->cfg_irq_chann > phba->cfg_hdw_queue) {
+ 		phba->cfg_irq_chann = phba->cfg_hdw_queue;
++		logit = 1;
++	}
++	if (logit)
++		lpfc_printf_log(phba, KERN_ERR, LOG_SLI,
++				"2006 Reducing Queues - CPU limitation: "
++				"IRQ %d HDWQ %d\n",
++				phba->cfg_irq_chann,
++				phba->cfg_hdw_queue);
+ 
+ 	if (phba->cfg_enable_fc4_type & LPFC_ENABLE_NVME &&
+ 	    phba->nvmet_support) {
 diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index db768e28d3f9..159afadaea2b 100644
+index 159afadaea2b..265f2dfa7fb0 100644
 --- a/drivers/scsi/lpfc/lpfc_init.c
 +++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -4577,6 +4577,13 @@ static void lpfc_host_supported_speeds_set(struct Scsi_Host *shost)
- 	struct lpfc_hba   *phba = vport->phba;
- 
- 	fc_host_supported_speeds(shost) = 0;
-+	/*
-+	 * Avoid reporting supported link speed for FCoE as it can't be
-+	 * controlled via FCoE.
-+	 */
-+	if (phba->hba_flag & HBA_FCOE_MODE)
-+		return;
-+
- 	if (phba->lmt & LMT_128Gb)
- 		fc_host_supported_speeds(shost) |= FC_PORTSPEED_128GBIT;
- 	if (phba->lmt & LMT_64Gb)
-@@ -4910,6 +4917,9 @@ lpfc_sli4_port_speed_parse(struct lpfc_hba *phba, uint32_t evt_code,
- 		case LPFC_ASYNC_LINK_SPEED_40GBPS:
- 			port_speed = 40000;
- 			break;
-+		case LPFC_ASYNC_LINK_SPEED_100GBPS:
-+			port_speed = 100000;
-+			break;
- 		default:
- 			port_speed = 0;
- 		}
-@@ -8589,7 +8599,7 @@ lpfc_sli4_read_config(struct lpfc_hba *phba)
- 				"VPI(B:%d M:%d) "
- 				"VFI(B:%d M:%d) "
- 				"RPI(B:%d M:%d) "
--				"FCFI:%d EQ:%d CQ:%d WQ:%d RQ:%d\n",
-+				"FCFI:%d EQ:%d CQ:%d WQ:%d RQ:%d lmt:x%x\n",
- 				phba->sli4_hba.extents_in_use,
- 				phba->sli4_hba.max_cfg_param.xri_base,
- 				phba->sli4_hba.max_cfg_param.max_xri,
-@@ -8603,7 +8613,8 @@ lpfc_sli4_read_config(struct lpfc_hba *phba)
- 				phba->sli4_hba.max_cfg_param.max_eq,
- 				phba->sli4_hba.max_cfg_param.max_cq,
- 				phba->sli4_hba.max_cfg_param.max_wq,
--				phba->sli4_hba.max_cfg_param.max_rq);
-+				phba->sli4_hba.max_cfg_param.max_rq,
-+				phba->lmt);
- 
- 		/*
- 		 * Calculate queue resources based on how
+@@ -8637,7 +8637,8 @@ lpfc_sli4_read_config(struct lpfc_hba *phba)
+ 		if ((phba->cfg_irq_chann > qmin) ||
+ 		    (phba->cfg_hdw_queue > qmin)) {
+ 			lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+-					"2005 Reducing Queues: "
++					"2005 Reducing Queues - "
++					"FW resource limitation: "
+ 					"WQ %d CQ %d EQ %d: min %d: "
+ 					"IRQ %d HDWQ %d\n",
+ 					phba->sli4_hba.max_cfg_param.max_wq,
 -- 
 2.26.2
 
