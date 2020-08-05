@@ -2,59 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4984B23C288
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 02:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6055D23C2A3
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 02:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgHEAQn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Aug 2020 20:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S1726489AbgHEAkF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Aug 2020 20:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726788AbgHEAQm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Aug 2020 20:16:42 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D88C06174A
-        for <linux-scsi@vger.kernel.org>; Tue,  4 Aug 2020 17:16:42 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id 25so14449905oir.0
-        for <linux-scsi@vger.kernel.org>; Tue, 04 Aug 2020 17:16:42 -0700 (PDT)
+        with ESMTP id S1725950AbgHEAkE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Aug 2020 20:40:04 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E456C06174A
+        for <linux-scsi@vger.kernel.org>; Tue,  4 Aug 2020 17:40:04 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id p20so4112556wrf.0
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Aug 2020 17:40:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=tlaYwYCe4OZCejQbMYs2u0Xxn0ktVuFV1VwXoIMFOjHGQwjyLNcoBYxhfGfYy7BGWk
-         gmB6+3nn057k3kkmIRg5CLBOi/Zlt/DIXTnu4gLBimW3TRimfKAfx9Q8DFDw3jcMRw7z
-         ouCa+n2hnlvhxywg03pLY+RY1d/bAL+waGXTgTk6DeLK+lGAYy94eEUThe0MROupX6BK
-         W4beIuw9731C9QFjElHkGDv4T/n6nxhCniqztPLr7Fn90+QPU3cuXaIvqkfs9lgK2Dp8
-         SEKzRQJCQWwDeSD7xsbn3NJIWxl0Xe6tbimsseMnEMpxtEKJk1OAuZgRo22ATGZHestB
-         nAEg==
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=hJW6wAkuoQDVAepJ5Cv3gWI6qzML2AhmW89J2ZpCvBI=;
+        b=aYjVfEoMZdXH24qlnS3M7VKdM/4CrIuQbZ1Ctm3utrbCjdxibrVgB9Re+wkQQ6Yag3
+         ZE4EkRYx0N2q4Y3A9/bPb9KlY3FK71K9PU7gQgvT1OqdIe57mYFjilbUb0ZM6N4yIUBL
+         O0QRk6O7dPBVXkYu8ztrFsUD2ZboBTjeJ+SAk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=JqftKt39rQsX/WM7UgUicXCLecP5QL45m7pga9Of9B4M7pirTSxgIdlBE+pM38D199
-         i7csW9NLXGpLc8hwXeH9uiWuwNVHq4WzpVl1SAdSF9PNqjokbyAdV3OUR7CQFfv6qH5y
-         lpvsQjxvNSK3QUBijBpgtCwcBeTHbvBrnU+2pLeUSLCV5BSwlgj88lF9yhs6APk51pSI
-         mw4CrLQRFRRJtovuFzu/93Sz5pMvr8fMcyDd6J/QCs9qDULM9fKgs4DjONmoBb1Jzqld
-         Tk15BODonAHILTTko+d3d7lgNxsPLn02WONvl8MK5zSgmOJmQ/FSJQmd9EeqZ83im7r/
-         hRow==
-X-Gm-Message-State: AOAM5310VKm3mxM0G/j62MUJOO8Rm78fFE2Ut2TErgSU/drCzosfCifs
-        hwjqknGrCpIg1StDr8EONcdzbGR7WSYftpO7BIg=
-X-Google-Smtp-Source: ABdhPJxCvDh0dllqqnAWzr6/gFl3mWtIxvEf/S5Z5pZHs/hnY9wI/ArZ7K6H/oZQEsm46QKI8kyXTaN1jFSe9KgozFM=
-X-Received: by 2002:aca:f106:: with SMTP id p6mr720707oih.169.1596586601538;
- Tue, 04 Aug 2020 17:16:41 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=hJW6wAkuoQDVAepJ5Cv3gWI6qzML2AhmW89J2ZpCvBI=;
+        b=bm8HNsrB+exc3xp2zyrVlInobjhAspyHLsO6CVBPIF8S9Ynlvl5H0Fa+dkKBJHoRAx
+         3xoHfgfVFZCKtvycsKabHPX6E3iSxkBlPw4dYA4CC0a0jMKUjUo91oq+EAkXeDqB5Xss
+         6zXHOPT1vPiFrsCkemnFsM8uhjCD/fbW7RhaPNbF1NmVCIJ0508VYntgl8Mbt2koXV0D
+         /orPZtAzGCWdwNkh0kqZg/LsMZVM+etVDaQvQRXiOPcLeR4TV6/aQsp8Vbb8DVn6C0VV
+         Q3bpuj/WPFZszIrC8SjIqLu1zB7SpMNB3TlHHpq7QaBNjHG6RqQ3r+SeNZr1ituIIhJd
+         2h3A==
+X-Gm-Message-State: AOAM530MRh8tcUKWljlfTyNgcOpG5NS7LGH0Hcq/uPdkFe/Z5DRs3zCv
+        MFIgX/kfvH2QFI7WBJamClcqBA==
+X-Google-Smtp-Source: ABdhPJxKkNX69AKXiUthEHMB6Dol3OWroWIMuU5IyuxNcQhTiTyAkCPxkDdFLyDUt8qOnMHGouuU0A==
+X-Received: by 2002:adf:efcc:: with SMTP id i12mr411064wrp.308.1596588002977;
+        Tue, 04 Aug 2020 17:40:02 -0700 (PDT)
+Received: from [10.230.185.151] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id g188sm608229wma.5.2020.08.04.17.40.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Aug 2020 17:40:02 -0700 (PDT)
+Subject: Re: [RFC 01/16] blkcg:Introduce blkio.app_identifier knob to blkio
+ controller
+To:     Tejun Heo <tj@kernel.org>, Daniel Wagner <dwagner@suse.de>
+Cc:     Muneendra <muneendra.kumar@broadcom.com>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        pbonzini@redhat.com, emilne@redhat.com, mkumar@redhat.com
+References: <1596507196-27417-1-git-send-email-muneendra.kumar@broadcom.com>
+ <1596507196-27417-2-git-send-email-muneendra.kumar@broadcom.com>
+ <20200804113130.qfi5agzilso3mlbp@beryllium.lan>
+ <20200804142123.GA4819@mtj.thefacebook.com>
+From:   James Smart <james.smart@broadcom.com>
+Message-ID: <b35e0e83-eb6c-4282-5142-22d9a996d260@broadcom.com>
+Date:   Tue, 4 Aug 2020 17:39:57 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: by 2002:a05:6838:809:0:0:0:0 with HTTP; Tue, 4 Aug 2020 17:16:41
- -0700 (PDT)
-Reply-To: sylviarobinson.usa@hotmail.com
-From:   Sylvia Robinson <lorirobison402@gmail.com>
-Date:   Wed, 5 Aug 2020 01:16:41 +0100
-Message-ID: <CAJ2n05F6ydrJWsbUJez856N4nWZU_jVV3+z3Z7Qb6-LGsXQT2g@mail.gmail.com>
-Subject: =?UTF-8?B?5oKo5aW977yM5oKo55yL5Yiw5oiR5Y+R57uZ5oKo55qE5raI5oGv5LqG5ZCX77yf?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200804142123.GA4819@mtj.thefacebook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
+
+On 8/4/2020 7:21 AM, Tejun Heo wrote:
+> Hello,
+>
+> On Tue, Aug 04, 2020 at 01:31:30PM +0200, Daniel Wagner wrote:
+>> Hi,
+>>
+>> [cc Tejun]
+>>
+>> On Tue, Aug 04, 2020 at 07:43:01AM +0530, Muneendra wrote:
+>>> This Patch added a unique application identifier i.e
+>>> blkio.app_identifier knob to  blkio controller which
+>>> allows identification of traffic sources at an
+>>> individual cgroup based Applications
+>>> (ex:virtual machine (VM))level in both host and
+>>> fabric infrastructure.
+> I'm not sure it makes sense to introduce custom IDs for these given that
+> there already are unique per-host cgroup IDs which aren't recycled.
+>
+> Thanks.
+>
+
+If the VM moves to a different host, does the per-host cgroup IDs 
+migrate with the VM ?   If not, we need to have an identifier that moves 
+with the VM and which is independent of what host the VM is residing on.
+
+-- james
 
 
