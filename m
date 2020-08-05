@@ -2,84 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F7223C2F8
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 03:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFDE23C30A
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 03:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727039AbgHEBR7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Aug 2020 21:17:59 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:51818 "EHLO
+        id S1726166AbgHEBbo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Aug 2020 21:31:44 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:59780 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727019AbgHEBR6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Aug 2020 21:17:58 -0400
+        with ESMTP id S1725863AbgHEBbo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Aug 2020 21:31:44 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0751C2qD135547;
-        Wed, 5 Aug 2020 01:17:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=zQs+pT64RxtSTUDQB3wwLi5w19TqBgvgH2P7d1bcsn8=;
- b=QENi2opKS30oyF+rgsyk/LrC/9vw7OfxHSUv82OYKDuD8z3yDdDgVwVD7D18JH8xU8Ps
- P7gCdbz/iOufV1NiCldNsoJ6hGitubgRUOGZePwkmGRAPbEEPrgM9x0/k7VLJ8S6YBQk
- zOd2dckptIynRvEyMcfD2aKRJA7wO5HaqxiW1OuEM8nu7Dd/yA4NouEbjLnrCW5hlqEX
- 6rMbgyz9bQxJJlxHqrtDfi1bbGM7t8n8jZvxxnjEyGHzneFtXQbd0EoUt4AFv8dnN2mF
- q1D4rjU0boRzsO2rqBRMFUtJeWmvgA3nb5Y7ca1nRvqm74qpYpdKw9WwSA9F7bcsQFfG tw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 32n11n7aps-1
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0751TPkm169942;
+        Wed, 5 Aug 2020 01:31:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=KAY8jIDQwbUNhrpR/XmkpPgt//2GIsPpz1VpkrJ2DgQ=;
+ b=A9WeRogcXcnozTNkmQ07mXXkOhu6FDlcV33O8Nsxqvga0tU8rVzb+K1N38quSsHbli7d
+ uzsjZOj6ii0Jeh03ZICMOSgd98olv+bEXxGnN4cTdbz1iGWz8gz4wxqz7+TNf/oiBSCi
+ z0ag39Mo9mS86JiB3EvDMj48Bjxccd5uZR+glaLMmmreAfrZ3Vkl+EPNT5x/GltZaVhd
+ pK1TrFnZUHltRNRtis9LsCAmNSrOH2q9fnjL5el+bnlKANcNDSdAPzuKj8XUtulxL3Q0
+ 9vewA1WkBbvUsrdkR7ozChrfgKonaRfBejCxYLa1WuE92uCsLjh/xKpmLR5nJYbC97Qw 8g== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 32n11n7bk2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 05 Aug 2020 01:17:44 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 075198kM088131;
-        Wed, 5 Aug 2020 01:17:43 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 32p5gt1mxk-1
+        Wed, 05 Aug 2020 01:31:23 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0751MrNk019436;
+        Wed, 5 Aug 2020 01:31:23 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 32pdnruuwh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Aug 2020 01:17:43 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0751Hf0C007535;
-        Wed, 5 Aug 2020 01:17:41 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        Wed, 05 Aug 2020 01:31:22 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0751VHaD022032;
+        Wed, 5 Aug 2020 01:31:17 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 04 Aug 2020 18:17:40 -0700
+        with ESMTP ; Tue, 04 Aug 2020 18:31:16 -0700
+To:     Can Guo <cang@codeaurora.org>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH v9 8/9] scsi: ufs: Fix a racing problem btw error
+ handler and runtime PM ops
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     sagi@grimberg.me, target-devel@vger.kernel.org,
-        michael.christie@oracle.com, linux-scsi@vger.kernel.org,
-        bvanassche@acm.org, Max Gurtovoy <maxg@mellanox.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        oren@mellanox.com
-Subject: Re: [PATCH 1/1] target: make iscsit_register_transport() return void
-Date:   Tue,  4 Aug 2020 21:17:33 -0400
-Message-Id: <159659019689.15726.3035694434346153928.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200803150008.83920-1-maxg@mellanox.com>
-References: <20200803150008.83920-1-maxg@mellanox.com>
+Organization: Oracle Corporation
+Message-ID: <yq1r1slzxoh.fsf@ca-mkp.ca.oracle.com>
+References: <1596445485-19834-1-git-send-email-cang@codeaurora.org>
+        <1596445485-19834-9-git-send-email-cang@codeaurora.org>
+Date:   Tue, 04 Aug 2020 21:31:13 -0400
+In-Reply-To: <1596445485-19834-9-git-send-email-cang@codeaurora.org> (Can
+        Guo's message of "Mon, 3 Aug 2020 02:04:43 -0700")
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9703 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 bulkscore=0
- phishscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 spamscore=0 mlxscore=0
+ bulkscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008050008
+ definitions=main-2008050010
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9703 signatures=668679
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 priorityscore=1501
  impostorscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0
+ suspectscore=2 mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008050008
+ definitions=main-2008050010
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 3 Aug 2020 18:00:08 +0300, Max Gurtovoy wrote:
 
-> This function always return 0 now, we can make it return void to
-> simplify the code. Also, no caller ever check the return value of this
-> function.
+Can,
 
-Applied to 5.9/scsi-queue, thanks!
+> Current IRQ handler blocks scsi requests before scheduling eh_work,
+> when error handler calls pm_runtime_get_sync, if ufshcd_suspend/resume
+> sends a scsi cmd, most likely the SSU cmd, since scsi requests are
+> blocked, pm_runtime_get_sync() will never return because
+> ufshcd_suspend/reusme is blocked by the scsi cmd. Some changes and
+> code re-arrangement can be made to resolve it.
 
-[1/1] scsi: target: Make iscsit_register_transport() return void
-      https://git.kernel.org/mkp/scsi/c/a8ac78357d9b
+  CC [M]  drivers/scsi/ufs/ufshcd.o
+drivers/scsi/ufs/ufshcd.c: In function =E2=80=98ufshcd_queuecommand=E2=80=
+=99:
+drivers/scsi/ufs/ufshcd.c:2570:6: error: this statement may fall through [-=
+Werror=3Dimplicit-fallthrough=3D]
+ 2570 |   if (hba->pm_op_in_progress) {
+      |      ^
+drivers/scsi/ufs/ufshcd.c:2575:2: note: here
+ 2575 |  case UFSHCD_STATE_RESET:
+      |  ^~~~
+cc1: all warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:280: drivers/scsi/ufs/ufshcd.o] Error 1
+make[2]: *** [scripts/Makefile.build:497: drivers/scsi/ufs] Error 2
+make[1]: *** [scripts/Makefile.build:497: drivers/scsi] Error 2
+make: *** [Makefile:1764: drivers] Error 2
 
--- 
+--=20
 Martin K. Petersen	Oracle Linux Engineering
