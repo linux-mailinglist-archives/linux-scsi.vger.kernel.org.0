@@ -2,93 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E23C23CA29
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 13:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C3223CFDD
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 21:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728464AbgHEK4V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Aug 2020 06:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
+        id S1728708AbgHETZ4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Aug 2020 15:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728193AbgHEKuE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Aug 2020 06:50:04 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6BCC0617A0
-        for <linux-scsi@vger.kernel.org>; Wed,  5 Aug 2020 03:24:57 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id l204so10365502oib.3
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Aug 2020 03:24:57 -0700 (PDT)
+        with ESMTP id S1728715AbgHERPB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Aug 2020 13:15:01 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08307C061757
+        for <linux-scsi@vger.kernel.org>; Wed,  5 Aug 2020 10:15:01 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id j7so23880277oij.9
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Aug 2020 10:15:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=UOr65DEC+2TW/zt7uOWWliltVKZ89UsSxVAE/jQE1oM=;
-        b=B66ZcTXEjsnpPty+Wf6Ruyhx6dz9qKkxKqb4ddmpgIPU1IkkeHcm8cAuf9TuVlkkkK
-         LMxVzLG/GLlCxlZb2Y1/OGXLp5QNTXaGc8vvvrXHOZEfraFRgAj/p2mXQvk1HjH1/sWK
-         UwiphMAIjn7YXS/uLgxCTMnI+OfnDV7dT/tFuF3Msj5kDqPmLHAfGj32MRVV1W55NGee
-         +h9NxPLdq9HmzHfb09WVi0g0br1/SpTrSlhfHIlb1wUGDNm9Gri8aNe1rEyyZpYsuqkj
-         7sW/zEmL9VCIcLki/3/YXfwxjJ1eoqXgo/aDcLcVpMJbdhl1EYx+QJIdEDFZXGkZddLy
-         P8kw==
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=jWQQ0cQXaDFSwdvPuv1NHdKGXywtUA2kO7hM0wR/9SI=;
+        b=Uf8WjI/AL0juCYG3MrhkVy1QGS7Yeq11AIhtf9OD3jjDIw/LrH6sMOKctAmvMyPQkk
+         m5Z+OH4gvZfUvpzfaoDMxN2y7JWSX5JlJ4rTVzfvk9DCrh0LvOx0svQrIsMLTw3QioEi
+         zNBBavkTkluAKNfqrCJjB5ZO0BypJ6dYyYJUw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=UOr65DEC+2TW/zt7uOWWliltVKZ89UsSxVAE/jQE1oM=;
-        b=jakHTxNdcnW+rG02QjVAeWtPN4KJNxzuxNx4YW4c0q3L/zr/tOFrTeR1KWJBy7bzWl
-         0NBcz8rtxCmTIyuCgAFoO2Ej0bTnKjZ/KN4tD7GzrBY2YrrYfItiOItO11PB84rCD8mR
-         lRTRwEQkubFlsQN9xm4bqoUG1NLGvpyFEy7YzoB3Gps+TktJ73UW8SAj1NOXitHGxJsL
-         C8Zb9PtOl+sguqFpmSlHa9u5R7zIXBi6uPblIoVp4A4GTk6RAGnQf89eJQXLI5yeABjz
-         ++nkQbouub6i1IIjopRs7t7xwbDTkk4CXkPMAshDEmQFWlO1j6nUGGcmy96tFgrc8sbH
-         t+jg==
-X-Gm-Message-State: AOAM532c51dRwkAtjlV0QeVBKINrP5YhnYtGi5OyCZaE/aA0ssiD3QWL
-        WmdL50WDacz2AW/nCkoyItOU8hmxMsPd9+bL0kw=
-X-Google-Smtp-Source: ABdhPJylLPuxjlI4kmrIqZPsriTRS7m9cqBfXBEpbfUFfECy3HY1ppQDkSSqXRXsMwf2EsKHn1rc6EyIKYk+o1xF89w=
-X-Received: by 2002:aca:cc0e:: with SMTP id c14mr678566oig.96.1596623093302;
- Wed, 05 Aug 2020 03:24:53 -0700 (PDT)
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=jWQQ0cQXaDFSwdvPuv1NHdKGXywtUA2kO7hM0wR/9SI=;
+        b=MJNHkYrKLYJuJX10a6QL/B7np+SEf1STl7zxTXHRnNIDqDRFu0rwAeVmX/zXvFtPPM
+         rrQwxU/nBbOiWGBJ5GHufCulXAkpbU89lsYo952WmEOKtcKDVJpsLy9vjQ55f1u8QwMs
+         P/dpI6mnvO9+75k7q3fAKmtm71KnfnyYjiuoBMcex4IPyNprHzpWjXEPPPblZumAR9NB
+         h9CsgTSSnWSk2JcD+6mlYrTFforn4QVnuRsun35AGNpC2jRRFvsu2yzV0iR20E799YLT
+         V2t+02FX7K8Q4m3myyALJbN5MwUU0g+YFGkBUvgtIukab1EbsfNuHWQTheAmGyXvoStM
+         sWWQ==
+X-Gm-Message-State: AOAM5326zdwGuTI1KStnAhAjDSrar6SL6tI+yhArSGWi9kjx7S9Hx3fA
+        5a/j2/gX/tqARFCENvRq3HZyZnmB3Q2+76jQAO5xiQ==
+X-Google-Smtp-Source: ABdhPJzLZdo8qY74/MuhM/+FSNWx/NNtopPEtpMZtcAHj+8nS6gaQUzZcd/IdoV0AZ96iiYdKi1Rm1aHAQIJkKQ5bdE=
+X-Received: by 2002:a54:478f:: with SMTP id o15mr3658717oic.77.1596647700338;
+ Wed, 05 Aug 2020 10:15:00 -0700 (PDT)
+From:   Muneendra Kumar M <muneendra.kumar@broadcom.com>
+References: <1596507196-27417-1-git-send-email-muneendra.kumar@broadcom.com>
+ <1596507196-27417-2-git-send-email-muneendra.kumar@broadcom.com>
+ <20200804113130.qfi5agzilso3mlbp@beryllium.lan> <20200804142123.GA4819@mtj.thefacebook.com>
+ <b35e0e83-eb6c-4282-5142-22d9a996d260@broadcom.com> <CACVXFVPVM-xU0d2nETztPrS_EpacMy8A4x8FbShhLYt2iV_ouw@mail.gmail.com>
+ <227c7f27-c6c7-5db1-59ac-2dd428f5a42a@suse.de> <20200805143913.GC4819@mtj.thefacebook.com>
+In-Reply-To: <20200805143913.GC4819@mtj.thefacebook.com>
 MIME-Version: 1.0
-Reply-To: mrahmedmuzashah@gmail.com
-Received: by 2002:a05:6838:e410:0:0:0:0 with HTTP; Wed, 5 Aug 2020 03:24:53
- -0700 (PDT)
-From:   "Mr.Ahmed Muzashah" <ahmedmuzashah@gmail.com>
-Date:   Wed, 5 Aug 2020 11:24:53 +0100
-X-Google-Sender-Auth: J-7KobIqVQTB9cxd94PGJld5kjs
-Message-ID: <CAMydiEb35tnrqcn7Wb5f9=f-xdrunbRJJN6=DtQzUr5KoNwutA@mail.gmail.com>
-Subject: =?UTF-8?B?U2Now7ZuZW4gVGFn?=
-To:     undisclosed-recipients:;
+X-Mailer: Microsoft Outlook 15.0
+thread-index: AQIDyhmBPqdmqCKUdNTZliBUbPkt/AIVs741AOV8stoBvB2xRwGs7Aj/AfU+Z6cCXn8lCgHQWH25qGqsWhA=
+Date:   Wed, 5 Aug 2020 22:44:56 +0530
+Message-ID: <c40bc34840566366177a84b0d8b7ae90@mail.gmail.com>
+Subject: RE: [RFC 01/16] blkcg:Introduce blkio.app_identifier knob to blkio controller
+To:     Tejun Heo <tj@kernel.org>, Hannes Reinecke <hare@suse.de>
+Cc:     Ming Lei <tom.leiming@gmail.com>,
+        James Smart <james.smart@broadcom.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ewan Milne <emilne@redhat.com>, mkumar@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sch=C3=B6nen Tag,
+Hi Tejun,
+Our main requirement is to track the bio requests coming from different VM
+/container applications  at the blk device layer(fc,scsi,nvme).
+By the time IO request comes to the blk device layer, the context of the
+application is lost and we can't track whose IO this belongs.
 
-Bitte entschuldigen Sie, dass Sie einen =C3=9Cberraschungsbrief geschrieben
-haben. Ich bin Herr Ahmed Muzashah, Account Manager bei einer
-Investmentbank hier in Burkina Faso. Ich habe ein sehr wichtiges
-Gesch=C3=A4ft, das ich mit Ihnen besprechen m=C3=B6chte. In meinem Konto is=
-t ein
-Kontoentwurf er=C3=B6ffnet Ich habe die M=C3=B6glichkeit, den verbleibenden
-Fonds (15,8 Millionen US-Dollar) von f=C3=BCnfzehn Millionen
-achthunderttausend US-Dollar eines meiner Bankkunden zu =C3=BCbertragen,
-der beim Zusammenbruch der Welt gestorben ist Handelszentrum in den
-Vereinigten Staaten am 11. September 2001.
+In our approach we used the block cgroup to achieve this requirement.
+Since Requests also have access to the block cgroup via
+bio->bi_blkg->blkcg, and from there we can get the VM UUID.
+Therefore we added the VM UUID(app_identifier) to struct blkcg and define
+the accessors in blkcg_files and blkcg_legacy_files.
 
-Ich m=C3=B6chte diese Mittel investieren und Sie unserer Bank f=C3=BCr dies=
-en
-Deal vorstellen. Alles, was ich ben=C3=B6tige, ist Ihre ehrliche
-Zusammenarbeit und ich garantiere Ihnen, dass dies unter einer
-legitimen Vereinbarung durchgef=C3=BChrt wird, die uns vor
-Gesetzesverst=C3=B6=C3=9Fen sch=C3=BCtzt Ich bin damit einverstanden, dass =
-40% dieses
-Geldes f=C3=BCr Sie als meinen ausl=C3=A4ndischen Partner, 50% f=C3=BCr mic=
-h und 10%
-f=C3=BCr die Schaffung der Grundlage f=C3=BCr die weniger Privilegien in Ih=
-rem
-Land bestimmt sind. Wenn Sie wirklich an meinem Vorschlag interessiert
-sind, werden weitere Einzelheiten der =C3=9Cbertragung ber=C3=BCcksichtigt =
-Sie
-werden an Sie weitergeleitet, sobald ich Ihre Bereitschaftsmail f=C3=BCr
-eine erfolgreiche =C3=9Cberweisung erhalte.
+Could you please let me know is there any another way where we can get the
+VM UUID info with the help of blkcg.
 
-Dein,
-Mr.Ahmed Muzashah,
+Regards,
+Muneendra.
+
+
+
+
+
+
+-----Original Message-----
+From: Tejun Heo [mailto:htejun@gmail.com] On Behalf Of Tejun Heo
+Sent: Wednesday, August 5, 2020 8:09 PM
+To: Hannes Reinecke <hare@suse.de>
+Cc: Ming Lei <tom.leiming@gmail.com>; James Smart
+<james.smart@broadcom.com>; Daniel Wagner <dwagner@suse.de>; Muneendra
+<muneendra.kumar@broadcom.com>; linux-block <linux-block@vger.kernel.org>;
+Linux SCSI List <linux-scsi@vger.kernel.org>; Paolo Bonzini
+<pbonzini@redhat.com>; Ewan Milne <emilne@redhat.com>; mkumar@redhat.com
+Subject: Re: [RFC 01/16] blkcg:Introduce blkio.app_identifier knob to
+blkio controller
+
+Hello,
+
+On Wed, Aug 05, 2020 at 08:33:19AM +0200, Hannes Reinecke wrote:
+> None of these are guaranteed to be either present or unique.
+> It's not uncommon to have VMs with more than one MAC address, and any
+> other unique identifier like system UUID is not required to be present.
+
+I have a really hard time seeing how this fits into block cgroup
+interface.
+The last time we did something similar (tagging from cgroup interface
+side) was for netcls and it ended poorly. There are basic problems with
+e.g.
+delegation as these things are at odds with everything else sharing the
+interface.
+
+My not-too-well informed suggestions are either building mapping somewhere
+in the stack or at least implement the interface where it fits better so
+that people who don't need app_identifier don't see them and preferably
+can disable them. I don't mind cgroup data structs carrying extra bits for
+stuff which want to make use of the cgroup tree but I'm a pretty firm nack
+on the proposed interface.
+
+Thanks.
+
+--
+tejun
