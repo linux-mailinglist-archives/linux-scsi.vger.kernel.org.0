@@ -2,139 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C3923D025
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 21:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4E923D281
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 22:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728401AbgHET3x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Aug 2020 15:29:53 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:59287 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728555AbgHERKL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Aug 2020 13:10:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596647407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XBRZHl7JCJFhcfupZL8iAhY/apUMRtB5oC1LWGAgU4A=;
-        b=BdzJi/1qxsjYplX9UHJnssT/2ipPnfKLyXNtuqAX0EdvC5yBvGeOWH0tkFtWUfQZRVCCP7
-        t4glj4Ud13UVyITwsXvJLny6e170e6e9PebDU5jGr+Qi+T1Y/H0X2Zm0Ty6w90ouiGlr+H
-        UgNupPu+ZtSu7YxmEUkQp5NZPSsBQx0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-206-BLY19M1LO4-lPDkv-Pp1VQ-1; Wed, 05 Aug 2020 09:44:03 -0400
-X-MC-Unique: BLY19M1LO4-lPDkv-Pp1VQ-1
-Received: by mail-wm1-f71.google.com with SMTP id z10so2725745wmi.8
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Aug 2020 06:44:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XBRZHl7JCJFhcfupZL8iAhY/apUMRtB5oC1LWGAgU4A=;
-        b=WzKCKukKVA0qwL/sCxuBg41e9ndgVU1kLaW4b2w9PQjVhYxSa8LxdVD/K2TQ/1t3xa
-         X0AUh+bieYsn8HsOhEhARClUmB6cboUVCRiEFLYDBMyQMhCIy4cAPSNFfTa6OaLT14HZ
-         BLPwp1m1PfsesceiQXznZbJ+ysmPsRL4QQMUWJXecGOz/fs2CVXD6wzpSdeQgI3j+o7k
-         ANEY5IeR2+6ugJbD9/v6B2mfhsd1lqhf6eaZ/8iJj2hC3AZRD3YFVGDrdxuI7aPNeQAx
-         zJG04BZqLlOrt+hnBq2Fuxw5GyWjAAgV1Q5wUDWjqUDWIzkQePhJEJQJTC6skKLJS3dh
-         X+LA==
-X-Gm-Message-State: AOAM532AxB7fugUP2/Ntq3xFZQOHJTX+LqINxtrDr9ryB6Nt4R46HVsV
-        tfNenfDhOQYYV7vuqGSVsvA1W7NxSFXqvtGwtY+s77npeB3sjhCtgYUQ5rVUA1UQZUQ+nfQ0YoW
-        lqkBb9Rzrg1SWyGfqn4VuDg==
-X-Received: by 2002:a7b:ca57:: with SMTP id m23mr3291805wml.35.1596635042169;
-        Wed, 05 Aug 2020 06:44:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxDiytpas+5HWe7CFND1zqnudLwtNEfOy8SdQ5eObOxwbDWWrns+xYAUPDW5UZJfGlbiTGXfw==
-X-Received: by 2002:a7b:ca57:: with SMTP id m23mr3291789wml.35.1596635041995;
-        Wed, 05 Aug 2020 06:44:01 -0700 (PDT)
-Received: from redhat.com (bzq-79-180-0-181.red.bezeqint.net. [79.180.0.181])
-        by smtp.gmail.com with ESMTPSA id x2sm3035450wrg.73.2020.08.05.06.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2020 06:44:01 -0700 (PDT)
-Date:   Wed, 5 Aug 2020 09:43:59 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH v3 16/38] virtio_scsi: correct tags for config space fields
-Message-ID: <20200805134226.1106164-17-mst@redhat.com>
-References: <20200805134226.1106164-1-mst@redhat.com>
+        id S1728720AbgHEUN0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Aug 2020 16:13:26 -0400
+Received: from sonic308-2.consmr.mail.bf2.yahoo.com ([74.6.130.41]:37597 "EHLO
+        sonic308-2.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726722AbgHEQXc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Aug 2020 12:23:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1596644611; bh=vSZ7gQ8F13hDNYtYk6t77g8qrdmtAY1S6LJUlA/r/r4=; h=Date:From:Reply-To:Subject:References:From:Subject; b=BMJPFi/NdyQjlhJBBa0zLV4Rf56Hksp/PEhdKoTIsjr1TBvYkjWqsTBgZPWXOjMpI8Y3UulftTDqPi3GXqnqzBxGpsFMv0pZ04xE2vnV4hmZaQ1QfriyKl7x7KnnOHx2ZgV4rR1s2TAL5stf4QLyyISARbwoCz5OjzN32wW02hKDugKT/OqL8QidxTdB3EKaN6+OSzP3MrSre7Qerv6WWKAFh4mm5g1A6D0ojrVNZEhwFWOpz1uK6Z8cWstm9SQ89DKZ4116FnSrob/0YONXb26WZ9P1RHm1M86f9UGoJCnkkiSPnHuXKkn4+ysAfKZ0FjIiw0MqoqfI5nJSwKbwrQ==
+X-YMail-OSG: ZZI2drYVM1n9gqZNlEmxeMLoS1P153_8JcURA_AUlLXSaK42v4Zdfb32aAnlWry
+ CD6AJB5PWTCqkmzc0dycpHWneNCQbkZ17cFEmLHDke_QgoNvj48zE0JzVQl3SavrCrKnup0zXFNn
+ Z6levpQJXvf6uh0GDkIYSsuHj.z9GABNUSKzBbvTcgx0z_k3zeOT6nvUDBr8jAPScfnKQK2oFiOO
+ xH8lihziKxVQO4rv5b01WirIzg.HCiRGt4vOKhrWUFUy0EW5lmdY0Y6JM7TMTUC40o3.gwa6DgJI
+ SvKB8oNRv3GdgRH_WMWCLHKlG4dSqxrrEOaxdC3ut2BRZuzVH2t2ecBKnQZeusBlTu4IOvM9BOtU
+ inl_zNxkxZU5jTF1JFWYRr2AnYvyYMuGeY2zeztAze4GuUS6Fwe6bMssfZTEehAiZ3HvBtCQVxCX
+ UKMEtV3JW3YcfoBVQvn.el6wRpKuoa51HvYJsbpd0WJyE8p5JvarrUvTlOXqQ7iuSLOc1UZTJ40R
+ sDeb..KsXqVTGFlGE9OwombHw417NPHvNwMf_zAuADvSH5yOEB6I33ZejFRPz_VIp.65H_2wb0ll
+ cpAktWziPRkDgt4j8FQVQIowaolDZ04rDvzqTmy6UHkkY9dqzBMw33b5y4VUUdENVyJ4iYf0xCZ1
+ OoYikz7a7pgQGmrtBrFHP7QiWojEYc_SmtL_0qvbGIdcz1dyY3_H3sTqDssYFjLqjJ5XL30KjngW
+ sHoHLFpHDAr5CO5_3inspiH_PnbRgzQRyRNbgm9QFVVXtDaad7.yJ4VdLHhW6NlhO5U9HvD7n88g
+ 3UkJGKEZk2F5TacboINCdZ1IE9mNW2LyBBsX2u4x03Y4Zwyg52VfU66F3BFyOy.X1nSP51c2hfTp
+ YYRfmMjGCsHRL4LgfSFIpiQ7WB2CeqoAwwQlm1jiMHZ3ukmFt2dZ.yUtA03mgKTDOFDw_iaXCfYH
+ 0Nf8iuRmDiGaUYaX.UeYmssxvAcwB_MVzwagASLIq5.SwCHucCsjJCrA1KPccgyYOYKVAR3bnLTN
+ kK0OM7WHAmXns_ozbchcP4n4LTFXQH4h09R7glw0_kdeUcxrpUhah36w_zu6HP2Pbri2xaBH6HdU
+ AYFNb5UzM4BdjSRKlBDYwipEsetdX_YiqtluBFtX1tSFoh9HOEh2gNx7f9t4k_BWZ6jnFR99C9kz
+ F3AwSMRXtIvTDJ26.lEvkoSRbLBkKoriD1XbSdjTAaTryTKyeAAgF2u_Cpz9UpSltIR1VJhWYZGQ
+ k0io7rF9Bk2VxiMtrULTEngG6nkFrZ2ffNdYf
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.bf2.yahoo.com with HTTP; Wed, 5 Aug 2020 16:23:31 +0000
+Date:   Wed, 5 Aug 2020 13:24:05 +0000 (UTC)
+From:   Mrs Faiza Mohammed <faizamo501@gmail.com>
+Reply-To: faiza_mo303@yahoo.com
+Message-ID: <1923981186.188535.1596633845646@mail.yahoo.com>
+Subject: Hello My Dear,
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200805134226.1106164-1-mst@redhat.com>
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1923981186.188535.1596633845646.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16436 YMailNodin Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101 Firefox/52.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Tag config space fields as having virtio endian-ness.
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
----
- drivers/scsi/virtio_scsi.c       |  4 ++--
- include/uapi/linux/virtio_scsi.h | 20 ++++++++++----------
- 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-index 0e0910c5b942..c36aeb9a1330 100644
---- a/drivers/scsi/virtio_scsi.c
-+++ b/drivers/scsi/virtio_scsi.c
-@@ -746,14 +746,14 @@ static struct scsi_host_template virtscsi_host_template = {
- 
- #define virtscsi_config_get(vdev, fld) \
- 	({ \
--		typeof(((struct virtio_scsi_config *)0)->fld) __val; \
-+		__virtio_native_type(struct virtio_scsi_config, fld) __val; \
- 		virtio_cread(vdev, struct virtio_scsi_config, fld, &__val); \
- 		__val; \
- 	})
- 
- #define virtscsi_config_set(vdev, fld, val) \
- 	do { \
--		typeof(((struct virtio_scsi_config *)0)->fld) __val = (val); \
-+		__virtio_native_type(struct virtio_scsi_config, fld) __val = (val); \
- 		virtio_cwrite(vdev, struct virtio_scsi_config, fld, &__val); \
- 	} while(0)
- 
-diff --git a/include/uapi/linux/virtio_scsi.h b/include/uapi/linux/virtio_scsi.h
-index cc18ef8825c0..0abaae4027c0 100644
---- a/include/uapi/linux/virtio_scsi.h
-+++ b/include/uapi/linux/virtio_scsi.h
-@@ -103,16 +103,16 @@ struct virtio_scsi_event {
- } __attribute__((packed));
- 
- struct virtio_scsi_config {
--	__u32 num_queues;
--	__u32 seg_max;
--	__u32 max_sectors;
--	__u32 cmd_per_lun;
--	__u32 event_info_size;
--	__u32 sense_size;
--	__u32 cdb_size;
--	__u16 max_channel;
--	__u16 max_target;
--	__u32 max_lun;
-+	__virtio32 num_queues;
-+	__virtio32 seg_max;
-+	__virtio32 max_sectors;
-+	__virtio32 cmd_per_lun;
-+	__virtio32 event_info_size;
-+	__virtio32 sense_size;
-+	__virtio32 cdb_size;
-+	__virtio16 max_channel;
-+	__virtio16 max_target;
-+	__virtio32 max_lun;
- } __attribute__((packed));
- 
- /* Feature Bits */
--- 
-MST
+Hello My Dear,
 
+Please do not feel disturbed for contacting you, based on the critical condition I find mine self though, it's not financial problem, but my health you might have know that cancer is not what to talk home about, I am married to Mr.Umair Mohammed who worked with Tunisia embassy in Burkina Faso for nine years before he died in the year 2012.We were married for eleven years without a child. He died after a brief illness that lasted for five days.
+
+Since his death I decided not to remarry, When my late husband was alive he deposited the sum of US$ 9.2m (Nine million two hundred thousand dollars) in a bank in Burkina Faso, Presently this money is still in bank. And My Doctor told me that I don't have much time to live because of the cancer problem, Having known my condition I decided to hand you over this fond to take care of the less-privileged people, you will utilize this money the way I am going to instruct herein. I want you to take 30 Percent of the total money for your personal use While 70% of the money will go to charity" people and helping the orphanage.
+
+I don't want my husband's efforts to be used by the Government. I grew up as an Orphan and I don't have anybody as my family member,
+
+I am expecting your response to private faiza_mo303@yahoo.com
+
+Regards,
+
+Mrs.Faiza Mohammed.
+written from Hospital.
