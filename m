@@ -2,94 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AA123C292
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 02:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4984B23C288
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 02:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgHEAXF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Aug 2020 20:23:05 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:59941 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726101AbgHEAXF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Aug 2020 20:23:05 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200805002301epoutp04fc02cc417392efca97d10bf183d41754~oN2aqozDL1047810478epoutp04X
-        for <linux-scsi@vger.kernel.org>; Wed,  5 Aug 2020 00:23:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200805002301epoutp04fc02cc417392efca97d10bf183d41754~oN2aqozDL1047810478epoutp04X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1596586982;
-        bh=qlNdJKxS6vjRNEiMmu428ar6fswYmiSCm+c/7glGFUc=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=E6oxyEImGOCEmwvFkNP+WDq6o4Wg2m9tfMl8jKsUYo8Ce2RfhFM9Yr/5Q740qa+yT
-         PX+Pq7ANbScCy3ERYJ//Z/ffnc7pXst307ZILFouAt1P67vOeoGh9PbeHq7SjXNcVy
-         AnHtjk+MhNZRsdJ2nfZOm4VbQJ9J8HcTZ8Mh3PAI=
-Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p4.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200805002301epcas1p4bd83ad50725ee1ba24824c5ff429a42c~oN2aOGZ3c1926719267epcas1p4a;
-        Wed,  5 Aug 2020 00:23:01 +0000 (GMT)
-Mime-Version: 1.0
-Subject: RE: Re: [PATCH v6 2/5] scsi: ufs: Add UFS-feature layer
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <8d0fe031-e941-1b4e-7596-301ebd36f06d@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <231786897.01596586981491.JavaMail.epsvc@epcpadp2>
-Date:   Wed, 05 Aug 2020 08:33:04 +0900
-X-CMS-MailID: 20200804233304epcms2p1a36cc6f2726b091573bb592e261a7961
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200713103423epcms2p8442ee7cc22395e4a4cedf224f95c45e8
-References: <8d0fe031-e941-1b4e-7596-301ebd36f06d@acm.org>
-        <7bcf45da-233b-0c38-b93a-99d205603e63@acm.org>
-        <231786897.01594636801601.JavaMail.epsvc@epcpadp1>
-        <963815509.21594636682161.JavaMail.epsvc@epcpadp2>
-        <231786897.01594637401708.JavaMail.epsvc@epcpadp1>
-        <20200722064112.GB21117@infradead.org>
-        <yq1h7tzg1lb.fsf@ca-mkp.ca.oracle.com>
-        <963815509.21595830981720.JavaMail.epsvc@epcpadp2>
-        <CGME20200713103423epcms2p8442ee7cc22395e4a4cedf224f95c45e8@epcms2p1>
+        id S1727792AbgHEAQn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Aug 2020 20:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726788AbgHEAQm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Aug 2020 20:16:42 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D88C06174A
+        for <linux-scsi@vger.kernel.org>; Tue,  4 Aug 2020 17:16:42 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id 25so14449905oir.0
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Aug 2020 17:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=tlaYwYCe4OZCejQbMYs2u0Xxn0ktVuFV1VwXoIMFOjHGQwjyLNcoBYxhfGfYy7BGWk
+         gmB6+3nn057k3kkmIRg5CLBOi/Zlt/DIXTnu4gLBimW3TRimfKAfx9Q8DFDw3jcMRw7z
+         ouCa+n2hnlvhxywg03pLY+RY1d/bAL+waGXTgTk6DeLK+lGAYy94eEUThe0MROupX6BK
+         W4beIuw9731C9QFjElHkGDv4T/n6nxhCniqztPLr7Fn90+QPU3cuXaIvqkfs9lgK2Dp8
+         SEKzRQJCQWwDeSD7xsbn3NJIWxl0Xe6tbimsseMnEMpxtEKJk1OAuZgRo22ATGZHestB
+         nAEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=JqftKt39rQsX/WM7UgUicXCLecP5QL45m7pga9Of9B4M7pirTSxgIdlBE+pM38D199
+         i7csW9NLXGpLc8hwXeH9uiWuwNVHq4WzpVl1SAdSF9PNqjokbyAdV3OUR7CQFfv6qH5y
+         lpvsQjxvNSK3QUBijBpgtCwcBeTHbvBrnU+2pLeUSLCV5BSwlgj88lF9yhs6APk51pSI
+         mw4CrLQRFRRJtovuFzu/93Sz5pMvr8fMcyDd6J/QCs9qDULM9fKgs4DjONmoBb1Jzqld
+         Tk15BODonAHILTTko+d3d7lgNxsPLn02WONvl8MK5zSgmOJmQ/FSJQmd9EeqZ83im7r/
+         hRow==
+X-Gm-Message-State: AOAM5310VKm3mxM0G/j62MUJOO8Rm78fFE2Ut2TErgSU/drCzosfCifs
+        hwjqknGrCpIg1StDr8EONcdzbGR7WSYftpO7BIg=
+X-Google-Smtp-Source: ABdhPJxCvDh0dllqqnAWzr6/gFl3mWtIxvEf/S5Z5pZHs/hnY9wI/ArZ7K6H/oZQEsm46QKI8kyXTaN1jFSe9KgozFM=
+X-Received: by 2002:aca:f106:: with SMTP id p6mr720707oih.169.1596586601538;
+ Tue, 04 Aug 2020 17:16:41 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6838:809:0:0:0:0 with HTTP; Tue, 4 Aug 2020 17:16:41
+ -0700 (PDT)
+Reply-To: sylviarobinson.usa@hotmail.com
+From:   Sylvia Robinson <lorirobison402@gmail.com>
+Date:   Wed, 5 Aug 2020 01:16:41 +0100
+Message-ID: <CAJ2n05F6ydrJWsbUJez856N4nWZU_jVV3+z3Z7Qb6-LGsXQT2g@mail.gmail.com>
+Subject: =?UTF-8?B?5oKo5aW977yM5oKo55yL5Yiw5oiR5Y+R57uZ5oKo55qE5raI5oGv5LqG5ZCX77yf?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bart,
-
-> Any idea how much time this work will take and when a new version will be
-> posted?
-
-I have plan to patch new version in this week.
-
-Thanks,
-
-Daejun
 
