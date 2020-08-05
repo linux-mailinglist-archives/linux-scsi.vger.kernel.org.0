@@ -2,110 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C590323D1CE
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Aug 2020 22:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8B223D436
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Aug 2020 01:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728973AbgHEUGg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Aug 2020 16:06:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53198 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727116AbgHEUGa (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 5 Aug 2020 16:06:30 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 3F402AC7C;
-        Wed,  5 Aug 2020 20:06:44 +0000 (UTC)
-From:   Enzo Matsumiya <ematsumiya@suse.de>
-To:     linux-scsi@vger.kernel.org
-Cc:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH] scsi: qla2xxx: use MBX_TOV_SECONDS for mailbox command timeout values
-Date:   Wed,  5 Aug 2020 17:05:46 -0300
-Message-Id: <20200805200546.22497-1-ematsumiya@suse.de>
-X-Mailer: git-send-email 2.28.0
+        id S1726005AbgHEXib (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Aug 2020 19:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725969AbgHEXi3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Aug 2020 19:38:29 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D169EC061575
+        for <linux-scsi@vger.kernel.org>; Wed,  5 Aug 2020 16:38:28 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id e5so21046909qth.5
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Aug 2020 16:38:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=tS465+e6GdpvKXllM7bMAFesYQVtVvr90Wm9oFWZvYA=;
+        b=SUpGuGhyy9MWMCjSY3MQXKQwn2vphZjE9gR1oXTVpRbSBjybhZl3fCgneev4QSO3FI
+         QlhGBfqL62kWE9DYryav6vu02+DI6jPWC9heHagIGcVqUoL+RIlBXokA0JXxecSJmbcl
+         I8nRjS15+WQlEd1BP7F7ojPGi4uYE3afafjqc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=tS465+e6GdpvKXllM7bMAFesYQVtVvr90Wm9oFWZvYA=;
+        b=Coc+haXZ7vwU6+6gr/jmdSFVyohcyegCli739CH1I4DCohuLO/PMbT5hIngxr5xpNZ
+         AaYGFgxx/UynZswBsfQRI43ke84nn0sPgiJ3oevwVRsmELV/hVIF3nS/BLV/IbsrrTNW
+         +05D1nkQ4+RNyj5kSTdnq6TLAZZenvL/aH0LpUI4yLAU/oD3eL0Bc5XKnO47LnXotKcB
+         rkPd2RVqIOPScalBcrUgT9yMb1KrvyLGX/+cQQN8iuRxO62PN02QuE8KVvCrtKPmcAwl
+         htona5D4nb/V7GExU1NC3xPZb52rP+f8ksjQFOFT2dsnWKXDiAxnOVh5BxnfdOG47GfI
+         AlAw==
+X-Gm-Message-State: AOAM532u9sXhrIsOBLGnlq0qYNNMSIfFyuVQHHQw8pWkTSGGOez18VMF
+        eTdkQuNZawmuSzNEEUbf5dV+Cg==
+X-Google-Smtp-Source: ABdhPJz4BHWcX7OF29gUAJUEkfOy/P6pLCcS6qg2O+FjGLpzvm8qQi14ba9FmEVrP9DSIu1QTDXWsA==
+X-Received: by 2002:aed:33e7:: with SMTP id v94mr5922334qtd.18.1596670707359;
+        Wed, 05 Aug 2020 16:38:27 -0700 (PDT)
+Received: from [192.168.1.42] (ip68-5-85-189.oc.oc.cox.net. [68.5.85.189])
+        by smtp.gmail.com with ESMTPSA id t12sm2799399qkt.56.2020.08.05.16.38.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Aug 2020 16:38:26 -0700 (PDT)
+Subject: Re: [RFC 16/16] lpfc: vmid: Introducing vmid in io path.
+To:     Hannes Reinecke <hare@suse.de>,
+        Muneendra <muneendra.kumar@broadcom.com>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     pbonzini@redhat.com, emilne@redhat.com, mkumar@redhat.com,
+        Gaurav Srivastava <gaurav.srivastava@broadcom.com>,
+        James Smart <jsmart2021@gmail.com>
+References: <1596507196-27417-1-git-send-email-muneendra.kumar@broadcom.com>
+ <1596507196-27417-17-git-send-email-muneendra.kumar@broadcom.com>
+ <61d2fd75-84ea-798b-aee9-b07957ac8f1b@suse.de>
+From:   James Smart <james.smart@broadcom.com>
+Message-ID: <08b9825b-6abb-c077-ac0d-bd63f10f2ac2@broadcom.com>
+Date:   Wed, 5 Aug 2020 16:38:20 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <61d2fd75-84ea-798b-aee9-b07957ac8f1b@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Improves readability of qla_mbx.c
+On 8/5/2020 12:16 AM, Hannes Reinecke wrote:
+> Well.
+>
+> Creating a VMID in the hotpath with a while() loop will be bogging 
+> down performance to no end.
+> I'd rather have restricted the ->queuecommand() function to a direct 
+> lookup.
+> If that fails (as the VMID isn't registered) we should kicking of a 
+> workqueue for registering the VMID and return BUSY.
+> Or tweak blkcg to register the VMID directly, and reject the command 
+> if the VMID isn't registered :-)
+>
+> Cheers,
+>
+> Hannes
 
-Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
----
- drivers/scsi/qla2xxx/qla_mbx.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+That's actually what's supposed to be happening. fastpath uses the uuid 
+to look up a vmid tag. If no vmid tag, kick off the fabric traffic that 
+will get one but don't wait for it to complete. Any io issued while that 
+process is occurring will be not be vmid tagged.    I'll circle back on 
+lpfc to make sure this is happening.
 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index df31ee0d59b2..b99eed55eb4a 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -5190,7 +5190,7 @@ qla2x00_read_ram_word(scsi_qla_host_t *vha, uint32_t risc_addr, uint32_t *data)
- 	mcp->mb[8] = MSW(risc_addr);
- 	mcp->out_mb = MBX_8|MBX_1|MBX_0;
- 	mcp->in_mb = MBX_3|MBX_2|MBX_0;
--	mcp->tov = 30;
-+	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
- 	rval = qla2x00_mailbox_command(vha, mcp);
- 	if (rval != QLA_SUCCESS) {
-@@ -5378,7 +5378,7 @@ qla2x00_write_ram_word(scsi_qla_host_t *vha, uint32_t risc_addr, uint32_t data)
- 	mcp->mb[8] = MSW(risc_addr);
- 	mcp->out_mb = MBX_8|MBX_3|MBX_2|MBX_1|MBX_0;
- 	mcp->in_mb = MBX_1|MBX_0;
--	mcp->tov = 30;
-+	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
- 	rval = qla2x00_mailbox_command(vha, mcp);
- 	if (rval != QLA_SUCCESS) {
-@@ -5650,7 +5650,7 @@ qla24xx_set_fcp_prio(scsi_qla_host_t *vha, uint16_t loop_id, uint16_t priority,
- 	mcp->mb[9] = vha->vp_idx;
- 	mcp->out_mb = MBX_9|MBX_4|MBX_3|MBX_2|MBX_1|MBX_0;
- 	mcp->in_mb = MBX_4|MBX_3|MBX_1|MBX_0;
--	mcp->tov = 30;
-+	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
- 	rval = qla2x00_mailbox_command(vha, mcp);
- 	if (mb != NULL) {
-@@ -5737,7 +5737,7 @@ qla82xx_mbx_intr_enable(scsi_qla_host_t *vha)
- 
- 	mcp->out_mb = MBX_1|MBX_0;
- 	mcp->in_mb = MBX_0;
--	mcp->tov = 30;
-+	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
- 
- 	rval = qla2x00_mailbox_command(vha, mcp);
-@@ -5772,7 +5772,7 @@ qla82xx_mbx_intr_disable(scsi_qla_host_t *vha)
- 
- 	mcp->out_mb = MBX_1|MBX_0;
- 	mcp->in_mb = MBX_0;
--	mcp->tov = 30;
-+	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
- 
- 	rval = qla2x00_mailbox_command(vha, mcp);
-@@ -5964,7 +5964,7 @@ qla81xx_set_led_config(scsi_qla_host_t *vha, uint16_t *led_cfg)
- 	if (IS_QLA8031(ha))
- 		mcp->out_mb |= MBX_6|MBX_5|MBX_4|MBX_3;
- 	mcp->in_mb = MBX_0;
--	mcp->tov = 30;
-+	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
- 
- 	rval = qla2x00_mailbox_command(vha, mcp);
-@@ -6000,7 +6000,7 @@ qla81xx_get_led_config(scsi_qla_host_t *vha, uint16_t *led_cfg)
- 	mcp->in_mb = MBX_2|MBX_1|MBX_0;
- 	if (IS_QLA8031(ha))
- 		mcp->in_mb |= MBX_6|MBX_5|MBX_4|MBX_3;
--	mcp->tov = 30;
-+	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
- 
- 	rval = qla2x00_mailbox_command(vha, mcp);
--- 
-2.28.0
+In the mean time - the most important patch to review is the cgroup 
+patch - patch1.
 
+If we wanted to speed the driver's io path up, one thing to consider is 
+adding a driver-settable value on the blkcg structure.  Once the fabric 
+traffic obtained the vmid, the driver would set the blkcg structure with 
+the value.  In this scenario though, as the vmid is destroyed as of link 
+down, the driver needs a way, independent of an io, to reach into the 
+blkcg struct to clear the vmid value.  We also need to be sure the blkcg 
+struct won't be on top of a multipath device or something such that the 
+blkcg struct may be referenced by a different scsi host - I assume we're 
+good in that area.
+
+-- james
