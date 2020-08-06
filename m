@@ -2,54 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0402723E16A
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Aug 2020 20:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C8923E1FF
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Aug 2020 21:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728328AbgHFStY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Aug 2020 14:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727868AbgHFStX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Aug 2020 14:49:23 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7EEC061574;
-        Thu,  6 Aug 2020 11:49:23 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id d14so45899727qke.13;
-        Thu, 06 Aug 2020 11:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MJ8ccO9lbYktITW/o79WANtILwBL30qXbRqoE9ItXOo=;
-        b=QbCdP6unh+l/hWMBO/NPIZ8fybGywwNRqzWhJqHKNhOvzCYSSHPeJlKtRVnvA7TsFS
-         FIbLR5QWwjXHhzszE2O2/mFTWeGOlKkd9NoMixPPRrGoLcoahJExIkRoy6SMVQVTqubo
-         Uh2cuB4TWonLlsZAwgIeqRAJkh5XYC6aAhxAN6/Kvf0eiUfhEGD16BUQtsOeLnpGW1fk
-         f4AhLjg2VkLc+ALTE0PKLueU7xioS0x7jdX/bSeBPd2/Sacs0nNhugzL1iv0LDgT6gQQ
-         ahBqNlZw3qgMCCyyiFy14XgcOyAmBvHcN+JaI9IbpMqzgWWkEwuBcm2thgffn+OJmOD4
-         uzng==
+        id S1726066AbgHFTUq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Aug 2020 15:20:46 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:57382 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726049AbgHFTUq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Aug 2020 15:20:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596741644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xksIODSgQJFquFghXdjFt8DevhlwMpk62x6LENq6tTk=;
+        b=ifaV5Tc//frOkcL0RgM5wqmVLNjmfnK0guaSG+kiUy3dtZoxenNRGQp2TrFnKfG6LI4EI3
+        W/b4kjCdduBtK1dZY8AQTLU320zGCufewJH4fc88fEUMBUxheKSZpoKe6nXNiT8GgJwhWm
+        cwUfXhum4eR2SumN2pDbF7TKxpogwxw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-294-t4Ylnl2sNEunG7BGWYI2Hw-1; Thu, 06 Aug 2020 15:20:43 -0400
+X-MC-Unique: t4Ylnl2sNEunG7BGWYI2Hw-1
+Received: by mail-wm1-f71.google.com with SMTP id h205so4487168wmf.0
+        for <linux-scsi@vger.kernel.org>; Thu, 06 Aug 2020 12:20:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=MJ8ccO9lbYktITW/o79WANtILwBL30qXbRqoE9ItXOo=;
-        b=RTHPCGMEzGTtKWckDiDrN6zB8/ivCVDfQhwyf25Iv710grJtF3eYOXb7tD0m4CVBmY
-         Ir66aK9jjcXssg5e27/orU4b5dkdX2gnxZs22tzmT4X2lg4i9LscaZwtGd1GcOBAsqQC
-         Re5EGUp650vrZ20UmPK5NDp792PShU0itrbU1GHUHu45xl2gvFPL5UddBF2A2yNgSl/y
-         z0FqWNumUNtsSWsOzyJ4R5nIe/JKUzMsRJMnRKIM3KC6p7xffmH29ksKSezYpKdxXXVZ
-         q25vAYkKAXcJbud20yT0+Fm66WeNwoICG/HSWh4uJ28e1tQgxUSfw1FZXecGeXy5zE3F
-         2njA==
-X-Gm-Message-State: AOAM530YRE/z3VqBAhpys5Sx64AH1q4Npbbqh4j4/i4emWy8Va9ZOOux
-        DcQhvIJOjHNLqCWk48HBZv0=
-X-Google-Smtp-Source: ABdhPJywOtekxMI0t0VU8N/DlILl7sl8pqy0Y6gmSpK/hzV34eQLoObVEaZ/XRiu9ATnVrQVSgf9KA==
-X-Received: by 2002:a37:4f4a:: with SMTP id d71mr9529841qkb.385.1596739761897;
-        Thu, 06 Aug 2020 11:49:21 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:2e8b])
-        by smtp.gmail.com with ESMTPSA id l66sm4642111qkd.62.2020.08.06.11.49.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2020 11:49:21 -0700 (PDT)
-Date:   Thu, 6 Aug 2020 14:49:20 -0400
-From:   Tejun Heo <tj@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xksIODSgQJFquFghXdjFt8DevhlwMpk62x6LENq6tTk=;
+        b=q8/FtcX/dMHqigLpjQxD9kBtJ4KA+Onid47/3hY0p84d7nFVdSX+CykDC2J+QGgWz8
+         p6RD5r2qzBNOOjPsa4XYxFqSiOdunKlCvkSjonJN/OsfNXmozeCsAyvc2Tbl5noUlxwL
+         /hYZ5mjHw12tQPvX4OEgNYh4Ga17KItJJzoxzxab/JNee7GkRUD6nGGam3sKKNk7GxHX
+         s1jLSuNTd33Dwi2me5a4wFUDDBe+iZAGrheSwR0fr1BCmboFfx1S3fEp9hvtfpn2+yXp
+         5B7GkTXZzXztr0s0J4M3iOksCoQzUWHD9zlMhBzTb0iQmtuhOwwTxLUT4GGzyMS7pioD
+         LGnw==
+X-Gm-Message-State: AOAM531JJnZ52wBwYaKHG9OAvFyCjZB9svJx2rPIs5AZrSxnGUerz1oJ
+        qi2BYVhMYT7NVoJDfk55wqaSvW54Yjd3SSqNT9OfRTlT4CYVL4t6kPe8LAMCKppBA6VwWeAf9OQ
+        FfcAUvWnpHtPgvUWOKy97Tg==
+X-Received: by 2002:a5d:43c4:: with SMTP id v4mr9107890wrr.426.1596741640884;
+        Thu, 06 Aug 2020 12:20:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzF2qvBkdbbAz82ivFuJFBiv5/5fq62E6i55Jt9AKWyBEns1rJTE6V6YIA9dfKiZ/KoJtfe/w==
+X-Received: by 2002:a5d:43c4:: with SMTP id v4mr9107873wrr.426.1596741640567;
+        Thu, 06 Aug 2020 12:20:40 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:7841:78cc:18c6:1e20? ([2001:b07:6468:f312:7841:78cc:18c6:1e20])
+        by smtp.gmail.com with ESMTPSA id d11sm7576859wrw.77.2020.08.06.12.20.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2020 12:20:40 -0700 (PDT)
+Subject: Re: [RFC 16/16] lpfc: vmid: Introducing vmid in io path.
+To:     Tejun Heo <tj@kernel.org>
 Cc:     Muneendra Kumar M <muneendra.kumar@broadcom.com>,
         James Smart <james.smart@broadcom.com>,
         Hannes Reinecke <hare@suse.de>, linux-block@vger.kernel.org,
@@ -57,8 +60,6 @@ Cc:     Muneendra Kumar M <muneendra.kumar@broadcom.com>,
         Gaurav Srivastava <gaurav.srivastava@broadcom.com>,
         James Smart <jsmart2021@gmail.com>,
         Ming Lei <tom.leiming@gmail.com>
-Subject: Re: [RFC 16/16] lpfc: vmid: Introducing vmid in io path.
-Message-ID: <20200806184920.GG4520@mtj.thefacebook.com>
 References: <1596507196-27417-17-git-send-email-muneendra.kumar@broadcom.com>
  <61d2fd75-84ea-798b-aee9-b07957ac8f1b@suse.de>
  <08b9825b-6abb-c077-ac0d-bd63f10f2ac2@broadcom.com>
@@ -69,37 +70,43 @@ References: <1596507196-27417-17-git-send-email-muneendra.kumar@broadcom.com>
  <b7fb1e9a-49c4-f639-475a-791a195be46b@redhat.com>
  <20200806145901.GE4520@mtj.thefacebook.com>
  <8850c528-725f-c89a-cdc6-a9abada80a69@redhat.com>
+ <20200806184920.GG4520@mtj.thefacebook.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <a2522463-daf1-ea45-1dbc-2e31eb8bced2@redhat.com>
+Date:   Thu, 6 Aug 2020 21:20:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8850c528-725f-c89a-cdc6-a9abada80a69@redhat.com>
+In-Reply-To: <20200806184920.GG4520@mtj.thefacebook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Aug 06, 2020 at 08:39:26PM +0200, Paolo Bonzini wrote:
-> On 06/08/20 16:59, Tejun Heo wrote:
-> >> If I understand correctly, your only objection is that you'd rather not
-> >> have it specified with a file under /sys/kernel/cgroup, and instead you
-> >> would prefer to have it implemented as a ioctl for a magic file
-> >> somewhere else in sysfs?  I don't think there is any precedent for this,
-> >> and I'm not even sure where that sysfs file would be.
-> > It just doesn't fit in the cgroupfs. I don't know where it should go for
-> > this specific case. That's for you guys to figure out. There are multiple
-> > precedences - e.g. how perf or bpf hooks into cgroup and others that I can't
-> > remember off the top of my head.
-> 
-> perf and bpf have file descriptors, system calls and data structures of
-> their own, here there is simply none: it's just an array of chars.  Can
-> you explain _why_ it doesn't fit in the cgroupfs?
+On 06/08/20 20:49, Tejun Heo wrote:
+>> perf and bpf have file descriptors, system calls and data structures of
+>> their own, here there is simply none: it's just an array of chars.  Can
+>> you explain _why_ it doesn't fit in the cgroupfs?
+> What's the hierarchical or delegation behavior?
 
-What's the hierarchical or delegation behavior? Why do the vast majority of
-people who don't have the hardware or feature need to see it? We can argue
-but I can pretty much guarantee that the conclusion is gonna be the same and
-it's gonna be a waste of time and energy for both of us.
+If a cgroup does not have an app identifier the driver should use the
+one from the closes parent that has one.
 
-Thanks.
+> Why do the vast majority of
+> people who don't have the hardware or feature need to see it? We can argue
+> but I can pretty much guarantee that the conclusion is gonna be the same and
+> it's gonna be a waste of time and energy for both of us.
 
--- 
-tejun
+I don't want to argue, I want to understand.  My standard is that a
+maintainer that rejects code explains a plan for integrating with his
+subsystem and/or points to existing code that does something similar,
+rather than handwaving it away as something "that I can't remember off
+the top of my head".
+
+Thanks,
+
+Paolo
+
