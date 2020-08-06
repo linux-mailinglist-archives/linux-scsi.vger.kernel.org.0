@@ -2,52 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9042B23DD2D
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Aug 2020 19:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53BB23DE05
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Aug 2020 19:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728507AbgHFRFD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Aug 2020 13:05:03 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:24472 "EHLO
+        id S1729805AbgHFRVR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Aug 2020 13:21:17 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:18198 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729780AbgHFREO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Aug 2020 13:04:14 -0400
+        by vger.kernel.org with ESMTP id S1729376AbgHFRVN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Aug 2020 13:21:13 -0400
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 076BAHjY021401
-        for <linux-scsi@vger.kernel.org>; Thu, 6 Aug 2020 04:11:04 -0700
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 076BAGGj021394
+        for <linux-scsi@vger.kernel.org>; Thu, 6 Aug 2020 04:12:00 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=keO6RQE7AHicSzwC/28V3NU5LTL/X5A7fx69ZebubgQ=;
- b=XRLGg6g/zgCAIq3MK1aWPgoBZP54IjRnGjutGTB3Kq4vjMxtifWEyOsjO9oKioEExxbj
- lyVuQM3JKjyX5SZ7wB2MXDDDvRl1GaegVVjhpjml2YhpPhHBS7x4IXFgdtjsDE5fxD3W
- lLRjI11XSC4GFlrSAlb+ED0+rNvrOl4sqWbUOiJM/O6z9TWzCCkP4D1dgHTiUQM/1DJ2
- ibHuqVQnyFq5RfCSxIjfakdsJ//AuVzricLXsXh5AO+nJA0+G8k/bOpFIHmuU0VWetc2
- 6AxpbXzxb7bCbipozI8Xl9oqaanBC9oLiUT3/4ftXAYcforJTc7FKlzeL3BBcTDe6GQT Iw== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0b-0016f401.pphosted.com with ESMTP id 32n8ff3x59-1
+ content-type; s=pfpt0818; bh=QU1riLo7tCDR2VuVGws1O5nRrxFfOCClgqgKHPL8tic=;
+ b=qq8k2ZQHBn0L0wpAY8g4dPjgsjkO6VqiWuqrVkfgAzNdyi6uDa5ygpblCIpsSZHotPAX
+ aPqhDKZNkViIcsGlt8pm9nqTrnVb+zhJOaePNLKS3SdPwAobHUz6V7VSFHHLlLPoKEwD
+ LtupzuaKvLsXE1ah3xoxfLzDq+LZ9aniM8tP75JNl1Gly76XxbaplP/PJqvETucHSYN+
+ CgMlGwXE2RMSENUrwnor429O3tBK2PcVel43u/WqAD7evPjwrTIBqe9FeXEltt4dMp5i
+ qWlpRPJvVPlfNZ91CFTMMkd/nLfCanYgH/TBrV8tlSouVPvaFZDSyy/vYKqo4kwELqqX Jg== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0b-0016f401.pphosted.com with ESMTP id 32n8ff3x6t-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 06 Aug 2020 04:11:04 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 Aug
- 2020 04:11:02 -0700
+        for <linux-scsi@vger.kernel.org>; Thu, 06 Aug 2020 04:12:00 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 Aug
+ 2020 04:11:52 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 Aug
+ 2020 04:11:51 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 Aug 2020 04:11:03 -0700
+ Transport; Thu, 6 Aug 2020 04:11:51 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id E19233F7043;
-        Thu,  6 Aug 2020 04:11:02 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 2798C3F703F;
+        Thu,  6 Aug 2020 04:11:51 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 076BB2Rh028474;
-        Thu, 6 Aug 2020 04:11:02 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 076BBpbf028490;
+        Thu, 6 Aug 2020 04:11:51 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 076BB2Sr028472;
-        Thu, 6 Aug 2020 04:11:02 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 076BBoO6028489;
+        Thu, 6 Aug 2020 04:11:50 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v2 01/11] qla2xxx: flush all sessions on zone disable
-Date:   Thu, 6 Aug 2020 04:10:04 -0700
-Message-ID: <20200806111014.28434-2-njavali@marvell.com>
+Subject: [PATCH v2 03/11] qla2xxx: Indicate correct supported speeds for Mezz card
+Date:   Thu, 6 Aug 2020 04:10:06 -0700
+Message-ID: <20200806111014.28434-4-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20200806111014.28434-1-njavali@marvell.com>
 References: <20200806111014.28434-1-njavali@marvell.com>
@@ -62,41 +65,52 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-On Zone Disable, certain switch would ignore all
-commands. This cause timeout for both switch
-scan command and abort of that command. On detection
-of this condition, all sessions will be shutdown.
+Correct the supported speeds for 16G Mezz card.
 
 Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_gs.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/scsi/qla2xxx/qla_gs.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index 42c3ad27f1cb..c5529da1df59 100644
+index d9ce8d31457a..8c30d9dbb48c 100644
 --- a/drivers/scsi/qla2xxx/qla_gs.c
 +++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -3734,6 +3734,18 @@ static void qla2x00_async_gpnft_gnnft_sp_done(srb_t *sp, int res)
- 		unsigned long flags;
- 		const char *name = sp->name;
- 
-+		if (res == QLA_OS_TIMER_EXPIRED) {
-+			/* switch is ignoring all commands.
-+			 * This might be a zone disable behavior.
-+			 * This means we hit 64s timeout.
-+			 * 22s GPNFT + 44s Abort = 64s
-+			 */
-+			ql_dbg(ql_dbg_disc, vha, 0xffff,
-+			       "%s: Switch Zone check please .\n",
-+			       name);
-+			qla2x00_mark_all_devices_lost(vha);
-+		}
+@@ -1505,11 +1505,11 @@ qla2x00_prep_ct_fdmi_req(struct ct_sns_pkt *p, uint16_t cmd,
+ static uint
+ qla25xx_fdmi_port_speed_capability(struct qla_hw_data *ha)
+ {
++	uint speeds = 0;
 +
- 		/*
- 		 * We are in an Interrupt context, queue up this
- 		 * sp for GNNFT_DONE work. This will allow all
+ 	if (IS_CNA_CAPABLE(ha))
+ 		return FDMI_PORT_SPEED_10GB;
+ 	if (IS_QLA28XX(ha) || IS_QLA27XX(ha)) {
+-		uint speeds = 0;
+-
+ 		if (ha->max_supported_speed == 2) {
+ 			if (ha->min_supported_speed <= 6)
+ 				speeds |= FDMI_PORT_SPEED_64GB;
+@@ -1536,9 +1536,16 @@ qla25xx_fdmi_port_speed_capability(struct qla_hw_data *ha)
+ 		}
+ 		return speeds;
+ 	}
+-	if (IS_QLA2031(ha))
+-		return FDMI_PORT_SPEED_16GB|FDMI_PORT_SPEED_8GB|
+-			FDMI_PORT_SPEED_4GB;
++	if (IS_QLA2031(ha)) {
++		if ((ha->pdev->subsystem_vendor == 0x103C) &&
++		    (ha->pdev->subsystem_device == 0x8002)) {
++			speeds = FDMI_PORT_SPEED_16GB;
++		} else {
++			speeds = FDMI_PORT_SPEED_16GB|FDMI_PORT_SPEED_8GB|
++				FDMI_PORT_SPEED_4GB;
++		}
++		return speeds;
++	}
+ 	if (IS_QLA25XX(ha))
+ 		return FDMI_PORT_SPEED_8GB|FDMI_PORT_SPEED_4GB|
+ 			FDMI_PORT_SPEED_2GB|FDMI_PORT_SPEED_1GB;
 -- 
 2.19.0.rc0
 
