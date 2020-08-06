@@ -2,115 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E53BB23DE05
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Aug 2020 19:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8042523DE72
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Aug 2020 19:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729805AbgHFRVR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Aug 2020 13:21:17 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:18198 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729376AbgHFRVN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Aug 2020 13:21:13 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 076BAGGj021394
-        for <linux-scsi@vger.kernel.org>; Thu, 6 Aug 2020 04:12:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=QU1riLo7tCDR2VuVGws1O5nRrxFfOCClgqgKHPL8tic=;
- b=qq8k2ZQHBn0L0wpAY8g4dPjgsjkO6VqiWuqrVkfgAzNdyi6uDa5ygpblCIpsSZHotPAX
- aPqhDKZNkViIcsGlt8pm9nqTrnVb+zhJOaePNLKS3SdPwAobHUz6V7VSFHHLlLPoKEwD
- LtupzuaKvLsXE1ah3xoxfLzDq+LZ9aniM8tP75JNl1Gly76XxbaplP/PJqvETucHSYN+
- CgMlGwXE2RMSENUrwnor429O3tBK2PcVel43u/WqAD7evPjwrTIBqe9FeXEltt4dMp5i
- qWlpRPJvVPlfNZ91CFTMMkd/nLfCanYgH/TBrV8tlSouVPvaFZDSyy/vYKqo4kwELqqX Jg== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 32n8ff3x6t-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 06 Aug 2020 04:12:00 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 Aug
- 2020 04:11:52 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 Aug
- 2020 04:11:51 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 Aug 2020 04:11:51 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 2798C3F703F;
-        Thu,  6 Aug 2020 04:11:51 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 076BBpbf028490;
-        Thu, 6 Aug 2020 04:11:51 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 076BBoO6028489;
-        Thu, 6 Aug 2020 04:11:50 -0700
-From:   Nilesh Javali <njavali@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v2 03/11] qla2xxx: Indicate correct supported speeds for Mezz card
-Date:   Thu, 6 Aug 2020 04:10:06 -0700
-Message-ID: <20200806111014.28434-4-njavali@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20200806111014.28434-1-njavali@marvell.com>
-References: <20200806111014.28434-1-njavali@marvell.com>
+        id S1730231AbgHFRZm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Aug 2020 13:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729460AbgHFRC7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Aug 2020 13:02:59 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F18C0698FE
+        for <linux-scsi@vger.kernel.org>; Thu,  6 Aug 2020 05:31:50 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id a24so22160020oia.6
+        for <linux-scsi@vger.kernel.org>; Thu, 06 Aug 2020 05:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=XJnGQ196bV3DG6WDX/7IGBMLELLOJ3Q8bWtsboroDLM=;
+        b=YLgp5kIilD8pmbKmsXH5m0rEms+wZ1NVhPWBe0FRs+ttAxnxM5JoQOCHiANs468qcm
+         jfbC/889zty4oq7MPZr+4fHEGWcvHeBIa9BsYZZT+b/BS553QJI0pWCrSDax/AjFjj03
+         gaVGQ9z417Sdn0qEiVTPYl4GQEl7zx9puTSo4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=XJnGQ196bV3DG6WDX/7IGBMLELLOJ3Q8bWtsboroDLM=;
+        b=FhS3jso4qGTtLG9h2a4S4MNE18EqGVHeWYAJ9ehmFHIHfhpzi5i+ULOsZHbf91/zFX
+         AfzrtmsbIL9nnftaBdjBCf3KBjSXiiuIfBo6qQEn5sSHAIsiii0fUg5YkiWJpd22o1rv
+         pJ276j02BcQ4N6Sehj3qZbN2zczy9rZOMQSD0wwluFPl352vDoQxfXvKUlWev7fRuF0k
+         2z46479DtlcEzAUvQ8cLaOK5iib5T0L7reSCQ5bCWw+IndjvY70AKPD9VUdrHJ3LP3Hx
+         ssY7cBx3sOIYOgw6ICe3RGEAsQTYRWtdfMS96td4stch5g+0QndQhkKXThn0YaCjOGK5
+         0o9g==
+X-Gm-Message-State: AOAM531MtWKUPNCQdX/gE2eIQBm4ohMNVXeru+9GKdCXRUmdfKyuZIly
+        pSH4G+GekQT3g1dZM0P20qtl7RkjqQjK05BpGFLXTA==
+X-Google-Smtp-Source: ABdhPJyH0/q1DwYdc78RBBSRXWb6p1cc7lF7eGuIw9zH5oLQ1X8ics0oScK4fD/ivmpcD0ouBnMbGpckr8zlxuFR/7w=
+X-Received: by 2002:aca:b988:: with SMTP id j130mr1723105oif.87.1596717108513;
+ Thu, 06 Aug 2020 05:31:48 -0700 (PDT)
+From:   Muneendra Kumar M <muneendra.kumar@broadcom.com>
+References: <1596507196-27417-1-git-send-email-muneendra.kumar@broadcom.com>
+ <1596507196-27417-2-git-send-email-muneendra.kumar@broadcom.com>
+ <20200804113130.qfi5agzilso3mlbp@beryllium.lan> <20200804142123.GA4819@mtj.thefacebook.com>
+ <b35e0e83-eb6c-4282-5142-22d9a996d260@broadcom.com> <CACVXFVPVM-xU0d2nETztPrS_EpacMy8A4x8FbShhLYt2iV_ouw@mail.gmail.com>
+ <227c7f27-c6c7-5db1-59ac-2dd428f5a42a@suse.de> <20200805143913.GC4819@mtj.thefacebook.com>
+ <c40bc34840566366177a84b0d8b7ae90@mail.gmail.com> <CACVXFVOYc9KAaLsQ1kPa_bW_MsUgcxhqec45f24pB62=r-KXPg@mail.gmail.com>
+In-Reply-To: <CACVXFVOYc9KAaLsQ1kPa_bW_MsUgcxhqec45f24pB62=r-KXPg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-06_06:2020-08-06,2020-08-06 signatures=0
+X-Mailer: Microsoft Outlook 15.0
+thread-index: AQIDyhmBPqdmqCKUdNTZliBUbPkt/AIVs741AOV8stoBvB2xRwGs7Aj/AfU+Z6cCXn8lCgHQWH25AVoqZXEB1thjAKhSey1A
+Date:   Thu, 6 Aug 2020 18:01:45 +0530
+Message-ID: <52249efd20f42271ef31767e84ac9b8c@mail.gmail.com>
+Subject: RE: [RFC 01/16] blkcg:Introduce blkio.app_identifier knob to blkio controller
+To:     Ming Lei <tom.leiming@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>, Hannes Reinecke <hare@suse.de>,
+        James Smart <james.smart@broadcom.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ewan Milne <emilne@redhat.com>, mkumar@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+Hi Ming Lei,
+Thanks for the input.
+We will consider the points which you and Tejun has suggested .
 
-Correct the supported speeds for 16G Mezz card.
+Regards,
+Muneendra.
 
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
----
- drivers/scsi/qla2xxx/qla_gs.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+-----Original Message-----
+From: Ming Lei [mailto:tom.leiming@gmail.com]
+Sent: Thursday, August 6, 2020 7:52 AM
+To: Muneendra Kumar M <muneendra.kumar@broadcom.com>
+Cc: Tejun Heo <tj@kernel.org>; Hannes Reinecke <hare@suse.de>; James Smart
+<james.smart@broadcom.com>; Daniel Wagner <dwagner@suse.de>; linux-block
+<linux-block@vger.kernel.org>; Linux SCSI List <linux-scsi@vger.kernel.org>;
+Paolo Bonzini <pbonzini@redhat.com>; Ewan Milne <emilne@redhat.com>;
+mkumar@redhat.com
+Subject: Re: [RFC 01/16] blkcg:Introduce blkio.app_identifier knob to blkio
+controller
 
-diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index d9ce8d31457a..8c30d9dbb48c 100644
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -1505,11 +1505,11 @@ qla2x00_prep_ct_fdmi_req(struct ct_sns_pkt *p, uint16_t cmd,
- static uint
- qla25xx_fdmi_port_speed_capability(struct qla_hw_data *ha)
- {
-+	uint speeds = 0;
-+
- 	if (IS_CNA_CAPABLE(ha))
- 		return FDMI_PORT_SPEED_10GB;
- 	if (IS_QLA28XX(ha) || IS_QLA27XX(ha)) {
--		uint speeds = 0;
--
- 		if (ha->max_supported_speed == 2) {
- 			if (ha->min_supported_speed <= 6)
- 				speeds |= FDMI_PORT_SPEED_64GB;
-@@ -1536,9 +1536,16 @@ qla25xx_fdmi_port_speed_capability(struct qla_hw_data *ha)
- 		}
- 		return speeds;
- 	}
--	if (IS_QLA2031(ha))
--		return FDMI_PORT_SPEED_16GB|FDMI_PORT_SPEED_8GB|
--			FDMI_PORT_SPEED_4GB;
-+	if (IS_QLA2031(ha)) {
-+		if ((ha->pdev->subsystem_vendor == 0x103C) &&
-+		    (ha->pdev->subsystem_device == 0x8002)) {
-+			speeds = FDMI_PORT_SPEED_16GB;
-+		} else {
-+			speeds = FDMI_PORT_SPEED_16GB|FDMI_PORT_SPEED_8GB|
-+				FDMI_PORT_SPEED_4GB;
-+		}
-+		return speeds;
-+	}
- 	if (IS_QLA25XX(ha))
- 		return FDMI_PORT_SPEED_8GB|FDMI_PORT_SPEED_4GB|
- 			FDMI_PORT_SPEED_2GB|FDMI_PORT_SPEED_1GB;
--- 
-2.19.0.rc0
+On Thu, Aug 6, 2020 at 1:15 AM Muneendra Kumar M
+<muneendra.kumar@broadcom.com> wrote:
+>
+> Hi Tejun,
+> Our main requirement is to track the bio requests coming from
+> different VM /container applications  at the blk device
+> layer(fc,scsi,nvme).
+> By the time IO request comes to the blk device layer, the context of
+> the application is lost and we can't track whose IO this belongs.
+>
+> In our approach we used the block cgroup to achieve this requirement.
+> Since Requests also have access to the block cgroup via
+> bio->bi_blkg->blkcg, and from there we can get the VM UUID.
+> Therefore we added the VM UUID(app_identifier) to struct blkcg and
+> define the accessors in blkcg_files and blkcg_legacy_files.
+>
+> Could you please let me know is there any another way where we can get
+> the VM UUID info with the help of blkcg.
 
+As Tejun suggested, the mapping between bio->bi_blkg->blkcg and the unique
+ID could be built in usage scope, such as fabric infrastructure, something
+like xarray/hash may help to do that without much difficulty.
+
+Thanks,
+Ming
