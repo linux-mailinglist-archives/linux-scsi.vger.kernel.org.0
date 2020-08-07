@@ -2,113 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1E923EC60
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 13:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAA023ECBC
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 13:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726398AbgHGLYz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Aug 2020 07:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbgHGLYz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 07:24:55 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1086C061574
-        for <linux-scsi@vger.kernel.org>; Fri,  7 Aug 2020 04:24:54 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 93so1335804otx.2
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Aug 2020 04:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:references:in-reply-to:mime-version:thread-index:date
-         :message-id:subject:to:cc;
-        bh=SEylcO++jh6H4UFuQXl3wGYWeZyruF7IyI8rBTkepFk=;
-        b=LiSQcG8z/iqeo/9A598jucjJAL73dvDRK6288yOYk3+YhQvFTtEVSBat23uBFXkap1
-         lS85krg5lqaxHpXw7nXVc755Y5nNreleJHP+IDP0Y1rucikKliEoW0zWE5iquNeultN3
-         LkH9DFUDfxaFrjJ+Q63wLXxboDxpA15KJ0W34=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:references:in-reply-to:mime-version
-         :thread-index:date:message-id:subject:to:cc;
-        bh=SEylcO++jh6H4UFuQXl3wGYWeZyruF7IyI8rBTkepFk=;
-        b=PuHVDZJt3w8LaxU3sz3wxzLsbs1Pc0zxMlGD7MmFhTj3xNK7B6cdu+zRWNZKpdiLBe
-         I8KOeN2XmhDWxGCdsnG/euDU79VNff3K/OUq8GOE9DFdbbDG11gzfdolnY5UtO3OCxlk
-         vd8+LRUkkzMGSAc7BM3w7ta3SMpwqfWGi9PWU9tPtw1F4xFWktuYRkKzPWOKCPuGXnTX
-         mq+ZYVGgP4OP6oJL0gf7kQyFVB+cNhAT4nzAtah3xxUvoPFLyqVQiu/JVscYMDjxWvyZ
-         9l7aR4lArfWz0xu630mhWlc7ONqnCkqiIudQ3B5WOBJBQ2k61J6lLAOXRAuzcfwguF3P
-         Eebw==
-X-Gm-Message-State: AOAM533P3a9HQbqJbqmcUadKHuIgBTniverhBRCBzvMYpcZZy2uG+sRB
-        Ee2uKztoag69M5kSqYDEBUhajkSBuuNZj4LExsYTeQ==
-X-Google-Smtp-Source: ABdhPJxIrUiQPh51NoyyrtH9vj7WBd2lxvcr4UhkIue4/0uNaPwU12z/bDdfaA+nM2WF2gX4SUWWO+oumjlhiSOQlfQ=
-X-Received: by 2002:a05:6830:1e71:: with SMTP id m17mr11775246otr.188.1596799492006;
- Fri, 07 Aug 2020 04:24:52 -0700 (PDT)
-From:   Muneendra Kumar M <muneendra.kumar@broadcom.com>
-References: <1596507196-27417-1-git-send-email-muneendra.kumar@broadcom.com>
- <1596507196-27417-17-git-send-email-muneendra.kumar@broadcom.com>
- <61d2fd75-84ea-798b-aee9-b07957ac8f1b@suse.de> <08b9825b-6abb-c077-ac0d-bd63f10f2ac2@broadcom.com>
- <aa595605c2f776148e03a8e5dd69168a@mail.gmail.com> <227c5ba1-8a9c-3ec9-5a0f-662a4736c66f@redhat.com>
- <b3350b999d5500ddef49a25aafee2ea6@mail.gmail.com> <eec84df0-1cee-e386-c18e-73ac8e0b89a3@redhat.com>
-In-Reply-To: <eec84df0-1cee-e386-c18e-73ac8e0b89a3@redhat.com>
+        id S1728004AbgHGLnn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Aug 2020 07:43:43 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:5424 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726466AbgHGLnm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 07:43:42 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 077AoDXH009460
+        for <linux-scsi@vger.kernel.org>; Fri, 7 Aug 2020 04:07:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=pfpt0818; bh=8GkOwEejP+caaAPh5n9wDVGPztdnEXLd61IMOULuKm8=;
+ b=OW0H65Io8WSzbqXvsQ44jAw3CSohkEMZX+ct5KBLjpm8hts5OP9+RluJrogYouRvAbfX
+ ciqewB1JBaXkhSLxXkpZSbpugc2kBiVSiOWogGbp6a4ZbjTdiw+g18Yz2bz14WIy3J9G
+ RPMbAjf6GAxbyCn5EPU/1aQdYmccIOc92lSIJZveMXEr5amaqfM/DbDDJxdWqpH4SP0X
+ 1+dK+3grEb7pr0V5PFMCyqiBZ9DaS0kYiJuiIUIj5886/XPfVcmRYkYzvEPBcfuGXBMf
+ 0lG1qO24IzYnyWkemblfCMWdfrbBdrU90Uc9prsUIpChtDxdXcfZ7sFawL1M+LyLCu2N 9g== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 32s3c98g8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Fri, 07 Aug 2020 04:07:47 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Aug
+ 2020 04:07:45 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Aug
+ 2020 04:07:45 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 7 Aug 2020 04:07:45 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id C21AD3F703F;
+        Fri,  7 Aug 2020 04:07:44 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 077B7ieq020012;
+        Fri, 7 Aug 2020 04:07:44 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 077B7id1020003;
+        Fri, 7 Aug 2020 04:07:44 -0700
+From:   Javed Hasan <jhasan@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>, <jhasan@marvell.com>
+Subject: [PATCH 1/7] qedf: Check for port type and role before processing an event.
+Date:   Fri, 7 Aug 2020 04:06:50 -0700
+Message-ID: <20200807110656.19965-2-jhasan@marvell.com>
+X-Mailer: git-send-email 2.12.0
+In-Reply-To: <20200807110656.19965-1-jhasan@marvell.com>
+References: <20200807110656.19965-1-jhasan@marvell.com>
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 15.0
-thread-index: AQIDyhmBPqdmqCKUdNTZliBUbPkt/AI5BKetAom9APICL6c0jAMHD3TmAjtZC5MBe/Ed2QIv9leoqFK+gzA=
-Date:   Fri, 7 Aug 2020 16:54:48 +0530
-Message-ID: <e76b12c664057adb51c14bf0663bb2f7@mail.gmail.com>
-Subject: RE: [RFC 16/16] lpfc: vmid: Introducing vmid in io path.
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        James Smart <james.smart@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Cc:     emilne@redhat.com, mkumar@redhat.com,
-        Gaurav Srivastava <gaurav.srivastava@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        Ming Lei <tom.leiming@gmail.com>, Tejun Heo <tj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-07_06:2020-08-06,2020-08-07 signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Paolo,
-Below are my replies.
+From: Saurav Kashyap <skashyap@marvell.com>
 
->> 3.As part of this interface user/deamon will provide the details of
->> VM such as UUID,PID on VM creation to the transport .
->> The VM process, or the container process, is likely to be
->> unprivileged and cannot obtain the permissions needed to do this;
->> therefore, you need to cope with the situation where there is no PID
->> yet in the cgroup, because the tool >that created the VM or container
->> might be initializing the cgroup, but it might not have started the
->> VM yet.  In that case there would be no PID.
->
-> Agreed.A
-> small doubt. If the VM is started (running)then we can have the PID and
-> we
-> can use the  PID?
->Yes, but it's too late when the VM is started.  In general there's no
->requirement that a cgroup is setup shortly before it is populated.
-This should be ok .
-The fabric  interface just provides a mechanism to store user specific data
-into a pid blkcg
-Before the daemon issues the UUID and pid to the fabric interface, it needs
-to check whether the VM is in running state or not.
-If it the VM is in running state then only it issues the VM details.
-And if the  cgroup's are not setup as you mentioned the interface will
-return a failure(with a proper logs) and the daemon will retry after some
-time.
-And this also helps us to keep track of PID to UUID mapping at daemon level.
+ The rport lock get initialized during offload. If the no FCP or
+ non target rport got logout then this rport will be uninitiazed.
+ Kasan was complaining because of it.
+=========
+[   14.384434] the code is fine but needs lockdep annotation.
+[   14.384482] turning off the locking correctness validator.
+========
 
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: Javed Hasan <jhasan@marvell.com>
+---
+ drivers/scsi/qedf/qedf_main.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
->> Also what would the kernel API look like for this?  Would it have to
->> be driver-specific?
->
-> The API should be generic and it should not be driver-specific.
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index 47fc14f..86b9479 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -1536,6 +1536,17 @@ static void qedf_rport_event_handler(struct fc_lport *lport,
+ 		if (port_id == FC_FID_DIR_SERV)
+ 			break;
+ 
++		if (rdata->spp_type != FC_TYPE_FCP) {
++			QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_DISC,
++			    "No action since spp type isn't FCP\n");
++			break;
++		}
++		if (!(rdata->ids.roles & FC_RPORT_ROLE_FCP_TARGET)) {
++			QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_DISC,
++			    "Not FCP target so no action\n");
++			break;
++		}
++
+ 		if (!rport) {
+ 			QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_DISC,
+ 			    "port_id=%x - rport notcreated Yet!!\n", port_id);
+-- 
+1.8.3.1
 
->So it would be a new file in /dev, whose only function is to set up a UUID
->for a cgroup?
-
-I will work with James Smart and check whether we can use any of the
-existing interface for the same and will share the details.
-
->Paolo
-
-Regards,
-Muneendra.
