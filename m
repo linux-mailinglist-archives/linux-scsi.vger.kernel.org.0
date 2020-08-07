@@ -2,108 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6193423EF0D
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 16:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF2223EF35
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 16:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726291AbgHGOaF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Aug 2020 10:30:05 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:40833 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725815AbgHGOaE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 10:30:04 -0400
-Received: (qmail 228459 invoked by uid 1000); 7 Aug 2020 10:30:02 -0400
-Date:   Fri, 7 Aug 2020 10:30:02 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Can Guo <cang@codeaurora.org>, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCH] scsi: sd: add runtime pm to open / release
-Message-ID: <20200807143002.GE226516@rowland.harvard.edu>
-References: <1596034432.4356.19.camel@HansenPartnership.com>
- <d9bb92e9-23fa-306f-c7f2-71a81ab28811@puri.sm>
- <1596037482.4356.37.camel@HansenPartnership.com>
- <A1653792-B7E5-46A9-835B-7FA85FCD0378@puri.sm>
- <20200729182515.GB1580638@rowland.harvard.edu>
- <1596047349.4356.84.camel@HansenPartnership.com>
- <d3fe36a9-b785-a5c4-c90d-b8fa10f4272f@puri.sm>
- <20200730151030.GB6332@rowland.harvard.edu>
- <9b80ca7c-39f8-e52d-2535-8b0baf93c7d1@puri.sm>
- <425990b3-4b0b-4dcf-24dc-4e7e60d5869d@puri.sm>
+        id S1726399AbgHGOtZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 7 Aug 2020 10:49:25 -0400
+Received: from mail.furshetcrimea.ru ([193.27.243.220]:51882 "EHLO
+        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbgHGOtZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 10:49:25 -0400
+X-Greylist: delayed 4963 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 10:49:23 EDT
+Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
+  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
+  with ESMTPA id 11097384; Fri, 07 Aug 2020 16:34:33 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <425990b3-4b0b-4dcf-24dc-4e7e60d5869d@puri.sm>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Bei Interesse antworten.
+To:     Recipients <info@furshetcrimea.ru>
+From:   info@furshetcrimea.ru
+Date:   Fri, 07 Aug 2020 14:21:57 +0100
+Reply-To: mattiassjoborg751@gmail.com
+X-Antivirus: Avast (VPS 200807-0, 08/07/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <auto-000011097384@furshetcrimea.ru>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 11:51:21AM +0200, Martin Kepplinger wrote:
-> it's really strange: below is the change I'm trying. Of course that's
-> only for testing the functionality, nothing how a patch could look like.
-> 
-> While I remember it had worked, now (weirdly since I tried that mounting
-> via fstab) it doesn't anymore!
-> 
-> What I understand (not much): I handle the error with "retry" via the
-> new flag, but scsi_decide_disposition() returns SUCCESS because of "no
-> more retries"; but it's the first and only time it's called.
+Schöne Grüße,
 
-Are you saying that scmd->allowed is set to 0?  Or is scsi_notry_cmd() 
-returning a nonzero value?  Whichever is true, why does it happen that 
-way?
+Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
 
-What is the failing command?  Is it a READ(10)?
+Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
 
-> How can this be? What am I missing?
+Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
 
-It's kind of hard to tell without seeing the error messages or system 
-log or any debugging information.
+www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
 
-Alan Stern
+Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
 
-> --- a/drivers/scsi/scsi_error.c
-> +++ b/drivers/scsi/scsi_error.c
-> @@ -565,6 +565,13 @@ int scsi_check_sense(struct scsi_cmnd *scmd)
->  				return NEEDS_RETRY;
->  			}
->  		}
-> +		if (scmd->device->expecting_media_change) {
-> +			if (sshdr.asc == 0x28 && sshdr.ascq == 0x00) {
-> +				scmd->device->expecting_media_change = 0;
-> +				return NEEDS_RETRY;
-> +			}
-> +		}
-> +
->  		/*
->  		 * we might also expect a cc/ua if another LUN on the target
->  		 * reported a UA with an ASC/ASCQ of 3F 0E -
-> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-> index d90fefffe31b..bb583e403b81 100644
-> --- a/drivers/scsi/sd.c
-> +++ b/drivers/scsi/sd.c
-> @@ -3642,6 +3642,8 @@ static int sd_resume(struct device *dev)
->  	if (!sdkp)	/* E.g.: runtime resume at the start of sd_probe() */
->  		return 0;
-> 
-> +	sdkp->device->expecting_media_change = 1;
-> +
->  	if (!sdkp->device->manage_start_stop)
->  		return 0;
-> 
-> diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-> index bc5909033d13..f5fc1af68e00 100644
-> --- a/include/scsi/scsi_device.h
-> +++ b/include/scsi/scsi_device.h
-> @@ -169,6 +169,7 @@ struct scsi_device {
->  				 * this device */
->  	unsigned expecting_cc_ua:1; /* Expecting a CHECK_CONDITION/UNIT_ATTN
->  				     * because we did a bus reset. */
-> +	unsigned expecting_media_change:1;
->  	unsigned use_10_for_rw:1; /* first try 10-byte read / write */
->  	unsigned use_10_for_ms:1; /* first try 10-byte mode sense/select */
->  	unsigned set_dbd_for_ms:1; /* Set "DBD" field in mode sense */
+Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
+
+Freundliche Grüße,
+Mr.Mattias Sjoborg
+(Vorsitzender des Vergütungs- und Nominierungsausschusses)
+Tethys Petroleum.
+London, England
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
