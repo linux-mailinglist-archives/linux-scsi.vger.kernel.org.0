@@ -2,56 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6A323F087
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 18:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1974723F3BC
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 22:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbgHGQJe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 7 Aug 2020 12:09:34 -0400
-Received: from mail.furshetcrimea.ru ([193.27.243.220]:40572 "EHLO
-        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgHGQJd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 12:09:33 -0400
-Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
-  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
-  with ESMTPA id 11168816; Fri, 07 Aug 2020 19:21:43 +0300
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Bei Interesse antworten.
-To:     Recipients <info@furshetcrimea.ru>
-From:   info@furshetcrimea.ru
-Date:   Fri, 07 Aug 2020 17:09:06 +0100
-Reply-To: mattiassjoborg751@gmail.com
-X-Antivirus: Avast (VPS 200807-2, 08/07/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <auto-000011168816@furshetcrimea.ru>
+        id S1726542AbgHGUXr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Aug 2020 16:23:47 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:55384 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725893AbgHGUXq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 16:23:46 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 077KMT5A159458;
+        Fri, 7 Aug 2020 20:23:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=BAN5cRysrxcdY2devteh1yGv6RjCTRWAH7jQ28thMP8=;
+ b=i+JhloIXgUii5NuYpC20kx72JwCKRwj/G145525yuxQKVmhcDH6NDpNIrayM61l0ucxz
+ 85WJpEQ3aQIUGLkCajM3O6FLDQAlc2HIOJ9rCowhd/O8bcfqyGhiNJe9jLOq7jjhYnkN
+ 5biZdsenOAOdTHL/pqTOvikFBGmWfxIOzZqFgpKfeVkKkhSSq3OR5DbZTop1cDaUOd41
+ SDg9R9omFx504PCISLm/rkWu1ncneImhSAelMxEK66cbVKDivy3wGG2NEdvcEC2gDBs6
+ lq+dXh2Q/zQvzl9fwREkVgwWy5n4w+yAEponod2830uES/mBRNWA4EAQ0BLoB5w8jwQ0 9A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 32r6fxth0j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 07 Aug 2020 20:23:41 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 077KJE6B066713;
+        Fri, 7 Aug 2020 20:23:41 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 32qy8rcgje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 07 Aug 2020 20:23:41 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 077KNb8f021459;
+        Fri, 7 Aug 2020 20:23:39 GMT
+Received: from ol2.localdomain (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 07 Aug 2020 13:23:37 -0700
+From:   Mike Christie <michael.christie@oracle.com>
+To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        james.bottomley@hansenpartnership.com
+Cc:     Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] fcoe: fix io path allocation
+Date:   Fri,  7 Aug 2020 15:23:33 -0500
+Message-Id: <1596831813-9839-1-git-send-email-michael.christie@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9706 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008070143
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9706 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 impostorscore=0 adultscore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 clxscore=1015 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008070143
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Schöne Grüße,
+ixgbe_fcoe_ddp_setup can be called from the main IO path and is called
+with a spin_lock held, so we have to use GFP_ATOMIC allocation instead
+of GFP_KERNEL.
 
-Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+cc: Hannes Reinecke <hare@suse.de>
+---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_fcoe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
-
-Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
-
-www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
-
-Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
-
-Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
-
-Freundliche Grüße,
-Mr.Mattias Sjoborg
-(Vorsitzender des Vergütungs- und Nominierungsausschusses)
-Tethys Petroleum.
-London, England
-
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_fcoe.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_fcoe.c
+index ec7a11d..9e70b9a 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_fcoe.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_fcoe.c
+@@ -192,7 +192,7 @@ static int ixgbe_fcoe_ddp_setup(struct net_device *netdev, u16 xid,
+ 	}
+ 
+ 	/* alloc the udl from per cpu ddp pool */
+-	ddp->udl = dma_pool_alloc(ddp_pool->pool, GFP_KERNEL, &ddp->udp);
++	ddp->udl = dma_pool_alloc(ddp_pool->pool, GFP_ATOMIC, &ddp->udp);
+ 	if (!ddp->udl) {
+ 		e_err(drv, "failed allocated ddp context\n");
+ 		goto out_noddp_unmap;
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+1.8.3.1
 
