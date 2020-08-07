@@ -2,53 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 062AE23EC1B
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 13:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0009923EBFA
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Aug 2020 13:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728327AbgHGLNm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Aug 2020 07:13:42 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:61812 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726073AbgHGLHX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 07:07:23 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 077ApcZ2021192
-        for <linux-scsi@vger.kernel.org>; Fri, 7 Aug 2020 04:07:21 -0700
+        id S1728216AbgHGLJx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Aug 2020 07:09:53 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:37090 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726798AbgHGLIu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Aug 2020 07:08:50 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 077AoEsc009463
+        for <linux-scsi@vger.kernel.org>; Fri, 7 Aug 2020 04:08:10 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0818;
- bh=5azXv7jRCoKYSmXWDjvSu7Gt0T12qiDAMBp3qw8Gjww=;
- b=UnT0fsVnkZIN+aT6cCEYMo8hPvzem6rlo5yJw5E6+7O/ReMJECMv9FctVFlq8ZzcwG/w
- vYWn6lJ4LFG4mL7dQwAfvW6EVp5vutHxjYzwBzkfAhriQJSR1VV3PxorUzS7XTfyqTMv
- 5q2YF12+QVlLtCmHtvjF9IKMhu0wbO12VebhjLeEtEtILRdwHgG8YpM33wtBSw3MmBAJ
- FeD52nKq/K77vFzsr95WcFXCinHbfaiWAt2qSYKd9NCCX8TuE+d6ToBs30DTBcy4AK8V
- 9vnjJUZB9GDdST/Kw6AaoSn1oRtPGGNAmwKzziQrAA9I83x0QKc4njzcDUUhOSe6rvzj Hg== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 32n6ch1ew6-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=pfpt0818; bh=CLcZ/UE+uwL7RS9wtnHPTOS2aoJOqdXPbDMK2I/PGPM=;
+ b=ciPUGO5ecapUW/OXe9tI4ipbzG5n2ueqJoHZWFAluG1ri4GJCZZ3ufkwJ40NOtgZSFjt
+ EC1BLKeShcCAVXKLtjZCSz2kYtbyx2neAIGmudHJW2u/ZzjU/ef/JkXff6Uqa4JskEPb
+ BMN7fQpUnRE+XjmB3166mqShgYu9FT7YV2/874b07Ghs4qQTtxooroUUt8jAVAuh/ycY
+ UsRmomWn4ZHHfuYsWNql8zr3CjWp/MCELYcYOnFi3rEIzZlllC8uYe4YlJ/yvPOyQ24Q
+ mCdb52zDWA8wn1Caimm5ZiUippbIBi9qIpjeUlgCT79yZnjMzsJGlFBPaaOFOcxOZwnV 2g== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 32s3c98gae-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Aug 2020 04:07:21 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Aug
- 2020 04:07:20 -0700
+        for <linux-scsi@vger.kernel.org>; Fri, 07 Aug 2020 04:08:10 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Aug
+ 2020 04:08:08 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 7 Aug 2020 04:07:21 -0700
+ Transport; Fri, 7 Aug 2020 04:08:09 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id A32603F703F;
-        Fri,  7 Aug 2020 04:07:20 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id E11D73F703F;
+        Fri,  7 Aug 2020 04:08:08 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 077B7Kk2020000;
-        Fri, 7 Aug 2020 04:07:20 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 077B88Cr020016;
+        Fri, 7 Aug 2020 04:08:08 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 077B7Kun019999;
-        Fri, 7 Aug 2020 04:07:20 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 077B88Tr020015;
+        Fri, 7 Aug 2020 04:08:08 -0700
 From:   Javed Hasan <jhasan@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>, <jhasan@marvell.com>
-Subject: [PATCH 0/7] qedf: Misc fixes for the driver.
-Date:   Fri, 7 Aug 2020 04:06:49 -0700
-Message-ID: <20200807110656.19965-1-jhasan@marvell.com>
+Subject: [PATCH 2/7] qedf: check the validity of rjt frame before processing.
+Date:   Fri, 7 Aug 2020 04:06:51 -0700
+Message-ID: <20200807110656.19965-3-jhasan@marvell.com>
 X-Mailer: git-send-email 2.12.0
+In-Reply-To: <20200807110656.19965-1-jhasan@marvell.com>
+References: <20200807110656.19965-1-jhasan@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
@@ -58,27 +60,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This series has misc bug fixes and code enhancements.
+From: Saurav Kashyap <skashyap@marvell.com>
 
-Kindly apply this series to scsi-queue at your earliest convenience.
+This is reported by Klockwork.
 
-Thanks,
-~Javed
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Change-Id: I22a440fc4834bca858570dff8a3e41933121f831
+---
+ drivers/scsi/qedf/qedf_els.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Saurav Kashyap (7):
-  qedf: Check for port type and role before processing an event.
-  qedf: check the validity of rjt frame before processing.
-  qedf: Do not kill timeout work for original IO on RRQ completion.
-  qedf: Send cleanup even for RRQ on timeout.
-  qedf: Initiate cleanup for ELS commands as well.
-  qedf: Don't process ELS completion if its flushed or cleaned up.
-  qedf: Fix race between els completion and flushing els request.
-
- drivers/scsi/qedf/qedf_els.c  | 32 ++++++++++++++++++++++++++++----
- drivers/scsi/qedf/qedf_io.c   | 11 ++++++++++-
- drivers/scsi/qedf/qedf_main.c | 11 +++++++++++
- 3 files changed, 49 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/scsi/qedf/qedf_els.c b/drivers/scsi/qedf/qedf_els.c
+index 542ba94..ab4b1a9 100644
+--- a/drivers/scsi/qedf/qedf_els.c
++++ b/drivers/scsi/qedf/qedf_els.c
+@@ -883,6 +883,11 @@ static void qedf_rec_compl(struct qedf_els_cb_arg *cb_arg)
+ 	opcode = fc_frame_payload_op(fp);
+ 	if (opcode == ELS_LS_RJT) {
+ 		rjt = fc_frame_payload_get(fp, sizeof(*rjt));
++		if (!rjt) {
++			QEDF_ERR(&qedf->dbg_ctx, "payload get failed");
++			goto out_free_frame;
++		}
++
+ 		QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_ELS,
+ 		    "Received LS_RJT for REC: er_reason=0x%x, "
+ 		    "er_explan=0x%x.\n", rjt->er_reason, rjt->er_explan);
 -- 
 1.8.3.1
 
