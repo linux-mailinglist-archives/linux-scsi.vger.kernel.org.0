@@ -2,71 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEE8241F43
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Aug 2020 19:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07032422C4
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Aug 2020 01:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729205AbgHKRbW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Aug 2020 13:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S1726164AbgHKXL7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Aug 2020 19:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728862AbgHKRbV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Aug 2020 13:31:21 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7E1C06174A
-        for <linux-scsi@vger.kernel.org>; Tue, 11 Aug 2020 10:31:21 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id k18so7978188pfp.7
-        for <linux-scsi@vger.kernel.org>; Tue, 11 Aug 2020 10:31:21 -0700 (PDT)
+        with ESMTP id S1726503AbgHKXL7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Aug 2020 19:11:59 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104C9C061787
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Aug 2020 16:11:59 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id h22so465106otq.11
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Aug 2020 16:11:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=FJTzqMLZ4lC5+RisM/TMmepADV+7ki2rblWwHfHhPMk=;
-        b=iqTSyFsCV939w1tw/Hi9SP8x+wIacWSI412jj2kOKhpUhgJmDmPbemSx7CcfJtFVQ/
-         vAXR7BnDgcvQY9/lysh+03Lmn29NfQBmeP+9WEVbTQHH2JkKWI/cBqiBGWkggL4Wy/9q
-         F0mWVESkFROURFuFwvLEazkyGveXX7E7Tygd81Fbkw+SZo+8pI6QYINT9BEEl1pU9Whb
-         DGDGr7qHfP/xanUnSYdASQ4cCl741rlbzQDB7dMsLIFWd7/EL4qA8Pj3N7EMSMmtWQe0
-         EKUW1hbcOdiiiq3QN+66iSjhKU9B5v+ico4hQEvKMPCvQTKyJB1hZOpJfXU5BWCC3nWG
-         LmTQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sGbgkpKabSRtvJFDP2cpGjFLq6qGka/uiZ+Vq9DL/Ow=;
+        b=c+fmFqlTRhySOXMlvaJbso581+GBoEadjNClaEYTZEpjECXyeroSqJz0uvu/2+65RS
+         GljkKHWebLTvyXe+LX5oUd7YPsah8EBUA6JHSjDQxpvFuhki5b7wMxRNSsUbXHUCJnqq
+         SiAdhBT/u5SkBV0BNPQrO+NNNl2c3K4iF1EOQzL9Ozj/7uZ20bTMLYgzOeFbGVTz33UJ
+         Io3yO/6ahoYdq8CmnNmVbeddS3V92417Yyv0lhIvmABUcQdBRbm5+lb3tq9/u6AX0IHE
+         4FTDr409qB7h2z4Ao2Z/8iqpBOElJ568n7exBhDKyQRsW0gXenyYLgx+TTbk0US7++/G
+         k5WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=FJTzqMLZ4lC5+RisM/TMmepADV+7ki2rblWwHfHhPMk=;
-        b=q5cVPWZE9utPbXDm4HNxVFgD18kea7LRv+hw4CN+zhyLPqE/T3voQiCrttGrWSPYah
-         nOgOIMYjHRVP/sXv0rmSGGkB+epjmt8tBov8foJjOJi00+zGeOUaezaT5TEiFh8gDbqF
-         vcBSt5/Ibmw06wF2KvnB8tZNEtb7sI/PMYZxGWrMH8AND9i9AGrMdZNkM61jqifvGLkE
-         oTUeke17mbGskl7O+ylFsyzv4VqKcbh68cxZCag+7cDKgZxZTUry8SvU9JnYTCTYM3TG
-         GKLgVA+kZgkC5yQUcuAYPh9nymgbT8epc+Tq3gCnOgQpGsj51aWfVGAlsp0JcbgKdhKT
-         Ox9g==
-X-Gm-Message-State: AOAM533V4jBeIHzvePqgtpukVQYOIR+T8H09GX+X9iDnzyXZdYU0MeN4
-        iEDCTl/obZHVq2LO/vG9KbIOvtU54aPFGZq6mA==
-X-Google-Smtp-Source: ABdhPJxDiU1NVJSKcb9zG1xbwDIJ6WeYpQOjKtJ//xk3850MzrnGNTp4CgU5ncFQ7NBd420fLTXl0BxFQ2SubzGkMDI=
-X-Received: by 2002:a63:cd54:: with SMTP id a20mr1650560pgj.228.1597167080851;
- Tue, 11 Aug 2020 10:31:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sGbgkpKabSRtvJFDP2cpGjFLq6qGka/uiZ+Vq9DL/Ow=;
+        b=kocWAY7EsIRvCEKnL+KyL6HvpO/wGh4E0tDtO5sO5VAnzZRIyPbACKxW5k92zYdV2W
+         CwE/EpFy5gBufmimhYl15/xE07UB/s0ZIjtgIpQOY0BIjKq8BzIusA4AFMB6q9f29B0C
+         X6uRkwUD0TmFQK7pOE4S2dBhHIub0wf+iryK43IdItX2MQM3DPq64oBKAFlUmLeEuU2r
+         oy7BAmDRI1DjOYG6ADmkEhEArW01LL6LTF1dbBBuD4hjwEV9l3EGl3KLL5QrAecWl6nK
+         TsPWMsOGynG2EFIIZ64We33qjVGEcIS5+PdWy2ZYSQVVY3nlz/2FkIrlQtpK4IoxH18l
+         N4xQ==
+X-Gm-Message-State: AOAM531ucKruOaiT95ax00qEIPMEuF6STjCLxA2fFb2+tglaPSAWRsPk
+        /Ylm2VLn1rY69FIoO8xoDGHBgOqoZIC1Fz86Rz1dLktRWo0=
+X-Google-Smtp-Source: ABdhPJz1l9i2eKeP99P0PVUqqfuqJ5MZWZKQYvADHHuV2THqxFZqfBLD5UUNVDPsADND7VkQzMhYIL9g7q6OWzOUHNI=
+X-Received: by 2002:a05:6830:3196:: with SMTP id p22mr7492118ots.102.1597187518112;
+ Tue, 11 Aug 2020 16:11:58 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: cindym.manton@gmail.com
-Received: by 2002:a05:6a10:8369:0:0:0:0 with HTTP; Tue, 11 Aug 2020 10:31:18
- -0700 (PDT)
-From:   Cindy Maria Manton <cmaria.manton@gmail.com>
-Date:   Tue, 11 Aug 2020 17:31:18 +0000
-X-Google-Sender-Auth: 204G57jTCj6vWIEZEtIguNPfZJo
-Message-ID: <CAMOd3-t+SgGzE=THF2Fh+kgQ=kyEJ54278bQGWASyVM0V=737Q@mail.gmail.com>
-Subject: I did not receive any reply from you.
-To:     undisclosed-recipients:;
+References: <20190320094918.20234-1-rnayak@codeaurora.org> <20190320094918.20234-4-rnayak@codeaurora.org>
+In-Reply-To: <20190320094918.20234-4-rnayak@codeaurora.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 11 Aug 2020 16:11:46 -0700
+Message-ID: <CALAqxLV2TBk9ScUM6MeJMCkL8kJnCihjQ7ac5fLzcqOg1rREVQ@mail.gmail.com>
+Subject: Re: [RFC v2 03/11] tty: serial: qcom_geni_serial: Use OPP API to set
+ clk/perf state
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-scsi@vger.kernel.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Dear,
+On Wed, Mar 20, 2019 at 2:49 AM Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>
+> geni serial needs to express a perforamnce state requirement on CX
+> depending on the frequency of the clock rates. Use OPP table from
+> DT to register with OPP framework and use dev_pm_opp_set_rate() to
+> set the clk/perf state.
+>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+>
 
-How are you doing, hope all are well? I am Mrs. Cindy Maria Manton
-From the USA, Please would you check if you have received any of my
-emails? I have sent you several messages and I did not receive any
-reply from you, kindly let me know and send me a mail if your email is
-still working, I have an important message to discuss with you.
+Hey,
+  I just wanted to follow up on this patch, as I've bisected it
+(a5819b548af0) down as having broken qca bluetooth on the Dragonboard
+845c.
 
-Please write to me through my private email: " cindym.manton@gmail.com
+I haven't yet had time to debug it yet, but wanted to raise the issue
+in case anyone else has seen similar trouble.
 
-Warm Regards,
-Cindy Maria Manton.
+thanks
+-john
