@@ -2,75 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422DA242873
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Aug 2020 12:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29754242931
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Aug 2020 14:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgHLK4h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Aug 2020 06:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
+        id S1727871AbgHLMQ4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Aug 2020 08:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727841AbgHLKzj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Aug 2020 06:55:39 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787CAC061351
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Aug 2020 03:54:20 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id x2so1101374ybf.12
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Aug 2020 03:54:20 -0700 (PDT)
+        with ESMTP id S1726829AbgHLMQz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Aug 2020 08:16:55 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4603C061787
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Aug 2020 05:16:55 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id x24so1741158otp.3
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Aug 2020 05:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
-        b=eHtAeuj7bl+NqyA/LfsHaO+6oyAIxBkO+xaPddsTkjseO3G/4FMwJLJZ3d+diuxq/O
-         YffChG6lM/ut84kiK2GdqizvnXUTzqNXiKNeOCFMCHYmku2UrRGBn1y3T1OsOwMYOEKv
-         LBmDv2mjmGXbF3KwlPMtLwFc3xM6G+0bvX65YPeFgFlF5FcqfYFe6/ujnqj6ZwqtqzRx
-         CRsXYh37MAdT1niXt9HvyCtXxvFJMDNle0UTFpVQ2TzE6EUtu97WN+v6jDd+jOD/fhNs
-         NHhfILPNMrGbOKQ0K/3+sSXJpmcDIWxt9q3WVW0iG0t9vhqzhK4edfeGY8dzuTRSQOKD
-         0iWg==
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HtTUL4nNsElQLTbbRqmNno/usEQ2WZWXtzv03bulQN8=;
+        b=LDGeFBnW5rdu6GwSJzOWDDfNm6Yf8pJLkrjSBoUNblFidc8r0eo0Ma3zJ5L++HbG1C
+         VI4o6/QZ67SsDXPykr2E3QOfNobVdGXWQG9ARkVrl8+V4HBsYrvQUGbUwbay11PHFUG9
+         NAuS+UlYl6rxBSkGmSlmpsSHnWUK4vaSIChAE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
-        b=GP5ccwmieW839oFXkcAto17psinnNrM6FqjDv9yBQthday1pOlgWH4bbgvPGafnlZr
-         UlJb19l66cigF9TtUgktVlrLe5Zi2esZmji9YjusLOHO6nS6Af4RpqQlKnd576r6Xwhi
-         R0fUaCuIdaU0+26JzFYW9mnmPFQuWYpb5VJtM8+t+K3C1Hpg/k0ZxCNh1tEOeucsVsyF
-         dsqrrvgGv56jvh0vG9O17uRcxE5bnUXlfbTiAfJNTKqwNYNZjiKuAMF5pi89KZT2X8iL
-         WvmHZ1dyD233ExGX3CSNb6ZSSf5hDvhI0PRYRYa2IJmbw/98Dn7TIUzU8+e2l1TcuAk5
-         VaXw==
-X-Gm-Message-State: AOAM5333FDcRjIUUNUpFiXt8qHg+hKPeKYcUr8k9v9Pc61muFZhcvqwv
-        IUWuUt0gA+3j13v9jb95Dm8dgQD66QtHmEHf2YE=
-X-Google-Smtp-Source: ABdhPJxlNC8oUTUc5nL8/QI7Vh+VC7WTqcpf0G2Ip8kZv1WBdyY0VUrpvwJDuXU1Jl7EvF/Yh6KiQFr+AHCrWs7YdRU=
-X-Received: by 2002:a25:234a:: with SMTP id j71mr54485670ybj.504.1597229657758;
- Wed, 12 Aug 2020 03:54:17 -0700 (PDT)
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=HtTUL4nNsElQLTbbRqmNno/usEQ2WZWXtzv03bulQN8=;
+        b=C0BbP0ufu303mv9cUns51yPw2cpOedo8wcTVKZeyADUWpqB1c25Ot7Toah98JojIjH
+         pOqGp+jpoSAW0IEBBZwsPxrCdBJvn6zqJmhXjtq3byBdj6pAc3iB5Oc6+mXMdTV9yPIC
+         sUG9xcQbzYK1ozwITepj3QWOMRYL/CDlAuoNndoOnnmu7zGTNsJCIgGsyJXxg7gxuPU6
+         Lh+ucB88B4SaJPsyKyAP9cF/PMWuaD+AojbkDfZl/FPv2z2f4vSoFIWueALrmtLprNFM
+         isajMYx+A3CP/14aubs7Dso1FyW42m/3PFR1O4ADxF+p2Muzf2/VREI4Oo3JMeTGd0nO
+         oEpg==
+X-Gm-Message-State: AOAM532RjsqKjMLMvYwV+asGStbnUclgQ3tcgkTAQuGsaKXJeKvs2N6c
+        dJgHdJMHbyMCmPC4oUs4xt6ymlVnuGRgB64AKSY8cg==
+X-Google-Smtp-Source: ABdhPJx46uM94ViEYE8Di9+fo0dpKCwJObkdb91bSAqgqgb3DiFi4jU0ZRPdFIFBl6MIyLIMsZZY91LtZ8UL2AdHmDY=
+X-Received: by 2002:a9d:3c6:: with SMTP id f64mr9234877otf.364.1597234614828;
+ Wed, 12 Aug 2020 05:16:54 -0700 (PDT)
+From:   Muneendra Kumar M <muneendra.kumar@broadcom.com>
+References: <1596507196-27417-1-git-send-email-muneendra.kumar@broadcom.com>
+ <1596507196-27417-17-git-send-email-muneendra.kumar@broadcom.com>
+ <61d2fd75-84ea-798b-aee9-b07957ac8f1b@suse.de> <08b9825b-6abb-c077-ac0d-bd63f10f2ac2@broadcom.com>
+ <aa595605c2f776148e03a8e5dd69168a@mail.gmail.com> <227c5ba1-8a9c-3ec9-5a0f-662a4736c66f@redhat.com>
+ <b3350b999d5500ddef49a25aafee2ea6@mail.gmail.com> <eec84df0-1cee-e386-c18e-73ac8e0b89a3@redhat.com>
+ <e76b12c664057adb51c14bf0663bb2f7@mail.gmail.com> <b471b84f-25e9-39cb-41e0-1cc1af409a8a@redhat.com>
+ <7e76e1464e794a79861ea9846e0a5370@mail.gmail.com> <053466c4-7786-38aa-012f-926b68c85c8c@redhat.com>
+ <05697e72c1981838c5471e503b28dfc2@mail.gmail.com> <a4bf914b-c0ff-5876-890d-f1889308f6ea@redhat.com>
+In-Reply-To: <a4bf914b-c0ff-5876-890d-f1889308f6ea@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:229b:0:0:0:0 with HTTP; Wed, 12 Aug 2020 03:54:17
- -0700 (PDT)
-Reply-To: alexanadi0005@gmail.com
-From:   Alex Anadi <diplomatagency2011@gmail.com>
-Date:   Wed, 12 Aug 2020 11:54:17 +0100
-Message-ID: <CAG2PG9VSNH2ukcO6fsJhaDp9DqTRw4ujLo-DJjtej2T=gVdW3A@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQIDyhmBPqdmqCKUdNTZliBUbPkt/AI5BKetAom9APICL6c0jAMHD3TmAjtZC5MBe/Ed2QIv9leoAyMPjxIBrC+2XAGG5LXBAnT4Ng8CRdBEeAH6rm1zp/JJiLA=
+Date:   Wed, 12 Aug 2020 17:46:51 +0530
+Message-ID: <747480d2533f28e44dcd9a02f6398a60@mail.gmail.com>
+Subject: RE: [RFC 16/16] lpfc: vmid: Introducing vmid in io path.
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        James Smart <james.smart@broadcom.com>,
+        Hannes Reinecke <hare@suse.de>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     emilne@redhat.com, mkumar@redhat.com,
+        Gaurav Srivastava <gaurav.srivastava@broadcom.com>,
+        James Smart <jsmart2021@gmail.com>,
+        Ming Lei <tom.leiming@gmail.com>, Tejun Heo <tj@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Attention: Sir/Madam,
+Hi Paolo/Tejun,
+From the overall conversation the approach will be as below.
+Please let me know if I miss anything or any issue with the same.
 
-Compliments of the season.
+1)      blkcg will have a new field fc_app_id to store UUID /driver specifi=
+c
+information.
+2)      scsi transport will provide a new interface(sysfs) as
+register_vm_fabric
+3)      As part of this interface user will provide the details of UUID and
+the  open fd (cgroup associated
+ info with VM) to the new interface.
+4)      With VM provided cgroup info we need to find the associated blkcg
+and needs to
+update the UUID info in the fc_app_id.
+5)      Once we update the fc_app_id  all the io=E2=80=99s issued from VM w=
+ill have
+the UUID info as part of blkcg.
 
-I am Mr Alex Anadi a senior staff of Computer Telex Dept of central
-bank of Nigeria.
-
-I decided to contact you because of the prevailing security report
-reaching my office and the intense nature of polity in Nigeria.
-
-This is to inform you about the recent plan of federal government of
-Nigeria to send your fund to you via diplomatic immunity CASH DELIVERY
-SYSTEM valued at $10.6 Million United states dollars only, contact me
-for further details.
+If this approach is fine then I will make the necessary changes in my next
+version.
 
 Regards,
-Mr Alex Anadi.
+Muneendra.
+
+
+-----Original Message-----
+From: Paolo Bonzini [mailto:pbonzini@redhat.com]
+Sent: Wednesday, August 12, 2020 1:25 PM
+To: Muneendra Kumar M <muneendra.kumar@broadcom.com>; James Smart
+<james.smart@broadcom.com>; Hannes Reinecke <hare@suse.de>;
+linux-block@vger.kernel.org; linux-scsi@vger.kernel.org
+Cc: emilne@redhat.com; mkumar@redhat.com; Gaurav Srivastava
+<gaurav.srivastava@broadcom.com>; James Smart <jsmart2021@gmail.com>; Ming
+Lei <tom.leiming@gmail.com>; Tejun Heo <tj@kernel.org>
+Subject: Re: [RFC 16/16] lpfc: vmid: Introducing vmid in io path.
+
+
+On 10/08/20 14:13, Muneendra Kumar M wrote:
+> Agreed:
+> So from the user we need to provide UUID and the cgroup associated
+> info with VM to the kernel interface. Is this correct?
+
+Yes.
+
+> There is no issues with UUID  passing as one of the arg.
+> Coming to the other cgroup associated VM here are the options which we
+> can send
+>
+> 1)openfd:
+> We need a utility which opens the cgroup path and pass the fd details
+> to the interface.
+> And we can use the cgroup_get_from_fd() utility to get the associated
+> cgroup in the kernel.
+> Dependent on utilty.
+
+This looks good to me.
+
+Paolo
