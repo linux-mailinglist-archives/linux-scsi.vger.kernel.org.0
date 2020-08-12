@@ -2,93 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A01C2429A2
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Aug 2020 14:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2746242B76
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Aug 2020 16:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727977AbgHLMr7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Aug 2020 08:47:59 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:33523 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727885AbgHLMr6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Aug 2020 08:47:58 -0400
-X-UUID: 0b668b7f44ec4903bd54273e02aa5c5b-20200812
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=bT/jAjwepiqYg+UqK+VnkcQWqBcqzhsrRXln3mLJ3OA=;
-        b=r+ciiD/GnTii08JDaHVytZ8jM8vU17/HHu/lSqiaPu0oCZj9D9FFAqcVV2tLqEkAEz8gS6t/MN1j8+V4I4dIMJTejjmY/46EdMPDXOEuQ/lwsh98AZNzJGRAmHmcqRStbuTF/F+r62oz9todaJRZw8h9CKLktJbLHx+G5MupRT4=;
-X-UUID: 0b668b7f44ec4903bd54273e02aa5c5b-20200812
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1794925368; Wed, 12 Aug 2020 20:47:54 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 12 Aug 2020 20:47:51 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by mtkcas07.mediatek.inc
- (172.21.101.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Aug
- 2020 20:47:51 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Aug 2020 20:47:50 +0800
-Message-ID: <1597236472.26065.9.camel@mtkswgap22>
-Subject: Re: [PATCH v2 1/2] scsi: ufs: Cleanup completed request without
- interrupt notification
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Bean Huo <huobean@gmail.com>, <avri.altman@wdc.com>
-CC:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <asutoshd@codeaurora.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
-        <bvanassche@acm.org>, <tomas.winkler@intel.com>,
-        <cang@codeaurora.org>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Wed, 12 Aug 2020 20:47:52 +0800
-In-Reply-To: <20200811141859.27399-2-huobean@gmail.com>
-References: <20200811141859.27399-1-huobean@gmail.com>
-         <20200811141859.27399-2-huobean@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1726540AbgHLOhR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Aug 2020 10:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726434AbgHLOhQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Aug 2020 10:37:16 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C326AC061383;
+        Wed, 12 Aug 2020 07:37:15 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id kq25so2525061ejb.3;
+        Wed, 12 Aug 2020 07:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=eMsBZ/mNa/JxQKyQPdcReQp5+OXk8qYiQBle2FaJYWE=;
+        b=a7Xs8eiL9sQb5S+77grjIRHd+2a3QftR5KKYmOk2cEtBdF2hASeNP8VstAOIdPNi6o
+         a7LqDbYU+vFa+DQUeowupLv/W+x59t6uSIT0K8RFVH/ctwL19S2kwZvBpnkcSjhqGOdf
+         k00K5tsQEUN/6NArTteoAvVMZ6OlzMGsiOE3A/K4SlENEq3IDmUQJ/gifZQQBkypYERu
+         anbnaetgf33tJG4umNIvfu/+nAISsUXYOIO2g8SpsaxXUDlpXF8hZSkInHpzbAExoBAT
+         LsYTvRMnE47SXc1O8WwLBe9BbhycGbXP73A5f/grL9cIkkYbbQGgUizfGN6ct+Y0tMO2
+         1zuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=eMsBZ/mNa/JxQKyQPdcReQp5+OXk8qYiQBle2FaJYWE=;
+        b=g8VRAwaAsMyrWpUYDcnvLLC7PsRuH+jmNTAPVZWM7xzL2CBt5GVu3fMD7ogxBA0tGe
+         0ZhxIlj0tV1pPJuQij/mlrNIbcwydsA0DWPD77meSB+gVxF8aOSmnFtjaDrJov6jvkpa
+         NQ3GA3y6dURhYiueXvUROJNCZFYDDFAj7r8IDExmML/2LGIImQtvuM7TcHXileFBayND
+         zx9AAdXbuGt39vmuZ51Pt/I9FCjECirWqgXKkf8Vu1moBuYo0pPiEmdrnLjiYKkpwcrC
+         M8341bxP0bt7Dq7u1KQ2smgClY8NTCSFIncQ8F+/S+iw2jufM2H8XVLnxoaAp/SG+XAb
+         WNKA==
+X-Gm-Message-State: AOAM530MVTPzWUBoNm25KUHUMUoLFJojOp2p+Vd7GSyAo3kEHglS8RtR
+        efyAfcBdStMGo/Gt6uFEXexJFfiB
+X-Google-Smtp-Source: ABdhPJw5PoytbQ6YlGTPiwjYLYZwLQRCn9WeP1u5MjMGQcf0z+eviTLrmL7xDCD4PBY/gove+nh6PQ==
+X-Received: by 2002:a17:906:2f17:: with SMTP id v23mr55947eji.343.1597243034601;
+        Wed, 12 Aug 2020 07:37:14 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:598:b90f:8e5c:44c:d55b:5f94:2fc4])
+        by smtp.gmail.com with ESMTPSA id d20sm1661179ejj.10.2020.08.12.07.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2020 07:37:14 -0700 (PDT)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] make UFS dev_cmd more readable
+Date:   Wed, 12 Aug 2020 16:37:02 +0200
+Message-Id: <20200812143704.30245-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgQXZyaSwgQmVhbiwNCg0KT24gVHVlLCAyMDIwLTA4LTExIGF0IDE2OjE4ICswMjAwLCBCZWFu
-IEh1byB3cm90ZToNCj4gRnJvbTogU3RhbmxleSBDaHUgPHN0YW5sZXkuY2h1QG1lZGlhdGVrLmNv
-bT4NCj4gDQo+IElmIHNvbWVob3cgbm8gaW50ZXJydXB0IG5vdGlmaWNhdGlvbiBpcyByYWlzZWQg
-Zm9yIGEgY29tcGxldGVkIHJlcXVlc3QNCj4gYW5kIGl0cyBkb29yYmVsbCBiaXQgaXMgY2xlYXJl
-ZCBieSBob3N0LCBVRlMgZHJpdmVyIG5lZWRzIHRvIGNsZWFudXANCj4gaXRzIG91dHN0YW5kaW5n
-IGJpdCBpbiB1ZnNoY2RfYWJvcnQoKS4gT3RoZXJ3aXNlLCBzeXN0ZW0gbWF5IGJlaGF2ZQ0KPiBh
-Ym5vcm1hbGx5IGJ5IGJlbG93IGZsb3c6DQo+IA0KPiBBZnRlciB1ZnNoY2RfYWJvcnQoKSByZXR1
-cm5zLCB0aGlzIHJlcXVlc3Qgd2lsbCBiZSByZXF1ZXVlZCBieSBTQ1NJDQo+IGxheWVyIHdpdGgg
-aXRzIG91dHN0YW5kaW5nIGJpdCBzZXQuIEFueSBmdXR1cmUgY29tcGxldGVkIHJlcXVlc3QNCj4g
-d2lsbCB0cmlnZ2VyIHVmc2hjZF90cmFuc2Zlcl9yZXFfY29tcGwoKSB0byBoYW5kbGUgYWxsICJj
-b21wbGV0ZWQNCj4gb3V0c3RhbmRpbmcgYml0cyIuIEluIHRoaXMgdGltZSwgdGhlICJhYm5vcm1h
-bCBvdXRzdGFuZGluZyBiaXQiDQo+IHdpbGwgYmUgZGV0ZWN0ZWQgYW5kIHRoZSAicmVxdWV1ZWQg
-cmVxdWVzdCIgd2lsbCBiZSBjaG9zZW4gdG8gZXhlY3V0ZQ0KPiByZXF1ZXN0IHBvc3QtcHJvY2Vz
-c2luZyBmbG93LiBUaGlzIGlzIHdyb25nIGJlY2F1c2UgdGhpcyByZXF1ZXN0IGlzDQo+IHN0aWxs
-ICJhbGl2ZSIuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBTdGFubGV5IENodSA8c3RhbmxleS5jaHVA
-bWVkaWF0ZWsuY29tPg0KPiBSZXZpZXdlZC1ieTogQ2FuIEd1byA8Y2FuZ0Bjb2RlYXVyb3JhLm9y
-Zz4NCj4gU2lnbmVkLW9mZi1ieTogQmVhbiBIdW8gPGJlYW5odW9AbWljcm9uLmNvbT4NCg0KVGhh
-bmtzIEJlYW4ncyBwYXRjaCBpbnRlZ3JhdGlvbi4NCg0KTGlrZSBBdnJpJ3MgY29tbWVudCBpbiBo
-dHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExNjgzMzgxLw0KSSB0aGluayB5b3Ug
-Y291bGQgYWRkIEFja2VkLWJ5IHRhZyBmcm9tIEF2cmkuDQoNCg0KDQpIaSBBdnJpLA0KDQpQbGVh
-c2UgY29ycmVjdCBhYm92ZSBkZXNjcmlwdGlvbiBpZiByZXF1aXJlZC4NClRoYW5rcyBmb3IgeW91
-ciByZXZpZXchIDogKQ0KDQoNClRoYW5rcywNCg0KU3RhbmxleSBDaHUNCg0KPiAtLS0NCj4gIGRy
-aXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMgfCAzICsrLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5z
-ZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2Nz
-aS91ZnMvdWZzaGNkLmMgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQo+IGluZGV4IDMwNzYy
-MjI4NDIzOS4uNjZmZTgxNGM4NzI1IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vm
-c2hjZC5jDQo+ICsrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMNCj4gQEAgLTY0OTIsNyAr
-NjQ5Miw3IEBAIHN0YXRpYyBpbnQgdWZzaGNkX2Fib3J0KHN0cnVjdCBzY3NpX2NtbmQgKmNtZCkN
-Cj4gIAkJCS8qIGNvbW1hbmQgY29tcGxldGVkIGFscmVhZHkgKi8NCj4gIAkJCWRldl9lcnIoaGJh
-LT5kZXYsICIlczogY21kIGF0IHRhZyAlZCBzdWNjZXNzZnVsbHkgY2xlYXJlZCBmcm9tIERCLlxu
-IiwNCj4gIAkJCQlfX2Z1bmNfXywgdGFnKTsNCj4gLQkJCWdvdG8gb3V0Ow0KPiArCQkJZ290byBj
-bGVhbnVwOw0KPiAgCQl9IGVsc2Ugew0KPiAgCQkJZGV2X2VycihoYmEtPmRldiwNCj4gIAkJCQki
-JXM6IG5vIHJlc3BvbnNlIGZyb20gZGV2aWNlLiB0YWcgPSAlZCwgZXJyICVkXG4iLA0KPiBAQCAt
-NjUyNiw2ICs2NTI2LDcgQEAgc3RhdGljIGludCB1ZnNoY2RfYWJvcnQoc3RydWN0IHNjc2lfY21u
-ZCAqY21kKQ0KPiAgCQlnb3RvIG91dDsNCj4gIAl9DQo+ICANCj4gK2NsZWFudXA6DQo+ICAJc2Nz
-aV9kbWFfdW5tYXAoY21kKTsNCj4gIA0KPiAgCXNwaW5fbG9ja19pcnFzYXZlKGhvc3QtPmhvc3Rf
-bG9jaywgZmxhZ3MpOw0KDQo=
+From: Bean Huo <beanhuo@micron.com>
+
+Changelog:
+    v1 - v2:
+        1. remove original patch scsi: ufs: differentiate dev_cmd trace message
+        2. add new patch scsi: ufs: remove several redundant goto statements
+
+Bean Huo (2):
+  scsi: ufs: change ufshcd_comp_devman_upiu() to
+    ufshcd_compose_devman_upiu()
+  scsi: ufs: remove several redundant goto statements
+
+ drivers/scsi/ufs/ufshcd.c | 33 +++++++++------------------------
+ 1 file changed, 9 insertions(+), 24 deletions(-)
+
+-- 
+2.17.1
 
