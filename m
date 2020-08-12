@@ -2,87 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17384243044
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Aug 2020 22:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD68243114
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Aug 2020 00:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726542AbgHLU7g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Aug 2020 16:59:36 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:60198 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726030AbgHLU7g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 Aug 2020 16:59:36 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id F07128EE1DD;
-        Wed, 12 Aug 2020 13:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1597265976;
-        bh=h4YzGSszXeQbBlfJMeRgGO4TecYOwdgHlVfmb2bZH74=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Qpb0Yeqm5b1HbEzAj1cPsDU6uI+/K0ca08j9Fv3XCuSa1OUmlQP+mG77kPjVj3rhb
-         ANpzQNN1iWdlSiAh4v2LB4gvdADUAyRXDcbYgnBvQpe/13xpT3N+LRlaEKF8dO7ebF
-         MXd3KbZqYEmOYvKAtT06WZxhJh9So1PW0v3nsN6o=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id On9qWzP5aks6; Wed, 12 Aug 2020 13:59:35 -0700 (PDT)
-Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726526AbgHLWpX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Aug 2020 18:45:23 -0400
+Received: from mx1.activ.net ([80.96.1.5]:37848 "EHLO mx1.activ.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726485AbgHLWpX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 12 Aug 2020 18:45:23 -0400
+X-Greylist: delayed 415 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Aug 2020 18:45:22 EDT
+Received: from mx1.activ.net (localhost.localdomain [127.0.0.1])
+        by mx1.activ.net (Proxmox) with ESMTP id 668C73CEF;
+        Thu, 13 Aug 2020 01:38:18 +0300 (EEST)
+Received: from mail.activnet.info (mail.activnet.info [82.208.154.171])
+        by mx1.activ.net (Proxmox) with ESMTP id 5AA833CEB;
+        Thu, 13 Aug 2020 01:38:18 +0300 (EEST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.activnet.info (Postfix) with ESMTP id 353A3802FAA;
+        Thu, 13 Aug 2020 01:38:19 +0300 (EEST)
+X-Virus-Scanned: amavisd-new at chance.ro
+Received: from mail.activnet.info ([127.0.0.1])
+        by localhost (mail.activnet.info [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pxE89JkHpKCG; Thu, 13 Aug 2020 01:38:18 +0300 (EEST)
+Received: from newmail.uav.ro (cp3.activ.net [80.96.1.3])
+        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6D0078EE0C7;
-        Wed, 12 Aug 2020 13:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1597265975;
-        bh=h4YzGSszXeQbBlfJMeRgGO4TecYOwdgHlVfmb2bZH74=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=oFVXsMGH23dsf1Zko0UzEwuMJ/uGKUE+50mrU16zhZ86hnsD9JabJmokxjmC2ZTRU
-         QD29C3OT7yiIQTH/0AsDiDBOlk+RbEG+MTvuzBT4169QG1+WX9Ewumtc7t0wTLZRBb
-         neSPapb5dH1nUkMkSmluCm2QNjSvWGtxFV99629U=
-Message-ID: <1597265973.7293.50.camel@HansenPartnership.com>
-Subject: Re: [PATCH 1/3 for-next] pvscsi: Use coherent memory instead of dma
- mapping sg lists
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jim Gill <jgill@vmware.com>, pv-drivers@vmware.com
-Cc:     jejb@linux.ibj.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org
-Date:   Wed, 12 Aug 2020 13:59:33 -0700
-In-Reply-To: <20200812205404.GA17846@petr-dev3.eng.vmware.com>
-References: <20200812205404.GA17846@petr-dev3.eng.vmware.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        (Authenticated sender: stiinte.exacte@uav.ro)
+        by mail.activnet.info (Postfix) with ESMTP id 196F5802FA2;
+        Thu, 13 Aug 2020 01:38:14 +0300 (EEST)
+MIME-Version: 1.0
+Date:   Thu, 13 Aug 2020 00:38:10 +0200
+From:   Mavis <stiinte.exacte@uav.ro>
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?=E8=89=AF=E3=81=84=E3=83=8B=E3=83=A5=E3=83=BC=E3=82=B9?=
+Reply-To: maviswanczykbest@gmail.com
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <1aaaa214553d747e5ba0c6bdcfde89b9@uav.ro>
+X-Sender: stiinte.exacte@uav.ro
+Organization: Mavis
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is not the correct format for sending on behalf of someone else.
+こんにちは
 
-First there needs to be a from at the beginning separated by a blank
-line identifying the Author:
+758.7ドルの巨額の受賞者であるMavis Wanczykです。メガ·ミリオンズ
+Jackpotと私が直接あなたに200万ドル寄付します。
 
-From: Thomas Hellstrom <thellstrom@vmware.com>
+フルネームと携帯電話番号で返信する
 
-On Wed, 2020-08-12 at 13:54 -0700, Jim Gill wrote:
-> Use coherent memory instead of dma mapping sg lists each
-> time they are used. This becomes important with SEV/swiotlb where
-> dma mapping otherwise implies bouncing of the data. It also gets rid
-> of a point of potential failure.
-> 
-> Tested using a "bonnie++" run on an 8GB pvscsi disk on a
-> swiotlb=force
-> booted kernel.
-> 
-> Signed-off-by: Thomas Hellstrom <thellstrom@vmware.com>
-> [jgill@vmware.com: forwarding patch on behalf of thellstrom]
-
-Then we don't need this because the From: at the beginning both
-preserves the author information and makes it obvious
-
-> Acked-by: jgill@vmware.com
-
-And finally this needs to be a Signed-off-by: to comply with the DCO
-section (c).
-
-James
+Mavis Wanczyk
 
