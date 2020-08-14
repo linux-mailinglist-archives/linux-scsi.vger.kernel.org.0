@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FF4244763
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Aug 2020 11:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FE524475E
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Aug 2020 11:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726935AbgHNJux (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1726974AbgHNJux (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Fri, 14 Aug 2020 05:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726926AbgHNJux (ORCPT
+        with ESMTP id S1726932AbgHNJux (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Aug 2020 05:50:53 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675E4C061384;
-        Fri, 14 Aug 2020 02:50:50 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id o18so9292407eje.7;
-        Fri, 14 Aug 2020 02:50:50 -0700 (PDT)
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD1C061385;
+        Fri, 14 Aug 2020 02:50:51 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id cq28so6365700edb.10;
+        Fri, 14 Aug 2020 02:50:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Gn7ZCZ5XA2EnBwutA3QyCJrGM4TBiILm4xq3LoAVuYo=;
-        b=EP8BlC1m7ESQb0LiRVBTSi0SfQyg8WF2mynv9loNY561Yhhf/D+Vue44DNz2XU2dQj
-         yGO2RGEZWLDs5OXwwvBVj2guTv0LBMmo2yQiTrvbcUPAdwQjOekfzEF+XRZJaAkf0XVP
-         cpBk5S51FoEw4jA4gMwB/1j6srRiAqSU326sYTKArupqKSW/lXTcxgYAAE9fKkTDwiEq
-         rR0+Na7ShMdUjx5o+pss0trRqxNizRghuVc66f4YAY2dY9YHBEAFUmrVyfmHpFP7iP2e
-         dD+nMtzTei4ogUv87/ZUSkJnkY5zB6luawHG2PXLV3mLZhPH6f7USdTmThoeASWnnJus
-         wegA==
+        bh=8Ev4gYxdQJBPen5vjwhLdew8Hi5m1sLHmKk6HbAlxZ0=;
+        b=WJTRgBB5TMaJeKE2aPuBhSmJA+fDJlQK3zF9k/m2zWXnPa6Sh0SOVqRcjol8AEGtCM
+         jlT+FKlZuwe5+RCG/kC6vC3MwZV0UsRWqrMZj07h5k9iC03JDjxQOtOGVOBLU6wGVSgT
+         2FOLbBQvZao9huB51ZHaDkEjokLiENdcZbGk3VC7anY1d60XSAT9macoAik/whIqDxLk
+         sJfoQB/u7WBTeiLiJUyK353Oa5inbj/hgwKpXZw+DA/QOWR1HXXQOs5ZM+lqznOA8U4O
+         1w9Yne/gRldxnEECmplJUvYjkiyMFwG01dOe6jhbeGitMPis6QG5SVkd7nyZZZwoFIyJ
+         vKoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Gn7ZCZ5XA2EnBwutA3QyCJrGM4TBiILm4xq3LoAVuYo=;
-        b=NvGQaun2SInAWrAokzN/zj23QO64schg/XJBl9dbKJDCt4c5tOdX0WFvKAQHM3CuKr
-         oBpmmGqOoe8QnyU/2xrdigF2jNdAGf1mBeWC2jYPKKSoVNwe7HeaIgPz8K4rQW7ZBe6z
-         Pp53t4Ag4Su58cjQN+PvAEVq0PyL9siE/rNIvfQm9DuN/q1ptTQd9pOEnfCVkAPbyTAC
-         QZNczajrCajOtCmD/bGIHGsHSapp1plv979pfux8kqoepqHNMA62lL6uJW1qstkWA5x2
-         G6SGZpNc231gzwfA6qxrHiQVIO9lbUxUBd1uGMnO6zKD3Cpql/SoaMhbl72lIkwsIJVP
-         Ol5A==
-X-Gm-Message-State: AOAM532cNDOwn5Qr1CwcY3yX2FqaF8Z4tUhKYu8vkU61H8fptznb2GoN
-        kldHUufEkMtVqaoYLgMsV1M=
-X-Google-Smtp-Source: ABdhPJy6TPJ0JmPMsLba/2+wJTbSyMIPCqnc0YtGr0uvrDO07C0Gp7Luo+rZVIWZ5tuyUVPLSVi7ig==
-X-Received: by 2002:a17:906:15cc:: with SMTP id l12mr1643692ejd.7.1597398648848;
-        Fri, 14 Aug 2020 02:50:48 -0700 (PDT)
+        bh=8Ev4gYxdQJBPen5vjwhLdew8Hi5m1sLHmKk6HbAlxZ0=;
+        b=XLUPcfCfzk/XywT2HlrGJVL37/zPrfC9hE943AgfYHAZslnKudFNEwvQc22va9GeuU
+         8UG/cCXGuP1dMWXcJz90TFxjEpnECOeRLpIJmogU5AX1SgVUDb3tlHUlTj3UcyWkKlxP
+         f24Z1G/dCQ0SmKsoXwBGyB7LGjFCCv4VWnluXUfTvUQUOQaVmH0JC6tFlAgA2uEl4J2d
+         rVjIpj4eq0sHdc8sHbzJWhWh32Uf61gh7TmVMkrpHx0wthOnQxka3hdcd8ygHPxTzbdk
+         TiDsS7XkgCL+gHhnbElwBeE5JylcbYZAqRnubmfvtSg/8EGjwPJt/AwlfpJ2uNkSodCd
+         M6IQ==
+X-Gm-Message-State: AOAM531d4khb69wHmfE64RHrwykhOtiJ4xRyo11RpPB5prx3GO/dyxfT
+        k8DtIhJkCrWQf6m4/let3dc=
+X-Google-Smtp-Source: ABdhPJz3wkOyXQCS/InPYAr1DHg9y6xJ/3R8lEAION1T9cUzFG2wwJWLIoFUGnvcMfp0D6J6zCbybQ==
+X-Received: by 2002:a05:6402:325:: with SMTP id q5mr1419796edw.343.1597398650172;
+        Fri, 14 Aug 2020 02:50:50 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:598:8980:3d37:44c:d55b:5f94:2fc4])
-        by smtp.gmail.com with ESMTPSA id r25sm6016448edy.93.2020.08.14.02.50.47
+        by smtp.gmail.com with ESMTPSA id r25sm6016448edy.93.2020.08.14.02.50.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2020 02:50:48 -0700 (PDT)
+        Fri, 14 Aug 2020 02:50:49 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -53,9 +53,9 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/2] scsi: ufs: change ufshcd_comp_devman_upiu() to ufshcd_compose_devman_upiu()
-Date:   Fri, 14 Aug 2020 11:50:33 +0200
-Message-Id: <20200814095034.20709-2-huobean@gmail.com>
+Subject: [PATCH v3 2/2] scsi: ufs: remove several redundant goto statements
+Date:   Fri, 14 Aug 2020 11:50:34 +0200
+Message-Id: <20200814095034.20709-3-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200814095034.20709-1-huobean@gmail.com>
 References: <20200814095034.20709-1-huobean@gmail.com>
@@ -66,44 +66,88 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-ufshcd_comp_devman_upiu() alwasy make me confuse that it is a request
-completion calling function. Change it to ufshcd_compose_devman_upiu().
-
 Signed-off-by: Bean Huo <beanhuo@micron.com>
-Acked-by: Avri Altman <avri.altman@wdc.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 25 +++++--------------------
+ 1 file changed, 5 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 5f09cda7b21c..e3663b85e8ee 100644
+index e3663b85e8ee..79b216c012d3 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -2391,12 +2391,13 @@ static inline void ufshcd_prepare_utp_nop_upiu(struct ufshcd_lrb *lrbp)
+@@ -4256,10 +4256,8 @@ int ufshcd_make_hba_operational(struct ufs_hba *hba)
+ 		dev_err(hba->dev,
+ 			"Host controller not ready to process requests");
+ 		err = -EIO;
+-		goto out;
+ 	}
+ 
+-out:
+ 	return err;
  }
+ EXPORT_SYMBOL_GPL(ufshcd_make_hba_operational);
+@@ -5542,10 +5540,8 @@ static bool ufshcd_quirk_dl_nac_errors(struct ufs_hba *hba)
+ 			hba->saved_err &= ~UIC_ERROR;
+ 		/* clear NAC error */
+ 		hba->saved_uic_err &= ~UFSHCD_UIC_DL_NAC_RECEIVED_ERROR;
+-		if (!hba->saved_uic_err) {
++		if (!hba->saved_uic_err)
+ 			err_handling = false;
+-			goto out;
+-		}
+ 	}
+ out:
+ 	spin_unlock_irqrestore(hba->host->host_lock, flags);
+@@ -7604,12 +7600,10 @@ static int ufshcd_config_vreg(struct device *dev,
+ 		if (vreg->min_uV && vreg->max_uV) {
+ 			min_uV = on ? vreg->min_uV : 0;
+ 			ret = regulator_set_voltage(reg, min_uV, vreg->max_uV);
+-			if (ret) {
++			if (ret)
+ 				dev_err(dev,
+ 					"%s: %s set voltage failed, err=%d\n",
+ 					__func__, name, ret);
+-				goto out;
+-			}
+ 		}
+ 	}
+ out:
+@@ -7672,8 +7666,6 @@ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on)
+ 		goto out;
  
- /**
-- * ufshcd_comp_devman_upiu - UFS Protocol Information Unit(UPIU)
-+ * ufshcd_compose_devman_upiu - UFS Protocol Information Unit(UPIU)
-  *			     for Device Management Purposes
-  * @hba: per adapter instance
-  * @lrbp: pointer to local reference block
-  */
--static int ufshcd_comp_devman_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
-+static int ufshcd_compose_devman_upiu(struct ufs_hba *hba,
-+				      struct ufshcd_lrb *lrbp)
- {
- 	u8 upiu_flags;
- 	int ret = 0;
-@@ -2590,7 +2591,7 @@ static int ufshcd_compose_dev_cmd(struct ufs_hba *hba,
- 	ufshcd_prepare_lrbp_crypto(NULL, lrbp);
- 	hba->dev_cmd.type = cmd_type;
+ 	ret = ufshcd_toggle_vreg(dev, info->vccq2, on);
+-	if (ret)
+-		goto out;
  
--	return ufshcd_comp_devman_upiu(hba, lrbp);
-+	return ufshcd_compose_devman_upiu(hba, lrbp);
+ out:
+ 	if (ret) {
+@@ -7719,10 +7711,8 @@ static int ufshcd_init_vreg(struct ufs_hba *hba)
+ 		goto out;
+ 
+ 	ret = ufshcd_get_vreg(dev, info->vccq);
+-	if (ret)
+-		goto out;
+-
+-	ret = ufshcd_get_vreg(dev, info->vccq2);
++	if (!ret)
++		ret = ufshcd_get_vreg(dev, info->vccq2);
+ out:
+ 	return ret;
  }
+@@ -7866,12 +7856,7 @@ static int ufshcd_variant_hba_init(struct ufs_hba *hba)
  
- static int
+ 	err = ufshcd_vops_setup_regulators(hba, true);
+ 	if (err)
+-		goto out_exit;
+-
+-	goto out;
+-
+-out_exit:
+-	ufshcd_vops_exit(hba);
++		ufshcd_vops_exit(hba);
+ out:
+ 	if (err)
+ 		dev_err(hba->dev, "%s: variant %s init failed err %d\n",
 -- 
 2.17.1
 
