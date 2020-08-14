@@ -2,157 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 076EE244D25
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Aug 2020 18:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFD2244D36
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Aug 2020 19:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727894AbgHNQyH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Aug 2020 12:54:07 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:57343 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726270AbgHNQyH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 14 Aug 2020 12:54:07 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597424046; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=0agT3+BVjCUaOQoCutKPeNabu7umEQg+D+MeTbkr8i4=; b=hAX3fmHkYoXsHDlCc+g4myEiHu/LaljCaYAMeYMNOpRBzjl2OzVa68KY3otgiOBv2Ughm91C
- EwvY/Hs66KNxB96oYcfFketjMK1K9JMingiUR5jOvPdNqs/ZEFmTe0jwcpORni+eKedVOUuo
- ZTP/b1n+bY1YbrNY95TaHCwDdcI=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 5f36c1ae3f2ce11020983f5b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 14 Aug 2020 16:54:06
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E1B08C4339C; Fri, 14 Aug 2020 16:54:05 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from asutoshd-linux1.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: asutoshd)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6C86AC433C9;
-        Fri, 14 Aug 2020 16:54:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6C86AC433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=asutoshd@codeaurora.org
-Date:   Fri, 14 Aug 2020 09:54:02 -0700
-From:   Asutosh Das <asutoshd@codeaurora.org>
-To:     Bean Huo <huobean@gmail.com>
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] scsi: ufs: remove several redundant goto
- statements
-Message-ID: <20200814165402.GB1217@asutoshd-linux1.qualcomm.com>
-References: <20200814095034.20709-1-huobean@gmail.com>
- <20200814095034.20709-3-huobean@gmail.com>
+        id S1727998AbgHNRAd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Aug 2020 13:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbgHNRAc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Aug 2020 13:00:32 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6781C061384
+        for <linux-scsi@vger.kernel.org>; Fri, 14 Aug 2020 10:00:32 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id x24so8111964otp.3
+        for <linux-scsi@vger.kernel.org>; Fri, 14 Aug 2020 10:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=3InI+6m1exd0moo3wfXFMK7pUNV8JmrgJuLWGjOhowY=;
+        b=Gf+/cdvdAjU1AJ1pHn5gW9DThcQQ4/xsE5iRWBP9tfUwi6aaQIHld1r8SLXIXxtM4t
+         3wVvS8EW613t9x+JltaTEuAJpznSscZ9+XJ+KVUMFtb0wdlNmDfRSUE/xx2OuHXEoz/F
+         nG9i+qKW7/3/L8JnNiypDIL8VU4NBFqdI0zeLouq/ZjNK8yN1fc9Uu+Rs6cDkwSPHZls
+         ibm70H4YH22l7ue5hihr+YddNbGvEg/wnxZZk2DpTobdjlYSV3fTbhl2o7WtGVEo2b6V
+         UXnNNxL1duqis+Ryi36PB7ZjtxVp6i2vjQxsOb60w1lXgHSlhdN5MZl0SSCfdNWROnrt
+         dx7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=3InI+6m1exd0moo3wfXFMK7pUNV8JmrgJuLWGjOhowY=;
+        b=RMFIR9g7k7sWJ1kfJBKopnsWeuRbF+Htap9hNzq1WjQ0Fd4/xZt3w21/AAv8giu3N3
+         Jz88RPdmozME33qciRGDiJdihSrTNqG2BnlgmswplhjnP2UiLXoktlUpQdY4yFqE5mfe
+         fRDhWwFfLMd0yl21SqqwMyG/qCJpRsy+IChyOJPkosd5U4SFp/Nj7NujCZgfoMA6/cl1
+         mtGcVgvUvRwQT3a37hlp9XO8RfpZw2L1IKlKYQ8x+jiqcV6x+Iz4ybmQX/b+MEg5qLz8
+         ya9A8kYlHCk8vbZV5SE7c6sqYd1czoCvcXi73bdx0hChQ0xbWofKbt7ptbP8pRZBid4V
+         C8Pw==
+X-Gm-Message-State: AOAM532F25ctPBWSZ1Z7BKz0vYpNv+CNxFTZeVHftSYfPdEaNHwgw1Di
+        El6VYDV7PBjOMGVUMeAvcPbBu9m/rAGU6+VW5ds=
+X-Google-Smtp-Source: ABdhPJzsMEnauQTPghOrfGdV82ZXTI2/bCT9mrBDmkEebMR61C2GeqfvK6uF4uvtNhqqxZPtRgfon2iesUFw3xYtIiA=
+X-Received: by 2002:a05:6830:4a1:: with SMTP id l1mr2511959otd.205.1597424432097;
+ Fri, 14 Aug 2020 10:00:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200814095034.20709-3-huobean@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Received: by 2002:a9d:1912:0:0:0:0:0 with HTTP; Fri, 14 Aug 2020 10:00:31
+ -0700 (PDT)
+Reply-To: missnadiaabass6@gmail.com
+From:   "Miss.Nadia Abass" <jamesillia9@gmail.com>
+Date:   Fri, 14 Aug 2020 18:00:31 +0100
+Message-ID: <CAE4XmCChcAEHsV-uQntOzMs5Gc+n2yritNTdC+O685QFDE1WOw@mail.gmail.com>
+Subject: Greeting my dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Aug 14 2020 at 02:50 -0700, Bean Huo wrote:
->From: Bean Huo <beanhuo@micron.com>
->
->Signed-off-by: Bean Huo <beanhuo@micron.com>
+Greeting my dear,
 
-Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
+I am Miss.Nadia Abass. by name, The only daughter of late MR. MOGAMAT
+ASHRAF ABASS,  My father was the manager of one of the biggest oil and
+gas company here in Benin Republic, when was alive.
 
->---
-> drivers/scsi/ufs/ufshcd.c | 25 +++++--------------------
-> 1 file changed, 5 insertions(+), 20 deletions(-)
->
->diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
->index e3663b85e8ee..79b216c012d3 100644
->--- a/drivers/scsi/ufs/ufshcd.c
->+++ b/drivers/scsi/ufs/ufshcd.c
->@@ -4256,10 +4256,8 @@ int ufshcd_make_hba_operational(struct ufs_hba *hba)
-> 		dev_err(hba->dev,
-> 			"Host controller not ready to process requests");
-> 		err = -EIO;
->-		goto out;
-> 	}
->
->-out:
-> 	return err;
-> }
-> EXPORT_SYMBOL_GPL(ufshcd_make_hba_operational);
->@@ -5542,10 +5540,8 @@ static bool ufshcd_quirk_dl_nac_errors(struct ufs_hba *hba)
-> 			hba->saved_err &= ~UIC_ERROR;
-> 		/* clear NAC error */
-> 		hba->saved_uic_err &= ~UFSHCD_UIC_DL_NAC_RECEIVED_ERROR;
->-		if (!hba->saved_uic_err) {
->+		if (!hba->saved_uic_err)
-> 			err_handling = false;
->-			goto out;
->-		}
-> 	}
-> out:
-> 	spin_unlock_irqrestore(hba->host->host_lock, flags);
->@@ -7604,12 +7600,10 @@ static int ufshcd_config_vreg(struct device *dev,
-> 		if (vreg->min_uV && vreg->max_uV) {
-> 			min_uV = on ? vreg->min_uV : 0;
-> 			ret = regulator_set_voltage(reg, min_uV, vreg->max_uV);
->-			if (ret) {
->+			if (ret)
-> 				dev_err(dev,
-> 					"%s: %s set voltage failed, err=%d\n",
-> 					__func__, name, ret);
->-				goto out;
->-			}
-> 		}
-> 	}
-> out:
->@@ -7672,8 +7666,6 @@ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on)
-> 		goto out;
->
-> 	ret = ufshcd_toggle_vreg(dev, info->vccq2, on);
->-	if (ret)
->-		goto out;
->
-> out:
-> 	if (ret) {
->@@ -7719,10 +7711,8 @@ static int ufshcd_init_vreg(struct ufs_hba *hba)
-> 		goto out;
->
-> 	ret = ufshcd_get_vreg(dev, info->vccq);
->-	if (ret)
->-		goto out;
->-
->-	ret = ufshcd_get_vreg(dev, info->vccq2);
->+	if (!ret)
->+		ret = ufshcd_get_vreg(dev, info->vccq2);
-> out:
-> 	return ret;
-> }
->@@ -7866,12 +7856,7 @@ static int ufshcd_variant_hba_init(struct ufs_hba *hba)
->
-> 	err = ufshcd_vops_setup_regulators(hba, true);
-> 	if (err)
->-		goto out_exit;
->-
->-	goto out;
->-
->-out_exit:
->-	ufshcd_vops_exit(hba);
->+		ufshcd_vops_exit(hba);
-> out:
-> 	if (err)
-> 		dev_err(hba->dev, "%s: variant %s init failed err %d\n",
->-- 
->2.17.1
->
+After he was poisoned by his business associates which he suffered and
+died. Before the death of my father, He left  about ( USD 750,000.00
+United State Dollars ) which he deposited with UBA Bank here Benin
+Republic and i am his next of kin.
+
+It was the money he intended to transfer overseas for other of his
+project before he was poisoned. I have been to the UBA Bank to claim
+the funds but the director of the Bank told me that i am not allow to
+operate my late fathers account because of the security Claus my
+father placed on the account which stated that i must come up to 30
+years old before i will be allow to start operating the accoun.
+
+But the manager of the Bank also advised me that since i need the
+money very urgent i should look for a good and honest foreign partners
+in overseas to be my trustee and help me receive the funds on my
+behalf and help me invest it into any good profitable business as i do
+not have any business experience to manage such huge amount of money
+on my own.
+
+Please am seeking for your kind assistance in the following ways:  (1)
+to provide a safe bank account where the money will be transferred for
+the investment project. (2) To serve as a guardian of this funds since
+I am a girl of 26 years old. (3) To make arrangement for me to come
+over to your country to further my education. This is my reason for
+writing to you. Please if you are interested to help me in this case
+kindly feel free to contact me back immediately. on my email;
+missnadiaabass6@gmail.com
+
+Yours faithful.
+Nadia Abass.
