@@ -2,81 +2,174 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1D4246405
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Aug 2020 12:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CA324641E
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Aug 2020 12:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727056AbgHQKGY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Aug 2020 06:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726760AbgHQKGS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Aug 2020 06:06:18 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEB7C061342
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Aug 2020 03:06:18 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id d2so8070160lfj.1
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Aug 2020 03:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=GdG37Fau00oTVKmW6BzgExzV9qbFfqB9ZIZw4LCMePs=;
-        b=kzXaOzBBjU6Ht2r1QmMdM/baUG4T4Hg9VJxT8q0da1udntfWECIVbCP6OLXXby6sOR
-         MSMWMit2x1q0rkrMxC71tPBOwJdUQfK3YC3zVKEmz4sUSYg6ukyD0gVCw7alVx93Avtu
-         jO1GKSpDYT28TyfYa9lAwaRkWP3DFmoqeTqwMLCdG7OzNCcBHKrHCrx3zEXbwe+uFZEQ
-         REMhBjPHp7NBGDLMkwZx2CdaFP9V4ZZ+bLWzj5xXG+M1HslZBNFqVhxWjiGILzPagpLO
-         5CThja1UBkm+jQo1iq5qpudmjgdqFio++HVPUGHROG+kRxDQGJc2zCyen8+7BCuW2OXg
-         NPWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=GdG37Fau00oTVKmW6BzgExzV9qbFfqB9ZIZw4LCMePs=;
-        b=NEGGyUEbPRlM0jvENhvDZ0s6Sxz2ijQK8G3aXkhDptnqb6I7zzCnoQ7EmW9T6IK+XK
-         FB4dF4+dBf/JjGnrCZft5HB+n9LcuPKxnz6zLcQdL70Orm5wNF+hJjAjuRCunNhwjlU6
-         ++nEbYmK9cRKtRoG9B+c7zSX2tvmOSMo2O7s4LYhPz+vEk0/gxsAIgq5cLzRXwkrjvhW
-         ZDHh8hYNvb7NRe1H35ZwpTCTQNbTc2SRbM2WgH5cn7dTh8aZ37jwxW3kHNRKqh+nJvmU
-         vw8ulbDm3OMk4uMA40dF+/qocyo/Y8lVv12i2rO/PI7ZuKyzddRhfZRZTOK7BAcYvWAB
-         qIUg==
-X-Gm-Message-State: AOAM532BOXfPt7klsHBgGNyF3ymhZUJzell1WYQCUBfvNd1gf9evpGQ5
-        YeYkHQzWY50gjy6LFffAfQEuJztMlOygeG9nuwQ=
-X-Google-Smtp-Source: ABdhPJzzDELn7VhlLHJ61XzMRKRRK7JvhXLbtZQN103gKcdJz6CJj1Dc5BReC2AUTcWnALjF6Q9qo8BDR9UrqPXW60U=
-X-Received: by 2002:a19:c206:: with SMTP id l6mr6969320lfc.152.1597658770928;
- Mon, 17 Aug 2020 03:06:10 -0700 (PDT)
+        id S1727791AbgHQKJA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Aug 2020 06:09:00 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:25299 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726685AbgHQKJA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 17 Aug 2020 06:09:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597658938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=N2yfmasZsglYb0iJRN9ghiYDlWrQBKKHcmazH1TjoVA=;
+        b=Nl14v4L645q5cr123I3Kfz9fbkphFqrSWSbJTS+73YloN5Y6JHJKEbGzfKj5lKZBwKEgvf
+        Dz3jZZ+RPi3lhDFDByPp7BVEhcr8AhSQcFCeZZjr788sOB7QVFUBLNI+2VSoE0t/mINnXb
+        mdTNzU900cU+21oa0XCM0RRvjYEhepA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-486-XUl7ElA8PEuxSjtTM1m9Cg-1; Mon, 17 Aug 2020 06:08:54 -0400
+X-MC-Unique: XUl7ElA8PEuxSjtTM1m9Cg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A901106B820;
+        Mon, 17 Aug 2020 10:08:52 +0000 (UTC)
+Received: from localhost (ovpn-13-146.pek2.redhat.com [10.72.13.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4590F78414;
+        Mon, 17 Aug 2020 10:08:47 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Long Li <longli@microsoft.com>,
+        John Garry <john.garry@huawei.com>, linux-block@vger.kernel.org
+Subject: [PATCH V4] scsi: core: only re-run queue in scsi_end_request() if device queue is busy
+Date:   Mon, 17 Aug 2020 18:08:40 +0800
+Message-Id: <20200817100840.2496976-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:ab3:76cb:0:0:0:0:0 with HTTP; Mon, 17 Aug 2020 03:06:10
- -0700 (PDT)
-Reply-To: asita.hussain0@gmail.com
-From:   "Mr.Asita.Hussain" <rs2851168@gmail.com>
-Date:   Mon, 17 Aug 2020 03:06:10 -0700
-Message-ID: <CAP7O7-4TY-zqSJeG-ZWdnq4ftXhAiSGYDdn3u6OZd8npAfrp_w@mail.gmail.com>
-Subject: Hello my good friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello,
-From Mr. Asita Hussain
-This message might meet you in utmost surprise.
-I am a banker by profession in Burkina-Faso, West Africa and currently
-holding the post of manager in account and auditing department in our
-bank. I have the opportunity of transferring the left over funds ($
-25.5 Million Dollars 15 kilos of Gold bar) belonging to our deceased
-customer who died along with his entire family in a bomb attack.
-Please indicate your willingness by sending the below information for
-more clarification and easy communication.
-Please Contact me with the following information's for more details.
-(1) YOUR FULL NAME.......................
-(2) YOUR AGE AND SEX......................
-(3) YOUR CONTACT ADDRESS...............
-(4) YOUR PRIVATE PHONE N0..........
-(5) FAX NUMBER..............
-(6) YOUR COUNTRY OF ORIGIN.................
-(7) YOUR OCCUPATION.................... .....
- Please Contact me for more details in this E-mail address
-(asita.hussain0@gmail.com)
-Trusting to hear from you immediately.
-Thanks & Best Regards,
-From Mr. Asita Hussain
+Now the request queue is run in scsi_end_request() unconditionally if both
+target queue and host queue is ready. We should have re-run request queue
+only after this device queue becomes busy for restarting this LUN only.
+
+Recently Long Li reported that cost of run queue may be very heavy in
+case of high queue depth. So improve this situation by only running
+the request queue when this LUN is busy.
+
+Cc: Ewan D. Milne <emilne@redhat.com>
+Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Long Li <longli@microsoft.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: linux-block@vger.kernel.org
+Reported-by: Long Li <longli@microsoft.com>
+Tested-by: Kashyap Desai <kashyap.desai@broadcom.com>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+---
+V4:
+	- fix one race reported by Kashyap, and simplify the implementation
+	a bit; also pass Kashyap's both function and performance test
+V3:
+	- add one smp_mb() in scsi_mq_get_budget() and comment
+
+V2:
+	- commit log change, no any code change
+	- add reported-by tag
+
+ drivers/scsi/scsi_lib.c    | 51 +++++++++++++++++++++++++++++++++++---
+ include/scsi/scsi_device.h |  1 +
+ 2 files changed, 49 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 7c6dd6f75190..a62c29058d26 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -551,8 +551,27 @@ static void scsi_run_queue_async(struct scsi_device *sdev)
+ 	if (scsi_target(sdev)->single_lun ||
+ 	    !list_empty(&sdev->host->starved_list))
+ 		kblockd_schedule_work(&sdev->requeue_work);
+-	else
+-		blk_mq_run_hw_queues(sdev->request_queue, true);
++	else {
++		/*
++		 * smp_mb() implied in either rq->end_io or blk_mq_free_request
++		 * is for ordering writing .device_busy in scsi_device_unbusy()
++		 * and reading sdev->restarts.
++		 */
++		int old = atomic_read(&sdev->restarts);
++
++		if (old) {
++			/*
++			 * ->restarts has to be kept as non-zero if there is
++			 *  new budget contention comes.
++			 *
++			 *  No need to run queue when either another re-run
++			 *  queue wins in updating ->restarts or one new budget
++			 *  contention comes.
++			 */
++			if (atomic_cmpxchg(&sdev->restarts, old, 0) == old)
++				blk_mq_run_hw_queues(sdev->request_queue, true);
++		}
++	}
+ }
+ 
+ /* Returns false when no more bytes to process, true if there are more */
+@@ -1611,8 +1630,34 @@ static void scsi_mq_put_budget(struct request_queue *q)
+ static bool scsi_mq_get_budget(struct request_queue *q)
+ {
+ 	struct scsi_device *sdev = q->queuedata;
++	int ret = scsi_dev_queue_ready(q, sdev);
++
++	if (ret)
++		return true;
++
++	atomic_inc(&sdev->restarts);
+ 
+-	return scsi_dev_queue_ready(q, sdev);
++	/*
++	 * Order writing .restarts and reading .device_busy, and make sure
++	 * .restarts is visible to scsi_end_request(). Its pair is implied by
++	 * __blk_mq_end_request() in scsi_end_request() for ordering
++	 * writing .device_busy in scsi_device_unbusy() and reading .restarts.
++	 *
++	 */
++	smp_mb__after_atomic();
++
++	/*
++	 * If all in-flight requests originated from this LUN are completed
++	 * before setting .restarts, sdev->device_busy will be observed as
++	 * zero, then blk_mq_delay_run_hw_queues() will dispatch this request
++	 * soon. Otherwise, completion of one of these request will observe
++	 * the .restarts flag, and the request queue will be run for handling
++	 * this request, see scsi_end_request().
++	 */
++	if (unlikely(atomic_read(&sdev->device_busy) == 0 &&
++				!scsi_device_blocked(sdev)))
++		blk_mq_delay_run_hw_queues(sdev->request_queue, SCSI_QUEUE_DELAY);
++	return false;
+ }
+ 
+ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index bc5909033d13..1a5c9a3df6d6 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -109,6 +109,7 @@ struct scsi_device {
+ 	atomic_t device_busy;		/* commands actually active on LLDD */
+ 	atomic_t device_blocked;	/* Device returned QUEUE_FULL. */
+ 
++	atomic_t restarts;
+ 	spinlock_t list_lock;
+ 	struct list_head starved_entry;
+ 	unsigned short queue_depth;	/* How deep of a queue we want */
+-- 
+2.25.2
+
