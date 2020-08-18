@@ -2,57 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA7A247C7D
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Aug 2020 05:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC43C247C77
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Aug 2020 05:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgHRDLo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Aug 2020 23:11:44 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:47512 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726302AbgHRDLo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Aug 2020 23:11:44 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I398GR033095;
-        Tue, 18 Aug 2020 03:11:25 GMT
+        id S1726381AbgHRDL1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Aug 2020 23:11:27 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:56774 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbgHRDLY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Aug 2020 23:11:24 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I38BPt134801;
+        Tue, 18 Aug 2020 03:11:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=Z76q9Syf5E6geLOMXEwFqaUPd87pHddkw2fm2ePaOx0=;
- b=qkCdzGLcI2aHLdXV1KZIuL/ixuMdCw67fWQo15IBydc3tD0VnlT3ts7VL0FPQbv9XJOb
- fAI5UjeS75ZrbjbqnaPE5zGRbr0lFKDMKi7vhAB4ZRYjTIqVzGxnBphn51Y2jSQMetsW
- eyum7/XDK/UU89uxj+q77mb4PI6lf6RDdjhCeAgaqT0KPgEEGmgVrHel3MTpAnzFz1GA
- xj7sf84mlDx5qYdGVTGvkNyjmdYza73j+VovlZAcKC8sHPyoAwl6Ca3ZxeD5mvbA0LGn
- HZiGyy/4T94osTppYOhVlVFD4XXnf+AJOnUkuadSSOFY74YaHTnyTmkvMMthyVI+Uoh3 2Q== 
+ bh=NJGb42kxruDBKZkQiR9AvBZ8NfWLrCnFLNTcQTTcufI=;
+ b=wcX8irhSaGVj6CEsRINYFiJUXssYEnVzx4GszSAY8vouBomYTBopqAM3AjeC1olC7ZUc
+ itADdXlIHnqGcRlQcfC0CadyTFEovhmCct1lR8DifiQiWR6FfbwuVgkUbGEtXVfXv5c1
+ 2ifcjLpYU6dwN9/8invyFkOpLBNVQXFGGsck4ijwu9yj1mC3uWN5C73zT4M4G/27cFPt
+ pmn8ik54SqGNW4h3Hi9GPbLNG46nPS9PPsio3ta/kvqgY/9IcHbyBMM2wAA8zprKPBkl
+ JkdJw10zqB6GsXuEtpFvHd8xt1FykZE23BvjC3Cqa9FdZ6LDxho5pvJjFNmHqRMlZcYk Iw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 32x7nma5be-1
+        by userp2130.oracle.com with ESMTP id 32x74r2798-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Aug 2020 03:11:25 +0000
+        Tue, 18 Aug 2020 03:11:22 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I37mUQ111766;
-        Tue, 18 Aug 2020 03:11:25 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 32xsm1q1xn-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I37jNi111691;
+        Tue, 18 Aug 2020 03:11:21 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 32xsm1q1tu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Aug 2020 03:11:25 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07I3BJrA029256;
-        Tue, 18 Aug 2020 03:11:19 GMT
+        Tue, 18 Aug 2020 03:11:21 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07I3BKk1020113;
+        Tue, 18 Aug 2020 03:11:20 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
         with ESMTP ; Mon, 17 Aug 2020 20:11:19 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     cang@codeaurora.org, stanley.chu@mediatek.com, beanhuo@micron.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com, bvanassche@acm.org,
-        jejb@linux.ibm.com, asutoshd@codeaurora.org,
-        Bean Huo <huobean@gmail.com>, tomas.winkler@intel.com
+To:     Javed Hasan <jhasan@marvell.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] make UFS dev_cmd more readable
-Date:   Mon, 17 Aug 2020 23:11:12 -0400
-Message-Id: <159772022968.19349.8893371849577463792.b4-ty@oracle.com>
+        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 0/7] qedf: Misc fixes for the driver.
+Date:   Mon, 17 Aug 2020 23:11:13 -0400
+Message-Id: <159772022968.19349.5116654525336166344.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200814095034.20709-1-huobean@gmail.com>
-References: <20200814095034.20709-1-huobean@gmail.com>
+In-Reply-To: <20200807110656.19965-1-jhasan@marvell.com>
+References: <20200807110656.19965-1-jhasan@marvell.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9716 signatures=668679
@@ -61,9 +58,9 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 susp
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2008180022
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9716 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- impostorscore=0 priorityscore=1501 adultscore=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 phishscore=0 malwarescore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 spamscore=0 mlxscore=0 adultscore=0
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1015
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2008180022
 Sender: linux-scsi-owner@vger.kernel.org
@@ -71,24 +68,33 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 14 Aug 2020 11:50:32 +0200, Bean Huo wrote:
+On Fri, 7 Aug 2020 04:06:49 -0700, Javed Hasan wrote:
 
-> Changelog:
->     v2 -v3:
->         1. fix a coding style issue in [2/2] (Asutosh Das)
+> This series has misc bug fixes and code enhancements.
 > 
->     v1 - v2:
->         1. remove original patch scsi: ufs: differentiate dev_cmd trace message
->         2. add new patch scsi: ufs: remove several redundant goto statements
+> Kindly apply this series to scsi-queue at your earliest convenience.
+> 
+> Thanks,
+> ~Javed
 > 
 > [...]
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/2] scsi: ufs: Change ufshcd_comp_devman_upiu() to ufshcd_compose_devman_upiu()
-      https://git.kernel.org/mkp/scsi/c/39e78be3474b
-[2/2] scsi: ufs: Remove several redundant goto statements
-      https://git.kernel.org/mkp/scsi/c/e62212672ab5
+[1/7] scsi: qedf: Check for port type and role before processing an event
+      https://git.kernel.org/mkp/scsi/c/04fedba774e8
+[2/7] scsi: qedf: Check the validity of rjt frame before processing
+      https://git.kernel.org/mkp/scsi/c/df89b0e5bfad
+[3/7] scsi: qedf: Do not kill timeout work for original I/O on RRQ completion
+      https://git.kernel.org/mkp/scsi/c/76693f4f1e2d
+[4/7] scsi: qedf: Send cleanup even for RRQ on timeout
+      https://git.kernel.org/mkp/scsi/c/8ea8f3eae8e5
+[5/7] scsi: qedf: Initiate cleanup for ELS commands as well
+      https://git.kernel.org/mkp/scsi/c/170ce800ed5c
+[6/7] scsi: qedf: Don't process ELS completion if event is flushed or cleaned up
+      https://git.kernel.org/mkp/scsi/c/49cf23e02935
+[7/7] scsi: qedf: Fix race between ELS completion and flushing ELS request
+      https://git.kernel.org/mkp/scsi/c/9acf1f771914
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
