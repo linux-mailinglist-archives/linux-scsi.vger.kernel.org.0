@@ -2,74 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEE724836F
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Aug 2020 12:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2DD248386
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Aug 2020 13:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgHRK7e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Aug 2020 06:59:34 -0400
-Received: from sonic309-13.consmr.mail.bf2.yahoo.com ([74.6.129.123]:33404
-        "EHLO sonic309-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726273AbgHRK73 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 18 Aug 2020 06:59:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1597748366; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=HCBzfySwJXLbY/S8UoqWqvEjKd5MMwVL80pdq6HG/8sNKkuZ5S3/bQOQndAYkT63KcU/hn3h0wD+c4Iv4XdMS05Y650rG4dHJVTVUlbk4ZJpIJCCIR22v5ku+cRl1+TfS3RXvfy1paugyrqLpyE1976SFGDIABjwgijwoMF+8ld2rV9lBQE0EBPDggZHa5f0FpWSxp+AZIhqv5rdqnC2v5vcm70EXEx4DfCpf/kwr5KYte7ik5gcxaDzOwaRZnBPhHyKgYnGkkTsp50Z3jFJYqAWlieF+oREyZIxHfYzvzpdDOnyh5XIWedXikmNATLWVivzjvrORDIbXjq9WfcbVw==
-X-YMail-OSG: 6Vr5whMVM1lQGLnNl.7Qm8obUi1Fark8WHN_n1KuKZYczmUkfRoQzQ17XTs18H1
- YLOnqnDRuNonSIcbaoVaQJfb.cGS7MvqFjDKoCWOaluBDBQky.ucuMBO4WAthHh00fCtPAQi9xWU
- NEhkQj15Cd4alqjA6ahSdJbpX0p.LUawrvjYetNn2MBGf4X6UofrkPcZ3JCb3ADGSV3R37XkKPCp
- BgSSlr.0CtEtcRdjt3c5oOIzOw7VuRp83yFTTIrZ.zuyLiTg41KSqfpMwXzdGZGbETMy7Z5ILall
- qbbczPmIrZu826Y2NToaPi4niv70P3NjLntp7xTDU2L9fE9SZoyfWpRahcmsJEycXlQyVc7KJpTk
- yDzlGKEF3g4JTk03mhSyJa5BJdRwXjTNg.SzXUdrEKV.q_oYULGskxm3p8htXQ9z2DP9Ec3AzgN4
- YC099Gavl4qU.rlPBr4C0N.l9f6TXLOTNcCi61uPYGH.__3d6sw2CTmcm5dzO31DDAgyo_8ATYPo
- CShoX5McyGsby704Mly3tNk_T9jidEtdSfVjr1LMyaFugMq21N.ucsBQCUp6Ddc3GjABVfsKcKBC
- jdlt5YnmdFjZmAYHBPUmbZwn0EDbtsFbBu9wjTlqudyLzJs05X3BwejAcRG2iuV6cHCpeBAKHjeF
- DKyNETNTSfc3LgulSieglwd0ogUuszYvzBYfq7WdvSQB0xJ4Nyv7xwJszMnqqjOx7lEJ9j_hCw.E
- 38j6IAgoTcERy_oEin_xxc5.CE9kyQkCVlcPbWK07X6KqS7EhrJMj6ybC9ahrkYY1YoE16UbSdmo
- _cbG6eayp9OZLDUPjuZFfUMD7BYovTgkcwhvyPaQrmMiE0UbeUAZbqrXGvvmN4dpVU.Fopyki4Wb
- 0aZc2S.UGRcGONkR6pDVEMFgmlsFafczJMdA1A4q74UDWMvLFTStKJTCCy64lL0riEzLJwXL0Hlg
- dc1z0D5.z4jCZoYMsm4WKX1LaEiM09zotgewNss0IyymyLY2o5BJDCi7nN29.8bpWn1VXf1b9G37
- FEeSfw1e.Sr6is4gcvybKMRrAszq4LV8jpg6bdvoB4XiuHpdhnIw4BIs406OpbpCZlE10DTFooaR
- j3DzH3c8o5lrRsEnf.TNpW560cV2ECr6CZjhfknh_plLlqY6h5y01xOHB2gVawliSuAB84Vgdsp_
- L0k0tGRHw3RrqK59Yl8oXKEgF1IAy4NO4endkoYj8jOvJW.t4s1eMikMdpK2Wk6zONziKl6yvCM3
- YfuQY19zg60aZ2ukjuO3HPXePd4kiCRLhM_p8zob15ITcZhSJimOM8GcqAP1LAM6hexEuJTAUo1j
- 2aj4GQys.ZDycvK4bZPp4NhU3ZdOehPFAtenpfkYhU.sWXLS.VA--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.bf2.yahoo.com with HTTP; Tue, 18 Aug 2020 10:59:26 +0000
-Date:   Tue, 18 Aug 2020 10:59:21 +0000 (UTC)
-From:   Ms lisa Hugh <lisahugh531@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <2066635058.1267083.1597748361304@mail.yahoo.com>
-Subject: BUSINESS FROM (Ms Lisa hugh).
+        id S1726645AbgHRLFM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Aug 2020 07:05:12 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:51438 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726273AbgHRLFI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 18 Aug 2020 07:05:08 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 3AD0686DAFEEDC458BC7;
+        Tue, 18 Aug 2020 19:05:01 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.487.0; Tue, 18 Aug 2020
+ 19:04:50 +0800
+From:   Wu Bo <wubo40@huawei.com>
+To:     <martin.petersen@oracle.com>, <michael.christie@oracle.com>,
+        <bvanassche@acm.org>, <sudhakar.panneerselvam@oracle.com>,
+        <mlombard@redhat.com>, <ddiss@suse.de>
+CC:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
+        <linfeilong@huawei.com>, <liuzhiqiang26@huawei.com>,
+        <wubo40@huawei.com>
+Subject: [PATCH] target:iscsi-target:Fix null pointer access while logout the iscsi session
+Date:   Tue, 18 Aug 2020 19:16:10 +0800
+Message-ID: <1597749370-631500-1-git-send-email-wubo40@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <2066635058.1267083.1597748361304.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16455 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+From: Wu Bo <wubo40@huawei.com>
 
+When I use fio to test the iscsi volumes and logout of the iscsi session
+at the same time, the following crash occurs:
 
-Dear Friend,
+[24912.893443] BUG: unable to handle kernel NULL pointer dereference at 0000000000000140
+[24912.893748] Oops: 0002 [#1] SMP PTI
+[24912.893883] CPU: 3 PID: 239032 Comm: kworker/3:2 Kdump: loaded Tainted:  
+[24912.894316] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+[24912.894773] Workqueue: target_completion target_complete_ok_work [target_core_mod]
+[24912.895065] RIP: 0010:sbitmap_queue_clear+0x2a/0x70
+[24912.895328] Code: 41 54 41 89 f4 55 89 d5 53 48 89 fb 8b 4f 04 89 f0 d3 e8 48 8d 3c
+[24912.895906] RSP: 0018:ffff9eb14129bdf0 EFLAGS: 00010206
+[24912.896268] RAX: 000000000000001b RBX: ffff9065367f23c0 RCX: 0000000000000005
+[24912.896591] RDX: 0000000000000000 RSI: 000000000000003b RDI: 00000000000000c0
+[24912.896919] RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+[24912.897556] R10: ffff9064bf6261e0 R11: 0000000000000100 R12: 000000000000003b
+[24912.897913] R13: 0000000000000000 R14: 0000000000000000 R15: ffff906518610c18
+[24912.897916] FS:  0000000000000000(0000) GS:ffff90653ad80000(0000) knlGS:0000000000000000
+[24912.898988] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[24912.899410] CR2: 0000000000000140 CR3: 0000000127c0a004 CR4: 00000000000206e0
+[24912.899830] Call Trace:
+[24912.900278]  target_release_cmd_kref+0x11d/0x2b0 [target_core_mod]
+[24912.900727]  target_put_sess_cmd+0x23/0x30 [target_core_mod]
+[24912.901181]  target_complete_ok_work+0xc2/0x370 [target_core_mod]
+[24912.901649]  ? __schedule+0x304/0x930
+[24912.902921]  process_one_work+0x195/0x390
+[24912.903396]  worker_thread+0x30/0x390
+[24912.903866]  ? process_one_work+0x390/0x390
+[24912.904355]  kthread+0x10d/0x130
+[24912.904835]  ? kthread_flush_work_fn+0x10/0x10
+[24912.905335]  ret_from_fork+0x35/0x40
 
-I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
+The iscsi-target thread executes the logout operation, 
+deletes the session,and releases the sess_tag_pool without waiting 
+for all cmds to complete. When the cmds is completed, the target_complete
+worker put the tag to sess_tag_pool, the sess_tag_pool has been released 
+at this time, So accessed the NULL pointer.
 
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
+Signed-off-by: Wu Bo <wubo40@huawei.com>
+---
+ drivers/target/iscsi/iscsi_target.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
+diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
+index c968961..a8ea4a7 100644
+--- a/drivers/target/iscsi/iscsi_target.c
++++ b/drivers/target/iscsi/iscsi_target.c
+@@ -4387,6 +4387,8 @@ int iscsit_close_session(struct iscsi_session *sess)
+ 		}
+ 	}
+ 
++	target_sess_cmd_list_set_waiting(sess->se_sess);
++	target_wait_for_sess_cmds(sess->se_sess);
+ 	transport_deregister_session(sess->se_sess);
+ 
+ 	if (sess->sess_ops->ErrorRecoveryLevel == 2)
+-- 
+1.8.3.1
 
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so will can be reaching each other
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
-
-
-Thanks.
-
-Ms Lisa hugh.
