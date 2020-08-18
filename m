@@ -2,68 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B612A247C76
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Aug 2020 05:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717AC247C7E
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Aug 2020 05:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbgHRDLZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Aug 2020 23:11:25 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:56768 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726302AbgHRDLW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Aug 2020 23:11:22 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I38Cd8134845;
-        Tue, 18 Aug 2020 03:11:18 GMT
+        id S1726656AbgHRDLs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Aug 2020 23:11:48 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:33530 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726302AbgHRDLr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Aug 2020 23:11:47 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I36u9w113691;
+        Tue, 18 Aug 2020 03:11:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=I0EZScj58NFxB2rOZIsCaKplUPsEex+PGqpJ94KUQoE=;
- b=IKID3jas0hbhdUhRWv+fIdsVg70Qcol+y8WkCR+BDM50RnJyx5/VgZul3ijyoGTF/e0Q
- R8Kl8LO6dmjyVLd3N4aOpy3KfUo/VNNZ2Fl1osBeR3hSdJZZqaGucuvPX+9N6lL56fDa
- JrWahQ49G+U26eyOtz1GoKU0iB9/AImvJsmSpoLQhg6NYWT1pw/hRMswoGXnwYO2qr4f
- MLl2b3jAUL5Py1Zv5hwEef80c8QvskXnThLLz7tFdZ/52Nem7/FdcXBRiarV175SzEn2
- Z4ecd3DrGFsbkkyWOrVzspX2RO44/JkjdDsKoMsO/LyQG5eOkD5YU1+p5o27xm4/9fG0 sQ== 
+ bh=KjjcL75V0/m+1nWGWd2tOjdENPU5ZqoRW8Bh9qm/BFE=;
+ b=GWrVgA+t6CeMNgcT4KKQdbzRcki3G1e1dn7IpFfvdUF5spnXKgS8bb5QIb1vng3vlGlv
+ PAJGGh07tO4m39CUmwL1Ka/5irBmt+OTIe6UqPhAZM71iXApuwEbOmgqGpXTepoONr4V
+ CKN7JmfegsJdINZxjct4WodkQYcgAwCdvWGUtK74MSC+Tpffowjreq11Ipy1Iyb2D6wn
+ /9ax1snB+D8tdqEO4hgSpVbTMX7BGbkbAkr0zLx3wuzDVCSE1cuExSDg/PISQRIrKSwz
+ YENNbreTPGfY32TuFWQJUSU7cRn5SwbyQbv4trg3+w0UMw976wZElRStTIaaFOqXs4Cp yQ== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 32x74r2790-1
+        by userp2120.oracle.com with ESMTP id 32x8bn22k9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Aug 2020 03:11:18 +0000
+        Tue, 18 Aug 2020 03:11:21 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I38tls134387;
-        Tue, 18 Aug 2020 03:11:18 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 32xsmwp4wj-1
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I38tug134334;
+        Tue, 18 Aug 2020 03:11:20 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 32xsmwp4xt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Aug 2020 03:11:17 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07I3BG1c029250;
-        Tue, 18 Aug 2020 03:11:16 GMT
+        Tue, 18 Aug 2020 03:11:20 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 07I3BIk5021978;
+        Tue, 18 Aug 2020 03:11:18 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 17 Aug 2020 20:11:16 -0700
+        with ESMTP ; Mon, 17 Aug 2020 20:11:17 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     kernel-team@android.com, nguyenb@codeaurora.org,
-        linux-scsi@vger.kernel.org, hongwus@codeaurora.org,
-        salyzyn@google.com, asutoshd@codeaurora.org,
-        Can Guo <cang@codeaurora.org>, rnayak@codeaurora.org,
-        saravanak@google.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v11 0/9] Fix up and simplify error recovery mechanism
-Date:   Mon, 17 Aug 2020 23:11:10 -0400
-Message-Id: <159772022967.19349.17899032606045774294.b4-ty@oracle.com>
+To:     Kevin.Barnett@microchip.com, hch@infradead.org,
+        jejb@linux.vnet.ibm.com, joseph.szczypek@hpe.com,
+        Justin.Lindley@microchip.com, bader.alisaleh@microchip.com,
+        scott.teel@microchip.com, gerry.morong@microchip.com,
+        POSWALD@suse.com, Don Brace <don.brace@microsemi.com>,
+        scott.benesh@microchip.com, mahesh.rajashekhara@microchip.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 0/7] smartpqi updates
+Date:   Mon, 17 Aug 2020 23:11:11 -0400
+Message-Id: <159772022967.19349.14005779725486000073.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <1596975355-39813-1-git-send-email-cang@codeaurora.org>
-References: <1596975355-39813-1-git-send-email-cang@codeaurora.org>
+In-Reply-To: <159622890296.30579.6820363566594432069.stgit@brunhilda>
+References: <159622890296.30579.6820363566594432069.stgit@brunhilda>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9716 signatures=668679
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 bulkscore=0
- mlxlogscore=661 phishscore=0 mlxscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 mlxscore=0 suspectscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2008180022
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9716 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxlogscore=648
- priorityscore=1501 phishscore=0 spamscore=0 mlxscore=0 adultscore=0
- suspectscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 adultscore=0 spamscore=0 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 clxscore=1011 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2008180022
 Sender: linux-scsi-owner@vger.kernel.org
@@ -71,41 +73,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 9 Aug 2020 05:15:46 -0700, Can Guo wrote:
+On Fri, 31 Jul 2020 16:01:05 -0500, Don Brace wrote:
 
-> The changes have been tested with error injections of multiple error types (and
-> all kinds of mixture of them) during runtime, e.g. hibern8 enter/ exit error,
-> power mode change error and fatal/non-fatal error from IRQ context. During the
-> test, error injections happen randomly across all contexts, e.g. clk scaling,
-> clk gate/ungate, runtime suspend/resume and IRQ.
+> These patches are based on Linus's tree
 > 
-> There are a few more fixes to resolve other minor problems based on the main
-> change, such as LINERESET handling and racing btw error handler and system
-> suspend/resume/shutdown, but they will be pushed after this series is taken,
-> due to there are already too many lines in these changes.
-> 
-> [...]
+> The changes are:
+> smartpqi-identify-physical-devices-without-issuing-INQUIRY
+>  - eliminate sending INQUIRYs to physical devices
+> smartpqi-add-id-support-for-smartRAID-3152-8i
+>  - add support for a new controller
+> smartpqi-update-logical-volume-size-after-expansion
+>  - update volume size in OS after expansion.
+> smartpqi-avoid-crashing-kernel-for-controller-issues
+>  - remove BUG calls for rare cases when controller returns
+>    bad responses.
+> smartpqi-support-device-deletion-via-sysfs
+>  - handle device removal using sysfs file
+>    /sys/block/sd<X>/device/delete where X is device name is a, b, ...
+> smartpqi-add-RAID-bypass-counter
+>  - aid to identify when RAID bypass is in use.
+> smartpqi-bump-version-to-1.2.16-010
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/9] scsi: ufs: Add checks before setting clk-gating states
-      https://git.kernel.org/mkp/scsi/c/2dec9475a402
-[2/9] scsi: ufs: ufs-qcom: Fix race conditions caused by ufs_qcom_testbus_config()
-      https://git.kernel.org/mkp/scsi/c/89dd87acd40a
-[3/9] scsi: ufs-qcom: Remove testbus dump in ufs_qcom_dump_dbg_regs
-      https://git.kernel.org/mkp/scsi/c/423cc66b5152
-[4/9] scsi: ufs: Add some debug information to ufshcd_print_host_state()
-      https://git.kernel.org/mkp/scsi/c/3f8af6044713
-[5/9] scsi: ufs: Fix concurrency of error handler and other error recovery paths
-      https://git.kernel.org/mkp/scsi/c/4db7a2360597
-[6/9] scsi: ufs: Recover HBA runtime PM error in error handler
-      https://git.kernel.org/mkp/scsi/c/c72e79c0ad2b
-[7/9] scsi: ufs: Move dumps in IRQ handler to error handler
-      https://git.kernel.org/mkp/scsi/c/c3be8d1ee1bf
-[8/9] scsi: ufs: Fix a race condition between error handler and runtime PM ops
-      https://git.kernel.org/mkp/scsi/c/5586dd8ea250
-[9/9] scsi: ufs: Properly release resources if a task is aborted successfully
-      https://git.kernel.org/mkp/scsi/c/35afe60929ab
+[1/7] scsi: smartpqi: Identify physical devices without issuing INQUIRY
+      https://git.kernel.org/mkp/scsi/c/79d98a09024f
+[2/7] scsi: smartpqi: Add id support for SmartRAID 3152-8i
+      https://git.kernel.org/mkp/scsi/c/0451304e8e8e
+[3/7] scsi: smartpqi: Update logical volume size after expansion
+      https://git.kernel.org/mkp/scsi/c/9e0ab6e5b185
+[4/7] scsi: smartpqi: Avoid crashing kernel for controller issues
+      https://git.kernel.org/mkp/scsi/c/d4f7505924ca
+[5/7] scsi: smartpqi: Support device deletion via sysfs
+      https://git.kernel.org/mkp/scsi/c/a5a3cb83cf3a
+[6/7] scsi: smartpqi: Add RAID bypass counter
+      https://git.kernel.org/mkp/scsi/c/bdd6dac631bc
+[7/7] scsi: smartpqi: Bump version to 1.2.16-010
+      https://git.kernel.org/mkp/scsi/c/441c5e632c1b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
