@@ -2,209 +2,168 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3C124A263
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Aug 2020 17:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DAB24A2D4
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Aug 2020 17:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728341AbgHSPES (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Aug 2020 11:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgHSPEP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Aug 2020 11:04:15 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DED7C061757
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Aug 2020 08:04:14 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id i26so18385095edv.4
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Aug 2020 08:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gblnYCzc62i56nCc5LRWss+Qf5wc+kIzyZ60hUww65Y=;
-        b=CmFRV9MF78Io9lyU3ZTHQoxCUWL8rgrVpgpqOj4nEXWpRTCd1+KGSochi2kuoVhtFt
-         PQJJembCFDIORAph3WzrpDoRd2cIGJpwf9VAtP5a9ydpphhRkHDHcmKRPuhZGWASaGfl
-         y6rPrnsIqK2MPfXnYUVbYzJtuDwuiigpqdGRc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gblnYCzc62i56nCc5LRWss+Qf5wc+kIzyZ60hUww65Y=;
-        b=uRGaRuSrqPaO9wJpEx8RdBnfrUUiJepTm5hBm3UtCqVxgZmg0NQM+g8tEzmgg9Du7k
-         0I7G/0JWLDg9U27wLtw5wlkT07rQSz1yz5x0fvsyTH9qRSG7IS2SgRELADPjDaYjTROm
-         sMb/7PVxoGB3qyBIzQ4jgcWefANgTiy9Yt8lbMwHi6o46xnKcbu0DvfZGtRjmzB7iFsk
-         nEg0t4spW8EJWeHqBTeK1dRhy5arlIKWCW+KagS9KacuZFHyIxPsTD9ol6f4Nzvuy8q/
-         naQ+bg9N52YMqyyveBpfeLNAku6EN1X9GOKtolBR1xhCwhuj3FgKpcqgfXaRO7LKGP32
-         G0Vg==
-X-Gm-Message-State: AOAM530z6+gEXQRW5+feK5hQvPz4D6ZKV97ZuDhcePQv1j+3V5FXgDDN
-        QAOqH/ybvgem8ePH9TH3rBSuYC4fD1btsA==
-X-Google-Smtp-Source: ABdhPJyyXmPqv+pi4eUaibgGzPPsGHuKst+9+/DEkPsLmhAg4yKJqMQSmICutWFX2om7np6J8I7O7Q==
-X-Received: by 2002:a05:6402:1c07:: with SMTP id ck7mr25573110edb.84.1597849452212;
-        Wed, 19 Aug 2020 08:04:12 -0700 (PDT)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
-        by smtp.gmail.com with ESMTPSA id ca3sm18034934edb.72.2020.08.19.08.04.09
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Aug 2020 08:04:10 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id p14so2414941wmg.1
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Aug 2020 08:04:09 -0700 (PDT)
-X-Received: by 2002:a1c:4d12:: with SMTP id o18mr5316483wmh.55.1597849448826;
- Wed, 19 Aug 2020 08:04:08 -0700 (PDT)
+        id S1728764AbgHSPZV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Aug 2020 11:25:21 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:38870 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728212AbgHSPZJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 19 Aug 2020 11:25:09 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 88887990BD3CA5378D3B;
+        Wed, 19 Aug 2020 23:24:58 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 19 Aug 2020 23:24:47 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <don.brace@microsemi.com>,
+        <kashyap.desai@broadcom.com>, <ming.lei@redhat.com>,
+        <bvanassche@acm.org>, <dgilbert@interlog.com>,
+        <paolo.valente@linaro.org>, <hare@suse.de>, <hch@lst.de>
+CC:     <sumit.saxena@broadcom.com>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <esc.storagedev@microsemi.com>, <megaraidlinux.pdl@broadcom.com>,
+        <chenxiang66@hisilicon.com>, <luojiaxing@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v8 00/18] blk-mq/scsi: Provide hostwide shared tags for SCSI HBAs
+Date:   Wed, 19 Aug 2020 23:20:18 +0800
+Message-ID: <1597850436-116171-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-20-hch@lst.de>
-In-Reply-To: <20200819065555.1802761-20-hch@lst.de>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Wed, 19 Aug 2020 17:03:52 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5Bbp-eAVKS1MKS8xtrT4ZoOmBPfZyw9mys=eOmDb6r8Lw@mail.gmail.com>
-Message-ID: <CAAFQd5Bbp-eAVKS1MKS8xtrT4ZoOmBPfZyw9mys=eOmDb6r8Lw@mail.gmail.com>
-Subject: Re: [PATCH 19/28] dma-mapping: replace DMA_ATTR_NON_CONSISTENT with
- dma_{alloc, free}_pages
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        alsa-devel@alsa-project.org,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-ia64@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        nouveau@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Christoph,
+Hi all,
 
-On Wed, Aug 19, 2020 at 8:57 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> Add a new API to allocate and free pages that are guaranteed to be
-> addressable by a device, but otherwise behave like pages allocated by
-> alloc_pages.  The intended APIs to sync them for use with the device
-> and cpu are dma_sync_single_for_{device,cpu} that are also used for
-> streaming mappings.
->
-> Switch all drivers over to this new API, but keep the usage of the
-> crufty dma_cache_sync API for now, which will be cleaned up on a driver
-> by driver basis.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  Documentation/core-api/dma-api.rst        | 68 +++++++++++------------
->  Documentation/core-api/dma-attributes.rst |  8 ---
->  arch/alpha/kernel/pci_iommu.c             |  2 +
->  arch/arm/mm/dma-mapping-nommu.c           |  2 +
->  arch/arm/mm/dma-mapping.c                 |  4 ++
->  arch/ia64/hp/common/sba_iommu.c           |  2 +
->  arch/mips/jazz/jazzdma.c                  |  7 +--
->  arch/powerpc/kernel/dma-iommu.c           |  2 +
->  arch/powerpc/platforms/ps3/system-bus.c   |  4 ++
->  arch/powerpc/platforms/pseries/vio.c      |  2 +
->  arch/s390/pci/pci_dma.c                   |  2 +
->  arch/x86/kernel/amd_gart_64.c             |  2 +
->  drivers/iommu/dma-iommu.c                 |  2 +
->  drivers/iommu/intel/iommu.c               |  4 ++
->  drivers/net/ethernet/i825xx/lasi_82596.c  | 13 ++---
->  drivers/net/ethernet/seeq/sgiseeq.c       | 12 ++--
->  drivers/parisc/ccio-dma.c                 |  2 +
->  drivers/parisc/sba_iommu.c                |  2 +
->  drivers/scsi/53c700.c                     |  8 +--
->  drivers/scsi/sgiwd93.c                    | 12 ++--
->  drivers/xen/swiotlb-xen.c                 |  2 +
->  include/linux/dma-direct.h                |  5 ++
->  include/linux/dma-mapping.h               | 29 ++++++++--
->  include/linux/dma-noncoherent.h           |  3 -
->  kernel/dma/direct.c                       | 51 ++++++++++++++++-
->  kernel/dma/mapping.c                      | 43 +++++++++++++-
->  kernel/dma/ops_helpers.c                  | 35 ++++++++++++
->  kernel/dma/virt.c                         |  2 +
->  sound/mips/hal2.c                         | 20 +++----
->  29 files changed, 254 insertions(+), 96 deletions(-)
->
+Here is v8 of the patchset.
 
-Thanks for the patch. The general design looks quite nice, but please
-see my comments inline.
+In this version of the series, we keep the shared sbitmap for driver tags,
+and introduce changes to fix up the tag budgeting across request queues.
+We also have a change to count requests per-hctx for when an elevator is
+enabled, as an optimisation. I also dropped the debugfs changes - more on
+that below.
 
+Some performance figures:
 
-> diff --git a/Documentation/core-api/dma-api.rst b/Documentation/core-api/dma-api.rst
-> index 90239348b30f6f..047fcfffa0e5cf 100644
-> --- a/Documentation/core-api/dma-api.rst
-> +++ b/Documentation/core-api/dma-api.rst
-> @@ -516,48 +516,53 @@ routines, e.g.:::
->         }
->
->
-> -Part II - Advanced dma usage
-> -----------------------------
-> +Part II - Non-coherent DMA allocations
-> +--------------------------------------
->
-> -Warning: These pieces of the DMA API should not be used in the
-> -majority of cases, since they cater for unlikely corner cases that
-> -don't belong in usual drivers.
-> +These APIs allow to allocate pages that can be used like normal pages
-> +in the kernel direct mapping, but are guaranteed to be DMA addressable.
+Using 12x SAS SSDs on hisi_sas v3 hw. mq-deadline results are included,
+but it is not always an appropriate scheduler to use.
 
-Could we elaborate a bit more on what "like normal pages in kernel
-direct mapping" mean from the driver perspective?
+Tag depth 		4000 (default)			260**
 
->
->  If you don't understand how cache line coherency works between a
->  processor and an I/O device, you should not be using this part of the
-> -API at all.
-> +API.
->
->  ::
->
->         void *
-> -       dma_alloc_attrs(struct device *dev, size_t size, dma_addr_t *dma_handle,
-> -                       gfp_t flag, unsigned long attrs)
-> +       dma_alloc_pages(struct device *dev, size_t size, dma_addr_t *dma_handle,
-> +                       enum dma_data_direction dir, gfp_t gfp)
-> +
-> +This routine allocates a region of <size> bytes of consistent memory.  It
-> +returns a pointer to the allocated region (in the processor's virtual address
-> +space) or NULL if the allocation failed. The returned memory is guanteed to
-> +behave like memory allocated using alloc_pages.
+Baseline (v5.9-rc1):
+none sched:		2094K IOPS			513K
+mq-deadline sched:	2145K IOPS			1336K
 
-There is one aspect that the existing dma_alloc_attrs() handles, but
-this new function doesn't: IOMMU support. The function will always
-allocate a physically-contiguous block memory, which is a costly
-operation and not even guaranteed to succeed, even if enough free
-memory is available.
+Final, host_tagset=0 in LLDD *, ***:
+none sched:		2120K IOPS			550K
+mq-deadline sched:	2121K IOPS			1309K
 
-Modern SoCs employ IOMMUs to avoid the need to allocate
-physically-contiguous memory and those happen to be also the devices
-that could benefit from non-coherent allocations a lot. One of the
-tasks of the DMA API was making it possible to allocate suitable
-memory for a given device, without having the driver know about the
-SoC integration details, such as the presence of an IOMMU.
+Final ***:
+none sched:		2132K IOPS			1185			
+mq-deadline sched:	2145K IOPS			2097	
 
-Today, dma_alloc_attrs() uses the .alloc callback of the dma_ops
-struct and the IOMMU-aware implementations, like the dma-iommu helpers
-[1], would allocate discontiguous pages. Therefore, while I see the
-DMA-aware page allocation functionality as a useful functionality on
-its own for scatter-gather-capable hardware, I believe it is not a
-complete replacement for dma_alloc_attrs() with the
-DMA_ATTR_NON_CONSISTENT attribute.
+* this is relevant as this is the performance in supporting but not
+  enabling the feature
+** depth=260 is relevant as some point where we are regularly waiting for
+   tags to be available. Figures were are a bit unstable here.
+*** Included "[PATCH V4] scsi: core: only re-run queue in
+    scsi_end_request() if device queue is busy"
 
-[1] https://elixir.bootlin.com/linux/v5.9-rc1/source/drivers/iommu/dma-iommu.c#L510
+A copy of the patches can be found here:
+https://github.com/hisilicon/kernel-dev/tree/private-topic-blk-mq-shared-tags-v8
 
-Best regards,
-Tomasz
+The hpsa patch depends on:
+https://lore.kernel.org/linux-scsi/20200430131904.5847-1-hare@suse.de/
+
+And the smartpqi patch is not to be accepted.
+
+Comments (and testing) welcome, thanks!
+
+Differences to v7:
+- Add null_blk and scsi_debug support
+- Drop debugfs tags patch - it's too difficult to be the same between
+hostwide and non-hostwide, as discussed:
+https://lore.kernel.org/linux-scsi/1591810159-240929-1-git-send-email-john.garry@huawei.com/T/#mb3eb462d8be40273718505989abd12f8228c15fd
+And from commit 6bf0eb550452 ("sbitmap: Consider cleared bits in
+sbitmap_bitmap_show()"), I guess not many used this anyway...
+- Add elevator per-hctx request count for optimisation
+- Break up "blk-mq: rename blk_mq_update_tag_set_depth()" into 2x patches
+- Pass flags for avoid per-hq queue tags init/free for hostwide tags
+- Add Don's reviewed-tag and tested-by tags to appropiate patches
+	- (@Don, please let me know if issue with how I did this)
+- Add "scsi: core: Show nr_hw_queues in sysfs"
+- Rework megaraid SAS patch to have module param (Kashyap)
+- rebase
+
+V7 is here for more info:
+https://lore.kernel.org/linux-scsi/1591810159-240929-1-git-send-email-john.garry@huawei.com/T/#t
+
+Hannes Reinecke (5):
+  blk-mq: Rename blk_mq_update_tag_set_depth()
+  blk-mq: Free tags in blk_mq_init_tags() upon error
+  scsi: Add host and host template flag 'host_tagset'
+  hpsa: enable host_tagset and switch to MQ
+  smartpqi: enable host tagset
+
+John Garry (10):
+  blk-mq: Pass flags for tag init/free
+  blk-mq: Use pointers for blk_mq_tags bitmap tags
+  blk-mq: Facilitate a shared sbitmap per tagset
+  blk-mq: Relocate hctx_may_queue()
+  blk-mq: Record nr_active_requests per queue for when using shared
+    sbitmap
+  blk-mq: Record active_queues_shared_sbitmap per tag_set for when using
+    shared sbitmap
+  null_blk: Support shared tag bitmap
+  scsi: core: Show nr_hw_queues in sysfs
+  scsi: hisi_sas: Switch v3 hw to MQ
+  scsi: scsi_debug: Support host tagset
+
+Kashyap Desai (2):
+  blk-mq, elevator: Count requests per hctx to improve performance
+  scsi: megaraid_sas: Added support for shared host tagset for
+    cpuhotplug
+
+Ming Lei (1):
+  blk-mq: Rename BLK_MQ_F_TAG_SHARED as BLK_MQ_F_TAG_QUEUE_SHARED
+
+ block/bfq-iosched.c                         |   9 +-
+ block/blk-core.c                            |   2 +
+ block/blk-mq-debugfs.c                      |  10 +-
+ block/blk-mq-sched.c                        |  13 +-
+ block/blk-mq-tag.c                          | 149 ++++++++++++++------
+ block/blk-mq-tag.h                          |  56 +++-----
+ block/blk-mq.c                              |  81 +++++++----
+ block/blk-mq.h                              |  76 +++++++++-
+ block/kyber-iosched.c                       |   4 +-
+ block/mq-deadline.c                         |   6 +
+ drivers/block/null_blk_main.c               |   6 +
+ drivers/block/rnbd/rnbd-clt.c               |   2 +-
+ drivers/scsi/hisi_sas/hisi_sas.h            |   3 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c       |  36 ++---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c      |  87 +++++-------
+ drivers/scsi/hosts.c                        |   1 +
+ drivers/scsi/hpsa.c                         |  44 +-----
+ drivers/scsi/hpsa.h                         |   1 -
+ drivers/scsi/megaraid/megaraid_sas_base.c   |  39 +++++
+ drivers/scsi/megaraid/megaraid_sas_fusion.c |  29 ++--
+ drivers/scsi/scsi_debug.c                   |  28 ++--
+ drivers/scsi/scsi_lib.c                     |   2 +
+ drivers/scsi/scsi_sysfs.c                   |  11 ++
+ drivers/scsi/smartpqi/smartpqi_init.c       |  45 ++++--
+ include/linux/blk-mq.h                      |  13 +-
+ include/linux/blkdev.h                      |   3 +
+ include/scsi/scsi_host.h                    |   9 +-
+ 27 files changed, 484 insertions(+), 281 deletions(-)
+
+-- 
+2.26.2
+
