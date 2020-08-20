@@ -2,63 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A08624B595
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Aug 2020 12:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E41224B6CE
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Aug 2020 12:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731600AbgHTKZ5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Aug 2020 06:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S1729398AbgHTKlM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Aug 2020 06:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731811AbgHTKYt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Aug 2020 06:24:49 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8482C061383
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Aug 2020 03:24:48 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id qc22so1871929ejb.4
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Aug 2020 03:24:48 -0700 (PDT)
+        with ESMTP id S1731287AbgHTKQl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Aug 2020 06:16:41 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899DAC061757
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Aug 2020 03:16:40 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id w17so1142083edt.8
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Aug 2020 03:16:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FU3+CiJFzLHmOFDuQMwlaisWRGuHRN+5AV6txupwZrU=;
-        b=QFNCCjnhRiVXX1RwHJMrjJrm3FMIDmNx/PgDGVaGoYPr2orRHBTBO48N0vE/bjgnJ+
-         SYuYytDiRhiYZtZgJZ7z4/4vPKus2MwWgTKmnlMmLZQ4o8gAgDqGKHg0dO0uTStdh95b
-         tHYxvzFh9iEVHBmlKA/EhqmNwNT52r2I3xUhk=
+        bh=p7IDsCs3O3XVq6Oo36ltfbQDp/qQH17B8kNCHrYYi58=;
+        b=ehZtgn4/AxsmBi4CkUnsCHo/q6bpQxXO/GGgvrCHjALePJV0mY03gGKLtDpnr62vq7
+         KV3mdnnS1aNkayPfMEd6+kiXUtw5pXZFUZ/dq+zcrKhOGKgl7b3lXQNmHHz0Fv8waUXO
+         bUcyInFMwIZHXpvW8Pcz/o4WwKo7iyfKJp3kg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FU3+CiJFzLHmOFDuQMwlaisWRGuHRN+5AV6txupwZrU=;
-        b=X55CnYIdZD/9/nxTZLxVOqp5MLjzF8irv5WCBz8tpxwR+Ue1QjicxcZIayw+UgllNo
-         twiksd8VXMqZ11xZK/OWQ98IYC1bf30dR7iW5WLy0beSnksc1hYD+WaxAbY9G70z2QRu
-         NnLFzX4hjrIe0FIXS0ftGCQ1tS6qp8EHV9T0PznhP8A+IjyTdK+rajzP71Bx/WqpFtYT
-         dJMULCYdXchUsytiVS2LpRoP/0+l9Xmc6cWJcroddtg9usSX6xtfjpB1WCcjqC27T4CU
-         znGStp0h27QYKc/+lY0GazYoKuEckD27SQjbeWwxLZDn/RDF1RGe3j6gqqd80kDn07kB
-         gbWw==
-X-Gm-Message-State: AOAM5322w0TVzO0l/CnxPiq4ZGp2eQrb2HQfU5neJPvtjOWkFPCEA4g1
-        OKdm1/C8KQXlGGfxIRu60bV/qW/d7Rwyp5Wq
-X-Google-Smtp-Source: ABdhPJyb4Y4hm66EHa380TCAgfeE/94XMUU1/ZUDT3d9GzqInxXcEv82wENVorsv/n9FhHXRmlmtZw==
-X-Received: by 2002:a17:906:f912:: with SMTP id lc18mr2483586ejb.226.1597919086323;
-        Thu, 20 Aug 2020 03:24:46 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id re10sm1184124ejb.68.2020.08.20.03.24.45
+        bh=p7IDsCs3O3XVq6Oo36ltfbQDp/qQH17B8kNCHrYYi58=;
+        b=phxOjcH6JNlE7w9DkA+LG02Xm3E+MnWELeQcowGlIMxfPEVAk9Aay58Z44T9fRKVWg
+         Nlae9rNs/789obXfoa8oNVW8gGI5Opuehn77if17souVIUP3d6NBj/jlxh3fEhLF1UGj
+         QXUAQXm+SQ0WaWQW5IVVgtcd7+UcIWCyviiX/cdRXJLR0RFCD24FlTHv3QhMsr/dOsQ3
+         ObEPSMEjBy0V40D7508DuAXImnIrSeOcDUKVykjJlE903Ms5CnyuPBbd78f8ZR4+ztCL
+         BTIM3fk56Ld4aDqEQY24xWyx5SiCoUPZ+KoLyCtCTBMVlQAczcKXfyoAEYJGlfT06fzh
+         sDzA==
+X-Gm-Message-State: AOAM530IYINwLo6UYjwIMcg6fhzWKmFe4ZdjhfVww0//tdiTqOz4k77+
+        tYZq6IJZHnMVLTRixZutFG9VQ7YYDos2KElc
+X-Google-Smtp-Source: ABdhPJwUfgOCSsxKBgM96fkavYAQsWOM+o4OucfQ/kwLbzzsSaMmbMPRI6zZQvtsxYgU6i/nrfHYuw==
+X-Received: by 2002:aa7:d54d:: with SMTP id u13mr2224213edr.356.1597918599022;
+        Thu, 20 Aug 2020 03:16:39 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id i26sm1034707edv.70.2020.08.20.03.16.38
         for <linux-scsi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2020 03:24:45 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id r15so1469082wrp.13
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Aug 2020 03:24:45 -0700 (PDT)
-X-Received: by 2002:a5d:6744:: with SMTP id l4mr2717742wrw.105.1597919084826;
- Thu, 20 Aug 2020 03:24:44 -0700 (PDT)
+        Thu, 20 Aug 2020 03:16:38 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id t14so1089456wmi.3
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Aug 2020 03:16:38 -0700 (PDT)
+X-Received: by 2002:a1c:5581:: with SMTP id j123mr2797156wmb.11.1597918188072;
+ Thu, 20 Aug 2020 03:09:48 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200819065555.1802761-1-hch@lst.de> <20200819065555.1802761-6-hch@lst.de>
  <CAAFQd5COLxjydDYrfx47ht8tj-aNPiaVnC+WyQA7nvpW4gs=ww@mail.gmail.com>
  <62e4f4fc-c8a5-3ee8-c576-fe7178cb4356@arm.com> <CAAFQd5AcCTDguB2C9KyDiutXWoEvBL8tL7+a==Uo8vj_8CLOJw@mail.gmail.com>
- <2b32f1d8-16f7-3352-40a5-420993d52fb5@arm.com> <20200820050214.GA4815@lst.de>
-In-Reply-To: <20200820050214.GA4815@lst.de>
+ <20200819135738.GB17098@lst.de> <CAAFQd5BvpzJTycFvjntmX9W_d879hHFX+rJ8W9EK6+6cqFaVMA@mail.gmail.com>
+ <20200820044533.GA4570@lst.de>
+In-Reply-To: <20200820044533.GA4570@lst.de>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 20 Aug 2020 12:24:31 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
-Message-ID: <CAAFQd5AknYpP5BamC=wJkEJyO-q47V6Gc+HT65h6B+HyT+-xjQ@mail.gmail.com>
+Date:   Thu, 20 Aug 2020 12:09:34 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5CEsC2h-oEdZOPTkUQ4WfFL0yyYu9dE5UscEVpLyMLrCg@mail.gmail.com>
+Message-ID: <CAAFQd5CEsC2h-oEdZOPTkUQ4WfFL0yyYu9dE5UscEVpLyMLrCg@mail.gmail.com>
 Subject: Re: [PATCH 05/28] media/v4l2: remove V4L2-FLAG-MEMORY-NON-CONSISTENT
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Robin Murphy <robin.murphy@arm.com>, alsa-devel@alsa-project.org,
@@ -92,80 +93,31 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 7:02 AM Christoph Hellwig <hch@lst.de> wrote:
+On Thu, Aug 20, 2020 at 6:45 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> On Wed, Aug 19, 2020 at 03:07:04PM +0100, Robin Murphy wrote:
-> >> FWIW, I asked back in time what the plan is for non-coherent
-> >> allocations and it seemed like DMA_ATTR_NON_CONSISTENT and
-> >> dma_sync_*() was supposed to be the right thing to go with. [2] The
-> >> same thread also explains why dma_alloc_pages() isn't suitable for the
-> >> users of dma_alloc_attrs() and DMA_ATTR_NON_CONSISTENT.
+> On Wed, Aug 19, 2020 at 04:11:52PM +0200, Tomasz Figa wrote:
+> > > > By the way, as a videobuf2 reviewer, I'd appreciate being CC'd on any
+> > > > series related to the subsystem-facing DMA API changes, since
+> > > > videobuf2 is one of the biggest users of it.
+> > >
+> > > The cc list is too long - I cc lists and key maintainers.  As a reviewer
+> > > should should watch your subsystems lists closely.
 > >
-> > AFAICS even back then Christoph was implying getting rid of NON_CONSISTENT
-> > and *replacing* it with something streaming-API-based - i.e. this series -
-> > not encouraging mixing the existing APIs. It doesn't seem impossible to
-> > implement a remapping version of this new dma_alloc_pages() for
-> > IOMMU-backed ops if it's really warranted (although at that point it seems
-> > like "non-coherent" vb2-dc starts to have significant conceptual overlap
-> > with vb2-sg).
+> > Well, I guess we can disagree on this, because there is no clear
+> > policy. I'm listed in the MAINTAINERS file for the subsystem and I
+> > believe the purpose of the file is to list the people to CC on
+> > relevant patches. We're all overloaded with work and having to look
+> > through the huge volume of mailing lists like linux-media doesn't help
+> > and thus I'd still appreciate being added on CC.
 >
-> You can alway vmap the returned pages from dma_alloc_pages, but it will
-> make cache invalidation hell - you'll need to use
-> invalidate_kernel_vmap_range and flush_kernel_vmap_range to properly
-> handle virtually indexed caches.
->
-> Or with remapping you mean using the iommu do de-scatter/gather?
+> I'm happy to Cc and active participant in the discussion.  I'm not
+> going to add all reviewers because even with the trimmed CC list
+> I'm already hitting the number of receipients limit on various lists.
 
-Ideally, both.
+Fair enough.
 
-For remapping in the CPU sense, there are drivers which rely on a
-contiguous kernel mapping of the vb2 buffers, which was provided by
-dma_alloc_attrs(). I think they could be reworked to work on single
-pages, but that would significantly complicate the code. At the same
-time, such drivers would actually benefit from a cached mapping,
-because they often have non-bursty, random access patterns.
-
-Then, in the IOMMU sense, the whole idea of videobuf2-dma-contig is to
-rely on the DMA API to always provide device-contiguous memory, as
-required by the hardware which only has a single pointer and size.
-
->
-> You can implement that trivially implement it yourself for the iommu
-> case:
->
-> {
->         merge_boundary = dma_get_merge_boundary(dev);
->         if (!merge_boundary || merge_boundary > chunk_size - 1) {
->                 /* can't coalesce */
->                 return -EINVAL;
->         }
->
->
->         nents = DIV_ROUND_UP(total_size, chunk_size);
->         sg = sgl_alloc();
->         for_each_sgl() {
->                 sg->page = __alloc_pages(get_order(chunk_size))
->                 sg->len = chunk_size;
->         }
->         dma_map_sg(sg, DMA_ATTR_SKIP_CPU_SYNC);
->         // you are guaranteed to get a single dma_addr out
-> }
->
-> Of course this still uses the scatterlist structure with its annoying
-> mix of input and output parametes, so I'd rather not expose it as
-> an official API at the DMA layer.
-
-The problem with the above open coded approach is that it requires
-explicit handling of the non-IOMMU and IOMMU cases and this is exactly
-what we don't want to have in vb2 and what was actually the job of the
-DMA API to hide. Is the plan to actually move the IOMMU handling out
-of the DMA API?
-
-Do you think we could instead turn it into a dma_alloc_noncoherent()
-helper, which has similar semantics as dma_alloc_attrs() and handles
-the various corner cases (e.g. invalidate_kernel_vmap_range and
-flush_kernel_vmap_range) to achieve the desired functionality without
-delegating the "hell", as you called it, to the users?
+We'll make your job easier and just turn my MAINTAINERS entry into a
+maintainer. :)
 
 Best regards,
 Tomasz
