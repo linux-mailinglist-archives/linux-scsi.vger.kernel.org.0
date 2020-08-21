@@ -2,288 +2,126 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5ED24D8F9
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Aug 2020 17:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2053624D9EF
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Aug 2020 18:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727828AbgHUPnQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Aug 2020 11:43:16 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:48357 "EHLO smtp.infotech.no"
+        id S1728083AbgHUQQ2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Aug 2020 12:16:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727829AbgHUPme (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 21 Aug 2020 11:42:34 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 39525204155;
-        Fri, 21 Aug 2020 17:42:21 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FnfxziSm+gjF; Fri, 21 Aug 2020 17:42:19 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-45-78-251-166.dyn.295.ca [45.78.251.166])
-        by smtp.infotech.no (Postfix) with ESMTPA id 3D6DA204255;
-        Fri, 21 Aug 2020 17:42:18 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        john.garry@huawei.com
-Subject: [PATCH v6 10/10] scsi_transport_sas: avoid dev_to_shost() walks
-Date:   Fri, 21 Aug 2020 11:42:04 -0400
-Message-Id: <20200821154204.9298-11-dgilbert@interlog.com>
+        id S1728070AbgHUQQX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:16:23 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B0DC622B4E;
+        Fri, 21 Aug 2020 16:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598026582;
+        bh=l8A2krO7X5bmyZWqfJPn18y+U9YtDtgV6LKcbdwCpdQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nEwV7/Axx45dRv17+oOlQM923tlP/gcoQjFO2R559tr2pOEXrwXeV/pgWDc7UkwyG
+         UXaKcnevJ95oZ4Fso0/1loTSNrihgDtkalAvr5sa/8osm9EEqf+f4q6LrwyDAwHfyL
+         s56bqwPC9sFNfS3bRD0+zKfZZJnmlFcTsiPLPipc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 30/61] scsi: lpfc: Fix shost refcount mismatch when deleting vport
+Date:   Fri, 21 Aug 2020 12:15:14 -0400
+Message-Id: <20200821161545.347622-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821154204.9298-1-dgilbert@interlog.com>
-References: <20200821154204.9298-1-dgilbert@interlog.com>
+In-Reply-To: <20200821161545.347622-1-sashal@kernel.org>
+References: <20200821161545.347622-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-While dev_to_shost() is a solid implementation of a runtime type
-identification (RTTI) scheme, within the scope of a Scsi_Host
-object (e.g. representing a HBA) the answer is always the same!
-So cache the answer for the sas_phy and sas_rphy cases. This
-should marginally improve the speed of about half the functions
-defined in scsi_transport_sas.c .
+From: Dick Kennedy <dick.kennedy@broadcom.com>
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+[ Upstream commit 03dbfe0668e6692917ac278883e0586cd7f7d753 ]
+
+When vports are deleted, it is observed that there is memory/kthread
+leakage as the vport isn't fully being released.
+
+There is a shost reference taken in scsi_add_host_dma that is not released
+during scsi_remove_host. It was noticed that other drivers resolve this by
+doing a scsi_host_put after calling scsi_remove_host.
+
+The vport_delete routine is taking two references one that corresponds to
+an access to the scsi_host in the vport_delete routine and another that is
+released after the adapter mailbox command completes that destroys the VPI
+that corresponds to the vport.
+
+Remove one of the references taken such that the second reference that is
+put will complete the missing scsi_add_host_dma reference and the shost
+will be terminated.
+
+Link: https://lore.kernel.org/r/20200630215001.70793-8-jsmart2021@gmail.com
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_sas.c | 40 +++++++++++++++----------------
- include/scsi/scsi_transport_sas.h |  8 +++++--
- 2 files changed, 26 insertions(+), 22 deletions(-)
+ drivers/scsi/lpfc/lpfc_vport.c | 26 ++++++++------------------
+ 1 file changed, 8 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
-index c9abed8429c9..8d52de5d0957 100644
---- a/drivers/scsi/scsi_transport_sas.c
-+++ b/drivers/scsi/scsi_transport_sas.c
-@@ -171,7 +171,7 @@ static struct sas_end_device *sas_sdev_to_rdev(struct scsi_device *sdev)
- 
- static int sas_smp_dispatch(struct bsg_job *job)
- {
--	struct Scsi_Host *shost = dev_to_shost(job->dev);
-+	struct Scsi_Host *shost;
- 	struct sas_rphy *rphy = NULL;
- 
- 	if (!scsi_is_host_device(job->dev))
-@@ -183,6 +183,7 @@ static int sas_smp_dispatch(struct bsg_job *job)
- 		return 0;
+diff --git a/drivers/scsi/lpfc/lpfc_vport.c b/drivers/scsi/lpfc/lpfc_vport.c
+index b766463579800..d0296f7cf45fc 100644
+--- a/drivers/scsi/lpfc/lpfc_vport.c
++++ b/drivers/scsi/lpfc/lpfc_vport.c
+@@ -642,27 +642,16 @@ lpfc_vport_delete(struct fc_vport *fc_vport)
+ 		    vport->port_state < LPFC_VPORT_READY)
+ 			return -EAGAIN;
  	}
- 
-+	shost = rphy->shost;
- 	to_sas_internal(shost->transportt)->f->smp_handler(job, shost, rphy);
- 	return 0;
- }
-@@ -462,7 +463,7 @@ store_sas_phy_##field(struct device *dev, 				\
- 		      const char *buf,	size_t count)			\
- {									\
- 	struct sas_phy *phy = transport_class_to_phy(dev);		\
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);	\
-+	struct Scsi_Host *shost = phy->shost;				\
- 	struct sas_internal *i = to_sas_internal(shost->transportt);	\
- 	u32 value;							\
- 	struct sas_phy_linkrates rates = {0};				\
-@@ -494,7 +495,7 @@ show_sas_phy_##field(struct device *dev, 				\
- 		     struct device_attribute *attr, char *buf)		\
- {									\
- 	struct sas_phy *phy = transport_class_to_phy(dev);		\
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);	\
-+	struct Scsi_Host *shost = phy->shost;				\
- 	struct sas_internal *i = to_sas_internal(shost->transportt);	\
- 	int error;							\
- 									\
-@@ -525,7 +526,7 @@ static ssize_t do_sas_phy_enable(struct device *dev,
- 		size_t count, int enable)
- {
- 	struct sas_phy *phy = transport_class_to_phy(dev);
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);
-+	struct Scsi_Host *shost = phy->shost;
- 	struct sas_internal *i = to_sas_internal(shost->transportt);
- 	int error;
- 
-@@ -573,8 +574,7 @@ static ssize_t
- do_sas_phy_reset(struct device *dev, size_t count, int hard_reset)
- {
- 	struct sas_phy *phy = transport_class_to_phy(dev);
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);
--	struct sas_internal *i = to_sas_internal(shost->transportt);
-+	struct sas_internal *i = to_sas_internal(phy->shost->transportt);
- 	int error;
- 
- 	error = i->f->phy_reset(phy, hard_reset);
-@@ -621,8 +621,7 @@ static int sas_phy_setup(struct transport_container *tc, struct device *dev,
- 			 struct device *cdev)
- {
- 	struct sas_phy *phy = dev_to_phy(dev);
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);
--	struct sas_internal *i = to_sas_internal(shost->transportt);
-+	struct sas_internal *i = to_sas_internal(phy->shost->transportt);
- 
- 	if (i->f->phy_setup)
- 		i->f->phy_setup(phy);
-@@ -640,7 +639,7 @@ static int sas_phy_match(struct attribute_container *cont, struct device *dev)
- 
- 	if (!scsi_is_sas_phy(dev))
- 		return 0;
--	shost = dev_to_shost(dev->parent);
-+	shost = dev_to_phy(dev)->shost;
- 
- 	if (!shost->transportt)
- 		return 0;
-@@ -655,8 +654,7 @@ static int sas_phy_match(struct attribute_container *cont, struct device *dev)
- static void sas_phy_release(struct device *dev)
- {
- 	struct sas_phy *phy = dev_to_phy(dev);
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);
--	struct sas_internal *i = to_sas_internal(shost->transportt);
-+	struct sas_internal *i = to_sas_internal(phy->shost->transportt);
- 
- 	if (i->f->phy_release)
- 		i->f->phy_release(phy);
-@@ -687,6 +685,7 @@ struct sas_phy *sas_phy_alloc(struct device *parent, int number)
- 
- 	phy->number = number;
- 	phy->enabled = 1;
-+	phy->shost = shost;
- 
- 	device_initialize(&phy->dev);
- 	phy->dev.parent = get_device(parent);
-@@ -806,6 +805,7 @@ static int sas_port_match(struct attribute_container *cont, struct device *dev)
- 
- 	if (!scsi_is_sas_port(dev))
- 		return 0;
-+	/* Could dev_to_sas_port(dev) and if port non-NULL use rphy->shost */
- 	shost = dev_to_shost(dev->parent);
- 
- 	if (!shost->transportt)
-@@ -1180,8 +1180,7 @@ show_sas_rphy_enclosure_identifier(struct device *dev,
- {
- 	struct sas_rphy *rphy = transport_class_to_rphy(dev);
- 	struct sas_phy *phy = dev_to_phy(rphy->dev.parent);
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);
--	struct sas_internal *i = to_sas_internal(shost->transportt);
-+	struct sas_internal *i = to_sas_internal(phy->shost->transportt);
- 	u64 identifier;
- 	int error;
- 
-@@ -1200,8 +1199,7 @@ show_sas_rphy_bay_identifier(struct device *dev,
- {
- 	struct sas_rphy *rphy = transport_class_to_rphy(dev);
- 	struct sas_phy *phy = dev_to_phy(rphy->dev.parent);
--	struct Scsi_Host *shost = dev_to_shost(phy->dev.parent);
--	struct sas_internal *i = to_sas_internal(shost->transportt);
-+	struct sas_internal *i = to_sas_internal(phy->shost->transportt);
- 	int val;
- 
- 	val = i->f->get_bay_identifier(rphy);
-@@ -1327,7 +1325,7 @@ static int sas_rphy_match(struct attribute_container *cont, struct device *dev)
- 
- 	if (!scsi_is_sas_rphy(dev))
- 		return 0;
--	shost = dev_to_shost(dev->parent->parent);
-+	shost = dev_to_rphy(dev)->shost;
- 
- 	if (!shost->transportt)
- 		return 0;
-@@ -1348,8 +1346,8 @@ static int sas_end_dev_match(struct attribute_container *cont,
- 
- 	if (!scsi_is_sas_rphy(dev))
- 		return 0;
--	shost = dev_to_shost(dev->parent->parent);
- 	rphy = dev_to_rphy(dev);
-+	shost = rphy->shost;
- 
- 	if (!shost->transportt)
- 		return 0;
-@@ -1371,8 +1369,8 @@ static int sas_expander_match(struct attribute_container *cont,
- 
- 	if (!scsi_is_sas_rphy(dev))
- 		return 0;
--	shost = dev_to_shost(dev->parent->parent);
- 	rphy = dev_to_rphy(dev);
-+	shost = rphy->shost;
- 
- 	if (!shost->transportt)
- 		return 0;
-@@ -1436,6 +1434,7 @@ struct sas_rphy *sas_end_device_alloc(struct sas_port *parent)
- 	}
- 
- 	device_initialize(&rdev->rphy.dev);
-+	rdev->rphy.shost = shost;
- 	rdev->rphy.dev.parent = get_device(&parent->dev);
- 	rdev->rphy.dev.release = sas_end_device_release;
- 	if (scsi_is_sas_expander_device(parent->dev.parent)) {
-@@ -1480,6 +1479,7 @@ struct sas_rphy *sas_expander_alloc(struct sas_port *parent,
- 	}
- 
- 	device_initialize(&rdev->rphy.dev);
-+	rdev->rphy.shost = shost;
- 	rdev->rphy.dev.parent = get_device(&parent->dev);
- 	rdev->rphy.dev.release = sas_expander_release;
- 	mutex_lock(&sas_host->lock);
-@@ -1504,7 +1504,7 @@ EXPORT_SYMBOL(sas_expander_alloc);
- int sas_rphy_add(struct sas_rphy *rphy)
- {
- 	struct sas_port *parent = dev_to_sas_port(rphy->dev.parent);
--	struct Scsi_Host *shost = dev_to_shost(parent->dev.parent);
-+	struct Scsi_Host *shost = rphy->shost;
- 	struct sas_host_attrs *sas_host = to_sas_host_attrs(shost);
- 	struct sas_identify *identify = &rphy->identify;
- 	int error;
-@@ -1563,7 +1563,7 @@ EXPORT_SYMBOL(sas_rphy_add);
- void sas_rphy_free(struct sas_rphy *rphy)
- {
- 	struct device *dev = &rphy->dev;
--	struct Scsi_Host *shost = dev_to_shost(rphy->dev.parent->parent);
-+	struct Scsi_Host *shost = rphy->shost;
- 	struct sas_host_attrs *sas_host = to_sas_host_attrs(shost);
- 
- 	mutex_lock(&sas_host->lock);
-diff --git a/include/scsi/scsi_transport_sas.h b/include/scsi/scsi_transport_sas.h
-index 05ec927a3c72..9f4c50358f82 100644
---- a/include/scsi/scsi_transport_sas.h
-+++ b/include/scsi/scsi_transport_sas.h
-@@ -9,6 +9,7 @@
- #include <linux/bsg-lib.h>
- 
- struct scsi_transport_template;
-+struct Scsi_Host;
- struct sas_rphy;
- struct request;
- 
-@@ -80,6 +81,8 @@ struct sas_phy {
- 	/* for the list of phys belonging to a port */
- 	struct list_head	port_siblings;
- 
-+	struct Scsi_Host	*shost;		/* cache to avoid dev_to_shost() walks */
 +
- 	/* available to the lldd */
- 	void			*hostdata;
- };
-@@ -89,7 +92,7 @@ struct sas_phy {
- #define transport_class_to_phy(dev) \
- 	dev_to_phy((dev)->parent)
- #define phy_to_shost(phy) \
--	dev_to_shost((phy)->dev.parent)
-+	((phy)->shost)
+ 	/*
+-	 * This is a bit of a mess.  We want to ensure the shost doesn't get
+-	 * torn down until we're done with the embedded lpfc_vport structure.
+-	 *
+-	 * Beyond holding a reference for this function, we also need a
+-	 * reference for outstanding I/O requests we schedule during delete
+-	 * processing.  But once we scsi_remove_host() we can no longer obtain
+-	 * a reference through scsi_host_get().
+-	 *
+-	 * So we take two references here.  We release one reference at the
+-	 * bottom of the function -- after delinking the vport.  And we
+-	 * release the other at the completion of the unreg_vpi that get's
+-	 * initiated after we've disposed of all other resources associated
+-	 * with the port.
++	 * Take early refcount for outstanding I/O requests we schedule during
++	 * delete processing for unreg_vpi.  Always keep this before
++	 * scsi_remove_host() as we can no longer obtain a reference through
++	 * scsi_host_get() after scsi_host_remove as shost is set to SHOST_DEL.
+ 	 */
+ 	if (!scsi_host_get(shost))
+ 		return VPORT_INVAL;
+-	if (!scsi_host_get(shost)) {
+-		scsi_host_put(shost);
+-		return VPORT_INVAL;
+-	}
++
+ 	lpfc_free_sysfs_attr(vport);
  
- struct request_queue;
- struct sas_rphy {
-@@ -97,6 +100,7 @@ struct sas_rphy {
- 	struct sas_identify	identify;
- 	struct list_head	list;
- 	struct request_queue	*q;
-+	struct Scsi_Host	*shost;		/* cache to avoid dev_to_shost() walks */
- 	u32			scsi_target_id;
- };
+ 	lpfc_debugfs_terminate(vport);
+@@ -809,8 +798,9 @@ lpfc_vport_delete(struct fc_vport *fc_vport)
+ 		if (!(vport->vpi_state & LPFC_VPI_REGISTERED) ||
+ 				lpfc_mbx_unreg_vpi(vport))
+ 			scsi_host_put(shost);
+-	} else
++	} else {
+ 		scsi_host_put(shost);
++	}
  
-@@ -105,7 +109,7 @@ struct sas_rphy {
- #define transport_class_to_rphy(dev) \
- 	dev_to_rphy((dev)->parent)
- #define rphy_to_shost(rphy) \
--	dev_to_shost((rphy)->dev.parent)
-+	((rphy)->shost)
- #define target_to_rphy(targ) \
- 	dev_to_rphy((targ)->dev.parent)
- 
+ 	lpfc_free_vpi(phba, vport->vpi);
+ 	vport->work_port_events = 0;
 -- 
 2.25.1
 
