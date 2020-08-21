@@ -2,65 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FA724CE56
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Aug 2020 08:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC28C24D379
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Aug 2020 13:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727841AbgHUG6Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Aug 2020 02:58:16 -0400
-Received: from e1.217software.com ([102.130.112.140]:36228 "EHLO
-        e1.217software.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgHUG6Q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Aug 2020 02:58:16 -0400
-X-Greylist: delayed 671 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Aug 2020 02:58:14 EDT
-DKIM-Filter: OpenDKIM Filter v2.11.0 e1.217software.com 6603024CD0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=217software.com;
-        s=e1; t=1597992421; bh=NeY7dCP1XrhBT3MWtgB7arJ0LETefnqYD3/oyBgRhfs=;
-        h=Date:Subject:From:Reply-To:To:List-Unsubscribe:List-Id:From;
-        b=RZgHCg40nNh5siR7wgkYutJU2YZF3gJgIo3n1xhxiCzLNc093awBPfUlBEU4m7eX5
-         ZarqnIti7jbguKtfznq+s/q5i713LSRF7FaZhVzgi3eobqhklaAgRr0gJ8daXXqjQ5
-         Gx1z6oE0AZQFb8uRITWnuuMhyomwIe/xJ9/xSPsA=
-Message-ID: <6b3d098a66a50e2a40ce0d53155f5a36@217software.com>
-Date:   Fri, 21 Aug 2020 06:46:43 +0000
-Subject: Fwd: Re: Would You please mail us web-hosting compare list?
-From:   John <info@217software.com>
-Reply-To: John <info@217software.com>
-To:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+        id S1727791AbgHULDu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Aug 2020 07:03:50 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:10299 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726118AbgHULDs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 21 Aug 2020 07:03:48 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 2728DAB371526D17C577;
+        Fri, 21 Aug 2020 19:03:44 +0800 (CST)
+Received: from localhost (10.174.179.108) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Fri, 21 Aug 2020
+ 19:03:37 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <hare@suse.de>, <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH v3] scsi: libfc: Fix passing zero to 'PTR_ERR' warning
+Date:   Fri, 21 Aug 2020 19:02:56 +0800
+Message-ID: <20200821110256.6660-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+In-Reply-To: <20200818114235.51052-1-yuehaibing@huawei.com>
+References: <20200818114235.51052-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Sender: info@217software.com
-X-Receiver: linux-scsi@vger.kernel.org
-X-Fjla-Tracking-Did: 0
-X-Fjla-Subscriber-Uid: gd063v0m2wcf1
-X-Fjla-Mailer: SwiftMailer - 5.4.x
-X-Fjla-Delivery-Sid: 1
-X-Fjla-Customer-Uid: gx0582et0060f
-X-Fjla-Customer-Gid: 0
-X-Fjla-Campaign-Uid: yb0822fonl9c3
-Feedback-ID: yb0822fonl9c3:gd063v0m2wcf1:cs4233gcj53de:gx0582et0060f
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.108]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-08-12 13:22, John wrote:
-> Great! I will forward it to my webmast=
-er.
->=20
-> On 2020-08-12 13:28, Kris wrote:
->> Good Day John,
->>
->>=
- Of course, there it is- tinylnx.com/hostingcompare
->>=20
->> On 2020-08-1=
-2 13:33, John wrote:
->>> Good Day Kris,
->>>=20
->>> I will launch few ph=
-p websites projects and we're going to need web-hosting, may You please sen=
-d me that web hosting compare website, that You mentioned some time ago?
-=
->>>=20
->>=20
->
+drivers/scsi/libfc/fc_disc.c:304
+ fc_disc_error() warn: passing zero to 'PTR_ERR'
+
+fp maybe NULL in fc_disc_error(), use PTR_ERR_OR_ZERO to handle this.
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+v3: use PTR_ERR_OR_ZERO
+v2: use use IS_ERR in fc_disc_error()
+---
+ drivers/scsi/libfc/fc_disc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/libfc/fc_disc.c b/drivers/scsi/libfc/fc_disc.c
+index d8cbc9c0e766..43284c3b2903 100644
+--- a/drivers/scsi/libfc/fc_disc.c
++++ b/drivers/scsi/libfc/fc_disc.c
+@@ -302,7 +302,7 @@ static void fc_disc_error(struct fc_disc *disc, struct fc_frame *fp)
+ 	unsigned long delay = 0;
+ 
+ 	FC_DISC_DBG(disc, "Error %ld, retries %d/%d\n",
+-		    PTR_ERR(fp), disc->retry_count,
++		    PTR_ERR_OR_ZERO(fp), disc->retry_count,
+ 		    FC_DISC_RETRY_LIMIT);
+ 
+ 	if (!fp || PTR_ERR(fp) == -FC_EX_TIMEOUT) {
+-- 
+2.17.1
+
+
