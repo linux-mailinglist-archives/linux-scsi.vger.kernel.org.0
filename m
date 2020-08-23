@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A9424F02C
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Aug 2020 00:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7A024F02F
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Aug 2020 00:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgHWWNz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 23 Aug 2020 18:13:55 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:54169 "EHLO smtp.infotech.no"
+        id S1726989AbgHWWOD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 23 Aug 2020 18:14:03 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:54174 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726972AbgHWWNm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 23 Aug 2020 18:13:42 -0400
+        id S1726765AbgHWWNn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 23 Aug 2020 18:13:43 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 1248120424C;
-        Mon, 24 Aug 2020 00:13:40 +0200 (CEST)
+        by smtp.infotech.no (Postfix) with ESMTP id 2C1D820426C;
+        Mon, 24 Aug 2020 00:13:41 +0200 (CEST)
 X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
 Received: from smtp.infotech.no ([127.0.0.1])
         by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Mp8RgN9QRnOZ; Mon, 24 Aug 2020 00:13:38 +0200 (CEST)
+        with ESMTP id C71phvT53eki; Mon, 24 Aug 2020 00:13:39 +0200 (CEST)
 Received: from xtwo70.bingwo.ca (host-45-78-251-166.dyn.295.ca [45.78.251.166])
-        by smtp.infotech.no (Postfix) with ESMTPA id BEB8A204255;
-        Mon, 24 Aug 2020 00:13:36 +0200 (CEST)
+        by smtp.infotech.no (Postfix) with ESMTPA id D1DFC20426F;
+        Mon, 24 Aug 2020 00:13:37 +0200 (CEST)
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: [PATCH v10 33/40] sg: move procfs objects to avoid forward decls
-Date:   Sun, 23 Aug 2020 18:12:41 -0400
-Message-Id: <20200823221248.15678-34-dgilbert@interlog.com>
+Subject: [PATCH v10 34/40] sg: protect multiple receivers
+Date:   Sun, 23 Aug 2020 18:12:42 -0400
+Message-Id: <20200823221248.15678-35-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200823221248.15678-1-dgilbert@interlog.com>
 References: <20200823221248.15678-1-dgilbert@interlog.com>
@@ -37,163 +37,168 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Move the procfs related file_operations and seq_operations
-definitions toward the end of the source file to minimize the
-need for forward declarations of the functions they name.
+If two threads call ioctl(SG_IORECEIVE) [or read()] on the same
+file descriptor there is a potential race on the same request
+response. Use atomic bit operations to make sure only one thread
+gets each request response. [The other thread will either get
+another request response or nothing.]
+
+Also make sfp cleanup a bit more robust and report if the
+number of submitted requests (which are decremented when
+completed) is other than the expected value of zero.
 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 ---
- drivers/scsi/sg.c | 129 +++++++++++++++++++++-------------------------
- 1 file changed, 58 insertions(+), 71 deletions(-)
+ drivers/scsi/sg.c | 54 +++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 111c4357526d..fdccd932bd92 100644
+index fdccd932bd92..2e29144ebdb5 100644
 --- a/drivers/scsi/sg.c
 +++ b/drivers/scsi/sg.c
-@@ -3776,77 +3776,6 @@ sg_rq_st_str(enum sg_rq_state rq_st, bool long_str)
- #endif
+@@ -109,6 +109,7 @@ enum sg_rq_state {	/* N.B. sg_rq_state_arr assumes SG_RS_AWAIT_RCV==2 */
+ #define SG_FRQ_SYNC_INVOC	2	/* synchronous (blocking) invocation */
+ #define SG_FRQ_NO_US_XFER	3	/* no user space transfer of data */
+ #define SG_FRQ_DEACT_ORPHAN	6	/* not keeping orphan so de-activate */
++#define SG_FRQ_RECEIVING	7	/* guard against multiple receivers */
+ #define SG_FRQ_BLK_PUT_REQ	8	/* set when blk_put_request() called */
  
- #if IS_ENABLED(CONFIG_SCSI_PROC_FS)     /* long, almost to end of file */
--static int sg_proc_seq_show_int(struct seq_file *s, void *v);
--
--static int sg_proc_single_open_adio(struct inode *inode, struct file *filp);
--static ssize_t sg_proc_write_adio(struct file *filp, const char __user *buffer,
--			          size_t count, loff_t *off);
--static const struct proc_ops adio_proc_ops = {
--	.proc_open	= sg_proc_single_open_adio,
--	.proc_read	= seq_read,
--	.proc_lseek	= seq_lseek,
--	.proc_write	= sg_proc_write_adio,
--	.proc_release	= single_release,
--};
--
--static int sg_proc_single_open_dressz(struct inode *inode, struct file *filp);
--static ssize_t sg_proc_write_dressz(struct file *filp, 
--		const char __user *buffer, size_t count, loff_t *off);
--static const struct proc_ops dressz_proc_ops = {
--	.proc_open	= sg_proc_single_open_dressz,
--	.proc_read	= seq_read,
--	.proc_lseek	= seq_lseek,
--	.proc_write	= sg_proc_write_dressz,
--	.proc_release	= single_release,
--};
--
--static int sg_proc_seq_show_version(struct seq_file *s, void *v);
--static int sg_proc_seq_show_devhdr(struct seq_file *s, void *v);
--static int sg_proc_seq_show_dev(struct seq_file *s, void *v);
--static void * dev_seq_start(struct seq_file *s, loff_t *pos);
--static void * dev_seq_next(struct seq_file *s, void *v, loff_t *pos);
--static void dev_seq_stop(struct seq_file *s, void *v);
--static const struct seq_operations dev_seq_ops = {
--	.start = dev_seq_start,
--	.next  = dev_seq_next,
--	.stop  = dev_seq_stop,
--	.show  = sg_proc_seq_show_dev,
--};
--
--static int sg_proc_seq_show_devstrs(struct seq_file *s, void *v);
--static const struct seq_operations devstrs_seq_ops = {
--	.start = dev_seq_start,
--	.next  = dev_seq_next,
--	.stop  = dev_seq_stop,
--	.show  = sg_proc_seq_show_devstrs,
--};
--
--static int sg_proc_seq_show_debug(struct seq_file *s, void *v);
--static const struct seq_operations debug_seq_ops = {
--	.start = dev_seq_start,
--	.next  = dev_seq_next,
--	.stop  = dev_seq_stop,
--	.show  = sg_proc_seq_show_debug,
--};
--
--static int
--sg_proc_init(void)
--{
--	struct proc_dir_entry *p;
--
--	p = proc_mkdir("scsi/sg", NULL);
--	if (!p)
--		return 1;
--
--	proc_create("allow_dio", 0644, p, &adio_proc_ops);
--	proc_create_seq("debug", 0444, p, &debug_seq_ops);
--	proc_create("def_reserved_size", 0644, p, &dressz_proc_ops);
--	proc_create_single("device_hdr", 0444, p, sg_proc_seq_show_devhdr);
--	proc_create_seq("devices", 0444, p, &dev_seq_ops);
--	proc_create_seq("device_strs", 0444, p, &devstrs_seq_ops);
--	proc_create_single("version", 0444, p, sg_proc_seq_show_version);
--	return 0;
--}
- 
- static int
- sg_last_dev(void)
-@@ -4219,6 +4148,64 @@ sg_proc_seq_show_debug(struct seq_file *s, void *v)
- 	return 0;
+ /* Bit positions (flags) for sg_fd::ffd_bm bitmask follow */
+@@ -1285,6 +1286,7 @@ sg_ctl_ioreceive(struct file *filp, struct sg_fd *sfp, void __user *p)
+ 	SG_LOG(3, sfp, "%s: non_block(+IMMED)=%d\n", __func__, non_block);
+ 	/* read in part of v3 or v4 header for pack_id or tag based find */
+ 	id = pack_id;
++try_again:
+ 	srp = sg_find_srp_by_id(sfp, id);
+ 	if (!srp) {     /* nothing available so wait on packet or */
+ 		if (unlikely(SG_IS_DETACHING(sdp)))
+@@ -1299,6 +1301,10 @@ sg_ctl_ioreceive(struct file *filp, struct sg_fd *sfp, void __user *p)
+ 		if (res)
+ 			return res;	/* signal --> -ERESTARTSYS */
+ 	}	/* now srp should be valid */
++	if (test_and_set_bit(SG_FRQ_RECEIVING, srp->frq_bm)) {
++		cpu_relax();
++		goto try_again;
++	}
+ 	return sg_receive_v4(sfp, srp, p, h4p);
  }
  
-+static const struct proc_ops adio_proc_ops = {
-+	.proc_open      = sg_proc_single_open_adio,
-+	.proc_read      = seq_read,
-+	.proc_lseek     = seq_lseek,
-+	.proc_write     = sg_proc_write_adio,
-+	.proc_release   = single_release,
-+};
-+
-+static const struct proc_ops dressz_proc_ops = {
-+	.proc_open      = sg_proc_single_open_dressz,
-+	.proc_read      = seq_read,
-+	.proc_lseek     = seq_lseek,
-+	.proc_write     = sg_proc_write_dressz,
-+	.proc_release   = single_release,
-+};
-+
-+static const struct seq_operations dev_seq_ops = {
-+	.start = dev_seq_start,
-+	.next  = dev_seq_next,
-+	.stop  = dev_seq_stop,
-+	.show  = sg_proc_seq_show_dev,
-+};
-+
-+static const struct seq_operations devstrs_seq_ops = {
-+	.start = dev_seq_start,
-+	.next  = dev_seq_next,
-+	.stop  = dev_seq_stop,
-+	.show  = sg_proc_seq_show_devstrs,
-+};
-+
-+static const struct seq_operations debug_seq_ops = {
-+	.start = dev_seq_start,
-+	.next  = dev_seq_next,
-+	.stop  = dev_seq_stop,
-+	.show  = sg_proc_seq_show_debug,
-+};
-+
-+static int
-+sg_proc_init(void)
-+{
-+	struct proc_dir_entry *p;
-+
-+	p = proc_mkdir("scsi/sg", NULL);
-+	if (!p)
-+		return 1;
-+
-+	proc_create("allow_dio", 0644, p, &adio_proc_ops);
-+	proc_create_seq("debug", 0444, p, &debug_seq_ops);
-+	proc_create("def_reserved_size", 0644, p, &dressz_proc_ops);
-+	proc_create_single("device_hdr", 0444, p, sg_proc_seq_show_devhdr);
-+	proc_create_seq("devices", 0444, p, &dev_seq_ops);
-+	proc_create_seq("device_strs", 0444, p, &devstrs_seq_ops);
-+	proc_create_single("version", 0444, p, sg_proc_seq_show_version);
-+	return 0;
-+}
-+
-+/* remove_proc_subtree("scsi/sg", NULL) in exit_sg() does cleanup */
-+
- #endif				/* CONFIG_SCSI_PROC_FS (~400 lines back) */
+@@ -1335,7 +1341,7 @@ sg_ctl_ioreceive_v3(struct file *filp, struct sg_fd *sfp, void __user *p)
  
- module_init(init_sg);
+ 	if (test_bit(SG_FFD_FORCE_PACKID, sfp->ffd_bm))
+ 		pack_id = h3p->pack_id;
+-
++try_again:
+ 	srp = sg_find_srp_by_id(sfp, pack_id);
+ 	if (!srp) {     /* nothing available so wait on packet or */
+ 		if (unlikely(SG_IS_DETACHING(sdp)))
+@@ -1350,6 +1356,10 @@ sg_ctl_ioreceive_v3(struct file *filp, struct sg_fd *sfp, void __user *p)
+ 		if (unlikely(res))
+ 			return res;	/* signal --> -ERESTARTSYS */
+ 	}	/* now srp should be valid */
++	if (test_and_set_bit(SG_FRQ_RECEIVING, srp->frq_bm)) {
++		cpu_relax();
++		goto try_again;
++	}
+ 	return sg_receive_v3(sfp, srp, SZ_SG_IO_HDR, p);
+ }
+ 
+@@ -1502,6 +1512,7 @@ sg_read(struct file *filp, char __user *p, size_t count, loff_t *ppos)
+ 			want_id = h2p->pack_id;
+ 		}
+ 	}
++try_again:
+ 	srp = sg_find_srp_by_id(sfp, want_id);
+ 	if (!srp) {	/* nothing available so wait on packet to arrive or */
+ 		if (unlikely(SG_IS_DETACHING(sdp)))
+@@ -1517,6 +1528,10 @@ sg_read(struct file *filp, char __user *p, size_t count, loff_t *ppos)
+ 			return ret;
+ 		/* otherwise srp should be valid */
+ 	}
++	if (test_and_set_bit(SG_FRQ_RECEIVING, srp->frq_bm)) {
++		cpu_relax();
++		goto try_again;
++	}
+ 	if (srp->s_hdr3.interface_id == '\0')
+ 		ret = sg_read_v1v2(p, (int)count, sfp, srp);
+ 	else
+@@ -3051,32 +3066,33 @@ sg_finish_scsi_blk_rq(struct sg_request *srp)
+ 		atomic_dec(&sfp->submitted);
+ 		atomic_dec(&sfp->waiting);
+ 	}
+-	if (srp->bio) {
+-		bool us_xfer = !test_bit(SG_FRQ_NO_US_XFER, srp->frq_bm);
+-
+-		if (us_xfer) {
+-			ret = blk_rq_unmap_user(srp->bio);
+-			if (ret) {	/* -EINTR (-4) can be ignored */
+-				SG_LOG(6, sfp,
+-				       "%s: blk_rq_unmap_user() --> %d\n",
+-				       __func__, ret);
+-			}
+-		}
+-		srp->bio = NULL;
+-	}
+-	/* In worst case READ data returned to user space by this point */
+ 
+ 	/* Expect blk_put_request(rq) already called in sg_rq_end_io() */
+ 	if (unlikely(!test_and_set_bit(SG_FRQ_BLK_PUT_REQ, srp->frq_bm))) {
+ 		struct request *rq = srp->rq;
+ 
++		srp->rq = NULL;
+ 		if (rq) {       /* blk_get_request() may have failed */
+ 			if (scsi_req(rq))
+ 				scsi_req_free_cmd(scsi_req(rq));
+-			srp->rq = NULL;
+ 			blk_put_request(rq);
+ 		}
+ 	}
++	if (srp->bio) {
++		bool us_xfer = !test_bit(SG_FRQ_NO_US_XFER, srp->frq_bm);
++		struct bio *bio = srp->bio;
++
++		srp->bio = NULL;
++		if (us_xfer && bio) {
++			ret = blk_rq_unmap_user(bio);
++			if (ret) {	/* -EINTR (-4) can be ignored */
++				SG_LOG(6, sfp,
++				       "%s: blk_rq_unmap_user() --> %d\n",
++				       __func__, ret);
++			}
++		}
++	}
++	/* In worst case, READ data returned to user space by this point */
+ }
+ 
+ static int
+@@ -3509,6 +3525,7 @@ sg_deact_request(struct sg_fd *sfp, struct sg_request *srp)
+ 		return;
+ 	sbp = srp->sense_bp;
+ 	srp->sense_bp = NULL;
++	srp->frq_bm[0] = 0;
+ 	sg_rq_state_chg(srp, 0, SG_RS_INACTIVE, true /* force */, __func__);
+ 	/* maybe orphaned req, thus never read */
+ 	if (sbp)
+@@ -3641,6 +3658,7 @@ static void
+ sg_remove_sfp_usercontext(struct work_struct *work)
+ {
+ 	__maybe_unused int o_count;
++	int subm;
+ 	unsigned long idx, iflags;
+ 	struct sg_device *sdp;
+ 	struct sg_fd *sfp = container_of(work, struct sg_fd, ew_fd.work);
+@@ -3678,6 +3696,10 @@ sg_remove_sfp_usercontext(struct work_struct *work)
+ 		SG_LOG(6, sfp, "%s: kfree: srp=%pK --\n", __func__, srp);
+ 		kfree(srp);
+ 	}
++	subm = atomic_read(&sfp->submitted);
++	if (subm != 0)
++		SG_LOG(1, sfp, "%s: expected submitted=0 got %d\n",
++		       __func__, subm);
+ 	xa_destroy(xafp);
+ 	xa_lock_irqsave(xadp, iflags);
+ 	e_sfp = __xa_erase(xadp, sfp->idx);
 -- 
 2.25.1
 
