@@ -2,88 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDDF250470
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Aug 2020 19:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A902506DA
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Aug 2020 19:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgHXRBz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Aug 2020 13:01:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728493AbgHXQik (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:38:40 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5A7420838;
-        Mon, 24 Aug 2020 16:38:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598287114;
-        bh=Xlt4LANXdOrhRf7zi/oAhoOIZdeFcPS4vzsgy5swhxA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eEZqsPw7C8aEvmuWpzaz38rls3TfN4oxdEm/u7rfIFOrO/0g29vFAYmBI7kDvH2WB
-         mKYBHU8rES62htFdLFgo4oI/Od1d+bLUldT+uF/2G+mYTq0Y2Ie6Sl5JWJzS+HRxa7
-         9QYz9p5o94zMfHvyzXYiVPzuo064+UZGKvMrV2yE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Saurav Kashyap <skashyap@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 31/38] Revert "scsi: qla2xxx: Fix crash on qla2x00_mailbox_command"
-Date:   Mon, 24 Aug 2020 12:37:43 -0400
-Message-Id: <20200824163751.606577-31-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163751.606577-1-sashal@kernel.org>
-References: <20200824163751.606577-1-sashal@kernel.org>
+        id S1727879AbgHXRsk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Aug 2020 13:48:40 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:42453 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727841AbgHXRsg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Aug 2020 13:48:36 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 17so5199885pfw.9;
+        Mon, 24 Aug 2020 10:48:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=rq5TKAgvRU98SjjkveCy6+ZXF39JNnbfx7EG8ZsPrGA=;
+        b=JUPgIw++a52Sx5xQ19RxppkLhoE3QJYwwE5bNgLvrXXMoQU7k+hWGk2Gs/SWTSdDOV
+         1XTjCjlrVwTbs5lxHTAgdoZUftHCMgz6pZPy7FUWnL7dy4w8rvgMCehBxBb8/To6gn3Q
+         uo9r2olbQ1WBAuIOhYWbppEHDEoa4ggsK+ACDqrK1j+D7AqQxdYOf/LTTvKHUOvvnCY5
+         0A7fd9u3nO8tBdGH5Z/9lg1mIpI04ecfuLKK4+TB9KeUB1TJUkoyNsnSh2G3MN0+2zYY
+         qQIesp9jcTXhL/MFWBeLlfJ6gMPb6iOKRZkd5G778GD/AzWC2B+IudaMoU8tqFYtZgjP
+         GpIg==
+X-Gm-Message-State: AOAM532kaQxYX7Df31e1ysFISEVsih7ABkMSSgOAcOKnM0Cz3Gi42KFz
+        52nK8D3fKBp5eRbMoehkmO+8y/GXww4=
+X-Google-Smtp-Source: ABdhPJwYwPUV3R0AMEbdzYtAUCpWFGOwxGYPK3swn5NtUc6J3LUYLFJiDH42C+rSc9l/dLHFn4P76w==
+X-Received: by 2002:a63:fe49:: with SMTP id x9mr4003407pgj.446.1598291315134;
+        Mon, 24 Aug 2020 10:48:35 -0700 (PDT)
+Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id y196sm12176464pfc.202.2020.08.24.10.48.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2020 10:48:34 -0700 (PDT)
+Subject: Re: [PATCH] block: Fix bug in runtime-resume handling
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     Can Guo <cang@codeaurora.org>, linux-scsi@vger.kernel.org,
+        linux-block@vger.kernel.org, kernel@puri.sm
+References: <9b80ca7c-39f8-e52d-2535-8b0baf93c7d1@puri.sm>
+ <425990b3-4b0b-4dcf-24dc-4e7e60d5869d@puri.sm>
+ <20200807143002.GE226516@rowland.harvard.edu>
+ <b0abab28-880e-4b88-eb3c-9ffd927d1ed9@puri.sm>
+ <20200808150542.GB256751@rowland.harvard.edu>
+ <d3b6f7b8-5345-1ae1-4f79-5dde226e74f1@puri.sm>
+ <20200809152643.GA277165@rowland.harvard.edu>
+ <60150284-be13-d373-5448-651b72a7c4c9@puri.sm>
+ <20200810141343.GA299045@rowland.harvard.edu>
+ <6f0c530f-4309-ab1e-393b-83bf8367f59e@puri.sm>
+ <20200823145733.GC303967@rowland.harvard.edu>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <3e5a465e-8fe0-b379-a80e-23e2f588c71a@acm.org>
+Date:   Mon, 24 Aug 2020 10:48:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200823145733.GC303967@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Saurav Kashyap <skashyap@marvell.com>
+On 2020-08-23 07:57, Alan Stern wrote:
+> The problem is fixed by checking that the queue's runtime-PM status
+> isn't RPM_SUSPENDED before allowing a request to be issued, [ ... ]
 
-[ Upstream commit de7e6194301ad31c4ce95395eb678e51a1b907e5 ]
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
-FCoE adapter initialization failed for ISP8021 with the following patch
-applied. In addition, reproduction of the issue the patch originally tried
-to address has been unsuccessful.
+Can, can you help with testing this patch?
 
-This reverts commit 3cb182b3fa8b7a61f05c671525494697cba39c6a.
+Thanks,
 
-Link: https://lore.kernel.org/r/20200806111014.28434-11-njavali@marvell.com
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/qla2xxx/qla_mbx.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 62a16463f0254..c1631e42d35d1 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -335,14 +335,6 @@ qla2x00_mailbox_command(scsi_qla_host_t *vha, mbx_cmd_t *mcp)
- 			if (time_after(jiffies, wait_time))
- 				break;
- 
--			/*
--			 * Check if it's UNLOADING, cause we cannot poll in
--			 * this case, or else a NULL pointer dereference
--			 * is triggered.
--			 */
--			if (unlikely(test_bit(UNLOADING, &base_vha->dpc_flags)))
--				return QLA_FUNCTION_TIMEOUT;
--
- 			/* Check for pending interrupts. */
- 			qla2x00_poll(ha->rsp_q_map[0]);
- 
--- 
-2.25.1
-
+Bart.
