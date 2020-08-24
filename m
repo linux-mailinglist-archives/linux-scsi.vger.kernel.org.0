@@ -2,68 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88860250632
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Aug 2020 19:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614952505C4
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Aug 2020 19:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728417AbgHXR3U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 24 Aug 2020 13:29:20 -0400
-Received: from ns2.chapar.net ([81.31.224.5]:4770 "EHLO mail.chapar.net"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728310AbgHXR2c (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Aug 2020 13:28:32 -0400
-X-Greylist: delayed 20126 seconds by postgrey-1.27 at vger.kernel.org; Mon, 24 Aug 2020 13:28:29 EDT
-Received: from chapar.net by mail.chapar.net (MDaemon PRO v12.5.6)
-        with ESMTP id md50001230169.msg
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Jun 2020 12:27:10 +0430
-X-Spam-Processed: mail.chapar.net, Tue, 23 Jun 2020 12:27:10 +0430
-        (not processed: message from trusted or authenticated source)
-X-Authenticated-Sender: iphone@chapar.net
-X-MDRemoteIP: 197.234.219.46
-X-Return-Path: iphone@chapar.net
-X-Envelope-From: iphone@chapar.net
-X-MDaemon-Deliver-To: linux-scsi@vger.kernel.org
-Reply-To: conseiljuriquemealabijoel1@gmail.com
-From:   Mr JOEL ALABI <iphone@chapar.net>
-To:     linux-scsi@vger.kernel.org
-Subject: Mes Salutations
-Date:   23 Jun 2020 03:25:20 +0200
-Message-ID: <20200623032519.3505F27523887681@chapar.net>
+        id S1728060AbgHXRU7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Aug 2020 13:20:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728285AbgHXQgH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:36:07 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 065D422D02;
+        Mon, 24 Aug 2020 16:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598286957;
+        bh=iko1cVkcks4eJF/tsESV//trlKvUBqx6xMAyNEqxTXA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=L338VFWqta5F5fsolrg/d8jgXb+KZxfXQlyEkHkjFDQTgiqo5LZkxAEpQMyuk9k9Q
+         AbDhlCmtPXZ+Z2p2HvNOd0LXOKi1S8oNTz6LnOi3Je2Qsun4DouAOl10miqrQNSIvy
+         P+nrs9L6oHVa0VX3KxPet9EIP14DFEIXSmlyOmLo=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Stanley Chu <stanley.chu@mediatek.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Andy Teng <andy.teng@mediatek.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.8 39/63] scsi: ufs: Fix possible infinite loop in ufshcd_hold
+Date:   Mon, 24 Aug 2020 12:34:39 -0400
+Message-Id: <20200824163504.605538-39-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200824163504.605538-1-sashal@kernel.org>
+References: <20200824163504.605538-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-A votre attention 
+From: Stanley Chu <stanley.chu@mediatek.com>
 
-OFFRE
-Je vous prie de m'excuser si vous êtes surpris de mon message. Je 
-me
-présente donc, je suis Mr Malik  AL- KHABIR ancien ingénieur 
-pétrolier
-sous le régime de l’ex et défunt président Mouammar KADHAFI.
-En effet, dans le cadre de mon soutien humanitaire individuel en 
-ces
-temps difficiles de lutte contre la maladie du virus Corona
-(COVID-19), au vu de la crise économique mondiale, votre adresse
-e-mail a été sélectionnée pour un don de 500 000 € pour une œuvre
-caritative et soutien médical communautaire dans votre  région. 
-En
-acceptant notre donation nous aidons ainsi toute une communauté à
-travers vous.
-Alors si vous acceptez cette donation je vous prie de prendre 
-contact
-avec mon avocat à son adresse personnelle  afin de rentrer en
-possession de ces fonds qui sont domiciliés dans une banque 
-située en
-Afrique ceci en toute légalité selon les lois en vigueur.
-Contact de l’avocat :
-NOM : Me JOEL ALABI
-E-mail : conseiljuriquemealabijoel1@gmail.com
-Cordialement…
-Mr Malik  AL- KHABIR
+[ Upstream commit 93b6c5db06028a3b55122bbb74d0715dd8ca4ae0 ]
 
+In ufshcd_suspend(), after clk-gating is suspended and link is set
+as Hibern8 state, ufshcd_hold() is still possibly invoked before
+ufshcd_suspend() returns. For example, MediaTek's suspend vops may
+issue UIC commands which would call ufshcd_hold() during the command
+issuing flow.
+
+Now if UFSHCD_CAP_HIBERN8_WITH_CLK_GATING capability is enabled,
+then ufshcd_hold() may enter infinite loops because there is no
+clk-ungating work scheduled or pending. In this case, ufshcd_hold()
+shall just bypass, and keep the link as Hibern8 state.
+
+Link: https://lore.kernel.org/r/20200809050734.18740-1-stanley.chu@mediatek.com
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Co-developed-by: Andy Teng <andy.teng@mediatek.com>
+Signed-off-by: Andy Teng <andy.teng@mediatek.com>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index e412e43d23821..8185ab3b41c9b 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -1557,6 +1557,7 @@ static void ufshcd_ungate_work(struct work_struct *work)
+ int ufshcd_hold(struct ufs_hba *hba, bool async)
+ {
+ 	int rc = 0;
++	bool flush_result;
+ 	unsigned long flags;
+ 
+ 	if (!ufshcd_is_clkgating_allowed(hba))
+@@ -1588,7 +1589,9 @@ int ufshcd_hold(struct ufs_hba *hba, bool async)
+ 				break;
+ 			}
+ 			spin_unlock_irqrestore(hba->host->host_lock, flags);
+-			flush_work(&hba->clk_gating.ungate_work);
++			flush_result = flush_work(&hba->clk_gating.ungate_work);
++			if (hba->clk_gating.is_suspended && !flush_result)
++				goto out;
+ 			spin_lock_irqsave(hba->host->host_lock, flags);
+ 			goto start;
+ 		}
+-- 
+2.25.1
 
