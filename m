@@ -2,48 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E09F8251160
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Aug 2020 07:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AC325121C
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Aug 2020 08:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgHYFOo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Aug 2020 01:14:44 -0400
-Received: from smtp.rcn.com ([69.168.97.78]:24064 "EHLO smtp.rcn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726090AbgHYFOn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Aug 2020 01:14:43 -0400
-DKIM-Signature: v=1; a=rsa-sha1; d=rcn.com; s=20180516; c=relaxed/simple;
-        q=dns/txt; i=@rcn.com; t=1598332480;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=4md+ssomE4Gwt1ASNPOhq2CzLX4=;
-        b=Tw+Hw2Au6oTPSG5DhuRup9/WAZGt6+OuqQqlKyv4cZNY69MfT9AzNqn1ZAFt61yR
-        pbkr5FffGqFcsth8xlclsznQRvqNbUwVqDytH5hPhoOz6t1nmyR16lcGJ/Xl8Rnw
-        wwpmHwwCVhn9H1Gy3nWUt5CtLRandxf34PhNRfvp9jtNwevK/OAS7EpQIRC+pUE+
-        M5lF3qAdrysRwX4CgqzxUhOwe4DrrDgYw5Llo1rkeKQmq1yuBmJdIyodZ4nqIzk4
-        no4l0ikfeqoD2BNyOHCqH+x0zLErI8xjTggJh8AuwNnNS2aAV+Pl/WlLa2yOQd9w
-        JBBwCAFxPWmwS1ELOhtbSw==;
-X-User-Whitelist: YES
-X-Authed-Username: cGVhcmxob3dlckByY24uY29t
-Authentication-Results: smtp03.rcn.cmh.synacor.com header.from=pearlhower@rcn.com; sender-id=softfail
-Authentication-Results: smtp03.rcn.cmh.synacor.com smtp.mail=pearlhower@rcn.com; spf=softfail; sender-id=softfail
-Received: from [10.33.66.0] ([10.33.66.0:43302] helo=md09.rcn.cmh.synacor.com)
-        by smtp.rcn.com (envelope-from <pearlhower@rcn.com>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id 57/A5-51190-F3E944F5; Tue, 25 Aug 2020 01:14:40 -0400
-Date:   Tue, 25 Aug 2020 01:14:39 -0400 (EDT)
-From:   neetu pal <pearlhower@rcn.com>
-Reply-To: neetu pal <pal820590@gmail.com>
-To:     rcnts@rcn.com
-Message-ID: <290124736.3518005.1598332479639.JavaMail.root@rcn.com>
-In-Reply-To: <1206416174.3498078.1598331772875.JavaMail.root@rcn.com>
-Subject: Re: jii hllo
+        id S1729088AbgHYGhU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Aug 2020 02:37:20 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:55298 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726940AbgHYGhT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Aug 2020 02:37:19 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 574DB6BEFDB23197F942;
+        Tue, 25 Aug 2020 14:37:13 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 25 Aug 2020 14:37:04 +0800
+From:   Jing Xiangfeng <jingxiangfeng@huawei.com>
+To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
+        <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <megaraidlinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jingxiangfeng@huawei.com>
+Subject: [PATCH] scsi: megaraid: Remove unnecessary assignment to variable ret
+Date:   Tue, 25 Aug 2020 14:38:36 +0800
+Message-ID: <20200825063836.92239-1-jingxiangfeng@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [155.94.250.96]
-X-Mailer: Zimbra 7.2.7_GA_2942 (zclient/7.2.7_GA_2942)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-i dropped by to say Gm sir
+The variable ret is being initialized with 'FAILED'. So we can remove
+this assignement.
+
+Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 0824410f78f8..96d424645b18 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -4700,7 +4700,6 @@ int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
+ 	if (atomic_read(&instance->adprecovery) != MEGASAS_HBA_OPERATIONAL) {
+ 		dev_err(&instance->pdev->dev, "Controller is not OPERATIONAL,"
+ 		"SCSI host:%d\n", instance->host->host_no);
+-		ret = FAILED;
+ 		return ret;
+ 	}
+ 
+@@ -4713,7 +4712,6 @@ int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
+ 	}
+ 
+ 	if (!mr_device_priv_data->is_tm_capable) {
+-		ret = FAILED;
+ 		goto out;
+ 	}
+ 
+-- 
+2.17.1
+
