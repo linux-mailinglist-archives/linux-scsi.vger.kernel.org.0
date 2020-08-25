@@ -2,28 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1286251287
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Aug 2020 09:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F207825128F
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Aug 2020 09:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729180AbgHYHBU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Aug 2020 03:01:20 -0400
-Received: from smtprelay0073.hostedemail.com ([216.40.44.73]:33036 "EHLO
+        id S1729248AbgHYHGa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Aug 2020 03:06:30 -0400
+Received: from smtprelay0045.hostedemail.com ([216.40.44.45]:38566 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728939AbgHYHBN (ORCPT
+        by vger.kernel.org with ESMTP id S1729137AbgHYHG3 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Aug 2020 03:01:13 -0400
+        Tue, 25 Aug 2020 03:06:29 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 30EA5837F27B;
-        Tue, 25 Aug 2020 07:01:11 +0000 (UTC)
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id A520D100E7B43;
+        Tue, 25 Aug 2020 07:06:28 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:69:355:379:599:960:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3353:3622:3865:3867:3871:3872:3873:4321:5007:6119:7903:9040:9592:10004:10400:10848:11026:11232:11473:11658:11914:12043:12048:12296:12297:12438:12555:12679:12740:12760:12895:12986:13161:13229:13439:14093:14097:14659:14721:21080:21451:21627:21990:30012:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: kick90_3a07d8a27059
-X-Filterd-Recvd-Size: 3293
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:967:968:973:988:989:1260:1263:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2828:2859:2895:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3622:3770:3865:3866:3867:3871:3872:3873:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:5007:6119:7903:7904:9010:9025:9388:10004:10400:10848:11232:11658:11914:12043:12048:12297:12555:12740:12760:12895:12986:13069:13311:13357:13439:13846:14096:14097:14181:14659:14721:14764:14777:21080:21451:21627:21672:21781:30012:30026:30054:30060:30064:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: tooth00_0809ad927059
+X-Filterd-Recvd-Size: 2084
 Received: from XPS-9350.home (unknown [47.151.133.149])
         (Authenticated sender: joe@perches.com)
-        by omf11.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 25 Aug 2020 07:01:09 +0000 (UTC)
-Message-ID: <5e8d3765063043f7a90c92c098317319757595ed.camel@perches.com>
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 25 Aug 2020 07:06:27 +0000 (UTC)
+Message-ID: <dc8aca7e3772670782c2abc086cab8b6f81be3c1.camel@perches.com>
 Subject: Re: [PATCH] scsi: megaraid: Remove unnecessary assignment to
  variable ret
 From:   Joe Perches <joe@perches.com>
@@ -31,11 +31,11 @@ To:     Jing Xiangfeng <jingxiangfeng@huawei.com>,
         kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
         martin.petersen@oracle.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 25 Aug 2020 00:01:07 -0700
-In-Reply-To: <20200825063836.92239-1-jingxiangfeng@huawei.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 25 Aug 2020 00:06:26 -0700
+In-Reply-To: <5e8d3765063043f7a90c92c098317319757595ed.camel@perches.com>
 References: <20200825063836.92239-1-jingxiangfeng@huawei.com>
+         <5e8d3765063043f7a90c92c098317319757595ed.camel@perches.com>
 Content-Type: text/plain; charset="ISO-8859-1"
 User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
@@ -45,79 +45,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2020-08-25 at 14:38 +0800, Jing Xiangfeng wrote:
-> The variable ret is being initialized with 'FAILED'. So we can remove
-> this assignement.
+On Tue, 2020-08-25 at 00:01 -0700, Joe Perches wrote:
+> On Tue, 2020-08-25 at 14:38 +0800, Jing Xiangfeng wrote:
+> > The variable ret is being initialized with 'FAILED'. So we can remove
+> > this assignement.
+> 
+> If you are going to change the code at all,
+> might as well try to improve it more by removing
+> the unnecessary out: label altogether.
 
-If you are going to change the code at all,
-might as well try to improve it more by removing
-the unnecessary out: label altogether.
+Looks like the megaraid mailing list is either subscribers-only
+or doesn't exist anymore as my mail to it bounced.
 
-Perhaps:
+One of the maintainers should remove it or update it.
+
+Maybe:
 ---
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index 883cccb59c2d..1a8f18113136 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -4688,9 +4688,8 @@ int megasas_task_abort_fusion(struct scsi_cmnd *scmd)
- 
- int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
- {
--
- 	struct megasas_instance *instance;
--	int ret = FAILED;
-+	int ret;
- 	u16 devhandle;
- 	struct MR_PRIV_DEVICE *mr_device_priv_data;
- 	mr_device_priv_data = scmd->device->hostdata;
-@@ -4700,32 +4699,27 @@ int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
- 	if (atomic_read(&instance->adprecovery) != MEGASAS_HBA_OPERATIONAL) {
- 		dev_err(&instance->pdev->dev, "Controller is not OPERATIONAL,"
- 		"SCSI host:%d\n", instance->host->host_no);
--		ret = FAILED;
--		return ret;
-+		return FAILED;
- 	}
- 
- 	if (!mr_device_priv_data) {
- 		sdev_printk(KERN_INFO, scmd->device,
- 			    "device been deleted! scmd: (0x%p)\n", scmd);
- 		scmd->result = DID_NO_CONNECT << 16;
--		ret = SUCCESS;
--		goto out;
-+		return SUCCESS;
- 	}
- 
--	if (!mr_device_priv_data->is_tm_capable) {
--		ret = FAILED;
--		goto out;
--	}
-+	if (!mr_device_priv_data->is_tm_capable)
-+		return FAILED;
- 
- 	mutex_lock(&instance->reset_mutex);
- 	devhandle = megasas_get_tm_devhandle(scmd->device);
- 
- 	if (devhandle == (u16)ULONG_MAX) {
--		ret = SUCCESS;
- 		sdev_printk(KERN_INFO, scmd->device,
- 			"target reset issued for invalid devhandle\n");
- 		mutex_unlock(&instance->reset_mutex);
--		goto out;
-+		return SUCCESS;
- 	}
- 
- 	sdev_printk(KERN_INFO, scmd->device,
-@@ -4741,7 +4735,6 @@ int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
- 	scmd_printk(KERN_NOTICE, scmd, "target reset %s!!\n",
- 		(ret == SUCCESS) ? "SUCCESS" : "FAILED");
- 
--out:
- 	return ret;
- }
- 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ac79fdbdf8d0..0c181cd07201 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11060,7 +11060,7 @@ MEGARAID SCSI/SAS DRIVERS
+ M:	Kashyap Desai <kashyap.desai@broadcom.com>
+ M:	Sumit Saxena <sumit.saxena@broadcom.com>
+ M:	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+-L:	megaraidlinux.pdl@broadcom.com
++L:	megaraidlinux.pdl@broadcom.com (subscribers-only)
+ L:	linux-scsi@vger.kernel.org
+ S:	Maintained
+ W:	http://www.avagotech.com/support/
 
 
