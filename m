@@ -2,61 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C3E2532BD
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Aug 2020 17:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B7A2534C8
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Aug 2020 18:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727769AbgHZPDR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Aug 2020 11:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S1726995AbgHZQXd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Aug 2020 12:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727012AbgHZPDP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Aug 2020 11:03:15 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1A4C061574
-        for <linux-scsi@vger.kernel.org>; Wed, 26 Aug 2020 08:03:15 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id y2so660887uaq.0
-        for <linux-scsi@vger.kernel.org>; Wed, 26 Aug 2020 08:03:15 -0700 (PDT)
+        with ESMTP id S1726910AbgHZQXc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Aug 2020 12:23:32 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31671C061574
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Aug 2020 09:23:32 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id j18so2021718oig.5
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Aug 2020 09:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=7sHcH5dHB5M/r8aJgv+GiRQ5s8sI9YcH2NRYOFmnXg4=;
-        b=l/F1Op+yo4unfIPZSFjgyiP8vYhL/50aECReHjB2wpL5g0Kb9AQqsj23Gz7p+kETlP
-         vwZhIACZ/4I2FnfGp8rxhzHg8epggjDcFr1mYLhwYdLBRyBPiFt4SqzggubDOqq26yN0
-         ajW+FZIV3/bgGD+e7vTp7LlT25m3EnjeQTD78DHs/d/acd1TsRJEEkh9H1QedSqgEZUL
-         VZqIz/AgjddJDBvSGC6AVgb3zMmSWTOWNTaCjKUawnQCaI5fu1U8Ix7RIXwPeTNQhVv9
-         3TmLRERh76ZjZBOo5RdwwF+5IK/8nbVYNsnxHxbL4lobhduUxuWm+/NPaH3eTTJ7ZTEq
-         1Rzg==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=okg93lju0q1SfvfPe5TXu00v0yhqTFNXEnfOVSkc654=;
+        b=UangwkekMdUxJy15TGgr44bJGeQbRN7MnBlnKehbjod/YvLkASQ/HPZBnD9DuDMMmU
+         x3xEwOsidXI4NFJGWP9tiZNs/VcvsKuvrbmimYRJexn4jcYS7uxIxjjFIurs0v4mjuzk
+         WjDFgtHQydlK3wcXRMcL11KQZ0Ud/5i58G8P4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=7sHcH5dHB5M/r8aJgv+GiRQ5s8sI9YcH2NRYOFmnXg4=;
-        b=iLZoTsaT1cIpvJNeznuDdcuHGAtYtRw8Jnso2zdc+KQ4s/2iDzRia/nBTK3oJHxpOc
-         LC3TIq+0S65vw0gtzW61VECNlH1Rcr9Zjb6fPK/VvVxT2My5RajJPm6OpHVIibzycdxi
-         p0ZZFe5eUNjfTkRqy7NraDxmB/LUEfe/0xxe/pBDwrRDUmkkdYb03NHK19z1Y8JJggqH
-         xiRAqqrwy2pkT+0soSD/wQNXG5fizHxvsvS8ALl6pD6h1m+Y++DBestdQaoIxcJZfP9U
-         IFMYSDkMKnu/nay9wogfP/GJV/C4AxA4uzqdgagvK825N2vvZ4g0Bsb96MJUGq9G/ign
-         KjXw==
-X-Gm-Message-State: AOAM5325xxma5niIKNuyrJuf/bt6f6lzSSJCuzgIqIR4NqhBSdnd/hok
-        q+1/Hl+nNEgrZ9o1CO1sZ/Xl92lwiUPQSFIygB8=
-X-Google-Smtp-Source: ABdhPJwJ6URBqAuhapPojNKzHCoKbMOvZFmBVpM/JHf+W665CHl9Z8m4mXzzcrm0/TXBhVcNh5qfZLdsTSCuv4LGSvk=
-X-Received: by 2002:a9f:2e0d:: with SMTP id t13mr8977656uaj.69.1598454193995;
- Wed, 26 Aug 2020 08:03:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=okg93lju0q1SfvfPe5TXu00v0yhqTFNXEnfOVSkc654=;
+        b=rxxKyiR19NnDYrbY7cWdXBbC4iuDjNzGtS3/G+0x3JRG9JqiPDYeMj3Jj/CU6g9MMQ
+         oY+1VSR5xqBvlEPuWcc55uOq7hWBfyel03yNE01eMhYEWCmF9CaOYG3XJvC+hbNAgV1U
+         MZNXvGWcp+21KI6LxnFgICU0coSRBu6U4WLJJ9dI+oGb/Ljn+mUj8w4pLZ5F72leiXdD
+         F5HbH6eEaXXD0rpTvbOZp+gL0tJyyT0RsawUGkt3F5bo5nT1MGuOWBaZKnk3mqjWnK2K
+         WiVbU3qBSrtd97c8ZvNhLCPr4Tss+YtaGv9dhGK4SiADt6nmKabwI1CVd6W8F8qvv3bo
+         nAvA==
+X-Gm-Message-State: AOAM5335/i4aSjZ2T8SWiWXGAB4PYiCXFFSdd4t20IgBWj3VZ5x0hjf8
+        grO10nJ5Xa7pWXYmnPH+xlkTeS4XRh2dKVx3gFmQAw==
+X-Google-Smtp-Source: ABdhPJwch4QXZ2NmLrZjH62Dreh3jQK773ILmC3GL8pzNCZq7twDsL/PR+CmPLN/GYvCGT2099sU9cd3wLAeO3LhRNw=
+X-Received: by 2002:aca:a887:: with SMTP id r129mr3490918oie.7.1598459011202;
+ Wed, 26 Aug 2020 09:23:31 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a67:d081:0:0:0:0:0 with HTTP; Wed, 26 Aug 2020 08:03:13
- -0700 (PDT)
-From:   Tricia Smith <triciatricia841@gmail.com>
-Date:   Wed, 26 Aug 2020 19:33:13 +0430
-X-Google-Sender-Auth: JY_p5GJP5U2fyYxRbJ3ZZhqHuMg
-Message-ID: <CAMe2y+p6URieYBsQtjbVujXjCLYHvTb2iDzfpDJvQi_=kgv1gA@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
+References: <20200814130426.2741171-1-sreekanth.reddy@broadcom.com>
+ <yq1a6yoviti.fsf@ca-mkp.ca.oracle.com> <CAK=zhgq-5CNQObiwDutLPGG3CbmpAbj+RbDGX-xGu6mVP_WZYw@mail.gmail.com>
+ <yq1r1rvqxqe.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq1r1rvqxqe.fsf@ca-mkp.ca.oracle.com>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Wed, 26 Aug 2020 21:53:19 +0530
+Message-ID: <CAK=zhgpg754D6J6k3s+xmyxH+2MGWjuNb44Tfccq2z+gFuLPRA@mail.gmail.com>
+Subject: Re: [PATCH v1] mpt3sas: Add support for Non-secure Aero and Sea PCI IDs
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Dear, I am Miss Tricia Smith the only Daughter/Child of late Mr and
-Mrs William Smith. Please i have something very important and
-confidential to discuss with you.
+On Tue, Aug 25, 2020 at 7:45 AM Martin K. Petersen
+<martin.petersen@oracle.com> wrote:
+>
+>
+> Sreekanth,
+>
+> > As explained in description the purpose of disabling support for these
+> > devices in the driver is to avoid interacting with any firmware which
+> > is not secured/signed by Broadcom.
+>
+> I understand, but that should be a user decision.
+>
+> What are these devices you want to disable support for? Why is their
+> firmware not signed?
+
+The scenario that we are discussing here is a scenario where the
+device is showing evidence that someone has attempted to physically
+tamper with the device and has attempted to put it into a state where
+security could be compromised.
+
+Broadcom adapters participate in a Secure Boot process, where every
+piece of FW is digitally signed by Broadcom and is checked for a valid
+signature.  If any piece of our adapter FW fails this signature check,
+it is possible the FW has been tampered with and the adapter should
+not be used.  Our driver should not make any additional access to the
+=E2=80=9Cinvalid/tampered=E2=80=9D adapter because the FW is not valid (cou=
+ld be
+malicious FW). This type of detection is added into latest Aero and
+Sea family adapters h/w.
+
+Thanks,
+Sreekanth
+
+
+>
+> --
+> Martin K. Petersen      Oracle Linux Engineering
