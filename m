@@ -2,72 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09169254C88
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Aug 2020 20:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA372255003
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Aug 2020 22:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgH0SCl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Aug 2020 14:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726120AbgH0SCk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Aug 2020 14:02:40 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48AAC061264
-        for <linux-scsi@vger.kernel.org>; Thu, 27 Aug 2020 11:02:39 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id 5so5122008otp.12
-        for <linux-scsi@vger.kernel.org>; Thu, 27 Aug 2020 11:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=jnUDESg0pdNz4PY9VX9E8QDwmm1Q8F5U3VU0vhzTuCg=;
-        b=XBDwXaC9V8Tui3H7qe4EcydwaVWBeOVCfxB9usX3ZSq9JEMXa54nBvV0JuSpjwPUTk
-         jWmH01LHSyPmnpkuX6kL/MeJwX+BZaAzlX+y/eL7vwb07qEk3YcDFluTPHr3iUaNtbw5
-         4XTY7h9Q3TuDUTlI8ej2ehbC/V0BBlQfS8/WWvj8ZrsNm15E/mnAGEdAyZWF1VJJZPkI
-         93Ud2VlXwSPgyTOmUKHuBklko+8g8tNSGTnZvJg+R6mTCWxoB1HmrHKtLGw/6hQXSLVn
-         dV6ledzkHnCpHFXXS4wzKh1AY8S2K8ujoKRQPxD3wnxSobPEWwqzoheoL4/8TfK3M+BW
-         bXqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=jnUDESg0pdNz4PY9VX9E8QDwmm1Q8F5U3VU0vhzTuCg=;
-        b=Xfk0J9xt2ZvnR7vNk5yR7IJ0RDcZmQ9MbC0vjftAaKX4bPNjYP6HxquEsjrgPjCPc1
-         d5tHpSR71P0qkfyUBpi3Y5O2FkidKcDZ2QSmGDq1TONMfkBn3pqESl7cnLDU2EIo8fTk
-         ZhtZ+smsmm2iOx7az0yRGGyAmFJE7Afdrfr+78D2bOzZ9TxZlIy4pBdbvslK0fFeFvr/
-         y+MZlngCzMRPvWRc/YDdwRdo4osL0JfKcJWQrhl3YH3OKtUSxkVlSp8MRy/sjwWsQJrv
-         kyqwARWNrRQnRdNKq7MMxNvPA5oJzBqr3ziUdXHOlxbs9WIN4DvjkE4yhbBmmD+qzUx9
-         gJZg==
-X-Gm-Message-State: AOAM5309zzhQqqQxO5Ri7CJRK9MZUBeS756QrYBmmK8wukY4zoHSahTJ
-        mYBsp5geawyfAl7dFB8N00v76+IAd15CPRJHgqM=
-X-Google-Smtp-Source: ABdhPJwGry3Xdf8KZ3eB9TClJIBiWTdZ5MuJKCIB0Sk0Ag2JQuVpRTnDFu+fa8RQ0eFIvnYwU3Fil6wJa+gyXol7JNc=
-X-Received: by 2002:a9d:32e5:: with SMTP id u92mr13153339otb.107.1598551358660;
- Thu, 27 Aug 2020 11:02:38 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a9d:6455:0:0:0:0:0 with HTTP; Thu, 27 Aug 2020 11:02:38
- -0700 (PDT)
-Reply-To: ibrahimaliu2578@gmail.com
-From:   Angela Smith <angelaamith3@gmail.com>
-Date:   Thu, 27 Aug 2020 11:02:38 -0700
-Message-ID: <CACWsM+C06f99abs=X=iXZvj7Ha+aj2T3zT5_VaeesA6ywx=mEg@mail.gmail.com>
-Subject: YfUR URGENT RESPONSE IS NEEDED NOW
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1726834AbgH0U1u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Aug 2020 16:27:50 -0400
+Received: from mx.exactcode.de ([144.76.154.42]:33430 "EHLO mx.exactcode.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726147AbgH0U1u (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 27 Aug 2020 16:27:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=exactco.de; s=x;
+        h=Content-Transfer-Encoding:Content-Type:Mime-Version:From:Subject:Cc:To:Message-Id:Date; bh=PFMImyhnUaXJJ+NeoVNAxNDkP+Zbre7Mw9Xs2DewNUI=;
+        b=AwJwSwYYyltwSMMr0IzjeoSC8hQnNi4ahFl4UitZp6Ojl5x8r0J2QNVEHtUgtzc0yqDlV1m0WM4393yaUwcpvxGZ/BvgzUxlX4blagogkOLbL1S6w+ju5RieY/RVdfLYiYVzsxt8ioCRFZWdn+AwVCj3FJutrR9kEEqLH87P9Gg=;
+Received: from exactco.de ([90.187.5.221])
+        by mx.exactcode.de with esmtp (Exim 4.82)
+        (envelope-from <rene@exactcode.com>)
+        id 1kBOVM-0001FZ-LP; Thu, 27 Aug 2020 20:28:16 +0000
+Received: from [192.168.2.130] (helo=localhost)
+        by exactco.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.86_2)
+        (envelope-from <rene@exactcode.com>)
+        id 1kBOCv-0005Aa-8B; Thu, 27 Aug 2020 20:09:18 +0000
+Date:   Thu, 27 Aug 2020 22:27:29 +0200 (CEST)
+Message-Id: <20200827.222729.1875148247374704975.rene@exactcode.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v3] fix qla2xxx regression on sparc64
+From:   Rene Rebe <rene@exactcode.com>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Score: -3.1 (---)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-I am contacting you on a business deal of $17.5 Million US Dollars,
-ready for transfer into your account
+Commit 98aee70d19a7e3203649fa2078464e4f402a0ad8 in 2014 broke qla2xxx
+on sparc64, e.g. as in the Sun Blade 1000 / 2000. Unbreak by partial
+revert to fix endianess in nvram firmware default initialization. Also
+mark the second frame_payload_size in nvram_t __le16 to avoid new
+sparse warnings.
 
-if we make this claim, we will share it 60%/40%.100% risk free and it
-will be legally backed up with government approved If you are
-interested reply for more details.
+Fixes: 98aee70d19a7e ("qla2xxx: Add endianizer to max_payload_size modi=
+fier.")
+Signed-off-by: Ren=E9 Rebe <rene@exactcode.de>
 
-Kindly reply  for more details Waiting for your reply  Make Sure You
-Write To My privat
+diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_=
+def.h
+index 8c92af5e4390..00782e859ef8 100644
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -1626,7 +1626,7 @@ typedef struct {
+ 	 */
+ 	uint8_t	 firmware_options[2];
+ =
 
-Best regards,
+-	uint16_t frame_payload_size;
++	__le16	frame_payload_size;
+ 	__le16	max_iocb_allocation;
+ 	__le16	execution_throttle;
+ 	uint8_t	 retry_count;
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla=
+_init.c
+index 57a2d76aa691..0916c33eb076 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -4603,18 +4603,18 @@ qla2x00_nvram_config(scsi_qla_host_t *vha)
+ 			nv->firmware_options[1] =3D BIT_7 | BIT_5;
+ 			nv->add_firmware_options[0] =3D BIT_5;
+ 			nv->add_firmware_options[1] =3D BIT_5 | BIT_4;
+-			nv->frame_payload_size =3D 2048;
++			nv->frame_payload_size =3D cpu_to_le16(2048);
+ 			nv->special_options[1] =3D BIT_7;
+ 		} else if (IS_QLA2200(ha)) {
+ 			nv->firmware_options[0] =3D BIT_2 | BIT_1;
+ 			nv->firmware_options[1] =3D BIT_7 | BIT_5;
+ 			nv->add_firmware_options[0] =3D BIT_5;
+ 			nv->add_firmware_options[1] =3D BIT_5 | BIT_4;
+-			nv->frame_payload_size =3D 1024;
++			nv->frame_payload_size =3D cpu_to_le16(1024);
+ 		} else if (IS_QLA2100(ha)) {
+ 			nv->firmware_options[0] =3D BIT_3 | BIT_1;
+ 			nv->firmware_options[1] =3D BIT_5;
+-			nv->frame_payload_size =3D 1024;
++			nv->frame_payload_size =3D cpu_to_le16(1024);
+ 		}
+ =
 
-Ibrahim Aliu
+ 		nv->max_iocb_allocation =3D cpu_to_le16(256);
+
+
+-- =
+
+  Ren=E9 Rebe, ExactCODE GmbH, Lietzenburger Str. 42, DE-10789 Berlin
+  https://exactcode.com | https://t2sde.org | https://rene.rebe.de
