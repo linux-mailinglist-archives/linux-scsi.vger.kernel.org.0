@@ -2,56 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A43A25429B
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Aug 2020 11:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7FE2542E9
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Aug 2020 11:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728246AbgH0Jjx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Aug 2020 05:39:53 -0400
-Received: from verein.lst.de ([213.95.11.211]:37505 "EHLO verein.lst.de"
+        id S1728469AbgH0J6d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Aug 2020 05:58:33 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37222 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726157AbgH0Jjw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 27 Aug 2020 05:39:52 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 386C568B02; Thu, 27 Aug 2020 11:39:48 +0200 (CEST)
-Date:   Thu, 27 Aug 2020 11:39:48 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Song Liu <song@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH 01/19] char_dev: replace cdev_map with an xarray
-Message-ID: <20200827093947.GA15976@lst.de>
-References: <20200826062446.31860-1-hch@lst.de> <20200826062446.31860-2-hch@lst.de> <20200826081905.GB1796103@kroah.com> <20200827085353.GA12111@lst.de> <20200827091859.GA393660@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200827091859.GA393660@kroah.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S1726826AbgH0J6d (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 27 Aug 2020 05:58:33 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1F27BAD72;
+        Thu, 27 Aug 2020 09:59:03 +0000 (UTC)
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH 0/4] qla2xxx: A couple crash fixes
+Date:   Thu, 27 Aug 2020 11:58:25 +0200
+Message-Id: <20200827095829.63871-1-dwagner@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 11:18:59AM +0200, Greg Kroah-Hartman wrote:
-> > I looked at it, but it does get registered and shows up in sysfs.
-> 
-> It does?  Where does that happen?  I see a bunch of kobject_init()
-> calls, but nothing that registers it in sysfs that I can see.
+Hi,
 
-Hmm, true.
+The first crash we observed is due memory corruption in the srb memory
+pool. Unforuntatly, I couldn't find the source of the problem but the
+workaround by resetting the cleanup callbacks 'fixes' this problem
+(patch #1). I think as intermeditate step this should be merged until
+the real cause can be identified.
 
-> 
-> Note, this is not the kobject that shows up in /sys/dev/char/ as a
-> symlink, that comes from the driver core logic and is independent of the
-> cdev code.
-> 
-> The kobject does handle the structure lifetime rules, but that should be
-> able to be replaced with a simple kref instead.
+The second crash is due a race condition(?) in the firmware. The sts
+entries are not updated in time which leads to this crash pattern
+which several customers have reported:
 
-Yeah.  I'll let you handle this stuff, as you obviously know the area
-better than I do.
+ #0 [c00000ffffd1bb80] scsi_dma_unmap at d00000001e4904d4 [scsi_mod]
+ #1 [c00000ffffd1bbe0] qla2x00_sp_compl at d0000000204803cc [qla2xxx]
+ #2 [c00000ffffd1bc20] qla24xx_process_response_queue at d0000000204c5810 [qla2xxx]
+ #3 [c00000ffffd1bd50] qla24xx_msix_rsp_q at d0000000204c8fd8 [qla2xxx]
+ #4 [c00000ffffd1bde0] __handle_irq_event_percpu at c000000000189510
+ #5 [c00000ffffd1bea0] handle_irq_event_percpu at c00000000018978c
+ #6 [c00000ffffd1bee0] handle_irq_event at c00000000018984c
+ #7 [c00000ffffd1bf10] handle_fasteoi_irq at c00000000018efc0
+ #8 [c00000ffffd1bf40] generic_handle_irq at c000000000187f10
+ #9 [c00000ffffd1bf60] __do_irq at c000000000018784
+ #10 [c00000ffffd1bf90] call_do_irq at c00000000002caa4
+ #11 [c00000ecca417a00] do_IRQ at c000000000018970
+ #12 [c00000ecca417a50] restore_check_irq_replay at c00000000000de98
+
+From analyzing the crash dump it was clear that
+qla24xx_mbx_iocb_entry() calls sp->done (qla2x00_sp_compl) which
+crashes because the response is not a mailbox entry, it is a status
+entry. Patch #4 changes the process logic for mailbox commands so that
+the sp is parsed before calling the correct proccess function.
+
+Thanks,
+Daniel
+
+Daniel Wagner (4):
+  qla2xxx: Reset done and free callback pointer on release
+  qla2xxx: Simplify return value logic in qla2x00_get_sp_from_handle()
+  qla2xxx: Drop unused function argument from
+    qla2x00_get_sp_from_handle()
+  qla2xxx: Handle incorrect entry_type entries
+
+ drivers/scsi/qla2xxx/qla_gbl.h    |  3 +-
+ drivers/scsi/qla2xxx/qla_inline.h |  2 ++
+ drivers/scsi/qla2xxx/qla_isr.c    | 72 ++++++++++++++++++++++-----------------
+ drivers/scsi/qla2xxx/qla_mr.c     |  9 ++---
+ 4 files changed, 47 insertions(+), 39 deletions(-)
+
+-- 
+2.16.4
+
