@@ -2,57 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1155256010
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Aug 2020 19:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FB5256012
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Aug 2020 19:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbgH1Rxo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Aug 2020 13:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
+        id S1727041AbgH1Rxp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Aug 2020 13:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726677AbgH1Rxj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Aug 2020 13:53:39 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75770C061264
-        for <linux-scsi@vger.kernel.org>; Fri, 28 Aug 2020 10:53:39 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id i13so82769pjv.0
-        for <linux-scsi@vger.kernel.org>; Fri, 28 Aug 2020 10:53:39 -0700 (PDT)
+        with ESMTP id S1727884AbgH1Rxl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Aug 2020 13:53:41 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2C8C061232
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Aug 2020 10:53:40 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id m8so1018466pfh.3
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Aug 2020 10:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fc3BOzKVJl2dqsg5OXJvVDuQ5v0PBIyT7SIjEZPYYMI=;
-        b=Ui6InmAwX7L45/0eXyP8zP17mE9nH+oYx3hz8tmqJ4p+JyiXosh0V5cVVTdGMbEdl4
-         JKnezS4pkFQdJSenmKSv76gC+F7C3vebk7CCWsLz2HBDmG+rb3Bfsgcijn53f0vKFBsS
-         5DZ6Od6E9u0ItOAs7kP0Th91i4OTexa0jJtfw=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TaLyrMTePWVx74K5m0rdCA2b0TFlH+5Xa8M4cBzzyq0=;
+        b=D5qQtWiwb69a2Gw9BKdHYEFd/x4winMN3rqV1gJPX5IfI7zYDdjdjMvcia/WQdAXwq
+         ogh8TkWo06jzAAc47yO670gAPUFadf3hDprvLZ7xefbXFMIaIfFOlffuA6PLnvCyB/XO
+         hzHy8C868P1iZfB+qG7TS/6spmXpe8VrDVpW0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fc3BOzKVJl2dqsg5OXJvVDuQ5v0PBIyT7SIjEZPYYMI=;
-        b=IUzo9289ol0KCVAqFXy/HYZKvu7zp3OUklVZSf47i0dTNvBMaaQvAGXPadgp8lvlpB
-         efqAFMIdwV497TEZtzKDgc7Vs4y8pvij1esM9uHH+F5/PWyp2Lju3kf0tGnkngDWx061
-         HpmwEvRJO1SB60+uupcyHRKSz8yWqGi4abwlsfRjXQ6OXBCf+GeAYhJwuqpCi/znd9fN
-         RsmQBeWmaZ+aNcNht5DyDPs7UAGmeBk8Cttl3UTtgqTxaVdJwR6MbRofZAUngq2ywlA8
-         Dpp5IxN2zMrO2PM8TT5eO2WPjne3q4OH8887AigEZvTg9bC9ckOH8LWFqK4BVHpnvSlE
-         +r2g==
-X-Gm-Message-State: AOAM533ib9SidYsQ6dFOkbxNagALfBftvDzTB2PSGHV61kQ1u+vxfu5h
-        OhyAnypojQ82IGAu2hKbak+eg832b3wBv7oDaCEvO+T6gfN6Qx/90czc3dAdNFmno7RfMhOLFjz
-        n877CoIyP+zCNjraTT4pE1+aSewzpV0s8Fj2jDA/0uA+yZ2p5ALXCqF30yB+rlXZs0/Luzi6QZE
-        oysnE=
-X-Google-Smtp-Source: ABdhPJzRR0ctt2zL0grc+ptt+fWPB0HAE+u+C9a2XWzceHMVGdCaOpKg/y8MHXs4SlIm0rEMwWMUIw==
-X-Received: by 2002:a17:902:fe88:: with SMTP id x8mr57078plm.204.1598637218467;
-        Fri, 28 Aug 2020 10:53:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TaLyrMTePWVx74K5m0rdCA2b0TFlH+5Xa8M4cBzzyq0=;
+        b=Me43UBYn8AYfm18O6frHshkvZFpZ8QXhlEMFL84lO7Tkhl6FdxY8pOnBNMUMH5H2m8
+         qUGfI5tgR8it95ptfzWv217Qw2PE9qlcU74H/26kUM26UQLhfs4KWCPt50Hs8IfecLow
+         wXcKBPuY2bBj4aN6CgT9GapqpHlmKZRTPYAkkTE99mVdEH+gQoaKI2S6YOembquMgwA6
+         dHvlfDMsv22XNP7T0B/OJ/w1N6Bmga4UB3FjkVodCxfm8Qv92nlYjs8XZVWuOrP9X8iq
+         lfL+rfCImSzJUBGX2V+jaK04ynDVFP38bg4tPIV2y+I4MO0Qv/p9+ZQEBmC5s9UCkaOc
+         7wsw==
+X-Gm-Message-State: AOAM532mBM5fzGGnqU+Y1mV/G+9Ej7WK7AsGezkM4EZDJ3k8bbTsVfNp
+        1RIumyaoYvEJ0x8v0muU8fSzPSSSnYQCxoqhrCJQ3KJDPEGsL4c3I2qxrloS53EF+M70PPuEsaD
+        NfDebwUzymEiaC5MJRWTE/9oR3HxIRSQiw6h0u2rzvlUur0QxT3Rhd43kRqp+GA6Bhpok87RtHH
+        tB+rE=
+X-Google-Smtp-Source: ABdhPJyGSColFTLeHAgD8EbB5Ju9TVHlnVPlDbHBtRmBjeMxGYxkdp5KYHntohkuQpTKLaz7V74Qlg==
+X-Received: by 2002:aa7:838d:: with SMTP id u13mr147684pfm.158.1598637219750;
+        Fri, 28 Aug 2020 10:53:39 -0700 (PDT)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e65sm88734pjk.45.2020.08.28.10.53.37
+        by smtp.gmail.com with ESMTPSA id e65sm88734pjk.45.2020.08.28.10.53.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2020 10:53:37 -0700 (PDT)
+        Fri, 28 Aug 2020 10:53:39 -0700 (PDT)
 From:   James Smart <james.smart@broadcom.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <james.smart@broadcom.com>
-Subject: [PATCH 0/4] lpfc: Update lpfc to revision 12.8.0.4
-Date:   Fri, 28 Aug 2020 10:53:28 -0700
-Message-Id: <20200828175332.130300-1-james.smart@broadcom.com>
+Cc:     James Smart <james.smart@broadcom.com>, stable@vger.kernel.org,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Subject: [PATCH 1/4] lpfc: Fix setting irq affinity with an empty cpu mask.
+Date:   Fri, 28 Aug 2020 10:53:29 -0700
+Message-Id: <20200828175332.130300-2-james.smart@broadcom.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200828175332.130300-1-james.smart@broadcom.com>
+References: <20200828175332.130300-1-james.smart@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -60,23 +63,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc to revision 12.8.0.4
+Some systems are reporting the following log message during driver
+unload or system shutdown:
+  ics_rtas_set_affinity: No online cpus in the mask
 
-The patches were cut against Martin's 5.9/scsi-queue tree
+A prior commit introduced the writing of an empty affinity mask in calls
+to irq_set_affinity_hint() when disabling interrupts or when there are
+no remaining online cpus to service an eq interrupt. At least some ppc64
+systems are checking whether affinity masks are empty or not.
 
-James Smart (4):
-  lpfc: Fix setting irq affinity with an empty cpu mask.
-  lpfc: Fix FLOGI/PLOGI receive race condition in pt2pt discovery
-  lpfc: Extend the RDF FPIN Registration descriptor for additional
-    events
-  lpfc: Update lpfc version to 12.8.0.4
+Fix: Do not call irq_set_affinity_hint() with an empty cpu mask.
 
- drivers/scsi/lpfc/lpfc_els.c     | 7 ++++++-
- drivers/scsi/lpfc/lpfc_hw4.h     | 2 +-
- drivers/scsi/lpfc/lpfc_init.c    | 1 -
- drivers/scsi/lpfc/lpfc_version.h | 2 +-
- 4 files changed, 8 insertions(+), 4 deletions(-)
+Fixes: dcaa21367938 ("scsi: lpfc: Change default IRQ model on AMD architectures")
+Cc: <stable@vger.kernel.org> # v5.5+
 
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <james.smart@broadcom.com>
+
+---
+ drivers/scsi/lpfc/lpfc_init.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 05ace6916b66..89c3ba0a0df9 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -11376,7 +11376,6 @@ lpfc_irq_clear_aff(struct lpfc_hba_eq_hdl *eqhdl)
+ {
+ 	cpumask_clear(&eqhdl->aff_mask);
+ 	irq_clear_status_flags(eqhdl->irq, IRQ_NO_BALANCING);
+-	irq_set_affinity_hint(eqhdl->irq, &eqhdl->aff_mask);
+ }
+ 
+ /**
 -- 
 2.26.2
 
