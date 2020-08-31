@@ -2,205 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DE02578E5
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 14:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A3C257A52
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 15:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbgHaMCj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Aug 2020 08:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S1726968AbgHaN0j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Aug 2020 09:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727042AbgHaMCf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 08:02:35 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0723AC061575
-        for <linux-scsi@vger.kernel.org>; Mon, 31 Aug 2020 05:02:34 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id v15so478455pgh.6
-        for <linux-scsi@vger.kernel.org>; Mon, 31 Aug 2020 05:02:34 -0700 (PDT)
+        with ESMTP id S1726913AbgHaN0S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 09:26:18 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EE0C061239
+        for <linux-scsi@vger.kernel.org>; Mon, 31 Aug 2020 06:26:10 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id u27so2074355lfm.13
+        for <linux-scsi@vger.kernel.org>; Mon, 31 Aug 2020 06:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a08AENI2DFUJOZiGvCRTg/GXwM7bPYe8BJ+rCJWtnl4=;
-        b=YOKtzczKXPTHUogmgXL30H3d8zUTN7PA3qH1/VNy/iIqfSR5XtUZyM07m1Joxg985J
-         VrNmTjEogNeVB1HiyJhuBpqLFF53UzSzSNwyuyuXB7jAinMQyKMdsBL6X0pdjsjdobc+
-         ewgM7hdO7Id5BLI7CG75ztKZ2HVgBH0LYm9IO7z85XLDzDN9IG4X0vJHZWBUNK1h4IAR
-         BBgh52YyXAHcZPc6rfS1u5wBtniJAjmpQulu6mHEtyeB73B3roqTuMs568SyhmBcrbKZ
-         7pqQSzhoMrZNBTGewkIv9tLosYbAgL8Jgnm/8x/NzaRG291HqSY4Bup7OP/P7r0cPfWh
-         36jg==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
+        b=Xq4uA6WQKrAYhjimxByBlx8GvGcvGHawEv3GOIrqEJ5RUHjzMHqw05v6WqOqFiCKn6
+         qRxuzvHYAhRxeUnWEKawePizICHZ57gAY9xD4g6AxCiTWl8JgMp9ZDJGItDWIfdcCwxB
+         D+RuaLZSaA/DdLAa2NqaIFZNxv8UQHjlJcNk9mz0qBxRohSukUjElohExaKZGjhIAZG6
+         fCjFii6u0MGq3aUVIKkYhmog5xaHq1dvg1Z6cFXklOCUQhUksK7LPKp0pMYeQ5MZQe/a
+         ivcRiTduDTsCcF62P9t/rnTC1RN1lraaofWCJhTFEss59vKlsMumHu2r5XlegQqeYIjp
+         h3tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a08AENI2DFUJOZiGvCRTg/GXwM7bPYe8BJ+rCJWtnl4=;
-        b=ttP96kgV9DL7AB3fGtxQC+QVqr860OR88lJy7IPpFnO0J4cbbg+Z3Xz/8mgYP//R8B
-         WLdeispijYYrloymMaIEJfOH+5fq2M6mg7QJhnKo7uxwvVBg99P/7wgd92EnESn6+clj
-         djZSWfKvScrkfIt0uiq90OetCngn7mzzGZ/GyP1wGfVxY/8QaA5BiRQ295lSNwdxck4o
-         UOUyGiIei+dXFZE6V58jx+r08tL/6dsxBe6gfw/EKG9c2WnzqAm7GxFUeWZ5Z0kaO24h
-         ogP3SG9CFxzKQkjPVU2dQDsyyBIv9wezSI5HEttWALE810Gytgk/b7uxGSXuDmVdT4rn
-         4AWg==
-X-Gm-Message-State: AOAM5305HW+4+TTc7OtapeAl6j97RwTRNgD6dM+nai2Sfw58QhIPRcGQ
-        hxpO6OmpNtAvf86R9W3pP30R6Q==
-X-Google-Smtp-Source: ABdhPJyVcgDinpA+btaIb9dzZaKvDLDOFy3R9RZel/AFBg1k8y/YJWPQcqpdSx2jFCouDYNOHU0pag==
-X-Received: by 2002:a65:66c4:: with SMTP id c4mr1014869pgw.442.1598875354300;
-        Mon, 31 Aug 2020 05:02:34 -0700 (PDT)
-Received: from houpudeMacBook-Pro.local ([240e:b1:e401:1::d])
-        by smtp.gmail.com with ESMTPSA id q201sm7756648pfq.80.2020.08.31.05.02.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Aug 2020 05:02:33 -0700 (PDT)
-Subject: Re: [PATCH] iscsi-target: fix hang in iscsit_access_np() when getting
- tpg->np_login_sem
-To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, michael.christie@oracle.com
-Cc:     stable@vger.kernel.org
-References: <20200729130343.24976-1-houpu@bytedance.com>
-From:   Hou Pu <houpu@bytedance.com>
-Message-ID: <01a58989-8777-3967-ebcd-f8c080e18a3c@bytedance.com>
-Date:   Mon, 31 Aug 2020 20:02:20 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
- Gecko/20100101 Thunderbird/68.11.0
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
+        b=JweZ4+G454U9u3pNmYcRzsaXT6Ns7LVJiDWhKN/5iCH2nVVskeXXfnH3YmPPN8fRYL
+         MFjC1Ff4Cp3fQ+LACWvFmPq+JAuBWEhiR0c1/2uBRGkeHdGrmfI7YrNvyL4EQtjsOAkD
+         oZZ/IwH7jpk6vKtWe8zjY32mo9B6RdCcTqneppaTaqqvvELvIXZcbeBm6bJFyBikvJDi
+         pa1h7ehVj/sC/YHnlI7Hdq5uzkP0ISiRRg7pCawCZdr1kanedVOsn7OfYF6gg6d97Epd
+         WaUVuI+jZIod2t2qOcFZsNp5jn102eFt0REUA72KBMi0Myl/RWliF6bwEllSOCzJ/UhQ
+         SdDw==
+X-Gm-Message-State: AOAM532ywB7VsR11gv49TcE9j/52BfbWNsHtuW3p/4Gdw8c+lDhQJcYL
+        b4wrcCQn7oyDLao16llu4Hq6Poh3SDcieJBwTVo=
+X-Google-Smtp-Source: ABdhPJziISB6g20VZDSn5XIRh4okPdoUnO8vKiEdwIFRlhhZcLPOFrcbTl+dbDcow8D6V0KXdzs4WSV3GBmwWRWGA6U=
+X-Received: by 2002:ac2:44a9:: with SMTP id c9mr657600lfm.99.1598880369031;
+ Mon, 31 Aug 2020 06:26:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200729130343.24976-1-houpu@bytedance.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Reply-To: marie_avis12@yahoo.com
+Received: by 2002:a2e:9817:0:0:0:0:0 with HTTP; Mon, 31 Aug 2020 06:26:08
+ -0700 (PDT)
+From:   Miss Maris Avis <marie.avis11@gmail.com>
+Date:   Mon, 31 Aug 2020 13:26:08 +0000
+X-Google-Sender-Auth: 7H4r-nfPsq5LxU2Tftky7Xudc0o
+Message-ID: <CADTVshMoCp0ChGK+tcBWTRqkH5HD2i5Kvi=LeK87KFDAVuAUYA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+My Dear,
 
-Hi,
+My name is Miss Marie Avis the only daughter of Mr. Gabriel Avis, my
+Father was dealing in Cocoa and Timber in this country before his
+death,  It is my pleasure to contact you for a business venture which
+I intend to establish in your country. Though I have not met with you
+before but I believe one has to risk confiding before you can succeed
+sometimes in life.
 
-Could anyone help review this patch? It is an important
-fix.
+I can confide in you for my brighter future since you are a human
+being like me. There is this huge amount of Ten Million five hundred
+thousand United States dollars. ($10.500.000.00) which my late Father
+kept for me in a suspense account with one of the bank here in Abidjan
+Cote d'Ivoire before he was assassinated by unknown persons, Now I
+have decided to invest these money in your country or anywhere safe
+enough for me.
 
-Login thread could hang __forever__ and only reboot could
-solve this. This happened several times in our production
-environment.
+I want you to help me claim this fund from the bank and have it
+transfer into your personal account in your country for investment
+purposes in your country in these areas:
 
-np->np_login_timer is shared by all TPGs of a portal.
-should be used carefully. If a connection to iqn-TPG A start
-login timer, It should not stop by another connection
-to iqn-TPG B.
+1). Telecommunication
+2). The transport Industry
+3). Five Star Hotel
+4). Tourism
+5). Real Estate
 
-np->np_login_timer protect potential hangs in
-__iscsi_target_login_thread.
-should be used locally in this function. It should really
-not be used in iscsi_target_login_sess_out from workqueue
-context.
+If you can be of assistance to me I will be pleased to offer you 20%
+of the total fund.
 
-Thanks,
-Hou
+I await your soonest response.
 
-On 2020/7/29 9:03 PM, Hou Pu wrote:
-> The iscsi target login thread might stuck in following stack:
-> 
-> cat /proc/`pidof iscsi_np`/stack
-> [<0>] down_interruptible+0x42/0x50
-> [<0>] iscsit_access_np+0xe3/0x167
-> [<0>] iscsi_target_locate_portal+0x695/0x8ac
-> [<0>] __iscsi_target_login_thread+0x855/0xb82
-> [<0>] iscsi_target_login_thread+0x2f/0x5a
-> [<0>] kthread+0xfa/0x130
-> [<0>] ret_from_fork+0x1f/0x30
-> 
-> This could be reproduced by following steps:
-> 1. Initiator A try to login iqn1-tpg1 on port 3260. After finishing
->     PDU exchange in the login thread and before the negotiation is
->     finished, at this time the network link is down. In a production
->     environment, this could happen. I could emulated it by bring
->     the network card down in the initiator node by ifconfig eth0 down.
->     (Now A could never finish this login. And tpg->np_login_sem is
->     hold by it).
-> 2. Initiator B try to login iqn2-tpg1 on port 3260. After finishing
->     PDU exchange in the login thread. The target expect to process
->     remaining login PDUs in workqueue context.
-> 3. Initiator A' try to re-login to iqn1-tpg1 on port 3260 from
->     a new socket. It will wait for tpg->np_login_sem with
->     np->np_login_timer loaded to wait for at most 15 second.
->     (Because the lock is held by A. A never gets a change to
->     release tpg->np_login_sem. so A' should finally get timeout).
-> 4. Before A' got timeout. Initiator B gets negotiation failed and
->     calls iscsi_target_login_drop()->iscsi_target_login_sess_out().
->     The np->np_login_timer is canceled. And initiator A' will hang
->     there forever. Because A' is now in the login thread. All other
->     login requests could not be serviced.
-> 
-> Fix this by moving iscsi_stop_login_thread_timer() out of
-> iscsi_target_login_sess_out(). Also remove iscsi_np parameter
-> from iscsi_target_login_sess_out().
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hou Pu <houpu@bytedance.com>
-> ---
->   drivers/target/iscsi/iscsi_target_login.c | 6 +++---
->   drivers/target/iscsi/iscsi_target_login.h | 3 +--
->   drivers/target/iscsi/iscsi_target_nego.c  | 3 +--
->   3 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/target/iscsi/iscsi_target_login.c b/drivers/target/iscsi/iscsi_target_login.c
-> index 85748e338858..893d1b406c29 100644
-> --- a/drivers/target/iscsi/iscsi_target_login.c
-> +++ b/drivers/target/iscsi/iscsi_target_login.c
-> @@ -1149,7 +1149,7 @@ void iscsit_free_conn(struct iscsi_conn *conn)
->   }
->   
->   void iscsi_target_login_sess_out(struct iscsi_conn *conn,
-> -		struct iscsi_np *np, bool zero_tsih, bool new_sess)
-> +				 bool zero_tsih, bool new_sess)
->   {
->   	if (!new_sess)
->   		goto old_sess_out;
-> @@ -1167,7 +1167,6 @@ void iscsi_target_login_sess_out(struct iscsi_conn *conn,
->   	conn->sess = NULL;
->   
->   old_sess_out:
-> -	iscsi_stop_login_thread_timer(np);
->   	/*
->   	 * If login negotiation fails check if the Time2Retain timer
->   	 * needs to be restarted.
-> @@ -1407,8 +1406,9 @@ static int __iscsi_target_login_thread(struct iscsi_np *np)
->   new_sess_out:
->   	new_sess = true;
->   old_sess_out:
-> +	iscsi_stop_login_thread_timer(np);
->   	tpg_np = conn->tpg_np;
-> -	iscsi_target_login_sess_out(conn, np, zero_tsih, new_sess);
-> +	iscsi_target_login_sess_out(conn, zero_tsih, new_sess);
->   	new_sess = false;
->   
->   	if (tpg) {
-> diff --git a/drivers/target/iscsi/iscsi_target_login.h b/drivers/target/iscsi/iscsi_target_login.h
-> index 3b8e3639ff5d..fc95e6150253 100644
-> --- a/drivers/target/iscsi/iscsi_target_login.h
-> +++ b/drivers/target/iscsi/iscsi_target_login.h
-> @@ -22,8 +22,7 @@ extern int iscsit_put_login_tx(struct iscsi_conn *, struct iscsi_login *, u32);
->   extern void iscsit_free_conn(struct iscsi_conn *);
->   extern int iscsit_start_kthreads(struct iscsi_conn *);
->   extern void iscsi_post_login_handler(struct iscsi_np *, struct iscsi_conn *, u8);
-> -extern void iscsi_target_login_sess_out(struct iscsi_conn *, struct iscsi_np *,
-> -				bool, bool);
-> +extern void iscsi_target_login_sess_out(struct iscsi_conn *, bool, bool);
->   extern int iscsi_target_login_thread(void *);
->   extern void iscsi_handle_login_thread_timeout(struct timer_list *t);
->   
-> diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
-> index 685d771b51d4..e32d93b92742 100644
-> --- a/drivers/target/iscsi/iscsi_target_nego.c
-> +++ b/drivers/target/iscsi/iscsi_target_nego.c
-> @@ -535,12 +535,11 @@ static bool iscsi_target_sk_check_and_clear(struct iscsi_conn *conn, unsigned in
->   
->   static void iscsi_target_login_drop(struct iscsi_conn *conn, struct iscsi_login *login)
->   {
-> -	struct iscsi_np *np = login->np;
->   	bool zero_tsih = login->zero_tsih;
->   
->   	iscsi_remove_failed_auth_entry(conn);
->   	iscsi_target_nego_release(conn);
-> -	iscsi_target_login_sess_out(conn, np, zero_tsih, true);
-> +	iscsi_target_login_sess_out(conn, zero_tsih, true);
->   }
->   
->   struct conn_timeout {
-> 
+Respectfully yours,
+Miss Marie Evis
+Tel: +225597438528
