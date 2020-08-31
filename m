@@ -2,94 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A3C257A52
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 15:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6550257A93
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 15:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbgHaN0j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Aug 2020 09:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S1726515AbgHaNek (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Aug 2020 09:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726913AbgHaN0S (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 09:26:18 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EE0C061239
-        for <linux-scsi@vger.kernel.org>; Mon, 31 Aug 2020 06:26:10 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id u27so2074355lfm.13
-        for <linux-scsi@vger.kernel.org>; Mon, 31 Aug 2020 06:26:10 -0700 (PDT)
+        with ESMTP id S1726167AbgHaNei (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 09:34:38 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1C7C061573;
+        Mon, 31 Aug 2020 06:34:37 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id d11so8455854ejt.13;
+        Mon, 31 Aug 2020 06:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
-        b=Xq4uA6WQKrAYhjimxByBlx8GvGcvGHawEv3GOIrqEJ5RUHjzMHqw05v6WqOqFiCKn6
-         qRxuzvHYAhRxeUnWEKawePizICHZ57gAY9xD4g6AxCiTWl8JgMp9ZDJGItDWIfdcCwxB
-         D+RuaLZSaA/DdLAa2NqaIFZNxv8UQHjlJcNk9mz0qBxRohSukUjElohExaKZGjhIAZG6
-         fCjFii6u0MGq3aUVIKkYhmog5xaHq1dvg1Z6cFXklOCUQhUksK7LPKp0pMYeQ5MZQe/a
-         ivcRiTduDTsCcF62P9t/rnTC1RN1lraaofWCJhTFEss59vKlsMumHu2r5XlegQqeYIjp
-         h3tg==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=8GcnX02giYXdZ/RxHybOYa4+sVruRRxorMeqsk/TQCk=;
+        b=QGGOZ4O0RRDhLLBhcIWkF4selDYedgjgBwmFZefkhwkgFPW69QApZd6Xe9lEi3z3Wu
+         qlunSZr4e4pnvgwQyOzm18Gf83nQlTifrQUajZaREdHEgkpCB4NlyBAdtmxnwcnFi5ea
+         NJXv9bGN1DnpYoUqTx5Uaodao9fUNh03Pw6wOQBew+6hC6gfkRWkvJmBsL/e5yTMxvxn
+         wq2OVbv61Jp5NkmX6DRTksPy2GKxh4Vg6CJ3O5gCgalulhh3dkk45I0a9nCF+h+wSD1w
+         malhRijnmH8jh6ypRaBmucO9s6QjNbmfcN/k/+V2s2/EsBGF1/tbNhAittIflALlUDkO
+         nu/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
-        b=JweZ4+G454U9u3pNmYcRzsaXT6Ns7LVJiDWhKN/5iCH2nVVskeXXfnH3YmPPN8fRYL
-         MFjC1Ff4Cp3fQ+LACWvFmPq+JAuBWEhiR0c1/2uBRGkeHdGrmfI7YrNvyL4EQtjsOAkD
-         oZZ/IwH7jpk6vKtWe8zjY32mo9B6RdCcTqneppaTaqqvvELvIXZcbeBm6bJFyBikvJDi
-         pa1h7ehVj/sC/YHnlI7Hdq5uzkP0ISiRRg7pCawCZdr1kanedVOsn7OfYF6gg6d97Epd
-         WaUVuI+jZIod2t2qOcFZsNp5jn102eFt0REUA72KBMi0Myl/RWliF6bwEllSOCzJ/UhQ
-         SdDw==
-X-Gm-Message-State: AOAM532ywB7VsR11gv49TcE9j/52BfbWNsHtuW3p/4Gdw8c+lDhQJcYL
-        b4wrcCQn7oyDLao16llu4Hq6Poh3SDcieJBwTVo=
-X-Google-Smtp-Source: ABdhPJziISB6g20VZDSn5XIRh4okPdoUnO8vKiEdwIFRlhhZcLPOFrcbTl+dbDcow8D6V0KXdzs4WSV3GBmwWRWGA6U=
-X-Received: by 2002:ac2:44a9:: with SMTP id c9mr657600lfm.99.1598880369031;
- Mon, 31 Aug 2020 06:26:09 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=8GcnX02giYXdZ/RxHybOYa4+sVruRRxorMeqsk/TQCk=;
+        b=tXjEUK2eCTYWqGweCmIz704FBcxh0MWXP8K8KWsSHH4XdeJv2klrZWfuA39ZgFtmyl
+         vlsQygR5o8xtObfwuhJdaOfzIKOf57GmRjxyb4zsmK40fzBuZIK8RF/nRpgsj4AkAJRZ
+         fyrhhxfedoWrmo9XODeYzuOMOKZjKlq5QMEyyNbVLMwQn2zqo/k1SCIee7MZTJ0EruG0
+         zysRwIZ7a88UOX07kKNBN9kcgsn7hXWappDR6RjKGS7BOJMEqNdAABgQjfWV4w4VFJw5
+         qO31SPjgYGRYSHTD4O5swCbs8xRxauojZafXBsCITZNnZptMrPC3MDdm+ZOIpRg0nXzg
+         JuTA==
+X-Gm-Message-State: AOAM530VMylLstYX5veHv/cEab1MQc8A4Y8L7XmaJ5kJw8IOOy/I1NsR
+        8b0OeLD7oR991xGt7dP4VwXW9qcZY1tS24ia5iunDlqrX3SARg==
+X-Google-Smtp-Source: ABdhPJzGS7uMIR2j5ikMu1m2rX3E0IdVw7LkXrZ5SBIV6NJs9csiD8cvFJr3MYcyv27oEKFz6BkTrZYO3ReoslJUcvw=
+X-Received: by 2002:a17:907:205c:: with SMTP id pg28mr1163295ejb.22.1598880876175;
+ Mon, 31 Aug 2020 06:34:36 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: marie_avis12@yahoo.com
-Received: by 2002:a2e:9817:0:0:0:0:0 with HTTP; Mon, 31 Aug 2020 06:26:08
- -0700 (PDT)
-From:   Miss Maris Avis <marie.avis11@gmail.com>
-Date:   Mon, 31 Aug 2020 13:26:08 +0000
-X-Google-Sender-Auth: 7H4r-nfPsq5LxU2Tftky7Xudc0o
-Message-ID: <CADTVshMoCp0ChGK+tcBWTRqkH5HD2i5Kvi=LeK87KFDAVuAUYA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+From:   Marc Dionne <marc.c.dionne@gmail.com>
+Date:   Mon, 31 Aug 2020 10:34:24 -0300
+Message-ID: <CAB9dFdtALXb_51QiY1t1Tbng34gA4wBHQGwk4w8Fttw-ko05Ng@mail.gmail.com>
+Subject: "scheduling while atomic" BUG in iscsid since commit 1b66d253610c7
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My Dear,
+The issue reported here:
+    https://lkml.org/lkml/2020/7/28/1085
+is still present as of 5.9-rc3; it was introduced in the 5.8 cycle.
 
-My name is Miss Marie Avis the only daughter of Mr. Gabriel Avis, my
-Father was dealing in Cocoa and Timber in this country before his
-death,  It is my pleasure to contact you for a business venture which
-I intend to establish in your country. Though I have not met with you
-before but I believe one has to risk confiding before you can succeed
-sometimes in life.
+When the problem occurs, iscsid crashes and iscsi volumes fail to come
+up, which makes the machine quite sad if the volumes are critical to
+its function.
 
-I can confide in you for my brighter future since you are a human
-being like me. There is this huge amount of Ten Million five hundred
-thousand United States dollars. ($10.500.000.00) which my late Father
-kept for me in a suspense account with one of the bank here in Abidjan
-Cote d'Ivoire before he was assassinated by unknown persons, Now I
-have decided to invest these money in your country or anywhere safe
-enough for me.
+Added CCs for iscsi related maintainers and lists suggested by get_maintainer.
 
-I want you to help me claim this fund from the bank and have it
-transfer into your personal account in your country for investment
-purposes in your country in these areas:
-
-1). Telecommunication
-2). The transport Industry
-3). Five Star Hotel
-4). Tourism
-5). Real Estate
-
-If you can be of assistance to me I will be pleased to offer you 20%
-of the total fund.
-
-I await your soonest response.
-
-Respectfully yours,
-Miss Marie Evis
-Tel: +225597438528
+Thanks,
+Marc
