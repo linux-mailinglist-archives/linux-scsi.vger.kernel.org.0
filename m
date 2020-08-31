@@ -2,47 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9332A2571F2
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 04:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A8B2571F0
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 04:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbgHaCyS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 30 Aug 2020 22:54:18 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41588 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbgHaCyO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 30 Aug 2020 22:54:14 -0400
-Received: by mail-pf1-f195.google.com with SMTP id t9so3766879pfq.8
-        for <linux-scsi@vger.kernel.org>; Sun, 30 Aug 2020 19:54:09 -0700 (PDT)
+        id S1726775AbgHaCyK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 30 Aug 2020 22:54:10 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33545 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726573AbgHaCyJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 30 Aug 2020 22:54:09 -0400
+Received: by mail-pl1-f194.google.com with SMTP id h2so2361511plr.0
+        for <linux-scsi@vger.kernel.org>; Sun, 30 Aug 2020 19:54:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/QJfcSZkg0GwS1gdT+HrJeHUZS+JFQJkkIZVE9XrBs0=;
-        b=oHwSEpWleBH3x9SdxRkZzJ79Ke6GAoPLmKtB3Utcj/W5+4UesclXE3cD4rsxMQU15o
-         9fQ02Hzx8YClbRxDR2D/jnaLywNXsBWi4LpQ97tX0jiXebaEFEkzXJMZeDUBIkgY99Gr
-         KxABuTzoi5OEzvFC++XpPVThGJBYvTHBUQEdf9aL8cRZQP21g6/Sio2RR/SnhlTQRvEC
-         H+nmHAKBEmgfuaZQPGo+YvxWcNdkTaRsDfimbUa8nz6bEJES/6+sOR9IthILFRAhkbNv
-         3yU38i0lTO1yhQZZaSlYa/OLVmY+2Re74x7zlRSDanH9wwHzzQRyf6+hIRXLI/vhjx2x
-         TxkA==
-X-Gm-Message-State: AOAM530yckgAZI4NnbZIRFfT9y8iI8t59mA4rBBhRZxq21EvJWBH/fjN
-        CKKYvygjTpKbO5VhQY6OuJU=
-X-Google-Smtp-Source: ABdhPJxTpXXkfIo6TDJMcPTvX4jYUIZTd9+anfF7Ql2P5RM1yta/5YIEkpI7A2TopgUqjMJws3TFGg==
-X-Received: by 2002:a63:6e01:: with SMTP id j1mr6672623pgc.147.1598842446829;
-        Sun, 30 Aug 2020 19:54:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=S8GnYufv9MZP7N22DryU0jHU7x5XYfvZ5ydievKhN2I=;
+        b=nj7YUQBlTcKnv8ItHN6MJwKS9XUgAAJy/VEsfl0kXy2tc6RsZptIkThHpu/pnrYKx3
+         zygP5sCFgmtwlD5PsKOTDKvgHw40/8lAfFhCcuhFqmQ5OyuvXzhE1VGLQLe8apavqmTM
+         ezJksUbGty3GVa8v+KKOKee8XvOowqOEvpshMHneS+Mu9gu4ctuI5jeWOltBpfxK0332
+         SUynII4OK+qQfKOnW2xjMxP5n8zl3hMquQ5xg4W2uvzvIh1MG9I+EyAww9tv3A9vFDEO
+         UEIwzdkbTf5G9dWjFP2lQ91UBk1uLDLPdM5CsFe8AqgjVyly8L2hX0im4G9TDf6cncmc
+         C3sQ==
+X-Gm-Message-State: AOAM531utQesqxYQdgRmxVE8kmwbPtRfqcQnOcghP/evKhj5IIr2pPT2
+        omEELCZX1aQGf/H7Vnq1QN8=
+X-Google-Smtp-Source: ABdhPJxiV2BNFdqYaNOGPLBxH1mY8UlWyz3nQaUUXvxkxoPgH80f0ydipEcvLbdRkQVqvfEQwQCOdg==
+X-Received: by 2002:a17:90a:af84:: with SMTP id w4mr8678964pjq.94.1598842448395;
+        Sun, 30 Aug 2020 19:54:08 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id l123sm583569pgl.24.2020.08.30.19.54.05
+        by smtp.gmail.com with ESMTPSA id l123sm583569pgl.24.2020.08.30.19.54.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2020 19:54:05 -0700 (PDT)
+        Sun, 30 Aug 2020 19:54:07 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     linux-scsi@vger.kernel.org,
         Martin Kepplinger <martin.kepplinger@puri.sm>,
         Can Guo <cang@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH RFC 0/6] Fix a deadlock in the SCSI power management code
-Date:   Sun, 30 Aug 2020 19:53:51 -0700
-Message-Id: <20200831025357.32700-1-bvanassche@acm.org>
+        Bart Van Assche <bvanassche@acm.org>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH RFC 1/6] ide: Do not set the RQF_PREEMPT flag for sense requests
+Date:   Sun, 30 Aug 2020 19:53:52 -0700
+Message-Id: <20200831025357.32700-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200831025357.32700-1-bvanassche@acm.org>
+References: <20200831025357.32700-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -50,31 +53,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Recently Martin Kepplinger reported a problem with the SCSI runtime PM
-code. Alan Stern root-caused the reported deadlock. This patch series is
-an attempt to fix that deadlock. These patches compile but have not yet
-been tested.
+RQF_PREEMPT is used for two different purposes in the legacy IDE code:
+1. To mark power management requests.
+2. To mark requests that should preempt another request. An (old)
+   explanation of that feature is as follows:
+   "The IDE driver in the Linux kernel normally uses a series of busywait
+   delays during its initialization. When the driver executes these
+   busywaits, the kernel does nothing for the duration of the wait. The
+   time spent in these waits could be used for other initialization
+   activities, if they could be run concurrently with these waits.
 
-Bart Van Assche (6):
-  ide: Do not set the RQF_PREEMPT flag for sense requests
-  scsi: Remove an incorrect comment
-  scsi: Pass a request queue pointer to __scsi_execute()
-  scsi_transport_spi: Make spi_execute() accept a request queue pointer
-  scsi_transport_spi: Freeze request queues instead of quiescing
-  block, scsi, ide: Only submit power management requests in state
-    RPM_SUSPENDED
+   More specifically, busywait-style delays such as udelay() in module
+   init functions inhibit kernel preemption because the Big Kernel Lock
+   is held, while yielding APIs such as schedule_timeout() allow preemption.
+   This is true because the kernel handles the BKL specially and releases
+   and reacquires it across reschedules allowed by the current thread.
 
- block/blk-core.c                  |   6 +-
- block/blk-mq-debugfs.c            |   1 -
- block/blk-mq.c                    |   4 +-
- drivers/ide/ide-atapi.c           |   1 -
- drivers/ide/ide-io.c              |   3 +-
- drivers/ide/ide-pm.c              |   2 +-
- drivers/scsi/scsi_lib.c           |  61 ++++++++-------
- drivers/scsi/scsi_priv.h          |   2 +
- drivers/scsi/scsi_transport_spi.c | 123 +++++++++++++++++-------------
- include/linux/blk-mq.h            |   4 +-
- include/linux/blkdev.h            |   6 +-
- include/scsi/scsi_device.h        |  16 ++--
- 12 files changed, 120 insertions(+), 109 deletions(-)
+   This IDE-preempt specification requires that the driver eliminate these
+   busywaits and replace them with a mechanism that allows other work to
+   proceed while the IDE driver is initializing."
 
+Since I haven't found an implementation of (2), do not set the PREEMPT
+flag for sense requests. This patch causes sense requests to be
+postponed while a drive is suspended instead of being submitted to
+ide_queue_rq().
+
+If it would ever be necessary to restore the IDE PREEMPT functionality,
+that can be done by introducing a new flag in struct ide_request.
+
+This patch is a first step towards removing the PREEMPT flag from the
+block layer.
+
+Cc: David S. Miller <davem@davemloft.net>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/ide/ide-atapi.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/ide/ide-atapi.c b/drivers/ide/ide-atapi.c
+index 2162bc80f09e..013ad33fbbc8 100644
+--- a/drivers/ide/ide-atapi.c
++++ b/drivers/ide/ide-atapi.c
+@@ -223,7 +223,6 @@ void ide_prep_sense(ide_drive_t *drive, struct request *rq)
+ 	sense_rq->rq_disk = rq->rq_disk;
+ 	sense_rq->cmd_flags = REQ_OP_DRV_IN;
+ 	ide_req(sense_rq)->type = ATA_PRIV_SENSE;
+-	sense_rq->rq_flags |= RQF_PREEMPT;
+ 
+ 	req->cmd[0] = GPCMD_REQUEST_SENSE;
+ 	req->cmd[4] = cmd_len;
