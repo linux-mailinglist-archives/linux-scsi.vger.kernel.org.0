@@ -2,85 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB9B257FC2
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 19:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B356257FE3
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 19:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728375AbgHaRlf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Aug 2020 13:41:35 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:34412 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728307AbgHaRlb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 13:41:31 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHU4sM143395;
-        Mon, 31 Aug 2020 17:41:24 GMT
+        id S1728917AbgHaRng (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Aug 2020 13:43:36 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:50348 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726105AbgHaRn0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 13:43:26 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHSrDR072950;
+        Mon, 31 Aug 2020 17:43:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=sdMVqMid/g3wPdDjL6h1OE4R752vt7FE0OPwRbalVCE=;
- b=BNO6fdnMgyfjmiTNRF8k6PUZgR777x6xOOSg9nEs/WszXWJdIeMYEf9Y99kGzFZSCW6o
- 1F/c9kb6tEgoOhYfCONXsOM0oC9CW/iFF06vZn/oIpOkvRcXMSQwv/uuv7kMqbaIYV8G
- FdcMQk6uMsRUKP1V7mE2naancSXErmYpBFYHT1rHLxs3qKDwy4QUbVD3T7RxBRYHd/pA
- zYLuvivPouVo25CXJoNWRPGsM3nr8w71kY7fOdFI51lPEbuymk21f22TkcCq/xgmV4U/
- H4tG9bi/7J9rEzzxNKcPQl2Ep/cIUXpCTE/5QkNpAN3dGOlTx4jq5geoJSR6kgKtcOga 0A== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 337eykyjg7-1
+ bh=LP7KEZhg+XKWxIs/BSczmC1OoPoZUx3aWNFf7jH3Qe0=;
+ b=f7AlhIj3J5T8JIrf1EOms30exoVXSEO8Rp89z0EioZ6Os1wfucGbgafkD55k1jI46liZ
+ iPnYwRp2AM/dNRcWETy6qlzaaacr09THXbQSp2Uuiy9QeowUU2DtZX3W0Wk7/q5piwsu
+ DLesClTUL2hp9fqzYgydCRgD0C4PZ4NS2NG7AFbjew+sbRUbAAokGxmege+vLaroc3/O
+ NtXAF2fDIwY/Ih90dXetEqK0ZmIEOpXH/VhR8lXrerAW9sNzqwEn9w8WGH/Tx62OsNa0
+ 5rYpbdVBf0u0YxwyJIEtajDRr1MfksDqzNdNJiMGsJ2H+/eWZRvjH9ogWbkLnxDJFPFb 1Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 337eeqqms1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Aug 2020 17:41:23 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHeY3D165590;
-        Mon, 31 Aug 2020 17:41:23 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 3380x0v0u6-1
+        Mon, 31 Aug 2020 17:43:19 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHf8G9078432;
+        Mon, 31 Aug 2020 17:41:18 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 3380kkynmf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Aug 2020 17:41:23 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 07VHfF7K018200;
-        Mon, 31 Aug 2020 17:41:15 GMT
+        Mon, 31 Aug 2020 17:41:18 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07VHfGGH005072;
+        Mon, 31 Aug 2020 17:41:17 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 31 Aug 2020 10:41:15 -0700
+        with ESMTP ; Mon, 31 Aug 2020 10:41:16 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Bradley Grove <linuxdrivers@attotech.com>,
-        linux-scsi@vger.kernel.org, Alex Dewar <alex.dewar90@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+To:     QLogic-Storage-Upstream@qlogic.com, jejb@linux.ibm.com,
+        lalit.chandivade@qlogic.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        michaelc@cs.wisc.edu, vikas.chaudhary@qlogic.com,
+        JBottomley@Parallels.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        kernel-janitors@vger.kernel.org, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: esas2r: Remove unnecessary casts
-Date:   Mon, 31 Aug 2020 13:41:02 -0400
-Message-Id: <159889566025.22322.2756105346317546336.b4-ty@oracle.com>
+Subject: Re: [PATCH] scsi: qla2xxx: Fix the size used in a 'dma_free_coherent()' call
+Date:   Mon, 31 Aug 2020 13:41:03 -0400
+Message-Id: <159889566023.22322.17846122781525526855.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200820181411.866057-1-alex.dewar90@gmail.com>
-References: <20200820181411.866057-1-alex.dewar90@gmail.com>
+In-Reply-To: <20200802110721.677707-1-christophe.jaillet@wanadoo.fr>
+References: <20200802110721.677707-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9730 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=797 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2008310105
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9730 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 clxscore=1011 spamscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008310104
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=787 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008310104
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 20 Aug 2020 19:14:11 +0100, Alex Dewar wrote:
+On Sun, 2 Aug 2020 13:07:21 +0200, Christophe JAILLET wrote:
 
-> In a number of places in esas2r_ioctl.c, the void* returned from
-> pci_alloc_consistent() is cast unnecessarily. Remove casts.
+> Update the size used in 'dma_free_coherent()' in order to match the one
+> used in the corresponding 'dma_alloc_coherent()'.
 > 
-> Issue identified with Coccinelle.
+> While at it, remove a memset after a call to 'dma_alloc_coherent()'.
+> This is useless since
+> commit 518a2f1925c3 ("dma-mapping: zero memory returned from dma_alloc_*")
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: esas2r: Remove unnecessary casts
-      https://git.kernel.org/mkp/scsi/c/32417d7844ab
+[1/1] scsi: qla2xxx: Fix the size used in a 'dma_free_coherent()' call
+      https://git.kernel.org/mkp/scsi/c/650b323c8e7c
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
