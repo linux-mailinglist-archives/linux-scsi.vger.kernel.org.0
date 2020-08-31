@@ -2,90 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4183825A892
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 11:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56E425ABE0
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 15:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbgIBJ2K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Sep 2020 05:28:10 -0400
-Received: from mga03.intel.com ([134.134.136.65]:29045 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgIBJ2K (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 2 Sep 2020 05:28:10 -0400
-IronPort-SDR: IGaoofaOCszIrAuqNFsQINaqArFCKV958pWyWmAkrk/alYSpUuawG4aNBDwje61pB/+OCd7NDH
- 8onUK8KQDMWw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="157358867"
-X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="157358867"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 02:28:04 -0700
-IronPort-SDR: ZjOyCf8L1o3UKofFPyqqcqzz4hgmZuuvLS8kECsM066KHnnFFTKEm2pxywaWzq2OEqdvtrc3Gs
- oZd4kRBuzGuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="297617334"
-Received: from slisovsk-lenovo-ideapad-720s-13ikb.fi.intel.com (HELO [10.237.72.190]) ([10.237.72.190])
-  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2020 02:28:03 -0700
-Subject: Re: [PATCH V2] scsi: ufs-pci: Add LTR support for Intel controllers
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>
-References: <20200827072030.24655-1-adrian.hunter@intel.com>
- <yq14kohexka.fsf@ca-mkp.ca.oracle.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <dc615e02-18a3-334d-dbc4-8aba94e4be6b@intel.com>
-Date:   Wed, 2 Sep 2020 12:27:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726913AbgIBNNX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Sep 2020 09:13:23 -0400
+Received: from 94637-75753.cloudwaysapps.com ([138.197.78.220]:53272 "EHLO
+        94637-75753.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726871AbgIBNK1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Sep 2020 09:10:27 -0400
+Received: from Shop01 (94637-75753.cloudwaysapps.com [127.0.0.1])
+        by 94637-75753.cloudwaysapps.com (Postfix) with SMTP id 8C18F238C5;
+        Mon, 31 Aug 2020 23:06:01 +0000 (UTC)
+Received: from [82.4.117.112]
+        by Shop01 with SMTP
+        for <linux-poweredge-request@dell.com>; Mon, 31 Aug 2020 19:05:05 -0500
+Message-ID: <qtnno0p329-4-$36$6mf5$2hup$ur@ceo.ls>
+From:   "Nassir Uddin" <fkinneyofd@tampabay.rr.com>
+Reply-To: "Nassir Uddin" <fkinneyofd@tampabay.rr.com>
+To:     linux-poweredge-request@dell.com
+Subject: Dear Sir/Madam
+Date:   Mon, 31 Aug 20 19:05:05 GMT
+X-Mailer: MIME-tools 5.503 (Entity 5.501)
 MIME-Version: 1.0
-In-Reply-To: <yq14kohexka.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/alternative;
+        boundary="52DA9_D0BE_.3_.5B.."
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/09/20 5:12 am, Martin K. Petersen wrote:
-> 
-> Adrian,
-> 
->> Intel host controllers support the setting of latency tolerance.
->> Accordingly, implement the PM QoS ->set_latency_tolerance() callback. The
->> raw register values are also exposed via debugfs.
-> 
-> Does not apply to 5.10/scsi-queue. Please rebase. Thanks!
-> 
 
-Hi
+--52DA9_D0BE_.3_.5B..
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for processing this.
+Dear Sir/Madam,
 
-The 5.10/scsi-queue branch seems to be missing the following fix.  If you cherry
-pick that, then it applies.
+We are an Investment/Project Service Company.
+We are looking for Partners that will part with us in a project that is ec=
+onomically viable and financially profitable with zero risk.
 
+Kindly express your interest to partner with us.
 
-                                                                                                                                                                                                                                                                                          
-commit 8da76f71fef7d8a1a72af09d48899573feb60065                                                                                                                                                                                                                                                                                                                                     
-Author: Adrian Hunter <adrian.hunter@intel.com>                                                                                                                                                                                                                                                                                                                                     
-Date:   Mon Aug 10 17:10:24 2020 +0300                                                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                                                                                                                                    
-    scsi: ufs-pci: Add quirk for broken auto-hibernate for Intel EHL                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                    
-    Intel EHL UFS host controller advertises auto-hibernate capability but it
-    does not work correctly. Add a quirk for that.
-    
-    [mkp: checkpatch fix]
-    
-    Link: https://lore.kernel.org/r/20200810141024.28859-1-adrian.hunter@intel.com
-    Fixes: 8c09d7527697 ("scsi: ufshdc-pci: Add Intel PCI IDs for EHL")
-    Acked-by: Stanley Chu <stanley.chu@mediatek.com>
-    Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-    Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Regards.
+Nassir Uddin
+
+--52DA9_D0BE_.3_.5B..--
 
