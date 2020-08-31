@@ -2,84 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D23DF257FDF
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 19:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7FC257FCA
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 19:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728333AbgHaRn3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Aug 2020 13:43:29 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:39548 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727963AbgHaRn1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 13:43:27 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHTf3n185226;
-        Mon, 31 Aug 2020 17:43:23 GMT
+        id S1729095AbgHaRly (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Aug 2020 13:41:54 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:49296 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729084AbgHaRlv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 13:41:51 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHSonc072910;
+        Mon, 31 Aug 2020 17:41:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=tEONa2vxtDQteg9PbJKnoPWh6utRvJWO0fqZQKSw8Cc=;
- b=PIWd9ql9stqV2TtEmn2ooyvKw5iBEdf65dRsCau8DuWSjKsSSFEkEaI2NMBk5/RoSayu
- /cwXKQFUxXeJdzYFrLJv+AY7c18G3rMI9CtJMN3ff0GO1X6svLWldVI07MsZQ8hgAOY1
- uuMcO2PjVVR7mB5ENACd7/Ft/ME0PRXMsRW7rxqFHPwSNszGCiptu9yQCXvHLkJYbtSe
- gzjO7LXS1kqVPLrU1RUTCSzMsj1CNW7PDMmiFsfEkARU71lVb6JhiMlfjVsx3aXPv9fd
- SZcmS4rOzWwLqaVj/o7y1ZXCgKRvHMHc3OaGD5G5Dic3Q/24DQCQo1Zjh3Ii2VV4/Ao5 sQ== 
+ bh=6Brqgu2ha0262GWeDozDJjgeaOVDJ0MjlldhBkpBzjU=;
+ b=nz+v/yyhhjI3F8XizagbN0QvA+R/LlljO7IW/u8IM6pBYlkusA4c6xHJLOEcVeTtoF6O
+ 9DuP3+GxuHyipLfbT3FJLFxWF0TWOr2jPWSUb2Ir9IbjjQNIhEKE+JcBzwVjX/bRZ7tM
+ slUMkophWow2UhANkrNNYRA5fiYeZttjEquk9be+OtMcIERLoz1dN/yDz00VIjd78qCs
+ M1IYQ/4mD6KnechlP2k8JS2dsYPZ9GHRUAWjPGx6EYrlUdrtUCY8uWsrBavHDrKI+zbq
+ 7P1bI3XMNA8RtJ58pILFyrbSWFYGyArjuPuwKbrCRVpavh0DozwDIxKaOowSfGKpEBOA zA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 337qrhene2-1
+        by userp2130.oracle.com with ESMTP id 337eeqqmgy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Aug 2020 17:43:23 +0000
+        Mon, 31 Aug 2020 17:41:25 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHeus2029436;
-        Mon, 31 Aug 2020 17:41:23 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 3380sqbru2-1
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07VHevqf029568;
+        Mon, 31 Aug 2020 17:41:25 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 3380sqbrv6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Aug 2020 17:41:22 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07VHfM4n012396;
-        Mon, 31 Aug 2020 17:41:22 GMT
+        Mon, 31 Aug 2020 17:41:25 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07VHfNSM005103;
+        Mon, 31 Aug 2020 17:41:23 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 31 Aug 2020 10:41:21 -0700
+        with ESMTP ; Mon, 31 Aug 2020 10:41:22 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Colin King <colin.king@canonical.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Karan Tilak Kumar <kartilak@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>
+To:     davem@davemloft.net, jejb@linux.ibm.com, arkadiusz@drabczyk.org,
+        praveenm@chelsio.com,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: snic: fix spelling mistakes of "Queueing"
-Date:   Mon, 31 Aug 2020 13:41:08 -0400
-Message-Id: <159889566023.22322.15777127928879513502.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, tianjia.zhang@alibaba.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: csiostor: Fix wrong return value in csio_hw_prep_fw()
+Date:   Mon, 31 Aug 2020 13:41:09 -0400
+Message-Id: <159889566025.22322.13946426443930971626.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200810080745.47314-1-colin.king@canonical.com>
-References: <20200810080745.47314-1-colin.king@canonical.com>
+In-Reply-To: <20200802111531.5065-1-tianjia.zhang@linux.alibaba.com>
+References: <20200802111531.5065-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9730 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=892 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=950 adultscore=0
  phishscore=0 malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2008310105
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9730 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=905 bulkscore=0
- adultscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015
- suspectscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008310104
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=964 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008310104
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 10 Aug 2020 09:07:45 +0100, Colin King wrote:
+On Sun, 2 Aug 2020 19:15:31 +0800, Tianjia Zhang wrote:
 
-> There are two different spelling mistakes of "Queueing" in
-> error and debug messages. Fix these.
+> On an error exit path, a negative error code should be returned
+> instead of a positive return value.
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: snic: Fix spelling mistakes of "Queueing"
-      https://git.kernel.org/mkp/scsi/c/cb562b132bf8
+[1/1] scsi: csiostor: Fix wrong return value in csio_hw_prep_fw()
+      https://git.kernel.org/mkp/scsi/c/44f4daf8678a
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
