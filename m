@@ -2,71 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6550257A93
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 15:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798E6257E86
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Aug 2020 18:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgHaNek (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Aug 2020 09:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726167AbgHaNei (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Aug 2020 09:34:38 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1C7C061573;
-        Mon, 31 Aug 2020 06:34:37 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id d11so8455854ejt.13;
-        Mon, 31 Aug 2020 06:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=8GcnX02giYXdZ/RxHybOYa4+sVruRRxorMeqsk/TQCk=;
-        b=QGGOZ4O0RRDhLLBhcIWkF4selDYedgjgBwmFZefkhwkgFPW69QApZd6Xe9lEi3z3Wu
-         qlunSZr4e4pnvgwQyOzm18Gf83nQlTifrQUajZaREdHEgkpCB4NlyBAdtmxnwcnFi5ea
-         NJXv9bGN1DnpYoUqTx5Uaodao9fUNh03Pw6wOQBew+6hC6gfkRWkvJmBsL/e5yTMxvxn
-         wq2OVbv61Jp5NkmX6DRTksPy2GKxh4Vg6CJ3O5gCgalulhh3dkk45I0a9nCF+h+wSD1w
-         malhRijnmH8jh6ypRaBmucO9s6QjNbmfcN/k/+V2s2/EsBGF1/tbNhAittIflALlUDkO
-         nu/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=8GcnX02giYXdZ/RxHybOYa4+sVruRRxorMeqsk/TQCk=;
-        b=tXjEUK2eCTYWqGweCmIz704FBcxh0MWXP8K8KWsSHH4XdeJv2klrZWfuA39ZgFtmyl
-         vlsQygR5o8xtObfwuhJdaOfzIKOf57GmRjxyb4zsmK40fzBuZIK8RF/nRpgsj4AkAJRZ
-         fyrhhxfedoWrmo9XODeYzuOMOKZjKlq5QMEyyNbVLMwQn2zqo/k1SCIee7MZTJ0EruG0
-         zysRwIZ7a88UOX07kKNBN9kcgsn7hXWappDR6RjKGS7BOJMEqNdAABgQjfWV4w4VFJw5
-         qO31SPjgYGRYSHTD4O5swCbs8xRxauojZafXBsCITZNnZptMrPC3MDdm+ZOIpRg0nXzg
-         JuTA==
-X-Gm-Message-State: AOAM530VMylLstYX5veHv/cEab1MQc8A4Y8L7XmaJ5kJw8IOOy/I1NsR
-        8b0OeLD7oR991xGt7dP4VwXW9qcZY1tS24ia5iunDlqrX3SARg==
-X-Google-Smtp-Source: ABdhPJzGS7uMIR2j5ikMu1m2rX3E0IdVw7LkXrZ5SBIV6NJs9csiD8cvFJr3MYcyv27oEKFz6BkTrZYO3ReoslJUcvw=
-X-Received: by 2002:a17:907:205c:: with SMTP id pg28mr1163295ejb.22.1598880876175;
- Mon, 31 Aug 2020 06:34:36 -0700 (PDT)
-MIME-Version: 1.0
-From:   Marc Dionne <marc.c.dionne@gmail.com>
-Date:   Mon, 31 Aug 2020 10:34:24 -0300
-Message-ID: <CAB9dFdtALXb_51QiY1t1Tbng34gA4wBHQGwk4w8Fttw-ko05Ng@mail.gmail.com>
-Subject: "scheduling while atomic" BUG in iscsid since commit 1b66d253610c7
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728514AbgHaQTX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Aug 2020 12:19:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45858 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727819AbgHaQTV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 31 Aug 2020 12:19:21 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7D834AC50;
+        Mon, 31 Aug 2020 16:19:19 +0000 (UTC)
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
+        Martin Wilck <mwilck@suse.com>, Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH v2 0/4] qla2xxx: A couple crash fixes
+Date:   Mon, 31 Aug 2020 18:18:50 +0200
+Message-Id: <20200831161854.70879-1-dwagner@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The issue reported here:
-    https://lkml.org/lkml/2020/7/28/1085
-is still present as of 5.9-rc3; it was introduced in the 5.8 cycle.
+changes since v1:
 
-When the problem occurs, iscsid crashes and iscsi volumes fail to come
-up, which makes the machine quite sad if the volumes are critical to
-its function.
+ - added dummy warn function to patch#1
+ - added log entry to patch#4
 
-Added CCs for iscsi related maintainers and lists suggested by get_maintainer.
+as suggested by Martin
+
+
+
+Initial cover letter:
+
+The first crash we observed is due memory corruption in the srb memory
+pool. Unforuntatly, I couldn't find the source of the problem but the
+workaround by resetting the cleanup callbacks 'fixes' this problem
+(patch #1). I think as intermeditate step this should be merged until
+the real cause can be identified.
+
+The second crash is due a race condition(?) in the firmware. The sts
+entries are not updated in time which leads to this crash pattern
+which several customers have reported:
+
+ #0 [c00000ffffd1bb80] scsi_dma_unmap at d00000001e4904d4 [scsi_mod]
+ #1 [c00000ffffd1bbe0] qla2x00_sp_compl at d0000000204803cc [qla2xxx]
+ #2 [c00000ffffd1bc20] qla24xx_process_response_queue at d0000000204c5810 [qla2xxx]
+ #3 [c00000ffffd1bd50] qla24xx_msix_rsp_q at d0000000204c8fd8 [qla2xxx]
+ #4 [c00000ffffd1bde0] __handle_irq_event_percpu at c000000000189510
+ #5 [c00000ffffd1bea0] handle_irq_event_percpu at c00000000018978c
+ #6 [c00000ffffd1bee0] handle_irq_event at c00000000018984c
+ #7 [c00000ffffd1bf10] handle_fasteoi_irq at c00000000018efc0
+ #8 [c00000ffffd1bf40] generic_handle_irq at c000000000187f10
+ #9 [c00000ffffd1bf60] __do_irq at c000000000018784
+ #10 [c00000ffffd1bf90] call_do_irq at c00000000002caa4
+ #11 [c00000ecca417a00] do_IRQ at c000000000018970
+ #12 [c00000ecca417a50] restore_check_irq_replay at c00000000000de98
+
+From analyzing the crash dump it was clear that
+qla24xx_mbx_iocb_entry() calls sp->done (qla2x00_sp_compl) which
+crashes because the response is not a mailbox entry, it is a status
+entry. Patch #4 changes the process logic for mailbox commands so that
+the sp is parsed before calling the correct proccess function.
 
 Thanks,
-Marc
+Daniel
+
+Daniel Wagner (4):
+  qla2xxx: Warn if done() or free() are called on an already freed srb
+  qla2xxx: Simplify return value logic in qla2x00_get_sp_from_handle()
+  qla2xxx: Drop unused function argument from
+    qla2x00_get_sp_from_handle()
+  qla2xxx: Handle incorrect entry_type entries
+
+ drivers/scsi/qla2xxx/qla_gbl.h    |  3 +-
+ drivers/scsi/qla2xxx/qla_init.c   | 10 ++++++
+ drivers/scsi/qla2xxx/qla_inline.h |  5 +++
+ drivers/scsi/qla2xxx/qla_isr.c    | 74 +++++++++++++++++++++++----------------
+ drivers/scsi/qla2xxx/qla_mr.c     |  9 ++---
+ 5 files changed, 62 insertions(+), 39 deletions(-)
+
+-- 
+2.16.4
+
