@@ -2,179 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6AB8258D7A
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Sep 2020 13:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DB7258F28
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Sep 2020 15:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726419AbgIALe7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Sep 2020 07:34:59 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:44774 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726789AbgIALea (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 1 Sep 2020 07:34:30 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 4ADCB44067A7C855BD8A;
-        Tue,  1 Sep 2020 19:17:07 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 1 Sep 2020 19:17:00 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>,
-        Xiang Chen <chenxiang66@hisilicon.com>,
-        "John Garry" <john.garry@huawei.com>
-Subject: [PATCH 7/8] scsi: hisi_sas: Add carriage returns to some prints
-Date:   Tue, 1 Sep 2020 19:13:09 +0800
-Message-ID: <1598958790-232272-8-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1598958790-232272-1-git-send-email-john.garry@huawei.com>
-References: <1598958790-232272-1-git-send-email-john.garry@huawei.com>
+        id S1728235AbgIANcp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Sep 2020 09:32:45 -0400
+Received: from elvis.franken.de ([193.175.24.41]:45627 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728129AbgIANby (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 1 Sep 2020 09:31:54 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kD6NY-0001cg-00; Tue, 01 Sep 2020 15:31:16 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id A31F7C0E44; Tue,  1 Sep 2020 15:29:05 +0200 (CEST)
+Date:   Tue, 1 Sep 2020 15:29:05 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Pawel Osciak <pawel@osciak.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        iommu@lists.linux-foundation.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-mm@kvack.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 06/28] lib82596: move DMA allocation into the callers of
+ i82596_probe
+Message-ID: <20200901132905.GA11506@alpha.franken.de>
+References: <20200819065555.1802761-1-hch@lst.de>
+ <20200819065555.1802761-7-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200819065555.1802761-7-hch@lst.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Xiang Chen <chenxiang66@hisilicon.com>
+On Wed, Aug 19, 2020 at 08:55:33AM +0200, Christoph Hellwig wrote:
+> This allows us to get rid of the LIB82596_DMA_ATTR defined and prepare
+> for untangling the coherent vs non-coherent DMA allocation API.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/net/ethernet/i825xx/lasi_82596.c | 24 ++++++++++------
+>  drivers/net/ethernet/i825xx/lib82596.c   | 36 ++++++++----------------
+>  drivers/net/ethernet/i825xx/sni_82596.c  | 19 +++++++++----
+>  3 files changed, 40 insertions(+), 39 deletions(-)
+> 
+> [...]
+> diff --git a/drivers/net/ethernet/i825xx/sni_82596.c b/drivers/net/ethernet/i825xx/sni_82596.c
+> index 22f5887578b2bd..e80e790ffbd4d4 100644
+> --- a/drivers/net/ethernet/i825xx/sni_82596.c
+> +++ b/drivers/net/ethernet/i825xx/sni_82596.c
+> @@ -24,8 +24,6 @@
+>  
+>  static const char sni_82596_string[] = "snirm_82596";
+>  
+> -#define LIB82596_DMA_ATTR	0
+> -
+>  #define DMA_WBACK(priv, addr, len)     do { } while (0)
+>  #define DMA_INV(priv, addr, len)       do { } while (0)
+>  #define DMA_WBACK_INV(priv, addr, len) do { } while (0)
+> @@ -134,10 +132,19 @@ static int sni_82596_probe(struct platform_device *dev)
+>  	lp->ca = ca_addr;
+>  	lp->mpu_port = mpu_addr;
+>  
+> +	lp->dma = dma_alloc_coherent(dev->dev.parent, sizeof(struct i596_dma),
+> +				     &lp->dma_addr, GFP_KERNEL);
 
-There is no carriage return for some prints, so add carriage returns for
-them.
+this needs to use &dev->dev as device argument otherwise I get a
 
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c  |  2 +-
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 24 ++++++++++++------------
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  2 +-
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  2 +-
- 4 files changed, 15 insertions(+), 15 deletions(-)
+WARNING: CPU: 0 PID: 1 at linux/kernel/dma/mapping.c:416 dma_alloc_attrs+0x64/0x98
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 6d1e42389cd6..f5ad8e662b4b 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -335,7 +335,7 @@ static int hisi_sas_dma_map(struct hisi_hba *hisi_hba,
- 	}
- 
- 	if (*n_elem > HISI_SAS_SGE_PAGE_CNT) {
--		dev_err(dev, "task prep: n_elem(%d) > HISI_SAS_SGE_PAGE_CNT",
-+		dev_err(dev, "task prep: n_elem(%d) > HISI_SAS_SGE_PAGE_CNT\n",
- 			*n_elem);
- 		rc = -EINVAL;
- 		goto err_out_dma_unmap;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index 7922a9bb1b28..45e866cb9164 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -752,7 +752,7 @@ static int hw_init_v1_hw(struct hisi_hba *hisi_hba)
- 
- 	rc = reset_hw_v1_hw(hisi_hba);
- 	if (rc) {
--		dev_err(dev, "hisi_sas_reset_hw failed, rc=%d", rc);
-+		dev_err(dev, "hisi_sas_reset_hw failed, rc=%d\n", rc);
- 		return rc;
- 	}
- 
-@@ -1166,7 +1166,7 @@ static void slot_err_v1_hw(struct hisi_hba *hisi_hba,
- 	case SAS_PROTOCOL_STP:
- 	case SAS_PROTOCOL_SATA | SAS_PROTOCOL_STP:
- 	{
--		dev_err(dev, "slot err: SATA/STP not supported");
-+		dev_err(dev, "slot err: SATA/STP not supported\n");
- 	}
- 		break;
- 	default:
-@@ -1218,35 +1218,35 @@ static void slot_complete_v1_hw(struct hisi_hba *hisi_hba,
- 		u32 info_reg = hisi_sas_read32(hisi_hba, HGC_INVLD_DQE_INFO);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_DQ_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq IPTT err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq IPTT err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_TYPE_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq type err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq type err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_FORCE_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq force phy err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq force phy err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_PHY_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq phy id err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq phy id err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_ABORT_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq abort flag err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq abort flag err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_IPTT_OF_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq IPTT or ICT err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq IPTT or ICT err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_SSP_ERR_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq SSP frame type err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq SSP frame type err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		if (info_reg & HGC_INVLD_DQE_INFO_OFL_MSK)
--			dev_err(dev, "slot complete: [%d:%d] has dq order frame len err",
-+			dev_err(dev, "slot complete: [%d:%d] has dq order frame len err\n",
- 				slot->cmplt_queue, slot->cmplt_queue_slot);
- 
- 		ts->stat = SAS_OPEN_REJECT;
-@@ -1294,7 +1294,7 @@ static void slot_complete_v1_hw(struct hisi_hba *hisi_hba,
- 	case SAS_PROTOCOL_SATA:
- 	case SAS_PROTOCOL_STP:
- 	case SAS_PROTOCOL_SATA | SAS_PROTOCOL_STP:
--		dev_err(dev, "slot complete: SATA/STP not supported");
-+		dev_err(dev, "slot complete: SATA/STP not supported\n");
- 		break;
- 
- 	default:
-@@ -1417,7 +1417,7 @@ static irqreturn_t int_bcast_v1_hw(int irq, void *p)
- 	irq_value = hisi_sas_phy_read32(hisi_hba, phy_no, CHL_INT2);
- 
- 	if (!(irq_value & CHL_INT2_SL_RX_BC_ACK_MSK)) {
--		dev_err(dev, "bcast: irq_value = %x not set enable bit",
-+		dev_err(dev, "bcast: irq_value = %x not set enable bit\n",
- 			irq_value);
- 		res = IRQ_NONE;
- 		goto end;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index 043f47ba3600..68d07a4f8422 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -1382,7 +1382,7 @@ static int hw_init_v2_hw(struct hisi_hba *hisi_hba)
- 
- 	rc = reset_hw_v2_hw(hisi_hba);
- 	if (rc) {
--		dev_err(dev, "hisi_sas_reset_hw failed, rc=%d", rc);
-+		dev_err(dev, "hisi_sas_reset_hw failed, rc=%d\n", rc);
- 		return rc;
- 	}
- 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 8522f693033f..397846388e85 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -909,7 +909,7 @@ static int hw_init_v3_hw(struct hisi_hba *hisi_hba)
- 
- 	rc = reset_hw_v3_hw(hisi_hba);
- 	if (rc) {
--		dev_err(dev, "hisi_sas_reset_hw failed, rc=%d", rc);
-+		dev_err(dev, "hisi_sas_reset_hw failed, rc=%d\n", rc);
- 		return rc;
- 	}
- 
+(coherent_dma_mask is set correctly).
+
+dev->dev.parent was correct when going from netdevice to underlying device,
+but now allocation is done via platform_device probe. I wonder why this works
+for parisc.
+
+Thomas.
+
 -- 
-2.26.2
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
