@@ -2,117 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA43525AC54
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 15:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB6525ACD6
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 16:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbgIBNuv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Sep 2020 09:50:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42590 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726871AbgIBNtr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 2 Sep 2020 09:49:47 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E96B9B609;
-        Wed,  2 Sep 2020 13:49:45 +0000 (UTC)
-Message-ID: <cbbd368e6e33af6e22c850192e69b27edd043efd.camel@suse.com>
-Subject: Re: [PATCH v4 2/4] target: initialize LUN in
- transport_init_se_cmd().
-From:   Martin Wilck <mwilck@suse.com>
-To:     Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>,
-        martin.petersen@oracle.com, michael.christie@oracle.com,
-        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     shirley.ma@oracle.com, Hannes Reinecke <hare@suse.com>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Arun Easi <aeasi@marvell.com>
-Date:   Wed, 02 Sep 2020 15:49:43 +0200
-In-Reply-To: <1591559913-8388-3-git-send-email-sudhakar.panneerselvam@oracle.com>
-References: <1591559913-8388-1-git-send-email-sudhakar.panneerselvam@oracle.com>
-         <1591559913-8388-3-git-send-email-sudhakar.panneerselvam@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.36.5 
+        id S1726654AbgIBOVB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Sep 2020 10:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727931AbgIBONl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Sep 2020 10:13:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C458AC061265;
+        Wed,  2 Sep 2020 07:12:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=loS36YfO2qDSFRDtfhX92YEoXynWvQPkbrbjbgtkbWo=; b=JOtqTM13brS3TXvp4xmcyXjbtd
+        0Gvxs46T8Bu7SM1BPnihOz9Lfpc4SEkd0bFm5HDi10YnpCkjUeXPuKqZqjtGa6fHLVGYcmsEQjZTx
+        Ta6w+ZxKAVl1i/jgi0wT2G++CyqJYVDXzJ3ulvMXb2g8jR6zG4S93T357xfeyghWEl8g14sw3rfjc
+        YFQ0IUNNGATUs+w9n2Nozg4I5runwPGbVNLdNp20Jq45b4JPlMF0AbsUgRFSVpuJaqIOOSZrUU8Cu
+        tEe59NU1h7cux0ruAq3Lq+828QQl8CYSEhFdRct2e6DaOaOh29sH1y3uk2D7veh7GEjq2s5Mubh1P
+        1bDcmCbw==;
+Received: from [2001:4bb8:184:af1:6a63:7fdb:a80e:3b0b] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kDTUs-0005co-QD; Wed, 02 Sep 2020 14:12:23 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        linux-m68k@lists.linux-m68k.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH 02/19] amiflop: use bdev_check_media_change
+Date:   Wed,  2 Sep 2020 16:12:01 +0200
+Message-Id: <20200902141218.212614-3-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200902141218.212614-1-hch@lst.de>
+References: <20200902141218.212614-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Sudhakar,
+The Amiga floppy driver does not have a ->revalidate_disk method, so it
+can just use bdev_check_media_change without any additional changes.
 
-On Sun, 2020-06-07 at 19:58 +0000, Sudhakar Panneerselvam wrote:
-> Initialization of orig_fe_lun is moved to transport_init_se_cmd()
-> from
-> transport_lookup_cmd_lun(). This helps for the cases where the scsi
-> request
-> fails before the call to transport_lookup_cmd_lun() so that
-> trace_target_cmd_complete() can print the LUN information to the
-> trace
-> buffer. Due to this change, the lun parameter is removed from
-> transport_lookup_cmd_lun() and transport_lookup_tmr_lun().
-> 
-> Signed-off-by: Sudhakar Panneerselvam <
-> sudhakar.panneerselvam@oracle.com>
-> ---
->  drivers/target/iscsi/iscsi_target.c    | 11 +++++------
->  drivers/target/target_core_device.c    | 19 ++++++++-----------
->  drivers/target/target_core_tmr.c       |  4 ++--
->  drivers/target/target_core_transport.c | 12 +++++++-----
->  drivers/target/target_core_xcopy.c     |  4 ++--
->  drivers/usb/gadget/function/f_tcm.c    |  6 ++++--
->  include/target/target_core_fabric.h    |  6 +++---
->  7 files changed, 31 insertions(+), 31 deletions(-)
-> 
-> [...]
-> diff --git a/drivers/target/target_core_transport.c
-> b/drivers/target/target_core_transport.c
-> index f2f7c5b818cc..7ea77933e64d 100644
-> --- a/drivers/target/target_core_transport.c
-> +++ b/drivers/target/target_core_transport.c
-> [...]
-> @@ -1790,7 +1792,7 @@ int target_submit_tmr(struct se_cmd *se_cmd,
-> struct se_session *se_sess,
->  	BUG_ON(!se_tpg);
->  
->  	transport_init_se_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
-> -			      0, DMA_NONE, TCM_SIMPLE_TAG, sense);
-> +			      0, DMA_NONE, TCM_SIMPLE_TAG, sense,
-> unpacked_lun);
->  	/*
->  	 * FIXME: Currently expect caller to handle se_cmd->se_tmr_req
->  	 * allocation failure.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/block/amiflop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Between this hunk and the next one in target_submit_tmr(), there
-is this code:
-
-        /*
-         * If this is ABORT_TASK with no explicit fabric provided LUN,
-         * go ahead and search active session tags for a match to figure
-         * out unpacked_lun for the original se_cmd.
-         */
-        if (tm_type == TMR_ABORT_TASK && (flags & TARGET_SCF_LOOKUP_LUN_FROM_TAG)) {
-                if (!target_lookup_lun_from_tag(se_sess, tag, &unpacked_lun))
-                        goto failure;
-        }
-
-> @@ -1818,7 +1820,7 @@ int target_submit_tmr(struct se_cmd *se_cmd,
-> struct se_session *se_sess,
->  			goto failure;
->  	}
->  
-> -	ret = transport_lookup_tmr_lun(se_cmd, unpacked_lun);
-> +	ret = transport_lookup_tmr_lun(se_cmd);
->  	if (ret)
->  		goto failure;
->  
-
-AFAICS, your patch breaks the case where the above code is executed to
-derive unpacked_lun from the tag. The updated value of unpacked_lun is 
-never used. That would break aborts for the qla2xxx target.
-
-Am I overlooking something? Can you please explain?
-
-Regards
-Martin
-
+diff --git a/drivers/block/amiflop.c b/drivers/block/amiflop.c
+index 226219da3da6a7..71c2b156455860 100644
+--- a/drivers/block/amiflop.c
++++ b/drivers/block/amiflop.c
+@@ -1670,7 +1670,7 @@ static int floppy_open(struct block_device *bdev, fmode_t mode)
+ 	}
+ 
+ 	if (mode & (FMODE_READ|FMODE_WRITE)) {
+-		check_disk_change(bdev);
++		bdev_check_media_change(bdev);
+ 		if (mode & FMODE_WRITE) {
+ 			int wrprot;
+ 
+-- 
+2.28.0
 
