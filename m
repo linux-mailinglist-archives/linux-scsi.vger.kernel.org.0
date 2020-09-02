@@ -2,90 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FB925A294
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 03:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9535525A299
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 03:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgIBBUp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Sep 2020 21:20:45 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:37320 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbgIBBUp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Sep 2020 21:20:45 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0821K9ZG147903;
-        Wed, 2 Sep 2020 01:20:40 GMT
+        id S1726193AbgIBBWy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Sep 2020 21:22:54 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:54016 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbgIBBWx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Sep 2020 21:22:53 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0821J9a3061241;
+        Wed, 2 Sep 2020 01:22:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=6Ix/wFPP3jGYKh2npUpM7gRAU5rDqRb638VaJZQP+Lc=;
- b=XwWeBzx0nPtmsWrDZiALcCEOCupiGaZVGq4lwIBL7RGCaMUnlDQ96p72iKxiPNvrpOeN
- Fes2BAQRSbgFl60BKAV4KOw5VgSd3Z1P3q0KdfB0LDLKm+YwlsgyOZPxU7CCIawDv59K
- 81Ff9gO5wl5UDc2MlD5epKqq/jdkBpJkXfHKRcJYadHxrICxxzum7HOKhXY81QuF6a/y
- WEI0kzH1FZVi7ILoxcVbHSnVttPEAKlrxeDfaZnKXGOSRWbrD/zAdVrQKtVdanFsMbIS
- H9UWrGovEcgwJ5K3PBu9cXEG2wnR3rtmQOZ0lYSWbApp2kZnofAZ303HgYlLzAXM72jU Ww== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 337eym7jja-1
+ bh=d2A/fakPT8AvXHlc10w6SP/dKYZddFmLCUQoXWCKYhI=;
+ b=eQ9q1UyyTxQIdRzS77ffkMWeqgouJabgfmTIGV5vaP/zCJRUU1GoPK+CjzKs7sTByp5o
+ r7Ck+duKpX1obYuAO5ErMDhDwVzx04DQvEDm2EAujm0vXMtWus5zE5wxPv/xXS8tY6RO
+ QKpSjz7hqQ1zdCtvjI9DQAq9jhJWWtLndrqxylsr6SQwt37X2/Ldp3/Z/+CnJX3OOusB
+ +HkMo+USjJ641ha7ehYIZL2iVKsSGh04UbuLV5TO46tO1a3FM5skGsoKccnCYRd8oxQF
+ k0wNSThLH8cT5yvUU7XbEc3JAjwMNkNHqJdpWyh01frAR21+smtK0MgnJ5gAb6igB2OV TQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 337eeqyndu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 02 Sep 2020 01:20:40 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0821Jhq6126284;
-        Wed, 2 Sep 2020 01:20:39 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 3380xxkr73-1
+        Wed, 02 Sep 2020 01:22:49 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0821Kb2Z095669;
+        Wed, 2 Sep 2020 01:22:48 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 3380x51ts1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Sep 2020 01:20:39 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0821KcQn029208;
-        Wed, 2 Sep 2020 01:20:38 GMT
+        Wed, 02 Sep 2020 01:22:48 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0821Mkc3025912;
+        Wed, 2 Sep 2020 01:22:47 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 01 Sep 2020 18:20:37 -0700
-To:     Viswas G <Viswas.G@microchip.com.com>
-Cc:     <linux-scsi@vger.kernel.org>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        <Viswas.G@microchip.com>, <deepak.ukey@microchip.com>,
-        <martin.petersen@oracle.com>, <yuuzheng@google.com>,
-        <auradkar@google.com>, <vishakhavc@google.com>,
-        <bjashnani@google.com>, <radha@google.com>, <akshatzen@google.com>
-Subject: Re: [PATCH v8 2/2] pm80xx : Staggered spin up support.
+        with ESMTP ; Tue, 01 Sep 2020 18:22:46 -0700
+To:     Alex Dewar <alex.dewar90@gmail.com>
+Cc:     GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, njavali@marvell.com
+Subject: Re: [PATCH v2] scsi: Don't call memset after dma_alloc_coherent()
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1k0xdf006.fsf@ca-mkp.ca.oracle.com>
-References: <20200820185123.27354-1-Viswas.G@microchip.com.com>
-        <20200820185123.27354-3-Viswas.G@microchip.com.com>
-Date:   Tue, 01 Sep 2020 21:20:34 -0400
-In-Reply-To: <20200820185123.27354-3-Viswas.G@microchip.com.com> (Viswas G.'s
-        message of "Fri, 21 Aug 2020 00:21:23 +0530")
+Message-ID: <yq1eenlezwf.fsf@ca-mkp.ca.oracle.com>
+References: <20200820185149.932178-1-alex.dewar90@gmail.com>
+        <20200820234952.317313-1-alex.dewar90@gmail.com>
+Date:   Tue, 01 Sep 2020 21:22:44 -0400
+In-Reply-To: <20200820234952.317313-1-alex.dewar90@gmail.com> (Alex Dewar's
+        message of "Fri, 21 Aug 2020 00:49:52 +0100")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 suspectscore=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
+ mlxlogscore=810 adultscore=0 suspectscore=1 bulkscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2009020009
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 adultscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 clxscore=1011 spamscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009020009
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=830 bulkscore=0 suspectscore=1
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009020009
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Viswas,
+Alex,
 
-> As a part of drive discovery, driver will initaite the drive spin up.
-> If all drives do spin up together, it will result in large power
-> consumption. To reduce the power consumption, driver provide an option
-> to make a small group of drives (say 3 or 4 drives together) to do the
-> spin up. The delay between two spin up group and no of drives to spin
-> up (group) can be programmed by the customer in seeprom and driver
-> will use it to control the spinup.
+> dma_alloc_coherent() already zeroes memory, so the extra call to
+> memset() is unnecessary.
 
-Please implement this in libsas as several people have suggested.
+One patch per driver, please.
+
 Thanks!
 
 -- 
