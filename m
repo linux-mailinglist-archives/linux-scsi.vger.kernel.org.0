@@ -2,117 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3264025A363
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 04:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5C825A3CE
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 05:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgIBC7H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Sep 2020 22:59:07 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:48134 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726140AbgIBC7F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Sep 2020 22:59:05 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0822reYl124264;
-        Wed, 2 Sep 2020 02:59:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=0giVz1o+VCCS8VKnCNvTQEqXBGUN6yWSXQt6dCZHuEU=;
- b=oHRFz4j6AovQaOWR8xieEzt14PRdaP2mpEzk5RNCOY7zavt1iC7je3s9yJM8J1BC8sfy
- o2u8aF7vZtY+DQ9+SNpwEAkRvJF4TznM38kWVIh/ph6fBJWF6YvMxpVkG324thQBwK6q
- ZqMelE8QaVsIZhujjDP+zD0+7etDfop5Lm0XzK8IBbKbCgDw/FYdrghcFZtZsAP5W5d6
- wU3R014R58iOhq4v9QNGfjQoT20jErBWbUTUC4ScSIoHcMRWyCSiTzQ7z490gdTB0XiG
- THsT31LJXRaWZLAQzL1wmbrLklzER+gvovyMLnxUaWNvZ9P0CNLfWcJOsVVJyyeBfE+U Pw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 339dmmxaaf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 02 Sep 2020 02:59:03 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0822t16F186009;
-        Wed, 2 Sep 2020 02:57:02 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 3380st0wt5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Sep 2020 02:57:02 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0822v1hJ005678;
-        Wed, 2 Sep 2020 02:57:01 GMT
-Received: from [20.15.0.5] (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 01 Sep 2020 19:57:01 -0700
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [PATCH] iscsi-target: fix hang in iscsit_access_np() when getting
- tpg->np_login_sem
-From:   Michael Christie <michael.christie@oracle.com>
-In-Reply-To: <20200729130343.24976-1-houpu@bytedance.com>
-Date:   Tue, 1 Sep 2020 21:57:00 -0500
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <24875CC6-70FA-477D-BB74-51FBFDD96732@oracle.com>
-References: <20200729130343.24976-1-houpu@bytedance.com>
-To:     Hou Pu <houpu@bytedance.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009020026
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 impostorscore=0 mlxscore=0 suspectscore=0
- spamscore=0 clxscore=1011 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009020026
+        id S1726298AbgIBDIF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Sep 2020 23:08:05 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:56898 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726174AbgIBDIE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Sep 2020 23:08:04 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200902030802epoutp01589df022097001794d0dcb2fd6218d68~w2KejgFs-0633006330epoutp01A
+        for <linux-scsi@vger.kernel.org>; Wed,  2 Sep 2020 03:08:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200902030802epoutp01589df022097001794d0dcb2fd6218d68~w2KejgFs-0633006330epoutp01A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1599016082;
+        bh=slkGBz03LrKgvrUFE9snJ+DtyTGdHUcvDkNGTiZMA04=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=GnrspJYz5FEMiYcNCmfQ6tZxqI618JXuwq4mLg7chgBIy/9KCJzLAHRY306NuyF6T
+         A0ySD3oKunN9wHCvc8dHSVAmvp1j8Cp4NR51ELummqoQ6hnteGxB3YF7y+2DYsaHH5
+         rxWJmMsko/OlkAhUaDLaYVWoThgQc1N3oQFl0X2Y=
+Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p2.samsung.com
+        (KnoxPortal) with ESMTP id
+        20200902030801epcas1p2da643c4bbf75470a571c436ad5a373f7~w2KeJ1fzf2827628276epcas1p2f;
+        Wed,  2 Sep 2020 03:08:01 +0000 (GMT)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: Fix NOP OUT timeout value
+Reply-To: daejun7.park@samsung.com
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        SEUNGUK SHIN <seunguk.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <231786897.01599016081767.JavaMail.epsvc@epcpadp2>
+Date:   Wed, 02 Sep 2020 11:58:52 +0900
+X-CMS-MailID: 20200902025852epcms2p2a2d4ac934f4fc09233d4272c96df9ff1
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20200902025852epcms2p2a2d4ac934f4fc09233d4272c96df9ff1
+References: <CGME20200902025852epcms2p2a2d4ac934f4fc09233d4272c96df9ff1@epcms2p2>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+In some Samsung UFS devices, there is some booting fail issue with
+low-power UFS device. The reason of this issue is the UFS device has a
+little bit longer latency for NOP OUT response. It causes booting fail
+because NOP OUT command is issued during initialization to check whether
+the device transport protocol is ready or not. This issue is resolved by
+releasing NOP_OUT_TIMEOUT value.
+
+NOP_OUT_TIMEOUT: 30ms -> 50ms
+
+Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 06e2439d523c..5cbd0e9e4ef8 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -36,8 +36,8 @@
+ 
+ /* NOP OUT retries waiting for NOP IN response */
+ #define NOP_OUT_RETRIES    10
+-/* Timeout after 30 msecs if NOP OUT hangs without response */
+-#define NOP_OUT_TIMEOUT    30 /* msecs */
++/* Timeout after 50 msecs if NOP OUT hangs without response */
++#define NOP_OUT_TIMEOUT    50 /* msecs */
+ 
+ /* Query request retries */
+ #define QUERY_REQ_RETRIES 3
+-- 
+2.17.1
 
 
-> On Jul 29, 2020, at 8:03 AM, Hou Pu <houpu@bytedance.com> wrote:
->=20
-> The iscsi target login thread might stuck in following stack:
->=20
-> cat /proc/`pidof iscsi_np`/stack
-> [<0>] down_interruptible+0x42/0x50
-> [<0>] iscsit_access_np+0xe3/0x167
-> [<0>] iscsi_target_locate_portal+0x695/0x8ac
-> [<0>] __iscsi_target_login_thread+0x855/0xb82
-> [<0>] iscsi_target_login_thread+0x2f/0x5a
-> [<0>] kthread+0xfa/0x130
-> [<0>] ret_from_fork+0x1f/0x30
->=20
-> This could be reproduced by following steps:
-> 1. Initiator A try to login iqn1-tpg1 on port 3260. After finishing
->   PDU exchange in the login thread and before the negotiation is
->   finished, at this time the network link is down. In a production
->   environment, this could happen. I could emulated it by bring
->   the network card down in the initiator node by ifconfig eth0 down.
->   (Now A could never finish this login. And tpg->np_login_sem is
->   hold by it).
-> 2. Initiator B try to login iqn2-tpg1 on port 3260. After finishing
->   PDU exchange in the login thread. The target expect to process
->   remaining login PDUs in workqueue context.
-> 3. Initiator A' try to re-login to iqn1-tpg1 on port 3260 from
->   a new socket. It will wait for tpg->np_login_sem with
->   np->np_login_timer loaded to wait for at most 15 second.
->   (Because the lock is held by A. A never gets a change to
->   release tpg->np_login_sem. so A' should finally get timeout).
-> 4. Before A' got timeout. Initiator B gets negotiation failed and
->   calls iscsi_target_login_drop()->iscsi_target_login_sess_out().
->   The np->np_login_timer is canceled. And initiator A' will hang
->   there forever. Because A' is now in the login thread. All other
->   login requests could not be serviced.
-
-iqn1 and iqn1 are different targets right? It=E2=80=99s not clear to me =
-how when initiator B fails negotiation that it cancels the timer for the =
-portal under a different iqn/target.
-
-Is iqn2-tpg1->np1 a different struct than iqn1-tpg1-np1? I mean =
-iscsit_get_tpg_from_np would return a different np struct for initiator =
-B and for A?=
