@@ -2,54 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFAB25A0B3
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Sep 2020 23:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B2525A297
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 03:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730021AbgIAVOL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Sep 2020 17:14:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56624 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728845AbgIAVOL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 1 Sep 2020 17:14:11 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.8-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598994850;
-        bh=VSFO8KirRqvb0Q1S1fwg0uY80jMI5CBPnTWxPURcims=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=ER5jKiFTVB8bUL5Z8KygVQMr2b/Z8Xr1JmXNOluapUdAWG/8z8rkg2NAC1pkOh7jM
-         RphDrBu57oZ3plGBLXjw3SElhDRK40C9zfFdMp8DFJiCFD9YcGsv8eOZAh/lxmYDgL
-         ud6s96vep3zYQ4khwsny/7BXJHiTtfGEnHkl035I=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1598994296.4238.30.camel@HansenPartnership.com>
-References: <1598994296.4238.30.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-scsi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1598994296.4238.30.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 75d46c6d15efabc5176a5e2694ee236f02ee72ef
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b765a32a2e9170702467747e290614be072c4f76
-Message-Id: <159899485063.20509.14496931103911439818.pr-tracker-bot@kernel.org>
-Date:   Tue, 01 Sep 2020 21:14:10 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1726144AbgIBBV6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Sep 2020 21:21:58 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:49732 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbgIBBV6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Sep 2020 21:21:58 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0821KNPU182923;
+        Wed, 2 Sep 2020 01:21:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=PjrY0eS9HukXy0OzFwPAzApjOa0hd3dQBC1T+ToDQQs=;
+ b=Jjl7vs5r4xTrkxv0656lTc3NqpUyP3oKSO7MhsB/3r6x4ZFY+zCrguFhgETC5ormmj+M
+ vWwNUP8xDTGplHxtHXgzxkXU+D8LnppcxahESI0dhdt9dypNcbOTyPPpvvdvFoaeB3Zy
+ s2taxpdBT0oUOZ6KEcLP72cNtWA61toPDyVsyH/ZSERnR6mPOKst4P/ZjLMZFgbtdrxP
+ K4kfDnF9D/9RiI0dIL3N2w5j48At/pSi2Gd2q0MLT92zWFog6yVwtA/f2rvhRzCO3r3M
+ bmq+IIdOLrFSmwCDP/aQBOE1Hn7b5xphE1+WRARTyEMT1gkO+pimLWqSa8a6GBMV7GK+ BA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 339dmmx2u6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 02 Sep 2020 01:21:52 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0821FGP2123785;
+        Wed, 2 Sep 2020 01:19:52 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 3380ssw86b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Sep 2020 01:19:52 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0821Jofa004560;
+        Wed, 2 Sep 2020 01:19:50 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 01 Sep 2020 18:19:50 -0700
+To:     Viswas G <Viswas.G@microchip.com.com>
+Cc:     <linux-scsi@vger.kernel.org>,
+        <Vasanthalakshmi.Tharmarajan@microchip.com>,
+        <Viswas.G@microchip.com>, <deepak.ukey@microchip.com>,
+        <martin.petersen@oracle.com>, <yuuzheng@google.com>,
+        <auradkar@google.com>, <vishakhavc@google.com>,
+        <bjashnani@google.com>, <radha@google.com>, <akshatzen@google.com>
+Subject: Re: [PATCH v8 1/2] pm80xx : Support for get phy profile functionality.
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1pn75f09i.fsf@ca-mkp.ca.oracle.com>
+References: <20200820185123.27354-1-Viswas.G@microchip.com.com>
+        <20200820185123.27354-2-Viswas.G@microchip.com.com>
+Date:   Tue, 01 Sep 2020 21:19:47 -0400
+In-Reply-To: <20200820185123.27354-2-Viswas.G@microchip.com.com> (Viswas G.'s
+        message of "Fri, 21 Aug 2020 00:21:22 +0530")
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009020008
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 impostorscore=0 mlxscore=0 suspectscore=1
+ spamscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009020009
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Tue, 01 Sep 2020 14:04:56 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Viswas,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b765a32a2e9170702467747e290614be072c4f76
+> Added the support to get the phy profile which gives information about
+> the phy states, port and errors on phy.
 
-Thank you!
+Where are these parameters made visible?
+
+Also, why not make the phy_errcnt members __le32 instead of using
+__force?
+
++		} else if (page_code == SAS_PHY_ERR_COUNTERS_PAGE) {
++			phy_err = (struct phy_errcnt *)ccb->resp_buf;
++			phy_err_cnt =
++			(struct phy_errcnt *)pPayload->ppc_specific_rsp;
++			phy_err->InvalidDword =
++			le32_to_cpu((__force __le32)phy_err_cnt->InvalidDword);
++			phy_err->runningDisparityError = le32_to_cpu
++			((__force __le32)phy_err_cnt->runningDisparityError);
++			phy_err->LossOfSyncDW = le32_to_cpu
++			((__force __le32)phy_err_cnt->LossOfSyncDW);
++			phy_err->phyResetProblem = le32_to_cpu
++			((__force __le32)phy_err_cnt->phyResetProblem);
++		}
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Martin K. Petersen	Oracle Linux Engineering
