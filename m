@@ -2,196 +2,179 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A1325AD85
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 16:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A7325AE96
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 17:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbgIBOlK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Sep 2020 10:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727995AbgIBONl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Sep 2020 10:13:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D082C06125E;
-        Wed,  2 Sep 2020 07:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=s3JUZA1FtjTiqtgMGHDLmiQxYMnM63DlyIQ2tpQALUI=; b=Ny3p7wlwFy0wP4sf+hF5EVB2Lh
-        YO7A8mKgrJj2mwOaaVLcOAng30rxxwPQzGxnkFxqbeBkqELDupdq1CTAmmgrTEEA+8pbXRdZGR8FU
-        ob3xxQh/ov/JgKEOJ4gpqc6w94Jg6FnXLLZRWESj2o6T+SxU40AwIUU0APyI895U2kjqoUlCaX7EC
-        agS1nWtjptWx5OQtQ+WfCnQTImB6Qck7pRcFjzgCMkt4F21sUM1CuxxwcC0L7oS/0QpgwIAg3G/Zq
-        UhRZu7rj15jFBLrcVefahoM/8IXk5+jxtutPIkHljxBCtyl2P8qdKD3uyuewbg3P1k3geKVpoOjZh
-        b65a2RWA==;
-Received: from [2001:4bb8:184:af1:6a63:7fdb:a80e:3b0b] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kDTV9-0005fV-Jn; Wed, 02 Sep 2020 14:12:39 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        linux-m68k@lists.linux-m68k.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH 14/19] ide-gd: stop using the disk events mechanism
-Date:   Wed,  2 Sep 2020 16:12:13 +0200
-Message-Id: <20200902141218.212614-15-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200902141218.212614-1-hch@lst.de>
-References: <20200902141218.212614-1-hch@lst.de>
+        id S1726762AbgIBPQu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Sep 2020 11:16:50 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:48098 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbgIBPPQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Sep 2020 11:15:16 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 082FEtmV056149;
+        Wed, 2 Sep 2020 15:15:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
+ message-id : date : from : sender : to : cc : subject : references :
+ in-reply-to : content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=gYMWuaYNXg+rjqjQKWcbvCaqzN+3Nom7q57z5YBU6sM=;
+ b=FsD+G+l71itn02BQ151GYD5PxhUuMTTIf2Id+DOvxobxTQfbOL9im9aujzQ+nqfOR1lW
+ tXm7B1xNMWAyBlY8On5VgRbU00VtjDZQBgKeBxPPtHE+frCxOdvIUTAaOKL1UVGlpTE1
+ cW+GZhiSy9H0A/kSdEaD4hJq93vmlfFlxGe1i1yoaVNQ6W6f5d/GJIxyPErRqwWeA/Qx
+ lVjBYNgWuUpKFiWvhwhWTlArC2HSvFxnTuI4rSdxDRfeWWyTfvY7MCddTg8DfBtrhufT
+ seJb0DGNcRwg85UWu4eLDDxuDDyn1sYKrC6AWji0isa/bqB5+gE5rPwI4Mazxkj2ldXj kQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 337eer37ka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 02 Sep 2020 15:15:00 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 082F5EIa028797;
+        Wed, 2 Sep 2020 15:14:59 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 3380kq5kf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Sep 2020 15:14:59 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 082FExGd000395;
+        Wed, 2 Sep 2020 15:14:59 GMT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Message-ID: <dcc05e5d-5b8f-4ae1-991d-b8d454eff3f0@default>
+Date:   Wed, 2 Sep 2020 08:14:57 -0700 (PDT)
+From:   Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>
+To:     Martin Wilck <mwilck@suse.com>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        Michael Christie <michael.christie@oracle.com>,
+        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     Shirley Ma <shirley.ma@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Arun Easi <aeasi@marvell.com>
+Subject: RE: [PATCH v4 2/4] target: initialize LUN in transport_init_se_cmd().
+References: <1591559913-8388-1-git-send-email-sudhakar.panneerselvam@oracle.com>
+ <1591559913-8388-3-git-send-email-sudhakar.panneerselvam@oracle.com>
+ <cbbd368e6e33af6e22c850192e69b27edd043efd.camel@suse.com>
+In-Reply-To: <cbbd368e6e33af6e22c850192e69b27edd043efd.camel@suse.com>
+X-Priority: 3
+X-Mailer: Oracle Beehive Extensions for Outlook 2.0.1.9.1  (1003210) [OL
+ 15.0.5267.0 (x86)]
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9732 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009020145
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9732 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009020146
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ide-gd is only using the disk events mechanism to be able to force an
-invalidation and partition scan on opening removable media.  Just open
-code the logic without invoving the block layer.
+Hi Martin,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/ide/ide-disk.c   |  5 +----
- drivers/ide/ide-floppy.c |  2 --
- drivers/ide/ide-gd.c     | 48 +++++-----------------------------------
- include/linux/ide.h      |  2 --
- 4 files changed, 7 insertions(+), 50 deletions(-)
+> -----Original Message-----
+> From: Martin Wilck [mailto:mwilck@suse.com]
+> Sent: Wednesday, September 2, 2020 7:50 AM
+> To: Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>; Martin
+> Petersen <martin.petersen@oracle.com>; Michael Christie
+> <michael.christie@oracle.com>; target-devel@vger.kernel.org; linux-
+> scsi@vger.kernel.org
+> Cc: Shirley Ma <shirley.ma@oracle.com>; Hannes Reinecke <hare@suse.com>;
+> Daniel Wagner <daniel.wagner@suse.com>; Arun Easi <aeasi@marvell.com>
+> Subject: Re: [PATCH v4 2/4] target: initialize LUN in transport_init_se_c=
+md().
+>=20
+> Hello Sudhakar,
+>=20
+> On Sun, 2020-06-07 at 19:58 +0000, Sudhakar Panneerselvam wrote:
+> > Initialization of orig_fe_lun is moved to transport_init_se_cmd()
+> > from
+> > transport_lookup_cmd_lun(). This helps for the cases where the scsi
+> > request
+> > fails before the call to transport_lookup_cmd_lun() so that
+> > trace_target_cmd_complete() can print the LUN information to the
+> > trace
+> > buffer. Due to this change, the lun parameter is removed from
+> > transport_lookup_cmd_lun() and transport_lookup_tmr_lun().
+> >
+> > Signed-off-by: Sudhakar Panneerselvam <
+> > sudhakar.panneerselvam@oracle.com>
+> > ---
+> >  drivers/target/iscsi/iscsi_target.c    | 11 +++++------
+> >  drivers/target/target_core_device.c    | 19 ++++++++-----------
+> >  drivers/target/target_core_tmr.c       |  4 ++--
+> >  drivers/target/target_core_transport.c | 12 +++++++-----
+> >  drivers/target/target_core_xcopy.c     |  4 ++--
+> >  drivers/usb/gadget/function/f_tcm.c    |  6 ++++--
+> >  include/target/target_core_fabric.h    |  6 +++---
+> >  7 files changed, 31 insertions(+), 31 deletions(-)
+> >
+> > [...]
+> > diff --git a/drivers/target/target_core_transport.c
+> > b/drivers/target/target_core_transport.c
+> > index f2f7c5b818cc..7ea77933e64d 100644
+> > --- a/drivers/target/target_core_transport.c
+> > +++ b/drivers/target/target_core_transport.c
+> > [...]
+> > @@ -1790,7 +1792,7 @@ int target_submit_tmr(struct se_cmd *se_cmd,
+> > struct se_session *se_sess,
+> >  =09BUG_ON(!se_tpg);
+> >
+> >  =09transport_init_se_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
+> > -=09=09=09      0, DMA_NONE, TCM_SIMPLE_TAG, sense);
+> > +=09=09=09      0, DMA_NONE, TCM_SIMPLE_TAG, sense,
+> > unpacked_lun);
+> >  =09/*
+> >  =09 * FIXME: Currently expect caller to handle se_cmd->se_tmr_req
+> >  =09 * allocation failure.
+>=20
+> Between this hunk and the next one in target_submit_tmr(), there
+> is this code:
+>=20
+>         /*
+>          * If this is ABORT_TASK with no explicit fabric provided LUN,
+>          * go ahead and search active session tags for a match to figure
+>          * out unpacked_lun for the original se_cmd.
+>          */
+>         if (tm_type =3D=3D TMR_ABORT_TASK && (flags &
+> TARGET_SCF_LOOKUP_LUN_FROM_TAG)) {
+>                 if (!target_lookup_lun_from_tag(se_sess, tag, &unpacked_l=
+un))
+>                         goto failure;
+>         }
+>=20
+> > @@ -1818,7 +1820,7 @@ int target_submit_tmr(struct se_cmd *se_cmd,
+> > struct se_session *se_sess,
+> >  =09=09=09goto failure;
+> >  =09}
+> >
+> > -=09ret =3D transport_lookup_tmr_lun(se_cmd, unpacked_lun);
+> > +=09ret =3D transport_lookup_tmr_lun(se_cmd);
+> >  =09if (ret)
+> >  =09=09goto failure;
+> >
+>=20
+> AFAICS, your patch breaks the case where the above code is executed to
+> derive unpacked_lun from the tag. The updated value of unpacked_lun is
+> never used. That would break aborts for the qla2xxx target.
+>=20
+> Am I overlooking something? Can you please explain?
+>=20
 
-diff --git a/drivers/ide/ide-disk.c b/drivers/ide/ide-disk.c
-index 1d3407d7e095fa..34b9441084f84f 100644
---- a/drivers/ide/ide-disk.c
-+++ b/drivers/ide/ide-disk.c
-@@ -739,12 +739,9 @@ static void ide_disk_setup(ide_drive_t *drive)
- 	set_wcache(drive, 1);
- 
- 	if ((drive->dev_flags & IDE_DFLAG_LBA) == 0 &&
--	    (drive->head == 0 || drive->head > 16)) {
-+	    (drive->head == 0 || drive->head > 16))
- 		printk(KERN_ERR "%s: invalid geometry: %d physical heads?\n",
- 			drive->name, drive->head);
--		drive->dev_flags &= ~IDE_DFLAG_ATTACH;
--	} else
--		drive->dev_flags |= IDE_DFLAG_ATTACH;
- }
- 
- static void ide_disk_flush(ide_drive_t *drive)
-diff --git a/drivers/ide/ide-floppy.c b/drivers/ide/ide-floppy.c
-index af7503b47dbe32..f5a2870aaf54bb 100644
---- a/drivers/ide/ide-floppy.c
-+++ b/drivers/ide/ide-floppy.c
-@@ -516,8 +516,6 @@ static void ide_floppy_setup(ide_drive_t *drive)
- 	(void) ide_floppy_get_capacity(drive);
- 
- 	ide_proc_register_driver(drive, floppy->driver);
--
--	drive->dev_flags |= IDE_DFLAG_ATTACH;
- }
- 
- static void ide_floppy_flush(ide_drive_t *drive)
-diff --git a/drivers/ide/ide-gd.c b/drivers/ide/ide-gd.c
-index 05c26986637ba3..661e2aa9c96784 100644
---- a/drivers/ide/ide-gd.c
-+++ b/drivers/ide/ide-gd.c
-@@ -225,8 +225,12 @@ static int ide_gd_open(struct block_device *bdev, fmode_t mode)
- 		 * and the door_lock is irrelevant at this point.
- 		 */
- 		drive->disk_ops->set_doorlock(drive, disk, 1);
--		drive->dev_flags |= IDE_DFLAG_MEDIA_CHANGED;
--		check_disk_change(bdev);
-+		if (__invalidate_device(bdev, true))
-+			pr_warn("VFS: busy inodes on changed media %s\n",
-+				bdev->bd_disk->disk_name);
-+		drive->disk_ops->get_capacity(drive);
-+		set_capacity(disk, ide_gd_capacity(drive));
-+		set_bit(BDEV_NEED_PART_SCAN, &bdev->bd_flags);
- 	} else if (drive->dev_flags & IDE_DFLAG_FORMAT_IN_PROGRESS) {
- 		ret = -EBUSY;
- 		goto out_put_idkp;
-@@ -284,32 +288,6 @@ static int ide_gd_getgeo(struct block_device *bdev, struct hd_geometry *geo)
- 	return 0;
- }
- 
--static unsigned int ide_gd_check_events(struct gendisk *disk,
--					unsigned int clearing)
--{
--	struct ide_disk_obj *idkp = ide_drv_g(disk, ide_disk_obj);
--	ide_drive_t *drive = idkp->drive;
--	bool ret;
--
--	/* do not scan partitions twice if this is a removable device */
--	if (drive->dev_flags & IDE_DFLAG_ATTACH) {
--		drive->dev_flags &= ~IDE_DFLAG_ATTACH;
--		return 0;
--	}
--
--	/*
--	 * The following is used to force revalidation on the first open on
--	 * removeable devices, and never gets reported to userland as
--	 * DISK_EVENT_FLAG_UEVENT isn't set in genhd->event_flags.
--	 * This is intended as removable ide disk can't really detect
--	 * MEDIA_CHANGE events.
--	 */
--	ret = drive->dev_flags & IDE_DFLAG_MEDIA_CHANGED;
--	drive->dev_flags &= ~IDE_DFLAG_MEDIA_CHANGED;
--
--	return ret ? DISK_EVENT_MEDIA_CHANGE : 0;
--}
--
- static void ide_gd_unlock_native_capacity(struct gendisk *disk)
- {
- 	struct ide_disk_obj *idkp = ide_drv_g(disk, ide_disk_obj);
-@@ -320,18 +298,6 @@ static void ide_gd_unlock_native_capacity(struct gendisk *disk)
- 		disk_ops->unlock_native_capacity(drive);
- }
- 
--static int ide_gd_revalidate_disk(struct gendisk *disk)
--{
--	struct ide_disk_obj *idkp = ide_drv_g(disk, ide_disk_obj);
--	ide_drive_t *drive = idkp->drive;
--
--	if (ide_gd_check_events(disk, 0))
--		drive->disk_ops->get_capacity(drive);
--
--	set_capacity(disk, ide_gd_capacity(drive));
--	return 0;
--}
--
- static int ide_gd_ioctl(struct block_device *bdev, fmode_t mode,
- 			     unsigned int cmd, unsigned long arg)
- {
-@@ -364,9 +330,7 @@ static const struct block_device_operations ide_gd_ops = {
- 	.compat_ioctl		= ide_gd_compat_ioctl,
- #endif
- 	.getgeo			= ide_gd_getgeo,
--	.check_events		= ide_gd_check_events,
- 	.unlock_native_capacity	= ide_gd_unlock_native_capacity,
--	.revalidate_disk	= ide_gd_revalidate_disk
- };
- 
- static int ide_gd_probe(ide_drive_t *drive)
-diff --git a/include/linux/ide.h b/include/linux/ide.h
-index a254841bd3156d..62653769509f89 100644
---- a/include/linux/ide.h
-+++ b/include/linux/ide.h
-@@ -490,8 +490,6 @@ enum {
- 	IDE_DFLAG_NOPROBE		= BIT(9),
- 	/* need to do check_media_change() */
- 	IDE_DFLAG_REMOVABLE		= BIT(10),
--	/* needed for removable devices */
--	IDE_DFLAG_ATTACH		= BIT(11),
- 	IDE_DFLAG_FORCED_GEOM		= BIT(12),
- 	/* disallow setting unmask bit */
- 	IDE_DFLAG_NO_UNMASK		= BIT(13),
--- 
-2.28.0
+You are right. This change breaks the qlogic abort task code path, since it=
+ is the only transport that sets the TARGET_SCF_LOOKUP_LUN_FROM_TAG flag ma=
+king that condition true. My apologies. I can send out a patch if you have =
+not written one already. Please let me know.
 
+Thanks
+Sudhakar
+
+> Regards
+> Martin
+>=20
+>=20
