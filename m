@@ -2,134 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFCA25A3F6
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 05:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E46825A3FF
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Sep 2020 05:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgIBDSG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Sep 2020 23:18:06 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:45754 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726140AbgIBDSD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Sep 2020 23:18:03 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0823A767112870;
-        Wed, 2 Sep 2020 03:17:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=G+5966owiAg86IIpCS294ZtfjahT/X8PWQHsoOn/A4o=;
- b=pkwRjUjjIRsLSAqWfQda3cFlCXdPyinEivkPoiLZCWPgkr0X8nvFhSop9juFd1m/FbmH
- MUS+W8SEV0z8+bPku3xOPPc6Ic5kYMGN1xm8vSpqWhNhIyTvK+J1qxxQrOvQdbIFap7e
- Dx0MbbpjLXJ6xWDOB1+8VhpalHGCw1kb1YAiUB5DiRoEohDHaft9ZGPe9ci0ZFh8cpEg
- TICJDjagoJepTRd2nhSIiV+Sde/Uk5d/0ovaXElleOhUUa3tbx+gS2zgG5heJyno9NTS
- yfcStMLUXsJONPZrv0a6atwYE25AYLxPYPpywspMqy4s1Jjs+Dqcd/N1Q5tJCSSc4JOD xg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 337eym7uhx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 02 Sep 2020 03:17:54 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08239iS3007735;
-        Wed, 2 Sep 2020 03:17:53 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 3380xxs00x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Sep 2020 03:17:53 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0823HqpS008630;
-        Wed, 2 Sep 2020 03:17:52 GMT
-Received: from [20.15.0.5] (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 01 Sep 2020 20:17:52 -0700
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [RFC PATCH] scsi: target: detect XCOPY NAA descriptor conflicts
-From:   Michael Christie <michael.christie@oracle.com>
-In-Reply-To: <20200813002142.13820-1-ddiss@suse.de>
-Date:   Tue, 1 Sep 2020 22:17:51 -0500
-Cc:     target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2155E745-0E65-441B-93AF-7B4C0A53F5F4@oracle.com>
-References: <20200813002142.13820-1-ddiss@suse.de>
-To:     David Disseldorp <ddiss@suse.de>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009020029
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9731 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009020029
+        id S1727001AbgIBDXF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Sep 2020 23:23:05 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:63064 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726971AbgIBDXF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Sep 2020 23:23:05 -0400
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200902032302epoutp01d0c0d763eb2328eff5a33576ae9a9e10~w2Xlct6qZ1810818108epoutp01f
+        for <linux-scsi@vger.kernel.org>; Wed,  2 Sep 2020 03:23:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200902032302epoutp01d0c0d763eb2328eff5a33576ae9a9e10~w2Xlct6qZ1810818108epoutp01f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1599016983;
+        bh=DSnklmNM1iRH6V9fPTu0ChZ9yrpvpym06lWfFNwv+dQ=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=N43PFbYOInmONGlfHh/B4euxEMdcZVnbqqetxLyz24LJIPKKcSMa/Cum0leeNd5Br
+         q96jkrQ5GLcHRjkNiF2MbwnQvtdt4sulRo46vmz7BJdRB1CWGZzSf+sxhe0kKtYzLr
+         a8oz1H0wpgGFoVwLjA6Q3i4z/juJFAZTsyoeViHE=
+Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p4.samsung.com
+        (KnoxPortal) with ESMTP id
+        20200902032302epcas1p4bc579ca4007cd49f39d668248eca5a12~w2Xk7mySO2726627266epcas1p4C;
+        Wed,  2 Sep 2020 03:23:02 +0000 (GMT)
+Mime-Version: 1.0
+Subject: [PATCH v11 1/4] scsi: ufs: Add HPB feature related parameters
+Reply-To: daejun7.park@samsung.com
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Daejun Park <daejun7.park@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>,
+        SEUNGUK SHIN <seunguk.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <231786897.01599016802080.JavaMail.epsvc@epcpadp1>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <336371513.41599016982374.JavaMail.epsvc@epcpadp2>
+Date:   Wed, 02 Sep 2020 12:20:58 +0900
+X-CMS-MailID: 20200902032058epcms2p2d2762c1ffaea976db2c8dcff77a9aec2
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20200902031713epcms2p664cebf386ba19d3d05895fec89aaf4fe
+References: <231786897.01599016802080.JavaMail.epsvc@epcpadp1>
+        <CGME20200902031713epcms2p664cebf386ba19d3d05895fec89aaf4fe@epcms2p2>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This is a patch for parameters to be used for HPB feature.
 
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Can Guo <cang@codeaurora.org>
+Acked-by: Avri Altman <Avri.Altman@wdc.com>
+Tested-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+---
+ drivers/scsi/ufs/ufs.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-> On Aug 12, 2020, at 7:21 PM, David Disseldorp <ddiss@suse.de> wrote:
->=20
-> LIO's XCOPY implementation currently only accepts IEEE NAA 0x83 type
-> device descriptors for copy source and destination IDs. These IDs are
-> automatically generated by spc_parse_naa_6h_vendor_specific() using
-> *only* hexadecimal characters present in the user-configured
-> vpd_unit_serial string, and advertised in the Device ID Page INQUIRY
-> response.
->=20
-> spc_parse_naa_6h_vendor_specific() mapping can quite easily result in
-> two devices with differing vpd_unit_serial strings sharing the same =
-NAA
-> ID. E.g.
-> LUN0
-> -> backstore device=3D/dev/sda, vpd_unit_serial=3Dunitserialfirst
-> LUN1
-> -> backstore device=3D/dev/sdb, vpd_unit_serial=3Dunitserialforth
->=20
-> In this case, both LUNs would advertise an NAA ID of:
-> 0x01405eaf0000000000000000...
-> Where 0x01405 corresponds to the OpenFabrics IEEE Company ID and 0xeaf
-> are hex characters taken from vpd_unit_serial.
->=20
-> With the above example, an initiator wishing to copy data from LUN0 to
-> LUN1 may issue an XCOPY request with a copy source and copy dest set
-> to 0x01405eaf... and observe that (despite XCOPY success), no data has
-> moved from LUN0 to LUN1. Instead LIO has processed the request using
-> LUN0 as source and destination.
->=20
-> This change sees LIO fail XCOPY requests if the copy source or
-> destination correspond to a non-unique NAA identifier.
->=20
-> Signed-off-by: David Disseldorp <ddiss@suse.de>
-> ---
-> drivers/target/target_core_xcopy.c | 23 +++++++++++++++++------
-> 1 file changed, 17 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/target/target_core_xcopy.c =
-b/drivers/target/target_core_xcopy.c
-> index 44e15d7fb2f0..3ce5da4b3e81 100644
-> --- a/drivers/target/target_core_xcopy.c
-> +++ b/drivers/target/target_core_xcopy.c
-> @@ -68,8 +68,14 @@ static int =
-target_xcopy_locate_se_dev_e4_iter(struct se_device *se_dev,
-> 	if (rc !=3D 0)
-> 		return 0;
->=20
-> -	info->found_dev =3D se_dev;
-> 	pr_debug("XCOPY 0xe4: located se_dev: %p\n", se_dev);
-> +	if (info->found_dev) {
-> +		pr_warn("XCOPY 0xe4 descriptor conflict for se_dev %p =
-and %p\n",
-> +			info->found_dev, se_dev);
-> +		=
-target_undepend_item(&info->found_dev->dev_group.cg_item);
-> +		return -ENOTUNIQ;
-> +	}
-> +	info->found_dev =3D se_dev;
+diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
+index f8ab16f30fdc..e879ac34c065 100644
+--- a/drivers/scsi/ufs/ufs.h
++++ b/drivers/scsi/ufs/ufs.h
+@@ -122,6 +122,7 @@ enum flag_idn {
+ 	QUERY_FLAG_IDN_WB_EN                            = 0x0E,
+ 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN                 = 0x0F,
+ 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8     = 0x10,
++	QUERY_FLAG_IDN_HPB_RESET                        = 0x11,
+ };
+ 
+ /* Attribute idn for Query requests */
+@@ -195,6 +196,9 @@ enum unit_desc_param {
+ 	UNIT_DESC_PARAM_PHY_MEM_RSRC_CNT	= 0x18,
+ 	UNIT_DESC_PARAM_CTX_CAPABILITIES	= 0x20,
+ 	UNIT_DESC_PARAM_LARGE_UNIT_SIZE_M1	= 0x22,
++	UNIT_DESC_HPB_LU_MAX_ACTIVE_REGIONS	= 0x23,
++	UNIT_DESC_HPB_LU_PIN_REGION_START_OFFSET	= 0x25,
++	UNIT_DESC_HPB_LU_NUM_PIN_REGIONS	= 0x27,
+ 	UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS	= 0x29,
+ };
+ 
+@@ -235,6 +239,8 @@ enum device_desc_param {
+ 	DEVICE_DESC_PARAM_PSA_MAX_DATA		= 0x25,
+ 	DEVICE_DESC_PARAM_PSA_TMT		= 0x29,
+ 	DEVICE_DESC_PARAM_PRDCT_REV		= 0x2A,
++	DEVICE_DESC_PARAM_HPB_VER		= 0x40,
++	DEVICE_DESC_PARAM_HPB_CONTROL		= 0x42,
+ 	DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP	= 0x4F,
+ 	DEVICE_DESC_PARAM_WB_PRESRV_USRSPC_EN	= 0x53,
+ 	DEVICE_DESC_PARAM_WB_TYPE		= 0x54,
+@@ -283,6 +289,10 @@ enum geometry_desc_param {
+ 	GEOMETRY_DESC_PARAM_ENM4_MAX_NUM_UNITS	= 0x3E,
+ 	GEOMETRY_DESC_PARAM_ENM4_CAP_ADJ_FCTR	= 0x42,
+ 	GEOMETRY_DESC_PARAM_OPT_LOG_BLK_SIZE	= 0x44,
++	GEOMETRY_DESC_PARAM_HPB_REGION_SIZE	= 0x48,
++	GEOMETRY_DESC_PARAM_HPB_NUMBER_LU	= 0x49,
++	GEOMETRY_DESC_PARAM_HPB_SUBREGION_SIZE	= 0x4A,
++	GEOMETRY_DESC_PARAM_HPB_MAX_ACTIVE_REGS	= 0x4B,
+ 	GEOMETRY_DESC_PARAM_WB_MAX_ALLOC_UNITS	= 0x4F,
+ 	GEOMETRY_DESC_PARAM_WB_MAX_WB_LUNS	= 0x53,
+ 	GEOMETRY_DESC_PARAM_WB_BUFF_CAP_ADJ	= 0x54,
+@@ -327,8 +337,10 @@ enum {
+ 
+ /* Possible values for dExtendedUFSFeaturesSupport */
+ enum {
++	UFS_DEV_HPB_SUPPORT		= BIT(7),
+ 	UFS_DEV_WRITE_BOOSTER_SUP	= BIT(8),
+ };
++#define UFS_DEV_HPB_SUPPORT_VERSION		0x310
+ 
+ #define POWER_DESC_MAX_SIZE			0x62
+ #define POWER_DESC_MAX_ACTV_ICC_LVLS		16
+@@ -537,6 +549,7 @@ struct ufs_dev_info {
+ 	u8 *model;
+ 	u16 wspecversion;
+ 	u32 clk_gating_wait_us;
++	u8 b_ufs_feature_sup;
+ 	u32 d_ext_ufs_feature_sup;
+ 	u8 b_wb_buffer_type;
+ 	u32 d_wb_alloc_units;
+-- 
+2.17.1
 
-Was it valid to copy to/from the same LUN? You would copy from/to =
-different src/destinations on that LUN. Would your patch break that?
 
