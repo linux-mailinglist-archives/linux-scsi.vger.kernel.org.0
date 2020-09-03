@@ -2,93 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B4125E089
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Sep 2020 19:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D90525E0D9
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Sep 2020 19:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726235AbgIDRIB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Sep 2020 13:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgIDRIA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Sep 2020 13:08:00 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BCDC061244;
-        Fri,  4 Sep 2020 10:08:00 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id j10so3330134qvk.11;
-        Fri, 04 Sep 2020 10:08:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=918xF9/TxEdi5FKvlN1Hc01QrtvkdS/H0R8ZEDh1m/w=;
-        b=Y+l+zXkj3iZuqa7nZb8fCT0usDu58TsmwrbKiLnARLXhpx48LTNUg1vzSWZYgs/13+
-         c1SW4HWkRuzguFhcVaFubEzMo5JXetRpeb5IaKJOis3Lc5y9CwOET924hMWP2Vria8nd
-         lvYqy0/NenC9vVpu/Yp1rWyHWoprju0xCwWUlf1mTx/o9Qlbcgxj1lElbOEp/dFdt8+Z
-         BGaY4GUaBVJUZsazZYrwxDJExUCqoGF7BDCUdmm2aARQzGWk5MuT3kglx8jdUMvuyY7l
-         WejixWyeWg1d4quZafz/tyWtoFfO7ikEoRS/oCUdYDVmPmpvif1r+0wTn3/t+wi9jFPm
-         HbKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=918xF9/TxEdi5FKvlN1Hc01QrtvkdS/H0R8ZEDh1m/w=;
-        b=V7hafMwmvMIeYgH9CTFN841qa5j+f9rTlAlZj71oloSzqcZDhuFy7MPkQJLrGvHwEZ
-         l6SmfKNfcWkykRDhfMUtNQxqwki7p+3ciiOhm1Znp7ODIfdpb5oAw6MzIyw/I2IhfjQv
-         epDPLzm6o7j3c2j+k7mT41V0VcaxKJ/Mr4bIvKiQ6EXcl31B/MNNZIWuk780bKmIcwFQ
-         cy1qH+zuSICgf1g56HuGxas+rcL+BTDMeHYqgoER8ImqAbRJyma7+KfUJoXNnCXgOEW6
-         hIQ+YjRCgrNS3k5VllIGvNmdG1J0tiktFGa4byjfQe9Yd9iJjSBIb50d8JKM9cTZeB01
-         SuMg==
-X-Gm-Message-State: AOAM531Xcz2pfqh5KuD8mUxmUYL3AF8xngJAFo4K1IePYVp3dVTDn4c9
-        iCkZLeMxh33azDjGPRJbVVRAFv4nO9cCzA==
-X-Google-Smtp-Source: ABdhPJz64ED1455jnMV0eSDG6iae1M9P2FH5Z/qtI61QyZxv8e+JfUDQeaVwUy8YmSVR4hm6jbnxYw==
-X-Received: by 2002:a0c:e981:: with SMTP id z1mr8597033qvn.15.1599239278260;
-        Fri, 04 Sep 2020 10:07:58 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:f2f5])
-        by smtp.gmail.com with ESMTPSA id c185sm4950309qkb.135.2020.09.04.10.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 10:07:57 -0700 (PDT)
-Date:   Fri, 4 Sep 2020 13:07:56 -0400
-From:   Tejun Heo <tj@kernel.org>
-To:     Akshat Jain <akshatzen@google.com>
-Cc:     Vishakha Channapattan <vishakhavc@google.com>,
-        linux-ide@vger.kernel.org, John Grass <jgrass@google.com>,
-        Thieu Le <thieule@google.com>, linux-scsi@vger.kernel.org
-Subject: Re: Question on ata_gen_passthru_sense interpretation of fixed
- format sense buffer
-Message-ID: <20200904170756.GC4295@mtj.thefacebook.com>
-References: <CACqKpR-5=bDwODQFfMY+o8-XJMCQmtLVAOiCEY8ApFwQr04A8A@mail.gmail.com>
- <20200817174215.GB4230@mtj.thefacebook.com>
- <CACqKpR8i=9A6kb05yCyh39HMZ8aEhEGacXTCvQKyUS=nYkqRiQ@mail.gmail.com>
+        id S1727992AbgIDRak (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Sep 2020 13:30:40 -0400
+Received: from rrcs-67-53-52-108.west.biz.rr.com ([67.53.52.108]:58065 "EHLO
+        thirdlane.local" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727964AbgIDRaj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Sep 2020 13:30:39 -0400
+Received: from Shop01 (localhost [127.0.0.1])
+        by thirdlane.local (Postfix) with SMTP id 6BD1F28232E;
+        Thu,  3 Sep 2020 13:44:51 -1000 (HST)
+Received: from (HELO 1dat1gj) [81.90.20.156] by Shop01 with ESMTP id 37713973 for <linux-mac68k-request@mac.linux-m68k.org>; Thu, 03 Sep 2020 19:59:02 -0400
+Message-ID: <61he5qtzr4r3$51ywylq43b97-rixs4@7dl.qig.pj52>
+From:   "William Saha" <wils@send.com>
+Reply-To: "William Saha" <wils@send.com>
+To:     linux-mac68k-request@mac.linux-m68k.org
+Subject: Greetings
+Date:   Thu, 03 Sep 20 19:59:02 GMT
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACqKpR8i=9A6kb05yCyh39HMZ8aEhEGacXTCvQKyUS=nYkqRiQ@mail.gmail.com>
+Content-Type: multipart/alternative;
+        boundary="_D3F_8EF_5_CCE.5B."
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello,
 
-On Tue, Aug 18, 2020 at 09:12:13PM -0700, Akshat Jain wrote:
-> To answer your question:
-> 1. Yes we will start working on a patch and send it for review.
-> 2. We found this issue during our code review.
-> 
-> Another information I need to bring to your attention is that many
-> user libraries today decode the fixed format sense block based on the
-> format today's kernel (ata_gen_passthru_sense) provides. Rather than
-> the format specified in the SCSI Primary commands - 4 specification.
-> If we were to correct the field offsets for the fixed format sense block.
-> It may break such libraries. How do you assess the impact
-> of such a change?
+--_D3F_8EF_5_CCE.5B.
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-So, I don't know. Given that nobody tripped over it till now, I doubt fixing
-it would cause a lot of trouble but at the same time it isn't a real
-problem, again, given that nobody has tripped over it yet. Maybe just fix it
-and see how it goes?
+Send your reply to: fkinneyofd@tampabay.rr.com 
 
-Thanks.
+Greetings
 
--- 
-tejun
+This notification memo has been sent to you three times without a response=
+ from you and this will be the last time and I do hope you receive it.
+This inquiry is about an account holder, who died and has no successor ove=
+r his fund with the bank.
+The essence of this communication with you is to request your willingness =
+to accept this inheritance left behind by my client if you are legally and=
+ legitimately appointed.
+You must appreciate that I am constrained from providing you with more det=
+ailed information at this point. Upon your response, I will give you more =
+detailed information on the deceased client and the process of nominating =
+you to inherit his wealth. Send your comments with your full names and you=
+r telephone number to enable us discuss .
+
+Yours faithfully,
+William Saha.
+fkinneyofd@tampabay.rr.com
+
+--_D3F_8EF_5_CCE.5B.--
+
