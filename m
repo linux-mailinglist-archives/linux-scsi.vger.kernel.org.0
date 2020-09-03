@@ -2,94 +2,172 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0407F25B92E
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Sep 2020 05:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587E125B957
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Sep 2020 05:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbgICDZ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Sep 2020 23:25:58 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:36852 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbgICDZ5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Sep 2020 23:25:57 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0833Ovs0073275
-        for <linux-scsi@vger.kernel.org>; Thu, 3 Sep 2020 03:25:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : subject : from :
- message-id : date : mime-version : content-type; s=corp-2020-01-29;
- bh=faZwFhJbJZmaWYlQ73kx2Q3kyUjiYX4AXkTIb40rXWQ=;
- b=Uwogh1sUYziPCQAMdlx1DgoTZQJ2cP1V5Ju4C+d8NW6L1xsJSFM5LZROCWDgbCTUilDh
- tnxWNocL3511ce/S9ZSZUlswsyPpRIzJusLDuamAH7EmwlUIKWkw0lQbrA1wUHQrXsMz
- 2r7GxbEGr7EEeq5GnW+/35OUdimUDWVxssdN0lm6TDMHQXfdeOdxV618u/24OqFZ2unc
- p9ih0tgMZYJ7L2YvhXfje/4HRGCO0TqqpxDrvWthEuX7xmsgkiJoP4X/UR4cHweviU37
- VPPHvoGd17CxYV4eCacbSbPGey5wJaTRkSC5rBUXFKc8mJGuDqJcORGFtQc/oDFfB0bM Dw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 337eer69hg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)
-        for <linux-scsi@vger.kernel.org>; Thu, 03 Sep 2020 03:25:56 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0833PFT0050769
-        for <linux-scsi@vger.kernel.org>; Thu, 3 Sep 2020 03:25:55 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 3380kr24n8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Thu, 03 Sep 2020 03:25:55 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0833PsHd028718
-        for <linux-scsi@vger.kernel.org>; Thu, 3 Sep 2020 03:25:55 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 02 Sep 2020 20:25:54 -0700
-To:     linux-scsi@vger.kernel.org
-Subject: SCSI staging branch
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1o8mnd0k5.fsf@ca-mkp.ca.oracle.com>
-Date:   Wed, 02 Sep 2020 23:25:53 -0400
+        id S1728219AbgICDo5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Sep 2020 23:44:57 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:46943 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726686AbgICDoy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Sep 2020 23:44:54 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 015775C01E6;
+        Wed,  2 Sep 2020 23:44:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 02 Sep 2020 23:44:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=+9t662V001TgRGCCG56jM+Z/YQ
+        k7ENVjdwqNyvtMt08=; b=ncEEIHoq2AjQY7yVVJwctMiONp9DMKYtGlsEjV+no+
+        Pb1qtMFvd0ckYLBcMugc8VTnpWaOwIvrb4n9yXpJmShC4cSsIQoLx1wNoRHu6M9n
+        2ZsNh8frkUr7eKjnpW+9H905itNXn1oTT275l7k5TIaDUCNS6aIi10HUtFYI/KZV
+        +nFidQWFExNmaXa1lLfgqQsdqzP9TVHvWQSKVmcejZYBjGat29JrUXRnLRRqPr1k
+        ivap7t/WSf3RPmN41remLxip/pz53kpLxzB+SkrHBnGy0pcTYAXqLHScHPxn0tSj
+        c8LCsZyWyT98iUKSCgZRVdQnXzMjloa9S3Q96Cf2/Dhg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=+9t662V001TgRGCCG
+        56jM+Z/YQk7ENVjdwqNyvtMt08=; b=En7xihk/JdEQlGCehutY2nWWwnJxqnebU
+        KyoT/M+BvwrrGwXhCQeHfx9Lp0MpYeVIjwegS5DA15QjGiPHlztRvBeFMgKJbnU2
+        D5sSGGq8bGM0ztDbwDi8rcP7NSFiqytt3831NNTwS0+NH2u1SVJLLn6e417IucYc
+        tVzy96Mi6tlDxi/IvTaRy368dWY+MnBBePIiA/eh4PTMBkieLwJqC2E3Byz/8B1J
+        9nho/nRy0NIFVpqmqJZ0D8ouEAjonQ30HW8vFjSIZaRGH6+Z/dR21/IjSxiV9SOG
+        htCThY06a8Z2ctB+HM1zftqZ2M+itrKgbp2sEWCAvHGLDh8uUoSig==
+X-ME-Sender: <xms:s2ZQX0lBpgjvIJpsuzpebcml88UtbpJsdAev4D9DWsW7DxvUWtYHtw>
+    <xme:s2ZQXz1-s9KK-bO4a9OebiWW_d87eDNlY3cPocI5k5mD4gM9CG2GrxvDpYxmej1LT
+    ot5MK0V6pPrSf1EzQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudegtddgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucfkphepjedtrddufeehrddugeekrdduhedunecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdr
+    ohhrgh
+X-ME-Proxy: <xmx:s2ZQXyrmczd2stHlXkHCcNk6lslNlWqkW-lgOdMqgSw_swAlbdJq9A>
+    <xmx:s2ZQXwkovpzyiXvVgn4tE9bCSFeD8VCSCLEv8M717ahmrJEkjBaDNw>
+    <xmx:s2ZQXy3mfoc7cTb6rKSBrb8RiiuZYeV63BBTckTU4E934oGLsSxuwQ>
+    <xmx:tGZQX-9qfDQoIW9np7-6wyk0AryePHqHxQmPx6jFocUbYvE-D9AGPw>
+Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 751C23060067;
+        Wed,  2 Sep 2020 23:44:51 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Adam Radford <aradford@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Joe Perches <joe@perches.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v4 1/3] scsi: 3w-9xxx: Use flexible array members to avoid struct padding
+Date:   Wed,  2 Sep 2020 22:44:48 -0500
+Message-Id: <20200903034450.5491-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9732 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
- mlxscore=0 suspectscore=3 malwarescore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009030030
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9732 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
- phishscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 suspectscore=3
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009030030
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+In preparation for removing the "#pragma pack(1)" from the driver, fix
+all instances where a trailing array member could be replaced by a
+flexible array member. Since a flexible array member has zero size, it
+introduces no padding, whether or not the struct is packed.
 
-I have had a few pokes about why patches are slow to show up in
-5.10/scsi-queue. The reason is that there have been an awful lot of
-rebases and fixups in the last couple of releases. When I have to go
-back and fix things that breaks the commit hash previously sent in the
-thank you notes from b4. Which again breaks the lore archive mail thread
-links to the git commits, etc.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-As a result I am experimenting with having a staging branch that is
-separate from and slightly ahead of scsi-queue. I merge patches and let
-them soak in there for a few days to let zeroday and the various code
-analyzers do their thing. And once I am reasonably comfortable that I
-don't have to go back and fix anything, I'll shuffle the commits over to
-5.10/scsi-queue.
+Changes since v3:
+  - Consistently put sizeof(TW_Ioctl_Buf_Apache) before buffer_length.
 
-This also means that there is now a delay between me merging something
-and the thank you notes being sent out. I was contemplating hacking b4
-so I could send notes for both staging and queue but it would generate a
-lot of potentially duplicate email.
+---
+ drivers/scsi/3w-9xxx.c | 16 ++++++++++------
+ drivers/scsi/3w-9xxx.h |  4 ++--
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
-Another option is that I send a personal note to the submitter once
-stuff is staged. And then the public b4 thank you notes once the commits
-end up in scsi-queue proper. I'm open to suggestions.
-
-Patchwork should still accurately reflect the status of posted
-patches. Plus my for-next branch shows what is currently staged, of
-course.
-
+diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
+index 3337b1e80412..aad9b3b73e15 100644
+--- a/drivers/scsi/3w-9xxx.c
++++ b/drivers/scsi/3w-9xxx.c
+@@ -676,7 +676,9 @@ static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long
+ 	data_buffer_length_adjusted = (driver_command.buffer_length + 511) & ~511;
+ 
+ 	/* Now allocate ioctl buf memory */
+-	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, &dma_handle, GFP_KERNEL);
++	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev,
++				      sizeof(TW_Ioctl_Buf_Apache) + data_buffer_length_adjusted,
++				      &dma_handle, GFP_KERNEL);
+ 	if (!cpu_addr) {
+ 		retval = TW_IOCTL_ERROR_OS_ENOMEM;
+ 		goto out2;
+@@ -685,7 +687,7 @@ static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long
+ 	tw_ioctl = (TW_Ioctl_Buf_Apache *)cpu_addr;
+ 
+ 	/* Now copy down the entire ioctl */
+-	if (copy_from_user(tw_ioctl, argp, driver_command.buffer_length + sizeof(TW_Ioctl_Buf_Apache) - 1))
++	if (copy_from_user(tw_ioctl, argp, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length))
+ 		goto out3;
+ 
+ 	/* See which ioctl we are doing */
+@@ -867,11 +869,13 @@ static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long
+ 	}
+ 
+ 	/* Now copy the entire response to userspace */
+-	if (copy_to_user(argp, tw_ioctl, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length - 1) == 0)
++	if (copy_to_user(argp, tw_ioctl, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length) == 0)
+ 		retval = 0;
+ out3:
+ 	/* Now free ioctl buf memory */
+-	dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, cpu_addr, dma_handle);
++	dma_free_coherent(&tw_dev->tw_pci_dev->dev,
++			  sizeof(TW_Ioctl_Buf_Apache) + data_buffer_length_adjusted,
++			  cpu_addr, dma_handle);
+ out2:
+ 	mutex_unlock(&tw_dev->ioctl_lock);
+ out:
+@@ -1392,7 +1396,7 @@ static void twa_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_comm
+ 		newcommand->request_id__lunl =
+ 			cpu_to_le16(TW_REQ_LUN_IN(TW_LUN_OUT(newcommand->request_id__lunl), request_id));
+ 		if (length) {
+-			newcommand->sg_list[0].address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache) - 1);
++			newcommand->sg_list[0].address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache));
+ 			newcommand->sg_list[0].length = cpu_to_le32(length);
+ 		}
+ 		newcommand->sgl_entries__lunh =
+@@ -1407,7 +1411,7 @@ static void twa_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_comm
+ 				sgl = (TW_SG_Entry *)((u32 *)oldcommand+oldcommand->size - (sizeof(TW_SG_Entry)/4) + pae);
+ 			else
+ 				sgl = (TW_SG_Entry *)((u32 *)oldcommand+TW_SGL_OUT(oldcommand->opcode__sgloffset));
+-			sgl->address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache) - 1);
++			sgl->address = TW_CPU_TO_SGL(dma_handle + sizeof(TW_Ioctl_Buf_Apache));
+ 			sgl->length = cpu_to_le32(length);
+ 
+ 			oldcommand->size += pae;
+diff --git a/drivers/scsi/3w-9xxx.h b/drivers/scsi/3w-9xxx.h
+index d88cd3499bd5..e65dafda2e3e 100644
+--- a/drivers/scsi/3w-9xxx.h
++++ b/drivers/scsi/3w-9xxx.h
+@@ -588,7 +588,7 @@ typedef struct TAG_TW_Ioctl_Apache {
+ 	TW_Ioctl_Driver_Command driver_command;
+         char padding[488];
+ 	TW_Command_Full firmware_command;
+-	char data_buffer[1];
++	char data_buffer[];
+ } TW_Ioctl_Buf_Apache;
+ 
+ /* Lock structure for ioctl get/release lock */
+@@ -604,7 +604,7 @@ typedef struct {
+ 	unsigned short	parameter_id;
+ 	unsigned short	parameter_size_bytes;
+ 	unsigned short  actual_parameter_size_bytes;
+-	unsigned char	data[1];
++	unsigned char	data[];
+ } TW_Param_Apache, *PTW_Param_Apache;
+ 
+ /* Response queue */
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.26.2
+
