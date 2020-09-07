@@ -2,84 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254CC26053C
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Sep 2020 21:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12EE260565
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Sep 2020 22:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729003AbgIGTnZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Sep 2020 15:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728675AbgIGTnV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Sep 2020 15:43:21 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9435CC061755
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Sep 2020 12:43:21 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id n14so1142657pff.6
-        for <linux-scsi@vger.kernel.org>; Mon, 07 Sep 2020 12:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=6mKn/5en2z64fzPFUbCk/VnAqrFKZhPfR20ue+E+80k=;
-        b=M8/qii5ZH9zY1h1qKVTXEr4/K7GsbiaJEKMB34/YR/YF2aaLtXo/az+n2YMWCwswC9
-         3VjpQ/TeF7lugUc6BN4ARmgChsHfAD68k7DxoFpwP4otisccKpSBgpynNda/fDsKhRCU
-         as9IHYmKKazez6Xlq7Bee/cHF5jKtac9BzM2zbOZC6Z/nhNR2ddqnQprHZP9L7bilX2U
-         z02NLi/S+/mPeMqFYGeiol/XiPphSZ2LSZeZCEk4BNtzhscdWfRD7PuXQpn8QuTzp0ji
-         TZKHrLJM1OWLYbkg22MW1JU82VauKUGmXgYeuTtybYmr3flg/pgmeyYyMfy3zn2awLyY
-         m/MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=6mKn/5en2z64fzPFUbCk/VnAqrFKZhPfR20ue+E+80k=;
-        b=KbZiBKmuvtBc664/MIS7L8afVhJci4mijeQh9kOqZGB+cKXBIDk+r9JjAoL7XkOBOk
-         Hp7opyVYjIqAcA0arYhRThMt3bizvC74+kLLNU56xcMLfBFiwmmqyDrpquNQGRglVUQc
-         nW3z47jtc6aFsNMXWioPHwfqvWYDTTlXeRccZMQyEJ18eK0LDmfQzx15nRQMQz8SMvlf
-         zkiG6OzNxl2JTrgC286t9+YJXwFUuxiadV6IQOXDqxn+NbXCcZ21Uv9b8Ss74Qna2rDE
-         b7viqA4IAQbdZrulLvC/l2Imirit5yg5MYWwBcSGU5Bav+pv4VOOWT80r6HIaYxfnl92
-         36Eg==
-X-Gm-Message-State: AOAM531UiAQx3k/de8O4m/LqIxOQr+rva11GxRZmv5Dt/BJuupoeqGRg
-        cXI9cYwF6/ry5Hr0DYN/eqFwi5lAYM87ydmTI4Q=
-X-Google-Smtp-Source: ABdhPJzWzh95R/o0bjywMOfcmZNLgIU9qhpV20xpiKGAf74ODeT5POoJgzHdU5K/rEn7tUgGsz2QbDJEN9THgfZJQq8=
-X-Received: by 2002:a63:d04b:: with SMTP id s11mr17380647pgi.241.1599507801067;
- Mon, 07 Sep 2020 12:43:21 -0700 (PDT)
+        id S1728934AbgIGUJe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Sep 2020 16:09:34 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:54130 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728879AbgIGUJd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Sep 2020 16:09:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599509370;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U92wTgfb7ujMAMgyGUmBIOFduv/fE1sLDpeelLKtrVQ=;
+        b=XszdPtDmMlypeXn1b+jK0nemqIyd4SgCvAT3PFq7zd5/dG/zfix4QkvSIggcIkSUyRq/Pf
+        rgbx4KhiYvsM3X094Ah2libhob6CFYo0RmmPaGFC1SWX2kpblRHRvqdUZFjYHoX1d0s93b
+        jsD/gCWV+5GAw6EqMuthlTVZV4qDuWA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-551-fjWJHNl0N9Ov255GyB_UAw-1; Mon, 07 Sep 2020 16:09:29 -0400
+X-MC-Unique: fjWJHNl0N9Ov255GyB_UAw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 32C3E1074646;
+        Mon,  7 Sep 2020 20:09:28 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.40.194.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A42A9805F0;
+        Mon,  7 Sep 2020 20:09:27 +0000 (UTC)
+Subject: Re: [PATCH] scsi: take module reference during async scan
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org
+References: <20200907154745.20145-1-thenzl@redhat.com>
+ <1599500808.4232.19.camel@HansenPartnership.com>
+From:   Tomas Henzl <thenzl@redhat.com>
+Message-ID: <f3095df4-4a34-1e0c-04e7-8983ffeac973@redhat.com>
+Date:   Mon, 7 Sep 2020 22:09:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:6158:0:0:0:0 with HTTP; Mon, 7 Sep 2020 12:43:20
- -0700 (PDT)
-Reply-To: li.anable85@gmail.com
-From:   Liliane Abel <yaovi.ihou11@gmail.com>
-Date:   Mon, 7 Sep 2020 20:43:20 +0100
-Message-ID: <CAOLrTi4kWgpTHNMOHwm2YdRu0jd2S8f2xY33tfwOJtWyfpg4_A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1599500808.4232.19.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dearest
+On 9/7/20 7:46 PM, James Bottomley wrote:
+> On Mon, 2020-09-07 at 17:47 +0200, Tomas Henzl wrote:
+>> During an async scan the driver shost->hostt structures are used,
+>> that may cause issues when the driver is removed at that time.
+>> As protection take the module reference.
+> 
+> Can I just ask what issues?  Today, our module model is that
+> scsi_device_get() bumps the module refcount and therefore makes the
+> module ineligible to be removed.  scsi_host_get() doesn't do this
+> because the way the host model is supposed to be coded, we can call
+> remove at any time but the module won't get freed until the last put of
+> the host.  I can see we have a potential problem with
+> scsi_forget_host() racing with the async scan thread ... is that what
+> you see? What's supposed to happen is that scsi_device_get() starts
+> failing as soon as the module begins it's exit routine, so if a scan is
+> in progress, it can't add any new devices ... in theory this means that
+> the list is stable for scsi_forget_host(), so knowing how that
+> assumption is breaking would be useful.
 
-Greeting my dear, I am Liliane Abel by name, The only daughter of late
-Mr.Benson Abel. My father is one of the top Politician in our country
-and my mother is a farmers and cocoa merchant when they were both
-alive. After the death of my mother, long ago, my father was
-controlling their business until he was poisoned by his business
-associates which he suffered and died.
+I think that the problem is that async scan uses callbacks to the module
+and when the module is being removed during scan it is not protected.
 
-Before the death of my father, He told me about (two million five
-hundred thousand united states dollars) which he deposited in the bank
-in Lome-Togo, It was the money he intended to transfer overseas for
-investment before he was poisoned. He also instructed me that I should
-seek for foreign partners in any country of my choice who will assist
-me transfer this money in overseas account where the money will be
-wisely invested.
-I am seeking for your kind assistance in the following ways:  (1) to
-provide a safe bank account into where the money will be transferred
-for investment. (2) To serve as a guardian of this fund since I am a
-girl of 19 years old. (3) To make arrangement for me to come over to
-your country to further my education. This is my reason for writing to
-you. Please if you are willing to assist me I will offer you 25% of
-the total money. Reply if  you are interested.
+modprobe mpt3sas && rmmod  mpt3sas
 
-Best regards.
-Liliane Abel.
+[  370.031614] INFO: task rmmod:3120 blocked for more than 120 seconds.
+[  370.037967]       Not tainted 4.18.0-193.el8.x86_64 #1
+[  370.043105] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+disables this message.
+[  370.050931] rmmod           D    0  3120   2460 0x00004080
+[  370.056414] Call Trace:
+[  370.058889]  ? __schedule+0x24f/0x650
+[  370.062554]  schedule+0x2f/0xa0
+[  370.065738]  async_synchronize_cookie_domain+0xad/0x140
+[  370.070983]  ? finish_wait+0x80/0x80
+[  370.074580]  __x64_sys_delete_module+0x166/0x280
+[  370.079198]  do_syscall_64+0x5b/0x1a0
+[  370.082876]  entry_SYSCALL_64_after_hwframe+0x65/0xca
+[  370.087946] RIP: 0033:0x7f6de460a7db
+[  370.091534] Code: Bad RIP value.
+[  370.094777] RSP: 002b:00007ffe9971e798 EFLAGS: 00000206 ORIG_RAX:
+00000000000000b0
+[  370.102341] RAX: ffffffffffffffda RBX: 00005592370d37b0 RCX:
+00007f6de460a7db
+[  370.109481] RDX: 000000000000000a RSI: 0000000000000800 RDI:
+00005592370d3818
+[  370.116606] RBP: 0000000000000000 R08: 00007ffe9971d711 R09:
+0000000000000000
+[  370.123748] R10: 00007f6de467c8e0 R11: 0000000000000206 R12:
+00007ffe9971e9c0
+[  370.130888] R13: 00007ffe99720333 R14: 00005592370d32a0 R15:
+00005592370d37b0
+
+
+> 
+> James
+> 
+
