@@ -2,98 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE21F25F43F
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Sep 2020 09:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65D125F579
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Sep 2020 10:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgIGHqM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Sep 2020 03:46:12 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:45624 "EHLO huawei.com"
+        id S1727921AbgIGIj7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Sep 2020 04:39:59 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:58260 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727827AbgIGHqI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 7 Sep 2020 03:46:08 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 4F469A6421ECB9EAE0F3;
-        Mon,  7 Sep 2020 15:46:07 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Mon, 7 Sep 2020
- 15:46:01 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <mdr@sgi.com>, <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <yanaijie@huawei.com>, <tbogendoerfer@suse.de>,
-        <linux-scsi@vger.kernel.org>
-CC:     Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH 4/4] scsi: qla1280: remove set but not used variable in qla1280_status_entry()
-Date:   Mon, 7 Sep 2020 15:45:18 +0800
-Message-ID: <20200907074518.2326360-5-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200907074518.2326360-1-yanaijie@huawei.com>
-References: <20200907074518.2326360-1-yanaijie@huawei.com>
+        id S1727897AbgIGIjs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 7 Sep 2020 04:39:48 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 4AABD5675653A422822F;
+        Mon,  7 Sep 2020 16:39:46 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 7 Sep 2020 16:39:37 +0800
+From:   Jing Xiangfeng <jingxiangfeng@huawei.com>
+To:     <tyreld@linux.ibm.com>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>, <jingxiangfeng@huawei.com>
+Subject: [PATCH] scsi: ibmvfc: Fix error return in ibmvfc_probe()
+Date:   Mon, 7 Sep 2020 16:39:49 +0800
+Message-ID: <20200907083949.154251-1-jingxiangfeng@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
 X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This addresses the following gcc warning with "make W=1":
+Fix to return error code PTR_ERR() from the error handling case instead
+of 0.
 
-drivers/scsi/qla1280.c: In function ‘qla1280_status_entry’:
-drivers/scsi/qla1280.c:3607:28: warning: variable ‘lun’ set but not used
-[-Wunused-but-set-variable]
- 3607 |  unsigned int bus, target, lun;
-      |                            ^~~
-drivers/scsi/qla1280.c:3607:20: warning: variable ‘target’ set but not
-used [-Wunused-but-set-variable]
- 3607 |  unsigned int bus, target, lun;
-      |                    ^~~~~~
-drivers/scsi/qla1280.c:3607:15: warning: variable ‘bus’ set but not used
-[-Wunused-but-set-variable]
- 3607 |  unsigned int bus, target, lun;
-      |               ^~~
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
+Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
 ---
- drivers/scsi/qla1280.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
-index fe4b88aaf5cb..545936cb3980 100644
---- a/drivers/scsi/qla1280.c
-+++ b/drivers/scsi/qla1280.c
-@@ -3601,7 +3601,6 @@ static void
- qla1280_status_entry(struct scsi_qla_host *ha, struct response *pkt,
- 		     struct list_head *done_q)
- {
--	unsigned int bus, target, lun;
- 	int sense_sz;
- 	struct srb *sp;
- 	struct scsi_cmnd *cmd;
-@@ -3627,11 +3626,6 @@ qla1280_status_entry(struct scsi_qla_host *ha, struct response *pkt,
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index ea7c8930592d..70daa0605082 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -4928,6 +4928,7 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+ 	if (IS_ERR(vhost->work_thread)) {
+ 		dev_err(dev, "Couldn't create kernel thread: %ld\n",
+ 			PTR_ERR(vhost->work_thread));
++		rc = PTR_ERR(vhost->work_thread);
+ 		goto free_host_mem;
+ 	}
  
- 	cmd = sp->cmd;
- 
--	/* Generate LU queue on cntrl, target, LUN */
--	bus = SCSI_BUS_32(cmd);
--	target = SCSI_TCN_32(cmd);
--	lun = SCSI_LUN_32(cmd);
--
- 	if (comp_status || scsi_status) {
- 		dprintk(3, "scsi: comp_status = 0x%x, scsi_status = "
- 			"0x%x, handle = 0x%x\n", comp_status,
-@@ -3670,7 +3664,8 @@ qla1280_status_entry(struct scsi_qla_host *ha, struct response *pkt,
- 
- 			dprintk(2, "qla1280_status_entry: Check "
- 				"condition Sense data, b %i, t %i, "
--				"l %i\n", bus, target, lun);
-+				"l %i\n", SCSI_BUS_32(cmd), SCSI_TCN_32(cmd),
-+				SCSI_LUN_32(cmd));
- 			if (sense_sz)
- 				qla1280_dump_buffer(2,
- 						    (char *)cmd->sense_buffer,
 -- 
-2.25.4
+2.17.1
 
