@@ -2,73 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2DA2601B5
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Sep 2020 19:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C8B260374
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Sep 2020 19:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730633AbgIGQck (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Sep 2020 12:32:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729851AbgIGQch (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:32:37 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC343217A0;
-        Mon,  7 Sep 2020 16:32:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599496353;
-        bh=fMnkgAblkIzmn4NV5qpGYdRfZFLnYfW+R/fXUqvNWzI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QZ23v3jzYH6cvhN/VT6/Av0T7inaPKka/VAxsYYFxgU2DYtXukRR5/C7s29T96e6q
-         0w/vMtHhdXVXWpCPEGizHdgtVl9tYJa+6qIM4fC6CJW/gWv0sB8CF7e26GHVqU2T3L
-         Zqb0fj4pzzzazFKv6Z89vwYSB2dibLdHLfAlfXow=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ye Bin <yebin10@huawei.com>, Saurav Kashyap <skashyap@marvell.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 10/53] scsi: qedf: Fix null ptr reference in qedf_stag_change_work
-Date:   Mon,  7 Sep 2020 12:31:36 -0400
-Message-Id: <20200907163220.1280412-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200907163220.1280412-1-sashal@kernel.org>
-References: <20200907163220.1280412-1-sashal@kernel.org>
+        id S1729285AbgIGMQ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Sep 2020 08:16:59 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:40474 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729183AbgIGMPl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Sep 2020 08:15:41 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 087C4vR5017293
+        for <linux-scsi@vger.kernel.org>; Mon, 7 Sep 2020 05:15:35 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=pfpt0220; bh=Emj55TWu8GdSl8Gl32qzKBMqEHxBXFQDEQsnur2quMQ=;
+ b=Zm2yv/u0pzCLfU46AEMIkPsaYHa707j/EiDVMLz9BIGC3MjIT7HreoBv2W7FpfQIkbs9
+ 8PHu4wt6xCVKsLz2MU/E3k+PkTPsp9UVVL2cIYwtGjnoozVSABiTFEv2FrsPxtPGkEKf
+ 5D607qVeIzXxmv98phuu7BUfrjzcEDm4GnZmpQzla/fzLKW/C1qtLH/l/FWPl1v6iaxe
+ eaSKf6Fw2dx8jFBSFbBsi2K/HQoOsqbItoM4m7CGqBXt9egte8DLBpmpBBYlM7ezPJFC
+ Q0cCMhgJu6vonJTIswyIe2MJaODv8hd9izL4oYjtYY1NuDc4eMSJZcvLheT2+dnhjauj yw== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0b-0016f401.pphosted.com with ESMTP id 33ccvqxn9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Mon, 07 Sep 2020 05:15:34 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Sep
+ 2020 05:15:33 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Sep
+ 2020 05:15:32 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 7 Sep 2020 05:15:32 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 115383F703F;
+        Mon,  7 Sep 2020 05:15:32 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 087CFV02005198;
+        Mon, 7 Sep 2020 05:15:31 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 087CFV10005197;
+        Mon, 7 Sep 2020 05:15:31 -0700
+From:   Javed Hasan <jhasan@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>, <jhasan@marvell.com>
+Subject: [PATCH 1/8] qedf: Changed the debug parameter permission to read & write
+Date:   Mon, 7 Sep 2020 05:14:36 -0700
+Message-ID: <20200907121443.5150-2-jhasan@marvell.com>
+X-Mailer: git-send-email 2.12.0
+In-Reply-To: <20200907121443.5150-1-jhasan@marvell.com>
+References: <20200907121443.5150-1-jhasan@marvell.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-07_06:2020-09-07,2020-09-07 signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+ Changed the debug parameter permission to read & write.
+ Gives flexibility to change the debug verbosity dynamically.
 
-[ Upstream commit f308a35f547cd7c1d8a901c12b3ac508e96df665 ]
-
-Link: https://lore.kernel.org/r/20200824033436.45570-1-yebin10@huawei.com
-Acked-by: Saurav Kashyap <skashyap@marvell.com>
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Javed Hasan <jhasan@marvell.com>
 ---
  drivers/scsi/qedf/qedf_main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 36b1ca2dadbb5..51cfab9d1afdc 100644
+index 86b9479..5770692 100644
 --- a/drivers/scsi/qedf/qedf_main.c
 +++ b/drivers/scsi/qedf/qedf_main.c
-@@ -3843,7 +3843,7 @@ void qedf_stag_change_work(struct work_struct *work)
- 	    container_of(work, struct qedf_ctx, stag_work.work);
+@@ -40,7 +40,7 @@
+ 	"remote ports (default 60)");
  
- 	if (!qedf) {
--		QEDF_ERR(&qedf->dbg_ctx, "qedf is NULL");
-+		QEDF_ERR(NULL, "qedf is NULL");
- 		return;
- 	}
- 	QEDF_ERR(&qedf->dbg_ctx, "Performing software context reset.\n");
+ uint qedf_debug = QEDF_LOG_INFO;
+-module_param_named(debug, qedf_debug, uint, S_IRUGO);
++module_param_named(debug, qedf_debug, uint, S_IRUGO|S_IWUSR);
+ MODULE_PARM_DESC(debug, " Debug mask. Pass '1' to enable default debugging"
+ 	" mask");
+ 
 -- 
-2.25.1
+1.8.3.1
 
