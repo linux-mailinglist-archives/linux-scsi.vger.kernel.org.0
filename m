@@ -2,95 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51007261225
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 15:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DBD2612F4
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 16:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730183AbgIHNrU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 09:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729911AbgIHNmM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 09:42:12 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C3AC0619C4
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Sep 2020 06:36:12 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d6so3913301pfn.9
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Sep 2020 06:36:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sslab.ics.keio.ac.jp; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=ehTU8VuqCe4uQqnVpDe9geOxORvh8qag6CqSgGb/x38=;
-        b=XXNR65cRXkVSPXHNMlGccTpQI7cOqRyhk5d8MsIws07AR035m+bxTug70SDBbKciK5
-         2lYRSm8fhoP+SbAUu7pr7CorYMYDf8ArGi3ZDTGpK4TqR6w3vHrr/iW4tbDJwhKJjYVE
-         ryBEybf6RG9DjezNonEi/3yWFDJBF0DAYhs6k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ehTU8VuqCe4uQqnVpDe9geOxORvh8qag6CqSgGb/x38=;
-        b=T+PvOpJ+slGSa9DXPCg4zUTxvCUMYgzmt4bVEWFIqCTlKfHhWNOxdZjCpwJPWW5mrD
-         i9I/uCuAGZKShrHRYM+a/KCjgVVpCa7mE1tRmwJFuNUFkXVN78Jzayb2fEu5lb9TeX5Q
-         9AfVp20y1Hl3tKN1WltPK8X/By9J+C+KL0y79VFLQOPMaHyO/Dl+rbXC1GCEOhraZ42n
-         dOnSE6Vt6oFj/rGX2RdFsxzTFXh8lFUCUJrytXkF6MDb9mvn/uE6jIMhxCLPcJCs5V2p
-         XnUWud3MTq4RjbXw3wAZiICrwJFjXMDuGktfInsmLOpl0GLO5AmFklHb0T4D/d0L2J7m
-         EPGg==
-X-Gm-Message-State: AOAM5300B0kTqA3UXww9GvYPMCj18rNANgdcyu9S11yUVOSeyescO33f
-        gHiGvwFHBTHuhfC0ktnMW683OQ==
-X-Google-Smtp-Source: ABdhPJwhXtG+H2LqAISEDK2z1kRlZcOQuBM48N1pdIL7c/KejeE7ihVjm7S4Fd1HckDMPESkOFR8iA==
-X-Received: by 2002:a17:902:c410:: with SMTP id k16mr24241546plk.123.1599572171471;
-        Tue, 08 Sep 2020 06:36:11 -0700 (PDT)
-Received: from brooklyn.i.sslab.ics.keio.ac.jp (sslab-relay.ics.keio.ac.jp. [131.113.126.173])
-        by smtp.googlemail.com with ESMTPSA id b20sm19856758pfb.198.2020.09.08.06.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 06:36:10 -0700 (PDT)
-From:   Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
-Cc:     keitasuzuki.park@sslab.ics.keio.ac.jp,
-        takafumi@sslab.ics.keio.ac.jp, Don Brace <don.brace@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: hpsa: fix memory leak in hpsa_init_one
-Date:   Tue,  8 Sep 2020 13:35:32 +0000
-Message-Id: <20200908133533.16744-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S1730205AbgIHOqv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 10:46:51 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2790 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729057AbgIHO0J (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 8 Sep 2020 10:26:09 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 35D81842F1FA0CAFAAA7;
+        Tue,  8 Sep 2020 15:06:44 +0100 (IST)
+Received: from [127.0.0.1] (10.47.6.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 8 Sep 2020
+ 15:06:43 +0100
+Subject: Re: [PATCH] scsi: take module reference during async scan
+To:     <dgilbert@interlog.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Tomas Henzl <thenzl@redhat.com>, <linux-scsi@vger.kernel.org>
+References: <20200907154745.20145-1-thenzl@redhat.com>
+ <1599500808.4232.19.camel@HansenPartnership.com>
+ <a31b8640-307f-a14f-7cf8-7673fa8a4ff1@interlog.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <73166a16-1655-4cfd-6939-2878b357e422@huawei.com>
+Date:   Tue, 8 Sep 2020 15:04:05 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
+MIME-Version: 1.0
+In-Reply-To: <a31b8640-307f-a14f-7cf8-7673fa8a4ff1@interlog.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.6.45]
+X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When hpsa_scsi_add_host fails, h->lastlogicals is leaked since it lacks
-free in the error handler.
+On 07/09/2020 22:32, Douglas Gilbert wrote:
 
-Fix this by adding free when hpsa_scsi_add_host fails.
+Hi Doug,
 
-Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
----
- drivers/scsi/hpsa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>   # insmod scsi_debug.ko
+> 
+> Gave errors like this:
+> 
+> [  140.115244] debugfs: Directory 'sde' with parent 'block' already 
+> present!
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 48d5da59262b..aed59ec20ad9 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -8854,7 +8854,7 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	/* hook into SCSI subsystem */
- 	rc = hpsa_scsi_add_host(h);
- 	if (rc)
--		goto clean7; /* perf, sg, cmd, irq, shost, pci, lu, aer/h */
-+		goto clean8; /* lastlogicals, perf, sg, cmd, irq, shost, pci, lu, aer/h */
- 
- 	/* Monitor the controller for firmware lockups */
- 	h->heartbeat_sample_interval = HEARTBEAT_SAMPLE_INTERVAL;
-@@ -8869,6 +8869,8 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 				HPSA_EVENT_MONITOR_INTERVAL);
- 	return 0;
- 
-+clean8: /* lastlogicals, perf, sg, cmd, irq, shost, pci, lu, aer/h */
-+	kfree(h->lastlogicals);
- clean7: /* perf, sg, cmd, irq, shost, pci, lu, aer/h */
- 	hpsa_free_performant_mode(h);
- 	h->access.set_intr_mask(h, HPSA_INTR_OFF);
--- 
-2.17.1
+As an aside, I thought that this issue was fixed...
+
+> [  140.376426] debugfs: Directory 'sde' with parent 'block' already 
+> present!
+> [  140.420613] sd 3:0:0:0: [sde] tag#40 access beyond end of device
+> [  140.426655] blk_update_request: I/O error, dev sde, sector 15984 op 
+> 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+> [  140.437319] sd 3:0:0:0: [sde] tag#41 access beyond end of device
+> [  140.443368] blk_update_request: I/O error, dev sde, sector 15984 op 
+> 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+> ...
+> 
+> Which wasn't the scsi_debug driver directly as it doesn't use debugfs. So
+> I suspect something is rotten in the mid-level.
+> 
+> When I tried to replicate John's config I couldn't even boot my Ubuntu
+> 20.04 based system (with a MKP kernel). Seemed to fail/lockup before any
+> kernel prints came out to the serial port (yes, still useful), perhaps in
+> initrd. I'm guessing another, non-SCSI module caused the lockup. So I
+> gave up and turned off that config setting.
+
+You can also try this hack locally (without enabling that config), if 
+you like:
+
+--->8---
+
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -496,6 +496,12 @@ static int really_probe(struct device *dev, struct 
+device_driver *drv)
+         int local_trigger_count = atomic_read(&deferred_trigger_count);
+         bool test_remove = IS_ENABLED(CONFIG_DEBUG_TEST_DRIVER_REMOVE) &&
+                            !drv->suppress_bind_attrs;
+
++       if (strcmp(drv->name, "sd") == 0)
++               test_remove = 1;
++       else if (strcmp(drv->name, "scsi_debug") == 0)
++               test_remove = 1;
+
+---8<---
+
+Cheers,
+john
 
