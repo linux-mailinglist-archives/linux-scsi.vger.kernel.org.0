@@ -2,60 +2,194 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D23CE261C49
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 21:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EC7261DB9
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 21:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731283AbgIHTR1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 15:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730769AbgIHQDg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 12:03:36 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03442C061755
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Sep 2020 09:03:22 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id r25so6668808ioj.0
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Sep 2020 09:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=1MR7w5pXZSiUaRJ6XXYmBVR/BBCArAfXUnOrJ4PHyTw=;
-        b=VuVhxUmAYTU/I7HDCV+wr/WxOJkmOaChTDbF7ujxbgTXhgN5rWi/l2bWdkts9w1WQm
-         3r20IqnOqPVaGbZKrngCLN869ihbcxjIjpQigAcABCL/Ixok3mKQM8hDKhWKPri4warX
-         hrmoCykhUF6x2fEaSP0T9n2YuocE/rO25S+YsjQd3Dk9PNzFdf85iwLsT2iBrdoScvNd
-         Z1tzqANM9cag4APB5nb4r7A1GZf2u5MuY3UWp/yCbCsmzszkxB2K8I8Kdd8tGFOYKEHj
-         R3Hk78d/Ud5H0K6rnt0ru24xlSErpSQUfzjJ6x70cgOL/0D5KQfvzWQxQbhYpdVMMiaP
-         zUPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=1MR7w5pXZSiUaRJ6XXYmBVR/BBCArAfXUnOrJ4PHyTw=;
-        b=SOaqzZXHn43Xa3s+nKyusdmp3t2tEBHgndeLYIRZvrHFk8RfoQhXeblkex+E1aI0Yg
-         10YsE8GNCTm90TXj9/Jy8VRBcu8RwGwd//344mjDmjJqCGPotmOwaRDpMRvHfAHoG2DF
-         81ubt4BBRlncZClYWPw7MPA+F6ZfZND1HOP4cYEHJTRcxEmbVBNuYttK/HSs9BKUnEtj
-         gatwY7D0iv5pDhtUQhew1b35ChqyNowbYgqXGTsuOojUC9/jNzrrQbeYF4FDAbN9dmjm
-         GRoR6Dg/3Q9qKCFeEp5meAdwseFKoZ0FYQehQwBMFzO3RpRX/C2unoZRuRLif94ALlQP
-         AnZg==
-X-Gm-Message-State: AOAM53050lL6bverfNUyjGgP2K/ExFbcuy0PYzpE56bXsBPBwhPgCAZ1
-        Gz8Bi76bSKWWw81+uk+QJPtz+8+r1K1ypiHcAPI=
-X-Google-Smtp-Source: ABdhPJyPrgqI+9uZjkl3EBieym7yj/cTQZEJ8/3YkbmKf26xhbelL0Y6n+IFq3u5uRFkOFDsh/EMXPBamiSSTdffHZ4=
-X-Received: by 2002:a02:9149:: with SMTP id b9mr24517367jag.50.1599581001385;
- Tue, 08 Sep 2020 09:03:21 -0700 (PDT)
+        id S1730925AbgIHTlW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 15:41:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47746 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730922AbgIHPxm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 8 Sep 2020 11:53:42 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E8123AEAC;
+        Tue,  8 Sep 2020 12:46:45 +0000 (UTC)
+Subject: Re: [PATCH v8 00/18] blk-mq/scsi: Provide hostwide shared tags for
+ SCSI HBAs
+To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        don.brace@microsemi.com, kashyap.desai@broadcom.com,
+        ming.lei@redhat.com, bvanassche@acm.org, dgilbert@interlog.com,
+        paolo.valente@linaro.org, hch@lst.de
+Cc:     sumit.saxena@broadcom.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        esc.storagedev@microsemi.com, megaraidlinux.pdl@broadcom.com,
+        chenxiang66@hisilicon.com, luojiaxing@huawei.com
+References: <1597850436-116171-1-git-send-email-john.garry@huawei.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <cef0e816-1b30-dd62-0f39-2842df766298@suse.de>
+Date:   Tue, 8 Sep 2020 14:46:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Received: by 2002:a02:cb45:0:0:0:0:0 with HTTP; Tue, 8 Sep 2020 09:03:20 -0700 (PDT)
-From:   Tricia Smith <triciatricia841@gmail.com>
-Date:   Tue, 8 Sep 2020 20:33:20 +0430
-X-Google-Sender-Auth: MUZUjmMWuwtG2os32B8mhaMdhQk
-Message-ID: <CAMx0FwWzUpwRqA=TT4U0rKDDHxMwNtvumd2oJwhSpxq=8u6TbA@mail.gmail.com>
-Subject: Re: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1597850436-116171-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Dear, I am Miss Tricia Smith the only Daughter/Child of late Mr and
-Mrs William Smith. I am 18 years old. Please i have something very
-important and confidential to discuss with you.
+On 8/19/20 5:20 PM, John Garry wrote:
+> Hi all,
+> 
+> Here is v8 of the patchset.
+> 
+> In this version of the series, we keep the shared sbitmap for driver tags,
+> and introduce changes to fix up the tag budgeting across request queues.
+> We also have a change to count requests per-hctx for when an elevator is
+> enabled, as an optimisation. I also dropped the debugfs changes - more on
+> that below.
+> 
+> Some performance figures:
+> 
+> Using 12x SAS SSDs on hisi_sas v3 hw. mq-deadline results are included,
+> but it is not always an appropriate scheduler to use.
+> 
+> Tag depth 		4000 (default)			260**
+> 
+> Baseline (v5.9-rc1):
+> none sched:		2094K IOPS			513K
+> mq-deadline sched:	2145K IOPS			1336K
+> 
+> Final, host_tagset=0 in LLDD *, ***:
+> none sched:		2120K IOPS			550K
+> mq-deadline sched:	2121K IOPS			1309K
+> 
+> Final ***:
+> none sched:		2132K IOPS			1185			
+> mq-deadline sched:	2145K IOPS			2097	
+> 
+> * this is relevant as this is the performance in supporting but not
+>   enabling the feature
+> ** depth=260 is relevant as some point where we are regularly waiting for
+>    tags to be available. Figures were are a bit unstable here.
+> *** Included "[PATCH V4] scsi: core: only re-run queue in
+>     scsi_end_request() if device queue is busy"
+> 
+> A copy of the patches can be found here:
+> https://github.com/hisilicon/kernel-dev/tree/private-topic-blk-mq-shared-tags-v8
+> 
+> The hpsa patch depends on:
+> https://lore.kernel.org/linux-scsi/20200430131904.5847-1-hare@suse.de/
+> 
+> And the smartpqi patch is not to be accepted.
+> 
+> Comments (and testing) welcome, thanks!
+> 
+> Differences to v7:
+> - Add null_blk and scsi_debug support
+> - Drop debugfs tags patch - it's too difficult to be the same between
+> hostwide and non-hostwide, as discussed:
+> https://lore.kernel.org/linux-scsi/1591810159-240929-1-git-send-email-john.garry@huawei.com/T/#mb3eb462d8be40273718505989abd12f8228c15fd
+> And from commit 6bf0eb550452 ("sbitmap: Consider cleared bits in
+> sbitmap_bitmap_show()"), I guess not many used this anyway...
+> - Add elevator per-hctx request count for optimisation
+> - Break up "blk-mq: rename blk_mq_update_tag_set_depth()" into 2x patches
+> - Pass flags for avoid per-hq queue tags init/free for hostwide tags
+> - Add Don's reviewed-tag and tested-by tags to appropiate patches
+> 	- (@Don, please let me know if issue with how I did this)
+> - Add "scsi: core: Show nr_hw_queues in sysfs"
+> - Rework megaraid SAS patch to have module param (Kashyap)
+> - rebase
+> 
+> V7 is here for more info:
+> https://lore.kernel.org/linux-scsi/1591810159-240929-1-git-send-email-john.garry@huawei.com/T/#t
+> 
+> Hannes Reinecke (5):
+>   blk-mq: Rename blk_mq_update_tag_set_depth()
+>   blk-mq: Free tags in blk_mq_init_tags() upon error
+>   scsi: Add host and host template flag 'host_tagset'
+>   hpsa: enable host_tagset and switch to MQ
+>   smartpqi: enable host tagset
+> 
+> John Garry (10):
+>   blk-mq: Pass flags for tag init/free
+>   blk-mq: Use pointers for blk_mq_tags bitmap tags
+>   blk-mq: Facilitate a shared sbitmap per tagset
+>   blk-mq: Relocate hctx_may_queue()
+>   blk-mq: Record nr_active_requests per queue for when using shared
+>     sbitmap
+>   blk-mq: Record active_queues_shared_sbitmap per tag_set for when using
+>     shared sbitmap
+>   null_blk: Support shared tag bitmap
+>   scsi: core: Show nr_hw_queues in sysfs
+>   scsi: hisi_sas: Switch v3 hw to MQ
+>   scsi: scsi_debug: Support host tagset
+> 
+> Kashyap Desai (2):
+>   blk-mq, elevator: Count requests per hctx to improve performance
+>   scsi: megaraid_sas: Added support for shared host tagset for
+>     cpuhotplug
+> 
+> Ming Lei (1):
+>   blk-mq: Rename BLK_MQ_F_TAG_SHARED as BLK_MQ_F_TAG_QUEUE_SHARED
+> 
+Now that Jens merged the block bits in his tree, wouldn't it be better
+to re-send the SCSI bits only, thereby avoiding a potential merge error
+later on?
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
