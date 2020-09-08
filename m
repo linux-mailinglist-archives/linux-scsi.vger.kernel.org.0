@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF82260B2D
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 08:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4796F260B23
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 08:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729047AbgIHGpn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 02:45:43 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:2238 "EHLO
+        id S1728481AbgIHGpS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 02:45:18 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59518 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728163AbgIHGpR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 02:45:17 -0400
-X-UUID: 1a02e19484c34048bb7d3441f45121d7-20200908
+        with ESMTP id S1726974AbgIHGpQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 02:45:16 -0400
+X-UUID: a610677484264359bbbd4fb373067e5d-20200908
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=gpE1ctEiw5a0F49dlYTrRDICddTGz2kby8/WkqyE3fU=;
-        b=IVsOyrvR1xoP9HQU2vpQd0/hs1fQmA+JYN94Ekmwakrvat1li8+OfIBmghT466vCjLy/Gxr6ycrg0gKa1bQO2443/gdjrCOzXVZ1NCbuhwBaxtugrRhboTc71njJlVkttkCX59Hf4dqCbEwUoSnlDRM9Mpc/mETKi0JqXmnlBYs=;
-X-UUID: 1a02e19484c34048bb7d3441f45121d7-20200908
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=2vPo2/6SWh33ktkAO3akjLdPD6CXJMF1HZ7GeTdKNVI=;
+        b=BHDKsJwhismPLDdjnUL0WUichZGiN5ewYYgBkqHkaOH5U8S59oT75CPqUqloPqE/YQJrzb2AqK9WOLnlZBYVKR/1U/KuKImepV5vKzz6IapAs/e/sveFRjchGhyja6VgN3HcMseeiYPk/dfLp3LOzzvm934VKZcPvBnJU1Iiv0E=;
+X-UUID: a610677484264359bbbd4fb373067e5d-20200908
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 79854291; Tue, 08 Sep 2020 14:45:11 +0800
+        with ESMTP id 961924112; Tue, 08 Sep 2020 14:45:13 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Tue, 8 Sep 2020 14:45:09 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Sep 2020 14:45:09 +0800
+ Transport; Tue, 8 Sep 2020 14:45:10 +0800
 From:   Stanley Chu <stanley.chu@mediatek.com>
 To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
         <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
@@ -37,12 +37,15 @@ CC:     <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
         <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH 0/4] scsi: ufs-mediatek: Fixes for kernel v5.10
-Date:   Tue, 8 Sep 2020 14:45:03 +0800
-Message-ID: <20200908064507.30774-1-stanley.chu@mediatek.com>
+Subject: [PATCH 1/4] scsi: ufs-mediatek: Eliminate error message for unbound mphy
+Date:   Tue, 8 Sep 2020 14:45:04 +0800
+Message-ID: <20200908064507.30774-2-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200908064507.30774-1-stanley.chu@mediatek.com>
+References: <20200908064507.30774-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-SNTS-SMTP: 09CF89399DBA7DE7D6B84CA40E7393B33CDCBF42D6BC4B72E193E381E4D0D5B42000:8
 X-MTK:  N
 Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
@@ -50,15 +53,20 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgTWFydGluLCBBdnJpLA0KDQpUaGlzIHNlcmllcyBmaXggc29tZSBkZWZlY3RzIGFuZCBpbnRy
-b2R1Y2UgaG9zdCByZXNldCBtZWNoYW5pc20gaW4gTWVkaWFUZWsgVUZTIHBsYXRmb3Jtcy4NClBs
-ZWFzZSBjb25zaWRlciB0aGlzIHBhdGNoIHNlcmllcyBmb3Iga2VybmVsIHY1LjEwLg0KDQpUaGFu
-a3MsDQoNClN0YW5sZXkgQ2h1DQoNClN0YW5sZXkgQ2h1ICg0KToNCiAgc2NzaTogdWZzLW1lZGlh
-dGVrOiBFbGltaW5hdGUgZXJyb3IgbWVzc2FnZSBmb3IgdW5ib3VuZCBtcGh5DQogIHNjc2k6IHVm
-cy1tZWRpYXRlazogRml4IEhPU1RfUEFfVEFDVElWQVRFIHF1aXJrDQogIHNjc2k6IHVmcy1tZWRp
-YXRlazogRml4IGZsYWcgb2YgdW5pcHJvIGxvdy1wb3dlciBtb2RlDQogIHNjc2k6IHVmcy1tZWRp
-YXRlazogQWRkIGhvc3QgcmVzZXQgbWVjaGFuaXNtDQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1t
-ZWRpYXRlay5jIHwgNzkgKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tDQogZHJpdmVy
-cy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuaCB8ICAzICsrDQogMiBmaWxlcyBjaGFuZ2VkLCA2NyBp
-bnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkNCg0KLS0gDQoyLjE4LjANCg==
+U29tZSBNZWRpYVRlayBwbGF0Zm9ybXMgZG9lcyBub3QgaGF2ZSB0byBiaW5kIE1QSFkgc28gdXNl
+cnMNCnNoYWxsIG5vdCBzZWUgYW55IHVubmVjZXNzYXJ5IGxvZ3MuIFNpbXBseSByZW1vdmUgbG9n
+cyBmb3IgdGhpcw0KY2FzZS4NCg0KRml4ZXM6IGZjNDk4MzAxOGZlYSAoInNjc2k6IHVmcy1tZWRp
+YXRlazogQWxsb3cgdW5ib3VuZCBtcGh5IikNClNpZ25lZC1vZmYtYnk6IFN0YW5sZXkgQ2h1IDxz
+dGFubGV5LmNodUBtZWRpYXRlay5jb20+DQotLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRp
+YXRlay5jIHwgNSArKysrLQ0KIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDEgZGVs
+ZXRpb24oLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMg
+Yi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQppbmRleCAyOWNkMDE3YzFhYTAuLjc0
+ODdiMjVmYTY1MSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMN
+CisrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCkBAIC0xMjksNyArMTI5LDEw
+IEBAIHN0YXRpYyBpbnQgdWZzX210a19iaW5kX21waHkoc3RydWN0IHVmc19oYmEgKmhiYSkNCiAJ
+CQlfX2Z1bmNfXywgZXJyKTsNCiAJfSBlbHNlIGlmIChJU19FUlIoaG9zdC0+bXBoeSkpIHsNCiAJ
+CWVyciA9IFBUUl9FUlIoaG9zdC0+bXBoeSk7DQotCQlkZXZfaW5mbyhkZXYsICIlczogUEhZIGdl
+dCBmYWlsZWQgJWRcbiIsIF9fZnVuY19fLCBlcnIpOw0KKwkJaWYgKGVyciAhPSAtRU5PREVWKSB7
+DQorCQkJZGV2X2luZm8oZGV2LCAiJXM6IFBIWSBnZXQgZmFpbGVkICVkXG4iLCBfX2Z1bmNfXywN
+CisJCQkJIGVycik7DQorCQl9DQogCX0NCiANCiAJaWYgKGVycikNCi0tIA0KMi4xOC4wDQo=
 
