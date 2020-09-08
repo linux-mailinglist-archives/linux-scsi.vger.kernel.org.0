@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BADD9262018
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 22:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF14261FFD
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 22:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731072AbgIHUJY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 16:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S1730317AbgIHUIj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 16:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730225AbgIHPSl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 11:18:41 -0400
+        with ESMTP id S1730275AbgIHPTQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 11:19:16 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88250C0A3BE4;
-        Tue,  8 Sep 2020 07:54:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B6C0A3BEA;
+        Tue,  8 Sep 2020 07:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=r+1XrJtfpZtchsPxllDIrQwea0QdW0twLhMRVg4bhr8=; b=TT1nBZNCsWHZwn8UVBX7BK04cl
-        V40yiVsMvETvsDAW5Wv9FQEx+6Zx3521Msa0ODGqX7JbyDbDwi7zup7RnusXJ3FizgOGll1ZitZbv
-        9FGQsobPamD8oInPwE68PLMVwDRZyGaf+z5cEbBFv6xTgtn1S7qa8OXvWSHKlwDVPBVp9xaNKqDgj
-        buRSn6aV1BPk5x71DUtH2D8JjWabTkIrbg4T77sAAwKPj4NmijWG2FfgHeBdH03ndnmQPwgRo0CSP
-        MgVlsN7xnx586Nk6lX1sNpc4JawJPCNroTbCJTWL5kYAs2WXGcyBNvl+eXuP/ULNu9P/9zH/JmDCK
-        D5T5USFQ==;
+        bh=AIbdaWqDOZXyI97EfNIUO6cOxzS/iRi/fiJ/sz/ZAL8=; b=GIpniUBInLXgvz98qrm3XEFBUU
+        jI7kZn/WrtbX4474Skgn5Iwip5HLeqPsKx5DEn4psj2SQF9WbRQFr6hKKl3VF9Ii5a+mcgkre1Sza
+        LvVllN82PZVtFinvq56fIrZ+RrfX3jfJo2TnUV32FrYcLzR4jFJCrT6NEMboJtHMh3kzEw0gcMwMo
+        kjJpuGwfTeKms3eK/8v1oiodNb55XfT3nmCYDptXrSPYQqqabbpKVI0KcHMhN7OEQmG5UydppiZWH
+        7B0QIIZZTgk9Gy3y1V11t3QVuwPYZecByMco+KFniEh8KoEeAjHYCnn8GTwF55IekYLSdRaFbpzFI
+        XKaiiNDg==;
 Received: from [2001:4bb8:184:af1:3dc3:9c83:fc6c:e0f] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kFf0q-0002xX-5v; Tue, 08 Sep 2020 14:54:27 +0000
+        id 1kFf0u-0002xt-QY; Tue, 08 Sep 2020 14:54:30 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
@@ -42,9 +42,9 @@ Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
         linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH 07/19] swim3: use bdev_check_media_changed
-Date:   Tue,  8 Sep 2020 16:53:35 +0200
-Message-Id: <20200908145347.2992670-8-hch@lst.de>
+Subject: [PATCH 08/19] xsysace: use bdev_check_media_change
+Date:   Tue,  8 Sep 2020 16:53:36 +0200
+Message-Id: <20200908145347.2992670-9-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200908145347.2992670-1-hch@lst.de>
 References: <20200908145347.2992670-1-hch@lst.de>
@@ -56,8 +56,8 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Switch to use bdev_check_media_changed instead of check_disk_change and
-call floppy_revalidate manually.  Given that floppy_revalidate only
+Switch to use bdev_check_media_change instead of check_disk_change and
+call ace_revalidate_disk manually.  Given that ace_revalidate_disk only
 deals with media change events, the extra call into ->revalidate_disk
 from bdev_disk_changed is not required either, so stop wiring up the
 method.
@@ -65,31 +65,31 @@ method.
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 ---
- drivers/block/swim3.c | 4 ++--
+ drivers/block/xsysace.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/swim3.c b/drivers/block/swim3.c
-index aa77eb5fb7de88..c2d922d125e281 100644
---- a/drivers/block/swim3.c
-+++ b/drivers/block/swim3.c
-@@ -945,7 +945,8 @@ static int floppy_open(struct block_device *bdev, fmode_t mode)
+diff --git a/drivers/block/xsysace.c b/drivers/block/xsysace.c
+index 5d8e0ab3f054f5..eefe542f2d9fff 100644
+--- a/drivers/block/xsysace.c
++++ b/drivers/block/xsysace.c
+@@ -922,7 +922,8 @@ static int ace_open(struct block_device *bdev, fmode_t mode)
+ 	ace->users++;
+ 	spin_unlock_irqrestore(&ace->lock, flags);
  
- 	if (err == 0 && (mode & FMODE_NDELAY) == 0
- 	    && (mode & (FMODE_READ|FMODE_WRITE))) {
--		check_disk_change(bdev);
-+		if (bdev_check_media_change(bdev))
-+			floppy_revalidate(bdev->bd_disk);
- 		if (fs->ejected)
- 			err = -ENXIO;
- 	}
-@@ -1055,7 +1056,6 @@ static const struct block_device_operations floppy_fops = {
- 	.release	= floppy_release,
- 	.ioctl		= floppy_ioctl,
- 	.check_events	= floppy_check_events,
--	.revalidate_disk= floppy_revalidate,
+-	check_disk_change(bdev);
++	if (bdev_check_media_change(bdev))
++		ace_revalidate_disk(bdev->bd_disk);
+ 	mutex_unlock(&xsysace_mutex);
+ 
+ 	return 0;
+@@ -966,7 +967,6 @@ static const struct block_device_operations ace_fops = {
+ 	.open = ace_open,
+ 	.release = ace_release,
+ 	.check_events = ace_check_events,
+-	.revalidate_disk = ace_revalidate_disk,
+ 	.getgeo = ace_getgeo,
  };
  
- static const struct blk_mq_ops swim3_mq_ops = {
 -- 
 2.28.0
 
