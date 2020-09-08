@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B684261FAE
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 22:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABF0262013
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 22:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732506AbgIHUFq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 16:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S1730971AbgIHUIt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 16:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729670AbgIHPV5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 11:21:57 -0400
+        with ESMTP id S1730257AbgIHPTN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 11:19:13 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17286C0A3BF6;
-        Tue,  8 Sep 2020 07:55:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB37C0A3BF7;
+        Tue,  8 Sep 2020 07:55:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=ijISDI3+FEAsJRrVv6gnkByyFtP6B2mrzNMrQzqv2GQ=; b=J+m1dnyxZ/PYz+dryLUb8kif20
-        f3x71W6Ej8XzEJbIhNcB1LU+pAraLcrDpiJOM3NnpmYpYXwpbb4jZrKnjGUqtCDjw0l/Gckp5OpHr
-        Uk5Rp2b6SktC1LZfPQicf8DGNlPllrYbKDLXTyGrG29Q2mDpWHLSd3omK0MmWaZR+lBsOaWw+0SVz
-        NPcujQr7rhEe+AaInu3x3iq2l3FxacJkiRd7o0r79Fqsdj4RnuRMukoTInM8ugORJ6teWIt+mwTXr
-        4xwoLOR3XK5qR6atnqMJJlNmizV9bCrJJSgSjhYsxYWzQLDBwuijgB1bNklCB3ytmV7LkYy0UbDNh
-        BTy8u2Rg==;
+        bh=fs8KDvUlBtih+JNIUNQobEQslvMWHTx5fiB3hsIGlEU=; b=fToRuRTLBzkwhKm/TBMIAObCfx
+        47SjRyodcVFkso9Pdp1Z4yO8OZ3afLCOAU2HivmVTsp3tP1Bs88OMnOZB7haSutu6gHet6t4VM3wp
+        yw1Wa+3VlMgjCzG1XqrEZAep3+D15GDpvLTW/mHCdv6Urlj/XZbc1Mi4vvIbLWP2FZPmjUyJsZ1Vv
+        yi0qc4NmeefS23wziWDUVQUXwMIwfzTbyLWpaBN3N8hJtzG+iTWHHG4AwwJjrYLudG25EJeXDoso9
+        RVK0YroYrfuP2PbYDLdLaevlsiDgFf5Jm5RM70YkGXbQXegJusJEa/ZMQ6NYGQUa1p9Yi1HBUDqt/
+        tlSbZePw==;
 Received: from [2001:4bb8:184:af1:3dc3:9c83:fc6c:e0f] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kFf1E-0002zv-1m; Tue, 08 Sep 2020 14:54:50 +0000
+        id 1kFf1I-00030J-0O; Tue, 08 Sep 2020 14:54:58 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
@@ -42,9 +42,9 @@ Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
         linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH 17/19] sr: use bdev_check_media_change
-Date:   Tue,  8 Sep 2020 16:53:45 +0200
-Message-Id: <20200908145347.2992670-18-hch@lst.de>
+Subject: [PATCH 18/19] sr: simplify sr_block_revalidate_disk
+Date:   Tue,  8 Sep 2020 16:53:46 +0200
+Message-Id: <20200908145347.2992670-19-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200908145347.2992670-1-hch@lst.de>
 References: <20200908145347.2992670-1-hch@lst.de>
@@ -56,53 +56,88 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Switch to use bdev_check_media_change instead of check_disk_change and
-call sr_block_revalidate_disk manually.  Also add an explicit call to
-sr_block_revalidate_disk just before disk_add() to ensure we always
-read check for a ready unit and read the TOC and then stop wiring up
-->revalidate_disk.
+Both callers have a valid CD struture available, so rely on that instead
+of getting another reference.  Also move the function to avoid a forward
+declaration.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 ---
- drivers/scsi/sr.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/scsi/sr.c | 36 +++++++++++++-----------------------
+ 1 file changed, 13 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 3b3a53c6a0de53..34be94b62523fa 100644
+index 34be94b62523fa..2b43c0f97442d4 100644
 --- a/drivers/scsi/sr.c
 +++ b/drivers/scsi/sr.c
-@@ -86,6 +86,7 @@ static int sr_remove(struct device *);
+@@ -86,7 +86,6 @@ static int sr_remove(struct device *);
  static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt);
  static int sr_done(struct scsi_cmnd *);
  static int sr_runtime_suspend(struct device *dev);
-+static int sr_block_revalidate_disk(struct gendisk *disk);
+-static int sr_block_revalidate_disk(struct gendisk *disk);
  
  static const struct dev_pm_ops sr_pm_ops = {
  	.runtime_suspend	= sr_runtime_suspend,
-@@ -529,7 +530,8 @@ static int sr_block_open(struct block_device *bdev, fmode_t mode)
+@@ -518,6 +517,17 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
+ 	return ret;
+ }
  
++static void sr_revalidate_disk(struct scsi_cd *cd)
++{
++	struct scsi_sense_hdr sshdr;
++
++	/* if the unit is not ready, nothing more to do */
++	if (scsi_test_unit_ready(cd->device, SR_TIMEOUT, MAX_RETRIES, &sshdr))
++		return;
++	sr_cd_check(&cd->cdi);
++	get_sectorsize(cd);
++}
++
+ static int sr_block_open(struct block_device *bdev, fmode_t mode)
+ {
+ 	struct scsi_cd *cd;
+@@ -531,7 +541,7 @@ static int sr_block_open(struct block_device *bdev, fmode_t mode)
  	sdev = cd->device;
  	scsi_autopm_get_device(sdev);
--	check_disk_change(bdev);
-+	if (bdev_check_media_change(bdev))
-+		sr_block_revalidate_disk(bdev->bd_disk);
+ 	if (bdev_check_media_change(bdev))
+-		sr_block_revalidate_disk(bdev->bd_disk);
++		sr_revalidate_disk(cd);
  
  	mutex_lock(&cd->lock);
  	ret = cdrom_open(&cd->cdi, bdev, mode);
-@@ -688,7 +690,6 @@ static const struct block_device_operations sr_bdops =
- 	.compat_ioctl	= sr_block_compat_ioctl,
- #endif
- 	.check_events	= sr_block_check_events,
--	.revalidate_disk = sr_block_revalidate_disk,
- };
+@@ -660,26 +670,6 @@ static unsigned int sr_block_check_events(struct gendisk *disk,
+ 	return ret;
+ }
  
- static int sr_open(struct cdrom_device_info *cdi, int purpose)
-@@ -802,6 +803,7 @@ static int sr_probe(struct device *dev)
+-static int sr_block_revalidate_disk(struct gendisk *disk)
+-{
+-	struct scsi_sense_hdr sshdr;
+-	struct scsi_cd *cd;
+-
+-	cd = scsi_cd_get(disk);
+-	if (!cd)
+-		return -ENXIO;
+-
+-	/* if the unit is not ready, nothing more to do */
+-	if (scsi_test_unit_ready(cd->device, SR_TIMEOUT, MAX_RETRIES, &sshdr))
+-		goto out;
+-
+-	sr_cd_check(&cd->cdi);
+-	get_sectorsize(cd);
+-out:
+-	scsi_cd_put(cd);
+-	return 0;
+-}
+-
+ static const struct block_device_operations sr_bdops =
+ {
+ 	.owner		= THIS_MODULE,
+@@ -803,7 +793,7 @@ static int sr_probe(struct device *dev)
  
  	dev_set_drvdata(dev, cd);
  	disk->flags |= GENHD_FL_REMOVABLE;
-+	sr_block_revalidate_disk(disk);
+-	sr_block_revalidate_disk(disk);
++	sr_revalidate_disk(cd);
  	device_add_disk(&sdev->sdev_gendev, disk, NULL);
  
  	sdev_printk(KERN_DEBUG, sdev,
