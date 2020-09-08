@@ -2,121 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDE8260B1F
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 08:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF82260B2D
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Sep 2020 08:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729135AbgIHGnR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 02:43:17 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:11968 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728115AbgIHGnR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 02:43:17 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0886esdQ001979;
-        Mon, 7 Sep 2020 23:43:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=pfpt0220; bh=xs56d2C/NYDIV25+23YdcJiJQUhJ3VMb5DccgFWDyug=;
- b=UzBVkh4tWB2VBqA2ak5HvG82DxSj+1H3hVSDEiFMUZyUfwNYk4VtMgVdfjqUbT6FE3H8
- uFUkzdZl4xOfjwvG+pTVmW11Ksp21gqtyo3nur8P3+0QrpXTwQ61/Z0yi8AtwrWYl1DL
- qAVlXK1BfG9i5J86DHRsVXDxWnd1ryOQfivC0W7os5aYojQzn5RH4u1yl6m7lYuUOM33
- lltRRu3aRPyS7Y8DduPMEXsOa7Q+2x2+EAVVCDkbXPk7Gn4WLa8PTF2j3n2X+xQ78ya7
- sQ9QFf7I4NaPS14osR2nzQrnBQyJrWzpGTZmGc/iEq2H616sOx3i21lBZMSzohXKa0m0 nw== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 33ccvr1980-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 07 Sep 2020 23:43:11 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Sep
- 2020 23:43:10 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Sep
- 2020 23:43:09 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 7 Sep 2020 23:43:09 -0700
-Received: from irv1user01.caveonetworks.com (unknown [10.104.116.179])
-        by maili.marvell.com (Postfix) with ESMTP id D95773F703F;
-        Mon,  7 Sep 2020 23:43:08 -0700 (PDT)
-Received: from localhost (aeasi@localhost)
-        by irv1user01.caveonetworks.com (8.14.4/8.14.4/Submit) with ESMTP id 0886h8Wb020003;
-        Mon, 7 Sep 2020 23:43:08 -0700
-X-Authentication-Warning: irv1user01.caveonetworks.com: aeasi owned process doing -bs
-Date:   Mon, 7 Sep 2020 23:43:08 -0700
-From:   Arun Easi <aeasi@marvell.com>
-X-X-Sender: aeasi@irv1user01.caveonetworks.com
-To:     Daniel Wagner <dwagner@suse.de>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Nilesh Javali" <njavali@marvell.com>,
-        Martin Wilck <mwilck@suse.com>
-Subject: Re: [PATCH v2 2/4] qla2xxx: Simplify return value logic in
- qla2x00_get_sp_from_handle()
-In-Reply-To: <20200831161854.70879-3-dwagner@suse.de>
-Message-ID: <alpine.LRH.2.21.9999.2009072342380.28578@irv1user01.caveonetworks.com>
-References: <20200831161854.70879-1-dwagner@suse.de>
- <20200831161854.70879-3-dwagner@suse.de>
-User-Agent: Alpine 2.21.9999 (LRH 334 2019-03-29)
+        id S1729047AbgIHGpn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 02:45:43 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:2238 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728163AbgIHGpR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 02:45:17 -0400
+X-UUID: 1a02e19484c34048bb7d3441f45121d7-20200908
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=gpE1ctEiw5a0F49dlYTrRDICddTGz2kby8/WkqyE3fU=;
+        b=IVsOyrvR1xoP9HQU2vpQd0/hs1fQmA+JYN94Ekmwakrvat1li8+OfIBmghT466vCjLy/Gxr6ycrg0gKa1bQO2443/gdjrCOzXVZ1NCbuhwBaxtugrRhboTc71njJlVkttkCX59Hf4dqCbEwUoSnlDRM9Mpc/mETKi0JqXmnlBYs=;
+X-UUID: 1a02e19484c34048bb7d3441f45121d7-20200908
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 79854291; Tue, 08 Sep 2020 14:45:11 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 8 Sep 2020 14:45:09 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 8 Sep 2020 14:45:09 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <cc.chou@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH 0/4] scsi: ufs-mediatek: Fixes for kernel v5.10
+Date:   Tue, 8 Sep 2020 14:45:03 +0800
+Message-ID: <20200908064507.30774-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-08_02:2020-09-08,2020-09-08 signatures=0
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 31 Aug 2020, 9:18am, Daniel Wagner wrote:
+SGkgTWFydGluLCBBdnJpLA0KDQpUaGlzIHNlcmllcyBmaXggc29tZSBkZWZlY3RzIGFuZCBpbnRy
+b2R1Y2UgaG9zdCByZXNldCBtZWNoYW5pc20gaW4gTWVkaWFUZWsgVUZTIHBsYXRmb3Jtcy4NClBs
+ZWFzZSBjb25zaWRlciB0aGlzIHBhdGNoIHNlcmllcyBmb3Iga2VybmVsIHY1LjEwLg0KDQpUaGFu
+a3MsDQoNClN0YW5sZXkgQ2h1DQoNClN0YW5sZXkgQ2h1ICg0KToNCiAgc2NzaTogdWZzLW1lZGlh
+dGVrOiBFbGltaW5hdGUgZXJyb3IgbWVzc2FnZSBmb3IgdW5ib3VuZCBtcGh5DQogIHNjc2k6IHVm
+cy1tZWRpYXRlazogRml4IEhPU1RfUEFfVEFDVElWQVRFIHF1aXJrDQogIHNjc2k6IHVmcy1tZWRp
+YXRlazogRml4IGZsYWcgb2YgdW5pcHJvIGxvdy1wb3dlciBtb2RlDQogIHNjc2k6IHVmcy1tZWRp
+YXRlazogQWRkIGhvc3QgcmVzZXQgbWVjaGFuaXNtDQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1t
+ZWRpYXRlay5jIHwgNzkgKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tDQogZHJpdmVy
+cy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuaCB8ICAzICsrDQogMiBmaWxlcyBjaGFuZ2VkLCA2NyBp
+bnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkNCg0KLS0gDQoyLjE4LjANCg==
 
-> 
-> Refactor qla2x00_get_sp_from_handle() to avoid the unecessary
-> goto if early returns are used. With this we can also avoid
-> preinitilzing the sp pointer.
-> 
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
-> ---
->  drivers/scsi/qla2xxx/qla_isr.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-> index 27bcd346af7c..5d278155e4e7 100644
-> --- a/drivers/scsi/qla2xxx/qla_isr.c
-> +++ b/drivers/scsi/qla2xxx/qla_isr.c
-> @@ -1716,7 +1716,7 @@ qla2x00_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
->  {
->  	struct qla_hw_data *ha = vha->hw;
->  	sts_entry_t *pkt = iocb;
-> -	srb_t *sp = NULL;
-> +	srb_t *sp;
->  	uint16_t index;
->  
->  	index = LSW(pkt->handle);
-> @@ -1728,13 +1728,13 @@ qla2x00_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
->  			set_bit(FCOE_CTX_RESET_NEEDED, &vha->dpc_flags);
->  		else
->  			set_bit(ISP_ABORT_NEEDED, &vha->dpc_flags);
-> -		goto done;
-> +		return NULL;
->  	}
->  	sp = req->outstanding_cmds[index];
->  	if (!sp) {
->  		ql_log(ql_log_warn, vha, 0x5032,
->  		    "Invalid completion handle (%x) -- timed-out.\n", index);
-> -		return sp;
-> +		return NULL;
->  	}
->  	if (sp->handle != index) {
->  		ql_log(ql_log_warn, vha, 0x5033,
-> @@ -1743,8 +1743,6 @@ qla2x00_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
->  	}
->  
->  	req->outstanding_cmds[index] = NULL;
-> -
-> -done:
->  	return sp;
->  }
->  
-
-Looks good.
-
-Regards,
--Arun
