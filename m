@@ -2,90 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D1F2624DE
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9D426251D
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729799AbgIICKD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 22:10:03 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:41708 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729691AbgIICJ4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 22:09:56 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08920mvP087228;
-        Wed, 9 Sep 2020 02:09:47 GMT
+        id S1729779AbgIICT5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 22:19:57 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:33718 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729767AbgIICTz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 22:19:55 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0892JFin151344;
+        Wed, 9 Sep 2020 02:19:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=6NgdItGifg263VtiVoj0X7HUu+IzTiOvKxXduWy2avU=;
- b=ZGkZ8nYrv771sNkTZOxvlKfx2jeSAKMAFzjqmMgBwk8yh5+dbO/S3So1AU5QqbI9Kh6c
- o1ekcf2kOYR7nzJjSvq3O+I/ENOKHm8Wv4iQznwvmUw9XGkDF/WhupzThJw+OQ4jXWE5
- fDmM9ar2zfPdTBxUtwFAbaEv1febQSoR2QdWpLO6CLrUyfi4gzTvTeABE+y2G8IaZ3VY
- b4+QGXC++Ho43ZnmBAyREyrJh9PKP5aAmvDjYstYByIEOzmvZlCeUMxVyxegnAgK1QUL
- dNHybtb7JPg+zjyYYHQWmDWQyMh/x3t7/Ep+b73/dqi29OF54Gyiv3SPbkRZjwFryJ/z QQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 33c2mkxvn7-1
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=8z0P0AS/f2LF+BEt4qDLPU1NT1ZkRDsA+a8DIPIst2c=;
+ b=MOb4NoVgOSU+X4ZKh6VxypqNT79ZKf9gOgwD7TuxmrgkslCsnewqucSJiwaTTIanVenl
+ td7wG7okrcJ+6uqcPHPfi+9Be0e2yRkcjqDafip+KK8yOXAM0kXCPIrGBYNe09QH5TT8
+ WVIeaogXcs2Zdla5cfLEPucBQZbbyaHFnBCY87BRhnaUZ6oX/OTHipJyhDS7ZLn/geyG
+ E5HHHCyUeJTKQMWriewcxuXdNih5CSXSQ3qdJMAx4htMjWfkxwpsV2Q8r3B0B9JZTVLL
+ a9QrSY+F+YrFM4mX4uDxs3mRCualRDpnrRJGIS2IBZY5UFa7lRWaUFSciqiJF/UBETz1 BQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 33c23qy121-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Sep 2020 02:09:47 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 089252dV095279;
-        Wed, 9 Sep 2020 02:09:47 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 33cmk53f50-1
+        Wed, 09 Sep 2020 02:19:43 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0892GKC5025846;
+        Wed, 9 Sep 2020 02:17:42 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 33cmkwwtnq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Sep 2020 02:09:47 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08929j1N022869;
-        Wed, 9 Sep 2020 02:09:45 GMT
+        Wed, 09 Sep 2020 02:17:42 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0892HXsL009559;
+        Wed, 9 Sep 2020 02:17:39 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Sep 2020 19:09:45 -0700
+        with ESMTP ; Tue, 08 Sep 2020 19:17:32 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     MPT-FusionLinux.pdl@broadcom.com, sathya.prakash@broadcom.com,
-        sreekanth.reddy@broadcom.com, Jason Yan <yanaijie@huawei.com>,
-        suganath-prabu.subramani@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH] scsi: mptscsih: remove set but not used 'timeleft'
-Date:   Tue,  8 Sep 2020 22:09:23 -0400
-Message-Id: <159961731706.5787.1390939746459393484.b4-ty@oracle.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Neukum <oliver@neukum.org>, dc395x@twibble.org,
+        linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Ali Akcaagac <aliakc@web.de>,
+        Jamie Lenehan <lenehan@twibble.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v1] scsi: dc395x: use %*ph to print small buffer
+Date:   Tue,  8 Sep 2020 22:17:21 -0400
+Message-Id: <159961781205.6233.5848582078618226004.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200827125925.428357-1-yanaijie@huawei.com>
-References: <20200827125925.428357-1-yanaijie@huawei.com>
+In-Reply-To: <20200730153535.39691-1-andriy.shevchenko@linux.intel.com>
+References: <20200730153535.39691-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
- mlxlogscore=980 bulkscore=0 adultscore=0 mlxscore=0 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
+ spamscore=0 mlxlogscore=948 adultscore=0 malwarescore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009090018
+ definitions=main-2009090019
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
- phishscore=0 adultscore=0 bulkscore=0 clxscore=1011 mlxlogscore=987
- malwarescore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ mlxlogscore=981 mlxscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1011
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090017
+ engine=8.12.0-2006250000 definitions=main-2009090020
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 27 Aug 2020 20:59:25 +0800, Jason Yan wrote:
+On Thu, 30 Jul 2020 18:35:35 +0300, Andy Shevchenko wrote:
 
-> This addresses the following gcc warning with "make W=1":
-> 
-> drivers/message/fusion/mptscsih.c: In function ‘mptscsih_IssueTaskMgmt’:
-> drivers/message/fusion/mptscsih.c:1519:17: warning: variable ‘timeleft’
-> set but not used [-Wunused-but-set-variable]
->  1519 |  unsigned long  timeleft;
->       |                 ^~~~~~~~
+> Use %*ph format to print small buffer as hex string.
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: mptscsih: Remove set but not used 'timeleft'
-      https://git.kernel.org/mkp/scsi/c/bef7afbf3bb6
+[1/1] scsi: dc395x: Use %*ph to print small buffer
+      https://git.kernel.org/mkp/scsi/c/ca358af1d1bb
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
