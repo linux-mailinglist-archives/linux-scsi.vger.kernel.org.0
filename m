@@ -2,89 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FAE2624C4
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB88E2624E5
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729457AbgIICF2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 22:05:28 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:53456 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726369AbgIICF1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 22:05:27 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0891xjOr123849;
-        Wed, 9 Sep 2020 02:05:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=tFOAzv9XG0TyeHmRnwIuZNeJgtdSDcUleU6XmnRHAL8=;
- b=zJvD51SpeAni12qAtPF8lK8ydY5jD/T8+3S8AJXZrQQqGySEyMMJc94Jxdkd7VBqe5Gi
- fx5jUjApbeO51G7EvW12FGpcC6hrV5zVPoQF6HEj1xMDc67e8jU8ni02imy2MHE43xwf
- kDDyAD+/V/IF73mA0ayx69zjWjjYk4WuVVRh7uZQ/PVGLE5WS0COn+pqw3hsao1ttqXD
- suGK57s6y8rI9Z5SwytXIhxhk4J4/GXBVQp7lBAp6jR0mIS0oHlv8CwKFhwTqRPUSeW5
- v0ZezsOBztgFCA32isTghzRzRKsjD8NzBiR5p3sjfHd0Nz3jbMwhE7t0ODFV+Hn/DkzT YQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 33c23qxyy5-1
+        id S1728911AbgIICKe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 22:10:34 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:40324 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726489AbgIICKe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 22:10:34 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08929wGo153585;
+        Wed, 9 Sep 2020 02:10:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=RA5KU7hC/4RZDaVvqLweitGeGaEEcpxcs09QIiSSOKw=;
+ b=F99m21MSZRInKB49TaY3cxp1Y/TaHGaKVfrbGNtQ+YsW31l0Q/RWvTH/7lL0HJpu40Yj
+ W3cz2oT+ACPCxuzcLQ1ceculkcyw0ILVaWsvD0l20J/y6nzpQ8OqgMpw0G2PFMiaFosb
+ cWiAVtgmAu64naqtxV2PWtZCV4apOY0ElKGL5nVE0l5f/X21ASHz5MTvf5RUlJw6XCuH
+ qJxKDWL/M22Es+D1CRDy++x0hxO5HQbhtPqXMo7z5XGnIn8PEaQSfoUXRJnA7Iz4KrNZ
+ B/c3tSZjbpX++XmwE2N0G+wNL+vDQYKz7n391nVwJ+M8npn7RYYXCD7lvrVGj8paFWiu /g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 33c3amxttw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Sep 2020 02:05:08 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08920Llu172600;
-        Wed, 9 Sep 2020 02:05:07 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 33cmkwwb5h-1
+        Wed, 09 Sep 2020 02:10:24 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08925Zu3069209;
+        Wed, 9 Sep 2020 02:08:23 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 33dacjq2pf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Sep 2020 02:05:07 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 089254MK006328;
-        Wed, 9 Sep 2020 02:05:04 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        Wed, 09 Sep 2020 02:08:23 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08928LlD022247;
+        Wed, 9 Sep 2020 02:08:21 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Sep 2020 19:05:03 -0700
-To:     "=?utf-8?Q?N=C3=ADcolas?= F. R. A. Prado" <nfraprado@protonmail.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-scsi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        lkcamp@lists.libreplanetbr.org, andrealmeid@collabora.com
-Subject: Re: [PATCH] scsi: docs: Remove obsolete scsi typedef text from
- scsi_mid_low_api
+        with ESMTP ; Tue, 08 Sep 2020 19:08:20 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq14ko766yx.fsf@ca-mkp.ca.oracle.com>
-References: <20200905210211.2286172-1-nfraprado@protonmail.com>
-Date:   Tue, 08 Sep 2020 22:05:01 -0400
-In-Reply-To: <20200905210211.2286172-1-nfraprado@protonmail.com>
- (=?utf-8?Q?=22N=C3=ADcolas?=
-        F. R. A. Prado"'s message of "Sat, 05 Sep 2020 21:03:00 +0000")
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        kernel-janitors@vger.kernel.org, Jason Yan <yanaijie@huawei.com>
+Subject: Re: [PATCH] scsi: libsas: Fix error path in sas_notify_lldd_dev_found()
+Date:   Tue,  8 Sep 2020 22:08:19 -0400
+Message-Id: <159961727333.18958.11850401583995372808.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200905125836.GF183976@mwanda>
+References: <20200905125836.GF183976@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=1
- spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009090017
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=781 malwarescore=0
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090018
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
- mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=1 spamscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1011
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090017
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
+ clxscore=1015 bulkscore=0 malwarescore=0 lowpriorityscore=0
+ mlxlogscore=795 suspectscore=0 adultscore=0 mlxscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090018
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Sat, 5 Sep 2020 15:58:36 +0300, Dan Carpenter wrote:
 
-N=C3=ADcolas,
+> In sas_notify_lldd_dev_found(), if we can't find a device, then it seems
+> like the wrong thing to mark the device as found and to increment the
+> reference count.  None of the callers ever drop the reference in that
+> situation.
 
-> Commit 91ebc1facd77 ("scsi: core: remove Scsi_Cmnd typedef") removed
-> the Scsi_cmnd typedef but it was still mentioned in a paragraph in the
-> "SCSI mid_level - lower_level driver interface" documentation page.
-> Remove this obsolete paragraph.
+Applied to 5.9/scsi-fixes, thanks!
 
-Applied to my 5.10 staging tree. Thanks!
+[1/1] scsi: libsas: Fix error path in sas_notify_lldd_dev_found()
+      https://git.kernel.org/mkp/scsi/c/fdcb7900d9ab
 
---=20
+-- 
 Martin K. Petersen	Oracle Linux Engineering
