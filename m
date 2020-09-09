@@ -2,20 +2,20 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E863926281C
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 09:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6135262884
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 09:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729876AbgIIHLD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 03:11:03 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33654 "EHLO mx2.suse.de"
+        id S1727899AbgIIH0q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 03:26:46 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48182 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729781AbgIIHK5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 9 Sep 2020 03:10:57 -0400
+        id S1726714AbgIIH0k (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 9 Sep 2020 03:26:40 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 903A4B588;
-        Wed,  9 Sep 2020 07:10:55 +0000 (UTC)
-Subject: Re: [PATCH 09/19] xsysace: simplify media change handling
+        by mx2.suse.de (Postfix) with ESMTP id 697F7AD3C;
+        Wed,  9 Sep 2020 07:26:38 +0000 (UTC)
+Subject: Re: [PATCH 10/19] paride/pcd: use bdev_check_media_change
 To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
 Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
         Michal Simek <michal.simek@xilinx.com>,
@@ -28,9 +28,10 @@ Cc:     Denis Efremov <efremov@linux.com>, Tim Waugh <tim@cyberelk.net>,
         linux-m68k@lists.linux-m68k.org, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
         linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
+        linux-fsdevel@vger.kernel.org,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
 References: <20200908145347.2992670-1-hch@lst.de>
- <20200908145347.2992670-10-hch@lst.de>
+ <20200908145347.2992670-11-hch@lst.de>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -76,12 +77,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <6fcc6e53-45e3-30e7-9972-e000d7155c53@suse.de>
-Date:   Wed, 9 Sep 2020 09:10:53 +0200
+Message-ID: <69c82450-93ee-51e5-a724-6b48c1481e7d@suse.de>
+Date:   Wed, 9 Sep 2020 09:26:31 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200908145347.2992670-10-hch@lst.de>
+In-Reply-To: <20200908145347.2992670-11-hch@lst.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -91,14 +92,28 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 9/8/20 4:53 PM, Christoph Hellwig wrote:
-> Pass a struct ace_device to ace_revalidate_disk, move the media changed
-> check into the one caller that needs it, and give the routine a better
-> name.
+> The pcd driver does not have a ->revalidate_disk method, so it can just
+> use bdev_check_media_change without any additional changes.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 > ---
->  drivers/block/xsysace.c | 26 ++++++++++----------------
->  1 file changed, 10 insertions(+), 16 deletions(-)
+>  drivers/block/paride/pcd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/block/paride/pcd.c b/drivers/block/paride/pcd.c
+> index 5124eca90e8337..70da8b86ce587d 100644
+> --- a/drivers/block/paride/pcd.c
+> +++ b/drivers/block/paride/pcd.c
+> @@ -233,7 +233,7 @@ static int pcd_block_open(struct block_device *bdev, fmode_t mode)
+>  	struct pcd_unit *cd = bdev->bd_disk->private_data;
+>  	int ret;
+>  
+> -	check_disk_change(bdev);
+> +	bdev_check_media_change(bdev);
+>  
+>  	mutex_lock(&pcd_mutex);
+>  	ret = cdrom_open(&cd->info, bdev, mode);
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 
