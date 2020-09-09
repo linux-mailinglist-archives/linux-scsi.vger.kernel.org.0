@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D22262518
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B5726251C
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729753AbgIICSR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Sep 2020 22:18:17 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:46602 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726489AbgIICR4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 22:17:56 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0892EU1Z110441;
-        Wed, 9 Sep 2020 02:17:44 GMT
+        id S1729719AbgIICTy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Sep 2020 22:19:54 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:33698 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726708AbgIICTx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 22:19:53 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0892JiYY151430;
+        Wed, 9 Sep 2020 02:19:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=0wD2yesqk5pSiJMtBVOyuvHAfACcnxK34z/yqaY/8MA=;
- b=xqqrHZd8m6Q4f0/q8vtmRS3YbX68+fWK6BQgvypg7pZPqZC3vcPzzktcHccUu1mKn5+B
- 7osoxfslR0Sq0R6Q1xYYWqisamfHc+noUf+/eOrB6FkdRfC2nbjzTA47OAm+vkXMsjh5
- knmGn5mMDJm/LQkLMu9gyeG04CF2rZWeYXuuG1jJX5bc1z3r/tRlYMBXMkaxNCk4wUAo
- Rk0OSe1G/wmi7BLOtF7sI/7cF2qlHhYRCBHH9t2ywN3hH3WnuMl1LI+tdLwHFFURg/cU
- Lq2RBNPINQT198AZevZhQ4M1todKmBhlIW527H4CawvAGMS6x5yiI/NnWDcoP7nwCTRp RQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 33c2mkxw9j-1
+ bh=j7WP0glQ2ZDDUS2obEoWYicFVU5oFZMWQcI0doLFy7o=;
+ b=ZOAvQaMqnVtmIz88QRKcuUwvLK44j4qw9F3wScn2rylASPLYywn3EaY6DqW5Ok57kYPC
+ fDqxs1zh2W2C4ZDv3sW/8N/rmslgsMb4KeNrszwUkWiXtP9WUjz5wiGu3VjVC5n/IGrv
+ Pemt7K+CpWtKam/c9eNctQycNyESyKsHDlGt4qdMrueKLpsIyw/em/IDuI9mtu3ECkAl
+ YgLyoD/R0olZSlvGpvmhRcnDvPFboOdA8P/g9MQItZBm4+4mkSAnZYwX7eJBGN32ivym
+ 1kB65woUHH5BUllY1Y2NkDkCbkFUFnAcGYGejk/xVHV1y2yoyRW9QAgkwSM5MuKEz121 /w== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 33c23qy125-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Sep 2020 02:17:44 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0892FaiB109619;
-        Wed, 9 Sep 2020 02:17:44 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 33dacjqc2m-1
+        Wed, 09 Sep 2020 02:19:44 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0892FRbI026689;
+        Wed, 9 Sep 2020 02:17:43 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 33cmerxmrc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 09 Sep 2020 02:17:43 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0892HfIU025687;
-        Wed, 9 Sep 2020 02:17:41 GMT
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0892Hg9w015285;
+        Wed, 9 Sep 2020 02:17:42 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Sep 2020 19:17:40 -0700
+        with ESMTP ; Tue, 08 Sep 2020 19:17:42 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     alim.akhtar@samsung.com, asutoshd@codeaurora.org,
         jejb@linux.ibm.com, cang@codeaurora.org, hy50.seo@samsung.com,
@@ -48,52 +48,46 @@ To:     alim.akhtar@samsung.com, asutoshd@codeaurora.org,
         Kiwoong Kim <kwmad.kim@samsung.com>, sc.suh@samsung.com,
         avri.altman@wdc.com, beanhuo@micron.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v3 0/2] ufs: introduce skipping manual flush for wb
-Date:   Tue,  8 Sep 2020 22:17:26 -0400
-Message-Id: <159961781205.6233.10247748545654822084.b4-ty@oracle.com>
+Subject: Re: [PATCH v3] ufs: change the way to complete fDeviceInit
+Date:   Tue,  8 Sep 2020 22:17:27 -0400
+Message-Id: <159961781204.6233.7354150485011455115.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <cover.1598319701.git.kwmad.kim@samsung.com>
-References: <CGME20200825015200epcas2p2aef1427e960c86e7da08dc4608f20e26@epcas2p2.samsung.com> <cover.1598319701.git.kwmad.kim@samsung.com>
+In-Reply-To: <1597053747-75171-1-git-send-email-kwmad.kim@samsung.com>
+References: <CGME20200810101054epcas2p2e1a4a550e7f4732e2ad1ee127317b0d2@epcas2p2.samsung.com> <1597053747-75171-1-git-send-email-kwmad.kim@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=838 malwarescore=0
- bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090019
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 adultscore=0
+ bulkscore=0 phishscore=0 malwarescore=0 mlxlogscore=758 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009090019
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
- phishscore=0 adultscore=0 bulkscore=0 clxscore=1011 mlxlogscore=853
- malwarescore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ mlxlogscore=764 mlxscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090019
+ engine=8.12.0-2006250000 definitions=main-2009090020
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 25 Aug 2020 10:43:14 +0900, Kiwoong Kim wrote:
+On Mon, 10 Aug 2020 19:02:27 +0900, Kiwoong Kim wrote:
 
-> v1 -> v2: enable the quirk in exynos
-> v2 -> v3: modify some commit messages
-> 
-> We have two knobs to flush for write booster, i.e.
-> fWriteBoosterBufferFlushDuringHibernate and fWriteBoosterBufferFlushEn.
-> However, many product makers uses only fWriteBoosterBufferFlushDuringHibernate,
-> because this can reportedly cover most scenarios and
-> there have been some reports that flush by fWriteBoosterBufferFlushEn
-> could lead to raise power consumption thanks to unexpected internal
-> operations. So we need a way to enable or disable fWriteBoosterEn
-> operations. For those case, this quirk will allow to avoid manual flush
+> Currently, UFS driver checks if fDeviceInit
+> is cleared at several times, not period. This patch
+> is to wait its completion with the period, not retrying.
+> Many device vendors usually provides the specification on
+> it with just period, not a combination of a number of retrying
+> and period. So it could be proper to regard to the information
+> coming from device vendors.
 > 
 > [...]
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/2] scsi: ufs: Introduce skipping manual flush for Write Booster
-      https://git.kernel.org/mkp/scsi/c/5df6f2def50c
-[2/2] scsi: ufs: exynos: Enable UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
-      https://git.kernel.org/mkp/scsi/c/7973b8ac669e
+[1/1] scsi: ufs: Change fDeviceInit busy wait
+      https://git.kernel.org/mkp/scsi/c/29707fab5845
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
