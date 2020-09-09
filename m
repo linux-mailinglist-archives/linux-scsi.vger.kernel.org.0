@@ -2,83 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEDB2624D8
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DEE2624E1
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 04:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728663AbgIICJz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1729670AbgIICJz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Tue, 8 Sep 2020 22:09:55 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:39760 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726726AbgIICJu (ORCPT
+Received: from userp2130.oracle.com ([156.151.31.86]:55976 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728297AbgIICJu (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Sep 2020 22:09:50 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0891xvxN146266;
-        Wed, 9 Sep 2020 02:09:40 GMT
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08929fU2130925;
+        Wed, 9 Sep 2020 02:09:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=Q3m3hmUdOc7UomT+KaQBpx8Q7cCwiuGT6mKRFYzMJic=;
- b=tE/rZXRZAJ9o2s9wyd1E+vbvyFTodV+5BvyRoWOXdEoPsyq+TPHBZ/KZkKL8CjPmhOyp
- kfLC+axMpDACSmofXh8ry0ivwHECH4fdIb6Epp0j5UgF+p8X8NotgrSF6V14kMFLzne8
- 0YxsUhAEtJeFMsUjAzXfCyVIrTgvxFZ1gXZ76KzviaQF+RMTnfKXVYbACV+6zldGPopk
- 4QCv6pwmCcNOjNQihTzVYssYqwgyTb0d9t2MHj84AC7EubXw6gWzj5rB5tf0dLFWUcUt
- y8tgBUlfSfLCatlHd3bnC3htyGDFURTmW+RggXeep35MqYPW98Oe7B82ymnV2gBrBzHO XQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33c3amxtrp-1
+ bh=N2X2IQDgc7o4BIYt/VZH27qWFcrc+h6onPu0wFTYFG4=;
+ b=oJyBWUryIkWdN8KyRtnSBuH7KcP8+3zgF7sASa5tAhZ2Z2n2pF5xaFVxSnHixfbcmO5W
+ 1uouL5pkwNinYKfqG2ZlU3PQNNKrU20e0KqOgwj4c/pKfi43O48Pj6p+PAS+OlfEWKIh
+ 0jRwCyrH4tBXXPj0EaNPv3mcXWbNlXdIsCrrM8h5cH+615Xp7CUoFGG8a4X9GlRvgiHK
+ 2dLnoB9p0zOspnOaMaHJMEMFkJsKbKOOzwKZ65GHJv0PR5gxZdcaphWU+Z6UClyjiTk6
+ hJiJk1H1K3Yi9qTg5/07rx9/HnOc82FypUHE49NVfJoXCKu/Buo/FFNXPIVWH0yUMHmH 4g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 33c23qy0a9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Sep 2020 02:09:40 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08925SIQ184096;
-        Wed, 9 Sep 2020 02:09:40 GMT
+        Wed, 09 Sep 2020 02:09:41 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08925Zou069229;
+        Wed, 9 Sep 2020 02:09:41 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 33cmerx7y7-1
+        by aserp3030.oracle.com with ESMTP id 33dacjq4km-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 09 Sep 2020 02:09:40 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08929c6V008051;
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08929dEO008056;
         Wed, 9 Sep 2020 02:09:39 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Sep 2020 19:09:38 -0700
+        with ESMTP ; Tue, 08 Sep 2020 19:09:39 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sergey Shtylyov <s.shtylyov@omprussia.ru>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: fdomain_isa: merge branches in fdomain_isa_match()
-Date:   Tue,  8 Sep 2020 22:09:17 -0400
-Message-Id: <159961731708.5787.1524744143353594403.b4-ty@oracle.com>
+To:     GR-QLogic-Storage-Upstream@marvell.com, njavali@marvell.com,
+        jejb@linux.ibm.com, Xianting Tian <tian.xianting@h3c.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: qla2xxx: Fix the return value
+Date:   Tue,  8 Sep 2020 22:09:18 -0400
+Message-Id: <159961731708.5787.17660244279632783700.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <df68e341-5113-4cf2-b64c-dc1ad0b686ac@omprussia.ru>
-References: <df68e341-5113-4cf2-b64c-dc1ad0b686ac@omprussia.ru>
+In-Reply-To: <20200829075746.19166-1-tian.xianting@h3c.com>
+References: <20200829075746.19166-1-tian.xianting@h3c.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=1 adultscore=0
- bulkscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009090018
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=883 malwarescore=0
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090018
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9738 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
- clxscore=1011 bulkscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=999 suspectscore=1 adultscore=0 mlxscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090017
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ mlxlogscore=915 mlxscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090018
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 29 Aug 2020 23:19:42 +0300, Sergey Shtylyov wrote:
+On Sat, 29 Aug 2020 15:57:46 +0800, Xianting Tian wrote:
 
-> The *else* branch of the *if* (base) statement in fdomain_isa_match() is
-> immediately followed by the *if* (!base) statement. Simplify the code by
-> removing the unneeded *if*...
+> A negative error code should be returned.
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: fdomain_isa: Merge branches in fdomain_isa_match()
-      https://git.kernel.org/mkp/scsi/c/255937d77390
+[1/1] scsi: qla2xxx: Fix the return value
+      https://git.kernel.org/mkp/scsi/c/e5f48ac42cc9
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
