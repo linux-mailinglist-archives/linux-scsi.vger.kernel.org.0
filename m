@@ -2,113 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 770272633B6
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 19:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD16C263658
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Sep 2020 20:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730893AbgIIRJF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 13:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S1726976AbgIIS7K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 14:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730572AbgIIRJA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 13:09:00 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63306C061755
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Sep 2020 10:09:00 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id x123so2713341pfc.7
-        for <linux-scsi@vger.kernel.org>; Wed, 09 Sep 2020 10:09:00 -0700 (PDT)
+        with ESMTP id S1726738AbgIIS7F (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 14:59:05 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8601C061573;
+        Wed,  9 Sep 2020 11:59:04 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id s13so3321959wmh.4;
+        Wed, 09 Sep 2020 11:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=from:content-transfer-encoding:mime-version:subject:message-id:date
-         :to;
-        bh=9VybDLOR5JDoDcYcg+nUMm+MiFVaKetYFnrN0jpQFMg=;
-        b=hYSSqw3Fi+VTsFETVEKe5DNYTZwrfWwK3SaAxRXKFYY1KEEVGgcA18ztCaEuUc6sCI
-         5wOXDziF3CDTrK/YaW2YRxEigZ/yJC3enVcE0Dw2ZwSlzwZQdQ98OC6hp9Bueudr/zk9
-         zMsliwsiZALKbdAP0QoqO/JGJFD07D+PwfKbU=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uXnjw/VPfhPNUnKOZ9x/3YdxbiHHO2depn2TRUMyriM=;
+        b=TY6WrvPqQej5Qj53qINdsFDPIya8YtQdBfgYxZLIGMmAZsCV0LErKw8IEvAfAQgL2u
+         XnZWLOfWp/5eXDPebRMSz5JYqi0faEf2xaFq4PxpvpQc4H++KNNRgxVHtF6GvRNEZuYw
+         4c8D4VloFNUyQ/kkeNyiB7NqjkNm2CBY6ZqrtYb1oc/JPL6fObquZ68czZ++pO/vMB8F
+         9A8V76itAmfXV/G5N8ZYIp6jF7/1NK5u1W+DpFCkLI9V9F+ylmA+jij7NyRC9PmrKgDh
+         5pJCDZiIJ4rgth7oakgD/2A3SUoZdbJ7+54mb2+bOOLQ3QRB1ZxuJF5LSyscJ89nRZ+z
+         tVMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:content-transfer-encoding:mime-version
-         :subject:message-id:date:to;
-        bh=9VybDLOR5JDoDcYcg+nUMm+MiFVaKetYFnrN0jpQFMg=;
-        b=uahXV04riUYVwEMhHler0kc+ib0xU9BtlmLOMcMh8IEaCsyzAvx8ygVvSE9oyOPojg
-         NOsWVA3wgByby+OuwbZVnTB+/mvpsXbQh+zVGEx+wamaCwq1txxpsd3ecTkGLvwFqY1I
-         XMpP4CTT0yPoaRSK2lK+B8H0Y2cwDx7p0arnfnOiWkENH96KzE8SVwT/QvqCf546SgW7
-         3SYxL1sTcZRxqN8eY5joRB/NWAYxiGAMfzQOZnnZfFlvRvbHCqYGF6Cr+35wuPf11U4h
-         8LEXrU33Z82bcVS4CjOXJDXyrnNL2wD2/7MNs99ZSpRnzHIlhMzy2TSnnp/YaGjU8a/5
-         BbRQ==
-X-Gm-Message-State: AOAM530TF9Kn6mX+xpGKbG8A6ZbqQwwrTJPfbzNU2sdRNkWzAJ/y2ze5
-        nHa5DvgBhAxj6y+gTTZFeJPk6UJVlYLFGZgaPwtCuFAGjP82xW0FwiQGtTj+KvveGwAfb6Z5yYu
-        sl1etZSizgViqaSWcljQe3OzELzyd3pASTMWjV1HUHmwpumvLMUcdwH/DLFCN3JI/AUnqtYQpLn
-        h1GdU=
-X-Google-Smtp-Source: ABdhPJy9pSADJStUcpB0DRuUkNT+Xkn16Wg6aqC9MdlCiRlfWR5ORIxo8Tq3V8hSz0nymbaewKgljg==
-X-Received: by 2002:aa7:9817:0:b029:13e:d13d:a139 with SMTP id e23-20020aa798170000b029013ed13da139mr1599537pfl.33.1599671337360;
-        Wed, 09 Sep 2020 10:08:57 -0700 (PDT)
-Received: from localhost.localdomain ([192.30.189.3])
-        by smtp.gmail.com with ESMTPSA id u10sm3249818pfn.122.2020.09.09.10.08.56
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Sep 2020 10:08:56 -0700 (PDT)
-From:   Brian Bunker <brian@purestorage.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.0.3.2.26\))
-Subject: fix for kernel BUG at drivers/scsi/device_handler/scsi_dh_alua.c:662!
-Message-Id: <FF501332-F768-46E2-9CB4-CAD103952509@purestorage.com>
-Date:   Wed, 9 Sep 2020 10:08:55 -0700
-To:     linux-scsi@vger.kernel.org
-X-Mailer: Apple Mail (2.3654.0.3.2.26)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uXnjw/VPfhPNUnKOZ9x/3YdxbiHHO2depn2TRUMyriM=;
+        b=jewWnlBQXmG68rAzXDKt4b7V96MSaAf1zjz6G5gymKKUc7uXDjg21jT/CTW5a/aNWs
+         4EA92aHdIpCzAUzHCffqYrS+LN04/v86olmFnUzzUbB/Egg/HjDfw00q3MU8cfelNpLV
+         b/MLygUoqXBBzNaGGueBJHSa0vx8orWbiM2QySO11vz47zEqLBPfQ/vVoYSghu6fu2BR
+         yAQSi70GY/UWCO/J5u2JViNIaOlWOLarvVmgM3Zkp7KulpE/fog6fhPcInFjsNCy+qGg
+         nJwipqPgX4OIxu7NOFz687XdMRfJQbU49YLMtAYU+s2XELsLVGlPNIwfKTNnTf19J2Ea
+         SCgg==
+X-Gm-Message-State: AOAM533Nr2vZV7IGkj8W2gnHAFaMxXUcPdlt40WfOcsLxiKK5wI6tJG4
+        cPGNs5TpRqUX8dbau11gNKs=
+X-Google-Smtp-Source: ABdhPJzpUpzvO3ELbOUmyO9iu8+McZLz9g/0Xcglf5404MzZZKU07CevL6J1ZnBe9J5zNKU0Y1HEZw==
+X-Received: by 2002:a1c:1fcc:: with SMTP id f195mr4663261wmf.127.1599677940990;
+        Wed, 09 Sep 2020 11:59:00 -0700 (PDT)
+Received: from localhost.localdomain (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
+        by smtp.gmail.com with ESMTPSA id j7sm5270080wrs.11.2020.09.09.11.58.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 11:59:00 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+Cc:     Alex Dewar <alex.dewar90@gmail.com>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: aic7xxx: Use kmemdup in two places
+Date:   Wed,  9 Sep 2020 19:58:55 +0100
+Message-Id: <20200909185855.151964-1-alex.dewar90@gmail.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello all,
+kmemdup can be used instead of kmalloc+memcpy. Replace two occurrences
+of this pattern.
 
-It looks like I sent this email to the wrong mailing list according to =
-RedHat so I am sending it here:
+Issue identified with Coccinelle.
 
->=46rom my earlier post:
+Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
+---
+ drivers/scsi/aic7xxx/aic79xx_core.c | 3 +--
+ drivers/scsi/aic7xxx/aic7xxx_core.c | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-https://www.redhat.com/archives/dm-devel/2020-September/msg00083.html
-
-
-Would it be better to move the unsetting the address of sdev to NULL =
-lower? This would protect
-against the crash we see when the alua_rtpg function tries to access the =
-sdev address
-that has been set to NULL in alua_bus_detach by another thread.
-
---- a/linux-5.4.17/drivers/scsi/device_handler/scsi_dh_alua.c	=
-2020-07-29 22:48:30.000000000 -0600
-+++ b/linux-5.4.17/drivers/scsi/device_handler/scsi_dh_alua.c	=
-2020-09-07 13:38:23.771575702 -0600
-@@ -1146,15 +1146,15 @@
-=20
- 	spin_lock(&h->pg_lock);
- 	pg =3D rcu_dereference_protected(h->pg, =
-lockdep_is_held(&h->pg_lock));
--	rcu_assign_pointer(h->pg, NULL);
--	h->sdev =3D NULL;
--	spin_unlock(&h->pg_lock);
- 	if (pg) {
- 		spin_lock_irq(&pg->lock);
- 		list_del_rcu(&h->node);
- 		spin_unlock_irq(&pg->lock);
- 		kref_put(&pg->kref, release_port_group);
+diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic79xx_core.c
+index 1c617c0d5899..98b02e7d38bb 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_core.c
++++ b/drivers/scsi/aic7xxx/aic79xx_core.c
+@@ -9402,10 +9402,9 @@ ahd_loadseq(struct ahd_softc *ahd)
+ 	if (cs_count != 0) {
+ 
+ 		cs_count *= sizeof(struct cs);
+-		ahd->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
++		ahd->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
+ 		if (ahd->critical_sections == NULL)
+ 			panic("ahd_loadseq: Could not malloc");
+-		memcpy(ahd->critical_sections, cs_table, cs_count);
  	}
-+	rcu_assign_pointer(h->pg, NULL);
-+	h->sdev =3D NULL;
-+	spin_unlock(&h->pg_lock);
- 	sdev->handler_data =3D NULL;
- 	kfree(h);
- }
-
-Thanks,
-Brian
-
-Brian Bunker
-SW Eng
-brian@purestorage.com
-
-
+ 	ahd_outb(ahd, SEQCTL0, PERRORDIS|FAILDIS|FASTMODE);
+ 
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index 2231c4afa531..725bb7f58054 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -6879,10 +6879,9 @@ ahc_loadseq(struct ahc_softc *ahc)
+ 	if (cs_count != 0) {
+ 
+ 		cs_count *= sizeof(struct cs);
+-		ahc->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
++		ahc->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
+ 		if (ahc->critical_sections == NULL)
+ 			panic("ahc_loadseq: Could not malloc");
+-		memcpy(ahc->critical_sections, cs_table, cs_count);
+ 	}
+ 	ahc_outb(ahc, SEQCTL, PERRORDIS|FAILDIS|FASTMODE);
+ 
+-- 
+2.28.0
 
