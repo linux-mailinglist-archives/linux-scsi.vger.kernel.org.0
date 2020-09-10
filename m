@@ -2,68 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C58C263A12
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8762639FA
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730697AbgIJCSE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 22:18:04 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:57100 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730108AbgIJCMo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:12:44 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2ASsc101063;
-        Thu, 10 Sep 2020 02:12:30 GMT
+        id S1730549AbgIJCQS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 22:16:18 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:55382 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730127AbgIJCOC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:14:02 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2AVOR088371;
+        Thu, 10 Sep 2020 02:13:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=xq8O6+Mkgoe5Tzj4VMvD/cUTVj2LNoCaJIQm11Ox3Mo=;
- b=cyVeSnv+W7Pb7yBAVNTmNuHsztNisGUgWm/bSy4TWYjmbz5P7L33JcLUFzPVHBu4ijZT
- Fcdk0sR5HJcw9x7eN77FnF5g5oRJbfwG5nVHxQcucpVkHCnLvDiuE7ba8ZamTXL6y4Tp
- tX2C7Wg1meGGM6Wb1rDeu5GpDm8eU1LHNy4qkWUEUsHglaOtZfFDoLBCnYhwNfZ8oAFT
- 0FqqOpU6CG5MDwvUQRwavvCGr1SyC+QvPV2Gp31asoJEhWaQjeRMhpbMWY4FTyoZ/oTG
- Yee+G90aFAI1Vt96/xVX+zU72Bw4S1s8qgtv4tGqjy5/4SYsWdOLPO54QpZ5m3XDIpOF lw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 33c3an548v-1
+ bh=OwE8Fsot9hBSkJ8LqX9PTvS5nVAXLBz7TvZXx1OQkM0=;
+ b=dThAPYxuJvAy3CgC3rmiOTBInBZMD0ystsujTlrikVvlzMY/fhpwC/q/WuIi4mC3NfCi
+ r5PYnIs+84xnhB6zBEaziRRG8v4AzJrUYUETMwB7T3UdHVEYDA0wACLlXoGThyy2sCE5
+ wozrapq16oXA4rmktNe6uc/AtOJ9W47jZyDLK225swCw6wsoNzALhfZDQ3D4rffu9boz
+ pIXT1NbWgjiJIGajsd1b6DGqQMv+aaJXzwcniR4DiLOBeRHYEbEPpWlyt4cj036yy6Ak
+ 6BaOjO3W+GcNUHW47gRyoSWyS7DKrimbyVc1XmqwMWOHGmW4JEIVobEf+wxjeCuV49vh Pw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33c2mm56pq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 10 Sep 2020 02:12:30 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2Bdd0168544;
-        Thu, 10 Sep 2020 02:12:29 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 33dacmdwtp-1
+        Thu, 10 Sep 2020 02:13:20 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2APXg082567;
+        Thu, 10 Sep 2020 02:13:20 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33cmkyy7yk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Sep 2020 02:12:29 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08A2CRj1030256;
-        Thu, 10 Sep 2020 02:12:28 GMT
+        Thu, 10 Sep 2020 02:13:20 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08A2DHUQ013374;
+        Thu, 10 Sep 2020 02:13:18 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 09 Sep 2020 19:12:27 -0700
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nilesh Javali <njavali@marvell.com>,
-        Martin Wilck <mwilck@suse.com>, Arun Easi <aeasi@marvell.com>
-Subject: Re: [PATCH v3 0/4] qla2xxx: A couple crash fixes
+        with ESMTP ; Wed, 09 Sep 2020 19:13:17 -0700
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <cc.chou@mediatek.com>
+Subject: Re: [PATCH] scsi: ufs-mediatek: Fix build warnings with make W=1
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1lfhi2xdv.fsf@ca-mkp.ca.oracle.com>
-References: <20200908081516.8561-1-dwagner@suse.de>
-Date:   Wed, 09 Sep 2020 22:12:25 -0400
-In-Reply-To: <20200908081516.8561-1-dwagner@suse.de> (Daniel Wagner's message
-        of "Tue, 8 Sep 2020 10:15:12 +0200")
+Message-ID: <yq1ft7q2xch.fsf@ca-mkp.ca.oracle.com>
+References: <20200910013756.11385-1-stanley.chu@mediatek.com>
+Date:   Wed, 09 Sep 2020 22:13:14 -0400
+In-Reply-To: <20200910013756.11385-1-stanley.chu@mediatek.com> (Stanley Chu's
+        message of "Thu, 10 Sep 2020 09:37:56 +0800")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- bulkscore=0 phishscore=0 adultscore=0 suspectscore=1 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009100019
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=1
+ spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009100019
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
- clxscore=1011 bulkscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=999 suspectscore=1 adultscore=0 mlxscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
+ malwarescore=0 suspectscore=1 lowpriorityscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009100018
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -71,17 +77,9 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Daniel,
+Stanley,
 
-> The first crash we observed is due memory corruption in the srb memory
-> pool. Unforuntatly, I couldn't find the source of the problem but the
-> workaround by resetting the cleanup callbacks 'fixes' this problem
-> (patch #1). I think as intermeditate step this should be merged until
-> the real cause can be identified.
->
-> The second crash is due a race condition(?) in the firmware. The sts
-> entries are not updated in time which leads to this crash pattern
-> which several customers have reported:
+> Fix build warnings with make W=1 as below,
 
 Applied to 5.10/scsi-staging. Thanks!
 
