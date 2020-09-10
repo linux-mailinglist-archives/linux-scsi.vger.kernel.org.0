@@ -2,80 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6292B263AD3
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DDF263AF4
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730431AbgIJCqm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 22:46:42 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:48228 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730408AbgIJCqW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:46:22 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2eQDU147813;
-        Thu, 10 Sep 2020 02:46:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type; s=corp-2020-01-29;
- bh=JSbb0b1+sYg2K7gSsSVOpFLen5pl/otZ2V+3AB36FZ8=;
- b=b05AJ5QmA6AAfsAS4JFGRjVNJs+BQcGRRlFds26Q4igp5DElI+p4xKDgA+tcNXx5Gdhw
- SYZXQYm3pTCYtbLFVpHdFBQJyonrWnRpB+1MWgcVIMzmnXxwR5ZmrEmzTrRuzpfZYJ3g
- cGyMU03nM+kO7QZWlVVaIh6KOENW3hs/2r3D65Fq6oYikZF5Jfc4yIajxTtM5Bk6WSzv
- Am6LRMAgDlV16I1MiLTQ3hEU4oIcFK8puatLPNV4b2Yve8XJwkfDHwehwBiWxkOqPIQ6
- +UjIBWetjjfx+N8aQsqkTS3HteYRntY5BykwBoIGmC+JBAqeJL/4OpP2f+/EfjGN/Yuo kA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33c3an56xt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 10 Sep 2020 02:46:14 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2dVRO157422;
-        Thu, 10 Sep 2020 02:44:14 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 33cmeu09sa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Sep 2020 02:44:13 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08A2iCOJ011750;
-        Thu, 10 Sep 2020 02:44:12 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 09 Sep 2020 19:44:12 -0700
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH] scsi: gdth: Remove set but used 'cmd_index'
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1sgbq1hed.fsf@ca-mkp.ca.oracle.com>
-References: <20200909082627.101984-1-yebin10@huawei.com>
-Date:   Wed, 09 Sep 2020 22:44:09 -0400
-In-Reply-To: <20200909082627.101984-1-yebin10@huawei.com> (Ye Bin's message of
-        "Wed, 9 Sep 2020 16:26:26 +0800")
+        id S1729691AbgIJCuI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 22:50:08 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:44830 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730483AbgIJCsR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:48:17 -0400
+X-UUID: 448029e51310475492f2cf0a0116796d-20200910
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=TGqc1+zgYwYtjPwGXOLfmyB55si+JzeFkKZj3cqjM3o=;
+        b=WRgfEzllMtgZPJpNyqVGY44Xle8BOAZIdAgVyxdRr3vsVhd2LN4ln6Wq0gZqGyaGQ3fY5sgKRwYnoonllfA1uJmDT5Or6m5tud5KHgF4UhNU1hVxB2Ck6iBf/cwLkBf0dWXVRWx+6p2+hu+l5gV1NNIhHeRi1Nxyc+bAYZRiOgc=;
+X-UUID: 448029e51310475492f2cf0a0116796d-20200910
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1663720026; Thu, 10 Sep 2020 10:48:08 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 10 Sep 2020 10:48:00 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 10 Sep 2020 10:48:00 +0800
+Message-ID: <1599706080.10649.30.camel@mtkswgap22>
+Subject: Re: [PATCH v2 1/2] scsi: ufs: Abort tasks before clear them from
+ doorbell
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Can Guo <cang@codeaurora.org>, <asutoshd@codeaurora.org>,
+        <nguyenb@codeaurora.org>, <hongwus@codeaurora.org>,
+        <ziqichen@codeaurora.org>, <rnayak@codeaurora.org>,
+        <linux-scsi@vger.kernel.org>, <kernel-team@android.com>,
+        <saravanak@google.com>, <salyzyn@google.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 10 Sep 2020 10:48:00 +0800
+In-Reply-To: <yq14ko62wn5.fsf@ca-mkp.ca.oracle.com>
+References: <1599099873-32579-1-git-send-email-cang@codeaurora.org>
+         <1599099873-32579-2-git-send-email-cang@codeaurora.org>
+         <1599627906.10803.65.camel@linux.ibm.com>
+         <yq14ko62wn5.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=1 adultscore=0
- bulkscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009100024
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
- clxscore=1015 bulkscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=999 suspectscore=1 adultscore=0 mlxscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009100024
+X-TM-SNTS-SMTP: C95A5FF5A81532B7594C3EEBC793AF7F2BFEA205FC1420AA08019861A81DF8022000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+SGkgTWFydGluLCBDYW4sDQoNCk9uIFdlZCwgMjAyMC0wOS0wOSBhdCAyMjozMiAtMDQwMCwgTWFy
+dGluIEsuIFBldGVyc2VuIHdyb3RlOg0KPiBDYW4gYW5kIFN0YW5sZXksDQo+IA0KPiA+IEkgY2Fu
+J3QgcmVjb25jaWxlIHRoaXMgaHVuazoNCj4gDQo+IFBsZWFzZSBwcm92aWRlIGEgcmVzb2x1dGlv
+biBmb3IgdGhlc2UgY29uZmxpY3RpbmcgY29tbWl0cyBpbiBmaXhlcyBhbmQNCj4gcXVldWU6DQo+
+IA0KPiAzMDczNDhmNmFiMTQgc2NzaTogdWZzOiBBYm9ydCB0YXNrcyBiZWZvcmUgY2xlYXJpbmcg
+dGhlbSBmcm9tIGRvb3JiZWxsDQo+IA0KPiBiMTAxNzhlZTdmYTggc2NzaTogdWZzOiBDbGVhbiB1
+cCBjb21wbGV0ZWQgcmVxdWVzdCB3aXRob3V0IGludGVycnVwdA0KPiBub3RpZmljYXRpb24NCj4g
+DQoNCkNhbidzIHBhdGNoIGhhcyBjb25zaWRlcmVkIG15IGZpeCBpbiB0aGUgbmV3IGZsb3cuDQoN
+ClRvIGJlIG1vcmUgY2xlYXIsIGZvciB0aGUgZml4aW5nIGNhc2UgaW4gbXkgcGF0Y2gsDQp1ZnNo
+Y2RfdHJ5X3RvX2Fib3J0X3Rhc2soKSB3aWxsIHJldHVybiAwIChlcnIgPSAwKSBhbmQgZmluYWxs
+eSB0aGUNCnRhcmdldCB0YWcgY2FuIGJlIGNvbXBsZXRlZCBhbmQgY2xlYXJlZCBieSBfX3Vmc2hj
+ZF90cmFuc2Zlcl9yZXFfY29tcGwoKQ0KaW4gQ2FuJ3MgbmV3IGZsb3cuDQoNClRodXMgSSB0aGlu
+ayB0aGUgcmVzb2x1dGlvbiBjYW4ganVzdCB1c2luZyB0aGUgY29kZSBpbiBDYW4ncyBwYXRjaC4N
+Cg0KQ2FuLCBwbGVhc2UgY29ycmVjdCBtZSBpZiBJIHdhcyB3cm9uZy4NCg0KVGhhbmtzLA0KU3Rh
+bmxleSBDaHUNCg0KDQo+IFRoYW5rcyENCj4gDQoNCg==
 
-Ye,
-
-> This addresses the following gcc warning with "make W=1":
-
-Applied your gdth, pmcraid, and lpfc fixes to the 5.10 SCSI staging
-tree. Thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
