@@ -2,130 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C36626393C
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 00:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EEF2639A7
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 03:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgIIWiN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 18:38:13 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:5788 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726489AbgIIWiN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 18:38:13 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089Ma4Se015740;
-        Wed, 9 Sep 2020 15:38:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=pfpt0220; bh=1eUUW+n7bOvSQJZZmGTpVy0aQy1F4c2fV6K5hJB2V3M=;
- b=SwKyhDCGk/iXlPGzj0BzL0Xk3UnaPfnuLY48dRGrOKxZrdclF0WeZLb2fcMlc/9CpccE
- CSH7arYVcbVHJybmuhiiKy7x86sL0lwyFUTht2MzkcOAIZ6StkJ1HsYWMKWuBx8nTkZp
- iOIWAw+dyWd1g1z9nwAGTUVryV5bY4FUdAEUxfYF8EkF3INzDlpQutjuIwA8EIRbyM43
- Aqm9+5kR8+VkYtcR++nzPAgHHTCzrKYo9XUeszb8lBS8/OFAX2oan10ymEYE6aNQ33JS
- FAgMvepXQzbtLmXezWgvV8ZKRabs22NdeJGv1qkCg4cpmSS2Zo4xXaW05rQlMRCROgEV YA== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 33ccvr8ncd-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 15:38:07 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 9 Sep
- 2020 15:38:06 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 9 Sep 2020 15:38:06 -0700
-Received: from irv1user01.caveonetworks.com (unknown [10.104.116.179])
-        by maili.marvell.com (Postfix) with ESMTP id E8A043F703F;
-        Wed,  9 Sep 2020 15:38:05 -0700 (PDT)
-Received: from localhost (aeasi@localhost)
-        by irv1user01.caveonetworks.com (8.14.4/8.14.4/Submit) with ESMTP id 089Mc5u4028222;
-        Wed, 9 Sep 2020 15:38:05 -0700
-X-Authentication-Warning: irv1user01.caveonetworks.com: aeasi owned process doing -bs
-Date:   Wed, 9 Sep 2020 15:38:05 -0700
-From:   Arun Easi <aeasi@marvell.com>
-X-X-Sender: aeasi@irv1user01.caveonetworks.com
-To:     Daniel Wagner <dwagner@suse.de>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Nilesh Javali" <njavali@marvell.com>,
-        Martin Wilck <mwilck@suse.com>
-Subject: Re: [EXT] [PATCH v3 0/4] qla2xxx: A couple crash fixes
-In-Reply-To: <20200908081516.8561-1-dwagner@suse.de>
-Message-ID: <alpine.LRH.2.21.9999.2009091537040.28578@irv1user01.caveonetworks.com>
-References: <20200908081516.8561-1-dwagner@suse.de>
-User-Agent: Alpine 2.21.9999 (LRH 334 2019-03-29)
+        id S1730323AbgIJB7S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 21:59:18 -0400
+Received: from a27-56.smtp-out.us-west-2.amazonses.com ([54.240.27.56]:46986
+        "EHLO a27-56.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730073AbgIJBuM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 21:50:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1599701398;
+        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID;
+        bh=bUHJtAVwy1m2g9Edc5VcIqVaaUJ6RKEBA+YnhRba2CU=;
+        b=C0VTPRon/XEWhUmwS8uG4rEEHnY6KNjExkolfJoHjhXRn53O7oksRp7XdEjOkuyT
+        zdPQMsDkmvnbDCwVlmIxmq7dvoJr7APXmmBzEn+FkAxZU/mAlSfi4+7fJ9/CZxaa+jY
+        PC9sjp/vrsamk0EsL7qz/eTOb6ARJ0JvbPzR9uVI=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1599701398;
+        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Feedback-ID;
+        bh=bUHJtAVwy1m2g9Edc5VcIqVaaUJ6RKEBA+YnhRba2CU=;
+        b=h8ya8Gox3JnCq2DUQlaMHq9XYhxIr7znRyLVEs5mUK4PHZPTklyVIQljSpeLrJUI
+        lqr8F+MT6rZ+mTW9akmr+QoRZuaaAXr53cQUEgQfyDWjVtGDCLAB5t/b6aHBZzLHrVs
+        2nbzhQ+NVwhT2fYuNfkF5E49JWJhVcWUxl2KSot8=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-09_17:2020-09-09,2020-09-09 signatures=0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 10 Sep 2020 01:29:58 +0000
+From:   nguyenb@codeaurora.org
+To:     cang@codeaurora.org, asutoshd@codeaurora.org,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] Supports Reading UFS's Vcc Voltage Levels from DT
+In-Reply-To: <cover.1598939393.git.nguyenb@codeaurora.org>
+References: <cover.1598939393.git.nguyenb@codeaurora.org>
+Message-ID: <0101017475a232b3-44f95537-e287-4e5c-b956-c0f8c56c1a3c-000000@us-west-2.amazonses.com>
+X-Sender: nguyenb@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
+X-SES-Outgoing: 2020.09.10-54.240.27.56
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Looks good. Thanks Daniel.
+On 2020-08-31 23:00, Bao D. Nguyen wrote:
+> UFS's specification supports a range of Vcc operating voltages.
+> Allows selecting the UFS Vcc operating voltage levels by reading
+> the UFS's vcc-voltage-level in the device tree.
+> 
+> Bao D. Nguyen (2):
+>   scsi: dt-bindings: ufs: Add vcc-voltage-level for UFS
+>   scsi: ufs: Support reading UFS's Vcc voltage from device tree
+> 
+>  Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt |  2 ++
+>  drivers/scsi/ufs/ufshcd-pltfrm.c                        | 15 
+> ++++++++++++---
+>  2 files changed, 14 insertions(+), 3 deletions(-)
 
-For the series:
-  Reviewed-by: Arun Easi <aeasi@marvell.com>
+Hello, please help review the change and comment if any.
 
-Regards,
--Arun
-
-On Tue, 8 Sep 2020, 1:15am, Daniel Wagner wrote:
-
-> External Email
-> 
-> ----------------------------------------------------------------------
-> The first crash we observed is due memory corruption in the srb memory
-> pool. Unforuntatly, I couldn't find the source of the problem but the
-> workaround by resetting the cleanup callbacks 'fixes' this problem
-> (patch #1). I think as intermeditate step this should be merged until
-> the real cause can be identified.
-> 
-> The second crash is due a race condition(?) in the firmware. The sts
-> entries are not updated in time which leads to this crash pattern
-> which several customers have reported:
-> 
->  #0 [c00000ffffd1bb80] scsi_dma_unmap at d00000001e4904d4 [scsi_mod]
->  #1 [c00000ffffd1bbe0] qla2x00_sp_compl at d0000000204803cc [qla2xxx]
->  #2 [c00000ffffd1bc20] qla24xx_process_response_queue at d0000000204c5810 [qla2xxx]
->  #3 [c00000ffffd1bd50] qla24xx_msix_rsp_q at d0000000204c8fd8 [qla2xxx]
->  #4 [c00000ffffd1bde0] __handle_irq_event_percpu at c000000000189510
->  #5 [c00000ffffd1bea0] handle_irq_event_percpu at c00000000018978c
->  #6 [c00000ffffd1bee0] handle_irq_event at c00000000018984c
->  #7 [c00000ffffd1bf10] handle_fasteoi_irq at c00000000018efc0
->  #8 [c00000ffffd1bf40] generic_handle_irq at c000000000187f10
->  #9 [c00000ffffd1bf60] __do_irq at c000000000018784
->  #10 [c00000ffffd1bf90] call_do_irq at c00000000002caa4
->  #11 [c00000ecca417a00] do_IRQ at c000000000018970
->  #12 [c00000ecca417a50] restore_check_irq_replay at c00000000000de98
-> 
-> From analyzing the crash dump it was clear that
-> qla24xx_mbx_iocb_entry() calls sp->done (qla2x00_sp_compl) which
-> crashes because the response is not a mailbox entry, it is a status
-> entry. Patch #4 changes the process logic for mailbox commands so that
-> the sp is parsed before calling the correct proccess function.
-> 
-> 
-> changes since v1:
->  - addressed review comments by Martin
->    - patch#1: added dummy warn function
->    - patch#4: added log entry
-> 
-> changes since v2:
->  - added reviewed tags by Martin
->  - addressed review comments by Arun
->    - patch#1: add srb pointer to log message
->    - patch#3: print calling func name in qla2x00_get_sp_from_handle()
->    - patch#4: dropped comment, reset HBA
-> 
-> 
-> Daniel Wagner (4):
->   qla2xxx: Warn if done() or free() are called on an already freed srb
->   qla2xxx: Simplify return value logic in qla2x00_get_sp_from_handle()
->   qla2xxx: Log calling function name in qla2x00_get_sp_from_handle()
->   qla2xxx: Handle incorrect entry_type entries
-> 
->  drivers/scsi/qla2xxx/qla_init.c   | 10 +++++++++
->  drivers/scsi/qla2xxx/qla_inline.h |  5 +++++
->  drivers/scsi/qla2xxx/qla_isr.c    | 47 ++++++++++++++++++++++++++++++---------
->  3 files changed, 51 insertions(+), 11 deletions(-)
-> 
-> 
+Thanks!
+Bao
