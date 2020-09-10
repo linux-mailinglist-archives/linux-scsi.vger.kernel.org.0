@@ -2,96 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 930692639E3
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEAE263A0E
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730498AbgIJCIv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 22:08:51 -0400
-Received: from a27-187.smtp-out.us-west-2.amazonses.com ([54.240.27.187]:41112
-        "EHLO a27-187.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730553AbgIJCGo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:06:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1599701327;
-        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID;
-        bh=hq2qlkdV42iGEc13LOvCdrQppZ9s1QRk5yIifv+RCMM=;
-        b=Gtp1ylcYQEVffdmQtrBdvWH6cosDN3shEHQfkw+bgx6Ro5QhyXrBcKyC6pfcTNz7
-        rbWuLo5VnItBdXEcxunj6/g5YpDAfomy7BtiaoKPUz9DvOi2xjgHYocsnW22TrXjhHr
-        dSvdRA2fjmc/VHb4sFdWZQDwPKZKZz0Q5UUVslmY=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1599701327;
-        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Feedback-ID;
-        bh=hq2qlkdV42iGEc13LOvCdrQppZ9s1QRk5yIifv+RCMM=;
-        b=hAdnamzqH6Sz+WfF7VgwmYHYvbw8SovftoShQbKOecaXxjmJ86e9F/RKtxRZwU1P
-        NW+MtO0G19y10UU3IsUpdE/08HbqIAC/ylBbSphW09uXjZ84qij0WM3BkyYQiqcJZHg
-        ckryzDCljEw96cyUVjwPAfgjKCHaoXzzid3Oqzps=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+        id S1730633AbgIJCR4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 22:17:56 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:54628 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730022AbgIJCMk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:12:40 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2AccQ088409;
+        Thu, 10 Sep 2020 02:12:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=0Ob3xkYnA7g87tw9QRrxEgtLXmHMT5ZuRH5gPzD9bu4=;
+ b=ByQbn9JdMyJhjBqhbUKTU1FHB5qP+V2HKUbVR14Yum0o1FMdcJ2wGyiS19Fl28HagoYo
+ efUT/z0KgFbzRRhUtWDnZtdhcn5qU828kCrduExDf1Fr8h8sLPAHuKsjKR0caEytaeHf
+ 93R0kjidhQ2o+Gxdfhb0kxOkD2etGvRas6tqUJsNSKex9y6koIvlvHKic/XMO4XK3kAK
+ KngrXaUKLRV3bT8D5SCbWO7ZrS4p69fOaUe4VjuhprCCFO+Bin29BD7LmiLk4VwPawoW
+ yjZp2USgw1ahg2U2OIs0KANsabWtIpcxzVz5MKtM7et1OHxYE0mlzLc8/53oSAFRQeHV Ag== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33c2mm56ma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 10 Sep 2020 02:12:01 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2APkX082529;
+        Thu, 10 Sep 2020 02:12:01 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33cmkyy6r9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Sep 2020 02:12:01 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08A2BvFi012904;
+        Thu, 10 Sep 2020 02:11:59 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 09 Sep 2020 19:11:56 -0700
+To:     Jing Xiangfeng <jingxiangfeng@huawei.com>
+Cc:     <tyreld@linux.ibm.com>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] scsi: ibmvfc: Fix error return in ibmvfc_probe()
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1r1ra2xf0.fsf@ca-mkp.ca.oracle.com>
+References: <20200907083949.154251-1-jingxiangfeng@huawei.com>
+Date:   Wed, 09 Sep 2020 22:11:50 -0400
+In-Reply-To: <20200907083949.154251-1-jingxiangfeng@huawei.com> (Jing
+        Xiangfeng's message of "Mon, 7 Sep 2020 16:39:49 +0800")
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 10 Sep 2020 01:28:47 +0000
-From:   nguyenb@codeaurora.org
-To:     cang@codeaurora.org, asutoshd@codeaurora.org,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] scsi: ufshcd: Properly set the device Icc Level
-In-Reply-To: <5c9d6f76303bbe5188bf839b2ea5e5bf530e7281.1598923023.git.nguyenb@codeaurora.org>
-References: <5c9d6f76303bbe5188bf839b2ea5e5bf530e7281.1598923023.git.nguyenb@codeaurora.org>
-Message-ID: <0101017475a11c06-5e39bfe2-d5ca-4eba-957e-339f317f8b55-000000@us-west-2.amazonses.com>
-X-Sender: nguyenb@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
-X-SES-Outgoing: 2020.09.10-54.240.27.187
-Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=1
+ spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009100019
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 bulkscore=0 clxscore=1011 mlxlogscore=999
+ malwarescore=0 suspectscore=1 lowpriorityscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009100018
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-08-31 18:19, Bao D. Nguyen wrote:
-> UFS version 3.0 and later devices require Vcc and Vccq power supplies
-> with Vccq2 being optional. While earlier UFS version 2.0 and 2.1
-> devices, the Vcc and Vccq2 are required with Vccq being optional.
-> Check the required power supplies used by the device
-> and set the device's supported Icc level properly.
-> 
-> Signed-off-by: Can Guo <cang@codeaurora.org>
-> Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
-> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 06e2439..fdd1d3e 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -6845,8 +6845,9 @@ static u32
-> ufshcd_find_max_sup_active_icc_level(struct ufs_hba *hba,
->  {
->  	u32 icc_level = 0;
-> 
-> -	if (!hba->vreg_info.vcc || !hba->vreg_info.vccq ||
-> -						!hba->vreg_info.vccq2) {
-> +	if (!hba->vreg_info.vcc ||
-> +		(!hba->vreg_info.vccq && hba->dev_info.wspecversion >= 0x300) ||
-> +		(!hba->vreg_info.vccq2 && hba->dev_info.wspecversion < 0x300)) {
->  		dev_err(hba->dev,
->  			"%s: Regulator capability was not set, actvIccLevel=%d",
->  							__func__, icc_level);
 
-Hello, please help review the change and comment if any.
+Jing,
 
-Thanks!
-Bao
+> Fix to return error code PTR_ERR() from the error handling case instead
+> of 0.
+
+Applied to 5.10/scsi-staging. Thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
