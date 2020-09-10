@@ -2,134 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 438CC263A80
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A043263AE8
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730480AbgIJCbL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 22:31:11 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:36185 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730870AbgIJC0D (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:26:03 -0400
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200910022553epoutp04cc2e6f82dfdcc90807ae8f77191eee93~zSv9uGtBB2776027760epoutp04C
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Sep 2020 02:25:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200910022553epoutp04cc2e6f82dfdcc90807ae8f77191eee93~zSv9uGtBB2776027760epoutp04C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1599704753;
-        bh=Ud/VzAfX4crf3keXqhpq/GL9lD3v995f5NkpdOA5784=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=jOVHY0AusBHnHjQn54dNa1DwdmkNGTHe1jDih7Obou7bcHFv1Tu9GQ/OTS/l4BRcb
-         l764GXtw1sM3kOINmA3cUlrCdhQPWz1PV3plPztQp9rz+L6mO+7/BofGSiNv1akXZs
-         T8zLdJDq3MlS0qVyDQ38u5C5x2fIuc1c8nma6Lwo=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20200910022552epcas5p41486f82589e10d4e6da0866160d1c29e~zSv83VYRN0668806688epcas5p4r;
-        Thu, 10 Sep 2020 02:25:52 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D5.37.40333.0BE895F5; Thu, 10 Sep 2020 11:25:52 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200910022551epcas5p2f42a5d87a0e171d0d6ba9ab7f077af4b~zSv7tKag60641506415epcas5p2b;
-        Thu, 10 Sep 2020 02:25:51 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200910022551epsmtrp2ef4ae7171b6b3317697404943b950b20~zSv7sijwK1619816198epsmtrp2Y;
-        Thu, 10 Sep 2020 02:25:51 +0000 (GMT)
-X-AuditID: b6c32a4a-991ff70000019d8d-48-5f598eb05a6a
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DE.4B.08303.FAE895F5; Thu, 10 Sep 2020 11:25:51 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200910022550epsmtip21cfcbb638d06aed9b4abdf018191d9bb~zSv6daxrp2640026400epsmtip2O;
-        Thu, 10 Sep 2020 02:25:49 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        avri.altman@wdc.com, linux-kernel@vger.kernel.org,
-        sfr@canb.auug.org.au, rdunlap@infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH v2] scsi: ufs: Fix 'unmet direct dependencies' config
- warning
-Date:   Thu, 10 Sep 2020 07:26:47 +0530
-Message-Id: <20200910015647.52875-1-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsWy7bCmuu6Gvsh4g+c/FS0ezNvGZvHy51U2
-        i0U3tjFZXN41h82i+/oONovlx/8xWby9M53FYuveq+wOHB6NN26weWxeoeUxYdEBRo+PT2+x
-        ePRtWcXo8XmTnEf7gW6mAPYoLpuU1JzMstQifbsErozn7+6zFRzkqpjUsompgfEhRxcjJ4eE
-        gInE5vbTLF2MXBxCArsZJR4vncYE4XxilGheOgcq85lR4tiRJSwwLTs/9DFDJHYxSvxa0wXl
-        tDBJHF27jRmkik1AW+Lu9C1MILaIgJzE5uVfwbqZBfYySuy96ghiCwv4Szx+/hCshkVAVeJo
-        Vw9YL6+AjcTHX3fYIbbJS6zecABsgYTAMXaJ91/6gRo4gBwXiVsvaiBqhCVeHd8CVS8l8fnd
-        XjaIkmyJnl3GEOEaiaXzjkE9YC9x4ArIZxxA52hKrN+lD3EZn0Tv7ydQw3klOtqEIKpVJZrf
-        XYXqlJaY2N3NCmF7SPx6vQ0sLiQQK/Gv9QX7BEaZWQhDFzAyrmKUTC0ozk1PLTYtMMpLLdcr
-        TswtLs1L10vOz93ECI58La8djA8ffNA7xMjEwXiIUYKDWUmENyk/Ml6INyWxsiq1KD++qDQn
-        tfgQozQHi5I4r9KPM3FCAumJJanZqakFqUUwWSYOTqkGJh+u+s8hmTsee4k9qXCZ9ngbw889
-        DIe8pK65ic9TnmRmPjmvWEd48WyFI1VGwtoXQ72NfllH3p5dFvTxnNRFbmNF406payqh+TP0
-        nj6W0D23smDbDjvW1QdT/p2qubu+7+NOmxy9l/fi1n8rMZ4k/eHyXKcYxcSX8u+e2/5IEQq1
-        vL6vbE/hw7SO2Lt6V2N2H+MI132e8y6T+Uvp3Z2KYTP4b772tZSc6u140mx6H/uen6rpr4SW
-        2+/ye1v59uWmjL37K3x6vl1/ZaV276DaceutWTEbWsoOHVm5fGbysXjVvMx+/0eip6fZRngc
-        9FmUd0jS9sqJDydCRDv7dKwP1WW+Ma5fVRWk+lf4nN2+aiWW4oxEQy3mouJEAKe+3AdrAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjluLIzCtJLcpLzFFi42LZdlhJXnd9X2S8wZo/ghYP5m1js3j58yqb
-        xaIb25gsLu+aw2bRfX0Hm8Xy4/+YLN7emc5isXXvVXYHDo/GGzfYPDav0PKYsOgAo8fHp7dY
-        PPq2rGL0+LxJzqP9QDdTAHsUl01Kak5mWWqRvl0CV8bzd/fZCg5yVUxq2cTUwPiQo4uRk0NC
-        wERi54c+5i5GLg4hgR2MEj9XHWODSEhLXN84gR3CFpZY+e85O0RRE5PE75u3mEASbALaEnen
-        bwGzRQTkJDYv/8oCUsQscJRR4vb532CThAV8JRZ17WMBsVkEVCWOdvUwg9i8AjYSH3/dgdog
-        L7F6wwHmCYw8CxgZVjFKphYU56bnFhsWGOWllusVJ+YWl+al6yXn525iBAeZltYOxj2rPugd
-        YmTiYDzEKMHBrCTCm5QfGS/Em5JYWZValB9fVJqTWnyIUZqDRUmc9+ushXFCAumJJanZqakF
-        qUUwWSYOTqkGJl0uL59nuUc3etvnXd40/fW2Izv90pafap+/JTT6jL/xspZvF6pSHH926j/x
-        XmLWtfWs8Ywvuw+xib6cdb292PzS+6U1BTdalSa2s0bONVpsmRL/e06zcgfHhs0G9mfezWNQ
-        2G3GueHH5ne3up61ZszdYb1Da1rdMh7FmrNZFjJz858nnirsX9LMxaradHWRcOb7+kqrEw9b
-        79Y+fWM8z+l55vUXyqvaJh84WX0tx/5Bg6lR8OYFHyaX7GPav145pq6vxPnIpp1qV3a6SVz5
-        2/S0aF7FrKC/5c1v84KvPoidEbQuco5NIvvSwKbuKavWy8WvSuex3//P+LD/o7UVGa3dEjpa
-        bZfYdJWf3fHft0mJpTgj0VCLuag4EQDF3P0goQIAAA==
-X-CMS-MailID: 20200910022551epcas5p2f42a5d87a0e171d0d6ba9ab7f077af4b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20200910022551epcas5p2f42a5d87a0e171d0d6ba9ab7f077af4b
-References: <CGME20200910022551epcas5p2f42a5d87a0e171d0d6ba9ab7f077af4b@epcas5p2.samsung.com>
+        id S1728936AbgIJCsf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 22:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728443AbgIJB7S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 21:59:18 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9B5C0617AB;
+        Wed,  9 Sep 2020 18:59:18 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id a12so4627586eds.13;
+        Wed, 09 Sep 2020 18:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dUjP7eOEkjBWCnPcsNMyT+WrVYzF6LJucKB9IpolFOQ=;
+        b=npIm4mdF6gzt7Jf+4i3ecdhlURjcoZac3a6SZy5gydDgPT32Pdh5LfTKOZdp0JRZNz
+         h8vVJHnYFFxtj8sTm30CJImU57l8Hg7EIIAUwMaNSik9HWYmQC0Xj2+7aCam0DJrkBDV
+         jdMBWbTXHKJk3t9o741EDeY2Qb7Wjn10OcpzGsNPLMwU6JT5UFv/gYIn3wkPAjk0xdLw
+         1TbCrEmAwPBMQL4OY37ol0O5vqcbSLcBO9y+m5KtIqQtY4/m8YrVp8jOQHZZR4g+Ojx5
+         GCeHowcWMPR9QdUwUX1Q43T8zkUsyAA7Jpb0HNA8lEg/+arImSrrf1e1oNHlljI+w67M
+         zYHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dUjP7eOEkjBWCnPcsNMyT+WrVYzF6LJucKB9IpolFOQ=;
+        b=YFVS6P84b6Nb3qSBo/JIds+sFO6wY5rhRcWRvVR477zYQHJa/ArNRF6JX/tariJd3t
+         6zh3eeBE4Cxt6jYRYV9p0zk+fRTotAdoq3RYIkQvnXycYKYGt8iYGFImxFCzNw6wGjRz
+         T9OVaWEC62Ah+WJTm5uUk/lVPGfDJS+5gE8ISY/umnMktZ/DJk+K21t3UmnX8AQPfpZE
+         OmEdc1M/kwSpf02g2HpsGSYa3XQn2c4aOUH+kWzEJhm2OONYmJzXzOZRVl8KqQKMwAaj
+         XG43+W+pd0fQQfDjWngqiE1hJIU9iXMnbLUtSKQUPzqwKiaAcEtKX2jm0wyXuWAIj+lp
+         UtHQ==
+X-Gm-Message-State: AOAM532zdhU6tS5wWJFuKpnrGkiibt/mB8DFbdBP41+ZUB8JJVUv6uIM
+        Cf7qyfrhDbxx3AT49fbqm4Ph6Y1LKTpE2pVSTZkgmWdX
+X-Google-Smtp-Source: ABdhPJyIlIV8kCXW7pbNF74CPJLFQm0lE0AK4ZTGite4N5UAKt1ax8TSQaB6dd6XQQT2E5PjMBrdlxylZqVYBTuxVzs=
+X-Received: by 2002:aa7:d458:: with SMTP id q24mr7198738edr.23.1599703156952;
+ Wed, 09 Sep 2020 18:59:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAGnHSE=bhpL4REG5PXST6dF3gSWeewg1Eqr+sLw_9rtqL-ToFQ@mail.gmail.com>
+ <20200906012716.1553-1-tom.ty89@gmail.com> <20200906012716.1553-2-tom.ty89@gmail.com>
+ <20200907060927.GA18909@lst.de> <CAGnHSEnWPSaM3xS1MtFUJDrSZPfaH_VwAiQ5UkndFTVe3uWNVA@mail.gmail.com>
+ <20200908084258.GA17030@lst.de>
+In-Reply-To: <20200908084258.GA17030@lst.de>
+From:   Tom Yan <tom.ty89@gmail.com>
+Date:   Thu, 10 Sep 2020 09:59:05 +0800
+Message-ID: <CAGnHSE=ASs3DG2yp1NpODHimwxHe+=XPRsOyDdkB3ThtyEU-KA@mail.gmail.com>
+Subject: Re: [PATCH RESEND 2/4] scsi: sg: implement BLKSSZGET
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-scsi@vger.kernel.org, dgilbert@interlog.com,
+        Bart Van Assche <bvanassche@acm.org>,
+        Alan Stern <stern@rowland.harvard.edu>, akinobu.mita@gmail.com,
+        linux-api@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-With !CONFIG_OF and SCSI_UFS_EXYNOS selected, the below
-warning is given:
+If we rename it to e.g. SG_GET_MAX_XFER_BYTES, it will still break
+applications unless we also keep the wrong/ugly/confusing name (and
+you lose the advantage/generality that the two ioctls can be used on
+both sg and "pure" block devices; which seems to be the case of some
+SG_* ioctls as well).
 
-WARNING: unmet direct dependencies detected for PHY_SAMSUNG_UFS
-  Depends on [n]: OF [=n] && (ARCH_EXYNOS || COMPILE_TEST [=y])
-  Selected by [y]:
-  - SCSI_UFS_EXYNOS [=y] && SCSI_LOWLEVEL [=y] && SCSI [=y] && SCSI_UFSHCD_PLATFORM [=y] && (ARCH_EXYNOS || COMPILE_TEST [=y])
+I don't see what it has to do with passthrough. Either way, it's just
+a matter of whether you want to decouple it and make things more
+flexible. The only real disadvantage is, you will have to do two
+ioctls instead of one, but no more than that, and for good reasons.
 
-Fix it by removing PHY_SAMSUNG_UFS dependency.
+I don't really care enough though. I mean, I'm okay with
+SG_GET_MAX_XFER_BYTES *and* NO "improper" BLKSECTGET. If that will get
+the patch series in, I am willing to send a new version. If not, I'm
+just gonna drop this.
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
----
-* Changes since v1
- - rebased on 5.10-scsi-queue 
- - Added Randy's Acked-by
-
- drivers/scsi/ufs/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
-index f6394999b98c..dcdb4eb1f90b 100644
---- a/drivers/scsi/ufs/Kconfig
-+++ b/drivers/scsi/ufs/Kconfig
-@@ -165,7 +165,6 @@ config SCSI_UFS_BSG
- config SCSI_UFS_EXYNOS
- 	tristate "EXYNOS specific hooks to UFS controller platform driver"
- 	depends on SCSI_UFSHCD_PLATFORM && (ARCH_EXYNOS || COMPILE_TEST)
--	select PHY_SAMSUNG_UFS
- 	help
- 	  This selects the EXYNOS specific additions to UFSHCD platform driver.
- 	  UFS host on EXYNOS includes HCI and UNIPRO layer, and associates with
-
-base-commit: 32417d7844ab0bc154c39128d9ac026f4f8a7907
--- 
-2.17.1
-
+On Tue, 8 Sep 2020 at 16:43, Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Mon, Sep 07, 2020 at 05:01:34PM +0800, Tom Yan wrote:
+> > Feel free to omit this. But then you will probably want to ditch
+> > BLKSECTGET as well, and then any usage of queue_max_sectors(), and
+> > maybe more/all queue_*().
+> >
+> > I'm not really interested in discussing/arguing whether
+> > general/ideally-speaking it's appropriate/necessary to keep BLKSECTGET
+> > / add BLKSSZGET. The only reason I added this is that, when BLKSECTGET
+> > was introduced to sg long time ago, it was wrongly implemented to
+> > gives out the limit in bytes, so now when I'm fixing it, I'm merely
+> > making sure that whatever has been relying on the ioctl (e.g. qemu)
+> > will only need to do one more ioctl (instead of e.g. doing SCSI in its
+> > non-SCSI-specific part), if they want/need the limit in bytes. If they
+> > can be implemented more "generic"-ly, feel free to improve/extend them
+> > to make them "SG_*-qualified".
+> >
+> > Even if you can do SCSI from the userspace, or even should, I don't
+> > see any reason that we shouldn't provide an ioctl to do
+> > queue_logical_block_size() *while we provide one to do
+> > queue_max_sectors()*.
+>
+> Well, the different definition in bytes for sg actually makes sense
+> to me, as a bytes based limit is what fundamentally makes sense for
+> the passthrough interface.  Only that it reuses the same cmd value
+> is a bit confusing.  So instead of changing anything and potentially
+> breaking applications I'd suggest to just better document the semantics.
