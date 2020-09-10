@@ -2,71 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA8B263AC2
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82952263AEE
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730718AbgIJCnx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 22:43:53 -0400
-Received: from a27-18.smtp-out.us-west-2.amazonses.com ([54.240.27.18]:54834
-        "EHLO a27-18.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729986AbgIJCG6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:06:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1599701398;
-        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID;
-        bh=bUHJtAVwy1m2g9Edc5VcIqVaaUJ6RKEBA+YnhRba2CU=;
-        b=C0VTPRon/XEWhUmwS8uG4rEEHnY6KNjExkolfJoHjhXRn53O7oksRp7XdEjOkuyT
-        zdPQMsDkmvnbDCwVlmIxmq7dvoJr7APXmmBzEn+FkAxZU/mAlSfi4+7fJ9/CZxaa+jY
-        PC9sjp/vrsamk0EsL7qz/eTOb6ARJ0JvbPzR9uVI=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1599701398;
-        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Feedback-ID;
-        bh=bUHJtAVwy1m2g9Edc5VcIqVaaUJ6RKEBA+YnhRba2CU=;
-        b=h8ya8Gox3JnCq2DUQlaMHq9XYhxIr7znRyLVEs5mUK4PHZPTklyVIQljSpeLrJUI
-        lqr8F+MT6rZ+mTW9akmr+QoRZuaaAXr53cQUEgQfyDWjVtGDCLAB5t/b6aHBZzLHrVs
-        2nbzhQ+NVwhT2fYuNfkF5E49JWJhVcWUxl2KSot8=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
+        id S1730285AbgIJB7F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 9 Sep 2020 21:59:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51614 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729251AbgIJBka (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 9 Sep 2020 21:40:30 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 206123] aacraid ( PM8068) and iommu=nobypass Frozen PHB error 
+ on ppc64
+Date:   Thu, 10 Sep 2020 01:32:11 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-aacraid@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: AACRAID
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: gyakovlev@gentoo.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: scsi_drivers-aacraid@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-206123-11613-V89NlnDJQ7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-206123-11613@https.bugzilla.kernel.org/>
+References: <bug-206123-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 10 Sep 2020 01:29:58 +0000
-From:   nguyenb@codeaurora.org
-To:     cang@codeaurora.org, asutoshd@codeaurora.org,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v1 0/2] Supports Reading UFS's Vcc Voltage Levels from DT
-In-Reply-To: <cover.1598939393.git.nguyenb@codeaurora.org>
-References: <cover.1598939393.git.nguyenb@codeaurora.org>
-Message-ID: <0101017475a232b3-44f95537-e287-4e5c-b956-c0f8c56c1a3c-000000@us-west-2.amazonses.com>
-X-Sender: nguyenb@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
-X-SES-Outgoing: 2020.09.10-54.240.27.18
-Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-08-31 23:00, Bao D. Nguyen wrote:
-> UFS's specification supports a range of Vcc operating voltages.
-> Allows selecting the UFS Vcc operating voltage levels by reading
-> the UFS's vcc-voltage-level in the device tree.
-> 
-> Bao D. Nguyen (2):
->   scsi: dt-bindings: ufs: Add vcc-voltage-level for UFS
->   scsi: ufs: Support reading UFS's Vcc voltage from device tree
-> 
->  Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt |  2 ++
->  drivers/scsi/ufs/ufshcd-pltfrm.c                        | 15 
-> ++++++++++++---
->  2 files changed, 14 insertions(+), 3 deletions(-)
+https://bugzilla.kernel.org/show_bug.cgi?id=206123
 
-Hello, please help review the change and comment if any.
+--- Comment #10 from gyakovlev@gentoo.org ---
+(In reply to Oliver O'Halloran from comment #8)
+> Can you see if this patch fixes it?
+> 
+> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20200908015106.79661-
+> 1-aik@ozlabs.ru/
 
-Thanks!
-Bao
+ok I applied this patch to linux-5.4.63
+
+looks very good so far, kernel booted with 'iommu=nobypass' and I don't see any
+problems with aacraid yet, it works. I can write to all 8 SAS disks in
+parallel, and can't trigger the error.
+
+
+I'll try to generate torture/heavy random IO on the disks a bit later.
+
+also I may give linux-5.8.8 a try.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
