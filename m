@@ -2,147 +2,312 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D3A264FB4
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 21:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AC62651AA
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 22:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbgIJTuR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Sep 2020 15:50:17 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50446 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726847AbgIJTta (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 10 Sep 2020 15:49:30 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08AJUs5L122237;
-        Thu, 10 Sep 2020 15:49:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : sender; s=pp1;
- bh=i7JBPvdd60neM6rxo1EKqoMekpXsXBVik7L2XppxG1Q=;
- b=ikuJDct3ysKrb2mciuEJ//WpQuEpAo3o9o5yQTM5OvoelLzgdok9bS8MfIMlP32fFGTY
- seq2XZB+0fqKDKbgDTjrXPcssBLvVXpxE9soKUHinSBCEBF9t+JTvPctRzlpDcw/cmXB
- GYIy1p90Od0AbmGszGC9onu/QZe89I6r/v+Mye2g2iLKtdPYEokfKH4V5W5G3p87q9IA
- U/3utru3zVKMzlnW5bodPk0Gn19D6T2bKrFBuhkNjQDTA4hgiNkPmOCjRf59XrzkyU2V
- bnRrar9AmlyhNEuSkckyOPhMwtuGJomV6IZStxjWJ/KUn+uBqO8k1pi0jpTxCmfS1kHr NA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33fqts5mbt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 15:49:23 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08AJm3Um007401;
-        Thu, 10 Sep 2020 19:49:21 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 33c2a86df4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 19:49:21 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08AJnIfo30736648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Sep 2020 19:49:18 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A29B6A4064;
-        Thu, 10 Sep 2020 19:49:18 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8DF38A4054;
-        Thu, 10 Sep 2020 19:49:18 +0000 (GMT)
-Received: from t480-pf1aa2c2 (unknown [9.145.32.17])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 10 Sep 2020 19:49:18 +0000 (GMT)
-Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
-        (envelope-from <bblock@linux.ibm.com>)
-        id 1kGSZJ-00AFA2-Hz; Thu, 10 Sep 2020 21:49:17 +0200
-From:   Benjamin Block <bblock@linux.ibm.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Julian Wiedmann <jwi@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Fedor Loshakov <loshakov@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH 2/2] zfcp: clarify access to erp_action in zfcp_fsf_req_complete()
-Date:   Thu, 10 Sep 2020 21:49:16 +0200
-Message-Id: <c500eac301fcbba5af942bbd200f2d6b14e46994.1599765652.git.bblock@linux.ibm.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1599765652.git.bblock@linux.ibm.com>
-References: <cover.1599765652.git.bblock@linux.ibm.com>
-MIME-Version: 1.0
-Organization: IBM Deutschland Research & Development GmbH, Vorsitz. AufsR. Gregor Pillen, Geschaeftsfuehrung Dirk Wittkopp, Sitz der Gesellschaft Boeblingen, Registergericht AmtsG Stuttgart, HRB 243294
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-10_08:2020-09-10,2020-09-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- mlxlogscore=999 suspectscore=2 clxscore=1015 malwarescore=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009100173
+        id S1727032AbgIJU7h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Sep 2020 16:59:37 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:42220 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726837AbgIJU72 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Sep 2020 16:59:28 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08AFjXMG171733;
+        Thu, 10 Sep 2020 15:46:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=+5x2gUQKeetbIiKkBiOUWf+e3CzqLWhREe7ngH9Kgco=;
+ b=0B059hrDvQs/u0QbOQqv3z0o+YT+ixzTAyxwPkjuVdyXrWcRG8PSzAi2YHW2zGhao7W0
+ ACAl5iwhC+Xv0ITOfEOh+p8VlEZYquGEiNEKipbpd0ljDhsfFtbFT3Hq5mfiY756hzE8
+ H6oJbkjwBEi7T7e9FwdW0DWscxLJefeTUhr+El4kSOsVbbV5J3G1nOcFzRM9P0x1k+9m
+ rqEjWICr1DXkOUim6Xxn2hK5gkD9BhQ3ctY4IaZ5KHium8+xmULLoKnUpIbx0rCZcAvG
+ gNVdH0rADbzz2/i/G58SuvEURcVLUADVvLUooX/P5oz6J3jwnF4HcLjVCoSUH/6h4QY4 Xg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 33c23r91hq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 10 Sep 2020 15:46:07 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08AFeRYt146570;
+        Thu, 10 Sep 2020 15:46:07 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 33cmm1902a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Sep 2020 15:46:07 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08AFk6qV032645;
+        Thu, 10 Sep 2020 15:46:06 GMT
+Received: from dhcp-10-154-107-125.vpn.oracle.com (/10.154.107.125)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 10 Sep 2020 08:46:06 -0700
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
+Subject: Re: [PATCH v2 2/3] scsi: update additional sense codes list
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+In-Reply-To: <20200910074843.217661-3-damien.lemoal@wdc.com>
+Date:   Thu, 10 Sep 2020 10:46:05 -0500
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C12140FE-7506-47DB-8B78-B38DBF3677F3@oracle.com>
+References: <20200910074843.217661-1-damien.lemoal@wdc.com>
+ <20200910074843.217661-3-damien.lemoal@wdc.com>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=4
+ spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009100144
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=4 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009100145
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Julian Wiedmann <jwi@linux.ibm.com>
 
-While reviewing
-commit 936e6b85da04 ("scsi: zfcp: Fix panic on ERP timeout for previously
-dismissed ERP action"),
-I stumbled over zfcp_fsf_req_complete() and wondered whether it has
-similar issues wrt concurrent modification of req->erp_action
-by zfcp_erp_strategy_check_fsfreq().
 
-But a closer look shows that both its two callers
-[zfcp_fsf_reqid_check(), zfcp_fsf_req_dismiss_all()] remove the request
-from the adapter's req_list under the req_list's lock.
-Hence we can trust that if zfcp_erp_strategy_check_fsfreq() concurrently
-looks up the corresponding req_id, it won't find this request and is thus
-unable to modify it while it's being processed by zfcp_fsf_req_complete().
+> On Sep 10, 2020, at 2:48 AM, Damien Le Moal <Damien.LeMoal@wdc.com> =
+wrote:
+>=20
+> Add missing Additional Sense Codes listed in
+> http://www.t10.org/lists/asc-num.txt.
+>=20
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> ---
+> drivers/scsi/sense_codes.h | 54 +++++++++++++++++++++++++++++++++++++-
+> 1 file changed, 53 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/scsi/sense_codes.h b/drivers/scsi/sense_codes.h
+> index 201a536688de..805d4c13d070 100644
+> --- a/drivers/scsi/sense_codes.h
+> +++ b/drivers/scsi/sense_codes.h
+> @@ -1,7 +1,7 @@
+> /* SPDX-License-Identifier: GPL-2.0 */
+> /*
+>  * The canonical list of T10 Additional Sense Codes is available at:
+> - * http://www.t10.org/lists/asc-num.txt [most recent: 20141221]
+> + * http://www.t10.org/lists/asc-num.txt [most recent: 20200817]
+>  */
+>=20
+> SENSE_CODE(0x0000, "No additional sense information")
+> @@ -29,6 +29,7 @@ SENSE_CODE(0x001E, "Conflicting SA creation =
+request")
+> SENSE_CODE(0x001F, "Logical unit transitioning to another power =
+condition")
+> SENSE_CODE(0x0020, "Extended copy information available")
+> SENSE_CODE(0x0021, "Atomic command aborted due to ACA")
+> +SENSE_CODE(0x0022, "Deferred microcode is pending")
+>=20
+> SENSE_CODE(0x0100, "No index/sector signal")
+>=20
+> @@ -72,6 +73,9 @@ SENSE_CODE(0x041F, "Logical unit not ready, =
+microcode download required")
+> SENSE_CODE(0x0420, "Logical unit not ready, logical unit reset =
+required")
+> SENSE_CODE(0x0421, "Logical unit not ready, hard reset required")
+> SENSE_CODE(0x0422, "Logical unit not ready, power cycle required")
+> +SENSE_CODE(0x0423, "Logical unit not ready, affiliation required")
+> +SENSE_CODE(0x0424, "Depopulation in progress")
+> +SENSE_CODE(0x0425, "Depopulation restoration in progress")
+>=20
+> SENSE_CODE(0x0500, "Logical unit does not respond to selection")
+>=20
+> @@ -104,6 +108,17 @@ SENSE_CODE(0x0B06, "Warning - non-volatile cache =
+now volatile")
+> SENSE_CODE(0x0B07, "Warning - degraded power to non-volatile cache")
+> SENSE_CODE(0x0B08, "Warning - power loss expected")
+> SENSE_CODE(0x0B09, "Warning - device statistics notification active")
+> +SENSE_CODE(0x0B0A, "Warning - high critical temperature limit =
+exceeded")
+> +SENSE_CODE(0x0B0B, "Warning - low critical temperature limit =
+exceeded")
+> +SENSE_CODE(0x0B0C, "Warning - high operating temperature limit =
+exceeded")
+> +SENSE_CODE(0x0B0D, "Warning - low operating temperature limit =
+exceeded")
+> +SENSE_CODE(0x0B0E, "Warning - high critical humidity limit exceeded")
+> +SENSE_CODE(0x0B0F, "Warning - low critical humidity limit exceeded")
+> +SENSE_CODE(0x0B10, "Warning - high operating humidity limit =
+exceeded")
+> +SENSE_CODE(0x0B11, "Warning - low operating humidity limit exceeded")
+> +SENSE_CODE(0x0B12, "Warning - microcode security at risk")
+> +SENSE_CODE(0x0B13, "Warning - microcode digital signature validation =
+failure")
+> +SENSE_CODE(0x0B14, "Warning - physical element status change")
+>=20
+> SENSE_CODE(0x0C00, "Write error")
+> SENSE_CODE(0x0C01, "Write error - recovered with auto reallocation")
+> @@ -122,6 +137,8 @@ SENSE_CODE(0x0C0D, "Write error - not enough =
+unsolicited data")
+> SENSE_CODE(0x0C0E, "Multiple write errors")
+> SENSE_CODE(0x0C0F, "Defects in error window")
+> SENSE_CODE(0x0C10, "Incomplete multiple atomic write operations")
+> +SENSE_CODE(0x0C11, "Write error - recovery scan needed")
+> +SENSE_CODE(0x0C12, "Write error - insufficient zone resources")
+>=20
+> SENSE_CODE(0x0D00, "Error detected by third party temporary =
+initiator")
+> SENSE_CODE(0x0D01, "Third party device failure")
+> @@ -242,6 +259,9 @@ SENSE_CODE(0x2009, "Access denied - invalid LU =
+identifier")
+> SENSE_CODE(0x200A, "Access denied - invalid proxy token")
+> SENSE_CODE(0x200B, "Access denied - ACL LUN conflict")
+> SENSE_CODE(0x200C, "Illegal command when not in append-only mode")
+> +SENSE_CODE(0x200D, "Not an administrative logical unit")
+> +SENSE_CODE(0x200E, "Not a subsidiary logical unit")
+> +SENSE_CODE(0x200F, "Not a conglomerate logical unit")
+>=20
+> SENSE_CODE(0x2100, "Logical block address out of range")
+> SENSE_CODE(0x2101, "Invalid element address")
+> @@ -251,6 +271,8 @@ SENSE_CODE(0x2104, "Unaligned write command")
+> SENSE_CODE(0x2105, "Write boundary violation")
+> SENSE_CODE(0x2106, "Attempt to read invalid data")
+> SENSE_CODE(0x2107, "Read boundary violation")
+> +SENSE_CODE(0x2108, "Misaligned write command")
+> +SENSE_CODE(0x2109, "Attempt to access gap zone")
+>=20
+> SENSE_CODE(0x2200, "Illegal function (use 20 00, 24 00, or 26 00)")
+>=20
+> @@ -275,6 +297,7 @@ SENSE_CODE(0x2405, "Security working key frozen")
+> SENSE_CODE(0x2406, "Nonce not unique")
+> SENSE_CODE(0x2407, "Nonce timestamp out of range")
+> SENSE_CODE(0x2408, "Invalid XCDB")
+> +SENSE_CODE(0x2409, "Invalid fast format")
+>=20
+> SENSE_CODE(0x2500, "Logical unit not supported")
+>=20
+> @@ -297,6 +320,10 @@ SENSE_CODE(0x260F, "Invalid data-out buffer =
+integrity check value")
+> SENSE_CODE(0x2610, "Data decryption key fail limit reached")
+> SENSE_CODE(0x2611, "Incomplete key-associated data set")
+> SENSE_CODE(0x2612, "Vendor specific key reference not found")
+> +SENSE_CODE(0x2613, "Application tag mode page is invalid")
+> +SENSE_CODE(0x2614, "Tape stream mirroring prevented")
+> +SENSE_CODE(0x2615, "Copy source or copy destination not authorized")
+> +SENSE_CODE(0x2616, "Fast copy not possible")
+>=20
+> SENSE_CODE(0x2700, "Write protected")
+> SENSE_CODE(0x2701, "Hardware write protected")
+> @@ -342,6 +369,7 @@ SENSE_CODE(0x2A12, "Data encryption parameters =
+changed by vendor specific event"
+> SENSE_CODE(0x2A13, "Data encryption key instance counter has changed")
+> SENSE_CODE(0x2A14, "SA creation capabilities data has changed")
+> SENSE_CODE(0x2A15, "Medium removal prevention preempted")
+> +SENSE_CODE(0x2A16, "Zone reset write pointer recommended")
+>=20
+> SENSE_CODE(0x2B00, "Copy cannot execute since host cannot disconnect")
+>=20
+> @@ -360,6 +388,11 @@ SENSE_CODE(0x2C0B, "Not reserved")
+> SENSE_CODE(0x2C0C, "Orwrite generation does not match")
+> SENSE_CODE(0x2C0D, "Reset write pointer not allowed")
+> SENSE_CODE(0x2C0E, "Zone is offline")
+> +SENSE_CODE(0x2C0F, "Stream not open")
+> +SENSE_CODE(0x2C10, "Unwritten data in zone")
+> +SENSE_CODE(0x2C11, "Descriptor format sense data required")
+> +SENSE_CODE(0x2C12, "Zone is inactive")
+> +SENSE_CODE(0x2C13, "Well known logical unit access required")
+>=20
+> SENSE_CODE(0x2D00, "Overwrite error on update in place")
+>=20
+> @@ -395,6 +428,8 @@ SENSE_CODE(0x3100, "Medium format corrupted")
+> SENSE_CODE(0x3101, "Format command failed")
+> SENSE_CODE(0x3102, "Zoned formatting failed due to spare linking")
+> SENSE_CODE(0x3103, "Sanitize command failed")
+> +SENSE_CODE(0x3104, "Depopulation failed")
+> +SENSE_CODE(0x3105, "Depopulation restoration failed")
+>=20
+> SENSE_CODE(0x3200, "No defect spare location available")
+> SENSE_CODE(0x3201, "Defect list update failure")
+> @@ -419,6 +454,7 @@ SENSE_CODE(0x3802, "Esn - power management class =
+event")
+> SENSE_CODE(0x3804, "Esn - media class event")
+> SENSE_CODE(0x3806, "Esn - device busy class event")
+> SENSE_CODE(0x3807, "Thin Provisioning soft threshold reached")
+> +SENSE_CODE(0x3808, "Depopulation interrupted")
+>=20
+> SENSE_CODE(0x3900, "Saving parameters not supported")
+>=20
+> @@ -456,6 +492,7 @@ SENSE_CODE(0x3B19, "Element enabled")
+> SENSE_CODE(0x3B1A, "Data transfer device removed")
+> SENSE_CODE(0x3B1B, "Data transfer device inserted")
+> SENSE_CODE(0x3B1C, "Too many logical objects on partition to support =
+operation")
+> +SENSE_CODE(0x3B20, "Element static information changed")
+>=20
+> SENSE_CODE(0x3D00, "Invalid bits in identify message")
+>=20
+> @@ -488,6 +525,11 @@ SENSE_CODE(0x3F13, "iSCSI IP address removed")
+> SENSE_CODE(0x3F14, "iSCSI IP address changed")
+> SENSE_CODE(0x3F15, "Inspect referrals sense descriptors")
+> SENSE_CODE(0x3F16, "Microcode has been changed without reset")
+> +SENSE_CODE(0x3F17, "Zone transition to full")
+> +SENSE_CODE(0x3F18, "Bind completed")
+> +SENSE_CODE(0x3F19, "Bind redirected")
+> +SENSE_CODE(0x3F1A, "Subsidiary binding changed")
+> +
+> /*
+>  *	SENSE_CODE(0x40NN, "Ram failure")
+>  *	SENSE_CODE(0x40NN, "Diagnostic failure on component nn")
+> @@ -589,6 +631,9 @@ SENSE_CODE(0x550B, "Insufficient power for =
+operation")
+> SENSE_CODE(0x550C, "Insufficient resources to create rod")
+> SENSE_CODE(0x550D, "Insufficient resources to create rod token")
+> SENSE_CODE(0x550E, "Insufficient zone resources")
+> +SENSE_CODE(0x550F, "Insufficient zone resources to complete write")
+> +SENSE_CODE(0x5510, "Maximum number of streams open")
+> +SENSE_CODE(0x5511, "Insufficient resources to bind")
+>=20
+> SENSE_CODE(0x5700, "Unable to recover table-of-contents")
+>=20
+> @@ -692,6 +737,7 @@ SENSE_CODE(0x5D69, "Firmware impending failure =
+throughput performance")
+> SENSE_CODE(0x5D6A, "Firmware impending failure seek time performance")
+> SENSE_CODE(0x5D6B, "Firmware impending failure spin-up retry count")
+> SENSE_CODE(0x5D6C, "Firmware impending failure drive calibration retry =
+count")
+> +SENSE_CODE(0x5D73, "Media impending failure endurance limit met")
+> SENSE_CODE(0x5DFF, "Failure prediction threshold exceeded (false)")
+>=20
+> SENSE_CODE(0x5E00, "Low power condition on")
+> @@ -744,6 +790,8 @@ SENSE_CODE(0x6708, "Assign failure occurred")
+> SENSE_CODE(0x6709, "Multiply assigned logical unit")
+> SENSE_CODE(0x670A, "Set target port groups command failed")
+> SENSE_CODE(0x670B, "ATA device feature not enabled")
+> +SENSE_CODE(0x670C, "Command rejected")
+> +SENSE_CODE(0x670D, "Explicit bind not allowed")
+>=20
+> SENSE_CODE(0x6800, "Logical unit not configured")
+> SENSE_CODE(0x6801, "Subsidiary logical unit not configured")
+> @@ -772,6 +820,10 @@ SENSE_CODE(0x6F04, "Media region code is =
+mismatched to logical unit region")
+> SENSE_CODE(0x6F05, "Drive region must be permanent/region reset count =
+error")
+> SENSE_CODE(0x6F06, "Insufficient block count for binding nonce =
+recording")
+> SENSE_CODE(0x6F07, "Conflict in binding nonce recording")
+> +SENSE_CODE(0x6F08, "Insufficient permission")
+> +SENSE_CODE(0x6F09, "Invalid drive-host pairing server")
+> +SENSE_CODE(0x6F0A, "Drive-host pairing suspended")
+> +
+> /*
+>  *	SENSE_CODE(0x70NN, "Decompression exception short algorithm id =
+of nn")
+>  */
+> --=20
+> 2.26.2
+>=20
 
-Add a code comment that hopefully makes this easier for future readers,
-and condense the two accesses to ->erp_action that made me trip over
-this code path in the first place.
+Looks Good.=20
 
-Signed-off-by: Julian Wiedmann <jwi@linux.ibm.com>
-Reviewed-by: Steffen Maier <maier@linux.ibm.com>
-Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
-Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
----
- drivers/s390/scsi/zfcp_fsf.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
-diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
-index c795f22249d8..d9de26157da2 100644
---- a/drivers/s390/scsi/zfcp_fsf.c
-+++ b/drivers/s390/scsi/zfcp_fsf.c
-@@ -426,9 +426,14 @@ static void zfcp_fsf_protstatus_eval(struct zfcp_fsf_req *req)
-  * or it has been dismissed due to a queue shutdown, this function
-  * is called to process the completion status and trigger further
-  * events related to the FSF request.
-+ * Caller must ensure that the request has been removed from
-+ * adapter->req_list, to protect against concurrent modification
-+ * by zfcp_erp_strategy_check_fsfreq().
-  */
- static void zfcp_fsf_req_complete(struct zfcp_fsf_req *req)
- {
-+	struct zfcp_erp_action *erp_action;
-+
- 	if (unlikely(zfcp_fsf_req_is_status_read_buffer(req))) {
- 		zfcp_fsf_status_read_handler(req);
- 		return;
-@@ -439,8 +444,9 @@ static void zfcp_fsf_req_complete(struct zfcp_fsf_req *req)
- 	zfcp_fsf_fsfstatus_eval(req);
- 	req->handler(req);
- 
--	if (req->erp_action)
--		zfcp_erp_notify(req->erp_action, 0);
-+	erp_action = req->erp_action;
-+	if (erp_action)
-+		zfcp_erp_notify(erp_action, 0);
- 
- 	if (likely(req->status & ZFCP_STATUS_FSFREQ_CLEANUP))
- 		zfcp_fsf_req_free(req);
--- 
-2.26.2
+--
+Himanshu Madhani	 Oracle Linux Engineering
 
