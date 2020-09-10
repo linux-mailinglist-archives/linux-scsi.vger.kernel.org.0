@@ -2,76 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB682645E7
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 14:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFB726481E
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 16:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730682AbgIJMXB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Sep 2020 08:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
+        id S1731196AbgIJOim (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Sep 2020 10:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730423AbgIJMUy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Sep 2020 08:20:54 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30DEC061573
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Sep 2020 05:18:11 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id k2so1400634ybp.7
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Sep 2020 05:18:11 -0700 (PDT)
+        with ESMTP id S1731019AbgIJOfX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Sep 2020 10:35:23 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10ECC0617A3;
+        Thu, 10 Sep 2020 07:35:19 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id nw23so9063267ejb.4;
+        Thu, 10 Sep 2020 07:35:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=r8oqE+nPv/U+7CnSSQyJw5Jfzfi0/vk69hAYorkY9lw=;
-        b=s3O6hVUr22tPpTSWeu0pMVvI/autH3zHiHCOoLFK1HrXKW7jilesPzca0MP6vlL49b
-         XG4bdyxSp6kFDfFQ1j0BZuhcNyrLz0yDHEe9ImI+KbOAsPLeRo/5mvaC6q9VpiI96yWr
-         Ed7SCfrx8TA4A7MBh/EDipIDdkCH6hGVabBQvoT1fmKP8SRH0IHg1V2PVC3gDjOVnoiL
-         6AyrJiLuUk20xyzoJfNEuTHmtpFZZERn/1xl3rftpeni1aEFCOGbfjgGRcJF2OL0nsks
-         ghpkkPYuttvCDpWmGYsYjeiZDEwjj5ieEhBJ1FF6DKGn5PgvsaEU5OHna9OJR4HzJVL9
-         RGGg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KCYaWwcvDjz/OmO+LXtbRJ6LszuyteB8m/JYCI1W1Mk=;
+        b=PLMSr5mhrZi80kquG3UTKc10L5Ed+nu36WWw+z2lZB7jY2NtSZwMDvRpv3TuwllizR
+         7wpc1iofk2ZoyyDJwpWceFzTiHn90TWZgiZ045Rqz/ctDq5xo9epE09YznVy4EY1BmCs
+         l2St/n4EQLGLl4Irlj/CjiNUTGWsQjI0pEg6F+baJPziJDFYBOwuCCOyMb+xCs9CEFvu
+         9KFGfkT69xlzT78AdIbRIVXoCrdn7bCNxNeWDPtg/woOLBOGoZLIKsWAlBjbsXvCsg9/
+         +ESlgsmFyeGx507Da/rJqBOVrFWssFaCbV59079oaLVMMMb6jhwsRiqhXjYp00Drq8eS
+         JdWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=r8oqE+nPv/U+7CnSSQyJw5Jfzfi0/vk69hAYorkY9lw=;
-        b=n8G9IwxA2XAI/FItQX6r9vIxTPEUGHtUGQ3cq3bjiqni9oWuRZXzxUkPBEjhFmhJvu
-         8zmLea+qSMGYnRqAjqkImbF0+kmGmyEg26cQAOcgOnoxcIPz84UmDgQZulB0GDwbYgor
-         1yFwXvw15kvN4RfD666WD/paulE0Uet3XjaH09UbnVetscGBYDJpd42KPi99xUTJ2lDP
-         bSqYXFqPdxVe1L5u1UwhAT2FeN9T4W77s4oSwxM22l7yPmkEx6U7AJWC5aBwp1+c7fBP
-         VpyKImUbUI5IHA4VgppBpoE7QVb1bvXvvsvgQLCE9k4s6hGGV19cWdeRFal37GjaGeAs
-         bztQ==
-X-Gm-Message-State: AOAM532jA1vAtUyl9ZsucE0DjBmoQlWUZFWUmVki/wmjHNRTBCbWzTQi
-        YT0eYtJ81BbZI0l3XPGtq/zmkJpQuxFIgZaBc2vtccru
-X-Google-Smtp-Source: ABdhPJyZErNcNyNQwy+k069CLewM4HMb8O/dAv+wjfy14b9zL2EEzJN4/WDeJyYZez82lljK/oFvEs/2Cl0UwSIk9g8=
-X-Received: by 2002:a25:3748:: with SMTP id e69mr12077245yba.520.1599740288836;
- Thu, 10 Sep 2020 05:18:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KCYaWwcvDjz/OmO+LXtbRJ6LszuyteB8m/JYCI1W1Mk=;
+        b=UFEPDaW6+yZMFx6m0VsNz3MGpAwL6M01lCF9AbqLIjFd63jnlOiw5djUQvdTIPokW3
+         VHmxa+Vyv/WzdOTxr2SEOnyD7j43evAls5fS/lI86MXSaDa0UJ4YQZtQIWxiRD6THmWN
+         bAJLAf2VKkdvTOG53mLFImXh7ZuiLo3x+AllljfJ05YnflmrDrNHPaHgqRjD8b9mplFw
+         qNA8sImuiwgO9O/xK4HaS71jXLVHsGygYDog/+ooCpxRm+5AKKYfhIISJKs5CzDrL72/
+         7RdEVaio6ZEY4Oz+W2hQfcrkPv+OP8EXky2dFoJPf1j6s82Z5lRnX/+bbaLC4AHaJthY
+         KAfA==
+X-Gm-Message-State: AOAM532OKeSERX9CGPVjdviG55sYo/xPyfeuQYo69cztuMbQJwywpaeQ
+        iwII9gjap6tv8/JWgpadtTA=
+X-Google-Smtp-Source: ABdhPJzWHmRORR4s5GPtiMxYzRL7RIeJHACIEt31sw6plEpoQQDbSHFzrwWgxYbTiAiLDLiHODRGHA==
+X-Received: by 2002:a17:906:e4f:: with SMTP id q15mr9640896eji.155.1599748518392;
+        Thu, 10 Sep 2020 07:35:18 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id ot19sm6825559ejb.121.2020.09.10.07.35.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 10 Sep 2020 07:35:17 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id CE39C27C00A2;
+        Thu, 10 Sep 2020 10:35:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 10 Sep 2020 10:35:13 -0400
+X-ME-Sender: <xms:oTlaX8LSfERbecu5P4Y3VnX8QDSTfUIGezI8Hipxv2LnPtz7F4DBPg>
+    <xme:oTlaX8IkTh1tJF26F5X221FUudtaV7u56qa6z1D_VKOQW2Lmh0L4mwdo_h5rkdvG_
+    ECZe3GDzwCWnxUEXg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudehjedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    goufhorhhtvggutfgvtghiphdvucdlgedtmdenucfjughrpefhvffufffkofgjfhgggfes
+    tdekredtredttdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnh
+    hgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpeehvdevteefgfeiudettdef
+    vedvvdelkeejueffffelgeeuhffhjeetkeeiueeuleenucfkphephedvrdduheehrdduud
+    durdejudenucevlhhushhtvghrufhiiigvpeehnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtd
+    eigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehf
+    ihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:oTlaX8tKhMX0KlXUF85wFnPzW9q02D2iV3z0nFlfNh75RGMaWwXWZw>
+    <xmx:oTlaX5amjTY7Rkksn5WCySfesXGC-eH8Vs3Dz60JGqN1ty073ZFy0Q>
+    <xmx:oTlaXzZ2hmDQiNVFuEI1gHCMoz1HeGK-QKZrR6fgxUOJ1Lq-hcO6gw>
+    <xmx:oTlaXwJ27AAct8MQcnQ5XmCc0ME2n0zxJ-szRB9WVJWXntdGTOzVGz5uryA>
+Received: from localhost (unknown [52.155.111.71])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 106293280059;
+        Thu, 10 Sep 2020 10:35:13 -0400 (EDT)
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michael Kelley <mikelley@microsoft.com>, will@kernel.org,
+        ardb@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+        mark.rutland@arm.com, maz@kernel.org,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: [PATCH v3 06/11] hv: hyperv.h: Introduce some hvpfn helper functions
+Date:   Thu, 10 Sep 2020 22:34:50 +0800
+Message-Id: <20200910143455.109293-7-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200910143455.109293-1-boqun.feng@gmail.com>
+References: <20200910143455.109293-1-boqun.feng@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a81:1342:0:0:0:0:0 with HTTP; Thu, 10 Sep 2020 05:18:08
- -0700 (PDT)
-Reply-To: gabrieledgal00@gmail.com
-From:   Chris Oranu <ngobeautydia@gmail.com>
-Date:   Thu, 10 Sep 2020 05:18:08 -0700
-Message-ID: <CAKGJcaqVejY7zx4E6pZKsXxi7Y5qqerps4U6OQWK9Rbz+ML7aQ@mail.gmail.com>
-Subject: QQ
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+When a guest communicate with the hypervisor, it must use HV_HYP_PAGE to
+calculate PFN, so introduce a few hvpfn helper functions as the
+counterpart of the page helper functions. This is the preparation for
+supporting guest whose PAGE_SIZE is not 4k.
+
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+---
+ include/linux/hyperv.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+index 6f4831212979..00c09d2ff9ad 100644
+--- a/include/linux/hyperv.h
++++ b/include/linux/hyperv.h
+@@ -1687,4 +1687,9 @@ static inline unsigned long virt_to_hvpfn(void *addr)
+ 	return  paddr >> HV_HYP_PAGE_SHIFT;
+ }
+ 
++#define NR_HV_HYP_PAGES_IN_PAGE	(PAGE_SIZE / HV_HYP_PAGE_SIZE)
++#define offset_in_hvpage(ptr)	((unsigned long)(ptr) & ~HV_HYP_PAGE_MASK)
++#define HVPFN_UP(x)	(((x) + HV_HYP_PAGE_SIZE-1) >> HV_HYP_PAGE_SHIFT)
++#define page_to_hvpfn(page)	(page_to_pfn(page) * NR_HV_HYP_PAGES_IN_PAGE)
++
+ #endif /* _HYPERV_H */
 -- 
-Dear Friend.
+2.28.0
 
-I am  Mr. Gabriel Edgal  , I am  internal Auditor  in our bank,i want
-you to get read to receive the transfer of $9.5 million Dollars which
-will be share among two of 50:50 . The fund  was deposited in our bank
-by one of my late client ,who bear the same surname with you and he
-died with his entire family in Auto Accident . The reason why I have
-contacted you is because you bear the same name with the late client
-and  i want to invite you as foreign partner to stand as the  next of
-kin to the decease customer  ,so that we will put claim over  the
-deposited fund and share it between two of us 50: 50 each  .  I want
-you to contact me back here through my email address
-(gabrieledgal00@gmail.com) for more details
-
-Best Regards,
-
-Mr. Gabriel Edgal
