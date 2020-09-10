@@ -2,109 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A043263AE8
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82CA263A96
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 04:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728936AbgIJCsf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Sep 2020 22:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728443AbgIJB7S (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 21:59:18 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9B5C0617AB;
-        Wed,  9 Sep 2020 18:59:18 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id a12so4627586eds.13;
-        Wed, 09 Sep 2020 18:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dUjP7eOEkjBWCnPcsNMyT+WrVYzF6LJucKB9IpolFOQ=;
-        b=npIm4mdF6gzt7Jf+4i3ecdhlURjcoZac3a6SZy5gydDgPT32Pdh5LfTKOZdp0JRZNz
-         h8vVJHnYFFxtj8sTm30CJImU57l8Hg7EIIAUwMaNSik9HWYmQC0Xj2+7aCam0DJrkBDV
-         jdMBWbTXHKJk3t9o741EDeY2Qb7Wjn10OcpzGsNPLMwU6JT5UFv/gYIn3wkPAjk0xdLw
-         1TbCrEmAwPBMQL4OY37ol0O5vqcbSLcBO9y+m5KtIqQtY4/m8YrVp8jOQHZZR4g+Ojx5
-         GCeHowcWMPR9QdUwUX1Q43T8zkUsyAA7Jpb0HNA8lEg/+arImSrrf1e1oNHlljI+w67M
-         zYHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dUjP7eOEkjBWCnPcsNMyT+WrVYzF6LJucKB9IpolFOQ=;
-        b=YFVS6P84b6Nb3qSBo/JIds+sFO6wY5rhRcWRvVR477zYQHJa/ArNRF6JX/tariJd3t
-         6zh3eeBE4Cxt6jYRYV9p0zk+fRTotAdoq3RYIkQvnXycYKYGt8iYGFImxFCzNw6wGjRz
-         T9OVaWEC62Ah+WJTm5uUk/lVPGfDJS+5gE8ISY/umnMktZ/DJk+K21t3UmnX8AQPfpZE
-         OmEdc1M/kwSpf02g2HpsGSYa3XQn2c4aOUH+kWzEJhm2OONYmJzXzOZRVl8KqQKMwAaj
-         XG43+W+pd0fQQfDjWngqiE1hJIU9iXMnbLUtSKQUPzqwKiaAcEtKX2jm0wyXuWAIj+lp
-         UtHQ==
-X-Gm-Message-State: AOAM532zdhU6tS5wWJFuKpnrGkiibt/mB8DFbdBP41+ZUB8JJVUv6uIM
-        Cf7qyfrhDbxx3AT49fbqm4Ph6Y1LKTpE2pVSTZkgmWdX
-X-Google-Smtp-Source: ABdhPJyIlIV8kCXW7pbNF74CPJLFQm0lE0AK4ZTGite4N5UAKt1ax8TSQaB6dd6XQQT2E5PjMBrdlxylZqVYBTuxVzs=
-X-Received: by 2002:aa7:d458:: with SMTP id q24mr7198738edr.23.1599703156952;
- Wed, 09 Sep 2020 18:59:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAGnHSE=bhpL4REG5PXST6dF3gSWeewg1Eqr+sLw_9rtqL-ToFQ@mail.gmail.com>
- <20200906012716.1553-1-tom.ty89@gmail.com> <20200906012716.1553-2-tom.ty89@gmail.com>
- <20200907060927.GA18909@lst.de> <CAGnHSEnWPSaM3xS1MtFUJDrSZPfaH_VwAiQ5UkndFTVe3uWNVA@mail.gmail.com>
- <20200908084258.GA17030@lst.de>
-In-Reply-To: <20200908084258.GA17030@lst.de>
-From:   Tom Yan <tom.ty89@gmail.com>
-Date:   Thu, 10 Sep 2020 09:59:05 +0800
-Message-ID: <CAGnHSE=ASs3DG2yp1NpODHimwxHe+=XPRsOyDdkB3ThtyEU-KA@mail.gmail.com>
-Subject: Re: [PATCH RESEND 2/4] scsi: sg: implement BLKSSZGET
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-scsi@vger.kernel.org, dgilbert@interlog.com,
+        id S1730690AbgIJCfP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Sep 2020 22:35:15 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:38494 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730449AbgIJCdI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Sep 2020 22:33:08 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2SWH3127504;
+        Thu, 10 Sep 2020 02:32:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=an7L+UH4c4nfLl3pql5CjoOv/Ddb1mwYqyEWS3Cvcyk=;
+ b=fCx4BGZUczIglj7jc1RleSkP1Uk1MKnS7WBWvEvM3C+PIEG5YjEErUSGNugY+u8VevXV
+ vWf0b0eEZmtGm/mvU7cIQrUKsDxLaqD0g85JWx5p0fDIXD5X/7B291fW6XjHZrRAMt5u
+ e78t9dE9iVxYXgwv6TPFSHY/yaRLzpknyTYYi5T1N6aoV7j5s5WEc0Qkgwa8zivfIbNf
+ AG/MhvSZPWhnlyDQNkljeSrtjs0qt+MLqhq3sYiWyKxO6gu25PjAU1jt/Sh4sA6iXeDp
+ kurY2NckGubMTnEJwF1hvrn5UEpbMwxrWkZQlH3dPEU6SKWD3t1stdXioGFBZ7opw5wO SA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33c2mm5868-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 10 Sep 2020 02:32:51 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08A2UT2u140713;
+        Thu, 10 Sep 2020 02:32:50 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 33cmkyyw9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Sep 2020 02:32:50 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08A2WlZF013885;
+        Thu, 10 Sep 2020 02:32:47 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 09 Sep 2020 19:32:47 -0700
+To:     Can Guo <cang@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, ziqichen@codeaurora.org,
+        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bean Huo <beanhuo@micron.com>,
         Bart Van Assche <bvanassche@acm.org>,
-        Alan Stern <stern@rowland.harvard.edu>, akinobu.mita@gmail.com,
-        linux-api@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v2 1/2] scsi: ufs: Abort tasks before clear them from
+ doorbell
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq14ko62wn5.fsf@ca-mkp.ca.oracle.com>
+References: <1599099873-32579-1-git-send-email-cang@codeaurora.org>
+        <1599099873-32579-2-git-send-email-cang@codeaurora.org>
+        <1599627906.10803.65.camel@linux.ibm.com>
+Date:   Wed, 09 Sep 2020 22:32:43 -0400
+In-Reply-To: <1599627906.10803.65.camel@linux.ibm.com> (James Bottomley's
+        message of "Tue, 08 Sep 2020 22:05:06 -0700")
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=1
+ spamscore=0 mlxlogscore=964 adultscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009100022
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9739 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 bulkscore=0 clxscore=1015 mlxlogscore=952
+ malwarescore=0 suspectscore=1 lowpriorityscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009100022
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If we rename it to e.g. SG_GET_MAX_XFER_BYTES, it will still break
-applications unless we also keep the wrong/ugly/confusing name (and
-you lose the advantage/generality that the two ioctls can be used on
-both sg and "pure" block devices; which seems to be the case of some
-SG_* ioctls as well).
 
-I don't see what it has to do with passthrough. Either way, it's just
-a matter of whether you want to decouple it and make things more
-flexible. The only real disadvantage is, you will have to do two
-ioctls instead of one, but no more than that, and for good reasons.
+Can and Stanley,
 
-I don't really care enough though. I mean, I'm okay with
-SG_GET_MAX_XFER_BYTES *and* NO "improper" BLKSECTGET. If that will get
-the patch series in, I am willing to send a new version. If not, I'm
-just gonna drop this.
+> I can't reconcile this hunk:
 
-On Tue, 8 Sep 2020 at 16:43, Christoph Hellwig <hch@lst.de> wrote:
->
-> On Mon, Sep 07, 2020 at 05:01:34PM +0800, Tom Yan wrote:
-> > Feel free to omit this. But then you will probably want to ditch
-> > BLKSECTGET as well, and then any usage of queue_max_sectors(), and
-> > maybe more/all queue_*().
-> >
-> > I'm not really interested in discussing/arguing whether
-> > general/ideally-speaking it's appropriate/necessary to keep BLKSECTGET
-> > / add BLKSSZGET. The only reason I added this is that, when BLKSECTGET
-> > was introduced to sg long time ago, it was wrongly implemented to
-> > gives out the limit in bytes, so now when I'm fixing it, I'm merely
-> > making sure that whatever has been relying on the ioctl (e.g. qemu)
-> > will only need to do one more ioctl (instead of e.g. doing SCSI in its
-> > non-SCSI-specific part), if they want/need the limit in bytes. If they
-> > can be implemented more "generic"-ly, feel free to improve/extend them
-> > to make them "SG_*-qualified".
-> >
-> > Even if you can do SCSI from the userspace, or even should, I don't
-> > see any reason that we shouldn't provide an ioctl to do
-> > queue_logical_block_size() *while we provide one to do
-> > queue_max_sectors()*.
->
-> Well, the different definition in bytes for sg actually makes sense
-> to me, as a bytes based limit is what fundamentally makes sense for
-> the passthrough interface.  Only that it reuses the same cmd value
-> is a bit confusing.  So instead of changing anything and potentially
-> breaking applications I'd suggest to just better document the semantics.
+Please provide a resolution for these conflicting commits in fixes and
+queue:
+
+307348f6ab14 scsi: ufs: Abort tasks before clearing them from doorbell
+
+b10178ee7fa8 scsi: ufs: Clean up completed request without interrupt
+notification
+
+Thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
