@@ -2,130 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3911264397
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 12:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB682645E7
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 14:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730833AbgIJKQ4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Sep 2020 06:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S1730682AbgIJMXB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Sep 2020 08:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730260AbgIJKQi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Sep 2020 06:16:38 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656B6C061756;
-        Thu, 10 Sep 2020 03:16:38 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id s13so5065195wmh.4;
-        Thu, 10 Sep 2020 03:16:38 -0700 (PDT)
+        with ESMTP id S1730423AbgIJMUy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Sep 2020 08:20:54 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30DEC061573
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Sep 2020 05:18:11 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id k2so1400634ybp.7
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Sep 2020 05:18:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DqY3ytm1lW24L4dBr5ZhfVe1Kl4JG7b6aElJixa0DtQ=;
-        b=TyMbFj/CCKS/yEhzmJyx0SXASPCumWs129eaMWwliNPHoe9nGlJZk2Tsw17ABtL/mL
-         mWke72l5dRMmrFg9ieYmDr1jVfXiMwSmIMEMsNuXAYrMDmbRSlu2SEhpSFeukLVe3cg9
-         +5O+wBu+Jx7JfEyF9JNwdrWebHIVozT6N0VTqxSNEjrIsLOZ3R3dejl3APk21PLF2Oj8
-         +Kb8ACZuKGttnfzoDexc2yloyF3/YUcCQzcDsr90PZvO0KOXZEocClY8eSC4NnFPV4xO
-         lvhsU6vpfnm+pvKWrckJN/8r5bLtL/kaV4lfgkeSIGRnLzVQeQ+BBL7u23nOrwhO07G+
-         JHEw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=r8oqE+nPv/U+7CnSSQyJw5Jfzfi0/vk69hAYorkY9lw=;
+        b=s3O6hVUr22tPpTSWeu0pMVvI/autH3zHiHCOoLFK1HrXKW7jilesPzca0MP6vlL49b
+         XG4bdyxSp6kFDfFQ1j0BZuhcNyrLz0yDHEe9ImI+KbOAsPLeRo/5mvaC6q9VpiI96yWr
+         Ed7SCfrx8TA4A7MBh/EDipIDdkCH6hGVabBQvoT1fmKP8SRH0IHg1V2PVC3gDjOVnoiL
+         6AyrJiLuUk20xyzoJfNEuTHmtpFZZERn/1xl3rftpeni1aEFCOGbfjgGRcJF2OL0nsks
+         ghpkkPYuttvCDpWmGYsYjeiZDEwjj5ieEhBJ1FF6DKGn5PgvsaEU5OHna9OJR4HzJVL9
+         RGGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DqY3ytm1lW24L4dBr5ZhfVe1Kl4JG7b6aElJixa0DtQ=;
-        b=pmUw8PMCpmIHzSROi++DPz4KjuYgWtg1+Y5TE231Bqiqr8R2N1C3xqoxsiwBj6o1cg
-         uH2BXtjGnMGGoluHj644z5xr7xlqF6U2gftY836V0P2i1eGVJRbd6Kt5NRdxnuMIEUiL
-         l2iyGGPzmqplYZFS9cH521ZnO3ebnALHjbVC/Yy86VDwVom/j1SkB7EzjdV3z887JSV1
-         vBn2sxOKogw/Qr4Wwks6/Tsd6y+ZPpXYP0rtp5M7H0Cz9R+tTExVNwpFLc4afNM8kBHv
-         sPRTlUxnMhVTJVsmuIxtZtgT2oyddp39osiyXrTv8c0GKDU7rTuLb07sCHlL7FBgK0nz
-         qKBw==
-X-Gm-Message-State: AOAM531fehkY9RO3xn+p429hIZbAH2vvrEoH04VI6Oae8Aw4ljanDWzg
-        xuso8Ww0yrtKmBUnjJW0R1g=
-X-Google-Smtp-Source: ABdhPJxz+CTfYBRsr9wPZ8ehDJQEmTq++yYJr4Xo0s0U0R6hQKoUpOmBLcC8LM7TIOPThVoU3WYKbg==
-X-Received: by 2002:a1c:234b:: with SMTP id j72mr7837172wmj.153.1599732997083;
-        Thu, 10 Sep 2020 03:16:37 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.113.201])
-        by smtp.gmail.com with ESMTPSA id a127sm2936155wmh.34.2020.09.10.03.16.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2020 03:16:36 -0700 (PDT)
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
-        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
-        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Kees Cook <kees.cook@canonical.com>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
-        storagedev@microchip.com, ceph-devel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <81d852d4-115f-c6c6-ef80-17c47ec4849a@gmail.com>
-Date:   Thu, 10 Sep 2020 12:16:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=r8oqE+nPv/U+7CnSSQyJw5Jfzfi0/vk69hAYorkY9lw=;
+        b=n8G9IwxA2XAI/FItQX6r9vIxTPEUGHtUGQ3cq3bjiqni9oWuRZXzxUkPBEjhFmhJvu
+         8zmLea+qSMGYnRqAjqkImbF0+kmGmyEg26cQAOcgOnoxcIPz84UmDgQZulB0GDwbYgor
+         1yFwXvw15kvN4RfD666WD/paulE0Uet3XjaH09UbnVetscGBYDJpd42KPi99xUTJ2lDP
+         bSqYXFqPdxVe1L5u1UwhAT2FeN9T4W77s4oSwxM22l7yPmkEx6U7AJWC5aBwp1+c7fBP
+         VpyKImUbUI5IHA4VgppBpoE7QVb1bvXvvsvgQLCE9k4s6hGGV19cWdeRFal37GjaGeAs
+         bztQ==
+X-Gm-Message-State: AOAM532jA1vAtUyl9ZsucE0DjBmoQlWUZFWUmVki/wmjHNRTBCbWzTQi
+        YT0eYtJ81BbZI0l3XPGtq/zmkJpQuxFIgZaBc2vtccru
+X-Google-Smtp-Source: ABdhPJyZErNcNyNQwy+k069CLewM4HMb8O/dAv+wjfy14b9zL2EEzJN4/WDeJyYZez82lljK/oFvEs/2Cl0UwSIk9g8=
+X-Received: by 2002:a25:3748:: with SMTP id e69mr12077245yba.520.1599740288836;
+ Thu, 10 Sep 2020 05:18:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a81:1342:0:0:0:0:0 with HTTP; Thu, 10 Sep 2020 05:18:08
+ -0700 (PDT)
+Reply-To: gabrieledgal00@gmail.com
+From:   Chris Oranu <ngobeautydia@gmail.com>
+Date:   Thu, 10 Sep 2020 05:18:08 -0700
+Message-ID: <CAKGJcaqVejY7zx4E6pZKsXxi7Y5qqerps4U6OQWK9Rbz+ML7aQ@mail.gmail.com>
+Subject: QQ
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+-- 
+Dear Friend.
 
+I am  Mr. Gabriel Edgal  , I am  internal Auditor  in our bank,i want
+you to get read to receive the transfer of $9.5 million Dollars which
+will be share among two of 50:50 . The fund  was deposited in our bank
+by one of my late client ,who bear the same surname with you and he
+died with his entire family in Auto Accident . The reason why I have
+contacted you is because you bear the same name with the late client
+and  i want to invite you as foreign partner to stand as the  next of
+kin to the decease customer  ,so that we will put claim over  the
+deposited fund and share it between two of us 50: 50 each  .  I want
+you to contact me back here through my email address
+(gabrieledgal00@gmail.com) for more details
 
-On 09/09/2020 22:06, Joe Perches wrote:
-> diff --git a/drivers/net/wireless/mediatek/mt7601u/dma.c b/drivers/net/wireless/mediatek/mt7601u/dma.c
-> index 09f931d4598c..778be26d329f 100644
-> --- a/drivers/net/wireless/mediatek/mt7601u/dma.c
-> +++ b/drivers/net/wireless/mediatek/mt7601u/dma.c
-> @@ -193,11 +193,11 @@ static void mt7601u_complete_rx(struct urb *urb)
->   	case -ESHUTDOWN:
->   	case -ENOENT:
->   		return;
-> +	case 0:
-> +		break;
->   	default:
->   		dev_err_ratelimited(dev->dev, "rx urb failed: %d\n",
->   				    urb->status);
-> -		fallthrough;
-> -	case 0:
->   		break;
->   	}
->   
-> @@ -238,11 +238,11 @@ static void mt7601u_complete_tx(struct urb *urb)
->   	case -ESHUTDOWN:
->   	case -ENOENT:
->   		return;
-> +	case 0:
-> +		break;
->   	default:
->   		dev_err_ratelimited(dev->dev, "tx urb failed: %d\n",
->   				    urb->status);
-> -		fallthrough;
-> -	case 0:
->   		break;
->   	}
+Best Regards,
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Mr. Gabriel Edgal
