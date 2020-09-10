@@ -2,106 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B812652A8
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 23:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC734265496
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Sep 2020 23:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbgIJVWX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Sep 2020 17:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbgIJVWG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Sep 2020 17:22:06 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DF2C061573
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Sep 2020 14:22:06 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id x123so5508729pfc.7
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Sep 2020 14:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=from:content-transfer-encoding:mime-version:subject:message-id:date
-         :to;
-        bh=7amgYtKA5AHB51jGt6qVc4R+ZemklilWw9+RcNp7k/I=;
-        b=E2vJlq56WKILuCLvyIfkVv48J4mznCKv7BjL+pkwZXttswl1TseVd5+k82D8XX/qd/
-         dSc7Z6sEB8dv7gn1+Lg1xBZzPEY2cSsqcSe2lhsUoaEmVAODAZhd2LgtrSzbChvdrBxG
-         yRggepQgkuz8l2yc8uJSsUd4A9ElSkfrsDg5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:content-transfer-encoding:mime-version
-         :subject:message-id:date:to;
-        bh=7amgYtKA5AHB51jGt6qVc4R+ZemklilWw9+RcNp7k/I=;
-        b=JSN3ILFxdr9mNu1WvG/klsxawBSIYKjIvI8oUtAni3zQSTmDjkP/e0FoxbWdGEPfib
-         Q+cYGifdfjyTw8EmE7VA0uOZUJQMAKC0ZVOwyPOzYbfyCYr+nND0//6kmRlyRehYgeW6
-         Uz5Wso5tgY745u1CgqyGg4Fe1RpQsyCbATTdjFebmR0GW+2My0QD/lqx1aQLJMaII8v3
-         W/cPSinf/Lh5gtSjJ64dchrN8UFYU6gIa6MUpbPoKWkf1I+1Ax5/wSCcPu0rTphumLXa
-         zGXxubAkVEIiqxh0sWq1khWOHfXnx1USuU3Vv5NYbjB1lJGF2WPaoWk5HvziEgYRyy0z
-         m3mg==
-X-Gm-Message-State: AOAM532Jb2MAaqqU+DDIdCWRq6WKP6yJh0bttVIJBUzkFu59sHULnfDt
-        sjp804JofrvyM3J44ocOso/iFWSj3GlLXc2PKnYdVFbglqtPbRwZi1xKz36SnJ0UK8nNb5SMGkD
-        +cfS0+4Zftkd/e+y8Zx/c5YTHZtibbaWW0AZW49a4cYO3R8wMy2kNW28Ga3Vzlh7tTE5cT0vc5o
-        qcMT0=
-X-Google-Smtp-Source: ABdhPJwCAPnP6rUSKjA2YrAO1zLeJOJiGqs15R6ZE4WizOC+lz7iZMQ9Hj+WgrCH8SMDJvttmHNS4w==
-X-Received: by 2002:a17:902:bccb:b029:d1:9be4:9d22 with SMTP id o11-20020a170902bccbb02900d19be49d22mr385846pls.40.1599772923843;
-        Thu, 10 Sep 2020 14:22:03 -0700 (PDT)
-Received: from localhost.localdomain ([192.30.189.3])
-        by smtp.gmail.com with ESMTPSA id w19sm22676pfq.60.2020.09.10.14.22.02
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Sep 2020 14:22:03 -0700 (PDT)
-From:   Brian Bunker <brian@purestorage.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.0.3.2.26\))
-Subject: [PATCH 1/1] scsi: scsi_dh_alua: remove the list entry before
- assigning the pointer and sdev to NULL
-Message-Id: <4064EB40-C84F-42E8-82F7-3940901C09D2@purestorage.com>
-Date:   Thu, 10 Sep 2020 14:22:02 -0700
-To:     linux-scsi@vger.kernel.org
-X-Mailer: Apple Mail (2.3654.0.3.2.26)
+        id S1725785AbgIJV6s convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 10 Sep 2020 17:58:48 -0400
+Received: from mail2.bemta23.messagelabs.com ([67.219.246.9]:38631 "EHLO
+        mail2.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730312AbgIJLNc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 10 Sep 2020 07:13:32 -0400
+Received: from [100.112.0.190] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-b.us-east-1.aws.symcld.net id DF/7F-59917-35A0A5F5; Thu, 10 Sep 2020 11:13:23 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjk+JIrShJLcpLzFFi42K5lR4TrBvMFRV
+  v8OuunsXUE+9YLfpbfrBbTDx2g9Hiz5Wv7BYvXy1htWh7eo3F4sTzp6wW7XteM1ucft7ManF1
+  zxV2i9blL1ksuq/vYLO4uWAWm8WO7feZLf6+X8xm0ffmObPF2olt7BaXP95htJizvYnVYsOnE
+  +wOIh5v7qxm8bi/eyW7x+QnG5k8+rYdZvf48noWk8fSuavZPXbOusvu8eFjnMei80dZPGZ9Wc
+  /s8b1HzuPzJjmP28+2sXhMuPGYMYAvijUzLym/IoE1o3PGQbaC1+wVZ+Z3sTYwPmLrYuTiEBJ
+  Ywijxe/1B1i5GTg5mAT2JG1OnsIHYvAKCEidnPmGBiGtLLFv4mrmLkQPIVpP42lUCEhYW4Jbo
+  PvGXHSQsIsAn8fF+AEiYTUBUYtumE8wgNouAqsSMjitgthCQffvdEkYQW0LAXmLp+wtQtqTEk
+  9uTGSG2ukv0b5sLtklIgF9iwu2qCYx8s5DcNgvJbbOQ3DYL4bYFjCyrGM2SijLTM0pyEzNzdA
+  0NDHQNDY10jXQNjYz1Eqt0k/RKi3VTE4tLdA31EsuL9Yorc5NzUvTyUks2MQKjOqWAqXoH449
+  XH/QOMUpyMCmJ8srcjowX4kvKT6nMSCzOiC8qzUktPsSox8EhcOHsw0+MAlc+fGpikmLJy89L
+  VZLgPXwXqFqwKDU9tSItMweYhGAaJDh4lER4ee4BpXmLCxJzizPTIVKnGL05Nh6dt4iZYzuYP
+  AYm+9csBpIvdy4Bkod3A0khsA1S4rxOIBsEQEZklObBLYAl00uMslLCvIwMDAxCPAWpRbmZJa
+  jyrxjFORiVhHnlQabwZOaVwN3xCuhEJqATG+XBTixJREhJNTA1BcpzHAr7FDz3XPTDX5s+emR
+  Lvdi9u16y4hrLspikKZdnigR+rVuy3mBTTpTXodvSCT/3fKoJjxQPkLay1y/cPfds2r4dE1Qe
+  plivt844NcXq4Ymbkw1bN/gx5DOuiGataBSXu/DSwPvD/8A1ruWvLkf2nO72nyiTGNZl29Cft
+  uppykpJ1c1XY2aHrNE/bMIRz/maT+fdDIUNu39lVE58NkdVMCrwWejpvc6nDmrvuaWvH6TFtz
+  HmROW8/p5v93ZK8mjbel90savw7b2zKf2+jGTtnbnfY276qJ31fNbO1OExN0mpuCXtylMztbl
+  lbS6Lr7xnDb75Z/acoJJT38PdzHQy33ywyqutOX/pL68SS3FGoqEWc1FxIgA9vgQWIQQAAA==
+X-Msg-Ref: server-30.tower-385.messagelabs.com!1599736362!509009!51
+X-Originating-IP: [218.103.92.83]
+X-SYMC-ESS-Client-Auth: outbound-route-from=fail
+X-StarScan-Received: 
+X-StarScan-Version: 9.60.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 8940 invoked from network); 10 Sep 2020 11:13:23 -0000
+Received: from 083.92.103.218.static.netvigator.com (HELO fksex.fkdomain.local) (218.103.92.83)
+  by server-30.tower-385.messagelabs.com with SMTP; 10 Sep 2020 11:13:23 -0000
+Received: from [172.20.10.4] (102.80.141.101) by fksex.fkdomain.local
+ (192.168.1.9) with Microsoft SMTP Server (TLS) id 8.2.255.0; Thu, 10 Sep 2020
+ 19:13:10 +0800
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re
+To:     Recipients@vger.kernel.org
+From:   Stefano@vger.kernel.org, Pessina@vger.kernel.org
+Date:   Thu, 10 Sep 2020 04:12:51 -0700
+Reply-To: stefanopessina679@yahoo.com
+X-Antivirus: Avast (VPS 200910-0, 09/09/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <49e43c78-1ed0-4d29-99da-a50816c75973@fksex.fkdomain.local>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-A race exists where the BUG_ON(!h->sdev) will fire if the detach device =
-handler
-from one thread runs removing a list entry while another thread is =
-trying to
-evaluate the target portal group state.
+Hallo,
 
-The order of the detach operation is now changed to delete the list =
-entry
-before modifying the pointer and setting h->sdev to NULL.
+Ich bin Stefano Pessina, ein italienischer Wirtschaftsmagnat, Investor und Philanthrop. der stellvertretende Vorsitzende, Chief Executive Officer (CEO) und der größte Einzelaktionär der Walgreens Boots Alliance. ich gab
+25 Prozent meines persönlichen Vermögens für wohltätige Zwecke wegbringen. Und ich habe auch zugesagt, den Rest von 25% in diesem Jahr 2020 wegen des Herzschmerzes von Covid-19 an Einzelpersonen zu verschenken. Ich habe beschlossen, Ihnen 950.000,00 USD (neunhundertfünfzigtausend Dollar) zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen. über meine E-Mail an (stefanopessina679@yahoo.com)
 
-Signed-off-by: Brian Bunker <brian@purestorage.com>
-Acked-by: Krishna Kant <krishna.kant@purestorage.com>
-___
-diff -Naur a/scsi/drivers/scsi/device_handler/scsi_dh_alua.c =
-b/scsi/drivers/scsi/device_handler/scsi_dh_alua.c
---- a/scsi/drivers/scsi/device_handler/scsi_dh_alua.c	2020-09-10 =
-12:29:03.000000000 -0700
-+++ b/scsi/drivers/scsi/device_handler/scsi_dh_alua.c	2020-09-10 =
-12:41:34.000000000 -0700
-@@ -1146,16 +1146,18 @@
+Sie können auch mehr über mich über den unten stehenden Link lesen
 
- 	spin_lock(&h->pg_lock);
- 	pg =3D rcu_dereference_protected(h->pg, =
-lockdep_is_held(&h->pg_lock));
--	rcu_assign_pointer(h->pg, NULL);
--	h->sdev =3D NULL;
--	spin_unlock(&h->pg_lock);
- 	if (pg) {
- 		spin_lock_irq(&pg->lock);
- 		list_del_rcu(&h->node);
- 		spin_unlock_irq(&pg->lock);
--		kref_put(&pg->kref, release_port_group);
- 	}
-+	rcu_assign_pointer(h->pg, NULL);
-+	h->sdev =3D NULL;
-+	spin_unlock(&h->pg_lock);
- 	sdev->handler_data =3D NULL;
-+	if (pg) {
-+		kref_put(&pg->kref, release_port_group);
-+	}
- 	kfree(h);
- }=
+https://en.wikipedia.org/wiki/Stefano_Pessina
+
+Herzlicher Gruss
+CEO Walgreens Boots Alliance
+Stefano Pessina
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
