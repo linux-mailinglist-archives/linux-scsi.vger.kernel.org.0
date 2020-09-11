@@ -2,110 +2,124 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793BA265EE7
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Sep 2020 13:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C202662B8
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Sep 2020 17:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725770AbgIKLke (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Sep 2020 07:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgIKLjT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Sep 2020 07:39:19 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F92C061757
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Sep 2020 04:39:13 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id o6so8078265ota.2
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Sep 2020 04:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rxn/rHXMuJKpAmwAoX0UMhVmMks7/+TlP/YTbCHZI9Q=;
-        b=NXFBy/iBibYuDhvWIuy1AYlz57uUxKxsAXeKkaMhZQCDoJBsuKAih4pEd9AFd4e73X
-         xw0YSXrX1ERw8FM0SdtskzwONjd4QDXeVH5ZcMWZ9exqdgXyNBfJ0hrgX0iB5pxYbRpM
-         zMrqQG98+dO2eDBtkZRzDHvHZ+KydlMAbcRcE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rxn/rHXMuJKpAmwAoX0UMhVmMks7/+TlP/YTbCHZI9Q=;
-        b=V3J1SSxzs6h8OKPHb+rNZip/paZ0suLs+qUZwF+reQQ5pTCDcAzkQIdxrxq8A7PTLh
-         6KuHRUfLF1sP7WFMwjhWHa4hVCMUjib9A7bIfUctaDNSnl1c3Y6Fq1tAhNIiCIky+JZx
-         h5nSi/a3TYySIpC/3ha5VBiPWOSiKTe9i4FwhfltsojrR0GGXbmV1EHZqk16ytlhoucN
-         AgFXCUxzWmJ2A5dhOIBq7qHD6vgQtUCb3NcVyhv6HfJeu5lGqNZzTqJW50SOQuQSnQJ4
-         o2sbSta5SWQh64diTOYy4W2l0S7//24FgwvyTxyR/sMYAYQKt1aFjW/h+2rXpKGvrp1/
-         hKJw==
-X-Gm-Message-State: AOAM533UqP7xFCa6AGMTtTU7S49X9hJdNg0n4t+f9zrf3+BFfgHaXTwk
-        HRT1FCyDuzBwaqNJbR39OO0YQp6+9Uj32HFTIY/yQw==
-X-Google-Smtp-Source: ABdhPJzrmDH440Cv1FzvL1QfAj6PUMek/yHY7sUzL9DpdcE9y8oI3a2w7+UWkioXVElthl6MbS8XQlAjz6A9NPt3P9E=
-X-Received: by 2002:a05:6830:1312:: with SMTP id p18mr980786otq.316.1599824352922;
- Fri, 11 Sep 2020 04:39:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200814130426.2741171-1-sreekanth.reddy@broadcom.com>
- <yq1a6yoviti.fsf@ca-mkp.ca.oracle.com> <CAK=zhgq-5CNQObiwDutLPGG3CbmpAbj+RbDGX-xGu6mVP_WZYw@mail.gmail.com>
- <yq1r1rvqxqe.fsf@ca-mkp.ca.oracle.com> <CAK=zhgpg754D6J6k3s+xmyxH+2MGWjuNb44Tfccq2z+gFuLPRA@mail.gmail.com>
- <yq1d02v4pxt.fsf@ca-mkp.ca.oracle.com>
-In-Reply-To: <yq1d02v4pxt.fsf@ca-mkp.ca.oracle.com>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Fri, 11 Sep 2020 17:09:01 +0530
-Message-ID: <CAK=zhgqXMLL1YJ0-0CAv0dSCyczgp34sac986-oORwUU5r-pZg@mail.gmail.com>
-Subject: Re: [PATCH v1] mpt3sas: Add support for Non-secure Aero and Sea PCI IDs
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726546AbgIKP7N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Sep 2020 11:59:13 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:51154 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726479AbgIKP6e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Sep 2020 11:58:34 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08BDMQFM156701;
+        Fri, 11 Sep 2020 13:23:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=Red1KfmdrafTES2OBbtSFrSu50BYGfLvnMworFNXkMg=;
+ b=vibNFZhHQaKI31k2Y2zZKGhK/KffgNBmfqHAktuk1/o5mZv8jr7h8oPcPCSHsBm/rM9X
+ jJ1CbNmKtUksgsbOsnEvyyt2A0+QlWwpxMjFyRCXXUYSuJnh3tni6HB9FAX540IyqwWr
+ grTbcYhzU7Ggw5QSHkktml2YEP5f8ktzp9X9vtHHKC5AMVhujnCnSRtcp3gL9rhcxD/p
+ FKfUm7cg9B5MuTHXqojkIdKhgZL+ziUm3ahoU489EWv/PZbrP5gpDE3PYotwk3QDzTL1
+ QZurtR6Eduqgvl7DQBc32P6jLaYuLFn/K3DmzzLdRcI25HZAYY67Bemd2Cz+Sf2kBSPo wA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 33c23re7me-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Sep 2020 13:23:31 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08BDLBUG053057;
+        Fri, 11 Sep 2020 13:23:30 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 33cmkcy2gn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Sep 2020 13:23:30 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08BDNTnO009072;
+        Fri, 11 Sep 2020 13:23:29 GMT
+Received: from [192.168.1.18] (/70.114.128.235)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 11 Sep 2020 06:23:29 -0700
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
+Subject: Re: [PATCH] scsi: qla2xxx: remove unneeded variable 'rval'
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+In-Reply-To: <20200911091021.2937708-1-yanaijie@huawei.com>
+Date:   Fri, 11 Sep 2020 08:23:28 -0500
+Cc:     Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        hmadhani@marvell.com, linux-scsi@vger.kernel.org,
+        Hulk Robot <hulkci@huawei.com>
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <FF312963-5603-4541-80AF-5266DA0DEBB1@oracle.com>
+References: <20200911091021.2937708-1-yanaijie@huawei.com>
+To:     Jason Yan <yanaijie@huawei.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9740 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 bulkscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009110107
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9740 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009110108
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 8:32 AM Martin K. Petersen
-<martin.petersen@oracle.com> wrote:
->
->
-> Sreekanth,
->
-> > Broadcom adapters participate in a Secure Boot process, where every
-> > piece of FW is digitally signed by Broadcom and is checked for a valid
-> > signature.  If any piece of our adapter FW fails this signature check,
-> > it is possible the FW has been tampered with and the adapter should
-> > not be used.  Our driver should not make any additional access to the
-> > =E2=80=9Cinvalid/tampered=E2=80=9D adapter because the FW is not valid =
-(could be
-> > malicious FW). This type of detection is added into latest Aero and
-> > Sea family adapters h/w.
->
-> While I appreciate the intent, I would still like there to be an option
-> to permit using the adapter. I am concerned about users being unable to
-> boot their system due to this if, for whatever reason, these validation
-> checks fail. Maybe there is limited risk of that happening since this is
-> restricted to Aero and Sea adapters. But I am still concerned about
-> enforcing policy decisions like this in the kernel.
 
-These non-secure PCI Ids are very unlikely to happen as they are not
-actual IDs instead they get exposed when something wrong happens in
-the controller and it is good to prevent boot instead of giving an
-ability for an user to run malicious code.
 
-Also, This is an extremely unlikely event, and is evidence of physical
-tampering at the ASIC level.
+> On Sep 11, 2020, at 4:10 AM, Jason Yan <yanaijie@huawei.com> wrote:
+>=20
+> This addresses the following coccinelle warning:
+>=20
+> drivers/scsi/qla2xxx/qla_init.c:7112:5-9: Unneeded variable: "rval".
+> Return "QLA_SUCCESS" on line 7115
+>=20
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
+> drivers/scsi/qla2xxx/qla_init.c | 5 ++---
+> 1 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/scsi/qla2xxx/qla_init.c =
+b/drivers/scsi/qla2xxx/qla_init.c
+> index 0bd04a62af83..df56ac8c3f00 100644
+> --- a/drivers/scsi/qla2xxx/qla_init.c
+> +++ b/drivers/scsi/qla2xxx/qla_init.c
+> @@ -7109,10 +7109,9 @@ qla24xx_reset_adapter(scsi_qla_host_t *vha)
+> 	unsigned long flags =3D 0;
+> 	struct qla_hw_data *ha =3D vha->hw;
+> 	struct device_reg_24xx __iomem *reg =3D &ha->iobase->isp24;
+> -	int rval =3D QLA_SUCCESS;
+>=20
+> 	if (IS_P3P_TYPE(ha))
+> -		return rval;
+> +		return QLA_SUCCESS;
+>=20
+> 	vha->flags.online =3D 0;
+> 	ha->isp_ops->disable_intrs(ha);
+> @@ -7127,7 +7126,7 @@ qla24xx_reset_adapter(scsi_qla_host_t *vha)
+> 	if (IS_NOPOLLING_TYPE(ha))
+> 		ha->isp_ops->enable_intrs(ha);
+>=20
+> -	return rval;
+> +	return QLA_SUCCESS;
+> }
+>=20
+> /* On sparc systems, obtain port and node WWN from firmware
+> --=20
+> 2.25.4
+>=20
 
-- If the executing firmware is authentic, signed Broadcom firmware, it
-will halt due to the evidence of physical tampering and you won't have
-a working controller anyway.
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
-- If the executing firmware continues to run, then that means that the
-physical attack has somehow succeeded and allowed the firmware to
-bypass some part of the signature check, since authentic firmware
-would have halted. In this case, the driver should reject the
-controller/firmware combination
+--
+Himanshu Madhani	 Oracle Linux Engineering
 
-Thanks,
-Sreekanth
-
->
-> --
-> Martin K. Petersen      Oracle Linux Engineering
