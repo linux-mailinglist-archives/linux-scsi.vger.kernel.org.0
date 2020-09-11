@@ -2,97 +2,168 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A03266568
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Sep 2020 19:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1C326671B
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Sep 2020 19:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726228AbgIKRBh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Sep 2020 13:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbgIKPEQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Sep 2020 11:04:16 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F47DC0612F0
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Sep 2020 07:50:16 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id d15so6099583lfq.11
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Sep 2020 07:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=l8o/PxZLRUsXqbfQdaHQ/PhODuJFQTqIyS1z/DNGmXE=;
-        b=GBLXcYiRneoUbwJXgqGF+e+XGNVgVltdBEIcaeanwlxmaAX1VWo/4dzT9DfjviYqi2
-         XcmLjS2OW9KPBmSFYpx8bozM7zao2WbY/CVR4UDTg1Qe1sXKckM/N4WajCkK52MzP4yS
-         IgRgs3DK+WLwtTT4gpFbmNokOnq3aFupUIOqJwoD7qHl9k0J+rKNmZqs2aXvQEKw7u5z
-         gzTSFOYdtZ8KhlP0sr3ZTHqcA++ihqkUMevp5VMAQBDPgFVDKVfB/i5Ccv/ctlTiJrQm
-         CG71Sk38ptXB9D7F5qjYuV9U/eOSchyvT6qxlBnbGGwM+QuucItfetP3lKY76Ps4cwHg
-         ftUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=l8o/PxZLRUsXqbfQdaHQ/PhODuJFQTqIyS1z/DNGmXE=;
-        b=ZmfUuaj2lbqRiK0jATvUZ/8pxJAj1SkB2IM0ohvgBKImi2fJiDVjSjfw6/71sKgEPk
-         EDN+4vHkWWIDPJbNlEzJzgbfZK6RlpOBPhMpqUMFSjPQn+motk4z/04oHEBn5daIdZiP
-         grSW67NIEIav/U2DlepHZbFDvEpSIScCzRno6Unzxs+oPntNLVBSkaa2cWh+Vzfc79Sl
-         XArmkj4r5kVKyPlmFG2JJVmLfgdEwiRIcw0zKDzzt/P9WVLk8qmVpWsw3XwrXYfOxs+w
-         VdorSNvfFenyyoppqogsJuybA3MUTnDq07561Ie7rx03cy/AtZxuivQIG4EcXYRTrRxR
-         P6qA==
-X-Gm-Message-State: AOAM530wl9T5TwQV0FzJY+6RF8kTffTlvg4cR1Ys+Db8R7kjifnWSuEU
-        jSg3o2W49vNSmhbWPRxdtORHGN/iyhpMo8txENk=
-X-Google-Smtp-Source: ABdhPJxEUIGF5kSZMH6oJgwES2Jtirh6xWlKwCnPeXysKCW0YVrW3slbDQu2K2EnJEZVIkMOddHVwa7tjHxPoDkSePE=
-X-Received: by 2002:a19:715:: with SMTP id 21mr917126lfh.212.1599835814881;
- Fri, 11 Sep 2020 07:50:14 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab3:60aa:0:0:0:0:0 with HTTP; Fri, 11 Sep 2020 07:50:14
- -0700 (PDT)
-From:   Donna Louise <donnamcinneslouise@gmail.com>
-Date:   Fri, 11 Sep 2020 02:50:14 -1200
-X-Google-Sender-Auth: 8mNrd402kDrDf8Sda_lYIuvxcxY
-Message-ID: <CAJMpOne16P0C9rX4s3veMOBtsZpg4uua1+HQQbiqVYDDC79rkQ@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1726024AbgIKRhr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Sep 2020 13:37:47 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:54712 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725964AbgIKRhg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Sep 2020 13:37:36 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08BHZMYj082991;
+        Fri, 11 Sep 2020 17:37:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=UtS6Lvax0iwSFvWxfVsY5t3dj+KYttnttvSJwUSuiPw=;
+ b=icJ2IUt8RO6BPYpQQVcehL+cD97DitFMaU902zdOdoP+T2aVMNIZ2c1EsYeBzqbKbMVS
+ JACVljGJ4GAvzwX31oqdnUFwyDjWtNMnS0XLsxUUPxe80P0r/JbEpmk9ohbYjNr0TnB2
+ iyikg1qdJ/xo07POOgv8HcUS/mcDK4TUBHwTjKzOtQURnndkhEWWZhgoD6ux8FHt1cMj
+ Uon5YCO5jr9Wpz/j0/oxSnnomZw/2Wd3vJF5LIuAPP279tUgvAl/4pXY7+aeYJ7Zuz90
+ TZ9kk8Cz4YlgAkVnMOMsCsu3YnWoOR2ysQIQcMXSSsuGmLoWm+gEp+13TWj0aquf5qaI KQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 33c23rfn5c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Sep 2020 17:37:30 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08BHUWMa070380;
+        Fri, 11 Sep 2020 17:37:29 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33cmm3s828-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Sep 2020 17:37:29 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08BHbOsS011603;
+        Fri, 11 Sep 2020 17:37:24 GMT
+Received: from dhcp-10-154-112-22.vpn.oracle.com (/10.154.112.22)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 11 Sep 2020 10:37:24 -0700
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
+Subject: Re: qla2xxx panic with 4.19-stable
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+In-Reply-To: <CAOOPZo448A7-qg6gpJqMF6TmnUWVXL3=A4nEo2pKVRt3iEkGrA@mail.gmail.com>
+Date:   Fri, 11 Sep 2020 12:37:23 -0500
+Cc:     linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org,
+        liuzhengyuan@tj.kylinos.cn
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <2420F4B8-5DAE-4A8D-B519-70F3665C41E8@oracle.com>
+References: <CAOOPZo448A7-qg6gpJqMF6TmnUWVXL3=A4nEo2pKVRt3iEkGrA@mail.gmail.com>
+To:     Zhengyuan Liu <liuzhengyuang521@gmail.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9741 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=3
+ spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009110142
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9741 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=3 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009110142
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
- Dear Friend,
+Hi,
 
-  I am glad to know you, but God knows you better and he knows why he
-has directed me to you at this point in time so do not be surprised at
-all. My name is Mrs. Donna Louise McInnes, a widow, i have been
-suffering from ovarian cancer disease. At this moment i am about to
-end the race like this because the illness has gotten to a very bad
-stage, without any family members and no child. I hope that you will
-not expose or betray this trust and confidence that I am about to
-entrust to you for the mutual benefit of the orphans and the less
-privileged ones. I have some funds I inherited from my late husband,
-the sum of ($11.000.000 Eleven million dollars.) deposited in the
-Bank.  Having known my present health status, I decided to entrust
-this fund to you believing that you will utilize it the way i am going
-to instruct herein.
+> On Sep 10, 2020, at 9:26 PM, Zhengyuan Liu =
+<liuzhengyuang521@gmail.com> wrote:
+>=20
+> Hi,
+>=20
+> There is a panic of NULL pointer dereference on my arm64 server when
+> boot  with the fabric line  plugged into the HBA of QLE2692. After
+> binary-search with git bisect I found this panic is introduced by
+> commit 4984a06bf094 ("scsi: qla2xxx: Remove all rports if fabric scan
+> retry fails"). The upstream and 4.19-stable both had the same problem
+> when reset to this point. but the upstream had fix this
+> unintentionally after commit da61ef053bcf ("scsi: qla2xxx: Reduce
+> holding sess_lock to prevent CPU") while the latest 4.19-stable still
+> has this issue. the panic showed as following:
+>=20
+> [   13.380405][  0] Unable to handle kernel NULL pointer dereference
+> at virtual address 0000000000000000
+> [   13.390947][  0] Mem abort info:
+> [   13.395535][  0]   ESR =3D 0x96000045
+> [   13.400390][  0]   Exception class =3D DABT (current EL), IL =3D 32 =
+bits
+> [   13.408089][  0]   SET =3D 0, FnV =3D 0
+> .
+> [   13.412941][  0]   EA =3D 0, S1PTW =3D 0
+> [   13.416747][  0] Data abort info:
+> [   13.420048][  0]   ISV =3D 0, ISS =3D 0x00000045
+> [   13.424293][  0]   CM =3D 0, WnR =3D 1
+> [   13.427676][  0] user pgtable: 64k pages, 48-bit VAs, pgdp =3D =
+(____ptrval____)
+> [   13.434778][  0] [0000000000000000] pgd=3D0000000000000000,
+> pud=3D0000000000000000
+> [   13.441968][  0] Internal error: Oops: 96000045 [#1] SMP
+> [   13.447250][  0] Modules linked in: qla2xxx nvme_fc nvme_fabrics
+> scsi_transport_fc igb megaraid_sas dm_snapshot iscsi_tcp libiscsi_tcp
+> libs
+> [   13.472588][  0] Process kworker/0:2 (pid: 343, stack limit =3D
+> 0x(____ptrval____))
+> [   13.472675][  5] audit: type=3D1130 audit(1599118767.260:14): pid=3D1=
 
-Therefore I need you to assist me and reclaim this money and use it
-for Charity works, for orphanages and giving justice and help to the
-poor, needy and to promote the words of God and the effort that the
-house of God will be maintained says The Lord." Jeremiah 22:15-16.=E2=80=9C
+> uid=3D0 auid=3D4294967295 ses=3D4294967295 msg=3D'unit=3Dinitrd-parse-et=
+c
+> comm=3D"sy'
+> [   13.480032][  0] CPU: 0 PID: 343 Comm: kworker/0:2 Tainted: G
+> W         4.19.90-19.ky10.aarch64 #1
+> [   13.480033][  5] Hardware name: GreatWall, BIOS 601FBE28 2020/04/20
+> [   13.480045][  0] Workqueue: qla2xxx_wq qla2x00_iocb_work_fn =
+[qla2xxx]
+> [   13.499248][  0] audit: type=3D1131 audit(1599118767.260:15): pid=3D1=
 
-It will be my great pleasure to compensate you with 35 % percent of
-the total money for your personal use, 5 % percent for any expenses
-that may occur during the international transfer process while 60% of
-the money will go to the charity project.
+> uid=3D0 auid=3D4294967295 ses=3D4294967295 msg=3D'unit=3Dinitrd-parse-et=
+c
+> comm=3D"sy'
+> [   13.508759][  0] pstate: 40000005 (nZcv daif -PAN -UAO)
+> [   13.547687][ 24] pc : __memset+0x16c/0x188
+> [   13.547697][  0] lr : qla24xx_async_gpnft+0x194/0x950 [qla2xxx]
+> [   13.547701][  0] sp : ffffb2158236bc60
+> [   13.561388][  0] x29: ffffb2158236bc60 x28: 0000000000000000
+> [   13.567104][  0] x27: ffff3be824ac0148 x26: ffff3be824ac00b8
+> [   13.572820][  0] x25: ffff3be824b031e0 x24: 0000000000000028
+> [   13.578535][  0] x23: ffffb2158600d188 x22: ffffb21586d3ea38
+> [   13.584251][  0] x21: 0000000000008010 x20: ffffb21586d3ea08
+> [   13.589968][  0] x19: ffffb2158600d040 x18: 0000000000000400
+> [   13.595683][  0] x17: 0000000000000000 x16: ffff3be83f9a9500
+> [   13.601398][  0] x15: 0000000000000400 x14: 0000000000000400
+> [   13.607114][  0] x13: 0000000000000189 x12: 0000000000000001
+> [   13.612829][  0] x11: 0000000000000000 x10: 0000000000000b40
+> [   13.618544][  0] x9 : 0000000000000000 x8 : 0000000000000000
+> [   13.624259][  0] x7 : 0000000000000000 x6 : 000000000000003f
+> [   13.629974][  0] x5 : 0000000000000040 x4 : 0000000000000000
+> [   13.635689][  0] x3 : 0000000000000004 x2 : 0000000000007fd0
+> [   13.641404][  0] x1 : 0000000000000000 x0 : 0000000000000000
+> [   13.647119][  0] Call trace:
+> [   13.649983][  0]  __memset+0x16c/0x188
+> [   13.653718][  0]  qla2x00_do_work+0x398/0x440 [qla2xxx]
+> [   13.658920][  0]  qla2x00_iocb_work_fn+0x50/0xe8 [qla2xxx]
+> [   13.664378][  0]  process_one_work+0x1f0/0x3c8
+> [   13.668797][  0]  worker_thread+0x48/0x4d0
+> [   13.672871][  0]  kthread+0x128/0x130
+> [   13.676514][  0]  ret_from_fork+0x10/0x18
+> [   13.680503][  0] Code: 91010108 54ffff4a 8b040108 cb050042 =
+(d50b7428)
+> [   13.687027][  0] ---[ end trace 258cdcdd74a25238 ]---
+> [   13.692051][  0] Kernel panic - not syncing: Fatal exception
 
-All I require from you is sincerity and the ability to complete God's
-task without any failure. It will be my pleasure to see that the bank
-has finally released and transferred the fund into your bank account
-therein your country even before I die here in the hospital, because
-of my present health status everything needs to be processed rapidly
-as soon as possible. I am waiting for your immediate reply, if only
-you are interested for further details of the transaction and
-execution of this charitable project.
+Have you tried applying commit da61ef053bcf ("scsi: qla2xxx: Reduce =
+holding sess_lock to prevent CPU=E2=80=9D) to confirm if it resolves =
+your panic. It does look like the panic should resolve with the changes =
+in that patch.
 
-Best Regards your friend Mrs.
-Donna Louise McInnes.
+If you are able to verify then we can request for sable back port with =
+your reported-by and tested-by tags.=20
+
+--
+Himanshu Madhani	 Oracle Linux Engineering
+
