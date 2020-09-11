@@ -2,72 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6588D265799
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Sep 2020 05:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EDF265808
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Sep 2020 06:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725795AbgIKDid convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 10 Sep 2020 23:38:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49314 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgIKDib (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 10 Sep 2020 23:38:31 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 206123] aacraid ( PM8068) and iommu=nobypass Frozen PHB error 
- on ppc64
-Date:   Fri, 11 Sep 2020 03:38:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-aacraid@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: AACRAID
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gyakovlev@gentoo.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-aacraid@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-206123-11613-0WWF4VqSij@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206123-11613@https.bugzilla.kernel.org/>
-References: <bug-206123-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1725829AbgIKETw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Sep 2020 00:19:52 -0400
+Received: from smtprelay0064.hostedemail.com ([216.40.44.64]:51536 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725283AbgIKETs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 11 Sep 2020 00:19:48 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 12942837F24A;
+        Fri, 11 Sep 2020 04:19:43 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3871:3872:3874:4321:5007:6742:6743:10004:10400:10848:11026:11232:11473:11657:11658:11914:12043:12297:12438:12555:12740:12760:12895:13153:13161:13228:13229:13439:14096:14097:14181:14659:14721:21080:21433:21627:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: seat91_4d0f80d270eb
+X-Filterd-Recvd-Size: 4376
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf19.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 11 Sep 2020 04:19:36 +0000 (UTC)
+Message-ID: <f4ad706519917d493a0af32ea2da8565227cc74a.camel@perches.com>
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+From:   Joe Perches <joe@perches.com>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
+        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
+        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Kees Cook <kees.cook@canonical.com>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
+        storagedev@microchip.com, ceph-devel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
+        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Will Deacon <will@kernel.org>
+Date:   Thu, 10 Sep 2020 21:19:35 -0700
+In-Reply-To: <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+         <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206123
+On Thu, 2020-09-10 at 15:21 +0100, Robin Murphy wrote:
+> On 2020-09-09 21:06, Joe Perches wrote:
+> > fallthrough to a separate case/default label break; isn't very readable.
+> > 
+> > Convert pseudo-keyword fallthrough; statements to a simple break; when
+> > the next label is case or default and the only statement in the next
+> > label block is break;
+> > 
+> > Found using:
+> > 
+> > $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
+> > 
+> > Miscellanea:
+> > 
+> > o Move or coalesce a couple label blocks above a default: block.
+> > 
+> > Signed-off-by: Joe Perches <joe@perches.com>
+> > ---
+> > 
+> > Compiled allyesconfig x86-64 only.
+> > A few files for other arches were not compiled.
+> > 
+> 
+> [...]
+> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > index c192544e874b..743db1abec40 100644
+> > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> > @@ -3777,7 +3777,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
+> >   	switch (FIELD_GET(IDR0_TTF, reg)) {
+> >   	case IDR0_TTF_AARCH32_64:
+> >   		smmu->ias = 40;
+> > -		fallthrough;
+> > +		break;
+> >   	case IDR0_TTF_AARCH64:
+> >   		break;
+> >   	default:
+> 
+> I have to say I don't really agree with the readability argument for 
+> this one - a fallthrough is semantically correct here, since the first 
+> case is a superset of the second. It just happens that anything we would 
+> do for the common subset is implicitly assumed (there are other 
+> potential cases we simply haven't added support for at the moment), thus 
+> the second case is currently empty.
+> This change actively obfuscates that distinction.
 
---- Comment #12 from gyakovlev@gentoo.org ---
-applied patch to linux-5.4.64, booted with iommu=nobypass and ran some
-stress-ng tests across all drives.
-looks good so far.
-wrote close to 1TB of test data, not a sign of a problem.
-performance is excellent.
+Then perhaps comments should be added to usefully
+describe the mechanisms.
 
+	case IDR0_TTF_AARCH32_64:
+		smmu->ias = 40;
+		fallthrough;	/* and still do the 64 bit processing */
+	case IDR0_TTF_AARCH64:
+		/* Nothing specific yet */
+		break;
 
-also booted linux-5.8.8 (without patch), just a tiny bit of IO triggers the
-error, controller does not recover after reset, everything hangs.
-I have not tested patched 5.8.8.
+> Robin.
 
-
-Conclusion is - patch Oliver linked definitely helps and system is stable and
-performant.
-
-Hopefully it'll make into 5.4 and 5.8, I'll be patching manually meanwhile.
-
-
-Tested-by: Georgy Yakovlev <gyakovlev@gentoo.org>
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
