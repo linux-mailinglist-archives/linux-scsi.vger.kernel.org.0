@@ -2,29 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F6A26778E
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Sep 2020 05:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9805826778F
+	for <lists+linux-scsi@lfdr.de>; Sat, 12 Sep 2020 05:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgILDil (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Sep 2020 23:38:41 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12238 "EHLO huawei.com"
+        id S1725836AbgILDiw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Sep 2020 23:38:52 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:32922 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725773AbgILDik (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 11 Sep 2020 23:38:40 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 372FE63358678070A603;
-        Sat, 12 Sep 2020 11:38:36 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Sat, 12 Sep 2020
- 11:38:29 +0800
+        id S1725773AbgILDiv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 11 Sep 2020 23:38:51 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 40232392D70814023D20;
+        Sat, 12 Sep 2020 11:38:49 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Sat, 12 Sep 2020
+ 11:38:39 +0800
 From:   Jason Yan <yanaijie@huawei.com>
-To:     <aacraid@microsemi.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hare@suse.de>,
+To:     <skashyap@marvell.com>, <jhasan@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <lee.jones@linaro.org>,
         <linux-scsi@vger.kernel.org>
 CC:     Jason Yan <yanaijie@huawei.com>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH] scsi: aacraid: make some symbols static in aachba.c
-Date:   Sat, 12 Sep 2020 11:37:49 +0800
-Message-ID: <20200912033749.142488-1-yanaijie@huawei.com>
+Subject: [PATCH] scsi: bnx2fc: make a bunch of symbols static in bnx2fc_fcoe.c
+Date:   Sat, 12 Sep 2020 11:37:58 +0800
+Message-ID: <20200912033758.142601-1-yanaijie@huawei.com>
 X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -38,50 +39,63 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 This eliminates the following sparse warning:
 
-drivers/scsi/aacraid/aachba.c:245:5: warning: symbol 'aac_convert_sgl'
-was not declared. Should it be static?
-drivers/scsi/aacraid/aachba.c:293:5: warning: symbol 'acbsize' was not
-declared. Should it be static?
-drivers/scsi/aacraid/aachba.c:324:5: warning: symbol 'aac_wwn' was not
-declared. Should it be static?
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:53:1: warning: symbol
+'bnx2fc_global_lock' was not declared. Should it be static?
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:111:6: warning: symbol
+'bnx2fc_devloss_tmo' was not declared. Should it be static?
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:116:6: warning: symbol
+'bnx2fc_max_luns' was not declared. Should it be static?
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:121:6: warning: symbol
+'bnx2fc_queue_depth' was not declared. Should it be static?
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:126:6: warning: symbol
+'bnx2fc_log_fka' was not declared. Should it be static?
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: Jason Yan <yanaijie@huawei.com>
 ---
- drivers/scsi/aacraid/aachba.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 6a44d385c745..31233f6a0274 100644
---- a/drivers/scsi/aacraid/aachba.c
-+++ b/drivers/scsi/aacraid/aachba.c
-@@ -242,7 +242,7 @@ int aac_commit = -1;
- int startup_timeout = 180;
- int aif_timeout = 120;
- int aac_sync_mode;  /* Only Sync. transfer - disabled */
--int aac_convert_sgl = 1;	/* convert non-conformable s/g list - enabled */
-+static int aac_convert_sgl = 1;	/* convert non-conformable s/g list - enabled */
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+index 5cdeeb3539fd..6890bbe04a8c 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -50,7 +50,7 @@ struct workqueue_struct *bnx2fc_wq;
+  * Here the io threads are per cpu but the l2 thread is just one
+  */
+ struct fcoe_percpu_s bnx2fc_global;
+-DEFINE_SPINLOCK(bnx2fc_global_lock);
++static DEFINE_SPINLOCK(bnx2fc_global_lock);
  
- module_param(aac_sync_mode, int, S_IRUGO|S_IWUSR);
- MODULE_PARM_DESC(aac_sync_mode, "Force sync. transfer mode"
-@@ -290,7 +290,7 @@ MODULE_PARM_DESC(numacb, "Request a limit to the number of adapter control"
- 	" blocks (FIB) allocated. Valid values are 512 and down. Default is"
- 	" to use suggestion from Firmware.");
+ static struct cnic_ulp_ops bnx2fc_cnic_cb;
+ static struct libfc_function_template bnx2fc_libfc_fcn_templ;
+@@ -108,22 +108,22 @@ MODULE_PARM_DESC(debug_logging,
+ 		"\t\t0x10 - fcoe L2 fame related logs.\n"
+ 		"\t\t0xff - LOG all messages.");
  
--int acbsize = -1;
-+static int acbsize = -1;
- module_param(acbsize, int, S_IRUGO|S_IWUSR);
- MODULE_PARM_DESC(acbsize, "Request a specific adapter control block (FIB)"
- 	" size. Valid values are 512, 2048, 4096 and 8192. Default is to use"
-@@ -321,7 +321,7 @@ int aac_reset_devices;
- module_param_named(reset_devices, aac_reset_devices, int, S_IRUGO|S_IWUSR);
- MODULE_PARM_DESC(reset_devices, "Force an adapter reset at initialization.");
+-uint bnx2fc_devloss_tmo;
++static uint bnx2fc_devloss_tmo;
+ module_param_named(devloss_tmo, bnx2fc_devloss_tmo, uint, S_IRUGO);
+ MODULE_PARM_DESC(devloss_tmo, " Change devloss_tmo for the remote ports "
+ 	"attached via bnx2fc.");
  
--int aac_wwn = 1;
-+static int aac_wwn = 1;
- module_param_named(wwn, aac_wwn, int, S_IRUGO|S_IWUSR);
- MODULE_PARM_DESC(wwn, "Select a WWN type for the arrays:\n"
- 	"\t0 - Disable\n"
+-uint bnx2fc_max_luns = BNX2FC_MAX_LUN;
++static uint bnx2fc_max_luns = BNX2FC_MAX_LUN;
+ module_param_named(max_luns, bnx2fc_max_luns, uint, S_IRUGO);
+ MODULE_PARM_DESC(max_luns, " Change the default max_lun per SCSI host. Default "
+ 	"0xffff.");
+ 
+-uint bnx2fc_queue_depth;
++static uint bnx2fc_queue_depth;
+ module_param_named(queue_depth, bnx2fc_queue_depth, uint, S_IRUGO);
+ MODULE_PARM_DESC(queue_depth, " Change the default queue depth of SCSI devices "
+ 	"attached via bnx2fc.");
+ 
+-uint bnx2fc_log_fka;
++static uint bnx2fc_log_fka;
+ module_param_named(log_fka, bnx2fc_log_fka, uint, S_IRUGO|S_IWUSR);
+ MODULE_PARM_DESC(log_fka, " Print message to kernel log when fcoe is "
+ 	"initiating a FIP keep alive when debug logging is enabled.");
 -- 
 2.25.4
 
