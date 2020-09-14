@@ -2,115 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC16268EA5
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 16:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1F7268F28
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 17:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgINO6f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Sep 2020 10:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726883AbgINO6P (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Sep 2020 10:58:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879BC06174A;
-        Mon, 14 Sep 2020 07:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=5I0Wekw7PGkNV3dZaIEsA8c8Eplwzl97xo8vYosQxdI=; b=jKw8RqKuJ++oQ1SuLItg20t5TM
-        m+tQOTB1YJulvaPmWR9W2ftI6DOR4X1yaVUwJmeeH2dkVth5Xu644krytFCPwhsgvlfLbRV664WHp
-        77xXf9YegU0pIUXzWHOmpFJpKtGGsbPXNvPXoSd/dKLY/pOsq8jeFeiR94UCcY+8ZOQCaFr2gUKLa
-        2U0tm2OMKgcLKJdgX3t5I1pqOpwZyNHwZZnPGKBlKRwbY4KpmBVnEkvtM0LdVmzxiakDhHhAknAf0
-        Tyh5ZEgG0X79MNLFtpN3VbcWaBqxePH/TV3qtXdqKxvw8EOUMV2DzB+LhDFoQND29BAXMvHObrhYe
-        Tr7br70Q==;
-Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kHpvN-00023B-Gu; Mon, 14 Sep 2020 14:57:45 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org
-Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org
-Subject: [PATCH 05/17] net/au1000-eth: stop using DMA_ATTR_NON_CONSISTENT
-Date:   Mon, 14 Sep 2020 16:44:21 +0200
-Message-Id: <20200914144433.1622958-6-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200914144433.1622958-1-hch@lst.de>
-References: <20200914144433.1622958-1-hch@lst.de>
+        id S1726031AbgINPJE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Sep 2020 11:09:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32952 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726621AbgINNF3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:05:29 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8492C2222D;
+        Mon, 14 Sep 2020 13:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600088679;
+        bh=nj04gQ2nO4VIAL2d7c7u/+7BBIF7UPrKHeahbNgg3hw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xr0uzeSO/sqmMkePVP09eccWv23Pqd6XLdVonwSLreL7Y5TmA5CYkgzBs1ZiA87jw
+         b4ltAssWZZ/pCcDt59VReBWoNuFwBEu0amwSkSTiaiVK2HnRpKuq7f6P5KFTT/vIa5
+         QUapyeG6/I6NDVQvNZfkbsSjT7laaf8JjuG9VAJc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Javed Hasan <jhasan@marvell.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 03/22] scsi: libfc: Fix for double free()
+Date:   Mon, 14 Sep 2020 09:04:15 -0400
+Message-Id: <20200914130434.1804478-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200914130434.1804478-1-sashal@kernel.org>
+References: <20200914130434.1804478-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The au1000-eth driver contains none of the manual cache synchronization
-required for using DMA_ATTR_NON_CONSISTENT.  From what I can tell it
-can be used on both dma coherent and non-coherent DMA platforms, but
-I suspect it has been buggy on the non-coherent platforms all along.
+From: Javed Hasan <jhasan@marvell.com>
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+[ Upstream commit 5a5b80f98534416b3b253859897e2ba1dc241e70 ]
+
+Fix for '&fp->skb' double free.
+
+Link:
+https://lore.kernel.org/r/20200825093940.19612-1-jhasan@marvell.com
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Javed Hasan <jhasan@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/amd/au1000_eth.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ drivers/scsi/libfc/fc_disc.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/amd/au1000_eth.c b/drivers/net/ethernet/amd/au1000_eth.c
-index 75dbd221dc594b..19e195420e2434 100644
---- a/drivers/net/ethernet/amd/au1000_eth.c
-+++ b/drivers/net/ethernet/amd/au1000_eth.c
-@@ -1131,10 +1131,9 @@ static int au1000_probe(struct platform_device *pdev)
- 	/* Allocate the data buffers
- 	 * Snooping works fine with eth on all au1xxx
- 	 */
--	aup->vaddr = (u32)dma_alloc_attrs(&pdev->dev, MAX_BUF_SIZE *
-+	aup->vaddr = (u32)dma_alloc_coherent(&pdev->dev, MAX_BUF_SIZE *
- 					  (NUM_TX_BUFFS + NUM_RX_BUFFS),
--					  &aup->dma_addr, 0,
--					  DMA_ATTR_NON_CONSISTENT);
-+					  &aup->dma_addr, 0);
- 	if (!aup->vaddr) {
- 		dev_err(&pdev->dev, "failed to allocate data buffers\n");
- 		err = -ENOMEM;
-@@ -1310,9 +1309,8 @@ static int au1000_probe(struct platform_device *pdev)
- err_remap2:
- 	iounmap(aup->mac);
- err_remap1:
--	dma_free_attrs(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
--			(void *)aup->vaddr, aup->dma_addr,
--			DMA_ATTR_NON_CONSISTENT);
-+	dma_free_coherent(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
-+			(void *)aup->vaddr, aup->dma_addr);
- err_vaddr:
- 	free_netdev(dev);
- err_alloc:
-@@ -1344,9 +1342,8 @@ static int au1000_remove(struct platform_device *pdev)
- 		if (aup->tx_db_inuse[i])
- 			au1000_ReleaseDB(aup, aup->tx_db_inuse[i]);
+diff --git a/drivers/scsi/libfc/fc_disc.c b/drivers/scsi/libfc/fc_disc.c
+index e00dc4693fcbd..589ddf003886e 100644
+--- a/drivers/scsi/libfc/fc_disc.c
++++ b/drivers/scsi/libfc/fc_disc.c
+@@ -634,8 +634,6 @@ static void fc_disc_gpn_id_resp(struct fc_seq *sp, struct fc_frame *fp,
+ 	fc_frame_free(fp);
+ out:
+ 	kref_put(&rdata->kref, fc_rport_destroy);
+-	if (!IS_ERR(fp))
+-		fc_frame_free(fp);
+ }
  
--	dma_free_attrs(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
--			(void *)aup->vaddr, aup->dma_addr,
--			DMA_ATTR_NON_CONSISTENT);
-+	dma_free_coherent(&pdev->dev, MAX_BUF_SIZE * (NUM_TX_BUFFS + NUM_RX_BUFFS),
-+			(void *)aup->vaddr, aup->dma_addr);
- 
- 	iounmap(aup->macdma);
- 	iounmap(aup->mac);
+ /**
 -- 
-2.28.0
+2.25.1
 
