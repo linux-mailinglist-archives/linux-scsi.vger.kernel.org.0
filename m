@@ -2,62 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE626268D51
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 16:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6586A268E20
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 16:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgINOUa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Sep 2020 10:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726667AbgINOUP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Sep 2020 10:20:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88160C06174A;
-        Mon, 14 Sep 2020 07:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9YKXruRD1GIGI2F0NMKyLvaAHDHfv6h+lQaAljDhid8=; b=UsnAEsCe93yuk5c3QewEY3LcSl
-        c3SrZ7WE8/sGqb4cVrjgBnRp2H9lJL4WTsWBv/seDYieRvaPydti1y4IWZi4/rNiMqOGKnocZD+WN
-        EIjbTjp/JhdHoCmj4VSf7jIpdJp4cdbgT4y7uoIHy9QGA+JwH67t6kr+aYWJ4B+wikhpGyVaOGVxE
-        k1bd226UB4ciP7baY/351tLVFiW+ph+QroxMPEn46IZXniT7La2xuNE/ZMjPJEC+/gLFdz3X5kl23
-        epLc4c4zuCyZ3cJQGhb+TIFvvPjonHPMv9X1WzhF2hwAlH9kdK9V1dTpc45jcccQs6pmQft5V9enR
-        S+qi2n7Q==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kHpL1-0007y3-Qt; Mon, 14 Sep 2020 14:20:11 +0000
-Date:   Mon, 14 Sep 2020 15:20:11 +0100
-From:   "hch@infradead.org" <hch@infradead.org>
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-Cc:     "hch@infradead.org" <hch@infradead.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        id S1726296AbgINOop (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Sep 2020 10:44:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726618AbgINNF3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:05:29 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 52F372222B;
+        Mon, 14 Sep 2020 13:04:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600088678;
+        bh=9DiVjW71ekwEdibZggUMrhbwn3fZDsgJ9O9o97eQizI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=U1rNB+6pF/cYvwkzc8ADO2WRTs0M9WPJuTbguQjSImyXe3TCwk05FnSECLMJHjHjT
+         1vHezq1ZDLkwSUWXkVPurEPsSFy4jme10f5itM6MQuch4R402XBYgfc5bpxf+Ftlv5
+         fGXGvr12GggcNzYNzflrjm0NDgSIem0XluRtt+Ss=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Borislav Petkov <bp@suse.de>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-Subject: Re: [PATCH v2 1/2] scsi: Fix handling of host-aware ZBC disks
-Message-ID: <20200914142011.GA30097@infradead.org>
-References: <20200914003448.471624-1-damien.lemoal@wdc.com>
- <20200914003448.471624-2-damien.lemoal@wdc.com>
- <20200914072034.GA25808@infradead.org>
- <CY4PR04MB3751877C568C7F8B3E458960E7230@CY4PR04MB3751.namprd04.prod.outlook.com>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 02/22] scsi: pm8001: Fix memleak in pm8001_exec_internal_task_abort
+Date:   Mon, 14 Sep 2020 09:04:14 -0400
+Message-Id: <20200914130434.1804478-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200914130434.1804478-1-sashal@kernel.org>
+References: <20200914130434.1804478-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CY4PR04MB3751877C568C7F8B3E458960E7230@CY4PR04MB3751.namprd04.prod.outlook.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 09:03:49AM +0000, Damien Le Moal wrote:
-> Yes, that's nice. Will send something along these lines. But since this is a bug
-> fix for the current cycle & stable, we probably should keep the patch as is and
-> add the improvement on top for 5.10, no ?
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-I'd much rather also add the trivial helper for 5.9 - otherwise we'll
-need to pull current mainline into the for-5.10 tree and create
-all kinds of mess.  And just adding the helper and using it for sd
-only will have no side effects elsewhere.
+[ Upstream commit ea403fde7552bd61bad6ea45e3feb99db77cb31e ]
+
+When pm8001_tag_alloc() fails, task should be freed just like it is done in
+the subsequent error paths.
+
+Link: https://lore.kernel.org/r/20200823091453.4782-1-dinghao.liu@zju.edu.cn
+Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/pm8001/pm8001_sas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index 7e48154e11c36..027bf5b2981b9 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -816,7 +816,7 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
+ 
+ 		res = pm8001_tag_alloc(pm8001_ha, &ccb_tag);
+ 		if (res)
+-			return res;
++			goto ex_err;
+ 		ccb = &pm8001_ha->ccb_info[ccb_tag];
+ 		ccb->device = pm8001_dev;
+ 		ccb->ccb_tag = ccb_tag;
+-- 
+2.25.1
+
