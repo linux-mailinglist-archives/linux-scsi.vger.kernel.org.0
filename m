@@ -2,102 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E88268DD8
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 16:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3FB268E48
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 16:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgINOff (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Sep 2020 10:35:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32954 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726648AbgINNFm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:05:42 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98C8322250;
-        Mon, 14 Sep 2020 13:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088708;
-        bh=jbKqVgYyt3WvvappifNaKnDCFj63tYxxqnvdh/gRnzM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lt523xVr5mU2wbsS1QMndTiXAytOYkTnjBXXyZaZdBxPWqIBdRiZeK47iGma82giH
-         kc/Er7xBuTPJ6P+UVawWSyST0a5ZA3HOfz/FlHFu81rvMoivMSqTQR4s8WOz9oznSf
-         8PpNgHCP9XOsqCysmYmdFhCw4S+4N25g5Kit3+dE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 04/19] scsi: lpfc: Fix FLOGI/PLOGI receive race condition in pt2pt discovery
-Date:   Mon, 14 Sep 2020 09:04:47 -0400
-Message-Id: <20200914130502.1804708-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914130502.1804708-1-sashal@kernel.org>
-References: <20200914130502.1804708-1-sashal@kernel.org>
+        id S1726849AbgINOrx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Sep 2020 10:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbgINOrj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Sep 2020 10:47:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17069C061788;
+        Mon, 14 Sep 2020 07:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=ZNjtOprQ0CMyI4ATRWqucmdOpx+hHcpY44uRUfjYcDA=; b=N4NdSCqp08oFrOv3mtyviiYwas
+        oNsCF+Dc8Ja0cguO7+ZPTYUzH37/R/e85Vh80cBfx4KckZelgIyQd543/M1egNtkylVU6AB/wVfBM
+        Tlkxi46PvOhn46tciCiOecLWzjs46m9we7uYxaasaogiTmImYuOdp/gt2FgdFngL+ZN6LS6utTo0O
+        Hm9LbW/uDyDkAIigJFLQXrAZkOr7o09fPL6HdPU4QQq1TyT5bp3IWI2Cw1qQE5T5w1y0VaAfJxPRZ
+        aK96DU68S1PJnrr+xN+ybqrGZgNzPzvroduSeid9Yw4t5OHe2QnIzFzfQyScSm13brcMUjUX0bu0P
+        Q8mlhOfQ==;
+Received: from 089144214092.atnat0023.highway.a1.net ([89.144.214.92] helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kHpkk-0001Er-WB; Mon, 14 Sep 2020 14:46:47 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        iommu@lists.linux-foundation.org
+Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org
+Subject: a saner API for allocating DMA addressable pages v2
+Date:   Mon, 14 Sep 2020 16:44:16 +0200
+Message-Id: <20200914144433.1622958-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <james.smart@broadcom.com>
+Hi all,
 
-[ Upstream commit 7b08e89f98cee9907895fabb64cf437bc505ce9a ]
+this series replaced the DMA_ATTR_NON_CONSISTENT flag to dma_alloc_attrs
+with a separate new dma_alloc_pages API, which is available on all
+platforms.  In addition to cleaning up the convoluted code path, this
+ensures that other drivers that have asked for better support for
+non-coherent DMA to pages with incurring bounce buffering over can finally
+be properly supported.
 
-The driver is unable to successfully login with remote device. During pt2pt
-login, the driver completes its FLOGI request with the remote device having
-WWN precedence.  The remote device issues its own (delayed) FLOGI after
-accepting the driver's and, upon transmitting the FLOGI, immediately
-recognizes it has already processed the driver's FLOGI thus it transitions
-to sending a PLOGI before waiting for an ACC to its FLOGI.
+I'm still a little unsure about the API naming, as alloc_pages sort of
+implies a struct page return value, but we return a kernel virtual
+address.  The other alternative would be to name the API
+dma_alloc_noncoherent, but the whole non-coherent naming seems to put
+people off.  As a follow up I plan to move the implementation of the
+DMA_ATTR_NO_KERNEL_MAPPING flag over to this framework as well, given
+that is also is a fundamentally non coherent allocation.  The replacement
+for that flag would then return a struct page, as it is allowed to
+actually return pages without a kernel mapping as the name suggested
+(although most of the time they will actually have a kernel mapping..)
 
-In the driver, the FLOGI is received and an ACC sent, followed by the PLOGI
-being received and an ACC sent. The issue is that the PLOGI reception
-occurs before the response from the adapter from the FLOGI ACC is
-received. Processing of the PLOGI sets state flags to perform the REG_RPI
-mailbox command and proceed with the rest of discovery on the port. The
-same completion routine used by both FLOGI and PLOGI is generic in
-nature. One of the things it does is clear flags, and those flags happen to
-drive the rest of discovery.  So what happened was the PLOGI processing set
-the flags, the FLOGI ACC completion cleared them, thus when the PLOGI ACC
-completes it doesn't see the flags and stops.
+In addition to the conversions of the existing non-coherent DMA users,
+I've also added a patch to convert the firewire ohci driver to use
+the new dma_alloc_pages API.
 
-Fix by modifying the generic completion routine to not clear the rest of
-discovery flag (NLP_ACC_REGLOGIN) unless the completion is also associated
-with performing a mailbox command as part of its handling.  For things such
-as FLOGI ACC, there isn't a subsequent action to perform with the adapter,
-thus there is no mailbox cmd ptr. PLOGI ACC though will perform REG_RPI
-upon completion, thus there is a mailbox cmd ptr.
+Note that I haven't carried over any Tested-by: tags for the noncoherent
+allocation conversions as there was a bit of a patch reshuffle, but the
+result should be the same.
 
-Link: https://lore.kernel.org/r/20200828175332.130300-3-james.smart@broadcom.com
-Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <james.smart@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/lpfc/lpfc_els.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+The first patch is queued up for 5.9 in the media tree, but included here
+for completeness.
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 9032793c405eb..6a4b496081e4a 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4112,7 +4112,9 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- out:
- 	if (ndlp && NLP_CHK_NODE_ACT(ndlp) && shost) {
- 		spin_lock_irq(shost->host_lock);
--		ndlp->nlp_flag &= ~(NLP_ACC_REGLOGIN | NLP_RM_DFLT_RPI);
-+		if (mbox)
-+			ndlp->nlp_flag &= ~NLP_ACC_REGLOGIN;
-+		ndlp->nlp_flag &= ~NLP_RM_DFLT_RPI;
- 		spin_unlock_irq(shost->host_lock);
- 
- 		/* If the node is not being used by another discovery thread,
--- 
-2.25.1
 
+A git tree is available here:
+
+    git://git.infradead.org/users/hch/misc.git dma_alloc_pages
+
+Gitweb:
+
+    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/dma_alloc_pages
+
+
+Changes since v1:
+ - rebased on the latests dma-mapping tree, which merged many of the
+   cleanups
+ - fix an argument passing typo in 53c700, caught by sparse
+ - rename a few macro arguments in 53c700
+ - pass the right device to the DMA API in the lib82596 drivers
+ - fix memory ownershiptransfers in sgiseeq
+ - better document what a page in the direct kernel mapping means
+ - split into dma_alloc_pages that returns a struct page and is in the
+   direct mapping vs dma_alloc_noncoherent that can be vmapped
+ - conver the firewire ohci driver to dma_alloc_pages
+
+Diffstat:
