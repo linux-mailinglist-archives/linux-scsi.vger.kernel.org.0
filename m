@@ -2,114 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C81BC268C42
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 15:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8D9268D82
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 16:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbgINNdw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Sep 2020 09:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726300AbgINNaN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Sep 2020 09:30:13 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEB7C06178C
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Sep 2020 06:30:12 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id x19so17862192oix.3
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Sep 2020 06:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0kKcJ2z3ux6tW6m9n+LCHXlUg2M6PuuRVsUT1ht3TrU=;
-        b=AAbjrKgyT/yb1+2mkNQeXWXcsk3L0KPJKqiQvj0Txms5uTjtTud3Vyxiaq/iziLfQc
-         iA939MRt3tLsIBtwfAFdDA2IH/s4uMBg1B1DOcLH6CA46SGKC9J9ZSi9VUGJIs2vj7Ob
-         Wopds+oEgY8vJBPJnRR+pVBl7NT9UkdvtNsyA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0kKcJ2z3ux6tW6m9n+LCHXlUg2M6PuuRVsUT1ht3TrU=;
-        b=CLgBN5+0Wiga7c0rh9tf4K22QnlS4US75N2L/EJwOPgwGzzUUgYDoymz9jZwf2qT7U
-         Y5Htc8JwXn+dYWoZWepUqifaezf0vWGlLW976nMeveCSIjxYi3DuqGNhOuKNRK3jh5rJ
-         Vcj+pnx3pBoCZ7aPn2Qy+EPPe2nmsFWE65042MF3qFWBStNUolZ2X92MWmbwtg3L5kd1
-         jyCZJNe6yZoomp2PoFCbSILwgImoKHeGhzgkH2kDnL38Lcc7RfLlZctJu/fP498GuxM1
-         BUxQanEcp5CSv81m2vT8aVdwF+NhDQwesQuxitmuAyIlcxXaTxsi6aGNXQTtVFLMxKeM
-         3ZDA==
-X-Gm-Message-State: AOAM533oBFIipnXWmrXgNsRLpLG+Hn4HTmGlwV4KR9pIgnAH31WU0tPW
-        Ii9GnVHDcFT6TFbJLmFsiMcVN+ntOj3fHcm8IX1vjsb21YVx8g==
-X-Google-Smtp-Source: ABdhPJwUohI77Yf7Z+Gf8DtYPSeewHmtoXY+777S0ev3FY3Mwe4bc5hVszZSPL+ajYTo8RCaLkvJlkQ/pkaoSSRcqWE=
-X-Received: by 2002:aca:1711:: with SMTP id j17mr9005132oii.152.1600090211806;
- Mon, 14 Sep 2020 06:30:11 -0700 (PDT)
+        id S1726865AbgINOZd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Sep 2020 10:25:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726475AbgINNGM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:06:12 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E7B2621D7E;
+        Mon, 14 Sep 2020 13:05:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600088729;
+        bh=PQSAbPp/SO39R20BoR+qN6FK+isHUo3NjRid7Kpzh9o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Reu0Lh6NdgwtUdo9WR0G6L5oJEyPnWl0xjZpZKX/5RJtooe4QSGcrSakBK8U41WEK
+         C4fS7uVsxXfOOijacdzenaaOAvknWNhQs/9fu36wmXPZoLst67HqIkrHco9dT0219T
+         X29PE08Lld8zz/VtWqT++/HuhCD1Uf1ABETePxmM=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 02/15] scsi: pm8001: Fix memleak in pm8001_exec_internal_task_abort
+Date:   Mon, 14 Sep 2020 09:05:13 -0400
+Message-Id: <20200914130526.1804913-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200914130526.1804913-1-sashal@kernel.org>
+References: <20200914130526.1804913-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20200910142126.8147-1-thenzl@redhat.com>
-In-Reply-To: <20200910142126.8147-1-thenzl@redhat.com>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Mon, 14 Sep 2020 19:00:00 +0530
-Message-ID: <CAK=zhgqc1GOOrp8Nm6HWzj6Dr0z4k1kWocku2daPU6u0oShuzw@mail.gmail.com>
-Subject: Re: [PATCH] mpt3sas: fix sync irqs
-To:     Tomas Henzl <thenzl@redhat.com>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 7:51 PM Tomas Henzl <thenzl@redhat.com> wrote:
->
-> - _base_process_reply_queue called from _base_interrupt
-> may schedule a new irq poll, fix this by calling
-> synchronize_irq first
-> - a fix for "Unbalanced enable for IRQ..."
-> enable_irq should be called only when necessary
->
-> Fixes: 320e77acb327 ("scsi: mpt3sas: Irq poll to avoid CPU hard lockups")
-> Signed-off-by: Tomas Henzl <thenzl@redhat.com>
-Acked-by: sreekanth reddy <sreekanth.reddy@broadcom.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-Thanks,
-Sreekanth
+[ Upstream commit ea403fde7552bd61bad6ea45e3feb99db77cb31e ]
 
-> ---
->  drivers/scsi/mpt3sas/mpt3sas_base.c | 14 +++++++++-----
->  drivers/scsi/scsi_scan.c            |  8 ++++++++
->  2 files changed, 17 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-> index a85c9672c6ea..a67749c8f4ab 100644
-> --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-> @@ -1808,18 +1808,22 @@ mpt3sas_base_sync_reply_irqs(struct MPT3SAS_ADAPTER *ioc)
->                 /* TMs are on msix_index == 0 */
->                 if (reply_q->msix_index == 0)
->                         continue;
-> +               synchronize_irq(pci_irq_vector(ioc->pdev, reply_q->msix_index));
->                 if (reply_q->irq_poll_scheduled) {
->                         /* Calling irq_poll_disable will wait for any pending
->                          * callbacks to have completed.
->                          */
->                         irq_poll_disable(&reply_q->irqpoll);
->                         irq_poll_enable(&reply_q->irqpoll);
-> -                       reply_q->irq_poll_scheduled = false;
-> -                       reply_q->irq_line_enable = true;
-> -                       enable_irq(reply_q->os_irq);
-> -                       continue;
-> +                       /* check how the scheduled poll has ended,
-> +                        * clean up only if necessary
-> +                        */
-> +                       if (reply_q->irq_poll_scheduled) {
-> +                               reply_q->irq_poll_scheduled = false;
-> +                               reply_q->irq_line_enable = true;
-> +                               enable_irq(reply_q->os_irq);
-> +                       }
->                 }
-> -               synchronize_irq(pci_irq_vector(ioc->pdev, reply_q->msix_index));
->         }
->  }
->
-> --
-> 2.25.4
->
+When pm8001_tag_alloc() fails, task should be freed just like it is done in
+the subsequent error paths.
+
+Link: https://lore.kernel.org/r/20200823091453.4782-1-dinghao.liu@zju.edu.cn
+Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/pm8001/pm8001_sas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index e64a13f0bce17..61a2da30f94b7 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -795,7 +795,7 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
+ 
+ 		res = pm8001_tag_alloc(pm8001_ha, &ccb_tag);
+ 		if (res)
+-			return res;
++			goto ex_err;
+ 		ccb = &pm8001_ha->ccb_info[ccb_tag];
+ 		ccb->device = pm8001_dev;
+ 		ccb->ccb_tag = ccb_tag;
+-- 
+2.25.1
+
