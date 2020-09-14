@@ -2,101 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7262691B1
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 18:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF3D2692AA
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 19:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbgINQfg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Sep 2020 12:35:36 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:14266 "EHLO m43-7.mailgun.net"
+        id S1726119AbgINRMO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Sep 2020 13:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726031AbgINQey (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Sep 2020 12:34:54 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1600101293; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ObHJxhWnQ6Id1CMXMXxijV0dvfRIEHq6RwO9EgQfuVY=;
- b=ZCD7Hhh3/5pgssIKBltNNmzQpehRPk4lyb5iNdcrJTD+yd8/+5iaLZeic486Vd60dU2syhVR
- zIKJs9w6PvDHIx3CIPsJVbH0KgWSdfYioZlqzNqusGoCYujLPOJjw7EpHps/nr2wCxLnaVum
- lX1r2oyXjVTToH9IbVm9xwlyiew=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 5f5f9ba44ba82a82fdbafb39 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 14 Sep 2020 16:34:44
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2DA8DC43382; Mon, 14 Sep 2020 16:34:44 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        id S1726441AbgINNEp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:04:45 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: nguyenb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 613BAC433C8;
-        Mon, 14 Sep 2020 16:34:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F99B21D24;
+        Mon, 14 Sep 2020 13:04:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600088646;
+        bh=kK9BT5mjTQ8XF5WRbFDzOIgCtUNac6wLSe0z0LkB2mo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JnVJTACKQunaaFCQ4Lj34P5avJQYfVrGoL9+cHyX1LNELa3CkMr0ICVHM6Qb3AGS+
+         oLVIwG2XOIcNXiqXJMpA6uh7K3kOCkd/JbFF0FSeFYjzcyPPzwzu2ru3pKPGETAQYg
+         +fxXANOY+T6m6C9qM90PHPV2bvzKv3sBtCGx8jB0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 06/29] scsi: pm8001: Fix memleak in pm8001_exec_internal_task_abort
+Date:   Mon, 14 Sep 2020 09:03:35 -0400
+Message-Id: <20200914130358.1804194-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200914130358.1804194-1-sashal@kernel.org>
+References: <20200914130358.1804194-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 14 Sep 2020 09:34:43 -0700
-From:   nguyenb@codeaurora.org
-To:     Avri Altman <Avri.Altman@wdc.com>
-Cc:     cang@codeaurora.org, asutoshd@codeaurora.org,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] scsi: ufshcd: Properly set the device Icc Level
-In-Reply-To: <BY5PR04MB6705A865E35CDA367249DC4EFC270@BY5PR04MB6705.namprd04.prod.outlook.com>
-References: <5c9d6f76303bbe5188bf839b2ea5e5bf530e7281.1598923023.git.nguyenb@codeaurora.org>
- <0101017475a11d00-6def34a7-db5d-472c-9dcc-215a80510402-000000@us-west-2.amazonses.com>
- <BY5PR04MB6705A865E35CDA367249DC4EFC270@BY5PR04MB6705.namprd04.prod.outlook.com>
-Message-ID: <e1b4e9f5eab891fa6615e7a4b2ed29e6@codeaurora.org>
-X-Sender: nguyenb@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-09-10 03:02, Avri Altman wrote:
->> 
->> On 2020-08-31 18:19, Bao D. Nguyen wrote:
->> > UFS version 3.0 and later devices require Vcc and Vccq power supplies
->> > with Vccq2 being optional. While earlier UFS version 2.0 and 2.1
->> > devices, the Vcc and Vccq2 are required with Vccq being optional.
->> > Check the required power supplies used by the device
->> > and set the device's supported Icc level properly.
-> Practically you are correct - most flash vendors moved in UFS3.1 to
-> 1.2 supply instead of 1.8.
-> However, the host should provide all 3 supplies to the device because -
-> a) A flash vendor might want to still use 1.8 in its UFS3.1 device, and
-> b) We should allow a degenerated configurations, e.g. 3.1 devices,
-> that are degenerated to 2.1 or 2.2
-Thank you for your comment.
-The host can provide all 3 power supplies. However, the change is to 
-ensure
-we do not exit early and fail to properly set the Icc level because the 
-optional power
-supply is not provided.
-> 
-> That said, I think we can entirely remove the check in the beginning
-> of the function,
-> But not because the spec allows it, but because each supply is
-> explicitly checked later on,
-> before reading its applicable max current entry in the power 
-> descriptor.
-We need these checks to prevent NULL pointer access subsequently in this 
-function.
-> Thanks,
-> Avri
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+
+[ Upstream commit ea403fde7552bd61bad6ea45e3feb99db77cb31e ]
+
+When pm8001_tag_alloc() fails, task should be freed just like it is done in
+the subsequent error paths.
+
+Link: https://lore.kernel.org/r/20200823091453.4782-1-dinghao.liu@zju.edu.cn
+Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/pm8001/pm8001_sas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index b7cbc312843e9..da9fd8a5f8cae 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -818,7 +818,7 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
+ 
+ 		res = pm8001_tag_alloc(pm8001_ha, &ccb_tag);
+ 		if (res)
+-			return res;
++			goto ex_err;
+ 		ccb = &pm8001_ha->ccb_info[ccb_tag];
+ 		ccb->device = pm8001_dev;
+ 		ccb->ccb_tag = ccb_tag;
+-- 
+2.25.1
 
