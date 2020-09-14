@@ -2,102 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7480F268BFB
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 15:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AD5268C7B
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 15:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbgINNPT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Sep 2020 09:15:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32954 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726687AbgINNHO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:07:14 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB5F42224D;
-        Mon, 14 Sep 2020 13:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088763;
-        bh=kAMW49P1gnd6Q7vgEB8RTzXo+02ZKiNLkrobbCM3QN8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IeFgALjOAOBUCw28CrLOMqpYIDxrhzp0Qf6D6pLgIzcOnl2U9ucZS+DWo0F4fFi9i
-         HCu2grJnVX3SS2uVCkK61TIcixNCqZm3dQ/kkzut97S9TIC1/0RnkjVpdyFeA4Y/OP
-         9Scid8YzoWGwf7v4Y1wXeI8rPivyLxUkYyCFDkd4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 3/8] scsi: lpfc: Fix FLOGI/PLOGI receive race condition in pt2pt discovery
-Date:   Mon, 14 Sep 2020 09:05:53 -0400
-Message-Id: <20200914130559.1805574-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914130559.1805574-1-sashal@kernel.org>
-References: <20200914130559.1805574-1-sashal@kernel.org>
+        id S1726570AbgINNpy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Sep 2020 09:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726579AbgINN2e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Sep 2020 09:28:34 -0400
+Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A609BC06174A
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Sep 2020 06:28:26 -0700 (PDT)
+Received: by mail-oo1-xc44.google.com with SMTP id z1so4012343ooj.3
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Sep 2020 06:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z/nsXJEmv3bjxBMPqniSWwu3bLXK58gqV1v3b66wVa4=;
+        b=EuATfV30/zA+G0vXptfb5bmcyyNEawvUFZlXBXDK72UGq7/kzhzeVhHGH2Q5CM4i6O
+         ERQ6VL5d0R77LY/jgf4CUijp42i9jE1JldZEezJ8jAF8wA/hCoadtYmrHeo0CPfLIckG
+         m68tLOafYKebLIMHBcCd+n6tS28p5IyC3DCL4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z/nsXJEmv3bjxBMPqniSWwu3bLXK58gqV1v3b66wVa4=;
+        b=D8/s83Tab2mQbnOoDA+sXITtpD2SzG3rD9O6O1OE6fmSBJSbGc5G9Sfx15l/lKs+dD
+         5FmQlnuQOBUg+6HKzyhQlzqUocCEPasnZ79IC30jvjta3peKLt8MpzpJzzpdKIIFjmZ2
+         lqjrVg8dt8hSCfsLrnNn7Nlwb/Grk/+1/0KFUnwSi4rXnH4d7CDkUcp9BBErBAo0Uqn/
+         nbHbazs8VkpS4ZBRc7nKttKuKDR8RHQz2Qvlvq/FB/w/gG0owSBMgAk5KfvJfm1xRQ70
+         ak83gqRlO49xYOwfhl29YPGcFz7+CHJVFC+eQ7v5QZNX4oLkTqTI75bpJDtBc8Jq5gc2
+         uuVQ==
+X-Gm-Message-State: AOAM530a3mHFLykVNmGyPNxyLQ9WL5dV1TgYufwJ5ZwJXVKmqGwOG/RR
+        vOFCswLt41Tp692rCwV32e8NRIpwRAe0EXbv3fNNHQ==
+X-Google-Smtp-Source: ABdhPJyyX9bsr6mnog8xW7Nq99oHpqIVJERU1/ROrmYSpo2DQpXLQBzsP71Rn/ralrReSmkhBP0qLs0FV80q/5x8VDs=
+X-Received: by 2002:a4a:978a:: with SMTP id w10mr10293848ooi.69.1600090101255;
+ Mon, 14 Sep 2020 06:28:21 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200911180057.14633-1-thenzl@redhat.com>
+In-Reply-To: <20200911180057.14633-1-thenzl@redhat.com>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Mon, 14 Sep 2020 18:58:10 +0530
+Message-ID: <CAK=zhgov_HrtqHpYaWzMkQXUFTfTWoEVmfBV2+YrsWw3o4u9Xw@mail.gmail.com>
+Subject: Re: [PATCH] mpt3sas: a small correction in _base_process_reply_queue
+To:     Tomas Henzl <thenzl@redhat.com>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <james.smart@broadcom.com>
+On Fri, Sep 11, 2020 at 11:31 PM Tomas Henzl <thenzl@redhat.com> wrote:
+>
+> There is no need to compute module a simple comparision
+> is good enough.
+>
+> Signed-off-by: Tomas Henzl <thenzl@redhat.com>
+Acked-by: sreekanth reddy <sreekanth.reddy@broadcom.com>
 
-[ Upstream commit 7b08e89f98cee9907895fabb64cf437bc505ce9a ]
-
-The driver is unable to successfully login with remote device. During pt2pt
-login, the driver completes its FLOGI request with the remote device having
-WWN precedence.  The remote device issues its own (delayed) FLOGI after
-accepting the driver's and, upon transmitting the FLOGI, immediately
-recognizes it has already processed the driver's FLOGI thus it transitions
-to sending a PLOGI before waiting for an ACC to its FLOGI.
-
-In the driver, the FLOGI is received and an ACC sent, followed by the PLOGI
-being received and an ACC sent. The issue is that the PLOGI reception
-occurs before the response from the adapter from the FLOGI ACC is
-received. Processing of the PLOGI sets state flags to perform the REG_RPI
-mailbox command and proceed with the rest of discovery on the port. The
-same completion routine used by both FLOGI and PLOGI is generic in
-nature. One of the things it does is clear flags, and those flags happen to
-drive the rest of discovery.  So what happened was the PLOGI processing set
-the flags, the FLOGI ACC completion cleared them, thus when the PLOGI ACC
-completes it doesn't see the flags and stops.
-
-Fix by modifying the generic completion routine to not clear the rest of
-discovery flag (NLP_ACC_REGLOGIN) unless the completion is also associated
-with performing a mailbox command as part of its handling.  For things such
-as FLOGI ACC, there isn't a subsequent action to perform with the adapter,
-thus there is no mailbox cmd ptr. PLOGI ACC though will perform REG_RPI
-upon completion, thus there is a mailbox cmd ptr.
-
-Link: https://lore.kernel.org/r/20200828175332.130300-3-james.smart@broadcom.com
-Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <james.smart@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/lpfc/lpfc_els.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 315dd25a0c44e..5be938b47f48b 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -3841,7 +3841,9 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- out:
- 	if (ndlp && NLP_CHK_NODE_ACT(ndlp) && shost) {
- 		spin_lock_irq(shost->host_lock);
--		ndlp->nlp_flag &= ~(NLP_ACC_REGLOGIN | NLP_RM_DFLT_RPI);
-+		if (mbox)
-+			ndlp->nlp_flag &= ~NLP_ACC_REGLOGIN;
-+		ndlp->nlp_flag &= ~NLP_RM_DFLT_RPI;
- 		spin_unlock_irq(shost->host_lock);
- 
- 		/* If the node is not being used by another discovery thread,
--- 
-2.25.1
-
+Thanks,
+Sreekanth
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> index a67749c8f4ab..ea51fd04e3f1 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> @@ -1627,7 +1627,7 @@ _base_process_reply_queue(struct adapter_reply_queue *reply_q)
+>                  * So that FW can find enough entries to post the Reply
+>                  * Descriptors in the reply descriptor post queue.
+>                  */
+> -               if (!base_mod64(completed_cmds, ioc->thresh_hold)) {
+> +               if (completed_cmds >= ioc->thresh_hold) {
+>                         if (ioc->combined_reply_queue) {
+>                                 writel(reply_q->reply_post_host_index |
+>                                                 ((msix_index  & 7) <<
+> --
+> 2.25.4
+>
