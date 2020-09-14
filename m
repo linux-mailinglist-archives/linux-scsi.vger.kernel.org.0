@@ -2,115 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6D92693BE
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 19:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6182694F4
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Sep 2020 20:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbgINRl7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Sep 2020 13:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726298AbgINMZN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Sep 2020 08:25:13 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA36AC061A29
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Sep 2020 05:21:57 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id n14so12488230pff.6
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Sep 2020 05:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
-        b=edh2sM0EbG5/TPSTEbA6B1Ur2vI0dSaE+3uhMOMeXAzktmmTCQsEN2N7ykSSpYe5sN
-         vTexTwUAuL/NvnK3u4QZMfXRVBrM2Cmy3fwtocWn5q5TpxOO/UiHKQpZTr6W1cY8OCck
-         7NdBE3Cq1kqemVoHGFYM4kvRnSKxbABPCShK9DFmbxK+Yj+BWlL5nwj7K4xDOqFBKKPH
-         h/ymfQ1M8ZPJ2tj6cosuHkaHK8vfr8LEDZ0AfQI2NwuIZDuDKlkvEml9JR7PCZvtOIhP
-         yrbsin2hZqj6+SL85Q1roIyYKAXWLX2IEDuiJCdMY5N+b6Xaeh9jVdtVgg/cfSMb5om1
-         T0EQ==
+        id S1726072AbgINSfU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Sep 2020 14:35:20 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:35359 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725964AbgINSfI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Sep 2020 14:35:08 -0400
+Received: by mail-il1-f195.google.com with SMTP id y9so560837ilq.2;
+        Mon, 14 Sep 2020 11:35:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
-        b=Bp/ZxacBsDf14gClLL5O/kYkpuvzzgWmztWb1flwKtBSbijZcunWeXbCYnPrhuZqX5
-         yHZeu5OhiCuogi+bCbvDSeX0puW2Dz4wcnJ4gtTJVQH7Eb889CPyh62PivRPgC3wo1w3
-         hD8tM83mp7F0x4+dcx+bfN/udTNDw7ZdBIf25T8wAXMy7seZ7v+g1bw0JK32yolFVp0O
-         R996xdMO9da8p5iiqR318q2G6b8+/ukkylTm9gtlI/xVYQ7QnTgbveyiCo47lTzqOL6w
-         hgRraxeVrg42ttRI5bayZvV/YZLI/rfE/FUoXnWQyD37o+lIdPKgg01gomYBsZ25CkvN
-         YY9w==
-X-Gm-Message-State: AOAM5316nPDa/nz5QwPWy7A9VuMwSye5MQdHK5E237yV4fHCS7JfosGD
-        CQCAi7vBdQThHdFxVHy361JvMf71sXLoaocemX4=
-X-Google-Smtp-Source: ABdhPJzAx2LsMISz//kcnd6U7/hIgUpxxZz7H6a05oI6m0/Fd3ECx1Kt3eCMwa5G5ACo9m+n/ZRD4ONakBaQUNwRvhY=
-X-Received: by 2002:a17:902:8f88:b029:d0:cbe1:e719 with SMTP id
- z8-20020a1709028f88b02900d0cbe1e719mr14639230plo.39.1600086117416; Mon, 14
- Sep 2020 05:21:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Kr/0iYbSBTjl5HEsBr9lRARUT7uhou4qJ8/Qjy30PVQ=;
+        b=dj56JEffJu9UHzZAoT7eiyx0qI/RjgfIQYHCYmP71D+y//BYFAIjZchvK753anpye4
+         NXyLLQUeeQivFdSKecRls4+IUby71rVhZ81FdIvPXb1bGulpVFRlD7XDl5WXfpoQeWbP
+         I9BtKWFvoZ9BmiOQv/HBuI6B8YcvYSCNHSmK3PL83sgbMYgHPDsnLL7OQUWpFnWFyLY1
+         cuJIWmY0EJQVFFjA6+3snmc2dVuzm7WnfW5Jmo51KBNQ1CVcE8K4+DnIv7eAwaZQkGay
+         GhgVjqY4JurlqaY1p47d56so8zGNWz3wyAvrG6Jog+LgpoTVktZIlT06qnVJUp4rB+lk
+         nKhw==
+X-Gm-Message-State: AOAM533Xizz3WC3lkDM3cPHE0GW83jReCFd+x6xh85buGqYJeWs9CFEI
+        bODc+GVCdYuitP+z3FYoxg==
+X-Google-Smtp-Source: ABdhPJwKuxW2v7Tvvdsia63gcfapU/VJH0B7ub5zz3NEZOsoQZMWHods8LNIVCEKD9nD3HjQNpVBsA==
+X-Received: by 2002:a92:c908:: with SMTP id t8mr12197926ilp.60.1600108507593;
+        Mon, 14 Sep 2020 11:35:07 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id t10sm6452117iog.49.2020.09.14.11.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 11:35:06 -0700 (PDT)
+Received: (nullmailer pid 8850 invoked by uid 1000);
+        Mon, 14 Sep 2020 18:35:05 -0000
+Date:   Mon, 14 Sep 2020 12:35:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Bao D. Nguyen" <nguyenb@codeaurora.org>
+Cc:     cang@codeaurora.org, asutoshd@codeaurora.org,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/2] scsi: dt-bindings: ufs: Add vcc-voltage-level for
+ UFS
+Message-ID: <20200914183505.GA357@bogus>
+References: <cover.1598939393.git.nguyenb@codeaurora.org>
+ <0a9d395dc38433501f9652a9236856d0ac840b77.1598939393.git.nguyenb@codeaurora.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:60d1:0:0:0:0 with HTTP; Mon, 14 Sep 2020 05:21:57
- -0700 (PDT)
-Reply-To: mrsmegwilliam6@gmail.com
-From:   Ms Mary Mcniff <diplomaticstoragecourier@gmail.com>
-Date:   Mon, 14 Sep 2020 05:21:57 -0700
-Message-ID: <CAD72A3M-as+Z675xdHZA+vpexAaXjsDOqTUvwe_1aCe=aPQwXA@mail.gmail.com>
-Subject: Your Respond ASAP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a9d395dc38433501f9652a9236856d0ac840b77.1598939393.git.nguyenb@codeaurora.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-From Chief Compliance Officer, Citigroup Inc CITIBANK
-388 Greenwich St, New York, 10013, United States United.
-PAYMENT CODE: FRB010
-Swift: PTBLBXXX
-==============================================
+On Mon, Aug 31, 2020 at 11:00:47PM -0700, Bao D. Nguyen wrote:
+> UFS's specifications supports a range of Vcc operating
+> voltage levels. Add documentation for the UFS's Vcc voltage
+> levels setting.
+> 
+> Signed-off-by: Can Guo <cang@codeaurora.org>
+> Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
+> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
+> ---
+>  Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt b/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
+> index 415ccdd..7257b32 100644
+> --- a/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
+> +++ b/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
+> @@ -23,6 +23,8 @@ Optional properties:
+>                            with "phys" attribute, provides phandle to UFS PHY node
+>  - vdd-hba-supply        : phandle to UFS host controller supply regulator node
+>  - vcc-supply            : phandle to VCC supply regulator node
+> +- vcc-voltage-level     : specifies voltage levels for VCC supply.
+> +                          Should be specified in pairs (min, max), units uV.
 
-Attention: Beneficiary,
+The expectation is the regulator pointed to by 'vcc-supply' has the 
+voltage constraints. Those constraints are supposed to be the board 
+constraints, not the regulator operating design constraints. If that 
+doesn't work for your case, then it should be addressed in a common way 
+for the regulator binding.
 
-We write to inform you that Series of meetings have been held over the
-past 2 weeks with the Secretary General of United Nations,U.S
-Department of State and Dubai Union Organization this ended last
-week.And parcel is under our custody right now, It will deliver to you
-within 24 hours once you clear the charges which will cost you
-according to the BANKERS COURIER SERVICES that wish to deliver your
-ATM CARD card to
-you immediately.
+Also, properties with units must have a unit suffix.
 
-However, it is the pleasure of this office to inform you that your ATM
-CARD number; is 29741733 and it has been approved and upgraded in your
-favor .you call me for the pin code numbers. The ATM CARD value is us
-$10.5 Million only.
-
-Kindly contact the paying bank for the claim of your ATM visa card
-payment fund $10,500,000.00 through the below contact information;
-
-Contact Person:Mr Williams S Young
-Director of Financial Controller
-Bank Name: CITIBANK
-Bank address; 388 Greenwich St,
-New York City,10013, United States
-Email:mrsmegwilliam6@gmail.com
-
-Reconfirm the following information?
-
-(1)Your Full Name=============
-(2)Mobile Phone Number======
-(3)Current Home Address==== ====
-(4)Fax Number================
-(5)Passport/Drivers license ======
-
-Endeavor to keep me posted once you contacted the officer in charge
-through the above mentioned information.
-
-Your timely response is highly appreciated.To this end, you are
-required to forward your payment information as follows to enable us
-load your fund into the card with your information and deliver it to
-your door step. as the BANKERS COURIER SERVICES are in charge of the
-delivery services to your destination.
-
-Yours truly;
-
-Ms Mary Mcniff.
-Chief Compliance Officer, Citigroup Inc
-FEDERAL RESERVE SYSTEM.
-Email: marymcniff7@gmail.com.
+Rob
