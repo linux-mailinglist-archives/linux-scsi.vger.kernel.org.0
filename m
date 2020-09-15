@@ -2,49 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A660226AC1E
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 20:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A75626AC0E
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 20:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727897AbgIOShV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 14:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S1728023AbgIOSer (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 14:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727974AbgIOSIx (ORCPT
+        with ESMTP id S1727983AbgIOSIx (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 14:08:53 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31DC06178A;
-        Tue, 15 Sep 2020 11:07:24 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id i1so3991857edv.2;
-        Tue, 15 Sep 2020 11:07:23 -0700 (PDT)
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAF7C06178C;
+        Tue, 15 Sep 2020 11:07:25 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id u21so6426944eja.2;
+        Tue, 15 Sep 2020 11:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Cf1iAlZ7KW1crellt7Mb98w82iNdc/UJBUN0U2Sts40=;
-        b=cLpOUy6yWPdQ6VmED21jNgkVOJHDl7n7dVXX0yb84QeXtpQ6BFeWf7QrIM4FFM0nVB
-         oAjy/cFnJ89fK8SFyLLMCeWKCI+TniZxw7z9n6il7qHMazDEjSvm8sWSqJtU1B1EHClO
-         EGOReqSI2jMtARbcW+ibkfYtGCgweMtnGDaDz67uUt54Q34fgsegkkVP2p6cb95odG35
-         cqn9KmxD/20IzwqHnxIyoKJiHBZmkT13aWOA1GGBXQ/voX9cT8RSHA+JnVox99i1xqLs
-         jqiSww8O3gUTp+OQ+cSUiifNZqPv5/Kx8UXX7qGYiQ+Rbhu1UNRtRpYjOorLCncp77TR
-         vf1Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=VDXs3UaUSwmfye/yNYLIy4eJ7yCHNkNrXTn6GB6XFac=;
+        b=q/pfs+hsumRAnXu+NF0wi5xEYfVeLJ5L2CG8iJCKA9TRd+uGzCZKR7EoTR2u8JDpSK
+         8/hn1IKXtxvVo+9aknOkqa6vsGL8ldMU8nq02uyzDSZbvbtinJVf6sGlSM1reRToZao9
+         Rdl6eNDQoLIqv4G3ApC2J6AZA5CWhVFZi8cLDvbmck3Q3zoHzhYTa68YpFgtu0RhkoTd
+         l64UrITJN/2clFm5np9UAh5rzAUbgza4XOPACRUzvjX8a1SX1ria6o3QmrCTF57zb0Ja
+         YODNOGM1uu/Ck8h5FTX0LmSWfxi26hoahdCzpbHeJDBCiXC2hj/z3CyxWCPblJeQ673H
+         w5/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Cf1iAlZ7KW1crellt7Mb98w82iNdc/UJBUN0U2Sts40=;
-        b=TwgClWgCymwhykF7m/1bd6XCSQ9YaYDUFzsKivRKx9/TRdxiFcu0WnHcLtOf8Onl8n
-         aboEvXBZaDC5ixLNzJhB2eUmB9lbXSG6hZPYwaOtFZySPji7BromVGSZLzbvLLUDheCb
-         T/04GROm/mhojDTFSW+5/CTvqSGN/02tnBkIuDUFqan1fDfEh5N7RyCH21XNYKBQa+Mc
-         l8Yq5wDPkN44mTBBPXFodoUW4P2WS9ZzsLlS7GqwaIlxsPJ2XmFTgw+cJgPjgXiwofnb
-         P+0XNLCwoyYbFd2AVsrqXGLY9hBHCTp089qB0AH1XTG2jMJ5qqHuYth1dDr20tGo4La0
-         d6tg==
-X-Gm-Message-State: AOAM5304Rz95fe4vHGgxsAzN82IxBtZEhE9x+g4hZTt/mq+yF86d5c14
-        4UziTMajm1jhJVkMCHu9qRZNIYQKxd0=
-X-Google-Smtp-Source: ABdhPJy1Q2hvhWMQ2fCeUCqU3OIoJM2WrHy0Eqkzh3Nl59GcGdTyhXA+nJ9yVmXqW5Ndw4NP2favZg==
-X-Received: by 2002:a50:8c66:: with SMTP id p93mr24032312edp.156.1600193242760;
-        Tue, 15 Sep 2020 11:07:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=VDXs3UaUSwmfye/yNYLIy4eJ7yCHNkNrXTn6GB6XFac=;
+        b=EuHEod00xAN7cosvW3IOG+nDpgyz8FiFQshziNQVwYhmS2wFwJYYCbjQVOF08gH3I8
+         PcpTKSdZB5m7iIsS8daEnOyS9xkQqh/LVFzPZhS/+kSqFWOriz8GPtGeBV4AW2QC8KBv
+         gamcOB6KkuH81bQd205A1q9nQ/efXWYJMN3fCSeO8znYuFWDi/2/NBtHM7fLM/GC9Jw0
+         pqxGqpFG2VvbURe20dueu0ih4y13Zm3hNA+DPWOrxinxhywSt6rBHSd87oPpA69UJHjL
+         5ZYN8gXkwJSZM84UMSsJLiQW0qpGL57Z6eJEVSgg//OZqg1mF6tHRmrEBXfH7deEZt2N
+         RUFQ==
+X-Gm-Message-State: AOAM5307D+/d0W2kAS+sIi4ejbzlWI9betjtPcRCX7aRa9Fkh7zQHOkA
+        TU7get6jFCakgsywuXkNuSaEMQiZIwo=
+X-Google-Smtp-Source: ABdhPJz72nhYvzAUxd7KZk1YMtgLkjnH63lfB4uo4I0txBPNxy3wUtqpa7zshDmr7OV2MGAySgz5Fw==
+X-Received: by 2002:a17:906:4a53:: with SMTP id a19mr22539391ejv.56.1600193244137;
+        Tue, 15 Sep 2020 11:07:24 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:598:b890:1ee4:75d6:3bdd:1167:483e])
-        by smtp.gmail.com with ESMTPSA id k25sm10687083ejk.3.2020.09.15.11.07.21
+        by smtp.gmail.com with ESMTPSA id k25sm10687083ejk.3.2020.09.15.11.07.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 11:07:22 -0700 (PDT)
+        Tue, 15 Sep 2020 11:07:23 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -52,10 +53,12 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Use devm_platform_ioremap_resource_byname()
-Date:   Tue, 15 Sep 2020 20:07:06 +0200
-Message-Id: <20200915180708.12311-1-huobean@gmail.com>
+Subject: [PATCH 1/2] scsi: ufs-mediatek: use devm_platform_ioremap_resource_byname()
+Date:   Tue, 15 Sep 2020 20:07:07 +0200
+Message-Id: <20200915180708.12311-2-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200915180708.12311-1-huobean@gmail.com>
+References: <20200915180708.12311-1-huobean@gmail.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -63,19 +66,53 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-platform_get_resource_byname() and devm_ioremap_resource() have been wrapped
-to the single helper devm_platform_ioremap_resource_byname(), so use it and
-simplify the code.
+Use devm_platform_ioremap_resource_byname() to simplify the code.
 
-Bean Huo (2):
-  scsi: ufs-mediatek: use devm_platform_ioremap_resource_byname()
-  scsi: ufs-qcom: use devm_platform_ioremap_resource_byname()
+Signed-off-by: Bean Huo <beanhuo@micron.com>
+---
+ drivers/scsi/ufs/ufs-exynos.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
- drivers/scsi/ufs/ufs-exynos.c   | 10 +++-------
- drivers/scsi/ufs/ufs-qcom-ice.c |  9 +--------
- drivers/scsi/ufs/ufs-qcom.c     | 23 +++++++++--------------
- 3 files changed, 13 insertions(+), 29 deletions(-)
-
+diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
+index 8f1b6f61a776..1eecbe550536 100644
+--- a/drivers/scsi/ufs/ufs-exynos.c
++++ b/drivers/scsi/ufs/ufs-exynos.c
+@@ -940,7 +940,6 @@ static int exynos_ufs_init(struct ufs_hba *hba)
+ 	struct device *dev = hba->dev;
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct exynos_ufs *ufs;
+-	struct resource *res;
+ 	int ret;
+ 
+ 	ufs = devm_kzalloc(dev, sizeof(*ufs), GFP_KERNEL);
+@@ -948,24 +947,21 @@ static int exynos_ufs_init(struct ufs_hba *hba)
+ 		return -ENOMEM;
+ 
+ 	/* exynos-specific hci */
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "vs_hci");
+-	ufs->reg_hci = devm_ioremap_resource(dev, res);
++	ufs->reg_hci = devm_platform_ioremap_resource_byname(pdev, "vs_hci");
+ 	if (IS_ERR(ufs->reg_hci)) {
+ 		dev_err(dev, "cannot ioremap for hci vendor register\n");
+ 		return PTR_ERR(ufs->reg_hci);
+ 	}
+ 
+ 	/* unipro */
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "unipro");
+-	ufs->reg_unipro = devm_ioremap_resource(dev, res);
++	ufs->reg_unipro = devm_platform_ioremap_resource_byname(pdev, "unipro");
+ 	if (IS_ERR(ufs->reg_unipro)) {
+ 		dev_err(dev, "cannot ioremap for unipro register\n");
+ 		return PTR_ERR(ufs->reg_unipro);
+ 	}
+ 
+ 	/* ufs protector */
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ufsp");
+-	ufs->reg_ufsp = devm_ioremap_resource(dev, res);
++	ufs->reg_ufsp = devm_platform_ioremap_resource_byname(pdev, "ufsp");
+ 	if (IS_ERR(ufs->reg_ufsp)) {
+ 		dev_err(dev, "cannot ioremap for ufs protector register\n");
+ 		return PTR_ERR(ufs->reg_ufsp);
 -- 
 2.17.1
 
