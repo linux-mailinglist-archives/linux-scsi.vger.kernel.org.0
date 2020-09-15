@@ -2,96 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C4D269F76
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 09:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C18269FD8
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 09:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgIOHPG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 03:15:06 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:38372 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbgIOHPF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 03:15:05 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200915071502epoutp04659894db838198a19f061ee62458c145~0462TwM4C3039530395epoutp043
-        for <linux-scsi@vger.kernel.org>; Tue, 15 Sep 2020 07:15:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200915071502epoutp04659894db838198a19f061ee62458c145~0462TwM4C3039530395epoutp043
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1600154102;
-        bh=DduciN/JwcnwqiVl5IpPOg+0xjvc7x2ue/tjaNhaSYA=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=KaE+RVnowPMqIGz9bI6lqDRt70JmC/Vz6+zjtzfbtNk7lldGHTnVEj58do3xdjZWA
-         JeNpJVWiNa+uivbnR2xnhu+ZM77RjKkWj+VueS5HFJysXlQ9GFY5/kbEkC8b4r/Mhx
-         tPI1AqUYVgSn4pCuLUx3xS6Olh/5zFujDJEPr2JY=
-Received: from epcpadp1 (unknown [182.195.40.11]) by epcas1p3.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200915071501epcas1p32ec33830c4ffae37f585cb1a6220b37d~0461u7IbB0453704537epcas1p3C;
-        Tue, 15 Sep 2020 07:15:01 +0000 (GMT)
-Mime-Version: 1.0
-Subject: RE: [PATCH] scsi: ufs: Fix NOP OUT timeout value
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <BY5PR04MB6705EA7473F8971029B8372FFC200@BY5PR04MB6705.namprd04.prod.outlook.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <231786897.01600154101631.JavaMail.epsvc@epcpadp1>
-Date:   Tue, 15 Sep 2020 16:08:22 +0900
-X-CMS-MailID: 20200915070822epcms2p860645039610710de7c5acc829d9f9862
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200902025852epcms2p2a2d4ac934f4fc09233d4272c96df9ff1
-References: <BY5PR04MB6705EA7473F8971029B8372FFC200@BY5PR04MB6705.namprd04.prod.outlook.com>
-        <231786897.01599016081767.JavaMail.epsvc@epcpadp2>
-        <CGME20200902025852epcms2p2a2d4ac934f4fc09233d4272c96df9ff1@epcms2p8>
+        id S1726145AbgIOHd7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 03:33:59 -0400
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:12669 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726087AbgIOHdx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 03:33:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1600155234; x=1631691234;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FarJKh3x0In5BY3dfnVbiccgbo1sWfg8Yc3MSgdQfvY=;
+  b=LkRvE2gHylnwnKGT8MVjnqLijXuwuB2guQI0p2Pzu/uSCRGYs5/GJ9sJ
+   v4JoNMY63ZAVjMEFkHd9rLMUcsEoyXUy17YGo0zwV+XHn7phSZ8X2ybgH
+   DDWlVgYx9RXwy4uXGfZjAibves92yXk3J3M9U+QjJLgGEQOHrmEyJ9ifP
+   /ERqTQG6BnNmS4Gv5oZHHPnay2kVJ1ALbZo73/NRY6IW0qIVmJXJ5giU6
+   yoWvQrCXajq526kGZaOQ0NsRkbzeea1QFhNEMHvNMPfV4lplCpcXwaZSQ
+   XWFKB5qqOKIoR0uvXfXiQw/PxXyQsnr/DQTTX0Oi7G4qcIjpnh8yfjPpC
+   g==;
+IronPort-SDR: NgWhtLidm76GMnT8CO2dxmchBLuUoCXDo986olFWEmPI51KXNixlGxEh4w2Dzd2WBnojw/eZli
+ M5Oild3r+GKT+mT/E/oilOtnMUyiqJSeRocf9ctzdxocj05fSy93kVTHVBLJc1dPFmB12ys3cU
+ xkFyMRPvXffir2kCZ9hAhU5UCkhhgf40tArWrW+id6E+Q8r08gk7O9qeFTVu4aUHxhQVUoqZBV
+ G46nMajg0Xj+HV6yEP0e//FV51fY7pcTSiHe1Kk1ZkBDdz9NJoU+ADS7UWJ+Ubk1zgOMxlYlSO
+ eMQ=
+X-IronPort-AV: E=Sophos;i="5.76,429,1592841600"; 
+   d="scan'208";a="147405117"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Sep 2020 15:33:52 +0800
+IronPort-SDR: W6RvQwcbocZVw2Be8Qc9S5sHnxtTveFjoZmVcVMbMXBOb6nwDcnAvDYaGiSUG8/K5UneOhKPk5
+ d61G/X3jvcjg==
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 00:21:02 -0700
+IronPort-SDR: YXjMHLq15wGZZgZURDn6+rP+8sqcxZSMvCzjsb1x46aHwffmodbopeWsgZaBXlaPREEKx4HKbv
+ Zrb8z90TCLCg==
+WDCIronportException: Internal
+Received: from washi.fujisawa.hgst.com ([10.149.53.254])
+  by uls-op-cesaip02.wdc.com with ESMTP; 15 Sep 2020 00:33:50 -0700
+From:   Damien Le Moal <damien.lemoal@wdc.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Borislav Petkov <bp@suse.de>
+Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: [PATCH v3 0/2] Fix handling of host-aware ZBC disks
+Date:   Tue, 15 Sep 2020 16:33:45 +0900
+Message-Id: <20200915073347.832424-1-damien.lemoal@wdc.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Avri,
+Martin,
 
-> > In some Samsung UFS devices, there is some booting fail issue with
-> > low-power UFS device. The reason of this issue is the UFS device has a
-> > little bit longer latency for NOP OUT response. It causes booting fail
-> > because NOP OUT command is issued during initialization to check whether
-> > the device transport protocol is ready or not. This issue is resolved by
-> > releasing NOP_OUT_TIMEOUT value.
-> > 
-> > NOP_OUT_TIMEOUT: 30ms -> 50ms
-> > 
-> > Signed-off-by: Daejun Park <daejun7.park@samsung.com>
-> Acked-by: Avri Altman <avri.altman@wdc.com>
+Two patches for this cycle (with a cc stable) to fix handling of
+host-aware ZBC disks that have partitions, that is, used as regular
+disks.
 
-Thanks for the review.
+The first patch fixes host-aware disk initialization and command
+completion processing. It also enables the use of host-aware disks as
+regular disks when CONFIG_BLK_DEV_ZONED is disabled.
 
-Bart,
-Could you review this patch, please?
+The second patch fixes the CONFIG_BLK_DEV_ZONED enabled configuration
+so that zone append emulation is not initialized for host-aware disks
+with partitions/used as regular disks. While at it, this patch also
+removes a problem with sd_zbc_init_disk() error handling in
+sd_revalidate_disk() by moving this function execution inside
+sd_zbc_revalidate_zones().
 
-Thanks,
-Daejun
+Borislav tested the previous version of this series and confirmed that
+it solves his problem (thanks Borislav !)
+
+Changes from v2:
+* Introduce blk_queue_set_zoned() helper function
+
+Changes from v1:
+* Rebased on rc5
+* Use "if (IS_DEFINED())" instead of #ifdef in patch 1
+
+Damien Le Moal (2):
+  scsi: Fix handling of host-aware ZBC disks
+  scsi: Fix ZBC disk initialization
+
+ block/blk-settings.c   | 46 +++++++++++++++++++++++++++++
+ drivers/scsi/sd.c      | 34 ++++++++++++----------
+ drivers/scsi/sd.h      |  8 +----
+ drivers/scsi/sd_zbc.c  | 66 +++++++++++++++++++++++++-----------------
+ include/linux/blkdev.h |  2 ++
+ 5 files changed, 107 insertions(+), 49 deletions(-)
+
+-- 
+2.26.2
+
