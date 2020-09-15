@@ -2,50 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C6B26AB86
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 20:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A660226AC1E
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 20:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727920AbgIOSJV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 14:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S1727897AbgIOShV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 14:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727990AbgIOSI4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 14:08:56 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FC3C061797;
-        Tue, 15 Sep 2020 11:07:27 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id a12so3903555eds.13;
-        Tue, 15 Sep 2020 11:07:27 -0700 (PDT)
+        with ESMTP id S1727974AbgIOSIx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 14:08:53 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31DC06178A;
+        Tue, 15 Sep 2020 11:07:24 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id i1so3991857edv.2;
+        Tue, 15 Sep 2020 11:07:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vvxOGxNKj/7yxq3LDFIGsq+9PQEexQTaLJnBkK3tSHg=;
-        b=tQEqOEqMWWwt2fWyREs3dQj94iTfe6kl3oM9wFHmaJ4HPYJiupV069c1OIfEPQYorl
-         kWYVZRsah58o5Tn8a8Q1vLjtmxH5vUe87cIHcGxPvYoW6NbM5piXCwvoAQZgi/9rGXmx
-         2RSZ37eqH9Y23mB7Yz+CgTg9UTW5x8BDyvTSXWQYA3MUfkgSLkn/irrjwRYO9Z+drmHD
-         U3dlQAeK7i4zszrn+yEM8HvguHPSlYpys2u4Q2pU7D2NxssO2Zgf8tDbQOb1lPeAP26b
-         0ZFfaPXXHVohIoDsAtwn40w1hnCsQyfg9X7LbpqCgAD26G8HFwXIbLkTdTYN5liz0hvo
-         eM2Q==
+        h=from:to:cc:subject:date:message-id;
+        bh=Cf1iAlZ7KW1crellt7Mb98w82iNdc/UJBUN0U2Sts40=;
+        b=cLpOUy6yWPdQ6VmED21jNgkVOJHDl7n7dVXX0yb84QeXtpQ6BFeWf7QrIM4FFM0nVB
+         oAjy/cFnJ89fK8SFyLLMCeWKCI+TniZxw7z9n6il7qHMazDEjSvm8sWSqJtU1B1EHClO
+         EGOReqSI2jMtARbcW+ibkfYtGCgweMtnGDaDz67uUt54Q34fgsegkkVP2p6cb95odG35
+         cqn9KmxD/20IzwqHnxIyoKJiHBZmkT13aWOA1GGBXQ/voX9cT8RSHA+JnVox99i1xqLs
+         jqiSww8O3gUTp+OQ+cSUiifNZqPv5/Kx8UXX7qGYiQ+Rbhu1UNRtRpYjOorLCncp77TR
+         vf1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=vvxOGxNKj/7yxq3LDFIGsq+9PQEexQTaLJnBkK3tSHg=;
-        b=kHv9i+Z48GKEjqjX3mQlIYJN4IDBN1omqnkxBXgoeKnQ82g+HaG46xJEIwt1Neow7R
-         7ROV6YYzLY9hK5Pu5kgT4m1DMa1ooHhN2OyseFg8om2EMbOCnE6zkpx/l78sqWQDfPVj
-         uMQzzoUaSyhdctXxQ+mgAWipQJYZzqrwb55tR/5ZaaZUtiGWqXcPQVm9on+slEnTGY5h
-         bsESYYJUKHHvpUdO9LsMvTJnn6K8Mwckxdm3V1FYsT2jLzKGOCXSLL8BMZOB9mjA1Ief
-         DEWRTxnjBsAue/x1KLeMT8nVCrn/v+LPkpsRKdxQjiQGDXdZHXofC9GA9GrKjPUBDK/q
-         KD3A==
-X-Gm-Message-State: AOAM533XLNolykSQsQ4rAx7xxDVYIVWJn39Enm3xm9seIn8eCoxYVuox
-        O7cj813uS6IsQOLDAE52HWE=
-X-Google-Smtp-Source: ABdhPJwwmJtEBhCSFDITxvEDupYDusK1WH0s4Kua1S4sxBDhRbbXG5dHdaH+NP8G3je5YgPgPAhz4w==
-X-Received: by 2002:a05:6402:1641:: with SMTP id s1mr24493949edx.66.1600193245886;
-        Tue, 15 Sep 2020 11:07:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Cf1iAlZ7KW1crellt7Mb98w82iNdc/UJBUN0U2Sts40=;
+        b=TwgClWgCymwhykF7m/1bd6XCSQ9YaYDUFzsKivRKx9/TRdxiFcu0WnHcLtOf8Onl8n
+         aboEvXBZaDC5ixLNzJhB2eUmB9lbXSG6hZPYwaOtFZySPji7BromVGSZLzbvLLUDheCb
+         T/04GROm/mhojDTFSW+5/CTvqSGN/02tnBkIuDUFqan1fDfEh5N7RyCH21XNYKBQa+Mc
+         l8Yq5wDPkN44mTBBPXFodoUW4P2WS9ZzsLlS7GqwaIlxsPJ2XmFTgw+cJgPjgXiwofnb
+         P+0XNLCwoyYbFd2AVsrqXGLY9hBHCTp089qB0AH1XTG2jMJ5qqHuYth1dDr20tGo4La0
+         d6tg==
+X-Gm-Message-State: AOAM5304Rz95fe4vHGgxsAzN82IxBtZEhE9x+g4hZTt/mq+yF86d5c14
+        4UziTMajm1jhJVkMCHu9qRZNIYQKxd0=
+X-Google-Smtp-Source: ABdhPJy1Q2hvhWMQ2fCeUCqU3OIoJM2WrHy0Eqkzh3Nl59GcGdTyhXA+nJ9yVmXqW5Ndw4NP2favZg==
+X-Received: by 2002:a50:8c66:: with SMTP id p93mr24032312edp.156.1600193242760;
+        Tue, 15 Sep 2020 11:07:22 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:598:b890:1ee4:75d6:3bdd:1167:483e])
-        by smtp.gmail.com with ESMTPSA id k25sm10687083ejk.3.2020.09.15.11.07.24
+        by smtp.gmail.com with ESMTPSA id k25sm10687083ejk.3.2020.09.15.11.07.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 11:07:25 -0700 (PDT)
+        Tue, 15 Sep 2020 11:07:22 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -53,12 +52,10 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] scsi: ufs-qcom: use devm_platform_ioremap_resource_byname()
-Date:   Tue, 15 Sep 2020 20:07:08 +0200
-Message-Id: <20200915180708.12311-3-huobean@gmail.com>
+Subject: [PATCH 0/2] Use devm_platform_ioremap_resource_byname()
+Date:   Tue, 15 Sep 2020 20:07:06 +0200
+Message-Id: <20200915180708.12311-1-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200915180708.12311-1-huobean@gmail.com>
-References: <20200915180708.12311-1-huobean@gmail.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -66,87 +63,19 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Use devm_platform_ioremap_resource_byname() to simplify the code.
+platform_get_resource_byname() and devm_ioremap_resource() have been wrapped
+to the single helper devm_platform_ioremap_resource_byname(), so use it and
+simplify the code.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
+Bean Huo (2):
+  scsi: ufs-mediatek: use devm_platform_ioremap_resource_byname()
+  scsi: ufs-qcom: use devm_platform_ioremap_resource_byname()
+
+ drivers/scsi/ufs/ufs-exynos.c   | 10 +++-------
  drivers/scsi/ufs/ufs-qcom-ice.c |  9 +--------
  drivers/scsi/ufs/ufs-qcom.c     | 23 +++++++++--------------
- 2 files changed, 10 insertions(+), 22 deletions(-)
+ 3 files changed, 13 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-qcom-ice.c b/drivers/scsi/ufs/ufs-qcom-ice.c
-index bbb0ad7590ec..cd67869a725e 100644
---- a/drivers/scsi/ufs/ufs-qcom-ice.c
-+++ b/drivers/scsi/ufs/ufs-qcom-ice.c
-@@ -97,25 +97,18 @@ int ufs_qcom_ice_init(struct ufs_qcom_host *host)
- 	struct ufs_hba *hba = host->hba;
- 	struct device *dev = hba->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
--	struct resource *res;
- 	int err;
- 
- 	if (!(ufshcd_readl(hba, REG_CONTROLLER_CAPABILITIES) &
- 	      MASK_CRYPTO_SUPPORT))
- 		return 0;
- 
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ice");
--	if (!res) {
--		dev_warn(dev, "ICE registers not found\n");
--		goto disable;
--	}
--
- 	if (!qcom_scm_ice_available()) {
- 		dev_warn(dev, "ICE SCM interface not found\n");
- 		goto disable;
- 	}
- 
--	host->ice_mmio = devm_ioremap_resource(dev, res);
-+	host->ice_mmio = devm_platform_ioremap_resource_byname(pdev, "ice");
- 	if (IS_ERR(host->ice_mmio)) {
- 		err = PTR_ERR(host->ice_mmio);
- 		dev_err(dev, "Failed to map ICE registers; err=%d\n", err);
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index f9d6ef356540..c0c76da5472a 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -976,7 +976,6 @@ static int ufs_qcom_init(struct ufs_hba *hba)
- 	struct device *dev = hba->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct ufs_qcom_host *host;
--	struct resource *res;
- 
- 	if (strlen(android_boot_dev) && strcmp(android_boot_dev, dev_name(dev)))
- 		return -ENODEV;
-@@ -1059,20 +1058,16 @@ static int ufs_qcom_init(struct ufs_hba *hba)
- 		host->dev_ref_clk_en_mask = BIT(26);
- 	} else {
- 		/* "dev_ref_clk_ctrl_mem" is optional resource */
--		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
--						   "dev_ref_clk_ctrl_mem");
--		if (res) {
--			host->dev_ref_clk_ctrl_mmio =
--					devm_ioremap_resource(dev, res);
--			if (IS_ERR(host->dev_ref_clk_ctrl_mmio)) {
--				dev_warn(dev,
--					"%s: could not map dev_ref_clk_ctrl_mmio, err %ld\n",
--					__func__,
--					PTR_ERR(host->dev_ref_clk_ctrl_mmio));
--				host->dev_ref_clk_ctrl_mmio = NULL;
--			}
--			host->dev_ref_clk_en_mask = BIT(5);
-+		host->dev_ref_clk_ctrl_mmio =
-+			devm_platform_ioremap_resource_byname(pdev,
-+							"dev_ref_clk_ctrl_mem");
-+		if (IS_ERR(host->dev_ref_clk_ctrl_mmio)) {
-+			dev_warn(dev,
-+			"%s: could not map dev_ref_clk_ctrl_mmio, err %ld\n",
-+			__func__, PTR_ERR(host->dev_ref_clk_ctrl_mmio));
-+			host->dev_ref_clk_ctrl_mmio = NULL;
- 		}
-+		host->dev_ref_clk_en_mask = BIT(5);
- 	}
- 
- 	err = ufs_qcom_init_lane_clks(host);
 -- 
 2.17.1
 
