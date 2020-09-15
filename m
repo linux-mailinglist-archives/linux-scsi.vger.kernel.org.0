@@ -2,80 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F73E26B1F3
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 00:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E5126B224
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 00:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727398AbgIOWii (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 18:38:38 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:54678 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727547AbgIOWi2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 18:38:28 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FMYRWw061567;
-        Tue, 15 Sep 2020 22:38:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type; s=corp-2020-01-29;
- bh=9/7/zbl6UqSMDCOseJ5iwze2tFYzlfcMsPKbFVZcrKc=;
- b=wdN3exqFfslipIoLUb3pUnYAJSuQQ2JX1pwHWbsZggT6fFDIRd09JIccWpZLDapOoNW3
- PZhPaFeAx3VkwuxRvXwxI5naqqBw5W4tE8hH/3gpL4LZic7M3C9Syxot3lPGJ6xRQ5YO
- /oJsVfRtYq4n0n//gyJXAlKmT++1DMc/l9Wf8m0IQUT2AsL0czJZRAvpv8kjZ7uxEu6M
- uoP7Erhns7CowHeZ9pdGJ5BSzown3fmK1rwt1FUGfjBDBGUX23gpNUWDt6NkO3hkpYAI
- DFWpbDNlqtpad0kzXhYbF3ipqxScT2VjDQ3Zl7fFG2L/lvNMtgypvtcFBKUCJ21ERiGT pQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 33j91dhhcn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Sep 2020 22:38:23 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FMYhht015125;
-        Tue, 15 Sep 2020 22:38:23 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 33h8905f75-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Sep 2020 22:38:22 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08FMcLTd030024;
-        Tue, 15 Sep 2020 22:38:22 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 15 Sep 2020 22:38:21 +0000
-To:     Tomas Henzl <thenzl@redhat.com>
-Cc:     linux-scsi@vger.kernel.org, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com, sathya.prakash@broadcom.com
-Subject: Re: [PATCH] mpt3sas: fix sync irqs
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1mu1q3bu5.fsf@ca-mkp.ca.oracle.com>
-References: <20200910142126.8147-1-thenzl@redhat.com>
-Date:   Tue, 15 Sep 2020 18:38:19 -0400
-In-Reply-To: <20200910142126.8147-1-thenzl@redhat.com> (Tomas Henzl's message
-        of "Thu, 10 Sep 2020 16:21:26 +0200")
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
- suspectscore=1 mlxscore=0 bulkscore=0 mlxlogscore=895 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009150176
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 suspectscore=1 mlxlogscore=910
- clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009150176
+        id S1727963AbgIOWmm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 18:42:42 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42010 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727925AbgIOWmj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 15 Sep 2020 18:42:39 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A4B758EE188;
+        Tue, 15 Sep 2020 15:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1600209755;
+        bh=VEHO4Ug0kD8bPGj3t70lHdvhQIsfuBMa/2qcEUNGuho=;
+        h=Subject:From:To:Cc:Date:From;
+        b=dQKM7Xsw/Ncz9A1FlYdvJIr8nJ0BrSr39xrXUPxqASLoWTj0i2YEpoE6t+XMBFCHU
+         1T+CBMAoyh0RXrw52xdS4CXumb9Q33hBSC8DPjBw0nyWWpDFQbFBgnh1zRnyG2sj/2
+         mtMUV2C7LoIFGp8izh4TE4LTpifkFKozNB6AVthY=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Z0HsipziwS27; Tue, 15 Sep 2020 15:42:35 -0700 (PDT)
+Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3F5AD8EE107;
+        Tue, 15 Sep 2020 15:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1600209755;
+        bh=VEHO4Ug0kD8bPGj3t70lHdvhQIsfuBMa/2qcEUNGuho=;
+        h=Subject:From:To:Cc:Date:From;
+        b=dQKM7Xsw/Ncz9A1FlYdvJIr8nJ0BrSr39xrXUPxqASLoWTj0i2YEpoE6t+XMBFCHU
+         1T+CBMAoyh0RXrw52xdS4CXumb9Q33hBSC8DPjBw0nyWWpDFQbFBgnh1zRnyG2sj/2
+         mtMUV2C7LoIFGp8izh4TE4LTpifkFKozNB6AVthY=
+Message-ID: <1600209754.5092.24.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.9-rc5
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Sep 2020 15:42:34 -0700
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Just one fix in libsas for a resource leak in an error path.
 
-Tomas,
+The patch is available here:
 
-> - _base_process_reply_queue called from _base_interrupt may schedule a
-> new irq poll, fix this by calling synchronize_irq first
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Applied to 5.10/scsi-staging, thanks!
+The short changelog is:
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Dan Carpenter (1):
+      scsi: libsas: Fix error path in sas_notify_lldd_dev_found()
+
+And the diffstat:
+
+ drivers/scsi/libsas/sas_discover.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/libsas/sas_discover.c b/drivers/scsi/libsas/sas_discover.c
+index daf951b0b3f5..13ad2b3d314e 100644
+--- a/drivers/scsi/libsas/sas_discover.c
++++ b/drivers/scsi/libsas/sas_discover.c
+@@ -182,10 +182,11 @@ int sas_notify_lldd_dev_found(struct domain_device *dev)
+ 		pr_warn("driver on host %s cannot handle device %016llx, error:%d\n",
+ 			dev_name(sas_ha->dev),
+ 			SAS_ADDR(dev->sas_addr), res);
++		return res;
+ 	}
+ 	set_bit(SAS_DEV_FOUND, &dev->state);
+ 	kref_get(&dev->kref);
+-	return res;
++	return 0;
+ }
+ 
+ 
