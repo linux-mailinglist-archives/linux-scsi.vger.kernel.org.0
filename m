@@ -2,67 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6355626B1F0
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 00:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F73E26B1F3
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 00:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727398AbgIOWiR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 18:38:17 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:33194 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727724AbgIOWiN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 18:38:13 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FMXihO107584;
-        Tue, 15 Sep 2020 22:38:08 GMT
+        id S1727398AbgIOWii (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 18:38:38 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:54678 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727547AbgIOWi2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 18:38:28 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FMYRWw061567;
+        Tue, 15 Sep 2020 22:38:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=qRdlesPSJAprlMkfqOmIvb04nMBCKy0yof1m9GqqBko=;
- b=kPObZoXJ6xIk79izAMox1ThWSbYli1Jp0v8aZKJfhnArwqwLK8fwhrcuHuysdc6h4WRe
- +t5oA6agIWewIO7yd7Nadam0VAk+5fKZf7dm+O0Fl8HJNfkEAIH04neVSjQ0s1b6PZl7
- 87DTg+vTGDeU6bKZSfCKVv9V5xCFDh/2aMeOI1VU1H8qkeEJFKeiz4b48kXnbotJTU4K
- w5ENgveTKneMWfm5xL439j5irrJSsdg7xufAMR7i2b9gQdxcKxhqoqpmA9w8yO/KNJ8g
- oDCRLK/Dm2iVjQsU9NPlshfVu0Fn5Ko5xD3sAmrAJKsnv24Vi4U/4MuzKgrbWZvcODBV cg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 33gnrqyx8c-1
+ bh=9/7/zbl6UqSMDCOseJ5iwze2tFYzlfcMsPKbFVZcrKc=;
+ b=wdN3exqFfslipIoLUb3pUnYAJSuQQ2JX1pwHWbsZggT6fFDIRd09JIccWpZLDapOoNW3
+ PZhPaFeAx3VkwuxRvXwxI5naqqBw5W4tE8hH/3gpL4LZic7M3C9Syxot3lPGJ6xRQ5YO
+ /oJsVfRtYq4n0n//gyJXAlKmT++1DMc/l9Wf8m0IQUT2AsL0czJZRAvpv8kjZ7uxEu6M
+ uoP7Erhns7CowHeZ9pdGJ5BSzown3fmK1rwt1FUGfjBDBGUX23gpNUWDt6NkO3hkpYAI
+ DFWpbDNlqtpad0kzXhYbF3ipqxScT2VjDQ3Zl7fFG2L/lvNMtgypvtcFBKUCJ21ERiGT pQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 33j91dhhcn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Sep 2020 22:38:08 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FMZxoH152817;
-        Tue, 15 Sep 2020 22:38:07 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 33h7wpuaec-1
+        Tue, 15 Sep 2020 22:38:23 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FMYhht015125;
+        Tue, 15 Sep 2020 22:38:23 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 33h8905f75-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Sep 2020 22:38:07 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08FMc5qn015645;
-        Tue, 15 Sep 2020 22:38:06 GMT
+        Tue, 15 Sep 2020 22:38:22 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08FMcLTd030024;
+        Tue, 15 Sep 2020 22:38:22 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 15 Sep 2020 22:38:05 +0000
+        with ESMTP ; Tue, 15 Sep 2020 22:38:21 +0000
 To:     Tomas Henzl <thenzl@redhat.com>
 Cc:     linux-scsi@vger.kernel.org, sreekanth.reddy@broadcom.com,
         suganath-prabu.subramani@broadcom.com, sathya.prakash@broadcom.com
-Subject: Re: [PATCH] mpt3sas: a small correction in _base_process_reply_queue
+Subject: Re: [PATCH] mpt3sas: fix sync irqs
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1sgbi3buj.fsf@ca-mkp.ca.oracle.com>
-References: <20200911180057.14633-1-thenzl@redhat.com>
-Date:   Tue, 15 Sep 2020 18:38:03 -0400
-In-Reply-To: <20200911180057.14633-1-thenzl@redhat.com> (Tomas Henzl's message
-        of "Fri, 11 Sep 2020 20:00:57 +0200")
+Message-ID: <yq1mu1q3bu5.fsf@ca-mkp.ca.oracle.com>
+References: <20200910142126.8147-1-thenzl@redhat.com>
+Date:   Tue, 15 Sep 2020 18:38:19 -0400
+In-Reply-To: <20200910142126.8147-1-thenzl@redhat.com> (Tomas Henzl's message
+        of "Thu, 10 Sep 2020 16:21:26 +0200")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009150176
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ suspectscore=1 mlxscore=0 bulkscore=0 mlxlogscore=895 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009150176
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 bulkscore=0 suspectscore=1
- clxscore=1015 mlxlogscore=999 adultscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=1 mlxlogscore=910
+ clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009150176
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -72,8 +72,8 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Tomas,
 
-> There is no need to compute module a simple comparision is good
-> enough.
+> - _base_process_reply_queue called from _base_interrupt may schedule a
+> new irq poll, fix this by calling synchronize_irq first
 
 Applied to 5.10/scsi-staging, thanks!
 
