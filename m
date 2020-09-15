@@ -2,165 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B88026AF30
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 23:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F109E26AFF0
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 23:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727931AbgIOVIn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 17:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727716AbgIOVIb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 17:08:31 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44003C06174A
-        for <linux-scsi@vger.kernel.org>; Tue, 15 Sep 2020 14:08:31 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id c13so5531788oiy.6
-        for <linux-scsi@vger.kernel.org>; Tue, 15 Sep 2020 14:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=LDekHbwFZghs1RUtaBp9A4+jkOD9LpvIN6BztS/FctI=;
-        b=MfZMe/tze/iCQOEBz+yc+pcslUjz+z3l0/5/87MDl4jCG7w/whRP1btthEgIrjvjp/
-         TpbdeNwwsgn05eVvjYPtzZbVGdBsTdkuF/Yu7fnawy1k410B69K71suK8blytx8GTD/j
-         6tz0xOSX056y2wUogzRQPvvV10ZYz6PEvOfAg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=LDekHbwFZghs1RUtaBp9A4+jkOD9LpvIN6BztS/FctI=;
-        b=Anj2uJ2zEVDZwc0zcE1E3hyfAIafejvYLJvZNWiYVwCP12Z4/GZ+qpb11XuU6+w8hZ
-         CIQ/tnX6JRjl7+7eNGAJ1TbDfE8Kha6VX6Zg6XnV/5zLt1f0R6s2D0vVrrVSnHHTwNLj
-         1RB3BdMew9gASErDx8A1YrOLnqlEf/QJhJCdhkS2CkqesqprgudjQ17oIPBzpMWnzt8X
-         0HCdMnKIKBMNHUd1IsDAPxzk375BLJeajE9UmzN8e0IsyiAoEQllGD9fy8aLWutmjdjm
-         4Fx7JwyJboXUEO7R32wqP5SlJKOadyn0RGzHgXefIDbdjJW5XuAZWw71qcP6tWthD8ni
-         4e/Q==
-X-Gm-Message-State: AOAM5328Y53vyz6eruqbkMFmNK1aTdRQ7ScUFIfAKxn2PgE9J43LzIDk
-        PkdONeeiV4jr7Q/SdU2LOY+Fr9suB9N+n9nL
-X-Google-Smtp-Source: ABdhPJy6iji+2PsbAH0OqBiGHa5zr9xX2M06eKJ42G09d7TjRZgKHKBaTTCSrxLAnORQV2c/41v14g==
-X-Received: by 2002:aca:f302:: with SMTP id r2mr876362oih.151.1600204110536;
-        Tue, 15 Sep 2020 14:08:30 -0700 (PDT)
-Received: from localhost.localdomain ([2600:1700:6970:bea0:ad6f:84dd:178e:bab3])
-        by smtp.gmail.com with ESMTPSA id z92sm1926090otb.22.2020.09.15.14.08.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Sep 2020 14:08:29 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.0.3.2.26\))
-Subject: Re: [PATCH] scsi: alua: fix the race between alua_bus_detach and
- alua_rtpg
-From:   Brian Bunker <brian@purestorage.com>
-In-Reply-To: <1600167537-12509-1-git-send-email-jitendra.khasdev@oracle.com>
-Date:   Tue, 15 Sep 2020 14:08:28 -0700
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com, hare@suse.com,
-        loberman@redhat.com, joe.jin@oracle.com, junxiao.bi@oracle.com,
-        gulam.mohamed@oracle.com,
-        "RITIKA.SRIVASTAVA@oracle.com" <RITIKA.SRIVASTAVA@ORACLE.COM>,
+        id S1728127AbgIOVu4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 17:50:56 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:49118 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728118AbgIOVua (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 17:50:30 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FKApmF178727;
+        Tue, 15 Sep 2020 20:16:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=l5Xi/C8aaybK1Dc/nZ423mkSftz9BwpE+EYiCy9WCYo=;
+ b=Etyt4ep5ZT7t/odhrnUeEuahCvdxq+O/2Snma7d1YF3F1Ey/JjYpDTnTLIzkGmuMSnJc
+ U1y/CTkqm1VqvtkAFQ63lWJ9J8pT3cN0uuqAWoQH+EVV4NBXmGWuJL1MhQ/M2DpoRCDU
+ i7C/P/qyqc7EOj/6K2IZSlc4aUSop2h0xb/EJrFHRT2VSV1Onj6Bjzt8OxhO/44aNqdn
+ YeUNgiXBTiBoYQc5rHSHXMlcKLqH8mzKsjnKQ4QNE24asEYF/wqaU9f6dw260N6WxbZo
+ W+XSnwr+hyijySctYoDoCr0AiXRPZ4mIXioSv3U0Pz6JX+ZV+5lSnBEZLkti4GO2oUjM JQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 33j91dh0yf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Sep 2020 20:16:39 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FKFvSx127227;
+        Tue, 15 Sep 2020 20:16:38 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 33h7wppqdn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Sep 2020 20:16:38 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08FKGbi1007837;
+        Tue, 15 Sep 2020 20:16:37 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 15 Sep 2020 20:16:36 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        rdunlap@infradead.org, avri.altman@wdc.com, sfr@canb.auug.org.au,
         linux-scsi@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E1362654-C1EC-4971-BFA6-07BF56592540@purestorage.com>
-References: <1600167537-12509-1-git-send-email-jitendra.khasdev@oracle.com>
-To:     Jitendra Khasdev <jitendra.khasdev@oracle.com>
-X-Mailer: Apple Mail (2.3654.0.3.2.26)
+Subject: Re: [PATCH -next] scsi: ufs: Fix 'unmet direct dependencies' config warning
+Date:   Tue, 15 Sep 2020 16:16:22 -0400
+Message-Id: <160020074003.8134.16280505616303761957.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200721172021.28922-1-alim.akhtar@samsung.com>
+References: <CGME20200721174310epcas5p2a448e38c6e4d5e36e9f0417f5ddced6d@epcas5p2.samsung.com> <20200721172021.28922-1-alim.akhtar@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150158
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
+ clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150157
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Jitendra,
+On Tue, 21 Jul 2020 22:50:21 +0530, Alim Akhtar wrote:
 
-It seems that we are in the same place trying to fix the same thing for =
-what is likely our same shared customer. Do you want to try to =
-incorporate anything from our fix from PURE? Like maybe remove the =
-BUG_ON lines from alua_rtpg if you are sure that the race is eliminated =
-with your patch?
+> With !CONFIG_OF and SCSI_UFS_EXYNOS selected, the below
+> warning is given:
+> 
+> WARNING: unmet direct dependencies detected for PHY_SAMSUNG_UFS
+>   Depends on [n]: OF [=n] && (ARCH_EXYNOS || COMPILE_TEST [=y])
+>   Selected by [y]:
+>   - SCSI_UFS_EXYNOS [=y] && SCSI_LOWLEVEL [=y] && SCSI [=y] && SCSI_UFSHCD_PLATFORM [=y] && (ARCH_EXYNOS || COMPILE_TEST [=y])
+> 
+> [...]
 
-See:
-https://marc.info/?l=3Dlinux-scsi&m=3D159984129611701&w=3D2
-https://marc.info/?l=3Dlinux-scsi&m=3D159983931810954&w=3D2
-https://marc.info/?l=3Dlinux-scsi&m=3D159971849210795&w=3D2
+Applied to 5.10/scsi-queue, thanks!
 
-Thanks,
-Brian
+[1/1] scsi: ufs: Fix 'unmet direct dependencies' config warning
+      https://git.kernel.org/mkp/scsi/c/09fd5f0ddf32
 
-Brian Bunker
-SW Eng
-brian@purestorage.com
-
-
-
-> On Sep 15, 2020, at 3:58 AM, Jitendra Khasdev =
-<jitendra.khasdev@oracle.com> wrote:
->=20
-> This is patch to fix the race occurs between bus detach and alua_rtpg.
->=20
-> It fluses the all pending workqueue in bus detach handler, so it can =
-avoid
-> race between alua_bus_detach and alua_rtpg.
->=20
-> Here is call trace where race got detected.
->=20
-> multipathd call stack:
-> [exception RIP: native_queued_spin_lock_slowpath+100]
-> --- <NMI exception stack> ---
-> native_queued_spin_lock_slowpath at ffffffff89307f54
-> queued_spin_lock_slowpath at ffffffff89307c18
-> _raw_spin_lock_irq at ffffffff89bd797b
-> alua_bus_detach at ffffffff8984dcc8
-> scsi_dh_release_device at ffffffff8984b6f2
-> scsi_device_dev_release_usercontext at ffffffff89846edf
-> execute_in_process_context at ffffffff892c3e60
-> scsi_device_dev_release at ffffffff8984637c
-> device_release at ffffffff89800fbc
-> kobject_cleanup at ffffffff89bb1196
-> kobject_put at ffffffff89bb12ea
-> put_device at ffffffff89801283
-> scsi_device_put at ffffffff89838d5b
-> scsi_disk_put at ffffffffc051f650 [sd_mod]
-> sd_release at ffffffffc051f8a2 [sd_mod]
-> __blkdev_put at ffffffff8952c79e
-> blkdev_put at ffffffff8952c80c
-> blkdev_close at ffffffff8952c8b5
-> __fput at ffffffff894e55e6
-> ____fput at ffffffff894e57ee
-> task_work_run at ffffffff892c94dc
-> exit_to_usermode_loop at ffffffff89204b12
-> do_syscall_64 at ffffffff892044da
-> entry_SYSCALL_64_after_hwframe at ffffffff89c001b8
->=20
-> kworker:
-> [exception RIP: alua_rtpg+2003]
-> account_entity_dequeue at ffffffff892e42c1
-> alua_rtpg_work at ffffffff8984f097
-> process_one_work at ffffffff892c4c29
-> worker_thread at ffffffff892c5a4f
-> kthread at ffffffff892cb135
-> ret_from_fork at ffffffff89c00354
->=20
-> Signed-off-by: Jitendra Khasdev <jitendra.khasdev@oracle.com>
-> ---
-> drivers/scsi/device_handler/scsi_dh_alua.c | 3 +++
-> 1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c =
-b/drivers/scsi/device_handler/scsi_dh_alua.c
-> index f32da0c..024a752 100644
-> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
-> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-> @@ -1144,6 +1144,9 @@ static void alua_bus_detach(struct scsi_device =
-*sdev)
-> 	struct alua_dh_data *h =3D sdev->handler_data;
-> 	struct alua_port_group *pg;
->=20
-> +	sdev_printk(KERN_INFO, sdev, "%s: flushing workqueues\n", =
-ALUA_DH_NAME);
-> +	flush_workqueue(kaluad_wq);
-> +
-> 	spin_lock(&h->pg_lock);
-> 	pg =3D rcu_dereference_protected(h->pg, =
-lockdep_is_held(&h->pg_lock));
-> 	rcu_assign_pointer(h->pg, NULL);
-> --=20
-> 1.8.3.1
->=20
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
