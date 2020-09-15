@@ -2,37 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFBF26AEEC
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 22:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB04326AEF5
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 22:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728047AbgIOUqq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 16:46:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42646 "EHLO mail.kernel.org"
+        id S1728061AbgIOUyQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 16:54:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42674 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726454AbgIOUqg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 15 Sep 2020 16:46:36 -0400
+        id S1727861AbgIOUqh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 15 Sep 2020 16:46:37 -0400
 Received: from localhost (unknown [104.132.1.66])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A4F120809;
+        by mail.kernel.org (Postfix) with ESMTPSA id C53DD20936;
         Tue, 15 Sep 2020 20:46:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1600202796;
-        bh=biBRsrW4Fs+Y3FfatFGMejxQwq4kpwq0ahfzBoNIGAM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TcTPD5CjNScvnACas/DuxQfwIjEVgKejo6dLSYhm84AuwpnT25q9TzTumsFBiJbCq
-         0ltWf08wjOzM7tYCAoEJ6QMl1yuBlSB9OZ/ca/xZNMSyB0B3cLS6X5Pil/J2KyoWpB
-         /+pt0YNu3CMzHZHBvVJXIxUlgKqGHqzwXplGgKCU=
+        bh=d1coarY+kYt3CCUrBHh62z5mGDhyA+XvBeFtxID2pGs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xr8SluegS6UFjDnRpW/eqYJKEKHp5AEwAjkKRdYO08kzM4/klo8niX2DcQe4Zss2c
+         /pDVZNXyll/QpGFYJTmky/I8GRlEj9rr9tP/57W6H9SfvBbFCxfWh8x5XGQLItcKvy
+         s2Cr/rv/S23NegqGZTb2Ysq/QYz3mnFuwwlNTkEg=
 From:   Jaegeuk Kim <jaegeuk@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         kernel-team@android.com
 Cc:     Jaegeuk Kim <jaegeuk@google.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH 1/6] scsi: ufs: atomic update for clkgating_enable
-Date:   Tue, 15 Sep 2020 13:45:27 -0700
-Message-Id: <20200915204532.1672300-1-jaegeuk@kernel.org>
+Subject: [PATCH 2/6] scsi: ufs: clear UAC for FFU
+Date:   Tue, 15 Sep 2020 13:45:28 -0700
+Message-Id: <20200915204532.1672300-2-jaegeuk@kernel.org>
 X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+In-Reply-To: <20200915204532.1672300-1-jaegeuk@kernel.org>
+References: <20200915204532.1672300-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -42,44 +44,73 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Jaegeuk Kim <jaegeuk@google.com>
 
-When giving a stress test which enables/disables clkgating, we hit device
-timeout sometimes. This patch avoids subtle racy condition to address it.
+In order to conduct FFU or RPMB operations, UFS needs to clear UAC. This patch
+clears it explicitly, so that we could get no failure given early execution.
 
 Cc: Alim Akhtar <alim.akhtar@samsung.com>
 Cc: Avri Altman <avri.altman@wdc.com>
 Signed-off-by: Jaegeuk Kim <jaegeuk@google.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 41 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 1d157ff58d817..d929c3d1e58cc 100644
+index d929c3d1e58cc..5deba03a61f75 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1791,19 +1791,19 @@ static ssize_t ufshcd_clkgate_enable_store(struct device *dev,
- 		return -EINVAL;
+@@ -7385,6 +7385,45 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ 	return ret;
+ }
  
- 	value = !!value;
++static int
++ufshcd_send_request_sense(struct ufs_hba *hba, struct scsi_device *sdp);
++
++static int ufshcd_clear_uac(struct ufs_hba *hba)
++{
++	struct scsi_device *sdp;
++	unsigned long flags;
++	int ret = 0;
 +
 +	spin_lock_irqsave(hba->host->host_lock, flags);
- 	if (value == hba->clk_gating.is_enabled)
- 		goto out;
- 
--	if (value) {
--		ufshcd_release(hba);
--	} else {
--		spin_lock_irqsave(hba->host->host_lock, flags);
-+	if (value)
-+		hba->clk_gating.active_reqs--;
-+	else
- 		hba->clk_gating.active_reqs++;
--		spin_unlock_irqrestore(hba->host->host_lock, flags);
--	}
- 
- 	hba->clk_gating.is_enabled = value;
- out:
++	sdp = hba->sdev_ufs_device;
++	if (sdp) {
++		ret = scsi_device_get(sdp);
++		if (!ret && !scsi_device_online(sdp)) {
++			ret = -ENODEV;
++			scsi_device_put(sdp);
++		}
++	} else {
++		ret = -ENODEV;
++	}
 +	spin_unlock_irqrestore(hba->host->host_lock, flags);
- 	return count;
++	if (ret)
++		goto out_err;
++
++	if (hba->wlun_dev_clr_ua) {
++		ret = ufshcd_send_request_sense(hba, sdp);
++		if (ret)
++			goto out;
++		/* Unit attention condition is cleared now */
++		hba->wlun_dev_clr_ua = false;
++	}
++out:
++	scsi_device_put(sdp);
++out_err:
++	if (ret)
++		dev_err(hba->dev, "%s: Failed UAC clear ret = %d\n", __func__, ret);
++	return ret;
++}
++
+ /**
+  * ufshcd_probe_hba - probe hba to detect device and initialize
+  * @hba: per-adapter instance
+@@ -7500,6 +7539,8 @@ static void ufshcd_async_scan(void *data, async_cookie_t cookie)
+ 		pm_runtime_put_sync(hba->dev);
+ 		ufshcd_exit_clk_scaling(hba);
+ 		ufshcd_hba_exit(hba);
++	} else {
++		ufshcd_clear_uac(hba);
+ 	}
  }
  
 -- 
