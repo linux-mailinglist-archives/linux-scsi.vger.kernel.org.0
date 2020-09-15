@@ -2,89 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F109E26AFF0
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 23:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC1A26AFB7
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Sep 2020 23:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728127AbgIOVu4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 17:50:56 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:49118 "EHLO
+        id S1727787AbgIOVku (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 17:40:50 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:37278 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728118AbgIOVua (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 17:50:30 -0400
+        with ESMTP id S1728053AbgIOVet (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 17:34:49 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FKApmF178727;
-        Tue, 15 Sep 2020 20:16:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=l5Xi/C8aaybK1Dc/nZ423mkSftz9BwpE+EYiCy9WCYo=;
- b=Etyt4ep5ZT7t/odhrnUeEuahCvdxq+O/2Snma7d1YF3F1Ey/JjYpDTnTLIzkGmuMSnJc
- U1y/CTkqm1VqvtkAFQ63lWJ9J8pT3cN0uuqAWoQH+EVV4NBXmGWuJL1MhQ/M2DpoRCDU
- i7C/P/qyqc7EOj/6K2IZSlc4aUSop2h0xb/EJrFHRT2VSV1Onj6Bjzt8OxhO/44aNqdn
- YeUNgiXBTiBoYQc5rHSHXMlcKLqH8mzKsjnKQ4QNE24asEYF/wqaU9f6dw260N6WxbZo
- W+XSnwr+hyijySctYoDoCr0AiXRPZ4mIXioSv3U0Pz6JX+ZV+5lSnBEZLkti4GO2oUjM JQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 33j91dh0yf-1
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FLUh5b146173;
+        Tue, 15 Sep 2020 21:34:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=bKefqrS9x6G26Q8J7sRki6R1Qm0M7hqQGhPAOWazeo4=;
+ b=lombxXODv8NFYNEoRa8P6KmSdGNOeGbQ682XD5jwetrB2nIxSqxDeKAxB9+11gE8Dhzz
+ 36vgXES0uHVOTMG6q/o8mkLIN1yIeNcMchpunG0O6LIUUSd4FhlJrIL1DsSAxRgtYhkj
+ GVYbxUtJUljhGfm9hJNGgo0brf5/1tdtfNttwdQl/LvSSMgNLvMl+j1xXO+iFsUEpHm8
+ 5cv8lpyIzKGClFmg/zPma4HMU7CYigSNj5IpaHSOuL3ZeKvjsCzz6XffRS4vzsDNzxJx
+ MAympkIpATmmbyahlzjR5OS+ox6B0m8bs45lCr4IcarW3xi5Wvw7e6OvWhV8mAMgYngA QQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 33j91dhb8g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Sep 2020 20:16:39 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FKFvSx127227;
-        Tue, 15 Sep 2020 20:16:38 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 33h7wppqdn-1
+        Tue, 15 Sep 2020 21:34:42 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FLTpaV144963;
+        Tue, 15 Sep 2020 21:32:41 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 33hm31ah54-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Sep 2020 20:16:38 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08FKGbi1007837;
-        Tue, 15 Sep 2020 20:16:37 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        Tue, 15 Sep 2020 21:32:41 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08FLWcrO010604;
+        Tue, 15 Sep 2020 21:32:38 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 15 Sep 2020 20:16:36 +0000
+        with ESMTP ; Tue, 15 Sep 2020 21:32:38 +0000
+To:     Jason Yan <yanaijie@huawei.com>
+Cc:     <njavali@marvell.com>, <GR-QLogic-Storage-Upstream@marvell.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH] scsi: qla2xxx: remove unneeded variable 'rval'
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        rdunlap@infradead.org, avri.altman@wdc.com, sfr@canb.auug.org.au,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH -next] scsi: ufs: Fix 'unmet direct dependencies' config warning
-Date:   Tue, 15 Sep 2020 16:16:22 -0400
-Message-Id: <160020074003.8134.16280505616303761957.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200721172021.28922-1-alim.akhtar@samsung.com>
-References: <CGME20200721174310epcas5p2a448e38c6e4d5e36e9f0417f5ddced6d@epcas5p2.samsung.com> <20200721172021.28922-1-alim.akhtar@samsung.com>
+Organization: Oracle Corporation
+Message-ID: <yq1pn6m680m.fsf@ca-mkp.ca.oracle.com>
+References: <20200911091021.2937708-1-yanaijie@huawei.com>
+Date:   Tue, 15 Sep 2020 17:32:35 -0400
+In-Reply-To: <20200911091021.2937708-1-yanaijie@huawei.com> (Jason Yan's
+        message of "Fri, 11 Sep 2020 17:10:21 +0800")
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009150158
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=1
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009150168
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
- clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=1 mlxlogscore=999
+ clxscore=1011 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009150157
+ engine=8.12.0-2006250000 definitions=main-2009150168
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 21 Jul 2020 22:50:21 +0530, Alim Akhtar wrote:
 
-> With !CONFIG_OF and SCSI_UFS_EXYNOS selected, the below
-> warning is given:
-> 
-> WARNING: unmet direct dependencies detected for PHY_SAMSUNG_UFS
->   Depends on [n]: OF [=n] && (ARCH_EXYNOS || COMPILE_TEST [=y])
->   Selected by [y]:
->   - SCSI_UFS_EXYNOS [=y] && SCSI_LOWLEVEL [=y] && SCSI [=y] && SCSI_UFSHCD_PLATFORM [=y] && (ARCH_EXYNOS || COMPILE_TEST [=y])
-> 
-> [...]
+Jason,
 
-Applied to 5.10/scsi-queue, thanks!
+> This addresses the following coccinelle warning:
+>
+> drivers/scsi/qla2xxx/qla_init.c:7112:5-9: Unneeded variable: "rval".
+> Return "QLA_SUCCESS" on line 7115
 
-[1/1] scsi: ufs: Fix 'unmet direct dependencies' config warning
-      https://git.kernel.org/mkp/scsi/c/09fd5f0ddf32
+Applied to 5.10/scsi-staging, thanks!
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
