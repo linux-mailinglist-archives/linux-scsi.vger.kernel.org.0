@@ -2,104 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8C926BA50
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 04:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D30E26BB20
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 05:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726306AbgIPCpz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 22:45:55 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:52784 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbgIPCpy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 22:45:54 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FKANhu178547;
-        Tue, 15 Sep 2020 20:16:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=qAI13vl8S4HJ0bvYvTuJZ4SrZXNUUbufGVxMmQawQvQ=;
- b=S3S+GkJtpgtD+WnjR7b1367YtZ1/mVfujKXdzFOeHi3zc+E7pnq92mkfWsbpzG9tMMa4
- hzG9E0hg6gJn7g7/AeqM3YxbpozKTpw5V4XUQXQZt8H918+Q+NQ5mcSsolMxhLswh3pF
- /1aby3Yv37iesJYW1MXUrbwF8XsehOcH8uUXidiL3i0oOiWGa+3pJMKzRAvUJUrutSvT
- deS6Tdb/7FLujl1RLQnmtsCWbOAHCOTpWKwCvt6X0gSGimLqj17rsQt1FhqWgVruPfxT
- lUoC3fy9JKM9F9IG9cnB7ecXPz7Lb/kUmlU+AELcp08n3Mp5UpBV/OFb+dkKzNgcbwj3 FA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 33j91dh0yr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Sep 2020 20:16:42 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FKEhaU181308;
-        Tue, 15 Sep 2020 20:16:42 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 33h88yy84d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Sep 2020 20:16:42 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08FKGfvW007855;
-        Tue, 15 Sep 2020 20:16:41 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 15 Sep 2020 20:16:41 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     lduncan@suse.com, Manish Rangankar <mrangankar@marvell.com>,
-        cleech@redhat.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] qedi: Misc bug fixes and enhancements
-Date:   Tue, 15 Sep 2020 16:16:26 -0400
-Message-Id: <160020074002.8134.7440013888270718633.b4-ty@oracle.com>
+        id S1726368AbgIPDse (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 23:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726133AbgIPDs2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 23:48:28 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96677C06174A;
+        Tue, 15 Sep 2020 20:48:27 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id n133so6789618qkn.11;
+        Tue, 15 Sep 2020 20:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xom8pv8pA5D1wdYSli3646ft73285J8Rq30WVkF+CBQ=;
+        b=nxUE6SE1fvzk0PjJBd6cS8bHQOdOaPxPYkADORPwwRlAgnDcnhEpl7zjFiKRbO0Gvh
+         0KT5ZywHMAhj6Hpv6vr9/B1wmQ4HOLMRnwt4kga5VzUJ3ukjzJsd6pEtp+gwI+7mkKCe
+         7DI8dwAMeYqgyw1M2y5xhL+twpxEV2ejO9C+syGcZKa/cfiYG2rTUweEpkLyzVV6J+iA
+         wamaizzgqdFCysoZspVBXPBO/4bG8r/50Fcjql+1qPKXP0kdZYSgGUt6WoXiW32o0krP
+         hzHvoNyswpLAsGKz7iqFsrAPOEbCHA5Pk3R7Disk+EMvBwAU6azIrXBVUSFHLW7pUJJ8
+         Ii9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xom8pv8pA5D1wdYSli3646ft73285J8Rq30WVkF+CBQ=;
+        b=pkwSAWZ6GNANbLKo8zeVvXavMjKLHoUVvtKIcjnXshQ3wbONaI7XVXKKNdU+GAVpX6
+         VThnmJDuppzWWTC468E1BhS0PpmsSGc1Hsh0nZqFTfWVG1780+IwdGzOpG1w9XIixTja
+         R+GZ6W9Ssr3EbdPeqzXQVItWFldZJ2aWcvJS954xD1soTdgdcZ5s/sPb7YGz56+vqG7L
+         zZzQMThSxdwPekW4FZkZlnbtUjPMn7kwm/SoUfCApdMjN9I8ssU+vG8wz1FF5VfWuESe
+         pvoU6y6+zKNO33AjGAHTslwb1eQKQ+nVJY/8lK2Q6/vfv6bwuzOQG34D7ZovAa08thAu
+         RmUQ==
+X-Gm-Message-State: AOAM532+2Evq9tZA6GNOpQhQpa8ULqzeYfZ2D7uLvU6dupiVKuFjl2lH
+        9yVMvyxF2nbRM34zqdcaV38=
+X-Google-Smtp-Source: ABdhPJwBZj+PJ1pX+JAfEeaBfIE7g8NqzyqPnN82hV+SZaeV9E3sfyqPr9wckUHLsyXMketqOJbmcg==
+X-Received: by 2002:a37:4c4:: with SMTP id 187mr21793282qke.40.1600228106823;
+        Tue, 15 Sep 2020 20:48:26 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id g12sm18491396qke.90.2020.09.15.20.48.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 15 Sep 2020 20:48:24 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 1919927C0054;
+        Tue, 15 Sep 2020 23:48:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 15 Sep 2020 23:48:23 -0400
+X-ME-Sender: <xms:BothX0JDGcLcL1kYuwZ2HZIkEoItrXBKUAilTe4S0Bf5aeF18f3LIQ>
+    <xme:BothX0IL_dvYRjq5mzJ0zwkGYB7_zUHmxWBOmgyiGlNPTB4GqWXr3mDuFC3dYh3XI
+    L246h2drGKDtnXEvg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddugdeikecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
+    fuohhrthgvugftvggtihhpvdculdegtddmnecujfgurhephffvufffkffoggfgsedtkeer
+    tdertddtnecuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesgh
+    hmrghilhdrtghomheqnecuggftrfgrthhtvghrnhepieeuveejleehudetfeevfeelgfej
+    teefhedvkedukefggedugefhudfhteevjedunecuffhomhgrihhnpehkvghrnhgvlhdroh
+    hrghenucfkphephedvrdduheehrdduuddurdejudenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvg
+    hrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhf
+    vghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:BothX0tvE5f5ZC1lbM16lmY7tH-hCjGuTfc-_5_lko2Pff9Rq5ViIg>
+    <xmx:BothXxYxS7FL22BQIwb9rooiOsikpAcbK66b2bIZWZDZaAKjd9UGyg>
+    <xmx:BothX7ZuqZs-GQ75QHCnJv8y_wRPE3u9Fs5hBvT1TDpsLRoLTPBNgQ>
+    <xmx:B4thX4ImC6wMsSoue1e08VHUqYpdBF2taAfN8vhH4lGw6hxTaI6LLH1JJzE>
+Received: from localhost (unknown [52.155.111.71])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 91E613064682;
+        Tue, 15 Sep 2020 23:48:21 -0400 (EDT)
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michael Kelley <mikelley@microsoft.com>, will@kernel.org,
+        ardb@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+        mark.rutland@arm.com, maz@kernel.org,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: [PATCH v4 00/11] Hyper-V: Support PAGE_SIZE larger than 4K
+Date:   Wed, 16 Sep 2020 11:48:06 +0800
+Message-Id: <20200916034817.30282-1-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200908095657.26821-1-mrangankar@marvell.com>
-References: <20200908095657.26821-1-mrangankar@marvell.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
- suspectscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009150158
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
- clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009150157
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 8 Sep 2020 02:56:49 -0700, Manish Rangankar wrote:
+This patchset add the necessary changes to support guests whose page
+size is larger than 4K. And the main architecture which we develop this
+for is ARM64 (also it's the architecture that I use to test this
+feature).
 
-> Please apply the qedi miscellaneous bug fixes and enhancement patches
-> to the scsi tree at your convenience.
-> 
-> v1->v2:
-> Fix warning reported by kernel test robot
-> 
-> Thanks,
-> Manish
-> 
-> [...]
+Previous version:
+v1: https://lore.kernel.org/lkml/20200721014135.84140-1-boqun.feng@gmail.com/
+v2: https://lore.kernel.org/lkml/20200902030107.33380-1-boqun.feng@gmail.com
+v3: https://lore.kernel.org/lkml/20200910143455.109293-1-boqun.feng@gmail.com/
 
-Applied to 5.10/scsi-queue, thanks!
+Changes since v3:
 
-[1/8] scsi: qedi: Use qed count from set_fp_int in msix allocation
-      https://git.kernel.org/mkp/scsi/c/3f8ad0072bf7
-[2/8] scsi: qedi: Skip firmware connection termination for PCI shutdown handler
-      https://git.kernel.org/mkp/scsi/c/5c35e4646566
-[3/8] scsi: qedi: Fix list_del corruption while removing active I/O
-      https://git.kernel.org/mkp/scsi/c/28b35d17f9f8
-[4/8] scsi: qedi: Protect active command list to avoid list corruption
-      https://git.kernel.org/mkp/scsi/c/c0650e28448d
-[5/8] scsi: qedi: Use snprintf instead of sprintf
-      https://git.kernel.org/mkp/scsi/c/5a2e69af16ce
-[6/8] scsi: qedi: Mark all connections for recovery on link down event
-      https://git.kernel.org/mkp/scsi/c/4118879be375
-[7/8] scsi: qedi: Add firmware error recovery invocation support
-      https://git.kernel.org/mkp/scsi/c/f4ba4e55db6d
-[8/8] scsi: qedi: Add support for handling PCIe errors
-      https://git.kernel.org/mkp/scsi/c/96a766a789eb
+*	Fix a bug that ringbuffer sizes are not page-aligned when
+	PAGE_SIZE = 16k. Drop the Acked-by and Reviewed-by tags for
+	those patches accordingly.
+
+*	Code improvement as per suggestion from Michael Kelley.
+
+I've done some tests with PAGE_SIZE=64k and PAGE_SIZE=16k configurations
+on ARM64 guests (with Michael's patchset[1] for ARM64 Hyper-V guest
+support), everything worked fine ;-)
+
+Looking forwards to comments and suggestions!
+
+Regards,
+Boqun
+
+[1]: https://lore.kernel.org/lkml/1598287583-71762-1-git-send-email-mikelley@microsoft.com/
+
+Boqun Feng (11):
+  Drivers: hv: vmbus: Always use HV_HYP_PAGE_SIZE for gpadl
+  Drivers: hv: vmbus: Move __vmbus_open()
+  Drivers: hv: vmbus: Introduce types of GPADL
+  Drivers: hv: Use HV_HYP_PAGE in hv_synic_enable_regs()
+  Drivers: hv: vmbus: Move virt_to_hvpfn() to hyperv header
+  hv: hyperv.h: Introduce some hvpfn helper functions
+  hv_netvsc: Use HV_HYP_PAGE_SIZE for Hyper-V communication
+  Input: hyperv-keyboard: Use VMBUS_RING_SIZE() for ringbuffer sizes
+  HID: hyperv: Use VMBUS_RING_SIZE() for ringbuffer sizes
+  Driver: hv: util: Use VMBUS_RING_SIZE() for ringbuffer sizes
+  scsi: storvsc: Support PAGE_SIZE larger than 4K
+
+ drivers/hid/hid-hyperv.c              |   4 +-
+ drivers/hv/channel.c                  | 461 ++++++++++++++++----------
+ drivers/hv/hv.c                       |   4 +-
+ drivers/hv/hv_util.c                  |  11 +-
+ drivers/input/serio/hyperv-keyboard.c |   4 +-
+ drivers/net/hyperv/netvsc.c           |   2 +-
+ drivers/net/hyperv/netvsc_drv.c       |  46 +--
+ drivers/net/hyperv/rndis_filter.c     |  13 +-
+ drivers/scsi/storvsc_drv.c            |  56 +++-
+ include/linux/hyperv.h                |  68 +++-
+ 10 files changed, 442 insertions(+), 227 deletions(-)
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.28.0
+
