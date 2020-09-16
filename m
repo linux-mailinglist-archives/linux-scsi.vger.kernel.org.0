@@ -2,90 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0606926B79B
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 02:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD13726B6B1
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 02:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgIPA01 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Sep 2020 20:26:27 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:34438 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726798AbgIOOMf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 15 Sep 2020 10:12:35 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9BF068EE188;
-        Tue, 15 Sep 2020 07:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1600179008;
-        bh=+R+IKAKZQYkLR7KIiLxpuuPm5bZnjzeal3GKWrEShUo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ZDUvluzGV6yKCC/nF9wrKzitsx/6M3Qz4Dv0CFUEt0vmhscavKWlYegA3t3D9AtoS
-         cgl18SKCLQ6g+fOWhOlSE1rajdI6kKqsO/3XSzI9vcO6roMQjXQ+sBvii1pDKecG7Q
-         7/nP62+cOOfIkefYX7rGreL2C+Tu2bzmyrkPw+GQ=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id o2D0dkS7cauB; Tue, 15 Sep 2020 07:10:08 -0700 (PDT)
-Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 329868EE107;
-        Tue, 15 Sep 2020 07:10:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1600179008;
-        bh=+R+IKAKZQYkLR7KIiLxpuuPm5bZnjzeal3GKWrEShUo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ZDUvluzGV6yKCC/nF9wrKzitsx/6M3Qz4Dv0CFUEt0vmhscavKWlYegA3t3D9AtoS
-         cgl18SKCLQ6g+fOWhOlSE1rajdI6kKqsO/3XSzI9vcO6roMQjXQ+sBvii1pDKecG7Q
-         7/nP62+cOOfIkefYX7rGreL2C+Tu2bzmyrkPw+GQ=
-Message-ID: <1600179006.5092.6.camel@HansenPartnership.com>
-Subject: Re: [PATCH 07/17] 53c700: improve non-coherent DMA handling
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        alsa-devel@alsa-project.org
-Date:   Tue, 15 Sep 2020 07:10:06 -0700
-In-Reply-To: <20200915062738.GA19113@lst.de>
-References: <20200914144433.1622958-1-hch@lst.de>
-         <20200914144433.1622958-8-hch@lst.de>
-         <1600096818.4061.7.camel@HansenPartnership.com>
-         <20200915062738.GA19113@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727305AbgIPAJg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Sep 2020 20:09:36 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:37878 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727159AbgIPAJd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Sep 2020 20:09:33 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08G03iav066137;
+        Wed, 16 Sep 2020 00:09:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=dJlUurZ7ip5OVS7wNF4rh6ayKvqydcqKCaUrBfVDz18=;
+ b=dcLb6rs+8ppq65OSHGf3uba36NboEkZAdKG0HHJzO0fYYWw4N6I6GCqdqXWDl2PTxHOH
+ qw0QqfUYEFCsDM31ykf5aAsr0dYhF1kjXToh6MzY+Zl9zRMEP0ActCwWxlYPnvQGwvWX
+ SwNmG5T6qPeqxbLDXjYM3KOVGO2b0fYXk3QQe4aESFgyIm18b8rZyaqNf/NFkZCQ42Bz
+ COnjsY8ADWRrpLKDY2eb4d6S6yP7mF2AJqO3GRsvfPNlgQxkhWb+6nkGgM6qy6PU+vtz
+ sIMX7HMigIhucW0arAqT1/Rq7xbRReoLr04uJbKCU4wBUxh+VepD2kMjhR1r2qZe6WEr 7Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 33gnrr052w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 16 Sep 2020 00:09:26 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08G04jjf062226;
+        Wed, 16 Sep 2020 00:09:26 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33h8909jmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Sep 2020 00:09:26 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08G09P1Z008895;
+        Wed, 16 Sep 2020 00:09:25 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 16 Sep 2020 00:09:24 +0000
+To:     Damien Le Moal <damien.lemoal@wdc.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Borislav Petkov <bp@suse.de>, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: Re: [PATCH v3 0/2] Fix handling of host-aware ZBC disks
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1bli637mx.fsf@ca-mkp.ca.oracle.com>
+References: <20200915073347.832424-1-damien.lemoal@wdc.com>
+Date:   Tue, 15 Sep 2020 20:09:22 -0400
+In-Reply-To: <20200915073347.832424-1-damien.lemoal@wdc.com> (Damien Le Moal's
+        message of "Tue, 15 Sep 2020 16:33:45 +0900")
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ suspectscore=1 mlxscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009150192
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 bulkscore=0 suspectscore=1
+ clxscore=1011 mlxlogscore=999 adultscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150191
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2020-09-15 at 08:27 +0200, Christoph Hellwig wrote:
-> On Mon, Sep 14, 2020 at 08:20:18AM -0700, James Bottomley wrote:
-> > If you're going to change the macros from taking a device to taking
-> > a hostdata structure then the descriptive argument name needs to
-> > change ... it can't be dev anymore.  I'm happy with it simply
-> > becoming 'h' if hostdata is too long.
-> > 
-> > I already asked for this on the first go around:
-> 
-> And I did rename them, those hunks just accidentally slipped into
-> patch 12 instead of this one.  Fixed for the next versions.
 
-Ah, yes, found it ... thanks for doing that!
+Damien,
 
-James
+> The first patch fixes host-aware disk initialization and command
+> completion processing. It also enables the use of host-aware disks as
+> regular disks when CONFIG_BLK_DEV_ZONED is disabled.
+>
+> The second patch fixes the CONFIG_BLK_DEV_ZONED enabled configuration
+> so that zone append emulation is not initialized for host-aware disks
+> with partitions/used as regular disks. While at it, this patch also
+> removes a problem with sd_zbc_init_disk() error handling in
+> sd_revalidate_disk() by moving this function execution inside
+> sd_zbc_revalidate_zones().
 
+Applied to 5.9/scsi-fixes, thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
