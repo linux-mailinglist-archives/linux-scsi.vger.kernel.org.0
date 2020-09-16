@@ -2,97 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D6D26C586
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 19:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5215F26C739
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Sep 2020 20:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbgIPRCY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Sep 2020 13:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
+        id S1727881AbgIPSV3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Sep 2020 14:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726475AbgIPRAw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Sep 2020 13:00:52 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8073AC0A3BDA;
-        Wed, 16 Sep 2020 09:44:15 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id c18so7600654wrm.9;
-        Wed, 16 Sep 2020 09:44:15 -0700 (PDT)
+        with ESMTP id S1727525AbgIPSJR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Sep 2020 14:09:17 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC84C0086CD
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Sep 2020 06:39:19 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id e11so2273529wme.0
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Sep 2020 06:39:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NIAOHzQzFLfA0GPWXwaNH3lHE/0XW9hoINO0h/wj+Js=;
-        b=HaYjRzay6bO8Gb/ySvO0a1JMXZ0yNUMnoS3JJa+Lo/IKV6kXGuGbjj+buu/BHpwpa9
-         bSaoFF1NkIqV7FcEqfUhZv87klmLDuw5FEZdVLy6PGlw0if9csJ+FydEPmWeuQLHpLq1
-         f2YwwJVYIHKGrXHYpoM95X1pgEQBAJfe5oQnaStAza5umWvhwYRGZogc0BX6yN5Ilqwj
-         3pOEmshgvRdJXjNj248td+7lKwiI91JRwaJjlvRY+zE/GD9e1i61511w8ROaGEx0M5WP
-         CZYD9vu5oS3JGhM4hkKVaQtkXhHJiuCy86Fl0twTu+DhzxVi2q/O5np8IZGLZN9mbnrN
-         lsKg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=cmoIIk/h00a3vbLSn0dbFItsWG9fb7l7Qn2gfHdrw80=;
+        b=EmIBcgf0kS88J7XrsLS49cj7kMeDBOSutS3Fxikdin45SxzCaMmyS8BRsTV2/mg0qG
+         Gryf3HNb1b9cj9xmjDWkyMwyUO9fkeMjNHdmLNciFrFcOzLchADPfDlmUFIPCz/F0q8i
+         pvxyHj8xRdg/i2BjRDA6/eX+e8ZNf7tsbXz+mkDW9p7Zo4E5/aTWsbIDDup62oH5Niwb
+         I74Kwj86KshQUNChDYIKl+Q56lYfdv0UaXU+uH43TNhUVFw7f+Mrc5mQAq6A+KERIjck
+         65y0wQAPWSSH1iQaZnzQEoQ7gekUsbiEO2DhKExgvRol0GNNoUSA26oKda8XX0MaKKTF
+         HSvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NIAOHzQzFLfA0GPWXwaNH3lHE/0XW9hoINO0h/wj+Js=;
-        b=hkQSN8wcZJAqINkm35IqhVDcGTa/onn3XvZcNiN5umk5R5SI/X1zYvR7s0n07toyOx
-         hmdFKx6j5FlMhtmSd3F4SoVXlLh+1N8ocjrR/oEpFKeMwalsMUWFLalAmDaqB2srjTIg
-         cFV3BzQmmTkiBPGqnbXXHgDmUuk0vmd1+sEF9SJvKmANsWDYvP5TJ9/FaCoDG+Sy0ZNl
-         f1errBu1y/UGzVs3XVkrlCck9tjPxNooxqNaRpiY6gUAxR3OU+L4ZQ1RgkIZlzg7NEGZ
-         ewvgEYpyLBQq5TSpfBFDmZmd+OQDfpgRf0+rCaeQCw0b/4G+96drw0NCbZlMc8yAPjU0
-         dSQQ==
-X-Gm-Message-State: AOAM530NRUpDnTRQ4P0vX/bgqLOaQoAldhNR78MQL5d6qkT2sB9JrKZG
-        JaAGJyPdJgNH4SKRQLPJ8FY=
-X-Google-Smtp-Source: ABdhPJysWo0vQD8RNCx9oWslc3MySE+uNCO1jeXyh3UMpdHfudjcl27MfFfbX5e6qhsafFQJHYbJJg==
-X-Received: by 2002:a5d:540a:: with SMTP id g10mr26279976wrv.138.1600274654416;
-        Wed, 16 Sep 2020 09:44:14 -0700 (PDT)
-Received: from lenovo-laptop (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
-        by smtp.gmail.com with ESMTPSA id x24sm33199670wrd.53.2020.09.16.09.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 09:44:13 -0700 (PDT)
-From:   Alex Dewar <alex.dewar90@gmail.com>
-X-Google-Original-From: Alex Dewar <alex.dewar@gmx.co.uk>
-Date:   Wed, 16 Sep 2020 17:44:11 +0100
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Alex Dewar <alex.dewar90@gmail.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/3] scsi: mpt: Refactor and port to dma_* interface
-Message-ID: <20200916164411.hkpmqigdhgdb66dl@lenovo-laptop>
-References: <20200903152832.484908-1-alex.dewar90@gmail.com>
- <yq1ft7ixyg8.fsf@ca-mkp.ca.oracle.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=cmoIIk/h00a3vbLSn0dbFItsWG9fb7l7Qn2gfHdrw80=;
+        b=eGcWERQxUm9DLua6/Y2my8eVvMNKPfO0err2Mk8rqdO2ZWZSGrf1pEBDgm2jY9KbY2
+         24TC2kwcOiw9uEmNy5Qbu/SNA6bUwoI5+061jC1x7uMd+yJTgjNMTbabQH9lNEY2hTkU
+         p3ek91RpUSUUi1oj+PIrNKkA7hDbv3X29/3TfJn3e1egvIgHJxwDt724ptaus7cNCGa4
+         ea+wfap/pZV/UXnVt6iiYfwdtsfclbARXho4uve4Z8cerHMSK/lTWrIQQV2QAtk2m/io
+         TRs1qh2G+mtwMuZ1+OVrBfTWxCnHTIuwHdQlsN4U0WD7UkHp0Up6YFhJyMP2oePvBM0J
+         6A9Q==
+X-Gm-Message-State: AOAM531V7vIdPPD1BJnVQ7kFUC9RsjMldGKUjDkC+RSIUlnIL2MYIodd
+        NQYb67iMvumpNfNphv/ws5TKclgio99PelUEeV4=
+X-Google-Smtp-Source: ABdhPJw+LRDkcLE8tw7AiD0GvnqijGNs5spiEgQeyw6CaizXgUGOvDGvaCH+r94hMeo7fVtFn0Clh+4rpcJjbeQz6FA=
+X-Received: by 2002:a1c:23c9:: with SMTP id j192mr5024904wmj.6.1600263557755;
+ Wed, 16 Sep 2020 06:39:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yq1ft7ixyg8.fsf@ca-mkp.ca.oracle.com>
+Received: by 2002:adf:84c6:0:0:0:0:0 with HTTP; Wed, 16 Sep 2020 06:39:17
+ -0700 (PDT)
+Reply-To: idrisibrahim@post.com
+From:   Idris <i.buba1111@gmail.com>
+Date:   Wed, 16 Sep 2020 15:39:17 +0200
+Message-ID: <CAMASMtyHx_V2MjR-wPZFNs0AUFLt5WXQwO2LJwMoNj9sU732qg@mail.gmail.com>
+Subject: Re: I WAIT FOR YOUR RESPOND
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 10:12:06PM -0400, Martin K. Petersen wrote:
-> 
-> Alex,
-> 
-> > Any feedback would be greatly appreciated!
-> 
-> Have you tested your changes?
+PLEASE AFTER READING MY MESSAGEIF YOU ARE INTERESTED GETBACK TO ME
+IMMEDIATELY, IF YOU ARE NOT INTERESTED PLEASE DELETE MY MESSAGE AND
+INFORM ME THAT YOU ARE NOT INTERESTED SO THAT I CAN LOOK FOR ANOTHER
+PERSON.
 
-No, as I'm afraid I don't have the hardware.
-
-For patch #1 though, I'm not sure that's such an issue, as the
-refactoring was really simple, even though the diffstat has ended up
-being quite large! I probably should have submitted that one
-individually without the RFC tag. Absolutely loads of functions have a
-sleepFlag parameter, but I only found one case where this was actually
-set to NO_SLEEP. Otherwise, if you follow the call stack it always ends
-up being a sleeping case. I verified this by changing functions one at a
-time and compile testing. Would you like me to resend this separately? I
-feel that this should probably be merged in any case before we discuss
-any of the other changes.
-
-If someone who does have the hardware would like to test it though, that'd be
-great :-)
-
-Best,
-Alex
-
-> 
-> -- 
-> Martin K. Petersen	Oracle Linux Engineering
+I contacted you to seek your interest over a business transaction. The
+amount involved is ($35.000.000.00). The money will be received in
+your bank account in your country. Declare your interest by sending
+your full names, phone numbers, occupation and your age.
