@@ -2,115 +2,157 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFE226D036
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 02:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F2126D051
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 03:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725858AbgIQAwN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Sep 2020 20:52:13 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:36865 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbgIQAwL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Sep 2020 20:52:11 -0400
-X-Greylist: delayed 540 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 20:52:09 EDT
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200917004302epoutp03e4f877d85a4445fa7745dce29d16a8ba~1a3J6vRDf0583605836epoutp03T
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 00:43:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200917004302epoutp03e4f877d85a4445fa7745dce29d16a8ba~1a3J6vRDf0583605836epoutp03T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1600303382;
-        bh=iF01R0RXpU+eG69rlPV5Od9C+ssN22uuhWON4+DSNWY=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=LCUBOcKJm6KSsXIPiJQz8JOvW6JMijIvJ/3n/QU22bN7kaOdPeD5AND75hpnbbJpI
-         XVKFZ9wNWV3W81XmsrAZxf7/htYSeDWLs7VqVq/NQJ//9Oh61jwuCz+omCaLGPJ/X7
-         DfZ3hRBh5Q6ZTOT7QvxxgL7h9LvA93W3s5GOAgZc=
-Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p2.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200917004301epcas1p25b5958440691a33befafc83db482b36e~1a3JhP3uT1274212742epcas1p27;
-        Thu, 17 Sep 2020 00:43:01 +0000 (GMT)
-Mime-Version: 1.0
-Subject: Re: [PATCH v11 0/4] scsi: ufs: Add Host Performance Booster Support
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Daejun Park <daejun7.park@samsung.com>
-CC:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20200916052208.GB12923@infradead.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <231786897.01600303381578.JavaMail.epsvc@epcpadp2>
-Date:   Thu, 17 Sep 2020 09:25:50 +0900
-X-CMS-MailID: 20200917002550epcms2p168eb4c7e2fb77f7f31a5db2f3522e256
+        id S1726185AbgIQBAF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Sep 2020 21:00:05 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:23545 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726004AbgIQBAD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 16 Sep 2020 21:00:03 -0400
+X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 21:00:02 EDT
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1600304394; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=fVudm0/lgiiKwjiWJ16VOu7Farkh1dx277bHuq90WXc=;
+ b=rKSgL/qwD6S5Pt+8HmYzR6J437Vmj3IJtiQ9PJUObiZcjrrdt+HW1BtK0U/q2X7hM2PZ+SCI
+ pbJ6Kgd44e4iLQo0KNwfll2EcmP0zGeSiw3QG3R3w+oMPUiDnniY65QT6q8yapSgAmZa+PS0
+ NSUhURvC/EDem4UJYLvzsMorAk0=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 5f62b3944ab73023a7f6fd9f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 17 Sep 2020 00:53:40
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 35E1EC433F0; Thu, 17 Sep 2020 00:53:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: nguyenb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DCB40C433C8;
+        Thu, 17 Sep 2020 00:53:37 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200902031713epcms2p664cebf386ba19d3d05895fec89aaf4fe
-References: <20200916052208.GB12923@infradead.org>
-        <231786897.01599016802080.JavaMail.epsvc@epcpadp1>
-        <231786897.01600211401846.JavaMail.epsvc@epcpadp1>
-        <CGME20200902031713epcms2p664cebf386ba19d3d05895fec89aaf4fe@epcms2p1>
+Date:   Wed, 16 Sep 2020 17:53:37 -0700
+From:   nguyenb@codeaurora.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     cang@codeaurora.org, asutoshd@codeaurora.org,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] scsi: ufshcd: Properly set the device Icc Level
+In-Reply-To: <20200915133729.GD670377@yoga>
+References: <5c9d6f76303bbe5188bf839b2ea5e5bf530e7281.1598923023.git.nguyenb@codeaurora.org>
+ <20200915025401.GD471@uller>
+ <a8c851744fcaee205fc7a58db8f747fa@codeaurora.org>
+ <20200915133729.GD670377@yoga>
+Message-ID: <6e36f0a315c13429bdad1ce704cbe878@codeaurora.org>
+X-Sender: nguyenb@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> > Hi All,
-> > 
-> > I want to know how to improve this patch.
+On 2020-09-15 06:37, Bjorn Andersson wrote:
+> On Tue 15 Sep 03:49 CDT 2020, nguyenb@codeaurora.org wrote:
 > 
-> Drop it and fix the actual UFS feature to not be so horrible?
+>> On 2020-09-14 19:54, Bjorn Andersson wrote:
+>> > On Tue 01 Sep 01:19 UTC 2020, Bao D. Nguyen wrote:
+>> >
+>> > > UFS version 3.0 and later devices require Vcc and Vccq power supplies
+>> > > with Vccq2 being optional. While earlier UFS version 2.0 and 2.1
+>> > > devices, the Vcc and Vccq2 are required with Vccq being optional.
+>> > > Check the required power supplies used by the device
+>> > > and set the device's supported Icc level properly.
+>> > >
+>> > > Signed-off-by: Can Guo <cang@codeaurora.org>
+>> > > Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
+>> > > Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
+>> > > ---
+>> > >  drivers/scsi/ufs/ufshcd.c | 5 +++--
+>> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+>> > >
+>> > > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> > > index 06e2439..fdd1d3e 100644
+>> > > --- a/drivers/scsi/ufs/ufshcd.c
+>> > > +++ b/drivers/scsi/ufs/ufshcd.c
+>> > > @@ -6845,8 +6845,9 @@ static u32
+>> > > ufshcd_find_max_sup_active_icc_level(struct ufs_hba *hba,
+>> > >  {
+>> > >  	u32 icc_level = 0;
+>> > >
+>> > > -	if (!hba->vreg_info.vcc || !hba->vreg_info.vccq ||
+>> > > -						!hba->vreg_info.vccq2) {
+>> > > +	if (!hba->vreg_info.vcc ||
+>> >
+>> > How did you test this?
+>> >
+>> > devm_regulator_get() never returns NULL, so afaict this conditional will
+>> > never be taken with either the old or new version of the code.
+>> Thanks for your comment. The call flow is as follows:
+>> ufshcd_pltfrm_init->ufshcd_parse_regulator_info->ufshcd_populate_vreg
+>> In the ufshcd_populate_vreg() function, it looks for DT entries 
+>> "%s-supply"
+>> For UFS3.0+ devices, "vccq2-supply" is optional, so the vendor may 
+>> choose
+>> not to provide vccq2-supply in the DT.
+>> As a result, a NULL is returned to hba->vreg_info.vccq2.
+>> Same for UFS2.0 and UFS2.1 devices, a NULL may be returned to
+>> hba->vreg_info.vccq if vccq-supply is not provided in the DT.
+>> The current code only checks for !hba->vreg_info.vccq OR
+>> !hba->vreg_info.vccq2. It will skip the setting for icc_level
+>> if either vccq or vccq2 is not provided in the DT.
+>> >
 > 
-
-Hello Christoph,
-
-Thanks for the comment.
-
-The HPB is essential feature for mobile devices.
-
-NAND-based storage needs logical to physical mapping, which is cached in
-the storage to minimize translation overhead. UFS is a NAND-based storage
-device with limited resources, mainly used for mobile devices. Typically,
-SSD has enough cache space for mapping information in SSD, but UFS has not
-enough.
-So, UFS stores L2P mapping in NAND and performs IO using demand loading 
-for translation. Due to overhead of demand loading, it degrades random read
-performance.
-
-The HPB is a feature which uses host memory to relieve this problem. By 
-using the HPB feature, UFS can provide improved random read performance
-without mapping data thrashing problem. Therefore, the HPB is currently
-already included in the Linux kernel code in android devices, however it 
-is maintained as out-of-tree.
-
-While upstreaming HPB feature to mainline kernel, we received various
-comments from several reviewers (thanks!) and the HPB feature can be
-improved. I think it would be good to make mainline the feature that are
-mainly used.
+> Thanks for the pointers, I now see that the there will only be struct
+> ufs_vreg objects allocated for the items that has an associated
+> %s-supply.
+> 
+> FYI, the idiomatic way to handle optional regulators is to use
+> regulator_get_optional(), which will return -ENODEV for regulators not
+> specified.
+Thanks for the regulator_get_optional() suggestion. Do you have a strong 
+opinion about
+using regulator_get_optional() or would my proposal be ok? With 
+regulator_get_optional(),
+we need to make 3 calls and check each result while the current 
+implementation is also reliable
+simple quick check for NULL without any potential problem.
 
 Thanks,
-Daejun
-
+Bao
+> 
+> Regards,
+> Bjorn
+> 
+>> > Regards,
+>> > Bjorn
+>> >
+>> > > +		(!hba->vreg_info.vccq && hba->dev_info.wspecversion >= 0x300) ||
+>> > > +		(!hba->vreg_info.vccq2 && hba->dev_info.wspecversion < 0x300)) {
+>> > >  		dev_err(hba->dev,
+>> > >  			"%s: Regulator capability was not set, actvIccLevel=%d",
+>> > >  							__func__, icc_level);
+>> > > --
+>> > > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
+>> > > Forum,
+>> > > a Linux Foundation Collaborative Project
+>> > >
