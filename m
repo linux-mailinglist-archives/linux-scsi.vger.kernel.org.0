@@ -2,118 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F63026E4A2
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 20:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA07426E544
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 21:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbgIQSxq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 14:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S1726514AbgIQTRW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 15:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726382AbgIQSxl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 14:53:41 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8CAC06174A
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 11:53:41 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id u3so1681597pjr.3
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 11:53:41 -0700 (PDT)
+        with ESMTP id S1728393AbgIQQSX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 12:18:23 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0070AC061756
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 09:00:31 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id q12so1343874plr.12
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 09:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=kyIEGoshtm8TZcLEcuEhTmYxnBkDxHRmoaZCCLi6y9k=;
-        b=A0znDSjtatMPpn4UlKRdicuGboz2gfmN4hG8UTidnUUcNSgwafMaQXlqOJw1aWUcYE
-         FVFjju5C9hX7z1GdW2UmPn4V4QI4G72S+slyCDEzCbx7rjaR5RAlrBZDbyIqzecCrIWK
-         z8E87iNJgAm6oVrc8Qqqdi8IcSCQNbzpYGo8T3Htg/o3M5ama9PUa1QbabDfgfS4BZVK
-         XlCb7MF/RT39hRqeTtwGlo76JIpVpxrA5GdD1Bfv511vNo9QbaINOWRkNVT2tm1toUUC
-         0dn1NhXT74H1+QhFAoF8mPy5HXfTOLo6pJAZII4EKtNTAXNE2SgXwL1P8bW3+oKkb4qJ
-         Vshw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dL5bjsBTpI1WHY1Lul+C+ZXEBNZvu4AIQRGli0lUOx4=;
+        b=mt9OJz/zcgF06uTcLmCvJqC8qMwbhFkudsZx0RItt2u4Ob+qc8sisFaFzs7LTpHzUq
+         Lz/Y0ZIL25qKDWNeKPz3v96dDvnRySrz767m50CaxcHxh6zM4I++9vA06lge3EOMujDY
+         7yFbNmb2A5UfCGvzfL9XW3WYKGyRegQ0piDyWgmB7Vhvuwdc8pZ4a8fKOa87E67QXgOQ
+         p5882KV/axOpCDf/91KXDflwXE75rCx9miWnMkOsvCulckrGfYVZTOHftw2pHiL6Yg6p
+         hMJPAgfqKscwpKx+mzUNzVbFAadDLBsqU22NuMmFvPfnYxprj8/J9sUfDxggbXQ/Rau0
+         66NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=kyIEGoshtm8TZcLEcuEhTmYxnBkDxHRmoaZCCLi6y9k=;
-        b=SVm6EaOJrd6jdRXjF1NiIAwUD6QXZOorhraGMynk5E/jjPRJw4UUZuMIT0RrLUs9vr
-         LQ0VngvaujX3Sv6CxZOdJA0l/hV4BuM87xstMoZgR6X/3rz8xljRS5QFk9PzHsNLfEe8
-         rzUA5B4AkbQIRWNy+8CfbvBK9rG/K2MPn+UkCmt+3OW3XENbd/N6te1SyeN2xdJNmV2b
-         shDhrOAa+lfd9yAxotu6NTOFgYks8PGQHj4ZUZAtCdW4juZrekGHqQTahKES6o6UuBtA
-         8hLizV5baYTFwigDNUCpGRiiVUk85h43QcJWLr36UGFyzZvSeQ7ZycCD3JvFY1yjOlSw
-         /gDA==
-X-Gm-Message-State: AOAM530C0igDyqPBXeXPlKiF2uohKAYsmVUa0/Dt+uoC1q03RME1ivSB
-        aGZB+vlzPNFudC0D6C6sAKT0RMg8pXe6kudgcCw=
-X-Google-Smtp-Source: ABdhPJyZjvkMVi+blNWEPFrlOJtRf06BOazC3SZ8DUikxSzNarpAp9BIkwAdQVqyli5oXeMud9YKP7TR1PUPs0yL3e8=
-X-Received: by 2002:a17:902:8548:b029:d0:cbe1:e70b with SMTP id
- d8-20020a1709028548b02900d0cbe1e70bmr29595037plo.25.1600368820854; Thu, 17
- Sep 2020 11:53:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dL5bjsBTpI1WHY1Lul+C+ZXEBNZvu4AIQRGli0lUOx4=;
+        b=Fj8RQA6k4uumBX3kRw7nRyNlbUgYv5XNaTimYAo6/NNjwm4IqGKvAX4MQb2c6+vlXZ
+         H6tYM7JHPkg6Vibp/8JSnnuD5IkAz/aCn1QYIHWkSRz3OrbmK5exXTD3lhcfRwRGhX5M
+         j6JEYYyRzgH1qstD/4t8ktilQ5far6TdEPc/hmpSybQCD65sqgxGDuuhq5k6p9Z6qq5f
+         VBFnAFXZqpIGqFllirVpBbyzZHES+3V05kaS/Zaw3hgRG4nJE8btI8INQktyAxoRioy7
+         tWNsQWaHGjuYelZ7+M13RhVtYGskFaA02kfSW8Bds0F9Au9+1LBjGDGU4j7lCDUDO0w1
+         iF/w==
+X-Gm-Message-State: AOAM5322SnNg2yy7tp5kWDUjaAsPtXyAMZ+XdbvgGyPmj4SiTdxhDoTz
+        OtNbCA22Pp6H0wG3fPs/EzDL8CVP9cYuAQ==
+X-Google-Smtp-Source: ABdhPJwcuj0AmaWpE2pcCdWARsJi+GFNSXG5434TRGxLz09h5InR+K75RaoJGx1EYZdj9dCbSxC6bQ==
+X-Received: by 2002:a17:902:d311:b029:d1:e598:3ff8 with SMTP id b17-20020a170902d311b02900d1e5983ff8mr11509473plc.50.1600358431116;
+        Thu, 17 Sep 2020 09:00:31 -0700 (PDT)
+Received: from localhost.localdomain ([161.81.44.186])
+        by smtp.gmail.com with ESMTPSA id 137sm29897pfu.149.2020.09.17.09.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 09:00:30 -0700 (PDT)
+From:   Tom Yan <tom.ty89@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     Tom Yan <tom.ty89@gmail.com>
+Subject: [PATCH 1/2] scsi: sg: use queue_logical_block_size() in max_sectors_bytes()
+Date:   Fri, 18 Sep 2020 00:00:15 +0800
+Message-Id: <20200917160016.2091-1-tom.ty89@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Reply-To: mrsdaniella.kyle@yandex.com
-Received: by 2002:a17:90a:df8b:0:0:0:0 with HTTP; Thu, 17 Sep 2020 11:53:40
- -0700 (PDT)
-From:   Mrs Daniella Kyle <mrsdaniellakyle6@gmail.com>
-Date:   Thu, 17 Sep 2020 11:53:40 -0700
-X-Google-Sender-Auth: 7HdsoXKBNuuNvuyjMlfV6RZv6kw
-Message-ID: <CAFyJdy1stHWbLLbDm9ppV4KGWvxHV0_matKP6BfCNKuFVKmgBw@mail.gmail.com>
-Subject: ATM Visa card compensation, Thanks for your past effort
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello dear, How are you, hope all is well with you?
+Logical block size was never / is no longer necessarily 512.
 
-It is a very joyful moment for me to share this good news to you
-today, although i have really missed you because you gave me the faith
-to carry on,you really brought hope to my hopeless situation then,so
-therefore i made a vow to myself that even if you fail to complete the
-transaction together,i must surely still compensate you. before
-knowing a helper appeared from nowhere and help me to finalized the
-transfer without any delay.
+Signed-off-by: Tom Yan <tom.ty89@gmail.com>
+---
+ drivers/scsi/sg.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-To be very honest with you, It is a joyful moment for me and my family
-right now, so therefore am using this opportunity to also inform you
-that have successfully move to Vietnam where am currently living now
-with my new business partner who assisted me to complete the transfer,
-but due to the willingness and acceptance you showed during my pain
-have decided to willingly compensated you and show my gratitude to you
-with these sum of $750,000.00 Seven Hundred and fifty Thousand US
-Dollars).
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index 20472aaaf630..8a2cca71017f 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -848,10 +848,11 @@ static int srp_done(Sg_fd *sfp, Sg_request *srp)
+ static int max_sectors_bytes(struct request_queue *q)
+ {
+ 	unsigned int max_sectors = queue_max_sectors(q);
++	max_sectors *= queue_logical_block_size(q);
+ 
+-	max_sectors = min_t(unsigned int, max_sectors, INT_MAX >> 9);
++	max_sectors = min_t(unsigned int, max_sectors, INT_MAX);
+ 
+-	return max_sectors << 9;
++	return max_sectors;
+ }
+ 
+ static void
+-- 
+2.28.0
 
-Please accept this little amount, because it is a gift from the bottom
-of my heart,i issued the check and i instructed the bank to role the
-fund on ATM card for security reason,you can use the ATM card to
-withdrawing money from any ATM machine world wide with a maximum of
-US$10,000 daily.
-
-This vow have made to myself about compensating you has been in my
-mind so am here to fulfilled it to you, although I did not tell you
-what was in my mind, my bank account manager said you can receive the
-card and use it anywhere in these global world. Go ahead contact the
-Global ATM Alliance direct with this bellow information. Email
-Address: ..... atmvisacardofficebk@dr.com
-
-Name: ........... ....... Global ATM Visa Card Alliance
-Office Address; ...... 01BP 23 Rue Des Grands Moulins.Ouagadougou, Burkina Faso
-Email Address: ..... [atmvisacardofficebk@dr.com]
-Name Of Manager In charge: Dr.Koko pedro-c
-
-Ask the manager to send you the ATM card and the pin code of the ATM
-card that i gave to you as compensation, So feel free and get in
-touched direct with the ATM office and instruct him where to send you
-the ATM card so that you can start to withdraw the money. Please do
-let me know immediately you receive it so that we can share the joy of
-your success.
-
-Presently I am very busy here in Vietnam because of the investment
-projects which I and my new partner are having at hand because I want
-to finalize everything before the end of the next month. I have giving
-instruction to ATM Visa card office on your behalf to release the ATM
-card which i gave to you as compensation. Therefore feel free and get
-in touch with him and he shall send the ATM card for you in order for
-you to start withdrawing the compensation money without delay.
-
-I and my family wishes you best of luck in whatever business you shall
-invest this money into. Kindly let me know as soon you received the
-ATM visa card in your hand.
-
-Thank you
-Yours Sincerely
-Mrs Daniella Kyle
