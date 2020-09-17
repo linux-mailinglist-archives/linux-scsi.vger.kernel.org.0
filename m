@@ -2,75 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EEA26D4FD
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 09:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB06926D594
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 10:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgIQHqy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 03:46:54 -0400
-Received: from sonic306-19.consmr.mail.ir2.yahoo.com ([77.238.176.205]:38275
-        "EHLO sonic306-19.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726269AbgIQHqr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:46:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1600328803; bh=AvKiqkXaiBoApu/bCD8nrF8C++5A98G78RHlkax3xM0=; h=Date:From:Reply-To:Subject:References:From:Subject; b=XIJfUx+8Vf86T4QcENKp5NVHvX1dhH/B2HvMV2BK0Hse79olc/Sm4EFNBrqta5UxoAQpcdcCLd9+/MPvEJqdtx+4BH/o3bKdaJdjJEn+00xHcbk7PGqHv+bfTvPudJ1F0Wjwe1IzM6VGb8T96DA8Fp8ILbfuKoQaRIgJSSWsheNm9XEOk1ct+0DAw86/JCkIl2Bw4PTQFNdZotMfHo451jVj9Cp7zCOwMXD93P5XFlfjMfrlzF9otxJo7aMfcH/FLZooMgoqsoiJCOsmeLH5U8Tfb97KPgVpxBCLyYxHfuOfjRRTKakxvpl7/Oq8q0j0Vp5W3xCK6qKnavxV1onf6Q==
-X-YMail-OSG: s4ksKKMVM1mcnC9ylB5eclWRIn36EwmxfsUjOFjPPCOUNUO36aicfsJc5TJceJh
- x.N94fOcZtuqZgR48evjD47n6iOtLWgNUgqD83KLPBlgiXxVkyVOsPiVpTP5ctv7dhpxss9DmSPb
- dcYBtUleF1jGhYjx69rWBaLTPYALeWHOAYu2AlrqSi5sGCCgq30FLh9L8J5Dv6qhCNcWH1w5AzN9
- qfrLLBn1jEt9Izm_fmtP_jDbwYPDVwwBwgozbqyfdPY4c4MZGiIFPPrrG3HJVUgfARLh3Q33YtWV
- XYe2vWIzP87CFOCoZmP6MN7tQqSrbcAjoK4vOQSNb.HmjRiuI5oiCug7KtmGjiBUQr3nzpP7SqFP
- 6.miQPqYLakRdrMJQmMpF9LmxAiepovJ._UciUblaAhaqGJL8WRooGEjhzFiTqroWvH9MpfrCSNL
- ZUwBCJ0aggnijUerirt_y_o0BnkN5lLQfcYCSmfljmFs7z3C8PnjzVM8eOUTQWnYdqrhBCEtGDgb
- UoTP1dNO5.JSTCYOWK0BQFDBFYQUy7ylDiEe_FX1MHpp7xXjFeCBdtrCzVDH_4khLm74Qe57BNdN
- s.i1SSEQLrWv.t.ZGabwAitlibprCac.gSXQgs8D5Tak._EXRrSMnAX8ZoNPGwL_O001a3t5GWI4
- YwEkBHFkiNzl8VqQs88I343hR3qSJOToojhPBunv4ez59kGusE.dLnYr4WQfVFmkMbfn5IXASX4m
- yQ4tpS0Z8ZrfjnY0dC40ar8UZCN.lhtvDwkv5PralhYMVjIn9yYvJ6vgda0V96bdal4sazKG_41y
- 5UxEzIT.K288hI2iT2n_5.e6PjEs8H3M7.8Pyda9QgEoP3ycXdbzqz5fe17PaDQ76Gnu3FqT5Ndx
- sOhf.zF_yOOCEqaku6uYy7TuljjkML7VW2pjmM.b_w_PbR7xuNl4BlF5et90pQHJMnyESCkD1pki
- W19cg7Oae6l9oUiLqYODBOs3CS4SF2AuoyCZBK92zOiUCBohTRnyLazfq12GLo4nfqIZy8_m3GXb
- QeBQNjhxW35vv9mTA9Ey7VBm1w9niNO2QHF5.dCshpG1CaWhC1f0jrcexUS.IqE6XLgPHm78ol8G
- oIvM2aYWEunkH74TprJct3iyvM1sBhqDxaf0gzLOQVbNkgDFGiJl6yIQcuBQqysXcaN.rY9t4VFp
- DuAAL6fxUXYC1H0AH.xHoUDpiu3YF2YERtK1dASE9jzEZmOoRNjkOXx16XY8Kt0OHBNL1sMxvvMv
- he4N6H2aVjJ6MYAqD9tmRB.YWlYuOkQ_5xVU0UKZtQj6BOGUvbQFG5BTnzuq0earJhQOkjoMSTzH
- l9RUJlLMSCo9TXKS2SSMmKXphrNbeYKat014u39XMsny_lPPpJ8nKRWp_jRgxXn1DO6lmM4vQ0n_
- J9aE5bIp7y6k9VIumqLm1MEdQQYmNv5BEaBWW6S8G.ZGdLQy81o9JOfeFpn8-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ir2.yahoo.com with HTTP; Thu, 17 Sep 2020 07:46:43 +0000
-Date:   Thu, 17 Sep 2020 07:46:41 +0000 (UTC)
-From:   Francis <francismr4752@gmail.com>
-Reply-To: francismr4752@gmail.com
-Message-ID: <739173431.810763.1600328801065@mail.yahoo.com>
-Subject: Please forgive me if my request is not acceptable by your kind
- person.
+        id S1726437AbgIQIEh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 04:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726336AbgIQIE2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 04:04:28 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260C9C061788
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 01:03:39 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id w2so1029094wmi.1
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 01:03:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
+        b=Xm9muXpLMfdw+3JTaQ5+6nxJDSneO0K8th2wgQ0VLh2VI2BmK+XWoQ9cDtIn8+KaRJ
+         B45Xbntr5JjNU8mF7nIZd8VP+CTHviEtF1Um5VazOhr6GEQCgh9bbRNIM6C+XWioNjmk
+         ImuOo8Gi8eD0FtSQ7hHZ1yPAo82BLFHJwGGg0UxKCYs0oMSSpMWIe45dJUN+DzUELaKQ
+         JzvvcS8KVPQMZJTfgm/lLBewbBl9UGKGHM3XV6hYGQwunOqgCSfJKO8sQaLl1M6X9BRD
+         K+XM2hJttDJQqNZl5Xftk9yd2fnhmTZR2ol6vfSH0itoQkT2+o/FcX7saxpuLl0f47l5
+         EzpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
+        b=kK8BbhvXXoa9qiMX4CAd3RsHJ7Vr2x9HZu60x3ljbxlas0EikA/gw499SPFRWypqr5
+         RGrikINiyJkTnESWI33eIwaVcTPqc55YXIq+cffwjUjPMksMLJrwpHndHb3bZ2cWW6nR
+         scn4B8npPJf4sve81hI02XvqmMlDFy8G6AOxQy8eL+RQN74+ogXG8SbaVFmJwWEQgaZT
+         ul8yi/Fab32//J+FHEkjluQJtfEl498EMpKfLJmxeUddwHFz102wc4rtcbaoXkIquSLV
+         Q6c5LdB8Ufdsvb9sgsaDvz0ZvkHgtvIJ+m2YazcR+UJF8jZI1ZTdm6j/rgtd4UfjX3mi
+         ztWA==
+X-Gm-Message-State: AOAM533xQTWT15xvcxzjbgkjdnkhTp9EV+vxQQYJktO1SYDdU3d/iN4y
+        DOufH6I1WKOsgzk7J+EPGOmQcQ==
+X-Google-Smtp-Source: ABdhPJzTwzfeJOnCQh65prZummqH9JR09Yxja+zvv2OTSAZpPcom4k7xuvXSyH3Yv50qn/8+2aIWyQ==
+X-Received: by 2002:a1c:e256:: with SMTP id z83mr8793930wmg.33.1600329817598;
+        Thu, 17 Sep 2020 01:03:37 -0700 (PDT)
+Received: from netronome.com ([2001:982:756:703:d63d:7eff:fe99:ac9d])
+        by smtp.gmail.com with ESMTPSA id a13sm9836030wme.26.2020.09.17.01.03.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 01:03:36 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 10:03:35 +0200
+From:   Simon Horman <simon.horman@netronome.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Kees Cook <kees.cook@canonical.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, sparclinux@vger.kernel.org,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>
+Subject: Re: [oss-drivers] [trivial PATCH] treewide: Convert switch/case
+ fallthrough; to break;
+Message-ID: <20200917080334.GB5769@netronome.com>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <739173431.810763.1600328801065.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16583 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Sir or Madam,
+On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
+> fallthrough to a separate case/default label break; isn't very readable.
+> 
+> Convert pseudo-keyword fallthrough; statements to a simple break; when
+> the next label is case or default and the only statement in the next
+> label block is break;
+> 
+> Found using:
+> 
+> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
+> 
+> Miscellanea:
+> 
+> o Move or coalesce a couple label blocks above a default: block.
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
 
-Please forgive me if my request is not acceptable by your kind person.
+...
 
-I am Mr.Francis Hashim, who works in ADB (BURKINA FASO) as a non-independent non-executive Director and President of AFRICAN DEVELOPMENT BANK. During our last banking audits, we discovered that an account abandoned belongs to one of our deceased foreign clients, the Mr. Wang Jian, co-founder and co-chair of the HNA Group, a conglomerate Chinese with important real estate properties throughout the US. in a accident during a business trip in France on Tuesday.
+> diff --git a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
+> index 252fe06f58aa..1d5b87079104 100644
+> --- a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
+> +++ b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
+> @@ -345,7 +345,7 @@ static int matching_bar(struct nfp_bar *bar, u32 tgt, u32 act, u32 tok,
+>  		baract = NFP_CPP_ACTION_RW;
+>  		if (act == 0)
+>  			act = NFP_CPP_ACTION_RW;
+> -		fallthrough;
+> +		break;
+>  	case NFP_PCIE_BAR_PCIE2CPP_MapType_FIXED:
+>  		break;
+>  	default:
 
-Go to this link:
-ttps://observer.com/2018/07/wang-jian-hna-founder-dies-tragic-fall/
+This is a cascading fall-through handling all map types.
+I don't think this change improves readability.
 
-I got your contact from yahoo tourist search while I was searching for a foreign partner. I am assured of your capability and reliability to champion this business opportunity when I prayed about you.
-
-I am writing to request your assistance to transfer the sum of $15,000,000.00 (fifteen million United States dollars) at its counts as Wang Jian's last foreign business partner, which I plan use the fund to invest in public benefit as follows
-
-1. Establish an orphanage home to help orphaned children.
-2. Build a hospital to help the poor.
-3. Build an asylum for the elderly and homeless.
-
-Meanwhile, before contacting you, I did an investigation staff to locate one of the relatives of the late Mr. Wang Jian who knows the account, but I didn't succeed. However, I took this decision to support orphans and less privileged children with this fund, because I don't want this fund transferred to our Account of Government treasury as unclaimed fund. I am willing to offer you the 50% of the fund for your support and assistant to transfer the fund to your account.
-
-More detailed information will be sent to the desegregation explaining how the fund will be transferred to you Please continue to achieve the purpose, Reply me on my private E-Mail Address: francismr4752@gmail.com
-
-Waiting for your urgent response.
-Attentively
-Mr.Francis Hashim.
+...
