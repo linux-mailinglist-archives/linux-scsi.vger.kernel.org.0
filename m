@@ -2,74 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 883CD26D421
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 09:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EEA26D4FD
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 09:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbgIQHEh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 03:04:37 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12815 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726247AbgIQHEc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:04:32 -0400
-X-Greylist: delayed 968 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 03:04:30 EDT
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 4D0752CD416C172A5FE1;
-        Thu, 17 Sep 2020 14:48:22 +0800 (CST)
-Received: from huawei.com (10.175.113.32) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Thu, 17 Sep 2020
- 14:48:12 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH -next] scsi: initio: use module_pci_driver to simplify the code
-Date:   Thu, 17 Sep 2020 15:10:45 +0800
-Message-ID: <20200917071045.1909320-1-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726333AbgIQHqy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 03:46:54 -0400
+Received: from sonic306-19.consmr.mail.ir2.yahoo.com ([77.238.176.205]:38275
+        "EHLO sonic306-19.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726269AbgIQHqr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Sep 2020 03:46:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1600328803; bh=AvKiqkXaiBoApu/bCD8nrF8C++5A98G78RHlkax3xM0=; h=Date:From:Reply-To:Subject:References:From:Subject; b=XIJfUx+8Vf86T4QcENKp5NVHvX1dhH/B2HvMV2BK0Hse79olc/Sm4EFNBrqta5UxoAQpcdcCLd9+/MPvEJqdtx+4BH/o3bKdaJdjJEn+00xHcbk7PGqHv+bfTvPudJ1F0Wjwe1IzM6VGb8T96DA8Fp8ILbfuKoQaRIgJSSWsheNm9XEOk1ct+0DAw86/JCkIl2Bw4PTQFNdZotMfHo451jVj9Cp7zCOwMXD93P5XFlfjMfrlzF9otxJo7aMfcH/FLZooMgoqsoiJCOsmeLH5U8Tfb97KPgVpxBCLyYxHfuOfjRRTKakxvpl7/Oq8q0j0Vp5W3xCK6qKnavxV1onf6Q==
+X-YMail-OSG: s4ksKKMVM1mcnC9ylB5eclWRIn36EwmxfsUjOFjPPCOUNUO36aicfsJc5TJceJh
+ x.N94fOcZtuqZgR48evjD47n6iOtLWgNUgqD83KLPBlgiXxVkyVOsPiVpTP5ctv7dhpxss9DmSPb
+ dcYBtUleF1jGhYjx69rWBaLTPYALeWHOAYu2AlrqSi5sGCCgq30FLh9L8J5Dv6qhCNcWH1w5AzN9
+ qfrLLBn1jEt9Izm_fmtP_jDbwYPDVwwBwgozbqyfdPY4c4MZGiIFPPrrG3HJVUgfARLh3Q33YtWV
+ XYe2vWIzP87CFOCoZmP6MN7tQqSrbcAjoK4vOQSNb.HmjRiuI5oiCug7KtmGjiBUQr3nzpP7SqFP
+ 6.miQPqYLakRdrMJQmMpF9LmxAiepovJ._UciUblaAhaqGJL8WRooGEjhzFiTqroWvH9MpfrCSNL
+ ZUwBCJ0aggnijUerirt_y_o0BnkN5lLQfcYCSmfljmFs7z3C8PnjzVM8eOUTQWnYdqrhBCEtGDgb
+ UoTP1dNO5.JSTCYOWK0BQFDBFYQUy7ylDiEe_FX1MHpp7xXjFeCBdtrCzVDH_4khLm74Qe57BNdN
+ s.i1SSEQLrWv.t.ZGabwAitlibprCac.gSXQgs8D5Tak._EXRrSMnAX8ZoNPGwL_O001a3t5GWI4
+ YwEkBHFkiNzl8VqQs88I343hR3qSJOToojhPBunv4ez59kGusE.dLnYr4WQfVFmkMbfn5IXASX4m
+ yQ4tpS0Z8ZrfjnY0dC40ar8UZCN.lhtvDwkv5PralhYMVjIn9yYvJ6vgda0V96bdal4sazKG_41y
+ 5UxEzIT.K288hI2iT2n_5.e6PjEs8H3M7.8Pyda9QgEoP3ycXdbzqz5fe17PaDQ76Gnu3FqT5Ndx
+ sOhf.zF_yOOCEqaku6uYy7TuljjkML7VW2pjmM.b_w_PbR7xuNl4BlF5et90pQHJMnyESCkD1pki
+ W19cg7Oae6l9oUiLqYODBOs3CS4SF2AuoyCZBK92zOiUCBohTRnyLazfq12GLo4nfqIZy8_m3GXb
+ QeBQNjhxW35vv9mTA9Ey7VBm1w9niNO2QHF5.dCshpG1CaWhC1f0jrcexUS.IqE6XLgPHm78ol8G
+ oIvM2aYWEunkH74TprJct3iyvM1sBhqDxaf0gzLOQVbNkgDFGiJl6yIQcuBQqysXcaN.rY9t4VFp
+ DuAAL6fxUXYC1H0AH.xHoUDpiu3YF2YERtK1dASE9jzEZmOoRNjkOXx16XY8Kt0OHBNL1sMxvvMv
+ he4N6H2aVjJ6MYAqD9tmRB.YWlYuOkQ_5xVU0UKZtQj6BOGUvbQFG5BTnzuq0earJhQOkjoMSTzH
+ l9RUJlLMSCo9TXKS2SSMmKXphrNbeYKat014u39XMsny_lPPpJ8nKRWp_jRgxXn1DO6lmM4vQ0n_
+ J9aE5bIp7y6k9VIumqLm1MEdQQYmNv5BEaBWW6S8G.ZGdLQy81o9JOfeFpn8-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ir2.yahoo.com with HTTP; Thu, 17 Sep 2020 07:46:43 +0000
+Date:   Thu, 17 Sep 2020 07:46:41 +0000 (UTC)
+From:   Francis <francismr4752@gmail.com>
+Reply-To: francismr4752@gmail.com
+Message-ID: <739173431.810763.1600328801065@mail.yahoo.com>
+Subject: Please forgive me if my request is not acceptable by your kind
+ person.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <739173431.810763.1600328801065.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16583 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the module_pci_driver() macro to make the code simpler
-by eliminating module_init and module_exit calls.
+Dear Sir or Madam,
 
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
----
- drivers/scsi/initio.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+Please forgive me if my request is not acceptable by your kind person.
 
-diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
-index 1d39628ac947..ca16ef45d8dc 100644
---- a/drivers/scsi/initio.c
-+++ b/drivers/scsi/initio.c
-@@ -2962,20 +2962,8 @@ static struct pci_driver initio_pci_driver = {
- 	.probe		= initio_probe_one,
- 	.remove		= initio_remove_one,
- };
--
--static int __init initio_init_driver(void)
--{
--	return pci_register_driver(&initio_pci_driver);
--}
--
--static void __exit initio_exit_driver(void)
--{
--	pci_unregister_driver(&initio_pci_driver);
--}
-+module_pci_driver(initio_pci_driver);
- 
- MODULE_DESCRIPTION("Initio INI-9X00U/UW SCSI device driver");
- MODULE_AUTHOR("Initio Corporation");
- MODULE_LICENSE("GPL");
--
--module_init(initio_init_driver);
--module_exit(initio_exit_driver);
--- 
-2.25.1
+I am Mr.Francis Hashim, who works in ADB (BURKINA FASO) as a non-independent non-executive Director and President of AFRICAN DEVELOPMENT BANK. During our last banking audits, we discovered that an account abandoned belongs to one of our deceased foreign clients, the Mr. Wang Jian, co-founder and co-chair of the HNA Group, a conglomerate Chinese with important real estate properties throughout the US. in a accident during a business trip in France on Tuesday.
 
+Go to this link:
+ttps://observer.com/2018/07/wang-jian-hna-founder-dies-tragic-fall/
+
+I got your contact from yahoo tourist search while I was searching for a foreign partner. I am assured of your capability and reliability to champion this business opportunity when I prayed about you.
+
+I am writing to request your assistance to transfer the sum of $15,000,000.00 (fifteen million United States dollars) at its counts as Wang Jian's last foreign business partner, which I plan use the fund to invest in public benefit as follows
+
+1. Establish an orphanage home to help orphaned children.
+2. Build a hospital to help the poor.
+3. Build an asylum for the elderly and homeless.
+
+Meanwhile, before contacting you, I did an investigation staff to locate one of the relatives of the late Mr. Wang Jian who knows the account, but I didn't succeed. However, I took this decision to support orphans and less privileged children with this fund, because I don't want this fund transferred to our Account of Government treasury as unclaimed fund. I am willing to offer you the 50% of the fund for your support and assistant to transfer the fund to your account.
+
+More detailed information will be sent to the desegregation explaining how the fund will be transferred to you Please continue to achieve the purpose, Reply me on my private E-Mail Address: francismr4752@gmail.com
+
+Waiting for your urgent response.
+Attentively
+Mr.Francis Hashim.
