@@ -2,89 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6343326D346
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 07:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2BA26D434
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 09:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726152AbgIQFxo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 01:53:44 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42608 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbgIQFxo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Sep 2020 01:53:44 -0400
-X-Greylist: delayed 976 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 01:53:43 EDT
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A2757B0BA;
-        Thu, 17 Sep 2020 05:37:41 +0000 (UTC)
-Subject: Re: [PATCH] lpfc: use NVMe error codes for LS request done callback
-To:     James Smart <james.smart@broadcom.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org
-References: <20200916085059.27206-1-hare@suse.de>
- <97c2e517-6b7b-70f5-f8da-14145f00361c@broadcom.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <3fbfcab8-e6bc-a609-2162-d95ccb39501d@suse.de>
-Date:   Thu, 17 Sep 2020 07:37:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726362AbgIQHG1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 03:06:27 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2876 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726348AbgIQHGX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Sep 2020 03:06:23 -0400
+X-Greylist: delayed 919 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 03:06:14 EDT
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 88DAD947F07ECE5CF47C;
+        Thu, 17 Sep 2020 07:50:53 +0100 (IST)
+Received: from [127.0.0.1] (10.210.165.75) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 17 Sep
+ 2020 07:50:52 +0100
+Subject: Re: [PATCH v8 00/18] blk-mq/scsi: Provide hostwide shared tags for
+ SCSI HBAs
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Jens Axboe <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <don.brace@microsemi.com>, <kashyap.desai@broadcom.com>,
+        <ming.lei@redhat.com>, <bvanassche@acm.org>,
+        <dgilbert@interlog.com>, <paolo.valente@linaro.org>,
+        <hare@suse.de>, <hch@lst.de>, <sumit.saxena@broadcom.com>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <esc.storagedev@microsemi.com>,
+        <megaraidlinux.pdl@broadcom.com>, <chenxiang66@hisilicon.com>,
+        <luojiaxing@huawei.com>
+References: <1597850436-116171-1-git-send-email-john.garry@huawei.com>
+ <df6a3bd3-a89e-5f2f-ece1-a12ada02b521@kernel.dk>
+ <379ef8a4-5042-926a-b8a0-2d0a684a0e01@huawei.com>
+ <yq1363xbtk7.fsf@ca-mkp.ca.oracle.com>
+ <32def143-911f-e497-662e-a2a41572fe4f@huawei.com>
+ <yq1imcdw6ni.fsf@ca-mkp.ca.oracle.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <7e90cb73-632c-ad37-699f-cb40044029ee@huawei.com>
+Date:   Thu, 17 Sep 2020 07:48:05 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <97c2e517-6b7b-70f5-f8da-14145f00361c@broadcom.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <yq1imcdw6ni.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.210.165.75]
+X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/16/20 11:23 PM, James Smart wrote:
 > 
-> 
-> On 9/16/2020 1:50 AM, Hannes Reinecke wrote:
->> The LS request callback requires a 'status' argument, but that one
->> should be an NVMe error code, not a driver specific one which has
->> no meaning in the nvme layer.
+>> Have you had a chance to check these outstanding SCSI patches?
 >>
->> Signed-off-by: Hannes Reinecke <hare@suse.de>
->> ---
->>   drivers/scsi/lpfc/lpfc_nvme.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/scsi/lpfc/lpfc_nvme.c 
->> b/drivers/scsi/lpfc/lpfc_nvme.c
->> index e5be334d6a11..4b007a28014b 100644
->> --- a/drivers/scsi/lpfc/lpfc_nvme.c
->> +++ b/drivers/scsi/lpfc/lpfc_nvme.c
->> @@ -498,7 +498,9 @@ __lpfc_nvme_ls_req_cmp(struct lpfc_hba *phba,  
->> struct lpfc_vport *vport,
->>           cmdwqe->context3 = NULL;
->>       }
->>       if (pnvme_lsreq->done)
->> -        pnvme_lsreq->done(pnvme_lsreq, status);
->> +        pnvme_lsreq->done(pnvme_lsreq,
->> +                  status == IOSTAT_SUCCESS ?
->> +                  NVME_SC_SUCCESS : NVME_SC_INTERNAL);
->>       else
->>           lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
->>                    "6046 NVMEx cmpl without done call back? "
+>> scsi: megaraid_sas: Added support for shared host tagset for cpuhotplug
+>> scsi: scsi_debug: Support host tagset
+>> scsi: hisi_sas: Switch v3 hw to MQ
+>> scsi: core: Show nr_hw_queues in sysfs
+>> scsi: Add host and host template flag 'host_tagset'
 > 
-> No - it's not a nvme command, so doesn't need a nvme status code. It 
-> should be a -Exxx  value or a 0 (success).  nvme_fc_send_ls_req() for 
-> example calls __nvme_fc_send_ls_req(), which can return any number of 
-> -Exxx values, and the routine returns the value returned by the done 
-> call after waiting for it to complete - so they should all follow the 
-> same form.
+> These look good to me.
 > 
-Right. But returning IOSTAT definitions is still wrong :->
+> Jens, feel free to merge.
 
-Will be updating the patch.
+Hi Jens,
 
-Cheers,
+I'm waiting on the hpsa and smartpqi patches update, so please kindly 
+merge only those patches, above.
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Thanks!
+
+> 
+> Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
+> 
+
+Cheers Martin
+
