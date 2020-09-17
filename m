@@ -2,91 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F68626E53B
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 21:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BA026E5AE
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 21:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbgIQTQL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 15:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S1726683AbgIQTzZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 15:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728398AbgIQQS2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 12:18:28 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753D0C061356
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 09:00:33 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d6so1479655pfn.9
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 09:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dyqT5DAvLDgsGMi6Y/ooNL+LKnGqQcxgtFjfUSbSM2I=;
-        b=KG+/Qva/Q1GNX/h+M+3Z05dm/opPuXEiNjr7HazE0EwItZsZ8OOv8IG6xMi4FFQNCp
-         2M/e1jsGLGy3oIN38Qua174krnW5M/ImiYDQddUOHoM4taUcIpbYeE/qYZn9X/REoOgk
-         liREg+i1Zos0JWYqiIHXi3xMhBGnFKxt/kFGZ8tI20/fHalgGmNCy1lneex7IduU9dqY
-         61E+VI9FRRJKZCGintEMsUNNC7BhaV8EeSIfKsllbQ/mqoaDKI4l3RtZWYwcKOnaejph
-         Fc54jSeBKcC8ud5SDblhE6/GMkEeRcLIR4NHUH3oxuChygEZ6bCwTR2/8g+GZnUW4szj
-         hqzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dyqT5DAvLDgsGMi6Y/ooNL+LKnGqQcxgtFjfUSbSM2I=;
-        b=r66VJI0oF5mQvIOAAgGeu37By70wg8M6Ng9JzaETfIU9syrQMnOGPke2gCV4A9Kuai
-         Y4BZMF/3VLXWIH53mMAW+gOHDTtyfnBIJZHYK+XjiloLB3GZL6nNz8MCD85HFPuv/plf
-         6uS3XYpXHYwDjaimMc5HgosZK387PfU5r3HC6E1aViH9nVICctoBdCVttgFr9k1NzLEv
-         00m26ICviz17MEGKYFL4OKnBLS/aMh0IcJPtSadBz8DCk6JyZQ2jjuADjNeTgHcCZOYI
-         3kuAvk0EI+8pG4M0laNuQJtJq1bmTXf+DVXIVhGXYjIfZYYjdNnIrstDH4C444pdBsm3
-         82jg==
-X-Gm-Message-State: AOAM531lJwr1Pt0hRTUUgncaePmoT1pOoaS5BulPH3cyIM6Zj29nCv9h
-        tOuSJqp1Yr5DO2udHbBdz5Z2Fc5bAXhfcA==
-X-Google-Smtp-Source: ABdhPJzZ3pIsLWszGhwWauAcCCg6KIpW3wc/Kbzio9b9UYqDuehIEY/rA7AoZIcJvvEcL1vs4qlS0w==
-X-Received: by 2002:a63:161e:: with SMTP id w30mr22504248pgl.255.1600358432695;
-        Thu, 17 Sep 2020 09:00:32 -0700 (PDT)
-Received: from localhost.localdomain ([161.81.44.186])
-        by smtp.gmail.com with ESMTPSA id 137sm29897pfu.149.2020.09.17.09.00.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 09:00:32 -0700 (PDT)
-From:   Tom Yan <tom.ty89@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     Tom Yan <tom.ty89@gmail.com>
-Subject: [PATCH 2/2] block/scsi_ioctl.c: use queue_logical_block_size() in max_sectors_bytes()
-Date:   Fri, 18 Sep 2020 00:00:16 +0800
-Message-Id: <20200917160016.2091-2-tom.ty89@gmail.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200917160016.2091-1-tom.ty89@gmail.com>
-References: <20200917160016.2091-1-tom.ty89@gmail.com>
+        with ESMTP id S1727387AbgIQO5u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 10:57:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DEAC06178A;
+        Thu, 17 Sep 2020 07:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DYbvYhbMXA9ajPbJG0Is0bvKHq8e2tKSFLIz7K4cCtw=; b=DKmSBGMZ8ouyh+lFHVFF2+PC1S
+        6P9h3/975zGRn/faB+N9lXC9y2nImmDeIehApvvBnaubVjQC3jBJL52BbOeDdxIJdc66Gatu6X//o
+        DyBsMMCBwhoUjxbyrzdbjIWGGTeoQjvwsmyvx/4JPellHtRekUV6IxhI82hmS77G1gBAdjwpqOebr
+        N4ULZVA7W5yODbUa3ufgqWNrpYd/KoBsy3rPv/tIROnsN9XnLwWvnU+SIBcdC6QVaZZCmBkJbLK1w
+        uSuIGqkvrDXUDp1t0IEkWR6c2obuf+E4xsec7LCbHnucJ94EZllMdsYRLExEuRaPeyJV5eaY+wKWy
+        o9cd1AEw==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kIvLp-0000Ok-KT; Thu, 17 Sep 2020 14:57:33 +0000
+Date:   Thu, 17 Sep 2020 15:57:33 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Anand Lodnoor <anand.lodnoor@broadcom.com>,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        Hannes Reinecke <hare@suse.de>, megaraidlinux.pdl@broadcom.com,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: compat_alloc_user_space removal, was Re: [PATCH 3/3] scsi:
+ megaraid_sas: simplify compat_ioctl handling
+Message-ID: <20200917145733.GA1433@infradead.org>
+References: <20200908213715.3553098-1-arnd@arndb.de>
+ <20200908213715.3553098-3-arnd@arndb.de>
+ <20200912074757.GA6688@infradead.org>
+ <CAK8P3a363DxgZnN9x4oNL7W4__kyG1U_34=7Hpqhpc-obAvjWw@mail.gmail.com>
+ <20200913065051.GA17932@infradead.org>
+ <CAK8P3a3W1EYts=2uL-6kTWwcgBeigLdv-W4mnxBd+En2ZFReLA@mail.gmail.com>
+ <CAK8P3a2r=-JQLyVeLhFvDtWrdtJN_pWsPHRoi5VHcgfK0SbQ5g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2r=-JQLyVeLhFvDtWrdtJN_pWsPHRoi5VHcgfK0SbQ5g@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Logical block size was never / is no longer necessarily 512.
+On Thu, Sep 17, 2020 at 04:55:49PM +0200, Arnd Bergmann wrote:
+> Unfortunately, the commit b902bfb3f0e "arm64: stop using <asm/compat.h>
+> directly" seems to introduce a circular header file inclusion between
+> linux/compat.h and asm/stat.h, breaking arm64 compilation.
+> 
+> Moving the compat_u64/compat_s64 definitions to include/asm-generic/compat.h
+> works fine though.
 
-Signed-off-by: Tom Yan <tom.ty89@gmail.com>
----
- block/scsi_ioctl.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/block/scsi_ioctl.c b/block/scsi_ioctl.c
-index ef722f04f88a..82ed73f07460 100644
---- a/block/scsi_ioctl.c
-+++ b/block/scsi_ioctl.c
-@@ -73,10 +73,11 @@ static int sg_set_timeout(struct request_queue *q, int __user *p)
- static int max_sectors_bytes(struct request_queue *q)
- {
- 	unsigned int max_sectors = queue_max_sectors(q);
-+	max_sectors *= queue_logical_block_size(q);
- 
--	max_sectors = min_t(unsigned int, max_sectors, INT_MAX >> 9);
-+	max_sectors = min_t(unsigned int, max_sectors, INT_MAX);
- 
--	return max_sectors << 9;
-+	return max_sectors;
- }
- 
- static int sg_get_reserved_size(struct request_queue *q, int __user *p)
--- 
-2.28.0
-
+I posted a version doing exactly that a few hours ago.
