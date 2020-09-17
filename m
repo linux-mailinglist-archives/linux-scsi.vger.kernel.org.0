@@ -2,88 +2,174 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CA426DC82
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 15:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9817926DE1B
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 16:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727033AbgIQNJo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 09:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726783AbgIQNJk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 09:09:40 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4140C06174A
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 06:09:39 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id 60so1834094otw.3
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Sep 2020 06:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=YgXgaY5ERGKEA2Jlza87xulHa9ePjWWcOJ+/WZOxc50=;
-        b=u9xdlrbupa3UWDG2hGxqvah6Not7IvQafzNdx3WhLyyt34CHZQJ/WDXJECMEqAHUFi
-         luB6tzO2nwqNHc3Xy3PVhWSjYv5hCfs2b83L3UYaE72qx48C47Y/L2DYxt7EwLSoccAu
-         lG3LjiyM2S7hRdsGHX3TQsUuYZrIcgEi4/w7mjIery4cuIQyJHMQcx8TAhCNYSz5Wtsj
-         D5UB4Fq15srJo61TmWVS4UpgJWjHMxgXbajQs9r7otZpip6qCT95QI1hMShyfngDesgf
-         m+2sRs+7avPaXCh2LDrvtr7ugrTFAP6PUiA86vIWlU5wtKd4gDtIZu90FU17156toCeW
-         3SHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=YgXgaY5ERGKEA2Jlza87xulHa9ePjWWcOJ+/WZOxc50=;
-        b=Rm6v8BCMKdbQ+55ZE6aHFyyNC73g/da3ZKGm7fbcZ1ssOwfwhyj9bj7xWd+kze4lNz
-         GMieu2xZ3+qWetoKTkcCp5lTlQuYAM8EcIPIIPv3hVS4Z8JqNgyj0UGP+ctUUDzXX1FA
-         aHnz7lCeLe+Kr/kpngCqibXA4Dg/Ip1Po9Ot7IcUgN+5xrS17/jpoyh+TmynjeuBSsv4
-         7lgMiiiZvkP02GSsLiYq+QD0dNnupu5YpkitPbOP5Rb+U/CM6/oFY7hDiyt6Bu8Th4Jr
-         KpCj+0coxo4CAGkPl66ndAJgtzCeOAxWL76HNCBtko21VaM5dpC3OCaTlkU1ZVtcr1AZ
-         Eg1Q==
-X-Gm-Message-State: AOAM533sGPxzKjsz5i0PxgrDDUExVKgb0QV22Ccsydx6V3zo7QJQyAcM
-        0YJbM7posvVEAvV89gkgHQ0wgsKIQ90EV7+/+RM=
-X-Google-Smtp-Source: ABdhPJwNkw2FlyaB4004CaxHz/s/eHCNePGcJRfcTOw5dLGAto1CLmLXQ2fs9Bki9Hs3CuYPf9BNBxck0yK7Ka853vo=
-X-Received: by 2002:a05:6830:1286:: with SMTP id z6mr18874045otp.291.1600348178097;
- Thu, 17 Sep 2020 06:09:38 -0700 (PDT)
+        id S1727482AbgIQOXB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 10:23:01 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:54824 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727478AbgIQOWz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 10:22:55 -0400
+X-Greylist: delayed 16604 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 10:22:55 EDT
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08H9SvCY141944;
+        Thu, 17 Sep 2020 09:46:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=RAmO1poU4EPFai7hm4nO0KZVlEZb9b7V9/m8icf834s=;
+ b=KGZqjtmsdOdjRI9l2V9lPHRiitwh4BLQS7V9xpx10hf+hZaLnggTznkGbvIC1GaZICjs
+ Rr1ycwETEfu5dm3O77noatCi4MkJ3vSJgQ4JsYXxBacPUhEEWqSjtPrUrWGC5aDhTGGo
+ uf5OOm8lG/N+R8debVsUprd29jv3Qkx7TOfgumcPAUFY3oSCfWFu1zt4SmRr2hvOkxBA
+ s2+0AlvOSIrfmXkNKJdniGhkLga+aERYueLNtg162VXRvLzA8mCT1HgseRu7MaEwFvSX
+ 66E2lPK5bFTJePG+CasSqSWWBmCJ0p1tDt48+hkFSE6ipNvNKhjn/8blDRnsKRuYIYm+ YQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 33gp9mg44f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 17 Sep 2020 09:46:00 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08H9TXE7014872;
+        Thu, 17 Sep 2020 09:44:00 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 33h88auddj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Sep 2020 09:43:59 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08H9hvlH007563;
+        Thu, 17 Sep 2020 09:43:57 GMT
+Received: from [192.168.0.103] (/111.125.192.187)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 17 Sep 2020 09:43:56 +0000
+Subject: Re: [PATCH] scsi: alua: fix the race between alua_bus_detach and
+ alua_rtpg
+To:     Brian Bunker <brian@purestorage.com>
+Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com, hare@suse.com,
+        loberman@redhat.com, joe.jin@oracle.com, junxiao.bi@oracle.com,
+        gulam.mohamed@oracle.com,
+        "RITIKA.SRIVASTAVA@oracle.com" <RITIKA.SRIVASTAVA@oracle.com>,
+        linux-scsi@vger.kernel.org
+References: <1600167537-12509-1-git-send-email-jitendra.khasdev@oracle.com>
+ <E1362654-C1EC-4971-BFA6-07BF56592540@purestorage.com>
+From:   jitendra.khasdev@oracle.com
+Organization: Oracle Corporation
+Message-ID: <3f5a6352-e721-2a87-b5bd-f2a9f5e3f399@oracle.com>
+Date:   Thu, 17 Sep 2020 15:13:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Received: by 2002:a05:6838:d3d1:0:0:0:0 with HTTP; Thu, 17 Sep 2020 06:09:37
- -0700 (PDT)
-Reply-To: alhouttta@gmail.com
-From:   Al Idress Akim <jm2102470@gmail.com>
-Date:   Thu, 17 Sep 2020 14:09:37 +0100
-Message-ID: <CAL4QASQR46RG+AW7emdGw+m=fiu0cR9RWquS7LfXNe9aVVdSag@mail.gmail.com>
-Subject: Assalam alaikum,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <E1362654-C1EC-4971-BFA6-07BF56592540@purestorage.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9746 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 adultscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009170072
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9746 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009170072
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Assalam alaikum,
+Hi Brian,
 
-I am an active banker,  I saw your email address while browsing
-through the bank DTC Screen in my office yesterday. now  I am in a
-better position to transfer about $8.3 million US Dollars into a
-foreign account. If you are willing and capable to work with me to
-receive this fund into a personal or company's account, I will give
-you the full detailed information. No risk is involved as it will pass
-through normal banking procedures.
+On 9/16/20 2:38 AM, Brian Bunker wrote:
+> Hello Jitendra,
+> 
+> It seems that we are in the same place trying to fix the same thing for what is likely our same shared customer. Do you want to try to incorporate anything from our fix from PURE? Like maybe remove the BUG_ON lines from alua_rtpg if you are sure that the race is eliminated with your patch?
+> 
+> See:
+> https://urldefense.com/v3/__https://marc.info/?l=linux-scsi&m=159984129611701&w=2__;!!GqivPVa7Brio!I4yOcJ5ukf2JyZxomXPkZdfh8vQTLSzBjHiZhWwhsSXyBgPCMqrS0xp0i3fa-5GELI3NNw$ 
+> https://urldefense.com/v3/__https://marc.info/?l=linux-scsi&m=159983931810954&w=2__;!!GqivPVa7Brio!I4yOcJ5ukf2JyZxomXPkZdfh8vQTLSzBjHiZhWwhsSXyBgPCMqrS0xp0i3fa-5EMk1YDDA$ 
+> https://urldefense.com/v3/__https://marc.info/?l=linux-scsi&m=159971849210795&w=2__;!!GqivPVa7Brio!I4yOcJ5ukf2JyZxomXPkZdfh8vQTLSzBjHiZhWwhsSXyBgPCMqrS0xp0i3fa-5H7zlg1Nw$ 
+> 
+> Thanks,
+> Brian
+> 
+> Brian Bunker
+> SW Eng
+> brian@purestorage.com
+> 
+> 
+> 
+>> On Sep 15, 2020, at 3:58 AM, Jitendra Khasdev <jitendra.khasdev@oracle.com> wrote:
+>>
+>> This is patch to fix the race occurs between bus detach and alua_rtpg.
+>>
+>> It fluses the all pending workqueue in bus detach handler, so it can avoid
+>> race between alua_bus_detach and alua_rtpg.
+>>
+>> Here is call trace where race got detected.
+>>
+>> multipathd call stack:
+>> [exception RIP: native_queued_spin_lock_slowpath+100]
+>> --- <NMI exception stack> ---
+>> native_queued_spin_lock_slowpath at ffffffff89307f54
+>> queued_spin_lock_slowpath at ffffffff89307c18
+>> _raw_spin_lock_irq at ffffffff89bd797b
+>> alua_bus_detach at ffffffff8984dcc8
+>> scsi_dh_release_device at ffffffff8984b6f2
+>> scsi_device_dev_release_usercontext at ffffffff89846edf
+>> execute_in_process_context at ffffffff892c3e60
+>> scsi_device_dev_release at ffffffff8984637c
+>> device_release at ffffffff89800fbc
+>> kobject_cleanup at ffffffff89bb1196
+>> kobject_put at ffffffff89bb12ea
+>> put_device at ffffffff89801283
+>> scsi_device_put at ffffffff89838d5b
+>> scsi_disk_put at ffffffffc051f650 [sd_mod]
+>> sd_release at ffffffffc051f8a2 [sd_mod]
+>> __blkdev_put at ffffffff8952c79e
+>> blkdev_put at ffffffff8952c80c
+>> blkdev_close at ffffffff8952c8b5
+>> __fput at ffffffff894e55e6
+>> ____fput at ffffffff894e57ee
+>> task_work_run at ffffffff892c94dc
+>> exit_to_usermode_loop at ffffffff89204b12
+>> do_syscall_64 at ffffffff892044da
+>> entry_SYSCALL_64_after_hwframe at ffffffff89c001b8
+>>
+>> kworker:
+>> [exception RIP: alua_rtpg+2003]
+>> account_entity_dequeue at ffffffff892e42c1
+>> alua_rtpg_work at ffffffff8984f097
+>> process_one_work at ffffffff892c4c29
+>> worker_thread at ffffffff892c5a4f
+>> kthread at ffffffff892cb135
+>> ret_from_fork at ffffffff89c00354
+>>
+>> Signed-off-by: Jitendra Khasdev <jitendra.khasdev@oracle.com>
+>> ---
+>> drivers/scsi/device_handler/scsi_dh_alua.c | 3 +++
+>> 1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+>> index f32da0c..024a752 100644
+>> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
+>> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+>> @@ -1144,6 +1144,9 @@ static void alua_bus_detach(struct scsi_device *sdev)
+>> 	struct alua_dh_data *h = sdev->handler_data;
+>> 	struct alua_port_group *pg;
+>>
+>> +	sdev_printk(KERN_INFO, sdev, "%s: flushing workqueues\n", ALUA_DH_NAME);
+>> +	flush_workqueue(kaluad_wq);
+>> +
+>> 	spin_lock(&h->pg_lock);
+>> 	pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+>> 	rcu_assign_pointer(h->pg, NULL);
+>> -- 
+>> 1.8.3.1
+>>
+> 
 
-Hence, I am inviting you for a business deal where this money can be
-transfer to your account which we will shared between us in the ratio
-of 50% for me,50% for you and both of us will share any expenses that
-will come during the release/transfer from our bank, if you agree to
-my business proposal. Further details of this Fund release and
-transfer will be forwarded to you as soon as I receive your detail
-Mail.
 
-1)Your Full Names. (2)Your country. (3)Your Telephone
-(4)Your Occupation .(5)Your Age. (6) Your full Address.
-I will use these detail information=E2=80=99s to fill a release/transfer an=
-d
-arrange some documents on your behalf in our bank here as the
-beneficiary owner of this fund abandoned in our bank
+Yes, looks we are fixing same problem. I looked into your patch, and thought removing BUG_ON could be last resort. Would you mind trying out my patch since it is reproducing at your site, because it looks me more cleaner way of doing it.
 
-Please contact me through my private Email:alhouttta@gmail.com
-
-All THE BEST Thanks
-Alh Idriss Akim Outta
+---
+Jitendra
