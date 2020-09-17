@@ -2,31 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0586226D444
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 09:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883CD26D421
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 09:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgIQHJJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 03:09:09 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:59270 "EHLO huawei.com"
+        id S1726285AbgIQHEh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 03:04:37 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12815 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726109AbgIQHJG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:09:06 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 4C3EFF1F76C25FDA1F18;
-        Thu, 17 Sep 2020 14:48:20 +0800 (CST)
-Received: from huawei.com (10.175.113.32) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Thu, 17 Sep 2020
- 14:48:10 +0800
+        id S1726247AbgIQHEc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Sep 2020 03:04:32 -0400
+X-Greylist: delayed 968 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 03:04:30 EDT
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 4D0752CD416C172A5FE1;
+        Thu, 17 Sep 2020 14:48:22 +0800 (CST)
+Received: from huawei.com (10.175.113.32) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Thu, 17 Sep 2020
+ 14:48:12 +0800
 From:   Liu Shixin <liushixin2@huawei.com>
-To:     Oliver Neukum <oliver@neukum.org>, Ali Akcaagac <aliakc@web.de>,
-        "Jamie Lenehan" <lenehan@twibble.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     <dc395x@twibble.org>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH -next] scsi: dc395x: use module_pci_driver to simplify the code
-Date:   Thu, 17 Sep 2020 15:10:44 +0800
-Message-ID: <20200917071044.1909268-1-liushixin2@huawei.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH -next] scsi: initio: use module_pci_driver to simplify the code
+Date:   Thu, 17 Sep 2020 15:10:45 +0800
+Message-ID: <20200917071045.1909320-1-liushixin2@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -42,45 +41,35 @@ by eliminating module_init and module_exit calls.
 
 Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 ---
- drivers/scsi/dc395x.c | 25 +------------------------
- 1 file changed, 1 insertion(+), 24 deletions(-)
+ drivers/scsi/initio.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index 0c251a3b99b7..fa16894d8758 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -4721,30 +4721,7 @@ static struct pci_driver dc395x_driver = {
- 	.probe          = dc395x_init_one,
- 	.remove         = dc395x_remove_one,
+diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
+index 1d39628ac947..ca16ef45d8dc 100644
+--- a/drivers/scsi/initio.c
++++ b/drivers/scsi/initio.c
+@@ -2962,20 +2962,8 @@ static struct pci_driver initio_pci_driver = {
+ 	.probe		= initio_probe_one,
+ 	.remove		= initio_remove_one,
  };
 -
--
--/**
-- * dc395x_module_init - Module initialization function
-- *
-- * Used by both module and built-in driver to initialise this driver.
-- **/
--static int __init dc395x_module_init(void)
+-static int __init initio_init_driver(void)
 -{
--	return pci_register_driver(&dc395x_driver);
+-	return pci_register_driver(&initio_pci_driver);
 -}
 -
--
--/**
-- * dc395x_module_exit - Module cleanup function.
-- **/
--static void __exit dc395x_module_exit(void)
+-static void __exit initio_exit_driver(void)
 -{
--	pci_unregister_driver(&dc395x_driver);
+-	pci_unregister_driver(&initio_pci_driver);
 -}
--
--
--module_init(dc395x_module_init);
--module_exit(dc395x_module_exit);
-+module_pci_driver(dc395x_driver);
++module_pci_driver(initio_pci_driver);
  
- MODULE_AUTHOR("C.L. Huang / Erich Chen / Kurt Garloff");
- MODULE_DESCRIPTION("SCSI host adapter driver for Tekram TRM-S1040 based adapters: Tekram DC395 and DC315 series");
+ MODULE_DESCRIPTION("Initio INI-9X00U/UW SCSI device driver");
+ MODULE_AUTHOR("Initio Corporation");
+ MODULE_LICENSE("GPL");
+-
+-module_init(initio_init_driver);
+-module_exit(initio_exit_driver);
 -- 
 2.25.1
 
