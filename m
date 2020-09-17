@@ -2,131 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1973D26E27C
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 19:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F044A26E37E
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Sep 2020 20:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbgIQRdW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 13:33:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:40652 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726202AbgIQRdO (ORCPT
+        id S1726543AbgIQS0G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 14:26:06 -0400
+Received: from sonic310-24.consmr.mail.ne1.yahoo.com ([66.163.186.205]:45750
+        "EHLO sonic310-24.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726489AbgIQSZt (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Sep 2020 13:33:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600363981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rmBUT/pYvgtK96UoWJYzCla0EiXSKgDJX1lzo9cTEeU=;
-        b=GeUf1MNhIEofyAmkfugEO/Yk0LLfeExw/siQ19wp0KgyYeB+gxZO5l7zvEc9pJVVp2p7d1
-        a/WUZwUg4KjqOqJijftfgnFnYTVGyabX2ngIeH5FZ5OeLKs9eFit7EtkyKY1H07Nk+q7xf
-        Ql5DAIxz70kpTNrKdlHgfinU3l0IfBI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-546-d3C2VEkeONmoXRS--YAquA-1; Thu, 17 Sep 2020 13:30:48 -0400
-X-MC-Unique: d3C2VEkeONmoXRS--YAquA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A36910BBED9;
-        Thu, 17 Sep 2020 17:30:46 +0000 (UTC)
-Received: from emilne (unknown [10.18.25.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B92710023A7;
-        Thu, 17 Sep 2020 17:30:45 +0000 (UTC)
-Message-ID: <c5e0700bb192a422541d1328db7ca0146edf7a81.camel@redhat.com>
-Subject: Re: [PATCH] scsi: alua: fix the race between alua_bus_detach and
- alua_rtpg
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     Jitendra Khasdev <jitendra.khasdev@oracle.com>,
-        martin.petersen@oracle.com, jejb@linux.ibm.com, hare@suse.com,
-        loberman@redhat.com
-Cc:     joe.jin@oracle.com, junxiao.bi@oracle.com,
-        gulam.mohamed@oracle.com, RITIKA.SRIVASTAVA@ORACLE.COM,
-        linux-scsi@vger.kernel.org
-Date:   Thu, 17 Sep 2020 13:30:44 -0400
-In-Reply-To: <1600167537-12509-1-git-send-email-jitendra.khasdev@oracle.com>
-References: <1600167537-12509-1-git-send-email-jitendra.khasdev@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Thu, 17 Sep 2020 14:25:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1600367148; bh=GzHQZhZRIsgl8MOTKujcKIKEI3cAMRVvPTGBZUZQRCc=; h=Date:From:Reply-To:Subject:References:From:Subject; b=WTowMEhlHbKmwx961KrFqttslY5XgHGBOuLVkIYGnKWkS1xP6h2vMnbq1PkBMYpzWvkm+ti9f+vziyTvEKwE1rn85fJD7lHJS5jxnQSxTQLwvdxYV9/J+w7cmom5SlV3a64bIC+tfyW4iD1yeiwgyPSYbfC1ke2YQtoZaglM374TGIwL5f01OkkPs9J6EwaUmNJzIXEMKQONfwhei38ziBfH02ePVAd6n9N+3PJh26QpvcZ+GLRw8SQM3iFXeCkyPofqro2QoceaFM6dUkQ4ZHMuIEEBh90X7BetZTTpchRw5s80mdOV8BxTG6n5y0L1UYQ2JeMrkMJCYy+a3VLb+g==
+X-YMail-OSG: V8GkspEVM1mMV27pO6qRlcpN6qJv_YWqimF4b4qgDzTu89wF7uNZu0WlARvnHJG
+ ypO1znUX4pLfBvL4lPkCrb3fCT2_99hTM83tSku_Huyj0wtc9kdAtgKJcJRxm.S4hr1n7NwBh5vR
+ UZ4oSxdW_DtI3.l6_el.BpQZOk8.UA5tm_dtmYSnV8e4GU2ZubpJbQkMmQWmtvshgmbZQNsSqIMZ
+ 5ECz1IYIUQBwOE3oG9GRSHUvEh7WA.8_5nFXfRsjH0ehoX4u8Z5k1eQ5VmpRQS1kT2jCy6XAwu3P
+ R6fdgJM8C0YM38u2tJauF0LD_m81F9xb_WQ1YjOUqkGhUaziGAaNpZwVdV38UKshR4EXjiXuZgF9
+ hayBVqr4_64mXCthKU1DV3O778DCOHYrDlNc4s4hT8meLbk6rXj_bWkiKvf3kNQ8zhJRGIuyt1hj
+ Xoha28X_nMM6Ehb9cb.BcZ_GIuwfxMC4co5OmEFjQ4G96LQLskqYCWWUZLhHwzjtA_ecOrgBN.Re
+ C2GCTncDc_ww2sm3NH9n39o6gPsITgnYy0zf009ICIZjsVNNR68txNvqOq8L_yy9RGVxLX5sXQ6P
+ UH0x3NQ80jCsKZvdts8d3RERRCOUvIjf09Au_k2XRNNLS7y16CCSRdLEsABc0xyhouZlRJLoRxpl
+ 0t1N_cnaPzf8wJnf3GV5vGJ9G9RXYgojv2ANChB4x04poMYHqbFEtw6ypgwMwmAHubjHJLfW1Png
+ WV_8jV0s.uKm5RSvqbVM2bj5Fc0uva3wr6VKyH6hBfhFw9Byvu_Jp.ngYcqeMf8OtDkWtAcCDPGo
+ eLk8HNiHKreVt.MXDH15L7nLnvunnSr.TcveZLxWiMyjLLxm.lf5mCCwPQJKYtz7UekGoOw7iTZa
+ SOMgwwR8Fa5Fq8g6BVX7W58pmHdGZlpz29CZL8JIdPSgdW.9g3Gq.tH0wHZyphAxNrZBZ51mNNj5
+ gSHRtyP_qoKZPensnKYNzhRHlLFrue.Lpgm1tqBR3SLqzxIlB29IWoh9lqnFrVsopqXvYFYTFuxu
+ 3avCuAKDZe0p13AodilC8MOB9BAPZul2siXTBCmAeHftQh2ZrLgEv8eaDDx_vtQuqOhZhIDoPF.q
+ rQNV6kO_io4FvM3ExSgEmUqytPpORbHvnxFJ00bLJ3JONLv01LlPwdCFx.xCVq.4Zlngxvi89NI9
+ a.5Yst4s3Ngc3hOfnlBfGeEPiAO65YPYlsWvA6YFkoKSsu6gHhVm1U0S8MiiM49Z4BArLA8McuuN
+ D.upsrfhz6cjonUDKnZt3gTmm3Fg17eEypHc6GT3Op_CaTKI0VpcUDkFxfxgd.XYRTmvZ_dGfADA
+ 7o8IQaz4qjHs2yXQEa8K.iTLrSCzzBDAaL4GLXSr3SOlvI6Nwk0mxcXCRD_qhU_4387KrXSyc8mx
+ 5vYrD8a5rzfAFNYgunEJ5yAvc4nti6OPvG4mJEwrSuNPkrxFHhuRY1Pz7lRnRbUJLoFlnYum1seE
+ IrdOZYhsGZ8jKDH_V0VTfIw--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Thu, 17 Sep 2020 18:25:48 +0000
+Date:   Thu, 17 Sep 2020 18:25:48 +0000 (UTC)
+From:   Ali Shareef Al-Emadi <alishareefalemadi465@gmail.com>
+Reply-To: alishareefalemadi465@gmail.com
+Message-ID: <1846803491.3562174.1600367148183@mail.yahoo.com>
+Subject: Investment from Qatar
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+References: <1846803491.3562174.1600367148183.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16583 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:80.0) Gecko/20100101 Firefox/80.0
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2020-09-15 at 16:28 +0530, Jitendra Khasdev wrote:
-> This is patch to fix the race occurs between bus detach and alua_rtpg.
-> 
-> It fluses the all pending workqueue in bus detach handler, so it can avoid
-> race between alua_bus_detach and alua_rtpg.
-> 
-> Here is call trace where race got detected.
-> 
-> multipathd call stack:
-> [exception RIP: native_queued_spin_lock_slowpath+100]
-> --- <NMI exception stack> ---
-> native_queued_spin_lock_slowpath at ffffffff89307f54
-> queued_spin_lock_slowpath at ffffffff89307c18
-> _raw_spin_lock_irq at ffffffff89bd797b
-> alua_bus_detach at ffffffff8984dcc8
-> scsi_dh_release_device at ffffffff8984b6f2
-> scsi_device_dev_release_usercontext at ffffffff89846edf
-> execute_in_process_context at ffffffff892c3e60
-> scsi_device_dev_release at ffffffff8984637c
-> device_release at ffffffff89800fbc
-> kobject_cleanup at ffffffff89bb1196
-> kobject_put at ffffffff89bb12ea
-> put_device at ffffffff89801283
-> scsi_device_put at ffffffff89838d5b
-> scsi_disk_put at ffffffffc051f650 [sd_mod]
-> sd_release at ffffffffc051f8a2 [sd_mod]
-> __blkdev_put at ffffffff8952c79e
-> blkdev_put at ffffffff8952c80c
-> blkdev_close at ffffffff8952c8b5
-> __fput at ffffffff894e55e6
-> ____fput at ffffffff894e57ee
-> task_work_run at ffffffff892c94dc
-> exit_to_usermode_loop at ffffffff89204b12
-> do_syscall_64 at ffffffff892044da
-> entry_SYSCALL_64_after_hwframe at ffffffff89c001b8
-> 
-> kworker:
-> [exception RIP: alua_rtpg+2003]
-> account_entity_dequeue at ffffffff892e42c1
-> alua_rtpg_work at ffffffff8984f097
-> process_one_work at ffffffff892c4c29
-> worker_thread at ffffffff892c5a4f
-> kthread at ffffffff892cb135
-> ret_from_fork at ffffffff89c00354
-> 
-> Signed-off-by: Jitendra Khasdev <jitendra.khasdev@oracle.com>
-> ---
->  drivers/scsi/device_handler/scsi_dh_alua.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-> index f32da0c..024a752 100644
-> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
-> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-> @@ -1144,6 +1144,9 @@ static void alua_bus_detach(struct scsi_device *sdev)
->  	struct alua_dh_data *h = sdev->handler_data;
->  	struct alua_port_group *pg;
->  
-> +	sdev_printk(KERN_INFO, sdev, "%s: flushing workqueues\n", ALUA_DH_NAME);
-> +	flush_workqueue(kaluad_wq);
-> +
->  	spin_lock(&h->pg_lock);
->  	pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
->  	rcu_assign_pointer(h->pg, NULL);
-
-I'm not sure this is the best solution.  The current code
-references h->sdev when the dh_list is traversed.  So it needs
-to remain valid.  Fixing it by flushing the workqueue to avoid
-the list traversal code running leaves open the possibility that
-future code alterations may expose this problem again.
-
--Ewan
 
 
+QATAR PETROLEUM
+P.O.Box 3212, Doha, Qatar
+
+Greetings.
+
+I am Mr. H.E. Ali Shareef Al-Emadi, Finance and Account, Qatar Petroleum. I have $30m for Investment. Contact me if you are interested; I have all it will take to move the fund to any of your account designate as a Contract Fund to avoid every query by the authority in your Country.
+
+I sent this message from my private Email; I will give you more details through my official
+Email upon the receipt of your response to prove myself and office to
+you.
+
+Office Email Address: alishareefalemadi465@gmail.com
+
+Regards.
+
+Mr. H.E. Ali Shareef Al-Emadi,
+Minister Of Finance.
+Qatar Petroleum
