@@ -2,61 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 584552704CC
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Sep 2020 21:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6512705BB
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Sep 2020 21:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbgIRTNJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Sep 2020 15:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726280AbgIRTNJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Sep 2020 15:13:09 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF9BC0613CE
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Sep 2020 12:13:08 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id x14so8266843oic.9
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Sep 2020 12:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=1MR7w5pXZSiUaRJ6XXYmBVR/BBCArAfXUnOrJ4PHyTw=;
-        b=HBjojwJJ7f5be0zb9iafTlNMiay7rELWlOdDunaAVIDT4GJLS1W/mLOtbmfmqoPC7i
-         mQis/6n39RdbUWCBODEnR5XI4fwLDzqh7nSXUCGEiR9+874HIs+qTNJhk1frVddpqXFS
-         tD6Dl/7jhGO8PNbk+qBN0wgoW/e6ZOdaUJJjbkKxyWI06fx+fbOZGk1UkqZWX37ZKD6+
-         dh4uwWubx6M1dg9sHJke3TvbBMXNcquTf4DZGxhCjG9kQycacyepMithjh14yjwZnvx5
-         YDFat69T+RmDUSCiCvb0IahKMDC/QAEPqyxps/BnCRvV7tYg8lcoqGk0GzVWtgR4azcb
-         V2fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=1MR7w5pXZSiUaRJ6XXYmBVR/BBCArAfXUnOrJ4PHyTw=;
-        b=dm78C68aBON4+nc1BW/Ceb82m/gbnJAzFHGSz7RNtsfK4FQj7J9QkFnW50NP0/LwzU
-         oD3rt83j35dyWPbzZqVxTBnwd0q0kwMT3kA7JbZn+Lw75XyEsJHn4OqCNKTxq4CZKH3G
-         +87ay/1NFjUwdqbpE95M0nbGHBgwqPFa2kUcuWz1/JRNBWY0lTSoMBy2IIp6R2f2AfRw
-         bI+joQIGOxAt3uFTwfGD1/vxmdEK036Zk66+ytq+qYGcCtOeSyeHd0WzBzM80wfhW09I
-         3jtIPru2HxLFbkK3ZuPUBWrZ6DzF+SKMyKhhqFkzDJd3cPPEKdvgALLCdD7jvGZFvns5
-         dSAw==
-X-Gm-Message-State: AOAM533eQbRAYl2KFC22NUhvY1wNkKd2T90WPaoPkfRgUHpsunwMzt9B
-        SI0l9C3eKBrYKqh9UK+PyV3cQXtBYSrOzHhZemo=
-X-Google-Smtp-Source: ABdhPJzBP+f+QRV0uG+cPDp7S5uO3ZGSquN4rm2UubaaYg2PGFphTagGzZ7Kx6wFkxUqjtOiwsDWB1rletlCDULGxHY=
-X-Received: by 2002:aca:f593:: with SMTP id t141mr10136571oih.166.1600456388160;
- Fri, 18 Sep 2020 12:13:08 -0700 (PDT)
+        id S1726392AbgIRTk7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Sep 2020 15:40:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40942 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726315AbgIRTk7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 18 Sep 2020 15:40:59 -0400
+Received: from dhcp-10-100-145-180.wdl.wdc.com (unknown [199.255.45.60])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 40A7D206A2;
+        Fri, 18 Sep 2020 19:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600458058;
+        bh=IwIR6aotZiZz6If768azZzVDumAWo05x1JcIldWd4Bg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hTB6MaJ8vlmyVCvLqDBkbU8PBPOgkTv2XnpdEREalwm0Del+ztISIfApVnQiZ+n0i
+         /gmvpgIHh8RnIf1PGE4Cgfm7QGlcSWS7qeR1pQU5hMFU06jjMXhHhgKRjkBJKgQiIJ
+         A8fgE/ddk2LfXs6XsMYUijB9nGsNKI4dMVxsX80Y=
+Date:   Fri, 18 Sep 2020 12:40:56 -0700
+From:   Keith Busch <kbusch@kernel.org>
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "sagi@grimberg.me" <sagi@grimberg.me>, "hch@lst.de" <hch@lst.de>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>
+Subject: Re: [PATCHv3 1/4] block: add zone specific block statuses
+Message-ID: <20200918194056.GB4030837@dhcp-10-100-145-180.wdl.wdc.com>
+References: <20200917231841.4029747-1-kbusch@kernel.org>
+ <20200917231841.4029747-2-kbusch@kernel.org>
+ <SN4PR0401MB35983DBC8B0B97A4083CDF8B9B3F0@SN4PR0401MB3598.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Sender: nicolemalachowski659@gmail.com
-Received: by 2002:a4a:e905:0:0:0:0:0 with HTTP; Fri, 18 Sep 2020 12:13:07
- -0700 (PDT)
-From:   TRICIA SMITH <triciatricia841@gmail.com>
-Date:   Fri, 18 Sep 2020 23:43:07 +0430
-X-Google-Sender-Auth: 59JxsgEKMOhAFNX4zE_pT29fd0s
-Message-ID: <CACfq6cQ4fz4QztHnK33RW4ma-nkr2LU-Mh5y9rtADSqZztVnDA@mail.gmail.com>
-Subject: Re: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SN4PR0401MB35983DBC8B0B97A4083CDF8B9B3F0@SN4PR0401MB3598.namprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Dear, I am Miss Tricia Smith the only Daughter/Child of late Mr and
-Mrs William Smith. I am 18 years old. Please i have something very
-important and confidential to discuss with you.
+On Fri, Sep 18, 2020 at 01:31:44PM +0000, Johannes Thumshirn wrote:
+> On 18/09/2020 01:18, Keith Busch wrote:
+> > diff --git a/Documentation/block/queue-sysfs.rst b/Documentation/block/queue-sysfs.rst
+> > index f261a5c84170..2638d3446b79 100644
+> > --- a/Documentation/block/queue-sysfs.rst
+> > +++ b/Documentation/block/queue-sysfs.rst
+> > @@ -124,6 +124,10 @@ For zoned block devices (zoned attribute indicating "host-managed" or
+> >  EXPLICIT OPEN, IMPLICIT OPEN or CLOSED, is limited by this value.
+> >  If this value is 0, there is no limit.
+> >  
+> > +If the host attempts to exceed this limit, the driver should report this error
+> > +with BLK_STS_ZONE_ACTIVE_RESOURCE, which user space may see as the EOVERFLOW
+> > +errno.
+> > +
+> >  max_open_zones (RO)
+> >  -------------------
+> >  For zoned block devices (zoned attribute indicating "host-managed" or
+> > @@ -131,6 +135,10 @@ For zoned block devices (zoned attribute indicating "host-managed" or
+> >  EXPLICIT OPEN or IMPLICIT OPEN, is limited by this value.
+> >  If this value is 0, there is no limit.
+> >  
+> > +If the host attempts to exceed this limit, the driver should report this error
+> > +with BLK_STS_ZONE_OPEN_RESOURCE, which user space may see as the ETOOMANYREFS
+> > +errno.
+> 
+> Don't we also need to update some man pages in section 2?
+
+Yes, good point. Those updates need to come from this repo
+
+  https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git
+
+right? If so, I can send updates there once it looks like this is the
+form that will be committed.
