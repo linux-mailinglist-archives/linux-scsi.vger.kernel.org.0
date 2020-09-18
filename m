@@ -2,78 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FA126F287
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Sep 2020 05:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6D826F4B1
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Sep 2020 05:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbgIRCF7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 22:05:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54856 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727673AbgIRCF6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:05:58 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 845552376F;
-        Fri, 18 Sep 2020 02:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394758;
-        bh=4HjaApKhhtTar4fxqvXTEJ36CBbwBcNfAnhgHrUQsuI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g2Xku6JNNaH3PS7Sg5D15p88NHJPfUzU8+rbJlEQpaq8VIWztA1Mdvs6qalnJp8iR
-         STdGzOdUJt/ORGVW7Z2g2/fPP6bbHu5YuMxxZKxM9tD7DbEZetJP4ruCTblDKOpmQq
-         6iVGKd33jg65iUA83qjd7RiymAXYZB8CuAOkoQZQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nilesh Javali <njavali@marvell.com>, Lee Duncan <lduncan@suse.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 235/330] scsi: qedi: Fix termination timeouts in session logout
-Date:   Thu, 17 Sep 2020 21:59:35 -0400
-Message-Id: <20200918020110.2063155-235-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
-References: <20200918020110.2063155-1-sashal@kernel.org>
+        id S1726537AbgIRD0v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 23:26:51 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:51150 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgIRD0v (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Sep 2020 23:26:51 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08I3P8DU042413;
+        Fri, 18 Sep 2020 03:26:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=u5Wc1Rpfr9jGdrhv1sc2/WJ6KhTGK1VbK75D+xbwxjk=;
+ b=N2c8J+TX50ard6WzXvKuXvMzu8Ny7YDzu7hCLo9GwNodb31EWmpUrFl5bsuCytfsChSD
+ WXI27EeNkCju8P8h0Wwlkx+J0Y8Ggg7Sp2V8yxp75zwDJMcCz4+IRu4yDBlI2SFItyqa
+ WQvuKcbHV1D5ac8UuwmJt6bmyOoF6FmiS5fZIy/K6j8tdqpWTj2iDkbWRBQ1yo/OjKiS
+ MMX8myPzkL8V0RBS7ytepYH9ryhKcZJXTH9+CDKLWRbMAwo1ykBeU7iM6RhwyUzmu8nX
+ 0CqDLybVW3fRhxwllj96ymABnWTttDPznx11muMrX1vesyqzpjzZFP2zVf6YMWM9JFtF rw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 33j91dxctw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Sep 2020 03:26:48 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08I3PvQF180306;
+        Fri, 18 Sep 2020 03:26:48 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 33hm361gdc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Sep 2020 03:26:48 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08I3QlSN009154;
+        Fri, 18 Sep 2020 03:26:47 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 18 Sep 2020 03:26:47 +0000
+To:     Alex Dewar <alex.dewar90@gmail.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/3] scsi: mpt: Refactor and port to dma_* interface
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq15z8bu5v6.fsf@ca-mkp.ca.oracle.com>
+References: <20200903152832.484908-1-alex.dewar90@gmail.com>
+        <yq1ft7ixyg8.fsf@ca-mkp.ca.oracle.com>
+        <20200916164411.hkpmqigdhgdb66dl@lenovo-laptop>
+Date:   Thu, 17 Sep 2020 23:26:45 -0400
+In-Reply-To: <20200916164411.hkpmqigdhgdb66dl@lenovo-laptop> (Alex Dewar's
+        message of "Wed, 16 Sep 2020 17:44:11 +0100")
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=1
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009180028
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=1 mlxlogscore=999
+ clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009180028
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Nilesh Javali <njavali@marvell.com>
 
-[ Upstream commit b9b97e6903032ec56e6dcbe137a9819b74a17fea ]
+Alex,
 
-The destroy connection ramrod timed out during session logout.  Fix the
-wait delay for graceful vs abortive termination as per the FW requirements.
+>> Have you tested your changes?
+>
+> No, as I'm afraid I don't have the hardware.
 
-Link: https://lore.kernel.org/r/20200408064332.19377-7-mrangankar@marvell.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Manish Rangankar <mrangankar@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/qedi/qedi_iscsi.c | 3 +++
- 1 file changed, 3 insertions(+)
+QEMU supports it, I propose you try testing with that.
 
-diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
-index 0f57c80734061..0f2622a48311c 100644
---- a/drivers/scsi/qedi/qedi_iscsi.c
-+++ b/drivers/scsi/qedi/qedi_iscsi.c
-@@ -1062,6 +1062,9 @@ static void qedi_ep_disconnect(struct iscsi_endpoint *ep)
- 		break;
- 	}
- 
-+	if (!abrt_conn)
-+		wait_delay += qedi->pf_params.iscsi_pf_params.two_msl_timer;
-+
- 	qedi_ep->state = EP_STATE_DISCONN_START;
- 	ret = qedi_ops->destroy_conn(qedi->cdev, qedi_ep->handle, abrt_conn);
- 	if (ret) {
+I hesitate merging big changes to abandoned drivers unless they've been
+tested. It's too easy to miss things during review...
+
 -- 
-2.25.1
-
+Martin K. Petersen	Oracle Linux Engineering
