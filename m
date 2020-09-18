@@ -2,36 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6017B26EC9C
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Sep 2020 04:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5F326EE94
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Sep 2020 04:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728910AbgIRCNU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Sep 2020 22:13:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40226 "EHLO mail.kernel.org"
+        id S1728599AbgIRCPG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Sep 2020 22:15:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728890AbgIRCNO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:13:14 -0400
+        id S1728384AbgIRCOt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:14:49 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 49E08235F9;
-        Fri, 18 Sep 2020 02:13:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E4BE239A1;
+        Fri, 18 Sep 2020 02:14:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395194;
-        bh=gJt5tl5bFwD12yQeDxuwhK+rvQNS3vF57KVmKFCezj4=;
+        s=default; t=1600395289;
+        bh=q4MqQEMeVjXUteqrkCzOYQn50fCqKwcytNOP0ZMrXrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eC4/kBkykT50FsU9NCrw6vSVZ3+LMNb1NrAR6azkIae5JJqnVZ+TBtRj/+TrwZoiV
-         onMGpfUwQZbkFhQkEw69JQ6HVWk0BheESMUUlo+uMq3O98puPXPLxVBK8uL4jDb7FH
-         AMcXO4JHgMTgZeGvp7td7HuOB98yKon8dC4LBjdM=
+        b=hVYNGLhTbkpfzlsgaAJgquve3ac+L0pYJF7ZgPq9kHwZLNVQx7yUUkyLeoVc/t02s
+         rljZc4YvbyreB3xxvY1sP69NJ1OAgfKtzBVgfKAEVVxiA/nhWWMz1rDpXRK1WoAgt+
+         mrDt75CjMXttyh3HMPBrm/vebyt/ZK6WF9sko6dM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
+Cc:     Javed Hasan <jhasan@marvell.com>,
+        Girish Basrur <gbasrur@marvell.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        Shyam Sundar <ssundar@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 045/127] scsi: lpfc: Fix RQ buffer leakage when no IOCBs available
-Date:   Thu, 17 Sep 2020 22:10:58 -0400
-Message-Id: <20200918021220.2066485-45-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, fcoe-devel@open-fcoe.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 123/127] scsi: libfc: Handling of extra kref
+Date:   Thu, 17 Sep 2020 22:12:16 -0400
+Message-Id: <20200918021220.2066485-123-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200918021220.2066485-1-sashal@kernel.org>
 References: <20200918021220.2066485-1-sashal@kernel.org>
@@ -43,56 +46,72 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Javed Hasan <jhasan@marvell.com>
 
-[ Upstream commit 39c4f1a965a9244c3ba60695e8ff8da065ec6ac4 ]
+[ Upstream commit 71f2bf85e90d938d4a9ef9dd9bfa8d9b0b6a03f7 ]
 
-The driver is occasionally seeing the following SLI Port error, requiring
-reset and reinit:
+Handling of extra kref which is done by lookup table in case rdata is
+already present in list.
 
- Port Status Event: ... error 1=0x52004a01, error 2=0x218
+This issue was leading to memory leak. Trace from KMEMLEAK tool:
 
-The failure means an RQ timeout. That is, the adapter had received
-asynchronous receive frames, ran out of buffer slots to place the frames,
-and the driver did not replenish the buffer slots before a timeout
-occurred. The driver should not be so slow in replenishing buffers that a
-timeout can occur.
+  unreferenced object 0xffff8888259e8780 (size 512):
+    comm "kworker/2:1", pid 182614, jiffies 4433237386 (age 113021.971s)
+    hex dump (first 32 bytes):
+    58 0a ec cf 83 88 ff ff 00 00 00 00 00 00 00 00
+    01 00 00 00 08 00 00 00 13 7d f0 1e 0e 00 00 10
+  backtrace:
+	[<000000006b25760f>] fc_rport_recv_req+0x3c6/0x18f0 [libfc]
+	[<00000000f208d994>] fc_lport_recv_els_req+0x120/0x8a0 [libfc]
+	[<00000000a9c437b8>] fc_lport_recv+0xb9/0x130 [libfc]
+	[<00000000ad5be37b>] qedf_ll2_process_skb+0x73d/0xad0 [qedf]
+	[<00000000e0eb6893>] process_one_work+0x382/0x6c0
+	[<000000002dfd9e21>] worker_thread+0x57/0x5c0
+	[<00000000b648204f>] kthread+0x1a0/0x1c0
+	[<0000000072f5ab20>] ret_from_fork+0x35/0x40
+	[<000000001d5c05d8>] 0xffffffffffffffff
 
-When the driver received all the frames of a sequence, it allocates an IOCB
-to put the frames in. In a situation where there was no IOCB available for
-the frame of a sequence, the RQ buffer corresponding to the first frame of
-the sequence was not returned to the FW. Eventually, with enough traffic
-encountering the situation, the timeout occurred.
+Below is the log sequence which leads to memory leak. Here we get the
+nested "Received PLOGI request" for same port and this request leads to
+call the fc_rport_create() twice for the same rport.
 
-Fix by releasing the buffer back to firmware whenever there is no IOCB for
-the first frame.
+	kernel: host1: rport fffce5: Received PLOGI request
+	kernel: host1: rport fffce5: Received PLOGI in INIT state
+	kernel: host1: rport fffce5: Port is Ready
+	kernel: host1: rport fffce5: Received PRLI request while in state Ready
+	kernel: host1: rport fffce5: PRLI rspp type 8 active 1 passive 0
+	kernel: host1: rport fffce5: Received LOGO request while in state Ready
+	kernel: host1: rport fffce5: Delete port
+	kernel: host1: rport fffce5: Received PLOGI request
+	kernel: host1: rport fffce5: Received PLOGI in state Delete - send busy
 
-[mkp: typo]
-
-Link: https://lore.kernel.org/r/20200128002312.16346-2-jsmart2021@gmail.com
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+Link: https://lore.kernel.org/r/20200622101212.3922-2-jhasan@marvell.com
+Reviewed-by: Girish Basrur <gbasrur@marvell.com>
+Reviewed-by: Saurav Kashyap <skashyap@marvell.com>
+Reviewed-by: Shyam Sundar <ssundar@marvell.com>
+Signed-off-by: Javed Hasan <jhasan@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/libfc/fc_rport.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 480d2d467f7a6..45445dafc80cf 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -17038,6 +17038,10 @@ lpfc_prep_seq(struct lpfc_vport *vport, struct hbq_dmabuf *seq_dmabuf)
- 			list_add_tail(&iocbq->list, &first_iocbq->list);
- 		}
- 	}
-+	/* Free the sequence's header buffer */
-+	if (!first_iocbq)
-+		lpfc_in_buf_free(vport->phba, &seq_dmabuf->dbuf);
-+
- 	return first_iocbq;
- }
+diff --git a/drivers/scsi/libfc/fc_rport.c b/drivers/scsi/libfc/fc_rport.c
+index 0e964ce75406b..a9137f64befa0 100644
+--- a/drivers/scsi/libfc/fc_rport.c
++++ b/drivers/scsi/libfc/fc_rport.c
+@@ -145,8 +145,10 @@ struct fc_rport_priv *fc_rport_create(struct fc_lport *lport, u32 port_id)
+ 	size_t rport_priv_size = sizeof(*rdata);
  
+ 	rdata = fc_rport_lookup(lport, port_id);
+-	if (rdata)
++	if (rdata) {
++		kref_put(&rdata->kref, fc_rport_destroy);
+ 		return rdata;
++	}
+ 
+ 	if (lport->rport_priv_size > 0)
+ 		rport_priv_size = lport->rport_priv_size;
 -- 
 2.25.1
 
