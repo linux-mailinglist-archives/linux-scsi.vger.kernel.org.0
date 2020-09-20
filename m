@@ -2,112 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B301F271819
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Sep 2020 23:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44831271830
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Sep 2020 23:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgITVNi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Sep 2020 17:13:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:60946 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726498AbgITVNi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 20 Sep 2020 17:13:38 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-64-HkvgTllpM-iYq_Po-gc7vg-1; Sun, 20 Sep 2020 22:13:25 +0100
-X-MC-Unique: HkvgTllpM-iYq_Po-gc7vg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sun, 20 Sep 2020 22:13:24 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sun, 20 Sep 2020 22:13:24 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>
-CC:     Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Subject: RE: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-Thread-Topic: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-Thread-Index: AQHWj495LxbJUITJXkeWJwtHmAdwxKlyBKsQ
-Date:   Sun, 20 Sep 2020 21:13:24 +0000
-Message-ID: <8363d874e503470f8caa201e85e9fbd4@AcuMS.aculab.com>
-References: <20200918124533.3487701-1-hch@lst.de>
- <20200918124533.3487701-2-hch@lst.de>
- <20200920151510.GS32101@casper.infradead.org>
- <20200920180742.GN3421308@ZenIV.linux.org.uk>
- <20200920190159.GT32101@casper.infradead.org>
- <20200920191031.GQ3421308@ZenIV.linux.org.uk>
- <20200920192259.GU32101@casper.infradead.org>
- <CALCETrXVtBkxNJcMxf9myaKT9snHKbCWUenKHGRfp8AOtORBPg@mail.gmail.com>
- <CAK8P3a37BRFj_qg61gP2oVrjJzBrZ58y1vggeTk_5n55Ou5U2Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a37BRFj_qg61gP2oVrjJzBrZ58y1vggeTk_5n55Ou5U2Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726178AbgITVWH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Sep 2020 17:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbgITVWH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Sep 2020 17:22:07 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7DFC061755
+        for <linux-scsi@vger.kernel.org>; Sun, 20 Sep 2020 14:22:06 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id h1so6325089qvo.9
+        for <linux-scsi@vger.kernel.org>; Sun, 20 Sep 2020 14:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=l8o/PxZLRUsXqbfQdaHQ/PhODuJFQTqIyS1z/DNGmXE=;
+        b=iG6ysIUuILHYcy9t6VmWCCeGKoW8/RpdOnDv/RXVZ4PS9nQdn8FyEYNRwGJSUhZXu0
+         PjQT+Uzd1zELzaB7jyLIT5K0qRNq6T+IBU84XRCoBoRzLLj+qf53WHClw73gD7MnE9N4
+         UMsAwrWmNTbsLxv0L59VenerNYFMtDpc07eo58kg2zsCIIUuqvfieFMDK7pmEOXVJlJ+
+         YC5qhrpt8o4cXDOAy4cAOFm+EZq8S3fmXvef2mKOaT5mS65iwKzj5KRDMqfMu2pUukXP
+         cfxb3SCY7yhEyL59rKH8fyV+66cX9IIPjQw/ai+eUytipCyeXAkLyuUG6M0GJutMW5/h
+         6TtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=l8o/PxZLRUsXqbfQdaHQ/PhODuJFQTqIyS1z/DNGmXE=;
+        b=VikVG5804Xe76sYZUm+VWes+Cg3HF3/l5VEXNf7nHwhjBSYOQzBM+AqmMFmw0VIuOc
+         yJh0WBrbu4AewDY0xaj1ojRs8Xo0nK2xhppLhbkEeQICMK76BnANpK2RDTUBIb/N/+Gq
+         md7HJ+w13tNqQqLaQNIUjB7/DMNDloKGfcombfv/aTKuP32MN5d5X0DstQIGrfHbyp+h
+         Y6fF8/IExQRQA0MyfqDfE5pQybzbcv6I9O3R5XBjJuHZN39sw0YiWIVKLfOMnZA6dgQM
+         IYfBEc6xEF5+u4fg1ZbpNBppjKSuFlPdEQtB70o+e8GF7nxenmwKZAHBl/Sf4qanZfUt
+         T7ag==
+X-Gm-Message-State: AOAM532YRO97ZdMJrdshNpBZZ382muaOjP9pN4GE8FJou/CmE0DUdvvY
+        h+VGL8eBEBjDqPMPR58ePjnF2P88zgU303ZlDLI=
+X-Google-Smtp-Source: ABdhPJwsFhDo6BmdID0Kpt/vOMeltLszpcFQMavWdPblWsNfYS/UClVZ0eHq/PPIgPMg/03lzn0DiLU0LSgRTXA5hXM=
+X-Received: by 2002:ad4:4e8f:: with SMTP id dy15mr26489920qvb.45.1600636925900;
+ Sun, 20 Sep 2020 14:22:05 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-Content-Language: en-US
+Sender: 1joypeters@gmail.com
+Received: by 2002:ac8:5147:0:0:0:0:0 with HTTP; Sun, 20 Sep 2020 14:22:05
+ -0700 (PDT)
+From:   Donna Louise <donnamcinneslouise@gmail.com>
+Date:   Sun, 20 Sep 2020 09:22:05 -1200
+X-Google-Sender-Auth: wl0aATkmbhU5uM_q_x9zets7br8
+Message-ID: <CA+F+Mbb2Mg=+QQB09C+V8Kd5NOYFZ4Y4WAB9GNNCr=HVuOGoxg@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMCBTZXB0ZW1iZXIgMjAyMCAyMTo0OQ0KPiAN
-Cj4gT24gU3VuLCBTZXAgMjAsIDIwMjAgYXQgOToyOCBQTSBBbmR5IEx1dG9taXJza2kgPGx1dG9A
-a2VybmVsLm9yZz4gd3JvdGU6DQo+ID4gT24gU3VuLCBTZXAgMjAsIDIwMjAgYXQgMTI6MjMgUE0g
-TWF0dGhldyBXaWxjb3ggPHdpbGx5QGluZnJhZGVhZC5vcmc+IHdyb3RlOg0KPiA+ID4NCj4gPiA+
-IE9uIFN1biwgU2VwIDIwLCAyMDIwIGF0IDA4OjEwOjMxUE0gKzAxMDAsIEFsIFZpcm8gd3JvdGU6
-DQo+ID4gPiA+IElNTyBpdCdzIG11Y2ggc2FuZXIgdG8gbWFyayB0aG9zZSBhbmQgcmVmdXNlIHRv
-IHRvdWNoIHRoZW0gZnJvbSBpb191cmluZy4uLg0KPiA+ID4NCj4gPiA+IFNpbXBsZXIgc29sdXRp
-b24gaXMgdG8gcmVtb3ZlIGlvX3VyaW5nIGZyb20gdGhlIDMyLWJpdCBzeXNjYWxsIGxpc3QuDQo+
-ID4gPiBJZiB5b3UncmUgYSAzMi1iaXQgcHJvY2VzcywgeW91IGRvbid0IGdldCB0byB1c2UgaW9f
-dXJpbmcuICBXb3VsZA0KPiA+ID4gYW55IHJlYWwgdXNlcnMgYWN0dWFsbHkgY2FyZSBhYm91dCB0
-aGF0Pw0KPiA+DQo+ID4gV2UgY291bGQgZ28gb25lIHN0ZXAgZmFydGhlciBhbmQgZGVjbGFyZSB0
-aGF0IHdlJ3JlIGRvbmUgYWRkaW5nICphbnkqDQo+ID4gbmV3IGNvbXBhdCBzeXNjYWxscyA6KQ0K
-PiANCj4gV291bGQgeW91IGFsc28gc3RvcCBhZGRpbmcgc3lzdGVtIGNhbGxzIHRvIG5hdGl2ZSAz
-Mi1iaXQgc3lzdGVtcyB0aGVuPw0KPiANCj4gT24gbWVtb3J5IGNvbnN0cmFpbmVkIHN5c3RlbXMg
-KGxlc3MgdGhhbiAyR0IgYS50Lm0uKSwgdGhlcmUgaXMgc3RpbGwgYQ0KPiBzdHJvbmcgZGVtYW5k
-IGZvciBydW5uaW5nIDMyLWJpdCB1c2VyIHNwYWNlLCBidXQgYWxsIG9mIHRoZSByZWNlbnQgQXJt
-DQo+IGNvcmVzIChhZnRlciBDb3J0ZXgtQTU1KSBkcm9wcGVkIHRoZSBhYmlsaXR5IHRvIHJ1biAz
-Mi1iaXQga2VybmVscywgc28NCj4gdGhhdCBjb21wYXQgbW9kZSBtYXkgZXZlbnR1YWxseSBiZWNv
-bWUgdGhlIHByaW1hcnkgd2F5IHRvIHJ1bg0KPiBMaW51eCBvbiBjaGVhcCBlbWJlZGRlZCBzeXN0
-ZW1zLg0KPiANCj4gSSBkb24ndCB0aGluayB0aGVyZSBpcyBhbnkgY2hhbmNlIHdlIGNhbiByZWFs
-aXN0aWNhbGx5IHRha2UgYXdheSBpb191cmluZw0KPiBmcm9tIHRoZSAzMi1iaXQgQUJJIGFueSBt
-b3JlIG5vdy4NCg0KQ2FuJ3QgaXQganVzdCBydW4gcmVxdWVzdHMgZnJvbSAzMmJpdCBhcHBzIGlu
-IGEga2VybmVsIHRocmVhZCB0aGF0IGhhcw0KdGhlICdpbl9jb21wYXRfc3lzY2FsbCcgZmxhZyBz
-ZXQ/DQpOb3QgdGhhdCBpIHJlY2FsbCBzZWVpbmcgdGhlIGNvZGUgd2hlcmUgaXQgc2F2ZXMgdGhl
-ICdjb21wYXQnIG5hdHVyZQ0Kb2YgYW55IHJlcXVlc3RzLg0KDQpJdCBpcyBhbHJlYWR5IGNvbXBs
-ZXRlbHkgZipja2VkIGlmIHlvdSB0cnkgdG8gcGFzcyB0aGUgY29tbWFuZCByaW5nDQp0byBhIGNo
-aWxkIHByb2Nlc3MgLSBpdCB1c2VzIHRoZSB3cm9uZyAnbW0nLg0KSSBzdXNwZWN0IHRoZXJlIGFy
-ZSBzb21lIHJlYWxseSBob3JyaWQgc2VjdXJpdHkgaG9sZXMgaW4gdGhhdCBhcmVhLg0KDQoJRGF2
-aWQuDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
-dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
-Mzg2IChXYWxlcykNCg==
+ Dear Friend,
 
+  I am glad to know you, but God knows you better and he knows why he
+has directed me to you at this point in time so do not be surprised at
+all. My name is Mrs. Donna Louise McInnes, a widow, i have been
+suffering from ovarian cancer disease. At this moment i am about to
+end the race like this because the illness has gotten to a very bad
+stage, without any family members and no child. I hope that you will
+not expose or betray this trust and confidence that I am about to
+entrust to you for the mutual benefit of the orphans and the less
+privileged ones. I have some funds I inherited from my late husband,
+the sum of ($11.000.000 Eleven million dollars.) deposited in the
+Bank.  Having known my present health status, I decided to entrust
+this fund to you believing that you will utilize it the way i am going
+to instruct herein.
+
+Therefore I need you to assist me and reclaim this money and use it
+for Charity works, for orphanages and giving justice and help to the
+poor, needy and to promote the words of God and the effort that the
+house of God will be maintained says The Lord." Jeremiah 22:15-16.=E2=80=9C
+
+It will be my great pleasure to compensate you with 35 % percent of
+the total money for your personal use, 5 % percent for any expenses
+that may occur during the international transfer process while 60% of
+the money will go to the charity project.
+
+All I require from you is sincerity and the ability to complete God's
+task without any failure. It will be my pleasure to see that the bank
+has finally released and transferred the fund into your bank account
+therein your country even before I die here in the hospital, because
+of my present health status everything needs to be processed rapidly
+as soon as possible. I am waiting for your immediate reply, if only
+you are interested for further details of the transaction and
+execution of this charitable project.
+
+Best Regards your friend Mrs.
+Donna Louise McInnes.
