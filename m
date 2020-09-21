@@ -2,161 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 000DA27325F
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Sep 2020 21:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9162E27326E
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Sep 2020 21:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbgIUTEj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Sep 2020 15:04:39 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:41738 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727593AbgIUTEj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Sep 2020 15:04:39 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08LIJOS9071634;
-        Mon, 21 Sep 2020 18:23:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=caI1ONMrsb/w+dsM1jY2IAtogW1OeaMvXH799kffeOw=;
- b=YGr9asXYdunAw06scws1xGGnDBEEDkqsablQdoLEFfPdn6ikDXFuoHvoCYgEw/csuSxr
- 8qlN4GAvBdDXZEYDLkMyaoJ55IvgfaetYGmCtmzjgsZ6TM02HzgMNd1sJgp35vZTfbtO
- pB36LJpF0OIlDWMQAnja/KBSSfSHF0hQKs+wqn2FLel7RjSPB6OyYHesn1toHu+h1oxq
- TLh429cOnqxOvxr9SOwJCCwohCovoAhG900pOcBB6uYnhZzFVd5AQAzhVHIKodpqpHb0
- PyIydORLu/y27t2cshBf9/VFpQ+ltB244QhKI313hiNuYYRHFMQKUOsEyniTYE9mnXI9 Rw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 33n7gaa8af-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Sep 2020 18:23:26 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08LIKKOj063392;
-        Mon, 21 Sep 2020 18:23:25 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 33nurr97c9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Sep 2020 18:23:25 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08LINOeG018026;
-        Mon, 21 Sep 2020 18:23:24 GMT
-Received: from ol2.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 21 Sep 2020 11:23:24 -0700
-From:   Mike Christie <michael.christie@oracle.com>
-To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        pbonzini@redhat.com, stefanha@redhat.com,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH 7/8] vhost: remove work arg from vhost_work_flush
-Date:   Mon, 21 Sep 2020 13:23:07 -0500
-Message-Id: <1600712588-9514-8-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1600712588-9514-1-git-send-email-michael.christie@oracle.com>
-References: <1600712588-9514-1-git-send-email-michael.christie@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9751 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- phishscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009210131
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9751 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 bulkscore=0
- mlxscore=0 suspectscore=0 impostorscore=0 malwarescore=0 spamscore=0
- phishscore=0 mlxlogscore=999 clxscore=1015 adultscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009210131
+        id S1727840AbgIUTGa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Sep 2020 15:06:30 -0400
+Received: from sonic303-3.consmr.mail.bf2.yahoo.com ([74.6.131.42]:35618 "EHLO
+        sonic303-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727731AbgIUTGa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 21 Sep 2020 15:06:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1600715189; bh=WUESKagEm1rdmKBSWVtDCW1cpdCKHA0ui3YTmWJbjYQ=; h=Date:From:Reply-To:Subject:References:From:Subject; b=DNtm5GHMJdVgZ/PeoMoakFubxeWj3C3P3WlRa2Va46CYf+oHuT7DM+okYZOUsi61Ce4pbNJA78kS4JBLj0XVQlwm/LvaZrA2heuw7z9GnKSyAAclh8cLY+zN6KB8QWbG/kkV2yxDNwtnm49PqDyE+T68NOdL61y6Do1O9pERiHv2xZTVi/FUhsPWArBvh3+O8RfeOgxM6t47u9cnICcfFN+R3J/dk+XEiPcypdUl5PMA0m4BWkXQ26xZAdUCuZ1QdzlcgPBgwEjPlQmStfsTovUDUcLr5tnNxJHSaNi1dSXcq4YqJCUXOI4aE1ZPQJADmjmQh/xtRfwQQUIJJ2feZA==
+X-YMail-OSG: iwaZEBYVM1laMv6DvjiBqoCzpDVJF4CjzpVnwMO1h8a60GBAzl8n6aIctwFLwmO
+ fTULge2gDCkhhQF1G9f47rwnemyygk22EeMSDgFVGOjTLHsmCV15oNlsqNMfhmUwxecuGptXA99P
+ jFtyc1oa7Pr2foAWaWTdct3KH95ibVvNG.YvqhdF5s2YSVf2hP8v9kzc2UVsrxvjWqd8nb7C3DBU
+ HO1QC3crBKmwogcKzBJQzDynRM9aAP3NnYqv4l4XRoMkDV_tPdE6sJYpP7CKOdaHEshDvkCuv0et
+ bAYmN6CqTTAqPHPt7TK3vSm47BZSnRIj9UNNaeVo5ZytY.JAGAiQEJJOGxLywKFwUhwAwpdpEVgT
+ PFd0xlqtlYIFks4Ag_DD77V3dwCwpnJ9_hahcT3K3ckGFwIGbuPkbGPNq.rGkmOe95QaN2KDHet0
+ JW9XKkrageeFK.5ogpXrsxqdb4OOvCvusMq7Vxdboz2H09r_HydNSyx72nI_tvTRXy5RwP8jW4eF
+ As3V7xffmg61WBa2TLhRFA37quqDiQT72j4z_oKKvQndMDVVi_lCHwaGSomkJSMfoBrJIPvtuZmz
+ VOTS7TYYtQfH0WIjpsPl05D6uJhDyzUAAV6MJNZ31qe.nqeUlWfFLhtuNJ_XgPzFNla6eCwtupQI
+ z0Uy74rT_koVlhE1aJLVvkqB2T8B_KS0pPPEhm1wxkKgiV2_7_6vGevhA7EoheQHRb2FJZnWm9Ow
+ I7CTSH3W77EGn5J0zRBQdABwa3geLjgUvK6dIm0Z4PSquHz1S9LQt09J7A6fZFK4QgjFJN1.pV96
+ 0A_ROnqaXdn3Ju5zJQ0RQnVJd1_uUg_s_TxJDO1msXDQueUWUy8OrJJ72o9tDTQQMV3a3ZelAIzm
+ GRLR0Gf72njYNtliHaTHYIAel.bif2OyafnV_O4qLGDeSVajGqTk5W7u3Se8TxMEQiZ3fHRkVERq
+ KWRi7LMOQB876_RHmdjJwxdP2vMaJ.sRh_NwqtCx4cugppp2JEypU2wLIAKJVmBtQrKa7X_cDoEw
+ _rcMGxG7ky_J4OL4ZtPmcli7JpsVe7WAbK.FsJOTmaWsICn409v_T.XXrFDqhxXEli_k0Ef.Uc1v
+ hY829bGJyq15oHTx.P1f9OCusXhkGGqDvuUal35o9mogyPGPeFyScEIJ.JmxHe9cKQtE8JvHp0vv
+ FwNwo_6u30Vg94VvYDhaiQRBiewApTsd7CLd3N4c801ZxbWRhH8b1bbl5L_N.JQZwX33dUz6mzQQ
+ aZFCqI6ydOcI.7DMqvOQnsEgdztI5B.sF3OQ_lhrkYfwK.Fem6gQ9icNmjrMshwgzF7dxFcdC794
+ zw_moRHQraMoDDSlrr1W.MMIRvs2oWgHBFAFRfXkTxelbzan74s2xwdzoNqXoiglp1zpYVrzahGB
+ uQtWjljFH8k5a3p47GQVAJs4J4XRYQWBKq6SLtimnuBvJbSjDNFKzetJVE3pD
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Mon, 21 Sep 2020 19:06:29 +0000
+Date:   Mon, 21 Sep 2020 19:06:25 +0000 (UTC)
+From:   Aisha Al-Qaddafi <gaddafiayesha532@gmail.com>
+Reply-To: gaddafiayesha532@gmail.com
+Message-ID: <803192571.4469086.1600715185685@mail.yahoo.com>
+Subject: Dear I Need An Investment Partner
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <803192571.4469086.1600715185685.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16583 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:80.0) Gecko/20100101 Firefox/80.0
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-vhost_work_flush doesn't do anything with the work arg. This patch drops
-it and then renames vhost_work_flush to vhost_work_dev_flush to reflect
-that the function flushes all the works in the dev and not just a
-specific queue or work item.
+Dear I Need An Investment Partner
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/vhost/scsi.c  | 4 ++--
- drivers/vhost/vhost.c | 8 ++++----
- drivers/vhost/vhost.h | 2 +-
- drivers/vhost/vsock.c | 2 +-
- 4 files changed, 8 insertions(+), 8 deletions(-)
+Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh
 
-diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-index 8791db8..5833059 100644
---- a/drivers/vhost/scsi.c
-+++ b/drivers/vhost/scsi.c
-@@ -1469,8 +1469,8 @@ static void vhost_scsi_flush(struct vhost_scsi *vs)
- 	/* Flush both the vhost poll and vhost work */
- 	for (i = 0; i < VHOST_SCSI_MAX_VQ; i++)
- 		vhost_scsi_flush_vq(vs, i);
--	vhost_work_flush(&vs->dev, &vs->vs_completion_work);
--	vhost_work_flush(&vs->dev, &vs->vs_event_work);
-+	vhost_work_dev_flush(&vs->dev);
-+	vhost_work_dev_flush(&vs->dev);
- 
- 	/* Wait for all reqs issued before the flush to be finished */
- 	for (i = 0; i < VHOST_SCSI_MAX_VQ; i++)
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 5dd9eb1..f83674e 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -231,7 +231,7 @@ void vhost_poll_stop(struct vhost_poll *poll)
- }
- EXPORT_SYMBOL_GPL(vhost_poll_stop);
- 
--void vhost_work_flush(struct vhost_dev *dev, struct vhost_work *work)
-+void vhost_work_dev_flush(struct vhost_dev *dev)
- {
- 	struct vhost_flush_struct flush;
- 
-@@ -243,13 +243,13 @@ void vhost_work_flush(struct vhost_dev *dev, struct vhost_work *work)
- 		wait_for_completion(&flush.wait_event);
- 	}
- }
--EXPORT_SYMBOL_GPL(vhost_work_flush);
-+EXPORT_SYMBOL_GPL(vhost_work_dev_flush);
- 
- /* Flush any work that has been scheduled. When calling this, don't hold any
-  * locks that are also used by the callback. */
- void vhost_poll_flush(struct vhost_poll *poll)
- {
--	vhost_work_flush(poll->dev, &poll->work);
-+	vhost_work_dev_flush(poll->dev);
- }
- EXPORT_SYMBOL_GPL(vhost_poll_flush);
- 
-@@ -542,7 +542,7 @@ static int vhost_attach_cgroups(struct vhost_dev *dev)
- 	attach.owner = current;
- 	vhost_work_init(&attach.work, vhost_attach_cgroups_work);
- 	vhost_work_queue(dev, &attach.work);
--	vhost_work_flush(dev, &attach.work);
-+	vhost_work_dev_flush(dev);
- 	return attach.ret;
- }
- 
-diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-index 3d30b3d..b91efb5 100644
---- a/drivers/vhost/vhost.h
-+++ b/drivers/vhost/vhost.h
-@@ -46,7 +46,7 @@ void vhost_poll_init(struct vhost_poll *poll, vhost_work_fn_t fn,
- void vhost_poll_stop(struct vhost_poll *poll);
- void vhost_poll_flush(struct vhost_poll *poll);
- void vhost_poll_queue(struct vhost_poll *poll);
--void vhost_work_flush(struct vhost_dev *dev, struct vhost_work *work);
-+void vhost_work_dev_flush(struct vhost_dev *dev);
- long vhost_vring_ioctl(struct vhost_dev *d, unsigned int ioctl, void __user *argp);
- 
- struct vhost_log {
-diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-index a483cec..f40205f 100644
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@ -652,7 +652,7 @@ static void vhost_vsock_flush(struct vhost_vsock *vsock)
- 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++)
- 		if (vsock->vqs[i].handle_kick)
- 			vhost_poll_flush(&vsock->vqs[i].poll);
--	vhost_work_flush(&vsock->dev, &vsock->send_pkt_work);
-+	vhost_work_dev_flush(&vsock->dev);
- }
- 
- static void vhost_vsock_reset_orphans(struct sock *sk)
--- 
-1.8.3.1
+Dear Friend,
 
+I came across your email contact prior to a private search while in need  of your assistance. I am Aisha Al-Qaddafi, the only biological Daughter of  Former President of Libya Col. Muammar Al-Qaddafi. Am a single Mother and a Widow with three Children.
+
+I have investment funds worth Twenty Seven Million Five Hundred Thousand United State Dollar ($27.500.000.00 ) and i need a trusted investment Manager/Partner because of my current refugee status, however, I am interested in you for investment project assistance in your country, may be from there, we can build business relationship in the nearest future.
+
+I am willing to negotiate an investment/business profit sharing ratio with you based on the future investment earning profits. If you are willing to handle this project on my behalf kindly reply urgently to enable me to provide you more information about the investment funds.
+
+Your Urgent Reply Will Be Appreciated
+
+Best Regards
+Mrs Aisha Al-Qaddafi
