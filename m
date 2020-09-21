@@ -2,74 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78116271CEC
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Sep 2020 10:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3032721EF
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Sep 2020 13:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgIUIDD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Sep 2020 04:03:03 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13744 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726934AbgIUICm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 21 Sep 2020 04:02:42 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id EAC8F36642FD99D8F596;
-        Mon, 21 Sep 2020 16:02:39 +0800 (CST)
-Received: from huawei.com (10.175.113.32) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Mon, 21 Sep 2020
- 16:02:30 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Karan Tilak Kumar <kartilak@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH -next] snic: simplify the return expression of svnic_cq_alloc
-Date:   Mon, 21 Sep 2020 16:24:55 +0800
-Message-ID: <20200921082455.2592190-1-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726720AbgIULL2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 21 Sep 2020 07:11:28 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:26581 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726701AbgIULL1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 21 Sep 2020 07:11:27 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-233-9UYq0ao9O6ejB4ujVxtO9g-1; Mon, 21 Sep 2020 12:11:22 +0100
+X-MC-Unique: 9UYq0ao9O6ejB4ujVxtO9g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 21 Sep 2020 12:11:21 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 21 Sep 2020 12:11:21 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>
+CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: let import_iovec deal with compat_iovecs as well
+Thread-Topic: let import_iovec deal with compat_iovecs as well
+Thread-Index: AQHWjbnKEn35LxofhEeT1lmdzdUiWqlwBNiwgAJx3YCAAH2K4A==
+Date:   Mon, 21 Sep 2020 11:11:21 +0000
+Message-ID: <ac8a3691c4f5442f908c51298260ca0e@AcuMS.aculab.com>
+References: <20200918124533.3487701-1-hch@lst.de>
+ <2c7bf42ee4314484ae0177280cd8f5f3@AcuMS.aculab.com>
+ <20200921044125.GA16522@lst.de>
+In-Reply-To: <20200921044125.GA16522@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-CFilter-Loop: Reflected
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Simplify the return expression.
+> On Sat, Sep 19, 2020 at 02:24:10PM +0000, David Laight wrote:
+> > I thought about that change while writing my import_iovec() => iovec_import()
+> > patch - and thought that the io_uring code would (as usual) cause grief.
+> >
+> > Christoph - did you see those patches?
 
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
----
- drivers/scsi/snic/vnic_cq.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Link to cover email.
 
-diff --git a/drivers/scsi/snic/vnic_cq.c b/drivers/scsi/snic/vnic_cq.c
-index 4c8e64e4fba6..3455dd7e73f4 100644
---- a/drivers/scsi/snic/vnic_cq.c
-+++ b/drivers/scsi/snic/vnic_cq.c
-@@ -31,8 +31,6 @@ void svnic_cq_free(struct vnic_cq *cq)
- int svnic_cq_alloc(struct vnic_dev *vdev, struct vnic_cq *cq,
- 	unsigned int index, unsigned int desc_count, unsigned int desc_size)
- {
--	int err;
+https://lkml.org/lkml/2020/9/15/661
+
 -
- 	cq->index = index;
- 	cq->vdev = vdev;
- 
-@@ -43,11 +41,7 @@ int svnic_cq_alloc(struct vnic_dev *vdev, struct vnic_cq *cq,
- 		return -EINVAL;
- 	}
- 
--	err = svnic_dev_alloc_desc_ring(vdev, &cq->ring, desc_count, desc_size);
--	if (err)
--		return err;
--
--	return 0;
-+	return svnic_dev_alloc_desc_ring(vdev, &cq->ring, desc_count, desc_size);
- }
- 
- void svnic_cq_init(struct vnic_cq *cq, unsigned int flow_control_enable,
--- 
-2.25.1
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
