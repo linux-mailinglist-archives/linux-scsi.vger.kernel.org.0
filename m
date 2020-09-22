@@ -2,112 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7565E273F31
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Sep 2020 12:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E03273FA9
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Sep 2020 12:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbgIVKFm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Sep 2020 06:05:42 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64822 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726341AbgIVKFm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 22 Sep 2020 06:05:42 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08MA3Uvs023543;
-        Tue, 22 Sep 2020 06:05:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to : sender; s=pp1;
- bh=tDnVg5R8NbDuTgFyY82/UmIpQB8FASy8rzMuZwSzmcM=;
- b=U8/jxPZQevcnuxfMNtfV8HVIPb9piqqr6PozbvJ7VfSdSEylflFgRIKOegdgZS0MEyAe
- vb7uen++dphsbQ43WCXf6z/MRNYHQ1LnmILGZOBLS43oSlbZQE/5KSl8liPSaQmBntKn
- BOZaUQAAbHd8OHIguymFD0ZKxQGVlk0sRYpHE5hfQ9WCyRs6iwGF72bFfP1oN/fYyU/d
- tGTx7yIXUrF8DGDBEfOktSZt9I9ILdVXuuYule2sXaWomAe6RZHjOSGOzYBC0aWBTBgD
- WCFvijJFvBR4ZnpoMzmSzsi8EB1UkTglDzOx1j+bew2MP3FXgrSGE1A/Lm251mJYW7Z6 eg== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33qdcytxtg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Sep 2020 06:05:38 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08MA3vOX003630;
-        Tue, 22 Sep 2020 10:05:36 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma01fra.de.ibm.com with ESMTP id 33n9m7sh1a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Sep 2020 10:05:35 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08MA5VNV30409162
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Sep 2020 10:05:31 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E7C324C05A;
-        Tue, 22 Sep 2020 10:05:32 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D27C64C050;
-        Tue, 22 Sep 2020 10:05:32 +0000 (GMT)
-Received: from t480-pf1aa2c2 (unknown [9.145.36.123])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 22 Sep 2020 10:05:32 +0000 (GMT)
-Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
-        (envelope-from <bblock@linux.ibm.com>)
-        id 1kKfAx-0002Jg-Kk; Tue, 22 Sep 2020 12:05:31 +0200
-Date:   Tue, 22 Sep 2020 12:05:31 +0200
-From:   Benjamin Block <bblock@linux.ibm.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Steffen Maier <maier@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Fedor Loshakov <loshakov@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH 0/2] zfcp: small changes for 5.10
-Message-ID: <20200922100531.GA6903@t480-pf1aa2c2>
-References: <cover.1599765652.git.bblock@linux.ibm.com>
- <160074695008.411.13328105917017372358.b4-ty@oracle.com>
+        id S1726550AbgIVKcX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Sep 2020 06:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726548AbgIVKcW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Sep 2020 06:32:22 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A9DC0613D2
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Sep 2020 03:32:21 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id nw23so22050634ejb.4
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Sep 2020 03:32:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=41PFzorI7KjlIpN6t+AQVQaq25K5gHYDK+l6OJfGm54=;
+        b=EeURDW0wrvGIn158BXPUNRRItgPcFtL72PxcUA5ZxJetaPxRYmKzlW0yeevS5dimwd
+         kmoE4tkfmFo9F8NZummFVQMScCeJ8Lm8Zu9NOsmbYLsoT5kvl+VvMpFYwDY/IsAUfE2m
+         fWdNKlXwz0wQhAOCm4YJJyq7IuRs8ZvEyzNHnPvqj8MIFa9udUU7YiCYgt2SzCRBYzzC
+         vm8AgJ5NdXiOi91J1rR8YugcG5H6VspptPLsXPt7BLbCPB4sOFfrEhYo4aVMcaAM2Mgk
+         9niiRBZaUTSl5T3lP+L9ESowTBYnmXJQ3QrIrmiMzZrqigXo15ceTvGNaRXg0ae/pO3B
+         5c8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=41PFzorI7KjlIpN6t+AQVQaq25K5gHYDK+l6OJfGm54=;
+        b=uSTKrpvFCFgGn5oMrYqO+mmyJ51bDg0zPPyA4eTk5ciDn4PJGIrpXnKmLvQ8++cRf9
+         Oag8ntFOowKw0+0IwXyh6dtyF6pNCSc5sxT9bxFV8Dv5vLmoe7ZHW8GltJAHnX6CfBxx
+         roXfr5g5ImDuj9fpF5rbb/N1jiqPeNuA+3oY/3pKgFaFMXPs3zGspo8/g7g3nub+w7M5
+         pbcnI00JVR/AeGWXrSnsC9ESUZI7ywkcFqgZvOObKMXpAZEVZZOOKVFW2kxzo3NHOPUB
+         SJqjM/YHvj+EG6UlsA6mruWxmDmSzX9dDVhxGbRsUS3WDPfX5Yn6dB44rXS0Remgl4jS
+         H1Eg==
+X-Gm-Message-State: AOAM531un4B+HsDaCXzSYfWObLJ4mES7SUu5JR4JxYy06mC89Qc9YLAc
+        9txpoe7FMhaIEQP1jswx9Yke8D15B4stp1ckV+A=
+X-Google-Smtp-Source: ABdhPJzT/G2iG24G57Y/BOCFmGmz1iR6qLMNSg9A+6Q83sd+opO8L8bEqCir2aCumDmRerZTGirmRS6fB/Aiqvm4N9g=
+X-Received: by 2002:a17:906:4a53:: with SMTP id a19mr4389329ejv.56.1600770739858;
+ Tue, 22 Sep 2020 03:32:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <160074695008.411.13328105917017372358.b4-ty@oracle.com>
-Sender: Benjamin Block <bblock@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-22_06:2020-09-21,2020-09-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0 clxscore=1015
- impostorscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009220082
+Received: by 2002:ab4:9884:0:0:0:0:0 with HTTP; Tue, 22 Sep 2020 03:32:19
+ -0700 (PDT)
+Reply-To: m.herman56@yahoo.com
+From:   United Nations Compensation <vsent24@gmail.com>
+Date:   Tue, 22 Sep 2020 11:32:19 +0100
+Message-ID: <CAA8WvLdQutKKJ0ZySSFw-ktxykHt8TCEUNsc00Mpxa+LyV+cbA@mail.gmail.com>
+Subject: RELEASE OF YOUR PAYMENT !
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 11:56:45PM -0400, Martin K. Petersen wrote:
-> On Thu, 10 Sep 2020 21:49:14 +0200, Benjamin Block wrote:
-> 
-> > here are some small changes for zfcp I'd like to include in 5.10 if
-> > possible. They apply cleanly on Martin's `scsi-queue`, and James' `misc`
-> > branches.
-> > 
-> > Both patches make the driver a bit cleaner, and hopefully easier to
-> > maintain.
-> > 
-> > [...]
-> 
-> Applied to 5.10/scsi-queue, thanks!
-> 
-> [1/2] scsi: zfcp: Use list_first_entry_or_null() in zfcp_erp_thread()
->       https://git.kernel.org/mkp/scsi/c/addf13729615
-> [2/2] scsi: zfcp: Clarify access to erp_action in zfcp_fsf_req_complete()
->       https://git.kernel.org/mkp/scsi/c/d251193d1732
-> 
+United Nations Human Settlement and Compensation Programme,
+Capacity Building and Improving the Performance of Humanitarian self support.
 
-Thanks Martin!
 
--- 
-Best Regards, Benjamin Block  / Linux on IBM Z Kernel Development / IBM Systems
-IBM Deutschland Research & Development GmbH    /    https://www.ibm.com/privacy
-Vorsitz. AufsR.: Gregor Pillen         /        Geschäftsführung: Dirk Wittkopp
-Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
+Attention Beneficiary
+
+We wish to notify you about the release of your outstanding payment
+which is truly $2.500,000.00 Million Dollars, The United Nation
+Secretary General scheduled a time frame to settle all foreign debts
+which includes
+
+Humanitarian self support donation, Contract/Inheritance/Lottery
+(Sponsored by Microsoft and Shell Petroleum Lottery) and other
+international loans, Your Name was among the people to receive
+$2.500,000.00 Million Dollars Compensation winning award by United
+Nations,
+
+We have successfully Converted this total amount into an ATM-Card in
+your name, And it has been approved and deposited to ADL-Express this
+morning for registration, and we agreed that, the delivery of your
+$2.500,000.00 Million USD ATM-Card Package will take off tomorrow
+morning,
+
+The information of the ADL-Express Delivery Company is below
+Contact Name Dr. Patrick Mupenda
+From ADL-Express Delivery Company
+Email: adl.excco@protonmail.com
+Email: adlexpressco@yahoo.com
+Tel: +229-610-820-11
+Tel: +229-985-679-87
+
+You will contact with your full info where your ATM-card will be delivered to
+
+(1) Full Name:..........
+(2) Mobile Number:.............
+(3) Country of origin:......................
+(4) Your Current delivery address:................
+(5) YOUR Identification Card/Driver's License:..............................
+
+Urgent get back to us today with your full address where your ATM-Card
+will be delivered to you because I will not be in the office next
+week;
+The amount in your ATM-Card is US$ 2.500, 000.00 Million and your Pin
+code is-(8116)
+
+Best Regards,
+Mr. Douglas Herman
+United Nation Head Quarter Dept Reconciliation Committee
+Benin Republic
