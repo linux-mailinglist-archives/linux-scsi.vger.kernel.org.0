@@ -2,101 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E7A27397C
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Sep 2020 05:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819F727396E
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Sep 2020 05:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728864AbgIVD5j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Sep 2020 23:57:39 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:60736 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728529AbgIVD5i (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Sep 2020 23:57:38 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08M3mvAY040814;
-        Tue, 22 Sep 2020 03:57:20 GMT
+        id S1728512AbgIVD5U (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Sep 2020 23:57:20 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:48336 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728413AbgIVD5T (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Sep 2020 23:57:19 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08M3nQ3j077430;
+        Tue, 22 Sep 2020 03:57:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=qGpc/nOeTwQgziFXzHeIbnzOAyU/Cr2/SdYgF0XLfJc=;
- b=0gJbn5W4dsMq4S4s/MZ4LMh5jXqpJI1fpMw/YeIHv2zAo2TIVrFmmyTZFuTe0Alfivsj
- Ov8wywJPy/OBQVqbIReV5p0BcTz5GCeD5iaIQl3RFPLQ0gQtuKnQvzgSxEEJO3gwHlW/
- aqjf5SFmxsQc2zp6KckFxyTIb5RpAtJHsh5uOKbdW4X5VcwdQMSioYNJSTPunUx+CRY5
- XZ6kDMDi52WMnaQaNIPUnHHnIAbEJFgK9c2VHKJABjQhc9zbFC8laCcQAVXfvQbdNUsH
- 8kM0FoE3n7lLLWoliPoeHGfASw/HWgfXAIPeV0E1BPtl92NKqza1q0Q6OaD9YJoyP7/N xA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 33ndnuagnd-1
+ bh=BOeJpepI4s3LsvoeUB3ZfcZusxYYuPdpsSR2ZKORuC4=;
+ b=m5GsWMwv6TJmigfyZGeJVq1fMfu66re4LyzuVcUtQH3kzVeGrOPVcp2W+DeTv0k5zg+Z
+ VJNk+/CM89t4WxKdx5fXqO4h29Ln90vWN6yRmxRzn/WTk/tgZZXRRzj3mGygZG+hUn+c
+ A5lj81lgksfvLQg5LDxNHLHzl9Vay5/FC9yKtJVs2DjmRCoNQUYpUGy543WsWI4RFyGc
+ ghQlcG8AoHs+l4gd32ybqDFw4PijimTygesM//wMxiu29/8uVWhFVV8UG0rQ7lAWJloK
+ nymI50/vhUYFkvMOek51P3LT/UvqQo6VJ15Bi/Nne3d6sUF6En3yodjz22IN3Av2NZzY zw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33q5rg8t6r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Sep 2020 03:57:20 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08M3tsKq017547;
-        Tue, 22 Sep 2020 03:57:19 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 33nuw2pkdr-1
+        Tue, 22 Sep 2020 03:57:18 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08M3tLHG020816;
+        Tue, 22 Sep 2020 03:57:18 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33nuwxk72c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Sep 2020 03:57:19 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08M3vGo4012110;
-        Tue, 22 Sep 2020 03:57:16 GMT
+        Tue, 22 Sep 2020 03:57:17 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08M3vH1g032465;
+        Tue, 22 Sep 2020 03:57:17 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 21 Sep 2020 20:57:15 -0700
+        with ESMTP ; Mon, 21 Sep 2020 20:57:16 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] scsi: ufs: Fix NOP OUT timeout value
-Date:   Mon, 21 Sep 2020 23:56:47 -0400
-Message-Id: <160074695009.411.9916497400383722372.b4-ty@oracle.com>
+To:     linux-scsi@vger.kernel.org, Damien Le Moal <damien.lemoal@wdc.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v2 0/3] Improve error handling
+Date:   Mon, 21 Sep 2020 23:56:48 -0400
+Message-Id: <160074695010.411.930812991107872093.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <231786897.01599016081767.JavaMail.epsvc@epcpadp2>
-References: <CGME20200902025852epcms2p2a2d4ac934f4fc09233d4272c96df9ff1@epcms2p2> <231786897.01599016081767.JavaMail.epsvc@epcpadp2>
+In-Reply-To: <20200910074843.217661-1-damien.lemoal@wdc.com>
+References: <20200910074843.217661-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9751 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
- mlxscore=0 suspectscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=819 phishscore=0 suspectscore=0 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2009220031
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9751 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0 bulkscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009220030
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 impostorscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=834 adultscore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009220030
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 02 Sep 2020 11:58:52 +0900, Daejun Park wrote:
+On Thu, 10 Sep 2020 16:48:40 +0900, Damien Le Moal wrote:
 
-> In some Samsung UFS devices, there is some booting fail issue with
-> low-power UFS device. The reason of this issue is the UFS device has a
-> little bit longer latency for NOP OUT response. It causes booting fail
-> because NOP OUT command is issued during initialization to check whether
-> the device transport protocol is ready or not. This issue is resolved by
-> releasing NOP_OUT_TIMEOUT value.
+> A small series to improve command error hadling.
+> 
+> The first patch is a simple code cleanup. The second patch updates
+> asc/ascq sense codes list. Finally, the third patch adds zone resource
+> errors handling for zoned block deives to return BLK_STS_DEV_RESOURCE,
+> similarly to what the NVMe driver does for ZNS devices.
 > 
 > [...]
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Fix NOP OUT timeout value
-      https://git.kernel.org/mkp/scsi/c/782e2efb749f
+[1/3] scsi: core: Clean up scsi_noretry_cmd()
+      https://git.kernel.org/mkp/scsi/c/342c81eeaaf0
+[2/3] scsi: core: Update additional sense codes list
+      https://git.kernel.org/mkp/scsi/c/46c9d608f989
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
