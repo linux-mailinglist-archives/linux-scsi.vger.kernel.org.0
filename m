@@ -2,57 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EA1275A91
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 16:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654DA275A1B
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 16:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726629AbgIWOq0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Sep 2020 10:46:26 -0400
-Received: from srvmail.sousaecouto.com.br ([189.84.240.98]:52462 "EHLO
-        srvmail.sousaecouto.com.br" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726332AbgIWOq0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 23 Sep 2020 10:46:26 -0400
-X-Greylist: delayed 3422 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 10:46:24 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by srvmail.sousaecouto.com.br (Postfix) with ESMTP id 0452E18E266D;
-        Wed, 23 Sep 2020 10:35:13 -0300 (-03)
-Received: from srvmail.sousaecouto.com.br ([127.0.0.1])
-        by localhost (srvmail.sousaecouto.com.br [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RQmPZ9Gxqhex; Wed, 23 Sep 2020 10:35:11 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by srvmail.sousaecouto.com.br (Postfix) with ESMTP id 80A9818E1E30;
-        Wed, 23 Sep 2020 10:35:11 -0300 (-03)
-X-Virus-Scanned: amavisd-new at sousaecouto.com.br
-Received: from srvmail.sousaecouto.com.br ([127.0.0.1])
-        by localhost (srvmail.sousaecouto.com.br [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id n0yycJ-rpFPP; Wed, 23 Sep 2020 10:35:11 -0300 (-03)
-Received: from User (unknown [154.70.153.210])
-        by srvmail.sousaecouto.com.br (Postfix) with ESMTPA id 4152418E28F5;
-        Wed, 23 Sep 2020 10:34:44 -0300 (-03)
-Reply-To: <hkbannkcomm1@gmail.com>
-From:   "Philip Li Wong" <plw@hk.bankcomm.com>
-Subject: Business Relationship
-Date:   Wed, 23 Sep 2020 14:33:44 +0100
+        id S1726746AbgIWOc5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Sep 2020 10:32:57 -0400
+Received: from verein.lst.de ([213.95.11.211]:48690 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726587AbgIWOc4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 23 Sep 2020 10:32:56 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0E0AE6736F; Wed, 23 Sep 2020 16:32:52 +0200 (CEST)
+Date:   Wed, 23 Sep 2020 16:32:51 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-aio@kvack.org, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 5/9] fs: remove various compat readv/writev helpers
+Message-ID: <20200923143251.GA14062@lst.de>
+References: <20200923060547.16903-1-hch@lst.de> <20200923060547.16903-6-hch@lst.de> <20200923142549.GK3421308@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20200923133445.4152418E28F5@srvmail.sousaecouto.com.br>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200923142549.GK3421308@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Glad to write to you. I avail myself of this opportunity to approach you for an establishment of a business relationship with you. I got your contact through LinkedIn and would like to discuss more with you about this opportunity. 
+On Wed, Sep 23, 2020 at 03:25:49PM +0100, Al Viro wrote:
+> On Wed, Sep 23, 2020 at 08:05:43AM +0200, Christoph Hellwig wrote:
+> >  COMPAT_SYSCALL_DEFINE3(readv, compat_ulong_t, fd,
+> > -		const struct compat_iovec __user *,vec,
+> > +		const struct iovec __user *, vec,
+> 
+> Um...  Will it even compile?
+> 
+> >  #ifdef __ARCH_WANT_COMPAT_SYS_PREADV64
+> >  COMPAT_SYSCALL_DEFINE4(preadv64, unsigned long, fd,
+> > -		const struct compat_iovec __user *,vec,
+> > +		const struct iovec __user *, vec,
+> 
+> Ditto.  Look into include/linux/compat.h and you'll see
+> 
+> asmlinkage long compat_sys_preadv64(unsigned long fd,
+>                 const struct compat_iovec __user *vec,
+>                 unsigned long vlen, loff_t pos);
+> 
+> How does that manage to avoid the compiler screaming bloody
+> murder?
 
-I would like to send a summary of this business for your review. 
+That's a very good question.  But it does not just compile but actually
+works.  Probably because all the syscall wrappers mean that we don't
+actually generate the normal names.  I just tried this:
 
-Could you please take a few minutes of your time to revert back to this mail???
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -468,7 +468,7 @@ asmlinkage long sys_lseek(unsigned int fd, off_t offset,
+ asmlinkage long sys_read(unsigned int fd, char __user *buf, size_t count);
+ asmlinkage long sys_write(unsigned int fd, const char __user *buf,
+                            size_t count);
+-asmlinkage long sys_readv(unsigned long fd,
++asmlinkage long sys_readv(void *fd,
 
-Best Regards,
-Philip Li Wong.
-hkbannkcomm1@gmail.com
+for fun, and the compiler doesn't care either..
