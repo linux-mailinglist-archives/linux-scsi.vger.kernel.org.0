@@ -2,82 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6579275261
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 09:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB0827525F
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 09:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbgIWHli (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Sep 2020 03:41:38 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2912 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726617AbgIWHli (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 23 Sep 2020 03:41:38 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 88EF53A7164AE11C43F0;
-        Wed, 23 Sep 2020 08:41:36 +0100 (IST)
-Received: from [127.0.0.1] (10.47.2.162) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Wed, 23 Sep
- 2020 08:41:35 +0100
-Subject: Re: [PATCH V3 for 5.11 11/12] scsi: make sure sdev->queue_depth is <=
- shost->can_queue
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        <linux-block@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     Omar Sandoval <osandov@fb.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.de>
-References: <20200923013339.1621784-1-ming.lei@redhat.com>
- <20200923013339.1621784-12-ming.lei@redhat.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <5b229af8-520d-d3cf-caa0-5d3b11fa1083@huawei.com>
-Date:   Wed, 23 Sep 2020 08:38:44 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1726631AbgIWHlg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Sep 2020 03:41:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51718 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726557AbgIWHlf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 23 Sep 2020 03:41:35 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id F31D7AE0D;
+        Wed, 23 Sep 2020 07:42:11 +0000 (UTC)
+Subject: Re: [PATCH 1/1] scsi: scsi_dh_alua: remove the list entry before
+ assigning the pointer and sdev to NULL
+To:     Brian Bunker <brian@purestorage.com>,
+        "Ewan D. Milne" <emilne@redhat.com>
+Cc:     linux-scsi@vger.kernel.org
+References: <4064EB40-C84F-42E8-82F7-3940901C09D2@purestorage.com>
+ <adbb27fcbe0a534a9f19f4ff624f05dbf2a1a193.camel@redhat.com>
+ <1D8474C3-6D04-4C0F-B23C-A2924CD5436A@purestorage.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <cc003a85-51ea-46b6-4657-440656f632c2@suse.de>
+Date:   Wed, 23 Sep 2020 09:41:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20200923013339.1621784-12-ming.lei@redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <1D8474C3-6D04-4C0F-B23C-A2924CD5436A@purestorage.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.2.162]
-X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 23/09/2020 02:33, Ming Lei wrote:
-> Obviously scsi device's queue depth can't be > host's can_queue,
-> so make it explicitely in scsi_change_queue_depth().
-
-ha, why not can_queue * nr_hw_queues?
-
+On 9/11/20 5:47 PM, Brian Bunker wrote:
+> To me just removing the h->sdev = NULL seems strange because then this
+> looks strange to me:
 > 
-> Cc: Omar Sandoval <osandov@fb.com>
-> Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-> Cc: Sumanesh Samanta <sumanesh.samanta@broadcom.com>
-> Cc: Ewan D. Milne <emilne@redhat.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->   drivers/scsi/scsi.c | 2 ++
->   1 file changed, 2 insertions(+)
+> pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+> rcu_assign_pointer(h->pg, NULL);
 > 
-> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-> index 24619c3bebd5..cc6ff1ae8c16 100644
-> --- a/drivers/scsi/scsi.c
-> +++ b/drivers/scsi/scsi.c
-> @@ -223,6 +223,8 @@ void scsi_finish_command(struct scsi_cmnd *cmd)
->    */
->   int scsi_change_queue_depth(struct scsi_device *sdev, int depth)
->   {
-> +	depth = min_t(int, depth, sdev->host->can_queue);
-> +
->   	if (depth > 0) {
->   		sdev->queue_depth = depth;
->   		wmb();
+> Then saying
+> If (pg)
+> 
+> Since we just assigned that pointer, h->pg to NULL.
 > 
 
+True, but the 'rcu_dereference()' call is just ensuring 'alua_dh_data' 
+is valid, not the contents of which.
+So to be absolutely correctly we would need to take 'h->lock' when 
+evaluating 'h->sdev'; but then this is an optimisation anyway we might 
+as well kill the BUG_ON() and replace it by a simple 'if' condition.
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
