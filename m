@@ -2,131 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D90A275391
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 10:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9E8275479
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 11:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbgIWIpP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Sep 2020 04:45:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48558 "EHLO mail.kernel.org"
+        id S1726412AbgIWJZn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Sep 2020 05:25:43 -0400
+Received: from apollo.dupie.be ([51.159.20.238]:54186 "EHLO apollo.dupie.be"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726130AbgIWIpP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 23 Sep 2020 04:45:15 -0400
-Received: from localhost (unknown [104.132.1.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F35D8221F0;
-        Wed, 23 Sep 2020 08:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600850714;
-        bh=XiMksB5vz2ze+VmO+JGKzgUGIZoRdpPjoIOpgvM1pXk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h2xwP5DQ0bctD7XTG5Z6nKDVDxbn+URT70n7ElGTtzrGj47WkvlDo5ns9tkht1apq
-         dCFDwDzfuvFBc64PyzX+Y+Uc7IGyzOZnnDbZ1adriwxnzLOzOFAa0LF3t7EBLJIArg
-         VjtTePTWiddXb2CK7kpbY2eiXpzxaP9P/2piwZjk=
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH] f2fs: fix slab leak of rpages pointer
-Date:   Wed, 23 Sep 2020 01:45:12 -0700
-Message-Id: <20200923084512.2947439-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+        id S1726178AbgIWJZn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 23 Sep 2020 05:25:43 -0400
+X-Greylist: delayed 490 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 05:25:42 EDT
+Received: from [IPv6:2a02:a03f:fa89:ff01:be0d:d770:d9ac:6ca4] (unknown [IPv6:2a02:a03f:fa89:ff01:be0d:d770:d9ac:6ca4])
+        by apollo.dupie.be (Postfix) with ESMTPSA id 0D9F41520EAE
+        for <linux-scsi@vger.kernel.org>; Wed, 23 Sep 2020 11:17:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dupond.be; s=dkim;
+        t=1600852649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ODTW5Xfe3y+UK/0lB7GRPsY1MowcEQMi6K9U2J5weHY=;
+        b=SFl8Kep0U3cCLeuPYMj0BJVw/+VWXTRdNo/ELkR4dbyuhQk0ICNHhdUJ8W6FshcJMdeHPv
+        1qdhwNBrCxCZM4ojR0xm5WFNbd/B3qIpVQZw7mc1Pd4YHKjv48g58zX+xGCx7VsO42VSDO
+        4GLymNvDNXpiCoOvwjcSAXWrqCe3w6mNQSmyAZs0hKvVgX0ycR5TDqouWta3QV5YTqwZUn
+        z48NXz4F3MeYolkO8hLxFMekAp5AZdvN3HuumOCJswMZd0Iv/7CzVVel3OqUkRLjui9CyK
+        rkAlLcARvTqLJQnYvWw22SR5Jtix4k34fNz/ipgjXcd8Yo/SOBmdsB27SPTpkg==
+To:     linux-scsi@vger.kernel.org
+From:   Jean-Louis Dupond <jean-louis@dupond.be>
+Subject: "Power-on or device reset occurred" after a LUN resize
+Message-ID: <a87b6e6e-d35e-2336-4593-c28872760c75@dupond.be>
+Date:   Wed, 23 Sep 2020 11:17:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This fixes the below mem leak.
+Hi,
 
-[  130.157600] =============================================================================
-[  130.159662] BUG f2fs_page_array_entry-252:16 (Tainted: G        W  O     ): Objects remaining in f2fs_page_array_entry-252:16 on __kmem_cache_shutdown()
-[  130.162742] -----------------------------------------------------------------------------
-[  130.162742]
-[  130.164979] Disabling lock debugging due to kernel taint
-[  130.166188] INFO: Slab 0x000000009f5a52d2 objects=22 used=4 fp=0x00000000ba72c3e9 flags=0xfffffc0010200
-[  130.168269] CPU: 7 PID: 3560 Comm: umount Tainted: G    B   W  O      5.9.0-rc4+ #35
-[  130.170019] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1 04/01/2014
-[  130.171941] Call Trace:
-[  130.172528]  dump_stack+0x74/0x9a
-[  130.173298]  slab_err+0xb7/0xdc
-[  130.174044]  ? kernel_poison_pages+0xc0/0xc0
-[  130.175065]  ? on_each_cpu_cond_mask+0x48/0x90
-[  130.176096]  __kmem_cache_shutdown.cold+0x34/0x141
-[  130.177190]  kmem_cache_destroy+0x59/0x100
-[  130.178223]  f2fs_destroy_page_array_cache+0x15/0x20 [f2fs]
-[  130.179527]  f2fs_put_super+0x1bc/0x380 [f2fs]
-[  130.180538]  generic_shutdown_super+0x72/0x110
-[  130.181547]  kill_block_super+0x27/0x50
-[  130.182438]  kill_f2fs_super+0x76/0xe0 [f2fs]
-[  130.183448]  deactivate_locked_super+0x3b/0x80
-[  130.184456]  deactivate_super+0x3e/0x50
-[  130.185363]  cleanup_mnt+0x109/0x160
-[  130.186179]  __cleanup_mnt+0x12/0x20
-[  130.187003]  task_work_run+0x70/0xb0
-[  130.187841]  exit_to_user_mode_prepare+0x18f/0x1b0
-[  130.188917]  syscall_exit_to_user_mode+0x31/0x170
-[  130.189989]  do_syscall_64+0x45/0x90
-[  130.190828]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[  130.191986] RIP: 0033:0x7faf868ea2eb
-[  130.192815] Code: 7b 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 90 f3 0f 1e fa 31 f6 e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 75 7b 0c 00 f7 d8 64 89 01
-[  130.196872] RSP: 002b:00007fffb7edb478 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[  130.198494] RAX: 0000000000000000 RBX: 00007faf86a18204 RCX: 00007faf868ea2eb
-[  130.201021] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055971df71c50
-[  130.203415] RBP: 000055971df71a40 R08: 0000000000000000 R09: 00007fffb7eda1f0
-[  130.205772] R10: 00007faf86a04339 R11: 0000000000000246 R12: 000055971df71c50
-[  130.208150] R13: 0000000000000000 R14: 000055971df71b38 R15: 0000000000000000
-[  130.210515] INFO: Object 0x00000000a980843a @offset=744
-[  130.212476] INFO: Allocated in page_array_alloc+0x3d/0xe0 [f2fs] age=1572 cpu=0 pid=3297
-[  130.215030] 	__slab_alloc+0x20/0x40
-[  130.216566] 	kmem_cache_alloc+0x2a0/0x2e0
-[  130.218217] 	page_array_alloc+0x3d/0xe0 [f2fs]
-[  130.219940] 	f2fs_init_compress_ctx+0x1f/0x40 [f2fs]
-[  130.221736] 	f2fs_write_cache_pages+0x3db/0x860 [f2fs]
-[  130.223591] 	f2fs_write_data_pages+0x2c9/0x300 [f2fs]
-[  130.225414] 	do_writepages+0x43/0xd0
-[  130.226907] 	__filemap_fdatawrite_range+0xd5/0x110
-[  130.228632] 	filemap_write_and_wait_range+0x48/0xb0
-[  130.230336] 	__generic_file_write_iter+0x18a/0x1d0
-[  130.232035] 	f2fs_file_write_iter+0x226/0x550 [f2fs]
-[  130.233737] 	new_sync_write+0x113/0x1a0
-[  130.235204] 	vfs_write+0x1a6/0x200
-[  130.236579] 	ksys_write+0x67/0xe0
-[  130.237898] 	__x64_sys_write+0x1a/0x20
-[  130.239309] 	do_syscall_64+0x38/0x90
+Last week some action that we do regularly caused some issues.
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/compress.c | 2 +-
- fs/f2fs/data.c     | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+00:50:31 CEST -> We resized a iSCSI LUN on a SAN from 3TB -> 4TB.
 
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 10a9f39b9d6a2..f086ac43ca825 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -159,7 +159,7 @@ struct page *f2fs_compress_control_page(struct page *page)
- 
- int f2fs_init_compress_ctx(struct compress_ctx *cc)
- {
--	if (cc->nr_rpages)
-+	if (cc->rpages)
- 		return 0;
- 
- 	cc->rpages = page_array_alloc(cc->inode);
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index db020a74fd849..ee87407602fa7 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -3129,6 +3129,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
- 			retry = 0;
- 		}
- 	}
-+	if (f2fs_compressed_file(inode))
-+		f2fs_destroy_compress_ctx(&cc);
- #endif
- 	if (retry) {
- 		index = 0;
--- 
-2.28.0.681.g6f77f65b4e-goog
+The clients did detect the change fine, and resized it devices:
+
+> Sep 22 00:51:07 server001 kernel: sd 16:0:0:1: Capacity data has changed
+> Sep 22 00:51:07 server001 kernel: sd 16:0:0:1: Inquiry data has changed
+> Sep 22 00:51:07 server001 kernel: sd 16:0:0:1: alua: supports implicit 
+> TPGS
+> Sep 22 00:51:07 server001 kernel: sd 16:0:0:1: alua: device 
+> t10.NETAPP   LUN 80Vcx]PVRq4F        port group 3e9 rel port 8
+> Sep 22 00:51:07 server001 kernel: sd 17:0:0:1: Capacity data has changed
+> Sep 22 00:51:07 server001 kernel: sd 16:0:0:1: [sdf] 8589934592 
+> 512-byte logical blocks: (4.40 TB/4.00 TiB)
+> Sep 22 00:51:07 server001 kernel: sd 16:0:0:1: [sdf] 4096-byte 
+> physical blocks
+> Sep 22 00:51:07 server001 kernel: sdf: detected capacity change from 
+> 3298534883328 to 4398046511104
+> Sep 22 00:51:07 server001 kernel: sd 16:0:0:1: alua: port group 3e9 
+> state A non-preferred supports TolUsNA
+> Sep 22 00:51:07 server001 kernel: sd 17:0:0:1: Inquiry data has changed
+> Sep 22 00:51:07 server001 kernel: sd 17:0:0:1: alua: supports implicit 
+> TPGS
+> Sep 22 00:51:07 server001 kernel: sd 17:0:0:1: alua: device 
+> t10.NETAPP   LUN 80Vcx]PVRq4F        port group 3e9 rel port 7
+> Sep 22 00:51:07 server001 kernel: sd 17:0:0:1: [sdi] 8589934592 
+> 512-byte logical blocks: (4.40 TB/4.00 TiB)
+> Sep 22 00:51:07 server001 kernel: sd 17:0:0:1: [sdi] 4096-byte 
+> physical blocks
+> Sep 22 00:51:07 server001 kernel: sdi: detected capacity change from 
+> 3298534883328 to 4398046511104
+> Sep 22 00:51:07 server001 kernel: sd 17:0:0:1: alua: port group 3e9 
+> state A non-preferred supports TolUsNA
+> Sep 22 00:51:12 server001 kernel: sd 18:0:0:1: Capacity data has changed
+> Sep 22 00:51:12 server001 kernel: sd 18:0:0:1: Inquiry data has changed
+> Sep 22 00:51:12 server001 kernel: sd 18:0:0:1: alua: supports implicit 
+> TPGS
+> Sep 22 00:51:12 server001 kernel: sd 18:0:0:1: alua: device 
+> t10.NETAPP   LUN 80Vcx]PVRq4F        port group 3e8 rel port 6
+> Sep 22 00:51:12 server001 kernel: sd 18:0:0:1: [sdl] 8589934592 
+> 512-byte logical blocks: (4.40 TB/4.00 TiB)
+> Sep 22 00:51:12 server001 kernel: sd 18:0:0:1: [sdl] 4096-byte 
+> physical blocks
+> Sep 22 00:51:12 server001 kernel: sdl: detected capacity change from 
+> 3298534883328 to 4398046511104
+> Sep 22 00:51:12 server001 kernel: sd 18:0:0:1: alua: port group 3e8 
+> state N non-preferred supports TolUsNA
+> Sep 22 00:51:18 server001 kernel: sd 15:0:0:1: Capacity data has changed
+> Sep 22 00:51:18 server001 kernel: sd 15:0:0:1: Inquiry data has changed
+> Sep 22 00:51:18 server001 kernel: sd 15:0:0:1: alua: supports implicit 
+> TPGS
+> Sep 22 00:51:18 server001 kernel: sd 15:0:0:1: alua: device 
+> t10.NETAPP   LUN 80Vcx]PVRq4F        port group 3e8 rel port 5
+> Sep 22 00:51:18 server001 kernel: sd 15:0:0:1: [sdc] 8589934592 
+> 512-byte logical blocks: (4.40 TB/4.00 TiB)
+> Sep 22 00:51:18 server001 kernel: sd 15:0:0:1: [sdc] 4096-byte 
+> physical blocks
+> Sep 22 00:51:18 server001 kernel: sdc: detected capacity change from 
+> 3298534883328 to 4398046511104
+> Sep 22 00:51:18 server001 kernel: sd 15:0:0:1: alua: port group 3e8 
+> state N non-preferred supports TolUsNA
+> Sep 22 00:52:09 server001 kernel: sd 16:0:0:1: Power-on or device 
+> reset occurred
+> Sep 22 00:52:09 server001 kernel: sd 16:0:0:1: alua: port group 3e9 
+> state A non-preferred supports TolUsNA
+> Sep 22 00:52:09 server001 kernel: sd 17:0:0:1: Power-on or device 
+> reset occurred
+
+But then it kept doing resets:
+> Sep 22 00:54:39 server001 kernel: sd 16:0:0:1: Power-on or device 
+> reset occurred
+> Sep 22 00:54:39 server001 kernel: sd 16:0:0:1: alua: port group 3e9 
+> state A non-preferred supports TolUsNA
+> Sep 22 00:54:39 server001 kernel: sd 17:0:0:1: Power-on or device 
+> reset occurred
+> Sep 22 00:54:39 server001 kernel: sd 17:0:0:1: alua: port group 3e9 
+> state A non-preferred supports TolUsNA
+> Sep 22 00:54:42 server001 kernel: sd 15:0:0:1: Power-on or device 
+> reset occurred
+> Sep 22 00:54:42 server001 kernel: sd 15:0:0:1: alua: port group 3e8 
+> state N non-preferred supports TolUsNA
+
+This caused some multipath failovers until it stopped after ~10 minutes.
+
+We do use ALUA multipath:
+3600a098038305663785d505652713446 dm-15 NETAPP,LUN C-Mode
+size=4.0T features='3 queue_if_no_path pg_init_retries 50' hwhandler='1 
+alua' wp=rw
+|-+- policy='service-time 0' prio=50 status=active
+| |- 16:0:0:1 sdf 8:80  active ready running
+| `- 17:0:0:1 sdi 8:128 active ready running
+`-+- policy='service-time 0' prio=10 status=enabled
+   |- 15:0:0:1 sdc 8:32  active ready running
+   `- 18:0:0:1 sdl 8:176 active ready running
+
+
+Who is sending the Power-on or device reset?
+Is that the SAN?
+Or does the client trigger a reset (for which reason then?)?
+The LUN is attachted to multiple servers (all CentOS 8), and all showed 
+the same resets.
+
+It would be nice to find out what caused this!
+
+Thanks for having a look :)
+Jean-Louis
+
 
