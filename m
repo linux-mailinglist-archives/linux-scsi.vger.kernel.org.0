@@ -2,152 +2,347 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E672750DF
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 08:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACF42751A3
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 08:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgIWGGs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Sep 2020 02:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726753AbgIWGGM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Sep 2020 02:06:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34D4C0613D5;
-        Tue, 22 Sep 2020 23:06:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=7X3/qUs2y75UUlnvdA2vy1FAPs/IUNMhWXsjmEB0AzE=; b=NIVOg9nkNP5R1AAXNIhM3YSXPM
-        qQhZDIsOgqRm8F5L3u8NN/+6vxw3vIyqPjouVmp/wB6q7DNB/Mr8240Po/ZZvVU1mexPSNxxRUWjH
-        ej15n9SxAKbmH+ewPeHB+B+fb+RgnttC95+9As75yawZIbjWNYflc0RQhEs6ynljtaBOCt6848rAc
-        3L4YG9CH6YdVJyf05/7o01+jdSXZWswvcEmEY71kAqtOpHNN698eeRE2lonXxdD3cfU06s7h0bUKC
-        NCXb1r7MyzYJg/RzXohD63kQclT/Rqz0zknvzeGy+Z7SKuS8sh/zsZdStqWQAafANb22dniPP9/20
-        sV56yCuw==;
-Received: from p4fdb0c34.dip0.t-ipconnect.de ([79.219.12.52] helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kKxuj-0003Uu-Tz; Wed, 23 Sep 2020 06:06:02 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-aio@kvack.org, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH 9/9] security/keys: remove compat_keyctl_instantiate_key_iov
-Date:   Wed, 23 Sep 2020 08:05:47 +0200
-Message-Id: <20200923060547.16903-10-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200923060547.16903-1-hch@lst.de>
-References: <20200923060547.16903-1-hch@lst.de>
+        id S1726770AbgIWGgr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Sep 2020 02:36:47 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44740 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726620AbgIWGgq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 23 Sep 2020 02:36:46 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 162AAAA55;
+        Wed, 23 Sep 2020 06:37:21 +0000 (UTC)
+Subject: Re: [PATCH V3 for 5.11 04/12] sbitmap: move allocation hint into
+ sbitmap
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     Omar Sandoval <osandov@fb.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>
+References: <20200923013339.1621784-1-ming.lei@redhat.com>
+ <20200923013339.1621784-5-ming.lei@redhat.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <351a36ab-a26c-6042-818d-28e167eb74e0@suse.de>
+Date:   Wed, 23 Sep 2020 08:36:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
+In-Reply-To: <20200923013339.1621784-5-ming.lei@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that import_iovec handles compat iovecs, the native version of
-keyctl_instantiate_key_iov can be used for the compat case as well.
+On 9/23/20 3:33 AM, Ming Lei wrote:
+> Allocation hint should have belonged to sbitmap, also when sbitmap's
+> depth is high and no need to use mulitple wakeup queues, user can
+> benefit from percpu allocation hint too.
+> 
+> So move allocation hint into sbitmap.
+> 
+> Cc: Omar Sandoval <osandov@fb.com>
+> Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+> Cc: Sumanesh Samanta <sumanesh.samanta@broadcom.com>
+> Cc: Ewan D. Milne <emilne@redhat.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>   block/blk-mq.c          |   2 +-
+>   block/kyber-iosched.c   |   2 +-
+>   include/linux/sbitmap.h |  41 ++++++++------
+>   lib/sbitmap.c           | 115 ++++++++++++++++++++++++----------------
+>   4 files changed, 97 insertions(+), 63 deletions(-)
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 45149970b891..88154cea83d8 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2684,7 +2684,7 @@ blk_mq_alloc_hctx(struct request_queue *q, struct blk_mq_tag_set *set,
+>   		goto free_cpumask;
+>   
+>   	if (sbitmap_init_node(&hctx->ctx_map, nr_cpu_ids, ilog2(8),
+> -				gfp, node, false))
+> +				gfp, node, false, false))
+>   		goto free_ctxs;
+>   	hctx->nr_ctx = 0;
+>   
+> diff --git a/block/kyber-iosched.c b/block/kyber-iosched.c
+> index cc8bcfe1d587..3949d68ac4c1 100644
+> --- a/block/kyber-iosched.c
+> +++ b/block/kyber-iosched.c
+> @@ -480,7 +480,7 @@ static int kyber_init_hctx(struct blk_mq_hw_ctx *hctx, unsigned int hctx_idx)
+>   	for (i = 0; i < KYBER_NUM_DOMAINS; i++) {
+>   		if (sbitmap_init_node(&khd->kcq_map[i], hctx->nr_ctx,
+>   				      ilog2(8), GFP_KERNEL, hctx->numa_node,
+> -				      false)) {
+> +				      false, false)) {
+>   			while (--i >= 0)
+>   				sbitmap_free(&khd->kcq_map[i]);
+>   			goto err_kcqs;
+> diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+> index 68097b052ec3..103b41c03311 100644
+> --- a/include/linux/sbitmap.h
+> +++ b/include/linux/sbitmap.h
+> @@ -70,6 +70,14 @@ struct sbitmap {
+>   	 * @map: Allocated bitmap.
+>   	 */
+>   	struct sbitmap_word *map;
+> +
+> +	/*
+> +	 * @alloc_hint: Cache of last successfully allocated or freed bit.
+> +	 *
+> +	 * This is per-cpu, which allows multiple users to stick to different
+> +	 * cachelines until the map is exhausted.
+> +	 */
+> +	unsigned int __percpu *alloc_hint;
+>   };
+>   
+>   #define SBQ_WAIT_QUEUES 8
+> @@ -105,14 +113,6 @@ struct sbitmap_queue {
+>   	 */
+>   	struct sbitmap sb;
+>   
+> -	/*
+> -	 * @alloc_hint: Cache of last successfully allocated or freed bit.
+> -	 *
+> -	 * This is per-cpu, which allows multiple users to stick to different
+> -	 * cachelines until the map is exhausted.
+> -	 */
+> -	unsigned int __percpu *alloc_hint;
+> -
+>   	/**
+>   	 * @wake_batch: Number of bits which must be freed before we wake up any
+>   	 * waiters.
+> @@ -152,11 +152,13 @@ struct sbitmap_queue {
+>    * @round_robin: If true, be stricter about allocation order; always allocate
+>    *               starting from the last allocated bit. This is less efficient
+>    *               than the default behavior (false).
+> + * @alloc_hint: If true, apply percpu hint for where to start searching for
+> + * 		a free bit.
+>    *
+>    * Return: Zero on success or negative errno on failure.
+>    */
+>   int sbitmap_init_node(struct sbitmap *sb, unsigned int depth, int shift,
+> -		      gfp_t flags, int node, bool round_robin);
+> +		      gfp_t flags, int node, bool round_robin, bool alloc_hint);
+>   
+>   /**
+>    * sbitmap_free() - Free memory used by a &struct sbitmap.
+> @@ -164,6 +166,7 @@ int sbitmap_init_node(struct sbitmap *sb, unsigned int depth, int shift,
+>    */
+>   static inline void sbitmap_free(struct sbitmap *sb)
+>   {
+> +	free_percpu(sb->alloc_hint);
+>   	kfree(sb->map);
+>   	sb->map = NULL;
+>   }
+> @@ -181,19 +184,17 @@ void sbitmap_resize(struct sbitmap *sb, unsigned int depth);
+>   /**
+>    * sbitmap_get() - Try to allocate a free bit from a &struct sbitmap.
+>    * @sb: Bitmap to allocate from.
+> - * @alloc_hint: Hint for where to start searching for a free bit.
+>    *
+>    * This operation provides acquire barrier semantics if it succeeds.
+>    *
+>    * Return: Non-negative allocated bit number if successful, -1 otherwise.
+>    */
+> -int sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint);
+> +int sbitmap_get(struct sbitmap *sb);
+>   
+>   /**
+>    * sbitmap_get_shallow() - Try to allocate a free bit from a &struct sbitmap,
+>    * limiting the depth used from each word.
+>    * @sb: Bitmap to allocate from.
+> - * @alloc_hint: Hint for where to start searching for a free bit.
+>    * @shallow_depth: The maximum number of bits to allocate from a single word.
+>    *
+>    * This rather specific operation allows for having multiple users with
+> @@ -205,8 +206,7 @@ int sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint);
+>    *
+>    * Return: Non-negative allocated bit number if successful, -1 otherwise.
+>    */
+> -int sbitmap_get_shallow(struct sbitmap *sb, unsigned int alloc_hint,
+> -			unsigned long shallow_depth);
+> +int sbitmap_get_shallow(struct sbitmap *sb, unsigned long shallow_depth);
+>   
+>   /**
+>    * sbitmap_any_bit_set() - Check for a set bit in a &struct sbitmap.
+> @@ -320,6 +320,18 @@ static inline void sbitmap_deferred_clear_bit(struct sbitmap *sb, unsigned int b
+>   	set_bit(SB_NR_TO_BIT(sb, bitnr), addr);
+>   }
+>   
+> +/*
+> + * Pair of sbitmap_get, and this one applies both cleared bit and
+> + * allocation hint.
+> + */
+> +static inline void sbitmap_put(struct sbitmap *sb, unsigned int bitnr)
+> +{
+> +	sbitmap_deferred_clear_bit(sb, bitnr);
+> +
+> +	if (likely(sb->alloc_hint && !sb->round_robin && bitnr < sb->depth))
+> +                *this_cpu_ptr(sb->alloc_hint) = bitnr;
+> +}
+> +
+>   static inline int sbitmap_test_bit(struct sbitmap *sb, unsigned int bitnr)
+>   {
+>   	return test_bit(SB_NR_TO_BIT(sb, bitnr), __sbitmap_word(sb, bitnr));
+> @@ -368,7 +380,6 @@ int sbitmap_queue_init_node(struct sbitmap_queue *sbq, unsigned int depth,
+>   static inline void sbitmap_queue_free(struct sbitmap_queue *sbq)
+>   {
+>   	kfree(sbq->ws);
+> -	free_percpu(sbq->alloc_hint);
+>   	sbitmap_free(&sbq->sb);
+>   }
+>   
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index 4e4423414f4d..16f59e99143e 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -9,52 +9,51 @@
+>   #include <linux/sbitmap.h>
+>   #include <linux/seq_file.h>
+>   
+> -static int init_alloc_hint(struct sbitmap_queue *sbq, gfp_t flags)
+> +static int init_alloc_hint(struct sbitmap *sb, gfp_t flags)
+>   {
+> -	unsigned depth = sbq->sb.depth;
+> +	unsigned depth = sb->depth;
+>   
+> -	sbq->alloc_hint = alloc_percpu_gfp(unsigned int, flags);
+> -	if (!sbq->alloc_hint)
+> +	sb->alloc_hint = alloc_percpu_gfp(unsigned int, flags);
+> +	if (!sb->alloc_hint)
+>   		return -ENOMEM;
+>   
+> -	if (depth && !sbq->sb.round_robin) {
+> +	if (depth && !sb->round_robin) {
+>   		int i;
+>   
+>   		for_each_possible_cpu(i)
+> -			*per_cpu_ptr(sbq->alloc_hint, i) = prandom_u32() % depth;
+> +			*per_cpu_ptr(sb->alloc_hint, i) = prandom_u32() % depth;
+>   	}
+> -
+>   	return 0;
+>   }
+>   
+> -static inline unsigned update_alloc_hint_before_get(struct sbitmap_queue *sbq,
+> +static inline unsigned update_alloc_hint_before_get(struct sbitmap *sb,
+>   						    unsigned int depth)
+>   {
+>   	unsigned hint;
+>   
+> -	hint = this_cpu_read(*sbq->alloc_hint);
+> +	hint = this_cpu_read(*sb->alloc_hint);
+>   	if (unlikely(hint >= depth)) {
+>   		hint = depth ? prandom_u32() % depth : 0;
+> -		this_cpu_write(*sbq->alloc_hint, hint);
+> +		this_cpu_write(*sb->alloc_hint, hint);
+>   	}
+>   
+>   	return hint;
+>   }
+>   
+> -static inline void update_alloc_hint_after_get(struct sbitmap_queue *sbq,
+> +static inline void update_alloc_hint_after_get(struct sbitmap *sb,
+>   					       unsigned int depth,
+>   					       unsigned int hint,
+>   					       unsigned int nr)
+>   {
+>   	if (nr == -1) {
+>   		/* If the map is full, a hint won't do us much good. */
+> -		this_cpu_write(*sbq->alloc_hint, 0);
+> -	} else if (nr == hint || unlikely(sbq->sb.round_robin)) {
+> +		this_cpu_write(*sb->alloc_hint, 0);
+> +	} else if (nr == hint || unlikely(sb->round_robin)) {
+>   		/* Only update the hint if we used it. */
+>   		hint = nr + 1;
+>   		if (hint >= depth - 1)
+>   			hint = 0;
+> -		this_cpu_write(*sbq->alloc_hint, hint);
+> +		this_cpu_write(*sb->alloc_hint, hint);
+>   	}
+>   }
+>   
+> @@ -91,7 +90,8 @@ static inline bool sbitmap_deferred_clear(struct sbitmap *sb, int index)
+>   }
+>   
+>   int sbitmap_init_node(struct sbitmap *sb, unsigned int depth, int shift,
+> -		      gfp_t flags, int node, bool round_robin)
+> +		      gfp_t flags, int node, bool round_robin,
+> +		      bool alloc_hint)
+>   {
+>   	unsigned int bits_per_word;
+>   	unsigned int i;
+> @@ -123,9 +123,18 @@ int sbitmap_init_node(struct sbitmap *sb, unsigned int depth, int shift,
+>   		return 0;
+>   	}
+>   
+> +	if (alloc_hint) {
+> +		if (init_alloc_hint(sb, flags))
+> +			return -ENOMEM;
+> +	} else {
+> +		sb->alloc_hint = NULL;
+> +	}
+> +
+>   	sb->map = kcalloc_node(sb->map_nr, sizeof(*sb->map), flags, node);
+> -	if (!sb->map)
+> +	if (!sb->map) {
+> +		free_percpu(sb->alloc_hint);
+>   		return -ENOMEM;
+> +	}
+>   
+>   	for (i = 0; i < sb->map_nr; i++) {
+>   		sb->map[i].depth = min(depth, bits_per_word);
+> @@ -204,7 +213,7 @@ static int sbitmap_find_bit_in_index(struct sbitmap *sb, int index,
+>   	return nr;
+>   }
+>   
+> -int sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
+> +static int __sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
+>   {
+>   	unsigned int i, index;
+>   	int nr = -1;
+> @@ -236,10 +245,29 @@ int sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
+>   
+>   	return nr;
+>   }
+> +
+> +int sbitmap_get(struct sbitmap *sb)
+> +{
+> +	int nr;
+> +
+> +	if (likely(sb->alloc_hint)) {
+> +		unsigned int hint, depth;
+> +
+> +		depth = READ_ONCE(sb->depth);
+> +		hint = update_alloc_hint_before_get(sb, depth);
+> +		nr = __sbitmap_get(sb, hint);
+> +		update_alloc_hint_after_get(sb, depth, hint, nr);
+> +	} else {
+> +		nr = __sbitmap_get(sb, 0);
+> +	}
+> +
+> +	return nr;
+> +}
+>   EXPORT_SYMBOL_GPL(sbitmap_get);
+>   
+Can't you move the 'alloc_hint' test into update_alloc_hint_before_get()?
+That way we can simplify the code and would avoid the 'if' clause here.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- security/keys/compat.c   | 36 ++----------------------------------
- security/keys/internal.h |  5 -----
- security/keys/keyctl.c   |  2 +-
- 3 files changed, 3 insertions(+), 40 deletions(-)
+Cheers,
 
-diff --git a/security/keys/compat.c b/security/keys/compat.c
-index 7ae531db031cf8..1545efdca56227 100644
---- a/security/keys/compat.c
-+++ b/security/keys/compat.c
-@@ -11,38 +11,6 @@
- #include <linux/slab.h>
- #include "internal.h"
- 
--/*
-- * Instantiate a key with the specified compatibility multipart payload and
-- * link the key into the destination keyring if one is given.
-- *
-- * The caller must have the appropriate instantiation permit set for this to
-- * work (see keyctl_assume_authority).  No other permissions are required.
-- *
-- * If successful, 0 will be returned.
-- */
--static long compat_keyctl_instantiate_key_iov(
--	key_serial_t id,
--	const struct compat_iovec __user *_payload_iov,
--	unsigned ioc,
--	key_serial_t ringid)
--{
--	struct iovec iovstack[UIO_FASTIOV], *iov = iovstack;
--	struct iov_iter from;
--	long ret;
--
--	if (!_payload_iov)
--		ioc = 0;
--
--	ret = import_iovec(WRITE, (const struct iovec __user *)_payload_iov,
--			   ioc, ARRAY_SIZE(iovstack), &iov, &from);
--	if (ret < 0)
--		return ret;
--
--	ret = keyctl_instantiate_key_common(id, &from, ringid);
--	kfree(iov);
--	return ret;
--}
--
- /*
-  * The key control system call, 32-bit compatibility version for 64-bit archs
-  */
-@@ -113,8 +81,8 @@ COMPAT_SYSCALL_DEFINE5(keyctl, u32, option,
- 		return keyctl_reject_key(arg2, arg3, arg4, arg5);
- 
- 	case KEYCTL_INSTANTIATE_IOV:
--		return compat_keyctl_instantiate_key_iov(
--			arg2, compat_ptr(arg3), arg4, arg5);
-+		return keyctl_instantiate_key_iov(arg2, compat_ptr(arg3), arg4,
-+						  arg5);
- 
- 	case KEYCTL_INVALIDATE:
- 		return keyctl_invalidate_key(arg2);
-diff --git a/security/keys/internal.h b/security/keys/internal.h
-index 338a526cbfa516..9b9cf3b6fcbb4d 100644
---- a/security/keys/internal.h
-+++ b/security/keys/internal.h
-@@ -262,11 +262,6 @@ extern long keyctl_instantiate_key_iov(key_serial_t,
- 				       const struct iovec __user *,
- 				       unsigned, key_serial_t);
- extern long keyctl_invalidate_key(key_serial_t);
--
--struct iov_iter;
--extern long keyctl_instantiate_key_common(key_serial_t,
--					  struct iov_iter *,
--					  key_serial_t);
- extern long keyctl_restrict_keyring(key_serial_t id,
- 				    const char __user *_type,
- 				    const char __user *_restriction);
-diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-index 9febd37a168fd0..e26bbccda7ccee 100644
---- a/security/keys/keyctl.c
-+++ b/security/keys/keyctl.c
-@@ -1164,7 +1164,7 @@ static int keyctl_change_reqkey_auth(struct key *key)
-  *
-  * If successful, 0 will be returned.
-  */
--long keyctl_instantiate_key_common(key_serial_t id,
-+static long keyctl_instantiate_key_common(key_serial_t id,
- 				   struct iov_iter *from,
- 				   key_serial_t ringid)
- {
+Hannes
 -- 
-2.28.0
-
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
