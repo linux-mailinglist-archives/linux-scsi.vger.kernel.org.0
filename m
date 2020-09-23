@@ -2,79 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BBC2751E2
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 08:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6579275261
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Sep 2020 09:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726608AbgIWGur (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Sep 2020 02:50:47 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53276 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbgIWGur (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 23 Sep 2020 02:50:47 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 65EB7AB0E;
-        Wed, 23 Sep 2020 06:51:22 +0000 (UTC)
-Subject: Re: [PATCH V3 for 5.11 12/12] scsi: replace sdev->device_busy with
- sbitmap
+        id S1726656AbgIWHli (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Sep 2020 03:41:38 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2912 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726617AbgIWHli (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 23 Sep 2020 03:41:38 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 88EF53A7164AE11C43F0;
+        Wed, 23 Sep 2020 08:41:36 +0100 (IST)
+Received: from [127.0.0.1] (10.47.2.162) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Wed, 23 Sep
+ 2020 08:41:35 +0100
+Subject: Re: [PATCH V3 for 5.11 11/12] scsi: make sure sdev->queue_depth is <=
+ shost->can_queue
 To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org,
+        <linux-block@vger.kernel.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     Omar Sandoval <osandov@fb.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     Omar Sandoval <osandov@fb.com>,
         Kashyap Desai <kashyap.desai@broadcom.com>,
         Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
-        "Ewan D . Milne" <emilne@redhat.com>
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.de>
 References: <20200923013339.1621784-1-ming.lei@redhat.com>
- <20200923013339.1621784-13-ming.lei@redhat.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <268a0b78-744a-a144-080f-d69e8144719b@suse.de>
-Date:   Wed, 23 Sep 2020 08:50:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+ <20200923013339.1621784-12-ming.lei@redhat.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <5b229af8-520d-d3cf-caa0-5d3b11fa1083@huawei.com>
+Date:   Wed, 23 Sep 2020 08:38:44 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <20200923013339.1621784-13-ming.lei@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200923013339.1621784-12-ming.lei@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.2.162]
+X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/23/20 3:33 AM, Ming Lei wrote:
-> scsi requires one global atomic variable to track queue depth for each LUN/
-> request queue, meantime blk-mq tracks queue depth for each hctx. This SCSI's
-> requirement can't be implemented in blk-mq easily, cause it is a bigger &
-> harder problem to spread the device or request queue's depth among all hw
-> queues.
-> 
-> The current approach by using atomic variable can't scale well when there
-> is lots of CPU cores and the disk is very fast and IO are submitted to this
-> device concurrently. It has been observed that IOPS is affected a lot by
-> tracking queue depth via sdev->device_busy in IO path.
-> 
-> So replace the atomic variable sdev->device_busy with sbitmap for
-> tracking scsi device queue depth.
-> 
-> It is observed that IOPS is improved ~30% by this patchset in the
-> following test:
-> 
-> 1) test machine(32 logical CPU cores)
-> 	Thread(s) per core:  2
-> 	Core(s) per socket:  8
-> 	Socket(s):           2
-> 	NUMA node(s):        2
-> 	Model name:          Intel(R) Xeon(R) Silver 4110 CPU @ 2.10GHz
-> 
-> 2) setup scsi_debug:
-> modprobe scsi_debug virtual_gb=128 max_luns=1 submit_queues=32 delay=0 max_queue=256
-> 
-> 3) fio script:
-> fio --rw=randread --size=128G --direct=1 --ioengine=libaio --iodepth=2048 \
-> 	--numjobs=32 --bs=4k --group_reporting=1 --group_reporting=1 --runtime=60 \
-> 	--loops=10000 --name=job1 --filename=/dev/sdN
-> 
-> [1] https://lore.kernel.org/linux-block/20200119071432.18558-6-ming.lei@redhat.com/
+On 23/09/2020 02:33, Ming Lei wrote:
+> Obviously scsi device's queue depth can't be > host's can_queue,
+> so make it explicitely in scsi_change_queue_depth().
+
+ha, why not can_queue * nr_hw_queues?
+
 > 
 > Cc: Omar Sandoval <osandov@fb.com>
 > Cc: Kashyap Desai <kashyap.desai@broadcom.com>
@@ -83,24 +63,21 @@ On 9/23/20 3:33 AM, Ming Lei wrote:
 > Cc: Hannes Reinecke <hare@suse.de>
 > Signed-off-by: Ming Lei <ming.lei@redhat.com>
 > ---
->   drivers/scsi/scsi.c        |  2 ++
->   drivers/scsi/scsi_lib.c    | 33 +++++++++++++++------------------
->   drivers/scsi/scsi_priv.h   |  1 +
->   drivers/scsi/scsi_scan.c   | 22 ++++++++++++++++++++--
->   drivers/scsi/scsi_sysfs.c  |  2 ++
->   include/scsi/scsi_device.h |  5 +++--
->   6 files changed, 43 insertions(+), 22 deletions(-)
+>   drivers/scsi/scsi.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-Ah. Now it makes sense why 'no budget' has been set to -1.
-Ok.
+> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+> index 24619c3bebd5..cc6ff1ae8c16 100644
+> --- a/drivers/scsi/scsi.c
+> +++ b/drivers/scsi/scsi.c
+> @@ -223,6 +223,8 @@ void scsi_finish_command(struct scsi_cmnd *cmd)
+>    */
+>   int scsi_change_queue_depth(struct scsi_device *sdev, int depth)
+>   {
+> +	depth = min_t(int, depth, sdev->host->can_queue);
+> +
+>   	if (depth > 0) {
+>   		sdev->queue_depth = depth;
+>   		wmb();
+> 
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
