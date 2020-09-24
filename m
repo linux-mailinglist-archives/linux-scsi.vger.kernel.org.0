@@ -2,107 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF83F276C87
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Sep 2020 10:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18D6276CE0
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Sep 2020 11:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727293AbgIXI74 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Sep 2020 04:59:56 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:42664 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgIXI7z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Sep 2020 04:59:55 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08O8x8r5195318;
-        Thu, 24 Sep 2020 08:59:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=dE2Lou7hZbnLtRutIaHG2ToxInouGVpJfq9Vzf5Lv1g=;
- b=Ebm/7LL7I9IjIYfhxiSrhlxooWKIXQMmCS9YXhUNNbuykf0/fjbvgc8pLPZ0rGXZGdbL
- dPUj9f98JxS2fF9YqBla3QYXWdRoc6W2kkfMnLI7LiUjewBp8D2bqsW/Aqs+7BlI9f2d
- /+Ho2tJb1dG1oFgUIs+a0e+y1mfZsEsqP/YgRByCToyKpZyuBsVCSTcX320Qr5GLyjha
- DxEXQjkc17rsO0Ub97W19tw1GLkLSQmuXlkXXGxhMs/0/dzzklMT8gHfv6IwFk/TqOOy
- FuoFXwX4dqbOQflbzM1+CMX0bwYPWW5SNtVlqWJeMKGx74oSHGMlF6tfe7GX1jnNLsic 8Q== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 33ndnuq2a5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Sep 2020 08:59:52 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08O8sQH6162135;
-        Thu, 24 Sep 2020 08:59:52 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 33nujqn6vm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Sep 2020 08:59:52 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08O8xoKV010346;
-        Thu, 24 Sep 2020 08:59:51 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 24 Sep 2020 01:59:50 -0700
-Date:   Thu, 24 Sep 2020 11:59:45 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     aeasi@marvell.com
-Cc:     linux-scsi@vger.kernel.org
-Subject: [bug report] scsi: qla2xxx: Setup debugfs entries for remote ports
-Message-ID: <20200924085945.GA1569340@mwanda>
+        id S1727338AbgIXJPB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Sep 2020 05:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727312AbgIXJPB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Sep 2020 05:15:01 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3ABC0613D6
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id k14so2663275edo.1
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=blIPJEbomAKiMgTEwz666YDx51JxK5KUKkCacV2k5DGrYF1dgoN3TPlbCce3UdPyqn
+         l+sjX0//ZpWoRSpXvagCpGylKqMTkNMo/2HAZJY28dwC1rti3ofKw4Z1RDbjcvxMDnbn
+         DBnAhALu6UdIa4wCDzo7dIv9qp2U03O4u7rDCQdwmjFPbrVpv5bepecSdGtwKnTJB9rH
+         nH/oGusFJ6JM43Xna+7eDdLYcEoJL8AsTmou4kcpDb2UtDY0KPfodc/NGQ4TUEcOm3hs
+         6cMsgEJtG/d3gouoUvTe4+Wy9RSjcJnO5Ygg3P7zVsSedlaT/hDy9teH4tkT8r3LGB8W
+         6cvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=gM+cqJSsMpLQ5h+s3SEUktQB48b60F7v7NE3YW7x95e9lnA6WuzLC5Szl10ayQ5E7S
+         wfZygOWg7ukwwiBnubYqAZ9o4fFNCDVie/tgZQpiyZg0gVTDYjhFEt4iMx8hsh3VWPz1
+         xeaDKJGOLgDyECoOrk8J6/JLJ0m8AiXmdaVlnZGKNow/taMMPQoFxw6+6HsZuglGXQMg
+         xwAkPKKiCeY095bnmEaL5asopYR1Oi/dnWKNsRVoDY0vRt6zlMhNeVlPxkYXMgT6xodT
+         ElHr4Zp+cKJ2Ep6XHl1xX8myrDtwAZhR43TrcdM3WPpSS6sAGwqkBwjXL+3WcPOmLFbu
+         cOsA==
+X-Gm-Message-State: AOAM533PJAXIMGB1oLFtzv43SK5XxZpZNHinH7G8um527P39WVWxtKSJ
+        NsKvUVchZ8CQLTd/K4z2KGIiJUqSaKQMbvfSMho=
+X-Google-Smtp-Source: ABdhPJyTPH8PP/2mieNLbOyLqms9pUviMKvSeTWD9wb8h+Pr7H1ZfKMbyjpiQTFtDXkxINcaJ73NV9FfmSogeqXajbU=
+X-Received: by 2002:a05:6402:c15:: with SMTP id co21mr1946edb.268.1600938899597;
+ Thu, 24 Sep 2020 02:14:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
- mlxlogscore=999 phishscore=0 adultscore=0 spamscore=0 suspectscore=3
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009240071
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=3 bulkscore=0
- clxscore=1011 impostorscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009240072
+Received: by 2002:a54:2811:0:0:0:0:0 with HTTP; Thu, 24 Sep 2020 02:14:58
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <floradarpin.d@gmail.com>
+Date:   Thu, 24 Sep 2020 02:14:58 -0700
+Message-ID: <CAPX4zWxG6--oZzPaoMmta9n5fWHajuiA-wFBP=cbGe-CKGcWaw@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Arun Easi,
+--=20
+Lieber Freund (Assalamu Alaikum),
 
-The patch 1e98fb0f9208: "scsi: qla2xxx: Setup debugfs entries for
-remote ports" from Sep 3, 2020, leads to the following static checker
-warning:
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-	drivers/scsi/qla2xxx/qla_dfs.c:119 qla2x00_dfs_create_rport()
-	warn: 'fp->dfs_rport_dir' is an error pointer or valid
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
-drivers/scsi/qla2xxx/qla_dfs.c
-   106  qla2x00_dfs_create_rport(scsi_qla_host_t *vha, struct fc_port *fp)
-   107  {
-   108          char wwn[32];
-   109  
-   110  #define QLA_CREATE_RPORT_FIELD_ATTR(_attr)                      \
-   111          debugfs_create_file(#_attr, 0400, fp->dfs_rport_dir,    \
-   112                  fp, &qla_dfs_rport_field_##_attr##_fops)
-   113  
-   114          if (!vha->dfs_rport_root || fp->dfs_rport_dir)
-   115                  return;
-   116  
-   117          sprintf(wwn, "pn-%016llx", wwn_to_u64(fp->port_name));
-   118          fp->dfs_rport_dir = debugfs_create_dir(wwn, vha->dfs_rport_root);
-   119          if (!fp->dfs_rport_dir)
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
 
-Just delete this test.  Debugfs functions are not supposed to be checked
-in the normal case.
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
 
-   120                  return;
-   121          if (NVME_TARGET(vha->hw, fp))
-   122                  debugfs_create_file("dev_loss_tmo", 0600, fp->dfs_rport_dir,
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
 
-The debugfs_create_file() function has it's own checks built in so no
-need to check.
-
-   123                                      fp, &qla_dfs_rport_dev_loss_tmo_fops);
-   124  
-   125          QLA_CREATE_RPORT_FIELD_ATTR(disc_state);
-   126          QLA_CREATE_RPORT_FIELD_ATTR(scan_state);
-   127          QLA_CREATE_RPORT_FIELD_ATTR(fw_login_state);
-
-regards,
-dan carpenter
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
