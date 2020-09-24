@@ -2,97 +2,309 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A18D6276CE0
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Sep 2020 11:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97625276EE5
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Sep 2020 12:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbgIXJPB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Sep 2020 05:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727312AbgIXJPB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Sep 2020 05:15:01 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3ABC0613D6
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id k14so2663275edo.1
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=blIPJEbomAKiMgTEwz666YDx51JxK5KUKkCacV2k5DGrYF1dgoN3TPlbCce3UdPyqn
-         l+sjX0//ZpWoRSpXvagCpGylKqMTkNMo/2HAZJY28dwC1rti3ofKw4Z1RDbjcvxMDnbn
-         DBnAhALu6UdIa4wCDzo7dIv9qp2U03O4u7rDCQdwmjFPbrVpv5bepecSdGtwKnTJB9rH
-         nH/oGusFJ6JM43Xna+7eDdLYcEoJL8AsTmou4kcpDb2UtDY0KPfodc/NGQ4TUEcOm3hs
-         6cMsgEJtG/d3gouoUvTe4+Wy9RSjcJnO5Ygg3P7zVsSedlaT/hDy9teH4tkT8r3LGB8W
-         6cvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=gM+cqJSsMpLQ5h+s3SEUktQB48b60F7v7NE3YW7x95e9lnA6WuzLC5Szl10ayQ5E7S
-         wfZygOWg7ukwwiBnubYqAZ9o4fFNCDVie/tgZQpiyZg0gVTDYjhFEt4iMx8hsh3VWPz1
-         xeaDKJGOLgDyECoOrk8J6/JLJ0m8AiXmdaVlnZGKNow/taMMPQoFxw6+6HsZuglGXQMg
-         xwAkPKKiCeY095bnmEaL5asopYR1Oi/dnWKNsRVoDY0vRt6zlMhNeVlPxkYXMgT6xodT
-         ElHr4Zp+cKJ2Ep6XHl1xX8myrDtwAZhR43TrcdM3WPpSS6sAGwqkBwjXL+3WcPOmLFbu
-         cOsA==
-X-Gm-Message-State: AOAM533PJAXIMGB1oLFtzv43SK5XxZpZNHinH7G8um527P39WVWxtKSJ
-        NsKvUVchZ8CQLTd/K4z2KGIiJUqSaKQMbvfSMho=
-X-Google-Smtp-Source: ABdhPJyTPH8PP/2mieNLbOyLqms9pUviMKvSeTWD9wb8h+Pr7H1ZfKMbyjpiQTFtDXkxINcaJ73NV9FfmSogeqXajbU=
-X-Received: by 2002:a05:6402:c15:: with SMTP id co21mr1946edb.268.1600938899597;
- Thu, 24 Sep 2020 02:14:59 -0700 (PDT)
+        id S1726444AbgIXKjv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Sep 2020 06:39:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45846 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726405AbgIXKjv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 24 Sep 2020 06:39:51 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 8F37CADAB;
+        Thu, 24 Sep 2020 10:40:26 +0000 (UTC)
+Subject: Re: [PATCH] scsi: alua: fix the race between alua_bus_detach and
+ alua_rtpg
+To:     jitendra.khasdev@oracle.com, "Ewan D. Milne" <emilne@redhat.com>,
+        martin.petersen@oracle.com, jejb@linux.ibm.com, hare@suse.com,
+        loberman@redhat.com
+Cc:     joe.jin@oracle.com, junxiao.bi@oracle.com,
+        gulam.mohamed@oracle.com, RITIKA.SRIVASTAVA@oracle.com,
+        linux-scsi@vger.kernel.org
+References: <1600167537-12509-1-git-send-email-jitendra.khasdev@oracle.com>
+ <c5e0700bb192a422541d1328db7ca0146edf7a81.camel@redhat.com>
+ <c58d1877-1d30-e81d-f10f-3571e3a248b9@oracle.com>
+ <d21e4a7c-9668-23db-c470-596a8e1e3af6@suse.de>
+ <a62fc767-6489-0093-d4ed-72e25f89782c@oracle.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <6d4115ba-bd69-75d9-e209-a4ef4aaa9a68@suse.de>
+Date:   Thu, 24 Sep 2020 12:39:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Received: by 2002:a54:2811:0:0:0:0:0 with HTTP; Thu, 24 Sep 2020 02:14:58
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <floradarpin.d@gmail.com>
-Date:   Thu, 24 Sep 2020 02:14:58 -0700
-Message-ID: <CAPX4zWxG6--oZzPaoMmta9n5fWHajuiA-wFBP=cbGe-CKGcWaw@mail.gmail.com>
-Subject: Lieber Freund (Assalamu Alaikum),?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <a62fc767-6489-0093-d4ed-72e25f89782c@oracle.com>
+Content-Type: multipart/mixed;
+ boundary="------------B2E7845B3A36296BA2FE1BE1"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Lieber Freund (Assalamu Alaikum),
+This is a multi-part message in MIME format.
+--------------B2E7845B3A36296BA2FE1BE1
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
-Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
-Mutter und eine Witwe
-mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
-hen
-Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
+On 9/23/20 7:50 PM, jitendra.khasdev@oracle.com wrote:
+> 
+> 
+> On 9/23/20 1:47 PM, Hannes Reinecke wrote:
+>> On 9/18/20 5:49 AM, jitendra.khasdev@oracle.com wrote:
+>>>
+>>>
+>>> On 9/17/20 11:00 PM, Ewan D. Milne wrote:
+>>>> On Tue, 2020-09-15 at 16:28 +0530, Jitendra Khasdev wrote:
+>>>>> This is patch to fix the race occurs between bus detach and alua_rtpg.
+>>>>>
+>>>>> It fluses the all pending workqueue in bus detach handler, so it can avoid
+>>>>> race between alua_bus_detach and alua_rtpg.
+>>>>>
+>>>>> Here is call trace where race got detected.
+>>>>>
+>>>>> multipathd call stack:
+>>>>> [exception RIP: native_queued_spin_lock_slowpath+100]
+>>>>> --- <NMI exception stack> ---
+>>>>> native_queued_spin_lock_slowpath at ffffffff89307f54
+>>>>> queued_spin_lock_slowpath at ffffffff89307c18
+>>>>> _raw_spin_lock_irq at ffffffff89bd797b
+>>>>> alua_bus_detach at ffffffff8984dcc8
+>>>>> scsi_dh_release_device at ffffffff8984b6f2
+>>>>> scsi_device_dev_release_usercontext at ffffffff89846edf
+>>>>> execute_in_process_context at ffffffff892c3e60
+>>>>> scsi_device_dev_release at ffffffff8984637c
+>>>>> device_release at ffffffff89800fbc
+>>>>> kobject_cleanup at ffffffff89bb1196
+>>>>> kobject_put at ffffffff89bb12ea
+>>>>> put_device at ffffffff89801283
+>>>>> scsi_device_put at ffffffff89838d5b
+>>>>> scsi_disk_put at ffffffffc051f650 [sd_mod]
+>>>>> sd_release at ffffffffc051f8a2 [sd_mod]
+>>>>> __blkdev_put at ffffffff8952c79e
+>>>>> blkdev_put at ffffffff8952c80c
+>>>>> blkdev_close at ffffffff8952c8b5
+>>>>> __fput at ffffffff894e55e6
+>>>>> ____fput at ffffffff894e57ee
+>>>>> task_work_run at ffffffff892c94dc
+>>>>> exit_to_usermode_loop at ffffffff89204b12
+>>>>> do_syscall_64 at ffffffff892044da
+>>>>> entry_SYSCALL_64_after_hwframe at ffffffff89c001b8
+>>>>>
+>>>>> kworker:
+>>>>> [exception RIP: alua_rtpg+2003]
+>>>>> account_entity_dequeue at ffffffff892e42c1
+>>>>> alua_rtpg_work at ffffffff8984f097
+>>>>> process_one_work at ffffffff892c4c29
+>>>>> worker_thread at ffffffff892c5a4f
+>>>>> kthread at ffffffff892cb135
+>>>>> ret_from_fork at ffffffff89c00354
+>>>>>
+>>>>> Signed-off-by: Jitendra Khasdev <jitendra.khasdev@oracle.com>
+>>>>> ---
+>>>>>    drivers/scsi/device_handler/scsi_dh_alua.c | 3 +++
+>>>>>    1 file changed, 3 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+>>>>> index f32da0c..024a752 100644
+>>>>> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
+>>>>> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+>>>>> @@ -1144,6 +1144,9 @@ static void alua_bus_detach(struct scsi_device *sdev)
+>>>>>        struct alua_dh_data *h = sdev->handler_data;
+>>>>>        struct alua_port_group *pg;
+>>>>>    +    sdev_printk(KERN_INFO, sdev, "%s: flushing workqueues\n", ALUA_DH_NAME);
+>>>>> +    flush_workqueue(kaluad_wq);
+>>>>> +
+>>>>>        spin_lock(&h->pg_lock);
+>>>>>        pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+>>>>>        rcu_assign_pointer(h->pg, NULL);
+>>>>
+>>>> I'm not sure this is the best solution.  The current code
+>>>> references h->sdev when the dh_list is traversed.  So it needs
+>>>> to remain valid.  Fixing it by flushing the workqueue to avoid
+>>>> the list traversal code running leaves open the possibility that
+>>>> future code alterations may expose this problem again.
+>>>>
+>>>> -Ewan
+>>>>
+>>>>
+>>>
+>>> I see your point, but as we are in detach handler and this code path
+>>> only execute when device is being detached. So, before detaching, flush
+>>> work-queue will take care of any current code references h->sdev where
+>>> dh_list is being traversed.
+>>>
+>> Flushing the workqueue is a bit of an overkill, seeing that we know exactly which workqueue element we're waiting for.
+>>
+>>> IMO, I do not think it would create any problem for future code
+>>> alterations. Or may be I am missing something over here, what could
+>>> be possible scenario for that?
+>>>
+>> Problem is more that I'd like to understand where exactly the race condition is. Can you figure out which spinlock is triggering in your stack trace?
+>>
+>> Cheers,
+>>
+>> Hannes
+> 
+> Hannes,
+> 
+> Race is between "alua_bus_detach" and "alua_rtpg_work".
+> 
+> Whenever we perform fail-over or turn off the switch, the path goes down, which eventually triggers
+> blkdev_put -> .. -> scsi_device_dev_release -> .. ->  alua_bus_detach meanwhile another thread of alua_rtpg_work also running in parallel. Both threads are using sdev.
+> 
+> In alua_bus_detach, we are setting null to sdev. From above call trace (multipathd) we can see alua_bus_deatch ran first and set sdev to null. It keeps its execution continue and it does not have any problem.
+> 
+> 1138 /*
+> 1139  * alua_bus_detach - Detach device handler
+> 1140  * @sdev: device to be detached from
+> 1141  */
+> 1142 static void alua_bus_detach(struct scsi_device *sdev)
+> 1143 {
+> 1144         struct alua_dh_data *h = sdev->handler_data;
+> 1145         struct alua_port_group *pg;
+> 1146
+> 1147         spin_lock(&h->pg_lock);
+> 1148         pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+> 1149         rcu_assign_pointer(h->pg, NULL);
+> *1150*         h->sdev = NULL;  << Looks detach handler won the race and set sdev to null
+> 1151         spin_unlock(&h->pg_lock);
+> 1152         if (pg) {
+> 1153                 spin_lock_irq(&pg->lock); <<< from the call trace we can see that we just acquired the lock and got NMI
+> exception because we encountered a BUG_ON from different thread.
+> 1154                 list_del_rcu(&h->node);
+> 
+> 
+> Meanwhile alua_rtpg try to check for BUG_ON(!h->sdev);
+> 
+> alua_rtpg_work -> alua_rtpg
+> ----
+>   505 static int alua_rtpg(struct scsi_device *sdev, struct alua_port_group *pg)
+>   506 {
+>   .
+>   .
+>   .
+>   659                                         list_for_each_entry_rcu(h,
+>   660                                                 &tmp_pg->dh_list, node) {
+>   661                                                 /* h->sdev should always be valid */
+>   *662*                                                 BUG_ON(!h->sdev); <<<< 2nd call trace caused the panic due to this bug on.
+>   663                                                 h->sdev->access_state = desc[0];
+>   664                                         }
+>   665                                         rcu_read_unlock();
+>   666                                 }
+> ----
+> 
+Ah, yes.
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend
-United State Dollar ($ 27.500.000.00) und ich brauche eine
-vertrauensw=C3=BCrdige Investition
-Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
-jedoch
-M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
-von
-Investitionsprojekten in Ihrem Land
-Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
-bauen.
+We would need to take 'h->lock' here before checking 'h->sdev'.
+Alternatively, we should be able to fix it by not setting h->sdev to 
+NULL, and issuing rcu_synchronize() before issuing kfree(h):
 
-Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
-n und
-Unternehmensgewinn zu verhandeln
-Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+@@ -1147,7 +1148,6 @@ static void alua_bus_detach(struct scsi_device *sdev)
+         spin_lock(&h->pg_lock);
+         pg = rcu_dereference_protected(h->pg, 
+lockdep_is_held(&h->pg_lock));
+         rcu_assign_pointer(h->pg, NULL);
+-       h->sdev = NULL;
+         spin_unlock(&h->pg_lock);
+         if (pg) {
+                 spin_lock_irq(&pg->lock);
+@@ -1156,6 +1156,7 @@ static void alua_bus_detach(struct scsi_device *sdev)
+                 kref_put(&pg->kref, release_port_group);
+         }
+         sdev->handler_data = NULL;
++       rcu_synchronize();
+         kfree(h);
+  }
 
-Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
-antworten Sie bitte dringend
-Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
-.
+The 'rcu_synchronize()' will ensure that any concurrent thread has left 
+the rcu-critical section (ie the loop mentioned above), and the issue 
+will be avoided.
+Additionally, we could replace the BUG_ON() with
 
-Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
-esse (
-ayishagddafio@mail.ru ) zur weiteren Diskussion.
+if (!h->sdev)
+     continue;
 
-Freundliche Gr=C3=BC=C3=9Fe
-Frau Aisha Al-Qaddafi
+and the problem should be solved.
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+
+--------------B2E7845B3A36296BA2FE1BE1
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-scsi_dh_alua-avoid-crash-during-alua_bus_detach.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0001-scsi_dh_alua-avoid-crash-during-alua_bus_detach.patch"
+
+From eb295823f4604a939d89cb21aad468fcd393484b Mon Sep 17 00:00:00 2001
+From: Hannes Reinecke <hare@suse.de>
+Date: Thu, 24 Sep 2020 12:33:22 +0200
+Subject: [PATCH] scsi_dh_alua: avoid crash during alua_bus_detach()
+
+alua_bus_detach() might be running concurrently with alua_rtpg_work(),
+so we might trip over h->sdev == NULL and call BUG_ON().
+The correct way of handling it would be to not set h->sdev to NULL
+in alua_bus_detach(), and call rcu_synchronize() before the final
+delete to ensure that all concurrent threads have left the critical
+section.
+Then we can get rid of the BUG_ON(), and replace it with a simple
+if condition.
+
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+---
+ drivers/scsi/device_handler/scsi_dh_alua.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+index f32da0ca529e..308bda2e9c00 100644
+--- a/drivers/scsi/device_handler/scsi_dh_alua.c
++++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+@@ -658,8 +658,8 @@ static int alua_rtpg(struct scsi_device *sdev, struct alua_port_group *pg)
+ 					rcu_read_lock();
+ 					list_for_each_entry_rcu(h,
+ 						&tmp_pg->dh_list, node) {
+-						/* h->sdev should always be valid */
+-						BUG_ON(!h->sdev);
++						if (!h->sdev)
++							continue;
+ 						h->sdev->access_state = desc[0];
+ 					}
+ 					rcu_read_unlock();
+@@ -705,7 +705,8 @@ static int alua_rtpg(struct scsi_device *sdev, struct alua_port_group *pg)
+ 			pg->expiry = 0;
+ 			rcu_read_lock();
+ 			list_for_each_entry_rcu(h, &pg->dh_list, node) {
+-				BUG_ON(!h->sdev);
++				if (!h->sdev)
++					continue;
+ 				h->sdev->access_state =
+ 					(pg->state & SCSI_ACCESS_STATE_MASK);
+ 				if (pg->pref)
+@@ -1147,7 +1148,6 @@ static void alua_bus_detach(struct scsi_device *sdev)
+ 	spin_lock(&h->pg_lock);
+ 	pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+ 	rcu_assign_pointer(h->pg, NULL);
+-	h->sdev = NULL;
+ 	spin_unlock(&h->pg_lock);
+ 	if (pg) {
+ 		spin_lock_irq(&pg->lock);
+@@ -1156,6 +1156,7 @@ static void alua_bus_detach(struct scsi_device *sdev)
+ 		kref_put(&pg->kref, release_port_group);
+ 	}
+ 	sdev->handler_data = NULL;
++	synchronize_rcu();
+ 	kfree(h);
+ }
+ 
+-- 
+2.16.4
+
+
+--------------B2E7845B3A36296BA2FE1BE1--
