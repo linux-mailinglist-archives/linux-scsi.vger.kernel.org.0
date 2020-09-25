@@ -2,75 +2,204 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32127278DEA
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Sep 2020 18:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCE0278E00
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Sep 2020 18:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729123AbgIYQSB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Sep 2020 12:18:01 -0400
-Received: from verein.lst.de ([213.95.11.211]:56719 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728524AbgIYQSB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 25 Sep 2020 12:18:01 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 39A7E68AFE; Fri, 25 Sep 2020 18:17:55 +0200 (CEST)
-Date:   Fri, 25 Sep 2020 18:17:54 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        iommu@lists.linux-foundation.org, alsa-devel@alsa-project.org,
-        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-doc@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        netdev@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 08/18] dma-mapping: add a new dma_alloc_noncoherent API
-Message-ID: <20200925161754.GA18721@lst.de>
-References: <20200915155122.1768241-1-hch@lst.de> <20200915155122.1768241-9-hch@lst.de> <c8ea4023-3e19-d63b-d936-46a04f502a61@arm.com>
+        id S1729427AbgIYQTk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Sep 2020 12:19:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20907 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729337AbgIYQTi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 25 Sep 2020 12:19:38 -0400
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601050776;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CZzTv3hBY/mUlwQevJcuf6ALk7r9I6yfAL5YgetwTXE=;
+        b=dYYTFfMa4Sp8hgIsP6oA4mi7npNVQLZHCnZHaIvf4G2EDnyc6zJBmjIoxEV1SXLokpkVJ2
+        +7pAAx6vQw0sVqJS9YNFeobxpuX6hgHMhuB/B6IkIs+BaiK9eNa86pJcRjCen8sR4pEvs9
+        joQcdJ54DhbvjSa2E/ivG1vAi2c3p54=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-87-ITFCUEKKPZ6J5olKVgEi9g-1; Fri, 25 Sep 2020 12:19:32 -0400
+X-MC-Unique: ITFCUEKKPZ6J5olKVgEi9g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 37A3010BBECF;
+        Fri, 25 Sep 2020 16:19:31 +0000 (UTC)
+Received: from sulaco.redhat.com (unknown [10.10.110.11])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E3035D9DC;
+        Fri, 25 Sep 2020 16:19:30 +0000 (UTC)
+From:   Tony Asleson <tasleson@redhat.com>
+To:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org
+Subject: [v5 00/12] Add persistent durable identifier to storage log messages
+Date:   Fri, 25 Sep 2020 11:19:17 -0500
+Message-Id: <20200925161929.1136806-1-tasleson@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c8ea4023-3e19-d63b-d936-46a04f502a61@arm.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 12:15:37PM +0100, Robin Murphy wrote:
-> On 2020-09-15 16:51, Christoph Hellwig wrote:
-> [...]
->> +These APIs allow to allocate pages in the kernel direct mapping that are
->> +guaranteed to be DMA addressable.  This means that unlike dma_alloc_coherent,
->> +virt_to_page can be called on the resulting address, and the resulting
->
-> Nit: if we explicitly describe this as if it's a guarantee that can be 
-> relied upon...
->
->> +struct page can be used for everything a struct page is suitable for.
->
-> [...]
->> +This routine allocates a region of <size> bytes of consistent memory.  It
->> +returns a pointer to the allocated region (in the processor's virtual address
->> +space) or NULL if the allocation failed.  The returned memory may or may not
->> +be in the kernels direct mapping.  Drivers must not call virt_to_page on
->> +the returned memory region.
->
-> ...then forbid this document's target audience from relying on it, 
-> something seems off. At the very least it's unhelpfully unclear :/
->
-> Given patch #17, I suspect that the first paragraph is the one that's no 
-> longer true.
+Today users have no easy way to correlate kernel log messages for storage
+devices across reboots, device dynamic add/remove, or when the device is
+physically or logically moved from from system to system.  This is due
+to the existing log IDs which identify how the device is attached and not
+a unique ID of what is attached.  Additionally, even when the attachment
+hasn't changed, it's not always obvious which messages belong to the
+device as the different areas in the storage stack use different
+identifiers, eg. (sda, sata1.00, sd 0:0:0:0).
 
-Yes.  dma_alloc_pages is the replacement for allocations that need the
-direct mapping.  I'll send a patch to document dma_alloc_pages and
-fixes this up
+This change addresses this by adding a unique ID to each log
+message.  It couples the existing structured key/value logging capability
+and VPD 0x83 device identification.  The structured key/value data is not
+visible in normal viewing and is not seen in the dmesg output or journal
+output unless you go looking for it by dumping the output as JSON.
+
+Some examples of logs filtered for a specific device utilizing this patch
+series.
+
+$ journalctl -b  _KERNEL_DURABLE_NAME="`cat /sys/block/sdb/device/wwid`" 
+| cut -c 25- | fmt -t
+l: scsi 1:0:0:0: Attached scsi generic sg1 type 0
+l: sd 1:0:0:0: [sdb] 209715200 512-byte logical blocks: (107 GB/100 GiB)
+l: sd 1:0:0:0: [sdb] Write Protect is off
+l: sd 1:0:0:0: [sdb] Mode Sense: 00 3a 00 00
+l: sd 1:0:0:0: [sdb] Write cache: enabled, read cache: enabled, doesn't
+   support DPO or FUA
+l: sd 1:0:0:0: [sdb] Attached SCSI disk
+l: ata2.00: exception Emask 0x0 SAct 0x8 SErr 0x8 action 0x6 frozen
+l: ata2.00: failed command: READ FPDMA QUEUED
+l: ata2.00: cmd 60/01:18:10:27:00/00:00:00:00:00/40 tag 3 ncq dma 512
+            in res 40/00:00:00:00:00/00:00:00:00:00/00 Emask 0x4 (timeout)
+l: ata2.00: status: { DRDY }
+l: ata2.00: configured for UDMA/100
+l: ata2.00: device reported invalid CHS sector 0
+l: ata2.00: exception Emask 0x0 SAct 0x4000 SErr 0x4000 action 0x6 frozen
+l: ata2.00: failed command: READ FPDMA QUEUED
+l: ata2.00: cmd 60/01:70:10:27:00/00:00:00:00:00/40 tag 14 ncq dma 512
+            in res 40/00:00:00:00:00/00:00:00:00:00/00 Emask 0x4 (timeout)
+l: ata2.00: status: { DRDY }
+l: ata2.00: configured for UDMA/100
+l: ata2.00: device reported invalid CHS sector 0
+l: ata2.00: exception Emask 0x0 SAct 0x80000000 SErr 0x80000000 action
+            0x6 frozen
+l: ata2.00: failed command: READ FPDMA QUEUED
+l: ata2.00: cmd 60/01:f8:10:27:00/00:00:00:00:00/40 tag 31 ncq dma 512
+            in res 40/00:ff:00:00:00/00:00:00:00:00/00 Emask 0x4 (timeout)
+l: ata2.00: status: { DRDY }
+l: ata2.00: configured for UDMA/100
+l: ata2.00: NCQ disabled due to excessive errors
+l: ata2.00: exception Emask 0x0 SAct 0x40000 SErr 0x40000 action 0x6
+            frozen
+l: ata2.00: failed command: READ FPDMA QUEUED
+l: ata2.00: cmd 60/01:90:10:27:00/00:00:00:00:00/40 tag 18 ncq dma 512
+            in res 40/00:01:00:00:00/00:00:00:00:00/00 Emask 0x4 (timeout)
+l: ata2.00: status: { DRDY }
+l: ata2.00: configured for UDMA/100
+
+$ journalctl -b  _KERNEL_DURABLE_NAME="`cat /sys/block/nvme0n1/wwid`" 
+| cut -c 25- | fmt -t
+l: blk_update_request: critical medium error, dev nvme0n1, sector 10000
+   op 0x0:(READ) flags 0x80700 phys_seg 4 prio class 0
+l: blk_update_request: critical medium error, dev nvme0n1, sector 10000
+   op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+l: Buffer I/O error on dev nvme0n1, logical block 1250, async page read
+
+$ journalctl -b  _KERNEL_DURABLE_NAME="`cat /sys/block/sdc/device/wwid`"
+| cut -c 25- | fmt -t
+l: sd 8:0:0:0: Power-on or device reset occurred
+l: sd 8:0:0:0: [sdc] 16777216 512-byte logical blocks: (8.59 GB/8.00 GiB)
+l: sd 8:0:0:0: Attached scsi generic sg2 type 0
+l: sd 8:0:0:0: [sdc] Write Protect is off
+l: sd 8:0:0:0: [sdc] Mode Sense: 63 00 00 08
+l: sd 8:0:0:0: [sdc] Write cache: enabled, read cache: enabled, doesn't
+   support DPO or FUA
+l: sd 8:0:0:0: [sdc] Attached SCSI disk
+l: sd 8:0:0:0: [sdc] tag#255 FAILED Result: hostbyte=DID_OK
+   driverbyte=DRIVER_SENSE cmd_age=0s
+l: sd 8:0:0:0: [sdc] tag#255 Sense Key : Medium Error [current]
+l: sd 8:0:0:0: [sdc] tag#255 Add. Sense: Unrecovered read error
+l: sd 8:0:0:0: [sdc] tag#255 CDB: Read(10) 28 00 00 00 27 10 00 00 01 00
+l: blk_update_request: critical medium error, dev sdc, sector 10000 op
+   0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+
+There should be no changes to the log message content with this patch series.
+I ran release kernel and this patch series and did a compare while forcing the
+kernel through the same errors paths to verify.
+
+The first 6 commits in the patch series utilize changes needed for dev_printk
+code path.  The last 6 commits in the patch add the needed changes to utilize
+durable_name_printk.  The function durable_name_printk is nothing more than
+a printk that adds structured key/value durable name to unmodified printk
+output.  I structured it this way so only a subset of the patch series could
+be theoretically applied if we cannot get agreement on complete patch series.
+
+v2:
+- Incorporated changes suggested by James Bottomley
+- Removed string function which removed leading/trailing/duplicate adjacent
+  spaces from generated id, value matches /sys/block/<device>/device/wwid
+- Remove xfs patch, limiting changes to lower block layers
+- Moved callback from struct device_type to struct device.  Struct device_type
+  is typically static const and with a number of different areas using shared
+  implementation of genhd unable to modify for each of the different areas.
+
+v3:
+- Increase the size of the buffers for NVMe id generation and
+  dev_vprintk_emit
+  
+v4:
+- Back out dev_printk for those locations that weren't using it before, so that
+  we don't change the content of the user visible log message by using a
+  function durable_name_printk.
+- Remove RFC from patch series.
+
+v5:
+- Reduced stack usage for nvme wwid
+- Make function ata_scsi_durable_name static, found by kernel test robot
+- Incorporated suggested changes from Andy Shevchenko and Sergei Shtylyov
+  * Remove unneeded line spacing
+  * Correct spelling
+  * Remove unneeded () in conditional operator
+  * Re-worked expressions to follow common kernel patterns, added
+    function dev_to_scsi_device
+- Re-based for v5.8 branch
+
+Tony Asleson (12):
+  struct device: Add function callback durable_name
+  create_syslog_header: Add durable name
+  dev_vprintk_emit: Increase hdr size
+  scsi: Add durable_name for dev_printk
+  nvme: Add durable name for dev_printk
+  libata: Add ata_scsi_durable_name
+  libata: Make ata_scsi_durable_name static
+  Add durable_name_printk
+  libata: use durable_name_printk
+  Add durable_name_printk_ratelimited
+  print_req_error: Use durable_name_printk_ratelimited
+  buffer_io_error: Use durable_name_printk_ratelimited
+
+ block/blk-core.c           |  5 ++++-
+ drivers/ata/libata-core.c  | 17 +++++++-------
+ drivers/ata/libata-scsi.c  | 18 ++++++++++++---
+ drivers/base/core.c        | 46 +++++++++++++++++++++++++++++++++++++-
+ drivers/nvme/host/core.c   | 18 +++++++++++++++
+ drivers/scsi/scsi_lib.c    |  9 ++++++++
+ drivers/scsi/scsi_sysfs.c  | 35 +++++++++++++++++++++++------
+ drivers/scsi/sd.c          |  2 ++
+ fs/buffer.c                | 15 +++++++++----
+ include/linux/dev_printk.h | 14 ++++++++++++
+ include/linux/device.h     |  4 ++++
+ include/scsi/scsi_device.h |  3 +++
+ 12 files changed, 162 insertions(+), 24 deletions(-)
+
+
+base-commit: bcf876870b95592b52519ed4aafcf9d95999bc9c
+-- 
+2.26.2
+
