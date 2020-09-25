@@ -2,107 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D64A277FB0
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Sep 2020 06:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E528F27804F
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Sep 2020 08:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgIYEzS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Sep 2020 00:55:18 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:55993 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726908AbgIYEzR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 25 Sep 2020 00:55:17 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 15E7420418F;
-        Fri, 25 Sep 2020 06:55:16 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id y7jVirbaeaYR; Fri, 25 Sep 2020 06:55:09 +0200 (CEST)
-Received: from [192.168.48.23] (host-45-78-251-166.dyn.295.ca [45.78.251.166])
-        by smtp.infotech.no (Postfix) with ESMTPA id E3BC6204179;
-        Fri, 25 Sep 2020 06:55:08 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: lib/scatterlist.c : sgl_alloc_order promises more than it
- delivers
-To:     Bart Van Assche <bvanassche@acm.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Cc:     "Martin K. Petersen" <martin.petersen@ORACLE.COM>,
-        USB list <linux-usb@vger.kernel.org>
-References: <b9f5c065-7662-30e0-8cbd-27a77d28611e@interlog.com>
- <d9513f73-fa18-4b71-fabf-be0b9e1614fd@acm.org>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <d487005a-ef6c-549f-7006-c7056cf3f36d@interlog.com>
-Date:   Fri, 25 Sep 2020 00:55:07 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727246AbgIYGID (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Sep 2020 02:08:03 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:40416 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727240AbgIYGID (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 25 Sep 2020 02:08:03 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id B6D1260DFD6FBC84E4AB;
+        Fri, 25 Sep 2020 14:08:00 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 25 Sep 2020 14:07:51 +0800
+From:   Jing Xiangfeng <jingxiangfeng@huawei.com>
+To:     <kartilak@cisco.com>, <sebaddel@cisco.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jingxiangfeng@huawei.com>
+Subject: [PATCH] scsi: snic: Remove unnecessary condition to simplify the code
+Date:   Fri, 25 Sep 2020 14:07:54 +0800
+Message-ID: <20200925060754.156599-1-jingxiangfeng@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <d9513f73-fa18-4b71-fabf-be0b9e1614fd@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-09-24 10:34 p.m., Bart Van Assche wrote:
-> On 2020-09-24 18:46, Douglas Gilbert wrote:
->>          /* Check for integer overflow */
->>          if (length > (nent << (PAGE_SHIFT + order)))
->>                  return NULL;
->>
->> Well _integers_ don't wrap, but that pedantic point aside, 'nent' is an
->> unsigned int which means the rhs expression cannot represent 2^32 or
->> higher. So if length >= 2^32 the function fails (i.e. returns NULL).
->>
->> On 8 GiB and 16 GiB machines I can easily build 6 or 12 GiB sgl_s (with
->> scsi_debug) but only if no single allocation is >= 4 GiB due to the
->> above check.
->>
->> So is the above check intended to do that or is it a bug?
-> 
-> The above check verifies that nent << (PAGE_SHIFT + order) ==
-> (uint64_t)nent << (PAGE_SHIFT + order). So I think it does what the
-> comment says it does.
+ret is always zero or an error in this code path. So the assignment to
+ret is redundant, and the code jumping to a label is unneed.
+Let's remove them to simplify the code. No functional changes.
 
-I modified sgl_alloc_order() like this:
+Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
+---
+ drivers/scsi/snic/snic_scsi.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-         /* Check for integer overflow */
-         if (length > (nent << (PAGE_SHIFT + order)))
-{
-pr_info("%s: (length > (nent << (PAGE_SHIFT + order))\n", __func__);
-                 return NULL;
-}
-	...
-
-Then I tried starting scsi_debug with dev_size_mb=4096
-
-This is what I saw in the log:
-
-scsi_debug:scsi_debug_init: fixing max submit queue depth to host max queue 
-depth, 32
-sgl_alloc_order: (length > (nent << (PAGE_SHIFT + order))
-message repeated 2 times: [sgl_alloc_order: (length > (nent << (PAGE_SHIFT + 
-order))]
-scsi_debug:sdeb_store_sgat: sdeb_store_sgat: unable to obtain 4096 MiB, last 
-element size: 256 kiB
-scsi_debug:sdebug_add_store: sgat: user data oom
-scsi_debug:sdebug_add_store: sdebug_add_store: failed, errno=12
-
-
-My code steps down from 1024 KiB elements on failure to 512 KiB and if that
-fails it tries 256 KiB. Then it gives up. The log output is consistent with
-my analysis. So your stated equality is an inequality when length >= 4 GiB.
-There is no promotion of unsigned int nent to uint64_t .
-
-You can write your own test harness if you don't believe me. The test machine
-doesn't need much ram. Without the call to sgl_free() corrected, if it really
-did try to get that much ram and failed toward the end, then (partially)
-freed up what it had obtained, then you would see a huge memory leak ...
-
-
-Now your intention seems to be that a 4 GiB sgl should be valid. Correct?
-Can that check just be dropped?
-
-Doug Gilbert
+diff --git a/drivers/scsi/snic/snic_scsi.c b/drivers/scsi/snic/snic_scsi.c
+index b3650c989ed4..0c2f31b8ea05 100644
+--- a/drivers/scsi/snic/snic_scsi.c
++++ b/drivers/scsi/snic/snic_scsi.c
+@@ -1387,10 +1387,6 @@ snic_issue_tm_req(struct snic *snic,
+ 	}
+ 
+ 	ret = snic_queue_itmf_req(snic, tmreq, sc, tmf, req_id);
+-	if (ret)
+-		goto tmreq_err;
+-
+-	ret = 0;
+ 
+ tmreq_err:
+ 	if (ret) {
+-- 
+2.17.1
 
