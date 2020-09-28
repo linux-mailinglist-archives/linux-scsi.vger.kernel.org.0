@@ -2,124 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F96B27AA6F
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Sep 2020 11:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0ED27AB15
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Sep 2020 11:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726665AbgI1JNP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Sep 2020 05:13:15 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:47812 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726640AbgI1JNP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Sep 2020 05:13:15 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08S98xjn021122;
-        Mon, 28 Sep 2020 09:13:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=onqFxvuNgmSWxb5TyttFFh60aQyyoipjjSNj0YfQXFk=;
- b=yfIqhgkDTFTf+awz5zS7P76xGfYWPpWuEvoSzoKf4BTDGR+JRR5e2DrXvSPVmJyvJn5f
- flj8gl2lBcthRxySyQLW6edl37FyZ9IBK5N9QFlaMp+aSoM8XeLS7IrD/o2x2enKp2oU
- 2SOepugO+XxQVA5sTO0C4tXFnE1F2zr+SvW/pHgVKxPAF/R1PegCK5J1bQhNAJtP3qbQ
- mFcqFFmBNZ3sOxi3Um/nqpBj1xNEKjvkvFTzB7vUXmKutGsLHndmf93mSReZLrRdXZa9
- lm6aw7dXnQRhDNlCtWD60ZQFcZ+wA7/k67YANPJPCGFYIJx/jqix41fx1IwQuju+TfWL vA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33sx9muvuv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Sep 2020 09:13:10 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08S9AekY176903;
-        Mon, 28 Sep 2020 09:13:09 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 33tfdprgmb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Sep 2020 09:13:09 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08S9D8n4030911;
-        Mon, 28 Sep 2020 09:13:08 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 28 Sep 2020 02:13:07 -0700
-Date:   Mon, 28 Sep 2020 12:13:00 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Subbu Seetharaman <subbu.seetharaman@broadcom.com>
-Cc:     Ketan Mukadam <ketan.mukadam@broadcom.com>,
-        Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@suse.de>,
-        Jayamohan Kallickal 
-        <jayamohank@HDRedirect-LB5-1afb6e2973825a56.elb.us-east-1.amazonaws.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] scsi: be2iscsi: Fix a theoretical leak in
- beiscsi_create_eqs()
-Message-ID: <20200928091300.GD377727@mwanda>
+        id S1726635AbgI1Jqt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Sep 2020 05:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726559AbgI1Jqt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Sep 2020 05:46:49 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D708BC061755
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Sep 2020 02:46:48 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id n61so275246ota.10
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Sep 2020 02:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WhMLzcQiRYr6gohgr1Y+WgU7n7TSvYgFGzisn/1Kvwg=;
+        b=WPwHkCL9w4yBhyHU8yspHSRj+Qvkar37dx6hefEnI0zAw6sRXjmpTLQe3Oq5yJwHfU
+         3zo2Mh9i9z3uTjsLziO1gJ3VlTQRH/12NL9GuqKudJtZQ/ab4L9xe9UChrpR2vmi49o2
+         ZjaUrbSoqJtKt3SNvynTAlO9a0PTgckb108angxiutCZngCfcq03tFJM8S30mCvrbyUH
+         shMdTZed/lYdT6G0/xgwC2LsNL1M6J6Qi4KRNEV1iTquzXDGC0XxKt7o6W/yyqIJfLUm
+         lS2RhHLnfzuafmHNecrw3DGF4Yw7pTzO5uADM0gx0utw0oGxlp30dqLJiNNZroubOEBX
+         Qdrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WhMLzcQiRYr6gohgr1Y+WgU7n7TSvYgFGzisn/1Kvwg=;
+        b=mmHEHeJHe8rBSuPTJmHUg5+QqItY9Evlqt9c/1bYY4vrbtbuSqrmM16lcNLHir/WxX
+         wiKm+o+druT0vbcgKDmsOh5hjI5tLIKrPlhuk9PacUDwTcK2Q35qTqQLN/75KJgtg4Tm
+         PCmxcS7ORBquDifSHyrAKnxyzghemkMesV31ypRCKG6PQ0p0m1G19+PoIY8MTkAoCBC4
+         2QDBZySuU6KYstQI2sby7tlLdVtAOq2lXyXlLXH8pBlP2+XlH9BErjfcZpwIRV8F9aUJ
+         BJHdxWty2+Vo8zG2oVKAMcSdSlw59+v42YgjhlG9OlhwEP6p3pOp5e/zH3p6RHniUWAe
+         UTMQ==
+X-Gm-Message-State: AOAM531eU4+EL1GRyNUvHj+WVpXlYzkLRWPBTRhppK6zDjnOyuGD3vv8
+        2GHnJ9muPHayJJuMM3tVYQ95HlCif57fFDSyJxw=
+X-Google-Smtp-Source: ABdhPJyRJTyyOb+PasLH4p+hcdPfRB4FwAYR6fL0snJcthCzmS41KKcFuo3eZ/5JJGD2skka88xz+qHHCTYzP8qF/uk=
+X-Received: by 2002:a9d:66da:: with SMTP id t26mr354971otm.240.1601286408278;
+ Mon, 28 Sep 2020 02:46:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- adultscore=0 malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009280077
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- phishscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1011
- spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009280077
+Received: by 2002:a9d:7343:0:0:0:0:0 with HTTP; Mon, 28 Sep 2020 02:46:47
+ -0700 (PDT)
+Reply-To: andrewclement069@gmail.com
+From:   Andrew Clement <joemarvic3@gmail.com>
+Date:   Mon, 28 Sep 2020 10:46:47 +0100
+Message-ID: <CAJy9wfLLVbzSNEY6ohfk_Ex7JsT2HxCd1TjtF_n4s6AoVJ=A5w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The be_fill_queue() function can only fail when "eq_vaddress" is NULL
-and since it's non-NULL here that means the function call can't fail.
-But imagine if it could, then in that situation we would want to store
-the "paddr" so that dma memory can be released.
-
-Fixes: bfead3b2cb46 ("[SCSI] be2iscsi: Adding msix and mcc_rings V3")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/scsi/be2iscsi/be_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
-index 5c3513a4b450..202ba925c494 100644
---- a/drivers/scsi/be2iscsi/be_main.c
-+++ b/drivers/scsi/be2iscsi/be_main.c
-@@ -3020,6 +3020,7 @@ static int beiscsi_create_eqs(struct beiscsi_hba *phba,
- 			goto create_eq_error;
- 		}
- 
-+		mem->dma = paddr;
- 		mem->va = eq_vaddress;
- 		ret = be_fill_queue(eq, phba->params.num_eq_entries,
- 				    sizeof(struct be_eq_entry), eq_vaddress);
-@@ -3029,7 +3030,6 @@ static int beiscsi_create_eqs(struct beiscsi_hba *phba,
- 			goto create_eq_error;
- 		}
- 
--		mem->dma = paddr;
- 		ret = beiscsi_cmd_eq_create(&phba->ctrl, eq,
- 					    BEISCSI_EQ_DELAY_DEF);
- 		if (ret) {
-@@ -3086,6 +3086,7 @@ static int beiscsi_create_cqs(struct beiscsi_hba *phba,
- 			goto create_cq_error;
- 		}
- 
-+		mem->dma = paddr;
- 		ret = be_fill_queue(cq, phba->params.num_cq_entries,
- 				    sizeof(struct sol_cqe), cq_vaddress);
- 		if (ret) {
-@@ -3095,7 +3096,6 @@ static int beiscsi_create_cqs(struct beiscsi_hba *phba,
- 			goto create_cq_error;
- 		}
- 
--		mem->dma = paddr;
- 		ret = beiscsi_cmd_cq_create(&phba->ctrl, cq, eq, false,
- 					    false, 0);
- 		if (ret) {
--- 
-2.28.0
-
+Hello, how are you? Hope you are alright, I sent you message earlier
+but no response from you, Confirm the receipt of my previous message
+and contact me for more explanation on time.
