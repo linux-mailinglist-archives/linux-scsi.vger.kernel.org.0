@@ -2,60 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0ED27AB15
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Sep 2020 11:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0FA27ABB1
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Sep 2020 12:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbgI1Jqt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Sep 2020 05:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        id S1726558AbgI1KT2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Sep 2020 06:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726559AbgI1Jqt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Sep 2020 05:46:49 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D708BC061755
-        for <linux-scsi@vger.kernel.org>; Mon, 28 Sep 2020 02:46:48 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id n61so275246ota.10
-        for <linux-scsi@vger.kernel.org>; Mon, 28 Sep 2020 02:46:48 -0700 (PDT)
+        with ESMTP id S1726380AbgI1KT2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Sep 2020 06:19:28 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1CAC0613CE
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Sep 2020 03:19:27 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id s31so450682pga.7
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Sep 2020 03:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WhMLzcQiRYr6gohgr1Y+WgU7n7TSvYgFGzisn/1Kvwg=;
-        b=WPwHkCL9w4yBhyHU8yspHSRj+Qvkar37dx6hefEnI0zAw6sRXjmpTLQe3Oq5yJwHfU
-         3zo2Mh9i9z3uTjsLziO1gJ3VlTQRH/12NL9GuqKudJtZQ/ab4L9xe9UChrpR2vmi49o2
-         ZjaUrbSoqJtKt3SNvynTAlO9a0PTgckb108angxiutCZngCfcq03tFJM8S30mCvrbyUH
-         shMdTZed/lYdT6G0/xgwC2LsNL1M6J6Qi4KRNEV1iTquzXDGC0XxKt7o6W/yyqIJfLUm
-         lS2RhHLnfzuafmHNecrw3DGF4Yw7pTzO5uADM0gx0utw0oGxlp30dqLJiNNZroubOEBX
-         Qdrg==
+        d=areca-com-tw.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:mime-version
+         :content-transfer-encoding;
+        bh=aqKuja4n+cNWBnmmn/RpGXVE0nrfXb2IK4hEeeWWG3Y=;
+        b=u3OdICsH6T+Q2k9FhEsUWwguIfe5wIrZTSCmxRqj7qmFewDfKqeED4sIS9TmvdrLhA
+         hzYnT0C6dTWsHXgKFhc3vTQ0IiJQZ3wam4yLxxtGSAxWq/+L8NURYogXmVwRsQceq4RQ
+         Kwa7P+M4lx14ekLnBBZe7qM2hqyTIH52nEVDruqJXFjgtY/N00gIh7RCAbFGkH0jXFF+
+         bMsPorGtgaQWoiIg5cbxG3PvHX6Xqaub3T8+GQoDcypfP8lVXnlK8hUELPW0F3eK2Vsr
+         4l/vvxWL/REvFBVQk2caFYbMatO40wN7xt5qOZmikK+YXBxZRvcReQhpc7WOCKanhdV3
+         Grag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WhMLzcQiRYr6gohgr1Y+WgU7n7TSvYgFGzisn/1Kvwg=;
-        b=mmHEHeJHe8rBSuPTJmHUg5+QqItY9Evlqt9c/1bYY4vrbtbuSqrmM16lcNLHir/WxX
-         wiKm+o+druT0vbcgKDmsOh5hjI5tLIKrPlhuk9PacUDwTcK2Q35qTqQLN/75KJgtg4Tm
-         PCmxcS7ORBquDifSHyrAKnxyzghemkMesV31ypRCKG6PQ0p0m1G19+PoIY8MTkAoCBC4
-         2QDBZySuU6KYstQI2sby7tlLdVtAOq2lXyXlLXH8pBlP2+XlH9BErjfcZpwIRV8F9aUJ
-         BJHdxWty2+Vo8zG2oVKAMcSdSlw59+v42YgjhlG9OlhwEP6p3pOp5e/zH3p6RHniUWAe
-         UTMQ==
-X-Gm-Message-State: AOAM531eU4+EL1GRyNUvHj+WVpXlYzkLRWPBTRhppK6zDjnOyuGD3vv8
-        2GHnJ9muPHayJJuMM3tVYQ95HlCif57fFDSyJxw=
-X-Google-Smtp-Source: ABdhPJyRJTyyOb+PasLH4p+hcdPfRB4FwAYR6fL0snJcthCzmS41KKcFuo3eZ/5JJGD2skka88xz+qHHCTYzP8qF/uk=
-X-Received: by 2002:a9d:66da:: with SMTP id t26mr354971otm.240.1601286408278;
- Mon, 28 Sep 2020 02:46:48 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a9d:7343:0:0:0:0:0 with HTTP; Mon, 28 Sep 2020 02:46:47
- -0700 (PDT)
-Reply-To: andrewclement069@gmail.com
-From:   Andrew Clement <joemarvic3@gmail.com>
-Date:   Mon, 28 Sep 2020 10:46:47 +0100
-Message-ID: <CAJy9wfLLVbzSNEY6ohfk_Ex7JsT2HxCd1TjtF_n4s6AoVJ=A5w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:mime-version
+         :content-transfer-encoding;
+        bh=aqKuja4n+cNWBnmmn/RpGXVE0nrfXb2IK4hEeeWWG3Y=;
+        b=PKa/TQRdpmf1n20xpohfNW82g0c4mXfCxrNovVMBY/ANtYA6URfiZoVPQs3YoSCPTb
+         2LGhkUTEvyZ80w/njP32jGlnG1EGIEvqCJdyVFFiLWoeiCXMjS5qm85tDzYFBMd3waud
+         d95qeIPRYjVF17zt9S87A0sX6NRUwr3QUo6xBBeDCOptyi6kq6XibfND/YlB6yLebMuC
+         Dz4YXn+5RrYZnrkrg0lxvt3tOzkM8W+5AVbmcP9DLBshPx4IcmmphDrxAOmydFsYowzU
+         1IcZEl0e/RW33rzkn2KMlj2HS5BKfiQ5qCusMdPAmdTjl2tldhHR8LupWaKpKAlRBuqh
+         VOxQ==
+X-Gm-Message-State: AOAM5327uTNqYDjLUH8Rz40qNTaKFvuNiKYlSSzRwX1eL0fEyhmYNo1q
+        p2iPWvx//YtzX/p3OQCnxGxBdA==
+X-Google-Smtp-Source: ABdhPJxQK0ydTcY4tRB0S+K0h+O/S+YYo0HjyzgsduohiEaw0Q2P+jTFVVoeH8SlVqH0OZIP+4bomQ==
+X-Received: by 2002:a63:b44f:: with SMTP id n15mr637920pgu.282.1601288367243;
+        Mon, 28 Sep 2020 03:19:27 -0700 (PDT)
+Received: from centos78 (60-248-88-209.HINET-IP.hinet.net. [60.248.88.209])
+        by smtp.gmail.com with ESMTPSA id w203sm1292653pff.0.2020.09.28.03.19.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Sep 2020 03:19:26 -0700 (PDT)
+Message-ID: <0fcd9588bb87f47856316677e8bb495f14fcb597.camel@areca.com.tw>
+Subject: [PATCH 0/4] scsi: arcmsr: Fix timer stop and support new adapter
+ ARC-1886 series
+From:   ching Huang <ching2048@areca.com.tw>
+To:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     dan.carpenter@oracle.com, hch@infradead.org,
+        Colin King <colin.king@canonical.com>
+Date:   Mon, 28 Sep 2020 18:19:24 +0800
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-8.el7) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello, how are you? Hope you are alright, I sent you message earlier
-but no response from you, Confirm the receipt of my previous message
-and contact me for more explanation on time.
+This patch series are against to mkp's 5.10/scsi-queue.
+
+1. Remove unnecessary syntax.
+2. Fix device hot-plug monitoring timer stop.
+3. Add supporting ARC-1886 series Raid controllers.
+4. Update driver version to v1.50.00.02-20200819.
+---
+
