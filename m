@@ -2,466 +2,268 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D42527D415
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Sep 2020 19:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEB527D4C1
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Sep 2020 19:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgI2RCH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 29 Sep 2020 13:02:07 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:46822 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728327AbgI2RCE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Sep 2020 13:02:04 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TGxqhN190393;
-        Tue, 29 Sep 2020 17:01:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=S3eDVlwbGMTQBdQHesJFujCr2Ar010OTfUmFw6cocO4=;
- b=JrMIqy6fK/nrQ+r8VK8p6BXEVvc1tvXs7IuKKmhgJXc1nyKbguSQ40LGzVMwg/6Zd+kL
- PsIM2KwysnwW4Af23zyVO+HgBNGGtnA8JW9voykTmXWZWxI5i+wXEQv2CMFTi2VJ3VTr
- g2kbTm0jiorhhVkWaWhzpsDqqfD5AF+pdp9HuvhsUfY3oriVA5jYA7rE9iHhqfvHdYEd
- xIV5D4Id3md3xLMQQ7N0v4ri8ZP5mW0diXqj9CE+iVLSJZG8fWZxRrojGGb22pXb892X
- WU8g77+GxHcSrPzOBlSPE3+yTtz4oza3pKuc/EnYbXCVchSJEIGY8CMwdvZP3DcNNWUy +A== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 33su5av6dd-1
+        id S1729353AbgI2RpT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 29 Sep 2020 13:45:19 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:41100 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728525AbgI2RpT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Sep 2020 13:45:19 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08THdVLa026422;
+        Tue, 29 Sep 2020 17:45:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=wie9BjZke2pOXyJoPYvwWddK0lj1/nhuv+mC6ZcINq4=;
+ b=I7maLuRKnQQwt1oep8XSLaiut0PLPgNIFLcO/VP28ZfIs29iI5Sypg4Y/zLeTpIMxkdf
+ FB7CDbM1+M2yUeG2rHyNPozNCgHS7yzAo3y0wZjqU4i0sRM3Wt8Hsn/DbsDZQSq/LxFG
+ mbj1fC1+fWNYuTNeph6O3MI8J3MSsvk+gylk8YtkZnh39+4IH4dw2R5iUP+1OieY8a9q
+ Xly+5/3lnEzSOT4jhx3fDaPNeXrNCx6X4RDWFYNXH0zW8f1Q3Fh+hPjiy+1+hk0zOtKw
+ rRwc+phZqZbk7TYEGfusZi4JVGZRzmA8ykX9a/Bh/z8uj/WlXguqhx6bUqHnBF/g79+n Gw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33swkkvacn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Sep 2020 17:01:58 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TH0rNj179543;
-        Tue, 29 Sep 2020 17:01:58 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 33uv2e65f4-1
+        Tue, 29 Sep 2020 17:45:08 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08THdkod099138;
+        Tue, 29 Sep 2020 17:45:07 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33tfjx61bw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Sep 2020 17:01:58 +0000
+        Tue, 29 Sep 2020 17:45:07 +0000
 Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08TH1t4H025136;
-        Tue, 29 Sep 2020 17:01:56 GMT
-Received: from ol2.localdomain (/73.88.28.6)
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08THj5Mi018424;
+        Tue, 29 Sep 2020 17:45:06 GMT
+Received: from [10.191.204.243] (/10.191.204.243)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 29 Sep 2020 10:01:55 -0700
-From:   Mike Christie <michael.christie@oracle.com>
-To:     martin.petersen@oracle.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Subject: [PATCH 2/2] scsi sd: Allow user to config cmd retries
-Date:   Tue, 29 Sep 2020 12:01:48 -0500
-Message-Id: <1601398908-28443-3-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1601398908-28443-1-git-send-email-michael.christie@oracle.com>
-References: <1601398908-28443-1-git-send-email-michael.christie@oracle.com>
+        with ESMTP ; Tue, 29 Sep 2020 10:45:05 -0700
+Subject: Re: [PATCH] scsi: alua: fix the race between alua_bus_detach and
+ alua_rtpg
+To:     Hannes Reinecke <hare@suse.de>,
+        "Ewan D. Milne" <emilne@redhat.com>, martin.petersen@oracle.com,
+        jejb@linux.ibm.com, hare@suse.com, loberman@redhat.com
+Cc:     joe.jin@oracle.com, junxiao.bi@oracle.com,
+        gulam.mohamed@oracle.com, RITIKA.SRIVASTAVA@oracle.com,
+        linux-scsi@vger.kernel.org
+References: <1600167537-12509-1-git-send-email-jitendra.khasdev@oracle.com>
+ <c5e0700bb192a422541d1328db7ca0146edf7a81.camel@redhat.com>
+ <c58d1877-1d30-e81d-f10f-3571e3a248b9@oracle.com>
+ <d21e4a7c-9668-23db-c470-596a8e1e3af6@suse.de>
+ <a62fc767-6489-0093-d4ed-72e25f89782c@oracle.com>
+ <6d4115ba-bd69-75d9-e209-a4ef4aaa9a68@suse.de>
+From:   jitendra.khasdev@oracle.com
+Organization: Oracle Corporation
+Message-ID: <4d65749a-0792-9b98-c39e-50a8ebb1c8cc@oracle.com>
+Date:   Tue, 29 Sep 2020 23:14:58 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <6d4115ba-bd69-75d9-e209-a4ef4aaa9a68@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9759 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290144
+ definitions=main-2009290149
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9759 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0
- malwarescore=0 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290144
+ definitions=main-2009290149
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Some iSCSI targets went the traditional export N ports and then allowed
-the initiator to multipath over them. Other targets went the opposite
-direction and export 1 port, and then software on the target side
-performs load balancing and failover to other targets via a iscsi
-specific feature or IP takover.
 
-The problem for the 2nd type of config is we quickly run out of our
-five retries and get IO errors. In these setups we want to reduce
-resource use on the initaitor side so we only wanted the one session
-and no dm-multipath. To handle traditional multipath operations like
-failover we do IP takover on the target side. So we would have a
-iscsi target running on node1. Some monitoring software decides it's
-dead or the node is overloaded, so it starts the iscsi target on
-node2. The problem is for the failover case where we might have the
-equivalent of a dm-multipath temp all paths down, or we just have to
-try more than 5 nodes before finding a good one.
 
-To handle this type of issue, this patch allows the user to config
-the disk cmd retries from -1 to the current max of 5. -1 means
-infinite retries and should be used for setups where some other
-setting is going to control when to fail. For example iscsi has the
-replacement/recovery timeout and fc (some users have used FC with
-NPIV and done something similar as IP takover) has
-dev_loss_tmo/fast_io_fail which will eventually expire and fail IO.
+On 9/24/20 4:09 PM, Hannes Reinecke wrote:
+> On 9/23/20 7:50 PM, jitendra.khasdev@oracle.com wrote:
+>>
+>>
+>> On 9/23/20 1:47 PM, Hannes Reinecke wrote:
+>>> On 9/18/20 5:49 AM, jitendra.khasdev@oracle.com wrote:
+>>>>
+>>>>
+>>>> On 9/17/20 11:00 PM, Ewan D. Milne wrote:
+>>>>> On Tue, 2020-09-15 at 16:28 +0530, Jitendra Khasdev wrote:
+>>>>>> This is patch to fix the race occurs between bus detach and alua_rtpg.
+>>>>>>
+>>>>>> It fluses the all pending workqueue in bus detach handler, so it can avoid
+>>>>>> race between alua_bus_detach and alua_rtpg.
+>>>>>>
+>>>>>> Here is call trace where race got detected.
+>>>>>>
+>>>>>> multipathd call stack:
+>>>>>> [exception RIP: native_queued_spin_lock_slowpath+100]
+>>>>>> --- <NMI exception stack> ---
+>>>>>> native_queued_spin_lock_slowpath at ffffffff89307f54
+>>>>>> queued_spin_lock_slowpath at ffffffff89307c18
+>>>>>> _raw_spin_lock_irq at ffffffff89bd797b
+>>>>>> alua_bus_detach at ffffffff8984dcc8
+>>>>>> scsi_dh_release_device at ffffffff8984b6f2
+>>>>>> scsi_device_dev_release_usercontext at ffffffff89846edf
+>>>>>> execute_in_process_context at ffffffff892c3e60
+>>>>>> scsi_device_dev_release at ffffffff8984637c
+>>>>>> device_release at ffffffff89800fbc
+>>>>>> kobject_cleanup at ffffffff89bb1196
+>>>>>> kobject_put at ffffffff89bb12ea
+>>>>>> put_device at ffffffff89801283
+>>>>>> scsi_device_put at ffffffff89838d5b
+>>>>>> scsi_disk_put at ffffffffc051f650 [sd_mod]
+>>>>>> sd_release at ffffffffc051f8a2 [sd_mod]
+>>>>>> __blkdev_put at ffffffff8952c79e
+>>>>>> blkdev_put at ffffffff8952c80c
+>>>>>> blkdev_close at ffffffff8952c8b5
+>>>>>> __fput at ffffffff894e55e6
+>>>>>> ____fput at ffffffff894e57ee
+>>>>>> task_work_run at ffffffff892c94dc
+>>>>>> exit_to_usermode_loop at ffffffff89204b12
+>>>>>> do_syscall_64 at ffffffff892044da
+>>>>>> entry_SYSCALL_64_after_hwframe at ffffffff89c001b8
+>>>>>>
+>>>>>> kworker:
+>>>>>> [exception RIP: alua_rtpg+2003]
+>>>>>> account_entity_dequeue at ffffffff892e42c1
+>>>>>> alua_rtpg_work at ffffffff8984f097
+>>>>>> process_one_work at ffffffff892c4c29
+>>>>>> worker_thread at ffffffff892c5a4f
+>>>>>> kthread at ffffffff892cb135
+>>>>>> ret_from_fork at ffffffff89c00354
+>>>>>>
+>>>>>> Signed-off-by: Jitendra Khasdev <jitendra.khasdev@oracle.com>
+>>>>>> ---
+>>>>>>    drivers/scsi/device_handler/scsi_dh_alua.c | 3 +++
+>>>>>>    1 file changed, 3 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+>>>>>> index f32da0c..024a752 100644
+>>>>>> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
+>>>>>> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+>>>>>> @@ -1144,6 +1144,9 @@ static void alua_bus_detach(struct scsi_device *sdev)
+>>>>>>        struct alua_dh_data *h = sdev->handler_data;
+>>>>>>        struct alua_port_group *pg;
+>>>>>>    +    sdev_printk(KERN_INFO, sdev, "%s: flushing workqueues\n", ALUA_DH_NAME);
+>>>>>> +    flush_workqueue(kaluad_wq);
+>>>>>> +
+>>>>>>        spin_lock(&h->pg_lock);
+>>>>>>        pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+>>>>>>        rcu_assign_pointer(h->pg, NULL);
+>>>>>
+>>>>> I'm not sure this is the best solution.  The current code
+>>>>> references h->sdev when the dh_list is traversed.  So it needs
+>>>>> to remain valid.  Fixing it by flushing the workqueue to avoid
+>>>>> the list traversal code running leaves open the possibility that
+>>>>> future code alterations may expose this problem again.
+>>>>>
+>>>>> -Ewan
+>>>>>
+>>>>>
+>>>>
+>>>> I see your point, but as we are in detach handler and this code path
+>>>> only execute when device is being detached. So, before detaching, flush
+>>>> work-queue will take care of any current code references h->sdev where
+>>>> dh_list is being traversed.
+>>>>
+>>> Flushing the workqueue is a bit of an overkill, seeing that we know exactly which workqueue element we're waiting for.
+>>>
+>>>> IMO, I do not think it would create any problem for future code
+>>>> alterations. Or may be I am missing something over here, what could
+>>>> be possible scenario for that?
+>>>>
+>>> Problem is more that I'd like to understand where exactly the race condition is. Can you figure out which spinlock is triggering in your stack trace?
+>>>
+>>> Cheers,
+>>>
+>>> Hannes
+>>
+>> Hannes,
+>>
+>> Race is between "alua_bus_detach" and "alua_rtpg_work".
+>>
+>> Whenever we perform fail-over or turn off the switch, the path goes down, which eventually triggers
+>> blkdev_put -> .. -> scsi_device_dev_release -> .. ->  alua_bus_detach meanwhile another thread of alua_rtpg_work also running in parallel. Both threads are using sdev.
+>>
+>> In alua_bus_detach, we are setting null to sdev. From above call trace (multipathd) we can see alua_bus_deatch ran first and set sdev to null. It keeps its execution continue and it does not have any problem.
+>>
+>> 1138 /*
+>> 1139  * alua_bus_detach - Detach device handler
+>> 1140  * @sdev: device to be detached from
+>> 1141  */
+>> 1142 static void alua_bus_detach(struct scsi_device *sdev)
+>> 1143 {
+>> 1144         struct alua_dh_data *h = sdev->handler_data;
+>> 1145         struct alua_port_group *pg;
+>> 1146
+>> 1147         spin_lock(&h->pg_lock);
+>> 1148         pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+>> 1149         rcu_assign_pointer(h->pg, NULL);
+>> *1150*         h->sdev = NULL;  << Looks detach handler won the race and set sdev to null
+>> 1151         spin_unlock(&h->pg_lock);
+>> 1152         if (pg) {
+>> 1153                 spin_lock_irq(&pg->lock); <<< from the call trace we can see that we just acquired the lock and got NMI
+>> exception because we encountered a BUG_ON from different thread.
+>> 1154                 list_del_rcu(&h->node);
+>>
+>>
+>> Meanwhile alua_rtpg try to check for BUG_ON(!h->sdev);
+>>
+>> alua_rtpg_work -> alua_rtpg
+>> ----
+>>   505 static int alua_rtpg(struct scsi_device *sdev, struct alua_port_group *pg)
+>>   506 {
+>>   .
+>>   .
+>>   .
+>>   659                                         list_for_each_entry_rcu(h,
+>>   660                                                 &tmp_pg->dh_list, node) {
+>>   661                                                 /* h->sdev should always be valid */
+>>   *662*                                                 BUG_ON(!h->sdev); <<<< 2nd call trace caused the panic due to this bug on.
+>>   663                                                 h->sdev->access_state = desc[0];
+>>   664                                         }
+>>   665                                         rcu_read_unlock();
+>>   666                                 }
+>> ----
+>>
+> Ah, yes.
+> 
+> We would need to take 'h->lock' here before checking 'h->sdev'.
+> Alternatively, we should be able to fix it by not setting h->sdev to NULL, and issuing rcu_synchronize() before issuing kfree(h):
+> 
+> @@ -1147,7 +1148,6 @@ static void alua_bus_detach(struct scsi_device *sdev)
+>         spin_lock(&h->pg_lock);
+>         pg = rcu_dereference_protected(h->pg, lockdep_is_held(&h->pg_lock));
+>         rcu_assign_pointer(h->pg, NULL);
+> -       h->sdev = NULL;
+>         spin_unlock(&h->pg_lock);
+>         if (pg) {
+>                 spin_lock_irq(&pg->lock);
+> @@ -1156,6 +1156,7 @@ static void alua_bus_detach(struct scsi_device *sdev)
+>                 kref_put(&pg->kref, release_port_group);
+>         }
+>         sdev->handler_data = NULL;
+> +       rcu_synchronize();
+>         kfree(h);
+>  }
+> 
+> The 'rcu_synchronize()' will ensure that any concurrent thread has left the rcu-critical section (ie the loop mentioned above), and the issue will be avoided.
+> Additionally, we could replace the BUG_ON() with
+> 
+> if (!h->sdev)
+>     continue;
+> 
+> and the problem should be solved.
+> 
+> Cheers,
+> 
+> Hannes
 
-Note:
-One alternative to this patch would be to make it transport class
-setting, then have it hook in to where we can config the
-scsi_cmnd->allowed value. I put the setting in sd_mod because I
-thought users might want to lower retries for the general case.
+Thanks Hannes for patch, I am currently testing it.
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/scsi/sd.c | 101 ++++++++++++++++++++++++++++++++--------------
- drivers/scsi/sd.h |   1 +
- 2 files changed, 72 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 16503e22691e..162b996334e5 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -194,7 +194,7 @@ cache_type_store(struct device *dev, struct device_attribute *attr,
- 	}
- 
- 	if (scsi_mode_sense(sdp, 0x08, 8, buffer, sizeof(buffer), SD_TIMEOUT,
--			    SD_MAX_RETRIES, &data, NULL))
-+			    sdkp->max_retries, &data, NULL))
- 		return -EINVAL;
- 	len = min_t(size_t, sizeof(buffer), data.length - data.header_length -
- 		  data.block_descriptor_length);
-@@ -212,7 +212,7 @@ cache_type_store(struct device *dev, struct device_attribute *attr,
- 	data.device_specific = 0;
- 
- 	if (scsi_mode_select(sdp, 1, sp, 8, buffer_data, len, SD_TIMEOUT,
--			     SD_MAX_RETRIES, &data, &sshdr)) {
-+			     sdkp->max_retries, &data, &sshdr)) {
- 		if (scsi_sense_valid(&sshdr))
- 			sd_print_sense_hdr(sdkp, &sshdr);
- 		return -EINVAL;
-@@ -543,6 +543,39 @@ zoned_cap_show(struct device *dev, struct device_attribute *attr, char *buf)
- }
- static DEVICE_ATTR_RO(zoned_cap);
- 
-+static ssize_t
-+max_retries_store(struct device *dev, struct device_attribute *attr,
-+		  const char *buf, size_t count)
-+{
-+	struct scsi_disk *sdkp = to_scsi_disk(dev);
-+	struct scsi_device *sdev = sdkp->device;
-+	int retries, err;
-+
-+	err = kstrtoint(buf, 10, &retries);
-+	if (err)
-+		return err;
-+
-+	if (retries == SCSI_CMD_RETRIES_NO_LIMIT || retries <= SD_MAX_RETRIES) {
-+		sdkp->max_retries = retries;
-+		return count;
-+	}
-+
-+	sdev_printk(KERN_ERR, sdev, "max_retries must be between -1 and %d\n",
-+		    SD_MAX_RETRIES);
-+	return -EINVAL;
-+}
-+
-+static ssize_t
-+max_retries_show(struct device *dev, struct device_attribute *attr,
-+		 char *buf)
-+{
-+	struct scsi_disk *sdkp = to_scsi_disk(dev);
-+
-+	return sprintf(buf, "%d\n", sdkp->max_retries);
-+}
-+
-+static DEVICE_ATTR_RW(max_retries);
-+
- static struct attribute *sd_disk_attrs[] = {
- 	&dev_attr_cache_type.attr,
- 	&dev_attr_FUA.attr,
-@@ -557,6 +590,7 @@ static struct attribute *sd_disk_attrs[] = {
- 	&dev_attr_max_write_same_blocks.attr,
- 	&dev_attr_max_medium_access_timeouts.attr,
- 	&dev_attr_zoned_cap.attr,
-+	&dev_attr_max_retries.attr,
- 	NULL,
- };
- ATTRIBUTE_GROUPS(sd_disk);
-@@ -665,7 +699,8 @@ static void scsi_disk_put(struct scsi_disk *sdkp)
- static int sd_sec_submit(void *data, u16 spsp, u8 secp, void *buffer,
- 		size_t len, bool send)
- {
--	struct scsi_device *sdev = data;
-+	struct scsi_disk *sdkp = data;
-+	struct scsi_device *sdev = sdkp->device;
- 	u8 cdb[12] = { 0, };
- 	int ret;
- 
-@@ -676,7 +711,7 @@ static int sd_sec_submit(void *data, u16 spsp, u8 secp, void *buffer,
- 
- 	ret = scsi_execute_req(sdev, cdb,
- 			send ? DMA_TO_DEVICE : DMA_FROM_DEVICE,
--			buffer, len, NULL, SD_TIMEOUT, SD_MAX_RETRIES, NULL);
-+			buffer, len, NULL, SD_TIMEOUT, sdkp->max_retries, NULL);
- 	return ret <= 0 ? ret : -EIO;
- }
- #endif /* CONFIG_BLK_SED_OPAL */
-@@ -839,6 +874,7 @@ static blk_status_t sd_setup_unmap_cmnd(struct scsi_cmnd *cmd)
- {
- 	struct scsi_device *sdp = cmd->device;
- 	struct request *rq = cmd->request;
-+	struct scsi_disk *sdkp = scsi_disk(rq->rq_disk);
- 	u64 lba = sectors_to_logical(sdp, blk_rq_pos(rq));
- 	u32 nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
- 	unsigned int data_len = 24;
-@@ -862,7 +898,7 @@ static blk_status_t sd_setup_unmap_cmnd(struct scsi_cmnd *cmd)
- 	put_unaligned_be64(lba, &buf[8]);
- 	put_unaligned_be32(nr_blocks, &buf[16]);
- 
--	cmd->allowed = SD_MAX_RETRIES;
-+	cmd->allowed = sdkp->max_retries;
- 	cmd->transfersize = data_len;
- 	rq->timeout = SD_TIMEOUT;
- 
-@@ -874,6 +910,7 @@ static blk_status_t sd_setup_write_same16_cmnd(struct scsi_cmnd *cmd,
- {
- 	struct scsi_device *sdp = cmd->device;
- 	struct request *rq = cmd->request;
-+	struct scsi_disk *sdkp = scsi_disk(rq->rq_disk);
- 	u64 lba = sectors_to_logical(sdp, blk_rq_pos(rq));
- 	u32 nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
- 	u32 data_len = sdp->sector_size;
-@@ -893,7 +930,7 @@ static blk_status_t sd_setup_write_same16_cmnd(struct scsi_cmnd *cmd,
- 	put_unaligned_be64(lba, &cmd->cmnd[2]);
- 	put_unaligned_be32(nr_blocks, &cmd->cmnd[10]);
- 
--	cmd->allowed = SD_MAX_RETRIES;
-+	cmd->allowed = sdkp->max_retries;
- 	cmd->transfersize = data_len;
- 	rq->timeout = unmap ? SD_TIMEOUT : SD_WRITE_SAME_TIMEOUT;
- 
-@@ -905,6 +942,7 @@ static blk_status_t sd_setup_write_same10_cmnd(struct scsi_cmnd *cmd,
- {
- 	struct scsi_device *sdp = cmd->device;
- 	struct request *rq = cmd->request;
-+	struct scsi_disk *sdkp = scsi_disk(rq->rq_disk);
- 	u64 lba = sectors_to_logical(sdp, blk_rq_pos(rq));
- 	u32 nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
- 	u32 data_len = sdp->sector_size;
-@@ -924,7 +962,7 @@ static blk_status_t sd_setup_write_same10_cmnd(struct scsi_cmnd *cmd,
- 	put_unaligned_be32(lba, &cmd->cmnd[2]);
- 	put_unaligned_be16(nr_blocks, &cmd->cmnd[7]);
- 
--	cmd->allowed = SD_MAX_RETRIES;
-+	cmd->allowed = sdkp->max_retries;
- 	cmd->transfersize = data_len;
- 	rq->timeout = unmap ? SD_TIMEOUT : SD_WRITE_SAME_TIMEOUT;
- 
-@@ -1056,7 +1094,7 @@ static blk_status_t sd_setup_write_same_cmnd(struct scsi_cmnd *cmd)
- 	}
- 
- 	cmd->transfersize = sdp->sector_size;
--	cmd->allowed = SD_MAX_RETRIES;
-+	cmd->allowed = sdkp->max_retries;
- 
- 	/*
- 	 * For WRITE SAME the data transferred via the DATA OUT buffer is
-@@ -1078,6 +1116,7 @@ static blk_status_t sd_setup_write_same_cmnd(struct scsi_cmnd *cmd)
- static blk_status_t sd_setup_flush_cmnd(struct scsi_cmnd *cmd)
- {
- 	struct request *rq = cmd->request;
-+	struct scsi_disk *sdkp = scsi_disk(rq->rq_disk);
- 
- 	/* flush requests don't perform I/O, zero the S/G table */
- 	memset(&cmd->sdb, 0, sizeof(cmd->sdb));
-@@ -1085,7 +1124,7 @@ static blk_status_t sd_setup_flush_cmnd(struct scsi_cmnd *cmd)
- 	cmd->cmnd[0] = SYNCHRONIZE_CACHE;
- 	cmd->cmd_len = 10;
- 	cmd->transfersize = 0;
--	cmd->allowed = SD_MAX_RETRIES;
-+	cmd->allowed = sdkp->max_retries;
- 
- 	rq->timeout = rq->q->rq_timeout * SD_FLUSH_TIMEOUT_MULTIPLIER;
- 	return BLK_STS_OK;
-@@ -1262,7 +1301,7 @@ static blk_status_t sd_setup_read_write_cmnd(struct scsi_cmnd *cmd)
- 	 */
- 	cmd->transfersize = sdp->sector_size;
- 	cmd->underflow = nr_blocks << 9;
--	cmd->allowed = SD_MAX_RETRIES;
-+	cmd->allowed = sdkp->max_retries;
- 	cmd->sdb.length = nr_blocks * sdp->sector_size;
- 
- 	SCSI_LOG_HLQUEUE(1,
-@@ -1609,7 +1648,7 @@ static unsigned int sd_check_events(struct gendisk *disk, unsigned int clearing)
- 	if (scsi_block_when_processing_errors(sdp)) {
- 		struct scsi_sense_hdr sshdr = { 0, };
- 
--		retval = scsi_test_unit_ready(sdp, SD_TIMEOUT, SD_MAX_RETRIES,
-+		retval = scsi_test_unit_ready(sdp, SD_TIMEOUT, sdkp->max_retries,
- 					      &sshdr);
- 
- 		/* failed to execute TUR, assume media not present */
-@@ -1666,7 +1705,7 @@ static int sd_sync_cache(struct scsi_disk *sdkp, struct scsi_sense_hdr *sshdr)
- 		 * flush everything.
- 		 */
- 		res = scsi_execute(sdp, cmd, DMA_NONE, NULL, 0, NULL, sshdr,
--				timeout, SD_MAX_RETRIES, 0, RQF_PM, NULL);
-+				timeout, sdkp->max_retries, 0, RQF_PM, NULL);
- 		if (res == 0)
- 			break;
- 	}
-@@ -1761,7 +1800,8 @@ static char sd_pr_type(enum pr_type type)
- static int sd_pr_command(struct block_device *bdev, u8 sa,
- 		u64 key, u64 sa_key, u8 type, u8 flags)
- {
--	struct scsi_device *sdev = scsi_disk(bdev->bd_disk)->device;
-+	struct scsi_disk *sdkp = scsi_disk(bdev->bd_disk);
-+	struct scsi_device *sdev = sdkp->device;
- 	struct scsi_sense_hdr sshdr;
- 	int result;
- 	u8 cmd[16] = { 0, };
-@@ -1777,7 +1817,7 @@ static int sd_pr_command(struct block_device *bdev, u8 sa,
- 	data[20] = flags;
- 
- 	result = scsi_execute_req(sdev, cmd, DMA_TO_DEVICE, &data, sizeof(data),
--			&sshdr, SD_TIMEOUT, SD_MAX_RETRIES, NULL);
-+			&sshdr, SD_TIMEOUT, sdkp->max_retries, NULL);
- 
- 	if (driver_byte(result) == DRIVER_SENSE &&
- 	    scsi_sense_valid(&sshdr)) {
-@@ -2114,7 +2154,7 @@ sd_spinup_disk(struct scsi_disk *sdkp)
- 			the_result = scsi_execute_req(sdkp->device, cmd,
- 						      DMA_NONE, NULL, 0,
- 						      &sshdr, SD_TIMEOUT,
--						      SD_MAX_RETRIES, NULL);
-+						      sdkp->max_retries, NULL);
- 
- 			/*
- 			 * If the drive has indicated to us that it
-@@ -2170,7 +2210,7 @@ sd_spinup_disk(struct scsi_disk *sdkp)
- 					cmd[4] |= 1 << 4;
- 				scsi_execute_req(sdkp->device, cmd, DMA_NONE,
- 						 NULL, 0, &sshdr,
--						 SD_TIMEOUT, SD_MAX_RETRIES,
-+						 SD_TIMEOUT, sdkp->max_retries,
- 						 NULL);
- 				spintime_expire = jiffies + 100 * HZ;
- 				spintime = 1;
-@@ -2312,7 +2352,7 @@ static int read_capacity_16(struct scsi_disk *sdkp, struct scsi_device *sdp,
- 
- 		the_result = scsi_execute_req(sdp, cmd, DMA_FROM_DEVICE,
- 					buffer, RC16_LEN, &sshdr,
--					SD_TIMEOUT, SD_MAX_RETRIES, NULL);
-+					SD_TIMEOUT, sdkp->max_retries, NULL);
- 
- 		if (media_not_present(sdkp, &sshdr))
- 			return -ENODEV;
-@@ -2397,7 +2437,7 @@ static int read_capacity_10(struct scsi_disk *sdkp, struct scsi_device *sdp,
- 
- 		the_result = scsi_execute_req(sdp, cmd, DMA_FROM_DEVICE,
- 					buffer, 8, &sshdr,
--					SD_TIMEOUT, SD_MAX_RETRIES, NULL);
-+					SD_TIMEOUT, sdkp->max_retries, NULL);
- 
- 		if (media_not_present(sdkp, &sshdr))
- 			return -ENODEV;
-@@ -2582,12 +2622,12 @@ sd_print_capacity(struct scsi_disk *sdkp,
- 
- /* called with buffer of length 512 */
- static inline int
--sd_do_mode_sense(struct scsi_device *sdp, int dbd, int modepage,
-+sd_do_mode_sense(struct scsi_disk *sdkp, int dbd, int modepage,
- 		 unsigned char *buffer, int len, struct scsi_mode_data *data,
- 		 struct scsi_sense_hdr *sshdr)
- {
--	return scsi_mode_sense(sdp, dbd, modepage, buffer, len,
--			       SD_TIMEOUT, SD_MAX_RETRIES, data,
-+	return scsi_mode_sense(sdkp->device, dbd, modepage, buffer, len,
-+			       SD_TIMEOUT, sdkp->max_retries, data,
- 			       sshdr);
- }
- 
-@@ -2610,14 +2650,14 @@ sd_read_write_protect_flag(struct scsi_disk *sdkp, unsigned char *buffer)
- 	}
- 
- 	if (sdp->use_192_bytes_for_3f) {
--		res = sd_do_mode_sense(sdp, 0, 0x3F, buffer, 192, &data, NULL);
-+		res = sd_do_mode_sense(sdkp, 0, 0x3F, buffer, 192, &data, NULL);
- 	} else {
- 		/*
- 		 * First attempt: ask for all pages (0x3F), but only 4 bytes.
- 		 * We have to start carefully: some devices hang if we ask
- 		 * for more than is available.
- 		 */
--		res = sd_do_mode_sense(sdp, 0, 0x3F, buffer, 4, &data, NULL);
-+		res = sd_do_mode_sense(sdkp, 0, 0x3F, buffer, 4, &data, NULL);
- 
- 		/*
- 		 * Second attempt: ask for page 0 When only page 0 is
-@@ -2626,13 +2666,13 @@ sd_read_write_protect_flag(struct scsi_disk *sdkp, unsigned char *buffer)
- 		 * CDB.
- 		 */
- 		if (!scsi_status_is_good(res))
--			res = sd_do_mode_sense(sdp, 0, 0, buffer, 4, &data, NULL);
-+			res = sd_do_mode_sense(sdkp, 0, 0, buffer, 4, &data, NULL);
- 
- 		/*
- 		 * Third attempt: ask 255 bytes, as we did earlier.
- 		 */
- 		if (!scsi_status_is_good(res))
--			res = sd_do_mode_sense(sdp, 0, 0x3F, buffer, 255,
-+			res = sd_do_mode_sense(sdkp, 0, 0x3F, buffer, 255,
- 					       &data, NULL);
- 	}
- 
-@@ -2694,7 +2734,7 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
- 	}
- 
- 	/* cautiously ask */
--	res = sd_do_mode_sense(sdp, dbd, modepage, buffer, first_len,
-+	res = sd_do_mode_sense(sdkp, dbd, modepage, buffer, first_len,
- 			&data, &sshdr);
- 
- 	if (!scsi_status_is_good(res))
-@@ -2726,7 +2766,7 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
- 
- 	/* Get the data */
- 	if (len > first_len)
--		res = sd_do_mode_sense(sdp, dbd, modepage, buffer, len,
-+		res = sd_do_mode_sense(sdkp, dbd, modepage, buffer, len,
- 				&data, &sshdr);
- 
- 	if (scsi_status_is_good(res)) {
-@@ -2845,7 +2885,7 @@ static void sd_read_app_tag_own(struct scsi_disk *sdkp, unsigned char *buffer)
- 		return;
- 
- 	res = scsi_mode_sense(sdp, 1, 0x0a, buffer, 36, SD_TIMEOUT,
--			      SD_MAX_RETRIES, &data, &sshdr);
-+			      sdkp->max_retries, &data, &sshdr);
- 
- 	if (!scsi_status_is_good(res) || !data.header_length ||
- 	    data.length < 6) {
-@@ -3368,6 +3408,7 @@ static int sd_probe(struct device *dev)
- 	sdkp->driver = &sd_template;
- 	sdkp->disk = gd;
- 	sdkp->index = index;
-+	sdkp->max_retries = SD_MAX_RETRIES;
- 	atomic_set(&sdkp->openers, 0);
- 	atomic_set(&sdkp->device->ioerr_cnt, 0);
- 
-@@ -3431,7 +3472,7 @@ static int sd_probe(struct device *dev)
- 	sd_revalidate_disk(gd);
- 
- 	if (sdkp->security) {
--		sdkp->opal_dev = init_opal_dev(sdp, &sd_sec_submit);
-+		sdkp->opal_dev = init_opal_dev(sdkp, &sd_sec_submit);
- 		if (sdkp->opal_dev)
- 			sd_printk(KERN_NOTICE, sdkp, "supports TCG Opal\n");
- 	}
-@@ -3546,7 +3587,7 @@ static int sd_start_stop_device(struct scsi_disk *sdkp, int start)
- 		return -ENODEV;
- 
- 	res = scsi_execute(sdp, cmd, DMA_NONE, NULL, 0, NULL, &sshdr,
--			SD_TIMEOUT, SD_MAX_RETRIES, 0, RQF_PM, NULL);
-+			SD_TIMEOUT, sdkp->max_retries, 0, RQF_PM, NULL);
- 	if (res) {
- 		sd_print_result(sdkp, "Start/Stop Unit failed", res);
- 		if (driver_byte(res) == DRIVER_SENSE)
-diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
-index a3aad608bc38..b59136c4125b 100644
---- a/drivers/scsi/sd.h
-+++ b/drivers/scsi/sd.h
-@@ -90,6 +90,7 @@ struct scsi_disk {
- #endif
- 	atomic_t	openers;
- 	sector_t	capacity;	/* size in logical blocks */
-+	int		max_retries;
- 	u32		max_xfer_blocks;
- 	u32		opt_xfer_blocks;
- 	u32		max_ws_blocks;
--- 
-2.18.2
-
+Jitendra
