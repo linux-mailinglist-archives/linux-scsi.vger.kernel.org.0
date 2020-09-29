@@ -2,75 +2,234 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B6D27D414
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Sep 2020 19:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9406E27D412
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Sep 2020 19:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728481AbgI2RCH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 29 Sep 2020 13:02:07 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:35652 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728140AbgI2RCF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Sep 2020 13:02:05 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TGxVCY162688;
+        id S1728442AbgI2RCE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 29 Sep 2020 13:02:04 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:33652 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728140AbgI2RCD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Sep 2020 13:02:03 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TGx3b2129749;
         Tue, 29 Sep 2020 17:01:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id; s=corp-2020-01-29;
- bh=V78XnH59zPxYBfPldhojs7jz16esqpSY6uy+P3aFU18=;
- b=HBAu4YtQeoVnwLi7ce4t/m/FJuDWTg6XssUDjeGBt9AG/xCvDcHT/nD1ONit/VHYWzkX
- i8mNoAi87pOE5ejLG4tpAATeYBwByKab4VKpTuUkQbUvYN1nAnSE9SeP6z1h2WZiApgr
- Uu4giVRr5jkA9i1w/IMG4tXuiD4IAjxpcUBegeBeZpjvOksO0Ty9pXCrREHmMcsDfRTO
- fNfbFuZkn8J6duvp9hjxe30mPMb9WFD4CWlf+JBq0LKZLZJlbVEj2MC/orVTc/WPdd9l
- 1GCE/KSj94tHzyReKJRn8eF1XU2lwzh3x5u4LED9TMgNNidSe9rw90srmdl1o9KhhPdb aQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 33swkkv46b-1
+ date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=5WivZP9pRn+wnRz+ETV+tiVzStXnn4aVm/mcCtVUFbQ=;
+ b=qavQrT7HHz8uXc9Ok2SYeP7/aD/AlxNZOp5KL2jwmYXyYByLprzZsBX7bxG+pLkG8m9g
+ UXJ3HUQYdr9LYEIPR14lCdH+HY34FFkxFR/MfLorQMSbGAz5icdi8VqKAjpKsJGczOr7
+ /KBgRiLHpkZDeoAnbQzTH3DB4PiQRdjOo18+aFqUrs2tcQ1RjG1vOcGEtdnHEVD3ACB4
+ uW64pjyYqVXbQZY1iE+/fDwTxHLmEuV/GUxUIfH5+5FgOe4ABi5J3nAJ6y3DvBkRoCnV
+ A26/E8jRlTNpnR5kt5SdKi22hS5eJa23nwWC6octSS8d0LUXrr1ocvM4e4OsH5dyAslk gA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 33sx9n41r3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Sep 2020 17:01:59 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TGxk5a131526;
+        Tue, 29 Sep 2020 17:01:58 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TH0jBi130925;
         Tue, 29 Sep 2020 17:01:58 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 33tfjx3y6w-1
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 33tfdsegk3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 29 Sep 2020 17:01:58 +0000
 Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08TH1tDv006238;
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08TH1tjS020017;
         Tue, 29 Sep 2020 17:01:56 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 29 Sep 2020 10:01:54 -0700
+        with ESMTP ; Tue, 29 Sep 2020 10:01:55 -0700
 From:   Mike Christie <michael.christie@oracle.com>
 To:     martin.petersen@oracle.com, bvanassche@acm.org,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Subject: [PATCH 0/2] scsi/sd: make disk cmd retries configurable V2
-Date:   Tue, 29 Sep 2020 12:01:46 -0500
-Message-Id: <1601398908-28443-1-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 1/2] scsi: Add limitless cmd retry support
+Date:   Tue, 29 Sep 2020 12:01:47 -0500
+Message-Id: <1601398908-28443-2-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1601398908-28443-1-git-send-email-michael.christie@oracle.com>
+References: <1601398908-28443-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9759 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=822 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290144
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ adultscore=0 malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009290144
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9759 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
- suspectscore=0 mlxlogscore=835 clxscore=1015 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ phishscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
+ spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2009290144
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The following patches made over Martin's staging branch allow
-the user to config sd cmd retries. I didn't allow the user to
-set any old value and kept the max at 5. However, you can now
-turn it off and rely on the transport error handler to decide
-when to stop retrying. You can also decrease retries for cases
-for disks where there is no use in retrying 5 times.
+The next patch allows users to configure disk scsi cmd retries from
+-1 up to a ULD specific value where -1 means infinite retries.
 
-V2:
-- Drop excess ()
-- Add comment about forcing completion in the request sense
-case
-- Use kstrtoint
+This patch adds infinite retry support to scsi-ml by just combining
+common checks for retries into some helper functions, and then
+checking for the -1/SCSI_CMD_RETRIES_NO_LIMIT.
+
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+---
+ drivers/scsi/scsi_error.c | 33 +++++++++++++++++++++++----------
+ drivers/scsi/scsi_lib.c   | 29 +++++++++++++++++++----------
+ drivers/scsi/scsi_priv.h  |  1 +
+ 3 files changed, 43 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index 7d3571a2bd89..8b1311b08bfd 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -116,6 +116,14 @@ static int scsi_host_eh_past_deadline(struct Scsi_Host *shost)
+ 	return 1;
+ }
+ 
++static bool scsi_cmd_retry_allowed(struct scsi_cmnd *cmd)
++{
++	if (cmd->allowed == SCSI_CMD_RETRIES_NO_LIMIT)
++		return true;
++
++	return (++cmd->retries <= cmd->allowed);
++}
++
+ /**
+  * scmd_eh_abort_handler - Handle command aborts
+  * @work:	command to be aborted.
+@@ -151,7 +159,7 @@ scmd_eh_abort_handler(struct work_struct *work)
+ 						    "eh timeout, not retrying "
+ 						    "aborted command\n"));
+ 			} else if (!scsi_noretry_cmd(scmd) &&
+-			    (++scmd->retries <= scmd->allowed)) {
++				   scsi_cmd_retry_allowed(scmd)) {
+ 				SCSI_LOG_ERROR_RECOVERY(3,
+ 					scmd_printk(KERN_WARNING, scmd,
+ 						    "retry aborted command\n"));
+@@ -1264,11 +1272,18 @@ int scsi_eh_get_sense(struct list_head *work_q,
+ 		 * upper level.
+ 		 */
+ 		if (rtn == SUCCESS)
+-			/* we don't want this command reissued, just
+-			 * finished with the sense data, so set
+-			 * retries to the max allowed to ensure it
+-			 * won't get reissued */
+-			scmd->retries = scmd->allowed;
++			/*
++			 * We don't want this command reissued, just finished
++			 * with the sense data, so set retries to the max
++			 * allowed to ensure it won't get reissued. If the user
++			 * has requested infinite retries, we also want to
++			 * finish this command, so force completion by setting
++			 * retries and allowed to the same value.
++			 */
++			if (scmd->allowed == SCSI_CMD_RETRIES_NO_LIMIT)
++				scmd->retries = scmd->allowed = 1;
++			else
++				scmd->retries = scmd->allowed;
+ 		else if (rtn != NEEDS_RETRY)
+ 			continue;
+ 
+@@ -1944,8 +1959,7 @@ int scsi_decide_disposition(struct scsi_cmnd *scmd)
+ 	 * the request was not marked fast fail.  Note that above,
+ 	 * even if the request is marked fast fail, we still requeue
+ 	 * for queue congestion conditions (QUEUE_FULL or BUSY) */
+-	if ((++scmd->retries) <= scmd->allowed
+-	    && !scsi_noretry_cmd(scmd)) {
++	if (scsi_cmd_retry_allowed(scmd) && !scsi_noretry_cmd(scmd)) {
+ 		return NEEDS_RETRY;
+ 	} else {
+ 		/*
+@@ -2091,8 +2105,7 @@ void scsi_eh_flush_done_q(struct list_head *done_q)
+ 	list_for_each_entry_safe(scmd, next, done_q, eh_entry) {
+ 		list_del_init(&scmd->eh_entry);
+ 		if (scsi_device_online(scmd->device) &&
+-		    !scsi_noretry_cmd(scmd) &&
+-		    (++scmd->retries <= scmd->allowed)) {
++		    !scsi_noretry_cmd(scmd) && scsi_cmd_retry_allowed(scmd)) {
+ 			SCSI_LOG_ERROR_RECOVERY(3,
+ 				scmd_printk(KERN_INFO, scmd,
+ 					     "%s: flush retry cmd\n",
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 7affaaf8b98e..cfe0e17422b9 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -652,6 +652,23 @@ static void scsi_io_completion_reprep(struct scsi_cmnd *cmd,
+ 	scsi_mq_requeue_cmd(cmd);
+ }
+ 
++static bool scsi_cmd_runtime_exceeced(struct scsi_cmnd *cmd)
++{
++	struct request *req = cmd->request;
++	unsigned long wait_for;
++
++	if (cmd->allowed == SCSI_CMD_RETRIES_NO_LIMIT)
++		return false;
++
++	wait_for = (cmd->allowed + 1) * req->timeout;
++	if (time_before(cmd->jiffies_at_alloc + wait_for, jiffies)) {
++		scmd_printk(KERN_ERR, cmd, "timing out command, waited %lus\n",
++			    wait_for/HZ);
++		return true;
++	}
++	return false;
++}
++
+ /* Helper for scsi_io_completion() when special action required. */
+ static void scsi_io_completion_action(struct scsi_cmnd *cmd, int result)
+ {
+@@ -660,7 +677,6 @@ static void scsi_io_completion_action(struct scsi_cmnd *cmd, int result)
+ 	int level = 0;
+ 	enum {ACTION_FAIL, ACTION_REPREP, ACTION_RETRY,
+ 	      ACTION_DELAYED_RETRY} action;
+-	unsigned long wait_for = (cmd->allowed + 1) * req->timeout;
+ 	struct scsi_sense_hdr sshdr;
+ 	bool sense_valid;
+ 	bool sense_current = true;      /* false implies "deferred sense" */
+@@ -765,8 +781,7 @@ static void scsi_io_completion_action(struct scsi_cmnd *cmd, int result)
+ 	} else
+ 		action = ACTION_FAIL;
+ 
+-	if (action != ACTION_FAIL &&
+-	    time_before(cmd->jiffies_at_alloc + wait_for, jiffies))
++	if (action != ACTION_FAIL && scsi_cmd_runtime_exceeced(cmd))
+ 		action = ACTION_FAIL;
+ 
+ 	switch (action) {
+@@ -1439,7 +1454,6 @@ static bool scsi_mq_lld_busy(struct request_queue *q)
+ static void scsi_softirq_done(struct request *rq)
+ {
+ 	struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(rq);
+-	unsigned long wait_for = (cmd->allowed + 1) * rq->timeout;
+ 	int disposition;
+ 
+ 	INIT_LIST_HEAD(&cmd->eh_entry);
+@@ -1449,13 +1463,8 @@ static void scsi_softirq_done(struct request *rq)
+ 		atomic_inc(&cmd->device->ioerr_cnt);
+ 
+ 	disposition = scsi_decide_disposition(cmd);
+-	if (disposition != SUCCESS &&
+-	    time_before(cmd->jiffies_at_alloc + wait_for, jiffies)) {
+-		scmd_printk(KERN_ERR, cmd,
+-			    "timing out command, waited %lus\n",
+-			    wait_for/HZ);
++	if (disposition != SUCCESS && scsi_cmd_runtime_exceeced(cmd))
+ 		disposition = SUCCESS;
+-	}
+ 
+ 	scsi_log_completion(cmd, disposition);
+ 
+diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
+index d12ada035961..180636d54982 100644
+--- a/drivers/scsi/scsi_priv.h
++++ b/drivers/scsi/scsi_priv.h
+@@ -15,6 +15,7 @@ struct scsi_host_template;
+ struct Scsi_Host;
+ struct scsi_nl_hdr;
+ 
++#define SCSI_CMD_RETRIES_NO_LIMIT -1
+ 
+ /*
+  * Scsi Error Handler Flags
+-- 
+2.18.2
 
