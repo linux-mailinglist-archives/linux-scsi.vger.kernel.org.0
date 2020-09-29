@@ -2,86 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AED8F27F80F
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Oct 2020 04:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CA527F8A7
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Oct 2020 06:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730481AbgJACyy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Sep 2020 22:54:54 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34595 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbgJACyy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 30 Sep 2020 22:54:54 -0400
-Received: by mail-pf1-f196.google.com with SMTP id k13so3065300pfg.1
-        for <linux-scsi@vger.kernel.org>; Wed, 30 Sep 2020 19:54:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ba6kCSnHTvYSJ7tkav1SA5XtG8mriR1CcIvRzfUMOK8=;
-        b=O6LYCA1LHue1wCVv847AiGd3Mf+oi1zz83ke7wsiMOycKKhOi0RIxtX5OirtR350qS
-         xgp3BuQbzPgjyWwHy7mwGrHaouhos/jeWeR5pst/yNx4fMWr05t6UH4nbj1ziDdFJDWN
-         XH5m/EXAySVNCdgviOYBgs89z/xFVkzQgYrszAvDpzpzHeuykjpy+tTMDEntT4QBtRGQ
-         oGDQkk6ZXQPGztKLcJQKnpMEG0Vgh+xBhYWogXIbUINDaVVvZKg2UrusFpkw8efnliBw
-         7yNUbkm15IH7txlgfkl+CsPKUQXeFGtyVIkqSIO+gGH9LOAxBlgrDB9brS9WFL8xWJS6
-         iRtA==
-X-Gm-Message-State: AOAM532EyuAczZMpNR3XETbiiQyv9TU4ESGQ7QK1+HYq3Lsl6doGsLUM
-        x8sNdKUe5eS/2jV/4uu9o20=
-X-Google-Smtp-Source: ABdhPJw+rdRkKOy2hSmwWeA5nd6+DEHxRik9hDGMQ6rECO2DRiT+6eMeRCukfRRwz49S/lJTdQO4xw==
-X-Received: by 2002:a05:6a00:23cc:b029:142:2501:35cf with SMTP id g12-20020a056a0023ccb0290142250135cfmr5361411pfc.47.1601520892469;
-        Wed, 30 Sep 2020 19:54:52 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:74c0:38d3:8092:91f1? ([2601:647:4000:d7:74c0:38d3:8092:91f1])
-        by smtp.gmail.com with ESMTPSA id y7sm3454310pgk.73.2020.09.30.19.54.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2020 19:54:51 -0700 (PDT)
-Subject: Re: [PATCH 2/2] scsi sd: Allow user to config cmd retries
-To:     Mike Christie <michael.christie@oracle.com>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        james.bottomley@hansenpartnership.com
-References: <1601398908-28443-1-git-send-email-michael.christie@oracle.com>
- <1601398908-28443-3-git-send-email-michael.christie@oracle.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <0a68e3b4-5a1f-ff59-a6cd-4eafc593e9e6@acm.org>
-Date:   Wed, 30 Sep 2020 19:54:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1725894AbgJAEZs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Oct 2020 00:25:48 -0400
+Received: from ftender.ru ([178.218.214.211]:61995 "HELO ftender2.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
+        id S1725823AbgJAEZs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 1 Oct 2020 00:25:48 -0400
+X-Greylist: delayed 88740 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Oct 2020 00:25:46 EDT
+dkim-signature: v=1; a=rsa-sha256; d=ftender2.ru; s=ke1;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=m3pASy53GgfFwHppvIPHJghbzAHQviKN6bgk+M/PrtE=;
+        b=b5+YRB9tAjrda+WISL4WFZ2AXEfbVXVCNQfyMMk/8/BDLr0qib773OoQboPPuQ5H1KONXttCL2q0Byhah+NClTOGF8nmHdqACXa5W0duz0zLzivxq37JG8Ybc7T/t8vn/D1ACXRXRPRuHvkfrE2rFyyhcZpEeovSjghjBfnLCsE=
+Received: from User (Unknown [176.32.20.25])
+        by ftender2.ru
+        ; Tue, 29 Sep 2020 14:55:38 +0300
+Message-ID: <583EF32B-3419-4372-803C-E71C92C6B58A@ftender2.ru>
+Reply-To: <maviswanczyko@aol.com>
+From:   "L.  Wanczyk." <billing@ftender2.ru>
+Subject: DONATION .....                       211
+Date:   Tue, 29 Sep 2020 13:54:40 -0700
 MIME-Version: 1.0
-In-Reply-To: <1601398908-28443-3-git-send-email-michael.christie@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2800.1081
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1081
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-09-29 10:01, Mike Christie wrote:
-> Some iSCSI targets went the traditional export N ports and then allowed
-> the initiator to multipath over them. Other targets went the opposite
-> direction and export 1 port, and then software on the target side
-> performs load balancing and failover to other targets via a iscsi
-> specific feature or IP takover.
+Hello,
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+I'm Mrs. Mavis Wanczyk, the mega winner of $758 Million in Mega Millions
+Jackpot, I am donating to 5 random individuals if you get this email then
+your email was selected after a spin ball. I have spread most of my wealth
+over a number of charities and organizations. I have voluntarily decided to
+donate the sum of $ 10 Million USD to you as one of the selected , to verify
+my
+winnings via YouTube page below.
+
+WATCH ME HERE: https://www.youtube.com/watch?v=7kWnqvJM1mM
+
+THIS IS YOUR DONATION CODE: F207162
+Kindly send your direct telephone and fax number to enable me to reach you
+
+Reply with the DONATION CODE to this email: maviswanczykoo@aol.com
+
+Hope to make you and your family happy.
+
+Regards,
+Mrs. Mavis L. Wanczyk.
+
