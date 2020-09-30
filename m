@@ -2,61 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 217A627DF02
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Sep 2020 05:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A754B27DF00
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Sep 2020 05:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729820AbgI3DfC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 29 Sep 2020 23:35:02 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:41902 "EHLO
+        id S1729784AbgI3DfB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 29 Sep 2020 23:35:01 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:41898 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727720AbgI3DfB (ORCPT
+        with ESMTP id S1726299AbgI3DfB (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Sep 2020 23:35:01 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08U3NwKK178171;
-        Wed, 30 Sep 2020 03:34:54 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08U3P4hH178693;
+        Wed, 30 Sep 2020 03:34:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=0s9DPxq9WNkXg/S4URXBUJpyzJOLxk0th48yVckNwjg=;
- b=eHWtNZx9HamhG2G50d/2KORCzx6KQSz+f1T6kAhhUoLVDJJnUoDcfUj0VrL0+bd/sF6G
- MrG6wqO5HnVtRlaTh5CCnuHOrV9MTQv1+1Uhn0A8eiI3LLC0aUTjZbafNzr6mVJhlW0f
- 3DejusXzQGM61mSer+2zg+BsHJehSsHmLF79do+tUHGBXz4ldBdk+iD2wCCsZbKnL0Y3
- 5fnzUKS0rBhoFuVaNk2HlZdm4WnygUnX/Bh323N01KKIMjHo+Vm/XY36hxvxJqzLVMJS
- kwfGAc/VhP8gKU7EPbN7hKmoYcHZ2BiM8irLGL8hD1BFDutxDFOKj85UGnj/u4jaXzXm 5w== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 33swkkx9pn-1
+ bh=XI1g9fYcldngXijmgxQ0vTHeCH0RD2obYMnKOd0J/nk=;
+ b=IM5M06DMXK9VHKxTVohjJrIS1oJ00djtmAKFaWEF0x+StD0j+pjNX5xs6IVMCpUhrpB3
+ MypxC4G1F6qPiTTVqvSA78/vTFPf/fUV9D9nT9IudFox+m5VP6dWdhesW4QHKeSmHC/M
+ d9kv28LV0OQP4rhkIkO1vNlEyRYttPvTqIDETiKUPSvQH+tAf8nrQP8Jel23hbTItaSR
+ w/F+4QeAyVfd2j+jwG8Wp/AwFWbAWYF+wCN3Jr3KEPcdodRTtxRbhJU/fpVwwAvAbIu6
+ Z287yH2NZBqbiXN6RxGpY95L+GCPr+x4E0qzTdY1rSALuT8TaG4cwKphv2fqCFbHa8Jp 6g== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 33swkkx9pq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 30 Sep 2020 03:34:54 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08U3PuRX024598;
-        Wed, 30 Sep 2020 03:34:54 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 33tfjxwcmg-1
+        Wed, 30 Sep 2020 03:34:57 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08U3OklE004028;
+        Wed, 30 Sep 2020 03:34:56 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 33tfdt3kyb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Sep 2020 03:34:53 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08U3Yqha027453;
-        Wed, 30 Sep 2020 03:34:52 GMT
+        Wed, 30 Sep 2020 03:34:56 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08U3YrsL030420;
+        Wed, 30 Sep 2020 03:34:53 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 29 Sep 2020 20:34:52 -0700
+        with ESMTP ; Tue, 29 Sep 2020 20:34:53 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, Brian King <brking@linux.vnet.ibm.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        tyreld@linux.ibm.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] ibmvfc: Protect vhost->task_set increment by the host lock
-Date:   Tue, 29 Sep 2020 23:34:45 -0400
-Message-Id: <160143685412.27701.17223336650096895762.b4-ty@oracle.com>
+To:     linux-scsi@vger.kernel.org,
+        Bodo Stroesser <bstroesser@ts.fujitsu.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        target-devel@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 0/3] target: scsi: tcmu: code rework and speed up of read data handling
+Date:   Tue, 29 Sep 2020 23:34:46 -0400
+Message-Id: <160143685412.27701.100112187449074876.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <1600286999-22059-1-git-send-email-brking@linux.vnet.ibm.com>
-References: <1600286999-22059-1-git-send-email-brking@linux.vnet.ibm.com>
+In-Reply-To: <20200910155041.17654-1-bstroesser@ts.fujitsu.com>
+References: <20200910155041.17654-1-bstroesser@ts.fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9759 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009300023
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ adultscore=0 malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009300023
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9759 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
  suspectscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
@@ -67,19 +69,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 16 Sep 2020 15:09:59 -0500, Brian King wrote:
+On Thu, 10 Sep 2020 17:50:38 +0200, Bodo Stroesser wrote:
 
-> In the discovery thread, ibmvfc does a vhost->task_set++ without
-> any lock held. This could result in two targets getting the same
-> cancel key, which could have strange effects in error recovery.
-> The actual probability of this occurring should be extremely
-> small, since this should all be done in a single threaded loop
-> from the discovery thread, but let's fix it up anyway to be safe.
+> This small series is made on top of Martin's 5.10/scsi-queue branch.
+> 
+> The patches simplify some code, splits off new helper functions
+> or implement a cleaner code sequence to prevent double work.
+> The 3rd patch speeds up buffer preparation for SCSI commands with
+> long read data.
+> The series is also base for cleaned up version v3 of my patch
+>   scsi: target: tcmu: add compat mode for 32bit userspace on 64bit kernel
+> 
+> [...]
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: ibmvfc: Protect vhost->task_set increment by the host lock
-      https://git.kernel.org/mkp/scsi/c/2584e5aef87a
+[1/3] scsi: target: tcmu: Join tcmu_cmd_get_data_length() and tcmu_cmd_get_block_cnt()
+      https://git.kernel.org/mkp/scsi/c/52ef2743f16c
+[2/3] scsi: target: tcmu: Optimize queue_cmd_ring()
+      https://git.kernel.org/mkp/scsi/c/7e98905e9d0d
+[3/3] scsi: target: tcmu: Optimize scatter_data_area()
+      https://git.kernel.org/mkp/scsi/c/3c9a7c58ea3d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
