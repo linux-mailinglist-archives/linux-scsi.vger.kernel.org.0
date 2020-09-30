@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2064A27DE66
+	by mail.lfdr.de (Postfix) with ESMTP id D037727DE67
 	for <lists+linux-scsi@lfdr.de>; Wed, 30 Sep 2020 04:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729470AbgI3CSb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 29 Sep 2020 22:18:31 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14729 "EHLO huawei.com"
+        id S1729479AbgI3CSc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 29 Sep 2020 22:18:32 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14728 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729322AbgI3CSb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 29 Sep 2020 22:18:31 -0400
+        id S1726689AbgI3CSc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 29 Sep 2020 22:18:32 -0400
 Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 6FF3124992858853F8A1;
+        by Forcepoint Email with ESMTP id 69C4FBB8B2ADB238BB21;
         Wed, 30 Sep 2020 10:18:30 +0800 (CST)
 Received: from huawei.com (10.175.127.227) by DGGEMS413-HUB.china.huawei.com
  (10.3.19.213) with Microsoft SMTP Server id 14.3.487.0; Wed, 30 Sep 2020
@@ -22,9 +22,11 @@ To:     <satishkh@cisco.com>, <sebaddel@cisco.com>, <kartilak@cisco.com>,
         <linux-scsi@vger.kernel.org>
 CC:     Ye Bin <yebin10@huawei.com>, Hulk Robot <hulkci@huawei.com>
 Subject: [PATCH] scsi: fnic: Fix inconsistent of format with argument type in fnic_debugfs.c
-Date:   Wed, 30 Sep 2020 10:19:18 +0800
-Message-ID: <20200930021919.2832860-1-yebin10@huawei.com>
+Date:   Wed, 30 Sep 2020 10:19:19 +0800
+Message-ID: <20200930021919.2832860-2-yebin10@huawei.com>
 X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20200930021919.2832860-1-yebin10@huawei.com>
+References: <20200930021919.2832860-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
