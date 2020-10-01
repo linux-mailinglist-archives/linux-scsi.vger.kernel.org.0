@@ -2,70 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBBD28043C
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Oct 2020 18:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DC8280439
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Oct 2020 18:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732299AbgJAQsx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Oct 2020 12:48:53 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:51038 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732107AbgJAQsw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Oct 2020 12:48:52 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091GjCmX176030;
-        Thu, 1 Oct 2020 16:48:42 GMT
+        id S1732803AbgJAQrd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Oct 2020 12:47:33 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:36346 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732342AbgJAQrc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Oct 2020 12:47:32 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091Gjx6D156948;
+        Thu, 1 Oct 2020 16:47:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
  mime-version : subject : from : in-reply-to : date : cc :
  content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=Hcuvzvizet1f4z8OHZuL46p13PAZdx5HGCo/sBMMYNU=;
- b=Bz4Yh3Vfgm+Q3p3m9iP8SH4bqurkl+EaCRDANVhGP+IPC+Rs2KlJYATH+KponZCArDRv
- 4+jxkv171NaoHUeay7dOll+KuGUrdN3tQLw+Du4r1rYD+BIkFgSi0OG/Mb0dg7GaMh5i
- 6JaNBO68GaPPxBgLzaoeqL+4Z6/metdgi8uB7Yv27rs7szilg/mxqhlEWxS38WFGaK9D
- G2+RkedW7UL2HYEOmJxJ9puL+1Xnf7Y+GFkSl0k/KtaFFsRVFIpJkCVOCW7i5fykQMfn
- XhyaWMfbapJ0IRbYH970XX97h303oUN6iU/ohd6QZEWOe/uttDlJB4a76WWXmGLsmIIm eA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33sx9nf307-1
+ s=corp-2020-01-29; bh=QJVjlnEPglxc9dDw8a6eVj9sP2pGnbCzt9sJAAwCCkA=;
+ b=X4283qo1c1b6h5ksu5+TxdOmNvFwWcH2xOnjXJMkLv6+wXXxeWQY91pqTJnGvT6PMlpi
+ 3uiTpZahkQSwrrOJwKLTmzsQZ+t3fau4Sp5qpc7cHDieRHlrXSF1U3i9NTuJvsOPhER/
+ cpXrmbIaV2wHBnx5Cocu2+QP5zTVZQ2GeK81b/Mowg0ZpyH6SE72vFZ/shHuUya9IMJN
+ me5SXZd+SxzWUWAyKZZ9DNpM9wIbm2X6Dor+pwH5NPaCkbyPJeKL5sx11WaA6NPs2YKW
+ hlXFYuykNBAErXrsbtRbji+M2vCwRZhIsr8wtYzZR4yPs6OnLam0IdBGHjk9N6MaZMG0 2g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 33su5b78c1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 01 Oct 2020 16:48:42 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091GiqXW116424;
-        Thu, 1 Oct 2020 16:46:41 GMT
+        Thu, 01 Oct 2020 16:47:19 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091GjqKP111841;
+        Thu, 1 Oct 2020 16:47:18 GMT
 Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 33tfdw3pnn-1
+        by userp3030.oracle.com with ESMTP id 33tfk1vvhx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Oct 2020 16:46:41 +0000
+        Thu, 01 Oct 2020 16:47:18 +0000
 Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 091GkeZ0000590;
-        Thu, 1 Oct 2020 16:46:40 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 091GlHHD000879;
+        Thu, 1 Oct 2020 16:47:17 GMT
 Received: from dhcp-10-154-119-140.vpn.oracle.com (/10.154.119.140)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 01 Oct 2020 09:46:39 -0700
+        with ESMTP ; Thu, 01 Oct 2020 09:47:17 -0700
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH 3/3] scsi: qla2xxx: Fix inconsistent of format with
- argument type in qla_dbg.c
+Subject: Re: [PATCH 1/3] scsi: qla2xxx: Fix inconsistent of format with
+ argument type in tcm_qla2xxx.c
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
-In-Reply-To: <20200930022515.2862532-4-yebin10@huawei.com>
-Date:   Thu, 1 Oct 2020 11:46:39 -0500
+In-Reply-To: <20200930022515.2862532-2-yebin10@huawei.com>
+Date:   Thu, 1 Oct 2020 11:47:16 -0500
 Cc:     Nilesh Javali <njavali@marvell.com>,
         GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
         Hulk Robot <hulkci@huawei.com>
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <FB4B635B-7365-46EE-BA9C-6071CA2CAB4D@oracle.com>
+Message-Id: <16EE7295-38DA-448B-A72F-7B50139D72D2@oracle.com>
 References: <20200930022515.2862532-1-yebin10@huawei.com>
- <20200930022515.2862532-4-yebin10@huawei.com>
+ <20200930022515.2862532-2-yebin10@huawei.com>
 To:     Ye Bin <yebin10@huawei.com>
 X-Mailer: Apple Mail (2.3608.120.23.2.4)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9761 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- adultscore=0 malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0
- suspectscore=3 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010010141
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=4
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010010141
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9761 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=3
- phishscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
- spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=4
+ lowpriorityscore=0 spamscore=0 clxscore=1011 mlxscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010010141
 Precedence: bulk
@@ -76,34 +76,50 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 > On Sep 29, 2020, at 9:25 PM, Ye Bin <yebin10@huawei.com> wrote:
 >=20
-> Fix follow warning:
-> [drivers/scsi/qla2xxx/qla_dbg.c:2451]: (warning) %ld in format string =
-(no. 4)
-> 	requires 'long' but the argument type is 'unsigned long'.
+> Fix follow warnings:
+> [drivers/scsi/qla2xxx/tcm_qla2xxx.c:884]: (warning) %u in format =
+string (no. 1)
+> 	requires 'unsigned int' but the argument type is 'signed int'.
+> [drivers/scsi/qla2xxx/tcm_qla2xxx.c:885]: (warning) %u in format =
+string (no. 1)
+> 	requires 'unsigned int' but the argument type is 'signed int'.
+> [drivers/scsi/qla2xxx/tcm_qla2xxx.c:886]: (warning) %u in format =
+string (no. 1)
+> 	requires 'unsigned int' but the argument type is 'signed int'.
+> [drivers/scsi/qla2xxx/tcm_qla2xxx.c:887]: (warning) %u in format =
+string (no. 1)
+> 	requires 'unsigned int' but the argument type is 'signed int'.
+> [drivers/scsi/qla2xxx/tcm_qla2xxx.c:888]: (warning) %u in format =
+string (no. 1)
+> 	requires 'unsigned int' but the argument type is 'signed int'.
 >=20
 > Reported-by: Hulk Robot <hulkci@huawei.com>
 > Signed-off-by: Ye Bin <yebin10@huawei.com>
 > ---
-> drivers/scsi/qla2xxx/qla_dbg.c | 2 +-
+> drivers/scsi/qla2xxx/tcm_qla2xxx.c | 2 +-
 > 1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/scsi/qla2xxx/qla_dbg.c =
-b/drivers/scsi/qla2xxx/qla_dbg.c
-> index 1434789c9919..bb7431912d41 100644
-> --- a/drivers/scsi/qla2xxx/qla_dbg.c
-> +++ b/drivers/scsi/qla2xxx/qla_dbg.c
-> @@ -2448,7 +2448,7 @@ static void ql_dbg_prefix(char *pbuf, int =
-pbuf_size,
-> 		const struct pci_dev *pdev =3D vha->hw->pdev;
->=20
-> 		/* <module-name> [<dev-name>]-<msg-id>:<host>: */
-> -		snprintf(pbuf, pbuf_size, "%s [%s]-%04x:%ld: ", =
-QL_MSGHDR,
-> +		snprintf(pbuf, pbuf_size, "%s [%s]-%04x:%lu: ", =
-QL_MSGHDR,
-> 			 dev_name(&(pdev->dev)), msg_id, vha->host_no);
-> 	} else {
-> 		/* <module-name> [<dev-name>]-<msg-id>: : */
+> diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c =
+b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> index 44bfe162654a..61017acd3458 100644
+> --- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> +++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> @@ -850,7 +850,7 @@ static ssize_t =
+tcm_qla2xxx_tpg_attrib_##name##_show(			\
+> 	struct tcm_qla2xxx_tpg *tpg =3D container_of(se_tpg,		=
+\
+> 			struct tcm_qla2xxx_tpg, se_tpg);		=
+\
+> 									=
+\
+> -	return sprintf(page, "%u\n", tpg->tpg_attrib.name);	\
+> +	return sprintf(page, "%d\n", tpg->tpg_attrib.name);	\
+> }									=
+\
+> 									=
+\
+> static ssize_t tcm_qla2xxx_tpg_attrib_##name##_store(			=
+\
 > --=20
 > 2.25.4
 >=20
