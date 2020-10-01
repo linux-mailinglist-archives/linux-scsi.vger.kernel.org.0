@@ -2,45 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB95927FA87
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Oct 2020 09:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68E527FAAC
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Oct 2020 09:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731243AbgJAHrS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Oct 2020 03:47:18 -0400
-Received: from mail2.grupovidela.com ([212.31.54.87]:47588 "EHLO
-        grupovidela.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725938AbgJAHrF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Oct 2020 03:47:05 -0400
-X-Greylist: delayed 62085 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Oct 2020 03:47:00 EDT
-Received: from User ([94.102.54.226])
-        (user=varios@grupovidela.com mech=LOGIN bits=0)
-        by fortimail.grupovidela.com  with ESMTP id 08UEUh9R015477-08UEUh9T015477;
-        Wed, 30 Sep 2020 16:30:44 +0200
-Message-Id: <202009301430.08UEUh9R015477-08UEUh9T015477@fortimail.grupovidela.com>
-Reply-To: <fulanlan28@gmail.com>
-From:   "Mr. Fu Lan" <aitor@coacan.es>
-Subject: YOUR EARLY REPLY
-Date:   Wed, 30 Sep 2020 07:30:48 -0700
+        id S1731189AbgJAHyh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Oct 2020 03:54:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44124 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725878AbgJAHyh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 1 Oct 2020 03:54:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1A9C6AC97;
+        Thu,  1 Oct 2020 07:54:35 +0000 (UTC)
+From:   Coly Li <colyli@suse.de>
+To:     linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        netdev@vger.kernel.org, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, ceph-devel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Coly Li <colyli@suse.de>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        Chris Leech <cleech@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, Cong Wang <amwang@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Ilya Dryomov <idryomov@gmail.com>, Jan Kara <jack@suse.com>,
+        Jeff Layton <jlayton@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Lee Duncan <lduncan@suse.com>,
+        Mike Christie <michaelc@cs.wisc.edu>,
+        Mikhail Skorzhinskii <mskorzhinskiy@solarflare.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Vlastimil Babka <vbabka@suse.com>
+Subject: [PATCH v9 0/7] Introduce sendpage_ok() to detect misused sendpage in network related drivers
+Date:   Thu,  1 Oct 2020 15:54:01 +0800
+Message-Id: <20201001075408.25508-1-colyli@suse.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-FEAS-AUTH-USER: varios@grupovidela.com
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-YOUR EARLY REPLY 
+This series was original by a bug fix in nvme-over-tcp driver which only
+checked whether a page was allocated from slab allcoator, but forgot to
+check its page_count: The page handled by sendpage should be neither a
+Slab page nor 0 page_count page.
 
-It is understandable that you might be a little bit apprehensive because
-you do not know me but I have a lucrative business proposal of mutual
-interest to share with you.$222,695.415.00 million United States dollars
-your earliest response will be appreciated.
-Email: fulanlan28@gmail.com
-Kind Regards,
-Mr. Fu Lan
+As Sagi Grimberg suggested, the original fix is refind to a more common
+inline routine:
+    static inline bool sendpage_ok(struct page *page)
+    {
+        return  (!PageSlab(page) && page_count(page) >= 1);
+    }
+If sendpage_ok() returns true, the checking page can be handled by the
+concrete zero-copy sendpage method in network layer.
+
+The v9 series has 7 patches, no change from v8 series,
+- The 1st patch in this series introduces sendpage_ok() in header file
+  include/linux/net.h.
+- The 2nd patch adds WARN_ONCE() for improper zero-copy send in
+  kernel_sendpage().
+- The 3rd patch fixes the page checking issue in nvme-over-tcp driver.
+- The 4th patch adds page_count check by using sendpage_ok() in
+  do_tcp_sendpages() as Eric Dumazet suggested.
+- The 5th and 6th patches just replace existing open coded checks with
+  the inline sendpage_ok() routine.
+
+Coly Li
+
+Cc: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Cc: Chris Leech <cleech@redhat.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Cong Wang <amwang@redhat.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Eric Dumazet <eric.dumazet@gmail.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Ilya Dryomov <idryomov@gmail.com>
+Cc: Jan Kara <jack@suse.com>
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Lee Duncan <lduncan@suse.com>
+Cc: Mike Christie <michaelc@cs.wisc.edu>
+Cc: Mikhail Skorzhinskii <mskorzhinskiy@solarflare.com>
+Cc: Philipp Reisner <philipp.reisner@linbit.com>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+Cc: Vasily Averin <vvs@virtuozzo.com>
+Cc: Vlastimil Babka <vbabka@suse.com>
+---
+Changelog:
+v9, fix a typo pointed out by Greg KH.
+    add Acked-by tags from Martin K. Petersen and Ilya Dryomov.
+v8: add WARN_ONCE() in kernel_sendpage() as Christoph suggested.
+v7: remove outer brackets from the return line of sendpage_ok() as
+    Eric Dumazet suggested.
+v6: fix page check in do_tcp_sendpages(), as Eric Dumazet suggested.
+    replace other open coded checks with sendpage_ok() in libceph,
+    iscsi drivers.
+v5, include linux/mm.h in include/linux/net.h
+v4, change sendpage_ok() as an inline helper, and post it as
+    separate patch, as Christoph Hellwig suggested.
+v3, introduce a more common sendpage_ok() as Sagi Grimberg suggested.
+v2, fix typo in patch subject
+v1, the initial version.
+
+
+Coly Li (7):
+  net: introduce helper sendpage_ok() in include/linux/net.h
+  net: add WARN_ONCE in kernel_sendpage() for improper zero-copy send
+  nvme-tcp: check page by sendpage_ok() before calling kernel_sendpage()
+  tcp: use sendpage_ok() to detect misused .sendpage
+  drbd: code cleanup by using sendpage_ok() to check page for
+    kernel_sendpage()
+  scsi: libiscsi: use sendpage_ok() in iscsi_tcp_segment_map()
+  libceph: use sendpage_ok() in ceph_tcp_sendpage()
+
+ drivers/block/drbd/drbd_main.c |  2 +-
+ drivers/nvme/host/tcp.c        |  7 +++----
+ drivers/scsi/libiscsi_tcp.c    |  2 +-
+ include/linux/net.h            | 16 ++++++++++++++++
+ net/ceph/messenger.c           |  2 +-
+ net/ipv4/tcp.c                 |  3 ++-
+ net/socket.c                   |  6 ++++--
+ 7 files changed, 28 insertions(+), 10 deletions(-)
+
+-- 
+2.26.2
+
