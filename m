@@ -2,149 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B31A281AC3
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Oct 2020 20:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF92281BD6
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Oct 2020 21:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387688AbgJBSW4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Oct 2020 14:22:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28805 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725991AbgJBSW4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Oct 2020 14:22:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601662974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hcUTUrmBZt8SZNuGe1YLHBp9h5KkZhqwq3YUbV+dhfg=;
-        b=aDQ586W+9t/qM5Ps0H/uTQCWD4Y6FIX9wSwzH84cF70cIRNqaClEgCcigqAae6JOm9KgUy
-        O7uj8huy5kxFHFyJwe0CJMElmUo5mRa2Rm6H12t6rPOZwSmR0u+WJdOYsG8Iz4dbElJ+p8
-        c/zAgoBMUtWE9OcRtztvWdt8GDH1CY4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-154-smCaREX6NcOegb63RdSm4A-1; Fri, 02 Oct 2020 14:22:52 -0400
-X-MC-Unique: smCaREX6NcOegb63RdSm4A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 36B42801FC6;
-        Fri,  2 Oct 2020 18:22:51 +0000 (UTC)
-Received: from [10.40.192.160] (unknown [10.40.192.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9F365C1DA;
-        Fri,  2 Oct 2020 18:22:49 +0000 (UTC)
-Subject: Re: [PATCH] Revert "scsi: target/iscsi: Detect conn_cmd_list
- corruption early"
-To:     Mike Christie <michael.christie@oracle.com>,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        bvanassche@acm.org
-References: <20201002073341.12470-1-mlombard@redhat.com>
- <dc48abf2-0b54-0241-6931-e2041c5dbc40@oracle.com>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Message-ID: <6954cd7a-ef06-c118-4680-71a6d3d219af@redhat.com>
-Date:   Fri, 2 Oct 2020 20:22:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S2388594AbgJBTXY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 2 Oct 2020 15:23:24 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:50644 "EHLO mx.metalurgs.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388590AbgJBTXY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 2 Oct 2020 15:23:24 -0400
+X-Greylist: delayed 545 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:23:23 EDT
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 26ADC62AAC
+        for <linux-scsi@vger.kernel.org>; Fri,  2 Oct 2020 22:14:15 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 08B6762AA5
+        for <linux-scsi@vger.kernel.org>; Fri,  2 Oct 2020 22:14:15 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id C6CCF629F4; Fri,  2 Oct 2020 22:14:13 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.50])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 60954622E9;
+        Fri,  2 Oct 2020 22:14:07 +0300 (EEST)
 MIME-Version: 1.0
-In-Reply-To: <dc48abf2-0b54-0241-6931-e2041c5dbc40@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Fri, 02 Oct 2020 16:14:00 -0300
+Reply-To: binmurrah@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201002191413.C6CCF629F4@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan.
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201002 notchecked
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hello Dear,
 
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
 
-Dne 02. 10. 20 v 20:06 Mike Christie napsal(a):
-> On 10/2/20 2:33 AM, Maurizio Lombardi wrote:
->> This reverts commit b0055acaedf56a2717a6e2a4b700f1959a1b60df.
->>
->> This warning is duplicated because the very same condition
->> is already checked in __iscsit_free_cmd().
->>
->> Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
->> ---
->>  drivers/target/iscsi/iscsi_target_util.c | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/target/iscsi/iscsi_target_util.c b/drivers/target/iscsi/iscsi_target_util.c
->> index 45ba07c6ec27..ff7830ddbd7b 100644
->> --- a/drivers/target/iscsi/iscsi_target_util.c
->> +++ b/drivers/target/iscsi/iscsi_target_util.c
->> @@ -764,8 +764,6 @@ void iscsit_free_cmd(struct iscsi_cmd *cmd, bool shutdown)
->>  	struct se_cmd *se_cmd = cmd->se_cmd.se_tfo ? &cmd->se_cmd : NULL;
->>  	int rc;
->>  
->> -	WARN_ON(!list_empty(&cmd->i_conn_node));
->> -
->>  	__iscsit_free_cmd(cmd, shutdown);
->>  	if (se_cmd) {
->>  		rc = transport_generic_free_cmd(se_cmd, shutdown);
->>
-> 
-> Maurizio, are you hitting these WARN()s?
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
 
-We received a number of bug reports against RHEL7 about warnings like the following:
+Please get back to me if you are interested for more
+details.
 
-Feb 18 12:41:01 hostname kernel: ------------[ cut here ]------------
-Feb 18 12:41:01 hostname kernel: WARNING: CPU: 1 PID: 21173 at drivers/target/iscsi/iscsi_target_util.c:720 __iscsit_free_cmd+0x26e/0x290 [iscsi_target_mod]
-...
-Feb 18 12:41:01 hostname kernel: CPU: 1 PID: 21173 Comm: kworker/u8:3 Kdump: loaded Not tainted 3.10.0-1062.4.1.el7.x86_64 #1
-Feb 18 12:41:01 hostname kernel: Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 09/17/2015
-Feb 18 12:41:01 hostname kernel: Workqueue: tmr-user target_tmr_work [target_core_mod]
-Feb 18 12:41:01 hostname kernel: Call Trace:
-Feb 18 12:41:01 hostname kernel: [<ffffffff91d78ba4>] dump_stack+0x19/0x1b
-Feb 18 12:41:01 hostname kernel: [<ffffffff9169a958>] __warn+0xd8/0x100
-Feb 18 12:41:01 hostname kernel: [<ffffffff9169aa9d>] warn_slowpath_null+0x1d/0x20
-Feb 18 12:41:01 hostname kernel: [<ffffffffc0a6f69e>] __iscsit_free_cmd+0x26e/0x290 [iscsi_target_mod]
-Feb 18 12:41:01 hostname kernel: [<ffffffffc0a70bc4>] iscsit_aborted_task+0x64/0x70 [iscsi_target_mod]
-Feb 18 12:41:01 hostname kernel: [<ffffffffc0a7830a>] lio_aborted_task+0x2a/0x30 [iscsi_target_mod]
-Feb 18 12:41:01 hostname kernel: [<ffffffffc09fa516>] transport_cmd_finish_abort+0x66/0xb0 [target_core_mod]
-Feb 18 12:41:01 hostname kernel: [<ffffffffc09f4d92>] core_tmr_abort_task+0x102/0x180 [target_core_mod]
-Feb 18 12:41:01 hostname kernel: [<ffffffffc09f7bb2>] target_tmr_work+0x152/0x170 [target_core_mod]
-Feb 18 12:41:01 hostname kernel: [<ffffffff916bd1df>] process_one_work+0x17f/0x440
-Feb 18 12:41:01 hostname kernel: [<ffffffff916be2f6>] worker_thread+0x126/0x3c0
-Feb 18 12:41:01 hostname kernel: [<ffffffff916be1d0>] ? manage_workers.isra.26+0x2a0/0x2a0
-Feb 18 12:41:01 hostname kernel: [<ffffffff916c51b1>] kthread+0xd1/0xe0
-Feb 18 12:41:01 hostname kernel: [<ffffffff916c50e0>] ? insert_kthread_work+0x40/0x40
-Feb 18 12:41:01 hostname kernel: [<ffffffff91d8bd37>] ret_from_fork_nospec_begin+0x21/0x21
-Feb 18 12:41:01 hostname kernel: [<ffffffff916c50e0>] ? insert_kthread_work+0x40/0x40
-Feb 18 12:41:01 hostname kernel: ---[ end trace ed2119501826ec7a ]---
-
-I was discussing the matter with Bart Van Assche in private and maybe I found the bug,
-this is the content of the last email I sent him:
-
-The iscsit_release_commands_from_conn() function does the following operations:
-
-1) locks the cmd_lock spinlock
-2) Scans the list of commands and sets the CMD_T_FABRIC_STOP flag
-3) Releases the cmd_lock spinlock
-4) Rescans the list again and clears the i_conn_node link of each command
-
-
-But what happens if an abort timer is fired between points 3 and 4?
-
-void iscsit_aborted_task(struct iscsi_conn *conn, struct iscsi_cmd *cmd)
-{
-        spin_lock_bh(&conn->cmd_lock);
-        if (!list_empty(&cmd->i_conn_node) &&
-            !(cmd->se_cmd.transport_state & CMD_T_FABRIC_STOP))
-                list_del_init(&cmd->i_conn_node);
-        spin_unlock_bh(&conn->cmd_lock);
-
-        __iscsit_free_cmd(cmd, true);
-}
-
-
-iscsit_aborted_task() will find the cmd_lock spinlock unlocked.
-will also find a non-empty i_conn_node link but with the CMD_T_FABRIC_STOP flag set. 
-Therefore it will not call list_del_init(i_conn_node) and will trigger the warning in __iscsit_free_cmd().
-
-Sounds it possible to you?
-If I am right, this has been introduced by commit 064cdd2d91c2805d788876082f31cc63506f22c3
-
-Maurizio
-
+Yours faithfully,
+Hashim Bin 
