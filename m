@@ -2,29 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 582D1281548
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Oct 2020 16:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B456281551
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Oct 2020 16:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388029AbgJBOeh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Oct 2020 10:34:37 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:14795 "EHLO huawei.com"
+        id S2388227AbgJBOew (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Oct 2020 10:34:52 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:14801 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387974AbgJBOeh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 2 Oct 2020 10:34:37 -0400
+        id S2388122AbgJBOek (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 2 Oct 2020 10:34:40 -0400
 Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id A4B32672524BC8C1AE67;
+        by Forcepoint Email with ESMTP id B9DB3BE3A2EE155DDC13;
         Fri,  2 Oct 2020 22:34:34 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 2 Oct 2020 22:34:25 +0800
+ 14.3.487.0; Fri, 2 Oct 2020 22:34:26 +0800
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 0/7] hisi_sas: Add runtime PM support for v3 hw
-Date:   Fri, 2 Oct 2020 22:30:31 +0800
-Message-ID: <1601649038-25534-1-git-send-email-john.garry@huawei.com>
+        <linuxarm@huawei.com>, Luo Jiaxing <luojiaxing@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 1/7] scsi: hisi_sas: Use hisi_hba->cq_nvecs for calling calling synchronize_irq()
+Date:   Fri, 2 Oct 2020 22:30:32 +0800
+Message-ID: <1601649038-25534-2-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1601649038-25534-1-git-send-email-john.garry@huawei.com>
+References: <1601649038-25534-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.58]
@@ -33,42 +36,63 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This series adds runtime PM support for v3 hw. Consists of:
-- Switch to new PM suspend and resume framework
-- Add links to devices to ensure host cannot be suspended while devices
-  are not
-- Filter out phy events during suspend to avoid deadlock
-- Add controller RPM support
-- And some more minor misc related changes
+From: Luo Jiaxing <luojiaxing@huawei.com>
 
-I also included a random small fix, only visible when #CPUs < #queues and
-MSI affinity module param set.
+We got one call trace when running function level reset with online CPUs
+number less than 16 and enable MSI auto-affinity.
 
-Note that this series does not conflict with patch "scsi: hisi_sas:
-Switch v3 hw to MQ", which is supposed to go through the block tree:
+[16538.348038] Call trace:
+[16538.348422]  pci_irq_vector+0x98/0xc0
+[16538.348947]  disable_host_v3_hw+0x8c/0x288 [hisi_sas_v3_hw]
+[16538.349706]  hisi_sas_reset_prepare_v3_hw+0x60/0x88 [hisi_sas_v3_hw]
+[16538.350631]  pci_dev_save_and_disable+0x38/0x68
+[16538.351290]  pci_reset_function+0x44/0x88
+[16538.351846]  reset_store+0x6c/0xb8
+[16538.352429]  dev_attr_store+0x44/0x60
+[16538.353035]  sysfs_kf_write+0x58/0x80
+[16538.353558]  kernfs_fop_write+0x140/0x230
+[16538.354175]  __vfs_write+0x48/0x80
+[16538.354675]  vfs_write+0xb8/0x1d8
+[16538.355145]  ksys_write+0x74/0xf8
+[16538.355615]  __arm64_sys_write+0x24/0x30
+[16538.356240]  el0_svc_common.constprop.4+0x80/0x1f0
+[16538.356905]  do_el0_svc+0x2c/0x38
+[16538.357408]  el0_svc+0x14/0x40
+[16538.357848]  el0_sync_handler+0xbc/0x2ec
+[16538.358388]  el0_sync+0x140/0x180
 
-https://lore.kernel.org/linux-scsi/32574da3d8de863ff38347ef6ead9b35@mail.gmail.com/T/#m39c82fc8a3e3a6b20247d0bd0122d2916e620a28
+The reason is that if we use pci_alloc_irq_vectors_affinity() to alloc IRQ,
+the number of CQ IRQs can only be less than or equal to the number of
+online CPUs, but we use hisi_hba->queue_count(alway 16) for cycle at
+interrupt_disable_v3_hw(). So pci_irq_vector() warn us by this call trace.
 
-Luo Jiaxing (1):
-  scsi: hisi_sas: Use hisi_hba->cq_nvecs for calling calling
-    synchronize_irq()
+So use hisi_hba->cq_nvecs to replace hisi_hba->queue_count to avoid
+synchronize IRQ which is not existed.
 
-Xiang Chen (6):
-  scsi: hisi_sas: Switch to new framework to support suspend and resume
-  scsi: hisi_sas: Add controller runtime PM support for v3 hw
-  scsi: hisi_sas: Add the check of the definition of method _PS0 and
-    _PR0
-  scsi: hisi_sas: Add device link between SCSI devices and hisi_hba
-  scsi: hisi_sas: Filter out new PHYs up events during suspended
-  scsi: hisi_sas: Recover phys state according to the status before
-    reset
+Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- drivers/scsi/hisi_sas/Kconfig          |   1 +
- drivers/scsi/hisi_sas/hisi_sas.h       |   2 +
- drivers/scsi/hisi_sas/hisi_sas_main.c  |  10 ++-
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 105 +++++++++++++++++++++++--
- 4 files changed, 107 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 87bda037303f..0cc186fcbca8 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -2525,10 +2525,11 @@ static void interrupt_disable_v3_hw(struct hisi_hba *hisi_hba)
+ 	synchronize_irq(pci_irq_vector(pdev, 1));
+ 	synchronize_irq(pci_irq_vector(pdev, 2));
+ 	synchronize_irq(pci_irq_vector(pdev, 11));
+-	for (i = 0; i < hisi_hba->queue_count; i++) {
++	for (i = 0; i < hisi_hba->queue_count; i++)
+ 		hisi_sas_write32(hisi_hba, OQ0_INT_SRC_MSK + 0x4 * i, 0x1);
++
++	for (i = 0; i < hisi_hba->cq_nvecs; i++)
+ 		synchronize_irq(pci_irq_vector(pdev, i + 16));
+-	}
+ 
+ 	hisi_sas_write32(hisi_hba, ENT_INT_SRC_MSK1, 0xffffffff);
+ 	hisi_sas_write32(hisi_hba, ENT_INT_SRC_MSK2, 0xffffffff);
 -- 
 2.26.2
 
