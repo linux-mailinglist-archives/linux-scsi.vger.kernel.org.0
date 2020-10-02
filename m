@@ -2,64 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF92281BD6
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Oct 2020 21:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F8D281C08
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Oct 2020 21:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388594AbgJBTXY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 2 Oct 2020 15:23:24 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:50644 "EHLO mx.metalurgs.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388590AbgJBTXY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 2 Oct 2020 15:23:24 -0400
-X-Greylist: delayed 545 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:23:23 EDT
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 26ADC62AAC
-        for <linux-scsi@vger.kernel.org>; Fri,  2 Oct 2020 22:14:15 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 08B6762AA5
-        for <linux-scsi@vger.kernel.org>; Fri,  2 Oct 2020 22:14:15 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id C6CCF629F4; Fri,  2 Oct 2020 22:14:13 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.50])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id 60954622E9;
-        Fri,  2 Oct 2020 22:14:07 +0300 (EEST)
+        id S2388456AbgJBT2O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Oct 2020 15:28:14 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:38496 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388321AbgJBT2K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Oct 2020 15:28:10 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3541B8EE18B;
+        Fri,  2 Oct 2020 12:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601666889;
+        bh=3pL9EYAVcTAbBFDIrqOl8kEYMnykySS3oUFcjqGIHlY=;
+        h=Subject:From:To:Cc:Date:From;
+        b=q2SoCNwNORD/hj4ZDO5aKWp1qkaQZ62yaCyu703I6KtRaHB9T7v5OQQeVjxhZAeiT
+         9u+DQ2iuBhp/KVXOHj78jMYmRLs4iJS8XpcylpijeyjGvMoqiU1l5BnH19PijuA7iO
+         wYK1CidqbOHeIAQnCeMFfg+LgkNz6wPfh52qaEsk=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id B8kwV0lblIKq; Fri,  2 Oct 2020 12:28:08 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C7EDF8EE012;
+        Fri,  2 Oct 2020 12:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601666888;
+        bh=3pL9EYAVcTAbBFDIrqOl8kEYMnykySS3oUFcjqGIHlY=;
+        h=Subject:From:To:Cc:Date:From;
+        b=mkLHtMCBYYSBlY3NteBr+Z8kSEw2WvEfgiVmwMDsXcATatrvJIJtpoZVBrQuu0uMU
+         nKsJ5TMMxl2sSiAVyKK/nvREPLg136cI9FwcsNwiM15v9/dhsrVUa38q6QOms1ivKV
+         vHAfsBtN6GnNZNOdLbCJnua3EPhTMUvFIkgPPYLU=
+Message-ID: <32aab084a6bf83b48b7e609c35e3822ee0f778df.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.9-rc7
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 02 Oct 2020 12:28:04 -0700
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Fri, 02 Oct 2020 16:14:00 -0300
-Reply-To: binmurrah@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201002191413.C6CCF629F4@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan.
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201002 notchecked
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Dear,
+   Two patches in driver frameworks.  The iscsi one corrects a bug
+   induced by a BPF change to network locking and the other is a
+   regression we introduced.
 
-We are Investment Company offering Corporate and Personal
-Loan at 3% Interest Rate for a duration of 10Years.
+The patch is available here:
 
-We also pay 1% commission to brokers, who introduce project
-owners for finance or other opportunities.
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Please get back to me if you are interested for more
-details.
+The short changelog is:
 
-Yours faithfully,
-Hashim Bin 
+Mark Mielke (1):
+      scsi: iscsi: iscsi_tcp: Avoid holding spinlock while calling getpeername()
+
+Sudhakar Panneerselvam (1):
+      scsi: target: Fix lun lookup for TARGET_SCF_LOOKUP_LUN_FROM_TAG case
+
+And the diffstat:
+
+ drivers/scsi/iscsi_tcp.c               | 22 +++++++++++++++-------
+ drivers/target/target_core_transport.c |  3 ++-
+ 2 files changed, 17 insertions(+), 8 deletions(-)
+
+With full diffs below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index b5dd1caae5e9..d10efb66cf19 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -736,6 +736,7 @@ static int iscsi_sw_tcp_conn_get_param(struct iscsi_cls_conn *cls_conn,
+ 	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+ 	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+ 	struct sockaddr_in6 addr;
++	struct socket *sock;
+ 	int rc;
+ 
+ 	switch(param) {
+@@ -747,13 +748,17 @@ static int iscsi_sw_tcp_conn_get_param(struct iscsi_cls_conn *cls_conn,
+ 			spin_unlock_bh(&conn->session->frwd_lock);
+ 			return -ENOTCONN;
+ 		}
++		sock = tcp_sw_conn->sock;
++		sock_hold(sock->sk);
++		spin_unlock_bh(&conn->session->frwd_lock);
++
+ 		if (param == ISCSI_PARAM_LOCAL_PORT)
+-			rc = kernel_getsockname(tcp_sw_conn->sock,
++			rc = kernel_getsockname(sock,
+ 						(struct sockaddr *)&addr);
+ 		else
+-			rc = kernel_getpeername(tcp_sw_conn->sock,
++			rc = kernel_getpeername(sock,
+ 						(struct sockaddr *)&addr);
+-		spin_unlock_bh(&conn->session->frwd_lock);
++		sock_put(sock->sk);
+ 		if (rc < 0)
+ 			return rc;
+ 
+@@ -775,6 +780,7 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
+ 	struct iscsi_tcp_conn *tcp_conn;
+ 	struct iscsi_sw_tcp_conn *tcp_sw_conn;
+ 	struct sockaddr_in6 addr;
++	struct socket *sock;
+ 	int rc;
+ 
+ 	switch (param) {
+@@ -789,16 +795,18 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
+ 			return -ENOTCONN;
+ 		}
+ 		tcp_conn = conn->dd_data;
+-
+ 		tcp_sw_conn = tcp_conn->dd_data;
+-		if (!tcp_sw_conn->sock) {
++		sock = tcp_sw_conn->sock;
++		if (!sock) {
+ 			spin_unlock_bh(&session->frwd_lock);
+ 			return -ENOTCONN;
+ 		}
++		sock_hold(sock->sk);
++		spin_unlock_bh(&session->frwd_lock);
+ 
+-		rc = kernel_getsockname(tcp_sw_conn->sock,
++		rc = kernel_getsockname(sock,
+ 					(struct sockaddr *)&addr);
+-		spin_unlock_bh(&session->frwd_lock);
++		sock_put(sock->sk);
+ 		if (rc < 0)
+ 			return rc;
+ 
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index 9fb0be0aa620..8dd289214dd8 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+@@ -1840,7 +1840,8 @@ int target_submit_tmr(struct se_cmd *se_cmd, struct se_session *se_sess,
+ 	 * out unpacked_lun for the original se_cmd.
+ 	 */
+ 	if (tm_type == TMR_ABORT_TASK && (flags & TARGET_SCF_LOOKUP_LUN_FROM_TAG)) {
+-		if (!target_lookup_lun_from_tag(se_sess, tag, &unpacked_lun))
++		if (!target_lookup_lun_from_tag(se_sess, tag,
++						&se_cmd->orig_fe_lun))
+ 			goto failure;
+ 	}
+ 
+
