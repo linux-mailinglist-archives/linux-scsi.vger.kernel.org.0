@@ -2,97 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2ED283856
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Oct 2020 16:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE49A2837FF
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Oct 2020 16:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726866AbgJEOqU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Oct 2020 10:46:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50173 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726848AbgJEOqT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Oct 2020 10:46:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601909178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=ptyKuh8WxjRCHezLemPMrH21hGCsiTIELZD7s9BSjQE=;
-        b=DPEHuD+womOA2lb1nwiAWYUp/aOvKZI7+QWIeQ8GJ107XzXcb2UJd9zmErhMapak6uSZ1R
-        wmTHdt5ZdqXZTmlcwQ9oVB4eWFGSHto5fNSYW9Z/sb0Krjt8NCPB0xbkQIvVqDc51QHmt3
-        8tAiaUte4s1Pvag06iBiMAY1on2B+M4=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-582-keanUG4kNoeZxecFTZheWg-1; Mon, 05 Oct 2020 10:46:17 -0400
-X-MC-Unique: keanUG4kNoeZxecFTZheWg-1
-Received: by mail-qt1-f197.google.com with SMTP id 7so6604477qtp.18
-        for <linux-scsi@vger.kernel.org>; Mon, 05 Oct 2020 07:46:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ptyKuh8WxjRCHezLemPMrH21hGCsiTIELZD7s9BSjQE=;
-        b=mElLmfcA/YVO9oVgih69UOnh032jZKdbhauRtmSUP7pHZiLEBC/nSDD2kAc/c2LhRT
-         z9C3Ojv4nXbMc5ijHl2cxQUE3PjyMpcesUr7Q/qAhzIYRx+Y6+Fnl3BqwwZKeHOhtoNh
-         IbEoBkzmE3vkRCStl2/y+5LPLMqevJag/qjZzpaOJVjfO9Sh5Q013WV2wVlcnCuUEINk
-         +6qy1pXH8WRh+Lg3Om4NL6UAjofKldMLu5w7+1hK3YL1yPOLFZTp9RgnL3vsrnoyrjHu
-         4kYCgZosCDMkgnjGo/6EI2rkWyVSZ6AFqSmtoqouK1w2m6K/23NGDlHaFTxMgXxuIFuh
-         U3AQ==
-X-Gm-Message-State: AOAM530KHPa26zI8OtavPQmgY/JU/TfeW2F2COSrebBH3taijGTgKboF
-        noMkxZRaH/NCc8d/b5fWowQhrfohPnktXwSKV4+nYwj8n7YGHGCt9a9xYYelvB4XByPQ3Qek5C6
-        owG2ouCI742cQ/Y0+35W3Mw==
-X-Received: by 2002:a37:62d6:: with SMTP id w205mr289255qkb.229.1601909176266;
-        Mon, 05 Oct 2020 07:46:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRfTKS3+jTPIJZ4QlireY6tUWjq/ctyLnV1eg1G0RryjdqD9T03AY8QFV8BktptD3/3u4pFw==
-X-Received: by 2002:a37:62d6:: with SMTP id w205mr289222qkb.229.1601909175969;
-        Mon, 05 Oct 2020 07:46:15 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id i90sm303450qtd.92.2020.10.05.07.46.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 07:46:15 -0700 (PDT)
-From:   trix@redhat.com
-To:     njavali@marvell.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, natechancellor@gmail.com,
-        ndesaulniers@google.com
-Cc:     GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: qla2xxx: initialize value
-Date:   Mon,  5 Oct 2020 07:45:44 -0700
-Message-Id: <20201005144544.25335-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.1
+        id S1726003AbgJEOkY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Oct 2020 10:40:24 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:21840 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgJEOkX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Oct 2020 10:40:23 -0400
+IronPort-SDR: /iwFvCYXyoq7gwGfzZ0QrdHDORymhjNNLXe5N9nzdx+1Lsh1Vi+2PAYP1O31qbjJ9FBOBuQUbC
+ a4oHvE7IShy7HnMSeOkGJv5dJsEfUPuHVQxsX4JsLCTLq3vOGgYPgkaG6tQayK831vkD3elso+
+ 0JVKhZm4huRQB8L8vDExdo2nySUiJ+EomYM6bz6KlOtSa9w6Brvpu8tJbezx+DKaucrQIGKj4L
+ BgM5WZ133aXwWPelG6S5z/6KV3Dj6ssNJDRMidA/qwW/ONesEc7YSAUJOLhi35ZUkWbeSt3sE7
+ c+I=
+X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
+   d="scan'208";a="89133513"
+Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.23])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Oct 2020 07:40:23 -0700
+Received: from AVMBX3.microsemi.net (10.100.34.33) by AVMBX3.microsemi.net
+ (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Mon, 5 Oct 2020
+ 07:40:22 -0700
+Received: from bby1unixsmtp01.microsemi.net (10.180.100.98) by
+ avmbx3.microsemi.net (10.100.34.33) with Microsoft SMTP Server id 15.1.1979.3
+ via Frontend Transport; Mon, 5 Oct 2020 07:40:22 -0700
+Received: from localhost (bby1unixlb02.microsemi.net [10.180.100.121])
+        by bby1unixsmtp01.microsemi.net (Postfix) with ESMTP id 14F12A09C6;
+        Mon,  5 Oct 2020 07:40:22 -0700 (PDT)
+From:   Viswas G <Viswas.G@microchip.com.com>
+To:     <linux-scsi@vger.kernel.org>
+CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
+        <Viswas.G@microchip.com>, <Ruksar.devadi@microchip.com>,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Subject: [PATCH V2 0/4] pm80xx updates.
+Date:   Mon, 5 Oct 2020 20:20:07 +0530
+Message-ID: <20201005145011.23674-1-Viswas.G@microchip.com.com>
+X-Mailer: git-send-email 2.16.3
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Viswas G <Viswas.G@microchip.com>
 
-clang static analysis reports this problem:
+Changes from v1:
+	- Improved commit messages.
+	- Fixed compiler warning for 
+		 "Increase the number of outstanding IO supported" patch 
 
-qla_nx2.c:694:3: warning: 6th function call argument is
-  an uninitialized value
-        ql_log(ql_log_fatal, vha, 0xb090,
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Viswas G (4):
+  pm80xx: Increase number of supported queues.
+  pm80xx: Remove DMA memory allocation for ccb and device structures.
+  pm80xx: Increase the number of outstanding IO supported to 1024.
+  pm80xx: Driver version update
 
-In qla8044_poll_reg(), when reading the reg fails, the
-error is reported by reusing the timeout error reporter.
-Because the value is unset, a garbage value will be
-reported.  So initialize the value.
+ drivers/scsi/pm8001/pm8001_ctl.c  |   6 +-
+ drivers/scsi/pm8001/pm8001_defs.h |  27 +++--
+ drivers/scsi/pm8001/pm8001_hwi.c  |  38 +++----
+ drivers/scsi/pm8001/pm8001_init.c | 221 ++++++++++++++++++++++++++------------
+ drivers/scsi/pm8001/pm8001_sas.h  |  15 ++-
+ drivers/scsi/pm8001/pm80xx_hwi.c  | 109 ++++++++++---------
+ 6 files changed, 254 insertions(+), 162 deletions(-)
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/scsi/qla2xxx/qla_nx2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_nx2.c b/drivers/scsi/qla2xxx/qla_nx2.c
-index 3a415b12dcec..01ccd4526707 100644
---- a/drivers/scsi/qla2xxx/qla_nx2.c
-+++ b/drivers/scsi/qla2xxx/qla_nx2.c
-@@ -659,7 +659,7 @@ static int
- qla8044_poll_reg(struct scsi_qla_host *vha, uint32_t addr,
- 	int duration, uint32_t test_mask, uint32_t test_result)
- {
--	uint32_t value;
-+	uint32_t value = 0;
- 	int timeout_error;
- 	uint8_t retries;
- 	int ret_val = QLA_SUCCESS;
 -- 
-2.18.1
+2.16.3
 
