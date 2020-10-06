@@ -2,111 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 881CF284980
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Oct 2020 11:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79DC284A9F
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Oct 2020 13:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726064AbgJFJnJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 05:43:09 -0400
-Received: from mout.gmx.net ([212.227.17.20]:51189 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725962AbgJFJnJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 6 Oct 2020 05:43:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1601977381;
-        bh=MRG/DidZTMAP3s/IKygvp2ugxJn5R6bJa+RqDMprr3A=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=RJNbDXt2g4hh29Zl7x8j5rFscE1YFwWtvw53aiaHjw7P+lC/cmJu0Kc1/SMgBg5ie
-         WLLlspcuHC6fTZhryPL1rpJuRZq+axnMm9qizK+6dW6boXvYV9rtvl/UjaOxXODjIY
-         3d3lgrk5l9p8T0Ze5g5YGDuz7lZNru34hbUoHPIc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ts7.local ([91.8.173.95]) by mail.gmx.com (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbAci-1kwrOO3hzk-00bXEk; Tue, 06
- Oct 2020 11:43:00 +0200
-From:   Thomas Schmitt <scdbackup@gmx.net>
-To:     linux-scsi@vger.kernel.org
-Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Thomas Schmitt <scdbackup@gmx.net>
-Subject: [PATCH v2 2/2] sr: fix automatic tray loading for data reading
-Date:   Tue,  6 Oct 2020 11:40:26 +0200
-Message-Id: <20201006094026.1730-3-scdbackup@gmx.net>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201006094026.1730-1-scdbackup@gmx.net>
-References: <20201006094026.1730-1-scdbackup@gmx.net>
+        id S1726442AbgJFLCo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 07:02:44 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:40955 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725891AbgJFLCn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 07:02:43 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1kPkk8-00008a-Tm; Tue, 06 Oct 2020 11:02:53 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: sym53c8xx_2: fix sizeof mismatch
+Date:   Tue,  6 Oct 2020 12:02:52 +0100
+Message-Id: <20201006110252.536641-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:l6ieuFgGsYKG0hE/t+kPEvA27KMQa7HUegLkrn6XgsyAYX3WwjC
- DhexRajTu/N89hanWQRi0GRynj8P0alW0hVBwrdWS+AMITo8iAu7tj1gVvYHz/UyqN+uBTi
- sYUYJsakyq2l2yzOSZX3kBku7+CrTzrxHh0iElUNUJHzSshBIvTII6X6uyX5d+Me6i/90ww
- 3m5qmAs6TmvMplmrGe8Mw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:RYa96kB+0ww=:w/pmmUVibN6OGtyT+mpzkK
- uML4P15EonK3MCzgl5GcAgkiP98lMqCcchlxNSZVlOv5d0byxJqlLRTHoV5Ej0fMsPooNistW
- b1w9wCTQKAvD+lfzwz5ZbszjbVe+HRI2Ant1ao2EqsS0Lvjv4f1Y2Zzb8Rqbqsg9TSROWweDS
- gUGP4iMBuJ1rI3Y6CAVjtj+8cp5NgXC/L3ptNqtFOc8yz36gikT0roI0jLq8qnnyZ3cOi6mFx
- Y8k39ipnyLSiyyDsZny1BpMaOyKkL7GhiR2naU9qbWmZMPLjRcfApAA2GkHswNHkk7mN5IQ9G
- 0ePgjx9mIUZA/GquUUvRABd4w9MvVHGBhg8IB9iblbu+vaEruOE2bOVcp5L8xsOYHuf+3hjxY
- 2RkcOTjjE/4rKOYcC7xFj81n31gRo5O8DEkEa8iVxOXWfVJDr++pw/D/t2s3zQiH+LcPyc5S2
- 99QoX/kDc7D7uyIJF8FmhgGaswDiix4UY8jSqoyiDZUU49VXalDWXnux4BcynYQ1cF4biNKFx
- Q68vffQ7aW/6i0gN5muXfMsUcDVDoAJ4J8PyBThZnzuPdRaoJiahF5g2i43OjMkI8IbHdhTP3
- N7+mRlv/1sJ2Tk4NOa9i6y1Ao2kdK/tHK+CYo/vtiHdjZI13K6BaB72JXT2b/r97IcExDS8oc
- Z8ajzlTaIbVspRwyKizK7mdGOzsP2FLYCkd33iLWWJljun7NKmLR09A18KVbGUDzT3QIR7HtN
- MMP1MjIpPwOyUzYF7dF6BCO8eXHaWOjmPWvHD4V5FJWGB9H0rHTDckI4BwOKn75oD24IkVx5h
- HdByxZH/1IRtIaZi7q2aMIY1uWCfWZp2/662YSJgW+3xE1yggtHqkmzUcZ1rjB59+y8eeKr48
- SuGS6mN1h9qsBf+p9rXDodUZo6G3VJMrUv0RddpAW74YW4HxVuaLBVfQBSKsDBt2mgZX/LKJ/
- vAx3sHz2Z9Mvg+YS+g0+HLj5Ap8DB02UjoajrkbeVvLruKMDedLGeLMdWIdq9bzRhlPQuUskQ
- uJyYXflWjuQ0jk5JNq88cSmdIcERD9ljOedQx8YOGh1sIUavmz0KoJMAsrFlwXYmEdgmlbvDI
- JNeeYQa+QEaDtISWUCIjr1zy0hcVfNvxcgVgrs/ojxQC+8B8CdXezFhwFTNMjjuZu65JbO0a7
- YOqhQIt5sTzSoVcmYKXQG1j9wHf6zs2CNPxspZyoQfxn7Ih6JuJjcDlX82fQs465HSxIhiqrt
- b9js8tcDChVQGh0d49H/H5oAgBhJeiz0Mp/mcvw==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If
-  open("/dev/sr0", O_RDONLY);
-pulls in the tray of an optical drive, it immediately returns -1 with
-errno ENOMEDIUM or the first read(2) fails with EIO. Later, when the drive
-has stopped blinking, another open() yields success and read() works.
-This affects not only userland reading of the device file but also
-mounting the device.
-The reason is that medium assessment happens before automatic tray
-loading.
+From: Colin Ian King <colin.king@canonical.com>
 
-Use the new function cdrom_handle_open_tray() for deciding and performing
-tray loading before doing medium assessment.
+An incorrect sizeof is being used, struct sym_ccb ** is not correct,
+it should be struct sym_ccb *. Note that since ** is the same size as
+* this is not causing any issues.  Improve this fix by using the
+idiom sizeof(*np->ccbh) as this allows one to not even reference the
+type of the pointer.
 
-Signed-off-by: Thomas Schmitt <scdbackup@gmx.net>
-=2D--
- drivers/scsi/sr.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+[ Note: this is an ancient 2005 buglet, the sha is from the
+  tglx/history repo ]
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 2b43c0f97442..1c3806f59865 100644
-=2D-- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -540,12 +540,18 @@ static int sr_block_open(struct block_device *bdev, =
-fmode_t mode)
+Addresses-Coverity: ("Sizeof not portable (SIZEOF_MISMATCH)")
+Fixes: 473c67f96e06 ("[PATCH] sym2 version 2.2.0")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/scsi/sym53c8xx_2/sym_hipd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- 	sdev =3D cd->device;
- 	scsi_autopm_get_device(sdev);
--	if (bdev_check_media_change(bdev))
--		sr_revalidate_disk(cd);
-
- 	mutex_lock(&cd->lock);
--	ret =3D cdrom_open(&cd->cdi, bdev, mode);
-+	ret =3D cdrom_handle_open_tray(&cd->cdi, mode, 0);
- 	mutex_unlock(&cd->lock);
-+	if (!ret) {
-+		if (bdev_check_media_change(bdev))
-+			sr_revalidate_disk(cd);
-+
-+		mutex_lock(&cd->lock);
-+		ret =3D cdrom_open(&cd->cdi, bdev, mode);
-+		mutex_unlock(&cd->lock);
-+	}
-
- 	scsi_autopm_put_device(sdev);
- 	if (ret)
-=2D-
-2.20.1
+diff --git a/drivers/scsi/sym53c8xx_2/sym_hipd.c b/drivers/scsi/sym53c8xx_2/sym_hipd.c
+index cc11daa1222b..14118dd70711 100644
+--- a/drivers/scsi/sym53c8xx_2/sym_hipd.c
++++ b/drivers/scsi/sym53c8xx_2/sym_hipd.c
+@@ -5656,7 +5656,7 @@ int sym_hcb_attach(struct Scsi_Host *shost, struct sym_fw *fw, struct sym_nvram
+ 	/*
+ 	 *  Allocate the array of lists of CCBs hashed by DSA.
+ 	 */
+-	np->ccbh = kcalloc(CCB_HASH_SIZE, sizeof(struct sym_ccb **), GFP_KERNEL);
++	np->ccbh = kcalloc(CCB_HASH_SIZE, sizeof(*np->ccbh), GFP_KERNEL);
+ 	if (!np->ccbh)
+ 		goto attach_failed;
+ 
+-- 
+2.27.0
 
