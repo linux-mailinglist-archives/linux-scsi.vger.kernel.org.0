@@ -2,252 +2,319 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FDE28497E
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Oct 2020 11:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9289D284981
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Oct 2020 11:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbgJFJms (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 05:42:48 -0400
-Received: from mout.gmx.net ([212.227.17.22]:34109 "EHLO mout.gmx.net"
+        id S1726131AbgJFJnO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 05:43:14 -0400
+Received: from mout.gmx.net ([212.227.17.22]:36701 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgJFJmr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 6 Oct 2020 05:42:47 -0400
+        id S1725946AbgJFJnK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 6 Oct 2020 05:43:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1601977353;
-        bh=Skf/L3Dyq1CuPIqkY4gR71mNxfblatWdGsd2D/rEIvI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=U6BeqY82WfX+zL9Ufdvd0GtUvgPLtG0mPmyiJQ/ipHPbflv55VqOPoOL5JSn3+MgM
-         UD4gxwG5134wHepiCjTem9aT3zIdd444LqRv3rbXt/5AOWZRih+RrKg3xJLSt66ayQ
-         zhsAtarm/BiHRkt/wr0jUOXLaOUT/EkgRxL4ScFg=
+        s=badeba3b8450; t=1601977379;
+        bh=GDqZvLHFHyBlYJw8l9bRGc++uPRpcU3Nor7kkfioIFQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=BLwfFik80p5AksROUSKurPLh7IAuAvJ1ZOpl938bd4m0oAhddCOzrcSmBCbVkzsOF
+         mMtdkgRoDazuVewKjm2SCLRialE2dkrwd/NHMoeDQf0MOFhakz+TrhNwobmEsEKKoP
+         4Iv60QFScDxl9px/kzpWb3ZSfTiCE58+GQvxUF5o=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from ts7.local ([91.8.173.95]) by mail.gmx.com (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M1HZi-1kO4nL1Xy6-002keK; Tue, 06
- Oct 2020 11:42:33 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfHEJ-1ktGtU0Gkt-00gmR3; Tue, 06
+ Oct 2020 11:42:59 +0200
 From:   Thomas Schmitt <scdbackup@gmx.net>
 To:     linux-scsi@vger.kernel.org
 Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org, jejb@linux.ibm.com,
         martin.petersen@oracle.com, Thomas Schmitt <scdbackup@gmx.net>
-Subject: [PATCH v2 0/2] Fix automatic CD tray loading for data reading via sr
-Date:   Tue,  6 Oct 2020 11:40:24 +0200
-Message-Id: <20201006094026.1730-1-scdbackup@gmx.net>
+Subject: [PATCH v2 1/2] cdrom: delegate automatic CD tray loading to callers of cdrom_open()
+Date:   Tue,  6 Oct 2020 11:40:25 +0200
+Message-Id: <20201006094026.1730-2-scdbackup@gmx.net>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201006094026.1730-1-scdbackup@gmx.net>
+References: <20201006094026.1730-1-scdbackup@gmx.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Jw9p0x4mXfBUonFFRPgNiCbvLCXoVf082glZYflxlbdJo7kLUQ/
- 4eF2ZPyqrjp8JlXseOmJ9Av9jN6H1vqCvid7+59bS8lcq/JvvYjwh4FrjuDhpsA6S6FJ8Kc
- AYsXkePaqg0v7yOw3ZNugpNcWGfqAlH0T0VGn6NzeGEd7oXGXXW8UpTnvyENf7e4r6b6eBm
- P+SVAMO8wc00U3p5VgZWQ==
+X-Provags-ID: V03:K1:vlHcON2E3P4q3nSfVlLS2ubdHMbDBcNtQxLwnpjBPvu1KgfoOpY
+ /2IvL0qsLthPXmOnUD+oi0nq0p3s/qJk2wosffB+pjxNO7FZl9SsgqxMZtzjKrdWOM7PvG3
+ 9awFscxzBlKE0k8gaXBkst37misIjLWDUqTrL8BAZ/HNh6BQdDuoQgtKem7By6mCjmpNxXI
+ pyE57Orj/8/zuGbFuglkA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:K01hy6Gc8O4=:jKOeHpjm8UA03QxybED49d
- vr4mZ/tDH8mSJfJldFGoo0Whdegdajhk4qdWMV5E9pR0b/7Qw971r8PnrVua9as906HX5a+Cz
- YyWVq19vVdE+IrUtbEk2LrUqpm5k6fEJKW1Kb2M41dXrNxGxErJQEF3hOTAgf6z35z0pm/a2R
- LsHnWgs4eNx7xCaWdr4+XGw8hSoPfuZHB70Fwv1wJyiKSEwwpoeWoo4rtxxOyDx2ISP6YoUxC
- EQ7yotMY9wV50vdFqGg569nuJb73+yftTv7Ne7Mo7wwvAKKscCpXev2u9cJ6MziNplNN4RQKZ
- XjqZb0jdjXVbXWe+H4yCwJQtsb5mngMOSxyDvghvL5zP4bPa8Iaspkibyhn5L2ernCzxl8uqZ
- o5McbkGvlDX5flBLzRISXHeJAKkUaIgKSUc0vcLTEpaunmW63iwjhxqkugg2QUdX86OXM2Q9a
- XFXtqvE4od3t3eOqn4BPDpCFfVeOrxWs8zwiUZJ11BiO0gPK6EphhpQlIzcMl1gWFon9nZqAj
- SJTVTxLZKOo7HthnHWgk9iFlr+M8bOo4+ZkMJtayAor0Nuc+4ZvYVmRtyaZ/17HOQjQ0SXaEc
- lwQCzFAv8+t4cWiCW0bCHXcAhhgrI/hgQxQDtTiyz+xykMrGZH7Tt2fuTrBfvjtdv0iavG9V9
- FoN03MsBR0UNjBCn0RVIGEAHS/jT71C61x+wsnKBMILTsOqiWQXG6iltEuTHGam0d0048OONB
- 5x86ByNhW9Tq0WB7qSbPVRUjbXyRUfC8kuJR4zj/NF0NGwjRNWO1phe76g2QhR0tzQy2KLeqo
- aomiV+x26MGEWunwyWjsyvpWXf/vnhK4E0wpg7tgp9r+VPvAnym23Y/NetJVT2IonDa2CLvzn
- DPVZtyPbiIoFXpBOWU0sD840ZXWLIcvFCAUP1YZfEDyZER5nyghqcBeHvAD1IYOQUEOlbLFQp
- Z9HiLdcYgvdedFW7zfVBolyX6nWxCf7jUajNTBM4cgNHIQHVAAPwVTZ4kdYGevtbWJOyonRNA
- OaQhIHJRvPWtHtvukC99CfyXfLfuHKsajZOeB3I04Ty6jwz3Pn2jzwTechlMzoIQ9w+gsFozc
- mL8W+NEIGXRQTeyIBTHHegDzHIRzRiVOTjz4xdzeh4cjd0KYnEuHCRkV+rWIpBRpgDA3r7WUR
- JeswpeiQmZbog+otaHSrOFtAshpxwrTeIC/1V0qSgbQfrFLxJwO3DIljNRgEJfuXPjI62y/so
- 1FiNCFKDPMldk6r3kdoSG1+7smhcWjgreDKweLw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7M6p5R/qggM=:1cGjnQuRlW4kFtIfKci4Wo
+ sjxVrK21VrxkvgWCaSTPsytPyo+78R7fjBNQTPhr9ESMJ2A1HOQpvWAxdBJfY0U8D2JmPky7z
+ eq09b2Pf2SiXHHPrvfGhS1Y0526LrsftH0ksyTtMsBJ6diHGI79SQYzmi4mqESTkyXfGkJtDj
+ VN5BrQGym7hyr8o5zBP7ZrsISVy78XQ3Q1HXI/kehnvw9iyUPzG/kMJob72jANkgm9phf93rb
+ qRJ6AfhPE0uLHHuemGDKkDXekUdCzX5DHipl0GPUyRcpwO/95gt4WQy63GSAyhJ88wY09RBD0
+ t7cYxszQGDc3XDmy+vDC1ZqX/MevLCtX6qXT+4fjDZCCwGn1b0i1ylnuYXiAMw7S9rppyMEeb
+ R5D9OOWnRbcCEgKIe+b3F+feIdERwWU9p9PUNGJ+oSXQCJo+MOuvufch4C/T4DkzFAOyrFNkS
+ 5bdWCtWpujt02Nv0vfmlPf2if2aZ9jdRoHvlSyM/2iTv/erjk8+bAeQAcxyOW5gJzlzrCA53W
+ 1U2+G2P/KIjeNkM2MvSf5y2KkGMsu141gBQA1b2nLSC1tvGntk9KLnxPUEUxOW6WyuN9D6XWZ
+ cuyHec6iHQKeENadgyv8Oc2as6SVaI0cop7zUPZ4UE9lRswz4axyACW6XaXtbIzKj4l136nj4
+ Viwy/bcNIqs+W5EKyIo4pJjiVpkOPZ0Voo3eSBFCZhMHvnLLqD5eclv0GCGq2Uu+wlnlHuIw8
+ dRXe/XILLFv9XTk9D/BjWdGnZYl4wayys7PjjcHPJ85RZxfr47lRnx6zzREa+Afz11k6rzdcy
+ mt7BiYutZzH1AMHZwWThrMa5pQNFMGgofCjsXcMIvflJ2QdE8qkfaLdugXTwB8Yds6V0t8dA9
+ f3ytILr7gm15lQTwGMtjaLa/QJQv7dxLEd2ZyyjtcR5Nap0lgzhBMPcGemCoReb1LyAgBBpR+
+ 9vrWdyrkmuId9lTUchhdo9bs8seqELv7D8bUaUV6qhBjyRpSKarwV2dkpB6fJh0o1F+o+PVg5
+ 9R43xAmnJMO0zpOIfVI7zLLpYfnLYZ02yl1tHTbcUb5FsVAGBce/ClFkA03OdzJrFHsmYiSAx
+ b1DRN96byjpf1MogtoVjjWKgPjd+nLwFAk+vbzJ5tVFgHPK5+5Ux8rW322oaOUkIjcx9Y6m2M
+ ur9KCrPXzhYiUc7ALHtRTWEGVnvzdCOCuqHC42yb9+D1Jb/GKmjWH60CYn6QgnOWgGuasRoT4
+ fzXfa8I6JNaTWdF4EvjLhfGwPL9f2DjqlI7wuPA==
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
-
-if
+If
   open("/dev/sr0", O_RDONLY);
 pulls in the tray of an optical drive, it immediately returns -1 with
-errno ENOMEDIUM, or the first read(2) fails with EIO. Later, when the
-drive has stopped blinking, another open() yields success and read()
-works.
+errno ENOMEDIUM or the first read(2) fails with EIO. Later, when the drive
+has stopped blinking, another open() yields success and read() works.
 This affects not only userland reading of the device file but also
 mounting the device.
 
-The fundamental problem of the current implementation is that function
-sr_block_open() does medium assessment before calling cdrom_open(), under
-which open_for_data() performs the tray loading too late.
-A minor problem is that there is currently no waiting loop for the drive's
-decision about the medium.
+Since commit 210ba1d1724f ("[SCSI] sr: update to follow tray status
+correctly") of january 2008 the necessary waiting loop after emitting the
+tray loading command is not performed, because sr_do_ioctl() is not called
+any more.
+Commit 2bbea6e11735 ("cdrom: do not call check_disk_change() inside
+cdrom_open()") of march 2008 moved medium assessment out of cdrom_open()
+and thus inevitable before automatic tray loading.
 
-Please regard my proposal as follow-up to commit 2bbea6e11735 ("cdrom: do
-not call check_disk_change() inside cdrom_open()") of march 2008. It moved
-medium assessment out ouf cdrom_open() but left behind tray loading.
+Factor out a new function cdrom_handle_open_tray() in cdrom.c from
+open_for_data() and export it, so that callers of cdrom_open() can call
+it before their call of check_disk_change(). It decides whether it can and
+should load the tray. If so, it emits the tray loading command and waits
+for the drive to make its decision.
 
-=2D-----------------------------------------------------------------------=
---
-For now my proposal fixes only data reading via sr, because that's what i
-am able to test:
+Replace automatic tray loading in cdrom_open() by a mere check whether the
+drive reports a usable medium in a loaded tray.
+Unaware callers of cdrom_open() will not cause automatic tray loading
+any more, but rather will reliably see -ENOMEDIUM if the tray is open.
 
-Factor out from open_for_data() a new function cdrom_handle_open_tray()
-and export it.
-It decides whether it can and should load the tray. If so, it emits the
-tray loading command and waits for up to 40 seconds for the drive to make
-its decision. Plus 1 second of waiting in case of a usable medium, in
-order to avoid hard-to-test narrow race conditions.
-
-Let cdrom_open() not attempt to load the tray any more, but rather just
-return -ENOMEDIUM if it detects an open tray.
-
-Let sr_block_open() call cdrom_handle_open_tray() under mutex cd->lock
-which it gives up immediately thereafter.
-Then it calls the same sequence of medium assessment, mutex cd->lock and
-cdrom_open() as it does currently.
-
-Thanks to commit 51a858817dcd ("scsi: sr: get rid of sr global mutex") of
-february 2020, the blocking of at most 41 seconds only affects the
-particular drive and not all other sr devices.
-
-=2D----------------------------------------------------------------------
-Successful tests:
-
-I tested with 3 different drives at SATA and USB (ASUS DRW-24D5MT,
-Pioneer BDR-S09, LG BH16NS40 in USB box) simultaneously by
-  time dd if=3D/dev/sr"$N" bs=3D2048 count=3D1 of=3D/dev/null
-with CD, DVD, and BD media. Waiting times ranged from 9 to 23 seconds.
-
-The same times were measured when each drive was the only busy one.
-
-Simultaneous full reads succeeded starting from open tray by
-  time dd if=3D/dev/sr"$N" bs=3D2048 status=3Dprogress of=3D/dev/null
-
-I tested mounting CD, DVD and BD with ISO 9660 from open tray by
-  mount /dev/sr"$N" /mnt/iso
-
-To make sure that no unwanted tray loading happens, i tested with open
-tray by a program which prevents loading by O_NONBLOCK:
-  fd =3D open(path, O_RDONLY | O_NONBLOCK);
-  ret =3D ioctl(fd, CDROMREADTOCHDR, &hdr);
-The open() call succeeds, whereas the ioctl() fails with ENOMEDIUM.
-The tray does not move.
-
-The patches were checked on Debian 10 by
-  ./scripts/checkpatch.pl --strict --codespell --codespellfile \
-       /usr/lib/python3/dist-packages/codespell_lib/data/dictionary.txt
-
-=2D--------------------------------------------------------------------
-Patch version:
-
-v2 is based on git://git.kernel.dk/linux-block branch for-next to take
-into respect commit afd35c4f573d ("sr: use bdev_check_media_change") and
-commit 38a2b557e238 ("sr: simplify sr_block_revalidate_disk").
-
-Newest in the branch was commit 73f2e37b498a ("Merge branch
-'for-5.10/drivers' into for-next").
-
-v2 improves the concurrency behavior of its tray loader with competing
-tray loading by the human user. v1 reported "no medium" when encountering
-a drive which is already in the process of decision. v2 waits for this
-decision.
-
-=2D-------------------------------------------------------------------
-The rest of this mail is about these aspects:
-- What about CD audio and non-sr CD drivers.
-- Why not (yet) waiting without mutex after tray loading.
-- Why i can only test data reading via sr.
-- Why the current code not always yields ENOMEDIUM at open() but sometimes
-  EIO at the first read(2).
-
-=2D-------------------------------------------------------------------
-What about CD audio and non-sr CD drivers:
-
-Because i lack of testing opportunities (see below), i omit:
-
-- Calling cdrom_handle_open_tray() in the bdops.open() functions of
-  cdrom/gdrom.c, block/paride/pcd.c, ide/ide-cd.c.
-
-- Calling cdrom_handle_open_tray() in the callers of
-  check_for_audio_disc(): cdrom_ioctl_audioctl() and
-  cdrom_ioctl_play_trkind() which control audio playback by the drive to
-  some (traditionally analog) audio outlet.
-
-- Replacing the tray loading code of check_for_audio_disc() in cdrom.c
-  by a mere status checker like by my proposal in open_for_data().
-  (It could stay in place but would be of no use any more.)
-
-My changes in sr_block_open() and open_for_data() could serve as
-templates for these omitted tasks.
-
-I would prepare patches if there is acceptance for untested code.
-
-=2D-------------------------------------------------------------------
-Why not (yet) waiting without mutex after tray loading:
-
-The automatic tray loading happened under the mutex for cdrom_open().
-My proposal upholds this locking by acquiring cd->lock before calling
-cdrom_handle_open_tray() and giving it up before medium assessment.
-
-It seems to me that it should be safe to run the new function
-cdrom_handle_open_tray() without cd->lock, as it mainly emits drive
-commands START/STOP UNIT and TEST UNIT READY. It does not manipulate
-members of device structs.
-Without lock it would enable access to the drive by other threads during
-the waiting for a drive decision.
-
-But i have no idea how to prove that it is safe.
-
-=2D--------------------------------------------------------------------
-Why i can only test data reading via sr:
-
-None of my DVD and BD drives has a socket for plugging loudspeakers or
-earphones. So i cannot test the consequences of my proposal to the ability
-of playing audio tracks.
-
-sr is the only driver i can test, because of the extinction status of the
-devices of the other drivers which call cdrom_open():
-- gdrom seems to be for ancient gaming consoles. It is unclear to me
-  whether they could load a tray by own motor power.
-- paride is described as ATAPI via an old printer cable.
-- ide-cd ... was not that the CD part of hd swallowed by sr, as the HDD
-  part of hd was swallowed by sd ?
-
-sr is well alive. BD drives cost ~80 EUR, 25 GB BD-RE media <1 EUR.
-Not a competitor to HDD, but to USB sticks.
-
-=2D--------------------------------------------------------------------
-Why the current code not always yields ENOMEDIUM at open() but sometimes
-EIO at the first read(2):
-
-A newly bought Pioneer BDR-S09 shows this behavior with the current code.
-dd reports I/O error rather than no medium.
-
-Inspection by libburn shows that it waits with its reply to START/STOP
-UNIT until it has decided over the medium. The first following TEST UNIT
-READY yields key=3D6, asc=3D28h, ascq=3D00h "Not Ready to Ready change, me=
-dium
-may have changed" and the second TEST UNIT READY yields success.
-
-This substitutes for the missing waiting loop, but not for the lack of
-medium assessment after loading. So open(2) succeeds, but read(2) faces
-the medium assessment which was made when the tray was out. The result was
-in my experiments always EIO on the first read().
-
-This behavior is peculiar among my drives. Seven others reply to
-START/STOP UNIT as soon as the tray has moved in. Then for several seconds
-they reply to TEST UNIT READY by key=3D2, asc=3D04h, ascq=3D01h "Logical u=
-nit is
-in process of becoming ready".
-
-Have a nice day :)
-
-Thomas
-
-Thomas Schmitt (2):
-  cdrom: delegate automatic CD tray loading to callers of cdrom_open()
-  sr: fix automatic tray loading for data reading
-
+Signed-off-by: Thomas Schmitt <scdbackup@gmx.net>
+=2D--
  drivers/cdrom/cdrom.c | 173 +++++++++++++++++++++++++++++++-----------
- drivers/scsi/sr.c     |  12 ++-
  include/linux/cdrom.h |   3 +
- 3 files changed, 141 insertions(+), 47 deletions(-)
+ 2 files changed, 132 insertions(+), 44 deletions(-)
 
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 0c271b9e3c5b..45bfe76129ef 100644
+=2D-- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -286,6 +286,18 @@
+ #include <scsi/scsi_common.h>
+ #include <scsi/scsi_request.h>
+
++/*
++ * For the wait-and-retry loop after possibly having loaded the drive tra=
+y.
++ * 10 retries in 20 seconds are hardcoded in sr_do_ioctl() which was used
++ * up to 2008.
++ * But time spans up to 25 seconds were measured by libburn on
++ * drives connected via SATA or USB-SATA bridges.
++ * So 20 retries * 2000 ms =3D 40 seconds seems more appropriate.
++ */
++#define CD_OPEN_MEDIUM_RETRY_MAX 20
++#define CD_OPEN_MEDIUM_RETRY_MSLEEP 2000
++#include <linux/delay.h>
++
+ /* used to tell the module to turn on full debugging messages */
+ static bool debug;
+ /* default compatibility mode */
+@@ -1040,6 +1052,114 @@ static void cdrom_count_tracks(struct cdrom_device=
+_info *cdi, tracktype *tracks)
+ 	       tracks->cdi, tracks->xa);
+ }
+
++static
++int wait_for_medium_decision(struct cdrom_device_info *cdi)
++{
++	int retry =3D 0, ret;
++	const struct cdrom_device_ops *cdo =3D cdi->ops;
++
++	/* Wait until the intermediate drive status CDS_DRIVE_NOT_READY ends */
++	while (1) {
++		ret =3D cdo->drive_status(cdi, CDSL_CURRENT);
++		if (ret =3D=3D CDS_DRIVE_NOT_READY &&
++		    retry++ < CD_OPEN_MEDIUM_RETRY_MAX)
++			msleep(CD_OPEN_MEDIUM_RETRY_MSLEEP);
++		else
++			break;
++	}
++	if (ret !=3D CDS_DISC_OK)
++		return ret;
++	/*
++	 * It is hard to test whether very recent readiness can cause race
++	 * conditions with media change events. So wait a while to never
++	 * undercut the average delay between actual readiness and detection
++	 * which was tested without this additional msleep().
++	 */
++	msleep(CD_OPEN_MEDIUM_RETRY_MSLEEP / 2);
++
++	return CDS_DISC_OK;
++}
++
++/*
++ * To be called by expectant callers of cdrom_open(), before they call
++ * check_disk_change() and then cdrom_open().
++ *
++ * If the mode is right, the drive capable, the tray out, and autoclose
++ * enabled, try to move in the tray and wait for the drive's decision abo=
+ut
++ * the medium.
++ * Return 0 if cdrom_open() would not want to know the tray status, or th=
+e
++ * drive cannot report its tray status at all, or the decision is CDS_DIS=
+C_OK.
++ * Else return a negative error number.
++ * Input parameter mode decides whether cdrom_open() will want to know or
++ * change the tray status at all.
++ * Input parameter leave_open =3D=3D 1 suppresses the try to close and th=
+e waiting
++ * for a decision. It rather just assesses the situation. Submit mode =3D=
+=3D 0
++ * to not hamper assessment.
++ */
++int cdrom_handle_open_tray(struct cdrom_device_info *cdi, fmode_t mode,
++			   int leave_open)
++{
++	int ret;
++	const struct cdrom_device_ops *cdo =3D cdi->ops;
++
++	if ((mode & FMODE_NDELAY) && (cdi->options & CDO_USE_FFLAGS))
++		return 0;
++	if (!cdo->drive_status)
++		return 0;
++
++	ret =3D cdo->drive_status(cdi, CDSL_CURRENT);
++	cd_dbg(CD_OPEN, "drive_status=3D%d\n", ret);
++	if (ret =3D=3D CDS_DRIVE_NOT_READY) {
++		/* Probably some other entity is loading the tray */
++		if (leave_open)
++			return -ENOMEDIUM;
++		wait_for_medium_decision(cdi);
++		goto assess_and_return;
++	}
++	if (ret !=3D CDS_TRAY_OPEN)
++		goto assess_and_return;
++
++	cd_dbg(CD_OPEN, "the tray is open...\n");
++	if (leave_open)
++		return -ENOMEDIUM;
++	/* can/may i close it? */
++	if (CDROM_CAN(CDC_CLOSE_TRAY) && cdi->options & CDO_AUTO_CLOSE) {
++		cd_dbg(CD_OPEN, "trying to close the tray\n");
++		ret =3D cdo->tray_move(cdi, 0);
++		if (ret) {
++			cd_dbg(CD_OPEN,
++			       "bummer. tried to close the tray but failed.\n");
++			/* Ignore the error from the low
++			 * level driver.  We don't care why it
++			 * couldn't close the tray.  We only care
++			 * that there is no disc in the drive,
++			 * since that is the _REAL_ problem here.
++			 */
++			return -ENOMEDIUM;
++		}
++	} else {
++		if (!CDROM_CAN(CDC_CLOSE_TRAY))
++			cd_dbg(CD_OPEN,
++			       "bummer. this drive can't close the tray.\n");
++		return -ENOMEDIUM;
++	}
++
++	ret =3D wait_for_medium_decision(cdi);
++	if (ret =3D=3D CDS_NO_DISC || ret =3D=3D CDS_TRAY_OPEN) {
++		cd_dbg(CD_OPEN, "bummer. the tray is still not closed.\n");
++		cd_dbg(CD_OPEN, "tray might not contain a medium\n");
++		return -ENOMEDIUM;
++	}
++	cd_dbg(CD_OPEN, "the tray is now closed\n");
++
++assess_and_return:
++	ret =3D cdo->drive_status(cdi, CDSL_CURRENT);
++	if (ret !=3D CDS_DISC_OK)
++		return -ENOMEDIUM;
++	return 0;
++}
++EXPORT_SYMBOL(cdrom_handle_open_tray);
++
+ static
+ int open_for_data(struct cdrom_device_info *cdi)
+ {
+@@ -1047,50 +1167,15 @@ int open_for_data(struct cdrom_device_info *cdi)
+ 	const struct cdrom_device_ops *cdo =3D cdi->ops;
+ 	tracktype tracks;
+ 	cd_dbg(CD_OPEN, "entering open_for_data\n");
+-	/* Check if the driver can report drive status.  If it can, we
+-	   can do clever things.  If it can't, well, we at least tried! */
+-	if (cdo->drive_status !=3D NULL) {
+-		ret =3D cdo->drive_status(cdi, CDSL_CURRENT);
+-		cd_dbg(CD_OPEN, "drive_status=3D%d\n", ret);
+-		if (ret =3D=3D CDS_TRAY_OPEN) {
+-			cd_dbg(CD_OPEN, "the tray is open...\n");
+-			/* can/may i close it? */
+-			if (CDROM_CAN(CDC_CLOSE_TRAY) &&
+-			    cdi->options & CDO_AUTO_CLOSE) {
+-				cd_dbg(CD_OPEN, "trying to close the tray\n");
+-				ret=3Dcdo->tray_move(cdi,0);
+-				if (ret) {
+-					cd_dbg(CD_OPEN, "bummer. tried to close the tray but failed.\n");
+-					/* Ignore the error from the low
+-					level driver.  We don't care why it
+-					couldn't close the tray.  We only care
+-					that there is no disc in the drive,
+-					since that is the _REAL_ problem here.*/
+-					ret=3D-ENOMEDIUM;
+-					goto clean_up_and_return;
+-				}
+-			} else {
+-				cd_dbg(CD_OPEN, "bummer. this drive can't close the tray.\n");
+-				ret=3D-ENOMEDIUM;
+-				goto clean_up_and_return;
+-			}
+-			/* Ok, the door should be closed now.. Check again */
+-			ret =3D cdo->drive_status(cdi, CDSL_CURRENT);
+-			if ((ret =3D=3D CDS_NO_DISC) || (ret=3D=3DCDS_TRAY_OPEN)) {
+-				cd_dbg(CD_OPEN, "bummer. the tray is still not closed.\n");
+-				cd_dbg(CD_OPEN, "tray might not contain a medium\n");
+-				ret=3D-ENOMEDIUM;
+-				goto clean_up_and_return;
+-			}
+-			cd_dbg(CD_OPEN, "the tray is now closed\n");
+-		}
+-		/* the door should be closed now, check for the disc */
+-		ret =3D cdo->drive_status(cdi, CDSL_CURRENT);
+-		if (ret!=3DCDS_DISC_OK) {
+-			ret =3D -ENOMEDIUM;
+-			goto clean_up_and_return;
+-		}
+-	}
++
++	/*
++	 * Check for open tray, but do not close it. The caller should
++	 * have cared to call cdrom_handle_open_tray(,,0) in advance.
++	 */
++	ret =3D cdrom_handle_open_tray(cdi, (fmode_t)0, 1);
++	if (ret)
++		goto clean_up_and_return;
++
+ 	cdrom_count_tracks(cdi, &tracks);
+ 	if (tracks.error =3D=3D CDS_NO_DISC) {
+ 		cd_dbg(CD_OPEN, "bummer. no disc.\n");
+diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
+index f48d0a31deae..cf2b5fc9c6fd 100644
+=2D-- a/include/linux/cdrom.h
++++ b/include/linux/cdrom.h
+@@ -98,6 +98,9 @@ int cdrom_multisession(struct cdrom_device_info *cdi,
+ int cdrom_read_tocentry(struct cdrom_device_info *cdi,
+ 		struct cdrom_tocentry *entry);
+
++int cdrom_handle_open_tray(struct cdrom_device_info *cdi, fmode_t mode,
++			   int leave_open);
++
+ /* the general block_device operations structure: */
+ extern int cdrom_open(struct cdrom_device_info *cdi, struct block_device =
+*bdev,
+ 			fmode_t mode);
 =2D-
 2.20.1
 
