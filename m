@@ -2,92 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85250285736
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7D128573E
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbgJGDsS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 23:48:18 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:36170 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725970AbgJGDsQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:48:16 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973hvto044770;
-        Wed, 7 Oct 2020 03:48:11 GMT
+        id S1727265AbgJGDs3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 23:48:29 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38670 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727160AbgJGDs0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:48:26 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973jV5a167245;
+        Wed, 7 Oct 2020 03:48:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=TZ22GLt8v2noU7mYvYvl5wxvRnyWf+PM35LhXeJoB74=;
- b=TiQ2abXESfbv5OIHN2ZiH/rvpYOzLFYI32qerjmoP20sj6wTnP4RydwZ1VYzWYySHDV7
- +DysOeAI8oHpiM+25OJyl0m4ht3JPhIDCV+ReI4JrOMdJiqX/YVIHu5KuC0mnawLWwGn
- qXY75iWYh+/7bscKNra6nh0rlcVRukGf0Yuak+GfebZThbDQGxYiHSZc5NvYCgIK2YBU
- XjRWRBsSnt7da4FJDAPW8srhQ6fTBHqn2uuOZqtg+bi0QqRhvwo1Gx+FDTu0+kdsuizf
- lxH7TXbomTPmUgEvkX41Myo/3sLcbuR1iSsqpqbrNEYlZ1EH3USfL6ms9p0VH/AtMpna Sw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 33ym34mjxq-1
+ bh=kyKFkLXbdAekvCLOdl/PsfM0CkigS++iap4xFCbLgaU=;
+ b=of5DWxlnliKS2+lC1DatNaB4zuckc4bpcwJsaY79Fzp7ScfmK0amvHS4IpA3wJ93nkBz
+ kUguXAl5Kj9/ParekfT0nImrDdIbV/G8iO4Yal+7SfqcBmTopkkwtcKZA1lw9k2l5vGu
+ YYVbKxCNDnLifzNLQ3/gMZex7lrvV5QsoiKgYMB/xkOZMkbF4t0ATd3lNYFu9zKXos2A
+ tnYsaJ1HfICYGBzokS45X4pGto5ciU7MQm3ngO811t52xqtk98WXktl1rnIznOP4GAoG
+ 3TIn+fd07wuMTFym23MfK1cLz96sDUbOtxZiVG3kH3YUxLRDdQyvQW+KbcrTA4RgV3Xd 8g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 33xhxmydc4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 07 Oct 2020 03:48:11 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973ip95194643;
-        Wed, 7 Oct 2020 03:48:10 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 3410jy2s0q-1
+        Wed, 07 Oct 2020 03:48:13 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973k9Pa160218;
+        Wed, 7 Oct 2020 03:48:13 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33y37xyvfn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 03:48:10 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0973m9M2002396;
-        Wed, 7 Oct 2020 03:48:09 GMT
+        Wed, 07 Oct 2020 03:48:13 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0973mA0w025056;
+        Wed, 7 Oct 2020 03:48:12 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 06 Oct 2020 20:48:08 -0700
+        with ESMTP ; Tue, 06 Oct 2020 20:48:10 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
+To:     Hannes Reinecke <hare@suse.de>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
-        kernel-janitors@vger.kernel.org,
-        Jayamohan Kallickal 
-        <jayamohank@HDRedirect-LB5-1afb6e2973825a56.elb.us-east-1.amazonaws.com>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        James Bottomley <James.Bottomley@suse.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: be2iscsi: Fix a theoretical leak in beiscsi_create_eqs()
-Date:   Tue,  6 Oct 2020 23:47:48 -0400
-Message-Id: <160204240578.16940.13402401013800356061.b4-ty@oracle.com>
+Subject: Re: [PATCH] fnic: to not call 'scsi_done()' for unhandled commands
+Date:   Tue,  6 Oct 2020 23:47:49 -0400
+Message-Id: <160204240575.16940.9033970836537317918.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200928091300.GD377727@mwanda>
-References: <20200928091300.GD377727@mwanda>
+In-Reply-To: <20200515112647.49260-1-hare@suse.de>
+References: <20200515112647.49260-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=928 spamscore=0
- adultscore=0 bulkscore=0 malwarescore=0 suspectscore=0 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010070023
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 priorityscore=1501
- mlxscore=0 mlxlogscore=938 clxscore=1011 bulkscore=0 spamscore=0
- malwarescore=0 phishscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010070023
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 28 Sep 2020 12:13:00 +0300, Dan Carpenter wrote:
+On Fri, 15 May 2020 13:26:47 +0200, Hannes Reinecke wrote:
 
-> The be_fill_queue() function can only fail when "eq_vaddress" is NULL
-> and since it's non-NULL here that means the function call can't fail.
-> But imagine if it could, then in that situation we would want to store
-> the "paddr" so that dma memory can be released.
+> The fnic drivers assigns an ioreq structure to each command, and
+> severs this assignment once scsi_done() has been called and the
+> command has been completed.
+> So when traversing commands to terminate outstanding I/O we should
+> not call scsi_done() on commands which do not have a corresponding
+> ioreq structure; these commands have either never entered the driver
+> or have already been completed.
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: be2iscsi: Fix a theoretical leak in beiscsi_create_eqs()
-      https://git.kernel.org/mkp/scsi/c/38b2db564d9a
+[1/1] scsi: fnic: Do not call 'scsi_done()' for unhandled commands
+      https://git.kernel.org/mkp/scsi/c/712582e60f28
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
