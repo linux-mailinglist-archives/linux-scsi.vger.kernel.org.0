@@ -2,69 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E54D92856D7
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12572856DB
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbgJGDFE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 23:05:04 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:51516 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726627AbgJGDFD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:05:03 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09734mEK110546;
-        Wed, 7 Oct 2020 03:04:48 GMT
+        id S1727183AbgJGDHh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 23:07:37 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:39110 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725996AbgJGDHg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:07:36 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09733tf2176285;
+        Wed, 7 Oct 2020 03:07:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=jqRdFRaTCRX50YLpfWUfCvgJZ+DcIQ09ZvdMuiM6BMo=;
- b=Sn+UK/KJujisWzLS1r7hxDORKd2qqAiBtWVZGBdnJ3iUcadX35BNNZDVB5oDpqLy75xt
- iTKgCBHCh3J0dnHOwJnYxTjIYWNhSiOrWjPVvnDDdLNsE7cgpoXgP69lLqEKWJzf1xZZ
- 3vvpNkfLbbRbgtl1QIn6ddAU4bMUL92xp0M4441bmpszUHUCeyyW8oHzm2I3cZls0w9C
- bYJ79I9FbcjR70H8UtuCFeD5oHJlU6Ka4qvHZzbzO21GD+o6PCAR0AR6eL+LiG3ZvTRc
- E6cIJ0rwtuOscyfvnLBiJIVckqSt6EUaByBiWa5DhuJg7vLqK20ufDz1+D+QfviWaPPH AA== 
+ bh=SpqvUTc1JSIevtlxGlR/OvymXNJlO9t3p+BYhnP/fQs=;
+ b=O4yR+xv3Hdfo5xVhtKWlfAz2F++lKDjJA2shPgffl8O7mxA3UhjwwabF8aPMLtcuafwt
+ lyIOVeGgxQd8mTRWiO3PSfb8Wxk4WVEw1c9iP+rzMPO1iwl4LXNMd7tCpVyM+2PuJpwc
+ LyYHEsJvdwOpZVC/b2XftCA8obeAU55bNlS1zAFvWd1LnvD4RefnHUYz0b2fFDdUbXEX
+ ToLLI3MXNeV2ldZ+mOPmqhc87kKQyA0j6VIZljDReXr0PfyRNKfZx+tF5m4fzg7cwdaV
+ wwXgcyzey/LIiI6PvoKhwDL6qsptUJC4JMuvb0gOwDT1HfBKe/sLvsBeRJyHAsy8KCo8 Bg== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 33xetayjg7-1
+        by aserp2120.oracle.com with ESMTP id 33ym34mgc0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 07 Oct 2020 03:04:48 +0000
+        Wed, 07 Oct 2020 03:07:18 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09731HEQ166779;
-        Wed, 7 Oct 2020 03:04:48 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 33y2vnwv8n-1
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09735H1u174326;
+        Wed, 7 Oct 2020 03:05:18 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 33y2vnwvq1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 03:04:48 +0000
+        Wed, 07 Oct 2020 03:05:18 +0000
 Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09734iw9006781;
-        Wed, 7 Oct 2020 03:04:44 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09735AQA027537;
+        Wed, 7 Oct 2020 03:05:11 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 06 Oct 2020 20:04:44 -0700
-To:     bvanassche@acm.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, jthumshirn@suse.de,
-        hare@suse.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] scsi: pmcraid: Fix memory allocation in
- 'pmcraid_alloc_sglist()'
+        with ESMTP ; Tue, 06 Oct 2020 20:05:10 -0700
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Oliver Neukum <oliver@neukum.org>, Ali Akcaagac <aliakc@web.de>,
+        "Jamie Lenehan" <lenehan@twibble.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <dc395x@twibble.org>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] scsi: dc395x: use module_pci_driver to simplify
+ the code
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1r1qa68lk.fsf@ca-mkp.ca.oracle.com>
-References: <20200920075722.376644-1-christophe.jaillet@wanadoo.fr>
-Date:   Tue, 06 Oct 2020 23:04:41 -0400
-In-Reply-To: <20200920075722.376644-1-christophe.jaillet@wanadoo.fr>
-        (Christophe JAILLET's message of "Sun, 20 Sep 2020 09:57:22 +0200")
+Message-ID: <yq1lfgi68ir.fsf@ca-mkp.ca.oracle.com>
+References: <20200917071044.1909268-1-liushixin2@huawei.com>
+Date:   Tue, 06 Oct 2020 23:05:06 -0400
+In-Reply-To: <20200917071044.1909268-1-liushixin2@huawei.com> (Liu Shixin's
+        message of "Thu, 17 Sep 2020 15:10:44 +0800")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=641
- malwarescore=0 suspectscore=10 spamscore=0 phishscore=0 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 suspectscore=1 spamscore=0 phishscore=0 bulkscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010070019
+ engine=8.12.0-2006250000 definitions=main-2010070020
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxscore=0
- clxscore=1011 priorityscore=1501 adultscore=0 mlxlogscore=657 phishscore=0
- impostorscore=0 malwarescore=0 suspectscore=10 lowpriorityscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 priorityscore=1501
+ mlxscore=0 mlxlogscore=999 clxscore=1011 bulkscore=0 spamscore=0
+ malwarescore=0 phishscore=0 suspectscore=1 adultscore=0 lowpriorityscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010070020
 Precedence: bulk
@@ -72,15 +74,12 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-> When the scatter list is allocated in 'pmcraid_alloc_sglist()', the
-> corresponding pointer should be stored in 'scatterlist' within the
-> 'pmcraid_sglist' structure. Otherwise, 'scatterlist' is NULL.
->
-> This leads to a potential memory leak and NULL pointer dereference.
+Liu,
 
-> Fixes: ed4414cef2ad ("scsi: pmcraid: Use sgl_alloc_order() and sgl_free_order()")
+> Use the module_pci_driver() macro to make the code simpler by
+> eliminating module_init and module_exit calls.
 
-This does indeed look odd. Bart?
+Applied to 5.10/scsi-staging, thanks!
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
