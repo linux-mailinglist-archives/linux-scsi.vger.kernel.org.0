@@ -2,55 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8622E285754
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA1C28574A
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727087AbgJGDuc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 23:50:32 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:39822 "EHLO
+        id S1727379AbgJGDso (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 23:48:44 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38790 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgJGDuZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:50:25 -0400
+        with ESMTP id S1727341AbgJGDsi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:48:38 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973k89K167332;
-        Wed, 7 Oct 2020 03:50:23 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973ldQp168232;
+        Wed, 7 Oct 2020 03:48:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=pemFeEsxzt7MLAVrTDVefhye6T4Fi310NOL4bybYSmo=;
- b=QLM8ZuNICdoK8IfAooMDnr2/hXfVh0XnqGUD99QVLF6sITNhJpt31ZjqC2GfeKGqZHhO
- +cTXNyh7j9SNX9PtqTYeNuZW3DsN5VyVlCIGCiaK1I8d7kEBAVtom5pddWgM54fSe0iQ
- wV/FyQNZxkXFJPu4GBbLrwACw3XI30RGo0wUR+SwFB/WD24JYwA7MjxspkFhPoFQVfyf
- NKraF1oQqlv7R38U6cfzqks+5bEP2nqv/RYiDmLjFJpd+j6yr9Fa0ktUw67fyYAv/yeG
- pNf8K5y2SubYRqkwJk1hwAmcJbWwQ87LQcpQC6Wt/e2qgKSO5HIs0nsr/5qNOHnt2aZD gg== 
+ bh=NghnnTiQ04L/eDU1fIJD4zEfn8ioaRXq80X7lbFGSYE=;
+ b=xcP7cfdKoc5T0+WpNrkZMbu9TIjSDhHnrjbe+cFU6M84OE2e1YfuVttYLHrkEhKItU8J
+ 8wg8gYitphW56Rc7YSc8vOlBo/dr70d8uj00/aD8E2uYWkcEWH+MI2N5+R0ETJPtBgVa
+ RZ8l3cbi3p4Ig+YSqf5EwdZzYMmnXtkYgW3hZmXgievCstNEQSNboQ76aAeBppaNa5Sa
+ LLZWZ99Yfbn9UZ6HK/8aocaj7rdasw+AWicXNoND78fYNxvrsGxbnvrgKRZ5dyN1uW9G
+ HiJqyVLOqrllWZGj+FfNi/Zj0TpG2tgE7mytLo8ZaQdr6gnJ9W0BXoE4avBlrPLopxQ6 7A== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 33xhxmydh0-1
+        by userp2120.oracle.com with ESMTP id 33xhxmydcn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 07 Oct 2020 03:50:23 +0000
+        Wed, 07 Oct 2020 03:48:27 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973ioR2194563;
-        Wed, 7 Oct 2020 03:48:23 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 3410jy2s60-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973ircW194801;
+        Wed, 7 Oct 2020 03:48:26 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 3410jy2s77-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 03:48:23 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0973mKlD025081;
-        Wed, 7 Oct 2020 03:48:21 GMT
+        Wed, 07 Oct 2020 03:48:26 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0973mOL7012544;
+        Wed, 7 Oct 2020 03:48:24 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 06 Oct 2020 20:48:20 -0700
+        with ESMTP ; Tue, 06 Oct 2020 20:48:23 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Roman Bolshakov <r.bolshakov@yadro.com>,
-        target-devel@vger.kernel.org
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Pujin Shi <shipujin.t@gmail.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux@yadro.com
-Subject: Re: [PATCH] scsi: target: core: Add CONTROL field for trace events
-Date:   Tue,  6 Oct 2020 23:48:00 -0400
-Message-Id: <160204240573.16940.10978624159806052406.b4-ty@oracle.com>
+        Satya Tangirala <satyat@google.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        linux-scsi@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        linux-kernel@vger.kernel.org, hankinsea@gmail.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>
+Subject: Re: [PATCH v2] scsi: ufs: fix missing brace warning for old compilers
+Date:   Tue,  6 Oct 2020 23:48:01 -0400
+Message-Id: <160204240575.16940.8613402806893286457.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200929125957.83069-1-r.bolshakov@yadro.com>
-References: <20200929125957.83069-1-r.bolshakov@yadro.com>
+In-Reply-To: <20201002063538.1250-1-shipujin.t@gmail.com>
+References: <20201002063538.1250-1-shipujin.t@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -69,24 +74,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 29 Sep 2020 15:59:57 +0300, Roman Bolshakov wrote:
+On Fri, 2 Oct 2020 14:35:38 +0800, Pujin Shi wrote:
 
-> trace-cmd report doesn't show events from target subsystem because
-> scsi_command_size() leaks through event format string:
+> For older versions of gcc, the array = {0}; will cause warnings:
 > 
->   [target:target_sequencer_start] function scsi_command_size not defined
->   [target:target_cmd_complete] function scsi_command_size not defined
-> 
-> Addition of scsi_command_size() to plugin_scsi.c in trace-cmd doesn't
-> help because an expression is used inside TP_printk(). trace-cmd event
-> parser doesn't understand minus sign inside [ ]:
-> 
-> [...]
+> drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_crypto_keyslot_program':
+> drivers/scsi/ufs/ufshcd-crypto.c:62:8: warning: missing braces around initializer [-Wmissing-braces]
+>   union ufs_crypto_cfg_entry cfg = { 0 };
+>         ^
+> drivers/scsi/ufs/ufshcd-crypto.c:62:8: warning: (near initialization for 'cfg.reg_val') [-Wmissing-braces]
+> drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_clear_keyslot':
+> drivers/scsi/ufs/ufshcd-crypto.c:103:8: warning: missing braces around initializer [-Wmissing-braces]
+>   union ufs_crypto_cfg_entry cfg = { 0 };
+>         ^
+> 2 warnings generated
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: target: core: Add CONTROL field for trace events
-      https://git.kernel.org/mkp/scsi/c/7010645ba725
+[1/1] scsi: ufs: Fix missing brace warning for old compilers
+      https://git.kernel.org/mkp/scsi/c/6500251e5906
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
