@@ -2,67 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D41E4285D2B
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 12:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D8B286019
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 15:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgJGKtP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 7 Oct 2020 06:49:15 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:55494 "EHLO mx.metalurgs.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727351AbgJGKtO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 7 Oct 2020 06:49:14 -0400
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 846C96348A
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Oct 2020 13:49:12 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 466D763422
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Oct 2020 13:49:12 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id 1BAA462BA6; Wed,  7 Oct 2020 13:49:11 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.55])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id 9BB485E200;
-        Wed,  7 Oct 2020 13:49:04 +0300 (EEST)
-MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Wed, 07 Oct 2020 07:48:57 -0300
-Reply-To: hmurrah39@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201007104911.1BAA462BA6@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan./mmm,
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201007 notchecked
+        id S1728448AbgJGN3k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Oct 2020 09:29:40 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:47800 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728380AbgJGN3k (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Oct 2020 09:29:40 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 097DDSMw134516;
+        Wed, 7 Oct 2020 13:29:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=CwN46KYA6wJKiyru5KHjshaf/jMkwSRcmYxyCnULW74=;
+ b=BikErFg29guYiSfqReZiklztBXlXpy6G4LpI8ItXnabkz4RZM7fiLiqxiaNT2tnkPTGy
+ LPipImh+kdPkmJQnKnMk3rAmftrtdeAP4aqGnYjaC360V9Nshc+sg72FbNaYquxeXKg0
+ YrGLXmrLuE1lUcQBdvDW9fr3mJ2q0uz7r4P7odqf0kOs5iOHWgGVWxq2X3ppxd5hKQhF
+ mnfrSZYOU2MgakTdRLQjZ6M72d+t67Acf+KvQueMTHhPLGErbKUrB8hzyAub6vCV/37b
+ W53e5lTO4loZoVsNS/S0wifSH8M11lQVzj8CGgSsG3o4UiOK1hDm0Ave19/6IGHwXfmM Gg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 33xhxn1nt9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 07 Oct 2020 13:29:31 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 097DFCIK141475;
+        Wed, 7 Oct 2020 13:29:31 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 33yyjh77v7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Oct 2020 13:29:30 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 097DTO4v023066;
+        Wed, 7 Oct 2020 13:29:25 GMT
+Received: from [192.168.1.26] (/70.114.128.235)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 07 Oct 2020 06:29:24 -0700
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [PATCH] qla2xxx: Use constant when it is known.
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+In-Reply-To: <20200921112340.GA19336@duo.ucw.cz>
+Date:   Wed, 7 Oct 2020 08:29:24 -0500
+Cc:     Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <39CE3456-73A7-4533-BE7F-382469695E08@oracle.com>
+References: <20200921112340.GA19336@duo.ucw.cz>
+To:     Pavel Machek <pavel@denx.de>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010070088
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 clxscore=1011 spamscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010070088
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Dear,
 
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+> On Sep 21, 2020, at 6:23 AM, Pavel Machek <pavel@denx.de> wrote:
+>=20
+> Directly return constant when it is known, to make code easier to
+> understand.
+>=20
+> Signed-off-by: Pavel Machek (CIP) <pavel@denx.de>
+>=20
+> diff --git a/drivers/scsi/qla2xxx/qla_nvme.c =
+b/drivers/scsi/qla2xxx/qla_nvme.c
+> index 90bbc61f361b..248197e9e8ea 100644
+> --- a/drivers/scsi/qla2xxx/qla_nvme.c
+> +++ b/drivers/scsi/qla2xxx/qla_nvme.c
+> @@ -530,7 +530,7 @@ static int qla_nvme_post_cmd(struct =
+nvme_fc_local_port *lport,
+> 	fc_port_t *fcport;
+> 	struct srb_iocb *nvme;
+> 	struct scsi_qla_host *vha;
+> -	int rval =3D -ENODEV;
+> +	int rval;
+> 	srb_t *sp;
+> 	struct qla_qpair *qpair =3D hw_queue_handle;
+> 	struct nvme_private *priv =3D fd->private;
+> @@ -538,14 +538,14 @@ static int qla_nvme_post_cmd(struct =
+nvme_fc_local_port *lport,
+>=20
+> 	if (!priv) {
+> 		/* nvme association has been torn down */
+> -		return rval;
+> +		return -ENODEV;
+> 	}
+>=20
+> 	fcport =3D qla_rport->fcport;
+>=20
+> 	if (!qpair || !fcport || (qpair && !qpair->fw_started) ||
+> 	    (fcport && fcport->deleted))
+> -		return rval;
+> +		return -ENODEV;
+>=20
+> 	vha =3D fcport->vha;
+> 	/*
+>=20
+> --=20
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures) =
+http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
 
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+--
+Himanshu Madhani	 Oracle Linux Engineering
 
-
-Please get back to me if you are interested for more
-
-details.
-
-
-Yours faithfully,
-
-Hashim Murrah
