@@ -2,102 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A250A285D12
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 12:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41E4285D2B
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 12:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727660AbgJGKmk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Oct 2020 06:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbgJGKmk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Oct 2020 06:42:40 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0666C061755;
-        Wed,  7 Oct 2020 03:42:39 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id l17so1613106edq.12;
-        Wed, 07 Oct 2020 03:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=6KY06uHjT4FGbr1jf7LkxmngoS8t8NSmf8ERDU+3OjU=;
-        b=gGAfa3mkIonhmBL6mXR/klqY56zNyofwXg+JPtC6R6ez3a3Nu2HSqq3FUSTMHAE+Rh
-         /TpJo4uZuk/pZo62SVAw0hs5jWL2OAV69uugtNb9w7D11hXN19zPBhuge8IgL5RJu3Kv
-         KXbnJvg9THd9CYkx074JsNmXC1chsn/4zGhZZfjHmV83E9VrDXDxrZdhx9XccEW87vZh
-         Hya2Rc3jxmkY3UMFCV+U5OdAEMdCkXbFC1zQ/2MqkRfFoF996WvujkI3+GantGXCb6F8
-         WskAE3xAtGonvtG27k25IDbzyfuq6ebeLmSWuqewjBrKedtj4GYDbq5FdVTBe/OdhVFa
-         mj9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=6KY06uHjT4FGbr1jf7LkxmngoS8t8NSmf8ERDU+3OjU=;
-        b=Pk8lMAyuusvvPezLePLNZGsGjncCb+kogEUubcot1X/kobwYUZ61F2UF3m7NYHvhY7
-         01CZ15y+UgGveQAEglbGTa+yLFOUJ0wxTDMBCg+x1qjf2+Pu6UBEORjr2pBt/ea24OUa
-         AQZdPtFz5r9OsmRaUSyBNzi3JZinJevOZLIpv/lo6segtbZImKTTpZ9B+g3weMxnfTyl
-         oMgpRE59n+cfRL89GU4Jp6U/S52gJAhW0WrFaPPkSf2Q6A1pXg/sQyfMlkf0Law3x4Gf
-         DiqoHjrJ1YnWeAxtFjlSYVK6k53kYAG2DVUxHiOeRpUpWdomh/EqQzFcgpLqHtBy9QEv
-         hHHQ==
-X-Gm-Message-State: AOAM532W2pFsckJaW7NILQJGPbbeu6DugAzBrzaTlcEmLY8/rRcSpWCs
-        hkHuEbodNLJyLKoMbuFFJgo=
-X-Google-Smtp-Source: ABdhPJyqraldx1BIB6BRIuIJPwg9j4l6EUxFmwO3fNVtOe98PCix4WME4TrObcyaxcQQ8ZICb4EanQ==
-X-Received: by 2002:a50:cfc5:: with SMTP id i5mr2800301edk.151.1602067358476;
-        Wed, 07 Oct 2020 03:42:38 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:598:b907:5772:ec4c:df78:2ef4:dfa8])
-        by smtp.gmail.com with ESMTPSA id s25sm1231482ejc.29.2020.10.07.03.42.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2020 03:42:37 -0700 (PDT)
-From:   Bean Huo <huobean@gmail.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bean Huo <beanhuo@micron.com>
-Subject: [PATCH] scsi: sd: Use UNMAP in case the device doesn't support WRITE_SAME
-Date:   Wed,  7 Oct 2020 12:42:20 +0200
-Message-Id: <20201007104220.8772-1-huobean@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727800AbgJGKtP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 7 Oct 2020 06:49:15 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:55494 "EHLO mx.metalurgs.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727351AbgJGKtO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 7 Oct 2020 06:49:14 -0400
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 846C96348A
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Oct 2020 13:49:12 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 466D763422
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Oct 2020 13:49:12 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 1BAA462BA6; Wed,  7 Oct 2020 13:49:11 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.55])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 9BB485E200;
+        Wed,  7 Oct 2020 13:49:04 +0300 (EEST)
+MIME-Version: 1.0
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Wed, 07 Oct 2020 07:48:57 -0300
+Reply-To: hmurrah39@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201007104911.1BAA462BA6@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan./mmm,
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201007 notchecked
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+Hello Dear,
 
-There exists a storage device that supports READ_CAPACITY, but doesn't
-support WRITE_SAME. The problem is that WRITE SAME heuristics doesn't work
-for this kind of storage device since its block limits VPD page doesn't
-contain the LBP information. Currently we set its provisioning_mode
-"writesame_16" and didn't check "no_write_same". If we didn't manually change
-this default provisioning_mode to "unmap" through sysfs, provisioning_mode
-will be set to "disabled" after the first WRITE_SAME command with the following
-error occurs:
 
-sd 0:0:0:3: [sdd] tag#4 UNKNOWN(0x2003) Result: hostbyte=0x00 driverbyte=0x08 cmd_age=0s
-sd 0:0:0:3: [sdd] tag#4 Sense Key : 0x5 [current]
-sd 0:0:0:3: [sdd] tag#4 ASC=0x20 ASCQ=0x0
-sd 0:0:0:3: [sdd] tag#4 CDB: opcode=0x93 93 08 00 00 00 00 00 00 05 4b 00 00 00 1f 00 00
-blk_update_request: critical target error, dev sdd, sector 10840 op 0x3:(DISCARD) flags 0x800 phys_seg 1 prio class 0
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
 
-Comparing to manually change provisioning_mode in sysfs, it is better to set
-provisioning_mode to "unmap" in case WRITE_SAME is not supported.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/sd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 95018e650f2d..93fb41741b21 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -2372,7 +2372,10 @@ static int read_capacity_16(struct scsi_disk *sdkp, struct scsi_device *sdp,
- 		if (buffer[14] & 0x40) /* LBPRZ */
- 			sdkp->lbprz = 1;
- 
--		sd_config_discard(sdkp, SD_LBP_WS16);
-+		if (sdp->no_write_same)
-+			sd_config_discard(sdkp, SD_LBP_UNMAP);
-+		else
-+			sd_config_discard(sdkp, SD_LBP_WS16);
- 	}
- 
- 	sdkp->capacity = lba + 1;
--- 
-2.17.1
 
+Please get back to me if you are interested for more
+
+details.
+
+
+Yours faithfully,
+
+Hashim Murrah
