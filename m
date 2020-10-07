@@ -2,40 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EED4328698A
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 22:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4302869B1
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 22:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728768AbgJGUzY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Oct 2020 16:55:24 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:43274 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727816AbgJGUzX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Oct 2020 16:55:23 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 097KnSPi038239;
-        Wed, 7 Oct 2020 20:55:18 GMT
+        id S1728513AbgJGU5d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Oct 2020 16:57:33 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:49764 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbgJGU5b (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Oct 2020 16:57:31 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 097KoJjn029026;
+        Wed, 7 Oct 2020 20:57:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id; s=corp-2020-01-29;
- bh=5maJtZ5Qqi8YcG2Pgsbhr+lhhOjLigFAU3RBzOM0cvA=;
- b=e9NiFsTA/HRevMPXChAKjsL6jXV8+CExxg9iD54kr5tKvn9S8HDZg0KWWMfqKcNzXN4P
- KX4MDNrxTqXmsO1yioElOxMXwTLeDFvPBeuIbuqU39kingxJmDZ5Rd8CsYBhtIHx5lfn
- UccPlQDZjOuDpE0Ql/hFRbPXuMQMpcUp9oYrSu12+xz+VpEpbbJbCfTcoWWn1/pzRGF5
- C4SF0/nCmU4DcOnOfIkqETT9y6WCMa3vtWMiLkf5LA0ZNEM8j52LFkvC8V0b24YvNFKZ
- 1XiY14OIDBdlmjYf8Mp+bC+oJE7UVGZ8P58BBnM4+BA+WL97gDVg+/xWD4h7/ajH5gMU pQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 33xhxn475a-1
+ date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=Tv8vJdJcHktH+HW6Vmwm6CHowylPwVzDpBg7/BJwSE0=;
+ b=0FrkmP3taSh+2Ah9qtMeMtQRcyeYoi5Ds15ncs61GkRjGDWKU05aAlCerLQrA7NIezQV
+ 43M8MyeJdZZbnyDYG7n1zdMIb+fO/SJiYL2nE9s/ypDMLhHBgA2ZByfBHOj04semiYRk
+ p/3265qWyEy6hBB2edcG2Ss6V+qa4Bqapfbmry4HHfuUAJ/UJQg46PE0bmlyIwEy/S6n
+ GvpuIAHgDgZQnf1+Q1dAnOrXvVN7ZRauMJMdrsF7TKI6SuUXlzzjD1xPCi0cYcZ7LH2N
+ 4wc9yUvUmZRVekmzdLOra4x4kAnqp3BGIqloREl+OCZVgKg+6zAbBxldbrT4FuNLECPC Gg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 33xetb4eqf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 07 Oct 2020 20:55:18 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 097KoDgd151578;
-        Wed, 7 Oct 2020 20:55:17 GMT
+        Wed, 07 Oct 2020 20:57:19 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 097KpEsv029234;
+        Wed, 7 Oct 2020 20:55:18 GMT
 Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 33y38025ak-1
+        by userp3020.oracle.com with ESMTP id 33yyjhpubp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 20:55:17 +0000
+        Wed, 07 Oct 2020 20:55:18 +0000
 Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 097KtGgd009040;
-        Wed, 7 Oct 2020 20:55:16 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 097KtHAt009045;
+        Wed, 7 Oct 2020 20:55:17 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
         with ESMTP ; Wed, 07 Oct 2020 13:55:16 -0700
@@ -44,71 +44,67 @@ To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
         pbonzini@redhat.com, stefanha@redhat.com,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH 00/16 V2] vhost: fix scsi cmd handling and IOPs
-Date:   Wed,  7 Oct 2020 15:54:45 -0500
-Message-Id: <1602104101-5592-1-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 01/16] vhost scsi: add lun parser helper
+Date:   Wed,  7 Oct 2020 15:54:46 -0500
+Message-Id: <1602104101-5592-2-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1602104101-5592-1-git-send-email-michael.christie@oracle.com>
+References: <1602104101-5592-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9767 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
- mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010070134
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9767 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 adultscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010070134
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The following patches were made over Michael's vhost branch here:
-https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/log/?h=vhost
+Move code to parse lun from req's lun_buf to helper, so tmf code
+can use it in the next patch.
+
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ drivers/vhost/scsi.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+index b22adf0..0ea78d0 100644
+--- a/drivers/vhost/scsi.c
++++ b/drivers/vhost/scsi.c
+@@ -907,6 +907,11 @@ static void vhost_scsi_submission_work(struct work_struct *work)
+ 	return ret;
+ }
  
-The patches also apply to Linus's or Martin's trees if you apply
-https://patchwork.kernel.org/patch/11790681/
-which was merged into mst's tree already.
-
-The following patches are a follow up to this post:
-https://patchwork.kernel.org/cover/11790763/
-which originally was fixing how vhost-scsi handled cmds so we would
-not get IO errors when sending more than 256 cmds.
-
-In that patchset I needed to detect if a vq was in use and for this
-patch:
-https://patchwork.kernel.org/patch/11790685/
-it was suggested to add support for VHOST_RING_ENABLE. While doing
-that though I hit a couple problems:
-
-1. The patches moved how vhost-scsi allocated cmds from per lio
-session to per vhost vq. To support both VHOST_RING_ENABLE and
-where userspace didn't support it, I would have to keep around the
-old per session/device cmd allocator/completion and then also maintain
-the new code. Or, I would still have to use this patch
-patchwork.kernel.org/cover/11790763/ for the compat case so there
-adding the new ioctl would not help much.
-
-2. For vhost-scsi I also wanted to prevent where we allocate iovecs
-for 128 vqs even though we normally use a couple. To do this, I needed
-something similar to #1, but the problem is that the VHOST_RING_ENABLE
-call would come too late.
-
-To try and balance #1 and #2, these patches just allow vhost-scsi
-to setup a vq when userspace starts to config it. This allows the
-driver to only fully setup (we still waste some memory to support older
-setups but do not have to preallocate everything like before) what
-is used plus I do not need to maintain 2 code paths.
-
-Note that in this posting I am also including additional patches
-that create multiple vhost worker threads, because I wanted to see
-if people felt that maybe to support that and for this enablement
-issue we want a completely a new ioctl.
-
-
-V2:
-- fix use before set cpu var errors
-- drop vhost_vq_is_setup
-- include patches to do a worker thread per scsi IO vq
-
++static u16 vhost_buf_to_lun(u8 *lun_buf)
++{
++	return ((lun_buf[2] << 8) | lun_buf[3]) & 0x3FFF;
++}
++
+ static void
+ vhost_scsi_handle_vq(struct vhost_scsi *vs, struct vhost_virtqueue *vq)
+ {
+@@ -1045,12 +1050,12 @@ static void vhost_scsi_submission_work(struct work_struct *work)
+ 			tag = vhost64_to_cpu(vq, v_req_pi.tag);
+ 			task_attr = v_req_pi.task_attr;
+ 			cdb = &v_req_pi.cdb[0];
+-			lun = ((v_req_pi.lun[2] << 8) | v_req_pi.lun[3]) & 0x3FFF;
++			lun = vhost_buf_to_lun(v_req_pi.lun);
+ 		} else {
+ 			tag = vhost64_to_cpu(vq, v_req.tag);
+ 			task_attr = v_req.task_attr;
+ 			cdb = &v_req.cdb[0];
+-			lun = ((v_req.lun[2] << 8) | v_req.lun[3]) & 0x3FFF;
++			lun = vhost_buf_to_lun(v_req.lun);
+ 		}
+ 		/*
+ 		 * Check that the received CDB size does not exceeded our
+-- 
+1.8.3.1
 
