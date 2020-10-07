@@ -2,82 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9DB285746
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1114628574D
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727423AbgJGDsp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 23:48:45 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:36368 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727160AbgJGDsa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:48:30 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973i2Rh044838;
-        Wed, 7 Oct 2020 03:48:26 GMT
+        id S1727287AbgJGDso (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 23:48:44 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38736 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727333AbgJGDsd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:48:33 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973k1WA167305;
+        Wed, 7 Oct 2020 03:48:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=uaPS7rQkw/qxlSO0nZEyhtX30Ykq97d2sf26PJGm6q8=;
- b=C6DCMtyRZDo0ATi4HVogMXQnV8LutyOHI7HW5pVBeG9sy8KuBpNzc+M6jQayl4nghG20
- Tz1X0AweZrdHQWLffsGvL2fQoM4dkNcboIGdbAK08LFLtBtPM+qr8y+7UF54uLLuSp2y
- sEP59Qzu/IKOW0DXqqPOGvNvW9T2VF63AqooobXJGIodlAayL8aWqivB3KWtiGv8Nvqu
- KvwxCdG50bzGsuNF6ZUC8xfJxjviI6hHiXqw18jdzuGs/JcjRk6KCLnHrE+5XKoh4OfL
- 7Sij9yMhJG3KoeDU3WxcM9ATomorTEaTeKWr3ft2gRbDv2xnFhRX59hm7RFC1e+aeyxr IQ== 
+ bh=hqw996zbortsDFaupHZQHJr1/zfBNxFfhhGoG/eXvwA=;
+ b=U8bJMaJTUOb1qO3GjnQ3t1pYsaX0xhwCcrbBi4G5a/r9e1JJta8qoSEPBDToBtgTV7o9
+ zptX1IZMVHONPOuH4IFbOZLaHNgQUi7+QCwBnJ9P1dRGjW4emqpxJixTrpNnxMZmtuUl
+ qDG6ucwuNsE9yaOCP7I+CHW66Sie3QNydcot0oUAlSnO1qWu589GpwjHvsJTv85J3nii
+ mvZIZ/r70kRkqbom0RcQ9xpDskKoJ8QkmiszePCdQ6IlDpU1MnpfIPQGwb9rdyDLkI4U
+ zTxTR5nFn66zfEBAVOWNOvBlZ83cnKSHTlq+AU4dg024sb0vqSPyi/RP6MP5Q/e8wukI Pw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 33ym34mjyd-1
+        by userp2120.oracle.com with ESMTP id 33xhxmydcm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 07 Oct 2020 03:48:26 +0000
+        Wed, 07 Oct 2020 03:48:27 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973ip99194632;
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0973ip9A194632;
         Wed, 7 Oct 2020 03:48:26 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 3410jy2s76-1
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 3410jy2s7b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 03:48:25 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0973mPTg002158;
-        Wed, 7 Oct 2020 03:48:25 GMT
+        Wed, 07 Oct 2020 03:48:26 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0973mQFj002433;
+        Wed, 7 Oct 2020 03:48:26 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 06 Oct 2020 20:48:24 -0700
+        with ESMTP ; Tue, 06 Oct 2020 20:48:25 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, Tomas Henzl <thenzl@redhat.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        aacraid@microsemi.com, Dave.Carroll@microchip.com,
-        Mahesh.Rajashekhara@microchip.com, Balsundar.P@microchip.com,
-        Sagar.Biradar@microchip.com
-Subject: Re: [PATCH] aacraid: add a missing iounmap call
-Date:   Tue,  6 Oct 2020 23:48:02 -0400
-Message-Id: <160204240578.16940.13153614318633367713.b4-ty@oracle.com>
+To:     njavali@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
+        linux-scsi@vger.kernel.org, Ye Bin <yebin10@huawei.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 0/3] Fix inconsistent of format with argument type
+Date:   Tue,  6 Oct 2020 23:48:03 -0400
+Message-Id: <160204240574.16940.5778977781778439147.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200926150015.6187-1-thenzl@redhat.com>
-References: <20200926150015.6187-1-thenzl@redhat.com>
+In-Reply-To: <20200930022515.2862532-1-yebin10@huawei.com>
+References: <20200930022515.2862532-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=811 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 spamscore=0
  adultscore=0 bulkscore=0 malwarescore=0 suspectscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010070023
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 priorityscore=1501
- mlxscore=0 mlxlogscore=843 clxscore=1015 bulkscore=0 spamscore=0
- malwarescore=0 phishscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2010070023
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 26 Sep 2020 17:00:15 +0200, Tomas Henzl wrote:
+On Wed, 30 Sep 2020 10:25:12 +0800, Ye Bin wrote:
 
-> Add a missing resource cleanup in _aac_reset_adapter
+> Ye Bin (3):
+>   scsi: qla2xxx: Fix inconsistent of format with argument type in
+>     tcm_qla2xxx.c
+>   scsi: qla2xxx: Fix inconsistent of format with argument type in
+>     qla_os.c
+>   scsi: qla2xxx: Fix inconsistent of format with argument type in
+>     qla_dbg.c
+> 
+> [...]
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: aacraid: Add a missing iounmap call
-      https://git.kernel.org/mkp/scsi/c/66ab2fa37216
+[1/3] scsi: qla2xxx: Fix inconsistent format argument type in tcm_qla2xxx.c
+      https://git.kernel.org/mkp/scsi/c/7f5523f69709
+[2/3] scsi: qla2xxx: Fix inconsistent format argument type in qla_os.c
+      https://git.kernel.org/mkp/scsi/c/250bd00923c7
+[3/3] scsi: qla2xxx: Fix inconsistent format argument type in qla_dbg.c
+      https://git.kernel.org/mkp/scsi/c/72e813d9a1b7
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
