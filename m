@@ -2,80 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4D52856DD
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC4E28570F
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727155AbgJGDHt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 23:07:49 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:42896 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbgJGDHt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:07:49 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09735f4x102947;
-        Wed, 7 Oct 2020 03:05:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type; s=corp-2020-01-29;
- bh=ITfne212mbBmm38b6hOqdLrqPp4oN7bL91Ib6kLeBZ0=;
- b=mA4gAZ8ZMKk4ZwlG5uk/o+J+ejyi1D3M1vlm+KPH4n3eQSHBCSpa9s7bnoQQKr8WBe99
- caqxvQz5x+m9pyinK4GlnHy4RUsa4XFEOBVki2AQooLmvNtLlP4hTbi1MlwildNU4seQ
- Dpscs4wusd5wCJymeplc1DUptVvFzRyNg/mM/tgZwy6adCZfy1j0gqsEoOAI6jnvkFcS
- uGN/Egwyo6JPznVlXRPK9CihfY4/hvUn7T3dFVYL3nLseBv65BaXELx5Emaq4mHBFFrN
- /Xz7I8J7ttxwRb4Ekzeq7kYflD1AyZTTPBg5oQxuEzCMvDZclaRyU/u2wswscmElBawZ Aw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33xhxmyand-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 07 Oct 2020 03:05:41 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09735Abs161185;
-        Wed, 7 Oct 2020 03:05:41 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 33yyjgk3bb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 03:05:41 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09735eO6007260;
-        Wed, 7 Oct 2020 03:05:40 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 06 Oct 2020 20:05:39 -0700
-To:     Jason Yan <yanaijie@huawei.com>
-Cc:     <achim_leubner@adaptec.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH v2] scsi: gdth: make option_setup() static
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1a6wy68hz.fsf@ca-mkp.ca.oracle.com>
-References: <20200918034920.3199926-1-yanaijie@huawei.com>
-Date:   Tue, 06 Oct 2020 23:05:37 -0400
-In-Reply-To: <20200918034920.3199926-1-yanaijie@huawei.com> (Jason Yan's
-        message of "Fri, 18 Sep 2020 11:49:20 +0800")
+        id S1726181AbgJGD2g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 23:28:36 -0400
+Received: from mail-pl1-f177.google.com ([209.85.214.177]:45883 "EHLO
+        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbgJGD2g (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:28:36 -0400
+Received: by mail-pl1-f177.google.com with SMTP id y20so282684pll.12
+        for <linux-scsi@vger.kernel.org>; Tue, 06 Oct 2020 20:28:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=2S+wo6Rrp0qHHhGJekSbD3NV9PEzyNZ+GZuEqYrkexU=;
+        b=tLnuGrkZLEXJlrU3OYOaw3IoEwyAjhspdQ2m/l0Q6FFWqEQcP+nRfQwmm+QlUbk/44
+         qntAsgb7WcOmvok8PiLmNNqrwj5uQrouT1/uE33XPfODzZSfT5dN4R2BztWXBeIAstEP
+         wTmT/c5oY3n6L/lrxCUVeAGCFmEBuKTQheTXHj3zT2qxDxUgXkF2VikTWJ0UpQ5be6sd
+         LFJw54Kn6XozLwIftEvJ1CL7EzplzihS+UU/1gwW73CvHrBxcKIpDpuKnZNjJ/PQ7AeV
+         4FLgGNeWmUPLC/3rM09UFZVoSVDx2EbBddw4AUTfdbNUJiW+oENn4qC6TbUj6+m+BflC
+         ETcA==
+X-Gm-Message-State: AOAM531EwOJz6h6rxsHBWgylgSDZ1Drys8oC+g07KqYXYu/zAQwQKLoF
+        Po2rBHL5pgpcJNSFKC1fbxQ=
+X-Google-Smtp-Source: ABdhPJy5QHtAtAvFhMI42iAeKvsfNPtVivYojI/FHq8znzMjo62KhgMh7AMNTS7YQAbNlokdodI4GA==
+X-Received: by 2002:a17:902:ee8b:b029:d3:f156:eefc with SMTP id a11-20020a170902ee8bb02900d3f156eefcmr991320pld.19.1602041315490;
+        Tue, 06 Oct 2020 20:28:35 -0700 (PDT)
+Received: from [192.168.3.218] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id c10sm733356pfc.196.2020.10.06.20.28.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Oct 2020 20:28:34 -0700 (PDT)
+Subject: Re: [PATCH V2 0/4] pm80xx updates.
+To:     dgilbert@interlog.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Viswas G <Viswas.G@microchip.com.com>
+Cc:     linux-scsi@vger.kernel.org,
+        Vasanthalakshmi.Tharmarajan@microchip.com, Viswas.G@microchip.com,
+        Ruksar.devadi@microchip.com,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>
+References: <20201005145011.23674-1-Viswas.G@microchip.com.com>
+ <yq1r1qa7pw7.fsf@ca-mkp.ca.oracle.com>
+ <81c98e02-75cf-5f9d-612f-a67a374811c3@interlog.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <012cd628-6bd3-e4f4-b494-51a9779a3c2c@acm.org>
+Date:   Tue, 6 Oct 2020 20:28:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 adultscore=0 bulkscore=0
- phishscore=0 mlxlogscore=954 mlxscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010070020
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 suspectscore=1 phishscore=0
- mlxlogscore=968 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010070020
+In-Reply-To: <81c98e02-75cf-5f9d-612f-a67a374811c3@interlog.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 2020-10-06 20:03, Douglas Gilbert wrote:
+> Is the "imperative mood" something in Danish or German grammar?
 
-Jason,
+Have you already encountered this?
+https://en.wikipedia.org/wiki/Imperative_mood#English
 
-> And move the two functions around the '__setup' macro which uses them
-> to avoid a 'unused-function' warning.
+Thanks,
 
-Applied to 5.10/scsi-staging, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Bart.
