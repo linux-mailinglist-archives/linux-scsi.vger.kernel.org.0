@@ -2,66 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26D22851BD
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Oct 2020 20:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4811228568F
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 04:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgJFSl2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 14:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbgJFSl2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 14:41:28 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC043C0613D4
-        for <linux-scsi@vger.kernel.org>; Tue,  6 Oct 2020 11:41:27 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id p15so19131443ejm.7
-        for <linux-scsi@vger.kernel.org>; Tue, 06 Oct 2020 11:41:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=C8GBCgQbcL72bHfuvAY+Zdl7rDxtS++c+cKqr1GrZYs=;
-        b=DjuJ/p24mQDEl/vbTYnWHBbmgNI9BSc0YKBExESfRytQ6pfYduML0M70l4DO6jipI2
-         zaX+9OrKjTaumELrIGwrKGRM2EXzuMkBrJnSRljYKOHVmkQ6E/cLd3MK4KvQ8oAnqJbm
-         UpxCAUlOuV7STQXFSNMIEdRxiwdEW36wXZThR9e6+j6jXEVPG/GcIb7QBPh9EiTy7Tu3
-         8GhHeU4/UQhsP5UREXADAaMQ2TaQeTtuRgxCYGYxoRhYGaWu0PwEr++ETasnNHi+M2k4
-         j3FoRYxuc5fexqm8AS9165nxSRcnGJezi56zpM2HsiZcbEp+jCVj0TvMO8izM05Sz+VK
-         Scrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=C8GBCgQbcL72bHfuvAY+Zdl7rDxtS++c+cKqr1GrZYs=;
-        b=JfMf27CUvwWQKF+wBdoS/ZeIfiODnoa+0UKmCe8seQx6Lp1EFULQHKxRer5lLzsAJc
-         bd46jKfcA4f/ak/3qgaIPL0EXexo+FIutlgkN/K3/W7lXAyzewIzOgkBJazScLJ609No
-         2xP8YhmsHiFkWOfxOKVqrxYu/Zr3kp9bMTbnjkkCycH1qTt0DRfzG510Du+6q+LkTd47
-         oaBnFd2resQ+937ICL6Wdx5Sqq1vGqxR+W2v3RYLHiw+pwuXxHtMW2KUX1CVGDoeHteq
-         YLpHFnYFY/lz2pIp/XQuJe9vWhR1Xw43Z3OjMm+aXNbzFvGRhAepSzN5l0EsYS37AOaZ
-         esxg==
-X-Gm-Message-State: AOAM530W/guOxxtBA5dR9D0lqoHG7IQlKV8a9mbZyjrEpD3N1BDAY/K+
-        bg8GCFQYflQOSQJusDosEGJyngeKaTPm8ApJIvY=
-X-Google-Smtp-Source: ABdhPJwxxh6PGu/CiD43ih/QOxChqReyXCVpm+S5i7eBm5XszzzFBNZYupRSu3v7y35kr7/OJFx65zzal/TZxdtBGKc=
-X-Received: by 2002:a17:906:a51:: with SMTP id x17mr945268ejf.137.1602009686244;
- Tue, 06 Oct 2020 11:41:26 -0700 (PDT)
+        id S1726138AbgJGCG4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 22:06:56 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:59136 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbgJGCG4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 22:06:56 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09724Taq085736;
+        Wed, 7 Oct 2020 02:06:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=npR1jO1LL2S5BgBvOdjPwn4IpCYcjN8e6TgEDtc4Xqk=;
+ b=Cs1FkHQIUCte2o/KQ1md7DBqlbREVv01AbR1tOpRpBU+otnXXNJ06hv7OoYMTpAX3hvj
+ ekiaDZj+W/Xw+fp+7UaCo1h8hY4ICvgeqQ+5rnYZJh3qCR+PEsu9ZmxHbGvAdy52KZmG
+ dmvLMw+ZWKZ6MN8dtm9A0EJ8MHckvEuoivIFI40RPfd9wkej/pHMEP6eX/XqdfkLuvgd
+ 7kdRbxmt8lrlzy5oubJ6/HO1Trymjou7ImjRffYjZHJnwmn6IWAfkDhAomP+c8Ua+oj4
+ AJ/KAdK15cftJXQXXIB9xOYwI2oBsyQUXXuD4KSA8s5yABkaDctrPQJ/o0Tmd/37yV4x 2w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33ym34mcgg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 07 Oct 2020 02:06:49 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 097269LU140818;
+        Wed, 7 Oct 2020 02:06:48 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 33y37xw0q9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Oct 2020 02:06:48 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09726l1O029544;
+        Wed, 7 Oct 2020 02:06:47 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 06 Oct 2020 19:06:46 -0700
+To:     Viswas G <Viswas.G@microchip.com.com>
+Cc:     <linux-scsi@vger.kernel.org>,
+        <Vasanthalakshmi.Tharmarajan@microchip.com>,
+        <Viswas.G@microchip.com>, <Ruksar.devadi@microchip.com>,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Subject: Re: [PATCH V2 0/4] pm80xx updates.
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1r1qa7pw7.fsf@ca-mkp.ca.oracle.com>
+References: <20201005145011.23674-1-Viswas.G@microchip.com.com>
+Date:   Tue, 06 Oct 2020 22:06:44 -0400
+In-Reply-To: <20201005145011.23674-1-Viswas.G@microchip.com.com> (Viswas G.'s
+        message of "Mon, 5 Oct 2020 20:20:07 +0530")
 MIME-Version: 1.0
-Received: by 2002:a17:906:bc55:0:0:0:0 with HTTP; Tue, 6 Oct 2020 11:41:24
- -0700 (PDT)
-Reply-To: mfdp@tlen.pl
-From:   Mr Bill T Winters <missfavourkip@gmail.com>
-Date:   Tue, 6 Oct 2020 11:41:24 -0700
-Message-ID: <CAJc0UUnUJvey7LoCQ_rsx28BKJ4u1pYKARah2rS2M9ttjqHKkg@mail.gmail.com>
-Subject: Good Morning!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 malwarescore=0 suspectscore=1 adultscore=0 mlxlogscore=745
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010070011
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 priorityscore=1501
+ mlxscore=0 mlxlogscore=777 clxscore=1011 bulkscore=0 spamscore=0
+ malwarescore=0 phishscore=0 suspectscore=1 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010070011
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+
+Viswas,
+
+> Changes from v1:
+> 	- Improved commit messages.
+> 	- Fixed compiler warning for 
+> 		 "Increase the number of outstanding IO supported" patch 
+
+Applied to 5.10/scsi-staging.
+
+In the future please run checkpatch and make sure that the commit
+messages are using imperative mood (see
+Documentation/process/submitting-patches.rst, section 2).
+
+Thanks!
+
 -- 
-Greetings,
-I Mr Bill T, did you Receive the (FUND), that was paid to you?
-Let me know with your full name:...  immediately,
-
-Sincerely Yours, Respectfully,
-
-Mr Bill T Winters,
-Group Chief Executive Officer & Executive Director,
+Martin K. Petersen	Oracle Linux Engineering
