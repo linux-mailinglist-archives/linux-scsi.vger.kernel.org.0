@@ -2,79 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A2E2856AD
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 04:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370C92856E1
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Oct 2020 05:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726566AbgJGChR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Oct 2020 22:37:17 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:53676 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725970AbgJGChR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 22:37:17 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0972Z28A057228;
-        Wed, 7 Oct 2020 02:37:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type; s=corp-2020-01-29;
- bh=BgyxMnkhAAvlEV7+8JwdG++McO42j0WB2Ul6Mt+sNEQ=;
- b=tnoV3NjLr4XyDV3/VOtSyxzrHKUVeHGicvK9bUT/99Fzsoj4HLvOrfAiTCfaO9cIbvnz
- R6n9q05mTLH8TtwaSRHy3fg49zP6J9bOa8uC30Xa9DsLFmh4lXNGZo1JuIvu1i5/Q0G4
- DB7v591SiQh33RLR0Hv1WiZy+rmg7ttW6Y2674vsr+E7YwQWhavNGBxzyfOswcHG3/+D
- PnyN2jm78I+gE/7y33acKlLMDQsqzDr6NbKWqZf+zWT+dNh5GspJ6lFNJaw8nyotURqr
- M7/7MN8sF7c02A0KUBxCMPSSQ8RMNHasWH/HrQlXdXLDdp7un7DnBhHdepp6bdH4/gbK Ow== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33xhxmy8vx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 07 Oct 2020 02:37:14 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0972VAOd094030;
-        Wed, 7 Oct 2020 02:37:14 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 33yyjgjc2e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 02:37:13 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0972bCds025616;
-        Wed, 7 Oct 2020 02:37:13 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 06 Oct 2020 19:37:12 -0700
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: misc I/O submission cleanups
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1wo0269tt.fsf@ca-mkp.ca.oracle.com>
-References: <20201005084130.143273-1-hch@lst.de>
-Date:   Tue, 06 Oct 2020 22:37:10 -0400
-In-Reply-To: <20201005084130.143273-1-hch@lst.de> (Christoph Hellwig's message
-        of "Mon, 5 Oct 2020 10:41:20 +0200")
+        id S1726697AbgJGDLP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Oct 2020 23:11:15 -0400
+Received: from mail-1.ca.inter.net ([208.85.220.69]:41717 "EHLO
+        mail-1.ca.inter.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbgJGDLP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Oct 2020 23:11:15 -0400
+X-Greylist: delayed 465 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Oct 2020 23:11:14 EDT
+Received: from localhost (offload-3.ca.inter.net [208.85.220.70])
+        by mail-1.ca.inter.net (Postfix) with ESMTP id 9DE072EAB94;
+        Tue,  6 Oct 2020 23:03:28 -0400 (EDT)
+Received: from mail-1.ca.inter.net ([208.85.220.69])
+        by localhost (offload-3.ca.inter.net [208.85.220.70]) (amavisd-new, port 10024)
+        with ESMTP id OMOt7DqS9VdY; Tue,  6 Oct 2020 22:56:50 -0400 (EDT)
+Received: from [192.168.48.23] (host-104-157-204-209.dyn.295.ca [104.157.204.209])
+        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail-1.ca.inter.net (Postfix) with ESMTPSA id E8D662EAB88;
+        Tue,  6 Oct 2020 23:03:27 -0400 (EDT)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH V2 0/4] pm80xx updates.
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Viswas G <Viswas.G@microchip.com.com>
+Cc:     linux-scsi@vger.kernel.org,
+        Vasanthalakshmi.Tharmarajan@microchip.com, Viswas.G@microchip.com,
+        Ruksar.devadi@microchip.com,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>
+References: <20201005145011.23674-1-Viswas.G@microchip.com.com>
+ <yq1r1qa7pw7.fsf@ca-mkp.ca.oracle.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <81c98e02-75cf-5f9d-612f-a67a374811c3@interlog.com>
+Date:   Tue, 6 Oct 2020 23:03:27 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 adultscore=0 bulkscore=0
- phishscore=0 mlxlogscore=738 mlxscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010070015
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 suspectscore=1 phishscore=0
- mlxlogscore=754 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010070015
+In-Reply-To: <yq1r1qa7pw7.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 2020-10-06 10:06 p.m., Martin K. Petersen wrote:
+> 
+> Viswas,
+> 
+>> Changes from v1:
+>> 	- Improved commit messages.
+>> 	- Fixed compiler warning for
+>> 		 "Increase the number of outstanding IO supported" patch
+> 
+> Applied to 5.10/scsi-staging.
+> 
+> In the future please run checkpatch and make sure that the commit
+> messages are using imperative mood (see
+> Documentation/process/submitting-patches.rst, section 2).
 
-Christoph,
+Get thee to a nunnery! [W. Shakespeare; translation: "fuck off"]
+Now that is imperative.
 
-> this series tidies up various loose ends in the SCSI I/O submission
-> path.
+As for "imperative mood", I believe there is no such thing in English
+grammar. My mother taught grammar and I studied French and Latin at
+school. Markus Elfring objected to my:
+     [PATCH] lib/scatterlist: Fix memory leak in sgl_alloc_order()  ***
 
-Looks good! Applied to 5.10/scsi-staging except for the varlen patch.
+with the same "imperative mood" line. In English, including British
+(i.e. "international") English taught in south Asia, that is the
+_imperative_ . Basically if you can stick "You" in front of the
+verb at the start of the sentence and the sense is the same, then
+it is the imperative.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Is the "imperative mood" something in Danish or German grammar?
+
+Doug Gilbert
+
+
+*** That patch was ack-ed by Bart (the culprit) and as far as I
+     know hasn't gone any further. My sgl-to-sgl copy, compare
+     and sgl_memset await that bug being sorted.
+
