@@ -2,81 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F903287BF6
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Oct 2020 20:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9CE287CD8
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Oct 2020 22:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729387AbgJHS6y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 8 Oct 2020 14:58:54 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37919 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725908AbgJHS6y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Oct 2020 14:58:54 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1kQb7s-0006D9-IB; Thu, 08 Oct 2020 18:58:52 +0000
-Subject: Re: [PATCH] scsi: qla2xxx: fix return of uninitialized value in rval
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201008183239.200358-1-colin.king@canonical.com>
- <20201008184105.GA25478@duo.ucw.cz>
-From:   Colin Ian King <colin.king@canonical.com>
-Message-ID: <d9b88091-27ba-5197-6979-710bd8075350@canonical.com>
-Date:   Thu, 8 Oct 2020 19:58:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1729993AbgJHUGO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 8 Oct 2020 16:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729940AbgJHUGO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Oct 2020 16:06:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD45C0613D2
+        for <linux-scsi@vger.kernel.org>; Thu,  8 Oct 2020 13:06:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=PPV2x7/SpSZNaly+oMGigtq/9AMobjUBhXIU/XHvcvk=; b=qoOAunk6ATOLuCjRIvPHkpx8lz
+        hPEkQiG8GBVlkW4Cx1nGFL5VEv3nv8jpzpat4/6XpgUJ3lAxWNnSxx4/0QEwE4zVj+iJWg4ju6QnB
+        x4VdfM1/tk71B2WnGa+xRlz9UIlsR2FAgDFJg4Xe25GE0x3TC+D4VvBrByH8jtdrysRAjXKmg0ANT
+        JWCX+ICIZ0IXRDIlxhA6hgYofLnyMismhzRUfjnlgN3K124gFgfUFFk0p2tvW8JSAio4QQ6OvOR8d
+        EXFmcvLuDJnG8V4o6YWRyLO9cfr7EDH7kegpBa2uH/VahD2K5tjpJFBq1/FvIBYn5KiUXYGwnDrXs
+        8xtq30fA==;
+Received: from [2001:4bb8:184:92a2:cbfa:206d:64ea:205c] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kQcB2-0001RR-C5; Thu, 08 Oct 2020 20:06:12 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org
+Subject: scsi regression fixes
+Date:   Thu,  8 Oct 2020 22:06:09 +0200
+Message-Id: <20201008200611.1818099-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20201008184105.GA25478@duo.ucw.cz>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 08/10/2020 19:41, Pavel Machek wrote:
-> On Thu 2020-10-08 19:32:39, Colin King wrote:
->> From: Colin Ian King <colin.king@canonical.com>
->>
->> A previous change removed the initialization of rval and there is
->> now an error where an uninitialized rval is being returned on an
->> error return path. Fix this by returning -ENODEV.
->>
->> Addresses-Coverity: ("Uninitialized scalar variable")
->> Fixes: b994718760fa ("scsi: qla2xxx: Use constant when it is known")
->> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> 
-> Acked-by: Pavel Machek (CIP) <pavel@denx.de>
-> 
-> And sorry, I did patch against mainline, and this got added in -next
-> in the meantime.
+Hi Martin,
 
-Ah, that explains it. No problem, Coverity is good at finding buglets
-
-Colin
-
-> 
->> index ae47e0eb0311..1f9005125313 100644
->> --- a/drivers/scsi/qla2xxx/qla_nvme.c
->> +++ b/drivers/scsi/qla2xxx/qla_nvme.c
->> @@ -561,7 +561,7 @@ static int qla_nvme_post_cmd(struct nvme_fc_local_port *lport,
->>  	vha = fcport->vha;
->>  
->>  	if (!(fcport->nvme_flag & NVME_FLAG_REGISTERED))
->> -		return rval;
->> +		return -ENODEV;
->>  
->>  	if (test_bit(ABORT_ISP_ACTIVE, &vha->dpc_flags) ||
->>  	    (qpair && !qpair->fw_started) || fcport->deleted)
->> -- 
->> 2.27.0
->>
-> 
-
+two regression fixes for my recently merged series, uncovered by libata.
