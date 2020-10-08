@@ -2,74 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EE5287CDA
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Oct 2020 22:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EF9287D0F
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Oct 2020 22:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729999AbgJHUGQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 8 Oct 2020 16:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729998AbgJHUGQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Oct 2020 16:06:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339FCC0613D3
-        for <linux-scsi@vger.kernel.org>; Thu,  8 Oct 2020 13:06:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=NbsVIy/lA7WcuYGoYiCNU9DZoK8QQWB2aMh0hU4RAnQ=; b=X1Qfg+GgduJwAj/QOW1LOn+zYK
-        fXJOCc049B7uWkT7jiwe3FzicmMi+SsKaaqGUF+bHysKG9h6X64Nj4wk72oDpG6fuMKD1qt0Y6J5Y
-        ORHF6XpTZvcF7DY8pu1t6Bx1mVobnKEqJp0S+5FvDWuj/5RB/DEm+FeOt+RNJNFC871jFTL3ZnIzX
-        lDRoaPehVbauOCS79YpALPhY8ZjHsCbNDGyB2GoqKD7KSJf3/hnbzWykYOOonZKJf50aTtmoUEO72
-        N0zD0ekxNgzDQnQDwF6U3PQNTFWAB7OUpOG7MfSZUTzZDGGlH/fomTeqs5g4U23h/9aYqFLu8Fk+f
-        ihj67NQg==;
-Received: from [2001:4bb8:184:92a2:cbfa:206d:64ea:205c] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kQcB4-0001SE-KJ; Thu, 08 Oct 2020 20:06:14 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Qian Cai <cai@redhat.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: [PATCH 2/2] scsi: set sc_data_direction to DMA_NONE for no-transfer commands
-Date:   Thu,  8 Oct 2020 22:06:11 +0200
-Message-Id: <20201008200611.1818099-3-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201008200611.1818099-1-hch@lst.de>
-References: <20201008200611.1818099-1-hch@lst.de>
+        id S1729544AbgJHU1A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 8 Oct 2020 16:27:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:40743 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728725AbgJHU1A (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Oct 2020 16:27:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602188818;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=twVz8zn39JFNygX3N+DpgBYsBehN6K5Zd/Llqp3b+sk=;
+        b=RG7U9gUpDFn1E80s8YPI3yxgju33yHzxae/uBhbIhfa2kU1qCA9UiZrulN5NHvTCONoK6P
+        LVRYjlZZLfF4r3/GxLKPu9CXe5WWHeblSeLjFhoyos5sPjv6PtDEQ8JG0b46nuwnNDoOSc
+        Ure/DqLhPGQ6ebmB3EnAzg0olMbuNQs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-415-ylp4GpxoOn2JdCor5kQirQ-1; Thu, 08 Oct 2020 16:26:56 -0400
+X-MC-Unique: ylp4GpxoOn2JdCor5kQirQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 73so3491941wma.5
+        for <linux-scsi@vger.kernel.org>; Thu, 08 Oct 2020 13:26:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=twVz8zn39JFNygX3N+DpgBYsBehN6K5Zd/Llqp3b+sk=;
+        b=HeLoyTkhfqhyNJb1X1XyqHUYnM7VP+B1PpLzHJVSWoxu9tQICewDCiyEHGO2lMgdzT
+         LM4/MyAt5mbLTHnV/Zq3t++rinklMgNszItvfQV2nYSBa7GjKir4iOKuU8RoVO4KTIEe
+         ssrZrMagYJxBMM/UQVJZqukGv8Dzt3qKnWwqEgDq4+4BmhmSvYOEia2dIqkh+K4g0TFm
+         hQGdDvqLSvjwGu8tfLMeTfzQhFfs6s3ZmuN8sDFvmRgYJyU4yYN3rxED3gwKVXpR0Din
+         3z2QTJlY0ngf44H3cABlT9Z54biot/fcH/kDscR4NfY8M7Kwp0j1a0Ii3gnEG3bXFQHN
+         Va5A==
+X-Gm-Message-State: AOAM5307CzS4xv/z4SIoxg1OCf7SK7+F9Nk+PKFuLhybexbkTGZBpCeB
+        oeC3fVlQTug8HqDoa8IuAoO93oNs0o5ES5/jiOOEPkKuRz+9KhB5fSo31jKxMtFIsBtETZ8Qgxv
+        +lSVUsO8EyBazP1IB7qJT5Q==
+X-Received: by 2002:a7b:cc17:: with SMTP id f23mr9940717wmh.166.1602188815246;
+        Thu, 08 Oct 2020 13:26:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx3KfXXvkMS5m5z/HtHdSxRswCK5ykunjW1kWHIj15VRre8iCzBqPKFXNiyvij71iupd9gn4A==
+X-Received: by 2002:a7b:cc17:: with SMTP id f23mr9940704wmh.166.1602188815005;
+        Thu, 08 Oct 2020 13:26:55 -0700 (PDT)
+Received: from redhat.com (bzq-79-179-71-128.red.bezeqint.net. [79.179.71.128])
+        by smtp.gmail.com with ESMTPSA id a199sm8942819wmd.8.2020.10.08.13.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2020 13:26:54 -0700 (PDT)
+Date:   Thu, 8 Oct 2020 16:26:51 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, jasowang@redhat.com,
+        pbonzini@redhat.com, stefanha@redhat.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 12/16] vhost: support multiple worker threads
+Message-ID: <20201008162523-mutt-send-email-mst@kernel.org>
+References: <1602104101-5592-1-git-send-email-michael.christie@oracle.com>
+ <1602104101-5592-13-git-send-email-michael.christie@oracle.com>
+ <da6f25b4-7a98-9294-a987-43d100625499@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da6f25b4-7a98-9294-a987-43d100625499@oracle.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-No having the special DMA_NONE logic makes libata rather unhappy.
+On Thu, Oct 08, 2020 at 12:56:53PM -0500, Mike Christie wrote:
+> On 10/7/20 3:54 PM, Mike Christie wrote:
+> > This is a prep patch to support multiple vhost worker threads per vhost
+> > dev. This patch converts the code that had assumed a single worker
+> > thread by:
+> > 
+> > 1. Moving worker related fields to a new struct vhost_worker.
+> > 2. Converting vhost.c code to use the new struct and assume we will
+> > have an array of workers.
+> > 3. It also exports a helper function that will be used in the last
+> > patch when vhost-scsi is converted to use this new functionality.
+> > 
+> 
+> Oh yeah I also wanted to bring up this patch:
+> 
+> https://www.spinics.net/lists/netdev/msg192548.html
+> 
+> The problem with my multi-threading patches is that I was focused on
+> the cgroup support parts and that lead to some gross decisions.
+> 
+> 1. I kept the cgroup support, but as a result I do not have control
+> over the threading affinity and making sure cmds are executed on a
+> optimal CPU like the above patches do.
+> 
+> When I drop the cgroup support and make sure threads are bound to
+> specific CPUs and then make sure IO is run on the CPU it came in on
+> then IOPs jumps from 600K to 800K for vhost-scsi.
+> 
+> 2. I can possible create a lot of threads.
+> 
+> So a couple open issues are:
+> 
+> 1. Can we do a thread per cpu that is shared across all vhost devices?
+> That would lead to dropping the cgroup vhost worker support.
+> 
+> 2. Can we just use the kernel's workqueues then?
 
-Fixes: 40b93836a136 ("scsi: core: Use rq_dma_dir in scsi_setup_cmnd()")
-Reported-by: Qian Cai <cai@redhat.com>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/scsi/scsi_lib.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 6b0fccda9af2ee..1a2e9bab42efab 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1545,7 +1545,10 @@ static blk_status_t scsi_prepare_cmd(struct request *req)
- 	cmd->request = req;
- 	cmd->tag = req->tag;
- 	cmd->prot_op = SCSI_PROT_NORMAL;
--	cmd->sc_data_direction = rq_dma_dir(req);
-+	if (blk_rq_bytes(req))
-+		cmd->sc_data_direction = rq_dma_dir(req);
-+	else
-+		cmd->sc_data_direction = DMA_NONE;
- 
- 	sg = (void *)cmd + sizeof(struct scsi_cmnd) + shost->hostt->cmd_size;
- 	cmd->sdb.table.sgl = sg;
--- 
-2.28.0
+Problem is, we are talking about *lots* of CPU, IO etc and ATM cgroups
+is how people expect to account for that overhead.
 
