@@ -2,392 +2,281 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C80288FD9
+	by mail.lfdr.de (Postfix) with ESMTP id 71246288FDA
 	for <lists+linux-scsi@lfdr.de>; Fri,  9 Oct 2020 19:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733267AbgJIROw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 9 Oct 2020 13:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
+        id S2389529AbgJIROx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 9 Oct 2020 13:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732603AbgJIROu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Oct 2020 13:14:50 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB29C0613D2
-        for <linux-scsi@vger.kernel.org>; Fri,  9 Oct 2020 10:14:50 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 132so816467pfz.5
-        for <linux-scsi@vger.kernel.org>; Fri, 09 Oct 2020 10:14:50 -0700 (PDT)
+        with ESMTP id S1732603AbgJIROx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Oct 2020 13:14:53 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139CCC0613D2
+        for <linux-scsi@vger.kernel.org>; Fri,  9 Oct 2020 10:14:53 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id o25so7710628pgm.0
+        for <linux-scsi@vger.kernel.org>; Fri, 09 Oct 2020 10:14:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=fsLcsh2OqZjEGlzU6yFMYJb/QM7fX7UOgYfaY4ekFXg=;
-        b=ccfFBVTxfLw5i/7R6atdeEpxbSAM/WrxlSmYewGLjbZ5/rc1hdprjbzKq0mGlHyuYm
-         Re2JEQMMhR4lEZevFKZgWCX+sw+1QCfnu4xLQxKCeRrb9tY/m5kBzl/yuIN1RzUgyDto
-         nFwGI2qzXsISBqinr93CqKvX3+49+9dRBGNL8=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=Vuf+3NHZS79/sBIBBOd+HW9OiSVjp8HSfR/2oIeyNY8=;
+        b=cVrmltQKarF70z2+JrG5kxUV1wr3tgAPSgXAd+QhjIR+Xcfy1jhRYv8502WCzFMrtu
+         pFnWtwVd7Iq4vhH2Cdhdf/6RnUOgKpplTPs53Qa8Gc22l+f3a5ifPCYkGKNb5u8Cf2by
+         P5QzbtUGVjmwUwZNHKmxtWkGJqjuNA39W/RZ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=fsLcsh2OqZjEGlzU6yFMYJb/QM7fX7UOgYfaY4ekFXg=;
-        b=p31SOKqzbrWPtjk0OeqJspMEpY7Qdkcy0qwQHIu7IXPPGrBW6Sng26Eh9uxrD7GLUp
-         H6nfxKXJLm838qmlokmtVzZmPp0eC1JUKQBvQY9RkiTUNIy+wD5B73tuodaEJ/plHo1m
-         25eJTZNztyhr2+wANWD8l00a0f4p71pi78vFdK5s5N66rmI8z02imoJrq8VMwNLLPCwn
-         Kk0cgyNS8j7YKTmwc9pCSPylGDKjQxw58T3OlsqOKzHsC5eu6WWcvrDnVU65sm/RHIBa
-         1Ja3K2mksi2GZFrp7VBU14MO0RTIM6QGq6GzQcPqqThwj57u7SbcR+BAbzYyF51Bvn2W
-         0biA==
-X-Gm-Message-State: AOAM533tDWUNOQANHgwi2NY8EXffZaixeJlvorzYZ30S2/Hmd3RPe6FN
-        vIDnCRNltR2R2yKfVjYpXG+5fQ==
-X-Google-Smtp-Source: ABdhPJzrN7jbGix/7tBy1RFGr1RcT29nuXyZlwKgcFm7hDqqw1Db3PEIjdNxHyQGUixQI1IMT4slXg==
-X-Received: by 2002:a63:5566:: with SMTP id f38mr4363335pgm.9.1602263689364;
-        Fri, 09 Oct 2020 10:14:49 -0700 (PDT)
+         :references;
+        bh=Vuf+3NHZS79/sBIBBOd+HW9OiSVjp8HSfR/2oIeyNY8=;
+        b=UAOPGHRn6driczUsKJLnK5YioSSBMhzVAOGljb3G/bTixaR2f3bcy0GSLHj+5V37sj
+         O6UnJ+mZ822U+/+fIHbjYg5sCl8BGkfClHMhew8yIP9P/eHh+flh5Nr+mSnD5yjkNQBz
+         1HVY1yT3RWzHLmjvDOLMLfHsufVDUBfgkkYu2lBdAYgwikGW8u4xy6wP1xwSIAUebd6x
+         51ZM6cMW1ZxOZxZY6/Zo1o//mB3yLCSuUf4654zBwlOpA2iflA6fnmagGen5gPQLlr7v
+         3Rik8h96VLP9t+LQnkjgyEB7v88IVdeWp4N5lJM3ue3E4DlDW5tXinOR3JQKseQMoFf9
+         iAKA==
+X-Gm-Message-State: AOAM533mP3RrD6vxAOKWTYo9yRyn5fhayTMumbZNCxIyznC7myy+aZG3
+        clJTjU5tWiOf0UHq+VJD6Nijbg==
+X-Google-Smtp-Source: ABdhPJwujk+Vi4uzWmRn3HSKuo1xNC7mM2DjYh0pyfjxQqLZ26//5/yoZXE9c/6Uj0BDXUp5EK3nqQ==
+X-Received: by 2002:a65:410c:: with SMTP id w12mr4162382pgp.411.1602263692345;
+        Fri, 09 Oct 2020 10:14:52 -0700 (PDT)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id fy24sm12299055pjb.35.2020.10.09.10.14.46
+        by smtp.gmail.com with ESMTPSA id fy24sm12299055pjb.35.2020.10.09.10.14.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 10:14:48 -0700 (PDT)
+        Fri, 09 Oct 2020 10:14:51 -0700 (PDT)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     martin.petersen@oracle.com
 Cc:     linux-scsi@vger.kernel.org, sathya.prakash@broadcom.com,
         suganath-prabu.subramani@broadcom.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 12/14] mpt3sas: Handle vSES vphy object during HBA reset
-Date:   Fri,  9 Oct 2020 22:44:38 +0530
-Message-Id: <20201009171440.4949-13-sreekanth.reddy@broadcom.com>
+Subject: [PATCH 13/14] mpt3sas: add module parameter multipath_on_hba
+Date:   Fri,  9 Oct 2020 22:44:39 +0530
+Message-Id: <20201009171440.4949-14-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.18.4
 In-Reply-To: <20201009171440.4949-1-sreekanth.reddy@broadcom.com>
 References: <20201009171440.4949-1-sreekanth.reddy@broadcom.com>
-MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000013cc3605b1401674"
+        boundary="0000000000003fe85005b140164c"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000013cc3605b1401674
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+--0000000000003fe85005b140164c
 
-During HBA reset, Port ID of vSES device may change.
-So, need to refresh virtual_phy objects after reset.
+Add module parameter multipath_on_hba to enable/disable
+the support a multi-port path topology.
+By default this feature is enabled on SAS3.5 HBA device
+and disabled on SAS3 &SAS2.5 HBA devices.
 
-Each Port’s vphy_list table needs to be updated after updating the
-HBA port table. Follow the below algorithm to update each
-Port’s vphy_list table.
-• Loop over each port entry from HBA port table
-  * Loop over each virtual phy entry from port’s vphys_list table
-    - Mark virtual phy entry as dirty by setting dirty bit in virtual phy
-      entry’s flags field
-• Read SASIOUnitPage0 page
-• Loop over each HBA Phy’s Phy data from SASIOUnitPage0
-  * If phy’s remote attached device is not SES device then continue with
-    processing next HBA Phy’s Phy data,
-  * Read SASPhyPage0 data for this Phy number and determine whether
-    current phy is a virtual phy or not. If it is not a virtual phy
-    then continue with next Phy data,
-  * Get the current phy’s remote attached vSES device’s SAS Address,
-  * Loop over each port entry from HBA port table
-    - If Port’s vphys_mask field is zero then continue with
-      next Port entry,
-    - Loop over each virtual phy entry from Port’s vphy_list table
-      • If the current phy’s remote SAS Address is different from
-        virtual phy entry’s SAS Address then continue with next
-        virtual phy entry,
-      • Set bit corresponding to current phy number in virtual phy
-        entry’s of phy_mask field,
-      • Get the HBA port table’s Port entry corresponding to
-        Phy data’s ‘Port’ value,
-	* If there is no Port entry corresponding to Phy data’s ‘Port’
-	  value in HBA port table then create a new port entry and
-          add it to HBA port table.
-      • If this retrieved Port entry is the same as the current Port
-        entry then don’t do anything, just clear the dirty bit from
-        virtual phy entry’s flag field and continue with processing
-        next HBA Phy’s Phy data.
-      • If this retrieved Port entry is different from the current Port
-        entry then move the current virtual phy entry from current Port’s
-        vphys_list to retrieved Port entry’s vphys_list.
-        * Clear current phy bit in current Port entry’s vphys_mask and
-          set the current phy bit in the retrieved Port entry’s
-          vphys_mask field.
-        * Clear the dirty bit from virtual phy entry’s flag field and
-          continue with next HBA Phy’s Phy data.
-• Delete the ‘virtual phy’ entries and HBA’s ‘Port table’
-  entries which are still marked as ‘dirty’.
+when this module parameter is disabled then driver uses
+a default PhysicalPort(PortID) number i.e. 255 instead of
+PhysicalPort number provided by HBA firmware.
 
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 233 +++++++++++++++++++++++++++
- 1 file changed, 233 insertions(+)
+ drivers/scsi/mpt3sas/mpt3sas_base.h      |  2 +
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c       |  6 ++-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c     | 69 ++++++++++++++++++++++--
+ drivers/scsi/mpt3sas/mpt3sas_transport.c |  6 ++-
+ 4 files changed, 76 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index cca14ab..badd823 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -1246,6 +1246,7 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
+  *	which ensures the syncrhonization between cli/sysfs_show path.
+  * @atomic_desc_capable: Atomic Request Descriptor support.
+  * @GET_MSIX_INDEX: Get the msix index of high iops queues.
++ * @multipath_on_hba: flag to determine multipath on hba is enabled or not
+  * @port_table_list: list containing HBA's wide/narrow port's info
+  */
+ struct MPT3SAS_ADAPTER {
+@@ -1540,6 +1541,7 @@ struct MPT3SAS_ADAPTER {
+ 	PUT_SMID_DEFAULT put_smid_default;
+ 	GET_MSIX_INDEX get_msix_index_for_smlio;
+ 
++	u8		multipath_on_hba;
+ 	struct list_head port_table_list;
+ };
+ 
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index 5c32dbb..af2d3e3 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -902,8 +902,10 @@ _ctl_do_mpt_command(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command karg,
+ 		    (Mpi2SmpPassthroughRequest_t *)mpi_request;
+ 		u8 *data;
+ 
+-		/* ioc determines which port to use */
+-		smp_request->PhysicalPort = 0xFF;
++		if (!ioc->multipath_on_hba) {
++			/* ioc determines which port to use */
++			smp_request->PhysicalPort = 0xFF;
++		}
+ 		if (smp_request->PassthroughFlags &
+ 		    MPI2_SMP_PT_REQ_PT_FLAGS_IMMEDIATE)
+ 			data = (u8 *)&smp_request->SGL;
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index 522e4d0..da4ffa6 100644
+index da4ffa6..699fc9a 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -5847,6 +5847,204 @@ _scsih_io_done(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index, u32 reply)
- 	return 0;
- }
+@@ -159,6 +159,15 @@ module_param(enable_sdev_max_qd, bool, 0444);
+ MODULE_PARM_DESC(enable_sdev_max_qd,
+ 	"Enable sdev max qd as can_queue, def=disabled(0)");
  
-+/**
-+ * _scsih_update_vphys_after_reset - update the Port's
-+ *			vphys_list after reset
-+ * @ioc: per adapter object
-+ *
-+ * Returns nothing.
-+ */
-+static void
-+_scsih_update_vphys_after_reset(struct MPT3SAS_ADAPTER *ioc)
-+{
-+	u16 sz, ioc_status;
-+	int i;
-+	Mpi2ConfigReply_t mpi_reply;
-+	Mpi2SasIOUnitPage0_t *sas_iounit_pg0 = NULL;
-+	u16 attached_handle;
-+	u64 attached_sas_addr;
-+	u8 found = 0, port_id;
-+	Mpi2SasPhyPage0_t phy_pg0;
-+	struct hba_port *port, *port_next, *mport;
-+	struct virtual_phy *vphy, *vphy_next;
-+	struct _sas_device *sas_device;
++static int multipath_on_hba = -1;
++module_param(multipath_on_hba, int, 0);
++MODULE_PARM_DESC(multipath_on_hba,
++	"Multipath support to add same target device\n\t\t"
++	"as many times as it is visible to HBA from various paths\n\t\t"
++	"(by default:\n\t\t"
++	"\t SAS 2.0 & SAS 3.0 HBA - This will be disabled,\n\t\t"
++	"\t SAS 3.5 HBA - This will be enabled)");
 +
+ /* raid transport support */
+ static struct raid_template *mpt3sas_raid_template;
+ static struct raid_template *mpt2sas_raid_template;
+@@ -373,6 +382,14 @@ mpt3sas_get_port_by_id(struct MPT3SAS_ADAPTER *ioc,
+ {
+ 	struct hba_port *port, *port_next;
+ 
 +	/*
-+	 * Mark all the vphys objects as dirty.
++	 * When multipath_on_hba is disabled then
++	 * search the hba_port entry using default
++	 * port id i.e. 255
 +	 */
-+	list_for_each_entry_safe(port, port_next,
-+	    &ioc->port_table_list, list) {
-+		if (!port->vphys_mask)
-+			continue;
-+		list_for_each_entry_safe(vphy, vphy_next,
-+		    &port->vphys_list, list) {
-+			vphy->flags |= MPT_VPHY_FLAG_DIRTY_PHY;
-+		}
-+	}
++	if (!ioc->multipath_on_hba)
++		port_id = MULTIPATH_DISABLED_PORT_ID;
 +
-+	/*
-+	 * Read SASIOUnitPage0 to get each HBA Phy's data.
-+	 */
-+	sz = offsetof(Mpi2SasIOUnitPage0_t, PhyData) +
-+	    (ioc->sas_hba.num_phys * sizeof(Mpi2SasIOUnit0PhyData_t));
-+	sas_iounit_pg0 = kzalloc(sz, GFP_KERNEL);
-+	if (!sas_iounit_pg0) {
-+		ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+		    __FILE__, __LINE__, __func__);
-+		return;
-+	}
-+	if ((mpt3sas_config_get_sas_iounit_pg0(ioc, &mpi_reply,
-+	    sas_iounit_pg0, sz)) != 0)
-+		goto out;
-+	ioc_status = le16_to_cpu(mpi_reply.IOCStatus) & MPI2_IOCSTATUS_MASK;
-+	if (ioc_status != MPI2_IOCSTATUS_SUCCESS)
-+		goto out;
-+	/*
-+	 * Loop over each HBA Phy.
-+	 */
-+	for (i = 0; i < ioc->sas_hba.num_phys; i++) {
-+		/*
-+		 * Check whether Phy's Negotiation Link Rate is > 1.5G or not.
-+		 */
-+		if ((sas_iounit_pg0->PhyData[i].NegotiatedLinkRate >> 4) <
-+		    MPI2_SAS_NEG_LINK_RATE_1_5)
-+			continue;
-+		/*
-+		 * Check whether Phy is connected to SEP device or not,
-+		 * if it is SEP device then read the Phy's SASPHYPage0 data to
-+		 * determine whether Phy is a virtual Phy or not. if it is
-+		 * virtual phy then it is conformed that the attached remote
-+		 * device is a HBA's vSES device.
-+		 */
-+		if (!(le32_to_cpu(
-+		    sas_iounit_pg0->PhyData[i].ControllerPhyDeviceInfo) &
-+		    MPI2_SAS_DEVICE_INFO_SEP))
-+			continue;
-+
-+		if ((mpt3sas_config_get_phy_pg0(ioc, &mpi_reply, &phy_pg0,
-+		    i))) {
-+			ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+			    __FILE__, __LINE__, __func__);
-+			continue;
-+		}
-+
-+		if (!(le32_to_cpu(phy_pg0.PhyInfo) &
-+		    MPI2_SAS_PHYINFO_VIRTUAL_PHY))
-+			continue;
-+		/*
-+		 * Get the vSES device's SAS Address.
-+		 */
-+		attached_handle = le16_to_cpu(
-+		    sas_iounit_pg0->PhyData[i].AttachedDevHandle);
-+		if (_scsih_get_sas_address(ioc, attached_handle,
-+		    &attached_sas_addr) != 0) {
-+			ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+			    __FILE__, __LINE__, __func__);
-+			continue;
-+		}
-+
-+		found = 0;
-+		port = port_next = NULL;
-+		/*
-+		 * Loop over each virtual_phy object from
-+		 * each port's vphys_list.
-+		 */
-+		list_for_each_entry_safe(port,
-+		    port_next, &ioc->port_table_list, list) {
-+			if (!port->vphys_mask)
-+				continue;
-+			list_for_each_entry_safe(vphy, vphy_next,
-+			    &port->vphys_list, list) {
-+				/*
-+				 * Continue with next virtual_phy object
-+				 * if the object is not marked as dirty.
-+				 */
-+				if (!(vphy->flags & MPT_VPHY_FLAG_DIRTY_PHY))
-+					continue;
-+
-+				/*
-+				 * Continue with next virtual_phy object
-+				 * if the object's SAS Address is not equals
-+				 * to current Phy's vSES device SAS Address.
-+				 */
-+				if (vphy->sas_address != attached_sas_addr)
-+					continue;
-+				/*
-+				 * Enable current Phy number bit in object's
-+				 * phy_mask field.
-+				 */
-+				if (!(vphy->phy_mask & (1 << i)))
-+					vphy->phy_mask = (1 << i);
-+				/*
-+				 * Get hba_port object from hba_port table
-+				 * corresponding to current phy's Port ID.
-+				 * if there is no hba_port object corresponding
-+				 * to Phy's Port ID then create a new hba_port
-+				 * object & add to hba_port table.
-+				 */
-+				port_id = sas_iounit_pg0->PhyData[i].Port;
-+				mport = mpt3sas_get_port_by_id(ioc, port_id, 1);
-+				if (!mport) {
-+					mport = kzalloc(
-+					    sizeof(struct hba_port), GFP_KERNEL);
-+					if (!mport)
-+						break;
-+					mport->port_id = port_id;
-+					ioc_info(ioc,
-+					    "%s: hba_port entry: %p, port: %d is added to hba_port list\n",
-+					    __func__, mport, mport->port_id);
-+					list_add_tail(&mport->list,
-+						&ioc->port_table_list);
-+				}
-+				/*
-+				 * If mport & port pointers are not pointing to
-+				 * same hba_port object then it means that vSES
-+				 * device's Port ID got changed after reset and
-+				 * hence move current virtual_phy object from
-+				 * port's vphys_list to mport's vphys_list.
-+				 */
-+				if (port != mport) {
-+					if (!mport->vphys_mask)
-+						INIT_LIST_HEAD(
-+						    &mport->vphys_list);
-+					mport->vphys_mask |= (1 << i);
-+					port->vphys_mask &= ~(1 << i);
-+					list_move(&vphy->list,
-+					    &mport->vphys_list);
-+					sas_device = mpt3sas_get_sdev_by_addr(
-+					    ioc, attached_sas_addr, port);
-+					if (sas_device)
-+						sas_device->port = mport;
-+				}
-+				/*
-+				 * Earlier while updating the hba_port table,
-+				 * it is determined that there is no other
-+				 * direct attached device with mport's Port ID,
-+				 * Hence mport was marked as dirty. Only vSES
-+				 * device has this Port ID, so unmark the mport
-+				 * as dirt.
-+				 */
-+				if (mport->flags & HBA_PORT_FLAG_DIRTY_PORT) {
-+					mport->sas_address = 0;
-+					mport->phy_mask = 0;
-+					mport->flags &=
-+					    ~HBA_PORT_FLAG_DIRTY_PORT;
-+				}
-+				/*
-+				 * Unmark current virtual_phy object as dirty.
-+				 */
-+				vphy->flags &= ~MPT_VPHY_FLAG_DIRTY_PHY;
-+				found = 1;
-+				break;
-+			}
-+			if (found)
-+				break;
-+		}
-+	}
-+out:
-+	kfree(sas_iounit_pg0);
-+}
-+
- /**
-  * _scsih_get_port_table_after_reset - Construct temporary port table
-  * @ioc: per adapter object
-@@ -6066,6 +6264,39 @@ _scsih_add_or_del_phys_from_existing_port(struct MPT3SAS_ADAPTER *ioc,
+ 	list_for_each_entry_safe(port, port_next,
+ 	    &ioc->port_table_list, list) {
+ 		if (port->port_id != port_id)
+@@ -384,6 +401,24 @@ mpt3sas_get_port_by_id(struct MPT3SAS_ADAPTER *ioc,
+ 		return port;
  	}
+ 
++	/*
++	 * Allocate hba_port object for default port id (i.e. 255)
++	 * when multipath_on_hba is disabled for the HBA.
++	 * And add this object to port_table_list.
++	 */
++	if (!ioc->multipath_on_hba) {
++		port = kzalloc(sizeof(struct hba_port), GFP_KERNEL);
++		if (!port)
++			return NULL;
++
++		port->port_id = port_id;
++		ioc_info(ioc,
++		   "hba_port entry: %p, port: %d is added to hba_port list\n",
++		   port, port->port_id);
++		list_add_tail(&port->list,
++		    &ioc->port_table_list);
++		return port;
++	}
+ 	return NULL;
  }
  
-+/**
-+ * _scsih_del_dirty_vphy - delete virtual_phy objects marked as dirty.
-+ * @ioc: per adapter object
-+ *
-+ * Returns nothing.
-+ */
-+static void
-+_scsih_del_dirty_vphy(struct MPT3SAS_ADAPTER *ioc)
-+{
-+	struct hba_port *port, *port_next;
-+	struct virtual_phy *vphy, *vphy_next;
-+
-+	list_for_each_entry_safe(port, port_next,
-+	    &ioc->port_table_list, list) {
-+		if (!port->vphys_mask)
-+			continue;
-+		list_for_each_entry_safe(vphy, vphy_next,
-+		    &port->vphys_list, list) {
-+			if (vphy->flags & MPT_VPHY_FLAG_DIRTY_PHY) {
-+				drsprintk(ioc, ioc_info(ioc,
-+				    "Deleting vphy %p entry from port id: %d\t, Phy_mask 0x%08x\n",
-+				    vphy, port->port_id,
-+				    vphy->phy_mask));
-+				port->vphys_mask &= ~vphy->phy_mask;
-+				list_del(&vphy->list);
-+				kfree(vphy);
-+			}
-+		}
-+		if (!port->vphys_mask && !port->sas_address)
-+			port->flags |= HBA_PORT_FLAG_DIRTY_PORT;
-+	}
-+}
-+
- /**
-  * _scsih_del_dirty_port_entries - delete dirty port entries from port list
-  *					after host reset
-@@ -10246,6 +10477,7 @@ mpt3sas_scsih_reset_done_handler(struct MPT3SAS_ADAPTER *ioc)
+@@ -10013,6 +10048,7 @@ _scsih_search_responding_expanders(struct MPT3SAS_ADAPTER *ioc)
+ 	u16 ioc_status;
+ 	u64 sas_address;
+ 	u16 handle;
++	u8 port;
+ 
+ 	ioc_info(ioc, "search for expanders: start\n");
+ 
+@@ -10030,10 +10066,12 @@ _scsih_search_responding_expanders(struct MPT3SAS_ADAPTER *ioc)
+ 
+ 		handle = le16_to_cpu(expander_pg0.DevHandle);
+ 		sas_address = le64_to_cpu(expander_pg0.SASAddress);
++		port = expander_pg0.PhysicalPort;
+ 		pr_info(
+ 		    "\texpander present: handle(0x%04x), sas_addr(0x%016llx), port:%d\n",
+ 		    handle, (unsigned long long)sas_address,
+-		    expander_pg0.PhysicalPort);
++		    (ioc->multipath_on_hba ?
++		    port : MULTIPATH_DISABLED_PORT_ID));
+ 		_scsih_mark_responding_expander(ioc, &expander_pg0);
+ 	}
+ 
+@@ -10476,8 +10514,10 @@ mpt3sas_scsih_reset_done_handler(struct MPT3SAS_ADAPTER *ioc)
+ 	dtmprintk(ioc, ioc_info(ioc, "%s: MPT3_IOC_DONE_RESET\n", __func__));
  	if ((!ioc->is_driver_loading) && !(disable_discovery > 0 &&
  					   !ioc->sas_hba.num_phys)) {
- 		_scsih_sas_port_refresh(ioc);
-+		_scsih_update_vphys_after_reset(ioc);
+-		_scsih_sas_port_refresh(ioc);
+-		_scsih_update_vphys_after_reset(ioc);
++		if (ioc->multipath_on_hba) {
++			_scsih_sas_port_refresh(ioc);
++			_scsih_update_vphys_after_reset(ioc);
++		}
  		_scsih_prep_device_scan(ioc);
  		_scsih_create_enclosure_list_after_reset(ioc);
  		_scsih_search_responding_sas_devices(ioc);
-@@ -10293,6 +10525,7 @@ _mpt3sas_fw_work(struct MPT3SAS_ADAPTER *ioc, struct fw_event_work *fw_event)
- 			ssleep(1);
+@@ -11765,6 +11805,12 @@ _scsih_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 			ioc->mfg_pg10_hide_flag = MFG_PAGE10_EXPOSE_ALL_DISKS;
+ 			break;
  		}
- 		_scsih_remove_unresponding_devices(ioc);
-+		_scsih_del_dirty_vphy(ioc);
- 		_scsih_del_dirty_port_entries(ioc);
- 		_scsih_scan_for_devices_after_reset(ioc);
- 		_scsih_set_nvme_max_shutdown_latency(ioc);
++
++		if (multipath_on_hba == -1 || multipath_on_hba == 0)
++			ioc->multipath_on_hba = 0;
++		else
++			ioc->multipath_on_hba = 1;
++
+ 		break;
+ 	case MPI25_VERSION:
+ 	case MPI26_VERSION:
+@@ -11826,6 +11872,23 @@ _scsih_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 				ioc->combined_reply_index_count =
+ 				 MPT3_SUP_REPLY_POST_HOST_INDEX_REG_COUNT_G3;
+ 		}
++
++		switch (ioc->is_gen35_ioc) {
++		case 0:
++			if (multipath_on_hba == -1 || multipath_on_hba == 0)
++				ioc->multipath_on_hba = 0;
++			else
++				ioc->multipath_on_hba = 1;
++			break;
++		case 1:
++			if (multipath_on_hba == -1 || multipath_on_hba > 0)
++				ioc->multipath_on_hba = 1;
++			else
++				ioc->multipath_on_hba = 0;
++		default:
++			break;
++		}
++
+ 		break;
+ 	default:
+ 		return -ENODEV;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_transport.c b/drivers/scsi/mpt3sas/mpt3sas_transport.c
+index 0d06025..6f47082 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_transport.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_transport.c
+@@ -912,7 +912,8 @@ mpt3sas_transport_port_remove(struct MPT3SAS_ADAPTER *ioc, u64 sas_address,
+ 		return;
+ 	}
+ 
+-	if (sas_node->handle <= ioc->sas_hba.num_phys) {
++	if (sas_node->handle <= ioc->sas_hba.num_phys &&
++	    (ioc->multipath_on_hba)) {
+ 		if (port->vphys_mask) {
+ 			list_for_each_entry_safe(vphy, vphy_next,
+ 			    &port->vphys_list, list) {
+@@ -1172,7 +1173,8 @@ mpt3sas_transport_update_links(struct MPT3SAS_ADAPTER *ioc,
+ 	if (handle && (link_rate >= MPI2_SAS_NEG_LINK_RATE_1_5)) {
+ 		_transport_set_identify(ioc, handle,
+ 		    &mpt3sas_phy->remote_identify);
+-		if (sas_node->handle <= ioc->sas_hba.num_phys) {
++		if ((sas_node->handle <= ioc->sas_hba.num_phys) &&
++		    (ioc->multipath_on_hba)) {
+ 			list_for_each_entry(hba_port,
+ 			    &ioc->port_table_list, list) {
+ 				if (hba_port->sas_address == sas_address &&
 -- 
 2.18.4
 
 
---00000000000013cc3605b1401674
+--0000000000003fe85005b140164c
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -458,13 +347,13 @@ JJQBmQHXii+acSeTgHmPWUYs3tYQ0uIX0Yy8LUWPdGbEq+KWepzY2otC+iVWdngCCv8Nf1Xo1jki
 AGJ6hrlWFE0qJVWv25sxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
 YWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hB
 MjU2IC0gRzMCDBmG1a14/wFg8qBhUjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg
-5GM3bNDY4TusVMuIirfPyhBOF3UYIdtlFG3trX2PCKowGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEH
-ATAcBgkqhkiG9w0BCQUxDxcNMjAxMDA5MTcxNDQ5WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFl
+/28biwAa6UIrFKBCk0T1Qevmf0FZ6967YjAfoW7Rk+4wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEH
+ATAcBgkqhkiG9w0BCQUxDxcNMjAxMDA5MTcxNDUyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFl
 AwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjAL
-BgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAEPliOH6XZSXjb0z7pIw
-cQjQgMRAD6VJ5rf+Gwdl5kiwyIakQxjSoXyEZ7vSL2UbR9YLT+WTIHIgHRMHeG6dx8U2if9Qb5J0
-IwlKqNewM4e5gr6tnPfc8WjSUUozBxRysglDcsNyUoTD3bpPMh9tjkWoEPjxHt92YpH5ZXTE5EL2
-7tl7hNWd9lbpD5pnWdjrRPHJiFDDeG7h9YUKNnYfZaOxtcf0qncaPMe2lEoZ+I19wZOIgs0X0S9i
-piN6DEeVQLjL6DJl1mJKKtBf9vj3zQ4sMzWfwLr0RRw9bwdniTn461tFDHe3bDmKgm2FnYRf8uR+
-PbiDP4wQbCzMXv1ThsE=
---00000000000013cc3605b1401674--
+BgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAC5u8ovLcADk4RbDFISk
+R4zSzHS/9bT+mF92chd2R3/xlLzD37WfC+MEWnXvaBgiXEFkl74KAjQol5xAP3aDCpzQczr5ec53
+54HjP5zYCQ2hQBekbXBP0nuM0I4TUeDYHz1Des85yL2dGPb3xglGhtB4vW9+1jAjSe8azibbuvAK
+lzzkPGjq5lcM/QzIhIt27RuyyusYE+M7JgRrUGXjjbugRX0HoydhjUTTCFPfocAgNnM3jkhH9dBl
+Zoj9tVwuCci+S7mUe7T3bcMgtPN4M5tl7flUinlD4b+uOeDY78Cq0vmsubhttzVGLyHfXBVTDiae
+QK7ZhQiK7ewBTw/l9Ds=
+--0000000000003fe85005b140164c--
