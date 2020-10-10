@@ -2,244 +2,463 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D9E28A1BC
-	for <lists+linux-scsi@lfdr.de>; Sun, 11 Oct 2020 00:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7E428A2F5
+	for <lists+linux-scsi@lfdr.de>; Sun, 11 Oct 2020 01:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730887AbgJJWvm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Oct 2020 18:51:42 -0400
-Received: from de-smtp-delivery-102.mimecast.com ([62.140.7.102]:32292 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730283AbgJJSzG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 10 Oct 2020 14:55:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1602356100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=F3rqvSo2pR+XXLTboJ/bGepwCouJVTq7fsEnnAyoqbw=;
-        b=NgfHLXdHhlgt53vWEkK3VVCmrlBx7/CWmVnDbuFF4UqwcbllKlznr2jdhggtnYrmnSbIc5
-        HlXfzyzupb0wd26Ee8pTpr8tWpc91Y42kzSDjVgjYrAgpkp4ueVoL8y2vRs1FxtPAfI8bc
-        8NfjM4ZPx3g7F9SprcfoLlVxCnhMbDQ=
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com
- (mail-am6eur05lp2111.outbound.protection.outlook.com [104.47.18.111])
- (Using TLS) by relay.mimecast.com with ESMTP id
- de-mta-15-EAkUOhnLPeWvWZdr3ncGMA-1; Sat, 10 Oct 2020 19:31:39 +0200
-X-MC-Unique: EAkUOhnLPeWvWZdr3ncGMA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qq2BISR9fikO1KRKS0I70xvwHIqa5oYDpK/HFdF5qnMbKoRJzcDotRgULoM4+o52lqfJitTujRH+fwrpTybq3Qyz/BscxtydHWu1m1B/IeDBg4fGF5dmgEf3zVfBtUxtZhMA1eGg7EBT5cfk9vZr6JTBZ/Jm/EXYY2jVSkKcdveGrxsu5pgNWO9zwZ5g0YTRrnaiQOE2DIMHUfNmQRH4YFIDD8i9UWUN3Ls1vZMRbNVET2I9TDtgHKDvfn59D9dn+ve7UTTxYDh66DLFsZZ+0hq1gVEYK0BESpnxRle58GPNn/eD4CObwkr48ByFHYaduq4J/XKap3bOl93TKDTKRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F3rqvSo2pR+XXLTboJ/bGepwCouJVTq7fsEnnAyoqbw=;
- b=Ia3HNmH5rMEgNpNtBB7+ywixOKqVjTFzVGUf+ROezNQC9+O5yURV4j9rPfsmOKZoy1PvxcdLXzxSo7PeqhhFsf32yk9Gh3FgfelXlEHWdnu70uH9Nu2pTKdoaGIyMWPNO4f12wQ046rda+aJuQ/VPEI3LIs/yeNOMcfMYRipiu082ExajYKYHbTrBgTvzkXxC8teLwC28fCf7EvHeY3bq7jZ4Z83tY58Yx+5Fk5s1lEPNTOuZ12GqWkmP0+UuE71ORiTEga45uu+5qTd5JBJbvAL6+Kg4/ub4TnpK9q4aePme3Qke/N7ANm+OJFemkMqX1ljzHOz1jZMhxltg2x5cQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: acm.org; dkim=none (message not signed)
- header.d=none;acm.org; dmarc=none action=none header.from=suse.com;
-Received: from AM5PR04MB3089.eurprd04.prod.outlook.com (2603:10a6:206:b::28)
- by AS8PR04MB7925.eurprd04.prod.outlook.com (2603:10a6:20b:2a2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.28; Sat, 10 Oct
- 2020 17:31:38 +0000
-Received: from AM5PR04MB3089.eurprd04.prod.outlook.com
- ([fe80::993e:654f:399e:8230]) by AM5PR04MB3089.eurprd04.prod.outlook.com
- ([fe80::993e:654f:399e:8230%6]) with mapi id 15.20.3455.028; Sat, 10 Oct 2020
- 17:31:38 +0000
-Subject: Re: [PATCH] scsi: core: don't start concurrent async scan on same
- host
-To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>
-References: <20201010032539.426615-1-ming.lei@redhat.com>
-From:   Lee Duncan <lduncan@suse.com>
-Autocrypt: addr=lduncan@suse.com; keydata=
- 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
- Xd8p+B+giaT8a1b5hWuz85V0
-Message-ID: <4f3e4d42-4d53-fc00-25bc-0ead15e86900@suse.com>
-Date:   Sat, 10 Oct 2020 10:31:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-In-Reply-To: <20201010032539.426615-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [73.25.22.216]
-X-ClientProxiedBy: AM0PR08CA0007.eurprd08.prod.outlook.com
- (2603:10a6:208:d2::20) To AM5PR04MB3089.eurprd04.prod.outlook.com
- (2603:10a6:206:b::28)
+        id S2391197AbgJJXCH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Oct 2020 19:02:07 -0400
+Received: from mga18.intel.com ([134.134.136.126]:50377 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726861AbgJJXCB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 10 Oct 2020 19:02:01 -0400
+IronPort-SDR: 16L4dxW8sxCoR8bf/LMjV1KYwBtjSnUVL/ioHZrfiB0+sgjKh5mYWqFQavt28XDMesQ34WX2ch
+ lurNUWzyVQ1Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9770"; a="153443529"
+X-IronPort-AV: E=Sophos;i="5.77,360,1596524400"; 
+   d="scan'208";a="153443529"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2020 16:01:58 -0700
+IronPort-SDR: u8hpYVeZMmLfNxJlrYKazUxwnAD4tdLG9jg9nK8c6q04PE64rSl1u0/Oby62JZ45YUl7qtSnq6
+ /O/xXGC90zkg==
+X-IronPort-AV: E=Sophos;i="5.77,360,1596524400"; 
+   d="scan'208";a="529414067"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2020 16:01:56 -0700
+Date:   Sat, 10 Oct 2020 16:01:55 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Airlie <airlied@linux.ie>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kexec@lists.infradead.org, linux-bcache@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devel@driverdev.osuosl.org,
+        linux-efi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-um@lists.infradead.org, linux-ntfs-dev@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, cluster-devel@redhat.com,
+        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
+        samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH RFC PKS/PMEM 09/58] drivers/gpu: Utilize new kmap_thread()
+Message-ID: <20201010230155.GX2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009195033.3208459-1-ira.weiny@intel.com>
+ <20201009195033.3208459-10-ira.weiny@intel.com>
+ <20201009220349.GQ438822@phenom.ffwll.local>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.20.3] (73.25.22.216) by AM0PR08CA0007.eurprd08.prod.outlook.com (2603:10a6:208:d2::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21 via Frontend Transport; Sat, 10 Oct 2020 17:31:35 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 260eb965-4628-4c33-a5fc-08d86d425796
-X-MS-TrafficTypeDiagnostic: AS8PR04MB7925:
-X-Microsoft-Antispam-PRVS: <AS8PR04MB792514634F69F3B008AB4086DA090@AS8PR04MB7925.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pQGqRASP/1MHsZUizlhh5rba14LeiDYXGYqilXicGgjhV6ILlojm9KnpMhltPXPn4/7dRU5kDUaWXbW9mx97597cAAJ1w2Cw2gAvWZahbwVXK0fTOO4SuUg8qGqXXXi83g8zXTrhAMkQhZgY9kU/ncROz8XPa8NR/gJqppKZdoYUIo53QfGBq6RjZI8vnkiwtJCMSIC0SdR89Vrw/Jes4nLdYqnejqbIoStwo+uH4VgKFqA/WlVD9l5gUctwz0z/YezjngweGN1JVjHtp99ilSfYfRpuiwa7fs7GHWUUsGG0NjrLmsEOcpvRbHz4CLburydPO3RYRVotRA61/VprO2T316jGOjR9K39Wa33dor39lgAIOF36cWQNVlCjMpHV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3089.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(136003)(346002)(376002)(39860400002)(366004)(2616005)(2906002)(956004)(36756003)(4326008)(6666004)(478600001)(83380400001)(31686004)(86362001)(8676002)(53546011)(16576012)(52116002)(31696002)(6486002)(110136005)(8936002)(316002)(66556008)(66476007)(66946007)(5660300002)(16526019)(186003)(54906003)(26005)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: plIVwjFdpwtzZ1Pb2YA5Mwqbvy9j6WPY+cre+ITqfVrckOVwE4s++UaTzeseyFi31en6El32JX0V3DS3fB4gfUAd/jVHRnYdwQ4JdvecdPzpQMad9+PxXTgeCHp0E7ZWB0hn6+Qw6nNKYGX9ZZeKHX0Q+jbobPzQ3IBw8G86GrdkJcrED5Ebouf8e7Y2vpKwI4dzqO2fPhyBuP3MdlRSYjbROD+hwXv12U4GiwJQnYkmuHi4jXR+UVeEi+0fYcTXygkwRfWJYlVcrcqTzRx7nUST5ArKH7jEGq+Zav68co9S1g+hb4zTAhs+mnxaMciyUbD1SUSo0HtY7Rs6rb7SrBBQ7K8XgNIngqbh4hxOyPW4M2fqbeNMvYPnrg7Y2BfeXpkXN9/W1BHr7LkIyrBGgTdjPp9FNGP2UZY8SR3oVKUJinqaW+qpPCnF9ekznbIJwI1D+cC7x0ZCdXujuIcSsB7Ac5vMR/x/+EeByrrgN+3vBzgZYzB9zhuPbu2v2TCHXNhQ3uuiHKJVKesorQBakUHD8hlY5f3jn2IrJmzhbAha3s2p/DkHEFue/aX0MmnCaB0ACjDBy59dTA7UbKAVFXBUm++xVdi0GpNIaQ38xE7zoec1r1wL49mtKOxtlQqRYzocmY6ghot8bmLBcpJtxg==
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 260eb965-4628-4c33-a5fc-08d86d425796
-X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3089.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2020 17:31:38.0653
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0osGL/ewX3qUGNyHnRHnfDEQlAatTOXNuAe00eQOv4zmKy7NNo3PypBAI2ZXn+gw9EtU5ez16pJxWyBiSHxKfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7925
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201009220349.GQ438822@phenom.ffwll.local>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/9/20 8:25 PM, Ming Lei wrote:
-> Current scsi host scan mechanism supposes to fallback into sync host
-> scan if async scan is in-progress. However, this rule isn't strictly
-> respected, because scsi_prep_async_scan() doesn't hold scan_mutex when
-> checking shost->async_scan. When scsi_scan_host() is called
-> concurrently, two async scan on same host may be started, and hang in
-> do_scan_async() is observed.
+On Sat, Oct 10, 2020 at 12:03:49AM +0200, Daniel Vetter wrote:
+> On Fri, Oct 09, 2020 at 12:49:44PM -0700, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > These kmap() calls in the gpu stack are localized to a single thread.
+> > To avoid the over head of global PKRS updates use the new kmap_thread()
+> > call.
+> > 
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 > 
-> Fixes this issue by checking & setting shost->async_scan atomically
-> with shost->scan_mutex.
-> 
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Ewan D. Milne <emilne@redhat.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->  drivers/scsi/scsi_scan.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-> index f2437a7570ce..9af50e6f94c4 100644
-> --- a/drivers/scsi/scsi_scan.c
-> +++ b/drivers/scsi/scsi_scan.c
-> @@ -1714,15 +1714,16 @@ static void scsi_sysfs_add_devices(struct Scsi_Host *shost)
->   */
->  static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
->  {
-> -	struct async_scan_data *data;
-> +	struct async_scan_data *data = NULL;
->  	unsigned long flags;
->  
->  	if (strncmp(scsi_scan_type, "sync", 4) == 0)
->  		return NULL;
->  
-> +	mutex_lock(&shost->scan_mutex);
->  	if (shost->async_scan) {
->  		shost_printk(KERN_DEBUG, shost, "%s called twice\n", __func__);
-> -		return NULL;
-> +		goto err;
->  	}
->  
->  	data = kmalloc(sizeof(*data), GFP_KERNEL);
-> @@ -1733,7 +1734,6 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
->  		goto err;
->  	init_completion(&data->prev_finished);
->  
-> -	mutex_lock(&shost->scan_mutex);
->  	spin_lock_irqsave(shost->host_lock, flags);
->  	shost->async_scan = 1;
->  	spin_unlock_irqrestore(shost->host_lock, flags);
-> @@ -1748,6 +1748,7 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
->  	return data;
->  
->   err:
-> +	mutex_unlock(&shost->scan_mutex);
->  	kfree(data);
->  	return NULL;
->  }
-> 
-Reviewed-by: Lee Duncan <lduncan@suse.com>
+> I'm guessing the entire pile goes in through some other tree.
+>
 
+Apologies for not realizing there were multiple maintainers here.
+
+But, I was thinking it would land together through the mm tree once the core
+support lands.  I've tried to split these out in a way they can be easily
+reviewed/acked by the correct developers.
+
+> If so:
+> 
+> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> 
+> If you want this to land through maintainer trees, then we need a
+> per-driver split (since aside from amdgpu and radeon they're all different
+> subtrees).
+
+It is just RFC for the moment.  I need to get the core support accepted first
+then this can land.
+
+> 
+> btw the two kmap calls in drm you highlight in the cover letter should
+> also be convertible to kmap_thread. We only hold vmalloc mappings for a
+> longer time (or it'd be quite a driver bug). So if you want maybe throw
+> those two as two additional patches on top, and we can do some careful
+> review & testing for them.
+
+Cool.  I'll add them in.
+
+Ira
+
+> -Daniel
+> 
+> > ---
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c              | 12 ++++++------
+> >  drivers/gpu/drm/gma500/gma_display.c                 |  4 ++--
+> >  drivers/gpu/drm/gma500/mmu.c                         | 10 +++++-----
+> >  drivers/gpu/drm/i915/gem/i915_gem_shmem.c            |  4 ++--
+> >  .../gpu/drm/i915/gem/selftests/i915_gem_context.c    |  4 ++--
+> >  drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c   |  8 ++++----
+> >  drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c         |  4 ++--
+> >  drivers/gpu/drm/i915/gt/intel_gtt.c                  |  4 ++--
+> >  drivers/gpu/drm/i915/gt/shmem_utils.c                |  4 ++--
+> >  drivers/gpu/drm/i915/i915_gem.c                      |  8 ++++----
+> >  drivers/gpu/drm/i915/i915_gpu_error.c                |  4 ++--
+> >  drivers/gpu/drm/i915/selftests/i915_perf.c           |  4 ++--
+> >  drivers/gpu/drm/radeon/radeon_ttm.c                  |  4 ++--
+> >  13 files changed, 37 insertions(+), 37 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> > index 978bae731398..bd564bccb7a3 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> > @@ -2437,11 +2437,11 @@ static ssize_t amdgpu_ttm_gtt_read(struct file *f, char __user *buf,
+> >  
+> >  		page = adev->gart.pages[p];
+> >  		if (page) {
+> > -			ptr = kmap(page);
+> > +			ptr = kmap_thread(page);
+> >  			ptr += off;
+> >  
+> >  			r = copy_to_user(buf, ptr, cur_size);
+> > -			kunmap(adev->gart.pages[p]);
+> > +			kunmap_thread(adev->gart.pages[p]);
+> >  		} else
+> >  			r = clear_user(buf, cur_size);
+> >  
+> > @@ -2507,9 +2507,9 @@ static ssize_t amdgpu_iomem_read(struct file *f, char __user *buf,
+> >  		if (p->mapping != adev->mman.bdev.dev_mapping)
+> >  			return -EPERM;
+> >  
+> > -		ptr = kmap(p);
+> > +		ptr = kmap_thread(p);
+> >  		r = copy_to_user(buf, ptr + off, bytes);
+> > -		kunmap(p);
+> > +		kunmap_thread(p);
+> >  		if (r)
+> >  			return -EFAULT;
+> >  
+> > @@ -2558,9 +2558,9 @@ static ssize_t amdgpu_iomem_write(struct file *f, const char __user *buf,
+> >  		if (p->mapping != adev->mman.bdev.dev_mapping)
+> >  			return -EPERM;
+> >  
+> > -		ptr = kmap(p);
+> > +		ptr = kmap_thread(p);
+> >  		r = copy_from_user(ptr + off, buf, bytes);
+> > -		kunmap(p);
+> > +		kunmap_thread(p);
+> >  		if (r)
+> >  			return -EFAULT;
+> >  
+> > diff --git a/drivers/gpu/drm/gma500/gma_display.c b/drivers/gpu/drm/gma500/gma_display.c
+> > index 3df6d6e850f5..35f4e55c941f 100644
+> > --- a/drivers/gpu/drm/gma500/gma_display.c
+> > +++ b/drivers/gpu/drm/gma500/gma_display.c
+> > @@ -400,9 +400,9 @@ int gma_crtc_cursor_set(struct drm_crtc *crtc,
+> >  		/* Copy the cursor to cursor mem */
+> >  		tmp_dst = dev_priv->vram_addr + cursor_gt->offset;
+> >  		for (i = 0; i < cursor_pages; i++) {
+> > -			tmp_src = kmap(gt->pages[i]);
+> > +			tmp_src = kmap_thread(gt->pages[i]);
+> >  			memcpy(tmp_dst, tmp_src, PAGE_SIZE);
+> > -			kunmap(gt->pages[i]);
+> > +			kunmap_thread(gt->pages[i]);
+> >  			tmp_dst += PAGE_SIZE;
+> >  		}
+> >  
+> > diff --git a/drivers/gpu/drm/gma500/mmu.c b/drivers/gpu/drm/gma500/mmu.c
+> > index 505044c9a673..fba7a3a461fd 100644
+> > --- a/drivers/gpu/drm/gma500/mmu.c
+> > +++ b/drivers/gpu/drm/gma500/mmu.c
+> > @@ -192,20 +192,20 @@ struct psb_mmu_pd *psb_mmu_alloc_pd(struct psb_mmu_driver *driver,
+> >  		pd->invalid_pte = 0;
+> >  	}
+> >  
+> > -	v = kmap(pd->dummy_pt);
+> > +	v = kmap_thread(pd->dummy_pt);
+> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
+> >  		v[i] = pd->invalid_pte;
+> >  
+> > -	kunmap(pd->dummy_pt);
+> > +	kunmap_thread(pd->dummy_pt);
+> >  
+> > -	v = kmap(pd->p);
+> > +	v = kmap_thread(pd->p);
+> >  	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
+> >  		v[i] = pd->invalid_pde;
+> >  
+> > -	kunmap(pd->p);
+> > +	kunmap_thread(pd->p);
+> >  
+> >  	clear_page(kmap(pd->dummy_page));
+> > -	kunmap(pd->dummy_page);
+> > +	kunmap_thread(pd->dummy_page);
+> >  
+> >  	pd->tables = vmalloc_user(sizeof(struct psb_mmu_pt *) * 1024);
+> >  	if (!pd->tables)
+> > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> > index 38113d3c0138..274424795fb7 100644
+> > --- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> > +++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> > @@ -566,9 +566,9 @@ i915_gem_object_create_shmem_from_data(struct drm_i915_private *dev_priv,
+> >  		if (err < 0)
+> >  			goto fail;
+> >  
+> > -		vaddr = kmap(page);
+> > +		vaddr = kmap_thread(page);
+> >  		memcpy(vaddr, data, len);
+> > -		kunmap(page);
+> > +		kunmap_thread(page);
+> >  
+> >  		err = pagecache_write_end(file, file->f_mapping,
+> >  					  offset, len, len,
+> > diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+> > index 7ffc3c751432..b466c677d007 100644
+> > --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+> > +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+> > @@ -1754,7 +1754,7 @@ static int check_scratch_page(struct i915_gem_context *ctx, u32 *out)
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > -	vaddr = kmap(page);
+> > +	vaddr = kmap_thread(page);
+> >  	if (!vaddr) {
+> >  		pr_err("No (mappable) scratch page!\n");
+> >  		return -EINVAL;
+> > @@ -1765,7 +1765,7 @@ static int check_scratch_page(struct i915_gem_context *ctx, u32 *out)
+> >  		pr_err("Inconsistent initial state of scratch page!\n");
+> >  		err = -EINVAL;
+> >  	}
+> > -	kunmap(page);
+> > +	kunmap_thread(page);
+> >  
+> >  	return err;
+> >  }
+> > diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> > index 9c7402ce5bf9..447df22e2e06 100644
+> > --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> > +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> > @@ -143,7 +143,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
+> >  	intel_gt_flush_ggtt_writes(&to_i915(obj->base.dev)->gt);
+> >  
+> >  	p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
+> > -	cpu = kmap(p) + offset_in_page(offset);
+> > +	cpu = kmap_thread(p) + offset_in_page(offset);
+> >  	drm_clflush_virt_range(cpu, sizeof(*cpu));
+> >  	if (*cpu != (u32)page) {
+> >  		pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
+> > @@ -161,7 +161,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
+> >  	}
+> >  	*cpu = 0;
+> >  	drm_clflush_virt_range(cpu, sizeof(*cpu));
+> > -	kunmap(p);
+> > +	kunmap_thread(p);
+> >  
+> >  out:
+> >  	__i915_vma_put(vma);
+> > @@ -236,7 +236,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
+> >  		intel_gt_flush_ggtt_writes(&to_i915(obj->base.dev)->gt);
+> >  
+> >  		p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
+> > -		cpu = kmap(p) + offset_in_page(offset);
+> > +		cpu = kmap_thread(p) + offset_in_page(offset);
+> >  		drm_clflush_virt_range(cpu, sizeof(*cpu));
+> >  		if (*cpu != (u32)page) {
+> >  			pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
+> > @@ -254,7 +254,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
+> >  		}
+> >  		*cpu = 0;
+> >  		drm_clflush_virt_range(cpu, sizeof(*cpu));
+> > -		kunmap(p);
+> > +		kunmap_thread(p);
+> >  		if (err)
+> >  			return err;
+> >  
+> > diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c b/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c
+> > index 7fb36b12fe7a..38da348282f1 100644
+> > --- a/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c
+> > +++ b/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c
+> > @@ -731,7 +731,7 @@ static void swizzle_page(struct page *page)
+> >  	char *vaddr;
+> >  	int i;
+> >  
+> > -	vaddr = kmap(page);
+> > +	vaddr = kmap_thread(page);
+> >  
+> >  	for (i = 0; i < PAGE_SIZE; i += 128) {
+> >  		memcpy(temp, &vaddr[i], 64);
+> > @@ -739,7 +739,7 @@ static void swizzle_page(struct page *page)
+> >  		memcpy(&vaddr[i + 64], temp, 64);
+> >  	}
+> >  
+> > -	kunmap(page);
+> > +	kunmap_thread(page);
+> >  }
+> >  
+> >  /**
+> > diff --git a/drivers/gpu/drm/i915/gt/intel_gtt.c b/drivers/gpu/drm/i915/gt/intel_gtt.c
+> > index 2a72cce63fd9..4cfb24e9ed62 100644
+> > --- a/drivers/gpu/drm/i915/gt/intel_gtt.c
+> > +++ b/drivers/gpu/drm/i915/gt/intel_gtt.c
+> > @@ -312,9 +312,9 @@ static void poison_scratch_page(struct page *page, unsigned long size)
+> >  	do {
+> >  		void *vaddr;
+> >  
+> > -		vaddr = kmap(page);
+> > +		vaddr = kmap_thread(page);
+> >  		memset(vaddr, POISON_FREE, PAGE_SIZE);
+> > -		kunmap(page);
+> > +		kunmap_thread(page);
+> >  
+> >  		page = pfn_to_page(page_to_pfn(page) + 1);
+> >  		size -= PAGE_SIZE;
+> > diff --git a/drivers/gpu/drm/i915/gt/shmem_utils.c b/drivers/gpu/drm/i915/gt/shmem_utils.c
+> > index 43c7acbdc79d..a40d3130cebf 100644
+> > --- a/drivers/gpu/drm/i915/gt/shmem_utils.c
+> > +++ b/drivers/gpu/drm/i915/gt/shmem_utils.c
+> > @@ -142,12 +142,12 @@ static int __shmem_rw(struct file *file, loff_t off,
+> >  		if (IS_ERR(page))
+> >  			return PTR_ERR(page);
+> >  
+> > -		vaddr = kmap(page);
+> > +		vaddr = kmap_thread(page);
+> >  		if (write)
+> >  			memcpy(vaddr + offset_in_page(off), ptr, this);
+> >  		else
+> >  			memcpy(ptr, vaddr + offset_in_page(off), this);
+> > -		kunmap(page);
+> > +		kunmap_thread(page);
+> >  		put_page(page);
+> >  
+> >  		len -= this;
+> > diff --git a/drivers/gpu/drm/i915/i915_gem.c b/drivers/gpu/drm/i915/i915_gem.c
+> > index 9aa3066cb75d..cae8300fd224 100644
+> > --- a/drivers/gpu/drm/i915/i915_gem.c
+> > +++ b/drivers/gpu/drm/i915/i915_gem.c
+> > @@ -312,14 +312,14 @@ shmem_pread(struct page *page, int offset, int len, char __user *user_data,
+> >  	char *vaddr;
+> >  	int ret;
+> >  
+> > -	vaddr = kmap(page);
+> > +	vaddr = kmap_thread(page);
+> >  
+> >  	if (needs_clflush)
+> >  		drm_clflush_virt_range(vaddr + offset, len);
+> >  
+> >  	ret = __copy_to_user(user_data, vaddr + offset, len);
+> >  
+> > -	kunmap(page);
+> > +	kunmap_thread(page);
+> >  
+> >  	return ret ? -EFAULT : 0;
+> >  }
+> > @@ -708,7 +708,7 @@ shmem_pwrite(struct page *page, int offset, int len, char __user *user_data,
+> >  	char *vaddr;
+> >  	int ret;
+> >  
+> > -	vaddr = kmap(page);
+> > +	vaddr = kmap_thread(page);
+> >  
+> >  	if (needs_clflush_before)
+> >  		drm_clflush_virt_range(vaddr + offset, len);
+> > @@ -717,7 +717,7 @@ shmem_pwrite(struct page *page, int offset, int len, char __user *user_data,
+> >  	if (!ret && needs_clflush_after)
+> >  		drm_clflush_virt_range(vaddr + offset, len);
+> >  
+> > -	kunmap(page);
+> > +	kunmap_thread(page);
+> >  
+> >  	return ret ? -EFAULT : 0;
+> >  }
+> > diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
+> > index 3e6cbb0d1150..aecd469b6b6e 100644
+> > --- a/drivers/gpu/drm/i915/i915_gpu_error.c
+> > +++ b/drivers/gpu/drm/i915/i915_gpu_error.c
+> > @@ -1058,9 +1058,9 @@ i915_vma_coredump_create(const struct intel_gt *gt,
+> >  
+> >  			drm_clflush_pages(&page, 1);
+> >  
+> > -			s = kmap(page);
+> > +			s = kmap_thread(page);
+> >  			ret = compress_page(compress, s, dst, false);
+> > -			kunmap(page);
+> > +			kunmap_thread(page);
+> >  
+> >  			drm_clflush_pages(&page, 1);
+> >  
+> > diff --git a/drivers/gpu/drm/i915/selftests/i915_perf.c b/drivers/gpu/drm/i915/selftests/i915_perf.c
+> > index c2d001d9c0ec..7f7ef2d056f4 100644
+> > --- a/drivers/gpu/drm/i915/selftests/i915_perf.c
+> > +++ b/drivers/gpu/drm/i915/selftests/i915_perf.c
+> > @@ -307,7 +307,7 @@ static int live_noa_gpr(void *arg)
+> >  	}
+> >  
+> >  	/* Poison the ce->vm so we detect writes not to the GGTT gt->scratch */
+> > -	scratch = kmap(ce->vm->scratch[0].base.page);
+> > +	scratch = kmap_thread(ce->vm->scratch[0].base.page);
+> >  	memset(scratch, POISON_FREE, PAGE_SIZE);
+> >  
+> >  	rq = intel_context_create_request(ce);
+> > @@ -405,7 +405,7 @@ static int live_noa_gpr(void *arg)
+> >  out_rq:
+> >  	i915_request_put(rq);
+> >  out_ce:
+> > -	kunmap(ce->vm->scratch[0].base.page);
+> > +	kunmap_thread(ce->vm->scratch[0].base.page);
+> >  	intel_context_put(ce);
+> >  out:
+> >  	stream_destroy(stream);
+> > diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+> > index 004344dce140..0aba0cac51e1 100644
+> > --- a/drivers/gpu/drm/radeon/radeon_ttm.c
+> > +++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+> > @@ -1013,11 +1013,11 @@ static ssize_t radeon_ttm_gtt_read(struct file *f, char __user *buf,
+> >  
+> >  		page = rdev->gart.pages[p];
+> >  		if (page) {
+> > -			ptr = kmap(page);
+> > +			ptr = kmap_thread(page);
+> >  			ptr += off;
+> >  
+> >  			r = copy_to_user(buf, ptr, cur_size);
+> > -			kunmap(rdev->gart.pages[p]);
+> > +			kunmap_thread(rdev->gart.pages[p]);
+> >  		} else
+> >  			r = clear_user(buf, cur_size);
+> >  
+> > -- 
+> > 2.28.0.rc0.12.gb6a658bd00c9
+> > 
+> 
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
