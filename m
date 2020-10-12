@@ -2,188 +2,148 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31B728C504
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Oct 2020 00:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB54428C538
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Oct 2020 01:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390876AbgJLWww (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Oct 2020 18:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390858AbgJLWwt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Oct 2020 18:52:49 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD75C0613D8
-        for <linux-scsi@vger.kernel.org>; Mon, 12 Oct 2020 15:52:41 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id c20so4511640pfr.8
-        for <linux-scsi@vger.kernel.org>; Mon, 12 Oct 2020 15:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=U71v0y9A/yeUSfRSWTIePZ0qq3wUA511pDnY3SEsJw8=;
-        b=Cgsf1xfUMJ+KXjKFl0ZJa+3x6PVE5yGgA2GzWSTNeGORC01xm5tQ+yZb0QWG7g2zYk
-         52kLG5zb7/cdvnOV6rS31FfGrQmC/VA7z8Q56A1/Hzqjb5dqybE+3K/cLOpZaJtjkRER
-         QqM46pMBXJfz1RLO/YKCdpa4xTxZ5qKkkN4XI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=U71v0y9A/yeUSfRSWTIePZ0qq3wUA511pDnY3SEsJw8=;
-        b=UMgXs8DPGPYka+JPLyMFx4RbAbexyRu87M4YsFScY2sjB+b0p8PrLywlG3I4/27oFE
-         VWF+MuurD01ynW2S8gy6TTEHCiXALoRAe178Jb2z/KjLZDmxwu6v+SsbKNDPgTYUsYnl
-         qcF51Ppc+SC/JGHtjEZI1X+w8zcGIwuU4bXyIYnv0aX9UuWXPvf3+dHjCG7SQO5aZHs0
-         4AigzJTS1B6puUN2ISstiqsihDxDVOCRHYSd0adnAxOxDydT1fbLiAmHEqZrQJJeLske
-         OSHD9qwQt5LwECFMZBFWZ2HdhKsfb0eXmO3Wmtbclxf4h72af3UbGNxwXIq3KzQC+X6e
-         uMJQ==
-X-Gm-Message-State: AOAM531IMbBzUbllndMS/cVNSlxbM67RW+Y9oJyVurZtYRdIn2yzOvhf
-        JWhapnCBJWLmyYMEKXEGELcDBR5Jd+yUHR/3FydygyWm6I7ElK0WmQX1LXVgREAPmW86pFDAyii
-        z/4uQvDM7hrY3jHoG7KEKJf89wiwbA2v0g3kCd2w+Vwto9/iJq5RpY07eNVu2tYK6Jb5pOD5cm0
-        jY4y4=
-X-Google-Smtp-Source: ABdhPJyjz17CgXY2xZhhJ8l6OYbTvTLX9BR3YbWB7AsL1ugvLX13mffvbNc+kI7AVDJI4mWxAPN4yg==
-X-Received: by 2002:a63:7843:: with SMTP id t64mr14907507pgc.117.1602543159906;
-        Mon, 12 Oct 2020 15:52:39 -0700 (PDT)
-Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x5sm21222287pfr.83.2020.10.12.15.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 15:52:38 -0700 (PDT)
-From:   James Smart <james.smart@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH v4 31/31] elx: efct: Tie into kernel Kconfig and build process
-Date:   Mon, 12 Oct 2020 15:51:47 -0700
-Message-Id: <20201012225147.54404-32-james.smart@broadcom.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201012225147.54404-1-james.smart@broadcom.com>
-References: <20201012225147.54404-1-james.smart@broadcom.com>
+        id S2389155AbgJLXbc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Oct 2020 19:31:32 -0400
+Received: from mga11.intel.com ([192.55.52.93]:32822 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726780AbgJLXb3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 12 Oct 2020 19:31:29 -0400
+IronPort-SDR: v8kc3Fio+LjPoyvQb3mY8ylUGqFR6CzeawpaCTXAqt1VAiQ6XIXdXgWe/N/tGX+W/WtGkwX1MB
+ Yyz30aCCeR2g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="162351722"
+X-IronPort-AV: E=Sophos;i="5.77,368,1596524400"; 
+   d="scan'208";a="162351722"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 16:31:28 -0700
+IronPort-SDR: tYujEEKuwB7pwkDEJNgfSBtOh7hwJ+YZEVhRvoIibttlBusG3o0pRElwiIGjx+C70rOitVdHyl
+ N8yvUi3stUVQ==
+X-IronPort-AV: E=Sophos;i="5.77,368,1596524400"; 
+   d="scan'208";a="313606559"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 16:31:27 -0700
+Date:   Mon, 12 Oct 2020 16:31:26 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, linux-aio@kvack.org,
+        linux-efi@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        target-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, samba-technical@lists.samba.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-afs@lists.infradead.org, cluster-devel@redhat.com,
+        linux-cachefs@redhat.com, intel-wired-lan@lists.osuosl.org,
+        xen-devel@lists.xenproject.org, linux-ext4@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, intel-gfx@lists.freedesktop.org,
+        linux-erofs@lists.ozlabs.org, reiserfs-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        io-uring@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, netdev@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH RFC PKS/PMEM 22/58] fs/f2fs: Utilize new kmap_thread()
+Message-ID: <20201012233126.GD2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009195033.3208459-23-ira.weiny@intel.com>
+ <20201009213434.GA839@sol.localdomain>
+ <20201010003954.GW20115@casper.infradead.org>
+ <20201010013036.GD1122@sol.localdomain>
+ <20201012065635.GB2046448@iweiny-DESK2.sc.intel.com>
+ <20201012161946.GA858@sol.localdomain>
+ <5d621db9-23d4-e140-45eb-d7fca2093d2b@intel.com>
+ <20201012164438.GA20115@casper.infradead.org>
+ <20201012195354.GC2046448@iweiny-DESK2.sc.intel.com>
+ <20201012200254.GB20115@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d3777205b1812792"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201012200254.GB20115@casper.infradead.org>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000d3777205b1812792
-Content-Transfer-Encoding: 8bit
+On Mon, Oct 12, 2020 at 09:02:54PM +0100, Matthew Wilcox wrote:
+> On Mon, Oct 12, 2020 at 12:53:54PM -0700, Ira Weiny wrote:
+> > On Mon, Oct 12, 2020 at 05:44:38PM +0100, Matthew Wilcox wrote:
+> > > On Mon, Oct 12, 2020 at 09:28:29AM -0700, Dave Hansen wrote:
+> > > > kmap_atomic() is always preferred over kmap()/kmap_thread().
+> > > > kmap_atomic() is _much_ more lightweight since its TLB invalidation is
+> > > > always CPU-local and never broadcast.
+> > > > 
+> > > > So, basically, unless you *must* sleep while the mapping is in place,
+> > > > kmap_atomic() is preferred.
+> > > 
+> > > But kmap_atomic() disables preemption, so the _ideal_ interface would map
+> > > it only locally, then on preemption make it global.  I don't even know
+> > > if that _can_ be done.  But this email makes it seem like kmap_atomic()
+> > > has no downsides.
+> > 
+> > And that is IIUC what Thomas was trying to solve.
+> > 
+> > Also, Linus brought up that kmap_atomic() has quirks in nesting.[1]
+> > 
+> > >From what I can see all of these discussions support the need to have something
+> > between kmap() and kmap_atomic().
+> > 
+> > However, the reason behind converting call sites to kmap_thread() are different
+> > between Thomas' patch set and mine.  Both require more kmap granularity.
+> > However, they do so with different reasons and underlying implementations but
+> > with the _same_ resulting semantics; a thread local mapping which is
+> > preemptable.[2]  Therefore they each focus on changing different call sites.
+> > 
+> > While this patch set is huge I think it serves a valuable purpose to identify a
+> > large number of call sites which are candidates for this new semantic.
+> 
+> Yes, I agree.  My problem with this patch-set is that it ties it to
+> some Intel feature that almost nobody cares about.
 
-This final patch ties the efct driver into the kernel Kconfig
-and build linkages in the drivers/scsi directory.
+I humbly disagree.  At this level the only thing this is tied to is the idea
+that there are additional memory protections available which can be enabled
+quickly on a per-thread basis.  PKS on Intel is but 1 implementation of that.
 
-Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: James Smart <james.smart@broadcom.com>
----
- drivers/scsi/Kconfig  | 2 ++
- drivers/scsi/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+Even the kmap code only has knowledge that there is something which needs to be
+done special on a devm page.
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 701b61ec76ee..f2d47bf55f97 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1170,6 +1170,8 @@ config SCSI_LPFC_DEBUG_FS
- 	  This makes debugging information from the lpfc driver
- 	  available via the debugfs filesystem.
- 
-+source "drivers/scsi/elx/Kconfig"
-+
- config SCSI_SIM710
- 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
- 	depends on EISA && SCSI
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index c00e3dd57990..844db573283c 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
- obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
- obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
- obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
-+obj-$(CONFIG_SCSI_EFCT)		+= elx/
- obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
- obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
- obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
--- 
-2.26.2
+>
+> Maybe we should
+> care about it, but you didn't try very hard to make anyone care about
+> it in the cover letter.
 
+Ok my bad.  We have customers who care very much about restricting access to
+the PMEM pages to prevent bugs in the kernel from causing permanent damage to
+their data/file systems.  I'll reword the cover letter better.
 
---000000000000d3777205b1812792
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> 
+> For a future patch-set, I'd like to see you just introduce the new
+> API.  Then you can optimise the Intel implementation of it afterwards.
+> Those patch-sets have entirely different reviewers.
 
-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
-AanDaJF6fE9TEzbfn5AWgVgHkbqS3VY3Gq05xkLhRugDQ60IGwT29K1B+wGfcujKSaalhQIDAQAB
-o4IBzzCCAcswDgYDVR0PAQH/BAQDAgWgMIGeBggrBgEFBQcBAQSBkTCBjjBNBggrBgEFBQcwAoZB
-aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NwZXJzb25hbHNpZ24yc2hhMmcz
-b2NzcC5jcnQwPQYIKwYBBQUHMAGGMWh0dHA6Ly9vY3NwMi5nbG9iYWxzaWduLmNvbS9nc3BlcnNv
-bmFsc2lnbjJzaGEyZzMwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwRAYDVR0fBD0w
-OzA5oDegNYYzaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc3BlcnNvbmFsc2lnbjJzaGEyZzMu
-Y3JsMCMGA1UdEQQcMBqBGGphbWVzLnNtYXJ0QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJnXsLYTAdBgNVHQ4EFgQUUXCHNA1n5KXj
-CXL1nHkJ8oKX5wYwDQYJKoZIhvcNAQELBQADggEBAGQDKmIdULu06w+bE15XZJOwlarihiP2PHos
-/4bNU3NRgy/tCQbTpJJr3L7LU9ldcPam9qQsErGZKmb5ypUjVdmS5n5M7KN42mnfLs/p7+lOOY5q
-ZwPZfsjYiUuaCWDGMvVpuBgJtdADOE1v24vgyyLZjtCbvSUzsgKKda3/Z/iwLFCRrIogixS1L6Vg
-2JU2wwirL0Sy5S1DREQmTMAuHL+M9Qwbl+uh/AprkVqaSYuvUzWFwBVgafOl2XgGdn8r6ubxSZhX
-9SybOi1fAXGcISX8GzOd85ygu/3dFqvMyCBpNke4vdweIll52KZIMyWji3y2PKJYfgqO+bxo7BAa
-ROYxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMCDH5i
-rbJ+nCPBux48wjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgjzQwAqIXLa3G+mea
-q9/nmA1CgwszfjpZSmLfHYupe2cwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0B
-CQUxDxcNMjAxMDEyMjI1MjQwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgB
-ZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcw
-CwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAEvoWCL/LvQLbh6gWq7vgSY8tZ80fkSF04oG
-hRSqIRsZ3p/KmJca6JOEVDeXY2YN+r4tGDVDzRSvi8N5xEkB/fjgNxB2nBT/exN/U7ONmNXlLFL+
-glnvaFQvsTP/z9atjvq50wqDnfCjXaqHufpzOCPrWbfE97kx1X2DvbXG2QHy11KlqXn40+rVRdbi
-bXfXhwpZaaUbkWWOjkro+e6JPWhi8oAXJVWD6ZUXNbTrTbxkIr7LFI7EiSnQ+d8vFzjtcFiWmwA1
-GaWPqaO3o9IEhF246EYSZ78cGKHrryWeECceRrIzqDFGF6wCH02rl3MaQGpJVEFPqS80EqVND0Cb
-pek=
---000000000000d3777205b1812792--
+I considered doing this.  But this seemed more logical because the feature is
+being driven by PMEM which is behind the kmap interface not by the users of the
+API.
+
+I can introduce a patch set with a kmap_thread() call which does nothing if
+that is more palatable but it seems wrong to me to do so.
+
+Ira
