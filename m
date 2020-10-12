@@ -2,73 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FC328B128
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Oct 2020 11:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09A328B87C
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Oct 2020 15:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729075AbgJLJLE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Oct 2020 05:11:04 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37740 "EHLO mx2.suse.de"
+        id S2388750AbgJLNwz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 12 Oct 2020 09:52:55 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:50040 "EHLO mx.metalurgs.lv"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728974AbgJLJLE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 12 Oct 2020 05:11:04 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0156DB0B7;
-        Mon, 12 Oct 2020 09:11:03 +0000 (UTC)
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Nilesh Javali <njavali@marvell.com>, Arun Easi <aeasi@marvell.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH] qla2xxx: Return EBUSY on fcport deletion
-Date:   Mon, 12 Oct 2020 11:11:00 +0200
-Message-Id: <20201012091100.55305-1-dwagner@suse.de>
-X-Mailer: git-send-email 2.16.4
+        id S1731773AbgJLNsB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 12 Oct 2020 09:48:01 -0400
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 06E1663911
+        for <linux-scsi@vger.kernel.org>; Mon, 12 Oct 2020 16:22:38 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 5163C67222
+        for <linux-scsi@vger.kernel.org>; Mon, 12 Oct 2020 16:08:02 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 254356F6B1; Mon, 12 Oct 2020 15:07:55 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.55])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 43ED15C05A;
+        Mon, 12 Oct 2020 15:02:09 +0300 (EEST)
+MIME-Version: 1.0
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Mon, 12 Oct 2020 09:02:02 -0300
+Reply-To: hmurrah39@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201012130143.254356F6B1@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan./n.,
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201012 notchecked
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When the fcport is about to be deleted we should return EBUSY instead
-of ENODEV. Only for EBUSY the request will be requeued in a multipath
-setup.
+Hello Dear,
 
-Also in case we have a valid qpair but the firmware has not yet
-started return EBUSY to avoid dropping the request.
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
 
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
-Hi,
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
 
-During port bounce and fail tests we observed that requests get
-dropped on a failing path because the driver returned ENODEV and thus
-the multipath code didn't requeue the request.
+Please get back to me if you are interested for more
+details.
 
-The tests were done with only the 'fcport && fcport->deleted' condition
-but Hannes suggested we might as well do the same for 'qpair &&
-!qpair->fw_started'.
-
-Thanks,
-Daniel
-
- drivers/scsi/qla2xxx/qla_nvme.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
-index 5cc1bbb1ed74..db8b802b147c 100644
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -555,8 +555,11 @@ static int qla_nvme_post_cmd(struct nvme_fc_local_port *lport,
- 
- 	fcport = qla_rport->fcport;
- 
--	if (!qpair || !fcport || (qpair && !qpair->fw_started) ||
-+	if ((qpair && !qpair->fw_started) ||
- 	    (fcport && fcport->deleted))
-+		return -EBUSY;
-+
-+	if (!qpair || !fcport)
- 		return rval;
- 
- 	vha = fcport->vha;
--- 
-2.16.4
-
+Yours faithfully,
+Hashim Bin 
