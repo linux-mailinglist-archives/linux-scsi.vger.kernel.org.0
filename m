@@ -2,34 +2,34 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8D928AD88
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Oct 2020 07:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725FC28AD89
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Oct 2020 07:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgJLFOd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Oct 2020 01:14:33 -0400
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:57157 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726651AbgJLFOd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Oct 2020 01:14:33 -0400
-IronPort-SDR: c3U/tGFRdEEWonE0t0Q7yTnOrzPOFM4uV4Jl2yeFdR3KugZX9LvHf43Jj4hZU3iLrdcTA8kri+
- eG6Bf/x0QzgNGixmA6PxCwg6dLSler1MwJ5ixGvPyDU91A9khWOVswbKSZFFmKc9YOXCiKc1mb
- NM4USPTbKpxu0YrYuN6MHHGjN0tQiUVVcII4dXj5aBza3XwbqvhxvR8S69AFMwGpZ/OBj78XJz
- VERa3ggMFfTS5b2brLlaNAyr1Y3ddqWUVq4+QFQL5QtLGKW6MSY1yFB2BXV0vmW/xZYT5g7ULN
- +74=
+        id S1726663AbgJLFOi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Oct 2020 01:14:38 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:37211 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726651AbgJLFOf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Oct 2020 01:14:35 -0400
+IronPort-SDR: CXK3T12kw6aPJluuEY5kpy0LhY6x2/ekUjEaHcqzWXgFVHVhClI7M1VG4Cjn/IiahEh4JW7yDP
+ pa8Ynb2FCBJjJjzFHJBQtBvYNBIN13QXYR1W4QB0K51NNQ4QDyVz/635cG0QKJbmBYCx5Xon6h
+ FCfG8GKMtw627zMi4+WZQj5rpnHb7TmeYI7zwDUSay3rBpPUzsEOdf7l0BpJDqABOBo2kpxfBY
+ vwFOCQQW3091fo7Y2jMVeyaflU6rlLIEswCoqnelxRpPzFZI0C/CdtxZbTqtsrIkdKhMGK8Ycl
+ fNQ=
 X-IronPort-AV: E=Sophos;i="5.77,365,1596524400"; 
-   d="scan'208";a="29517238"
+   d="scan'208";a="89863716"
 Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.23])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Oct 2020 22:14:32 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Oct 2020 22:14:34 -0700
 Received: from AVMBX3.microsemi.net (10.100.34.33) by AVMBX3.microsemi.net
  (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Sun, 11 Oct
- 2020 22:14:31 -0700
-Received: from bby1unixsmtp01.microsemi.net (10.180.100.98) by
+ 2020 22:14:33 -0700
+Received: from bby1unixsmtp01.microsemi.net (10.180.100.99) by
  avmbx3.microsemi.net (10.100.34.33) with Microsoft SMTP Server id 15.1.1979.3
- via Frontend Transport; Sun, 11 Oct 2020 22:14:31 -0700
+ via Frontend Transport; Sun, 11 Oct 2020 22:14:33 -0700
 Received: from localhost (bby1unixlb02.microsemi.net [10.180.100.121])
-        by bby1unixsmtp01.microsemi.net (Postfix) with ESMTP id 70155A09D5;
-        Sun, 11 Oct 2020 22:14:31 -0700 (PDT)
+        by bby1unixsmtp01.microsemi.net (Postfix) with ESMTP id 1FF8040047;
+        Sun, 11 Oct 2020 22:14:33 -0700 (PDT)
 From:   Viswas G <Viswas.G@microchip.com.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -37,9 +37,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <Viswas.G@microchip.com>,
         "peter chang --cc=yuuzheng @ google . com" <dpf@google.com>,
         <vishakhavc@google.com>, <radha@google.com>, <akshatzen@google.com>
-Subject: [PATCH 3/4] pm80xx: Avoid busywait in FW ready check
-Date:   Mon, 12 Oct 2020 10:54:14 +0530
-Message-ID: <20201012052415.18963-4-Viswas.G@microchip.com.com>
+Subject: [PATCH 4/4] pm80xx: make pm8001_mpi_set_nvmd_resp free of race condition
+Date:   Mon, 12 Oct 2020 10:54:15 +0530
+Message-ID: <20201012052415.18963-5-Viswas.G@microchip.com.com>
 X-Mailer: git-send-email 2.16.3
 In-Reply-To: <20201012052415.18963-1-Viswas.G@microchip.com.com>
 References: <20201012052415.18963-1-Viswas.G@microchip.com.com>
@@ -49,114 +49,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: akshatzen <akshatzen@google.com>
+From: yuuzheng <yuuzheng@google.com>
 
-Today in function check_fw_ready we do busy wait using udelay. Due to
-which CPU is not released and we see CPU need_resched failures.
+The use-after-free or null-pointer error occurs when the 251-byte
+response data are copied from IOMB buffer to response message
+buffer in function mp8001_mpi_set_nvmd_resp. pm8001_mpi_set_nvmd_resp
+is a function to process the response of command set_nvmd_data_resp.
+After sending the command set_nvmd_data, the caller begins to sleep by
+calling wait_for_complete() and wait for the wake-up from calling
+complete() in pm8001_mpi_set_nvmd_resp. In the current code,
+the memcpy for response message buffer occurs after calling complete().
+So, it is not protected by the use of wait_for_completion() and
+complete().
 
-Here busy waiting is not necessary since we are in process context and
-we should sleep instead. So to avoid busy waiting we are replacing
-udelay with msleep of 20 ms intervals to check for FW to become ready.
+Due to unexpected events (e.g., interrupt), if response buffer gets
+freed before memcpy, the use-after-free error will occur.
+To fix it, the complete() should be called after memcpy.
 
-It's verified that check_fw_ready today is not being used in interrupt
-context anywhere, hence it is safe to make this change.
-
-Tested:
-Installed the kernel and looked at dmesg for failures pertaining to
-need_resched and did not find them.
-
-Signed-off-by: akshatzen <akshatzen@google.com>
+Signed-off-by: yuuzheng <yuuzheng@google.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
 Signed-off-by: Radha Ramachandran <radha@google.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 21 +++++++++++----------
- drivers/scsi/pm8001/pm80xx_hwi.h |  6 ++++++
- 2 files changed, 17 insertions(+), 10 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 1ba93fb76093..24a4f6b9e79d 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1042,6 +1042,7 @@ static int mpi_init_check(struct pm8001_hba_info *pm8001_ha)
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index 9e9a546da959..2054c2b03d92 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -3279,10 +3279,15 @@ pm8001_mpi_get_nvmd_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 		pm8001_ha->memoryMap.region[NVMD].virt_ptr,
+ 		fw_control_context->len);
+ 	kfree(ccb->fw_control_context);
++	/* To avoid race condition, complete should be
++	 * called after the message is copied to
++	 * fw_control_context->usrAddr
++	 */
++	complete(pm8001_ha->nvmd_completion);
++	PM8001_MSG_DBG(pm8001_ha, pm8001_printk("Set nvm data complete!\n"));
+ 	ccb->task = NULL;
+ 	ccb->ccb_tag = 0xFFFFFFFF;
+ 	pm8001_tag_free(pm8001_ha, tag);
+-	complete(pm8001_ha->nvmd_completion);
+ }
  
- /**
-  * check_fw_ready - The LLDD check if the FW is ready, if not, return error.
-+ * This function sleeps hence it must not be used in atomic context.
-  * @pm8001_ha: our hba card information
-  */
- static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
-@@ -1052,16 +1053,16 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
- 	int ret = 0;
- 
- 	/* reset / PCIe ready */
--	max_wait_time = max_wait_count = 100 * 1000;	/* 100 milli sec */
-+	max_wait_time = max_wait_count = 5;	/* 100 milli sec */
- 	do {
--		udelay(1);
-+		msleep(FW_READY_INTERVAL);
- 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
- 	} while ((value == 0xFFFFFFFF) && (--max_wait_count));
- 
- 	/* check ila status */
--	max_wait_time = max_wait_count = 1000 * 1000;	/* 1000 milli sec */
-+	max_wait_time = max_wait_count = 50;	/* 1000 milli sec */
- 	do {
--		udelay(1);
-+		msleep(FW_READY_INTERVAL);
- 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
- 	} while (((value & SCRATCH_PAD_ILA_READY) !=
- 			SCRATCH_PAD_ILA_READY) && (--max_wait_count));
-@@ -1074,9 +1075,9 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
- 	}
- 
- 	/* check RAAE status */
--	max_wait_time = max_wait_count = 1800 * 1000;	/* 1800 milli sec */
-+	max_wait_time = max_wait_count = 90;	/* 1800 milli sec */
- 	do {
--		udelay(1);
-+		msleep(FW_READY_INTERVAL);
- 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
- 	} while (((value & SCRATCH_PAD_RAAE_READY) !=
- 				SCRATCH_PAD_RAAE_READY) && (--max_wait_count));
-@@ -1089,9 +1090,9 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
- 	}
- 
- 	/* check iop0 status */
--	max_wait_time = max_wait_count = 600 * 1000;	/* 600 milli sec */
-+	max_wait_time = max_wait_count = 30;	/* 600 milli sec */
- 	do {
--		udelay(1);
-+		msleep(FW_READY_INTERVAL);
- 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
- 	} while (((value & SCRATCH_PAD_IOP0_READY) != SCRATCH_PAD_IOP0_READY) &&
- 			(--max_wait_count));
-@@ -1107,9 +1108,9 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
- 	if ((pm8001_ha->chip_id != chip_8008) &&
- 			(pm8001_ha->chip_id != chip_8009)) {
- 		/* 200 milli sec */
--		max_wait_time = max_wait_count = 200 * 1000;
-+		max_wait_time = max_wait_count = 10;
- 		do {
--			udelay(1);
-+			msleep(FW_READY_INTERVAL);
- 			value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
- 		} while (((value & SCRATCH_PAD_IOP1_READY) !=
- 				SCRATCH_PAD_IOP1_READY) && (--max_wait_count));
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
-index 701951a0f715..ec48bc276de6 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.h
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.h
-@@ -1639,3 +1639,9 @@ typedef struct SASProtocolTimerConfig SASProtocolTimerConfig_t;
- 
- #define MEMBASE_II_SHIFT_REGISTER       0x1010
- #endif
-+
-+/**
-+ * As we know sleep (1~20) ms may result in sleep longer than ~20 ms, hence we
-+ * choose 20 ms interval.
-+ */
-+#define FW_READY_INTERVAL	20
+ int pm8001_mpi_local_phy_ctl(struct pm8001_hba_info *pm8001_ha, void *piomb)
 -- 
 2.16.3
 
