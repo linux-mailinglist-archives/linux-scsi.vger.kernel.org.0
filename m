@@ -2,94 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E0D28BBE3
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Oct 2020 17:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC3528BD3F
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Oct 2020 18:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389874AbgJLPaM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Oct 2020 11:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388984AbgJLPaM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Oct 2020 11:30:12 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51955C0613D0
-        for <linux-scsi@vger.kernel.org>; Mon, 12 Oct 2020 08:30:12 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id r24so9343106vsp.8
-        for <linux-scsi@vger.kernel.org>; Mon, 12 Oct 2020 08:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=tRCUoyf4i6bdg+Yqm1GLr5U7/r2o74dLV242KpQW+GY=;
-        b=C6bMm0pKoMvKpm/LMX4v738MEqz1E+NDUsDbuQu+428S5wR2e+A5tXHnMCTOPrYdIF
-         V2lkwCsw4K7DnDRurrnv2IcNN4wPmNiUZqIaOTOG4j7ry+2Pa4gn0D0Q5jc0fgY48otk
-         kBiN0SgKKQkf/ftwRJrT126KrmZSfBYFNb8tNs9ifOaL2adlfFEqnJ24lPc0HQjmAq+A
-         UQRSVP9JvQFS8cvaa052shC/oenF0zvb9VXDyk/lEua2ShDxCPsbpWNAD7HLsUcLRfF/
-         lNB+iljkSxfy56561qGjwx+ZESZ7sMW1aysPi/lwsLe289rjm7kcFrKA+zZet7qdldKf
-         luhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=tRCUoyf4i6bdg+Yqm1GLr5U7/r2o74dLV242KpQW+GY=;
-        b=M55EUYFaSS8i9n2x63tmjBGG2NPYz6EJmGK4NtEUHN5Exrm7mPQ5az0gshr6VnoS0n
-         lPy/lJopcRygpzS5dLmVUQOEqN13UJHbNTTSkqhM3Qnv6AQkAQ8ZatryFFt0D7vMegw+
-         J8GpFvEczuUIDJAg2lVu9VZO1Lxt7nNAeiIkcPeTOUz3auz2+wQ1qaBsVN0gvdrQvlY6
-         d4wkzXEyCPmUGO7W8Wzvb6HF4f5Hp9/0JndO2ZhFCqa/0G/XjVaYFLXDnkrOIYemO1cr
-         ghccdKcnyNgeElhNxgH0yILXkfsKAlE4EyQkE8+ytLGpY7GzaQwJXF9DQqNUtMu8CMC5
-         4QjA==
-X-Gm-Message-State: AOAM530UfWQUePvbRUVKpwuvx2aubHDhf40qekiAu3SOinFTfIORtFqE
-        vgpzgGbZ9kqRwQTO8d0bM6VwTFXwcDm5tmxLGuM=
-X-Google-Smtp-Source: ABdhPJyjUrNXaMLFXLW99cwuFontcnHGbtZeDaoKYsEoVp9VEPLdQz/fc5oRd7wM2VntIbx0nTvI/MIIjWxneR9ko3o=
-X-Received: by 2002:a67:d090:: with SMTP id s16mr14139876vsi.0.1602516611383;
- Mon, 12 Oct 2020 08:30:11 -0700 (PDT)
+        id S2390427AbgJLQHW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Oct 2020 12:07:22 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:25870 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389068AbgJLQHV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 12 Oct 2020 12:07:21 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09CG5GIR031007;
+        Mon, 12 Oct 2020 09:07:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=pfpt0220; bh=BP3BVCMCCqHQdQd5oJqR+pD+fhRIgp9mzZVOt3kVJgk=;
+ b=f3r+dEZ0zfLT/4kck3qoFrCNcHgaIK4EFSZ3RIVsxkLGmnzlo892gVQstvf0W1NvmCPE
+ FrvhauXfGHpmnK5BwPl3Zmm0UE3TK/Bj+P6GCRr6Hp6QXTHuB1cYpzIDuWLSNgLpp+Qz
+ iC2bsB82HokWvhtfh2kCV8febs9M1akaS8ye43L/oJ6zWmTsbfjr6tkbE0UTn1+9YxVu
+ +//W8TBcRiVRZ/SekmSRZO7QE04fs565EMHxb17HaknzKw6PQPBlwOc2mle3RVpUvzfv
+ 91MHy/gbR/XLFsFe3vBR62Ac+1VFUqQHyUdjjwEQY9ljahnAURGrcfY0MywbGXVZlHDo wg== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0b-0016f401.pphosted.com with ESMTP id 343cfj6bdp-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 12 Oct 2020 09:07:18 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 12 Oct
+ 2020 09:07:17 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 12 Oct
+ 2020 09:07:16 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 12 Oct 2020 09:07:16 -0700
+Received: from irv1user01.caveonetworks.com (unknown [10.104.116.179])
+        by maili.marvell.com (Postfix) with ESMTP id 48F643F703F;
+        Mon, 12 Oct 2020 09:07:16 -0700 (PDT)
+Received: from localhost (aeasi@localhost)
+        by irv1user01.caveonetworks.com (8.14.4/8.14.4/Submit) with ESMTP id 09CG7GPx003221;
+        Mon, 12 Oct 2020 09:07:16 -0700
+X-Authentication-Warning: irv1user01.caveonetworks.com: aeasi owned process doing -bs
+Date:   Mon, 12 Oct 2020 09:07:15 -0700
+From:   Arun Easi <aeasi@marvell.com>
+X-X-Sender: aeasi@irv1user01.caveonetworks.com
+To:     Daniel Wagner <dwagner@suse.de>
+CC:     Nilesh Javali <njavali@marvell.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] qla2xxx: Return EBUSY on fcport deletion
+In-Reply-To: <20201012091100.55305-1-dwagner@suse.de>
+Message-ID: <alpine.LRH.2.21.9999.2010120904230.28578@irv1user01.caveonetworks.com>
+References: <20201012091100.55305-1-dwagner@suse.de>
+User-Agent: Alpine 2.21.9999 (LRH 334 2019-03-29)
 MIME-Version: 1.0
-Received: by 2002:a67:24c5:0:0:0:0:0 with HTTP; Mon, 12 Oct 2020 08:30:11
- -0700 (PDT)
-Reply-To: revrobertwilliams222@gmail.com
-From:   Rev Robert Williams <godwichukwu17@gmail.com>
-Date:   Mon, 12 Oct 2020 16:30:11 +0100
-Message-ID: <CAC2WoK2fu0430u_PJoXhxUqHnx_=ryJm4W27_VerUVMYvMeJZw@mail.gmail.com>
-Subject: Your Payment is Ready.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="US-ASCII"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-12_12:2020-10-12,2020-10-12 signatures=0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ATTENTION
+On Mon, 12 Oct 2020, 2:11am, Daniel Wagner wrote:
 
-I AM REV.ROBERT WILLIAM, DIRECTOR CASH PROCESSING UNIT,UNITED BANK
-FOR AFRICA [UBA] THE ONLY BANK APPOINTED BY THE O.A.U MEMBERS LED BY
-PRESIDENT JOHN KUFFOR. DUE TO ON GOING FRAUD IN WEST AFRICA  COUNTRIES
-WHERE SOME INNOCENT BENEFICIARIES WERE ASKED TO PAY IN ADVANCE BEFORE
-RECEIVING THEIR MONEY.
+> When the fcport is about to be deleted we should return EBUSY instead
+> of ENODEV. Only for EBUSY the request will be requeued in a multipath
+> setup.
+> 
+> Also in case we have a valid qpair but the firmware has not yet
+> started return EBUSY to avoid dropping the request.
+> 
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+> Hi,
+> 
+> During port bounce and fail tests we observed that requests get
+> dropped on a failing path because the driver returned ENODEV and thus
+> the multipath code didn't requeue the request.
+> 
+> The tests were done with only the 'fcport && fcport->deleted' condition
+> but Hannes suggested we might as well do the same for 'qpair &&
+> !qpair->fw_started'.
+> 
+> Thanks,
+> Daniel
+> 
+>  drivers/scsi/qla2xxx/qla_nvme.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
+> index 5cc1bbb1ed74..db8b802b147c 100644
+> --- a/drivers/scsi/qla2xxx/qla_nvme.c
+> +++ b/drivers/scsi/qla2xxx/qla_nvme.c
+> @@ -555,8 +555,11 @@ static int qla_nvme_post_cmd(struct nvme_fc_local_port *lport,
+>  
+>  	fcport = qla_rport->fcport;
+>  
+> -	if (!qpair || !fcport || (qpair && !qpair->fw_started) ||
+> +	if ((qpair && !qpair->fw_started) ||
+>  	    (fcport && fcport->deleted))
+> +		return -EBUSY;
+> +
+> +	if (!qpair || !fcport)
+>  		return rval;
+>  
+>  	vha = fcport->vha;
+> 
 
-THE ABOVE AFRICA UNION AND IMF HELD A MEETING IN BENIN REPUBLIC AND
-RESOLVED TO PAY ALL BENEFICIARIES IN CASH THROUGH A DIPLOMATIC COURIER
-SERVICE. THE UNION HAS APPROVED AND APPOINTED UNITED BANK FOR AFRICA
-TO PAY YOU THE SUM OF ($1,500,000.00)BUT DUE TO ONGOING FRAUD IN WEST
-AFRICA, WE HAVE TAKEN (US$5,000) FROM YOUR FUND FOR HANDLING CHARGES.
-THEREFORE THE AMOUNT YOU WILL BE EXPECTING FROM THE DIPLOMAT IS
-$1,495,000.00) INSTEAD OF ($1.5M).
+This does not appear to be cut against the latest for-next/staging; "rval" 
+is not used there for the initial set of returns.
 
+Anyway, returning EBUSY is the right way to go.
 
-WE ALSO UNDERSTOOD FROM THE FILE THAT YOU HAVE BEEN DEALING WITH THE
-FRAUDSTER WHO HAS BEEN EXTORTING MONEY FROM YOU, MY DEAR,AS A SENIOR
-BANKER, CONTROLLING THIS CASH PAYMENT NOW,
-I ADVISE YOU NOT TO WASTE YOUR HARD EARNING MONEY BY PAYING ANY BODY
-IN ADVANCE AGAIN, AND IF YOU JUST FOLLOW MY INSTRUCTION YOU WILL
-RECEIVE YOUR MONEY IN THREE DAYS TIME.
-
-YOUR FUND WILL BE PACKAGED IN A CONSIGNMENT BOX AND SHIPPED THROUGH
-LICENSED DIPLOMATIC COURIER SERVICE. I WILL ALSO SEND THE PICTURE OF
-THE BOX BY ATTACHMENT TO YOU TO SEE HOW THE MONEY IS PACKAGED, I WILL
-SEND YOU MORE MAILS TO GIVE YOU MORE INFORMATION WITH MY INTERNATIONAL
-PASSPORT FOR YOU TO KNOW THE GENUINE OF THIS TRANSACTION. THEREFORE,
-QUICKLY FORWARD YOUR FULL NAME.......... HOME ADDRESS..........
-AND DIRECT PHONE...... NUMBER ........TO ME AT
-(revrobertwilliams222@gmail.com )
-FOR IMMEDIATE DELIVERY.
-REV.ROBERT WILLIAM
-DIRECTOR CASH PROCESSING UNIT
-UNITED BANK FOR AFRICA
-E-mail:::::: (revrobertwilliams222@gmail.com)
+Regards,
+-Arun
