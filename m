@@ -2,88 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7713C28D67A
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Oct 2020 00:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0DC28D6A3
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Oct 2020 00:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728852AbgJMWnR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Oct 2020 18:43:17 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:34260 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbgJMWnQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Oct 2020 18:43:16 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMYZ2p023515;
-        Tue, 13 Oct 2020 22:43:12 GMT
+        id S1729401AbgJMWpP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Oct 2020 18:45:15 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:42964 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729386AbgJMWpP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Oct 2020 18:45:15 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMaCZw072213;
+        Tue, 13 Oct 2020 22:45:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=b8+BtDvdnvqRGyviSgmSRydVjoh1Tbhgum73s6i2O4w=;
- b=Pkup2MgdBgYdCnXqmsz62KHr+rDNs9izL61DuP2BZq1zUMfK9emXI7iGYY5x32MPJQYW
- hG/N4gmMmgvelE4dYKIXzKNBTP0Y1DMXXKk6lFAnDHJ2gPz+jacknAShI6s7+03Z30z6
- O4GBb0KB/EYYqOp72AP6HnS07QgWchLlJ3zFBGqWyE7GBr6UDpWsAuJV2U2Zci7h2fed
- G9a7Az2RzMQ3VGxDih9RQn4YbOQVr2gMJbFsMchExZg9qTaEVcsotK1waqHj9VL0IIO/
- +t0JP7mGodm42XgbqhyBkz/qUm1clsbUchYtBuT6rf6gC+Fe3AUYl1yu9hY8mm+6bh3W Sg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 3434wkmr7d-1
+ bh=oHzB0ScHQDIM4C4XfbPqB9kB+1m+Sa/o+eLjBew+oF0=;
+ b=qTOzj/YonOVWV0fsC1OwP01kOFzaVLF7Ms6TE5aYaPIPqlfsFENrkPVsnEBJgKagYBLG
+ pFxERO7+RwgMMuoog1av5hhtyQwLHbyJJFY2tV5v9vNDo8qEeE+Ewkv5OYW/Mbd514Rx
+ CNbllUuRsWb5bPJpe0iW08I87fjqki+3tVaZmgFYM40/5tk+aaRV0AlZCDc24xPjIBf8
+ 86nzb/ZOFftjzmWSTVJcmR5vwlr/0OplDiMSte/+14/vk81gB298KCAZe7kNCcdBdK21
+ 5Yhbk9P0pldcmPnmWBw19R6GuvcXkp8hygUd1cmSnCNaLuG2F9p5uwfnD34qrTjiGGfS GQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 343vaeb2hm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 13 Oct 2020 22:43:12 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMZWWa162453;
-        Tue, 13 Oct 2020 22:43:11 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 344by2v0b6-1
+        Tue, 13 Oct 2020 22:45:12 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMaX2g049180;
+        Tue, 13 Oct 2020 22:43:12 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 343pvx1sn0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Oct 2020 22:43:11 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09DMhAIN002550;
-        Tue, 13 Oct 2020 22:43:10 GMT
+        Tue, 13 Oct 2020 22:43:12 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09DMhB9T005704;
+        Tue, 13 Oct 2020 22:43:11 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
         with ESMTP ; Tue, 13 Oct 2020 15:43:10 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Arun Easi <aeasi@marvell.com>, Daniel Wagner <dwagner@suse.de>,
-        Nilesh Javali <njavali@marvell.com>
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] qla2xxx: Do not consume srb greedily
-Date:   Tue, 13 Oct 2020 18:42:47 -0400
-Message-Id: <160262862432.3018.12930536900869421478.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 01/10] scsi: don't export scsi_device_from_queue
+Date:   Tue, 13 Oct 2020 18:42:48 -0400
+Message-Id: <160262862430.3018.1460317399464810054.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200929073802.18770-1-dwagner@suse.de>
-References: <20200929073802.18770-1-dwagner@suse.de>
+In-Reply-To: <20201005084130.143273-2-hch@lst.de>
+References: <20201005084130.143273-1-hch@lst.de> <20201005084130.143273-2-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9773 signatures=668681
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=965 spamscore=0
- suspectscore=0 mlxscore=0 malwarescore=0 adultscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010130158
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010130158
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9773 signatures=668681
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0 clxscore=1015
- spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0 mlxlogscore=982
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
+ mlxscore=0 suspectscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2010130158
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 29 Sep 2020 09:38:02 +0200, Daniel Wagner wrote:
+On Mon, 5 Oct 2020 10:41:21 +0200, Christoph Hellwig wrote:
 
-> qla2xx_process_get_sp_from_handle() will clear the slot which the
-> current srb is stored. So this function has a side effect. Therefore,
-> we can't use it in qla24xx_process_mbx_iocb_response() to check
-> for consistency and later again in qla24xx_mbx_iocb_entry().
-> 
-> Let's move the consistency check directly into
-> qla24xx_mbx_iocb_entry() and avoid the double call or any open coding
-> of the qla2xx_process_get_sp_from_handle() functionality.
+> This function is only used by code built into scsi_mod.ko.
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: qla2xxx: Do not consume srb greedily
-      https://git.kernel.org/mkp/scsi/c/657ed8a8a61b
+[01/10] scsi: core: Don't export scsi_device_from_queue()
+        https://git.kernel.org/mkp/scsi/c/2ba87c43872f
+[02/10] scsi: core: Remove scsi_init_cmd_errh
+        https://git.kernel.org/mkp/scsi/c/3a8dc5bbc8c0
+[03/10] scsi: core: Move command size detection out of the fast path
+        https://git.kernel.org/mkp/scsi/c/2ceda20f0a99
+[05/10] scsi: core: Use rq_dma_dir in scsi_setup_cmnd()
+        https://git.kernel.org/mkp/scsi/c/40b93836a136
+[06/10] scsi: core: Rename scsi_prep_state_check() to scsi_device_state_check()
+        https://git.kernel.org/mkp/scsi/c/822bd2db798b
+[07/10] scsi: core: Rename scsi_mq_prep_fn() to scsi_prepare_cmd()
+        https://git.kernel.org/mkp/scsi/c/5843cc3d5acd
+[08/10] scsi: core: Clean up allocation and freeing of sgtables
+        https://git.kernel.org/mkp/scsi/c/7007e9dd5676
+[09/10] scsi: core: Remove scsi_setup_cmnd() and scsi_setup_fs_cmnd()
+        https://git.kernel.org/mkp/scsi/c/74e5e6c1b18c
+[10/10] scsi: core: Only start the request just before dispatching
+        https://git.kernel.org/mkp/scsi/c/ed7fb2d018fd
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
