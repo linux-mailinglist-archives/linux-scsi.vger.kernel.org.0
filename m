@@ -2,90 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC33828D69B
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Oct 2020 00:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7713C28D67A
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Oct 2020 00:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729339AbgJMWoU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Oct 2020 18:44:20 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:34362 "EHLO
+        id S1728852AbgJMWnR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Oct 2020 18:43:17 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:34260 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728927AbgJMWnY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Oct 2020 18:43:24 -0400
+        with ESMTP id S1725935AbgJMWnQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Oct 2020 18:43:16 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMYPqA023467;
-        Tue, 13 Oct 2020 22:43:15 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMYZ2p023515;
+        Tue, 13 Oct 2020 22:43:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=fpKfILKysPwGf+lx41VOH7aScruYbGsVss0CW+qCs2s=;
- b=RDDRJrx3NfcS9ITQ8QYkMGCUhgVkueMi6iEvb8g7vcT9VFJTlmbJfF0OBKXsH66/P+cM
- ra0j0xnw+54FgnCwhWauQRMeJSBUHODE95D5RIR49q16W2uLIT1cgf227FtwDzsDTU8R
- AhD2WAv4WvbfsyVdSdOnZBisPzl++2yR32yLeY9NSodsn+RLMMg3Qi/6ekeYi2LXAHdB
- ApMA0OjCGOFGM8tw1YA6NIJzgoj8AEa7yNiJ68eFzwUG8nCLW2cXBzfCa6WrOUJhsvtT
- AcDsxwFsMDLYjhEACK+ChWOiaNn+ZPvA6J6PwnsyWOGKT+KpPJ2XhWsrLJ55Ywrp+1aq Bw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 3434wkmr7g-1
+ bh=b8+BtDvdnvqRGyviSgmSRydVjoh1Tbhgum73s6i2O4w=;
+ b=Pkup2MgdBgYdCnXqmsz62KHr+rDNs9izL61DuP2BZq1zUMfK9emXI7iGYY5x32MPJQYW
+ hG/N4gmMmgvelE4dYKIXzKNBTP0Y1DMXXKk6lFAnDHJ2gPz+jacknAShI6s7+03Z30z6
+ O4GBb0KB/EYYqOp72AP6HnS07QgWchLlJ3zFBGqWyE7GBr6UDpWsAuJV2U2Zci7h2fed
+ G9a7Az2RzMQ3VGxDih9RQn4YbOQVr2gMJbFsMchExZg9qTaEVcsotK1waqHj9VL0IIO/
+ +t0JP7mGodm42XgbqhyBkz/qUm1clsbUchYtBuT6rf6gC+Fe3AUYl1yu9hY8mm+6bh3W Sg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 3434wkmr7d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 13 Oct 2020 22:43:15 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMZDIM155592;
-        Tue, 13 Oct 2020 22:43:15 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 343puyjx0f-1
+        Tue, 13 Oct 2020 22:43:12 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09DMZWWa162453;
+        Tue, 13 Oct 2020 22:43:11 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 344by2v0b6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Oct 2020 22:43:14 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09DMh9io005685;
-        Tue, 13 Oct 2020 22:43:09 GMT
+        Tue, 13 Oct 2020 22:43:11 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09DMhAIN002550;
+        Tue, 13 Oct 2020 22:43:10 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 13 Oct 2020 15:43:09 -0700
+        with ESMTP ; Tue, 13 Oct 2020 15:43:10 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Colin King <colin.king@canonical.com>,
-        linux-scsi@vger.kernel.org
+To:     Arun Easi <aeasi@marvell.com>, Daniel Wagner <dwagner@suse.de>,
+        Nilesh Javali <njavali@marvell.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] scsi: sym53c8xx_2: fix sizeof mismatch
-Date:   Tue, 13 Oct 2020 18:42:46 -0400
-Message-Id: <160262862435.3018.4642298428321942870.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] qla2xxx: Do not consume srb greedily
+Date:   Tue, 13 Oct 2020 18:42:47 -0400
+Message-Id: <160262862432.3018.12930536900869421478.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201006110252.536641-1-colin.king@canonical.com>
-References: <20201006110252.536641-1-colin.king@canonical.com>
+In-Reply-To: <20200929073802.18770-1-dwagner@suse.de>
+References: <20200929073802.18770-1-dwagner@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9773 signatures=668681
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
- adultscore=0 suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010130158
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=965 spamscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010130158
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9773 signatures=668681
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 mlxscore=0
  malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0 clxscore=1015
- spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0 mlxlogscore=999
+ spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0 mlxlogscore=982
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2010130158
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 6 Oct 2020 12:02:52 +0100, Colin King wrote:
+On Tue, 29 Sep 2020 09:38:02 +0200, Daniel Wagner wrote:
 
-> An incorrect sizeof is being used, struct sym_ccb ** is not correct,
-> it should be struct sym_ccb *. Note that since ** is the same size as
-> * this is not causing any issues.  Improve this fix by using the
-> idiom sizeof(*np->ccbh) as this allows one to not even reference the
-> type of the pointer.
+> qla2xx_process_get_sp_from_handle() will clear the slot which the
+> current srb is stored. So this function has a side effect. Therefore,
+> we can't use it in qla24xx_process_mbx_iocb_response() to check
+> for consistency and later again in qla24xx_mbx_iocb_entry().
 > 
-> [ Note: this is an ancient 2005 buglet, the sha is from the
->   tglx/history repo ]
+> Let's move the consistency check directly into
+> qla24xx_mbx_iocb_entry() and avoid the double call or any open coding
+> of the qla2xx_process_get_sp_from_handle() functionality.
 
 Applied to 5.10/scsi-queue, thanks!
 
-[1/1] scsi: sym53c8xx_2: Fix sizeof() mismatch
-      https://git.kernel.org/mkp/scsi/c/1725ba8d6ff1
+[1/1] scsi: qla2xxx: Do not consume srb greedily
+      https://git.kernel.org/mkp/scsi/c/657ed8a8a61b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
