@@ -2,41 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 320EE28ECF7
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Oct 2020 08:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808F228E895
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Oct 2020 23:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727866AbgJOGOb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Oct 2020 02:14:31 -0400
-Received: from mail.hanmingtech.com ([122.193.27.132]:46292 "EHLO
-        mail.hanmingtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbgJOGOb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Oct 2020 02:14:31 -0400
-Received: from User (unknown [64.235.38.47])
-        by mail.hanmingtech.com (Postfix) with ESMTPA id 9600E4543D14;
-        Thu, 15 Oct 2020 03:26:03 +0800 (CST)
-Reply-To: <marcarmenguty@yandex.com>
-From:   "Mariacarmen Gutierrez" <fernrodyup12@gmx.es>
-Subject: PLEASE TAKE NOTE!
-Date:   Wed, 14 Oct 2020 12:26:06 -0700
+        id S1726528AbgJNV5K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Oct 2020 17:57:10 -0400
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:32791 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726035AbgJNV5K (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 14 Oct 2020 17:57:10 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Oct 2020 17:57:09 EDT
+Received: from [192.168.0.3] (ip5f5af44e.dynamic.kabel-deutschland.de [95.90.244.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 750442064621D;
+        Wed, 14 Oct 2020 23:47:06 +0200 (CEST)
+To:     Don Brace <don.brace@microsemi.com>
+Cc:     "James E. J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, it+linux-scsi@molgen.mpg.de
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Linux 5.9: smartpqi: controller is offline: status code 0x6100c
+Message-ID: <bc10fad1-2353-7326-c782-7a45882fd791@molgen.mpg.de>
+Date:   Wed, 14 Oct 2020 23:47:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20201014192603.9600E4543D14@mail.hanmingtech.com>
-To:     undisclosed-recipients:;
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello friend!
+Dear Linux folks,
 
-I would like to contact you personally for an important proposal that could of interest to you.
-I send this email only to know if this email address is functional.
-I have something very important to discuss with you. Contact me for details by:  Email: fernrodyup1215@aol.com with your direct contacts.
 
-Kind regards.
-Maria Carmen Gutierrez
+With Linux 5.9 and
+
+
+     $ lspci -nn -s 89:
+     89:00.0 Serial Attached SCSI controller [0107]: Adaptec Smart 
+Storage PQI 12G SAS/PCIe 3 [9005:028f] (rev 01)
+     $ more 
+/sys/devices/pci0000:88/0000:88:00.0/0000:89:00.0/host15/scsi_host/host15/driver_version
+     1.2.8-026
+     $ more 
+/sys/devices/pci0000:88/0000:88:00.0/0000:89:00.0/host15/scsi_host/host15/firmware_version
+     2.62-0
+
+the controller went offline with status code 0x6100c.
+
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: smartpqi 0000:89:00.0: controller is offline: status code 0x6100c
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: smartpqi 0000:89:00.0: controller offline
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:2:0: [sdu] tag#709 FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=6s
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:15:0: [sdah] tag#274 FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=6s
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:4:0: [sdw] tag#516 FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=6s
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:4:0: [sdw] tag#516 CDB: Write(10) 2a 00 0d e6 9e 88 00 00 01 00
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: blk_update_request: I/O error, dev sdw, sector 1865741376 op 0x1:(WRITE) flags 0x0 phys_seg 1 prio class 0
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:0:0: [sds] tag#529 FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=6s
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:0:0: [sds] tag#529 CDB: Write(10) 2a 00 29 4e e8 ff 00 00 01 00
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: blk_update_request: I/O error, dev sds, sector 5544298488 op 0x1:(WRITE) flags 0x0 phys_seg 1 prio class 0
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:0:0: [sds] tag#627 FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=6s
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:0:0: [sds] tag#627 CDB: Read(10) 28 00 5d df 2c 04 00 00 04 00
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: blk_update_request: I/O error, dev sds, sector 12599255072 op 0x0:(READ) flags 0x1000 phys_seg 1 prio class
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:5:0: [sdx] tag#567 FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=6s
+> Oct 14 14:54:01 done.molgen.mpg.de kernel: sd 15:0:5:0: [sdx] tag#567 CDB: Write(10) 2a 00 21 4e ce 04 00 00 04 00
+
+How can the status code 0x6100c be deciphered?
+
+
+Kind regards,
+
+Paul
