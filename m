@@ -2,67 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF6928F900
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Oct 2020 20:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B192D28F0D6
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Oct 2020 13:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391273AbgJOS5o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Oct 2020 14:57:44 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:43262 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391266AbgJOS5o (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 15 Oct 2020 14:57:44 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 1F60A204238;
-        Thu, 15 Oct 2020 20:57:41 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id j+hTVM7Rc0O6; Thu, 15 Oct 2020 20:57:39 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
-        by smtp.infotech.no (Postfix) with ESMTPA id 4EC58204193;
-        Thu, 15 Oct 2020 20:57:38 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     martin.petersen@oracle.com, axboe@kernel.dk, bvanassche@acm.org
-Subject: [RESEND PATCH] sgl_alloc_order: fix memory leak
-Date:   Thu, 15 Oct 2020 14:57:35 -0400
-Message-Id: <20201015185735.5480-1-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727148AbgJOLUz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Oct 2020 07:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbgJOLUz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Oct 2020 07:20:55 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412DCC0613D2
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Oct 2020 04:20:55 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id y14so1696060pgf.12
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Oct 2020 04:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=areca-com-tw.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:date:mime-version
+         :content-transfer-encoding;
+        bh=h3tRYVbrXJtU2QrbFsBU9Spd181m5OYM6XKvEjWUj7o=;
+        b=QIt/mP8DYXc3aZ9StyaAf2nXjupmpSXJxoytuCIbUXNsgENvncCxtqnJ4375DhrhXx
+         EvL/5yz9peW8cIZdmOHclXRu7fLxJsjlN8cGjG1jPde7jP8CFUQk9eovln5n8Nj9VGrr
+         rh2CIZQxIh/ecTcr5BFF5Rrw8+QNZvjClVcYhGHf2cW1JObwlI/XExq6jAlRsCN0B7r9
+         c5X9bQAIwy0lOPAHZ0sMtnVpXr8acL1jKEtLCDmup52Z9pmxAXd3R12PYi/r9QgzcDzm
+         JTQQnPyaTMlDOiBFEPiOTg7G9dzyk3MXoAnvZqqfT274OcFfZPnLX4m/0f97rb1Uyg/r
+         itnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:date:mime-version
+         :content-transfer-encoding;
+        bh=h3tRYVbrXJtU2QrbFsBU9Spd181m5OYM6XKvEjWUj7o=;
+        b=l+X3uxCtk1WNeaUVzUDLMEk3TIjEiNQhIMG1aruxwAgjkefKZIsLcfH3D23UJ7hoId
+         ZH25F4ecgtbPXVtc9lr1tdnG8Yn8y2+QGvYlIMRYtFOeAUw9pK/ovg/EaFqIZ/957xiD
+         a03zsq85YkbMKfkRar8EFBwhaZBUxDjpoNtlWhS4YiaqAupqcrDm+ezcHNNw7GeIpfXD
+         YaNL97xUezYH2Ynsi+rv7zZZGXZof/hrmmNGHoVpSWqc8JwB7dpltvPgAPTVBnaR2sP4
+         8nI3EbAhBYQencgpKYrrUvtgPybHMHlbS4zHsseKCEuun9dF8qZ4NmnPB0YW5ZZmF1nk
+         QjDA==
+X-Gm-Message-State: AOAM5323Np6ivfAhlfkFdSbuSo90h2u3pws3q0bTwPqWE9lQjL9wUF0E
+        5/w/3LLYUPPMjOXGKKYSTsFopw==
+X-Google-Smtp-Source: ABdhPJycSiqzIkOBMmcrMer+prhnFXkBkWVnnTG1jX+nH7iysz4LJoobpMqgfGJiu0O57TDIZE4ACQ==
+X-Received: by 2002:a63:1d15:: with SMTP id d21mr2958265pgd.433.1602760854749;
+        Thu, 15 Oct 2020 04:20:54 -0700 (PDT)
+Received: from centos78 (60-248-88-209.HINET-IP.hinet.net. [60.248.88.209])
+        by smtp.gmail.com with ESMTPSA id k127sm2828221pgk.10.2020.10.15.04.20.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Oct 2020 04:20:54 -0700 (PDT)
+Message-ID: <f746bda4c51d6553f2094b0a3dfbafa3e39d4c28.camel@areca.com.tw>
+Subject: [PATCH 0/1] scsi: arcmsr: configure the default SCSI device command
+ timeout value
+From:   ching Huang <ching2048@areca.com.tw>
+To:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
+        linux-scsi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 16 Oct 2020 03:20:54 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-8.el7) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-sgl_alloc_order() can fail when 'length' is large on a memory
-constrained system. When order > 0 it will potentially be
-making several multi-page allocations with the later ones more
-likely to fail than the earlier one. So it is important that
-sgl_alloc_order() frees up any pages it has obtained before
-returning NULL. In the case when order > 0 it calls the wrong
-free page function and leaks. In testing the leak was
-sufficient to bring down my 8 GiB laptop with OOM.
+This patch is against to mkp's 5.10/scsi-queue.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+1. Configure the default SCSI device command timeout value.
 ---
- lib/scatterlist.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-index 5d63a8857f36..c448642e0f78 100644
---- a/lib/scatterlist.c
-+++ b/lib/scatterlist.c
-@@ -514,7 +514,7 @@ struct scatterlist *sgl_alloc_order(unsigned long long length,
- 		elem_len = min_t(u64, length, PAGE_SIZE << order);
- 		page = alloc_pages(gfp, order);
- 		if (!page) {
--			sgl_free(sgl);
-+			sgl_free_order(sgl, order);
- 			return NULL;
- 		}
- 
--- 
-2.25.1
 
