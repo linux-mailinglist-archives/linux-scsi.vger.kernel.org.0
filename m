@@ -2,133 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C489291019
-	for <lists+linux-scsi@lfdr.de>; Sat, 17 Oct 2020 08:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7953D291027
+	for <lists+linux-scsi@lfdr.de>; Sat, 17 Oct 2020 08:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436615AbgJQGYF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 17 Oct 2020 02:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2411862AbgJQGYE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 17 Oct 2020 02:24:04 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936FBC061755
-        for <linux-scsi@vger.kernel.org>; Fri, 16 Oct 2020 23:24:00 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id b138so3793509yba.5
-        for <linux-scsi@vger.kernel.org>; Fri, 16 Oct 2020 23:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qp+VenraDtPhabJ4sLub62rP0hM+GPnsh5CvC8dU6P0=;
-        b=LFmO5/Sy4YD/YaOXE/OgdEbUmSVGCxNRE2lZ6qcpH6zlVweBG3XZkB6rb2q9kHHHF1
-         mFIaQGWRukYp7Arx42I+1lXiUNa09KczuiRpOgENewuwz9INUCElmYzR4hNbtN5Xg+LR
-         pspnbKzlBzW35Y6SMtpdTkJInW1jvGxnxCJqEOC3aavoYDlEPJeSRHcni2T8Dq5FhNbm
-         tbVJd4sBhOQ6aG+8wrqoWfkP8EvZ7vAfvftLOotDBZaur8ls+ib6leYx5Nok80EX2n6F
-         qYZRB+v55BMs0H34bzSsVTIgqj/iDbQl+ArTuC407twUdqOxAyAjMOlBzmAT/PJ2cWQq
-         j8KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qp+VenraDtPhabJ4sLub62rP0hM+GPnsh5CvC8dU6P0=;
-        b=P/7zkdME7Gg5w8iLnC9YbOkzaUFRlM3xxbKiT7buM+vt7Bjy4zgVKtWAW7roqrMZ6x
-         AHIs+SmUIV1XL829ReeY4qepkMWG3IegPM3soyJ2ObiZIXncmWpRFGnuQ5HPY9R/xy+I
-         fuxNPUEFFDHL4zC0ZkVx5DchVJb10iNXo1PiQU4p0mi2objPzvskxrSHEAYDfW5iQ1kK
-         tg0C2KWWL/4Fw5qrcRlupATeupys0p6OwYodgtrkmTBFzQ5LcHjlW0MYL6udXXWrd2Fr
-         5yJUFh+OmKDyIS8cfvxsUj4DCUBhyElUkluliEzRvIySO5AL4sZQ+TrApP9wXRX7e793
-         PjPA==
-X-Gm-Message-State: AOAM533lu1bldzTJjSYdexmlIKlRwKcnunxCYLEaSMU5w/7stNlprek6
-        JT0wGIsgwEeYCBr5nLZ0IkFZXeUumdNsaDDOOcQ=
-X-Google-Smtp-Source: ABdhPJxPyPlTYWlseSeggV5BiJq/lJZCQpKtnoZl4E/8cxO9HYwoxs8m/7lvpecy7DkW/1TIf2XeRFQdU8gfP0jnWdc=
-X-Received: by 2002:a25:5f06:: with SMTP id t6mr9105845ybb.501.1602915839685;
- Fri, 16 Oct 2020 23:23:59 -0700 (PDT)
+        id S2436965AbgJQG3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 17 Oct 2020 02:29:36 -0400
+Received: from sonic301-20.consmr.mail.ir2.yahoo.com ([77.238.176.97]:32986
+        "EHLO sonic301-20.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2436749AbgJQG3g (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 17 Oct 2020 02:29:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1602916173; bh=815eJ56VHnklTDk+DCOG4XAfdC9czamW+ZJP9hVvUQw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=XOxGgUQGfj2XdVwCLN5nugU08oZunnhLgHdc0jf2EzqSuu3KSaRWKWOcmiHOyFWs1gzRBvkDJlAKekvCJHC1wmJ/x/h/V3CSJ8e53pCvQROfJdWMFghNZj865akb9mb4DW1TEvzidFDZexhOfZLU5lU7BbA37zGpvls/dUKkAJCEsIhHmy/RMIaq2PwEX47Zd/UJZ3fkPfUAhAN2GjkATC/NyIbfWQSdKaUOantfKXDqxPcbuHfPl5oDXYIviLzRCM2Ux+fSAf1HNe1Pj2vPkvIc/Z6msICetLe62moUDNDl++GrE+9aP7R5guLwo1vubP7HKeLqy62jCFkl1RHHLw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1602916173; bh=rXIfuoqmzca0eMbNYity36C0RVhAg70w5i2D9cdPJh9=; h=Date:From:Subject; b=gG6RpCRU+q0QR5KFWAdWoiOsxZ3w6TWl+3jumio/EdLnTmJ2a1QlMduzl0CEnlHrkNL6pHrqY4fW7vevnQVVJsW0GENLJZHfpglhXjORTBnoFxhq+Wat7If39JJhJOn2Ng5jhCyPzwmHLPMC3MdUiU4Js3rlltvXU/I/yq5S8Nv0jvWxmMwVEHr5lKMAVpWlJYEpKkiLIWcuJ9s4uUAYmflitBSYfQxYf9GGWM57ddWWF/HgdmbDxBRSyC0/nnLHT/rjOGWZrgIr4EOBTb+/CkESL/i/aM8NCgpQH8jeURagack/WLB5EbYn36jU5vUycqFKQP1Xqgo/ESB9MloN2A==
+X-YMail-OSG: 5iAH3fAVM1ntzZsZ0ZXT9dAEWQeOOFwNZw8v7GAVvtrqxkL7TWBUBhDngGqpWYN
+ yXrWFPsdrRjSzPsCNQtSpizfRzHvZBv2LGxZ7glEXvlu.HHgUMR6PH0xITZcC7TE_8bopMs0tD8Y
+ TvsLLB6CKdw3Wjbbk6E52cZ9rF9mehvlVtGNw412oEqyA_YgRpw8r1WO1ZgzGdOWk8.Nq16hwf5P
+ iqZ.depmqn7HRPc7C9SrVkR52LjcpCkPvD5.ddINJ364Sk.ay.qTEdo9YLLAQtGEqdKHds2RuS8A
+ imuu_bwB0iVMHHaharOgtA_AKEeiACNOx69r9TMWmyBnhcOIWqYOzoe0XO024JZ65WPmTAIBjKIh
+ VH_Pm6u55P_3WgfgaJHo6UTqE5MfKZAQk_qCP9UhYaWTFd4r7w11cRTm7_yHoRr1lSD8bjJ5SDCt
+ hAMk4YtSqJmNR5jupmKHCHR9CJZkmy48r0AyB6TPcsZT9.mMvibTGQheMe9dwArJbruGrBBaIxJq
+ XDfrmHSrSusndFapxog35QeQNR7w8zNhls3Jt4nXpBHpc.BlfQRWx2WIDUUJPGI9Fn3e777xr6pi
+ zt61J0aFMImMH_X4ZonrUO8p79aiE6exrvPgyl35yB2ov2u4DUqwBbe3JU4HzQ9RyP08_vD5yUvV
+ AhoXPR5HM1JH0j3FOC9bHUqfd6xodpzsSztNxvu7QcB63DSogg7YoGiOdiOJhWFzC8x4nmcZOr2l
+ 4Hui3MLHc1hZYyo0ZpAFlZusSgrs05CAHCPjkrkMJ_xTDGAFycjDGNQjrZ22qLero027YSj4K10i
+ nJSYoAoiiFND4pgri4XF95LIhsaFhTDAB3UZR9O7S5cRIpaDZmWC302Wk2H9ZM9DM9sw13g9l1tF
+ 5FXgW97ei3WdR9QcN8m_51HVF10N9HVvURSIXywPmf_H1aSyfnreuGKLNj4vfzHr.EvN41psWa3t
+ zDomAqvJK.JlNT2eiVYrKQC5NfJgVTWUnPt8jP66UBHQvrd8jZjWdYbBOEPsJlki4tEk2UOgR2zc
+ 4mDuso00pNy5RpX8fnvhQH5vyz4eFhFf9P6fLz_2Vy1iC5vQPK8fablHnCQkju0LDYsCzHPbyJqG
+ go7gt6k7MDJdoigegd2hLqMgPPu_OkmScV7Hr.lda5iJyzfDym6UXCQ1wGSF47PLBw7XlB7PJcCe
+ skhMUCfII6qmY34rkUT_8CYWf5fE1WUEfbD2scetyKi9xjnkUrE3LLmrCUlvEAM.JSYSzUsLcVpd
+ YVVpegkVVW0ODlXPKNVwHktLin7uylDu.qmzvc2l.sis5sOOcqQf8QFgDM33YN2zgmB.WKnvWm6n
+ 15LCYahvaFM3fEchjbVCsbQe.JKl_wd67K2Wmh0yvKJ5iS1wUjrPuJ_2.eTx1DcKyL84PqoxHKKZ
+ 2odVNjWGdgcRS0cIMiW90D8yIr3HdzTnx4lr6vMz_
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Sat, 17 Oct 2020 06:29:33 +0000
+Date:   Sat, 17 Oct 2020 06:29:32 +0000 (UTC)
+From:   "Mrs. Barbara Roth." <mrsemailcontact1@aol.com>
+Reply-To: mrsemailcontact1@aol.com
+Message-ID: <857866243.602427.1602916172816@mail.yahoo.com>
+Subject: Dearest beloved in the Lord,
 MIME-Version: 1.0
-References: <20201010032539.426615-1-ming.lei@redhat.com>
-In-Reply-To: <20201010032539.426615-1-ming.lei@redhat.com>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Sat, 17 Oct 2020 14:23:47 +0800
-Message-ID: <CACVXFVMNGdd_ahhdn+v9YgjU_J-XfsosUz6H-Vz7Hfh3r7EHxQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: core: don't start concurrent async scan on same host
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <857866243.602427.1602916172816.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16868 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, Oct 10, 2020 at 4:23 PM Ming Lei <ming.lei@redhat.com> wrote:
->
-> Current scsi host scan mechanism supposes to fallback into sync host
-> scan if async scan is in-progress. However, this rule isn't strictly
-> respected, because scsi_prep_async_scan() doesn't hold scan_mutex when
-> checking shost->async_scan. When scsi_scan_host() is called
-> concurrently, two async scan on same host may be started, and hang in
-> do_scan_async() is observed.
->
-> Fixes this issue by checking & setting shost->async_scan atomically
-> with shost->scan_mutex.
->
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Ewan D. Milne <emilne@redhat.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->  drivers/scsi/scsi_scan.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-> index f2437a7570ce..9af50e6f94c4 100644
-> --- a/drivers/scsi/scsi_scan.c
-> +++ b/drivers/scsi/scsi_scan.c
-> @@ -1714,15 +1714,16 @@ static void scsi_sysfs_add_devices(struct Scsi_Host *shost)
->   */
->  static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
->  {
-> -       struct async_scan_data *data;
-> +       struct async_scan_data *data = NULL;
->         unsigned long flags;
->
->         if (strncmp(scsi_scan_type, "sync", 4) == 0)
->                 return NULL;
->
-> +       mutex_lock(&shost->scan_mutex);
->         if (shost->async_scan) {
->                 shost_printk(KERN_DEBUG, shost, "%s called twice\n", __func__);
-> -               return NULL;
-> +               goto err;
->         }
->
->         data = kmalloc(sizeof(*data), GFP_KERNEL);
-> @@ -1733,7 +1734,6 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
->                 goto err;
->         init_completion(&data->prev_finished);
->
-> -       mutex_lock(&shost->scan_mutex);
->         spin_lock_irqsave(shost->host_lock, flags);
->         shost->async_scan = 1;
->         spin_unlock_irqrestore(shost->host_lock, flags);
-> @@ -1748,6 +1748,7 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
->         return data;
->
->   err:
-> +       mutex_unlock(&shost->scan_mutex);
->         kfree(data);
->         return NULL;
->  }
-> --
-> 2.25.2
->
 
-Hello Guys,
 
-Ping...
 
-Thanks,
-Ming Lei
+
+Dearest beloved in the Lord,
+
+Mine names are Mrs. Barbara Roth, I am a 66 years old woman. My beloved lat=
+e husband is from United Kingdom England, while I am of a Dutch nationality=
+ by birth .I was born an orphan and GOD blessed me and mine late beloved hu=
+sband with abundantly with riches but no children. I am not a happy woman b=
+ecause i have no husband or children, my husband died 21 years ago. Right n=
+ow I am affected with cancer of the lung and breast i also have partial str=
+oke which has affected my speeches. I can no longer talk well and half of m=
+y body is paralyzed, i send this email to you with the help of my private f=
+emale nurse who is typing my request at China cancer research facility.
+
+My condition is really deteriorating and is quite obvious that i may not li=
+ve more than 3 weeks, because the cancer stage has gotten to its 3rd stage.=
+ After my Doctor Notice, i have decided to divide part of my fortune by con=
+tributing to the Charities & Motherless. I don't know you but i am contacti=
+ng you with the hope that, you will be able to carry out my wish for the sa=
+ke of humanity.
+
+I am willing to donate the sum of =EF=BF=A110,500,000.00, Ten Million Five =
+Hundred Thousand, Great Britain Pound to the poor through you. I have also =
+made some cash donations to orphanage children in Somalia, Syria, Ethiopian=
+, Cambodia, Philippines, South Sudan and some in South Africa and Europe.
+
+If you are willing and able to do this task for the sake of humanity then s=
+end me below information for more details to receive the funds.
+1. Name...................................................
+2. Phone number...............................
+3. Address.............................................
+May GOD guide you.
+
+Mrs. Barbara Roth.
