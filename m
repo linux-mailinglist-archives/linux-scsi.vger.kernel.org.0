@@ -2,36 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2D9291A94
-	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E147291C50
+	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731216AbgJRTZS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 18 Oct 2020 15:25:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39598 "EHLO mail.kernel.org"
+        id S1732773AbgJRThW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 18 Oct 2020 15:37:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39940 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731203AbgJRTZP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:25:15 -0400
+        id S1728967AbgJRTZ0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:25:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 330ED222C8;
-        Sun, 18 Oct 2020 19:25:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D05AC2137B;
+        Sun, 18 Oct 2020 19:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049115;
-        bh=qynpNT36o9aGtFqn0y/bgsJZhOxb7uAFUh6hfpdDxag=;
+        s=default; t=1603049125;
+        bh=OGO84g8beFQc9L4vEayCM2nhBsWjs8Ga4+guQzqTyxk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c9TxtfI5uKFfy1T3/Kmx1R/vW7axs5XtORNFGjj+7y9Z18jSG5/zVCwirZSLQOV3r
-         IWaEKBo5Hj4H7h9ZuZldLH4czAbB9U/t8vHIG0fu4mQhThWVV6YCke+zcTJc0zXhYi
-         KfduCSY2kgPIwPRnEKK0EuuWhR2qgMe1/4GEFt9Q=
+        b=D3+vBzl0hSj6FSrN7oKdf3o9KgcNm4Y2+IOikf3zspkhHZTNqeKixqm/htLfWfx3H
+         4rAwMQidKaZURnC2AaaaA74Lw6+dEqYwpq7vHjH0a2sSTfzmZQEnKreJf/x7i1w/Gw
+         k2rb0pxeWoRracNpQ2jBWKH72tOmgY22QvDeHVo0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
+Cc:     Can Guo <cang@codeaurora.org>, Hongwu Su <hongwus@codeaurora.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 47/56] scsi: qedi: Fix list_del corruption while removing active I/O
-Date:   Sun, 18 Oct 2020 15:24:08 -0400
-Message-Id: <20201018192417.4055228-47-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 55/56] scsi: ufs: ufs-qcom: Fix race conditions caused by ufs_qcom_testbus_config()
+Date:   Sun, 18 Oct 2020 15:24:16 -0400
+Message-Id: <20201018192417.4055228-55-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192417.4055228-1-sashal@kernel.org>
 References: <20201018192417.4055228-1-sashal@kernel.org>
@@ -43,69 +45,50 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Nilesh Javali <njavali@marvell.com>
+From: Can Guo <cang@codeaurora.org>
 
-[ Upstream commit 28b35d17f9f8573d4646dd8df08917a4076a6b63 ]
+[ Upstream commit 89dd87acd40a44de8ff3358138aedf8f73f4efc6 ]
 
-While aborting the I/O, the firmware cleanup task timed out and driver
-deleted the I/O from active command list. Some time later the firmware
-sent the cleanup task response and driver again deleted the I/O from
-active command list causing firmware to send completion for non-existent
-I/O and list_del corruption of active command list.
+If ufs_qcom_dump_dbg_regs() calls ufs_qcom_testbus_config() from
+ufshcd_suspend/resume and/or clk gate/ungate context, pm_runtime_get_sync()
+and ufshcd_hold() will cause a race condition. Fix this by removing the
+unnecessary calls of pm_runtime_get_sync() and ufshcd_hold().
 
-Add fix to check if I/O is present before deleting it from the active
-command list to ensure firmware sends valid I/O completion and protect
-against list_del corruption.
-
-Link: https://lore.kernel.org/r/20200908095657.26821-4-mrangankar@marvell.com
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Manish Rangankar <mrangankar@marvell.com>
+Link: https://lore.kernel.org/r/1596975355-39813-3-git-send-email-cang@codeaurora.org
+Reviewed-by: Hongwu Su <hongwus@codeaurora.org>
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
+Signed-off-by: Can Guo <cang@codeaurora.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qedi/qedi_fw.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/scsi/ufs/ufs-qcom.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/scsi/qedi/qedi_fw.c b/drivers/scsi/qedi/qedi_fw.c
-index 0d00970b7e25e..357a0acc5ed2f 100644
---- a/drivers/scsi/qedi/qedi_fw.c
-+++ b/drivers/scsi/qedi/qedi_fw.c
-@@ -837,8 +837,11 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
- 			qedi_clear_task_idx(qedi_conn->qedi, rtid);
+diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+index 21e3ff590ec91..798a74535ea7b 100644
+--- a/drivers/scsi/ufs/ufs-qcom.c
++++ b/drivers/scsi/ufs/ufs-qcom.c
+@@ -1581,9 +1581,6 @@ int ufs_qcom_testbus_config(struct ufs_qcom_host *host)
+ 	 */
+ 	}
+ 	mask <<= offset;
+-
+-	pm_runtime_get_sync(host->hba->dev);
+-	ufshcd_hold(host->hba, false);
+ 	ufshcd_rmwl(host->hba, TEST_BUS_SEL,
+ 		    (u32)host->testbus.select_major << 19,
+ 		    REG_UFS_CFG1);
+@@ -1596,8 +1593,6 @@ int ufs_qcom_testbus_config(struct ufs_qcom_host *host)
+ 	 * committed before returning.
+ 	 */
+ 	mb();
+-	ufshcd_release(host->hba);
+-	pm_runtime_put_sync(host->hba->dev);
  
- 			spin_lock(&qedi_conn->list_lock);
--			list_del_init(&dbg_cmd->io_cmd);
--			qedi_conn->active_cmd_count--;
-+			if (likely(dbg_cmd->io_cmd_in_list)) {
-+				dbg_cmd->io_cmd_in_list = false;
-+				list_del_init(&dbg_cmd->io_cmd);
-+				qedi_conn->active_cmd_count--;
-+			}
- 			spin_unlock(&qedi_conn->list_lock);
- 			qedi_cmd->state = CLEANUP_RECV;
- 			wake_up_interruptible(&qedi_conn->wait_queue);
-@@ -1257,6 +1260,7 @@ int qedi_cleanup_all_io(struct qedi_ctx *qedi, struct qedi_conn *qedi_conn,
- 		qedi_conn->cmd_cleanup_req++;
- 		qedi_iscsi_cleanup_task(ctask, true);
- 
-+		cmd->io_cmd_in_list = false;
- 		list_del_init(&cmd->io_cmd);
- 		qedi_conn->active_cmd_count--;
- 		QEDI_WARN(&qedi->dbg_ctx,
-@@ -1470,8 +1474,11 @@ static void qedi_tmf_work(struct work_struct *work)
- 	spin_unlock_bh(&qedi_conn->tmf_work_lock);
- 
- 	spin_lock(&qedi_conn->list_lock);
--	list_del_init(&cmd->io_cmd);
--	qedi_conn->active_cmd_count--;
-+	if (likely(cmd->io_cmd_in_list)) {
-+		cmd->io_cmd_in_list = false;
-+		list_del_init(&cmd->io_cmd);
-+		qedi_conn->active_cmd_count--;
-+	}
- 	spin_unlock(&qedi_conn->list_lock);
- 
- 	clear_bit(QEDI_CONN_FW_CLEANUP, &qedi_conn->flags);
+ 	return 0;
+ }
 -- 
 2.25.1
 
