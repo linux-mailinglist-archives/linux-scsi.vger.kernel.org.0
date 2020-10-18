@@ -2,76 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3F5291B27
-	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723F0292081
+	for <lists+linux-scsi@lfdr.de>; Mon, 19 Oct 2020 00:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732385AbgJRT3W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 18 Oct 2020 15:29:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730597AbgJRT15 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:27:57 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B079422273;
-        Sun, 18 Oct 2020 19:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049277;
-        bh=SBkxYVyJD6g5LSEeSgtiHjd3WiPlaeyAddD+i1RKgXg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hoxUWcFPVQKBN6A+sITtUEJMDmWhZrprt+zq3homuACkCIJQ/lmRqzDkGjaj8JT1K
-         CqwI/gTdMzp/zVVDlSE6XG2Zyo1YiprreYOC7Qa3PsHCHy2uMkDWORoNIlNlzcLg1N
-         3IFvTixLa41vExX1EjgyceXoOltPXIF2UZv5hHdY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jing Xiangfeng <jingxiangfeng@huawei.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 4.4 24/33] scsi: ibmvfc: Fix error return in ibmvfc_probe()
-Date:   Sun, 18 Oct 2020 15:27:19 -0400
-Message-Id: <20201018192728.4056577-24-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192728.4056577-1-sashal@kernel.org>
-References: <20201018192728.4056577-1-sashal@kernel.org>
+        id S1729431AbgJRWqz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 18 Oct 2020 18:46:55 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:51230 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726681AbgJRWqy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 18 Oct 2020 18:46:54 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09IMdOnK164523;
+        Sun, 18 Oct 2020 22:46:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=V2AF6mLh43s8o2WI9+ncHrjGsHjWPSdrdgrxXTDAc94=;
+ b=nn5oeuKLzUB7QLpQJqTGXli1I1rPMeTX+G5fPNC8UvXPGpbeh/dAylN44D+y9JvkVc0J
+ RvvgkglVTi8v+HrHiucdLrL0woS5j2yjbX5rAbrPYIp2iKbclxqgDn8D82aj3M8iiY9L
+ e0jnY1mY2mIu24LqNKK96JZpnHrY98T9iIHcfh2es7nnGwCPaOEm4NsRHopa+2uuunhV
+ QY3RtRXV6lBlNHGm4iojZI8h1PzCj6e+hzvU+sLNNAZFrDXSAiL21uqrQea9Tw2NVQhk
+ r7tMIQxFHOZm7yjNHqi2Rou2yfWsUhopRkfhJxfa4kVvfC/qLtS9MkgSfMcqY1x9udWt yQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 347rjkjwk9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 18 Oct 2020 22:46:52 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09IMjt8d186179;
+        Sun, 18 Oct 2020 22:46:52 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 348a6k9j0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 18 Oct 2020 22:46:52 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09IMkpuv008655;
+        Sun, 18 Oct 2020 22:46:51 GMT
+Received: from [20.15.0.202] (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sun, 18 Oct 2020 15:46:51 -0700
+Subject: Re: [PATCH] scsi: target: tcmu: scatter_/gather_data_area rework
+To:     Bodo Stroesser <bostroesser@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+References: <20201016195839.27440-1-bostroesser@gmail.com>
+From:   Mike Christie <michael.christie@oracle.com>
+Message-ID: <89399f74-86e5-1217-c06e-f5ac4f9b5853@oracle.com>
+Date:   Sun, 18 Oct 2020 17:46:50 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201016195839.27440-1-bostroesser@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9778 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ bulkscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010180180
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9778 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ phishscore=0 suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010180179
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jing Xiangfeng <jingxiangfeng@huawei.com>
+On 10/16/20 2:58 PM, Bodo Stroesser wrote:
+> +
+> +static inline void tcmu_copy_data(struct tcmu_dev *udev,
+> +				  struct tcmu_cmd *tcmu_cmd, uint32_t direction,
+> +				  struct scatterlist *sg, unsigned int sg_nents,
+> +				  struct iovec **iov,
+> +				  int data_len)
 
-[ Upstream commit 5e48a084f4e824e1b624d3fd7ddcf53d2ba69e53 ]
-
-Fix to return error code PTR_ERR() from the error handling case instead of
-0.
-
-Link: https://lore.kernel.org/r/20200907083949.154251-1-jingxiangfeng@huawei.com
-Acked-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/ibmvscsi/ibmvfc.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 0526a47e30a3f..db80ab8335dfb 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -4790,6 +4790,7 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
- 	if (IS_ERR(vhost->work_thread)) {
- 		dev_err(dev, "Couldn't create kernel thread: %ld\n",
- 			PTR_ERR(vhost->work_thread));
-+		rc = PTR_ERR(vhost->work_thread);
- 		goto free_host_mem;
- 	}
- 
--- 
-2.25.1
-
+It's a nice cleanup. I only have a small nit. This line should have been merged
+with the one above it.
