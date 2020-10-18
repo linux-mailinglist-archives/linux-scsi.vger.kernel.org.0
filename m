@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4312E291DF7
-	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B75291DD0
+	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387636AbgJRTsm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 18 Oct 2020 15:48:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34360 "EHLO mail.kernel.org"
+        id S2387455AbgJRTsO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 18 Oct 2020 15:48:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34544 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729466AbgJRTVy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:54 -0400
+        id S1727349AbgJRTWB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:22:01 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 730F4222EB;
-        Sun, 18 Oct 2020 19:21:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DCB31222E9;
+        Sun, 18 Oct 2020 19:21:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048913;
-        bh=ccfMSBtyYsuJVMxC+7PNxuOzjyfmMrrqCrfQSwg9WK4=;
+        s=default; t=1603048920;
+        bh=hAfwZo3WFQcSNO/kbKcDbhhHxXXm/AOfOCg43UAlxw4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XYBTks78EueNJly5AGj3ARmCGYLmYUUhhDpbImjgInNOJmjUCB74NDPAfgp4LMgv/
-         tHdw9g8hXZc4JM7duzDSnHXMNOAgXm3UA8+lgNCSUs7uvbA2ZML0I6ud1rLD1u3/JS
-         0XYKcVjr4TaIYEjFDmfzKP4dflgSnDV0cpgV/1JA=
+        b=fLAuLpFYIE3NxXVk/0P+aSHYu1gzRedn8Mp+LkFWYLszbCnsfwg/O3jYlyQFIKstD
+         oRcfxYyLEAg5Y9EYPo/EtErWCCqsqS0nBdoxjPpigALNKp2EOj64vTB2l2PoP9cte5
+         sslVXNo0B8lS0fbTARkc/KMBREKi+c952gCCRIUg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Wagner <dwagner@suse.de>, Martin Wilck <mwilck@suse.com>,
-        Arun Easi <aeasi@marvell.com>,
+Cc:     Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 072/101] scsi: qla2xxx: Warn if done() or free() are called on an already freed srb
-Date:   Sun, 18 Oct 2020 15:19:57 -0400
-Message-Id: <20201018192026.4053674-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 078/101] scsi: qedf: Return SUCCESS if stale rport is encountered
+Date:   Sun, 18 Oct 2020 15:20:03 -0400
+Message-Id: <20201018192026.4053674-78-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
 References: <20201018192026.4053674-1-sashal@kernel.org>
@@ -43,73 +43,35 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Daniel Wagner <dwagner@suse.de>
+From: Saurav Kashyap <skashyap@marvell.com>
 
-[ Upstream commit c0014f94218ea3a312f6235febea0d626c5f2154 ]
+[ Upstream commit 10aff62fab263ad7661780816551420cea956ebb ]
 
-Emit a warning when ->done or ->free are called on an already freed
-srb. There is a hidden use-after-free bug in the driver which corrupts
-the srb memory pool which originates from the cleanup callbacks.
+If SUCCESS is not returned, error handling will escalate. Return SUCCESS
+similar to other conditions in this function.
 
-An extensive search didn't bring any lights on the real problem. The
-initial fix was to set both pointers to NULL and try to catch invalid
-accesses. But instead the memory corruption was gone and the driver
-didn't crash. Since not all calling places check for NULL pointer, add
-explicitly default handlers. With this we workaround the memory
-corruption and add a debug help.
-
-Link: https://lore.kernel.org/r/20200908081516.8561-2-dwagner@suse.de
-Reviewed-by: Martin Wilck <mwilck@suse.com>
-Reviewed-by: Arun Easi <aeasi@marvell.com>
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
+Link: https://lore.kernel.org/r/20200907121443.5150-6-jhasan@marvell.com
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: Javed Hasan <jhasan@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c   | 10 ++++++++++
- drivers/scsi/qla2xxx/qla_inline.h |  5 +++++
- 2 files changed, 15 insertions(+)
+ drivers/scsi/qedf/qedf_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 2861c636dd651..f17ab22ad0e4a 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -63,6 +63,16 @@ void qla2x00_sp_free(srb_t *sp)
- 	qla2x00_rel_sp(sp);
- }
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index 51cfab9d1afdc..ed3054fffa344 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -704,7 +704,7 @@ static int qedf_eh_abort(struct scsi_cmnd *sc_cmd)
+ 	rdata = fcport->rdata;
+ 	if (!rdata || !kref_get_unless_zero(&rdata->kref)) {
+ 		QEDF_ERR(&qedf->dbg_ctx, "stale rport, sc_cmd=%p\n", sc_cmd);
+-		rc = 1;
++		rc = SUCCESS;
+ 		goto out;
+ 	}
  
-+void qla2xxx_rel_done_warning(srb_t *sp, int res)
-+{
-+	WARN_ONCE(1, "Calling done() of an already freed srb %p object\n", sp);
-+}
-+
-+void qla2xxx_rel_free_warning(srb_t *sp)
-+{
-+	WARN_ONCE(1, "Calling free() of an already freed srb %p object\n", sp);
-+}
-+
- /* Asynchronous Login/Logout Routines -------------------------------------- */
- 
- unsigned long
-diff --git a/drivers/scsi/qla2xxx/qla_inline.h b/drivers/scsi/qla2xxx/qla_inline.h
-index 1fb6ccac07ccd..26d9c78d4c52c 100644
---- a/drivers/scsi/qla2xxx/qla_inline.h
-+++ b/drivers/scsi/qla2xxx/qla_inline.h
-@@ -207,10 +207,15 @@ qla2xxx_get_qpair_sp(scsi_qla_host_t *vha, struct qla_qpair *qpair,
- 	return sp;
- }
- 
-+void qla2xxx_rel_done_warning(srb_t *sp, int res);
-+void qla2xxx_rel_free_warning(srb_t *sp);
-+
- static inline void
- qla2xxx_rel_qpair_sp(struct qla_qpair *qpair, srb_t *sp)
- {
- 	sp->qpair = NULL;
-+	sp->done = qla2xxx_rel_done_warning;
-+	sp->free = qla2xxx_rel_free_warning;
- 	mempool_free(sp, qpair->srb_mempool);
- 	QLA_QPAIR_MARK_NOT_BUSY(qpair);
- }
 -- 
 2.25.1
 
