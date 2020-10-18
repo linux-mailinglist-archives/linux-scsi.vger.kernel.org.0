@@ -2,41 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1193E291CEE
-	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5CE291C98
+	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733209AbgJRTlg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 18 Oct 2020 15:41:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38042 "EHLO mail.kernel.org"
+        id S1730924AbgJRTYv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 18 Oct 2020 15:24:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39000 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730637AbgJRTYJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:24:09 -0400
+        id S1731035AbgJRTYu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:24:50 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3DEB42137B;
-        Sun, 18 Oct 2020 19:24:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C64DC207DE;
+        Sun, 18 Oct 2020 19:24:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049049;
-        bh=WLp/7ApDJMvNYaMBO/CNLukKMpcK9SehLbW5shjh7Jk=;
+        s=default; t=1603049090;
+        bh=0PciOSX2gDkQA1NyDpMa1zEgIxCFqywez5dzFi1BmZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I/Ac8981jWMNr9ehp9gIIsqsiODFtVbFYstzo/X6vo9cOj6hTgCaCmMOp0wyv4Q/D
-         3VGYb3Msf526yfRZ2V0F0W+cOupBBbwxbkehN9P4pYq3z64CIcTKVBAKBZcboqUqX8
-         GureayP750uS9OD1DWyR5yb5oDsiPcFlSaPXxNog=
+        b=hGyKfJ+CeN2FiyyglK5FN6Ipz72y12JfXmHnCgNJkWnUJGujhZc09iw96eXk3r3f0
+         vo4fIJ9nhEAAgNCTj6Q0fF20Jy0Oc7nfcuY91PmV/USnLWv7mqNXuv+QETNz0klRkP
+         R7iiUBy0c4DYzDccfNPCLv5dLrrMOCDQfWZAyO8w=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Can Guo <cang@codeaurora.org>, Hongwu Su <hongwus@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Asutosh Das <asutoshd@codeaurora.org>,
+Cc:     Jing Xiangfeng <jingxiangfeng@huawei.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 77/80] scsi: ufs: ufs-qcom: Fix race conditions caused by ufs_qcom_testbus_config()
-Date:   Sun, 18 Oct 2020 15:22:28 -0400
-Message-Id: <20201018192231.4054535-77-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 26/56] scsi: mvumi: Fix error return in mvumi_io_attach()
+Date:   Sun, 18 Oct 2020 15:23:47 -0400
+Message-Id: <20201018192417.4055228-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
-References: <20201018192231.4054535-1-sashal@kernel.org>
+In-Reply-To: <20201018192417.4055228-1-sashal@kernel.org>
+References: <20201018192417.4055228-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,50 +42,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Can Guo <cang@codeaurora.org>
+From: Jing Xiangfeng <jingxiangfeng@huawei.com>
 
-[ Upstream commit 89dd87acd40a44de8ff3358138aedf8f73f4efc6 ]
+[ Upstream commit 055f15ab2cb4a5cbc4c0a775ef3d0066e0fa9b34 ]
 
-If ufs_qcom_dump_dbg_regs() calls ufs_qcom_testbus_config() from
-ufshcd_suspend/resume and/or clk gate/ungate context, pm_runtime_get_sync()
-and ufshcd_hold() will cause a race condition. Fix this by removing the
-unnecessary calls of pm_runtime_get_sync() and ufshcd_hold().
+Return PTR_ERR() from the error handling case instead of 0.
 
-Link: https://lore.kernel.org/r/1596975355-39813-3-git-send-email-cang@codeaurora.org
-Reviewed-by: Hongwu Su <hongwus@codeaurora.org>
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
-Signed-off-by: Can Guo <cang@codeaurora.org>
+Link: https://lore.kernel.org/r/20200910123848.93649-1-jingxiangfeng@huawei.com
+Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufs-qcom.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/scsi/mvumi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index c49e9f6c46f87..4f066e3b19af1 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -1492,9 +1492,6 @@ int ufs_qcom_testbus_config(struct ufs_qcom_host *host)
- 	 */
+diff --git a/drivers/scsi/mvumi.c b/drivers/scsi/mvumi.c
+index b3cd9a6b1d306..b3df114a1200f 100644
+--- a/drivers/scsi/mvumi.c
++++ b/drivers/scsi/mvumi.c
+@@ -2439,6 +2439,7 @@ static int mvumi_io_attach(struct mvumi_hba *mhba)
+ 	if (IS_ERR(mhba->dm_thread)) {
+ 		dev_err(&mhba->pdev->dev,
+ 			"failed to create device scan thread\n");
++		ret = PTR_ERR(mhba->dm_thread);
+ 		mutex_unlock(&mhba->sas_discovery_mutex);
+ 		goto fail_create_thread;
  	}
- 	mask <<= offset;
--
--	pm_runtime_get_sync(host->hba->dev);
--	ufshcd_hold(host->hba, false);
- 	ufshcd_rmwl(host->hba, TEST_BUS_SEL,
- 		    (u32)host->testbus.select_major << 19,
- 		    REG_UFS_CFG1);
-@@ -1507,8 +1504,6 @@ int ufs_qcom_testbus_config(struct ufs_qcom_host *host)
- 	 * committed before returning.
- 	 */
- 	mb();
--	ufshcd_release(host->hba);
--	pm_runtime_put_sync(host->hba->dev);
- 
- 	return 0;
- }
 -- 
 2.25.1
 
