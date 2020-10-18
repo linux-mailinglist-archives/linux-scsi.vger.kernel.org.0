@@ -2,36 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40407291DCD
-	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A0D291A32
+	for <lists+linux-scsi@lfdr.de>; Sun, 18 Oct 2020 21:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387431AbgJRTsJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 18 Oct 2020 15:48:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34636 "EHLO mail.kernel.org"
+        id S1729809AbgJRTWW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 18 Oct 2020 15:22:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728196AbgJRTWE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:22:04 -0400
+        id S1729798AbgJRTWW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:22:22 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7310F22314;
-        Sun, 18 Oct 2020 19:22:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A11FB222EB;
+        Sun, 18 Oct 2020 19:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048924;
-        bh=XNBNPHCWavZrEu5SlajFZldWJA/rSGH/UWI9X1BQniU=;
+        s=default; t=1603048940;
+        bh=vFWIJpCjg0YuZJwQ7T9dbxdSTezdwsa+8kcmFJHFEYo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lN2nxicENqYsbs5ikVZSA8LUyujTHv9mLxNK4gnDRUFsjCirgNXAYuJtxWxplFeiv
-         n6J6WMu7U4JTqFF+w13jqALxYBfXOol5ngRKMxbbMwZrP3abKP3i67TTWOfLo+CyPI
-         EApVE/OMFONRGNcXMS3bRbBxdAPxDCbLET2MRTA4=
+        b=fy5R3oxm5bOZaE+o5DsQ+c1fyJJkxVeWr6u3jPUeHM1CVJ+PwfNqrqzJQYgCEi4Iz
+         j2h1zvp4lhQ39UWS3K3As/1paLcAi9USKNT4zRnVC64lFWWWb4PrmUm8ZmiP88b2fJ
+         e7vA12tdrg9smhJ+OLEVP7JAhjSeGZuM/sJyH+eg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
+Cc:     Kevin Barnett <kevin.barnett@microsemi.com>,
+        Scott Teel <scott.teel@microsemi.com>,
+        Scott Benesh <scott.benesh@microsemi.com>,
+        Prasad Munirathnam <Prasad.Munirathnam@microsemi.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Don Brace <don.brace@microsemi.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 081/101] scsi: qedi: Fix list_del corruption while removing active I/O
-Date:   Sun, 18 Oct 2020 15:20:06 -0400
-Message-Id: <20201018192026.4053674-81-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, esc.storagedev@microsemi.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 094/101] scsi: smartpqi: Avoid crashing kernel for controller issues
+Date:   Sun, 18 Oct 2020 15:20:19 -0400
+Message-Id: <20201018192026.4053674-94-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
 References: <20201018192026.4053674-1-sashal@kernel.org>
@@ -43,69 +48,245 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Nilesh Javali <njavali@marvell.com>
+From: Kevin Barnett <kevin.barnett@microsemi.com>
 
-[ Upstream commit 28b35d17f9f8573d4646dd8df08917a4076a6b63 ]
+[ Upstream commit 9e68cccc8ef7206f0bccd590378d0dca8f9b4f57 ]
 
-While aborting the I/O, the firmware cleanup task timed out and driver
-deleted the I/O from active command list. Some time later the firmware
-sent the cleanup task response and driver again deleted the I/O from
-active command list causing firmware to send completion for non-existent
-I/O and list_del corruption of active command list.
+Eliminate kernel panics when getting invalid responses from controller.
+Take controller offline instead of causing kernel panics.
 
-Add fix to check if I/O is present before deleting it from the active
-command list to ensure firmware sends valid I/O completion and protect
-against list_del corruption.
-
-Link: https://lore.kernel.org/r/20200908095657.26821-4-mrangankar@marvell.com
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Manish Rangankar <mrangankar@marvell.com>
+Link: https://lore.kernel.org/r/159622929306.30579.16523318707596752828.stgit@brunhilda
+Reviewed-by: Scott Teel <scott.teel@microsemi.com>
+Reviewed-by: Scott Benesh <scott.benesh@microsemi.com>
+Reviewed-by: Prasad Munirathnam <Prasad.Munirathnam@microsemi.com>
+Reviewed-by: Martin Wilck <mwilck@suse.com>
+Signed-off-by: Kevin Barnett <kevin.barnett@microsemi.com>
+Signed-off-by: Don Brace <don.brace@microsemi.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qedi/qedi_fw.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/scsi/smartpqi/smartpqi.h      |   2 +-
+ drivers/scsi/smartpqi/smartpqi_init.c | 101 +++++++++++++++++---------
+ 2 files changed, 68 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/scsi/qedi/qedi_fw.c b/drivers/scsi/qedi/qedi_fw.c
-index 32586800620bd..90aa64604ad78 100644
---- a/drivers/scsi/qedi/qedi_fw.c
-+++ b/drivers/scsi/qedi/qedi_fw.c
-@@ -825,8 +825,11 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
- 			qedi_clear_task_idx(qedi_conn->qedi, rtid);
+diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
+index 1129fe7a27edd..ee069a8b442a7 100644
+--- a/drivers/scsi/smartpqi/smartpqi.h
++++ b/drivers/scsi/smartpqi/smartpqi.h
+@@ -359,7 +359,7 @@ struct pqi_event_response {
+ 	struct pqi_iu_header header;
+ 	u8	event_type;
+ 	u8	reserved2 : 7;
+-	u8	request_acknowlege : 1;
++	u8	request_acknowledge : 1;
+ 	__le16	event_id;
+ 	__le32	additional_event_id;
+ 	union {
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index cd157f11eb222..10afbaaa4a82f 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -542,8 +542,7 @@ static int pqi_build_raid_path_request(struct pqi_ctrl_info *ctrl_info,
+ 		put_unaligned_be16(cdb_length, &cdb[7]);
+ 		break;
+ 	default:
+-		dev_err(&ctrl_info->pci_dev->dev, "unknown command 0x%c\n",
+-			cmd);
++		dev_err(&ctrl_info->pci_dev->dev, "unknown command 0x%c\n", cmd);
+ 		break;
+ 	}
  
- 			spin_lock(&qedi_conn->list_lock);
--			list_del_init(&dbg_cmd->io_cmd);
--			qedi_conn->active_cmd_count--;
-+			if (likely(dbg_cmd->io_cmd_in_list)) {
-+				dbg_cmd->io_cmd_in_list = false;
-+				list_del_init(&dbg_cmd->io_cmd);
-+				qedi_conn->active_cmd_count--;
-+			}
- 			spin_unlock(&qedi_conn->list_lock);
- 			qedi_cmd->state = CLEANUP_RECV;
- 			wake_up_interruptible(&qedi_conn->wait_queue);
-@@ -1244,6 +1247,7 @@ int qedi_cleanup_all_io(struct qedi_ctx *qedi, struct qedi_conn *qedi_conn,
- 		qedi_conn->cmd_cleanup_req++;
- 		qedi_iscsi_cleanup_task(ctask, true);
+@@ -2462,7 +2461,6 @@ static int pqi_raid_bypass_submit_scsi_cmd(struct pqi_ctrl_info *ctrl_info,
+ 		offload_to_mirror =
+ 			(offload_to_mirror >= layout_map_count - 1) ?
+ 				0 : offload_to_mirror + 1;
+-		WARN_ON(offload_to_mirror >= layout_map_count);
+ 		device->offload_to_mirror = offload_to_mirror;
+ 		/*
+ 		 * Avoid direct use of device->offload_to_mirror within this
+@@ -2915,10 +2913,14 @@ static int pqi_interpret_task_management_response(
+ 	return rc;
+ }
  
-+		cmd->io_cmd_in_list = false;
- 		list_del_init(&cmd->io_cmd);
- 		qedi_conn->active_cmd_count--;
- 		QEDI_WARN(&qedi->dbg_ctx,
-@@ -1455,8 +1459,11 @@ static void qedi_tmf_work(struct work_struct *work)
- 	spin_unlock_bh(&qedi_conn->tmf_work_lock);
+-static unsigned int pqi_process_io_intr(struct pqi_ctrl_info *ctrl_info,
+-	struct pqi_queue_group *queue_group)
++static inline void pqi_invalid_response(struct pqi_ctrl_info *ctrl_info)
++{
++	pqi_take_ctrl_offline(ctrl_info);
++}
++
++static int pqi_process_io_intr(struct pqi_ctrl_info *ctrl_info, struct pqi_queue_group *queue_group)
+ {
+-	unsigned int num_responses;
++	int num_responses;
+ 	pqi_index_t oq_pi;
+ 	pqi_index_t oq_ci;
+ 	struct pqi_io_request *io_request;
+@@ -2930,6 +2932,13 @@ static unsigned int pqi_process_io_intr(struct pqi_ctrl_info *ctrl_info,
  
- 	spin_lock(&qedi_conn->list_lock);
--	list_del_init(&cmd->io_cmd);
--	qedi_conn->active_cmd_count--;
-+	if (likely(cmd->io_cmd_in_list)) {
-+		cmd->io_cmd_in_list = false;
-+		list_del_init(&cmd->io_cmd);
-+		qedi_conn->active_cmd_count--;
+ 	while (1) {
+ 		oq_pi = readl(queue_group->oq_pi);
++		if (oq_pi >= ctrl_info->num_elements_per_oq) {
++			pqi_invalid_response(ctrl_info);
++			dev_err(&ctrl_info->pci_dev->dev,
++				"I/O interrupt: producer index (%u) out of range (0-%u): consumer index: %u\n",
++				oq_pi, ctrl_info->num_elements_per_oq - 1, oq_ci);
++			return -1;
++		}
+ 		if (oq_pi == oq_ci)
+ 			break;
+ 
+@@ -2938,10 +2947,22 @@ static unsigned int pqi_process_io_intr(struct pqi_ctrl_info *ctrl_info,
+ 			(oq_ci * PQI_OPERATIONAL_OQ_ELEMENT_LENGTH);
+ 
+ 		request_id = get_unaligned_le16(&response->request_id);
+-		WARN_ON(request_id >= ctrl_info->max_io_slots);
++		if (request_id >= ctrl_info->max_io_slots) {
++			pqi_invalid_response(ctrl_info);
++			dev_err(&ctrl_info->pci_dev->dev,
++				"request ID in response (%u) out of range (0-%u): producer index: %u  consumer index: %u\n",
++				request_id, ctrl_info->max_io_slots - 1, oq_pi, oq_ci);
++			return -1;
++		}
+ 
+ 		io_request = &ctrl_info->io_request_pool[request_id];
+-		WARN_ON(atomic_read(&io_request->refcount) == 0);
++		if (atomic_read(&io_request->refcount) == 0) {
++			pqi_invalid_response(ctrl_info);
++			dev_err(&ctrl_info->pci_dev->dev,
++				"request ID in response (%u) does not match an outstanding I/O request: producer index: %u  consumer index: %u\n",
++				request_id, oq_pi, oq_ci);
++			return -1;
++		}
+ 
+ 		switch (response->header.iu_type) {
+ 		case PQI_RESPONSE_IU_RAID_PATH_IO_SUCCESS:
+@@ -2971,24 +2992,22 @@ static unsigned int pqi_process_io_intr(struct pqi_ctrl_info *ctrl_info,
+ 			io_request->error_info = ctrl_info->error_buffer +
+ 				(get_unaligned_le16(&response->error_index) *
+ 				PQI_ERROR_BUFFER_ELEMENT_LENGTH);
+-			pqi_process_io_error(response->header.iu_type,
+-				io_request);
++			pqi_process_io_error(response->header.iu_type, io_request);
+ 			break;
+ 		default:
++			pqi_invalid_response(ctrl_info);
+ 			dev_err(&ctrl_info->pci_dev->dev,
+-				"unexpected IU type: 0x%x\n",
+-				response->header.iu_type);
+-			break;
++				"unexpected IU type: 0x%x: producer index: %u  consumer index: %u\n",
++				response->header.iu_type, oq_pi, oq_ci);
++			return -1;
+ 		}
+ 
+-		io_request->io_complete_callback(io_request,
+-			io_request->context);
++		io_request->io_complete_callback(io_request, io_request->context);
+ 
+ 		/*
+ 		 * Note that the I/O request structure CANNOT BE TOUCHED after
+ 		 * returning from the I/O completion callback!
+ 		 */
+-
+ 		oq_ci = (oq_ci + 1) % ctrl_info->num_elements_per_oq;
+ 	}
+ 
+@@ -3301,9 +3320,9 @@ static void pqi_ofa_capture_event_payload(struct pqi_event *event,
+ 	}
+ }
+ 
+-static unsigned int pqi_process_event_intr(struct pqi_ctrl_info *ctrl_info)
++static int pqi_process_event_intr(struct pqi_ctrl_info *ctrl_info)
+ {
+-	unsigned int num_events;
++	int num_events;
+ 	pqi_index_t oq_pi;
+ 	pqi_index_t oq_ci;
+ 	struct pqi_event_queue *event_queue;
+@@ -3317,26 +3336,31 @@ static unsigned int pqi_process_event_intr(struct pqi_ctrl_info *ctrl_info)
+ 
+ 	while (1) {
+ 		oq_pi = readl(event_queue->oq_pi);
++		if (oq_pi >= PQI_NUM_EVENT_QUEUE_ELEMENTS) {
++			pqi_invalid_response(ctrl_info);
++			dev_err(&ctrl_info->pci_dev->dev,
++				"event interrupt: producer index (%u) out of range (0-%u): consumer index: %u\n",
++				oq_pi, PQI_NUM_EVENT_QUEUE_ELEMENTS - 1, oq_ci);
++			return -1;
++		}
++
+ 		if (oq_pi == oq_ci)
+ 			break;
+ 
+ 		num_events++;
+-		response = event_queue->oq_element_array +
+-			(oq_ci * PQI_EVENT_OQ_ELEMENT_LENGTH);
++		response = event_queue->oq_element_array + (oq_ci * PQI_EVENT_OQ_ELEMENT_LENGTH);
+ 
+ 		event_index =
+ 			pqi_event_type_to_event_index(response->event_type);
+ 
+-		if (event_index >= 0) {
+-			if (response->request_acknowlege) {
+-				event = &ctrl_info->events[event_index];
+-				event->pending = true;
+-				event->event_type = response->event_type;
+-				event->event_id = response->event_id;
+-				event->additional_event_id =
+-					response->additional_event_id;
++		if (event_index >= 0 && response->request_acknowledge) {
++			event = &ctrl_info->events[event_index];
++			event->pending = true;
++			event->event_type = response->event_type;
++			event->event_id = response->event_id;
++			event->additional_event_id = response->additional_event_id;
++			if (event->event_type == PQI_EVENT_TYPE_OFA)
+ 				pqi_ofa_capture_event_payload(event, response);
+-			}
+ 		}
+ 
+ 		oq_ci = (oq_ci + 1) % PQI_NUM_EVENT_QUEUE_ELEMENTS;
+@@ -3451,7 +3475,8 @@ static irqreturn_t pqi_irq_handler(int irq, void *data)
+ {
+ 	struct pqi_ctrl_info *ctrl_info;
+ 	struct pqi_queue_group *queue_group;
+-	unsigned int num_responses_handled;
++	int num_io_responses_handled;
++	int num_events_handled;
+ 
+ 	queue_group = data;
+ 	ctrl_info = queue_group->ctrl_info;
+@@ -3459,17 +3484,25 @@ static irqreturn_t pqi_irq_handler(int irq, void *data)
+ 	if (!pqi_is_valid_irq(ctrl_info))
+ 		return IRQ_NONE;
+ 
+-	num_responses_handled = pqi_process_io_intr(ctrl_info, queue_group);
++	num_io_responses_handled = pqi_process_io_intr(ctrl_info, queue_group);
++	if (num_io_responses_handled < 0)
++		goto out;
+ 
+-	if (irq == ctrl_info->event_irq)
+-		num_responses_handled += pqi_process_event_intr(ctrl_info);
++	if (irq == ctrl_info->event_irq) {
++		num_events_handled = pqi_process_event_intr(ctrl_info);
++		if (num_events_handled < 0)
++			goto out;
++	} else {
++		num_events_handled = 0;
 +	}
- 	spin_unlock(&qedi_conn->list_lock);
  
- 	clear_bit(QEDI_CONN_FW_CLEANUP, &qedi_conn->flags);
+-	if (num_responses_handled)
++	if (num_io_responses_handled + num_events_handled > 0)
+ 		atomic_inc(&ctrl_info->num_interrupts);
+ 
+ 	pqi_start_io(ctrl_info, queue_group, RAID_PATH, NULL);
+ 	pqi_start_io(ctrl_info, queue_group, AIO_PATH, NULL);
+ 
++out:
+ 	return IRQ_HANDLED;
+ }
+ 
 -- 
 2.25.1
 
