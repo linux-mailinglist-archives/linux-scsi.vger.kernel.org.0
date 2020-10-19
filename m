@@ -2,139 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF7B29247F
-	for <lists+linux-scsi@lfdr.de>; Mon, 19 Oct 2020 11:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5522924C2
+	for <lists+linux-scsi@lfdr.de>; Mon, 19 Oct 2020 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730259AbgJSJSg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Oct 2020 05:18:36 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:34649 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729941AbgJSJSg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 19 Oct 2020 05:18:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1603099115; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=214UCzHFLDONI35AQrRDMUkpfaFdQ/OBZ1szzBN82CI=;
- b=nIpAQEBpfZMqXDuAbKMdF8iSLRwsVvMBeq3dJb3ten0NHWbbDom9kN8Gohw9zmoZXo50Djc3
- TzCZM+Ditl2g2++3AR8rPIBaclTsgCVHNzcjUw/OJZGRYBAQcaHFsdLxVkxOAQTBsxJclC18
- AOUmCyAZuh0T3iiCIa1uFDGZ/mE=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 5f8d59cc57b88ccb5608102f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 19 Oct 2020 09:18:04
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4C427C43382; Mon, 19 Oct 2020 09:18:04 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5E61CC433FE;
-        Mon, 19 Oct 2020 09:18:03 +0000 (UTC)
+        id S1730427AbgJSJkA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Oct 2020 05:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727556AbgJSJj5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Oct 2020 05:39:57 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1F4C0613D3
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Oct 2020 02:39:56 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id h6so13359385lfj.3
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Oct 2020 02:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=Zr6WnALleQdZ1gAu/9D/xHkeePuW/Rb5f5x+BjyZdvg=;
+        b=QIZK1nPiYC8ZcBELzS0IhBjf2JVtl2pfb6qrQ3tvwUDVXBlwVtwylABNDe+B1zla7Y
+         4Vxvnco/Aaz+iSSXy0jvfBZ0MxnRgXNYK4RbjZPlazVd6Nx2hWOz22/L3PbqH+JC9R8d
+         o5aEwj1/9yLPSL5k09s+wGxMoN607qd0Nlk4sQzZxFSQjVvlNZQHfcYY6ekSOlWDvi1p
+         uwRw4dm2E2K6Esaag7J/8HRZ/50pPk6XCfXXHc+w7p0muDgo4S8J1Yos6ZxNvOg3mvBS
+         lQz08nf9yUCvitd+cpH+c3++Kq54QIk1uy3QliAP26mrIuoDP5DADjvT4VNtm2j/o0A4
+         HJDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=Zr6WnALleQdZ1gAu/9D/xHkeePuW/Rb5f5x+BjyZdvg=;
+        b=dEQthVuAcqllysQQv9DUUH1We5/2OoFdiL3EYQ0Sur4/CTEaqFkJM2L/6Rb6L7oqyJ
+         SyDGOeEoDh3Mn3t3bkkQcTuQIouyAF58IcLsGYIR/1S0/nIptnq2+RfqGcYPefThC7cN
+         0NyCzAuB0pknZMJ7VlO9KGIvOEChw7frPemKCHnTAZTCeTZq17OADBg+B7k0gfHYpIo0
+         cO38Gcmx8g4P7f9EQ7sPjcxg4xlWeT2PrbTu+QcETvKrdjK5TsTwKykOKbP/1I36p23G
+         EuVrOGc+NXbCvYF4Lij/8NjJ5wJwDqvfDQx267csp5W3747YKpA82cm9sBfemAipPhZ6
+         ULgg==
+X-Gm-Message-State: AOAM531K9/zj95dsKGtuUM0gTk8JyNhoynEpQg+vtyCSa7J9ozK7v7QP
+        vmBx/zdYbmT2nonWSV129B3WjZmsrPTJ0O01hcA=
+X-Google-Smtp-Source: ABdhPJyf2mEr0WsePg7MajeAkiSaCxxrmRRA/9PRDTw1l4Q9jKVVKmcv5SSF/7RxvEsOtgiY9dKUUvP+ZGwxjgzbWd4=
+X-Received: by 2002:ac2:43af:: with SMTP id t15mr5016382lfl.42.1603100394685;
+ Mon, 19 Oct 2020 02:39:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 19 Oct 2020 17:18:03 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     jaegeuk@kernel.org, Asutosh Das <asutoshd@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: Re: [PATCH v2] scsi: ufs: fix clkgating on/off correctly
-In-Reply-To: <20201016211826.GA3441410@google.com>
-References: <20201016060259.390029-1-jaegeuk@kernel.org>
- <20201016211826.GA3441410@google.com>
-Message-ID: <b03c5b39506381577ea049a38a342adf@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Reply-To: salif.musa211@gmail.com
+Sender: uslif12@gmail.com
+Received: by 2002:a19:88d6:0:0:0:0:0 with HTTP; Mon, 19 Oct 2020 02:39:54
+ -0700 (PDT)
+From:   Salif Musa <salif.musa212@gmail.com>
+Date:   Mon, 19 Oct 2020 10:39:54 +0100
+X-Google-Sender-Auth: 0GcHAIJjIbzrP9Qw6dr59MDPLSA
+Message-ID: <CAKVqExfGjP9SgEWgeKVc1wokh9ymZQ6K0=AXAZq6SzHDxVTMoA@mail.gmail.com>
+Subject: TREAT AS URGENT/ REPLY FOR MORE DETAILS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-10-17 05:18, jaegeuk@kernel.org wrote:
-> The below call stack prevents clk_gating at every IO completion.
-> We can remove the condition, ufshcd_any_tag_in_use(), since 
-> clkgating_work
-> will check it again.
+-- 
+Hi friend
 
-Thanks for fixing it, actually we have noticed this for a while.
-It used to work well, please add a Fixes tag or mention the commit
-which breaks clk gating functionality - the commit which introduces
-func ufshcd_any_tag_in_use().
 
-Regards,
 
-Can Guo.
+I am a banker in ADB BANK. I want to transfer an abandoned sum of
+USD15.6Million to your Bank account. 40/percent will be your share.
 
-> 
-> ufshcd_complete_requests(struct ufs_hba *hba)
->   ufshcd_transfer_req_compl()
->     __ufshcd_transfer_req_compl()
->       __ufshcd_release(hba)
->         if (ufshcd_any_tag_in_use() == 1)
->            return;
->   ufshcd_tmc_handler(hba);
->     blk_mq_tagset_busy_iter();
-> 
-> In addition, we have to avoid gate_work, if it was disabled.
-> 
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: Avri Altman <avri.altman@wdc.com>
-> Cc: Can Guo <cang@codeaurora.org>
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
-> 
-> Change log from v1:
->  - change the patch subject
->  - fix clkgate.is_enable to work
-> 
->  drivers/scsi/ufs/ufshcd.c | 5 +++--
->  drivers/scsi/ufs/ufshcd.h | 5 +++++
->  2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index a2db8182663d..75e8a76f20c7 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -1729,9 +1729,10 @@ static void __ufshcd_release(struct ufs_hba 
-> *hba)
-> 
->  	if (hba->clk_gating.active_reqs || hba->clk_gating.is_suspended
->  		|| hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL
-> -		|| ufshcd_any_tag_in_use(hba) || hba->outstanding_tasks
-> +		|| hba->outstanding_tasks
->  		|| hba->active_uic_cmd || hba->uic_async_done
-> -		|| ufshcd_eh_in_progress(hba))
-> +		|| ufshcd_eh_in_progress(hba)
-> +		|| ufshcd_is_clkgating_enabled(hba))
->  		return;
-> 
->  	hba->clk_gating.state = REQ_CLKS_OFF;
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 8344d8cb3678..09e59cb86e69 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -814,6 +814,11 @@ static inline bool
-> ufshcd_is_auto_hibern8_supported(struct ufs_hba *hba)
->  		!(hba->quirks & UFSHCD_QUIRK_BROKEN_AUTO_HIBERN8);
->  }
-> 
-> +static inline bool ufshcd_is_clkgating_enabled(struct ufs_hba *hba)
-> +{
-> +	return hba->clk_gating.is_enabled;
-> +}
-> +
->  static inline bool ufshcd_is_auto_hibern8_enabled(struct ufs_hba *hba)
->  {
->  	return FIELD_GET(UFSHCI_AHIBERN8_TIMER_MASK, hba->ahit) ? true : 
-> false;
+No risk involved but keeps it as secret. Contact me for more details.
+Please reply me through my alternative email id only (salif.musa211@gmail.com)
+for confidential reasons.
+
+
+Yours
+Dr Salif Musa
