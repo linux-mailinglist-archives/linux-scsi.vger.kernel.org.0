@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9094292718
-	for <lists+linux-scsi@lfdr.de>; Mon, 19 Oct 2020 14:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617E6292716
+	for <lists+linux-scsi@lfdr.de>; Mon, 19 Oct 2020 14:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbgJSMSD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Oct 2020 08:18:03 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49276 "EHLO mx2.suse.de"
+        id S1726700AbgJSMSA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Oct 2020 08:18:00 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49292 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726599AbgJSMSA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1726631AbgJSMSA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Mon, 19 Oct 2020 08:18:00 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id ED631AFC4;
-        Mon, 19 Oct 2020 12:17:57 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 01A9AB1DA;
+        Mon, 19 Oct 2020 12:17:58 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 1/4] bfa: Remove legacy printk() usage
-Date:   Mon, 19 Oct 2020 14:17:53 +0200
-Message-Id: <20201019121756.74644-2-hare@suse.de>
+Subject: [PATCH 2/4] bfa: drop unused 'bfad' and 'pcidev' arguments
+Date:   Mon, 19 Oct 2020 14:17:54 +0200
+Message-Id: <20201019121756.74644-3-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20201019121756.74644-1-hare@suse.de>
 References: <20201019121756.74644-1-hare@suse.de>
@@ -30,407 +30,322 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Replace the remaining callsites to use dev_printk() and friends.
+The various bfa modules all have an 'attach' function, most of
+which have two pointless arguments 'bfad' and 'pcidev'.
+Remove them.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/bfa/bfad.c         | 55 +++++++++++++++++------------------------
- drivers/scsi/bfa/bfad_bsg.c     | 12 +++------
- drivers/scsi/bfa/bfad_debugfs.c | 32 +++++++++---------------
- drivers/scsi/bfa/bfad_drv.h     |  3 +++
- drivers/scsi/bfa/bfad_im.c      | 14 +++++------
- 5 files changed, 48 insertions(+), 68 deletions(-)
+ drivers/scsi/bfa/bfa.h         |  3 ---
+ drivers/scsi/bfa/bfa_core.c    | 30 +++++++++++++++---------------
+ drivers/scsi/bfa/bfa_fcpim.c   |  8 +++-----
+ drivers/scsi/bfa/bfa_ioc.c     |  3 +--
+ drivers/scsi/bfa/bfa_ioc.h     |  1 -
+ drivers/scsi/bfa/bfa_modules.h | 28 ++++++++++------------------
+ drivers/scsi/bfa/bfa_svc.c     | 23 ++++++++---------------
+ 7 files changed, 37 insertions(+), 59 deletions(-)
 
-diff --git a/drivers/scsi/bfa/bfad.c b/drivers/scsi/bfa/bfad.c
-index 440ef32be048..f350f3154e52 100644
---- a/drivers/scsi/bfa/bfad.c
-+++ b/drivers/scsi/bfa/bfad.c
-@@ -170,8 +170,7 @@ bfad_sm_uninit(struct bfad_s *bfad, enum bfad_sm_event event)
- 		bfad->bfad_tsk = kthread_create(bfad_worker, (void *) bfad,
- 						"%s", "bfad_worker");
- 		if (IS_ERR(bfad->bfad_tsk)) {
--			printk(KERN_INFO "bfad[%d]: Kernel thread "
--				"creation failed!\n", bfad->inst_no);
-+			BFA_MSG(KERN_INFO, bfad, "Kernel thread creation failed!\n");
- 			bfa_sm_send_event(bfad, BFAD_E_KTHREAD_CREATE_FAILED);
- 		}
- 		bfa_sm_send_event(bfad, BFAD_E_INIT);
-@@ -205,8 +204,7 @@ bfad_sm_created(struct bfad_s *bfad, enum bfad_sm_event event)
+diff --git a/drivers/scsi/bfa/bfa.h b/drivers/scsi/bfa/bfa.h
+index 7bd2ba1ad4d1..901e77b9c650 100644
+--- a/drivers/scsi/bfa/bfa.h
++++ b/drivers/scsi/bfa/bfa.h
+@@ -293,9 +293,6 @@ struct bfa_iocfc_s {
+ void bfa_iocfc_meminfo(struct bfa_iocfc_cfg_s *cfg,
+ 			struct bfa_meminfo_s *meminfo,
+ 			struct bfa_s *bfa);
+-void bfa_iocfc_attach(struct bfa_s *bfa, void *bfad,
+-		      struct bfa_iocfc_cfg_s *cfg,
+-		      struct bfa_pcidev_s *pcidev);
+ void bfa_iocfc_init(struct bfa_s *bfa);
+ void bfa_iocfc_start(struct bfa_s *bfa);
+ void bfa_iocfc_stop(struct bfa_s *bfa);
+diff --git a/drivers/scsi/bfa/bfa_core.c b/drivers/scsi/bfa/bfa_core.c
+index 6846ca8f7313..aa726fc7f7e1 100644
+--- a/drivers/scsi/bfa/bfa_core.c
++++ b/drivers/scsi/bfa/bfa_core.c
+@@ -1033,12 +1033,11 @@ bfa_iocfc_send_cfg(void *bfa_arg)
+ }
  
- 		/* Enable Interrupt and wait bfa_init completion */
- 		if (bfad_setup_intr(bfad)) {
--			printk(KERN_WARNING "bfad%d: bfad_setup_intr failed\n",
--					bfad->inst_no);
-+			BFA_MSG(KERN_WARNING, bfad, "bfad_setup_intr failed\n");
- 			bfa_sm_send_event(bfad, BFAD_E_INIT_FAILED);
- 			break;
- 		}
-@@ -218,8 +216,7 @@ bfad_sm_created(struct bfad_s *bfad, enum bfad_sm_event event)
- 		/* Set up interrupt handler for each vectors */
- 		if ((bfad->bfad_flags & BFAD_MSIX_ON) &&
- 			bfad_install_msix_handler(bfad)) {
--			printk(KERN_WARNING "%s: install_msix failed, bfad%d\n",
--				__func__, bfad->inst_no);
-+			BFA_MSG(KERN_WARNING, bfad, "install_msix failed\n");
- 		}
+ static void
+-bfa_iocfc_init_mem(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
++bfa_iocfc_init_mem(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg,
+ 		   struct bfa_pcidev_s *pcidev)
+ {
+ 	struct bfa_iocfc_s	*iocfc = &bfa->iocfc;
  
- 		bfad_init_timer(bfad);
-@@ -229,9 +226,7 @@ bfad_sm_created(struct bfad_s *bfad, enum bfad_sm_event event)
- 		if ((bfad->bfad_flags & BFAD_HAL_INIT_DONE)) {
- 			bfa_sm_send_event(bfad, BFAD_E_INIT_SUCCESS);
- 		} else {
--			printk(KERN_WARNING
--				"bfa %s: bfa init failed\n",
--				bfad->pci_name);
-+			BFA_MSG(KERN_WARNING, bfad, "bfa init failed\n");
- 			spin_lock_irqsave(&bfad->bfad_lock, flags);
- 			bfa_fcs_init(&bfad->bfa_fcs);
- 			spin_unlock_irqrestore(&bfad->bfad_lock, flags);
-@@ -722,7 +717,7 @@ bfad_pci_init(struct pci_dev *pdev, struct bfad_s *bfad)
- 	int rc = -ENODEV;
+-	bfa->bfad = bfad;
+ 	iocfc->bfa = bfa;
+ 	iocfc->cfg = *cfg;
  
- 	if (pci_enable_device(pdev)) {
--		printk(KERN_ERR "pci_enable_device fail %p\n", pdev);
-+		dev_err(&pdev->dev, "pci_enable_device fail %p\n", pdev);
- 		goto out;
+@@ -1513,8 +1512,8 @@ bfa_iocfc_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *meminfo,
+ /*
+  * Query IOC memory requirement information.
+  */
+-void
+-bfa_iocfc_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
++static void
++bfa_iocfc_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg,
+ 		 struct bfa_pcidev_s *pcidev)
+ {
+ 	int		i;
+@@ -1531,7 +1530,7 @@ bfa_iocfc_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+ 	bfa_ioc_pci_init(&bfa->ioc, pcidev, BFI_PCIFN_CLASS_FC);
+ 	bfa_ioc_mbox_register(&bfa->ioc, bfa_mbox_isrs);
+ 
+-	bfa_iocfc_init_mem(bfa, bfad, cfg, pcidev);
++	bfa_iocfc_init_mem(bfa, cfg, pcidev);
+ 	bfa_iocfc_mem_claim(bfa, cfg);
+ 	INIT_LIST_HEAD(&bfa->timer_mod.timer_q);
+ 
+@@ -1833,6 +1832,7 @@ bfa_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+ 	struct list_head *dm_qe, *km_qe;
+ 
+ 	bfa->fcs = BFA_FALSE;
++	bfa->bfad = bfad;
+ 
+ 	WARN_ON((cfg == NULL) || (meminfo == NULL));
+ 
+@@ -1855,16 +1855,16 @@ bfa_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+ 		kva_elem->kva_curp = kva_elem->kva;
  	}
  
-@@ -737,7 +732,7 @@ bfad_pci_init(struct pci_dev *pdev, struct bfad_s *bfad)
+-	bfa_iocfc_attach(bfa, bfad, cfg, pcidev);
+-	bfa_fcdiag_attach(bfa, bfad, cfg, pcidev);
+-	bfa_sgpg_attach(bfa, bfad, cfg, pcidev);
+-	bfa_fcport_attach(bfa, bfad, cfg, pcidev);
+-	bfa_fcxp_attach(bfa, bfad, cfg, pcidev);
+-	bfa_lps_attach(bfa, bfad, cfg, pcidev);
+-	bfa_uf_attach(bfa, bfad, cfg, pcidev);
+-	bfa_rport_attach(bfa, bfad, cfg, pcidev);
+-	bfa_fcp_attach(bfa, bfad, cfg, pcidev);
+-	bfa_dconf_attach(bfa, bfad, cfg);
++	bfa_iocfc_attach(bfa, cfg, pcidev);
++	bfa_fcdiag_attach(bfa, cfg);
++	bfa_sgpg_attach(bfa, cfg);
++	bfa_fcport_attach(bfa, cfg);
++	bfa_fcxp_attach(bfa, cfg);
++	bfa_lps_attach(bfa, cfg);
++	bfa_uf_attach(bfa, cfg);
++	bfa_rport_attach(bfa, cfg);
++	bfa_fcp_attach(bfa, cfg);
++	bfa_dconf_attach(bfa, cfg);
+ 	bfa_com_port_attach(bfa);
+ 	bfa_com_ablk_attach(bfa);
+ 	bfa_com_cee_attach(bfa);
+diff --git a/drivers/scsi/bfa/bfa_fcpim.c b/drivers/scsi/bfa/bfa_fcpim.c
+index 29f99561dfc3..cc3203c52c4b 100644
+--- a/drivers/scsi/bfa/bfa_fcpim.c
++++ b/drivers/scsi/bfa/bfa_fcpim.c
+@@ -305,8 +305,7 @@ bfa_fcpim_meminfo(struct bfa_iocfc_cfg_s *cfg, u32 *km_len)
  
- 	if (rc) {
- 		rc = -ENODEV;
--		printk(KERN_ERR "dma_set_mask_and_coherent fail %p\n", pdev);
-+		dev_err(&pdev->dev, "dma_set_mask_and_coherent fail\n");
- 		goto out_release_region;
+ 
+ static void
+-bfa_fcpim_attach(struct bfa_fcp_mod_s *fcp, void *bfad,
+-		struct bfa_iocfc_cfg_s *cfg, struct bfa_pcidev_s *pcidev)
++bfa_fcpim_attach(struct bfa_fcp_mod_s *fcp, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_fcpim_s *fcpim = &fcp->fcpim;
+ 	struct bfa_s *bfa = fcp->bfa;
+@@ -3679,8 +3678,7 @@ bfa_fcp_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *minfo,
+ }
+ 
+ void
+-bfa_fcp_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-		struct bfa_pcidev_s *pcidev)
++bfa_fcp_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_fcp_mod_s *fcp = BFA_FCP_MOD(bfa);
+ 	struct bfa_mem_dma_s *seg_ptr;
+@@ -3710,7 +3708,7 @@ bfa_fcp_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
  	}
  
-@@ -748,7 +743,7 @@ bfad_pci_init(struct pci_dev *pdev, struct bfad_s *bfad)
- 	bfad->pci_bar2_kva = pci_iomap(pdev, 2, pci_resource_len(pdev, 2));
+ 	fcp->throttle_update_required = 1;
+-	bfa_fcpim_attach(fcp, bfad, cfg, pcidev);
++	bfa_fcpim_attach(fcp, cfg);
  
- 	if (bfad->pci_bar0_kva == NULL) {
--		printk(KERN_ERR "Fail to map bar0\n");
-+		BFA_MSG(KERN_ERR, bfad, "Fail to map bar0\n");
- 		rc = -ENODEV;
- 		goto out_release_region;
- 	}
-@@ -774,13 +769,13 @@ bfad_pci_init(struct pci_dev *pdev, struct bfad_s *bfad)
- 		    pcie_max_read_reqsz <= 4096 &&
- 		    is_power_of_2(pcie_max_read_reqsz)) {
- 			int max_rq = pcie_get_readrq(pdev);
--			printk(KERN_WARNING "BFA[%s]: "
-+			dev_warn(&pdev->dev, "BFA[%s]: "
- 				"pcie_max_read_request_size is %d, "
- 				"reset to %d\n", bfad->pci_name, max_rq,
- 				pcie_max_read_reqsz);
- 			pcie_set_readrq(pdev, pcie_max_read_reqsz);
- 		} else {
--			printk(KERN_WARNING "BFA[%s]: invalid "
-+			dev_warn(&pdev->dev, "BFA[%s]: invalid "
- 			       "pcie_max_read_request_size %d ignored\n",
- 			       bfad->pci_name, pcie_max_read_reqsz);
- 		}
-@@ -822,10 +817,8 @@ bfad_drv_init(struct bfad_s *bfad)
+ 	bfa_iotag_attach(fcp);
  
- 	rc = bfad_hal_mem_alloc(bfad);
- 	if (rc != BFA_STATUS_OK) {
--		printk(KERN_WARNING "bfad%d bfad_hal_mem_alloc failure\n",
--		       bfad->inst_no);
--		printk(KERN_WARNING
--			"Not enough memory to attach all QLogic BR-series HBA ports. System may need more memory.\n");
-+		BFA_MSG(KERN_WARNING, bfad, "bfad_hal_mem_alloc failure\n");
-+		BFA_MSG(KERN_WARNING, bfad, "Not enough memory to attach all QLogic BR-series HBA ports. System may need more memory.\n");
- 		return BFA_STATUS_FAILED;
- 	}
+diff --git a/drivers/scsi/bfa/bfa_ioc.c b/drivers/scsi/bfa/bfa_ioc.c
+index dd5821dfcac2..b2ba89c81c65 100644
+--- a/drivers/scsi/bfa/bfa_ioc.c
++++ b/drivers/scsi/bfa/bfa_ioc.c
+@@ -6066,11 +6066,10 @@ bfa_dconf_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *meminfo,
+ }
  
-@@ -1011,7 +1004,7 @@ bfad_start_ops(struct bfad_s *bfad) {
- 	/* BFAD level FC4 IM specific resource allocation */
- 	retval = bfad_im_probe(bfad);
- 	if (retval != BFA_STATUS_OK) {
--		printk(KERN_WARNING "bfad_im_probe failed\n");
-+		BFA_MSG(KERN_WARNING, bfad, "bfad_im_probe failed\n");
- 		if (bfa_sm_cmp_state(bfad, bfad_sm_initializing))
- 			bfa_sm_set_state(bfad, bfad_sm_failed);
- 		return BFA_STATUS_FAILED;
-@@ -1038,8 +1031,8 @@ bfad_start_ops(struct bfad_s *bfad) {
- 		fc_vport = fc_vport_create(bfad->pport.im_port->shost, 0, &vid);
- 		if (!fc_vport) {
- 			wwn2str(pwwn_buf, vid.port_name);
--			printk(KERN_WARNING "bfad%d: failed to create pbc vport"
--				" %s\n", bfad->inst_no, pwwn_buf);
-+			BFA_MSG(KERN_WARNING, bfad, "failed to create pbc vport %s\n",
-+				 pwwn_buf);
- 		}
- 		list_del(&vport->list_entry);
- 		kfree(vport);
-@@ -1220,19 +1213,17 @@ bfad_setup_intr(struct bfad_s *bfad)
- 					      msix_entries, bfad->nvec);
- 		/* In CT1 & CT2, try to allocate just one vector */
- 		if (error == -ENOSPC && bfa_asic_id_ctc(pdev->device)) {
--			printk(KERN_WARNING "bfa %s: trying one msix "
--			       "vector failed to allocate %d[%d]\n",
--			       bfad->pci_name, bfad->nvec, error);
-+			BFA_MSG(KERN_WARNING, bfad, "trying one msix vector "
-+				 "failed to allocate %d[%d]\n",
-+				 bfad->nvec, error);
- 			bfad->nvec = 1;
- 			error = pci_enable_msix_exact(bfad->pcidev,
- 						      msix_entries, 1);
- 		}
+ void
+-bfa_dconf_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg)
++bfa_dconf_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_dconf_mod_s *dconf = BFA_DCONF_MOD(bfa);
  
- 		if (error) {
--			printk(KERN_WARNING "bfad%d: "
--			       "pci_enable_msix_exact failed (%d), "
--			       "use line based.\n",
--				bfad->inst_no, error);
-+			BFA_MSG(KERN_WARNING, bfad, "pci_enable_msix_exact "
-+				"failed (%d), use line based.\n", error);
- 			goto line_based;
- 		}
+-	dconf->bfad = bfad;
+ 	dconf->bfa = bfa;
+ 	dconf->instance = bfa->ioc.port_id;
+ 	bfa_trc(bfa, dconf->instance);
+diff --git a/drivers/scsi/bfa/bfa_ioc.h b/drivers/scsi/bfa/bfa_ioc.h
+index 933a1c3890ff..402f7b6a3df4 100644
+--- a/drivers/scsi/bfa/bfa_ioc.h
++++ b/drivers/scsi/bfa/bfa_ioc.h
+@@ -782,7 +782,6 @@ struct bfa_dconf_mod_s {
+ 	bfa_boolean_t		min_cfg;
+ 	struct bfa_timer_s	timer;
+ 	struct bfa_s		*bfa;
+-	void			*bfad;
+ 	void			*trcmod;
+ 	struct bfa_dconf_s	*dconf;
+ 	struct bfa_mem_kva_s	kva_seg;
+diff --git a/drivers/scsi/bfa/bfa_modules.h b/drivers/scsi/bfa/bfa_modules.h
+index 578e7678b056..299b41a7b540 100644
+--- a/drivers/scsi/bfa/bfa_modules.h
++++ b/drivers/scsi/bfa/bfa_modules.h
+@@ -56,7 +56,7 @@ enum {
+ #define BFA_CACHELINE_SZ	(256)
  
-@@ -1306,7 +1297,7 @@ bfad_pci_probe(struct pci_dev *pdev, const struct pci_device_id *pid)
+ struct bfa_s {
+-	void			*bfad;		/*  BFA driver instance    */
++	struct bfad_s		*bfad;		/*  BFA driver instance    */
+ 	struct bfa_plog_s	*plog;		/*  portlog buffer	    */
+ 	struct bfa_trc_mod_s	*trcmod;	/*  driver tracing	    */
+ 	struct bfa_ioc_s	ioc;		/*  IOC module		    */
+@@ -74,12 +74,11 @@ struct bfa_s {
  
- 	bfad->trcmod = kzalloc(sizeof(struct bfa_trc_mod_s), GFP_KERNEL);
- 	if (!bfad->trcmod) {
--		printk(KERN_WARNING "Error alloc trace buffer!\n");
-+		dev_warn(&pdev->dev, "Error alloc trace buffer!\n");
- 		error = -ENOMEM;
- 		goto out_alloc_trace_failure;
- 	}
-@@ -1328,7 +1319,7 @@ bfad_pci_probe(struct pci_dev *pdev, const struct pci_device_id *pid)
+ extern bfa_boolean_t bfa_auto_recover;
  
- 	retval = bfad_pci_init(pdev, bfad);
- 	if (retval) {
--		printk(KERN_WARNING "bfad_pci_init failure!\n");
-+		dev_warn(&pdev->dev, "bfad_pci_init failure!\n");
- 		error = retval;
- 		goto out_pci_init_failure;
- 	}
-@@ -1749,14 +1740,14 @@ bfad_read_firmware(struct pci_dev *pdev, u32 **bfi_image,
- 	const struct firmware *fw;
+-void bfa_dconf_attach(struct bfa_s *, void *, struct bfa_iocfc_cfg_s *);
++void bfa_dconf_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_dconf_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		  struct bfa_s *);
+ void bfa_dconf_iocdisable(struct bfa_s *);
+-void bfa_fcp_attach(struct bfa_s *, void *, struct bfa_iocfc_cfg_s *,
+-		struct bfa_pcidev_s *);
++void bfa_fcp_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_fcp_iocdisable(struct bfa_s *bfa);
+ void bfa_fcp_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		struct bfa_s *);
+@@ -88,36 +87,29 @@ void bfa_fcport_start(struct bfa_s *);
+ void bfa_fcport_iocdisable(struct bfa_s *);
+ void bfa_fcport_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		   struct bfa_s *);
+-void bfa_fcport_attach(struct bfa_s *, void *, struct bfa_iocfc_cfg_s *,
+-		struct bfa_pcidev_s *);
++void bfa_fcport_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_fcxp_iocdisable(struct bfa_s *);
+ void bfa_fcxp_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		struct bfa_s *);
+-void bfa_fcxp_attach(struct bfa_s *, void *, struct bfa_iocfc_cfg_s *,
+-		struct bfa_pcidev_s *);
++void bfa_fcxp_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_fcdiag_iocdisable(struct bfa_s *);
+-void bfa_fcdiag_attach(struct bfa_s *bfa, void *, struct bfa_iocfc_cfg_s *,
+-		struct bfa_pcidev_s *);
++void bfa_fcdiag_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *);
+ void bfa_ioim_lm_init(struct bfa_s *);
+ void bfa_lps_iocdisable(struct bfa_s *bfa);
+ void bfa_lps_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		struct bfa_s *);
+-void bfa_lps_attach(struct bfa_s *, void *, struct bfa_iocfc_cfg_s *,
+-	struct bfa_pcidev_s *);
++void bfa_lps_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_rport_iocdisable(struct bfa_s *bfa);
+ void bfa_rport_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		struct bfa_s *);
+-void bfa_rport_attach(struct bfa_s *, void *, struct bfa_iocfc_cfg_s *,
+-		struct bfa_pcidev_s *);
++void bfa_rport_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_sgpg_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		struct bfa_s *);
+-void bfa_sgpg_attach(struct bfa_s *, void *bfad, struct bfa_iocfc_cfg_s *,
+-		struct bfa_pcidev_s *);
++void bfa_sgpg_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_uf_iocdisable(struct bfa_s *);
+ void bfa_uf_meminfo(struct bfa_iocfc_cfg_s *, struct bfa_meminfo_s *,
+ 		struct bfa_s *);
+-void bfa_uf_attach(struct bfa_s *, void *, struct bfa_iocfc_cfg_s *,
+-		struct bfa_pcidev_s *);
++void bfa_uf_attach(struct bfa_s *, struct bfa_iocfc_cfg_s *);
+ void bfa_uf_start(struct bfa_s *);
  
- 	if (request_firmware(&fw, fw_name, &pdev->dev)) {
--		printk(KERN_ALERT "Can't locate firmware %s\n", fw_name);
-+		dev_alert(&pdev->dev, "Can't locate firmware %s\n", fw_name);
- 		*bfi_image = NULL;
- 		goto out;
- 	}
+ #endif /* __BFA_MODULES_H__ */
+diff --git a/drivers/scsi/bfa/bfa_svc.c b/drivers/scsi/bfa/bfa_svc.c
+index 1e266c1ef793..c47c7e45b733 100644
+--- a/drivers/scsi/bfa/bfa_svc.c
++++ b/drivers/scsi/bfa/bfa_svc.c
+@@ -487,8 +487,7 @@ bfa_fcxp_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *minfo,
+ }
  
- 	*bfi_image = vmalloc(fw->size);
- 	if (NULL == *bfi_image) {
--		printk(KERN_ALERT "Fail to allocate buffer for fw image "
-+		dev_alert(&pdev->dev, "Fail to allocate buffer for fw image "
- 			"size=%x!\n", (u32) fw->size);
- 		goto out;
- 	}
-diff --git a/drivers/scsi/bfa/bfad_bsg.c b/drivers/scsi/bfa/bfad_bsg.c
-index fc515424ca88..9302f0b83ca2 100644
---- a/drivers/scsi/bfa/bfad_bsg.c
-+++ b/drivers/scsi/bfa/bfad_bsg.c
-@@ -3441,16 +3441,14 @@ bfad_im_bsg_els_ct_request(struct bsg_job *job)
- 	/* allocate memory for req / rsp buffers */
- 	req_kbuf = kzalloc(job->request_payload.payload_len, GFP_KERNEL);
- 	if (!req_kbuf) {
--		printk(KERN_INFO "bfa %s: fcpt request buffer alloc failed\n",
--				bfad->pci_name);
-+		BFA_MSG(KERN_INFO, bfad, "fcpt request buffer alloc failed\n");
- 		rc = -ENOMEM;
- 		goto out_free_mem;
- 	}
+ void
+-bfa_fcxp_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-		struct bfa_pcidev_s *pcidev)
++bfa_fcxp_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_fcxp_mod_s *mod = BFA_FCXP_MOD(bfa);
  
- 	rsp_kbuf = kzalloc(job->reply_payload.payload_len, GFP_KERNEL);
- 	if (!rsp_kbuf) {
--		printk(KERN_INFO "bfa %s: fcpt response buffer alloc failed\n",
--				bfad->pci_name);
-+		BFA_MSG(KERN_INFO, bfad, "fcpt response buffer alloc failed\n");
- 		rc = -ENOMEM;
- 		goto out_free_mem;
- 	}
-@@ -3464,8 +3462,7 @@ bfad_im_bsg_els_ct_request(struct bsg_job *job)
- 					job->request_payload.payload_len,
- 					&drv_fcxp->num_req_sgles);
- 	if (!drv_fcxp->reqbuf_info) {
--		printk(KERN_INFO "bfa %s: fcpt request fcxp_map_sg failed\n",
--				bfad->pci_name);
-+		BFA_MSG(KERN_INFO, bfad, "fcpt request fcxp_map_sg failed\n");
- 		rc = -ENOMEM;
- 		goto out_free_mem;
- 	}
-@@ -3480,8 +3477,7 @@ bfad_im_bsg_els_ct_request(struct bsg_job *job)
- 					job->reply_payload.payload_len,
- 					&drv_fcxp->num_rsp_sgles);
- 	if (!drv_fcxp->rspbuf_info) {
--		printk(KERN_INFO "bfa %s: fcpt response fcxp_map_sg failed\n",
--				bfad->pci_name);
-+		BFA_MSG(KERN_INFO, bfad, "fcpt response fcxp_map_sg failed\n");
- 		rc = -ENOMEM;
- 		goto out_free_mem;
- 	}
-diff --git a/drivers/scsi/bfa/bfad_debugfs.c b/drivers/scsi/bfa/bfad_debugfs.c
-index fd1b378a263a..2eaa8e6473c1 100644
---- a/drivers/scsi/bfa/bfad_debugfs.c
-+++ b/drivers/scsi/bfa/bfad_debugfs.c
-@@ -76,8 +76,7 @@ bfad_debugfs_open_fwtrc(struct inode *inode, struct file *file)
- 	fw_debug->debug_buffer = vzalloc(fw_debug->buffer_len);
- 	if (!fw_debug->debug_buffer) {
- 		kfree(fw_debug);
--		printk(KERN_INFO "bfad[%d]: Failed to allocate fwtrc buffer\n",
--				bfad->inst_no);
-+		BFA_MSG(KERN_INFO, bfad, "Failed to allocate fwtrc buffer\n");
- 		return -ENOMEM;
- 	}
+@@ -1477,8 +1476,7 @@ bfa_lps_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *minfo,
+  * bfa module attach at initialization time
+  */
+ void
+-bfa_lps_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-	struct bfa_pcidev_s *pcidev)
++bfa_lps_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_lps_mod_s	*mod = BFA_LPS_MOD(bfa);
+ 	struct bfa_lps_s	*lps;
+@@ -3021,8 +3019,7 @@ bfa_fcport_mem_claim(struct bfa_fcport_s *fcport)
+  * Memory initialization.
+  */
+ void
+-bfa_fcport_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-		struct bfa_pcidev_s *pcidev)
++bfa_fcport_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_fcport_s *fcport = BFA_FCPORT_MOD(bfa);
+ 	struct bfa_port_cfg_s *port_cfg = &fcport->cfg;
+@@ -4810,8 +4807,7 @@ bfa_rport_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *minfo,
+ }
  
-@@ -90,8 +89,7 @@ bfad_debugfs_open_fwtrc(struct inode *inode, struct file *file)
- 		vfree(fw_debug->debug_buffer);
- 		fw_debug->debug_buffer = NULL;
- 		kfree(fw_debug);
--		printk(KERN_INFO "bfad[%d]: Failed to collect fwtrc\n",
--				bfad->inst_no);
-+		BFA_MSG(KERN_INFO, bfad, "Failed to collect fwtrc\n");
- 		return -ENOMEM;
- 	}
+ void
+-bfa_rport_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-		struct bfa_pcidev_s *pcidev)
++bfa_rport_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_rport_mod_s *mod = BFA_RPORT_MOD(bfa);
+ 	struct bfa_rport_s *rp;
+@@ -5176,8 +5172,7 @@ bfa_sgpg_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *minfo,
+ }
  
-@@ -118,8 +116,7 @@ bfad_debugfs_open_fwsave(struct inode *inode, struct file *file)
- 	fw_debug->debug_buffer = vzalloc(fw_debug->buffer_len);
- 	if (!fw_debug->debug_buffer) {
- 		kfree(fw_debug);
--		printk(KERN_INFO "bfad[%d]: Failed to allocate fwsave buffer\n",
--				bfad->inst_no);
-+		BFA_MSG(KERN_INFO, bfad, "Failed to allocate fwsave buffer\n");
- 		return -ENOMEM;
- 	}
+ void
+-bfa_sgpg_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-		struct bfa_pcidev_s *pcidev)
++bfa_sgpg_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_sgpg_mod_s *mod = BFA_SGPG_MOD(bfa);
+ 	struct bfa_sgpg_s *hsgpg;
+@@ -5450,8 +5445,7 @@ bfa_uf_meminfo(struct bfa_iocfc_cfg_s *cfg, struct bfa_meminfo_s *minfo,
+ }
  
-@@ -132,8 +129,7 @@ bfad_debugfs_open_fwsave(struct inode *inode, struct file *file)
- 		vfree(fw_debug->debug_buffer);
- 		fw_debug->debug_buffer = NULL;
- 		kfree(fw_debug);
--		printk(KERN_INFO "bfad[%d]: Failed to collect fwsave\n",
--				bfad->inst_no);
-+		BFA_MSG(KERN_INFO, bfad, "Failed to collect fwsave\n");
- 		return -ENOMEM;
- 	}
+ void
+-bfa_uf_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-		struct bfa_pcidev_s *pcidev)
++bfa_uf_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_uf_mod_s *ufm = BFA_UF_MOD(bfa);
  
-@@ -256,9 +252,8 @@ bfad_debugfs_write_regrd(struct file *file, const char __user *buf,
+@@ -5707,13 +5701,12 @@ bfa_fcdiag_set_busy_status(struct bfa_fcdiag_s *fcdiag)
+ }
  
- 	rc = sscanf(kern_buf, "%x:%x", &addr, &len);
- 	if (rc < 2 || len > (UINT_MAX >> 2)) {
--		printk(KERN_INFO
--			"bfad[%d]: %s failed to read user buf\n",
--			bfad->inst_no, __func__);
-+		BFA_MSG(KERN_INFO, bfad, "%s failed to read user buf\n",
-+			 __func__);
- 		kfree(kern_buf);
- 		return -EINVAL;
- 	}
-@@ -270,8 +265,7 @@ bfad_debugfs_write_regrd(struct file *file, const char __user *buf,
+ void
+-bfa_fcdiag_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
+-		struct bfa_pcidev_s *pcidev)
++bfa_fcdiag_attach(struct bfa_s *bfa, struct bfa_iocfc_cfg_s *cfg)
+ {
+ 	struct bfa_fcdiag_s *fcdiag = BFA_FCDIAG_MOD(bfa);
+ 	struct bfa_dport_s  *dport = &fcdiag->dport;
  
- 	bfad->regdata = kzalloc(len << 2, GFP_KERNEL);
- 	if (!bfad->regdata) {
--		printk(KERN_INFO "bfad[%d]: Failed to allocate regrd buffer\n",
--				bfad->inst_no);
-+		BFA_MSG(KERN_INFO, bfad, "Failed to allocate regrd buffer\n");
- 		return -ENOMEM;
- 	}
- 
-@@ -282,8 +276,7 @@ bfad_debugfs_write_regrd(struct file *file, const char __user *buf,
- 	/* offset and len sanity check */
- 	rc = bfad_reg_offset_check(bfa, addr, len);
- 	if (rc) {
--		printk(KERN_INFO "bfad[%d]: Failed reg offset check\n",
--				bfad->inst_no);
-+		BFA_MSG(KERN_INFO, bfad, "Failed reg offset check\n");
- 		kfree(bfad->regdata);
- 		bfad->regdata = NULL;
- 		bfad->reglen = 0;
-@@ -323,9 +316,8 @@ bfad_debugfs_write_regwr(struct file *file, const char __user *buf,
- 
- 	rc = sscanf(kern_buf, "%x:%x", &addr, &val);
- 	if (rc < 2) {
--		printk(KERN_INFO
--			"bfad[%d]: %s failed to read user buf\n",
--			bfad->inst_no, __func__);
-+		BFA_MSG(KERN_INFO, bfad, "%s failed to read user buf\n",
-+			__func__);
- 		kfree(kern_buf);
- 		return -EINVAL;
- 	}
-@@ -336,9 +328,7 @@ bfad_debugfs_write_regwr(struct file *file, const char __user *buf,
- 	/* offset and len sanity check */
- 	rc = bfad_reg_offset_check(bfa, addr, 1);
- 	if (rc) {
--		printk(KERN_INFO
--			"bfad[%d]: Failed reg offset check\n",
--			bfad->inst_no);
-+		BFA_MSG(KERN_INFO, bfad, "Failed reg offset check\n");
- 		return -EINVAL;
- 	}
- 
-diff --git a/drivers/scsi/bfa/bfad_drv.h b/drivers/scsi/bfa/bfad_drv.h
-index eaee7c8bc2d2..619a7e47553b 100644
---- a/drivers/scsi/bfa/bfad_drv.h
-+++ b/drivers/scsi/bfa/bfad_drv.h
-@@ -286,6 +286,9 @@ do {									\
- 		dev_printk(level, &((bfad)->pcidev)->dev, fmt, ##arg);	\
- } while (0)
- 
-+#define BFA_MSG(level, bfad, fmt, arg...)			\
-+	dev_warn(&((bfad)->pcidev)->dev, "bfad%d: " fmt, (bfad)->inst_no, ##arg);
-+
- bfa_status_t	bfad_vport_create(struct bfad_s *bfad, u16 vf_id,
- 				  struct bfa_lport_cfg_s *port_cfg,
- 				  struct device *dev);
-diff --git a/drivers/scsi/bfa/bfad_im.c b/drivers/scsi/bfa/bfad_im.c
-index 22f06be2606f..1e5fe003ea11 100644
---- a/drivers/scsi/bfa/bfad_im.c
-+++ b/drivers/scsi/bfa/bfad_im.c
-@@ -542,7 +542,7 @@ bfad_im_scsi_host_alloc(struct bfad_s *bfad, struct bfad_im_port_s *im_port,
- 	error = idr_alloc(&bfad_im_port_index, im_port, 0, 0, GFP_KERNEL);
- 	if (error < 0) {
- 		mutex_unlock(&bfad_mutex);
--		printk(KERN_WARNING "idr_alloc failure\n");
-+		BFA_MSG(KERN_WARNING, bfad, "idr_alloc failure\n");
- 		goto out;
- 	}
- 	im_port->idr_id = error;
-@@ -570,7 +570,7 @@ bfad_im_scsi_host_alloc(struct bfad_s *bfad, struct bfad_im_port_s *im_port,
- 
- 	error = scsi_add_host_with_dma(im_port->shost, dev, &bfad->pcidev->dev);
- 	if (error) {
--		printk(KERN_WARNING "scsi_add_host failure %d\n", error);
-+		BFA_MSG(KERN_WARNING, bfad, "scsi_add_host failure %d\n", error);
- 		goto out_fc_rel;
- 	}
- 
-@@ -1136,7 +1136,7 @@ bfad_im_itnim_work_handler(struct work_struct *work)
- 				itnim->scsi_tgt_id,
- 				fcid_str, wwpn_str);
- 		} else {
--			printk(KERN_WARNING
-+			BFA_MSG(KERN_WARNING, bfad,
- 				"%s: itnim %llx is already in online state\n",
- 				__func__,
- 				bfa_fcs_itnim_get_pwwn(&itnim->fcs_itnim));
-@@ -1237,9 +1237,9 @@ bfad_im_queuecommand_lck(struct scsi_cmnd *cmnd, void (*done) (struct scsi_cmnd
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
- 	if (!(bfad->bfad_flags & BFAD_HAL_START_DONE)) {
--		printk(KERN_WARNING
--			"bfad%d, queuecommand %p %x failed, BFA stopped\n",
--		       bfad->inst_no, cmnd, cmnd->cmnd[0]);
-+		BFA_MSG(KERN_WARNING, bfad,
-+			"queuecommand %p %x failed, BFA stopped\n",
-+			cmnd, cmnd->cmnd[0]);
- 		cmnd->result = DID_NO_CONNECT << 16;
- 		goto out_fail_cmd;
- 	}
-@@ -1254,7 +1254,7 @@ bfad_im_queuecommand_lck(struct scsi_cmnd *cmnd, void (*done) (struct scsi_cmnd
- 	hal_io = bfa_ioim_alloc(&bfad->bfa, (struct bfad_ioim_s *) cmnd,
- 				    itnim->bfa_itnim, sg_cnt);
- 	if (!hal_io) {
--		printk(KERN_WARNING "hal_io failure\n");
-+		BFA_MSG(KERN_WARNING, bfad, "hal_io failure\n");
- 		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
- 		scsi_dma_unmap(cmnd);
- 		return SCSI_MLQUEUE_HOST_BUSY;
+-	fcdiag->bfa             = bfa;
++	fcdiag->bfa = bfa;
+ 	fcdiag->trcmod  = bfa->trcmod;
+ 	/* The common DIAG attach bfa_diag_attach() will do all memory claim */
+ 	dport->bfa = bfa;
 -- 
 2.16.4
 
