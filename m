@@ -2,122 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAD029333E
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Oct 2020 04:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B6D2933BB
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Oct 2020 05:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730497AbgJTCfz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Oct 2020 22:35:55 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:25190 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730404AbgJTCfz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 19 Oct 2020 22:35:55 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1603161354; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=7V0ug32c1j1PP+hx2W4Yh8PnNSTX3h6faSFkylQvda0=;
- b=eywAp/bzcf6xLmnT8DVIciT6wPjO73Z780V5fzkAMxmESyxoaVyiAApDbXfPnICOZCDEjVIV
- Z4zH7I7HFhUp1767zub88j2OF/e0/icqfpDQx+UKRaXr+Y4ic12uUFp6AKK0nxml2WkCFASR
- OBdaFldpM4J5E9QgXgjBY4Rptyc=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 5f8e4d0aaad2c3cd1c610816 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 20 Oct 2020 02:35:54
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DAA79C43382; Tue, 20 Oct 2020 02:35:53 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 31967C433FE;
-        Tue, 20 Oct 2020 02:35:53 +0000 (UTC)
+        id S2391333AbgJTDxa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Oct 2020 23:53:30 -0400
+Received: from 68.66.194.29.static.a2webhosting.com ([68.66.194.29]:34938 "EHLO
+        server.mobibuyer.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2391331AbgJTDxa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Oct 2020 23:53:30 -0400
+X-Greylist: delayed 2344 seconds by postgrey-1.27 at vger.kernel.org; Mon, 19 Oct 2020 23:53:29 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kolors.ae;
+         s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+        In-Reply-To:Subject:To:From:Date:MIME-Version:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=13yft7Hb+0Eu/vS4oBxxG8YZC0QBD2nN4/GChWsTrYs=; b=eEEB9p2mCZW0iP/C5PP0H61OgM
+        WpBsNP7dGH8ltHy7yPmOaV00hGrmqzAJ/+Hxw44E22BKK1YyghEoXkzlH/C5T+OuM0oYdAPz3MCjX
+        wvwyS/769lVyEYBtfbhiBdETOv/8s//N47LQ1QkDrTCJ0zrBHrsb4zqdAOSCS2Fq9ejk+P03h/9eo
+        kveQrIZERAzuNHeg+Dj+oleffs+JLCXJLbDbLO9M8pt85AvJktl8vXb8B7IXOqFXb3CVKcpianeLD
+        E5t6ij130CDZ8QHQbftLcOU1okr41/YqLC0aRroI3gfPEXG/v0nwxUlp4EoaNxLhdVK74rvx2pNez
+        j4BvbT3w==;
+Received: from [::1] (port=57810 helo=server.mobibuyer.com)
+        by server.mobibuyer.com with esmtpa (Exim 4.93)
+        (envelope-from <linbansah@gmail.com>)
+        id 1kUi6R-00059l-L8; Mon, 19 Oct 2020 23:14:23 -0400
 MIME-Version: 1.0
+Date:   Tue, 20 Oct 2020 03:14:23 +0000
+From:   Linda Hills <linbansah@gmail.com>
+To:     undisclosed-recipients:;
+Subject: from Linda
+In-Reply-To: <dcd4ba76a62ad0724b005bdd7d77da92@gmail.com>
+References: <93bc625b661319e9db38b9bccb7539b0@hotmail.com>
+ <cf6fd891a80aa5320f067a451b3ed300@hotmail.com>
+ <43be5269e8c2a4aee2fcf21fa7753b40@hotmail.com>
+ <ec88a61a241eb79e32822f6e9cdd60e5@hotmail.com>
+ <8ea4416a9e1becd584b161a8e7d0e0d5@hotmail.com>
+ <a2e485b00406815e82cca8e8c505041a@hotmail.com>
+ <13dc050f285182c7daa9d605292d9f11@hotmail.com>
+ <7c390f7e6e866f8385fc6770bfe8fa77@hotmail.com>
+ <02e3620bb80ecf5b4973b12deccc62a5@hotmail.com>
+ <0fcb36f814899f435a2c7be193722cc1@hotmail.com>
+ <00a8382ad0364045dff0bc88e8581849@hotmail.com>
+ <b6b09ab4458bba33445a9e5e4a945b6f@hotmail.com>
+ <c75002d63c286a0768c1e27ac3a62e6e@gmail.com>
+ <127d71411da3e06e6d10a6fb81ac3881@gmail.com>
+ <7925a65181746830be88306a23d07fd6@gmail.com>
+ <7fc4b313d8364127d09a6c1438df8425@gmail.com>
+ <557ca960ed6605746efc10b34419043a@gmail.com>
+ <0a833579070dc0fea5f3ea9189c639d2@gmail.com>
+ <640ea0d56ec25e329e2f200a8034ce12@gmail.com>
+ <7bbaaee9501a0a7eb205f4b1377a4039@gmail.com>
+ <e0e37aa57062af1f65e2460c4da4da35@gmail.com>
+ <dcd4ba76a62ad0724b005bdd7d77da92@gmail.com>
+Message-ID: <5dd48e8f390067d3bc3df4c320d1460d@gmail.com>
+X-Sender: linbansah@gmail.com
+User-Agent: Roundcube Webmail/1.3.15
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 20 Oct 2020 10:35:53 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: Make sure clk scaling happens only when hba is
- runtime ACTIVE
-In-Reply-To: <1600758548-28576-1-git-send-email-cang@codeaurora.org>
-References: <1600758548-28576-1-git-send-email-cang@codeaurora.org>
-Message-ID: <67c4ae5998765daa674a4df696d8d673@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server.mobibuyer.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - gmail.com
+X-Get-Message-Sender-Via: server.mobibuyer.com: authenticated_id: info@kolors.ae
+X-Authenticated-Sender: server.mobibuyer.com: info@kolors.ae
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Stanley,
 
-On 2020-09-22 15:09, Can Guo wrote:
-> If someone plays with the UFS clk scaling devfreq governor through 
-> sysfs,
-> ufshcd_devfreq_scale may be called even when hba is not runtime ACTIVE,
-> which can lead to unexpected error. We cannot just protect it by 
-> calling
-> pm_runtime_get_sync, because that may cause racing problem since hba
-> runtime suspend ops needs to suspend clk scaling. In order to fix it, 
-> call
-> pm_runtime_get_noresume and check hba's runtime status, then only 
-> proceed
-> if hba is runtime ACTIVE, otherwise just bail.
-> 
-> governor_store
->  devfreq_performance_handler
->   update_devfreq
->    devfreq_set_target
->     ufshcd_devfreq_target
->      ufshcd_devfreq_scale
-> 
-> Signed-off-by: Can Guo <cang@codeaurora.org>
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index e4cb994..847f355 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -1294,8 +1294,15 @@ static int ufshcd_devfreq_target(struct device 
-> *dev,
->  	}
->  	spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
-> 
-> +	pm_runtime_get_noresume(hba->dev);
-> +	if (!pm_runtime_active(hba->dev)) {
-> +		pm_runtime_put_noidle(hba->dev);
-> +		ret = -EAGAIN;
-> +		goto out;
-> +	}
->  	start = ktime_get();
->  	ret = ufshcd_devfreq_scale(hba, scale_up);
-> +	pm_runtime_put(hba->dev);
-> 
->  	trace_ufshcd_profile_clk_scaling(dev_name(hba->dev),
->  		(scale_up ? "up" : "down"),
+Hello,
 
-Could you please review this one since we may be the only two
-users of clk scaling?
-
-Thanks,
-
-Can Guo.
+how are you today?
+This is Linda, I have written to you before but no reply,
+please I want you to text me on WhatsApp +1(408)9903267
+There is something very important that I want to talk to you about.
+Linda.
