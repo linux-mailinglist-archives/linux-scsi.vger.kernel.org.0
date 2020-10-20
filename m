@@ -2,80 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE25A29438E
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Oct 2020 21:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CD9294399
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Oct 2020 21:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438453AbgJTTxR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 20 Oct 2020 15:53:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48310 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438427AbgJTTxJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 20 Oct 2020 15:53:09 -0400
-Received: from localhost (unknown [104.132.1.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C54CA223C6;
-        Tue, 20 Oct 2020 19:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603223588;
-        bh=AHoy8KFgublxtbfCrMKzqGKKzUoHEFBYkSraSnVIqHM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5R/G05opR4eHjGJBhmaxL/dgp2gKoKY0LLIw6+O5iv/b7y3cMxyA6GMZ0+WJYV4v
-         JzfxiC2lNgaqx0Gj0/xoxUspW/g9jCOsg8kpLLjqoRemxXErhMYuTvNaINxl9yufSW
-         RS7nyCeuDcno3s9Zcr1NvZPeTCGXWzlIEdHnEyyk=
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Can Guo <cang@codeaurora.org>
-Subject: [PATCH v2 5/5] scsi: ufs: fix clkgating on/off correctly
-Date:   Tue, 20 Oct 2020 12:52:58 -0700
-Message-Id: <20201020195258.2005605-6-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-In-Reply-To: <20201020195258.2005605-1-jaegeuk@kernel.org>
-References: <20201020195258.2005605-1-jaegeuk@kernel.org>
+        id S2438464AbgJTTxf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 20 Oct 2020 15:53:35 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:54698 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438461AbgJTTxf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 20 Oct 2020 15:53:35 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09KJmv2J086640;
+        Tue, 20 Oct 2020 19:53:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=4cVQZk2od44z+jLC34sJjhXfIhR3Lei2dqs009xN6zE=;
+ b=hbApIH7T/lN4QQFyPx96TzZZuvRuMb2bdCS1Qac8hDQ+sPYyNhPuvZA3EcMF+tjtvoj0
+ h0sXNRCk8LbFxvsI3NexleX+a+IAs0wdPVwA7Uobd9sE/uxtdkh7voqydHKLCvVBYSC+
+ 1qpwBrQupiWugaq/OC7Peif+rOpLcOdbi8Oe14xbkSBnv382UG/eqejXWT0Q8knDSrMX
+ pgWjgAPbD5ZoeifELXAdQyuQdktIJer+Uc7aC0B7U4Xjv6U817bJ8mS9Gyo5QabrEN3F
+ xw035DDeWlY3T8lcAFlebFV2HFIuFb5HPTYdHCS4wKWRyPKLWadeoFyvlTOjKTHrM7UG 4w== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 347p4aw8r3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Oct 2020 19:53:23 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09KJo3v1122852;
+        Tue, 20 Oct 2020 19:53:23 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 348a6njtau-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Oct 2020 19:53:23 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09KJrLln018958;
+        Tue, 20 Oct 2020 19:53:21 GMT
+Received: from [20.15.0.202] (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 20 Oct 2020 12:53:21 -0700
+Subject: Re: [PATCH v3 03/17] scsi: No retries on abort success
+To:     Muneendra Kumar M <muneendra.kumar@broadcom.com>,
+        linux-scsi@vger.kernel.org, hare@suse.de
+Cc:     jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com
+References: <1602732462-10443-1-git-send-email-muneendra.kumar@broadcom.com>
+ <1602732462-10443-4-git-send-email-muneendra.kumar@broadcom.com>
+ <d13fc9bd-a5da-134f-df21-33f8ac14f7b8@oracle.com>
+ <af17dfd40fc54d819b5f33259f7cd63b@mail.gmail.com>
+From:   Mike Christie <michael.christie@oracle.com>
+Message-ID: <63d24f21-1f65-87d3-0a0b-d474541b32e0@oracle.com>
+Date:   Tue, 20 Oct 2020 14:53:20 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <af17dfd40fc54d819b5f33259f7cd63b@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9780 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ bulkscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010200133
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9780 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010200133
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The below call stack prevents clk_gating at every IO completion.
-We can remove the condition, ufshcd_any_tag_in_use(), since clkgating_work
-will check it again.
+On 10/19/20 2:26 PM, Muneendra Kumar M wrote:
+> Hi Michael,
+> 
+>>   check_type:
+>> +	/*
+>> +	 * Check whether caller has decided not to do retries on
+>> +	 * abort success by setting the SCMD_NORETRIES_ABORT bit
+>> +	 */
+>> +	if ((test_bit(SCMD_NORETRIES_ABORT, &scmd->state)) &&
+>> +		(scmd->request->cmd_flags & REQ_FAILFAST_TRANSPORT)) {
+>> +		set_host_byte(scmd, DID_TRANSPORT_MARGINAL);
+> 
+>> Hey, one other thing that might be confusing me is this check and the
+>> naming. The 0/17 email description and the SCMD_NORETRIES_ABORT name makes
+>> me think we want to only run this if the cmd timedout and we went >through
+>> the SCSI EH TMF operations. However, I think this will end up failing other
+>> errors with DID_TRANSPORT_MARGINAL right?
+> 
+>> Did you want just the the SCSI EH timeout/abort case to hit this or any
+>> errors that hit this code path?
+> [Muneendra]At present we want SCSI EH timeout/abort case to hit this.
 
-ufshcd_complete_requests(struct ufs_hba *hba)
-  ufshcd_transfer_req_compl()
-    __ufshcd_transfer_req_compl()
-      __ufshcd_release(hba)
-        if (ufshcd_any_tag_in_use() == 1)
-           return;
-  ufshcd_tmc_handler(hba);
-    blk_mq_tagset_busy_iter();
-
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Avri Altman <avri.altman@wdc.com>
-Cc: Can Guo <cang@codeaurora.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- drivers/scsi/ufs/ufshcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index b5ca0effe636..cecbd4ace8b4 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1746,7 +1746,7 @@ static void __ufshcd_release(struct ufs_hba *hba)
- 
- 	if (hba->clk_gating.active_reqs || hba->clk_gating.is_suspended ||
- 	    hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL ||
--	    ufshcd_any_tag_in_use(hba) || hba->outstanding_tasks ||
-+	    hba->outstanding_tasks ||
- 	    hba->active_uic_cmd || hba->uic_async_done)
- 		return;
- 
--- 
-2.29.0.rc1.297.gfa9743e501-goog
-
+What about adding a new eh callout that the transport classes can implement.
+They can check the port state at this time and decide if the cmd should be
+retried or failed. It would be similar to fc_eh_timed_out for example.
