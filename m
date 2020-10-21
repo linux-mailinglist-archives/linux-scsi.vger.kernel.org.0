@@ -2,105 +2,239 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBBC294EE1
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Oct 2020 16:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45F9294EF8
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Oct 2020 16:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442053AbgJUOjb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Oct 2020 10:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441957AbgJUOjb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Oct 2020 10:39:31 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD98C0613CF
-        for <linux-scsi@vger.kernel.org>; Wed, 21 Oct 2020 07:39:30 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id j8so2794208ilk.0
-        for <linux-scsi@vger.kernel.org>; Wed, 21 Oct 2020 07:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=RTbmCQFCQ7nSK/oerOP6Amzmeduj2X2rg93uEIMDvMc=;
-        b=fycshIIr6divJaut5LHQx3XbLmLSgWWSjyQWbBmdf2tRrSuGXSY0zq8ZaYdy50S1Bc
-         0/j7tqHwmWKnm/hJI5jt2t+sCuG+/2BuAk/gfVtax81vdX2bA7D7JQr9KQIL5ZdFDRyD
-         u2wLJcX09MHrpGopw3neJveKoT6S55ma7sm0pd1ysmHEGP7AwKO5P0hlu9wxW2kKC49N
-         IkSnMc5FIpNfCqQ7dmKgX05lb4qEzGiM02ZmivHVDXL9HnLuuzrQm3GMaO1x/Z/FC5xL
-         tj+fF2WneKWd7e+rHZiqFt/0PilTG7hm1eI7fZfKmA/wLaHQsAxRKIdD3E80Mnz5ldjx
-         V5EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=RTbmCQFCQ7nSK/oerOP6Amzmeduj2X2rg93uEIMDvMc=;
-        b=qSWFkBnqrcYcPWy80LJgJ/EGddxzcdlO4NlwVs0EsYEvgpkalSIdhaT8+/Esnmkenm
-         nsy/0bvlrlMowKbcUpMp0mxh8Y98nKWcsuDpI4v65oNpWFj3zwLbzzmUfkm4Kau5+NRV
-         SccPe47LPUoNcpfhYBDwHkr0YWmHhEYNt8S+fPEWrYbml34D89Xh/udTnSleNuAcE0Aj
-         A5Rk+iVAz8h410ISbkocmwUnV29Nvf/IgdLMgSw+pLydYbuZEX7FQSxsu3dqKKWV2F1b
-         LKF9qVLFsa9NikMiV+Sm/t2FBanWfVR/Wih7TJeDQw/SVuoQY3LGC9jN9VEG6TvwKlx4
-         EylA==
-X-Gm-Message-State: AOAM533muhlyG3THEcpxf4eJg6u4ms4Yvhn42UmXSTkagpOywHqvNyOC
-        Fr9bXu2SBVpjB1jsByN1NNw/CP9Q66k0cAWlrvw=
-X-Google-Smtp-Source: ABdhPJzqqt4m9FmqviR7RFEuZL1igVdcP6kKb3kf9DV42Y1a83OI0rkQam28L6wCGF2H9A9TUhPAu4rybNPAelb2qfM=
-X-Received: by 2002:a92:c150:: with SMTP id b16mr2770245ilh.206.1603291170200;
- Wed, 21 Oct 2020 07:39:30 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a6b:d907:0:0:0:0:0 with HTTP; Wed, 21 Oct 2020 07:39:29
- -0700 (PDT)
-Reply-To: mstheresaaheidi@yahoo.com
-From:   Ms Theresa Heidi <mstheresaheidi@gmail.com>
-Date:   Wed, 21 Oct 2020 09:39:29 -0500
-Message-ID: <CAK_gh8+tz3=J9R7oBdNA99T7yRdtaFO8cfbjyNetsDf+4qsaoA@mail.gmail.com>
-Subject: URGENT MATTER HELP!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S2443116AbgJUOqk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Oct 2020 10:46:40 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:55614 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2395254AbgJUOqj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Oct 2020 10:46:39 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LEjEWZ014798;
+        Wed, 21 Oct 2020 14:46:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=8HMg4DcZusQLkK3MHXCkrxj2XZZ88oGdxlqqNIcHmto=;
+ b=fWWws1t8UpTs56+iPlTOk6GkyTfHD7KmOgayLX1VFPo26+N0w9p/sQ9FmW/KEWyI2tQ+
+ XY4ddXO5z2alHJQ+wKXjwn4oE7f9Pzx9EhYqw6SCoDYGavJDfrC1IFBqTjWn4rimDvqC
+ 3QjD1jmsMjlUh8Do8LtjfdCnKSKRrInMnP+56LF8p7mUAP9zJkY86sKRkvyKbB/IJz6c
+ ODvvpeOAdzobsGQoGLaXJFMaU2MNY5wUfeu3yT56nYAhQhfcK8nwIBwSITgrCbXAJPlv
+ UkK60uMxpfz3K8t8SFK99e8bhvizUabKD+8sy1Y0PB87knwBKiqxi8IMOfNYlfbZmJ64 TA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 347p4b11uj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 21 Oct 2020 14:46:37 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LEixpA060283;
+        Wed, 21 Oct 2020 14:46:37 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 348ahxnwyu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Oct 2020 14:46:36 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09LEkaId025403;
+        Wed, 21 Oct 2020 14:46:36 GMT
+Received: from [192.168.1.6] (/70.114.128.235)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 21 Oct 2020 07:46:35 -0700
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [PATCH v3 1/5] scsi: fc: Update formal FPIN descriptor
+ definitions
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+In-Reply-To: <20201021092715.22669-2-njavali@marvell.com>
+Date:   Wed, 21 Oct 2020 09:46:35 -0500
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <924243C0-FEC5-4D75-B07A-4D8501A07499@oracle.com>
+References: <20201021092715.22669-1-njavali@marvell.com>
+ <20201021092715.22669-2-njavali@marvell.com>
+To:     Nilesh Javali <njavali@marvell.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9780 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010210112
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9780 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010210112
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Beloved One,
 
-CHARITY DONATION Please read carefully, I know it is true that this
-letter may come to you as a surprise. nevertheless,i humbly ask you to
-give me your attention and hear me, i am writing this mail to you with
-heavy sorrow in my heart,i have chose to reach you through Internet
-because it still remains the fastest medium of communication, after
-going through your profile in search of an honest person.
 
-My name is Mrs Theresa Heidi i am native France currently hospitalized
-in a private hospital here in Israel as a result of lungs cancer I am
-62 years old and I was diagnosed of lungs cancer for about 4 years
-ago, immediately after the death of my husband, who has left me
-everything he worked for. I'm with my laptop in a hospital here in
-where I have been undergoing treatment for cancer of the lungs.
+> On Oct 21, 2020, at 4:27 AM, Nilesh Javali <njavali@marvell.com> wrote:
+> 
+> From: Shyam Sundar <ssundar@marvell.com>
+> 
+> Add Fabric Performance Impact Notification (FPIN) descriptor definition
+> for the following FPINs:
+> Delivery Notification Descriptor
+> Peer Congestion Notification Descriptor
+> Congestion Notification Descriptor
+> 
+> Signed-off-by: Shyam Sundar <ssundar@marvell.com>
+> Signed-off-by: Nilesh Javali <njavali@marvell.com>
+> Reviewed-by: James Smart <james.smart@broadcom.com>
+> ---
+> include/uapi/scsi/fc/fc_els.h | 114 +++++++++++++++++++++++++++++++++-
+> 1 file changed, 113 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/scsi/fc/fc_els.h b/include/uapi/scsi/fc/fc_els.h
+> index 8c704e510e39..91d4be987220 100644
+> --- a/include/uapi/scsi/fc/fc_els.h
+> +++ b/include/uapi/scsi/fc/fc_els.h
+> @@ -916,7 +916,9 @@ enum fc_els_clid_ic {
+> 	ELS_CLID_IC_LIP =	8,	/* receiving LIP */
+> };
+> 
+> -
+> +/*
+> + * Link Integrity event types
+> + */
+> enum fc_fpin_li_event_types {
+> 	FPIN_LI_UNKNOWN =		0x0,
+> 	FPIN_LI_LINK_FAILURE =		0x1,
+> @@ -943,6 +945,54 @@ enum fc_fpin_li_event_types {
+> 	{ FPIN_LI_DEVICE_SPEC,		"Device Specific" },		\
+> }
+> 
+> +/*
+> + * Delivery event types
+> + */
+> +enum fc_fpin_deli_event_types {
+> +	FPIN_DELI_UNKNOWN =		0x0,
+> +	FPIN_DELI_TIMEOUT =		0x1,
+> +	FPIN_DELI_UNABLE_TO_ROUTE =	0x2,
+> +	FPIN_DELI_DEVICE_SPEC =		0xF,
+> +};
+> +
+> +/*
+> + * Initializer useful for decoding table.
+> + * Please keep this in sync with the above definitions.
+> + */
+> +#define FC_FPIN_DELI_EVT_TYPES_INIT {					\
+> +	{ FPIN_DELI_UNKNOWN,		"Unknown" },			\
+> +	{ FPIN_DELI_TIMEOUT,		"Timeout" },			\
+> +	{ FPIN_DELI_UNABLE_TO_ROUTE,	"Unable to Route" },		\
+> +	{ FPIN_DELI_DEVICE_SPEC,	"Device Specific" },		\
+> +}
+> +
+> +/*
+> + * Congestion event types
+> + */
+> +enum fc_fpin_congn_event_types {
+> +	FPIN_CONGN_CLEAR =		0x0,
+> +	FPIN_CONGN_LOST_CREDIT =	0x1,
+> +	FPIN_CONGN_CREDIT_STALL =	0x2,
+> +	FPIN_CONGN_OVERSUBSCRIPTION =	0x3,
+> +	FPIN_CONGN_DEVICE_SPEC =	0xF,
+> +};
+> +
+> +/*
+> + * Initializer useful for decoding table.
+> + * Please keep this in sync with the above definitions.
+> + */
+> +#define FC_FPIN_CONGN_EVT_TYPES_INIT {					\
+> +	{ FPIN_CONGN_CLEAR,		"Clear" },			\
+> +	{ FPIN_CONGN_LOST_CREDIT,	"Lost Credit" },		\
+> +	{ FPIN_CONGN_CREDIT_STALL,	"Credit Stall" },		\
+> +	{ FPIN_CONGN_OVERSUBSCRIPTION,	"Oversubscription" },		\
+> +	{ FPIN_CONGN_DEVICE_SPEC,	"Device Specific" },		\
+> +}
+> +
+> +enum fc_fpin_congn_severity_types {
+> +	FPIN_CONGN_SEVERITY_WARNING =	0xF1,
+> +	FPIN_CONGN_SEVERITY_ERROR =	0xF7,
+> +};
+> 
+> /*
+>  * Link Integrity Notification Descriptor
+> @@ -974,6 +1024,68 @@ struct fc_fn_li_desc {
+> 					 */
+> };
+> 
+> +/*
+> + * Delivery Notification Descriptor
+> + */
+> +struct fc_fn_deli_desc {
+> +	__be32		desc_tag;	/* Descriptor Tag (0x00020002) */
+> +	__be32		desc_len;	/* Length of Descriptor (in bytes).
+> +					 * Size of descriptor excluding
+> +					 * desc_tag and desc_len fields.
+> +					 */
+> +	__be64		detecting_wwpn;	/* Port Name that detected event */
+> +	__be64		attached_wwpn;	/* Port Name of device attached to
+> +					 * detecting Port Name
+> +					 */
+> +	__be32		deli_reason_code;/* see enum fc_fpin_deli_event_types */
+> +};
+> +
+> +/*
+> + * Peer Congestion Notification Descriptor
+> + */
+> +struct fc_fn_peer_congn_desc {
+> +	__be32		desc_tag;	/* Descriptor Tag (0x00020003) */
+> +	__be32		desc_len;	/* Length of Descriptor (in bytes).
+> +					 * Size of descriptor excluding
+> +					 * desc_tag and desc_len fields.
+> +					 */
+> +	__be64		detecting_wwpn;	/* Port Name that detected event */
+> +	__be64		attached_wwpn;	/* Port Name of device attached to
+> +					 * detecting Port Name
+> +					 */
+> +	__be16		event_type;	/* see enum fc_fpin_congn_event_types */
+> +	__be16		event_modifier;	/* Implementation specific value
+> +					 * describing the event type
+> +					 */
+> +	__be32		event_period;	/* duration (ms) of the detected
+> +					 * congestion event
+> +					 */
+> +	__be32		pname_count;	/* number of portname_list elements */
+> +	__be64		pname_list[0];	/* list of N_Port_Names accessible
+> +					 * through the attached port
+> +					 */
+> +};
+> +
+> +/*
+> + * Congestion Notification Descriptor
+> + */
+> +struct fc_fn_congn_desc {
+> +	__be32		desc_tag;	/* Descriptor Tag (0x00020004) */
+> +	__be32		desc_len;	/* Length of Descriptor (in bytes).
+> +					 * Size of descriptor excluding
+> +					 * desc_tag and desc_len fields.
+> +					 */
+> +	__be16		event_type;	/* see enum fc_fpin_congn_event_types */
+> +	__be16		event_modifier;	/* Implementation specific value
+> +					 * describing the event type
+> +					 */
+> +	__be32		event_period;	/* duration (ms) of the detected
+> +					 * congestion event
+> +					 */
+> +	__u8		severity;	/* command */
+> +	__u8		resv[3];	/* reserved - must be zero */
+> +};
+> +
+> /*
+>  * ELS_FPIN - Fabric Performance Impact Notification
+>  */
+> -- 
+> 2.19.0.rc0
+> 
 
-Now that is clear that I=E2=80=99m approaching the last-days of my life and=
- i
-don't even need the money again for any thing and because my doctor
-told me that i would not last for the period of one year due to Lungs
-cancer problem.I have some funds inherited from my late husband, the
-sum of $15 Million United State Dollars ( US$15,000,000,00 ).
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
-This money is still with the foreign bank and the management just
-wrote me as the true owner to come forward to receive the money for
-keeping it so long or rather issue a letter of authorization to
-somebody to receive it on my behalf since I can't come over because of
-my illness or they may get it confiscated.
+--
+Himanshu Madhani	 Oracle Linux Engineering
 
-I decided to contact you if you may be willing and interested to
-handle these trust funds in good faith before anything happens to
-me.This is not a stolen money and there are no dangers involved,is
-100% risk free with full legal proof.
-
-I want you to help me withdraw this money from the foreign bank then
-use the funds for Charity works/assistance to less privileged people
-in the society.It is my last wish to see that this money is invested
-to any organization of your choice.
-
-I want you to take 45% of the total money for your personal use while
-55% of the money will go to charity. I will appreciate your utmost
-confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
-
-Yours Beloved Sister.
-Mrs Theresa Heidi
