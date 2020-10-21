@@ -2,75 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AC22949CA
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Oct 2020 10:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D43C294A81
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Oct 2020 11:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502391AbgJUI6A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Oct 2020 04:58:00 -0400
-Received: from sonic317-28.consmr.mail.bf2.yahoo.com ([74.6.129.83]:44042 "EHLO
-        sonic317-28.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2441186AbgJUI56 (ORCPT
+        id S2395558AbgJUJ1l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Oct 2020 05:27:41 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:29614 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2395379AbgJUJ1k (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 21 Oct 2020 04:57:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1603270677; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=d4rrYv3V2GJTucSzxHI0poqvECxQCuSKX4APhFt9rKN6EimvrunRxtGLPpmGC+3G31roWA41aYuzFEMmlKmf7P/Q0sUlg3s9Ou4mxrpF6l/0oxHJMCWPcGiH1NGPUxo3gUtGq/oYSF7/c2NG7eTiJ8mJGMCIjPIokhiWkGTauRhfVPH3vsF9tiHj0+pBy3nWIp+jMl7frUYpHR5p3xM+PZhYKvpgKSjcFoDwKOqStiLRPOMH2JuHA7ReBF9vDTZtpkIs7u6Xtp6BRjwsCKRPQGQh0BmSa6IDfEnfn4ekYCkUY7IdgDEwCkvk9M2hqZgUuXdcuKt24Uw1x4LxbKiWsA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1603270677; bh=pUKPVXVUVqGBchhUwlgheIAjNXzldvseapb/CY56kLE=; h=Date:From:Subject; b=eMNdI2+afZpry5nL8TRuRk86ZlHYtwAsCIw82ymsAstPV0ytNjw0FxlbybpNHZHoY5qiTcucPrn2ZLMXTmcYjCUAAJAcHzRjZQmgFz7TaL0UBAE/HzD8ykDEjaD/d7LWHDxt3LP5X7XCSGHzIhZuIAP5IphSzgUO2gCmhX7BD2Hc6y0O32ennlncMC6YMPfVRRIanOeR9qRzcBxOy/hBT+jfwQYPxYzSjl2uM4e9Nqe2iQ03+Gr7yDiTDZc2zFdU5zq2nwLP6RCATI4q6KCD+l2sCOHdzT7MnmNjV83T43OzuOjxGBga4ZT3+WZkMARQGOdWyKPMdE6WFO5PhwT2xA==
-X-YMail-OSG: 27O9dHMVM1l0v1zZCY7N17sxiCY0UJUNa3S9RO84G7Mxo2xEe5xYKLte4._DV_a
- eGb4t6ZaeisnE_wP4rHNd20rDmFadcIOz2ZRS4R1.WwbffWpez410aLx3Al0erAX.j6mdWIHv2x8
- 4UsEM6conx3CapOGxAte_VV4u2NtrjvGggdFB6dWVERBtwaKEKm9tcGf2kgUD8Khr12r7IoaOEjf
- M9RcoclxMd30nFX5RTdyrQ2.Mq5HvgcfmDNbXb_JoHmSU_xpkcxX28bnTujlnk5.fYllEQ1YIpyK
- eDfob2o7GDp28zp8ZksAN7B0PlCla42pVz37ALxhu.bnGrgOxO8AZrCTNdfu6TKi_8sgF7qORPt4
- jWu0pbbcqQ0QtsQSO8oaI6TX_aqWNBpddQe8QX6tPxVTSEhOcK8dAaA3pf3bMhUqhIi9IJEBfq6B
- jn96vgCuxI6PsbWBlZj0odnEOSO8wUvUFiXzUtcK40UShkPxb8mD9OK3V.V25eKnqXQHw4FtUgrn
- MDkGU3yozvuJ86_r4zF8xkkOlLYqC4hWMxjMVlqG9KDoH.L.hG99yuMXSOAKFy51JPqInct0QQ0B
- bzdX3Bil1aKvhJUGay6lI5sWrd2jBkIwdkK3v2UBEO1l1rxUBAGlXHKlhoPlj0RiyFupyrSeV71U
- 9rKIlINyoSsN4CqO3om6D0wlcIWXhJOdxsd6HEzrheqOdobW.fZNla16UCJeOhJdH2e6CVT0C7pS
- 8Xh3P4yIxGtP86nUb8rgkl5F43cBBWNwseiHaM6lUD4Btw1UQBjucPXZmzVjXk_vvQ.qfCHuGd5D
- nHkNOdTYLbCwzLiwF_cLNVj3o8cgQwSF9HcFX2q4MbLWWGHQWpXmfZcGkK8Cn6AsUZzSesQMirR4
- gf4J1E3RdVGqDWhGhfx09EqE0DKy4ZQ6hGbn.9beBCoJWox3Q10vbxnmuCCSmXI70RPxMxBEyxYw
- cOP.Twy9EMlkbgLqTbroTh6FgeVMrP1YFIDaa6KhM0cAG.wPa5QN_vB2Qftig_WcPKYR5hB.Wlvr
- .EQNOCrguP24hZRm_QcCKwUIhwAC8vL02dWhwArYHkBqoHNm8h63A1u_DkTA5YU217FuWSxlED.X
- qzYz5fX6DEtf5MkSQaG8tuBXY56LS565QV9p3.6OkHpvYhwHniYIZXMou3Kdkfk3f7spzAS3cPNR
- YEc7pQoFWypS4F2YEiMM1G8T.Dw_rbTTX7D9A7ZCSDOJmBZFb3o11KA4gvoK6s6_ZkLK7wJj9qRW
- xxE7nSte3exUdyXjbFYtXFe.c1rqr1AtdIZki5CVddLxtza._UD5NzBaWGk6DyaXQuEW9C38ZgRm
- 7FBE1rWUt3kAOjwB38shxtCYEjWinKcdOixPVZZoTIHnks.VwwsrehFjdZIXDbch1ndjTpZp7aQT
- wTTaRHtFUnyRU1P4cP6QoXxUFepUZIN3xL6OGUglLYbWs
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.bf2.yahoo.com with HTTP; Wed, 21 Oct 2020 08:57:57 +0000
-Date:   Wed, 21 Oct 2020 08:57:55 +0000 (UTC)
-From:   Ms lisa Hugh <lisahugh531@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <772581317.1319804.1603270675650@mail.yahoo.com>
-Subject: YOUR CO-OPERATION FOR THIS BUSINESS (Ms Lisa Hugh).
+        Wed, 21 Oct 2020 05:27:40 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09L9Omx4006710
+        for <linux-scsi@vger.kernel.org>; Wed, 21 Oct 2020 02:27:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=omub+oHb7p3fZngRFv+6oG24zqHuKc4n/UhuBHuAgWU=;
+ b=bwb/tqF6aZ7TbmrxfEu24IUyTNXct9ZNrVk9Elfz4SbagJNb5fXSo6cdUTTjrowPZoSV
+ r46BTLtNG22BM1O/Ik/QxdQxzhzb6bmzuvv6QvUmesgB7rMsh8IdvJpWLZQTeLJFINcD
+ hiWDNIGOziA1FKCuh9qD9NdflHRXhuwDiAxBr/B5gr5qYA/LHXVxhOZ5SBemVmdCKCCF
+ 5MCz2E4balMampXatgPQbAfvr96hDieaYq6oXlGnjp5F2U/mSN6fVZULuFoTz1X+SqL6
+ tCN2PkONrtefleYvEVsGJd7+arAn+GqEqpabNp82muLTAmmUtduSwUpg5mhX7wdZTwNJ 8g== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0a-0016f401.pphosted.com with ESMTP id 347wyqcm5t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Wed, 21 Oct 2020 02:27:40 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 21 Oct
+ 2020 02:27:39 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 21 Oct 2020 02:27:39 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 70CE53F703F;
+        Wed, 21 Oct 2020 02:27:39 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 09L9Rdkh022704;
+        Wed, 21 Oct 2020 02:27:39 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 09L9RdLV022703;
+        Wed, 21 Oct 2020 02:27:39 -0700
+From:   Nilesh Javali <njavali@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: [PATCH v3 0/5] SAN Congestion Management (SCM) statistics
+Date:   Wed, 21 Oct 2020 02:27:10 -0700
+Message-ID: <20201021092715.22669-1-njavali@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <772581317.1319804.1603270675650.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16868 YMailNodin Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
+ definitions=2020-10-21_03:2020-10-20,2020-10-21 signatures=0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Martin,
+
+Please apply the attached patchset implementing the SAN Congestion
+Management (SCM) statistics to the scsi tree at your earliest
+convenience.
+
+v2->v3:
+Incorporate review comments for patch v2 3/5.
+Added Reviewed-by tag for other patches.
+
+v1->v2:
+Further break down patches based on functionality.
+Remove dependency on LLDs for remote port FPIN statistics.
+Optimize fc_find_rport_by_wwpn implementation.
+Name changes to multiple variables/structure elements based on review
+comments.
+
+Thanks,
+Nilesh
+
+Shyam Sundar (5):
+  scsi: fc: Update formal FPIN descriptor definitions
+  scsi: fc: Add FPIN statistics to fc_host and fc_rport objects
+  scsi: fc: Parse FPIN packets and update statistics
+  scsi: fc: Add mechanism to update FPIN signal statistics
+  scsi: fc: Update documentation of sysfs nodes for FPIN stats
+
+ Documentation/ABI/testing/sysfs-class-fc_host |  23 +
+ .../ABI/testing/sysfs-class-fc_remote_ports   |  23 +
+ drivers/scsi/scsi_transport_fc.c              | 415 ++++++++++++++++++
+ include/scsi/scsi_transport_fc.h              |  36 ++
+ include/uapi/scsi/fc/fc_els.h                 | 114 ++++-
+ 5 files changed, 610 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-fc_host
+ create mode 100644 Documentation/ABI/testing/sysfs-class-fc_remote_ports
 
 
-Dear Friend,
+base-commit: 1ef16a407f544408d3559e4de2ed05591df4da75
+-- 
+2.19.0.rc0
 
-I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
-
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
-
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
-
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so will can be reaching each other
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
-
-
-Thanks.
-
-Ms Lisa hugh.
