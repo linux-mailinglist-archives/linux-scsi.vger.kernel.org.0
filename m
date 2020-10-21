@@ -2,63 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88E9294F46
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Oct 2020 16:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F489294F5D
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Oct 2020 16:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443632AbgJUO4g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Oct 2020 10:56:36 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:36892 "EHLO
+        id S2443843AbgJUO7I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Oct 2020 10:59:08 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:39318 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2443041AbgJUO4f (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Oct 2020 10:56:35 -0400
+        with ESMTP id S2443840AbgJUO7I (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Oct 2020 10:59:08 -0400
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LEmva2018087;
-        Wed, 21 Oct 2020 14:56:32 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LEmxud018119;
+        Wed, 21 Oct 2020 14:59:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
  mime-version : subject : from : in-reply-to : date : cc :
  content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=Z2G6Iv6z2dlIE8PHG92xWZVAsg7tlx60852YY2Su1xY=;
- b=W1p1mT7AzVSXghybw20bv05il8GvZIB+utE1GI6qH/dLO7teFi0m3BkgYpjDhW8RghZ8
- plwGnOZjwNFLatg3DFjvjf2i4bIFCF+mu5zX1nz+/AnHIs9VpgWQOPeROY4pV4qzy3mg
- /qYDdLclgsC7+MWGykU2aZ2gSE26noOsEaa8PhowQpbdTXRSvTba1RhV0EIxBv+8pO4B
- W+FQB9SMRfrdk2V/jUnPcCW5pt+0HZe4tgz+DcS9hlpTbNHlYlsJEMCZ4vmdvQ3LiVe2
- 21eJjYYW+Ddf9mHIujk/5fTOZdiV5q+UE+DHMKWi+FQOc3i0EE/0jVfml1XypZC8nKgG FA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 347p4b13kn-1
+ s=corp-2020-01-29; bh=1s3pdq6sblTxC1TwIPhEt3j5JJbN4eRMwySWpi0g69E=;
+ b=iwloSGrCitBKhpoDqTWfLtEJC91ET6zXtn/czC2Vku0c14CZ8q0BCEtxGE6AKZh6dVLq
+ 3oqaTiWR6aJcUIdCvQGoFMMML/Fz/YnatEm9GRbqhGdgxevttKbFhEEpLxxTTggcMzft
+ zGN41utWKLtNx/xOB4UIG+FaEPnKmLUV1wNCrmkbxH5R696yM1oGEd93OjaBe8TU+qf6
+ gQiTLIUWdttTYHsq+VfDvSSPyGxPRK0ZdD1ju7+Fh6FZ2REygoMP4HTVbABw6rAgDTGI
+ 1SzAHi0D0mDZ5v+KjFCrJgrKz7b/UbpZeCkwF56Wxe5kFKT/AvjSbiex9VzVufew3Mg3 vQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 347p4b1435-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 21 Oct 2020 14:56:32 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LEnv74132219;
-        Wed, 21 Oct 2020 14:56:32 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 34ak18rtwx-1
+        Wed, 21 Oct 2020 14:59:06 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LEneC7022290;
+        Wed, 21 Oct 2020 14:57:05 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 348agys5yt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Oct 2020 14:56:31 +0000
+        Wed, 21 Oct 2020 14:57:05 +0000
 Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09LEuUZM011043;
-        Wed, 21 Oct 2020 14:56:30 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09LEv44A031557;
+        Wed, 21 Oct 2020 14:57:04 GMT
 Received: from [192.168.1.6] (/70.114.128.235)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 21 Oct 2020 07:56:30 -0700
+        with ESMTP ; Wed, 21 Oct 2020 07:57:04 -0700
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH v3 4/5] scsi: fc: Add mechanism to update FPIN signal
- statistics
+Subject: Re: [PATCH v3 5/5] scsi: fc: Update documentation of sysfs nodes for
+ FPIN stats
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
-In-Reply-To: <20201021092715.22669-5-njavali@marvell.com>
-Date:   Wed, 21 Oct 2020 09:56:30 -0500
+In-Reply-To: <20201021092715.22669-6-njavali@marvell.com>
+Date:   Wed, 21 Oct 2020 09:57:03 -0500
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <577B3B37-2C6C-47D3-B710-3D80BFFE70FE@oracle.com>
+Message-Id: <034E3044-26EF-4F51-8F3D-50E8A0ABE6D4@oracle.com>
 References: <20201021092715.22669-1-njavali@marvell.com>
- <20201021092715.22669-5-njavali@marvell.com>
+ <20201021092715.22669-6-njavali@marvell.com>
 To:     Nilesh Javali <njavali@marvell.com>
 X-Mailer: Apple Mail (2.3608.120.23.2.4)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9780 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 phishscore=0
- spamscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2010210113
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9780 signatures=668682
@@ -78,62 +78,91 @@ wrote:
 >=20
 > From: Shyam Sundar <ssundar@marvell.com>
 >=20
-> Add statistics for Congestion Signals that are delivered to the host =
-as
-> interrupt signals, under fc_host_statistics.
+> Update documentation for sysfs nodes within,
+>       /sys/class/fc_host
+>       /sys/class/fc_remote_ports
 >=20
 > Signed-off-by: Shyam Sundar <ssundar@marvell.com>
 > Signed-off-by: Nilesh Javali <njavali@marvell.com>
 > Reviewed-by: James Smart <james.smart@broadcom.com>
 > ---
-> drivers/scsi/scsi_transport_fc.c | 5 +++++
-> include/scsi/scsi_transport_fc.h | 3 +++
-> 2 files changed, 8 insertions(+)
+> Documentation/ABI/testing/sysfs-class-fc_host | 23 +++++++++++++++++++
+> .../ABI/testing/sysfs-class-fc_remote_ports   | 23 +++++++++++++++++++
+> 2 files changed, 46 insertions(+)
+> create mode 100644 Documentation/ABI/testing/sysfs-class-fc_host
+> create mode 100644 =
+Documentation/ABI/testing/sysfs-class-fc_remote_ports
 >=20
-> diff --git a/drivers/scsi/scsi_transport_fc.c =
-b/drivers/scsi/scsi_transport_fc.c
-> index 4dfa0e40d8e5..3f816ab1d845 100644
-> --- a/drivers/scsi/scsi_transport_fc.c
-> +++ b/drivers/scsi/scsi_transport_fc.c
-> @@ -2100,6 +2100,9 @@ fc_host_statistic(fc_xid_not_found);
-> fc_host_statistic(fc_xid_busy);
-> fc_host_statistic(fc_seq_not_found);
-> fc_host_statistic(fc_non_bls_resp);
-> +fc_host_statistic(cn_sig_warn);
-> +fc_host_statistic(cn_sig_alarm);
+> diff --git a/Documentation/ABI/testing/sysfs-class-fc_host =
+b/Documentation/ABI/testing/sysfs-class-fc_host
+> new file mode 100644
+> index 000000000000..0a696cbd8232
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-fc_host
+> @@ -0,0 +1,23 @@
+> +What:		/sys/class/fc_host/hostX/statistics/fpin_cn_yyy
+> +Date:		July 2020
+> +Contact:	Shyam Sundar <ssundar@marvell.com>
+> +Description:
+> +		These files contain the number of congestion =
+notification
+> +		events recorded by the F_Port, reported using fabric
+> +		performance impact notification (FPIN) event.
 > +
->=20
-> #define fc_host_fpin_statistic(name)					=
-\
-> static ssize_t fc_host_fpinstat_##name(struct device *cd,		=
-\
-> @@ -2182,6 +2185,8 @@ static struct attribute *fc_statistics_attrs[] =3D=
- {
-> 	&device_attr_host_fc_xid_busy.attr,
-> 	&device_attr_host_fc_seq_not_found.attr,
-> 	&device_attr_host_fc_non_bls_resp.attr,
-> +	&device_attr_host_cn_sig_warn.attr,
-> +	&device_attr_host_cn_sig_alarm.attr,
-> 	&device_attr_host_reset_statistics.attr,
-> 	&device_attr_host_fpin_dn.attr,
-> 	&device_attr_host_fpin_dn_unknown.attr,
-> diff --git a/include/scsi/scsi_transport_fc.h =
-b/include/scsi/scsi_transport_fc.h
-> index a636c1986e22..c759b29e46c7 100644
-> --- a/include/scsi/scsi_transport_fc.h
-> +++ b/include/scsi/scsi_transport_fc.h
-> @@ -468,6 +468,9 @@ struct fc_host_statistics {
-> 	u64 fc_seq_not_found;		/* seq is not found for exchange =
-*/
-> 	u64 fc_non_bls_resp;		/* a non BLS response frame with
-> 					   a sequence responder in new =
-exch */
-> +	/* Host Congestion Signals */
-> +	u64 cn_sig_warn;
-> +	u64 cn_sig_alarm;
-> };
->=20
->=20
+> +What:		/sys/class/fc_host/hostX/statistics/fpin_li_yyy
+> +Date:		July 2020
+> +Contact:	Shyam Sundar <ssundar@marvell.com>
+> +Description:
+> +		These files contain the number of link integrity error
+> +		events recorded by the F_Port/Nx_Port, reported using =
+fabric
+> +		performance impact notification (FPIN) event.
+> +
+> +What:		/sys/class/fc_host/hostX/statistics/fpin_dn_yyy
+> +Date:		July 2020
+> +Contact:	Shyam Sundar <ssundar@marvell.com>
+> +Description:
+> +		These files contain the number of delivery related =
+errors
+> +		recorded by the F_Port/Nx_Port, reported using fabric
+> +		performance impact notification (FPIN) event.
+> diff --git a/Documentation/ABI/testing/sysfs-class-fc_remote_ports =
+b/Documentation/ABI/testing/sysfs-class-fc_remote_ports
+> new file mode 100644
+> index 000000000000..55a951529e03
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-fc_remote_ports
+> @@ -0,0 +1,23 @@
+> +What:		=
+/sys/class/fc_remote_ports/rport-X:Y-Z/statistics/fpin_cn_yyy
+> +Date:		July 2020
+> +Contact:	Shyam Sundar <ssundar@marvell.com>
+> +Description:
+> +		These files contain the number of congestion =
+notification
+> +		events recorded by the F_Port/Nx_Port, reported using =
+fabric
+> +		performance impact notification (FPIN) event.
+> +
+> +What:		=
+/sys/class/fc_remote_ports/rport-X:Y-Z/statistics/fpin_li_yyy
+> +Date:		July 2020
+> +Contact:	Shyam Sundar <ssundar@marvell.com>
+> +Description:
+> +		These files contain the number of link integrity error
+> +		events recorded by the F_Port/Nx_Port, reported using =
+fabric
+> +		performance impact notification (FPIN) event.
+> +
+> +What:		=
+/sys/class/fc_remote_ports/rport-X:Y-Z/statistics/fpin_dn_yyy
+> +Date:		July 2020
+> +Contact:	Shyam Sundar <ssundar@marvell.com>
+> +Description:
+> +		These files contain the number of delivery related =
+errors
+> +		recorded by the F_Port/Nx_Port, reported using fabric
+> +		performance impact notification (FPIN) event.
 > --=20
 > 2.19.0.rc0
 >=20
