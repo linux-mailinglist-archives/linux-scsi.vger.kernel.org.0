@@ -2,105 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F092960D8
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Oct 2020 16:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44CC29610B
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Oct 2020 16:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S368111AbgJVOXQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 22 Oct 2020 10:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S368106AbgJVOXP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 22 Oct 2020 10:23:15 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A50C0613CE
-        for <linux-scsi@vger.kernel.org>; Thu, 22 Oct 2020 07:23:15 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id p15so1844171ioh.0
-        for <linux-scsi@vger.kernel.org>; Thu, 22 Oct 2020 07:23:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2vXv7jW6ij4t34SRUKDPY/Xu6HI46ldM5rtU6Mltw9M=;
-        b=uPDl8Vik8sXnl3L7v1/bSgzQwINJqx2a8DcZm23ABftp6pBVqrpbKzfA6AHuOMX6hN
-         BQPqHYjzPsGYSZ7VPn891v6H/wps+G1fDpOR6xBwFBffgUTiUs28EWO1M/N/PUfzfdsV
-         v52OYLrwKJYV8t084Tad9Y+/W8r130valNDzR/Q7WGTJeSL0bvN77WduxDP740N/6w4y
-         wmpcwCCcsHbC2QlxcxJWUwmB+I+cbNjMO3xrjB05K4gb/yuL5h4p8Qq8kJkX2U5rR3nD
-         WA/77jB37nSjIeKZmvBg3ZjSGZX3ScH9Q6TCVEMillNd5p35hzgPadkaCwrbzcGnXZJh
-         cw+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=2vXv7jW6ij4t34SRUKDPY/Xu6HI46ldM5rtU6Mltw9M=;
-        b=X54l/7M1A3ChH1Q3Bl8BDaa2zNh/o7lnowA1NXfsVH/mSvJJjPX6nPRij+8p17d44t
-         FbQrL2WfG1TAU80nBqCttHfVSfSHaNVQSjMr//S07GcPDhOtjYnwmNRHffvWP1nXjEAS
-         cUv95tjPH4see92B3kZHr+4VfEbUJ9v87thsY3WklX1ToXW5dQxioFmbCcNMrr46u6cm
-         tDX2p+lmRqDFttybb3IEwIyjRM+rIlwEv2CAGFun/pZkHF+Kv3zznr74wiV4OXZtc846
-         /eJti53T+nVsClb1W53QtFrGRO9QRKOttlr0Nnx9UKXRlpLNDWr67aNsbGTSMH8+CYRW
-         ZRFg==
-X-Gm-Message-State: AOAM532IoJMrORD3sOs3mZAtI9KBPWV1FWVJA7NlNShPTz4iOGFEWRbr
-        jKzLNMOyYXYAHNgGJ9427EbmMb2KZ4xDE9L4r08=
-X-Google-Smtp-Source: ABdhPJxP7Qlx4BRfugVigUQmqo9AHQTRzUym5amNH8cQGYEo/xDWHOuxr5U3gBtwuRgWPD5epgQh+DxB27rwoZGJPSA=
-X-Received: by 2002:a02:ca03:: with SMTP id i3mr1918971jak.50.1603376594459;
- Thu, 22 Oct 2020 07:23:14 -0700 (PDT)
+        id S2900978AbgJVOjs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 22 Oct 2020 10:39:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2900951AbgJVOjq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 22 Oct 2020 10:39:46 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 276A224171;
+        Thu, 22 Oct 2020 14:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603377583;
+        bh=ma7f6ciQXaB7O32bDDp+GeQJ6WrSJ5EDDu1VyaA7rGo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PxugVsee9PWrXt/gXzudeuTvI47TjXebpNxq+V4HCmVCe1sKZHLosNqAbXuuvW+/i
+         F3Omc7qJjCGcZpsoZ0gvdBLvvwF6P71x/p/bcwNCyzTjDInFt6yyFfEubOEEK8j98S
+         eCVIVyZ2FmbbCU8ALan3OPjQJXwF2/c6hnwwd7rg=
+Date:   Thu, 22 Oct 2020 16:40:21 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     David Hildenbrand <david@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Message-ID: <20201022144021.GA1969554@kroah.com>
+References: <e04d0c5d-e834-a15b-7844-44dcc82785cc@redhat.com>
+ <a1533569-948a-1d5b-e231-5531aa988047@redhat.com>
+ <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com>
+ <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
+ <20201022104805.GA1503673@kroah.com>
+ <20201022121849.GA1664412@kroah.com>
+ <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
+ <20201022125759.GA1685526@kroah.com>
+ <20201022135036.GA1787470@kroah.com>
+ <CAK8P3a1B7OVdyzW0-97JwzZiwp0D0fnSfyete16QTvPp_1m07A@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:9e4d:0:0:0:0:0 with HTTP; Thu, 22 Oct 2020 07:23:14
- -0700 (PDT)
-Reply-To: elisabeth1981@mail.com
-From:   ELISABETH EDWARDS <alhajihassankareem@gmail.com>
-Date:   Thu, 22 Oct 2020 16:23:14 +0200
-Message-ID: <CAJC1dGq964+PTz5mY6ZHAoCgDHJdNQip8MwU7A3a4V4Mvef+Mg@mail.gmail.com>
-Subject: Dearest one
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1B7OVdyzW0-97JwzZiwp0D0fnSfyete16QTvPp_1m07A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings Beloved,
+On Thu, Oct 22, 2020 at 04:28:20PM +0200, Arnd Bergmann wrote:
+> On Thu, Oct 22, 2020 at 3:50 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Thu, Oct 22, 2020 at 02:57:59PM +0200, Greg KH wrote:
+> > > On Thu, Oct 22, 2020 at 02:42:24PM +0200, David Hildenbrand wrote:
+> 
+> > > >  struct iovec *iovec_from_user(const struct iovec __user *uvec,
+> > > > -               unsigned long nr_segs, unsigned long fast_segs,
+> > > > +               unsigned nr_segs, unsigned fast_segs,
+> > > >                 struct iovec *fast_iov, bool compat)
+> > > >  {
+> > > >         struct iovec *iov = fast_iov;
+> > > > @@ -1738,7 +1738,7 @@ ssize_t __import_iovec(int type, const struct
+> > > > iovec __user *uvec,
+> > > >                  struct iov_iter *i, bool compat)
+> > > >  {
+> > > >         ssize_t total_len = 0;
+> > > > -       unsigned long seg;
+> > > > +       unsigned seg;
+> > > >         struct iovec *iov;
+> > > >
+> > > >         iov = iovec_from_user(uvec, nr_segs, fast_segs, *iovp, compat);
+> > > >
+> > >
+> > > Ah, I tested the other way around, making everything "unsigned long"
+> > > instead.  Will go try this too, as other tests are still running...
+> >
+> > Ok, no, this didn't work either.
+> >
+> > Nick, I think I need some compiler help here.  Any ideas?
+> 
+> I don't think the patch above would reliably clear the upper bits if they
+> contain garbage.
+> 
+> If the integer extension is the problem, the way I'd try it is to make the
+> function take an 'unsigned long' and then explictly mask the upper
+> bits with
+> 
+>      seg = lower_32_bits(seg);
+> 
+> Can you attach the iov_iter.s files from the broken build, plus the
+> one with 'noinline' for comparison? Maybe something can be seen
+> in there.
 
-Please forgive me for stressing you with my predicaments as I know
-that this letter may come to you as big surprise. Actually, I came
-across your E-mail from my personal search afterward I decided to
-email you directly believing that you will be honest to fulfill my
-final wish before I die.
+I don't know how to extract the .s files easily from the AOSP build
+system, I'll look into that.  I'm also now testing by downgrading to an
+older version of clang (10 instead of 11), to see if that matters at all
+or not...
 
-Meanwhile, I am Madam Elisabeth Edwards, 73 years, from USA, childless
-and I am suffering from a long-time cancer and from all indication my
-condition is really deteriorating as my doctors have confirmed and
-courageously advised me that I may not live beyond two months from now
-for the reason that my tumor has reached a critical stage which has
-defiled all forms of medical treatment.
+thanks,
 
-Since my days are numbered, I=E2=80=99ve decided willingly to fulfill my lo=
-ng-
-time promise to donate the sum of Ten Million One Hundred Thousand
-Dollars ($10,100,000) remaining in my foreign bank account over 9
-years due to my health problem. This fund was obtained by me when I
-was dealing on Gold.
-
-My promise is to help the widows, handicapped, orphans,
-underprivileged, to build technical school and hospital for their
-well-being. If you will be obedient to assist me fulfill my promise as
- I said here kindly show me your first obedience by providing me your
-personal details your last name and first name, your exact address and
- your mobile/house/office telephone contact, and an identification
-such  as driver's license or international passport data page so I can
-forward them to my bank and have you present to the bank as the next
-person in charge of this fund, to enable me introduce you to my bank
-management as the sole beneficiary and to enable them check whether it
- will be possible to transfer or deliver my fund to you so that if I
-die anytime, the situation will not be complicated.
-
-I have been trying to handle this project for the past 4 years by
-myself when I will get better, but I have seen that it won=E2=80=99t be
-possible anymore.
-
-Please get back to me if you can handle the project for more details
-and explanations email me at Id:  elisabeth1981@mail.com
-
-
-God bless you
-
-Elisabeth Edwards
+greg k-h
