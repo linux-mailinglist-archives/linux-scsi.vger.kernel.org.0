@@ -2,40 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26001295599
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Oct 2020 02:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE822955A9
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Oct 2020 02:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894369AbgJVAfY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Oct 2020 20:35:24 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:43304 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2507562AbgJVAfV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Oct 2020 20:35:21 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09M0SxWr086850;
-        Thu, 22 Oct 2020 00:35:18 GMT
+        id S2894389AbgJVAfe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Oct 2020 20:35:34 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:51042 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2894365AbgJVAfY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Oct 2020 20:35:24 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09M0Uxrp175223;
+        Thu, 22 Oct 2020 00:35:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=60uJMfmHb5c6yTfXQfCI6Hs08UShLQ9VnZ7vDwQNZPo=;
- b=vaIwbVc1/5L+Bq2je9XM2x9mAL5T1xXKG8aXOAiYXI/ebarJ4Xk/0WDOkCrNqSrbcIpz
- XTIcayIdshltRepGczUvW2vdtUULhrPtZZMemGfksO1Jz1OE9WddvrUkIMLvzRpc0Br/
- MTmn6JpMwTvXM9Krwsf8HXtbsPhjWfP5vm/Nn9J78chkV16ALKDHrblk42se9ov5NXJ1
- pEhGf7AbwP7PQGz175niq+XC0J4RYP17Rmgq8GEsWZxGK64YZZzwRrJnfeQUeg3zK/Qb
- Jp9opDVxq0nhbAoyJidgJNMLBF517ERQnSBSIbDygOQZGfmWCn1i9SrEl8lnF+iGwsaW ZQ== 
+ bh=k8143jbDI+11PRlnKlV9xLBM7esQh1smloKbyRl2Emk=;
+ b=Etgx7qmjBJX5hA6krjnzBXAUNrlDSdqs3mjdjroxKortucoYKNLEokY5r5XwxJ14HCx1
+ DDg9m+X7jsJkaU6fbT79OBCOVLc9FG8ghOF8ebdWAavVVwkO2AmAo54ng7MIDEpU2Alw
+ zXQqQL7chgQSal5R4UAevAo7z7tm5WvZZs3mGWrayuEB/JGV5uXNlpqXtzO7TqPhwxYi
+ eM5WjQ9WWMvtyAL5Wqg8lL2nIPfvG3Q1DQvqZuFiDK3sxU3QlMyZ0GeU1wAIn7Tf6IR4
+ 6gRpHlx22PsymSzCzj+RdP+oFti9Oy8DcbLekpybQY3fpOmjLe+W0eEmQfdvjOaGlbdY tw== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 349jrpuft5-1
+        by userp2120.oracle.com with ESMTP id 34ak16kp3n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 22 Oct 2020 00:35:18 +0000
+        Thu, 22 Oct 2020 00:35:20 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09M0U7pj177070;
-        Thu, 22 Oct 2020 00:35:18 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 348a6q15sx-1
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09M0U7oq177214;
+        Thu, 22 Oct 2020 00:35:19 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 348a6q15tk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Oct 2020 00:35:18 +0000
+        Thu, 22 Oct 2020 00:35:19 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09M0ZHYS029961;
-        Thu, 22 Oct 2020 00:35:17 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09M0ZIFU009191;
+        Thu, 22 Oct 2020 00:35:18 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
         with ESMTP ; Wed, 21 Oct 2020 17:35:17 -0700
@@ -44,9 +44,9 @@ To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
         pbonzini@redhat.com, stefanha@redhat.com,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH 11/17] vhost scsi: remove extra flushes
-Date:   Wed, 21 Oct 2020 19:34:57 -0500
-Message-Id: <1603326903-27052-12-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 12/17] vhost poll: fix coding style
+Date:   Wed, 21 Oct 2020 19:34:58 -0500
+Message-Id: <1603326903-27052-13-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1603326903-27052-1-git-send-email-michael.christie@oracle.com>
 References: <1603326903-27052-1-git-send-email-michael.christie@oracle.com>
@@ -56,54 +56,45 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 ml
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2010220001
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9781 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=999 mlxscore=0 spamscore=0 suspectscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010220001
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 malwarescore=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010220001
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The vhost work flush function was flushing the entire work queue, so
-there is no need for the double vhost_work_dev_flush calls in
-vhost_scsi_flush.
-
-And we do not need to call vhost_poll_flush for each poller because
-that call also ends up flushing the same work queue thread the
-vhost_work_dev_flush call flushed.
+We use like 3 coding styles in this struct. Switch to just tabs.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/vhost/scsi.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/vhost/vhost.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-index f543fa0..b348e9c 100644
---- a/drivers/vhost/scsi.c
-+++ b/drivers/vhost/scsi.c
-@@ -1443,11 +1443,6 @@ static void vhost_scsi_handle_kick(struct vhost_work *work)
- 	vhost_scsi_handle_vq(vs, vq);
- }
+diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+index 9677870..08c5aef 100644
+--- a/drivers/vhost/vhost.h
++++ b/drivers/vhost/vhost.h
+@@ -28,12 +28,12 @@ struct vhost_work {
+ /* Poll a file (eventfd or socket) */
+ /* Note: there's nothing vhost specific about this structure. */
+ struct vhost_poll {
+-	poll_table                table;
+-	wait_queue_head_t        *wqh;
+-	wait_queue_entry_t              wait;
+-	struct vhost_work	  work;
+-	__poll_t		  mask;
+-	struct vhost_dev	 *dev;
++	poll_table		table;
++	wait_queue_head_t	*wqh;
++	wait_queue_entry_t	wait;
++	struct vhost_work	work;
++	__poll_t		mask;
++	struct vhost_dev	*dev;
+ };
  
--static void vhost_scsi_flush_vq(struct vhost_scsi *vs, int index)
--{
--	vhost_poll_flush(&vs->vqs[index].vq.poll);
--}
--
- /* Callers must hold dev mutex */
- static void vhost_scsi_flush(struct vhost_scsi *vs)
- {
-@@ -1466,9 +1461,6 @@ static void vhost_scsi_flush(struct vhost_scsi *vs)
- 		kref_put(&old_inflight[i]->kref, vhost_scsi_done_inflight);
- 
- 	/* Flush both the vhost poll and vhost work */
--	for (i = 0; i < VHOST_SCSI_MAX_VQ; i++)
--		vhost_scsi_flush_vq(vs, i);
--	vhost_work_dev_flush(&vs->dev);
- 	vhost_work_dev_flush(&vs->dev);
- 
- 	/* Wait for all reqs issued before the flush to be finished */
+ void vhost_work_init(struct vhost_work *work, vhost_work_fn_t fn);
 -- 
 1.8.3.1
 
