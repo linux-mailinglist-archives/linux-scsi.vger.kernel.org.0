@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21065295A9B
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Oct 2020 10:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7193B295A96
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Oct 2020 10:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2509412AbgJVIj3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 22 Oct 2020 04:39:29 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15763 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2509386AbgJVIj2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S2509397AbgJVIj2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 22 Oct 2020 04:39:28 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:15762 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2508298AbgJVIj1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 22 Oct 2020 04:39:27 -0400
 Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 6D9271698A847086BC91;
+        by Forcepoint Email with ESMTP id 659406A8CB4F4D55BBB2;
         Thu, 22 Oct 2020 16:39:24 +0800 (CST)
 Received: from huawei.com (10.69.192.56) by DGGEMS410-HUB.china.huawei.com
  (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Thu, 22 Oct 2020
- 16:39:14 +0800
+ 16:39:15 +0800
 From:   Luo Jiaxing <luojiaxing@huawei.com>
 To:     <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
         <andriy.shevchenko@linux.intel.com>
@@ -26,10 +26,12 @@ CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
         <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
         <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
         <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
-Subject: [PATCH v1 0/5] Introduce a new helper marco DEFINE_STORE_ATTRIBUTE at seq_file.c
-Date:   Thu, 22 Oct 2020 16:39:52 +0800
-Message-ID: <1603355997-32350-1-git-send-email-luojiaxing@huawei.com>
+Subject: [PATCH v1 1/5] seq_file: Introduce DEFINE_STORE_ATTRIBUTE() helper macro
+Date:   Thu, 22 Oct 2020 16:39:53 +0800
+Message-ID: <1603355997-32350-2-git-send-email-luojiaxing@huawei.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1603355997-32350-1-git-send-email-luojiaxing@huawei.com>
+References: <1603355997-32350-1-git-send-email-luojiaxing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.56]
@@ -39,25 +41,42 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
-for read-only file, but we found many of drivers also want a helper marco for
+for read-only file, but we found many of drivers want a helper marco for
 read-write file too.
 
-So we try to add this macro to help decrease code duplication.
+So we try to make one to decrease code duplication.
 
-Luo Jiaxing (5):
-  seq_file: Introduce DEFINE_STORE_ATTRIBUTE() helper macro
-  scsi: hisi_sas: Introduce DEFINE_STORE_ATTRIBUTE for debugfs
-  scsi: qla2xxx: Introduce DEFINE_STORE_ATTRIBUTE for debugfs
-  usb: dwc3: debugfs: Introduce DEFINE_STORE_ATTRIBUTE
-  drm/i915/display: Introduce DEFINE_STORE_ATTRIBUTE for debugfs
+Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
+---
+ include/linux/seq_file.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
- .../gpu/drm/i915/display/intel_display_debugfs.c   |  55 +--------
- drivers/scsi/hisi_sas/hisi_sas_main.c              | 135 +++------------------
- drivers/scsi/qla2xxx/qla_dfs.c                     |  19 +--
- drivers/usb/dwc3/debugfs.c                         |  52 +-------
- include/linux/seq_file.h                           |  15 +++
- 5 files changed, 41 insertions(+), 235 deletions(-)
-
+diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
+index 813614d..3b3b797 100644
+--- a/include/linux/seq_file.h
++++ b/include/linux/seq_file.h
+@@ -191,6 +191,21 @@ static const struct proc_ops __name ## _proc_ops = {			\
+ 	.proc_release	= single_release,				\
+ }
+ 
++#define DEFINE_STORE_ATTRIBUTE(__name)					\
++static int __name ## _open(struct inode *inode, struct file *file)	\
++{									\
++	return single_open(file, __name ## _show, inode->i_private);	\
++}									\
++									\
++static const struct file_operations __name ## _fops = {			\
++	.owner		= THIS_MODULE,					\
++	.open		= __name ## _open,				\
++	.read		= seq_read,					\
++	.write		= __name ## _write,				\
++	.llseek		= seq_lseek,					\
++	.release	= single_release,				\
++}
++
+ static inline struct user_namespace *seq_user_ns(struct seq_file *seq)
+ {
+ #ifdef CONFIG_USER_NS
 -- 
 2.7.4
 
