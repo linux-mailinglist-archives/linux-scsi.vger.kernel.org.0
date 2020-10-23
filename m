@@ -2,98 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A48F297196
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Oct 2020 16:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79FF297206
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Oct 2020 17:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S465263AbgJWOqq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Oct 2020 10:46:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S375361AbgJWOqp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 23 Oct 2020 10:46:45 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E45AF21527;
-        Fri, 23 Oct 2020 14:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603464403;
-        bh=LtX8NeyP+cZ+2j1IkUU1onEVvrv3sB8QAV9FejdlLLQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n+Z3zXp7hD62WA2GyjU1CFbNrrDqUUtJgO3Hhs0qmS6IRk1kCefdPKHlJkGJDQDby
-         tb8m505yCaidWoXteLvLB2qPUN8tGHdSulV4hyYT/Cc4MZvzeSAaCs/I78FB9ZMO1G
-         o8KazfPZPnsdksdQupxOqy9g0C+sIFUJot2idFhI=
-Date:   Fri, 23 Oct 2020 16:47:18 +0200
-From:   'Greg KH' <gregkh@linuxfoundation.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'David Hildenbrand' <david@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
- rw_copy_check_uvector() into lib/iov_iter.c"
-Message-ID: <20201023144718.GA2525489@kroah.com>
-References: <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
- <20201022104805.GA1503673@kroah.com>
- <20201022121849.GA1664412@kroah.com>
- <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
- <20201022125759.GA1685526@kroah.com>
- <20201022135036.GA1787470@kroah.com>
- <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
- <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
- <999e2926-9a75-72fd-007a-1de0af341292@redhat.com>
- <35d0ec90ef4f4a35a75b9df7d791f719@AcuMS.aculab.com>
+        id S465613AbgJWPNL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Oct 2020 11:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S461735AbgJWPNL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Oct 2020 11:13:11 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68094C0613CE
+        for <linux-scsi@vger.kernel.org>; Fri, 23 Oct 2020 08:13:11 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id x13so1486278pgp.7
+        for <linux-scsi@vger.kernel.org>; Fri, 23 Oct 2020 08:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=k0ipwKtJAdA6ZFtvf8yrLbufQSTAMQGdLEN+z24QY94=;
+        b=mi7mjFjrsFeYUjfoHp4NwQ5ARva2qgvrhxR6td6+D7GSpWmV4I0nkVNN4CWT61Vt0F
+         iwlT9uB2oGca2iLxVdZb/phoBP82fGG9Nuj7ogLOFdBQucIGQgHRsmQ0PGbgMWF93hCp
+         M8dWldk+MXMBq7FqFIAgHhiOg+v6umftkU8S3Wn6EKvYL54umIGffYyUjFfrzQnXz1/b
+         XvFC9EsiFxzLKcTiTNhJZDxqIYuynIninXG+I15WQUd/U9w4RZAgyiDirc5Eq7XCP8B6
+         Mw3wanV8veSy0RsQ/010LIkRUrozWMdaky0WpyceMW2yeECht+aLuZpVOJpapeCgyj2e
+         C0rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=k0ipwKtJAdA6ZFtvf8yrLbufQSTAMQGdLEN+z24QY94=;
+        b=B2RTzdjXv55hH6+t4zMab6JVKtHi0RoyjJ4L1wKiysXDwWFG7qP/dtA3Bav3zPTdSL
+         SpdbdC+22mHFZF52+BLi7FsEXmcrwNHdyecjapPmJ+tRD8g1Sq5vBHHltCfQvNuabEuY
+         FIWTwEP9w1zmzjBy+LHZh3NWKw1cWHkDJ7+/RtQqSqn68Qdy3prQi82RvTdIPZnvNcMF
+         j8EdfH0l+mEBNsIQziKDA1EOsMZkIVHI2Nlp3n5Wn0zzZDXnStZ9Q+xAKOsu8JxN4izk
+         gODpXfwx579J2QGlf/WjvUvzABrNOcgyxaZa5UgNO86+PAhOn6YUnD4+FxjVR7BLkU/E
+         GStg==
+X-Gm-Message-State: AOAM533ITjOXbk4NgxKhYh3vZ42EpucP5LnFn+qEkhKRt06ty2Woem6E
+        RsqID93YTzpLh8Y9srSCoE2Utll70N87PdYvYGE=
+X-Google-Smtp-Source: ABdhPJxwlbNr1CvNPjD1MJ1+i8z0cmCVb3nazcO0uOOyOEWEr5ds9igb4bUyblvZsZ3W1s3oGxhh9qfC1Xm4k36aWtg=
+X-Received: by 2002:a63:7d0:: with SMTP id 199mr930690pgh.47.1603465990741;
+ Fri, 23 Oct 2020 08:13:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35d0ec90ef4f4a35a75b9df7d791f719@AcuMS.aculab.com>
+Received: by 2002:a05:6a10:a84d:0:0:0:0 with HTTP; Fri, 23 Oct 2020 08:13:10
+ -0700 (PDT)
+Reply-To: isabella.ferreira@yandex.com
+From:   "Isabella.Ferreira" <sdornoo9@gmail.com>
+Date:   Fri, 23 Oct 2020 08:13:10 -0700
+Message-ID: <CAG4pQ0VTKcdWhTEQKG_rENb1ZUWf54M0xa4uqK2yQ-8ZzCJTgQ@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 02:39:24PM +0000, David Laight wrote:
-> From: David Hildenbrand
-> > Sent: 23 October 2020 15:33
-> ...
-> > I just checked against upstream code generated by clang 10 and it
-> > properly discards the upper 32bit via a mov w23 w2.
-> > 
-> > So at least clang 10 indeed properly assumes we could have garbage and
-> > masks it off.
-> > 
-> > Maybe the issue is somewhere else, unrelated to nr_pages ... or clang 11
-> > behaves differently.
-> 
-> We'll need the disassembly from a failing kernel image.
-> It isn't that big to hand annotate.
+May peace of our almighty God be unto you
 
-I've worked around the merge at the moment in the android tree, but it
-is still quite reproducable, and will try to get a .o file to
-disassemble on Monday or so...
+Greeting in the name of our almighty God I wish you and your family
+happy moments of life now and forever more amen.my name is Mrs
+Isabella,69 years old from United State living in Philippines,
 
-thanks,
+Please, i do not have formal relationship with you but because of my
+present predicament and circumstances i am made to contact you.i have
+been suffering from cancer and have a short life to leave.i have made
+up my mind to donate my inheritance of 5.4million usd from my Late
+Husband to the less privileged please help me to fulfill my last wish,
+I want you to take 30 Percent of the total money for your personal use
+While 70% of the money will go to charity, people in the street and
+helping the orphanage. I grew up as an Orphan and I don't have any
+body as my family member, just to end endeavor that the house of God
+is maintained. Am doing this so that God will forgive my sins and
+accept my soul because these sicknesses have suffered me so much.
 
-greg k-h
+when I receive your mail I shall send you my pictures, and banking
+records institution to If you are interested to help.
+
+wait to hear from you soon
+
+Thanks
+
+Mrs Isabella
