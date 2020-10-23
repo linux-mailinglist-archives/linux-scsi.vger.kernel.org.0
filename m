@@ -2,83 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A79FF297206
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Oct 2020 17:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A47A8297240
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Oct 2020 17:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S465613AbgJWPNL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Oct 2020 11:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S461735AbgJWPNL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Oct 2020 11:13:11 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68094C0613CE
-        for <linux-scsi@vger.kernel.org>; Fri, 23 Oct 2020 08:13:11 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id x13so1486278pgp.7
-        for <linux-scsi@vger.kernel.org>; Fri, 23 Oct 2020 08:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=k0ipwKtJAdA6ZFtvf8yrLbufQSTAMQGdLEN+z24QY94=;
-        b=mi7mjFjrsFeYUjfoHp4NwQ5ARva2qgvrhxR6td6+D7GSpWmV4I0nkVNN4CWT61Vt0F
-         iwlT9uB2oGca2iLxVdZb/phoBP82fGG9Nuj7ogLOFdBQucIGQgHRsmQ0PGbgMWF93hCp
-         M8dWldk+MXMBq7FqFIAgHhiOg+v6umftkU8S3Wn6EKvYL54umIGffYyUjFfrzQnXz1/b
-         XvFC9EsiFxzLKcTiTNhJZDxqIYuynIninXG+I15WQUd/U9w4RZAgyiDirc5Eq7XCP8B6
-         Mw3wanV8veSy0RsQ/010LIkRUrozWMdaky0WpyceMW2yeECht+aLuZpVOJpapeCgyj2e
-         C0rw==
+        id S465800AbgJWP1Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Oct 2020 11:27:16 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43595 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S462196AbgJWP1Q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Oct 2020 11:27:16 -0400
+Received: by mail-pg1-f196.google.com with SMTP id r10so1505942pgb.10;
+        Fri, 23 Oct 2020 08:27:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=k0ipwKtJAdA6ZFtvf8yrLbufQSTAMQGdLEN+z24QY94=;
-        b=B2RTzdjXv55hH6+t4zMab6JVKtHi0RoyjJ4L1wKiysXDwWFG7qP/dtA3Bav3zPTdSL
-         SpdbdC+22mHFZF52+BLi7FsEXmcrwNHdyecjapPmJ+tRD8g1Sq5vBHHltCfQvNuabEuY
-         FIWTwEP9w1zmzjBy+LHZh3NWKw1cWHkDJ7+/RtQqSqn68Qdy3prQi82RvTdIPZnvNcMF
-         j8EdfH0l+mEBNsIQziKDA1EOsMZkIVHI2Nlp3n5Wn0zzZDXnStZ9Q+xAKOsu8JxN4izk
-         gODpXfwx579J2QGlf/WjvUvzABrNOcgyxaZa5UgNO86+PAhOn6YUnD4+FxjVR7BLkU/E
-         GStg==
-X-Gm-Message-State: AOAM533ITjOXbk4NgxKhYh3vZ42EpucP5LnFn+qEkhKRt06ty2Woem6E
-        RsqID93YTzpLh8Y9srSCoE2Utll70N87PdYvYGE=
-X-Google-Smtp-Source: ABdhPJxwlbNr1CvNPjD1MJ1+i8z0cmCVb3nazcO0uOOyOEWEr5ds9igb4bUyblvZsZ3W1s3oGxhh9qfC1Xm4k36aWtg=
-X-Received: by 2002:a63:7d0:: with SMTP id 199mr930690pgh.47.1603465990741;
- Fri, 23 Oct 2020 08:13:10 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BLVFBML2Vwax1XyDeMppx9C3lOBX85F9Q67T1CeljKY=;
+        b=PW7flJX+qlxsMTWjY8G8NIIrIK34rAfZdykbHO3sgOht/xqz678v2jiPwLqHDgSnwY
+         WuBYNtZCVdTHlvLqUB8yhJkcXTc/LsSZHUDtU7TyVdz6JMsb5nhBV6F9m/Xel+TkQ3j5
+         d+Gj2pWOr24Rnsylx6FB0A2hqRI3oephUxKE2kPN/PwaUf/TU9Nxs8yy/hLNQcckKdbP
+         pw14y4nGg8Fss320J1DzKuY866UlSBJ9VfZGulCian5EaHnZo0moL13tz5vyw5QzWBAR
+         tn0qi29TrBaqYSAn9VAB0iMgxFmTe/Qdg+VOLMwP7NX6ylFPWfsXgGBESwodNCsSLzmp
+         0gmg==
+X-Gm-Message-State: AOAM530F7pTzSMc2ZGovDX5V2q8hC2FCALIz/1P6r0UhXnpNppnTE8Ko
+        gF9eBgVruTrs76vmyO5azxSdE8NAxV1KPw==
+X-Google-Smtp-Source: ABdhPJxKO0uOkptR8CUzV7g074wD+rgIs0xpvIRLo8ZQpNiEBUz3XTXUQ4A03M1xKLM9YaBFCJL6oA==
+X-Received: by 2002:a17:90a:e997:: with SMTP id v23mr3037101pjy.195.1603466834441;
+        Fri, 23 Oct 2020 08:27:14 -0700 (PDT)
+Received: from [192.168.50.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id u21sm2243209pfk.89.2020.10.23.08.27.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Oct 2020 08:27:12 -0700 (PDT)
+Subject: Re: [PATCH] scsi: ufs: make sure scan sequence for multiple hosts
+To:     Chanho Park <chanho61.park@samsung.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CGME20201020070519epcas2p27906d7db7c74e45f2acf8243ec2eae1d@epcas2p2.samsung.com>
+ <20201020070516.129273-1-chanho61.park@samsung.com>
+ <7fafcc82-2c42-8ef5-14a6-7906b5956363@acm.org>
+ <000a01d6a761$efafcaf0$cf0f60d0$@samsung.com>
+ <0a5eb555-af2a-196a-2376-01dc4a92ae0c@acm.org>
+ <008a01d6a830$1a109800$4e31c800$@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <6e204521-74e4-cc6c-27e7-3a290c492793@acm.org>
+Date:   Fri, 23 Oct 2020 08:27:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:a84d:0:0:0:0 with HTTP; Fri, 23 Oct 2020 08:13:10
- -0700 (PDT)
-Reply-To: isabella.ferreira@yandex.com
-From:   "Isabella.Ferreira" <sdornoo9@gmail.com>
-Date:   Fri, 23 Oct 2020 08:13:10 -0700
-Message-ID: <CAG4pQ0VTKcdWhTEQKG_rENb1ZUWf54M0xa4uqK2yQ-8ZzCJTgQ@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <008a01d6a830$1a109800$4e31c800$@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-May peace of our almighty God be unto you
+On 10/21/20 9:59 PM, Chanho Park wrote:
+>> Please use udev or systemd instead of adding code in the UFS driver that
+>> is
+>> not necessary when udev or systemd is used.
+>>
+> 
+> What I mentioned was how it can be handled when we mount rootfs directly from kernel.
+> 
+> 1) kernel -> initramfs (mount root) -> systemd
+> 2) kernel (mount root) -> systemd
+>   -> In this case, we normally use root=/dev/sda1 from kernel commandline to mount the rootfs.
+> 
+> Like fstab can support legacy node mount, ufs driver also needs to provide
+> an option for using the permanent legacy node. If you're really worry about > adding a new codes for all UFS driver, we can put this as controller specific> or optional feature.
 
-Greeting in the name of our almighty God I wish you and your family
-happy moments of life now and forever more amen.my name is Mrs
-Isabella,69 years old from United State living in Philippines,
+The only code that should occur in the UFS driver is code that is specific
+to UFS devices. Since the functionality in this patch is not UFS specific,
+it should be added elsewhere.
 
-Please, i do not have formal relationship with you but because of my
-present predicament and circumstances i am made to contact you.i have
-been suffering from cancer and have a short life to leave.i have made
-up my mind to donate my inheritance of 5.4million usd from my Late
-Husband to the less privileged please help me to fulfill my last wish,
-I want you to take 30 Percent of the total money for your personal use
-While 70% of the money will go to charity, people in the street and
-helping the orphanage. I grew up as an Orphan and I don't have any
-body as my family member, just to end endeavor that the house of God
-is maintained. Am doing this so that God will forgive my sins and
-accept my soul because these sicknesses have suffered me so much.
+Additionally, since this functionality can be implemented easily in user
+space, I think it should be implemented in user space instead of in the
+kernel. Even when not using systemd or udev, it is easy to implement a loop
+that waits until a certain LUN or WWID appears.
 
-when I receive your mail I shall send you my pictures, and banking
-records institution to If you are interested to help.
-
-wait to hear from you soon
-
-Thanks
-
-Mrs Isabella
+Bart.
