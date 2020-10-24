@@ -2,115 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F933297C54
-	for <lists+linux-scsi@lfdr.de>; Sat, 24 Oct 2020 14:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0C3297D05
+	for <lists+linux-scsi@lfdr.de>; Sat, 24 Oct 2020 17:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1761386AbgJXMdi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 24 Oct 2020 08:33:38 -0400
-Received: from avasout03.plus.net ([84.93.230.244]:38315 "EHLO
-        avasout03.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1761383AbgJXMdh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 24 Oct 2020 08:33:37 -0400
-Received: from APOLLO ([212.159.61.44])
-        by smtp with ESMTPA
-        id WIjlk2EJH99nqWIjmkbs0l; Sat, 24 Oct 2020 13:33:36 +0100
-X-Clacks-Overhead: "GNU Terry Pratchett"
-X-CM-Score: 0.00
-X-CNFS-Analysis: v=2.3 cv=Uoz4y94B c=1 sm=1 tr=0
- a=AGp1duJPimIJhwGXxSk9fg==:117 a=AGp1duJPimIJhwGXxSk9fg==:17
- a=kj9zAlcOel0A:10 a=P1kZ4gAsAAAA:8 a=VwQbUJbxAAAA:8 a=RjYKm9-K-DIam8sJtF8A:9
- a=CjuIK1q_8ugA:10 a=fn9vMg-Z9CMH7MoVPInU:22 a=AjGcO6oz07-iQ99wixmX:22
-X-AUTH: perdrix52@:2500
-From:   "David C. Partridge" <david.partridge@perdrix.co.uk>
-To:     <linux-scsi@vger.kernel.org>
-References: <007e01d6a7a1$fed7d820$fc878860$@perdrix.co.uk>
-In-Reply-To: <007e01d6a7a1$fed7d820$fc878860$@perdrix.co.uk>
-Subject: RE: Adaptec ASR-51245 and aacraid driver timeouts
-Date:   Sat, 24 Oct 2020 13:33:33 +0100
-Message-ID: <009901d6aa01$e49d4690$add7d3b0$@perdrix.co.uk>
+        id S1760441AbgJXPGv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 24 Oct 2020 11:06:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60676 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1760429AbgJXPGu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 24 Oct 2020 11:06:50 -0400
+Received: from localhost (unknown [104.132.1.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6FCC920757;
+        Sat, 24 Oct 2020 15:06:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603552010;
+        bh=IqPOti2AVhOtcpidqC0x2uSNRGu2YHFlUB4t2pvldcc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JDwosvsOZagUL79j3cTaUZHZeRYqy4Od2EOaXk8rLEkxChgKEtr+Nf8DiatAxMHNQ
+         DERFpj0UQePz/eeXLiAM885ZG59CtL71oxo55c7teLas6e0WSlySNbVBW5t3GbvYJm
+         Qd4lWWyP009F+YIrM9Rcd/kkuBLyQ/rujjyeNGtk=
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     cang@codeaurora.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        bvanassche@acm.org
+Subject: [UFS v3] UFS fixes
+Date:   Sat, 24 Oct 2020 08:06:41 -0700
+Message-Id: <20201024150646.1790529-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 14.0
-Content-Language: en-gb
-Thread-Index: AQHRB8w658IXIXOeAUgHC2i4dDaVL6mx8y3g
-X-CMAE-Envelope: MS4wfOh7xYieJVe4zmTZGoPlokb786YrucYDk02ukk6XllXyR349A2MsDg80L0w+f/+5+N7txUo1Woetlu6VUsIYjHTxFNLRRwc0LnHr645XYZXussmHCv//
- wizxgrSZmvn81O4yrr8nVGCjhU8D5fzHTB1fnSBp4MzghyqB+dOek148VuMUKaRsFKL/rkkZORSTbg==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi again,
+Change log from v2:
+ - use active_req-- instead of __ufshcd_release to avoid UFS timeout
 
-I know there's been a lot of activity lately, so this could well have been
-missed.
-
-I'd dearly like to be able to power the drives down when the array is idle,
-but this problem seems to make that impossible.
-
-Are any of the folks that know the Adaptec raid cards and the aacraid driver
-here?
-
-Thanks
-David 
-
------Original Message-----
-From: David C. Partridge [mailto:david.partridge@perdrix.co.uk] 
-Sent: 21 October 2020 13:02
-To: linux-scsi@vger.kernel.org
-Subject: Adaptec ASR-51245 and aacraid driver timeouts
-
-I'm running LUbuntu x64 20.04.1 kernel 5.4.0-52-generic with an Adapted
-ASR-51245 hosting a RAID-5 array.
-
-If I configure the card to power down the drives in the raid array after a
-period of idleness, the next time my server attempts to access the logical
-device I get:
-
-Oct 19 04:03:03 charon kernel: aacraid: Host adapter abort request.
-                               aacraid: Outstanding commands on (0,0,0,0):
-Oct 19 04:03:03 charon kernel: aacraid: Host adapter reset request. SCSI
-hang ?
-Oct 19 04:03:18 charon kernel: aacraid: Host adapter reset request. SCSI
-hang ?
-Oct 19 04:03:18 charon kernel: aacraid 0000:01:00.0: outstanding cmd:
-midlevel-0
-Oct 19 04:03:18 charon kernel: aacraid 0000:01:00.0: outstanding cmd:
-lowlevel-0
-Oct 19 04:03:18 charon kernel: aacraid 0000:01:00.0: outstanding cmd: error
-handler-0
-Oct 19 04:03:18 charon kernel: aacraid 0000:01:00.0: outstanding cmd:
-firmware-1
-Oct 19 04:03:18 charon kernel: aacraid 0000:01:00.0: outstanding cmd:
-kernel-0
-Oct 19 04:03:48 charon kernel: sd 0:0:0:0: Device offlined - not ready after
-error recovery
-Oct 19 04:03:48 charon kernel: sd 0:0:0:0: [sda] tag#215 FAILED Result:
-hostbyte=DID_OK driverbyte=DRIVER_TIMEOUT
-Oct 19 04:03:48 charon kernel: sd 0:0:0:0: [sda] tag#215 CDB: Read(16) 88 00
-00 00 00 00 00 05 27 48 00 00 00 08 00 00
-Oct 19 04:03:48 charon kernel: blk_update_request: I/O error, dev sda,
-sector 337736 op 0x0:(READ) flags 0x1000 phys_seg 1 prio class 0
-Oct 19 04:03:48 charon kernel: BTRFS error (device sda1): bdev /dev/sda1
-errs: wr 1, rd 1, flush 0, corrupt 3, gen 0
-
-at which point the drive is now effectively offline :/
-
-I tried upping the timeout:
-
-root@charon:/etc/udev/rules.d# cat 99-aacraid.rules 
-SUBSYSTEM=="block", ACTION=="add", ENV{ID_VENDOR}=="Adaptec",
-ENV{ID_MODEL}=="Shared", RUN+="/bin/sh -c 'echo 135 >
-/sys/block/%k/device/timeout'"
-
-but that didn't appear to stop the problem occurring (and the kernel wasn't
-over happy about a >120s timeout).
-
-Any help much appreciated.
-David
-
-
-
+Change log from v1:
+ - remove clkgating_enable check in __ufshcd_release
+ - use __uhfshcd_release instead of active_req.
 
 
