@@ -2,83 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41898298298
-	for <lists+linux-scsi@lfdr.de>; Sun, 25 Oct 2020 17:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FC02984E8
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Oct 2020 00:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1417269AbgJYQrX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 25 Oct 2020 12:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1417267AbgJYQrW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Oct 2020 12:47:22 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57419C061755
-        for <linux-scsi@vger.kernel.org>; Sun, 25 Oct 2020 09:47:22 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id x16so7227479ljh.2
-        for <linux-scsi@vger.kernel.org>; Sun, 25 Oct 2020 09:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=TttfZRJ6f3LDmhteDTtPV+vCQzXeq0tM6mHeMRR26/M=;
-        b=Kwybtspol+tkbzAfJhJJjKi27AFVQ1V61PxEYW4ZutzOJnYyz7VtSPFnHFLl5Ebycr
-         lnBZw4W/h01D8R5hPEOO2cxBkVid1Ti+AvU60drufIEnNDCr55NE+2lJ9dbkWhZ94oD2
-         fiym0ZEurqK9XXrO9Ihoif5uL4m7SGWnHhivadCbLKlRt2OZdwmK8KOze7RW4YTJnz5y
-         e1T9gM0zAs5ZH5GC8Ctp+Qiofw/xuV49IPr0v3fJxYtmt6cZMsYX1hMsW4MVj3f+UoME
-         ubbV9t5zTzCf8H1dnv7zKXgqIRO1lIh4gWeZYZ0sGLdk4NbA71oBbO42FPgnCLKxODm9
-         lvhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=TttfZRJ6f3LDmhteDTtPV+vCQzXeq0tM6mHeMRR26/M=;
-        b=GOB8GjEbvJvSrrCxvpsacPLL/i5OCNCgV6soNl4QSlffTlF3xwHLKmzWv4rRSrudun
-         MUVqW1QdYyNeDBUNLsAJ17T2SuuAGdcn3NE9VCmQMLa0z299D9ct5T9ge4YBZvtUkJsc
-         teZQOIZ//YHX/PMZVUOOqdcoLzDaOswAYUqzKoRlS4EU0uvLxJ1tmZ96RGvZh4KseSnK
-         cPPBuxCeod82NYlrZFt6djkWDH3P5rQuMDQy2Msoojod1VUcLliyZ4k6Kq6+vh6+tDHo
-         0fcBGgrcmrsUglJEV//7bFVIrtrPBMtyTqnf2+GIXMsWuNyajIbxhMA+9yv/QTDoHudL
-         L5tQ==
-X-Gm-Message-State: AOAM531Q8l5HLWZEMys6OeC2arL5SNb7DfPBr+XlRzlen7ReDF9/A8iZ
-        CzgMJn6jzbZ5lDmD0nRmg698F71xZ8VpFUQkc2w=
-X-Google-Smtp-Source: ABdhPJzsHcvzUvtl1kZxgTGP831I2/LJ4vYZBXmxBx2sYQg+SjmNguNhlzN1eCU2XfEMwZo9tkiqouTmpeFdbra48dM=
-X-Received: by 2002:a2e:b5b9:: with SMTP id f25mr4481616ljn.309.1603644439162;
- Sun, 25 Oct 2020 09:47:19 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a9a:394d:0:b029:90:e180:29d with HTTP; Sun, 25 Oct 2020
- 09:47:17 -0700 (PDT)
-Reply-To: ubanivincent@yandex.com
-From:   Ubani Vincent <hon.makz1960@gmail.com>
-Date:   Sun, 25 Oct 2020 16:47:17 +0000
-Message-ID: <CAOHVmYYPyFnbZeOYTf+-QrgNs8-m3x1vih+9Q-dr9ch7vKb0pQ@mail.gmail.com>
-Subject: COVID-19 Information !!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1419630AbgJYXDi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 25 Oct 2020 19:03:38 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:55110 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1419406AbgJYXDh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Oct 2020 19:03:37 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09PMxmww014852;
+        Sun, 25 Oct 2020 23:03:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id; s=corp-2020-01-29;
+ bh=7EeP3tf8AXm8+gH2Mh6ulwKE2rZTOm728vH+cUBDjqc=;
+ b=c+GumHq19Fv39eLJsrhW3LugAGUXqa0lVOPJLdhkO2Xh6H5ZuT7mt2ksQZn44lv27MSX
+ 4m5ca63cfUKaIEX3t8a7YWJ6QEbCBtKJmAOBdrxG43zXX8cfO/L+8ZT+Pir5F/wMd71s
+ dpcTWeCgxDyZ7KRuon/pizODitxgq5Ni9BGbH3ncx3s0QqFniGYRjfCWnoDqrF8ucRjC
+ bdjTiAENDEkC69GDV72aJ6Fo31KpRjJK6ince9acTOxuTLImwHiBncrsXlR4yQrorN7g
+ 3Vz9ZMFtnACZiJvQVyPMr4euG5rpPLvhqioIDUbXRzBjnNAEFmhbV83QWYDA8ZFPvDpl AQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 34cc7kjg6w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 25 Oct 2020 23:03:25 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09PN0IDu032788;
+        Sun, 25 Oct 2020 23:03:25 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 34cwujrt6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 25 Oct 2020 23:03:25 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09PN3OHN013495;
+        Sun, 25 Oct 2020 23:03:24 GMT
+Received: from ol2.localdomain (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sun, 25 Oct 2020 16:03:24 -0700
+From:   Mike Christie <michael.christie@oracle.com>
+To:     himanshu.madhani@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: [RFC PATCH 0/7] target: fix up locking in IO paths
+Date:   Sun, 25 Oct 2020 18:03:11 -0500
+Message-Id: <1603666998-8086-1-git-send-email-michael.christie@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9785 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010250174
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9785 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 adultscore=0
+ malwarescore=0 spamscore=0 clxscore=1015 mlxscore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010250174
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings! Ye'll likely be surprised by this letter, I want to make it
-clear that I want to create deep relationship, We hope you safe and
-healthy during this COVID-19 crisis, in my department we discover
-abandoned sum of 15 million USA dollars belongs to one of our foreign
-customer who died along with all his family in the Asia Earth Quake
-Disaster and all the relation died along side with him at the Earth
-Quake Disaster leaving nobody behind for the claim. I want you stand
-as next of kin to the deceased. I agree that 40% of this money will be
-for you as foreign partner, in respect to the provision of a foreign
-account and 60% would be for me. Upon receipt of your reply, I will
-send to you by email the text of the application. I will not fail to
-bring to your notice that this transaction is hitch free and that you
-should not entertain any atom of fear as all required arrangements
-have been made for the transfer.
+This patchset removes se_session sess_cmd_lock for every driver but
+tcm qla2xxx and moves the se_device execution lock to per CPU so
+we can run submissions from multiple CPUs without hammering on
+those locks.
 
-I am waiting for your immediate response as you receive this mail.
-Yours faithfully,
-Mr. Ubani Vincent.
+With the patches I'm seeing a 25% improvement in IOPs for small
+IO tests like:
 
-FILL THIS FORM BELLOW AND RESEND IT TO ME.
-1) Your Full Name ....
-2) Your Age .....
-3) Your Cell Phone Number ...
-4) Your Country .......
-5) Your Occupation ....
-6) Sex ............
+fio  --filename=/dev/sdXYZ  --direct=1 --rw=randrw --bs=4k \
+--iodepth=128  --numjobs=16
+
+I'm sending this as RFC, because the qla2xxx patches are not
+tested and I'm hoping we can maybe just remove the session
+locking/list from that driver since it's only used to lookup
+commands for aborts when a specific model is used.
+
+The following patches are made over Linus's tree. Some of Martin's
+branches are missing:
+
+commit 149415586243bd0ea729760fb6dd7b3c50601871
+Author: Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>
+Date:   Wed Sep 16 23:54:31 2020 +0000
+
+    scsi: target: Fix lun lookup for TARGET_SCF_LOOKUP_LUN_FROM_TAG case
+
+
