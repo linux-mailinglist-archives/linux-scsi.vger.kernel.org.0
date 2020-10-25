@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3D42984F2
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Oct 2020 00:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C542984E3
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Oct 2020 00:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1420446AbgJYXF3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 25 Oct 2020 19:05:29 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:56238 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1419630AbgJYXF2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Oct 2020 19:05:28 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09PMxl81014830;
-        Sun, 25 Oct 2020 23:05:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=VFP3rst2ois9Jw13xeMWABJLa3WgranbJd/XPTUpHW8=;
- b=SGqpYaRnVygLiz3I4dU+HXxkCZxpnAIpfz12sTrl0ttBpEjR2L59S3k7IJRWaPea0aUh
- aCGaLwzsZPTZO23edRSugqn0Hns6ll4LJf2lglBHzlvBR6x8eycYBgbatXYL9Idex/su
- FFHRhRvMEczHiV5ubEMIYxZMGFqcms3uD/bIkIaaxyKGxZ6AedsgYj/kXVHbzTZSDRN7
- mbGTof20Diocj65NagfkwrV3eJcvkrx3ydAgLwgukMVnHzUWncTZWrLz6A9pr0h+qtxH
- oIbN+jI+Pxh78+d8SDZYaEJ6QadGEERMU4E+7PLMdprCCRisKBF74wiF7nv40YiwFTwy ww== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 34cc7kjg8a-1
+        id S1420397AbgJYXDk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 25 Oct 2020 19:03:40 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:40702 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1419475AbgJYXDh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Oct 2020 19:03:37 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09PMxD8I149169;
+        Sun, 25 Oct 2020 23:03:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=j0e80+39/vPLi7qwyAw/9GrLFt2fQ3NQre3X7U3tIBs=;
+ b=aG2kVVZdz0dl79JIFgbhWDGhQMbCeECFQz28sgFhWceuLag48HF/qdoNOAjhMoY4XY3K
+ jEfkazzMHpVt9s3JxBTTAKB44k/8e9zPvahSIBii2hwLmta0udbPLB35H+OR2FSfXS1x
+ gez9k4whHAafhzP5wfCa/F6apSGeCtGnSa3+TmFehY/MKPF5H90xkHoGWAF+5gaAvZW2
+ IBYfSE5+TJOFwi4eLARIi9gzSUG2ASojGnEY727zbyNULMGhy4JTgYRHKcyYyJL88lb7
+ 2OePi1Sdp7o1EFUOr1OB5H9+DpAcDkSgzAOnI5/hx43yvV68bA4d+4nBJHK5kPaKXs68 uw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 34c9sajmmr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 25 Oct 2020 23:05:26 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09PN0IOB032868;
-        Sun, 25 Oct 2020 23:03:25 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 34cwujrt6g-1
+        Sun, 25 Oct 2020 23:03:27 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09PN0Ea4140643;
+        Sun, 25 Oct 2020 23:03:26 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 34cx1p1t8j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 25 Oct 2020 23:03:25 +0000
+        Sun, 25 Oct 2020 23:03:26 +0000
 Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09PN3PuF014749;
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09PN3PXa013501;
         Sun, 25 Oct 2020 23:03:25 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
@@ -42,98 +42,186 @@ Received: from ol2.localdomain (/73.88.28.6)
 From:   Mike Christie <michael.christie@oracle.com>
 To:     himanshu.madhani@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [PATCH 2/7] target: remove TARGET_SCF_LOOKUP_LUN_FROM_TAG
-Date:   Sun, 25 Oct 2020 18:03:13 -0500
-Message-Id: <1603666998-8086-3-git-send-email-michael.christie@oracle.com>
+Cc:     Nilesh Javali <njavali@marvell.com>
+Subject: [PATCH 3/7] tcm qlaxx: move sess cmd list/lock to driver
+Date:   Sun, 25 Oct 2020 18:03:14 -0500
+Message-Id: <1603666998-8086-4-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1603666998-8086-1-git-send-email-michael.christie@oracle.com>
 References: <1603666998-8086-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9785 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 bulkscore=0
- spamscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
+ suspectscore=2 malwarescore=0 mlxlogscore=999 mlxscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2010250174
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9785 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 adultscore=0
- malwarescore=0 spamscore=0 clxscore=1015 mlxscore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 spamscore=0 phishscore=0 clxscore=1015 suspectscore=2
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2010250174
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-TARGET_SCF_LOOKUP_LUN_FROM_TAG is no longer used so remove it.
+Except for debug output in the shutdown path, tcm qla2xxx is the only
+driver using the se_session sess_cmd_list. This moves the list to that
+driver so in the next patches we can remove the sess_cmd_lock from the
+main IO path for the rest of the drivers.
 
+Cc: Nilesh Javali <njavali@marvell.com>
+Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/target/target_core_transport.c | 33 ---------------------------------
- include/target/target_core_base.h      |  1 -
- 2 files changed, 34 deletions(-)
+ drivers/scsi/qla2xxx/qla_def.h     |  2 ++
+ drivers/scsi/qla2xxx/qla_target.c  |  2 +-
+ drivers/scsi/qla2xxx/qla_target.h  |  1 +
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c | 47 +++++++++++++++++++++++---------------
+ 4 files changed, 32 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index ff26ab0..ee2d2db 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -1764,29 +1764,6 @@ static void target_complete_tmr_failure(struct work_struct *work)
- 	transport_cmd_check_stop_to_fabric(se_cmd);
+diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
+index a165120..b6284ad 100644
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -2484,6 +2484,8 @@ enum rscn_addr_format {
+ 	int generation;
+ 
+ 	struct se_session *se_sess;
++	struct list_head sess_cmd_list;
++	spinlock_t sess_cmd_lock;
+ 	struct kref sess_kref;
+ 	struct qla_tgt *tgt;
+ 	unsigned long expires;
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 5c417d3..6cb4348 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -4366,7 +4366,7 @@ static int qlt_handle_cmd_for_atio(struct scsi_qla_host *vha,
+ 	cmd->trc_flags |= TRC_NEW_CMD;
+ 
+ 	spin_lock_irqsave(&vha->cmd_list_lock, flags);
+-	list_add_tail(&cmd->cmd_list, &vha->qla_cmd_list);
++	list_add_tail(&cmd->sess_cmd_list, &vha->qla_cmd_list);
+ 	spin_unlock_irqrestore(&vha->cmd_list_lock, flags);
+ 
+ 	INIT_WORK(&cmd->work, qlt_do_work);
+diff --git a/drivers/scsi/qla2xxx/qla_target.h b/drivers/scsi/qla2xxx/qla_target.h
+index 1cff7c6..10e5e6c8 100644
+--- a/drivers/scsi/qla2xxx/qla_target.h
++++ b/drivers/scsi/qla2xxx/qla_target.h
+@@ -856,6 +856,7 @@ struct qla_tgt_cmd {
+ 	uint8_t cmd_type;
+ 	uint8_t pad[7];
+ 	struct se_cmd se_cmd;
++	struct list_head sess_cmd_list;
+ 	struct fc_port *sess;
+ 	struct qla_qpair *qpair;
+ 	uint32_t reset_count;
+diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+index 4abf24c..076e0ab 100644
+--- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
++++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+@@ -255,6 +255,7 @@ static void tcm_qla2xxx_free_mcmd(struct qla_tgt_mgmt_cmd *mcmd)
+ static void tcm_qla2xxx_complete_free(struct work_struct *work)
+ {
+ 	struct qla_tgt_cmd *cmd = container_of(work, struct qla_tgt_cmd, work);
++	unsigned long flags;
+ 
+ 	cmd->cmd_in_wq = 0;
+ 
+@@ -265,6 +266,10 @@ static void tcm_qla2xxx_complete_free(struct work_struct *work)
+ 	cmd->trc_flags |= TRC_CMD_FREE;
+ 	cmd->cmd_sent_to_fw = 0;
+ 
++	spin_lock_irqsave(&cmd->sess->sess_cmd_lock, flags);
++	list_del_init(&cmd->sess_cmd_list);
++	spin_unlock_irqrestore(&cmd->sess->sess_cmd_lock, flags);
++
+ 	transport_generic_free_cmd(&cmd->se_cmd, 0);
  }
  
--static bool target_lookup_lun_from_tag(struct se_session *se_sess, u64 tag,
--				       u64 *unpacked_lun)
--{
--	struct se_cmd *se_cmd;
--	unsigned long flags;
--	bool ret = false;
+@@ -451,13 +456,14 @@ static int tcm_qla2xxx_handle_cmd(scsi_qla_host_t *vha, struct qla_tgt_cmd *cmd,
+ 	struct se_portal_group *se_tpg;
+ 	struct tcm_qla2xxx_tpg *tpg;
+ #endif
+-	int flags = TARGET_SCF_ACK_KREF;
++	int target_flags = TARGET_SCF_ACK_KREF, ret;
++	unsigned long flags;
+ 
+ 	if (bidi)
+-		flags |= TARGET_SCF_BIDI_OP;
++		target_flags |= TARGET_SCF_BIDI_OP;
+ 
+ 	if (se_cmd->cpuid != WORK_CPU_UNBOUND)
+-		flags |= TARGET_SCF_USE_CPUID;
++		target_flags |= TARGET_SCF_USE_CPUID;
+ 
+ 	sess = cmd->sess;
+ 	if (!sess) {
+@@ -479,11 +485,17 @@ static int tcm_qla2xxx_handle_cmd(scsi_qla_host_t *vha, struct qla_tgt_cmd *cmd,
+ 		return 0;
+ 	}
+ #endif
 -
--	spin_lock_irqsave(&se_sess->sess_cmd_lock, flags);
--	list_for_each_entry(se_cmd, &se_sess->sess_cmd_list, se_cmd_list) {
--		if (se_cmd->se_cmd_flags & SCF_SCSI_TMR_CDB)
+ 	cmd->qpair->tgt_counters.qla_core_sbt_cmd++;
+-	return target_submit_cmd(se_cmd, se_sess, cdb, &cmd->sense_buffer[0],
++	ret = target_submit_cmd(se_cmd, se_sess, cdb, &cmd->sense_buffer[0],
+ 				cmd->unpacked_lun, data_length, fcp_task_attr,
+-				data_dir, flags);
++				data_dir, target_flags);
++	if (!ret) {
++		spin_lock_irqsave(&sess->sess_cmd_lock, flags);
++		list_add_tail(&cmd->sess_cmd_list, &sess->sess_cmd_list);
++		spin_unlock_irqrestore(&sess->sess_cmd_lock, flags);
++	}
++
++	return ret;
+ }
+ 
+ static void tcm_qla2xxx_handle_data_work(struct work_struct *work)
+@@ -617,25 +629,20 @@ static int tcm_qla2xxx_handle_tmr(struct qla_tgt_mgmt_cmd *mcmd, u64 lun,
+ static struct qla_tgt_cmd *tcm_qla2xxx_find_cmd_by_tag(struct fc_port *sess,
+     uint64_t tag)
+ {
+-	struct qla_tgt_cmd *cmd = NULL;
+-	struct se_cmd *secmd;
++	struct qla_tgt_cmd *cmd;
+ 	unsigned long flags;
+ 
+ 	if (!sess->se_sess)
+ 		return NULL;
+ 
+-	spin_lock_irqsave(&sess->se_sess->sess_cmd_lock, flags);
+-	list_for_each_entry(secmd, &sess->se_sess->sess_cmd_list, se_cmd_list) {
+-		/* skip task management functions, including tmr->task_cmd */
+-		if (secmd->se_cmd_flags & SCF_SCSI_TMR_CDB)
 -			continue;
 -
--		if (se_cmd->tag == tag) {
--			*unpacked_lun = se_cmd->orig_fe_lun;
--			ret = true;
+-		if (secmd->tag == tag) {
+-			cmd = container_of(secmd, struct qla_tgt_cmd, se_cmd);
 -			break;
 -		}
--	}
--	spin_unlock_irqrestore(&se_sess->sess_cmd_lock, flags);
--
--	return ret;
--}
--
- /**
-  * target_submit_tmr - lookup unpacked lun and submit uninitialized se_cmd
-  *                     for TMR CDBs
-@@ -1834,16 +1811,6 @@ int target_submit_tmr(struct se_cmd *se_cmd, struct se_session *se_sess,
- 		core_tmr_release_req(se_cmd->se_tmr_req);
- 		return ret;
++	spin_lock_irqsave(&sess->sess_cmd_lock, flags);
++	list_for_each_entry(cmd, &sess->sess_cmd_list, sess_cmd_list) {
++		if (cmd->se_cmd.tag == tag)
++			goto done;
  	}
--	/*
--	 * If this is ABORT_TASK with no explicit fabric provided LUN,
--	 * go ahead and search active session tags for a match to figure
--	 * out unpacked_lun for the original se_cmd.
--	 */
--	if (tm_type == TMR_ABORT_TASK && (flags & TARGET_SCF_LOOKUP_LUN_FROM_TAG)) {
--		if (!target_lookup_lun_from_tag(se_sess, tag,
--						&se_cmd->orig_fe_lun))
--			goto failure;
--	}
+-	spin_unlock_irqrestore(&sess->se_sess->sess_cmd_lock, flags);
++	cmd = NULL;
++done:
++	spin_unlock_irqrestore(&sess->sess_cmd_lock, flags);
  
- 	ret = transport_lookup_tmr_lun(se_cmd);
- 	if (ret)
-diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
-index 549947d..b3c9946 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -195,7 +195,6 @@ enum target_sc_flags_table {
- 	TARGET_SCF_ACK_KREF		= 0x02,
- 	TARGET_SCF_UNKNOWN_SIZE		= 0x04,
- 	TARGET_SCF_USE_CPUID		= 0x08,
--	TARGET_SCF_LOOKUP_LUN_FROM_TAG	= 0x10,
- };
+ 	return cmd;
+ }
+@@ -1426,6 +1433,8 @@ static int tcm_qla2xxx_session_cb(struct se_portal_group *se_tpg,
+ 	uint16_t loop_id = qlat_sess->loop_id;
+ 	unsigned long flags;
  
- /* fabric independent task management function values */
++	INIT_LIST_HEAD(&qlat_sess->sess_cmd_list);
++	spin_lock_init(&qlat_sess->sess_cmd_lock);
+ 	/*
+ 	 * And now setup se_nacl and session pointers into HW lport internal
+ 	 * mappings for fabric S_ID and LOOP_ID.
 -- 
 1.8.3.1
 
