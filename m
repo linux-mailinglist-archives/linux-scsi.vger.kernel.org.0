@@ -2,106 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A59298736
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Oct 2020 08:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED13298919
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Oct 2020 10:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1736788AbgJZHCk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 26 Oct 2020 03:02:40 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:47924 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1736776AbgJZHCk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 26 Oct 2020 03:02:40 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1603695759; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=4W30NrG0crD/eXRgkUetS2eftLP50C0CS9VL2EWCFO0=;
- b=v/QiIfKq0HBGwKPOaehyLVfS1qAEo7/LssOUxg2WtuARGXY3xN6HemluDBB7HzHqTUPxjPd7
- eQ9vo+mjZnREKERf29TPXqq808DyyFSRlNzXhX2ydHpU+kcdKfnBpNXU69aYHoMHVRi+TCD2
- xWsrAR1wPbNmmlFdx4lu8CfonnE=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 5f96745babdbaddfebb337fe (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 26 Oct 2020 07:01:47
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B14C2C433FF; Mon, 26 Oct 2020 07:01:46 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E6EDCC433F0;
-        Mon, 26 Oct 2020 07:01:45 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 26 Oct 2020 15:01:45 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Avri Altman <Avri.Altman@wdc.com>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] scsi: ufs: Fix unexpected values get from
- ufshcd_read_desc_param()
-In-Reply-To: <BY5PR04MB67056EDDDA22DEDAFD1972C1FC190@BY5PR04MB6705.namprd04.prod.outlook.com>
-References: <1603346348-14149-1-git-send-email-cang@codeaurora.org>
- <BY5PR04MB6705D719530D5E188ECB724EFC1D0@BY5PR04MB6705.namprd04.prod.outlook.com>
- <5271e570f2e38770da3b23f13e739e41@codeaurora.org>
- <BY5PR04MB67056EDDDA22DEDAFD1972C1FC190@BY5PR04MB6705.namprd04.prod.outlook.com>
-Message-ID: <28555cab045fb631c91262c77b71d9fc@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        id S1772585AbgJZJHS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 26 Oct 2020 05:07:18 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1304 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391099AbgJZJHS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 26 Oct 2020 05:07:18 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09Q93IOk096895;
+        Mon, 26 Oct 2020 05:07:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id; s=pp1;
+ bh=LZu6nfQ0g9v5m/93Hb7gW5a8qdfim4JniShGr/vv/A0=;
+ b=mK3tMcsZY5pqcMM3A1Tejke3XkkWv8CsF1GM6d/66zuqX1qHT8Hksx8imPbvpYQcbBDx
+ u7+kOukgOI9HRV/idefY+3VayFzccCDz+0XkWCiknwkvTTsKaAGCp2D4zYHKvmH3hgby
+ J/8a4XSMKqb2jESXxxBxpqSlhfAzT00rQdunJ9X2V8SnYhvPj0d9R10xyewhigHaKhtg
+ mY5dyfmtlh93z4i5gEXhd7gQhBvkLqunJrvaUZBYgwynxHBqsFvQeVt15Dbk6flcpovO
+ KmZpDbBqMCZdUnh3OPZxUmxZ9Za68R0lzvLZ3VwY4amwInxGBX1/f7vOHhtwZd8Gp9lF IQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34drctn1ca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Oct 2020 05:07:15 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09Q93klL099338;
+        Mon, 26 Oct 2020 05:07:15 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34drctn1bj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Oct 2020 05:07:14 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09Q9308F022984;
+        Mon, 26 Oct 2020 09:07:12 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 34cbw8911j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Oct 2020 09:07:12 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09Q979ke31392112
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Oct 2020 09:07:09 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1D155204F;
+        Mon, 26 Oct 2020 09:07:09 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 6890C5204E;
+        Mon, 26 Oct 2020 09:07:09 +0000 (GMT)
+From:   Julian Wiedmann <jwi@linux.ibm.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH] scsi: docs: SG_ALL no longer opts out from chained sgl
+Date:   Mon, 26 Oct 2020 10:07:01 +0100
+Message-Id: <20201026090701.36065-1-jwi@linux.ibm.com>
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
+ definitions=2020-10-26_06:2020-10-26,2020-10-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ clxscore=1011 suspectscore=0 adultscore=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 impostorscore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010260066
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-10-26 13:22, Avri Altman wrote:
->> On 2020-10-22 14:37, Avri Altman wrote:
->> >> Since WB feature has been added, WB related sysfs entries can be
->> >> accessed
->> >> even when an UFS device does not support WB feature. In that case, the
->> >> descriptors which are not supported by the UFS device may be wrongly
->> >> reported when they are accessed from their corrsponding sysfs entries.
->> >> Fix it by adding a sanity check of parameter offset against the actual
->> >> decriptor length.s
->> > This should be a bug fix IMO, and be dealt with similarly like
->> > ufshcd_is_wb_attrs or ufshcd_is_wb_flag.
->> > Thanks,
->> > Avri
->> 
->> Could you please elaborate on ufshcd_is_wb_attrs or ufshcd_is_wb_flag?
->> Sorry that I don't quite get it.
-> Since this change is only protecting illegal access from sysfs entries,
-> I am suggesting to handle it there, just like ufshcd_is_wb_attrs or
-> ufshcd_is_wb_flag
-> Are doing it for flags and attributes.
-> 
-> Thanks,
-> Avri
+commit 3dccdf53c2f3 ("scsi: core: avoid preallocating big SGL for data")
+has changed the sgl allocation logic. A scsi_cmnd may now contain
+chained SG lists, even when sg_tablesize is set to <= SG_ALL by the LLD.
 
-This is a general problem - if later we have HPB entries added into 
-sysfs,
-we will hit it again. We cannot keep adding checks like 
-ufshcd_is_xxx_attrs
-or ufshcd_is_xxx_flag to block them, right?
+Cc: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Julian Wiedmann <jwi@linux.ibm.com>
+---
+ Documentation/scsi/scsi_mid_low_api.rst | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks,
+diff --git a/Documentation/scsi/scsi_mid_low_api.rst b/Documentation/scsi/scsi_mid_low_api.rst
+index 5bc17d012b25..6b2bad6dc899 100644
+--- a/Documentation/scsi/scsi_mid_low_api.rst
++++ b/Documentation/scsi/scsi_mid_low_api.rst
+@@ -1081,7 +1081,6 @@ of interest:
+ 		 - scsi id of host (scsi initiator) or -1 if not known
+     sg_tablesize
+ 		 - maximum scatter gather elements allowed by host.
+-                   Set this to SG_ALL or less to avoid chained SG lists.
+                    Must be at least 1.
+     max_sectors
+ 		 - maximum number of sectors (usually 512 bytes) allowed
+-- 
+2.17.1
 
-Can Guo.
