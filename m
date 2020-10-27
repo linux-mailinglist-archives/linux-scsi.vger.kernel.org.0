@@ -2,258 +2,176 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CF529AB87
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Oct 2020 13:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE3C29ACCA
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Oct 2020 14:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1750780AbgJ0MOR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Oct 2020 08:14:17 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:6406 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750752AbgJ0MOQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Oct 2020 08:14:16 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CL9cB1zjqz6ycc;
-        Tue, 27 Oct 2020 20:14:18 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 27 Oct 2020 20:14:05 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <martin.petersen@oracle.com>, <jejb@linux.ibm.com>,
-        <tglx@linutronix.de>
-CC:     <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <maz@kernel.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH 3/3] scsi: hisi_sas: Expose HW queues for v2 hw
-Date:   Tue, 27 Oct 2020 20:10:24 +0800
-Message-ID: <1603800624-180488-4-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1603800624-180488-1-git-send-email-john.garry@huawei.com>
-References: <1603800624-180488-1-git-send-email-john.garry@huawei.com>
+        id S2439261AbgJ0NHq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Oct 2020 09:07:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49227 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751834AbgJ0NHq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Oct 2020 09:07:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603804064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pUGFV8Epd7vXcx8sg02eTabi/rVHE/rnCF+rnz+uE1E=;
+        b=SxIjkC10pdkNSjzuIH5eikq/PXVUMI1i16xA2H47cEX4wCCqO4TxFZBCMSUa7lEH0JTe4C
+        8DynKgUvsLO71Et0YwLse/o3yGrxIqhH4K8nU9MJ/yFVHkoYiEf3mtcqHCqm5OqW99cfJk
+        1Z6u31H/YpooNQg43FHRV3krt9HaSHk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-415-CsZFxLlnOKOv-4qGODkByw-1; Tue, 27 Oct 2020 09:07:39 -0400
+X-MC-Unique: CsZFxLlnOKOv-4qGODkByw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 940B580B714;
+        Tue, 27 Oct 2020 13:07:18 +0000 (UTC)
+Received: from [10.35.206.125] (unknown [10.35.206.125])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DF5D06EF67;
+        Tue, 27 Oct 2020 13:07:14 +0000 (UTC)
+Subject: Re: [PATCH 09/17] vhost scsi: fix cmd completion race
+To:     Mike Christie <michael.christie@oracle.com>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        pbonzini@redhat.com, stefanha@redhat.com,
+        virtualization@lists.linux-foundation.org
+References: <1603326903-27052-1-git-send-email-michael.christie@oracle.com>
+ <1603326903-27052-10-git-send-email-michael.christie@oracle.com>
+From:   Maurizio Lombardi <mlombard@redhat.com>
+Message-ID: <8662eb42-7632-a05f-cb55-5dc80b444612@redhat.com>
+Date:   Tue, 27 Oct 2020 14:07:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+In-Reply-To: <1603326903-27052-10-git-send-email-michael.christie@oracle.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As a performance enhancement, make the completion queue interrupts
-managed.
 
-In addition, in commit bf0beec0607d ("blk-mq: drain I/O when all CPUs in a
-hctx are offline"), CPU hotplug for MQ devices using managed interrupts
-is made safe. So expose HW queues to blk-mq to take advantage of this.
 
-Flag Scsi_host.host_tagset is also set to ensure that the HBA is not sent
-more commands than it can handle. However the driver still does not use
-request tag for IPTT as there are many HW bugs which means that special
-rules apply for IPTT allocation.
+Dne 22. 10. 20 v 2:34 Mike Christie napsal(a):
+> We might not do the final se_cmd put from vhost_scsi_complete_cmd_work.
+> When the last put happens a little later then we could race where
+> vhost_scsi_complete_cmd_work does vhost_signal, the guest runs and sends
+> more IO, and vhost_scsi_handle_vq runs but does not find any free cmds.
+> 
+> This patch has us delay completing the cmd until the last lio core ref
+> is dropped. We then know that once we signal to the guest that the cmd
+> is completed that if it queues a new command it will find a free cmd.
+> 
+> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+> ---
+>  drivers/vhost/scsi.c | 42 +++++++++++++++---------------------------
+>  1 file changed, 15 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+> index f6b9010..2fa48dd 100644
+> --- a/drivers/vhost/scsi.c
+> +++ b/drivers/vhost/scsi.c
+> @@ -322,7 +322,7 @@ static u32 vhost_scsi_tpg_get_inst_index(struct se_portal_group *se_tpg)
+>  	return 1;
+>  }
+>  
+> -static void vhost_scsi_release_cmd(struct se_cmd *se_cmd)
+> +static void vhost_scsi_release_cmd_res(struct se_cmd *se_cmd)
+>  {
+>  	struct vhost_scsi_cmd *tv_cmd = container_of(se_cmd,
+>  				struct vhost_scsi_cmd, tvc_se_cmd);
+> @@ -344,6 +344,16 @@ static void vhost_scsi_release_cmd(struct se_cmd *se_cmd)
+>  	vhost_scsi_put_inflight(inflight);
+>  }
+>  
+> +static void vhost_scsi_release_cmd(struct se_cmd *se_cmd)
+> +{
+> +	struct vhost_scsi_cmd *cmd = container_of(se_cmd,
+> +					struct vhost_scsi_cmd, tvc_se_cmd);
+> +	struct vhost_scsi *vs = cmd->tvc_vhost;
+> +
+> +	llist_add(&cmd->tvc_completion_list, &vs->vs_completion_list);
+> +	vhost_work_queue(&vs->dev, &vs->vs_completion_work);
+> +}
+> +
+>  static u32 vhost_scsi_sess_get_index(struct se_session *se_sess)
+>  {
+>  	return 0;
+> @@ -366,28 +376,15 @@ static int vhost_scsi_get_cmd_state(struct se_cmd *se_cmd)
+>  	return 0;
+>  }
+>  
+> -static void vhost_scsi_complete_cmd(struct vhost_scsi_cmd *cmd)
+> -{
+> -	struct vhost_scsi *vs = cmd->tvc_vhost;
+> -
+> -	llist_add(&cmd->tvc_completion_list, &vs->vs_completion_list);
+> -
+> -	vhost_work_queue(&vs->dev, &vs->vs_completion_work);
+> -}
+> -
+>  static int vhost_scsi_queue_data_in(struct se_cmd *se_cmd)
+>  {
+> -	struct vhost_scsi_cmd *cmd = container_of(se_cmd,
+> -				struct vhost_scsi_cmd, tvc_se_cmd);
+> -	vhost_scsi_complete_cmd(cmd);
+> +	transport_generic_free_cmd(se_cmd, 0);
+>  	return 0;
+>  }
+>  
+>  static int vhost_scsi_queue_status(struct se_cmd *se_cmd)
+>  {
+> -	struct vhost_scsi_cmd *cmd = container_of(se_cmd,
+> -				struct vhost_scsi_cmd, tvc_se_cmd);
+> -	vhost_scsi_complete_cmd(cmd);
+> +	transport_generic_free_cmd(se_cmd, 0);
+>  	return 0;
+>  }
+>  
+> @@ -433,15 +430,6 @@ static void vhost_scsi_free_evt(struct vhost_scsi *vs, struct vhost_scsi_evt *ev
+>  	return evt;
+>  }
+>  
+> -static void vhost_scsi_free_cmd(struct vhost_scsi_cmd *cmd)
+> -{
+> -	struct se_cmd *se_cmd = &cmd->tvc_se_cmd;
+> -
+> -	/* TODO locking against target/backend threads? */
+> -	transport_generic_free_cmd(se_cmd, 0);
+> -
+> -}
+> -
+>  static int vhost_scsi_check_stop_free(struct se_cmd *se_cmd)
+>  {
+>  	return target_put_sess_cmd(se_cmd);
+> @@ -560,7 +548,7 @@ static void vhost_scsi_complete_cmd_work(struct vhost_work *work)
+>  		} else
+>  			pr_err("Faulted on virtio_scsi_cmd_resp\n");
+>  
+> -		vhost_scsi_free_cmd(cmd);
+> +		vhost_scsi_release_cmd_res(se_cmd);
+>  	}
+>  
+>  	vq = -1;
+> @@ -1096,7 +1084,7 @@ static u16 vhost_buf_to_lun(u8 *lun_buf)
+>  						      &prot_iter, exp_data_len,
+>  						      &data_iter))) {
+>  				vq_err(vq, "Failed to map iov to sgl\n");
+> -				vhost_scsi_release_cmd(&cmd->tvc_se_cmd);
+> +				vhost_scsi_release_cmd_res(&cmd->tvc_se_cmd);
+>  				goto err;
+>  			}
+>  		}
+> 
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas.h       |  4 ++
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 11 ++++
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 71 ++++++++++++++++++++++----
- 3 files changed, 75 insertions(+), 11 deletions(-)
+Looks ok to me.
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index a25cfc11c96d..33c4fb45dd99 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -14,6 +14,7 @@
- #include <linux/debugfs.h>
- #include <linux/dmapool.h>
- #include <linux/iopoll.h>
-+#include <linux/irq.h>
- #include <linux/lcm.h>
- #include <linux/libata.h>
- #include <linux/mfd/syscon.h>
-@@ -312,6 +313,7 @@ enum {
- 
- struct hisi_sas_hw {
- 	int (*hw_init)(struct hisi_hba *hisi_hba);
-+	int (*interrupt_preinit)(struct hisi_hba *hisi_hba);
- 	void (*setup_itct)(struct hisi_hba *hisi_hba,
- 			   struct hisi_sas_device *device);
- 	int (*slot_index_alloc)(struct hisi_hba *hisi_hba,
-@@ -418,6 +420,8 @@ struct hisi_hba {
- 	u32 refclk_frequency_mhz;
- 	u8 sas_addr[SAS_ADDR_SIZE];
- 
-+	int irq_map[128]; /* v2 hw */
-+
- 	int n_phy;
- 	spinlock_t lock;
- 	struct semaphore sem;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 128583dfccf2..56f914203679 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -2614,6 +2614,13 @@ static struct Scsi_Host *hisi_sas_shost_alloc(struct platform_device *pdev,
- 	return NULL;
- }
- 
-+static int hisi_sas_interrupt_preinit(struct hisi_hba *hisi_hba)
-+{
-+	if (hisi_hba->hw->interrupt_preinit)
-+		return hisi_hba->hw->interrupt_preinit(hisi_hba);
-+	return 0;
-+}
-+
- int hisi_sas_probe(struct platform_device *pdev,
- 		   const struct hisi_sas_hw *hw)
- {
-@@ -2671,6 +2678,10 @@ int hisi_sas_probe(struct platform_device *pdev,
- 		sha->sas_port[i] = &hisi_hba->port[i].sas_port;
- 	}
- 
-+	rc = hisi_sas_interrupt_preinit(hisi_hba);
-+	if (rc)
-+		goto err_out_ha;
-+
- 	rc = scsi_add_host(shost, &pdev->dev);
- 	if (rc)
- 		goto err_out_ha;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index b57177b52fac..d6b933c3d0a2 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -3302,6 +3302,37 @@ static irq_handler_t fatal_interrupts[HISI_SAS_FATAL_INT_NR] = {
- 	fatal_axi_int_v2_hw
- };
- 
-+static int hisi_sas_v2_interrupt_preinit(struct hisi_hba *hisi_hba)
-+{
-+	struct platform_device *pdev = hisi_hba->platform_dev;
-+	struct Scsi_Host *shost = hisi_hba->shost;
-+	int rc, i, *irqs, count;
-+	struct irq_affinity desc = {
-+		.pre_vectors = 96, /* base of completion queue interrupts */
-+		.post_vectors = 16,
-+	};
-+
-+	rc = platform_get_irqs_affinity(pdev, &desc, &count, &irqs);
-+	if (rc < 0)
-+		return rc;
-+
-+	/* 128 interrupts are always expected */
-+	if (count != 128) {
-+		kfree(irqs);
-+		return -EIO;
-+	}
-+
-+	/* Store the IRQ numbers in the driver */
-+	for (i = 0; i < 128; i++)
-+		hisi_hba->irq_map[i] = irqs[i];
-+
-+	shost->nr_hw_queues = hisi_hba->cq_nvecs = hisi_hba->queue_count;
-+
-+	kfree(irqs);
-+
-+	return 0;
-+}
-+
- /*
-  * There is a limitation in the hip06 chipset that we need
-  * to map in all mbigen interrupts, even if they are not used.
-@@ -3310,14 +3341,11 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- {
- 	struct platform_device *pdev = hisi_hba->platform_dev;
- 	struct device *dev = &pdev->dev;
--	int irq, rc = 0, irq_map[128];
-+	int irq, rc = 0;
- 	int i, phy_no, fatal_no, queue_no;
- 
--	for (i = 0; i < 128; i++)
--		irq_map[i] = platform_get_irq(pdev, i);
--
- 	for (i = 0; i < HISI_SAS_PHY_INT_NR; i++) {
--		irq = irq_map[i + 1]; /* Phy up/down is irq1 */
-+		irq = hisi_hba->irq_map[i + 1]; /* Phy up/down is irq1 */
- 		rc = devm_request_irq(dev, irq, phy_interrupts[i], 0,
- 				      DRV_NAME " phy", hisi_hba);
- 		if (rc) {
-@@ -3331,7 +3359,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	for (phy_no = 0; phy_no < hisi_hba->n_phy; phy_no++) {
- 		struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
- 
--		irq = irq_map[phy_no + 72];
-+		irq = hisi_hba->irq_map[phy_no + 72];
- 		rc = devm_request_irq(dev, irq, sata_int_v2_hw, 0,
- 				      DRV_NAME " sata", phy);
- 		if (rc) {
-@@ -3343,7 +3371,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	}
- 
- 	for (fatal_no = 0; fatal_no < HISI_SAS_FATAL_INT_NR; fatal_no++) {
--		irq = irq_map[fatal_no + 81];
-+		irq = hisi_hba->irq_map[fatal_no + 81];
- 		rc = devm_request_irq(dev, irq, fatal_interrupts[fatal_no], 0,
- 				      DRV_NAME " fatal", hisi_hba);
- 		if (rc) {
-@@ -3357,7 +3385,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	for (queue_no = 0; queue_no < hisi_hba->queue_count; queue_no++) {
- 		struct hisi_sas_cq *cq = &hisi_hba->cq[queue_no];
- 
--		cq->irq_no = irq_map[queue_no + 96];
-+		cq->irq_no = hisi_hba->irq_map[queue_no + 96];
- 		rc = devm_request_threaded_irq(dev, cq->irq_no,
- 					       cq_interrupt_v2_hw,
- 					       cq_thread_v2_hw, IRQF_ONESHOT,
-@@ -3368,10 +3396,8 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 			rc = -ENOENT;
- 			goto err_out;
- 		}
-+		cq->irq_mask = irq_get_affinity_mask(cq->irq_no);
- 	}
--
--	hisi_hba->cq_nvecs = hisi_hba->queue_count;
--
- err_out:
- 	return rc;
- }
-@@ -3529,6 +3555,26 @@ static struct device_attribute *host_attrs_v2_hw[] = {
- 	NULL
- };
- 
-+static int map_queues_v2_hw(struct Scsi_Host *shost)
-+{
-+	struct hisi_hba *hisi_hba = shost_priv(shost);
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+	const struct cpumask *mask;
-+	unsigned int queue, cpu;
-+
-+	for (queue = 0; queue < qmap->nr_queues; queue++) {
-+		mask = irq_get_affinity_mask(hisi_hba->irq_map[96 + queue]);
-+		if (!mask)
-+			continue;
-+
-+		for_each_cpu(cpu, mask)
-+			qmap->mq_map[cpu] = qmap->queue_offset + queue;
-+	}
-+
-+	return 0;
-+
-+}
-+
- static struct scsi_host_template sht_v2_hw = {
- 	.name			= DRV_NAME,
- 	.proc_name		= DRV_NAME,
-@@ -3553,10 +3599,13 @@ static struct scsi_host_template sht_v2_hw = {
- #endif
- 	.shost_attrs		= host_attrs_v2_hw,
- 	.host_reset		= hisi_sas_host_reset,
-+	.map_queues		= map_queues_v2_hw,
-+	.host_tagset		= 1,
- };
- 
- static const struct hisi_sas_hw hisi_sas_v2_hw = {
- 	.hw_init = hisi_sas_v2_init,
-+	.interrupt_preinit = hisi_sas_v2_interrupt_preinit,
- 	.setup_itct = setup_itct_v2_hw,
- 	.slot_index_alloc = slot_index_alloc_quirk_v2_hw,
- 	.alloc_dev = alloc_dev_quirk_v2_hw,
--- 
-2.26.2
+Reviewed-by: Maurizio Lombardi <mlombard@redhat.com>
 
