@@ -2,62 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F3029A88D
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Oct 2020 11:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F64529AB89
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Oct 2020 13:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896577AbgJ0J63 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Oct 2020 05:58:29 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37518 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2896559AbgJ0J5k (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:57:40 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E9747B1BF;
-        Tue, 27 Oct 2020 09:57:38 +0000 (UTC)
-Date:   Tue, 27 Oct 2020 10:57:37 +0100
-From:   David Disseldorp <ddiss@suse.de>
-To:     Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] scsi: target: COMPARE AND WRITE miscompare sense
-Message-ID: <20201027105737.5a52b17e@suse.de>
-In-Reply-To: <ec78c756-6abd-32a8-a7d3-1c7788fa57d3@oracle.com>
-References: <20201026190646.8727-1-ddiss@suse.de>
-        <ec78c756-6abd-32a8-a7d3-1c7788fa57d3@oracle.com>
+        id S1750763AbgJ0MOQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Oct 2020 08:14:16 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:6405 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750750AbgJ0MOP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Oct 2020 08:14:15 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CL9c970g5z6w93;
+        Tue, 27 Oct 2020 20:14:17 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 27 Oct 2020 20:14:04 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <martin.petersen@oracle.com>, <jejb@linux.ibm.com>,
+        <tglx@linutronix.de>
+CC:     <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <maz@kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/3] Support managed interrupts for platform devices
+Date:   Tue, 27 Oct 2020 20:10:21 +0800
+Message-ID: <1603800624-180488-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 27 Oct 2020 00:49:23 -0500, Mike Christie wrote:
+So far, managed interrupts are only used for PCI MSIs. This series add
+platform device support for managed interrupts. Initially this topic was
+discussed at [0].
 
-> On 10/26/20 2:06 PM, David Disseldorp wrote:
-> > This patchset adds missing functionality to return the offset of
-> > non-matching read/compare data in the sense INFORMATION field on
-> > COMPARE AND WRITE miscompare.
-...
-> > Changes since v1:
-> > - drop unnecessary WARN_ON()
-> > - fix two checkpatch warnings
-> > - drop single-use nlbas variable
-> > - avoid compare_len recalculation
-> > 
-> > Cheers, David
-> > 
-> >   drivers/target/target_core_sbc.c       | 137 +++++++++++++++----------
-> >   drivers/target/target_core_transport.c |  33 +++---
-> >   include/target/target_core_base.h      |   2 +-
-> >   lib/scatterlist.c                      |   2 +-
-> >   4 files changed, 102 insertions(+), 72 deletions(-)  
-> 
-> 
-> Reviewed-by: Mike Christie <michael.christie@oracle.com>
+The method to enable managed interrupts is to allocate all the IRQs for
+the device, and then switch the interrupts to managed - this is done
+through new function irq_update_affinity_desc().
 
-Thanks Mike.
-@Martin: please pull patches 2/5 through to 5/5 only; the independent
-scatterlist patch 1/5 has been submitted via linux-block.
+API platform_get_irqs_affinity() is added as a helper to manage this work,
+such that we don't need to export irq_update_affinity_desc() or
+irq_create_affinity_masks().
 
-Cheers, David
+For now, the HiSilicon SAS v2 hw driver is switched over. This is used
+in the D05 dev board.
+
+Performance gain observed for 6x SAS SSDs is ~357K -> 420K IOPs for fio read.
+
+I hope - all going well - this series can go through the SCSI tree, since
+the non-SCSI changes are additive, thanks!
+
+[0] https://lore.kernel.org/lkml/84a9411b-4ae3-1928-3d35-1666f2687ec8@huawei.com/
+
+John Garry (2):
+  Driver core: platform: Add platform_get_irqs_affinity()
+  scsi: hisi_sas: Expose HW queues for v2 hw
+
+Thomas Gleixner (1):
+  genirq/affinity: Add irq_update_affinity_desc()
+
+ drivers/base/platform.c                | 58 +++++++++++++++++++++
+ drivers/scsi/hisi_sas/hisi_sas.h       |  4 ++
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 11 ++++
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 71 ++++++++++++++++++++++----
+ include/linux/interrupt.h              |  8 +++
+ include/linux/platform_device.h        |  5 ++
+ kernel/irq/manage.c                    | 19 +++++++
+ 7 files changed, 165 insertions(+), 11 deletions(-)
+
+-- 
+2.26.2
+
