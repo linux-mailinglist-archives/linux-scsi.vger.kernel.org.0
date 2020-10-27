@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F5B29BB8A
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Oct 2020 17:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561DA29BC3F
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Oct 2020 17:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2901165AbgJ0QRJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Oct 2020 12:17:09 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:45555 "EHLO
+        id S1764298AbgJ0Pon (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Oct 2020 11:44:43 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:32057 "EHLO
         esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2509560AbgJ0QRA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Oct 2020 12:17:00 -0400
+        with ESMTP id S368720AbgJ0P1J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Oct 2020 11:27:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1603815419; x=1635351419;
+  t=1603812428; x=1635348428;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=nfRimo1mT64N1RN/x9yiCH5n5Df6FWrG4IetxrEZmL4=;
-  b=u6RYtr71WE2KZGb51I0w7aGxlIiIpsEElGmKKrWGt/+EmVvbtdzSeHrb
-   7r3YmO7kcP92ALoFiciQlKvIG/lNHHV3exTHkuLR/9RKEjE9hnJDqjjpb
-   G7KW32GvxG55586QXL8BGx6eW7aSlno37fld6vs4rGaAjYx+NdtoaF3ME
-   Na31Us5Ev5H9Imw7xYa/Bj0w1v98V3MtqDjPOcYoxxZpKsZhxCnrOT3jK
-   fBgbRoTH/tFdu0hWiAUGQNug5lbO+Udzn/s7f8cEf9a0+S5iurL2bz+Cl
-   ZoixLpYOMjZtR/KFLeidXF2aN+SUfQkuQ6D14L/TkU0x5UNqVxNzwnzo9
+  bh=4dIBGw+FipiGhEuFweOo7nZUFvJn3MxR0AbD8TiRDRE=;
+  b=yNcebOCoDZlpjm2bAzHvU79xxnSpyInUTbKPc2lvKZA9iRZ2C7BqDLRz
+   CNlMAUIQYeAUs/tbgXIrZBNPIwh4audCssmF5GdcUJPk5DpLKW3j7A/fR
+   O6MSWweuSjyzkYTtG7Q35BX39fya7a0Q8iAqdF5tH8c3MOZdHPLdqiGsc
+   CSDw+hhY4wVmEzbTQni706J9H/ZK1aHG+dclSW0/0i8BMe1o/CSn7JBJc
+   77zy/fcghhnfj62iDEJ6inadxDFUdUyj8CMaAy4QKCugSbhzCUgtXqX6m
+   4hkrNZPUOrOXcJxUPpFkg1lLt90Rt9izRKjXGWHidySznfiEcdoCagtJK
    A==;
-IronPort-SDR: /u1cBLoHDALoUUd13o9NfBw5GTeiam8QWDQS0QeZCID5T1HqrGg+jVXIiU/Mr8TY8UJLIIvtK7
- zTA/tH3aw4ns5yaX+qztlUkI4PlqlNutmPLJBVk/LnTVawzxJpJj0oXutTV60hhPQ55ygw+scG
- 1yPBGH56SZgzU/YPOQHAOUzT5Qlge6vZ1l+TBbmSfjKe1Vcxuj0PHqUZhfUihlr0GFqKpEF6Nd
- yt4gx3lYt5DRtOMU9Mw9lyOEQIqembIaSb6SqxF5h8Ryg9O73TS7XuzHD7F0TTvCUZS5elFfQ9
- 1Bw=
+IronPort-SDR: 1hYJPHj1HMBjwLv2LTRMHmmRtuggrrQDX/k/Ms2Zr+SNtrWETgtdsgM/S8lDvGDrXva5FkiGjP
+ 8nBNBHOGfuROedPV3AcfoBQQaeutwsl9dM+KKsgF833PX52gqPutyWOsXVry/vJsO44G38ZZZ/
+ vg0wI6UOVH8Lu8E47QQxM+a1hAzQdSgoAJXbi3NgGVP9bSii02I3q0LnNWbHq7ptDKqwE3wv21
+ SQKfONKw/b0RqrgQDHhFW4VaBwPHZhy1B+d5m5oMayySVMxUBixrX0jC5H2/RZyrt2HmgrT2PN
+ /dM=
 X-IronPort-AV: E=Sophos;i="5.77,424,1596524400"; 
-   d="scan'208";a="96790331"
+   d="scan'208";a="96783572"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Oct 2020 09:16:58 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Oct 2020 08:27:07 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 27 Oct 2020 09:16:56 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3 via Frontend
- Transport; Tue, 27 Oct 2020 09:16:56 -0700
+ 15.1.1979.3; Tue, 27 Oct 2020 08:27:07 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
+ via Frontend Transport; Tue, 27 Oct 2020 08:27:07 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MfcNdG3yt6KQVNkaxW2gZRsytyuCrTRKE2SwbjBWti5QJZUcJQhNYO4sCEXOlspPsb0ufUqg/+ncnrGiCpUQmXL+n4CXRP+fiZpONpmSRcsARE0YgMRNbucEDNJF2ffxnkADShDbotZ8I02ZI9vTMEDXSV5XSOKVZaX1PqGScJN4LUwW6/LY88qNSbrfI/ToYmI7DIGH8bC+/HJ0yJiyleu9QXidkIjAzpyGJTOyXcXtTWnTrCZtPfyzAcrp927hMKQAsDR3nSefeOGhAfPKB6tUhS1RIFEbDBU+990UBaXjTCnXPytL49pqjDYoQ/H0MFvl29AZzHrDIAgYEuH28g==
+ b=G/LvmizyjGjRZQZEzRDtk/DM8IVEIkt92oxhzdjVvHHUEOhFNxWn26PdKj/wOtcCy1LeUQ4hLd8w/CeWPKo6jDFEqjiaupnuJMY7VtOsMyedpk1+ltmZrxrSJNFqwXHetwyHAjXqDO6Anirjk1MYuUUx8cLzArGwk4IBx5lMpfuw7m+JmJPlEGM3QSr3ZLOGUdo0RkbH2AYPIQcifo2GU/3/Ruz3ndM1spe6pWkwGQ97I2RtAWr/cn6IV7608vJSRi8n0278VcyD2WIaTx7JI3zVYq3v6vt/3WPqhlt75bc7MKQOxf11DdubEKSLk35vBcC4NLtYgIz1cf8uFnjR3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IgPBS65dMYPvBlt7rM3WI9Pfl88tllHGJG1mWim032s=;
- b=aZsX2lA2BP3cBHpBdk7gosgnCWqJtmrPuKxGkX872TZqGDgED7JhlUCXGvUkPWl76l3dAme3mlKq8YpnvwWhStOn7GimmWTzm2/pfaITyvjjkhTqDrSTeMkoTVyBz+Tpxvz7SohktbKN53EiHoyWKnaE1IH+PUGzPDfHzkYdolSp8iMsjWuMGWpKvgUzKlsAouPjsTtOqeIi0SrDsNRIqlYfLYdMRon9iVJ957regIzhtk5duTzT9RmmJtosrzZNnmWIt6hlk3+obAo5fnhbVhkE7AqGCeUmgeGVtfrkIDtoysts6x3ohcxjpnIZFZ8Pqg/j285hQYL5Zncbru8fAA==
+ bh=zCugLmb0g5xwJ7POHk8/FjANMJiLFPG5yvQkG86WrhA=;
+ b=nVAQLe62LfE45VXuf14ZF8sawtar6d7E7ypOUdB/x7ZrDZXzkWBi5JNbgMYtip4OXvnQOy8mKD29zShgrTTEsOP8a01khWk2t3ibX4qKq3RaAqLmp2mBtAwe3iseGkdR7zGc3gXhUWZPfgxop6pKZNYK2QqTzIKQISJeS0BkqHr4jNNyd1ndEYjz8u8NaxggofezAAzqkaTNKWgPK7fUkUrgaFfX5t8z6e5NGWK+sXAmgAuf4Is+Dw8NOT1vd+zERut7ocdu+7+/n+DSgqhCYObswTpbHqviugt0b3nkokVl+1gur2uNKYp7hIMtxBZfc1NAmCxlSqWYV4Uojl5VDQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microchip.com; dmarc=pass action=none
  header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
@@ -55,161 +55,122 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=microchiptechnology.onmicrosoft.com;
  s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IgPBS65dMYPvBlt7rM3WI9Pfl88tllHGJG1mWim032s=;
- b=WmapINtfKWLFnj6pBtHnWuFvR844xQJeMR9PaUfTLZzTwMm26yLZsS/zHUYlTKXnbGpHhQ/3RraekInSkWP15g79MPqMSM+2G6AhWoIVUq3NyFxnr1Nd5caGKQudA/6l2PiLAbHyPqxMorpOkg49G1C95U45iMdiceqfFEPCmIQ=
+ bh=zCugLmb0g5xwJ7POHk8/FjANMJiLFPG5yvQkG86WrhA=;
+ b=bGSkfnaWCNBzLZnDqxXf37f79/nPExl4oCLPqv/XjiLvsum+lUhQG/jdidMdkYUT7SKU9TPTBG1k37WfwaGOroYQj6Nku29aN8+fq5ZtgDXkW64ih4P98VpvHKsTlz/74gug3up0BtQT6FhFCQfXI7w430ZzriGh6Na9eOz7yJ4=
 Received: from SN6PR11MB2848.namprd11.prod.outlook.com (2603:10b6:805:5d::20)
- by SA2PR11MB5195.namprd11.prod.outlook.com (2603:10b6:806:11a::16) with
+ by SA2PR11MB4826.namprd11.prod.outlook.com (2603:10b6:806:11c::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Tue, 27 Oct
- 2020 16:16:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.21; Tue, 27 Oct
+ 2020 15:27:05 +0000
 Received: from SN6PR11MB2848.namprd11.prod.outlook.com
  ([fe80::cc4c:c230:c557:d721]) by SN6PR11MB2848.namprd11.prod.outlook.com
  ([fe80::cc4c:c230:c557:d721%7]) with mapi id 15.20.3477.028; Tue, 27 Oct 2020
- 16:16:55 +0000
+ 15:27:05 +0000
 From:   <Don.Brace@microchip.com>
-To:     <vaibhavgupta40@gmail.com>, <helgaas@kernel.org>,
-        <bhelgaas@google.com>, <bjorn@helgaas.com>,
-        <vaibhav.varodek@gmail.com>, <aradford@gmail.com>,
+To:     <keitasuzuki.park@sslab.ics.keio.ac.jp>
+CC:     <takafumi@sslab.ics.keio.ac.jp>, <don.brace@microsemi.com>,
         <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <aacraid@microsemi.com>, <hare@suse.com>,
-        <linuxdrivers@attotech.com>, <john.garry@huawei.com>,
-        <don.brace@microsemi.com>, <james.smart@broadcom.com>,
-        <dick.kennedy@broadcom.com>, <kashyap.desai@broadcom.com>,
-        <sumit.saxena@broadcom.com>,
-        <shivasharan.srikanteshwara@broadcom.com>,
-        <sathya.prakash@broadcom.com>, <sreekanth.reddy@broadcom.com>,
-        <suganath-prabu.subramani@broadcom.com>,
-        <jinpu.wang@cloud.ionos.com>
-CC:     <skhan@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        <linux-scsi@vger.kernel.org>, <esc.storagedev@microsemi.com>,
-        <megaraidlinux.pdl@broadcom.com>,
-        <MPT-FusionLinux.pdl@broadcom.com>
-Subject: RE: [PATCH v3 19/28] scsi: hpsa: use generic power management
-Thread-Topic: [PATCH v3 19/28] scsi: hpsa: use generic power management
-Thread-Index: AQHWl+7UxHWuBPldh0y5y/6Bgs5jF6mryROw
-Date:   Tue, 27 Oct 2020 16:16:55 +0000
-Message-ID: <SN6PR11MB2848B4C4D2899B8DC71E049CE1160@SN6PR11MB2848.namprd11.prod.outlook.com>
-References: <20201001122511.1075420-1-vaibhavgupta40@gmail.com>
- <20201001122511.1075420-20-vaibhavgupta40@gmail.com>
-In-Reply-To: <20201001122511.1075420-20-vaibhavgupta40@gmail.com>
+        <esc.storagedev@microsemi.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3] scsi: hpsa: fix memory leak in hpsa_init_one
+Thread-Topic: [PATCH v3] scsi: hpsa: fix memory leak in hpsa_init_one
+Thread-Index: AQHWrDNWBhz7JdHQ006d7jd8TgCKpqmrkivQ
+Date:   Tue, 27 Oct 2020 15:27:04 +0000
+Message-ID: <SN6PR11MB2848C63D9D1A86AE45EF0975E1160@SN6PR11MB2848.namprd11.prod.outlook.com>
+References: <CAEYrHjmJRmcKX+F8R_wjd146FXnSHekodauG_eNQBXArE4OBeA@mail.gmail.com>
+ <20201027073125.14229-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
+In-Reply-To: <20201027073125.14229-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=microchip.com;
+authentication-results: sslab.ics.keio.ac.jp; dkim=none (message not signed)
+ header.d=none;sslab.ics.keio.ac.jp; dmarc=none action=none
+ header.from=microchip.com;
 x-originating-ip: [76.30.208.15]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec952c40-c81b-42c8-7598-08d87a93b8d0
-x-ms-traffictypediagnostic: SA2PR11MB5195:
-x-microsoft-antispam-prvs: <SA2PR11MB5195D3BE5DF5B4B5F62232EEE1160@SA2PR11MB5195.namprd11.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 4b9e9571-326d-41ea-bfde-08d87a8cc27e
+x-ms-traffictypediagnostic: SA2PR11MB4826:
+x-microsoft-antispam-prvs: <SA2PR11MB4826D44A99DF7CD86B9EAA8BE1160@SA2PR11MB4826.namprd11.prod.outlook.com>
 x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:254;
+x-ms-oob-tlc-oobclassifiers: OLM:655;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GBmf3pjz/8O9kHurSLY+ziS53Bz/YWtGuD5jLBpLsSQqZi/1KOQ+u8XrIG+So1V7+e6V3Zl+mXfB3rqARK4bA8/25oWJ05NBOwDU11WcWJJxo1c1fUnk/xCZ3mEg8QJRcypxeyF6jD9yrtXc8KEK1FGbAj/T7ho6QhhWKC5trquQf7PEMX9/BHWH294dKNDuZC9r8uCj/wSZW64Gdweqvqut9SqitpSLvBq2rPkCXOHw6KTH0/Q8gQmQZbZjQkJ6SA5kDFFjZsMLmVvHYLSn/oJDowpMaW4Ezsfy+JOSbd2NX5Ap0ndYxLApNaXmNAqF3NpQjM+BEP/sYGCm1ulX4t5RVJJEsBGZG/81bz64XJ1fhJ9w0TbKjB3KBswST5WjuSJasiHhSG+BalkEk2i+GQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB2848.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(376002)(346002)(396003)(366004)(8676002)(2906002)(8936002)(83380400001)(9686003)(55016002)(4326008)(478600001)(26005)(186003)(53546011)(7696005)(54906003)(110136005)(316002)(64756008)(86362001)(66476007)(66946007)(66446008)(66556008)(6506007)(76116006)(71200400001)(33656002)(7416002)(52536014)(5660300002)(41533002)(921003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: XUgS+0mwiIDiaXL0JhWo03glDuYNU8VZDRkXWjERYAzei4NkfkmxpOR8JLH/aG1z2LRYmTX7qJPgFKoHgSOukDt6MYvMpNNJ+jjXgO/lDttss1fiu2nChzsJazQBaG2jeXyoOaRkQ28b/7yUgXiRD/cy6+CPhOqa6A3a3wpE7+5KCi1OqqiAnDi6L3y2FZAX1uoVsjNfQHX1PW9pLlViJIM0+AN/4IlGktZgv4hvb7w5IQcgiq2AYhH/R0t4So+qZ85yptwWKpx4JTo3AwnkEbP3gPeexXKsRzUpyBIv82BG6narEh6u+yRG3cZNL7kFmhaPOT2H0U9u1InF5tY0GxYSZ3mwLmbnj9wgL5vUvhJdoqBIkNcOJIl2UxeUWaK7KinTjcsAjl7waUJPlMQZpvkNxGVQ62CzBYTBCWCTMioGl0OKSuCQqYxn9LYH88W54Q5FIqUHKKXzqTfJkRR9zJKkQ+/CvlfcCdvfr6G5xLnW10sbE+kucpUfs21wXHL4Qv9HhL0yZhbAIpQISEeHjevYtB0k7fJJCoT34++6DmgPWclSiVYNC7GMAHO0UvgLroYYAeaXPqNIePD21scp6MG4ErtgFJ8S6kfgv03o/h+ux/J8Ma/6B4/0ycpKNpT0moVI+RGZXddEZQM9+rQRsQ==
+x-microsoft-antispam-message-info: fOvoNOwHBs8E9J0CGlbQaWdJni+3VvHYvK9k09SXqn2pwXVXfSRcrTF9jIzUcSNK+UZZ1poqy3aZT4RpallDtr26Q3QPs8sPkHCetLJJRpp7+ahDpWp78ztiScTISJK4+0iDYfxr0fBmc1Ez4MDcJTXC1rm7KMB+5XlVPRb1eO3cXZDI7iEi+ydQ75s37y311/pQC8oeN3GZwqBqXpV2GePr/KyBmyrQSfFsABrkacPY328TrPxFdYPrfI3vjcq8B2INABtul8egR77uteASktE307OBeFhFrACRtr+qA/YwH0w6nclFpIXr/lMdgHo6mGGHYXjnNJp8269xa4WlXg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB2848.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(39850400004)(366004)(396003)(376002)(346002)(136003)(54906003)(4326008)(478600001)(5660300002)(8936002)(71200400001)(86362001)(2906002)(9686003)(316002)(66946007)(64756008)(6506007)(7696005)(76116006)(52536014)(83380400001)(26005)(186003)(6916009)(66476007)(55016002)(66556008)(33656002)(66446008)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: waXou0gotKKx8ZCKVkXXUwQpaMmwwWLSd0Z0GlzHrl6c7Fdenr+q1VEd8kpUjs9ic8gHxHCYJdp1mysru+Qsse6MfWlFAslZ8ICAvE5n/UJOPkNdh0AXCGecQAKCs68p2v6DfBNyaVicFzgva2kOPSUcE/iw1v7myuJjHtivou2TDoULvUoniMUmhptEmvQ+JSFrCcw09c4Ut9rPe0tbv3XGIlmTU1r3DlLvtZsYIC2HSjB11Slf+QLAAN9xUE8emUrAY/nnUxjNKhsrbeGLdpwZVp4oaBXbPlvd6Kh5t35TV9Cm02iCUKvssiK3H1WH05MQA5j6DKx47YgJhevuqz7X071KUiiRki4CqCZ08hf/wWk7HPNz33u1uWnWp1tk2PreQKF8+uJBA876v+HOtVnMfr9X4vqd8/5B5V8+uIyN/2Q87whCWogjpyrLzBBWa/IFht/wtiGEgE9bsfG13Q/EFfcTEj0iwggmK/pH1Yzc35Xc9iI1t93HyuI7eo7qToNtSe1vhPSyzLefpWhlwDyla8ipbi5NzYKIT1LbFqjnXQC0GCtGklw4Our3RDnPSdGIO0xOPf9QoAFdO974D8CtmlGxJBn3oAvamgCAKrLbOTqNd1CydZVhMFoUCRlZAIii4y2qMwJyHMvvxx0MMQ==
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB2848.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec952c40-c81b-42c8-7598-08d87a93b8d0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2020 16:16:55.0606
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b9e9571-326d-41ea-bfde-08d87a8cc27e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2020 15:27:04.9362
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JKCgb99XiU5psJc+kL3XnVIpBwgUnAQ9MXpFI27yCCcjoYrkGY3CLX3BDO1YfW4r0Bp326BCtXGHd7y7H1jBlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5195
+X-MS-Exchange-CrossTenant-userprincipalname: TfiPTuIlQ6st9/hZOvRCnmXtyXhHw0/XDYRPGnaQnkh3awrD1PAkjCOg2S3You7Wp5z9KTljMVWXUQaWeMeCIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4826
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 -----Original Message-----
-From: Vaibhav Gupta [mailto:vaibhavgupta40@gmail.com]=20
-Sent: Thursday, October 1, 2020 7:25 AM
-To: Bjorn Helgaas <helgaas@kernel.org>; Bjorn Helgaas <bhelgaas@google.com>=
-; Bjorn Helgaas <bjorn@helgaas.com>; Vaibhav Gupta <vaibhav.varodek@gmail.c=
-om>; Adam Radford <aradford@gmail.com>; James E.J. Bottomley <jejb@linux.ib=
-m.com>; Martin K. Petersen <martin.petersen@oracle.com>; Adaptec OEM Raid S=
-olutions <aacraid@microsemi.com>; Hannes Reinecke <hare@suse.com>; Bradley =
-Grove <linuxdrivers@attotech.com>; John Garry <john.garry@huawei.com>; Don =
-Brace <don.brace@microsemi.com>; James Smart <james.smart@broadcom.com>; Di=
-ck Kennedy <dick.kennedy@broadcom.com>; Kashyap Desai <kashyap.desai@broadc=
-om.com>; Sumit Saxena <sumit.saxena@broadcom.com>; Shivasharan S <shivashar=
-an.srikanteshwara@broadcom.com>; Sathya Prakash <sathya.prakash@broadcom.co=
-m>; Sreekanth Reddy <sreekanth.reddy@broadcom.com>; Suganath Prabu Subraman=
-i <suganath-prabu.subramani@broadcom.com>; Jack Wang <jinpu.wang@cloud.iono=
-s.com>
-Cc: Vaibhav Gupta <vaibhavgupta40@gmail.com>; Shuah Khan <skhan@linuxfounda=
-tion.org>; linux-kernel@vger.kernel.org; linux-kernel-mentees@lists.linuxfo=
-undation.org; linux-scsi@vger.kernel.org; esc.storagedev@microsemi.com; meg=
-araidlinux.pdl@broadcom.com; MPT-FusionLinux.pdl@broadcom.com
-Subject: [PATCH v3 19/28] scsi: hpsa: use generic power management
+From: Keita Suzuki [mailto:keitasuzuki.park@sslab.ics.keio.ac.jp]=20
+Sent: Tuesday, October 27, 2020 2:31 AM
+Cc: keitasuzuki.park@sslab.ics.keio.ac.jp; takafumi@sslab.ics.keio.ac.jp; D=
+on Brace <don.brace@microsemi.com>; James E.J. Bottomley <jejb@linux.ibm.co=
+m>; Martin K. Petersen <martin.petersen@oracle.com>; esc.storagedev@microse=
+mi.com; linux-scsi@vger.kernel.org; linux-kernel@vger.kernel.org
+Subject: [PATCH v3] scsi: hpsa: fix memory leak in hpsa_init_one
 
 EXTERNAL EMAIL: Do not click links or open attachments unless you know the =
 content is safe
 
-Drivers should do only device-specific jobs. But in general, drivers using =
-legacy PCI PM framework for .suspend()/.resume() have to manage many PCI PM=
--related tasks themselves which can be done by PCI Core itself. This brings=
- extra load on the driver and it directly calls PCI helper functions to han=
-dle them.
+When hpsa_scsi_add_host fails, h->lastlogicals is leaked since it lacks fre=
+e in the error handler.
 
-Switch to the new generic framework by updating function signatures and def=
-ine a "struct dev_pm_ops" variable to bind PM callbacks. Also, remove unnec=
-essary calls to the PCI Helper functions along with the legacy .suspend & .=
-resume bindings.
+Fix this by adding free when hpsa_scsi_add_host fails.
 
-Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
 
 Acked-by: Don Brace <don.brace@microchip.com>
+Tested-by: Don Brace <don.brace@microchip.com>
 
 ---
- drivers/scsi/hpsa.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+v3: revert label name to numbered labels
+v2: rename labels
+ drivers/scsi/hpsa.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c index 81d0414e2117..=
-70bdd6fe91ee 100644
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c index 48d5da59262b..=
+aed59ec20ad9 100644
 --- a/drivers/scsi/hpsa.c
 +++ b/drivers/scsi/hpsa.c
-@@ -9070,25 +9070,27 @@ static void hpsa_remove_one(struct pci_dev *pdev)
-        hpda_free_ctlr_info(h);                         /* init_one 1 */
- }
+@@ -8854,7 +8854,7 @@ static int hpsa_init_one(struct pci_dev *pdev, const =
+struct pci_device_id *ent)
+        /* hook into SCSI subsystem */
+        rc =3D hpsa_scsi_add_host(h);
+        if (rc)
+-               goto clean7; /* perf, sg, cmd, irq, shost, pci, lu, aer/h *=
+/
++               goto clean8; /* lastlogicals, perf, sg, cmd, irq, shost,=20
++ pci, lu, aer/h */
 
--static int hpsa_suspend(__attribute__((unused)) struct pci_dev *pdev,
--       __attribute__((unused)) pm_message_t state)
-+static int __maybe_unused hpsa_suspend(
-+       __attribute__((unused)) struct device *dev)
- {
-        return -ENOSYS;
- }
+        /* Monitor the controller for firmware lockups */
+        h->heartbeat_sample_interval =3D HEARTBEAT_SAMPLE_INTERVAL; @@ -886=
+9,6 +8869,8 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct =
+pci_device_id *ent)
+                                HPSA_EVENT_MONITOR_INTERVAL);
+        return 0;
 
--static int hpsa_resume(__attribute__((unused)) struct pci_dev *pdev)
-+static int __maybe_unused hpsa_resume
-+       (__attribute__((unused)) struct device *dev)
- {
-        return -ENOSYS;
- }
-
-+static SIMPLE_DEV_PM_OPS(hpsa_pm_ops, hpsa_suspend, hpsa_resume);
-+
- static struct pci_driver hpsa_pci_driver =3D {
-        .name =3D HPSA,
-        .probe =3D hpsa_init_one,
-        .remove =3D hpsa_remove_one,
-        .id_table =3D hpsa_pci_device_id, /* id_table */
-        .shutdown =3D hpsa_shutdown,
--       .suspend =3D hpsa_suspend,
--       .resume =3D hpsa_resume,
-+       .driver.pm =3D &hpsa_pm_ops,
- };
-
- /* Fill in bucket_map[], given nsgs (the max number of
++clean8: /* lastlogicals, perf, sg, cmd, irq, shost, pci, lu, aer/h */
++       kfree(h->lastlogicals);
+ clean7: /* perf, sg, cmd, irq, shost, pci, lu, aer/h */
+        hpsa_free_performant_mode(h);
+        h->access.set_intr_mask(h, HPSA_INTR_OFF);
 --
-2.28.0
+2.17.1
 
