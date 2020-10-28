@@ -2,76 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E116429D555
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 23:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D8529D288
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 22:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729302AbgJ1V71 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Oct 2020 17:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729296AbgJ1V70 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Oct 2020 17:59:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BBEC0613D1;
-        Wed, 28 Oct 2020 14:59:26 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1603909350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hHSo5mLm2YdFaQeHlvR8xcV3UAJmfAc+vvkhBluX8qo=;
-        b=G2SRgpwNjPS2PH7DHQA38BGfmVOfajAY2isL1Sq1OCS+XXjtEyTCt+SlM57rdjf3f+6n+g
-        m99IZb/Jfe3WefkKHGyD4pVPkCTs+byjYWrm9re7Bmnqmg1w+gWb64Zhy4SFCzqnBY2TWM
-        4xO6vBXlYhhZhkX9m8t4GC3RpkdUEiTfTcI+qHAowj7S3BdlVvr6Shded/G4HztZ3nHU1C
-        Dq+fde2zgojwG0K+oabyxY3WkE3FutsDA3o/+Lm4fuTFNwFBpXmcjtVsOMUKnXYL5j/zWQ
-        XS4+Feii3CoyBWBe/cm0H0JJGGDwMfs0zUcvpHmDB5N+jftG6g5PbFoSEKpJ/g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1603909350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hHSo5mLm2YdFaQeHlvR8xcV3UAJmfAc+vvkhBluX8qo=;
-        b=JEwHkmPJCpzQmpW+KFKsSIdIi/I+53aSg4+W8esXHBbp57OL4ZDRhuIQIt3/H/G0qisUa9
-        urgekIPvbeQQIXDw==
-To:     John Garry <john.garry@huawei.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, martin.petersen@oracle.com, jejb@linux.ibm.com
-Cc:     linuxarm@huawei.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org,
-        John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH v2 1/3] genirq/affinity: Add irq_update_affinity_desc()
-In-Reply-To: <1603888387-52499-2-git-send-email-john.garry@huawei.com>
-References: <1603888387-52499-1-git-send-email-john.garry@huawei.com> <1603888387-52499-2-git-send-email-john.garry@huawei.com>
-Date:   Wed, 28 Oct 2020 19:22:29 +0100
-Message-ID: <87eelifbx6.fsf@nanos.tec.linutronix.de>
+        id S1725937AbgJ1VdL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Oct 2020 17:33:11 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9768 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725898AbgJ1VdK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 28 Oct 2020 17:33:10 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09SI22Xs067483;
+        Wed, 28 Oct 2020 14:30:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding : sender;
+ s=pp1; bh=qroMZAEeiJASjmAsz/C4AnrRLZKN1U7Iue4g2NJm6AY=;
+ b=ZjDZYPSxriOFpuB0cREOrRJzj9/6u8np8q1fqFvNlo4ti9BnX8oAFtJYEEaL/Az5SpuV
+ Aw0Vl/fxwRSzUqmf3xH3FKfcPjr+NIYvXEykUe6PiwUyzXHtNfDPXgzLqcoAcIJn65go
+ wF5Em/aX8vJTrRIR3xHBZ6vVjNimS+ydD1SYZTlx0kPjjuLEfz/BaDRZCW2aHWDQPy7D
+ xpPI+gJkl8NhRkCmov1+BzgPVQpTi3GIM3I42pxapCe/MPWoCjIvVsBFsV9xBcxZQsok
+ 2i0t75ukAodvEkWTxtXy0JUQKcglFQjBIAucOHZsAuLyUiUBbVuWvbWhe5PL2csp5rTN 8A== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34d97hwtbm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Oct 2020 14:30:58 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09SIS27j030355;
+        Wed, 28 Oct 2020 18:30:56 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 34f8cr89s3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Oct 2020 18:30:56 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09SIUrMK22806948
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Oct 2020 18:30:53 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E4ED52075;
+        Wed, 28 Oct 2020 18:30:53 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.145.72.181])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 43C9152073;
+        Wed, 28 Oct 2020 18:30:53 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1kXqDk-002prt-9n; Wed, 28 Oct 2020 19:30:52 +0100
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Benjamin Block <bblock@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Fedor Loshakov <loshakov@linux.ibm.com>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH 0/5] zfcp: cleanups, refactorings and features for 5.11
+Date:   Wed, 28 Oct 2020 19:30:47 +0100
+Message-Id: <cover.1603908167.git.bblock@linux.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Organization: IBM Deutschland Research & Development GmbH, Vorsitz. AufsR. Gregor Pillen, Geschaeftsfuehrung Dirk Wittkopp, Sitz der Gesellschaft Boeblingen, Registergericht AmtsG Stuttgart, HRB 243294
+Content-Transfer-Encoding: 8bit
+Sender: Benjamin Block <bblock@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-28_08:2020-10-28,2020-10-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ suspectscore=0 lowpriorityscore=0 clxscore=1011 bulkscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 mlxlogscore=913
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2010280116
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Oct 28 2020 at 20:33, John Garry wrote:
->  
-> +int irq_update_affinity_desc(unsigned int irq,
-> +			     struct irq_affinity_desc *affinity)
-> +{
-> +	unsigned long flags;
-> +	struct irq_desc *desc = irq_get_desc_lock(irq, &flags, 0);
-> +
-> +	if (!desc)
-> +		return -EINVAL;
+Hello James, Martin,
 
-Just looking at it some more. This needs a check whether the interrupt
-is actually shut down. Otherwise the update will corrupt
-state. Something like this:
+here is a series of changes for our zfcp driver for 5.11.
 
-        if (irqd_is_started(&desc->irq_data))
-        	return -EBUSY;
+Other than 2 smaller cleanups and clarifications for maintainability we
+have a refactoring of how zfcp uses s390's qdio layer, and we have a
+small feature improving our handling of out-of-band version changes to our
+adapters (or firmware).
 
-But all of this can't work on x86 due to the way how vector allocation
-works. Let me think about that.
+Especially the refactoring ("zfcp: lift Input Queue tasklet from qdio")
+would be nice to have, because we have other patches queued internally
+that depend on this, and because qdio patches go via the s390 tree, this
+creates a dependency for Heiko and Vasily.
 
-Thanks,
+As always, feedback and reviews are appreciated :-)
 
-        tglx
+Julian Wiedmann (4):
+  zfcp: lift Input Queue tasklet from qdio
+  zfcp: clarify & assert the stat_lock locking in zfcp_qdio_send()
+  zfcp: process Version Change events
+  zfcp: handle event-lost notification for Version Change events
+
+Vasily Gorbik (1):
+  zfcp: remove orphaned function declarations
+
+ drivers/s390/scsi/zfcp_aux.c  | 11 ++++++++
+ drivers/s390/scsi/zfcp_def.h  |  1 +
+ drivers/s390/scsi/zfcp_ext.h  |  2 --
+ drivers/s390/scsi/zfcp_fsf.c  | 19 ++++++++++++++
+ drivers/s390/scsi/zfcp_fsf.h  | 11 ++++++++
+ drivers/s390/scsi/zfcp_qdio.c | 47 +++++++++++++++++++++++++++++++++++
+ drivers/s390/scsi/zfcp_qdio.h |  2 ++
+ 7 files changed, 91 insertions(+), 2 deletions(-)
+
+-- 
+2.26.2
 
