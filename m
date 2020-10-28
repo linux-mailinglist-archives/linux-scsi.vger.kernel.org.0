@@ -2,124 +2,181 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAE929D738
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 23:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD1229D5FC
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 23:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732642AbgJ1WWU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Oct 2020 18:22:20 -0400
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:16407 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732591AbgJ1WV5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Oct 2020 18:21:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1603923716; x=1635459716;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=pfQ6MZRDthoQwzVOs+bVYPvaewGWtODGQqJl3KL0200=;
-  b=TyXws0NUaPQ9kKSREK4pK501VAaum/vmC1PNdyOzXEoYTmprCk4wOAMJ
-   V+QVDTpScY7FvzO2ZV2uP7yhxfMHxeWQW3Y0XXGm5tdG5gKkXHdkKEMOZ
-   GRXzSRuUhQcEqQg5MlGV8ejpJ5mmgJctuQmacyL4ios4V17BAgoKV0fzX
-   72If0XytUQ6dDwt1wpbEzbjGHytZXncJkWVEF5fK+ug2i9wLy/zm6/KOU
-   GV26Mef+9kt+0Q5gvMYzZsAjlo+P4edZEMOlrW3+k9iEytUmITH3vvqA5
-   LyXrVrkL5AKHE1jZbl4xX7MmYwcXQ6x4Wg5ItgDV3FIFLi37WG8s/Zb85
-   Q==;
-IronPort-SDR: ODtPwuIEyDMPiZncUsUkzECVHLLjRHzNa4hnnZ5gDCm+yxrlhJD19h8tv3pDFtozK0/bwIKFhz
- 4tRYvaqOpTjqz6X58qsTnjidRpZ3GtgiTRKfEeGE5dA5GrycbIwUW/Q3jejC3j75cg2douv+3K
- UuIlk1jOo+hpLxHyfWOCAHvP7Z3Ro2oUBzYCQNwNFN5tL2hdjCaCdCBf1yuZ2t1+ah6tCS8TN/
- 50i+kqgsr7CS06odCCUO4SKEhPRIb84pUWQEDUbedN1NBKbBJ9EZzex28OlhzvsKii0d8tTpax
- gIw=
-X-IronPort-AV: E=Sophos;i="5.77,425,1596470400"; 
-   d="scan'208";a="150991890"
-Received: from mail-bn8nam12lp2175.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.175])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Oct 2020 14:18:11 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Itz6eaOMmCHnKBa+EqO4XFGufktWrfAXe31NaB6Ij6C7xSRB2IB581gkzxPYa9FiSQJcAIIqTBoF5gN0X6WKk8aQgVZ21ppehvH5Bf0UnKTMF/Wr0EvIMAepHNFcvkcEa1mDRY5K+YrpQNBCPjHmNqk//3b5hG0Zdzw0SSvnN/ZnBeNIgUkESSrxkmh+HyC8WXKT0N8jAULNG5Q+tRkBQjsL7uC1OVEgQ070eveLbI/5ep45p9nnjW+RY57xY+exP5phH4xpi4L2dzZjdt4xiyk3s4pV5PQVep9MXIk7k43b/cAWsknhwAef2DPV5XMLNFn6ywlhJWGcGRKIcyfrnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pfQ6MZRDthoQwzVOs+bVYPvaewGWtODGQqJl3KL0200=;
- b=F6AJWVtVynYRraNg1Rg+h3Ycybh9lrQxT57yC5OW4Sl9dRQnOramJWXtCCHWXWpHzhTrSjuMCFmLWfRmYcUUGKCGoZsXbr+QDgu/ttU2qL9pp2ekJTIWT3KOVHF1wP5mRQoxSCC8WTmwYMmX903HOCxg4n6L4C4tsdqSojUnLhV3BpLTrtfm07rFiJh4Ayj0EvXTULQ1/RZevOtwfcw0R3KneHUnLU1H86cMOPAVDY7BtXgxCzjgRBfGPe+hnalL5/Qsyl6+n3OhRZl/0di8YwPa+SEsIO0tWIGPArFsvRRfP0bDw+Pg63rf/otRpertmoc70QIL65V/pFNX5SHfIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pfQ6MZRDthoQwzVOs+bVYPvaewGWtODGQqJl3KL0200=;
- b=L5/YscOxaYCoRNFcB1SxpMqnRpcKM0l4AfB8/rx1IVl+/TXhy3qhywoqTiZ7lwrLCSbRRsh5PQ3QruhuUd62FpnedgnIu57ygKVXnEBhV/sbMIk6DobjS06plyiiJr0H+YHbhoGQzB2idON1Lvy/cwNBzCs50r/+CC0lv8pBBOo=
-Received: from BY5PR04MB6705.namprd04.prod.outlook.com (2603:10b6:a03:220::8)
- by BYAPR04MB4855.namprd04.prod.outlook.com (2603:10b6:a03:4f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Wed, 28 Oct
- 2020 06:18:10 +0000
-Received: from BY5PR04MB6705.namprd04.prod.outlook.com
- ([fe80::709c:ec54:b10b:2d90]) by BY5PR04MB6705.namprd04.prod.outlook.com
- ([fe80::709c:ec54:b10b:2d90%9]) with mapi id 15.20.3477.029; Wed, 28 Oct 2020
- 06:18:10 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Asutosh Das <asutoshd@codeaurora.org>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-CC:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] ufs: qcom: Enable aggressive power collapse for
- ufs hba
-Thread-Topic: [PATCH v2 2/2] ufs: qcom: Enable aggressive power collapse for
- ufs hba
-Thread-Index: AQHWrJTiuVqcUW9G5kyfu8pY66aJRqmsit8g
-Date:   Wed, 28 Oct 2020 06:18:10 +0000
-Message-ID: <BY5PR04MB67059BD084CCDED6578642CAFC170@BY5PR04MB6705.namprd04.prod.outlook.com>
-References: <52198e70bff750632740d78678a815256d697e43.1603825776.git.asutoshd@codeaurora.org>
- <1306284ab2215425ca0a3d9c802574cbd6d35ea7.1603825776.git.asutoshd@codeaurora.org>
-In-Reply-To: <1306284ab2215425ca0a3d9c802574cbd6d35ea7.1603825776.git.asutoshd@codeaurora.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: codeaurora.org; dkim=none (message not signed)
- header.d=none;codeaurora.org; dmarc=none action=none header.from=wdc.com;
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9e76ac9f-9c82-44af-b8df-08d87b093e94
-x-ms-traffictypediagnostic: BYAPR04MB4855:
-x-microsoft-antispam-prvs: <BYAPR04MB4855EB6638137C85C9C05AF5FC170@BYAPR04MB4855.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:590;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T+Fwx35oOJkuGd71IE4ZwR0DH0JJjALlNLMJ+Naxu8KRhFADjQvJ83cHwCMxCqu6JKFyOR9DNPnl4MUG4N30ZGQyBhClIWabbf6QTLsseh2l5l8dtVHbaH0ijGYZki9uPUmqMF3kfiS9+8qC8HMNflTxw6tzVqGs44DfUi7V4HsAV9K4o2BwgqFBj2xAnYVM0JTZnvipaccHmqkZt+oUrNBng4QGPxw7YFhDD8PngeIEXOfSxIQRoKjWGSXbShJlvRGXWyH7GbFBIBCY6LCDxPH3xZvey/ivLD6tPLnLYdHoo0rN3r1FJQTo3nTM8HIfaN14OVXHyaq0A2rabNrEUg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6705.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(186003)(26005)(6506007)(71200400001)(2906002)(8936002)(7416002)(9686003)(33656002)(8676002)(4326008)(316002)(110136005)(54906003)(7696005)(64756008)(55016002)(66556008)(66476007)(478600001)(66946007)(66446008)(86362001)(5660300002)(558084003)(76116006)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: aqfho+6PYSOjBehJ7SDIMr59b3d8s868f7HuolCoyz33DHyWVk22jKP9SDoEnQGuifsD9XIBlwOw//aTQosm4QsJ0VXJ4VicDrwuq7PtCoLf6sOdRUybqgBGogaouSGeajYfZNd+TQUECCXir4du25PzmrUOCV4vq2ojUGFbt3PiYWpVM5sPBr05hiQ48XFwEUZnGxx9oPDHYnZEksoW5y9GyAfRGkBtadVLIsE5SJPo9xZt3QQMcwXKF8tQlcJmmeWdJw0OArxpC+VE8Jy35PmK6p1ibsHBoDHwtQDdAix+GG/ydQDSHglSGgO5+79NgHOufyKuqrrMO7TYke6FabF/bDWotgdGtWZGxegQlS69oFFe1nJ+g5O7WBxT6oUr2Xhf5DVC35iLwzDV3g+qBeR04GrLdmy8rzvnscTFRuG3XI2+sp+KYE1ukSUGyw1ZVS1VpNhpVxQOit1I0pOT14zF98YabPxnNBvUajnDtxwDpGORtikfeqbuwHBoYJlNWxwusMIESONIKUmdnvfDIanKw8byQbmGAF+9apQDnwEBlv8cewp3Bpt9zJPq5scD+tGucmpqLguJFXekYOIsxofyttGwkf+6SM2CvL/AnGHXGhGsT1mBI6Ee4Zgd7r2GTBtAlfXsQnvyfEuvNrrd3A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1730563AbgJ1WKh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Oct 2020 18:10:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:33200 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730532AbgJ1WKg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:10:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603923034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DeXZH2CM/0JL0dV2e8UQ5dRCc4s7qSC0e1ICk1+6Htw=;
+        b=SdUu6nlNKXHLM6639ZdXo64xKhqxa+dYKy9d3pF7SUn5jP/0BxMif9wmm4lo6qWK2OAKgZ
+        uCxFMZTE64NhBIRMxMRFZLXisG7Xbofjsyg0aPQygl2RKT7oWMudRAFnL1ZrwpCB0szsgB
+        qOf7JSQhJFMrXw809k4DfWDpnDZekdY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-203-Pl_IbCEiNHyU9M9lSXt-Ug-1; Wed, 28 Oct 2020 13:09:53 -0400
+X-MC-Unique: Pl_IbCEiNHyU9M9lSXt-Ug-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4F94F1016CE8;
+        Wed, 28 Oct 2020 17:09:52 +0000 (UTC)
+Received: from [10.35.206.112] (unknown [10.35.206.112])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 42C812C31E;
+        Wed, 28 Oct 2020 17:09:49 +0000 (UTC)
+Subject: Re: [PATCH 2/2] target: iscsi: fix a race condition when aborting a
+ task
+To:     Michael Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        bvanassche@acm.org
+References: <20201007145326.56850-1-mlombard@redhat.com>
+ <20201007145326.56850-3-mlombard@redhat.com>
+ <20daa17d-08e7-a412-4d33-bcf75587eca6@oracle.com>
+ <1852a8bd-3edc-5c49-fa51-9afe52f125a8@redhat.com>
+ <184667b1-032b-c36f-d1e7-5cfef961c763@oracle.com>
+ <71691FED-C164-482C-B629-A8B89B81E566@oracle.com>
+From:   Maurizio Lombardi <mlombard@redhat.com>
+Message-ID: <a936cc4e-1610-5201-5960-107689b81820@redhat.com>
+Date:   Wed, 28 Oct 2020 18:09:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6705.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e76ac9f-9c82-44af-b8df-08d87b093e94
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 06:18:10.6606
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NcFZnIoK59xvMJwuEcrLj02nYjJwxOWz3NecFtsnrixWaNjpBRF5k0Z1QR9D+RcXFkVWNgdh3Ek4GjxD1dRE1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4855
+In-Reply-To: <71691FED-C164-482C-B629-A8B89B81E566@oracle.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->=20
-> Enabling this capability to let hba power-collapse
-> more often to save power.
->=20
-> Reviewed-by: Can Guo <cang@codeaurora.org>
-> Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
+
+
+Dne 27. 10. 20 v 21:03 Michael Christie napsal(a):
+> 
+> 
+>> On Oct 27, 2020, at 12:54 PM, Mike Christie <michael.christie@oracle.com> wrote:
+>>
+>> On 10/27/20 8:49 AM, Maurizio Lombardi wrote:
+>>> Hello Mike,
+>>>
+>>> Dne 22. 10. 20 v 4:42 Mike Christie napsal(a):
+>>>> If we free the cmd from the abort path, then for your conn stop plus abort race case, could we do:
+>>>>
+>>>> 1. thread1 runs iscsit_release_commands_from_conn and sets CMD_T_FABRIC_STOP.
+>>>> 2. thread2 runs iscsit_aborted_task and then does __iscsit_free_cmd. It then returns from the aborted_task callout and we finish target_handle_abort and do:
+>>>>
+>>>> target_handle_abort -> transport_cmd_check_stop_to_fabric -> lio_check_stop_free -> target_put_sess_cmd
+>>>>
+>>>> The cmd is now freed.
+>>>> 3. thread1 now finishes iscsit_release_commands_from_conn and runs iscsit_free_cmd while accessing a command we just released.
+>>>>
+>>>>
+>>>
+>>> Thanks for the review!
+>>>
+>>> There are definitely some problems with task aborts and commands' refcounting *
+>>> but this is a different bug than the one this patch is trying to solve (a race to list_del_init());
+>>> unless you are saying that abort tasks should never be executed when the connection 
+>>> is going down and we have to prevent such cases from happening at all.
+>>
+>> Yeah, I think if we prevent the race then we fix the refcount issue and your issue.
+>> Here is a patch that is only compile tested:
+>>
+>> From 209709bcedd9a6ce6003e6bb86f3ebf547dca6af Mon Sep 17 00:00:00 2001
+>> From: Mike Christie <michael.christie@oracle.com>
+>> Date: Tue, 27 Oct 2020 12:30:53 -0500
+>> Subject: [PATCH] iscsi target: fix cmd abort vs fabric stop race
+>>
+>> The abort and cmd stop paths can race where:
+>>
+>> 1. thread1 runs iscsit_release_commands_from_conn and sets
+>> CMD_T_FABRIC_STOP.
+>> 2. thread2 runs iscsit_aborted_task and then does __iscsit_free_cmd. It
+>> then returns from the aborted_task callout and we finish
+>> target_handle_abort and do:
+>>
+>> target_handle_abort -> transport_cmd_check_stop_to_fabric ->
+>> lio_check_stop_free -> target_put_sess_cmd
+>>
+>> The cmd is now freed.
+>> 3. thread1 now finishes iscsit_release_commands_from_conn and runs
+>> iscsit_free_cmd while accessing a command we just released.
+>>
+>> In __target_check_io_state we check for CMD_T_FABRIC_STOP and set the
+>> CMD_T_ABORTED if the driver is not cleaning up the cmd because of
+>> a session shutdown. However, iscsit_release_commands_from_conn only
+>> sets the CMD_T_FABRIC_STOP and does not check to see if the abort path
+>> has claimed completion ownership of the command.
+>>
+>> This adds a check in iscsit_release_commands_from_conn so only the
+>> abort or fabric stop path cleanup the command.
+>> ---
+>> drivers/target/iscsi/iscsi_target.c | 13 +++++++++++--
+>> 1 file changed, 11 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
+>> index f77e5ee..85027d3 100644
+>> --- a/drivers/target/iscsi/iscsi_target.c
+>> +++ b/drivers/target/iscsi/iscsi_target.c
+>> @@ -483,8 +483,7 @@ int iscsit_queue_rsp(struct iscsi_conn *conn, struct iscsi_cmd *cmd)
+>> void iscsit_aborted_task(struct iscsi_conn *conn, struct iscsi_cmd *cmd)
+>> {
+>> 	spin_lock_bh(&conn->cmd_lock);
+>> -	if (!list_empty(&cmd->i_conn_node) &&
+>> -	    !(cmd->se_cmd.transport_state & CMD_T_FABRIC_STOP))
+>> +	if (!list_empty(&cmd->i_conn_node))
+>> 		list_del_init(&cmd->i_conn_node);
+>> 	spin_unlock_bh(&conn->cmd_lock);
+>>
+>> @@ -4088,6 +4087,16 @@ static void iscsit_release_commands_from_conn(struct iscsi_conn *conn)
+>>
+>> 		if (se_cmd->se_tfo != NULL) {
+>> 			spin_lock_irq(&se_cmd->t_state_lock);
+>> +			if (se_cmd->transport_state & CMD_T_ABORTED) {
+>> +				/*
+>> +				 * LIO's abort path owns the cleanup for this,
+>> +				 * so put it back on the list and let
+>> +				 * aborted_task handle it.
+>> +				 */
+>> +				list_add_tail(&cmd->i_conn_node,
+>> +					      &conn->conn_cmd_list);
+> 
+> 
+> That should have been a move from the tmp list back to the conn_cmd_list.
+
+Nice, it looks simple and I will test it.
+I am a bit worried there could be other possible race conditions.
+
+Example: 
+
+thread1: connection is going to be closed,
+iscsit_release_commands_from_conn() finds a command that is about
+to be aborted, re-adds it to conn_cmd_list and proceeds.
+iscsit_close_connection() decreases the conn usage count and finally calls iscsit_free_conn(conn)
+that destroys the conn structure.
+
+thread2: iscsit_aborted_task() gets called and tries to lock the conn->cmd_lock spinlock, dereferencing
+an invalid pointer.
+
+Possible solutions that I can think of:
+
+- Make iscsit_release_commands_from_conn() wait for the abort task to finish
+or
+- abort handler could hold a reference to the conn structure so that iscsit_close_connection()
+will sleep when calling iscsit_check_conn_usage_count(conn) until abort finishes.
+
+
+Maurizio
+
