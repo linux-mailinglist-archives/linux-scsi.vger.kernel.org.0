@@ -2,119 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDC629D634
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 23:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BD529D948
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 23:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730850AbgJ1WMc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Oct 2020 18:12:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730832AbgJ1WMY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:12:24 -0400
-Received: from google.com (unknown [104.132.1.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E2A9E24795;
-        Wed, 28 Oct 2020 19:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603914234;
-        bh=Uig8XlVVywuZSs/xiHVDxKfmc2EvUkGvRLURSxmRfOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dfusWPKWqTKRnMdbvN3oZ846WjjPGP1zahpiGLPq7lLhrOPyDeFDLz1cHc9PWFcZx
-         AfCnIMUYVw2KHtvQTMXiA8EyfosDwA6yEnKTaOfqCqREvHybxFLydVlbuyxPljCaBW
-         36b9cwb9UexFKfBKUhyXKkEQkJPSzToDbMT4hDOI=
-Date:   Wed, 28 Oct 2020 12:43:52 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Can Guo <cang@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, bvanassche@acm.org
-Subject: Re: [PATCH v4 1/5] scsi: ufs: atomic update for clkgating_enable
-Message-ID: <20201028194352.GA3060274@google.com>
-References: <20201026195124.363096-1-jaegeuk@kernel.org>
- <20201026195124.363096-2-jaegeuk@kernel.org>
- <20d1c2ca06e95beb207fd4ba1b61dc80@codeaurora.org>
- <20201027033311.GA1745317@google.com>
- <76df977d164683c7404d2dc702f2e5ad@codeaurora.org>
+        id S2389612AbgJ1Wug (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Oct 2020 18:50:36 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:38276 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389610AbgJ1Wuf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Oct 2020 18:50:35 -0400
+Received: by mail-oi1-f195.google.com with SMTP id 9so1295453oir.5;
+        Wed, 28 Oct 2020 15:50:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=94gWFWTQQr945dbvotr81WLIHlciBWGEJdlFTXsxNX0=;
+        b=FW3XZupD6RME05A6kvf1n17sCxFIYuQAFgrllE5K3Nyw8veNh5ORdC0fIsLswthaoY
+         d8HuuCJLZ1XMe4v/LzsmhwltGP17bq5IHUY3lVRVPAwRp+D+8yWR46XHqQzqE++BWaGe
+         I/n2ItJUo9lAMwexVmGIpA6HIQqA/d6empV/Sadv1tZt6B6IBxl5ArvfBXuYUIM80/Oh
+         L2E0aJ5/qr8ENazOky5AU4WTziaOn3f/VfpGypfErv1czf7YX+JOvLU4kccjBRvmJlmL
+         2jO0fJziT9bfhxCvSKDfuGHFZYAbAQoqQpiNR3yRj0OcpLvy+SRuXfQUpt5Gx3+RzZ8c
+         oQQQ==
+X-Gm-Message-State: AOAM533piZQDRgK8DNaV6v+NUNhLq2QE6TO+wrMjrmRUyvf0rGRFaLqS
+        oixaIYHTHlwi8Y/BXsXfQU03qdP7AC3dzg==
+X-Google-Smtp-Source: ABdhPJyYu1nxikKct93ZBfbAHHhX3RiaBcUADsl4+28JmKe4RvnXhqis7icDV2+Uc2pC+Y2zyi8OLA==
+X-Received: by 2002:a17:90a:bf03:: with SMTP id c3mr5090925pjs.65.1603856490288;
+        Tue, 27 Oct 2020 20:41:30 -0700 (PDT)
+Received: from [192.168.3.218] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id n16sm3884068pfo.150.2020.10.27.20.41.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 20:41:29 -0700 (PDT)
+Subject: Re: [PATCH 3/3] scsi: target: core: Change ASCQ for residual write
+To:     Roman Bolshakov <r.bolshakov@yadro.com>
+Cc:     Anastasia Kovaleva <a.kovaleva@yadro.com>,
+        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux@yadro.com
+References: <20201022172011.42367-1-a.kovaleva@yadro.com>
+ <20201022172011.42367-4-a.kovaleva@yadro.com>
+ <e2b215ca-0aa8-bdae-e5bd-292a09d8282e@acm.org>
+ <20201024121315.GA35317@SPB-NB-133.local>
+ <b831a7db-1da2-c293-a8f6-d9c62f68c224@acm.org>
+ <20201026131226.GA88490@SPB-NB-133.local>
+ <270e2edf-49c9-942f-ac3d-b6dfa0aca8f7@acm.org>
+ <20201027234639.GB88490@SPB-NB-133.local>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <c3dac124-301e-df94-9d64-b3c46d4eafb9@acm.org>
+Date:   Tue, 27 Oct 2020 20:41:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76df977d164683c7404d2dc702f2e5ad@codeaurora.org>
+In-Reply-To: <20201027234639.GB88490@SPB-NB-133.local>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/27, Can Guo wrote:
-> On 2020-10-27 11:33, Jaegeuk Kim wrote:
-> > On 10/27, Can Guo wrote:
-> > > On 2020-10-27 03:51, Jaegeuk Kim wrote:
-> > > > From: Jaegeuk Kim <jaegeuk@google.com>
-> > > >
-> > > > When giving a stress test which enables/disables clkgating, we hit
-> > > > device
-> > > > timeout sometimes. This patch avoids subtle racy condition to address
-> > > > it.
-> > > >
-> > > > Note that, this requires a patch to address the device stuck by
-> > > > REQ_CLKS_OFF in
-> > > > __ufshcd_release().
-> > > >
-> > > > The fix is "scsi: ufs: avoid to call REQ_CLKS_OFF to CLKS_OFF".
-> > > 
-> > > Why don't you just squash the fix into this one?
-> > 
-> > I'm seeing this patch just revealed that problem.
+On 10/27/20 4:46 PM, Roman Bolshakov wrote:
+> Thanks for raising the point about overlength/underlength. If you wish
+> we can add an extra check that fails DMA_TO_DEVICE && DATA with
+> residuals only for SBC devices but note that before the series,
+> underflow/overflow for WRITE didn't return GOOD status. The particular
+> patch only changes sense code to more meaningful from the former INVALID
+> FIELD IN CDB.
 > 
-> That scenario (back to back calling of ufshcd_release()) only happens
-> when you stress the clkgate_enable sysfs node, so let's keep the fix
-> as one to make things simple. What do you think?
+> Theoretically, it could be good to have a configurable switch how LIO
+> handles overflows/underflows for a LUN. Then it'd be possible to
+> configure desired behaviour on a per-LUN basis. But there should be a
+> clear need & demand for the feature to avoid maintenance of dead code.
+>>> An additional question is what behavior other operating systems than
+>> Linux expect? There are probably setups in which another operating
+>> system than Linux communicates with a LIO SCSI target?
+> 
+> TBH I don't know any hosts that do SBC WRITE with residuals as normal
+> course of operation. They wouldn't be able to work with LIO because it
+> never returns GOOD status on WRITE with residuals. I can send an update
+> later if the series works fine with modern hosts (~1 month, after a few
+> cycles of system testing).
 
-If we don't have this patch, do you think this issue won't happen at all?
+Hi Roman,
 
-> 
-> Thanks,
-> 
-> Can Guo.
-> 
-> > 
-> > > 
-> > > Thanks,
-> > > 
-> > > Can Guo.
-> > > 
-> > > >
-> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@google.com>
-> > > > ---
-> > > >  drivers/scsi/ufs/ufshcd.c | 12 ++++++------
-> > > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> > > > index cc8d5f0c3fdc..6c9269bffcbd 100644
-> > > > --- a/drivers/scsi/ufs/ufshcd.c
-> > > > +++ b/drivers/scsi/ufs/ufshcd.c
-> > > > @@ -1808,19 +1808,19 @@ static ssize_t
-> > > > ufshcd_clkgate_enable_store(struct device *dev,
-> > > >  		return -EINVAL;
-> > > >
-> > > >  	value = !!value;
-> > > > +
-> > > > +	spin_lock_irqsave(hba->host->host_lock, flags);
-> > > >  	if (value == hba->clk_gating.is_enabled)
-> > > >  		goto out;
-> > > >
-> > > > -	if (value) {
-> > > > -		ufshcd_release(hba);
-> > > > -	} else {
-> > > > -		spin_lock_irqsave(hba->host->host_lock, flags);
-> > > > +	if (value)
-> > > > +		__ufshcd_release(hba);
-> > > > +	else
-> > > >  		hba->clk_gating.active_reqs++;
-> > > > -		spin_unlock_irqrestore(hba->host->host_lock, flags);
-> > > > -	}
-> > > >
-> > > >  	hba->clk_gating.is_enabled = value;
-> > > >  out:
-> > > > +	spin_unlock_irqrestore(hba->host->host_lock, flags);
-> > > >  	return count;
-> > > >  }
+I'm not sure adding a new kernel switch is the best choice. That would
+be an additional parameter users have to know about and have to learn
+how to use.
+
+Bodo seems to be in favor of this patch series. Are there other people
+who want to share their opinion about this patch series?
+
+Thanks,
+
+Bart.
