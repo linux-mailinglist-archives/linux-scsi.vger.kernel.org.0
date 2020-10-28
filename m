@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEB929D34D
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 22:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F42529D284
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 22:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725871AbgJ1Vml (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Oct 2020 17:42:41 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55030 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726226AbgJ1Vm2 (ORCPT
+        id S1725856AbgJ1VdB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Oct 2020 17:33:01 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2902 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725828AbgJ1Vc4 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:42:28 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09SI22qW067465;
-        Wed, 28 Oct 2020 14:31:01 -0400
+        Wed, 28 Oct 2020 17:32:56 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09SI25qA123705;
+        Wed, 28 Oct 2020 14:31:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : sender; s=pp1;
- bh=35ID2PYetT0GEOaJ//qciD06Z9tv3Q+Cmcip8WaWe44=;
- b=SiY/FoikhA1hRwgkkQaUz63NTnIzSCl/VOSNy97BvwErQZ2yEiXhYuLvuapvoR1TqWaG
- r34nEBd/m1U6LE3UXBpKR7NUwI2QG4cfPhyjsAjrEsgET9ucj0R4/sRn4bWQZzgP3iy/
- Ir6Z6mAIy6mcWtwyltBe4HcoYuYQudIhhT+5LJnR9HiYdz8r/37ZxgWjVUAPFagr9htO
- 5y6l6uon2cF/he7SVNJajc3d2JuKyhaswGTNPBLRUGB2ev8YGbxqpGu+TE33JAv5me/k
- cy1nF6x364d9HByLjqsXB/Vok67vYWN8YD85EkaW4hXKSeTX+H0rpkQjo1ISwWFkZZDx oQ== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34d97hwtc0-1
+ bh=TQtuFv4i4lEPirDbebLwB2JvxgOWERtBtKQF8MOx+2M=;
+ b=sVzeVD510ul6oUUaSTdXXy1l1KKC0D8Wb8P7Wpx09ALIHHbLzxR2CEpRGl76wxUnQkKQ
+ ttXkVM9SHb8RiYEi3h26pO+fz4R+JsC64HkYK7yBXCD5Cah4Nve53aU9Zpu4KzkGWbXf
+ jfTlqhihG90eIQhrDyDo3oUV5ro8MXJZ8oUC8rLeGzpoiNoSlEJD9BDWFNaBgcGXFaMo
+ +K9pMsnJsZpim1YZ9wHsaAYG05Kg4JPBGdnSy3CZ6o28Se4sk4ZGksbL9Q+0389nC26E
+ SSDM9qHHHXqScHynf/TtukVuUCYNk5I5c3wMzlJ46L9La7e4dm11prLqy7pkgDwtlgKu 9Q== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34esjm5x41-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Oct 2020 14:31:01 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09SIRbWW010761;
+        Wed, 28 Oct 2020 14:30:59 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09SITIYG020422;
         Wed, 28 Oct 2020 18:30:57 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 34f7s3r6cc-1
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 34ejqe8rw8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 28 Oct 2020 18:30:57 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09SIUseN30146858
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09SIUsm931981874
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 28 Oct 2020 18:30:54 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 72C81AE076;
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB4CC4C05C;
         Wed, 28 Oct 2020 18:30:54 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 684A6AE056;
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD9C74C05E;
         Wed, 28 Oct 2020 18:30:54 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.145.72.181])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Wed, 28 Oct 2020 18:30:54 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1kXqDl-002ps3-Di; Wed, 28 Oct 2020 19:30:53 +0100
+        id 1kXqDl-002ps6-Mk; Wed, 28 Oct 2020 19:30:53 +0100
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -62,9 +62,9 @@ Cc:     Julian Wiedmann <jwi@linux.ibm.com>,
         Steffen Maier <maier@linux.ibm.com>,
         Fedor Loshakov <loshakov@linux.ibm.com>,
         linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH 4/5] zfcp: process Version Change events
-Date:   Wed, 28 Oct 2020 19:30:51 +0100
-Message-Id: <d2c7bc57c6cf1b65eabbf7a5d0e3927b9f65647f.1603908167.git.bblock@linux.ibm.com>
+Subject: [PATCH 5/5] zfcp: handle event-lost notification for Version Change events
+Date:   Wed, 28 Oct 2020 19:30:52 +0100
+Message-Id: <297c7be2944c3714863fcd22d531d910312d29f0.1603908167.git.bblock@linux.ibm.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1603908167.git.bblock@linux.ibm.com>
 References: <cover.1603908167.git.bblock@linux.ibm.com>
@@ -75,106 +75,110 @@ Sender: Benjamin Block <bblock@linux.ibm.com>
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-10-28_08:2020-10-28,2020-10-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- suspectscore=2 lowpriorityscore=0 clxscore=1015 bulkscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 mlxlogscore=999
- adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2010280116
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ adultscore=0 mlxscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 priorityscore=1501 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010280116
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Julian Wiedmann <jwi@linux.ibm.com>
 
-Handle notifications for a concurrent change of the FCP Channel
-firmware.
-Update the relevant user-visible fields to provide accurate data.
+As recovery for a lost Version Change event, trigger an
+Exchange Config Data cmd to retrieve the current FW version.
 
+Doing so requires process context (as eg. zfcp_qdio_sbal_get()
+might need to sleep), so defer from tasklet context into a work
+item.
+
+Suggested-by: Steffen Maier <maier@linux.ibm.com>
 Signed-off-by: Julian Wiedmann <jwi@linux.ibm.com>
 Reviewed-by: Steffen Maier <maier@linux.ibm.com>
 Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
 Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/s390/scsi/zfcp_fsf.c | 16 ++++++++++++++++
- drivers/s390/scsi/zfcp_fsf.h | 10 ++++++++++
- 2 files changed, 26 insertions(+)
+ drivers/s390/scsi/zfcp_aux.c | 11 +++++++++++
+ drivers/s390/scsi/zfcp_def.h |  1 +
+ drivers/s390/scsi/zfcp_fsf.c |  3 +++
+ drivers/s390/scsi/zfcp_fsf.h |  1 +
+ 4 files changed, 16 insertions(+)
 
-diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
-index 6cb963a06777..afa95e04eceb 100644
---- a/drivers/s390/scsi/zfcp_fsf.c
-+++ b/drivers/s390/scsi/zfcp_fsf.c
-@@ -242,6 +242,19 @@ static void zfcp_fsf_status_read_link_down(struct zfcp_fsf_req *req)
- 	}
+diff --git a/drivers/s390/scsi/zfcp_aux.c b/drivers/s390/scsi/zfcp_aux.c
+index 18b713a616de..768873dd55b8 100644
+--- a/drivers/s390/scsi/zfcp_aux.c
++++ b/drivers/s390/scsi/zfcp_aux.c
+@@ -292,6 +292,14 @@ static void _zfcp_status_read_scheduler(struct work_struct *work)
+ 					     stat_work));
  }
  
-+static void
-+zfcp_fsf_status_read_version_change(struct zfcp_adapter *adapter,
-+				    struct fsf_status_read_buffer *sr_buf)
++static void zfcp_version_change_lost_work(struct work_struct *work)
 +{
-+	if (sr_buf->status_subtype == FSF_STATUS_READ_SUB_LIC_CHANGE) {
-+		u32 version = sr_buf->payload.version_change.current_version;
++	struct zfcp_adapter *adapter = container_of(work, struct zfcp_adapter,
++						    version_change_lost_work);
 +
-+		WRITE_ONCE(adapter->fsf_lic_version, version);
-+		snprintf(fc_host_firmware_version(adapter->scsi_host),
-+			 FC_VERSION_STRING_SIZE, "%#08x", version);
-+	}
++	zfcp_fsf_exchange_config_data_sync(adapter->qdio, NULL);
 +}
 +
- static void zfcp_fsf_status_read_handler(struct zfcp_fsf_req *req)
+ static void zfcp_print_sl(struct seq_file *m, struct service_level *sl)
  {
- 	struct zfcp_adapter *adapter = req->adapter;
-@@ -300,6 +313,9 @@ static void zfcp_fsf_status_read_handler(struct zfcp_fsf_req *req)
+ 	struct zfcp_adapter *adapter =
+@@ -353,6 +361,8 @@ struct zfcp_adapter *zfcp_adapter_enqueue(struct ccw_device *ccw_device)
+ 	INIT_WORK(&adapter->stat_work, _zfcp_status_read_scheduler);
+ 	INIT_DELAYED_WORK(&adapter->scan_work, zfcp_fc_scan_ports);
+ 	INIT_WORK(&adapter->ns_up_work, zfcp_fc_sym_name_update);
++	INIT_WORK(&adapter->version_change_lost_work,
++		  zfcp_version_change_lost_work);
+ 
+ 	adapter->next_port_scan = jiffies;
+ 
+@@ -429,6 +439,7 @@ void zfcp_adapter_unregister(struct zfcp_adapter *adapter)
+ 	cancel_delayed_work_sync(&adapter->scan_work);
+ 	cancel_work_sync(&adapter->stat_work);
+ 	cancel_work_sync(&adapter->ns_up_work);
++	cancel_work_sync(&adapter->version_change_lost_work);
+ 	zfcp_destroy_adapter_work_queue(adapter);
+ 
+ 	zfcp_fc_wka_ports_force_offline(adapter->gs);
+diff --git a/drivers/s390/scsi/zfcp_def.h b/drivers/s390/scsi/zfcp_def.h
+index da8a5ceb615c..f656d74a5f94 100644
+--- a/drivers/s390/scsi/zfcp_def.h
++++ b/drivers/s390/scsi/zfcp_def.h
+@@ -201,6 +201,7 @@ struct zfcp_adapter {
+ 	struct zfcp_fc_events events;
+ 	unsigned long		next_port_scan;
+ 	struct zfcp_diag_adapter	*diagnostics;
++	struct work_struct	version_change_lost_work;
+ };
+ 
+ struct zfcp_port {
+diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
+index afa95e04eceb..7593a9667b3e 100644
+--- a/drivers/s390/scsi/zfcp_fsf.c
++++ b/drivers/s390/scsi/zfcp_fsf.c
+@@ -309,6 +309,9 @@ static void zfcp_fsf_status_read_handler(struct zfcp_fsf_req *req)
+ 	case FSF_STATUS_READ_NOTIFICATION_LOST:
+ 		if (sr_buf->status_subtype & FSF_STATUS_READ_SUB_INCOMING_ELS)
+ 			zfcp_fc_conditional_port_scan(adapter);
++		if (sr_buf->status_subtype & FSF_STATUS_READ_SUB_VERSION_CHANGE)
++			queue_work(adapter->work_queue,
++				   &adapter->version_change_lost_work);
+ 		break;
  	case FSF_STATUS_READ_FEATURE_UPDATE_ALERT:
  		adapter->adapter_features = sr_buf->payload.word[0];
- 		break;
-+	case FSF_STATUS_READ_VERSION_CHANGE:
-+		zfcp_fsf_status_read_version_change(adapter, sr_buf);
-+		break;
- 	}
- 
- 	mempool_free(virt_to_page(sr_buf), adapter->pool.sr_data);
 diff --git a/drivers/s390/scsi/zfcp_fsf.h b/drivers/s390/scsi/zfcp_fsf.h
-index 09d73d0061ef..26ad7a0c5ce3 100644
+index 26ad7a0c5ce3..5e6b601af980 100644
 --- a/drivers/s390/scsi/zfcp_fsf.h
 +++ b/drivers/s390/scsi/zfcp_fsf.h
-@@ -134,6 +134,7 @@
- #define FSF_STATUS_READ_LINK_UP          	0x00000006
- #define FSF_STATUS_READ_NOTIFICATION_LOST	0x00000009
- #define FSF_STATUS_READ_FEATURE_UPDATE_ALERT	0x0000000C
-+#define FSF_STATUS_READ_VERSION_CHANGE		0x0000000D
+@@ -143,6 +143,7 @@
  
- /* status subtypes for link down */
- #define FSF_STATUS_READ_SUB_NO_PHYSICAL_LINK	0x00000000
-@@ -143,6 +144,9 @@
  /* status subtypes for unsolicited status notification lost */
  #define FSF_STATUS_READ_SUB_INCOMING_ELS	0x00000001
++#define FSF_STATUS_READ_SUB_VERSION_CHANGE	0x00000100
  
-+/* status subtypes for version change */
-+#define FSF_STATUS_READ_SUB_LIC_CHANGE		0x00000001
-+
- /* topologie that is detected by the adapter */
- #define FSF_TOPO_P2P				0x00000001
- #define FSF_TOPO_FABRIC				0x00000002
-@@ -226,6 +230,11 @@ struct fsf_link_down_info {
- 	u8 vendor_specific_code;
- } __attribute__ ((packed));
- 
-+struct fsf_version_change {
-+	u32 current_version;
-+	u32 previous_version;
-+} __packed;
-+
- struct fsf_status_read_buffer {
- 	u32 status_type;
- 	u32 status_subtype;
-@@ -242,6 +251,7 @@ struct fsf_status_read_buffer {
- 		u32 word[FSF_STATUS_READ_PAYLOAD_SIZE/sizeof(u32)];
- 		struct fsf_link_down_info link_down_info;
- 		struct fsf_bit_error_payload bit_error;
-+		struct fsf_version_change version_change;
- 	} payload;
- } __attribute__ ((packed));
- 
+ /* status subtypes for version change */
+ #define FSF_STATUS_READ_SUB_LIC_CHANGE		0x00000001
 -- 
 2.26.2
 
