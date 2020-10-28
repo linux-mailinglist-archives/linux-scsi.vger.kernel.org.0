@@ -2,121 +2,178 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1C329CD33
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 02:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1FE29D549
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Oct 2020 23:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgJ1Bin (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Oct 2020 21:38:43 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:46032 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1833054AbgJ0Xqp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Oct 2020 19:46:45 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 1A39C412F3;
-        Tue, 27 Oct 2020 23:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=mta-01; t=1603842400;
-         x=1605656801; bh=z1lAivyAWMVrhdFLfzNfi3hY5tnKbWtUjtmUI3M2EjE=; b=
-        M+1C+LC5dSvta1Qn1oUT0HmPktvDQ8OSsYzA1UBUZfQZW2huYII2kN8EcK+Eqrmn
-        Oaa6d9vxUO8STh2NQzF8CP0wrkb/D1kFfVzvGrjb9YAi9+tHOoJ+oFDz5V3OSw9T
-        dFSyre3QPSeW1iqYnsqgnVBchqPzzA73VtDM7KkvZ04=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wbYx8PcnIBIm; Wed, 28 Oct 2020 02:46:40 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S1729313AbgJ1V7r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Oct 2020 17:59:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35169 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728525AbgJ1V7a (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 28 Oct 2020 17:59:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603922368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fsp+qw7VQilYqGlRCGG49/rRdIH2EMX83NOPrIacuxk=;
+        b=Z21ZFxGaHChx8I+W7ER25mjfddy8X1El+FFO0lWi7XMo133RyClZtBLr4pvYRYSr9oDOsC
+        yZpHAn/j/cjjQtNPlCgc4K83gTntQkn0pR9q858m8HRm3yVyq+oGrb0oDQNSgoRKhOJ512
+        vXDMWmdIEddWVDfaKN/VpfgpiARq6H0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-401-UfFOzHHINp27BE-bRy8Obw-1; Tue, 27 Oct 2020 21:55:27 -0400
+X-MC-Unique: UfFOzHHINp27BE-bRy8Obw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id B1E6841279;
-        Wed, 28 Oct 2020 02:46:40 +0300 (MSK)
-Received: from localhost (172.17.204.212) by T-EXCH-04.corp.yadro.com
- (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Wed, 28
- Oct 2020 02:46:39 +0300
-Date:   Wed, 28 Oct 2020 02:46:39 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     Anastasia Kovaleva <a.kovaleva@yadro.com>,
-        <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux@yadro.com>
-Subject: Re: [PATCH 3/3] scsi: target: core: Change ASCQ for residual write
-Message-ID: <20201027234639.GB88490@SPB-NB-133.local>
-References: <20201022172011.42367-1-a.kovaleva@yadro.com>
- <20201022172011.42367-4-a.kovaleva@yadro.com>
- <e2b215ca-0aa8-bdae-e5bd-292a09d8282e@acm.org>
- <20201024121315.GA35317@SPB-NB-133.local>
- <b831a7db-1da2-c293-a8f6-d9c62f68c224@acm.org>
- <20201026131226.GA88490@SPB-NB-133.local>
- <270e2edf-49c9-942f-ac3d-b6dfa0aca8f7@acm.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D994F1868401;
+        Wed, 28 Oct 2020 01:55:25 +0000 (UTC)
+Received: from [10.72.13.38] (ovpn-13-38.pek2.redhat.com [10.72.13.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 759D35D9E8;
+        Wed, 28 Oct 2020 01:55:17 +0000 (UTC)
+Subject: Re: [PATCH 07/17] vhost scsi: support delayed IO vq creation
+To:     Mike Christie <michael.christie@oracle.com>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, mst@redhat.com, pbonzini@redhat.com,
+        stefanha@redhat.com, virtualization@lists.linux-foundation.org
+References: <1603326903-27052-1-git-send-email-michael.christie@oracle.com>
+ <1603326903-27052-8-git-send-email-michael.christie@oracle.com>
+ <9e97ea2a-bc57-d4aa-4711-35dba20b3b9e@redhat.com>
+ <49c2fc29-348c-06db-4823-392f7476d318@oracle.com>
+From:   Jason Wang <jasowang@redhat.com>
+Message-ID: <adcaeb64-b1da-2195-6656-ecc19f12e5ed@redhat.com>
+Date:   Wed, 28 Oct 2020 09:55:15 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <270e2edf-49c9-942f-ac3d-b6dfa0aca8f7@acm.org>
-X-Originating-IP: [172.17.204.212]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-04.corp.yadro.com (172.17.100.104)
+In-Reply-To: <49c2fc29-348c-06db-4823-392f7476d318@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 07:42:55PM -0700, Bart Van Assche wrote:
-> On 10/26/20 6:12 AM, Roman Bolshakov wrote:
-> > Note, that if we talk about SSC over FCP, then "9.4.2 FCP_DATA IUs for
-> > read and write operations" does additionally apply. Perhaps a) from
-> > "9.4.2 FCP_DATA IUs for read and write operations" works well for SSC:
-> > 
-> >   a) process the command normally except that data beyond the FCP_DL count
-> >   shall not be requested or transferred;
-> > 
-> > The clause allows to accomodate variable-block tranfers from SSC.
-> > 
-> > So, what if we return CHECK CONDITION only for SBC WRITEs with
-> > residuals?  Then it has no impact on SSC and other device types. In
-> > future, we might also add a patch that would fail SBC READs with
-> > residuals for sake of consistency. That behaviour would be beneficial
-> > for SBC devices as no host could corrupt data or itself by forming,
-> > requesting invalid data buffer.
-> 
-> Maybe I'm overly concerned. I do not know for sure which applications
-> rely on the current behavior of residual handling. All I know about
-> these applications is based on what others wrote about these
-> applications. An example from
-> https://www.t10.org/pipermail/t10/2003-November/009317.html: "We have
-> customers who also use overlength and underlength transfers as a normal
-> mode of operation."
-> 
 
-Hi Bart,
+On 2020/10/27 下午1:47, Mike Christie wrote:
+> On 10/25/20 10:51 PM, Jason Wang wrote:
+>>
+>> On 2020/10/22 上午8:34, Mike Christie wrote:
+>>> Each vhost-scsi device will need a evt and ctl queue, but the number
+>>> of IO queues depends on whatever the user has configured in userspace.
+>>> This patch has vhost-scsi create the evt, ctl and one IO vq at device
+>>> open time. We then create the other IO vqs when userspace starts to
+>>> set them up. We still waste some mem on the vq and scsi vq structs,
+>>> but we don't waste mem on iovec related arrays and for later patches
+>>> we know which queues are used by the dev->nvqs value.
+>>>
+>>> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+>>> ---
+>>>   drivers/vhost/scsi.c | 19 +++++++++++++++----
+>>>   1 file changed, 15 insertions(+), 4 deletions(-)
+>>
+>>
+>> Not familiar with SCSI. But I wonder if it could behave like vhost-net.
+>>
+>> E.g userspace should known the number of virtqueues so it can just 
+>> open and close multiple vhost-scsi file descriptors.
+>>
+>
+> One hiccup I'm hitting is that we might end up creating about 3x more 
+> vqs than we need. The problem is that for scsi each vhost device has:
+>
+> vq=0: special control vq
+> vq=1: event vq
+> vq=2 and above: SCSI CMD/IO vqs. We want to create N of these.
+>
+> Today we do:
+>
+> Uerspace does open(/dev/vhost-scsi)
+>         vhost_dev_init(create 128 vqs and then later we setup and use 
+> N of them);
+>
+> Qemu does ioctl(VHOST_SET_OWNER)
+>         vhost_dev_set_owner()
+>
+> For N vqs userspace does:
+>         // virtqueue setup related ioctls
+>
+> Qemu does ioctl(VHOST_SCSI_SET_ENDPOINT)
+>         - match LIO/target port to vhost_dev
+>
+>
+> So we could change that to:
+>
+> For N IO vqs userspace does
+>         open(/dev/vhost-scsi)
+>                 vhost_dev_init(create IO, evt, and ctl);
+>
+> for N IO vqs Qemu does:
+>         ioctl(VHOST_SET_OWNER)
+>                 vhost_dev_set_owner()
+>
+> for N IO vqs Qemu does:
+>         // virtqueue setup related ioctls
+>
+> for N IO vqs Qemu does:
+>         ioctl(VHOST_SCSI_SET_ENDPOINT)
+>                 - match LIO/target port to vhost_dev and assemble the 
+> multiple vhost_dev device.
+>
+> The problem is that we have to setup some of the evt/ctl specific 
+> parts at open() time when vhost_dev_init does vhost_poll_init for 
+> example.
+>
+> - At open time, we don't know if this vhost_dev is going to be part of 
+> a multiple vhost_device device or a single one so we need to create at 
+> least 3 of them
+> - If it is a multiple device we don't know if its the first device 
+> being created for the device or the N'th, so we don't know if the 
+> dev's vqs will be used for IO or ctls/evts, so we have to create all 3.
+>
+> When we get the first VHOST_SCSI_SET_ENDPOINT call for a new style 
+> multiple vhost_dev device, we can use that dev's evt/ctl vqs for 
+> events/controls requests. When we get the other 
+> VHOST_SCSI_SET_ENDPOINT calls for the multiple vhost_dev device then 
+> those dev's evt/ctl vqs will be ignored and we will only use their IO 
+> vqs. So we end up with a lot of extra vqs.
 
-Thanks for raising the point about overlength/underlength. If you wish
-we can add an extra check that fails DMA_TO_DEVICE && DATA with
-residuals only for SBC devices but note that before the series,
-underflow/overflow for WRITE didn't return GOOD status. The particular
-patch only changes sense code to more meaningful from the former INVALID
-FIELD IN CDB.
 
-Theoretically, it could be good to have a configurable switch how LIO
-handles overflows/underflows for a LUN. Then it'd be possible to
-configure desired behaviour on a per-LUN basis. But there should be a
-clear need & demand for the feature to avoid maintenance of dead code.
+Right, so in this case we can use this patch to address this issue 
+probably. If evt/ctl vq is not used, we won't even create them.
 
-> An additional question is what behavior other operating systems than
-> Linux expect? There are probably setups in which another operating
-> system than Linux communicates with a LIO SCSI target?
-> 
 
-TBH I don't know any hosts that do SBC WRITE with residuals as normal
-course of operation. They wouldn't be able to work with LIO because it
-never returns GOOD status on WRITE with residuals. I can send an update
-later if the series works fine with modern hosts (~1 month, after a few
-cycles of system testing).
+>
+>
+> One other question/issue I have is that qemu can open the 
+> /dev/vhost-scsi device or it allows tools like libvirtd to open the 
+> device and pass in the fd to use.
 
-Fun fact, ~60 years ago WRITE overflows were used to achieve behaviour
-similar to disk zeroing/WRITE SAME [1].
 
-1. https://mailarchive.ietf.org/arch/msg/ips/135ycRlgwUg1sb3gRrUQ3-lSXg0/
+It allows libvirt to open and pass fds to qemu. This is how multie-queue 
+virtio-net is done, libvirt is in charge of opening multiple file 
+descriptors and pass them to qemu.
 
-Thanks,
-Roman
+
+> For the latter case, would we continue to have those tools pass in the 
+> leading fd, then have qemu do the other num_queues - 1 
+> open(/dev/vhost-scsi) calls? Or do these apps that pass in the fd need 
+> to know about all of the fds for some management reason?
+
+
+Usually qemu is running without privilege. So it depends on the 
+management to open the device.
+
+Note that I'm not object your proposal, just want to see if it could be 
+done via a more easy way. During the development if multiqueue 
+virito-net, something similar as you've done was proposed but we end up 
+with the multiple vhost-net fd model which keeps kernel code unchanged.
+
+Thanks
+
+
+
