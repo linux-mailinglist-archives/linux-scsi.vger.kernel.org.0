@@ -2,117 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7CD29E6FE
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Oct 2020 10:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A51129E7DF
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Oct 2020 10:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725808AbgJ2JMj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 29 Oct 2020 05:12:39 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:39912 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725791AbgJ2JMj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 29 Oct 2020 05:12:39 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09T6jKmk035657;
-        Thu, 29 Oct 2020 06:49:46 GMT
+        id S1726384AbgJ2JzQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 29 Oct 2020 05:55:16 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:58680 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726335AbgJ2JzP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 29 Oct 2020 05:55:15 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09T6ioCU037352;
+        Thu, 29 Oct 2020 06:49:42 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=5tYefEpoHOl8ww31xzN1AXDs7HZQBL/PG3MQ0Z9WHxA=;
- b=LC4kmHObvW+H32k7Xv+0GUgUrbacGlrrfJ4FroogDwYqyI02ShGlZU7zQnZhp2PDChLc
- VKYiGArIVBTPW7BzUPtBfvVdl5a1thLeExcAWuRI5apEwaMR+sDdA+7febosHlkfUv/o
- TbMCvjoF1uPF+PoSGrbFvvr1ijMIfDEg1NQMGIJwMXwQqi463rO4oJC+DqLUmGLiJ95C
- sDHhkb3w82Tb61hO5tv10s7jcAij5N6ZUAwKN0jYtb/td4zIK3qW/nxFy1E1iRUI7F36
- bvxI90f+W4fir/W10+h54NYvbpShrpEUYm3j0APwofoyA7mlx8mmCmM4/a9IlGpUPXY+ 5A== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 34cc7m32j4-1
+ bh=LIqXxII8R1PdUpYDGrZyozrQSO+LwSZruSt/jQNE33g=;
+ b=JZEFTAxY+tawYGa81Fu4rf+sRGeaOP8KUfbreRfMDuTUzfdBB6f9b7tAndEUmlqot7wC
+ vYzSymiNtPVO9LIdSXG0DMnyzDq1D1IhbY8hPygdtyr+WfFD7wLQPiJmdmoM3//1fIa+
+ ms9GA8k3o4hepJO5Sx72FNub1fy93iVkNbmOpKGNdi377/WY5KDz4p8IPKvxOIsftCMg
+ P8A+VXv0g05+RFxzZtVwjz36NFRkzTfqcu3NYrZQj2/fFxbQ/cI/PZGcJtzgiZg/nRG8
+ 2ahLuG65OWYEtTK+H/9tPgAdvsKY9Xoq4Yzc1rUf0NDUi/vIB5vq1CBlmlrCxF/seOXV BA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 34dgm48pfg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 29 Oct 2020 06:49:46 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09T6kExe026734;
-        Thu, 29 Oct 2020 06:49:45 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 34cx606ad5-1
+        Thu, 29 Oct 2020 06:49:42 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09T6kMet178500;
+        Thu, 29 Oct 2020 06:49:41 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 34cx1svd4c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Oct 2020 06:49:45 +0000
+        Thu, 29 Oct 2020 06:49:41 +0000
 Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09T6njAj008249;
-        Thu, 29 Oct 2020 06:49:45 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09T6neZ9014503;
+        Thu, 29 Oct 2020 06:49:40 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 28 Oct 2020 23:49:45 -0700
+        with ESMTP ; Wed, 28 Oct 2020 23:49:40 -0700
 From:   Mike Christie <michael.christie@oracle.com>
 To:     himanshu.madhani@oracle.com, njavali@marvell.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         james.bottomley@hansenpartnership.com
-Subject: [PATCH 8/8] tcm loop: allow queues, can queue and cmd per lun to be settable
-Date:   Thu, 29 Oct 2020 01:49:31 -0500
-Message-Id: <1603954171-11621-9-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 1/8] target: fix lun ref count handling
+Date:   Thu, 29 Oct 2020 01:49:24 -0500
+Message-Id: <1603954171-11621-2-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1603954171-11621-1-git-send-email-michael.christie@oracle.com>
 References: <1603954171-11621-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9788 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 mlxlogscore=999
- suspectscore=2 bulkscore=0 malwarescore=0 spamscore=0 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2010290047
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9788 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 adultscore=0
- malwarescore=0 spamscore=0 clxscore=1015 mlxscore=0 suspectscore=2
- priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010290047
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
+ adultscore=0 bulkscore=0 spamscore=0 phishscore=0 mlxlogscore=999
+ suspectscore=0 clxscore=1015 mlxscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010290047
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make can_queue, nr_hw_queues and cmd_per_lun settable by the user
-instead of hard coding them.
+This fixes 2 bugs in the lun refcounting.
+
+1. For the TCM_WRITE_PROTECTED case we were returning an error after
+taking a ref to the lun, but never dropping it (caller just send
+status and drops cmd ref).
+
+2. We still need to do a percpu_ref_tryget_live for the virt lun0 like
+we do for other luns, because the tpg code does the refcount/wait
+process like it does with other luns.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/target/loopback/tcm_loop.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/target/target_core_device.c | 43 +++++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/target/loopback/tcm_loop.c b/drivers/target/loopback/tcm_loop.c
-index 16d5a4e..badba43 100644
---- a/drivers/target/loopback/tcm_loop.c
-+++ b/drivers/target/loopback/tcm_loop.c
-@@ -46,6 +46,15 @@
+diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+index 405d82d..1f673fb 100644
+--- a/drivers/target/target_core_device.c
++++ b/drivers/target/target_core_device.c
+@@ -65,6 +65,16 @@
+ 			atomic_long_add(se_cmd->data_length,
+ 					&deve->read_bytes);
  
- static int tcm_loop_queue_status(struct se_cmd *se_cmd);
++		if ((se_cmd->data_direction == DMA_TO_DEVICE) &&
++		    deve->lun_access_ro) {
++			pr_err("TARGET_CORE[%s]: Detected WRITE_PROTECTED LUN"
++				" Access for 0x%08llx\n",
++				se_cmd->se_tfo->fabric_name,
++				se_cmd->orig_fe_lun);
++			rcu_read_unlock();
++			return TCM_WRITE_PROTECTED;
++		}
++
+ 		se_lun = rcu_dereference(deve->se_lun);
  
-+static unsigned int tcm_loop_nr_hw_queues = 1;
-+module_param_named(nr_hw_queues, tcm_loop_nr_hw_queues, uint, 0644);
-+
-+static unsigned int tcm_loop_can_queue = 1024;
-+module_param_named(can_queue, tcm_loop_can_queue, uint, 0644);
-+
-+static unsigned int tcm_loop_cmd_per_lun = 1024;
-+module_param_named(cmd_per_lun, tcm_loop_cmd_per_lun, uint, 0644);
-+
- /*
-  * Called from struct target_core_fabric_ops->check_stop_free()
-  */
-@@ -305,10 +314,8 @@ static int tcm_loop_target_reset(struct scsi_cmnd *sc)
- 	.eh_abort_handler = tcm_loop_abort_task,
- 	.eh_device_reset_handler = tcm_loop_device_reset,
- 	.eh_target_reset_handler = tcm_loop_target_reset,
--	.can_queue		= 1024,
- 	.this_id		= -1,
- 	.sg_tablesize		= 256,
--	.cmd_per_lun		= 1024,
- 	.max_sectors		= 0xFFFF,
- 	.dma_boundary		= PAGE_SIZE - 1,
- 	.module			= THIS_MODULE,
-@@ -342,6 +349,9 @@ static int tcm_loop_driver_probe(struct device *dev)
- 	sh->max_lun = 0;
- 	sh->max_channel = 0;
- 	sh->max_cmd_len = SCSI_MAX_VARLEN_CDB_SIZE;
-+	sh->nr_hw_queues = tcm_loop_nr_hw_queues;
-+	sh->can_queue = tcm_loop_can_queue;
-+	sh->cmd_per_lun = tcm_loop_cmd_per_lun;
+ 		if (!percpu_ref_tryget_live(&se_lun->lun_ref)) {
+@@ -76,17 +86,6 @@
+ 		se_cmd->pr_res_key = deve->pr_res_key;
+ 		se_cmd->se_cmd_flags |= SCF_SE_LUN_CMD;
+ 		se_cmd->lun_ref_active = true;
+-
+-		if ((se_cmd->data_direction == DMA_TO_DEVICE) &&
+-		    deve->lun_access_ro) {
+-			pr_err("TARGET_CORE[%s]: Detected WRITE_PROTECTED LUN"
+-				" Access for 0x%08llx\n",
+-				se_cmd->se_tfo->fabric_name,
+-				se_cmd->orig_fe_lun);
+-			rcu_read_unlock();
+-			ret = TCM_WRITE_PROTECTED;
+-			goto ref_dev;
+-		}
+ 	}
+ out_unlock:
+ 	rcu_read_unlock();
+@@ -106,21 +105,20 @@
+ 			return TCM_NON_EXISTENT_LUN;
+ 		}
  
- 	host_prot = SHOST_DIF_TYPE1_PROTECTION | SHOST_DIF_TYPE2_PROTECTION |
- 		    SHOST_DIF_TYPE3_PROTECTION | SHOST_DIX_TYPE1_PROTECTION |
+-		se_lun = se_sess->se_tpg->tpg_virt_lun0;
+-		se_cmd->se_lun = se_sess->se_tpg->tpg_virt_lun0;
+-		se_cmd->se_cmd_flags |= SCF_SE_LUN_CMD;
+-
+-		percpu_ref_get(&se_lun->lun_ref);
+-		se_cmd->lun_ref_active = true;
+-
+ 		/*
+ 		 * Force WRITE PROTECT for virtual LUN 0
+ 		 */
+ 		if ((se_cmd->data_direction != DMA_FROM_DEVICE) &&
+-		    (se_cmd->data_direction != DMA_NONE)) {
+-			ret = TCM_WRITE_PROTECTED;
+-			goto ref_dev;
+-		}
++		    (se_cmd->data_direction != DMA_NONE))
++			return TCM_WRITE_PROTECTED;
++
++		se_lun = se_sess->se_tpg->tpg_virt_lun0;
++		if (!percpu_ref_tryget_live(&se_lun->lun_ref))
++			return TCM_NON_EXISTENT_LUN;
++
++		se_cmd->se_lun = se_sess->se_tpg->tpg_virt_lun0;
++		se_cmd->se_cmd_flags |= SCF_SE_LUN_CMD;
++		se_cmd->lun_ref_active = true;
+ 	}
+ 	/*
+ 	 * RCU reference protected by percpu se_lun->lun_ref taken above that
+@@ -128,7 +126,6 @@
+ 	 * pointer can be kfree_rcu() by the final se_lun->lun_group put via
+ 	 * target_core_fabric_configfs.c:target_fabric_port_release
+ 	 */
+-ref_dev:
+ 	se_cmd->se_dev = rcu_dereference_raw(se_lun->lun_se_dev);
+ 	atomic_long_inc(&se_cmd->se_dev->num_cmds);
+ 
 -- 
 1.8.3.1
 
