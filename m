@@ -2,206 +2,292 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2103629F256
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Oct 2020 17:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6762E29F29A
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Oct 2020 18:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbgJ2Q4o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 29 Oct 2020 12:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726078AbgJ2Q4o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 29 Oct 2020 12:56:44 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8F9C0613CF
-        for <linux-scsi@vger.kernel.org>; Thu, 29 Oct 2020 09:56:44 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id s21so3760909oij.0
-        for <linux-scsi@vger.kernel.org>; Thu, 29 Oct 2020 09:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:references:in-reply-to:mime-version:thread-index:date
-         :message-id:subject:to:cc;
-        bh=s33VaVKSaw2q7yG2uUTQtijnQVJYjeBqd0hN07fuBKI=;
-        b=RIab94O/dzQJ3Ack4UYZpS198dOnUzaxTRyCqn6+PDnnZGqlM5sKy5mCSHmjDjwEwr
-         d9VIKmpwLa3tjNeUugzVZNoezenpicI0+zD0aXbIbypp/3alma6XFuiwG2Tn4roPRT0w
-         BZwpRB66UyXdkT6BcWxHwJwStFcyBQ4JW2/A4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:references:in-reply-to:mime-version
-         :thread-index:date:message-id:subject:to:cc;
-        bh=s33VaVKSaw2q7yG2uUTQtijnQVJYjeBqd0hN07fuBKI=;
-        b=D9nMtoHHlv+cCwMH74QuHza/VaUvt3lW8dm8akUROf5kN3IRkTH9Bah/L/UqlowMaA
-         +1chgEfqAEWV9n/xxztW7bMGgWCdDXMiLRsMG2j0XpQudEbE6KFoE8JZ3+TldivSZcM9
-         lNmyJylGZALmvRMPgRFVr/EbEk2vfcw7Wkl4ojAicY40paVt+JRzXYAnBypduY6mRyl2
-         8MVgZc9XO2+KSVFv4OgVkK0USoHb+gBZeu+P99f2Y7zaNm3G4ljCuYXM7sFxkFtxC/2J
-         IDL7kcRhs34C4UvL/L1XOmKnWCnDEEn6PAAv6YS0W0Cr+TfPEPFwlX+sbqQpD+ixBENa
-         rI1Q==
-X-Gm-Message-State: AOAM530UDbhsdrfrXw95Fg6hh92+KlTFNjsg2mGTlDyyszLHWKZbTmqe
-        nT1uEtitWSVf5R98lUaegJmWgA5LFW+cqs1ch3cOjw==
-X-Google-Smtp-Source: ABdhPJwANWHk1c6UDON7y8ULC99o6cYxBpps7vDUdQkS1WAOZeuXiQ2vFIX6gySg2lEoQWR2KBjII+mKUcX+w5tb+Vs=
-X-Received: by 2002:aca:6748:: with SMTP id b8mr386102oiy.77.1603990603263;
- Thu, 29 Oct 2020 09:56:43 -0700 (PDT)
-From:   Muneendra Kumar M <muneendra.kumar@broadcom.com>
-References: <1603370091-9337-1-git-send-email-muneendra.kumar@broadcom.com>
- <1603370091-9337-5-git-send-email-muneendra.kumar@broadcom.com>
- <2818f7af-e2f9-7d20-a0e6-10eb3c03c7ef@oracle.com> <6499e81f001ed33b8430d5f2cd863ae2@mail.gmail.com>
- <49b9b97c-bf84-e9ac-3b74-ffbf3352e2d5@oracle.com>
-In-Reply-To: <49b9b97c-bf84-e9ac-3b74-ffbf3352e2d5@oracle.com>
+        id S1725972AbgJ2RJf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 29 Oct 2020 13:09:35 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38046 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726078AbgJ2RJf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 29 Oct 2020 13:09:35 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1603991345;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1guq/0q6IGzpRoaJ71CCy04UixufVjMPUGDXuDWeYIk=;
+        b=QFsCyV0axNK1frEDNK4hEIKamyYu69DcwOl4z1RFmrGVO1c174QdnfHa97hVq1+/PIDr8J
+        cHFGWOicvqr8M0p7SDo5V7QyUsmkCTijwhek3DsE8g/8hwgGjsLRcNAuebnXymPLHJrVdB
+        SJp/OdSswzwPWRftd8ccXckpSFnbgiY=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 36973ACF6;
+        Thu, 29 Oct 2020 17:09:05 +0000 (UTC)
+From:   mwilck@suse.com
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.de>
+Cc:     linux-scsi@vger.kernel.org,
+        James Bottomley <jejb@linux.vnet.ibm.com>,
+        Martin Wilck <mwilck@suse.com>
+Subject: [PATCH 1/2] scsi: scsi_vpd_lun_id(): fix designator priorities
+Date:   Thu, 29 Oct 2020 18:08:45 +0100
+Message-Id: <20201029170846.14786-1-mwilck@suse.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQLv5vf0y45oXVLFrswKM5p1yAny/wICmmMsApYyjekCIoo37wE5UXM1pzyxxbA=
-Date:   Thu, 29 Oct 2020 22:26:39 +0530
-Message-ID: <16b1982432ed23ef646130c94ed1e9db@mail.gmail.com>
-Subject: RE: [patch v4 4/5] scsi_transport_fc: Added a new rport state FC_PORTSTATE_MARGINAL
-To:     Mike Christie <michael.christie@oracle.com>,
-        linux-scsi@vger.kernel.org, hare@suse.de
-Cc:     jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000276aef05b2d22a2b"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000276aef05b2d22a2b
-Content-Type: text/plain; charset="UTF-8"
+From: Martin Wilck <mwilck@suse.com>
 
-Hi Mike,
+The current implementation of scsi_vpd_lun_id() uses the designator
+length as an implicit measure of priority. This works most of the
+time, but not always. For example, some Hitachi storage arrays return
+this in VPD 0x83:
 
-> [Muneendra] I have to  make sure the flag is set after the check for
-> blocked state.  If blocked, it's returning BLK_EH_RESET_TIMER, so it
-> will restart the eh timer. The io will "sit out" like this, pending,
-> until either the adapter fails it back due to logout or io completion,
-> or fastio fail or rport devloss timesout and invokes the abort handler
-> to force abort .
+VPD INQUIRY: Device Identification page
+  Designation descriptor number 1, descriptor length: 24
+    designator_type: T10 vendor identification,  code_set: ASCII
+    associated with the Addressed logical unit
+      vendor id: HITACHI
+      vendor specific: 5030C3502025
+  Designation descriptor number 2, descriptor length: 6
+    designator_type: vendor specific [0x0],  code_set: Binary
+    associated with the Target port
+      vendor specific: 08 03
+  Designation descriptor number 3, descriptor length: 20
+    designator_type: NAA,  code_set: Binary
+    associated with the Addressed logical unit
+      NAA 6, IEEE Company_id: 0x60e8
+      Vendor Specific Identifier: 0x7c35000
+      Vendor Specific Identifier Extension: 0x30c35000002025
+      [0x60060e8007c350000030c35000002025]
 
->Hey,
+The current code would use the first descriptor, because it's longer
+than the NAA descriptor. But this is wrong, the kernel is supposed
+to prefer NAA descriptors over T10 vendor ID. Designator length
+should only be used to compare designators of the same type.
 
->I'm not sure if we are talking about the same thing. If port state is
->marginal above, then we set the NORETRIES bit then return BLK_EH_DONE which
->will start up the scsi eh_abort_handler and if that fails the rest of the
->scsi >eh_*_handlers.
+This patch addresses the issue by separating designator priority and
+length.
 
->While we are calling the eh handlers, if the driver does a
->fc_remote_port_delete then fc_remote_port_add we still have the NORETRIES
->bit set, so when we return from the eh_*_handlers we will fail the IO
->upwards.
+Fixes: 9983bed3907c ("scsi: Add scsi_vpd_lun_id()")
+Signed-off-by: Martin Wilck <mwilck@suse.com>
+---
+ drivers/scsi/scsi_lib.c | 126 +++++++++++++++++++++++++++-------------
+ 1 file changed, 86 insertions(+), 40 deletions(-)
 
->I was trying to ask if you wanted the IO failed upwards in that case.
->Because the port state went to online, did you want the normal (cleared
->NOTRIES bit) cmd retry behavior? It sounds like below you want the cleared
->NORETRIED bit behavior, right?
-[Muneendra]Yes we need the normal cmd behavior(clear noretries bit) when the
-portstate went to normal.
-I think to achieve this we can  clear the noretries bit in fc_block_scsi_eh/
-fc_block_rport .
-As this is the last place where the individual abort_handler checks for
-blocked state. Is this fine?
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 60c7a7d74852..293ee1af62c3 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -2949,6 +2949,78 @@ void sdev_enable_disk_events(struct scsi_device *sdev)
+ }
+ EXPORT_SYMBOL(sdev_enable_disk_events);
+ 
++static unsigned char designator_prio(const unsigned char *d)
++{
++	if (d[1] & 0x30)
++		/* not associated with LUN */
++		return 0;
++
++	if (d[3] == 0)
++		/* invalid length */
++		return 0;
++
++	/*
++	 * Order of preference for lun descriptor:
++	 * - SCSI name string
++	 * - NAA IEEE Registered Extended
++	 * - EUI-64 based 16-byte
++	 * - EUI-64 based 12-byte
++	 * - NAA IEEE Registered
++	 * - NAA IEEE Extended
++	 * - EUI-64 based 8-byte
++	 * - SCSI name string (truncated)
++	 * - T10 Vendor ID
++	 * as longer descriptors reduce the likelyhood
++	 * of identification clashes.
++	 */
++
++	switch (d[1] & 0xf) {
++	case 8:
++		/* SCSI name string, variable-length UTF-8 */
++		return 9;
++	case 3:
++		switch (d[4] >> 4) {
++		case 6:
++			/* NAA registered extended */
++			return 8;
++		case 5:
++			/* NAA registered */
++			return 5;
++		case 4:
++			/* NAA extended */
++			return 4;
++		case 3:
++			/* NAA locally assigned */
++			return 1;
++		default:
++			break;
++		}
++		break;
++	case 2:
++		switch (d[3]) {
++		case 16:
++			/* EUI64-based, 16 byte */
++			return 7;
++		case 12:
++			/* EUI64-based, 12 byte */
++			return 6;
++		case 8:
++			/* EUI64-based, 8 byte */
++			return 3;
++		default:
++			break;
++		}
++		break;
++	case 1:
++		/* T10 vendor ID */
++		return 1;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
+ /**
+  * scsi_vpd_lun_id - return a unique device identification
+  * @sdev: SCSI device
+@@ -2965,7 +3037,7 @@ EXPORT_SYMBOL(sdev_enable_disk_events);
+  */
+ int scsi_vpd_lun_id(struct scsi_device *sdev, char *id, size_t id_len)
+ {
+-	u8 cur_id_type = 0xff;
++	u8 cur_id_prio = 0;
+ 	u8 cur_id_size = 0;
+ 	const unsigned char *d, *cur_id_str;
+ 	const struct scsi_vpd *vpd_pg83;
+@@ -2978,20 +3050,6 @@ int scsi_vpd_lun_id(struct scsi_device *sdev, char *id, size_t id_len)
+ 		return -ENXIO;
+ 	}
+ 
+-	/*
+-	 * Look for the correct descriptor.
+-	 * Order of preference for lun descriptor:
+-	 * - SCSI name string
+-	 * - NAA IEEE Registered Extended
+-	 * - EUI-64 based 16-byte
+-	 * - EUI-64 based 12-byte
+-	 * - NAA IEEE Registered
+-	 * - NAA IEEE Extended
+-	 * - T10 Vendor ID
+-	 * as longer descriptors reduce the likelyhood
+-	 * of identification clashes.
+-	 */
+-
+ 	/* The id string must be at least 20 bytes + terminating NULL byte */
+ 	if (id_len < 21) {
+ 		rcu_read_unlock();
+@@ -3001,8 +3059,9 @@ int scsi_vpd_lun_id(struct scsi_device *sdev, char *id, size_t id_len)
+ 	memset(id, 0, id_len);
+ 	d = vpd_pg83->data + 4;
+ 	while (d < vpd_pg83->data + vpd_pg83->len) {
+-		/* Skip designators not referring to the LUN */
+-		if ((d[1] & 0x30) != 0x00)
++		u8 prio = designator_prio(d);
++
++		if (prio == 0 || cur_id_prio > prio)
+ 			goto next_desig;
+ 
+ 		switch (d[1] & 0xf) {
+@@ -3010,28 +3069,19 @@ int scsi_vpd_lun_id(struct scsi_device *sdev, char *id, size_t id_len)
+ 			/* T10 Vendor ID */
+ 			if (cur_id_size > d[3])
+ 				break;
+-			/* Prefer anything */
+-			if (cur_id_type > 0x01 && cur_id_type != 0xff)
+-				break;
++			cur_id_prio = prio;
+ 			cur_id_size = d[3];
+ 			if (cur_id_size + 4 > id_len)
+ 				cur_id_size = id_len - 4;
+ 			cur_id_str = d + 4;
+-			cur_id_type = d[1] & 0xf;
+ 			id_size = snprintf(id, id_len, "t10.%*pE",
+ 					   cur_id_size, cur_id_str);
+ 			break;
+ 		case 0x2:
+ 			/* EUI-64 */
+-			if (cur_id_size > d[3])
+-				break;
+-			/* Prefer NAA IEEE Registered Extended */
+-			if (cur_id_type == 0x3 &&
+-			    cur_id_size == d[3])
+-				break;
++			cur_id_prio = prio;
+ 			cur_id_size = d[3];
+ 			cur_id_str = d + 4;
+-			cur_id_type = d[1] & 0xf;
+ 			switch (cur_id_size) {
+ 			case 8:
+ 				id_size = snprintf(id, id_len,
+@@ -3049,17 +3099,14 @@ int scsi_vpd_lun_id(struct scsi_device *sdev, char *id, size_t id_len)
+ 						   cur_id_str);
+ 				break;
+ 			default:
+-				cur_id_size = 0;
+ 				break;
+ 			}
+ 			break;
+ 		case 0x3:
+ 			/* NAA */
+-			if (cur_id_size > d[3])
+-				break;
++			cur_id_prio = prio;
+ 			cur_id_size = d[3];
+ 			cur_id_str = d + 4;
+-			cur_id_type = d[1] & 0xf;
+ 			switch (cur_id_size) {
+ 			case 8:
+ 				id_size = snprintf(id, id_len,
+@@ -3072,26 +3119,25 @@ int scsi_vpd_lun_id(struct scsi_device *sdev, char *id, size_t id_len)
+ 						   cur_id_str);
+ 				break;
+ 			default:
+-				cur_id_size = 0;
+ 				break;
+ 			}
+ 			break;
+ 		case 0x8:
+ 			/* SCSI name string */
+-			if (cur_id_size + 4 > d[3])
++			if (cur_id_size > d[3])
+ 				break;
+ 			/* Prefer others for truncated descriptor */
+-			if (cur_id_size && d[3] > id_len)
+-				break;
++			if (d[3] > id_len) {
++				prio = 2;
++				if (cur_id_prio > prio)
++					break;
++			}
++			cur_id_prio = prio;
+ 			cur_id_size = id_size = d[3];
+ 			cur_id_str = d + 4;
+-			cur_id_type = d[1] & 0xf;
+ 			if (cur_id_size >= id_len)
+ 				cur_id_size = id_len - 1;
+ 			memcpy(id, cur_id_str, cur_id_size);
+-			/* Decrease priority for truncated descriptor */
+-			if (cur_id_size != id_size)
+-				cur_id_size = 6;
+ 			break;
+ 		default:
+ 			break;
+-- 
+2.29.0
 
-Regards,
-Muneendra.
-
->
->> +		(rport->port_state != FC_PORTSTATE_MARGINAL)) {
->>   		spin_unlock_irqrestore(shost->host_lock, flags);
->>   		return;
->
->> It looks like if fc_remote_port_delete is called, then we will allow
->> that function to set the port_state to blocked. If the problem is
->> resolved then fc_remote_port_add will set the state to online. So it
->> would look like the port state is >now ok in the kernel, but would
->> userspace still have it in the marginal port group?
->
->> Did you want this behavior or did you want it to stay in marginal
->> until your daemon marks it as online?
-> [Muneendra] We need this behavior.User daemon should not depend on the
-> rport_state to move a path from marginal path
->   group.It should only depends on RSCN and LINKUP events/manual
-> intervention. events that we look out (rscn for target-side cable
-> bounces and link up/down for initiator cable bounces) will result in
-> port state changes - so although we don't drive one from the other,
-> they are correlated.
->
-> Regards,
-> Muneendra.
->
-
---000000000000276aef05b2d22a2b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-J/4V6ms/nIUi+/4vPYjckYUbRzkXm1/X0IyUfpp5cgdrFn9jBIk69fQGAUEhnVvwcXnHWotYxZFd
-Xew5Fz0CAwEAAaOCAdMwggHPMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEwgY4wTQYI
-KwYBBQUHMAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVyc29uYWxz
-aWduMnNoYTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5j
-b20vZ3NwZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsG
-AQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAA
-MEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJzb25hbHNp
-Z24yc2hhMmczLmNybDAnBgNVHREEIDAegRxtdW5lZW5kcmEua3VtYXJAYnJvYWRjb20uY29tMBMG
-A1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQYMBaAFGlygmIxZ5VEhXeRgMQENkmdewthMB0GA1Ud
-DgQWBBR6On9cEmlB2VsuST951zNMSKtFBzANBgkqhkiG9w0BAQsFAAOCAQEAOGDBLQ17Ge8BVULh
-hsKhgh5eDx0mNmRRdhvTJnxOTRX5QsOKvsJGOUbyrKjD3BTTcGmIUti9HmbqDe/3gRTbhu8LA508
-LbMkW5lUoTb8ycBNOKLYhNE8UEOY8jRTUtMEhzT6NJDEE+1hb3kSGfArrrF3Z8pRYiUUhcpC5GKL
-9KsxA+DECRfSGfXJJQSq6nEZUGKhz+dz5CV1s8UIZLe9HEEfyJO4eRP+Fw9X16cthAbY0kpVnAvT
-/j45FAauY/h87uphdvSb5wC9v5w4VO0JKs0yNUjyWXg/RG+6JCvcViLFLAlRCLrcRcVaQwWZQ3YB
-EpmWnHflnrBcah5Ozy137DGCAm8wggJrAgEBMG0wXTELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEds
-b2JhbFNpZ24gbnYtc2ExMzAxBgNVBAMTKkdsb2JhbFNpZ24gUGVyc29uYWxTaWduIDIgQ0EgLSBT
-SEEyNTYgLSBHMwIMX/krgFDQUQNyOf+1MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEi
-BCCzy7QrHkyRdtKyjRP+rIuqexxWKfdNUsWCTS5NC0vimzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDEwMjkxNjU2NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
-AWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEK
-MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAsrBCFwxZWkT/jXD3
-HhaSZsX9Ij4laMeJQ0I0t5HYn7QlRYWP6kytnwMocX4cWjK2+RuRQ8MqlA+VoAYLbqfFj7xnd/cv
-CRNsE2dXec6n2xAgTX+w/qzYSgXMk0IXJad1EdNsEmP9tZWldLO+BWuYTgRyUKO43AzHE6aG0HfF
-w18JJGoXnqGdDQFSQTgm2bwilaQGVv1NyVd82wgg1y0JydESBFnTZJAG/2o793uz6zE5/0nLhI/s
-uFRfHC5kh6Y9ZjOJTyDSfc40Ipm7LnvyX9C6nnSNWskVt+Z5fqvoQMEbW7OPCdU+6RZyMlTFdkCm
-yo2qTBQpHc8ZgbnjNvhSnQ==
---000000000000276aef05b2d22a2b--
