@@ -2,82 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 149322A08BE
-	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 16:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0B42A0AA8
+	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 17:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbgJ3PAe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Oct 2020 11:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727001AbgJ3PAc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Oct 2020 11:00:32 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EB4C0613B5
-        for <linux-scsi@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id v6so8202821lfa.13
-        for <linux-scsi@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
-         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
-         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
-         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
-         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
-         Sb9g==
+        id S1726396AbgJ3QEV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Oct 2020 12:04:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31005 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725844AbgJ3QEV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 30 Oct 2020 12:04:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604073859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZOY0se4WQ8x55VAXnO7UrS7S0TCfPfbJZdpu+fnITnI=;
+        b=UzfI1UbaMx9EDQYIDqXLWjLPC/bHcBnejLyoLIFpLldh/Tb2xdnQPPHV4wBdfJQU8uY8nw
+        /zyHOhk7xXxo593hGNq8X75REQT2pdZWxH7M9XI/3I5SKdhS9KbcMthDCx0eJtHKcyxyXe
+        XfNR0vszOq1LgTwW/Yz9wIhkvJDqJok=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-117-WZ2gy6LYPOikyszFuw8Zwg-1; Fri, 30 Oct 2020 12:04:17 -0400
+X-MC-Unique: WZ2gy6LYPOikyszFuw8Zwg-1
+Received: by mail-ej1-f69.google.com with SMTP id ha4so2613906ejb.9
+        for <linux-scsi@vger.kernel.org>; Fri, 30 Oct 2020 09:04:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=o4vfFMYezpSi73MrclsIpA5WCfYuUU7cplsgPoxKkVGC2EhDAj6ABOXWtl5bV/jluD
-         Xo8UzsrHUbrDGr8cbg6wFquAaa2PZdq9xLvcbCyNGIzTbDvepbL5+p3qqiA8JZuP1p5Q
-         nRoSe3Jmb4R/o+90wk/IkslK9QYW/TFTF9O8BZq1FJAX5iJ6fw4OIJ5VJ6Kt70/Ar5Or
-         RE0runklCG0jJs057sMNjMTEoyXhU5PyzSud72Yf2X2vtUtN0tVgA+VZM3iY+TB8wD7Q
-         ojIknKFPywrpyII86Q42bEfdfhXL814CdE/DGdRXcNmLR298kkzjt6g+6lZ3VbC9cGbJ
-         WxiA==
-X-Gm-Message-State: AOAM531ZoEuF+ZEa47Ry/CguOZFnCSxhobE8+LensbSzOxzMZI5afprT
-        l3fNXcJHuwIWQ948XEMXfSZvjrUoMZlyQce0nVOkaEePaQ==
-X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
-X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
- Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZOY0se4WQ8x55VAXnO7UrS7S0TCfPfbJZdpu+fnITnI=;
+        b=LX5ziWn57YkiZycGM3Dxdj2amHtxym5LUDkrPaobgsmp5P5T5mn+nxIbQGyFeg/Ro3
+         JoAJXHCNE4i7gNw55Oe7XKmWkLC+RR4w/EBNQEiAMOrcIfR/+3A+3UWe1LUxDnYIsatj
+         MHStYN6wFSgdkRiTmCu5GhLQf46keIN7eGsFY71K80NvkO8aOYgWEGpnaFjXmy7DlJkX
+         ox2VGaK8Txoe4BMR+VKZr3vUGe0O4d93xdtcjWGB8j/DFsMWj2AX1zoBBkJCrrnufpFx
+         yOvPBt5bFYmog9QtRtv5Si7cpU3Xsc2ONbp40RqvLeCKWAC3AQFaj2Y1+dWeJ/OB6aXk
+         sJVA==
+X-Gm-Message-State: AOAM532yKxET2Y6vpAHBZ7+u4IZBvPr19oWxr4bFOp5/oFRTvQr3Qi87
+        zeND62d9JHntTJPYwG0TUyYSmMAMd04QYWCU7cGioNPsYPGkCjjExLsH52d6z7/+KzKlTcjnsxc
+        YBIn7Amp9953m/LHyFKH8gA==
+X-Received: by 2002:a17:906:7844:: with SMTP id p4mr3180823ejm.26.1604073854719;
+        Fri, 30 Oct 2020 09:04:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz1LhBtUe4RfD7vdz6T+WU0b0bdIKVll+yCKX7zLk8O+pUhvNlQ2Df5Opp8ngLp1ngs7C94iQ==
+X-Received: by 2002:a17:906:7844:: with SMTP id p4mr3180802ejm.26.1604073854514;
+        Fri, 30 Oct 2020 09:04:14 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id h26sm3266273edr.71.2020.10.30.09.04.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Oct 2020 09:04:13 -0700 (PDT)
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, jasowang@redhat.com,
+        stefanha@redhat.com, virtualization@lists.linux-foundation.org
+References: <1603326903-27052-1-git-send-email-michael.christie@oracle.com>
+ <1603326903-27052-10-git-send-email-michael.christie@oracle.com>
+ <20201030045053-mutt-send-email-mst@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 09/17] vhost scsi: fix cmd completion race
+Message-ID: <5c319f1a-cf4c-f522-ecde-5b6b5a2e1ddd@redhat.com>
+Date:   Fri, 30 Oct 2020 17:04:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
- -0700 (PDT)
-Reply-To: li.anable85@gmail.com
-From:   Liliane Abel <k.griest04@gmail.com>
-Date:   Fri, 30 Oct 2020 15:59:34 +0100
-Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201030045053-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dearest
+On 30/10/20 09:51, Michael S. Tsirkin wrote:
+> On Wed, Oct 21, 2020 at 07:34:55PM -0500, Mike Christie wrote:
+>> We might not do the final se_cmd put from vhost_scsi_complete_cmd_work.
+>> When the last put happens a little later then we could race where
+>> vhost_scsi_complete_cmd_work does vhost_signal, the guest runs and sends
+>> more IO, and vhost_scsi_handle_vq runs but does not find any free cmds.
+>>
+>> This patch has us delay completing the cmd until the last lio core ref
+>> is dropped. We then know that once we signal to the guest that the cmd
+>> is completed that if it queues a new command it will find a free cmd.
+>>
+>> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+> 
+> Paolo, could you review this one?
 
-Greeting my dear, I am Liliane Abel by name, The only daughter of late
-Mr.Benson Abel. My father is one of the top Politician in our country
-and my mother is a farmers and cocoa merchant when they were both
-alive. After the death of my mother, long ago, my father was
-controlling their business until he was poisoned by his business
-associates which he suffered and died.
+I don't know how LIO does all the callbacks, honestly (I have only ever
+worked on the virtio-scsi driver, not vhost-scsi, and I have only ever
+reviewed some virtio-scsi spec bits of vhost-scsi).
 
-Before the death of my father, He told me about (two million five
-hundred thousand united states dollars) which he deposited in the bank
-in Lome-Togo, It was the money he intended to transfer overseas for
-investment before he was poisoned. He also instructed me that I should
-seek for foreign partners in any country of my choice who will assist
-me transfer this money in overseas account where the money will be
-wisely invested.
-I am seeking for your kind assistance in the following ways:  (1) to
-provide a safe bank account into where the money will be transferred
-for investment. (2) To serve as a guardian of this fund since I am a
-girl of 19 years old. (3) To make arrangement for me to come over to
-your country to further my education. This is my reason for writing to
-you. Please if you are willing to assist me I will offer you 25% of
-the total money. Reply if  you are interested
-Best regards.
-Liliane Abel.
+The vhost_scsi_complete_cmd_work parts look fine, but I have no idea why
+vhost_scsi_queue_data_in and vhost_scsi_queue_status call.
+
+Paolo
+
