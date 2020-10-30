@@ -2,89 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDA629FA82
-	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 02:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E86229FAEC
+	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 02:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725949AbgJ3BX2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 29 Oct 2020 21:23:28 -0400
-Received: from smtprelay0213.hostedemail.com ([216.40.44.213]:52318 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725379AbgJ3BX1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 29 Oct 2020 21:23:27 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id A389A18029210;
-        Fri, 30 Oct 2020 01:23:25 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:967:973:988:989:1042:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2525:2538:2560:2563:2682:2685:2691:2734:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3353:3622:3855:3865:3866:3867:3868:3870:3871:3872:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4250:4321:5007:6117:6119:6742:9025:9108:10004:10400:10848:11232:11658:11914:12043:12297:12679:12740:12760:12895:13069:13161:13200:13229:13311:13357:13439:14096:14097:14659:14721:14819:21063:21067:21080:21451:21627:21772:30054:30067:30070:30079:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: teeth17_541127c27292
-X-Filterd-Recvd-Size: 2939
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf11.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 30 Oct 2020 01:23:22 +0000 (UTC)
-Message-ID: <0b286566394d2e65cf3977ce3a76c6bbc18cb947.camel@perches.com>
-Subject: Re: [PATCH] z2ram: MODULE_LICENSE update and neatening
-From:   Joe Perches <joe@perches.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Song Liu <song@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        Hannes Reinecke <hare@suse.de>
-Date:   Thu, 29 Oct 2020 18:23:21 -0700
-In-Reply-To: <202d1246a14617e4e7a4a7b723dc92191815d134.camel@HansenPartnership.com>
-References: <20201029145841.144173-1-hch@lst.de>
-         <20201029145841.144173-18-hch@lst.de>
-         <4945b720d67e9f67b8c8ba02a29c6af1ffa15b08.camel@perches.com>
-         <202d1246a14617e4e7a4a7b723dc92191815d134.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S1725919AbgJ3Byt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 29 Oct 2020 21:54:49 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:35224 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725790AbgJ3Byt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 29 Oct 2020 21:54:49 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09U1p1mn195227;
+        Fri, 30 Oct 2020 01:54:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=9BwIeQoynB864aanJXPNY53QHQixtwGUBJ8VvBjvPy0=;
+ b=UGqKo3vYLw/Zyj51N8hNzIcI8Jmp7POHk+8JBD2SkijIKlRvun0D/r77Gec596/BwVLS
+ Gm1m1tN6B4E6vuibk3oF7O0pi6UXt1zha2PAeKx2tu1kStRyRId4JkQydEPq3lrk2FOb
+ 6DrCCgYW053Fxm6+ZNLg+bKhPzvhaCRj2Www4rXR+s4yYf0+eZDMclGg698UjhmvHOTv
+ usvaIqMgx+emHY/LP/yPw1pjB1Gs+jE5EOtBJd45MB+VNLdf+quPRssasLYOWQJnt6+X
+ uyBTTrAeZXKqhvOIukGSU6tMMOeA92Rn855Tj6vC5leBLGdEERZnAdLzMRi2wWEzAK+l Ig== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 34cc7m7pd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 30 Oct 2020 01:54:39 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09U1oXsD189072;
+        Fri, 30 Oct 2020 01:52:39 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 34cwuqf0t5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Oct 2020 01:52:39 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09U1qYLU031468;
+        Fri, 30 Oct 2020 01:52:35 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 29 Oct 2020 18:52:34 -0700
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.de>, Arnd Bergmann <arnd@arndb.de>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org
+Subject: Re: [PATCH 1/2] libfc: move scsi/fc_encode.h to libfc
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1y2jo1nvx.fsf@ca-mkp.ca.oracle.com>
+References: <20201026160705.3706396-1-arnd@kernel.org>
+Date:   Thu, 29 Oct 2020 21:52:30 -0400
+In-Reply-To: <20201026160705.3706396-1-arnd@kernel.org> (Arnd Bergmann's
+        message of "Mon, 26 Oct 2020 17:06:12 +0100")
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9789 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 suspectscore=1
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010300011
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9789 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 adultscore=0
+ malwarescore=0 spamscore=0 clxscore=1015 mlxscore=0 suspectscore=1
+ priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010300011
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2020-10-29 at 18:01 -0700, James Bottomley wrote:
-> On Thu, 2020-10-29 at 17:11 -0700, Joe Perches wrote:
-> > This file still does not have an SPDX line.  What should it be?
-> 
-> It's old style MIT with a slight variation:
-> 
-> https://fedoraproject.org/wiki/Licensing:MIT#Old_Style
 
-Yes, it's quite similar.
-But ", and sell" does not exist in this variant.
+Arnd,
 
-So I believe its use of MODULE_LICENSE("GPL") is not correct and
-that MODULE_LICENSE("GPL and additional rights") might be the best
-available option.
+> Most of this file is only used inside of libfc, so move it to where it
+> is actually used, with only fc_fill_fc_hdr() left inside of the
+> header.
 
-MIT Old style:
+Applied to 5.11/scsi-staging, thanks!
 
-Permission to use, copy, modify, distribute, and sell this software and its
-documentation for any purpose is hereby granted without fee, provided that
-the above copyright notice appear in all copies and that both that
-copyright notice and this permission notice appear in supporting
-documentation.  No representations are made about the suitability of this
-software for any purpose.  It is provided "as is" without express or
-implied warranty.
-
-License in the file:
-
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose and without fee is hereby granted, provided
- * that the above copyright notice appear in all copies and that both that
- * copyright notice and this permission notice appear in supporting
- * documentation.  This software is provided "as is" without express or
- * implied warranty.
-
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
