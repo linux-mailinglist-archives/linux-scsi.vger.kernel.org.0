@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FA82A0068
-	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 09:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69602A0059
+	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 09:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbgJ3Iuo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Oct 2020 04:50:44 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:6943 "EHLO
+        id S1726148AbgJ3Iu0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Oct 2020 04:50:26 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:6942 "EHLO
         szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbgJ3IuY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Oct 2020 04:50:24 -0400
+        with ESMTP id S1725784AbgJ3IuZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Oct 2020 04:50:25 -0400
 Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CMwWp0wLDz70S0;
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CMwWp0cLFz70Rp;
         Fri, 30 Oct 2020 16:31:34 +0800 (CST)
 Received: from huawei.com (10.69.192.56) by DGGEMS411-HUB.china.huawei.com
  (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Fri, 30 Oct 2020
@@ -26,9 +26,9 @@ CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
         <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
         <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
         <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
-Subject: [PATCH v2 1/5] seq_file: Introduce DEFINE_SHOW_STORE_ATTRIBUTE() helper macro
-Date:   Fri, 30 Oct 2020 16:31:58 +0800
-Message-ID: <1604046722-15531-2-git-send-email-luojiaxing@huawei.com>
+Subject: [PATCH v2 2/5] scsi: hisi_sas: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+Date:   Fri, 30 Oct 2020 16:31:59 +0800
+Message-ID: <1604046722-15531-3-git-send-email-luojiaxing@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1604046722-15531-1-git-send-email-luojiaxing@huawei.com>
 References: <1604046722-15531-1-git-send-email-luojiaxing@huawei.com>
@@ -40,43 +40,244 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
-for read-only file, but we found many of drivers want a helper marco for
-read-write file too.
-
-So we try to make one to decrease code duplication.
+Seq instroduce a new helper marco DEFINE_SHOW_STORE_ATTRIBUTE for
+Read-Write file, So we use it at our code to reduce some duplicate code.
 
 Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 ---
- include/linux/seq_file.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 135 ++++------------------------------
+ 1 file changed, 16 insertions(+), 119 deletions(-)
 
-diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
-index 813614d..8a474c8 100644
---- a/include/linux/seq_file.h
-+++ b/include/linux/seq_file.h
-@@ -191,6 +191,21 @@ static const struct proc_ops __name ## _proc_ops = {			\
- 	.proc_release	= single_release,				\
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 128583d..b8a6fc9 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -3403,22 +3403,7 @@ static ssize_t hisi_sas_debugfs_bist_linkrate_write(struct file *filp,
+ 
+ 	return count;
+ }
+-
+-static int hisi_sas_debugfs_bist_linkrate_open(struct inode *inode,
+-					       struct file *filp)
+-{
+-	return single_open(filp, hisi_sas_debugfs_bist_linkrate_show,
+-			   inode->i_private);
+-}
+-
+-static const struct file_operations hisi_sas_debugfs_bist_linkrate_ops = {
+-	.open = hisi_sas_debugfs_bist_linkrate_open,
+-	.read = seq_read,
+-	.write = hisi_sas_debugfs_bist_linkrate_write,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.owner = THIS_MODULE,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(hisi_sas_debugfs_bist_linkrate);
+ 
+ static const struct {
+ 	int		value;
+@@ -3493,22 +3478,7 @@ static ssize_t hisi_sas_debugfs_bist_code_mode_write(struct file *filp,
+ 
+ 	return count;
+ }
+-
+-static int hisi_sas_debugfs_bist_code_mode_open(struct inode *inode,
+-						struct file *filp)
+-{
+-	return single_open(filp, hisi_sas_debugfs_bist_code_mode_show,
+-			   inode->i_private);
+-}
+-
+-static const struct file_operations hisi_sas_debugfs_bist_code_mode_ops = {
+-	.open = hisi_sas_debugfs_bist_code_mode_open,
+-	.read = seq_read,
+-	.write = hisi_sas_debugfs_bist_code_mode_write,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.owner = THIS_MODULE,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(hisi_sas_debugfs_bist_code_mode);
+ 
+ static ssize_t hisi_sas_debugfs_bist_phy_write(struct file *filp,
+ 					       const char __user *buf,
+@@ -3542,22 +3512,7 @@ static int hisi_sas_debugfs_bist_phy_show(struct seq_file *s, void *p)
+ 
+ 	return 0;
+ }
+-
+-static int hisi_sas_debugfs_bist_phy_open(struct inode *inode,
+-					  struct file *filp)
+-{
+-	return single_open(filp, hisi_sas_debugfs_bist_phy_show,
+-			   inode->i_private);
+-}
+-
+-static const struct file_operations hisi_sas_debugfs_bist_phy_ops = {
+-	.open = hisi_sas_debugfs_bist_phy_open,
+-	.read = seq_read,
+-	.write = hisi_sas_debugfs_bist_phy_write,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.owner = THIS_MODULE,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(hisi_sas_debugfs_bist_phy);
+ 
+ static const struct {
+ 	int		value;
+@@ -3621,22 +3576,7 @@ static ssize_t hisi_sas_debugfs_bist_mode_write(struct file *filp,
+ 
+ 	return count;
+ }
+-
+-static int hisi_sas_debugfs_bist_mode_open(struct inode *inode,
+-					   struct file *filp)
+-{
+-	return single_open(filp, hisi_sas_debugfs_bist_mode_show,
+-			   inode->i_private);
+-}
+-
+-static const struct file_operations hisi_sas_debugfs_bist_mode_ops = {
+-	.open = hisi_sas_debugfs_bist_mode_open,
+-	.read = seq_read,
+-	.write = hisi_sas_debugfs_bist_mode_write,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.owner = THIS_MODULE,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(hisi_sas_debugfs_bist_mode);
+ 
+ static ssize_t hisi_sas_debugfs_bist_enable_write(struct file *filp,
+ 						  const char __user *buf,
+@@ -3677,22 +3617,7 @@ static int hisi_sas_debugfs_bist_enable_show(struct seq_file *s, void *p)
+ 
+ 	return 0;
+ }
+-
+-static int hisi_sas_debugfs_bist_enable_open(struct inode *inode,
+-					     struct file *filp)
+-{
+-	return single_open(filp, hisi_sas_debugfs_bist_enable_show,
+-			   inode->i_private);
+-}
+-
+-static const struct file_operations hisi_sas_debugfs_bist_enable_ops = {
+-	.open = hisi_sas_debugfs_bist_enable_open,
+-	.read = seq_read,
+-	.write = hisi_sas_debugfs_bist_enable_write,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.owner = THIS_MODULE,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(hisi_sas_debugfs_bist_enable);
+ 
+ static const struct {
+ 	char *name;
+@@ -3730,21 +3655,7 @@ static int hisi_sas_debugfs_show(struct seq_file *s, void *p)
+ 
+ 	return 0;
+ }
+-
+-static int hisi_sas_debugfs_open(struct inode *inode, struct file *filp)
+-{
+-	return single_open(filp, hisi_sas_debugfs_show,
+-			   inode->i_private);
+-}
+-
+-static const struct file_operations hisi_sas_debugfs_ops = {
+-	.open = hisi_sas_debugfs_open,
+-	.read = seq_read,
+-	.write = hisi_sas_debugfs_write,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.owner = THIS_MODULE,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(hisi_sas_debugfs);
+ 
+ static ssize_t hisi_sas_debugfs_phy_down_cnt_write(struct file *filp,
+ 						   const char __user *buf,
+@@ -3776,21 +3687,7 @@ static int hisi_sas_debugfs_phy_down_cnt_show(struct seq_file *s, void *p)
+ 	return 0;
  }
  
-+#define DEFINE_SHOW_STORE_ATTRIBUTE(__name)					\
-+static int __name ## _open(struct inode *inode, struct file *file)	\
-+{									\
-+	return single_open(file, __name ## _show, inode->i_private);	\
-+}									\
-+									\
-+static const struct file_operations __name ## _fops = {			\
-+	.owner		= THIS_MODULE,					\
-+	.open		= __name ## _open,				\
-+	.read		= seq_read,					\
-+	.write		= __name ## _write,				\
-+	.llseek		= seq_lseek,					\
-+	.release	= single_release,				\
-+}
-+
- static inline struct user_namespace *seq_user_ns(struct seq_file *seq)
+-static int hisi_sas_debugfs_phy_down_cnt_open(struct inode *inode,
+-					      struct file *filp)
+-{
+-	return single_open(filp, hisi_sas_debugfs_phy_down_cnt_show,
+-			   inode->i_private);
+-}
+-
+-static const struct file_operations hisi_sas_debugfs_phy_down_cnt_ops = {
+-	.open = hisi_sas_debugfs_phy_down_cnt_open,
+-	.read = seq_read,
+-	.write = hisi_sas_debugfs_phy_down_cnt_write,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.owner = THIS_MODULE,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(hisi_sas_debugfs_phy_down_cnt);
+ 
+ void hisi_sas_debugfs_work_handler(struct work_struct *work)
  {
- #ifdef CONFIG_USER_NS
+@@ -3937,7 +3834,7 @@ static void hisi_sas_debugfs_phy_down_cnt_init(struct hisi_hba *hisi_hba)
+ 		snprintf(name, 16, "%d", phy_no);
+ 		debugfs_create_file(name, 0600, dir,
+ 				    &hisi_hba->phy[phy_no],
+-				    &hisi_sas_debugfs_phy_down_cnt_ops);
++				    &hisi_sas_debugfs_phy_down_cnt_fops);
+ 	}
+ }
+ 
+@@ -3950,34 +3847,34 @@ static void hisi_sas_debugfs_bist_init(struct hisi_hba *hisi_hba)
+ 			debugfs_create_dir("bist", hisi_hba->debugfs_dir);
+ 	debugfs_create_file("link_rate", 0600,
+ 			    hisi_hba->debugfs_bist_dentry, hisi_hba,
+-			    &hisi_sas_debugfs_bist_linkrate_ops);
++			    &hisi_sas_debugfs_bist_linkrate_fops);
+ 
+ 	debugfs_create_file("code_mode", 0600,
+ 			    hisi_hba->debugfs_bist_dentry, hisi_hba,
+-			    &hisi_sas_debugfs_bist_code_mode_ops);
++			    &hisi_sas_debugfs_bist_code_mode_fops);
+ 
+ 	debugfs_create_file("fixed_code", 0600,
+ 			    hisi_hba->debugfs_bist_dentry,
+ 			    &hisi_hba->debugfs_bist_fixed_code[0],
+-			    &hisi_sas_debugfs_ops);
++			    &hisi_sas_debugfs_fops);
+ 
+ 	debugfs_create_file("fixed_code_1", 0600,
+ 			    hisi_hba->debugfs_bist_dentry,
+ 			    &hisi_hba->debugfs_bist_fixed_code[1],
+-			    &hisi_sas_debugfs_ops);
++			    &hisi_sas_debugfs_fops);
+ 
+ 	debugfs_create_file("phy_id", 0600, hisi_hba->debugfs_bist_dentry,
+-			    hisi_hba, &hisi_sas_debugfs_bist_phy_ops);
++			    hisi_hba, &hisi_sas_debugfs_bist_phy_fops);
+ 
+ 	debugfs_create_u32("cnt", 0600, hisi_hba->debugfs_bist_dentry,
+ 			   &hisi_hba->debugfs_bist_cnt);
+ 
+ 	debugfs_create_file("loopback_mode", 0600,
+ 			    hisi_hba->debugfs_bist_dentry,
+-			    hisi_hba, &hisi_sas_debugfs_bist_mode_ops);
++			    hisi_hba, &hisi_sas_debugfs_bist_mode_fops);
+ 
+ 	debugfs_create_file("enable", 0600, hisi_hba->debugfs_bist_dentry,
+-			    hisi_hba, &hisi_sas_debugfs_bist_enable_ops);
++			    hisi_hba, &hisi_sas_debugfs_bist_enable_fops);
+ 
+ 	ports_dentry = debugfs_create_dir("port", hisi_hba->debugfs_bist_dentry);
+ 
+@@ -3996,7 +3893,7 @@ static void hisi_sas_debugfs_bist_init(struct hisi_hba *hisi_hba)
+ 			debugfs_create_file(hisi_sas_debugfs_ffe_name[i].name,
+ 					    0600, ffe_dentry,
+ 					    &hisi_hba->debugfs_bist_ffe[phy_no][i],
+-					    &hisi_sas_debugfs_ops);
++					    &hisi_sas_debugfs_fops);
+ 		}
+ 	}
+ 
 -- 
 2.7.4
 
