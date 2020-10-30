@@ -2,98 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0392A0096
-	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 09:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A16182A0101
+	for <lists+linux-scsi@lfdr.de>; Fri, 30 Oct 2020 10:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbgJ3I73 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Oct 2020 04:59:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58332 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726077AbgJ3I72 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 30 Oct 2020 04:59:28 -0400
-Received: from saruman (88-113-213-94.elisa-laajakaista.fi [88.113.213.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F61420709;
-        Fri, 30 Oct 2020 08:59:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604048367;
-        bh=V55sGn2rj0SKqKDvY7u2Lm3iopy2BhrGvK4iQIktSRA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dis3A2JGF0hgWYzNCR5xz4msUqzYN+2ufj5b0yk/SDQpM2rzpJAErFfTV26Y7LYtp
-         IzicK8ePsep7pwJMLmbQp+FMSv9tIJ30ge3vS2Cale2dEdpyuyo5rYiX8khwF+a4iM
-         qNpZyNoCdCrfDbe2bZ9Aq8ieAijnZTtD7+5eyCQs=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Luo Jiaxing <luojiaxing@huawei.com>, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, andriy.shevchenko@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        john.garry@huawei.com, himanshu.madhani@cavium.com,
-        gregkh@linuxfoundation.org, uma.shankar@intel.com,
-        anshuman.gupta@intel.com, animesh.manna@intel.com,
-        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com
-Subject: Re: [PATCH v2 4/5] usb: dwc3: debugfs: Introduce
- DEFINE_SHOW_STORE_ATTRIBUTE
-In-Reply-To: <1604046722-15531-5-git-send-email-luojiaxing@huawei.com>
-References: <1604046722-15531-1-git-send-email-luojiaxing@huawei.com>
- <1604046722-15531-5-git-send-email-luojiaxing@huawei.com>
-Date:   Fri, 30 Oct 2020 10:59:18 +0200
-Message-ID: <87v9esks2h.fsf@kernel.org>
+        id S1726229AbgJ3JQt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Oct 2020 05:16:49 -0400
+Received: from server.msgroupspa.com ([185.149.113.111]:55218 "EHLO
+        server.msgroupspa.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725790AbgJ3JQs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Oct 2020 05:16:48 -0400
+X-Greylist: delayed 3509 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Oct 2020 05:16:46 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=msgroupspa.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gOeEglh1DIJatPKqyvOsPs4e0Zw8Lzg9wwjnNfQdiM8=; b=IokIFgF2M/fhFw6IF8nrSwbJmM
+        MlwG3tpJlxdYp41ozZmBh23jShtPjpSHRdC3MpczAIOafQSanqCI4SpIxf3HTyUUpEdjCdB+OeYxK
+        Gw2rREgmK4FsnPMVRm8Tr9MSa6vU8nA7T3ULBza6f9cUqGaruQFk2tosoed242yvlCnR8OFuMS09H
+        R+xTyir+Feh+v3yHldX/7k2Rar9rNDQeeECacKpsU0fX+GyVg4L8cXIegtb47zjIqevAnOBjeKiTj
+        Vr75s/iQxnHvJPw4dgq0JKmBexcvsjZ+K+F/WU92VSUC9Wi7PJbH4zd7egkNt3FfkpFoU+MBkJLXr
+        WGoKwrJQ==;
+Received: from [::1] (port=54996 helo=server.msgroupspa.com)
+        by server.msgroupspa.com with esmtpa (Exim 4.93)
+        (envelope-from <no-reply@msgroupspa.com>)
+        id 1kYPRG-0006K5-Gd; Fri, 30 Oct 2020 16:07:10 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Date:   Fri, 30 Oct 2020 16:07:10 +0800
+From:   "Mr. John Galvan" <no-reply@msgroupspa.com>
+To:     undisclosed-recipients:;
+Subject: Hello/Hallo
+Reply-To: galvan.johnny@outlook.com
+User-Agent: Roundcube Webmail/1.4.8
+Message-ID: <4da22a9c7203063f0d9f8b29d1c30dd1@msgroupspa.com>
+X-Sender: no-reply@msgroupspa.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server.msgroupspa.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - msgroupspa.com
+X-Get-Message-Sender-Via: server.msgroupspa.com: authenticated_id: no-reply@msgroupspa.com
+X-Authenticated-Sender: server.msgroupspa.com: no-reply@msgroupspa.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
-Luo Jiaxing <luojiaxing@huawei.com> writes:
 
-> Seq instroduce a new helper marco DEFINE_SHOW_STORE_ATTRIBUTE for
-      ^^^^^^^^^^              ^^^^^
-      introduce               macro
+-- 
+Sir/Madam,
 
-> Read-Write file, So we apply it at dwc3 debugfs to reduce some duplicate
-                   ^^                                            ^^^^^^^^^
-                   so                                            duplicated
+I have access to very vital information that can be used to move a huge 
+amount of money. I have done my homework very well and I have the 
+machineries in place to get it done since I am still in active service. 
+If it was possible for me to do it alone I would not have bothered 
+contacting you. Ultimately I need an honest foreigner to play an 
+important role in the completion of this business transaction. Send 
+responds to this email: galvan.johnny@outlook.com
 
-> code.
+Regards,
+John Galvan
 
-to be fair, your commit is doing more than what it claims. Maybe update
-commit log with a "while at that, also use DEFINE_SHOW_ATTRIBUTE() where
-possible".
+---------------------------------------------------------------
 
-> Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
+Sir / Madam,
 
-other than that, this looks okay. Since it depends on the definition of
-DEFINE_SHOW_STORE_ATTRIBUTE:
+Ich habe Zugang zu sehr wichtigen Informationen, mit denen ich eine 
+große Menge Geld bewegen kann. Ich habe meine Hausaufgaben sehr gut 
+gemacht und ich habe die Maschinen, um sie zu erledigen, da ich immer 
+noch im aktiven Dienst bin. Wenn es mir möglich gewesen wäre, es alleine 
+zu tun, hätte ich mich nicht darum gekümmert, Sie zu kontaktieren. 
+Letztendlich brauche ich einen ehrlichen Ausländer, der eine wichtige 
+Rolle beim Abschluss dieses Geschäftsvorgangs spielt. Senden Sie 
+Antworten auf diese E-Mail: galvan.johnny@outlook.com
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl+b1eYRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbfWRAAk6T3bnYboy4kDtezxHaGWWVKcLnjDdre
-VHNP4AAPlI6z+jQrT6dkvS+83osjN2LMU+xP2IJdq4ZG6c/DGK/my7PUYiwwDxMk
-deH/BM+5v7M9Tit3TJEuM5maPE+I7lwDFPGsdHo5112uoiTE2R8FJaO/bL2cNzM5
-W9e/GbIIbLGi/BH01UrOeG1qPvPeb+G2YKlDyHFPZh0xyO6sBOy4WabuW2Uk4adl
-Ih5sOSz0DgyYvY/QKqAe+fKVByGluVgRStfNFUGNkKbhCi7s0ga1DkYrlsYs+zYY
-zrKdgyq9Wey1JmJ1JQ73PO5t3/94HjhsEEs8FltSZ4J2M6GRZM/hBH4uV/p45on3
-zfHuxnqQOxgUslXunWRhrXixlvwWeD8pL4zI6er6Cn7nlSauLYXvasmqjddPfCks
-xrijv+fTj7koWujLfKQ65nZY7PpcDszS/pV0URhcKO9X8+XN3IKh1KB1BFRxiuyA
-PUh1e8xtegr2YeJqsOpERVbTKhs5U6uFys13I1PbBHKPJ34QPotcRF0DWofQAioe
-rdZHxDnqSM8qvFiy21RtvujXQwbP0Yf3VvOlIn5JtlersaXoDEmIjM7TtNVGH+JZ
-mNI9t3iiX1w4QUx+VRRn1xkmpIn804eO4V7XlW4R14no+FTEAdjLe7BQM6//TCUm
-0j3r+KdUeZ8=
-=+rAO
------END PGP SIGNATURE-----
---=-=-=--
+Grüße,
+John Galvan
