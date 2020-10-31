@@ -2,48 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 892FA2A1274
-	for <lists+linux-scsi@lfdr.de>; Sat, 31 Oct 2020 02:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 511042A12CB
+	for <lists+linux-scsi@lfdr.de>; Sat, 31 Oct 2020 03:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgJaB1A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Oct 2020 21:27:00 -0400
-Received: from 93804.cloudwaysapps.com ([178.62.255.238]:56412 "EHLO
-        93804.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726209AbgJaB07 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 30 Oct 2020 21:26:59 -0400
-X-Greylist: delayed 12135 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Oct 2020 21:26:55 EDT
-Received: from 127.0.0.1 (93804.cloudwaysapps.com [127.0.0.1])
-        by 93804.cloudwaysapps.com (Postfix) with SMTP id B7E2222075;
-        Fri, 30 Oct 2020 19:28:42 +0000 (UTC)
-Received: from [205.230.2.174] by 127.0.0.1 id <5950496-65746>; Sat, 31 Oct 2020 00:24:59 +0400
-Message-ID: <ur-dehw$u-v8-$q8xj2j$n5t4uc@bcyg0.39fe.ck7>
-From:   "JOHN PHIL" <gerradfinancialplanning@gmail.com>
-Reply-To: "JOHN PHIL" <gerradfinancialplanning@gmail.com>
-To:     linux-raid@vger.kernel.org
-Subject: November Equity Investment 20-20 
-Date:   Sat, 31 Oct 20 00:24:59 GMT
-X-Mailer: AOL 7.0 for Windows US sub 118
+        id S1725917AbgJaCLT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Oct 2020 22:11:19 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6674 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725536AbgJaCLT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Oct 2020 22:11:19 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CNN2Z01vnz15MJr;
+        Sat, 31 Oct 2020 10:11:18 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
+ 14.3.487.0; Sat, 31 Oct 2020 10:11:07 +0800
+From:   Qinglang Miao <miaoqinglang@huawei.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Qinglang Miao" <miaoqinglang@huawei.com>
+Subject: [PATCH] scsi: qla2xxx: add missing iounmap() on error in qlafx00_iospace_config
+Date:   Sat, 31 Oct 2020 10:16:53 +0800
+Message-ID: <20201031021653.186554-1-miaoqinglang@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="07B_9ED_4_"
-X-Priority: 1
-X-MSMail-Priority: High
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Add the missing iounmap() before return from qlafx00_iospace_config
+in the error handling case when os failed to do ioremap for ha->iobase.
 
---07B_9ED_4_
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+---
+ drivers/scsi/qla2xxx/qla_mr.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-How are you doing today I have a proposal which i think may interest you a=
-nd benefit you.I will like to give you full details of this via email:  ge=
-rradfinancialplanning@gmail.com
-Thanks.
-
-John PHIL
-
---07B_9ED_4_--
+diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
+index ca7306685..c6fcd47de 100644
+--- a/drivers/scsi/qla2xxx/qla_mr.c
++++ b/drivers/scsi/qla2xxx/qla_mr.c
+@@ -798,13 +798,13 @@ qlafx00_iospace_config(struct qla_hw_data *ha)
+ 		ql_log_pci(ql_log_warn, ha->pdev, 0x0129,
+ 		    "region #2 not an MMIO resource (%s), aborting\n",
+ 		    pci_name(ha->pdev));
+-		goto iospace_error_exit;
++		goto ha_iobase_exit;
+ 	}
+ 	if (pci_resource_len(ha->pdev, 2) < BAR2_LEN_FX00) {
+ 		ql_log_pci(ql_log_warn, ha->pdev, 0x012a,
+ 		    "Invalid PCI mem BAR2 region size (%s), aborting\n",
+ 			pci_name(ha->pdev));
+-		goto iospace_error_exit;
++		goto ha_iobase_exit;
+ 	}
+ 
+ 	ha->iobase =
+@@ -812,7 +812,7 @@ qlafx00_iospace_config(struct qla_hw_data *ha)
+ 	if (!ha->iobase) {
+ 		ql_log_pci(ql_log_fatal, ha->pdev, 0x012b,
+ 		    "cannot remap MMIO (%s), aborting\n", pci_name(ha->pdev));
+-		goto iospace_error_exit;
++		goto ha_iobase_exit;
+ 	}
+ 
+ 	/* Determine queue resources */
+@@ -824,6 +824,8 @@ qlafx00_iospace_config(struct qla_hw_data *ha)
+ 
+ 	return 0;
+ 
++ha_iobase_exit:
++	iounmap(ha->cregbase);
+ iospace_error_exit:
+ 	return -ENOMEM;
+ }
+-- 
+2.23.0
 
