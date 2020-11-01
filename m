@@ -2,107 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D965B2A1E95
-	for <lists+linux-scsi@lfdr.de>; Sun,  1 Nov 2020 15:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEE32A20E0
+	for <lists+linux-scsi@lfdr.de>; Sun,  1 Nov 2020 19:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgKAOkZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 1 Nov 2020 09:40:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55156 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726781AbgKAOkZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 1 Nov 2020 09:40:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604241624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=WUL64u8dGf0LoKnUz7lF+D+J0ocjCbe9Ay8eU/rDBJ4=;
-        b=MUYiCNWVPtAryyGmrLctOHyTrWEyRdr8tRX7qtaMRkiEEVjf5CIwdCXI3Va+eWVyVIC2YA
-        joiyIiVEjGxukAPboFAT1YH2J4MKf96KtBlHQpN31l+33Sh05HYWJMoMiEnSzPspUmh99v
-        XiL43rOFUlHOHdN99GoKKRnczhNu4Ec=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-484-U59IiFZqM9md4zwJDroXhA-1; Sun, 01 Nov 2020 09:40:22 -0500
-X-MC-Unique: U59IiFZqM9md4zwJDroXhA-1
-Received: by mail-ot1-f71.google.com with SMTP id 36so231735otu.11
-        for <linux-scsi@vger.kernel.org>; Sun, 01 Nov 2020 06:40:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=WUL64u8dGf0LoKnUz7lF+D+J0ocjCbe9Ay8eU/rDBJ4=;
-        b=G1r+opjiBH05bQHMWs265WwbKVuSQPGwA/EqPMcxc+C+JJe5mePZNYs2ftdkVF0D6w
-         EuJdVoORMl/WWbgtOgbCb6/OmcWqzCmb1csR0DakIQGUm7JUmkzHWZWo4orj/fcWdVSc
-         KRLCB8XchUUgtW6rGQczlrncIPwFvXnZwsvEifA5SSZnlWovGUnSvw9P48zKBRc0sRCN
-         hjuDmp4VAzZkI/EXNgzs7oq98FZHxZGMCv1X2H5TclGLbtXAOS5LvvM9Is+IQWW+myJi
-         GsiLV/Znsmh7TIuSAHxJTfbxVGeRaRALb8Cib6oYeyVgeYOxIrZM+Nc/BQwxWEf/vlRc
-         priw==
-X-Gm-Message-State: AOAM533v1M76e/Zko+j+37ItsIHFPa4RdlvcNUv2riZdH8nYe6VUW4ZY
-        xFbuY9Cwn/oOYBGH5XNBJVvptv0jrs9Lvmks0an1ZOFzQQ63JUm55eCWvu186v7STrgaGgbUxzN
-        fHoYMX6OVxuzbR2F+n1KaTg==
-X-Received: by 2002:aca:ab50:: with SMTP id u77mr3838864oie.111.1604241621988;
-        Sun, 01 Nov 2020 06:40:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwCMM4TlP5Yz7zso7HiOmxshFFIZRjvHbAQQc7PaS/R66+AJ3PeA5xHwhc2C7I73PxclekXbQ==
-X-Received: by 2002:aca:ab50:: with SMTP id u77mr3838855oie.111.1604241621808;
-        Sun, 01 Nov 2020 06:40:21 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id f18sm2931296otp.10.2020.11.01.06.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2020 06:40:21 -0800 (PST)
-From:   trix@redhat.com
-To:     hare@suse.de, jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: fcoe: remove unneeded semicolon
-Date:   Sun,  1 Nov 2020 06:40:17 -0800
-Message-Id: <20201101144017.2284047-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.1
+        id S1727298AbgKAS7w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 1 Nov 2020 13:59:52 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:46386 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727264AbgKAS7v (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 1 Nov 2020 13:59:51 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A1ItOs8152790;
+        Sun, 1 Nov 2020 18:59:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id; s=corp-2020-01-29;
+ bh=fzt5NevbQReMFhXiJ/Enlt2ogqCHwfGDL8t4GWsr4pc=;
+ b=zNjIo9p6UPxzc/kg0PobCZsa37kzqEPkFOQuqrm8//hcMNPIZ+nCEm6LAW8coQa31trK
+ kca9Gi9+xBo/4U50uTiqf4n8GhjwHPZ5eB74miWtpEKVC3Q05xTR1rDr/VL5LgVVaMkQ
+ eR8txznyob+niydSKJnCVhb8kF3659rQGQbXwQK+rI/x6he5NepE9NClTEJ6IoZR89Nm
+ z6OJFpHgHLebixsOlQ9eExTjzEsp5ExVgUmSDJ3MboY7RKOhK34GJT3aasS+XnirPBfs
+ M08BeQ9blMRn7C6eFQsR9FoENnFdWK+Bs61qrFVaE+99RPDtk+xp9Hhf+UTe9Y8lvUfU Og== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 34hhvc1arg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 01 Nov 2020 18:59:46 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A1Isgux091271;
+        Sun, 1 Nov 2020 18:59:45 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 34hw0aprdg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 01 Nov 2020 18:59:45 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0A1Ixghe013094;
+        Sun, 1 Nov 2020 18:59:44 GMT
+Received: from ol2.localdomain (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sun, 01 Nov 2020 10:59:41 -0800
+From:   Mike Christie <michael.christie@oracle.com>
+To:     himanshu.madhani@oracle.com, njavali@marvell.com,
+        james.bottomley@hansenpartnership.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: [PATCH 0/8 v3] target: fix up locking/refcounting in IO paths
+Date:   Sun,  1 Nov 2020 12:59:26 -0600
+Message-Id: <1604257174-4524-1-git-send-email-michael.christie@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9792 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011010154
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9792 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=999
+ bulkscore=0 phishscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011010154
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+The following patches made over Martin's staging branch fix some
+ref counting issues I hit while testing and improves the locking
+in the IO paths. To do the latter, the patches:
 
-A semicolon is not needed after a switch statement.
+1. move the sess_cmd_lock to tcm_qla2xxx since it was the only
+driver using the sess_cmd_list.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/scsi/fcoe/fcoe.c       | 2 +-
- drivers/scsi/fcoe/fcoe_sysfs.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+2. makes the execution lock/list per cpu'ish. I just allocate
+nr_cpu_ids's worth of lock/lists then make sure we complete
+the cmd on the cpu it was started on.
 
-diff --git a/drivers/scsi/fcoe/fcoe.c b/drivers/scsi/fcoe/fcoe.c
-index a4be6f439c47..03bf49adaafe 100644
---- a/drivers/scsi/fcoe/fcoe.c
-+++ b/drivers/scsi/fcoe/fcoe.c
-@@ -2023,7 +2023,7 @@ static int fcoe_ctlr_enabled(struct fcoe_ctlr_device *cdev)
- 	case FCOE_CTLR_UNUSED:
- 	default:
- 		return -ENOTSUPP;
--	};
-+	}
- }
- 
- /**
-diff --git a/drivers/scsi/fcoe/fcoe_sysfs.c b/drivers/scsi/fcoe/fcoe_sysfs.c
-index ffef2c8eddc6..af658aa38fed 100644
---- a/drivers/scsi/fcoe/fcoe_sysfs.c
-+++ b/drivers/scsi/fcoe/fcoe_sysfs.c
-@@ -312,7 +312,7 @@ static ssize_t store_ctlr_mode(struct device *dev,
- 	default:
- 		LIBFCOE_SYSFS_DBG(ctlr, "Mode change not supported.\n");
- 		return -ENOTSUPP;
--	};
-+	}
- }
- 
- static FCOE_DEVICE_ATTR(ctlr, mode, S_IRUGO | S_IWUSR,
-@@ -346,7 +346,7 @@ static ssize_t store_ctlr_enabled(struct device *dev,
- 		break;
- 	case FCOE_CTLR_UNUSED:
- 		return -ENOTSUPP;
--	};
-+	}
- 
- 	rc = ctlr->f->set_fcoe_ctlr_enabled(ctlr);
- 	if (rc)
--- 
-2.18.1
+With the patches I'm seeing a 25% improvement in IOPs for small
+IO tests like:
+
+fio  --filename=/dev/sdXYZ  --direct=1 --rw=randrw --bs=4k \
+--iodepth=128  --numjobs=16
+
+with drivers like vhost (with those other patches on the list to
+fix up multiple virtqueue support) and with the included loop
+patch when nr hw queues is increased.
+
+v3:
+- Fixed issue where qla2xxx's cpuid was overwritten.
+- Fixed up email submit prefix to have "qla2xxx".
+v2:
+- Got access to qla2xxx setup and tested patch. Fixed various issues.
+- Added fixes for issues found in the same code paths I was testing:
+        - target: fix lun ref count handling
+        - target: fix cmd_count ref leak
+v1/RFC
+- Initial posting.
+
 
