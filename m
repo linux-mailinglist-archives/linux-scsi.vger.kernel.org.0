@@ -2,150 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1092A1B3F
-	for <lists+linux-scsi@lfdr.de>; Sun,  1 Nov 2020 00:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0237F2A1E8D
+	for <lists+linux-scsi@lfdr.de>; Sun,  1 Nov 2020 15:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbgJaXc0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 31 Oct 2020 19:32:26 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57544 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726068AbgJaXc0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 31 Oct 2020 19:32:26 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 54A6CB1B5;
-        Sat, 31 Oct 2020 23:32:24 +0000 (UTC)
-From:   David Disseldorp <ddiss@suse.de>
-To:     target-devel@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org, David Disseldorp <ddiss@suse.de>
-Subject: [PATCH v4 4/4] scsi: target: return COMPARE AND WRITE miscompare offsets
-Date:   Sun,  1 Nov 2020 00:32:11 +0100
-Message-Id: <20201031233211.5207-5-ddiss@suse.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201031233211.5207-1-ddiss@suse.de>
-References: <20201031233211.5207-1-ddiss@suse.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726541AbgKAOiW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 1 Nov 2020 09:38:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47307 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726480AbgKAOiV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 1 Nov 2020 09:38:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604241500;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=yF2H9VamO/Tll8pOx08HeoHBpSFSmObT+cyhnQuDOz0=;
+        b=GyPNeg6EnPEwRVgmyP/NMf3DW2DXI7ClQ0AhGc8aGUVTztYgI4dOgpFLkpNKuxP1NCFDRH
+        TzChYzBZR91g22nmIOyeAubxcpVQq0DoKfHSEp0bqFGyXhYd6GGgtWVBiDLegSWrBYad9j
+        0FRiWaM5xvdfWPtFjXszPvdM/7/Dtjk=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-75-RQwb1r2fOJmxG5QizKY6nw-1; Sun, 01 Nov 2020 09:38:18 -0500
+X-MC-Unique: RQwb1r2fOJmxG5QizKY6nw-1
+Received: by mail-ot1-f71.google.com with SMTP id g51so5152856otg.9
+        for <linux-scsi@vger.kernel.org>; Sun, 01 Nov 2020 06:38:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yF2H9VamO/Tll8pOx08HeoHBpSFSmObT+cyhnQuDOz0=;
+        b=BEhCZ2OUblcbKRWiDqoNlszfgMFs9v4Jt9g+qZfy3jSYyCXJki16eDIMBrbnol/Pt8
+         l5bYjppp5hArBOwiTT5zWxMr/WO50DJMY7zlSPEENUqE0sQYYsNfZePfh5uQXb4Wp/xq
+         +b0LjKSuvD4Hj/pffn08BkTRvWgBtYUIn8hJVuD+QEq6w8qh7Pjs+mHs6rRoVlNLg9Q5
+         IuXHnu7mnWhmoPGkhI2qzdep3+lZwdSXD2YIp62wamIBJrHnPf/Ru8Tosj/nPG9MTiPh
+         Ukj1ZqMkjvGIFFJAmAiBveM06i2/Vm3/a0kCKuDicbbzvsltQ+o7SwzCRWFVODR6hA4E
+         uL6Q==
+X-Gm-Message-State: AOAM531prHrET/3BDcgcx6UbJVk9BffsojvHjbxxRNRyJv+Yy2vjZlmw
+        Ie+JYaUvQ8yRq09geVUflFujR5Gq1WLBLkmbXodndoQwao7TSxB9RCQ9PphWWL3lbu8i0p675tq
+        SVTXEpWQBa8LSnOiquLKo0g==
+X-Received: by 2002:a54:449a:: with SMTP id v26mr7513062oiv.16.1604241498104;
+        Sun, 01 Nov 2020 06:38:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzjTxqUzVJc18z2qTLQHnlRYFXx4YOeCh/Q5B8AiiSjFkMZ4gTWY/eZUlhjTV66TdCgE7+1mw==
+X-Received: by 2002:a54:449a:: with SMTP id v26mr7513049oiv.16.1604241497934;
+        Sun, 01 Nov 2020 06:38:17 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id p10sm2876495oig.37.2020.11.01.06.38.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2020 06:38:17 -0800 (PST)
+From:   trix@redhat.com
+To:     skashyap@marvell.com, jhasan@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] scsi: bnx2fc: remove unneeded semicolon
+Date:   Sun,  1 Nov 2020 06:38:12 -0800
+Message-Id: <20201101143812.2283642-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SBC-4 r15 5.3 COMPARE AND WRITE command states:
-  if the compare operation does not indicate a match, then terminate the
-  command with CHECK CONDITION status with the sense key set to
-  MISCOMPARE and the additional sense code set to MISCOMPARE DURING
-  VERIFY OPERATION. In the sense data (see 4.18 and SPC-5) the offset
-  from the start of the Data-Out Buffer to the first byte of data that
-  was not equal shall be reported in the INFORMATION field.
+From: Tom Rix <trix@redhat.com>
 
-This change implements the missing logic to report the miscompare offset
-in the sense data INFORMATION field. As an optimization, byte-by-byte
-miscompare offset calculation is only performed after memcmp() mismatch.
+A semicolon is not needed after a switch statement.
 
-Signed-off-by: David Disseldorp <ddiss@suse.de>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/target/target_core_sbc.c       | 35 ++++++++++++++++++--------
- drivers/target/target_core_transport.c |  1 +
- 2 files changed, 26 insertions(+), 10 deletions(-)
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
-index 22d0cbba6ff3..768c4878e0d3 100644
---- a/drivers/target/target_core_sbc.c
-+++ b/drivers/target/target_core_sbc.c
-@@ -435,13 +435,13 @@ static sense_reason_t compare_and_write_post(struct se_cmd *cmd, bool success,
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+index 6890bbe04a8c..a436adb6092d 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -2275,7 +2275,7 @@ static int bnx2fc_ctlr_enabled(struct fcoe_ctlr_device *cdev)
+ 	case FCOE_CTLR_UNUSED:
+ 	default:
+ 		return -ENOTSUPP;
+-	};
++	}
  }
  
- /*
-- * compare @cmp_len bytes of @read_sgl with @cmp_sgl. On miscompare return
-- * TCM_MISCOMPARE_VERIFY.
-+ * compare @cmp_len bytes of @read_sgl with @cmp_sgl. On miscompare, fill
-+ * @miscmp_off and return TCM_MISCOMPARE_VERIFY.
-  */
- static sense_reason_t
- compare_and_write_do_cmp(struct scatterlist *read_sgl, unsigned int read_nents,
- 			 struct scatterlist *cmp_sgl, unsigned int cmp_nents,
--			 unsigned int cmp_len)
-+			 unsigned int cmp_len, unsigned int *miscmp_off)
- {
- 	unsigned char *buf = NULL;
- 	struct scatterlist *sg;
-@@ -466,18 +466,23 @@ compare_and_write_do_cmp(struct scatterlist *read_sgl, unsigned int read_nents,
- 	 * Compare SCSI READ payload against verify payload
- 	 */
- 	offset = 0;
-+	ret = TCM_NO_SENSE;
- 	for_each_sg(read_sgl, sg, read_nents, i) {
- 		unsigned int len = min(sg->length, cmp_len);
- 		unsigned char *addr = kmap_atomic(sg_page(sg));
- 
- 		if (memcmp(addr, buf + offset, len)) {
--			pr_warn("Detected MISCOMPARE for addr: %p buf: %p\n",
--				addr, buf + offset);
--			kunmap_atomic(addr);
-+			unsigned int i;
-+			for (i = 0; i < len && addr[i] == buf[offset + i]; i++)
-+				;
-+			*miscmp_off = offset + i;
-+			pr_warn("Detected MISCOMPARE at offset %u\n",
-+				*miscmp_off);
- 			ret = TCM_MISCOMPARE_VERIFY;
--			goto out;
- 		}
- 		kunmap_atomic(addr);
-+		if (ret != TCM_NO_SENSE)
-+			goto out;
- 
- 		offset += len;
- 		cmp_len -= len;
-@@ -485,7 +490,6 @@ compare_and_write_do_cmp(struct scatterlist *read_sgl, unsigned int read_nents,
- 			break;
- 	}
- 	pr_debug("COMPARE AND WRITE read data matches compare data\n");
--	ret = TCM_NO_SENSE;
- out:
- 	kfree(buf);
- 	return ret;
-@@ -501,6 +505,7 @@ static sense_reason_t compare_and_write_callback(struct se_cmd *cmd, bool succes
- 	unsigned int len;
- 	unsigned int block_size = dev->dev_attrib.block_size;
- 	unsigned int compare_len = (cmd->t_task_nolb * block_size);
-+	unsigned int miscmp_off = 0;
- 	sense_reason_t ret = TCM_NO_SENSE;
- 	int i;
- 
-@@ -532,8 +537,18 @@ static sense_reason_t compare_and_write_callback(struct se_cmd *cmd, bool succes
- 				       cmd->t_bidi_data_nents,
- 				       cmd->t_data_sg,
- 				       cmd->t_data_nents,
--				       compare_len);
--	if (ret)
-+				       compare_len,
-+				       &miscmp_off);
-+	if (ret == TCM_MISCOMPARE_VERIFY) {
-+		/*
-+		 * SBC-4 r15: 5.3 COMPARE AND WRITE command
-+		 * In the sense data (see 4.18 and SPC-5) the offset from the
-+		 * start of the Data-Out Buffer to the first byte of data that
-+		 * was not equal shall be reported in the INFORMATION field.
-+		 */
-+		cmd->sense_info = miscmp_off;
-+		goto out;
-+	} else if (ret)
- 		goto out;
- 
- 	if (sg_alloc_table(&write_tbl, cmd->t_data_nents, GFP_KERNEL) < 0) {
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index c6f45c12d564..693ed3fe4388 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -3196,6 +3196,7 @@ static const struct sense_detail sense_detail_table[] = {
- 		.key = MISCOMPARE,
- 		.asc = 0x1d, /* MISCOMPARE DURING VERIFY OPERATION */
- 		.ascq = 0x00,
-+		.add_sense_info = true,
- 	},
- 	[TCM_LOGICAL_BLOCK_GUARD_CHECK_FAILED] = {
- 		.key = ABORTED_COMMAND,
+ enum bnx2fc_create_link_state {
 -- 
-2.26.2
+2.18.1
 
