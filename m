@@ -2,59 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 954782A2CC5
+	by mail.lfdr.de (Postfix) with ESMTP id 261EA2A2CC4
 	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 15:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726258AbgKBOZP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 09:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S1726260AbgKBOYT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 09:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726246AbgKBOYR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:24:17 -0500
+        with ESMTP id S1726220AbgKBOYS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:24:18 -0500
 Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BE4C061A04
-        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:24:16 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id b8so14857912wrn.0
-        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:24:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14E2C0617A6
+        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:24:17 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id a9so14799573wrg.12
+        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:24:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b1a6YHQXGZMUnJNF8MJYubaqVfXzvcvl6CdQ46sxWjM=;
-        b=amjzFEdycct+fBy4wvobDLEhGWm69eQKt6whChJ8JlXRazlsySQ0Ut+SSj5dhR9Uy+
-         MzzORxICFwAWp1+zpN2DGGck1/P/+TmIoazBVBx5KkCuGKePv0vd3xYeaut6QYmA0afn
-         cU7NCJJgm0IPXrmL9eDpUFozyCxvByyRcEHW+W/OoQe0epzsOfDPEqB2yo0jeZp83L5M
-         W7AnoTt4HqU+FJUwMcAVy/X6n+iCx1t+B1XvEWY9MFX7tQKNFj1Myq3Jc+W+6CI25iBo
-         MDtLD/bdtSnwIs9vz0T42TdP9Z4pJgo9q12VdIHCKKQY9dABhdJuCxC3sq9aIHo5XlYh
-         LrXQ==
+        bh=7S7czJXKoFmUehfVFN7m7xZuWWqCXLmTUcmn4WxJNRA=;
+        b=hckddZGciYNQI/ruTqugSmxaeCQFdVKoY7bMi4NhUOn/QyP7+FG7MHFkLCjeXxf6A8
+         P/Q2ZKb5+WVOmYHHCQ546nhycIjUS0lS/y7iyBanpy1aSK4pNagBtR2CFgI1k0eASkK6
+         ye7h3CjRsizH8NIJfUprn7MFXHVomB9fm6UfZjQR1k1WLlMn3aXe4y9V3qg+VDh3HveV
+         q+ynpaS4Uw72jXzw9OQ32WwZn+V/sO4CmthSPhRx4rssOnP7sAEHCRUWBAXEMFqiSOMl
+         4K2KpFYC/MUOI8jm5hJBw8Qv90r+D+kdjteSzQgr2fiPIswqwsDn9aVbL3jZH90UQhVg
+         tU5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=b1a6YHQXGZMUnJNF8MJYubaqVfXzvcvl6CdQ46sxWjM=;
-        b=T7Ajb4xsnT/1p7Wjl9f45Ny8DJXdmGhyOAB42QQ67X0X0gPKQ+FFV68tjX5eP0xcSX
-         RPMyZquhRHo6nNuK6cXIdizJArYsOT9QvTyVW3QP3nZ3J6RN696+tWQP2Awsv8tjQT4y
-         MxTe+lxzwkKedyhuMJbQvlh3NJ4i9Uyy6MlWfnoeNX+tzCi49GxSqYGETdRl7PqRGYbG
-         1sK71lUNmX1lP8GDkuoBuJPtkoJdPlBlh+Ey9jru/qucXJcwH4VAgOcZZqiRat1z6mlK
-         /qNAAnVFEygmeBAu+oc/ffk+NjCZybopHRiSzsDuVvcXjdQd3kNh0TOhaj0h3eJ1nfFS
-         dODA==
-X-Gm-Message-State: AOAM530vaWjZ5xeCLlXZdAfeLkwACezyj6bWpLBRYUO3XS7cCWTF0+GX
-        at9xZztW0WcwzDvjk3boMcCIRw==
-X-Google-Smtp-Source: ABdhPJzLFghEEj7dMpcUjxYt0Fs0erXBoWfEk0PbyWEwcX7Qvon6YJDXZHuMfGOlMmGONgXYLU03Cw==
-X-Received: by 2002:adf:92e7:: with SMTP id 94mr21969909wrn.271.1604327055374;
-        Mon, 02 Nov 2020 06:24:15 -0800 (PST)
+        bh=7S7czJXKoFmUehfVFN7m7xZuWWqCXLmTUcmn4WxJNRA=;
+        b=fRneGCeREm5BrnBlyUnqxFtRrlIClmk/mUaz325yXO5vP65WAfmkDPL3VuuVjaGB+6
+         HOspvHphOnrfqH+dGh9EGoWYssgY7OMtpzv22NUaUHtV8icGl6fhrmDVnjWvVAU2oBcs
+         cTGbuvM4WUFt3/uuJA0YzO7obp7OJVuiUmAcr719MIdmQby52YE44HDZbKzE79L06Tfz
+         SkDf4knw/4jzl6HSM3kjEgmbtPC1hfgpqTyqcq+a/iKxX4W5mI1SUa3pzqovYmdeKaoD
+         2Wz6iSz5vxq8xeOQ+ZOuRBYkmF1txDo+uaAQJbGA76uyA/JxtBO/2yuE9Hsz23ThKww3
+         LE5g==
+X-Gm-Message-State: AOAM531tkqyk9LbE6/yqUys5tTumV0OLqeRqfF4kbmpbB1kNDX4L0qAL
+        qzzmTMT93qZ2oCUIMYYrV94c3w==
+X-Google-Smtp-Source: ABdhPJwGVmaJ0FERlXGI5CMfBTiQzu33duLDjQFIT+/pYqeoUneqPy4KhIliXa1MhM65Zs48UWP5nQ==
+X-Received: by 2002:adf:8296:: with SMTP id 22mr20755927wrc.341.1604327056564;
+        Mon, 02 Nov 2020 06:24:16 -0800 (PST)
 Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id f7sm23542501wrx.64.2020.11.02.06.24.14
+        by smtp.gmail.com with ESMTPSA id f7sm23542501wrx.64.2020.11.02.06.24.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 06:24:14 -0800 (PST)
+        Mon, 02 Nov 2020 06:24:15 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     martin.petersen@oracle.com, jejb@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Bradley Grove <linuxdrivers@attotech.com>
-Subject: [RESEND 09/19] scsi: esas2r: esas2r_init: Place brackets around a potentially empty if()
-Date:   Mon,  2 Nov 2020 14:23:49 +0000
-Message-Id: <20201102142359.561122-10-lee.jones@linaro.org>
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Subject: [RESEND 10/19] scsi: lpfc: lpfc_nvme: Remove unused variable 'phba'
+Date:   Mon,  2 Nov 2020 14:23:50 +0000
+Message-Id: <20201102142359.561122-11-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201102142359.561122-1-lee.jones@linaro.org>
 References: <20201102142359.561122-1-lee.jones@linaro.org>
@@ -67,33 +68,36 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/esas2r/esas2r_init.c: In function ‘esas2r_init_adapter’:
- drivers/scsi/esas2r/esas2r_init.c:418:41: warning: suggest braces around empty body in an ‘else’ statement [-Wempty-body]
+ drivers/scsi/lpfc/lpfc_nvme.c: In function ‘lpfc_nvme_ls_abort’:
+ drivers/scsi/lpfc/lpfc_nvme.c:943:19: warning: variable ‘phba’ set but not used [-Wunused-but-set-variable]
 
-Cc: Bradley Grove <linuxdrivers@attotech.com>
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/esas2r/esas2r_init.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_nvme.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/esas2r/esas2r_init.c b/drivers/scsi/esas2r/esas2r_init.c
-index 09c5c24bf391f..4b91db7ba919c 100644
---- a/drivers/scsi/esas2r/esas2r_init.c
-+++ b/drivers/scsi/esas2r/esas2r_init.c
-@@ -412,10 +412,11 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
- 	esas2r_disable_chip_interrupts(a);
- 	esas2r_check_adapter(a);
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
+index 69f1a0457f51e..33d007ca5c8e6 100644
+--- a/drivers/scsi/lpfc/lpfc_nvme.c
++++ b/drivers/scsi/lpfc/lpfc_nvme.c
+@@ -940,7 +940,6 @@ lpfc_nvme_ls_abort(struct nvme_fc_local_port *pnvme_lport,
+ {
+ 	struct lpfc_nvme_lport *lport;
+ 	struct lpfc_vport *vport;
+-	struct lpfc_hba *phba;
+ 	struct lpfc_nodelist *ndlp;
+ 	int ret;
  
--	if (!esas2r_init_adapter_hw(a, true))
-+	if (!esas2r_init_adapter_hw(a, true)) {
- 		esas2r_log(ESAS2R_LOG_CRIT, "failed to initialize hardware!");
--	else
-+	} else {
- 		esas2r_debug("esas2r_init_adapter ok");
-+	}
+@@ -948,7 +947,6 @@ lpfc_nvme_ls_abort(struct nvme_fc_local_port *pnvme_lport,
+ 	if (unlikely(!lport))
+ 		return;
+ 	vport = lport->vport;
+-	phba = vport->phba;
  
- 	esas2r_claim_interrupts(a);
- 
+ 	if (vport->load_flag & FC_UNLOADING)
+ 		return;
 -- 
 2.25.1
 
