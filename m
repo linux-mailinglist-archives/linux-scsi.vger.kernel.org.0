@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5D62A3062
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 17:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8562C2A3064
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 17:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727486AbgKBQwu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 11:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S1727384AbgKBQxA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 11:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727484AbgKBQwq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 11:52:46 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E1BC0617A6;
-        Mon,  2 Nov 2020 08:52:46 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id k9so9590462pgt.9;
-        Mon, 02 Nov 2020 08:52:46 -0800 (PST)
+        with ESMTP id S1727196AbgKBQw7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 11:52:59 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0F0C0617A6;
+        Mon,  2 Nov 2020 08:52:58 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id y14so11587475pfp.13;
+        Mon, 02 Nov 2020 08:52:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XPMjeP+Aj8Y7qYlQVBIVXdIdvsMXyUBB2qOriiIG5lA=;
-        b=BFOSE7/jZj6D/hNGPW6Z+IYEY9S+IxabURlympaa+oRyRRbAXjsP9s3RqWZx4J9hsI
-         BGEE9Eq70JfosYWPtLomF9SBSuA2HBDZ02GUj+CVWcFUEBT+XVI7n7zaCr7wbCwgw6ka
-         3+H7Z9qVtNwMndJMN2vWnlSyc5hAqGyIR5QQN8X+2yhvSRPnaI69RmUxBdbubFTuCUIX
-         piy3chi0KamIbGXKBG2UJ2Es5dnVCmLTvftYmI0OmGoR0vMZdTO+zQFhPSeSyRYxhBDJ
-         KlfHKfLgq+0S1P+m6dMT7tAXfXoDIUsQHSzhmIinIKqJS2Ln4WWV+wyx2ui1xnLN3d52
-         V74g==
+        bh=MBzsuEUa6bYvsV+CNnIl+xHeK3YoENUVJTW96RlBScM=;
+        b=i4lK7B2jCeWUWs/7k7aRJe2mVzCOREf/YaZphfdcnGM0u+NoaCHXT1UMtxiid1cPRk
+         z+BPB3zIpcTUGy7gNJ+vQ+mf6T/j71u4xbBtkOpJFr0pkC7C9qKw3p0Q/5/01HSApBta
+         Ou3O6JCnnfnkLTA7bAPGiA4KrhBxm/8fKADenbdF1J4iCL0+VyOS918WGeSy6jnLmizw
+         gqP9jIo7nYYWjov+spMoRffy2As9Y9GUzTL5aQWpXYLgfZia0BjMUJBE8J1Or8gBFVVo
+         F016wRV7uUCivQ4adKG5hAUXH+lhQwfZSg1Wfk102HFPrtIRVcxXRArRP+VFGN2ZB9nO
+         alSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XPMjeP+Aj8Y7qYlQVBIVXdIdvsMXyUBB2qOriiIG5lA=;
-        b=aSrurqFQWiQ+kB2Dx66kipoTUG+G3EXQyW4/wxKVi9utlut22q/gg54gI9mKR1eN7J
-         Y8J57qqNmrX8iU79FYrUJIKHE3Sk/X1X7mqcR37rt1ry+AgmKFym2fS2BF8sFbSex84o
-         MzZ22R/HykFQgo7FQ1WY9NzpoL3eat1rW6Y0GJDKCfJj1mES/jeH0ufO8Zw85760SjBf
-         dT5mGMfZ+KR08qWJWNP41fxHkdkwQZDhpcnknnzGg0YcgWTJX7Hip49jv2zq0nJ7XGtF
-         iD+L86Acvn8KCv+VKSGxbAIIAP3oj5W0QSy+WUFN1Ld61mIHeEbbDX9Dza3NgpApcHUW
-         8yWA==
-X-Gm-Message-State: AOAM532FctXEUjsNslvOvuiSZlY/+v/mVxMYras0OXfEbY9r3WnUuDYP
-        wDVCocXf+86wCMAlKIlPG5E=
-X-Google-Smtp-Source: ABdhPJyCrllqbyiFve3kKXuwDFU8Zp7rtUgBCNHNxZtJ2bhsDm1uCIq1J9Y4X4Ue1/8Cl51gz1/Uiw==
-X-Received: by 2002:a17:90a:468f:: with SMTP id z15mr17777167pjf.200.1604335966065;
-        Mon, 02 Nov 2020 08:52:46 -0800 (PST)
+        bh=MBzsuEUa6bYvsV+CNnIl+xHeK3YoENUVJTW96RlBScM=;
+        b=bipUM18rmPTrQX97TuRcxqTJVVlM3ldiB9OtaHS2o66vKrGS9Gm0qNr7LH0etVY5K5
+         SPjAhwU8y4YAEKTrGIc96hhlD4hA/+/zzhnJYQimMAJZc3vl8cY0+nnzgp2f1rAV8Amn
+         QqfXMscTePQB0l7f23qk7HcFiwaj9sxiOwpXKnO0LAQEu1mLQcHLKrUq25kaXFGsh6R/
+         DnZU3z4GJz+9TxmUPmb7r4v2n31q411FWXaFzXTWCQevktnf9uetU1nKAzY6hs++aiIX
+         y786XCihAkW7t97meEikuYhSoGoP2sFVJO7z2VTToyLphNzEUMXV3cmRgNR3uLgLUAyk
+         bzHQ==
+X-Gm-Message-State: AOAM532uqq4HWH+zqVXLAPOQvw1n6kCiZDVgeUsiIjyLvSG3hJeo0AMj
+        quQgZnHzDdUocDL4wgVexnk=
+X-Google-Smtp-Source: ABdhPJxiIXDXayIA4x2vypTJ5B2naXIVlq1IYCXlgXG2jWp3RJ2Zwiiq5D86qMZ/Pko1ZcPv4K6N1w==
+X-Received: by 2002:a17:90a:3e4a:: with SMTP id t10mr18207881pjm.151.1604335977846;
+        Mon, 02 Nov 2020 08:52:57 -0800 (PST)
 Received: from varodek.localdomain ([223.179.149.110])
-        by smtp.gmail.com with ESMTPSA id t74sm4953233pfc.47.2020.11.02.08.52.37
+        by smtp.gmail.com with ESMTPSA id t74sm4953233pfc.47.2020.11.02.08.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 08:52:45 -0800 (PST)
+        Mon, 02 Nov 2020 08:52:57 -0800 (PST)
 From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
 To:     Bjorn Helgaas <helgaas@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -78,9 +78,9 @@ Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-scsi@vger.kernel.org, esc.storagedev@microsemi.com,
         megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com
-Subject: [PATCH v4 12/29] scsi: hisi_sas_v3_hw: Drop PCI Wakeup calls from .resume
-Date:   Mon,  2 Nov 2020 22:17:13 +0530
-Message-Id: <20201102164730.324035-13-vaibhavgupta40@gmail.com>
+Subject: [PATCH v4 13/29] scsi: hisi_sas_v3_hw: Don't use PCI helper functions
+Date:   Mon,  2 Nov 2020 22:17:14 +0530
+Message-Id: <20201102164730.324035-14-vaibhavgupta40@gmail.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201102164730.324035-1-vaibhavgupta40@gmail.com>
 References: <20201102164730.324035-1-vaibhavgupta40@gmail.com>
@@ -90,32 +90,68 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The driver calls pci_enable_wake(...., false) in hisi_sas_v3_resume(), and
-there is no corresponding pci_enable_wake(...., true) in
-hisi_sas_v3_suspend(). Either it should do enable-wake the device in
-.suspend() or should not invoke pci_enable_wake() at all.
+Drivers using new-framework/generic-framework should not handle standard
+power management operations. These operations were performed by legacy
+framework through PCI helper functions like pci_save/restore_state(),
+pci_set_power_state(), etc.
 
-Concluding that this driver doesn't support enable-wake and PCI core calls
-pci_enable_wake(pci_dev, PCI_D0, false) during resume, drop it from
-hisi_sas_v3_resume().
+Drivers should not use them now.
 
 Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
 
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 7133ca859b5e..f19f3db1ac6d 100644
+index f19f3db1ac6d..dfeb86c865d3 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -3492,7 +3492,6 @@ static int _resume_v3_hw(struct device *device)
+@@ -3440,7 +3440,6 @@ static int _suspend_v3_hw(struct device *device)
+ 	struct hisi_hba *hisi_hba = sha->lldd_ha;
+ 	struct device *dev = hisi_hba->dev;
+ 	struct Scsi_Host *shost = hisi_hba->shost;
+-	pci_power_t device_state;
+ 	int rc;
+ 
+ 	if (!pdev->pm_cap) {
+@@ -3466,12 +3465,7 @@ static int _suspend_v3_hw(struct device *device)
+ 
+ 	hisi_sas_init_mem(hisi_hba);
+ 
+-	device_state = pci_choose_state(pdev, PMSG_SUSPEND);
+-	dev_warn(dev, "entering operating state [D%d]\n",
+-			device_state);
+-	pci_save_state(pdev);
+-	pci_disable_device(pdev);
+-	pci_set_power_state(pdev, device_state);
++	dev_warn(dev, "entering suspend state\n");
+ 
+ 	hisi_sas_release_tasks(hisi_hba);
+ 
+@@ -3491,15 +3485,7 @@ static int _resume_v3_hw(struct device *device)
+ 
  	dev_warn(dev, "resuming from operating state [D%d]\n",
  		 device_state);
- 	pci_set_power_state(pdev, PCI_D0);
--	pci_enable_wake(pdev, PCI_D0, 0);
- 	pci_restore_state(pdev);
- 	rc = pci_enable_device(pdev);
+-	pci_set_power_state(pdev, PCI_D0);
+-	pci_restore_state(pdev);
+-	rc = pci_enable_device(pdev);
+-	if (rc) {
+-		dev_err(dev, "enable device failed during resume (%d)\n", rc);
+-		return rc;
+-	}
+ 
+-	pci_set_master(pdev);
+ 	scsi_unblock_requests(shost);
+ 	clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
+ 
+@@ -3507,7 +3493,6 @@ static int _resume_v3_hw(struct device *device)
+ 	rc = hw_init_v3_hw(hisi_hba);
  	if (rc) {
+ 		scsi_remove_host(shost);
+-		pci_disable_device(pdev);
+ 		return rc;
+ 	}
+ 	hisi_hba->hw->phys_init(hisi_hba);
 -- 
 2.28.0
 
