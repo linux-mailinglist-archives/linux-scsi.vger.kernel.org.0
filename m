@@ -2,97 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0A92A3032
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 17:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9E92A3153
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 18:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727171AbgKBQpl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 11:45:41 -0500
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:57516 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726786AbgKBQpl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 11:45:41 -0500
-IronPort-SDR: fhLgXiaaAIMAwvJUhArGsBYMFwI/f0SC8BZ758+7FWX6rYRbVb9X9JfhesdMJHbjrU6N147Sd0
- r51ICzBcBUdaoJ8UA3EQ6j8OKI7RfueTvQ/jFfF9M3cfEzK8ntvuDwjuAv2KxoznX6Qsc1qCBk
- qajQ6Oc/R4l+W0UeE2CzGe946PE5CFGL1dEOf00MzrjCUbqjfQ22qGLg4TKCRy4FpezF79jKhJ
- 1s9ZJNWp/7VkHzGURBoaBP5aKPLnxszw0TGY0zZ5iVOzK+4d+FnEKkllGFCf/0b8uMiYA6Q3aO
- WG4=
-X-IronPort-AV: E=Sophos;i="5.77,445,1596524400"; 
-   d="scan'208";a="96859293"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2020 09:45:40 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 2 Nov 2020 09:45:40 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Mon, 2 Nov 2020 09:45:39 -0700
-From:   Viswas G <Viswas.G@microchip.com.com>
-To:     <linux-scsi@vger.kernel.org>
-CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        <Viswas.G@microchip.com>, <Ruksar.devadi@microchip.com>,
-        <martin.petersen@oracle.com>, <yuuzheng@google.com>,
-        <vishakhavc@google.com>, <radha@google.com>,
-        <akshatzen@google.com>, <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH V3 4/4] pm80xx: make pm8001_mpi_get_nvmd_resp free of race condition.
-Date:   Mon, 2 Nov 2020 22:25:28 +0530
-Message-ID: <20201102165528.26510-5-Viswas.G@microchip.com.com>
-X-Mailer: git-send-email 2.16.3
-In-Reply-To: <20201102165528.26510-1-Viswas.G@microchip.com.com>
-References: <20201102165528.26510-1-Viswas.G@microchip.com.com>
+        id S1727388AbgKBRTy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 12:19:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49804 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727334AbgKBRTy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 12:19:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604337592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IlFEvEjMSrm8s5qHZz+GEuVEXkuh6HpBQEzj3Z7NPMM=;
+        b=MCk5HfDF6Ze3K5uNpuuJwbDPwdVms1JV+5gdPtmaJQzCdMflosdabiZx5sOx4zy2PgKtGU
+        dDkuoE/MUd1oxvVzPQq93x+xmxF6jVwUVdQbrq9IaPpjA6T7IGWg9l5nD5fTBem0HAXbUg
+        NehR97zlYA7UwLSrp/SrM8OV9pTJoNk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-201-4qigXCibNpu611g5sVQsqg-1; Mon, 02 Nov 2020 12:19:50 -0500
+X-MC-Unique: 4qigXCibNpu611g5sVQsqg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 734291099F60;
+        Mon,  2 Nov 2020 17:19:49 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.40.194.149])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 590B35B4D3;
+        Mon,  2 Nov 2020 17:19:48 +0000 (UTC)
+Subject: Re: [PATCH] mpt3sas: Fix timeouts observed while reenabling IRQ
+To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, sathya.prakash@broadcom.com,
+        suganath-prabu.subramani@broadcom.com
+References: <20201102072746.27410-1-sreekanth.reddy@broadcom.com>
+From:   Tomas Henzl <thenzl@redhat.com>
+Message-ID: <12d0a321-235d-49f0-3e14-da6b40ddaa34@redhat.com>
+Date:   Mon, 2 Nov 2020 18:19:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20201102072746.27410-1-sreekanth.reddy@broadcom.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: yuuzheng <yuuzheng@google.com>
+On 11/2/20 8:27 AM, Sreekanth Reddy wrote:
+> While reenabling the IRQ after irq poll there may be small time
+> window where HBA firmware has posted some replies and raise the
+> interrupts but driver has not received the interrupts. So we may
+> observe IO timeouts as the driver has not processed the replies
+> as interrupts got missed while reenabling the IRQ.
+> 
+> So, to fix this issue, the driver has to go for one more
+> round of processing the reply descriptors from reply descriptor
+> post queue after enabling the IRQ.
+> 
+> Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> Reported-by: Tomas Henzl <thenzl@redhat.com>
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_base.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> index b096917..a0ab44d 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> @@ -1740,6 +1740,13 @@ _base_irqpoll(struct irq_poll *irqpoll, int budget)
+>  		reply_q->irq_poll_scheduled = false;
+>  		reply_q->irq_line_enable = true;
+>  		enable_irq(reply_q->os_irq);
+> +		/*
+> +		 * Go for one more round of processing the
+> +		 * reply descriptor post queue incase if HBA
+> +		 * Firmware has posted some reply descriptors
+> +		 * while reenabling the IRQ.
+> +		 */
+> +		_base_process_reply_queue(reply_q);
+>  	}
+>  
+>  	return num_entries;
+> 
 
-The use-after-free or null-pointer error occurs when the 251-byte
-response data are copied from IOMB buffer to response message
-buffer in function pm8001_mpi_get_nvmd_resp. pm8001_mpi_get_nvmd_resp
-is a function to process the response of command get_nvmd_data.
-After sending the command get_nvmd_data, the caller begins to sleep by
-calling wait_for_complete() and wait for the wake-up from calling
-complete() in pm8001_mpi_get_nvmd_resp. In the current code,
-the memcpy for response message buffer occurs after calling complete().
-So, it is not protected by the use of wait_for_completion() and
-complete().
+I've tested the fix and the system now works.
 
-Due to unexpected events (e.g., interrupt), if response buffer gets
-freed before memcpy, the use-after-free error will occur.
-To fix it, the complete() should be called after memcpy.
-
-Signed-off-by: yuuzheng <yuuzheng@google.com>
-Signed-off-by: Viswas G <Viswas.G@microchip.com>
-Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
-Signed-off-by: Radha Ramachandran <radha@google.com>
-Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
----
- drivers/scsi/pm8001/pm8001_hwi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 9e9a546da959..2054c2b03d92 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -3279,10 +3279,15 @@ pm8001_mpi_get_nvmd_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		pm8001_ha->memoryMap.region[NVMD].virt_ptr,
- 		fw_control_context->len);
- 	kfree(ccb->fw_control_context);
-+	/* To avoid race condition, complete should be
-+	 * called after the message is copied to
-+	 * fw_control_context->usrAddr
-+	 */
-+	complete(pm8001_ha->nvmd_completion);
-+	PM8001_MSG_DBG(pm8001_ha, pm8001_printk("Set nvm data complete!\n"));
- 	ccb->task = NULL;
- 	ccb->ccb_tag = 0xFFFFFFFF;
- 	pm8001_tag_free(pm8001_ha, tag);
--	complete(pm8001_ha->nvmd_completion);
- }
- 
- int pm8001_mpi_local_phy_ctl(struct pm8001_hba_info *pm8001_ha, void *piomb)
--- 
-2.16.3
+Reviewed-by: Tomas Henzl <thenzl@redhat.com>
 
