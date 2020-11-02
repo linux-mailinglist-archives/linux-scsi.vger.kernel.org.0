@@ -2,60 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE012A2CBC
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 15:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A532A2CA7
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 15:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgKBOZF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 09:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
+        id S1725956AbgKBOYX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 09:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbgKBOYU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:24:20 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED4BC061A48
-        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:24:20 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id a9so14799751wrg.12
-        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:24:20 -0800 (PST)
+        with ESMTP id S1726158AbgKBOYV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:24:21 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51488C061A49
+        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:24:21 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id b8so14858202wrn.0
+        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:24:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dlRlfgBmVVvi0XaSviLroiHJRxOcA6L90EI31nd/fJo=;
-        b=bdhOjo5JJNkkNaW0Dd2roG3kYOhEiRQ6ljiwDvIVErpzInsnmypt1B/ya9Y08OyJDQ
-         hYvk2LuDA44N+sVtz7rmzyvai8BniDNcdQm2hS87fPjjuMAF6QaYXh1pKcnn2AKaWUfz
-         qfCOeb1h4+tWyuFuevcSl3eQvCnuYpCiJ9uj3zF+1JHxvb5Gka8LT/d9dkZ9mcN0xcFU
-         SRBUHCxoMkj8yxGS3rUJrsd8FpG3ZHQ97aq40IcVHmgJ/9NB8mgKrh2Zo5uSZ0eY/5PH
-         Zq2aYfAAp10J8nhRzRUGJZWXN/RaytpTSanH0Fzs/yJZ0IaQF/RYEvtztj8czUfxoXqT
-         ZLcQ==
+        bh=f8wKhzR7FJBQMiEnfCciYkFk4n5t6vlssgzVpAdB5/k=;
+        b=db0MVFJWijauPlBzatrYmnHt5JzRud2OXRirPxM8zuMRIBJN0qdVDK10tG1UFZ+iXl
+         gqyiXgQHszyEpISWYYOfDbupBX1fQ16nRaIsAMQutn0zj656UVfQv4RrvPF0gHRzSVC9
+         eOBKSHJ4shspWcLWliEhxNDo1HFI21TQWc7IZYG2WcQwxQHKYFMW28xRrhWWs3tClsXJ
+         NdCGJYmoliiOkdS6DQljVvsmqEBFOJKDQDKYGDbUPVcEPpETSIAKVcshHdPwQkcNoMtN
+         avciAnCy044XrMYRCYzPpSeNCKGPaA7TppODaNN4tm6xX3K8TXB9uhrtkCP+gypuJpp8
+         3T/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dlRlfgBmVVvi0XaSviLroiHJRxOcA6L90EI31nd/fJo=;
-        b=DNBwBjiFjx7jN5cboufu/PBFYj46Kpa9F7PIS2wVV7BjT1uf0/6c9Dh+r2IyoT5hNV
-         t8VnLrC3nOpyhsR0JJrDjnnSCopPvSOOUDaSoYavZQx448sG7Tf39BaIXiE1aU0m6jMm
-         8+4ZwfIBoNAeibX1A9D2v/x5xWFWCxWFyG8bC4h/0D6oM6fah8NHhAYnYp/H4TcwBod4
-         NPznwofDSOl+qP7MJ5xO9TddJmNL18uu44gqFvpiSwXxmNbMHpCS5cdo/E+S1ygm3FMw
-         LIa2zdvPHAb/A4VwB05oEpHJ4fYOzEUokgxlVLCwEjHuvYn9nC4OGcEPBG2sUznco1g3
-         jHaA==
-X-Gm-Message-State: AOAM531LdR/MBPxqLApDb1ZRv76+XHUbMQzIpPnZ0cgzRwe29h5HLNWq
-        6rXcn8wppp6zY7Xlhhao74Q+jA==
-X-Google-Smtp-Source: ABdhPJys/5LgLK6NEDr60Vmpb1u/H+ilriScrJVIJl3BovaMT8Uz7Iukbd4L0r5TxT9iUUQc2b85FQ==
-X-Received: by 2002:a5d:4207:: with SMTP id n7mr20398224wrq.76.1604327058983;
-        Mon, 02 Nov 2020 06:24:18 -0800 (PST)
+        bh=f8wKhzR7FJBQMiEnfCciYkFk4n5t6vlssgzVpAdB5/k=;
+        b=d21q0xT9VEcG+qthtdSVuIzk85al31wrGEoD6I6vqaw/6G10InDJDKrPMOsyR597rQ
+         K+LGjuDCsyyb8ETBBfIpIzgyx+gtzZpXgA62i0nExNGiZgge6UhfpzNg7ah5+L/36EGa
+         w+mDwUqOZigljEdzd6F7ty0D99M5sQctzoawirIrsCxR+vQ4kL3WncpPuvc1cPR81k65
+         rT/WYmaKukpLJR353oqaZfK0ol0cE4/c+qPCkEQd3SWIYPv6Y/xPosaPWmLcRDLvp0LY
+         fht+hImR8XYkm/kbUP7nchUXMW1x/lvGopc5vzkVSNurZTXTsczvSd5Y+/lyjzFubSwp
+         t1Ng==
+X-Gm-Message-State: AOAM533Vdy1Q0CralalNxt5D21kyNLdMRaY+GSxutE6EhRCcs8+/VhjS
+        WPsDJMqBdXSVDoE0U2jgYdNp9w==
+X-Google-Smtp-Source: ABdhPJyg9OT5suipwrg1XnLxsISG6yruwE/0i8QZCwqrPdqHNiqDIuq5gMNXejSs1+p35tM7niZQNQ==
+X-Received: by 2002:adf:eb4d:: with SMTP id u13mr19655645wrn.146.1604327060108;
+        Mon, 02 Nov 2020 06:24:20 -0800 (PST)
 Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id f7sm23542501wrx.64.2020.11.02.06.24.17
+        by smtp.gmail.com with ESMTPSA id f7sm23542501wrx.64.2020.11.02.06.24.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 06:24:18 -0800 (PST)
+        Mon, 02 Nov 2020 06:24:19 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     martin.petersen@oracle.com, jejb@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [RESEND 12/19] scsi: lpfc: lpfc_nvme: Fix some kernel-doc related issues
-Date:   Mon,  2 Nov 2020 14:23:52 +0000
-Message-Id: <20201102142359.561122-13-lee.jones@linaro.org>
+        Bradley Grove <linuxdrivers@attotech.com>
+Subject: [RESEND 13/19] scsi: esas2r: esas2r_int: Add brackets around potentially empty if()s
+Date:   Mon,  2 Nov 2020 14:23:53 +0000
+Message-Id: <20201102142359.561122-14-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201102142359.561122-1-lee.jones@linaro.org>
 References: <20201102142359.561122-1-lee.jones@linaro.org>
@@ -68,170 +67,46 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/lpfc/lpfc_nvme.c: In function ‘lpfc_nvme_ls_abort’:
- drivers/scsi/lpfc/lpfc_nvme.c:943:19: warning: variable ‘phba’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/lpfc/lpfc_nvme.c:256: warning: Excess function parameter 'lpfc_pnvme' description in 'lpfc_nvme_create_queue'
- drivers/scsi/lpfc/lpfc_nvme.c:804: warning: Function parameter or member 'pnvme_rport' not described in 'lpfc_nvme_ls_req'
- drivers/scsi/lpfc/lpfc_nvme.c:804: warning: Excess function parameter 'nvme_rport' description in 'lpfc_nvme_ls_req'
- drivers/scsi/lpfc/lpfc_nvme.c:1312: warning: Function parameter or member 'lpfc_ncmd' not described in 'lpfc_nvme_prep_io_cmd'
- drivers/scsi/lpfc/lpfc_nvme.c:1312: warning: Excess function parameter 'lpfcn_cmd' description in 'lpfc_nvme_prep_io_cmd'
- drivers/scsi/lpfc/lpfc_nvme.c:1416: warning: Function parameter or member 'lpfc_ncmd' not described in 'lpfc_nvme_prep_io_dma'
- drivers/scsi/lpfc/lpfc_nvme.c:1416: warning: Excess function parameter 'lpfcn_cmd' description in 'lpfc_nvme_prep_io_dma'
- drivers/scsi/lpfc/lpfc_nvme.c:1594: warning: bad line:  indicated in @lpfc_nvme_rport.
- drivers/scsi/lpfc/lpfc_nvme.c:1605: warning: Function parameter or member 'pnvme_lport' not described in 'lpfc_nvme_fcp_io_submit'
- drivers/scsi/lpfc/lpfc_nvme.c:1605: warning: Function parameter or member 'pnvme_rport' not described in 'lpfc_nvme_fcp_io_submit'
- drivers/scsi/lpfc/lpfc_nvme.c:1605: warning: Function parameter or member 'pnvme_fcreq' not described in 'lpfc_nvme_fcp_io_submit'
- drivers/scsi/lpfc/lpfc_nvme.c:1605: warning: Excess function parameter 'lpfc_pnvme' description in 'lpfc_nvme_fcp_io_submit'
- drivers/scsi/lpfc/lpfc_nvme.c:1605: warning: Excess function parameter 'lpfc_nvme_lport' description in 'lpfc_nvme_fcp_io_submit'
- drivers/scsi/lpfc/lpfc_nvme.c:1605: warning: Excess function parameter 'lpfc_nvme_rport' description in 'lpfc_nvme_fcp_io_submit'
- drivers/scsi/lpfc/lpfc_nvme.c:1605: warning: Excess function parameter 'lpfc_nvme_fcreq' description in 'lpfc_nvme_fcp_io_submit'
- drivers/scsi/lpfc/lpfc_nvme.c:1852: warning: Function parameter or member 'abts_cmpl' not described in 'lpfc_nvme_abort_fcreq_cmpl'
- drivers/scsi/lpfc/lpfc_nvme.c:1852: warning: Excess function parameter 'rspiocb' description in 'lpfc_nvme_abort_fcreq_cmpl'
- drivers/scsi/lpfc/lpfc_nvme.c:1888: warning: Function parameter or member 'pnvme_lport' not described in 'lpfc_nvme_fcp_abort'
- drivers/scsi/lpfc/lpfc_nvme.c:1888: warning: Function parameter or member 'pnvme_rport' not described in 'lpfc_nvme_fcp_abort'
- drivers/scsi/lpfc/lpfc_nvme.c:1888: warning: Function parameter or member 'pnvme_fcreq' not described in 'lpfc_nvme_fcp_abort'
- drivers/scsi/lpfc/lpfc_nvme.c:1888: warning: Excess function parameter 'lpfc_pnvme' description in 'lpfc_nvme_fcp_abort'
- drivers/scsi/lpfc/lpfc_nvme.c:1888: warning: Excess function parameter 'lpfc_nvme_lport' description in 'lpfc_nvme_fcp_abort'
- drivers/scsi/lpfc/lpfc_nvme.c:1888: warning: Excess function parameter 'lpfc_nvme_rport' description in 'lpfc_nvme_fcp_abort'
- drivers/scsi/lpfc/lpfc_nvme.c:1888: warning: Excess function parameter 'lpfc_nvme_fcreq' description in 'lpfc_nvme_fcp_abort'
- drivers/scsi/lpfc/lpfc_nvme.c:2089: warning: Function parameter or member 'ndlp' not described in 'lpfc_get_nvme_buf'
- drivers/scsi/lpfc/lpfc_nvme.c:2089: warning: Function parameter or member 'idx' not described in 'lpfc_get_nvme_buf'
- drivers/scsi/lpfc/lpfc_nvme.c:2089: warning: Function parameter or member 'expedite' not described in 'lpfc_get_nvme_buf'
- drivers/scsi/lpfc/lpfc_nvme.c:2193: warning: Function parameter or member 'vport' not described in 'lpfc_nvme_create_localport'
- drivers/scsi/lpfc/lpfc_nvme.c:2326: warning: Function parameter or member 'vport' not described in 'lpfc_nvme_destroy_localport'
- drivers/scsi/lpfc/lpfc_nvme.c:2326: warning: Excess function parameter 'pnvme' description in 'lpfc_nvme_destroy_localport'
- drivers/scsi/lpfc/lpfc_nvme.c:2544: warning: Function parameter or member 'vport' not described in 'lpfc_nvme_rescan_port'
- drivers/scsi/lpfc/lpfc_nvme.c:2544: warning: Function parameter or member 'ndlp' not described in 'lpfc_nvme_rescan_port'
+ drivers/scsi/esas2r/esas2r_int.c: In function ‘esas2r_doorbell_interrupt’:
+ drivers/scsi/esas2r/esas2r_int.c:692:22: warning: suggest braces around empty body in an ‘if’ statement [-Wempty-body]
+ drivers/scsi/esas2r/esas2r_int.c: In function ‘esas2r_send_reset_ae’:
+ drivers/scsi/esas2r/esas2r_int.c:868:44: warning: suggest braces around empty body in an ‘else’ statement [-Wempty-body]
 
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Dick Kennedy <dick.kennedy@broadcom.com>
+Cc: Bradley Grove <linuxdrivers@attotech.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/lpfc/lpfc_nvme.c | 35 +++++++++++++++--------------------
- 1 file changed, 15 insertions(+), 20 deletions(-)
+ drivers/scsi/esas2r/esas2r_int.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 33d007ca5c8e6..42eb144fed0d1 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -235,7 +235,6 @@ lpfc_nvme_prep_abort_wqe(struct lpfc_iocbq *pwqeq, u16 xritag, u8 opt)
- /**
-  * lpfc_nvme_create_queue -
-  * @pnvme_lport: Transport localport that LS is to be issued from
-- * @lpfc_pnvme: Pointer to the driver's nvme instance data
-  * @qidx: An cpu index used to affinitize IO queues and MSIX vectors.
-  * @qsize: Size of the queue in bytes
-  * @handle: An opaque driver handle used in follow-up calls.
-@@ -787,7 +786,7 @@ __lpfc_nvme_ls_req(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- /**
-  * lpfc_nvme_ls_req - Issue an NVME Link Service request
-  * @pnvme_lport: Transport localport that LS is to be issued from.
-- * @nvme_rport: Transport remoteport that LS is to be sent to.
-+ * @pnvme_rport: Transport remoteport that LS is to be sent to.
-  * @pnvme_lsreq: the transport nvme_ls_req structure for the LS
-  *
-  * Driver registers this routine to handle any link service request
-@@ -1290,7 +1289,7 @@ lpfc_nvme_io_cmd_wqe_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pwqeIn,
- /**
-  * lpfc_nvme_prep_io_cmd - Issue an NVME-over-FCP IO
-  * @vport: pointer to a host virtual N_Port data structure
-- * @lpfcn_cmd: Pointer to lpfc scsi command
-+ * @lpfc_ncmd: Pointer to lpfc scsi command
-  * @pnode: pointer to a node-list data structure
-  * @cstat: pointer to the control status structure
-  *
-@@ -1398,7 +1397,7 @@ lpfc_nvme_prep_io_cmd(struct lpfc_vport *vport,
- /**
-  * lpfc_nvme_prep_io_dma - Issue an NVME-over-FCP IO
-  * @vport: pointer to a host virtual N_Port data structure
-- * @lpfcn_cmd: Pointer to lpfc scsi command
-+ * @lpfc_ncmd: Pointer to lpfc scsi command
-  *
-  * Driver registers this routine as it io request handler.  This
-  * routine issues an fcp WQE with data from the @lpfc_nvme_fcpreq
-@@ -1580,16 +1579,14 @@ lpfc_nvme_prep_io_dma(struct lpfc_vport *vport,
+diff --git a/drivers/scsi/esas2r/esas2r_int.c b/drivers/scsi/esas2r/esas2r_int.c
+index f16d6bcf9bb6d..5281d93563275 100644
+--- a/drivers/scsi/esas2r/esas2r_int.c
++++ b/drivers/scsi/esas2r/esas2r_int.c
+@@ -688,8 +688,9 @@ static void esas2r_doorbell_interrupt(struct esas2r_adapter *a, u32 doorbell)
+ 		esas2r_local_reset_adapter(a);
+ 	}
  
- /**
-  * lpfc_nvme_fcp_io_submit - Issue an NVME-over-FCP IO
-- * @lpfc_pnvme: Pointer to the driver's nvme instance data
-- * @lpfc_nvme_lport: Pointer to the driver's local port data
-- * @lpfc_nvme_rport: Pointer to the rport getting the @lpfc_nvme_ereq
-- * @lpfc_nvme_fcreq: IO request from nvme fc to driver.
-+ * @pnvme_lport: Pointer to the driver's local port data
-+ * @pnvme_rport: Pointer to the rport getting the @lpfc_nvme_ereq
-  * @hw_queue_handle: Driver-returned handle in lpfc_nvme_create_queue
-+ * @pnvme_fcreq: IO request from nvme fc to driver.
-  *
-  * Driver registers this routine as it io request handler.  This
-  * routine issues an fcp WQE with data from the @lpfc_nvme_fcpreq
-- * data structure to the rport
-- indicated in @lpfc_nvme_rport.
-+ * data structure to the rport indicated in @lpfc_nvme_rport.
-  *
-  * Return value :
-  *   0 - Success
-@@ -1837,7 +1834,7 @@ lpfc_nvme_fcp_io_submit(struct nvme_fc_local_port *pnvme_lport,
-  * lpfc_nvme_abort_fcreq_cmpl - Complete an NVME FCP abort request.
-  * @phba: Pointer to HBA context object
-  * @cmdiocb: Pointer to command iocb object.
-- * @rspiocb: Pointer to response iocb object.
-+ * @abts_cmpl: Pointer to wcqe complete object.
-  *
-  * This is the callback function for any NVME FCP IO that was aborted.
-  *
-@@ -1863,11 +1860,10 @@ lpfc_nvme_abort_fcreq_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 
- /**
-  * lpfc_nvme_fcp_abort - Issue an NVME-over-FCP ABTS
-- * @lpfc_pnvme: Pointer to the driver's nvme instance data
-- * @lpfc_nvme_lport: Pointer to the driver's local port data
-- * @lpfc_nvme_rport: Pointer to the rport getting the @lpfc_nvme_ereq
-- * @lpfc_nvme_fcreq: IO request from nvme fc to driver.
-+ * @pnvme_lport: Pointer to the driver's local port data
-+ * @pnvme_rport: Pointer to the rport getting the @lpfc_nvme_ereq
-  * @hw_queue_handle: Driver-returned handle in lpfc_nvme_create_queue
-+ * @pnvme_fcreq: IO request from nvme fc to driver.
-  *
-  * Driver registers this routine as its nvme request io abort handler.  This
-  * routine issues an fcp Abort WQE with data from the @lpfc_nvme_fcpreq
-@@ -2070,9 +2066,8 @@ static struct nvme_fc_port_template lpfc_nvme_template = {
- 	.fcprqst_priv_sz = sizeof(struct lpfc_nvme_fcpreq_priv),
- };
- 
--/**
-+/*
-  * lpfc_get_nvme_buf - Get a nvme buffer from io_buf_list of the HBA
-- * @phba: The HBA for which this call is being executed.
-  *
-  * This routine removes a nvme buffer from head of @hdwq io_buf_list
-  * and returns to caller.
-@@ -2172,7 +2167,7 @@ lpfc_release_nvme_buf(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_ncmd)
- 
- /**
-  * lpfc_nvme_create_localport - Create/Bind an nvme localport instance.
-- * @pvport - the lpfc_vport instance requesting a localport.
-+ * @vport - the lpfc_vport instance requesting a localport.
-  *
-  * This routine is invoked to create an nvme localport instance to bind
-  * to the nvme_fc_transport.  It is called once during driver load
-@@ -2319,7 +2314,7 @@ lpfc_nvme_lport_unreg_wait(struct lpfc_vport *vport,
- 
- /**
-  * lpfc_nvme_destroy_localport - Destroy lpfc_nvme bound to nvme transport.
-- * @pnvme: pointer to lpfc nvme data structure.
-+ * @vport: pointer to a host virtual N_Port data structure
-  *
-  * This routine is invoked to destroy all lports bound to the phba.
-  * The lport memory was allocated by the nvme fc transport and is
-@@ -2538,7 +2533,7 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- #endif
+-	if (!(doorbell & DRBL_FORCE_INT))
++	if (!(doorbell & DRBL_FORCE_INT)) {
+ 		esas2r_trace_exit();
++	}
  }
  
--/**
-+/*
-  * lpfc_nvme_rescan_port - Check to see if we should rescan this remoteport
-  *
-  * If the ndlp represents an NVME Target, that we are logged into,
+ void esas2r_force_interrupt(struct esas2r_adapter *a)
+@@ -862,10 +863,11 @@ void esas2r_send_reset_ae(struct esas2r_adapter *a, bool pwr_mgt)
+ 	ae.byflags = 0;
+ 	ae.bylength = (u8)sizeof(struct atto_vda_ae_hdr);
+ 
+-	if (pwr_mgt)
++	if (pwr_mgt) {
+ 		esas2r_hdebug("*** sending power management AE ***");
+-	else
++	} else {
+ 		esas2r_hdebug("*** sending reset AE ***");
++	}
+ 
+ 	esas2r_queue_fw_event(a, fw_event_vda_ae, &ae,
+ 			      sizeof(union atto_vda_ae));
 -- 
 2.25.1
 
