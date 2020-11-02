@@ -2,60 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 377462A2CB9
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 15:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BAF2A2CA8
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 15:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgKBOY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 09:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S1726318AbgKBOY0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 09:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726294AbgKBOYX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:24:23 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27317C0617A6
-        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:24:23 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id i16so9412465wrv.1
-        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:24:23 -0800 (PST)
+        with ESMTP id S1726300AbgKBOYY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:24:24 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4490EC061A04
+        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:24:24 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id 33so4037194wrl.7
+        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:24:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YiKuxEo/wRHTJJqPU7mxaF4N92praJWOsPzk81kg8ns=;
-        b=tbjF9ZU5V9QQwA7I40gxdrkwTvBLFOqeWGReA3201tpEwPfps0rEKTURYPc6d5P5pM
-         5UBLpjxpqej1MQ1XjWiUbSNdxWGozwxXrb7Qf9cAqD8DkKbQzfuBvODPNf6T/icrg6Wr
-         bGGL6vz56QVMnfpeQ1FqIXwxHgeqpPGdwFeOzM6+9NLh9lM6CPMA/SVCm4OZFqlqSv4+
-         LqjCg5QG2eAxonev8i4VGcavO511CS2k9mk062USbmTCughEToBclX3L6qJVPaOLiH8J
-         tFKHCWASs4zfGKb92o6Ay3gQgM7hczy/HtM3PN2e7p+13Q2YOTEWucY2I/FMnniKlCzI
-         COMw==
+        bh=UpntW8qOQ6pR3vVGmsTYcGUv23Vlc0jF5vAOPXJRUnY=;
+        b=OEPURfW0F5vM6exWKOpcJkjQrhV9jXWZbcAdjngWRPRcaLOP5W4ZwGGQxQN54fY3Sd
+         GVCokXyaAlkA5Bsoe5Wfn3xNV0rp05HNqMNKoMAbXEQTSXw1XhgMvgb9YBLzuxmUX5Z4
+         xg8rMBp2jc4OInxJy6pp9N9Enz5eNE9JlYt3m0j8VJkUXaRvpLHvwmi08unDt4fj4YEL
+         nbTYzBcn0/ySR2Yt9A8hwP59HbNyd/81GX4zaAPuEmodgnyUZa+Q/F8YiwwSwp8NiR48
+         qWB6Hi0pC7gL+i7ej267J9nVvhfx3o/E2zUi+ULF3k2ZVkRrvWfiiZ2SvcXYv+AWiNuz
+         Oy/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YiKuxEo/wRHTJJqPU7mxaF4N92praJWOsPzk81kg8ns=;
-        b=ETvtuWC1q4FHPfLhDJKXctY+rlRQxqf0qNsFrG3os7rOiKjytDLq/BTHJuuNZ6ewdy
-         0t/kVoscoIr1OruPx7z0PI6FkKmJBd7YCYwcUrVS+Peq9MfwUrVGO32myFOMFMlL2ztn
-         OIQDhlPqee7VroypGmWxFp5ZLi8P0BKihVvgHmt2V3YOzF6JijuKwvICECCOH0NoO29z
-         yyZ/bwWp7B6L9FFM1ZWUEqrLShSCAkaFmX1zA06ifa19Uog/O8VARCuge1A6CfA1fE+x
-         WpJH7pfuZ5gui/cm7n2pDXhSgUxmTT0KHyzelXlWuKJt+nFIztYhzSRT+fmCuFloJ+Z8
-         2BsQ==
-X-Gm-Message-State: AOAM533GraqL2Fqz3hivoHtzZfyDLKnxMgeTmG5R83/MZkkfU8kumxXh
-        MgpkMaaTm2qM1rxmCNYeF+esOQ==
-X-Google-Smtp-Source: ABdhPJz0WN8Bx9yzKpxS+qQtclExNDAebvE1c+5gQ2g/maOWMn7FFA68UYuUlqX4pemgNEhzHevjqA==
-X-Received: by 2002:adf:eace:: with SMTP id o14mr21089866wrn.308.1604327061915;
-        Mon, 02 Nov 2020 06:24:21 -0800 (PST)
+        bh=UpntW8qOQ6pR3vVGmsTYcGUv23Vlc0jF5vAOPXJRUnY=;
+        b=GZSDH29NViLJOEqGJEpL5XIGIG3HG5tCId/MxXmCina8mCDH3BcM9opOO6sjxaa25U
+         4+3M/eGstMi35vv1kerUsQbUQCkRJgiQj8IA2LcoBbWJoYkGSqu1QGRnuDM7NKfEaQu4
+         bB8PuUcF9LojjZlCI4Pr0H07ol7FIxncSdTA/BssBKG5ugNS+5wAEHqUApRZznidI/nZ
+         zcOu7sUnn33zC5XBhysTSN1JqwUWq00wyWD7Wvh3dsb5cN4kDnQ9xHI9smL/vIdNP2T0
+         aqvQJnBqd5T5rcw4yu6a4XuJeCpXMlmF3wtQLVDxgcUY4IIl0tXyWkF4FCzNaPwk73D1
+         Jvig==
+X-Gm-Message-State: AOAM533TXUozyPo1fGWwh8hQ5tK8o4XEV5rxKLza6fZTyqw9xBsLfzfP
+        Yj338YC4TY96UCGHomM4zJIV/Q==
+X-Google-Smtp-Source: ABdhPJzqM4zHDC6zJHOrG9oqJ8YwdfCQNaNJtkjJOKY1K4M2Wce/LLBycsCbeSVNpuImTr2/U1Kyog==
+X-Received: by 2002:adf:f20e:: with SMTP id p14mr19910515wro.376.1604327062980;
+        Mon, 02 Nov 2020 06:24:22 -0800 (PST)
 Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id f7sm23542501wrx.64.2020.11.02.06.24.20
+        by smtp.gmail.com with ESMTPSA id f7sm23542501wrx.64.2020.11.02.06.24.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 06:24:21 -0800 (PST)
+        Mon, 02 Nov 2020 06:24:22 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     martin.petersen@oracle.com, jejb@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [RESEND 14/19] scsi: lpfc: lpfc_nvmet: Fix-up some formatting and doc-rot issues
-Date:   Mon,  2 Nov 2020 14:23:54 +0000
-Message-Id: <20201102142359.561122-15-lee.jones@linaro.org>
+        Bradley Grove <linuxdrivers@attotech.com>
+Subject: [RESEND 15/19] scsi: esas2r: esas2r_main: Demote non-conformant kernel-doc header
+Date:   Mon,  2 Nov 2020 14:23:55 +0000
+Message-Id: <20201102142359.561122-16-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201102142359.561122-1-lee.jones@linaro.org>
 References: <20201102142359.561122-1-lee.jones@linaro.org>
@@ -67,75 +66,39 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/lpfc/lpfc_nvmet.c:386: warning: Function parameter or member 'ctx_buf' not described in 'lpfc_nvmet_ctxbuf_post'
- drivers/scsi/lpfc/lpfc_nvmet.c:386: warning: Excess function parameter 'ctxp' description in 'lpfc_nvmet_ctxbuf_post'
- drivers/scsi/lpfc/lpfc_nvmet.c:386: warning: Excess function parameter 'mp' description in 'lpfc_nvmet_ctxbuf_post'
- drivers/scsi/lpfc/lpfc_nvmet.c:1310: warning: Function parameter or member 'targetport' not described in 'lpfc_nvmet_ls_req'
- drivers/scsi/lpfc/lpfc_nvmet.c:1310: warning: Function parameter or member 'hosthandle' not described in 'lpfc_nvmet_ls_req'
- drivers/scsi/lpfc/lpfc_nvmet.c:1310: warning: Function parameter or member 'pnvme_lsreq' not described in 'lpfc_nvmet_ls_req'
- drivers/scsi/lpfc/lpfc_nvmet.c:1350: warning: Function parameter or member 'hosthandle' not described in 'lpfc_nvmet_ls_abort'
- drivers/scsi/lpfc/lpfc_nvmet.c:1350: warning: Function parameter or member 'pnvme_lsreq' not described in 'lpfc_nvmet_ls_abort'
- drivers/scsi/lpfc/lpfc_nvmet.c:3607: warning: Function parameter or member 'phba' not described in 'lpfc_nvmet_invalidate_host'
- drivers/scsi/lpfc/lpfc_nvmet.c:3607: warning: Function parameter or member 'ndlp' not described in 'lpfc_nvmet_invalidate_host'
+ drivers/scsi/esas2r/esas2r_main.c:911: warning: Function parameter or member 'a' not described in 'esas2r_check_active_queue'
+ drivers/scsi/esas2r/esas2r_main.c:911: warning: Function parameter or member 'abort_request' not described in 'esas2r_check_active_queue'
+ drivers/scsi/esas2r/esas2r_main.c:911: warning: Function parameter or member 'cmd' not described in 'esas2r_check_active_queue'
+ drivers/scsi/esas2r/esas2r_main.c:911: warning: Function parameter or member 'queue' not described in 'esas2r_check_active_queue'
 
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Dick Kennedy <dick.kennedy@broadcom.com>
+Cc: Bradley Grove <linuxdrivers@attotech.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/lpfc/lpfc_nvmet.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ drivers/scsi/esas2r/esas2r_main.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
-index d4ade7cdb93a9..675253093e877 100644
---- a/drivers/scsi/lpfc/lpfc_nvmet.c
-+++ b/drivers/scsi/lpfc/lpfc_nvmet.c
-@@ -371,8 +371,7 @@ lpfc_nvmet_xmt_ls_rsp_cmp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdwqe,
- /**
-  * lpfc_nvmet_ctxbuf_post - Repost a NVMET RQ DMA buffer and clean up context
-  * @phba: HBA buffer is associated with
-- * @ctxp: context to clean up
-- * @mp: Buffer to free
-+ * @ctx_buf: ctx buffer context
-  *
-  * Description: Frees the given DMA buffer in the appropriate way given by
-  * reposting it to its associated RQ so it can be reused.
-@@ -1291,10 +1290,10 @@ lpfc_nvmet_ls_req_cmp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdwqe,
+diff --git a/drivers/scsi/esas2r/esas2r_main.c b/drivers/scsi/esas2r/esas2r_main.c
+index 7b49e2e9fcdec..923e6e5ddbf90 100644
+--- a/drivers/scsi/esas2r/esas2r_main.c
++++ b/drivers/scsi/esas2r/esas2r_main.c
+@@ -894,15 +894,11 @@ static void complete_task_management_request(struct esas2r_adapter *a,
+ 	esas2r_free_request(a, rq);
+ }
  
- /**
-  * lpfc_nvmet_ls_req - Issue an Link Service request
-- * @targetport - pointer to target instance registered with nvmet transport.
-- * @hosthandle - hosthandle set by the driver in a prior ls_rqst_rcv.
-+ * @targetport: pointer to target instance registered with nvmet transport.
-+ * @hosthandle: hosthandle set by the driver in a prior ls_rqst_rcv.
-  *               Driver sets this value to the ndlp pointer.
-- * @pnvme_lsreq - the transport nvme_ls_req structure for the LS
-+ * @pnvme_lsreq: the transport nvme_ls_req structure for the LS
+-/**
++/*
+  * Searches the specified queue for the specified queue for the command
+  * to abort.
   *
-  * Driver registers this routine to handle any link service request
-  * from the nvme_fc transport to a remote nvme-aware port.
-@@ -1336,9 +1335,9 @@ lpfc_nvmet_ls_req(struct nvmet_fc_target_port *targetport,
- /**
-  * lpfc_nvmet_ls_abort - Abort a prior NVME LS request
-  * @targetport: Transport targetport, that LS was issued from.
-- * @hosthandle - hosthandle set by the driver in a prior ls_rqst_rcv.
-+ * @hosthandle: hosthandle set by the driver in a prior ls_rqst_rcv.
-  *               Driver sets this value to the ndlp pointer.
-- * @pnvme_lsreq - the transport nvme_ls_req structure for LS to be aborted
-+ * @pnvme_lsreq: the transport nvme_ls_req structure for LS to be aborted
-  *
-  * Driver registers this routine to abort an NVME LS request that is
-  * in progress (from the transports perspective).
-@@ -3596,8 +3595,8 @@ lpfc_nvme_unsol_ls_issue_abort(struct lpfc_hba *phba,
- /**
-  * lpfc_nvmet_invalidate_host
-  *
-- * @phba - pointer to the driver instance bound to an adapter port.
-- * @ndlp - pointer to an lpfc_nodelist type
-+ * @phba: pointer to the driver instance bound to an adapter port.
-+ * @ndlp: pointer to an lpfc_nodelist type
-  *
-  * This routine upcalls the nvmet transport to invalidate an NVME
-  * host to which this target instance had active connections.
+- * @param [in] a
+- * @param [in] abort_request
+- * @param [in] cmd
+- * t
+- * @return 0 on failure, 1 if command was not found, 2 if command was found
++ * Return 0 on failure, 1 if command was not found, 2 if command was found
+  */
+ static int esas2r_check_active_queue(struct esas2r_adapter *a,
+ 				     struct esas2r_request **abort_request,
 -- 
 2.25.1
 
