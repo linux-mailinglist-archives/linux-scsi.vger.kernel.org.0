@@ -2,187 +2,190 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F23EB2A2CAC
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 15:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594D92A2D0A
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 15:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgKBOYb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 09:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S1725788AbgKBOcX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 09:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbgKBOY3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:24:29 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7855EC061A49
-        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:24:29 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id c9so8036918wml.5
-        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:24:29 -0800 (PST)
+        with ESMTP id S1726076AbgKBOcA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 09:32:00 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310E3C061A47
+        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 06:32:00 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id g13so6175443qvu.1
+        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 06:32:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gYXRe7D5GCobzJA+DWJKpgWmSfraOvjmjOLuPeMvqEQ=;
-        b=p5gv76b1szPR4z0IxdEII81bCJNxDSSxIMAfclFyk8C9w1Nd+xN7AeEDqZaOvLIXrf
-         RQngPHA8G1W3uCO6VwNGLZnAACNyvAu7HsxchW2qnbAsyTSUcdEkpTlAFFY0Z1ufc54y
-         G9X4dRk7XP+WoySTS8eC0n90QrxHw0ZGlm9QalH4uvgpEe1JrJrRCE347nlOMlY6ArUk
-         OcmU7WzxS7Sw85uRzcyaiEVrIPqHcxgRNpagMaZ7C1tDFEcdkKfhSFwHSAPaf3Kh5P0M
-         1XolWtLpv7bfG8AbDIy9HpeIcbpESDPk5OuvS/vZth2dScABz1tSu6QddG1ptVCvwwVT
-         EN0w==
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=Yc9ah3y6TtUlAbrz0Eo2D8PD2eDgmWmyCIIRTnT9v4U=;
+        b=ambGpt8sVcohYNHTO4cix+khLaOQukqDO/PfQHxnVMSs6ufdoQyHF8XX5bEgsUoOjs
+         paPdXNtxN9pEC83jTBFaB7hhWk5qPh/7f1K1HgJ5Cx8CfrvdUG0qE3DjRFY0qfCy+V2V
+         1sTDDAemdZNFdlLQ/gpzEKTNQajnC7WFxICYc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gYXRe7D5GCobzJA+DWJKpgWmSfraOvjmjOLuPeMvqEQ=;
-        b=CRYTMeYKKpeWYkCR7LrCtYMmYtaEvoel5Qt/6mLq21Kva/C94SHxVf3XCKgOOFK39K
-         OZCQsmnKT5aMkVGK4uBaQ/umbbPoqdjF4pU9dRk5VBbR1nYrELVQT8nH/kjzywx3fGXw
-         eAhKhEw2jUyZ1p9PzojTX7jBqeCuNlnL1lbtrUat7QC6WWsPbjcw+g1+wV8xtll1AbCD
-         +K+2DAVq5YrQ/QOwXVwqqDWryS72paPuCR5hkrHBBD0CnOnrz8NDpYOu9plUZExSlTDV
-         RU/KcACeRxcsns+faVjaqKu06bmyOYSQoccwTfsZc3Pugd0YP1u8GPfy96pFYDgWuGbZ
-         ozRg==
-X-Gm-Message-State: AOAM5330ZNuf+Pf7VcSPgjdS7VNfEo8MPpb6h22a7b9UDKp5cqbkEeE1
-        KmPODsaLsEaLvSGuNYJPBkU1Sw==
-X-Google-Smtp-Source: ABdhPJxvCxyHKzS8jJeU6IcN2+ly0u9053pwOpBwSYvsX9YBJpXtOYx91dPoTF/ddYExAU0yGpQ32g==
-X-Received: by 2002:a7b:c387:: with SMTP id s7mr17592278wmj.52.1604327068228;
-        Mon, 02 Nov 2020 06:24:28 -0800 (PST)
-Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id f7sm23542501wrx.64.2020.11.02.06.24.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 06:24:27 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     martin.petersen@oracle.com, jejb@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Don Brace <don.brace@microchip.com>,
-        Bugfixes to <esc.storagedev@microsemi.com>,
-        storagedev@microchip.com
-Subject: [RESEND 19/19] scsi: hpsa: Strip out a bunch of set but unused variables
-Date:   Mon,  2 Nov 2020 14:23:59 +0000
-Message-Id: <20201102142359.561122-20-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201102142359.561122-1-lee.jones@linaro.org>
-References: <20201102142359.561122-1-lee.jones@linaro.org>
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=Yc9ah3y6TtUlAbrz0Eo2D8PD2eDgmWmyCIIRTnT9v4U=;
+        b=GH6vD2iQmRqVmhjgF7pyNoXb8CmBX/nnd4couq0IbOsxzFMuJaghFMQZYAvLXLXMVk
+         Yg87THTdYdgpZfySmS2gsC3Bp6yD9SXJ+cRwUxgl4VbUFQS2aR0gMyN9OGUAUWox6yHJ
+         xKfMyUozKwMnVzqJ1jg6Ias0G55746YqiZlExAQigEwyc3hM413slv0yUyd5RLQJuxjk
+         eEfS+p74fDf2v32q8Wn8JUI5WgInvQXbYhgz1QFhZmmXjWqL/pJkmZ2AKMcTPSywRrMR
+         MT9Cvks4QxRmYkIAm7Pucx1p6ikIRGqMSkQ3RlmbU+H7n/zKGXatNTabht0oRnxvswqg
+         R60A==
+X-Gm-Message-State: AOAM531QmY+K8M+VFOVQ2XRofQY6ZFPI8UGdI7ORYkblxN0unFXTTE2C
+        J5kGgJxH1SX+RERUrP/IbxhTtm5Fvd0ipDermw5UnQ==
+X-Google-Smtp-Source: ABdhPJxDecX0uFlfN58W3lUU/SgCYBdAV13Nk2j+mkKDdCuIncKwkTr48GZXXPHju4Vfn2LwrTGyw/R+xRIZGCN0Ewg=
+X-Received: by 2002:ad4:42ae:: with SMTP id e14mr3337109qvr.34.1604327518660;
+ Mon, 02 Nov 2020 06:31:58 -0800 (PST)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <1597850436-116171-1-git-send-email-john.garry@huawei.com>
+         <1597850436-116171-18-git-send-email-john.garry@huawei.com> <fe3dff7dae4494e5a88caffbb4d877bbf472dceb.camel@redhat.com>
+In-Reply-To: <fe3dff7dae4494e5a88caffbb4d877bbf472dceb.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQIEYzmMwLj9Hjt1oYRTL2F1ptHELAH4Y1GPA2MBE+CpLqftIA==
+Date:   Mon, 2 Nov 2020 20:01:55 +0530
+Message-ID: <1824064113e9adfdf4d086709cccee00@mail.gmail.com>
+Subject: RE: [PATCH v8 17/18] scsi: megaraid_sas: Added support for shared
+ host tagset for cpuhotplug
+To:     Qian Cai <cai@redhat.com>, John Garry <john.garry@huawei.com>,
+        axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        don.brace@microsemi.com, ming.lei@redhat.com, bvanassche@acm.org,
+        dgilbert@interlog.com, paolo.valente@linaro.org, hare@suse.de,
+        hch@lst.de
+Cc:     Sumit Saxena <sumit.saxena@broadcom.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, esc.storagedev@microsemi.com,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
+        chenxiang66@hisilicon.com, luojiaxing@huawei.com,
+        Hannes Reinecke <hare@suse.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000e03c2c05b3209bf4"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+--000000000000e03c2c05b3209bf4
+Content-Type: text/plain; charset="UTF-8"
 
- drivers/scsi/hpsa.c: In function ‘hpsa_volume_offline’:
- drivers/scsi/hpsa.c:3885:5: warning: variable ‘scsi_status’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/hpsa.c:3884:6: warning: variable ‘cmd_status’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/hpsa.c: In function ‘hpsa_update_scsi_devices’:
- drivers/scsi/hpsa.c:4354:9: warning: variable ‘n_ext_target_devs’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/hpsa.c: In function ‘hpsa_scatter_gather’:
- drivers/scsi/hpsa.c:4583:36: warning: variable ‘last_sg’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/hpsa.c: In function ‘hpsa_init_one’:
- drivers/scsi/hpsa.c:8639:6: warning: variable ‘dac’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/hpsa.c: In function ‘hpsa_enter_performant_mode’:
- drivers/scsi/hpsa.c:9300:7: warning: variable ‘rc’ set but not used [-Wunused-but-set-variable]
+> On Wed, 2020-08-19 at 23:20 +0800, John Garry wrote:
+> > From: Kashyap Desai <kashyap.desai@broadcom.com>
+> >
+> > Fusion adapters can steer completions to individual queues, and we now
+> > have support for shared host-wide tags.
+> > So we can enable multiqueue support for fusion adapters.
+> >
+> > Once driver enable shared host-wide tags, cpu hotplug feature is also
+> > supported as it was enabled using below patchsets - commit
+> > bf0beec0607d ("blk-mq: drain I/O when all CPUs in a hctx are
+> > offline")
+> >
+> > Currently driver has provision to disable host-wide tags using
+> > "host_tagset_enable" module parameter.
+> >
+> > Once we do not have any major performance regression using host-wide
+> > tags, we will drop the hand-crafted interrupt affinity settings.
+> >
+> > Performance is also meeting the expecatation - (used both none and
+> > mq-deadline scheduler)
+> > 24 Drive SSD on Aero with/without this patch can get 3.1M IOPs
+> > 3 VDs consist of 8 SAS SSD on Aero with/without this patch can get
+> > 3.1M IOPs.
+> >
+> > Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
+> > Signed-off-by: Hannes Reinecke <hare@suse.com>
+> > Signed-off-by: John Garry <john.garry@huawei.com>
+>
+> Reverting this commit fixed an issue that Dell Power Edge R6415 server
+> with
+> megaraid_sas is unable to boot.
 
-Cc: Don Brace <don.brace@microchip.com>
-Cc: Bugfixes to <esc.storagedev@microsemi.com>
-Cc: storagedev@microchip.com
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/scsi/hpsa.c | 25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+I will take a look at this. BTW, can you try keeping same PATCH but use
+module parameter "host_tagset_enable =0"
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 16fd378285d27..02e20bed8a484 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -3881,8 +3881,6 @@ static unsigned char hpsa_volume_offline(struct ctlr_info *h,
- 	u8 sense_key, asc, ascq;
- 	int sense_len;
- 	int rc, ldstat = 0;
--	u16 cmd_status;
--	u8 scsi_status;
- #define ASC_LUN_NOT_READY 0x04
- #define ASCQ_LUN_NOT_READY_FORMAT_IN_PROGRESS 0x04
- #define ASCQ_LUN_NOT_READY_INITIALIZING_CMD_REQ 0x02
-@@ -3902,8 +3900,6 @@ static unsigned char hpsa_volume_offline(struct ctlr_info *h,
- 	else
- 		sense_len = c->err_info->SenseLen;
- 	decode_sense_data(sense, sense_len, &sense_key, &asc, &ascq);
--	cmd_status = c->err_info->CommandStatus;
--	scsi_status = c->err_info->ScsiStatus;
- 	cmd_free(h, c);
- 
- 	/* Determine the reason for not ready state */
-@@ -4351,7 +4347,7 @@ static void hpsa_update_scsi_devices(struct ctlr_info *h)
- 	u32 ndev_allocated = 0;
- 	struct hpsa_scsi_dev_t **currentsd, *this_device, *tmpdevice;
- 	int ncurrent = 0;
--	int i, n_ext_target_devs, ndevs_to_allocate;
-+	int i, ndevs_to_allocate;
- 	int raid_ctlr_position;
- 	bool physical_device;
- 	DECLARE_BITMAP(lunzerobits, MAX_EXT_TARGETS);
-@@ -4416,7 +4412,6 @@ static void hpsa_update_scsi_devices(struct ctlr_info *h)
- 		raid_ctlr_position = nphysicals + nlogicals;
- 
- 	/* adjust our table of devices */
--	n_ext_target_devs = 0;
- 	for (i = 0; i < nphysicals + nlogicals + 1; i++) {
- 		u8 *lunaddrbytes, is_OBDR = 0;
- 		int rc = 0;
-@@ -4580,7 +4575,7 @@ static int hpsa_scatter_gather(struct ctlr_info *h,
- 		struct scsi_cmnd *cmd)
- {
- 	struct scatterlist *sg;
--	int use_sg, i, sg_limit, chained, last_sg;
-+	int use_sg, i, sg_limit, chained;
- 	struct SGDescriptor *curr_sg;
- 
- 	BUG_ON(scsi_sg_count(cmd) > h->maxsgentries);
-@@ -4602,7 +4597,6 @@ static int hpsa_scatter_gather(struct ctlr_info *h,
- 	curr_sg = cp->SG;
- 	chained = use_sg > h->max_cmd_sg_entries;
- 	sg_limit = chained ? h->max_cmd_sg_entries - 1 : use_sg;
--	last_sg = scsi_sg_count(cmd) - 1;
- 	scsi_for_each_sg(cmd, sg, sg_limit, i) {
- 		hpsa_set_sg_descriptor(curr_sg, sg);
- 		curr_sg++;
-@@ -8635,7 +8629,7 @@ static struct ctlr_info *hpda_alloc_ctlr_info(void)
- 
- static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- {
--	int dac, rc;
-+	int rc;
- 	struct ctlr_info *h;
- 	int try_soft_reset = 0;
- 	unsigned long flags;
-@@ -8711,13 +8705,9 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	/* configure PCI DMA stuff */
- 	rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
--	if (rc == 0) {
--		dac = 1;
--	} else {
-+	if (rc != 0)
- 		rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
--		if (rc == 0) {
--			dac = 0;
--		} else {
-+		if (rc != 0) {
- 			dev_err(&pdev->dev, "no suitable DMA available\n");
- 			goto clean3;	/* shost, pci, lu, aer/h */
- 		}
-@@ -9298,10 +9288,9 @@ static int hpsa_enter_performant_mode(struct ctlr_info *h, u32 trans_support)
- 	} else if (trans_support & CFGTBL_Trans_io_accel2) {
- 		u64 cfg_offset, cfg_base_addr_index;
- 		u32 bft2_offset, cfg_base_addr;
--		int rc;
- 
--		rc = hpsa_find_cfg_addrs(h->pdev, h->vaddr, &cfg_base_addr,
--			&cfg_base_addr_index, &cfg_offset);
-+		hpsa_find_cfg_addrs(h->pdev, h->vaddr, &cfg_base_addr,
-+				    &cfg_base_addr_index, &cfg_offset);
- 		BUILD_BUG_ON(offsetof(struct io_accel2_cmd, sg) != 64);
- 		bft2[15] = h->ioaccel_maxsg + HPSA_IOACCEL2_HEADER_SZ;
- 		calc_bucket_map(bft2, ARRAY_SIZE(bft2), h->ioaccel_maxsg,
--- 
-2.25.1
+Kashyap
 
+--000000000000e03c2c05b3209bf4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+yfWKfxJx8FcWmsjkSlrwDu+oVuDUa2wqeKBU12HQ4JAVd+LOb5edsbbFQxgGHu+MPuc/1hl9kTkC
+AwEAAaOCAdEwggHNMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEwgY4wTQYIKwYBBQUH
+MAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVyc29uYWxzaWduMnNo
+YTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vZ3Nw
+ZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIB
+FiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEQGA1Ud
+HwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJzb25hbHNpZ24yc2hh
+MmczLmNybDAlBgNVHREEHjAcgRprYXNoeWFwLmRlc2FpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAK
+BggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJnXsLYTAdBgNVHQ4EFgQU4dX1
+Yg4eoWXbqyPW/N1ZD/LPIWcwDQYJKoZIhvcNAQELBQADggEBABBuHYKGUwHIhCjd3LieJwKVuJNr
+YohEnZzCoNaOj33/j5thiA4cZehCh6SgrIlFBIktLD7jW9Dwl88Gfcy+RrVa7XK5Hyqwr1JlCVsW
+pNj4hlSJMNNqxNSqrKaD1cR4/oZVPFVnJJYlB01cLVjGMzta9x27e6XEtseo2s7aoPS2l82koMr7
+8S/v9LyyP4X2aRTWOg9RG8D/13rLxFAApfYvCrf0quIUBWw2BXlq3+e3r7pU7j40d6P04VV3Zxws
+M+LbYxcXFT2gXvoYd2Ms8zsLrhO2M6pMzeNGWk2HWTof9s7EEHDjis/MRlbYSNaohV23IUzNlBw7
+1FmvvW5GKK0xggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
+IG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0g
+RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgsg/XY/U4
+rHYVahd8ykRLmqc+EHfvIdb84tafTy2GLp0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
+hkiG9w0BCQUxDxcNMjAxMTAyMTQzMTU5WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
+BglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG
+9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAK7IkGa+pN1ifyqm2aN71wPo1V1K
+SwkseFDxVYiSDxzkNMGiJbnn5aP2tmdSxRSXCqiHueNo7A8bsa6qXxr3Gx87GxzvDnay+vBxXXoA
+ebUUkzXFoIzwmSGIF58OgnEbrDMq9pzSN5FmsBke/jNjVPARMMO/32ufK7C7h+S4UIL7VW3YqivO
+yymshRt7y0vmjlyoRNJDvavi20iR9EqlRPHeCvMudkf4+eN4kSTCebeiwmp2fJUH83lljY5ZbILv
+URoUJxdI8rMg/AbsImAgnQDpONcCeuBjEHVZI1+cshWi22wE+QaPrmgsbHOboGIsffk0V6UshX9V
+s5q80qF4REM=
+--000000000000e03c2c05b3209bf4--
