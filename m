@@ -2,193 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD292A475B
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 15:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C6E2A47A3
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 15:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729529AbgKCOKa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Nov 2020 09:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S1729570AbgKCONC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Nov 2020 09:13:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729485AbgKCOI6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 09:08:58 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5D6C0613D1
-        for <linux-scsi@vger.kernel.org>; Tue,  3 Nov 2020 06:08:58 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id i7so11831510pgh.6
-        for <linux-scsi@vger.kernel.org>; Tue, 03 Nov 2020 06:08:58 -0800 (PST)
+        with ESMTP id S1729569AbgKCOLp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 09:11:45 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F5AC0613D1
+        for <linux-scsi@vger.kernel.org>; Tue,  3 Nov 2020 06:11:45 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id b3so14319458pfo.2
+        for <linux-scsi@vger.kernel.org>; Tue, 03 Nov 2020 06:11:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=HY7qgx7DbH5dyQUVtk9IIE7Ar0qcvIccR/Ro4PjOb4Q=;
-        b=eJ68gK9ZwxKy0uq4xMVE0xzzY1jiKJ4Xi0nMSs2oQTMWifugOm6fkxX33lGVOfXnG8
-         4REiHYWQofr/wirKG0dPLUVodwDhLMsahZ5boXbfNyLLo2sLwFbDOO/1ZP20wRhE4evg
-         k6DNYyihXvpTxcPw2XTdOY8L+Zct599s3QIBk=
+        h=from:to:cc:subject:date:message-id;
+        bh=jFUQEVDnU1Z9Tp0ZXnilLbpdKbUQbN/gnLGRvwOeuI0=;
+        b=YgeL7l+AOgVFCmJaGmcZIgN9Cx7uYE6jy72jEniHkExG0awjCBWIkcyEUGVAX+zZn4
+         oCbvw5lxo4VdDdxyYRbsfrw2062rsqY5PW8mZxnp1SJMaaSK8S7yPrIGh/vupqd4s3an
+         haBe0CcYKJIWZryzJS3L1s1ahjiw28ScWAJ6w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=HY7qgx7DbH5dyQUVtk9IIE7Ar0qcvIccR/Ro4PjOb4Q=;
-        b=uR2U0ckPqmvihD0hMoGtWKjxEKmn4v/FwShty3b2TwDYKNZ0dt1EQHJ07Z9FT1o6O/
-         0jVFT2WxEC1HQXbJmrvRJKAhN03TjzaCjdC1lklhyv8JFscszht8thPPFPV3lQ2DTbOe
-         D/NucAdDGiXNaD9VbUgX+oM2ORn67r/qemVvmmHKKvcat1qZqyUSLvGokfgDTBYb+gTU
-         LdgIGhG6Gx6fSqfxa1j+Oc47jL3xgPbOQTUJsHeeVK7uG1xwsDEqOt8oK6aEuIvTWb6J
-         qRFZoeXUvOr0onBuh4iKaRr6kUCLbKXzKIR7U93RxfYotskk1U8DSxKWtM18q/YMt45r
-         4sNg==
-X-Gm-Message-State: AOAM53085FIDPYYN1WPbu4Zie0q7kGF4gRfSlsLjCdg0q0sDTaX5FsmR
-        nn0GHt5pcGjNjzfvXf3Z7GnrC7SvPKMpfKdAhIJXUihK33IfLwVz4/qS+fkvwxwjl/J2Ey+RTZP
-        VJ8hfTH0PyoadevpUlayJJkhlqgqN53IvtoMJL29NGKxtEeeC9tvjxw2DDHDWRHYHxjWX/ipani
-        Qpf8AkxmFE7RE=
-X-Google-Smtp-Source: ABdhPJx/s4eWvQca4GW+Cxl8H1tMwHkE1YsZLcuZciJ+sgff+ZxgKAJ1OKbkHe6sThNVOif2YRaUZA==
-X-Received: by 2002:a63:5458:: with SMTP id e24mr17024945pgm.73.1604412537471;
-        Tue, 03 Nov 2020 06:08:57 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=jFUQEVDnU1Z9Tp0ZXnilLbpdKbUQbN/gnLGRvwOeuI0=;
+        b=tJ2j4O+xd1tf4qpH/24Dqr63xLBhiE7jG2FSde7T9Ct2F5hJ7aFl0bVJE/Hn8jBbQS
+         KLLUFaS/gitZEv0uW3Vy11LZooWVvGTATVUwVP+5QOM3yB7ksBG7eRC0DdQ1VtYlTTo8
+         og8AKjkMGjRjkM1CGfqXHXx666iWNgDJGiWTCOzjmE9vis71/yPJexntbG1iS4ulE0bO
+         uPLP8+W4OEPJB2Zu+tVNvoOwHwndp/9szw9lRlufArKhrxjMpDLvJtV+dQTiIwgtfllc
+         Q83277pzYW5yAdPxF7W1c0VcpEhpXb/ScElhnl989kKBt/W4JjGVmXMW3m9b2fUMRHfB
+         1d5A==
+X-Gm-Message-State: AOAM532PsKZUW7wyx9SDBlhQt1XwxUc+SSVAmJiIezLFeG9gwPwNPY9h
+        mxb9Xz7QkACa6I3wXGPqZRMXVQ==
+X-Google-Smtp-Source: ABdhPJz01++O0S6ZVcWrNO3SBWnq7YZECuJpF4GK4dgWTwz8UVYYaYqyEMn8izhcFykudtS7D2s25A==
+X-Received: by 2002:a17:90a:a609:: with SMTP id c9mr4211108pjq.124.1604412705006;
+        Tue, 03 Nov 2020 06:11:45 -0800 (PST)
 Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id r19sm3525959pjo.23.2020.11.03.06.08.53
+        by smtp.gmail.com with ESMTPSA id t19sm3596691pgv.37.2020.11.03.06.11.41
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Nov 2020 06:08:56 -0800 (PST)
+        Tue, 03 Nov 2020 06:11:44 -0800 (PST)
 From:   Muneendra <muneendra.kumar@broadcom.com>
-To:     linux-scsi@vger.kernel.org, michael.christie@oracle.com,
-        hare@suse.de
+To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        tj@kernel.org, linux-nvme@lists.infradead.org
 Cc:     jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com,
-        Muneendra <muneendra.kumar@broadcom.com>
-Subject: [patch v5 5/5] scsi_transport_fc: Added store fucntionality to set the rport port_state using sysfs
-Date:   Tue,  3 Nov 2020 12:45:12 +0530
-Message-Id: <1604387712-19801-6-git-send-email-muneendra.kumar@broadcom.com>
+        pbonzini@redhat.com, Muneendra <muneendra.kumar@broadcom.com>
+Subject: [PATCH v3 00/19] blkcg:Support to track FC storage blk io traffic
+Date:   Tue,  3 Nov 2020 12:48:04 +0530
+Message-Id: <1604387903-20006-1-git-send-email-muneendra.kumar@broadcom.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1604387712-19801-1-git-send-email-muneendra.kumar@broadcom.com>
-References: <1604387712-19801-1-git-send-email-muneendra.kumar@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000065858005b33467cd"
+        boundary="00000000000060839f05b3347150"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000065858005b33467cd
+--00000000000060839f05b3347150
 
-Added a store functionality to set rport port_state using sysfs
-under  fc_remote_ports/rport-*/port_state
+This Patch added a unique application identifier i.e
+app_id  knob to  blkcg which allows identification of traffic
+sources at an individual cgroup based Applications
+(ex:virtual machine (VM))level in both host and
+fabric infrastructure.
 
-With this functionality the user can move the port_state from
-Marginal -> Online and Online->Marginal.
+Added a new sysfs attribute appid_store to set the application identfier
+in  the blkcg associted with cgroup id
+/sys/class/fc/fc_udev_device/*
+With this new interface the user can set the application identfier
+in  the blkcg associted with cgroup id.
 
-On Marginal :This interface will set SCMD_NORETRIES_ABORT bit in
-scmd->state for all the pending io's on the scsi device associated
-with target port.
+This capability can be utilized by multiple block transport infrastructure
+like fc,iscsi,roce.
 
-On Online :This interface will clear SCMD_NORETRIES_ABORT bit in
-scmd->state for all the pending io's on the scsi device associated
-with target port.
+Existing FC fabric will use this feature and the description of
+the use case is below.
 
-Below is the interface provided to set the port state to Marginal
-and Online.
+Various virtualization technologies used in Fibre Channel
+SAN deployments have created the opportunity to identify
+and associate traffic with specific virtualized applications.
+The concepts behind the T11 Application Services standard is
+to provide the general mechanisms needed to identify
+virtualized services.
+It enables the Fabric and the storage targets to
+identify, monitor, and handle FC traffic
+based on vm tags by inserting application specific identification
+into the FC frame.
 
-echo "Marginal" >> /sys/class/fc_remote_ports/rport-X\:Y-Z/port_state
-echo "Online" >> /sys/class/fc_remote_ports/rport-X\:Y-Z/port_state
-
-Signed-off-by: Muneendra <muneendra.kumar@broadcom.com>
-
----
-v5:
-No change
-
-v4:
-Addressed the error reported by kernel test robot
-Removed the code needed to traverse all the devices under rport
-to set/clear SCMD_NORETRIES_ABORT
-Removed unncessary comments.
-Return the error values on failure while setting the port_state
+The patches were cut against  5.10/scsi-queue tree
 
 v3:
-Removed the port_state from starget attributes.
-Enabled the store functionality for port_state under remote port.
-used the starget_for_each_device to traverse around all the devices
-under rport
+removed RFC.
 
-v2:
-Changed from a noretries_abort attribute under fc_transport/target*/ to
-port_state for changing the port_state to a marginal state
----
- drivers/scsi/scsi_transport_fc.c | 56 ++++++++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 2 deletions(-)
+Renamed the functions and app_id to more specific
+Addressed the reference leaks in blkcg_set_app_identifier
+Added a new config BLK_CGROUP_FC_APPID and made changes to 
+select the same under SCSI_FC_ATTRS
 
-diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/scsi_transport_fc.c
-index 0ac490816f3e..979032e1dafc 100644
---- a/drivers/scsi/scsi_transport_fc.c
-+++ b/drivers/scsi/scsi_transport_fc.c
-@@ -943,7 +943,59 @@ show_fc_rport_roles (struct device *dev, struct device_attribute *attr,
- static FC_DEVICE_ATTR(rport, roles, S_IRUGO,
- 		show_fc_rport_roles, NULL);
- 
--fc_private_rport_rd_enum_attr(port_state, FC_PORTSTATE_MAX_NAMELEN);
-+static ssize_t fc_rport_set_marginal_state(struct device *dev,
-+						struct device_attribute *attr,
-+						const char *buf, size_t count)
-+{
-+	struct fc_rport *rport = transport_class_to_rport(dev);
-+	enum fc_port_state port_state;
-+	int ret = 0;
-+
-+	ret = get_fc_port_state_match(buf, &port_state);
-+	if (ret)
-+		return -EINVAL;
-+	if (port_state == FC_PORTSTATE_MARGINAL) {
-+		/*
-+		 * Change the state to marginal only if the
-+		 * current rport state is Online
-+		 * Allow only Online->marginal
-+		 */
-+		if (rport->port_state == FC_PORTSTATE_ONLINE)
-+			rport->port_state = port_state;
-+		else
-+			return -EINVAL;
-+	} else if (port_state == FC_PORTSTATE_ONLINE) {
-+		/*
-+		 * Change the state to Online only if the
-+		 * current rport state is Marginal
-+		 * Allow only  MArginal->Online
-+		 */
-+		if (rport->port_state == FC_PORTSTATE_MARGINAL)
-+			rport->port_state = port_state;
-+		else
-+			return -EINVAL;
-+	} else
-+		return -EINVAL;
-+	return count;
-+}
-+
-+static ssize_t
-+show_fc_rport_port_state(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	const char *name;
-+	struct fc_rport *rport = transport_class_to_rport(dev);
-+
-+	name = get_fc_port_state_name(rport->port_state);
-+	if (!name)
-+		return -EINVAL;
-+
-+	return snprintf(buf, 20, "%s\n", name);
-+}
-+
-+static FC_DEVICE_ATTR(rport, port_state, 0444 | 0200,
-+			show_fc_rport_port_state, fc_rport_set_marginal_state);
-+
- fc_private_rport_rd_attr(scsi_target_id, "%d\n", 20);
- 
- /*
-@@ -2267,7 +2319,7 @@ fc_attach_transport(struct fc_function_template *ft)
- 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(port_name);
- 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(port_id);
- 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(roles);
--	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(port_state);
-+	SETUP_PRIVATE_RPORT_ATTRIBUTE_RW(port_state);
- 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(scsi_target_id);
- 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RW(fast_io_fail_tmo);
- 
+V2:
+renamed app_identifier to app_id.
+removed the  sysfs interface blkio.app_identifie under
+/sys/fs/cgroup/blkio
+Ported the patch on top of 5.10/scsi-queue.
+Removed redundant code due to changes since last submit.
+Added a fix for issuing QFPA command.
+
+
+
+Gaurav Srivastava (15):
+  lpfc: vmid: Add the datastructure for supporting VMID in lpfc
+  lpfc: vmid: API to check if VMID is enabled.
+  lpfc: vmid: Supplementary data structures for vmid
+  lpfc: vmid: Forward declarations for APIs
+  lpfc: vmid: Add support for vmid in mailbox command
+  lpfc: vmid: VMID params initialization
+  lpfc: vmid: vmid resource allocation
+  lpfc: vmid: cleanup vmid resources
+  lpfc: vmid: Implements ELS commands for appid patch
+  lpfc: vmid: Functions to manage vmids
+  lpfc: vmid: Implements CT commands for appid.
+  lpfc: vmid: Appends the vmid in the wqe before sending request
+  lpfc: vmid: Timeout implementation for vmid
+  lpfc: vmid: Adding qfpa and vmid timeout check in worker thread
+  lpfc: vmid: Introducing vmid in io path.
+
+Muneendra (4):
+  cgroup: Added cgroup_get_from_kernfs_id
+  blkcg: Added a app identifier support for blkcg
+  nvme: Added a newsysfs attribute appid_store
+  scsi: Made changes in Kconfig to select BLK_CGROUP_FC_APPID
+
+ block/Kconfig                    |   9 +
+ drivers/nvme/host/fc.c           |  73 ++++++-
+ drivers/scsi/Kconfig             |   1 +
+ drivers/scsi/lpfc/lpfc.h         | 121 +++++++++++
+ drivers/scsi/lpfc/lpfc_attr.c    |  47 ++++
+ drivers/scsi/lpfc/lpfc_crtn.h    |  11 +
+ drivers/scsi/lpfc/lpfc_ct.c      | 249 +++++++++++++++++++++
+ drivers/scsi/lpfc/lpfc_disc.h    |   1 +
+ drivers/scsi/lpfc/lpfc_els.c     | 356 ++++++++++++++++++++++++++++++-
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 151 +++++++++++++
+ drivers/scsi/lpfc/lpfc_hw.h      | 124 ++++++++++-
+ drivers/scsi/lpfc/lpfc_hw4.h     |  12 ++
+ drivers/scsi/lpfc/lpfc_init.c    | 108 ++++++++++
+ drivers/scsi/lpfc/lpfc_mbox.c    |   6 +
+ drivers/scsi/lpfc/lpfc_scsi.c    | 325 ++++++++++++++++++++++++++++
+ drivers/scsi/lpfc/lpfc_sli.c     |  65 +++++-
+ drivers/scsi/lpfc/lpfc_sli.h     |   8 +
+ include/linux/blk-cgroup.h       |  65 ++++++
+ include/linux/cgroup.h           |   6 +
+ kernel/cgroup/cgroup.c           |  26 +++
+ 20 files changed, 1751 insertions(+), 13 deletions(-)
+
 -- 
 2.26.2
 
 
---00000000000065858005b33467cd
+--00000000000060839f05b3347150
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -259,13 +228,13 @@ LbMkW5lUoTb8ycBNOKLYhNE8UEOY8jRTUtMEhzT6NJDEE+1hb3kSGfArrrF3Z8pRYiUUhcpC5GKL
 EpmWnHflnrBcah5Ozy137DGCAm8wggJrAgEBMG0wXTELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEds
 b2JhbFNpZ24gbnYtc2ExMzAxBgNVBAMTKkdsb2JhbFNpZ24gUGVyc29uYWxTaWduIDIgQ0EgLSBT
 SEEyNTYgLSBHMwIMX/krgFDQUQNyOf+1MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEi
-BCBieAoaO46QiHhGGdq0AWbysxWUpTQpitTjYbj8C6wE/zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDExMDMxNDA4NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
+BCAk539AQZt1nx3oavrZCfm649B9e806JM6X2bK2d0s2IDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
+AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDExMDMxNDExNDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
 AWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEK
-MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAV4hQrD6Icnxrghau
-CurOanw91ZV1v82hUg9pN+25tzrJLTmp3LBx7YPGuxsy83aFYd8X7ABM8lbKBQXVipRYQlncviZz
-3CMkHNQaJnXzSxJ/Maggni4DeRLQ2NdYe5XPJlFR7myIu0Qd3EulayKUgdlFYyhuLy1GjZVX6qwl
-RUI/p8K8kBFPdoLQua1s/YtmKqj0O+oDTRJHqhVPJPLkPw8IO1wIvMPnWqHNcO0kWMmsnb4ogO5D
-ZZF4fAdMhaXxjdC9fB9ilQI90Lmxh+qnCxVrvzf/IuvdrkALbXIuqtJYOKit+TgIxodn67VS5QT4
-DuRCUaF1fd2HVZ+eZ1V3kA==
---00000000000065858005b33467cd--
+MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAmSPOPuUWQc064zQm
+1EG/HQgarBTJVqfw78DgoiH2+y3oO/I82gbUf6qMT1Xmvq/GaWSgJlIjNlPmgprWpD56nu1TsHM7
+CPlQu6/AOrPUeKzQ9cEwTfh/9Jx8lzh0ZmxBw+o6RfWqsJDj83nkUKMvxq+g8EXcM6pltwKgvU+O
+J5WTs496uWJKrDZdC7XMIl64+p/cTYs2LYwglsg7TTQ9al43i4KWKcWPe3L8XfcoMrD/GjkR6Ake
+3cQstW/Ek6WwA5HV72xmKaGsbWc0JvsFAKNf1FTbX0mk6Frru/ik6SuNbKVNnoV9BbBsn8Ag/g96
+/cVQdKgGG8aFV7Ag1hILHw==
+--00000000000060839f05b3347150--
