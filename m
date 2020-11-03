@@ -2,72 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73ABE2A4749
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 15:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E9B2A474E
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 15:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729528AbgKCOIl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Nov 2020 09:08:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
+        id S1729527AbgKCOIp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Nov 2020 09:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729361AbgKCOIk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 09:08:40 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E417C0613D1
-        for <linux-scsi@vger.kernel.org>; Tue,  3 Nov 2020 06:08:40 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id x23so8620931plr.6
-        for <linux-scsi@vger.kernel.org>; Tue, 03 Nov 2020 06:08:40 -0800 (PST)
+        with ESMTP id S1729529AbgKCOIo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 09:08:44 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901CDC0613D1
+        for <linux-scsi@vger.kernel.org>; Tue,  3 Nov 2020 06:08:44 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id w11so8599689pll.8
+        for <linux-scsi@vger.kernel.org>; Tue, 03 Nov 2020 06:08:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=tGPF1tZzbjg9RDUrVBN5ZLmFYpdjHRMWH4T2ul90m0c=;
-        b=K2+iM6Tl55o1HcoKQEBSmoT3t7GxzV/wDQgS88qTXlW3BFGrWXaga+DkSQtQVqIRrX
-         5aKfa6G+6cWEDra7rVD/lhrSsbtSPhDgq2VAi/bYj74KXvc0kJISlnpqqVc0P/jufNxZ
-         ZGaTy3LmSzzoUIb5pXmHksv7IyNR4jOa4BBVU=
+        bh=u3pSgIxg9wnYG+RnsaKd7ypSQe33hfPQEmk6SiSOaxg=;
+        b=WISZXAUBASxPYBTH9mXrQFsD6yFWU+E/NKIc1unzRoIhcOZVpHT7fyo+0MUJgxM6Pw
+         s8e80BE/qEsN2kBjHq9eX1XQVWMETlLx6EftG5pc6T9a4SmlRxSBwRgDkdyv1Y6HtTko
+         CEaQW3rtLMsZlOpgB74eXAiVtERLg6QgoIfSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=tGPF1tZzbjg9RDUrVBN5ZLmFYpdjHRMWH4T2ul90m0c=;
-        b=OTPQBaP1HhTkLzszPPPt1jtWfdQCu67/MLBAXt3+XcHHJZQXgbJw8+IDuDQFGXYoCU
-         VeaK2VqIznYouB6djWmYVMUhTXPDRgCojvjIXk+ziO1drkS/8M1ESqZqq8gUUbQBdIEe
-         TY6JyJhy4osQHmdmPVpIqR+LGkeYPyV/vbsoW4iJiJl76hU7P0ZEX9IdYs0eylZWqH7J
-         AsOzecyVHp9iNiP/qSkyZT0LBV1x/29Oz8EYdhqbsnJZ0IMyzx9KLcOBWhQYK2QKGXe2
-         FfClQ5lZg0dH0Wxs65TEA9gF6CQrir3n+H9ZqBUJlf2nVnUfC2QW7XTddEY3fTM3x+ga
-         FP+g==
-X-Gm-Message-State: AOAM531dTeFmH5/uxIG2YWaNrgexQoEnaX0fb+i4BjrXK37IoyZTyAZa
-        XXzwKyExHpdo4YPnXI57URvABopGXG6dUwGiouwmnBVpNuOUVwk8tOYbPpMxhAD5oqUaxYRnlp6
-        beBm8tMnN8q93o1KIMVwGTu0+AbaAUNLsGE6a8/TpwUm61K/K0rwZeyoFBvno3Vn1wQ8EIVvq8I
-        3JnN9C0ee5biw=
-X-Google-Smtp-Source: ABdhPJyf7BIEUIRwRqDLlrGE3Zla/rRkBItcySnBqzdS9tbPCAF2Ff9yjLc6uZvmPQQGZMt4QMDYFg==
-X-Received: by 2002:a17:902:b196:b029:d5:a8fd:9a1c with SMTP id s22-20020a170902b196b02900d5a8fd9a1cmr26011382plr.44.1604412519300;
-        Tue, 03 Nov 2020 06:08:39 -0800 (PST)
+        bh=u3pSgIxg9wnYG+RnsaKd7ypSQe33hfPQEmk6SiSOaxg=;
+        b=IDfgVHfBKPQXpG0A8cV+O3OvefuEzey3bh2TgstlE4O6xS3LWyLsTLcYR+glHWqI8p
+         JxJfqL3qLgTEdtjVh0MZyROL8U8Bd8Z1uvcOqa+ed9ypXwfTxSK7x6D5tt3i0CRAt8Q2
+         3ANhSdPN7/aGuaS2F6uamBvRt6zeFXTSQ1GRSw0dKJqTRx8RQ/Qz2iY0DlePLPvZN6CT
+         EsElfa+sFqFh5I62MU40Jr7/LMFBV9WOobNgSoqjYiKrkrk0UEasRg80d6roT9tORSIZ
+         kIywx0J61GVpL9vg0sF8eEOMUtu4o5s6OZHvKpe+Zr2e9Spgp0j4qPYHw+S5NpTb0ofZ
+         aypA==
+X-Gm-Message-State: AOAM530fPPLDMfohIxOIkPPVpYOnrA8tJ5vFhsUpoSw2AuSZOrFTJmWb
+        t5R8/WGHyZ7idebjYYxR9k43YS5ASp5MHGvZpe9IO/EyxHxs9tlgZjYm/6Sd75wehngeRq5lxft
+        /VWYoZBnQnEIf2d4yrk9YtEIsGpEeM0a9/kWi/hCRWY+yXWTFG9Fn1/RCvGHYoSIS13cB32atRL
+        GVoJj3SyhkQbo=
+X-Google-Smtp-Source: ABdhPJyUMdsXIGecoSjXJuxuO2dSjFphhu8xK9301K4czRMlNaGgVXx16X98STI4B7fh7Yozdve6QQ==
+X-Received: by 2002:a17:902:8698:b029:d3:b362:7342 with SMTP id g24-20020a1709028698b02900d3b3627342mr25457699plo.50.1604412523396;
+        Tue, 03 Nov 2020 06:08:43 -0800 (PST)
 Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id r19sm3525959pjo.23.2020.11.03.06.08.35
+        by smtp.gmail.com with ESMTPSA id r19sm3525959pjo.23.2020.11.03.06.08.39
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Nov 2020 06:08:38 -0800 (PST)
+        Tue, 03 Nov 2020 06:08:42 -0800 (PST)
 From:   Muneendra <muneendra.kumar@broadcom.com>
 To:     linux-scsi@vger.kernel.org, michael.christie@oracle.com,
         hare@suse.de
 Cc:     jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com,
         Muneendra <muneendra.kumar@broadcom.com>
-Subject: [patch v5 1/5] scsi: Added a new definition in scsi_cmnd.h
-Date:   Tue,  3 Nov 2020 12:45:08 +0530
-Message-Id: <1604387712-19801-2-git-send-email-muneendra.kumar@broadcom.com>
+Subject: [patch v5 2/5] scsi: Added a new error code in scsi.h
+Date:   Tue,  3 Nov 2020 12:45:09 +0530
+Message-Id: <1604387712-19801-3-git-send-email-muneendra.kumar@broadcom.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1604387712-19801-1-git-send-email-muneendra.kumar@broadcom.com>
 References: <1604387712-19801-1-git-send-email-muneendra.kumar@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000050164b05b33466f9"
+        boundary="0000000000008ec20205b33466c0"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000050164b05b33466f9
+--0000000000008ec20205b33466c0
 
-Added a new definition SCMD_NORETRIES_ABORT in scsi_cmnd.h
+Added a new error code DID_TRANSPORT_MARGINAL to handle marginal
+errors in scsi.h
 
-The SCMD_NORETRIES_ABORT defines the third bit postion
-in scmd->state
+Clearing the SCMD_NORETRIES_ABORT bit in state flag before
+blk_mq_start_request
 
 Signed-off-by: Muneendra <muneendra.kumar@broadcom.com>
 
@@ -76,36 +77,48 @@ v5:
 No Change
 
 v4:
-No Change
-
-v3:
 No change
 
-v2:
-Modified the commit log
----
- include/scsi/scsi_cmnd.h | 3 +++
- 1 file changed, 3 insertions(+)
+v3:
+Rearranged the patch by merging second hunk of the previous(v2)
+patch3 to this patch
 
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 69ade4fb71aa..8dec4ec6bd5f 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -64,6 +64,9 @@ struct scsi_pointer {
- /* for scmd->state */
- #define SCMD_STATE_COMPLETE	0
- #define SCMD_STATE_INFLIGHT	1
-+#define SCMD_NORETRIES_ABORT	2 /* If this bit is set then there won't be any
-+				   * retries of scmd on abort success
-+				   */
+v2:
+Newpatch
+---
+ drivers/scsi/scsi_lib.c | 1 +
+ include/scsi/scsi.h     | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 1a2e9bab42ef..2b5dea07498e 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1660,6 +1660,7 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
+ 		req->rq_flags |= RQF_DONTPREP;
+ 	} else {
+ 		clear_bit(SCMD_STATE_COMPLETE, &cmd->state);
++		clear_bit(SCMD_NORETRIES_ABORT, &cmd->state);
+ 	}
  
- struct scsi_cmnd {
- 	struct scsi_request req;
+ 	cmd->flags &= SCMD_PRESERVED_FLAGS;
+diff --git a/include/scsi/scsi.h b/include/scsi/scsi.h
+index 5339baadc082..5b287ad8b727 100644
+--- a/include/scsi/scsi.h
++++ b/include/scsi/scsi.h
+@@ -159,6 +159,7 @@ static inline int scsi_is_wlun(u64 lun)
+ 				 * paths might yield different results */
+ #define DID_ALLOC_FAILURE 0x12  /* Space allocation on the device failed */
+ #define DID_MEDIUM_ERROR  0x13  /* Medium error */
++#define DID_TRANSPORT_MARGINAL 0x14 /* Transport marginal errors */
+ #define DRIVER_OK       0x00	/* Driver status                           */
+ 
+ /*
 -- 
 2.26.2
 
 
---00000000000050164b05b33466f9
+--0000000000008ec20205b33466c0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -176,13 +189,13 @@ LbMkW5lUoTb8ycBNOKLYhNE8UEOY8jRTUtMEhzT6NJDEE+1hb3kSGfArrrF3Z8pRYiUUhcpC5GKL
 EpmWnHflnrBcah5Ozy137DGCAm8wggJrAgEBMG0wXTELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEds
 b2JhbFNpZ24gbnYtc2ExMzAxBgNVBAMTKkdsb2JhbFNpZ24gUGVyc29uYWxTaWduIDIgQ0EgLSBT
 SEEyNTYgLSBHMwIMX/krgFDQUQNyOf+1MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEi
-BCDvuhJQ57eH2lGKUIDURKQ2I+SiE1g1PMlO8Eil06VWiTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDExMDMxNDA4MzlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
+BCDwrC0ONjEznhl/ODAoYiRFl581KI8eACrRUFEdNtPoLDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
+AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDExMDMxNDA4NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
 AWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEK
-MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAdqvZW+g09PPXcE24
-7XU4z7BPzPWXvipNxkTnpV0h3+jIeOkqifpNdkwTVBnmsqBpoVbL0l99dIl6cgipuCJLyJZXoJvT
-9437W4vVsc+RoctEc6G1neDHV923UCmnFBVWvnC557VIwBoMLa2ZInTeCRGbNqHcfZSdFv8wj7b1
-HzU4/KByQ4ZmYL2ES+WZk/reZxA5NiYjnxT3LS/1tTEUsES28QBQKvpbSz5D1iCdmh4gjQ3EgfN6
-WiRgUxUStFQQcICTww54AWfwGdM5sagtl3Tm9tZ3Z3zQ+NG12XSk9+E9ysr9vWynMjtxcn+HPt43
-eXrW9cHJlY3HMlaRc7swbw==
---00000000000050164b05b33466f9--
+MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAUKBoo3Qmql92xRLI
+tCUQhnymA7Ra3McyiQngQXjmjoAgjdfwR49DtTiINTGzIPvSUd8xi7Pi5QIWlr6QAZ+4Gqzqvixk
+2oezvkmVowiIA8rEadb4nqZx/b5lA6i6djQjGSZdnIyMg4lDTz0xJuyVoLyi+Aky4WeDhI0mHJKX
+bpkSdSDj3I9FHiR6q8kqPhZh5MGNbcDZPjFBrHXueGteeJQWzpa5UQ8wn1C/YubUbUZTE7+7wbO1
+mSPuVs6uOPsJnV5ghHBwWfft/HEBi0wVe1y79Knpc+OMu1UKvdmzI7+xUEFI3hjzqIWaqA9phTzM
+RYDdo81VnMCkHprmzUo8uA==
+--0000000000008ec20205b33466c0--
