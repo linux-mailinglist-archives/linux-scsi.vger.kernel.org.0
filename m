@@ -2,138 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 595622A45A6
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 13:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366462A4660
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 14:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729158AbgKCMyf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Nov 2020 07:54:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729130AbgKCMyV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 07:54:21 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B14C0613D1;
-        Tue,  3 Nov 2020 04:54:17 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id v4so18157001edi.0;
-        Tue, 03 Nov 2020 04:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9Sl56c8k51H8Vu2OSyVbh5e7wa+RNXgDGujKIEt2TYo=;
-        b=udqUPOFrit8ZOErOJKsB+z4D6+BLT5eAqGZLwqEby83aQe/aGEkKqG4hjNj1o7IAo+
-         THuNzMAIH5yvOo2hVRFZFOnQ5MyXhtggMKkE9QCnuQNwQpaC8UMkHOsQ+XrlrR6KOBqR
-         oxAes5dDPqc001mJt7Yh6nQR+jiLYnFLsu47LaLk3xhJ/KLuq86E3x6xq8bc9nfWcDjR
-         Kl6yKx4ZSf3RVllNkYRJhKqU5wnHoqWAJZCNBYTztGZ+0lXE8rvUJ2fFCq+HFg+7LLLK
-         eJsVRgFDMp3vrOBdN/ATAz4vZpizlGLnfMlJ0nRI7OlbBN+9wzM5re/lc9P12q4MLXRD
-         YMqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9Sl56c8k51H8Vu2OSyVbh5e7wa+RNXgDGujKIEt2TYo=;
-        b=HLwMqtATmdbN+4eWj+gjPqic3rRrrk/Z9PHn2I3v1NLMuoJF7aLQ5rA3fKa9IsacLB
-         3GoEcA5/EpMa5mej5Ewhf3ywXuPtsfTKnpI30y53IXIXayj50D9zlDXuZK/az4IRrRyu
-         nIZbvb0bgnnhMJ9O/J3ogfEOeDkMRL47IN9M7eKyiEhcRcma2Pw6VxqcB6rDBN3Rspqe
-         i2bumluMNSs4S/Mc7JY+Rzbwkud/neUhnI+vZhECc7dND+a7r43WLvBuvNu9m4UDVF0i
-         R7mLcnsUgpZ4cLM7JaqXc6k621kUqsQkABfskePOjtCNHHNlptsegvqLx3HGbsXGNDAd
-         DR7Q==
-X-Gm-Message-State: AOAM5304vultbes0dFQyP/84aam1ZT7PRndKPInNzmQ4i+KRJfYjUOi5
-        1i5rzzf2sJjjroJeuyMngx4=
-X-Google-Smtp-Source: ABdhPJw/aBni6ZTG1aHvoYitADBy4us0mcruZhypS49M61E3Nu53RTJ3rq6JWQRM/239ttS3V5CT9A==
-X-Received: by 2002:aa7:c5d0:: with SMTP id h16mr10094225eds.7.1604408056190;
-        Tue, 03 Nov 2020 04:54:16 -0800 (PST)
-Received: from [192.168.178.40] ([188.192.138.212])
-        by smtp.gmail.com with ESMTPSA id k4sm11010356edq.73.2020.11.03.04.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2020 04:54:15 -0800 (PST)
-Subject: Re: [PATCH v3 1/4] sgl_alloc_order: remove 4 GiB limit, sgl_free()
- warning
-To:     Douglas Gilbert <dgilbert@interlog.com>,
-        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     martin.petersen@oracle.com, axboe@kernel.dk, bvanassche@acm.org
-References: <20201019191928.77845-1-dgilbert@interlog.com>
- <20201019191928.77845-2-dgilbert@interlog.com>
-From:   Bodo Stroesser <bostroesser@gmail.com>
-Message-ID: <2e94f118-1216-b926-a275-2fb325874b04@gmail.com>
-Date:   Tue, 3 Nov 2020 13:54:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729275AbgKCN2n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Nov 2020 08:28:43 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:45803 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729258AbgKCN2j (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 3 Nov 2020 08:28:39 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604410118; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=dldIYfTJS6IkZ8/7xmZR8OD1UnVkZixlc/QiTKGvk1I=;
+ b=kgMtwDp4AWGehadPrFceA+O2rE7drbpHUhZbSOJCygbsfI48X7hlYW8ZEBmiJP7F5HHokt9+
+ gH0gxO4vZwkEK6DdQ9chb0TDfzCJoc5bMAe2v2wNZ41DH3LwQcjaB0mQFvgyy7ILxkLUdcTk
+ 09OPublYBcrZLqXGFaR48sUEdw4=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5fa15af8b64b1c5b780e9878 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 13:28:24
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 02243C4345F; Tue,  3 Nov 2020 05:28:11 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 638A0C433B1;
+        Tue,  3 Nov 2020 05:28:10 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20201019191928.77845-2-dgilbert@interlog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Tue, 03 Nov 2020 13:28:10 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org
+Subject: Re: [PATCH v4 1/5] scsi: ufs: atomic update for clkgating_enable
+In-Reply-To: <20201028194352.GA3060274@google.com>
+References: <20201026195124.363096-1-jaegeuk@kernel.org>
+ <20201026195124.363096-2-jaegeuk@kernel.org>
+ <20d1c2ca06e95beb207fd4ba1b61dc80@codeaurora.org>
+ <20201027033311.GA1745317@google.com>
+ <76df977d164683c7404d2dc702f2e5ad@codeaurora.org>
+ <20201028194352.GA3060274@google.com>
+Message-ID: <2c73eb84991227b7e42ba4c1d268d390@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Am 19.10.20 um 21:19 schrieb Douglas Gilbert:
-> This patch removes a check done by sgl_alloc_order() before it starts
-> any allocations. The comment before the removed code says: "Check for
-> integer overflow" arguably gives a false sense of security. The right
-> hand side of the expression in the condition is resolved as u32 so
-> cannot exceed UINT32_MAX (4 GiB) which means 'length' cannot exceed
-> that amount. If that was the intention then the comment above it
-> could be dropped and the condition rewritten more clearly as:
->       if (length > UINT32_MAX) <<failure path >>;
+On 2020-10-29 03:43, Jaegeuk Kim wrote:
+> On 10/27, Can Guo wrote:
+>> On 2020-10-27 11:33, Jaegeuk Kim wrote:
+>> > On 10/27, Can Guo wrote:
+>> > > On 2020-10-27 03:51, Jaegeuk Kim wrote:
+>> > > > From: Jaegeuk Kim <jaegeuk@google.com>
+>> > > >
+>> > > > When giving a stress test which enables/disables clkgating, we hit
+>> > > > device
+>> > > > timeout sometimes. This patch avoids subtle racy condition to address
+>> > > > it.
+>> > > >
+>> > > > Note that, this requires a patch to address the device stuck by
+>> > > > REQ_CLKS_OFF in
+>> > > > __ufshcd_release().
+>> > > >
+>> > > > The fix is "scsi: ufs: avoid to call REQ_CLKS_OFF to CLKS_OFF".
+>> > >
+>> > > Why don't you just squash the fix into this one?
+>> >
+>> > I'm seeing this patch just revealed that problem.
+>> 
+>> That scenario (back to back calling of ufshcd_release()) only happens
+>> when you stress the clkgate_enable sysfs node, so let's keep the fix
+>> as one to make things simple. What do you think?
+> 
+> If we don't have this patch, do you think this issue won't happen at 
+> all?
+> 
 
-I think the intention of the check is to reject calls, where length is so high, that calculation of nent overflows unsigned int nent/nalloc.
-Consistently a similar check is done few lines later before incrementing nalloc due to chainable = true.
-So I think the code tries to allow length values up to 4G << (PAGE_SHIFT + order).
+At least I've never seen this scenario these years, otherwise I would 
+have
+put up a fix.
 
-That said I think instead of removing the check it better should be fixed, e.g. by adding an unsigned long long cast before nent
+Thanks,
 
-BTW: I don't know why there are two checks. I think one check after conditionally incrementing nalloc would be enough.
+Can Guo.
 
-> 
-> The author's intention is to use sgl_alloc_order() to replace
-> vmalloc(unsigned long) for a large allocation (debug ramdisk).
-> vmalloc has no limit at 4 GiB so its seems unreasonable that:
->      sgl_alloc_order(unsigned long long length, ....)
-> does. sgl_s made with sgl_alloc_order(chainable=false) have equally
-> sized segments placed in a scatter gather array. That allows O(1)
-> navigation around a big sgl using some simple integer maths.
-> 
-> Having previously sent a patch to fix a memory leak in
-> sg_alloc_order() take the opportunity to put a one line comment above
-> sgl_free()'s declaration that it is not suitable when order > 0 . The
-> mis-use of sgl_free() when order > 0 was the reason for the memory
-> leak. The other users of sgl_alloc_order() in the kernel where
-> checked and found to handle free-ing properly.
-> 
-> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
-> ---
->   include/linux/scatterlist.h | 1 +
->   lib/scatterlist.c           | 3 ---
->   2 files changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
-> index 45cf7b69d852..80178afc2a4a 100644
-> --- a/include/linux/scatterlist.h
-> +++ b/include/linux/scatterlist.h
-> @@ -302,6 +302,7 @@ struct scatterlist *sgl_alloc(unsigned long long length, gfp_t gfp,
->   			      unsigned int *nent_p);
->   void sgl_free_n_order(struct scatterlist *sgl, int nents, int order);
->   void sgl_free_order(struct scatterlist *sgl, int order);
-> +/* Only use sgl_free() when order is 0 */
->   void sgl_free(struct scatterlist *sgl);
->   #endif /* CONFIG_SGL_ALLOC */
->   
-> diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-> index c448642e0f78..d5770e7f1030 100644
-> --- a/lib/scatterlist.c
-> +++ b/lib/scatterlist.c
-> @@ -493,9 +493,6 @@ struct scatterlist *sgl_alloc_order(unsigned long long length,
->   	u32 elem_len;
->   
->   	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
-> -	/* Check for integer overflow */
-> -	if (length > (nent << (PAGE_SHIFT + order)))
-> -		return NULL;
->   	nalloc = nent;
->   	if (chainable) {
->   		/* Check for integer overflow */
-> 
+>> 
+>> Thanks,
+>> 
+>> Can Guo.
+>> 
+>> >
+>> > >
+>> > > Thanks,
+>> > >
+>> > > Can Guo.
+>> > >
+>> > > >
+>> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@google.com>
+>> > > > ---
+>> > > >  drivers/scsi/ufs/ufshcd.c | 12 ++++++------
+>> > > >  1 file changed, 6 insertions(+), 6 deletions(-)
+>> > > >
+>> > > > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> > > > index cc8d5f0c3fdc..6c9269bffcbd 100644
+>> > > > --- a/drivers/scsi/ufs/ufshcd.c
+>> > > > +++ b/drivers/scsi/ufs/ufshcd.c
+>> > > > @@ -1808,19 +1808,19 @@ static ssize_t
+>> > > > ufshcd_clkgate_enable_store(struct device *dev,
+>> > > >  		return -EINVAL;
+>> > > >
+>> > > >  	value = !!value;
+>> > > > +
+>> > > > +	spin_lock_irqsave(hba->host->host_lock, flags);
+>> > > >  	if (value == hba->clk_gating.is_enabled)
+>> > > >  		goto out;
+>> > > >
+>> > > > -	if (value) {
+>> > > > -		ufshcd_release(hba);
+>> > > > -	} else {
+>> > > > -		spin_lock_irqsave(hba->host->host_lock, flags);
+>> > > > +	if (value)
+>> > > > +		__ufshcd_release(hba);
+>> > > > +	else
+>> > > >  		hba->clk_gating.active_reqs++;
+>> > > > -		spin_unlock_irqrestore(hba->host->host_lock, flags);
+>> > > > -	}
+>> > > >
+>> > > >  	hba->clk_gating.is_enabled = value;
+>> > > >  out:
+>> > > > +	spin_unlock_irqrestore(hba->host->host_lock, flags);
+>> > > >  	return count;
+>> > > >  }
