@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B392A451A
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 13:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0204A2A4529
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 13:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729067AbgKCM32 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Nov 2020 07:29:28 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7588 "EHLO
+        id S1728995AbgKCM3X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Nov 2020 07:29:23 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7585 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729042AbgKCM30 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 07:29:26 -0500
+        with ESMTP id S1728168AbgKCM3V (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 07:29:21 -0500
 Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CQTcB1YvVzLt6L;
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CQTcB23vzzLt6w;
         Tue,  3 Nov 2020 20:29:14 +0800 (CST)
 Received: from huawei.com (10.69.192.56) by DGGEMS410-HUB.china.huawei.com
  (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Tue, 3 Nov 2020
@@ -26,9 +26,9 @@ CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
         <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
         <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
         <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
-Subject: [PATCH v3 4/5] usb: dwc3: debugfs: Introduce DEFINE_SHOW_STORE_ATTRIBUTE
-Date:   Tue, 3 Nov 2020 20:29:43 +0800
-Message-ID: <1604406584-53926-5-git-send-email-luojiaxing@huawei.com>
+Subject: [PATCH v3 5/5] drm/i915/display: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+Date:   Tue, 3 Nov 2020 20:29:44 +0800
+Message-ID: <1604406584-53926-6-git-send-email-luojiaxing@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1604406584-53926-1-git-send-email-luojiaxing@huawei.com>
 References: <1604406584-53926-1-git-send-email-luojiaxing@huawei.com>
@@ -41,129 +41,101 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Seq introduce a new helper macro DEFINE_SHOW_STORE_ATTRIBUTE for
-Read-Write file, so we apply it at dwc3 debugfs to reduce some duplicated
-code.
-
-While at that, also use DEFINE_SHOW_ATTRIBUTE() where possible.
+Read-Write file, so we apply it at drm/i915/display to reduce some
+duplicated code.
 
 Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-Acked-by: Felipe Balbi <balbi@kernel.org>
 ---
- drivers/usb/dwc3/debugfs.c | 52 ++++------------------------------------------
- 1 file changed, 4 insertions(+), 48 deletions(-)
+ .../gpu/drm/i915/display/intel_display_debugfs.c   | 55 ++--------------------
+ 1 file changed, 4 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index 5da4f60..2b5de8d 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -348,11 +348,6 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+diff --git a/drivers/gpu/drm/i915/display/intel_display_debugfs.c b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
+index 0bf31f9..8bf839f 100644
+--- a/drivers/gpu/drm/i915/display/intel_display_debugfs.c
++++ b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
+@@ -1329,21 +1329,7 @@ static int i915_displayport_test_active_show(struct seq_file *m, void *data)
  	return 0;
  }
  
--static int dwc3_lsp_open(struct inode *inode, struct file *file)
+-static int i915_displayport_test_active_open(struct inode *inode,
+-					     struct file *file)
 -{
--	return single_open(file, dwc3_lsp_show, inode->i_private);
+-	return single_open(file, i915_displayport_test_active_show,
+-			   inode->i_private);
 -}
 -
- static ssize_t dwc3_lsp_write(struct file *file, const char __user *ubuf,
- 			      size_t count, loff_t *ppos)
- {
-@@ -377,13 +372,7 @@ static ssize_t dwc3_lsp_write(struct file *file, const char __user *ubuf,
- 	return count;
- }
- 
--static const struct file_operations dwc3_lsp_fops = {
--	.open			= dwc3_lsp_open,
--	.write			= dwc3_lsp_write,
--	.read			= seq_read,
--	.llseek			= seq_lseek,
--	.release		= single_release,
+-static const struct file_operations i915_displayport_test_active_fops = {
+-	.owner = THIS_MODULE,
+-	.open = i915_displayport_test_active_open,
+-	.read = seq_read,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.write = i915_displayport_test_active_write
 -};
-+DEFINE_SHOW_STORE_ATTRIBUTE(dwc3_lsp);
++DEFINE_SHOW_STORE_ATTRIBUTE(i915_displayport_test_active);
  
- static int dwc3_mode_show(struct seq_file *s, void *unused)
+ static int i915_displayport_test_data_show(struct seq_file *m, void *data)
  {
-@@ -412,11 +401,6 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
- 	return 0;
+@@ -1733,19 +1719,7 @@ static ssize_t i915_hpd_storm_ctl_write(struct file *file,
+ 	return len;
  }
  
--static int dwc3_mode_open(struct inode *inode, struct file *file)
+-static int i915_hpd_storm_ctl_open(struct inode *inode, struct file *file)
 -{
--	return single_open(file, dwc3_mode_show, inode->i_private);
+-	return single_open(file, i915_hpd_storm_ctl_show, inode->i_private);
 -}
 -
- static ssize_t dwc3_mode_write(struct file *file,
- 		const char __user *ubuf, size_t count, loff_t *ppos)
- {
-@@ -445,13 +429,7 @@ static ssize_t dwc3_mode_write(struct file *file,
- 	return count;
- }
- 
--static const struct file_operations dwc3_mode_fops = {
--	.open			= dwc3_mode_open,
--	.write			= dwc3_mode_write,
--	.read			= seq_read,
--	.llseek			= seq_lseek,
--	.release		= single_release,
+-static const struct file_operations i915_hpd_storm_ctl_fops = {
+-	.owner = THIS_MODULE,
+-	.open = i915_hpd_storm_ctl_open,
+-	.read = seq_read,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.write = i915_hpd_storm_ctl_write
 -};
-+DEFINE_SHOW_STORE_ATTRIBUTE(dwc3_mode);
++DEFINE_SHOW_STORE_ATTRIBUTE(i915_hpd_storm_ctl);
  
- static int dwc3_testmode_show(struct seq_file *s, void *unused)
+ static int i915_hpd_short_storm_ctl_show(struct seq_file *m, void *data)
  {
-@@ -491,11 +469,6 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
- 	return 0;
+@@ -1811,14 +1785,7 @@ static ssize_t i915_hpd_short_storm_ctl_write(struct file *file,
+ 	return len;
  }
  
--static int dwc3_testmode_open(struct inode *inode, struct file *file)
+-static const struct file_operations i915_hpd_short_storm_ctl_fops = {
+-	.owner = THIS_MODULE,
+-	.open = i915_hpd_short_storm_ctl_open,
+-	.read = seq_read,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.write = i915_hpd_short_storm_ctl_write,
+-};
++DEFINE_SHOW_STORE_ATTRIBUTE(i915_hpd_short_storm_ctl);
+ 
+ static int i915_drrs_ctl_set(void *data, u64 val)
+ {
+@@ -2181,21 +2148,7 @@ static ssize_t i915_dsc_fec_support_write(struct file *file,
+ 	return len;
+ }
+ 
+-static int i915_dsc_fec_support_open(struct inode *inode,
+-				     struct file *file)
 -{
--	return single_open(file, dwc3_testmode_show, inode->i_private);
+-	return single_open(file, i915_dsc_fec_support_show,
+-			   inode->i_private);
 -}
 -
- static ssize_t dwc3_testmode_write(struct file *file,
- 		const char __user *ubuf, size_t count, loff_t *ppos)
- {
-@@ -528,13 +501,7 @@ static ssize_t dwc3_testmode_write(struct file *file,
- 	return count;
- }
- 
--static const struct file_operations dwc3_testmode_fops = {
--	.open			= dwc3_testmode_open,
--	.write			= dwc3_testmode_write,
--	.read			= seq_read,
--	.llseek			= seq_lseek,
--	.release		= single_release,
+-static const struct file_operations i915_dsc_fec_support_fops = {
+-	.owner = THIS_MODULE,
+-	.open = i915_dsc_fec_support_open,
+-	.read = seq_read,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-	.write = i915_dsc_fec_support_write
 -};
-+DEFINE_SHOW_STORE_ATTRIBUTE(dwc3_testmode);
++DEFINE_SHOW_STORE_ATTRIBUTE(i915_dsc_fec_support);
  
- static int dwc3_link_state_show(struct seq_file *s, void *unused)
- {
-@@ -564,11 +531,6 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
- 	return 0;
- }
- 
--static int dwc3_link_state_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, dwc3_link_state_show, inode->i_private);
--}
--
- static ssize_t dwc3_link_state_write(struct file *file,
- 		const char __user *ubuf, size_t count, loff_t *ppos)
- {
-@@ -620,13 +582,7 @@ static ssize_t dwc3_link_state_write(struct file *file,
- 	return count;
- }
- 
--static const struct file_operations dwc3_link_state_fops = {
--	.open			= dwc3_link_state_open,
--	.write			= dwc3_link_state_write,
--	.read			= seq_read,
--	.llseek			= seq_lseek,
--	.release		= single_release,
--};
-+DEFINE_SHOW_STORE_ATTRIBUTE(dwc3_link_state);
- 
- struct dwc3_ep_file_map {
- 	const char name[25];
+ /**
+  * intel_connector_debugfs_add - add i915 specific connector debugfs files
 -- 
 2.7.4
 
