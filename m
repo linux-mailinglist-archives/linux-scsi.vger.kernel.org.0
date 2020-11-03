@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DADF2A390E
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 02:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092B72A38E1
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 02:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727388AbgKCBXD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 20:23:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35938 "EHLO mail.kernel.org"
+        id S1728318AbgKCBVF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 20:21:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36324 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728223AbgKCBUt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 2 Nov 2020 20:20:49 -0500
+        id S1727147AbgKCBVD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 2 Nov 2020 20:21:03 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 194B422400;
-        Tue,  3 Nov 2020 01:20:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A9D52225E;
+        Tue,  3 Nov 2020 01:21:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604366449;
-        bh=3cwa2+oW48qbbKajQym3cjbPzZISxKfmoExe6aZKujk=;
+        s=default; t=1604366463;
+        bh=kufhhXjMYz79mB5F/fg39na2TWrw2qE0E+JKeiGLhCA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n821X1d07vJ0M8NP3BZW0Ys8udRQ5yScEDf9aV1i6o3wJAww1l2vB7UrP99XCM1sJ
-         77P7jvbwzDtxf2rHOYn94Ulyi6CUgmq1jr+Bn907YFC6lvMSTqnmLz8Aeo9Kgbo1TH
-         3XSOP16QNzBil2XJvo5Ce3TPWYCOej3wRRlFEcL0=
+        b=1rZHszH+vfFqdJtmGQOD/D0i721RxWc7oH0x8UKccjN+JJyyE1IWp0DDSsQ42pewq
+         8+qU9UYcarG+8l4I3215lskyiRVtzwdMWwgMSBEdgD2KoSHTeVRVD+l4fRJ729AuOG
+         o81Y2UOUqNOiI9+iVTnwsKvTYkzt9uM5JM8EWmE0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
@@ -32,12 +32,12 @@ Cc:     Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
         Lee Duncan <lduncan@suse.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/11] scsi: core: Don't start concurrent async scan on same host
-Date:   Mon,  2 Nov 2020 20:20:35 -0500
-Message-Id: <20201103012039.183672-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 06/10] scsi: core: Don't start concurrent async scan on same host
+Date:   Mon,  2 Nov 2020 20:20:50 -0500
+Message-Id: <20201103012054.183811-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201103012039.183672-1-sashal@kernel.org>
-References: <20201103012039.183672-1-sashal@kernel.org>
+In-Reply-To: <20201103012054.183811-1-sashal@kernel.org>
+References: <20201103012054.183811-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 9a7e3a3bd5ce8..009a5b2aa3d02 100644
+index 0b11405bfd7ea..40acc060b6558 100644
 --- a/drivers/scsi/scsi_scan.c
 +++ b/drivers/scsi/scsi_scan.c
-@@ -1722,15 +1722,16 @@ static void scsi_sysfs_add_devices(struct Scsi_Host *shost)
+@@ -1720,15 +1720,16 @@ static void scsi_sysfs_add_devices(struct Scsi_Host *shost)
   */
  static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
  {
@@ -97,7 +97,7 @@ index 9a7e3a3bd5ce8..009a5b2aa3d02 100644
  	}
  
  	data = kmalloc(sizeof(*data), GFP_KERNEL);
-@@ -1741,7 +1742,6 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
+@@ -1739,7 +1740,6 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
  		goto err;
  	init_completion(&data->prev_finished);
  
@@ -105,7 +105,7 @@ index 9a7e3a3bd5ce8..009a5b2aa3d02 100644
  	spin_lock_irqsave(shost->host_lock, flags);
  	shost->async_scan = 1;
  	spin_unlock_irqrestore(shost->host_lock, flags);
-@@ -1756,6 +1756,7 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
+@@ -1754,6 +1754,7 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
  	return data;
  
   err:
