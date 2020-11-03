@@ -2,110 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA372A363F
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Nov 2020 23:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0DC2A39B4
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 02:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725910AbgKBWGX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 17:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbgKBWGX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 17:06:23 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA263C0617A6
-        for <linux-scsi@vger.kernel.org>; Mon,  2 Nov 2020 14:06:22 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id j30so19494074lfp.4
-        for <linux-scsi@vger.kernel.org>; Mon, 02 Nov 2020 14:06:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=yOeaU6BmujlW8/sz9myL4hUTr7Ca+5czBJG1/GXMdqg=;
-        b=R5b+UOQt647sZqbfK8AZh3/+ep35X/nEvq39ddAM9Dy+PvwgQF5JCp8y8imS6pnXPz
-         CQZV+od4CKx91mNztW6JMmNJdJ/B0YCg9C1X4ZK82XMPPM8ma8ZYj6TpMDHYajuaFPwc
-         0ksYDCIhh4u0C1bMMxtZPb3f+TjNhtj5IwZBo3hPzuIWJ01uJV7xqSboqx6AyzZPMGLI
-         LKuqFxMEar+oaGEMus6xawACmR00Xkox7eCssA+7mXPi0IzDp9oonJOoeNEtKRv6TT9O
-         2vGkfMgBRqz+KR/xzIj/3zRsfv4oxtkiQXVJ08shDtNgs0QbBfccUwAFZck/ycFllYIx
-         Qzcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=yOeaU6BmujlW8/sz9myL4hUTr7Ca+5czBJG1/GXMdqg=;
-        b=rDBfUnJNS5NyS2h97XXHnb0eBa4zkWUGmeA8zQs95OTHie4HdqSAD6aYrFN4EnGSnE
-         YOpNmvWnxSaWObmu5StRmwwoUde+YaoiSrdUHBRMt0Ddaj/c1enLvfjLPMEi6MnRonpx
-         cFNt68lijGBSAuDJ8c8hjvCGSIvM6Kn9dnOy9OONtc2tLe+YObdMttNpsgMPNZVvTVfK
-         //pdYQQ6GTTmdHlC1mmrhAfaKfxIFPZWn8qQwMz92LK4padHjby6BmtlUXM5FhkCN+hL
-         j1yPYVVcU4wnEnPmeAcufQ4zMN0G6fm2ElOwa4BsVx3ZbgadSp9NunhoVK7yKiBxIv2V
-         29LA==
-X-Gm-Message-State: AOAM532sUYk9XG3f+YnapoZXFQ3Pd17fLlJapmDFzg1ADVRGT/M13wPl
-        vN3fKW92VOgXfkZx29C/dEY6o8RE3gyzA9Sw+BU=
-X-Google-Smtp-Source: ABdhPJxNteMVcPt/U6WP0WBEquDMppXzy5BNFMqTi3Rr4ULIAQDL6aexNs64i15fDO/2B0k0iFwfxNdeAijM0sqwhE8=
-X-Received: by 2002:a19:87:: with SMTP id 129mr6047263lfa.164.1604354780928;
- Mon, 02 Nov 2020 14:06:20 -0800 (PST)
+        id S1728066AbgKCB1W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 20:27:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60868 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727521AbgKCBTI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 2 Nov 2020 20:19:08 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA955223FB;
+        Tue,  3 Nov 2020 01:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604366347;
+        bh=nC8cboVWH1YROKvwVzP82ppAtTQk2sOk7bmIlq4ryLM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vTl7NX2YxdUcX8L1xhDrg17FcacqUqtIUPZ31KNioYVYO1S1KbJFcyqTQl7CgeAdV
+         2MKVVDE8o6RCR5FyZpuWRfxDdYoJjt0sa0SU5V/AlyhRq/dqFkrZ4rDwaZRaOXw/b7
+         r1ucjfI8znBlIs+9FHPA2pjz8Gr6OX3MA/caPo/Y=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Lee Duncan <lduncan@suse.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 20/35] scsi: core: Don't start concurrent async scan on same host
+Date:   Mon,  2 Nov 2020 20:18:25 -0500
+Message-Id: <20201103011840.182814-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201103011840.182814-1-sashal@kernel.org>
+References: <20201103011840.182814-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ab3:6fd8:0:0:0:0:0 with HTTP; Mon, 2 Nov 2020 14:06:20 -0800 (PST)
-Reply-To: UBAGroupb@groupmail.com
-From:   "Mrs. Agba Ezu" <jamesberryfcu9@gmail.com>
-Date:   Mon, 2 Nov 2020 23:06:20 +0100
-Message-ID: <CAFct6hn5sa+KJ9n5svuh1U=mWNESKb9Z691Pw4PX7uR6CL3aMA@mail.gmail.com>
-Subject: Contact for your ATM CARD {$2.700,000.00}
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Attention for you outstanding payment
+From: Ming Lei <ming.lei@redhat.com>
 
-How are you doing hoping all is well with you and your family?
-We know you might have forgotten about this outstanding
-compensation payment due to delay on the delivery up till now. We are
-here by writing to inform you that your payment file was found in our
-Office and we discovered that your Compensation payment worth sum of
-two million seven hundred thousand United State Dollars
-{$2.700,000.00} have not been sent to you as it was instructed by The
-Economic Community of West African States(ECO-WAS) We are here to
-inform you that your payment has been converted into ATM Visa/Master
-Card to free it from Confiscating, and all necessary arrangement your
-ATM VISA/MASTER CARD Payment worth of {$2.700,000.00} has been granted
-for your payment through Our ATM Card Department Center.
+[ Upstream commit 831e3405c2a344018a18fcc2665acc5a38c3a707 ]
 
-Now Your ATM Visa/Master Card is well packaged with every legal
-document to convey it not having any problem with anybody therefore we
-are here by inviting you to our Head office here in Abuja, Office
-Address, Commented Bank, Abuja Paul street 1NG 325,Federal Republic of
-Nigeria, to enable us complete the normal formalities and activation
-process of your ATM Visa Card and issue the Secret PIN CODE/NUMBER to
-enable you start using it at any ATM MACHINE worldwide of your choice
-nearest to you, as soon as it is activated, But if you are unable to
-come down here in our office in person you will be required to update
-our ATM Department Center with your contact delivery details as stated
-below so that they will precede with the necessary arrangement for the
-delivery of your ATM VISA/MASTER CARD.
+The current scanning mechanism is supposed to fall back to a synchronous
+host scan if an asynchronous scan is in progress. However, this rule isn't
+strictly respected, scsi_prep_async_scan() doesn't hold scan_mutex when
+checking shost->async_scan. When scsi_scan_host() is called concurrently,
+two async scans on same host can be started and a hang in do_scan_async()
+is observed.
 
-1. Your Full name, ________________
-2. Your home Address, _____________
-3. Your telephone number, _________
-4. A copy of your ID, _____________
+Fixes this issue by checking & setting shost->async_scan atomically with
+shost->scan_mutex.
 
-Meanwhile you should contact OUR ATM CARD PAYMENT DEPARTMENT CENTER
-immediately on their below;
+Link: https://lore.kernel.org/r/20201010032539.426615-1-ming.lei@redhat.com
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Ewan D. Milne <emilne@redhat.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/scsi_scan.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-E-mail: { officebankatmuba@gmail.com }
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index f2437a7570ce8..9af50e6f94c4c 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1714,15 +1714,16 @@ static void scsi_sysfs_add_devices(struct Scsi_Host *shost)
+  */
+ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
+ {
+-	struct async_scan_data *data;
++	struct async_scan_data *data = NULL;
+ 	unsigned long flags;
+ 
+ 	if (strncmp(scsi_scan_type, "sync", 4) == 0)
+ 		return NULL;
+ 
++	mutex_lock(&shost->scan_mutex);
+ 	if (shost->async_scan) {
+ 		shost_printk(KERN_DEBUG, shost, "%s called twice\n", __func__);
+-		return NULL;
++		goto err;
+ 	}
+ 
+ 	data = kmalloc(sizeof(*data), GFP_KERNEL);
+@@ -1733,7 +1734,6 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
+ 		goto err;
+ 	init_completion(&data->prev_finished);
+ 
+-	mutex_lock(&shost->scan_mutex);
+ 	spin_lock_irqsave(shost->host_lock, flags);
+ 	shost->async_scan = 1;
+ 	spin_unlock_irqrestore(shost->host_lock, flags);
+@@ -1748,6 +1748,7 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
+ 	return data;
+ 
+  err:
++	mutex_unlock(&shost->scan_mutex);
+ 	kfree(data);
+ 	return NULL;
+ }
+-- 
+2.27.0
 
-E-mail: { ubaatmofficepayment@gmail.com }
-
-Contact Person; Dr. Bright Kalu
-Director Of United Bank For Africa (UBA)
-Telephone Number; +234-8124700865
-
-Try to call him immediately to know when your ATM VISA/MASTER CARD
-will be delivered to you.
-
-I am waiting for your update as soon as you have received your
-Visa/Master ATM Card.
-
-Thanks and God Bless You.
-
-Yours sincerely
-Mrs. Agba Ezu
