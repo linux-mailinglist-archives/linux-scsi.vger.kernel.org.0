@@ -2,117 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C0A2A38CB
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 02:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B15D2A3A29
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 03:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728421AbgKCBV0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Nov 2020 20:21:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36928 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728413AbgKCBVZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 2 Nov 2020 20:21:25 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C302222B9;
-        Tue,  3 Nov 2020 01:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604366484;
-        bh=+DuDdVpjTF8qkkCWdGV1GlLIMkWVkV/LL5kQv0N/2Ig=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vKijAm/AJ/CyvnW93HJcLyVMHg2BLqM1BjbQdufi/TiP2wZo/sdPTrVL36iF3rl5e
-         j1IxgJfo+/Zw2hjIeAn5emTPM54fTtMFBeLv/sebdX/AvU3FmzGC2/WdMf63+0Z/Lq
-         c1J0PZK9d81wj0PIwtmZFyPZqzwTZQyZsyBvXrrU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        id S1726859AbgKCCCP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Nov 2020 21:02:15 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:41134 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbgKCCCO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Nov 2020 21:02:14 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A31wuLI025233;
+        Tue, 3 Nov 2020 02:02:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=cIMX/ky3aUv9Mygip6c32WMsIlDYK7dd5HjFrY+i14s=;
+ b=x2FjnJ6W1u89xVZmNW23VMRBIqMZQuxoBS2FK/uxtMPfp3KRl9Dnh6wQaBZuh2MKvqvq
+ bB8lF08JSAMP3VApNbkMDpui5FgB7WyOvU0iHrox28AjNnCuCgIRsK4zT+EBtiQtqGK8
+ tyns+acpQLuWIfu8gQknevdPxbMkPQaktxyHDBzKTlvHI278N30a9Z8n+m2qxJBEq7Fr
+ BFMUbTMc8/bfzyH+IHXlnmbQbztgrgJve9sD5SNzzpZwKJh8vb5x8ar6af9/25G7Ioqf
+ 7cr750NHtI4kZDAhh4LgWblTgKhgkOjp57dEZRb1S3vQGFKpxsZOOn9qULhQk6Vh2myh UA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 34hhw2ex2v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 03 Nov 2020 02:02:02 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A320k2o100274;
+        Tue, 3 Nov 2020 02:02:01 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 34jf47kjhc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 Nov 2020 02:02:01 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0A321wZ7004357;
+        Tue, 3 Nov 2020 02:01:58 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 02 Nov 2020 18:01:58 -0800
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Lee Duncan <lduncan@suse.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 4/5] scsi: core: Don't start concurrent async scan on same host
-Date:   Mon,  2 Nov 2020 20:21:17 -0500
-Message-Id: <20201103012119.184049-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201103012119.184049-1-sashal@kernel.org>
-References: <20201103012119.184049-1-sashal@kernel.org>
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Brian Bunker <brian@purestorage.com>
+Subject: Re: [PATCH] scsi_dh_alua: avoid crash during alua_bus_detach()
+Date:   Mon,  2 Nov 2020 21:01:56 -0500
+Message-Id: <160436888615.27492.12981270573337953625.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200924104559.26753-1-hare@suse.de>
+References: <20200924104559.26753-1-hare@suse.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9793 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 malwarescore=0 mlxlogscore=640 phishscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011030011
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9793 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 clxscore=1011 priorityscore=1501 impostorscore=0
+ spamscore=0 lowpriorityscore=0 mlxlogscore=653 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011030011
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+On Thu, 24 Sep 2020 12:45:59 +0200, Hannes Reinecke wrote:
 
-[ Upstream commit 831e3405c2a344018a18fcc2665acc5a38c3a707 ]
+> alua_bus_detach() might be running concurrently with alua_rtpg_work(),
+> so we might trip over h->sdev == NULL and call BUG_ON().
+> The correct way of handling it would be to not set h->sdev to NULL
+> in alua_bus_detach(), and call rcu_synchronize() before the final
+> delete to ensure that all concurrent threads have left the critical
+> section.
+> Then we can get rid of the BUG_ON(), and replace it with a simple
+> if condition.
 
-The current scanning mechanism is supposed to fall back to a synchronous
-host scan if an asynchronous scan is in progress. However, this rule isn't
-strictly respected, scsi_prep_async_scan() doesn't hold scan_mutex when
-checking shost->async_scan. When scsi_scan_host() is called concurrently,
-two async scans on same host can be started and a hang in do_scan_async()
-is observed.
+Applied to 5.10/scsi-fixes, thanks!
 
-Fixes this issue by checking & setting shost->async_scan atomically with
-shost->scan_mutex.
+[1/1] scsi: scsi_dh_alua: Avoid crash during alua_bus_detach()
+      https://git.kernel.org/mkp/scsi/c/5faf50e9e9fd
 
-Link: https://lore.kernel.org/r/20201010032539.426615-1-ming.lei@redhat.com
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Ewan D. Milne <emilne@redhat.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/scsi_scan.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 3e2288af56bc3..647a057a9b6cc 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -1710,15 +1710,16 @@ static void scsi_sysfs_add_devices(struct Scsi_Host *shost)
-  */
- static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
- {
--	struct async_scan_data *data;
-+	struct async_scan_data *data = NULL;
- 	unsigned long flags;
- 
- 	if (strncmp(scsi_scan_type, "sync", 4) == 0)
- 		return NULL;
- 
-+	mutex_lock(&shost->scan_mutex);
- 	if (shost->async_scan) {
- 		shost_printk(KERN_DEBUG, shost, "%s called twice\n", __func__);
--		return NULL;
-+		goto err;
- 	}
- 
- 	data = kmalloc(sizeof(*data), GFP_KERNEL);
-@@ -1729,7 +1730,6 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
- 		goto err;
- 	init_completion(&data->prev_finished);
- 
--	mutex_lock(&shost->scan_mutex);
- 	spin_lock_irqsave(shost->host_lock, flags);
- 	shost->async_scan = 1;
- 	spin_unlock_irqrestore(shost->host_lock, flags);
-@@ -1744,6 +1744,7 @@ static struct async_scan_data *scsi_prep_async_scan(struct Scsi_Host *shost)
- 	return data;
- 
-  err:
-+	mutex_unlock(&shost->scan_mutex);
- 	kfree(data);
- 	return NULL;
- }
 -- 
-2.27.0
-
+Martin K. Petersen	Oracle Linux Engineering
