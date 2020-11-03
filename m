@@ -2,33 +2,33 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0316B2A4668
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 14:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4AA2A4654
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 14:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729217AbgKCN21 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1729246AbgKCN21 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Tue, 3 Nov 2020 08:28:27 -0500
-Received: from z5.mailgun.us ([104.130.96.5]:62151 "EHLO z5.mailgun.us"
+Received: from z5.mailgun.us ([104.130.96.5]:22061 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729172AbgKCN2Y (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 3 Nov 2020 08:28:24 -0500
+        id S1729229AbgKCN2Z (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 3 Nov 2020 08:28:25 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1604410103; h=Message-ID: References: In-Reply-To: Subject:
+ s=smtp; t=1604410105; h=Message-ID: References: In-Reply-To: Subject:
  Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=Hoz/9n79EsI+6gaixvqKXML4PaGEpjr6mGkwMpWyi2o=;
- b=v0Sqfgv3pJ3bTA/cesWphdtVzVtbbAm3d3JAM5e1LWdXDRcmrmlMiS2pvncXTGU1tFJ/u8JF
- DI8o5s4plxW5gDhFGeeSBrk/T5O6VEajj436l3LC7/5y4RH5Tu40OTHDzE57VwG7t/95YrqY
- 3AlGRnVHNTxKNdYeLpOMVua8c0c=
+ MIME-Version: Sender; bh=JLjIZJZw1u9HJgVMWdn4LPLwRFKRMpegIpRTqok6leY=;
+ b=tsC0FgZjitOhS94IAN0g4cU5Row3+l55vWSI4f5SBUgA2A3HjdTp+Bw0OLHZRHcdcH8fiiD0
+ DYlQCC8qzbZ3BHB40+Ay848Wq84pmWWfdxBgz9na74inxizPpwrIMOJ5RDZOVEJR33PwnD3v
+ Y9g8qcQbI504wdvzdr68ZHckDvc=
 X-Mailgun-Sending-Ip: 104.130.96.5
 X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 5fa15af71037425ce11641da (version=TLS1.2,
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5fa15af7875877e3edaa822f (version=TLS1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 13:28:23
  GMT
 Sender: cang=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 87044C3852B; Tue,  3 Nov 2020 08:01:43 +0000 (UTC)
+        id A0073C38591; Tue,  3 Nov 2020 10:01:07 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -38,13 +38,13 @@ Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 30920C384FE;
-        Tue,  3 Nov 2020 08:01:42 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 69B04C38586;
+        Tue,  3 Nov 2020 10:01:02 +0000 (UTC)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 03 Nov 2020 16:01:42 +0800
+Date:   Tue, 03 Nov 2020 18:01:01 +0800
 From:   Can Guo <cang@codeaurora.org>
 To:     Stanley Chu <stanley.chu@mediatek.com>
 Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
@@ -57,177 +57,88 @@ Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Bean Huo <beanhuo@micron.com>,
         Bart Van Assche <bvanassche@acm.org>,
-        Satya Tangirala <satyat@google.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 2/2] scsi: ufs: Try to save power mode change and UIC
- cmd completion timeout
-In-Reply-To: <1604388023.13152.4.camel@mtkswgap22>
+Subject: Re: [PATCH v1 1/2] scsi: ufs: Fix unbalanced scsi_block_reqs_cnt
+ caused by ufshcd_hold()
+In-Reply-To: <1604387262.13152.2.camel@mtkswgap22>
 References: <1604384682-15837-1-git-send-email-cang@codeaurora.org>
- <1604384682-15837-3-git-send-email-cang@codeaurora.org>
- <1604388023.13152.4.camel@mtkswgap22>
-Message-ID: <1a557cffd04632875f6d52d43a036ad9@codeaurora.org>
+ <1604384682-15837-2-git-send-email-cang@codeaurora.org>
+ <1604387262.13152.2.camel@mtkswgap22>
+Message-ID: <09c5d4d31a0bd9bed99815cfbf51aaad@codeaurora.org>
 X-Sender: cang@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Stanley,
-
-On 2020-11-03 15:20, Stanley Chu wrote:
+On 2020-11-03 15:07, Stanley Chu wrote:
 > Hi Can,
 > 
-> Except for below nit, otherwise looks good to me.
-> 
-> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-> 
 > On Mon, 2020-11-02 at 22:24 -0800, Can Guo wrote:
->> Use the uic_cmd->cmd_active as a flag to track the lifecycle of an UIC 
->> cmd.
->> The flag is set before send the UIC cmd and cleared in IRQ handler. 
->> When a
->> PMC or UIC cmd completion timeout happens, if the flag is not set, 
->> instead
->> of returning timeout error, we still treat it as a successful 
->> operation.
->> This is to deal with the scenario in which completion has been raised 
->> but
->> the one waiting for the completion cannot be awaken in time due to 
->> kernel
->> scheduling problem.
->> 
->> Signed-off-by: Can Guo <cang@codeaurora.org>
->> ---
->>  drivers/scsi/ufs/ufshcd.c | 26 ++++++++++++++++++++++++--
->>  drivers/scsi/ufs/ufshcd.h |  2 ++
->>  2 files changed, 26 insertions(+), 2 deletions(-)
->> 
->> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
->> index efa7d86..7f33310 100644
->> --- a/drivers/scsi/ufs/ufshcd.c
->> +++ b/drivers/scsi/ufs/ufshcd.c
->> @@ -2122,10 +2122,20 @@ ufshcd_wait_for_uic_cmd(struct ufs_hba *hba, 
->> struct uic_command *uic_cmd)
->>  	unsigned long flags;
->> 
->>  	if (wait_for_completion_timeout(&uic_cmd->done,
->> -					msecs_to_jiffies(UIC_CMD_TIMEOUT)))
->> +					msecs_to_jiffies(UIC_CMD_TIMEOUT))) {
->>  		ret = uic_cmd->argument2 & MASK_UIC_COMMAND_RESULT;
->> -	else
->> +	} else {
->>  		ret = -ETIMEDOUT;
->> +		dev_err(hba->dev,
->> +			"uic cmd 0x%x with arg3 0x%x completion timeout\n",
->> +			uic_cmd->command, uic_cmd->argument3);
->> +
->> +		if (!uic_cmd->cmd_active) {
->> +			dev_err(hba->dev, "%s: UIC cmd has been completed, return the 
->> result\n",
->> +				__func__);
->> +			ret = uic_cmd->argument2 & MASK_UIC_COMMAND_RESULT;
->> +		}
->> +	}
->> 
->>  	spin_lock_irqsave(hba->host->host_lock, flags);
->>  	hba->active_uic_cmd = NULL;
->> @@ -2157,6 +2167,7 @@ __ufshcd_send_uic_cmd(struct ufs_hba *hba, 
->> struct uic_command *uic_cmd,
->>  	if (completion)
->>  		init_completion(&uic_cmd->done);
->> 
->> +	uic_cmd->cmd_active = 1;
->>  	ufshcd_dispatch_uic_cmd(hba, uic_cmd);
->> 
->>  	return 0;
->> @@ -3828,10 +3839,18 @@ static int ufshcd_uic_pwr_ctrl(struct ufs_hba 
->> *hba, struct uic_command *cmd)
->>  		dev_err(hba->dev,
->>  			"pwr ctrl cmd 0x%x with mode 0x%x completion timeout\n",
->>  			cmd->command, cmd->argument3);
->> +
->> +		if (!cmd->cmd_active) {
->> +			dev_err(hba->dev, "%s: Power Mode Change operation has been 
->> completed, go check UPMCRS\n",
->> +				__func__);
->> +			goto check_upmcrs;
->> +		}
->> +
->>  		ret = -ETIMEDOUT;
->>  		goto out;
->>  	}
->> 
->> +check_upmcrs:
->>  	status = ufshcd_get_upmcrs(hba);
->>  	if (status != PWR_LOCAL) {
->>  		dev_err(hba->dev,
->> @@ -4923,11 +4942,14 @@ static irqreturn_t ufshcd_uic_cmd_compl(struct 
->> ufs_hba *hba, u32 intr_status)
->>  			ufshcd_get_uic_cmd_result(hba);
->>  		hba->active_uic_cmd->argument3 =
->>  			ufshcd_get_dme_attr_val(hba);
->> +		if (!hba->uic_async_done)
+>> The scsi_block_reqs_cnt increased in ufshcd_hold() is supposed to be
+>> decreased back in ufshcd_ungate_work() in a paired way. However, if
+>> specific ufshcd_hold/release sequences are met, it is possible that
+>> scsi_block_reqs_cnt is increased twice but only one ungate work is
+>> queued. To make sure scsi_block_reqs_cnt is handled by ufshcd_hold() 
+>> and
 > 
-> Is this check necessary?
+> Just curious that how could this be possible? Would you have some 
+> failed
+> examples?
 > 
 
-Thanks for your quick response.
+[1] One gate_work() is in the workqueue, not yet executed, now clk state 
+== REQ_CLKS_OFF.
+[2] ufshcd_queuecommand() calls ufshcd_hold(async == ture) -> 
+active_req++ -> scsi_block_reqs_cnt++ -> REQ_CLKS_ON -> queue ungate 
+work -> active_req-- -> return -EAGAIN.
+[3] Now gate_work() starts to run, but since the clk state is 
+REQ_CLKS_ON, gate_work() just sets clk state to CLKS_ON and bail.
+[3] Someone calls ufshcd_hold(async == false) -> do something -> 
+ufshcd_release() -> clk state is changed to REQ_CLKS_OFF. Note that, 
+till now, ungate_work() is still in the work queue, not executed yet.
+[4] Now, if someone calls ufshcd_hold(), we will hit the issue.
 
-In the case of PMC, UIC cmd completion IRQ comes first, then power
-status change IRQ comes next. In this case, an UIC cmd's lifecyle
-ends only after the power status change IRQ comes [1].
-
-I guess you may want to say that in current code since we have
-masked UIC cmd completion IRQ in the case of a PMC operation, so
-no need to check it here since we won't be here anyways before
-power status change IRQ comes. So, removing the check here
-definitely works, and then we won't even need below line as well.
-
-	if ((intr_status & UFSHCD_UIC_PWR_MASK) && hba->uic_async_done) {
-+		hba->active_uic_cmd->cmd_active = 0;
-		complete(hba->uic_async_done);
-		retval = IRQ_HANDLED;
-
-If my guess is right, my opinion is that the current change may
-be more readable and comprehensive as it strictly follows my
-description in [1]. What do you think?
+Above sequence is a very common clk gate/ungate sequence. The issue
+is because ungate_work is queued but cannot be executed in time. In my
+case, I see the ungate_work is somehow delayed for about 150ms. This
+change has been tested by customers on multiple platforms. And you
+can tell from the code that it won't break anything. :)
 
 Thanks,
 
 Can Guo.
 
->> +			hba->active_uic_cmd->cmd_active = 0;
->>  		complete(&hba->active_uic_cmd->done);
->>  		retval = IRQ_HANDLED;
->>  	}
+>> ufshcd_ungate_work() in a paired way, increase it only if queue_work()
+>> returns true.
 >> 
->>  	if ((intr_status & UFSHCD_UIC_PWR_MASK) && hba->uic_async_done) {
->> +		hba->active_uic_cmd->cmd_active = 0;
->>  		complete(hba->uic_async_done);
->>  		retval = IRQ_HANDLED;
->>  	}
->> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
->> index 66e5338..be982ed 100644
->> --- a/drivers/scsi/ufs/ufshcd.h
->> +++ b/drivers/scsi/ufs/ufshcd.h
->> @@ -64,6 +64,7 @@ enum dev_cmd_type {
->>   * @argument1: UIC command argument 1
->>   * @argument2: UIC command argument 2
->>   * @argument3: UIC command argument 3
->> + * @cmd_active: Indicate if UIC command is outstanding
->>   * @done: UIC command completion
->>   */
->>  struct uic_command {
->> @@ -71,6 +72,7 @@ struct uic_command {
->>  	u32 argument1;
->>  	u32 argument2;
->>  	u32 argument3;
->> +	int cmd_active;
->>  	struct completion done;
->>  };
+>> Signed-off-by: Can Guo <cang@codeaurora.org>
+>> Reviewed-by: Hongwu Su <hongwus@codeaurora.org>
+>> ---
+>>  drivers/scsi/ufs/ufshcd.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
 >> 
-> 
-> 
+>> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> index 847f355..efa7d86 100644
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -1634,12 +1634,12 @@ int ufshcd_hold(struct ufs_hba *hba, bool 
+>> async)
+>>  		 */
+>>  		/* fallthrough */
+>>  	case CLKS_OFF:
+>> -		ufshcd_scsi_block_requests(hba);
+>>  		hba->clk_gating.state = REQ_CLKS_ON;
+>>  		trace_ufshcd_clk_gating(dev_name(hba->dev),
+>>  					hba->clk_gating.state);
+>> -		queue_work(hba->clk_gating.clk_gating_workq,
+>> -			   &hba->clk_gating.ungate_work);
+>> +		if (queue_work(hba->clk_gating.clk_gating_workq,
+>> +			       &hba->clk_gating.ungate_work))
+>> +			ufshcd_scsi_block_requests(hba);
+>>  		/*
+>>  		 * fall through to check if we should wait for this
+>>  		 * work to be done or not.
 > 
 > Thanks,
 > Stanley Chu
