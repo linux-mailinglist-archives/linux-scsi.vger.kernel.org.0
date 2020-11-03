@@ -2,49 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCFF2A3D85
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 08:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9372A3D28
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 08:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727839AbgKCHWa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Nov 2020 02:22:30 -0500
-Received: from mail2.directv.syn-alias.com ([69.168.106.50]:46008 "EHLO
-        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727843AbgKCHWa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 02:22:30 -0500
-DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
-        q=dns/txt; i=@wildblue.net; t=1604386933;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=PmvmApXnyYfH9oWIPT4+UobxtR8=;
-        b=IYLivOnEOEMn94iG9ynuF09ePxMp7igiDtxDilhcTPVEQQ1EiMzD0JzNbpmAeemO
-        Vn8ascB4QbBeaZCKuEWUgKQh5nznUvNISM5egCmGktviH34jLjo1CR8wq8UibqBp
-        RM3GDkqgaG8BGVy/9DFyzLM9HHmCnV2neAPkZ0cChAw1JZ6YJWkIod8KAGI6od03
-        bbCTpmVUWkIP2Sv8gEbjO/T9/6kYttpTcFwsYs6w115xJCQyUr5E+72ttNFDF0l5
-        SqorirEmtccTpwMiSmviSEwi84SOzA5i+4ug67Po9zF2q20uC/xn2ykQ8zO+DPe9
-        5fHNDM5c/9Q1KcV68dBEGg==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.3 cv=Xt+ExmN9 c=1 sm=1 tr=0 cx=a_idp_x a=nfaRfHh3SbEwtWsx5XPaSQ==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=ygrmT7gxR2oA:10 a=s7WOZ2_Ixt8A:10 a=IkcTkHD0fZMA:10 a=x7bEGLp0ZPQA:10 a=nNwsprhYR40A:10 a=Eoj24Je_-wkA:10 a=OIQJQQiFZvEA:10 a=y9MvFs8pOQU3BlF_QJUA:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=JEWwRQZEyXxBK19DtV0j:22 a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: am9iZWFyQHdpbGRibHVlLm5ldA==
-Received: from [10.80.118.18] ([10.80.118.18:41712] helo=md05.jasper.bos.sync.lan)
-        by mail2.directv.syn-alias.com (envelope-from <jobear@wildblue.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id 68/83-32012-47001AF5; Tue, 03 Nov 2020 02:02:12 -0500
-Date:   Tue, 3 Nov 2020 02:02:12 -0500 (EST)
-From:   George <jobear@wildblue.net>
-Reply-To: geo4w11@gmail.com
-Message-ID: <1970484956.94241731.1604386932366.JavaMail.zimbra@wildblue.net>
-Subject: 
+        id S1726690AbgKCHHr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Nov 2020 02:07:47 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42291 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725958AbgKCHHr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 02:07:47 -0500
+X-UUID: 0cd27029a24f41bca58df90019b241ea-20201103
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=xgZxM4bZdBoYMDGnpcKBnJHgKjg4eO6nDZKJOGIeWdo=;
+        b=PUtkyKF0b3dBSMtd3cT167RsJne4PCUmgNlL025Hyu28j28uMYl/OclqQ41hYONY4kq+3wA2lmY8+3x8wUTSnReKNs5F3a/nMvaxOe0Nm5iDiibf6qNZmuXhmxBCrO8bjfWI67gY1zU3Ip93FM4PoKC03BkETquvzoCe15viT3c=;
+X-UUID: 0cd27029a24f41bca58df90019b241ea-20201103
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 957126120; Tue, 03 Nov 2020 15:07:44 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 3 Nov 2020 15:07:42 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 3 Nov 2020 15:07:42 +0800
+Message-ID: <1604387262.13152.2.camel@mtkswgap22>
+Subject: Re: [PATCH v1 1/2] scsi: ufs: Fix unbalanced scsi_block_reqs_cnt
+ caused by ufshcd_hold()
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     Can Guo <cang@codeaurora.org>
+CC:     <asutoshd@codeaurora.org>, <nguyenb@codeaurora.org>,
+        <hongwus@codeaurora.org>, <rnayak@codeaurora.org>,
+        <linux-scsi@vger.kernel.org>, <kernel-team@android.com>,
+        <saravanak@google.com>, <salyzyn@google.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 3 Nov 2020 15:07:42 +0800
+In-Reply-To: <1604384682-15837-2-git-send-email-cang@codeaurora.org>
+References: <1604384682-15837-1-git-send-email-cang@codeaurora.org>
+         <1604384682-15837-2-git-send-email-cang@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [175.35.202.220]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Index: igROVXAG1PYaGVvJW+3Ju2vO7y7XSA==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+X-TM-SNTS-SMTP: 295080CDDDD8E39A2ADF44384CB5E35A2D4E5055CC367A2FD534E280F511F3EC2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Do you get my previous message 
+SGkgQ2FuLA0KDQpPbiBNb24sIDIwMjAtMTEtMDIgYXQgMjI6MjQgLTA4MDAsIENhbiBHdW8gd3Jv
+dGU6DQo+IFRoZSBzY3NpX2Jsb2NrX3JlcXNfY250IGluY3JlYXNlZCBpbiB1ZnNoY2RfaG9sZCgp
+IGlzIHN1cHBvc2VkIHRvIGJlDQo+IGRlY3JlYXNlZCBiYWNrIGluIHVmc2hjZF91bmdhdGVfd29y
+aygpIGluIGEgcGFpcmVkIHdheS4gSG93ZXZlciwgaWYNCj4gc3BlY2lmaWMgdWZzaGNkX2hvbGQv
+cmVsZWFzZSBzZXF1ZW5jZXMgYXJlIG1ldCwgaXQgaXMgcG9zc2libGUgdGhhdA0KPiBzY3NpX2Js
+b2NrX3JlcXNfY250IGlzIGluY3JlYXNlZCB0d2ljZSBidXQgb25seSBvbmUgdW5nYXRlIHdvcmsg
+aXMNCj4gcXVldWVkLiBUbyBtYWtlIHN1cmUgc2NzaV9ibG9ja19yZXFzX2NudCBpcyBoYW5kbGVk
+IGJ5IHVmc2hjZF9ob2xkKCkgYW5kDQoNCkp1c3QgY3VyaW91cyB0aGF0IGhvdyBjb3VsZCB0aGlz
+IGJlIHBvc3NpYmxlPyBXb3VsZCB5b3UgaGF2ZSBzb21lIGZhaWxlZA0KZXhhbXBsZXM/DQoNCj4g
+dWZzaGNkX3VuZ2F0ZV93b3JrKCkgaW4gYSBwYWlyZWQgd2F5LCBpbmNyZWFzZSBpdCBvbmx5IGlm
+IHF1ZXVlX3dvcmsoKQ0KPiByZXR1cm5zIHRydWUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBDYW4g
+R3VvIDxjYW5nQGNvZGVhdXJvcmEub3JnPg0KPiBSZXZpZXdlZC1ieTogSG9uZ3d1IFN1IDxob25n
+d3VzQGNvZGVhdXJvcmEub3JnPg0KPiAtLS0NCj4gIGRyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMg
+fCA2ICsrKy0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
+bnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jIGIvZHJp
+dmVycy9zY3NpL3Vmcy91ZnNoY2QuYw0KPiBpbmRleCA4NDdmMzU1Li5lZmE3ZDg2IDEwMDY0NA0K
+PiAtLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQo+ICsrKyBiL2RyaXZlcnMvc2NzaS91
+ZnMvdWZzaGNkLmMNCj4gQEAgLTE2MzQsMTIgKzE2MzQsMTIgQEAgaW50IHVmc2hjZF9ob2xkKHN0
+cnVjdCB1ZnNfaGJhICpoYmEsIGJvb2wgYXN5bmMpDQo+ICAJCSAqLw0KPiAgCQkvKiBmYWxsdGhy
+b3VnaCAqLw0KPiAgCWNhc2UgQ0xLU19PRkY6DQo+IC0JCXVmc2hjZF9zY3NpX2Jsb2NrX3JlcXVl
+c3RzKGhiYSk7DQo+ICAJCWhiYS0+Y2xrX2dhdGluZy5zdGF0ZSA9IFJFUV9DTEtTX09OOw0KPiAg
+CQl0cmFjZV91ZnNoY2RfY2xrX2dhdGluZyhkZXZfbmFtZShoYmEtPmRldiksDQo+ICAJCQkJCWhi
+YS0+Y2xrX2dhdGluZy5zdGF0ZSk7DQo+IC0JCXF1ZXVlX3dvcmsoaGJhLT5jbGtfZ2F0aW5nLmNs
+a19nYXRpbmdfd29ya3EsDQo+IC0JCQkgICAmaGJhLT5jbGtfZ2F0aW5nLnVuZ2F0ZV93b3JrKTsN
+Cj4gKwkJaWYgKHF1ZXVlX3dvcmsoaGJhLT5jbGtfZ2F0aW5nLmNsa19nYXRpbmdfd29ya3EsDQo+
+ICsJCQkgICAgICAgJmhiYS0+Y2xrX2dhdGluZy51bmdhdGVfd29yaykpDQo+ICsJCQl1ZnNoY2Rf
+c2NzaV9ibG9ja19yZXF1ZXN0cyhoYmEpOw0KPiAgCQkvKg0KPiAgCQkgKiBmYWxsIHRocm91Z2gg
+dG8gY2hlY2sgaWYgd2Ugc2hvdWxkIHdhaXQgZm9yIHRoaXMNCj4gIAkJICogd29yayB0byBiZSBk
+b25lIG9yIG5vdC4NCg0KVGhhbmtzLA0KU3RhbmxleSBDaHUNCg0K
+
