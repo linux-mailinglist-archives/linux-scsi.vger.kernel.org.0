@@ -2,134 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1672A3CC6
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 07:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCFF2A3D85
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 08:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727628AbgKCGZR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Nov 2020 01:25:17 -0500
-Received: from labrats.qualcomm.com ([199.106.110.90]:30196 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgKCGZQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 01:25:16 -0500
-IronPort-SDR: JXv9Q1UC6ry6FSYnDYrn5ErYovILaWn2Flo2uexVjBxoNm++K9c664ft/tbDLylpVurzn9J0GV
- N2nREYpNgxbSo/1hPNDPgVmc6Z4NBbsu9OUyGdoW6H+tROIafPc318T9C3ImrE2Ybuz61Z5Jkk
- msUv4IChlk4ENwmPLyr3dbdAemDShzBknqOM1jRNbp5zb4ETwu3Bi3KyOeXu02Yi407AXtGu/5
- 6VwIOkOwSjTHNSNXwIxf+f63TSqCDJr92yT/FMGAHzoWo7VebzLodY+IL7vAcLIyEvvQhwutX1
- iTI=
-X-IronPort-AV: E=Sophos;i="5.77,447,1596524400"; 
-   d="scan'208";a="29256947"
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by labrats.qualcomm.com with ESMTP; 02 Nov 2020 22:25:14 -0800
-X-QCInternal: smtphost
-Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
-  by ironmsg04-sd.qualcomm.com with ESMTP; 02 Nov 2020 22:25:03 -0800
-Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 07731217C9; Mon,  2 Nov 2020 22:25:02 -0800 (PST)
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] scsi: ufs: Try to save power mode change and UIC cmd completion timeout
-Date:   Mon,  2 Nov 2020 22:24:41 -0800
-Message-Id: <1604384682-15837-4-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1604384682-15837-1-git-send-email-cang@codeaurora.org>
-References: <1604384682-15837-1-git-send-email-cang@codeaurora.org>
+        id S1727839AbgKCHWa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Nov 2020 02:22:30 -0500
+Received: from mail2.directv.syn-alias.com ([69.168.106.50]:46008 "EHLO
+        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727843AbgKCHWa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 02:22:30 -0500
+DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
+        q=dns/txt; i=@wildblue.net; t=1604386933;
+        h=From:Subject:Date:To:MIME-Version:Content-Type;
+        bh=PmvmApXnyYfH9oWIPT4+UobxtR8=;
+        b=IYLivOnEOEMn94iG9ynuF09ePxMp7igiDtxDilhcTPVEQQ1EiMzD0JzNbpmAeemO
+        Vn8ascB4QbBeaZCKuEWUgKQh5nznUvNISM5egCmGktviH34jLjo1CR8wq8UibqBp
+        RM3GDkqgaG8BGVy/9DFyzLM9HHmCnV2neAPkZ0cChAw1JZ6YJWkIod8KAGI6od03
+        bbCTpmVUWkIP2Sv8gEbjO/T9/6kYttpTcFwsYs6w115xJCQyUr5E+72ttNFDF0l5
+        SqorirEmtccTpwMiSmviSEwi84SOzA5i+4ug67Po9zF2q20uC/xn2ykQ8zO+DPe9
+        5fHNDM5c/9Q1KcV68dBEGg==;
+X_CMAE_Category: , ,
+X-CNFS-Analysis: v=2.3 cv=Xt+ExmN9 c=1 sm=1 tr=0 cx=a_idp_x a=nfaRfHh3SbEwtWsx5XPaSQ==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=ygrmT7gxR2oA:10 a=s7WOZ2_Ixt8A:10 a=IkcTkHD0fZMA:10 a=x7bEGLp0ZPQA:10 a=nNwsprhYR40A:10 a=Eoj24Je_-wkA:10 a=OIQJQQiFZvEA:10 a=y9MvFs8pOQU3BlF_QJUA:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=JEWwRQZEyXxBK19DtV0j:22 a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
+X-CM-Score: 0
+X-Scanned-by: Cloudmark Authority Engine
+X-Authed-Username: am9iZWFyQHdpbGRibHVlLm5ldA==
+Received: from [10.80.118.18] ([10.80.118.18:41712] helo=md05.jasper.bos.sync.lan)
+        by mail2.directv.syn-alias.com (envelope-from <jobear@wildblue.net>)
+        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
+        id 68/83-32012-47001AF5; Tue, 03 Nov 2020 02:02:12 -0500
+Date:   Tue, 3 Nov 2020 02:02:12 -0500 (EST)
+From:   George <jobear@wildblue.net>
+Reply-To: geo4w11@gmail.com
+Message-ID: <1970484956.94241731.1604386932366.JavaMail.zimbra@wildblue.net>
+Subject: 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [175.35.202.220]
+X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
+Thread-Index: igROVXAG1PYaGVvJW+3Ju2vO7y7XSA==
+Thread-Topic: 
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the uic_cmd->cmd_active as a flag to track the lifecycle of an UIC cmd.
-The flag is set before send the UIC cmd and cleared after the completion is
-raised in IRQ handler. For a power mode change operation, including hibern8
-enter/exit, the flag is cleared only after hba->uic_async_done completion
-is raised. When completion timeout happens, if the flag is cleared, instead
-of returning timeout error, simply ignore it.
-
-Change-Id: Ie3cd6ae6221a44619925fb2cf78136a5617fdd5d
-Signed-off-by: Can Guo <cang@codeaurora.org>
----
- drivers/scsi/ufs/ufshcd.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 252e022..8b291c3 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -2131,10 +2131,20 @@ ufshcd_wait_for_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd)
- 	unsigned long flags;
- 
- 	if (wait_for_completion_timeout(&uic_cmd->done,
--					msecs_to_jiffies(UIC_CMD_TIMEOUT)))
-+					msecs_to_jiffies(UIC_CMD_TIMEOUT))) {
- 		ret = uic_cmd->argument2 & MASK_UIC_COMMAND_RESULT;
--	else
-+	} else {
- 		ret = -ETIMEDOUT;
-+		dev_err(hba->dev,
-+			"uic cmd 0x%x with arg3 0x%x completion timeout\n",
-+			uic_cmd->command, uic_cmd->argument3);
-+
-+		if (!uic_cmd->cmd_active) {
-+			dev_err(hba->dev, "%s: UIC cmd has been completed, return the result\n",
-+				__func__);
-+			ret = uic_cmd->argument2 & MASK_UIC_COMMAND_RESULT;
-+		}
-+	}
- 
- 	spin_lock_irqsave(hba->host->host_lock, flags);
- 	hba->active_uic_cmd = NULL;
-@@ -2166,6 +2176,7 @@ __ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd,
- 	if (completion)
- 		init_completion(&uic_cmd->done);
- 
-+	uic_cmd->cmd_active = 1;
- 	ufshcd_dispatch_uic_cmd(hba, uic_cmd);
- 
- 	return 0;
-@@ -3944,10 +3955,18 @@ static int ufshcd_uic_pwr_ctrl(struct ufs_hba *hba, struct uic_command *cmd)
- 		dev_err(hba->dev,
- 			"pwr ctrl cmd 0x%x with mode 0x%x completion timeout\n",
- 			cmd->command, cmd->argument3);
-+
-+		if (!cmd->cmd_active) {
-+			dev_err(hba->dev, "%s: Power Mode Change operation has been completed, go check UPMCRS\n",
-+				__func__);
-+			goto check_upmcrs;
-+		}
-+
- 		ret = -ETIMEDOUT;
- 		goto out;
- 	}
- 
-+check_upmcrs:
- 	status = ufshcd_get_upmcrs(hba);
- 	if (status != PWR_LOCAL) {
- 		dev_err(hba->dev,
-@@ -5060,11 +5079,14 @@ static irqreturn_t ufshcd_uic_cmd_compl(struct ufs_hba *hba, u32 intr_status)
- 		hba->active_uic_cmd->argument3 =
- 			ufshcd_get_dme_attr_val(hba);
- 		complete(&hba->active_uic_cmd->done);
-+		if (!hba->uic_async_done)
-+			hba->active_uic_cmd->cmd_active = 0;
- 		retval = IRQ_HANDLED;
- 	}
- 
- 	if ((intr_status & UFSHCD_UIC_PWR_MASK) && hba->uic_async_done) {
- 		complete(hba->uic_async_done);
-+		hba->active_uic_cmd->cmd_active = 0;
- 		retval = IRQ_HANDLED;
- 	}
- 	return retval;
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-
+Do you get my previous message 
