@@ -2,73 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793BF2A449F
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 12:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BB12A4520
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Nov 2020 13:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728396AbgKCL4f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Nov 2020 06:56:35 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6696 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727109AbgKCL4f (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 06:56:35 -0500
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CQStR0xXvz15QX0;
-        Tue,  3 Nov 2020 19:56:31 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 3 Nov 2020 19:56:26 +0800
-From:   Jing Xiangfeng <jingxiangfeng@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jingxiangfeng@huawei.com>
-Subject: [PATCH] scsi: qla4xxx: Remove redundant assignment to variable rval
-Date:   Tue, 3 Nov 2020 20:01:37 +0800
-Message-ID: <20201103120137.109717-1-jingxiangfeng@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1729097AbgKCM3m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Nov 2020 07:29:42 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7583 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728928AbgKCM3Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Nov 2020 07:29:24 -0500
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CQTcB1KBgzLsY7;
+        Tue,  3 Nov 2020 20:29:14 +0800 (CST)
+Received: from huawei.com (10.69.192.56) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Tue, 3 Nov 2020
+ 20:29:08 +0800
+From:   Luo Jiaxing <luojiaxing@huawei.com>
+To:     <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>,
+        <andriy.shevchenko@linux.intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <john.garry@huawei.com>, <himanshu.madhani@cavium.com>,
+        <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
+        <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
+Subject: [PATCH v3 0/5] Introduce a new helper marco DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
+Date:   Tue, 3 Nov 2020 20:29:39 +0800
+Message-ID: <1604406584-53926-1-git-send-email-luojiaxing@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The variable rval has been initialized with 'QLA_ERROR'. The assignment
-is redundant in an error path. So remove it.
+We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
+for read-only file, but we found many of drivers also want a helper macro
+for read-write file too.
 
-Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
+So we add this macro to help decrease code duplication.
+
 ---
- drivers/scsi/qla4xxx/ql4_os.c | 3 ---
- 1 file changed, 3 deletions(-)
+ v1->v2:
+        1.Rename DEFINE_STORE_ATTRIBUTE() to DEFINE_SHOW_STORE_ATTRIBUTE().
+ v2->v3:
+        1.Fixed some spelling mistakes in commit.
+        2.Revised resumes are added for easy tracing.
+---
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 676778cbc550..aaccbf71dff5 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -686,7 +686,6 @@ static int qla4xxx_get_chap_by_index(struct scsi_qla_host *ha,
- 
- 	if (!ha->chap_list) {
- 		ql4_printk(KERN_ERR, ha, "CHAP table cache is empty!\n");
--		rval = QLA_ERROR;
- 		goto exit_get_chap;
- 	}
- 
-@@ -698,14 +697,12 @@ static int qla4xxx_get_chap_by_index(struct scsi_qla_host *ha,
- 
- 	if (chap_index > max_chap_entries) {
- 		ql4_printk(KERN_ERR, ha, "Invalid Chap index\n");
--		rval = QLA_ERROR;
- 		goto exit_get_chap;
- 	}
- 
- 	*chap_entry = (struct ql4_chap_table *)ha->chap_list + chap_index;
- 	if ((*chap_entry)->cookie !=
- 	     __constant_cpu_to_le16(CHAP_VALID_COOKIE)) {
--		rval = QLA_ERROR;
- 		*chap_entry = NULL;
- 	} else {
- 		rval = QLA_SUCCESS;
+Luo Jiaxing (5):
+  seq_file: Introduce DEFINE_SHOW_STORE_ATTRIBUTE() helper macro
+  scsi: hisi_sas: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+  scsi: qla2xxx: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+  usb: dwc3: debugfs: Introduce DEFINE_SHOW_STORE_ATTRIBUTE
+  drm/i915/display: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
+
+ .../gpu/drm/i915/display/intel_display_debugfs.c   |  55 +--------
+ drivers/scsi/hisi_sas/hisi_sas_main.c              | 135 +++------------------
+ drivers/scsi/qla2xxx/qla_dfs.c                     |  19 +--
+ drivers/usb/dwc3/debugfs.c                         |  52 +-------
+ include/linux/seq_file.h                           |  15 +++
+ 5 files changed, 41 insertions(+), 235 deletions(-)
+
 -- 
-2.17.1
+2.7.4
 
