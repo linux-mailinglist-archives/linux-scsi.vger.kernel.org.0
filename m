@@ -2,97 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0005D2A705D
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Nov 2020 23:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC9B2A707C
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Nov 2020 23:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731414AbgKDW05 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Nov 2020 17:26:57 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:48466 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726777AbgKDW04 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Nov 2020 17:26:56 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A4MPWVT178794;
-        Wed, 4 Nov 2020 22:26:52 GMT
+        id S1732401AbgKDW27 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Nov 2020 17:28:59 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:39242 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732391AbgKDW25 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Nov 2020 17:28:57 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A4MNViW075645;
+        Wed, 4 Nov 2020 22:28:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id; s=corp-2020-01-29;
- bh=tTNnVnp+XdTImqrLS0WLlmWMJi1Zi9uv4dziywxFHZw=;
- b=0D6DpQJ3llVTc4DLbAkuTbzJLWEjSntmxNC42ZjQQHuv1lLAH7RvfG79RaDU0waE5/uB
- pTlVtWZ7VqffWbTX4gqMNT2JPK/sok0kDCak/Qa5WvJnp32bphz06hHU96hYJKDvNs1c
- DtO4xW0Rh9N17nAzLQYDflRbFjKfi8eam+MKPY8e+AH6Mea+GUGWNeTGtx689puOexQ7
- w2Xx8Xe7ZT1wCFCRvjzw9PS8QgFSsLmFqrZsQO8AVn1nk3QmlO/lQoA4Gr/jo3nqQjUu
- T+nVRzrtm05pltyLimtQsRuZSSfFTi5ZfhFJmII6a0XxYWlV2rmWktSMUgtLNTD4UkAG yA== 
+ date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=tFeHcDzCbkwbX/9lBHgeIeyMkuHr/fDtJ5pBi5Ia/ng=;
+ b=W3t1mQaz69OuoaZIb4SpiI6JK9PQ5epG8UR8lrtD7Tc8R76QYKDfw0Zw+83xkZa2A9KR
+ 8PMminY3TuCbSh3/RcSebhoE+Pl07DNuLLZ9arJ2njNcW3v+rnX64IiP9uhdJf5Dc+Jg
+ n+YAQ3nF8Eq8kZkD2ZS38SIi2kQx8lb8xdUcho5VoBB9lEtJy6Jn+TeLvOt2+m85un/B
+ 09BGmMR9ZHclvnNbu6KwsxvLEMc5jVxh7TmkEb/F72b+niHwwydQEijXqSqaVwdQ7gqb
+ D6LTWHaq6ZAXqiZDTeUwhQriWm1fnkb4GHayq/Sqxk9sa4JUB1uoXinm/dNLohd2EUJ7 gg== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 34hhw2s6p6-1
+        by aserp2120.oracle.com with ESMTP id 34hhvch7hv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 04 Nov 2020 22:26:52 +0000
+        Wed, 04 Nov 2020 22:28:53 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A4MJnVC082840;
-        Wed, 4 Nov 2020 22:26:51 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 34hvryj70u-1
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A4MJn9x082845;
+        Wed, 4 Nov 2020 22:26:52 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 34hvryj715-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Nov 2020 22:26:51 +0000
+        Wed, 04 Nov 2020 22:26:52 +0000
 Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0A4MQohg027558;
-        Wed, 4 Nov 2020 22:26:50 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0A4MQpZD009395;
+        Wed, 4 Nov 2020 22:26:51 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Nov 2020 14:26:50 -0800
+        with ESMTP ; Wed, 04 Nov 2020 14:26:51 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
         pbonzini@redhat.com, stefanha@redhat.com,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH 00/11 V4] vhost: vhost-scsi bug fixes
-Date:   Wed,  4 Nov 2020 16:26:33 -0600
-Message-Id: <1604528804-2878-1-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 01/11] vhost scsi: add lun parser helper
+Date:   Wed,  4 Nov 2020 16:26:34 -0600
+Message-Id: <1604528804-2878-2-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1604528804-2878-1-git-send-email-michael.christie@oracle.com>
+References: <1604528804-2878-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9795 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 mlxscore=0
  malwarescore=0 mlxlogscore=999 suspectscore=0 spamscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011040159
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9795 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- spamscore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011040159
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=999
+ bulkscore=0 phishscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011040159
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The following patches made over Michael's vhost branch
-https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/log/?h=vhost
+Move code to parse lun from req's lun_buf to helper, so tmf code
+can use it in the next patch.
 
-The patches fix issues with vhost-scsi's 256 cmd limit
-where if the guest sends more than 256 cmds it will get IO
-errors, or even if exactly 256 are being sent then we can race and
-get IO errors. The patches also add LUN RESET support so guests
-that do not support resetting command timers will not get IO
-errors and offlined devices when the physical device hits temp
-issues.
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/vhost/scsi.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Jason, you reviewed ever non scsi patch but 2 of them. I was not
-sure if that was an oversight or you were ok with them. I'm sending
-this out hoping you were ok with them and forgot to reply (or I guess
-will be ok with them if you just missed them last time).
-
-V4:
-- really really fix compile errors
-- dropped threading patches so we can figure that out separately.
-
-V3:
-- fix compile errors
-- fix possible crash where cmd could be freed while adding it to
-completion list
-- fix issue where we added the worker thread to the blk cgroup but
-the blk IO was submitted by a driver workqueue.
-
-V2:
-- fix use before set cpu var errors
-- drop vhost_vq_is_setup
-- include patches to do a worker thread per scsi IO vq
-
+diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+index b22adf0..0ea78d0 100644
+--- a/drivers/vhost/scsi.c
++++ b/drivers/vhost/scsi.c
+@@ -907,6 +907,11 @@ static void vhost_scsi_submission_work(struct work_struct *work)
+ 	return ret;
+ }
+ 
++static u16 vhost_buf_to_lun(u8 *lun_buf)
++{
++	return ((lun_buf[2] << 8) | lun_buf[3]) & 0x3FFF;
++}
++
+ static void
+ vhost_scsi_handle_vq(struct vhost_scsi *vs, struct vhost_virtqueue *vq)
+ {
+@@ -1045,12 +1050,12 @@ static void vhost_scsi_submission_work(struct work_struct *work)
+ 			tag = vhost64_to_cpu(vq, v_req_pi.tag);
+ 			task_attr = v_req_pi.task_attr;
+ 			cdb = &v_req_pi.cdb[0];
+-			lun = ((v_req_pi.lun[2] << 8) | v_req_pi.lun[3]) & 0x3FFF;
++			lun = vhost_buf_to_lun(v_req_pi.lun);
+ 		} else {
+ 			tag = vhost64_to_cpu(vq, v_req.tag);
+ 			task_attr = v_req.task_attr;
+ 			cdb = &v_req.cdb[0];
+-			lun = ((v_req.lun[2] << 8) | v_req.lun[3]) & 0x3FFF;
++			lun = vhost_buf_to_lun(v_req.lun);
+ 		}
+ 		/*
+ 		 * Check that the received CDB size does not exceeded our
+-- 
+1.8.3.1
 
