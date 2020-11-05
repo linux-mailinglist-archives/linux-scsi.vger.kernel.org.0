@@ -2,108 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E973B2A7072
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Nov 2020 23:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D751A2A74F9
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Nov 2020 02:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732346AbgKDW1J (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Nov 2020 17:27:09 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:49296 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732258AbgKDW1G (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Nov 2020 17:27:06 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A4MNpBk041303;
-        Wed, 4 Nov 2020 22:27:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=4wYHajXgvb+owu6TtvaFma/2xdev3UI1ru+9TkTK/Zc=;
- b=kpG8V8SL34EVuZudsJoPnO92EJbKi9LzE3UlamU1A6g5IaxZCk2I/BlP1Ot7l11OWW6N
- xGj6vXHvVu0OsFE0x5Ib0E/i6nEvdaNTao1bs6n+7+S6H6oWf5m5WB34l5gEyk+VvaU1
- o3jRPyceaXfg0Zkny1qt2QRr2cFVZnI/R7RPfhIxGGfp0HFZL3pGaZkYblm0z2eMxJpL
- IPH8FB2ZSosOaukhE76KI62sgcrvO9GdPSSXw3ZEq6kOcY4S6YfMTcBkwtALj+6qAyW6
- I4Za3kFdMnky+oDw7vX5WDfK4QZnRRdEMF74nreXHPQG3P9GwCNrrlGU/2yOQMxQ6GfL WQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 34hhb296t3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 04 Nov 2020 22:27:02 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A4MJn8E082846;
-        Wed, 4 Nov 2020 22:27:01 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 34hvryj78n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Nov 2020 22:27:01 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0A4MR0iv027650;
-        Wed, 4 Nov 2020 22:27:00 GMT
-Received: from ol2.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Nov 2020 14:27:00 -0800
-From:   Mike Christie <michael.christie@oracle.com>
-To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        pbonzini@redhat.com, stefanha@redhat.com,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH 11/11] vhost scsi: remove extra flushes
-Date:   Wed,  4 Nov 2020 16:26:44 -0600
-Message-Id: <1604528804-2878-12-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1604528804-2878-1-git-send-email-michael.christie@oracle.com>
-References: <1604528804-2878-1-git-send-email-michael.christie@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9795 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=999 suspectscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011040159
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9795 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 suspectscore=0
- clxscore=1015 mlxlogscore=999 impostorscore=0 malwarescore=0
- lowpriorityscore=0 adultscore=0 spamscore=0 priorityscore=1501 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011040159
+        id S1731175AbgKEBm7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Nov 2020 20:42:59 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:45785 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725862AbgKEBm7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Nov 2020 20:42:59 -0500
+X-UUID: 1bef8b12dd4d435b9108f60879640ac5-20201105
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DQeeK3y6tT8rfnIb28bW7sTSRBJVhBxclVvnAe9p7dA=;
+        b=JMxCjwlOT7WseV/P4NVAv5GezKM/lthZkwoJj4G+cXmA1UJhmhTl4rgvwOgMRziJBjmdBjgKHRwW7eh5gi6d2TD5LB3ueOeitVY7jiJJLs0DqvZcD+J/AsindgOh8FjAch+0RbHXOT8QPKXnGoZbyhy7U5g87cL1DSoY176tYos=;
+X-UUID: 1bef8b12dd4d435b9108f60879640ac5-20201105
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 159934362; Thu, 05 Nov 2020 09:42:48 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 5 Nov 2020 09:42:46 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 5 Nov 2020 09:42:46 +0800
+Message-ID: <1604540566.13152.16.camel@mtkswgap22>
+Subject: Re: [PATCH V4 1/2] scsi: ufs: Add DeepSleep feature
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>, Bean Huo <huobean@gmail.com>,
+        Can Guo <cang@codeaurora.org>
+Date:   Thu, 5 Nov 2020 09:42:46 +0800
+In-Reply-To: <20201103141403.2142-2-adrian.hunter@intel.com>
+References: <20201103141403.2142-1-adrian.hunter@intel.com>
+         <20201103141403.2142-2-adrian.hunter@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The vhost work flush function was flushing the entire work queue, so
-there is no need for the double vhost_work_dev_flush calls in
-vhost_scsi_flush.
-
-And we do not need to call vhost_poll_flush for each poller because
-that call also ends up flushing the same work queue thread the
-vhost_work_dev_flush call flushed.
-
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/vhost/scsi.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-index 144cd05..774bffe 100644
---- a/drivers/vhost/scsi.c
-+++ b/drivers/vhost/scsi.c
-@@ -1443,11 +1443,6 @@ static void vhost_scsi_handle_kick(struct vhost_work *work)
- 	vhost_scsi_handle_vq(vs, vq);
- }
- 
--static void vhost_scsi_flush_vq(struct vhost_scsi *vs, int index)
--{
--	vhost_poll_flush(&vs->vqs[index].vq.poll);
--}
--
- /* Callers must hold dev mutex */
- static void vhost_scsi_flush(struct vhost_scsi *vs)
- {
-@@ -1466,9 +1461,6 @@ static void vhost_scsi_flush(struct vhost_scsi *vs)
- 		kref_put(&old_inflight[i]->kref, vhost_scsi_done_inflight);
- 
- 	/* Flush both the vhost poll and vhost work */
--	for (i = 0; i < VHOST_SCSI_MAX_VQ; i++)
--		vhost_scsi_flush_vq(vs, i);
--	vhost_work_dev_flush(&vs->dev);
- 	vhost_work_dev_flush(&vs->dev);
- 
- 	/* Wait for all reqs issued before the flush to be finished */
--- 
-1.8.3.1
+T24gVHVlLCAyMDIwLTExLTAzIGF0IDE2OjE0ICswMjAwLCBBZHJpYW4gSHVudGVyIHdyb3RlOg0K
+PiBEZWVwU2xlZXAgaXMgYSBVRlMgdjMuMSBmZWF0dXJlIHRoYXQgYWNoaWV2ZXMgdGhlIGxvd2Vz
+dCBwb3dlciBjb25zdW1wdGlvbg0KPiBvZiB0aGUgZGV2aWNlLCBhcGFydCBmcm9tIHBvd2VyIG9m
+Zi4NCj4gDQo+IEluIERlZXBTbGVlcCBtb2RlLCBubyBjb21tYW5kcyBhcmUgYWNjZXB0ZWQsIGFu
+ZCB0aGUgb25seSB3YXkgdG8gZXhpdCBpcw0KPiB1c2luZyBhIGhhcmR3YXJlIHJlc2V0IG9yIHBv
+d2VyIGN5Y2xlLg0KPiANCj4gVGhpcyBwYXRjaCBhc3N1bWVzIHRoYXQgaWYgYSBwb3dlciBjeWNs
+ZSB3YXMgYW4gb3B0aW9uLCB0aGVuIHBvd2VyIG9mZg0KPiB3b3VsZCBiZSBwcmVmZXJhYmxlLCBz
+byBvbmx5IGV4aXQgdmlhIGEgaGFyZHdhcmUgcmVzZXQgaXMgc3VwcG9ydGVkLg0KPiANCj4gRHJp
+dmVycyB0aGF0IHdpc2ggdG8gc3VwcG9ydCBEZWVwU2xlZXAgbmVlZCB0byBzZXQgYSBuZXcgY2Fw
+YWJpbGl0eSBmbGFnDQo+IFVGU0hDRF9DQVBfREVFUFNMRUVQIGFuZCBwcm92aWRlIGEgaGFyZHdh
+cmUgcmVzZXQgdmlhIHRoZSBleGlzdGluZw0KPiAgLT5kZXZpY2VfcmVzZXQoKSBjYWxsYmFjay4N
+Cj4gDQo+IEl0IGlzIGFzc3VtZWQgdGhhdCBVRlMgZGV2aWNlcyB3aXRoIHdzcGVjdmVyc2lvbiA+
+PSAweDMxMCBzdXBwb3J0DQo+IERlZXBTbGVlcC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFkcmlh
+biBIdW50ZXIgPGFkcmlhbi5odW50ZXJAaW50ZWwuY29tPg0KDQpSZXZpZXdlZC1ieTogU3Rhbmxl
+eSBDaHUgPHN0YW5sZXkuY2h1QG1lZGlhdGVrLmNvbT4NCg0KDQo=
 
