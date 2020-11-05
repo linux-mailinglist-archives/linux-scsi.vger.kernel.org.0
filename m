@@ -2,68 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133DA2A7651
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Nov 2020 05:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DF12A764D
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Nov 2020 05:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730234AbgKEEWS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Nov 2020 23:22:18 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:59062 "EHLO
+        id S1730179AbgKEEVz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Nov 2020 23:21:55 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:58826 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726225AbgKEEWS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Nov 2020 23:22:18 -0500
+        with ESMTP id S1726225AbgKEEVz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Nov 2020 23:21:55 -0500
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A54Jh4m146131;
-        Thu, 5 Nov 2020 04:21:57 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A54K20t146391;
+        Thu, 5 Nov 2020 04:21:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=Q/Zxvd8Y2ETDhPysP3vR7GgbkKkwEG1Cl5eXaCf/fe8=;
- b=xzBkHHw7LXUkd0oDkDaZx33aT+UMvLcF3XsZBEmSc6gdJTky7+BxLaq5trrunXYiwZnJ
- BfBvjOWewoWvXsJ7b2x4XfTaQXdGwWpbC2L/QtVd8hoVkYTjRuIIfGXAUpgKXHH2Vd8l
- MHGHq/0J3qj+UDyQIwFWXSoFJiPYPzHPhu3fHV7kAbgWlrrteh6Q/9cQJtC1bljKUezj
- i63C878rWpa2SUjTF57R9PKApvCS1pOj2O9hiWnan1F7tzS9x71UFMe/6bBxz/CrD5Ds
- crX3r+pLQEsyNM0cSQP7tfq4sS4QZpAuEIWah+OCBd/P08e+e4phLd4Pb5dGuEXA5z1g eg== 
+ bh=xd9c8oQl95kc6kHWZbW3G6Q5b8JLutLP7OHMPXIx1ew=;
+ b=pqWnFrjc1cIWcHRwdMsUPk+3cKRbhp0XkRAofkcbwhipS9FYcGpw5WNVPO8coNKf/MeV
+ vECud+ZINB2ASW8gYwZcqm30Tpb1QQwS46LMqdwdrSE3Iudq+IHCsJWEFESDRYsu9Pi7
+ mBCbD7uUrA/kmcNktiyTvAfWvBcmn4p0zxJxJSvxWIFZO/ytC002GgE7bjcqQNZV7ZZN
+ +uPO5+qhjyJC9SQc7Vw3d+/ozmjXZEyY+Z0+U4yr9y4bbA6IG0qiHaG3EN3keeTFAOvO
+ EgS2mY3PEdgeq4xxMXFychN19LA7rpIdxBTmdiVvlpO6NbgN+18QCob76pjcL9zS5rl9 aQ== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 34hhvchya2-1
+        by aserp2120.oracle.com with ESMTP id 34hhvchy9y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 05 Nov 2020 04:21:57 +0000
+        Thu, 05 Nov 2020 04:21:53 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A54Kkhn020897;
-        Thu, 5 Nov 2020 04:21:57 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 34hw0m0e9k-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A54Kkaw020885;
+        Thu, 5 Nov 2020 04:21:52 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 34hw0m0e66-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 05 Nov 2020 04:21:57 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0A54Lo4M017180;
-        Thu, 5 Nov 2020 04:21:50 GMT
+        Thu, 05 Nov 2020 04:21:52 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0A54Lpre031185;
+        Thu, 5 Nov 2020 04:21:52 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Nov 2020 20:21:50 -0800
+        with ESMTP ; Wed, 04 Nov 2020 20:21:51 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     cang@codeaurora.org, Asutosh Das <asutoshd@codeaurora.org>,
-        linux-scsi@vger.kernel.org
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        linux-arm-msm@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Satya Tangirala <satyat@google.com>,
-        Bean Huo <beanhuo@micron.com>
-Subject: Re: [PATCH v2 1/2] scsi: ufs: Put hba into LPM during clk gating
-Date:   Wed,  4 Nov 2020 23:21:45 -0500
-Message-Id: <160455005256.26277.2812826866099587703.b4-ty@oracle.com>
+        Fedor Loshakov <loshakov@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        linux-scsi@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: [PATCH 0/5] zfcp: cleanups, refactorings and features for 5.11
+Date:   Wed,  4 Nov 2020 23:21:46 -0500
+Message-Id: <160455005256.26277.4237038702456087390.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <52198e70bff750632740d78678a815256d697e43.1603825776.git.asutoshd@codeaurora.org>
-References: <52198e70bff750632740d78678a815256d697e43.1603825776.git.asutoshd@codeaurora.org>
+In-Reply-To: <cover.1603908167.git.bblock@linux.ibm.com>
+References: <cover.1603908167.git.bblock@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -82,17 +75,29 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 27 Oct 2020 12:10:36 -0700, Asutosh Das wrote:
+On Wed, 28 Oct 2020 19:30:47 +0100, Benjamin Block wrote:
 
-> During clock gating, after clocks are disabled,
-> put hba into LPM to save more power.
+> here is a series of changes for our zfcp driver for 5.11.
+> 
+> Other than 2 smaller cleanups and clarifications for maintainability we
+> have a refactoring of how zfcp uses s390's qdio layer, and we have a
+> small feature improving our handling of out-of-band version changes to our
+> adapters (or firmware).
+> 
+> [...]
 
 Applied to 5.11/scsi-queue, thanks!
 
-[1/2] scsi: ufs: Put HBA into LPM during clk gating
-      https://git.kernel.org/mkp/scsi/c/dd7143e27cb7
-[2/2] scsi: ufs: qcom: Enable aggressive power collapse for ufs HBA
-      https://git.kernel.org/mkp/scsi/c/61906fd465c0
+[1/5] scsi: zfcp: Lift Input Queue tasklet from qdio
+      https://git.kernel.org/mkp/scsi/c/0b524abc2dd1
+[2/5] scsi: zfcp: Remove orphaned function declarations
+      https://git.kernel.org/mkp/scsi/c/84e7b4169f94
+[3/5] scsi: zfcp: Clarify & assert the stat_lock locking in zfcp_qdio_send()
+      https://git.kernel.org/mkp/scsi/c/efd321768d2e
+[4/5] scsi: zfcp: Process Version Change events
+      https://git.kernel.org/mkp/scsi/c/a6c37abe6988
+[5/5] scsi: zfcp: Handle event-lost notification for Version Change events
+      https://git.kernel.org/mkp/scsi/c/d90196317484
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
