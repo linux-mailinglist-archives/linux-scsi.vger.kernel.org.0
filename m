@@ -2,183 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DBB2A992C
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Nov 2020 17:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB08A2A9D72
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Nov 2020 20:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbgKFQLv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Nov 2020 11:11:51 -0500
-Received: from sonic303-2.consmr.mail.bf2.yahoo.com ([74.6.131.41]:40639 "EHLO
-        sonic303-2.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725868AbgKFQLv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Nov 2020 11:11:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1604679109; bh=Q/AmPmR0e9CXxQBYbB2SR9aRfA51ls0ZhJJ5ujjkgjM=; h=Date:From:Reply-To:Subject:References:From:Subject; b=IY9J1oqbc2g3VbFuc2a48ocNOH2qPobJ/8zi/XE0HAxRFz4XS4JvZ7fUbUe5DwSslbSnhK6Y4v/dxJCkE+Q0Tg9IGuFIkyrfwgLjWjkepYAKX+YXagXvboraEhOAhjttnR3TjDm7EQ2Zf/lyqaHN0W2ItF13pZy4hiFI2aptmPw8xmpS57zrXIknOX3ZQgOyyOH+cyDUNnIBZ/3wi89SBx8E5INtOGuulqZr8nBdZMRNGmYIHhq2H3kr10hbmcmhMHq3Bhg/Hti7vyGWl1hCysNfXKgoYmXtxbSnyVlnqPleufoukmxtC0ntMoeKXyZ2SzLvIVZR933Op2uzxjqrPA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1604679109; bh=cJlXn4bVl3jkfaVTN4QVrk7VgEvR6OumghwyYbEbDGe=; h=Date:From:Subject; b=WXmjcQPJ4zg1gPnEr4QUWlZkguArnhBTdfu3Xbd3Vb/pkNaLVgINB/4MRLTLfg6+fhqPz76vk9Vs4oApO5bPhZ45Gd64xi7EEeEktt7s0LOdKYXoIRk5czDDivhMrLYcmiTcJpBILQGmn3CkQr1Tr/p0MIcGDlpRc3DU9YacKFZxMp+/DZYc6/AV7lxVKI1gpnABAb4oagQUepYGaI62vZzBnQ+oyHvJSc5rI8KHDNcRnXsf8AZY3IiVyzbRfrv/w8q/UiNFGUBHqpfhJgMoEH1AoEV+fOgkeTrFHXhB6WX2YA8O+2vKCg8IOUHBDyGmg7dLLc+pPLZ085hllANb4Q==
-X-YMail-OSG: 4oyXXrAVM1m3UFdUyzcNvWzzQw1AhsR2USJe_2ppjD6NN_uYw4J7ulwPwXxh0bT
- XvUO27Tr2YjAeSKUog3Bm6_Zvs16zHnoe2BTA5QZLf2z7TjIXebHRpyi_a99cKUZHzk64ucKxPXL
- Tl.XjE7yReoH7V5HE6U3uelR_xXqugpMDoPLAZ7dFFsCqprJUfJ4kLUSPX1qfuG4mYPqcxPfKVKx
- FS3bf7YOCP0Zw2.So3Wamg5M_GIEcyfAzp5txpDVeMLwVMB_OWuuqjpqpI4FIUqnsxp73FKeK93O
- 8UMwBcNUMhQttShm4MXQKOyDVEriyqGI81QR9MPDhKLDMzhFhkDi1e3LMzv2l6rcZwcHb4J9fhGC
- DC2Oum.fqhN4Jqt5GQJhmS.F.82mNb4ikRf7lDFDccTT2HU7__t18BoHshI.5AwXdoawUBhm7q5X
- hdanPXH9JQ3XcpwWo7xXtdUJHaEi0stsqwnTQlRnnJb8vPgJHzpaLjII5puNbCt3SwYM16LIUof3
- 4wRsVODL_ln3lt7YMSB.CvREiHF2zrK_ONNif3nXVAMwWbNVqWodFIP68qctVo.MBH1Q4Eys46f3
- gMCQoFEuxg6VYa3o5xUzc2lSChyqKY0oX4nPliEAbGV5KKVcKoK5wNri0WH5El0jmvZXRqFLDDm9
- AsSfcuVH.2qYV3u9GKmHL84XNlq_41CIIn92kowxczxpEMvKmhLJggKzJiN0m9CJ.ukB8MNYgQE3
- X9nNjcJxh7unFKNOPAPc1OrtnLToD8o9aH2RcM1AvnvA1Lm7BsW4M2NaoNaviI9N1de9LXdVwkuD
- LtTs.qSl8mQEeBfh8LvhPC0MoWSfMdVo3oUueTOWmphZuVPghpanuUEFPck2HWZNYCAfdTlQwFSR
- f0gbTutU0oia1h3c9qsf2S7iWcQc0lneuMNkIhJ8UA5wdUdFPUY9wj0G43q6zlETEen_0k7TVybK
- LBM_RqmTcCGwL5gJECKvkb56qc6NIgQ6hxJs.oyS3GxAzsvchdx4k_u4PovPbOQSfiNaNX_jnOi.
- xaQvqPraB_RzaTHrIWNSctaf7Tny6ceBHJyoDebllLiJz7wwEfE_SPgRXvRIUczX1Eh.xe5h3QTl
- qimByCyrt7zO66gp8VwXjhCZLm1ZGWGe.eiHoZRrZtOWaRJpMspW92zd3PnKdNhKpRuAuHOUueJD
- vpaoXe_sPrP4YqJ0bH9FogrIAZgpWfJqsljronp5h46X9iYpVZ4S1.BHonr1OfD1iUhISprpZdv7
- 0oW3E_ssWflJm9v9aUyYK8_u0ZZiUGY3LJ7fQDcoYPeI2bue2WSKzA6g3H2rTMicwU5bAOXVq1tE
- FiKfWZv17a2DY.5d37_LcUaEDRhuvvu6vKZglUjSyJbKZ9cU.JLEiIlWT0gQASYW.s8iVHyVBkU.
- qxWJOK_JeeVxqnaztx4ew37lUYgxrgeF0SrsZduwg7DiN.tuZEth_QNCY2zK_ri4DTsjsWuCmgOi
- 8FbahMtGt.o7NfCpRfOAI6X85X3cVdRUetp4EYKtJ0byB3jZXgLoXnMea16gt0.xSTMfXiEUJWPT
- GFAjq4lSMmof7sTf8cmxyu5ybTm4UTvKvHOTFfTc.uPj3O6jt4Cn4NsYZBpjoviSFm62d2hAlkPv
- diWjrqovYjwb9eDZj32C0vclg9je8t4eXHYhTQP8qi_u3jOW_H8SOrZmjHjEn0AuR5sB_Vh4pS2f
- w4o7JyrBn9dJ7U..ejZGgPO1gfp1lof2vjfOILQiU8FuQLUqqydkN8jLqfhtFuZt96L_hAm5LU8n
- rpFvBOVvsUhz6.OMwuaWEyQ_DPCKS2XuVZLjTw3xyHJxC6YZXJQyYB2IRyR7JCwT20Cg1_D4fdvv
- eP1vztdzXoFtd9GMAztFElIxBxcTz9j7jO5ntqzgVlQfJAMIeAE9JurbyVu_sNwEDAq5_ezPAA6z
- j0_bIeeKU6X2r9tIO8qWVY122_buQ_ZT1Pb3By4fUuYAMB.DPWNMHVhBRtQPazFS99ZkySgRVN5P
- bEpHkWFhAvJODVDj0ja6U5sks96t9RlMkEi.qb50Edb6uLyqQKY8qeWxfZPSs0M70YJJWULJdpmw
- v9dprO2WLwOmZUjTzBRc9N00Ezp1J6zrNHI5uKMdOjREoolVzBn.OK6SC9WzuAkZPqN6mOk8IzuI
- QAFfYpOk_ItrdVnG1ThHYx7mCg7FN3jY78jD.FqRk9dYHjWV0JOZuJGkrwvGOsdi8YKMef59OHH5
- dyEUKeThy0mwDO9QcUPrK_wbZv7Vqu2F6fMKVKXLb3o7cnHaDgmmXJwZQzRh2zUfz0P78YebL_R9
- KajWlkZXOxHwImyyW0SIjo98XYixIJcFu0O09QLtXZQC4TtcWNuaFNUAe_fNAid8O2KBy83KwIie
- JdV6Y7Jccz5MX4qrAfY88anTz_RYCULxtyR8V9uBnf2bap0TCfjDjMabNd9vbArt5XzKmjDWVWf4
- wHoubWTsKCBp3sHF5rZWvoSoh7k49dP_HB6hd5Nv9.YSHMvq42C7FWe3Y6dd9muwp5eirEZfSaZD
- tcRzFIdxzO78hdJv3yPc7RL0Nid0Z7GTOjgTVNKM9v_.9Mxp63iK7wTJeo7LntE0wylMM9cZIL.q
- pArxMtHJSZjuIxmOLbOj8zZls2yXsC3a5Pz.i5Ci9Wu9msIUZAtC2ESLA2RxtDtvrUkioKIe0FGj
- mTHTIYU8ZL5_.3ZSQOGcA4zS31f13KF2w66NpXp7Gv81LuZTKxueHMou3gEJRU2JdKuEcuITnx8v
- 3coSGhRPkb2y.VAffpEl.nm5VjYqvIR4XK9l9pVflVhU8jlk4IVOCxgGlrMfIhMig_sLcOHuPDAO
- Mbps_eUFm8GyLd4EP0in_53XecEINelNgvS.fa0WKFEcgoFd_Tm0Pwq_Fln8w6YuBjMSQ1Fne_bu
- K.yftnKJppHBtrann1Nikl64spBY2scD0rr1I59gTXbBK1GCvFQAj9csmlghWAHFNGV4rzMvff9n
- 0SP_H_Xr1zGgxQlbbTpVrqFLk92WujFydS7xJLUFLLDGZDOv6oe7MscDV29UDzHTEq_W4K9HV1ly
- UM4BjvNeNxYKhjx_ORgcOE2c.2NpC7ucFe1vlNLC8LvEPme8ZOs7osioWnLc0CCPV1P6ALQEJJIQ
- vVhNcYRRq6_.xHfiq._V5tih_NMxqyeBOhDoAuRz3J4rqTsYxIdIJYsk5StKoIsnpkvh9yKOtYiq
- Ep5AnwE7cpvROpfTNysGyUX95PturYrEaFbbG.MYJiifQ4viWZVppumR_xCROdeg30rS3H4wlk3q
- lNmZppwHUgUhneKStwq.U19XWGkSp4HWPlbIzFS1lXutIyvb07Uped8BQNakQhTAgu6KrmIsT1_o
- 86FvQsWadSCq.0SI1beuCYjhgvMwlMRcXNxUo_5vGdlDfClW70pJblLGOHU32DG0UNr1ciGfgwod
- ZDOUT0ZF6Qfw7rqMjQlEdZw7HSDRdIzxRq9r_vBjOqIREGpYcLJzs3B8TsGDaJgxaRrzoDBpYnUf
- lqYj_en32epD7yxN4jgxIsrvZ3JC6Kx7lJg6d66z6U6UHzaPbJz3rL1WC2EGf5FLt7PDfS6vTEqu
- EOvwU_HsLeHq8adcK6LktP2beE1fpyBSCE3ZCTcCtzK6u.2.5XmvNLLJ2ipg5f8YqEpTl3yD3YFn
- .YoJRMpxufqKt4XfCtDS1dBo9dOKZ1_CnaE3LlfDSohtbY9XM21mMFz1VT_UM8tj3HjK7ELlFbl9
- AAyH4w1hDC1w6GNjJR4ch.imssneG.G0UOuV59jLmR9V8LIfCkFUV5S8ZyX9.3ZHveYfWbC.wqxA
- k5lXBJ10t3PvrItVDfcH0p3lEwHi3rwQm5ffwD4usmhAw5qNeREDLAsPPPc_RNnL5F_414dSIpq8
- rhC31fC7RUOSRNA45NqfIsA9_cO4IKrMT1UFHdbiEORZlbjIK3wWxCxnl2s3lkt6NgwaHxbH8uvv
- zfXUHxDrHOM9WISZLtDdPKgFm.9y141ihp1pkQ_s07eH2rEPW62oUrfZLzQnUgNUBuS2BBy6ksla
- iegVHnl9mhxWh0vdRYE5fIlWJkfoQYxVc2CrvyXfmZDeVczx_jkiqPr50YbyI1niv4tcciRGtfun
- lKPh5qGnNZBDzuoJn7o5FSR8a_dCzjGUxc5vaWL63eYqnujAdL5NFpWp4TORFXrLmVSEBsN1pyUF
- FjeUSLQ9ehi.PLpusGyBXKDdykFVirY16xvm1FW2dn1ZXNaOOw46Stti6Q_6r2voskuneMR8b6yL
- wVW03IRx3wEiiqX1oCVmMRp5NpWuyddIeUjDfWLHDufoR8tme5.oTmTezVF.UuFHKBTzYsUQl7VA
- zJG9D0ZLzwuIjVJ8AMoNM6J5HiJai0GsbrFOniZv_eHKdTZVVkvHlokUAXRkAA40kyY_P9YTbKK9
- dFjk6kDqVodQ084Z5RLNKoXfXcfkZki5wibCX5E1Fgt4XMYARQFWZ_O6E9_4ZWepdfbk5UIPBlAI
- m72UWMhGqcsa1rz6IOeyWkUkPMMX0hvVjm.J92Kr7Z814S8iGu5Q7vh.muif3wY45XOwtZnvo3o8
- izXzVLlZcSQ75JRUbMXiuuZLLXYxU2Krlc6qydosdPVqxCLUvhbL1EqBpTqBmTmOMjhaATQS.IC1
- kG6j4r38M44cJqj4l03SSREaU06o8etHbwND3tIs9ybWuTB.W3RNgtELggNPic3aq48gxUhkELQd
- BTWE4JJJF4Td66vuCzmuAlWGinMXeptcyLftvtYoNwfoBIy.5WROoq4zpud5jyxSyyB7L5Ltquql
- bFCVRZX1gQTmRpxNnoyCsm2rmwzOcbesQUITLpbPG3Mq_tnB1rAma0paYSJw9Hz.PNOoDcnkbziw
- zSgM.sV534mLXg55nDmSo9XQ8D2bRpT35hhke2Q4hz_ZgtG4rLKHS6vT4mQNViGGLnvU.ptjvMVl
- LdOhF1MhVpIhk1BsfoafJAfl2hXgWY.CgJRa3EhxYFr9ekN1vVrFSzn1WLgtoB8G4NKxswR_q18f
- lcqps_cAotiDQp2zEBg9dchBiwVu0pLgQ6IHRlfiqUdSzUkZrwhCcT6Uu0Dm2zKa3WyvpKqQh94D
- HHhXwU3GKdRGxcOPnR7FhBCO2xVmyMysSw6MIUXOAXRaKn950d3jBuWHwIBqCDvgkAZAzLESGBaV
- .vCHVBmCz0yUP5h1lkGT8IfijxfhYlDLz6og2rqWFRFMGnzKdnjAdgj0Ez_EfGkYoP_VDJUSRF6j
- fIYk1zHQbQiav9YpXvhLm5oybMbd9shV7FUmagSbhw9H1CD5ClRDFSmSzF0eLYaqaNV7mIualXyB
- js2EEKc5m7TDhBJN7uqW18l0799picASTqqPHR6otRy45DFnNqfXfixVd_UWyyCmV8lLTnyzfTv3
- kLNSkYIDCnGpcFFY1.9Bee0THGixxqXPCrGDhCrY2AMkWviuAmMPH2foV5dJR8AAHIQ6oeRoJCSs
- fTWwcJYQl_HSC4iCewdPgbYGvcVZNneSqg5.R2tYj4Sqh_WWozzm6S.Fvf1hk3gqO.aGiEUN.lwL
- 5mDPGjbmYje._qUQDYkLofNiqYFKT7rs9ZtXuaUN3NYTAW4f4.s0RkDILeflSVo1ZJ0JHolpc7ks
- 1PU2jmTvtUuqHlyeJRnN3Cjvxaj5E4XCZi.hdHLj0Ltf7OUWxhA_X0t6UsUUnLSKaKibXdS3UJXg
- 8JUP3qMlz8aOt6p5Im3Jlc3JXFyE23BDx_nqOkyOJgJkE6EjcdF55vfftKc8c88EYNfmWTEnu9As
- IRweh2AzQBvLWqiIhIMYHuRGqVpxYAanvl6YbeVtg17mO019zIOiswHHkZtOkVc_aChZ2cIfjYhX
- 4XvXSR7B.VF3M3PdGGxB844O5VOzJFkGkqU1jZ2MEFVNmItXNt5eIFrh1SjzW_BskRczK.O2vEC7
- A6cQYkttYnAyPRqBF7y1VfdL_0s2rWqJo0jcW9OFL..thSCshqjl4vYl8ZeeCowsB.z8fsGEBAdS
- kxr.Hxf_7zeRfa6ze6KlIAkgX1oidSbNgap0qRu33D_FfiYQiN3OjhyFvLkJNe7YrulK2pMQaXTJ
- BsJ5nawzoJdb6o09hXATmOLLs1EzYXjuRwTzs_jDOd_vwdkvOuMvvfiICYxlFjnVxRhKC2tjOF.r
- U0nILZ2BGT9dA00aCPUYpPYaETYRLZHKMewEJ9aQJ_3G16GCV.fIGyzVUNY5mSPOnsNoD.65AT06
- nLLxs0GNFiMmECjJREjkjf_JKL0BZM4gUbCYIkNp3Mn5p1hZiwGnjkWweKEvbWM5NwDBCAoMCie8
- xrhfMLOMEhRtdkL63xtn0QSPnvgD10lgAeJnfNhMOqo2OFqD6q9KcJBBK5p2Qb9NC9u_nOzRJv89
- 6hZ.XhGj_hAScFRIEufSXltYl3HLRKO.s8ZLJdDXntLtmzwavb7FqJdXAMLV128.xXfjfjrGXSVp
- 0TKVBN._RzBtnwIHG63NziWDzk7mly.Rc4yr2HPSFs7sTAEgcYR9UUl1VbuhL83w1x6O8p8Y7jsW
- 2Osc5qhSllMfXO0WLj990IyaotMd1UMAjUVs0R3L35WA0.sOW8egHPoOMXuwuzEa88EA1O0AhuwC
- AdqRfJ9lr4ze4F6PDNGwdek2UGx2yFqY3QEBFnDesO1xAaDOHrNmVD.YWfapzMifJkhnziMmNWgy
- Ou.7xrZxbcJWFluEjQJpjEAOXa6408iG_9WK41ctcyLh_lwFmSRVEKKDkcEZo7ss83WErYQrHZ0A
- XiN1gTehY9Jw7IcHgFlhX664Z1NoK95V6.i0NtmotEYfuod3PVQsun4ZKObuiUHTlm6mUd42x_PF
- 8TEI0fPapYILHyVTmsVAx2KS9LeL5DnFE0saUDeJPkzidd44NJhJluVYzUWlQOd._eTZBvkgwa7w
- YdSLTyEqFW9hFkffg251T8ikguRPzzCvRf6.w10HPKry.UIsJawON5ovzDejBYTYmrh.yrri7zm6
- rnYBh6TJi6UjrEeIZFLIv9rnBPv7dHRey.yXAu73StdyQ4PSsB9x9UxiObZ7zh.bq9IlAXLfY6AQ
- vbMztDxlfznTNXHJtxZXLUfeqXsV7TWu.rsUn3Wf9jdy8vwDsJoZ_q7hlBuLywH7iqY3iKO_FUud
- feehtqtnxlGVFW.o0GIqpemZQGNzVIUgKNZmOxCbjc52FisVVFsL1OR.VGwgd4U20aRdsJl.eG56
- tAM1XQeZIrDodpwDru0f3a1NnZZX_ji14VqDDA5gofI22zu19CSgSOz_sSgxshW9WeaHBq1STIws
- oREoG_MQQN21HyI2BMRsAsBz1hs5JDnm3bDGE4diww63qruby33sK7peHkMu3HPw7RZVnkO6EtPJ
- qdrL5JmaA2ggX2Jp9tNNjROU7PhdgQdcr.CSzI8kT6G1E8m8i_bGfcl72vWEjL2bcKmwwfOkOYT9
- HbWv5KJveT.y3wzI629lpUQe76Mqj1uTAAIZALoOL.LdD1SrJ1tqMhLpL5dXS3LO6w8xqha9vLuv
- YtXS_Xjm5Buo60ypGTiTGSjsbp7Ix6AlElHZw1COZoRgycDqxkgEwl4OJcjLl2F9i98RTuNnDshI
- pWkdgmQX2Fk3kPpcqgb.TrqT1WlPvLTmN1LrpawVkE5yAi91KpYKMYTZu8..dFPImRkjL6luAX6v
- _zvSS9hsXrConjX.oyRn86K1oY_vnCKNKb05nBXprfCIyUjAmUuRrbtF5x1Jp8zOMGzuYiO6iZH3
- Nccy_H4MHkzqAZc1V4oHamqxWuCYuk71YWZv7pMMgKym03jGqv.U47JGBB1cqXGvE4VCOTfWfg6m
- T3duvbmfnKAnZxXsfSo8JsMiurBUGnLvnIogpA0F5IwprqQXAhevITzNXjDXNnSYE5rxbeIMNb26
- 7nY3z.eE4eKVItyPlViOYB6xsm0KJuGe6f79Esd0zrNpRFyJj0VPfBTXi.JfySPtL6hIcsUXAPVY
- WRgDNGOZKZoIC54KqSWZN3jsGAPMZOFtv0YqPXaoQ5T3r0iFLnjidaC0Dzu5D_tdiA6CrCsh7CcW
- 6HpO8h7fg4bvTwKqoJsidgBrMOWHwUSdkqH2MpoHG5uIkuwK_mSd3t7LdC1H4laArXh1v0AoFAyr
- 5hp76gViFUU4aw1X13dICRKkgzfu093uIUu09iIxzyKkFbIzUYL.NSE.eyZppNOr.LIam6M44CMt
- pr8R5evkKX6AeRernqt4UpDQ4g4pYDvso4u4DNHVeZFWH.BcFk87NEqhCM5IL4Sb5TtyGEXjN.Nt
- NO36Bt7U3FZFqL4xtIb1S_Uy_bBpzuU234CXXU3xoPV09W.5rExCr11b.KgBKJOsh8HYawxIiPsD
- f3zskAtYMOJ5Vua2z_nEQ0fNzVngvczlxWnu81riYT8mcfAV1sbnaH1zIvNjZzr98fGJdP9qsa3M
- 8ZZZIsqjQ3LM1a7FoVHXWpAvfWxmMn_dX9E7gkucuWZJ0UqzhrbsbVMgmIo0tDhV39Sqczr9QpjQ
- bHSauMEs18LlxJKfQK8t5k6xWABehFnRbOdbwNs99GIP.bG_wBGakaUelG3ppbej1ekZtM52bIc5
- RNDpAXuhaCNHOdXWRSa1iSFwQWJpBIvvorCpz.RhDGck_7Xj8rxpSBKChqqx17TZQ54qLbrWeQqY
- bmG_mn7RKjLTmJpIN.y84qkcilvIYpfih0Prwj_Bb_b.cGpzy1DSwc5XluzKh7ozWzSGcTBx4_GP
- HItMKy_0zC3XfOwLGO59wkrvuhawJ1qKsarAko6hiIpRli7ZU0zGaQnViXIhDi40gnFuqrTV7SVW
- WxOW3OZM7HrR12YebkoXIj0ogfGIvbqEIOu5qkTxQZ0ubWlnkwHN89pNsGWWyyLsTr8CFpv4g_KZ
- vHB9OhCQgekfidMaQe2Ck11mDEKpiyDD2sBtvrBzwu05vQGp1DE34kHNU_p5IqKniQKlb9Q3hceE
- Ty3DtINPyu9LZkVwUXv072X_zaqazG6qKpCRT_4ySpzBZZI2U9hHitjy_0SVUV5I.NSta8Jy79FZ
- j04TQi56lPf.3Z_qu2tWaeTgwpVmCkN__xou6tq2iQMaI8ZuBifFMCr7MK96eIeViioSJxMFjJSC
- t680GuyUVh9cNiepvXxPEetsy.Muq1myVXi6EJf7wPzaD1nszOCLaTWWuaZn4n.b9QQOWX8hAepH
- eg8l4XilzZyxXPX6bdOZduG1y6doZ04zfEfIGGp78tLI7jeoqlJdf9PYu_PfJpjTpjcQl6bPkiP8
- 6GxilpMC5gsE.38cVDZi_G6JsfXmiHTM_qL.9Hgg2A39bf2chY6u3lNFKKv.a9jjfw8kJbvQNO1E
- B2JdBEXsMuBQYyW9fwn5PsPchNrxNOMkGnhvPo36urZ3Bv9vBXzfwFqsMOwc1mVn.T5nJ2mADgjv
- 58vzL38_ugJZ5SgBGOgdbgveNBMKdRlC1.y6mmg.yY9XgMPaz8iBGqe1qkbFdwxbzC7lLjCDLZog
- i_MTubn8z9KwWLZqp_65UK9C3kL1rBeX9Lz9hW32vrZN6iCJ8w9uJJiZ7R1iLr5eXB5XVGo2fmZH
- 92yd9e40MRZfuE4PwppNcZOhhHTAIG58vWVDFrUICWPrRZipOYjyEj.x_bnOVoMo3wBVMMNm0S_9
- 8z6cagOhbUwsv1IMqGnX4y1MwpacrnMn0E5DZmoubteiFCTdZnLHlnD2yGQJGEAH.G2BjRct1efj
- ItZP.2lH3R6Vg0gAzd3hEJ8nDCiG1X4b1mUrywlA0cXeIilyQZJowTr.QAcJxuTOqxo5dBvbBHzq
- 3A8F8KdYsTW.G3Bhriso4IEKpOy7_DWQkfnGT9EQM7CGGQkDVsJFDMFIbem6GxEEXSU.633DJbjE
- qp69ENls32agYWSQCas34dCGcDpTEid5C4DGApAepX2qmHGCFPCs6kuJdQqqwD0gMHSVHTXAkRdw
- PbDwiKYQdaIqmoEPEDzKAvGUXXkFhi13qI1AFskHPHSTLRga.ePsr8fleHc5AvvvGuOnHlTcEN0P
- TNKUX8zmvOA6Ub.4UdWzf3tQvt3wxUoIDOqA5Njhu986rM6PQaWz5L2iNkf7gJuivz8pbqXKdVuu
- DMddAtWaCE3sT7yP.VwE3Ctt8fFWJBctfp6UDHcauAM26JtvVqxJduD1lP0nzByWaGR4V6jjcMBo
- lSRXULSLLEF.lycsEWv4SOwau6v_zhYG1YHi7WRnqUYScUcn7PKMEKRds.DLJ4K09XG.p
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Fri, 6 Nov 2020 16:11:49 +0000
-Date:   Fri, 6 Nov 2020 16:11:48 +0000 (UTC)
-From:   Mrs Aisha Al-Qaddafi <mrsashaalqaddfi147@gmail.com>
-Reply-To: mrsashaalqaddfi147@gmail.com
-Message-ID: <440405410.1704732.1604679108955@mail.yahoo.com>
-Subject: Dear I Need An Investment Partner
+        id S1728352AbgKFTGN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Nov 2020 14:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbgKFTEI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Nov 2020 14:04:08 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E556FC0613D2;
+        Fri,  6 Nov 2020 11:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=KZOj2ixaxfr+x29An18oeDfaJx3FSv//8uc71Hhn2A0=; b=snjJGRx7qVkoWA28XGyBSN/FU5
+        1P5/6U8yQxPbAyQppy+ZGNo7hD7TWcSzoG9wJV5MoXxMDDYieBlcG6uvG1NU21CqTnxt3WKQtAuJf
+        UqKqna1ID0lcpQmhrivJzFz3YtmWKpZm0KUamzMFajaTMK5TOilliU8pAMmZ7jcA4xKsEPe9u9FQe
+        QLgag4ggR9M8REy4gaAzi95ookXu/+vKsN1gxvlBcIDCNpbUaA+k+bepajweHAsKHRlnIci3X0/gt
+        +qiwIBcx7dd+5GmJaUUfQwr2V0s1euix28lr0Y0k8IK6gPjGXKGEZvDvsOwgNI/M1zhmywSH4Q6X6
+        FMOFWKCQ==;
+Received: from [2001:4bb8:184:9a8d:9e34:f7f4:e59e:ad6f] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kb71P-0000t7-34; Fri, 06 Nov 2020 19:03:47 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Justin Sanders <justin@coraid.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        drbd-dev@lists.linbit.com, nbd@other.debian.org,
+        ceph-devel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: cleanup updating the size of block devices
+Date:   Fri,  6 Nov 2020 20:03:12 +0100
+Message-Id: <20201106190337.1973127-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <440405410.1704732.1604679108955.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16944 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Jens,
 
+this series builds on top of the work that went into the last merge window,
+and make sure we have a single coherent interfac for updating the size of a
+block device.
 
-Dear I Need An Investment Partner
-
-Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh
-
-Dear Friend,
-
-I came across your e-mail contact prior to a private search while in need of your assistance. I am Aisha Al-Qaddafi, the only biological Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a single Mother and a Widow with three Children.
-
-I have investment funds worth Twenty Seven Million Five Hundred Thousand United State Dollar ($27.500.000.00 ) and i need a trusted investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in your country, may be from there, we can build business relationship in the nearest future. I am willing to negotiate an investment/business profit sharing ratio with you based on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply urgently to enable me to provide you more information about the investment funds. Your Urgent Reply Will Be Appreciated
-
-Best Regards
-Mrs Aisha Al-Qaddafi
+Diffstat:
+ block/genhd.c                  |   16 +++----
+ drivers/block/aoe/aoecmd.c     |   15 +-----
+ drivers/block/drbd/drbd_main.c |    6 --
+ drivers/block/loop.c           |   36 ++--------------
+ drivers/block/nbd.c            |   88 +++++++++++++----------------------------
+ drivers/block/pktcdvd.c        |    3 -
+ drivers/block/rbd.c            |    3 -
+ drivers/block/rnbd/rnbd-clt.c  |    3 -
+ drivers/block/virtio_blk.c     |    3 -
+ drivers/block/xen-blkfront.c   |    2 
+ drivers/block/zram/zram_drv.c  |    7 ---
+ drivers/md/dm-raid.c           |    3 -
+ drivers/md/dm.c                |    3 -
+ drivers/md/md-cluster.c        |    8 ---
+ drivers/md/md-linear.c         |    3 -
+ drivers/md/md.c                |   24 ++++-------
+ drivers/nvme/host/core.c       |   18 --------
+ drivers/scsi/sd.c              |    9 +---
+ fs/block_dev.c                 |    7 ---
+ include/linux/genhd.h          |    3 -
+ 20 files changed, 76 insertions(+), 184 deletions(-)
