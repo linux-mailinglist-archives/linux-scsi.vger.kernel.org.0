@@ -2,106 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E600E2AB41C
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Nov 2020 10:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4962AB457
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Nov 2020 11:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729206AbgKIJ5S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Nov 2020 04:57:18 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:36942 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727183AbgKIJ5R (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Nov 2020 04:57:17 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A99rm3a168608;
-        Mon, 9 Nov 2020 09:57:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=EgR8M57jdF5W6v/LtWZUIPEB0wXu/qEKkaNkJ31iix0=;
- b=Pjy86BceYnOzvN/Zk9owat4C9QapONtcjMroOzrHN5U+wIuBvqcwJYuhGCHLYbjnejJJ
- zoxi++c7n2LdciTYbLKUAVTZPPZTtN7xyX3ingy6EcU5mcOCC6rP4zfRyywVOkbmexsL
- 5UNrC65yvZiDwBhMpEoEojCKAHY7spCI1uE4T4ZeiiftDhDD9iPvlsgHlYmaYGeUX00K
- fDIzV6sS48DgNRSn6EqIAMRtn9sKB60dGoprreRwde5iQ7lXXIkI++E7znmypKuffs6M
- rPUoByP7P9is6pEvcbSaIJ1iUguBIx9OSkX7iPlYydXLOkrerWOGKCZy7sQPt13MuJIR 2Q== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 34nh3ana3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 09 Nov 2020 09:57:14 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A99u3Wl077835;
-        Mon, 9 Nov 2020 09:57:13 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 34p5gv29qc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 09 Nov 2020 09:57:13 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0A99vDNV013495;
-        Mon, 9 Nov 2020 09:57:13 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 09 Nov 2020 01:57:12 -0800
-Date:   Mon, 9 Nov 2020 12:57:07 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org
-Subject: [bug report] scsi: ufs: Try to save power mode change and UIC cmd
- completion timeout
-Message-ID: <20201109095707.GA2453397@mwanda>
+        id S1729255AbgKIKEW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Nov 2020 05:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728016AbgKIKEW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Nov 2020 05:04:22 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A82C0613CF;
+        Mon,  9 Nov 2020 02:04:22 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id p19so5110414wmg.0;
+        Mon, 09 Nov 2020 02:04:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r4nJVMcVXyeSNGliK+OKnPS1DW/M6pE2tauCbHrhVNg=;
+        b=sv8VDD99EDQKRUHHYWhNzmvr29ToOfjGdwAkmf45K7JwkiCC4hz/umidSte2zIE46g
+         imH8ms3hAFSjABW11LgmgAzg0k/2BAEc+8lefRQa1mdrC6HLXhpfFY1m/IVOeVyXQC3+
+         mg2jfbgyrolcY02WmhBtAABl8P/jvm9NCywhjwCCnyF1Wt8bhvH8tz8T77ujSx9nOSjc
+         MZBbmmwr10lzn+SPK7vK9G1MfiV5uzDsBacdF1W7SOzlUJYl1xAmFquS8HjMMs3PT7JX
+         c14Mt+0tImqEfvvYGkMcVrZbpPp46hzleSYCql+q0cmNI02yOzP4FGSkXtX+2lBTF070
+         OZ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r4nJVMcVXyeSNGliK+OKnPS1DW/M6pE2tauCbHrhVNg=;
+        b=t15Hrdbd33AR4+D82zYPzvNgTj/s4qm1khvjjxfoJO8HjjDOZH56RHPCK+RKd71fuF
+         /aIPFrO7w994LpHm+NBBPr1DqXYT8FGonaMgC4AzKowM9BoVtSctmtCrr7OMzc4n1g+i
+         c341NP5MYpvDSVNtr945IM9dnCi/EAxVU5ImWRY0XiBQMgDJayJyOZQyhdW3cKDDTKVX
+         XbNJAfbaSVKcqIvt4I7tUiPeKOszzYMfFNkOQM0dduMuSuP2l8NokjA6Ejr5ZqmEjtEx
+         HVZpSEPFE+WhvniPquqFKLCmoZXChS3UJcH8VTV1KAJu/JoerF99d+5a/Ockz0sa1Vus
+         yg/g==
+X-Gm-Message-State: AOAM531pjh5+wK/MJHp09Fvvg7mJCS+E4Ct+joNe9BLuVHu1MgGZpABa
+        N+qlz3JM8TRGGO4LvnDMa1V+7t7UeoRSxg==
+X-Google-Smtp-Source: ABdhPJylkCLm47ZABGOmnUFDl+mj6x3wCSK8hVbNgoKK/Su8yYiWSfdWD+UkSyp4HGAsa7gUh6Qm0A==
+X-Received: by 2002:a1c:9950:: with SMTP id b77mr13601643wme.123.1604916260448;
+        Mon, 09 Nov 2020 02:04:20 -0800 (PST)
+Received: from localhost.localdomain (host-95-245-157-54.retail.telecomitalia.it. [95.245.157.54])
+        by smtp.gmail.com with ESMTPSA id 71sm13117885wrm.20.2020.11.09.02.04.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2020 02:04:19 -0800 (PST)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Andres Beltran <lkmlabelt@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Saruhan Karademir <skarade@microsoft.com>,
+        Juan Vazquez <juvazq@microsoft.com>,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v9 0/3] Drivers: hv: vmbus: vmbus_requestor data structure for VMBus hardening
+Date:   Mon,  9 Nov 2020 11:03:59 +0100
+Message-Id: <20201109100402.8946-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9799 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 phishscore=0 adultscore=0 malwarescore=0 suspectscore=3
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011090063
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9799 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1011 malwarescore=0 mlxscore=0 spamscore=0 suspectscore=3
- mlxlogscore=999 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011090063
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Can Guo,
+Currently, VMbus drivers use pointers into guest memory as request IDs
+for interactions with Hyper-V. To be more robust in the face of errors
+or malicious behavior from a compromised Hyper-V, avoid exposing
+guest memory addresses to Hyper-V. Also avoid Hyper-V giving back a
+bad request ID that is then treated as the address of a guest data
+structure with no validation. Instead, encapsulate these memory
+addresses and provide small integers as request IDs.
 
-This is a semi-automatic email about new static checker warnings.
+The first patch creates the definitions for the data structure, provides
+helper methods to generate new IDs and retrieve data, and
+allocates/frees the memory needed for vmbus_requestor.
 
-The patch 0f52fcb99ea2: "scsi: ufs: Try to save power mode change and
-UIC cmd completion timeout" from Nov 2, 2020, leads to the following
-Smatch complaint:
+The second and third patches make use of vmbus_requestor to send request
+IDs to Hyper-V in storvsc and netvsc respectively.
 
-    drivers/scsi/ufs/ufshcd.c:4941 ufshcd_uic_cmd_compl()
-    error: we previously assumed 'hba->active_uic_cmd' could be null (see line 4929)
+The series is based on 5.10-rc3.  Changelog in the actual patches.
 
-drivers/scsi/ufs/ufshcd.c
-  4928	
-  4929		if ((intr_status & UIC_COMMAND_COMPL) && hba->active_uic_cmd) {
-                                                         ^^^^^^^^^^^^^^^^^^^
-Here is the NULL check
+  Andrea
 
-  4930			hba->active_uic_cmd->argument2 |=
-  4931				ufshcd_get_uic_cmd_result(hba);
-  4932			hba->active_uic_cmd->argument3 =
-  4933				ufshcd_get_dme_attr_val(hba);
-  4934			if (!hba->uic_async_done)
-  4935				hba->active_uic_cmd->cmd_active = 0;
-  4936			complete(&hba->active_uic_cmd->done);
-  4937			retval = IRQ_HANDLED;
-  4938		}
-  4939	
-  4940		if ((intr_status & UFSHCD_UIC_PWR_MASK) && hba->uic_async_done) {
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Smatch isn't clever enough to tie this to "hba->active_uic_cmd" and I
-looked at it briefly and wasn't able to right away either.
+Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: linux-scsi@vger.kernel.org
+Cc: netdev@vger.kernel.org
 
-  4941			hba->active_uic_cmd->cmd_active = 0;
-                        ^^^^^^^^^^^^^^^^^^^^^
-Unchecked NULL dereference.
+Andres Beltran (3):
+  Drivers: hv: vmbus: Add vmbus_requestor data structure for VMBus
+    hardening
+  scsi: storvsc: Use vmbus_requestor to generate transaction IDs for
+    VMBus hardening
+  hv_netvsc: Use vmbus_requestor to generate transaction IDs for VMBus
+    hardening
 
-  4942			complete(hba->uic_async_done);
-  4943			retval = IRQ_HANDLED;
+ drivers/hv/channel.c              | 174 ++++++++++++++++++++++++++++--
+ drivers/hv/hyperv_vmbus.h         |   3 +-
+ drivers/hv/ring_buffer.c          |  29 ++++-
+ drivers/net/hyperv/hyperv_net.h   |  13 +++
+ drivers/net/hyperv/netvsc.c       |  22 ++--
+ drivers/net/hyperv/rndis_filter.c |   1 +
+ drivers/scsi/storvsc_drv.c        |  26 ++++-
+ include/linux/hyperv.h            |  23 ++++
+ 8 files changed, 273 insertions(+), 18 deletions(-)
 
-regards,
-dan carpenter
+-- 
+2.25.1
+
