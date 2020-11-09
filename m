@@ -2,242 +2,227 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFAD2AB0EC
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Nov 2020 06:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791A52AB117
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Nov 2020 07:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729474AbgKIFlt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Nov 2020 00:41:49 -0500
-Received: from mail-1.ca.inter.net ([208.85.220.69]:58322 "EHLO
-        mail-1.ca.inter.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729391AbgKIFlt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Nov 2020 00:41:49 -0500
-Received: from localhost (offload-3.ca.inter.net [208.85.220.70])
-        by mail-1.ca.inter.net (Postfix) with ESMTP id F37DC2EA16B;
-        Mon,  9 Nov 2020 00:41:47 -0500 (EST)
-Received: from mail-1.ca.inter.net ([208.85.220.69])
-        by localhost (offload-3.ca.inter.net [208.85.220.70]) (amavisd-new, port 10024)
-        with ESMTP id nb+tua23EEig; Mon,  9 Nov 2020 00:32:56 -0500 (EST)
-Received: from [192.168.48.23] (host-104-157-204-209.dyn.295.ca [104.157.204.209])
-        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail-1.ca.inter.net (Postfix) with ESMTPSA id 759FC2EA077;
-        Mon,  9 Nov 2020 00:41:46 -0500 (EST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH] scsi_debug: change store from vmalloc to sgl
-To:     kernel test robot <lkp@intel.com>, linux-scsi@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, martin.petersen@oracle.com,
-        jejb@linux.vnet.ibm.com, bostroesser@gmail.com, bvanassche@acm.org,
-        ddiss@suse.de, hare@suse.de
-References: <20201106003852.24113-1-dgilbert@interlog.com>
- <202011091353.o6V6Hxmc-lkp@intel.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <f74d2ef8-c791-e8d0-0d37-a848f417c8e3@interlog.com>
-Date:   Mon, 9 Nov 2020 00:41:46 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729554AbgKIGGA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Nov 2020 01:06:00 -0500
+Received: from mail.lth.gov.my ([210.187.87.182]:58588 "EHLO THSBG2.lth.gov.my"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727077AbgKIGF7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 9 Nov 2020 01:05:59 -0500
+X-Greylist: delayed 916 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 01:05:58 EST
+DKIM-Signature: v=1; a=rsa-sha256; d=lth.gov.my; s=lth2020; c=relaxed/relaxed;
+        q=dns/txt; i=@lth.gov.my; t=1604900328; x=1636436328;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=HqgD/9hdEi5MVEsUFRj+EpK6m79beQbDzCw53BVveS8=;
+        b=Itaga1ezIbpmDhPQ8NQNHGC64FdyJOti/A6OI5r/vQ6tPGLg71mse4a+cokZhVwk
+        ly6mSAhuXHmZfmAY6n6X6nrMD3Ww240zKkzRR7zJrqm/8iTdFXSzpOXF269PN+/T
+        xPFjaUUEx1XYwbVMzoq/jUe3dkjYfNPcRn9048EsIa7Wb12gXcxlsi+lH2lLco2K
+        tae0YEnlCP6r43GGlrKXxMvD/SzZY32O3RG452hMB5eTNBVXiWu+rXp6jm3h9+Jb
+        UARxexyGrj2WNUQwLzEsSZ3U8SGNMg3YOBzov4ojxpmofbZ3d0uvD9ubRuhs6JR9
+        jm0dIDp02vMBLFYZKn4lFA==;
+X-AuditID: ac141e14-6cdff70000002394-b2-5fa8d5e7fc6a
+Received: from THHQHTCAS02.lth.gov.my (Unknown_Domain [10.5.32.223])
+        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        by THSBG2.lth.gov.my (Symantec Messaging Gateway) with SMTP id 09.5D.09108.7E5D8AF5; Mon,  9 Nov 2020 13:38:48 +0800 (+08)
+To:     undisclosed-recipients:;
+Received: from THHQMBX02.lth.gov.my ([fe80::40ba:65cc:fa66:a790]) by
+ THHQHTCAS02.lth.gov.my ([::1]) with mapi id 14.03.0361.001; Mon, 9 Nov 2020
+ 13:50:36 +0800
+From:   "Afiq Farhan b. Azli" <afiqfarhan.azly@lth.gov.my>
+Subject: =?koi8-r?B?9yDXwdvFyiDV3sXUzs/KINrB0MnTySDC2czBIM/CzsHS1dbFzsEgzsXPwtne?=
+ =?koi8-r?B?zsHRIMHL1MnXzs/T1NgsINDP1sHM1crT1MEsINDPxNTXxdLEydTFINPXz8Ag?=
+ =?koi8-r?B?1d7F1M7VwCDawdDJ09gsIN7Uz8LZINDPzNXewdTYIM/WycTBwN3VwCDXyM/E?=
+ =?koi8-r?B?0d3VwCDQz97U1Q==?=
+Thread-Topic: =?koi8-r?B?9yDXwdvFyiDV3sXUzs/KINrB0MnTySDC2czBIM/CzsHS1dbFzsEgzsXPwtne?=
+ =?koi8-r?B?zsHRIMHL1MnXzs/T1NgsINDP1sHM1crT1MEsINDPxNTXxdLEydTFINPXz8Ag?=
+ =?koi8-r?B?1d7F1M7VwCDawdDJ09gsIN7Uz8LZINDPzNXewdTYIM/WycTBwN3VwCDXyM/E?=
+ =?koi8-r?B?0d3VwCDQz97U1Q==?=
+Thread-Index: Ada2WrRimBtUGyHYSeyhf4C1BBI3Yw==
+Date:   Mon, 9 Nov 2020 05:50:35 +0000
+Message-ID: <A048555A387939469CD0266C5594BE3F2278F0B3@THHQMBX02.lth.gov.my>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [196.170.47.86]
+Content-Type: text/plain; charset="koi8-r"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <202011091353.o6V6Hxmc-lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA3VVa1RTVxr15N4bAno1RB6HDDrpna6uTmnw7Tpt1fGB9lrt0qqdTm1dMYZb
+        khoSJjdp1emaoajQUixBwAoUJcJgtBSIiiIFFNAWKaBIeQlFR7BVoMkwyKs+OicJj+isyY9v
+        nex99pf97fXdGxEh6Z8hFWl0Rs6gU2oZoQ/pQ8luyu82WRVz9xV5oS/rm4Qo58slqKe5gUSp
+        LQ8p5MgwE6hu+BiFrhf85oVu17dT6PKBc0LU0W8j0ePTpyjUmJcqRIVpCRQqKD1DoJLPLQL0
+        Q/9NArUeP0yi/1QfA6jnbCKF0muPCdGjlBgKlVwKRpbcQgKZU6+TKL3hMUAZ3RUEOuj4RIja
+        Ex1CdOTwUYByzI0kulHUR6Jf4xoJlHYVl/pbVgp111V7oe6aFgJdGL0GUGmiHlnaDgIUW/Kr
+        APXkVQGUfgA7vmurFqKCH8PQZy3FQpT/Y6sQJRwuBCi7QowcA4MUsnfiCfuTK72Q7bMYAn1e
+        kEOgb7MCUEW3HpU2VAB01JZPoMSvbgpRkfNWatYJATpnNqHRzv0ADaddwllklBHLt7Kjgx2A
+        LctKJ9gHQ8kE+8tXDor9tqeMZB0nukj2WmspxZbl27zY71LrKPZsbBHB5uUNkWz85T4hu6+v
+        CrDVZwYoduDUbPZR3sfCjSFbo8ESpU6nNyqNnCyc41VLmfVbWFmYhldplZpIzsDINOFLmYWM
+        LEqrVHGRnM64lFFGRXG6cGaZj+x/PkvwNY1OxulU+nCNLmIps3bzBjlCi16Sz2OWha3dvGr9
+        irWvr94ke1m2Ra3hZZw8Urm9a6Y6v7zWK8rmuyuhsJKIBvbp8cBbBMULYWZhijAe+IgkYqsA
+        2tMOASfhJw6GmRldlJvIBrA5zuIihGIEryXbXYqZ4nisyBp1ffETJwpg6e0+0i0PhSPfZFDO
+        Myl+Fpo/vedS0+J1sCezVOg8A3EAHK7JEzjPhDgQ3ug+KnB7EsOc0quE++wP73U9ptznZ2B1
+        1u2x+y/A8vgRwn0OgbmWXsLd3xdeSesmzUCS7tE23UOS7iFJ95BkAfIk8N3Cbl756vxQrVEd
+        GqH/IDRy9ymAn6w8v9l+xSDpQH9oJRCIQCWIAyIB40+fuWhVSKbv0IfvVit5tcJg0nI840c/
+        9wOG6Ql4h0m7k5HSzzvRmROojvuQ13JG/Pgys+k1EbkKSeAEx5v4KI1KozfxCpNBi7ULRv+0
+        zUPLm3ZEanheo9dVAigi8E/uC8MN6HDl7j2cQe82UglCcPZJhHSqSo/fEjqjYsHcuUwg/Tb5
+        T4VEHIGXcSfHRXGG8dsWIBKJbyXYVVJSp9dxDKSpZuzY18BFcLve02iN41dxD/VLmBF7Mq4h
+        Z9H6C8cVkgBPwmPOZ+jffYR1Uk/6qVFn0WDKlClPdvCcViDyrgQxQDQNz/yF0x7NRykjeU3E
+        mLWZtK0Ro9PGUZetILrRCUrGQQ9Ls+g/8zi5gHHqKTtBbjuSSXrcSg24DETme5nHCJHt8hFc
+        c7qycB3ea8HVPpqN65WTObjecdW487hKXMFKA+lap3Oxs6napJvIVRpAq8MxMcODcPqXBtPF
+        HMb9PfDJEaQyOqAAs0Ee7JNTYL085Sn95CA9IBuvNA7O6jQ1Df+hTKYpof/oBKeOga4wId3p
+        DNN3DPPIMpjONOIs/ceYp6KE9E9X/zCpmzQwPxvgd0EfBa0P5sAjn6yHIwODALaaRwXwYfQJ
+        ClY/jBfCXttFGvbX9frDob4YCJO+SAmGbTmxv4ctg00y2BCdyMD7VU0MzD/bL4epgymhsO/a
+        3jkwu6N8How9XTIfxh2MWwIHE+JWwuK0c6vg/ZqR1fCnKxlroL3OgYvFsgE3/fQNaLXu/Qu0
+        Nn39NixPvvgOvDFS9S6MrWjZ1uPcOgHeuo0rXFuHX+aeWzeyN9e5dWPo2NYNOUHJOPjE1nXG
+        uLZujPp/WzdBj2cljRaAwqDrPqbyxt6UlI72t4xd071/idhUb11wW7D8xeWtbbHv7wnftvo1
+        Qrw46kjNi1b7m3X723c2WL8u+mCLr3TqIsu/7+TKTq4uTmmLO8THX2oZ2J9dbfSZcaazxHwo
+        +fTIX5epcvPO67M2JzUrXovs8Y7o+NuGoKPEilfW2bs/3P4zvUn08l0mqfZ0zIOPVY/WnZIP
+        OAJ/Q/d7V61s9ntH/mp7U9ez9y7YF8GH8aRj10dDQcrW19si7xw/HhL8Vh18XJbcUGy49dzP
+        Cf+oT/7XxkNV56csvPL3nd6NcxwBiu43F4Na+XRNyPf7X9HKAsyOyn3JC4Z9Fr9f5DCEKWLU
+        j77f6l3MrtlTsp0hebVy3guEgVf+F12xPyUECQAA
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-11-09 12:24 a.m., kernel test robot wrote:
-> Hi Douglas,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on scsi/for-next]
-> [also build test ERROR on mkp-scsi/for-next v5.10-rc3 next-20201106]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Douglas-Gilbert/scsi_debug-change-store-from-vmalloc-to-sgl/20201106-084105
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-> config: riscv-allyesconfig (attached as .config)
-> compiler: riscv64-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/0day-ci/linux/commit/210cfb290b96c8543a20986a703b6134692e069a
->          git remote add linux-review https://github.com/0day-ci/linux
->          git fetch --no-tags linux-review Douglas-Gilbert/scsi_debug-change-store-from-vmalloc-to-sgl/20201106-084105
->          git checkout 210cfb290b96c8543a20986a703b6134692e069a
->          # save the attached .config to linux build tree
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=riscv
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     drivers/scsi/scsi_debug.c: In function 'do_device_access':
->>> drivers/scsi/scsi_debug.c:2970:9: error: implicit declaration of function 'sgl_copy_sgl' [-Werror=implicit-function-declaration]
->      2970 |   ret = sgl_copy_sgl(store_sgl, sip->n_elem - sgl_i, rem,
+=F7=E5=F2=E9=E6=E9=EB=E1=E3=E9=F1 =F5=FE=E5=F4=EE=EF=EA =FA=E1=F0=E9=F3=E9
 
-Hi Robot,
-Perhaps you can't read English. This patch submission says:
 
-    'This patch depends on: "[PATCH v4 0/4] scatterlist: add new
-     capabilities".'
+=F5=D7=C1=D6=C1=C5=CD=D9=CA =D0=CF=CC=D8=DA=CF=D7=C1=D4=C5=CC=D8 =D7=C5=C2-=
+=D0=CF=DE=D4=D9,
 
-And that patchset has been submitted to the linux-block list for
-consideration.
+=ED=D9 =DA=C1=CD=C5=D4=C9=CC=C9 =CE=C5=CF=C2=D9=DE=CE=D5=C0 =C1=CB=D4=C9=D7=
+=CE=CF=D3=D4=D8 =D7 =D7=C1=DB=C5=CA =D5=DE=C5=D4=CE=CF=CA =DA=C1=D0=C9=D3=C9=
+ =DC=CC=C5=CB=D4=D2=CF=CE=CE=CF=CA =D0=CF=DE=D4=D9, =C9 =D7 =C2=CC=C9=D6=C1=
+=CA=DB=C9=C5 24 =DE=C1=D3=C1 =D7=C1=DB=C1 =D5=DE=C5=D4=CE=C1=D1 =DA=C1=D0=C9=
+=D3=D8 =C2=D5=C4=C5=D4 =D7=D2=C5=CD=C5=CE=CE=CF =DA=C1=C2=CC=CF=CB=C9=D2=CF=
+=D7=C1=CE=C1 =C4=CC=D1 =DA=C1=DD=C9=D4=D9 =D7=C1=DB=C5=CA =D5=DE=C5=D4=CE=CF=
+=CA =DA=C1=D0=C9=D3=C9 =DC=CC=C5=CB=D4=D2=CF=CE=CE=CF=CA =D0=CF=DE=D4=D9. =
+=FC=D4=CF =CD=CF=D6=C5=D4 =C2=D9=D4=D8 =D3=D7=D1=DA=C1=CE=CF =D3 =D4=C5=CD,=
+ =DE=D4=CF =CB=D4=CF-=D4=CF =CD=CF=C7 =C9=D3=D0=CF=CC=D8=DA=CF=D7=C1=D4=D8 =
+=D7=C1=DB=D5 =D5=DE=C5=D4=CE=D5=C0 =DA=C1=D0=C9=D3=D8 =C4=CC=D1 =CF=D4=D0=D2=
+=C1=D7=CB=C9 =C2=CF=CC=D8=DB=CF=C7=CF =CB=CF=CC=C9=DE=C5=D3=D4=D7=C1 =CE=C5=
+=D6=C5=CC=C1=D4=C5=CC=D8=CE=D9=C8 =D0=C9=D3=C5=CD =C9=CC=C9 =DE=C5=C7=CF-=D4=
+=CF =C5=DD=C5, =DE=D4=CF =CE=C1=D2=D5=DB=C1=C5=D4 =CE=C1=DB=C9 =F5=D3=CC=CF=
+=D7=C9=D1 =CF=C2=D3=CC=D5=D6=C9=D7=C1=CE=C9=D1.
 
-Doug Gilbert
+=F7=D3=D1 =D7=C1=DB=C1 =D7=C8=CF=C4=D1=DD=C1=D1 =D0=CF=DE=D4=C1 =C2=D9=CC=C1=
+ =D0=C5=D2=C5=D7=C5=C4=C5=CE=C1 =D7 =D3=D4=C1=D4=D5=D3 =CF=D6=C9=C4=C1=CE=C9=
+=D1.
 
->           |         ^~~~~~~~~~~~
->     drivers/scsi/scsi_debug.c: In function 'comp_write_worker':
->>> drivers/scsi/scsi_debug.c:3034:9: error: implicit declaration of function 'sgl_compare_sgl_idx' [-Werror=implicit-function-declaration]
->      3034 |   equ = sgl_compare_sgl_idx(store_sgl, sip->n_elem - sgl_i, rem,
->           |         ^~~~~~~~~~~~~~~~~~~
->     drivers/scsi/scsi_debug.c: In function 'unmap_region':
->>> drivers/scsi/scsi_debug.c:3505:5: error: implicit declaration of function 'sgl_memset'; did you mean 'memset'? [-Werror=implicit-function-declaration]
->      3505 |     sgl_memset(store_sgl, sip->n_elem - sgl_i, rem, val,
->           |     ^~~~~~~~~~
->           |     memset
->     cc1: some warnings being treated as errors
-> 
-> vim +/sgl_copy_sgl +2970 drivers/scsi/scsi_debug.c
-> 
->    2938	
->    2939	/* Returns number of bytes copied or -1 if error. */
->    2940	static int do_device_access(struct sdeb_store_info *sip, struct scsi_cmnd *scp,
->    2941				    u32 data_inout_off, u64 lba, u32 n_blks, bool do_write)
->    2942	{
->    2943		int ret;
->    2944		u32 lb_size = sdebug_sector_size;
->    2945		u64 block, sgl_i, rem, lba_start, rest = 0;
->    2946		enum dma_data_direction dir;
->    2947		struct scsi_data_buffer *sdb = &scp->sdb;
->    2948		struct scatterlist *store_sgl;
->    2949	
->    2950		if (do_write) {
->    2951			dir = DMA_TO_DEVICE;
->    2952			write_since_sync = true;
->    2953		} else {
->    2954			dir = DMA_FROM_DEVICE;
->    2955		}
->    2956	
->    2957		if (!sdb->length || !sip)
->    2958			return 0;
->    2959		if (scp->sc_data_direction != dir)
->    2960			return -1;
->    2961		block = do_div(lba, sdebug_store_sectors);
->    2962		if (block + n_blks > sdebug_store_sectors)
->    2963			rest = block + n_blks - sdebug_store_sectors;
->    2964		lba_start = block * lb_size;
->    2965		sgl_i = lba_start >> sip->elem_pow2;
->    2966		rem = lba_start - (sgl_i ? (sgl_i << sip->elem_pow2) : 0);
->    2967		store_sgl = sip->sgl + sgl_i;	/* O(1) to each store sg element */
->    2968	
->    2969		if (do_write)
->> 2970			ret = sgl_copy_sgl(store_sgl, sip->n_elem - sgl_i, rem,
->    2971					   sdb->table.sgl, sdb->table.nents, data_inout_off,
->    2972					   (n_blks - rest) * lb_size);
->    2973		else
->    2974			ret = sgl_copy_sgl(sdb->table.sgl, sdb->table.nents, data_inout_off,
->    2975					   store_sgl, sip->n_elem - sgl_i, rem,
->    2976					   (n_blks - rest) * lb_size);
->    2977	
->    2978		if (ret != (n_blks - rest) * lb_size)
->    2979			return ret;
->    2980	
->    2981		if (rest == 0)
->    2982			goto fini;
->    2983		if (do_write)
->    2984			ret += sgl_copy_sgl(sip->sgl, sip->n_elem, 0, sdb->table.sgl, sdb->table.nents,
->    2985					    data_inout_off + ((n_blks - rest) * lb_size), rest * lb_size);
->    2986		else
->    2987			ret += sgl_copy_sgl(sdb->table.sgl, sdb->table.nents,
->    2988					    data_inout_off + ((n_blks - rest) * lb_size),
->    2989					    sip->sgl, sip->n_elem, 0, rest * lb_size);
->    2990	fini:
->    2991		return ret;
->    2992	}
->    2993	
->    2994	/* Returns number of bytes copied or -1 if error. */
->    2995	static int do_dout_fetch(struct scsi_cmnd *scp, u32 num, u8 *doutp)
->    2996	{
->    2997		struct scsi_data_buffer *sdb = &scp->sdb;
->    2998	
->    2999		if (!sdb->length)
->    3000			return 0;
->    3001		if (scp->sc_data_direction != DMA_TO_DEVICE)
->    3002			return -1;
->    3003		return sg_copy_buffer(sdb->table.sgl, sdb->table.nents, doutp,
->    3004				      num * sdebug_sector_size, 0, true);
->    3005	}
->    3006	
->    3007	/* If sip->storep+lba compares equal to arr(num) or scp->sdb, then if miscomp_idxp is non-NULL,
->    3008	 * copy top half of arr into sip->storep+lba and return true. If comparison fails then return
->    3009	 * false and write the miscompare_idx via miscomp_idxp. Thsi is the COMAPARE AND WRITE case.
->    3010	 * For VERIFY(BytChk=1), set arr to NULL which causes a sgl (store) to sgl (data-out buffer)
->    3011	 * compare to be done. VERIFY(BytChk=3) sets arr to a valid address and sets miscomp_idxp
->    3012	 * to NULL.
->    3013	 */
->    3014	static bool comp_write_worker(struct sdeb_store_info *sip, u64 lba, u32 num,
->    3015				      const u8 *arr, struct scsi_cmnd *scp, size_t *miscomp_idxp)
->    3016	{
->    3017		bool equ;
->    3018		u64 block, lba_start, sgl_i, rem, rest = 0;
->    3019		u32 store_blks = sdebug_store_sectors;
->    3020		const u32 lb_size = sdebug_sector_size;
->    3021		u32 top_half = num * lb_size;
->    3022		struct scsi_data_buffer *sdb = &scp->sdb;
->    3023		struct scatterlist *store_sgl;
->    3024	
->    3025		block = do_div(lba, store_blks);
->    3026		if (block + num > store_blks)
->    3027			rest = block + num - store_blks;
->    3028		lba_start = block * lb_size;
->    3029		sgl_i = lba_start >> sip->elem_pow2;
->    3030		rem = lba_start - (sgl_i ? (sgl_i << sip->elem_pow2) : 0);
->    3031		store_sgl = sip->sgl + sgl_i;	/* O(1) to each store sg element */
->    3032	
->    3033		if (!arr) {	/* sgl to sgl compare */
->> 3034			equ = sgl_compare_sgl_idx(store_sgl, sip->n_elem - sgl_i, rem,
->    3035						  sdb->table.sgl, sdb->table.nents, 0,
->    3036						  (num - rest) * lb_size, miscomp_idxp);
->    3037			if (!equ)
->    3038				return equ;
->    3039			if (rest > 0)
->    3040				equ = sgl_compare_sgl_idx(sip->sgl, sip->n_elem, 0, sdb->table.sgl,
->    3041							  sdb->table.nents, (num - rest) * lb_size,
->    3042							  rest * lb_size, miscomp_idxp);
->    3043		} else {
->    3044			equ = sdeb_sgl_cmp_buf(store_sgl, sip->n_elem - sgl_i, arr,
->    3045					       (num - rest) * lb_size, 0);
->    3046			if (!equ)
->    3047				return equ;
->    3048			if (rest > 0)
->    3049				equ = sdeb_sgl_cmp_buf(sip->sgl, sip->n_elem, arr,
->    3050						       (num - rest) * lb_size, 0);
->    3051		}
->    3052		if (!equ || !miscomp_idxp)
->    3053			return equ;
->    3054	
->    3055		/* Copy "top half" of dout (args: 4, 5 and 6) into store sgl (args 1, 2 and 3) */
->    3056		sgl_copy_sgl(store_sgl, sip->n_elem - sgl_i, rem,
->    3057			     sdb->table.sgl, sdb->table.nents, top_half,
->    3058			     (num - rest) * lb_size);
->    3059		if (rest > 0) {	/* for virtual_gb need to handle wrap-around of store */
->    3060			u32 src_off =  top_half + ((num - rest) * lb_size);
->    3061	
->    3062			sgl_copy_sgl(sip->sgl, sip->n_elem, 0,
->    3063				     sdb->table.sgl, sdb->table.nents, src_off,
->    3064				     rest * lb_size);
->    3065		}
->    3066		return true;
->    3067	}
->    3068	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+=EE=C1=D6=CD=C9=D4=C5 =DA=C4=C5=D3=D8, =DE=D4=CF=C2=D9 =D0=CF=C4=D4=D7=C5=D2=
+=C4=C9=D4=D8 =D3=D7=CF=C0 =D5=DE=C5=D4=CE=D5=C0 =DA=C1=D0=C9=D3=D8 =D7=C5=C2=
+-=D0=CF=DE=D4=D9<https://mhall486.wixsite.com/my-site>
 
+=FE=D4=CF=C2=D9 =CE=C1=DE=C1=D4=D8 =D0=CF=CC=D5=DE=C1=D4=D8 =D7=C8=CF=C4=D1=
+=DD=D5=C0 =D0=CF=DE=D4=D5
+
+=E7=D2=D5=D0=D0=C1 =D0=D2=CF=D7=C5=D2=CB=C9 =D5=DE=C5=D4=CE=CF=CA =DA=C1=D0=
+=C9=D3=C9 =DC=CC=C5=CB=D4=D2=CF=CE=CE=CF=CA =D0=CF=DE=D4=D9, Microsoft =D5=
+=D7=C1=D6=C1=C5=D4 =D7=C1=DB=D5 =CB=CF=CE=C6=C9=C4=C5=CE=C3=C9=C1=CC=D8=CE=
+=CF=D3=D4=D8.
+
+Copyright =BF 2020 Webmail Inc. =F7=D3=C5 =D0=D2=C1=D7=C1 =DA=C1=DD=C9=DD=C5=
+=CE=D9.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DISCLAIMER : This e-mail and any attachment ("Message") are intended only fo=
+r the use of the recipient(s) named above and may contain confidential infor=
+mation. You are hereby notified that the taking of any action in reliance up=
+on, or any review, retransmission, dissemination, distribution, printing or=
+ copying of this Message or any part thereof by anyone other than the intend=
+ed recipient(s) is prohibited. If you have received this Message in error, y=
+ou should delete this Message immediately and advise the sender by return e-=
+mail.
+
+Any opinion, view and/or other information in this Message which do not rela=
+te to the official business of TH or its Group of Companies shall not be dee=
+med given nor endorsed by TH or its Group of Companies. TH is not responsibl=
+e for any activity that might be considered to be an illegal and/or improper=
+ use of e-mail. The recipient should check this Message for the presence of=
+ viruses. TH or its Group of Companies accepts no liability for any damage c=
+aused by any virus transmitted by this Message.
+
+Lembaga Tabung Haji, 201, Jalan Tun Razak, 50400 Kuala Lumpur, Malaysia.
+http://www.tabunghaji.gov.my
