@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C69E32ACC42
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Nov 2020 04:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D96F22ACC6F
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Nov 2020 04:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732405AbgKJDyF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Nov 2020 22:54:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54702 "EHLO mail.kernel.org"
+        id S1733066AbgKJDzO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Nov 2020 22:55:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56400 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731300AbgKJDyC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:54:02 -0500
+        id S1733044AbgKJDzN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:55:13 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D63F20731;
-        Tue, 10 Nov 2020 03:54:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58691207BC;
+        Tue, 10 Nov 2020 03:55:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980441;
+        s=default; t=1604980512;
         bh=7lcMbKOxhN/Le0MESmUbQj5z7nRfEq6LZOAd40/ORv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vk47cYGrDUPeCVbko0vfzGm+bnvSTkPhN5LY4swzrbcjlheHhPA9rRIQ2CArRSaGz
-         Pe6vD+ANHId1UX1GiKo7M05O4ebzJ+o48OYup7sWz7ulnJfQI3zQ5nX+FMnhmCmkhK
-         ovaE/xJp3JYt88iC62eD6tpCmxdEOpYmyhRlP4sA=
+        b=crctbawAQy4Y5qs2hCPdtuAWg9BmLiI0f3ReViLIw1+MojlpgRvvhISvXZl7sccxF
+         08+jpWiYN5fH7MQw4IL+jRHCjSaRRORPUQME3rzXOxDz2dvu/THT16zMPp8TL0osc9
+         67gIGRsub2QRJAkIcovNf9Bm2KT+4TU0BNG8Uftg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hannes Reinecke <hare@suse.de>,
@@ -30,12 +30,12 @@ Cc:     Hannes Reinecke <hare@suse.de>,
         Jitendra Khasdev <jitendra.khasdev@oracle.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 30/55] scsi: scsi_dh_alua: Avoid crash during alua_bus_detach()
-Date:   Mon,  9 Nov 2020 22:52:53 -0500
-Message-Id: <20201110035318.423757-30-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 22/42] scsi: scsi_dh_alua: Avoid crash during alua_bus_detach()
+Date:   Mon,  9 Nov 2020 22:54:20 -0500
+Message-Id: <20201110035440.424258-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201110035318.423757-1-sashal@kernel.org>
-References: <20201110035318.423757-1-sashal@kernel.org>
+In-Reply-To: <20201110035440.424258-1-sashal@kernel.org>
+References: <20201110035440.424258-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
