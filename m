@@ -2,90 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B35BB2ACB48
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Nov 2020 03:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A052ACB50
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Nov 2020 03:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729706AbgKJCup (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Nov 2020 21:50:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30975 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727311AbgKJCuo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Nov 2020 21:50:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604976643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cN43+bPvc1CdMAPDr88esBeeC4ALthX2RLH8XdHg4RI=;
-        b=EV632HYGHrfN825X0fYEYhmBC6y4ZJ+ifddwoMJkcL9OBCjPK90bPOHUasF8JqhY6gTqGV
-        N86wlBzbTsJtod6osLVEUn9ewC4TwXUBmmtassdth60iRohfpX4c7r9InliNcxs8eXYkPg
-        Li4JPvJEE9NlP6uMjIrIG+yPUvJ/lLg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-60-lc8ooORmPL2OfARN71KMng-1; Mon, 09 Nov 2020 21:50:40 -0500
-X-MC-Unique: lc8ooORmPL2OfARN71KMng-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8CA675F9C0;
-        Tue, 10 Nov 2020 02:50:39 +0000 (UTC)
-Received: from [10.72.13.94] (ovpn-13-94.pek2.redhat.com [10.72.13.94])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 53FEC5D9DD;
-        Tue, 10 Nov 2020 02:50:31 +0000 (UTC)
-Subject: Re: [PATCH 06/11] vhost: support delayed vq creation
-To:     Mike Christie <michael.christie@oracle.com>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, mst@redhat.com, pbonzini@redhat.com,
-        stefanha@redhat.com, virtualization@lists.linux-foundation.org
-References: <1604528804-2878-1-git-send-email-michael.christie@oracle.com>
- <1604528804-2878-7-git-send-email-michael.christie@oracle.com>
- <56056e8d-d6ff-9a6e-2a7e-1ea1737b1d27@redhat.com>
- <54285b79-637e-3dcd-382f-ddeff44f6019@oracle.com>
- <fc22b679-08c1-85bb-515a-8f63de7148a2@oracle.com>
-From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <5a64e2d5-1b8b-7bc6-2793-a34206c59d75@redhat.com>
-Date:   Tue, 10 Nov 2020 10:50:29 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730330AbgKJCwT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Nov 2020 21:52:19 -0500
+Received: from smtprelay0242.hostedemail.com ([216.40.44.242]:52914 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727311AbgKJCwS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Nov 2020 21:52:18 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id F008012CB;
+        Tue, 10 Nov 2020 02:52:13 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1261:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3870:4321:4605:5007:6117:6119:6742:6743:7652:7875:7903:8660:10004:10400:10848:11232:11658:11783:11914:12043:12048:12297:12679:12740:12895:13019:13069:13148:13230:13311:13357:13439:13894:14181:14659:14721:21080:21451:21627:21939:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: ink22_1714ef1272f1
+X-Filterd-Recvd-Size: 2439
+Received: from [192.168.0.160] (cpe-72-134-80-165.natsow.res.rr.com [72.134.80.165])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 10 Nov 2020 02:52:09 +0000 (UTC)
+Message-ID: <3c39c363690d0b46069afddc3ad09213011e5cd4.camel@perches.com>
+Subject: Re: Subject: [RFC] clang tooling cleanups
+From:   Joe Perches <joe@perches.com>
+To:     trix@redhat.com, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com, cocci <cocci@systeme.lip6.fr>
+Cc:     linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        qat-linux@intel.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Date:   Mon, 09 Nov 2020 18:52:08 -0800
+In-Reply-To: <20201027164255.1573301-1-trix@redhat.com>
+References: <20201027164255.1573301-1-trix@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-In-Reply-To: <fc22b679-08c1-85bb-515a-8f63de7148a2@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Tue, 2020-10-27 at 09:42 -0700, trix@redhat.com wrote:
+> This rfc will describe
+> An upcoming treewide cleanup.
+> How clang tooling was used to programatically do the clean up.
+> Solicit opinions on how to generally use clang tooling.
+> 
+> The clang warning -Wextra-semi-stmt produces about 10k warnings.
+> Reviewing these, a subset of semicolon after a switch looks safe to
+> fix all the time.  An example problem
+> 
+> void foo(int a) {
+>      switch(a) {
+>      	       case 1:
+> 	       ...
+>      }; <--- extra semicolon
+> }
+> 
+> Treewide, there are about 100 problems in 50 files for x86_64 allyesconfig.
+> These fixes will be the upcoming cleanup.
 
-On 2020/11/10 ä¸Šåˆ4:30, Mike Christie wrote:
-> On 11/9/20 12:41 PM, Mike Christie wrote:
->>
->> If you want to pair this patchset down to it's bare bug fixes that 
->> prevent users from getting IO errors, I would do ring.addr check only 
->> approach for this bug fix patchset.
->
-> Oh yeah, just so we don't have to burn an extra day, above I'm 
-> proposing I repost the original patchset:
->
-> https://lore.kernel.org/linux-scsi/1600712588-9514-1-git-send-email-michael.christie@oracle.com/t/ 
->
->
-> for the bug fix only patches. It will have the compile error fixed and 
-> Bart's comment handled.
->
-> To even trim it down more I can also drop the last 2 patches:
->
-> 0007-vhost-remove-work-arg-from-vhost_work_flush.patch
-> 0008-vhost-scsi-remove-extra-flushes.patch
->
-> and send separately in a cleanups patchset since the extra flushes it 
-> kills don't really hurt.
+coccinelle already does some of these.
 
+For instance: scripts/coccinelle/misc/semicolon.cocci
 
-Fine with me.
+Perhaps some tool coordination can be done here as
+coccinelle/checkpatch/clang/Lindent call all be used
+to do some facet or another of these cleanup issues.
 
-Thanks
 
 
