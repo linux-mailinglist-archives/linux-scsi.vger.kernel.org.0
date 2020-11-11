@@ -2,66 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 801142AF1DB
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Nov 2020 14:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D072AF18D
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Nov 2020 14:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbgKKNSn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 11 Nov 2020 08:18:43 -0500
-Received: from mail.bata.co.id ([117.54.3.130]:41290 "EHLO mail.bata.co.id"
+        id S1726338AbgKKNGQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Nov 2020 08:06:16 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43152 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726592AbgKKNSn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Nov 2020 08:18:43 -0500
-X-Greylist: delayed 2507 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Nov 2020 08:18:40 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bata.co.id (Postfix) with ESMTP id D21A66C6EA2;
-        Wed, 11 Nov 2020 19:03:28 +0700 (WIB)
-Received: from mail.bata.co.id ([127.0.0.1])
-        by localhost (mail.bata.co.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id NcKh7lb76jgB; Wed, 11 Nov 2020 19:03:28 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bata.co.id (Postfix) with ESMTP id 4E6696C6E87;
-        Wed, 11 Nov 2020 19:03:28 +0700 (WIB)
-X-Virus-Scanned: amavisd-new at bata.co.id
-Received: from mail.bata.co.id ([127.0.0.1])
-        by localhost (mail.bata.co.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id bQYCddaoRkVc; Wed, 11 Nov 2020 19:03:28 +0700 (WIB)
-Received: from mail.bata.co.id (mail.bata.co.id [117.54.3.130])
-        by mail.bata.co.id (Postfix) with ESMTP id 04CC86C6D4F;
-        Wed, 11 Nov 2020 19:03:22 +0700 (WIB)
-Date:   Wed, 11 Nov 2020 19:03:21 +0700 (WIB)
-From:   =?utf-8?B?0KHQuNGB0YLQtdC80L3Ri9C5INCw0LTQvNC40L3QuNGB0YLRgNCw0YLQvtGA?= 
-        <sb57405@bata.co.id>
-Reply-To: mailupgrade@mail2engineer.com
-Message-ID: <172607517.49325.1605096201910.JavaMail.zimbra@bata.co.id>
-Subject: 
+        id S1725912AbgKKNGP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Nov 2020 08:06:15 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2B341AFC6;
+        Wed, 11 Nov 2020 13:06:14 +0000 (UTC)
+Subject: Re: [PATCH 03/24] nvme: let set_capacity_revalidate_and_notify update
+ the bdev size
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     Justin Sanders <justin@coraid.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        drbd-dev@lists.linbit.com, nbd@other.debian.org,
+        ceph-devel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20201111082658.3401686-1-hch@lst.de>
+ <20201111082658.3401686-4-hch@lst.de>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <92fdb64d-b6b1-a934-b32b-b3ce565fadea@suse.de>
+Date:   Wed, 11 Nov 2020 14:06:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-Originating-IP: [110.225.88.196]
-X-Mailer: Zimbra 8.8.15_GA_3975 (zclient/8.8.15_GA_3975)
-Thread-Index: Fu0PhgQJX7/YeGucFDIyW59E5tDOIg==
-Thread-Topic: 
-Content-Transfer-Encoding: 8BIT
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20201111082658.3401686-4-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ВНИМАНИЕ;
+On 11/11/20 9:26 AM, Christoph Hellwig wrote:
+> There is no good reason to call revalidate_disk_size separately.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   drivers/nvme/host/core.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Ваш почтовый ящик превысил лимит хранилища, который составляет 5 ГБ, определенный администратором, который в настоящее время работает с 10,9 ГБ, вы не сможете отправлять или получать новую почту, пока не подтвердите свой почтовый ящик снова. Для повторной проверки вашего почтового ящика отправьте следующую информацию:
+Cheers,
 
-Название:
-Имя пользователя:
-пароль:
-Подтвердить Пароль:
-Электронное письмо:
-телефон:
-
-Если вы не можете повторно подтвердить свой почтовый ящик, он будет отключен!
-
-Приносим извинения за неудобства.
-Проверочный код: 666690opp4r56: 006524
-Электронная почта Техническая поддержка © 2020
-
-Благодарность
-Системный администратор
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
