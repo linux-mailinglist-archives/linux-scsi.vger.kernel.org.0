@@ -2,82 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 210F52AE69F
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Nov 2020 03:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3F32AE6A8
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Nov 2020 03:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725959AbgKKC6n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 Nov 2020 21:58:43 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:49910 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbgKKC6m (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Nov 2020 21:58:42 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AB2tGMi159404;
-        Wed, 11 Nov 2020 02:58:37 GMT
+        id S1726017AbgKKC6q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 10 Nov 2020 21:58:46 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:56030 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbgKKC6p (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Nov 2020 21:58:45 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AB2sm5b089949;
+        Wed, 11 Nov 2020 02:58:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=7ZcDgeb3uXfHwzg9j9rfLyoPbsWgAZ/teiCVqIYL8i8=;
- b=SJne98ahxWT6up4kEIiOkwB6TQeJ1dsW9cqni+VHeRN3DRwsN4asCypm6SXGp/BUV2Bi
- FFo+HZpvvuqFNnim3Y9yQIZBy6ceHU3DgSeL2p7eWBj/B6E+PQeTAfjpzhgGev0nxpe4
- mfhCFaT7gETyfopEycARw72V/LNezMaFI7TRrkVUu4QE0QMWvSr2VBDRQJPfUqicz7XT
- OmWImXt9qcDjCxczSx+tVx56kKdWE9N752eySkt4MTySZEoRvRhXvYnrCEaVm096wZzh
- f2KM9dKvTBDOPIiC69GTSIqoszvf8jor301zJ+J2aguAKELSS6Qm7wsObIxkUEo5l8KL oA== 
+ bh=2fw+zMaJjK4Z2sWI/MIP+pVKZTJLoHqPhI/FzOnDOtw=;
+ b=M6FMZw6hhjn1aMSF/g72zq+R+3/9jtspDadjRkLPDtXHnVH8E8GUEG63AuvYhdTSxAEZ
+ 8wfYx96F7XmzhbQ2gAbM+LGBHO4VY+qHtpNZntQPzD9yTwnxJgZAtk38Pa/x3aoLUepV
+ Q5Lhdc60yFx1hZRmTYFXMMpwm/t6Wfyz2kfvwu4zlZoIAJ4vhCvWV9zEJLpzIXBEmkmf
+ DX9l8VMw6wKutBOxvFRYdBrWyKNxQJOTbqJ9Q+TD2iMdF5JwFWFoM8Ve8Pmq9L0jpsuL
+ 7liBHDrEW700kcoWzsOes2U0JbJqK9v8DFOEYsNj1hZPuZKcBaizFYiOzLQ84tuco/ZA Lg== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 34nkhkxwpv-1
+        by aserp2130.oracle.com with ESMTP id 34nh3ay5a9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 11 Nov 2020 02:58:37 +0000
+        Wed, 11 Nov 2020 02:58:38 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AB2tDA0057916;
-        Wed, 11 Nov 2020 02:58:37 GMT
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AB2tE7S057978;
+        Wed, 11 Nov 2020 02:58:38 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 34p55pdnkp-1
+        by aserp3030.oracle.com with ESMTP id 34p55pdnkw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Nov 2020 02:58:37 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AB2wa9L008148;
-        Wed, 11 Nov 2020 02:58:36 GMT
+        Wed, 11 Nov 2020 02:58:38 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AB2wb2I008155;
+        Wed, 11 Nov 2020 02:58:37 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 10 Nov 2020 18:58:36 -0800
+        with ESMTP ; Tue, 10 Nov 2020 18:58:37 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     "trix@redhat.com" <trix@redhat.com>, skashyap@marvell.com,
-        jejb@linux.ibm.com, jhasan@marvell.com
+To:     "trix@redhat.com" <trix@redhat.com>, jejb@linux.ibm.com,
+        hare@suse.de
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        GR-QLogic-Storage-Upstream@marvell.com
-Subject: Re: [PATCH] scsi: bnx2fc: remove unneeded semicolon
-Date:   Tue, 10 Nov 2020 21:58:25 -0500
-Message-Id: <160506295513.14063.10787681998429655692.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: fcoe: remove unneeded semicolon
+Date:   Tue, 10 Nov 2020 21:58:26 -0500
+Message-Id: <160506295513.14063.7052061474895651871.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201101143812.2283642-1-trix@redhat.com>
-References: <20201101143812.2283642-1-trix@redhat.com>
+In-Reply-To: <20201101144017.2284047-1-trix@redhat.com>
+References: <20201101144017.2284047-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9801 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 phishscore=0
- mlxlogscore=924 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=960 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011110012
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9801 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
- mlxscore=0 suspectscore=0 mlxlogscore=954 lowpriorityscore=0 spamscore=0
- malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 mlxscore=0 spamscore=0 suspectscore=0
+ mlxlogscore=990 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011110012
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 1 Nov 2020 06:38:12 -0800, trix@redhat.com wrote:
+On Sun, 1 Nov 2020 06:40:17 -0800, trix@redhat.com wrote:
 
 > A semicolon is not needed after a switch statement.
 
 Applied to 5.11/scsi-queue, thanks!
 
-[1/1] scsi: bnx2fc: Remove unneeded semicolon
-      https://git.kernel.org/mkp/scsi/c/4a9435b7b04e
+[1/1] scsi: fcoe: Remove unneeded semicolon
+      https://git.kernel.org/mkp/scsi/c/00c00807a110
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
