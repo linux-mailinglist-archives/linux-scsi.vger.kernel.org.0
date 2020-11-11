@@ -2,96 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D1C2AEAED
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Nov 2020 09:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F322AEBCF
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Nov 2020 09:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbgKKIRU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Nov 2020 03:17:20 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54922 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725903AbgKKIRU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Nov 2020 03:17:20 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1605082639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SGNMWGSyzrXXNn9z3ZeuYny0fmKgFw9UJyQopJXlgo0=;
-        b=Td+lnN/pCrfQbvCfI7s+ExElgGtCmKQ0UxtUnEE9ueLMexgWX6sIQ4pOvJEfKgkxarFTfk
-        vIdDO/3yFlVJ43Nai3HdoDsXh1gKMU2HVaJ0GxEL39shK2VIHSkOYbax51/b69jTrdd1CF
-        b1teE36d2aGEdvwCFo3lgs3SMI0QjRI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9037DB013;
-        Wed, 11 Nov 2020 08:17:18 +0000 (UTC)
-Message-ID: <f28d600615f05050ecf52a0ec338127a09a2f821.camel@suse.com>
-Subject: Re: [PATCH 1/2] scsi: scsi_vpd_lun_id(): fix designator priorities
-From:   Martin Wilck <mwilck@suse.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.de>
-Cc:     linux-scsi@vger.kernel.org,
-        James Bottomley <jejb@linux.vnet.ibm.com>
-Date:   Wed, 11 Nov 2020 09:17:14 +0100
-In-Reply-To: <64c0efe0-e6dd-d706-4e50-f21bcbc58e23@suse.de>
-References: <20201029170846.14786-1-mwilck@suse.com>
-         <yq1eel0ha2c.fsf@ca-mkp.ca.oracle.com>
-         <64c0efe0-e6dd-d706-4e50-f21bcbc58e23@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.36.5 
+        id S1726595AbgKKI3h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Nov 2020 03:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726321AbgKKI1W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Nov 2020 03:27:22 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD76C0613D6;
+        Wed, 11 Nov 2020 00:27:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=JAKJjNQpsrrbjmsxnYVVJRTgGHrM34ycZR/npT/boCU=; b=b1ddQnGWc2jtHoKywAuScN8Zdh
+        JpUZaUqXCtKuY0r1wvcQJho9I5LlxQ+Jf1PeuV9MT8HozEqz08MjPlQ2bflOzs5jN6AtnzX9UZLvR
+        TP+ksdGoX+zMrKqAYf6UV/230oaeX+lnludtn/sFHHGEZUrrgeMSlNkGj8LNwkKSIL8M1BtpRD8QW
+        JHnmwoGSdoYRlX13Qq80Wbx/PB+8AMxck1eRfIb4ZyOL7mf/BnfhPUzDrVsEYY2/hN12f5r+V4/aB
+        CJTa0r5tvV0A5l4JwwqEcBTVEhomL9IDTnuaOQ3CyD1joSKU5ImqC0esiM6bTSJ+Tq3LxQEN03v+h
+        /wjoDc/w==;
+Received: from [2001:4bb8:180:6600:bcde:334f:863c:27b8] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kclT1-0007Z4-Lb; Wed, 11 Nov 2020 08:27:00 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Justin Sanders <justin@coraid.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        drbd-dev@lists.linbit.com, nbd@other.debian.org,
+        ceph-devel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: cleanup updating the size of block devices v2
+Date:   Wed, 11 Nov 2020 09:26:34 +0100
+Message-Id: <20201111082658.3401686-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 2020-11-11 at 07:54 +0100, Hannes Reinecke wrote:
-> On 11/11/20 4:05 AM, Martin K. Petersen wrote:
-> > Martin,
-> > 
-> > > The current code would use the first descriptor, because it's
-> > > longer
-> > > than the NAA descriptor. But this is wrong, the kernel is
-> > > supposed to
-> > > prefer NAA descriptors over T10 vendor ID. Designator length
-> > > should
-> > > only be used to compare designators of the same type.
-> > > 
-> > > This patch addresses the issue by separating designator priority
-> > > and
-> > > length.
-> > 
-> > I am concerned that we're going to break existing systems since
-> > their
-> > /dev/disk/by-* names might change as a result of this. Thoughts?
-> > 
-> No, this shouldn't happen. With the standard udev rules we're
-> creating 
-> symlinks for all possible VPD designators, so they don't change.
+Hi Jens,
 
-Right. On distributions using either udev's scsi_id or the standard
-rules shipped with sg3_utils for determining WWIDs, nothing should
-change.
+this series builds on top of the work that went into the last merge window,
+and make sure we have a single coherent interfac for updating the size of a
+block device.
 
-With this patch, the kernel's logic would eventually match the logic of
-the udev rules, which is a good thing. In the long run, we could
-finally ditch the complexity of the udev rules and rely on the kernel
-to get the wwid right. That would be a big step forward for device
-identification, wrt both reliablity and speed.
+Changes since v1:
+ - minor spelling fixes
 
-Only distributions using non-standard udev rules (generating
-/dev/disk/by-wwid from the "wwid" attribute) would be affected. I don't
-know if any such distribution currently exist, I haven't seen one. Even
-those would only be affected in certain cases like the one I showed in
-the commit message.
-
-If this truly worries you, we could introduce a new sysfs attribute
-besides "wwid". But I suppose that would rather confuse people. I
-strongly believe we should have a sysfs attribute that reliably
-provides the "right" WWID to user space.
-
-Regards,
-Martin
-
-
-
+Diffstat:
+ block/genhd.c                  |   16 +++----
+ drivers/block/aoe/aoecmd.c     |   15 +-----
+ drivers/block/drbd/drbd_main.c |    6 --
+ drivers/block/loop.c           |   36 ++--------------
+ drivers/block/nbd.c            |   88 +++++++++++++----------------------------
+ drivers/block/pktcdvd.c        |    3 -
+ drivers/block/rbd.c            |    3 -
+ drivers/block/rnbd/rnbd-clt.c  |    3 -
+ drivers/block/virtio_blk.c     |    3 -
+ drivers/block/xen-blkfront.c   |    2 
+ drivers/block/zram/zram_drv.c  |    7 ---
+ drivers/md/dm-raid.c           |    3 -
+ drivers/md/dm.c                |    3 -
+ drivers/md/md-cluster.c        |    8 ---
+ drivers/md/md-linear.c         |    3 -
+ drivers/md/md.c                |   24 ++++-------
+ drivers/nvme/host/core.c       |   18 --------
+ drivers/scsi/sd.c              |    9 +---
+ fs/block_dev.c                 |    7 ---
+ include/linux/genhd.h          |    3 -
+ 20 files changed, 76 insertions(+), 184 deletions(-)
