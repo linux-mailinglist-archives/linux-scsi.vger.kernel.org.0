@@ -2,208 +2,144 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFB92B12A4
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 00:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6432B129A
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 00:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgKLXTr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Nov 2020 18:19:47 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:33658 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725929AbgKLXTn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Nov 2020 18:19:43 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACN9wqA118615;
-        Thu, 12 Nov 2020 23:19:29 GMT
+        id S1726148AbgKLXTm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Nov 2020 18:19:42 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:38688 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725929AbgKLXTl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Nov 2020 18:19:41 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACN9uH8109270;
+        Thu, 12 Nov 2020 23:19:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=PuG2MHrqBf/1kUfD7Ba10juzqwo0+sOBqOl8iJowU7k=;
- b=BOZ4cmOCM6oICTeUXY7Ug+7JPpJVJq9AnxN6rNOqQWANEKHj0QeOxPsNibq0e5qxlymS
- pV+aA68sCUJYVr5ouDcXRa+9inK0ETAFq7cDpTiQS3bmml1nnCzablrX5iZXSxTMqm5Z
- SaGSKfiuXcCqC1W5g+9M+nCUSoyskTr11HPhM7c+ipaGGqW+joN+kUtxd99tG58KEKtP
- m0/Aiv9uxSQ55O84soLjErMMt5FxfB8YkTh7CDz0CzRpoXbq2IaKs6b00wtPp7IWbx7Y
- 5NZamjDd2C5/0NifLbZHLWHB/Z1ebR431uaatRJ214qf1EmB+orFSpAJGZjFMVKc99cD Wg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 34nkhm83ve-1
+ bh=o28HMjxZvdjabwbgesnkp8UHr7OdXDYF6AOdSGODfhc=;
+ b=R5a1zoi5WqCDkNUW4IrS4unkWWDdWKT5cQUHFwbNY0nwlz8g3Pd0x58d1ZQvrkh5Uzzj
+ ScHPDBF0JYG6y9l7msnHddMyMr2h8yiVNmeD3cQ4RQPCbk/PDmWgDl28wvan3AICsJsm
+ vMpzc4VC0F8kqX/kfIjiHcttrT2lMyWKXZu5/S/6dLsuW4oUbQmgmk+ZAaKzuBkhJENf
+ 792Q7NO02CpKThAimJMZtW5nuWDFRNQZlRJcsbHmBH8Ra65NnW9gBu6SqEoJz4v9trF4
+ 4qgkCV4R1zw4zgGxwuA0EBRq1GBQaj5F/JiBynCMiJpnxTPOXYjJuwmAX5FQgueXHOAQ UQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 34p72exauj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Nov 2020 23:19:29 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNAHDa075901;
-        Thu, 12 Nov 2020 23:19:29 GMT
+        Thu, 12 Nov 2020 23:19:31 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNB0vu027435;
+        Thu, 12 Nov 2020 23:19:30 GMT
 Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 34rtksk51j-1
+        by aserp3020.oracle.com with ESMTP id 34p5g3tsem-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Nov 2020 23:19:28 +0000
+        Thu, 12 Nov 2020 23:19:30 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0ACNJRmT026830;
-        Thu, 12 Nov 2020 23:19:28 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0ACNJS85026839;
+        Thu, 12 Nov 2020 23:19:29 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 12 Nov 2020 15:19:27 -0800
+        with ESMTP ; Thu, 12 Nov 2020 15:19:28 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     stefanha@redhat.com, qemu-devel@nongnu.org, fam@euphon.net,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
         mst@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH 06/10] vhost scsi: make SCSI cmd completion per vq
-Date:   Thu, 12 Nov 2020 17:19:06 -0600
-Message-Id: <1605223150-10888-8-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 07/10] vhost, vhost-scsi: flush IO vqs then send TMF rsp
+Date:   Thu, 12 Nov 2020 17:19:07 -0600
+Message-Id: <1605223150-10888-9-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
 References: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9803 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
- suspectscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 malwarescore=0
+ adultscore=0 phishscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011120130
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9803 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
- mlxscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1015
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011120130
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In the last patches we are going to have a worker thread per IO vq.
-This patch separates the scsi cmd completion code paths so we can
-complete cmds based on their vq instead of having all cmds complete
-on the same worker thread.
+With one worker we will always send the scsi cmd responses then send the
+TMF rsp, because LIO will always complete the scsi cmds first which
+calls vhost_scsi_release_cmd to add them to the work queue.
+
+When the next patch adds multiple worker support, the worker threads
+could still be sending their responses when the tmf's work is run.
+So this patch has vhost-scsi flush the IO vqs on other worker threads
+before we send the tmf response.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/vhost/scsi.c | 48 +++++++++++++++++++++++++-----------------------
- 1 file changed, 25 insertions(+), 23 deletions(-)
+ drivers/vhost/scsi.c  | 16 ++++++++++++++--
+ drivers/vhost/vhost.c |  6 ++++++
+ drivers/vhost/vhost.h |  1 +
+ 3 files changed, 21 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-index 4725a08..2bbe1a8 100644
+index 2bbe1a8..612359d 100644
 --- a/drivers/vhost/scsi.c
 +++ b/drivers/vhost/scsi.c
-@@ -178,6 +178,7 @@ enum {
- 
- struct vhost_scsi_virtqueue {
- 	struct vhost_virtqueue vq;
-+	struct vhost_scsi *vs;
- 	/*
- 	 * Reference counting for inflight reqs, used for flush operation. At
- 	 * each time, one reference tracks new commands submitted, while we
-@@ -192,6 +193,9 @@ struct vhost_scsi_virtqueue {
- 	struct vhost_scsi_cmd *scsi_cmds;
- 	struct sbitmap scsi_tags;
- 	int max_cmds;
+@@ -1178,11 +1178,23 @@ static void vhost_scsi_tmf_resp_work(struct vhost_work *work)
+ 	struct vhost_scsi_tmf *tmf = container_of(work, struct vhost_scsi_tmf,
+ 						  vwork);
+ 	int resp_code;
++	int i;
 +
-+	struct vhost_work completion_work;
-+	struct llist_head completion_list;
- };
++	if (tmf->se_cmd.se_tmr_req->response == TMR_FUNCTION_COMPLETE) {
++		/*
++		 * When processing a TMF, lio completes the cmds then the
++		 * TMF, so with one worker the TMF always completes after
++		 * cmds. For multiple worker support, we must flush the
++		 * IO vqs that do not share a worker with the ctl vq (vqs
++		 * 3 and up) to make sure they have completed their cmds.
++		 */
++		for (i = 1; i < tmf->vhost->dev.num_workers; i++)
++			vhost_vq_work_flush(&tmf->vhost->vqs[i + VHOST_SCSI_VQ_IO].vq);
  
- struct vhost_scsi {
-@@ -202,9 +206,6 @@ struct vhost_scsi {
- 	struct vhost_dev dev;
- 	struct vhost_scsi_virtqueue vqs[VHOST_SCSI_MAX_VQ];
+-	if (tmf->se_cmd.se_tmr_req->response == TMR_FUNCTION_COMPLETE)
+ 		resp_code = VIRTIO_SCSI_S_FUNCTION_SUCCEEDED;
+-	else
++	} else {
+ 		resp_code = VIRTIO_SCSI_S_FUNCTION_REJECTED;
++	}
  
--	struct vhost_work vs_completion_work; /* cmd completion work item */
--	struct llist_head vs_completion_list; /* cmd completion queue */
--
- 	struct vhost_work vs_event_work; /* evt injection work item */
- 	struct llist_head vs_event_list; /* evt injection queue */
- 
-@@ -380,10 +381,11 @@ static void vhost_scsi_release_cmd(struct se_cmd *se_cmd)
- 	} else {
- 		struct vhost_scsi_cmd *cmd = container_of(se_cmd,
- 					struct vhost_scsi_cmd, tvc_se_cmd);
--		struct vhost_scsi *vs = cmd->tvc_vhost;
-+		struct vhost_scsi_virtqueue *svq =  container_of(cmd->tvc_vq,
-+					struct vhost_scsi_virtqueue, vq);
- 
--		llist_add(&cmd->tvc_completion_list, &vs->vs_completion_list);
--		vhost_work_queue(&vs->dev, &vs->vs_completion_work);
-+		llist_add(&cmd->tvc_completion_list, &svq->completion_list);
-+		vhost_vq_work_queue(&svq->vq, &svq->completion_work);
- 	}
+ 	vhost_scsi_send_tmf_resp(tmf->vhost, &tmf->svq->vq, tmf->in_iovs,
+ 				 tmf->vq_desc, &tmf->resp_iov, resp_code);
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index 9eeb8c7..6a6abfc 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -278,6 +278,12 @@ void vhost_work_dev_flush(struct vhost_dev *dev)
  }
+ EXPORT_SYMBOL_GPL(vhost_work_dev_flush);
  
-@@ -545,18 +547,17 @@ static void vhost_scsi_evt_work(struct vhost_work *work)
-  */
- static void vhost_scsi_complete_cmd_work(struct vhost_work *work)
- {
--	struct vhost_scsi *vs = container_of(work, struct vhost_scsi,
--					vs_completion_work);
--	DECLARE_BITMAP(signal, VHOST_SCSI_MAX_VQ);
-+	struct vhost_scsi_virtqueue *svq = container_of(work,
-+				struct vhost_scsi_virtqueue, completion_work);
- 	struct virtio_scsi_cmd_resp v_rsp;
- 	struct vhost_scsi_cmd *cmd, *t;
- 	struct llist_node *llnode;
- 	struct se_cmd *se_cmd;
- 	struct iov_iter iov_iter;
--	int ret, vq;
-+	bool signal = false;
-+	int ret;
- 
--	bitmap_zero(signal, VHOST_SCSI_MAX_VQ);
--	llnode = llist_del_all(&vs->vs_completion_list);
-+	llnode = llist_del_all(&svq->completion_list);
- 	llist_for_each_entry_safe(cmd, t, llnode, tvc_completion_list) {
- 		se_cmd = &cmd->tvc_se_cmd;
- 
-@@ -576,21 +577,16 @@ static void vhost_scsi_complete_cmd_work(struct vhost_work *work)
- 			      cmd->tvc_in_iovs, sizeof(v_rsp));
- 		ret = copy_to_iter(&v_rsp, sizeof(v_rsp), &iov_iter);
- 		if (likely(ret == sizeof(v_rsp))) {
--			struct vhost_scsi_virtqueue *q;
-+			signal = true;
- 			vhost_add_used(cmd->tvc_vq, cmd->tvc_vq_desc, 0);
--			q = container_of(cmd->tvc_vq, struct vhost_scsi_virtqueue, vq);
--			vq = q - vs->vqs;
--			__set_bit(vq, signal);
- 		} else
- 			pr_err("Faulted on virtio_scsi_cmd_resp\n");
- 
- 		vhost_scsi_release_cmd_res(se_cmd);
- 	}
- 
--	vq = -1;
--	while ((vq = find_next_bit(signal, VHOST_SCSI_MAX_VQ, vq + 1))
--		< VHOST_SCSI_MAX_VQ)
--		vhost_signal(&vs->dev, &vs->vqs[vq].vq);
-+	if (signal)
-+		vhost_signal(&svq->vs->dev, &svq->vq);
- }
- 
- static struct vhost_scsi_cmd *
-@@ -1799,6 +1795,7 @@ static int vhost_scsi_set_features(struct vhost_scsi *vs, u64 features)
- 
- static int vhost_scsi_open(struct inode *inode, struct file *f)
- {
-+	struct vhost_scsi_virtqueue *svq;
- 	struct vhost_scsi *vs;
- 	struct vhost_virtqueue **vqs;
- 	int r = -ENOMEM, i;
-@@ -1814,7 +1811,6 @@ static int vhost_scsi_open(struct inode *inode, struct file *f)
- 	if (!vqs)
- 		goto err_vqs;
- 
--	vhost_work_init(&vs->vs_completion_work, vhost_scsi_complete_cmd_work);
- 	vhost_work_init(&vs->vs_event_work, vhost_scsi_evt_work);
- 
- 	vs->vs_events_nr = 0;
-@@ -1825,8 +1821,14 @@ static int vhost_scsi_open(struct inode *inode, struct file *f)
- 	vs->vqs[VHOST_SCSI_VQ_CTL].vq.handle_kick = vhost_scsi_ctl_handle_kick;
- 	vs->vqs[VHOST_SCSI_VQ_EVT].vq.handle_kick = vhost_scsi_evt_handle_kick;
- 	for (i = VHOST_SCSI_VQ_IO; i < VHOST_SCSI_MAX_VQ; i++) {
--		vqs[i] = &vs->vqs[i].vq;
--		vs->vqs[i].vq.handle_kick = vhost_scsi_handle_kick;
-+		svq = &vs->vqs[i];
++void vhost_vq_work_flush(struct vhost_virtqueue *vq)
++{
++	vhost_work_flush_on(vq->dev, vq->worker_id);
++}
++EXPORT_SYMBOL_GPL(vhost_vq_work_flush);
 +
-+		vqs[i] = &svq->vq;
-+		svq->vs = vs;
-+		init_llist_head(&svq->completion_list);
-+		vhost_work_init(&svq->completion_work,
-+				vhost_scsi_complete_cmd_work);
-+		svq->vq.handle_kick = vhost_scsi_handle_kick;
- 	}
- 	vhost_dev_init(&vs->dev, vqs, VHOST_SCSI_MAX_VQ, UIO_MAXIOV,
- 		       VHOST_SCSI_WEIGHT, 0, true, NULL);
+ /* Flush any work that has been scheduled. When calling this, don't hold any
+  * locks that are also used by the callback. */
+ void vhost_poll_flush(struct vhost_poll *poll)
+diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+index 232c5f9..0837133 100644
+--- a/drivers/vhost/vhost.h
++++ b/drivers/vhost/vhost.h
+@@ -46,6 +46,7 @@ struct vhost_poll {
+ void vhost_work_init(struct vhost_work *work, vhost_work_fn_t fn);
+ void vhost_work_queue(struct vhost_dev *dev, struct vhost_work *work);
+ bool vhost_has_work(struct vhost_dev *dev);
++void vhost_vq_work_flush(struct vhost_virtqueue *vq);
+ void vhost_vq_work_queue(struct vhost_virtqueue *vq, struct vhost_work *work);
+ int vhost_vq_worker_add(struct vhost_dev *dev, struct vhost_virtqueue *vq);
+ void vhost_vq_worker_remove(struct vhost_dev *dev, struct vhost_virtqueue *vq);
 -- 
 1.8.3.1
 
