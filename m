@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3A52B12A6
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 00:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFB92B12A4
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 00:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbgKLXTq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Nov 2020 18:19:46 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:33642 "EHLO
+        id S1726194AbgKLXTr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Nov 2020 18:19:47 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:33658 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726143AbgKLXTn (ORCPT
+        with ESMTP id S1725929AbgKLXTn (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Nov 2020 18:19:43 -0500
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACN9wq9118615;
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACN9wqA118615;
         Thu, 12 Nov 2020 23:19:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=gZyyk7ggNXfCzNmiUuDWYeooyouXg0wGLOis3wWvvGU=;
- b=n4BwUT6KIivc3v7qHpaGRosoFqh0Io33JoRHBK5x/kyNSofyI+UzbJDgUfwFkiOLvd5w
- aNDBxIP4KIl5y2H0dSUi2NKXDlBSyxgiVgDyVjNkqOUWqgLMFJCLFepRHHu5XxTpqajm
- dximJ8n+K3Gzm6slvtODkJli7N7Fz+XQo9VOd3Lbg0Z4zIQ/Uiz7R7UgTARAXEz01vAm
- ZgSffjibAEeAv0MW8VcV8u7yll0aaXT3NGjC2y3gswlvR9G8NkRP7TtawAiwyFnGmuOC
- Gbr/l+GpiRJbads173+7jjpaLx7U51LGF8KIDe/k/KZ0q5HAVH73VFXh6GXn9pRvBk8t Nw== 
+ bh=PuG2MHrqBf/1kUfD7Ba10juzqwo0+sOBqOl8iJowU7k=;
+ b=BOZ4cmOCM6oICTeUXY7Ug+7JPpJVJq9AnxN6rNOqQWANEKHj0QeOxPsNibq0e5qxlymS
+ pV+aA68sCUJYVr5ouDcXRa+9inK0ETAFq7cDpTiQS3bmml1nnCzablrX5iZXSxTMqm5Z
+ SaGSKfiuXcCqC1W5g+9M+nCUSoyskTr11HPhM7c+ipaGGqW+joN+kUtxd99tG58KEKtP
+ m0/Aiv9uxSQ55O84soLjErMMt5FxfB8YkTh7CDz0CzRpoXbq2IaKs6b00wtPp7IWbx7Y
+ 5NZamjDd2C5/0NifLbZHLWHB/Z1ebR431uaatRJ214qf1EmB+orFSpAJGZjFMVKc99cD Wg== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 34nkhm83vb-1
+        by aserp2120.oracle.com with ESMTP id 34nkhm83ve-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Nov 2020 23:19:28 +0000
+        Thu, 12 Nov 2020 23:19:29 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNAH2l075845;
-        Thu, 12 Nov 2020 23:19:28 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 34rtksk518-1
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNAHDa075901;
+        Thu, 12 Nov 2020 23:19:29 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 34rtksk51j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 12 Nov 2020 23:19:28 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0ACNJRtr011506;
-        Thu, 12 Nov 2020 23:19:27 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0ACNJRmT026830;
+        Thu, 12 Nov 2020 23:19:28 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 12 Nov 2020 15:19:26 -0800
+        with ESMTP ; Thu, 12 Nov 2020 15:19:27 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     stefanha@redhat.com, qemu-devel@nongnu.org, fam@euphon.net,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
         mst@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH 05/10] vhost: poll support support multiple workers
-Date:   Thu, 12 Nov 2020 17:19:05 -0600
-Message-Id: <1605223150-10888-7-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 06/10] vhost scsi: make SCSI cmd completion per vq
+Date:   Thu, 12 Nov 2020 17:19:06 -0600
+Message-Id: <1605223150-10888-8-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
 References: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
@@ -65,127 +65,145 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The final patches are going to have vhost scsi create a vhost worker
-per IO vq. This patch converts the poll code to poll and queue work on
-the worker that is tied to the vq (in this patch we maintain the old
-behavior where all vqs use a single worker).
-
-For drivers that do not convert over to the multiple worker support
-or for the case where the user just does not want to allocate the
-resources then we maintain support for the single worker case.
-
-Note: This adds a new function vhost_vq_work_queue. It's used by
-this patch and also the next one, so I exported it here.
+In the last patches we are going to have a worker thread per IO vq.
+This patch separates the scsi cmd completion code paths so we can
+complete cmds based on their vq instead of having all cmds complete
+on the same worker thread.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/vhost/net.c   |  6 ++++--
- drivers/vhost/vhost.c | 14 +++++++++++---
- drivers/vhost/vhost.h |  6 ++++--
- 3 files changed, 19 insertions(+), 7 deletions(-)
+ drivers/vhost/scsi.c | 48 +++++++++++++++++++++++++-----------------------
+ 1 file changed, 25 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 531a00d..6a27fe6 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -1330,8 +1330,10 @@ static int vhost_net_open(struct inode *inode, struct file *f)
- 		       VHOST_NET_PKT_WEIGHT, VHOST_NET_WEIGHT, true,
- 		       NULL);
+diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+index 4725a08..2bbe1a8 100644
+--- a/drivers/vhost/scsi.c
++++ b/drivers/vhost/scsi.c
+@@ -178,6 +178,7 @@ enum {
  
--	vhost_poll_init(n->poll + VHOST_NET_VQ_TX, handle_tx_net, EPOLLOUT, dev);
--	vhost_poll_init(n->poll + VHOST_NET_VQ_RX, handle_rx_net, EPOLLIN, dev);
-+	vhost_poll_init(n->poll + VHOST_NET_VQ_TX, handle_tx_net, EPOLLOUT, dev,
-+			vqs[VHOST_NET_VQ_TX]);
-+	vhost_poll_init(n->poll + VHOST_NET_VQ_RX, handle_rx_net, EPOLLIN, dev,
-+			vqs[VHOST_NET_VQ_RX]);
- 
- 	f->private_data = n;
- 	n->page_frag.page = NULL;
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index d229515..9eeb8c7 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -187,13 +187,15 @@ void vhost_work_init(struct vhost_work *work, vhost_work_fn_t fn)
- 
- /* Init poll structure */
- void vhost_poll_init(struct vhost_poll *poll, vhost_work_fn_t fn,
--		     __poll_t mask, struct vhost_dev *dev)
-+		     __poll_t mask, struct vhost_dev *dev,
-+		     struct vhost_virtqueue *vq)
- {
- 	init_waitqueue_func_entry(&poll->wait, vhost_poll_wakeup);
- 	init_poll_funcptr(&poll->table, vhost_poll_func);
- 	poll->mask = mask;
- 	poll->dev = dev;
- 	poll->wqh = NULL;
-+	poll->vq = vq;
- 
- 	vhost_work_init(&poll->work, fn);
- }
-@@ -284,6 +286,12 @@ void vhost_poll_flush(struct vhost_poll *poll)
- }
- EXPORT_SYMBOL_GPL(vhost_poll_flush);
- 
-+void vhost_vq_work_queue(struct vhost_virtqueue *vq, struct vhost_work *work)
-+{
-+	vhost_work_queue_on(vq->dev, work, vq->worker_id);
-+}
-+EXPORT_SYMBOL_GPL(vhost_vq_work_queue);
+ struct vhost_scsi_virtqueue {
+ 	struct vhost_virtqueue vq;
++	struct vhost_scsi *vs;
+ 	/*
+ 	 * Reference counting for inflight reqs, used for flush operation. At
+ 	 * each time, one reference tracks new commands submitted, while we
+@@ -192,6 +193,9 @@ struct vhost_scsi_virtqueue {
+ 	struct vhost_scsi_cmd *scsi_cmds;
+ 	struct sbitmap scsi_tags;
+ 	int max_cmds;
 +
- /* A lockless hint for busy polling code to exit the loop */
- bool vhost_has_work(struct vhost_dev *dev)
- {
-@@ -301,7 +309,7 @@ bool vhost_has_work(struct vhost_dev *dev)
++	struct vhost_work completion_work;
++	struct llist_head completion_list;
+ };
  
- void vhost_poll_queue(struct vhost_poll *poll)
- {
--	vhost_work_queue(poll->dev, &poll->work);
-+	vhost_vq_work_queue(poll->vq, &poll->work);
- }
- EXPORT_SYMBOL_GPL(vhost_poll_queue);
+ struct vhost_scsi {
+@@ -202,9 +206,6 @@ struct vhost_scsi {
+ 	struct vhost_dev dev;
+ 	struct vhost_scsi_virtqueue vqs[VHOST_SCSI_MAX_VQ];
  
-@@ -528,7 +536,7 @@ void vhost_dev_init(struct vhost_dev *dev,
- 		vhost_vq_reset(dev, vq);
- 		if (vq->handle_kick)
- 			vhost_poll_init(&vq->poll, vq->handle_kick,
--					EPOLLIN, dev);
-+					EPOLLIN, dev, vq);
+-	struct vhost_work vs_completion_work; /* cmd completion work item */
+-	struct llist_head vs_completion_list; /* cmd completion queue */
+-
+ 	struct vhost_work vs_event_work; /* evt injection work item */
+ 	struct llist_head vs_event_list; /* evt injection queue */
+ 
+@@ -380,10 +381,11 @@ static void vhost_scsi_release_cmd(struct se_cmd *se_cmd)
+ 	} else {
+ 		struct vhost_scsi_cmd *cmd = container_of(se_cmd,
+ 					struct vhost_scsi_cmd, tvc_se_cmd);
+-		struct vhost_scsi *vs = cmd->tvc_vhost;
++		struct vhost_scsi_virtqueue *svq =  container_of(cmd->tvc_vq,
++					struct vhost_scsi_virtqueue, vq);
+ 
+-		llist_add(&cmd->tvc_completion_list, &vs->vs_completion_list);
+-		vhost_work_queue(&vs->dev, &vs->vs_completion_work);
++		llist_add(&cmd->tvc_completion_list, &svq->completion_list);
++		vhost_vq_work_queue(&svq->vq, &svq->completion_work);
  	}
  }
- EXPORT_SYMBOL_GPL(vhost_dev_init);
-diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-index f334e90..232c5f9 100644
---- a/drivers/vhost/vhost.h
-+++ b/drivers/vhost/vhost.h
-@@ -33,7 +33,6 @@ struct vhost_worker {
- };
  
- /* Poll a file (eventfd or socket) */
--/* Note: there's nothing vhost specific about this structure. */
- struct vhost_poll {
- 	poll_table		table;
- 	wait_queue_head_t	*wqh;
-@@ -41,16 +40,19 @@ struct vhost_poll {
- 	struct vhost_work	work;
- 	__poll_t		mask;
- 	struct vhost_dev	*dev;
-+	struct vhost_virtqueue	*vq;
- };
+@@ -545,18 +547,17 @@ static void vhost_scsi_evt_work(struct vhost_work *work)
+  */
+ static void vhost_scsi_complete_cmd_work(struct vhost_work *work)
+ {
+-	struct vhost_scsi *vs = container_of(work, struct vhost_scsi,
+-					vs_completion_work);
+-	DECLARE_BITMAP(signal, VHOST_SCSI_MAX_VQ);
++	struct vhost_scsi_virtqueue *svq = container_of(work,
++				struct vhost_scsi_virtqueue, completion_work);
+ 	struct virtio_scsi_cmd_resp v_rsp;
+ 	struct vhost_scsi_cmd *cmd, *t;
+ 	struct llist_node *llnode;
+ 	struct se_cmd *se_cmd;
+ 	struct iov_iter iov_iter;
+-	int ret, vq;
++	bool signal = false;
++	int ret;
  
- void vhost_work_init(struct vhost_work *work, vhost_work_fn_t fn);
- void vhost_work_queue(struct vhost_dev *dev, struct vhost_work *work);
- bool vhost_has_work(struct vhost_dev *dev);
-+void vhost_vq_work_queue(struct vhost_virtqueue *vq, struct vhost_work *work);
- int vhost_vq_worker_add(struct vhost_dev *dev, struct vhost_virtqueue *vq);
- void vhost_vq_worker_remove(struct vhost_dev *dev, struct vhost_virtqueue *vq);
+-	bitmap_zero(signal, VHOST_SCSI_MAX_VQ);
+-	llnode = llist_del_all(&vs->vs_completion_list);
++	llnode = llist_del_all(&svq->completion_list);
+ 	llist_for_each_entry_safe(cmd, t, llnode, tvc_completion_list) {
+ 		se_cmd = &cmd->tvc_se_cmd;
  
- void vhost_poll_init(struct vhost_poll *poll, vhost_work_fn_t fn,
--		     __poll_t mask, struct vhost_dev *dev);
-+		     __poll_t mask, struct vhost_dev *dev,
-+		     struct vhost_virtqueue *vq);
- int vhost_poll_start(struct vhost_poll *poll, struct file *file);
- void vhost_poll_stop(struct vhost_poll *poll);
- void vhost_poll_flush(struct vhost_poll *poll);
+@@ -576,21 +577,16 @@ static void vhost_scsi_complete_cmd_work(struct vhost_work *work)
+ 			      cmd->tvc_in_iovs, sizeof(v_rsp));
+ 		ret = copy_to_iter(&v_rsp, sizeof(v_rsp), &iov_iter);
+ 		if (likely(ret == sizeof(v_rsp))) {
+-			struct vhost_scsi_virtqueue *q;
++			signal = true;
+ 			vhost_add_used(cmd->tvc_vq, cmd->tvc_vq_desc, 0);
+-			q = container_of(cmd->tvc_vq, struct vhost_scsi_virtqueue, vq);
+-			vq = q - vs->vqs;
+-			__set_bit(vq, signal);
+ 		} else
+ 			pr_err("Faulted on virtio_scsi_cmd_resp\n");
+ 
+ 		vhost_scsi_release_cmd_res(se_cmd);
+ 	}
+ 
+-	vq = -1;
+-	while ((vq = find_next_bit(signal, VHOST_SCSI_MAX_VQ, vq + 1))
+-		< VHOST_SCSI_MAX_VQ)
+-		vhost_signal(&vs->dev, &vs->vqs[vq].vq);
++	if (signal)
++		vhost_signal(&svq->vs->dev, &svq->vq);
+ }
+ 
+ static struct vhost_scsi_cmd *
+@@ -1799,6 +1795,7 @@ static int vhost_scsi_set_features(struct vhost_scsi *vs, u64 features)
+ 
+ static int vhost_scsi_open(struct inode *inode, struct file *f)
+ {
++	struct vhost_scsi_virtqueue *svq;
+ 	struct vhost_scsi *vs;
+ 	struct vhost_virtqueue **vqs;
+ 	int r = -ENOMEM, i;
+@@ -1814,7 +1811,6 @@ static int vhost_scsi_open(struct inode *inode, struct file *f)
+ 	if (!vqs)
+ 		goto err_vqs;
+ 
+-	vhost_work_init(&vs->vs_completion_work, vhost_scsi_complete_cmd_work);
+ 	vhost_work_init(&vs->vs_event_work, vhost_scsi_evt_work);
+ 
+ 	vs->vs_events_nr = 0;
+@@ -1825,8 +1821,14 @@ static int vhost_scsi_open(struct inode *inode, struct file *f)
+ 	vs->vqs[VHOST_SCSI_VQ_CTL].vq.handle_kick = vhost_scsi_ctl_handle_kick;
+ 	vs->vqs[VHOST_SCSI_VQ_EVT].vq.handle_kick = vhost_scsi_evt_handle_kick;
+ 	for (i = VHOST_SCSI_VQ_IO; i < VHOST_SCSI_MAX_VQ; i++) {
+-		vqs[i] = &vs->vqs[i].vq;
+-		vs->vqs[i].vq.handle_kick = vhost_scsi_handle_kick;
++		svq = &vs->vqs[i];
++
++		vqs[i] = &svq->vq;
++		svq->vs = vs;
++		init_llist_head(&svq->completion_list);
++		vhost_work_init(&svq->completion_work,
++				vhost_scsi_complete_cmd_work);
++		svq->vq.handle_kick = vhost_scsi_handle_kick;
+ 	}
+ 	vhost_dev_init(&vs->dev, vqs, VHOST_SCSI_MAX_VQ, UIO_MAXIOV,
+ 		       VHOST_SCSI_WEIGHT, 0, true, NULL);
 -- 
 1.8.3.1
 
