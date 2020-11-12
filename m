@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8BC2B001A
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Nov 2020 08:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB4B2B000E
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Nov 2020 08:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbgKLHH1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1727038AbgKLHH1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 12 Nov 2020 02:07:27 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7517 "EHLO
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8068 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbgKLHH0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Nov 2020 02:07:26 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CWt2V0QWMzhkkv;
-        Thu, 12 Nov 2020 15:07:14 +0800 (CST)
+        with ESMTP id S1726083AbgKLHH1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Nov 2020 02:07:27 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CWt2Q3Sk5zLrGV;
+        Thu, 12 Nov 2020 15:07:10 +0800 (CST)
 Received: from huawei.com (10.69.192.56) by DGGEMS405-HUB.china.huawei.com
  (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Thu, 12 Nov 2020
  15:07:14 +0800
@@ -26,10 +26,12 @@ CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
         <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
         <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
         <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
-Subject: [PATCH v4 0/5] Introduce a new helper macro DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
-Date:   Thu, 12 Nov 2020 15:07:38 +0800
-Message-ID: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
+Subject: [PATCH v4 1/5] seq_file: Introduce DEFINE_SHOW_STORE_ATTRIBUTE() helper macro
+Date:   Thu, 12 Nov 2020 15:07:39 +0800
+Message-ID: <1605164864-58944-2-git-send-email-luojiaxing@huawei.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
+References: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.56]
@@ -39,39 +41,42 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
-for read-only file, but we found many of drivers also want a helper macro
-for read-write file too.
+for read-only file, but many of drivers want a helper macro for read-write
+file too.
 
-So we add this macro to help decrease code duplication.
+So we make one to decrease code duplication.
 
+Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 ---
- v1->v2:
-        1.Rename DEFINE_STORE_ATTRIBUTE() to DEFINE_SHOW_STORE_ATTRIBUTE().
-	2.AI Viro points out that he doesn't like the definition of macros
-	  like DEFINE_SHOW_ATTRIBUTE.
- v2->v3:
-        1.Fixed some spelling mistakes in commit.
-        2.Revision description are added for easy tracing.
+ include/linux/seq_file.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
- v3->v4:
-	1.Add AI Viro's comment to v1->v2's revision description.
-	2.Fixed a spelling mistakes of "marco" to "macro".
----
-
-Luo Jiaxing (5):
-  seq_file: Introduce DEFINE_SHOW_STORE_ATTRIBUTE() helper macro
-  scsi: hisi_sas: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
-  scsi: qla2xxx: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
-  usb: dwc3: debugfs: Introduce DEFINE_SHOW_STORE_ATTRIBUTE
-  drm/i915/display: Introduce DEFINE_SHOW_STORE_ATTRIBUTE for debugfs
-
- .../gpu/drm/i915/display/intel_display_debugfs.c   |  55 +--------
- drivers/scsi/hisi_sas/hisi_sas_main.c              | 135 +++------------------
- drivers/scsi/qla2xxx/qla_dfs.c                     |  19 +--
- drivers/usb/dwc3/debugfs.c                         |  52 +-------
- include/linux/seq_file.h                           |  15 +++
- 5 files changed, 41 insertions(+), 235 deletions(-)
-
+diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
+index 813614d..8a474c8 100644
+--- a/include/linux/seq_file.h
++++ b/include/linux/seq_file.h
+@@ -191,6 +191,21 @@ static const struct proc_ops __name ## _proc_ops = {			\
+ 	.proc_release	= single_release,				\
+ }
+ 
++#define DEFINE_SHOW_STORE_ATTRIBUTE(__name)					\
++static int __name ## _open(struct inode *inode, struct file *file)	\
++{									\
++	return single_open(file, __name ## _show, inode->i_private);	\
++}									\
++									\
++static const struct file_operations __name ## _fops = {			\
++	.owner		= THIS_MODULE,					\
++	.open		= __name ## _open,				\
++	.read		= seq_read,					\
++	.write		= __name ## _write,				\
++	.llseek		= seq_lseek,					\
++	.release	= single_release,				\
++}
++
+ static inline struct user_namespace *seq_user_ns(struct seq_file *seq)
+ {
+ #ifdef CONFIG_USER_NS
 -- 
 2.7.4
 
