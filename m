@@ -2,175 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A08F2B129F
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 00:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397692B12A5
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 00:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbgKLXTo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Nov 2020 18:19:44 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:33636 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbgKLXTm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Nov 2020 18:19:42 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNAs3h119284;
+        id S1726063AbgKLXTr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Nov 2020 18:19:47 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:57208 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgKLXTn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Nov 2020 18:19:43 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNAUNv087344;
         Thu, 12 Nov 2020 23:19:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=aPfcN7KuEaC6QPosjKJKTrzN39N6uYT6NYusx0B9wME=;
- b=lwslecXonjC/dE8BDvWM8JVSJUPGabyjLP0AAIBWG0NGdmw4Oq7SbBVlCAyH1FdQpnzg
- 8eqE5azlhsOxBJzO6isQuIfnj2Qpx1ZLDV5C58xqK4/tlEt9FBPvKRjCD0QpyoRNYI7B
- 5HVtKdWWvrh+tmM/DvYCEUbUBG+01jVtpHKNiIoToEJ9M/PZMZCcl/3vwIQ5IBYVHOVv
- WfqppRjcAl2hg1c2EXKJFWnlZ/J3aggsFdZbqiaV7e30iPmG4EPvgJmB/Sp0TfKv4q1D
- /VGdNQFRuQonXMK2I6x4yuM687B20O1Y2qShKKsYI/UOggCWym+g4lGFYbXVWOaWcmQs Ig== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 34nkhm83vh-1
+ bh=inE/sT98h+DxX+TMTZz44K2yKdu909cu59+L/DBU4f4=;
+ b=CAGe0CZkbvzldQmV2dPMlPBVG+mkEbn7zICigJEPkRLannPnWRSwYpx5aoJfSnYhpMn/
+ DOlSjrO9ArwFFXFQUT4zAthdcEpm0vmraXvcFaZGkwOpZU9J1d2Vi9UwrXGL9mMzgk2Z
+ g48WZ/BAeTyYc8mPcplm1VC5++YQzoWxJ9kbg43cfwrjtDmmMrAi6sxu9cgO7v+M4y7b
+ nlh5rbws2RyWxtKWxiu2iExtylXkSnYFx4qvh4ge7C8b/LHsO+Sk1JyX6B9D3jvtdjTb
+ fKqr44eAcKXFCAKgJjI1TPvpkYbDdX+GkUU5ERrmYT3seXPnPKjGGcHnFCT8qZtJctO8 1A== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 34nh3b8btu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
         Thu, 12 Nov 2020 23:19:31 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNBKnT177101;
-        Thu, 12 Nov 2020 23:19:30 GMT
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ACNB0Rb027426;
+        Thu, 12 Nov 2020 23:19:31 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 34p55s26fw-1
+        by aserp3020.oracle.com with ESMTP id 34p5g3tsfe-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Nov 2020 23:19:30 +0000
+        Thu, 12 Nov 2020 23:19:31 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0ACNJTso020407;
-        Thu, 12 Nov 2020 23:19:29 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0ACNJU2Y020415;
+        Thu, 12 Nov 2020 23:19:30 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 12 Nov 2020 15:19:29 -0800
+        with ESMTP ; Thu, 12 Nov 2020 15:19:30 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     stefanha@redhat.com, qemu-devel@nongnu.org, fam@euphon.net,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
         mst@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
         virtualization@lists.linux-foundation.org
-Subject: [PATCH 08/10] vhost: move msg_handler to new ops struct
-Date:   Thu, 12 Nov 2020 17:19:08 -0600
-Message-Id: <1605223150-10888-10-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 09/10] vhost: add VHOST_SET_VRING_ENABLE support
+Date:   Thu, 12 Nov 2020 17:19:09 -0600
+Message-Id: <1605223150-10888-11-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
 References: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9803 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 malwarescore=0
+ adultscore=0 phishscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011120130
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9803 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 priorityscore=1501
- mlxscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 mlxscore=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011120130
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The next patch adds a callout so drivers can perform some action when we
-get a VHOST_SET_VRING_ENABLE, so this patch moves the msg_handler callout
-to a new vhost_dev_ops struct just to keep all the callouts better
-organized.
+This adds a new ioctl VHOST_SET_VRING_ENABLE that the vhost drivers can
+implement a callout for and execute an operation when the vq is
+enabled/disabled.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/vhost/vdpa.c  |  7 +++++--
- drivers/vhost/vhost.c | 10 ++++------
- drivers/vhost/vhost.h | 11 ++++++-----
- 3 files changed, 15 insertions(+), 13 deletions(-)
+ drivers/vhost/vhost.c      | 25 +++++++++++++++++++++++++
+ drivers/vhost/vhost.h      |  1 +
+ include/uapi/linux/vhost.h |  1 +
+ 3 files changed, 27 insertions(+)
 
-diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index 2754f30..f271f42 100644
---- a/drivers/vhost/vdpa.c
-+++ b/drivers/vhost/vdpa.c
-@@ -802,6 +802,10 @@ static void vhost_vdpa_set_iova_range(struct vhost_vdpa *v)
- 	}
- }
- 
-+static struct vhost_dev_ops vdpa_dev_ops = {
-+	.msg_handler	= vhost_vdpa_process_iotlb_msg,
-+};
-+
- static int vhost_vdpa_open(struct inode *inode, struct file *filep)
- {
- 	struct vhost_vdpa *v;
-@@ -829,8 +833,7 @@ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
- 		vqs[i] = &v->vqs[i];
- 		vqs[i]->handle_kick = handle_vq_kick;
- 	}
--	vhost_dev_init(dev, vqs, nvqs, 0, 0, 0, false,
--		       vhost_vdpa_process_iotlb_msg);
-+	vhost_dev_init(dev, vqs, nvqs, 0, 0, 0, false, &vdpa_dev_ops);
- 
- 	dev->iotlb = vhost_iotlb_alloc(0, 0);
- 	if (!dev->iotlb) {
 diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 6a6abfc..2f98b81 100644
+index 2f98b81..e953031 100644
 --- a/drivers/vhost/vhost.c
 +++ b/drivers/vhost/vhost.c
-@@ -504,9 +504,7 @@ static size_t vhost_get_desc_size(struct vhost_virtqueue *vq,
- void vhost_dev_init(struct vhost_dev *dev,
- 		    struct vhost_virtqueue **vqs, int nvqs,
- 		    int iov_limit, int weight, int byte_weight,
--		    bool use_worker,
--		    int (*msg_handler)(struct vhost_dev *dev,
--				       struct vhost_iotlb_msg *msg))
-+		    bool use_worker, struct vhost_dev_ops *ops)
- {
- 	struct vhost_virtqueue *vq;
- 	int i;
-@@ -524,7 +522,7 @@ void vhost_dev_init(struct vhost_dev *dev,
- 	dev->weight = weight;
- 	dev->byte_weight = byte_weight;
- 	dev->use_worker = use_worker;
--	dev->msg_handler = msg_handler;
-+	dev->ops = ops;
- 	init_waitqueue_head(&dev->wait);
- 	INIT_LIST_HEAD(&dev->read_list);
- 	INIT_LIST_HEAD(&dev->pending_list);
-@@ -1328,8 +1326,8 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
- 		goto done;
- 	}
+@@ -1736,6 +1736,28 @@ static long vhost_vring_set_num_addr(struct vhost_dev *d,
  
--	if (dev->msg_handler)
--		ret = dev->msg_handler(dev, &msg);
-+	if (dev->ops && dev->ops->msg_handler)
-+		ret = dev->ops->msg_handler(dev, &msg);
- 	else
- 		ret = vhost_process_iotlb_msg(dev, &msg);
- 	if (ret) {
+ 	return r;
+ }
++
++static long vhost_vring_set_enable(struct vhost_dev *d,
++				   struct vhost_virtqueue *vq,
++				   void __user *argp)
++{
++	struct vhost_vring_state s;
++	int ret = 0;
++
++	if (vq->private_data)
++		return -EBUSY;
++
++	if (copy_from_user(&s, argp, sizeof s))
++		return -EFAULT;
++
++	if (s.num != 1 && s.num != 0)
++		return -EINVAL;
++
++	if (d->ops && d->ops->enable_vring)
++		ret = d->ops->enable_vring(vq, s.num);
++	return ret;
++}
++
+ long vhost_vring_ioctl(struct vhost_dev *d, unsigned int ioctl, void __user *argp)
+ {
+ 	struct file *eventfp, *filep = NULL;
+@@ -1765,6 +1787,9 @@ long vhost_vring_ioctl(struct vhost_dev *d, unsigned int ioctl, void __user *arg
+ 	mutex_lock(&vq->mutex);
+ 
+ 	switch (ioctl) {
++	case VHOST_SET_VRING_ENABLE:
++		r = vhost_vring_set_enable(d, vq, argp);
++		break;
+ 	case VHOST_SET_VRING_BASE:
+ 		/* Moving base with an active backend?
+ 		 * You don't want to do that. */
 diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-index 0837133..a293f48 100644
+index a293f48..1279c09 100644
 --- a/drivers/vhost/vhost.h
 +++ b/drivers/vhost/vhost.h
-@@ -156,6 +156,10 @@ struct vhost_msg_node {
-   struct list_head node;
+@@ -158,6 +158,7 @@ struct vhost_msg_node {
+ 
+ struct vhost_dev_ops {
+ 	int (*msg_handler)(struct vhost_dev *dev, struct vhost_iotlb_msg *msg);
++	int (*enable_vring)(struct vhost_virtqueue *vq, bool enable);
  };
  
-+struct vhost_dev_ops {
-+	int (*msg_handler)(struct vhost_dev *dev, struct vhost_iotlb_msg *msg);
-+};
-+
  struct vhost_dev {
- 	struct mm_struct *mm;
- 	struct mutex mutex;
-@@ -175,16 +179,13 @@ struct vhost_dev {
- 	int byte_weight;
- 	u64 kcov_handle;
- 	bool use_worker;
--	int (*msg_handler)(struct vhost_dev *dev,
--			   struct vhost_iotlb_msg *msg);
-+	struct vhost_dev_ops *ops;
- };
+diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+index c998860..3ffd133 100644
+--- a/include/uapi/linux/vhost.h
++++ b/include/uapi/linux/vhost.h
+@@ -70,6 +70,7 @@
+ #define VHOST_VRING_BIG_ENDIAN 1
+ #define VHOST_SET_VRING_ENDIAN _IOW(VHOST_VIRTIO, 0x13, struct vhost_vring_state)
+ #define VHOST_GET_VRING_ENDIAN _IOW(VHOST_VIRTIO, 0x14, struct vhost_vring_state)
++#define VHOST_SET_VRING_ENABLE _IOW(VHOST_VIRTIO, 0x15, struct vhost_vring_state)
  
- bool vhost_exceeds_weight(struct vhost_virtqueue *vq, int pkts, int total_len);
- void vhost_dev_init(struct vhost_dev *, struct vhost_virtqueue **vqs,
- 		    int nvqs, int iov_limit, int weight, int byte_weight,
--		    bool use_worker,
--		    int (*msg_handler)(struct vhost_dev *dev,
--				       struct vhost_iotlb_msg *msg));
-+		    bool use_worker, struct vhost_dev_ops *ops);
- long vhost_dev_set_owner(struct vhost_dev *dev);
- bool vhost_dev_has_owner(struct vhost_dev *dev);
- long vhost_dev_check_owner(struct vhost_dev *);
+ /* The following ioctls use eventfd file descriptors to signal and poll
+  * for events. */
 -- 
 1.8.3.1
 
