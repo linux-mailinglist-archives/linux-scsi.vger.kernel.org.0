@@ -2,76 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4F42B23F4
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 19:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 685332B2415
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Nov 2020 19:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgKMSm1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Nov 2020 13:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbgKMSm1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Nov 2020 13:42:27 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CE1C0613D1
-        for <linux-scsi@vger.kernel.org>; Fri, 13 Nov 2020 10:42:27 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id y17so9320319ejh.11
-        for <linux-scsi@vger.kernel.org>; Fri, 13 Nov 2020 10:42:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
-        b=oEIwbCen0Heye+/ZxDmeLcNrgO1Y86FoZMjHrbHAg+pZhpm4sWQlRJLrQcfTayuGb3
-         6YvXTxF3rEvGOMLpny59DCNF8T0tB+H+p/6s3/H7sWjhRDS4f24TfaCd7FLGfqOBqzgJ
-         n9YTnGBlj75RvuapGTQjsyvszxuJ0yAlmSyKjiD/wsCDL+O4sVUkv02VMETgmMDj3Rvd
-         oYfvZDpiMs1jiOQbhNsDM0GSUwFXLB2ocGyCj/qmWmIViBGbV0+6VtTrhDP0uO3jC5/p
-         32GR1PyJQxYVfbmY2FRHhz4AcH7hWf7Z/yT4HYMCQ5RKlDmUw0Ukyjm5G3hWylV6EGT1
-         o0hQ==
+        id S1726204AbgKMSy3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Nov 2020 13:54:29 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54081 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgKMSy2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Nov 2020 13:54:28 -0500
+Received: by mail-wm1-f66.google.com with SMTP id p22so9594820wmg.3;
+        Fri, 13 Nov 2020 10:54:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
-        b=i9pJD/j/7U3EhyI0iLG6nCjY9yRZEXuWb5c2DCKuFhnbx8b2p7NjKFzx0dP24dEHSD
-         BdL22RoXg+6k8zREuRCwpy1COh53g4JvHyuW1enijLyXZR1WQeCROyXoL2EF4Git3kKF
-         A1+hddPJ8AdJlkhba2gws8Co45d8/qVzVcSSLiCCwNh48yhkpCFjiGcFdO3UKczXMG4N
-         43WY174Ms1RHAoNIng1AN0cbbdpJRhQLi4oIMD9kytIoQNZ5v5nlAb12WtkrFP1p2Cna
-         Mqzu71VvqgEKLKzg7CDJpW6mONZEOtMaP3gVt03rqel55NKa9OK9v9WZjM4LKo0H/sEo
-         VLow==
-X-Gm-Message-State: AOAM530ocrHSDjEgpdVjFnymSa4XcIOucmIQUAjwupli2uBw2Qnwefw7
-        N2KswG2PHRsPRag28IbExBTX1TQNM3/czSuP66Q=
-X-Google-Smtp-Source: ABdhPJyqfjJ3L7695KqYFPsBayZuQGftZ2MTF0QYgnuYrs8au6JlIv//L3MwNOTFqEZmpDX5q/qQ+K68QHuWBjM6AK4=
-X-Received: by 2002:a17:906:77cc:: with SMTP id m12mr3235105ejn.139.1605292944577;
- Fri, 13 Nov 2020 10:42:24 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tzL14T6rCTSN4RsuVPtTnWJiOyUZXc1z2gXeQlm5kq8=;
+        b=gCvOupb3ISWmYY9xXbqcFv5BfoEfp9v+Q5AKWACfOj7Dx+ta7muduPNtC0Zn0KQeBy
+         cYefoRUp3xnm1ou7naolKgLP0MjOcIhJ2JzQXDtVRlwn3GYi7JfPr7+sCitTaTKC4RVd
+         2dSknXtk1ac4FpPdRal04vGFR4BuXKYlg1B51qREVqTwqoSgNOgLUnTSp5FrK68xbcCZ
+         PPeb2DXt8muR+LrCiKEYaOsxwQRggxFDDApb8nmbBtEzOwYYu2mG9hCS1wP8zS25HRVb
+         VZTO59F/Y4yJlqQ7+fM6Ye5wIb0tBySvhDd+Bvd4jqyDTNEjVywZPei/xiE8+zSMaDuS
+         Gv/A==
+X-Gm-Message-State: AOAM532LqRgi4YI7Im4QJBqxxH5Z/RViIG5kcU9je5nabhM/jLWUNSBJ
+        T/8MH1Pq0LUmAJHoMZ9qO7s=
+X-Google-Smtp-Source: ABdhPJwZPyvPPpg2JGbFWoSxXPFRAFGFLuAl484xnZIUH09JJJ8ZkGkOxsNN8/LkABhANC6ma/BPcA==
+X-Received: by 2002:a7b:c8c5:: with SMTP id f5mr889104wml.174.1605293666845;
+        Fri, 13 Nov 2020 10:54:26 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id u5sm7158222wro.56.2020.11.13.10.54.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2020 10:54:26 -0800 (PST)
+Date:   Fri, 13 Nov 2020 18:54:24 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Andres Beltran <lkmlabelt@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Saruhan Karademir <skarade@microsoft.com>,
+        Juan Vazquez <juvazq@microsoft.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v9 2/3] scsi: storvsc: Use vmbus_requestor to generate
+ transaction IDs for VMBus hardening
+Message-ID: <20201113185424.ujdfx6ot7siqr5qh@liuwe-devbox-debian-v2>
+References: <20201109100402.8946-1-parri.andrea@gmail.com>
+ <20201109100402.8946-3-parri.andrea@gmail.com>
+ <20201113113327.dmium67e32iadqbz@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-Received: by 2002:a17:907:2712:0:0:0:0 with HTTP; Fri, 13 Nov 2020 10:42:24
- -0800 (PST)
-Reply-To: georgemike7031@gmail.com
-From:   george mike <greogebrown@gmail.com>
-Date:   Fri, 13 Nov 2020 19:42:24 +0100
-Message-ID: <CAH0Hv2hOchsu4s3jcNxit3syp59DFAVVWSCaxTFa1de=nkE6qQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201113113327.dmium67e32iadqbz@liuwe-devbox-debian-v2>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hallo
+On Fri, Nov 13, 2020 at 11:33:27AM +0000, Wei Liu wrote:
+> On Mon, Nov 09, 2020 at 11:04:01AM +0100, Andrea Parri (Microsoft) wrote:
+> > From: Andres Beltran <lkmlabelt@gmail.com>
+> > 
+> > Currently, pointers to guest memory are passed to Hyper-V as
+> > transaction IDs in storvsc. In the face of errors or malicious
+> > behavior in Hyper-V, storvsc should not expose or trust the transaction
+> > IDs returned by Hyper-V to be valid guest memory addresses. Instead,
+> > use small integers generated by vmbus_requestor as requests
+> > (transaction) IDs.
+> > 
+> > Signed-off-by: Andres Beltran <lkmlabelt@gmail.com>
+> > Co-developed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+> > Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> > Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> > Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> > Cc: linux-scsi@vger.kernel.org
+> 
+> Reviewed-by: Wei Liu <wl@xen.org>
 
-Mein Name ist George Mike. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
-Ihnen anbieten
-der n=C3=A4chste Verwandte meines Klienten. Sie erben die Summe von (8,5
-Millionen US-Dollar)
-Dollar, die mein Kunde vor seinem Tod auf der Bank gelassen hat.
+Martin already gave his ack back in July. I guess nothing substantial
+changed so it should have been carried over?
 
-Mein Kunde ist ein Staatsb=C3=BCrger Ihres Landes, der mit seiner Frau bei
-einem Autounfall ums Leben gekommen ist
-und einziger Sohn. Ich habe Anspruch auf 50% des Gesamtfonds, 50% darauf
-sein f=C3=BCr dich.
-Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
-Informationen: georgemike7031@gmail.com
-
-Vielen Dank im Voraus,
-Mr. George Mike,
+Wei.
