@@ -2,105 +2,238 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E30E2B38AB
-	for <lists+linux-scsi@lfdr.de>; Sun, 15 Nov 2020 20:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F0F2B38AC
+	for <lists+linux-scsi@lfdr.de>; Sun, 15 Nov 2020 20:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727892AbgKOT1T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 15 Nov 2020 14:27:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S1727626AbgKOT1U (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 15 Nov 2020 14:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727888AbgKOT1R (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Nov 2020 14:27:17 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE57CC0613D2
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:17 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id i13so10762459pgm.9
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:17 -0800 (PST)
+        with ESMTP id S1727888AbgKOT1T (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Nov 2020 14:27:19 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FB3C0613CF
+        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:19 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id m9so1163388pgb.4
+        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=1ugZKNecJ1jJSKemFdD2RY8QNo5m0OXotOhoJUcd8Pk=;
-        b=DzDBJEq0fErxV5r0Y6Dns3Z2HfsgYl4KhI9G78gELcHHTq/aYohduYLIZXmb5Bq5yk
-         h0+Yx3QeZHREBQUlBff4xouZYNLp9IJsik3ZbDt2YHYXulGBUKuxWOv+G4Rrvx8FShgs
-         /wZuIq0TC3/Im3Iho4rLEZTTrtn/xS6R9SiiA=
+        bh=mrT27w4SjkpCLh6WolZ7AWen1MnVPjhIyWl3D5J88NY=;
+        b=I4iPNRcc0qurv+gmwVBR1KSqk+wvCBYuF5qNKyX0UI62rtiIagiEStcCPGJR/Jx2Pl
+         Ix8BcV8zecCts3YzPPgkdOU0L4zhdoeuyT08ZWutVA7gJ4N46VI/YeGqToUyNuktV2w6
+         GkjVU0OahLQOd7i3DLw+o4SQ4a5c382+2jNUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=1ugZKNecJ1jJSKemFdD2RY8QNo5m0OXotOhoJUcd8Pk=;
-        b=accasnFYFSzDL3BWm7aXS0KFb8AETS0KFU5y9V0J666t3sbOZ06KqtndzTQu6LhRn2
-         ePqcCVgJztoFXibssoilCmlGJJIre0+N/Y4iNaRTE0P5D0/oM1IRvN0/Dpy43YWabycm
-         FwoVJF8LJsePygvgYaJ+HUAM7bmbF7qgJIV/50wxv6og9QWlhAnsYV4/sIrPetJdn9ue
-         qIIRofa95+gLJMaP4ICxlXsKbifopAUu/s5fdMt0S3P6PR10Xw2cXpgr6zFstsZPOYGI
-         mq0iDcwOlfCPnX6DhyVVSoqwIcJ3i+uPaE2x6NWB2vMEf7nxkVkymdMh8M3qd44IhPAd
-         e4Hw==
-X-Gm-Message-State: AOAM532X5oqHJkifEVKt5LfhBH1D3kJGR1shqWYyKi6dSxIs2v6/tmhK
-        E+VYZ4muo8uXR7UJ+UNdKALD9/m2gj60yJcN4Duopq25uNFzRF8ZCPp9TIw7blz+KS/THvxDd0j
-        VX1Zaog06ihrlzgBIskVtFa1W6AC0vwumaCTGKYzyiyiH3Hg+G1yY0dGgqGx7+LGwFkyyurQhwf
-        SSDQg=
-X-Google-Smtp-Source: ABdhPJzdn/7mHQcNSe4CxuACs8ZIQs7tk7aj06jj2NShZC85v45D/oGe3/ui+ShlFZyFrh5sLQBzLA==
-X-Received: by 2002:a17:90a:a393:: with SMTP id x19mr12297049pjp.68.1605468436240;
-        Sun, 15 Nov 2020 11:27:16 -0800 (PST)
+        bh=mrT27w4SjkpCLh6WolZ7AWen1MnVPjhIyWl3D5J88NY=;
+        b=lF4B7mVe7Wk6kfvSMjmuWH90KGT7WlNS58rpwY/ozIzw9fFPe8D48J6Y6pq//V4Vfq
+         inTENEorgEeGzcgJcEaPctMgfznK+tU6XH2dUHa36PdKnQTLkULM/fg0SBJTRo0N4FHX
+         vC/ewu5YBsFSHKQQMfM5zmZ0Rjdmqsgo8d4Stog/jxlc/7c3BX0hTCUMSGvzxRJWFHLs
+         v+OlaVDgTEgIaICePywLf8gL2tuVFAomieXz6DvpT+V5kd4H/rA6ljN3inQx31uRhzhK
+         de7goXvVbz+sVucXN6wo7iO/cDkCsbRPKofATuwVqYqCv1vwbDZS6eqV0f2n6ee8418d
+         nCEw==
+X-Gm-Message-State: AOAM533cosRNa4SVXKTGmKA7cmViiuOOWUieRsSERNHFk1tadANavZ1h
+        54a5RQ2sOyg0uR868g0vlHSOiQRF9EEtrp2Gt/TpfZCWZnkgEaA3tfo3UVWbZ+z8zmbGV/r37T/
+        GgvRgnNcbFKQ/3bHYrdypcV6SO46//jcdCmq/rKn0v51V2KE+tHTg6wz7Rk43nv8vFBnl/Vo3qZ
+        SpIRo=
+X-Google-Smtp-Source: ABdhPJwp+ju96ZD75xP2fcR9D1bVA77rNNv37eaZLEh09HKbORdsjqJC6A41ybXDC7K5clCjaI5Q8g==
+X-Received: by 2002:a17:90a:2ec3:: with SMTP id h3mr12592863pjs.54.1605468438080;
+        Sun, 15 Nov 2020 11:27:18 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v126sm15864604pfb.137.2020.11.15.11.27.15
+        by smtp.gmail.com with ESMTPSA id v126sm15864604pfb.137.2020.11.15.11.27.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2020 11:27:15 -0800 (PST)
+        Sun, 15 Nov 2020 11:27:17 -0800 (PST)
 From:   James Smart <james.smart@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <james.smart@broadcom.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 16/17] lpfc: Update lpfc version to 12.8.0.6
-Date:   Sun, 15 Nov 2020 11:26:45 -0800
-Message-Id: <20201115192646.12977-17-james.smart@broadcom.com>
+Subject: [PATCH 17/17] lpfc: Update changed file copyrights for 2020
+Date:   Sun, 15 Nov 2020 11:26:46 -0800
+Message-Id: <20201115192646.12977-18-james.smart@broadcom.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201115192646.12977-1-james.smart@broadcom.com>
 References: <20201115192646.12977-1-james.smart@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e4a78b05b42a3fe5"
+        boundary="000000000000fcf5ff05b42a3f17"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000e4a78b05b42a3fe5
+--000000000000fcf5ff05b42a3f17
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Update lpfc version to 12.8.0.6
+Update Copyright in files changed by the 12.8.0.6 patch set to 2020
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <james.smart@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_version.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_bsg.c       | 2 +-
+ drivers/scsi/lpfc/lpfc_crtn.h      | 2 +-
+ drivers/scsi/lpfc/lpfc_debugfs.c   | 2 +-
+ drivers/scsi/lpfc/lpfc_disc.h      | 2 +-
+ drivers/scsi/lpfc/lpfc_hw4.h       | 2 +-
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 2 +-
+ drivers/scsi/lpfc/lpfc_nvme.c      | 2 +-
+ drivers/scsi/lpfc/lpfc_nvme.h      | 2 +-
+ drivers/scsi/lpfc/lpfc_nvmet.c     | 2 +-
+ drivers/scsi/lpfc/lpfc_sli.h       | 2 +-
+ drivers/scsi/lpfc/lpfc_vport.c     | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-index d91ee125abd0..234dca60995b 100644
---- a/drivers/scsi/lpfc/lpfc_version.h
-+++ b/drivers/scsi/lpfc/lpfc_version.h
-@@ -20,7 +20,7 @@
-  * included with this package.                                     *
-  *******************************************************************/
- 
--#define LPFC_DRIVER_VERSION "12.8.0.5"
-+#define LPFC_DRIVER_VERSION "12.8.0.6"
- #define LPFC_DRIVER_NAME		"lpfc"
- 
- /* Used for SLI 2/3 */
-@@ -32,6 +32,6 @@
- 
- #define LPFC_MODULE_DESC "Emulex LightPulse Fibre Channel SCSI driver " \
- 		LPFC_DRIVER_VERSION
--#define LPFC_COPYRIGHT "Copyright (C) 2017-2019 Broadcom. All Rights " \
-+#define LPFC_COPYRIGHT "Copyright (C) 2017-2020 Broadcom. All Rights " \
- 		"Reserved. The term \"Broadcom\" refers to Broadcom Inc. " \
- 		"and/or its subsidiaries."
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index 8fb84415893d..2ac4272710a1 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2009-2015 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_crtn.h b/drivers/scsi/lpfc/lpfc_crtn.h
+index 69b1a357007b..f78e52a18b0b 100644
+--- a/drivers/scsi/lpfc/lpfc_crtn.h
++++ b/drivers/scsi/lpfc/lpfc_crtn.h
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index 8625dc824492..26117cb9f9d0 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.  *
+  * Copyright (C) 2007-2015 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_disc.h b/drivers/scsi/lpfc/lpfc_disc.h
+index 7757175a5c37..ea07afcb750a 100644
+--- a/drivers/scsi/lpfc/lpfc_disc.h
++++ b/drivers/scsi/lpfc/lpfc_disc.h
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2018 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2013 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_hw4.h b/drivers/scsi/lpfc/lpfc_hw4.h
+index 26a9057fb042..541b9aef6bfe 100644
+--- a/drivers/scsi/lpfc/lpfc_hw4.h
++++ b/drivers/scsi/lpfc/lpfc_hw4.h
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.  *
+  * Copyright (C) 2009-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
+index 297fc92d01ce..1ac855640fc5 100644
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
+index a821f36f66e6..7791eb023c9d 100644
+--- a/drivers/scsi/lpfc/lpfc_nvme.c
++++ b/drivers/scsi/lpfc/lpfc_nvme.c
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.  *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.h b/drivers/scsi/lpfc/lpfc_nvme.h
+index 4e11ce8d5e31..69a5a844c69c 100644
+--- a/drivers/scsi/lpfc/lpfc_nvme.h
++++ b/drivers/scsi/lpfc/lpfc_nvme.h
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.  *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index dfd8e61b9daa..f9e3aaf0d2e3 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channsel Host Bus Adapters.                               *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_sli.h b/drivers/scsi/lpfc/lpfc_sli.h
+index 3ddaac57f99e..4f6936014ff5 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.h
++++ b/drivers/scsi/lpfc/lpfc_sli.h
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_vport.c b/drivers/scsi/lpfc/lpfc_vport.c
+index f590d18b3f06..a99fdfba7d27 100644
+--- a/drivers/scsi/lpfc/lpfc_vport.c
++++ b/drivers/scsi/lpfc/lpfc_vport.c
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2019 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2020 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
 -- 
 2.26.2
 
 
---000000000000e4a78b05b42a3fe5
+--000000000000fcf5ff05b42a3f17
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -170,14 +303,14 @@ ZwPZfsjYiUuaCWDGMvVpuBgJtdADOE1v24vgyyLZjtCbvSUzsgKKda3/Z/iwLFCRrIogixS1L6Vg
 9SybOi1fAXGcISX8GzOd85ygu/3dFqvMyCBpNke4vdweIll52KZIMyWji3y2PKJYfgqO+bxo7BAa
 ROYxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMCDH5i
-rbJ+nCPBux48wjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgjHKihunOIiDnSsGp
-tW25piGIvsLw9CqA+3Qy2+hzR9EwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0B
-CQUxDxcNMjAxMTE1MTkyNzE3WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgB
+rbJ+nCPBux48wjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgKGw1IkNYG05zG3+/
+kkZSQOaH/M86M8/xkoMe/MqTGh8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0B
+CQUxDxcNMjAxMTE1MTkyNzE4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgB
 ZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcw
-CwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJeBJJCg2rAVrt1E+UrJzwwzGWA4jAYEQsNx
-CE6Hfga0BWeEj0tyuGcWe18QIihy8Zo2ucQGeigcvlp9FhEksFyxQnuQo/qy2upcrprvvE9szT4a
-mrevwQVMHCn3et4yNk/8FU2FQd1ofRKGJ2M/mgcvnuKS8joo2mVy3pYvsibo6KaWSNN5ZblryxYY
-1izVw+J3u7f+kVo6IrzuPvdcS+amuRhMQLHNJ6yoKyhz4M9epbHxMPhzXBxLHp6Wz2I2At/gRgQ1
-CGxrHbOjhXpHcFZQ9uD02HNtkX3GQWA/02lnXopCa5UW187p/n0R5AuQ1ufbfC4MsyyCJpBBTFC2
-aSQ=
---000000000000e4a78b05b42a3fe5--
+CwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBACGjEG+VWtwFEM61nXnXyX+CJYslzQJ4xGyz
+nGvLenGWvDeFx4ky5kGn7pf9NevDVqgIXdFtDess/DWCAZoNnrIcH8eswy0XiPU/YgUwy5Edkqxl
+qwwPvrMvKFCw/HahvqbOMKLbHuOweH7Ke/Ge+m8lSUw8Q/ajvub69JdbTrx5DBn2MCTfT1xQtHqm
+qSpNzdxo87WNp9gFo5zcO8VQZdBAubnk7aUuNVwvMX/HkIakyBZER5RsVSD8ed2bMh30Zbx+gYHs
+O+YzI8Gta4yZwHTIv3XzrwproguC88UNSCmfykcynr3JWmeXTu/HdP1Odzz2Jg2teK4cp5jrFqDe
+3aI=
+--000000000000fcf5ff05b42a3f17--
