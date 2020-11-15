@@ -2,305 +2,217 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCED2B38A0
-	for <lists+linux-scsi@lfdr.de>; Sun, 15 Nov 2020 20:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6751D2B38A1
+	for <lists+linux-scsi@lfdr.de>; Sun, 15 Nov 2020 20:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727872AbgKOT1E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 15 Nov 2020 14:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S1727874AbgKOT1F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 15 Nov 2020 14:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727861AbgKOT1D (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Nov 2020 14:27:03 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532C0C0613D1
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:03 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id h16so6694745pgb.7
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:03 -0800 (PST)
+        with ESMTP id S1727861AbgKOT1E (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Nov 2020 14:27:04 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76727C0613CF
+        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:04 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id q28so254347pgk.1
+        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=581mWpYSkbjRsvY7z6U1NZtOwUZaeecnEd+VwP+iQlM=;
-        b=arYMWNk2QTpujml5OKNM9BNYQudfJYn/AmgiuVxeiS3UeISwXi0eOGhWVi/wBtJ6S1
-         41AOgxGTTX2HDSh/ILEwGuxd+RkorvY9IUaCYOMabkfQwPI+aT08ZQc9RrN3FCUsCj+o
-         wuDGsb438HKLyPRJ8i5AK+x61zhG4kF9OGXEI=
+        bh=SgtQHDxfKrtxjDe1jRKmMHXrVw8y/QrZMtSTCgNnq0o=;
+        b=Es7+xPR5qW0h6HN7yLmTxUTwmyctuccL1hR8zpuP0q5umAlv8ukXWsFy3ggB0AXsvu
+         VHrR7FLxUUTmJmfq1O6HmqL4Ad4RymXzH6z2uJy8tiJwLhCG2ZOzNeXOCXOzjjZlYRu8
+         Yd0EayunQXm8s16KWXCDc1dECx/VB0ER/j3Tw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=581mWpYSkbjRsvY7z6U1NZtOwUZaeecnEd+VwP+iQlM=;
-        b=Ypmb+cZAEQ0TW5UHbJktj/I4dlx1OlLPDJFG4L49lBS6EYvpQg1kCm5fQZXnsmL6S5
-         FIcccKw3C/Mx5ESOYDrd3Y0HcEIJ2JBWsUh1sSGrM9R4RafCsPLzIdzTAvxrXTgB3KKL
-         gvDtDTTV2989s/DPIEieWxY9kGdLuPKt6OaKBrary1XdfwuJV5g9nBxWlWKlN746EQPw
-         sQkJKcDuh6buEYZwYwPx+pbY3hXXejXNXjezZb5/1A7aeKgj77vAF/K4BAaS3bWXWbmk
-         d68kXOv2aehmFPkSvZw7ovtl5yipRG5L5S4BspgaLJ7yOLWYjrJIEpo7ohg5g2s/gqcV
-         N6/A==
-X-Gm-Message-State: AOAM532zHeuhlSE90hqol23kc3+iBiBfy8rqs926EIZ3Tyss0mFmn/D8
-        wwA4APzSYte5rQXAbwSeLdMqtwpgKOgXzj0s3sLSRjQS8kkIDnHZu5oRaj2Dt710x5aBs1pZlwB
-        9m4+d7bK7ulqXsQoYjR7+f+W2crlXQGG+fTwFhcRQLqI1ula67aH9JpifkQy9SQQD+JawMo/D1v
-        MYmyU=
-X-Google-Smtp-Source: ABdhPJyBadtPZv8UIPpH7xXkjtXKHLIwfi9uB8Y4X9NKHIY8hioeF/daPwFia/67/0gPB/d2xJu2LA==
-X-Received: by 2002:a17:90a:a08f:: with SMTP id r15mr12329707pjp.118.1605468421931;
-        Sun, 15 Nov 2020 11:27:01 -0800 (PST)
+        bh=SgtQHDxfKrtxjDe1jRKmMHXrVw8y/QrZMtSTCgNnq0o=;
+        b=oZWrT58CP15mFHohiXBZSZYOqYXVIL6zzRN8z0SDdsym/xRBvlk2fJIANBplvNI24H
+         V/FOldPVXYmr4xzvPUtaQAZNF5vYop5tVKgomD+0MqQLP7w1ixkLSMl1f5I4y/LHwhOn
+         ZIhI1d1ZG7gCuDp16C2PmtI0GqTHFYKtS+C7zGD0m3KZMTnYc8uBH/DhGuJfXZ6e8p7J
+         RPjbHhyCwIPaMKlIjkANakZIWMJN4+rMKq1sCoStAIaNzn2PxXZ0l4s818b9cLC67qO1
+         5QH/ytFrPwx7L2hyqRlFnxWJnTUDNHHrijAnrIbxpL92Itmhc3naZ0kXU7Le/9F6pHBK
+         T1wQ==
+X-Gm-Message-State: AOAM532bmkU27zHuqbVsviOl+rMmnG44h1etCE71BOd1JcU/3YG7DuBy
+        WBpRotx7YF6Qx5z/wVisTR72XHnW+PhKv+xO2kykGht038GE3QNKHAKZw7hqO18eCcuF8jISBXc
+        sUEW9VcPhLdG0Ojbqugh6JNCgOseH16IXdhvxTc1vSng22xcxNwpgwWiG8DN0egEqHLZDr52HZE
+        rSGJA=
+X-Google-Smtp-Source: ABdhPJyyihRi0XCn91um1NBBzsqm2vjXMPIiZo1GEtaTvOfj23ZNiuBd7K+tnd/jJLb4Otvozc4Zaw==
+X-Received: by 2002:a05:6a00:13a4:b029:18b:cfc9:1ea1 with SMTP id t36-20020a056a0013a4b029018bcfc91ea1mr10873367pfg.25.1605468423335;
+        Sun, 15 Nov 2020 11:27:03 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v126sm15864604pfb.137.2020.11.15.11.27.00
+        by smtp.gmail.com with ESMTPSA id v126sm15864604pfb.137.2020.11.15.11.27.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2020 11:27:01 -0800 (PST)
+        Sun, 15 Nov 2020 11:27:02 -0800 (PST)
 From:   James Smart <james.smart@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <james.smart@broadcom.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 06/17] lpfc: Remove ndlp when a PLOGI/ADISC/PRLI/REG_RPI ultimately fails
-Date:   Sun, 15 Nov 2020 11:26:35 -0800
-Message-Id: <20201115192646.12977-7-james.smart@broadcom.com>
+Subject: [PATCH 07/17] lpfc: Unsolicited ELS leaves node in incorrect state while dropping it
+Date:   Sun, 15 Nov 2020 11:26:36 -0800
+Message-Id: <20201115192646.12977-8-james.smart@broadcom.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201115192646.12977-1-james.smart@broadcom.com>
 References: <20201115192646.12977-1-james.smart@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000008f7d605b42a3fad"
+        boundary="0000000000001b05bc05b42a3f9d"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000008f7d605b42a3fad
+--0000000000001b05bc05b42a3f9d
 Content-Transfer-Encoding: 8bit
 
-When a PLOGI/ADISC/PRLI/REG_RPI fails, the node remains in the nodelist
-in that state.  Although the driver now frees a node when the ref count
-goes to zero, in this case the ref cnt doesn't reach zero because there
-isn't a mechanism to release the final reference.  Discovery just stops.
+When a target swap happens, under certain conditions the node sends a
+LOGO. The unsolicited ELS logic responds with a reject. The logic may
+allocate a new node to handle this. Afterward, the new nodes are dropped
+incorrectly leaving them in a mis-matched state and refcounting causes
+a use-after-free situation leading to a crash.
 
-Fix by calling the node discovery state machine DEVICE_RM event whenever
-one of these commands fail. This will remove the final reference count
-and trigger node release.
+It is also possible that the unsolicited els handling finds a node which
+is in an UNUSED state. The handling moves these nodes to NPR state with a
+refcount of 1. Although the end of the discovery logic assumes a final
+put will free such a node, there are codes paths which could increment the
+reference count, thus the node is in NPR state and not released.
+Eventually this mismatch in state and refcount leads to premature release
+of the node causing a crash.
+
+Fix by always using the discovery engine DEVICE RM event to decrement and
+release the nodes (rather than explicit code that tried to do it before).
+This will take care of moving the node to the UNUSED state and then
+removes the final ref count. If there is a trigger to reuse this node,
+the transition from the UNUSED state clearly indicates that the initial
+reference is then incremented and use can continue.
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <james.smart@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c     | 66 +++++++++++++++++++++++++++++---
- drivers/scsi/lpfc/lpfc_hbadisc.c | 39 +++++++++++--------
- 2 files changed, 85 insertions(+), 20 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 33 ++++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 565ab29abf3c..225215a04313 100644
+index 225215a04313..45a8ebbf60bc 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -1988,12 +1988,25 @@ lpfc_cmpl_els_plogi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 				 "2753 PLOGI failure DID:%06X Status:x%x/x%x\n",
- 				 ndlp->nlp_DID, irsp->ulpStatus,
- 				 irsp->un.ulpWord[4]);
--		/* Do not call DSM for lpfc_els_abort'ed ELS cmds. Just execute
--		 * the final node put to free it to the pool.
-+
-+		/* Do not call DSM for lpfc_els_abort'ed ELS cmds */
-+		if (lpfc_error_lost_link(irsp))
-+			goto check_plogi;
-+		else
-+			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
-+						NLP_EVT_CMPL_PLOGI);
-+
-+		/* As long as this node is not registered with the scsi or nvme
-+		 * transport, it is no longer an active node.  Otherwise
-+		 * devloss handles the final cleanup.
- 		 */
--		if (!lpfc_error_lost_link(irsp))
-+		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD))) {
-+			spin_lock_irq(&ndlp->lock);
-+			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
-+			spin_unlock_irq(&ndlp->lock);
- 			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
- 						NLP_EVT_DEVICE_RM);
-+		}
- 	} else {
- 		/* Good status, call state machine */
- 		prsp = list_entry(((struct lpfc_dmabuf *)
-@@ -2004,6 +2017,7 @@ lpfc_cmpl_els_plogi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 					NLP_EVT_CMPL_PLOGI);
+@@ -8728,7 +8728,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 
+ 		lpfc_els_rcv_flogi(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_LOGO:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8770,7 +8771,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvRSCN++;
+ 		lpfc_els_rcv_rscn(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_ADISC:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8848,7 +8850,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvLIRR++;
+ 		lpfc_els_rcv_lirr(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_RLS:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8858,7 +8861,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvRLS++;
+ 		lpfc_els_rcv_rls(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_RPL:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8868,7 +8872,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvRPL++;
+ 		lpfc_els_rcv_rpl(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_RNID:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8878,7 +8883,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvRNID++;
+ 		lpfc_els_rcv_rnid(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_RTV:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8887,7 +8893,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvRTV++;
+ 		lpfc_els_rcv_rtv(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_RRQ:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8897,7 +8904,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvRRQ++;
+ 		lpfc_els_rcv_rrq(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_ECHO:
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+@@ -8907,7 +8915,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 		phba->fc_stat.elsRcvECHO++;
+ 		lpfc_els_rcv_echo(vport, elsiocb, ndlp);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
+ 	case ELS_CMD_REC:
+ 		/* receive this due to exchange closed */
+@@ -8938,7 +8947,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 				 "0115 Unknown ELS command x%x "
+ 				 "received from NPORT x%x\n", cmd, did);
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
++					NLP_EVT_DEVICE_RM);
+ 		break;
  	}
  
-+ check_plogi:
- 	if (disc && vport->num_disc_nodes) {
- 		/* Check to see if there are more PLOGIs to be sent */
- 		lpfc_more_plogi(vport);
-@@ -2243,6 +2257,20 @@ lpfc_cmpl_els_prli(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		else
- 			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
- 						NLP_EVT_CMPL_PRLI);
-+
-+		/* As long as this node is not registered with the scsi
-+		 * or nvme transport and no other PRLIs are outstanding,
-+		 * it is no longer an active node.  Otherwise devloss
-+		 * handles the final cleanup.
-+		 */
-+		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD)) &&
-+		    !ndlp->fc4_prli_sent) {
-+			spin_lock_irq(&ndlp->lock);
-+			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
-+			spin_unlock_irq(&ndlp->lock);
-+			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
-+						NLP_EVT_DEVICE_RM);
-+		}
- 	} else {
- 		/* Good status, call state machine.  However, if another
- 		 * PRLI is outstanding, don't call the state machine
-@@ -2655,14 +2683,29 @@ lpfc_cmpl_els_adisc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 				 ndlp->nlp_DID, irsp->ulpStatus,
- 				 irsp->un.ulpWord[4]);
- 		/* Do not call DSM for lpfc_els_abort'ed ELS cmds */
--		if (!lpfc_error_lost_link(irsp))
-+		if (lpfc_error_lost_link(irsp))
-+			goto check_adisc;
-+		else
- 			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
- 						NLP_EVT_CMPL_ADISC);
-+
-+		/* As long as this node is not registered with the scsi or nvme
-+		 * transport, it is no longer an active node. Otherwise
-+		 * devloss handles the final cleanup.
-+		 */
-+		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD))) {
-+			spin_lock_irq(&ndlp->lock);
-+			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
-+			spin_unlock_irq(&ndlp->lock);
-+			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
-+						NLP_EVT_DEVICE_RM);
-+		}
- 	} else
- 		/* Good status, call state machine */
- 		lpfc_disc_state_machine(vport, ndlp, cmdiocb,
- 					NLP_EVT_CMPL_ADISC);
- 
-+ check_adisc:
- 	/* Check to see if there are more ADISCs to be sent */
- 	if (disc && vport->num_disc_nodes)
- 		lpfc_more_adisc(vport);
-@@ -2879,8 +2922,21 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 				 irsp->un.ulpWord[4], irsp->ulpTimeout,
- 				 vport->num_disc_nodes);
- 		lpfc_disc_start(vport);
-+		return;
-+	}
-+
-+	/* Cleanup path for failed REG_RPI handling. If REG_RPI fails, the
-+	 * driver sends a LOGO to the rport to cleanup.  For fabric and
-+	 * initiator ports cleanup the node as long as it the node is not
-+	 * register with the transport.
-+	 */
-+	if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD))) {
-+		spin_lock_irq(&ndlp->lock);
-+		ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
-+		spin_unlock_irq(&ndlp->lock);
-+		lpfc_disc_state_machine(vport, ndlp, cmdiocb,
+@@ -8952,7 +8962,8 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 				    NULL);
+ 		/* Remove the reference from above for new nodes. */
+ 		if (newnode)
+-			lpfc_nlp_put(ndlp);
++			lpfc_disc_state_machine(vport, ndlp, NULL,
 +					NLP_EVT_DEVICE_RM);
  	}
--	return;
- }
  
- /**
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 8f3106aadfc7..ac05d188f816 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -204,10 +204,13 @@ lpfc_dev_loss_tmo_callbk(struct fc_rport *rport)
- 
- 	spin_lock_irqsave(&ndlp->lock, iflags);
- 	ndlp->nlp_flag |= NLP_IN_DEV_LOSS;
-+	ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
-+
- 	/*
--	 * The backend does not expect any more calls assoicated with this
--	 * rport, Remove the association between rport and ndlp
-+	 * The backend does not expect any more calls associated with this
-+	 * rport. Remove the association between rport and ndlp.
- 	 */
-+	ndlp->fc4_xpt_flags &= ~SCSI_XPT_REGD;
- 	((struct lpfc_rport_data *)rport->dd_data)->pnode = NULL;
- 	ndlp->rport = NULL;
- 	spin_unlock_irqrestore(&ndlp->lock, iflags);
-@@ -248,7 +251,6 @@ lpfc_dev_loss_tmo_handler(struct lpfc_nodelist *ndlp)
- 	int warn_on = 0;
- 	int fcf_inuse = 0;
- 	unsigned long iflags;
--	u32 fc4_xpt_flags;
- 
- 	vport = ndlp->vport;
- 	shost = lpfc_shost_from_vport(vport);
-@@ -267,10 +269,11 @@ lpfc_dev_loss_tmo_handler(struct lpfc_nodelist *ndlp)
- 			      ndlp->nlp_DID, ndlp->nlp_type, ndlp->nlp_sid);
- 
- 	lpfc_printf_vlog(ndlp->vport, KERN_INFO, LOG_NODE,
--			 "3182 %s x%06x, nflag x%x xflags x%x\n",
-+			 "3182 %s x%06x, nflag x%x xflags x%x refcnt %d\n",
- 			 __func__, ndlp->nlp_DID, ndlp->nlp_flag,
--			 ndlp->fc4_xpt_flags);
-+			 ndlp->fc4_xpt_flags, kref_read(&ndlp->kref));
- 
-+	/* If the driver is recovering the rport, ignore devloss. */
- 	if (ndlp->nlp_state == NLP_STE_MAPPED_NODE) {
- 		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
- 				 "0284 Devloss timeout Ignored on "
-@@ -282,8 +285,11 @@ lpfc_dev_loss_tmo_handler(struct lpfc_nodelist *ndlp)
- 		return fcf_inuse;
- 	}
- 
--	if (ndlp->nlp_type & NLP_FABRIC)
-+	/* Fabric nodes are done. */
-+	if (ndlp->nlp_type & NLP_FABRIC) {
-+		lpfc_nlp_put(ndlp);
- 		return fcf_inuse;
-+	}
- 
- 	if (ndlp->nlp_sid != NLP_NO_SID) {
- 		warn_on = 1;
-@@ -311,12 +317,7 @@ lpfc_dev_loss_tmo_handler(struct lpfc_nodelist *ndlp)
- 				 ndlp->nlp_state, ndlp->nlp_rpi);
- 	}
- 
--	/* Should be final reference removal triggering a node free. */
--	spin_lock_irqsave(shost->host_lock, iflags);
--	fc4_xpt_flags = ndlp->fc4_xpt_flags;
--	spin_unlock_irqrestore(shost->host_lock, iflags);
--
--	if (!(fc4_xpt_flags & (NVME_XPT_REGD | SCSI_XPT_REGD)))
-+	if (!(ndlp->fc4_xpt_flags & NVME_XPT_REGD))
- 		lpfc_disc_state_machine(vport, ndlp, NULL, NLP_EVT_DEVICE_RM);
- 
- 	return fcf_inuse;
-@@ -3587,7 +3588,7 @@ lpfc_mbx_cmpl_reg_login(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
- 	pmb->ctx_buf = NULL;
- 	pmb->ctx_ndlp = NULL;
- 
--	lpfc_printf_vlog(vport, KERN_INFO, LOG_SLI,
-+	lpfc_printf_vlog(vport, KERN_INFO, LOG_SLI | LOG_NODE | LOG_DISCOVERY,
- 			 "0002 rpi:%x DID:%x flg:%x %d x%px\n",
- 			 ndlp->nlp_rpi, ndlp->nlp_DID, ndlp->nlp_flag,
- 			 kref_read(&ndlp->kref),
-@@ -4079,8 +4080,16 @@ lpfc_mbx_cmpl_ns_reg_login(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
- 		kfree(mp);
- 		mempool_free(pmb, phba->mbox_mem_pool);
- 
--		/* If no other thread is using the ndlp, free it */
--		lpfc_nlp_not_used(ndlp);
-+		/* If the node is not registered with the scsi or nvme
-+		 * transport, remove the fabric node.  The failed reg_login
-+		 * is terminal.
-+		 */
-+		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD))) {
-+			spin_lock_irq(&ndlp->lock);
-+			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
-+			spin_unlock_irq(&ndlp->lock);
-+			lpfc_nlp_not_used(ndlp);
-+		}
- 
- 		if (phba->fc_topology == LPFC_TOPOLOGY_LOOP) {
- 			/*
+ 	/* Release the reference on this elsiocb, not the ndlp. */
 -- 
 2.26.2
 
 
---00000000000008f7d605b42a3fad
+--0000000000001b05bc05b42a3f9d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -370,14 +282,14 @@ ZwPZfsjYiUuaCWDGMvVpuBgJtdADOE1v24vgyyLZjtCbvSUzsgKKda3/Z/iwLFCRrIogixS1L6Vg
 9SybOi1fAXGcISX8GzOd85ygu/3dFqvMyCBpNke4vdweIll52KZIMyWji3y2PKJYfgqO+bxo7BAa
 ROYxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMCDH5i
-rbJ+nCPBux48wjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgtiomDoYKiGQlFQU9
-t+RctgB8G8n2Ukbi5Xg5g3bGu1EwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0B
-CQUxDxcNMjAxMTE1MTkyNzAyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgB
+rbJ+nCPBux48wjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgSZE8teLyg/rU7UuR
+qmOKayJKju67tWfEj6TSN/V5wT0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0B
+CQUxDxcNMjAxMTE1MTkyNzAzWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgB
 ZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcw
-CwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAC4JsQrwsHI4Iq98wm23wdsrOviTzrHvII8z
-ROK4I/H+qnvqgmhSV6Ded/JGL3+tw5htYgbx9XWOXnLEzRVMumV2rgsOjuCTU0JdkvNXkYEB16EF
-nDcBcq4qJ2koWpvVT2Xz0WIhp5dOvTjXd4HdQa2MjS1UEHly+7d/h0IdBSzRfOM4tuiUw6c+nPUN
-E8JQne9vwJyu1eQ2jAyeOhE7XZ1ceQC9ZPxOLDGfgZOOky19RLd2fKBpnHzb/wYOoWkitmdg93i3
-twX8v3hBhva+CSE03DmhdI5v66TRRsTU209aN+TdX1ySEfmM0icFCmigR/0HCbgmtEqmRsstW/QC
-SDQ=
---00000000000008f7d605b42a3fad--
+CwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAHPBhhNDwoPqbTNbW1uDbWbEvxRpGQvWOLbG
+K5SrRRnbupxx1D5lDj36Lm4KcENvimr0EphoCq9VSJGUQ0X27euB9pVoBHflyObIJNs+6KVimWAd
+gkhE4Ule3C5coTG2HBBltbLwtZEbAteUbh0h2767XWgZACO9Nbw8BUiWf8Nuaqksp9OP5t/3i4aj
+XH/f9EInys1iMI2P8uIBU9DjWLONMWuMD/AduVOYh7DAb4S6ueqpoZo3zFGv1tBDlFfQvYgkuU/B
+FtX+jRthkCLxlXfVTK12hh6uwQ3SRRJjaULqPntomgB2RTR0CutbSy7xZh+aPNm7XGDDWNN39kXa
+WnE=
+--0000000000001b05bc05b42a3f9d--
