@@ -2,150 +2,319 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D0C2B38A3
-	for <lists+linux-scsi@lfdr.de>; Sun, 15 Nov 2020 20:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596A02B38A4
+	for <lists+linux-scsi@lfdr.de>; Sun, 15 Nov 2020 20:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgKOT1I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 15 Nov 2020 14:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        id S1727881AbgKOT1M (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 15 Nov 2020 14:27:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727861AbgKOT1F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Nov 2020 14:27:05 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D382BC0613CF
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:05 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id a18so11348036pfl.3
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:05 -0800 (PST)
+        with ESMTP id S1727876AbgKOT1I (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Nov 2020 14:27:08 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAB1C0613CF
+        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:07 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id 131so806902pfb.9
+        for <linux-scsi@vger.kernel.org>; Sun, 15 Nov 2020 11:27:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=gqZlVEbVNSBZRqbcxyKX9YCI1715XhxSCPftVUufgy4=;
-        b=C+bZxa65r48qLYLcRcMG2YP0vUEqbf3CysIz3WtLrGnrWGG65dGLBnwKeibOpbKVpR
-         oAcnBTek6G/d6VJ0D1DnBFZrNTzKCAjd+Q84bJVPtMS0kSCaQeR+3xBPPepurY34pXbk
-         xk2F8dI/zF4NiG/GX4hAauRgd22s6ksOHEjwQ=
+        bh=uXD0A4RB1f/zcqW+dLYMOF60xigJE4xgFRURHsQQOZg=;
+        b=fQ4LuqoZwuDy3vhPuu+cI2sFRSzv4vI337zQlZflx+9lSOApisLW/JuxWk/KUdC0UI
+         lhpB3m/isJS1VHDAaPXy7SgE46FbNdMi1LLk/2JZXD6/Iy+qvYwhYx0VPmXSUqcEpRhi
+         m+SElA3aod4X8Jxpv0NPzeu152q12URL8AZcs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=gqZlVEbVNSBZRqbcxyKX9YCI1715XhxSCPftVUufgy4=;
-        b=P44lxKub57fBFY7eESUN/jiL2kwlhZaLqdxKYtn4L0UGyG6Kqx0Nq8DrIyE4sydoo0
-         g48gDQiERZKAyEGdJdfGcgP7dev990h6ER60SiTMO2iePzyjg7c3Zu4Kw4dEDNe7Bmxr
-         EhHHae9iMIimvYIoR8LSyhrauYaqL0INujoeq201hY6TObFDkY9V53kwNtCmwT/zaB2j
-         h4YrAJtNz08+302NZN8QRjktzwDYX5vAw8sTiDHgIOzVjGax3Mo/kEWtmApfP+WhfcEn
-         pLklSaKeGZLr7vQMADL65lz05/kwJiPvagF5A3TLmfr5vRQbpntXNonT5l3GMr5J1L3b
-         xfJg==
-X-Gm-Message-State: AOAM5305giLa0ijHfy3y1TMO5rnS9nKMTJG2x4eCj39rlBVEQ9Lbm0FF
-        5UiAhDvGB41Ci8SpOYAk5LGU9bGTjOZu4NWh3Ku6uYGxSCgtOj8opVvjUC9K95ulsPAY+Sr2vqu
-        N73qRqgMuBNRs4ldbdA9lwTBsfX6ZqYI2tosiEJIJ8KBXSLWUicuDesGDLzPQhVvp86958G8t6+
-        +p5mc=
-X-Google-Smtp-Source: ABdhPJzFtA6jffGRPydsxBdPk1kZsh/rDOHQt61wXzoE8+CJP8E6pAPHccCXgTUKunjCXTQgL1QOTA==
-X-Received: by 2002:a62:17c8:0:b029:18b:5a97:a8d1 with SMTP id 191-20020a6217c80000b029018b5a97a8d1mr10887092pfx.15.1605468424825;
-        Sun, 15 Nov 2020 11:27:04 -0800 (PST)
+        bh=uXD0A4RB1f/zcqW+dLYMOF60xigJE4xgFRURHsQQOZg=;
+        b=LXtO0T33QQ+orQJ3JWZm3NwxiChN8TBY2eP2KVMYuSs4Nr7R5baj+fgEJpZxMshraQ
+         j+QolVuCGxThsUU6UHdJYqoNWnpo+YeXrEwaQR40fh3bUOWHFcdes6R1I2VF80Iubx37
+         PsONxAyyVPxnJAdU9WxzFz+AWO9ISqmMvZ3QO9iBsod/W4GzeIelkj7VPcnju+nxVLSF
+         FTb1jRIgR4JLW6cqV74VouH1jrYtZnXabrENdybeEzN/f/4DE0ad1su96PcIyRE8lM3i
+         ivUh3kWaoXyyVaUDxgUSBhPwJhTYxrdM8XRj4SeI+hfvDz/T6FBm8SVTH5HbEXi/G7qP
+         CjtQ==
+X-Gm-Message-State: AOAM531bB2Z3GEOkd6FQ1weAQp0x2UGmucFaZC3eWwgsrfogcz4Tl9E/
+        6+865RCrRKGO/rHIuAz7HpNSoR8nQiPdJRHnz8213IGiq4Lfq3FXWxSO5/Xh46AwrwL0LED3zkn
+        YZfuVsCVuFPOC53XqOqttgx/511cJvT8ryMe0DaiJNltoFg/fMSABKMiUYGV4AeMkPjYXPw5NVw
+        IRyGk=
+X-Google-Smtp-Source: ABdhPJwe0e3lU9y6P19crvCWLOKeFmIVsty/xkpJNfxPhEc86wEsjuBtoC906C4JpHWg0Bx1heyXyg==
+X-Received: by 2002:a62:7c95:0:b029:18c:5002:a1ab with SMTP id x143-20020a627c950000b029018c5002a1abmr10705922pfc.40.1605468426228;
+        Sun, 15 Nov 2020 11:27:06 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v126sm15864604pfb.137.2020.11.15.11.27.03
+        by smtp.gmail.com with ESMTPSA id v126sm15864604pfb.137.2020.11.15.11.27.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2020 11:27:03 -0800 (PST)
+        Sun, 15 Nov 2020 11:27:05 -0800 (PST)
 From:   James Smart <james.smart@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <james.smart@broadcom.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 08/17] lpfc: Fix NPIV discovery and Fabric Node detection
-Date:   Sun, 15 Nov 2020 11:26:37 -0800
-Message-Id: <20201115192646.12977-9-james.smart@broadcom.com>
+Subject: [PATCH 09/17] lpfc: Fix NPIV Fabric Node reference counting
+Date:   Sun, 15 Nov 2020 11:26:38 -0800
+Message-Id: <20201115192646.12977-10-james.smart@broadcom.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201115192646.12977-1-james.smart@broadcom.com>
 References: <20201115192646.12977-1-james.smart@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003094f305b42a3fe4"
+        boundary="000000000000466ee005b42a3f68"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000003094f305b42a3fe4
+--000000000000466ee005b42a3f68
 Content-Transfer-Encoding: 8bit
 
-While testing NPIV and link bounces, the vport would not show a fabric
-node for the F_Port, would not transition into NPR state during a link
-fault, or leave the FDMI node untouched during error injection. Cause
-for this was determined to be an inconsistent manner in which F_Port,
-Nameserver, and FDMI controller nodes were created and linked. In some
-cases, the nodes would never be unregistered from the transport, leaving
-references active. In other cases, the fabric nodes may register with
-the transport multiple times while still registered.
+While testing initiator-side cable swaps with NPIV, oops occur.
+The reference counts for the Fabric nodes on the NPIV vports isn't
+balanced, resulting in premature node removal.
 
-The following changes were made:
-- Fix the FDISC issue routine, which starts vport (re)creation, to mark
-  the F_Port as a fabric node (NLP_FABRIC) and allow the F_Port node to
-  fully be created and show up in the node list.
-- When remote ports are cleaned up on vport termination, cleanup the
-  nameserver and FDMI controller nodes on the vport so they unregister
-  from the transport.
-- On link bounces, don't exclude the NPIV Fabric remote ports from
-  transitioning to the NPR state, allowing them to avoid re-registration
-  if already registered.
+The following fixes were made:
+- Removed the FC_LBIT check in lpfc_linkup_port. This removed the special
+  case for vports that didn't have them clean up just like the physical
+  port.
+- Removed the unreg_rpi call in lpfc_cleanup_node. In this section, the
+  node is being removed in the context of a reference count release
+  and a mailbox command can't be issued at this point.
+- Remove special case handling in the default mailbox completion handler
+  that allowed the skipping of a node reference. Now, reference counting
+  always requires the removal of the reference.
+- Move the location of the DEVICE_RM event is done during LOGO handling
+  as the driver has additional work to do on the ndlp before puts/releases
+  can be performed.
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <james.smart@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c     |  4 ++++
- drivers/scsi/lpfc/lpfc_hbadisc.c | 11 +++++------
- 2 files changed, 9 insertions(+), 6 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c     | 47 +++++++++++++++++---------------
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 29 ++++++++------------
+ drivers/scsi/lpfc/lpfc_init.c    |  6 ++--
+ drivers/scsi/lpfc/lpfc_sli.c     | 10 +++++--
+ 4 files changed, 46 insertions(+), 46 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 45a8ebbf60bc..6fc42c978730 100644
+index 6fc42c978730..48095bebd47b 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -1508,6 +1508,10 @@ lpfc_initial_fdisc(struct lpfc_vport *vport)
- 		ndlp = lpfc_nlp_init(vport, Fabric_DID);
- 		if (!ndlp)
- 			return 0;
-+
-+		/* NPIV is only supported in Fabrics. */
-+		ndlp->nlp_type |= NLP_FABRIC;
-+
- 		/* Put ndlp onto node list */
- 		lpfc_enqueue_node(vport, ndlp);
+@@ -2835,8 +2835,9 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 	/* LOGO completes to NPort <nlp_DID> */
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS,
+ 			 "0105 LOGO completes to NPort x%x "
+-			 "Data: x%x x%x x%x x%x\n",
+-			 ndlp->nlp_DID, irsp->ulpStatus, irsp->un.ulpWord[4],
++			 "refcnt %d nflags x%x Data: x%x x%x x%x x%x\n",
++			 ndlp->nlp_DID, kref_read(&ndlp->kref), ndlp->nlp_flag,
++			 irsp->ulpStatus, irsp->un.ulpWord[4],
+ 			 irsp->ulpTimeout, vport->num_disc_nodes);
+ 
+ 	if (lpfc_els_chk_latt(vport)) {
+@@ -2844,17 +2845,6 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		goto out;
  	}
+ 
+-	/* Check to see if link went down during discovery */
+-	if (ndlp->nlp_flag & NLP_TARGET_REMOVE) {
+-	        /* NLP_EVT_DEVICE_RM should unregister the RPI
+-		 * which should abort all outstanding IOs.
+-		 */
+-		lpfc_disc_state_machine(vport, ndlp, cmdiocb,
+-					NLP_EVT_DEVICE_RM);
+-		skip_recovery = 1;
+-		goto out;
+-	}
+-
+ 	/* The LOGO will not be retried on failure.  A LOGO was
+ 	 * issued to the remote rport and a ACC or RJT or no Answer are
+ 	 * all acceptable.  Note the failure and move forward with
+@@ -2876,6 +2866,19 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 	/* Call state machine. This will unregister the rpi if needed. */
+ 	lpfc_disc_state_machine(vport, ndlp, cmdiocb, NLP_EVT_CMPL_LOGO);
+ 
++	/* The driver sets this flag for an NPIV instance that doesn't want to
++	 * log into the remote port.
++	 */
++	if (ndlp->nlp_flag & NLP_TARGET_REMOVE) {
++		lpfc_disc_state_machine(vport, ndlp, cmdiocb,
++					NLP_EVT_DEVICE_RM);
++		lpfc_els_free_iocb(phba, cmdiocb);
++		lpfc_nlp_put(ndlp);
++
++		/* Presume the node was released. */
++		return;
++	}
++
+ out:
+ 	/* Driver is done with the IO.  */
+ 	lpfc_els_free_iocb(phba, cmdiocb);
+@@ -4399,10 +4402,10 @@ lpfc_cmpl_els_logo_acc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		irsp->ulpStatus, irsp->un.ulpWord[4], ndlp->nlp_DID);
+ 	/* ACC to LOGO completes to NPort <nlp_DID> */
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS,
+-			 "0109 ACC to LOGO completes to NPort x%x "
++			 "0109 ACC to LOGO completes to NPort x%x refcnt %d"
+ 			 "Data: x%x x%x x%x\n",
+-			 ndlp->nlp_DID, ndlp->nlp_flag, ndlp->nlp_state,
+-			 ndlp->nlp_rpi);
++			 ndlp->nlp_DID, kref_read(&ndlp->kref), ndlp->nlp_flag,
++			 ndlp->nlp_state, ndlp->nlp_rpi);
+ 
+ 	if (ndlp->nlp_state == NLP_STE_NPR_NODE) {
+ 		/* NPort Recovery mode or node is just allocated */
+@@ -8650,9 +8653,9 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 	/* ELS command <elsCmd> received from NPORT <did> */
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS,
+ 			 "0112 ELS command x%x received from NPORT x%x "
+-			 "Data: x%x x%x x%x x%x\n",
+-			cmd, did, vport->port_state, vport->fc_flag,
+-			vport->fc_myDID, vport->fc_prevDID);
++			 "refcnt %d Data: x%x x%x x%x x%x\n",
++			 cmd, did, kref_read(&ndlp->kref), vport->port_state,
++			 vport->fc_flag, vport->fc_myDID, vport->fc_prevDID);
+ 
+ 	/* reject till our FLOGI completes or PLOGI assigned DID via PT2PT */
+ 	if ((vport->port_state < LPFC_FABRIC_CFG_LINK) &&
+@@ -9144,9 +9147,9 @@ lpfc_do_scr_ns_plogi(struct lpfc_hba *phba, struct lpfc_vport *vport)
+ 	spin_lock_irq(shost->host_lock);
+ 	if (vport->fc_flag & FC_DISC_DELAYED) {
+ 		spin_unlock_irq(shost->host_lock);
+-		lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+-				"3334 Delay fc port discovery for %d seconds\n",
+-				phba->fc_ratov);
++		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
++				 "3334 Delay fc port discovery for %d secs\n",
++				 phba->fc_ratov);
+ 		mod_timer(&vport->delayed_disc_tmo,
+ 			jiffies + msecs_to_jiffies(1000 * phba->fc_ratov));
+ 		return;
 diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index ac05d188f816..f3cf988733c2 100644
+index f3cf988733c2..4c5a0ffec86f 100644
 --- a/drivers/scsi/lpfc/lpfc_hbadisc.c
 +++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -818,12 +818,13 @@ lpfc_cleanup_rpis(struct lpfc_vport *vport, int remove)
- 	struct lpfc_nodelist *ndlp, *next_ndlp;
+@@ -4810,8 +4810,14 @@ lpfc_set_unreg_login_mbx_cmpl(struct lpfc_hba *phba, struct lpfc_vport *vport,
+ {
+ 	unsigned long iflags;
  
- 	list_for_each_entry_safe(ndlp, next_ndlp, &vport->fc_nodes, nlp_listp) {
--
- 		if (ndlp->nlp_state == NLP_STE_UNUSED_NODE)
- 			continue;
++	/* Driver always gets a reference on the mailbox job
++	 * in support of async jobs.
++	 */
++	mbox->ctx_ndlp = lpfc_nlp_get(ndlp);
++	if (!mbox->ctx_ndlp)
++		return;
 +
- 		if ((phba->sli3_options & LPFC_SLI3_VPORT_TEARDOWN) ||
--			((vport->port_type == LPFC_NPIV_PORT) &&
--			(ndlp->nlp_DID == NameServer_DID)))
-+		    ((vport->port_type == LPFC_NPIV_PORT) &&
-+		     ((ndlp->nlp_DID == NameServer_DID) ||
-+		      (ndlp->nlp_DID == FDMI_DID))))
- 			lpfc_unreg_rpi(vport, ndlp);
+ 	if (ndlp->nlp_flag & NLP_ISSUE_LOGO) {
+-		mbox->ctx_ndlp = ndlp;
+ 		mbox->mbox_cmpl = lpfc_nlp_logo_unreg;
  
- 		/* Leave Fabric nodes alone on link down */
-@@ -1037,9 +1038,7 @@ lpfc_linkup_port(struct lpfc_vport *vport)
- 	vport->fc_ns_retry = 0;
- 	spin_unlock_irq(shost->host_lock);
+ 	} else if (phba->sli_rev == LPFC_SLI_REV4 &&
+@@ -4819,7 +4825,6 @@ lpfc_set_unreg_login_mbx_cmpl(struct lpfc_hba *phba, struct lpfc_vport *vport,
+ 		    (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) >=
+ 				      LPFC_SLI_INTF_IF_TYPE_2) &&
+ 		    (kref_read(&ndlp->kref) > 0)) {
+-		mbox->ctx_ndlp = lpfc_nlp_get(ndlp);
+ 		mbox->mbox_cmpl = lpfc_sli4_unreg_rpi_cmpl_clr;
+ 	} else {
+ 		if (vport->load_flag & FC_UNLOADING) {
+@@ -4828,9 +4833,7 @@ lpfc_set_unreg_login_mbx_cmpl(struct lpfc_hba *phba, struct lpfc_vport *vport,
+ 				ndlp->nlp_flag |= NLP_RELEASE_RPI;
+ 				spin_unlock_irqrestore(&ndlp->lock, iflags);
+ 			}
+-			lpfc_nlp_get(ndlp);
+ 		}
+-		mbox->ctx_ndlp = ndlp;
+ 		mbox->mbox_cmpl = lpfc_sli_def_mbox_cmpl;
+ 	}
+ }
+@@ -4888,6 +4891,11 @@ lpfc_unreg_rpi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 			lpfc_unreg_login(phba, vport->vpi, rpi, mbox);
+ 			mbox->vport = vport;
+ 			lpfc_set_unreg_login_mbx_cmpl(phba, vport, ndlp, mbox);
++			if (!mbox->ctx_ndlp) {
++				mempool_free(mbox, phba->mbox_mem_pool);
++				return 1;
++			}
++
+ 			if (mbox->mbox_cmpl == lpfc_sli4_unreg_rpi_cmpl_clr)
+ 				/*
+ 				 * accept PLOGIs after unreg_rpi_cmpl
+@@ -5057,7 +5065,6 @@ lpfc_cleanup_node(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 	struct lpfc_hba  *phba = vport->phba;
+ 	LPFC_MBOXQ_t *mb, *nextmb;
+ 	struct lpfc_dmabuf *mp;
+-	unsigned long iflags;
  
--	if (vport->fc_flag & FC_LBIT)
--		lpfc_linkup_cleanup_nodes(vport);
--
-+	lpfc_linkup_cleanup_nodes(vport);
+ 	/* Cleanup node for NPort <nlp_DID> */
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
+@@ -5125,18 +5132,6 @@ lpfc_cleanup_node(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 	lpfc_cleanup_vports_rrqs(vport, ndlp);
+ 	if (phba->sli_rev == LPFC_SLI_REV4)
+ 		ndlp->nlp_flag |= NLP_RELEASE_RPI;
+-	if (!lpfc_unreg_rpi(vport, ndlp)) {
+-		/* Clean up unregistered and non freed rpis */
+-		if ((ndlp->nlp_flag & NLP_RELEASE_RPI) &&
+-		    !(ndlp->nlp_rpi == LPFC_RPI_ALLOC_ERROR)) {
+-			lpfc_sli4_free_rpi(vport->phba,
+-					   ndlp->nlp_rpi);
+-			spin_lock_irqsave(&ndlp->lock, iflags);
+-			ndlp->nlp_flag &= ~NLP_RELEASE_RPI;
+-			ndlp->nlp_rpi = LPFC_RPI_ALLOC_ERROR;
+-			spin_unlock_irqrestore(&ndlp->lock, iflags);
+-		}
+-	}
+ 	return 0;
  }
  
- static int
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index f0cbf98e7caa..86d9ab4bcebb 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -2851,10 +2851,8 @@ lpfc_cleanup(struct lpfc_vport *vport)
+ 			continue;
+ 		}
+ 
+-		/* take care of nodes in unused state before the state
+-		 * machine taking action.
+-		 */
+-		if (ndlp->nlp_state == NLP_STE_UNUSED_NODE) {
++		if (ndlp->nlp_DID == Fabric_Cntl_DID &&
++		    ndlp->nlp_state == NLP_STE_UNUSED_NODE) {
+ 			lpfc_nlp_put(ndlp);
+ 			continue;
+ 		}
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 4f537a07bac6..116a6822c201 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -2541,8 +2541,12 @@ lpfc_sli_def_mbox_cmpl(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
+ 			} else {
+ 				__lpfc_sli_rpi_release(vport, ndlp);
+ 			}
+-			if (vport->load_flag & FC_UNLOADING)
+-				lpfc_nlp_put(ndlp);
++
++			/* The unreg_login mailbox is complete and had a
++			 * reference that has to be released.  The PLOGI
++			 * got its own ref.
++			 */
++			lpfc_nlp_put(ndlp);
+ 			pmb->ctx_ndlp = NULL;
+ 		}
+ 	}
+@@ -2566,7 +2570,7 @@ lpfc_sli_def_mbox_cmpl(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
+  *
+  * This function is the unreg rpi mailbox completion handler. It
+  * frees the memory resources associated with the completed mailbox
+- * command. An additional refrenece is put on the ndlp to prevent
++ * command. An additional reference is put on the ndlp to prevent
+  * lpfc_nlp_release from freeing the rpi bit in the bitmask before
+  * the unreg mailbox command completes, this routine puts the
+  * reference back.
 -- 
 2.26.2
 
 
---0000000000003094f305b42a3fe4
+--000000000000466ee005b42a3f68
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -215,14 +384,14 @@ ZwPZfsjYiUuaCWDGMvVpuBgJtdADOE1v24vgyyLZjtCbvSUzsgKKda3/Z/iwLFCRrIogixS1L6Vg
 9SybOi1fAXGcISX8GzOd85ygu/3dFqvMyCBpNke4vdweIll52KZIMyWji3y2PKJYfgqO+bxo7BAa
 ROYxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMCDH5i
-rbJ+nCPBux48wjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg3egHBwrDd06jEooE
-14BahImqL2z+qSVc1bY59OORI6wwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0B
-CQUxDxcNMjAxMTE1MTkyNzA1WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgB
+rbJ+nCPBux48wjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgRpfmySR9Vtd8rnnX
+tpimlF3KOu5Yhfls4AKE4vys66IwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0B
+CQUxDxcNMjAxMTE1MTkyNzA2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgB
 ZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcw
-CwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBACvoTGkqGIzvJRMQn5yzVeiundPPAfvLXtnE
-wD+9CSZruzN/g0MM0IPYjfcRTPm4/TTG378qtDvK7sRvlyC8ec9IYONlfylhnx5hdJcMX3XzZ3FI
-0voxZv9zyB0rvHn4UM8Et0NnQd4pyTYcbKqPpeguPI9vUANLMb3M5Wtr6t/VDcdUjKsB9iFsmfHB
-Z0eUk0Gvzfvuy7iPIIBDMzt3Fcs8fdVJdH4Rdsy251g6Rm7f4ge8oPyKZumaf7FY4XKUufpYvJCN
-cVcCbiXo5KFibRG9kvtnCbQ3dRVqjTp+MZ1kjHVQyXpWw6gCYuXauhw49zKrZW3jiCAdjh6H7k6N
-bFo=
---0000000000003094f305b42a3fe4--
+CwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAIHnqy4kQQDEALh42FryfzoND0HwLoD1pr6P
+xAPjZX1TRlQP4QNsMCNLlh2STErhico8LUc1AujoDVbfYO/BxJv37fZpK8BFx9q68f1LImYO7dWG
++Sll2p+kMfjpCO2Utpiz5hgTD8h648SsXV6PIM/z1wJLjhhMlq6es2p0xR0Ky5PpiVi9SkG+ryh6
+l7vKSvmLi+/zyVO4kRbosIZ5etnQlAFm3ayguMwG2qwDH4RZPjKjNUoHBzFbb1yumbzDDorqf5GM
+sC1e1SvAemEaXDhun2z1GyAIczwbXNMe9gBgxLThMSdDnNYmfWorWPzyEnBMLLWEsT501mnH5Bxd
+hEo=
+--000000000000466ee005b42a3f68--
