@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2702B483E
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 16:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98ED42B47A4
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 16:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731332AbgKPPDG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Nov 2020 10:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S1730972AbgKPO7g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Nov 2020 09:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730860AbgKPO7U (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 09:59:20 -0500
+        with ESMTP id S1730943AbgKPO7a (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 09:59:30 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3A0C0613D1;
-        Mon, 16 Nov 2020 06:59:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533E1C0613D1;
+        Mon, 16 Nov 2020 06:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=ISq8BehFRmfA7X2bUEKuKNCEzkzF+ixwO2P3vH2Ca4g=; b=d73ns3M7F3JRR21anbEXFxuf9g
-        A1xWTv4tBpopyBGHuve4hdPzPLwGluE0C2j9u+A4uk1WzPvrWwUq+wvI0IfwLikycPsXYuDfNoqOe
-        m8TfyEmDYqxSeCEPv8OHRnRxlZa2BK0Mb/DUIm1Z0f6pGaDzcvBobxYIJlmaIdSdeUSaf89GVeTXM
-        JufiFirvEUqjxlNXxHVTpo2WhwYvjUKrOkF5h55ecknCMyA1me/y2F2FdynUFWj9zZc5XKzC9ijl9
-        HJGyPVpfezAKOMvhyISvMkEFsLN1uvdIFVszTvvkCN35wOb/aMbNL+Xc75GBLtiIukt+24033x1tu
-        55Dk0zgg==;
+        bh=Ub9jpknBNltWl/xM1z440GPAq6lbWyOu/cfyXRrsD14=; b=VtALb1vlttJ0buxeem4ez+UVG4
+        Hu+Wqzb0QtgrS5QrZw/6aENv47GRNNh/CISIBQASNaoUt+cYAFXDVK4WXECNVL5dVc+xc/uVQOnIg
+        HTLM6KHwDsX+QnIalbhYcS8kk7anQ8yPF0pzoGt/ezmRxs/uYaG5KB5LFuw2m65+v4FLJ9BMD4Ovz
+        FfsRasFisl+b2XzsGmdUtlricIuZ6vBTkUhVjcJ0lMBS4vQc6DLTXfAo6MDzYuO1bB1gpNPStxfTg
+        5oO+avG3iudqBw1sow49CGkIHR2P/HvdJHVOxannWGYHrDjws6h+iO/erNUOkLsTjti8W+DcHNPIc
+        3Oq8t4Bg==;
 Received: from [2001:4bb8:180:6600:255b:7def:a93:4a09] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kefyD-0003xZ-0p; Mon, 16 Nov 2020 14:59:05 +0000
+        id 1kefyG-0003yI-1n; Mon, 16 Nov 2020 14:59:08 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Justin Sanders <justin@coraid.com>,
@@ -48,9 +48,9 @@ Cc:     Justin Sanders <justin@coraid.com>,
         linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
         linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 39/78] block: add an optional probe callback to major_names
-Date:   Mon, 16 Nov 2020 15:57:30 +0100
-Message-Id: <20201116145809.410558-40-hch@lst.de>
+Subject: [PATCH 41/78] swim: don't call blk_register_region
+Date:   Mon, 16 Nov 2020 15:57:32 +0100
+Message-Id: <20201116145809.410558-42-hch@lst.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201116145809.410558-1-hch@lst.de>
 References: <20201116145809.410558-1-hch@lst.de>
@@ -61,94 +61,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add a callback to the major_names array that allows a driver to override
-how to probe for dev_t that doesn't currently have a gendisk registered.
-This will help separating the lookup of the gendisk by dev_t vs probe
-action for a not currently registered dev_t.
+The swim driver (unlike various other floppy drivers) doesn't have
+magic device nodes for certain modes, and already registers a gendisk
+for each of the floppies supported by a device.  Thus the region
+registered is a no-op and can be removed.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 ---
- block/genhd.c         | 21 ++++++++++++++++++---
- include/linux/genhd.h |  5 ++++-
- 2 files changed, 22 insertions(+), 4 deletions(-)
+ drivers/block/swim.c | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
-diff --git a/block/genhd.c b/block/genhd.c
-index 8391e7d83a6920..dc8690bc281c16 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -399,6 +399,7 @@ static struct blk_major_name {
- 	struct blk_major_name *next;
- 	int major;
- 	char name[16];
-+	void (*probe)(dev_t devt);
- } *major_names[BLKDEV_MAJOR_HASH_SIZE];
- static DEFINE_MUTEX(major_names_lock);
+diff --git a/drivers/block/swim.c b/drivers/block/swim.c
+index 52dd1efa00f9c5..cc6a0bc6c005a7 100644
+--- a/drivers/block/swim.c
++++ b/drivers/block/swim.c
+@@ -745,18 +745,6 @@ static const struct block_device_operations floppy_fops = {
+ 	.check_events	 = floppy_check_events,
+ };
  
-@@ -441,7 +442,8 @@ void blkdev_show(struct seq_file *seqf, off_t offset)
-  * See Documentation/admin-guide/devices.txt for the list of allocated
-  * major numbers.
-  */
--int register_blkdev(unsigned int major, const char *name)
-+int __register_blkdev(unsigned int major, const char *name,
-+		void (*probe)(dev_t devt))
+-static struct kobject *floppy_find(dev_t dev, int *part, void *data)
+-{
+-	struct swim_priv *swd = data;
+-	int drive = (*part & 3);
+-
+-	if (drive >= swd->floppy_count)
+-		return NULL;
+-
+-	*part = 0;
+-	return get_disk_and_module(swd->unit[drive].disk);
+-}
+-
+ static int swim_add_floppy(struct swim_priv *swd, enum drive_location location)
  {
- 	struct blk_major_name **n, *p;
- 	int index, ret = 0;
-@@ -480,6 +482,7 @@ int register_blkdev(unsigned int major, const char *name)
+ 	struct floppy_state *fs = &swd->unit[swd->floppy_count];
+@@ -846,9 +834,6 @@ static int swim_floppy_init(struct swim_priv *swd)
+ 		add_disk(swd->unit[drive].disk);
  	}
  
- 	p->major = major;
-+	p->probe = probe;
- 	strlcpy(p->name, name, sizeof(p->name));
- 	p->next = NULL;
- 	index = major_to_index(major);
-@@ -502,8 +505,7 @@ int register_blkdev(unsigned int major, const char *name)
- 	mutex_unlock(&major_names_lock);
- 	return ret;
- }
+-	blk_register_region(MKDEV(FLOPPY_MAJOR, 0), 256, THIS_MODULE,
+-			    floppy_find, NULL, swd);
 -
--EXPORT_SYMBOL(register_blkdev);
-+EXPORT_SYMBOL(__register_blkdev);
+ 	return 0;
  
- void unregister_blkdev(unsigned int major, const char *name)
- {
-@@ -1030,6 +1032,19 @@ static ssize_t disk_badblocks_store(struct device *dev,
+ exit_put_disks:
+@@ -932,8 +917,6 @@ static int swim_remove(struct platform_device *dev)
+ 	int drive;
+ 	struct resource *res;
  
- static void request_gendisk_module(dev_t devt)
- {
-+	unsigned int major = MAJOR(devt);
-+	struct blk_major_name **n;
-+
-+	mutex_lock(&major_names_lock);
-+	for (n = &major_names[major_to_index(major)]; *n; n = &(*n)->next) {
-+		if ((*n)->major == major && (*n)->probe) {
-+			(*n)->probe(devt);
-+			mutex_unlock(&major_names_lock);
-+			return;
-+		}
-+	}
-+	mutex_unlock(&major_names_lock);
-+
- 	if (request_module("block-major-%d-%d", MAJOR(devt), MINOR(devt)) > 0)
- 		/* Make old-style 2.4 aliases work */
- 		request_module("block-major-%d", MAJOR(devt));
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 8427ad8bef520d..04f6a6bf577a90 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -366,7 +366,10 @@ extern void blk_unregister_region(dev_t devt, unsigned long range);
- 
- #define alloc_disk(minors) alloc_disk_node(minors, NUMA_NO_NODE)
- 
--int register_blkdev(unsigned int major, const char *name);
-+int __register_blkdev(unsigned int major, const char *name,
-+		void (*probe)(dev_t devt));
-+#define register_blkdev(major, name) \
-+	__register_blkdev(major, name, NULL)
- void unregister_blkdev(unsigned int major, const char *name);
- 
- void revalidate_disk_size(struct gendisk *disk, bool verbose);
+-	blk_unregister_region(MKDEV(FLOPPY_MAJOR, 0), 256);
+-
+ 	for (drive = 0; drive < swd->floppy_count; drive++) {
+ 		del_gendisk(swd->unit[drive].disk);
+ 		blk_cleanup_queue(swd->unit[drive].disk->queue);
 -- 
 2.29.2
 
