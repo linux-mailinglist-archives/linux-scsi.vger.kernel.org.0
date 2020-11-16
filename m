@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4B92B3D44
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9AB2B3D47
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727231AbgKPGvD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Nov 2020 01:51:03 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:59517 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726821AbgKPGvD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:03 -0500
-X-UUID: 678c4dd23da34c25a9763b26d65baf67-20201116
-X-UUID: 678c4dd23da34c25a9763b26d65baf67-20201116
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        id S1727252AbgKPGvE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Nov 2020 01:51:04 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:56429 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727226AbgKPGvE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:04 -0500
+X-UUID: d7f1ca938c2c4145a203ae78dd275a93-20201116
+X-UUID: d7f1ca938c2c4145a203ae78dd275a93-20201116
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1266693890; Mon, 16 Nov 2020 14:50:57 +0800
+        with ESMTP id 988543428; Mon, 16 Nov 2020 14:50:57 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Mon, 16 Nov 2020 14:50:56 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -37,70 +37,57 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 7/9] scsi: ufs: Refactor ADAPT configuration function
-Date:   Mon, 16 Nov 2020 14:50:52 +0800
-Message-ID: <20201116065054.7658-8-stanley.chu@mediatek.com>
+Subject: [PATCH v1 8/9] scsi: ufs-mediatek: Use common ADAPT configuration function
+Date:   Mon, 16 Nov 2020 14:50:53 +0800
+Message-ID: <20201116065054.7658-9-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201116065054.7658-1-stanley.chu@mediatek.com>
 References: <20201116065054.7658-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 5926274FF60AC1D2252A78452B893F06980F61EAFD7235CF175F1E25C3F32A5E2000:8
+X-TM-SNTS-SMTP: 586618FD9FC2E94551F1713EFAAF3BF557FB27D60D232CE7923BD1AADFE1CDAF2000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Several vendors are using same code to configure ADAPT
-settings for HS-G4. Simply refactor it as common function.
+Use common ADAPT configuration function to reduce duplicated
+code in UFS drivers.
 
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 16 ++++++++++++++++
- drivers/scsi/ufs/ufshcd.h |  3 +++
- 2 files changed, 19 insertions(+)
+ drivers/scsi/ufs/ufs-mediatek.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 9186ee01379a..80cbce414678 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -3587,6 +3587,22 @@ static int ufshcd_dme_reset(struct ufs_hba *hba)
- 	return ret;
- }
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 87b4bf125e23..1d3c5cd4592e 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -677,7 +677,6 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ {
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+ 	struct ufs_dev_params host_cap;
+-	u32 adapt_val;
+ 	int ret;
  
-+int ufshcd_dme_configure_adapt(struct ufs_hba *hba,
-+			       int agreed_gear,
-+			       int adapt_val)
-+{
-+	int ret;
-+
-+	if (agreed_gear != UFS_HS_G4)
-+		adapt_val = PA_INITIAL_ADAPT;
-+
-+	ret = ufshcd_dme_set(hba,
-+			     UIC_ARG_MIB(PA_TXHSADAPTTYPE),
-+			     adapt_val);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_dme_configure_adapt);
-+
- /**
-  * ufshcd_dme_enable - UIC command for DME_ENABLE
-  * @hba: per adapter instance
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 5191d87f6263..d0b68df07eef 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -956,6 +956,9 @@ extern int ufshcd_runtime_idle(struct ufs_hba *hba);
- extern int ufshcd_system_suspend(struct ufs_hba *hba);
- extern int ufshcd_system_resume(struct ufs_hba *hba);
- extern int ufshcd_shutdown(struct ufs_hba *hba);
-+extern int ufshcd_dme_configure_adapt(struct ufs_hba *hba,
-+				      int agreed_gear,
-+				      int adapt_val);
- extern int ufshcd_dme_set_attr(struct ufs_hba *hba, u32 attr_sel,
- 			       u8 attr_set, u32 mib_val, u8 peer);
- extern int ufshcd_dme_get_attr(struct ufs_hba *hba, u32 attr_sel,
+ 	ufshcd_init_pwr_dev_param(&host_cap);
+@@ -693,13 +692,9 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ 	}
+ 
+ 	if (host->hw_ver.major >= 3) {
+-		if (dev_req_params->gear_tx == UFS_HS_G4)
+-			adapt_val = PA_INITIAL_ADAPT;
+-		else
+-			adapt_val = PA_NO_ADAPT;
+-		ufshcd_dme_set(hba,
+-			       UIC_ARG_MIB(PA_TXHSADAPTTYPE),
+-			       adapt_val);
++		ret = ufshcd_dme_configure_adapt(hba,
++					   dev_req_params->gear_tx,
++					   PA_INITIAL_ADAPT);
+ 	}
+ 
+ 	return ret;
 -- 
 2.18.0
 
