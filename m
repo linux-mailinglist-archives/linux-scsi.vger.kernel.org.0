@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EF82B3D4D
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 380712B3D4F
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbgKPGvH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1727319AbgKPGvH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 16 Nov 2020 01:51:07 -0500
 Received: from mailgw01.mediatek.com ([210.61.82.183]:56429 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727166AbgKPGvH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:07 -0500
-X-UUID: 9cae7b35b84e434985b0e4257749f71b-20201116
-X-UUID: 9cae7b35b84e434985b0e4257749f71b-20201116
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        with ESMTP id S1727248AbgKPGvG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:06 -0500
+X-UUID: 17fb1c7661d740e59a8e28bfec8058c8-20201116
+X-UUID: 17fb1c7661d740e59a8e28bfec8058c8-20201116
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 751693401; Mon, 16 Nov 2020 14:50:57 +0800
+        with ESMTP id 1338968127; Mon, 16 Nov 2020 14:50:57 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Mon, 16 Nov 2020 14:50:56 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 16 Nov 2020 14:50:55 +0800
+ Transport; Mon, 16 Nov 2020 14:50:56 +0800
 From:   Stanley Chu <stanley.chu@mediatek.com>
 To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
         <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
@@ -37,14 +37,15 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 4/9] scsi: ufs-qcom: Use device parameter initialization function
-Date:   Mon, 16 Nov 2020 14:50:49 +0800
-Message-ID: <20201116065054.7658-5-stanley.chu@mediatek.com>
+Subject: [PATCH v1 5/9] scsi: ufs-exynos: Use device parameter initialization function
+Date:   Mon, 16 Nov 2020 14:50:50 +0800
+Message-ID: <20201116065054.7658-6-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201116065054.7658-1-stanley.chu@mediatek.com>
 References: <20201116065054.7658-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-SNTS-SMTP: F7C328403594EF3E73E48010B0EA8562DABC4C1AE26A152F8097040FB84C7D3E2000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -55,58 +56,60 @@ initialziing those parameters by vendor driver itself.
 
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufs-qcom.c | 13 +------------
- drivers/scsi/ufs/ufs-qcom.h | 11 -----------
- 2 files changed, 1 insertion(+), 23 deletions(-)
+ drivers/scsi/ufs/ufs-exynos.c | 15 +--------------
+ drivers/scsi/ufs/ufs-exynos.h | 13 -------------
+ 2 files changed, 1 insertion(+), 27 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 357c3b49321d..04adfbd10753 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -691,19 +691,8 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
+index 5e6b95dbb578..a8770ff14588 100644
+--- a/drivers/scsi/ufs/ufs-exynos.c
++++ b/drivers/scsi/ufs/ufs-exynos.c
+@@ -617,20 +617,7 @@ static int exynos_ufs_pre_pwr_mode(struct ufs_hba *hba,
+ 		goto out;
+ 	}
  
- 	switch (status) {
- 	case PRE_CHANGE:
--		ufs_qcom_cap.tx_lanes = UFS_QCOM_LIMIT_NUM_LANES_TX;
--		ufs_qcom_cap.rx_lanes = UFS_QCOM_LIMIT_NUM_LANES_RX;
--		ufs_qcom_cap.hs_rx_gear = UFS_QCOM_LIMIT_HSGEAR_RX;
--		ufs_qcom_cap.hs_tx_gear = UFS_QCOM_LIMIT_HSGEAR_TX;
--		ufs_qcom_cap.pwm_rx_gear = UFS_QCOM_LIMIT_PWMGEAR_RX;
--		ufs_qcom_cap.pwm_tx_gear = UFS_QCOM_LIMIT_PWMGEAR_TX;
--		ufs_qcom_cap.rx_pwr_pwm = UFS_QCOM_LIMIT_RX_PWR_PWM;
--		ufs_qcom_cap.tx_pwr_pwm = UFS_QCOM_LIMIT_TX_PWR_PWM;
--		ufs_qcom_cap.rx_pwr_hs = UFS_QCOM_LIMIT_RX_PWR_HS;
--		ufs_qcom_cap.tx_pwr_hs = UFS_QCOM_LIMIT_TX_PWR_HS;
-+		ufshcd_init_pwr_dev_param(&ufs_qcom_cap);
- 		ufs_qcom_cap.hs_rate = UFS_QCOM_LIMIT_HS_RATE;
--		ufs_qcom_cap.desired_working_mode =
--					UFS_QCOM_LIMIT_DESIRED_MODE;
+-
+-	ufs_exynos_cap.tx_lanes = UFS_EXYNOS_LIMIT_NUM_LANES_TX;
+-	ufs_exynos_cap.rx_lanes = UFS_EXYNOS_LIMIT_NUM_LANES_RX;
+-	ufs_exynos_cap.hs_rx_gear = UFS_EXYNOS_LIMIT_HSGEAR_RX;
+-	ufs_exynos_cap.hs_tx_gear = UFS_EXYNOS_LIMIT_HSGEAR_TX;
+-	ufs_exynos_cap.pwm_rx_gear = UFS_EXYNOS_LIMIT_PWMGEAR_RX;
+-	ufs_exynos_cap.pwm_tx_gear = UFS_EXYNOS_LIMIT_PWMGEAR_TX;
+-	ufs_exynos_cap.rx_pwr_pwm = UFS_EXYNOS_LIMIT_RX_PWR_PWM;
+-	ufs_exynos_cap.tx_pwr_pwm = UFS_EXYNOS_LIMIT_TX_PWR_PWM;
+-	ufs_exynos_cap.rx_pwr_hs = UFS_EXYNOS_LIMIT_RX_PWR_HS;
+-	ufs_exynos_cap.tx_pwr_hs = UFS_EXYNOS_LIMIT_TX_PWR_HS;
+-	ufs_exynos_cap.hs_rate = UFS_EXYNOS_LIMIT_HS_RATE;
+-	ufs_exynos_cap.desired_working_mode =
+-				UFS_EXYNOS_LIMIT_DESIRED_MODE;
++	ufshcd_init_pwr_dev_param(&ufs_exynos_cap);
  
- 		if (host->hw_ver.major == 0x1) {
- 			/*
-diff --git a/drivers/scsi/ufs/ufs-qcom.h b/drivers/scsi/ufs/ufs-qcom.h
-index 3f4922743b3e..8208e3a3ef59 100644
---- a/drivers/scsi/ufs/ufs-qcom.h
-+++ b/drivers/scsi/ufs/ufs-qcom.h
-@@ -27,18 +27,7 @@
+ 	ret = ufshcd_get_pwr_dev_param(&ufs_exynos_cap,
+ 				       dev_max_params, dev_req_params);
+diff --git a/drivers/scsi/ufs/ufs-exynos.h b/drivers/scsi/ufs/ufs-exynos.h
+index 76d6e39efb2f..06ee565f7eb0 100644
+--- a/drivers/scsi/ufs/ufs-exynos.h
++++ b/drivers/scsi/ufs/ufs-exynos.h
+@@ -90,19 +90,6 @@ struct exynos_ufs;
  #define SLOW 1
  #define FAST 2
  
--#define UFS_QCOM_LIMIT_NUM_LANES_RX	2
--#define UFS_QCOM_LIMIT_NUM_LANES_TX	2
--#define UFS_QCOM_LIMIT_HSGEAR_RX	UFS_HS_G3
--#define UFS_QCOM_LIMIT_HSGEAR_TX	UFS_HS_G3
--#define UFS_QCOM_LIMIT_PWMGEAR_RX	UFS_PWM_G4
--#define UFS_QCOM_LIMIT_PWMGEAR_TX	UFS_PWM_G4
--#define UFS_QCOM_LIMIT_RX_PWR_PWM	SLOW_MODE
--#define UFS_QCOM_LIMIT_TX_PWR_PWM	SLOW_MODE
--#define UFS_QCOM_LIMIT_RX_PWR_HS	FAST_MODE
--#define UFS_QCOM_LIMIT_TX_PWR_HS	FAST_MODE
- #define UFS_QCOM_LIMIT_HS_RATE		PA_HS_MODE_B
--#define UFS_QCOM_LIMIT_DESIRED_MODE	FAST
- 
- /* QCOM UFS host controller vendor specific registers */
- enum {
+-#define UFS_EXYNOS_LIMIT_NUM_LANES_RX	2
+-#define UFS_EXYNOS_LIMIT_NUM_LANES_TX	2
+-#define UFS_EXYNOS_LIMIT_HSGEAR_RX	UFS_HS_G3
+-#define UFS_EXYNOS_LIMIT_HSGEAR_TX	UFS_HS_G3
+-#define UFS_EXYNOS_LIMIT_PWMGEAR_RX	UFS_PWM_G4
+-#define UFS_EXYNOS_LIMIT_PWMGEAR_TX	UFS_PWM_G4
+-#define UFS_EXYNOS_LIMIT_RX_PWR_PWM	SLOW_MODE
+-#define UFS_EXYNOS_LIMIT_TX_PWR_PWM	SLOW_MODE
+-#define UFS_EXYNOS_LIMIT_RX_PWR_HS	FAST_MODE
+-#define UFS_EXYNOS_LIMIT_TX_PWR_HS	FAST_MODE
+-#define UFS_EXYNOS_LIMIT_HS_RATE		PA_HS_MODE_B
+-#define UFS_EXYNOS_LIMIT_DESIRED_MODE	FAST
+-
+ #define RX_ADV_FINE_GRAN_SUP_EN	0x1
+ #define RX_ADV_FINE_GRAN_STEP_VAL	0x3
+ #define RX_ADV_MIN_ACTV_TIME_CAP	0x9
 -- 
 2.18.0
 
