@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 049C12B46CF
+	by mail.lfdr.de (Postfix) with ESMTP id 7242A2B46D1
 	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 15:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730853AbgKPO7N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1730849AbgKPO7N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 16 Nov 2020 09:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730816AbgKPO7K (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 09:59:10 -0500
+        with ESMTP id S1730815AbgKPO7J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 09:59:09 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23764C0613D2;
-        Mon, 16 Nov 2020 06:59:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E783EC0613D1;
+        Mon, 16 Nov 2020 06:59:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=xZanwokwrC93vQLNLNyxIE9cwRexAjHIbs3YFwVPsFg=; b=a7d0WKhPNBtgQ87fZA08kVqe1y
-        s8Sr2lxZqA4u53myzeDnnzR5qIAz6vA3egUoMXd0PFkUGzFv/UxEUPI892XyeOmB7FRMPywqZgzFQ
-        fvJvVKuwSCKubwUgCeDnhSdQj3zjceiRZRQvdQW64tflG1Ubobb0xgCwA9qgVb3P8bufG21KACqxF
-        LdxKiVKNAom0BaCGTkLFBbfzny15lEtGihDxBpVpKvP1ZCnxYnkEVNdSSfERf5h6KpD5Xp1Gipw2N
-        P3IlVQJDBBHLI1ckJlQziKc3EInlMrYDiIlMfsnRoAyesz+vylm3lK1KNLRuTKMEj958SrIUpqIbd
-        95x8ALqA==;
+        bh=hmW8AusT819Hpp1U0vQRnp8T84EK6KuhlshbO+/HZ1o=; b=s3PyuNumv2XJNuimh+ngj+d/f6
+        scNE+kFuc6xkgKNnr1zZ7z2rWNuEJjtRjoF8etdpy5umK3setslsL6lUQiK5cAVCegzHKOP2tNVRN
+        1Sa9ShGf1/F5HMkg28qrnE9RKWnptAc1NOgcS5xzLqKhJFI4gE0I6jkqsNfuoY0Yg/d/tfTnu2g27
+        +3jL897Lg+GjB+qFNGwVEtM3B26pX5XnYLr43N09shWkl6V+i4C3a3gB1Gh7uFE1MmG1EyGX2j2HD
+        PQjkAdNsC8nET4kWMgCjPetxyfW4P8cNls2hPSf7oPeT4Bi2Ng0klNLw8Pn/NUGmnPBoTRVCulBmk
+        W/SI5tEw==;
 Received: from [2001:4bb8:180:6600:255b:7def:a93:4a09] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kefy3-0003uy-0n; Mon, 16 Nov 2020 14:58:55 +0000
+        id 1kefy4-0003vL-Dh; Mon, 16 Nov 2020 14:58:56 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Justin Sanders <justin@coraid.com>,
@@ -47,9 +47,9 @@ Cc:     Justin Sanders <justin@coraid.com>,
         ceph-devel@vger.kernel.org, xen-devel@lists.xenproject.org,
         linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
         linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH 32/78] block: remove set_device_ro
-Date:   Mon, 16 Nov 2020 15:57:23 +0100
-Message-Id: <20201116145809.410558-33-hch@lst.de>
+Subject: [PATCH 33/78] block: remove __blkdev_driver_ioctl
+Date:   Mon, 16 Nov 2020 15:57:24 +0100
+Message-Id: <20201116145809.410558-34-hch@lst.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201116145809.410558-1-hch@lst.de>
 References: <20201116145809.410558-1-hch@lst.de>
@@ -60,58 +60,124 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fold set_device_ro into its only remaining caller.
+Just open code it in the few callers.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- block/genhd.c         | 7 -------
- block/ioctl.c         | 2 +-
- include/linux/genhd.h | 1 -
- 3 files changed, 1 insertion(+), 9 deletions(-)
+ block/ioctl.c               | 25 +++++--------------------
+ drivers/block/pktcdvd.c     |  6 ++++--
+ drivers/md/bcache/request.c |  5 +++--
+ drivers/md/dm.c             |  5 ++++-
+ include/linux/blkdev.h      |  2 --
+ 5 files changed, 16 insertions(+), 27 deletions(-)
 
-diff --git a/block/genhd.c b/block/genhd.c
-index 8c350fecfe8bfe..b0f0b0cac9aa7f 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -1843,13 +1843,6 @@ static void set_disk_ro_uevent(struct gendisk *gd, int ro)
- 	kobject_uevent_env(&disk_to_dev(gd)->kobj, KOBJ_CHANGE, envp);
- }
- 
--void set_device_ro(struct block_device *bdev, int flag)
--{
--	bdev->bd_part->policy = flag;
--}
--
--EXPORT_SYMBOL(set_device_ro);
--
- void set_disk_ro(struct gendisk *disk, int flag)
- {
- 	struct disk_part_iter piter;
 diff --git a/block/ioctl.c b/block/ioctl.c
-index 96cb4544736468..04255dc5f3bff3 100644
+index 04255dc5f3bff3..6b785181344fe1 100644
 --- a/block/ioctl.c
 +++ b/block/ioctl.c
-@@ -371,7 +371,7 @@ static int blkdev_roset(struct block_device *bdev, fmode_t mode,
- 		if (ret)
- 			return ret;
+@@ -219,23 +219,6 @@ static int compat_put_ulong(compat_ulong_t __user *argp, compat_ulong_t val)
+ }
+ #endif
+ 
+-int __blkdev_driver_ioctl(struct block_device *bdev, fmode_t mode,
+-			unsigned cmd, unsigned long arg)
+-{
+-	struct gendisk *disk = bdev->bd_disk;
+-
+-	if (disk->fops->ioctl)
+-		return disk->fops->ioctl(bdev, mode, cmd, arg);
+-
+-	return -ENOTTY;
+-}
+-/*
+- * For the record: _GPL here is only because somebody decided to slap it
+- * on the previous export.  Sheer idiocy, since it wasn't copyrightable
+- * at all and could be open-coded without any exports by anybody who cares.
+- */
+-EXPORT_SYMBOL_GPL(__blkdev_driver_ioctl);
+-
+ #ifdef CONFIG_COMPAT
+ /*
+  * This is the equivalent of compat_ptr_ioctl(), to be used by block
+@@ -594,10 +577,12 @@ int blkdev_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
  	}
--	set_device_ro(bdev, n);
-+	bdev->bd_part->policy = n;
- 	return 0;
+ 
+ 	ret = blkdev_common_ioctl(bdev, mode, cmd, arg, argp);
+-	if (ret == -ENOIOCTLCMD)
+-		return __blkdev_driver_ioctl(bdev, mode, cmd, arg);
++	if (ret != -ENOIOCTLCMD)
++		return ret;
+ 
+-	return ret;
++	if (!bdev->bd_disk->fops->ioctl)
++		return -ENOTTY;
++	return bdev->bd_disk->fops->ioctl(bdev, mode, cmd, arg);
+ }
+ EXPORT_SYMBOL_GPL(blkdev_ioctl); /* for /dev/raw */
+ 
+diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
+index 4326401cede445..b8bb8ec7538d9b 100644
+--- a/drivers/block/pktcdvd.c
++++ b/drivers/block/pktcdvd.c
+@@ -2583,9 +2583,11 @@ static int pkt_ioctl(struct block_device *bdev, fmode_t mode, unsigned int cmd,
+ 	case CDROM_LAST_WRITTEN:
+ 	case CDROM_SEND_PACKET:
+ 	case SCSI_IOCTL_SEND_COMMAND:
+-		ret = __blkdev_driver_ioctl(pd->bdev, mode, cmd, arg);
++		if (!bdev->bd_disk->fops->ioctl)
++			ret = -ENOTTY;
++		else
++			ret = bdev->bd_disk->fops->ioctl(bdev, mode, cmd, arg);
+ 		break;
+-
+ 	default:
+ 		pkt_dbg(2, pd, "Unknown ioctl (%x)\n", cmd);
+ 		ret = -ENOTTY;
+diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
+index 21432638314562..afac8d07c1bd00 100644
+--- a/drivers/md/bcache/request.c
++++ b/drivers/md/bcache/request.c
+@@ -1230,8 +1230,9 @@ static int cached_dev_ioctl(struct bcache_device *d, fmode_t mode,
+ 
+ 	if (dc->io_disable)
+ 		return -EIO;
+-
+-	return __blkdev_driver_ioctl(dc->bdev, mode, cmd, arg);
++	if (!dc->bdev->bd_disk->fops->ioctl)
++		return -ENOTTY;
++	return dc->bdev->bd_disk->fops->ioctl(dc->bdev, mode, cmd, arg);
  }
  
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 4b22bfd9336e1a..8427ad8bef520d 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -304,7 +304,6 @@ extern void del_gendisk(struct gendisk *gp);
- extern struct gendisk *get_gendisk(dev_t dev, int *partno);
- extern struct block_device *bdget_disk(struct gendisk *disk, int partno);
+ void bch_cached_dev_request_init(struct cached_dev *dc)
+diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+index 62ad44925e73ec..54739f1b579bc8 100644
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -570,7 +570,10 @@ static int dm_blk_ioctl(struct block_device *bdev, fmode_t mode,
+ 		}
+ 	}
  
--extern void set_device_ro(struct block_device *bdev, int flag);
- extern void set_disk_ro(struct gendisk *disk, int flag);
+-	r =  __blkdev_driver_ioctl(bdev, mode, cmd, arg);
++	if (!bdev->bd_disk->fops->ioctl)
++		r = -ENOTTY;
++	else
++		r = bdev->bd_disk->fops->ioctl(bdev, mode, cmd, arg);
+ out:
+ 	dm_unprepare_ioctl(md, srcu_idx);
+ 	return r;
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 5c1ba8a8d2bc7e..05b346a68c2eee 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1867,8 +1867,6 @@ extern int blkdev_compat_ptr_ioctl(struct block_device *, fmode_t,
+ #define blkdev_compat_ptr_ioctl NULL
+ #endif
  
- static inline int get_disk_ro(struct gendisk *disk)
+-extern int __blkdev_driver_ioctl(struct block_device *, fmode_t, unsigned int,
+-				 unsigned long);
+ extern int bdev_read_page(struct block_device *, sector_t, struct page *);
+ extern int bdev_write_page(struct block_device *, sector_t, struct page *,
+ 						struct writeback_control *);
 -- 
 2.29.2
 
