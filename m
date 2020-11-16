@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D8C2B3D4B
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010C32B3D53
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727288AbgKPGvG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Nov 2020 01:51:06 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:56409 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727166AbgKPGvF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:05 -0500
-X-UUID: 63e5d1246d63429b928920b9aacebae1-20201116
-X-UUID: 63e5d1246d63429b928920b9aacebae1-20201116
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        id S1727387AbgKPGvT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Nov 2020 01:51:19 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59517 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727228AbgKPGvE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:04 -0500
+X-UUID: a4cd92fc30f746358018a7f03dd0d624-20201116
+X-UUID: a4cd92fc30f746358018a7f03dd0d624-20201116
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1379785335; Mon, 16 Nov 2020 14:50:57 +0800
+        with ESMTP id 2073750733; Mon, 16 Nov 2020 14:50:56 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Mon, 16 Nov 2020 14:50:55 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -37,71 +37,72 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 1/9] scsi: ufs-mediatek: Refactor performance scaling functions
-Date:   Mon, 16 Nov 2020 14:50:46 +0800
-Message-ID: <20201116065054.7658-2-stanley.chu@mediatek.com>
+Subject: [PATCH v1 2/9] scsi: ufs: Introduce device parameter initialization function
+Date:   Mon, 16 Nov 2020 14:50:47 +0800
+Message-ID: <20201116065054.7658-3-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201116065054.7658-1-stanley.chu@mediatek.com>
 References: <20201116065054.7658-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 7BA158C2F014F9EBECDA729273DE98A4D70B8A66006E120B5A876D526A8E02762000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Refactor preformance scaling related functions in MediaTek
-UFS driver.
+Nowadays many vendors initialize their device parameters in
+their own vendor drivers. The initialization code is almost
+the same as well as the pre-defined definitions. Introduce
+a common device parameter initialization function which assign
+the most common initial values. With this function, we
+could remove those duplicated codes in vendor drivers.
 
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufs-mediatek.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ drivers/scsi/ufs/ufshcd-pltfrm.c | 17 +++++++++++++++++
+ drivers/scsi/ufs/ufshcd-pltfrm.h |  1 +
+ 2 files changed, 18 insertions(+)
 
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index 7fed7630d36c..b9b423752ee1 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -514,6 +514,19 @@ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
- 	dev_info(hba->dev, "caps: 0x%x", host->caps);
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+index 3db0af66c71c..a6f76399b3ae 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -354,6 +354,23 @@ int ufshcd_get_pwr_dev_param(struct ufs_dev_params *pltfrm_param,
  }
+ EXPORT_SYMBOL_GPL(ufshcd_get_pwr_dev_param);
  
-+static void ufs_mtk_scale_perf(struct ufs_hba *hba, bool up)
++void ufshcd_init_pwr_dev_param(struct ufs_dev_params *dev_param)
 +{
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
-+
-+	ufs_mtk_boost_crypt(hba, up);
-+	ufs_mtk_setup_ref_clk(hba, up);
-+
-+	if (up)
-+		phy_power_on(host->mphy);
-+	else
-+		phy_power_off(host->mphy);
++	dev_param->tx_lanes = 2;
++	dev_param->rx_lanes = 2;
++	dev_param->hs_rx_gear = UFS_HS_G3;
++	dev_param->hs_tx_gear = UFS_HS_G3;
++	dev_param->pwm_rx_gear = UFS_PWM_G4;
++	dev_param->pwm_tx_gear = UFS_PWM_G4;
++	dev_param->rx_pwr_pwm = SLOW_MODE;
++	dev_param->tx_pwr_pwm = SLOW_MODE;
++	dev_param->rx_pwr_hs = FAST_MODE;
++	dev_param->tx_pwr_hs = FAST_MODE;
++	dev_param->hs_rate = PA_HS_MODE_B;
++	dev_param->desired_working_mode = UFS_HS_MODE;
 +}
++EXPORT_SYMBOL_GPL(ufshcd_init_pwr_dev_param);
 +
  /**
-  * ufs_mtk_setup_clocks - enables/disable clocks
-  * @hba: host controller instance
-@@ -555,15 +568,10 @@ static int ufs_mtk_setup_clocks(struct ufs_hba *hba, bool on,
- 				clk_pwr_off = true;
- 		}
- 
--		if (clk_pwr_off) {
--			ufs_mtk_boost_crypt(hba, on);
--			ufs_mtk_setup_ref_clk(hba, on);
--			phy_power_off(host->mphy);
--		}
-+		if (clk_pwr_off)
-+			ufs_mtk_scale_perf(hba, false);
- 	} else if (on && status == POST_CHANGE) {
--		phy_power_on(host->mphy);
--		ufs_mtk_setup_ref_clk(hba, on);
--		ufs_mtk_boost_crypt(hba, on);
-+		ufs_mtk_scale_perf(hba, true);
- 	}
- 
- 	return ret;
+  * ufshcd_pltfrm_init - probe routine of the driver
+  * @pdev: pointer to Platform device handle
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.h b/drivers/scsi/ufs/ufshcd-pltfrm.h
+index b79cdf9129a0..772a8e848098 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.h
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.h
+@@ -28,6 +28,7 @@ struct ufs_dev_params {
+ int ufshcd_get_pwr_dev_param(struct ufs_dev_params *dev_param,
+ 			     struct ufs_pa_layer_attr *dev_max,
+ 			     struct ufs_pa_layer_attr *agreed_pwr);
++void ufshcd_init_pwr_dev_param(struct ufs_dev_params *dev_param);
+ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 		       const struct ufs_hba_variant_ops *vops);
+ void ufshcd_pltfrm_shutdown(struct platform_device *pdev);
 -- 
 2.18.0
 
