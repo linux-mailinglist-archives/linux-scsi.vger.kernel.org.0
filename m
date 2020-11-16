@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9AB2B3D47
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F202B3D41
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 07:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbgKPGvE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Nov 2020 01:51:04 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:56429 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727226AbgKPGvE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:04 -0500
-X-UUID: d7f1ca938c2c4145a203ae78dd275a93-20201116
-X-UUID: d7f1ca938c2c4145a203ae78dd275a93-20201116
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        id S1727140AbgKPGvA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Nov 2020 01:51:00 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59498 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726821AbgKPGvA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 01:51:00 -0500
+X-UUID: c5225fbbdcfb4bed8e9767705d9e44a0-20201116
+X-UUID: c5225fbbdcfb4bed8e9767705d9e44a0-20201116
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 988543428; Mon, 16 Nov 2020 14:50:57 +0800
+        with ESMTP id 2043911849; Mon, 16 Nov 2020 14:50:58 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 16 Nov 2020 14:50:56 +0800
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 16 Nov 2020 14:50:57 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 16 Nov 2020 14:50:56 +0800
+ Transport; Mon, 16 Nov 2020 14:50:57 +0800
 From:   Stanley Chu <stanley.chu@mediatek.com>
 To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
         <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
@@ -37,15 +37,14 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 8/9] scsi: ufs-mediatek: Use common ADAPT configuration function
-Date:   Mon, 16 Nov 2020 14:50:53 +0800
-Message-ID: <20201116065054.7658-9-stanley.chu@mediatek.com>
+Subject: [PATCH v1 9/9] scsi: ufs-qcom: Use common ADAPT configuration function
+Date:   Mon, 16 Nov 2020 14:50:54 +0800
+Message-ID: <20201116065054.7658-10-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201116065054.7658-1-stanley.chu@mediatek.com>
 References: <20201116065054.7658-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 586618FD9FC2E94551F1713EFAAF3BF557FB27D60D232CE7923BD1AADFE1CDAF2000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -56,38 +55,34 @@ code in UFS drivers.
 
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufs-mediatek.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ drivers/scsi/ufs/ufs-qcom.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index 87b4bf125e23..1d3c5cd4592e 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -677,7 +677,6 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
- {
- 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
- 	struct ufs_dev_params host_cap;
--	u32 adapt_val;
- 	int ret;
+diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+index 04adfbd10753..1e434cce0f79 100644
+--- a/drivers/scsi/ufs/ufs-qcom.c
++++ b/drivers/scsi/ufs/ufs-qcom.c
+@@ -723,17 +723,9 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+ 			ufs_qcom_dev_ref_clk_ctrl(host, true);
  
- 	ufshcd_init_pwr_dev_param(&host_cap);
-@@ -693,13 +692,9 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
- 	}
- 
- 	if (host->hw_ver.major >= 3) {
--		if (dev_req_params->gear_tx == UFS_HS_G4)
--			adapt_val = PA_INITIAL_ADAPT;
--		else
--			adapt_val = PA_NO_ADAPT;
--		ufshcd_dme_set(hba,
--			       UIC_ARG_MIB(PA_TXHSADAPTTYPE),
--			       adapt_val);
-+		ret = ufshcd_dme_configure_adapt(hba,
-+					   dev_req_params->gear_tx,
-+					   PA_INITIAL_ADAPT);
- 	}
- 
- 	return ret;
+ 		if (host->hw_ver.major >= 0x4) {
+-			if (dev_req_params->gear_tx == UFS_HS_G4) {
+-				/* INITIAL ADAPT */
+-				ufshcd_dme_set(hba,
+-					       UIC_ARG_MIB(PA_TXHSADAPTTYPE),
+-					       PA_INITIAL_ADAPT);
+-			} else {
+-				/* NO ADAPT */
+-				ufshcd_dme_set(hba,
+-					       UIC_ARG_MIB(PA_TXHSADAPTTYPE),
+-					       PA_NO_ADAPT);
+-			}
++			ufshcd_dme_configure_adapt(hba,
++						dev_req_params->gear_tx,
++						PA_INITIAL_ADAPT);
+ 		}
+ 		break;
+ 	case POST_CHANGE:
 -- 
 2.18.0
 
