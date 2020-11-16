@@ -2,132 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6FB2B44DE
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 14:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090FF2B4681
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Nov 2020 15:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729280AbgKPNid (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Nov 2020 08:38:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56000 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726615AbgKPNic (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 16 Nov 2020 08:38:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605533910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TUCExb2Myfed67dyXicBK4o1FCf+8g+t7D84qw1NisQ=;
-        b=LChdLN25pyN0qPGk+quwCxK3JNk13cNgfB8A8I4tz25pJQOQ44VCFhVOG8AwaTNeEAD/RX
-        Au3zWJcWCTO1sWyY2fsXtXkbF6u1mL64DtiPybFwKg4olRsjR4GlZXmipB9T9cMl74yQi1
-        i0R17SP7j9kUcxnqfcL+GzeMzM8o/S0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-265-PrBKkYCLMHGc4WdFIim1UQ-1; Mon, 16 Nov 2020 08:38:28 -0500
-X-MC-Unique: PrBKkYCLMHGc4WdFIim1UQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7664B186DD21;
-        Mon, 16 Nov 2020 13:38:27 +0000 (UTC)
-Received: from [10.35.206.131] (unknown [10.35.206.131])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0F1CA5C3E3;
-        Mon, 16 Nov 2020 13:38:25 +0000 (UTC)
-Subject: Re: [PATCH] iscsi target: fix cmd abort fabric stop race
-To:     Mike Christie <michael.christie@oracle.com>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-References: <1605318378-9269-1-git-send-email-michael.christie@oracle.com>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Message-ID: <4c55f623-9347-ead7-0f5b-6cf1f7687584@redhat.com>
-Date:   Mon, 16 Nov 2020 14:38:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1730492AbgKPO6e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Nov 2020 09:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730230AbgKPO6c (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 09:58:32 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E522AC0613D1;
+        Mon, 16 Nov 2020 06:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=82UVn9JDhZ7kcS3JGvYaAt4iz84QDJp/mOdtcI/Npsk=; b=usuU2sefAFYqsEXj3qbul/Q7Un
+        CCv9GjY0IirraZHVxERI0VFsNKbIJNWWfb9W2amAmbgPQFz1SQQGP9jucGmGFK5Dmz+uV/dQrh4EZ
+        Yz7+inlUGGRZ2SENP6FNBzSsnyPPr/9g2oHpP/gfHR3aZh9bCC9SRkZky62gN2xUhMktrW7I1gC8O
+        OlLKrcM8QGapUy4m0OUacF0pEkCV+NYMm0cjABSANyQg80uGZOPlSQK6hRsBvshv4teWYRl87jbJA
+        +wqxRblm4gAKo4kgFpaUcUBO3YCWIyQ/tck3EBg4rNw0ym4xMAVhVwQ1xnNmFGgIlSjLbsb6rNNg5
+        l7qTv7cQ==;
+Received: from [2001:4bb8:180:6600:255b:7def:a93:4a09] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kefxL-0003ie-Nn; Mon, 16 Nov 2020 14:58:12 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Justin Sanders <justin@coraid.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        drbd-dev@lists.linbit.com, nbd@other.debian.org,
+        ceph-devel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 01/78] block: remove the call to __invalidate_device in check_disk_size_change
+Date:   Mon, 16 Nov 2020 15:56:52 +0100
+Message-Id: <20201116145809.410558-2-hch@lst.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201116145809.410558-1-hch@lst.de>
+References: <20201116145809.410558-1-hch@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <1605318378-9269-1-git-send-email-michael.christie@oracle.com>
-Content-Type: text/plain; charset=iso-8859-2
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+__invalidate_device without the kill_dirty parameter just invalidates
+various clean entries in caches, which doesn't really help us with
+anything, but can cause all kinds of horrible lock orders due to how
+it calls into the file system.  The only reason this hasn't been a
+major issue is because so many people use partitions, for which no
+invalidation was performed anyway.
 
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+---
+ fs/block_dev.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Dne 14. 11. 20 v 2:46 Mike Christie napsal(a):
-> Maurizio Lombardi <mlombard@redhat.com> found a race where the abort
-> and cmd stop paths can race as follows:
-> 
-> 1. thread1 runs iscsit_release_commands_from_conn and sets
-> CMD_T_FABRIC_STOP.
-> 2. thread2 runs iscsit_aborted_task and then does __iscsit_free_cmd. It
-> then returns from the aborted_task callout and we finish
-> target_handle_abort and do:
-> 
-> target_handle_abort -> transport_cmd_check_stop_to_fabric ->
-> lio_check_stop_free -> target_put_sess_cmd
-> 
-> The cmd is now freed.
-> 3. thread1 now finishes iscsit_release_commands_from_conn and runs
-> iscsit_free_cmd while accessing a command we just released.
-> 
-> In __target_check_io_state we check for CMD_T_FABRIC_STOP and set the
-> CMD_T_ABORTED if the driver is not cleaning up the cmd because of
-> a session shutdown. However, iscsit_release_commands_from_conn only
-> sets the CMD_T_FABRIC_STOP and does not check to see if the abort path
-> has claimed completion ownership of the command.
-> 
-> This adds a check in iscsit_release_commands_from_conn so only the
-> abort or fabric stop path cleanup the command.
-> 
-> Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> 
-> ---
->  drivers/target/iscsi/iscsi_target.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-> index f77e5ee..518fac4 100644
-> --- a/drivers/target/iscsi/iscsi_target.c
-> +++ b/drivers/target/iscsi/iscsi_target.c
-> @@ -483,8 +483,7 @@ int iscsit_queue_rsp(struct iscsi_conn *conn, struct iscsi_cmd *cmd)
->  void iscsit_aborted_task(struct iscsi_conn *conn, struct iscsi_cmd *cmd)
->  {
->  	spin_lock_bh(&conn->cmd_lock);
-> -	if (!list_empty(&cmd->i_conn_node) &&
-> -	    !(cmd->se_cmd.transport_state & CMD_T_FABRIC_STOP))
-> +	if (!list_empty(&cmd->i_conn_node))
->  		list_del_init(&cmd->i_conn_node);
->  	spin_unlock_bh(&conn->cmd_lock);
->  
-> @@ -4083,12 +4082,22 @@ static void iscsit_release_commands_from_conn(struct iscsi_conn *conn)
->  	spin_lock_bh(&conn->cmd_lock);
->  	list_splice_init(&conn->conn_cmd_list, &tmp_list);
->  
-> -	list_for_each_entry(cmd, &tmp_list, i_conn_node) {
-> +	list_for_each_entry_safe(cmd, cmd_tmp, &tmp_list, i_conn_node) {
->  		struct se_cmd *se_cmd = &cmd->se_cmd;
->  
->  		if (se_cmd->se_tfo != NULL) {
->  			spin_lock_irq(&se_cmd->t_state_lock);
-> -			se_cmd->transport_state |= CMD_T_FABRIC_STOP;
-> +			if (se_cmd->transport_state & CMD_T_ABORTED) {
-> +				/*
-> +				 * LIO's abort path owns the cleanup for this,
-> +				 * so put it back on the list and let
-> +				 * aborted_task handle it.
-> +				 */
-> +				list_move_tail(&cmd->i_conn_node,
-> +					       &conn->conn_cmd_list);
-> +			} else {
-> +				se_cmd->transport_state |= CMD_T_FABRIC_STOP;
-> +			}
->  			spin_unlock_irq(&se_cmd->t_state_lock);
->  		}
->  	}
-> 
-
-Reviewed-by: Maurizio Lombardi <mlombard@redhat.com>
+diff --git a/fs/block_dev.c b/fs/block_dev.c
+index 9e84b1928b9401..66ebf594c97f47 100644
+--- a/fs/block_dev.c
++++ b/fs/block_dev.c
+@@ -1334,12 +1334,6 @@ static void check_disk_size_change(struct gendisk *disk,
+ 		i_size_write(bdev->bd_inode, disk_size);
+ 	}
+ 	spin_unlock(&bdev->bd_size_lock);
+-
+-	if (bdev_size > disk_size) {
+-		if (__invalidate_device(bdev, false))
+-			pr_warn("VFS: busy inodes on resized disk %s\n",
+-				disk->disk_name);
+-	}
+ }
+ 
+ /**
+-- 
+2.29.2
 
