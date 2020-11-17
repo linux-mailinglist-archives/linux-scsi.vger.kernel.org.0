@@ -2,107 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C78E62B6BA5
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 18:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216C32B6C41
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 18:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729355AbgKQRXd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Nov 2020 12:23:33 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:26611 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726547AbgKQRXc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 17 Nov 2020 12:23:32 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1605633812; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=HKBzQf+Wq3jLBX3M54k/nh+GCQY6+jg1bPUkUq9gsbU=; b=LluWHpnzYtmMB0Zy+XmmTbX8CkHfhbGNzsOE7/SgdiTGFVEAZwkF5G6p4SqEd5KnFxjN1+QE
- eK2hu9tLVFjClhLbf+LzzPmh663PK27Ks+bRqq+GA8+OMRZO7dqkC9kpL9xu4lvUAywa4QzI
- AOJiE4VH9WnFpXOXuoY4TAfUKR4=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5fb407139a53d19da939e6e4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Nov 2020 17:23:31
- GMT
-Sender: asutoshd=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 57530C43464; Tue, 17 Nov 2020 17:23:31 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.8.168] (cpe-70-95-149-85.san.res.rr.com [70.95.149.85])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: asutoshd)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A6587C43460;
-        Tue, 17 Nov 2020 17:23:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A6587C43460
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=asutoshd@codeaurora.org
-Subject: Re: [PATCH v3 3/3] scsi: ufs: Print host regs in IRQ handler when AH8
- error happens
-To:     Can Guo <cang@codeaurora.org>, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, ziqichen@codeaurora.org,
-        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, saravanak@google.com, salyzyn@google.com
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1605596660-2987-1-git-send-email-cang@codeaurora.org>
- <1605596660-2987-4-git-send-email-cang@codeaurora.org>
-From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
-Message-ID: <1b2aacf0-ebc2-e541-2db5-2d595b4b392f@codeaurora.org>
-Date:   Tue, 17 Nov 2020 09:23:28 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S1729476AbgKQRtl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Nov 2020 12:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728827AbgKQRtk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Nov 2020 12:49:40 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BFFC0613CF
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Nov 2020 09:49:40 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id a16so2881983ejj.5
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Nov 2020 09:49:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
+        b=ROOjokTW9pr1LRGA07oHvbLVk9+MqM08K4hepWrk221pbHHgQ+WI2LFThBQAqaWVfB
+         LBo9CYDAfgTBZE/09T99VVqTPlsXelI+2r4HMc3+6TTiEYrqDHpmXYR9gpkjlpJo2cCt
+         PycBiYWvlDxlvnYhREdQZyFqD0wYgl0uZo0rRUVqAWugs7xPjuG0BrxpYpoK8OE5QC7P
+         ojDf/i3uNuGQH0WJsjqbqrlMIKzXrf6/DSyHG0Re+elz0WTWnTnY+Wep6ROAPuDs6yA8
+         ZFMRJO4f/yB1q71RnTUHxV8tqx2c3OfAuFiYA+S5NXJHQX4KrS16US6u46Aj3bFGhpu4
+         kXYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
+        b=NtBP2SyNk82safoie5n1Ny8phWQkJsZwCqcz+SVoJwly7os0iIsMUD1DDN3YSxtVrf
+         YYQSolhmoxyUqGjzC9VgLaqCkBoCIYImkdeHlE4QTDHa8AirPkdee+iJ5iJH9q2Jt6en
+         ulDA2KJgscNap8b/Ji6Eo+u/Tg9n7dnhNKtxBLYQJq+LaE661FgXUVbLS1Lit02WSzPY
+         llMBgtHluPeqXDrplIEvK64Uui/JS4oSL3PZ7Yz1VGBsBWbwyKHTm2w8oQ0TqUk5+UiL
+         kk1iaY3Sp+D0oYATRxHa1dUZ1FOP2VerRH+N51eQ2aFXIB91syxn5OvwxpKVZ8SMSzw4
+         U/tQ==
+X-Gm-Message-State: AOAM531s70cT/wQzMrfBo5DZJI9pmah2VGdyOdsZcP5CM4rTVuVhMtMr
+        77U7B4vUUYHP3mdHQ0p+iLFTh8/iUOBty+o2g28=
+X-Google-Smtp-Source: ABdhPJwYSU0MrTikpeKFl3K0GkzCezGL9durf2R6yOQXaOR2P8SAuip1JOAyOweaL2MwM+S95kSqhU+AQrdhotjTVeY=
+X-Received: by 2002:a17:906:c086:: with SMTP id f6mr3575016ejz.38.1605635379070;
+ Tue, 17 Nov 2020 09:49:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1605596660-2987-4-git-send-email-cang@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a17:906:b1c7:0:0:0:0 with HTTP; Tue, 17 Nov 2020 09:49:38
+ -0800 (PST)
+Reply-To: georgemike7031@gmail.com
+From:   george mike <greogebrown@gmail.com>
+Date:   Tue, 17 Nov 2020 18:49:38 +0100
+Message-ID: <CAH0Hv2he4k0FLjfBy5j9dDnivDc2ZGkSQXqLxO-DTn8Ec=VROw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/16/2020 11:04 PM, Can Guo wrote:
-> When AH8 error happens, all the regs and states are dumped in err handler.
-> Sometime we need to look into host regs right after AH8 error happens,
-> which is before leaving the IRQ handler.
-> 
-> Signed-off-by: Can Guo <cang@codeaurora.org>
-> ---
+Hallo
 
-Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
+Mein Name ist George Mike. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
+Ihnen anbieten
+der n=C3=A4chste Verwandte meines Klienten. Sie erben die Summe von (8,5
+Millionen US-Dollar)
+Dollar, die mein Kunde vor seinem Tod auf der Bank gelassen hat.
 
->   drivers/scsi/ufs/ufshcd.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index cd7394e..a7857f6 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -6057,7 +6057,8 @@ static irqreturn_t ufshcd_check_errors(struct ufs_hba *hba)
->   		hba->saved_uic_err |= hba->uic_error;
->   
->   		/* dump controller state before resetting */
-> -		if ((hba->saved_err & (INT_FATAL_ERRORS)) ||
-> +		if ((hba->saved_err &
-> +		     (INT_FATAL_ERRORS | UFSHCD_UIC_HIBERN8_MASK)) ||
->   		    (hba->saved_uic_err &&
->   		     (hba->saved_uic_err != UFSHCD_UIC_PA_GENERIC_ERROR))) {
->   			dev_err(hba->dev, "%s: saved_err 0x%x saved_uic_err 0x%x\n",
-> 
+Mein Kunde ist ein Staatsb=C3=BCrger Ihres Landes, der mit seiner Frau bei
+einem Autounfall ums Leben gekommen ist
+und einziger Sohn. Ich habe Anspruch auf 50% des Gesamtfonds, 50% darauf
+sein f=C3=BCr dich.
+Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
+Informationen: georgemike7031@gmail.com
 
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-Linux Foundation Collaborative Project
+Vielen Dank im Voraus,
+Mr. George Mike,
