@@ -2,76 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 216C32B6C41
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 18:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F352B6DDC
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 19:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729476AbgKQRtl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Nov 2020 12:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728827AbgKQRtk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Nov 2020 12:49:40 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BFFC0613CF
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Nov 2020 09:49:40 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id a16so2881983ejj.5
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Nov 2020 09:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
-        b=ROOjokTW9pr1LRGA07oHvbLVk9+MqM08K4hepWrk221pbHHgQ+WI2LFThBQAqaWVfB
-         LBo9CYDAfgTBZE/09T99VVqTPlsXelI+2r4HMc3+6TTiEYrqDHpmXYR9gpkjlpJo2cCt
-         PycBiYWvlDxlvnYhREdQZyFqD0wYgl0uZo0rRUVqAWugs7xPjuG0BrxpYpoK8OE5QC7P
-         ojDf/i3uNuGQH0WJsjqbqrlMIKzXrf6/DSyHG0Re+elz0WTWnTnY+Wep6ROAPuDs6yA8
-         ZFMRJO4f/yB1q71RnTUHxV8tqx2c3OfAuFiYA+S5NXJHQX4KrS16US6u46Aj3bFGhpu4
-         kXYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
-        b=NtBP2SyNk82safoie5n1Ny8phWQkJsZwCqcz+SVoJwly7os0iIsMUD1DDN3YSxtVrf
-         YYQSolhmoxyUqGjzC9VgLaqCkBoCIYImkdeHlE4QTDHa8AirPkdee+iJ5iJH9q2Jt6en
-         ulDA2KJgscNap8b/Ji6Eo+u/Tg9n7dnhNKtxBLYQJq+LaE661FgXUVbLS1Lit02WSzPY
-         llMBgtHluPeqXDrplIEvK64Uui/JS4oSL3PZ7Yz1VGBsBWbwyKHTm2w8oQ0TqUk5+UiL
-         kk1iaY3Sp+D0oYATRxHa1dUZ1FOP2VerRH+N51eQ2aFXIB91syxn5OvwxpKVZ8SMSzw4
-         U/tQ==
-X-Gm-Message-State: AOAM531s70cT/wQzMrfBo5DZJI9pmah2VGdyOdsZcP5CM4rTVuVhMtMr
-        77U7B4vUUYHP3mdHQ0p+iLFTh8/iUOBty+o2g28=
-X-Google-Smtp-Source: ABdhPJwYSU0MrTikpeKFl3K0GkzCezGL9durf2R6yOQXaOR2P8SAuip1JOAyOweaL2MwM+S95kSqhU+AQrdhotjTVeY=
-X-Received: by 2002:a17:906:c086:: with SMTP id f6mr3575016ejz.38.1605635379070;
- Tue, 17 Nov 2020 09:49:39 -0800 (PST)
+        id S1728350AbgKQSuu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Nov 2020 13:50:50 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:13450 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727825AbgKQSup (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 17 Nov 2020 13:50:45 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AHIXYaI069645;
+        Tue, 17 Nov 2020 13:50:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=RmsftSqeK+iTEilXtDQxEDiHH74AX0QOs+3P/fEMQIY=;
+ b=hHneyeGzUhUj7i7hjtJBKKHFgpOtiR237EmJ3u5d1JLX7cNj28fsJ+c2dI6I9UasL9zw
+ 0MDoWV5Dwr665tYRu016lzmBowj/IvW2V65kCIdGDDm92fiV6qegQBubf4zUMiHUGfwE
+ OQqBvxwwk+tVbJucnKrIRWFKrcJmDmRB2pTudt2PFbkVs9tpoAvhcJQ4tQqOSiZxa8mw
+ dt0KAvsEaPtnYgKbhPuzqUcppTyFA68n5FNeYJuUH8jjt5qclZ4F7uIluo2EPEbojEqj
+ BZVWL9ZjSrA8hxakLDKBza3fqfHJj0Kbb56UMEC7MDys6qiUVmj5FkAlZmR20ZrdA1+T RA== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34vcs3e3g2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Nov 2020 13:50:37 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AHImc1i004337;
+        Tue, 17 Nov 2020 18:50:36 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02dal.us.ibm.com with ESMTP id 34vgjm9t9p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Nov 2020 18:50:36 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AHIoSp27930374
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Nov 2020 18:50:28 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 987EE7805E;
+        Tue, 17 Nov 2020 18:50:34 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2194978060;
+        Tue, 17 Nov 2020 18:50:34 +0000 (GMT)
+Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 17 Nov 2020 18:50:33 +0000 (GMT)
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+To:     james.bottomley@hansenpartnership.com
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: [PATCH 1/3] ibmvfc: byte swap login_buf.resp values in attribute show functions
+Date:   Tue, 17 Nov 2020 12:50:29 -0600
+Message-Id: <20201117185031.129939-1-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a17:906:b1c7:0:0:0:0 with HTTP; Tue, 17 Nov 2020 09:49:38
- -0800 (PST)
-Reply-To: georgemike7031@gmail.com
-From:   george mike <greogebrown@gmail.com>
-Date:   Tue, 17 Nov 2020 18:49:38 +0100
-Message-ID: <CAH0Hv2he4k0FLjfBy5j9dDnivDc2ZGkSQXqLxO-DTn8Ec=VROw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-17_07:2020-11-17,2020-11-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 suspectscore=1 clxscore=1015 phishscore=0
+ mlxscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011170133
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hallo
+Both ibmvfc_show_host_(capabilities|npiv_version) functions retrieve
+values from vhost->login_buf.resp buffer. This is the MAD response
+buffer from the VIOS and as such any multi-byte non-string values are in
+big endian format.
 
-Mein Name ist George Mike. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
-Ihnen anbieten
-der n=C3=A4chste Verwandte meines Klienten. Sie erben die Summe von (8,5
-Millionen US-Dollar)
-Dollar, die mein Kunde vor seinem Tod auf der Bank gelassen hat.
+Byte swap these values to host cpu endian format for better human
+readability.
 
-Mein Kunde ist ein Staatsb=C3=BCrger Ihres Landes, der mit seiner Frau bei
-einem Autounfall ums Leben gekommen ist
-und einziger Sohn. Ich habe Anspruch auf 50% des Gesamtfonds, 50% darauf
-sein f=C3=BCr dich.
-Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
-Informationen: georgemike7031@gmail.com
+Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+---
+ drivers/scsi/ibmvscsi/ibmvfc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Vielen Dank im Voraus,
-Mr. George Mike,
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index 070cf516b98f..01fe65de9086 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -3025,7 +3025,7 @@ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
+ {
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+-	return snprintf(buf, PAGE_SIZE, "%d\n", vhost->login_buf->resp.version);
++	return snprintf(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
+ }
+ 
+ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
+@@ -3033,7 +3033,7 @@ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
+ {
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+-	return snprintf(buf, PAGE_SIZE, "%llx\n", vhost->login_buf->resp.capabilities);
++	return snprintf(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
+ }
+ 
+ /**
+-- 
+2.27.0
+
