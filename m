@@ -2,93 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 971CE2B5FD2
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 14:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960442B600B
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 14:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728875AbgKQM6v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Nov 2020 07:58:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728714AbgKQM5s (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 17 Nov 2020 07:57:48 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726019AbgKQNE3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Nov 2020 08:04:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20396 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726035AbgKQNE2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 17 Nov 2020 08:04:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605618267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kNa5O/Hj0HBQuu1Ns8AweW8QzcPZsqmg4/YkfGYf+Iw=;
+        b=W00FUIo6G7zd3/vrLyGRB3w56n8CP1fw1pco3aQeWqqOX05+7DXFke6dV4P+y5MwRluCeW
+        OXOug9bkIhNkU+ifixMOfxG+azFfVROrShyI8qwn4hpxMknXclGvGx3dFznWVUAQzlOzFK
+        kKpjDW9CpHsXXhYYPi2BJEzE4u7bblM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-521-MyAQ-weGMI6SqUW7jvbcQg-1; Tue, 17 Nov 2020 08:04:25 -0500
+X-MC-Unique: MyAQ-weGMI6SqUW7jvbcQg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 370BC2464E;
-        Tue, 17 Nov 2020 12:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605617867;
-        bh=/MUdipLcb4JkvDppPS27UAP/oB9I9J9uiNiR54nSO1g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jylpcKqVW8hCDlNBLEKHqzy4fCLj0xMN0eJpwOXUzR+abXIhUiHlztSivdwvtF1C4
-         9zobbYxRTq8Tp31tZAeO/abolv6l1QqH00Icf2hAPNGgGWSxgJ1VmHddV63WoGgCtR
-         SCz22s6E1dc0Ehe5/815A1jVtKqfAQvgjoMcrSDM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Can Guo <cang@codeaurora.org>, Hongwu Su <hongwus@codeaurora.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 2/6] scsi: ufs: Fix unbalanced scsi_block_reqs_cnt caused by ufshcd_hold()
-Date:   Tue, 17 Nov 2020 07:57:39 -0500
-Message-Id: <20201117125743.599974-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201117125743.599974-1-sashal@kernel.org>
-References: <20201117125743.599974-1-sashal@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1334A6D585;
+        Tue, 17 Nov 2020 13:04:24 +0000 (UTC)
+Received: from localhost (ovpn-115-113.ams2.redhat.com [10.36.115.113])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5EA7D55760;
+        Tue, 17 Nov 2020 13:04:18 +0000 (UTC)
+Date:   Tue, 17 Nov 2020 13:04:17 +0000
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     qemu-devel@nongnu.org, fam@euphon.net, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        pbonzini@redhat.com, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 01/10] vhost: remove work arg from vhost_work_flush
+Message-ID: <20201117130417.GK131917@stefanha-x1.localdomain>
+References: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
+ <1605223150-10888-3-git-send-email-michael.christie@oracle.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1605223150-10888-3-git-send-email-michael.christie@oracle.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=stefanha@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EVcIhgQsEzAXu06J"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Can Guo <cang@codeaurora.org>
+--EVcIhgQsEzAXu06J
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[ Upstream commit da3fecb0040324c08f1587e5bff1f15f36be1872 ]
+On Thu, Nov 12, 2020 at 05:19:01PM -0600, Mike Christie wrote:
+> diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+> index f22fce5..8795fd3 100644
+> --- a/drivers/vhost/scsi.c
+> +++ b/drivers/vhost/scsi.c
+> @@ -1468,8 +1468,8 @@ static void vhost_scsi_flush(struct vhost_scsi *vs)
+>  	/* Flush both the vhost poll and vhost work */
+>  	for (i = 0; i < VHOST_SCSI_MAX_VQ; i++)
+>  		vhost_scsi_flush_vq(vs, i);
+> -	vhost_work_flush(&vs->dev, &vs->vs_completion_work);
+> -	vhost_work_flush(&vs->dev, &vs->vs_event_work);
+> +	vhost_work_dev_flush(&vs->dev);
+> +	vhost_work_dev_flush(&vs->dev);
 
-The scsi_block_reqs_cnt increased in ufshcd_hold() is supposed to be
-decreased back in ufshcd_ungate_work() in a paired way. However, if
-specific ufshcd_hold/release sequences are met, it is possible that
-scsi_block_reqs_cnt is increased twice but only one ungate work is
-queued. To make sure scsi_block_reqs_cnt is handled by ufshcd_hold() and
-ufshcd_ungate_work() in a paired way, increase it only if queue_work()
-returns true.
+These two calls can be combined into a single call now.
 
-Link: https://lore.kernel.org/r/1604384682-15837-2-git-send-email-cang@codeaurora.org
-Reviewed-by: Hongwu Su <hongwus@codeaurora.org>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Can Guo <cang@codeaurora.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/ufs/ufshcd.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+--EVcIhgQsEzAXu06J
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index b2cbdd01ab10b..a63119c35fde8 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1592,12 +1592,12 @@ int ufshcd_hold(struct ufs_hba *hba, bool async)
- 		 * work and to enable clocks.
- 		 */
- 	case CLKS_OFF:
--		ufshcd_scsi_block_requests(hba);
- 		hba->clk_gating.state = REQ_CLKS_ON;
- 		trace_ufshcd_clk_gating(dev_name(hba->dev),
- 					hba->clk_gating.state);
--		queue_work(hba->clk_gating.clk_gating_workq,
--			   &hba->clk_gating.ungate_work);
-+		if (queue_work(hba->clk_gating.clk_gating_workq,
-+			       &hba->clk_gating.ungate_work))
-+			ufshcd_scsi_block_requests(hba);
- 		/*
- 		 * fall through to check if we should wait for this
- 		 * work to be done or not.
--- 
-2.27.0
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAl+zylEACgkQnKSrs4Gr
+c8hrVwf+Mw0t1WPblvn8yE7/N+vf0dXbjADIoB7GyZgfdmFl4j1KGKlUh0ou0Kqb
+Jth2D1ZdGZH640h2T+KEiGahhxXOP5yKL3GuEQcy80cd/93c+jpR4QRnUvg8xCSH
+CrVg4cIAuf8cZAUXDjj7a5VeL7z3yI6Diq6iWX6Y8I8JOMtYBdI4DUeLJjUagIiL
+qv65Rakq6rUcSDuQtl0uJopuWBM9sdntAUCrJLbBZakQThdBW7eu+L0TUbWI+w2k
+iCSNazGQV2yqgRWfN8cKqC2bPG2rVVmghPK3XWCLkjSoNnnEizR/d1BrRLOHs/Rg
+YoNm0XOtXilZ2v9oOenhdNIoekvUpA==
+=j25G
+-----END PGP SIGNATURE-----
+
+--EVcIhgQsEzAXu06J--
 
