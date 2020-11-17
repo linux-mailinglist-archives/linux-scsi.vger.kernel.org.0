@@ -2,101 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 782532B6E48
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 20:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D8F2B70EB
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 22:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728573AbgKQTQ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Nov 2020 14:16:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39732 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728273AbgKQTQv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 17 Nov 2020 14:16:51 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AHJ2qkl002040;
-        Tue, 17 Nov 2020 14:16:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=68UWPbczHo5LE3ccLdpl1ez6+EdUva+mYmdnX0HIkU0=;
- b=tSyq2xlcTvVnJXRgID8gfY119kkeFpwvYee8rCX2EBmBRrFIu7bqF4D5en8EZtfOFq0J
- muCbZbeeqlIH1KrZeGqrxqtMzNdbu9wqFS2WM8EfHndjROhvcq2jehfe/ar1SCD2lGpe
- n+6yanD5kWir0t3xmz9sTPZhxoaSM0WGHv9IK13XQzrLBYXJQxj6IbS5U2+hVogbXOSj
- DdLx8GNhZlTumTym/zzmXX9cd68LHPc2kNChkJ+uxUX52m0HZRI9NDWiGGvgy/6ySoX5
- 0Acjl5qQBFNLowR8DcBYJDuuacHJr1ONfO5AhKg5reKwr5PJDcTfpkO5QmBonZHpjKEa lw== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 34vd4q7n0r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Nov 2020 14:16:44 -0500
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AHJGfJl030297;
-        Tue, 17 Nov 2020 19:16:44 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01dal.us.ibm.com with ESMTP id 34uttrbpyx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Nov 2020 19:16:43 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AHJGgsE8913482
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Nov 2020 19:16:42 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 13816C6057;
-        Tue, 17 Nov 2020 19:16:42 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9ADABC605B;
-        Tue, 17 Nov 2020 19:16:41 +0000 (GMT)
-Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 17 Nov 2020 19:16:41 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH v2 6/6] ibmvfc: advertise client support for targetWWPN using v2 commands
-Date:   Tue, 17 Nov 2020 13:16:36 -0600
-Message-Id: <20201117191636.131127-7-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201117191636.131127-1-tyreld@linux.ibm.com>
-References: <20201117191636.131127-1-tyreld@linux.ibm.com>
+        id S1726742AbgKQV2T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Nov 2020 16:28:19 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50860 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725823AbgKQV2T (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Nov 2020 16:28:19 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1605648496;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=qkpMN7o/19/TZxkV4lw2vAMrUA7+5hdnxe5TUzFyyb8=;
+        b=qu51eMYPBefnGJbWsrcUcTwT5yTa1zD8V6qXEE/EeKTvCPOtPRzKAS4/uZRVwoxnr2vkcT
+        EE3B1SfTfBLA0akZk7sLWoXOjZne4lQbiievwzVD2rJEvfEdBPiF77jzwvv9TSS8NvnzEV
+        HLQ/AORbpYPWYTSz9bzMx2MoV0aJMXR8Q+9oEcRVD0c+fvlBgbhfPAjiQGHRuIAXFdPEKg
+        /XsYs2ChWS/VhzGpyEpxeMF6lj4rDyvExkj0Ie5lMj1WqZiuJIom7vyM+5Ac+RowGJCmMx
+        69hsJvIRp++CCs7x7A45UhaPmQETM0KeXX7cQiqls5Ds4l0E1hI/IBjvQzePHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1605648496;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=qkpMN7o/19/TZxkV4lw2vAMrUA7+5hdnxe5TUzFyyb8=;
+        b=ErqIsePB4BVn7uut1ECV49PBgvo7Cm9LAgghMnPa3Keccx2xyNlj1xh80Lw/MwSroHAoV7
+        h1PGHeWej5RxcjDA==
+To:     John Garry <john.garry@huawei.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, martin.petersen@oracle.com, jejb@linux.ibm.com
+Cc:     linuxarm@huawei.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+Subject: Re: [PATCH v2 1/3] genirq/affinity: Add irq_update_affinity_desc()
+In-Reply-To: <87blgf8pkk.fsf@nanos.tec.linutronix.de>
+Date:   Tue, 17 Nov 2020 22:28:16 +0100
+Message-ID: <87ft57r7v3.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-17_07:2020-11-17,2020-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- clxscore=1015 phishscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 malwarescore=0 impostorscore=0 bulkscore=0
- suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011170133
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The previous patch added support for the targetWWPN field in version 2
-MADs and vfcFrame structures.
+On Mon, Nov 02 2020 at 21:35, Thomas Gleixner wrote:
+> On Mon, Nov 02 2020 at 17:32, John Garry wrote:
+> Correct. I have a halfways working solution for that, but I need to fix
+> some other thing first.
 
-Set the IBMVFC_CAN_SEND_VF_WWPN bit in our capabailites flag during NPIV
-Login to inform the VIOS that this client supports this feature.
+Sorry for the delay. Supporting this truly on x86 needs some more
+thought and surgery, but for ARM it should not matter. I made a few
+tweaks to your original code. See below.
 
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Thanks,
+
+        tglx
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From: John Garry <john.garry@huawei.com>
+Subject: genirq/affinity: Add irq_update_affinity_desc()
+Date: Wed, 28 Oct 2020 20:33:05 +0800
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 9efc39b60cf7..a150b433f7b1 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -1255,7 +1255,7 @@ static void ibmvfc_set_login_info(struct ibmvfc_host *vhost)
- 		login_info->flags |= cpu_to_be16(IBMVFC_CLIENT_MIGRATED);
+From: John Garry <john.garry@huawei.com>
+
+Add a function to allow the affinity of an interrupt be switched to
+managed, such that interrupts allocated for platform devices may be
+managed.
+
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: John Garry <john.garry@huawei.com>
+---
+ include/linux/interrupt.h |    8 ++++++
+ kernel/irq/manage.c       |   56 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 64 insertions(+)
+
+--- a/include/linux/interrupt.h
++++ b/include/linux/interrupt.h
+@@ -352,6 +352,8 @@ extern int irq_can_set_affinity(unsigned
+ extern int irq_select_affinity(unsigned int irq);
  
- 	login_info->max_cmds = cpu_to_be32(max_requests + IBMVFC_NUM_INTERNAL_REQ);
--	login_info->capabilities = cpu_to_be64(IBMVFC_CAN_MIGRATE);
-+	login_info->capabilities = cpu_to_be64(IBMVFC_CAN_MIGRATE | IBMVFC_CAN_SEND_VF_WWPN);
- 	login_info->async.va = cpu_to_be64(vhost->async_crq.msg_token);
- 	login_info->async.len = cpu_to_be32(vhost->async_crq.size * sizeof(*vhost->async_crq.msgs));
- 	strncpy(login_info->partition_name, vhost->partition_name, IBMVFC_MAX_NAME);
--- 
-2.27.0
-
+ extern int irq_set_affinity_hint(unsigned int irq, const struct cpumask *m);
++extern int irq_update_affinity_desc(unsigned int irq,
++				    struct irq_affinity_desc *affinity);
+ 
+ extern int
+ irq_set_affinity_notifier(unsigned int irq, struct irq_affinity_notify *notify);
+@@ -386,6 +388,12 @@ static inline int irq_set_affinity_hint(
+ {
+ 	return -EINVAL;
+ }
++
++static inline int irq_update_affinity_desc(unsigned int irq,
++					   struct irq_affinity_desc *affinity)
++{
++	return -EINVAL;
++}
+ 
+ static inline int
+ irq_set_affinity_notifier(unsigned int irq, struct irq_affinity_notify *notify)
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -371,6 +371,62 @@ int irq_set_affinity_locked(struct irq_d
+ 	return ret;
+ }
+ 
++/**
++ * irq_update_affinity_desc - Update affinity management for an interrupt
++ * @irq:	The interrupt number to update
++ * @affinity:	Pointer to the affinity descriptor
++ *
++ * This interface can be used to configure the affinity management of
++ * interrupts which have been allocated already.
++ */
++int irq_update_affinity_desc(unsigned int irq,
++			     struct irq_affinity_desc *affinity)
++{
++	struct irq_desc *desc;
++	unsigned long flags;
++	bool activated;
++
++	/*
++	 * Supporting this with the reservation scheme used by x86 needs
++	 * some more thought. Fail it for now.
++	 */
++	if (IS_ENABLED(CONFIG_GENERIC_IRQ_RESERVATION_MODE))
++		return -EOPNOTSUPP;
++
++	desc = irq_get_desc_buslock(irq, &flags, 0);
++	if (!desc)
++		return -EINVAL;
++
++	/* Requires the interrupt to be shut down */
++	if (irqd_is_started(&desc->irq_data))
++		return -EBUSY;
++
++	/* Interrupts which are already managed cannot be modified */
++	if (irqd_is_managed(&desc->irq_data))
++		return -EBUSY;
++
++	/*
++	 * Deactivate the interrupt. That's required to undo
++	 * anything an earlier activation has established.
++	 */
++	activated = irqd_is_activated(&desc->irq_data);
++	if (activated)
++		irq_domain_deactivate_irq(&desc->irq_data);
++
++	if (affinity->is_managed) {
++		irqd_set(&desc->irq_data, IRQD_AFFINITY_MANAGED);
++		irqd_set(&desc->irq_data, IRQD_MANAGED_SHUTDOWN);
++	}
++
++	cpumask_copy(desc->irq_common_data.affinity, &affinity->mask);
++
++	/* Restore the activation state */
++	if (activated)
++		irq_domain_deactivate_irq(&desc->irq_data);
++	irq_put_desc_busunlock(desc, flags);
++	return 0;
++}
++
+ int __irq_set_affinity(unsigned int irq, const struct cpumask *mask, bool force)
+ {
+ 	struct irq_desc *desc = irq_to_desc(irq);
