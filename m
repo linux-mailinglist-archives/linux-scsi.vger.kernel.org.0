@@ -2,90 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1113C2B598A
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 07:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9FD2B59F0
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 07:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbgKQGGr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Nov 2020 01:06:47 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:37046 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726628AbgKQGGr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Nov 2020 01:06:47 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH648Gb172904;
-        Tue, 17 Nov 2020 06:06:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=5x60dfneffxPJgWPh4rhQWm76JVXcCXrIsW/mFCREs4=;
- b=qj08sUi/cbVICROdFkeXrwiywrE2ZaaYOjK4deAOjsXZrt5420vlxRE2KBlfkmXwWSGK
- yHtFmE4ldSnGvNQORtPr7659z72H8h7itAOha1oTYvyvdD6cEl4LDzwrJo2cghDoC1X+
- mogez+ng9uopElbr4WRhLdYjqjPjX/nGx539Feqsg+pU4TFCU7VlGdyZKl6q5VZVtN1f
- ipeuI9mUjgozecUzzVigvQUk7DKWU4XbJgudLWEHc1JeXgCrXBaGPPw7/L3OCG0EmvzA
- 99xT2Yx4IYno8qaErkVmSI/fM1kQ/ZQxVjALH4qB9yNyVGuJwMvSSZfBAwN1MzVnvbk9 Sg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 34t76krq7v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 Nov 2020 06:06:42 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH65ExO161464;
-        Tue, 17 Nov 2020 06:06:42 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 34umcxr8cw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Nov 2020 06:06:42 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AH66eef019678;
-        Tue, 17 Nov 2020 06:06:40 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 16 Nov 2020 22:06:39 -0800
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        Mike Christie <michael.christie@oracle.com>,
-        mlombard@redhat.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] iscsi target: fix cmd abort fabric stop race
-Date:   Tue, 17 Nov 2020 01:06:38 -0500
-Message-Id: <160559316817.969.3374643719447006512.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <1605318378-9269-1-git-send-email-michael.christie@oracle.com>
-References: <1605318378-9269-1-git-send-email-michael.christie@oracle.com>
+        id S1726544AbgKQG5o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Nov 2020 01:57:44 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33426 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725792AbgKQG5n (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 17 Nov 2020 01:57:43 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 61E62AC1F;
+        Tue, 17 Nov 2020 06:57:41 +0000 (UTC)
+Subject: Re: [PATCH V4 05/12] sbitmap: export sbitmap_weight
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Omar Sandoval <osandov@fb.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>
+References: <20201116090737.50989-1-ming.lei@redhat.com>
+ <20201116090737.50989-6-ming.lei@redhat.com>
+ <d05cb6bf-35e6-d939-30a5-6ef3a9c8a679@suse.de> <20201117021030.GC56247@T590>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <1183d3b9-bd52-2428-d696-ef02d0134299@suse.de>
+Date:   Tue, 17 Nov 2020 07:57:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20201117021030.GC56247@T590>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9807 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 phishscore=0
- spamscore=0 bulkscore=0 mlxlogscore=782 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011170044
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9807 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 clxscore=1015 mlxlogscore=796
- malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011170044
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 13 Nov 2020 19:46:18 -0600, Mike Christie wrote:
-
-> Maurizio Lombardi <mlombard@redhat.com> found a race where the abort
-> and cmd stop paths can race as follows:
+On 11/17/20 3:10 AM, Ming Lei wrote:
+> On Mon, Nov 16, 2020 at 10:38:58AM +0100, Hannes Reinecke wrote:
+>> On 11/16/20 10:07 AM, Ming Lei wrote:
+>>> SCSI's .device_busy will be converted to sbitmap, and sbitmap_weight
+>>> is needed, so export the helper.
+>>>
+>>> Cc: Omar Sandoval <osandov@fb.com>
+>>> Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+>>> Cc: Sumanesh Samanta <sumanesh.samanta@broadcom.com>
+>>> Cc: Ewan D. Milne <emilne@redhat.com>
+>>> Reviewed-by: Hannes Reinecke <hare@suse.de>
+>>> Tested-by: Sumanesh Samanta <sumanesh.samanta@broadcom.com>
+>>> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+>>> ---
+>>>    include/linux/sbitmap.h |  9 +++++++++
+>>>    lib/sbitmap.c           | 11 ++++++-----
+>>>    2 files changed, 15 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+>>> index 103b41c03311..34343ce3ef6c 100644
+>>> --- a/include/linux/sbitmap.h
+>>> +++ b/include/linux/sbitmap.h
+>>> @@ -346,6 +346,15 @@ static inline int sbitmap_test_bit(struct sbitmap *sb, unsigned int bitnr)
+>>>     */
+>>>    void sbitmap_show(struct sbitmap *sb, struct seq_file *m);
+>>> +
+>>> +/**
+>>> + * sbitmap_weight() - Return how many real bits set in a &struct sbitmap.
+>>> + * @sb: Bitmap to check.
+>>> + *
+>>> + * Return: How many real bits set
+>>> + */
+>>> +unsigned int sbitmap_weight(const struct sbitmap *sb);
+>>> +
+>>>    /**
+>>>     * sbitmap_bitmap_show() - Write a hex dump of a &struct sbitmap to a &struct
+>>>     * seq_file.
+>>> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+>>> index dcd6a89b4d2f..fb1d3c2f70a2 100644
+>>> --- a/lib/sbitmap.c
+>>> +++ b/lib/sbitmap.c
+>>> @@ -342,20 +342,21 @@ static unsigned int __sbitmap_weight(const struct sbitmap *sb, bool set)
+>>>    	return weight;
+>>>    }
+>>> -static unsigned int sbitmap_weight(const struct sbitmap *sb)
+>>> +static unsigned int sbitmap_cleared(const struct sbitmap *sb)
+>>>    {
+>>> -	return __sbitmap_weight(sb, true);
+>>> +	return __sbitmap_weight(sb, false);
+>>>    }
+>>> -static unsigned int sbitmap_cleared(const struct sbitmap *sb)
+>>> +unsigned int sbitmap_weight(const struct sbitmap *sb)
+>>>    {
+>>> -	return __sbitmap_weight(sb, false);
+>>> +	return __sbitmap_weight(sb, true) - sbitmap_cleared(sb);
+>>>    }
+>>> +EXPORT_SYMBOL_GPL(sbitmap_weight);
+>> That is extremely confusing. Why do you change the meaning of
+>> 'sbitmap_weight' from __sbitmap_weight(sb, true) to
+>> __sbitmap_weight(sb, true) - __sbitmap_weight(sb, false)?
 > 
-> 1. thread1 runs iscsit_release_commands_from_conn and sets
-> CMD_T_FABRIC_STOP.
-> 2. thread2 runs iscsit_aborted_task and then does __iscsit_free_cmd. It
-> then returns from the aborted_task callout and we finish
-> target_handle_abort and do:
+> Because the only user of sbitmap_weight() just uses the following way:
 > 
-> [...]
+> 	sbitmap_weight(sb) - sbitmap_cleared(sb)
+> 
+> Frankly, I think sbitmap_weight(sb) should return real busy bits.
+> 
+No argument about that. Just wanted to be clear that this is by intention.
 
-Applied to 5.10/scsi-fixes, thanks!
+>> Does this mean that the original definition was wrong?
+>> Or does this mean that this patch implies a different meaning of
+>> 'sbitmap_weight'?
+> 
+> Yeah, this patch changes meaning of sbitmap_weight(), now it is
+> exported, and we should make it more accurate/readable from user view.
+> 
+So can you please state this in the patch description?
 
-[1/1] scsi: target: iscsi: Fix cmd abort fabric stop race
-      https://git.kernel.org/mkp/scsi/c/f36199355c64
+Cheers,
 
+Hannes
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
