@@ -2,69 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 204422B5891
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 04:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C42DF2B5899
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Nov 2020 05:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgKQD4U (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Nov 2020 22:56:20 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:45884 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726841AbgKQD4T (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 22:56:19 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3dwCM166149;
-        Tue, 17 Nov 2020 03:56:13 GMT
+        id S1726339AbgKQD7G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Nov 2020 22:59:06 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:47664 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726085AbgKQD7G (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Nov 2020 22:59:06 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3fKxB138097;
+        Tue, 17 Nov 2020 03:58:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=GIMTB8BpU8tBdqjUEfN4pOkfikOqGpoKtBjM6BWvysw=;
- b=WE1zkVBKTFxmX7/NnSkXeNbZrwonT1vSJ94Z3zrwiCNHXRstH9aa16iK57PiNYV3Su3u
- eC2e4se4RacppMs/NTCifQzUhv/oZnLsPRTQc0TxagjfQE9RI2ndSdILEmAHj4bDB447
- Cwo4czHm4SspBmbdU44R9FZGexsEx7KIxNq8BFbyS9ezCw5LjONUSYac//d2eMX4Q7Ma
- Qma2/TBUojnSDSC2/fslAy+g5ny5BOYfutC189UUfoRFOhNNVrYAkBchLjWE58bf1FPt
- tBDZaV2VvG9EsqywOnhs3wWCsooc43Y2Wv8yBaLAkUZP+iCRisdR/LnriAZ8013r1iiu fg== 
+ content-type; s=corp-2020-01-29;
+ bh=4uRHwmfKuuxRJtZVOun8/wC6aST5HhqMfBfPWZdhLFI=;
+ b=w2FKmWJMDn7W2zOWNSHTLZAFPC8RinY2JluDg/+65GV+u5UHr9ST5NR/XM/UE9PQzvKS
+ txSPzIsgrLn9fd+Iuy8CYS0UL1qUWTx7Yt0Fl5wnE3WIJUtddOWeyhQoC2eUl9vGaswM
+ hXAXvThVomCjjvOIot5gUOFvAwBwA35wMAOV+LKZHPgPGMf/DkR3AWcGxqLFYa4eyFUb
+ YCVGSNr2TEzjuIDqdjV7RKPyQs5B9qBQdfBfFHeZ6zdujXjB27BbhIqpjTPCDNSHALjs
+ THxI83OX9//2Tp8vUDORdm3PBFxxeQYhbOJfnAjHoDuxxySzPfzT9NEetgptQrR2O6JZ /A== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 34t7vn0ccs-1
+        by aserp2120.oracle.com with ESMTP id 34t76kre6k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 Nov 2020 03:56:13 +0000
+        Tue, 17 Nov 2020 03:58:50 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3fILS005292;
-        Tue, 17 Nov 2020 03:56:12 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 34umcxmpds-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3fIIv005297;
+        Tue, 17 Nov 2020 03:58:50 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 34umcxms51-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Nov 2020 03:56:12 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AH3uA81006513;
-        Tue, 17 Nov 2020 03:56:10 GMT
+        Tue, 17 Nov 2020 03:58:49 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AH3wmXN010018;
+        Tue, 17 Nov 2020 03:58:48 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 16 Nov 2020 19:56:10 -0800
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Jack Wang <jinpu.wang@cloud.ionos.com>
-Subject: Re: [PATCH 1/1] scsi: pm8001: pm8001_hwi: Remove unused variable
- 'value'
+        with ESMTP ; Mon, 16 Nov 2020 19:58:47 -0800
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Tom Rix <trix@redhat.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: sd: remove obsolete variable in sd_remove()
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1a6vg63hp.fsf@ca-mkp.ca.oracle.com>
-References: <20201116104119.816527-1-lee.jones@linaro.org>
-Date:   Mon, 16 Nov 2020 22:56:08 -0500
-In-Reply-To: <20201116104119.816527-1-lee.jones@linaro.org> (Lee Jones's
-        message of "Mon, 16 Nov 2020 10:41:19 +0000")
+Message-ID: <yq14klo63ee.fsf@ca-mkp.ca.oracle.com>
+References: <20201116070035.11870-1-lukas.bulwahn@gmail.com>
+        <yq1ft5863ku.fsf@ca-mkp.ca.oracle.com>
+Date:   Mon, 16 Nov 2020 22:58:45 -0500
+In-Reply-To: <yq1ft5863ku.fsf@ca-mkp.ca.oracle.com> (Martin K. Petersen's
+        message of "Mon, 16 Nov 2020 22:54:16 -0500")
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9807 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 mlxscore=0 phishscore=0
  spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011170027
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9807 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=1
- malwarescore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
- adultscore=0 mlxscore=0 priorityscore=1501 phishscore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 phishscore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 clxscore=1015 mlxlogscore=999
+ malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011170027
 Precedence: bulk
@@ -72,18 +76,16 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Lee,
-
-> Hasn't been used since 2009.
+>> Commit 140ea3bbf39a ("sd: use __register_blkdev to avoid a modprobe
+>> for an unregistered dev_t") removed blk_register_region(devt, ...) in
+>> sd_remove() and since then, devt is unused in sd_remove().
 >
-> Fixes the following W=3D1 kernel build warning(s):
->
->  drivers/scsi/pm8001/pm8001_hwi.c: In function =E2=80=98mpi_set_phys_g3_w=
-ith_ssc=E2=80=99:
->  drivers/scsi/pm8001/pm8001_hwi.c:415:6: warning: variable =E2=80=98value=
-=E2=80=99 set but not used [-Wunused-but-set-variable]
+> Applied to 5.11/scsi-staging, thanks!
 
-Applied to 5.11/scsi-staging, thanks!
+Actually, this should go through block given the dependency on the
+commit above.
 
---=20
+Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
+
+-- 
 Martin K. Petersen	Oracle Linux Engineering
