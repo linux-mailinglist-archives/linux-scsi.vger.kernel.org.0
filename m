@@ -2,72 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9E02B7A0D
-	for <lists+linux-scsi@lfdr.de>; Wed, 18 Nov 2020 10:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55922B7A2C
+	for <lists+linux-scsi@lfdr.de>; Wed, 18 Nov 2020 10:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727157AbgKRJJL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 18 Nov 2020 04:09:11 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:51498 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726704AbgKRJJK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 Nov 2020 04:09:10 -0500
-X-UUID: a65f9d900f0b4a95a1c39a653adb6685-20201118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=9qQ2MTnmFZ5gd1t1CoayM7oj5fRrO2+V03uugCH4TZQ=;
-        b=ra3qQXA/tn0bzc3x6LjAHjwwR9Va4WR3HFiwsC8lSZYFdI9+I58nFTbCTJ+Jt06uhDx1JW97H3GppA868SLD8uQPTW9iiANuHYtvRb4GuTJFwSCYfLhSYCpsgNd2yj2AvgPliVfFd7nOBL52aG9fW0vnWirYlJuiwWcO+GYR7F8=;
-X-UUID: a65f9d900f0b4a95a1c39a653adb6685-20201118
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1157048324; Wed, 18 Nov 2020 17:09:05 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 18 Nov 2020 17:09:04 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by mtkcas07.mediatek.inc
- (172.21.101.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 18 Nov
- 2020 17:08:56 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 18 Nov 2020 17:08:56 +0800
-Message-ID: <1605690537.18082.2.camel@mtkswgap22>
-Subject: Re: [PATCH v2 8/9] block, scsi, ide: Only process PM requests if
- rpm_status != RPM_ACTIVE
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Can Guo" <cang@codeaurora.org>, Ming Lei <ming.lei@redhat.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Date:   Wed, 18 Nov 2020 17:08:57 +0800
-In-Reply-To: <20201116030459.13963-9-bvanassche@acm.org>
-References: <20201116030459.13963-1-bvanassche@acm.org>
-         <20201116030459.13963-9-bvanassche@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726433AbgKRJPX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 18 Nov 2020 04:15:23 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49228 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725779AbgKRJPX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 18 Nov 2020 04:15:23 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id A72EAAD45;
+        Wed, 18 Nov 2020 09:15:20 +0000 (UTC)
+Subject: Re: [PATCH V4 12/12] scsi: replace sdev->device_busy with sbitmap
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kbuild-all@lists.01.org,
+        clang-built-linux@googlegroups.com, Omar Sandoval <osandov@fb.com>,
+        "Ewan D . Milne" <emilne@redhat.com>
+References: <20201116090737.50989-13-ming.lei@redhat.com>
+ <202011161944.U7XHrbsd-lkp@intel.com> <20201118023507.GA92339@T590>
+ <99089c7f-422b-3a61-a9c5-677a1e629862@suse.de> <20201118074405.GA111852@T590>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <145b2f31-674c-567a-f901-dde3f6f16b3a@suse.de>
+Date:   Wed, 18 Nov 2020 10:15:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20201118074405.GA111852@T590>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTExLTE2IGF0IDExOjA0ICswODAwLCBCYXJ0IFZhbiBBc3NjaGUgd3JvdGU6
-DQo+IEluc3RlYWQgb2Ygc3VibWl0dGluZyBhbGwgU0NTSSBjb21tYW5kcyBzdWJtaXR0ZWQgd2l0
-aCBzY3NpX2V4ZWN1dGUoKSB0bw0KPiBhIFNDU0kgZGV2aWNlIGlmIHJwbV9zdGF0dXMgIT0gUlBN
-X0FDVElWRSwgb25seSBzdWJtaXQgUlFGX1BNIChwb3dlcg0KPiBtYW5hZ2VtZW50IHJlcXVlc3Rz
-KSBpZiBycG1fc3RhdHVzICE9IFJQTV9BQ1RJVkUuIFJlbW92ZSBmbGFnDQo+IFJRRl9QUkVFTVBU
-IHNpbmNlIGl0IGlzIG5vIGxvbmdlciBuZWNlc3NhcnkuDQo+IA0KPiBDYzogTWFydGluIEsuIFBl
-dGVyc2VuIDxtYXJ0aW4ucGV0ZXJzZW5Ab3JhY2xlLmNvbT4NCj4gQ2M6IEFsYW4gU3Rlcm4gPHN0
-ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHU+DQo+IENjOiBDYW4gR3VvIDxjYW5nQGNvZGVhdXJvcmEu
-b3JnPg0KPiBDYzogU3RhbmxleSBDaHUgPHN0YW5sZXkuY2h1QG1lZGlhdGVrLmNvbT4NCj4gQ2M6
-IE1pbmcgTGVpIDxtaW5nLmxlaUByZWRoYXQuY29tPg0KPiBDYzogUmFmYWVsIEouIFd5c29ja2kg
-PHJhZmFlbC5qLnd5c29ja2lAaW50ZWwuY29tPg0KPiBUZXN0ZWQtYnk6IE1hcnRpbiBLZXBwbGlu
-Z2VyIDxtYXJ0aW4ua2VwcGxpbmdlckBwdXJpLnNtPg0KPiBTaWduZWQtb2ZmLWJ5OiBCYXJ0IFZh
-biBBc3NjaGUgPGJ2YW5hc3NjaGVAYWNtLm9yZz4NCg0KUmV2aWV3ZWQtYnk6IFN0YW5sZXkgQ2h1
-IDxzdGFubGV5LmNodUBtZWRpYXRlay5jb20+DQoNCg==
+On 11/18/20 8:44 AM, Ming Lei wrote:
+> On Wed, Nov 18, 2020 at 08:15:47AM +0100, Hannes Reinecke wrote:
+>> Hey Ming,
+>>
+>> On 11/18/20 3:35 AM, Ming Lei wrote:
+>>> Hello Kashyap & Sumanesh,
+>>>
+>>> On Mon, Nov 16, 2020 at 07:49:31PM +0800, kernel test robot wrote:
+>>>> Hi Ming,
+>>>>
+>>>> Thank you for the patch! Yet something to improve:
+>>>>
+>>>> [auto build test ERROR on block/for-next]
+>>>> [also build test ERROR on mkp-scsi/for-next scsi/for-next v5.10-rc4 next-20201116]
+>>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>>> And when submitting patch, we suggest to use '--base' as documented in
+>>>> https://git-scm.com/docs/git-format-patch]
+>>>>
+>>>> url:    https://github.com/0day-ci/linux/commits/Ming-Lei/blk-mq-scsi-tracking-device-queue-depth-via-sbitmap/20201116-171449
+>>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+>>>> config: powerpc64-randconfig-r026-20201116 (attached as .config)
+>>>> compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project c044709b8fbea2a9a375e4173a6bd735f6866c0c)
+>>>> reproduce (this is a W=1 build):
+>>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>           chmod +x ~/bin/make.cross
+>>>>           # install powerpc64 cross compiling tool for clang build
+>>>>           # apt-get install binutils-powerpc64-linux-gnu
+>>>>           # https://github.com/0day-ci/linux/commit/cc286ae987be50d7b8e152cc80a5ccaa8682e3ff
+>>>>           git remote add linux-review https://github.com/0day-ci/linux
+>>>>           git fetch --no-tags linux-review Ming-Lei/blk-mq-scsi-tracking-device-queue-depth-via-sbitmap/20201116-171449
+>>>>           git checkout cc286ae987be50d7b8e152cc80a5ccaa8682e3ff
+>>>>           # save the attached .config to linux build tree
+>>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=powerpc64
+>>>>
+>>>> If you fix the issue, kindly add following tag as appropriate
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> All errors (new ones prefixed by >>):
+>>>>
+>>>>>> drivers/scsi/megaraid/megaraid_sas_fusion.c:365:41: error: no member named 'device_busy' in 'struct scsi_device'
+>>>>              sdev_busy = atomic_read(&scmd->device->device_busy);
+>>>
+>>> This new reference to sdev->device_busy is added by recent shared host
+>>> tag patch, and according to the comment, you may have planed to convert into
+>>> one megaraid internal counter.
+>>>
+>>>           /* TBD - if sml remove device_busy in future, driver
+>>>            * should track counter in internal structure.
+>>>            */
+>>>
+>>> So can you post one patch? And I am happy to fold it into this series.
+>>>
+>> Seeing that we already have the accessor 'scsi_device_busy()' it's probably
+>> easier to just use that and not fiddle with driver internals.
+>> See the attached patch.
+>>
+>> Cheers,
+>>
+>> Hannes
+>> -- 
+>> Dr. Hannes Reinecke                Kernel Storage Architect
+>> hare@suse.de                              +49 911 74053 688
+>> SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+>> HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+> 
+>>  From d8fa5e61187dbe851b8da9c65a5df5ec5809f8ea Mon Sep 17 00:00:00 2001
+>> From: Hannes Reinecke <hare@suse.de>
+>> Date: Wed, 18 Nov 2020 08:08:41 +0100
+>> Subject: [PATCH] megaraid_sas: use scsi_device_busy() instead of direct access
+>>   to atomic counter
+>>
+>> It's always a bad style to access structure internals, especially if
+>> there is an accessor for it. So convert to use scsi_device_busy()
+>> intead of accessing the atomic counter directly.
+>>
+>> Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+>> Cc: Sumanesh Samanta <sumanesh.samanta@broadcom.com>
+>> Signed-off-by: Hannes Reinecke <hare@suse.de>
+>> ---
+>>   drivers/scsi/megaraid/megaraid_sas_fusion.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+>> index fd607287608e..272ff123bc6b 100644
+>> --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
+>> +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+>> @@ -362,7 +362,7 @@ megasas_get_msix_index(struct megasas_instance *instance,
+>>   	/* TBD - if sml remove device_busy in future, driver
+>>   	 * should track counter in internal structure.
+>>   	 */
+>> -	sdev_busy = atomic_read(&scmd->device->device_busy);
+>> +	sdev_busy = scsi_device_busy(scmd->device);
+> 
+> megasas_get_msix_index() is called in .queuecommand() path,
+> scsi_device_busy() might take more cycles since it has to iterate over
+> each sbitmap words, especially when the sbitmap depth is high.
+> 
+> I'd suggest Kashyap/Sumanesh to check if there is better way to
+> deal with it. If not, scsi_device_busy() should be fine.
+> 
+I guess this whole codepath will become obsolete if and when support for 
+polling queues / io_uring will be implemented for megaraid_sas.
+This whole section deals with spreading the load over several hardware 
+queues once the dedicated one is at risk of being congested.
+But this is only required if someone want to reach high IOPS; so if we 
+have poll/io_uring support there won't be a need for this anymore.
+Or that's the theory, at least :-)
 
+But the patch should be good enough for now to get your patchset in.
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
