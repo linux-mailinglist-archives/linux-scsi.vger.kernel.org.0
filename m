@@ -2,101 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3AE2B7391
-	for <lists+linux-scsi@lfdr.de>; Wed, 18 Nov 2020 02:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3913D2B7397
+	for <lists+linux-scsi@lfdr.de>; Wed, 18 Nov 2020 02:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbgKRBLU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Nov 2020 20:11:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21416 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729108AbgKRBLS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 17 Nov 2020 20:11:18 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AI11fLv096709;
-        Tue, 17 Nov 2020 20:11:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qlBlMKkNc45GKgll0eG+w8CHNkb4Fcr1XZD0GBNdCiU=;
- b=M79okglUkTgW2xd2BP+p80up2kv4GAbLdL4N6sGkuAGWHXMR4wEgr7mkVFCtkXnPtCvS
- 4jv8Fzh5FeI00djQbMjdwbg308DKoAcTfGCf6InV9eZJCU4753Mg4pLm2e/Jfmskvwe4
- khNLga5N+tN6NR3umXyfkaTbRAw+t+S+USSLzdbTJ9VGgCHWLVBTe0nVhAg2r9G9uWOk
- JXubtVMXgWwkBoQQhZdNzAtJtYwEHJsCIbdJ3x8u5cojADDKLCcDxtpv/IJvl6+0tFIQ
- 7iiDZ/jAj7XvH1wGW91gPT3iXHwBoH+i6F5MwL2zNZxibcY3xYsVwGBmB2CtV3ldsW2w kg== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34vbvra13v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Nov 2020 20:11:11 -0500
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AI11g2B010752;
-        Wed, 18 Nov 2020 01:11:10 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03dal.us.ibm.com with ESMTP id 34t6v9h3pk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Nov 2020 01:11:10 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AI1B0Ip5046830
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Nov 2020 01:11:00 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5BD3BE04F;
-        Wed, 18 Nov 2020 01:11:08 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6975ABE053;
-        Wed, 18 Nov 2020 01:11:08 +0000 (GMT)
-Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Nov 2020 01:11:08 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH v3 6/6] ibmvfc: advertise client support for targetWWPN using v2 commands
-Date:   Tue, 17 Nov 2020 19:11:04 -0600
-Message-Id: <20201118011104.296999-7-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201118011104.296999-1-tyreld@linux.ibm.com>
-References: <20201118011104.296999-1-tyreld@linux.ibm.com>
+        id S1729667AbgKRBLp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Nov 2020 20:11:45 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:44861 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727892AbgKRBLo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 17 Nov 2020 20:11:44 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1605661903; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=AdSCJkjqb9OkQUTrN7lTj6Tme9Iyj9rtBA9UFQ9zHss=;
+ b=NGFDegXLv7EuTrpqWnx+pLAYvDzuJ/eJ4wQfot33gkURjV5DO/kG8uLujuWSfcomatIQr1fv
+ Sc/bG6RPc/5H0XSZqTwZndwQK1rq2cIYoYTiu7K4vB+9hVbcDQzWSiJWRRRd0beUk/6pNK/g
+ wfDVB80XoJkDb2Sg7CuJ8PahwRA=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 5fb474b96c42d983b9048c65 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 18 Nov 2020 01:11:21
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 83FD8C43467; Wed, 18 Nov 2020 01:11:20 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 29EADC433ED;
+        Wed, 18 Nov 2020 01:11:19 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-17_15:2020-11-17,2020-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- adultscore=0 phishscore=0 suspectscore=1 priorityscore=1501
- mlxlogscore=999 mlxscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011180000
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 18 Nov 2020 09:11:19 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        Leo Liou <leoliou@google.com>
+Subject: Re: [PATCH v5 7/7] scsi: ufs: show lba and length for unmap commands
+In-Reply-To: <20201117165839.1643377-8-jaegeuk@kernel.org>
+References: <20201117165839.1643377-1-jaegeuk@kernel.org>
+ <20201117165839.1643377-8-jaegeuk@kernel.org>
+Message-ID: <173677d39200bbdf577fb7923eef2916@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The previous patch added support for the targetWWPN field in version 2
-MADs and vfcFrame structures.
+On 2020-11-18 00:58, Jaegeuk Kim wrote:
+> From: Leo Liou <leoliou@google.com>
+> 
+> We have lba and length for unmap commands.
+> 
+> Signed-off-by: Leo Liou <leoliou@google.com>
+> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-Set the IBMVFC_CAN_SEND_VF_WWPN bit in our capabailites flag during NPIV
-Login to inform the VIOS that this client supports the feature.
+Reviewed-by: Can Guo <cang@codeaurora.org>
 
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
----
- drivers/scsi/ibmvscsi/ibmvfc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 83627e11e85e..42e4d35e0d35 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -1255,7 +1255,7 @@ static void ibmvfc_set_login_info(struct ibmvfc_host *vhost)
- 		login_info->flags |= cpu_to_be16(IBMVFC_CLIENT_MIGRATED);
- 
- 	login_info->max_cmds = cpu_to_be32(max_requests + IBMVFC_NUM_INTERNAL_REQ);
--	login_info->capabilities = cpu_to_be64(IBMVFC_CAN_MIGRATE);
-+	login_info->capabilities = cpu_to_be64(IBMVFC_CAN_MIGRATE | IBMVFC_CAN_SEND_VF_WWPN);
- 	login_info->async.va = cpu_to_be64(vhost->async_crq.msg_token);
- 	login_info->async.len = cpu_to_be32(vhost->async_crq.size * sizeof(*vhost->async_crq.msgs));
- 	strncpy(login_info->partition_name, vhost->partition_name, IBMVFC_MAX_NAME);
--- 
-2.27.0
-
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 86c8dee01ca9..dba3ee307307 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -376,6 +376,11 @@ static void ufshcd_add_command_trace(struct 
+> ufs_hba *hba,
+>  				lrbp->ucd_req_ptr->sc.exp_data_transfer_len);
+>  			if (opcode == WRITE_10)
+>  				group_id = lrbp->cmd->cmnd[6];
+> +		} else if (opcode == UNMAP) {
+> +			if (cmd->request) {
+> +				lba = scsi_get_lba(cmd);
+> +				transfer_len = blk_rq_bytes(cmd->request);
+> +			}
+>  		}
+>  	}
