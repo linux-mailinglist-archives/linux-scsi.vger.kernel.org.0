@@ -2,93 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4CA2B9576
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Nov 2020 15:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DF32B95AE
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Nov 2020 16:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728354AbgKSOql (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 09:46:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51955 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728036AbgKSOqj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:46:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605797196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nBU9vCty/xUTtvWiRTKM3SNaAnXZsWQI+V6F25yzTt8=;
-        b=HHuiH1Scv3UBL9+E32Ir9/c4HGjesuLFONctPpegf5X6X+V15E4WtC5YWn8Wz7MxABCy9+
-        tVGwfQtY7yTqqzcT6nfoL6Gz5I6ok4NVUdtckTOSECyJs2hWh7SlUW5z+3/MaRhmgTAVOg
-        IpsATjdLtfW7dqh6/CFESUPQLhRv0rw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-189--k-fgY6XM5G2xh66h4pWVg-1; Thu, 19 Nov 2020 09:46:34 -0500
-X-MC-Unique: -k-fgY6XM5G2xh66h4pWVg-1
-Received: by mail-wr1-f70.google.com with SMTP id x16so2113804wrn.9
-        for <linux-scsi@vger.kernel.org>; Thu, 19 Nov 2020 06:46:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nBU9vCty/xUTtvWiRTKM3SNaAnXZsWQI+V6F25yzTt8=;
-        b=jNRvW3jfEU8OnJ8Ge7IF1S4GsA4Kllib5124u/PVZuA745cmzyrm1oJ32dhDH1dBDE
-         dAb8DSD1vuwn+X7/2SQMx7h2El+iLzAHrKIwvLnIdzsPuNX/6tH1SJ6pwE4xx9L72+uU
-         WpzCMuiDyPdi6TedmvvAkGGIMSfaYyhN0sD8VDUtR87Pw9hA2hwC0GFaNeg+cb0zlFJH
-         W6Ew/loi9B6sO42hyrobwrhIOpuetg612OpJ2/V9rI1KrqHtGwoIRns+tDK43nkCp8O2
-         PV4SoqI5KBuQ3z7fXel6p0h8YCiLGi6KD6FI8Ki8v022A/B7WTJsnx80Cq/PCB6VsnXZ
-         Ql7g==
-X-Gm-Message-State: AOAM530UtnCj6ioJ4LnK4Xt76S5beKS4yCqOkKdFpKal4jxOee2jRFg7
-        Q1H84A+GMAht3KypeI5ynb7PdaYwGyUWglqwKEPJKHEgwn0/vBO0+HnN/3r05LWajEcJSz3VtDl
-        mfRnCNfu6wBD9maWEY5PCeg==
-X-Received: by 2002:a1c:e0c3:: with SMTP id x186mr4948931wmg.21.1605797193263;
-        Thu, 19 Nov 2020 06:46:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvmGgl1ENR3sYN4BkxpKKT1u0hPsLZxxmf1t2xm1+WIEcjQ7FNbjFySAZs3x19GfjQiwVI5Q==
-X-Received: by 2002:a1c:e0c3:: with SMTP id x186mr4948910wmg.21.1605797193047;
-        Thu, 19 Nov 2020 06:46:33 -0800 (PST)
-Received: from redhat.com (bzq-109-64-91-49.red.bezeqint.net. [109.64.91.49])
-        by smtp.gmail.com with ESMTPSA id l13sm41378138wrm.24.2020.11.19.06.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 06:46:31 -0800 (PST)
-Date:   Thu, 19 Nov 2020 09:46:26 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     Mike Christie <michael.christie@oracle.com>, qemu-devel@nongnu.org,
-        fam@euphon.net, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, jasowang@redhat.com,
-        pbonzini@redhat.com, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 00/10] vhost/qemu: thread per IO SCSI vq
-Message-ID: <20201119094315-mutt-send-email-mst@kernel.org>
-References: <1605223150-10888-1-git-send-email-michael.christie@oracle.com>
- <20201117164043.GS131917@stefanha-x1.localdomain>
- <b3343762-bb11-b750-46ec-43b5556f2b8e@oracle.com>
- <20201118113117.GF182763@stefanha-x1.localdomain>
+        id S1728204AbgKSPEd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 10:04:33 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:45924 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727309AbgKSPEc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 10:04:32 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AJEsLhu178597;
+        Thu, 19 Nov 2020 15:03:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=3iuJfllWNDFpqOP3OVs2BGzQRlYzNjiqptp4PKzPruQ=;
+ b=DiaP0WjOqSq2NAlRahxAGjn4veMBSzfQFPzrijjpUV4Y0fYlYG4PaIk86y+mAvvk6CNh
+ LpTBs6nzZVaqXeueHMNb/COo/L43wgNtyv5ukmziJYzHbVPa1V9719+7eAYXW4Zy8VMl
+ oT709r3b/Rn+DBWqdP5qK1BgE7mZP6czBTpsnjup7JaxPf8FQVMLa62D67/w6g/uMJyV
+ ygLNeF4rKyK/Eg1xhtyUzghLZCRisrzvQld76u5PtUcn6sVuqugXslAdaAYewjeKGwWD
+ TEq1NCpMJFaZDdlu2mkHL0Cgz+SfIXPm8dqwogj6cFuyOaWZPiwKyz4AM7HKto47JR0x jQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 34t4rb5y65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 19 Nov 2020 15:03:48 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AJEtNIN138932;
+        Thu, 19 Nov 2020 15:03:47 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 34umd22n8a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Nov 2020 15:03:47 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AJF3iaO013403;
+        Thu, 19 Nov 2020 15:03:44 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 19 Nov 2020 07:03:43 -0800
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     salyzyn@google.com, kernel-team@android.com,
+        nguyenb@codeaurora.org, hongwus@codeaurora.org,
+        saravanak@google.com, asutoshd@codeaurora.org,
+        Can Guo <cang@codeaurora.org>, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: [PATCH] scsi: ufs: Make sure clk scaling happens only when hba is runtime ACTIVE
+Date:   Thu, 19 Nov 2020 10:03:41 -0500
+Message-Id: <160579821161.27938.15426150263135159232.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <1600758548-28576-1-git-send-email-cang@codeaurora.org>
+References: <1600758548-28576-1-git-send-email-cang@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201118113117.GF182763@stefanha-x1.localdomain>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9809 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 phishscore=0
+ spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011190113
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9809 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015
+ malwarescore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011190113
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 11:31:17AM +0000, Stefan Hajnoczi wrote:
-> > My preference has been:
-> > 
-> > 1. If we were to ditch cgroups, then add a new interface that would allow
-> > us to bind threads to a specific CPU, so that it lines up with the guest's
-> > mq to CPU mapping.
-> 
-> A 1:1 vCPU/vq->CPU mapping isn't desirable in all cases.
-> 
-> The CPU affinity is a userspace policy decision. The host kernel should
-> provide a mechanism but not the policy. That way userspace can decide
-> which workers are shared by multiple vqs and on which physical CPUs they
-> should run.
+On Tue, 22 Sep 2020 00:09:04 -0700, Can Guo wrote:
 
-So if we let userspace dictate the threading policy then I think binding
-vqs to userspace threads and running there makes the most sense,
-no need to create the threads.
+> If someone plays with the UFS clk scaling devfreq governor through sysfs,
+> ufshcd_devfreq_scale may be called even when hba is not runtime ACTIVE,
+> which can lead to unexpected error. We cannot just protect it by calling
+> pm_runtime_get_sync, because that may cause racing problem since hba
+> runtime suspend ops needs to suspend clk scaling. In order to fix it, call
+> pm_runtime_get_noresume and check hba's runtime status, then only proceed
+> if hba is runtime ACTIVE, otherwise just bail.
+> 
+> [...]
+
+Applied to 5.10/scsi-fixes, thanks!
+
+[1/1] scsi: ufs: Make sure clk scaling happens only when HBA is runtime ACTIVE
+      https://git.kernel.org/mkp/scsi/c/73cc291c2702
 
 -- 
-MST
-
+Martin K. Petersen	Oracle Linux Engineering
