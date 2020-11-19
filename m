@@ -2,74 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3108D2B8E69
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Nov 2020 10:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E832B8EF3
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Nov 2020 10:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbgKSJKJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 04:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbgKSJKJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 04:10:09 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4327FC0613CF
-        for <linux-scsi@vger.kernel.org>; Thu, 19 Nov 2020 01:10:09 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id y22so2600306plr.6
-        for <linux-scsi@vger.kernel.org>; Thu, 19 Nov 2020 01:10:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lQ5BMhTT6sUhSQ/EPRyzVv3ta5aqXji4ylypU+yg43o=;
-        b=PbOZcs1/dlilyp2kmmiRGQygvvy3gnJqZ8hxVTac5GlxL5AzWGPUYXxXNX2gWBch6i
-         OpS6Y8td8CuKQnHvnvYovmBOvSrBrFaCnnGvbELo/c1acsjPhoV40ZOlinEfYf+5XjW/
-         yFMbSR6mh+Vs+aO5PETkjYLXDJ5MvlJPvSdQLwf+PV1+D8kCNme2NPanrfCJ/gRqnTQo
-         grB26voDcdEk284ihxyAacoYrjcMVmSZYDI6rsuvgYNcZvrluQgUaJsBI5IZsiK7aCJG
-         azeC72S8O5rpdfIh4eTYz8PJWD/kgWk5hr4PtiNGapFfc7MQJy46y17nSG8k9jOEj57Y
-         xkhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lQ5BMhTT6sUhSQ/EPRyzVv3ta5aqXji4ylypU+yg43o=;
-        b=e65xmsCd2hljPNNQ/yKVqlmWEN+C8sjB3sXgYni0bGctVgaznpQ3yUZmA1URiBYW+Y
-         WeWhwPh5ssNWfXYJtF4lRl6zNdTrGvyrWm6RAxGMRUIhHRrSTjM3ROM5G11WeK1j9DST
-         rVU7BFWhe+JB1JFodAaXO8Z8tdLfclEqsdPNe0SwBSlEeV6iRa5W/FTChONbGYgDmhUT
-         TC+YwFRGx51zQwRWh41jsu26Jetb9pqE8M9DQ1DW6l3gsg3UHL/T8GaWg995Glv9BVQh
-         j3veJikhl41jhesfj3IuVUSt94I42V6g/f8/euGX9hR/6eyYNTkijx2377XDAvTRrvHS
-         1+Aw==
-X-Gm-Message-State: AOAM533OMIjQusgSa98a2MndOblGEBuaQn95F4FvZ65peinqOlZKeaFs
-        2+9I7i+OO94MBWri4hWp0Dk86K4wGEwYMytgLIE=
-X-Google-Smtp-Source: ABdhPJzeSkgMtBa+gww+sLmHPLKFSAVOjSwVOfinsPVQIZ485bJsMLGRjBfgUjKuVsy3PYGuRAqBaWZDrQC240s/3pA=
-X-Received: by 2002:a17:902:aa04:b029:d8:b7a8:6a3e with SMTP id
- be4-20020a170902aa04b02900d8b7a86a3emr7979971plb.58.1605777008885; Thu, 19
- Nov 2020 01:10:08 -0800 (PST)
+        id S1726898AbgKSJcQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 04:32:16 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2130 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbgKSJcP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 04:32:15 -0500
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CcDtj28bWz67FXS;
+        Thu, 19 Nov 2020 17:30:37 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Thu, 19 Nov 2020 10:32:13 +0100
+Received: from [10.200.65.70] (10.200.65.70) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1913.5; Thu, 19 Nov
+ 2020 09:32:11 +0000
+Subject: Re: [PATCH v2 1/3] genirq/affinity: Add irq_update_affinity_desc()
+To:     Thomas Gleixner <tglx@linutronix.de>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <martin.petersen@oracle.com>,
+        <jejb@linux.ibm.com>
+CC:     <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <maz@kernel.org>
+References: <87ft57r7v3.fsf@nanos.tec.linutronix.de>
+ <78356caa-57a0-b807-fe52-8f12d36c1789@huawei.com>
+ <874klmqu2r.fsf@nanos.tec.linutronix.de>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <b86af904-2288-8b53-7e99-e763b73987d0@huawei.com>
+Date:   Thu, 19 Nov 2020 09:31:56 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:4045:0:0:0:0 with HTTP; Thu, 19 Nov 2020 01:10:08
- -0800 (PST)
-Reply-To: morrisball102@gmail.com
-From:   Morris Ball <abdulsaladino101@gmail.com>
-Date:   Thu, 19 Nov 2020 10:10:08 +0100
-Message-ID: <CACoN8T1pHf_ZgQvedGqj4acbXE7dscZiOUnSqi_+G1+fT5WASQ@mail.gmail.com>
-Subject: Good day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <874klmqu2r.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.200.65.70]
+X-ClientProxiedBy: lhreml707-chm.china.huawei.com (10.201.108.56) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Good day,
+Hi Thomas,
 
-Please accept my apologies I do not intend to invade your privacy, I
-wrote to you earlier, but no answer, in my first post I told you about
-my late client's untimely death, I received several letters from his
-bank, where he made a deposit of ($7.5 million Dollars) before his
-death, the bank asked me to provide his next of kin or any of his
-relatives, who will stand for this claim, otherwise it will be
-confiscated by the bank due to lack of claims from his relatives hence
-I contacted you to present you as his new beneficiary next of kin.
-After your reply I shall give you more details and procedures of this
-transaction, waiting for your reply
+>>> +int irq_update_affinity_desc(unsigned int irq,
+>>> +			     struct irq_affinity_desc *affinity)
+>> Just a note on the return value, in the only current callsite -
+>> platform_get_irqs_affinity() - we don't check the return value and
+>> propagate the error. This is because we don't want to fail the interrupt
+>> init just because of problems updating the affinity mask. So I could
+>> print a message to inform the user of error (at the callsite).
+> Well, not sure about that. During init on a platform which does not have
+> the issues with reservation mode there failure cases are:
+> 
+>   1) Interrupt does not exist. Definitely a full fail
+> 
+>   2) Interrupt is already started up. Not a good idea on init() and
+>      a clear fail.
+> 
+>   3) Interrupt has already been switched to managed. Double init is not
+>      really a good sign either.
 
-Best Regards,
-Mr.Morris Ball.
-E-mai
+I just tested that and case 3) would be a problem. I don't see us 
+clearing the managed flag when free'ing the interrupt. So with 
+CONFIG_DEBUG_TEST_DRIVER_REMOVE=y, we attempt this affinity update 
+twice, and error from the irqd_affinity_is_managed() check.
+
+> 
+>>> +	/* Requires the interrupt to be shut down */
+>>> +	if (irqd_is_started(&desc->irq_data))
+>> We're missing the unlock here, right?
+> Duh yes.
+> 
+>>> +		return -EBUSY;
+>>> +
+>>> +	/* Interrupts which are already managed cannot be modified */
+>>> +	if (irqd_is_managed(&desc->irq_data))
+>> And here, and I figure that this should be irqd_affinity_is_managed()
+> More duh:)
+> 
+> I assume you send a fixed variant of this.
+
+Can do.
+
+Thanks,
+John
