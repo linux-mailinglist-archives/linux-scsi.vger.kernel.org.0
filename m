@@ -2,110 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7705B2B8C20
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Nov 2020 08:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3108D2B8E69
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Nov 2020 10:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726433AbgKSHOc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 02:14:32 -0500
-Received: from z5.mailgun.us ([104.130.96.5]:41494 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726123AbgKSHOb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 19 Nov 2020 02:14:31 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1605770071; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=XXv1sghWHsOtozF9TjpzQ8BZgyE+fxP4S3fS/+0JJH0=;
- b=Zv4D+rzlwvAbwP4VMMXZVYOjVk3ALudsWb5815CXEa8fmxuFB/TM2PFoAQqGKM4XnbkrDUJT
- /8N/jT7WaiBN9hpyvgG5Je8A3Kk5uNxfwCBo4/JvXVswEwM27pBK/zmnHhbhtftkoAJEPZ+N
- 3EFADvwEYqn+GJ0bJdjX1lWyObM=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
- 5fb61b51fa67d9becfd6996c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 19 Nov 2020 07:14:25
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 39411C4346D; Thu, 19 Nov 2020 07:14:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 25A96C4346B;
-        Thu, 19 Nov 2020 07:14:20 +0000 (UTC)
+        id S1726292AbgKSJKJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 04:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbgKSJKJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 04:10:09 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4327FC0613CF
+        for <linux-scsi@vger.kernel.org>; Thu, 19 Nov 2020 01:10:09 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id y22so2600306plr.6
+        for <linux-scsi@vger.kernel.org>; Thu, 19 Nov 2020 01:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=lQ5BMhTT6sUhSQ/EPRyzVv3ta5aqXji4ylypU+yg43o=;
+        b=PbOZcs1/dlilyp2kmmiRGQygvvy3gnJqZ8hxVTac5GlxL5AzWGPUYXxXNX2gWBch6i
+         OpS6Y8td8CuKQnHvnvYovmBOvSrBrFaCnnGvbELo/c1acsjPhoV40ZOlinEfYf+5XjW/
+         yFMbSR6mh+Vs+aO5PETkjYLXDJ5MvlJPvSdQLwf+PV1+D8kCNme2NPanrfCJ/gRqnTQo
+         grB26voDcdEk284ihxyAacoYrjcMVmSZYDI6rsuvgYNcZvrluQgUaJsBI5IZsiK7aCJG
+         azeC72S8O5rpdfIh4eTYz8PJWD/kgWk5hr4PtiNGapFfc7MQJy46y17nSG8k9jOEj57Y
+         xkhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=lQ5BMhTT6sUhSQ/EPRyzVv3ta5aqXji4ylypU+yg43o=;
+        b=e65xmsCd2hljPNNQ/yKVqlmWEN+C8sjB3sXgYni0bGctVgaznpQ3yUZmA1URiBYW+Y
+         WeWhwPh5ssNWfXYJtF4lRl6zNdTrGvyrWm6RAxGMRUIhHRrSTjM3ROM5G11WeK1j9DST
+         rVU7BFWhe+JB1JFodAaXO8Z8tdLfclEqsdPNe0SwBSlEeV6iRa5W/FTChONbGYgDmhUT
+         TC+YwFRGx51zQwRWh41jsu26Jetb9pqE8M9DQ1DW6l3gsg3UHL/T8GaWg995Glv9BVQh
+         j3veJikhl41jhesfj3IuVUSt94I42V6g/f8/euGX9hR/6eyYNTkijx2377XDAvTRrvHS
+         1+Aw==
+X-Gm-Message-State: AOAM533OMIjQusgSa98a2MndOblGEBuaQn95F4FvZ65peinqOlZKeaFs
+        2+9I7i+OO94MBWri4hWp0Dk86K4wGEwYMytgLIE=
+X-Google-Smtp-Source: ABdhPJzeSkgMtBa+gww+sLmHPLKFSAVOjSwVOfinsPVQIZ485bJsMLGRjBfgUjKuVsy3PYGuRAqBaWZDrQC240s/3pA=
+X-Received: by 2002:a17:902:aa04:b029:d8:b7a8:6a3e with SMTP id
+ be4-20020a170902aa04b02900d8b7a86a3emr7979971plb.58.1605777008885; Thu, 19
+ Nov 2020 01:10:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 19 Nov 2020 15:14:19 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Stanley Chu <stanley.chu@mediatek.com>
-Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com,
-        beanhuo@micron.com, asutoshd@codeaurora.org,
-        matthias.bgg@gmail.com, bvanassche@acm.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kuohong.wang@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, andy.teng@mediatek.com,
-        chaotian.jing@mediatek.com, cc.chou@mediatek.com,
-        jiajie.hao@mediatek.com, alice.chao@mediatek.com
-Subject: Re: [PATCH v1] scsi: ufs: Fix race between shutdown and runtime
- resume flow
-In-Reply-To: <20201119062916.12931-1-stanley.chu@mediatek.com>
-References: <20201119062916.12931-1-stanley.chu@mediatek.com>
-Message-ID: <26585f80038d25fc6ee9dddf07e66b93@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Received: by 2002:a05:6a10:4045:0:0:0:0 with HTTP; Thu, 19 Nov 2020 01:10:08
+ -0800 (PST)
+Reply-To: morrisball102@gmail.com
+From:   Morris Ball <abdulsaladino101@gmail.com>
+Date:   Thu, 19 Nov 2020 10:10:08 +0100
+Message-ID: <CACoN8T1pHf_ZgQvedGqj4acbXE7dscZiOUnSqi_+G1+fT5WASQ@mail.gmail.com>
+Subject: Good day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-11-19 14:29, Stanley Chu wrote:
-> If UFS host device is in runtime-suspended state while
-> UFS shutdown callback is invoked, UFS device shall be
-> resumed for register accesses. Currently only UFS local
-> runtime resume function will be invoked to wake up the host.
-> This is not enough because if someone triggers runtime
-> resume from block layer, then race may happen between
-> shutdown and runtime resume flow, and finally lead to
-> unlocked register access.
-> 
-> To fix this kind of issues, in ufshcd_shutdown(), use
-> pm_runtime_get_sync() instead of resuming UFS device by
-> ufshcd_runtime_resume() "internally" to let runtime PM
-> framework manage the whole resume flow.
-> 
-> Fixes: 57d104c153d3 ("ufs: add UFS power management support")
-> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Dear Good day,
 
-Reviewed-by: Can Guo <cang@codeaurora.org>
+Please accept my apologies I do not intend to invade your privacy, I
+wrote to you earlier, but no answer, in my first post I told you about
+my late client's untimely death, I received several letters from his
+bank, where he made a deposit of ($7.5 million Dollars) before his
+death, the bank asked me to provide his next of kin or any of his
+relatives, who will stand for this claim, otherwise it will be
+confiscated by the bank due to lack of claims from his relatives hence
+I contacted you to present you as his new beneficiary next of kin.
+After your reply I shall give you more details and procedures of this
+transaction, waiting for your reply
 
-> ---
->  drivers/scsi/ufs/ufshcd.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 80cbce414678..bb16cc04f106 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -8941,11 +8941,7 @@ int ufshcd_shutdown(struct ufs_hba *hba)
->  	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba))
->  		goto out;
-> 
-> -	if (pm_runtime_suspended(hba->dev)) {
-> -		ret = ufshcd_runtime_resume(hba);
-> -		if (ret)
-> -			goto out;
-> -	}
-> +	pm_runtime_get_sync(hba->dev);
-> 
->  	ret = ufshcd_suspend(hba, UFS_SHUTDOWN_PM);
->  out:
+Best Regards,
+Mr.Morris Ball.
+E-mai
