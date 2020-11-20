@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C04E2BA0ED
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08BA2BA104
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726159AbgKTDOL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 22:14:11 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:35480 "EHLO
+        id S1726548AbgKTDTU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 22:19:20 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:38702 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725944AbgKTDOL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:14:11 -0500
+        with ESMTP id S1726105AbgKTDTU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:19:20 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3AOfF044941;
-        Fri, 20 Nov 2020 03:14:05 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3AgTr044992;
+        Fri, 20 Nov 2020 03:19:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=s/8N3xCSQsdW1nxIK6iFS39cuZ3X3S3099X+yNSwVNY=;
- b=UNyZAqzNHYbh92DyeBhBKycv3nrnu/v4KNDn6BoUqSe1Lidew3RZvORL40otx1NnnKR+
- 1R3atx06DUJUTMxloGzWN1LdgFygK3KdelvDdREaYD8LNyIUmOiNkY0vZjwDgTpscGLW
- QuA8/GoJ82t5O4IoUyHhjDuT1cycDp6OFYe6uDzZiN13fl9PeJH2QNV+4jdAEED5sJmQ
- h5lDzb7rexe0DbLMcROYhHrAFutM4F9v9jWHJBcU/PdS+txexRsTx0z7St+P6deJ3Vem
- ajtjtFCDMJ48UrMrlu+VEh34zKY2B98O5SQQtdC9mLKdcCOYUQej6gI+TnK000lnDRxs OQ== 
+ bh=kzhRRpx5yRu6Z9t5GD0RCUXCFpjzDl5U8XfrLeTFP+g=;
+ b=Zs4kb1AjNGaftfwGu0N6OezyO8gydHwP+aN/vltVazFoFRMTOZwidSohYh+Ifmws0mmv
+ sx/rVR3aNGNpF4ULmchHvpcxXiY3SckP8ZeZFPUTL6av8UqzwD8Q+mJEhI87LdHEYksj
+ iQYxXxNnbctLL0mg1KgS2uWw0HzniUAScX5Z/RMnehJU+ImNDSZ5he324Ts/0cB0GkRt
+ Z4V1Zvh6cyGhIhy2zWi+qvm5Xn4oqVuqKdAffuJrpJnkhgFN2PdtNVMAWyGTZciwJVQ4
+ keVHR08r3HIBBWFblv/VBNmjjJ3vu3kHl6r2lgeAQX09DftQQ2Vyivrvx5pZvqYyNMoY Tw== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 34t4rb8t00-1
+        by aserp2130.oracle.com with ESMTP id 34t4rb8t9h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Nov 2020 03:14:05 +0000
+        Fri, 20 Nov 2020 03:19:15 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK35iaK166566;
-        Fri, 20 Nov 2020 03:14:04 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 34uspx1ycv-1
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK35ijx166517;
+        Fri, 20 Nov 2020 03:17:15 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 34uspx23u2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Nov 2020 03:14:04 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AK3E3jp021197;
-        Fri, 20 Nov 2020 03:14:03 GMT
+        Fri, 20 Nov 2020 03:17:15 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AK3HErV019707;
+        Fri, 20 Nov 2020 03:17:14 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 19 Nov 2020 19:14:03 -0800
+        with ESMTP ; Thu, 19 Nov 2020 19:17:14 -0800
 To:     Colin King <colin.king@canonical.com>
 Cc:     James Smart <james.smart@broadcom.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>,
@@ -47,15 +47,14 @@ Cc:     James Smart <james.smart@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: lpfc: fix pointer defereference before it
- is null checked issue
+Subject: Re: [PATCH][next] scsi: lpfc: remove dead code on second !ndlp check
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1zh3cwwi5.fsf@ca-mkp.ca.oracle.com>
-References: <20201118131345.460631-1-colin.king@canonical.com>
-Date:   Thu, 19 Nov 2020 22:14:01 -0500
-In-Reply-To: <20201118131345.460631-1-colin.king@canonical.com> (Colin King's
-        message of "Wed, 18 Nov 2020 13:13:45 +0000")
+Message-ID: <yq1tutkwwcx.fsf@ca-mkp.ca.oracle.com>
+References: <20201118133744.461385-1-colin.king@canonical.com>
+Date:   Thu, 19 Nov 2020 22:17:12 -0500
+In-Reply-To: <20201118133744.461385-1-colin.king@canonical.com> (Colin King's
+        message of "Wed, 18 Nov 2020 13:37:44 +0000")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
@@ -64,7 +63,7 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 m
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011200022
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015
  malwarescore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
  mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=1 spamscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
@@ -76,10 +75,11 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Colin,
 
-> There is a null check on pointer lpfc_cmd after the pointer has been
-> dereferenced when pointers rdata and ndlp are initialized at the start
-> of the function. Fix this by only assigning rdata and ndlp after the
-> pointer lpfc_cmd has been null checked.
+> Currently there is a null check on the pointer ndlp that exits via
+> error path issue_ct_rsp_exit followed by another null check on the
+> same pointer that is almost identical to the previous null check
+> stanza and yet can never can be reached because the previous check
+> exited via issue_ct_rsp_exit. This is deadcode and can be removed.
 
 Applied to 5.11/scsi-staging, thanks!
 
