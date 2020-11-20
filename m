@@ -2,70 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 303332BA100
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B985F2BA108
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727330AbgKTDRh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 22:17:37 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:37664 "EHLO
+        id S1727181AbgKTDT5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 22:19:57 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:39130 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726515AbgKTDRg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:17:36 -0500
+        with ESMTP id S1727040AbgKTDT5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:19:57 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3ASSD044953;
-        Fri, 20 Nov 2020 03:17:32 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3AMkM044895;
+        Fri, 20 Nov 2020 03:19:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=/AZaGsozau1Ylap7Gb4tYCOsCEIKJGqpAULHIQ4wllw=;
- b=ZWTUlf924IImxXkmc5OYBWA6SsxtkokZs4bbW3Jpul4VZBuEnegzsaUkF9IcbXQX2nzG
- d9fLut2btuf4Eu9h2u11PhTjACSdgyksBEtkWvpMpR0lBJWP8vXKY+gqNxqB9CqP/oYt
- SbWtAxH5bpt/COi6wakSHmSfh8Aan6ieJcjjEN1qCi1ANVmMLNQ41rCpECtXJDYpb26+
- sAswCq83pjc7AbqUiqJKIYO48JH8e49wBgij+gjmAYZ2K67h46hsK65XqIkl80Wq0xeV
- P3Wd7Zr2za5kp0ZmTPrO46+waIZkYzex7G1waYjanB6aLUrmSnEqfwSK8fMD10GyK281 Kw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 34t4rb8t65-1
+ bh=P/Qj9YJGfTJLiI6ocgmWlEWiWTZGyYYe4ejODXr/Eow=;
+ b=zHAJSeNhV97QDEZe9SW9e1O+TMBQ1UAeW0AePCmoFW+CbcFv1TXwy510MLL9IXl0Oq9a
+ TzQnRmmt21ffmbrEgyOPQIsnLCEBIoxBPoqDuk7x05W6eXmBrLzs0fV5bxQd20hLalOy
+ kagE5xUbVPdMGV+HVMovs0lRh+9Y2F7edzd6NTFBShr62M9DwVnQtsADYjH3vuSb/9dm
+ 2gU/gT2vXcLxSiFdI930bpoQVGAawpcrpqWhzboNLCUdzan8sZfSLz8ljFKLM0qtaaeR
+ lj2ndiHO43e8hCAqwSeVx6wxAcMGHJ6alZiYtrVxIZuv1fuD2ZJS879G0KqKWitnjcgI mA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 34t4rb8tan-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Nov 2020 03:17:31 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK36eTQ160822;
-        Fri, 20 Nov 2020 03:17:31 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 34ts60w1ah-1
+        Fri, 20 Nov 2020 03:19:53 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK35cPq028084;
+        Fri, 20 Nov 2020 03:19:53 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 34ts0upnjd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Nov 2020 03:17:31 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AK3HUUr010591;
-        Fri, 20 Nov 2020 03:17:30 GMT
+        Fri, 20 Nov 2020 03:19:53 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AK3JpKk023651;
+        Fri, 20 Nov 2020 03:19:51 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 19 Nov 2020 19:17:29 -0800
-To:     Colin King <colin.king@canonical.com>
-Cc:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: lpfc: Fix memory leak on lcb_context
+        with ESMTP ; Thu, 19 Nov 2020 19:19:51 -0800
+To:     James Smart <james.smart@broadcom.com>
+Cc:     linux-scsi@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] lpfc: Fix missing prototype warning for
+ lpfc_fdmi_vendor_attr_mi
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1o8jswwci.fsf@ca-mkp.ca.oracle.com>
-References: <20201118141314.462471-1-colin.king@canonical.com>
-Date:   Thu, 19 Nov 2020 22:17:27 -0500
-In-Reply-To: <20201118141314.462471-1-colin.king@canonical.com> (Colin King's
-        message of "Wed, 18 Nov 2020 14:13:14 +0000")
+Message-ID: <yq1ima0ww8e.fsf@ca-mkp.ca.oracle.com>
+References: <20201119203328.121772-1-james.smart@broadcom.com>
+Date:   Thu, 19 Nov 2020 22:19:50 -0500
+In-Reply-To: <20201119203328.121772-1-james.smart@broadcom.com> (James Smart's
+        message of "Thu, 19 Nov 2020 12:33:28 -0800")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 phishscore=0
- suspectscore=5 mlxscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011200022
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 suspectscore=1 spamscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011200022
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015
  malwarescore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=5 spamscore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=1 spamscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011200022
 Precedence: bulk
@@ -73,13 +69,9 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Colin,
+James,
 
-> Currently there is an error return path that neglects to free the
-> allocation for lcb_context.  Fix this by adding a new error free exit
-> path that kfree's lcb_context before returning.  Use this new kfree
-> exit path in another exit error path that also kfree's the same
-> object, allowing a line of code to be removed.
+> Function needs to be declared as static.
 
 Applied to 5.11/scsi-staging, thanks!
 
