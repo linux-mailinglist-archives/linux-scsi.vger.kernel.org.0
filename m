@@ -2,79 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 032272BA116
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3C32BA127
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgKTDY7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 22:24:59 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:42360 "EHLO
+        id S1726672AbgKTDaB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 22:30:01 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:45622 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbgKTDY7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:24:59 -0500
+        with ESMTP id S1725887AbgKTDaB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:30:01 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3OUfu070114;
-        Fri, 20 Nov 2020 03:24:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : in-reply-to : message-id : references : date : mime-version :
- content-type; s=corp-2020-01-29;
- bh=dQWJOrnj3mw6JIRHWrcMexXtHqc0RwecP/89n5DZ8Rc=;
- b=xsGcQ3QoEizcAvLjSRd3JYQ1fwQSbvbzsAz8GdNzBXtpeglecZZrYanP1ydCWh1LsZIX
- p7ZA0xQx6YjXrPB2iDMzZ9UwrhpkqtIJDa0XBV3HqWE29m0hYF0z3Pc1G1nJGpFcMwMp
- YfrnsWLhjAhtYmGEn8DpobUyuVgX+Cd7ERYAjJqgiazVJCz8FjUIPFKTfUWpo7hJEBmo
- Y7JfJM+eAzUVmEVluW9ZHmfaLDElhrrtJ/H674P2TE+Uhob0713C7fD//dz0+OSJj4OZ
- FTA3KImRw5+WIYUncIeO5W4FXF/2k+SkoLWBxv5Ho13oKaEO8g9KK1nBehrClrrvUxJn 0g== 
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3OnBd070169;
+        Fri, 20 Nov 2020 03:29:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=JUl9Oy+xUSpMnGiSebmleA6BvZq25faqvbOg2K3HtkU=;
+ b=xTBgh7iV8YnnOhUYaRIdM1MX6c7+x2x5WM5JSCOIw7iaT8Q0ky18bz80dmfkqCBoiI3I
+ bO8wBaAh8hoGUD+eYAFmNzXrI6aeZ2LohCRQEANd0Cqj3OVca7HQ/VZbbmCPYJRGrxLd
+ IQkh//oZj9KwXa9qlf7/ek/QI9jE2+ZollMA/IxC6SG8KWK+bfjQBnLV0ODR2K72TTLW
+ O2vORRdhp5yLySz8c39Bjhg19FUkOmWbIzJaKo9vuZbw0xAlGmZ71OAXEm/4rYW6SVzu
+ +hjHVWADfVRnc0CW04D3EqbCNj6PAxDCeAThNBT8eB4TTc9BV1TGXmFw+v3RyvyUQXl5 Ew== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 34t4rb8tkq-1
+        by aserp2130.oracle.com with ESMTP id 34t4rb8tu4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Nov 2020 03:24:55 +0000
+        Fri, 20 Nov 2020 03:29:48 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK35ilW166518;
-        Fri, 20 Nov 2020 03:22:55 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 34uspx29v5-1
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3Pi4n032359;
+        Fri, 20 Nov 2020 03:29:47 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 34uspx2g7b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Nov 2020 03:22:55 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AK3MtMr022363;
-        Fri, 20 Nov 2020 03:22:55 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        Fri, 20 Nov 2020 03:29:47 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AK3TjdM029067;
+        Fri, 20 Nov 2020 03:29:46 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 19 Nov 2020 19:22:54 -0800
-To:     James Smart <james.smart@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] lpfc: Fix variable 'vport' set but not used in
- lpfc_sli4_abts_err_handler
+        with ESMTP ; Thu, 19 Nov 2020 19:29:45 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-In-Reply-To: <20201119203407.121913-1-james.smart@broadcom.com> (James Smart's
-        message of "Thu, 19 Nov 2020 12:34:07 -0800")
-Organization: Oracle Corporation
-Message-ID: <yq1v9e0vhja.fsf@ca-mkp.ca.oracle.com>
-References: <20201119203407.121913-1-james.smart@broadcom.com>
-Date:   Thu, 19 Nov 2020 22:22:53 -0500
+To:     Justin.Lindley@microchip.com, Kevin.Barnett@microchip.com,
+        joseph.szczypek@hpe.com, gerry.morong@microchip.com,
+        hch@infradead.org, POSWALD@suse.com,
+        Don Brace <don.brace@microchip.com>,
+        mahesh.rajashekhara@microchip.com, scott.teel@microchip.com,
+        scott.benesh@microchip.com, jejb@linux.vnet.ibm.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 0/3] smartpqi updates
+Date:   Thu, 19 Nov 2020 22:29:33 -0500
+Message-Id: <160584262850.7157.296979724827286830.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <160512621964.2359.14416010917893813538.stgit@brunhilda>
+References: <160512621964.2359.14416010917893813538.stgit@brunhilda>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=854 malwarescore=0
- mlxscore=0 bulkscore=0 suspectscore=1 adultscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 bulkscore=0 suspectscore=0 adultscore=0 spamscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011200022
+ engine=8.12.0-2009150000 definitions=main-2011200023
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1015
  malwarescore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=866 adultscore=0 phishscore=0 suspectscore=1 spamscore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=0 spamscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011200023
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Wed, 11 Nov 2020 14:24:33 -0600, Don Brace wrote:
 
-James,
+> These patches are based on Linus's tree
+> 
+> This small set of changes consist of two minor bug fixes:
+>   * Remove an unbalanced call to pqi_ctrl_unbusy in the smp
+>     handler. There is not a call to pqi_ctrl_busy.
+>   * Correct driver rmmod hang when using HBA disks with
+>     write cache enabled. During removal, SCSI SYNCHRONIZE CACHE
+>     requests are blocked with SCSI_MLQUEUE_HOST_BUSY which cause
+>     the hang.
+> Also included is a version change.
 
-> Remove vport variable that is assigned but not used in
-> lpfc_sli4_abts_err_handler().
+Applied to 5.11/scsi-queue, thanks!
 
-Applied to 5.11/scsi-staging, thanks!
+[1/3] scsi: smartpqi: Correct driver removal with HBA disks
+      https://git.kernel.org/mkp/scsi/c/1bdf6e934387
+[2/3] scsi: smartpqi: Correct pqi_sas_smp_handler busy condition
+      https://git.kernel.org/mkp/scsi/c/408bdd7e5845
+[3/3] scsi: smartpqi: Update version to 1.2.16-012
+      https://git.kernel.org/mkp/scsi/c/5443bdc4cc77
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
