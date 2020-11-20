@@ -2,65 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5622BA130
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 692552BA141
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgKTDcA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 22:32:00 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:35080 "EHLO
+        id S1727181AbgKTDhA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 22:37:00 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:38412 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726314AbgKTDcA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:32:00 -0500
+        with ESMTP id S1726674AbgKTDg7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:36:59 -0500
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3QOHl097173;
-        Fri, 20 Nov 2020 03:31:49 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3OxAh096019;
+        Fri, 20 Nov 2020 03:31:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=ofRlNUws8pz30CMsIW3vU9rnckAljY2y638SwvM8cEA=;
- b=dXoEMp6j9n2W4mmSEAlVZknhsgmSmo1P6fYK2v0cfmcSd1bPoyQJak1AozTIvWtpJ/0u
- Z2DWtLMVAUvyxaTU/Rg7tyRwWdRHmv8VPVspqjYr/M6Gvfj4DYEtdoalCOcwmpuKia1c
- MLTikE4Fxdq9dy6n6wiHyAtSagVWcjxoftXpbaHE7JOcW62YgYBxf53+z/8bTnb6Gspu
- 05Bc6VUlU+v/Ug7z1XvR6cdqanhl06lfSkmF/APFJTJlIjcgUvVWbEjRJkVVVRRyjTyQ
- pU5oj88VdG79wCjw9QEdfVLsrz2QWpetUwP+tev757f7VhAcJPLrhRP2S4yqo63Grs0J Uw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 34t76m8qxm-1
+ bh=67dTBmUGckDFPhVupJWT4pclAbMGc1TiRi9QJ/ol3GY=;
+ b=loglzgexwG8sza19oTC6ypZun0gEUI92sSd4Nap91uYDY9Ciok9XD2e+5XJElwgy4Ysu
+ ncKaifhY78nYxF9aghYQcMoKo2eeO86BqxnrRXpcD9o/JBo2r8y3t87GvflMgpMdz7Xa
+ EwNpuz1RYA4Ief0wRTGMZcGCBh9BXJXwZsw6j2I4RXpvfbjtjStOvsy/8HmWgVjVZDTc
+ vCbjnUT5k4X7gOjvCG6JB3BxfwWeupabn7bUYQipitbmfkbYEWALbMhEHYNFJFafY13e
+ 8RiRlAn9tVNSbwBDM8fGWKjcvN0vSYNBfH233rQMmkxY2W+FoeLJydDdOwjVWd8t0lJe 2g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 34t76m8qxn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Nov 2020 03:31:49 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3PjJT032475;
-        Fri, 20 Nov 2020 03:31:49 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 34uspx2jwh-1
+        Fri, 20 Nov 2020 03:31:51 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3OeZP029073;
+        Fri, 20 Nov 2020 03:31:50 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 34ts60wh8v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Nov 2020 03:31:49 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AK3VleU017490;
-        Fri, 20 Nov 2020 03:31:47 GMT
+        Fri, 20 Nov 2020 03:31:50 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AK3VmYF011032;
+        Fri, 20 Nov 2020 03:31:48 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 19 Nov 2020 19:31:47 -0800
+        with ESMTP ; Thu, 19 Nov 2020 19:31:48 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, Jing Xiangfeng <jingxiangfeng@huawei.com>
+To:     jejb@linux.ibm.com, Lee Jones <lee.jones@linaro.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: qla4xxx: Remove redundant assignment to variable rval
-Date:   Thu, 19 Nov 2020 22:31:40 -0500
-Message-Id: <160584262853.7157.9544470440731442413.b4-ty@oracle.com>
+Subject: Re: [PATCH 1/1] scsi: pm8001: pm8001_hwi: Remove unused variable 'value'
+Date:   Thu, 19 Nov 2020 22:31:41 -0500
+Message-Id: <160584262848.7157.434419881287888181.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201103120137.109717-1-jingxiangfeng@huawei.com>
-References: <20201103120137.109717-1-jingxiangfeng@huawei.com>
+In-Reply-To: <20201116104119.816527-1-lee.jones@linaro.org>
+References: <20201116104119.816527-1-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 bulkscore=0 suspectscore=0 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011200023
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 phishscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 bulkscore=0 mlxlogscore=974
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011200023
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 clxscore=1015 mlxlogscore=999
+ adultscore=0 priorityscore=1501 bulkscore=0 clxscore=1015 mlxlogscore=988
  malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011200023
@@ -68,15 +69,19 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 3 Nov 2020 20:01:37 +0800, Jing Xiangfeng wrote:
+On Mon, 16 Nov 2020 10:41:19 +0000, Lee Jones wrote:
 
-> The variable rval has been initialized with 'QLA_ERROR'. The assignment
-> is redundant in an error path. So remove it.
+> Hasn't been used since 2009.
+> 
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/scsi/pm8001/pm8001_hwi.c: In function ‘mpi_set_phys_g3_with_ssc’:
+>  drivers/scsi/pm8001/pm8001_hwi.c:415:6: warning: variable ‘value’ set but not used [-Wunused-but-set-variable]
 
 Applied to 5.11/scsi-queue, thanks!
 
-[1/1] scsi: qla4xxx: Remove redundant assignment to variable rval
-      https://git.kernel.org/mkp/scsi/c/cf4d4d8ebdb8
+[1/1] scsi: pm8001: Remove unused variable 'value'
+      https://git.kernel.org/mkp/scsi/c/a364a3ea32da
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
