@@ -2,84 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C61C2BA139
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 04:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA962BA181
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Nov 2020 05:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbgKTDeK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Nov 2020 22:34:10 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:36580 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726683AbgKTDeK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 22:34:10 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3SXsm098115;
-        Fri, 20 Nov 2020 03:33:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=gpHNhwltXbctafKIWWGNMwxN2Xhap722syu01cunpG4=;
- b=lkO5viPCzEiYVU0WjjD0kPJw8rndx/fbx95SrjBrohBdkXP3Z/wiO6KpSnLZUuSrqfke
- L+oH3aomQXSl+jM23FL5sGe6JTOz5xN5nvxs/uDxPDK4b71sp70wDxP+Kdy7tV9TXW1B
- ZzI+UobTAtwvSmQ77151SS47TPCRkWQc4gGLnB31UhEoEsM7X/HgXZ4PuTrdGVv9dHxJ
- pguDN+aNRuqv8uf3CLMpLt609t6qSdko55JECJRz7diZb7aJcs8CzLuiafpt/vMz8F1B
- 0fAU7vHlGpHY7np3+dghWESHNO4a4xuYIRgqW35iS7UHcX94eh1C4HB8oUYJWnaAMxn3 SA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 34t76m8r30-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Nov 2020 03:33:58 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AK3PP59032478;
-        Fri, 20 Nov 2020 03:31:58 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 34umd2w0wv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Nov 2020 03:31:58 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AK3Vvx6029968;
-        Fri, 20 Nov 2020 03:31:57 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 19 Nov 2020 19:31:57 -0800
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, Zou Wei <zou_wei@huawei.com>,
-        subbu.seetharaman@broadcom.com, ketan.mukadam@broadcom.com,
-        jitendra.bhivare@broadcom.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH -next] scsi: be2iscsi: Mark beiscsi_attrs with static keyword
-Date:   Thu, 19 Nov 2020 22:31:46 -0500
-Message-Id: <160584262852.7157.3690097884416896355.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <1605339474-22329-1-git-send-email-zou_wei@huawei.com>
-References: <1605339474-22329-1-git-send-email-zou_wei@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 phishscore=0
- spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011200023
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9810 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 clxscore=1015 mlxlogscore=999
- malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011200023
+        id S1726325AbgKTEvj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Nov 2020 23:51:39 -0500
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:52650 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726172AbgKTEvg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Nov 2020 23:51:36 -0500
+Received: by kvm5.telegraphics.com.au (Postfix, from userid 502)
+        id A38082A451; Thu, 19 Nov 2020 23:51:35 -0500 (EST)
+To:     Michael Schmitz <schmitzmic@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <af25163257796b50bb99d4ede4025cea55787b8f.1605847196.git.fthain@telegraphics.com.au>
+From:   Finn Thain <fthain@telegraphics.com.au>
+Subject: [PATCH] scsi/atari_scsi: Fix race condition between .queuecommand and
+ EH
+Date:   Fri, 20 Nov 2020 15:39:56 +1100
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 14 Nov 2020 15:37:54 +0800, Zou Wei wrote:
+It is possible that bus_reset_cleanup() or .eh_abort_handler could
+be invoked during NCR5380_queuecommand(). If that takes place before
+the new command is enqueued and after the ST-DMA "lock" has been
+acquired, the ST-DMA "lock" will be released again. This will result
+in a lost DMA interrupt and a command timeout. Fix this by excluding
+EH and interrupt handlers while the new command is enqueued.
 
-> Fix the following sparse warning:
-> 
-> ./be_main.c:167:25: warning: symbol 'beiscsi_attrs' was not declared. Should it be static?
+Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+---
+Michael, would you please send your Acked-by or Reviewed-and-tested-by?
+These two patches taken together should be equivalent to the one you tested
+recently. I've split it into two as that seemed to make more sense.
+---
+ drivers/scsi/NCR5380.c    |  9 ++++++---
+ drivers/scsi/atari_scsi.c | 10 +++-------
+ 2 files changed, 9 insertions(+), 10 deletions(-)
 
-Applied to 5.11/scsi-queue, thanks!
-
-[1/1] scsi: be2iscsi: Mark beiscsi_attrs with static keyword
-      https://git.kernel.org/mkp/scsi/c/4ab2990a5ce1
-
+diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+index d654a6cc4162..ea4b5749e7da 100644
+--- a/drivers/scsi/NCR5380.c
++++ b/drivers/scsi/NCR5380.c
+@@ -580,11 +580,14 @@ static int NCR5380_queue_command(struct Scsi_Host *instance,
+ 
+ 	cmd->result = 0;
+ 
+-	if (!NCR5380_acquire_dma_irq(instance))
+-		return SCSI_MLQUEUE_HOST_BUSY;
+-
+ 	spin_lock_irqsave(&hostdata->lock, flags);
+ 
++	if (!NCR5380_acquire_dma_irq(instance)) {
++		spin_unlock_irqrestore(&hostdata->lock, flags);
++
++		return SCSI_MLQUEUE_HOST_BUSY;
++	}
++
+ 	/*
+ 	 * Insert the cmd into the issue queue. Note that REQUEST SENSE
+ 	 * commands are added to the head of the queue since any command will
+diff --git a/drivers/scsi/atari_scsi.c b/drivers/scsi/atari_scsi.c
+index a82b63a66635..95d7a3586083 100644
+--- a/drivers/scsi/atari_scsi.c
++++ b/drivers/scsi/atari_scsi.c
+@@ -376,15 +376,11 @@ static int falcon_get_lock(struct Scsi_Host *instance)
+ 	if (IS_A_TT())
+ 		return 1;
+ 
+-	if (stdma_is_locked_by(scsi_falcon_intr) &&
+-	    instance->hostt->can_queue > 1)
++	if (stdma_is_locked_by(scsi_falcon_intr))
+ 		return 1;
+ 
+-	if (in_interrupt())
+-		return stdma_try_lock(scsi_falcon_intr, instance);
+-
+-	stdma_lock(scsi_falcon_intr, instance);
+-	return 1;
++	/* stdma_lock() may sleep which means it can't be used here */
++	return stdma_try_lock(scsi_falcon_intr, instance);
+ }
+ 
+ #ifndef MODULE
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.26.2
+
