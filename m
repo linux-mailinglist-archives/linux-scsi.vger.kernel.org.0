@@ -2,110 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A5F2BFE7F
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 Nov 2020 04:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7072BFE94
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 Nov 2020 04:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgKWDCE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 22 Nov 2020 22:02:04 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:50693 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726903AbgKWDCE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 22 Nov 2020 22:02:04 -0500
-Received: (qmail 695174 invoked by uid 1000); 22 Nov 2020 22:02:02 -0500
-Date:   Sun, 22 Nov 2020 22:02:02 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Can Guo <cang@codeaurora.org>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, ziqichen@codeaurora.org,
-        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH RFC v2 1/1] scsi: pm: Leave runtime PM status alone
- during system resume/thaw/restore
-Message-ID: <20201123030202.GA694907@rowland.harvard.edu>
-References: <1605861443-11459-1-git-send-email-cang@codeaurora.org>
- <20201120163524.GB619708@rowland.harvard.edu>
- <ff2975f88cc452d134b8bf24c55bec09@codeaurora.org>
+        id S1727909AbgKWDR6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 22 Nov 2020 22:17:58 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44560 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727709AbgKWDR5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 22 Nov 2020 22:17:57 -0500
+Received: by mail-pf1-f195.google.com with SMTP id y7so13570110pfq.11;
+        Sun, 22 Nov 2020 19:17:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JdacO1PAka2oa8mQksw1pu4/yi2dGdopCnDapBlAxf0=;
+        b=B6nkBYVYegoslGXaLiga1mnoEnOqoEjKa6S5FMgwkkSYCVvAJHFuM3HGMzpY72uuPW
+         9sbcDSLuQCesl2pX4VEKtiIjt3W7Jgw2USSQazxkBNjTo6v02Z4J7HeT98mGdP9eLqBd
+         KLSiKOwg+PFzcBuAu5ISLDn/JPJzVqjq8Q236CRQ6BFWFilIM2dsuJ1M2inBYBfDV4XZ
+         oxWAXR/nS8UKwRPB6GJq0czjuoCPOaZ0OVkEiptQ2beBqtcK1Ci8J1DBqZXg7aRXWBWY
+         OUdF6g4/v+8kbWrcAH623Ft5mpVPmnHpsvM1kMl3gY308o+MTQJ0ByCDuQnzXtg0F6iS
+         fkVQ==
+X-Gm-Message-State: AOAM533+WFE4Geq2F9LnHFUpe9LQLw2cFPXCB1zZDYcnYauVA5m6PUgp
+        hKeL0lGp7LRxu9EgFL0ggaQ=
+X-Google-Smtp-Source: ABdhPJwyCJz/xswKK8RgXirTVtta98y+e6uasurYUM3006ZYr7Yb2rwEFSqSIH1NbyPMBTTwMWB3Yg==
+X-Received: by 2002:a17:90a:f691:: with SMTP id cl17mr1534082pjb.206.1606101476735;
+        Sun, 22 Nov 2020 19:17:56 -0800 (PST)
+Received: from asus.hsd1.ca.comcast.net (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id w12sm3578751pfn.136.2020.11.22.19.17.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Nov 2020 19:17:55 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
+        linux-block@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v3 0/9] Rework runtime suspend and SCSI domain validation
+Date:   Sun, 22 Nov 2020 19:17:40 -0800
+Message-Id: <20201123031749.14912-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff2975f88cc452d134b8bf24c55bec09@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 09:23:53AM +0800, Can Guo wrote:
-> Hi Alan,
-> 
-> On 2020-11-21 00:35, Alan Stern wrote:
-> > On Fri, Nov 20, 2020 at 12:37:22AM -0800, Can Guo wrote:
-> > > Runtime resume is handled by runtime PM framework, no need to forcibly
-> > > set runtime PM status to RPM_ACTIVE during system resume/thaw/restore.
-> > 
-> > Sorry, I don't understand this explanation at all.
-> > 
-> > Sure, runtime resume is handled by the runtime PM framework.  But this
-> > patch changes the code for system resume, which is completely different.
-> > 
-> > Following a system resume, the hardware will be at full power.  We don't
-> > want the kernel to think that the device is still in runtime suspend;
-> > otherwise is would never put the device back into low-power mode.
-> 
-> How about adding below lines to the patch?
-> 
-> diff --git a/drivers/scsi/scsi_pm.c b/drivers/scsi/scsi_pm.c
-> index 908f27f..7ebe582 100644
-> --- a/drivers/scsi/scsi_pm.c
-> +++ b/drivers/scsi/scsi_pm.c
-> @@ -75,9 +75,11 @@ static int scsi_dev_type_resume(struct device *dev,
->         const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
->         int err = 0;
-> 
-> -       err = cb(dev, pm);
-> -       scsi_device_resume(to_scsi_device(dev));
-> -       dev_dbg(dev, "scsi resume: %d\n", err);
-> +       if (pm_runtime_active(dev)) {
-> +               err = cb(dev, pm);
-> +               scsi_device_resume(to_scsi_device(dev));
-> +               dev_dbg(dev, "scsi resume: %d\n", err);
-> +       }
-> 
->         return err;
->  }
-> 
-> Whenever a device is accessed, the issuer or somewhere in the path
-> should do something like pm_runtime_get_sync (e.g. in sg_open()) or
-> pm_runtime_resume() (e.g. in blk_queue_enter()), in either sync or
-> async way. After the job (read/write/ioctl or whatever) is done,
-> either a pm_runtime_put_sync() or auto runtime suspend puts the device
-> back into runtime suspended/low-power mode. Since the func
-> scsi_bus_suspend_common() does nothing if device is already in runtime
-> suspended mode, scsi_dev_type_resume() should only resume the device
-> if it is runtime active.
+Hi Martin,
 
-You're starting to think along the right lines, but you are ignoring all 
-the other work that people have already done for handling these cases.
+The SCSI runtime suspend and domain validation mechanisms both use
+scsi_device_quiesce(). scsi_device_quiesce() restricts blk_queue_enter() to
+BLK_MQ_REQ_PREEMPT requests. There is a conflict between the requirements
+of runtime suspend and SCSI domain validation: no requests must be sent to
+runtime suspended devices that are in the state RPM_SUSPENDED while
+BLK_MQ_REQ_PREEMPT requests must be processed during SCSI domain
+validation. This conflict is resolved by reworking the SCSI domain
+validation implementation.
 
-Please read Documentation/driver-api/pm/devices.rst very carefully, 
-especially the parts about returning a positive value from the ->prepare 
-callback (also known as "direct-complete" and related to the 
-DPM_FLAG_NO_DIRECT_COMPLETE and DPM_FLAG_SMART_PREPARE flags) and the 
-parts about the DPM_FLAG_SMART_SUSPEND and DPM_FLAG_MAY_SKIP_RESUME 
-flags.  Then think about what you want to accomplish and write a patch 
-that takes all this information into account.
+Hybernation, runtime suspend and SCSI domain validation have been retested.
 
-Key point: At no time should any part of the kernel think that the 
-device is in a low-power state when it is actually in a high-power 
-state, or vice versa.
+Please consider this patch series for kernel v5.11.
 
-Alan Stern
+Thanks,
+
+Bart.
+
+Changes between v2 and v3:
+- Inlined scsi_mq_alloc_queue() into scsi_alloc_sdev() as requested by
+  Christoph.
+
+Changes between v1 and v2:
+- Rebased this patch series on top of kernel v5.10-rc1.
+
+Alan Stern (1):
+  block: Do not accept any requests while suspended
+
+Bart Van Assche (8):
+  block: Fix a race in the runtime power management code
+  ide: Do not set the RQF_PREEMPT flag for sense requests
+  scsi: Pass a request queue pointer to __scsi_execute()
+  scsi: Inline scsi_mq_alloc_queue()
+  scsi: Do not wait for a request in scsi_eh_lock_door()
+  scsi_transport_spi: Make spi_execute() accept a request queue pointer
+  scsi_transport_spi: Freeze request queues instead of quiescing
+  block, scsi, ide: Only process PM requests if rpm_status != RPM_ACTIVE
+
+ block/blk-core.c                  |  12 +--
+ block/blk-mq-debugfs.c            |   1 -
+ block/blk-mq.c                    |   4 +-
+ block/blk-pm.c                    |  15 +--
+ block/blk-pm.h                    |  14 ++-
+ drivers/ide/ide-atapi.c           |   1 -
+ drivers/ide/ide-io.c              |   3 +-
+ drivers/ide/ide-pm.c              |   2 +-
+ drivers/scsi/scsi_error.c         |   7 +-
+ drivers/scsi/scsi_lib.c           |  72 ++++++--------
+ drivers/scsi/scsi_priv.h          |   3 +-
+ drivers/scsi/scsi_scan.c          |  12 ++-
+ drivers/scsi/scsi_transport_spi.c | 151 ++++++++++++++++++------------
+ include/linux/blk-mq.h            |   4 +-
+ include/linux/blkdev.h            |   6 +-
+ include/scsi/scsi_device.h        |  14 ++-
+ 16 files changed, 175 insertions(+), 146 deletions(-)
+
