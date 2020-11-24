@@ -2,70 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B78E72C2F0D
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 18:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89F32C2F1E
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 18:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403815AbgKXRnC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 Nov 2020 12:43:02 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:58228 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728945AbgKXRnB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 Nov 2020 12:43:01 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHeYGv113002;
-        Tue, 24 Nov 2020 17:42:54 GMT
+        id S2404008AbgKXRrX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 24 Nov 2020 12:47:23 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:60004 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403935AbgKXRrX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 Nov 2020 12:47:23 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHeZ2J016959;
+        Tue, 24 Nov 2020 17:45:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
  mime-version : subject : from : in-reply-to : date : cc :
  content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=Pj6aFG522HTK2O+nZBQpXmZczUvG+SAK5w/01TmFfss=;
- b=P4oMmewpaKdNI1CC1BqCqkftFcRRFnxnH6zuX2rpLPR+R6moCJc4sjyxMHAxR57HABiN
- R09LltD03dQggfjO0OgKj5NZwp16pfdGt76n8KxXQHMJC7agdTjw4+UsxJl7+VmbGl7c
- yFBrO/2Rx0Kr3m2NsgS50IrgwcG38GndHnsqOfQSaZE9ehh5C0iumYUeKBpzXPUJulep
- SaArxVLzcFmUwe8gCvn7G11ww4pi4u0SfYvJg9OJuGmDKpbYv3aHYmJ1i7nDjqsxMK6D
- WX7pVtkpXsVsHkNEBvEaw7l9J+t6WhyW1v13xBkvWcqNRpKvTGimapj/j7YU5Oxeee3D eA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 34xtum42vx-1
+ s=corp-2020-01-29; bh=SrC1MPaeb8YIM01kqo1k2A7vhURfg43IGThsDyqfzSs=;
+ b=jqVzqsHgvcQ04wy+zJSkuMgbvj/nmWXxvSkIpux+W5lwKYxqZlNwgZLj75GJg+wna50l
+ nFTz9GLG7PurGEFdRZVUUzPZ3B5cmdNXr7hyHgM55CMZcZXPj3LZt3QOkeHVIJN8hTMq
+ njseZgC9ZY9iA5BLNBqwA8/pIbyVT3YwJ5jYdQd+9Tw9KsfpSwdF/lqujFa+O8e5jIGn
+ mjxy5DserYKek7aOpRJY+ogvUvNaxOvuKeo3j5Ek/Tf2Dqo7OAa2hNHtGVUs3tzRsz/q
+ W4vju03Lm3jJ0RRXLEACzwqcfxE+8v37wQrt2Rz682dN2mPu6Y043s6bGOUUEv3nJiKh Hw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 34xrdav957-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Nov 2020 17:42:54 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHe0v8104153;
-        Tue, 24 Nov 2020 17:42:54 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 34ycfnmqvg-1
+        Tue, 24 Nov 2020 17:45:15 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHev1N117360;
+        Tue, 24 Nov 2020 17:43:14 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 34yctwt9rw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Nov 2020 17:42:54 +0000
+        Tue, 24 Nov 2020 17:43:14 +0000
 Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AOHgqpT028909;
-        Tue, 24 Nov 2020 17:42:52 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AOHhDaI012336;
+        Tue, 24 Nov 2020 17:43:13 GMT
 Received: from [192.168.1.15] (/70.114.128.235)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 24 Nov 2020 09:42:52 -0800
+        with ESMTP ; Tue, 24 Nov 2020 09:43:13 -0800
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH v7 1/5] scsi: Added a new error code
- DID_TRANSPORT_MARGINAL in scsi.h
+Subject: Re: [PATCH v7 2/5] scsi: No retries on abort success
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
-In-Reply-To: <1605070685-20945-2-git-send-email-muneendra.kumar@broadcom.com>
-Date:   Tue, 24 Nov 2020 11:42:50 -0600
+In-Reply-To: <1605070685-20945-3-git-send-email-muneendra.kumar@broadcom.com>
+Date:   Tue, 24 Nov 2020 11:43:13 -0600
 Cc:     linux-scsi@vger.kernel.org, michael.christie@oracle.com,
         hare@suse.de, jsmart2021@gmail.com, emilne@redhat.com,
         mkumar@redhat.com
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <955440FA-FBF0-410D-88C0-86AA2727F70D@oracle.com>
+Message-Id: <81652DA5-494A-413C-AB85-914909167855@oracle.com>
 References: <1605070685-20945-1-git-send-email-muneendra.kumar@broadcom.com>
- <1605070685-20945-2-git-send-email-muneendra.kumar@broadcom.com>
+ <1605070685-20945-3-git-send-email-muneendra.kumar@broadcom.com>
 To:     Muneendra <muneendra.kumar@broadcom.com>
 X-Mailer: Apple Mail (2.3608.120.23.2.4)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9815 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
- adultscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011240107
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 phishscore=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011240107
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9815 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 lowpriorityscore=0
- malwarescore=0 mlxlogscore=999 impostorscore=0 spamscore=0 mlxscore=0
- phishscore=0 clxscore=1011 suspectscore=0 bulkscore=0 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 impostorscore=0 mlxscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011240107
 Precedence: bulk
@@ -77,25 +76,30 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 > On Nov 10, 2020, at 10:58 PM, Muneendra <muneendra.kumar@broadcom.com> =
 wrote:
 >=20
-> Added a new error code DID_TRANSPORT_MARGINAL to handle marginal
-> errors in scsi.h
+> Added a new optional routine eh_should_retry_cmd
+> in scsi_host_template that allows the transport to decide if a
+> cmd is retryable.Return true if the transport is in a state the
+> cmd should be retried on.
 >=20
-> Added a code in scsi_result_to_blk_status to translate
-> a new error DID_TRANSPORT_MARGINAL to the corresponding blk_status_t
-> i.e BLK_STS_TRANSPORT
+> Added a new interface scsi_eh_should_retry_cmd which checks and
+> calls the new routine eh_should_retry_cmd.
 >=20
-> Added DID_TRANSPORT_MARGINAL case to scsi_decide_disposition
+> Made changes in scmd_eh_abort_handler and scsi_eh_flush_done_q which
+> calls the scsi_eh_should_retry_cmd to check whether the
+> command needs to be retried.
+>=20
+> The above changes were done based on a patch by Mike Christie.
 >=20
 > Signed-off-by: Muneendra <muneendra.kumar@broadcom.com>
 >=20
 > ---
 > v7:
-> Rearranged the patch by moving the DID_TRANSPORT_MARGINAL
-> and the changes with respect to the same to this patch
-> from the previous patch2 in v6
+> Added New routine in scsi_host_template to decide if a cmd is
+> retryable instead of checking the same using  SCMD_NORETRIES_ABORT
+> bit as the cmd retry part can be checked by validating the port state.
 >=20
-> Removed the previuos patch patch1 in v6 as in the
-> current approach there is no need of this bit SCMD_NORETRIES_ABORT
+> Moved the DID_TRANSPORT_MARGINAL changes to previous patch
+> for reordering
 >=20
 > v6:
 > Rearranged the patch by merging second hunk of the patch2 in v5
@@ -115,59 +119,76 @@ wrote:
 > set the hostbyte as DID_TRANSPORT_MARGINAL instead of
 > DID_TRANSPORT_FAILFAST.
 > ---
-> drivers/scsi/scsi_error.c | 6 ++++++
-> drivers/scsi/scsi_lib.c   | 1 +
-> include/scsi/scsi.h       | 1 +
-> 3 files changed, 8 insertions(+)
+> drivers/scsi/scsi_error.c | 17 +++++++++++++++--
+> include/scsi/scsi_host.h  |  6 ++++++
+> 2 files changed, 21 insertions(+), 2 deletions(-)
 >=20
 > diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-> index f11f51e2465f..28056ee498b3 100644
+> index 28056ee498b3..1cdfa5a8ca09 100644
 > --- a/drivers/scsi/scsi_error.c
 > +++ b/drivers/scsi/scsi_error.c
-> @@ -1861,6 +1861,12 @@ int scsi_decide_disposition(struct scsi_cmnd =
-*scmd)
-> 		 * the fast io fail tmo fired), so send IO directly =
-upwards.
-> 		 */
-> 		return SUCCESS;
-> +	case DID_TRANSPORT_MARGINAL:
-> +		/*
-> +		 * caller has decided not to do retries on
-> +		 * abort success, so send IO directly upwards
-> +		 */
-> +		return SUCCESS;
-> 	case DID_ERROR:
-> 		if (msg_byte(scmd->result) =3D=3D COMMAND_COMPLETE &&
-> 		    status_byte(scmd->result) =3D=3D =
-RESERVATION_CONFLICT)
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index 20a357563d3d..ce1e2adaca36 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -629,6 +629,7 @@ static blk_status_t =
-scsi_result_to_blk_status(struct scsi_cmnd *cmd, int result)
-> 			return BLK_STS_OK;
-> 		return BLK_STS_IOERR;
-> 	case DID_TRANSPORT_FAILFAST:
-> +	case DID_TRANSPORT_MARGINAL:
-> 		return BLK_STS_TRANSPORT;
-> 	case DID_TARGET_FAILURE:
-> 		set_host_byte(cmd, DID_OK);
-> diff --git a/include/scsi/scsi.h b/include/scsi/scsi.h
-> index 5339baadc082..5b287ad8b727 100644
-> --- a/include/scsi/scsi.h
-> +++ b/include/scsi/scsi.h
-> @@ -159,6 +159,7 @@ static inline int scsi_is_wlun(u64 lun)
-> 				 * paths might yield different results =
-*/
-> #define DID_ALLOC_FAILURE 0x12  /* Space allocation on the device =
-failed */
-> #define DID_MEDIUM_ERROR  0x13  /* Medium error */
-> +#define DID_TRANSPORT_MARGINAL 0x14 /* Transport marginal errors */
-> #define DRIVER_OK       0x00	/* Driver status                         =
-  */
+> @@ -124,6 +124,17 @@ static bool scsi_cmd_retry_allowed(struct =
+scsi_cmnd *cmd)
+> 	return ++cmd->retries <=3D cmd->allowed;
+> }
 >=20
-> /*
+> +static bool scsi_eh_should_retry_cmd(struct scsi_cmnd *cmd)
+> +{
+> +	struct scsi_device *sdev =3D cmd->device;
+> +	struct Scsi_Host *host =3D sdev->host;
+> +
+> +	if (host->hostt->eh_should_retry_cmd)
+> +		return  host->hostt->eh_should_retry_cmd(cmd);
+> +
+> +	return true;
+> +}
+> +
+> /**
+>  * scmd_eh_abort_handler - Handle command aborts
+>  * @work:	command to be aborted.
+> @@ -159,7 +170,8 @@ scmd_eh_abort_handler(struct work_struct *work)
+> 						    "eh timeout, not =
+retrying "
+> 						    "aborted =
+command\n"));
+> 			} else if (!scsi_noretry_cmd(scmd) &&
+> -				   scsi_cmd_retry_allowed(scmd)) {
+> +				   scsi_cmd_retry_allowed(scmd) &&
+> +				scsi_eh_should_retry_cmd(scmd)) {
+> 				SCSI_LOG_ERROR_RECOVERY(3,
+> 					scmd_printk(KERN_WARNING, scmd,
+> 						    "retry aborted =
+command\n"));
+> @@ -2111,7 +2123,8 @@ void scsi_eh_flush_done_q(struct list_head =
+*done_q)
+> 	list_for_each_entry_safe(scmd, next, done_q, eh_entry) {
+> 		list_del_init(&scmd->eh_entry);
+> 		if (scsi_device_online(scmd->device) &&
+> -		    !scsi_noretry_cmd(scmd) && =
+scsi_cmd_retry_allowed(scmd)) {
+> +		    !scsi_noretry_cmd(scmd) && =
+scsi_cmd_retry_allowed(scmd) &&
+> +			scsi_eh_should_retry_cmd(scmd)) {
+> 			SCSI_LOG_ERROR_RECOVERY(3,
+> 				scmd_printk(KERN_INFO, scmd,
+> 					     "%s: flush retry cmd\n",
+> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+> index 701f178b20ae..e30fd963b97d 100644
+> --- a/include/scsi/scsi_host.h
+> +++ b/include/scsi/scsi_host.h
+> @@ -314,6 +314,12 @@ struct scsi_host_template {
+> 	 * Status: OPTIONAL
+> 	 */
+> 	enum blk_eh_timer_return (*eh_timed_out)(struct scsi_cmnd *);
+> +	/*
+> +	 * Optional routine that allows the transport to decide if a cmd
+> +	 * is retryable. Return true if the transport is in a state the
+> +	 * cmd should be retried on.
+> +	 */
+> +	bool (*eh_should_retry_cmd)(struct scsi_cmnd *scmd);
+>=20
+> 	/* This is an optional routine that allows transport to initiate
+> 	 * LLD adapter or firmware reset using sysfs attribute.
 > --=20
 > 2.26.2
 >=20
