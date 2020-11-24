@@ -2,69 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4842C1C45
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 04:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5023A2C1C3D
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 04:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727673AbgKXDuL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 23 Nov 2020 22:50:11 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:33726 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726315AbgKXDuL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 Nov 2020 22:50:11 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AO3nKln074368;
-        Tue, 24 Nov 2020 03:50:07 GMT
+        id S1726899AbgKXDsY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 23 Nov 2020 22:48:24 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:43872 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726315AbgKXDsX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 Nov 2020 22:48:23 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AO3T03n039012;
+        Tue, 24 Nov 2020 03:48:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=7mhH8HWEwM8QG4djjmYXl21iBFuui8uZpAORahmg0Yw=;
- b=c4nQi2pWwbUdIBcYdq6P4/WKjQMBkE+h4n+5jbtfMaJzGScYKzx9l28dcbkTWWqAj+m9
- z7mixDw0+f6pIl88QgGMygV0Eq7fTZchUxyEasXei4EnAyYfQIZ1uBmIiWNLD3342wZn
- ApPrmmm3pwR2nzDTHotHhhH8c+xQwCm78dQa6x2B09z+h82Rb48bEDmxThJJEjB4YHCm
- aSK3l0Rqc+mDm+39B/O8IeGIXFYCdR7nrxlBegP/Ro0EVP78LrRGVfWEkzC+xWc9U3HF
- J9gvYFUxWZLBEgEXi3m4ZJUU9ofZh95wTnoq6Ubpr0PAmQAgPAHNrtgze724lAIkYDTb 9g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 34xtaqky5r-1
+ bh=P2tdlic+bz9rYgNxW7PiBXNicBQRSc4EaMXcKO1dJy8=;
+ b=YJjuMS4GkTCgTCiUXhCQbOuxrjfkjBvUkqPKiMTzeZCY0b9t9ZGtKFaN1k91w8vkW22x
+ ZL39D+Wfc+IBl3yrElHH2PZtmFeu/onsDbCwMnXqgazRVtrRAuPGN6N9Y5lzlZUk0BNE
+ ZnBg6XR8E+qXIyKLEmf+WcNBzPBClol52+ESloOBjKPOLfN0C7wnY754ReEtGk98Lwlh
+ jrwI3YOQJ52gbeRE+NRZ6mfsOsABHJ/C7y1uDEJuP3Ore/DmhrE7goKdsK1Sg7xVfW88
+ znbfZrtjOSdaLIbRMe1R7dMjgGeq41owehR0K1ROCOTFCXm/3uD58PXPJgR/PEcIYs6o CA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 34xrdarkr6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Nov 2020 03:50:07 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AO3jeot042255;
-        Tue, 24 Nov 2020 03:48:06 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 34yx8j9w7f-1
+        Tue, 24 Nov 2020 03:48:20 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AO3itWH090772;
+        Tue, 24 Nov 2020 03:48:20 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 34yctvts0h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Nov 2020 03:48:06 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AO3m4hx023452;
-        Tue, 24 Nov 2020 03:48:05 GMT
+        Tue, 24 Nov 2020 03:48:20 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AO3mIpZ031081;
+        Tue, 24 Nov 2020 03:48:19 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 23 Nov 2020 19:48:04 -0800
+        with ESMTP ; Mon, 23 Nov 2020 19:48:18 -0800
 To:     Karan Tilak Kumar <kartilak@cisco.com>
 Cc:     satishkh@cisco.com, sebaddel@cisco.com, arulponn@cisco.com,
         jejb@linux.ibm.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: fnic: Change shost_printk with FNIC_FCS_DBG
+Subject: Re: [PATCH] scsi: fnic: Avoid looping in TRANS ETH on unload
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1ft4zmn4p.fsf@ca-mkp.ca.oracle.com>
-References: <20201120220712.16708-1-kartilak@cisco.com>
-Date:   Mon, 23 Nov 2020 22:48:02 -0500
-In-Reply-To: <20201120220712.16708-1-kartilak@cisco.com> (Karan Tilak Kumar's
-        message of "Fri, 20 Nov 2020 14:07:12 -0800")
+Message-ID: <yq1a6v7mn48.fsf@ca-mkp.ca.oracle.com>
+References: <20201121012145.18522-1-kartilak@cisco.com>
+Date:   Mon, 23 Nov 2020 22:48:16 -0500
+In-Reply-To: <20201121012145.18522-1-kartilak@cisco.com> (Karan Tilak Kumar's
+        message of "Fri, 20 Nov 2020 17:21:45 -0800")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9814 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=1
- bulkscore=0 mlxlogscore=911 malwarescore=0 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011240020
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=1
+ malwarescore=0 spamscore=0 phishscore=0 mlxlogscore=961 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011240020
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9814 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
- mlxlogscore=941 clxscore=1015 suspectscore=1 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 impostorscore=0 adultscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 impostorscore=0 mlxscore=0
+ mlxlogscore=992 spamscore=0 phishscore=0 clxscore=1011 malwarescore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=1 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011240020
+ definitions=main-2011240019
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -72,8 +72,9 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Karan,
 
-> Replacing shost_printk with FNIC_FCS_DBG so that these log messages
-> are controlled by fnic_log_level flag in fnic_fip_handler_timer.
+> This change is to avoid looping in fnic_scsi_abort_io before sending
+> fw reset when fnic is in TRANS ETH state and when we have not received
+> any link events.
 
 Applied to 5.11/scsi-staging, thanks!
 
