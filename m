@@ -2,87 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 800D62C1CB7
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 05:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 522602C1CBA
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 05:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728733AbgKXEbQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 23 Nov 2020 23:31:16 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:46510 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726039AbgKXEbP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 Nov 2020 23:31:15 -0500
-X-Greylist: delayed 4971 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Nov 2020 23:31:15 EST
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AO35Mfo028996;
-        Tue, 24 Nov 2020 03:08:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type; s=corp-2020-01-29;
- bh=z+f2roqdjBDs+WQyM/1a5Y3zBTJyjDhmrmR83masnk0=;
- b=hWFXiO6gcOSz46PjoHdM1dL60J56No4x+5x6KFB/O67KhMWylP4eiDGqzpZDhGUx31Vm
- dy54l/JvjXsCVrMc9ycrDWGMzLXJKcd+Kv2O47Cyt//jr7A+k9O6r9xEyW0a9dKJ3tEt
- AeHzWO4jJm+xZ7O3UHtChhn9z5HRZu+WwG8C1KuOU3Mj67N/1/IBZsZlqvl6MgKVKX+V
- 0K0c9KhENZZ4QTe39h6vSXAq/Tie7wsv2INS+C8edpmUQDAzt9dqcSKDQ9ukZev9kNdN
- 4R5zjbuINpNrC8DtKNP2kZo9SlT9dkWIzaFNi4xMMd34db8GbT3ESTWQvR6ov8g54t8c 1Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 34xtaqkvmv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Nov 2020 03:08:10 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AO2xcLF132902;
-        Tue, 24 Nov 2020 03:08:09 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 34yx8j8yen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Nov 2020 03:08:09 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AO3866r011202;
-        Tue, 24 Nov 2020 03:08:06 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 23 Nov 2020 19:08:06 -0800
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
+        id S1728839AbgKXEdT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 23 Nov 2020 23:33:19 -0500
+Received: from smtprelay0150.hostedemail.com ([216.40.44.150]:53014 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728828AbgKXEdT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 23 Nov 2020 23:33:19 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id C1265837F24A;
+        Tue, 24 Nov 2020 04:33:17 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1537:1561:1593:1594:1711:1714:1730:1747:1777:1792:1981:2194:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3622:3865:3866:3867:3868:4321:4362:5007:9040:10004:10400:10848:11232:11658:11914:12297:12740:12760:12895:13069:13161:13229:13311:13357:13439:14659:14721:21080:21451:21627:30012:30054:30083:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: bread73_1a0b27a2736b
+X-Filterd-Recvd-Size: 1221
+Received: from XPS-9350.home (unknown [47.151.128.180])
+        (Authenticated sender: joe@perches.com)
+        by omf06.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 24 Nov 2020 04:33:16 +0000 (UTC)
+Message-ID: <3b5f1d63666a1cf70143574f75cfb0d7f5d0e0de.camel@perches.com>
+Subject: Re: [PATCH 0/2] scsi: pm8001: logging neatening
+From:   Joe Perches <joe@perches.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Bean Huo <beanhuo@micron.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: Adjust logic in common ADAPT helper
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1eekjo3jm.fsf@ca-mkp.ca.oracle.com>
-References: <20201121044810.507288-1-bjorn.andersson@linaro.org>
-Date:   Mon, 23 Nov 2020 22:08:03 -0500
-In-Reply-To: <20201121044810.507288-1-bjorn.andersson@linaro.org> (Bjorn
-        Andersson's message of "Fri, 20 Nov 2020 20:48:10 -0800")
+        linux-kernel@vger.kernel.org
+Date:   Mon, 23 Nov 2020 20:33:15 -0800
+In-Reply-To: <yq1r1ojmoa5.fsf@ca-mkp.ca.oracle.com>
+References: <cover.1605914030.git.joe@perches.com>
+         <yq1r1ojmoa5.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9814 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=1
- bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011240017
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9814 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 clxscore=1011 suspectscore=1 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 impostorscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011240017
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Mon, 2020-11-23 at 22:23 -0500, Martin K. Petersen wrote:
+> > Reduce code duplication and generic neatening of logging macros
+> 
+> Applied to 5.11/scsi-staging, thanks!
 
-Bjorn,
+Thanks.
 
-> The introduction of ufshcd_dme_configure_adapt() refactored out
-> duplication from the Mediatek and Qualcomm drivers.
+The kernel robot reported an indentation defect here so I will send
+a couple more patches on top of this.
 
-Applied to 5.11/scsi-staging, thanks!
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
