@@ -2,70 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B8F2C2F10
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 18:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815872C2F33
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Nov 2020 18:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403935AbgKXRoP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 Nov 2020 12:44:15 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:57324 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403887AbgKXRoP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 Nov 2020 12:44:15 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHea3A017004;
-        Tue, 24 Nov 2020 17:44:07 GMT
+        id S2404055AbgKXRuY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 24 Nov 2020 12:50:24 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:35966 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403994AbgKXRuY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 Nov 2020 12:50:24 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHebdD113058;
+        Tue, 24 Nov 2020 17:48:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
  mime-version : subject : from : in-reply-to : date : cc :
  content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=WIFmrkTepan6PjzJxZUZ4xEDsxGy1sOeQTEnIL3CUL4=;
- b=u/mfGZJdSwetrvbj2Oo9wxBm7BJQfmQkT3XouSlkai+ANTkiJexQrHQtaJRc7yqdhTKq
- Sub+uxwTJjlxWBboiV2liVL0vBPMUzSPkpRFTLYo88xW36A2Cs8Rs2PG+3yEp7neTP47
- xgrfuSKdxRpwDp+W2Yf9axS26fV6gG2TCNlH4sGZBJcOM2rc01cMBOLomFnQDbBYMGsi
- ki7NjH4Ct+2zbJpgP54KMK1OCCkRjEWp/ohCOx8x1c99kMuQdpDKT0oj1qfQpL/n9fll
- fqm5bP/0l/3cakTUyEuKtXLiH0YZCT7EldZMkFlOM5o3MYkMYOMj0caXDCn34InpjfWG Nw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 34xrdav8yk-1
+ s=corp-2020-01-29; bh=2axXQg9Zug5f5rxs+mjICQzGcHi3pcd/K+FRV0njW/s=;
+ b=dmHdcRSu1vdhERiFPLbclbGw+s/nS1hKSCqlN8AZAlfyhWXfoB/sYuYq5jZ2SPlPgIzu
+ wssZO4p1aInHnCoZD5Wh2c9E7loUl/uHhq6J6ebfhDqSmLn6tqSJpynNyxQvFW0YW6O3
+ s08rqvkJRDJsZOaHNY5vrt6fvedXZF36OwYZubD7wfmJxynJ349o83588pAI7HT43vNa
+ +RFJilpBdZqjALLEBmLtdjGB0TOXxV/OezBRVXA4/zw9O3zn1YYhNORcLTKCGtii3Qy8
+ Ic4Xoku46DVDTGdhhZKnZB3Bhd18AyX2XP8vOPmmz+yamtlfVTqShfv5WbibZI9uwH54 xw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 34xtum43sw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Nov 2020 17:44:06 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHe0ho104130;
-        Tue, 24 Nov 2020 17:44:06 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 34ycfnms9m-1
+        Tue, 24 Nov 2020 17:48:17 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AOHdfw4024704;
+        Tue, 24 Nov 2020 17:46:17 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 34yx8k6asp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Nov 2020 17:44:06 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AOHi4KP029609;
-        Tue, 24 Nov 2020 17:44:05 GMT
+        Tue, 24 Nov 2020 17:46:17 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AOHkFfu013919;
+        Tue, 24 Nov 2020 17:46:16 GMT
 Received: from [192.168.1.15] (/70.114.128.235)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 24 Nov 2020 09:44:04 -0800
+        with ESMTP ; Tue, 24 Nov 2020 09:46:15 -0800
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH v7 4/5] scsi_transport_fc: Added store fucntionality to
- set the rport port_state using sysfs
+Subject: Re: [PATCH v7 5/5] scsi:lpfc: Added support for eh_should_retry_cmd
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
-In-Reply-To: <1605070685-20945-5-git-send-email-muneendra.kumar@broadcom.com>
-Date:   Tue, 24 Nov 2020 11:44:04 -0600
-Cc:     linux-scsi@vger.kernel.org, michael.christie@oracle.com,
-        hare@suse.de, jsmart2021@gmail.com, emilne@redhat.com,
-        mkumar@redhat.com
+In-Reply-To: <1605070685-20945-6-git-send-email-muneendra.kumar@broadcom.com>
+Date:   Tue, 24 Nov 2020 11:46:14 -0600
+Cc:     linux-scsi@vger.kernel.org,
+        Mike Christie <michael.christie@oracle.com>, hare@suse.de,
+        jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <8D1BAA0B-610D-4A9F-A51B-8BC547717A0B@oracle.com>
+Message-Id: <D07EE9A8-07E4-48A3-A966-2016C0C9F10F@oracle.com>
 References: <1605070685-20945-1-git-send-email-muneendra.kumar@broadcom.com>
- <1605070685-20945-5-git-send-email-muneendra.kumar@broadcom.com>
+ <1605070685-20945-6-git-send-email-muneendra.kumar@broadcom.com>
 To:     Muneendra <muneendra.kumar@broadcom.com>
 X-Mailer: Apple Mail (2.3608.120.23.2.4)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9815 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
- adultscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011240107
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9815 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 phishscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 adultscore=0 suspectscore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=999 impostorscore=0 spamscore=0 mlxscore=0
+ phishscore=0 clxscore=1015 suspectscore=0 bulkscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011240107
 Precedence: bulk
@@ -77,143 +76,38 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 > On Nov 10, 2020, at 10:58 PM, Muneendra <muneendra.kumar@broadcom.com> =
 wrote:
 >=20
-> Added a store functionality to set rport port_state using sysfs
-> under  fc_remote_ports/rport-*/port_state
->=20
-> With this functionality the user can move the port_state from
-> Marginal -> Online and Online->Marginal.
->=20
-> On Marginal :This interface will set SCMD_NORETRIES_ABORT bit in
-> scmd->state for all the pending io's on the scsi device associated
-> with target port.
->=20
-> On Online :This interface will clear SCMD_NORETRIES_ABORT bit in
-> scmd->state for all the pending io's on the scsi device associated
-> with target port.
->=20
-> Below is the interface provided to set the port state to Marginal
-> and Online.
->=20
-> echo "Marginal" >> /sys/class/fc_remote_ports/rport-X\:Y-Z/port_state
-> echo "Online" >> /sys/class/fc_remote_ports/rport-X\:Y-Z/port_state
+> Added support to handle eh_should_retry_cmd in lpfc_template.
 >=20
 > Signed-off-by: Muneendra <muneendra.kumar@broadcom.com>
 >=20
 > ---
 > v7:
-> No change
->=20
-> v6:
-> No change
->=20
-> v5:
-> No change
->=20
-> v4:
-> Addressed the error reported by kernel test robot
-> Removed the code needed to traverse all the devices under rport
-> to set/clear SCMD_NORETRIES_ABORT
-> Removed unncessary comments.
-> Return the error values on failure while setting the port_state
->=20
-> v3:
-> Removed the port_state from starget attributes.
-> Enabled the store functionality for port_state under remote port.
-> used the starget_for_each_device to traverse around all the devices
-> under rport
->=20
-> v2:
-> Changed from a noretries_abort attribute under fc_transport/target*/ =
-to
-> port_state for changing the port_state to a marginal state
+> New patch
 > ---
-> drivers/scsi/scsi_transport_fc.c | 56 ++++++++++++++++++++++++++++++--
-> 1 file changed, 54 insertions(+), 2 deletions(-)
+> drivers/scsi/lpfc/lpfc_scsi.c | 1 +
+> 1 file changed, 1 insertion(+)
 >=20
-> diff --git a/drivers/scsi/scsi_transport_fc.c =
-b/drivers/scsi/scsi_transport_fc.c
-> index ffd25195ae62..d378ca4a60fe 100644
-> --- a/drivers/scsi/scsi_transport_fc.c
-> +++ b/drivers/scsi/scsi_transport_fc.c
-> @@ -1238,7 +1238,59 @@ show_fc_rport_roles (struct device *dev, struct =
-device_attribute *attr,
-> static FC_DEVICE_ATTR(rport, roles, S_IRUGO,
-> 		show_fc_rport_roles, NULL);
->=20
-> -fc_private_rport_rd_enum_attr(port_state, FC_PORTSTATE_MAX_NAMELEN);
-> +static ssize_t fc_rport_set_marginal_state(struct device *dev,
-> +						struct device_attribute =
-*attr,
-> +						const char *buf, size_t =
-count)
-> +{
-> +	struct fc_rport *rport =3D transport_class_to_rport(dev);
-> +	enum fc_port_state port_state;
-> +	int ret =3D 0;
-> +
-> +	ret =3D get_fc_port_state_match(buf, &port_state);
-> +	if (ret)
-> +		return -EINVAL;
-> +	if (port_state =3D=3D FC_PORTSTATE_MARGINAL) {
-> +		/*
-> +		 * Change the state to marginal only if the
-> +		 * current rport state is Online
-> +		 * Allow only Online->marginal
-> +		 */
-> +		if (rport->port_state =3D=3D FC_PORTSTATE_ONLINE)
-> +			rport->port_state =3D port_state;
-> +		else
-> +			return -EINVAL;
-> +	} else if (port_state =3D=3D FC_PORTSTATE_ONLINE) {
-> +		/*
-> +		 * Change the state to Online only if the
-> +		 * current rport state is Marginal
-> +		 * Allow only  MArginal->Online
-> +		 */
-> +		if (rport->port_state =3D=3D FC_PORTSTATE_MARGINAL)
-> +			rport->port_state =3D port_state;
-> +		else
-> +			return -EINVAL;
-> +	} else
-> +		return -EINVAL;
-> +	return count;
-> +}
-> +
-> +static ssize_t
-> +show_fc_rport_port_state(struct device *dev,
-> +				struct device_attribute *attr, char =
-*buf)
-> +{
-> +	const char *name;
-> +	struct fc_rport *rport =3D transport_class_to_rport(dev);
-> +
-> +	name =3D get_fc_port_state_name(rport->port_state);
-> +	if (!name)
-> +		return -EINVAL;
-> +
-> +	return snprintf(buf, 20, "%s\n", name);
-> +}
-> +
-> +static FC_DEVICE_ATTR(rport, port_state, 0444 | 0200,
-> +			show_fc_rport_port_state, =
-fc_rport_set_marginal_state);
-> +
-> fc_private_rport_rd_attr(scsi_target_id, "%d\n", 20);
->=20
-> /*
-> @@ -2681,7 +2733,7 @@ fc_attach_transport(struct fc_function_template =
-*ft)
-> 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(port_name);
-> 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(port_id);
-> 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(roles);
-> -	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(port_state);
-> +	SETUP_PRIVATE_RPORT_ATTRIBUTE_RW(port_state);
-> 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RD(scsi_target_id);
-> 	SETUP_PRIVATE_RPORT_ATTRIBUTE_RW(fast_io_fail_tmo);
->=20
+> diff --git a/drivers/scsi/lpfc/lpfc_scsi.c =
+b/drivers/scsi/lpfc/lpfc_scsi.c
+> index 4ffdfd2c8604..dbc80e6423ea 100644
+> --- a/drivers/scsi/lpfc/lpfc_scsi.c
+> +++ b/drivers/scsi/lpfc/lpfc_scsi.c
+> @@ -6040,6 +6040,7 @@ struct scsi_host_template lpfc_template =3D {
+> 	.info			=3D lpfc_info,
+> 	.queuecommand		=3D lpfc_queuecommand,
+> 	.eh_timed_out		=3D fc_eh_timed_out,
+> +	.eh_should_retry_cmd    =3D fc_eh_should_retry_cmd,
+> 	.eh_abort_handler	=3D lpfc_abort_handler,
+> 	.eh_device_reset_handler =3D lpfc_device_reset_handler,
+> 	.eh_target_reset_handler =3D lpfc_target_reset_handler,
 > --=20
 > 2.26.2
 >=20
+
+This is generic change for LLD, I expect other drivers to add this to =
+their respective code as well.=20
+
+So with that in mind .. =20
 
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
