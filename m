@@ -2,104 +2,172 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 293CF2C4020
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Nov 2020 13:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238D72C43B9
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Nov 2020 16:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729372AbgKYM2T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Nov 2020 07:28:19 -0500
-Received: from m42-4.mailgun.net ([69.72.42.4]:62757 "EHLO m42-4.mailgun.net"
+        id S1730624AbgKYPg3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Nov 2020 10:36:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53774 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727114AbgKYM2S (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 25 Nov 2020 07:28:18 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1606307297; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=iNAPFkL8b7EnXxHK07zTOw6eeK1eE3u8WLYvqlWH7hw=;
- b=BDXTt0I1RM5bwS70cszkBNSWPJfmxWRtmblDYZul+CNaa2RWgbRuPvnH9Abxp6hyNoRatXPf
- SWyJ33+pN0yB1GSXFnA8Y3pC2h59ZSrPfu8wGn9/NuCq4Bi1TlWzCEobkXqTKzZfNh33kI2a
- MtnYLYfQnW9YLe76qg8yMPjX+wI=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 5fbe4de17f0cfa6a1632a13a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 25 Nov 2020 12:28:17
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A8845C43468; Wed, 25 Nov 2020 12:28:16 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        id S1730572AbgKYPg2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 25 Nov 2020 10:36:28 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BE92CC433ED;
-        Wed, 25 Nov 2020 12:28:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3374E21D7E;
+        Wed, 25 Nov 2020 15:36:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606318587;
+        bh=qMotAVffAEsf++T/AK3uhhl7b0MPcN4XqkYwbcsLpVs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=B712rkUADSgUdBEO016V2U1hRL+A6Xtthe0deJeDWfCHhrhBl0RNMIKR6BkVC/kJB
+         7FLcdRPC2XDkoj5qFl1ZE96NjNEQOhFSMY5lS+2002p/qA13GS7L2rfjmjcrgcnbip
+         TcAuJnGm+fqkp/q+UYdeKorDKgYrqJ0C0m1MRX0k=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Lee Duncan <lduncan@suse.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 26/33] scsi: libiscsi: Fix NOP race condition
+Date:   Wed, 25 Nov 2020 10:35:43 -0500
+Message-Id: <20201125153550.810101-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201125153550.810101-1-sashal@kernel.org>
+References: <20201125153550.810101-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 25 Nov 2020 20:28:15 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Bean Huo <huobean@gmail.com>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, ziqichen@codeaurora.org,
-        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Satya Tangirala <satyat@google.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] scsi: ufs: Refector ufshcd_setup_clocks() to
- remove skip_ref_clk
-In-Reply-To: <0b0c545d80f9a0e8106a634063c23a8f0ba895fc.camel@gmail.com>
-References: <1606202906-14485-1-git-send-email-cang@codeaurora.org>
- <1606202906-14485-2-git-send-email-cang@codeaurora.org>
- <9070660d115dd96c70bc3cc90d5c7dab833f36a8.camel@gmail.com>
- <d112935400a5ef115a384a4c753b6d04@codeaurora.org>
- <0b0c545d80f9a0e8106a634063c23a8f0ba895fc.camel@gmail.com>
-Message-ID: <9484cba7b95c6c6fcbafd96bc35c1dee@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-11-25 19:54, Bean Huo wrote:
-> On Wed, 2020-11-25 at 08:53 +0800, Can Guo wrote:
->> > > +       bool always_on_while_link_active;
->> >
->> > Can,
->> > using a sentence as a parameter name looks a little bit clumsy to
->> > me.
->> > The meaning has been explained in the comments section. How about
->> > simplify it and in line with other parameters in the structure?
->> >
->> 
->> Do you have a better name in mind?
->> 
-> no specail input in mind, maybe just "bool eternal_on"
+From: Lee Duncan <lduncan@suse.com>
 
-It is like plain "always_on", but it cannot tell the whole story.
-If it is not something crutial, let's just let it go first so long
-as it does not break the original functionality. What do you say?
+[ Upstream commit fe0a8a95e7134d0b44cd407bc0085b9ba8d8fe31 ]
 
-Thanks,
+iSCSI NOPs are sometimes "lost", mistakenly sent to the user-land iscsid
+daemon instead of handled in the kernel, as they should be, resulting in a
+message from the daemon like:
 
-Can Guo.
+  iscsid: Got nop in, but kernel supports nop handling.
 
-> 
->> Thanks,
->> 
->> Can Guo.
+This can occur because of the new forward- and back-locks, and the fact
+that an iSCSI NOP response can occur before processing of the NOP send is
+complete. This can result in "conn->ping_task" being NULL in
+iscsi_nop_out_rsp(), when the pointer is actually in the process of being
+set.
+
+To work around this, we add a new state to the "ping_task" pointer. In
+addition to NULL (not assigned) and a pointer (assigned), we add the state
+"being set", which is signaled with an INVALID pointer (using "-1").
+
+Link: https://lore.kernel.org/r/20201106193317.16993-1-leeman.duncan@gmail.com
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/libiscsi.c | 23 +++++++++++++++--------
+ include/scsi/libiscsi.h |  3 +++
+ 2 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index 1e9c3171fa9f4..f9314f1393fbd 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -533,8 +533,8 @@ static void iscsi_complete_task(struct iscsi_task *task, int state)
+ 	if (conn->task == task)
+ 		conn->task = NULL;
+ 
+-	if (conn->ping_task == task)
+-		conn->ping_task = NULL;
++	if (READ_ONCE(conn->ping_task) == task)
++		WRITE_ONCE(conn->ping_task, NULL);
+ 
+ 	/* release get from queueing */
+ 	__iscsi_put_task(task);
+@@ -738,6 +738,9 @@ __iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
+ 						   task->conn->session->age);
+ 	}
+ 
++	if (unlikely(READ_ONCE(conn->ping_task) == INVALID_SCSI_TASK))
++		WRITE_ONCE(conn->ping_task, task);
++
+ 	if (!ihost->workq) {
+ 		if (iscsi_prep_mgmt_task(conn, task))
+ 			goto free_task;
+@@ -941,8 +944,11 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
+         struct iscsi_nopout hdr;
+ 	struct iscsi_task *task;
+ 
+-	if (!rhdr && conn->ping_task)
+-		return -EINVAL;
++	if (!rhdr) {
++		if (READ_ONCE(conn->ping_task))
++			return -EINVAL;
++		WRITE_ONCE(conn->ping_task, INVALID_SCSI_TASK);
++	}
+ 
+ 	memset(&hdr, 0, sizeof(struct iscsi_nopout));
+ 	hdr.opcode = ISCSI_OP_NOOP_OUT | ISCSI_OP_IMMEDIATE;
+@@ -957,11 +963,12 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
+ 
+ 	task = __iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)&hdr, NULL, 0);
+ 	if (!task) {
++		if (!rhdr)
++			WRITE_ONCE(conn->ping_task, NULL);
+ 		iscsi_conn_printk(KERN_ERR, conn, "Could not send nopout\n");
+ 		return -EIO;
+ 	} else if (!rhdr) {
+ 		/* only track our nops */
+-		conn->ping_task = task;
+ 		conn->last_ping = jiffies;
+ 	}
+ 
+@@ -984,7 +991,7 @@ static int iscsi_nop_out_rsp(struct iscsi_task *task,
+ 	struct iscsi_conn *conn = task->conn;
+ 	int rc = 0;
+ 
+-	if (conn->ping_task != task) {
++	if (READ_ONCE(conn->ping_task) != task) {
+ 		/*
+ 		 * If this is not in response to one of our
+ 		 * nops then it must be from userspace.
+@@ -1923,7 +1930,7 @@ static void iscsi_start_tx(struct iscsi_conn *conn)
+  */
+ static int iscsi_has_ping_timed_out(struct iscsi_conn *conn)
+ {
+-	if (conn->ping_task &&
++	if (READ_ONCE(conn->ping_task) &&
+ 	    time_before_eq(conn->last_recv + (conn->recv_timeout * HZ) +
+ 			   (conn->ping_timeout * HZ), jiffies))
+ 		return 1;
+@@ -2058,7 +2065,7 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 	 * Checking the transport already or nop from a cmd timeout still
+ 	 * running
+ 	 */
+-	if (conn->ping_task) {
++	if (READ_ONCE(conn->ping_task)) {
+ 		task->have_checked_conn = true;
+ 		rc = BLK_EH_RESET_TIMER;
+ 		goto done;
+diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
+index c25fb86ffae95..b3bbd10eb3f07 100644
+--- a/include/scsi/libiscsi.h
++++ b/include/scsi/libiscsi.h
+@@ -132,6 +132,9 @@ struct iscsi_task {
+ 	void			*dd_data;	/* driver/transport data */
+ };
+ 
++/* invalid scsi_task pointer */
++#define	INVALID_SCSI_TASK	(struct iscsi_task *)-1l
++
+ static inline int iscsi_task_has_unsol_data(struct iscsi_task *task)
+ {
+ 	return task->unsol_r2t.data_length > task->unsol_r2t.sent;
+-- 
+2.27.0
+
