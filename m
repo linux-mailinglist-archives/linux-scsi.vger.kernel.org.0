@@ -2,18 +2,15 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8AE2C555B
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580C32C555C
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390123AbgKZNai (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 08:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390119AbgKZNai (ORCPT
+        id S2389937AbgKZNaj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 08:30:39 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56576 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390090AbgKZNai (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:30:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7B5C0613D4
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 05:30:37 -0800 (PST)
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1606397436;
@@ -21,21 +18,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4DmSpUn3TvaIi0YjTfs82cRBGlzSa3RE3+yQ+8tMx+Q=;
-        b=ip+FKZTkGX8NbmXLvAJYkFappUHQxrXaFJMpzAQeQsR2492Di6leYrwY8GeibG9sBC7ND0
-        rTQCa6NQ2ZcMA8FRAzL8xQH5cHfgrIfnWfj0sdyKbXrFZxmJU9Vs4+niNG+8NZj4nC5ULu
-        6FxdwKcmvDsMcr37LzYnmWAbDn+/XUaceQvWmcaIP8h8Vn6P7MnMhgjFqg7LzyYySq38uk
-        IE4dCjbjEcqiTGVZiypa63skfGeILt06vJYD30MJx6SiwEapGBBNn0gQ2gcYMARD/cWLkF
-        WAQNTKJJc0Wnm4HdZh7R1CnyKpceZyia8u28BtbyB0PmyMiyUSEVl5y2Xt8jXA==
+        bh=STvXLhib2DiuGdj/XJWl8ZdJjfyQ63o5jIE034MX1z8=;
+        b=D9WUf0FRBkSPU67vTFe9SxSW4dy/pxtsAxzYsbYqUQYxo/sdg3JjFdPuk5MSLiawed+K4A
+        VrPm4u9HPkzbclKIrAqahFYNwiF2K1Xc3qmzwywjpsubq+IwH4q1IPzjJZlq9sQG3LNCVZ
+        OWDeVH4TZd5i6cB/Qu62Ya69Kig6lUt0EXVmG0avYT+onQH3uTstcrvUO2H8ZrrTucgahn
+        DQAQdF5tDoAlBE9G4u5+w0yWWivro0EKyMnIKnTrsUL6y4N8VYVo6D3l3dPCHMGwcv6ejn
+        vt6IzZzsqNssHVjzGA2a0rYVZInHOiBre3GA2NoCoyz30vUi9Y0PHaLSxzluhA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1606397436;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4DmSpUn3TvaIi0YjTfs82cRBGlzSa3RE3+yQ+8tMx+Q=;
-        b=xhGeS/Icf3b18Dtesq1lK9vvQDd665cpSUVQ3Hvb5YcbxW/EvIlQbP3mH64Y7CmeY0r69u
-        7ZtlIQtUKGYKHeCg==
+        bh=STvXLhib2DiuGdj/XJWl8ZdJjfyQ63o5jIE034MX1z8=;
+        b=wY4F9US2+fO340CMFDIUC4+fwTyaldHwU1WU8xCqvN431uXGAGu92DymV5qC5xcODm7DQA
+        pqDVO5BZpnPjJzCw==
 To:     linux-scsi@vger.kernel.org
 Cc:     Finn Thain <fthain@telegraphics.com.au>,
         GR-QLogic-Storage-Upstream@marvell.com,
@@ -59,9 +56,9 @@ Cc:     Finn Thain <fthain@telegraphics.com.au>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Ahmed S . Darwish" <a.darwish@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 10/14] scsi: myrb: Remove WARN_ON(in_interrupt()).
-Date:   Thu, 26 Nov 2020 14:29:48 +0100
-Message-Id: <20201126132952.2287996-11-bigeasy@linutronix.de>
+Subject: [PATCH 11/14] scsi: myrs: Remove WARN_ON(in_interrupt()).
+Date:   Thu, 26 Nov 2020 14:29:49 +0100
+Message-Id: <20201126132952.2287996-12-bigeasy@linutronix.de>
 In-Reply-To: <20201126132952.2287996-1-bigeasy@linutronix.de>
 References: <20201126132952.2287996-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -92,21 +89,21 @@ Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: Hannes Reinecke <hare@kernel.org>
 ---
- drivers/scsi/myrb.c | 1 -
+ drivers/scsi/myrs.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
-index 5fa0f4ed6565f..3d8e91c07dc77 100644
---- a/drivers/scsi/myrb.c
-+++ b/drivers/scsi/myrb.c
-@@ -194,7 +194,6 @@ static unsigned short myrb_exec_cmd(struct myrb_hba *cb,
- 	cb->qcmd(cb, cmd_blk);
- 	spin_unlock_irqrestore(&cb->queue_lock, flags);
+diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+index 7a3ade765ce3b..4adf9ded296aa 100644
+--- a/drivers/scsi/myrs.c
++++ b/drivers/scsi/myrs.c
+@@ -136,7 +136,6 @@ static void myrs_exec_cmd(struct myrs_hba *cs,
+ 	myrs_qcmd(cs, cmd_blk);
+ 	spin_unlock_irqrestore(&cs->queue_lock, flags);
 =20
 -	WARN_ON(in_interrupt());
- 	wait_for_completion(&cmpl);
- 	return cmd_blk->status;
+ 	wait_for_completion(&complete);
  }
+=20
 --=20
 2.29.2
 
