@@ -2,150 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3282C4CDF
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 02:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C472C4D12
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 03:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732462AbgKZBs7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Nov 2020 20:48:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38018 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731984AbgKZBsm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 25 Nov 2020 20:48:42 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AQ1WL0u118049;
-        Wed, 25 Nov 2020 20:48:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=uCYlkH5iQ+L908Nf0wbhEccUqKJpvqoojo1F1Q4GFbY=;
- b=GPqIjVhhcXsWK7iUIutlgkVdlpdTDoetbUofYXSXXDRsK6BPU/IDFw4v3JAJyLzdoCCN
- XS0o5YBCYCO2/ufVuPb+hKbIxeaXw8FPy6fMj7/3xMAKUTFUAGc1ez/WCqL0wr1GNO3G
- QsRxCC6SW00o4rX78KHCFJIxRz0DYNNoHrtFtOdNxeb3cZ0Imn/haFVnsgJdSr6GxEp5
- O6A992n387eEjlIXDSTNiDziDSmxAGINcos3d6DRsS94XfslsczI81pZ5po7AjgDjIWu
- u/5rZg1vNNiW8/iWgjKcrl4R33wms7pl6vUQ/6+MeR3hTTQ9LayobHDA9PAQiM7Xd3pC 9A== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 351vyvg9v7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Nov 2020 20:48:36 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AQ1lG3L026374;
-        Thu, 26 Nov 2020 01:48:36 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 34xthacpm7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Nov 2020 01:48:36 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AQ1mYTn7143962
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Nov 2020 01:48:34 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 80F706E04C;
-        Thu, 26 Nov 2020 01:48:34 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A2056E052;
-        Thu, 26 Nov 2020 01:48:34 +0000 (GMT)
-Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Nov 2020 01:48:34 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH 13/13] ibmvfc: register Sub-CRQ handles with VIOS during channel setup
-Date:   Wed, 25 Nov 2020 19:48:24 -0600
-Message-Id: <20201126014824.123831-14-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201126014824.123831-1-tyreld@linux.ibm.com>
-References: <20201126014824.123831-1-tyreld@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-25_14:2020-11-25,2020-11-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 bulkscore=0
- suspectscore=3 spamscore=0 clxscore=1015 adultscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011260001
+        id S1732617AbgKZCD1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Nov 2020 21:03:27 -0500
+Received: from labrats.qualcomm.com ([199.106.110.90]:11562 "EHLO
+        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730764AbgKZCD1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Nov 2020 21:03:27 -0500
+IronPort-SDR: CzcYvJ4NfqvTgZlGRHzk/oU0n6LZaaKwQsDbIlpRiXO07EoDQrrVTQ1SUl8icuDoiZlo5Kazw1
+ Hdlaurwz7A10k1bgv7t7+tHlEex1jPSBOuTwLBS5DMepl2DNbFHo38UlvOMa+8LkYiQiNPC7j6
+ OLiZsuaYoOi3n6p2LssE3kc2IqWGxb8NfEvgWsXT1IyHYBFzY/UhBZAjBdUI8dX1x2KWrgvXj3
+ P5eL15ad8xRTRKqt0yvn+ZQVxfHMbyhhhbZsCwDYJwIF2HbP4Rlpa40UpUDsGeR55ahWAZINEk
+ bhU=
+X-IronPort-AV: E=Sophos;i="5.78,370,1599548400"; 
+   d="scan'208";a="47516301"
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by labrats.qualcomm.com with ESMTP; 25 Nov 2020 18:03:27 -0800
+X-QCInternal: smtphost
+Received: from stor-presley.qualcomm.com ([192.168.140.85])
+  by ironmsg05-sd.qualcomm.com with ESMTP; 25 Nov 2020 18:03:25 -0800
+Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
+        id 9A77221858; Wed, 25 Nov 2020 18:03:25 -0800 (PST)
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, ziqichen@codeaurora.org,
+        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        cang@codeaurora.org
+Subject: [PATCH v3 0/2] Subject: [PATCH v3 0/2] Refactor ufshcd_setup_clocks() to remove param skip_ref_clk
+Date:   Wed, 25 Nov 2020 18:00:59 -0800
+Message-Id: <1606356063-38380-1-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If the ibmvfc client adapter requests channels it must submit a number
-of Sub-CRQ handles matching the number of channels being requested. The
-VIOS in its response will overwrite the actual number of channel
-resources allocated which may be less than what was requested. The
-client then must store the VIOS Sub-CRQ handle for each queue. This VIOS
-handle is needed as a parameter with  h_send_sub_crq().
+Allow vendor drivers to decide which clock should be kept on when
+clk gating or suspend disables clocks while link is active.
 
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
----
- drivers/scsi/ibmvscsi/ibmvfc.c | 32 +++++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+Change since v2:
+- Fixed a typo in commit title
+- Changed naming always_on_while_link_active to keep_link_active
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 897e3236534d..6bb1028bbe44 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -4494,15 +4494,35 @@ static void ibmvfc_discover_targets(struct ibmvfc_host *vhost)
- static void ibmvfc_channel_setup_done(struct ibmvfc_event *evt)
- {
- 	struct ibmvfc_host *vhost = evt->vhost;
-+	struct ibmvfc_channel_setup *setup = vhost->channel_setup_buf;
-+	struct ibmvfc_scsi_channels *scrqs = &vhost->scsi_scrqs;
- 	u32 mad_status = be16_to_cpu(evt->xfer_iu->channel_setup.common.status);
- 	int level = IBMVFC_DEFAULT_LOG_LEVEL;
-+	int flags, active_queues, i;
- 
- 	ibmvfc_free_event(evt);
- 
- 	switch (mad_status) {
- 	case IBMVFC_MAD_SUCCESS:
- 		ibmvfc_dbg(vhost, "Channel Setup succeded\n");
-+		flags = be32_to_cpu(setup->flags);
- 		vhost->do_enquiry = 0;
-+		active_queues = be32_to_cpu(setup->num_scsi_subq_channels);
-+		scrqs->active_queues = active_queues;
-+
-+		if (flags & IBMVFC_CHANNELS_CANCELED) {
-+			ibmvfc_dbg(vhost, "Channels Canceled\n");
-+			vhost->using_channels = 0;
-+		} else {
-+			if (active_queues)
-+				vhost->using_channels = 1;
-+			for (i = 0; i < active_queues; i++)
-+				scrqs->scrqs[i].vios_cookie =
-+					be64_to_cpu(setup->channel_handles[i]);
-+
-+			ibmvfc_dbg(vhost, "Using %u channels\n",
-+				   vhost->scsi_scrqs.active_queues);
-+		}
- 		break;
- 	case IBMVFC_MAD_FAILED:
- 		level += ibmvfc_retry_host_init(vhost);
-@@ -4526,9 +4546,19 @@ static void ibmvfc_channel_setup(struct ibmvfc_host *vhost)
- 	struct ibmvfc_channel_setup_mad *mad;
- 	struct ibmvfc_channel_setup *setup_buf = vhost->channel_setup_buf;
- 	struct ibmvfc_event *evt = ibmvfc_get_event(vhost);
-+	struct ibmvfc_scsi_channels *scrqs = &vhost->scsi_scrqs;
-+	unsigned int num_channels =
-+		min(vhost->client_scsi_channels, vhost->max_vios_scsi_channels);
-+	int i;
- 
- 	memset(setup_buf, 0, sizeof(*setup_buf));
--	setup_buf->flags = cpu_to_be32(IBMVFC_CANCEL_CHANNELS);
-+	if (num_channels == 0)
-+		setup_buf->flags = cpu_to_be32(IBMVFC_CANCEL_CHANNELS);
-+	else {
-+		setup_buf->num_scsi_subq_channels = cpu_to_be32(num_channels);
-+		for (i = 0; i < num_channels; i++)
-+			setup_buf->channel_handles[i] = cpu_to_be64(scrqs->scrqs[i].cookie);
-+	}
- 
- 	ibmvfc_init_event(evt, ibmvfc_channel_setup_done, IBMVFC_MAD_FORMAT);
- 	mad = &evt->iu.channel_setup;
+Change since v1:
+- Incorporated Stanley's idea which is to refactor func ufshcd_setup_clocks()
+
+Can Guo (2):
+  scsi: ufs: Refactor ufshcd_setup_clocks() to remove skip_ref_clk
+  scsi: ufs-qcom: Keep core_clk_unipro ON while link is active
+
+ drivers/scsi/ufs/ufs-qcom.c      |  6 ++++++
+ drivers/scsi/ufs/ufshcd-pltfrm.c |  2 ++
+ drivers/scsi/ufs/ufshcd.c        | 29 +++++++++--------------------
+ drivers/scsi/ufs/ufshcd.h        |  3 +++
+ 4 files changed, 20 insertions(+), 20 deletions(-)
+
 -- 
-2.27.0
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
