@@ -2,114 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0462C4E79
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 06:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318AA2C5007
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 09:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387844AbgKZFit (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 00:38:49 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:43865 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730773AbgKZFit (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 00:38:49 -0500
-X-UUID: f6c2e8685fc547a7ae234551d540fcf4-20201126
-X-UUID: f6c2e8685fc547a7ae234551d540fcf4-20201126
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1835791511; Thu, 26 Nov 2020 13:38:42 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 26 Nov 2020 13:38:40 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 26 Nov 2020 13:38:41 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <alice.chao@mediatek.com>, <huadian.liu@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 3/3] scsi: ufs: Introduce notify_event variant function
-Date:   Thu, 26 Nov 2020 13:38:39 +0800
-Message-ID: <20201126053839.25889-4-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201126053839.25889-1-stanley.chu@mediatek.com>
-References: <20201126053839.25889-1-stanley.chu@mediatek.com>
+        id S1728901AbgKZIOD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 03:14:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37163 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729107AbgKZIOD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 26 Nov 2020 03:14:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606378442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lzOZ0+ORGJBLPor/ndG4DzkjsuKwEIa25PWAxEo/TLA=;
+        b=VMOzUjjeTXLKyuJmAgCzxX5K4iP1hgTIWzKg8zXPGg4WKu9D/Fnx1OZFkR4C2bcEOqzI3u
+        jvh5jfzUwb8fjTorzS5WFCz2G6usRtqf0VFqYfT4Xl4cE0MQLjICqp4rbD+Anfts2oMRGs
+        ewWv1rvpTYruzr7HEJ1/ZwMSPyeBgFk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-487-o6oKrDUFPBex5xHfYOV6ew-1; Thu, 26 Nov 2020 03:13:59 -0500
+X-MC-Unique: o6oKrDUFPBex5xHfYOV6ew-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 15B1E8143E5;
+        Thu, 26 Nov 2020 08:13:58 +0000 (UTC)
+Received: from gondolin (ovpn-113-125.ams2.redhat.com [10.36.113.125])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 38D7860855;
+        Thu, 26 Nov 2020 08:13:55 +0000 (UTC)
+Date:   Thu, 26 Nov 2020 09:13:53 +0100
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Qinglang Miao <miaoqinglang@huawei.com>
+Cc:     Benjamin Block <bblock@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        <linux-s390@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH] scsi: zfcp: fix use-after-free in zfcp_unit_remove
+Message-ID: <20201126091353.50cf6ab6.cohuck@redhat.com>
+In-Reply-To: <4c65bead-2553-171e-54d2-87a9de0330e8@huawei.com>
+References: <20201120074854.31754-1-miaoqinglang@huawei.com>
+        <20201125170658.GB8578@t480-pf1aa2c2>
+        <4c65bead-2553-171e-54d2-87a9de0330e8@huawei.com>
+Organization: Red Hat GmbH
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: EBE7BAEF129B0F5E336E31696B4C21E27A89E4F63B38E3C9CB52C786E6C3C5152000:8
-X-MTK:  N
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Introduce notify_event variant function to allow
-vendor to get notified of important events and connect
-to any proprietary debugging facilities.
+On Thu, 26 Nov 2020 09:27:41 +0800
+Qinglang Miao <miaoqinglang@huawei.com> wrote:
 
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufshcd.c |  2 ++
- drivers/scsi/ufs/ufshcd.h | 11 +++++++++++
- 2 files changed, 13 insertions(+)
+> =E5=9C=A8 2020/11/26 1:06, Benjamin Block =E5=86=99=E9=81=93:
+> > On Fri, Nov 20, 2020 at 03:48:54PM +0800, Qinglang Miao wrote: =20
+> >> kfree(port) is called in put_device(&port->dev) so that following
+> >> use would cause use-after-free bug.
+> >>
+> >> The former put_device is redundant for device_unregister contains
+> >> put_device already. So just remove it to fix this.
+> >>
+> >> Fixes: 86bdf218a717 ("[SCSI] zfcp: cleanup unit sysfs attribute usage")
+> >> Reported-by: Hulk Robot <hulkci@huawei.com>
+> >> Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+> >> ---
+> >>   drivers/s390/scsi/zfcp_unit.c | 2 --
+> >>   1 file changed, 2 deletions(-)
+> >>
+> >> diff --git a/drivers/s390/scsi/zfcp_unit.c b/drivers/s390/scsi/zfcp_un=
+it.c
+> >> index e67bf7388..664b77853 100644
+> >> --- a/drivers/s390/scsi/zfcp_unit.c
+> >> +++ b/drivers/s390/scsi/zfcp_unit.c
+> >> @@ -255,8 +255,6 @@ int zfcp_unit_remove(struct zfcp_port *port, u64 f=
+cp_lun)
+> >>   		scsi_device_put(sdev);
+> >>   	}
+> >>  =20
+> >> -	put_device(&unit->dev);
+> >> -
+> >>   	device_unregister(&unit->dev); =20
+> >>  >>   	return 0; =20
+> >=20
+> > Same as in the other mail for `zfcp_sysfs_port_remove_store()`. We
+> > explicitly get a new ref in `_zfcp_unit_find()`, so we also need to put
+> > that away again.
+> > =20
+> Sorry, Benjamin, I don't think so, because device_unregister calls=20
+> put_device inside.
+>=20
+> It seem's that another put_device before or after device_unregister is=20
+> useless and even might cause an use-after-free.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 7194bed1f10b..63fe37e1c908 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -4484,6 +4484,8 @@ void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val)
- 	e->val[e->pos] = val;
- 	e->tstamp[e->pos] = ktime_get();
- 	e->pos = (e->pos + 1) % UFS_EVENT_HIST_LENGTH;
-+
-+	ufshcd_vops_notify_event(hba, id, &val);
- }
- EXPORT_SYMBOL_GPL(ufshcd_update_evt_hist);
- 
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 82c2fc5597bb..a81ca36c1715 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -317,6 +317,7 @@ struct ufs_pwr_mode_info {
-  * @phy_initialization: used to initialize phys
-  * @device_reset: called to issue a reset pulse on the UFS device
-  * @program_key: program or evict an inline encryption key
-+ * @notify_event: called to notify important events
-  */
- struct ufs_hba_variant_ops {
- 	const char *name;
-@@ -352,6 +353,8 @@ struct ufs_hba_variant_ops {
- 					void *data);
- 	int	(*program_key)(struct ufs_hba *hba,
- 			       const union ufs_crypto_cfg_entry *cfg, int slot);
-+	void	(*notify_event)(struct ufs_hba *hba,
-+				enum ufs_event_type evt, void *data);
- };
- 
- /* clock gating state  */
-@@ -1097,6 +1100,14 @@ static inline int ufshcd_vops_clk_scale_notify(struct ufs_hba *hba,
- 	return 0;
- }
- 
-+static inline void ufshcd_vops_notify_event(struct ufs_hba *hba,
-+					    enum ufs_event_type evt,
-+					    void *data)
-+{
-+	if (hba->vops && hba->vops->notify_event)
-+		hba->vops->notify_event(hba, evt, data);
-+}
-+
- static inline int ufshcd_vops_setup_clocks(struct ufs_hba *hba, bool on,
- 					enum ufs_notify_change_status status)
- {
--- 
-2.18.0
+The issue here (and in the other patches that I had commented on) is
+that the references have different origins. device_register() acquires
+a reference, and that reference is given up when you call
+device_unregister(). However, the code here grabs an extra reference,
+and it of course has to give it up again when it no longer needs it.
+
+This is something that is not that easy to spot by an automated check,
+I guess?
 
