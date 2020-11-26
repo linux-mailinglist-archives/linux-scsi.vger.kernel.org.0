@@ -2,85 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAE62C599B
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 17:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84F92C59D7
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 18:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391564AbgKZQwt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 11:52:49 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2167 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390599AbgKZQws (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 11:52:48 -0500
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ChkKB3rfbz67J6L;
-        Fri, 27 Nov 2020 00:50:38 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Thu, 26 Nov 2020 17:52:47 +0100
-Received: from [10.210.172.213] (10.210.172.213) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.1913.5; Thu, 26 Nov 2020 16:52:45 +0000
-Subject: Re: [PATCH v2 1/3] genirq/affinity: Add irq_update_affinity_desc()
-From:   John Garry <john.garry@huawei.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>, <gregkh@linuxfoundation.org>,
-        <rafael@kernel.org>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>, <linuxarm@huawei.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <87ft57r7v3.fsf@nanos.tec.linutronix.de>
- <78356caa-57a0-b807-fe52-8f12d36c1789@huawei.com>
- <874klmqu2r.fsf@nanos.tec.linutronix.de>
- <b86af904-2288-8b53-7e99-e763b73987d0@huawei.com>
- <87lfexp6am.fsf@nanos.tec.linutronix.de>
- <3acb7fde-eae2-a223-9cfd-f409cc2abba6@huawei.com>
- <873615oy8a.fsf@nanos.tec.linutronix.de>
- <4aab9d3b-6ca6-01c5-f840-459f945c7577@huawei.com>
- <87sg91ik9e.wl-maz@kernel.org>
- <0edc9a11-0b92-537f-1790-6b4b6de4900d@huawei.com>
- <afd97dd4b1e102ac9ad49800821231a4@kernel.org>
- <5a314713-c1ee-2d34-bee1-60beae274742@huawei.com>
- <0525a4bcf17a355cd141632d4f3714be@kernel.org>
- <702e1729-9a4b-b16f-6a58-33172b1a3220@huawei.com>
- <5a588f5d86010602ff9a90e8f057743c@kernel.org>
- <80e0a19b-3291-1304-1a5b-0445c49efe31@huawei.com>
- <d696d314514a4bd53c85f2da73a23eed@kernel.org>
- <e96dd9b0-c3a7-f7fb-0317-2fc2107f405a@huawei.com>
-Message-ID: <696c04a9-8c13-0fec-08c4-068d4dd5ba67@huawei.com>
-Date:   Thu, 26 Nov 2020 16:52:22 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S2404112AbgKZRBk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 12:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404088AbgKZRBg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 12:01:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E9CC0613D4
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 09:01:36 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kiKcr-0001Kj-AC; Thu, 26 Nov 2020 18:00:09 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kiKch-0002rx-1n; Thu, 26 Nov 2020 17:59:59 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Geoff Levand <geoff@infradead.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jens Axboe <axboe@kernel.dk>, Jim Paris <jim@jtan.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, alsa-devel@alsa-project.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH 1/2] ALSA: ppc: drop if block with always false condition
+Date:   Thu, 26 Nov 2020 17:59:49 +0100
+Message-Id: <20201126165950.2554997-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <e96dd9b0-c3a7-f7fb-0317-2fc2107f405a@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.172.213]
-X-ClientProxiedBy: lhreml707-chm.china.huawei.com (10.201.108.56) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Marc,
+The remove callback is only called for devices that were probed
+successfully before. As the matching probe function cannot complete
+without error if dev->match_id != PS3_MATCH_ID_SOUND, we don't have to
+check this here.
 
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/hacks 
-> 
-> 
-> ok, I'll have a look
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ sound/ppc/snd_ps3.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-I tried that and it doesn't look to work.
+diff --git a/sound/ppc/snd_ps3.c b/sound/ppc/snd_ps3.c
+index 58bb49fff184..6ab796a5d936 100644
+--- a/sound/ppc/snd_ps3.c
++++ b/sound/ppc/snd_ps3.c
+@@ -1053,8 +1053,6 @@ static int snd_ps3_driver_remove(struct ps3_system_bus_device *dev)
+ {
+ 	int ret;
+ 	pr_info("%s:start id=%d\n", __func__,  dev->match_id);
+-	if (dev->match_id != PS3_MATCH_ID_SOUND)
+-		return -ENXIO;
+ 
+ 	/*
+ 	 * ctl and preallocate buffer will be freed in
+-- 
+2.29.2
 
-I find that for the its_msi_prepare() call, its_dev->shared does not get 
-set, as MSI_ALLOC_FLAGS_SHARED_DEVICE is not set in info->flags.
-
-If I understand the code correctly, MSI_ALLOC_FLAGS_SHARED_DEVICE is 
-supposed to be set in info->flags in platform_msi_set_desc(), but this 
-is called per-msi after its_msi_prepare(), so we don't the flags set at 
-the right time. That's how it looks to me...
-
-Cheers,
-John
