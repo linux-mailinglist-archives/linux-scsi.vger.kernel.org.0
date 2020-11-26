@@ -2,18 +2,15 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C64C42C555D
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422A72C555E
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389545AbgKZNak (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 08:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389743AbgKZNak (ORCPT
+        id S2389945AbgKZNan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 08:30:43 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56576 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390124AbgKZNak (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:30:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0EC0613D4
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 05:30:39 -0800 (PST)
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1606397438;
@@ -21,21 +18,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pWZinuhF44IRroHb4hD7Q0Kvc+zAzhZUteuvx6ildkM=;
-        b=h/4PIlQfU59ZsGvuAqvIllGc9APCWXyf6nPXVX432VkUv3Pcv3vf0iesdxs7zval9LLMHb
-        ZUwValfpdwIpICCjzoO+6YqRJNbpGMluu50Qe0jRKkN3clblAtbQT9VVqu/2lvMMU6crFd
-        6TddkQT+8aR8BhXZwrWpP1Rzie8tb0G8jOMzjyPZrd0QVyGoQoL6jpZKS3jo4U2SdsOkX9
-        BbFXb9VBbtyRHZqjkzriHn7jveOqiQLj5pWngOTDUtcb9tAvOd4/qwOu/aywPQX/2g0tgt
-        ooECZWYV8+JRZtJnwxX7r8ojh5PO31vKDU+dipjYFDqPdAs3mS5TW3IehOv8BQ==
+        bh=xOOBp6z3OInykv2pKK7i4G7TCjhXQtxisN5E2TisB+U=;
+        b=UVx+cuiijhsjFzna9+6Zqbcckv8jr+L/hm8tSPZxe/bQJNiWItdNPTm4uLgd0T6p2PiU1u
+        1Fj9u2FOn3UCQXAt0HC3Cz7eWVIldXES05AohHDsrP9G97NGioK8VESTGxHMOn+aDDIvOs
+        SdyCLd7KoGxDk6eJU7MbbTCMqc1YIfxN3prsAP8tcFnTxi3YDqaBaKhY/TCO2fA+taJ/8K
+        uYf6baBKGsUKh33aVbKJsMTEX4LpV71Fnjm7YJyiOxaTUkPGMw7Zw3fHAlJho3JOndCjJB
+        7yUv1gpXkbeplah/1Er3WVqMLWz/X/TlymvPxv/UGDarmpijcSx6iBmEyWc/UQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1606397438;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pWZinuhF44IRroHb4hD7Q0Kvc+zAzhZUteuvx6ildkM=;
-        b=SBNPN6jNE6BlezRqouO9hWdUGNnuxmvSi03dldf8vsAw+9o57PGzMOYxb3nMhcJLdxLKIj
-        DctZyn2fJad3aABw==
+        bh=xOOBp6z3OInykv2pKK7i4G7TCjhXQtxisN5E2TisB+U=;
+        b=mpfunGzghZF4WsR3K6MnZfzrV/WdyF3J1uNBm0rLDM4bup9qGPN8JK7MbEdo+da6w+Mv/K
+        VkmQ5T22WC26VCCw==
 To:     linux-scsi@vger.kernel.org
 Cc:     Finn Thain <fthain@telegraphics.com.au>,
         GR-QLogic-Storage-Upstream@marvell.com,
@@ -59,9 +56,9 @@ Cc:     Finn Thain <fthain@telegraphics.com.au>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Ahmed S . Darwish" <a.darwish@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 13/14] scsi: message: fusion: Remove in_interrupt() usage in mpt_config().
-Date:   Thu, 26 Nov 2020 14:29:51 +0100
-Message-Id: <20201126132952.2287996-14-bigeasy@linutronix.de>
+Subject: [PATCH 14/14] scsi: message: fusion: Remove in_interrupt() usage in mptsas_cleanup_fw_event_q().
+Date:   Thu, 26 Nov 2020 14:29:52 +0100
+Message-Id: <20201126132952.2287996-15-bigeasy@linutronix.de>
 In-Reply-To: <20201126132952.2287996-1-bigeasy@linutronix.de>
 References: <20201126132952.2287996-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -70,122 +67,159 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
-
-in_interrupt() is referenced all over the place in these drivers. Most of
-these references are comments which are outdated and wrong.
+mptsas_cleanup_fw_event_q() uses in_interrupt() to determine if it is
+safe to cancel a worker item.
 
 Aside of that in_interrupt() is deprecated as it does not provide what the
 name suggests. It covers more than hard/soft interrupt servicing context
 and is semantically ill defined.
 
-From reading the mpt_config() code and the history this is clearly a
-debug mechanism and should probably be replaced by might_sleep() or
-completely removed because such checks are already in the subsequent
-functions.
+Looking closer there are a few problems with the current construct:
+- It could be invoked from an interrupt handler / non-blocking context
+  because cancel_delayed_work() has no such restriction. Also,
+  mptsas_free_fw_event() has no such restriction.
 
-Remove the in_interrupt() references and replace the usage in
-mpt_config() with might_sleep().
+- The list is accessed unlocked. It may dequeue a valid work-item but at
+  the time of invoking cancel_delayed_work() the memory may be released
+  or reused because the worker has already run.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+mptsas_cleanup_fw_event_q() is invoked via mptsas_shutdown() which is
+always invoked from preemtible context on device shutdown.
+It is also invoked via mptsas_ioc_reset(, MPT_IOC_POST_RESET) which is a
+MptResetHandlers callback. The only caller here are
+mpt_SoftResetHandler(), mpt_HardResetHandler() and
+mpt_Soft_Hard_ResetHandler(). All these functions have a `sleepFlag'
+argument and each caller uses caller uses `CAN_SLEEP' here and according
+to current documentation:
+|      @sleepFlag: Indicates if sleep or schedule must be called
+
+So it is safe to sleep.
+
+Add mptsas_hotplug_event::users member. Initialize it to one by default
+so mptsas_free_fw_event() will free the memory.
+mptsas_cleanup_fw_event_q() will increment its value for items it
+dequeues and then it may keep a pointer after dropping the lock.
+Invoke cancel_delayed_work_sync() to cancel the work item and wait if
+the worker is currently busy. Free the memory afterwards since it owns
+the last reference to it.
+
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: Sathya Prakash <sathya.prakash@broadcom.com>
 Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
 Cc: MPT-FusionLinux.pdl@broadcom.com
 ---
- drivers/message/fusion/mptbase.c  | 14 ++------------
- drivers/message/fusion/mptfc.c    |  2 +-
- drivers/message/fusion/mptscsih.c |  2 +-
- drivers/message/fusion/mptspi.c   |  2 +-
- 4 files changed, 5 insertions(+), 15 deletions(-)
+ drivers/message/fusion/mptsas.c | 45 +++++++++++++++++++++++++--------
+ drivers/message/fusion/mptsas.h |  1 +
+ 2 files changed, 36 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptb=
-ase.c
-index 3078fac34e51f..549797d0301d8 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -57,7 +57,7 @@
- #include <linux/kdev_t.h>
- #include <linux/blkdev.h>
- #include <linux/delay.h>
--#include <linux/interrupt.h>		/* needed for in_interrupt() proto */
-+#include <linux/interrupt.h>
- #include <linux/dma-mapping.h>
- #include <linux/kthread.h>
- #include <scsi/scsi_host.h>
-@@ -6335,7 +6335,6 @@ SendEventAck(MPT_ADAPTER *ioc, EventNotificationReply=
-_t *evnp)
-  *		Page header is updated.
-  *
-  *	Returns 0 for success
-- *	-EPERM if not allowed due to ISR context
-  *	-EAGAIN if no msg frames currently available
-  *	-EFAULT for non-successful reply or no reply (timeout)
-  */
-@@ -6353,19 +6352,10 @@ mpt_config(MPT_ADAPTER *ioc, CONFIGPARMS *pCfg)
- 	u8		 page_type =3D 0, extend_page;
- 	unsigned long 	 timeleft;
- 	unsigned long	 flags;
--	int		 in_isr;
- 	u8		 issue_hard_reset =3D 0;
- 	u8		 retry_count =3D 0;
+diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsa=
+s.c
+index 18b91ea1a353f..5eb0b3361e4e0 100644
+--- a/drivers/message/fusion/mptsas.c
++++ b/drivers/message/fusion/mptsas.c
+@@ -289,6 +289,7 @@ mptsas_add_fw_event(MPT_ADAPTER *ioc, struct fw_event_w=
+ork *fw_event,
 =20
--	/*	Prevent calling wait_event() (below), if caller happens
--	 *	to be in ISR context, because that is fatal!
--	 */
--	in_isr =3D in_interrupt();
--	if (in_isr) {
--		dcprintk(ioc, printk(MYIOC_s_WARN_FMT "Config request not allowed in ISR=
- context!\n",
--				ioc->name));
--		return -EPERM;
--    }
-+	might_sleep();
+ 	spin_lock_irqsave(&ioc->fw_event_lock, flags);
+ 	list_add_tail(&fw_event->list, &ioc->fw_event_list);
++	fw_event->users =3D 1;
+ 	INIT_DELAYED_WORK(&fw_event->work, mptsas_firmware_event_work);
+ 	devtprintk(ioc, printk(MYIOC_s_DEBUG_FMT "%s: add (fw_event=3D0x%p)"
+ 		"on cpuid %d\n", ioc->name, __func__,
+@@ -314,6 +315,15 @@ mptsas_requeue_fw_event(MPT_ADAPTER *ioc, struct fw_ev=
+ent_work *fw_event,
+ 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+ }
 =20
- 	/* don't send a config page during diag reset */
- 	spin_lock_irqsave(&ioc->taskmgmt_lock, flags);
-diff --git a/drivers/message/fusion/mptfc.c b/drivers/message/fusion/mptfc.c
-index f92b0433f599f..0484e9c15c097 100644
---- a/drivers/message/fusion/mptfc.c
-+++ b/drivers/message/fusion/mptfc.c
-@@ -50,7 +50,7 @@
- #include <linux/kdev_t.h>
- #include <linux/blkdev.h>
- #include <linux/delay.h>	/* for mdelay */
--#include <linux/interrupt.h>	/* needed for in_interrupt() proto */
-+#include <linux/interrupt.h>
- #include <linux/reboot.h>	/* notifier code */
- #include <linux/workqueue.h>
- #include <linux/sort.h>
-diff --git a/drivers/message/fusion/mptscsih.c b/drivers/message/fusion/mpt=
-scsih.c
-index e7f0d4ae0f960..ce2e5b21978e2 100644
---- a/drivers/message/fusion/mptscsih.c
-+++ b/drivers/message/fusion/mptscsih.c
-@@ -52,7 +52,7 @@
- #include <linux/kdev_t.h>
- #include <linux/blkdev.h>
- #include <linux/delay.h>	/* for mdelay */
--#include <linux/interrupt.h>	/* needed for in_interrupt() proto */
-+#include <linux/interrupt.h>
- #include <linux/reboot.h>	/* notifier code */
- #include <linux/workqueue.h>
++static void __mptsas_free_fw_event(MPT_ADAPTER *ioc,
++				   struct fw_event_work *fw_event)
++{
++	devtprintk(ioc, printk(MYIOC_s_DEBUG_FMT "%s: kfree (fw_event=3D0x%p)\n",
++	    ioc->name, __func__, fw_event));
++	list_del(&fw_event->list);
++	kfree(fw_event);
++}
++
+ /* free memory associated to a sas firmware event */
+ static void
+ mptsas_free_fw_event(MPT_ADAPTER *ioc, struct fw_event_work *fw_event)
+@@ -321,10 +331,9 @@ mptsas_free_fw_event(MPT_ADAPTER *ioc, struct fw_event=
+_work *fw_event)
+ 	unsigned long flags;
 =20
-diff --git a/drivers/message/fusion/mptspi.c b/drivers/message/fusion/mptsp=
-i.c
-index eabc4de5816cb..af0ce5611e4ac 100644
---- a/drivers/message/fusion/mptspi.c
-+++ b/drivers/message/fusion/mptspi.c
-@@ -52,7 +52,7 @@
- #include <linux/kdev_t.h>
- #include <linux/blkdev.h>
- #include <linux/delay.h>	/* for mdelay */
--#include <linux/interrupt.h>	/* needed for in_interrupt() proto */
-+#include <linux/interrupt.h>
- #include <linux/reboot.h>	/* notifier code */
- #include <linux/workqueue.h>
- #include <linux/raid_class.h>
+ 	spin_lock_irqsave(&ioc->fw_event_lock, flags);
+-	devtprintk(ioc, printk(MYIOC_s_DEBUG_FMT "%s: kfree (fw_event=3D0x%p)\n",
+-	    ioc->name, __func__, fw_event));
+-	list_del(&fw_event->list);
+-	kfree(fw_event);
++	fw_event->users--;
++	if (!fw_event->users)
++		__mptsas_free_fw_event(ioc, fw_event);
+ 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+ }
+=20
+@@ -333,9 +342,10 @@ mptsas_free_fw_event(MPT_ADAPTER *ioc, struct fw_event=
+_work *fw_event)
+ static void
+ mptsas_cleanup_fw_event_q(MPT_ADAPTER *ioc)
+ {
+-	struct fw_event_work *fw_event, *next;
++	struct fw_event_work *fw_event;
+ 	struct mptsas_target_reset_event *target_reset_list, *n;
+ 	MPT_SCSI_HOST	*hd =3D shost_priv(ioc->sh);
++	unsigned long flags;
+=20
+ 	/* flush the target_reset_list */
+ 	if (!list_empty(&hd->target_reset_list)) {
+@@ -350,14 +360,29 @@ mptsas_cleanup_fw_event_q(MPT_ADAPTER *ioc)
+ 		}
+ 	}
+=20
+-	if (list_empty(&ioc->fw_event_list) ||
+-	     !ioc->fw_event_q || in_interrupt())
++	if (list_empty(&ioc->fw_event_list) || !ioc->fw_event_q)
+ 		return;
+=20
+-	list_for_each_entry_safe(fw_event, next, &ioc->fw_event_list, list) {
+-		if (cancel_delayed_work(&fw_event->work))
+-			mptsas_free_fw_event(ioc, fw_event);
++	spin_lock_irqsave(&ioc->fw_event_lock, flags);
++
++	while (!list_empty(&ioc->fw_event_list)) {
++		bool canceled =3D false;
++
++		fw_event =3D list_first_entry(&ioc->fw_event_list,
++					    struct fw_event_work, list);
++		fw_event->users++;
++		spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
++		if (cancel_delayed_work_sync(&fw_event->work))
++			canceled =3D true;
++
++		spin_lock_irqsave(&ioc->fw_event_lock, flags);
++		if (canceled)
++			fw_event->users--;
++		fw_event->users--;
++		WARN_ON_ONCE(fw_event->users);
++		__mptsas_free_fw_event(ioc, fw_event);
+ 	}
++	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+ }
+=20
+=20
+diff --git a/drivers/message/fusion/mptsas.h b/drivers/message/fusion/mptsa=
+s.h
+index e35b13891fe42..71abf3477495e 100644
+--- a/drivers/message/fusion/mptsas.h
++++ b/drivers/message/fusion/mptsas.h
+@@ -107,6 +107,7 @@ struct mptsas_hotplug_event {
+ struct fw_event_work {
+ 	struct list_head 	list;
+ 	struct delayed_work	 work;
++	int			users;
+ 	MPT_ADAPTER	*ioc;
+ 	u32			event;
+ 	u8			retries;
 --=20
 2.29.2
 
