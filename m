@@ -2,94 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D62C5190
+	by mail.lfdr.de (Postfix) with ESMTP id C58332C5191
 	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 10:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733254AbgKZJpw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 04:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S1733271AbgKZJp4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 04:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727958AbgKZJpw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 04:45:52 -0500
+        with ESMTP id S1733263AbgKZJpz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 04:45:55 -0500
 Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB585C0613D4
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 01:45:51 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id t21so1285068pgl.3
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 01:45:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7220C0613D4
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 01:45:55 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id 62so1247280pgg.12
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 01:45:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=xNTIwgQwHmK3COaPc5yvqUr/mZurdipaZvhHbW+X8fM=;
-        b=M2HJ8cdTKJLpSCVVW+z1qaYk0ck7NIxdUk9vuASANm1t54jSjmoL0s1nz7LaMrLr4s
-         FppiVKaGKShBnAQVKVJxCVGbTGSf0HaTA5M6xLCoekBMbq2DMDTpqbXMhaPHgVaMqIeF
-         RHik7ijhBtLEeIYXzBSaTGktAibNbkAg4hF8E=
+        bh=oOJuzruQQ2GAMKF23RY1RyqiWW0P61ksWs4Xw9Mz9+4=;
+        b=PnM5NzI8bjcRYfuZoLRLw9M3ufbuDwWF//58GrVQkPDiIxmOwVd0vI7mcHkozZYsuY
+         bK3qDLcDbPzl4NqEo+wS8LZ75uU9+iJ3bWzEYLusaD4zsHxmASEZVHIaiNpj7JVVlfQ5
+         K8JZWrFKQ/iZtHC7FzmAr6GApcwk6ETyieYi8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=xNTIwgQwHmK3COaPc5yvqUr/mZurdipaZvhHbW+X8fM=;
-        b=FAM0DdDPB1WJZBoow85iAPKTVeZDfZ48JpbYLSebZsmohKQO8tD8cE3XciodVV5+gv
-         g0/YjktTYnKZfLDZejRRMB0q5Iw8NyFRbwM2Y987T+2qNdxqgkaTFfIydlCsvrPdu2wp
-         gNOum5Q6gQIaNSJI89Fx51sP4f81UCEFM1+OGAZHCcRKi5DDwVy1NyYpvLk53SBe1oie
-         rLL+tjZ/e6obufyK03w6YoQYEjKbtJ7KKl6VU6K5KXylJZpS4DwrYYJAT0HJMk3FpjKe
-         i1WK7uvAgphMmvXX9CJuHhzu+8613Zvww84cwmjFnzPLDsz9D6Fhx8JW/goKjG1/JNgx
-         4xTw==
-X-Gm-Message-State: AOAM530RSkcz6N0owd3utN1W4sYbfPBDLU4comBLCGJBBNcgCCJeqSIM
-        DINKH9hGZw15lNfGwG+1uA/JmSsC3lw0tkh2/khEj9QAl1IzT8abYdeJ6P8bHdV/Cr/TqPwtkZ2
-        C47gn6t75BSn+CGDLXhiMCMoWRDPoc9kfzaZah0lA1cB3RuraHpIzw7i9iPN5LMNDdyeT896Qbb
-        5DKN291nY6I4IyBmh9VPVo3Ms=
-X-Google-Smtp-Source: ABdhPJwDHVjGxivsZout/BOKJnc0psJ8OJjuGVQ6AM62XPIYNwy8IGEQswzNimYfJz7sAF/ajOcYeQ==
-X-Received: by 2002:a17:90a:d308:: with SMTP id p8mr2729508pju.110.1606383950714;
-        Thu, 26 Nov 2020 01:45:50 -0800 (PST)
+        bh=oOJuzruQQ2GAMKF23RY1RyqiWW0P61ksWs4Xw9Mz9+4=;
+        b=nOdwgaeGZT5yGHeRUG8wU5vMA1LinoNfolga93U6AmW4hZuSF5tqBEZaMbuORW/uTk
+         Daiz9e3qreKJup/5uDJ++oo/XRg1S3ah6JsX/HK7NixZTacAvP3rKAVNGJ1KL6CTuWsf
+         +JQ7ZPmdqlA3P2wiPuWQyxY/TcNlwhwm7mfe58MJgwW8XN5WM1+WTj6CMYqWcGaVo1d6
+         ulwg4jtgF+TkcFVep+ExvBRZ13nSWrzmV+7kWk3CAmLLnzAD6vDjaQS4XA6+slh28anV
+         bM1/KwrwZKfLCY8OByXvwAEhs2HOFoqMWMjGHqVr552LrDbt87MLDjrcOyWbV7pGRPgR
+         IXMQ==
+X-Gm-Message-State: AOAM531lFzcezrUkjwfGIawqN3A+7jd17yMcEEjC77G0ab4h5teXTuFG
+        NECIhHGkXQ23z3zTwe9w5nyxxnrsoUjx1BU9xrP10kucrJR5a9t8SjN2n8dAfefXUZYtTuqN/cB
+        RBe+uP0uZmFwJhH6PrZ3Ehl0Y9s6knB+efBktm8UnOzzJLBQhzylTTD+AOBqO/Pj5BT5Dir1xgl
+        KiaQOuHGE81Tudc9fLaDuezF8=
+X-Google-Smtp-Source: ABdhPJzMdt2lXX1aeSXrggx7Hi1zK/D5JMXJAP80fQgP446CsZQLFUGtrQ7aO04Tg1tvK6U1Epifsg==
+X-Received: by 2002:a17:90a:4dc3:: with SMTP id r3mr2767145pjl.155.1606383954528;
+        Thu, 26 Nov 2020 01:45:54 -0800 (PST)
 Received: from dhcp-10-123-20-14.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id i10sm4343220pfk.206.2020.11.26.01.45.47
+        by smtp.gmail.com with ESMTPSA id i10sm4343220pfk.206.2020.11.26.01.45.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2020 01:45:50 -0800 (PST)
+        Thu, 26 Nov 2020 01:45:53 -0800 (PST)
 From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
 Cc:     Sathya.Prakash@broadcom.com, sreekanth.reddy@broadcom.com,
         Suganath Prabu S <suganath-prabu.subramani@broadcom.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH v1 3/8] mpt3sas: Add master triggers persistent Trigger Page
-Date:   Thu, 26 Nov 2020 15:13:06 +0530
-Message-Id: <20201126094311.8686-4-suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH v1 4/8] mpt3sas: Add Event triggers persistent Trigger Page2
+Date:   Thu, 26 Nov 2020 15:13:07 +0530
+Message-Id: <20201126094311.8686-5-suganath-prabu.subramani@broadcom.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201126094311.8686-1-suganath-prabu.subramani@broadcom.com>
 References: <20201126094311.8686-1-suganath-prabu.subramani@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cb5db705b4ff68b8"
+        boundary="00000000000003925f05b4ff696c"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000cb5db705b4ff68b8
+--00000000000003925f05b4ff696c
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Description:
-Trigger Page 1 is used to store information about master triggers.
-Below are the master triggers conditions.
+Trigger page2 is used to store information about event triggers.
 
-Bit[3]  Trigger condition for Device Removal event
-Bit[2]  Trigger condition for TM command issued by driver
-Bit[1]  Trigger condition for Adapter reset issued by driver
-Bit[0]  Trigger condition for IOC Fault state
+Persistent Trigger page2 format:
+
+ 31     24 23        16 15      8 7         0   Byte
+-----------------------------------------------
+|PageType  |PageNumber  |Reserved |PageVersion| 0x00
+-----------------------------------------------
+|Reserved  |ExtPageType |   ExtPageLength     | 0x04
+-----------------------------------------------
+|     Reserved          | NumMPIEventTriggers | 0x08
+-----------------------------------------------
+|                 MPIEventTriggerEntries      | 0x0C
+|                                             | 0xFC
+-----------------------------------------------
+
+NumMPIEventTriggers:
+Number of MPI Event Trigger Entries currently stored in this page.
+If this is set to zero, there are no valid MPI-Event-Trigger
+entries available in this page.
+
+MPIEventTriggerEntry:
+- MPIEventCode [15:00]
+  MPI Event code specified in MPI-Spec
+- MPIEventCodeSpecific [16:31]
+  For Event Code “MPI2_EVENT_LOG_ENTRY_ADDED (0x0021)”,
+  this field specifies the Log-Entry-Qualifier.
+  For all other Event Codes, this field is reserved and not used
+
+Maximum of 20-event trigger entries can be stored in this page.
 
 During driver load:
- If Master trigger type bit is enabled in the Persistent Trigger Page0
- then read the Persistent Trigger Page1 and update the ioc instances
- diag_trigger_master.MasterData with Persistent Trigger Page1's
- MasterTriggerFlags. This will restores the Master trigger type's
+ If MPIEvent trigger type bit is enabled in the Persistent Trigger Page0
+ then read the Persistent Trigger Page2 and update the ioc instances
+ diag_trigger_event.EventTriggerEntry with Persistent Trigger Page2's
+ MPIEventTriggerEntries. This will restores the MPIEvent trigger type's
  triggers which are enabled before.
 
-When user modifies the Master trigger type triggers:
- When user sets/clears the Master trigger type triggers then driver
+When user modifies the MPIEvent trigger type triggers:
+ When user sets/clears the MPIEvent trigger type triggers then driver
  fisrt checks whether IOC firmware supports trigger pages support
  or not. if firmware supports these pages then driver enables the
- Master trigger type bit in Persistent Trigger Page0 (if it was not
+ MPIEvent trigger type bit in Persistent Trigger Page0 (if it was not
  enabled before) and updates the user provided trigger values in
- Persistent Trigger Page1.
+ Persistent Trigger Page2.
 
 Signed-off-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 Reported-by: kernel test robot <lkp@intel.com>
@@ -97,36 +121,39 @@ Reported-by: kernel test robot <lkp@intel.com>
 v1 Changes:
 Fixed sparse warnings and warnings with W=1 build.
 
- drivers/scsi/mpt3sas/mpt3sas_base.c   |  46 ++++++++
+ drivers/scsi/mpt3sas/mpt3sas_base.c   |  60 ++++++++++
  drivers/scsi/mpt3sas/mpt3sas_base.h   |   6 +
- drivers/scsi/mpt3sas/mpt3sas_config.c | 151 ++++++++++++++++++++++++++
- 3 files changed, 203 insertions(+)
+ drivers/scsi/mpt3sas/mpt3sas_config.c | 160 ++++++++++++++++++++++++++
+ 3 files changed, 226 insertions(+)
 
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 4ccfcb3..332d304 100644
+index 332d304..1fd77aa 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -4797,6 +4797,42 @@ _base_update_ioc_page1_inlinewith_perf_mode(struct MPT3SAS_ADAPTER *ioc)
+@@ -4797,6 +4797,57 @@ _base_update_ioc_page1_inlinewith_perf_mode(struct MPT3SAS_ADAPTER *ioc)
  	}
  }
  
 +/**
-+ * _base_get_master_diag_triggers - get master diag trigger values from
++ * _base_get_event_diag_triggers - get event diag trigger values from
 + *				persistent pages
 + * @ioc : per adapter object
 + *
 + * Return nothing.
 + */
 +static void
-+_base_get_master_diag_triggers(struct MPT3SAS_ADAPTER *ioc)
++_base_get_event_diag_triggers(struct MPT3SAS_ADAPTER *ioc)
 +{
-+	Mpi26DriverTriggerPage1_t trigger_pg1;
++	Mpi26DriverTriggerPage2_t trigger_pg2;
++	struct SL_WH_EVENT_TRIGGER_T *event_tg;
++	MPI26_DRIVER_MPI_EVENT_TIGGER_ENTRY *mpi_event_tg;
 +	Mpi2ConfigReply_t mpi_reply;
-+	int r;
++	int r = 0, i = 0;
++	u16 count = 0;
 +	u16 ioc_status;
 +
-+	r = mpt3sas_config_get_driver_trigger_pg1(ioc, &mpi_reply,
-+	    &trigger_pg1);
++	r = mpt3sas_config_get_driver_trigger_pg2(ioc, &mpi_reply,
++	    &trigger_pg2);
 +	if (r)
 +		return;
 +
@@ -135,68 +162,77 @@ index 4ccfcb3..332d304 100644
 +	if (ioc_status != MPI2_IOCSTATUS_SUCCESS) {
 +		dinitprintk(ioc,
 +		    ioc_err(ioc,
-+		    "%s: Failed to get trigger pg1, ioc_status(0x%04x)\n",
++		    "%s: Failed to get trigger pg2, ioc_status(0x%04x)\n",
 +		   __func__, ioc_status));
 +		return;
 +	}
 +
-+	if (le16_to_cpu(trigger_pg1.NumMasterTrigger))
-+		ioc->diag_trigger_master.MasterData |=
-+		    le32_to_cpu(
-+		    trigger_pg1.MasterTriggers[0].MasterTriggerFlags);
++	if (le16_to_cpu(trigger_pg2.NumMPIEventTrigger)) {
++		count = le16_to_cpu(trigger_pg2.NumMPIEventTrigger);
++		count = min_t(u16, NUM_VALID_ENTRIES, count);
++		ioc->diag_trigger_event.ValidEntries = count;
++
++		event_tg = &ioc->diag_trigger_event.EventTriggerEntry[0];
++		mpi_event_tg = &trigger_pg2.MPIEventTriggers[0];
++		for (i = 0; i < count; i++) {
++			event_tg->EventValue = le16_to_cpu(
++			    mpi_event_tg->MPIEventCode);
++			event_tg->LogEntryQualifier = le16_to_cpu(
++			    mpi_event_tg->MPIEventCodeSpecific);
++			event_tg++;
++			mpi_event_tg++;
++		}
++	}
 +}
 +
  /**
-  * _base_check_for_trigger_pages_support - checks whether HBA FW supports
-  *					driver trigger pages or not
-@@ -4843,10 +4879,20 @@ _base_get_diag_triggers(struct MPT3SAS_ADAPTER *ioc)
- 	 */
- 	ioc->diag_trigger_master.MasterData =
- 	    (MASTER_TRIGGER_FW_FAULT + MASTER_TRIGGER_ADAPTER_RESET);
-+
- 	trigger_flags = _base_check_for_trigger_pages_support(ioc);
- 	if (trigger_flags < 0)
- 		return;
-+
- 	ioc->supports_trigger_pages = 1;
+  * _base_get_master_diag_triggers - get master diag trigger values from
+  *				persistent pages
+@@ -4893,6 +4944,15 @@ _base_get_diag_triggers(struct MPT3SAS_ADAPTER *ioc)
+ 	if ((u16)trigger_flags &
+ 	    MPI26_DRIVER_TRIGGER0_FLAG_MASTER_TRIGGER_VALID)
+ 		_base_get_master_diag_triggers(ioc);
 +
 +	/*
-+	 * Retrieve master diag trigger values from driver trigger pg1
-+	 * if master trigger bit enabled in TriggerFlags.
++	 * Retrieve event diag trigger values from driver trigger pg2
++	 * if event trigger bit enabled in TriggerFlags.
 +	 */
 +	if ((u16)trigger_flags &
-+	    MPI26_DRIVER_TRIGGER0_FLAG_MASTER_TRIGGER_VALID)
-+		_base_get_master_diag_triggers(ioc);
++	    MPI26_DRIVER_TRIGGER0_FLAG_MPI_EVENT_TRIGGER_VALID)
++		_base_get_event_diag_triggers(ioc);
++
  }
  
  /**
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index 83b6308..8215b0e 100644
+index 8215b0e..1d381d7 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.h
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -1822,6 +1822,12 @@ int mpt3sas_config_get_volume_wwid(struct MPT3SAS_ADAPTER *ioc,
+@@ -1826,8 +1826,14 @@ int
+ mpt3sas_config_get_driver_trigger_pg1(struct MPT3SAS_ADAPTER *ioc,
+ 	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage1_t *config_page);
  int
- mpt3sas_config_get_driver_trigger_pg0(struct MPT3SAS_ADAPTER *ioc,
- 	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage0_t *config_page);
++mpt3sas_config_get_driver_trigger_pg2(struct MPT3SAS_ADAPTER *ioc,
++	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage2_t *config_page);
 +int
-+mpt3sas_config_get_driver_trigger_pg1(struct MPT3SAS_ADAPTER *ioc,
-+	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage1_t *config_page);
+ mpt3sas_config_update_driver_trigger_pg1(struct MPT3SAS_ADAPTER *ioc,
+ 	struct SL_WH_MASTER_TRIGGER_T *master_tg, bool set);
 +int
-+mpt3sas_config_update_driver_trigger_pg1(struct MPT3SAS_ADAPTER *ioc,
-+	struct SL_WH_MASTER_TRIGGER_T *master_tg, bool set);
++mpt3sas_config_update_driver_trigger_pg2(struct MPT3SAS_ADAPTER *ioc,
++	struct SL_WH_EVENT_TRIGGERS_T *event_tg, bool set);
  
  /* ctl shared API */
  extern struct device_attribute *mpt3sas_host_attrs[];
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_config.c b/drivers/scsi/mpt3sas/mpt3sas_config.c
-index 2fa60c2..9eff6fd 100644
+index 9eff6fd..9bad6a8 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_config.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_config.c
-@@ -1876,6 +1876,157 @@ mpt3sas_config_update_driver_trigger_pg0(struct MPT3SAS_ADAPTER *ioc,
- 	return 0;
+@@ -2027,6 +2027,166 @@ out:
+ 	return rc;
  }
  
 +/**
-+ * mpt3sas_config_get_driver_trigger_pg1 - obtain driver trigger page 1
++ * mpt3sas_config_get_driver_trigger_pg2 - obtain driver trigger page 2
 + * @ioc: per adapter object
 + * @mpi_reply: reply mf payload returned from firmware
 + * @config_page: contents of the config page
@@ -205,8 +241,8 @@ index 2fa60c2..9eff6fd 100644
 + * Returns 0 for success, non-zero for failure.
 + */
 +int
-+mpt3sas_config_get_driver_trigger_pg1(struct MPT3SAS_ADAPTER *ioc,
-+	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage1_t *config_page)
++mpt3sas_config_get_driver_trigger_pg2(struct MPT3SAS_ADAPTER *ioc,
++	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage2_t *config_page)
 +{
 +	Mpi2ConfigRequest_t mpi_request;
 +	int r;
@@ -217,8 +253,8 @@ index 2fa60c2..9eff6fd 100644
 +	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_EXTENDED;
 +	mpi_request.ExtPageType =
 +	    MPI2_CONFIG_EXTPAGETYPE_DRIVER_PERSISTENT_TRIGGER;
-+	mpi_request.Header.PageNumber = 1;
-+	mpi_request.Header.PageVersion = MPI26_DRIVER_TRIGGER_PAGE1_PAGEVERSION;
++	mpi_request.Header.PageNumber = 2;
++	mpi_request.Header.PageVersion = MPI26_DRIVER_TRIGGER_PAGE2_PAGEVERSION;
 +	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
 +	r = _config_request(ioc, &mpi_request, mpi_reply,
 +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
@@ -234,7 +270,7 @@ index 2fa60c2..9eff6fd 100644
 +}
 +
 +/**
-+ * mpt3sas_config_set_driver_trigger_pg1 - write driver trigger page 1
++ * mpt3sas_config_set_driver_trigger_pg2 - write driver trigger page 2
 + * @ioc: per adapter object
 + * @mpi_reply: reply mf payload returned from firmware
 + * @config_page: contents of the config page
@@ -243,8 +279,8 @@ index 2fa60c2..9eff6fd 100644
 + * Returns 0 for success, non-zero for failure.
 + */
 +static int
-+_config_set_driver_trigger_pg1(struct MPT3SAS_ADAPTER *ioc,
-+	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage1_t *config_page)
++_config_set_driver_trigger_pg2(struct MPT3SAS_ADAPTER *ioc,
++	Mpi2ConfigReply_t *mpi_reply, Mpi26DriverTriggerPage2_t *config_page)
 +{
 +	Mpi2ConfigRequest_t mpi_request;
 +	int r;
@@ -255,8 +291,8 @@ index 2fa60c2..9eff6fd 100644
 +	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_EXTENDED;
 +	mpi_request.ExtPageType =
 +	    MPI2_CONFIG_EXTPAGETYPE_DRIVER_PERSISTENT_TRIGGER;
-+	mpi_request.Header.PageNumber = 1;
-+	mpi_request.Header.PageVersion = MPI26_DRIVER_TRIGGER_PAGE1_PAGEVERSION;
++	mpi_request.Header.PageNumber = 2;
++	mpi_request.Header.PageVersion = MPI26_DRIVER_TRIGGER_PAGE2_PAGEVERSION;
 +	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
 +	r = _config_request(ioc, &mpi_request, mpi_reply,
 +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
@@ -276,29 +312,29 @@ index 2fa60c2..9eff6fd 100644
 +}
 +
 +/**
-+ * mpt3sas_config_update_driver_trigger_pg1 - update driver trigger page 1
++ * mpt3sas_config_update_driver_trigger_pg2 - update driver trigger page 2
 + * @ioc: per adapter object
-+ * @master_tg: Master trigger bit map
++ * @event_tg: list of Event Triggers
 + * @set: set ot clear trigger values
 + * Context: sleep.
 + *
 + * Returns 0 for success, non-zero for failure.
 + */
 +int
-+mpt3sas_config_update_driver_trigger_pg1(struct MPT3SAS_ADAPTER *ioc,
-+	struct SL_WH_MASTER_TRIGGER_T *master_tg, bool set)
++mpt3sas_config_update_driver_trigger_pg2(struct MPT3SAS_ADAPTER *ioc,
++	struct SL_WH_EVENT_TRIGGERS_T *event_tg, bool set)
 +{
-+	Mpi26DriverTriggerPage1_t tg_pg1;
++	Mpi26DriverTriggerPage2_t tg_pg2;
 +	Mpi2ConfigReply_t mpi_reply;
-+	int rc;
++	int rc, i, count;
 +	u16 ioc_status;
 +
 +	rc = mpt3sas_config_update_driver_trigger_pg0(ioc,
-+	    MPI26_DRIVER_TRIGGER0_FLAG_MASTER_TRIGGER_VALID, set);
++	    MPI26_DRIVER_TRIGGER0_FLAG_MPI_EVENT_TRIGGER_VALID, set);
 +	if (rc)
 +		return rc;
 +
-+	rc = mpt3sas_config_get_driver_trigger_pg1(ioc, &mpi_reply, &tg_pg1);
++	rc = mpt3sas_config_get_driver_trigger_pg2(ioc, &mpi_reply, &tg_pg2);
 +	if (rc)
 +		goto out;
 +
@@ -307,22 +343,31 @@ index 2fa60c2..9eff6fd 100644
 +	if (ioc_status != MPI2_IOCSTATUS_SUCCESS) {
 +		dcprintk(ioc,
 +		    ioc_err(ioc,
-+		    "%s: Failed to get trigger pg1, ioc_status(0x%04x)\n",
++		    "%s: Failed to get trigger pg2, ioc_status(0x%04x)\n",
 +		    __func__, ioc_status));
 +		rc = -EFAULT;
 +		goto out;
 +	}
 +
 +	if (set) {
-+		tg_pg1.NumMasterTrigger = cpu_to_le16(1);
-+		tg_pg1.MasterTriggers[0].MasterTriggerFlags = cpu_to_le32(
-+		    master_tg->MasterData);
++		count = event_tg->ValidEntries;
++		tg_pg2.NumMPIEventTrigger = cpu_to_le16(count);
++		for (i = 0; i < count; i++) {
++			tg_pg2.MPIEventTriggers[i].MPIEventCode =
++			    cpu_to_le16(
++			    event_tg->EventTriggerEntry[i].EventValue);
++			tg_pg2.MPIEventTriggers[i].MPIEventCodeSpecific =
++			    cpu_to_le16(
++			    event_tg->EventTriggerEntry[i].LogEntryQualifier);
++		}
 +	} else {
-+		tg_pg1.NumMasterTrigger = 0;
-+		tg_pg1.MasterTriggers[0].MasterTriggerFlags = 0;
++		tg_pg2.NumMPIEventTrigger = 0;
++		memset(&tg_pg2.MPIEventTriggers[0], 0,
++		    NUM_VALID_ENTRIES * sizeof(
++		    MPI26_DRIVER_MPI_EVENT_TIGGER_ENTRY));
 +	}
 +
-+	rc = _config_set_driver_trigger_pg1(ioc, &mpi_reply, &tg_pg1);
++	rc = _config_set_driver_trigger_pg2(ioc, &mpi_reply, &tg_pg2);
 +	if (rc)
 +		goto out;
 +
@@ -331,7 +376,7 @@ index 2fa60c2..9eff6fd 100644
 +	if (ioc_status != MPI2_IOCSTATUS_SUCCESS) {
 +		dcprintk(ioc,
 +		    ioc_err(ioc,
-+		    "%s: Failed to get trigger pg1, ioc_status(0x%04x)\n",
++		    "%s: Failed to get trigger pg2, ioc_status(0x%04x)\n",
 +		    __func__, ioc_status));
 +		rc = -EFAULT;
 +		goto out;
@@ -341,7 +386,7 @@ index 2fa60c2..9eff6fd 100644
 +
 +out:
 +	mpt3sas_config_update_driver_trigger_pg0(ioc,
-+	    MPI26_DRIVER_TRIGGER0_FLAG_MASTER_TRIGGER_VALID, !set);
++	    MPI26_DRIVER_TRIGGER0_FLAG_MPI_EVENT_TRIGGER_VALID, !set);
 +
 +	return rc;
 +}
@@ -353,7 +398,7 @@ index 2fa60c2..9eff6fd 100644
 2.27.0
 
 
---000000000000cb5db705b4ff68b8
+--00000000000003925f05b4ff696c
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -424,13 +469,13 @@ DAYA3uHCdaZTnVbSESs1pk+HAhlZhqrDYXWCG6ya+SIG51Q4PHS6jfst/6xnaSFPhWhIv2hSB2NA
 vWzrcXMq9IfE5HFZXqzOWMP/gUOKk155U6EuRQzVcCpabG8ROpPND3sxggJvMIICawIBATBtMF0x
 CzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxT
 aWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMCDE84Ya9bsUMoMZ6qKjANBglghkgB
-ZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg8CXxShASljDC39cOwGqaPDGSFr0opENO8VrAxSXL
-m4MwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMTI2MDk0NTUx
+ZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgXD9chuKNQMhmK2da4E/VQJyfak8dyOXktjrYUIf+
+XOcwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMTI2MDk0NTU1
 WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAEC
 MAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqG
-SIb3DQEBAQUABIIBAMQzi+Tx1xiJCRVF0w5eEeCYocoCn+qTPvfsRSyXrgG+G7QkTepX0iiPrPQk
-6oUIqHajUPI7khzAUJKPvq+L6tgQ3xb3AiIQcT41KW4DUeqIxlfWZWIHrc460PWe/7Dc9Sq1HGFA
-2dnoSmpA/WCzoM3bk68881jHG53fK9OcrmCkrdcuxR5pjS7TG5r9WPFRe827Z8W6O1TCSSS2QHnh
-7STTBuuyy/eYGBrbtbs5UdBAhYNWFwx0i+/KzqMdBVqqw9sXzdnuNkBQtDBrbnOMydrQMbSaYcU8
-uhjg8RKI2Y7tazrUiiJsCixg7+tI5uWKqQwLN8pROo69oqJOh4ax/+4=
---000000000000cb5db705b4ff68b8--
+SIb3DQEBAQUABIIBADzDYaI3WSoAQ/N7TJd5jdB5ilcU3HQRdxgWYSJo/IIkPc374aB1jRyEgiLa
+77h26K0FA4L9cck7V5QCMbfZMvgYZlZQZXuAV0Efpo6OASEhRkSjl3wItDyCoxQt5DeZo1dZfHn4
+TLQ3gSyHHYjJOm1P+/Vql03aSIJ3qrBwR2MM+qgOgHXh0VJyvNkijAxiz8jiQ83pNgmglOOQSO53
+vlYr5mRWQvEo/fF9l4TEad+BQh+s5su6Rd8Tjc7pyiFyhD2ZJXxqlwW1eW5kh65pBQ0YTynxY7VX
+50DF2W9jXzDs4WmMzT82wU/ImMLzmgzRLm7uocmrj5c9WaNGrFEf1Ec=
+--00000000000003925f05b4ff696c--
