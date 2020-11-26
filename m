@@ -2,15 +2,15 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 931172C5556
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FE62C5559
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390078AbgKZNaf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 08:30:35 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:56550 "EHLO
+        id S2390100AbgKZNah (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 08:30:37 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56576 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390051AbgKZNaf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:30:35 -0500
+        with ESMTP id S2390067AbgKZNag (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:30:36 -0500
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1606397433;
@@ -18,21 +18,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Eq8zX1hG/IVKLKYDpk4avTvLjQi6a7SB9a8YWbl+fNg=;
-        b=F1hEmG2pDyoBl1o+RDcGhJFdbY3FdBMLCOYEsMc/YQmVK/lC5EsLJdlR/66cXZiTj0zdUs
-        coCH94z+zjEk/sAFy/YmsbWzStZbhdKTI8YmfotJ3udVzUcv03+pNpmBvRVjjT7Si4GkHl
-        kB4X/6A5ZN8RjJh+y7rkyTzBehTl88fKCmteK/SccJZUeptpucF75CzqN6cQ7A6aOqoEUb
-        sUYuFgoYEaueclQbz3OmqlZyN+o8DZSZOSJNAJJDhWm94wxchp5UgiMXLY3R9wtZszn7QO
-        KGqRDbbq6LXEpc09h9Vc5qL02VYlf01xNWyu5hF4ivNdQpDmCTfBYI1cOgah6w==
+        bh=qrQH7xIDzf20GII/6KAvMh6TDcdBZRtUy7TTmRCIPTU=;
+        b=IRCzus7GCSHg4/0BNYEGF0nlYHnXxAbunWrghpvrKt413OjNH9K+Kr03xDPVdutfJ1ibk9
+        u7aNoErqz9qI2ODI+toKoP+on89iNuXgD0V6RVuZ1/sP2+ZZ8j1+/HcNsJ/rnzWkx8pvqc
+        o6jHvetZCCTpxosc6fEdaLXKg7vkHWdNbwVQAEFUTwV9LndHcwF+oaTzS7fC2n1iM8x2lX
+        KK/IzDsIAwy4Lc1Ha9YcZmPPB/UduOrs9wW0uBcPSVKbVGdb3mU0N6PuqytTxkviIqfCx0
+        TdWy+forr/6KIGf7wyCVXfwjq8IS6AsFU+ygmX8fUQ5y7+oOL5ZpmOJjVbgovg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1606397433;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Eq8zX1hG/IVKLKYDpk4avTvLjQi6a7SB9a8YWbl+fNg=;
-        b=kNZaTeKsHj3jVY2UY3u55E+u+BRRThXEEuNpdZJBq99VPCJj1DRVQJTOLlWw5mGNf18DNJ
-        Tp4J/bzWNgyEdlCw==
+        bh=qrQH7xIDzf20GII/6KAvMh6TDcdBZRtUy7TTmRCIPTU=;
+        b=y1ZmSnJbXqVnwIkJoNUYZg8/VEeX8tu+Y3EBrmnoZiATjFWMCUJXgy0nP9uQSS5i0YLbsw
+        reKqvi/RrSuyJlDA==
 To:     linux-scsi@vger.kernel.org
 Cc:     Finn Thain <fthain@telegraphics.com.au>,
         GR-QLogic-Storage-Upstream@marvell.com,
@@ -56,9 +56,9 @@ Cc:     Finn Thain <fthain@telegraphics.com.au>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Ahmed S . Darwish" <a.darwish@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 06/14] scsi: qla2xxx: init/os: Remove in_interrupt().
-Date:   Thu, 26 Nov 2020 14:29:44 +0100
-Message-Id: <20201126132952.2287996-7-bigeasy@linutronix.de>
+Subject: [PATCH 07/14] scsi: qla4xxx: qla4_82xx_idc_lock(): Remove in_interrupt().
+Date:   Thu, 26 Nov 2020 14:29:45 +0100
+Message-Id: <20201126132952.2287996-8-bigeasy@linutronix.de>
 In-Reply-To: <20201126132952.2287996-1-bigeasy@linutronix.de>
 References: <20201126132952.2287996-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -69,194 +69,128 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: "Ahmed S. Darwish" <a.darwish@linutronix.de>
 
-qla83xx_wait_logic() is used to control the frequency of device IDC lock
-retries. If in_interrupt() is true, it does 20 loops of cpu_relax().
-Otherwise, it sleeps for 100ms and yields the CPU.
+qla4_82xx_idc_lock() spins on a certain hardware state until it is
+updated. At the end of each spin, if in_interrupt() is true, it does 20
+loops of cpu_relax(). Otherwise, it yields the CPU.
 
 While in_interrupt() is ill-defined and does not provide what the name
-suggests, it is not needed here: that qla83xx_wait_logic() is exclusively
-called by qla83xx_idc_lock() / unlock(), and they always run from
-process context. Below is an analysis of all the idc lock/unlock callers,
-in order of appearance:
+suggests, it is not needed here: qla4_82xx_idc_lock() is always called
+from process context. Below is an analysis of its callers:
 
-  - qla_os.c:
-      qla83xx_nic_core_unrecoverable_work(),
-      qla83xx_idc_state_handler_work(),
-      qla83xx_nic_core_reset_work(),
-      qla83xx_service_idc_aen(), all workqueue context
+  - ql4_nx.c: qla4_82xx_need_reset_handler(), 1-second msleep() in a
+    loop.
 
-  - qla_os.c: qla83xx_check_nic_core_fw_alive(), has msleep()
+  - ql4_nx.c: qla4_82xx_isp_reset(), calls
+    qla4_8xxx_device_state_handler(), which has multiple msleep()s.
 
-  - qla_os.c: qla83xx_set_drv_presence(), called once from
-    qla2x00_abort_isp(), which is bound to process-context ->abort_isp()
-    hook. It also invokes wait_for_completion_timeout() through the
-    chain qla2x00_configure_hba() =3D> qla24xx_link_initialize() =3D>
-    qla2x00_mailbox_command().
+Beside direct calls, qla4_82xx_idc_lock() is also bound to
+isp_operations ->idc_lock() hook. Other functions which are bound to the
+same hook, e.g. qla4_83xx_drv_lock(), also have an msleep(). For
+completeness, below is an analysis of all callers of that hook:
 
-  - qla_os.c: qla83xx_clear_drv_presence(), which is called from
-    qla2x00_abort_isp() discussed above, and from qla2x00_remove_one()
-    which is PCI process-context ->remove() hook.
+  - ql4_83xx.c: qla4_83xx_need_reset_handler(), has an msleep()
 
-  - qla_os.c: qla83xx_need_reset_handler(), has a one second msleep() in
-    a loop.
+  - ql4_83xx.c: qla4_83xx_isp_reset(), calls
+    qla4_8xxx_device_state_handler(), which has multiple msleep()s.
 
-  - qla_os.c: qla83xx_device_bootstrap(), called only by
-    qla83xx_idc_state_handler(), which has multiple msleep()
-    invocations.
+  - ql4_83xx.c: qla4_83xx_disable_pause(), all process context callers:
+    =3D> ql4_mbx.c: qla4xxx_mailbox_command(), msleep(), mutex_lock()
+    =3D> ql4_os.c: qla4xxx_recover_adapter(), schedule_timeout() in loop
+    =3D> ql4_os.c: qla4xxx_do_dpc(), workqueue context
 
-  - qla_os.c: qla83xx_idc_state_handler(), multiple msleep()
-    invocations.
-
-  - qla_attr.c: qla2x00_sysfs_write_reset(), sysfs bin_attribute
+  - ql4_attr.c: qla4_8xxx_sysfs_write_fw_dump(), sysfs bin_attribute
     ->write() hook, process context
 
-  - qla_init.c: qla83xx_nic_core_fw_load()
-      =3D> qla_init.c: qla2x00_initialize_adapter()
-        =3D> bound to isp_operations ->initialize_adapter() hook
-        ** =3D> qla_os.c: qla2x00_probe_one(), PCI ->probe() process ctx
+  - ql4_mbx.c: qla4xxx_mailbox_command(), earlier discussed
 
-  - qla_init.c: qla83xx_initiating_reset(), msleep() in a loop.
+  - ql4_nx.c: qla4_8xxx_device_bootstrap(), callers:
+    =3D> ql4_83xx.c: qla4_83xx_need_reset_handler(), process, msleep()
+    =3D> ql4_nx.c: qla4_8xxx_device_state_handler(), earlier discussed
 
-  - qla_init.c: qla83xx_nic_core_reset(), called by
-    qla83xx_nic_core_reset_work(), workqueue context.
+  - ql4_nx.c: qla4_8xxx_need_qsnt_handler(), callers:
+    =3D> ql4_nx.c: qla4_8xxx_device_state_handler(), multipe msleep()s
+    =3D> ql4_os.c: qla4xxx_do_dpc(), workqueue context
 
-Remove the in_interrupt() check, and thus replace the entirety of
-qla83xx_wait_logic() with an msleep(QLA83XX_WAIT_LOGIC_MS).
+  - ql4_nx.c: qla4_8xxx_update_idc_reg(), callers:
+    =3D> ql4_nx.c: qla4_8xxx_device_state_handler(), earlier discussed
+    =3D> ql4_os.c: qla4_8xxx_error_recovery(), only called by
+    qla4xxx_pci_slot_reset(), which is bound to PCI ->slot_reset()
+    process-context hook
 
-Mark qla83xx_idc_lock() / unlock() with "Context: task, can sleep".
+  - ql4_nx.c: qla4_8xxx_device_state_handler(), earlier discussed
+
+  - ql4_os.c: qla4xxx_recover_adapter(), earlier discussed
+
+  - ql4_os.c: qla4xxx_do_dpc(), earlier discussed
+
+Remove the in_interrupt() check. Mark, qla4_82xx_idc_lock(), and the
+->idc_lock() hook itself, with "Context: task, can sleep".
+
+Change qla4_82xx_idc_lock() implementation to sleep 100ms, instead of a
+schedule(), for each spin. This is more deterministic, and it matches
+other PCI HW locking functions in the driver.
 
 Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: Nilesh Javali <njavali@marvell.com>
-Cc: GR-QLogic-Storage-Upstream@marvell.com
+Cc: Manish Rangankar <mrangankar@marvell.com>
+Cc: <GR-QLogic-Storage-Upstream@marvell.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 43 ++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 24 deletions(-)
+ drivers/scsi/qla4xxx/ql4_def.h |  2 +-
+ drivers/scsi/qla4xxx/ql4_nx.c  | 14 +++++---------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index f9c8ae9d669ef..2a8e065b192c3 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5619,25 +5619,10 @@ qla83xx_service_idc_aen(struct work_struct *work)
- 	}
- }
-=20
--static void
--qla83xx_wait_logic(void)
--{
+diff --git a/drivers/scsi/qla4xxx/ql4_def.h b/drivers/scsi/qla4xxx/ql4_def.h
+index f5b382ed0a1b2..9210547483886 100644
+--- a/drivers/scsi/qla4xxx/ql4_def.h
++++ b/drivers/scsi/qla4xxx/ql4_def.h
+@@ -435,7 +435,7 @@ struct isp_operations {
+ 	void (*wr_reg_direct) (struct scsi_qla_host *, ulong, uint32_t);
+ 	int (*rd_reg_indirect) (struct scsi_qla_host *, uint32_t, uint32_t *);
+ 	int (*wr_reg_indirect) (struct scsi_qla_host *, uint32_t, uint32_t);
+-	int (*idc_lock) (struct scsi_qla_host *);
++	int (*idc_lock) (struct scsi_qla_host *); /* Context: task, can sleep */
+ 	void (*idc_unlock) (struct scsi_qla_host *);
+ 	void (*rom_lock_recovery) (struct scsi_qla_host *);
+ 	void (*queue_mailbox_command) (struct scsi_qla_host *, uint32_t *, int);
+diff --git a/drivers/scsi/qla4xxx/ql4_nx.c b/drivers/scsi/qla4xxx/ql4_nx.c
+index da903a545b2c0..4362d0ebe0e15 100644
+--- a/drivers/scsi/qla4xxx/ql4_nx.c
++++ b/drivers/scsi/qla4xxx/ql4_nx.c
+@@ -512,12 +512,15 @@ int qla4_82xx_md_wr_32(struct scsi_qla_host *ha, uint=
+32_t off, uint32_t data)
+  *
+  * General purpose lock used to synchronize access to
+  * CRB_DEV_STATE, CRB_DEV_REF_COUNT, etc.
++ *
++ * Context: task, can sleep
+  **/
+ int qla4_82xx_idc_lock(struct scsi_qla_host *ha)
+ {
 -	int i;
+ 	int done =3D 0, timeout =3D 0;
+=20
++	might_sleep();
++
+ 	while (!done) {
+ 		/* acquire semaphore5 from PCI HW block */
+ 		done =3D qla4_82xx_rd_32(ha, QLA82XX_PCIE_REG(PCIE_SEM5_LOCK));
+@@ -527,14 +530,7 @@ int qla4_82xx_idc_lock(struct scsi_qla_host *ha)
+ 			return -1;
+=20
+ 		timeout++;
 -
--	/* Yield CPU */
--	if (!in_interrupt()) {
--		/*
--		 * Wait about 200ms before retrying again.
--		 * This controls the number of retries for single
--		 * lock operation.
--		 */
--		msleep(100);
--		schedule();
--	} else {
--		for (i =3D 0; i < 20; i++)
--			cpu_relax(); /* This a nop instr on i386 */
--	}
--}
-+/*
-+ * Control the frequency of IDC lock retries
-+ */
-+#define QLA83XX_WAIT_LOGIC_MS	100
-=20
- static int
- qla83xx_force_lock_recovery(scsi_qla_host_t *base_vha)
-@@ -5727,7 +5712,7 @@ qla83xx_idc_lock_recovery(scsi_qla_host_t *base_vha)
- 		goto exit;
-=20
- 	if (o_drv_lockid =3D=3D n_drv_lockid) {
--		qla83xx_wait_logic();
-+		msleep(QLA83XX_WAIT_LOGIC_MS);
- 		goto retry_lockid;
- 	} else
- 		return QLA_SUCCESS;
-@@ -5736,6 +5721,9 @@ qla83xx_idc_lock_recovery(scsi_qla_host_t *base_vha)
- 	return rval;
- }
-=20
-+/*
-+ * Context: task, can sleep
-+ */
- void
- qla83xx_idc_lock(scsi_qla_host_t *base_vha, uint16_t requester_id)
- {
-@@ -5743,6 +5731,8 @@ qla83xx_idc_lock(scsi_qla_host_t *base_vha, uint16_t =
-requester_id)
- 	uint32_t lock_owner;
- 	struct qla_hw_data *ha =3D base_vha->hw;
-=20
-+	might_sleep();
-+
- 	/* IDC-lock implementation using driver-lock/lock-id remote registers */
- retry_lock:
- 	if (qla83xx_rd_reg(base_vha, QLA83XX_DRIVER_LOCK, &data)
-@@ -5761,7 +5751,7 @@ qla83xx_idc_lock(scsi_qla_host_t *base_vha, uint16_t =
-requester_id)
- 			/* Retry/Perform IDC-Lock recovery */
- 			if (qla83xx_idc_lock_recovery(base_vha)
- 			    =3D=3D QLA_SUCCESS) {
--				qla83xx_wait_logic();
-+				msleep(QLA83XX_WAIT_LOGIC_MS);
- 				goto retry_lock;
- 			} else
- 				ql_log(ql_log_warn, base_vha, 0xb075,
-@@ -6259,6 +6249,9 @@ void qla24xx_process_purex_list(struct purex_list *li=
-st)
+-		/* Yield CPU */
+-		if (!in_interrupt())
+-			schedule();
+-		else {
+-			for (i =3D 0; i < 20; i++)
+-				cpu_relax();    /*This a nop instr on i386*/
+-		}
++		msleep(100);
  	}
+ 	return 0;
  }
-=20
-+/*
-+ * Context: task, can sleep
-+ */
- void
- qla83xx_idc_unlock(scsi_qla_host_t *base_vha, uint16_t requester_id)
- {
-@@ -6269,6 +6262,8 @@ qla83xx_idc_unlock(scsi_qla_host_t *base_vha, uint16_=
-t requester_id)
- 	uint32_t data;
- 	struct qla_hw_data *ha =3D base_vha->hw;
-=20
-+	might_sleep();
-+
- 	/* IDC-unlock implementation using driver-unlock/lock-id
- 	 * remote registers
- 	 */
-@@ -6284,7 +6279,7 @@ qla83xx_idc_unlock(scsi_qla_host_t *base_vha, uint16_=
-t requester_id)
- 			/* SV: XXX: IDC unlock retrying needed here? */
-=20
- 			/* Retry for IDC-unlock */
--			qla83xx_wait_logic();
-+			msleep(QLA83XX_WAIT_LOGIC_MS);
- 			retry++;
- 			ql_dbg(ql_dbg_p3p, base_vha, 0xb064,
- 			    "Failed to release IDC lock, retrying=3D%d\n", retry);
-@@ -6292,7 +6287,7 @@ qla83xx_idc_unlock(scsi_qla_host_t *base_vha, uint16_=
-t requester_id)
- 		}
- 	} else if (retry < 10) {
- 		/* Retry for IDC-unlock */
--		qla83xx_wait_logic();
-+		msleep(QLA83XX_WAIT_LOGIC_MS);
- 		retry++;
- 		ql_dbg(ql_dbg_p3p, base_vha, 0xb065,
- 		    "Failed to read drv-lockid, retrying=3D%d\n", retry);
-@@ -6308,7 +6303,7 @@ qla83xx_idc_unlock(scsi_qla_host_t *base_vha, uint16_=
-t requester_id)
- 	if (qla83xx_access_control(base_vha, options, 0, 0, NULL)) {
- 		if (retry < 10) {
- 			/* Retry for IDC-unlock */
--			qla83xx_wait_logic();
-+			msleep(QLA83XX_WAIT_LOGIC_MS);
- 			retry++;
- 			ql_dbg(ql_dbg_p3p, base_vha, 0xb066,
- 			    "Failed to release IDC lock, retrying=3D%d\n", retry);
 --=20
 2.29.2
 
