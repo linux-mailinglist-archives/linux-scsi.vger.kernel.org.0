@@ -2,42 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422A72C555E
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 105F02C5683
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389945AbgKZNan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 08:30:43 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:56576 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390124AbgKZNak (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:30:40 -0500
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1606397438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xOOBp6z3OInykv2pKK7i4G7TCjhXQtxisN5E2TisB+U=;
-        b=UVx+cuiijhsjFzna9+6Zqbcckv8jr+L/hm8tSPZxe/bQJNiWItdNPTm4uLgd0T6p2PiU1u
-        1Fj9u2FOn3UCQXAt0HC3Cz7eWVIldXES05AohHDsrP9G97NGioK8VESTGxHMOn+aDDIvOs
-        SdyCLd7KoGxDk6eJU7MbbTCMqc1YIfxN3prsAP8tcFnTxi3YDqaBaKhY/TCO2fA+taJ/8K
-        uYf6baBKGsUKh33aVbKJsMTEX4LpV71Fnjm7YJyiOxaTUkPGMw7Zw3fHAlJho3JOndCjJB
-        7yUv1gpXkbeplah/1Er3WVqMLWz/X/TlymvPxv/UGDarmpijcSx6iBmEyWc/UQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1606397438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xOOBp6z3OInykv2pKK7i4G7TCjhXQtxisN5E2TisB+U=;
-        b=mpfunGzghZF4WsR3K6MnZfzrV/WdyF3J1uNBm0rLDM4bup9qGPN8JK7MbEdo+da6w+Mv/K
-        VkmQ5T22WC26VCCw==
-To:     linux-scsi@vger.kernel.org
-Cc:     Finn Thain <fthain@telegraphics.com.au>,
+        id S2389957AbgKZN6n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 08:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389923AbgKZN6n (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:58:43 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4C5C0613D4
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 05:58:42 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id 7so3122391ejm.0
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Nov 2020 05:58:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloud.ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0ZnlpdHGKLLs1HjgjZ57oIwQ/E9hSKGuo9TRf/d6l7Y=;
+        b=YGcu1A/bGEojIh2hXNbJIpvpVFABgN62i6zbiwIMkmT7nl5y8yS4N8sQWHV5/pTku5
+         a/9kwotcQNIUyhtm4NKxkST1Fe+RSzolno64PbsvHvEHvsHnFF1RBeQX46g4gDlyyIjX
+         st/xPIn6drh6b3MpPfMnYnFQJ6RBDxkEFpdg0RBaagKQ6qHnNd9+KmbdrDdLSTI8qJhI
+         /7gn48pxJCmB88DAcKSKghG6NdJVBSjJXeoPOS/6mEg1mMZ1svvletkcVbVKakF6xkiU
+         Laol6REYX5yAcFDzOhSBTiBeRcBQ6VBpO7MXE5nhJkxxdn1wO/7VLGQaE4u7P9IGraCh
+         G3cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0ZnlpdHGKLLs1HjgjZ57oIwQ/E9hSKGuo9TRf/d6l7Y=;
+        b=s5AP/NtNuPtfa7jOopugHHeeSV/4Y6f6mRPjh0lMJ5YPDev6B452HWfwLMkeySFfpf
+         2wXGQnNkBV2TwywNM+tHujoCCH866Bf16TvatExRtHCY9LzATbSMCYUiZKYzcOG68fuI
+         ZZHntj3ZAXSYFzioZaGXsyOJc6Kb17kXOw89X3VGdFzBBcr0p0FVz4YxAGgp6HB1wOFF
+         iBdRL8KIKBVE418kkaM0nvbIApC12Gzf6C3HZOQa/3CrpOI1wEaSc+1tbA5OZEFp1pNB
+         wbZijmeiQ3T/8R+g4yVKgyJNxfhEyyL7tXDJ8aPWRvZhxnr7fwbuXCWtADvtNCfFMD7M
+         4ueQ==
+X-Gm-Message-State: AOAM533YBS3dwi7sVB+dZjOzXult0EW5ZDvMcud3NY8uOK+FpAIDe/D1
+        ZO1TPaBqONRGea5OJVwvPQUyATPjUH4POrZspAe3Kw==
+X-Google-Smtp-Source: ABdhPJxQ3lbgok2nzajF7J3WM8tj9j7hS/DQ1abTCwysoqXRwAZKsSfY3arkEzD7W3qCTRbOaxjD6QmKApOjXisCCz0=
+X-Received: by 2002:a17:906:94ca:: with SMTP id d10mr1435532ejy.62.1606399121382;
+ Thu, 26 Nov 2020 05:58:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20201126132952.2287996-1-bigeasy@linutronix.de> <20201126132952.2287996-2-bigeasy@linutronix.de>
+In-Reply-To: <20201126132952.2287996-2-bigeasy@linutronix.de>
+From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Date:   Thu, 26 Nov 2020 14:58:30 +0100
+Message-ID: <CAMGffE=7=Tjx53gb8s8tjJQ5VeVtQN7OZzNro0ghpQH_pUWMzw@mail.gmail.com>
+Subject: Re: [PATCH 01/14] scsi: pm80xx: Do not sleep in atomic context.
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
+        Finn Thain <fthain@telegraphics.com.au>,
         GR-QLogic-Storage-Upstream@marvell.com,
         Hannes Reinecke <hare@kernel.org>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
         John Garry <john.garry@huawei.com>,
         linux-m68k@lists.linux-m68k.org,
         Manish Rangankar <mrangankar@marvell.com>,
@@ -54,172 +71,53 @@ Cc:     Finn Thain <fthain@telegraphics.com.au>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "Ahmed S . Darwish" <a.darwish@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 14/14] scsi: message: fusion: Remove in_interrupt() usage in mptsas_cleanup_fw_event_q().
-Date:   Thu, 26 Nov 2020 14:29:52 +0100
-Message-Id: <20201126132952.2287996-15-bigeasy@linutronix.de>
-In-Reply-To: <20201126132952.2287996-1-bigeasy@linutronix.de>
-References: <20201126132952.2287996-1-bigeasy@linutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        "Ahmed S . Darwish" <a.darwish@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-mptsas_cleanup_fw_event_q() uses in_interrupt() to determine if it is
-safe to cancel a worker item.
-
-Aside of that in_interrupt() is deprecated as it does not provide what the
-name suggests. It covers more than hard/soft interrupt servicing context
-and is semantically ill defined.
-
-Looking closer there are a few problems with the current construct:
-- It could be invoked from an interrupt handler / non-blocking context
-  because cancel_delayed_work() has no such restriction. Also,
-  mptsas_free_fw_event() has no such restriction.
-
-- The list is accessed unlocked. It may dequeue a valid work-item but at
-  the time of invoking cancel_delayed_work() the memory may be released
-  or reused because the worker has already run.
-
-mptsas_cleanup_fw_event_q() is invoked via mptsas_shutdown() which is
-always invoked from preemtible context on device shutdown.
-It is also invoked via mptsas_ioc_reset(, MPT_IOC_POST_RESET) which is a
-MptResetHandlers callback. The only caller here are
-mpt_SoftResetHandler(), mpt_HardResetHandler() and
-mpt_Soft_Hard_ResetHandler(). All these functions have a `sleepFlag'
-argument and each caller uses caller uses `CAN_SLEEP' here and according
-to current documentation:
-|      @sleepFlag: Indicates if sleep or schedule must be called
-
-So it is safe to sleep.
-
-Add mptsas_hotplug_event::users member. Initialize it to one by default
-so mptsas_free_fw_event() will free the memory.
-mptsas_cleanup_fw_event_q() will increment its value for items it
-dequeues and then it may keep a pointer after dropping the lock.
-Invoke cancel_delayed_work_sync() to cancel the work item and wait if
-the worker is currently busy. Free the memory afterwards since it owns
-the last reference to it.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Cc: MPT-FusionLinux.pdl@broadcom.com
----
- drivers/message/fusion/mptsas.c | 45 +++++++++++++++++++++++++--------
- drivers/message/fusion/mptsas.h |  1 +
- 2 files changed, 36 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsa=
-s.c
-index 18b91ea1a353f..5eb0b3361e4e0 100644
---- a/drivers/message/fusion/mptsas.c
-+++ b/drivers/message/fusion/mptsas.c
-@@ -289,6 +289,7 @@ mptsas_add_fw_event(MPT_ADAPTER *ioc, struct fw_event_w=
-ork *fw_event,
-=20
- 	spin_lock_irqsave(&ioc->fw_event_lock, flags);
- 	list_add_tail(&fw_event->list, &ioc->fw_event_list);
-+	fw_event->users =3D 1;
- 	INIT_DELAYED_WORK(&fw_event->work, mptsas_firmware_event_work);
- 	devtprintk(ioc, printk(MYIOC_s_DEBUG_FMT "%s: add (fw_event=3D0x%p)"
- 		"on cpuid %d\n", ioc->name, __func__,
-@@ -314,6 +315,15 @@ mptsas_requeue_fw_event(MPT_ADAPTER *ioc, struct fw_ev=
-ent_work *fw_event,
- 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
- }
-=20
-+static void __mptsas_free_fw_event(MPT_ADAPTER *ioc,
-+				   struct fw_event_work *fw_event)
-+{
-+	devtprintk(ioc, printk(MYIOC_s_DEBUG_FMT "%s: kfree (fw_event=3D0x%p)\n",
-+	    ioc->name, __func__, fw_event));
-+	list_del(&fw_event->list);
-+	kfree(fw_event);
-+}
-+
- /* free memory associated to a sas firmware event */
- static void
- mptsas_free_fw_event(MPT_ADAPTER *ioc, struct fw_event_work *fw_event)
-@@ -321,10 +331,9 @@ mptsas_free_fw_event(MPT_ADAPTER *ioc, struct fw_event=
-_work *fw_event)
- 	unsigned long flags;
-=20
- 	spin_lock_irqsave(&ioc->fw_event_lock, flags);
--	devtprintk(ioc, printk(MYIOC_s_DEBUG_FMT "%s: kfree (fw_event=3D0x%p)\n",
--	    ioc->name, __func__, fw_event));
--	list_del(&fw_event->list);
--	kfree(fw_event);
-+	fw_event->users--;
-+	if (!fw_event->users)
-+		__mptsas_free_fw_event(ioc, fw_event);
- 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
- }
-=20
-@@ -333,9 +342,10 @@ mptsas_free_fw_event(MPT_ADAPTER *ioc, struct fw_event=
-_work *fw_event)
- static void
- mptsas_cleanup_fw_event_q(MPT_ADAPTER *ioc)
- {
--	struct fw_event_work *fw_event, *next;
-+	struct fw_event_work *fw_event;
- 	struct mptsas_target_reset_event *target_reset_list, *n;
- 	MPT_SCSI_HOST	*hd =3D shost_priv(ioc->sh);
-+	unsigned long flags;
-=20
- 	/* flush the target_reset_list */
- 	if (!list_empty(&hd->target_reset_list)) {
-@@ -350,14 +360,29 @@ mptsas_cleanup_fw_event_q(MPT_ADAPTER *ioc)
- 		}
- 	}
-=20
--	if (list_empty(&ioc->fw_event_list) ||
--	     !ioc->fw_event_q || in_interrupt())
-+	if (list_empty(&ioc->fw_event_list) || !ioc->fw_event_q)
- 		return;
-=20
--	list_for_each_entry_safe(fw_event, next, &ioc->fw_event_list, list) {
--		if (cancel_delayed_work(&fw_event->work))
--			mptsas_free_fw_event(ioc, fw_event);
-+	spin_lock_irqsave(&ioc->fw_event_lock, flags);
-+
-+	while (!list_empty(&ioc->fw_event_list)) {
-+		bool canceled =3D false;
-+
-+		fw_event =3D list_first_entry(&ioc->fw_event_list,
-+					    struct fw_event_work, list);
-+		fw_event->users++;
-+		spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
-+		if (cancel_delayed_work_sync(&fw_event->work))
-+			canceled =3D true;
-+
-+		spin_lock_irqsave(&ioc->fw_event_lock, flags);
-+		if (canceled)
-+			fw_event->users--;
-+		fw_event->users--;
-+		WARN_ON_ONCE(fw_event->users);
-+		__mptsas_free_fw_event(ioc, fw_event);
- 	}
-+	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
- }
-=20
-=20
-diff --git a/drivers/message/fusion/mptsas.h b/drivers/message/fusion/mptsa=
-s.h
-index e35b13891fe42..71abf3477495e 100644
---- a/drivers/message/fusion/mptsas.h
-+++ b/drivers/message/fusion/mptsas.h
-@@ -107,6 +107,7 @@ struct mptsas_hotplug_event {
- struct fw_event_work {
- 	struct list_head 	list;
- 	struct delayed_work	 work;
-+	int			users;
- 	MPT_ADAPTER	*ioc;
- 	u32			event;
- 	u8			retries;
---=20
-2.29.2
-
+On Thu, Nov 26, 2020 at 2:30 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> From: "Ahmed S. Darwish" <a.darwish@linutronix.de>
+>
+> hw_event_sas_phy_up() is used in hardirq/softirq context:
+>
+>  pm8001_interrupt_handler_msix() || pm8001_interrupt_handler_intx() || pm8001_tasklet
+>    => PM8001_CHIP_DISP->isr() = pm80xx_chip_isr()
+>      => process_oq() [spin_lock_irqsave(&pm8001_ha->lock,)]
+>        => process_one_iomb()
+>          => mpi_hw_event()
+>            => hw_event_sas_phy_up()
+>              => msleep(200)
+>
+> Revert the msleep() back to an mdelay() to avoid sleeping in atomic
+> context.
+>
+> Fixes: 4daf1ef3c681 ("scsi: pm80xx: Convert 'long' mdelay to msleep")
+> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Vikram Auradkar <auradkar@google.com>
+> Cc: Jack Wang <jinpu.wang@cloud.ionos.com>
+Indeed, thx for the fix.
+Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>> ---
+>  drivers/scsi/pm8001/pm80xx_hwi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+> index 69f8244539e04..7d838e316657c 100644
+> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
+> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+> @@ -3296,7 +3296,7 @@ hw_event_sas_phy_up(struct pm8001_hba_info *pm8001_ha, void *piomb)
+>         pm8001_get_attached_sas_addr(phy, phy->sas_phy.attached_sas_addr);
+>         spin_unlock_irqrestore(&phy->sas_phy.frame_rcvd_lock, flags);
+>         if (pm8001_ha->flags == PM8001F_RUN_TIME)
+> -               msleep(200);/*delay a moment to wait disk to spinup*/
+> +               mdelay(200);/*delay a moment to wait disk to spinup*/
+>         pm8001_bytes_dmaed(pm8001_ha, phy_id);
+>  }
+>
+> --
+> 2.29.2
+>
