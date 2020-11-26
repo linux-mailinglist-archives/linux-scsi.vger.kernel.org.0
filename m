@@ -2,15 +2,15 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B12D2C5558
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE732C555A
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Nov 2020 14:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390081AbgKZNag (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Nov 2020 08:30:36 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:56528 "EHLO
+        id S2390079AbgKZNai (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Nov 2020 08:30:38 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56550 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390063AbgKZNaf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:30:35 -0500
+        with ESMTP id S2390051AbgKZNah (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Nov 2020 08:30:37 -0500
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1606397434;
@@ -18,21 +18,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3RCu427yktHSfqwVAeE87UO1kLLTnzKktm7HKtp31hM=;
-        b=jNflzse8IiiPcnxdY8n1k1tscAktBDx92CUgeD8b+wdnm6pbaC416l7lsDxUtWBcroaE2k
-        vb5jxKFradW0zwV4wH2B87YsR892OrV4NZsGPAXEI1sOm49vSTlfPd+vVOMHvYrMrqyxpC
-        fvDwAry2W1okXy59wqEbq3gIUxo3RszOjttppL84Ys5Wd6twT2AgEewDIDd3/UbuwdFbKq
-        eXfTWpo/J/u9Xs8qvOc0JD+oIWKb7byZIMHy+Nq7K2VQFwnmh+vrjPtAitKqUKdfygTTfY
-        HcSB+qOYgAMNXgB35HPJ+0g1mAW9mRlbDg3zRRfV885gveJ6P8jO0jhDciYGPA==
+        bh=XrxBQ28uUTJB++jetuL6kEnNvt90PxZnzODz8Wc8oMw=;
+        b=3ZWZnXnQNI3yd1oZIaL27a1gn7A8XnvQTxYuYhPvrpJW33zWzRH9N77J47ehQetaiaEIdR
+        7iqdkmwqeBxiHBvk5M8cYxF5mpGZacDc9w3wSJtT1wL8x31J7Ymtpd1yNDCet6FBcr3CXz
+        cwtACi+gUxS9539GjccM6j4rwBtuSgywJhMPl17xFoabLTvX3FM/BQ5Y/jqYX9jPxAAJcs
+        VbZCaDdx3MAwKqJNYkNFcfgdra6yVEz95LMm+36m2uHuCOhzAmg6tBCKzzgXVIrwn/kCqc
+        lzErsCSuRMxfFzMZfOelSuzACRdmAbBgCcdQN4TygPldnI6ELRcG1tAUSOwDZQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1606397434;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3RCu427yktHSfqwVAeE87UO1kLLTnzKktm7HKtp31hM=;
-        b=rNAocpL+hIJB3jxaPSEo/Lii/VSXzFA6Wg7EXxLe2LipUdJrpcZyyE5UGtBNYR3oxcOIaR
-        lI1wnVGeWj66cCBQ==
+        bh=XrxBQ28uUTJB++jetuL6kEnNvt90PxZnzODz8Wc8oMw=;
+        b=D71BIfsun8GR62UEPsc/jExgaHeHGcRLgvZgMexCqGGsOmK4D1X7sqv2s8jAv9BMrRhdbV
+        NNq/xxA12ymnOzBA==
 To:     linux-scsi@vger.kernel.org
 Cc:     Finn Thain <fthain@telegraphics.com.au>,
         GR-QLogic-Storage-Upstream@marvell.com,
@@ -56,9 +56,9 @@ Cc:     Finn Thain <fthain@telegraphics.com.au>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Ahmed S . Darwish" <a.darwish@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 08/14] scsi: qla4xxx: qla4_82xx_rom_lock(): Remove in_interrupt().
-Date:   Thu, 26 Nov 2020 14:29:46 +0100
-Message-Id: <20201126132952.2287996-9-bigeasy@linutronix.de>
+Subject: [PATCH 09/14] scsi: mpt3sas: Remove in_interrupt().
+Date:   Thu, 26 Nov 2020 14:29:47 +0100
+Message-Id: <20201126132952.2287996-10-bigeasy@linutronix.de>
 In-Reply-To: <20201126132952.2287996-1-bigeasy@linutronix.de>
 References: <20201126132952.2287996-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -69,100 +69,65 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: "Ahmed S. Darwish" <a.darwish@linutronix.de>
 
-qla4_82xx_rom_lock() spins on a certain hardware state until it is
-updated. At the end of each spin, if in_interrupt() is true, it does 20
-loops of cpu_relax(). Otherwise, it yields the CPU.
+_scsih_fw_event_cleanup_queue() waits for all outstanding firmware
+events wokrqueue handlers to finish. If in_interrupt() is true, it
+cancels itself and return early.
 
-While in_interrupt() is ill-defined and does not provide what the name
-suggests, it is not needed here: qla4_82xx_rom_lock() is always called
-from process context. Below is an analysis of its callers:
+That in_interrupt() check is ill-defined and does not provide what the
+name suggests: it does not cover all states in which it is safe to block
+and call functions like cancel_work_sync().
 
-  - ql4_nx.c: qla4_82xx_rom_fast_read(), all process context callers:
-    =3D> ql4_nx.c: qla4_82xx_pinit_from_rom(), GFP_KERNEL allocation
-    =3D> ql4_nx.c: qla4_82xx_load_from_flash(), msleep() in a loop
+That check is also not needed: _scsih_fw_event_cleanup_queue() is always
+invoked from process context. Below is an analysis of its callers:
 
-  - ql4_nx.c: qla4_82xx_pinit_from_rom(), earlier discussed
+  - scsih_remove(), bound to PCI ->remove(), process context
 
-  - ql4_nx.c: qla4_82xx_rom_lock_recovery(), bound to "isp_operations"
-    ->rom_lock_recovery() hook, which has one process context caller,
-    qla4_8xxx_device_bootstrap(), with callers:
-      =3D> ql4_83xx.c: qla4_83xx_need_reset_handler(), process, msleep()
-      =3D> ql4_nx.c: qla4_8xxx_device_state_handler(), multiple msleep()s
+  - scsih_shutdown(), bound to PCI ->shutdown(), process context
 
-  - ql4_nx.c: qla4_82xx_read_flash_data(), has cond_resched()
+  - mpt3sas_scsih_clear_outstanding_scsi_tm_commands(), called by
+      =3D> _base_clear_outstanding_commands(), called by
+        =3D>_base_fault_reset_work(), workqueue
+        =3D> mpt3sas_base_hard_reset_handler(), locks mutex
 
-Remove the in_interrupt() check. Mark, qla4_82xx_rom_lock(), and the
-->rom_lock_recovery() hook, with "Context: task, can sleep".
-
-Change qla4_82xx_rom_lock() implementation to sleep 20ms, instead of a
-schedule(), for each spin. This is more deterministic, and it matches
-the other implementations bound to ->rom_lock_recovery().
+Remove the in_interrupt() check. Change _scsih_fw_event_cleanup_queue()
+specification to a purely process-context function and mark it with
+"Context: task, can sleep".
 
 Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Nilesh Javali <njavali@marvell.com>
-Cc: Manish Rangankar <mrangankar@marvell.com>
-Cc: <GR-QLogic-Storage-Upstream@marvell.com>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>
+Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Cc: <MPT-FusionLinux.pdl@broadcom.com>
 ---
- drivers/scsi/qla4xxx/ql4_def.h |  2 +-
- drivers/scsi/qla4xxx/ql4_nx.c  | 16 ++++++----------
- 2 files changed, 7 insertions(+), 11 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_def.h b/drivers/scsi/qla4xxx/ql4_def.h
-index 9210547483886..031569c496e57 100644
---- a/drivers/scsi/qla4xxx/ql4_def.h
-+++ b/drivers/scsi/qla4xxx/ql4_def.h
-@@ -437,7 +437,7 @@ struct isp_operations {
- 	int (*wr_reg_indirect) (struct scsi_qla_host *, uint32_t, uint32_t);
- 	int (*idc_lock) (struct scsi_qla_host *); /* Context: task, can sleep */
- 	void (*idc_unlock) (struct scsi_qla_host *);
--	void (*rom_lock_recovery) (struct scsi_qla_host *);
-+	void (*rom_lock_recovery) (struct scsi_qla_host *); /* Context: task, can=
- sleep */
- 	void (*queue_mailbox_command) (struct scsi_qla_host *, uint32_t *, int);
- 	void (*process_mailbox_interrupt) (struct scsi_qla_host *, int);
- };
-diff --git a/drivers/scsi/qla4xxx/ql4_nx.c b/drivers/scsi/qla4xxx/ql4_nx.c
-index 4362d0ebe0e15..fd30fbd0d33cb 100644
---- a/drivers/scsi/qla4xxx/ql4_nx.c
-+++ b/drivers/scsi/qla4xxx/ql4_nx.c
-@@ -871,15 +871,18 @@ qla4_82xx_decode_crb_addr(unsigned long addr)
- static long rom_max_timeout =3D 100;
- static long qla4_82xx_rom_lock_timeout =3D 100;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mp=
+t3sas_scsih.c
+index f081adb85addc..d91f45abe6b86 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -3673,6 +3673,8 @@ static struct fw_event_work *dequeue_next_fw_event(st=
+ruct MPT3SAS_ADAPTER *ioc)
+  *
+  * Walk the firmware event queue, either killing timers, or waiting
+  * for outstanding events to complete
++ *
++ * Context: task, can sleep
+  */
+ static void
+ _scsih_fw_event_cleanup_queue(struct MPT3SAS_ADAPTER *ioc)
+@@ -3680,7 +3682,7 @@ _scsih_fw_event_cleanup_queue(struct MPT3SAS_ADAPTER =
+*ioc)
+ 	struct fw_event_work *fw_event;
 =20
-+/*
-+ * Context: task, can_sleep
-+ */
- static int
- qla4_82xx_rom_lock(struct scsi_qla_host *ha)
- {
--	int i;
- 	int done =3D 0, timeout =3D 0;
+ 	if ((list_empty(&ioc->fw_event_list) && !ioc->current_event) ||
+-	     !ioc->firmware_event_thread || in_interrupt())
++	    !ioc->firmware_event_thread)
+ 		return;
 =20
-+	might_sleep();
-+
- 	while (!done) {
- 		/* acquire semaphore2 from PCI HW block */
--
- 		done =3D qla4_82xx_rd_32(ha, QLA82XX_PCIE_REG(PCIE_SEM2_LOCK));
- 		if (done =3D=3D 1)
- 			break;
-@@ -887,14 +890,7 @@ qla4_82xx_rom_lock(struct scsi_qla_host *ha)
- 			return -1;
-=20
- 		timeout++;
--
--		/* Yield CPU */
--		if (!in_interrupt())
--			schedule();
--		else {
--			for (i =3D 0; i < 20; i++)
--				cpu_relax();    /*This a nop instr on i386*/
--		}
-+		msleep(20);
- 	}
- 	qla4_82xx_wr_32(ha, QLA82XX_ROM_LOCK_ID, ROM_LOCK_DRIVER);
- 	return 0;
+ 	ioc->fw_events_cleanup =3D 1;
 --=20
 2.29.2
 
