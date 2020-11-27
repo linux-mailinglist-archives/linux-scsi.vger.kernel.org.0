@@ -2,85 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090D42C6DF7
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Nov 2020 01:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A3D2C7326
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Nov 2020 23:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731059AbgK0UBt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Nov 2020 15:01:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23618 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731209AbgK0UA4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 27 Nov 2020 15:00:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606507201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=YX3PDhvRE+VeqHxgvNMZolM1FSVvjpNDz5RKUJDXUSA=;
-        b=LlZqlmABA1q82dCq/khbm37uWlCtUOmt3ARIWTMsLjoOIYZL7kWiCxYsD/ZQ6yWsBvbqBV
-        6blz9K8RTvp0/0yZaSrg9qaWHIRraHlwnSR32DdyFbaYxPoTZrFfeWThiYjOLJxlVU8MMR
-        4JkivsBcyV/UCpTrmVGKM9dbP3tvCck=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-435-mg78b8EDO9G0ImFZXoPJlA-1; Fri, 27 Nov 2020 14:21:56 -0500
-X-MC-Unique: mg78b8EDO9G0ImFZXoPJlA-1
-Received: by mail-qk1-f197.google.com with SMTP id 202so4260375qkl.9
-        for <linux-scsi@vger.kernel.org>; Fri, 27 Nov 2020 11:21:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=YX3PDhvRE+VeqHxgvNMZolM1FSVvjpNDz5RKUJDXUSA=;
-        b=HSlKr8cax1Q6qO2jePxvS+a+4PsDtVWK+KH0fTnWqWuFNmMUu6s1OoPERwBIKyuiQ1
-         iQR/yZAYis3SkxMxrYcosVsDLjRqf/CCQaOh4EhRgYjO4B2Q4Xcs0yhx2f4nTbSXqlmX
-         aXpm1FqvtgfxqAzFy2x1Bb4O+fev0VCl+o5lpDAGPgWmW3xcxnZ9k5ypxXanMKhm5tcz
-         fYjHjU7X8YpPnsYSvDuM8ztS/kTjhDJmGrd5ezkJvndoXq3kCjBWdATHIxb2PSV4mINX
-         BGPloJYp1oa63XFuOlFV05JdUJK8bMVuyCHVNM02CQNLw7bKPVGz+6lD+pupDObN+CRQ
-         mT5A==
-X-Gm-Message-State: AOAM532Y0gsAHAfvfTLS+MwNAl5GBV08eysd52UbJYiC8JghWDxFw+rf
-        aW/HJExpkK2H6XPC5wPfdoFt08SKTrFEC4CSszE5BgO3i14vMCxZuyTv/jbJFjvH4+5DSpNu0ci
-        c+MHPwP26cNwlzUZADQwjlA==
-X-Received: by 2002:a05:622a:291:: with SMTP id z17mr9764529qtw.180.1606504915966;
-        Fri, 27 Nov 2020 11:21:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxTjd3+sc/rOOK9IGazo/f+VSMO0SUNnoM4vNPL9Qx06yg0Cqm4w4a1MKDCHKvLsCni1m5cUA==
-X-Received: by 2002:a05:622a:291:: with SMTP id z17mr9764514qtw.180.1606504915784;
-        Fri, 27 Nov 2020 11:21:55 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id z19sm6946111qtu.51.2020.11.27.11.21.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2020 11:21:55 -0800 (PST)
-From:   trix@redhat.com
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: remove trailing semicolon in macro definition
-Date:   Fri, 27 Nov 2020 11:21:49 -0800
-Message-Id: <20201127192149.2859789-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.4
+        id S2389484AbgK1VuB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730628AbgK0TwS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Nov 2020 14:52:18 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC2C08E863;
+        Fri, 27 Nov 2020 11:37:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=euM/zmZmiU7XynopsfsNk5VEQJ/eikhYtJwXlpq8tno=; b=nl6On1ujk9wd9PEKkJgg2KJ2Am
+        m8AA3an/yzFOvOzfdYyYfcRQEQMV6C+rNHKxGHpqDzm49BkSsw+5EhhU0P154qkYr9MXuNpi7PREG
+        fPLa8hJsj9oN6M7qgVOHMRcPTnFhMtktGs8woTspm5p63HB4LfTCBfTY+3w6jPlLDCe5rI6brlPWe
+        Wzm7YdlXRMuEt8mo+EDmAHmVkjUP3io6h5+Bil+IHytP1lZ1245P0R6S0s2IchExPIzcixOwncumC
+        FhBV3gK43XgwhLQNaxt5pUzXLAu2p81YKnwCaC/q+zrjSo81jdUaUUkBqIuXwnd/oQ3fdltyGRC9o
+        jz4txzgg==;
+Received: from [2602:306:c5a2:a380:9e7b:efff:fe40:2b26]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kijYQ-0005Xk-FY; Fri, 27 Nov 2020 19:37:14 +0000
+Subject: Re: [PATCH 1/2] ALSA: ppc: drop if block with always false condition
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jens Axboe <axboe@kernel.dk>, Jim Paris <jim@jtan.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Leonard Goehrs <l.goehrs@pengutronix.de>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, alsa-devel@alsa-project.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20201126165950.2554997-1-u.kleine-koenig@pengutronix.de>
+From:   Geoff Levand <geoff@infradead.org>
+Message-ID: <fdaedef8-4734-7ab3-9334-b628f8207c9e@infradead.org>
+Date:   Fri, 27 Nov 2020 11:37:07 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20201126165950.2554997-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hi Uwe,
 
-The macro use will already have a semicolon.
+On 11/26/20 8:59 AM, Uwe Kleine-König wrote:
+> The remove callback is only called for devices that were probed
+> successfully before. As the matching probe function cannot complete
+> without error if dev->match_id != PS3_MATCH_ID_SOUND, we don't have to
+> check this here.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- include/scsi/scsi_driver.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I tested your two patches plus Leonard's patch 'ALSA: ppc: remove
+redundant checks in PS3 driver probe' applied to v5.9 on the PS3,
+and they seem to work fine.
 
-diff --git a/include/scsi/scsi_driver.h b/include/scsi/scsi_driver.h
-index 6dffa8555a39..f6221c006aa7 100644
---- a/include/scsi/scsi_driver.h
-+++ b/include/scsi/scsi_driver.h
-@@ -25,7 +25,7 @@ struct scsi_driver {
- 
- extern int scsi_register_driver(struct device_driver *);
- #define scsi_unregister_driver(drv) \
--	driver_unregister(drv);
-+	driver_unregister(drv)
- 
- extern int scsi_register_interface(struct class_interface *);
- #define scsi_unregister_interface(intf) \
--- 
-2.18.4
+Thanks for both your efforts.
 
+Tested by: Geoff Levand <geoff@infradead.org>
