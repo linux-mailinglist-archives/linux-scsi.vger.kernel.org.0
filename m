@@ -2,119 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F892C7334
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Nov 2020 23:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7ADB2C732F
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Nov 2020 23:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389529AbgK1VuC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S2389557AbgK1VuC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Sat, 28 Nov 2020 16:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733309AbgK1SSF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 28 Nov 2020 13:18:05 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B819BC02A189
-        for <linux-scsi@vger.kernel.org>; Sat, 28 Nov 2020 04:21:40 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id q13so10219960lfr.10
-        for <linux-scsi@vger.kernel.org>; Sat, 28 Nov 2020 04:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=dj3qfXJ4Iec3raMLz9uZPv/2iNP/sFcmUQrTQYmXPI4=;
-        b=o9vDpD1dqWWqph26Yhd4G7BcLVySzLILRkWBtHtyr40ZkF+2hDgeXlhMnEi8YqJ3ZJ
-         zGVuLOVLyWbqkHAvQjMUw08ohIScuoCAKEv0ni6llRgh659nNgNvfEBwOVpqGum5Wzuo
-         wV1sqyPYc3JabkbJWYwPkzzsTSk69pCQhXig4ONinKDfWjP1WelkF4VpEL5e5xNTj+LN
-         Dp5FmwKDfBWSNM88w1Vcd7aJ7GHTO56ehJ16PaCzHXpB3d95K3pamgfFBOMm5Kkjucqb
-         Y6cXJVHYrsjsYRJhUtcouQu6djD5oanSkaCHtBeOFolG4TcjsS5KsWdgM06kyuVb5ZRI
-         kakA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=dj3qfXJ4Iec3raMLz9uZPv/2iNP/sFcmUQrTQYmXPI4=;
-        b=atk6AjPMQo/N+pAbLWPt9TOHlSJrT1Yc9xF0wWxDVuaqAaj+E8ov2U7RSltqjo/U5E
-         653le2aS08dc/YOlvk62jdKrIh3hhkn0WZT9Zbd7a0QinkGRWk1jIDASm0SwPRRFQZub
-         dqL7y+F8SX9Yhss4zgzUHYoVNHMtADQkIcv4OMqXI5Apff9Y4ceRHCIYHVpoKbJSij7K
-         tP9weV0lwLmRbbkOhmjS/YZIjQUOTqIZikN8aw2GVYpnZelQu/4YU2MR0d1mdhg7U8Ee
-         6siNh1ioYmO/LXnoMwzzYh8zrU74irpK09fxwPzlLXfDWLmxGPkb3t3Yt43fKF4irydb
-         aroQ==
-X-Gm-Message-State: AOAM5305YJnKM2yyBSFQ9khudxt9GMkFi0R6Opq8ki7v8CSSAcX9PyOV
-        MeFzUBM+kh4VPeyq5ahUZxrUvemavyhnDwjPHRA=
-X-Google-Smtp-Source: ABdhPJzQk/S1nG9Ww17zUthK2VX/Fro867c/MtHdOqP1WGX1v96LoNLBYMuWViUbM4drVUlNfLKf7FtNjAxFlS2z8Ek=
-X-Received: by 2002:a19:c005:: with SMTP id q5mr5826183lff.400.1606566099003;
- Sat, 28 Nov 2020 04:21:39 -0800 (PST)
-MIME-Version: 1.0
-Sender: alexanderluis646@gmail.com
-Received: by 2002:ab3:744c:0:0:0:0:0 with HTTP; Sat, 28 Nov 2020 04:21:38
- -0800 (PST)
-From:   "Ms. Nadia Emaan" <mrsnadiaemaan50@gmail.com>
-Date:   Sat, 28 Nov 2020 12:21:38 +0000
-X-Google-Sender-Auth: vxnb54uxsdIMOWvAgf6_xRpDuvw
-Message-ID: <CALiTr0jj-iBjvt5sDGtBo7iEd6PHM8A=UxDd4ghnuNPfw+rXUg@mail.gmail.com>
-Subject: May the Peace of God be with You!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Received: from mail-m1272.qiye.163.com ([115.236.127.2]:27661 "EHLO
+        mail-m1272.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387565AbgK1The (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 28 Nov 2020 14:37:34 -0500
+X-Greylist: delayed 4199 seconds by postgrey-1.27 at vger.kernel.org; Sat, 28 Nov 2020 14:37:33 EST
+Received: from localhost.localdomain (unknown [113.89.246.41])
+        by mail-m1272.qiye.163.com (Hmail) with ESMTPA id AEEC6B01F56;
+        Sat, 28 Nov 2020 20:27:49 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ding Hui <dinghui@sangfor.com.cn>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] scsi: ses: Fix crash caused by kfree an invalid pointer
+Date:   Sat, 28 Nov 2020 20:23:02 +0800
+Message-Id: <20201128122302.9490-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZHx5DTU9NTB0eGk1PVkpNS01OTU1PTUJCQkJVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hKTFVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PzY6Qzo5MT8tTk4wSkMUNwxO
+        IUxPCilVSlVKTUtNTk1NT0xLSE9JVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlKSkhVQ0JVSU9NVU9KWVdZCAFZQUhCTEs3Bg++
+X-HM-Tid: 0a760ed2e10598b7kuuuaeec6b01f56
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-May God Bless you My beloved,
+We can get a crash when disconnecting the iSCSI session,
+the call trace like this:
 
-I am contacting you through this means because I need your urgent
-assistance and also help me to carry a charity project in your
-country. I found your email address as a true child of God for past
-few days now that I have been praying to know if you are really the
-chosen one for this great charity project, according to God's
-direction, after all prayers I am convinced, and I have decided to
-contact you. Please, i want you use the funds for the Lord's work,
-with confidence, read and respond now.
+  [ffff00002a00fb70] kfree at ffff00000830e224
+  [ffff00002a00fba0] ses_intf_remove at ffff000001f200e4
+  [ffff00002a00fbd0] device_del at ffff0000086b6a98
+  [ffff00002a00fc50] device_unregister at ffff0000086b6d58
+  [ffff00002a00fc70] __scsi_remove_device at ffff00000870608c
+  [ffff00002a00fca0] scsi_remove_device at ffff000008706134
+  [ffff00002a00fcc0] __scsi_remove_target at ffff0000087062e4
+  [ffff00002a00fd10] scsi_remove_target at ffff0000087064c0
+  [ffff00002a00fd70] __iscsi_unbind_session at ffff000001c872c4
+  [ffff00002a00fdb0] process_one_work at ffff00000810f35c
+  [ffff00002a00fe00] worker_thread at ffff00000810f648
+  [ffff00002a00fe70] kthread at ffff000008116e98
 
+In ses_intf_add, components count could be 0, and kcalloc 0 size scomp,
+but not saved in edev->component[i].scratch
 
-My name is Ms. Nadia Emaan , a widow, but currently based in West
-Africa since my life with my late husband, who was a businessman in
-this country before dying some years ago. We were married to many
-years without a child. He died after a brief illness that lasted only
-six days and I myself have been suffering from an ovarian cancer
-disease. At this moment I am about to finish the race in this way
-because the disease has reached a very bad stage, without any family
-member and without children. I hope you do not expose or betray this
-trust and I am sure that I am about to trust you for the mutual
-benefit of orphans and the less privileged. I have some funds that I
-inherited from my late husband, the total sum of ($ 12,500,000.00)
-deposited at a bank here in Burkina Faso. After knowing my current
-state of health, I decided to trust you with this fund, believing that
-you will use it in the way I will instruct here.
+In this situation, edev->component[0].scratch is an invalid pointer,
+when kfree it in ses_intf_remove_enclosure, a crash like above would happen
+The call trace also could be other random cases when kfree cannot catch
+the invalid pointer
 
+We should not use edev->component[] array when the components count is 0
+We also need check index when use edev->component[] array in
+ses_enclosure_data_process
 
-you will use this $12.5 Million for public benefit as follows;
+Tested-by: Zeng Zhicong <timmyzeng@163.com>
+Cc: stable <stable@vger.kernel.org> # 2.6.25+
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+---
+ drivers/scsi/ses.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-1. Establish An Orphanage Home To Help The Orphanages Children.
-2. Build A Hospital To Help The Poor.
-3. Build A Nursing Home For Elderly People Need Care & Meal.
+diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
+index c2afba2a5414..f5ef0a91f0eb 100644
+--- a/drivers/scsi/ses.c
++++ b/drivers/scsi/ses.c
+@@ -477,9 +477,6 @@ static int ses_enclosure_find_by_addr(struct enclosure_device *edev,
+ 	int i;
+ 	struct ses_component *scomp;
+ 
+-	if (!edev->component[0].scratch)
+-		return 0;
+-
+ 	for (i = 0; i < edev->components; i++) {
+ 		scomp = edev->component[i].scratch;
+ 		if (scomp->addr != efd->addr)
+@@ -565,8 +562,10 @@ static void ses_enclosure_data_process(struct enclosure_device *edev,
+ 						components++,
+ 						type_ptr[0],
+ 						name);
+-				else
++				else if (components < edev->components)
+ 					ecomp = &edev->component[components++];
++				else
++					ecomp = ERR_PTR(-EINVAL);
+ 
+ 				if (!IS_ERR(ecomp)) {
+ 					if (addl_desc_ptr)
+@@ -731,9 +730,11 @@ static int ses_intf_add(struct device *cdev,
+ 		buf = NULL;
+ 	}
+ page2_not_supported:
+-	scomp = kcalloc(components, sizeof(struct ses_component), GFP_KERNEL);
+-	if (!scomp)
+-		goto err_free;
++	if (components > 0) {
++		scomp = kcalloc(components, sizeof(struct ses_component), GFP_KERNEL);
++		if (!scomp)
++			goto err_free;
++	}
+ 
+ 	edev = enclosure_register(cdev->parent, dev_name(&sdev->sdev_gendev),
+ 				  components, &ses_enclosure_callbacks);
+@@ -813,7 +814,8 @@ static void ses_intf_remove_enclosure(struct scsi_device *sdev)
+ 	kfree(ses_dev->page2);
+ 	kfree(ses_dev);
+ 
+-	kfree(edev->component[0].scratch);
++	if (edev->components > 0)
++		kfree(edev->component[0].scratch);
+ 
+ 	put_device(&edev->edev);
+ 	enclosure_unregister(edev);
+-- 
+2.17.1
 
-You will named them after my late husband.Therefore, I need you to
-help me and claim this money and use it for charities, for orphanages
-and provide justice and help to the poor, needy and to promote the
-words of God and the effort to maintain the house of God, according to
-the bible in the book of. Jeremiah 22: 15-16.
-
-It will be a pleasure to compensate with 40% percent of the total
-money for your effort in handling the transaction, while 60% of the
-money will go to charity project.
-
-All I need from you is sincerity and ability to complete the task of
-God without any failure. It will be my pleasure to see that the bank
-has finally released and transferred the fund to your bank account in
-the country, even before I die here in the hospital, due to my current
-state of health, everything must be processed as soon as possible.
-
- I am waiting for your immediate response, if you are only interested
-in obtaining more details about the transaction and execution of this
-humanitarian project for the glory and honor of God.
-
-Sorry if you received this letter in your spam, is due to recent
-connection/network error here in the country.
-
-Please I am waiting for your urgent reply now.
-
-May God Bless you,
-Ms Nadia Emaan .
