@@ -2,156 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5758D2C7CF9
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Nov 2020 03:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2A72C7E9F
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Nov 2020 08:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbgK3CrX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 29 Nov 2020 21:47:23 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:38656 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726691AbgK3CrW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 Nov 2020 21:47:22 -0500
-Received: by mail-pj1-f68.google.com with SMTP id j13so433189pjz.3;
-        Sun, 29 Nov 2020 18:47:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4JgpHAM7ijqDR/daqOEIIKcPlm8O8muBHkiT8mO3EUY=;
-        b=OU5hFKJ7Pj125/WpCiIgABuKzjbZT7By+/pnOy8fcyfCBDBJGfr+UmppqJhn8oslp1
-         rvlZjQFJ7DyLz1pKjysRBA/eASVE0CYuIQr/G0Ku+1xMQx07w27IBtgmtp65nL6ng+Fy
-         jO/oo7dUBZ9wL5rVspSncizF8FKd/tpoSknAFDyEKsKiOughgYolzSBZVQmLQd7gJPtd
-         8B+ANvFToIhYVY0tVrOY8LwPorig/bUu77eD8iG7VBf99taGU3Ns3IIYJlJ6K9ABfnqG
-         /rHCAMVRgRgUE4srDWJtdpeX4XgY/nI9Gih+wyvUW/PMHUyJkAnwLD6zr8zd3t9j612+
-         c4Wg==
-X-Gm-Message-State: AOAM533fmR1+szOtJG4es6TCVM8DjY+e/CANNB7UeHEpU8jOhsQCN7Er
-        gu2Tarp4ZFU7DS4V73Ygg48=
-X-Google-Smtp-Source: ABdhPJySzFwaS9kN5Nehx4yAWHDsKt0CycJXycGTqD+OB5huQZiDmvnMpZPa38YaDmL3k1FJ6d0fow==
-X-Received: by 2002:a17:90a:aa14:: with SMTP id k20mr23553945pjq.131.1606704401812;
-        Sun, 29 Nov 2020 18:46:41 -0800 (PST)
-Received: from asus.hsd1.ca.comcast.net (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id n127sm14734659pfd.143.2020.11.29.18.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Nov 2020 18:46:40 -0800 (PST)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
-        linux-block@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Can Guo <cang@codeaurora.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v4 9/9] block: Do not accept any requests while suspended
-Date:   Sun, 29 Nov 2020 18:46:15 -0800
-Message-Id: <20201130024615.29171-10-bvanassche@acm.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201130024615.29171-1-bvanassche@acm.org>
-References: <20201130024615.29171-1-bvanassche@acm.org>
+        id S1726005AbgK3HYH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Nov 2020 02:24:07 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:8473 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725902AbgK3HYG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Nov 2020 02:24:06 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CkxXV387RzhkW5;
+        Mon, 30 Nov 2020 15:23:06 +0800 (CST)
+Received: from [10.174.178.248] (10.174.178.248) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 30 Nov 2020 15:23:08 +0800
+From:   Yufen Yu <yuyufen@huawei.com>
+Subject: [RFC] blk-mq/scsi: deadlock found on usb driver
+To:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+CC:     <john.garry@huawei.com>, "axboe@kernel.dk" <axboe@kernel.dk>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        Ming Lei <ming.lei@redhat.com>, <osandov@fb.com>,
+        <wubo40@huawei.com>, yanaijie <yanaijie@huawei.com>,
+        <yuyufen@huawei.com>
+Message-ID: <d6266f2e-9cc7-d222-dedd-15a1a0a6571f@huawei.com>
+Date:   Mon, 30 Nov 2020 15:23:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.248]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+Hi, all
 
-blk_queue_enter() accepts BLK_MQ_REQ_PM requests independent of the runtime
-power management state. Now that SCSI domain validation no longer depends
-on this behavior, modify the behavior of blk_queue_enter() as follows:
-- Do not accept any requests while suspended.
-- Only process power management requests while suspending or resuming.
+   We reported IO stuck on a scsi usb driver recently and any IO issued
+to the device cannot return. The usb driver just have **one** driver tag
+and  **two** sched tag. After debugging, we found there is a deadlock
+race as following:
 
-Submitting BLK_MQ_REQ_PM requests to a device that is runtime suspended
-causes runtime-suspended devices not to resume as they should. The request
-which should cause a runtime resume instead gets issued directly, without
-resuming the device first. Of course the device can't handle it properly,
-the I/O fails, and the device remains suspended.
+cpu0(scsi_eh)       cpu1                          cpu2
+                     get sched tag(internal_tag=0)
+                     get driver tag(tag=0)
+                                                   get sched tag(internal_tag=1)
+                                                   wait for driver tag
+scsi_error_handler try issue io
+wait for sched tag
+                     try to dispatch the request
+                     wait for setting shost state as SHOST_RUNNING
+//scsi_host_set_state(shost, SHOST_RUNNING)
 
-The problem is fixed by checking that the queue's runtime-PM status
-isn't RPM_SUSPENDED before allowing a request to be issued, and
-queuing a runtime-resume request if it is.  In particular, the inline
-blk_pm_request_resume() routine is renamed blk_pm_resume_queue() and
-the code is unified by merging the surrounding checks into the
-routine.  If the queue isn't set up for runtime PM, or there currently
-is no restriction on allowed requests, the request is allowed.
-Likewise if the BLK_MQ_REQ_PM flag is set and the status isn't
-RPM_SUSPENDED.  Otherwise a runtime resume is queued and the request
-is blocked until conditions are more suitable.
+The scsi_eh thread stack as following:
+PID: 945745  TASK: ffff950a8f2f0000  CPU: 42  COMMAND: "scsi_eh_15"
+   [ffffbbee8d5b3ce0] __schedule at ffffffffa506ebac
+   [ffffbbee8d5b3d00] sbitmap_get at ffffffffa4c4684f
+   [ffffbbee8d5b3d48] schedule at ffffffffa506f208
+   [ffffbbee8d5b3d50] io_schedule at ffffffffa506f5d2
+   [ffffbbee8d5b3d60] blk_mq_get_tag at ffffffffa4bf5277
+   [ffffbbee8d5b3d88] autoremove_wake_function at ffffffffa48ffe40
+   [ffffbbee8d5b3db8] autoremove_wake_function at ffffffffa48ffe40
+   [ffffbbee8d5b3e08] blk_mq_get_request at ffffffffa4bef14c
+   [ffffbbee8d5b3e20] eh_lock_door_done at ffffffffa4da5580
+   [ffffbbee8d5b3e38] blk_mq_alloc_request at ffffffffa4bef494
+   [ffffbbee8d5b3e80] blk_get_request at ffffffffa4be5042
+   [ffffbbee8d5b3e98] scsi_error_handler at ffffffffa4da8670
+   [ffffbbee8d5b3ea0] __schedule at ffffffffa506ebb4
+   [ffffbbee8d5b3f08] scsi_error_handler at ffffffffa4da8430
+   [ffffbbee8d5b3f10] kthread at ffffffffa48d6d7d
+   [ffffbbee8d5b3f20] kthread at ffffffffa48d6c70
+   [ffffbbee8d5b3f50] ret_from_fork at ffffffffa520023f
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Can Guo <cang@codeaurora.org>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reported-and-tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-[ bvanassche: modified commit message and removed Cc: stable because without
-  the previous patches from this series this patch would break parallel SCSI
-  domain validation ]
----
- block/blk-core.c |  6 +++---
- block/blk-pm.h   | 14 +++++++++-----
- 2 files changed, 12 insertions(+), 8 deletions(-)
+Since there are no more available sched tag and driver tag. All of
+threads will wait forever. We found the bug on 4.18 kernel, but the
+latest kernel code also have the problem.
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index a00bce9f46d8..230880cbf8c8 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -440,7 +440,8 @@ int blk_queue_enter(struct request_queue *q, blk_mq_req_flags_t flags)
- 			 * responsible for ensuring that that counter is
- 			 * globally visible before the queue is unfrozen.
- 			 */
--			if (pm || !blk_queue_pm_only(q)) {
-+			if ((pm && q->rpm_status != RPM_SUSPENDED) ||
-+			    !blk_queue_pm_only(q)) {
- 				success = true;
- 			} else {
- 				percpu_ref_put(&q->q_usage_counter);
-@@ -465,8 +466,7 @@ int blk_queue_enter(struct request_queue *q, blk_mq_req_flags_t flags)
- 
- 		wait_event(q->mq_freeze_wq,
- 			   (!q->mq_freeze_depth &&
--			    (pm || (blk_pm_request_resume(q),
--				    !blk_queue_pm_only(q)))) ||
-+			    blk_pm_resume_queue(pm, q)) ||
- 			   blk_queue_dying(q));
- 		if (blk_queue_dying(q))
- 			return -ENODEV;
-diff --git a/block/blk-pm.h b/block/blk-pm.h
-index ea5507d23e75..a2283cc9f716 100644
---- a/block/blk-pm.h
-+++ b/block/blk-pm.h
-@@ -6,11 +6,14 @@
- #include <linux/pm_runtime.h>
- 
- #ifdef CONFIG_PM
--static inline void blk_pm_request_resume(struct request_queue *q)
-+static inline int blk_pm_resume_queue(const bool pm, struct request_queue *q)
- {
--	if (q->dev && (q->rpm_status == RPM_SUSPENDED ||
--		       q->rpm_status == RPM_SUSPENDING))
--		pm_request_resume(q->dev);
-+	if (!q->dev || !blk_queue_pm_only(q))
-+		return 1;	/* Nothing to do */
-+	if (pm && q->rpm_status != RPM_SUSPENDED)
-+		return 1;	/* Request allowed */
-+	pm_request_resume(q->dev);
-+	return 0;
- }
- 
- static inline void blk_pm_mark_last_busy(struct request *rq)
-@@ -44,8 +47,9 @@ static inline void blk_pm_put_request(struct request *rq)
- 		--rq->q->nr_pending;
- }
- #else
--static inline void blk_pm_request_resume(struct request_queue *q)
-+static inline int blk_pm_resume_queue(const bool pm, struct request_queue *q)
- {
-+	return 1;
- }
- 
- static inline void blk_pm_mark_last_busy(struct request *rq)
+I don't have good idea about how to fix the bug. So, any suggestions are welcome.
+
+Thanks,
+Yufen
