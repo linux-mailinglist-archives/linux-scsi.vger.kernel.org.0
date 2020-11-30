@@ -2,257 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB32A2C8B83
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Nov 2020 18:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15C92C8C54
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Nov 2020 19:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387781AbgK3RlC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Nov 2020 12:41:02 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:8219 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728499AbgK3RlB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Nov 2020 12:41:01 -0500
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4ClCCf5RwYzkjdj;
-        Tue,  1 Dec 2020 01:39:26 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 1 Dec 2020 01:39:51 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <lenb@kernel.org>, <rjw@rjwysocki.net>,
-        <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
-        <maz@kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <linux-acpi@vger.kernel.org>,
-        <dwagner@suse.de>, "John Garry" <john.garry@huawei.com>
-Subject: [PATCH v4 5/5] scsi: hisi_sas: Expose HW queues for v2 hw
-Date:   Tue, 1 Dec 2020 01:35:59 +0800
-Message-ID: <1606757759-6076-6-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1606757759-6076-1-git-send-email-john.garry@huawei.com>
-References: <1606757759-6076-1-git-send-email-john.garry@huawei.com>
+        id S1729601AbgK3SMp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Nov 2020 13:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729577AbgK3SMo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Nov 2020 13:12:44 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA07C0613D2;
+        Mon, 30 Nov 2020 10:11:58 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id s13so8200688ejr.1;
+        Mon, 30 Nov 2020 10:11:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RCGFRNxkqVOdH2oPpvMvZWWLTLogZHhrB4I80nWfwYE=;
+        b=ATy8L4S4MPS3cgLSmif9EybGT2t08UZ5ZwIwM2Msge4epnSxG9nE+3H15+qCF1ML7l
+         l1/PWFqg1wFune8lHUmorQ4nCcltm+jmzl8oOt0fpNj/JiEKM41u1zxKL/Kr0qQD/oaG
+         NfKbxkIsYEhoiwbEYVfMCU9tFLJWHfd9c5S9YYX4M7vnmJrC8e7Qu0c/70q3G20ID58m
+         522dFpukMzXRWyiCZmUPjqarYWWdL7xohI9HbHbkYhfdvlO067MJETwHdoNUFPSM5wg0
+         O1C13HFT5unglHP0QZPqu7en1DLi8yKbmNaOJ2m4tKm6LqVRPHeMnYheEELTVnzzo2DZ
+         0RgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RCGFRNxkqVOdH2oPpvMvZWWLTLogZHhrB4I80nWfwYE=;
+        b=kKTB5cUVidZzuShIB0/YGb5zrx2mLDwnOBJJqH6vEkErpQrwD7hfmKi0NbQ12J5zqH
+         FdJl3iIMy1jmyaHdmUgaKaxN5AVr5i9393TBtPpCHoBfIiotSO0Xguc/y7e4Ia7TYNNd
+         Rv9zV0GpsMqJEZ/t9TnJ6svNDbQIsCoelZXwdcl2IgOztiWIlLbr8Dq4EmQO+VYPWSX5
+         K6t1s8eANkSL/Z0eSlgmVGeeWWyADEpfa3MsTacOWpeN1ZE3X22wh0jTqJ6ryOfXaDjs
+         3YFMX3B9FBq8vYgjzUO4XF5c1IKSCTvwvFq1MloREcuhvIVmCk1Y379U2iVWftRjmkWu
+         zeaw==
+X-Gm-Message-State: AOAM532qoeK3t/7Z016fjmTALElmaZ3w1BtNkxd4UDuzn6uExjIgaVcX
+        ssmtMxgSPknVw0jJNOLdbC0=
+X-Google-Smtp-Source: ABdhPJzR3KwLg/bYDQzWMpqfTHanjQOIH8HC9BKo0hT12g4qm3ojmpPdNazEUBnUbKqa/YGog3URCQ==
+X-Received: by 2002:a17:906:33c4:: with SMTP id w4mr21273300eja.380.1606759916999;
+        Mon, 30 Nov 2020 10:11:56 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
+        by smtp.gmail.com with ESMTPSA id d14sm2702899edn.31.2020.11.30.10.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 10:11:55 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Three changes for UFS WriteBooster
+Date:   Mon, 30 Nov 2020 19:11:40 +0100
+Message-Id: <20201130181143.5739-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As a performance enhancement, make the completion queue interrupts managed.
+From: Bean Huo <beanhuo@micron.com>
 
-In addition, in commit bf0beec0607d ("blk-mq: drain I/O when all CPUs in a
-hctx are offline"), CPU hotplug for MQ devices using managed interrupts
-is made safe. So expose HW queues to blk-mq to take advantage of this.
 
-Flag Scsi_host.host_tagset is also set to ensure that the HBA is not sent
-more commands than it can handle. However the driver still does not use
-request tag for IPTT as there are many HW bugs means that special rules
-apply for IPTT allocation.
+Bean Huo (3):
+  scsi: ufs: Add "wb_on" sysfs node to control WB on/off
+  scsi: ufs: Keep device power on only
+    fWriteBoosterBufferFlushDuringHibernate == 1
+  scsi: ufs: Changes comment in the function ufshcd_wb_probe()
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas.h       |  4 ++
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 11 +++++
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 66 +++++++++++++++++++++-----
- 3 files changed, 68 insertions(+), 13 deletions(-)
+ drivers/scsi/ufs/ufs-sysfs.c | 33 +++++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufs.h       |  2 ++
+ drivers/scsi/ufs/ufshcd.c    | 21 ++++++++++++++-------
+ drivers/scsi/ufs/ufshcd.h    |  2 ++
+ 4 files changed, 51 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index a25cfc11c96d..aa67807c5693 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -14,6 +14,7 @@
- #include <linux/debugfs.h>
- #include <linux/dmapool.h>
- #include <linux/iopoll.h>
-+#include <linux/irq.h>
- #include <linux/lcm.h>
- #include <linux/libata.h>
- #include <linux/mfd/syscon.h>
-@@ -312,6 +313,7 @@ enum {
- 
- struct hisi_sas_hw {
- 	int (*hw_init)(struct hisi_hba *hisi_hba);
-+	int (*interrupt_preinit)(struct hisi_hba *hisi_hba);
- 	void (*setup_itct)(struct hisi_hba *hisi_hba,
- 			   struct hisi_sas_device *device);
- 	int (*slot_index_alloc)(struct hisi_hba *hisi_hba,
-@@ -418,6 +420,8 @@ struct hisi_hba {
- 	u32 refclk_frequency_mhz;
- 	u8 sas_addr[SAS_ADDR_SIZE];
- 
-+	int *irq_map; /* v2 hw */
-+
- 	int n_phy;
- 	spinlock_t lock;
- 	struct semaphore sem;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index c8dd8588f800..624c5ec723fb 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -2614,6 +2614,13 @@ static struct Scsi_Host *hisi_sas_shost_alloc(struct platform_device *pdev,
- 	return NULL;
- }
- 
-+static int hisi_sas_interrupt_preinit(struct hisi_hba *hisi_hba)
-+{
-+	if (hisi_hba->hw->interrupt_preinit)
-+		return hisi_hba->hw->interrupt_preinit(hisi_hba);
-+	return 0;
-+}
-+
- int hisi_sas_probe(struct platform_device *pdev,
- 		   const struct hisi_sas_hw *hw)
- {
-@@ -2671,6 +2678,10 @@ int hisi_sas_probe(struct platform_device *pdev,
- 		sha->sas_port[i] = &hisi_hba->port[i].sas_port;
- 	}
- 
-+	rc = hisi_sas_interrupt_preinit(hisi_hba);
-+	if (rc)
-+		goto err_out_ha;
-+
- 	rc = scsi_add_host(shost, &pdev->dev);
- 	if (rc)
- 		goto err_out_ha;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index b57177b52fac..9adfdefef9ca 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -3302,6 +3302,28 @@ static irq_handler_t fatal_interrupts[HISI_SAS_FATAL_INT_NR] = {
- 	fatal_axi_int_v2_hw
- };
- 
-+#define CQ0_IRQ_INDEX (96)
-+
-+static int hisi_sas_v2_interrupt_preinit(struct hisi_hba *hisi_hba)
-+{
-+	struct platform_device *pdev = hisi_hba->platform_dev;
-+	struct Scsi_Host *shost = hisi_hba->shost;
-+	struct irq_affinity desc = {
-+		.pre_vectors = CQ0_IRQ_INDEX,
-+		.post_vectors = 16,
-+	};
-+	int resv = desc.pre_vectors + desc.post_vectors, minvec = resv + 1, nvec;
-+
-+	nvec = devm_platform_get_irqs_affinity(pdev, &desc, minvec, 128,
-+					       &hisi_hba->irq_map);
-+	if (nvec < 0)
-+		return nvec;
-+
-+	shost->nr_hw_queues = hisi_hba->cq_nvecs = nvec - resv;
-+
-+	return 0;
-+}
-+
- /*
-  * There is a limitation in the hip06 chipset that we need
-  * to map in all mbigen interrupts, even if they are not used.
-@@ -3310,14 +3332,11 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- {
- 	struct platform_device *pdev = hisi_hba->platform_dev;
- 	struct device *dev = &pdev->dev;
--	int irq, rc = 0, irq_map[128];
-+	int irq, rc = 0;
- 	int i, phy_no, fatal_no, queue_no;
- 
--	for (i = 0; i < 128; i++)
--		irq_map[i] = platform_get_irq(pdev, i);
--
- 	for (i = 0; i < HISI_SAS_PHY_INT_NR; i++) {
--		irq = irq_map[i + 1]; /* Phy up/down is irq1 */
-+		irq = hisi_hba->irq_map[i + 1]; /* Phy up/down is irq1 */
- 		rc = devm_request_irq(dev, irq, phy_interrupts[i], 0,
- 				      DRV_NAME " phy", hisi_hba);
- 		if (rc) {
-@@ -3331,7 +3350,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	for (phy_no = 0; phy_no < hisi_hba->n_phy; phy_no++) {
- 		struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
- 
--		irq = irq_map[phy_no + 72];
-+		irq = hisi_hba->irq_map[phy_no + 72];
- 		rc = devm_request_irq(dev, irq, sata_int_v2_hw, 0,
- 				      DRV_NAME " sata", phy);
- 		if (rc) {
-@@ -3343,7 +3362,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	}
- 
- 	for (fatal_no = 0; fatal_no < HISI_SAS_FATAL_INT_NR; fatal_no++) {
--		irq = irq_map[fatal_no + 81];
-+		irq = hisi_hba->irq_map[fatal_no + 81];
- 		rc = devm_request_irq(dev, irq, fatal_interrupts[fatal_no], 0,
- 				      DRV_NAME " fatal", hisi_hba);
- 		if (rc) {
-@@ -3354,24 +3373,22 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 		}
- 	}
- 
--	for (queue_no = 0; queue_no < hisi_hba->queue_count; queue_no++) {
-+	for (queue_no = 0; queue_no < hisi_hba->cq_nvecs; queue_no++) {
- 		struct hisi_sas_cq *cq = &hisi_hba->cq[queue_no];
- 
--		cq->irq_no = irq_map[queue_no + 96];
-+		cq->irq_no = hisi_hba->irq_map[queue_no + 96];
- 		rc = devm_request_threaded_irq(dev, cq->irq_no,
- 					       cq_interrupt_v2_hw,
- 					       cq_thread_v2_hw, IRQF_ONESHOT,
- 					       DRV_NAME " cq", cq);
- 		if (rc) {
- 			dev_err(dev, "irq init: could not request cq interrupt %d, rc=%d\n",
--				irq, rc);
-+					cq->irq_no, rc);
- 			rc = -ENOENT;
- 			goto err_out;
- 		}
-+		cq->irq_mask = irq_get_affinity_mask(cq->irq_no);
- 	}
--
--	hisi_hba->cq_nvecs = hisi_hba->queue_count;
--
- err_out:
- 	return rc;
- }
-@@ -3529,6 +3546,26 @@ static struct device_attribute *host_attrs_v2_hw[] = {
- 	NULL
- };
- 
-+static int map_queues_v2_hw(struct Scsi_Host *shost)
-+{
-+	struct hisi_hba *hisi_hba = shost_priv(shost);
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+	const struct cpumask *mask;
-+	unsigned int queue, cpu;
-+
-+	for (queue = 0; queue < qmap->nr_queues; queue++) {
-+		mask = irq_get_affinity_mask(hisi_hba->irq_map[96 + queue]);
-+		if (!mask)
-+			continue;
-+
-+		for_each_cpu(cpu, mask)
-+			qmap->mq_map[cpu] = qmap->queue_offset + queue;
-+	}
-+
-+	return 0;
-+
-+}
-+
- static struct scsi_host_template sht_v2_hw = {
- 	.name			= DRV_NAME,
- 	.proc_name		= DRV_NAME,
-@@ -3553,10 +3590,13 @@ static struct scsi_host_template sht_v2_hw = {
- #endif
- 	.shost_attrs		= host_attrs_v2_hw,
- 	.host_reset		= hisi_sas_host_reset,
-+	.map_queues		= map_queues_v2_hw,
-+	.host_tagset		= 1,
- };
- 
- static const struct hisi_sas_hw hisi_sas_v2_hw = {
- 	.hw_init = hisi_sas_v2_init,
-+	.interrupt_preinit = hisi_sas_v2_interrupt_preinit,
- 	.setup_itct = setup_itct_v2_hw,
- 	.slot_index_alloc = slot_index_alloc_quirk_v2_hw,
- 	.alloc_dev = alloc_dev_quirk_v2_hw,
 -- 
-2.26.2
+2.17.1
 
