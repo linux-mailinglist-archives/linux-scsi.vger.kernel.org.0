@@ -2,51 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB00D2C8DC7
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Nov 2020 20:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9FA2C8DD0
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Nov 2020 20:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbgK3TPD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Nov 2020 14:15:03 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:55158 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729665AbgK3TPA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Nov 2020 14:15:00 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AUJ9AYe003707;
-        Mon, 30 Nov 2020 19:13:38 GMT
+        id S2388301AbgK3TQX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Nov 2020 14:16:23 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:40530 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388228AbgK3TQU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Nov 2020 14:16:20 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AUJEtID180387;
+        Mon, 30 Nov 2020 19:15:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
  mime-version : subject : from : in-reply-to : date : cc :
  content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=beudE14zcXr8+Wjd8IruOkrNoIvvL+m5FPyj6/lImGA=;
- b=oyEuP4WklbnwjVKeqzcCB0NmtqgAAO908H/E16qMOutwwGPDAqNSz3hjwLduAvUtuzPm
- hIynsvaa/wYStGBxJYOM3L9WQpvbkpS8D+ZS5Q0yCoKEcwjTiFFAvtv6qlJuTK1Ei+X0
- 9IFAHLk5dWkRl4llg36ruJRidyXNVIH5tetZ7FZ1jD0zq4Qn7aj/TdMnejfiM7qdnSV2
- LFd94zUGVkvbmUzzemefScYTqF0UqxWFYFgjsLE0YwudpyFHR6LYU1Qhd3t+k0eBa8YH
- 2os4nIP+KevdjMuPyU8VyYfuSeoL2NljLRdRc5JTUfflIv5ZW+sohV3pSht6MBqKzF49 MQ== 
+ s=corp-2020-01-29; bh=QRRyLHr54zLVvqts0q1E1e7aOWhET0v7UIce6bgUCrc=;
+ b=L9rTKV3U9zLnRPNGh2azi9OleWIrKjaWkUwL8aqkJ/az28XpQrLIaXl1EAKkIyrAiDX1
+ nkKrBPANksPj57rVaWB4+ILg/o+vtLhF2RfHfUFqVtmzRs3kpnPhYBXk/024nZ9pbSn4
+ 1KP6rLX1GVgdQf25IyUkR8bPVKih/thFmavYD7Wa8ZJSGRTbIWeSYA6QJhMODwJLPfXU
+ eQK5Ymw4tVvovNk/MNJaeKwpHi3jT5I/uQD4I/EBV5Mfa1Eyms1aLeFY/2Rlj2Wzb0B+
+ LOCTioUfv70qBA66vWeH2WB5yuksEEjRLGhs52NIPLNYuUGB8biqmvYi46grZ7tHq2Ch XA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 353dyqev0k-1
+        by aserp2130.oracle.com with ESMTP id 353c2aq073-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 30 Nov 2020 19:13:37 +0000
+        Mon, 30 Nov 2020 19:15:21 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AUJ6EZt075817;
-        Mon, 30 Nov 2020 19:11:37 GMT
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AUJ6DNH075561;
+        Mon, 30 Nov 2020 19:13:20 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 3540ar18dg-1
+        by userp3020.oracle.com with ESMTP id 3540ar1a2k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Nov 2020 19:11:37 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AUJBSGW020683;
-        Mon, 30 Nov 2020 19:11:28 GMT
+        Mon, 30 Nov 2020 19:13:20 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0AUJDJPX021683;
+        Mon, 30 Nov 2020 19:13:19 GMT
 Received: from dhcp-10-154-168-92.vpn.oracle.com (/10.154.168.92)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 30 Nov 2020 11:11:27 -0800
+        with ESMTP ; Mon, 30 Nov 2020 11:13:18 -0800
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH 04/14] scsi: qla2xxx: qla82xx: Remove in_interrupt().
+Subject: Re: [PATCH 05/14] scsi: qla2xxx: tcm_qla2xxx: Remove
+ BUG_ON(in_interrupt()).
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
-In-Reply-To: <20201126132952.2287996-5-bigeasy@linutronix.de>
-Date:   Mon, 30 Nov 2020 13:11:25 -0600
+In-Reply-To: <20201126132952.2287996-6-bigeasy@linutronix.de>
+Date:   Mon, 30 Nov 2020 13:13:15 -0600
 Cc:     linux-scsi@vger.kernel.org,
         Finn Thain <fthain@telegraphics.com.au>,
         GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
@@ -69,22 +70,22 @@ Cc:     linux-scsi@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         "Ahmed S . Darwish" <a.darwish@linutronix.de>
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <B8EAE100-5178-41D8-97B4-104CEB3500FF@oracle.com>
+Message-Id: <74BF47E2-787C-41DA-8810-6369DFD0CC53@oracle.com>
 References: <20201126132952.2287996-1-bigeasy@linutronix.de>
- <20201126132952.2287996-5-bigeasy@linutronix.de>
+ <20201126132952.2287996-6-bigeasy@linutronix.de>
 To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 X-Mailer: Apple Mail (2.3608.120.23.2.4)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
- phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 suspectscore=3
+ phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 suspectscore=11
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011300123
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- clxscore=1011 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=3 lowpriorityscore=0 phishscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011300123
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=11 lowpriorityscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ spamscore=0 adultscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011300124
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -96,157 +97,44 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 >=20
 > From: "Ahmed S. Darwish" <a.darwish@linutronix.de>
 >=20
-> qla82xx_idc_lock() spins on a certain hardware state until it's =
-updated. At
-> the end of each spin, if in_interrupt() is true, it does 20 loops of
-> cpu_relax(). Otherwise, it yields the CPU.
+> tcm_qla2xxx_free_session() has a BUG_ON(in_interrupt()).
 >=20
 > While in_interrupt() is ill-defined and does not provide what the name
-> suggests, it is not needed here: qla82xx_idc_lock() is always called
-> from process context. Below is an analysis of its callers, in order of
-> appearance:
+> suggests, it is not needed here: the function is always invoked from
+> workqueue context through "struct qla_tgt_func_tmpl" ->free_session()
+> hook it is bound to.
 >=20
->  - qla_nx.c: qla82xx_device_bootstrap(), only called by
->    qla82xx_device_state_handler(), has multiple msleep()s.
+> The function also calls wait_event_timeout() down the chain, which
+> already has a might_sleep().
 >=20
->  - qla_nx.c: qla82xx_need_qsnt_handler(), has one second msleep()
->=20
->  - qla_nx.c: qla82xx_wait_for_state_change(), one second msleep()
->=20
->  - qla_nx.c: qla82xx_need_reset_handler(), can sleep up to 10 seconds
->=20
->  - qla_nx.c: qla82xx_device_state_handler(), has multiple msleep()s
->=20
->  - qla_nx.c: qla82xx_abort_isp(), if it's a qla82xx controller, calls
->    qla82xx_device_state_handler(), which sleeps. It's also bound to
->    isp_operations ->abort_isp() hook, where all the callers are in
->    process context.
->=20
->  - qla_nx.c: qla82xx_beacon_on(), bound to isp_operations =
-->beacon_on()
->    hook.  That hook is only called once, in a mutex locked context,
->    from qla2x00_beacon_store().
->=20
->  - qla_nx.c: qla82xx_beacon_off(), bound to isp_operations
->    ->beacon_off() hook.  Like ->beacon_on(), it's only called once, in
->    a mutex locked context, from qla2x00_beacon_store().
->=20
->  - qla_nx.c: qla82xx_fw_dump(), calls qla2x00_wait_for_chip_reset(),
->    which has msleep() in a loop. It is bound to isp_operations
->    ->fw_dump() hook. That hook *is* called from atomic context at
->    qla_isr.c by multiple interrupt handlers. Nonetheless, it's other
->    controllers interrupt handlers, and not the qla82xx.
->=20
->  - qla_attr.c: qla2x00_sysfs_write_fw_dump(), and
->    qla2x00_sysfs_write_reset(), process-context sysfs ->write() hooks.
->=20
->  - qla_os.c: qla2x00_probe_one(). PCI ->probe(), process context.
->=20
->  - qla_os.c: qla2x00_clear_drv_active(), called solely from
->    qla2x00_remove_one(), which is PCI ->remove() hook, process =
-context.
->=20
->  - qla_os.c: qla2x00_do_dpc(), kthread function, process context.
->=20
-> Remove the in_interrupt() check. Change qla82xx_idc_lock() =
-specification
-> to a purely process-context function. Mark it with "Context: task, =
-might
-> sleep".
->=20
-> Change qla82xx_idc_lock() implementation to sleep 100ms, instead of a
-> schedule(), for each spin. This is more deterministic, and it matches
-> the other qla models idc_lock() functions.
+> Remove the in_interrupt() check.
 >=20
 > Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
 > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > Cc: Nilesh Javali <njavali@marvell.com>
 > Cc: <GR-QLogic-Storage-Upstream@marvell.com>
 > ---
-> drivers/scsi/qla2xxx/qla_def.h |  5 +++++
-> drivers/scsi/qla2xxx/qla_nx.c  | 25 +++++++++++--------------
-> 2 files changed, 16 insertions(+), 14 deletions(-)
+> drivers/scsi/qla2xxx/tcm_qla2xxx.c | 2 --
+> 1 file changed, 2 deletions(-)
 >=20
-> diff --git a/drivers/scsi/qla2xxx/qla_def.h =
-b/drivers/scsi/qla2xxx/qla_def.h
-> index ed9b10f8537d6..fe3c0e2f1ce88 100644
-> --- a/drivers/scsi/qla2xxx/qla_def.h
-> +++ b/drivers/scsi/qla2xxx/qla_def.h
-> @@ -3296,8 +3296,10 @@ struct isp_operations {
-> 	void (*fw_dump)(struct scsi_qla_host *vha);
-> 	void (*mpi_fw_dump)(struct scsi_qla_host *, int);
+> diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c =
+b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> index 784b43f181818..b55fc768a2a7a 100644
+> --- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> +++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> @@ -1400,8 +1400,6 @@ static void tcm_qla2xxx_free_session(struct =
+fc_port *sess)
+> 	struct se_session *se_sess;
+> 	struct tcm_qla2xxx_lport *lport;
 >=20
-> +	/* Context: task, might sleep */
-> 	int (*beacon_on) (struct scsi_qla_host *);
-> 	int (*beacon_off) (struct scsi_qla_host *);
-> +
-> 	void (*beacon_blink) (struct scsi_qla_host *);
->=20
-> 	void *(*read_optrom)(struct scsi_qla_host *, void *,
-> @@ -3308,7 +3310,10 @@ struct isp_operations {
-> 	int (*get_flash_version) (struct scsi_qla_host *, void *);
-> 	int (*start_scsi) (srb_t *);
-> 	int (*start_scsi_mq) (srb_t *);
-> +
-> +	/* Context: task, might sleep */
-> 	int (*abort_isp) (struct scsi_qla_host *);
-> +
-> 	int (*iospace_config)(struct qla_hw_data *);
-> 	int (*initialize_adapter)(struct scsi_qla_host *);
-> };
-> diff --git a/drivers/scsi/qla2xxx/qla_nx.c =
-b/drivers/scsi/qla2xxx/qla_nx.c
-> index b3ba0de5d4fb8..b2017f1c35044 100644
-> --- a/drivers/scsi/qla2xxx/qla_nx.c
-> +++ b/drivers/scsi/qla2xxx/qla_nx.c
-> @@ -489,29 +489,26 @@ qla82xx_rd_32(struct qla_hw_data *ha, ulong =
-off_in)
-> 	return data;
-> }
->=20
-> -#define IDC_LOCK_TIMEOUT 100000000
-> +/*
-> + * Context: task, might sleep
-> + */
-> int qla82xx_idc_lock(struct qla_hw_data *ha)
-> {
-> -	int i;
-> -	int done =3D 0, timeout =3D 0;
-> +	const int delay_ms =3D 100, timeout_ms =3D 2000;
-> +	int done, total =3D 0;
->=20
-> -	while (!done) {
-> +	might_sleep();
-> +
-> +	while (true) {
-> 		/* acquire semaphore5 from PCI HW block */
-> 		done =3D qla82xx_rd_32(ha, =
-QLA82XX_PCIE_REG(PCIE_SEM5_LOCK));
-> 		if (done =3D=3D 1)
-> 			break;
-> -		if (timeout >=3D IDC_LOCK_TIMEOUT)
-> +		if (WARN_ON_ONCE(total >=3D timeout_ms))
-> 			return -1;
->=20
-> -		timeout++;
+> -	BUG_ON(in_interrupt());
 > -
-> -		/* Yield CPU */
-> -		if (!in_interrupt())
-> -			schedule();
-> -		else {
-> -			for (i =3D 0; i < 20; i++)
-> -				cpu_relax();
-> -		}
-> +		total +=3D delay_ms;
-> +		msleep(delay_ms);
-> 	}
->=20
-> 	return 0;
+> 	se_sess =3D sess->se_sess;
+> 	if (!se_sess) {
+> 		pr_err("struct fc_port->se_sess is NULL\n");
 > --=20
 > 2.29.2
 >=20
-
-Looks Good.=20
 
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
