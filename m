@@ -2,90 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E79252CAB5E
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 20:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E342CAE6A
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 22:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392367AbgLATDY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Dec 2020 14:03:24 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:45458 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392361AbgLATDY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 14:03:24 -0500
-Received: by mail-ot1-f68.google.com with SMTP id k3so2696268otp.12;
-        Tue, 01 Dec 2020 11:03:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S4nwtnN++PXcnu5S7VLuEP8CX8HDk2g/09v0VasvzIE=;
-        b=Cc6Q1QnCv9wTEjGcmYHh+9Ca8Nu0QhucFa1LT6+eIoiy44gzz/MVyKT+KRn/G3ycz5
-         KbWhEEA1qmrO6aluGQKlWvXMWaF3eD851/d2+J6tjyrnTkoVQZjLEv6z9DM9hynxnvGu
-         hpYZsDtyglJxS7MzAcQ/V0o+P39KNQTTxJfB3dUOr2mrZDCsvSntexp5QlViGjoYNOPz
-         vwMu+Hiafu4yBzWimzaPYzcDw2TLh/BcgTM5wmFLUD4SFruf9lcCnPQfo7bxZA3c98Qi
-         e+TkmoXGicRrES7aHiTUPdQa3TIZuXQsfZKV8Af79z1qHN4rA/8QfyGpdjrmtroZqiZt
-         ARPA==
-X-Gm-Message-State: AOAM533OxdxHKAxmFUwIh/pU5Mr8fsfcEP/hg2aXGaQ89boW0LKQLywL
-        c++9XHqE8PxLE0H/T/3SzUjm5XGdEtTVYHyWq34=
-X-Google-Smtp-Source: ABdhPJzGR+NesdwIyDdJas2CXaIgk6UfRYSZ1sSTqiODL/M3W+gzrpp8l2Q9ipuRL4LAD/fdGa3QPJUhiO5kPbAC3kY=
-X-Received: by 2002:a9d:171a:: with SMTP id i26mr2927492ota.260.1606849363083;
- Tue, 01 Dec 2020 11:02:43 -0800 (PST)
-MIME-Version: 1.0
-References: <1606757759-6076-1-git-send-email-john.garry@huawei.com> <1606757759-6076-3-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1606757759-6076-3-git-send-email-john.garry@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Dec 2020 20:02:31 +0100
-Message-ID: <CAJZ5v0jzDSQ8URKkmBYh0P79P3v5OHCwgssnkyVMk1jpZ=DWyQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] resource: Add irqresource_disabled()
-To:     John Garry <john.garry@huawei.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        dwagner@suse.de
-Content-Type: text/plain; charset="UTF-8"
+        id S1729454AbgLAVbE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Dec 2020 16:31:04 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:46718 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729347AbgLAVbD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 16:31:03 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1LTN7a018840;
+        Tue, 1 Dec 2020 21:30:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id; s=corp-2020-01-29;
+ bh=7EgUkcoHKcec2MRQDgbuTkzcavb0i9ajumZYYK+MyDo=;
+ b=zpUeM56E2dvusRAKcSjlaeX7Jc4Wvz5Ljfq26TO3a4hah62HXdHCruELgeVj8mIHCwFf
+ rUtBfgKsisr/71cdtg7j+V+O66KuyJ1uzI13qv+8a3ou0LZiZN1O0jKRtyfyrgzn1L3h
+ q7CXWaVSr+mwzGnt1L3crOv/dWEa5EPhNsf5zumaLsq6+IClDjxAz7XE8cmaFDJQRGEI
+ 7nk4xIZVbfSl7IZRBMFFdrqc0YJ8xf66m2X17yak0ws3hxdCdwsR74NGkYySVkXE//sN
+ qd1q1KNsLjAof+U9M2K4eFpIYgj5LOAKEGfWKC+JVj51arOrEXAvUwP21drEwbXEVewI SA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 353dyqmy25-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 01 Dec 2020 21:30:12 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1LU7oA105721;
+        Tue, 1 Dec 2020 21:30:11 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 3540eyh8tk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Dec 2020 21:30:11 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B1LU4Dg020956;
+        Tue, 1 Dec 2020 21:30:09 GMT
+Received: from ol2.localdomain (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 01 Dec 2020 13:30:04 -0800
+From:   Mike Christie <michael.christie@oracle.com>
+To:     subbu.seetharaman@broadcom.com, ketan.mukadam@broadcom.com,
+        jitendra.bhivare@broadcom.com, lduncan@suse.com, cleech@redhat.com,
+        njavali@marvell.com, mrangankar@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, varun@chelsio.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        james.bottomley@hansenpartnership.com
+Subject: [RFC PATCH 00/15] libiscsi: lock clean ups
+Date:   Tue,  1 Dec 2020 15:29:41 -0600
+Message-Id: <1606858196-5421-1-git-send-email-michael.christie@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012010130
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012010130
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 6:41 PM John Garry <john.garry@huawei.com> wrote:
->
-> Add a common function to set the fields for a irq resource to disabled,
-> which mimics what is done in acpi_dev_irqresource_disabled(), with a view
-> to replace that function.
->
-> Signed-off-by: John Garry <john.garry@huawei.com>
+The following patches made over Linus's current tree cleanup the
+locking in libiscsi so we again, for the main IO path, have the frwd
+lock only used in the xmit/queue path and the back lock used in the
+completion path and no taskqueuelock. The EH paths still use both
+the frwd/back lock though.
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+These patches are not ready for merging. I have only tested iscsi_tcp.
+Also, even though the changes to the offload drivers look like minimal
+API use changes, I wanted to try and get some tests done as the changes
+affect the main IO and error paths.
 
-> ---
->  include/linux/ioport.h | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-> index 5135d4b86cd6..f9bf374f9633 100644
-> --- a/include/linux/ioport.h
-> +++ b/include/linux/ioport.h
-> @@ -307,6 +307,13 @@ struct resource *devm_request_free_mem_region(struct device *dev,
->  struct resource *request_free_mem_region(struct resource *base,
->                 unsigned long size, const char *name);
->
-> +static inline void irqresource_disabled(struct resource *res, u32 irq)
-> +{
-> +       res->start = irq;
-> +       res->end = irq;
-> +       res->flags = IORESOURCE_IRQ | IORESOURCE_DISABLED | IORESOURCE_UNSET;
-> +}
-> +
->  #ifdef CONFIG_IO_STRICT_DEVMEM
->  void revoke_devmem(struct resource *res);
->  #else
-> --
-> 2.26.2
->
+Also, I wanted to try and track down any offload maintainers that are
+still doing development on their drivers. After this batch of patches
+is merged we can go one step further and remove the frwd lock from
+queuecommand for at least the iscsi xmit wq based drivers by switching
+to some per task locking or lllists. And if we can figure out if the
+offload cards manage their own cmdsn window then we could drop the
+frwd lock for them too and we could do some optimizatons with the back
+lock for them.
+
