@@ -2,199 +2,172 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4309C2CA7BF
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 17:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7612CA808
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 17:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392010AbgLAQGV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Dec 2020 11:06:21 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:35836 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2392002AbgLAQGU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 11:06:20 -0500
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B1G0xDc019675
-        for <linux-scsi@vger.kernel.org>; Tue, 1 Dec 2020 08:05:39 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pfpt0220;
- bh=Zx3rj8PMAjn+1C2jzG7z47OruA3jZ6SKz+HLgG0gQw8=;
- b=XJC5kYYbmcQ8IJp+yn8vrfv5y+zzVSW9OYSfrY7RSWYSHZJLub0JauVypsV4I1WccMfY
- YXITq2HGOum2diY6jTCEWR9ZUkxPObeGXxHtumO+lmTfBEOTVNc4UI+9hy88dHGmE6gY
- 2lrE2d9KGRqi3GV4ww2ZgrNlYj5CL1ScwPAi9Fp2+p8BxrB/hL4IUUkPZA66GnpDQRn9
- pnsBLo1mXBynQh4yAMWTZY2J+zKtmqm89ARAE9ALeU2LxIZGn7TZbdtPJsr0pVhtzzS/
- M35uwQBvFkCzGSe30Y873ZxorsFhJKb7uJkaDRI+IG7aUkPWcRCmtt7tGOWQeKXNlQhu VA== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 355k8s970k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 01 Dec 2020 08:05:39 -0800
-Received: from SC-EXCH02.marvell.com (10.93.176.82) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Dec
- 2020 08:05:38 -0800
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (104.47.38.54) by
- SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Tue, 1 Dec 2020 08:05:38 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WBvY7ub9S3dJ0jUrFm7mv7zy6OAFPARauuaOxe69FoOZl1oWwCikrvDnkbnom5XdlXy/jUenODgsMjQL/RSe2rAAvy6u+0TXFZaCaIlI1U7YYc71Yhq0GzOUtHVlkfJ7SOZsKec2MJwXZeo79hChifm352XQ7LmfH+hz+I6K7QxlZkPzmN7FAem29v7ZX6+EROzsaLZFFOq2HNYDrPHsh6xAVaNZrYdYMB15ogxPhHfYwwbNkm3MemPt/vnUdupw9GPj77u3JS7fl2W5/unzTcq6k+YWUVG9ZUmJ809fw9ifge/gVbZ+BSy5V4naNAOda6ARSBYMO+bPDzlh6bTWnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zx3rj8PMAjn+1C2jzG7z47OruA3jZ6SKz+HLgG0gQw8=;
- b=X6U++82o6/7pXgE8w/hHjr4JokNsvoZJWqy1KcNfa0JbKCpwANAGd7ipzsdsfzRtIlwIzEb0lBURCykH0cLjYJ+buj1OXT2gwFZUQX01t19gsItHCTeuyhilk0EaQF+jvNDDivI39uVpue7jA+bhuYjLlkoNKmmAxLw5ygvcwEZrLCKh+oJnkcQ3e1WoqyzrlSYzlAjnH8YrStkJCdX0iR+eOLvwRRKxW5UN0n3IJFPHyIU5VpTaCqhHK9HLhMVSpZjYuYr4BeXCreVNrc8Fmujmr43fgr9I6OElx47raP9Tar1D+3uiMfsYigyC8KC1L1xQPuMWlCRamhoALY1nCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zx3rj8PMAjn+1C2jzG7z47OruA3jZ6SKz+HLgG0gQw8=;
- b=PPsxXg1Qfa6rMUMnZbc+vTs4XCTEDtPeynayHnBOgVtkGhq/w74gWsxIFO+ENgxCo+6rMTTQ054/EUCQgcmHaq1t3h2iU2Q2Lai2kvFOYqMSfdDYiQFfQtERj1bhnyoaSZTMIo1kuK/3fwK00ALS6GvsUn8i4jwEkexavXNNsQk=
-Received: from DM6PR18MB3034.namprd18.prod.outlook.com (2603:10b6:5:18c::32)
- by DM6PR18MB2409.namprd18.prod.outlook.com (2603:10b6:5:15f::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Tue, 1 Dec
- 2020 16:05:37 +0000
-Received: from DM6PR18MB3034.namprd18.prod.outlook.com
- ([fe80::a087:2131:1284:66e7]) by DM6PR18MB3034.namprd18.prod.outlook.com
- ([fe80::a087:2131:1284:66e7%7]) with mapi id 15.20.3611.025; Tue, 1 Dec 2020
- 16:05:37 +0000
-From:   Saurav Kashyap <skashyap@marvell.com>
-To:     Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Nilesh Javali <njavali@marvell.com>
-CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        id S2392127AbgLAQSs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Dec 2020 11:18:48 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:58968 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390823AbgLAQSr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 11:18:47 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1G5I67099368;
+        Tue, 1 Dec 2020 16:18:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=l+x8wpkXP5iqaWwgYUNLeU9jW73efgcTE+WWnUZlx3s=;
+ b=UlW90sejdYvBNwpRDv6JNwoOtie4IGMy178a6ylMKa99elNhGp3V/si4/G5cvXMxQka3
+ xD4URDNCgoBk3AwWOiekeZj31Bp4EXO7U0iaFWx+TzjLhlpWjdjJYAo7V0u1qAMMz/FM
+ TUoMYOdQQYC2b5HWmSgOvnCSspEaUz+qDOapass+N5qVREsyXQGy6YWHAytJf5BymEKZ
+ pbmzw5wvmZaXROSrQP5lzPFlTa2cBOxSB4Mk14Wrj4AUODiOb8qzAobtipwzNLaiPZPv
+ Dsyuoy3dpE6t8DT8kJu55QwfmxJel6rI2lOHs5tLo9GFOIy5pGnNruP5ebv3mxuGEOwk mQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 353dyqkf62-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 01 Dec 2020 16:18:04 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1G68LI043004;
+        Tue, 1 Dec 2020 16:16:03 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 3540ey659y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Dec 2020 16:16:03 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B1GG20x029029;
+        Tue, 1 Dec 2020 16:16:02 GMT
+Received: from [192.168.1.15] (/70.114.128.235)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 01 Dec 2020 08:16:02 -0800
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [PATCH 02/15] qla2xxx: Change post del message from debug level
+ to log level
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+In-Reply-To: <DM6PR18MB303442AE6B84810FE6604CC5D2F40@DM6PR18MB3034.namprd18.prod.outlook.com>
+Date:   Tue, 1 Dec 2020 10:15:59 -0600
+Cc:     Nilesh Javali <njavali@marvell.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: RE: [PATCH 02/15] qla2xxx: Change post del message from debug level
- to log level
-Thread-Topic: [PATCH 02/15] qla2xxx: Change post del message from debug level
- to log level
-Thread-Index: AQHWx/lkg4LKfycnQUap8eyy38ZRyqniZrdg
-Date:   Tue, 1 Dec 2020 16:05:37 +0000
-Message-ID: <DM6PR18MB303442AE6B84810FE6604CC5D2F40@DM6PR18MB3034.namprd18.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A1F83C12-6AA8-417C-AC24-31F6BFC56C43@oracle.com>
 References: <20201201082730.24158-1-njavali@marvell.com>
  <20201201082730.24158-3-njavali@marvell.com>
  <3CCE1C90-64DB-46C7-A49D-9378077CA083@oracle.com>
-In-Reply-To: <3CCE1C90-64DB-46C7-A49D-9378077CA083@oracle.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: oracle.com; dkim=none (message not signed)
- header.d=none;oracle.com; dmarc=none action=none header.from=marvell.com;
-x-originating-ip: [103.103.215.19]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fae43331-e54f-46fb-ed79-08d89612f149
-x-ms-traffictypediagnostic: DM6PR18MB2409:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR18MB24091018509562BC36F909A6D2F40@DM6PR18MB2409.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1091;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: E3HD9QpD07XBimFOGNReYAJkhQUk+2fAM4vQd7slHwKLWJ3cj+uryMzJ8w7/UwDgd005PPuw+HdQKVd0nXWbPvIXjniQEFLx//PZaz1CA9RySz9+w7FkBZ7XW3IkawLg6BfTgIdNWmzzmYwbCi+sNl2vSsMXBQZL3rgmB379FELGgmvWlmAnxfPs6Pd03cAFBtIQwkPicFND4Bg+OohuRm0TU6GF5rKiF/QUGVnfQltKZBMP85ZZfVqA0kx4Y78z4eoZ9pM5VOfbrKgQ219nTvgEXUs0qt6BL8pB15k/QdXZudBN7eRtKy3yMBbnGvLa
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR18MB3034.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39830400003)(366004)(396003)(346002)(376002)(8936002)(478600001)(8676002)(53546011)(6636002)(107886003)(110136005)(316002)(7696005)(4326008)(54906003)(26005)(55016002)(9686003)(15650500001)(186003)(33656002)(86362001)(5660300002)(83380400001)(76116006)(52536014)(6506007)(2906002)(66946007)(71200400001)(66476007)(66556008)(64756008)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?6qSgLCIyyllxWLi/2C9fgAG3Xbc7yi6xTkXjYJO7DG28ORbxYuUMMjDuwZoA?=
- =?us-ascii?Q?LOGOF/nzgXpFUnaR9nM5Q1cUyrtjO+0CJaJbC+JIw7Pa8cWP1ky3Dyvl1Eyd?=
- =?us-ascii?Q?UHddMzA1tqiHoO8GQ1yt9Ivm1KjfOf+7Ht3ApqsE7Lf/6tnZx8PaNJWi/4dN?=
- =?us-ascii?Q?SrQMtG/+iyeoPqEppOMmzFtu5DWsMFLII0LJzKUYGWDM9J7uwVNxWw3f5h/N?=
- =?us-ascii?Q?bdMhzMOAF7Pi0X6omVKSyBaBvQpVvrAjgV7YBmTwZXv/3O3OH22NKgO/EuLv?=
- =?us-ascii?Q?5m0U74b0kpJra2aUsfGK/2IlpahaqMVl6rV/yZesR3wijoZPS2MfN7GQLGez?=
- =?us-ascii?Q?otewPFG2Syh6Xa9kw+8v/gIbDsDEIb0K/LcdQfuNdW0FMnrMAKKuIdEL5DvS?=
- =?us-ascii?Q?acnNYs0g8tKvSEC7XNmoHLT4Hf5a0w+Qj86U69VKQm5RMUp0rw5Ssvj3D87+?=
- =?us-ascii?Q?MEGZmJGuqAPLwnwDPZpG9a6kY+H4It9ae7YdKqjFBQ/A8LzPVZOXuGhRUdPO?=
- =?us-ascii?Q?5QjzuPXZv0wNmh8qc2LTSaZK4MfMRF0roZlhADgdkenqwyDJgm/kBQFeYoVE?=
- =?us-ascii?Q?sbL7oe+KJvcAHffZZTgVL8wArowAnFBMx6wol20chcJu5iR56gj//WV6utx0?=
- =?us-ascii?Q?ckySJy+kf3h3asJL3n9CkEHq0X72bpGa+CbgoN1UU8PHKeKQ/28SgVaJAWh1?=
- =?us-ascii?Q?kH1H35rDMUdQik+A2GNiOAaT8lEj6Kaj39H43oB1/X0P8l8ELIWlZKOkpr8d?=
- =?us-ascii?Q?zr0pA1lOoia2Q0wM70bzTE/xtqCCVxd1jixwlFJTJnToUwushOFRqHMM4XyB?=
- =?us-ascii?Q?H3yUMOh+0ueo8Fi+M93TVwyV3Qmu99zKOu8CT6CoODrhqygyDL45SZKqW+et?=
- =?us-ascii?Q?BHgyDeCzDTLhb4n+FrOVSPNprue+PdfpqKYjU0qb29aOYVQMzpG/5YScsaeT?=
- =?us-ascii?Q?3YIJqG4nnXp0ny560dVammNzzKzf4wzrv2veDE7oUkc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR18MB3034.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fae43331-e54f-46fb-ed79-08d89612f149
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2020 16:05:37.3477
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WNAxfakcM5BMK4hGqH7XFsEVL2cYcvVLXzRDVB0w94kD+lT8Scl7LAP4OalSvufScQ7svumRTJTI7AhRxggnLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR18MB2409
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-01_07:2020-11-30,2020-12-01 signatures=0
+ <DM6PR18MB303442AE6B84810FE6604CC5D2F40@DM6PR18MB3034.namprd18.prod.outlook.com>
+To:     Saurav Kashyap <skashyap@marvell.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012010101
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ clxscore=1011 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012010101
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Himasnhu,
-Comments inline
 
-> -----Original Message-----
-> From: Himanshu Madhani <himanshu.madhani@oracle.com>
-> Sent: Tuesday, December 1, 2020 9:15 PM
-> To: Nilesh Javali <njavali@marvell.com>
-> Cc: Martin K . Petersen <martin.petersen@oracle.com>; linux-
-> scsi@vger.kernel.org; GR-QLogic-Storage-Upstream <GR-QLogic-Storage-
-> Upstream@marvell.com>
-> Subject: Re: [PATCH 02/15] qla2xxx: Change post del message from debug le=
-vel
-> to log level
->=20
->=20
->=20
-> > On Dec 1, 2020, at 2:27 AM, Nilesh Javali <njavali@marvell.com> wrote:
-> >
-> > From: Saurav Kashyap <skashyap@marvell.com>
-> >
-> > Change the message debug level.
-> >
-> > Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
-> > Signed-off-by: Nilesh Javali <njavali@marvell.com>
-> > ---
-> > drivers/scsi/qla2xxx/qla_gs.c | 8 ++++----
-> > 1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_g=
-s.c
-> > index e28c4b7ec55f..391ac75e3de3 100644
-> > --- a/drivers/scsi/qla2xxx/qla_gs.c
-> > +++ b/drivers/scsi/qla2xxx/qla_gs.c
-> > @@ -3558,10 +3558,10 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t
-> *vha, srb_t *sp)
-> > 					if (fcport->flags & FCF_FCP2_DEVICE)
-> > 						fcport->logout_on_delete =3D 0;
-> >
-> > -					ql_dbg(ql_dbg_disc, vha, 0x20f0,
-> > -					    "%s %d %8phC post del sess\n",
-> > -					    __func__, __LINE__,
-> > -					    fcport->port_name);
-> > +					ql_log(ql_log_warn, vha, 0x20f0,
-> > +					       "%s %d %8phC post del sess\n",
-> > +					       __func__, __LINE__,
-> > +					       fcport->port_name);
-> >
-> >
-> 	qlt_schedule_sess_for_deletion(fcport);
-> > 					continue;
-> > --
-> > 2.19.0.rc0
-> >
->=20
-> I am okay with the change just curious, Would it not flood message file f=
-or
-> large number of sessions?
 
-This was added mainly for help in debugging, if debug is not enabled. Somet=
-imes we get logs
-where it's hard to tell what happened to particular session. Moreover sessi=
-on deletion is not
-very common scenario.
-
-Thanks,
-~Saurav
+> On Dec 1, 2020, at 10:05 AM, Saurav Kashyap <skashyap@marvell.com> =
+wrote:
 >=20
-> --
-> Himanshu Madhani	 Oracle Linux Engineering
+> Hi Himasnhu,
+> Comments inline
+>=20
+>> -----Original Message-----
+>> From: Himanshu Madhani <himanshu.madhani@oracle.com>
+>> Sent: Tuesday, December 1, 2020 9:15 PM
+>> To: Nilesh Javali <njavali@marvell.com>
+>> Cc: Martin K . Petersen <martin.petersen@oracle.com>; linux-
+>> scsi@vger.kernel.org; GR-QLogic-Storage-Upstream <GR-QLogic-Storage-
+>> Upstream@marvell.com>
+>> Subject: Re: [PATCH 02/15] qla2xxx: Change post del message from =
+debug level
+>> to log level
+>>=20
+>>=20
+>>=20
+>>> On Dec 1, 2020, at 2:27 AM, Nilesh Javali <njavali@marvell.com> =
+wrote:
+>>>=20
+>>> From: Saurav Kashyap <skashyap@marvell.com>
+>>>=20
+>>> Change the message debug level.
+>>>=20
+>>> Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+>>> Signed-off-by: Nilesh Javali <njavali@marvell.com>
+>>> ---
+>>> drivers/scsi/qla2xxx/qla_gs.c | 8 ++++----
+>>> 1 file changed, 4 insertions(+), 4 deletions(-)
+>>>=20
+>>> diff --git a/drivers/scsi/qla2xxx/qla_gs.c =
+b/drivers/scsi/qla2xxx/qla_gs.c
+>>> index e28c4b7ec55f..391ac75e3de3 100644
+>>> --- a/drivers/scsi/qla2xxx/qla_gs.c
+>>> +++ b/drivers/scsi/qla2xxx/qla_gs.c
+>>> @@ -3558,10 +3558,10 @@ void =
+qla24xx_async_gnnft_done(scsi_qla_host_t
+>> *vha, srb_t *sp)
+>>> 					if (fcport->flags & =
+FCF_FCP2_DEVICE)
+>>> 						fcport->logout_on_delete =
+=3D 0;
+>>>=20
+>>> -					ql_dbg(ql_dbg_disc, vha, 0x20f0,
+>>> -					    "%s %d %8phC post del =
+sess\n",
+>>> -					    __func__, __LINE__,
+>>> -					    fcport->port_name);
+>>> +					ql_log(ql_log_warn, vha, 0x20f0,
+>>> +					       "%s %d %8phC post del =
+sess\n",
+>>> +					       __func__, __LINE__,
+>>> +					       fcport->port_name);
+>>>=20
+>>>=20
+>> 	qlt_schedule_sess_for_deletion(fcport);
+>>> 					continue;
+>>> --
+>>> 2.19.0.rc0
+>>>=20
+>>=20
+>> I am okay with the change just curious, Would it not flood message =
+file for
+>> large number of sessions?
+>=20
+> This was added mainly for help in debugging, if debug is not enabled. =
+Sometimes we get logs
+> where it's hard to tell what happened to particular session. Moreover =
+session deletion is not
+> very common scenario.
+>=20
+
+In that case, I would also prefer to see message coming out from =
+qlt_schedule_sess_for_deletion(), because that=E2=80=99s where you can =
+track that session is scheduled for deletion.=20
+
+I would prefer this message also changed to ql_log_warn.=20
+
+        ql_dbg(ql_dbg_disc, sess->vha, 0xe001,
+            "Scheduling sess %p for deletion %8phC\n",
+            sess, sess->port_name);
+
+> Thanks,
+> ~Saurav
+>>=20
+>> --
+>> Himanshu Madhani	 Oracle Linux Engineering
+>=20
+
+--
+Himanshu Madhani	 Oracle Linux Engineering
 
