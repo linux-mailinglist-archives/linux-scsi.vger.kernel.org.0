@@ -2,64 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BDF2C96B7
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 06:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2991E2C96AA
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 06:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726441AbgLAFGV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Dec 2020 00:06:21 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:56192 "EHLO
+        id S1726037AbgLAFFO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Dec 2020 00:05:14 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:55574 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726418AbgLAFGU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 00:06:20 -0500
+        with ESMTP id S1725973AbgLAFFO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 00:05:14 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B14n7xo008467;
-        Tue, 1 Dec 2020 05:05:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
- message-id : date : from : to : cc : subject : references : in-reply-to :
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B14nQx9008535;
+        Tue, 1 Dec 2020 05:04:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=5d9AP2y5OmYGIQTuKZTw29SkqgOUaVOW69s2a3zB8/Y=;
- b=F6G9jQePnf4QEV6aCQ3lhjMy/XqV0StxVNNZETlr8Uy6dCNv4cjCctne7X48t/vlUbVL
- ianIODFcJicSwsc/wPVShfhVeeU8miQQ8JkqF3sjrcvS1XJyLzTInnv+9kMgMaSR7xiy
- X18b/wMHRknJR3s3aPoS6lu6nyC3GrPeiZqWYTNfekkP/dzNYC7Pljvr5qF1fRwOmHVr
- R/qkXGVnXBDfE66nsPOEaioGoJ9ehWCNQz+Zvt+lEYPS5CUMY020XbPQB/QG0fuNgZMV
- pLidAMATWaR2erUCX6MxNggYB/wWWDvqV7afwh2r7rgk0tMhzSPpYQ9ufqkXiEw7t0C3 7w== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 353c2arqfm-1
+ bh=Tfjmc6LfrOPX/TJW8fDDf2OOlnO1ghX4FNaqk4e3b+w=;
+ b=x2E/L8E77Hw+zRC+u5J0JmJyWUfBR10pCWfsTMupPZCKKTHJm5KxX4D2xpjn+4c/TaFe
+ GgXrgp2fgkT+hVmaOKQc+fgeMrn8BPO7wVe4Fz79TbsY8t8xmeU7fT28lBMJ+y0zSKv7
+ K+m5f84W5MKmxkYIuHBgBF5iP+wlDqfAiza3ecO9nTZkXSCHelUM5FBM4AmdZYS9xCq/
+ nsmLod1UiZMqMDVhHlLZa9AnCrAXGLkCZdIxBeIm5W++7Rhd+ntPxloKAt0+hD5XXMUn
+ tWNbh2sKRRTXC//UCVtYk9mYWd5cCmii7VevIl6eOe2WhTuRb3M7g5/O16UxAaP7gQWL kA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 353c2arqdg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 01 Dec 2020 05:05:36 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B14oMOf134941;
-        Tue, 1 Dec 2020 05:05:36 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 35404mdx2p-1
+        Tue, 01 Dec 2020 05:04:29 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B14o3Kh114682;
+        Tue, 1 Dec 2020 05:04:28 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 3540exfcs2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Dec 2020 05:05:36 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B155Z5A017105;
-        Tue, 1 Dec 2020 05:05:35 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201) by default (Oracle
- Beehive Gateway v4.0) with ESMTP ; Mon, 30 Nov 2020 21:04:26 -0800
-MIME-Version: 1.0
-Message-ID: <160636449893.25598.14958452418456601378.b4-ty@oracle.com>
-Date:   Mon, 30 Nov 2020 21:04:16 -0800 (PST)
+        Tue, 01 Dec 2020 05:04:28 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B154RkG017364;
+        Tue, 1 Dec 2020 05:04:27 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 30 Nov 2020 21:04:27 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     Michael Schmitz <schmitzmic@gmail.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Finn Thain <fthain@telegraphics.com.au>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi/atari_scsi: Fix race condition between .queuecommand
- and EH
-References: <af25163257796b50bb99d4ede4025cea55787b8f.1605847196.git.fthain@telegraphics.com.au>
-In-Reply-To: <af25163257796b50bb99d4ede4025cea55787b8f.1605847196.git.fthain@telegraphics.com.au>
+Subject: Re: [PATCH] scsi/NCR5380: Reduce NCR5380_maybe_release_dma_irq() call sites
+Date:   Tue,  1 Dec 2020 00:04:17 -0500
+Message-Id: <160636449893.25598.9528631656224076486.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <c1317ae8fdcb498460de5d7ea0bd62a42f5eeca8.1605847196.git.fthain@telegraphics.com.au>
+References: <c1317ae8fdcb498460de5d7ea0bd62a42f5eeca8.1605847196.git.fthain@telegraphics.com.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 phishscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012010033
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012010033
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 lowpriorityscore=0
  clxscore=1015 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
@@ -72,17 +72,13 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 On Fri, 20 Nov 2020 15:39:56 +1100, Finn Thain wrote:
 
-> It is possible that bus_reset_cleanup() or .eh_abort_handler could
-> be invoked during NCR5380_queuecommand(). If that takes place before
-> the new command is enqueued and after the ST-DMA "lock" has been
-> acquired, the ST-DMA "lock" will be released again. This will result
-> in a lost DMA interrupt and a command timeout. Fix this by excluding
-> EH and interrupt handlers while the new command is enqueued.
+> Refactor to avoid needless calls to NCR5380_maybe_release_dma_irq().
+> This makes the machine code smaller and the source more readable.
 
 Applied to 5.11/scsi-queue, thanks!
 
-[1/1] scsi: atari_scsi: Fix race condition between .queuecommand and EH
-      https://git.kernel.org/mkp/scsi/c/03fe6a640a05
+[1/1] scsi: NCR5380: Reduce NCR5380_maybe_release_dma_irq() call sites
+      https://git.kernel.org/mkp/scsi/c/bdd1cc0377d3
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
