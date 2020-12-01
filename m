@@ -2,84 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DA62C9770
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 07:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B55262C9768
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 07:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727062AbgLAGJO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Dec 2020 01:09:14 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:49552 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727057AbgLAGJN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 01:09:13 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B165ETg071019;
-        Tue, 1 Dec 2020 06:08:31 GMT
+        id S1725979AbgLAGHQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Dec 2020 01:07:16 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:50414 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725859AbgLAGHQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 01:07:16 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B164une032756;
+        Tue, 1 Dec 2020 06:06:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=O6m9rQvnSVvHQGgO/uu/QShygvQ+hAFA4Hjll/8l+bk=;
- b=wKghXgUAXy9f61OVz2cGARe8fhzUeVG9uhFcRRbjrMFMpV/ebu/6N6T8SAh59VvLFKjR
- y3IvWdi+41MTQxdNIXZHPyteb5ZwpaJjfyTzfEErATc2zvbweshF5K15BojAkvCF2P0L
- UW37vLpRj3ZiFbMfxGCeLHl1Uc6GN4swaOsYatjJYEGbugepYOvQ6yoBVcd22LwIsghe
- WBjkZVaO/OupFq+PewNhajaAnXV8ESXQCSTB03e2BzOmiC8ZBFPqAvnZcS0T9dZd7t/h
- qCQ+t3D9w3eyKPgL9GJ77ShzHGHjPyKMrbcvPR5MAhxOT7TiPo2PQfNrCse/pMWryg08 0w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 353dyqgsrk-1
+ bh=Q9uKMxCrUUNPymmd9mpaetni5jFgnpSUaYc8KT09e6Y=;
+ b=GZdWd96e9pIopaIfGn3PUBR7/Bi6Zkpjy3ADBh46GNoc6SnFsD5d5Y/LFSFXBK1TwONN
+ qi8qYsjd0jsUav+EfzO7Aff44egheqBKe0pFiR6l9Ob39FoDjHlWdW3oWiX8Bi0/LDtj
+ KS/jAfwpanGPVESgwICCKa66L1jgOkLXRDj2tDml8Hh/le+VNgTgy+xmHNoJ/bBFmLhk
+ kvAhYtl6u4lI/Uf4q32Sdrk1xIqQjkyILOznGmOR+I4q7CLe/AFmD+QoQ4qvem0grX/+
+ RoXoMLez6zKdkjNnm85UV+nlS05U9M6QiUX4CEgy6T/iMNfDgqOIzPrXLkVzW8JzzlNv 4A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 353egkgr3d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 01 Dec 2020 06:08:31 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1664k2108621;
-        Tue, 1 Dec 2020 06:06:30 GMT
+        Tue, 01 Dec 2020 06:06:32 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B166LBX147137;
+        Tue, 1 Dec 2020 06:06:31 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 3540exh3a3-1
+        by userp3020.oracle.com with ESMTP id 3540arr6p4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Dec 2020 06:06:30 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B166TtK011796;
+        Tue, 01 Dec 2020 06:06:31 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B166Uoo011803;
         Tue, 1 Dec 2020 06:06:30 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 30 Nov 2020 22:06:29 -0800
+        with ESMTP ; Mon, 30 Nov 2020 22:06:30 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+To:     stable@vger.kernel.org,
+        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>,
+        linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, suganath-prabu.subramani@broadcom.com,
-        sathya.prakash@broadcom.com
-Subject: Re: [PATCH] mpt3sas: Increase IOCInit request timeout to 30s
-Date:   Tue,  1 Dec 2020 01:06:25 -0500
-Message-Id: <160680263440.25762.10503808138811663400.b4-ty@oracle.com>
+        Sathya.Prakash@broadcom.com, sreekanth.reddy@broadcom.com
+Subject: Re: [PATCH] mpt3sas: Fix timeout issue in ioctl commands.
+Date:   Tue,  1 Dec 2020 01:06:26 -0500
+Message-Id: <160680263440.25762.6562939673076560027.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201130082733.26120-1-sreekanth.reddy@broadcom.com>
-References: <20201130082733.26120-1-sreekanth.reddy@broadcom.com>
+In-Reply-To: <20201125094838.4340-1-suganath-prabu.subramani@broadcom.com>
+References: <20201125094838.4340-1-suganath-prabu.subramani@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=835
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012010041
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1011 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2012010041
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=863
- suspectscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012010041
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 30 Nov 2020 13:57:33 +0530, Sreekanth Reddy wrote:
+On Wed, 25 Nov 2020 15:18:38 +0530, Suganath Prabu S wrote:
 
-> Currently IOCInit request message timeout is set to 10s,
-> which may not be sufficient in some scenarios such as HBA
-> FW downgrade operation. So, increasing IOCInit request
-> timeout to 30s.
+> Description of issue:
+> Patch with commit id "c1a6c5ac4278d406c112cc2f038e6e506feadff9"
+> has modified ioctl path 'timeout' variable type to u8 from
+> unsigned long. With this maximum timeout value that the driver
+> can support is 255 seconds. But for some commands application is
+> providing the higher timeout value (512 seconds as default), so
+> it will be round off to zero value. Hence timeout is observed
+> immediately and the IOCTL request fails.
+> 
+> [...]
 
 Applied to 5.10/scsi-fixes, thanks!
 
-[1/1] mpt3sas: Increase IOCInit request timeout to 30s
-      https://git.kernel.org/mkp/scsi/c/85dad327d9b5
+[1/1] mpt3sas: Fix timeout issue in ioctl commands.
+      https://git.kernel.org/mkp/scsi/c/42f687038bcc
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
