@@ -2,65 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CA22CA806
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 17:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A5F2CA81B
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 17:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391874AbgLAQSe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Dec 2020 11:18:34 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:40718 "EHLO
+        id S2392168AbgLAQVq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Dec 2020 11:21:46 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:43842 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390841AbgLAQSe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 11:18:34 -0500
+        with ESMTP id S2392160AbgLAQVq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 11:21:46 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1G59Rf063049;
-        Tue, 1 Dec 2020 16:17:51 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1G4v54062860;
+        Tue, 1 Dec 2020 16:21:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
  mime-version : subject : from : in-reply-to : date : cc :
  content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=k2S0i6N067felbOAZOdEH14dYciiCf29z6ZKQ1qwlQA=;
- b=aqJMLezp+X24ErnObHKtAnK27hD+DPVvJZyHjtJtnLq6l8K/UDhlyO47yy9ow3wTKIaY
- wvBJL+iQo79qw5boXSG3TFAFCX2+Khbu/FonbQ5wd2fNi7S3yqv8uhnhjasYrB92dVky
- qbnhEJsPTUu9idhimqudH1Y4BFCvrBJcypVytJMAvAagBGiXKiy1GBr1xhmoJY7dWjfK
- igKakWYmDetiMXQBS0xmWD4HxR9Iz2jYYRb8MBlbtG9FlHyJDUdhfMa2SvgeXej9Sn3U
- XMcw9J6/3K6GgZENKtHMq0c2ewWC9Jw8GGvZ6ZHaP4oJKHpdefzCXe5lq9Kun0FjZRby PQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 353c2aujvb-1
+ s=corp-2020-01-29; bh=xtGuR3iEY39Besy2+p0OPoRIlXoowV1B8IgiXcLXIP0=;
+ b=rafnqVC/4z81JXuEzzedgnUYcOP/R5vBRRVI5u/bkAU7AdEwgg3X5JA3u4XoxBZi6CF4
+ lZbogreStAoZi69TnPSnfYfFXXqCKePpKB1CMlS3QUmOVYuF0ixTw6vfydqEei1we3M6
+ fuZGYRS2qKjG4wWc6bIHMZPynfMnMyF9JuIPBAZ23Nfhsc4xTyfSJJHfZnA6gaSwS3VA
+ A0M8KhBagD3HRtqvz1fSe7NjvBkBexRYtz8U2BGwlGX3DN2sSnJ+TS1pCKx9z6SooM3e
+ aH8zaKkmLB/57t1IllIGzWh1ol+AZl4sS19bFQuCOfsUjCoBUWwQR7I6JOh41GOHiSW6 /w== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 353c2aukgt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 01 Dec 2020 16:17:51 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1G5Ll2139497;
-        Tue, 1 Dec 2020 16:17:50 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 3540fx6efb-1
+        Tue, 01 Dec 2020 16:21:03 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1G67Jm042822;
+        Tue, 1 Dec 2020 16:19:03 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 3540ey68p2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Dec 2020 16:17:50 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B1GHoXo027083;
-        Tue, 1 Dec 2020 16:17:50 GMT
+        Tue, 01 Dec 2020 16:19:03 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B1GJ2JB000398;
+        Tue, 1 Dec 2020 16:19:02 GMT
 Received: from [192.168.1.15] (/70.114.128.235)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 01 Dec 2020 08:17:49 -0800
+        with ESMTP ; Tue, 01 Dec 2020 08:19:02 -0800
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH 11/15] qla2xxx: Fix flash update in 28XX adapters on big
- endian machines
+Subject: Re: [PATCH 12/15] qla2xxx: Fix the call trace for flush workqueue
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
-In-Reply-To: <20201201082730.24158-12-njavali@marvell.com>
-Date:   Tue, 1 Dec 2020 10:17:49 -0600
+In-Reply-To: <20201201082730.24158-13-njavali@marvell.com>
+Date:   Tue, 1 Dec 2020 10:19:00 -0600
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <EB5FF572-64DF-48C1-B791-3E0F11952C3D@oracle.com>
+Message-Id: <C2548017-BF58-4CFE-92FD-7D4748FE6A2A@oracle.com>
 References: <20201201082730.24158-1-njavali@marvell.com>
- <20201201082730.24158-12-njavali@marvell.com>
+ <20201201082730.24158-13-njavali@marvell.com>
 To:     Nilesh Javali <njavali@marvell.com>
 X-Mailer: Apple Mail (2.3608.120.23.2.4)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- phishscore=0 mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012010101
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012010101
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 lowpriorityscore=0
  clxscore=1015 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
@@ -75,68 +74,84 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 > On Dec 1, 2020, at 2:27 AM, Nilesh Javali <njavali@marvell.com> wrote:
 >=20
-> From: Arun Easi <aeasi@marvell.com>
+> From: Saurav Kashyap <skashyap@marvell.com>
 >=20
-> Flash update failed due to missing endian conversion in FLT region =
-access
-> as well as in checksum computation.
+> The call trace was because workqueue was allocated without any
+> flags, added WQ_MEM_RECLAIM as flag while allocation.
 >=20
-> Signed-off-by: Arun Easi <aeasi@marvell.com>
+> kernel: workqueue: WQ_MEM_RECLAIM
+> kblockd:blk_mq_run_work_fn is flushing !WQ_MEM_RECLAIM qla2xxx_wq:0x0
+> kernel: WARNING: CPU: 0 PID: 2475 at
+> kernel/workqueue.c:2593 check_flush_dependency+0x110/0x130
+> kernel: CPU: 0 PID: 2475 Comm: kworker/0:1H Kdump:
+> loaded Tainted: G           OE    --------- -  - 4.18.0-193.el8.x86_64 =
+#1
+> kernel: Hardware name: HPE ProLiant XL170r Gen10/ProLiant XL170r =
+Gen10, BIOS U38 05/21/2019
+> kernel: Workqueue: kblockd blk_mq_run_work_fn
+> kernel: RIP: 0010:check_flush_dependency+0x110/0x130
+> kernel: Code: ff ff 48 8b 50 18 48 8d 8b b0 00 00 00 49 89 e8 48 81 c6 =
+b0 00 00 00 48 c7 c7 00 1e e9
+> 	95 c6 05 dc 9a 2f 01 01 e8 1a 42 fe ff <0f> 0b e9 0a ff ff ff 80 =
+3d ca 9a 2f 01 0 0 75 95 e9 41 ff ff ff 90
+> kernel: RSP: 0018:ffffa40f48b2baf8 EFLAGS: 00010282
+> kernel: RAX: 0000000000000000 RBX: ffff946795282600 RCX: =
+0000000000000000
+> kernel: RDX: 000000000000005f RSI: ffffffff96a1af7f RDI: =
+0000000000000246
+> kernel: RBP: 0000000000000000 R08: ffffffff96a1af20 R09: =
+0000000000029480
+> kernel: R10: 00080c89bb3e7462 R11: 00000000000009ab R12: =
+ffff946773628000
+> kernel: R13: 0000000000000282 R14: 0000000000000246 R15: =
+ffffa40f48b2bb40
+> kernel: FS: 	0000000000000000(0000) 	GS:ffff94679fa00000(0000) =
+knlGS:0000000000000000
+> kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> kernel: CR2: 00005570c4b60110 CR3: 000000029140a005 CR4: =
+00000000007606f0
+> kernel: DR0: 0000000000000000 DR1: 0000000000000000 DR2: =
+0000000000000000
+> kernel: DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: =
+0000000000000400
+> kernel: PKRU: 55555554
+> kernel: Call Trace:
+> kernel: flush_workqueue+0x13a/0x440
+> kernel: qla2x00_wait_for_sess_deletion+0x1d6/0x200 [qla2xxx]
+> kernel: ? finish_wait+0x80/0x80
+> kernel: qla2xxx_disable_port+0x2b/0x30 [qla2xxx]
+> kernel: qla2x00_process_vendor_specific+0x1dc9/0x2d20 [qla2xxx]
+> kernel: ? blk_rq_map_sg+0x195/0x570
+> kernel: qla24xx_bsg_request+0x1a3/0xf90 [qla2xxx]
+>=20
+> Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
 > Signed-off-by: Nilesh Javali <njavali@marvell.com>
 > ---
-> drivers/scsi/qla2xxx/qla_sup.c | 10 +++++-----
-> 1 file changed, 5 insertions(+), 5 deletions(-)
+> drivers/scsi/qla2xxx/qla_os.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/scsi/qla2xxx/qla_sup.c =
-b/drivers/scsi/qla2xxx/qla_sup.c
-> index 0f92e9a044dc..f771fabcba59 100644
-> --- a/drivers/scsi/qla2xxx/qla_sup.c
-> +++ b/drivers/scsi/qla2xxx/qla_sup.c
-> @@ -2634,14 +2634,14 @@ qla28xx_extract_sfub_and_verify(struct =
-scsi_qla_host *vha, uint32_t *buf,
-> 	    sizeof(struct secure_flash_update_block));
+> diff --git a/drivers/scsi/qla2xxx/qla_os.c =
+b/drivers/scsi/qla2xxx/qla_os.c
+> index f9c8ae9d669e..a75edba2b334 100644
+> --- a/drivers/scsi/qla2xxx/qla_os.c
+> +++ b/drivers/scsi/qla2xxx/qla_os.c
+> @@ -3265,7 +3265,7 @@ qla2x00_probe_one(struct pci_dev *pdev, const =
+struct pci_device_id *id)
+> 	    "req->req_q_in=3D%p req->req_q_out=3D%p rsp->rsp_q_in=3D%p =
+rsp->rsp_q_out=3D%p.\n",
+> 	    req->req_q_in, req->req_q_out, rsp->rsp_q_in, =
+rsp->rsp_q_out);
 >=20
-> 	for (i =3D 0; i < (sizeof(struct secure_flash_update_block) >> =
-2); i++)
-> -		check_sum +=3D p[i];
-> +		check_sum +=3D le32_to_cpu(p[i]);
->=20
-> 	check_sum =3D (~check_sum) + 1;
->=20
-> -	if (check_sum !=3D p[i]) {
-> +	if (check_sum !=3D le32_to_cpu(p[i])) {
-> 		ql_log(ql_log_warn, vha, 0x7097,
-> 		    "SFUB checksum failed, 0x%x, 0x%x\n",
-> -		    check_sum, p[i]);
-> +		    check_sum, le32_to_cpu(p[i]));
-> 		return QLA_COMMAND_ERROR;
-> 	}
->=20
-> @@ -2721,7 +2721,7 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, =
-uint32_t *dwptr, uint32_t faddr,
-> 	if (ha->flags.secure_adapter && region.attribute) {
->=20
-> 		ql_log(ql_log_warn + ql_dbg_verbose, vha, 0xffff,
-> -		    "Region %x is secure\n", region.code);
-> +		    "Region %x is secure\n", le16_to_cpu(region.code));
->=20
-> 		switch (le16_to_cpu(region.code)) {
-> 		case FLT_REG_FW:
-> @@ -2775,7 +2775,7 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, =
-uint32_t *dwptr, uint32_t faddr,
-> 		default:
-> 			ql_log(ql_log_warn + ql_dbg_verbose, vha,
-> 			    0xffff, "Secure region %x not supported\n",
-> -			    region.code);
-> +			    le16_to_cpu(region.code));
-> 			rval =3D QLA_COMMAND_ERROR;
-> 			goto done;
-> 		}
+> -	ha->wq =3D alloc_workqueue("qla2xxx_wq", 0, 0);
+> +	ha->wq =3D alloc_workqueue("qla2xxx_wq", WQ_MEM_RECLAIM, 0);
+> 	if (unlikely(!ha->wq)) {
+> 		ret =3D -ENOMEM;
+> 		goto probe_failed;
 > --=20
 > 2.19.0.rc0
 >=20
 
-Looks Good.
+Looks Good.=20
 
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
