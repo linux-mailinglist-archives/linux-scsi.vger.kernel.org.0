@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EBF2CB20E
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Dec 2020 02:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA182CB206
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Dec 2020 02:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727657AbgLBBHG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Dec 2020 20:07:06 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:3102 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726908AbgLBBHF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 20:07:05 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B216EGg193128;
-        Tue, 1 Dec 2020 20:06:15 -0500
+        id S1727517AbgLBBFI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Dec 2020 20:05:08 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11912 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726556AbgLBBFI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 20:05:08 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B212i04074437;
+        Tue, 1 Dec 2020 20:04:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
@@ -24,9 +24,9 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : c
  MtPo1R3mKQmn/fPW0BwxH+83QbyUBayXf+W3KwUcnriYKah7bHXbYAGwNwb15LDcZZyq
  YjgD88y+ZN3gAcH3D9ql3jpp+U579tyNUxIeF8xfMCBit+pqm5zZU0RFxSin7k1ZENnB EA== 
 Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 355jt7d5cg-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 355jjh8wq9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 20:05:10 -0500
+        Tue, 01 Dec 2020 20:04:21 -0500
 Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
         by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B20f5DJ016199;
         Wed, 2 Dec 2020 00:53:34 GMT
@@ -64,11 +64,11 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_12:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- adultscore=0 spamscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 mlxlogscore=999 suspectscore=1 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012020000
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=1
+ lowpriorityscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 phishscore=0 clxscore=1015 impostorscore=0
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020002
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
