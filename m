@@ -2,257 +2,148 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B28C2CBAD0
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Dec 2020 11:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAC82CBBF6
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Dec 2020 12:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388705AbgLBKlu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Dec 2020 05:41:50 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:8491 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388620AbgLBKlq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Dec 2020 05:41:46 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CmFqS5hnYzhll7;
-        Wed,  2 Dec 2020 18:40:36 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 2 Dec 2020 18:40:49 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <lenb@kernel.org>, <rjw@rjwysocki.net>,
-        <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
-        <maz@kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <linux-acpi@vger.kernel.org>,
-        <dwagner@suse.de>, "John Garry" <john.garry@huawei.com>
-Subject: [PATCH v5 5/5] scsi: hisi_sas: Expose HW queues for v2 hw
-Date:   Wed, 2 Dec 2020 18:36:57 +0800
-Message-ID: <1606905417-183214-6-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1606905417-183214-1-git-send-email-john.garry@huawei.com>
-References: <1606905417-183214-1-git-send-email-john.garry@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+        id S2388056AbgLBLxq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Dec 2020 06:53:46 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37948 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729715AbgLBLxp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 2 Dec 2020 06:53:45 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id BB087ACBA;
+        Wed,  2 Dec 2020 11:53:03 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
+        Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 00/34] SCSI result handling cleanup, part 1
+Date:   Wed,  2 Dec 2020 12:52:15 +0100
+Message-Id: <20201202115249.37690-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As a performance enhancement, make the completion queue interrupts managed.
+Hi all,
 
-In addition, in commit bf0beec0607d ("blk-mq: drain I/O when all CPUs in a
-hctx are offline"), CPU hotplug for MQ devices using managed interrupts
-is made safe. So expose HW queues to blk-mq to take advantage of this.
+this is the first part of an attempt to clean up SCSI result handling.
+The patchset primarily cleans up various drivers by fixing up
+whitespaces or move to standard definitions.
+It also fixes some minor issues in some drivers which set the
+wrong result values.
+And, of course, another attempt to kill the gdth driver :-)
 
-Flag Scsi_host.host_tagset is also set to ensure that the HBA is not sent
-more commands than it can handle. However the driver still does not use
-request tag for IPTT as there are many HW bugs means that special rules
-apply for IPTT allocation.
+I have a larger patchset based on this one to update the SCSI result
+handling for all drivers, but decided to split things in two to not
+overload reviewers :-)
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas.h       |  4 ++
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 11 +++++
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 66 +++++++++++++++++++++-----
- 3 files changed, 68 insertions(+), 13 deletions(-)
+As usual, comments and reviews are welcome.
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index a25cfc11c96d..aa67807c5693 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -14,6 +14,7 @@
- #include <linux/debugfs.h>
- #include <linux/dmapool.h>
- #include <linux/iopoll.h>
-+#include <linux/irq.h>
- #include <linux/lcm.h>
- #include <linux/libata.h>
- #include <linux/mfd/syscon.h>
-@@ -312,6 +313,7 @@ enum {
- 
- struct hisi_sas_hw {
- 	int (*hw_init)(struct hisi_hba *hisi_hba);
-+	int (*interrupt_preinit)(struct hisi_hba *hisi_hba);
- 	void (*setup_itct)(struct hisi_hba *hisi_hba,
- 			   struct hisi_sas_device *device);
- 	int (*slot_index_alloc)(struct hisi_hba *hisi_hba,
-@@ -418,6 +420,8 @@ struct hisi_hba {
- 	u32 refclk_frequency_mhz;
- 	u8 sas_addr[SAS_ADDR_SIZE];
- 
-+	int *irq_map; /* v2 hw */
-+
- 	int n_phy;
- 	spinlock_t lock;
- 	struct semaphore sem;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index c8dd8588f800..624c5ec723fb 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -2614,6 +2614,13 @@ static struct Scsi_Host *hisi_sas_shost_alloc(struct platform_device *pdev,
- 	return NULL;
- }
- 
-+static int hisi_sas_interrupt_preinit(struct hisi_hba *hisi_hba)
-+{
-+	if (hisi_hba->hw->interrupt_preinit)
-+		return hisi_hba->hw->interrupt_preinit(hisi_hba);
-+	return 0;
-+}
-+
- int hisi_sas_probe(struct platform_device *pdev,
- 		   const struct hisi_sas_hw *hw)
- {
-@@ -2671,6 +2678,10 @@ int hisi_sas_probe(struct platform_device *pdev,
- 		sha->sas_port[i] = &hisi_hba->port[i].sas_port;
- 	}
- 
-+	rc = hisi_sas_interrupt_preinit(hisi_hba);
-+	if (rc)
-+		goto err_out_ha;
-+
- 	rc = scsi_add_host(shost, &pdev->dev);
- 	if (rc)
- 		goto err_out_ha;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index b57177b52fac..9adfdefef9ca 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -3302,6 +3302,28 @@ static irq_handler_t fatal_interrupts[HISI_SAS_FATAL_INT_NR] = {
- 	fatal_axi_int_v2_hw
- };
- 
-+#define CQ0_IRQ_INDEX (96)
-+
-+static int hisi_sas_v2_interrupt_preinit(struct hisi_hba *hisi_hba)
-+{
-+	struct platform_device *pdev = hisi_hba->platform_dev;
-+	struct Scsi_Host *shost = hisi_hba->shost;
-+	struct irq_affinity desc = {
-+		.pre_vectors = CQ0_IRQ_INDEX,
-+		.post_vectors = 16,
-+	};
-+	int resv = desc.pre_vectors + desc.post_vectors, minvec = resv + 1, nvec;
-+
-+	nvec = devm_platform_get_irqs_affinity(pdev, &desc, minvec, 128,
-+					       &hisi_hba->irq_map);
-+	if (nvec < 0)
-+		return nvec;
-+
-+	shost->nr_hw_queues = hisi_hba->cq_nvecs = nvec - resv;
-+
-+	return 0;
-+}
-+
- /*
-  * There is a limitation in the hip06 chipset that we need
-  * to map in all mbigen interrupts, even if they are not used.
-@@ -3310,14 +3332,11 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- {
- 	struct platform_device *pdev = hisi_hba->platform_dev;
- 	struct device *dev = &pdev->dev;
--	int irq, rc = 0, irq_map[128];
-+	int irq, rc = 0;
- 	int i, phy_no, fatal_no, queue_no;
- 
--	for (i = 0; i < 128; i++)
--		irq_map[i] = platform_get_irq(pdev, i);
--
- 	for (i = 0; i < HISI_SAS_PHY_INT_NR; i++) {
--		irq = irq_map[i + 1]; /* Phy up/down is irq1 */
-+		irq = hisi_hba->irq_map[i + 1]; /* Phy up/down is irq1 */
- 		rc = devm_request_irq(dev, irq, phy_interrupts[i], 0,
- 				      DRV_NAME " phy", hisi_hba);
- 		if (rc) {
-@@ -3331,7 +3350,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	for (phy_no = 0; phy_no < hisi_hba->n_phy; phy_no++) {
- 		struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
- 
--		irq = irq_map[phy_no + 72];
-+		irq = hisi_hba->irq_map[phy_no + 72];
- 		rc = devm_request_irq(dev, irq, sata_int_v2_hw, 0,
- 				      DRV_NAME " sata", phy);
- 		if (rc) {
-@@ -3343,7 +3362,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	}
- 
- 	for (fatal_no = 0; fatal_no < HISI_SAS_FATAL_INT_NR; fatal_no++) {
--		irq = irq_map[fatal_no + 81];
-+		irq = hisi_hba->irq_map[fatal_no + 81];
- 		rc = devm_request_irq(dev, irq, fatal_interrupts[fatal_no], 0,
- 				      DRV_NAME " fatal", hisi_hba);
- 		if (rc) {
-@@ -3354,24 +3373,22 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 		}
- 	}
- 
--	for (queue_no = 0; queue_no < hisi_hba->queue_count; queue_no++) {
-+	for (queue_no = 0; queue_no < hisi_hba->cq_nvecs; queue_no++) {
- 		struct hisi_sas_cq *cq = &hisi_hba->cq[queue_no];
- 
--		cq->irq_no = irq_map[queue_no + 96];
-+		cq->irq_no = hisi_hba->irq_map[queue_no + 96];
- 		rc = devm_request_threaded_irq(dev, cq->irq_no,
- 					       cq_interrupt_v2_hw,
- 					       cq_thread_v2_hw, IRQF_ONESHOT,
- 					       DRV_NAME " cq", cq);
- 		if (rc) {
- 			dev_err(dev, "irq init: could not request cq interrupt %d, rc=%d\n",
--				irq, rc);
-+					cq->irq_no, rc);
- 			rc = -ENOENT;
- 			goto err_out;
- 		}
-+		cq->irq_mask = irq_get_affinity_mask(cq->irq_no);
- 	}
--
--	hisi_hba->cq_nvecs = hisi_hba->queue_count;
--
- err_out:
- 	return rc;
- }
-@@ -3529,6 +3546,26 @@ static struct device_attribute *host_attrs_v2_hw[] = {
- 	NULL
- };
- 
-+static int map_queues_v2_hw(struct Scsi_Host *shost)
-+{
-+	struct hisi_hba *hisi_hba = shost_priv(shost);
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+	const struct cpumask *mask;
-+	unsigned int queue, cpu;
-+
-+	for (queue = 0; queue < qmap->nr_queues; queue++) {
-+		mask = irq_get_affinity_mask(hisi_hba->irq_map[96 + queue]);
-+		if (!mask)
-+			continue;
-+
-+		for_each_cpu(cpu, mask)
-+			qmap->mq_map[cpu] = qmap->queue_offset + queue;
-+	}
-+
-+	return 0;
-+
-+}
-+
- static struct scsi_host_template sht_v2_hw = {
- 	.name			= DRV_NAME,
- 	.proc_name		= DRV_NAME,
-@@ -3553,10 +3590,13 @@ static struct scsi_host_template sht_v2_hw = {
- #endif
- 	.shost_attrs		= host_attrs_v2_hw,
- 	.host_reset		= hisi_sas_host_reset,
-+	.map_queues		= map_queues_v2_hw,
-+	.host_tagset		= 1,
- };
- 
- static const struct hisi_sas_hw hisi_sas_v2_hw = {
- 	.hw_init = hisi_sas_v2_init,
-+	.interrupt_preinit = hisi_sas_v2_interrupt_preinit,
- 	.setup_itct = setup_itct_v2_hw,
- 	.slot_index_alloc = slot_index_alloc_quirk_v2_hw,
- 	.alloc_dev = alloc_dev_quirk_v2_hw,
+Hannes Reinecke (34):
+  scsi: drop gdth driver
+  3w-xxxx: Whitespace fixes and tag with SPDX
+  3w-9xxx: Whitespace fixes and tag with SPDX
+  3w-sas: Whitespace fixes and tag with SPDX
+  atp870u: Whitespace cleanup
+  aic7xxx,aic79xx: Whitespace cleanup
+  aic7xxx,aic79xx: kill pointless forward declarations
+  aic7xxx,aic79xxx: remove driver-defined SAM status definitions
+  bfa: drop driver-defined SCSI status codes
+  acornscsi: use standard defines
+  nsp32: fixup status handling
+  dc395: drop private SAM status code definitions
+  qla4xxx: use standard SAM status definitions
+  zfcp: do not set COMMAND_COMPLETE
+  aacraid: avoid setting message byte on completion
+  hpsa: do not set COMMAND_COMPLETE
+  stex: do not set COMMAND_COMPLETE
+  nsp_cs: drop internal SCSI message definition
+  aic7xxx,aic79xx: drop internal SCSI message definition
+  dc395x: drop internal SCSI message definitions
+  initio: drop internal SCSI message definition
+  scsi_debug: do not set COMMAND_COMPLETE
+  ufshcd: do not set COMMAND_COMPLETE
+  atp870u: use standard definitions
+  mac53c94: Do not set invalid command result
+  dpt_i2o: use DID_ERROR instead of INITIATOR_ERROR message
+  esp_scsi: use host byte as last argument to esp_cmd_is_done()
+  esp_scsi: do not set SCSI message byte
+  wd33c93: use SCSI status
+  ips: use correct command completion on error
+  storvsc: Return DID_ERROR for invalid commands
+  qla2xxx: fc_remote_port_chkready() returns a SCSI result value
+  advansys: kill driver_defined status byte accessors
+  ncr53c8xx: Use SAM status values
+
+ Documentation/kbuild/makefiles.rst                 |    4 +-
+ Documentation/process/magic-number.rst             |    2 -
+ Documentation/scsi/scsi-parameters.rst             |    3 -
+ Documentation/userspace-api/ioctl/ioctl-number.rst |    1 -
+ drivers/s390/scsi/zfcp_fc.h                        |    1 -
+ drivers/scsi/3w-9xxx.c                             |   90 +-
+ drivers/scsi/3w-9xxx.h                             |  190 +-
+ drivers/scsi/3w-sas.c                              |   86 +-
+ drivers/scsi/3w-sas.h                              |  152 +-
+ drivers/scsi/3w-xxxx.c                             |  230 +-
+ drivers/scsi/3w-xxxx.h                             |  173 +-
+ drivers/scsi/Kconfig                               |   14 -
+ drivers/scsi/Makefile                              |    2 -
+ drivers/scsi/aacraid/aachba.c                      |  173 +-
+ drivers/scsi/advansys.c                            |   80 +-
+ drivers/scsi/aic7xxx/aic79xx.h                     |   36 +-
+ drivers/scsi/aic7xxx/aic79xx_core.c                |  257 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.c                 |   20 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.h                 |   37 +-
+ drivers/scsi/aic7xxx/aic7xxx_core.c                |  263 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.c                 |   88 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.h                 |   39 +-
+ drivers/scsi/aic7xxx/aiclib.h                      |   15 -
+ drivers/scsi/aic7xxx/scsi_message.h                |   41 -
+ drivers/scsi/arm/acornscsi.c                       |   14 +-
+ drivers/scsi/atp870u.c                             |  451 +-
+ drivers/scsi/atp870u.h                             |   14 +-
+ drivers/scsi/bfa/bfa_fc.h                          |   15 -
+ drivers/scsi/bfa/bfa_fcpim.c                       |    2 +-
+ drivers/scsi/bfa/bfad_im.c                         |    2 +-
+ drivers/scsi/dc395x.c                              |   25 +-
+ drivers/scsi/dc395x.h                              |   38 -
+ drivers/scsi/dpt_i2o.c                             |    2 +-
+ drivers/scsi/esp_scsi.c                            |   21 +-
+ drivers/scsi/gdth.c                                | 4322 --------------------
+ drivers/scsi/gdth.h                                |  981 -----
+ drivers/scsi/gdth_ioctl.h                          |  251 --
+ drivers/scsi/gdth_proc.c                           |  586 ---
+ drivers/scsi/gdth_proc.h                           |   18 -
+ drivers/scsi/hpsa.c                                |    4 +-
+ drivers/scsi/initio.c                              |   64 +-
+ drivers/scsi/initio.h                              |   25 -
+ drivers/scsi/ips.c                                 |    9 +-
+ drivers/scsi/mac53c94.c                            |    1 -
+ drivers/scsi/ncr53c8xx.c                           |   82 +-
+ drivers/scsi/ncr53c8xx.h                           |   16 -
+ drivers/scsi/nsp32.c                               |    2 +-
+ drivers/scsi/pcmcia/nsp_cs.c                       |   12 +-
+ drivers/scsi/pcmcia/nsp_cs.h                       |   11 -
+ drivers/scsi/qla2xxx/qla_os.c                      |    2 +-
+ drivers/scsi/qla4xxx/ql4_fw.h                      |    1 -
+ drivers/scsi/qla4xxx/ql4_isr.c                     |    2 +-
+ drivers/scsi/scsi_debug.c                          |    2 +-
+ drivers/scsi/stex.c                                |   25 +-
+ drivers/scsi/storvsc_drv.c                         |    2 +-
+ drivers/scsi/ufs/ufshcd.c                          |    4 +-
+ drivers/scsi/wd33c93.c                             |    6 +-
+ include/scsi/scsi.h                                |    1 +
+ 58 files changed, 1221 insertions(+), 7789 deletions(-)
+ delete mode 100644 drivers/scsi/gdth.c
+ delete mode 100644 drivers/scsi/gdth.h
+ delete mode 100644 drivers/scsi/gdth_ioctl.h
+ delete mode 100644 drivers/scsi/gdth_proc.c
+ delete mode 100644 drivers/scsi/gdth_proc.h
+
 -- 
-2.26.2
+2.16.4
 
