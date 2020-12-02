@@ -2,226 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BFF2CAE7B
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Dec 2020 22:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184682CB1BC
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Dec 2020 01:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729198AbgLAVdK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Dec 2020 16:33:10 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:59484 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728548AbgLAVdJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 16:33:09 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1LSx7G081112;
-        Tue, 1 Dec 2020 21:32:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=gUJQhfOD6F5BbtI4YaUIpIDrmKr6VtxIjpNoQYugrTw=;
- b=L/LLEoKO+Q3NfqU5m74noRRnMFsqthLy1vZifkJiBMmuluAyI1XHKOK0kIb6qupqQPDR
- 7MEw/FMbC3qOv7kULQNPnUh52mXYJcsV+m48tg0AtOpUw2yxlfgSoAcPj2PN5Iywi3NL
- oDps5pIWYnmamJgmaN3gxTzE0XnPfJeNa2gfcgdw2DkgXldiNLMLNRIgHdNwnihO7mcW
- H4VvfG+iVtekVUp2IOApSI+4MxqXMstwjpNiPmMcW+VgLGIG5FX7n7MO/HuOID1KMk7z
- W+NYoh3Vanor+PGSQm8jHVkpkCcfhTQfq1HXbLMpj7Md1r0E8QR0M6jzDTc2C/vuNlxH DQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 353egkmwf0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 01 Dec 2020 21:32:20 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1LUIqd131117;
-        Tue, 1 Dec 2020 21:30:19 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 3540at23sg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Dec 2020 21:30:19 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B1LUFsO018440;
-        Tue, 1 Dec 2020 21:30:15 GMT
-Received: from ol2.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 01 Dec 2020 13:30:15 -0800
-From:   Mike Christie <michael.christie@oracle.com>
-To:     subbu.seetharaman@broadcom.com, ketan.mukadam@broadcom.com,
-        jitendra.bhivare@broadcom.com, lduncan@suse.com, cleech@redhat.com,
-        njavali@marvell.com, mrangankar@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, varun@chelsio.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        james.bottomley@hansenpartnership.com
-Subject: [PATCH 15/15] libiscsi: convert ping_task to refcount handler
-Date:   Tue,  1 Dec 2020 15:29:56 -0600
-Message-Id: <1606858196-5421-16-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1606858196-5421-1-git-send-email-michael.christie@oracle.com>
-References: <1606858196-5421-1-git-send-email-michael.christie@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
- phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 suspectscore=2
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012010130
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9822 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=2
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012010130
+        id S1727639AbgLBAy3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Dec 2020 19:54:29 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27202 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727415AbgLBAy3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Dec 2020 19:54:29 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B20VkX6139457;
+        Tue, 1 Dec 2020 19:53:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=pcL5VReTU0J7QsDxX1hP9luUG3IKmWM81Cxa6JZMWUo=;
+ b=X0o54C5lllA36z63LhqUoSNX/dZD+udxFQtZJpnkxH6Wsu/oH/dAMSwVLom+dxuHUz9M
+ XekVq4lF3zzrJSecbXVJo36gg8zHQjMnwCmswLvn4OdKjOB1UT8IQSPSJh7byoFx79YM
+ bgNpoA1vWjZMHyZbIaA4UmSF9HgOmZMvi0qz49Z4LvQF4xMaHCIYASha6VEpAj8ZTjWQ
+ Mtm5uZkBCgckPL5kI87cm8G5uPyyAsYSCmDRyel1XI4q5EMBCvWbazZgjGM1w3b0EmE5
+ NQkEMvdB16CTcDvQLKPM39a0ZyGHgUdRd9z1299enfMYoP01ii6NwR7U0MNF8NmYVm7X xA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 355d9duy0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Dec 2020 19:53:33 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B20cNaH028142;
+        Wed, 2 Dec 2020 00:53:33 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03dal.us.ibm.com with ESMTP id 353e69beer-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Dec 2020 00:53:32 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B20rV4T17432992
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Dec 2020 00:53:31 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B37E78063;
+        Wed,  2 Dec 2020 00:53:31 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F21117805C;
+        Wed,  2 Dec 2020 00:53:30 +0000 (GMT)
+Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Dec 2020 00:53:30 +0000 (GMT)
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+To:     james.bottomley@hansenpartnership.com
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: [PATCH v2 00/17] ibmvfc: initial MQ development
+Date:   Tue,  1 Dec 2020 18:53:12 -0600
+Message-Id: <20201202005329.4538-1-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-01_12:2020-11-30,2020-12-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999
+ clxscore=1015 mlxscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ adultscore=0 suspectscore=3 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012010142
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The conn_send_pdu API is evil in that it returns a pointer to a
-iscsi_task, but that task might have been freed already. This
-would happen with the ping_task code. To fix up the API so the
-caller can access the task if it needs to like in the ping_task
-case, this has conn_send_pdu grab a ref to the task for the
-caller. We then move the ping_task clearing to when all the
-refcounts are dropped, so we know the caller and a completion
-do not race.
+Recent updates in pHyp Firmware and VIOS releases provide new infrastructure
+towards enabling Subordinate Command Response Queues (Sub-CRQs) such that each
+Sub-CRQ is a channel backed by an actual hardware queue in the FC stack on the
+partner VIOS. Sub-CRQs are registered with the firmware via hypercalls and then
+negotiated with the VIOS via new Management Datagrams (MADs) for channel setup.
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/libiscsi.c | 39 +++++++++++++++++++++------------------
- include/scsi/libiscsi.h |  3 ---
- 2 files changed, 21 insertions(+), 21 deletions(-)
+This initial implementation adds the necessary Sub-CRQ framework and implements
+the new MADs for negotiating and assigning a set of Sub-CRQs to associated VIOS
+HW backed channels. The event pool and locking still leverages the legacy single
+queue implementation, and as such lock contention is problematic when increasing
+the number of queues. However, this initial work demonstrates a 1.2x factor
+increase in IOPs when configured with two HW queues despite lock contention.
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index e020fba..79cec93 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -546,13 +546,16 @@ static void iscsi_free_task(struct iscsi_task *task)
- 		return;
- 
- 	iscsi_free_itt(session, task);
--
-+ 
- 	if (session->win_opened && !work_pending(&conn->xmitwork)) {
- 		session->win_opened = false;
- 		iscsi_conn_queue_work(conn);
- 	}
- 
- 	if (!sc) {
-+		if (READ_ONCE(conn->ping_task) == task)
-+			WRITE_ONCE(conn->ping_task, NULL);
-+
- 		spin_lock_bh(&session->mgmt_lock);
- 		kfifo_in(&session->mgmt_pool.queue, (void*)&task, sizeof(void*));
- 		spin_unlock_bh(&session->mgmt_lock);
-@@ -603,9 +606,6 @@ static void iscsi_complete_task(struct iscsi_task *task, int state)
- 	WARN_ON_ONCE(task->state == ISCSI_TASK_FREE);
- 	task->state = state;
- 
--	if (READ_ONCE(conn->ping_task) == task)
--		WRITE_ONCE(conn->ping_task, NULL);
--
- 	/* release get from queueing */
- 	iscsi_put_task(task);
- }
-@@ -819,6 +819,8 @@ static int iscsi_prep_mgmt_task(struct iscsi_conn *conn,
- 	task->sc = NULL;
- 	INIT_LIST_HEAD(&task->running);
- 	task->state = ISCSI_TASK_PENDING;
-+	/* Take an extra ref so the caller can access the task */
-+	iscsi_get_task(task);
- 
- 	if (data_size) {
- 		memcpy(task->data, data, data_size);
-@@ -846,9 +848,6 @@ static int iscsi_prep_mgmt_task(struct iscsi_conn *conn,
- 						   task->conn->session->age);
- 	}
- 
--	if (unlikely(READ_ONCE(conn->ping_task) == INVALID_SCSI_TASK))
--		WRITE_ONCE(conn->ping_task, task);
--
- 	if (!ihost->workq) {
- 		if (iscsi_prep_mgmt_task(conn, task))
- 			goto free_task;
-@@ -863,6 +862,8 @@ static int iscsi_prep_mgmt_task(struct iscsi_conn *conn,
- 	return task;
- 
- free_task:
-+	/* drop extra count taken for caller and count from allocation */
-+	iscsi_put_task(task);
- 	iscsi_put_task(task);
- 	return NULL;
- }
-@@ -872,11 +873,15 @@ int iscsi_conn_send_pdu(struct iscsi_cls_conn *cls_conn, struct iscsi_hdr *hdr,
- {
- 	struct iscsi_conn *conn = cls_conn->dd_data;
- 	struct iscsi_session *session = conn->session;
-+	struct iscsi_task *task;
- 	int err = 0;
- 
- 	spin_lock_bh(&session->frwd_lock);
--	if (!__iscsi_conn_send_pdu(conn, hdr, data, data_size))
-+	task = __iscsi_conn_send_pdu(conn, hdr, data, data_size);
-+	if (!task)
- 		err = -EPERM;
-+	else
-+		iscsi_put_task(task);
- 	spin_unlock_bh(&session->frwd_lock);
- 	return err;
- }
-@@ -1047,12 +1052,6 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
-         struct iscsi_nopout hdr;
- 	struct iscsi_task *task;
- 
--	if (!rhdr) {
--		if (READ_ONCE(conn->ping_task))
--			return -EINVAL;
--		WRITE_ONCE(conn->ping_task, INVALID_SCSI_TASK);
--	}
--
- 	memset(&hdr, 0, sizeof(struct iscsi_nopout));
- 	hdr.opcode = ISCSI_OP_NOOP_OUT | ISCSI_OP_IMMEDIATE;
- 	hdr.flags = ISCSI_FLAG_CMD_FINAL;
-@@ -1061,20 +1060,23 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
- 		hdr.lun = rhdr->lun;
- 		hdr.ttt = rhdr->ttt;
- 		hdr.itt = RESERVED_ITT;
--	} else
-+	} else {
-+		if (READ_ONCE(conn->ping_task))
-+			return -EINVAL;
-+
- 		hdr.ttt = RESERVED_ITT;
-+	}
- 
- 	task = __iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)&hdr, NULL, 0);
- 	if (!task) {
--		if (!rhdr)
--			WRITE_ONCE(conn->ping_task, NULL);
- 		iscsi_conn_printk(KERN_ERR, conn, "Could not send nopout\n");
- 		return -EIO;
- 	} else if (!rhdr) {
- 		/* only track our nops */
- 		conn->last_ping = jiffies;
-+		WRITE_ONCE(conn->ping_task, task);
- 	}
--
-+	iscsi_put_task(task);
- 	return 0;
- }
- 
-@@ -1907,6 +1909,7 @@ static int iscsi_exec_task_mgmt_fn(struct iscsi_conn *conn,
- 		spin_lock_bh(&session->frwd_lock);
- 		return -EPERM;
- 	}
-+	iscsi_put_task(task);
- 	conn->tmfcmd_pdus_cnt++;
- 	conn->tmf_timer.expires = timeout * HZ + jiffies;
- 	add_timer(&conn->tmf_timer);
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index d0a6834..a17c551 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -133,9 +133,6 @@ struct iscsi_task {
- 	void			*dd_data;	/* driver/transport data */
- };
- 
--/* invalid scsi_task pointer */
--#define	INVALID_SCSI_TASK	(struct iscsi_task *)-1l
--
- static inline int iscsi_task_has_unsol_data(struct iscsi_task *task)
- {
- 	return task->unsol_r2t.data_length > task->unsol_r2t.sent;
+changes in v2:
+* Patch 4: NULL'd scsi_scrq reference after deallocation [brking]
+* Patch 6: Added switch case to handle XPORT event [brking]
+* Patch 9: fixed ibmvfc_event leak and double free [brking]
+* added support for cancel command with MQ
+* added parameter toggles for MQ settings
+
+Tyrel Datwyler (17):
+  ibmvfc: add vhost fields and defaults for MQ enablement
+  ibmvfc: define hcall wrapper for registering a Sub-CRQ
+  ibmvfc: add Subordinate CRQ definitions
+  ibmvfc: add alloc/dealloc routines for SCSI Sub-CRQ Channels
+  ibmvfc: add Sub-CRQ IRQ enable/disable routine
+  ibmvfc: add handlers to drain and complete Sub-CRQ responses
+  ibmvfc: define Sub-CRQ interrupt handler routine
+  ibmvfc: map/request irq and register Sub-CRQ interrupt handler
+  ibmvfc: implement channel enquiry and setup commands
+  ibmvfc: advertise client support for using hardware channels
+  ibmvfc: set and track hw queue in ibmvfc_event struct
+  ibmvfc: send commands down HW Sub-CRQ when channelized
+  ibmvfc: register Sub-CRQ handles with VIOS during channel setup
+  ibmvfc: add cancel mad initialization helper
+  ibmvfc: send Cancel MAD down each hw scsi channel
+  ibmvfc: enable MQ and set reasonable defaults
+  ibmvfc: provide modules parameters for MQ settings
+
+ drivers/scsi/ibmvscsi/ibmvfc.c | 706 +++++++++++++++++++++++++++++----
+ drivers/scsi/ibmvscsi/ibmvfc.h |  41 +-
+ 2 files changed, 675 insertions(+), 72 deletions(-)
+
 -- 
-1.8.3.1
+2.27.0
 
