@@ -2,118 +2,124 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7F92CCB65
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 02:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39CC2CCC3A
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 03:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727355AbgLCBFY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Dec 2020 20:05:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:22230 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726410AbgLCBFW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Dec 2020 20:05:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606957436;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D7JV1y8c0cDE1Jy7cOhPsXlkTwqCO6sPQjmpwXoD/uY=;
-        b=C8NZTNAia2hZygZBa9X2WYkp21d4cWMzIH6RnKEGq5plsUnfuSPjj9AXrZ23ppGukANu49
-        sUzCdN6o8jkMrhmyVOdd5sPqi5pJ19TjMpnuVeNNAACjSLdbr79z74epJNXx8ITSv1FtGc
-        JpbyuJkK3DmBKftRS4yItTntllWzIho=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-366-L9yb-BLqNU-TkfUKrgrM9Q-1; Wed, 02 Dec 2020 20:03:52 -0500
-X-MC-Unique: L9yb-BLqNU-TkfUKrgrM9Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4FD91081B2D;
-        Thu,  3 Dec 2020 01:03:50 +0000 (UTC)
-Received: from T590 (ovpn-12-87.pek2.redhat.com [10.72.12.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B5CAF5C1B4;
-        Thu,  3 Dec 2020 01:03:41 +0000 (UTC)
-Date:   Thu, 3 Dec 2020 09:03:36 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Ewan Milne <emilne@redhat.com>, Long Li <longli@microsoft.com>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>,
-        John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH] scsi: core: fix race between handling STS_RESOURCE and
- completion
-Message-ID: <20201203010336.GC540033@T590>
-References: <20201202100419.525144-1-ming.lei@redhat.com>
- <5f17e0b1-2bee-7dd2-6049-58088691204b@acm.org>
+        id S1729380AbgLCCJB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Dec 2020 21:09:01 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45642 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727835AbgLCCJA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Dec 2020 21:09:00 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B326WgZ065377;
+        Wed, 2 Dec 2020 21:08:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=byTD4NKmU+qfCqX3DcTp3BJ5vLnURAwlR4Q01sTDRLI=;
+ b=GAufvn4ODxhCDr31bhpA7pHo6OIQTOySKP1kHvcYIfMYM4UX2HWMoCMCrQudvzTdDo+M
+ H+CcztkOHQZEOgfe13JnVeRGl4HTown53G1lLzbQ926aQ/c26t1I3OUyxk3B/1pTsKPD
+ jrY9e/obFMEXhoZ1iQ9ocmSQzm3MTRfPwChvJ7e+KwUM2vH8JgaXmoGuyI0OAZlvo6Ci
+ 0Ai7LT7Efpes6Iepr+bypHjXjc1vxn09yuUtGkNrRsQ/PEDj5olpM3jCm4qvN1fF2P6z
+ ghLPVajJmS2M54wOzv03w7nQy9z9HwGRtQ9xbtf9mAHZ1N3OHCS5NfyES+AoYuZx4d9P bw== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 356jg86ufu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Dec 2020 21:08:11 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B31uL3P013325;
+        Thu, 3 Dec 2020 02:08:10 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01wdc.us.ibm.com with ESMTP id 355vrfvc75-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Dec 2020 02:08:10 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B32821Q36110948
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Dec 2020 02:08:02 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D39C78063;
+        Thu,  3 Dec 2020 02:08:09 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D13E078060;
+        Thu,  3 Dec 2020 02:08:08 +0000 (GMT)
+Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Dec 2020 02:08:08 +0000 (GMT)
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+To:     james.bottomley@hansenpartnership.com
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: [PATCH v3 00/18] ibmvfc: initial MQ development
+Date:   Wed,  2 Dec 2020 20:07:48 -0600
+Message-Id: <20201203020806.14747-1-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5f17e0b1-2bee-7dd2-6049-58088691204b@acm.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-02_14:2020-11-30,2020-12-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ spamscore=0 clxscore=1015 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 impostorscore=0 phishscore=0
+ suspectscore=3 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012030009
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Dec 02, 2020 at 10:10:30AM -0800, Bart Van Assche wrote:
-> On 12/2/20 2:04 AM, Ming Lei wrote:
-> > When queuing IO request to LLD, STS_RESOURCE may be returned because:
-> > 
-> > - host in recovery or blocked
-> > - target queue throttling or blocked
-> > - LLD rejection
-> > 
-> > Any one of the above doesn't happen frequently enough.
-> > 
-> > BLK_STS_DEV_RESOURCE is returned to block layer for avoiding unnecessary
-> > re-run queue, and it is just one small optimization. However, all
-> > in-flight requests originated from this scsi device may be completed
-> > just after reading 'sdev->device_busy', so BLK_STS_DEV_RESOURCE is
-> > returned to block layer. And the current failed IO won't get chance
-> > to be queued any more, since it is invisible at that time for either
-> > scsi_run_queue_async() or blk-mq's RESTART.
-> > 
-> > Fix the issue by not returning BLK_STS_DEV_RESOURCE in this situation.
-> > 
-> > Cc: Hannes Reinecke <hare@suse.com>
-> > Cc: Sumit Saxena <sumit.saxena@broadcom.com>
-> > Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-> > Cc: Bart Van Assche <bvanassche@acm.org>
-> > Cc: Ewan Milne <emilne@redhat.com>
-> > Cc: Long Li <longli@microsoft.com>
-> > Tested-by: "chenxiang (M)" <chenxiang66@hisilicon.com>
-> > Reported-by: John Garry <john.garry@huawei.com>
-> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> > ---
-> >   drivers/scsi/scsi_lib.c | 3 +--
-> >   1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> > index 60c7a7d74852..03c6d0620bfd 100644
-> > --- a/drivers/scsi/scsi_lib.c
-> > +++ b/drivers/scsi/scsi_lib.c
-> > @@ -1703,8 +1703,7 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
-> >   		break;
-> >   	case BLK_STS_RESOURCE:
-> >   	case BLK_STS_ZONE_RESOURCE:
-> > -		if (atomic_read(&sdev->device_busy) ||
-> > -		    scsi_device_blocked(sdev))
-> > +		if (scsi_device_blocked(sdev))
-> >   			ret = BLK_STS_DEV_RESOURCE;
-> >   		break;
-> >   	default:
-> 
-> Since this patch modifies code introduced in commit 86ff7c2a80cd ("blk-mq:
-> introduce BLK_STS_DEV_RESOURCE"), does this patch perhaps needs a Fixes:
-> tag?
+Recent updates in pHyp Firmware and VIOS releases provide new infrastructure
+towards enabling Subordinate Command Response Queues (Sub-CRQs) such that each
+Sub-CRQ is a channel backed by an actual hardware queue in the FC stack on the
+partner VIOS. Sub-CRQs are registered with the firmware via hypercalls and then
+negotiated with the VIOS via new Management Datagrams (MADs) for channel setup.
 
-This same race exists before commit 86ff7c2a80cd, so I think the 'Fixes:' tag
-is misleading.
+This initial implementation adds the necessary Sub-CRQ framework and implements
+the new MADs for negotiating and assigning a set of Sub-CRQs to associated VIOS
+HW backed channels. The event pool and locking still leverages the legacy single
+queue implementation, and as such lock contention is problematic when increasing
+the number of queues. However, this initial work demonstrates a 1.2x factor
+increase in IOPs when configured with two HW queues despite lock contention.
 
+changes in v2:
+* Patch 4: changed firmware support logging to dev_warn_once
+* Patch 6: adjusted locking
+* Patch 15: dropped logging verbosity, moved cancel event tracking into subqueue
+* Patch 17: removed write permission for migration module parameters
+	    drive hard reset after update to num of scsi channels
 
+changes in v2:
+* Patch 4: NULL'd scsi_scrq reference after deallocation
+* Patch 6: Added switch case to handle XPORT event
+* Patch 9: fixed ibmvfc_event leak and double free
+* added support for cancel command with MQ
+* added parameter toggles for MQ settings
 
-Thanks,
-Ming
+Tyrel Datwyler (18):
+  ibmvfc: add vhost fields and defaults for MQ enablement
+  ibmvfc: define hcall wrapper for registering a Sub-CRQ
+  ibmvfc: add Subordinate CRQ definitions
+  ibmvfc: add alloc/dealloc routines for SCSI Sub-CRQ Channels
+  ibmvfc: add Sub-CRQ IRQ enable/disable routine
+  ibmvfc: add handlers to drain and complete Sub-CRQ responses
+  ibmvfc: define Sub-CRQ interrupt handler routine
+  ibmvfc: map/request irq and register Sub-CRQ interrupt handler
+  ibmvfc: implement channel enquiry and setup commands
+  ibmvfc: advertise client support for using hardware channels
+  ibmvfc: set and track hw queue in ibmvfc_event struct
+  ibmvfc: send commands down HW Sub-CRQ when channelized
+  ibmvfc: register Sub-CRQ handles with VIOS during channel setup
+  ibmvfc: add cancel mad initialization helper
+  ibmvfc: send Cancel MAD down each hw scsi channel
+  ibmvfc: enable MQ and set reasonable defaults
+  ibmvfc: provide modules parameters for MQ settings
+  ibmvfc: drop host lock when completing commands in CRQ
+
+ drivers/scsi/ibmvscsi/ibmvfc.c | 721 +++++++++++++++++++++++++++++----
+ drivers/scsi/ibmvscsi/ibmvfc.h |  79 +++-
+ 2 files changed, 711 insertions(+), 89 deletions(-)
+
+-- 
+2.27.0
 
