@@ -2,129 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E7D2CD6B5
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 14:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A57C2CD7DC
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 14:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387612AbgLCN2B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Dec 2020 08:28:01 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2199 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726302AbgLCN2B (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Dec 2020 08:28:01 -0500
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CmxR52XYhz67LF8;
-        Thu,  3 Dec 2020 21:25:21 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Thu, 3 Dec 2020 14:27:17 +0100
-Received: from [10.47.8.200] (10.47.8.200) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 3 Dec 2020
- 13:27:17 +0000
-Subject: Re: [PATCH v2 4/4] scsi: set shost as hctx driver_data
-To:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-References: <20201203034100.29716-1-kashyap.desai@broadcom.com>
- <20201203034100.29716-5-kashyap.desai@broadcom.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <3ee6826b-e010-8874-0447-da8e9b1e8971@huawei.com>
-Date:   Thu, 3 Dec 2020 13:26:49 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S2436514AbgLCNaQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Dec 2020 08:30:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47984 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2436463AbgLCNaF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 3 Dec 2020 08:30:05 -0500
+From:   Sasha Levin <sashal@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 12/39] scsi: ufs: Fix unexpected values from ufshcd_read_desc_param()
+Date:   Thu,  3 Dec 2020 08:28:06 -0500
+Message-Id: <20201203132834.930999-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201203132834.930999-1-sashal@kernel.org>
+References: <20201203132834.930999-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201203034100.29716-5-kashyap.desai@broadcom.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.8.200]
-X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 03/12/2020 03:41, Kashyap Desai wrote:
-> hctx->driver_data is not set for SCSI currently.
-> Separately set hctx->driver_data = shost.
+From: Can Guo <cang@codeaurora.org>
 
-nit: this looks ok to me, but I would have made as an earlier patch so 
-that you don't add code and then remove it:
+[ Upstream commit 1699f980d87fb678a669490462cf0b9517c1fb47 ]
 
- >   static int scsi_mq_poll(struct blk_mq_hw_ctx *hctx)
- >   {
- > -	struct request_queue *q = hctx->queue;
- > -	struct scsi_device *sdev = q->queuedata;
- > -	struct Scsi_Host *shost = sdev->host;
+WB-related sysfs entries can be accessed even when an UFS device does not
+support the feature. The descriptors which are not supported by the UFS
+device may be wrongly reported when they are accessed from their
+corrsponding sysfs entries. Fix it by adding a sanity check of parameter
+offset against the actual decriptor length.
 
-Thanks,
-John
+Link: https://lore.kernel.org/r/1603346348-14149-1-git-send-email-cang@codeaurora.org
+Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
+Acked-by: Daejun Park <daejun7.park@samsung.com>
+Signed-off-by: Can Guo <cang@codeaurora.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-> 
-> Suggested-by: John Garry <john.garry@huawei.com>
-> Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
-> ---
->   drivers/scsi/scsi_lib.c | 19 +++++++++++++------
->   1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index 8675900ccc27..892315c21b70 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -1789,9 +1789,7 @@ static void scsi_mq_exit_request(struct blk_mq_tag_set *set, struct request *rq,
->   
->   static int scsi_mq_poll(struct blk_mq_hw_ctx *hctx)
->   {
-> -	struct request_queue *q = hctx->queue;
-> -	struct scsi_device *sdev = q->queuedata;
-> -	struct Scsi_Host *shost = sdev->host;
-> +	struct Scsi_Host *shost = hctx->driver_data;
->   
->   	if (shost->hostt->mq_poll)
->   		return shost->hostt->mq_poll(shost, hctx->queue_num);
-> @@ -1799,6 +1797,15 @@ static int scsi_mq_poll(struct blk_mq_hw_ctx *hctx)
->   	return 0;
->   }
->   
-> +static int scsi_init_hctx(struct blk_mq_hw_ctx *hctx, void *data,
-> +			  unsigned int hctx_idx)
-> +{
-> +	struct Scsi_Host *shost = data;
-> +
-> +	hctx->driver_data = shost;
-> +	return 0;
-> +}
-> +
->   static int scsi_map_queues(struct blk_mq_tag_set *set)
->   {
->   	struct Scsi_Host *shost = container_of(set, struct Scsi_Host, tag_set);
-> @@ -1866,15 +1873,14 @@ static const struct blk_mq_ops scsi_mq_ops_no_commit = {
->   	.cleanup_rq	= scsi_cleanup_rq,
->   	.busy		= scsi_mq_lld_busy,
->   	.map_queues	= scsi_map_queues,
-> +	.init_hctx	= scsi_init_hctx,
->   	.poll		= scsi_mq_poll,
->   };
->   
->   
->   static void scsi_commit_rqs(struct blk_mq_hw_ctx *hctx)
->   {
-> -	struct request_queue *q = hctx->queue;
-> -	struct scsi_device *sdev = q->queuedata;
-> -	struct Scsi_Host *shost = sdev->host;
-> +	struct Scsi_Host *shost = hctx->driver_data;
->   
->   	shost->hostt->commit_rqs(shost, hctx->queue_num);
->   }
-> @@ -1895,6 +1901,7 @@ static const struct blk_mq_ops scsi_mq_ops = {
->   	.cleanup_rq	= scsi_cleanup_rq,
->   	.busy		= scsi_mq_lld_busy,
->   	.map_queues	= scsi_map_queues,
-> +	.init_hctx	= scsi_init_hctx,
->   	.poll		= scsi_mq_poll,
->   };
->   
-> 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 9dd32bb0ff2be..cbcdd79a1f76f 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -3163,13 +3163,19 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 	/* Get the length of descriptor */
+ 	ufshcd_map_desc_id_to_length(hba, desc_id, &buff_len);
+ 	if (!buff_len) {
+-		dev_err(hba->dev, "%s: Failed to get desc length", __func__);
++		dev_err(hba->dev, "%s: Failed to get desc length\n", __func__);
++		return -EINVAL;
++	}
++
++	if (param_offset >= buff_len) {
++		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
++			__func__, param_offset, desc_id, buff_len);
+ 		return -EINVAL;
+ 	}
+ 
+ 	/* Check whether we need temp memory */
+ 	if (param_offset != 0 || param_size < buff_len) {
+-		desc_buf = kmalloc(buff_len, GFP_KERNEL);
++		desc_buf = kzalloc(buff_len, GFP_KERNEL);
+ 		if (!desc_buf)
+ 			return -ENOMEM;
+ 	} else {
+@@ -3183,14 +3189,14 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 					desc_buf, &buff_len);
+ 
+ 	if (ret) {
+-		dev_err(hba->dev, "%s: Failed reading descriptor. desc_id %d, desc_index %d, param_offset %d, ret %d",
++		dev_err(hba->dev, "%s: Failed reading descriptor. desc_id %d, desc_index %d, param_offset %d, ret %d\n",
+ 			__func__, desc_id, desc_index, param_offset, ret);
+ 		goto out;
+ 	}
+ 
+ 	/* Sanity check */
+ 	if (desc_buf[QUERY_DESC_DESC_TYPE_OFFSET] != desc_id) {
+-		dev_err(hba->dev, "%s: invalid desc_id %d in descriptor header",
++		dev_err(hba->dev, "%s: invalid desc_id %d in descriptor header\n",
+ 			__func__, desc_buf[QUERY_DESC_DESC_TYPE_OFFSET]);
+ 		ret = -EINVAL;
+ 		goto out;
+@@ -3200,12 +3206,12 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
+ 	ufshcd_update_desc_length(hba, desc_id, desc_index, buff_len);
+ 
+-	/* Check wherher we will not copy more data, than available */
+-	if (is_kmalloc && (param_offset + param_size) > buff_len)
+-		param_size = buff_len - param_offset;
+-
+-	if (is_kmalloc)
++	if (is_kmalloc) {
++		/* Make sure we don't copy more data than available */
++		if (param_offset + param_size > buff_len)
++			param_size = buff_len - param_offset;
+ 		memcpy(param_read_buf, &desc_buf[param_offset], param_size);
++	}
+ out:
+ 	if (is_kmalloc)
+ 		kfree(desc_buf);
+-- 
+2.27.0
 
