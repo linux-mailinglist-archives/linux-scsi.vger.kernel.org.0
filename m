@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9381B2CD05E
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 08:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE69B2CD05A
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 08:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388136AbgLCHZe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Dec 2020 02:25:34 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:48022 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725912AbgLCHZe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Dec 2020 02:25:34 -0500
-X-UUID: 3b0365861baa45ae857e90cb2efd3347-20201203
-X-UUID: 3b0365861baa45ae857e90cb2efd3347-20201203
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        id S2388107AbgLCHZc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Dec 2020 02:25:32 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:57194 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726085AbgLCHZc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Dec 2020 02:25:32 -0500
+X-UUID: e6540b5be7c14fdb96486b2d7ab0f167-20201203
+X-UUID: e6540b5be7c14fdb96486b2d7ab0f167-20201203
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2137833836; Thu, 03 Dec 2020 15:24:48 +0800
+        with ESMTP id 414784189; Thu, 03 Dec 2020 15:24:48 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 3 Dec 2020 15:24:44 +0800
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 3 Dec 2020 15:24:45 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Thu, 3 Dec 2020 15:24:45 +0800
@@ -37,33 +37,54 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, <huadian.liu@mediatek.com>,
         Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 0/3] Refine error history and introduce event_notify vop
-Date:   Thu, 3 Dec 2020 15:24:40 +0800
-Message-ID: <20201203072443.6663-1-stanley.chu@mediatek.com>
+Subject: [PATCH v2 1/3] scsi: ufs: Add error history for abort event in UFS Device W-LUN
+Date:   Thu, 3 Dec 2020 15:24:41 +0800
+Message-ID: <20201203072443.6663-2-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20201203072443.6663-1-stanley.chu@mediatek.com>
+References: <20201203072443.6663-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: C4D933F04B8EEE2591AD9993567FE9F7560B576AB4461CA834E1FE9700733EDB2000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
-This series refines error history functions and introduce a new event_notify vop to allow vendor to get notification of important events.
+Add error history for abort event in UFS Device W-LUN.
+Besides, use specified value as parameter of ufshcd_update_reg_hist()
+to identify the aborted tag or LUNs.
 
-Change since v1:
-  - Change notify_event() to event_notify() to follow vop naming covention.
+Reviewed-by: Can Guo <cang@codeaurora.org>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Stanley Chu (3):
-  scsi: ufs: Add error history for abort event in UFS Device W-LUN
-  scsi: ufs: Refine error history functions
-  scsi: ufs: Introduce event_notify variant function
-
- drivers/scsi/ufs/ufshcd.c | 122 ++++++++++++++++++++++----------------
- drivers/scsi/ufs/ufshcd.h |  82 ++++++++++++-------------
- 2 files changed, 112 insertions(+), 92 deletions(-)
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 11a4aad09f3a..7067b86a8e08 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6738,8 +6738,10 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+ 	 * To avoid these unnecessary/illegal step we skip to the last error
+ 	 * handling stage: reset and restore.
+ 	 */
+-	if (lrbp->lun == UFS_UPIU_UFS_DEVICE_WLUN)
++	if (lrbp->lun == UFS_UPIU_UFS_DEVICE_WLUN) {
++		ufshcd_update_reg_hist(&hba->ufs_stats.task_abort, lrbp->lun);
+ 		return ufshcd_eh_host_reset_handler(cmd);
++	}
+ 
+ 	ufshcd_hold(hba, false);
+ 	reg = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+@@ -6763,7 +6765,7 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+ 	 */
+ 	scsi_print_command(hba->lrb[tag].cmd);
+ 	if (!hba->req_abort_count) {
+-		ufshcd_update_reg_hist(&hba->ufs_stats.task_abort, 0);
++		ufshcd_update_reg_hist(&hba->ufs_stats.task_abort, tag);
+ 		ufshcd_print_host_regs(hba);
+ 		ufshcd_print_host_state(hba);
+ 		ufshcd_print_pwr_info(hba);
 -- 
 2.18.0
 
