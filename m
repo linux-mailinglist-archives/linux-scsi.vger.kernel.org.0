@@ -2,15 +2,15 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B922CD754
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 14:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553D82CD70D
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 14:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436530AbgLCNdZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Dec 2020 08:33:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49050 "EHLO mail.kernel.org"
+        id S2436935AbgLCNbT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Dec 2020 08:31:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436858AbgLCNbF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 3 Dec 2020 08:31:05 -0500
+        id S2436927AbgLCNbR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 3 Dec 2020 08:31:17 -0500
 From:   Sasha Levin <sashal@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
@@ -20,12 +20,12 @@ Cc:     Can Guo <cang@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 06/14] scsi: ufs: Make sure clk scaling happens only when HBA is runtime ACTIVE
-Date:   Thu,  3 Dec 2020 08:30:02 -0500
-Message-Id: <20201203133010.931600-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 5/9] scsi: ufs: Make sure clk scaling happens only when HBA is runtime ACTIVE
+Date:   Thu,  3 Dec 2020 08:30:27 -0500
+Message-Id: <20201203133031.931763-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201203133010.931600-1-sashal@kernel.org>
-References: <20201203133010.931600-1-sashal@kernel.org>
+In-Reply-To: <20201203133031.931763-1-sashal@kernel.org>
+References: <20201203133031.931763-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,10 +63,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 7e4e6e982055e..61b1eae42ea85 100644
+index a3a3ee6e2a002..342e086e41991 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1281,8 +1281,15 @@ static int ufshcd_devfreq_target(struct device *dev,
+@@ -1215,8 +1215,15 @@ static int ufshcd_devfreq_target(struct device *dev,
  	}
  	spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
  
