@@ -2,55 +2,173 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 873362CCEF6
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 07:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B0D2CD04B
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 08:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729493AbgLCGEM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Dec 2020 01:04:12 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54146 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729458AbgLCGEL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Dec 2020 01:04:11 -0500
-X-UUID: 09e45c68bb16487a96c96b2518a8a4dd-20201203
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=XrMDBOPH0/Kj16iXJYkaW28uKCRVbAh84nWO9OHLR6c=;
-        b=ffh5qK8eVJqn1bCEO8feiAOa9Xll821xKyXNNp/divVRguFjL6PAK9fAj4um6YNbwuRMFSnw0S2eTtzC/yp4xlj5CUgkSoJb4jmAGXPyYWax84amJ9nYlyU5E89x11uXBeBEHKmVYQu5Uy5o4hQLBOZogjQCp3k/Lm4ikAS7bTs=;
-X-UUID: 09e45c68bb16487a96c96b2518a8a4dd-20201203
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 813641303; Thu, 03 Dec 2020 14:03:29 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 3 Dec 2020 14:03:26 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Dec 2020 14:03:26 +0800
-Message-ID: <1606975407.23925.61.camel@mtkswgap22>
-Subject: Re: [PATCH] scsi: ufs: Adjust ufshcd_hold() during sending
- attribute requests
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Jintae Jang <jt77.jang@samsung>
-CC:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <jt77.jang@samsung.com>
-Date:   Thu, 3 Dec 2020 14:03:27 +0800
-In-Reply-To: <1606973132-5937-1-git-send-email-user@jang-Samsung-DeskTop-System>
-References: <CGME20201203053818epcas1p2aef4dce58afcac06fb28354146254c8d@epcas1p2.samsung.com>
-         <1606973132-5937-1-git-send-email-user@jang-Samsung-DeskTop-System>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S2388075AbgLCHTl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Dec 2020 02:19:41 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34740 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728612AbgLCHTk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 3 Dec 2020 02:19:40 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7A7C6ABCE;
+        Thu,  3 Dec 2020 07:18:58 +0000 (UTC)
+Subject: Re: [PATCH v4 5/9] scsi: Do not wait for a request in
+ scsi_eh_lock_door()
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Can Guo <cang@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20201130024615.29171-1-bvanassche@acm.org>
+ <20201130024615.29171-6-bvanassche@acm.org>
+ <bdadfbcd-76c4-4658-0b36-b7666fa1dc7b@suse.de>
+ <6e5fbc73-881e-69c7-54ce-381b8b695b3c@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <b56cf3af-940f-62ed-2a79-eb80599e2f44@suse.de>
+Date:   Thu, 3 Dec 2020 08:18:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <6e5fbc73-881e-69c7-54ce-381b8b695b3c@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTEyLTAzIGF0IDE0OjI1ICswOTAwLCBKaW50YWUgSmFuZyB3cm90ZToNCj4g
-RnJvbTogamludGFlIGphbmcgPGp0NzcuamFuZ0BzYW1zdW5nLmNvbT4NCj4gDQo+IEludmFsaWRh
-dGlvbiBjaGVjayBvZiBhcmd1bWVudHMgc2hvdWxkIGhhdmUgYmVlbiBjaGVja2VkIGJlZm9yZQ0K
-PiB1ZnNoY2RfaG9sZCgpLiBJdCBjYW4gaGVscCB0byBwcmV2ZW50IHVmc2hjZF9ob2xkKCkvDQo+
-IHVmc2hjZF9yZWxlYXNlKCkgZnJvbSBiZWluZyBpbnZva2VkIHVubmVjZXNzYXJpbHkuDQo+IA0K
-PiBTaWduZWQtb2ZmLWJ5OiBqaW50YWUgamFuZyA8anQ3Ny5qYW5nQHNhbXN1bmcuY29tPg0KDQpS
-ZXZpZXdlZC1ieTogU3RhbmxleSBDaHUgPHN0YW5sZXkuY2h1QG1lZGlhdGVrLmNvbT4NCg==
+On 12/3/20 6:10 AM, Bart Van Assche wrote:
+> On 12/1/20 11:06 PM, Hannes Reinecke wrote:
+>> On 11/30/20 3:46 AM, Bart Van Assche wrote:
+>>> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+>>> index d94449188270..6de6e1bf3dcb 100644
+>>> --- a/drivers/scsi/scsi_error.c
+>>> +++ b/drivers/scsi/scsi_error.c
+>>> @@ -1993,7 +1993,12 @@ static void scsi_eh_lock_door(struct
+>>> scsi_device *sdev)
+>>>        struct request *req;
+>>>        struct scsi_request *rq;
+>>>    -    req = blk_get_request(sdev->request_queue, REQ_OP_SCSI_IN, 0);
+>>> +    /*
+>>> +     * It is not guaranteed that a request is available nor that
+>>> +     * sdev->request_queue is unfrozen. Hence the BLK_MQ_REQ_NOWAIT
+>>> below.
+>>> +     */
+>>> +    req = blk_get_request(sdev->request_queue, REQ_OP_SCSI_IN,
+>>> +                  BLK_MQ_REQ_NOWAIT);
+>>>        if (IS_ERR(req))
+>>>            return;
+>>>        rq = scsi_req(req);
+>>>
+>>
+>> Well ... had been thinking about that one, too.
+>> The idea of this function is that prior to SCSI EH the device was locked
+>> via scsi_set_medium_removal(). And during SCSI EH the device might have
+>> become unlocked, so we need to lock it again.
+>> However, scsi_set_medium_removal() not only issues the
+>> PREVENT_ALLOW_MEDIUM_REMOVAL command, but also sets the 'locked' flag
+>> based on the result.
+>> So if we fail to get a request here, shouldn't we unset the 'locked'
+>> flag, too?
+> 
+> Probably not. My interpretation of the 'locked' flag is that it
+> represents the door state before error handling began. The following
+> code in the SCSI error handler restores the door state after a bus reset:
+> 
+> 	if (scsi_device_online(sdev) && sdev->was_reset && sdev->locked) {
+> 		scsi_eh_lock_door(sdev);
+> 		sdev->was_reset = 0;
+> 	}
+> 
+>> And what does happen if we fail here? There is no return value, hence
+>> SCSI EH might run to completion, and the system will continue
+>> with an unlocked door ...
+>> Not sure if that's a good idea.
+> 
+> How about applying the following patch on top of patch 5/9?
+> 
+> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+> index 6de6e1bf3dcb..feac7262e40e 100644
+> --- a/drivers/scsi/scsi_error.c
+> +++ b/drivers/scsi/scsi_error.c
+> @@ -1988,7 +1988,7 @@ static void eh_lock_door_done(struct request *req, blk_status_t status)
+>    * 	We queue up an asynchronous "ALLOW MEDIUM REMOVAL" request on the
+>    * 	head of the devices request queue, and continue.
+>    */
+> -static void scsi_eh_lock_door(struct scsi_device *sdev)
+> +static int scsi_eh_lock_door(struct scsi_device *sdev)
+>   {
+>   	struct request *req;
+>   	struct scsi_request *rq;
+> @@ -2000,7 +2000,7 @@ static void scsi_eh_lock_door(struct scsi_device *sdev)
+>   	req = blk_get_request(sdev->request_queue, REQ_OP_SCSI_IN,
+>   			      BLK_MQ_REQ_NOWAIT);
+>   	if (IS_ERR(req))
+> -		return;
+> +		return PTR_ERR(req);
+>   	rq = scsi_req(req);
+> 
+>   	rq->cmd[0] = ALLOW_MEDIUM_REMOVAL;
+> @@ -2016,6 +2016,7 @@ static void scsi_eh_lock_door(struct scsi_device *sdev)
+>   	rq->retries = 5;
+> 
+>   	blk_execute_rq_nowait(req->q, NULL, req, 1, eh_lock_door_done);
+> +	return 0;
+>   }
+> 
+>   /**
+> @@ -2037,8 +2038,8 @@ static void scsi_restart_operations(struct Scsi_Host *shost)
+>   	 * is no point trying to lock the door of an off-line device.
+>   	 */
+>   	shost_for_each_device(sdev, shost) {
+> -		if (scsi_device_online(sdev) && sdev->was_reset && sdev->locked) {
+> -			scsi_eh_lock_door(sdev);
+> +		if (scsi_device_online(sdev) && sdev->was_reset &&
+> +		    sdev->locked && scsi_eh_lock_door(sdev) == 0) {
+>   			sdev->was_reset = 0;
+>   		}
+>   	}
+> 
+I probably didn't make myself clear.
+As per SBC (in this case, sbc3r36) the effects of 
+PREVENT_ALLOW_MEDIUM_REMOVAL are being reset by a successfull LUN Reset, 
+Hard Reset, Power/On Reset, or an I_T Nexus loss. Which incidentally 
+maps nicely onto SCSI EH, so after a successful SCSI EH the door will be 
+unlocked (which is why we need to call scsi_eh_lock_door()).
+In the SCSI midlayer this state is being reflected by the 'locked' flag.
+Now, if scsi_eh_lock_door() is _not_ being executed due to a 
+blk_get_request() failure, the device remains unlocked, and as such the 
+'locked' flag would need to be _unset_.
 
+So I was thinking more along these lines:
+
+@@ -2030,7 +2037,8 @@ static void scsi_restart_operations(struct 
+Scsi_Host *shost)
+          */
+         shost_for_each_device(sdev, shost) {
+                 if (scsi_device_online(sdev) && sdev->was_reset && 
+sdev->locked) {
+-                       scsi_eh_lock_door(sdev);
++                       if (scsi_eh_lock_door(sdev) < 0)
++                               sdev->locked = 0;
+                         sdev->was_reset = 0;
+                 }
+         }
+
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
