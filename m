@@ -2,47 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5352CCC41
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDCD2CCC42
 	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 03:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbgLCCJj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Dec 2020 21:09:39 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49810 "EHLO
+        id S1729612AbgLCCJm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Dec 2020 21:09:42 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48938 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728279AbgLCCJB (ORCPT
+        by vger.kernel.org with ESMTP id S1728252AbgLCCJB (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Dec 2020 21:09:01 -0500
 Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B322kER095952;
-        Wed, 2 Dec 2020 21:08:13 -0500
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B322kET095952;
+        Wed, 2 Dec 2020 21:08:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=FikaVMSWv9fzh3+QqH1htxIk/scNAtSYHyhJCHaSiXA=;
- b=FxqiK1f1dHlPpF5SniKkC5nugqEFuOnj3tNk4h1HmjUPO/tjRgNiVnno345a6tZQi0Fv
- /CnoLE6XCliqrTgUr6veQtt1u9011PT/0kKgUSOOJO2tSdq2vXBtHJ/XBfiTNFnK7gfH
- IL/NBn2NaSqSvgNwDgCm94Ac9cCegX7hPAEQOILgF3dHwQcgwC3ACGm5uET7NJVbVWW1
- cSyzHJIjIAcjBnVfz8yUruEQ09pX2TIcnoEGTCJBHXHYNwgScRMTJ91z7uNBuU5zEwGb
- s2sPNHscNITmhZV0yRZeAJPmlogPPoHhV9fd60EMlOlghWtkJximV+uCmKA4nWIRbX8v Gg== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 356jfcxxc9-1
+ bh=quLqGqXAl/PPgl+TuyjYAEjbjck4OUuu3Qk2jmO0lrg=;
+ b=HfTpzJrch9k/+CR54cx6q7JB0qQwTKPrSfs+cZOrQTtV762n2SsjbI0Xv01XDUtJXR7L
+ ATk6jsf0xEHd402U08XUANGteVtKMOottZqDIXb8QRuQ6ziLK0JccB06EdRQaonYIgZ1
+ IhLHZh4AyGEMXd5+UaTSxYg8G20hd6CjaUM1ffvfpq4N+uatfeamBnK83XSpjJWw2lqD
+ /MlvAgLSf9K1y/Bk6CH4Efk3NbK8ukqny+ZkI/olCQKJo8OYobRYZkjPtmfP7tfnTXA7
+ uKg3ledqaZYQF2DkM51CukUCuAisejdpNx/vvbil0j4OlIFAHEyil/eg+xsEz5gOw6VS LQ== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 356jfcxxcg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Dec 2020 21:08:13 -0500
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B327Wme010529;
+        Wed, 02 Dec 2020 21:08:14 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B31uLTO013319;
         Thu, 3 Dec 2020 02:08:12 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01dal.us.ibm.com with ESMTP id 355rf7px9q-1
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma01wdc.us.ibm.com with ESMTP id 355vrfvc7e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 03 Dec 2020 02:08:12 +0000
 Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B328A5g11338290
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B328BQ221102922
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Dec 2020 02:08:10 GMT
+        Thu, 3 Dec 2020 02:08:11 GMT
 Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B294A78063;
-        Thu,  3 Dec 2020 02:08:10 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6561178064;
+        Thu,  3 Dec 2020 02:08:11 +0000 (GMT)
 Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D69678064;
+        by IMSVA (Postfix) with ESMTP id CD0EE7805F;
         Thu,  3 Dec 2020 02:08:10 +0000 (GMT)
 Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
         by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
@@ -53,9 +53,9 @@ Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>,
         Brian King <brking@linux.vnet.ibm.com>
-Subject: [PATCH v3 02/18] ibmvfc: define hcall wrapper for registering a Sub-CRQ
-Date:   Wed,  2 Dec 2020 20:07:50 -0600
-Message-Id: <20201203020806.14747-3-tyreld@linux.ibm.com>
+Subject: [PATCH v3 03/18] ibmvfc: add Subordinate CRQ definitions
+Date:   Wed,  2 Dec 2020 20:07:51 -0600
+Message-Id: <20201203020806.14747-4-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201203020806.14747-1-tyreld@linux.ibm.com>
 References: <20201203020806.14747-1-tyreld@linux.ibm.com>
@@ -73,40 +73,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sub-CRQs are registred with firmware via a hypercall. Abstract that
-interface into a simpler helper function.
+Subordinate Command Response Queues (Sub CRQ) are used in conjunction
+with the primary CRQ when more than one queue is needed by the virtual
+IO adapter. Recent phyp firmware versions support Sub CRQ's with ibmvfc
+adapters. This feature is a prerequisite for supporting multiple
+hardware backed submission queues in the vfc adapter.
+
+The Sub CRQ command element differs from the standard CRQ in that it is
+32bytes long as opposed to 16bytes for the latter. Despite this extra
+16bytes the ibmvfc protocol will use the original CRQ command element
+mapped to the first 16bytes of the Sub CRQ element initially.
+
+Add definitions for the Sub CRQ command element and queue.
 
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/scsi/ibmvscsi/ibmvfc.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index f1d677a7423d..64674054dbae 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -138,6 +138,20 @@ static void ibmvfc_tgt_move_login(struct ibmvfc_target *);
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.h b/drivers/scsi/ibmvscsi/ibmvfc.h
+index e095daada70e..b3cd35cbf067 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.h
++++ b/drivers/scsi/ibmvscsi/ibmvfc.h
+@@ -656,6 +656,29 @@ struct ibmvfc_crq_queue {
+ 	dma_addr_t msg_token;
+ };
  
- static const char *unknown_error = "unknown error";
- 
-+static long h_reg_sub_crq(unsigned long unit_address, unsigned long ioba,
-+			  unsigned long length, unsigned long *cookie,
-+			  unsigned long *irq)
-+{
-+	unsigned long retbuf[PLPAR_HCALL_BUFSIZE];
-+	long rc;
++struct ibmvfc_sub_crq {
++	struct ibmvfc_crq crq;
++	__be64 reserved[2];
++} __packed __aligned(8);
 +
-+	rc = plpar_hcall(H_REG_SUB_CRQ, retbuf, unit_address, ioba, length);
-+	*cookie = retbuf[0];
-+	*irq = retbuf[1];
++struct ibmvfc_sub_queue {
++	struct ibmvfc_sub_crq *msgs;
++	dma_addr_t msg_token;
++	int size, cur;
++	struct ibmvfc_host *vhost;
++	unsigned long cookie;
++	unsigned long vios_cookie;
++	unsigned long hw_irq;
++	unsigned long irq;
++	unsigned long hwq_id;
++	char name[32];
++};
 +
-+	return rc;
-+}
++struct ibmvfc_scsi_channels {
++	struct ibmvfc_sub_queue *scrqs;
++	unsigned int active_queues;
++};
 +
- static int ibmvfc_check_caps(struct ibmvfc_host *vhost, unsigned long cap_flags)
- {
- 	u64 host_caps = be64_to_cpu(vhost->login_buf->resp.capabilities);
+ enum ibmvfc_ae_link_state {
+ 	IBMVFC_AE_LS_LINK_UP		= 0x01,
+ 	IBMVFC_AE_LS_LINK_BOUNCED	= 0x02,
 -- 
 2.27.0
 
