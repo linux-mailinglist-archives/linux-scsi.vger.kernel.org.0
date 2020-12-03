@@ -2,60 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA5E2CD641
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 13:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FAE2CD675
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Dec 2020 14:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730645AbgLCM6x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Dec 2020 07:58:53 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41626 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730628AbgLCM6w (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 3 Dec 2020 07:58:52 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E203DAC65;
-        Thu,  3 Dec 2020 12:58:10 +0000 (UTC)
-Subject: Re: [PATCH v2 3/4] scsi_debug : iouring iopoll support
-To:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        linux-scsi@vger.kernel.org
-Cc:     dgilbert@interlog.com, linux-block@vger.kernel.org
-References: <20201203034100.29716-1-kashyap.desai@broadcom.com>
- <20201203034100.29716-4-kashyap.desai@broadcom.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <53469128-7250-adc4-b581-309e7f861372@suse.de>
-Date:   Thu, 3 Dec 2020 13:58:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <20201203034100.29716-4-kashyap.desai@broadcom.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1730577AbgLCNQI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Dec 2020 08:16:08 -0500
+Received: from mail-m972.mail.163.com ([123.126.97.2]:49850 "EHLO
+        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729142AbgLCNQH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Dec 2020 08:16:07 -0500
+X-Greylist: delayed 4654 seconds by postgrey-1.27 at vger.kernel.org; Thu, 03 Dec 2020 08:16:05 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=GgH58TmNPqh2B4YQNF
+        GHe8cIq1p3EuxNRQSc4QcypV0=; b=H2ez7+05h3kZ0ktT3NaWT264ZIdA6VRt//
+        fUNEXTyEqUDcBP0aLNIzjzTIBQ6OF1NpJfluIps3VPS4UZuuhMjp83j5baDVidXD
+        /IHovSObAsRRe4cOi0hE7jKw/ANPozpcbNfygguJZoZ9j6ehGHwtrCZeKhQ6/2Ek
+        bG3M/Iw7M=
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp2 (Coremail) with SMTP id GtxpCgCXNbq5zshfqV4QDw--.9527S4;
+        Thu, 03 Dec 2020 19:40:49 +0800 (CST)
+From:   Xiaohui Zhang <ruc_zhangxiaohui@163.com>
+To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+Subject: [PATCH 1/1] target: Make sure no zero value in the buffer
+Date:   Thu,  3 Dec 2020 19:40:40 +0800
+Message-Id: <20201203114040.12656-1-ruc_zhangxiaohui@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: GtxpCgCXNbq5zshfqV4QDw--.9527S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XFy5Zw47Kr17Jw1fXFWUArb_yoW3uwc_Gw
+        4kJr18Ww1F9w4Fyr1UC3sxury2yw1ruFn29F4IyF43KryUuas8twn2qF1DC3yDZ3ykXr95
+        uaySqwsxCF45KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUU0PfJUUUUU==
+X-Originating-IP: [202.112.113.212]
+X-CM-SenderInfo: puxfs6pkdqw5xldrx3rl6rljoofrz/xtbBRQHvMFPAIneHYQAAs7
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12/3/20 4:40 AM, Kashyap Desai wrote:
-> Add support of iouring iopoll interface in scsi_debug.
-> This feature requires shared hosttag support in kernel and driver.
-> 
-> Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
-> Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-> Tested-by: Douglas Gilbert <dgilbert@interlog.com>
-> 
-> Cc: dgilbert@interlog.com
-> Cc: linux-block@vger.kernel.org
-> ---
->   drivers/scsi/scsi_debug.c | 130 ++++++++++++++++++++++++++++++++++++++
->   1 file changed, 130 insertions(+)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+From: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
 
-Cheers,
+The fix makes sure no zero value in the buffer, by comparing the
+strlen() of the original buffer with the size variable.
 
-Hannes
+Signed-off-by: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+---
+ drivers/target/target_core_iblock.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index f2bd2e207..b23e92449 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -537,6 +537,8 @@ static ssize_t iblock_set_configfs_dev_params(struct se_device *dev,
+ 	int ret = 0, token;
+ 	unsigned long tmp_readonly;
+ 
++	if (strlen(page) < count)
++		return -EOVERFLOW;
+ 	opts = kstrdup(page, GFP_KERNEL);
+ 	if (!opts)
+ 		return -ENOMEM;
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.17.1
+
