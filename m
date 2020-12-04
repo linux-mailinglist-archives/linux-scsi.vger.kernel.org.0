@@ -2,144 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEC62CEB5E
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 10:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E39552CEB93
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 11:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387795AbgLDJu4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 04:50:56 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34563 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726136AbgLDJu4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 04:50:56 -0500
-X-UUID: 6bb079f1f1dd46edb44ba9b6d7a7ff1e-20201204
-X-UUID: 6bb079f1f1dd46edb44ba9b6d7a7ff1e-20201204
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 375920986; Fri, 04 Dec 2020 17:50:10 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 4 Dec 2020 17:50:07 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 4 Dec 2020 17:50:07 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <alice.chao@mediatek.com>, <huadian.liu@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v3 8/8] scsi: ufs-mediatek: Introduce event_notify implementation
-Date:   Fri, 4 Dec 2020 17:50:07 +0800
-Message-ID: <20201204095007.20639-9-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201204095007.20639-1-stanley.chu@mediatek.com>
-References: <20201204095007.20639-1-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+        id S1729667AbgLDKC3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 05:02:29 -0500
+Received: from mx2.suse.de ([195.135.220.15]:50434 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726014AbgLDKC3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 4 Dec 2020 05:02:29 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 8E59CACB5;
+        Fri,  4 Dec 2020 10:01:47 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv2 00/37] SCSI result handling cleanup, part 1
+Date:   Fri,  4 Dec 2020 11:01:03 +0100
+Message-Id: <20201204100140.140863-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Introduce event_notify implementation on MediaTek UFS platform.
+Hi all,
 
-A vendor-specific tracepoint is added that could be used
-for debugging purpose.
+this is the first part of an attempt to clean up SCSI result handling.
+The patchset primarily cleans up various drivers by fixing up
+whitespaces or move to standard definitions.
+It also fixes some minor issues in some drivers which set the
+wrong result values.
+And, of course, another attempt to kill the gdth driver
 
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufs-mediatek-trace.h | 37 +++++++++++++++++++++++++++
- drivers/scsi/ufs/ufs-mediatek.c       | 10 ++++++++
- 2 files changed, 47 insertions(+)
- create mode 100644 drivers/scsi/ufs/ufs-mediatek-trace.h
+I have a larger patchset based on this one to update the SCSI result
+handling for all drivers, but decided to split things in two to not
+overload reviewers
 
-diff --git a/drivers/scsi/ufs/ufs-mediatek-trace.h b/drivers/scsi/ufs/ufs-mediatek-trace.h
-new file mode 100644
-index 000000000000..c36ca6de9636
---- /dev/null
-+++ b/drivers/scsi/ufs/ufs-mediatek-trace.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020 MediaTek Inc.
-+ */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM ufs_mtk
-+
-+#if !defined(_TRACE_EVENT_UFS_MEDIATEK_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_EVENT_UFS_MEDIATEK_H
-+
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(ufs_mtk_event,
-+	TP_PROTO(unsigned int type, int data),
-+	TP_ARGS(type, data),
-+
-+	TP_STRUCT__entry(
-+		__field(unsigned int, type)
-+		__field(int, data)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->type = type;
-+		__entry->data = data;
-+	),
-+
-+	TP_printk("ufs:event=%u data=%u",
-+		  __entry->type, __entry->data)
-+	);
-+#endif
-+
-+#undef TRACE_INCLUDE_PATH
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_PATH .
-+#define TRACE_INCLUDE_FILE ufs-mediatek-trace
-+#include <trace/define_trace.h>
-+
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index 1d3c5cd4592e..b6755aab9a7b 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -24,6 +24,9 @@
- #include "unipro.h"
- #include "ufs-mediatek.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include "ufs-mediatek-trace.h"
-+
- #define ufs_mtk_smc(cmd, val, res) \
- 	arm_smccc_smc(MTK_SIP_UFS_CONTROL, \
- 		      cmd, val, 0, 0, 0, 0, 0, &(res))
-@@ -1002,6 +1005,12 @@ static void ufs_mtk_fixup_dev_quirks(struct ufs_hba *hba)
- 	ufshcd_fixup_dev_quirks(hba, ufs_mtk_dev_fixups);
- }
- 
-+static void ufs_mtk_event_notify(struct ufs_hba *hba,
-+				 enum ufs_event_type evt, void *data)
-+{
-+	trace_ufs_mtk_event(evt, (int)data);
-+}
-+
- /*
-  * struct ufs_hba_mtk_vops - UFS MTK specific variant operations
-  *
-@@ -1021,6 +1030,7 @@ static const struct ufs_hba_variant_ops ufs_hba_mtk_vops = {
- 	.resume              = ufs_mtk_resume,
- 	.dbg_register_dump   = ufs_mtk_dbg_register_dump,
- 	.device_reset        = ufs_mtk_device_reset,
-+	.event_notify        = ufs_mtk_event_notify,
- };
- 
- /**
+As usual, comments and reviews are welcome.
+
+Changes to v1:
+- Add reviews from Christoph
+- Included review from Finn Thain
+- Add set_status_byte() helper
+- Add cleanup for dc395c
+- Add additional patch for using SAM status values instead
+  of the shifted linux versions
+
+Hannes Reinecke (37):
+  scsi: drop gdth driver
+  3w-xxxx: Whitespace cleanup
+  3w-9xxx: Whitespace cleanup
+  3w-sas: Whitespace cleanup
+  atp870u: Whitespace cleanup
+  aic7xxx,aic79xx: Whitespace cleanup
+  aic7xxx,aic79xx: kill pointless forward declarations
+  aic7xxx,aic79xxx: remove driver-defined SAM status definitions
+  bfa: drop driver-defined SCSI status codes
+  acornscsi: use standard defines
+  nsp32: fixup status handling
+  dc395: drop private SAM status code definitions
+  qla4xxx: use standard SAM status definitions
+  zfcp: do not set COMMAND_COMPLETE
+  aacraid: avoid setting message byte on completion
+  hpsa: do not set COMMAND_COMPLETE
+  stex: do not set COMMAND_COMPLETE
+  nsp_cs: drop internal SCSI message definition
+  aic7xxx,aic79xx: drop internal SCSI message definition
+  dc395x: drop internal SCSI message definitions
+  initio: drop internal SCSI message definition
+  scsi_debug: do not set COMMAND_COMPLETE
+  ufshcd: do not set COMMAND_COMPLETE
+  atp870u: use standard definitions
+  mac53c94: Do not set invalid command result
+  dpt_i2o: use DID_ERROR instead of INITIATOR_ERROR message
+  scsi: add 'set_status_byte()' accessor
+  esp_scsi: use host byte as last argument to esp_cmd_is_done()
+  esp_scsi: do not set SCSI message byte
+  wd33c93: use SCSI status
+  ips: use correct command completion on error
+  storvsc: Return DID_ERROR for invalid commands
+  qla2xxx: fc_remote_port_chkready() returns a SCSI result value
+  advansys: kill driver_defined status byte accessors
+  ncr53c8xx: Use SAM status values
+  dc395x: drop internal result accessors
+  scsi: use non-shifted status values
+
+ Documentation/kbuild/makefiles.rst                 |    4 +-
+ Documentation/process/magic-number.rst             |    2 -
+ Documentation/scsi/scsi-parameters.rst             |    3 -
+ Documentation/userspace-api/ioctl/ioctl-number.rst |    1 -
+ drivers/s390/scsi/zfcp_fc.h                        |    1 -
+ drivers/scsi/3w-9xxx.c                             |   59 +-
+ drivers/scsi/3w-9xxx.h                             |  156 +-
+ drivers/scsi/3w-sas.c                              |   52 +-
+ drivers/scsi/3w-sas.h                              |  118 +-
+ drivers/scsi/3w-xxxx.c                             |  257 +-
+ drivers/scsi/3w-xxxx.h                             |  199 +-
+ drivers/scsi/Kconfig                               |   14 -
+ drivers/scsi/Makefile                              |    2 -
+ drivers/scsi/aacraid/aachba.c                      |  173 +-
+ drivers/scsi/advansys.c                            |   84 +-
+ drivers/scsi/aic7xxx/aic79xx.h                     |   36 +-
+ drivers/scsi/aic7xxx/aic79xx_core.c                |  257 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.c                 |   20 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.h                 |   37 +-
+ drivers/scsi/aic7xxx/aic79xx_osm_pci.c             |    6 +-
+ drivers/scsi/aic7xxx/aic79xx_proc.c                |   13 +-
+ drivers/scsi/aic7xxx/aic7xxx_93cx6.c               |    4 +-
+ drivers/scsi/aic7xxx/aic7xxx_core.c                |  263 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.c                 |   88 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.h                 |   39 +-
+ drivers/scsi/aic7xxx/aic7xxx_proc.c                |   15 +-
+ drivers/scsi/aic7xxx/aiclib.h                      |   15 -
+ drivers/scsi/aic7xxx/scsi_message.h                |   41 -
+ drivers/scsi/arcmsr/arcmsr_hba.c                   |    2 +-
+ drivers/scsi/arm/acornscsi.c                       |   14 +-
+ drivers/scsi/atp870u.c                             |  451 +-
+ drivers/scsi/atp870u.h                             |   14 +-
+ drivers/scsi/bfa/bfa_fc.h                          |   15 -
+ drivers/scsi/bfa/bfa_fcpim.c                       |    2 +-
+ drivers/scsi/bfa/bfad_im.c                         |    2 +-
+ drivers/scsi/dc395x.c                              |  110 +-
+ drivers/scsi/dc395x.h                              |   38 -
+ drivers/scsi/dpt_i2o.c                             |    2 +-
+ drivers/scsi/esp_scsi.c                            |   23 +-
+ drivers/scsi/gdth.c                                | 4322 --------------------
+ drivers/scsi/gdth.h                                |  981 -----
+ drivers/scsi/gdth_ioctl.h                          |  251 --
+ drivers/scsi/gdth_proc.c                           |  586 ---
+ drivers/scsi/gdth_proc.h                           |   18 -
+ drivers/scsi/hpsa.c                                |    4 +-
+ drivers/scsi/initio.c                              |   64 +-
+ drivers/scsi/initio.h                              |   25 -
+ drivers/scsi/ips.c                                 |    9 +-
+ drivers/scsi/mac53c94.c                            |    1 -
+ drivers/scsi/megaraid.c                            |    6 +-
+ drivers/scsi/megaraid/megaraid_mbox.c              |    8 +-
+ drivers/scsi/ncr53c8xx.c                           |   83 +-
+ drivers/scsi/ncr53c8xx.h                           |   16 -
+ drivers/scsi/nsp32.c                               |    2 +-
+ drivers/scsi/pcmcia/nsp_cs.c                       |   12 +-
+ drivers/scsi/pcmcia/nsp_cs.h                       |   11 -
+ drivers/scsi/qla2xxx/qla_os.c                      |    2 +-
+ drivers/scsi/qla4xxx/ql4_fw.h                      |    1 -
+ drivers/scsi/qla4xxx/ql4_isr.c                     |    2 +-
+ drivers/scsi/scsi_debug.c                          |    2 +-
+ drivers/scsi/stex.c                                |   25 +-
+ drivers/scsi/storvsc_drv.c                         |    2 +-
+ drivers/scsi/ufs/ufshcd.c                          |    4 +-
+ drivers/scsi/wd33c93.c                             |    6 +-
+ include/scsi/scsi.h                                |    1 +
+ include/scsi/scsi_cmnd.h                           |    5 +
+ 66 files changed, 1353 insertions(+), 7728 deletions(-)
+ delete mode 100644 drivers/scsi/gdth.c
+ delete mode 100644 drivers/scsi/gdth.h
+ delete mode 100644 drivers/scsi/gdth_ioctl.h
+ delete mode 100644 drivers/scsi/gdth_proc.c
+ delete mode 100644 drivers/scsi/gdth_proc.h
+
 -- 
-2.18.0
+2.16.4
 
