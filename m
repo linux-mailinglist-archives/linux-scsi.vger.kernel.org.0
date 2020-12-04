@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DC52CEB62
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 10:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8432CEB69
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 10:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387871AbgLDJvM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 04:51:12 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34563 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387866AbgLDJvL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 04:51:11 -0500
-X-UUID: 4080438f15a14f628406f14712027c6b-20201204
-X-UUID: 4080438f15a14f628406f14712027c6b-20201204
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        id S2387931AbgLDJvU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 04:51:20 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:37623 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387656AbgLDJvM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 04:51:12 -0500
+X-UUID: a7aac038871341fdb3f00d6541372d54-20201204
+X-UUID: a7aac038871341fdb3f00d6541372d54-20201204
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1465791880; Fri, 04 Dec 2020 17:50:11 +0800
+        with ESMTP id 935237692; Fri, 04 Dec 2020 17:50:09 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 4 Dec 2020 17:50:07 +0800
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 4 Dec 2020 17:50:06 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Fri, 4 Dec 2020 17:50:06 +0800
@@ -37,41 +37,48 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, <huadian.liu@mediatek.com>,
         Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v3 3/8] scsi: ufs-cdns: Use phy_initialization helper
-Date:   Fri, 4 Dec 2020 17:50:02 +0800
-Message-ID: <20201204095007.20639-4-stanley.chu@mediatek.com>
+Subject: [PATCH v3 4/8] scsi: ufs-dwc: Use phy_initialization helper
+Date:   Fri, 4 Dec 2020 17:50:03 +0800
+Message-ID: <20201204095007.20639-5-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201204095007.20639-1-stanley.chu@mediatek.com>
 References: <20201204095007.20639-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 954FA1CA6C6EB9F1CCDA633874490B3712B194BA30CE146A07AA8891CDB3AE642000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use phy_initialization helper instead of direct function invoking.
+Use phy_initialization helper instead of direct invoking.
 
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/cdns-pltfrm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/ufs/ufshcd-dwc.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
-index da065a259f6e..149391faa19c 100644
---- a/drivers/scsi/ufs/cdns-pltfrm.c
-+++ b/drivers/scsi/ufs/cdns-pltfrm.c
-@@ -221,8 +221,7 @@ static int cdns_ufs_init(struct ufs_hba *hba)
- 		return -ENOMEM;
- 	ufshcd_set_variant(hba, host);
+diff --git a/drivers/scsi/ufs/ufshcd-dwc.c b/drivers/scsi/ufs/ufshcd-dwc.c
+index 6a901da2d15a..5bb9d3a88795 100644
+--- a/drivers/scsi/ufs/ufshcd-dwc.c
++++ b/drivers/scsi/ufs/ufshcd-dwc.c
+@@ -120,13 +120,10 @@ int ufshcd_dwc_link_startup_notify(struct ufs_hba *hba,
+ 	if (status == PRE_CHANGE) {
+ 		ufshcd_dwc_program_clk_div(hba, DWC_UFS_REG_HCLKDIV_DIV_125);
  
--	if (hba->vops && hba->vops->phy_initialization)
--		status = hba->vops->phy_initialization(hba);
-+	status = ufshcd_vops_phy_initialization(hba);
- 
- 	return status;
- }
+-		if (hba->vops->phy_initialization) {
+-			err = hba->vops->phy_initialization(hba);
+-			if (err) {
+-				dev_err(hba->dev, "Phy setup failed (%d)\n",
+-									err);
+-				goto out;
+-			}
++		err = ufshcd_vops_phy_initialization(hba);
++		if (err) {
++			dev_err(hba->dev, "Phy setup failed (%d)\n", err);
++			goto out;
+ 		}
+ 	} else { /* POST_CHANGE */
+ 		err = ufshcd_dwc_link_is_up(hba);
 -- 
 2.18.0
 
