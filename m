@@ -2,111 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD492CF23E
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 17:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E663D2CF24C
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 17:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730984AbgLDQss (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 11:48:48 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:48522 "EHLO
+        id S1731063AbgLDQtm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 11:49:42 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48530 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726309AbgLDQsr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 11:48:47 -0500
-Date:   Fri, 4 Dec 2020 17:48:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1607100485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=3pZ3FTQEhW5VI2xWSqytawbzEkWxvXEDOdIicOWp2ug=;
-        b=YoAdKgExfx/yI1cwQ8zVEu8g+HlxLogWsqAX7nzQO4sRPmRojKBSIs7mY1Aq1UQEqo5CxN
-        SxuqcJTfX+7F15EDLm5SJ+L8ECNO3Pib0Zpff7Ffa+jlXRSPhJliW1rl+a2RnA6HY07AZk
-        PEk3zhkEqMk1U5Tso+xrbdCk625OB7gnVBaVys6oFTJ8c5VWPok7zsD4zJNZsks6YJ8U/4
-        zhyUDCemqsCeGviIzmEZ5cx7HOEUGkFhBJxEX+NOcnj+2StGkPp0ve/l1yXj09RBFcRQa6
-        sD6i0WFHtroW8z4Le0BnFMIDPaZKod+kpJ3b/BCcP4YKFn/XAgmBObqT4zqXvg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1607100485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=3pZ3FTQEhW5VI2xWSqytawbzEkWxvXEDOdIicOWp2ug=;
-        b=3Nvh9wAazTydhuZmet6IwKKnupnT9mMZW605igPKCY90qqTvbryOz2bnUavlbryIUMnG2C
-        dmla0F0sFYjkWUCA==
+        with ESMTP id S1731021AbgLDQtl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 11:49:41 -0500
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1607100539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zVmduwuXX/EtsNpL6GIUNu67EAHxRaD9Jr2TF6Y1iUI=;
+        b=4PpF9phaFYkXNRjhGjolQ11N8z0op2VsWnINy5E+SDH8/1kg2275pS+r+gceqDCWQSI/Sy
+        FKAWv3iouz6ndnQbeZew4Ty9ckiAtsUGo0EPwPTtRPi6ihTuaOmlqSOZUxW13hDuaP6y4w
+        +x8PCz1W9xgRrVN/V4DIz7gQ/2foEsadVYX2TLs+Ku8uxx7yyR0R/hMDZj714//5+FGBGz
+        Vl5Y7nL6vmd7788r0mhAfUYh0P4E1K1CGEvuk6kDzkTKloqgDDMTpAaciNprzw5LdqJrur
+        7iNLUraY/FGXZcmQDwEX2b2USG0FSuBqBr71Cp3odOwC8qIAzuPp2UtZRg4ITw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1607100539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zVmduwuXX/EtsNpL6GIUNu67EAHxRaD9Jr2TF6Y1iUI=;
+        b=ofh5NU+CKTUaCBB/NQB487eCfWL4VEphmdxik8LzRyunDLdSwglElK41h+mhRPKcUVdAwR
+        Js6vEj+z4eJ71/Bw==
 To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 0/3] Remove in_interrupt() usage in sr.
-Message-ID: <20201204164803.ovwurzs3257em2rp@linutronix.de>
+        "Ahmed S . Darwish" <a.darwish@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 1/3] cdrom: Reset sector_size back it is not 2048.
+Date:   Fri,  4 Dec 2020 17:48:48 +0100
+Message-Id: <20201204164850.2343359-1-bigeasy@linutronix.de>
+In-Reply-To: <20201204164803.ovwurzs3257em2rp@linutronix.de>
+References: <20201204164803.ovwurzs3257em2rp@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Before v2.1.62 sr_read_sector() did MODE_SELECT to set the requested sector size,
-issued READ_10 and then used MODE_SELECT to select a sector size of 2048 bytes.
-This function was used to serve ioctl()'s command CDROMREADMODE2 and CDROMREADRAW
-which do not use 2048 bytes as sector size.
+In v2.4.0-test2pre2 mmc_ioctl_cdrom_read_data() was extended by issuing
+a MODE_SELECT opcode to change the sector size and READ_10 to perform
+the actual read if the READ_CD opcode is not support.
+The sector size is never changed back to the previous value of 2048
+bytes which is however denoted by the comment for version 3.09 of the
+cdrom.c file.
 
-In v2.1.62 sr_read_sector() changed to use READ_CD first and fallback to
-MODE_SELECT and READ_10 if READ_CD was not supported. Since this version it did
-not reset the sector size back to 2048 after the READ_10 opcode and
-instead gained a lazy reset in do_sr_request() and sr_release().
-It kept the new sector size and only changed if needed. On closing the
-device node sr_release() reset the sector size back to its default
-value.
+Use cdrom_switch_blocksize() to change the sector size only if the
+requested size deviates from 2048. Change it back to 2048 after the read
+operation if a change was mode.
 
-In v2.3.16 the ioctl() (CDROMREADMODE2, CDROMREADRAW) were consolidated since
-both stacks (SCSI and IDE) did mostly the same thing. For the ioctl handling
-the SCSI implementation (doing sr_read_sector()) was removed and the ioctl was
-now served based on what the IDE implementation had to offer which was
-using cdrom_read_block(). cdrom_read_block() was also updated to use
-READ_CD and invoke the ->generic_packeto() callback.
-It is worth noting that READ_CD is now mandatory by the software stack.
-The old function with the fallback (sr_read_sector()) is only used
-sr_is_xa().
+Link: https://lkml.kernel.org/r/20201204164803.ovwurzs3257em2rp@linutronix.=
+de
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ drivers/cdrom/cdrom.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-In v2.4.0-test2pre2 it is no longer mandatory to support the READ_CD
-opcode. A fallback mechanism was added in case the device did not
-supported the opcode. The mechanism had a small variance compared to the
-one from v2.1.62 and did: MODE_SELECT of the requested sector size,
-READ_10 and MODE_SELECT of the _requested_ sector size instead the
-previous sector size. To quote a comment from the changelog
-area of the file from when the change was introduced:
-| -- Fix Video-CD on SCSI drives that don't support READ_CD command. In
-| that case switch block size and issue plain READ_10 again, then switch
-| back.
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 0c271b9e3c5b7..8f0e52a714938 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -2996,13 +2996,15 @@ static noinline int mmc_ioctl_cdrom_read_data(struc=
+t cdrom_device_info *cdi,
+ 		 * SCSI-II devices are not required to support
+ 		 * READ_CD, so let's try switching block size
+ 		 */
+-		/* FIXME: switch back again... */
+-		ret =3D cdrom_switch_blocksize(cdi, blocksize);
+-		if (ret)
+-			goto out;
++		if (blocksize !=3D CD_FRAMESIZE) {
++			ret =3D cdrom_switch_blocksize(cdi, blocksize);
++			if (ret)
++				goto out;
++		}
+ 		cgc->sshdr =3D NULL;
+ 		ret =3D cdrom_read_cd(cdi, cgc, lba, blocksize, 1);
+-		ret |=3D cdrom_switch_blocksize(cdi, blocksize);
++		if (blocksize !=3D CD_FRAMESIZE)
++			ret |=3D cdrom_switch_blocksize(cdi, CD_FRAMESIZE);
+ 	}
+ 	if (!ret && copy_to_user(arg, cgc->buffer, blocksize))
+ 		ret =3D -EFAULT;
+--=20
+2.29.2
 
-but the code did not switch back, the changed sector size remained. The comment
-around the code says:
-|/* FIXME: switch back again... */
-
-which leaves me puzzled. My interpretation of my archaeological research
-is that MODE_SELECT + READ_10 + FIXME was added first as the needed
-workaround. Later within the same release the FIXME was addressed by
-unfortunately using the wrong sector size, the FIXME comment remained
-and the changelog comment was added.
-
-This is what we have today. Lets move on with this background in mind.
-
-The in_interrupt() check in sr_init_command() is a leftover from v2.1.62
-change when the delayed sector size reset was used. It remained even
-after it was no longer used after v2.3.16. 
-
-The sector size change was introduced back in v2.4.0-test2pre2 for SCSI
-devices that lack the READ_CD command but it was implemented
-differently. It sends directly a CDB which is not inspected by
-sr_packet() so the ->sector_size variable is never updated as it used
-to be back at the time when ioctl() was served by `sr'. As a consequence
-sr_release() is not resetting the sector size nor does
-sr_init_command(). I did not find anything that would allow to update
-the sector size at run time (other than a media change).
-
-Side note: sr_init_command() is often invoked indirectly by
-__blk_mq_run_hw_queue() which has a WARN_ON_ONCE(in_interrupt()) check
-and acquires a rcu_readlock() so sleeping is not allowed and not
-detected by in_interrupt().
-
-Sebastian
