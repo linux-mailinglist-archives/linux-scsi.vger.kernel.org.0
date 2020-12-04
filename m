@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 087D02CEB95
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 11:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C959C2CEBA5
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 11:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387595AbgLDKCa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 05:02:30 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50448 "EHLO mx2.suse.de"
+        id S2387774AbgLDKDM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 05:03:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51208 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729032AbgLDKC3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 4 Dec 2020 05:02:29 -0500
+        id S1729687AbgLDKDM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 4 Dec 2020 05:03:12 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9102BAD09;
+        by mx2.suse.de (Postfix) with ESMTP id C750FAD3F;
         Fri,  4 Dec 2020 10:01:47 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 04/37] 3w-sas: Whitespace cleanup
-Date:   Fri,  4 Dec 2020 11:01:07 +0100
-Message-Id: <20201204100140.140863-5-hare@suse.de>
+Subject: [PATCH 05/37] atp870u: Whitespace cleanup
+Date:   Fri,  4 Dec 2020 11:01:08 +0100
+Message-Id: <20201204100140.140863-6-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20201204100140.140863-1-hare@suse.de>
 References: <20201204100140.140863-1-hare@suse.de>
@@ -32,397 +32,988 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/3w-sas.c |  52 +++++++++++-----------
- drivers/scsi/3w-sas.h | 118 ++++++++++++++++++++++++++++----------------------
- 2 files changed, 93 insertions(+), 77 deletions(-)
+ drivers/scsi/atp870u.c | 431 ++++++++++++++++++++++++++++---------------------
+ drivers/scsi/atp870u.h |  14 +-
+ 2 files changed, 258 insertions(+), 187 deletions(-)
 
-diff --git a/drivers/scsi/3w-sas.c b/drivers/scsi/3w-sas.c
-index dda6fa857709..a07e7e7e8b54 100644
---- a/drivers/scsi/3w-sas.c
-+++ b/drivers/scsi/3w-sas.c
-@@ -120,7 +120,7 @@ static struct bin_attribute twl_sysfs_aen_read_attr = {
- 	.attr = {
- 		.name = "3ware_aen_read",
- 		.mode = S_IRUSR,
--	}, 
-+	},
- 	.size = 0,
- 	.read = twl_sysfs_aen_read
- };
-@@ -151,7 +151,7 @@ static struct bin_attribute twl_sysfs_compat_info_attr = {
- 	.attr = {
- 		.name = "3ware_compat_info",
- 		.mode = S_IRUSR,
--	}, 
-+	},
- 	.size = 0,
- 	.read = twl_sysfs_compat_info
- };
-@@ -174,7 +174,7 @@ static ssize_t twl_show_stats(struct device *dev,
- 		       "Last sector count:         %4d\n"
- 		       "Max sector count:          %4d\n"
- 		       "SCSI Host Resets:          %4d\n"
--		       "AEN's:                     %4d\n", 
-+		       "AEN's:                     %4d\n",
- 		       TW_DRIVER_VERSION,
- 		       tw_dev->posted_request_count,
- 		       tw_dev->max_posted_request_count,
-@@ -191,7 +191,7 @@ static ssize_t twl_show_stats(struct device *dev,
- /* stats sysfs attribute initializer */
- static struct device_attribute twl_host_stats_attr = {
- 	.attr = {
--		.name = 	"3ware_stats",
-+		.name =		"3ware_stats",
- 		.mode =		S_IRUGO,
- 	},
- 	.show = twl_show_stats
-@@ -432,7 +432,7 @@ static void twl_aen_sync_time(TW_Device_Extension *tw_dev, int request_id)
- 	param->parameter_id = cpu_to_le16(0x3); /* SchedulerTime */
- 	param->parameter_size_bytes = cpu_to_le16(4);
+diff --git a/drivers/scsi/atp870u.c b/drivers/scsi/atp870u.c
+index c6a752309dda..e559baeb0329 100644
+--- a/drivers/scsi/atp870u.c
++++ b/drivers/scsi/atp870u.c
+@@ -42,7 +42,8 @@
  
--	/* Convert system time in UTC to local time seconds since last 
-+	/* Convert system time in UTC to local time seconds since last
-            Sunday 12:00AM */
- 	local_time = (ktime_get_real_seconds() - (sys_tz.tz_minuteswest * 60));
- 	div_u64_rem(local_time - (3 * 86400), 604800, &schedulertime);
-@@ -483,7 +483,7 @@ static int twl_aen_complete(TW_Device_Extension *tw_dev, int request_id)
- 		/* Keep reading the queue in case there are more aen's */
- 		if (twl_aen_read_queue(tw_dev, request_id))
- 			goto out2;
--	        else {
-+		else {
- 			retval = 0;
- 			goto out;
- 		}
-@@ -548,7 +548,7 @@ static int twl_poll_response(TW_Device_Extension *tw_dev, int request_id, int se
- 		msleep(50);
- 	}
- 	retval = 0;
--out: 
-+out:
- 	return retval;
- } /* End twl_poll_response() */
+ static struct scsi_host_template atp870u_template;
+ static void send_s870(struct atp_unit *dev,unsigned char c);
+-static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip, unsigned char lvdmode);
++static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip,
++		   unsigned char lvdmode);
  
-@@ -802,7 +802,7 @@ static long twl_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long
- 
- 		/* Now copy in the command packet response */
- 		memcpy(&(tw_ioctl->firmware_command), tw_dev->command_packet_virt[request_id], sizeof(TW_Command_Full));
--		
-+
- 		/* Now complete the io */
- 		spin_lock_irqsave(tw_dev->host->host_lock, flags);
- 		tw_dev->posted_request_count--;
-@@ -879,7 +879,7 @@ static int twl_fill_sense(TW_Device_Extension *tw_dev, int i, int request_id, in
- 			       tw_dev->host->host_no,
- 			       TW_MESSAGE_SOURCE_CONTROLLER_ERROR,
- 			       header->status_block.error,
--			       error_str, 
-+			       error_str,
- 			       header->err_specific_desc);
- 		else
- 			printk(KERN_WARNING "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
-@@ -937,8 +937,8 @@ static void *twl_get_param(TW_Device_Extension *tw_dev, int request_id, int tabl
- 	command_packet = &full_command_packet->command.oldcommand;
- 
- 	command_packet->opcode__sgloffset = TW_OPSGL_IN(2, TW_OP_GET_PARAM);
--	command_packet->size              = TW_COMMAND_SIZE;
--	command_packet->request_id        = request_id;
-+	command_packet->size		  = TW_COMMAND_SIZE;
-+	command_packet->request_id	  = request_id;
- 	command_packet->byte6_offset.block_count = cpu_to_le16(1);
- 
- 	/* Now setup the param */
-@@ -968,14 +968,14 @@ static void *twl_get_param(TW_Device_Extension *tw_dev, int request_id, int tabl
- 
- /* This function will send an initconnection command to controller */
- static int twl_initconnection(TW_Device_Extension *tw_dev, int message_credits,
-- 			      u32 set_features, unsigned short current_fw_srl, 
--			      unsigned short current_fw_arch_id, 
--			      unsigned short current_fw_branch, 
--			      unsigned short current_fw_build, 
--			      unsigned short *fw_on_ctlr_srl, 
--			      unsigned short *fw_on_ctlr_arch_id, 
--			      unsigned short *fw_on_ctlr_branch, 
--			      unsigned short *fw_on_ctlr_build, 
-+			      u32 set_features, unsigned short current_fw_srl,
-+			      unsigned short current_fw_arch_id,
-+			      unsigned short current_fw_branch,
-+			      unsigned short current_fw_build,
-+			      unsigned short *fw_on_ctlr_srl,
-+			      unsigned short *fw_on_ctlr_arch_id,
-+			      unsigned short *fw_on_ctlr_branch,
-+			      unsigned short *fw_on_ctlr_build,
- 			      u32 *init_connect_result)
+ static inline void atp_writeb_base(struct atp_unit *atp, u8 reg, u8 val)
  {
- 	TW_Command_Full *full_command_packet;
-@@ -986,7 +986,7 @@ static int twl_initconnection(TW_Device_Extension *tw_dev, int message_credits,
- 	full_command_packet = tw_dev->command_packet_virt[request_id];
- 	memset(full_command_packet, 0, sizeof(TW_Command_Full));
- 	full_command_packet->header.header_desc.size_header = 128;
--	
-+
- 	tw_initconnect = (TW_Initconnect *)&full_command_packet->command.oldcommand;
- 	tw_initconnect->opcode__reserved = TW_OPRES_IN(0, TW_OP_INIT_CONNECTION);
- 	tw_initconnect->request_id = request_id;
-@@ -1004,7 +1004,7 @@ static int twl_initconnection(TW_Device_Extension *tw_dev, int message_credits,
- 		tw_initconnect->fw_arch_id = cpu_to_le16(current_fw_arch_id);
- 		tw_initconnect->fw_branch = cpu_to_le16(current_fw_branch);
- 		tw_initconnect->fw_build = cpu_to_le16(current_fw_build);
--	} else 
-+	} else
- 		tw_initconnect->size = TW_INIT_COMMAND_PACKET_SIZE;
- 
- 	/* Send command packet to the board */
-@@ -1211,7 +1211,7 @@ static irqreturn_t twl_interrupt(int irq, void *dev_instance)
- 
- 			if (!error)
- 				cmd->result = (DID_OK << 16);
--			
-+
- 			/* Report residual bytes for single sgl */
- 			if ((scsi_sg_count(cmd) <= 1) && (full_command_packet->command.newcommand.status == 0)) {
- 				if (full_command_packet->command.newcommand.sg_list[0].length < scsi_bufflen(tw_dev->srb[request_id]))
-@@ -1245,7 +1245,7 @@ static int twl_poll_register(TW_Device_Extension *tw_dev, void *reg, u32 value,
- 	reg_value = readl(reg);
- 	before = jiffies;
- 
--        while ((reg_value & value) != result) {
-+	while ((reg_value & value) != result) {
- 		reg_value = readl(reg);
- 		if (time_after(jiffies, before + HZ * seconds))
- 			goto out;
-@@ -1470,7 +1470,7 @@ static int twl_scsi_queue_lck(struct scsi_cmnd *SCpnt, void (*done)(struct scsi_
- 
- 	/* Save done function into scsi_cmnd struct */
- 	SCpnt->scsi_done = done;
+@@ -137,16 +138,17 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 	}
+ 	if ((j & 0x80) == 0)
+ 		return IRQ_NONE;
+-#ifdef ED_DBGP	
++#ifdef ED_DBGP
+ 	printk("atp870u_intr_handle enter\n");
+-#endif	
++#endif
+ 	dev->in_int[c] = 1;
+ 	cmdp = atp_readb_io(dev, c, 0x10);
+ 	if (dev->working[c] != 0) {
+ 		if (is885(dev)) {
+ 			if ((atp_readb_io(dev, c, 0x16) & 0x80) == 0)
+-				atp_writeb_io(dev, c, 0x16, (atp_readb_io(dev, c, 0x16) | 0x80));
+-		}		
++				atp_writeb_io(dev, c, 0x16,
++					      (atp_readb_io(dev, c, 0x16) | 0x80));
++		}
+ 		if ((atp_readb_pci(dev, c, 0x00) & 0x08) != 0)
+ 		{
+ 			for (k=0; k < 1000; k++) {
+@@ -157,9 +159,9 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			}
+ 		}
+ 		atp_writeb_pci(dev, c, 0, 0x00);
 -		
 +
- 	/* Get a free request id */
- 	twl_get_request_id(tw_dev, &request_id);
+ 		i = atp_readb_io(dev, c, 0x17);
+-		
++
+ 		if (is885(dev))
+ 			atp_writeb_pci(dev, c, 2, 0x06);
  
-@@ -1524,7 +1524,7 @@ static void twl_shutdown(struct pci_dev *pdev)
+@@ -185,44 +187,51 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			dev->r1f[c][target_id] |= j;
+ #ifdef ED_DBGP
+ 		printk("atp870u_intr_handle status = %x\n",i);
+-#endif	
++#endif
+ 		if (i == 0x85) {
+ 			if ((dev->last_cmd[c] & 0xf0) != 0x40) {
+ 			   dev->last_cmd[c] = 0xff;
+ 			}
+ 			if (is885(dev)) {
+ 				adrcnt = 0;
+-				((unsigned char *) &adrcnt)[2] = atp_readb_io(dev, c, 0x12);
+-				((unsigned char *) &adrcnt)[1] = atp_readb_io(dev, c, 0x13);
+-				((unsigned char *) &adrcnt)[0] = atp_readb_io(dev, c, 0x14);
++				((unsigned char *) &adrcnt)[2] =
++					atp_readb_io(dev, c, 0x12);
++				((unsigned char *) &adrcnt)[1] =
++					atp_readb_io(dev, c, 0x13);
++				((unsigned char *) &adrcnt)[0] =
++					atp_readb_io(dev, c, 0x14);
+ 				if (dev->id[c][target_id].last_len != adrcnt) {
+ 					k = dev->id[c][target_id].last_len;
+-			   		k -= adrcnt;
+-			   		dev->id[c][target_id].tran_len = k;			   
++					k -= adrcnt;
++					dev->id[c][target_id].tran_len = k;
+ 					dev->id[c][target_id].last_len = adrcnt;
+ 				}
+ #ifdef ED_DBGP
+-				printk("dev->id[c][target_id].last_len = %d dev->id[c][target_id].tran_len = %d\n",dev->id[c][target_id].last_len,dev->id[c][target_id].tran_len);
+-#endif		
++				printk("dev->id[c][target_id].last_len = %d "
++				       "dev->id[c][target_id].tran_len = %d\n",
++				       dev->id[c][target_id].last_len,
++				       dev->id[c][target_id].tran_len);
++#endif
+ 			}
  
- 	tw_dev = (TW_Device_Extension *)host->hostdata;
+ 			/*
+ 			 *      Flip wide
+-			 */			
++			 */
+ 			if (dev->wide_id[c] != 0) {
+ 				atp_writeb_io(dev, c, 0x1b, 0x01);
+ 				while ((atp_readb_io(dev, c, 0x1b) & 0x01) != 0x01)
+ 					atp_writeb_io(dev, c, 0x1b, 0x01);
+-			}		
++			}
+ 			/*
+ 			 *	Issue more commands
+ 			 */
+-			spin_lock_irqsave(dev->host->host_lock, flags);			 			 
+-			if (((dev->quhd[c] != dev->quend[c]) || (dev->last_cmd[c] != 0xff)) &&
++			spin_lock_irqsave(dev->host->host_lock, flags);
++			if (((dev->quhd[c] != dev->quend[c]) ||
++			     (dev->last_cmd[c] != 0xff)) &&
+ 			    (dev->in_snd[c] == 0)) {
+ #ifdef ED_DBGP
+ 				printk("Call sent_s870\n");
+-#endif				
++#endif
+ 				send_s870(dev,c);
+ 			}
+ 			spin_unlock_irqrestore(dev->host->host_lock, flags);
+@@ -232,7 +241,7 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			dev->in_int[c] = 0;
+ #ifdef ED_DBGP
+ 				printk("Status 0x85 return\n");
+-#endif				
++#endif
+ 			return IRQ_HANDLED;
+ 		}
  
--	if (tw_dev->online) 
-+	if (tw_dev->online)
- 		__twl_shutdown(tw_dev);
- } /* End twl_shutdown() */
+@@ -247,9 +256,12 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			   dev->last_cmd[c] = 0xff;
+ 			}
+ 			adrcnt = 0;
+-			((unsigned char *) &adrcnt)[2] = atp_readb_io(dev, c, 0x12);
+-			((unsigned char *) &adrcnt)[1] = atp_readb_io(dev, c, 0x13);
+-			((unsigned char *) &adrcnt)[0] = atp_readb_io(dev, c, 0x14);
++			((unsigned char *) &adrcnt)[2] =
++				atp_readb_io(dev, c, 0x12);
++			((unsigned char *) &adrcnt)[1] =
++				atp_readb_io(dev, c, 0x13);
++			((unsigned char *) &adrcnt)[0] =
++				atp_readb_io(dev, c, 0x14);
+ 			k = dev->id[c][target_id].last_len;
+ 			k -= adrcnt;
+ 			dev->id[c][target_id].tran_len = k;
+@@ -262,17 +274,16 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
  
-@@ -1675,7 +1675,7 @@ static int twl_probe(struct pci_dev *pdev, const struct pci_device_id *dev_id)
+ 		if (is885(dev)) {
+ 			if ((i == 0x4c) || (i == 0x4d) || (i == 0x8c) || (i == 0x8d)) {
+-		   		if ((i == 0x4c) || (i == 0x8c)) 
+-		      			i=0x48;
+-		   		else 
+-		      			i=0x49;
+-		   	}	
+-			
++				if ((i == 0x4c) || (i == 0x8c))
++					i=0x48;
++				else
++					i=0x49;
++			}
+ 		}
+ 		if ((i == 0x80) || (i == 0x8f)) {
+ #ifdef ED_DBGP
+ 			printk(KERN_DEBUG "Device reselect\n");
+-#endif			
++#endif
+ 			lun = 0;
+ 			if (cmdp == 0x44 || i == 0x80)
+ 				lun = atp_readb_io(dev, c, 0x1d) & 0x07;
+@@ -283,11 +294,14 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 				if (cmdp == 0x41) {
+ #ifdef ED_DBGP
+ 					printk("cmdp = 0x41\n");
+-#endif						
++#endif
+ 					adrcnt = 0;
+-					((unsigned char *) &adrcnt)[2] = atp_readb_io(dev, c, 0x12);
+-					((unsigned char *) &adrcnt)[1] = atp_readb_io(dev, c, 0x13);
+-					((unsigned char *) &adrcnt)[0] = atp_readb_io(dev, c, 0x14);
++					((unsigned char *) &adrcnt)[2] =
++						atp_readb_io(dev, c, 0x12);
++					((unsigned char *) &adrcnt)[1] =
++						atp_readb_io(dev, c, 0x13);
++					((unsigned char *) &adrcnt)[0] =
++						atp_readb_io(dev, c, 0x14);
+ 					k = dev->id[c][target_id].last_len;
+ 					k -= adrcnt;
+ 					dev->id[c][target_id].tran_len = k;
+@@ -298,7 +312,7 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 				} else {
+ #ifdef ED_DBGP
+ 					printk("cmdp != 0x41\n");
+-#endif						
++#endif
+ 					atp_writeb_io(dev, c, 0x10, 0x46);
+ 					dev->id[c][target_id].dirct = 0x00;
+ 					atp_writeb_io(dev, c, 0x12, 0x00);
+@@ -330,13 +344,13 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			if (is885(dev))
+ 				atp_writeb_io(dev, c, 0x10, 0x45);
+ 			workreq = dev->id[c][target_id].curr_req;
+-#ifdef ED_DBGP			
++#ifdef ED_DBGP
+ 			scmd_printk(KERN_DEBUG, workreq, "CDB");
+ 			for (l = 0; l < workreq->cmd_len; l++)
+ 				printk(KERN_DEBUG " %x",workreq->cmnd[l]);
+ 			printk("\n");
+-#endif	
+-			
++#endif
++
+ 			atp_writeb_io(dev, c, 0x0f, lun);
+ 			atp_writeb_io(dev, c, 0x11, dev->id[c][target_id].devsp);
+ 			adrcnt = dev->id[c][target_id].tran_len;
+@@ -345,9 +359,12 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			atp_writeb_io(dev, c, 0x12, ((unsigned char *) &k)[2]);
+ 			atp_writeb_io(dev, c, 0x13, ((unsigned char *) &k)[1]);
+ 			atp_writeb_io(dev, c, 0x14, ((unsigned char *) &k)[0]);
+-#ifdef ED_DBGP			
+-			printk("k %x, k[0] 0x%x k[1] 0x%x k[2] 0x%x\n", k, atp_readb_io(dev, c, 0x14), atp_readb_io(dev, c, 0x13), atp_readb_io(dev, c, 0x12));
+-#endif			
++#ifdef ED_DBGP
++			printk("k %x, k[0] 0x%x k[1] 0x%x k[2] 0x%x\n", k,
++			       atp_readb_io(dev, c, 0x14),
++			       atp_readb_io(dev, c, 0x13),
++			       atp_readb_io(dev, c, 0x12));
++#endif
+ 			/* Remap wide */
+ 			j = target_id;
+ 			if (target_id > 7) {
+@@ -357,26 +374,39 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			j |= dev->id[c][target_id].dirct;
+ 			atp_writeb_io(dev, c, 0x15, j);
+ 			atp_writeb_io(dev, c, 0x16, 0x80);
+-			
+-			/* enable 32 bit fifo transfer */	
++
++			/* enable 32 bit fifo transfer */
+ 			if (is885(dev)) {
+ 				i = atp_readb_pci(dev, c, 1) & 0xf3;
+-				//j=workreq->cmnd[0];	    		    	
+-				if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a)) {
++				//j=workreq->cmnd[0];
++				if ((workreq->cmnd[0] == 0x08) ||
++				    (workreq->cmnd[0] == 0x28) ||
++				    (workreq->cmnd[0] == 0x0a) ||
++				    (workreq->cmnd[0] == 0x2a)) {
+ 				   i |= 0x0c;
+ 				}
+ 				atp_writeb_pci(dev, c, 1, i);
+ 			} else if (is880(dev)) {
+-				if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a))
+-					atp_writeb_base(dev, 0x3b, (atp_readb_base(dev, 0x3b) & 0x3f) | 0xc0);
++				if ((workreq->cmnd[0] == 0x08) ||
++				    (workreq->cmnd[0] == 0x28) ||
++				    (workreq->cmnd[0] == 0x0a) ||
++				    (workreq->cmnd[0] == 0x2a))
++					atp_writeb_base(dev, 0x3b,
++							(atp_readb_base(dev, 0x3b) & 0x3f) | 0xc0);
+ 				else
+-					atp_writeb_base(dev, 0x3b, atp_readb_base(dev, 0x3b) & 0x3f);
+-			} else {				
+-				if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a))
+-					atp_writeb_base(dev, 0x3a, (atp_readb_base(dev, 0x3a) & 0xf3) | 0x08);
++					atp_writeb_base(dev, 0x3b,
++							atp_readb_base(dev, 0x3b) & 0x3f);
++			} else {
++				if ((workreq->cmnd[0] == 0x08) ||
++				    (workreq->cmnd[0] == 0x28) ||
++				    (workreq->cmnd[0] == 0x0a) ||
++				    (workreq->cmnd[0] == 0x2a))
++					atp_writeb_base(dev, 0x3a,
++							(atp_readb_base(dev, 0x3a) & 0xf3) | 0x08);
+ 				else
+-					atp_writeb_base(dev, 0x3a, atp_readb_base(dev, 0x3a) & 0xf3);
+-			}	
++					atp_writeb_base(dev, 0x3a,
++							atp_readb_base(dev, 0x3a) & 0xf3);
++			}
+ 			j = 0;
+ 			id = 1;
+ 			id = id << target_id;
+@@ -394,12 +424,12 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 				dev->in_int[c] = 0;
+ #ifdef ED_DBGP
+ 				printk("dev->id[c][target_id].last_len = 0\n");
+-#endif					
++#endif
+ 				return IRQ_HANDLED;
+ 			}
+ #ifdef ED_DBGP
+ 			printk("target_id = %d adrcnt = %d\n",target_id,adrcnt);
+-#endif			
++#endif
+ 			prd = dev->id[c][target_id].prd_pos;
+ 			while (adrcnt != 0) {
+ 				id = ((unsigned short int *)prd)[2];
+@@ -409,8 +439,8 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 					k = id;
+ 				}
+ 				if (k > adrcnt) {
+-					((unsigned short int *)prd)[2] = (unsigned short int)
+-					    (k - adrcnt);
++					((unsigned short int *)prd)[2] =
++						(unsigned short int)(k - adrcnt);
+ 					((unsigned long *)prd)[0] += adrcnt;
+ 					adrcnt = 0;
+ 					dev->id[c][target_id].prd_pos = prd;
+@@ -421,11 +451,12 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 					if (adrcnt == 0) {
+ 						dev->id[c][target_id].prd_pos = prd;
+ 					}
+-				}				
++				}
+ 			}
+ 			atp_writel_pci(dev, c, 0x04, dev->id[c][target_id].prdaddr);
+ #ifdef ED_DBGP
+-			printk("dev->id[%d][%d].prdaddr 0x%8x\n", c, target_id, dev->id[c][target_id].prdaddr);
++			printk("dev->id[%d][%d].prdaddr 0x%8x\n",
++			       c, target_id, dev->id[c][target_id].prdaddr);
+ #endif
+ 			if (!is885(dev)) {
+ 				atp_writeb_pci(dev, c, 2, 0x06);
+@@ -440,7 +471,7 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 				dev->in_int[c] = 0;
+ #ifdef ED_DBGP
+ 				printk("status 0x80 return dirct != 0\n");
+-#endif				
++#endif
+ 				return IRQ_HANDLED;
+ 			}
+ 			atp_writeb_io(dev, c, 0x18, 0x08);
+@@ -448,7 +479,7 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			dev->in_int[c] = 0;
+ #ifdef ED_DBGP
+ 			printk("status 0x80 return dirct = 0\n");
+-#endif			
++#endif
+ 			return IRQ_HANDLED;
+ 		}
  
- 	/* Re-enable interrupts on the card */
- 	TWL_UNMASK_INTERRUPTS(tw_dev);
+@@ -484,7 +515,7 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			(*workreq->scsi_done) (workreq);
+ #ifdef ED_DBGP
+ 			   printk("workreq->scsi_done\n");
+-#endif	
++#endif
+ 			/*
+ 			 *	Clear it off the queue
+ 			 */
+@@ -498,16 +529,17 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 				atp_writeb_io(dev, c, 0x1b, 0x01);
+ 				while ((atp_readb_io(dev, c, 0x1b) & 0x01) != 0x01)
+ 					atp_writeb_io(dev, c, 0x1b, 0x01);
+-			} 
++			}
+ 			/*
+ 			 *	If there is stuff to send and nothing going then send it
+ 			 */
+ 			spin_lock_irqsave(dev->host->host_lock, flags);
+-			if (((dev->last_cmd[c] != 0xff) || (dev->quhd[c] != dev->quend[c])) &&
++			if (((dev->last_cmd[c] != 0xff) ||
++			     (dev->quhd[c] != dev->quend[c])) &&
+ 			    (dev->in_snd[c] == 0)) {
+ #ifdef ED_DBGP
+ 			   printk("Call sent_s870(scsi_done)\n");
+-#endif				   
++#endif
+ 			   send_s870(dev,c);
+ 			}
+ 			spin_unlock_irqrestore(dev->host->host_lock, flags);
+@@ -528,9 +560,12 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			atp_writeb_io(dev, c, 0x10, 0x41);
+ 			if (is885(dev)) {
+ 				k = dev->id[c][target_id].last_len;
+-				atp_writeb_io(dev, c, 0x12, ((unsigned char *) (&k))[2]);
+-				atp_writeb_io(dev, c, 0x13, ((unsigned char *) (&k))[1]);
+-				atp_writeb_io(dev, c, 0x14, ((unsigned char *) (&k))[0]);
++				atp_writeb_io(dev, c, 0x12,
++					      ((unsigned char *) (&k))[2]);
++				atp_writeb_io(dev, c, 0x13,
++					      ((unsigned char *) (&k))[1]);
++				atp_writeb_io(dev, c, 0x14,
++					      ((unsigned char *) (&k))[0]);
+ 				dev->id[c][target_id].dirct = 0x00;
+ 			} else {
+ 				dev->id[c][target_id].dirct = 0x00;
+@@ -547,11 +582,15 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
+ 			atp_writeb_io(dev, c, 0x10, 0x41);
+ 			if (is885(dev)) {
+ 				k = dev->id[c][target_id].last_len;
+-				atp_writeb_io(dev, c, 0x12, ((unsigned char *) (&k))[2]);
+-				atp_writeb_io(dev, c, 0x13, ((unsigned char *) (&k))[1]);
+-				atp_writeb_io(dev, c, 0x14, ((unsigned char *) (&k))[0]);
++				atp_writeb_io(dev, c, 0x12,
++					      ((unsigned char *) (&k))[2]);
++				atp_writeb_io(dev, c, 0x13,
++					      ((unsigned char *) (&k))[1]);
++				atp_writeb_io(dev, c, 0x14,
++					      ((unsigned char *) (&k))[0]);
+ 			}
+-			atp_writeb_io(dev, c, 0x15, atp_readb_io(dev, c, 0x15) | 0x20);
++			atp_writeb_io(dev, c, 0x15,
++				      atp_readb_io(dev, c, 0x15) | 0x20);
+ 			dev->id[c][target_id].dirct = 0x20;
+ 			atp_writeb_io(dev, c, 0x18, 0x08);
+ 			atp_writeb_pci(dev, c, 0, 0x01);
+@@ -593,17 +632,15 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
+ 	if (scmd_channel(req_p) > 1) {
+ 		req_p->result = 0x00040000;
+ 		done(req_p);
+-#ifdef ED_DBGP		
+-		printk("atp870u_queuecommand : req_p->device->channel > 1\n");	
+-#endif			
++#ifdef ED_DBGP
++		printk("atp870u_queuecommand : req_p->device->channel > 1\n");
++#endif
+ 		return 0;
+ 	}
+ 
+ 	host = req_p->device->host;
+ 	dev = (struct atp_unit *)&host->hostdata;
+-		
+ 
+-		
+ 	m = 1;
+ 	m = m << scmd_id(req_p);
+ 
+@@ -620,14 +657,14 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
+ 	if (done) {
+ 		req_p->scsi_done = done;
+ 	} else {
+-#ifdef ED_DBGP		
++#ifdef ED_DBGP
+ 		printk( "atp870u_queuecommand: done can't be NULL\n");
+-#endif		
++#endif
+ 		req_p->result = 0;
+ 		done(req_p);
+ 		return 0;
+ 	}
 -	
 +
- 	/* Finally, scan the host */
- 	scsi_scan_host(host);
+ 	/*
+ 	 *	Count new command
+ 	 */
+@@ -635,7 +672,7 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
+ 	if (dev->quend[c] >= qcnt) {
+ 		dev->quend[c] = 0;
+ 	}
+-	
++
+ 	/*
+ 	 *	Check queue state
+ 	 */
+@@ -643,27 +680,32 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
+ 		if (dev->quend[c] == 0) {
+ 			dev->quend[c] = qcnt;
+ 		}
+-#ifdef ED_DBGP		
++#ifdef ED_DBGP
+ 		printk("atp870u_queuecommand : dev->quhd[c] == dev->quend[c]\n");
+-#endif		
++#endif
+ 		dev->quend[c]--;
+ 		req_p->result = 0x00020000;
+-		done(req_p);	
++		done(req_p);
+ 		return 0;
+ 	}
+ 	dev->quereq[c][dev->quend[c]] = req_p;
+-#ifdef ED_DBGP	
+-	printk("dev->ioport[c] = %x atp_readb_io(dev, c, 0x1c) = %x dev->in_int[%d] = %d dev->in_snd[%d] = %d\n",dev->ioport[c],atp_readb_io(dev, c, 0x1c),c,dev->in_int[c],c,dev->in_snd[c]);
++#ifdef ED_DBGP
++	printk("dev->ioport[c] = %x atp_readb_io(dev, c, 0x1c) = %x "
++	       "dev->in_int[%d] = %d dev->in_snd[%d] = %d\n",
++	       dev->ioport[c], atp_readb_io(dev, c, 0x1c), c,
++	       dev->in_int[c],c,dev->in_snd[c]);
+ #endif
+-	if ((atp_readb_io(dev, c, 0x1c) == 0) && (dev->in_int[c] == 0) && (dev->in_snd[c] == 0)) {
++	if ((atp_readb_io(dev, c, 0x1c) == 0) &&
++	    (dev->in_int[c] == 0) &&
++	    (dev->in_snd[c] == 0)) {
+ #ifdef ED_DBGP
+ 		printk("Call sent_s870(atp870u_queuecommand)\n");
+-#endif		
++#endif
+ 		send_s870(dev,c);
+ 	}
+-#ifdef ED_DBGP	
++#ifdef ED_DBGP
+ 	printk("atp870u_queuecommand : exit\n");
+-#endif	
++#endif
+ 	return 0;
+ }
  
-diff --git a/drivers/scsi/3w-sas.h b/drivers/scsi/3w-sas.h
-index 05e77d84c16d..b0508039a280 100644
---- a/drivers/scsi/3w-sas.h
-+++ b/drivers/scsi/3w-sas.h
-@@ -52,17 +52,17 @@ static char *twl_aen_severity_table[] =
+@@ -674,7 +716,7 @@ static DEF_SCSI_QCMD(atp870u_queuecommand)
+  *	@host: host
+  *
+  *	On entry there is work queued to be done. We move some of that work to the
+- *	controller itself. 
++ *	controller itself.
+  *
+  *	Caller holds the host lock.
+  */
+@@ -689,7 +731,7 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 	unsigned long  sg_count;
+ 
+ 	if (dev->in_snd[c] != 0) {
+-#ifdef ED_DBGP		
++#ifdef ED_DBGP
+ 		printk("cmnd in_snd\n");
+ #endif
+ 		return;
+@@ -729,7 +771,8 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 		dev->id[c][scmd_id(workreq)].curr_req = workreq;
+ 		dev->last_cmd[c] = scmd_id(workreq);
+ 	}
+-	if ((atp_readb_io(dev, c, 0x1f) & 0xb0) != 0 || atp_readb_io(dev, c, 0x1c) != 0) {
++	if ((atp_readb_io(dev, c, 0x1f) & 0xb0) != 0 ||
++	    atp_readb_io(dev, c, 0x1c) != 0) {
+ #ifdef ED_DBGP
+ 		printk("Abort to Send\n");
+ #endif
+@@ -744,7 +787,7 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 		printk(" %x",workreq->cmnd[i]);
+ 	}
+ 	printk("\n");
+-#endif	
++#endif
+ 	l = scsi_bufflen(workreq);
+ 
+ 	if (is885(dev)) {
+@@ -752,7 +795,7 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 		atp_writeb_base(dev, 0x29, j);
+ 		dev->r1f[c][scmd_id(workreq)] = 0;
+ 	}
+-	
++
+ 	if (workreq->cmnd[0] == READ_CAPACITY) {
+ 		if (l > 8)
+ 			l = 8;
+@@ -796,8 +839,9 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 	 *	Write the target
+ 	 */
+ 	atp_writeb_io(dev, c, 0x11, dev->id[c][target_id].devsp);
+-#ifdef ED_DBGP	
+-	printk("dev->id[%d][%d].devsp = %2x\n",c,target_id,dev->id[c][target_id].devsp);
++#ifdef ED_DBGP
++	printk("dev->id[%d][%d].devsp = %2x\n",c,target_id,
++	       dev->id[c][target_id].devsp);
+ #endif
+ 
+ 	sg_count = scsi_dma_map(workreq);
+@@ -807,12 +851,12 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 	atp_writeb_io(dev, c, 0x12, ((unsigned char *) (&l))[2]);
+ 	atp_writeb_io(dev, c, 0x13, ((unsigned char *) (&l))[1]);
+ 	atp_writeb_io(dev, c, 0x14, ((unsigned char *) (&l))[0]);
+-	j = target_id;	
++	j = target_id;
+ 	dev->id[c][j].last_len = l;
+ 	dev->id[c][j].tran_len = 0;
+-#ifdef ED_DBGP	
++#ifdef ED_DBGP
+ 	printk("dev->id[%2d][%2d].last_len = %d\n",c,j,dev->id[c][j].last_len);
+-#endif	
++#endif
+ 	/*
+ 	 *	Flip the wide bits
+ 	 */
+@@ -832,8 +876,8 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 	if (l == 0) {
+ 		if (atp_readb_io(dev, c, 0x1c) == 0) {
+ #ifdef ED_DBGP
+-			printk("change SCSI_CMD_REG 0x08\n");	
+-#endif				
++			printk("change SCSI_CMD_REG 0x08\n");
++#endif
+ 			atp_writeb_io(dev, c, 0x18, 0x08);
+ 		} else
+ 			dev->last_cmd[c] |= 0x40;
+@@ -854,9 +898,9 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 		scsi_for_each_sg(workreq, sgpnt, sg_count, j) {
+ 			bttl = sg_dma_address(sgpnt);
+ 			l=sg_dma_len(sgpnt);
+-#ifdef ED_DBGP		
++#ifdef ED_DBGP
+ 			printk("1. bttl %x, l %x\n",bttl, l);
+-#endif			
++#endif
+ 			while (l > 0x10000) {
+ 				(((u16 *) (prd))[i + 3]) = 0x0000;
+ 				(((u16 *) (prd))[i + 2]) = 0x0000;
+@@ -868,17 +912,22 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 			(((u32 *) (prd))[i >> 1]) = cpu_to_le32(bttl);
+ 			(((u16 *) (prd))[i + 2]) = cpu_to_le16(l);
+ 			(((u16 *) (prd))[i + 3]) = 0;
+-			i += 0x04;			
++			i += 0x04;
+ 		}
+-		(((u16 *) (prd))[i - 1]) = cpu_to_le16(0x8000);	
+-#ifdef ED_DBGP		
+-		printk("prd %4x %4x %4x %4x\n",(((unsigned short int *)prd)[0]),(((unsigned short int *)prd)[1]),(((unsigned short int *)prd)[2]),(((unsigned short int *)prd)[3]));
++		(((u16 *) (prd))[i - 1]) = cpu_to_le16(0x8000);
++#ifdef ED_DBGP
++		printk("prd %4x %4x %4x %4x\n",
++		       (((unsigned short int *)prd)[0]),
++		       (((unsigned short int *)prd)[1]),
++		       (((unsigned short int *)prd)[2]),
++		       (((unsigned short int *)prd)[3]));
+ 		printk("2. bttl %x, l %x\n",bttl, l);
+-#endif			
++#endif
+ 	}
+-#ifdef ED_DBGP		
+-	printk("send_s870: prdaddr_2 0x%8x target_id %d\n", dev->id[c][target_id].prdaddr,target_id);
+-#endif	
++#ifdef ED_DBGP
++	printk("send_s870: prdaddr_2 0x%8x target_id %d\n",
++	       dev->id[c][target_id].prdaddr,target_id);
++#endif
+ 	dev->id[c][target_id].prdaddr = dev->id[c][target_id].prd_bus;
+ 	atp_writel_pci(dev, c, 4, dev->id[c][target_id].prdaddr);
+ 	atp_writeb_pci(dev, c, 2, 0x06);
+@@ -886,30 +935,36 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 	if (is885(dev)) {
+ 		j = atp_readb_pci(dev, c, 1) & 0xf3;
+ 		if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) ||
+-	    	(workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a)) {
+-	   		j |= 0x0c;
++		    (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a)) {
++			j |= 0x0c;
+ 		}
+ 		atp_writeb_pci(dev, c, 1, j);
+ 	} else if (is880(dev)) {
+-		if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a))
+-			atp_writeb_base(dev, 0x3b, (atp_readb_base(dev, 0x3b) & 0x3f) | 0xc0);
++		if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) ||
++		    (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a))
++			atp_writeb_base(dev, 0x3b,
++					(atp_readb_base(dev, 0x3b) & 0x3f) | 0xc0);
+ 		else
+-			atp_writeb_base(dev, 0x3b, atp_readb_base(dev, 0x3b) & 0x3f);
+-	} else {		
+-		if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a))
+-			atp_writeb_base(dev, 0x3a, (atp_readb_base(dev, 0x3a) & 0xf3) | 0x08);
++			atp_writeb_base(dev, 0x3b,
++					atp_readb_base(dev, 0x3b) & 0x3f);
++	} else {
++		if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) ||
++		    (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a))
++			atp_writeb_base(dev, 0x3a,
++					(atp_readb_base(dev, 0x3a) & 0xf3) | 0x08);
+ 		else
+-			atp_writeb_base(dev, 0x3a, atp_readb_base(dev, 0x3a) & 0xf3);
+-	}	
++			atp_writeb_base(dev, 0x3a,
++					atp_readb_base(dev, 0x3a) & 0xf3);
++	}
+ 
+ 	if(workreq->sc_data_direction == DMA_TO_DEVICE) {
+ 		dev->id[c][target_id].dirct = 0x20;
+ 		if (atp_readb_io(dev, c, 0x1c) == 0) {
+ 			atp_writeb_io(dev, c, 0x18, 0x08);
+ 			atp_writeb_pci(dev, c, 0, 0x01);
+-#ifdef ED_DBGP		
++#ifdef ED_DBGP
+ 		printk( "start DMA(to target)\n");
+-#endif				
++#endif
+ 		} else {
+ 			dev->last_cmd[c] |= 0x40;
+ 		}
+@@ -919,9 +974,9 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
+ 	if (atp_readb_io(dev, c, 0x1c) == 0) {
+ 		atp_writeb_io(dev, c, 0x18, 0x08);
+ 		atp_writeb_pci(dev, c, 0, 0x09);
+-#ifdef ED_DBGP		
++#ifdef ED_DBGP
+ 		printk( "start DMA(to host)\n");
+-#endif			
++#endif
+ 	} else {
+ 		dev->last_cmd[c] |= 0x40;
+ 	}
+@@ -1193,7 +1248,9 @@ static void atp870u_free_tables(struct Scsi_Host *host)
+ 		for (k = 0; k < 16; k++) {
+ 			if (!atp_dev->id[j][k].prd_table)
+ 				continue;
+-			dma_free_coherent(&atp_dev->pdev->dev, 1024, atp_dev->id[j][k].prd_table, atp_dev->id[j][k].prd_bus);
++			dma_free_coherent(&atp_dev->pdev->dev, 1024,
++					  atp_dev->id[j][k].prd_table,
++					  atp_dev->id[j][k].prd_bus);
+ 			atp_dev->id[j][k].prd_table = NULL;
+ 		}
+ 	}
+@@ -1204,35 +1261,38 @@ static int atp870u_init_tables(struct Scsi_Host *host)
+ 	struct atp_unit *atp_dev = (struct atp_unit *)&host->hostdata;
+ 	int c,k;
+ 	for(c=0;c < 2;c++) {
+-	   	for(k=0;k<16;k++) {
+-				atp_dev->id[c][k].prd_table = dma_alloc_coherent(&atp_dev->pdev->dev, 1024, &(atp_dev->id[c][k].prd_bus), GFP_KERNEL);
+-	   			if (!atp_dev->id[c][k].prd_table) {
+-	   				printk("atp870u_init_tables fail\n");
++		for(k=0;k<16;k++) {
++			atp_dev->id[c][k].prd_table =
++				dma_alloc_coherent(&atp_dev->pdev->dev, 1024,
++						   &(atp_dev->id[c][k].prd_bus),
++						   GFP_KERNEL);
++			if (!atp_dev->id[c][k].prd_table) {
++				printk("atp870u_init_tables fail\n");
+ 				atp870u_free_tables(host);
+ 				return -ENOMEM;
+ 			}
+ 			atp_dev->id[c][k].prdaddr = atp_dev->id[c][k].prd_bus;
+ 			atp_dev->id[c][k].devsp=0x20;
+ 			atp_dev->id[c][k].devtype = 0x7f;
+-			atp_dev->id[c][k].curr_req = NULL;			   
+-	   	}
+-	   			
+-	   	atp_dev->active_id[c] = 0;
+-	   	atp_dev->wide_id[c] = 0;
+-	   	atp_dev->host_id[c] = 0x07;
+-	   	atp_dev->quhd[c] = 0;
+-	   	atp_dev->quend[c] = 0;
+-	   	atp_dev->last_cmd[c] = 0xff;
+-	   	atp_dev->in_snd[c] = 0;
+-	   	atp_dev->in_int[c] = 0;
+-	   	
+-	   	for (k = 0; k < qcnt; k++) {
+-	   		  atp_dev->quereq[c][k] = NULL;
+-	   	}	   		   
+-	   	for (k = 0; k < 16; k++) {
++			atp_dev->id[c][k].curr_req = NULL;
++		}
++
++		atp_dev->active_id[c] = 0;
++		atp_dev->wide_id[c] = 0;
++		atp_dev->host_id[c] = 0x07;
++		atp_dev->quhd[c] = 0;
++		atp_dev->quend[c] = 0;
++		atp_dev->last_cmd[c] = 0xff;
++		atp_dev->in_snd[c] = 0;
++		atp_dev->in_int[c] = 0;
++
++		for (k = 0; k < qcnt; k++) {
++			atp_dev->quereq[c][k] = NULL;
++		}
++		for (k = 0; k < 16; k++) {
+ 			   atp_dev->id[c][k].curr_req = NULL;
+ 			   atp_dev->sp[c][k] = 0x04;
+-	   	}		   
++		}
+ 	}
+ 	return 0;
+ }
+@@ -1263,7 +1323,8 @@ static void atp870_init(struct Scsi_Host *shpnt)
+ 
+ 	pci_read_config_byte(pdev, 0x49, &host_id);
+ 
+-	dev_info(&pdev->dev, "ACARD AEC-671X PCI Ultra/W SCSI-2/3 Host Adapter: IO:%lx, IRQ:%d.\n",
++	dev_info(&pdev->dev, "ACARD AEC-671X PCI Ultra/W SCSI-2/3 "
++		 "Host Adapter: IO:%lx, IRQ:%d.\n",
+ 		 shpnt->io_port, shpnt->irq);
+ 
+ 	atpdev->ioport[0] = shpnt->io_port;
+@@ -1314,7 +1375,8 @@ static void atp880_init(struct Scsi_Host *shpnt)
+ 
+ 	host_id = atp_readb_base(atpdev, 0x39) >> 4;
+ 
+-	dev_info(&pdev->dev, "ACARD AEC-67160 PCI Ultra3 LVD Host Adapter: IO:%lx, IRQ:%d.\n",
++	dev_info(&pdev->dev, "ACARD AEC-67160 PCI Ultra3 LVD "
++		 "Host Adapter: IO:%lx, IRQ:%d.\n",
+ 		 shpnt->io_port, shpnt->irq);
+ 	atpdev->host_id[0] = host_id;
+ 
+@@ -1393,7 +1455,8 @@ static void atp885_init(struct Scsi_Host *shpnt)
+ 	unsigned int n;
+ 	unsigned char setupdata[2][16];
+ 
+-	dev_info(&pdev->dev, "ACARD AEC-67162 PCI Ultra3 LVD Host Adapter: IO:%lx, IRQ:%d.\n",
++	dev_info(&pdev->dev, "ACARD AEC-67162 PCI Ultra3 LVD "
++		 "Host Adapter: IO:%lx, IRQ:%d.\n",
+ 		 shpnt->io_port, shpnt->irq);
+ 
+ 	atpdev->ioport[0] = shpnt->io_port + 0x80;
+@@ -1413,11 +1476,13 @@ static void atp885_init(struct Scsi_Host *shpnt)
+ 			atpdev->global_map[m] = 0;
+ 			for (k = 0; k < 4; k++) {
+ 				atp_writew_base(atpdev, 0x3c, n++);
+-				((u32 *)&setupdata[m][0])[k] = atp_readl_base(atpdev, 0x38);
++				((u32 *)&setupdata[m][0])[k] =
++					atp_readl_base(atpdev, 0x38);
+ 			}
+ 			for (k = 0; k < 4; k++) {
+ 				atp_writew_base(atpdev, 0x3c, n++);
+-				((u32 *)&atpdev->sp[m][0])[k] = atp_readl_base(atpdev, 0x38);
++				((u32 *)&atpdev->sp[m][0])[k] =
++					atp_readl_base(atpdev, 0x38);
+ 			}
+ 			n += 8;
+ 		}
+@@ -1510,17 +1575,17 @@ static int atp870u_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		goto fail;
+ 
+ 	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(32))) {
+-                printk(KERN_ERR "atp870u: DMA mask required but not available.\n");
+-                err = -EIO;
+-                goto disable_device;
+-        }
++		printk(KERN_ERR "atp870u: DMA mask required but not available.\n");
++		err = -EIO;
++		goto disable_device;
++	}
+ 
+ 	err = pci_request_regions(pdev, "atp870u");
+ 	if (err)
+ 		goto disable_device;
+ 	pci_set_master(pdev);
+ 
+-        err = -ENOMEM;
++	err = -ENOMEM;
+ 	shpnt = scsi_host_alloc(&atp870u_template, sizeof(struct atp_unit));
+ 	if (!shpnt)
+ 		goto release_region;
+@@ -1586,7 +1651,7 @@ static int atp870u_abort(struct scsi_cmnd * SCpnt)
+ {
+ 	unsigned char  j, k, c;
+ 	struct scsi_cmnd *workrequ;
+-	struct atp_unit *dev;	
++	struct atp_unit *dev;
+ 	struct Scsi_Host *host;
+ 	host = SCpnt->device->host;
+ 
+@@ -1655,11 +1720,10 @@ static int atp870u_biosparam(struct scsi_device *disk, struct block_device *dev,
+ }
+ 
+ static void atp870u_remove (struct pci_dev *pdev)
+-{	
++{
+ 	struct atp_unit *devext = pci_get_drvdata(pdev);
+ 	struct Scsi_Host *pshost = devext->host;
+-	
+-	
++
+ 	scsi_remove_host(pshost);
+ 	free_irq(pshost->irq, pshost);
+ 	pci_release_regions(pdev);
+@@ -1671,23 +1735,23 @@ MODULE_LICENSE("GPL");
+ 
+ static struct scsi_host_template atp870u_template = {
+      .module			= THIS_MODULE,
+-     .name              	= "atp870u"		/* name */,
++     .name			= "atp870u"		/* name */,
+      .proc_name			= "atp870u",
+      .show_info			= atp870u_show_info,
+-     .info              	= atp870u_info		/* info */,
+-     .queuecommand      	= atp870u_queuecommand	/* queuecommand */,
+-     .eh_abort_handler  	= atp870u_abort		/* abort */,
+-     .bios_param        	= atp870u_biosparam	/* biosparm */,
+-     .can_queue         	= qcnt			/* can_queue */,
+-     .this_id           	= 7			/* SCSI ID */,
+-     .sg_tablesize      	= ATP870U_SCATTER	/*SG_ALL*/,
++     .info			= atp870u_info		/* info */,
++     .queuecommand		= atp870u_queuecommand	/* queuecommand */,
++     .eh_abort_handler		= atp870u_abort		/* abort */,
++     .bios_param		= atp870u_biosparam	/* biosparm */,
++     .can_queue			= qcnt			/* can_queue */,
++     .this_id			= 7			/* SCSI ID */,
++     .sg_tablesize		= ATP870U_SCATTER	/*SG_ALL*/,
+      .max_sectors		= ATP870U_MAX_SECTORS,
  };
  
- /* Liberator register offsets */
--#define TWL_STATUS                         0x0  /* Status */
--#define TWL_HIBDB                          0x20 /* Inbound doorbell */
--#define TWL_HISTAT                         0x30 /* Host interrupt status */
--#define TWL_HIMASK                         0x34 /* Host interrupt mask */
-+#define TWL_STATUS			   0x0  /* Status */
-+#define TWL_HIBDB			   0x20 /* Inbound doorbell */
-+#define TWL_HISTAT			   0x30 /* Host interrupt status */
-+#define TWL_HIMASK			   0x34 /* Host interrupt mask */
- #define TWL_HOBDB			   0x9C /* Outbound doorbell */
--#define TWL_HOBDBC                         0xA0 /* Outbound doorbell clear */
--#define TWL_SCRPD3                         0xBC /* Scratchpad */
--#define TWL_HIBQPL                         0xC0 /* Host inbound Q low */
--#define TWL_HIBQPH                         0xC4 /* Host inbound Q high */
--#define TWL_HOBQPL                         0xC8 /* Host outbound Q low */
--#define TWL_HOBQPH                         0xCC /* Host outbound Q high */
-+#define TWL_HOBDBC			   0xA0 /* Outbound doorbell clear */
-+#define TWL_SCRPD3			   0xBC /* Scratchpad */
-+#define TWL_HIBQPL			   0xC0 /* Host inbound Q low */
-+#define TWL_HIBQPH			   0xC4 /* Host inbound Q high */
-+#define TWL_HOBQPL			   0xC8 /* Host outbound Q low */
-+#define TWL_HOBQPH			   0xCC /* Host outbound Q high */
- #define TWL_HISTATUS_VALID_INTERRUPT	   0xC
- #define TWL_HISTATUS_ATTENTION_INTERRUPT   0x4
- #define TWL_HISTATUS_RESPONSE_INTERRUPT	   0x8
-@@ -80,12 +80,12 @@ static char *twl_aen_severity_table[] =
- #define TW_OP_EXECUTE_SCSI    0x10
+ static struct pci_device_id atp870u_id_table[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, ATP885_DEVID)			  },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, ATP880_DEVID1)			  },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, ATP880_DEVID2)			  },
++	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, ATP880_DEVID1)		  },
++	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, ATP880_DEVID2)		  },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, PCI_DEVICE_ID_ARTOP_AEC7610)    },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, PCI_DEVICE_ID_ARTOP_AEC7612UW)  },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_ARTOP, PCI_DEVICE_ID_ARTOP_AEC7612U)   },
+@@ -1709,7 +1773,8 @@ static struct pci_driver atp870u_driver = {
  
- /* Asynchronous Event Notification (AEN) codes used by the driver */
--#define TW_AEN_QUEUE_EMPTY       0x0000
--#define TW_AEN_SOFT_RESET        0x0001
-+#define TW_AEN_QUEUE_EMPTY	 0x0000
-+#define TW_AEN_SOFT_RESET	 0x0001
- #define TW_AEN_SYNC_TIME_WITH_HOST 0x031
--#define TW_AEN_SEVERITY_ERROR    0x1
--#define TW_AEN_SEVERITY_DEBUG    0x4
--#define TW_AEN_NOT_RETRIEVED 0x1
-+#define TW_AEN_SEVERITY_ERROR	 0x1
-+#define TW_AEN_SEVERITY_DEBUG	 0x4
-+#define TW_AEN_NOT_RETRIEVED	 0x1
+ module_pci_driver(atp870u_driver);
  
- /* Command state defines */
- #define TW_S_INITIAL   0x1  /* Initial state */
-@@ -101,7 +101,7 @@ static char *twl_aen_severity_table[] =
- #define TW_CURRENT_DRIVER_BRANCH 0
- 
- /* Misc defines */
--#define TW_SECTOR_SIZE                        512
-+#define TW_SECTOR_SIZE			      512
- #define TW_MAX_UNITS			      32
- #define TW_INIT_MESSAGE_CREDITS		      0x100
- #define TW_INIT_COMMAND_PACKET_SIZE	      0x3
-@@ -116,15 +116,15 @@ static char *twl_aen_severity_table[] =
- #define TW_MAX_RESET_TRIES		      2
- #define TW_MAX_CMDS_PER_LUN		      254
- #define TW_MAX_AEN_DRAIN		      255
--#define TW_IN_RESET                           2
-+#define TW_IN_RESET			      2
- #define TW_USING_MSI			      3
- #define TW_IN_ATTENTION_LOOP		      4
--#define TW_MAX_SECTORS                        256
--#define TW_MAX_CDB_LEN                        16
--#define TW_IOCTL_CHRDEV_TIMEOUT               60 /* 60 seconds */
--#define TW_IOCTL_CHRDEV_FREE                  -1
--#define TW_COMMAND_OFFSET                     128 /* 128 bytes */
--#define TW_VERSION_TABLE                      0x0402
-+#define TW_MAX_SECTORS			      256
-+#define TW_MAX_CDB_LEN			      16
-+#define TW_IOCTL_CHRDEV_TIMEOUT		      60 /* 60 seconds */
-+#define TW_IOCTL_CHRDEV_FREE		      -1
-+#define TW_COMMAND_OFFSET		      128 /* 128 bytes */
-+#define TW_VERSION_TABLE		      0x0402
- #define TW_TIMEKEEP_TABLE		      0x040A
- #define TW_INFORMATION_TABLE		      0x0403
- #define TW_PARAM_FWVER			      3
-@@ -136,15 +136,15 @@ static char *twl_aen_severity_table[] =
- #define TW_PARAM_PHY_SUMMARY_TABLE	      1
- #define TW_PARAM_PHYCOUNT		      2
- #define TW_PARAM_PHYCOUNT_LENGTH	      1
--#define TW_IOCTL_FIRMWARE_PASS_THROUGH        0x108  // Used by smartmontools
-+#define TW_IOCTL_FIRMWARE_PASS_THROUGH	      0x108  // Used by smartmontools
- #define TW_ALLOCATION_LENGTH		      128
- #define TW_SENSE_DATA_LENGTH		      18
- #define TW_ERROR_LOGICAL_UNIT_NOT_SUPPORTED   0x10a
- #define TW_ERROR_INVALID_FIELD_IN_CDB	      0x10d
--#define TW_ERROR_UNIT_OFFLINE                 0x128
-+#define TW_ERROR_UNIT_OFFLINE		      0x128
- #define TW_MESSAGE_SOURCE_CONTROLLER_ERROR    3
- #define TW_MESSAGE_SOURCE_CONTROLLER_EVENT    4
--#define TW_DRIVER 			      6
-+#define TW_DRIVER			      6
- #ifndef PCI_DEVICE_ID_3WARE_9750
- #define PCI_DEVICE_ID_3WARE_9750 0x1010
+-static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip, unsigned char lvdmode)
++static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip,
++		   unsigned char lvdmode)
+ {
+ 	unsigned char i, j, k, rmb, n;
+ 	unsigned short int m;
+@@ -1982,8 +2047,9 @@ static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip, unsign
+ 			m = m << i;
+ 			dev->wide_id[c] |= m;
+ 			dev->id[c][i].devsp = 0xce;
+-#ifdef ED_DBGP		   
+-			printk("dev->id[%2d][%2d].devsp = %2x\n",c,i,dev->id[c][i].devsp);
++#ifdef ED_DBGP
++			printk("dev->id[%2d][%2d].devsp = %2x\n",
++			       c, i, dev->id[c][i].devsp);
  #endif
-@@ -167,25 +167,41 @@ static char *twl_aen_severity_table[] =
- #define TW_NOTMFA_OUT(x) (x & 0x1)
+ 			continue;
+ 		}
+@@ -2005,7 +2071,8 @@ static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip, unsign
+ 		while ((atp_readb_io(dev, c, 0x1f) & 0x80) == 0x00)
+ 			cpu_relax();
  
- /* request_id: 12, lun: 4 */
--#define TW_REQ_LUN_IN(lun, request_id) (((lun << 12) & 0xf000) | (request_id & 0xfff))
-+#define TW_REQ_LUN_IN(lun, request_id)			\
-+	(((lun << 12) & 0xf000) | (request_id & 0xfff))
- #define TW_LUN_OUT(lun) ((lun >> 12) & 0xf)
+-		if (atp_readb_io(dev, c, 0x17) != 0x11 && atp_readb_io(dev, c, 0x17) != 0x8e)
++		if (atp_readb_io(dev, c, 0x17) != 0x11 &&
++		    atp_readb_io(dev, c, 0x17) != 0x8e)
+ 			continue;
  
- /* Register access macros */
--#define TWL_STATUS_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_STATUS)
--#define TWL_HOBQPL_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HOBQPL)
--#define TWL_HOBQPH_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HOBQPH)
--#define TWL_HOBDB_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HOBDB)
--#define TWL_HOBDBC_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HOBDBC)
--#define TWL_HIMASK_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HIMASK)
--#define TWL_HISTAT_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HISTAT)
--#define TWL_HIBQPH_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HIBQPH)
--#define TWL_HIBQPL_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HIBQPL)
--#define TWL_HIBDB_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_HIBDB)
--#define TWL_SCRPD3_REG_ADDR(x) ((unsigned char __iomem *)x->base_addr + TWL_SCRPD3)
--#define TWL_MASK_INTERRUPTS(x) (writel(~0, TWL_HIMASK_REG_ADDR(tw_dev)))
--#define TWL_UNMASK_INTERRUPTS(x) (writel(~TWL_HISTATUS_VALID_INTERRUPT, TWL_HIMASK_REG_ADDR(tw_dev)))
--#define TWL_CLEAR_DB_INTERRUPT(x) (writel(~0, TWL_HOBDBC_REG_ADDR(tw_dev)))
--#define TWL_SOFT_RESET(x) (writel(TWL_ISSUE_SOFT_RESET, TWL_HIBDB_REG_ADDR(tw_dev)))
-+#define TWL_STATUS_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_STATUS)
-+#define TWL_HOBQPL_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HOBQPL)
-+#define TWL_HOBQPH_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HOBQPH)
-+#define TWL_HOBDB_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HOBDB)
-+#define TWL_HOBDBC_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HOBDBC)
-+#define TWL_HIMASK_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HIMASK)
-+#define TWL_HISTAT_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HISTAT)
-+#define TWL_HIBQPH_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HIBQPH)
-+#define TWL_HIBQPL_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HIBQPL)
-+#define TWL_HIBDB_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_HIBDB)
-+#define TWL_SCRPD3_REG_ADDR(x)					\
-+	((unsigned char __iomem *)x->base_addr + TWL_SCRPD3)
-+#define TWL_MASK_INTERRUPTS(x)					\
-+	(writel(~0, TWL_HIMASK_REG_ADDR(tw_dev)))
-+#define TWL_UNMASK_INTERRUPTS(x)				\
-+	(writel(~TWL_HISTATUS_VALID_INTERRUPT, TWL_HIMASK_REG_ADDR(tw_dev)))
-+#define TWL_CLEAR_DB_INTERRUPT(x)				\
-+	(writel(~0, TWL_HOBDBC_REG_ADDR(tw_dev)))
-+#define TWL_SOFT_RESET(x)					\
-+	(writel(TWL_ISSUE_SOFT_RESET, TWL_HIBDB_REG_ADDR(tw_dev)))
+ 		while (atp_readb_io(dev, c, 0x17) != 0x8e)
+@@ -2109,7 +2176,9 @@ static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip, unsign
+ 		m = m << i;
+ 		dev->wide_id[c] |= m;
+ not_wide:
+-		if ((dev->id[c][i].devtype == 0x00) || (dev->id[c][i].devtype == 0x07) || ((dev->id[c][i].devtype == 0x05) && ((n & 0x10) != 0))) {
++		if ((dev->id[c][i].devtype == 0x00) ||
++		    (dev->id[c][i].devtype == 0x07) ||
++		    ((dev->id[c][i].devtype == 0x05) && ((n & 0x10) != 0))) {
+ 			m = 1;
+ 			m = m << i;
+ 			if ((dev->async[c] & m) != 0) {
+@@ -2148,7 +2217,8 @@ static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip, unsign
+ 		while ((atp_readb_io(dev, c, 0x1f) & 0x80) == 0x00)
+ 			cpu_relax();
  
- /* Macros */
- #define TW_PRINTK(h,a,b,c) { \
-@@ -317,7 +333,7 @@ typedef struct TAG_TW_Ioctl_Driver_Command {
+-		if (atp_readb_io(dev, c, 0x17) != 0x11 && atp_readb_io(dev, c, 0x17) != 0x8e)
++		if (atp_readb_io(dev, c, 0x17) != 0x11 &&
++		    atp_readb_io(dev, c, 0x17) != 0x8e)
+ 			continue;
  
- typedef struct TAG_TW_Ioctl_Apache {
- 	TW_Ioctl_Driver_Command driver_command;
--        char padding[488];
-+	char padding[488];
- 	TW_Command_Full firmware_command;
- 	char data_buffer[1];
- } TW_Ioctl_Buf_Apache;
-@@ -352,10 +368,10 @@ typedef struct TAG_TW_Compatibility_Info
- #pragma pack()
+ 		while (atp_readb_io(dev, c, 0x17) != 0x8e)
+@@ -2310,7 +2380,8 @@ static void atp_is(struct atp_unit *dev, unsigned char c, bool wide_chip, unsign
+ set_syn_ok:
+ 		dev->id[c][i].devsp = (dev->id[c][i].devsp & 0x0f) | j;
+ #ifdef ED_DBGP
+-		printk("dev->id[%2d][%2d].devsp = %2x\n",c,i,dev->id[c][i].devsp);
++		printk("dev->id[%2d][%2d].devsp = %2x\n",
++		       c,i,dev->id[c][i].devsp);
+ #endif
+ 	}
+ }
+diff --git a/drivers/scsi/atp870u.h b/drivers/scsi/atp870u.h
+index 75c44399fc88..31f6ab24b5cb 100644
+--- a/drivers/scsi/atp870u.h
++++ b/drivers/scsi/atp870u.h
+@@ -7,10 +7,10 @@
  
- typedef struct TAG_TW_Device_Extension {
--	void                     __iomem *base_addr;
--	unsigned long	       	*generic_buffer_virt[TW_Q_LENGTH];
--	dma_addr_t	       	generic_buffer_phys[TW_Q_LENGTH];
--	TW_Command_Full	       	*command_packet_virt[TW_Q_LENGTH];
-+	void			__iomem *base_addr;
-+	unsigned long		*generic_buffer_virt[TW_Q_LENGTH];
-+	dma_addr_t		generic_buffer_phys[TW_Q_LENGTH];
-+	TW_Command_Full		*command_packet_virt[TW_Q_LENGTH];
- 	dma_addr_t		command_packet_phys[TW_Q_LENGTH];
- 	TW_Command_Apache_Header *sense_buffer_virt[TW_Q_LENGTH];
- 	dma_addr_t		sense_buffer_phys[TW_Q_LENGTH];
-@@ -364,7 +380,7 @@ typedef struct TAG_TW_Device_Extension {
- 	unsigned char		free_queue[TW_Q_LENGTH];
- 	unsigned char		free_head;
- 	unsigned char		free_tail;
--	int     		state[TW_Q_LENGTH];
-+	int			state[TW_Q_LENGTH];
- 	unsigned int		posted_request_count;
- 	unsigned int		max_posted_request_count;
- 	unsigned int		max_sgl_entries;
-@@ -375,9 +391,9 @@ typedef struct TAG_TW_Device_Extension {
- 	unsigned int		aen_count;
- 	struct Scsi_Host	*host;
- 	long			flags;
--	TW_Event                *event_queue[TW_Q_LENGTH];
--	unsigned char           error_index;
--	unsigned int            error_sequence_id;
-+	TW_Event		*event_queue[TW_Q_LENGTH];
-+	unsigned char		error_index;
-+	unsigned int		error_sequence_id;
- 	int			chrdev_request_id;
- 	wait_queue_head_t	ioctl_wqueue;
- 	struct mutex		ioctl_lock;
+ /* I/O Port */
+ 
+-#define MAX_CDB 	12
+-#define MAX_SENSE 	14
+-#define qcnt	       	32
+-#define ATP870U_SCATTER 	128
++#define MAX_CDB		12
++#define MAX_SENSE	14
++#define qcnt		32
++#define ATP870U_SCATTER	128
+ 
+ #define MAX_ADAPTER	8
+ #define MAX_SCSI_ID	16
+@@ -40,7 +40,7 @@ struct atp_unit
+ 	unsigned short ultra_map[2];
+ 	unsigned short async[2];
+ 	unsigned char sp[2][16];
+-	unsigned char r1f[2][16];		
++	unsigned char r1f[2][16];
+ 	struct scsi_cmnd *quereq[2][qcnt];
+ 	struct atp_id
+ 	{
+@@ -55,8 +55,8 @@ struct atp_unit
+ 		dma_addr_t prdaddr;		/* Dynamically updated in driver */
+ 		struct scsi_cmnd *curr_req;
+ 	} id[2][16];
+-    	struct Scsi_Host *host;
+-    	struct pci_dev *pdev;
++	struct Scsi_Host *host;
++	struct pci_dev *pdev;
+ 	unsigned int unit;
+ };
+ 
 -- 
 2.16.4
 
