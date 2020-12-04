@@ -2,126 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2792CF250
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 17:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE712CF256
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 17:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388030AbgLDQto (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 11:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387952AbgLDQto (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 11:49:44 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA66AC061A51;
-        Fri,  4 Dec 2020 08:49:03 -0800 (PST)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1607100542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DpTRFsFRc9/tXI4gMGMyZKDuQbOkXJKaQdzwiNLDT4s=;
-        b=B2ciP1NhXnAP2waJrjFFjcIJNjngJI2TpMagMN8GdkeNnK1sXK51i0yj1MC5V8skJKqmMn
-        eirkdoY4S9b3nOqgQ5iHgjkcUJSwaMLYyUnx9i80FjVb5w5Fp3fDZNchVZPilhYcfTCNdb
-        l0iXjWv953QSZtg5203RWoGpcg95FeZKyK0Nh9s9pfT+2RZaII/PRyoZCQd0JtSPlyl2Al
-        Z22Fz7sBawLkXfbhR6tasTqrsosI53pgzR1j2fVuedKASFTIwh3mSjXoVcurNJslVjgoeJ
-        7ewva/AIcRwspIPBqzu2xV4f3fSLlSs/8H0FNr/yawsSJnQihNG3EkaMORMZ5A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1607100542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DpTRFsFRc9/tXI4gMGMyZKDuQbOkXJKaQdzwiNLDT4s=;
-        b=kpO714HqfqwQQV8oJZbFASHdsbfVXcctd3YyQFFmAgzpyk8q247LzdIRp2XcipqjG3bcge
-        kHFunfrSRej0InCw==
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Ahmed S . Darwish" <a.darwish@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 3/3] sr: Remove in_interrupt() usage in sr_init_command().
-Date:   Fri,  4 Dec 2020 17:48:50 +0100
-Message-Id: <20201204164850.2343359-3-bigeasy@linutronix.de>
-In-Reply-To: <20201204164850.2343359-1-bigeasy@linutronix.de>
-References: <20201204164803.ovwurzs3257em2rp@linutronix.de>
- <20201204164850.2343359-1-bigeasy@linutronix.de>
+        id S1730957AbgLDQv2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 11:51:28 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:35824 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729617AbgLDQv2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 11:51:28 -0500
+Received: by mail-pf1-f195.google.com with SMTP id c79so4113211pfc.2;
+        Fri, 04 Dec 2020 08:51:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tKNG89IP0eWAuFAmQbkXENZV9Tbmi4dU4MxDvBA7mFI=;
+        b=OfUNSUs5OxS2as7eBxQdTZXATgCM9VvgbpYwrkxk2Ok51AW9WU1Dbem2i14dSOaPVU
+         Ki0X7/cmuq87VlyBZlHKNOmxHZZYKN15nhhfDpitfcgPJQcGiMT10fAOy1Oco9oUBgbV
+         V1O4qdZq2ef0bLDSrWfbE0TQXia8Hgr6K+M/o3zDGs+GruFatt+3yiVgmPnAB0NEu99F
+         BVMgw9+uF5D6eqNxSvIxwJ+axyCz0VPqLy7VTwhuoEf9yeN6m4cYUBMKtVmlphd01GD4
+         0VBRMTWv++TkWjO5aifejOmxMd9RVZJQFbXBCZfIZUH0Z3rmvfBLF6hxpqVfSFFGmVdO
+         iDTw==
+X-Gm-Message-State: AOAM531ogFjfZAO+LBBfTAcRjuRGJxEuRp2sqnEdobUR25fYvMJrdKbv
+        QMicZtvKn76CAK9nBz+xeIo=
+X-Google-Smtp-Source: ABdhPJyVjoClBTZulB9nZ/rWWhlx2xF6FBwXReB+wzB03dYuTytWT/YAJkp7loPNHUyzV5nqAtAYEg==
+X-Received: by 2002:a63:4:: with SMTP id 4mr8059058pga.443.1607100647637;
+        Fri, 04 Dec 2020 08:50:47 -0800 (PST)
+Received: from [192.168.3.218] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id w2sm2687796pjb.22.2020.12.04.08.50.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Dec 2020 08:50:46 -0800 (PST)
+Subject: Re: [PATCH v4 5/9] scsi: Do not wait for a request in
+ scsi_eh_lock_door()
+To:     Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Can Guo <cang@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20201130024615.29171-1-bvanassche@acm.org>
+ <20201130024615.29171-6-bvanassche@acm.org>
+ <bdadfbcd-76c4-4658-0b36-b7666fa1dc7b@suse.de>
+ <6e5fbc73-881e-69c7-54ce-381b8b695b3c@acm.org>
+ <b56cf3af-940f-62ed-2a79-eb80599e2f44@suse.de> <20201203072738.GB633702@T590>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <32732e89-e425-2b71-4564-35e243f170bc@acm.org>
+Date:   Fri, 4 Dec 2020 08:50:44 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201203072738.GB633702@T590>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The in_interrupt() check in sr_init_command() is a leftover from the
-past, pre v2.3.16 era to be exact. Back then the ioctl() was served by
-`sr' itself and sector size changes by CDROMREADMODE2 (as noted in the
-comment) were accounted within sr's data structures which allowed a
-"lazy" reset so it could be skipped on the next request and reset back
-to the default value once the device node was closed or before a command
-from the blockqueue was issued.
+On 12/2/20 11:27 PM, Ming Lei wrote:
+> BTW, scsi_eh_lock_door() returns void, and it can't be sync because
+> there may not be any driver tag available. Even though it is available,
+> the host state isn't running yet, so the command can't be queued to LLD
+> yet.
+> 
+> Maybe the above lines should be put after host state is updated to
+> RUNNING.
+> 
+> Also changing to NOWAIT can't avoid the issue completely, what if 'none'
+> is used?
 
-This does not work like that anymore. The CDROMREADMODE2 is served by
-cdrom's mmc_ioctl() function which may change the sector size but the
-`sr' driver does not learn about it and so its ->sector_size is not
-updated.
-The ioctl() resets the changed sector size back to 2048.
-sr_read_sector() also resets the sector size back to the default once it
-is done.
+Hi Ming,
 
-Remove the conditional sector size update from sr_init_command() and
-sr_release() because it is not needed.
+I am considering to drop this patch since the latest version of the SPI
+DV patch no longer introduces a new blk_mq_freeze_queue() call in the
+SPI DV code. In other words, any potential issues with
+scsi_eh_lock_door() are existing issues and are not made worse by my
+patch series.
 
-Link: https://lkml.kernel.org/r/20201204164803.ovwurzs3257em2rp@linutronix.=
-de
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-This change makes also ide-cd providing the last non-empty
-cdrom_device_info::release callback.
+Thanks,
 
- drivers/scsi/sr.c | 17 -----------------
- 1 file changed, 17 deletions(-)
-
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index fd4b582110b29..e4633b84c556a 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -416,19 +416,7 @@ static blk_status_t sr_init_command(struct scsi_cmnd *=
-SCpnt)
- 		goto out;
- 	}
-=20
--	/*
--	 * we do lazy blocksize switching (when reading XA sectors,
--	 * see CDROMREADMODE2 ioctl)=20
--	 */
- 	s_size =3D cd->device->sector_size;
--	if (s_size > 2048) {
--		if (!in_interrupt())
--			sr_set_blocklength(cd, 2048);
--		else
--			scmd_printk(KERN_INFO, SCpnt,
--				    "can't switch blocksize: in interrupt\n");
--	}
--
- 	if (s_size !=3D 512 && s_size !=3D 1024 && s_size !=3D 2048) {
- 		scmd_printk(KERN_ERR, SCpnt, "bad sector size %d\n", s_size);
- 		goto out;
-@@ -701,11 +689,6 @@ static int sr_open(struct cdrom_device_info *cdi, int =
-purpose)
-=20
- static void sr_release(struct cdrom_device_info *cdi)
- {
--	struct scsi_cd *cd =3D cdi->handle;
--
--	if (cd->device->sector_size > 2048)
--		sr_set_blocklength(cd, 2048);
--
- }
-=20
- static int sr_probe(struct device *dev)
---=20
-2.29.2
-
+Bart.
