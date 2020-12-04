@@ -2,45 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 755072CF74A
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 00:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235602CF74B
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 00:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727517AbgLDXDt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 18:03:49 -0500
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:48973 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727348AbgLDXDs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 18:03:48 -0500
+        id S1727357AbgLDXE0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 18:04:26 -0500
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:1456 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727348AbgLDXE0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 18:04:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607123028; x=1638659028;
+  t=1607123066; x=1638659066;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=V3ZFAee8kjnF5fem46YCVTq9Tu6zPg0HPIuxEfi3qMU=;
-  b=t+XH9hp0Fbh/aFtNUGUrIbO/CnLB1JiH/AKXLXYR0TTErDpKBK8e8PzO
-   ie1qAJP0gMHH2sD95KUKXfPfbZ/Suo6UsXRBPlidp/WGoJqJ27/DiktPU
-   OfK0+UJGBdFNyKrlyLnmcGQr12wqki07Nx29oTi6Bgqz8sKh52OSNExm0
-   79i38GydGS5+xDTiUnhp06PTnPu3A3/+lHQnY+GJcsDWzipNKiryPdYzl
-   YVMRV6VFBdbKEO63LeUv87TSdFmMLcw3hTcmQgENkktU5Nvv7kq0ts5PR
-   ShP31PoU9/ojT4fmRo4hbAOuW1gHI0T03Us5hRxnKlZrJEw0iU/mBEzsE
-   A==;
-IronPort-SDR: 7LT+VtB3CGeep+rRP7SU6ZS16lhK/LWRF9RtTp5n2BZLdSsjQqXaAJ3zfPXQqPQTQw5U9VCrQ6
- wQj7lfN/llAl2wDovGgSz1igmpR+Tq+Le/0v1EJAqEV9EVPWRsL/Z92x8b51qar+Atvhv/Saoq
- FO9nFxvjEl26DdM78QCdBPHjCBNoLMllNnnP5n84Mto5ea9BkL1LRsejAweeFE3AQs5NIOuVae
- GZ8M32t+iaxRrC2mQymqXXHXu06jWFqkZ/5AYQ5gghoAvv41R/8btNshG00/Q+rv0EcElP+Xk4
- 2cc=
+  bh=xYZN3FRbTMguNn3cxo8CKKBXr+jqAuoIaHF1KU+m+wc=;
+  b=XclMlUHdMJ0y/D4vSPvgDpt5tzxHWRatuld6mU/+Dt20Gh2nw2K8RdRT
+   OKSQQwbYtcZn06AzMLoXxjSCSv5dqlhSFxqMe52HfGZKzxnDa3c9ALDoV
+   RRAMGoG+nDeLPBEKArqZ2c2UTCLrUaXfPCjsRN4H73cI6jRkbtoZw69ED
+   75wBJgJ8kb7PwfdYa2XBjagPLxyGU56/GK/Kxn9E92g+nIOPwzNSJrhc0
+   3Fbi5Yro1DqTkwF/zYP+UCpoTDJp+9kY00UV5wo/YeS7h1lKK59hzjtp1
+   Btk99QELK0h7grPBU0aixvP6uD0hR2ROJq/hk96Ag07yBjbW7k6gGndS3
+   Q==;
+IronPort-SDR: wsYeIkuZmASDyMRBU43BfkvgmjjLZdswCoFl3FfDD6oW5RltIqjjyApzeh0y+yLnIM4B49oVsX
+ HyY6EpjMJbnjrqRZ1KcOkXbg9QyerWc99jQ+OngEMU8vFHldlzSva9VvhtD4wGhqKBfgcH5edi
+ 2IJSyvXbkWwX3lepTSWwQnbBy4QQxzLHP05DaxgHtr/0NmeWf03njYJSPJWYe4FIwDce36n3QT
+ wRUMLbphCfs8pS1nLx8nx4fvSjOPz+XDxqICOg6bBpsJ9Lv0NJKcBsPj23JLjWwvAcJJ58HSve
+ mX4=
 X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
-   d="scan'208";a="95934708"
+   d="scan'208";a="101548931"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Dec 2020 16:02:59 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Dec 2020 16:03:05 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 4 Dec 2020 16:02:59 -0700
-Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Fri, 4 Dec 2020 16:02:58 -0700
-Subject: [PATCH 22/25] smartpqi: update enclosure identifier in sysf
+ 15.1.1979.3; Fri, 4 Dec 2020 16:03:04 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Fri, 4 Dec 2020 16:03:04 -0700
+Subject: [PATCH 23/25] smartpqi: correct system hangs when resuming from
+ hibernation
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -48,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Fri, 4 Dec 2020 17:02:58 -0600
-Message-ID: <160712297842.21372.14060743747106039439.stgit@brunhilda>
+Date:   Fri, 4 Dec 2020 17:03:04 -0600
+Message-ID: <160712298422.21372.9624784570305531704.stgit@brunhilda>
 In-Reply-To: <160712276179.21372.51526310810782843.stgit@brunhilda>
 References: <160712276179.21372.51526310810782843.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -60,30 +61,33 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Murthy Bhat <Murthy.Bhat@microchip.com>
+From: Kevin Barnett <kevin.barnett@microchip.com>
 
-* Update enclosure identifier field corresponding to
-  physical devices in lsscsi/sysfs.
+* Correct system hangs when resuming from hibernation after
+  first successful hibernation/resume cycle.
+  * Rare condition involving OFA.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Murthy Bhat <Murthy.Bhat@microchip.com>
+Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index cfc5505e8234..01e62eb08583 100644
+index 01e62eb08583..acfa57beb3c5 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -1841,7 +1841,6 @@ static void pqi_dev_info(struct pqi_ctrl_info *ctrl_info,
- static void pqi_scsi_update_device(struct pqi_scsi_dev *existing_device,
- 	struct pqi_scsi_dev *new_device)
- {
--	existing_device->devtype = new_device->devtype;
- 	existing_device->device_type = new_device->device_type;
- 	existing_device->bus = new_device->bus;
- 	if (new_device->target_lun_valid) {
+@@ -8619,6 +8619,11 @@ static __maybe_unused int pqi_resume(struct pci_dev *pci_dev)
+ 	pci_set_power_state(pci_dev, PCI_D0);
+ 	pci_restore_state(pci_dev);
+ 
++	pqi_ctrl_unblock_device_reset(ctrl_info);
++	pqi_ctrl_unblock_requests(ctrl_info);
++	pqi_scsi_unblock_requests(ctrl_info);
++	pqi_ctrl_unblock_scan(ctrl_info);
++
+ 	return pqi_ctrl_init_resume(ctrl_info);
+ }
+ 
 
