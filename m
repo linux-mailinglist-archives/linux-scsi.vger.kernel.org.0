@@ -2,133 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EC12CF64C
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Dec 2020 22:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1472CF737
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 00:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730458AbgLDVhb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 16:37:31 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25716 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725995AbgLDVha (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 16:37:30 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B4L3rPS195890;
-        Fri, 4 Dec 2020 16:36:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=mq0Py58u7yVQMGnTGvPD5H4RBHRUXUVsbgY2eBrKMWw=;
- b=KF42hkEb7PMPmHjmnQZslNNKg3QrgJLyoTg0LkIwllFzt0pVJ3zQvE/UYp6LxHR9tFNQ
- fHKt/9VvnrW0kMuxXY+XF/Gn9wDCb/XXrlTafb0y/X+sT+Mtt0xiAsT9gXonsih0FUmT
- BIYfJUznqDvDilzaSgkTU3EPz03c0/Eg6gFkN1fdNzA7VOUupinx2Jy7JyUIo7j4Z4hd
- LtUoIcEWrziWHwqeKOhlmdCPBW59b/7oPYS/AhRM9GDAQQ/ZlD3lfQFmrJ6qU/FBlKaD
- krpkDWqq6Qb/9v6W/Z3dr8YdS27Y02tZdKaJ2gLqH9GAa8725esUAU7wbwfRpRFk6YR8 oQ== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 357m8gyuca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Dec 2020 16:36:43 -0500
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B4LLwtB003116;
-        Fri, 4 Dec 2020 21:36:43 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01wdc.us.ibm.com with ESMTP id 355vrgdxsb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Dec 2020 21:36:43 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B4LZQSs3474112
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Dec 2020 21:35:26 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D12E712405A;
-        Fri,  4 Dec 2020 21:35:26 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F4229124058;
-        Fri,  4 Dec 2020 21:35:25 +0000 (GMT)
-Received: from oc6034535106.ibm.com (unknown [9.163.73.174])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Dec 2020 21:35:25 +0000 (GMT)
-Subject: Re: [PATCH v3 18/18] ibmvfc: drop host lock when completing commands
- in CRQ
-To:     Tyrel Datwyler <tyreld@linux.ibm.com>,
-        james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        brking@linux.ibm.com
-References: <20201203020806.14747-1-tyreld@linux.ibm.com>
- <20201203020806.14747-19-tyreld@linux.ibm.com>
-From:   Brian King <brking@linux.vnet.ibm.com>
-Message-ID: <b048ede5-e673-4ba9-3c28-df077aa4467a@linux.vnet.ibm.com>
-Date:   Fri, 4 Dec 2020 15:35:25 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1725966AbgLDXCa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 18:02:30 -0500
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:1374 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbgLDXC2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 18:02:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1607122948; x=1638658948;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SSTfQIG1JQKmCxs/Dqmm5tVsmIQJNJ0BuY871m9XrKY=;
+  b=DEZRxAvXn027lSqEhhaFZ21idAUagbFmedS7aGUqI4m1Dv7Z1bDzgHz6
+   WGKr2wTzmOpBGoQYKTCGDV1mwj2LSUCPqB3BQ33jWZj6mQRxYabZHxCBk
+   QejB6SRGeiyI0vQYD8BeK+68a/m36ZnKGC1mmqZ4KEL74pg/sX1gKAojy
+   oNMkLNhXMHGY76QGsuDWFw4RvIj4tlX4AI8v1nYiNc4LqVX41KyO5Udk1
+   tht5UhIIslmwitIXlCIuptTsLyEzjC3ye4sgE6O5ecCKYpCpqMEIKOn2k
+   LHOdBoZ4XeWNb6h5DVnv7xuTaUf8Ffgl/MxBxIwVz77f6rHsNDgB5vKxp
+   w==;
+IronPort-SDR: cJfu8Yer5+C72xRUxNKmDBhZ54NYNGlaN5nw0eodMxGPJvqjJLI0HutwDuyQ8dBBP4xK6n+vKj
+ ylYAcFe3YzA7UgTYDJKUCCu5/39xBmbIT5WYyxfsUJKAp/qdgH/d52cB6LcIEfIF4Y7p8v3Ed3
+ cRsu6z2yx3HvjpUw9ZJu5zW3OrWWXqwhrL3322a8/3PfBqb7Jh24pwrK59vcZ4PTNFMIRQWKeM
+ ZbB+90s7htgf/wK/GDg7Su8ewBlBK0XyfYIc5Wz0UbzPrKEHJpxBY6nfOyo9bEHPQ9jdsS8v1c
+ mOQ=
+X-IronPort-AV: E=Sophos;i="5.78,393,1599548400"; 
+   d="scan'208";a="101548265"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Dec 2020 16:00:59 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 4 Dec 2020 16:00:51 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Fri, 4 Dec 2020 16:00:50 -0700
+Subject: [PATCH 00/25] smartpqi updates
+From:   Don Brace <don.brace@microchip.com>
+To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
+        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
+        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
+CC:     <linux-scsi@vger.kernel.org>
+Date:   Fri, 4 Dec 2020 17:00:50 -0600
+Message-ID: <160712276179.21372.51526310810782843.stgit@brunhilda>
+User-Agent: StGit/0.23-dirty
 MIME-Version: 1.0
-In-Reply-To: <20201203020806.14747-19-tyreld@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-04_11:2020-12-04,2020-12-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 spamscore=0
- impostorscore=0 mlxscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012040119
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12/2/20 8:08 PM, Tyrel Datwyler wrote:
-> The legacy CRQ holds the host lock the even while completing commands.
-> This presents a problem when in legacy single queue mode and
-> nr_hw_queues is greater than one since calling scsi_done() introduces
-> the potential for deadlock.
-> 
-> If nr_hw_queues is greater than one drop the hostlock in the legacy CRQ
-> path when completing a command.
-> 
-> Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-> ---
->  drivers/scsi/ibmvscsi/ibmvfc.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-> index e499599662ec..e2200bdff2be 100644
-> --- a/drivers/scsi/ibmvscsi/ibmvfc.c
-> +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-> @@ -2969,6 +2969,7 @@ static void ibmvfc_handle_crq(struct ibmvfc_crq *crq, struct ibmvfc_host *vhost)
->  {
->  	long rc;
->  	struct ibmvfc_event *evt = (struct ibmvfc_event *)be64_to_cpu(crq->ioba);
-> +	unsigned long flags;
->  
->  	switch (crq->valid) {
->  	case IBMVFC_CRQ_INIT_RSP:
-> @@ -3039,7 +3040,12 @@ static void ibmvfc_handle_crq(struct ibmvfc_crq *crq, struct ibmvfc_host *vhost)
->  	del_timer(&evt->timer);
->  	list_del(&evt->queue);
->  	ibmvfc_trc_end(evt);
-> -	evt->done(evt);
-> +	if (nr_scsi_hw_queues > 1) {
-> +		spin_unlock_irqrestore(vhost->host->host_lock, flags);
-> +		evt->done(evt);
-> +		spin_lock_irqsave(vhost->host->host_lock, flags);
-> +	} else
-> +		evt->done(evt);
+These patches are based on Martin Peterson's 5.11/scsi-queue tree
 
-Similar comment here as previously. The flags parameter is an output for
-spin_lock_irqsave but an input for spin_unlock_irqrestore. You'll need
-to rethink the locking here. You could just do a spin_unlock_irq / spin_lock_irq
-here and that would probably be OK, but probably isn't the best. 
+Note that these patches depend on the following three patches
+applied to Martin Peterson's tree:
+  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+  5.11/scsi-queue
+Depends-on: 5443bdc4cc77 scsi: smartpqi: Update version to 1.2.16-012
+Depends-on: 408bdd7e5845 scsi: smartpqi: Correct pqi_sas_smp_handler busy condition
+Depends-on: 1bdf6e934387 scsi: smartpqi: Correct driver removal with HBA disks
 
->  }
->  
->  /**
-> 
+This set of changes consist of:
+  * Add support for newer controller hardware.
+    * Refactor AIO and s/g processing code. (No functional changes)
+    * Add write support for RAID 5/6/1 Raid bypass path (or accelerated I/O path).
+    * Add check for sequential streaming.
+    * Add in new PCI-IDs.
+  * Format changes to re-align with our in-house driver. (No functional changes)
+  * Correct some issues relating to suspend/hibernation/OFA/shutdown.
+    * Block I/O requests during these conditions.
+  * Add in qdepth limit check to limit outstanding commands.
+    to the max values supported by the controller.
+  * Correct some minor issues found during regression testing.
+  * Update the driver version.
+
+---
+
+Don Brace (7):
+      smartpqi: refactor aio submission code
+      smartpqi: refactor build sg list code
+      smartpqi: add support for raid5 and raid6 writes
+      smartpqi: add support for raid1 writes
+      smartpqi: add stream detection
+      smartpqi: add host level stream detection enable
+      smartpqi: update version to 2.1.6-005
+
+Kevin Barnett (14):
+      smartpqi: add support for product id
+      smartpqi: add support for BMIC sense feature cmd and feature bits
+      smartpqi: update AIO Sub Page 0x02 support
+      smartpqi: add support for long firmware version
+      smartpqi: align code with oob driver
+      smartpqi: enable support for NVMe encryption
+      smartpqi: disable write_same for nvme hba disks
+      smartpqi: fix driver synchronization issues
+      smartpqi: convert snprintf to scnprintf
+      smartpqi: change timing of release of QRM memory during OFA
+      smartpqi: return busy indication for IOCTLs when ofa is active
+      smartpqi: add additional logging for LUN resets
+      smartpqi: correct system hangs when resuming from hibernation
+      smartpqi: add new pci ids
+
+Mahesh Rajashekhara (1):
+      smartpqi: fix host qdepth limit
+
+Murthy Bhat (3):
+      smartpqi: add phy id support for the physical drives
+      smartpqi: update sas initiator_port_protocols and target_port_protocols
+      smartpqi: update enclosure identifier in sysf
 
 
--- 
-Brian King
-Power Linux I/O
-IBM Linux Technology Center
+ drivers/scsi/smartpqi/smartpqi.h              |  301 +-
+ drivers/scsi/smartpqi/smartpqi_init.c         | 3088 ++++++++++-------
+ .../scsi/smartpqi/smartpqi_sas_transport.c    |   39 +-
+ drivers/scsi/smartpqi/smartpqi_sis.c          |    4 +-
+ 4 files changed, 2137 insertions(+), 1295 deletions(-)
 
+--
+Signature
