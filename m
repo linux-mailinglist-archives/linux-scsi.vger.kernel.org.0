@@ -2,146 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D148A2CFD15
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 19:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9062CFD6E
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 19:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729515AbgLESTc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 5 Dec 2020 13:19:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S1726356AbgLESd1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 5 Dec 2020 13:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727381AbgLERqn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Dec 2020 12:46:43 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499F8C02B8F5;
-        Sat,  5 Dec 2020 09:30:33 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CA3331280881;
-        Sat,  5 Dec 2020 09:30:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1607189430;
-        bh=ju+gwqxSbw4wAV2Be4ASi/eauxUvVwvTJ6wdfezRikM=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=sw4ZNyO+g5ST4XpJmRf6c8a8GvRnAqCt3Q2+OcRWiOG9GQQLtA9lF9mR+LYauTs8T
-         +yzkLelUaNGUTBpSAr60r7/ECQs/rp12i7fQCX36noFErYQDdAfOwHEuPIMKSsMJxJ
-         hlEFvLlpSSga3oooaIGg5ghLQ2arb5A7bZ5Os8Go=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id btD5y0INxwPt; Sat,  5 Dec 2020 09:30:30 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6C0D01280857;
-        Sat,  5 Dec 2020 09:30:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1607189430;
-        bh=ju+gwqxSbw4wAV2Be4ASi/eauxUvVwvTJ6wdfezRikM=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=sw4ZNyO+g5ST4XpJmRf6c8a8GvRnAqCt3Q2+OcRWiOG9GQQLtA9lF9mR+LYauTs8T
-         +yzkLelUaNGUTBpSAr60r7/ECQs/rp12i7fQCX36noFErYQDdAfOwHEuPIMKSsMJxJ
-         hlEFvLlpSSga3oooaIGg5ghLQ2arb5A7bZ5Os8Go=
-Message-ID: <6241da59ba45eeb525203201095d1f5ee76fbceb.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.10-rc6
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sat, 05 Dec 2020 09:30:29 -0800
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        with ESMTP id S1726330AbgLESd0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Dec 2020 13:33:26 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB5C061A4F
+        for <linux-scsi@vger.kernel.org>; Sat,  5 Dec 2020 10:32:40 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id z3so6472985qtw.9
+        for <linux-scsi@vger.kernel.org>; Sat, 05 Dec 2020 10:32:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=GnBpU4QvwQSAqBn2VZXouIg480pQegyfUjmjbMR5ggk=;
+        b=ddbaouPlk/qNb8Hp1esG568aH/zXLScm8oqna3g54e8M4pLyrDfrtC+m4W3v/juEp8
+         sxaz+8Pur24G2a1s9yeM4yZ4Po3fCFLBCkfDO2wl/qOt2m423QT54rDiKE6XnSlSi3jC
+         EXmaak358R7wbbrv+VRr1dv/d6TRmhgpnfJ7nqy71Ky8r7vsPqvrDtgVAhJRb8gdYzEu
+         +9ScLu5caCVWy/ThYLxXVpkEu8dsQ2Zw+JZFGlnl1G+8RwDPl5WHNcjfu6Hue2TJntph
+         6/JiPyEJhD0vQHoAE2b3CAQW+ODF0PHM2XDsfzEMwjS0CCZG8uS+UPujcHIuerUZxB4L
+         0U2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=GnBpU4QvwQSAqBn2VZXouIg480pQegyfUjmjbMR5ggk=;
+        b=VzPsl+4vmvyldC3xoseWgildtN3h3zctJLlnLQMpGvzAC6TMAPfcTYHGyCj8jJoRwk
+         HTJ4V8y0mLzRX2izzYIV2FfGGZ18bbwbLjjfycB9tE6+R4XLFiRzoo/C5oEasmECTlZT
+         5UwTfEK6pmvHAMOL3CC5gGjiS0pn0umTTeb54V4bKf16ObsOSK9uCzAwZ/E885SSz6cP
+         EwOsq/HvjbbKqvL1gq3owu878A5h6diuoVi8yrK+/s8xha4B8P84/+z2ILhSfjcwgsmh
+         36eM61Rv52DjI+VcCfr4uRqwkWtKcZbykfQJXkFHBA4YrAkOBUjboG8wNeZ0meA8waOy
+         R1NA==
+X-Gm-Message-State: AOAM530YNoqeKSjYTOufukRTLXNnPLtH86U/N9i8JDctXGaDqksA3/UN
+        Io31KHhcpOGbcefiO8ekLtvnRvxxkTN4iQkCxtE=
+X-Google-Smtp-Source: ABdhPJyEMgbFvZzlPRifgCM0TIIL/PBBDX6CbfUVQTXnaHefY1NNgOeT/eoWhx2t9nYCqBQ/KN135cFfR1tji1G1qSk=
+X-Received: by 2002:ac8:6f65:: with SMTP id u5mr1795258qtv.303.1607193159175;
+ Sat, 05 Dec 2020 10:32:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Sender: ms.aishagaddafi00@gmail.com
+Received: by 2002:a0c:c3ce:0:0:0:0:0 with HTTP; Sat, 5 Dec 2020 10:32:38 -0800 (PST)
+From:   Ms Nadia Emaan <mrsnadiaemaan50@gmail.com>
+Date:   Sat, 5 Dec 2020 18:32:38 +0000
+X-Google-Sender-Auth: WMhvj-Ttx3b_2rhD6c8qtFnWCjY
+Message-ID: <CAPHg+rGkBO3QQ56QYLJM9VEcRMTpR6ikM5aeA4FW1Juo7uKSrg@mail.gmail.com>
+Subject: May the Peace of God be with You;!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Four small fixes in two drivers.  The mpt3sas fixes are all timeout
-under unusual conditions problems and the storvsc is a missed incoming
-packet validation and a missed error return.
+Greetings To you My Dear Friend,
 
-The patch is available here:
+I am contacting you through this means because I need your urgent
+assistance and also help me to carry a charity project in your
+country. I found your email address as a true child of God for past
+few days now that I have been praying to know if you are really the
+chosen one for this great charity project, according to God's
+direction, after all prayers I am convinced, and I have decided to
+contact you. Please, i want you use the funds for the Lord's work,
+with confidence, read and respond now.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-The short changelog is:
+My name is Mrs Nadia Farouk Emaan , a widow, but currently based in West
+Africa since my life with my late husband, who was a businessman in
+this country before dying some years ago. We were married to many
+years without a child. He died after a brief illness that lasted only
+six days and I myself have been suffering from an ovarian cancer
+disease. At this moment I am about to finish the race in this way
+because the disease has reached a very bad stage, without any family
+member and without children. I hope you do not expose or betray this
+trust and I am sure that I am about to trust you for the mutual
+benefit of orphans and the less privileged. I have some funds that I
+inherited from my late husband, the total sum of ($ 12,500,000.00)
+deposited at a bank here in Burkina Faso. After knowing my current
+state of health, I decided to trust you with this fund, believing that
+you will use it in the way I will instruct here.
 
-Andrea Parri (Microsoft) (1):
-      scsi: storvsc: Validate length of incoming packet in storvsc_on_channel_callback()
 
-Jing Xiangfeng (1):
-      scsi: storvsc: Fix error return in storvsc_probe()
+you will use this $12.5 Million for public benefit as follows;
 
-Sreekanth Reddy (1):
-      scsi: mpt3sas: Increase IOCInit request timeout to 30s
+1. Establish An Orphanage Home To Help The Orphanages Children.
+2. Build A Hospital To Help The Poor.
+3. Build A Nursing Home For Elderly People Need Care & Meal.
 
-Suganath Prabu S (1):
-      scsi: mpt3sas: Fix ioctl timeout
+You will named them after my late husband.Therefore, I need you to
+help me and claim this money and use it for charities, for orphanages
+and provide justice and help to the poor, needy and to promote the
+words of God and the effort to maintain the house of God, according to
+the bible in the book of. Jeremiah 22: 15-16.
 
-And the diffstat:
+It will be a pleasure to compensate with 40% percent of the total
+money for your effort in handling the transaction, while 60% of the
+money will go to charity project.
 
- drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
- drivers/scsi/mpt3sas/mpt3sas_ctl.c  | 2 +-
- drivers/scsi/storvsc_drv.c          | 9 ++++++++-
- 3 files changed, 10 insertions(+), 3 deletions(-)
+All I need from you is sincerity and ability to complete the task of
+God without any failure. It will be my pleasure to see that the bank
+has finally released and transferred the fund to your bank account in
+the country, even before I die here in the hospital, due to my current
+state of health, everything must be processed as soon as possible.
 
-With full diff below.
+ I am waiting for your immediate response, if you are only interested
+in obtaining more details about the transaction and execution of this
+humanitarian project for the glory and honor of God.
 
-James
+Sorry if you received this letter in your spam, is due to recent
+connection/network error here in the country.
 
----
+Please I am waiting for your urgent reply now.
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index e4cc92bc4d94..bb940cbcbb5d 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -6459,7 +6459,7 @@ _base_send_ioc_init(struct MPT3SAS_ADAPTER *ioc)
- 
- 	r = _base_handshake_req_reply_wait(ioc,
- 	    sizeof(Mpi2IOCInitRequest_t), (u32 *)&mpi_request,
--	    sizeof(Mpi2IOCInitReply_t), (u16 *)&mpi_reply, 10);
-+	    sizeof(Mpi2IOCInitReply_t), (u16 *)&mpi_reply, 30);
- 
- 	if (r != 0) {
- 		ioc_err(ioc, "%s: handshake failed (r=%d)\n", __func__, r);
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index 0f2b681449e6..edd26a2570fa 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -664,7 +664,7 @@ _ctl_do_mpt_command(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command karg,
- 	Mpi26NVMeEncapsulatedRequest_t *nvme_encap_request = NULL;
- 	struct _pcie_device *pcie_device = NULL;
- 	u16 smid;
--	u8 timeout;
-+	unsigned long timeout;
- 	u8 issue_reset;
- 	u32 sz, sz_arg;
- 	void *psge;
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index 0c65fbd41035..99c8ff81de74 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -1246,6 +1246,11 @@ static void storvsc_on_channel_callback(void *context)
- 		request = (struct storvsc_cmd_request *)
- 			((unsigned long)desc->trans_id);
- 
-+		if (hv_pkt_datalen(desc) < sizeof(struct vstor_packet) - vmscsi_size_delta) {
-+			dev_err(&device->device, "Invalid packet len\n");
-+			continue;
-+		}
-+
- 		if (request == &stor_device->init_request ||
- 		    request == &stor_device->reset_request) {
- 			memcpy(&request->vstor_packet, packet,
-@@ -1994,8 +1999,10 @@ static int storvsc_probe(struct hv_device *device,
- 			alloc_ordered_workqueue("storvsc_error_wq_%d",
- 						WQ_MEM_RECLAIM,
- 						host->host_no);
--	if (!host_dev->handle_error_wq)
-+	if (!host_dev->handle_error_wq) {
-+		ret = -ENOMEM;
- 		goto err_out2;
-+	}
- 	INIT_WORK(&host_dev->host_scan_work, storvsc_host_scan);
- 	/* Register the HBA and start the scsi bus scan */
- 	ret = scsi_add_host(host, &device->device);
-
+May God Bless you,
+Nadia Farouk Emaan .
