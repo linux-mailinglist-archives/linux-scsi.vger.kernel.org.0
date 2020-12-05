@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B14522CF905
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 03:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D125D2CF901
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 03:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbgLECkn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 21:40:43 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:43884 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725300AbgLECkn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 21:40:43 -0500
-X-UUID: 727a67e07e1b48fdb5e8dbb87bd9d090-20201205
-X-UUID: 727a67e07e1b48fdb5e8dbb87bd9d090-20201205
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        id S1727911AbgLECkb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 21:40:31 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:53958 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725300AbgLECk1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 21:40:27 -0500
+X-UUID: 70cd198581f44444950f03ccd8f8c3ae-20201205
+X-UUID: 70cd198581f44444950f03ccd8f8c3ae-20201205
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1144447061; Sat, 05 Dec 2020 10:39:41 +0800
+        with ESMTP id 24090389; Sat, 05 Dec 2020 10:39:42 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Sat, 5 Dec 2020 10:39:37 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -37,9 +37,9 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, <huadian.liu@mediatek.com>,
         Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v4 7/8] scsi: ufs: Introduce event_notify variant function
-Date:   Sat, 5 Dec 2020 10:39:37 +0800
-Message-ID: <20201205023938.13848-8-stanley.chu@mediatek.com>
+Subject: [PATCH v4 8/8] scsi: ufs-mediatek: Introduce event_notify implementation
+Date:   Sat, 5 Dec 2020 10:39:38 +0800
+Message-ID: <20201205023938.13848-9-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201205023938.13848-1-stanley.chu@mediatek.com>
 References: <20201205023938.13848-1-stanley.chu@mediatek.com>
@@ -50,66 +50,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Introduce event_notify variant function to allow
-vendor to get notification of important events and connect
-to any proprietary debugging facilities.
+Introduce event_notify implementation on MediaTek UFS platform.
 
-Reviewed-by: Can Guo <cang@codeaurora.org>
+A vendor-specific tracepoint is added that could be used
+for debugging purpose.
+
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufshcd.c |  2 ++
- drivers/scsi/ufs/ufshcd.h | 11 +++++++++++
- 2 files changed, 13 insertions(+)
+ drivers/scsi/ufs/ufs-mediatek-trace.h | 37 +++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufs-mediatek.c       | 12 +++++++++
+ 2 files changed, 49 insertions(+)
+ create mode 100644 drivers/scsi/ufs/ufs-mediatek-trace.h
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 1a7d31849511..6e72c0543c7b 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -4480,6 +4480,8 @@ void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val)
- 	e->val[e->pos] = val;
- 	e->tstamp[e->pos] = ktime_get();
- 	e->pos = (e->pos + 1) % UFS_EVENT_HIST_LENGTH;
+diff --git a/drivers/scsi/ufs/ufs-mediatek-trace.h b/drivers/scsi/ufs/ufs-mediatek-trace.h
+new file mode 100644
+index 000000000000..8c47f54f3e6b
+--- /dev/null
++++ b/drivers/scsi/ufs/ufs-mediatek-trace.h
+@@ -0,0 +1,37 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020 MediaTek Inc.
++ */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM ufs_mtk
 +
-+	ufshcd_vops_event_notify(hba, id, &val);
++#if !defined(_TRACE_EVENT_UFS_MEDIATEK_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_EVENT_UFS_MEDIATEK_H
++
++#include <linux/tracepoint.h>
++
++TRACE_EVENT(ufs_mtk_event,
++	TP_PROTO(unsigned int type, unsigned int data),
++	TP_ARGS(type, data),
++
++	TP_STRUCT__entry(
++		__field(unsigned int, type)
++		__field(unsigned int, data)
++	),
++
++	TP_fast_assign(
++		__entry->type = type;
++		__entry->data = data;
++	),
++
++	TP_printk("ufs:event=%u data=%u",
++		  __entry->type, __entry->data)
++	);
++#endif
++
++#undef TRACE_INCLUDE_PATH
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_FILE ufs-mediatek-trace
++#include <trace/define_trace.h>
++
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 1d3c5cd4592e..3522458db3bb 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -24,6 +24,9 @@
+ #include "unipro.h"
+ #include "ufs-mediatek.h"
+ 
++#define CREATE_TRACE_POINTS
++#include "ufs-mediatek-trace.h"
++
+ #define ufs_mtk_smc(cmd, val, res) \
+ 	arm_smccc_smc(MTK_SIP_UFS_CONTROL, \
+ 		      cmd, val, 0, 0, 0, 0, 0, &(res))
+@@ -1002,6 +1005,14 @@ static void ufs_mtk_fixup_dev_quirks(struct ufs_hba *hba)
+ 	ufshcd_fixup_dev_quirks(hba, ufs_mtk_dev_fixups);
  }
- EXPORT_SYMBOL_GPL(ufshcd_update_evt_hist);
  
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index b55a71c10fa6..8c44929bed53 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -319,6 +319,7 @@ struct ufs_pwr_mode_info {
-  * @phy_initialization: used to initialize phys
-  * @device_reset: called to issue a reset pulse on the UFS device
-  * @program_key: program or evict an inline encryption key
-+ * @event_notify: called to notify important events
-  */
- struct ufs_hba_variant_ops {
- 	const char *name;
-@@ -353,6 +354,8 @@ struct ufs_hba_variant_ops {
- 					void *data);
- 	int	(*program_key)(struct ufs_hba *hba,
- 			       const union ufs_crypto_cfg_entry *cfg, int slot);
-+	void	(*event_notify)(struct ufs_hba *hba,
-+				enum ufs_event_type evt, void *data);
- };
- 
- /* clock gating state  */
-@@ -1100,6 +1103,14 @@ static inline int ufshcd_vops_clk_scale_notify(struct ufs_hba *hba,
- 	return 0;
- }
- 
-+static inline void ufshcd_vops_event_notify(struct ufs_hba *hba,
-+					    enum ufs_event_type evt,
-+					    void *data)
++static void ufs_mtk_event_notify(struct ufs_hba *hba,
++				 enum ufs_event_type evt, void *data)
 +{
-+	if (hba->vops && hba->vops->event_notify)
-+		hba->vops->event_notify(hba, evt, data);
++	unsigned int val = *(u32 *)data;
++
++	trace_ufs_mtk_event(evt, val);
 +}
 +
- static inline int ufshcd_vops_setup_clocks(struct ufs_hba *hba, bool on,
- 					enum ufs_notify_change_status status)
- {
+ /*
+  * struct ufs_hba_mtk_vops - UFS MTK specific variant operations
+  *
+@@ -1021,6 +1032,7 @@ static const struct ufs_hba_variant_ops ufs_hba_mtk_vops = {
+ 	.resume              = ufs_mtk_resume,
+ 	.dbg_register_dump   = ufs_mtk_dbg_register_dump,
+ 	.device_reset        = ufs_mtk_device_reset,
++	.event_notify        = ufs_mtk_event_notify,
+ };
+ 
+ /**
 -- 
 2.18.0
 
