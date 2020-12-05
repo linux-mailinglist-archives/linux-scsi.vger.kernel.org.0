@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F0D2CF909
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 03:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 697B92CF90D
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 03:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728682AbgLEClA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 21:41:00 -0500
+        id S1728883AbgLEClR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 21:41:17 -0500
 Received: from mailgw02.mediatek.com ([210.61.82.184]:43895 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728663AbgLECk7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 21:40:59 -0500
-X-UUID: f4922e3ba7e2400db2e14d41092d9185-20201205
-X-UUID: f4922e3ba7e2400db2e14d41092d9185-20201205
+        with ESMTP id S1726880AbgLEClQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 21:41:16 -0500
+X-UUID: 2310ee56d5de4d6db198762b572d9d41-20201205
+X-UUID: 2310ee56d5de4d6db198762b572d9d41-20201205
 Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 584594122; Sat, 05 Dec 2020 10:39:40 +0800
+        with ESMTP id 1514176385; Sat, 05 Dec 2020 10:39:40 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
  mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Sat, 5 Dec 2020 10:39:36 +0800
@@ -37,10 +37,12 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, <huadian.liu@mediatek.com>,
         Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v4 0/8] Refine error history and introduce event_notify vop
-Date:   Sat, 5 Dec 2020 10:39:30 +0800
-Message-ID: <20201205023938.13848-1-stanley.chu@mediatek.com>
+Subject: [PATCH v4 1/8] scsi: ufs: Remove unused setup_regulators variant function
+Date:   Sat, 5 Dec 2020 10:39:31 +0800
+Message-ID: <20201205023938.13848-2-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20201205023938.13848-1-stanley.chu@mediatek.com>
+References: <20201205023938.13848-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -48,39 +50,81 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
-This series refines error history functions, do vop cleanups and introduce a new event_notify vop to allow vendor to get notification of important events.
+Since setup_regulators variant function is not used by any
+vendors, simply remove it.
 
-Changes since v3:
-  - Fix build warning in patch [8/8]
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 10 +---------
+ drivers/scsi/ufs/ufshcd.h | 10 ----------
+ 2 files changed, 1 insertion(+), 19 deletions(-)
 
-Changes since v2:
-  - Add patches for vop cleanups
-  - Introduce phy_initialization helper and replace direct invoking in ufs-cdns and ufs-dwc by the helper
-  - Introduce event_notify vop implemntation in ufs-mediatek
-
-Changes since v1:
-  - Change notify_event() to event_notify() to follow vop naming covention
-
-Stanley Chu (8):
-  scsi: ufs: Remove unused setup_regulators variant function
-  scsi: ufs: Introduce phy_initialization helper
-  scsi: ufs-cdns: Use phy_initialization helper
-  scsi: ufs-dwc: Use phy_initialization helper
-  scsi: ufs: Add error history for abort event in UFS Device W-LUN
-  scsi: ufs: Refine error history functions
-  scsi: ufs: Introduce event_notify variant function
-  scsi: ufs-mediatek: Introduce event_notify implementation
-
- drivers/scsi/ufs/cdns-pltfrm.c        |   3 +-
- drivers/scsi/ufs/ufs-mediatek-trace.h |  37 ++++++++
- drivers/scsi/ufs/ufs-mediatek.c       |  12 +++
- drivers/scsi/ufs/ufshcd-dwc.c         |  11 +--
- drivers/scsi/ufs/ufshcd.c             | 132 ++++++++++++++------------
- drivers/scsi/ufs/ufshcd.h             | 100 +++++++++----------
- 6 files changed, 175 insertions(+), 120 deletions(-)
- create mode 100644 drivers/scsi/ufs/ufs-mediatek-trace.h
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 11a4aad09f3a..c2f611516ea7 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -8171,16 +8171,10 @@ static int ufshcd_variant_hba_init(struct ufs_hba *hba)
+ 		goto out;
+ 
+ 	err = ufshcd_vops_init(hba);
+-	if (err)
+-		goto out;
+-
+-	err = ufshcd_vops_setup_regulators(hba, true);
+-	if (err)
+-		ufshcd_vops_exit(hba);
+-out:
+ 	if (err)
+ 		dev_err(hba->dev, "%s: variant %s init failed err %d\n",
+ 			__func__, ufshcd_get_var_name(hba), err);
++out:
+ 	return err;
+ }
+ 
+@@ -8189,8 +8183,6 @@ static void ufshcd_variant_hba_exit(struct ufs_hba *hba)
+ 	if (!hba->vops)
+ 		return;
+ 
+-	ufshcd_vops_setup_regulators(hba, false);
+-
+ 	ufshcd_vops_exit(hba);
+ }
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 7a7e056a33a9..21de7607611f 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -277,7 +277,6 @@ struct ufs_pwr_mode_info {
+  * @get_ufs_hci_version: called to get UFS HCI version
+  * @clk_scale_notify: notifies that clks are scaled up/down
+  * @setup_clocks: called before touching any of the controller registers
+- * @setup_regulators: called before accessing the host controller
+  * @hce_enable_notify: called before and after HCE enable bit is set to allow
+  *                     variant specific Uni-Pro initialization.
+  * @link_startup_notify: called before and after Link startup is carried out
+@@ -307,7 +306,6 @@ struct ufs_hba_variant_ops {
+ 				    enum ufs_notify_change_status);
+ 	int	(*setup_clocks)(struct ufs_hba *, bool,
+ 				enum ufs_notify_change_status);
+-	int     (*setup_regulators)(struct ufs_hba *, bool);
+ 	int	(*hce_enable_notify)(struct ufs_hba *,
+ 				     enum ufs_notify_change_status);
+ 	int	(*link_startup_notify)(struct ufs_hba *,
+@@ -1119,14 +1117,6 @@ static inline int ufshcd_vops_setup_clocks(struct ufs_hba *hba, bool on,
+ 	return 0;
+ }
+ 
+-static inline int ufshcd_vops_setup_regulators(struct ufs_hba *hba, bool status)
+-{
+-	if (hba->vops && hba->vops->setup_regulators)
+-		return hba->vops->setup_regulators(hba, status);
+-
+-	return 0;
+-}
+-
+ static inline int ufshcd_vops_hce_enable_notify(struct ufs_hba *hba,
+ 						bool status)
+ {
 -- 
 2.18.0
 
