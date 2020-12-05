@@ -2,53 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA67F2CF851
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 01:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F0D2CF909
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 03:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731121AbgLEArR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Dec 2020 19:47:17 -0500
-Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:50044 "EHLO
-        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726917AbgLEArR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 19:47:17 -0500
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
-        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 31A351A558B;
-        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
-        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
-Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
-        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+        id S1728682AbgLEClA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Dec 2020 21:41:00 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:43895 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728663AbgLECk7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Dec 2020 21:40:59 -0500
+X-UUID: f4922e3ba7e2400db2e14d41092d9185-20201205
+X-UUID: f4922e3ba7e2400db2e14d41092d9185-20201205
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 584594122; Sat, 05 Dec 2020 10:39:40 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 5 Dec 2020 10:39:36 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 5 Dec 2020 10:39:35 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <alice.chao@mediatek.com>, <huadian.liu@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v4 0/8] Refine error history and introduce event_notify vop
+Date:   Sat, 5 Dec 2020 10:39:30 +0800
+Message-ID: <20201205023938.13848-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
-Date:   Sat, 05 Dec 2020 04:44:54 +0900
-From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
-To:     <infocarferr1@aim.com>
-Reply-To: <infocarfer@aim.com>
-Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
-         Kuo Fung I have Important Matter to Discuss with you concerning
-         my late client. Died without a NEXT OF KIN. Send me your private
-         email for full details information. 
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MAILER: Active! mail
-X-TM-AS-MML: disable
-X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
-X-TM-AS-Result: No--4.326-5.0-31-10
-X-imss-scan-details: No--4.326-5.0-31-10
-X-TM-AS-User-Approved-Sender: No
-X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
-        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
-        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
-        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
-        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-infocarfer@aim.com
+Hi,
+This series refines error history functions, do vop cleanups and introduce a new event_notify vop to allow vendor to get notification of important events.
 
+Changes since v3:
+  - Fix build warning in patch [8/8]
 
+Changes since v2:
+  - Add patches for vop cleanups
+  - Introduce phy_initialization helper and replace direct invoking in ufs-cdns and ufs-dwc by the helper
+  - Introduce event_notify vop implemntation in ufs-mediatek
+
+Changes since v1:
+  - Change notify_event() to event_notify() to follow vop naming covention
+
+Stanley Chu (8):
+  scsi: ufs: Remove unused setup_regulators variant function
+  scsi: ufs: Introduce phy_initialization helper
+  scsi: ufs-cdns: Use phy_initialization helper
+  scsi: ufs-dwc: Use phy_initialization helper
+  scsi: ufs: Add error history for abort event in UFS Device W-LUN
+  scsi: ufs: Refine error history functions
+  scsi: ufs: Introduce event_notify variant function
+  scsi: ufs-mediatek: Introduce event_notify implementation
+
+ drivers/scsi/ufs/cdns-pltfrm.c        |   3 +-
+ drivers/scsi/ufs/ufs-mediatek-trace.h |  37 ++++++++
+ drivers/scsi/ufs/ufs-mediatek.c       |  12 +++
+ drivers/scsi/ufs/ufshcd-dwc.c         |  11 +--
+ drivers/scsi/ufs/ufshcd.c             | 132 ++++++++++++++------------
+ drivers/scsi/ufs/ufshcd.h             | 100 +++++++++----------
+ 6 files changed, 175 insertions(+), 120 deletions(-)
+ create mode 100644 drivers/scsi/ufs/ufs-mediatek-trace.h
+
+-- 
+2.18.0
 
