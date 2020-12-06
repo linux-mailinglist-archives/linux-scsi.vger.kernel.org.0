@@ -2,101 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B5F2D0276
-	for <lists+linux-scsi@lfdr.de>; Sun,  6 Dec 2020 11:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A087E2D0280
+	for <lists+linux-scsi@lfdr.de>; Sun,  6 Dec 2020 11:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726451AbgLFKOf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 6 Dec 2020 05:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S1726209AbgLFKQ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 6 Dec 2020 05:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726035AbgLFKOd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Dec 2020 05:14:33 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE2DC061A4F;
-        Sun,  6 Dec 2020 02:13:53 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id ga15so15171113ejb.4;
-        Sun, 06 Dec 2020 02:13:53 -0800 (PST)
+        with ESMTP id S1725804AbgLFKQ6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Dec 2020 05:16:58 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36296C0613D0;
+        Sun,  6 Dec 2020 02:16:12 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id u18so13762824lfd.9;
+        Sun, 06 Dec 2020 02:16:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=z4lmzD54k4CKdINLObL10PwNDFGT6vmjyRLOn35UKtU=;
-        b=DT7nIKZH7mwI2974LkZPcCGsV9GDVIFqz8+nXqL5jADRAn5vrbkHttYu+t8Hou7HLU
-         fwBeFWCUMwFbDSdca8FDJxqq0LO4uYbbbGQoNVfIWspTQEejiSIywDjs1gwjqSye7Isp
-         Ac/f5Ab5Ih5hRdZnkAJLzLWn0buPx2Yu3AlqqZMHE2mAf92QAx4HGFzOjI8xiWAvOzPH
-         6z2AH5kOm78MLPVi8azPrnhSf0ChqLcRMpW11Kev1yMLBmOSIDFDNN5WiOkvvM1pjbbx
-         /CpfpKziaPDxk50XqnEeVIqzoCwe7ghyYbOzonVpCmm1O1qa3y0fPfYG/aCXeE9Adnha
-         +fPw==
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WHV07lAOVmhSmkP5MngljG1mtktpzKayNMNHBzWj6Lc=;
+        b=f38mKdf7dAAFQ1WpYRMiX1k3BkdvcSG5X0TxntQ5iKUL7I1WItPMjlum2Ayeb/hmYx
+         F1S8ImgpDUQVwofJQOx6Q0CG9H5bMEpH2ehPDUgDvyBezdxC52O0nKhJ+zinsXW4nuz0
+         Erq33WEyG2yrioEs249m2NGP2YKeF2oYODi/IPBrxi1VHP5oNKQaHlvobPDIJZM8sC8r
+         LcGI3AyMTu/gu9lHxEGJXqXaXfjt8YCbPet0Rnh0fUijjL7YVbajayzj5e3lsoEw9cWd
+         s2ZKW3kyCGWtGfekWVWr4XUSEr8YUs617mwGQvqwlVdb2kxHR3z8ttsAquigAr9mLwoT
+         +Iuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=z4lmzD54k4CKdINLObL10PwNDFGT6vmjyRLOn35UKtU=;
-        b=Nmsa8ts8Anav5W/pbucmVocBKw7BxlsEss2jK/fW14YsuaNabNMGgZflWGhmAaSo42
-         a/lNv8Z6jd4PM2ywMCeFSAHiaVI8C5RrEfMBu6hxcic5lSY6VWftKnSj44Xx8Z2+gQ+1
-         2LEnPDCIpX5EkkB7htuTQpXK9Grq1DhtBpqHuq4pM12b8g/B+ixcMPiaRivrFPVLdxex
-         +ZM2cUlw1pVEGnViUTUtakKorE+J9ImkSCPUtrGp9UBZ3R3nFEAp3hiblqniT30ManOh
-         rWqLgVfBGHYi8pnjoKKaSoBM176Op9rLISuqjwTWW5QbfYdISKFPgIgAKUsxIpXzRJz6
-         ml6Q==
-X-Gm-Message-State: AOAM533S1kimj7gFSMbupxZVoClut2+bG9rEwmyhyHEwjGdEHZBnejfg
-        EX8mTxc7Y+9rGDftaJ7z0z0=
-X-Google-Smtp-Source: ABdhPJwsqqa+FsK75vBtEoP7Sr4daPDl0Sjg5fgwq4kMCYD5RPzvl/uG0lDDRNRO/ee3WY6Qv9nCZA==
-X-Received: by 2002:a17:906:b307:: with SMTP id n7mr14412264ejz.102.1607249631225;
-        Sun, 06 Dec 2020 02:13:51 -0800 (PST)
-Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.gmail.com with ESMTPSA id f24sm7701919ejf.117.2020.12.06.02.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Dec 2020 02:13:50 -0800 (PST)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] scsi: ufs: Changes comment in the function ufshcd_wb_probe()
-Date:   Sun,  6 Dec 2020 11:13:35 +0100
-Message-Id: <20201206101335.3418-4-huobean@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201206101335.3418-1-huobean@gmail.com>
-References: <20201206101335.3418-1-huobean@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=WHV07lAOVmhSmkP5MngljG1mtktpzKayNMNHBzWj6Lc=;
+        b=fiK0ZA/qQKN/2iDMnQSo1qyr7BHsb9dbZJ0GQDHkcJfqtLEwoR+6vMMZZFa0vHWBEc
+         /+dpSQXrUhqIvklogkE1WzJy4JakwwwF4Kf1iEiTrqWEGTIBMRI50b0NFUDVm0HEADHH
+         YYoVGE0jjonJqkgk3CRgNX50q40eWiEjZKMHTAQQOqKMWWrOGiF8JmAfDT9+e6soOd2v
+         /OsqBgb6LQWxkDNIWdhepgd7FtmBZ3q3kjCOSSTzBpNuBx+4CZeLMIHBHu2gLV6Wt0ri
+         1/6MTGeV8m9w7F/Q9D0fOoEYUuBVInO+9fKN0rPDd+Z+TlSbDZ6gxw2N/ythSg9yP2bz
+         R2xg==
+X-Gm-Message-State: AOAM533fPi0Z9DYECS6IHPjvnZOxIwKnnmqrKcqy4JlH3TjeR5chnsN9
+        bHZzaULIHRlkoDlorX9wjjslepAImBk=
+X-Google-Smtp-Source: ABdhPJyATWIKiA4tyYtxbtxJZGhv50GEP/5neZh9nMFgHvQe4Q1TZRv7HUHQD1YoO8KrKXlx4/1Dqg==
+X-Received: by 2002:a05:6512:419:: with SMTP id u25mr6080248lfk.222.1607249770583;
+        Sun, 06 Dec 2020 02:16:10 -0800 (PST)
+Received: from [192.168.1.100] ([31.173.86.115])
+        by smtp.gmail.com with ESMTPSA id g8sm2460815lfb.223.2020.12.06.02.16.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Dec 2020 02:16:10 -0800 (PST)
+Subject: Re: [RFC] block: avoid the unnecessary blk_bio_discard_split()
+To:     Tom Yan <tom.ty89@gmail.com>, linux-block@vger.kernel.org
+Cc:     linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org
+References: <20201206061537.3870-1-tom.ty89@gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <55e0b8be-a16b-9895-fde5-b325773ae0e7@gmail.com>
+Date:   Sun, 6 Dec 2020 13:16:04 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201206061537.3870-1-tom.ty89@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+Hello!
 
-USFHCD supports WriteBooster "LU dedicated buffer” mode and
-“shared buffer” mode both, so changes the comment in the
-function ufshcd_wb_probe().
+On 06.12.2020 9:15, Tom Yan wrote:
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Can Guo <cang@codeaurora.org>
----
- drivers/scsi/ufs/ufshcd.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+> It doesn't seem necessary to have the redundant layer of splitting.
+> The request size will even be more consistent / aligned to the cap.
+> 
+> Signed-off-by: Tom Yan <tom.ty89@gmail.com>
+> ---
+>   block/blk-lib.c   | 5 ++++-
+>   block/blk-merge.c | 2 +-
+>   block/blk.h       | 8 ++++++--
+>   3 files changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/block/blk-lib.c b/block/blk-lib.c
+> index e90614fd8d6a..f606184a9050 100644
+> --- a/block/blk-lib.c
+> +++ b/block/blk-lib.c
+> @@ -85,9 +85,12 @@ int __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
+>   		 *   is split in device drive, the split ones are very probably
+>   		 *   to be aligned to discard_granularity of the device's queue.
+>   		 */
+> -		if (granularity_aligned_lba == sector_mapped)
+> +		if (granularity_aligned_lba == sector_mapped) {
+>   			req_sects = min_t(sector_t, nr_sects,
+>   					  bio_aligned_discard_max_sectors(q));
+> +			if (!req_sects)
+> +				return -EOPNOTSUPP;
+> +		}
+>   		else
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index da38d760944b..ceb562accc39 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -7171,10 +7171,9 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
- 		goto wb_disabled;
- 
- 	/*
--	 * WB may be supported but not configured while provisioning.
--	 * The spec says, in dedicated wb buffer mode,
--	 * a max of 1 lun would have wb buffer configured.
--	 * Now only shared buffer mode is supported.
-+	 * WB may be supported but not configured while provisioning. The spec
-+	 * says, in dedicated wb buffer mode, a max of 1 lun would have wb
-+	 * buffer configured.
- 	 */
- 	dev_info->b_wb_buffer_type =
- 		desc_buf[DEVICE_DESC_PARAM_WB_TYPE];
--- 
-2.17.1
+    Needs to be } else { according to the CodingStyle doc...
 
+>   			req_sects = min_t(sector_t, nr_sects,
+>   					  granularity_aligned_lba - sector_mapped);
+[...]
+
+MBR, Sergei
