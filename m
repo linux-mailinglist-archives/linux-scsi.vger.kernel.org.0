@@ -2,56 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10312CFE4C
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Dec 2020 20:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874FB2CFFE1
+	for <lists+linux-scsi@lfdr.de>; Sun,  6 Dec 2020 01:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727696AbgLETWe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 5 Dec 2020 14:22:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50848 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726122AbgLETWP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 5 Dec 2020 14:22:15 -0500
-Subject: Re: [GIT PULL] SCSI fixes for 5.10-rc6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607196095;
-        bh=BZq3IxDKpmbn2jySF9xqrVNMvGyLS/bo+Ze2k+bkKLY=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Jfuq/OaTxNoVq0/SLvIgYIBDm+swLLV4PX6nD5jwK4XGi5hvW6a1A7hBc95fyaKjc
-         LyUoHeOnrNoiBXSrP4NHXGas4Q7FmoUjmB0IqqPrzmtdKbBJ7eX3LYRpjUarDjxV0Z
-         zUK01y+rsOeVdwwkaeu1CUQ/2AXhWX9blMlm5BXJOWZSVly26CA2Tlmsp4uFW9GrrE
-         ld9GKPkzfhtZM7DY4GDtq0qa71SeWrbOo3QSwOnCaUlc7g4snagRA483j+wItlaiSd
-         4FrSwY+p0cFxSpV5jeo6yBoYag+O4JIUPBwjHzaAR1bdZJAVSvDm+Ojt/LGD7kBvEN
-         MfrUsgANWR/YQ==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <6241da59ba45eeb525203201095d1f5ee76fbceb.camel@HansenPartnership.com>
-References: <6241da59ba45eeb525203201095d1f5ee76fbceb.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-scsi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <6241da59ba45eeb525203201095d1f5ee76fbceb.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 85dad327d9b58b4c9ce08189a2707167de392d23
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 312b0bcd402a003053914e13d962e82be906cf41
-Message-Id: <160719609530.18711.6749077510215679363.pr-tracker-bot@kernel.org>
-Date:   Sat, 05 Dec 2020 19:21:35 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1727330AbgLFACl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 5 Dec 2020 19:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725784AbgLFACl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Dec 2020 19:02:41 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63831C0613CF
+        for <linux-scsi@vger.kernel.org>; Sat,  5 Dec 2020 16:01:55 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id m9so5948768pgb.4
+        for <linux-scsi@vger.kernel.org>; Sat, 05 Dec 2020 16:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=m6ZOlEEYAPn5D22xKU47CZXMmwT6O45WhKH57Gwas7Q=;
+        b=0ZxbUo2d5cEJjGu35LPR5RFVMu6yLLcXFKcAawJumEf8iYO4FGG42D8vdIScrKTb4Z
+         E3KdAGayeRJMGeysdDzaJ+89ci68hGVl6l+By3UODnl4xn/eJCvm5npnSw2YaU0j9x85
+         AFQ1JQD/phf0zMmCb4TAyRU5Oz0OzwK4RsKyAOPeh8F2cIIKz8ofB+LTnkhBpUSZ8iZK
+         32YE0e0/m3KKUzSxWDRqIuNGe9up70UICCeTPQCBsaNzQxemk+izNRDohFnWN8GrFHoU
+         SdAEEAQSjBUi2mZ87VAGY7hdFaZEwkevntZKGR/6Faz92k38rDn6N8OfByp3k+D9cn0B
+         ApSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=m6ZOlEEYAPn5D22xKU47CZXMmwT6O45WhKH57Gwas7Q=;
+        b=i69cSA8UZNWkvxf1Ia62y+UqyQAsKFe/Z8W03Vfo8Hr51o77mjR6rcQXo0epyXH2ja
+         IaPsJdD8BY8RjlRr7cFVMET46/adUhVXapkn0Ix8RJyReOa+d3DhJeoq+FR3EJpJ7l8G
+         I/XvMlORUQYaygyLLFIICHdzSx/UKZkq+mnqJvh42SYgqZgB618dShEcOJT0d2uS7pyU
+         Y8/hJ4ZM5rKbRTeb3SWsmWIzFwCwEAn/o17m0QVYCznTN0IQyXMDfjPb9KzM9ive5NV0
+         OMwUW7H0k2lOhphrUzv2fuTRIgI7nfw0ds05fuFrhiFC4q+Duzn9s7nkbraqC+6aKAxF
+         P3oA==
+X-Gm-Message-State: AOAM531GI7ROttd/30s8dkuDzuNZgjX+Y7Wi+iltmtpLAdJVFNxCj+z+
+        K+Iu1GS3IFIbPNva4uHRmrTmrg==
+X-Google-Smtp-Source: ABdhPJxmhbAbH6cKdUjlfDN9h/wA73T9dbE2auWUmxNgPfGQac/Y5ONV+lE+pTL48MhCgnJydrfd0Q==
+X-Received: by 2002:a62:2a81:0:b029:18c:310f:74fe with SMTP id q123-20020a622a810000b029018c310f74femr10124642pfq.50.1607212914836;
+        Sat, 05 Dec 2020 16:01:54 -0800 (PST)
+Received: from [192.168.1.134] ([66.219.217.173])
+        by smtp.gmail.com with ESMTPSA id y3sm6363325pjb.18.2020.12.05.16.01.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Dec 2020 16:01:54 -0800 (PST)
+Subject: Re: [PATCH v4 0/9] Rework runtime suspend and SPI domain validation
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org
+References: <20201130024615.29171-1-bvanassche@acm.org>
+ <yq1k0u1c6ye.fsf@ca-mkp.ca.oracle.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <8ad8e593-438f-c366-39e1-73a45045de04@kernel.dk>
+Date:   Sat, 5 Dec 2020 17:01:56 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <yq1k0u1c6ye.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 05 Dec 2020 09:30:29 -0800:
+On 12/1/20 6:51 PM, Martin K. Petersen wrote:
+> 
+> Jens,
+> 
+> Any objections to me picking this up?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+No, go ahead. Looks good to me, you can add:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/312b0bcd402a003053914e13d962e82be906cf41
+Reviewed-by: Jens Axboe <axboe@kernel.dk>
 
-Thank you!
+to the series.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Jens Axboe
+
