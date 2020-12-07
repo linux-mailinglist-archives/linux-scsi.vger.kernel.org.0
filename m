@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0EE2D10E5
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Dec 2020 13:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DA62D10EA
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Dec 2020 13:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgLGMt4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Dec 2020 07:49:56 -0500
-Received: from mx2.suse.de ([195.135.220.15]:43248 "EHLO mx2.suse.de"
+        id S1726100AbgLGMt6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Dec 2020 07:49:58 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43274 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725931AbgLGMt4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1726067AbgLGMt4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Mon, 7 Dec 2020 07:49:56 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C7FC0AE66;
+        by mx2.suse.de (Postfix) with ESMTP id C8091AE69;
         Mon,  7 Dec 2020 12:48:31 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 13/35] qla4xxx: use standard SAM status definitions
-Date:   Mon,  7 Dec 2020 13:47:57 +0100
-Message-Id: <20201207124819.95822-14-hare@suse.de>
+Subject: [PATCH 14/35] zfcp: do not set COMMAND_COMPLETE
+Date:   Mon,  7 Dec 2020 13:47:58 +0100
+Message-Id: <20201207124819.95822-15-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20201207124819.95822-1-hare@suse.de>
 References: <20201207124819.95822-1-hare@suse.de>
@@ -30,41 +30,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use standard SAM status definitions and drop the
-driver-defined ones.
+COMMAND_COMPLETE is defined as '0', and it is a SCSI parallel message
+to boot. So drop the call to set_msg_byte().
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/scsi/qla4xxx/ql4_fw.h  | 1 -
- drivers/scsi/qla4xxx/ql4_isr.c | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ drivers/s390/scsi/zfcp_fc.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_fw.h b/drivers/scsi/qla4xxx/ql4_fw.h
-index b9142464d3f0..4e1764df0a73 100644
---- a/drivers/scsi/qla4xxx/ql4_fw.h
-+++ b/drivers/scsi/qla4xxx/ql4_fw.h
-@@ -1181,7 +1181,6 @@ struct status_entry {
- 	uint32_t handle;	/* 04-07 */
+diff --git a/drivers/s390/scsi/zfcp_fc.h b/drivers/s390/scsi/zfcp_fc.h
+index 6902ae1f8e4f..8aaf409ce9cb 100644
+--- a/drivers/s390/scsi/zfcp_fc.h
++++ b/drivers/s390/scsi/zfcp_fc.h
+@@ -275,7 +275,6 @@ void zfcp_fc_eval_fcp_rsp(struct fcp_resp_with_ext *fcp_rsp,
+ 	u32 sense_len, resid;
+ 	u8 rsp_flags;
  
- 	uint8_t scsiStatus;	/* 08 */
--#define SCSI_CHECK_CONDITION		  0x02
+-	set_msg_byte(scsi, COMMAND_COMPLETE);
+ 	scsi->result |= fcp_rsp->resp.fr_status;
  
- 	uint8_t iscsiFlags;	/* 09 */
- #define ISCSI_FLAG_RESIDUAL_UNDER	  0x02
-diff --git a/drivers/scsi/qla4xxx/ql4_isr.c b/drivers/scsi/qla4xxx/ql4_isr.c
-index a51910ae9525..6f0e77dc2a34 100644
---- a/drivers/scsi/qla4xxx/ql4_isr.c
-+++ b/drivers/scsi/qla4xxx/ql4_isr.c
-@@ -182,7 +182,7 @@ static void qla4xxx_status_entry(struct scsi_qla_host *ha,
- 
- 		cmd->result = DID_OK << 16 | scsi_status;
- 
--		if (scsi_status != SCSI_CHECK_CONDITION)
-+		if (scsi_status != SAM_STAT_CHECK_CONDITION)
- 			break;
- 
- 		/* Copy Sense Data into sense buffer. */
+ 	rsp_flags = fcp_rsp->resp.fr_flags;
 -- 
 2.16.4
 
