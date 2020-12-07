@@ -2,105 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8884F2D1ECB
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 01:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFBA2D1F6E
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 01:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727770AbgLHANC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Dec 2020 19:13:02 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:50078 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727757AbgLHANC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Dec 2020 19:13:02 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 353102A907;
-        Mon,  7 Dec 2020 19:12:20 -0500 (EST)
-Date:   Tue, 8 Dec 2020 11:12:28 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     "Ahmed S. Darwish" <a.darwish@linutronix.de>
-cc:     Michael Schmitz <schmitzmic@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] scsi: NCR5380: Remove context check
-In-Reply-To: <20201206075157.19067-1-a.darwish@linutronix.de>
-Message-ID: <alpine.LNX.2.23.453.2012081104380.27@nippy.intranet>
-References: <alpine.LNX.2.23.453.2012051512300.6@nippy.intranet> <20201206075157.19067-1-a.darwish@linutronix.de>
+        id S1728914AbgLHAvm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Dec 2020 19:51:42 -0500
+Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:35013 "EHLO
+        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728234AbgLHAvk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Dec 2020 19:51:40 -0500
+X-Greylist: delayed 16991 seconds by postgrey-1.27 at vger.kernel.org; Mon, 07 Dec 2020 19:51:35 EST
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
+        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id DE24F1A606F;
+        Tue,  8 Dec 2020 04:09:26 +0900 (JST)
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
+        by postfix.imss71 (Postfix) with ESMTP id BC3D8382029;
+        Tue,  8 Dec 2020 04:09:26 +0900 (JST)
+Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
+        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id 426EA83825B;
+        Tue,  8 Dec 2020 04:09:26 +0900 (JST)
 MIME-Version: 1.0
+Message-ID: <20201207190926.000057A2.0664@hyogo-dai.ac.jp>
+Date:   Tue, 08 Dec 2020 04:09:26 +0900
+From:   "Raymond " <hozumi@hyogo-dai.ac.jp>
+To:     <infocarferw1@aim.com>
+Reply-To: <infocarfer@aim.com>
+Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
+         Kuo Fung I have Important Matter to Discuss with you concerning
+         my late client. Died without a NEXT OF KIN. Send me your private
+         email for full details information.
 Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MAILER: Active! mail
+X-TM-AS-MML: disable
+X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
+X-TM-AS-Result: No--2.951-5.0-31-10
+X-imss-scan-details: No--2.951-5.0-31-10
+X-TM-AS-User-Approved-Sender: No
+X-TMASE-MatchedRID: X41QhRrT5f5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce6P0
+        clhHAFPyJA6GJqxAEzL554DD9nXlqqPFjJEFr+olfeZdJ1XsoriOub3SYcq1hJf7eAx/Ae/AbQo
+        eraIcZBRw7u01FqNA2K1Ia4IbeAdLm9ukrtqhno/rIUidklntLAP5zT0d393cymsk/wUE4hoZaR
+        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
+        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 6 Dec 2020, Ahmed S. Darwish wrote:
+email:kraymond75@aol.com
 
-> NCR5380_poll_politely2() uses in_interrupt() and irqs_disabled() to
-> check if it is safe to sleep.
-> 
-> Such usage in drivers is phased out and Linus clearly requested that
-> code which changes behaviour depending on context should either be
-> separated, or the context be explicitly conveyed in an argument passed
-> by the caller.
-> 
-> Below is a context analysis of NCR5380_poll_politely2() uppermost
-> callers:
-> 
->   - NCR5380_maybe_reset_bus(), task, invoked during device probe.
->     -> NCR5380_poll_politely()
->     -> do_abort()
-> 
->   - NCR5380_select(), task, but can only sleep in the "release, then
->     re-acquire" regions of the spinlock held by its caller.
->     Sleeping invocations (lock released):
->     -> NCR5380_poll_politely2()
-> 
->     Atomic invocations (lock acquired):
->     -> NCR5380_reselect()
->        -> NCR5380_poll_politely()
->        -> do_abort()
->        -> NCR5380_transfer_pio()
-> 
->   - NCR5380_intr(), interrupt handler
->     -> NCR5380_dma_complete()
->        -> NCR5380_transfer_pio()
-> 	  -> NCR5380_poll_politely()
->     -> NCR5380_reselect() (see above)
-> 
->   - NCR5380_information_transfer(), task, but can only sleep in the
->     "release, then re-acquire" regions of the caller-held spinlock.
->     Sleeping invocations (lock released):
->       - NCR5380_transfer_pio() -> NCR5380_poll_politely()
->       - NCR5380_poll_politely()
-> 
->     Atomic invocations (lock acquired):
->       - NCR5380_transfer_dma()
-> 	-> NCR5380_dma_recv_setup()
->            => generic_NCR5380_precv() -> NCR5380_poll_politely()
-> 	   => macscsi_pread() -> NCR5380_poll_politely()
-> 
-> 	-> NCR5380_dma_send_setup()
->  	   => generic_NCR5380_psend -> NCR5380_poll_politely2()
-> 	   => macscsi_pwrite() -> NCR5380_poll_politely()
-> 
-> 	-> NCR5380_poll_politely2()
->         -> NCR5380_dma_complete()
->            -> NCR5380_transfer_pio()
-> 	      -> NCR5380_poll_politely()
->       - NCR5380_transfer_pio() -> NCR5380_poll_politely
-> 
->   - NCR5380_reselect(), atomic, always called with hostdata spinlock
->     held.
-> 
-> Since NCR5380_poll_politely2() already takes a "wait" argument in
-> jiffies, use it to determine if the function can sleep. Modify atomic
-> callers, which passed an unused wait value in terms of HZ, to pass zero.
-> 
-> Suggested-by: Finn Thain <fthain@telegraphics.com.au>
-> Co-developed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-> Cc: Michael Schmitz <schmitzmic@gmail.com>
-> Cc: <linux-m68k@lists.linux-m68k.org>
 
-Acked-by: Finn Thain <fthain@telegraphics.com.au>
+
