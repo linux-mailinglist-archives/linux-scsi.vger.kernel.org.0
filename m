@@ -2,102 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7EE2D0FCE
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Dec 2020 12:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007F62D10D9
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Dec 2020 13:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgLGL5O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Dec 2020 06:57:14 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35708 "EHLO mx2.suse.de"
+        id S1726056AbgLGMtN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Dec 2020 07:49:13 -0500
+Received: from mx2.suse.de ([195.135.220.15]:41984 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726840AbgLGL5O (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 7 Dec 2020 06:57:14 -0500
+        id S1725772AbgLGMtN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 7 Dec 2020 07:49:13 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DB8CFAC9A;
-        Mon,  7 Dec 2020 11:56:32 +0000 (UTC)
-Subject: Re: [PATCH v2 01/17] ibmvfc: add vhost fields and defaults for MQ
- enablement
-To:     Brian King <brking@linux.vnet.ibm.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        brking@linux.ibm.com
-References: <20201202005329.4538-1-tyreld@linux.ibm.com>
- <20201202005329.4538-2-tyreld@linux.ibm.com>
- <a11c0e6a-cfa6-0dc4-5d34-6fd35ae1f29b@linux.vnet.ibm.com>
- <38903a4f-9253-0b4b-6f67-af78ec86175f@linux.ibm.com>
- <efbfe9e9-c692-80a1-f5b4-55473d8193e4@linux.vnet.ibm.com>
+        by mx2.suse.de (Postfix) with ESMTP id 6B4C4AB63;
+        Mon,  7 Dec 2020 12:48:31 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <6ce79011-d288-7a49-3d51-262da58d8486@suse.de>
-Date:   Mon, 7 Dec 2020 12:56:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <efbfe9e9-c692-80a1-f5b4-55473d8193e4@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv3 00/35] SCSI result handling cleanup, part 1
+Date:   Mon,  7 Dec 2020 13:47:44 +0100
+Message-Id: <20201207124819.95822-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12/4/20 3:26 PM, Brian King wrote:
-> On 12/2/20 11:27 AM, Tyrel Datwyler wrote:
->> On 12/2/20 7:14 AM, Brian King wrote:
->>> On 12/1/20 6:53 PM, Tyrel Datwyler wrote:
->>>> Introduce several new vhost fields for managing MQ state of the adapter
->>>> as well as initial defaults for MQ enablement.
->>>>
->>>> Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
->>>> ---
->>>>   drivers/scsi/ibmvscsi/ibmvfc.c |  9 ++++++++-
->>>>   drivers/scsi/ibmvscsi/ibmvfc.h | 13 +++++++++++--
->>>>   2 files changed, 19 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
->>>> index 42e4d35e0d35..f1d677a7423d 100644
->>>> --- a/drivers/scsi/ibmvscsi/ibmvfc.c
->>>> +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
->>>> @@ -5161,12 +5161,13 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
->>>>   	}
->>>>   
->>>>   	shost->transportt = ibmvfc_transport_template;
->>>> -	shost->can_queue = max_requests;
->>>> +	shost->can_queue = (max_requests / IBMVFC_SCSI_HW_QUEUES);
->>>
->>> This doesn't look right. can_queue is the SCSI host queue depth, not the MQ queue depth.
->>
->> Our max_requests is the total number commands allowed across all queues. From
->> what I understand is can_queue is the total number of commands in flight allowed
->> for each hw queue.
->>
->>          /*
->>           * In scsi-mq mode, the number of hardware queues supported by the LLD.
->>           *
->>           * Note: it is assumed that each hardware queue has a queue depth of
->>           * can_queue. In other words, the total queue depth per host
->>           * is nr_hw_queues * can_queue. However, for when host_tagset is set,
->>           * the total queue depth is can_queue.
->>           */
->>
->> We currently don't use the host wide shared tagset.
-> 
-> Ok. I missed that bit... In that case, since we allocate by default only 100
-> event structs. If we slice that across IBMVFC_SCSI_HW_QUEUES (16) queues, then
-> we end up with only about 6 commands that can be outstanding per queue,
-> which is going to really hurt performance... I'd suggest bumping up
-> IBMVFC_MAX_REQUESTS_DEFAULT from 100 to 1000 as a starting point.
-> 
-Before doing that I'd rather use the host-wide shared tagset.
-Increasing the number of requests will increase the memory footprint of 
-the driver (as each request will be statically allocated).
+Hi all,
 
-Cheers,
+this is the first part of an attempt to clean up SCSI result handling.
+The patchset primarily cleans up various drivers by fixing up
+whitespaces or move to standard definitions.
+It also fixes some minor issues in some drivers which set the
+wrong result values.
+And, of course, another attempt to kill the gdth driver
 
-Hannes
+I have a larger patchset based on this one to update the SCSI result
+handling for all drivers, but decided to split things in two to not
+overload reviewers
+
+As usual, comments and reviews are welcome.
+
+Changes to v1:
+- Add reviews from Christoph
+- Included review from Finn Thain
+- Add set_status_byte() helper
+- Add cleanup for dc395c
+- Add additional patch for using SAM status values instead
+  of the shifted linux versions
+
+Changes to v2:
+- Add Reviewed-by: tags
+- Drop additional patches again
+
+Hannes Reinecke (35):
+  scsi: drop gdth driver
+  3w-xxxx: Whitespace cleanup
+  3w-9xxx: Whitespace cleanup
+  3w-sas: Whitespace cleanup
+  atp870u: Whitespace cleanup
+  aic7xxx,aic79xx: Whitespace cleanup
+  aic7xxx,aic79xx: kill pointless forward declarations
+  aic7xxx,aic79xxx: remove driver-defined SAM status definitions
+  bfa: drop driver-defined SCSI status codes
+  acornscsi: use standard defines
+  nsp32: fixup status handling
+  dc395: drop private SAM status code definitions
+  qla4xxx: use standard SAM status definitions
+  zfcp: do not set COMMAND_COMPLETE
+  aacraid: avoid setting message byte on completion
+  hpsa: do not set COMMAND_COMPLETE
+  stex: do not set COMMAND_COMPLETE
+  nsp_cs: drop internal SCSI message definition
+  aic7xxx,aic79xx: drop internal SCSI message definition
+  dc395x: drop internal SCSI message definitions
+  initio: drop internal SCSI message definition
+  scsi_debug: do not set COMMAND_COMPLETE
+  ufshcd: do not set COMMAND_COMPLETE
+  atp870u: use standard definitions
+  mac53c94: Do not set invalid command result
+  dpt_i2o: use DID_ERROR instead of INITIATOR_ERROR message
+  scsi: add 'set_status_byte()' accessor
+  esp_scsi: use host byte as last argument to esp_cmd_is_done()
+  esp_scsi: do not set SCSI message byte
+  wd33c93: use SCSI status
+  ips: use correct command completion on error
+  storvsc: Return DID_ERROR for invalid commands
+  qla2xxx: fc_remote_port_chkready() returns a SCSI result value
+  advansys: kill driver_defined status byte accessors
+  ncr53c8xx: Use SAM status values
+
+ Documentation/kbuild/makefiles.rst                 |    4 +-
+ Documentation/process/magic-number.rst             |    2 -
+ Documentation/scsi/scsi-parameters.rst             |    3 -
+ Documentation/userspace-api/ioctl/ioctl-number.rst |    1 -
+ drivers/s390/scsi/zfcp_fc.h                        |    1 -
+ drivers/scsi/3w-9xxx.c                             |   56 +-
+ drivers/scsi/3w-9xxx.h                             |  156 +-
+ drivers/scsi/3w-sas.c                              |   52 +-
+ drivers/scsi/3w-sas.h                              |  118 +-
+ drivers/scsi/3w-xxxx.c                             |  251 +-
+ drivers/scsi/3w-xxxx.h                             |  199 +-
+ drivers/scsi/Kconfig                               |   14 -
+ drivers/scsi/Makefile                              |    2 -
+ drivers/scsi/aacraid/aachba.c                      |  173 +-
+ drivers/scsi/advansys.c                            |   84 +-
+ drivers/scsi/aic7xxx/aic79xx.h                     |   36 +-
+ drivers/scsi/aic7xxx/aic79xx_core.c                |  257 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.c                 |   20 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.h                 |   37 +-
+ drivers/scsi/aic7xxx/aic79xx_osm_pci.c             |    6 +-
+ drivers/scsi/aic7xxx/aic79xx_proc.c                |   13 +-
+ drivers/scsi/aic7xxx/aic7xxx_93cx6.c               |    4 +-
+ drivers/scsi/aic7xxx/aic7xxx_core.c                |  263 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.c                 |   88 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.h                 |   39 +-
+ drivers/scsi/aic7xxx/aic7xxx_proc.c                |   15 +-
+ drivers/scsi/aic7xxx/aiclib.h                      |   15 -
+ drivers/scsi/aic7xxx/scsi_message.h                |   41 -
+ drivers/scsi/arm/acornscsi.c                       |   14 +-
+ drivers/scsi/atp870u.c                             |  451 +-
+ drivers/scsi/atp870u.h                             |   14 +-
+ drivers/scsi/bfa/bfa_fc.h                          |   15 -
+ drivers/scsi/bfa/bfa_fcpim.c                       |    2 +-
+ drivers/scsi/bfa/bfad_im.c                         |    2 +-
+ drivers/scsi/dc395x.c                              |   25 +-
+ drivers/scsi/dc395x.h                              |   38 -
+ drivers/scsi/dpt_i2o.c                             |    2 +-
+ drivers/scsi/esp_scsi.c                            |   23 +-
+ drivers/scsi/gdth.c                                | 4322 --------------------
+ drivers/scsi/gdth.h                                |  981 -----
+ drivers/scsi/gdth_ioctl.h                          |  251 --
+ drivers/scsi/gdth_proc.c                           |  586 ---
+ drivers/scsi/gdth_proc.h                           |   18 -
+ drivers/scsi/hpsa.c                                |    4 +-
+ drivers/scsi/initio.c                              |   64 +-
+ drivers/scsi/initio.h                              |   25 -
+ drivers/scsi/ips.c                                 |    9 +-
+ drivers/scsi/mac53c94.c                            |    1 -
+ drivers/scsi/ncr53c8xx.c                           |   83 +-
+ drivers/scsi/ncr53c8xx.h                           |   16 -
+ drivers/scsi/nsp32.c                               |    2 +-
+ drivers/scsi/pcmcia/nsp_cs.c                       |   12 +-
+ drivers/scsi/pcmcia/nsp_cs.h                       |   11 -
+ drivers/scsi/qla2xxx/qla_os.c                      |    2 +-
+ drivers/scsi/qla4xxx/ql4_fw.h                      |    1 -
+ drivers/scsi/qla4xxx/ql4_isr.c                     |    2 +-
+ drivers/scsi/scsi_debug.c                          |    2 +-
+ drivers/scsi/stex.c                                |   25 +-
+ drivers/scsi/storvsc_drv.c                         |    2 +-
+ drivers/scsi/ufs/ufshcd.c                          |    4 +-
+ drivers/scsi/wd33c93.c                             |    6 +-
+ include/scsi/scsi.h                                |    1 +
+ include/scsi/scsi_cmnd.h                           |    5 +
+ 63 files changed, 1305 insertions(+), 7666 deletions(-)
+ delete mode 100644 drivers/scsi/gdth.c
+ delete mode 100644 drivers/scsi/gdth.h
+ delete mode 100644 drivers/scsi/gdth_ioctl.h
+ delete mode 100644 drivers/scsi/gdth_proc.c
+ delete mode 100644 drivers/scsi/gdth_proc.h
+
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.16.4
+
