@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC792D0A62
+	by mail.lfdr.de (Postfix) with ESMTP id 954B02D0A63
 	for <lists+linux-scsi@lfdr.de>; Mon,  7 Dec 2020 06:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbgLGFun (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Dec 2020 00:50:43 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:57343 "EHLO
+        id S1725996AbgLGFuo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Dec 2020 00:50:44 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:57359 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725819AbgLGFum (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Dec 2020 00:50:42 -0500
-X-UUID: 23ce1bc6ea4d42f0833bcee470ec59c0-20201207
-X-UUID: 23ce1bc6ea4d42f0833bcee470ec59c0-20201207
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        with ESMTP id S1725832AbgLGFuo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Dec 2020 00:50:44 -0500
+X-UUID: 41718caccc7945d5951a6f17dc259a13-20201207
+X-UUID: 41718caccc7945d5951a6f17dc259a13-20201207
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1241344740; Mon, 07 Dec 2020 13:49:58 +0800
+        with ESMTP id 250273908; Mon, 07 Dec 2020 13:49:58 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Mon, 7 Dec 2020 13:49:56 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -36,9 +36,9 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 1/2] scsi: ufs: Allow regulators being always-on
-Date:   Mon, 7 Dec 2020 13:49:54 +0800
-Message-ID: <20201207054955.24366-2-stanley.chu@mediatek.com>
+Subject: [PATCH v1 2/2] scsi: ufs-mediatek: Keep VCC always-on for specific devices
+Date:   Mon, 7 Dec 2020 13:49:55 +0800
+Message-ID: <20201207054955.24366-3-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201207054955.24366-1-stanley.chu@mediatek.com>
 References: <20201207054955.24366-1-stanley.chu@mediatek.com>
@@ -49,41 +49,76 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Introduce a flag "always_on" in struct ufs_vreg to allow vendors
-to keep the regulator always-on.
+For some devices which needs extra delay after VCC power down,
+VCC shall be kept always-on in some MediaTek UFS platforms to
+ensure the stability of such devices because the extra delay may
+not be enough in those platforms.
 
 Reviewed-by: Andy Teng <andy.teng@mediatek.com>
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufs.h    | 1 +
- drivers/scsi/ufs/ufshcd.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/ufs/ufs-mediatek.c | 21 +++++++++++++++++++++
+ drivers/scsi/ufs/ufs-mediatek.h |  1 +
+ 2 files changed, 22 insertions(+)
 
-diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-index d593edb48767..26f929afbcef 100644
---- a/drivers/scsi/ufs/ufs.h
-+++ b/drivers/scsi/ufs/ufs.h
-@@ -513,6 +513,7 @@ struct ufs_query_res {
- struct ufs_vreg {
- 	struct regulator *reg;
- 	const char *name;
-+	bool always_on;
- 	bool enabled;
- 	int min_uV;
- 	int max_uV;
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 6e72c0543c7b..4879e87577e1 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -7973,7 +7973,7 @@ static int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg)
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 3522458db3bb..80618af7c872 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -70,6 +70,13 @@ static bool ufs_mtk_is_va09_supported(struct ufs_hba *hba)
+ 	return !!(host->caps & UFS_MTK_CAP_VA09_PWR_CTRL);
+ }
+ 
++static bool ufs_mtk_is_broken_vcc(struct ufs_hba *hba)
++{
++	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
++
++	return !!(host->caps & UFS_MTK_CAP_BROKEN_VCC);
++}
++
+ static void ufs_mtk_cfg_unipro_cg(struct ufs_hba *hba, bool enable)
  {
- 	int ret = 0;
+ 	u32 tmp;
+@@ -514,6 +521,9 @@ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
+ 	if (of_property_read_bool(np, "mediatek,ufs-disable-ah8"))
+ 		host->caps |= UFS_MTK_CAP_DISABLE_AH8;
  
--	if (!vreg || !vreg->enabled)
-+	if (!vreg || !vreg->enabled || vreg->always_on)
- 		goto out;
++	if (of_property_read_bool(np, "mediatek,ufs-broken-vcc"))
++		host->caps |= UFS_MTK_CAP_BROKEN_VCC;
++
+ 	dev_info(hba->dev, "caps: 0x%x", host->caps);
+ }
  
- 	ret = regulator_disable(vreg->reg);
+@@ -1003,6 +1013,17 @@ static int ufs_mtk_apply_dev_quirks(struct ufs_hba *hba)
+ static void ufs_mtk_fixup_dev_quirks(struct ufs_hba *hba)
+ {
+ 	ufshcd_fixup_dev_quirks(hba, ufs_mtk_dev_fixups);
++
++	if (ufs_mtk_is_broken_vcc(hba) && hba->vreg_info.vcc &&
++	    (hba->dev_quirks & UFS_DEVICE_QUIRK_DELAY_AFTER_LPM)) {
++		hba->vreg_info.vcc->always_on = true;
++		/*
++		 * VCC will be kept always-on thus we don't
++		 * need any delay during regulator operations
++		 */
++		hba->dev_quirks &= ~(UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM |
++			UFS_DEVICE_QUIRK_DELAY_AFTER_LPM);
++	}
+ }
+ 
+ static void ufs_mtk_event_notify(struct ufs_hba *hba,
+diff --git a/drivers/scsi/ufs/ufs-mediatek.h b/drivers/scsi/ufs/ufs-mediatek.h
+index 93d35097dfb0..3f0d3bb769e8 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.h
++++ b/drivers/scsi/ufs/ufs-mediatek.h
+@@ -81,6 +81,7 @@ enum ufs_mtk_host_caps {
+ 	UFS_MTK_CAP_BOOST_CRYPT_ENGINE         = 1 << 0,
+ 	UFS_MTK_CAP_VA09_PWR_CTRL              = 1 << 1,
+ 	UFS_MTK_CAP_DISABLE_AH8                = 1 << 2,
++	UFS_MTK_CAP_BROKEN_VCC                 = 1 << 3,
+ };
+ 
+ struct ufs_mtk_crypt_cfg {
 -- 
 2.18.0
 
