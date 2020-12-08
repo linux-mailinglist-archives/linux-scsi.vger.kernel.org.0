@@ -2,86 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 314542D2251
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 05:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10272D225B
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 05:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbgLHExA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Dec 2020 23:53:00 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:50420 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726828AbgLHEw7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Dec 2020 23:52:59 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84nhS1099105;
-        Tue, 8 Dec 2020 04:52:16 GMT
+        id S1727407AbgLHExu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Dec 2020 23:53:50 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:40304 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727193AbgLHExu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Dec 2020 23:53:50 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84ocIt134327;
+        Tue, 8 Dec 2020 04:53:03 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=E4fuYebIERG0aZIT7o+2O4xvcUKPOiV+ErzyiVg+jiM=;
- b=o1lnbsMGtMgW5ccSznVAK3t8qZNdJ/SfExuib7PMJQa3OYAbvw9UHpQ53Lt1wrsYCeno
- bX96mjXuh1Opn99qeE6AnBfyRQGVD9ZNVzxQVbxo+vUBc4ADSSGDEkr2QORZIcIdqfLO
- SA3ht5n6YAZxa5q/oRYj1WTd/ESXLtnoKX9Rduu+ZO3RalrUZZOrONalQLJNgCAta/zP
- 31cYoB1BwHhQgxOwhhNHt7m3H6O8SU8/FXlNz8ccTdG/xXNfiaqVxmXRnflEX19hhtS6
- x9bJoIwZ8kHLWfUz1PFv3J0AFl8oPzmI9n14Cj5Cgh44rUUt1RA9rc7S09HL+2tPMbj9 sw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 357yqbrwbu-1
+ bh=q6vcNK7EUL0+jkb9MM0W0hXlcVsoj2SoAzgXmE5ZB+w=;
+ b=CPBtcTTG8Tp+bPm/QCYxn2FGCTxA5mp6XZIS72vQfJJ6EJZyWivM3pKsaWprA0ZYhaJp
+ 3+dVHOWOS4mMgIRF67k3Z0hn47esJOYRkvKZ17guhSOV7a7HyOJEbblIaKNBvDLVML89
+ SZgSmkKpmSVT8foU1Ie+DDcFyYdlLy86fNuGECW7LL2K+5afDeE49+4F14N2I+NwVEwY
+ AQf/2DfJ3/wsHrzlL3DHKJOdL1SVKD1pmkZKYHUDZOrHv071Ks0kFC9RTXjszr8BiQbp
+ CybV/Z8PtHtKvQTW4u+6hC4yv9jEw9mcfMeJpRA/nKTG71pt5gqxj0f/8R7Vq6k42KRG 8w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 3581mqrrqv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 08 Dec 2020 04:52:16 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84ocSc155424;
-        Tue, 8 Dec 2020 04:52:15 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 358kys9m1p-1
+        Tue, 08 Dec 2020 04:53:03 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84ngKV145396;
+        Tue, 8 Dec 2020 04:53:03 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 358m4x76fh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Dec 2020 04:52:15 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B84qEtl028165;
-        Tue, 8 Dec 2020 04:52:14 GMT
+        Tue, 08 Dec 2020 04:53:02 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B84r18O016177;
+        Tue, 8 Dec 2020 04:53:01 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 07 Dec 2020 20:52:14 -0800
+        with ESMTP ; Mon, 07 Dec 2020 20:53:01 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     James Smart <james.smart@broadcom.com>, linux-scsi@vger.kernel.org
+To:     Colin King <colin.king@canonical.com>, linux-scsi@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH] lpfc: Correct null ndlp reference on routine exit
-Date:   Mon,  7 Dec 2020 23:52:02 -0500
-Message-Id: <160740299786.710.5429624924898215992.b4-ty@oracle.com>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] scsi: pm8001: remove space in a debug message
+Date:   Mon,  7 Dec 2020 23:52:57 -0500
+Message-Id: <160740315201.1143.13169163294791547714.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201130181226.16675-1-james.smart@broadcom.com>
-References: <20201130181226.16675-1-james.smart@broadcom.com>
+In-Reply-To: <20201124093828.307709-1-colin.king@canonical.com>
+References: <20201124093828.307709-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9828 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 malwarescore=0 phishscore=0 adultscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2012080029
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9828 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ clxscore=1015 malwarescore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012080029
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 30 Nov 2020 10:12:26 -0800, James Smart wrote:
+On Tue, 24 Nov 2020 09:38:28 +0000, Colin King wrote:
 
-> smatch correctly called out a logic error with accessing a pointer after
-> checking it for null.
->  drivers/scsi/lpfc/lpfc_els.c:2043 lpfc_cmpl_els_plogi()
->  error: we previously assumed 'ndlp' could be null (see line 1942)
-> 
-> Adjust the exit point to avoid the trace printf ndlp reference. A trace
-> entry was already generated when the ndlp was checked for null.
+> There are two words that need separating with a space in a
+> pm8001_dbg message. Fix it.
 
 Applied to 5.11/scsi-queue, thanks!
 
-[1/1] lpfc: Correct null ndlp reference on routine exit
-      https://git.kernel.org/mkp/scsi/c/9d8de441db26
+[1/1] scsi: pm8001: remove space in a debug message
+      https://git.kernel.org/mkp/scsi/c/c6131854e28a
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
