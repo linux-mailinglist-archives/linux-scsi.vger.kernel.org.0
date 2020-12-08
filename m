@@ -2,106 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 385312D3511
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 22:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC6B2D352C
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 22:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728812AbgLHVP3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 16:15:29 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2227 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727660AbgLHVP3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 16:15:29 -0500
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CrCXd65Qtz67FSB;
-        Wed,  9 Dec 2020 05:11:29 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 8 Dec 2020 22:14:47 +0100
-Received: from [10.210.169.98] (10.210.169.98) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 8 Dec 2020 21:14:46 +0000
+        id S1728888AbgLHVYp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 16:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726114AbgLHVYp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 16:24:45 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9ED7C0613CF
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Dec 2020 13:23:58 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id m12so276890lfo.7
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Dec 2020 13:23:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VtI8aWS2XBU6E+db2R347MjtIB/R2TuW+JI08/V//xI=;
+        b=IX2+1eiVYs54WNPTx865dRN+VfZEy8FmzNHCJlr0nkTBrazPeMBbK0B6P6Bc0Ervo7
+         lIQc7C4G9hlb8+jo8nZ+kr4AsXv0jKoBgIWW3f6NhLMOMd9YdtBoiG/YKxnS/zUjisqP
+         OoeDeTYj7iX17QGH19mdD+qa/PRj0zIINeozQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VtI8aWS2XBU6E+db2R347MjtIB/R2TuW+JI08/V//xI=;
+        b=HTAqKqYjMAZBSPKogvOOJcHCXJLVSGZF08WGsP21zkMBqbjS32sGMMe3hl7pz2657b
+         8Gp9CoupD/LGmwd4ghFVVp3JMd6USrwaD45uPYC7pOYz2ocOL/G+sdbhGd3wNAVNXVTp
+         iCywjQbfSspDhVafPNzLVh6FEXBuhrJI5exJHkZ0xj2BbeC+lnSCrQaY/g+F3dB+FsXQ
+         8vy2AHnFWqbh/Prp1cVQD5ubUKhxYJD41uNpMvuPMiturr4dHeitgYaEJWAtPQwrSZyB
+         gZsid+eOgHpTRLkpOY/D1uAwXQUcAvJzVU7WHd2JwZMs14mcchE9LShnjV2e9VM6E9wN
+         QEEA==
+X-Gm-Message-State: AOAM532qC2/kKMnue5+7OwKhtDLyzI6XwYdXtkVUyhXi0O6U7P2rCO11
+        F7+yKMhSPZuqM997cE8b4fKeSRWUc0VtYw==
+X-Google-Smtp-Source: ABdhPJwNJcFzf0pJ4pSwdEi/MCCTgs5fVJpoe+LezOI9cXQcUtyIF/bK3jdmGiA4EaJzwRAwSx3qng==
+X-Received: by 2002:ac2:5383:: with SMTP id g3mr10606004lfh.184.1607462636134;
+        Tue, 08 Dec 2020 13:23:56 -0800 (PST)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id a4sm1293467ljp.14.2020.12.08.13.23.53
+        for <linux-scsi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Dec 2020 13:23:53 -0800 (PST)
+Received: by mail-lj1-f173.google.com with SMTP id j10so22070741lja.5
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Dec 2020 13:23:53 -0800 (PST)
+X-Received: by 2002:a2e:90cb:: with SMTP id o11mr11822819ljg.465.1607462632951;
+ Tue, 08 Dec 2020 13:23:52 -0800 (PST)
+MIME-Version: 1.0
+References: <alpine.DEB.2.22.394.2012081813310.2680@hadrien>
+ <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
+ <yq1sg8gunxy.fsf@ca-mkp.ca.oracle.com> <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
+ <9106e994-bb4b-4148-1280-f08f71427420@huawei.com>
+In-Reply-To: <9106e994-bb4b-4148-1280-f08f71427420@huawei.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 8 Dec 2020 13:23:36 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjsWB612YA0OSpVPkzePxQWyqcSGDaY1-x3R2AgjOCqSQ@mail.gmail.com>
+Message-ID: <CAHk-=wjsWB612YA0OSpVPkzePxQWyqcSGDaY1-x3R2AgjOCqSQ@mail.gmail.com>
 Subject: Re: problem booting 5.10
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Julia Lawall <julia.lawall@inria.fr>,
+To:     John Garry <john.garry@huawei.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <nicolas.palix@univ-grenoble-alpes.fr>,
+        nicolas.palix@univ-grenoble-alpes.fr,
         linux-scsi <linux-scsi@vger.kernel.org>,
         Kashyap Desai <kashyap.desai@broadcom.com>,
         Ming Lei <ming.lei@redhat.com>
-References: <alpine.DEB.2.22.394.2012081813310.2680@hadrien>
- <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
- <yq1sg8gunxy.fsf@ca-mkp.ca.oracle.com>
- <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <9106e994-bb4b-4148-1280-f08f71427420@huawei.com>
-Date:   Tue, 8 Dec 2020 21:14:10 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
-MIME-Version: 1.0
-In-Reply-To: <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.169.98]
-X-ClientProxiedBy: lhreml719-chm.china.huawei.com (10.201.108.70) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 08/12/2020 19:19, Linus Torvalds wrote:
-> On Tue, Dec 8, 2020 at 10:59 AM Martin K. Petersen
-> <martin.petersen@oracle.com> wrote:
->>
->>> So I'm adding SCSI people to the cc, just in case they go "Hmm..".
->>
->> Only change in this department was:
->>
->> 831e3405c2a3 scsi: core: Don't start concurrent async scan on same host
-> 
-> Yeah, I found that one too, and dismissed it for the same reason you
-> did - it wasn't in rc1. Plus it looked very simple.
-> 
-> That said, maybe Julia might have misspoken, and rc1 was ok, so I
-> guess it's possible. The scan_mutex does show up in that "locks held"
-> list, although I can't see why it would matter. But it does
-> potentially change timing (so it could expose some existing race), if
-> nothing else.
-> 
-> But let's make sure Jens is aware of this too, in case it's some ATA
-> issue. Not that any of those handful of 5.10 changes look remotely
-> likely _either_.
-> 
-> Jens, see
-> 
->     https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2012081813310.2680@hadrien/
-> 
-> if you don't already have the lkml thread locally.. There's not enough
-> of the dmesg to even really guess what Julia's actual hardware is,
-> apart from it being a Seagate SATA disk. Julia? What controllers and
-> disks do you have show up when things work?
-> 
->               Linus
-> .
-> 
+On Tue, Dec 8, 2020 at 1:14 PM John Garry <john.garry@huawei.com> wrote:
+>
+> JFYI, About "scsi: megaraid_sas: Added support for shared host tagset
+> for cpuhotplug", we did have an issue reported here already from Qian
+> about a boot hang:
 
-JFYI, About "scsi: megaraid_sas: Added support for shared host tagset 
-for cpuhotplug", we did have an issue reported here already from Qian 
-about a boot hang:
+Hmm. That does sound like it might be it.
 
-https://lore.kernel.org/linux-scsi/fe3dff7dae4494e5a88caffbb4d877bbf472dceb.camel@redhat.com/
+At this point, the patches from Ming Lei seem to be a riskier approach
+than perhaps just reverting the megaraid_sas change?
 
-And the solution to that specific problem is in:
-https://lore.kernel.org/linux-block/20201203012638.543321-1-ming.lei@redhat.com/
+It looks like those patches are queued up for 5.11, and we could
+re-apply the megaraid_sas change then?
 
-This issue may be related, so you could test by reverting that megaraid 
-sas commit or setting the driver module param "host_tagset_enable=0" 
-just to see.
+Jens, comments?
 
-Thanks,
-John
+And Julia - if it's that thing, then a
+
+    git revert 103fbf8e4020
+
+would be the thing to test.
+
+           Linus
