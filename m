@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 742812D2C66
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 14:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6862B2D2C68
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 14:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729684AbgLHN5W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 08:57:22 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37922 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729678AbgLHN5V (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 08:57:21 -0500
-X-UUID: 4098dee9f14746dfa395ca8d74c7ef55-20201208
-X-UUID: 4098dee9f14746dfa395ca8d74c7ef55-20201208
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        id S1729711AbgLHN5Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 08:57:24 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:56236 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729025AbgLHN5Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 08:57:24 -0500
+X-UUID: 8ef993b99daa4830a6bd8b7b2228282c-20201208
+X-UUID: 8ef993b99daa4830a6bd8b7b2228282c-20201208
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1451369614; Tue, 08 Dec 2020 21:56:38 +0800
+        with ESMTP id 1497966473; Tue, 08 Dec 2020 21:56:37 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 8 Dec 2020 21:56:34 +0800
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 8 Dec 2020 21:56:36 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Tue, 8 Dec 2020 21:56:34 +0800
@@ -37,30 +37,59 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 0/2] scsi: ufs: Re-enable WB after device reset
-Date:   Tue, 8 Dec 2020 21:56:33 +0800
-Message-ID: <20201208135635.15326-1-stanley.chu@mediatek.com>
+Subject: [PATCH v2 1/2] scsi: ufs: Re-enable WriteBooster after device reset
+Date:   Tue, 8 Dec 2020 21:56:34 +0800
+Message-ID: <20201208135635.15326-2-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20201208135635.15326-1-stanley.chu@mediatek.com>
+References: <20201208135635.15326-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 29694EDB5F58899C9EB8D22B45F58AE6EF1CEAF90F164B2504683A26C00FED832000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+UFS 3.1 specification mentions that below WriteBooster flags will be
+set to default value, say disabled, after power cycle or any type
+of reset event. Thus we need to reset those flag variables kept
+in struct hba to align the device status and ensure WriteBooster
+related functions being configured properly after device reset.
 
-This series fixes up an issue that WB is not re-enabled after device reset.
+Without this fix, WriteBooster will not be enabled successfully
+after by ufshcd_wb_ctrl() after device reset because hba->wb_enabled
+remains true.
 
-Stanley Chu (2):
-  scsi: ufs: Re-enable WriteBooster after device reset
-  scsi: ufs: Uninline ufshcd_vops_device_reset function
+Flags required to be reset to default values:
+- fWriteBoosterEn: hba->wb_enabled
+- fWriteBoosterBufferFlushEn: hba->wb_buf_flush_enabled
+- fWriteBoosterBufferFlushDuringHibernate: No variable mapped
 
- drivers/scsi/ufs/ufshcd.c | 27 ++++++++++++++++++++++-----
- drivers/scsi/ufs/ufshcd.h | 14 +++++---------
- 2 files changed, 27 insertions(+), 14 deletions(-)
+Fixes: 3d17b9b5ab11 ("scsi: ufs: Add write booster feature support")
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/scsi/ufs/ufshcd.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 08c8a591e6b0..36d367eb8139 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -1221,8 +1221,13 @@ static inline void ufshcd_vops_device_reset(struct ufs_hba *hba)
+ 	if (hba->vops && hba->vops->device_reset) {
+ 		int err = hba->vops->device_reset(hba);
+ 
+-		if (!err)
++		if (!err) {
+ 			ufshcd_set_ufs_dev_active(hba);
++			if (ufshcd_is_wb_allowed(hba)) {
++				hba->wb_enabled = false;
++				hba->wb_buf_flush_enabled = false;
++			}
++		}
+ 		if (err != -EOPNOTSUPP)
+ 			ufshcd_update_evt_hist(hba, UFS_EVT_DEV_RESET, err);
+ 	}
 -- 
 2.18.0
 
