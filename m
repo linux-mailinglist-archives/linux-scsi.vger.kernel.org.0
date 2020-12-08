@@ -2,94 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B342D34ED
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 22:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E602D34F6
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 22:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729060AbgLHVHf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 16:07:35 -0500
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:62561 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728568AbgLHVHd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 16:07:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607461652; x=1638997652;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=z2X8vlZ3oZEXCm/iPHP7e6ONznSUIDNnAs1sBrwhv60=;
-  b=oh36zqbJsDPnFk5uiiZoRrI3a0BikDvr44lgxdVM6vNC0B+HRrvsNIsm
-   cTkelDXypVVjN/32/MYL3yiYUOLxrBS5aEz8qJQs3/FJVnRXmHjWn2o6/
-   PiDOmaSQIZKV+92B127XsHWP3zmlUNcPC4NxRCP4S7/93RQvhQEl+dwl5
-   bDhfhgfO+6oQZK9ryuq4U47kJVXQBNRkKE5eebsKcnBnNmO3LIdFbJzAa
-   dY0ke/RQFPJMRoL30IE/t/qKvVnD1fTqcLhTcI8WIZe1V95JHRyFIIVU5
-   lrzxsCfSPjM4FAibA+x/W/S8dzGnH4nutkVFMsGPtIapVEBDqISzNYj2f
-   A==;
-IronPort-SDR: tnHDWamAkwOjN2Klx9tjUTNPYiHtar2kFjk70Nt7ywac/2nRVDzdY1BPi2K7k/sz16ukaTBq2t
- rOtyjrktWocwTpk1PtPtDS4pGG8s0AaiVpeidKgc0o2FBW2AfgZn1DWpc4rUzcK4ZWBxV0ro/w
- Xiebm0xgVpnUWnMNe0gU/M82nVEWTG+hWJ4IwSM4z36buSYK96BcIdSH2+ZsRiq23fFtFUh0gU
- N7dvFIujvnqfHTVu6GaRWwFOKBVC0Kz9dkq/PQ+Ct9Zdby+WeWULaz4xLrBafUJHMJ9FYtZPBy
- HHc=
-X-IronPort-AV: E=Sophos;i="5.78,403,1599548400"; 
-   d="scan'208";a="36640177"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2020 12:39:01 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 8 Dec 2020 12:39:01 -0700
-Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Tue, 8 Dec 2020 12:39:00 -0700
-Subject: [PATCH V2 25/25] smartpqi: update version to 2.1.6-005
-From:   Don Brace <don.brace@microchip.com>
-To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
-        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
-        <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
-        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
-        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
-CC:     <linux-scsi@vger.kernel.org>
-Date:   Tue, 8 Dec 2020 13:39:00 -0600
-Message-ID: <160745634054.13450.15884798256888277859.stgit@brunhilda>
-In-Reply-To: <160745609917.13450.11882890596851148601.stgit@brunhilda>
-References: <160745609917.13450.11882890596851148601.stgit@brunhilda>
-User-Agent: StGit/0.23-dirty
+        id S1726766AbgLHVKc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 16:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725766AbgLHVKc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 16:10:32 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07757C0613D6;
+        Tue,  8 Dec 2020 13:09:52 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id x16so26643901ejj.7;
+        Tue, 08 Dec 2020 13:09:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wNs/3miZJZMRVGd+tONPw5tRmrGF0sc2ymKJoQXU/q8=;
+        b=NtwAvitu0Dgz05kasu9RPNf/EgA1QoLlWEzF65LW6NMQGstFb1Ho4Ix3Y7zaXwtAy3
+         9zkPGbuDEXl3kOvqpACvCCPpVVaku1DpBwRKvSSPfjbrqe6TmukWn/ec95WLQcgdNqTC
+         qIy1eugiLQU6LJ5BW6qiEPsOACSrIUIb2Po0ZtQo4XBNABypvgL5nUWjARUUzKqca57K
+         iOjRzwXSrSEvB/+l3xiyJwHm/rdwqFuV0YTHMTk6Z33QSXGnJRwIBQllQxXfw68AEfwr
+         fTilrDKF9bmaVauS/1UffKj+cy2Xk9q16OizX5xj+28Ad68ljoV0NEA6skRH8SxXrMoZ
+         T2vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wNs/3miZJZMRVGd+tONPw5tRmrGF0sc2ymKJoQXU/q8=;
+        b=OlbG0WjUHa1vqdgcsfLqZ2VTppdn2eYjeiC+oUmcPviLotJbilgqepCAOTEGCL+s37
+         RODDFQNYoEOrmgQ9zSIfGcf+s/O57IKuWdsDdl0WJ/iw+ti5saLSrCbip/rg9uJw+aeu
+         x4FXHieRGwDIgVYNfS4NjdVYCbjw3RB6Cmu9zMk41TosBBv2MpA0lfEXM5/0Yf3V6a7q
+         nfmHbc/AMBeJcqPH3U2e0Wd/Vfp4GZf13bAShy2hzeWSMcBChCPpWBdbeFqenbOU2UDh
+         SAthnVlgLJ9JbrJ6vEsvfMSUJei53DkkOWt4Yts2IQ8G4Y/NqnSyF/cJyLTnH+4RQpfa
+         zRBw==
+X-Gm-Message-State: AOAM531T/Z4yA38yx1eUUad8m6nXx6fVCv6xnFfhSyXjFXKFDiuomhvQ
+        zyFL5y6QQMaEvrlaXo1HpY8=
+X-Google-Smtp-Source: ABdhPJz246F7teP6RzCfKElrHJAlYH7IEETY5MjpJ+xEOtfKHwtDj99KXOS9nDGpl+pqFU9r4XDB+Q==
+X-Received: by 2002:a17:906:3081:: with SMTP id 1mr25895007ejv.162.1607461790800;
+        Tue, 08 Dec 2020 13:09:50 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
+        by smtp.gmail.com with ESMTPSA id n22sm17908edr.11.2020.12.08.13.09.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 13:09:50 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Three changes for UFS WriteBooster
+Date:   Tue,  8 Dec 2020 22:09:38 +0100
+Message-Id: <20201208210941.2177-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-* Update version for tracking
+From: Bean Huo <beanhuo@micron.com>
 
-Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-Reviewed-by: Gerry Morong <gerry.morong@microchip.com>
-Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Don Brace <don.brace@microchip.com>
----
- drivers/scsi/smartpqi/smartpqi_init.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Changelog:
+v2--v3:
+  1. Change multi-line comments style in patch 1/3 (Can Guo)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index b709c1ebff6a..746baa84706e 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -33,11 +33,11 @@
- #define BUILD_TIMESTAMP
- #endif
- 
--#define DRIVER_VERSION		"1.2.16-012"
--#define DRIVER_MAJOR		1
--#define DRIVER_MINOR		2
--#define DRIVER_RELEASE		16
--#define DRIVER_REVISION		12
-+#define DRIVER_VERSION		"2.1.6-005"
-+#define DRIVER_MAJOR		2
-+#define DRIVER_MINOR		1
-+#define DRIVER_RELEASE		6
-+#define DRIVER_REVISION		5
- 
- #define DRIVER_NAME		"Microsemi PQI Driver (v" \
- 				DRIVER_VERSION BUILD_TIMESTAMP ")"
+v1--v2:
+  1. Take is_hibern8_wb_flush checkup out from function
+     ufshcd_wb_need_flush() in patch 2/3
+  2. Add UFSHCD_CAP_CLK_SCALING checkup in patch 1/3. that means
+     only for the platform, which doesn't support UFSHCD_CAP_CLK_SCALING,
+     can control WB through "wb_on".
+
+Bean Huo (3):
+  scsi: ufs: Add "wb_on" sysfs node to control WB on/off
+  scsi: ufs: Keep device active mode only
+    fWriteBoosterBufferFlushDuringHibernate == 1
+  scsi: ufs: Changes comment in the function ufshcd_wb_probe()
+
+ drivers/scsi/ufs/ufs-sysfs.c | 41 ++++++++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufs.h       |  2 ++
+ drivers/scsi/ufs/ufshcd.c    | 30 ++++++++++++++++----------
+ drivers/scsi/ufs/ufshcd.h    |  2 ++
+ 4 files changed, 64 insertions(+), 11 deletions(-)
+
+-- 
+2.17.1
 
