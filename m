@@ -2,87 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BF02D330A
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 21:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA192D3425
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 21:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731160AbgLHUQE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 15:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731124AbgLHUOY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 15:14:24 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD080C061793
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Dec 2020 12:13:42 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id r24so25976352lfm.8
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Dec 2020 12:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sgyQki4FzsYscH5k16Etbh421UMG+JihNWud51/vg7o=;
-        b=Kf4+GRG3ICi22fvx5fccY4z9fvoThH7QoV401LvADvCQugMcp6btTNSih+yZOSoZ3j
-         a2Q4gyueZSi5BP5D2Zdzf+u2ZyELugu0V4ZSQwUNMWysc21aPXKcL6d9WbJrfWoKkaDM
-         5kD8tlsLhmWzjPSFqTPB6Xq+mP/fDQ7RtaM28=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sgyQki4FzsYscH5k16Etbh421UMG+JihNWud51/vg7o=;
-        b=c3NEZFMRL8x/hAvepg0W2EYINXThRp2kMYmbsQ0m/RRGxc87QgOClT6mAs1j9qPYoa
-         QuJ/YN2eCflHasBEkmFlSucCzf6couFJjrqQGn/1U+Ao/GXdy8gjR5/yrex2pxmJcMX5
-         goXTaBAZeb7DAzUqIFvWbK86vIbozWe3GwwiGu+IEy4obH1DRT1uZSM/HYA9JgaJXTXh
-         O8ISGPKXecfhO+MOhdob72yl5FZlRFuA8+8HYQkIbhnz8c1PHXS+ogbhEkkEQ9dgjaou
-         orFA8SUyb2YM+lvQCSrVDMIuTKH8tPiaj2bAnkVDJJIafXOWJrXL9kEnRQGN9ZO+Kf1f
-         /sUQ==
-X-Gm-Message-State: AOAM533bHeqEKUM3e8lMKBdwpZLhsCKuo06bxz+HtXL0Iv8jPQM+bSQU
-        IUiSCz3nOXqkpaMQax8W8scdim372EXjlg==
-X-Google-Smtp-Source: ABdhPJxUuZ1dX+aTjYcRgnGMGDzw2CWgBw6o5fJMZtxCYf4hgoPshs5EHrnNvU9heCzF/pRp/W3cyA==
-X-Received: by 2002:a2e:97c8:: with SMTP id m8mr10903966ljj.338.1607456872469;
-        Tue, 08 Dec 2020 11:47:52 -0800 (PST)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id a26sm3540912ljn.137.2020.12.08.11.47.52
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Dec 2020 11:47:52 -0800 (PST)
-Received: by mail-lj1-f179.google.com with SMTP id f11so9395426ljm.8
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Dec 2020 11:47:52 -0800 (PST)
-X-Received: by 2002:a2e:8995:: with SMTP id c21mr3342315lji.251.1607456869937;
- Tue, 08 Dec 2020 11:47:49 -0800 (PST)
-MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2012081813310.2680@hadrien>
- <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
- <yq1sg8gunxy.fsf@ca-mkp.ca.oracle.com> <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2012082025310.16458@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2012082025310.16458@hadrien>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 8 Dec 2020 11:47:33 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjVch4Y7wGKRROYCHN9vD0e5YK=KRWhcZMJ2zNQdc+_Jg@mail.gmail.com>
-Message-ID: <CAHk-=wjVch4Y7wGKRROYCHN9vD0e5YK=KRWhcZMJ2zNQdc+_Jg@mail.gmail.com>
-Subject: Re: problem booting 5.10
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        id S1728842AbgLHUai (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 15:30:38 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:55886 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728460AbgLHUad (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 15:30:33 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B8ItVTP193430;
+        Tue, 8 Dec 2020 18:59:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=7qzXZe0gMYZQ/xhFXJ1/oXcs7VbDKuFEC3Igf2zwT+E=;
+ b=k1kZayqwsoOm1cXk/dUfWUcR9cm6x1JlMoXC4Zn6sl9h1LF4gm6RQL/MzZ7woIUv/cGO
+ w6PYKyK5k8MCvUrfIbxGGin41bykvY3AAMQobARud8H+nPZ2tdNYrvUkZ60iBZUtXY/b
+ 8Y/fpSN6XH559/jY4b4OJawjR6mQiPuLaJ02cQFN9Cbe4Kc29HoBZ79dh/459eBen1yl
+ FbKYTGv1hfsIx/YCN17VDmwUj+0WLSn/hXp25xbTmk7xAR6SlrALyGQpuw2VvXhAnURa
+ Im1B+qt6FiY5cO4iN4/vvcJFv+9tRyGzwThwDQwJaP9Hxr/WVkIB6M9IIVaswIis7i0F 9Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 3581mqvep4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 08 Dec 2020 18:59:18 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B8IsnfF150260;
+        Tue, 8 Dec 2020 18:59:17 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 358ksp082v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Dec 2020 18:59:17 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B8IxD5U019445;
+        Tue, 8 Dec 2020 18:59:13 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 08 Dec 2020 10:59:13 -0800
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Julia Lawall <julia.lawall@inria.fr>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         nicolas.palix@univ-grenoble-alpes.fr,
         linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: problem booting 5.10
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1sg8gunxy.fsf@ca-mkp.ca.oracle.com>
+References: <alpine.DEB.2.22.394.2012081813310.2680@hadrien>
+        <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
+Date:   Tue, 08 Dec 2020 13:59:11 -0500
+In-Reply-To: <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
+        (Linus Torvalds's message of "Tue, 8 Dec 2020 10:31:49 -0800")
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=942 suspectscore=1
+ bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012080115
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 mlxlogscore=956
+ clxscore=1011 malwarescore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012080115
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Dec 8, 2020 at 11:29 AM Julia Lawall <julia.lawall@inria.fr> wrote:
->
-> A dmesg after successfully booting in 5.9 is attached.
 
-Ok, from a quick look it's megaraid_sas.
+Linus,
 
-The only thing I see there is that commit 103fbf8e4020 ("scsi:
-megaraid_sas: Added support for shared host tagset for cpuhotplug").
+> So I'm adding SCSI people to the cc, just in case they go "Hmm..".
 
-Of course, it could be something entirely unrelated that just triggers
-this, but I don't think I've seen any other reports, so at a first
-guess I'd blame something specific to that hardware, rather than some
-generic problem that just happens to hit Jula.
+Only change in this department was:
 
-            Linus
+831e3405c2a3 scsi: core: Don't start concurrent async scan on same host
+
+which went into -rc2. I can't think of anything in -rc1 which would
+affect scanning.
+
+I'll take a look this afternoon.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
