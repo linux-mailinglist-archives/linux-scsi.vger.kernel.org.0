@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF712D33C9
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 21:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F922D33E5
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 21:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728411AbgLHUZ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 15:25:58 -0500
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:25999 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgLHUZ4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 15:25:56 -0500
+        id S1731162AbgLHUQF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 15:16:05 -0500
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:32318 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731154AbgLHUPX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 15:15:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607459155; x=1638995155;
-  h=subject:from:to:cc:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rjx1hEZdg50UepevKgr6oYYgNBbk1tPcLa7fZHDURhY=;
-  b=FIa/yuB/8qft2N7r084aaVTFEDjAVydI6/qlGPkN5gHcGrcatZbpzdHP
-   ziII9F0fQeNzoxmxVQoC2K9MiuxSZEJQymjSyyiijtlw9YbdyDHnDd2/Z
-   4x8/ApMrbCCXO3R90QxYc0mvRsakIeGRz2F1jbyBcff+rNCxBed6nKrv0
-   CmHYKvU0iOcEiscF3UBseYJu7wJIeGYNcrmv5Kc0t7WLzKHszRxtw0MHh
-   PmloafFgY3s7oabaQMIcKcWIRA1OBCF9lNHKWbr/FSyqNTZ5J9fFqdU1h
-   crKlmc46Uef0mdC0klx7O2bFGiUnjCOHIuQ3cUgF8swk7UBXxPlZu5X1I
-   w==;
-IronPort-SDR: GD72SoHAYlwnN8Gy+uObOiHIFXJKOMXnEy8KoeKu3RMZFozhX+dAIjgbzwmn2HblZL0cbSNiro
- D5oNREU61prfYhdMREbN2MCAHMlFSFbksHYOpXFuF1uGaWDltLuUbeEWYFkNm6rHn4h2KcpnLI
- IQyKuQZr5m06acgwGRXgAlJeoHSSta6CjHHP/D03j3XWUpOYYvqHAC893yXV22JNdnlIn0S4Ft
- L6GP+0rLXcf2SVvErA0OfZbxvNOTPYSki9SaAH2h/06L9/I9hlQBzBTLMERMW0Vg8PlT928jQz
- P3g=
+  t=1607458523; x=1638994523;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xnriuakHErWSuQ/TNdXXtkqup1jqGM9VGmYc1FDQgf4=;
+  b=Zx6m+LDSvhUmzdfxP8+k0I1sg4C5V3YMH+FVLZRtp4BLKT5AplTscynE
+   Mjwen6m01OS5WEqPVzuqDi/kQ10/BrxSOdyg3Yk1wSl+mKmyfJjcZkaZw
+   BVeFayj145W+PKP3Jy2o0b6pVcnYkgFWgVpFiSPWRriCmcVcWDLPik9kW
+   xF/NyH7ZzrtUDgbSHCFrt4/ISVt8NJaCEW0Zne0aQhSGvkRpBBQwCIkqe
+   RU6OffhwdVBx586gBKEu+wLMnBSbPx577XBRKfNL+v1msf5Jnrr9n1muF
+   dIoHEAWgQ7BjBI2DY9/vd/rBkPXhSFvwD51usH2KXUEHJOvjf1fvyfQZG
+   Q==;
+IronPort-SDR: ldjL9+Tv0lYQ3BkfSAzjSz3r3S5JcJn4A0bBCVdPslzE3JOPvUOkr/ri3ohyGXxrJq2cxFcVEY
+ S8f+yLWtsuZjKDXf9WAe+GxjCqSlXOkOOCMiD1ALoEXiHuXwYPo2RsCGcVXhnDCe9UI2Fdtjlg
+ UgtHJ9YZiUwmJX6Gnd/O9W/EwUiYcT3JeEBd3eaEtEAexI30TsP89Y8302nZ8O9T2GPmlPKZop
+ EhNcMVJyB6dOqgjgzNcSIUQW+UXFEyMO0a6BBfG2asgHOxpSxuyEB07dozNVK3hT2Dfa0CsFan
+ g50=
 X-IronPort-AV: E=Sophos;i="5.78,403,1599548400"; 
-   d="scan'208";a="102011964"
+   d="scan'208";a="101443181"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2020 12:36:35 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2020 12:36:54 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 8 Dec 2020 12:36:35 -0700
+ 15.1.1979.3; Tue, 8 Dec 2020 12:36:53 -0700
 Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Tue, 8 Dec 2020 12:36:35 -0700
-Subject: [PATCH V2 00/25] smartpqi updates
+ Transport; Tue, 8 Dec 2020 12:36:52 -0700
+Subject: [PATCH V2 03/25] smartpqi: refactor build sg list code
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -48,8 +48,10 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Tue, 8 Dec 2020 13:36:35 -0600
-Message-ID: <160745609917.13450.11882890596851148601.stgit@brunhilda>
+Date:   Tue, 8 Dec 2020 13:36:52 -0600
+Message-ID: <160745621250.13450.3396484024045806277.stgit@brunhilda>
+In-Reply-To: <160745609917.13450.11882890596851148601.stgit@brunhilda>
+References: <160745609917.13450.11882890596851148601.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -58,77 +60,164 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-These patches are based on Martin Peterson's 5.11/scsi-queue tree
+* No functional changes.
+* Factor out code common to all s/g list building.
 
-Note that these patches depend on the following three patches
-applied to Martin Peterson's tree:
-  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
-  5.11/scsi-queue
-Depends-on: 5443bdc4cc77 scsi: smartpqi: Update version to 1.2.16-012
-Depends-on: 408bdd7e5845 scsi: smartpqi: Correct pqi_sas_smp_handler busy condition
-Depends-on: 1bdf6e934387 scsi: smartpqi: Correct driver removal with HBA disks
-
-This set of changes consist of:
-  * Add support for newer controller hardware.
-    * Refactor AIO and s/g processing code. (No functional changes)
-    * Add write support for RAID 5/6/1 Raid bypass path (or accelerated I/O path).
-    * Add check for sequential streaming.
-    * Add in new PCI-IDs.
-  * Format changes to re-align with our in-house driver. (No functional changes.)
-  * Correct some issues relating to suspend/hibernation/OFA/shutdown.
-    * Block I/O requests during these conditions.
-  * Add in qdepth limit check to limit outstanding commands.
-    to the max values supported by the controller.
-  * Correct some minor issues found during regression testing.
-  * Update the driver version.
-
-Changes since V1:
-  * Re-added 32bit calculations to correct i386 compile issues
-    to patch smartpqi-refactor-aio-submission-code 
-    Reported-by: kernel test robot <lkp@intel.com>
-    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/VMBBGGGE5446SVEOQBRCKBTRRWTSH4AB/
-
+Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
+ drivers/scsi/smartpqi/smartpqi_init.c |  101 ++++++++++++++-------------------
+ 1 file changed, 42 insertions(+), 59 deletions(-)
 
-Don Brace (7):
-      smartpqi: refactor aio submission code
-      smartpqi: refactor build sg list code
-      smartpqi: add support for raid5 and raid6 writes
-      smartpqi: add support for raid1 writes
-      smartpqi: add stream detection
-      smartpqi: add host level stream detection enable
-      smartpqi: update version to 2.1.6-005
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 2348b9f24d8c..6bcb037ae9d7 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -4857,16 +4857,52 @@ static inline void pqi_set_sg_descriptor(
+ 	put_unaligned_le32(0, &sg_descriptor->flags);
+ }
+ 
++static unsigned int pqi_build_sg_list(struct pqi_sg_descriptor *sg_descriptor,
++	struct scatterlist *sg, int sg_count, struct pqi_io_request *io_request,
++	int max_sg_per_iu, bool *chained)
++{
++	int i;
++	unsigned int num_sg_in_iu;
++
++	*chained = false;
++	i = 0;
++	num_sg_in_iu = 0;
++	max_sg_per_iu--;	/* Subtract 1 to leave room for chain marker. */
++
++	while (1) {
++		pqi_set_sg_descriptor(sg_descriptor, sg);
++		if (!*chained)
++			num_sg_in_iu++;
++		i++;
++		if (i == sg_count)
++			break;
++		sg_descriptor++;
++		if (i == max_sg_per_iu) {
++			put_unaligned_le64((u64)io_request->sg_chain_buffer_dma_handle,
++				&sg_descriptor->address);
++			put_unaligned_le32((sg_count - num_sg_in_iu) * sizeof(*sg_descriptor),
++				&sg_descriptor->length);
++			put_unaligned_le32(CISS_SG_CHAIN, &sg_descriptor->flags);
++			*chained = true;
++			num_sg_in_iu++;
++			sg_descriptor = io_request->sg_chain_buffer;
++		}
++		sg = sg_next(sg);
++	}
++
++	put_unaligned_le32(CISS_SG_LAST, &sg_descriptor->flags);
++
++	return num_sg_in_iu;
++}
++
+ static int pqi_build_raid_sg_list(struct pqi_ctrl_info *ctrl_info,
+ 	struct pqi_raid_path_request *request, struct scsi_cmnd *scmd,
+ 	struct pqi_io_request *io_request)
+ {
+-	int i;
+ 	u16 iu_length;
+ 	int sg_count;
+ 	bool chained;
+ 	unsigned int num_sg_in_iu;
+-	unsigned int max_sg_per_iu;
+ 	struct scatterlist *sg;
+ 	struct pqi_sg_descriptor *sg_descriptor;
+ 
+@@ -4882,36 +4918,10 @@ static int pqi_build_raid_sg_list(struct pqi_ctrl_info *ctrl_info,
+ 
+ 	sg = scsi_sglist(scmd);
+ 	sg_descriptor = request->sg_descriptors;
+-	max_sg_per_iu = ctrl_info->max_sg_per_iu - 1;
+-	chained = false;
+-	num_sg_in_iu = 0;
+-	i = 0;
+ 
+-	while (1) {
+-		pqi_set_sg_descriptor(sg_descriptor, sg);
+-		if (!chained)
+-			num_sg_in_iu++;
+-		i++;
+-		if (i == sg_count)
+-			break;
+-		sg_descriptor++;
+-		if (i == max_sg_per_iu) {
+-			put_unaligned_le64(
+-				(u64)io_request->sg_chain_buffer_dma_handle,
+-				&sg_descriptor->address);
+-			put_unaligned_le32((sg_count - num_sg_in_iu)
+-				* sizeof(*sg_descriptor),
+-				&sg_descriptor->length);
+-			put_unaligned_le32(CISS_SG_CHAIN,
+-				&sg_descriptor->flags);
+-			chained = true;
+-			num_sg_in_iu++;
+-			sg_descriptor = io_request->sg_chain_buffer;
+-		}
+-		sg = sg_next(sg);
+-	}
++	num_sg_in_iu = pqi_build_sg_list(sg_descriptor, sg, sg_count, io_request,
++		ctrl_info->max_sg_per_iu, &chained);
+ 
+-	put_unaligned_le32(CISS_SG_LAST, &sg_descriptor->flags);
+ 	request->partial = chained;
+ 	iu_length += num_sg_in_iu * sizeof(*sg_descriptor);
+ 
+@@ -4925,12 +4935,10 @@ static int pqi_build_aio_sg_list(struct pqi_ctrl_info *ctrl_info,
+ 	struct pqi_aio_path_request *request, struct scsi_cmnd *scmd,
+ 	struct pqi_io_request *io_request)
+ {
+-	int i;
+ 	u16 iu_length;
+ 	int sg_count;
+ 	bool chained;
+ 	unsigned int num_sg_in_iu;
+-	unsigned int max_sg_per_iu;
+ 	struct scatterlist *sg;
+ 	struct pqi_sg_descriptor *sg_descriptor;
+ 
+@@ -4947,35 +4955,10 @@ static int pqi_build_aio_sg_list(struct pqi_ctrl_info *ctrl_info,
+ 
+ 	sg = scsi_sglist(scmd);
+ 	sg_descriptor = request->sg_descriptors;
+-	max_sg_per_iu = ctrl_info->max_sg_per_iu - 1;
+-	chained = false;
+-	i = 0;
+ 
+-	while (1) {
+-		pqi_set_sg_descriptor(sg_descriptor, sg);
+-		if (!chained)
+-			num_sg_in_iu++;
+-		i++;
+-		if (i == sg_count)
+-			break;
+-		sg_descriptor++;
+-		if (i == max_sg_per_iu) {
+-			put_unaligned_le64(
+-				(u64)io_request->sg_chain_buffer_dma_handle,
+-				&sg_descriptor->address);
+-			put_unaligned_le32((sg_count - num_sg_in_iu)
+-				* sizeof(*sg_descriptor),
+-				&sg_descriptor->length);
+-			put_unaligned_le32(CISS_SG_CHAIN,
+-				&sg_descriptor->flags);
+-			chained = true;
+-			num_sg_in_iu++;
+-			sg_descriptor = io_request->sg_chain_buffer;
+-		}
+-		sg = sg_next(sg);
+-	}
++	num_sg_in_iu = pqi_build_sg_list(sg_descriptor, sg, sg_count, io_request,
++		ctrl_info->max_sg_per_iu, &chained);
+ 
+-	put_unaligned_le32(CISS_SG_LAST, &sg_descriptor->flags);
+ 	request->partial = chained;
+ 	iu_length += num_sg_in_iu * sizeof(*sg_descriptor);
+ 
 
-Kevin Barnett (14):
-      smartpqi: add support for product id
-      smartpqi: add support for BMIC sense feature cmd and feature bits
-      smartpqi: update AIO Sub Page 0x02 support
-      smartpqi: add support for long firmware version
-      smartpqi: align code with oob driver
-      smartpqi: enable support for NVMe encryption
-      smartpqi: disable write_same for nvme hba disks
-      smartpqi: fix driver synchronization issues
-      smartpqi: convert snprintf to scnprintf
-      smartpqi: change timing of release of QRM memory during OFA
-      smartpqi: return busy indication for IOCTLs when ofa is active
-      smartpqi: add additional logging for LUN resets
-      smartpqi: correct system hangs when resuming from hibernation
-      smartpqi: add new pci ids
-
-Mahesh Rajashekhara (1):
-      smartpqi: fix host qdepth limit
-
-Murthy Bhat (3):
-      smartpqi: add phy id support for the physical drives
-      smartpqi: update sas initiator_port_protocols and target_port_protocols
-      smartpqi: update enclosure identifier in sysf
-
-
- drivers/scsi/smartpqi/smartpqi.h              |  301 +-
- drivers/scsi/smartpqi/smartpqi_init.c         | 3111 ++++++++++-------
- .../scsi/smartpqi/smartpqi_sas_transport.c    |   39 +-
- drivers/scsi/smartpqi/smartpqi_sis.c          |    4 +-
- 4 files changed, 2180 insertions(+), 1275 deletions(-)
-
---
-Signature
