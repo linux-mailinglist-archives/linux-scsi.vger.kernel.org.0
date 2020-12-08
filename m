@@ -2,103 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CE72D3248
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 19:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF712D33C9
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 21:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731093AbgLHSiB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 13:38:01 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:8166 "EHLO
-        mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730854AbgLHSiB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 13:38:01 -0500
-X-IronPort-AV: E=Sophos;i="5.78,403,1599516000"; 
-   d="scan'208";a="366953506"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 19:37:18 +0100
-Date:   Tue, 8 Dec 2020 19:37:18 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        nicolas.palix@univ-grenoble-alpes.fr,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Subject: Re: problem booting 5.10
-In-Reply-To: <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2012081935580.16458@hadrien>
-References: <alpine.DEB.2.22.394.2012081813310.2680@hadrien> <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S1728411AbgLHUZ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 15:25:58 -0500
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:25999 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgLHUZ4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 15:25:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1607459155; x=1638995155;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rjx1hEZdg50UepevKgr6oYYgNBbk1tPcLa7fZHDURhY=;
+  b=FIa/yuB/8qft2N7r084aaVTFEDjAVydI6/qlGPkN5gHcGrcatZbpzdHP
+   ziII9F0fQeNzoxmxVQoC2K9MiuxSZEJQymjSyyiijtlw9YbdyDHnDd2/Z
+   4x8/ApMrbCCXO3R90QxYc0mvRsakIeGRz2F1jbyBcff+rNCxBed6nKrv0
+   CmHYKvU0iOcEiscF3UBseYJu7wJIeGYNcrmv5Kc0t7WLzKHszRxtw0MHh
+   PmloafFgY3s7oabaQMIcKcWIRA1OBCF9lNHKWbr/FSyqNTZ5J9fFqdU1h
+   crKlmc46Uef0mdC0klx7O2bFGiUnjCOHIuQ3cUgF8swk7UBXxPlZu5X1I
+   w==;
+IronPort-SDR: GD72SoHAYlwnN8Gy+uObOiHIFXJKOMXnEy8KoeKu3RMZFozhX+dAIjgbzwmn2HblZL0cbSNiro
+ D5oNREU61prfYhdMREbN2MCAHMlFSFbksHYOpXFuF1uGaWDltLuUbeEWYFkNm6rHn4h2KcpnLI
+ IQyKuQZr5m06acgwGRXgAlJeoHSSta6CjHHP/D03j3XWUpOYYvqHAC893yXV22JNdnlIn0S4Ft
+ L6GP+0rLXcf2SVvErA0OfZbxvNOTPYSki9SaAH2h/06L9/I9hlQBzBTLMERMW0Vg8PlT928jQz
+ P3g=
+X-IronPort-AV: E=Sophos;i="5.78,403,1599548400"; 
+   d="scan'208";a="102011964"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2020 12:36:35 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 8 Dec 2020 12:36:35 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Tue, 8 Dec 2020 12:36:35 -0700
+Subject: [PATCH V2 00/25] smartpqi updates
+From:   Don Brace <don.brace@microchip.com>
+To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
+        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
+        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
+CC:     <linux-scsi@vger.kernel.org>
+Date:   Tue, 8 Dec 2020 13:36:35 -0600
+Message-ID: <160745609917.13450.11882890596851148601.stgit@brunhilda>
+User-Agent: StGit/0.23-dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+These patches are based on Martin Peterson's 5.11/scsi-queue tree
+
+Note that these patches depend on the following three patches
+applied to Martin Peterson's tree:
+  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+  5.11/scsi-queue
+Depends-on: 5443bdc4cc77 scsi: smartpqi: Update version to 1.2.16-012
+Depends-on: 408bdd7e5845 scsi: smartpqi: Correct pqi_sas_smp_handler busy condition
+Depends-on: 1bdf6e934387 scsi: smartpqi: Correct driver removal with HBA disks
+
+This set of changes consist of:
+  * Add support for newer controller hardware.
+    * Refactor AIO and s/g processing code. (No functional changes)
+    * Add write support for RAID 5/6/1 Raid bypass path (or accelerated I/O path).
+    * Add check for sequential streaming.
+    * Add in new PCI-IDs.
+  * Format changes to re-align with our in-house driver. (No functional changes.)
+  * Correct some issues relating to suspend/hibernation/OFA/shutdown.
+    * Block I/O requests during these conditions.
+  * Add in qdepth limit check to limit outstanding commands.
+    to the max values supported by the controller.
+  * Correct some minor issues found during regression testing.
+  * Update the driver version.
+
+Changes since V1:
+  * Re-added 32bit calculations to correct i386 compile issues
+    to patch smartpqi-refactor-aio-submission-code 
+    Reported-by: kernel test robot <lkp@intel.com>
+    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/VMBBGGGE5446SVEOQBRCKBTRRWTSH4AB/
+
+---
+
+Don Brace (7):
+      smartpqi: refactor aio submission code
+      smartpqi: refactor build sg list code
+      smartpqi: add support for raid5 and raid6 writes
+      smartpqi: add support for raid1 writes
+      smartpqi: add stream detection
+      smartpqi: add host level stream detection enable
+      smartpqi: update version to 2.1.6-005
+
+Kevin Barnett (14):
+      smartpqi: add support for product id
+      smartpqi: add support for BMIC sense feature cmd and feature bits
+      smartpqi: update AIO Sub Page 0x02 support
+      smartpqi: add support for long firmware version
+      smartpqi: align code with oob driver
+      smartpqi: enable support for NVMe encryption
+      smartpqi: disable write_same for nvme hba disks
+      smartpqi: fix driver synchronization issues
+      smartpqi: convert snprintf to scnprintf
+      smartpqi: change timing of release of QRM memory during OFA
+      smartpqi: return busy indication for IOCTLs when ofa is active
+      smartpqi: add additional logging for LUN resets
+      smartpqi: correct system hangs when resuming from hibernation
+      smartpqi: add new pci ids
+
+Mahesh Rajashekhara (1):
+      smartpqi: fix host qdepth limit
+
+Murthy Bhat (3):
+      smartpqi: add phy id support for the physical drives
+      smartpqi: update sas initiator_port_protocols and target_port_protocols
+      smartpqi: update enclosure identifier in sysf
 
 
-On Tue, 8 Dec 2020, Linus Torvalds wrote:
+ drivers/scsi/smartpqi/smartpqi.h              |  301 +-
+ drivers/scsi/smartpqi/smartpqi_init.c         | 3111 ++++++++++-------
+ .../scsi/smartpqi/smartpqi_sas_transport.c    |   39 +-
+ drivers/scsi/smartpqi/smartpqi_sis.c          |    4 +-
+ 4 files changed, 2180 insertions(+), 1275 deletions(-)
 
-> On Tue, Dec 8, 2020 at 9:37 AM Julia Lawall <julia.lawall@inria.fr> wrote:
-> >
-> > We have not succeeded to boot 5.10 on our Intel(R) Xeon(R) CPU E7-8870 v4 @
-> > 2.10GHz server.  Previous versions (eg 4.19 - 5.9) boot fine.  We have
-> > tried various rcs.
->
-> So the problem started with rc1?
-
-Yes.
-
->
-> Could you try bisecting - even partially?
-
-Sure.
-
-Thanks for the feedback.
-
-julia
-
-> If you do only six
-> bisections, the number of suspect commits drops from 15k to about 230
-> - which likely pinpoints the suspect area.
->
-> That said, your traces certainly makes me go "Hmm. Some thing broke in
-> SCSI device scanning", with the primary one being the
-> wait_for_completion() one - the rest of the stuck processes seem to be
-> stuck in async_synchronize_cookie_domain() and are presumably waiting
-> for this kthread that is waiting for the scan to finish.
->
-> So I'm adding SCSI people to the cc, just in case they go "Hmm..".
->
-> Martin & co - in the next email Julia also quotes
->
-> > [   51.355655][    T7] scsi 0:0:14:0: Direct-Access     ATA      ST2000LM015-2E81 SDM1 PQ: 0 ANSI: 6
-> > Gave up waiting for root file system device.  Common problems:[..]
->
-> which seems to be more of the same pattern with the SCSI scanning failure.
->
-> Of course, it could be some non-scsi patch that causes this, but.. A
-> bisect would hopefully clarify.
->
-> Leaving the (simplified) backtrace quoted below.
->
->                    Linus
->
-> >The backtrace for rc7 is shown below.
-> >
-> > [  253.207171][  T979] INFO: task kworker/u321:2:1278 blocked for more than 120 seconds.
-> > [  253.224089][  T979]       Tainted: G            E     5.10.0-rc7 #3
-> > [  253.239209][  T979] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > [  253.256990][  T979] task:kworker/u321:2  state:D stack:    0 pid: 1278 ppid:     2 flags:0x00004000
-> > [  253.275552][  T979] Workqueue: events_unbound async_run_entry_fn
-> > [  253.290687][  T979] Call Trace:
-> > [  253.302491][  T979]  __schedule+0x31e/0x890
-> > [  253.315353][  T979]  schedule+0x3c/0xa0
-> > [  253.327688][  T979]  schedule_timeout+0x274/0x310
-> > [  253.379283][  T979]  wait_for_completion+0x8a/0xf0
-> > [  253.392327][  T979]  scsi_complete_async_scans+0x107/0x170
-> > [  253.406115][  T979]  __scsi_add_device+0xf7/0x130
-> > [  253.418974][  T979]  ata_scsi_scan_host+0x98/0x1c0
-> > [  253.431948][  T979]  async_run_entry_fn+0x39/0x160
-> > [  253.444853][  T979]  process_one_work+0x24c/0x490
->
+--
+Signature
