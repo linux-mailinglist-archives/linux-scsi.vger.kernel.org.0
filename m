@@ -2,54 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B17D2D366D
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 23:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598C32D367E
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 23:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728655AbgLHWro (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 17:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727914AbgLHWro (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 17:47:44 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1769AC0613D6
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Dec 2020 14:47:04 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id 4so100490plk.5
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Dec 2020 14:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NhoPWANOuKk74WKFMhZT6qq1p5q2Lo8ht3SDLB7i7r8=;
-        b=vqG3vMEW30YVZkZ3EhpYrXQJPqrDz8uFRuNK8rsW5VbhyJNrLLjnQlQj752zlXRn6b
-         sf7uM8ikLy+9cdeE86GdCCf+vA6H3d2qzpFEvcVhvNBmRj3wC3VPSMIKRltjB+UWokxm
-         uKRgWZzRMB7GDbpDCcYuzsftrmdVLz1nxj24TAETvpHNx96kbNYlMEfXVLSIcWFOk2Lj
-         mXacmgDd92ys9D/4TPewM9gfblhCL9lZoVU+rVsU6JLpZJ5GIjnw8a97vYkJmmghUoWW
-         R4cOryf2iWw0fV2+efNufuUtQUY8k9k9DPoGBTWJ+g11HwB3jW1Nhk84wYrW6WaEAQzH
-         XqYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NhoPWANOuKk74WKFMhZT6qq1p5q2Lo8ht3SDLB7i7r8=;
-        b=H+MOVITpve6r930HrmbZTfJdIQ10CBrY9l/GOGlJRiwjKeIV37HUFyTMvxCZAor7gq
-         nS48A8rHiifql8Da3vfvGa1rPF+p093QWXLCBNzcUQpZsuHz7KxnuSGWy/jrrU93rZ0s
-         0ytGuqN5AT1lsMvzTYkVYi8txRVzLtMvx9aEuCqWWy76lYn0rwqHunZ6bjWuHqx3cR2G
-         cMho9YcRyCOytoMrUuFUe3FvowjkK5la29dQTrikhXzbXOKLhCzfwA6NvfEhk061W3MO
-         zYQTO/0sBcCdcRbSN0RXiB1eXEiNYmeCAA4iYgIKEb/HGECON+oBAi+YMELVf2xcz+Zq
-         Ewyw==
-X-Gm-Message-State: AOAM5314LcyO66sQ73dKgGYPWcV8DW3z5Wj+gd1bDm+5KIS1HjM4c8ia
-        C82i2t4tLplLMt8n+yHi47CHOQ==
-X-Google-Smtp-Source: ABdhPJyTNwc9ppFYE5Krbe4DW1eOX3XMoDFJAurWfPSZUtamJFI1LgNhldLKQx43nqRXajRYEe4NeA==
-X-Received: by 2002:a17:902:a9c1:b029:da:8227:65f7 with SMTP id b1-20020a170902a9c1b02900da822765f7mr221417plr.49.1607467623485;
-        Tue, 08 Dec 2020 14:47:03 -0800 (PST)
-Received: from [192.168.1.134] ([66.219.217.173])
-        by smtp.gmail.com with ESMTPSA id b4sm192701pju.33.2020.12.08.14.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Dec 2020 14:47:02 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: Re: problem booting 5.10
+        id S1731352AbgLHWwK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 17:52:10 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:52328 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728147AbgLHWwJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 17:52:09 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B8MnJ4h167149;
+        Tue, 8 Dec 2020 22:51:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=3+QUZSt2q2jWmzvwsgmOVm1eKlyky2fgihAM4ea9S5I=;
+ b=yBJMH4oZbyn/4+iPwjViFVp2Zl4jHs29sXx9X1EaGJn3ya6cN8MlCQbmXrABTdEpPz/3
+ MFpg6gLFNe5LqG3zdoTIriY/LX50N57vjRmAUJivn0J2PnkpgDN1sgy/kUAD0zGn6HHP
+ NCImuuwuiMGPaE14DJAq4mDpOJ4JBhmi+OYjjw98GOhcKuckG9z/KQ+noaCg/4ZfQhKx
+ d6UsTKZlWtAM2IFt8xh0q405PJ3OGpDCoWa7wp+CWEPhjx7secUq0NYPSj4i6YGf4Haq
+ OQVQVJ15kw6v2b3dUv8IsUTtWlbKLHgzEpsEffnh40n8Q/iobcmkKqZIYgr+Rnr6/l37 eQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 35825m5dm1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 08 Dec 2020 22:51:15 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B8MofZP046160;
+        Tue, 8 Dec 2020 22:51:15 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 358kytmpc4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Dec 2020 22:51:15 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B8MpAZq015951;
+        Tue, 8 Dec 2020 22:51:11 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 08 Dec 2020 14:51:10 -0800
 To:     Julia Lawall <julia.lawall@inria.fr>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         John Garry <john.garry@huawei.com>,
@@ -60,57 +50,47 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-scsi <linux-scsi@vger.kernel.org>,
         Kashyap Desai <kashyap.desai@broadcom.com>,
         Ming Lei <ming.lei@redhat.com>
+Subject: Re: problem booting 5.10
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1sg8fud7y.fsf@ca-mkp.ca.oracle.com>
 References: <alpine.DEB.2.22.394.2012081813310.2680@hadrien>
- <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
- <yq1sg8gunxy.fsf@ca-mkp.ca.oracle.com>
- <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
- <9106e994-bb4b-4148-1280-f08f71427420@huawei.com>
- <CAHk-=wjsWB612YA0OSpVPkzePxQWyqcSGDaY1-x3R2AgjOCqSQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2012082339470.16458@hadrien>
-Message-ID: <ca63ada5-76a6-dae9-e759-838386831f83@kernel.dk>
-Date:   Tue, 8 Dec 2020 15:47:00 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
+        <yq1sg8gunxy.fsf@ca-mkp.ca.oracle.com>
+        <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
+        <9106e994-bb4b-4148-1280-f08f71427420@huawei.com>
+        <CAHk-=wjsWB612YA0OSpVPkzePxQWyqcSGDaY1-x3R2AgjOCqSQ@mail.gmail.com>
+        <alpine.DEB.2.22.394.2012082339470.16458@hadrien>
+Date:   Tue, 08 Dec 2020 17:51:07 -0500
+In-Reply-To: <alpine.DEB.2.22.394.2012082339470.16458@hadrien> (Julia Lawall's
+        message of "Tue, 8 Dec 2020 23:40:44 +0100 (CET)")
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.22.394.2012082339470.16458@hadrien>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
+ malwarescore=0 suspectscore=1 mlxlogscore=852 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012080143
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 adultscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=863 clxscore=1015 priorityscore=1501 mlxscore=0
+ spamscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012080143
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Dec 8, 2020 at 3:42 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> On Tue, 8 Dec 2020, Linus Torvalds wrote:
->
-> > On Tue, Dec 8, 2020 at 1:14 PM John Garry <john.garry@huawei.com> wrote:
-> > >
-> > > JFYI, About "scsi: megaraid_sas: Added support for shared host tagset
-> > > for cpuhotplug", we did have an issue reported here already from Qian
-> > > about a boot hang:
-> >
-> > Hmm. That does sound like it might be it.
-> >
-> > At this point, the patches from Ming Lei seem to be a riskier approach
-> > than perhaps just reverting the megaraid_sas change?
-> >
-> > It looks like those patches are queued up for 5.11, and we could
-> > re-apply the megaraid_sas change then?
-> >
-> > Jens, comments?
-> >
-> > And Julia - if it's that thing, then a
-> >
-> >     git revert 103fbf8e4020
-> >
-> > would be the thing to test.
->
-> This solves the problem.  Starting from 5.10-rc7 and doing this
-> revert, I get a kernel that boots.
 
-Thanks for testing! Linus, do you just want to revert this, or do you
-want me to queue it up?
+Julia,
+
+> This solves the problem.  Starting from 5.10-rc7 and doing this revert, I
+> get a kernel that boots.
+
+Thanks for testing!
+
+I'll go ahead and revert 103fbf8e4020 in 5.10/scsi-fixes. We can revisit
+this change in 5.11 when Ming's fixes are in place.
 
 -- 
-Jens Axboe
-
+Martin K. Petersen	Oracle Linux Engineering
