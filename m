@@ -2,75 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 376F02D2C14
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 14:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742812D2C66
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 14:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729392AbgLHNhg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 08:37:36 -0500
-Received: from mail-m972.mail.163.com ([123.126.97.2]:38440 "EHLO
-        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729020AbgLHNhf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 08:37:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=t2VJOPJlWsz8l5wsja
-        RBlQoKQE79rv25LpyRWLQ/ba0=; b=b2aJ7/dSbQG7CMDbVNBHIkBCvL2U6vyJ2b
-        vExmabzSzvEr357wuq/GFDu28Qr3KxTqY1GYhZhj/wEo6glJkzf40WlsAhvoVewk
-        X4AyUx0724fXwl5kISaoLyWBAOolkXoUPNTtr9C7hBxEik7MHy4uIe6dtURBmEr+
-        OGQ8qSzLw=
-Received: from localhost.localdomain (unknown [202.112.113.212])
-        by smtp2 (Coremail) with SMTP id GtxpCgC3z3pYfc9fHjmbEQ--.13268S4;
-        Tue, 08 Dec 2020 21:19:26 +0800 (CST)
-From:   Xiaohui Zhang <ruc_zhangxiaohui@163.com>
-To:     Xiaohui Zhang <ruc_zhangxiaohui@163.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] scsi: Fix possible buffer overflows in storvsc_queuecommand
-Date:   Tue,  8 Dec 2020 21:19:18 +0800
-Message-Id: <20201208131918.31534-1-ruc_zhangxiaohui@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: GtxpCgC3z3pYfc9fHjmbEQ--.13268S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtF4xZF4rAw4fXF4xJry7ZFb_yoWDAFbE9w
-        4rKr97Wry5Arn7Xr1DGFy3ua4avr4UWr1rua12v39xArWjywsav34vqrs0vr48trWUuayD
-        A3Z5Xr1Fy3W0kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRR9mRUUUUUU==
-X-Originating-IP: [202.112.113.212]
-X-CM-SenderInfo: puxfs6pkdqw5xldrx3rl6rljoofrz/1tbipR70MFUMbDH2ZAAAsp
+        id S1729684AbgLHN5W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 08:57:22 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:37922 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729678AbgLHN5V (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 08:57:21 -0500
+X-UUID: 4098dee9f14746dfa395ca8d74c7ef55-20201208
+X-UUID: 4098dee9f14746dfa395ca8d74c7ef55-20201208
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1451369614; Tue, 08 Dec 2020 21:56:38 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 8 Dec 2020 21:56:34 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 8 Dec 2020 21:56:34 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <nguyenb@codeaurora.org>,
+        <bjorn.andersson@linaro.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v2 0/2] scsi: ufs: Re-enable WB after device reset
+Date:   Tue, 8 Dec 2020 21:56:33 +0800
+Message-ID: <20201208135635.15326-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 29694EDB5F58899C9EB8D22B45F58AE6EF1CEAF90F164B2504683A26C00FED832000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+Hi,
 
-storvsc_queuecommand() calls memcpy() without checking
-the destination size may trigger a buffer overflower,
-which a local user could use to cause denial of service
-or the execution of arbitrary code.
-Fix it by putting the length check before calling memcpy().
+This series fixes up an issue that WB is not re-enabled after device reset.
 
-Signed-off-by: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
----
- drivers/scsi/storvsc_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+Stanley Chu (2):
+  scsi: ufs: Re-enable WriteBooster after device reset
+  scsi: ufs: Uninline ufshcd_vops_device_reset function
 
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index 0c65fbd41..09b60a4c0 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -1729,6 +1729,8 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 
- 	vm_srb->cdb_length = scmnd->cmd_len;
- 
-+	if (vm_srb->cdb_length > STORVSC_MAX_CMD_LEN)
-+		vm_srb->cdb_length = STORVSC_MAX_CMD_LEN;
- 	memcpy(vm_srb->cdb, scmnd->cmnd, vm_srb->cdb_length);
- 
- 	sgl = (struct scatterlist *)scsi_sglist(scmnd);
+ drivers/scsi/ufs/ufshcd.c | 27 ++++++++++++++++++++++-----
+ drivers/scsi/ufs/ufshcd.h | 14 +++++---------
+ 2 files changed, 27 insertions(+), 14 deletions(-)
+
 -- 
-2.17.1
+2.18.0
 
