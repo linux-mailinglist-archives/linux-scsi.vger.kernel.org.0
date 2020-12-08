@@ -2,102 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D42A02D34FA
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 22:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385312D3511
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 22:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729671AbgLHVKg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 16:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729308AbgLHVKf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 16:10:35 -0500
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304E3C06179C;
-        Tue,  8 Dec 2020 13:09:55 -0800 (PST)
-Received: by mail-ej1-x644.google.com with SMTP id lt17so26715047ejb.3;
-        Tue, 08 Dec 2020 13:09:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pcUFeGN1uwzpyJXiBF01tsjkIE/O4GFCTJ/pyCmdmBU=;
-        b=QIHsxzx6gd3fFLf1zUHC6i3YFsw4z7RdrhdaLFyeEJBDe4e+XqhkZnyMoHL7iVe17v
-         RhBzzd4VpQyRi4uO7MdaUlCrW5djq6MvQx+BHf1BWXC3pyjtpSYIy6KzkuYLQgljszdO
-         hp42xJ2m42tBXR05FVz++pQExVQOufK8o7Z6vn5DmDrwCqmx+LI6DVqPv32fZTN9f8MJ
-         Vq8QssCLFTqttTQi0vQFtCP49gKd/W0zDDRYLRf39HiEKHAR4GpqDzRo3yEtKdyTYrt6
-         oY0UAN4nJvLp2MwJY8Ob55Nks31Sdxts/bhMtqmSvCX+ozN31L45BuJ/b0zQiORe/HDk
-         BN7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pcUFeGN1uwzpyJXiBF01tsjkIE/O4GFCTJ/pyCmdmBU=;
-        b=OPoM6q7ur8wuKrl1cDFdz+1TEqDrRP1Yy3wARly7SNiYD8A79aT+g7UPgaFF5/D3m9
-         PkPjJXa87w1HfGX4PJIvZnqlleWR+SbY/tCHtc0gg56/qrlCNh7A09sjk9QHgRFjYbzC
-         U1jSV2439fMnDE43RltZcifYU/MNGGGF0HnHfFBRUI/uNAw0kK7jgg5M1KuRFgjwln1z
-         NGcNIbr1C5xgCRzMlCVNvYb/OE3IV2zgzNV0vGlzTdwHz+06L5rAMzN65LuurQJUQ2VB
-         VPy89ESVgHMod1WBA5SMXcl9d3J+olpdyUjM/dq9r3AfQocvmtuNmt0dw+7bqkLiUnHM
-         kM4A==
-X-Gm-Message-State: AOAM530W304NZ2zsNgXqPUhIQdhwP1DvGdBNB4TiXxquFPNar1bEZi1k
-        vuKzowp31StD/KgHh1w0eKM=
-X-Google-Smtp-Source: ABdhPJyjzP5NFJy3eu7Vc0AjmAczfmBkCADjF9lFg/pGiZEoLKxkC7/UjFEbyFl6SMPPHoMdUyxs4g==
-X-Received: by 2002:a17:906:d62:: with SMTP id s2mr5548458ejh.61.1607461793933;
-        Tue, 08 Dec 2020 13:09:53 -0800 (PST)
-Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.gmail.com with ESMTPSA id n22sm17908edr.11.2020.12.08.13.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Dec 2020 13:09:53 -0800 (PST)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] scsi: ufs: Changes comment in the function ufshcd_wb_probe()
-Date:   Tue,  8 Dec 2020 22:09:41 +0100
-Message-Id: <20201208210941.2177-4-huobean@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201208210941.2177-1-huobean@gmail.com>
-References: <20201208210941.2177-1-huobean@gmail.com>
+        id S1728812AbgLHVP3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 16:15:29 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2227 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727660AbgLHVP3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 16:15:29 -0500
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CrCXd65Qtz67FSB;
+        Wed,  9 Dec 2020 05:11:29 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 8 Dec 2020 22:14:47 +0100
+Received: from [10.210.169.98] (10.210.169.98) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 8 Dec 2020 21:14:46 +0000
+Subject: Re: problem booting 5.10
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Julia Lawall <julia.lawall@inria.fr>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <nicolas.palix@univ-grenoble-alpes.fr>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Ming Lei <ming.lei@redhat.com>
+References: <alpine.DEB.2.22.394.2012081813310.2680@hadrien>
+ <CAHk-=wi=R7uAoaVK9ewDPdCYDn1i3i19uoOzXEW5Nn8UV-1_AA@mail.gmail.com>
+ <yq1sg8gunxy.fsf@ca-mkp.ca.oracle.com>
+ <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <9106e994-bb4b-4148-1280-f08f71427420@huawei.com>
+Date:   Tue, 8 Dec 2020 21:14:10 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=whThuW=OckyeH0rkJ5vbbbpJzMdt3YiMEE7Y5JuU1EkUQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.210.169.98]
+X-ClientProxiedBy: lhreml719-chm.china.huawei.com (10.201.108.70) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On 08/12/2020 19:19, Linus Torvalds wrote:
+> On Tue, Dec 8, 2020 at 10:59 AM Martin K. Petersen
+> <martin.petersen@oracle.com> wrote:
+>>
+>>> So I'm adding SCSI people to the cc, just in case they go "Hmm..".
+>>
+>> Only change in this department was:
+>>
+>> 831e3405c2a3 scsi: core: Don't start concurrent async scan on same host
+> 
+> Yeah, I found that one too, and dismissed it for the same reason you
+> did - it wasn't in rc1. Plus it looked very simple.
+> 
+> That said, maybe Julia might have misspoken, and rc1 was ok, so I
+> guess it's possible. The scan_mutex does show up in that "locks held"
+> list, although I can't see why it would matter. But it does
+> potentially change timing (so it could expose some existing race), if
+> nothing else.
+> 
+> But let's make sure Jens is aware of this too, in case it's some ATA
+> issue. Not that any of those handful of 5.10 changes look remotely
+> likely _either_.
+> 
+> Jens, see
+> 
+>     https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2012081813310.2680@hadrien/
+> 
+> if you don't already have the lkml thread locally.. There's not enough
+> of the dmesg to even really guess what Julia's actual hardware is,
+> apart from it being a Seagate SATA disk. Julia? What controllers and
+> disks do you have show up when things work?
+> 
+>               Linus
+> .
+> 
 
-USFHCD supports WriteBooster "LU dedicated buffer” mode and
-“shared buffer” mode both, so changes the comment in the
-function ufshcd_wb_probe().
+JFYI, About "scsi: megaraid_sas: Added support for shared host tagset 
+for cpuhotplug", we did have an issue reported here already from Qian 
+about a boot hang:
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Can Guo <cang@codeaurora.org>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufshcd.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+https://lore.kernel.org/linux-scsi/fe3dff7dae4494e5a88caffbb4d877bbf472dceb.camel@redhat.com/
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index f3ba46c48383..75ea74748bc6 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -7167,10 +7167,9 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
- 		goto wb_disabled;
- 
- 	/*
--	 * WB may be supported but not configured while provisioning.
--	 * The spec says, in dedicated wb buffer mode,
--	 * a max of 1 lun would have wb buffer configured.
--	 * Now only shared buffer mode is supported.
-+	 * WB may be supported but not configured while provisioning. The spec
-+	 * says, in dedicated wb buffer mode, a max of 1 lun would have wb
-+	 * buffer configured.
- 	 */
- 	dev_info->b_wb_buffer_type =
- 		desc_buf[DEVICE_DESC_PARAM_WB_TYPE];
--- 
-2.17.1
+And the solution to that specific problem is in:
+https://lore.kernel.org/linux-block/20201203012638.543321-1-ming.lei@redhat.com/
 
+This issue may be related, so you could test by reverting that megaraid 
+sas commit or setting the driver module param "host_tagset_enable=0" 
+just to see.
+
+Thanks,
+John
