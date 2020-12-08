@@ -2,168 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64242D2C69
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 14:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FC12D2CD5
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Dec 2020 15:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729700AbgLHN5Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 08:57:24 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37939 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729680AbgLHN5X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 08:57:23 -0500
-X-UUID: 04896d5bc9764a2e8ec41ba1c2bb8256-20201208
-X-UUID: 04896d5bc9764a2e8ec41ba1c2bb8256-20201208
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 510762096; Tue, 08 Dec 2020 21:56:38 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 8 Dec 2020 21:56:34 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Dec 2020 21:56:34 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <nguyenb@codeaurora.org>,
-        <bjorn.andersson@linaro.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 2/2] scsi: ufs: Uninline ufshcd_vops_device_reset function
-Date:   Tue, 8 Dec 2020 21:56:35 +0800
-Message-ID: <20201208135635.15326-3-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201208135635.15326-1-stanley.chu@mediatek.com>
+        id S1729601AbgLHOO1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 09:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729457AbgLHOO1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 09:14:27 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BB7C061749;
+        Tue,  8 Dec 2020 06:13:47 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id c7so17719327edv.6;
+        Tue, 08 Dec 2020 06:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eSPfpQbfD8TtnWjYs+6jj8qzhsWODAim1cckJ/MJTu0=;
+        b=pMxp4TNM4M+N05Yx9TQgHM79zWQBDbpvpnmuI555O1zxarA53NmboJkgdjPiAvm2rk
+         tA5Nxy3pEFTL8n62f5NDpQA2anFbpBzV6UuZnAmMdt23xIg1F4mQWZtvO0Ea4oWZhiqR
+         Mk788rhqKcb8Z+qCwERSPi7jnRwjPYRDARTP9lDWSyID9m+1ZcJ8ccjghI6h6AZrh5C3
+         2AdQvAAw5BgPumeEHZboIkxXk2yESbZyjnBCrArWoBb7TIKKaC+w3ANmYjV5CD8tdlck
+         yGAsthsXggHQnxbc/Why3OhoTu2e/oBSBGMEEPYd2fLqeayYYbcl1HqO0wDamcPNgkdF
+         OaGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eSPfpQbfD8TtnWjYs+6jj8qzhsWODAim1cckJ/MJTu0=;
+        b=Iq2Jnh3FvMXcotoSClQ3hLSw3Dwy34Lys/OGAEebO8dHjNoSuVgb1eRR9P38Bw2wub
+         R1yKWs681GCHNrF7CEj5+sCLuW60QEbaD2QMEwZUT/BAFToxpVZ7oj9GKqISazbqC+Mp
+         EmHrEUggY7s/UVRFDKBrp5vDUesmOg5istNKCQftQ8lQAcmkLCnQfNSUWibxN+i+SuXz
+         tWoLIzRFZs9n2KUUcJwke6saDRFfS+EUwijzhNQcnH88zhXtjrsGJSgZa8SIojihW/cV
+         ExbcOVdl6LQHLhciSBFieGMUeFSn3nWOo7q7ccSfmu7yQtUTd78tt3E2suCijaDojsRU
+         8jMg==
+X-Gm-Message-State: AOAM533gFVzl6m6pyfU+gxKO5ey7GbW45SKMCYCPb/EAo2CiST9j6Qyx
+        NoaT2V+FzwTY+nHhglv6GpE=
+X-Google-Smtp-Source: ABdhPJxT3MS0tLQzrz5zGTrmxsemf1EdNibb6+Ece9/iVj28PTNygmtdP13l0xPVSWG+mugPOMO4PA==
+X-Received: by 2002:a50:fb1a:: with SMTP id d26mr25055415edq.101.1607436825849;
+        Tue, 08 Dec 2020 06:13:45 -0800 (PST)
+Received: from ubuntu-laptop (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
+        by smtp.googlemail.com with ESMTPSA id s5sm15577093eju.98.2020.12.08.06.13.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 08 Dec 2020 06:13:45 -0800 (PST)
+Message-ID: <970af8b1abf565184bf37c3c055bf42ad760201a.camel@gmail.com>
+Subject: Re: [PATCH v2 1/2] scsi: ufs: Re-enable WriteBooster after device
+ reset
+From:   Bean Huo <huobean@gmail.com>
+To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, avri.altman@wdc.com,
+        alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     beanhuo@micron.com, asutoshd@codeaurora.org, cang@codeaurora.org,
+        matthias.bgg@gmail.com, bvanassche@acm.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nguyenb@codeaurora.org, bjorn.andersson@linaro.org,
+        kuohong.wang@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, andy.teng@mediatek.com,
+        chaotian.jing@mediatek.com, cc.chou@mediatek.com,
+        jiajie.hao@mediatek.com, alice.chao@mediatek.com
+Date:   Tue, 08 Dec 2020 15:13:43 +0100
+In-Reply-To: <20201208135635.15326-2-stanley.chu@mediatek.com>
 References: <20201208135635.15326-1-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 101DC9A9E8D7F51DCEBAB7D3E09A549AADA7E869E7FE7D2790AA99B6101A000D2000:8
-X-MTK:  N
+         <20201208135635.15326-2-stanley.chu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Since more and more statements showing up in ufshcd_vops_device_reset(),
-uninline it to allow compiler making possibly better optimization.
+On Tue, 2020-12-08 at 21:56 +0800, Stanley Chu wrote:
+> index 08c8a591e6b0..36d367eb8139 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -1221,8 +1221,13 @@ static inline void
+> ufshcd_vops_device_reset(struct ufs_hba *hba)
+>         if (hba->vops && hba->vops->device_reset) {
+>                 int err = hba->vops->device_reset(hba);
+>  
+> -               if (!err)
+> +               if (!err) {
+>                         ufshcd_set_ufs_dev_active(hba);
+> +                       if (ufshcd_is_wb_allowed(hba)) {
+> +                               hba->wb_enabled = false;
+> +                               hba->wb_buf_flush_enabled = false;
+> +                       }
+> +               }
 
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufshcd.c | 27 ++++++++++++++++++++++-----
- drivers/scsi/ufs/ufshcd.h | 19 +++++--------------
- 2 files changed, 27 insertions(+), 19 deletions(-)
+Stanley,
+how do you think group wb_buf_flush_enabled and wb_enabled to the
+dev_info, since they are UFS device attributes. means they are set only
+when UFS device flags being set.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index c1c401b2b69d..b2ca1a6ad426 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -580,6 +580,23 @@ static void ufshcd_print_pwr_info(struct ufs_hba *hba)
- 		 hba->pwr_info.hs_rate);
- }
- 
-+static void ufshcd_device_reset(struct ufs_hba *hba)
-+{
-+	int err;
-+
-+	err = ufshcd_vops_device_reset(hba);
-+
-+	if (!err) {
-+		ufshcd_set_ufs_dev_active(hba);
-+		if (ufshcd_is_wb_allowed(hba)) {
-+			hba->wb_enabled = false;
-+			hba->wb_buf_flush_enabled = false;
-+		}
-+	}
-+	if (err != -EOPNOTSUPP)
-+		ufshcd_update_evt_hist(hba, UFS_EVT_DEV_RESET, err);
-+}
-+
- void ufshcd_delay_us(unsigned long us, unsigned long tolerance)
- {
- 	if (!us)
-@@ -3932,7 +3949,7 @@ int ufshcd_link_recovery(struct ufs_hba *hba)
- 	spin_unlock_irqrestore(hba->host->host_lock, flags);
- 
- 	/* Reset the attached device */
--	ufshcd_vops_device_reset(hba);
-+	ufshcd_device_reset(hba);
- 
- 	ret = ufshcd_host_reset_and_restore(hba);
- 
-@@ -6933,7 +6950,7 @@ static int ufshcd_reset_and_restore(struct ufs_hba *hba)
- 
- 	do {
- 		/* Reset the attached device */
--		ufshcd_vops_device_reset(hba);
-+		ufshcd_device_reset(hba);
- 
- 		err = ufshcd_host_reset_and_restore(hba);
- 	} while (err && --retries);
-@@ -8712,7 +8729,7 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	 * further below.
- 	 */
- 	if (ufshcd_is_ufs_dev_deepsleep(hba)) {
--		ufshcd_vops_device_reset(hba);
-+		ufshcd_device_reset(hba);
- 		WARN_ON(!ufshcd_is_link_off(hba));
- 	}
- 	if (ufshcd_is_link_hibern8(hba) && !ufshcd_uic_hibern8_exit(hba))
-@@ -8722,7 +8739,7 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- set_dev_active:
- 	/* Can also get here needing to exit DeepSleep */
- 	if (ufshcd_is_ufs_dev_deepsleep(hba)) {
--		ufshcd_vops_device_reset(hba);
-+		ufshcd_device_reset(hba);
- 		ufshcd_host_reset_and_restore(hba);
- 	}
- 	if (!ufshcd_set_dev_pwr_mode(hba, UFS_ACTIVE_PWR_MODE))
-@@ -9321,7 +9338,7 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
- 	}
- 
- 	/* Reset the attached device */
--	ufshcd_vops_device_reset(hba);
-+	ufshcd_device_reset(hba);
- 
- 	ufshcd_init_crypto(hba);
- 
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 36d367eb8139..9bb5f0ed4124 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -1216,21 +1216,12 @@ static inline void ufshcd_vops_dbg_register_dump(struct ufs_hba *hba)
- 		hba->vops->dbg_register_dump(hba);
- }
- 
--static inline void ufshcd_vops_device_reset(struct ufs_hba *hba)
-+static inline int ufshcd_vops_device_reset(struct ufs_hba *hba)
- {
--	if (hba->vops && hba->vops->device_reset) {
--		int err = hba->vops->device_reset(hba);
--
--		if (!err) {
--			ufshcd_set_ufs_dev_active(hba);
--			if (ufshcd_is_wb_allowed(hba)) {
--				hba->wb_enabled = false;
--				hba->wb_buf_flush_enabled = false;
--			}
--		}
--		if (err != -EOPNOTSUPP)
--			ufshcd_update_evt_hist(hba, UFS_EVT_DEV_RESET, err);
--	}
-+	if (hba->vops && hba->vops->device_reset)
-+		return hba->vops->device_reset(hba);
-+
-+	return -EOPNOTSUPP;
- }
- 
- static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
--- 
-2.18.0
+Reviewed-by: Bean Huo <beanhuo@micron.com>
 
