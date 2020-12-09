@@ -2,83 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960532D47D8
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1E32D4823
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730070AbgLIRZz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Dec 2020 12:25:55 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:32820 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732488AbgLIRY6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:24:58 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HJfGi111633;
-        Wed, 9 Dec 2020 17:24:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=2l7htSo6MD1dOx5sHS9E/jqRgPMmrfiFHkATVuhk0/M=;
- b=b0jd0zuBjH8IHgFXbldhSWbEBqer47d/ezG2OCaeOZPNaUQpYjuSPkQozSB8dDFvhWxn
- Rd6lAWAnLmrbUuesyaoyWPf8miHKJWE2ETylKCRitcq8mtw7i4r6p//m9hJJjaTX+ZGq
- wTXftEyNNS5CPPVMFSKxi+CZnl1cGAA8S97imezh7qnEbRzSGY7q63n+/7owtvrAnDgz
- JccWunlVLg1wMJdBVNYdejOx4bJFv9I46eIMBXaLYub5yx4B5vFuuKkcbIKGG4uzv3MI
- UMARLVDCpaRHVqDmcnWLMYkR1kD6IqwUz5lCnQfdBrIOuTgJbgslrN16iZAq6UP8IUUL cw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 35825m9cw5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Dec 2020 17:24:09 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HKY7T186037;
-        Wed, 9 Dec 2020 17:24:09 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 358m40juqc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Dec 2020 17:24:09 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B9HO8is014474;
-        Wed, 9 Dec 2020 17:24:08 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 09 Dec 2020 09:24:08 -0800
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Zhang Qilong <zhangqilong3@huawei.com>, jinpu.wang@cloud.ionos.com,
-        jejb@linux.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: pm80xx: Fix error return in pm8001_pci_probe
-Date:   Wed,  9 Dec 2020 12:23:27 -0500
-Message-Id: <160753457753.14816.2017756599021747206.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201205115551.2079471-1-zhangqilong3@huawei.com>
-References: <20201205115551.2079471-1-zhangqilong3@huawei.com>
+        id S1732844AbgLIRj0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Dec 2020 12:39:26 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2236 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732053AbgLIRjZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:39:25 -0500
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CrkkC2Gbfz67Mb9;
+        Thu, 10 Dec 2020 01:36:35 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 9 Dec 2020 18:38:41 +0100
+Received: from [10.210.171.175] (10.210.171.175) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 9 Dec 2020 17:38:40 +0000
+Subject: Re: [PATCH v2 1/1] hisi_sas: Fix possible buffer overflows in
+ prep_ssp_v3_hw
+To:     Xiaohui Zhang <ruc_zhangxiaohui@163.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20201209124818.25122-1-ruc_zhangxiaohui@163.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <87979504-6540-6b38-88df-938390ae5d3c@huawei.com>
+Date:   Wed, 9 Dec 2020 17:38:05 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 adultscore=0
- bulkscore=0 phishscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012090122
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501 mlxscore=0
- spamscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012090122
+In-Reply-To: <20201209124818.25122-1-ruc_zhangxiaohui@163.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.210.171.175]
+X-ClientProxiedBy: lhreml738-chm.china.huawei.com (10.201.108.188) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 5 Dec 2020 19:55:51 +0800, Zhang Qilong wrote:
+On 09/12/2020 12:48, Xiaohui Zhang wrote:
+> From: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+> 
+> prep_ssp_v3_hw() calls memcpy() without checking the destination
+> size may trigger a buffer overflower.
+> 
+> buf_cmd should be a ssp_tmf_iu struct through the analysis of
 
-> Forget to set error code when pm8001_configure_phy_settings
-> failed. We fixed it by using rc to store return value of
-> pm8001_configure_phy_settings.
+hmmm... but you change the !tmf path.
 
-Applied to 5.11/scsi-queue, thanks!
+> the command below:
+> buf_cmd = hisi_sas_cmd_hdr_addr_mem(slot) +
+>          sizeof(struct ssp_frame_hdr);
+> 
+> Then buf_cmd + 12 should point to tag, so the length parameter
+> of memcpy() should not exceed sizeof(__be16)+sizeof(u8)*14):
+> struct ssp_tmf_iu {
+>      u8     lun[8];
+>      u16    _r_a;
+>      u8     tmf;
+>      u8     _r_b;
+>      __be16 tag;
+>      u8     _r_c[14];
+> } __attribute__ ((packed));
+> 
+> Signed-off-by: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+> ---
+>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> index 7133ca859..d02831c17 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> @@ -1267,7 +1267,9 @@ static void prep_ssp_v3_hw(struct hisi_hba *hisi_hba,
+>   	memcpy(buf_cmd, &task->ssp_task.LUN, 8);
+>   	if (!tmf) {
+>   		buf_cmd[9] = ssp_task->task_attr | (ssp_task->task_prio << 3);
+> -		memcpy(buf_cmd + 12, scsi_cmnd->cmnd, scsi_cmnd->cmd_len);
+> +		memcpy(buf_cmd + 12, scsi_cmnd->cmnd,
+> +		       min_t(unsigned short, scsi_cmnd->cmd_len,
+> +			     sizeof(__be16) + sizeof(u8) * 14));
 
-[1/1] scsi: pm80xx: Fix error return in pm8001_pci_probe
-      https://git.kernel.org/mkp/scsi/c/97031ccffa4f
+Again, this is not the right thing to do, and I don't think that this 
+code needs fixing at all.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+There should be a contract already that the driver is not sent cdb len > 
+16, and this is sizeof(ssp_command_iu.cdb).
+
+And, if we were sent too much data, then we would/should error.
+
+Thanks,
+John
