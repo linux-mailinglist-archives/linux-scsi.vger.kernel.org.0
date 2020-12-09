@@ -2,76 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8A92D47DB
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BA72D47CD
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732335AbgLIRYs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Dec 2020 12:24:48 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:53338 "EHLO
+        id S1731574AbgLIRY2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Dec 2020 12:24:28 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:52140 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732200AbgLIRYe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:24:34 -0500
+        with ESMTP id S1731244AbgLIRYS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:24:18 -0500
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HJwqh078310;
-        Wed, 9 Dec 2020 17:23:34 GMT
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HK6ac078542;
+        Wed, 9 Dec 2020 17:23:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=5Zx6gGYBv1twjEiZEeKE229v8R8lxWyd3YNzIzSTGe8=;
- b=o/Z8E/8SIokqQNm3FpLY5FJGw7p2FGzO0fuhkvfNKGHo5PNjeU02Z2D9khoYXnP7Kzo5
- L2djXwmomP8h0EDpLtm20KKHKSFy8qseWEc85i/QdHLca6SkmQV8yHf6jTL8BHKYlAWk
- BO942WWATQh6JUFVFXO/nbJwqJ65Kxd1VXk/SreNTXrvd1O88/gq2swMuywGxD/EIPeH
- bGLjOoaVxbo/at+OnCrQk+LeznE3bKeYofSTi2KeCz04LJ+UwCFjGXplwOoOWgK6rJ0Z
- b6HGwmSX/Ybl2xZDnOgH1MJvSwBHxGic4C23V8h4y2PIyI1IAQiVxf8SkerFXaKGzoV9 ag== 
+ bh=gwNIt2FBy+r3VieI/FhGNcprg9z8Y9mB79smd7XjyC0=;
+ b=F2k6Dsn6OlDS9qNGEnS8pL3bOjHP9NrdUy30zUv6Q41GbKGeN7ugBOE2548S4W58zl59
+ 0AQIIVuE/zGJOBeYDxLMkIVAhLa0qlg0vZRDqQhgldF+lw0oS6OBosgIGPQqJ1SueNPE
+ XxS4wwfXmWhzrlFTbNCAUBQOpu/UHsEiWW3HVCqzpzmAH/ohPjJTWalpLKly05VEUT7d
+ RWtCbvKgFE1VwwRbrxz1shEPN82d3JEXxfkfnXTjFcb9gD1HV1OEn2wy4idH/koAvDvk
+ a4nT2KrQnTJEKTZJTDX/KM9YmQFRSawfFQ5O/FOReY3aqnAPigKCQjAW8ZnSTKwDryPC Eg== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 3581mr1a3g-1
+        by userp2130.oracle.com with ESMTP id 3581mr1a3d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Dec 2020 17:23:34 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HKqhf099961;
-        Wed, 9 Dec 2020 17:23:34 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 358ksqdjms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 09 Dec 2020 17:23:33 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B9HNUEM017666;
-        Wed, 9 Dec 2020 17:23:30 GMT
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HKqlK100041;
+        Wed, 9 Dec 2020 17:23:33 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 358ksqdjm2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Dec 2020 17:23:32 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B9HNVT2017684;
+        Wed, 9 Dec 2020 17:23:31 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 09 Dec 2020 09:23:29 -0800
+        with ESMTP ; Wed, 09 Dec 2020 09:23:31 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Nathan Chancellor <natechancellor@gmail.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        clang-built-linux@googlegroups.com, Can Guo <cang@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] ufshcd: fix Wsometimes-uninitialized warning
-Date:   Wed,  9 Dec 2020 12:23:14 -0500
-Message-Id: <160753457755.14816.4979467058172336849.b4-ty@oracle.com>
+To:     saravanak@google.com, asutoshd@codeaurora.org, salyzyn@google.com,
+        rnayak@codeaurora.org, kernel-team@android.com,
+        hongwus@codeaurora.org, Can Guo <cang@codeaurora.org>,
+        nguyenb@codeaurora.org, linux-scsi@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH V7 0/3] Minor fixes to UFS error handling
+Date:   Wed,  9 Dec 2020 12:23:15 -0500
+Message-Id: <160753457754.14816.406841787648084993.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201203223137.1205933-1-arnd@kernel.org>
-References: <20201203223137.1205933-1-arnd@kernel.org>
+In-Reply-To: <1606910644-21185-1-git-send-email-cang@codeaurora.org>
+References: <1606910644-21185-1-git-send-email-cang@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=925 suspectscore=0
  bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0 spamscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012090122
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=938
  clxscore=1015 malwarescore=0 priorityscore=1501 adultscore=0
  lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxscore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
@@ -80,24 +70,29 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 3 Dec 2020 23:31:26 +0100, Arnd Bergmann wrote:
+On Wed, 2 Dec 2020 04:04:00 -0800, Can Guo wrote:
 
-> clang complains about a possible code path in which a variable is
-> used without an initialization:
+> This series mainly fixes below two things which come along with UFS error
+> handling in some corner cases.
+> [1] Concurrency problems btw err_handler and paths like system suspend/resume/shutdown and async scan.
+> [2] Race condition btw UFS error recovery and task abort which happens to W-LU during suspend/resume/shutdown.
 > 
-> drivers/scsi/ufs/ufshcd.c:7690:3: error: variable 'sdp' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->                 BUG_ON(1);
->                 ^~~~~~~~~
-> include/asm-generic/bug.h:63:36: note: expanded from macro 'BUG_ON'
->  #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
->                                    ^~~~~~~~~~~~~~~~~~~
+> The 1st change is tested with error/fault injections to power mode change
+> operations during system PM operations and async scan. The 2nd change is
+> tested by mimicing SSU cmd timeout during suspend/resume/shutdown. The 3rd
+> one is just a minor change to a check condition in IRQ handler such that
+> the driver can dump host regs when AH8 error happens.
 > 
 > [...]
 
 Applied to 5.11/scsi-queue, thanks!
 
-[1/1] ufshcd: fix Wsometimes-uninitialized warning
-      https://git.kernel.org/mkp/scsi/c/4c60244dc372
+[1/3] scsi: ufs: Serialize eh_work with system PM events and async scan
+      https://git.kernel.org/mkp/scsi/c/88a92d6ae4fe
+[2/3] scsi: ufs: Fix a race condition between ufshcd_abort and eh_work
+      https://git.kernel.org/mkp/scsi/c/7a7e66c65d41
+[3/3] scsi: ufs: Print host regs in IRQ handler when AH8 error happens
+      https://git.kernel.org/mkp/scsi/c/ace3804b69af
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
