@@ -2,95 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CE92D47E3
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD0C2D47D2
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730848AbgLIR1D (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Dec 2020 12:27:03 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:36896 "EHLO
+        id S1732450AbgLIRZI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Dec 2020 12:25:08 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:34774 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732360AbgLIR05 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:26:57 -0500
+        with ESMTP id S1732477AbgLIRY6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:24:58 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HPOre064148;
-        Wed, 9 Dec 2020 17:26:03 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HJopo058999;
+        Wed, 9 Dec 2020 17:24:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=PnwL1t36QAzy4Z0CyQFFNGR0pO0nbAzqjsSAVUWwyM0=;
- b=gYMKZgrYBXaNaZFAGzgD5UjpVS4Xyn/2mVrLsw/wo6/T/+yJa1AayJtAV2PqHFcw2S9J
- hKPQXRvGJtdwzCyt39qlxrejQJ/2bnpgoJhJm+J/YLo+czZPkmj+OxBLkcJAoKZNjFKO
- /vI+ycS8UsTIz/++y0h61NX3vZyTgvMMsgf/FgqRYfYUEWJHcozcrobcE75EkWKzTP73
- PrHTz91KeCheOd86MVSqNvDFi3bwK78WyVCQCLcTuNfwMgFBRG3kBqnAMNaCP+5+/qrF
- wLwujtYmNE7b7Zds1vxm4m7mrUQZbGdFqpAB2COTjdL2Qw9cTQZNMAcTiamI5PB2SU3Q aw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 357yqc1fyn-1
+ bh=yVP8hzy1AwhZc1OZLvSSH4nn+zlDgukvqxfFINAXqJQ=;
+ b=lcVtKhEYV0zplaRRieiJeJHn65HOLozN1+17PYagI8Ill0wFhvipZoLG+APz5SSk+HLV
+ Ego7OhRRAEADILIO5olx2nTnCAOqM8CK5xNe04dWJT/Y0Vc/AtO1McNzFcYTuUmAesIi
+ y2SRO2LZr0y6J3y1JRGcj3uWVHFvsuq9H88HAbl7+Rm9TGQbA3R53z7VhLV/9K6dR4oF
+ aZNX0FpKaVMW9156x8DjaEcQ+yjwTKq4L7zN6FUJ0iRVWJ3mPXrigzXmiBVLUxGqrfUW
+ uajF8uWDJAhr19WY8rMKBktybQi0JzMyP3mQtYFTZfEeit0WZ9da0vReLTMmRNk7PXJW Dw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 357yqc1fp7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Dec 2020 17:26:03 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HKjg8142428;
-        Wed, 9 Dec 2020 17:24:02 GMT
+        Wed, 09 Dec 2020 17:24:03 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9HKrSL100140;
+        Wed, 9 Dec 2020 17:24:03 GMT
 Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 358kyv0h7h-1
+        by aserp3030.oracle.com with ESMTP id 358ksqdk7y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Dec 2020 17:24:02 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B9HO0Ib014388;
-        Wed, 9 Dec 2020 17:24:00 GMT
+        Wed, 09 Dec 2020 17:24:03 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B9HO2Ts014403;
+        Wed, 9 Dec 2020 17:24:02 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 09 Dec 2020 09:24:00 -0800
+        with ESMTP ; Wed, 09 Dec 2020 09:24:02 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     Stanley Chu <stanley.chu@mediatek.com>, alim.akhtar@samsung.com,
         avri.altman@wdc.com, linux-scsi@vger.kernel.org, jejb@linux.ibm.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        jiajie.hao@mediatek.com, beanhuo@micron.com,
+        beanhuo@micron.com, jiajie.hao@mediatek.com,
         chun-hung.wu@mediatek.com, cc.chou@mediatek.com,
         asutoshd@codeaurora.org, chaotian.jing@mediatek.com,
-        matthias.bgg@gmail.com, kuohong.wang@mediatek.com,
-        alice.chao@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, andy.teng@mediatek.com,
-        bvanassche@acm.org, cang@codeaurora.org,
-        linux-mediatek@lists.infradead.org, peter.wang@mediatek.com
-Subject: Re: [PATCH v3] scsi: ufs: Remove pre-defined initial voltage values of device powers
-Date:   Wed,  9 Dec 2020 12:23:22 -0500
-Message-Id: <160753457754.14816.2412706138431491646.b4-ty@oracle.com>
+        matthias.bgg@gmail.com, alice.chao@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        andy.teng@mediatek.com, bvanassche@acm.org,
+        huadian.liu@mediatek.com, kuohong.wang@mediatek.com,
+        cang@codeaurora.org, linux-mediatek@lists.infradead.org,
+        peter.wang@mediatek.com
+Subject: Re: [PATCH v5 0/4] scsi: ufs: Refine error history and introduce event_notify vop
+Date:   Wed,  9 Dec 2020 12:23:23 -0500
+Message-Id: <160753457754.14816.15980863701992917932.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201202091819.22363-1-stanley.chu@mediatek.com>
-References: <20201202091819.22363-1-stanley.chu@mediatek.com>
+In-Reply-To: <20201205115901.26815-1-stanley.chu@mediatek.com>
+References: <20201205115901.26815-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012090122
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012090122
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
  clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
  spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012090123
+ engine=8.12.0-2009150000 definitions=main-2012090122
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 2 Dec 2020 17:18:19 +0800, Stanley Chu wrote:
+On Sat, 5 Dec 2020 19:58:57 +0800, Stanley Chu wrote:
 
-> UFS specficication allows different VCC configurations for UFS devices,
-> for example,
-> 	(1). 2.70V - 3.60V (Activated by default in UFS core driver)
-> 	(2). 1.70V - 1.95V (Activated if "vcc-supply-1p8" is declared in
->                           device tree)
-> 	(3). 2.40V - 2.70V (Supported since UFS 3.x)
+> This series refines error history functions and introduces a new event_notify vop to allow vendor to get notification of important events.
+> 
+> Changes since v4:
+>   - Seperate patch sets according to Avri's suggestion
+> 
+> Changes since v3:
+>   - Fix build warning in patch [8/8]
 > 
 > [...]
 
 Applied to 5.11/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Remove pre-defined initial voltage values of device powers
-      https://git.kernel.org/mkp/scsi/c/5b44a07b6bb2
+[1/4] scsi: ufs: Add error history for abort event in UFS Device W-LUN
+      https://git.kernel.org/mkp/scsi/c/eb3d2611df2e
+[2/4] scsi: ufs: Refine error history functions
+      https://git.kernel.org/mkp/scsi/c/e965e5e00b23
+[3/4] scsi: ufs: Introduce event_notify variant function
+      https://git.kernel.org/mkp/scsi/c/172614a9d0e8
+[4/4] scsi: ufs-mediatek: Introduce event_notify implementation
+      https://git.kernel.org/mkp/scsi/c/ca1bb061d644
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
