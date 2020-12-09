@@ -2,89 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 362D52D38F4
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 03:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D81A2D3917
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 04:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbgLICrR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 21:47:17 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:36174 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbgLICrR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 21:47:17 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92jP1O005763;
-        Wed, 9 Dec 2020 02:46:26 GMT
+        id S1726918AbgLIDFc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 22:05:32 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:54294 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbgLIDFc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 22:05:32 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B933vWE013387;
+        Wed, 9 Dec 2020 03:04:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
+ from : in-reply-to : message-id : references : date : mime-version :
  content-type; s=corp-2020-01-29;
- bh=uVVZYatFC2fO6YB80YgckEZtVowLfXp1IQQBuIfl10s=;
- b=cz/Y1Gc1ThoHFN6xZRfHXnFWHFfVnfJ14pJnXk8l86ggosh6u0DLo0NBBbHRFxl/vZuX
- mhPubvtAxOAKKiBtpl2a2C4sb1wtFVXFD1grOuDetde6L5CkTjxs98eu5KZnhIoGDJbE
- BDrYKrk+ijl+sCTVsyPXLPahdAEN8d3ldHQbb+WYc7hYo0Axwuehh2jL2xVIPaIjdaoZ
- ojuxN6U/xqWG+xC/DQPeYUAiZzG9uAE9oXkG09Igdx86pwAg20X2w5HUlQ2AXz2wPt88
- UXELrcu2fyodGVNkfaqCoNOTncepwuSNqgyQ5STMxcfMCq8RUOoFpbNvSOgA3GM/azCq SA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 357yqbx2js-1
+ bh=im6KM1TeupZ7+OOqaL16g9WQ+py93dKnhY0FXeXUVrg=;
+ b=CgT2u9G+DufvhAow7IPt573MPTsgelj/WTscwwx8qiipLPEte677SGvrA95oyHIIFtj1
+ +3aR1DPmDfiFXTj8R7jfEEoEGfhshcE9Gx3L6Uo+9pfEEoMODoRGJZT0Lcj6RhSkp4Cb
+ WIFVPvCeWshgSTiRQt7KK9u8u1zZCjvG0ImXHSnNpCGrIkXXRIuo+LM0uAL3AuMP+l3c
+ gfAF4QZAXkme6Ee3vL2DjCy2x/3J9GHF7wL6u6tyPA+OqvqYgnAX0CbRpsEILyu//66a
+ J/RvZqMLg7j+p1VGXFJgqMeh0BMS4ue9hQpCCkOzcvS02jsee+Wj38jGCf3JKgAapMr0 NA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 3581mqwxu4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Dec 2020 02:46:25 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92ifwB035887;
-        Wed, 9 Dec 2020 02:46:25 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 358kytw38n-1
+        Wed, 09 Dec 2020 03:04:26 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92tiw1007609;
+        Wed, 9 Dec 2020 03:04:26 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 358m4yujv1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Dec 2020 02:46:25 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B92kN1F025988;
-        Wed, 9 Dec 2020 02:46:23 GMT
+        Wed, 09 Dec 2020 03:04:26 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B934MK3021556;
+        Wed, 9 Dec 2020 03:04:22 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Dec 2020 18:46:23 -0800
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: Re: [PATCH 0/4] scsi: ufs-pci: Fixes for Intel controllers
+        with ESMTP ; Tue, 08 Dec 2020 19:04:20 -0800
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        SelvaKumar S <selvakuma.s1@samsung.com>,
+        linux-nvme@lists.infradead.org, kbusch@kernel.org, axboe@kernel.dk,
+        damien.lemoal@wdc.com, sagi@grimberg.me,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dm-devel@redhat.com, snitzer@redhat.com, selvajove@gmail.com,
+        nj.shetty@samsung.com, joshi.k@samsung.com,
+        javier.gonz@samsung.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/2] add simple copy support
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+In-Reply-To: <01fe46ac-16a5-d4db-f23d-07a03d3935f3@suse.de> (Hannes Reinecke's
+        message of "Mon, 7 Dec 2020 15:56:15 +0100")
 Organization: Oracle Corporation
-Message-ID: <yq1o8j3snm2.fsf@ca-mkp.ca.oracle.com>
-References: <20201207083120.26732-1-adrian.hunter@intel.com>
-Date:   Tue, 08 Dec 2020 21:46:20 -0500
-In-Reply-To: <20201207083120.26732-1-adrian.hunter@intel.com> (Adrian Hunter's
-        message of "Mon, 7 Dec 2020 10:31:16 +0200")
+Message-ID: <yq1im9bsn0a.fsf@ca-mkp.ca.oracle.com>
+References: <CGME20201204094719epcas5p23b3c41223897de3840f92ae3c229cda5@epcas5p2.samsung.com>
+        <20201204094659.12732-1-selvakuma.s1@samsung.com>
+        <20201207141123.GC31159@lst.de>
+        <01fe46ac-16a5-d4db-f23d-07a03d3935f3@suse.de>
+Date:   Tue, 08 Dec 2020 22:02:35 -0500
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=1 mlxlogscore=999 bulkscore=0 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=1
+ bulkscore=0 malwarescore=0 phishscore=0 adultscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012090016
+ definitions=main-2012090018
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 mlxlogscore=999
- clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012090016
+ clxscore=1011 malwarescore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012090019
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Adrian,
+Hannes,
 
-> Here are some small fixes / amendments.
->
-> Adrian Hunter (4):
->       scsi: ufs-pci: Fix restore from S4 for Intel controllers
->       scsi: ufs-pci: Ensure UFS device is in PowerDown mode for suspend-to-disk ->poweroff()
->       scsi: ufs-pci: Fix recovery from hibernate exit errors for Intel controllers
->       scsi: ufs-pci: Enable UFSHCD_CAP_RPM_AUTOSUSPEND for Intel controllers
+[Sorry I'm late to the discussion here, had a few fires going in
+addition to the end of the kernel cycle]
 
-Applied to 5.11/scsi-staging, thanks!
+> And we shouldn't forget that the main issue which killed all previous
+> implementations was a missing QoS guarantee.
+
+That and the fact that our arbitrary stacking situation was hard to
+resolve.
+
+The QoS guarantee was somewhat addressed by Fred in T10. But I agree we
+need some sort of toggle.
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
