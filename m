@@ -2,47 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5CC2D4858
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2232D485A
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 18:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728723AbgLIRvp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Dec 2020 12:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S1729196AbgLIRwK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Dec 2020 12:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726683AbgLIRvp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:51:45 -0500
+        with ESMTP id S1726449AbgLIRwE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 12:52:04 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2A1C0613CF
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Dec 2020 09:51:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0989BC061793;
+        Wed,  9 Dec 2020 09:51:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=kQ630RwNYw146YL40NcRtm81WZ
-        OyYGq4u9Lt8B0oyJSo6OtmfMFRyDXNwkHFqIf4bZ7LmSOx1E2z/S3ROtxkZcdOhRYt639Q92T4pFY
-        /FotT6wuGIMmZ6sLyhzz1Zih5bTV1rQl8onC8DYYUFnHURTN8O4MrjZ3GbpIBhg+OfNq9d3KifV8w
-        2CdgW+osB/374mUud8mWrjk+gRdP8J8qyK5eo8dBBjNHQLoFibvJGjsEZyfF5lk3iQASPj4uei3ML
-        jKwCnaPqKJf4VuRsR0YxiYYukfzsONLRIvwFvTd2BkukhYvV9b73J6KPX3CFAkGiI4AfEWQL105Bf
-        DQg8vT6g==;
+        bh=qEaW85wNUThtYmzPpVh2Uv1WGFjJCT1naEW5fc1KM9I=; b=A6ZF2C2LZqABf8J8WIch1GHoMn
+        61E7ro40d5ueErJg1gliDKEje9EgZ/yDSSbAvoa8u/JKXs3Q0wmULVpHXBCfGLRZc26qmAYG8D/Iq
+        Eo0W4JSCSw/+v1Yw58I8zTSg7RXmgGZzXyzSLwkgZLLZusJo7GF0cHEMbEoDhFkQvucyJi4PG3HNR
+        h+XEpl6giqfoL0AkVW/nn4Ykywz/Grd2EoHbX46/ux0qjqEslcOmkZVv/WluEh4MOM86Z7acSHipA
+        /FAMDMUXSE63VMb+5Rosq8f6P3MQpgeMdPhwCmXuJKsM7z2ryGQ6zl7QQGdVNyl8tibGs3TPgrXq/
+        U81iQSZw==;
 Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kn3cE-0006h8-Np; Wed, 09 Dec 2020 17:51:02 +0000
-Date:   Wed, 9 Dec 2020 17:51:02 +0000
+        id 1kn3cX-0006hp-Ls; Wed, 09 Dec 2020 17:51:21 +0000
+Date:   Wed, 9 Dec 2020 17:51:21 +0000
 From:   Christoph Hellwig <hch@infradead.org>
-To:     "Ewan D. Milne" <emilne@redhat.com>
-Cc:     linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: sd: suppress suprious block errors when WRITE SAME
- is being disabled
-Message-ID: <20201209175102.GA25719@infradead.org>
-References: <20201207221021.28243-1-emilne@redhat.com>
+To:     Tom Yan <tom.ty89@gmail.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 1/3] block: try one write zeroes request before going
+ further
+Message-ID: <20201209175121.GB25719@infradead.org>
+References: <20201206055332.3144-1-tom.ty89@gmail.com>
+ <20201207133658.GC28592@infradead.org>
+ <CAGnHSEmzrJxm2RVHqP9qGfT0-5N2Zi8wdhvDz_zy-d7W0g7caQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201207221021.28243-1-emilne@redhat.com>
+In-Reply-To: <CAGnHSEmzrJxm2RVHqP9qGfT0-5N2Zi8wdhvDz_zy-d7W0g7caQ@mail.gmail.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Looks good,
+On Tue, Dec 08, 2020 at 08:48:15PM +0800, Tom Yan wrote:
+> You mean like submit_bio_wait() is a blocking operation?
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Yes, it blocks to wait for the I/O to complete.
