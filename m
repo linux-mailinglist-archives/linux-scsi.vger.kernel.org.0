@@ -2,82 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D922D3D43
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 09:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59AD2D3D69
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 09:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgLIIXM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Dec 2020 03:23:12 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37611 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726253AbgLIIXM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 03:23:12 -0500
-X-UUID: 5cbf7747fc934a73b9dccfafea129beb-20201209
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=tZQgclW7QtXGrfoKik3mkK/gxZ2Tg8scqcXCmVvIFJ0=;
-        b=Dc4ejFaoTxbMHcV0vefC1/HaqdU1fbqcMvlIiSGRhl3/vvbuYI8L7nE1cqWEo/v9LfiAFkUS/0V5ZB3ykI9kPszYoLFYuNAfQ3NxdAVKEheLAzClWW/6FLsNqN7yo0Yt6gA8Ola3iZXWFEq7oryHtK3PKNvVjLkCWoB+ybDnJ+4=;
-X-UUID: 5cbf7747fc934a73b9dccfafea129beb-20201209
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 364962277; Wed, 09 Dec 2020 16:22:28 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 9 Dec
- 2020 16:22:27 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 9 Dec 2020 16:22:27 +0800
-Message-ID: <1607502147.3580.33.camel@mtkswgap22>
-Subject: Re: [PATCH v1 2/2] scsi: ufs: Clean up some lines from
- ufshcd_hba_exit()
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Can Guo <cang@codeaurora.org>
-CC:     <asutoshd@codeaurora.org>, <nguyenb@codeaurora.org>,
-        <hongwus@codeaurora.org>, <rnayak@codeaurora.org>,
-        <linux-scsi@vger.kernel.org>, <kernel-team@android.com>,
-        <saravanak@google.com>, <salyzyn@google.com>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        id S1727127AbgLIIbF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Dec 2020 03:31:05 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:63186 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbgLIIa4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 03:30:56 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1607502632; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=US7I9Jxk2V33c8DwknWZ5ZyHOLeSlMGpz/OnKDqm8xs=;
+ b=ozy7dgNV/twdvGI8fDc/X+mOonyGM1w0caskoOHGFkmHq4wF05o/idUxBd44CR5v1RzgvYy+
+ 7Y6B0XzQTFLrARSc5oCdZTmiSnGn3tN1wgK1o/CkpCHxo8ws6VXuuqw1OmN/XBznf7vL0Crl
+ b6EU9Bw7gip/RAP1ealDxOjRHbs=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5fd08b02395c822bfe738e25 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 09 Dec 2020 08:29:54
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E0A36C43465; Wed,  9 Dec 2020 08:29:53 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AF386C433C6;
+        Wed,  9 Dec 2020 08:29:52 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 09 Dec 2020 16:29:52 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         Avri Altman <avri.altman@wdc.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Bean Huo <beanhuo@micron.com>,
-        "Bart Van Assche" <bvanassche@acm.org>,
+        Bart Van Assche <bvanassche@acm.org>,
         open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 9 Dec 2020 16:22:27 +0800
-In-Reply-To: <1607497100-27570-3-git-send-email-cang@codeaurora.org>
+Subject: Re: [PATCH v1 2/2] scsi: ufs: Clean up some lines from
+ ufshcd_hba_exit()
+In-Reply-To: <1607502147.3580.33.camel@mtkswgap22>
 References: <1607497100-27570-1-git-send-email-cang@codeaurora.org>
-         <1607497100-27570-3-git-send-email-cang@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+ <1607497100-27570-3-git-send-email-cang@codeaurora.org>
+ <1607502147.3580.33.camel@mtkswgap22>
+Message-ID: <527089ac0a43d9095131103f7a274cf1@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgQ2FuLA0KDQpPbiBUdWUsIDIwMjAtMTItMDggYXQgMjI6NTggLTA4MDAsIENhbiBHdW8gd3Jv
-dGU6DQo+IHVmc2hjZF9oYmFfZXhpdCgpIGlzIGFsd2F5cyBjYWxsZWQgYWZ0ZXIgdWZzaGNkX2V4
-aXRfY2xrX3NjYWxpbmcoKSBhbmQNCj4gdWZzaGNkX2V4aXRfY2xrX2dhdGluZygpLCBzbyBubyBu
-ZWVkIHRvIHN1c3BlbmQgY2xvY2sgc2NhbGluZyBhZ2FpbiBpbg0KPiB1ZnNoY2RfaGJhX2V4aXQo
-KS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IENhbiBHdW8gPGNhbmdAY29kZWF1cm9yYS5vcmc+DQo+
-IC0tLQ0KPiAgZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYyB8IDUgKy0tLS0NCj4gIDEgZmlsZSBj
-aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYw0K
-PiBpbmRleCAxMjI2NmJkLi4wYTViMTk3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Njc2kvdWZz
-L3Vmc2hjZC5jDQo+ICsrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMNCj4gQEAgLTc3NjUs
-NiArNzc2NSw3IEBAIHN0YXRpYyB2b2lkIHVmc2hjZF9hc3luY19zY2FuKHZvaWQgKmRhdGEsIGFz
-eW5jX2Nvb2tpZV90IGNvb2tpZSkNCj4gIAlpZiAocmV0KSB7DQo+ICAJCXBtX3J1bnRpbWVfcHV0
-X3N5bmMoaGJhLT5kZXYpOw0KPiAgCQl1ZnNoY2RfZXhpdF9jbGtfc2NhbGluZyhoYmEpOw0KPiAr
-CQl1ZnNoY2RfZXhpdF9jbGtfZ2F0aW5nKGhiYSk7DQoNCkhvdyBhYm91dCBtb3ZpbmcgYWJvdmUg
-dHdvIGxpbmVzIHRvIHVmc2hjZF9oYmFfZXhpdCgpPw0KDQpPdGhlcndpc2UgbG9va3MgZ29vZCB0
-byBtZSENClJldmlld2VkLWJ5OiBTdGFubGV5IENodSA8c3RhbmxleWMuY2h1QG1lZGlhdGVrLmNv
-bT4NCg0KPiAgCQl1ZnNoY2RfaGJhX2V4aXQoaGJhKTsNCj4gIAl9DQo+ICB9DQo+IEBAIC04MjAz
-LDEwICs4MjA0LDYgQEAgc3RhdGljIHZvaWQgdWZzaGNkX2hiYV9leGl0KHN0cnVjdCB1ZnNfaGJh
-ICpoYmEpDQo+ICAJaWYgKGhiYS0+aXNfcG93ZXJlZCkgew0KPiAgCQl1ZnNoY2RfdmFyaWFudF9o
-YmFfZXhpdChoYmEpOw0KPiAgCQl1ZnNoY2Rfc2V0dXBfdnJlZyhoYmEsIGZhbHNlKTsNCj4gLQkJ
-dWZzaGNkX3N1c3BlbmRfY2xrc2NhbGluZyhoYmEpOw0KPiAtCQlpZiAodWZzaGNkX2lzX2Nsa3Nj
-YWxpbmdfc3VwcG9ydGVkKGhiYSkpDQo+IC0JCQlpZiAoaGJhLT5kZXZmcmVxKQ0KPiAtCQkJCXVm
-c2hjZF9zdXNwZW5kX2Nsa3NjYWxpbmcoaGJhKTsNCj4gIAkJdWZzaGNkX3NldHVwX2Nsb2Nrcyho
-YmEsIGZhbHNlKTsNCj4gIAkJdWZzaGNkX3NldHVwX2hiYV92cmVnKGhiYSwgZmFsc2UpOw0KPiAg
-CQloYmEtPmlzX3Bvd2VyZWQgPSBmYWxzZTsNCg0K
+On 2020-12-09 16:22, Stanley Chu wrote:
+> Hi Can,
+> 
+> On Tue, 2020-12-08 at 22:58 -0800, Can Guo wrote:
+>> ufshcd_hba_exit() is always called after ufshcd_exit_clk_scaling() and
+>> ufshcd_exit_clk_gating(), so no need to suspend clock scaling again in
+>> ufshcd_hba_exit().
+>> 
+>> Signed-off-by: Can Guo <cang@codeaurora.org>
+>> ---
+>>  drivers/scsi/ufs/ufshcd.c | 5 +----
+>>  1 file changed, 1 insertion(+), 4 deletions(-)
+>> 
+>> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> index 12266bd..0a5b197 100644
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -7765,6 +7765,7 @@ static void ufshcd_async_scan(void *data, 
+>> async_cookie_t cookie)
+>>  	if (ret) {
+>>  		pm_runtime_put_sync(hba->dev);
+>>  		ufshcd_exit_clk_scaling(hba);
+>> +		ufshcd_exit_clk_gating(hba);
+> 
+> How about moving above two lines to ufshcd_hba_exit()?
+> 
+> Otherwise looks good to me!
+> Reviewed-by: Stanley Chu <stanleyc.chu@mediatek.com>
 
+You read my mind - I thought about that too, but in ufshcd_init(),
+they are separately called on different error out paths.
+
+11232 exit_gating:
+11233 	ufshcd_exit_clk_scaling(hba);
+11234 	ufshcd_exit_clk_gating(hba);
+11235 out_disable:
+11236 	hba->is_irq_enabled = false;
+11237 	ufshcd_hba_exit(hba);
+
+Thanks,
+
+Can Guo.
+
+> 
+>>  		ufshcd_hba_exit(hba);
+>>  	}
+>>  }
+>> @@ -8203,10 +8204,6 @@ static void ufshcd_hba_exit(struct ufs_hba 
+>> *hba)
+>>  	if (hba->is_powered) {
+>>  		ufshcd_variant_hba_exit(hba);
+>>  		ufshcd_setup_vreg(hba, false);
+>> -		ufshcd_suspend_clkscaling(hba);
+>> -		if (ufshcd_is_clkscaling_supported(hba))
+>> -			if (hba->devfreq)
+>> -				ufshcd_suspend_clkscaling(hba);
+>>  		ufshcd_setup_clocks(hba, false);
+>>  		ufshcd_setup_hba_vreg(hba, false);
+>>  		hba->is_powered = false;
