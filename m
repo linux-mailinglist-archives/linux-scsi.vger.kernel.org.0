@@ -2,82 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FDF2D38E0
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 03:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9802D390A
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 03:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbgLIChw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 21:37:52 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:44694 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbgLIChw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 21:37:52 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92Yogx151683;
-        Wed, 9 Dec 2020 02:37:01 GMT
+        id S1727032AbgLICym (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Dec 2020 21:54:42 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:41220 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727012AbgLICyg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 21:54:36 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92ZLbv193227;
+        Wed, 9 Dec 2020 02:43:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : message-id : references : date : in-reply-to : mime-version :
  content-type; s=corp-2020-01-29;
- bh=r/Lh49/O2EZr6JB2u3epTpgfpKC+u36DuUavw2fVJ5o=;
- b=tCsmcjxQTQSWWdj1qCU7IxjVvC493QHkXcydTtpZSeVVoFWHI9DBzzmcJevuTyHVMTw/
- sXKmXKnkGMGvXie54A6bqI0ZkCE7YxvSrY+iu4lJLo+beCtZnxr1rITpxYt0h7fQeDwM
- z0quhxiAMhs0McYhPc0j5K0Gv37z6ZuuyJtzpXlk1ru43KCOGry9UCYHzrELrh9NFmjB
- Frwsu3yeWR1t9ImQ/X7hJoYY/bBLxjW7egbp44r/igs+fxMKML01+iAz1cEEzdaFLcFS
- KvpV7Pmef0ugGtz89FDHcmo0Ouy5iHgfinzYE0yyya4Y69MNcGMJR6SD/qHTagjEosy8 jg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 3581mqwvy7-1
+ bh=mVMv5/81Agpr6XuQ1R6ctAlZm6JEeHFZTjeufEXtpgk=;
+ b=OR05Dk1edGfx1vgrVzv5ff6FouXdc09xLx3/vp/WoQAJAMAeJqnzKKUrjMypuerqI69o
+ WfVoTHgwWizHMJZJk8YNO9v6IZTjgSlOCwfFJC2Eyfn9CBmNwOyEJNQRKlO/XzsfEUVo
+ Ifz9PKE/mtklWN5C+jPy/W2EgimXwGYV+aYdv/EGejj1WXxypIUhs7I8EI3L9n4T9Pgz
+ trx/v/MQP8Jvd/wkVL5iyEQvZ7qjvqNcLogdMkkYApCDarGICMO6AJJv06J+qL9YRidq
+ 8B5qPForc1uzpStwboLmMp5dupirp29MsZ0Yag8tMqQMNCdbpuXRb7OT0ttx9ghtTwAS LQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 357yqbx2cp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Dec 2020 02:37:00 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92YnR3174630;
-        Wed, 9 Dec 2020 02:37:00 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 358kspf2ry-1
+        Wed, 09 Dec 2020 02:43:26 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92Zngi160763;
+        Wed, 9 Dec 2020 02:43:26 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 358m4ytww4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Dec 2020 02:37:00 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B92aukJ022294;
-        Wed, 9 Dec 2020 02:36:57 GMT
+        Wed, 09 Dec 2020 02:43:26 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B92hLmL000768;
+        Wed, 9 Dec 2020 02:43:22 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Dec 2020 18:36:56 -0800
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, cang@codeaurora.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        Randall Huang <huangrandall@google.com>,
-        Leo Liou <leoliou@google.com>
-Subject: Re: [PATCH v2] scsi: ufs: clear uac for RPMB after ufshcd resets
+        with ESMTP ; Tue, 08 Dec 2020 18:43:21 -0800
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <beanhuo@micron.com>,
+        <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <alice.chao@mediatek.com>
+Subject: Re: [PATCH v1 0/2] scsi: ufs: Allow regulators being always on
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-Message-ID: <yq1zh2nso1v.fsf@ca-mkp.ca.oracle.com>
-References: <20201201041402.3860525-1-jaegeuk@kernel.org>
-        <X8/1U8+Dd3UJjKA/@google.com>
-Date:   Tue, 08 Dec 2020 21:36:53 -0500
-In-Reply-To: <X8/1U8+Dd3UJjKA/@google.com> (Jaegeuk Kim's message of "Tue, 8
-        Dec 2020 13:51:15 -0800")
+Message-ID: <yq1tusvsnr5.fsf@ca-mkp.ca.oracle.com>
+References: <20201207054955.24366-1-stanley.chu@mediatek.com>
+Date:   Tue, 08 Dec 2020 21:43:17 -0500
+In-Reply-To: <20201207054955.24366-1-stanley.chu@mediatek.com> (Stanley Chu's
+        message of "Mon, 7 Dec 2020 13:49:53 +0800")
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=841 suspectscore=1
- bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012090015
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=1
+ bulkscore=0 malwarescore=0 phishscore=0 adultscore=0 mlxlogscore=926
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012090015
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 mlxlogscore=871
- clxscore=1011 malwarescore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 mlxlogscore=940
+ clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
+ spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012090015
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Jaegeuk,
+Stanley,
 
-> If RPMB is not provisioned, we may see RPMB failure after UFS suspend/resume.
-> Inject request_sense to clear uac in ufshcd reset flow.
+> This series allow vendors to keep the regulator always-on, and provide
+> an implementation on MediaTek UFS platforms.
 
 Applied to 5.11/scsi-staging, thanks!
 
