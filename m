@@ -2,99 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D81A2D3917
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 04:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223332D3A93
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 06:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbgLIDFc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Dec 2020 22:05:32 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:54294 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbgLIDFc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Dec 2020 22:05:32 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B933vWE013387;
-        Wed, 9 Dec 2020 03:04:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : in-reply-to : message-id : references : date : mime-version :
- content-type; s=corp-2020-01-29;
- bh=im6KM1TeupZ7+OOqaL16g9WQ+py93dKnhY0FXeXUVrg=;
- b=CgT2u9G+DufvhAow7IPt573MPTsgelj/WTscwwx8qiipLPEte677SGvrA95oyHIIFtj1
- +3aR1DPmDfiFXTj8R7jfEEoEGfhshcE9Gx3L6Uo+9pfEEoMODoRGJZT0Lcj6RhSkp4Cb
- WIFVPvCeWshgSTiRQt7KK9u8u1zZCjvG0ImXHSnNpCGrIkXXRIuo+LM0uAL3AuMP+l3c
- gfAF4QZAXkme6Ee3vL2DjCy2x/3J9GHF7wL6u6tyPA+OqvqYgnAX0CbRpsEILyu//66a
- J/RvZqMLg7j+p1VGXFJgqMeh0BMS4ue9hQpCCkOzcvS02jsee+Wj38jGCf3JKgAapMr0 NA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 3581mqwxu4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Dec 2020 03:04:26 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B92tiw1007609;
-        Wed, 9 Dec 2020 03:04:26 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 358m4yujv1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Dec 2020 03:04:26 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B934MK3021556;
-        Wed, 9 Dec 2020 03:04:22 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Dec 2020 19:04:20 -0800
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        SelvaKumar S <selvakuma.s1@samsung.com>,
-        linux-nvme@lists.infradead.org, kbusch@kernel.org, axboe@kernel.dk,
-        damien.lemoal@wdc.com, sagi@grimberg.me,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dm-devel@redhat.com, snitzer@redhat.com, selvajove@gmail.com,
-        nj.shetty@samsung.com, joshi.k@samsung.com,
-        javier.gonz@samsung.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/2] add simple copy support
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-In-Reply-To: <01fe46ac-16a5-d4db-f23d-07a03d3935f3@suse.de> (Hannes Reinecke's
-        message of "Mon, 7 Dec 2020 15:56:15 +0100")
-Organization: Oracle Corporation
-Message-ID: <yq1im9bsn0a.fsf@ca-mkp.ca.oracle.com>
-References: <CGME20201204094719epcas5p23b3c41223897de3840f92ae3c229cda5@epcas5p2.samsung.com>
-        <20201204094659.12732-1-selvakuma.s1@samsung.com>
-        <20201207141123.GC31159@lst.de>
-        <01fe46ac-16a5-d4db-f23d-07a03d3935f3@suse.de>
-Date:   Tue, 08 Dec 2020 22:02:35 -0500
+        id S1727655AbgLIFar (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Dec 2020 00:30:47 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34260 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727248AbgLIFal (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 00:30:41 -0500
+Received: by mail-pf1-f195.google.com with SMTP id w6so285405pfu.1;
+        Tue, 08 Dec 2020 21:30:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GQJISQRfqnfIEwhNSFqIfxEkoIa370X69ODE4/s7ieU=;
+        b=p2tzmxCMOICQlpouIlH1Hump2qBfX6izvMh4Ws+jQPmfyWJw6k61UvXjM46GgePgic
+         Akuk/9KIggsSw1mYj8NzrKmmvceS2TeX+grtCmCRKmwda0vTzgMCmKCEan1n9TnUFlxT
+         TOtSHERfwL5spiWNaHxcusV2UhFpE+VkXQDlNnWrNZZ/3I/9C3oJyHTNs++6Df7GXQXX
+         0owE3IZmFv02sEYs8b8TWG+epqq+W4ilJ95tasmGcSxxJqtUy49ETB94WW1J+vdDRFsM
+         pXhR0Oxsq9vTmrukCfZb2nxg+9LGHtHVXPW821MJvJaGVrYXMkHFNnDIOS3KAp1wLKRI
+         v9qA==
+X-Gm-Message-State: AOAM533Qsb6OsVJoslVbhwILsKMbDwWyssNQCyK06hI9TVcPJntiHELE
+        f3RjN3XLhsZH1fU/FoPvRkU=
+X-Google-Smtp-Source: ABdhPJySd2Uz/D5FdeSW1k9M52O2X59ijCIoTJUVT7ffqHE7ich9XIsSVh27tT9oii/vwnYXvWiL/w==
+X-Received: by 2002:a63:1d55:: with SMTP id d21mr501635pgm.324.1607491800294;
+        Tue, 08 Dec 2020 21:30:00 -0800 (PST)
+Received: from asus.hsd1.ca.comcast.net (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id 77sm753097pfv.16.2020.12.08.21.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 21:29:59 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v5 0/8] Rework runtime suspend and SPI domain validation
+Date:   Tue,  8 Dec 2020 21:29:43 -0800
+Message-Id: <20201209052951.16136-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=1
- bulkscore=0 malwarescore=0 phishscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012090018
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 mlxlogscore=999
- clxscore=1011 malwarescore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012090019
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Martin,
 
-Hannes,
+The SCSI runtime suspend and SPI domain validation mechanisms both use
+scsi_device_quiesce(). scsi_device_quiesce() restricts blk_queue_enter() to
+BLK_MQ_REQ_PREEMPT requests. There is a conflict between the requirements
+of runtime suspend and SCSI domain validation: no requests must be sent to
+runtime suspended devices that are in the state RPM_SUSPENDED while
+BLK_MQ_REQ_PREEMPT requests must be processed during SCSI domain
+validation. This conflict is resolved by reworking the SCSI domain
+validation implementation.
 
-[Sorry I'm late to the discussion here, had a few fires going in
-addition to the end of the kernel cycle]
+Hybernation, runtime suspend and SCSI domain validation have been retested.
 
-> And we shouldn't forget that the main issue which killed all previous
-> implementations was a missing QoS guarantee.
+Please consider this patch series for kernel v5.11.
 
-That and the fact that our arbitrary stacking situation was hard to
-resolve.
+Thanks,
 
-The QoS guarantee was somewhat addressed by Fred in T10. But I agree we
-need some sort of toggle.
+Bart.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Changes between v4 and v5:
+- Fixed the CONFIG_PM=n build.
+- Left out patch "scsi: Do not wait for a request in scsi_eh_lock_door()".
+
+Changes between v3 and v4:
+- Instead of creating a second request queue for SPI DV, set RQF_PM.
+
+Changes between v2 and v3:
+- Inlined scsi_mq_alloc_queue() into scsi_alloc_sdev() as requested by
+  Christoph.
+
+Changes between v1 and v2:
+- Rebased this patch series on top of kernel v5.10-rc1.
+
+Alan Stern (1):
+  block: Do not accept any requests while suspended
+
+Bart Van Assche (7):
+  block: Fix a race in the runtime power management code
+  block: Introduce BLK_MQ_REQ_PM
+  ide: Do not set the RQF_PREEMPT flag for sense requests
+  ide: Mark power management requests with RQF_PM instead of RQF_PREEMPT
+  scsi_transport_spi: Set RQF_PM for domain validation commands
+  scsi: Only process PM requests if rpm_status != RPM_ACTIVE
+  block: Remove RQF_PREEMPT and BLK_MQ_REQ_PREEMPT
+
+ block/blk-core.c                  | 13 +++++++------
+ block/blk-mq-debugfs.c            |  1 -
+ block/blk-mq.c                    |  4 ++--
+ block/blk-pm.c                    | 15 +++++++++------
+ block/blk-pm.h                    | 14 +++++++++-----
+ drivers/ide/ide-atapi.c           |  1 -
+ drivers/ide/ide-io.c              |  7 +------
+ drivers/ide/ide-pm.c              |  2 +-
+ drivers/scsi/scsi_lib.c           | 27 ++++++++++++++-------------
+ drivers/scsi/scsi_transport_spi.c | 27 +++++++++++++++++++--------
+ include/linux/blk-mq.h            |  4 ++--
+ include/linux/blkdev.h            | 18 +++++++++++++-----
+ 12 files changed, 77 insertions(+), 56 deletions(-)
+
