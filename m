@@ -2,90 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E302D3E1D
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 10:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F13F2D3E2E
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Dec 2020 10:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728733AbgLIJEM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Dec 2020 04:04:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40154 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728634AbgLIJDx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 9 Dec 2020 04:03:53 -0500
-Date:   Wed, 9 Dec 2020 14:33:00 +0530
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607504585;
-        bh=Y8sKKGrlYezUfpA9QSrlmnL0kO7yXjvMcIxMPszDLQU=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZYv88C+wY/E/J2SeDl906oq3dpbKDT6luvBWvgQIoTtv6uk70LSXQOc4LV4/Ckte2
-         t2UovonfT5iDGd4TYZiJMKtE6Td0rbMVabgQIfxxzGAPJPouzmrrf7Cdq5VSoEWG56
-         q3+OKUTzYzW22kRBiuIhOsQUhVtGj0btEIGytZTd6kpR81vO0k3bNJzFp7kxiFMuAS
-         P2jivjBpreQyW8DQ9NQIzE3uS8JtbsnUyXVSE1qVpB3csHKn7duH6xd5l8cNGL9/dL
-         p0AYMZhW78mhf8JJeZgcCWjjWmJu/y/PpwrMg7iVUj5PLUcBVq4nuWF8fIxyWO+fHP
-         iGoo++aTYv9fg==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Miller <davem@davemloft.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ion Badulescu <ionut@badula.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Adam Radford <aradford@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ide@vger.kernel.org, dmaengine@vger.kernel.org,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        linux-parisc@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] PCI: Remove pci_try_set_mwi
-Message-ID: <20201209090300.GI8403@vkoul-mobl>
-References: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
+        id S1728427AbgLIJFj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Dec 2020 04:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728422AbgLIJFg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Dec 2020 04:05:36 -0500
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C480C0613CF
+        for <linux-scsi@vger.kernel.org>; Wed,  9 Dec 2020 01:04:56 -0800 (PST)
+Received: by mail-qt1-x843.google.com with SMTP id b9so444853qtr.2
+        for <linux-scsi@vger.kernel.org>; Wed, 09 Dec 2020 01:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=O5Au1r0JB92szpdfLXxfIJFgMxDBXlqcxXRXrgoKoak=;
+        b=hXPxEy1Fd4ytFb8I3vUcyDQOwT5UU2UR11PuxEkEEld6y851jD8189CTdjN21qIp9G
+         /VcxJUSv1jYly8MwTikVorDbJ5qbwAu48bUyv+Ha0LQGbSx2GTklHlo53qOqTNyTyCqj
+         O/OF9o0aoopEUArxO+OS1k3CES4m5JW/lZJqiUSVkP4tFRrW1Z8XrjFdmdFr9V/plQL0
+         QwLe9qiaN2UL3MF8Yq7a2HaWnqRMTeA04Mleu1bTDPghE7uIfUcRhHvkiy2y/K3KWEtv
+         +3TdyMCuOO6aEwQIeemTMqO0rXw8DCwlGMfnwU0WTg5Gqc9XPY2BLBSqISgSuu7ZxO5q
+         ivwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=O5Au1r0JB92szpdfLXxfIJFgMxDBXlqcxXRXrgoKoak=;
+        b=Amarru6Nz/Tp5TWbbqPNMk9oSVSBXkxpyEx/NmoLgTJVBJuI7LBxAUqzON1CFrMuDa
+         Oitzqw94rT1o9PpwUxMtdGq0gPk/Dq6D8hJboEC1d9wczKw72jzbYC4wdnpAjjYeKJCe
+         la5jTjBkg7cXXsgLy1U0sqKXuz5vuKYmbYwMB8SWm6VDP9QXpQlAU/JS9mC/Bqk9lTn0
+         NEtgG+ssEj6z7+U6ili4pAvLts2uMXQ6qwQlHzSV3Wfy050+3eDVuoUNo6Y5xWqt0MQE
+         5OzUVeS9KlsBwmcnDPerzCAz6/zDhMAmQbiZcLJ1z+FqYtieg6tzFG6KdkyLsXUe0gdV
+         IUOQ==
+X-Gm-Message-State: AOAM5336q7e0l5p6EWBcu5bayK+bxi8gyuVl0EqH2Xuoc+Wg+dtG7yXg
+        l6rvdHJNdUR4ureJWsNQHCYJgqzwQww0jSnbDNk=
+X-Google-Smtp-Source: ABdhPJwajAEZmym9kB9zCDq2Lxpok109FH0Yy6X0oi5mKO+3t8VV4PKowuSSBDm1assnE31ISQKI3+aGiq9lFHwQHCY=
+X-Received: by 2002:ac8:120d:: with SMTP id x13mr2069810qti.141.1607504695881;
+ Wed, 09 Dec 2020 01:04:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
+Sender: ifeanyiomaka1@gmail.com
+Received: by 2002:aed:3bee:0:0:0:0:0 with HTTP; Wed, 9 Dec 2020 01:04:55 -0800 (PST)
+From:   Donna Louise <donnamcinneslouise@gmail.com>
+Date:   Tue, 8 Dec 2020 21:04:55 -1200
+X-Google-Sender-Auth: AMn-JQmP9mRVThnd0pnfH6zuONY
+Message-ID: <CAO-KV1-kFgduN=ykFqcUgcOCqXZ9d4R+hiyR-5dFzpo3uMtuVQ@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 09-12-20, 09:31, Heiner Kallweit wrote:
-> pci_set_mwi() and pci_try_set_mwi() do exactly the same, just that the
-> former one is declared as __must_check. However also some callers of
-> pci_set_mwi() have a comment that it's an optional feature. I don't
-> think there's much sense in this separation and the use of
-> __must_check. Therefore remove pci_try_set_mwi() and remove the
-> __must_check attribute from pci_set_mwi().
-> I don't expect either function to be used in new code anyway.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
-> patch applies on top of pci/misc for v5.11
-> ---
->  drivers/dma/dw/pci.c                          |  2 +-
->  drivers/dma/hsu/pci.c                         |  2 +-
+Hello My Dear,
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+ I am sending the same message to you. My names are Mrs. Donna Louise
+McInnes, a widow diagnosed with brain tumor disease which has gotten
+to a very bad stage, Please I want you to understand the most
+important reason why I am contacting you through this medium is
+because I need your sincerity and ability to carry out this
+transaction and fulfill my final wish in implementing the charitable
+investment project in your country as it requires absolute trust and
+devotion without any failure, which i believe that you will not expose
+this to anyone or betray this trust and confident that I am about to
+entrust on you for the mutual benefit of the orphans and the less
+privileges ones. I have some funds I inherited from my late husband,
+the sum of ($ 11,000,000.00) deposited with the Bank. Having known my
+present health condition, I decided to entrust this fund to you
+believing that you will utilize it the way i am going to instruct
+herein.
+It will be my pleasure to compensate you as my Investment
+Manager/Partner with 35% percent of the total money for your effort in
+handling the transaction, 5% percent for any expenses or processing
+charges fee that will involve during this process while 60% of the
+fund will be Invested into the charity project there in your country.
+Therefore I am waiting for your prompt respond, if only you are
+interested in this humanitarian project for further details of the
+transaction and execution of this charitable project for the glory and
+honor of God the merciful compassionate. Your urgent reply will be
+appreciated.
 
--- 
-~Vinod
+God bless you.
+Sincerely Sister in Christ Mrs. Donna Louise McInnes.
