@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CC72D68ED
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78B72D68E2
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393271AbgLJUi2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Dec 2020 15:38:28 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:13293 "EHLO
+        id S2393830AbgLJUhl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Dec 2020 15:37:41 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:44703 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404653AbgLJUhV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:37:21 -0500
+        with ESMTP id S2404645AbgLJUhe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:37:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607632641; x=1639168641;
+  t=1607632654; x=1639168654;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n26blj5N7CQZKCNhBxhXS0TfPvrHTI1mUYbPNBWrfoI=;
-  b=x+BMEGg1+ZNMtAzy7HnkM98nb1hTIWIeWLn536E/DCMwFo+CB3Tc0jRO
-   i2sz2dFU6gIL+5JiP4Rk3CgsrO4B70LLjlV1dUJNAsvkTVb9bmgKtwxX3
-   IhMSyoKWdfzpEQswMFE83z53n44KYMeOfrhYwyoyFmgrrrrhsrBLRR64N
-   v5rCd9Vt/i6ttRRpaXTzSSfgbC+AFDF1673teTuBAKa/vLbtu1k2pKkS2
-   1eMf6MvdIEC9dvoJXrZtCCFGso7O7DP1dxPIiv1p01snuy4sdMUNesBKL
-   O+Yo5OEfV/LfUNpCjXhrVeuPiPiwGuS64mvkRSv90/Zoxgamg6t2AlxeC
-   g==;
-IronPort-SDR: 943p/+GvSbTPKorlgBMCy/D73MSCQtc0u7oVho+ocGIj8OYWYBQjraGGy1aQDvOJ9niKElyDwi
- EBYihim8auXqiwHuR8cRstc9cMRaWLb3N6uiNFQLp1Ok8OPbVxgZlkYBpdaug+tQeQzEHIxYxe
- fGSNsAtVcdkfEidAADGoxBf0PnmWHWg25ynERem5EWn0FekeyUKDSzv18xSphWffRGxlGD1bYj
- opOZuD7wQqIeoGs8ARGFU87+OAvsTWDexZBr4e5mRD2/qxmSNouq2UKOh+MOimh8S4s687ua6q
- wBg=
+  bh=IeGnp3DWJKsJWF7ZhoFyAqz5lnsfjFnygOBpWTTn56M=;
+  b=P9kpKRu6sHwcMpfZ4twO8ULwr9OPJFCKFEk2F4UCmft12np1eZEGdiZH
+   EJvjuRGD/mwuiVhKWlETAZVSsOKhWrHdRJtcMcXXRf+4FNB97UAK749g6
+   8RdEZ30AfeyOXqfGTENX97OLjcMxYCh1VdPsyTphbvNGzPvjXaEfVmHOw
+   fyKN6CfJ5Dqa6JoRwHciNcyoOeMSmchryhdr/tU5izsFjt/6uNkcGx/TN
+   rmMeFVD8q4FpKjVaaauZwvWI6d3Us1Gnx+6fEKD4LU/gWLr5M8/rixBHM
+   NTped8BvHdgVLqpWb1WV65M9slQ3l5c4HKbN3LkgIysoCMzZJyj/SOHdu
+   w==;
+IronPort-SDR: /wHiV2OiM95lXK8RCUvvzQZMZ8iLLEEgHG10mKbagH/hEzuOm1IV1llmEc9CqD35Cj68bUnWFM
+ eqjJYkZGPc0ENW57rm/r4JNZqq0QlM4bhARfPtNDnm684V67vUK//YjxC3PTIMaxZHbA9jKBCi
+ 1Cdl89zNK3ZQ+/PQzOQLkq3Q2S2xTR/d4PsNz2hVXsvdi6e0XbSvglFf6COvvQ//Inr9DDJUcr
+ Nxl54M5Yv4yjP6cvnkxc/nJHtPChZguoi99fKPPodiXHvx01QAkmZLtItbd0NIh+BGulYvu5ls
+ BK8=
 X-IronPort-AV: E=Sophos;i="5.78,409,1599548400"; 
-   d="scan'208";a="102325193"
+   d="scan'208";a="102325209"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:36:03 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:36:05 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 13:35:59 -0700
-Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Thu, 10 Dec 2020 13:35:59 -0700
-Subject: [PATCH V3 17/25] smartpqi: change timing of release of QRM memory
- during OFA
+ 15.1.1979.3; Thu, 10 Dec 2020 13:36:05 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Thu, 10 Dec 2020 13:36:05 -0700
+Subject: [PATCH V3 18/25] smartpqi: return busy indication for IOCTLs when
+ ofa is active
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -49,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Thu, 10 Dec 2020 14:35:59 -0600
-Message-ID: <160763255925.26927.7798016026983421676.stgit@brunhilda>
+Date:   Thu, 10 Dec 2020 14:36:05 -0600
+Message-ID: <160763256504.26927.9864878430274064369.stgit@brunhilda>
 In-Reply-To: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -63,53 +63,29 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Kevin Barnett <kevin.barnett@microchip.com>
 
-* Release QRM memory (OFA buffer) on OFA error conditions.
-* Controller is left in a bad state which can cause a kernel panic
-    upon reboot after an unsuccessful OFA.
+* Prevent Kernel crashes while issuing ioctl during OFA.
+* Before this fix, the driver returned busy indication for
+    pass-through IOCTLs throughout all stages of OFA.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 456ea8732312..552072812771 100644
+index 552072812771..f6bc7d9850e0 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -3305,8 +3305,6 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
- 	else
- 		reset_status = RESET_INITIATE_FIRMWARE;
+@@ -6238,6 +6238,8 @@ static int pqi_passthru_ioctl(struct pqi_ctrl_info *ctrl_info, void __user *arg)
  
--	pqi_ofa_free_host_buffer(ctrl_info);
--
- 	delay_secs = PQI_POST_RESET_DELAY_SECS;
- 
- 	switch (reset_status) {
-@@ -3322,6 +3320,7 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
- 		ctrl_info->pqi_mode_enabled = false;
- 		pqi_save_ctrl_mode(ctrl_info, SIS_MODE);
- 		rc = pqi_ofa_ctrl_restart(ctrl_info, delay_secs);
-+		pqi_ofa_free_host_buffer(ctrl_info);
- 		pqi_ctrl_ofa_done(ctrl_info);
- 		dev_info(&ctrl_info->pci_dev->dev,
- 				"Online Firmware Activation: %s\n",
-@@ -3332,6 +3331,7 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
- 				"Online Firmware Activation ABORTED\n");
- 		if (ctrl_info->soft_reset_handshake_supported)
- 			pqi_clear_soft_reset_status(ctrl_info);
-+		pqi_ofa_free_host_buffer(ctrl_info);
- 		pqi_ctrl_ofa_done(ctrl_info);
- 		pqi_ofa_ctrl_unquiesce(ctrl_info);
- 		break;
-@@ -3341,6 +3341,7 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
- 		dev_err(&ctrl_info->pci_dev->dev,
- 			"unexpected Online Firmware Activation reset status: 0x%x\n",
- 			reset_status);
-+		pqi_ofa_free_host_buffer(ctrl_info);
- 		pqi_ctrl_ofa_done(ctrl_info);
- 		pqi_ofa_ctrl_unquiesce(ctrl_info);
- 		pqi_take_ctrl_offline(ctrl_info);
+ 	if (pqi_ctrl_offline(ctrl_info))
+ 		return -ENXIO;
++	if (pqi_ofa_in_progress(ctrl_info) && pqi_ctrl_blocked(ctrl_info))
++		return -EBUSY;
+ 	if (!arg)
+ 		return -EINVAL;
+ 	if (!capable(CAP_SYS_RAWIO))
 
