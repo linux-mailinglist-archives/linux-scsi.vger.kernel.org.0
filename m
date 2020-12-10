@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D192D68E0
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D011F2D68F6
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393828AbgLJUgu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Dec 2020 15:36:50 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:60508 "EHLO
+        id S2403938AbgLJUjF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Dec 2020 15:39:05 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:44703 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393794AbgLJUgr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:36:47 -0500
+        with ESMTP id S2404641AbgLJUhJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:37:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607632606; x=1639168606;
+  t=1607632629; x=1639168629;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=N9+QSnBJ2GPL4kcgRFEa8vIv5juD3AybqT7f5fNC1I8=;
-  b=xNudHc/1iTEKys1J4qy0DmwtXzzMwogVCvsJRFPOowuZVT6tABtE1SCD
-   vrDMaHCTn0q0ADFMSq6Gi1rS4Xqize3MAZH/kprmLZ1bdndHWNR9/vH18
-   zqJoNZv4MTH+d7J8eszz4aWXyVRgCXSlAMJwN8tAkOBXDcWbtRPom25sQ
-   UH8XHu6ytUg12SUYOh3hhuB4cr172lfVbZXGO5IJ3bEpmdBRQzhAkD7Oq
-   Kru9n3VTgrR4gFdRs6B4l8ACzh9RL0Voj6J6S9yJAzvSsleCdE/ahpbE1
-   SrR7+zTj5OQJRw8tpYJD4rVuJ+mblV6I5yalGLuRdD/wzhz1fgDqA8WpH
-   Q==;
-IronPort-SDR: ZctV5kBRcE0EVOexC79OarCMBP1imJXjTR7L5aWd1Cr6F6/60isfN0iFB8qfNGMMLqrUEzsBOO
- KFuc2m1mVy5yFvcmSnphdu6RK8ekOY+Ee45AnoQYbX8mk77fUDek7SWN4NhqqCIS0aX6xyAyni
- ztD1Z9ZuIM8Lb5Gjslmd/CLQuALGMz67S/wx7zWBHqviK3bjhiyDup8f3/w22ivqqbGmKL/8/9
- Bi8XyDQtkDv6YRjtk0FNaCqDqmA9T/7cS25oTev8aLcaaHIzh0CkmsC9eVVt13xR8OAO3fBo1s
- +sQ=
+  bh=zfJU0rkRYKLOEpDN2ohtgJG/aoT0ah3mnho7Sl1eXw0=;
+  b=yBNnOewWAey8YZZfWOEbwLXVjuiKkiCT/Q+FLYZqFzPOTvBoz5pzDuK/
+   5+U75NMtDOmcoxSvxnzD2F4XsWujshk6AlxuOqZ3RdkAwnRRVkpBWBE94
+   PYcIsklQpDtYRINdp8SDWKU4qDv1aoAJb9+CjWdqKhUvVyTBIlGKzN9/Q
+   nLiBULHk3QBQLTeNFhNhQnTkeuP0PHyjM+MS+MbeLX8AXWHsjb5I/MWMn
+   51Q4cS05EbttbnEgPx+5/sjeCTUyj6e+FzD1h3qxhYkniu1LYyv6aUrk1
+   0q7TTJprg8xclbrSpuB11oX7cQY9fO8f18amo+RMzrGtxjwuE0h000owj
+   g==;
+IronPort-SDR: 711gYyRurMF6urjV+4XbGazc/+jJxGCQ922UU8DO4fQrsQjA5sw5iljugXMC2sCShW7YxL+MPu
+ 5INQwfpPg+dV18Yckgya+B8Iw55gSfXkxxxBIRM5g43svOUCiddi1OOCWpv6OwrnkLdA+O+Si1
+ /vnypGmpTQLVeMUu7dHPqYVtcwLG87dyfGYXd28lz6M75gr/AWm/baskKAMB69pPHMBPSlfFPs
+ SxBHxsgb21LRt5DTit0iZUrXjAkr5pnWeHoiP1SpCDPEI98WCt4k77FXK/DfYq9lmQ2vRvsstC
+ 8gk=
 X-IronPort-AV: E=Sophos;i="5.78,409,1599548400"; 
-   d="scan'208";a="96675011"
+   d="scan'208";a="102325152"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:35:31 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:35:58 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 13:35:30 -0700
-Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Thu, 10 Dec 2020 13:35:30 -0700
-Subject: [PATCH V3 12/25] smartpqi: enable support for NVMe encryption
+ 15.1.1979.3; Thu, 10 Dec 2020 13:35:36 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Thu, 10 Dec 2020 13:35:36 -0700
+Subject: [PATCH V3 13/25] smartpqi: disable write_same for nvme hba disks
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -48,8 +48,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Thu, 10 Dec 2020 14:35:30 -0600
-Message-ID: <160763253019.26927.7831220182823562476.stgit@brunhilda>
+Date:   Thu, 10 Dec 2020 14:35:36 -0600
+Message-ID: <160763253599.26927.2206478699294629813.stgit@brunhilda>
 In-Reply-To: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -62,46 +62,35 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Kevin Barnett <kevin.barnett@microchip.com>
 
-* Support new FW feature bit that enables
-  NVMe encryption.
+* Controller do not support SCSI WRITE SAME
+  for NVMe drives in HBA mode
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi.h      |    3 ++-
- drivers/scsi/smartpqi/smartpqi_init.c |    5 +++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index 343f06e44220..976bfd8c5192 100644
---- a/drivers/scsi/smartpqi/smartpqi.h
-+++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -849,7 +849,8 @@ struct pqi_config_table_firmware_features {
- #define PQI_FIRMWARE_FEATURE_UNIQUE_SATA_WWN			12
- #define PQI_FIRMWARE_FEATURE_RAID_IU_TIMEOUT			13
- #define PQI_FIRMWARE_FEATURE_TMF_IU_TIMEOUT			14
--#define PQI_FIRMWARE_FEATURE_MAXIMUM				14
-+#define PQI_FIRMWARE_FEATURE_RAID_BYPASS_ON_ENCRYPTED_NVME	15
-+#define PQI_FIRMWARE_FEATURE_MAXIMUM				15
- 
- struct pqi_config_table_debug {
- 	struct pqi_config_table_section_header header;
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 9a449bbc1898..19b8dc9ea6ad 100644
+index 19b8dc9ea6ad..1eb677bc6c69 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -7573,6 +7573,11 @@ static struct pqi_firmware_feature pqi_firmware_features[] = {
- 		.feature_bit = PQI_FIRMWARE_FEATURE_TMF_IU_TIMEOUT,
- 		.feature_status = pqi_ctrl_update_feature_flags,
- 	},
-+	{
-+		.feature_name = "RAID Bypass on encrypted logical volumes on NVMe",
-+		.feature_bit = PQI_FIRMWARE_FEATURE_RAID_BYPASS_ON_ENCRYPTED_NVME,
-+		.feature_status = pqi_firmware_feature_status,
-+	},
- };
+@@ -6280,10 +6280,13 @@ static int pqi_slave_alloc(struct scsi_device *sdev)
+ 			scsi_change_queue_depth(sdev,
+ 				device->advertised_queue_depth);
+ 		}
+-		if (pqi_is_logical_device(device))
++		if (pqi_is_logical_device(device)) {
+ 			pqi_disable_write_same(sdev);
+-		else
++		} else {
+ 			sdev->allow_restart = 1;
++			if (device->device_type == SA_DEVICE_TYPE_NVME)
++				pqi_disable_write_same(sdev);
++		}
+ 	}
  
- static void pqi_process_firmware_features(
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
 
