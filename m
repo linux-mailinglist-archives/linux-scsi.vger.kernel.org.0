@@ -2,119 +2,139 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CA02D6866
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 349082D68D5
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390298AbgLJUOZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Dec 2020 15:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393646AbgLJUOO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:14:14 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5211C0613CF;
-        Thu, 10 Dec 2020 12:13:32 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id cw27so6916046edb.5;
-        Thu, 10 Dec 2020 12:13:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KXgO4GifdvzY6EhKipkwQ6+uBUGL6+vhzbZkboDddCA=;
-        b=WmsNWNjivibe5aaYVi3xZhk05JAMwnMYDzjKOfG3LvdE40P1PgIFdeeiSC9NlI/gXW
-         tvFxLq77dsSfc2htEPKcVgqtv+94wbByKlP0ykBO7ilSw6VQOiw9L/0eCcTGl4O9PEJE
-         DxzZ/6NoenqqvfI3n7flqhrwjcn5LZ45Y0xbRMwc3QnpvSp863hHiDWpdZVDlIH9IKeU
-         PqInxmeGuy+7Ky8JrP2+y7ERwQZsbBNA1ky5HSNaXs3VtAYDDmHpEFZzWRanyK4B7oFf
-         7X9zOzNlahFR46VsZCWstPdnHGF9QTzhCl022C0ThMYbD9GIO8pOWmjw0KWzIk5ZblUn
-         I3VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KXgO4GifdvzY6EhKipkwQ6+uBUGL6+vhzbZkboDddCA=;
-        b=l8l3HIOd2G9LNLHYhesoD65akrUqqHBRxe5SFlGRd9qS8tVtvL0eI5YIc4TRWUMx0F
-         05XiPT7GmAw5/PdEkt0FFp7RDhe3HjTjiEZtwq7dqBTTDdj131HFL2o3IiiLdvKKKElu
-         RXynDGBRlr3otbgck7CfbsOZ5HuP85qRHBOliinJCOvLGPMy8T+dE/GU8BtKcoqqv1Z6
-         6oZFhs6E9AmuOzexldnLTfowUje3x5Eq/1PLsRNoVyl0d49+1EpGu+mwAv0d70jKRLLr
-         MYEKIiMBFPV8pQ6/sIaAIq50n92lMtv64KWCwxSmzJbi41Z+wnWacRUf5PHrkLiEDYdd
-         tFGQ==
-X-Gm-Message-State: AOAM530OEu34Ad+2ETB2n9nk54gKlEZKNmKK1JVApjZwo9FYumsNO8c8
-        ZaejXPLfWL4dEJ5dXsu7uY0=
-X-Google-Smtp-Source: ABdhPJxRfb7mJRY7H+1Ywg5Dj50h34zEA9dgeDxhpbwTdZCYglR+VIv5ypzNSfrnIgrsH4V8V5n1sQ==
-X-Received: by 2002:a05:6402:3074:: with SMTP id bs20mr8518860edb.365.1607631211331;
-        Thu, 10 Dec 2020 12:13:31 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.googlemail.com with ESMTPSA id m13sm6043570edi.87.2020.12.10.12.13.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 10 Dec 2020 12:13:30 -0800 (PST)
-Message-ID: <7542e8637f2eca65e87e74c34b2203a3fcd4bb80.camel@gmail.com>
-Subject: Re: [PATCH v3 2/3] scsi: ufs: Keep device active mode only
- fWriteBoosterBufferFlushDuringHibernate == 1
-From:   Bean Huo <huobean@gmail.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 10 Dec 2020 21:13:29 +0100
-In-Reply-To: <DM6PR04MB657504D6828919BAB731B16DFCCB0@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <20201208210941.2177-1-huobean@gmail.com>
-         <20201208210941.2177-3-huobean@gmail.com>
-         <DM6PR04MB6575B928898B319E8ACF1395FCCC0@DM6PR04MB6575.namprd04.prod.outlook.com>
-         <c95e0518fd5c73dead0139054c04dda2243af620.camel@gmail.com>
-         <DM6PR04MB657504D6828919BAB731B16DFCCB0@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
+        id S2393790AbgLJUgU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Dec 2020 15:36:20 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:46625 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404455AbgLJUfl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:35:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1607632540; x=1639168540;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=doYFKZUlImmV9Nua4+/wlhGpQ5LDyeb5bftASqg7Q0M=;
+  b=k5+ggaypAKh6pGXJjGwe/70Wxq2lNpU6wynNlqj0p+yYxzBRT7gxw2xH
+   DtclQ9WDLPLGzQ8wG3uagCAi/wbvT4cnkzpSLWHAOgjznjNnI13EqpcOt
+   vhZCyO6LE18BTmz17XQUn54yh4x0VOlplEIsLGDyWWd3Dk+esnULB7gqD
+   FrELT3Tds5pk61Ug6nDsVLNO9G7wYvSXqd3mhqLbC2rsuyAtRzaZqw0IE
+   pYTy7RkRUqQkemgm6RMe/SLgMq/HAcn+bKJQIKYyV1Doirc01MVeYm2Yd
+   KtjS1ssoLHXAEYV9ujXYt/BTWs9rASsHx6Z8j8Yplqu1HrIU3z3d3P6V7
+   g==;
+IronPort-SDR: Eq3aMmlt4C3MSjHWt8CeXj1WkO/uUyUxqnCySTy1QuGiuHyKpbCEGH3fptwM+mAE4VTvA0x3f3
+ h4tXd0Hxn2gn++xInzJXRs5In0vED6NvWLMrjFy+Q9U6fZuZw38+qQGPXjVP1ZCwsv8ZANHIR6
+ OY8p6/v1HRTWJUIhO/j3ON6f6c9T9AVAUyS7zFrmYuXhRukibLz5RVJ8m+TWwBVy9vD1KUxwzo
+ xF+Y8sUUlAEAK9INoGXXeiz92U6GA0isOhB3ZNpZTp+V3YR9PZ1yMuqxl6xm7WxsSSatJ3Wj0k
+ uoM=
+X-IronPort-AV: E=Sophos;i="5.78,409,1599548400"; 
+   d="scan'208";a="99412594"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:34:21 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 10 Dec 2020 13:34:20 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Thu, 10 Dec 2020 13:34:20 -0700
+Subject: [PATCH V3 00/25] smartpqi updates
+From:   Don Brace <don.brace@microchip.com>
+To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
+        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
+        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
+CC:     <linux-scsi@vger.kernel.org>
+Date:   Thu, 10 Dec 2020 14:34:20 -0600
+Message-ID: <160763241302.26927.17487238067261230799.stgit@brunhilda>
+User-Agent: StGit/0.23-dirty
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2020-12-10 at 07:46 +0000, Avri Altman wrote:
-> > 
-> 
-> Right.
-> But it is a small price, and you no longer need to worry about rare
-> error event.
-> Also adding an if (fWriteBoosterBufferFlushDuringHibernate == 1) will
-> allow some more flexibility,
-> e.g. shutting it off from user-space (ufs-utils), unlike today,
-> that it is categorically on for all platforms / devices.
-> 
-> Anyway, if you decided to add new capability,
-> Preferable to do it in a different series.
-> 
-> Thanks,
-> Avri
+These patches are based on Martin Peterson's 5.11/scsi-queue tree
 
-Hi Avri
-Thanks. This reminds me that ufs-bsg is a latent defect. Currently,
-userspace can pass any raw UPIU commands to the UFS through ufs-bsg,
-ufs-bsg is a pass-through channel. So,
-fWriteBoosterBufferFlushDuringHibernate is not the only one in the
-ufshcd.c can be changed by ufs-utils. any flags in the UFS can be
-changed by user-space tool after UFS finishing its initialization.
+Note that these patches depend on the following three patches
+applied to Martin Peterson's tree:
+  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+  5.11/scsi-queue
+Depends-on: 5443bdc4cc77 scsi: smartpqi: Update version to 1.2.16-012
+Depends-on: 408bdd7e5845 scsi: smartpqi: Correct pqi_sas_smp_handler busy condition
+Depends-on: 1bdf6e934387 scsi: smartpqi: Correct driver removal with HBA disks
+
+This set of changes consist of:
+  * Add support for newer controller hardware.
+    * Refactor AIO and s/g processing code. (No functional changes)
+    * Add write support for RAID 5/6/1 Raid bypass path (or accelerated I/O path).
+    * Add check for sequential streaming.
+    * Add in new PCI-IDs.
+  * Format changes to re-align with our in-house driver. (No functional changes.)
+  * Correct some issues relating to suspend/hibernation/OFA/shutdown.
+    * Block I/O requests during these conditions.
+  * Add in qdepth limit check to limit outstanding commands.
+    to the max values supported by the controller.
+  * Correct some minor issues found during regression testing.
+  * Update the driver version.
+
+Changes since V1:
+  * Re-added 32bit calculations to correct i386 compile issues
+    to patch smartpqi-refactor-aio-submission-code 
+    Reported-by: kernel test robot <lkp@intel.com>
+    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/VMBBGGGE5446SVEOQBRCKBTRRWTSH4AB/
+
+Changes since V2:
+  * Added 32bit division to correct i386 compile issues
+    to patch smartpqi-add-support-for-raid5-and-raid6-writes
+    Reported-by: kernel test robot <lkp@intel.com>
+    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/ZCXJJDGPPTTXLZCSCGWEY6VXPRB3IFOQ/
+
+---
+
+Don Brace (7):
+      smartpqi: refactor aio submission code
+      smartpqi: refactor build sg list code
+      smartpqi: add support for raid5 and raid6 writes
+      smartpqi: add support for raid1 writes
+      smartpqi: add stream detection
+      smartpqi: add host level stream detection enable
+      smartpqi: update version to 2.1.6-005
+
+Kevin Barnett (14):
+      smartpqi: add support for product id
+      smartpqi: add support for BMIC sense feature cmd and feature bits
+      smartpqi: update AIO Sub Page 0x02 support
+      smartpqi: add support for long firmware version
+      smartpqi: align code with oob driver
+      smartpqi: enable support for NVMe encryption
+      smartpqi: disable write_same for nvme hba disks
+      smartpqi: fix driver synchronization issues
+      smartpqi: convert snprintf to scnprintf
+      smartpqi: change timing of release of QRM memory during OFA
+      smartpqi: return busy indication for IOCTLs when ofa is active
+      smartpqi: add additional logging for LUN resets
+      smartpqi: correct system hangs when resuming from hibernation
+      smartpqi: add new pci ids
+
+Mahesh Rajashekhara (1):
+      smartpqi: fix host qdepth limit
+
+Murthy Bhat (3):
+      smartpqi: add phy id support for the physical drives
+      smartpqi: update sas initiator_port_protocols and target_port_protocols
+      smartpqi: update enclosure identifier in sysf
 
 
-This modification after the fact (Linux initialization/probe itself) is
-not legal. I remembered we discussed this on the eMMC case, the same
-with here that, user can change some parameters in the eMMC through
-eMMC Ioctl, the user feels great, but they did a wrong thing.
+ drivers/scsi/smartpqi/smartpqi.h              |  301 +-
+ drivers/scsi/smartpqi/smartpqi_init.c         | 3123 ++++++++++-------
+ .../scsi/smartpqi/smartpqi_sas_transport.c    |   39 +-
+ drivers/scsi/smartpqi/smartpqi_sis.c          |    4 +-
+ 4 files changed, 2189 insertions(+), 1278 deletions(-)
 
-
-Ulf Hansson: "I don't think it's worth to compensate and try
-to act accordingly to cover cases when userspace has messed up."
-
-
-
-thanks,
-Bean
-
+--
+Signature
