@@ -2,80 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1527B2D8030
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Dec 2020 21:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103A12D80D4
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Dec 2020 22:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392775AbgLKUrM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Dec 2020 15:47:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41778 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391288AbgLKUrJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 11 Dec 2020 15:47:09 -0500
-Date:   Fri, 11 Dec 2020 12:46:27 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607719589;
-        bh=W3XvV2FN8bnGn+0PE+UG66OnmrvBWes/FNmdjqojzaE=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pVpvQXxdGH6hT8/deIH1b8KzzSU0P9l0Wa7k98mQrV/z/baUAEWISNvcHPkvyfwV4
-         sIKtbNz6vlZEAmuqi6eWbIT6dppb13Sry8pkgZaGYdgxYQ8QxQysi6kBQR7mZbtj9R
-         9KMnIGngOCJ90nfdMXaoRPljwwqfIkIhisA/+G2BPUz/kMzAqAKruFlXn6o08dWEJd
-         G5AC3fFNB4WZ6YwBq7bCJJg4CvAoaJAk3Asel0VMBP428Oyj1UAQeMKVZPmB/njDev
-         Cr2PQqRB6nX5zWogRC5Axyx7nGR2t4KWjqtUAs0Bec5P7BikHL1Zj3Kc8zgS5P12Up
-         1DGs5ovOXtf5w==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, cang@codeaurora.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com
-Subject: Re: [PATCH] scsi: ufs: fix memory boundary check for UFS 3.0
-Message-ID: <X9Pao72HrNrVB5Fn@google.com>
-References: <20201211193814.1709484-1-jaegeuk@kernel.org>
- <X9PaCUbaIFhsKgc7@gmail.com>
+        id S2404755AbgLKVNR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Dec 2020 16:13:17 -0500
+Received: from server.kenspensetc.com ([185.148.128.76]:60744 "EHLO
+        server.kenspensetc.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2395162AbgLKVMY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Dec 2020 16:12:24 -0500
+Received: from localhost ([127.0.0.1]:48514 helo=server.kenspensetc.com)
+        by server.kenspensetc.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <sender@ridecals.com>)
+        id 1knLnA-0002CX-4B; Thu, 10 Dec 2020 08:15:32 -0500
+Received: from [70.32.0.46] ([70.32.0.46]) by ridecals.com (Horde Framework)
+ with HTTPS; Thu, 10 Dec 2020 08:15:32 -0500
+Date:   Thu, 10 Dec 2020 08:15:32 -0500
+Message-ID: <20201210081532.Horde.8qYOU3VVNsL5wjy1lylWpdy@ridecals.com>
+From:   Russell Branting <sender@ridecals.com>
+Subject: Vital
+Reply-to: Goodagent01@gmail.com
+User-Agent: Horde Application Framework 5
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <X9PaCUbaIFhsKgc7@gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server.kenspensetc.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - ridecals.com
+X-Get-Message-Sender-Via: server.kenspensetc.com: authenticated_id: sender9@ridecals.com
+X-Authenticated-Sender: server.kenspensetc.com: sender9@ridecals.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12/11, Eric Biggers wrote:
-> On Fri, Dec 11, 2020 at 11:38:14AM -0800, Jaegeuk Kim wrote:
-> > From: Jaegeuk Kim <jaegeuk@google.com>
-> > 
-> > If param_offset is greater than what UFS supports, it'll give kernel panic.
-> > 
-> > Signed-off-by: Jaegeuk Kim <jaegeuk@google.com>
-> > Change-Id: I48ea6f3f3074bd42abf4ecf8be87806732f3e6a3
-> > ---
-> >  drivers/scsi/ufs/ufshcd.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> > index d6a3a0ba6960..04687661d0df 100644
-> > --- a/drivers/scsi/ufs/ufshcd.c
-> > +++ b/drivers/scsi/ufs/ufshcd.c
-> > @@ -3194,6 +3194,9 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > +	if (param_offset > buff_len)
-> > +		return -EINVAL;
-> > +
-> >  	/* Check whether we need temp memory */
-> >  	if (param_offset != 0 || param_size < buff_len) {
-> >  		desc_buf = kmalloc(buff_len, GFP_KERNEL);
-> > -- 
-> 
-> Didn't this already get fixed by:
-> 
-> 	commit 1699f980d87fb678a669490462cf0b9517c1fb47
-> 	Author: Can Guo <cang@codeaurora.org>
-> 	Date:   Wed Oct 21 22:59:00 2020 -0700
-> 
-> 	    scsi: ufs: Fix unexpected values from ufshcd_read_desc_param()
 
-Oh, cool. Yes, please ignore this.
+I am instructed to inform you of your appointment as the next of kin  
+to your deceased relative estate. Kindly indicate your acceptance by  
+reconfirming your Full Name, Address & Phone Number for immediate  
+processing of the funds release to your control OR the deceased  
+deposited funds will be declared unclaimed.
 
-Thanks,
+
