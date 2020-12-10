@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C53E82D68DC
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D4F2D68E9
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404656AbgLJUh2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Dec 2020 15:37:28 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:13285 "EHLO
+        id S2404455AbgLJUhz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Dec 2020 15:37:55 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:55295 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404013AbgLJUhU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:37:20 -0500
+        with ESMTP id S2404660AbgLJUhf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:37:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607632638; x=1639168638;
+  t=1607632654; x=1639168654;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wx/rFxEsFYmKJp+x3YgucDeY54zopuzvSkA2vcvzSXs=;
-  b=n/2D7pbHCZtpHqwT6VhW7EfnSboWoY+obIPbCRejEssCNJl5XhPn8COz
-   XsqDAmKlpISV4jlGmVU96LtHssmagbpAsk17TuwtEcnI0pAga25EOBVxa
-   RUsTasx820NTUkwcS9niZLn3nMRVmGjQmsOWdi6POTbStxeUsqrjWxjIc
-   80LqgPtdNUBqlLVYMs9kw7O6xplQQuIWawjMFHklmJ905UuqF0QMxqlq6
-   bCJFcTdMUtjMxewKqOiIAZrCT9xAowF1NwS371Wkw7gefxDJPTQ4+ww2c
-   reX9ltvkUdWJewSMTs4n2NcoWikVCSktJIv54LtblzKQc0t2OKZV9823K
-   w==;
-IronPort-SDR: YYrtuJs6Dx2WrxHWpp/EfujubEo6sCs9dR334k8Rti2p65zyMS6Muc1UACZ4C7Vj4o1qfCMyIP
- YS8g6dEY4wPrafkgfO/m5rMEaS6OEjMZ0umqDkEyONGDiNSgCulvEqUMYTQpO1ptRaWv9p0xjE
- a+5QmEAFvHe3oMsWVXrgWyAjSteUOzWOZGv0iGCoZ/es7Vm4EbdY9IIQ+ofIupxRfMKmP+y4ew
- uWgWnPgS6Pu4Mi4mgiUtiAaA6kRUROGoAdEJNKqnhbqCs2ORAY3MyvEO8TWzi8hrGcmiC+2uqK
- b/s=
+  bh=bLnVp0QamLrqNtK3ruUOoBbZI6LE/aaXlXCfnzZPe3Y=;
+  b=iNmO+0lgrzTIgcvxQW2Nm8BlH1HxkZFC28uON6qtYsSqrqec1xl1iycG
+   Sj07RCjrFbAEpegXfvnlR341l0wqlxPvog3uOpzyoWAVSATxE08w/UKDr
+   aVltpqApq3xCzf07BXqjDAJu5uVHOJIdomyDCZDZ9V0D69p+lfgol8g+N
+   KCBEGQLhcHBT0ZhUR+/QcRjkQsh7sQxfL1fzUdov9/ZwZlyeF/Nxe0s3O
+   lyxWiKgeqmw5WPYpSZH5kamXmZtb2I0tSPON6m4l1jqru9ckXF2uXVRYd
+   Eiw1HhIH/g/0i8XViRH6XMUdF4LygGLuuHOSl9awmZ2zJ8fjA/HMkbC/L
+   A==;
+IronPort-SDR: BvePX5Y+5oBuFygQRo/Yjie1A+m1ycyI1WtRILhosT2IueTOzbFeEh8sGRL6EjfJU+xrXH6eJe
+ JO36E7CwbfJMyRZtkuVfkkTnnEgw1gUy4jjnEV33YNheHSXrF8Kxo69sFCn7cSuosz/vcwIfTL
+ jgDS8y46cDlZh51Sex7UIu6Uc5rKfr9v3/SOAZVOKfbbL0RPOOQGXHDF7IGuEmlplCZEsILnKf
+ 3jJVCsYRdNGzdp7H3e75NnRNYF7/lNIWfLFxMYWuq5Lr2ZlyObJhy9/lCxrtoG/1loRs9QoGyS
+ b98=
 X-IronPort-AV: E=Sophos;i="5.78,409,1599548400"; 
-   d="scan'208";a="102325159"
+   d="scan'208";a="36986807"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:35:58 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:35:55 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 13:35:48 -0700
+ 15.1.1979.3; Thu, 10 Dec 2020 13:35:54 -0700
 Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Thu, 10 Dec 2020 13:35:47 -0700
-Subject: [PATCH V3 15/25] smartpqi: fix host qdepth limit
+ Transport; Thu, 10 Dec 2020 13:35:53 -0700
+Subject: [PATCH V3 16/25] smartpqi: convert snprintf to scnprintf
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -48,8 +48,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Thu, 10 Dec 2020 14:35:47 -0600
-Message-ID: <160763254769.26927.9249430312259308888.stgit@brunhilda>
+Date:   Thu, 10 Dec 2020 14:35:53 -0600
+Message-ID: <160763255345.26927.17474892658811246984.stgit@brunhilda>
 In-Reply-To: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -60,100 +60,121 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
+From: Kevin Barnett <kevin.barnett@microchip.com>
 
-* Correct scsi-mid-layer sending more requests than
-  exposed host Q depth causing firmware ASSERT issue.
-  * Add host Qdepth counter.
+The entire Linux kernel has been slowly migrating from snprintf
+to scnprintf, so we are doing our part. This article explains
+the rationale for this change:
+    https: //lwn.net/Articles/69419/
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
+Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi.h      |    2 ++
- drivers/scsi/smartpqi/smartpqi_init.c |   19 ++++++++++++++++---
- 2 files changed, 18 insertions(+), 3 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |   23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index 0b94c755a74c..c3b103b15924 100644
---- a/drivers/scsi/smartpqi/smartpqi.h
-+++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -1345,6 +1345,8 @@ struct pqi_ctrl_info {
- 	struct work_struct ofa_quiesce_work;
- 	u32		ofa_bytes_requested;
- 	u16		ofa_cancel_reason;
-+
-+	atomic_t	total_scmds_outstanding;
- };
- 
- enum pqi_ctrl_mode {
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 082b17e9bd80..4e088f47d95f 100644
+index 4e088f47d95f..456ea8732312 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -5578,6 +5578,8 @@ static inline bool pqi_is_bypass_eligible_request(struct scsi_cmnd *scmd)
- void pqi_prep_for_scsi_done(struct scsi_cmnd *scmd)
+@@ -1750,7 +1750,7 @@ static void pqi_dev_info(struct pqi_ctrl_info *ctrl_info,
+ 	ssize_t count;
+ 	char buffer[PQI_DEV_INFO_BUFFER_LENGTH];
+ 
+-	count = snprintf(buffer, PQI_DEV_INFO_BUFFER_LENGTH,
++	count = scnprintf(buffer, PQI_DEV_INFO_BUFFER_LENGTH,
+ 		"%d:%d:", ctrl_info->scsi_host->host_no, device->bus);
+ 
+ 	if (device->target_lun_valid)
+@@ -6405,14 +6405,13 @@ static ssize_t pqi_firmware_version_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->firmware_version);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->firmware_version);
+ }
+ 
+ static ssize_t pqi_driver_version_show(struct device *dev,
+ 	struct device_attribute *attr, char *buffer)
  {
- 	struct pqi_scsi_dev *device;
-+	struct pqi_ctrl_info *ctrl_info;
-+	struct Scsi_Host *shost;
- 
- 	if (!scmd->device) {
- 		set_host_byte(scmd, DID_NO_CONNECT);
-@@ -5590,7 +5592,11 @@ void pqi_prep_for_scsi_done(struct scsi_cmnd *scmd)
- 		return;
- 	}
- 
-+	shost = scmd->device->host;
-+	ctrl_info = shost_to_hba(shost);
-+
- 	atomic_dec(&device->scsi_cmds_outstanding);
-+	atomic_dec(&ctrl_info->total_scmds_outstanding);
+-	return snprintf(buffer, PAGE_SIZE, "%s\n",
+-			DRIVER_VERSION BUILD_TIMESTAMP);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", DRIVER_VERSION BUILD_TIMESTAMP);
  }
  
- static bool pqi_is_parity_write_stream(struct pqi_ctrl_info *ctrl_info,
-@@ -5678,6 +5684,7 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
- 	bool raid_bypassed;
+ static ssize_t pqi_serial_number_show(struct device *dev,
+@@ -6424,7 +6423,7 @@ static ssize_t pqi_serial_number_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
  
- 	device = scmd->device->hostdata;
-+	ctrl_info = shost_to_hba(shost);
- 
- 	if (!device) {
- 		set_host_byte(scmd, DID_NO_CONNECT);
-@@ -5686,8 +5693,11 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
- 	}
- 
- 	atomic_inc(&device->scsi_cmds_outstanding);
--
--	ctrl_info = shost_to_hba(shost);
-+	if (atomic_inc_return(&ctrl_info->total_scmds_outstanding) >
-+		ctrl_info->scsi_ml_can_queue) {
-+		rc = SCSI_MLQUEUE_HOST_BUSY;
-+		goto out;
-+	}
- 
- 	if (pqi_ctrl_offline(ctrl_info) || pqi_device_in_remove(device)) {
- 		set_host_byte(scmd, DID_NO_CONNECT);
-@@ -5730,8 +5740,10 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
- 	}
- 
- out:
--	if (rc)
-+	if (rc) {
- 		atomic_dec(&device->scsi_cmds_outstanding);
-+		atomic_dec(&ctrl_info->total_scmds_outstanding);
-+	}
- 
- 	return rc;
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->serial_number);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->serial_number);
  }
-@@ -8054,6 +8066,7 @@ static struct pqi_ctrl_info *pqi_alloc_ctrl_info(int numa_node)
  
- 	INIT_WORK(&ctrl_info->event_work, pqi_event_worker);
- 	atomic_set(&ctrl_info->num_interrupts, 0);
-+	atomic_set(&ctrl_info->total_scmds_outstanding, 0);
+ static ssize_t pqi_model_show(struct device *dev,
+@@ -6436,7 +6435,7 @@ static ssize_t pqi_model_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
  
- 	INIT_DELAYED_WORK(&ctrl_info->rescan_work, pqi_rescan_worker);
- 	INIT_DELAYED_WORK(&ctrl_info->update_time_work, pqi_update_time_worker);
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->model);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->model);
+ }
+ 
+ static ssize_t pqi_vendor_show(struct device *dev,
+@@ -6448,7 +6447,7 @@ static ssize_t pqi_vendor_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->vendor);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->vendor);
+ }
+ 
+ static ssize_t pqi_host_rescan_store(struct device *dev,
+@@ -6642,7 +6641,7 @@ static ssize_t pqi_unique_id_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE,
++	return scnprintf(buffer, PAGE_SIZE,
+ 		"%02X%02X%02X%02X%02X%02X%02X%02X"
+ 		"%02X%02X%02X%02X%02X%02X%02X%02X\n",
+ 		unique_id[0], unique_id[1], unique_id[2], unique_id[3],
+@@ -6675,7 +6674,7 @@ static ssize_t pqi_lunid_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "0x%8phN\n", lunid);
++	return scnprintf(buffer, PAGE_SIZE, "0x%8phN\n", lunid);
+ }
+ 
+ #define MAX_PATHS	8
+@@ -6787,7 +6786,7 @@ static ssize_t pqi_sas_address_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "0x%016llx\n", sas_address);
++	return scnprintf(buffer, PAGE_SIZE, "0x%016llx\n", sas_address);
+ }
+ 
+ static ssize_t pqi_ssd_smart_path_enabled_show(struct device *dev,
+@@ -6845,7 +6844,7 @@ static ssize_t pqi_raid_level_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", raid_level);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", raid_level);
+ }
+ 
+ static ssize_t pqi_raid_bypass_cnt_show(struct device *dev,
+@@ -6872,7 +6871,7 @@ static ssize_t pqi_raid_bypass_cnt_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "0x%x\n", raid_bypass_cnt);
++	return scnprintf(buffer, PAGE_SIZE, "0x%x\n", raid_bypass_cnt);
+ }
+ 
+ static DEVICE_ATTR(lunid, 0444, pqi_lunid_show, NULL);
 
