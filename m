@@ -2,45 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D4F2D68E9
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CC72D68ED
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Dec 2020 21:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404455AbgLJUhz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Dec 2020 15:37:55 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:55295 "EHLO
+        id S2393271AbgLJUi2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Dec 2020 15:38:28 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:13293 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404660AbgLJUhf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:37:35 -0500
+        with ESMTP id S2404653AbgLJUhV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Dec 2020 15:37:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607632654; x=1639168654;
+  t=1607632641; x=1639168641;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bLnVp0QamLrqNtK3ruUOoBbZI6LE/aaXlXCfnzZPe3Y=;
-  b=iNmO+0lgrzTIgcvxQW2Nm8BlH1HxkZFC28uON6qtYsSqrqec1xl1iycG
-   Sj07RCjrFbAEpegXfvnlR341l0wqlxPvog3uOpzyoWAVSATxE08w/UKDr
-   aVltpqApq3xCzf07BXqjDAJu5uVHOJIdomyDCZDZ9V0D69p+lfgol8g+N
-   KCBEGQLhcHBT0ZhUR+/QcRjkQsh7sQxfL1fzUdov9/ZwZlyeF/Nxe0s3O
-   lyxWiKgeqmw5WPYpSZH5kamXmZtb2I0tSPON6m4l1jqru9ckXF2uXVRYd
-   Eiw1HhIH/g/0i8XViRH6XMUdF4LygGLuuHOSl9awmZ2zJ8fjA/HMkbC/L
-   A==;
-IronPort-SDR: BvePX5Y+5oBuFygQRo/Yjie1A+m1ycyI1WtRILhosT2IueTOzbFeEh8sGRL6EjfJU+xrXH6eJe
- JO36E7CwbfJMyRZtkuVfkkTnnEgw1gUy4jjnEV33YNheHSXrF8Kxo69sFCn7cSuosz/vcwIfTL
- jgDS8y46cDlZh51Sex7UIu6Uc5rKfr9v3/SOAZVOKfbbL0RPOOQGXHDF7IGuEmlplCZEsILnKf
- 3jJVCsYRdNGzdp7H3e75NnRNYF7/lNIWfLFxMYWuq5Lr2ZlyObJhy9/lCxrtoG/1loRs9QoGyS
- b98=
+  bh=n26blj5N7CQZKCNhBxhXS0TfPvrHTI1mUYbPNBWrfoI=;
+  b=x+BMEGg1+ZNMtAzy7HnkM98nb1hTIWIeWLn536E/DCMwFo+CB3Tc0jRO
+   i2sz2dFU6gIL+5JiP4Rk3CgsrO4B70LLjlV1dUJNAsvkTVb9bmgKtwxX3
+   IhMSyoKWdfzpEQswMFE83z53n44KYMeOfrhYwyoyFmgrrrrhsrBLRR64N
+   v5rCd9Vt/i6ttRRpaXTzSSfgbC+AFDF1673teTuBAKa/vLbtu1k2pKkS2
+   1eMf6MvdIEC9dvoJXrZtCCFGso7O7DP1dxPIiv1p01snuy4sdMUNesBKL
+   O+Yo5OEfV/LfUNpCjXhrVeuPiPiwGuS64mvkRSv90/Zoxgamg6t2AlxeC
+   g==;
+IronPort-SDR: 943p/+GvSbTPKorlgBMCy/D73MSCQtc0u7oVho+ocGIj8OYWYBQjraGGy1aQDvOJ9niKElyDwi
+ EBYihim8auXqiwHuR8cRstc9cMRaWLb3N6uiNFQLp1Ok8OPbVxgZlkYBpdaug+tQeQzEHIxYxe
+ fGSNsAtVcdkfEidAADGoxBf0PnmWHWg25ynERem5EWn0FekeyUKDSzv18xSphWffRGxlGD1bYj
+ opOZuD7wQqIeoGs8ARGFU87+OAvsTWDexZBr4e5mRD2/qxmSNouq2UKOh+MOimh8S4s687ua6q
+ wBg=
 X-IronPort-AV: E=Sophos;i="5.78,409,1599548400"; 
-   d="scan'208";a="36986807"
+   d="scan'208";a="102325193"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:35:55 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2020 13:36:03 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 13:35:54 -0700
+ 15.1.1979.3; Thu, 10 Dec 2020 13:35:59 -0700
 Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Thu, 10 Dec 2020 13:35:53 -0700
-Subject: [PATCH V3 16/25] smartpqi: convert snprintf to scnprintf
+ Transport; Thu, 10 Dec 2020 13:35:59 -0700
+Subject: [PATCH V3 17/25] smartpqi: change timing of release of QRM memory
+ during OFA
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -48,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Thu, 10 Dec 2020 14:35:53 -0600
-Message-ID: <160763255345.26927.17474892658811246984.stgit@brunhilda>
+Date:   Thu, 10 Dec 2020 14:35:59 -0600
+Message-ID: <160763255925.26927.7798016026983421676.stgit@brunhilda>
 In-Reply-To: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -62,119 +63,53 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Kevin Barnett <kevin.barnett@microchip.com>
 
-The entire Linux kernel has been slowly migrating from snprintf
-to scnprintf, so we are doing our part. This article explains
-the rationale for this change:
-    https: //lwn.net/Articles/69419/
+* Release QRM memory (OFA buffer) on OFA error conditions.
+* Controller is left in a bad state which can cause a kernel panic
+    upon reboot after an unsuccessful OFA.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c |   23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 4e088f47d95f..456ea8732312 100644
+index 456ea8732312..552072812771 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -1750,7 +1750,7 @@ static void pqi_dev_info(struct pqi_ctrl_info *ctrl_info,
- 	ssize_t count;
- 	char buffer[PQI_DEV_INFO_BUFFER_LENGTH];
+@@ -3305,8 +3305,6 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ 	else
+ 		reset_status = RESET_INITIATE_FIRMWARE;
  
--	count = snprintf(buffer, PQI_DEV_INFO_BUFFER_LENGTH,
-+	count = scnprintf(buffer, PQI_DEV_INFO_BUFFER_LENGTH,
- 		"%d:%d:", ctrl_info->scsi_host->host_no, device->bus);
+-	pqi_ofa_free_host_buffer(ctrl_info);
+-
+ 	delay_secs = PQI_POST_RESET_DELAY_SECS;
  
- 	if (device->target_lun_valid)
-@@ -6405,14 +6405,13 @@ static ssize_t pqi_firmware_version_show(struct device *dev,
- 	shost = class_to_shost(dev);
- 	ctrl_info = shost_to_hba(shost);
- 
--	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->firmware_version);
-+	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->firmware_version);
- }
- 
- static ssize_t pqi_driver_version_show(struct device *dev,
- 	struct device_attribute *attr, char *buffer)
- {
--	return snprintf(buffer, PAGE_SIZE, "%s\n",
--			DRIVER_VERSION BUILD_TIMESTAMP);
-+	return scnprintf(buffer, PAGE_SIZE, "%s\n", DRIVER_VERSION BUILD_TIMESTAMP);
- }
- 
- static ssize_t pqi_serial_number_show(struct device *dev,
-@@ -6424,7 +6423,7 @@ static ssize_t pqi_serial_number_show(struct device *dev,
- 	shost = class_to_shost(dev);
- 	ctrl_info = shost_to_hba(shost);
- 
--	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->serial_number);
-+	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->serial_number);
- }
- 
- static ssize_t pqi_model_show(struct device *dev,
-@@ -6436,7 +6435,7 @@ static ssize_t pqi_model_show(struct device *dev,
- 	shost = class_to_shost(dev);
- 	ctrl_info = shost_to_hba(shost);
- 
--	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->model);
-+	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->model);
- }
- 
- static ssize_t pqi_vendor_show(struct device *dev,
-@@ -6448,7 +6447,7 @@ static ssize_t pqi_vendor_show(struct device *dev,
- 	shost = class_to_shost(dev);
- 	ctrl_info = shost_to_hba(shost);
- 
--	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->vendor);
-+	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->vendor);
- }
- 
- static ssize_t pqi_host_rescan_store(struct device *dev,
-@@ -6642,7 +6641,7 @@ static ssize_t pqi_unique_id_show(struct device *dev,
- 
- 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
- 
--	return snprintf(buffer, PAGE_SIZE,
-+	return scnprintf(buffer, PAGE_SIZE,
- 		"%02X%02X%02X%02X%02X%02X%02X%02X"
- 		"%02X%02X%02X%02X%02X%02X%02X%02X\n",
- 		unique_id[0], unique_id[1], unique_id[2], unique_id[3],
-@@ -6675,7 +6674,7 @@ static ssize_t pqi_lunid_show(struct device *dev,
- 
- 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
- 
--	return snprintf(buffer, PAGE_SIZE, "0x%8phN\n", lunid);
-+	return scnprintf(buffer, PAGE_SIZE, "0x%8phN\n", lunid);
- }
- 
- #define MAX_PATHS	8
-@@ -6787,7 +6786,7 @@ static ssize_t pqi_sas_address_show(struct device *dev,
- 
- 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
- 
--	return snprintf(buffer, PAGE_SIZE, "0x%016llx\n", sas_address);
-+	return scnprintf(buffer, PAGE_SIZE, "0x%016llx\n", sas_address);
- }
- 
- static ssize_t pqi_ssd_smart_path_enabled_show(struct device *dev,
-@@ -6845,7 +6844,7 @@ static ssize_t pqi_raid_level_show(struct device *dev,
- 
- 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
- 
--	return snprintf(buffer, PAGE_SIZE, "%s\n", raid_level);
-+	return scnprintf(buffer, PAGE_SIZE, "%s\n", raid_level);
- }
- 
- static ssize_t pqi_raid_bypass_cnt_show(struct device *dev,
-@@ -6872,7 +6871,7 @@ static ssize_t pqi_raid_bypass_cnt_show(struct device *dev,
- 
- 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
- 
--	return snprintf(buffer, PAGE_SIZE, "0x%x\n", raid_bypass_cnt);
-+	return scnprintf(buffer, PAGE_SIZE, "0x%x\n", raid_bypass_cnt);
- }
- 
- static DEVICE_ATTR(lunid, 0444, pqi_lunid_show, NULL);
+ 	switch (reset_status) {
+@@ -3322,6 +3320,7 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ 		ctrl_info->pqi_mode_enabled = false;
+ 		pqi_save_ctrl_mode(ctrl_info, SIS_MODE);
+ 		rc = pqi_ofa_ctrl_restart(ctrl_info, delay_secs);
++		pqi_ofa_free_host_buffer(ctrl_info);
+ 		pqi_ctrl_ofa_done(ctrl_info);
+ 		dev_info(&ctrl_info->pci_dev->dev,
+ 				"Online Firmware Activation: %s\n",
+@@ -3332,6 +3331,7 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ 				"Online Firmware Activation ABORTED\n");
+ 		if (ctrl_info->soft_reset_handshake_supported)
+ 			pqi_clear_soft_reset_status(ctrl_info);
++		pqi_ofa_free_host_buffer(ctrl_info);
+ 		pqi_ctrl_ofa_done(ctrl_info);
+ 		pqi_ofa_ctrl_unquiesce(ctrl_info);
+ 		break;
+@@ -3341,6 +3341,7 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ 		dev_err(&ctrl_info->pci_dev->dev,
+ 			"unexpected Online Firmware Activation reset status: 0x%x\n",
+ 			reset_status);
++		pqi_ofa_free_host_buffer(ctrl_info);
+ 		pqi_ctrl_ofa_done(ctrl_info);
+ 		pqi_ofa_ctrl_unquiesce(ctrl_info);
+ 		pqi_take_ctrl_offline(ctrl_info);
 
