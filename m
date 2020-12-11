@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B89D2D774D
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Dec 2020 15:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 127E22D774F
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Dec 2020 15:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405077AbgLKOBq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S2404672AbgLKOBq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Fri, 11 Dec 2020 09:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395187AbgLKOBo (ORCPT
+        with ESMTP id S2395190AbgLKOBo (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Dec 2020 09:01:44 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D2C06179C;
-        Fri, 11 Dec 2020 06:00:52 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id bo9so12438136ejb.13;
-        Fri, 11 Dec 2020 06:00:52 -0800 (PST)
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB210C0617A6;
+        Fri, 11 Dec 2020 06:00:53 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id k4so9463748edl.0;
+        Fri, 11 Dec 2020 06:00:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=r7avsLazbZX9dvU8Tg2nAQdER6pLqpE9+qG8bfjeftM=;
-        b=dwmFFwZc99d/3nDJ/2pSBeVKX3qWS7FwI83wvV5vjwZfnhbuL9NQPZn8FYcnGs9q0P
-         JPNyUO4CYhsg9PhmABjEj81priABl307EDrYEUt1HryOBWuCB1i6Y7OybmlpNhPXiPfo
-         HRlBIBz1tjjFSr/7GAec/KjS8h+BCoMlkuHlf1+LFJowicy6WY2W8nHuTsZ5ecUm9t1j
-         FCacKkF5+H5LYsxACrn0+x6dusOwuPlHAr4hTUofIcJaDHOQqVhtrbmOBOmOVCBYYoFc
-         gSgm7UMTFYU6JUEmsdwx6uS5rSSL3DehuI4yl1XpS9ZmV5IoDAQAkPemUffv7eTeVhbw
-         BhdA==
+        bh=Ij2jWlbd33lTLBTZXg3PtNV3E0laB8helhKjcL0SZ3o=;
+        b=bAegCaHUyMEMbburi06cxlaYRl+cCbKZXTdSpYVVHcHT/OxBDo6R/sFTMRcAdoVlhL
+         6HPD85In1uAFXHEY4Zl0djrMj1tSXp0KH7/EToVkJPXhxw+NsS8Hr424Qky6bxo9gYQd
+         +cwckb2vOtr3H5Cg7sdrZVIbPMQcyg/ku1NrNLFSVbZZcf9cdrSo1r2gXoLTN+8DJB8n
+         PCV2pdfBp4CFRk4e9TLKGhODmb3IzXnvmcFp+6NeeVqbssc4v8XEn4yj5EjJBtqfjSDN
+         NPMlyT5Jo3XAkce6VvT/iv4+l75N2MA6fkoAyuRKnhV98jVX/T8N/B/TsL1WxB7GNZMo
+         dsgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=r7avsLazbZX9dvU8Tg2nAQdER6pLqpE9+qG8bfjeftM=;
-        b=DzFHfAuyeGsXqtPmgdkLvMq9rUrAR+99rcV6Nn/ZjMVT/URw3jP2azMni6vPtY82AH
-         7icYlWgW7bPU3LsUisdKM44mkOFMMNNtZCg7Yj1qmhEz63cQHZWE64AVBs8gkgAlkxqe
-         djWwe+3FDStnFWFDalbf9NV6sY4qaFlq8E0PUeqsXOW9X3OiNvW1I8fjNfPfmcTjL7nk
-         T8nLbJlfxgRu91sFPNEjnQI6djFGAyZlpiLc3WW8sOJJeB5iTfH12+MoxQS151vbcWvz
-         N1VPvZl6OQGJB0CwfzjpyiPYOZ6F4DdfUYHgJZpkeqFa9ErkOtg3mXhmpl2abu1hG1GZ
-         yCcw==
-X-Gm-Message-State: AOAM531IeoRtxBqhNc1lZ9WQC4c3sSX8Jrdl7jJLnAkaw19sV46FAGLw
-        wH90AzZN186s4a4sE5CSoKg=
-X-Google-Smtp-Source: ABdhPJwNuczM71eE2ghLGJvtL/gDQz7vkH5A+d+U47OsL6T1pHpoA+DlwF01CJfdCsBX8RMLuAYSuw==
-X-Received: by 2002:a17:906:3881:: with SMTP id q1mr11245093ejd.490.1607695251484;
-        Fri, 11 Dec 2020 06:00:51 -0800 (PST)
+        bh=Ij2jWlbd33lTLBTZXg3PtNV3E0laB8helhKjcL0SZ3o=;
+        b=rLBkHrZ2ZFs+2g/kBCpYq6g0XFtBYUi5UeGoELjiVgA6Z3iwX04okWvFRJN906Cb4y
+         +RWPZmsPKr0aNc/C/MZ5DV/gZ67rLzuhhpjbVWhmWMUbEALPPZo4KEBGXNueR1r7gHjz
+         ZZb1X+wuq2HDrVTBAAGy9u5JKZBHuEPPR2nZ6cMhP3Xa1mPbrJdMQKe/ARq1/rkm7xO2
+         F3pki5Jn4XWERm6SI7ONbtVZrsNR9su7cX1AXiQueHzsiIeVbL56vbfhp9YswAxaF5D2
+         nu4VQyz2mqfVmnZ69s2j3NBzIg/MSn96GwDTfublr9WRB8ngzSkWq3n27y4udXLR/b6x
+         fXNA==
+X-Gm-Message-State: AOAM531SeVmW0RZUkacOGSqPr9iZLU2RqWyXa6I0IfBiwqOLYAs5/5oQ
+        AE9ZuJnNmeov3EBbD2KRR+U=
+X-Google-Smtp-Source: ABdhPJxfaCzxyjLMHwXKmrK8kG1Rg+8c4pw1EQAV083eMMyDo4K3yi3oWctIdT615ZyG27vZ6lF0Uw==
+X-Received: by 2002:a50:a684:: with SMTP id e4mr11777089edc.148.1607695252668;
+        Fri, 11 Dec 2020 06:00:52 -0800 (PST)
 Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.gmail.com with ESMTPSA id z24sm7797818edr.9.2020.12.11.06.00.50
+        by smtp.gmail.com with ESMTPSA id z24sm7797818edr.9.2020.12.11.06.00.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 06:00:51 -0800 (PST)
+        Fri, 11 Dec 2020 06:00:52 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -53,9 +53,9 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/6] scsi: ufs: Group UFS WB related flags to struct ufs_dev_info
-Date:   Fri, 11 Dec 2020 15:00:32 +0100
-Message-Id: <20201211140035.20016-4-huobean@gmail.com>
+Subject: [PATCH v4 4/6] scsi: ufs: Remove d_wb_alloc_units from struct ufs_dev_info
+Date:   Fri, 11 Dec 2020 15:00:33 +0100
+Message-Id: <20201211140035.20016-5-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201211140035.20016-1-huobean@gmail.com>
 References: <20201211140035.20016-1-huobean@gmail.com>
@@ -65,160 +65,46 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-UFS device-related flags should be grouped in ufs_dev_info. Take
-wb_enabled and wb_buf_flush_enabled out from the struct ufs_hba,
-group them to struct ufs_dev_info, and align the names of the structure
-members vertically
+d_wb_alloc_units only be used while WB probe, just used to confirm the
+condition that "if bWriteBoosterBufferType is set to 01h but
+dNumSharedWriteBoosterBufferAllocUnits is set to zero, the WriteBooster
+feature is disabled". So, don't need to keep it in runtime.
 
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/scsi/ufs/ufs-sysfs.c |  2 +-
- drivers/scsi/ufs/ufs.h       | 33 +++++++++++++++++++--------------
- drivers/scsi/ufs/ufshcd.c    | 16 ++++++++--------
- drivers/scsi/ufs/ufshcd.h    |  2 --
- 4 files changed, 28 insertions(+), 25 deletions(-)
+ drivers/scsi/ufs/ufs.h    | 1 -
+ drivers/scsi/ufs/ufshcd.c | 6 ++----
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index 2b4e9fe935cc..4bd7e18bb486 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -194,7 +194,7 @@ static ssize_t wb_on_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", hba->wb_enabled);
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", hba->dev_info.wb_enabled);
- }
- 
- static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
 diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-index 14dfda735adf..45bebca29fdd 100644
+index 45bebca29fdd..8ed342e43883 100644
 --- a/drivers/scsi/ufs/ufs.h
 +++ b/drivers/scsi/ufs/ufs.h
-@@ -527,22 +527,27 @@ struct ufs_vreg_info {
- };
+@@ -544,7 +544,6 @@ struct ufs_dev_info {
+ 	bool	wb_buf_flush_enabled;
+ 	u8	wb_dedicated_lu;
+ 	u8	b_wb_buffer_type;
+-	u32	d_wb_alloc_units;
  
- struct ufs_dev_info {
--	bool f_power_on_wp_en;
-+	bool	f_power_on_wp_en;
- 	/* Keeps information if any of the LU is power on write protected */
--	bool is_lu_power_on_wp;
-+	bool	is_lu_power_on_wp;
- 	/* Maximum number of general LU supported by the UFS device */
--	u8 max_lu_supported;
--	u8 wb_dedicated_lu;
--	u16 wmanufacturerid;
--	/*UFS device Product Name */
--	u8 *model;
--	u16 wspecversion;
--	u32 clk_gating_wait_us;
--	u32 d_ext_ufs_feature_sup;
--	u8 b_wb_buffer_type;
--	u32 d_wb_alloc_units;
--	bool b_rpm_dev_flush_capable;
--	u8 b_presrv_uspc_en;
-+	u8	max_lu_supported;
-+	u16	wmanufacturerid;
-+	/* UFS device Product Name */
-+	u8	*model;
-+	u16	wspecversion;
-+	u32	clk_gating_wait_us;
-+	u32	d_ext_ufs_feature_sup;
-+
-+	/* UFS WB related flags */
-+	bool	wb_enabled;
-+	bool	wb_buf_flush_enabled;
-+	u8	wb_dedicated_lu;
-+	u8	b_wb_buffer_type;
-+	u32	d_wb_alloc_units;
-+
-+	bool	b_rpm_dev_flush_capable;
-+	u8	b_presrv_uspc_en;
- };
- 
- /**
+ 	bool	b_rpm_dev_flush_capable;
+ 	u8	b_presrv_uspc_en;
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 6a5532b752aa..528c257df48c 100644
+index 528c257df48c..0998e6103cd7 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -589,8 +589,8 @@ static void ufshcd_device_reset(struct ufs_hba *hba)
- 	if (!err) {
- 		ufshcd_set_ufs_dev_active(hba);
- 		if (ufshcd_is_wb_allowed(hba)) {
--			hba->wb_enabled = false;
--			hba->wb_buf_flush_enabled = false;
-+			hba->dev_info.wb_enabled = false;
-+			hba->dev_info.wb_buf_flush_enabled = false;
- 		}
- 	}
- 	if (err != -EOPNOTSUPP)
-@@ -5359,7 +5359,7 @@ int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
- 	if (!ufshcd_is_wb_allowed(hba))
- 		return 0;
+@@ -7243,10 +7243,8 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
+ 		desc_buf[DEVICE_DESC_PARAM_WB_PRESRV_USRSPC_EN];
  
--	if (!(enable ^ hba->wb_enabled))
-+	if (!(enable ^ hba->dev_info.wb_enabled))
- 		return 0;
- 	if (enable)
- 		opcode = UPIU_QUERY_OPCODE_SET_FLAG;
-@@ -5375,7 +5375,7 @@ int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
- 		return ret;
- 	}
- 
--	hba->wb_enabled = enable;
-+	hba->dev_info.wb_enabled = enable;
- 	dev_dbg(hba->dev, "%s write booster %s %d\n",
- 			__func__, enable ? "enable" : "disable", ret);
- 
-@@ -5415,7 +5415,7 @@ static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba)
- 	int ret;
- 	u8 index;
- 
--	if (!ufshcd_is_wb_allowed(hba) || hba->wb_buf_flush_enabled)
-+	if (!ufshcd_is_wb_allowed(hba) || hba->dev_info.wb_buf_flush_enabled)
- 		return 0;
- 
- 	index = ufshcd_wb_get_query_index(hba);
-@@ -5426,7 +5426,7 @@ static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba)
- 		dev_err(hba->dev, "%s WB - buf flush enable failed %d\n",
- 			__func__, ret);
- 	else
--		hba->wb_buf_flush_enabled = true;
-+		hba->dev_info.wb_buf_flush_enabled = true;
- 
- 	dev_dbg(hba->dev, "WB - Flush enabled: %d\n", ret);
- 	return ret;
-@@ -5437,7 +5437,7 @@ static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba)
- 	int ret;
- 	u8 index;
- 
--	if (!ufshcd_is_wb_allowed(hba) || !hba->wb_buf_flush_enabled)
-+	if (!ufshcd_is_wb_allowed(hba) || !hba->dev_info.wb_buf_flush_enabled)
- 		return 0;
- 
- 	index = ufshcd_wb_get_query_index(hba);
-@@ -5448,7 +5448,7 @@ static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba)
- 		dev_warn(hba->dev, "%s: WB - buf flush disable failed %d\n",
- 			 __func__, ret);
+ 	if (dev_info->b_wb_buffer_type == WB_BUF_MODE_SHARED) {
+-		dev_info->d_wb_alloc_units =
+-		get_unaligned_be32(desc_buf +
+-				   DEVICE_DESC_PARAM_WB_SHARED_ALLOC_UNITS);
+-		if (!dev_info->d_wb_alloc_units)
++		if (!get_unaligned_be32(desc_buf +
++				   DEVICE_DESC_PARAM_WB_SHARED_ALLOC_UNITS))
+ 			goto wb_disabled;
  	} else {
--		hba->wb_buf_flush_enabled = false;
-+		hba->dev_info.wb_buf_flush_enabled = false;
- 		dev_dbg(hba->dev, "WB - Flush disabled: %d\n", ret);
- 	}
- 
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 2a97006a2c93..45c3eca88f0e 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -805,8 +805,6 @@ struct ufs_hba {
- 
- 	struct device		bsg_dev;
- 	struct request_queue	*bsg_queue;
--	bool wb_buf_flush_enabled;
--	bool wb_enabled;
- 	struct delayed_work rpm_dev_flush_recheck_work;
- 
- #ifdef CONFIG_SCSI_UFS_CRYPTO
+ 		for (lun = 0; lun < UFS_UPIU_MAX_WB_LUN_ID; lun++) {
 -- 
 2.17.1
 
