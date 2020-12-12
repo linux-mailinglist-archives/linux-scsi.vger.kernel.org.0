@@ -2,15 +2,15 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D892D87F6
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Dec 2020 17:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1692D87BF
+	for <lists+linux-scsi@lfdr.de>; Sat, 12 Dec 2020 17:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407539AbgLLQWU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Dec 2020 11:22:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59454 "EHLO mail.kernel.org"
+        id S2439353AbgLLQLB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 12 Dec 2020 11:11:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57726 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439472AbgLLQKk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 12 Dec 2020 11:10:40 -0500
+        id S2439499AbgLLQKu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 12 Dec 2020 11:10:50 -0500
 From:   Sasha Levin <sashal@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
@@ -18,12 +18,12 @@ Cc:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>,
         MPT-FusionLinux.pdl@avagotech.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 7/8] scsi: mpt3sas: Increase IOCInit request timeout to 30s
-Date:   Sat, 12 Dec 2020 11:08:58 -0500
-Message-Id: <20201212160859.2335412-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 4/5] scsi: mpt3sas: Increase IOCInit request timeout to 30s
+Date:   Sat, 12 Dec 2020 11:09:08 -0500
+Message-Id: <20201212160910.2335511-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201212160859.2335412-1-sashal@kernel.org>
-References: <20201212160859.2335412-1-sashal@kernel.org>
+In-Reply-To: <20201212160910.2335511-1-sashal@kernel.org>
+References: <20201212160910.2335511-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -50,10 +50,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 556971c5f0b0e..20bf1fa7f2733 100644
+index 601a93953307d..16716b2644020 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -4575,7 +4575,7 @@ _base_send_ioc_init(struct MPT3SAS_ADAPTER *ioc)
+@@ -4477,7 +4477,7 @@ _base_send_ioc_init(struct MPT3SAS_ADAPTER *ioc)
  
  	r = _base_handshake_req_reply_wait(ioc,
  	    sizeof(Mpi2IOCInitRequest_t), (u32 *)&mpi_request,
