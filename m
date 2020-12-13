@@ -2,163 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613772D8B21
-	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 04:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A94782D8B1A
+	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 04:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391939AbgLMDMM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Dec 2020 22:12:12 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:60388 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391777AbgLMDL6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Dec 2020 22:11:58 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD37NPB076315;
-        Sun, 13 Dec 2020 03:11:09 GMT
+        id S2390477AbgLMDLC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 12 Dec 2020 22:11:02 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:60634 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388193AbgLMDKC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Dec 2020 22:10:02 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD33bM5156190;
+        Sun, 13 Dec 2020 03:09:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=5zFzZEb8yItCs8XhGp4SpBiqEhLiuZfSZ6U4DN+XNdw=;
- b=RHNyXPeeU2l9tSKrVz36/2xr6ELR98ww554tUriDaBcsaI5kX4/K7ZkULInGCm/Im9sg
- MisB2g4XoQLIusvNMFknW/tigDcnoIAVr+A+Zl+v8Hkiw0UWFBoX61HxsDx3+ilVA72k
- PDlr5hXBA4tFJDcNPaQVWDYhZq0cTSCPik1mu0qBHdCmj8bMWHi2bB+GvKKejpB1ceLh
- eqa4JNLqGF34uKE9GhioUhQCmldp3O2y4e4DL9Y0A3huEn0NznRvsXTxZqf4oT/DlPjr
- B/D/XW9/Xvt88R9xG5kq53OBYWzcRDGZYWmVufvy/Zbpz5b//YPKE7ErI2lwX2WIcuUG xg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 35cn9r1jd5-1
+ bh=z6I6fHREh7MFbCUuv3108y5Mdw0oOU21FY0obr3/55U=;
+ b=rwtZfkECT26mNqdQsLQC2Bvk5+buMG3qUlr8gJ3z+glJcQrRVRFkwno/kCO420IY3W2o
+ INcr5WOG/KFxJ0dMIJVrwWYVfttYNwN7HcK7ZxeCqREt0zmnBCOgH4fcQDiTAC4F3TmW
+ mVny04T2C+IaYbtbS5LQ+xCEeB/Zh8/VeyYpDQZxisLT5AvX1Tm4ZHWM/QTH76osmC7T
+ VHVzs5yTJMIfbsV8BFPRcxPwFJrdcTEb/tHflpr0fcHO04AzVkJg6D/joGvMM8wuM7qm
+ r2G8hDGgQ1Mo24wgwbtz3es1tKomWMPxhK541EyE83a+Rm2/gbqw8EBUmkmfVJh/aCzo zg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 35ckcb1ph6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 13 Dec 2020 03:11:09 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD34rit122050;
-        Sun, 13 Dec 2020 03:09:09 GMT
+        Sun, 13 Dec 2020 03:09:10 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD351wR107812;
+        Sun, 13 Dec 2020 03:09:10 GMT
 Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 35d7mnkn12-1
+        by aserp3030.oracle.com with ESMTP id 35d7ejakjh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 13 Dec 2020 03:09:08 +0000
+        Sun, 13 Dec 2020 03:09:10 +0000
 Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BD397BP013833;
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BD398WD013837;
         Sun, 13 Dec 2020 03:09:08 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 12 Dec 2020 19:09:06 -0800
+        with ESMTP ; Sat, 12 Dec 2020 19:09:08 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
         mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
         varun@chelsio.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Subject: [RFC PATCH 11/18] iser, be2iscsi, qla4xxx: set scsi_host_template cmd_size
-Date:   Sat, 12 Dec 2020 21:08:39 -0600
-Message-Id: <1607828926-3658-12-git-send-email-michael.christie@oracle.com>
+Subject: [RFC PATCH 12/18] bnx2i: set scsi_host_template cmd_size
+Date:   Sat, 12 Dec 2020 21:08:40 -0600
+Message-Id: <1607828926-3658-13-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1607828926-3658-1-git-send-email-michael.christie@oracle.com>
 References: <1607828926-3658-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9833 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2012130023
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9833 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0
- malwarescore=0 priorityscore=1501 phishscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 suspectscore=0 adultscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012130023
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use scsi_host_template cmd_size so the block/scsi-ml layers allocate
-the iscsi structs for the driver. This patch includes the easy drivers
-that just needed to set the size and a helper to init the iscsi task.
+Use scsi_host_template cmd_size so the block/scsi-ml layers allocate the
+iscsi structs for the driver.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/infiniband/ulp/iser/iscsi_iser.c |  3 +++
- drivers/scsi/be2iscsi/be_main.c          |  2 ++
- drivers/scsi/libiscsi.c                  | 17 +++++++++++++++++
- drivers/scsi/qla4xxx/ql4_os.c            |  3 +++
- include/scsi/libiscsi.h                  |  1 +
- 5 files changed, 26 insertions(+)
+ drivers/scsi/bnx2i/bnx2i_iscsi.c | 55 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
-index 3690e28..96f44eb 100644
---- a/drivers/infiniband/ulp/iser/iscsi_iser.c
-+++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
-@@ -976,6 +976,9 @@ static umode_t iser_attr_is_visible(int param_type, int param)
- 	.proc_name              = "iscsi_iser",
- 	.this_id                = -1,
- 	.track_queue_depth	= 1,
-+	.cmd_size		= sizeof(struct iscsi_iser_task) +
-+				  sizeof(struct iscsi_task),
-+	.init_cmd_priv		= iscsi_init_cmd_priv,
- };
- 
- static struct iscsi_transport iscsi_iser_transport = {
-diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
-index cd3189b..91bc822 100644
---- a/drivers/scsi/be2iscsi/be_main.c
-+++ b/drivers/scsi/be2iscsi/be_main.c
-@@ -401,6 +401,8 @@ static int beiscsi_eh_device_reset(struct scsi_cmnd *sc)
- 	.cmd_per_lun = BEISCSI_CMD_PER_LUN,
- 	.vendor_id = SCSI_NL_VID_TYPE_PCI | BE_VENDOR_ID,
- 	.track_queue_depth = 1,
-+	.cmd_size = sizeof(struct beiscsi_io_task) + sizeof(struct iscsi_task),
-+	.init_cmd_priv = iscsi_init_cmd_priv,
- };
- 
- static struct scsi_transport_template *beiscsi_scsi_transport;
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 39d7d81..462a308 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -2838,6 +2838,23 @@ static void iscsi_host_dec_session_cnt(struct Scsi_Host *shost)
- 	scsi_host_put(shost);
+diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+index c49e7aa..975fb48 100644
+--- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
++++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+@@ -434,6 +434,31 @@ static void bnx2i_free_ep(struct iscsi_endpoint *ep)
+ 	iscsi_destroy_endpoint(ep);
  }
  
-+static void iscsi_init_task(struct iscsi_task *task)
++static void __bnx2i_free_task_priv(struct Scsi_Host *shost,
++				   struct iscsi_task *task)
 +{
-+	task->dd_data = &task[1];
-+	task->itt = ISCSI_RESERVED_TAG;
-+	task->state = ISCSI_TASK_FREE;
-+	INIT_LIST_HEAD(&task->running);
++	struct bnx2i_hba *hba = iscsi_host_priv(shost);
++	struct bnx2i_cmd *cmd = task->dd_data;
++
++	if (!cmd->io_tbl.bd_tbl)
++		return;
++
++	dma_free_coherent(&hba->pcidev->dev,
++			  ISCSI_MAX_BDS_PER_CMD * sizeof(struct iscsi_bd),
++			  cmd->io_tbl.bd_tbl, cmd->io_tbl.bd_tbl_dma);
 +}
 +
-+int iscsi_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *sc)
++static void bnx2i_free_task_priv(struct iscsi_session *session,
++				 struct iscsi_task *task)
 +{
-+	struct iscsi_task *task = scsi_cmd_priv(sc);
++	__bnx2i_free_task_priv(session->host, task);
++}
 +
-+	iscsi_init_task(task);
++static int bnx2i_exit_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *sc)
++{
++	__bnx2i_free_task_priv(shost, scsi_cmd_priv(sc));
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(iscsi_init_cmd_priv);
-+
+ 
  /**
-  * iscsi_session_setup - create iscsi cls session and host and session
-  * @iscsit: iscsi transport template
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 6996942..c20b7c3 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -239,6 +239,9 @@ static int qla4xxx_sysfs_ddb_logout(struct iscsi_bus_flash_session *fnode_sess,
- 	.this_id		= -1,
- 	.cmd_per_lun		= 3,
- 	.sg_tablesize		= SG_ALL,
-+	.cmd_size		= sizeof(struct ql4_task_data) +
+  * bnx2i_alloc_bdt - allocates buffer descriptor (BD) table for the command
+@@ -456,30 +481,28 @@ static int bnx2i_alloc_bdt(struct bnx2i_hba *hba, struct bnx2i_cmd *cmd)
+ 	return 0;
+ }
+ 
+-static void bnx2i_free_task_priv(struct iscsi_session *session,
+-				 struct iscsi_task *task)
++static int __bnx2i_alloc_task_priv(struct Scsi_Host *shost,
++				   struct iscsi_task *task)
+ {
+-	struct bnx2i_hba *hba = iscsi_host_priv(session->host);
++	struct bnx2i_hba *hba = iscsi_host_priv(shost);
+ 	struct bnx2i_cmd *cmd = task->dd_data;
+ 
+-	if (!cmd->io_tbl.bd_tbl)
+-		return;
++	task->hdr = &cmd->hdr;
++	task->hdr_max = sizeof(struct iscsi_hdr);
+ 
+-	dma_free_coherent(&hba->pcidev->dev,
+-			  ISCSI_MAX_BDS_PER_CMD * sizeof(struct iscsi_bd),
+-			  cmd->io_tbl.bd_tbl, cmd->io_tbl.bd_tbl_dma);
++	return bnx2i_alloc_bdt(hba, cmd);
+ }
+ 
+ static int bnx2i_alloc_task_priv(struct iscsi_session *session,
+ 				 struct iscsi_task *task)
+ {
+-	struct bnx2i_hba *hba = iscsi_host_priv(session->host);
+-	struct bnx2i_cmd *cmd = task->dd_data;
+-
+-	task->hdr = &cmd->hdr;
+-	task->hdr_max = sizeof(struct iscsi_hdr);
++	return __bnx2i_alloc_task_priv(session->host, task);
++}
+ 
+-	return bnx2i_alloc_bdt(hba, cmd);
++static int bnx2i_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *sc)
++{
++	iscsi_init_cmd_priv(shost, sc);
++	return __bnx2i_alloc_task_priv(shost, scsi_cmd_priv(sc));
+ }
+ 
+ /**
+@@ -2204,6 +2227,10 @@ static umode_t bnx2i_attr_is_visible(int param_type, int param)
+ 	.sg_tablesize		= ISCSI_MAX_BDS_PER_CMD,
+ 	.shost_attrs		= bnx2i_dev_attributes,
+ 	.track_queue_depth	= 1,
++	.cmd_size		= sizeof(struct bnx2i_cmd) +
 +				  sizeof(struct iscsi_task),
-+	.init_cmd_priv		= iscsi_init_cmd_priv,
++	.init_cmd_priv		= bnx2i_init_cmd_priv,
++	.exit_cmd_priv		= bnx2i_exit_cmd_priv,
+ };
  
- 	.max_sectors		= 0xFFFF,
- 	.shost_attrs		= qla4xxx_host_attrs,
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index e4dd975..406e8a2 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -460,6 +460,7 @@ extern int __iscsi_complete_pdu(struct iscsi_conn *, struct iscsi_hdr *,
- extern void __iscsi_get_task(struct iscsi_task *task);
- extern void iscsi_complete_scsi_task(struct iscsi_task *task,
- 				     uint32_t exp_cmdsn, uint32_t max_cmdsn);
-+extern int iscsi_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
- 
- /*
-  * generic helpers
+ struct iscsi_transport bnx2i_iscsi_transport = {
 -- 
 1.8.3.1
 
