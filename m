@@ -2,50 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FD32D8D0A
-	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 13:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F132D8DC1
+	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 15:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406620AbgLMMKq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 13 Dec 2020 07:10:46 -0500
-Received: from mail.saocarlos.sp.gov.br ([187.103.149.63]:53322 "EHLO
-        webmail.saocarlos.sp.gov.br" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406522AbgLMMKq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 13 Dec 2020 07:10:46 -0500
-X-Greylist: delayed 603 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Dec 2020 07:10:45 EST
-Received: from webmail.saocarlos.sp.gov.br (unknown [187.103.149.63])
-        (Authenticated sender: joao.guedes@saocarlos.sp.gov.br)
-        by webmail.saocarlos.sp.gov.br (webmail.saocarlos.sp.gov.br) with ESMTPSA id 5F24920C74;
-        Sun, 13 Dec 2020 08:59:52 -0300 (-03)
+        id S2395148AbgLMOGn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Dec 2020 09:06:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2395074AbgLMOGb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 13 Dec 2020 09:06:31 -0500
+Date:   Sun, 13 Dec 2020 09:05:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607868350;
+        bh=mcbojKX0rCRAglq8j0baJ+vgXce4rMTNLcaD/nWwNHs=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rRFQLa9PCwMZs0lPKS99ktrsTgouLcbSl8Wem5V5bqvQpsD5VnSfXkjJkwDv6NpTP
+         wYi8ROaa6VTvX1JMo/pD7EayF2ds/o4Bh2HD+DjRVHnRSTuWGz1+NY9VukNrnmOgBv
+         zWlyg3DYQevPMBJ4qe9HX8IXTWiyLHK9C2CZ5CPIsSfXd+llpnf0rIXyXtJOMaLuJA
+         FeEzDOO1d1pjE2yFrwqwrLLrNlh3LDvfPPRMltmi3ikLrvqqauzeiSmphedv+1IwEx
+         uQYLBzXaoa0SF7zjUhhOfPMNx17/ZjnEUrvUhbTJWa+2k8Rp5NHeo4Zjgr/RJ5Dpcw
+         3F+kzL1Linugg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org,
+        Saruhan Karademir <skarade@microsoft.com>,
+        devel@linuxdriverproject.org
+Subject: Re: [PATCH AUTOSEL 5.9 15/23] scsi: storvsc: Validate length of
+ incoming packet in storvsc_on_channel_callback()
+Message-ID: <20201213140549.GP643756@sasha-vm>
+References: <20201212160804.2334982-1-sashal@kernel.org>
+ <20201212160804.2334982-15-sashal@kernel.org>
+ <20201212180901.GA19225@andrea>
 MIME-Version: 1.0
-Date:   Sun, 13 Dec 2020 12:59:52 +0100
-From:   "Dr. Cheong Kong" <jao.guedes@saocarlos.sp.gov.br>
-To:     undisclosed-recipients:;
-Subject: Covid-19 Relief Fund
-Reply-To: cckong804@protonmail.ch
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <2f78d40c7b1a3609025d59c8f33e3ec3@saocarlos.sp.gov.br>
-X-Sender: jao.guedes@saocarlos.sp.gov.br
-Organization: Dr. Cheong Kong
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20201212180901.GA19225@andrea>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Sat, Dec 12, 2020 at 07:09:01PM +0100, Andrea Parri wrote:
+>Hi Sasha,
+>
+>On Sat, Dec 12, 2020 at 11:07:56AM -0500, Sasha Levin wrote:
+>> From: "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+>>
+>> [ Upstream commit 3b8c72d076c42bf27284cda7b2b2b522810686f8 ]
+>
+>FYI, we found that this commit introduced a regression and posted a
+>revert:
+>
+>  https://lkml.kernel.org/r/20201211131404.21359-1-parri.andrea@gmail.com
+>
+>Same comment for the AUTOSEL 5.4, 4.19 and 4.14 you've just posted.
 
+I'll drop those, thanks!
 
 -- 
-Dear Beneficiary,
-
-You have been selected by the WORLD BANK GROUP to receive a Covid-19 
-Relief
-Fund sum of $850,000.00 USD.
-
-For more details, please email directly to (cckong804@protonmail.ch)
-
-Your Ref #: WBGUTB1920.
-
-Dr. Cheong Kong
-Notification Officer
+Thanks,
+Sasha
