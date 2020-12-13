@@ -2,224 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 160012D8B19
-	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 04:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAFF2D8C76
+	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 10:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388644AbgLMDKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Dec 2020 22:10:52 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:60506 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389030AbgLMDKG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Dec 2020 22:10:06 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD347Mp025390;
-        Sun, 13 Dec 2020 03:09:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=hix38S5zrAF9sL3tdxODzBgmtKmngs3KQCIBpcFCTkE=;
- b=pfmIaf8IL7a+5c78cnhY4OxbBTvTrfd1wYUuaQVoIiRaK1aPfv9KIXEp2OCcauwzlSF0
- 1BAn4Rlzds4lv34WCDVUvbBz9C4YAF/Skp4tnekFm3g8IZpr1d9EV0EIJ1Fri91Xo9fU
- eR8O8TGZIWM2XD4Bq+Jg3lJrT3U40kGOo0ebsddG2SiRrvZy9kbrRbexedhraOtSfbDU
- ODOUV2NJQYqsQvkdAc+AoWiiySdLqGaaMMHCVPml9jlVEOAMo40t+M5N+oAKNhn/S8I8
- w/BGJwNA4567RAl6WzOio7P7KGlp4pqyUdVYwqnChSY2/aRXh0p+/QKaUrYHwbYNJjlo tQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 35cntkshbd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 13 Dec 2020 03:09:15 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD351dS107815;
-        Sun, 13 Dec 2020 03:09:15 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 35d7ejakkm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 13 Dec 2020 03:09:15 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0BD39Diu010279;
-        Sun, 13 Dec 2020 03:09:14 GMT
-Received: from ol2.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 12 Dec 2020 19:09:13 -0800
-From:   Mike Christie <michael.christie@oracle.com>
-To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
-        mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        varun@chelsio.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Subject: [RFC PATCH 18/18] libiscsi: fix conn_send_pdu API
-Date:   Sat, 12 Dec 2020 21:08:46 -0600
-Message-Id: <1607828926-3658-19-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1607828926-3658-1-git-send-email-michael.christie@oracle.com>
-References: <1607828926-3658-1-git-send-email-michael.christie@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9833 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
- suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012130023
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9833 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012130023
+        id S2405216AbgLMJIn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Dec 2020 04:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728089AbgLMJIl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Dec 2020 04:08:41 -0500
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24539C0613CF
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Dec 2020 01:08:01 -0800 (PST)
+Received: by mail-io1-xd42.google.com with SMTP id r9so13959451ioo.7
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Dec 2020 01:08:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=5uPM6D1T3KKs706E8+sERKFimLN/9nHp+H87Ue6e5VI=;
+        b=M5qV6ijW2X4aAZxF3GxD717jT5q/7uShkTmFj4UDNHM+vJNoLshxpEX+oS8D1R50Rr
+         3X0IJx3RTBic59ML/xckhLexSYhmfg62O1oNjSMkJLdBHzrsH6vAh2aIWz11GzL6RWHh
+         kzOW+Pree0Qm9N7IXh/YsTkLvDM9URNAl2CDM9cUs70Cy/4Za2X8nlxqXRvT5K9a1XV0
+         YrltTVp/IL4eLoRW+7hIelUFmOGR8N6hq2s/VFfeHc55Eer6iLpZBFDdagIsFt0Faeiu
+         z0pNLwBJ+TsBYlIDMAnFmooW7dHS4D12U0eQ4GGhZXXWo7NvA0LNmYePz84BTOlFlqra
+         2XTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=5uPM6D1T3KKs706E8+sERKFimLN/9nHp+H87Ue6e5VI=;
+        b=DROCN3UdDAk1LFQSMGtEmxJpvFx1jDdoWanvz81GUQXh/2lOhZPhlyMaiZE27z9Fkw
+         zdC+WXVQZE4QWpW6oJhbP5fLbQSvitkO8VcDJk9H/YgSUYgVlkELRPXzM3FXy3R7Pwx+
+         5nnobAe27q+PV05FRy07UgRz5i8UozWulfk99PRtx1ufof27BYHrOKGontbLBji9JH6/
+         ZK/JUoZhfUVAB9lOlX7kWlsRyrVkaksv8PUyOGO0cv83at8LDGFfw2Zd+laPmh9L6GAG
+         NpO1uqPzSe9+5m5MAu530xSSarv/x0iaaXDIPdni0ZK5MIq3em3kJs+qVGQQPyLzN3cM
+         7WEg==
+X-Gm-Message-State: AOAM5316eQOD88gqowPgEQSKqtjMktxyw5+nUdNa0gK9Ljj+z2p6gefX
+        GjryM0Q0yEqZvpeW080wfM3COC+hsFcip/xDzt4=
+X-Google-Smtp-Source: ABdhPJzE5ILTQLh7bhnWwOIPyvQWqyWlJ4n1Mbc5M03XY0kZ2oKZobunQANGTK+vTrR6h9ueV0VKt7N2gw9bHsOG33I=
+X-Received: by 2002:a02:5e81:: with SMTP id h123mr26685012jab.36.1607850480243;
+ Sun, 13 Dec 2020 01:08:00 -0800 (PST)
+MIME-Version: 1.0
+Sender: dhldeliveringcompany.bf@gmail.com
+Received: by 2002:a02:a38a:0:0:0:0:0 with HTTP; Sun, 13 Dec 2020 01:07:59
+ -0800 (PST)
+From:   Donna Louise <donnamcinneslouise@gmail.com>
+Date:   Sat, 12 Dec 2020 21:07:59 -1200
+X-Google-Sender-Auth: o1aTCgmT583z0Ic88EPpxD1PQT8
+Message-ID: <CAGPv-0HY2WvWHsuBSuyWg6eOq12rvkj3FTbhOb0uXB92aPV_2A@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The conn_send_pdu API is evil in that it returns a pointer to a
-iscsi_task, but that task might have been freed already so you can't
-touch it. This patch splits the task allocation and transmission, so
-functions like iscsi_send_nopout can access the task before its sent.
-We then can remove that INVALID_SCSI_TASK dance.
+Dear Friend,
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/libiscsi.c | 68 ++++++++++++++++++++++++++++++++++---------------
- include/scsi/libiscsi.h |  3 ---
- 2 files changed, 48 insertions(+), 23 deletions(-)
+  I am glad to know you, but God knows you better and he knows why he
+has directed me to you at this point in time so do not be surprised at
+all. My name is Mrs. Donna Louise McInnes, a widow, i have been
+suffering from ovarian cancer disease. At this moment i am about to
+end the race like this because the illness has gotten to a very bad
+stage, without any family members and no child. I hope that you will
+not expose or betray this trust and confidence that I am about to
+entrust to you for the mutual benefit of the orphans and the less
+privileged ones. I have some funds I inherited from my late husband,
+the sum of ($11.000.000 Eleven million dollars.) deposited in the
+Bank.  Having known my present health status, I decided to entrust
+this fund to you believing that you will utilize it the way i am going
+to instruct herein.
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 05e329b..2592fe9 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -759,11 +759,10 @@ static int iscsi_prep_mgmt_task(struct iscsi_conn *conn,
- }
- 
- static struct iscsi_task *
--__iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
-+iscsi_alloc_mgmt_task(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
- 		      char *data, uint32_t data_size)
- {
- 	struct iscsi_session *session = conn->session;
--	struct iscsi_host *ihost = shost_priv(session->host);
- 	uint8_t opcode = hdr->opcode & ISCSI_OPCODE_MASK;
- 	struct iscsi_task *task;
- 	itt_t itt;
-@@ -854,25 +853,50 @@ static int iscsi_prep_mgmt_task(struct iscsi_conn *conn,
- 						   task->conn->session->age);
- 	}
- 
--	if (unlikely(READ_ONCE(conn->ping_task) == INVALID_SCSI_TASK))
--		WRITE_ONCE(conn->ping_task, task);
-+	return task;
-+
-+free_task:
-+	iscsi_put_task(task);
-+	return NULL;
-+}
-+
-+static int iscsi_send_mgmt_task(struct iscsi_task *task)
-+{
-+	struct iscsi_conn *conn = task->conn;
-+	struct iscsi_session *session = conn->session;
-+	struct iscsi_host *ihost = shost_priv(conn->session->host);
-+	int rc = 0;
- 
- 	if (!ihost->workq) {
--		if (iscsi_prep_mgmt_task(conn, task))
--			goto free_task;
-+		rc = iscsi_prep_mgmt_task(conn, task);
-+		if (rc)
-+			return rc;
- 
--		if (session->tt->xmit_task(task))
--			goto free_task;
-+		rc = session->tt->xmit_task(task);
-+		if (rc)
-+			return rc;
- 	} else {
- 		list_add_tail(&task->running, &conn->mgmtqueue);
- 		iscsi_conn_queue_work(conn);
- 	}
- 
--	return task;
-+	return 0;
-+}
- 
--free_task:
--	iscsi_put_task(task);
--	return NULL;
-+static int __iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
-+				 char *data, uint32_t data_size)
-+{
-+	struct iscsi_task *task;
-+	int rc;
-+
-+	task = iscsi_alloc_mgmt_task(conn, hdr, data, data_size);
-+	if (!task)
-+		return -ENOMEM;
-+
-+	rc = iscsi_send_mgmt_task(task);
-+	if (rc)
-+		iscsi_put_task(task);
-+	return rc;
- }
- 
- int iscsi_conn_send_pdu(struct iscsi_cls_conn *cls_conn, struct iscsi_hdr *hdr,
-@@ -883,7 +907,7 @@ int iscsi_conn_send_pdu(struct iscsi_cls_conn *cls_conn, struct iscsi_hdr *hdr,
- 	int err = 0;
- 
- 	spin_lock_bh(&session->frwd_lock);
--	if (!__iscsi_conn_send_pdu(conn, hdr, data, data_size))
-+	if (__iscsi_conn_send_pdu(conn, hdr, data, data_size))
- 		err = -EPERM;
- 	spin_unlock_bh(&session->frwd_lock);
- 	return err;
-@@ -1058,7 +1082,6 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
- 	if (!rhdr) {
- 		if (READ_ONCE(conn->ping_task))
- 			return -EINVAL;
--		WRITE_ONCE(conn->ping_task, INVALID_SCSI_TASK);
- 	}
- 
- 	memset(&hdr, 0, sizeof(struct iscsi_nopout));
-@@ -1072,10 +1095,18 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
- 	} else
- 		hdr.ttt = RESERVED_ITT;
- 
--	task = __iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)&hdr, NULL, 0);
--	if (!task) {
-+	task = iscsi_alloc_mgmt_task(conn, (struct iscsi_hdr *)&hdr, NULL, 0);
-+	if (!task)
-+		return -ENOMEM;
-+
-+	if (!rhdr)
-+		WRITE_ONCE(conn->ping_task, task);
-+
-+	if (iscsi_send_mgmt_task(task)) {
- 		if (!rhdr)
- 			WRITE_ONCE(conn->ping_task, NULL);
-+		iscsi_put_task(task);
-+
- 		iscsi_conn_printk(KERN_ERR, conn, "Could not send nopout\n");
- 		return -EIO;
- 	} else if (!rhdr) {
-@@ -1904,11 +1935,8 @@ static int iscsi_exec_task_mgmt_fn(struct iscsi_conn *conn,
- 	__must_hold(&session->frwd_lock)
- {
- 	struct iscsi_session *session = conn->session;
--	struct iscsi_task *task;
- 
--	task = __iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)hdr,
--				      NULL, 0);
--	if (!task) {
-+	if (__iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)hdr, NULL, 0)) {
- 		spin_unlock_bh(&session->frwd_lock);
- 		iscsi_conn_printk(KERN_ERR, conn, "Could not send TMF.\n");
- 		iscsi_conn_failure(conn, ISCSI_ERR_CONN_FAILED);
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 298ff70..aae77c1 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -133,9 +133,6 @@ struct iscsi_task {
- 	void			*dd_data;	/* driver/transport data */
- };
- 
--/* invalid scsi_task pointer */
--#define	INVALID_SCSI_TASK	(struct iscsi_task *)-1l
--
- static inline int iscsi_task_has_unsol_data(struct iscsi_task *task)
- {
- 	return task->unsol_r2t.data_length > task->unsol_r2t.sent;
--- 
-1.8.3.1
+Therefore I need you to assist me and reclaim this money and use it
+for Charity works, for orphanages and giving justice and help to the
+poor, needy and to promote the words of God and the effort that the
+house of God will be maintained says The Lord." Jeremiah 22:15-16.=E2=80=9C
 
+It will be my great pleasure to compensate you with 35 % percent of
+the total money for your personal use, 5 % percent for any expenses
+that may occur during the international transfer process while 60% of
+the money will go to the charity project.
+
+All I require from you is sincerity and the ability to complete God's
+task without any failure. It will be my pleasure to see that the bank
+has finally released and transferred the fund into your bank account
+therein your country even before I die here in the hospital, because
+of my present health status everything needs to be processed rapidly
+as soon as possible. Please kindly respond quickly. Thanks and God
+bless you.
+
+Best Regards your friend,
+Mrs.Donna Louise McInnes.
