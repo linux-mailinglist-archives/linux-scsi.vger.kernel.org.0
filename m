@@ -2,56 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EDA2D8A18
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Dec 2020 22:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308992D8B1F
+	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 04:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407948AbgLLVER (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Dec 2020 16:04:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38530 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726912AbgLLVD7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 12 Dec 2020 16:03:59 -0500
-Subject: Re: [GIT PULL] SCSI fixes for 5.10-rc7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607806999;
-        bh=jswMUpTjsyCQ5hfsOANp6aigxbw0bihRVxrpVeHpWtM=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=dQPejd9SpwYrlqpjuqW+SYqb8Q/goVC0+BbvMpSebv0oFBwoWbkPbevOnlloVfEnC
-         6IJUGdArh3aULKa7XM2dwFnqdBtYpqCTDvgtD61y0lqkvn1orpuPeGwM5NKPXfYNgu
-         55jdrQjjK0N+UGMzM1Uq3bwXmq8FrwMOALOtZQLTHNVT2FfDmXBxLQhhBG9IyA2rZG
-         kHCCnwuCFYPhi48IL/gKDvrcI2ymBiircTlCRG9EuC2SHXPp4BueTMKLPOMrxYxk4m
-         /xaaWfml1WnYdprTW/u83PynLAbEeCpLj8zoE6yITe2VQTaCGbPOJaLKCCkKqCa/7F
-         zycfusVVvL34g==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <a66d77104855fe9cec651d3c51aef288c2676dc2.camel@HansenPartnership.com>
-References: <a66d77104855fe9cec651d3c51aef288c2676dc2.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <a66d77104855fe9cec651d3c51aef288c2676dc2.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 4da3a54f5a025846f9930354cfb80f075b9952e0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6bff9bb8a292668e7da3e740394b061e5201f683
-Message-Id: <160780699924.2095.628693049935910139.pr-tracker-bot@kernel.org>
-Date:   Sat, 12 Dec 2020 21:03:19 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S2391814AbgLMDMB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 12 Dec 2020 22:12:01 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:33722 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391366AbgLMDLu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Dec 2020 22:11:50 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD34sX4176477;
+        Sun, 13 Dec 2020 03:10:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id; s=corp-2020-01-29;
+ bh=7nDMjDNV9fpMEfTyH+z4MxJjnrlyz+4MuWonsyzOW2w=;
+ b=g0+qiq0lKxwHMbf5Rf1azZc0r8Fmgr0dJh4h/Bk5onjTJhHZryCjMdJN+3hvQRd8PCFv
+ kH6dGApJPnNtobQxyQZrPIXdWZ9DdxvSdn6LEhM720uwnwVNxO4V+h2bOEys8/2Txcb6
+ UQi6hig+grNlWjBsmICA+rUDbE/gXgDPhS0Pz3O7cnkvvXwal+jhnKuOUJ9YU7NWiQpC
+ ZT517PY8VkOuABGtM3YdBgB6qrKQlnTv20TOHF4Mcu9qOOJCxuPVnEF3DyZIOM8au/xQ
+ DnrhSms7VuPTqHs0iDdxZl1KVpFh5AtlUJPyBwVL4NAeTMf12of+YTULm31sji4Af2aD YQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 35ckcb1pka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 13 Dec 2020 03:10:59 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BD351aM107909;
+        Sun, 13 Dec 2020 03:08:59 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 35d7ejakg9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Dec 2020 03:08:59 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BD38uDm013810;
+        Sun, 13 Dec 2020 03:08:56 GMT
+Received: from ol2.localdomain (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 12 Dec 2020 19:08:56 -0800
+From:   Mike Christie <michael.christie@oracle.com>
+To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
+        mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
+        varun@chelsio.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
+Subject: [RFC PATCH 00/18] iscsi lock/xmit/recv cleanups
+Date:   Sat, 12 Dec 2020 21:08:28 -0600
+Message-Id: <1607828926-3658-1-git-send-email-michael.christie@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9833 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012130023
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9833 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 suspectscore=0 adultscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012130023
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 12 Dec 2020 11:32:54 -0800:
+The following patches made over Linus's current tree cleanup the
+locking in libiscsi so we again, for the main IO path, have the frwd
+lock only used in the xmit/queue path and the back lock used in the
+completion path and no taskqueuelock. The EH paths still use both
+the frwd/back lock though.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+These patches are still not ready for merging. I have now tested
+iscsi_tcp, ib_iser, and be2iscsi. Manish tested qedi but it failed.
+However, this version should work for qedi and bnx2i. I had forgot to
+convert one of the mgmt task paths those drivers use.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6bff9bb8a292668e7da3e740394b061e5201f683
+V2:
+- Fix issue where we used the back lock to make sure all recv
+completion paths saw the window reopened flag.
+- Fix ping_task path, so it accounts for send/completion race Lee
+had fixed.
+- Fix bug hit with qedi and bnx2i during testing where I forgot to
+allow this drivers to preallocate mgmt task resources.
+- Tested ib_iser and be2iscsi.
 
-Thank you!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
