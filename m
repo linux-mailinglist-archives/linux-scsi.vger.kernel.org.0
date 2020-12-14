@@ -2,103 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC532D9FA0
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 19:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E94642DA1CE
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 21:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502218AbgLNSwy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 13:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S2502827AbgLNUVG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 15:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731829AbgLNSwi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 13:52:38 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6300C0613D3;
-        Mon, 14 Dec 2020 10:51:57 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id d17so24016372ejy.9;
-        Mon, 14 Dec 2020 10:51:57 -0800 (PST)
+        with ESMTP id S1727855AbgLNUVG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 15:21:06 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C70C0613D3;
+        Mon, 14 Dec 2020 12:20:26 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id jx16so24341671ejb.10;
+        Mon, 14 Dec 2020 12:20:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kmEWL9N858FqTq18xXGT1VCd7aIAPnn5gZrMzk+8WhI=;
-        b=Afo/cIHYdCXKfH752KDHu2O8NkEAZVkf5WOf6ECkwK6ARDFUB9yPT62H0/v8tHgR61
-         xevdbRVodazqrMPywJcq0YpH6GAk0IBsIBbAhWWqt9ZMLBqKJ6a9hLu/PipJmUyfGTPo
-         Abtg9nUqww/AxeLq/yWXA+dVCSXjo/w6S3SRRs1iXQqrqXPDtKhg1/ET/sIw1wiEq0ZW
-         8QKetn2wA0RdciaRs+/YQmdpA6LHbt84IdWgBoWFF/o/lW5ASQssnMQiBqM5PjbMgPh4
-         ec4PusS/fQfZ4OjwHcIGGAX00j+4UJPzU7p++7M5Zqc5naun3uQUz+YC2pdd2zVCQL4O
-         RbVA==
+        h=from:to:cc:subject:date:message-id;
+        bh=CAtJX87HqXXu8z9DPu1gGW2L6L0r7ONQKKLzHO1fhlQ=;
+        b=C+fe6fZP1TyzKBNGaW3LtoCox4rIcmYQOaU/AZ3k/EnlwAdE11YbebbqXWTORnxWod
+         5ahtEiayO26PSzWmOLPkl32Lyt4MYMW5/LiKiYnUhstsO3Kd2lKOLmnulPwGxoz7ON3j
+         1n9GklV8ykXWFVRfOz0a61IjGRBzKJI5XwMbng3GGO9s+FuCIUH2YLlTL7ODTnlW5NT1
+         Cmp5U+59K9dGVQpqmWRidQZ4sKScemDOzTE5ry5YzO5aiNPF+dWs0OSA7EicWhOqi5EA
+         5akAIGeuk10AatEsiTGYiCsA2ponvV8+ey46LhE1SHYTGuNgVHEt+BQSfo9q6ZRUecSB
+         iiRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kmEWL9N858FqTq18xXGT1VCd7aIAPnn5gZrMzk+8WhI=;
-        b=CuFahRSrWno3ZCr8AEge5PGnT6iH0DLkZng9NWHwkfzdM5ZzCF+hpzlTxqAjZDV8vL
-         GrDOnirnC3qZLTZNhCWrdQ0CpSbZKLFPsEsTf1VCrrTvV9oYqgvws/8xzgwm8mGCaZGk
-         fK/4p3hk9u/8mRTgKEJTYY38YCcHpBUAB9PWqzlhHJxr/EflEpB2z8YLG8KocYENcS5i
-         cE2KO8aiJamF44bf9cpvTw9jiqUEzofE9a6UoVEwTiyVPAERXVKla94nXpdaj4HXUJA5
-         sWjHW+czeL44uHNkt/mcgQu8XPtdCHTLFYCtrpFHg68lpTk51NxbKLMZG34gcxoVI+jM
-         AkzA==
-X-Gm-Message-State: AOAM532iX1sLMkEhNOxq9aD4dd0h+3rLm+SFMnftxKcx+pOr2w13u028
-        oEaXDsj6Urp38f2jghsn7Jo=
-X-Google-Smtp-Source: ABdhPJxrxN33uribVUjiZKJXkD851HxLdfh1YJ77xbUmPGGGbrrluHT7/CfnPcd+aN6YyEq31DBpFQ==
-X-Received: by 2002:a17:907:4271:: with SMTP id nq1mr19563127ejb.358.1607971916648;
-        Mon, 14 Dec 2020 10:51:56 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.googlemail.com with ESMTPSA id h23sm14154997ejg.37.2020.12.14.10.51.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 14 Dec 2020 10:51:56 -0800 (PST)
-Message-ID: <f23cea390a812f5126dbb232b1944e5499cc40dc.camel@gmail.com>
-Subject: Re: [PATCH v2 1/6] scsi: ufs: Remove stringize operator '#'
- restriction
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=CAtJX87HqXXu8z9DPu1gGW2L6L0r7ONQKKLzHO1fhlQ=;
+        b=fof6hqXvzj9rDxiXo/atKyQi61Tx0dt/vQRqW7iC3nEMLkz6tXJZ5L3PulExPhMgl+
+         0OneqTAW+A8oJlFYZ4ZrVGY58hy+5YME9IN+NtBBnMeL98KJOQznwEPffftNRAmKW01/
+         pEA2aQiczKzXAr0CQGmGr934gtel4wFNR91dIE4ir+Lzr2drj3piCqpLBHc2JjkCXiEQ
+         S3shSJkqA5BaBm1TpO0/fiP0V45aE4LgBjOP1nwxBKVPCFtf3D2xvYPaBWn9J6JEDfhc
+         Bu5L85QfgtO6gMHniSDW0N7LCwFuyxhseDnxg+aEVdPTyQFntX4bPAJdOdaEJlzfSeUH
+         cYJQ==
+X-Gm-Message-State: AOAM532dMSvg7i8DJugdDEHp4p5GbGSF32X73J563UXC4XUzOgirH68M
+        qbG0AxPauaXNMBJ2yVUchXw=
+X-Google-Smtp-Source: ABdhPJx4TEOVB6AI5rxHDmYP9CjlKqOJ47Mfj2ukov49ocF0SB7yMBvtbk4NqrtVu+OtS/Wc+uIRvA==
+X-Received: by 2002:a17:906:2818:: with SMTP id r24mr23244078ejc.100.1607977224826;
+        Mon, 14 Dec 2020 12:20:24 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
+        by smtp.gmail.com with ESMTPSA id r7sm9334634edh.86.2020.12.14.12.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 12:20:24 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
-To:     Joe Perches <joe@perches.com>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
         martin.petersen@oracle.com, stanley.chu@mediatek.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, rostedt@goodmis.org
+        cang@codeaurora.org, rostedt@goodmis.org, joe@perches.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 14 Dec 2020 19:51:55 +0100
-In-Reply-To: <ade665cbfa138d1851343576caad84a61e904c46.camel@perches.com>
-References: <20201214161502.13440-1-huobean@gmail.com>
-         <20201214161502.13440-2-huobean@gmail.com>
-         <ade665cbfa138d1851343576caad84a61e904c46.camel@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v3 0/6] Several changes for the UPIU trace
+Date:   Mon, 14 Dec 2020 21:20:08 +0100
+Message-Id: <20201214202014.13835-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2020-12-14 at 08:46 -0800, Joe Perches wrote:
-> > However, we have other cases, the symbol and enum name are not the
-> > same,
-> > we can redefine EM/EMe, but there will introduce some redundant
-> > codes.
-> > This patch is to remove this restriction, let others reuse the
-> > current
-> > EM/EMe definition.
-> 
-> I think the other way (adding new definitions for the cases when the
-> name and string are different) is less error prone.
-> 
-yes, agree with you, but here it is ok, it is not too much copy/paste.
+From: Bean Huo <beanhuo@micron.com>
 
-> > diff --git a/include/trace/events/ufs.h
-> > b/include/trace/events/ufs.h
-> 
-> []
-> > +#define
-> > UFS_LINK_STATES                                              \
-> > +     EM(UIC_LINK_OFF_STATE, "UIC_LINK_OFF_STATE")            \
-> > +     EM(UIC_LINK_ACTIVE_STATE, "UIC_LINK_ACTIVE_STATE,")     \
-> 
-> For instance:
-> 
-> Like here where you added an unnecessary and unwanted comma
+Changelog:
 
-Thanks, I will fix it in next version.
+V2--V3:
+  1. Fix a typo in patch 1/6 (Reported-by: Joe Perches <joe@perches.com>)
 
-Bean
+V1--V2:
+  1. Convert __get_str(str) to __print_symbolic()
+  2. Add new patches 1/6, 2/6,3/6
+  3. Use __print_symbolic() in patch 6/6
 
+Bean Huo (6):
+  scsi: ufs: Remove stringize operator '#' restriction
+  scsi: ufs: Use __print_symbolic() for UFS trace string print
+  scsi: ufs: Don't call trace_ufshcd_upiu() in case trace poit is
+    disabled
+  scsi: ufs: Distinguish between query REQ and query RSP in query trace
+  scsi: ufs: Distinguish between TM request UPIU and response UPIU in TM
+    UPIU trace
+  scsi: ufs: Make UPIU trace easier differentiate among CDB, OSF, and TM
+
+ drivers/scsi/ufs/ufs.h     |  17 ++++++
+ drivers/scsi/ufs/ufshcd.c  |  72 ++++++++++++++++---------
+ include/trace/events/ufs.h | 108 +++++++++++++++++++++++--------------
+ 3 files changed, 131 insertions(+), 66 deletions(-)
+
+-- 
+2.17.1
 
