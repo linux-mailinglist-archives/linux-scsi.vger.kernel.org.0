@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A19D2DA15A
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 21:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4690B2DA161
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 21:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503061AbgLNUVS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 15:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S2502802AbgLNUWA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 15:22:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502992AbgLNUVL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 15:21:11 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162A8C06179C;
-        Mon, 14 Dec 2020 12:20:31 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id j22so6381051eja.13;
-        Mon, 14 Dec 2020 12:20:31 -0800 (PST)
+        with ESMTP id S2503120AbgLNUVq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 15:21:46 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FDCC0617A6;
+        Mon, 14 Dec 2020 12:20:32 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id u19so18596286edx.2;
+        Mon, 14 Dec 2020 12:20:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MDUTAHSnLQf17rDCvTDFruIhmvOHEpBhNEFUu+lMa4s=;
-        b=kRJ91+DDQZ6kWB3QxvEUPEZD5Jgt7e+I7J3Fuy0W1o1pkPn/wieQhypllwEy5uvLeX
-         +00+JRQlpYrfQLc1u8unP4KOiReU3Mn1ixKZCqM4brGeXCeymXwkkA5BJ7CBvA+/1Oe5
-         nc8Qoz+/Gh2MZcuNHU0wrZkzQcK5u306OpEUh/vSwOkv1hDikbEBuusH2Z9YGhrrZylu
-         nmYaJS11hj6mgvKqRwzyq6jcWFCSH+APaGnJ8ABJcrz5tamPtoA7J5Y4UnxIIKQSdj3M
-         +NirRgndyDmMqFDdmUa09SVYemV0gkXUpbjUJ5fux5EA894kF4MuSx+sMCWNDHBfidFb
-         Qkyg==
+        bh=kX6w9TQPV6DAnVZ3iF7tdAXWv6mADHAIKZfdziB6tUo=;
+        b=HqXhEHnR2e/Ii/YgdJOSC0gxgYAkOL9KIlICpKjGTc7wQ5lr2wk+MDpN71Srtj61y8
+         HRcTynhx3VvbDzAMFdurm61DaMyTlMeZWZQuTkXEOfhtdutgFIzIqWM+lS4Zv5lR1lkI
+         nQ6wSVdl7hPeI5G9OFt8p2ws9Xysd45KDHzY7KJkZ+g2Mly6m3J4WSWb5EEr8yNdCkRB
+         sH+LCM/ilV8XdAugPY4K/XzPQJA7STUvho7ejYQaz1Sltpa0XW2aOdPH3/5BB5to9TnZ
+         H2xYGv2+HNiCdEih/0npa4y2l8/UU+Es+6NmcavSv9XeYvm1+aYPosursjQuYQPYXdLS
+         QQmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=MDUTAHSnLQf17rDCvTDFruIhmvOHEpBhNEFUu+lMa4s=;
-        b=DPWgwjQ501qAWPJWuiAzaU0JlxaPuLIQVUQS5qcy44XufPZTSBMZTuM0a07WkJj1B/
-         Z7KQOreexFEL3szGY7C1xBQsYqXSvWPUYEpTCXI98CHqK7mSSFsnTGfz1OrQNdy+2k1L
-         8DT7RXeuBI3RfP8JZrA1AIiCWqgqK+zCSl4EJiSrrGN63CE6Gyeh29uJrM+srIIOjD5q
-         8dBUnfhJylF6EQDqE6rQ1AaCpEbEZYfdf8inpfW2cLsyx1tw5PYndn9Z3fdIhPjB+gBT
-         g7DetnuD/ve2h2XOP8of+DbJgLIvtrfxZRV+0jrCQy8U0O4gmHW1B646fJPvvpl570UM
-         megw==
-X-Gm-Message-State: AOAM533L+0tWV4SipbCgnvAvtI9XLs0Ogh3xWIGZmuzW59gzNUGCm7Jg
-        t5xJ25LPbulOLo8UP7khMkU=
-X-Google-Smtp-Source: ABdhPJxBf0Qqfsbbaqfe50wiiKREJ1hGKmNxQBkp1lnOon//BtJGgCIbOi1u52Kvi7keooyu1lJxtw==
-X-Received: by 2002:a17:907:961b:: with SMTP id gb27mr23634089ejc.313.1607977229777;
-        Mon, 14 Dec 2020 12:20:29 -0800 (PST)
+        bh=kX6w9TQPV6DAnVZ3iF7tdAXWv6mADHAIKZfdziB6tUo=;
+        b=U+pN/jFqz9WdD9Y5E23U0V3GsfsMlMx3431iXoVu0TcqYz8Ez9vcjaYyvnWAIDL1aI
+         zWoiyOxXq6KWtHDNv8UQ/G949Mmovs1ZoiHQf4k0vTUEBNLYW+9fILRJLAEW7b61HRLH
+         l2p5+jTUtPpVCsHlJnkEVdqr5MULWeLX4mL1AW4gvN0uZMUblNdEGN4lc5Gc0/tWbm67
+         +bHS2mjiOXGRlDnhJatz3sDEFJoYJISDHHrefEEmiqO+FVWZrFV4q6m25Jb17BMnZ4As
+         0NXw3M3xX/NoccSD5GDmGqsXJuke2RdjvN9luCUrDOj8DI+ik7CpbLN4OYfsaYrRW90E
+         Rcng==
+X-Gm-Message-State: AOAM531Ksj9mkAdcBorVo9b3+iba5r4/YI2V9NEhfjgjQ0RLcDnnHdC+
+        oQ9AxXX9TnbldpdbKzyUyJ8=
+X-Google-Smtp-Source: ABdhPJyzH7GycWDpxinG3+VSSjCPzkdzbReUN/eZOVtxu/U8lYeYo5ygKkcubR455rk7jZ1a5mmrqw==
+X-Received: by 2002:aa7:db56:: with SMTP id n22mr11674142edt.4.1607977230974;
+        Mon, 14 Dec 2020 12:20:30 -0800 (PST)
 Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.gmail.com with ESMTPSA id r7sm9334634edh.86.2020.12.14.12.20.28
+        by smtp.gmail.com with ESMTPSA id r7sm9334634edh.86.2020.12.14.12.20.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 12:20:29 -0800 (PST)
+        Mon, 14 Dec 2020 12:20:30 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -53,9 +53,9 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org, rostedt@goodmis.org, joe@perches.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/6] scsi: ufs: Distinguish between query REQ and query RSP in query trace
-Date:   Mon, 14 Dec 2020 21:20:12 +0100
-Message-Id: <20201214202014.13835-5-huobean@gmail.com>
+Subject: [PATCH v3 5/6] scsi: ufs: Distinguish between TM request UPIU and response UPIU in TM UPIU trace
+Date:   Mon, 14 Dec 2020 21:20:13 +0100
+Message-Id: <20201214202014.13835-6-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201214202014.13835-1-huobean@gmail.com>
 References: <20201214202014.13835-1-huobean@gmail.com>
@@ -65,55 +65,35 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Currently, in the query completion trace print,  since we use
-hba->lrb[tag].ucd_req_ptr and didn't differentiate UPIU between
-request and response, thus header and transaction-specific field
-in UPIU printed by query trace are identical. This is not very
-practical. As below:
-
-query_send: HDR:16 00 00 0e 00 81 00 00 00 00 00 00, CDB:06 0e 03 00 00 00 00 00 00 00 00 00 00 00 00 00
-query_complete: HDR:16 00 00 0e 00 81 00 00 00 00 00 00, CDB:06 0e 03 00 00 00 00 00 00 00 00 00 00 00 00 00
-
-For the failure analysis, we want to understand the real response
-reported by the UFS device, however, the current query trace tells
-us nothing. After this patch, the query trace on the query_send, and
-the above a pair of query_send and query_complete will be:
-
-query_send: HDR:16 00 00 0e 00 81 00 00 00 00 00 00, CDB:06 0e 03 00 00 00 00 00 00 00 00 00 00 00 00 00
-ufshcd_upiu: HDR:36 00 00 0e 00 81 00 00 00 00 00 00, CDB:06 0e 03 00 00 00 00 00 00 00 00 01 00 00 00 00
+Distinguish between TM request UPIU and response UPIU in TM UPIU trace,
+for the TM response, let TM UPIU trace print its TM response UPIU.
 
 Acked-by: Avri Altman <avri.altman@wdc.com>
 Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index f4a071d12542..d0b054aa0a3c 100644
+index d0b054aa0a3c..2cf983b3de1a 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -318,12 +318,18 @@ static void ufshcd_add_cmd_upiu_trace(struct ufs_hba *hba, unsigned int tag,
- static void ufshcd_add_query_upiu_trace(struct ufs_hba *hba, unsigned int tag,
- 					enum ufs_trace_str_t str_t)
- {
--	struct utp_upiu_req *rq = hba->lrb[tag].ucd_req_ptr;
-+	struct utp_upiu_req *rq_rsp;
- 
+@@ -341,8 +341,12 @@ static void ufshcd_add_tm_upiu_trace(struct ufs_hba *hba, unsigned int tag,
  	if (!trace_ufshcd_upiu_enabled())
  		return;
  
--	trace_ufshcd_upiu(dev_name(hba->dev), str_t, &rq->header, &rq->qr);
-+	if (str_t == UFS_QUERY_SEND)
-+		rq_rsp = hba->lrb[tag].ucd_req_ptr;
+-	trace_ufshcd_upiu(dev_name(hba->dev), str_t, &descp->req_header,
+-			&descp->input_param1);
++	if (str_t == UFS_TM_SEND)
++		trace_ufshcd_upiu(dev_name(hba->dev), str_t, &descp->req_header,
++				  &descp->input_param1);
 +	else
-+		rq_rsp = (struct utp_upiu_req *)hba->lrb[tag].ucd_rsp_ptr;
-+
-+	trace_ufshcd_upiu(dev_name(hba->dev), str_t, &rq_rsp->header,
-+			  &rq_rsp->qr);
++		trace_ufshcd_upiu(dev_name(hba->dev), str_t, &descp->rsp_header,
++				  &descp->output_param1);
  }
  
- static void ufshcd_add_tm_upiu_trace(struct ufs_hba *hba, unsigned int tag,
+ static void ufshcd_add_uic_command_trace(struct ufs_hba *hba,
 -- 
 2.17.1
 
