@@ -2,211 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC5E2D9E4E
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 18:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826932D9F07
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 19:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502384AbgLNRzA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 12:55:00 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:48555 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2438375AbgLNRy4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Dec 2020 12:54:56 -0500
-Received: from [192.168.0.6] (ip5f5af462.dynamic.kabel-deutschland.de [95.90.244.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id ACB402064787B;
-        Mon, 14 Dec 2020 18:54:08 +0100 (CET)
-Subject: Re: [PATCH V3 15/25] smartpqi: fix host qdepth limit
-To:     Don Brace <don.brace@microchip.com>,
-        Kevin Barnett <kevin.barnett@microchip.com>,
-        Scott Teel <scott.teel@microchip.com>,
-        Justin.Lindley@microchip.com,
-        Scott Benesh <scott.benesh@microchip.com>,
-        gerry.morong@microchip.com,
-        Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>,
-        hch@infradead.org, joseph.szczypek@hpe.com, POSWALD@suse.com,
-        "James E. J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, it+linux-scsi@molgen.mpg.de,
-        Donald Buczek <buczek@molgen.mpg.de>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
- <160763254769.26927.9249430312259308888.stgit@brunhilda>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <ddd8bca4-2ae7-a2dc-cca6-0a2ff85a7d35@molgen.mpg.de>
-Date:   Mon, 14 Dec 2020 18:54:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S2440457AbgLNSaC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 13:30:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45750 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2440449AbgLNS34 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Dec 2020 13:29:56 -0500
+Date:   Mon, 14 Dec 2020 13:29:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607970555;
+        bh=20HnP498QOKwNnxWdPlKAsPzoUCM0IYYFMY4LLh9MJM=;
+        h=From:To:Subject:References:In-Reply-To:From;
+        b=Ft7j2cmhQBm7VNzDX/4P6KXE0oL9bjVwbakggglxnBx6L10lgufIK6QP2f7O1MnCV
+         7zaujoRkYdSZk6Y+7OF0Fcseb1kHGY6XW8EaGXm8gzc6A5KjI+chl3fEomaFKEuaf0
+         aHiFAtqlnmj13nikLkNa5lmdv8Wl/7vBMvs53mF/Ui60pHdkPbhhkfZtB6T5iyasnX
+         DtdJNcxxS4erE2b6xnazCalcKxyuaG/l4sU13jE4FOuBy3FDgmwJOdgSicG1tEfiTV
+         vLmTi+qVx//uSLshdF0au4BqRSEu17DvbzDdzqkKf2oaXNo/uzevwhxkw8VfyFHWjy
+         oUPvy5inQxrwg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        devel@linuxdriverproject.org,
+        Saruhan Karademir <skarade@microsoft.com>
+Subject: Re: [PATCH AUTOSEL 5.9 15/23] scsi: storvsc: Validate length of
+ incoming packet in storvsc_on_channel_callback()
+Message-ID: <20201214182914.GU643756@sasha-vm>
+References: <20201212160804.2334982-1-sashal@kernel.org>
+ <20201212160804.2334982-15-sashal@kernel.org>
+ <20201212180901.GA19225@andrea>
+ <20201214110711.GB2831@kadam>
+ <20201214130625.x2v53xhx5xw6jp4o@chatter.i7.local>
 MIME-Version: 1.0
-In-Reply-To: <160763254769.26927.9249430312259308888.stgit@brunhilda>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20201214130625.x2v53xhx5xw6jp4o@chatter.i7.local>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Don, dear Mahesh,
+On Mon, Dec 14, 2020 at 08:06:25AM -0500, Konstantin Ryabitsev wrote:
+>On Mon, Dec 14, 2020 at 02:07:11PM +0300, Dan Carpenter wrote:
+>> On Sat, Dec 12, 2020 at 07:09:01PM +0100, Andrea Parri wrote:
+>> > Hi Sasha,
+>> >
+>> > On Sat, Dec 12, 2020 at 11:07:56AM -0500, Sasha Levin wrote:
+>> > > From: "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+>> > >
+>> > > [ Upstream commit 3b8c72d076c42bf27284cda7b2b2b522810686f8 ]
+>> >
+>> > FYI, we found that this commit introduced a regression and posted a
+>> > revert:
+>> >
+>> >   https://lkml.kernel.org/r/20201211131404.21359-1-parri.andrea@gmail.com
+>> >
+>> > Same comment for the AUTOSEL 5.4, 4.19 and 4.14 you've just posted.
+>> >
+>>
+>> Konstantin, is there anyway we could make searching lore.kernel.org
+>> search all the mailing lists?  Right now we can only search one mailing
+>> list at a time.
+>
+>This functionality is coming in the next version of public-inbox and
+>should be available on lore.kernel.org within the next little while.
 
+That's a good idea Dan; I had something running on linux-next, but I
+guess it's not enough and cases such as these sneak in.
 
-Am 10.12.20 um 21:35 schrieb Don Brace:
-> From: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
-> 
-> * Correct scsi-mid-layer sending more requests than
->    exposed host Q depth causing firmware ASSERT issue.
->    * Add host Qdepth counter.
+I wrote a script to do what you've suggested by simply cloning the repos
+on erol.kernel.org locally and then doing a simple search for the
+"Fixes:" and revert patterns.
 
-This supposedly fixes the regression between Linux 5.4 and 5.9, which we 
-reported in [1].
-
-     kernel: smartpqi 0000:89:00.0: controller is offline: status code 
-0x6100c
-     kernel: smartpqi 0000:89:00.0: controller offline
-
-Thank you for looking into this issue and fixing it. We are going to 
-test this.
-
-For easily finding these things in the git history or the WWW, it would 
-be great if these log messages could be included (in the future).
-
-Also, that means, that the regression is still present in Linux 5.10, 
-released yesterday, and this commit does not apply to these versions.
-
-Mahesh, do you have any idea, what commit caused the regression and why 
-the issue started to show up?
-
-James, Martin, how are regressions handled for the SCSI subsystem?
-
-Regarding the diff, personally, I find the commit message much too 
-terse. `pqi_scsi_queue_command()` will return `SCSI_MLQUEUE_HOST_BUSY` 
-for the case of too many requests. Will that be logged by Linux in some 
-log level? In my opinion it points to a performance problem, and should 
-be at least logged as a notice or warning.
-
-Can `ctrl_info->scsi_ml_can_queue` be queried somehow maybe in the logs? 
-`sudo find /sys -name queue` did not display something interesting.
-
-[1]: https://marc.info/?l=linux-scsi&m=160271263114829&w=2
-      "Linux 5.9: smartpqi: controller is offline: status code 0x6100c"
-
-> Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-> Reviewed-by: Scott Teel <scott.teel@microchip.com>
-> Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-> Signed-off-by: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
-> Signed-off-by: Don Brace <don.brace@microchip.com>
-> ---
->   drivers/scsi/smartpqi/smartpqi.h      |    2 ++
->   drivers/scsi/smartpqi/smartpqi_init.c |   19 ++++++++++++++++---
->   2 files changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-> index 0b94c755a74c..c3b103b15924 100644
-> --- a/drivers/scsi/smartpqi/smartpqi.h
-> +++ b/drivers/scsi/smartpqi/smartpqi.h
-> @@ -1345,6 +1345,8 @@ struct pqi_ctrl_info {
->   	struct work_struct ofa_quiesce_work;
->   	u32		ofa_bytes_requested;
->   	u16		ofa_cancel_reason;
-> +
-> +	atomic_t	total_scmds_outstanding;
->   };
-
-What is the difference between the already existing
-
-     atomic_t scsi_cmds_outstanding;
-
-and the new counter?
-
-     atomic_t	total_scmds_outstanding;
-
-The names are quite similar, so different names or a comment might be 
-useful.
-
->   
->   enum pqi_ctrl_mode {
-> diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-> index 082b17e9bd80..4e088f47d95f 100644
-> --- a/drivers/scsi/smartpqi/smartpqi_init.c
-> +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-> @@ -5578,6 +5578,8 @@ static inline bool pqi_is_bypass_eligible_request(struct scsi_cmnd *scmd)
->   void pqi_prep_for_scsi_done(struct scsi_cmnd *scmd)
->   {
->   	struct pqi_scsi_dev *device;
-> +	struct pqi_ctrl_info *ctrl_info;
-> +	struct Scsi_Host *shost;
->   
->   	if (!scmd->device) {
->   		set_host_byte(scmd, DID_NO_CONNECT);
-> @@ -5590,7 +5592,11 @@ void pqi_prep_for_scsi_done(struct scsi_cmnd *scmd)
->   		return;
->   	}
->   
-> +	shost = scmd->device->host;
-
-The function already has a variable `device`, which is assigned 
-“hostdata” though:
-
-     device = scmd->device->hostdata;
-
-This confuses me. Maybe this should be cleaned up in a followup commit, 
-and the variable device be reused above in the `shost` assignment.
-
-> +	ctrl_info = shost_to_hba(shost);
-> +
->   	atomic_dec(&device->scsi_cmds_outstanding);
-> +	atomic_dec(&ctrl_info->total_scmds_outstanding);
->   }
->   
->   static bool pqi_is_parity_write_stream(struct pqi_ctrl_info *ctrl_info,
-> @@ -5678,6 +5684,7 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
->   	bool raid_bypassed;
->   
->   	device = scmd->device->hostdata;
-> +	ctrl_info = shost_to_hba(shost);
->   
->   	if (!device) {
->   		set_host_byte(scmd, DID_NO_CONNECT);
-> @@ -5686,8 +5693,11 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
->   	}
->   
->   	atomic_inc(&device->scsi_cmds_outstanding);
-> -
-> -	ctrl_info = shost_to_hba(shost);
-
-I believe, style changes (re-ordering) in commits fixing regressions 
-make it harder to backport it.
-
-> +	if (atomic_inc_return(&ctrl_info->total_scmds_outstanding) >
-> +		ctrl_info->scsi_ml_can_queue) {
-> +		rc = SCSI_MLQUEUE_HOST_BUSY;
-> +		goto out;
-> +	}
->   
->   	if (pqi_ctrl_offline(ctrl_info) || pqi_device_in_remove(device)) {
->   		set_host_byte(scmd, DID_NO_CONNECT);
-> @@ -5730,8 +5740,10 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
->   	}
->   
->   out:
-> -	if (rc)
-> +	if (rc) {
->   		atomic_dec(&device->scsi_cmds_outstanding);
-> +		atomic_dec(&ctrl_info->total_scmds_outstanding);
-> +	}
->   
->   	return rc;
->   }
-> @@ -8054,6 +8066,7 @@ static struct pqi_ctrl_info *pqi_alloc_ctrl_info(int numa_node)
->   
->   	INIT_WORK(&ctrl_info->event_work, pqi_event_worker);
->   	atomic_set(&ctrl_info->num_interrupts, 0);
-> +	atomic_set(&ctrl_info->total_scmds_outstanding, 0);
->   
->   	INIT_DELAYED_WORK(&ctrl_info->rescan_work, pqi_rescan_worker);
->   	INIT_DELAYED_WORK(&ctrl_info->update_time_work, pqi_update_time_worker);
-
-
-Kind regards,
-
-Paul
+-- 
+Thanks,
+Sasha
