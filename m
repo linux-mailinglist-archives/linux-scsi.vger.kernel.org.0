@@ -2,73 +2,260 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 354102D9CEF
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 17:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5612D9EF4
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 19:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502120AbgLNQrS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 11:47:18 -0500
-Received: from smtprelay0156.hostedemail.com ([216.40.44.156]:46500 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2502118AbgLNQrS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Dec 2020 11:47:18 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 6CA581730873;
-        Mon, 14 Dec 2020 16:46:34 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:334:355:368:369:379:599:800:960:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3871:3872:3873:4250:4321:5007:6737:7576:10004:10400:10848:11026:11232:11473:11658:11914:12048:12297:12438:12679:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21433:21451:21627:30012:30029:30054:30089:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: look56_4507fd12741c
-X-Filterd-Recvd-Size: 2092
-Received: from XPS-9350.home (unknown [47.151.137.21])
-        (Authenticated sender: joe@perches.com)
-        by omf20.hostedemail.com (Postfix) with ESMTPA;
-        Mon, 14 Dec 2020 16:46:31 +0000 (UTC)
-Message-ID: <ade665cbfa138d1851343576caad84a61e904c46.camel@perches.com>
-Subject: Re: [PATCH v2 1/6] scsi: ufs: Remove stringize operator '#'
- restriction
-From:   Joe Perches <joe@perches.com>
-To:     Bean Huo <huobean@gmail.com>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, rostedt@goodmis.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 14 Dec 2020 08:46:30 -0800
-In-Reply-To: <20201214161502.13440-2-huobean@gmail.com>
-References: <20201214161502.13440-1-huobean@gmail.com>
-         <20201214161502.13440-2-huobean@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S2408778AbgLNS0u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 13:26:50 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:36908 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502301AbgLNRiE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 12:38:04 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BEHUCtl074973;
+        Mon, 14 Dec 2020 17:36:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=HRHsAcy8BkeA7VXzdenFOGTOJJwlYgOlUYUvjlYTFPw=;
+ b=kSX0q27JTpquQE9ZgolumOOSf+2OfPdpVfp+r3FT2884WL6UshO+tqm4lmro2oxYkc5E
+ YSp9ceZZq/chn8PF5P7KA8DMx5mJmQ/0YLa7eJ5rk1C4QCRChLMy+EBrv2X243jodluP
+ NgwDOx2FS9MrB4opA3h70EtmO6CHKLaSlfPklnhU490byXXZCr1bugSliUQWCKXvx4CL
+ HXifwLsy34DvSbE+hg/OKPwmWO811k89BxFU8gJtGt5FzECEvavmiMXPz5l7fV6/9cLd
+ Es+Kgsbj6qk33U+XwR2Y1S/IWGOzo/E5+3NctqgCbNzPXWzg1JTKpAETk1yXaCtnXnXc gg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 35cn9r6haj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 14 Dec 2020 17:36:54 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BEHV5RL136122;
+        Mon, 14 Dec 2020 17:36:53 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 35e6jpt7y0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Dec 2020 17:36:53 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BEHapqM003074;
+        Mon, 14 Dec 2020 17:36:51 GMT
+Received: from [20.15.0.202] (/73.88.28.6)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 14 Dec 2020 09:36:50 -0800
+Subject: Re: [RFC PATCH] scsi:libiscsi:Fix possible NULL dereference in
+ iscsi_eh_cmd_timed_out
+To:     Wu Bo <wubo40@huawei.com>, lduncan@suse.com, cleech@redhat.com,
+        michaelc@cs.wisc.edu, linux-scsi@vger.kernel.org,
+        open-iscsi@googlegroups.com
+Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
+        lutianxiong@huawei.com, linfeilong@huawei.com,
+        liuzhiqiang26@huawei.com, haowenchao@huawei.com
+References: <1607935317-263599-1-git-send-email-wubo40@huawei.com>
+From:   Mike Christie <michael.christie@oracle.com>
+Message-ID: <d545b4b0-2c85-8e81-4f78-1d4c6a08c7dd@oracle.com>
+Date:   Mon, 14 Dec 2020 11:36:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
+In-Reply-To: <1607935317-263599-1-git-send-email-wubo40@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9834 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012140119
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9834 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 clxscore=1011 spamscore=0
+ malwarescore=0 priorityscore=1501 phishscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012140119
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2020-12-14 at 17:14 +0100, Bean Huo wrote:
-> From: Bean Huo <beanhuo@micron.com>
+On 12/14/20 2:41 AM, Wu Bo wrote:
+> When testing kernel 4.18 version, NULL pointer dereference problem occurs
+> in iscsi_eh_cmd_timed_out function.
 > 
-> Current EM macro definition, we use stringize operator '#', which turns
-> the argument it precedes into a quoted string. Thus requires the symbol
-> of __print_symbolic() should be the string corresponding to the name of
-> the enum.
+> I think this bug in the upstream is still exists.
 > 
-> However, we have other cases, the symbol and enum name are not the same,
-> we can redefine EM/EMe, but there will introduce some redundant codes.
-> This patch is to remove this restriction, let others reuse the current
-> EM/EMe definition.
+> The analysis reasons are as follows:
+> 1)  For some reason, I/O command did not complete within 
+>     the timeout period. The block layer timer works, 
+>     call scsi_times_out() to handle I/O timeout logic. 
+>     At the same time the command just completes.
+> 
+> 2)  scsi_times_out() call iscsi_eh_cmd_timed_out() 
+>     to processing timeout logic.  although there is an NULL judgment 
+> 	for the task, the task has not been released yet now.    
+> 
+> 3)  iscsi_complete_task() call __iscsi_put_task(), 
+>     The task reference count reaches zero, the conditions for free task 
+>     is met, then iscsi_free_task () free the task, 
+>     and let sc->SCp.ptr = NULL. After iscsi_eh_cmd_timed_out passes 
+>     the task judgment check, there may be NULL dereference scenarios
+>     later.
+> 	
 
-I think the other way (adding new definitions for the cases when the
-name and string are different) is less error prone.
+I have a patch for this I think. This is broken out of patchset I was
+trying to fixup the back lock usage for offload drivers, so I have only
+compile tested it.
 
-> diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
-[]
-> +#define UFS_LINK_STATES						\
-> +	EM(UIC_LINK_OFF_STATE, "UIC_LINK_OFF_STATE")		\
-> +	EM(UIC_LINK_ACTIVE_STATE, "UIC_LINK_ACTIVE_STATE,")	\
+There is another issue where the for lun reset cleanup we could race. The
+comments mention suspending the rx side, but we only do that for session level
+cleaup.
 
-For instance:
-
-Like here where you added an unnecessary and unwanted comma
+The basic idea is we don't want to add more frwd lock uses in the completion
+patch like in your patch. In these non perf paths, like the tmf/timeout case
+we can just take a ref to the cmd so it's not freed from under us.
 
 
+
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index f9314f1..f07f8c1 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -573,18 +573,9 @@ void iscsi_complete_scsi_task(struct iscsi_task *task,
+ static void fail_scsi_task(struct iscsi_task *task, int err)
+ {
+ 	struct iscsi_conn *conn = task->conn;
+-	struct scsi_cmnd *sc;
++	struct scsi_cmnd *sc = task->sc;
+ 	int state;
+ 
+-	/*
+-	 * if a command completes and we get a successful tmf response
+-	 * we will hit this because the scsi eh abort code does not take
+-	 * a ref to the task.
+-	 */
+-	sc = task->sc;
+-	if (!sc)
+-		return;
+-
+ 	if (task->state == ISCSI_TASK_PENDING) {
+ 		/*
+ 		 * cmd never made it to the xmit thread, so we should not count
+@@ -1855,26 +1846,34 @@ static int iscsi_exec_task_mgmt_fn(struct iscsi_conn *conn,
+ }
+ 
+ /*
+- * Fail commands. session lock held and recv side suspended and xmit
+- * thread flushed
++ * Fail commands. session frwd lock held and and xmit thread flushed.
+  */
+ static void fail_scsi_tasks(struct iscsi_conn *conn, u64 lun, int error)
+ {
++	struct iscsi_session *session = conn->session;
+ 	struct iscsi_task *task;
+ 	int i;
+ 
+-	for (i = 0; i < conn->session->cmds_max; i++) {
+-		task = conn->session->cmds[i];
+-		if (!task->sc || task->state == ISCSI_TASK_FREE)
++	for (i = 0; i < session->cmds_max; i++) {
++		spin_lock_bh(&session->back_lock);
++		task = session->cmds[i];
++		if (!task->sc || task->state == ISCSI_TASK_FREE) {
++			spin_unlock_bh(&session->back_lock);
+ 			continue;
++		}
+ 
+-		if (lun != -1 && lun != task->sc->device->lun)
++		if (lun != -1 && lun != task->sc->device->lun) {
++			spin_unlock_bh(&session->back_lock);
+ 			continue;
++		}
++		__iscsi_get_task(task);
++		spin_unlock_bh(&session->back_lock);
+ 
+-		ISCSI_DBG_SESSION(conn->session,
++		ISCSI_DBG_SESSION(session,
+ 				  "failing sc %p itt 0x%x state %d\n",
+ 				  task->sc, task->itt, task->state);
+ 		fail_scsi_task(task, error);
++		iscsi_put_task(task);
+ 	}
+ }
+ 
+@@ -1953,6 +1952,7 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 	ISCSI_DBG_EH(session, "scsi cmd %p timedout\n", sc);
+ 
+ 	spin_lock_bh(&session->frwd_lock);
++	spin_lock(&session->back_lock);
+ 	task = (struct iscsi_task *)sc->SCp.ptr;
+ 	if (!task) {
+ 		/*
+@@ -1960,8 +1960,11 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 		 * so let timeout code complete it now.
+ 		 */
+ 		rc = BLK_EH_DONE;
++		spin_unlock(&session->back_lock);
+ 		goto done;
+ 	}
++	__iscsi_get_task(task);
++	spin_unlock(&session->back_lock);
+ 
+ 	if (session->state != ISCSI_STATE_LOGGED_IN) {
+ 		/*
+@@ -2077,9 +2080,12 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 	rc = BLK_EH_RESET_TIMER;
+ 
+ done:
+-	if (task)
+-		task->last_timeout = jiffies;
+ 	spin_unlock_bh(&session->frwd_lock);
++
++	if (task) {
++		task->last_timeout = jiffies;
++		iscsi_put_task(task);
++	}
+ 	ISCSI_DBG_EH(session, "return %s\n", rc == BLK_EH_RESET_TIMER ?
+ 		     "timer reset" : "shutdown or nh");
+ 	return rc;
+@@ -2187,15 +2193,20 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+ 	conn->eh_abort_cnt++;
+ 	age = session->age;
+ 
+-	task = (struct iscsi_task *)sc->SCp.ptr;
+-	ISCSI_DBG_EH(session, "aborting [sc %p itt 0x%x]\n",
+-		     sc, task->itt);
+-
+-	/* task completed before time out */
+-	if (!task->sc) {
++	spin_lock(&session->back_lock);
++	task = (struct iscsi_task *)sc->SCp.ptr;	
++	if (!task || !task->sc) {
++		/* task completed before time out */
+ 		ISCSI_DBG_EH(session, "sc completed while abort in progress\n");
+-		goto success;
++
++		spin_unlock(&session->back_lock);
++		spin_unlock_bh(&session->frwd_lock);
++		mutex_unlock(&session->eh_mutex);
++		return SUCCESS;
+ 	}
++	ISCSI_DBG_EH(session, "aborting [sc %p itt 0x%x]\n", sc, task->itt);
++	__iscsi_get_task(task);
++	spin_unlock(&session->back_lock);
+ 
+ 	if (task->state == ISCSI_TASK_PENDING) {
+ 		fail_scsi_task(task, DID_ABORT);
+@@ -2258,6 +2269,8 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+ 	ISCSI_DBG_EH(session, "abort success [sc %p itt 0x%x]\n",
+ 		     sc, task->itt);
+ 	mutex_unlock(&session->eh_mutex);
++
++	iscsi_put_task(task);
+ 	return SUCCESS;
+ 
+ failed:
+@@ -2266,6 +2279,8 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+ 	ISCSI_DBG_EH(session, "abort failed [sc %p itt 0x%x]\n", sc,
+ 		     task ? task->itt : 0);
+ 	mutex_unlock(&session->eh_mutex);
++
++	iscsi_put_task(task);
+ 	return FAILED;
+ }
+ EXPORT_SYMBOL_GPL(iscsi_eh_abort);
