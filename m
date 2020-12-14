@@ -2,71 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1522D9C96
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 17:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354102D9CEF
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 17:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439358AbgLNQYN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 14 Dec 2020 11:24:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58962 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440030AbgLNQYJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Dec 2020 11:24:09 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 73CE822795;
-        Mon, 14 Dec 2020 16:23:27 +0000 (UTC)
-Date:   Mon, 14 Dec 2020 11:23:25 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Bean Huo <huobean@gmail.com>
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        id S2502120AbgLNQrS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 11:47:18 -0500
+Received: from smtprelay0156.hostedemail.com ([216.40.44.156]:46500 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2502118AbgLNQrS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Dec 2020 11:47:18 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 6CA581730873;
+        Mon, 14 Dec 2020 16:46:34 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:334:355:368:369:379:599:800:960:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3871:3872:3873:4250:4321:5007:6737:7576:10004:10400:10848:11026:11232:11473:11658:11914:12048:12297:12438:12679:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21433:21451:21627:30012:30029:30054:30089:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: look56_4507fd12741c
+X-Filterd-Recvd-Size: 2092
+Received: from XPS-9350.home (unknown [47.151.137.21])
+        (Authenticated sender: joe@perches.com)
+        by omf20.hostedemail.com (Postfix) with ESMTPA;
+        Mon, 14 Dec 2020 16:46:31 +0000 (UTC)
+Message-ID: <ade665cbfa138d1851343576caad84a61e904c46.camel@perches.com>
+Subject: Re: [PATCH v2 1/6] scsi: ufs: Remove stringize operator '#'
+ restriction
+From:   Joe Perches <joe@perches.com>
+To:     Bean Huo <huobean@gmail.com>, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
         martin.petersen@oracle.com, stanley.chu@mediatek.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] Several changes for the UPIU trace
-Message-ID: <20201214112325.464a2cb0@gandalf.local.home>
-In-Reply-To: <20201214161502.13440-1-huobean@gmail.com>
+        cang@codeaurora.org, rostedt@goodmis.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 14 Dec 2020 08:46:30 -0800
+In-Reply-To: <20201214161502.13440-2-huobean@gmail.com>
 References: <20201214161502.13440-1-huobean@gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+         <20201214161502.13440-2-huobean@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 14 Dec 2020 17:14:56 +0100
-Bean Huo <huobean@gmail.com> wrote:
-
+On Mon, 2020-12-14 at 17:14 +0100, Bean Huo wrote:
 > From: Bean Huo <beanhuo@micron.com>
 > 
-> Changelog:
+> Current EM macro definition, we use stringize operator '#', which turns
+> the argument it precedes into a quoted string. Thus requires the symbol
+> of __print_symbolic() should be the string corresponding to the name of
+> the enum.
 > 
-> V1--V2:
->   1. Convert __get_str(str) to __print_symbolic()
->   2. Add new patches 1/6, 2/6,3/6
->   3. Use __print_symbolic() in patch 6/6
-> 
-> Bean Huo (6):
->   scsi: ufs: Remove stringize operator '#' restriction
->   scsi: ufs: Use __print_symbolic() for UFS trace string print
->   scsi: ufs: Don't call trace_ufshcd_upiu() in case trace poit is
->     disabled
->   scsi: ufs: Distinguish between query REQ and query RSP in query trace
->   scsi: ufs: Distinguish between TM request UPIU and response UPIU in TM
->     UPIU trace
->   scsi: ufs: Make UPIU trace easier differentiate among CDB, OSF, and TM
-> 
->  drivers/scsi/ufs/ufs.h     |  17 ++++++
->  drivers/scsi/ufs/ufshcd.c  |  72 ++++++++++++++++---------
->  include/trace/events/ufs.h | 108 +++++++++++++++++++++++--------------
->  3 files changed, 131 insertions(+), 66 deletions(-)
-> 
+> However, we have other cases, the symbol and enum name are not the same,
+> we can redefine EM/EMe, but there will introduce some redundant codes.
+> This patch is to remove this restriction, let others reuse the current
+> EM/EMe definition.
 
-From a tracing point of view for the series.
+I think the other way (adding new definitions for the cases when the
+name and string are different) is less error prone.
 
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+[]
+> +#define UFS_LINK_STATES						\
+> +	EM(UIC_LINK_OFF_STATE, "UIC_LINK_OFF_STATE")		\
+> +	EM(UIC_LINK_ACTIVE_STATE, "UIC_LINK_ACTIVE_STATE,")	\
 
--- Steve
+For instance:
+
+Like here where you added an unnecessary and unwanted comma
+
+
