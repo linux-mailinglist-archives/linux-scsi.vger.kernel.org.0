@@ -2,51 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 366A12D9BDC
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 17:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51DC2D9C65
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 17:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440044AbgLNQFm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 11:05:42 -0500
-Received: from server.kenspensetc.com ([185.148.128.76]:48008 "EHLO
-        server.kenspensetc.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439358AbgLNQFj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 11:05:39 -0500
-Received: from localhost ([127.0.0.1]:47936 helo=server.kenspensetc.com)
-        by server.kenspensetc.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <sender@ridecals.com>)
-        id 1knLn0-00029V-6J; Thu, 10 Dec 2020 08:15:22 -0500
-Received: from [70.32.0.46] ([70.32.0.46]) by ridecals.com (Horde Framework)
- with HTTPS; Thu, 10 Dec 2020 08:15:22 -0500
-Date:   Thu, 10 Dec 2020 08:15:22 -0500
-Message-ID: <20201210081522.Horde.GEA1j18D53oi4VTUxYWD_87@ridecals.com>
-From:   Russell Branting <sender@ridecals.com>
-Subject: Vital
-Reply-to: Goodagent01@gmail.com
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
-MIME-Version: 1.0
-Content-Disposition: inline
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.kenspensetc.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - ridecals.com
-X-Get-Message-Sender-Via: server.kenspensetc.com: authenticated_id: sender9@ridecals.com
-X-Authenticated-Sender: server.kenspensetc.com: sender9@ridecals.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-To:     unlisted-recipients:; (no To-header on input)
+        id S2502034AbgLNQTG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 11:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2440214AbgLNQQJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 11:16:09 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B42C0613D3;
+        Mon, 14 Dec 2020 08:15:28 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id b73so17696451edf.13;
+        Mon, 14 Dec 2020 08:15:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=vXJYk1sYt5MnW2qjVCNzPOZOPPYy5lNnvQwIx2hLAi8=;
+        b=afw5ng7ISHEBh1H2Mp6fdH8KTcbpxWvMnlFQWWizwUr965g5XSyvSouqIWRPjFmGu1
+         E02ER9J6y6wLX9C8AkjU2hw+xceMkHbApwtSK50RvITVp2R0Vi6X1XFQheO8QqjuGAyT
+         7043ObGhn6VUUFzMELmdLB2FYlIjCafsDByTz9rlrjxZ+/khn8jFfMxWBk0v6eN3SLuI
+         n9ro/50RaEW0DMBPOWE5YRmc2LDvNZVUB/dFqgnXhVBSj7TVoUrGQemrS89vBzGkwBbd
+         rL9OyjB57jWVFTZQXkZDLTLRnw2yQXcluSAMvods+blYcjdigZJIYdv3J8SP3pCC8hUX
+         kJVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=vXJYk1sYt5MnW2qjVCNzPOZOPPYy5lNnvQwIx2hLAi8=;
+        b=gOY5Jw9TmbLnyZuIO0CQnH4WLvTQ9szNRMHAf2TXtG2shNH5l8wYaZcMHrM3YOnXBm
+         rMLKck4jJOqF092mMzNj7L7BscYTvqB2P9+o/HYr7OM3icBvu/VEKq2Y+f7LFIk3SHmy
+         bzhMEpzjBUEstAsCK22u/gTIcb0DRhuMG5JdCJQyP6AT43/N+sm/aaeVoeO0sFcHE6/U
+         1L3voIeobn517fNhxFQgTUh+B2Ig0VOPfCH4V6WmvbAbYvDWP+NIjDMMdeeM1LGRWd2C
+         WrlkUL+mhFohHVt3qznOZsT8m6tPP/7Mj2Pd/H3sgiaohONlVuTwEyLQfS3mjoujfMtc
+         TIPQ==
+X-Gm-Message-State: AOAM530c27U1GdEkxqYl2XPekyI5mgcCEMV20Z/CWD2ZupgT4gHcsQLV
+        Xe+R9357vKk7tRLRR2b3GrQ=
+X-Google-Smtp-Source: ABdhPJw9pRKSZ3/vKqQA8zaFmdzSG3scbpzu2FMa0zbiVm5gq0BDrWLSKFSMAgqweH+2hdEof7WykA==
+X-Received: by 2002:aa7:c3d3:: with SMTP id l19mr26084730edr.366.1607962527256;
+        Mon, 14 Dec 2020 08:15:27 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
+        by smtp.gmail.com with ESMTPSA id i13sm6646056edu.22.2020.12.14.08.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 08:15:26 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org, rostedt@goodmis.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] Several changes for the UPIU trace
+Date:   Mon, 14 Dec 2020 17:14:56 +0100
+Message-Id: <20201214161502.13440-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+From: Bean Huo <beanhuo@micron.com>
 
-I am instructed to inform you of your appointment as the next of kin  
-to your deceased relative estate. Kindly indicate your acceptance by  
-reconfirming your Full Name, Address & Phone Number for immediate  
-processing of the funds release to your control OR the deceased  
-deposited funds will be declared unclaimed.
+Changelog:
 
+V1--V2:
+  1. Convert __get_str(str) to __print_symbolic()
+  2. Add new patches 1/6, 2/6,3/6
+  3. Use __print_symbolic() in patch 6/6
+
+Bean Huo (6):
+  scsi: ufs: Remove stringize operator '#' restriction
+  scsi: ufs: Use __print_symbolic() for UFS trace string print
+  scsi: ufs: Don't call trace_ufshcd_upiu() in case trace poit is
+    disabled
+  scsi: ufs: Distinguish between query REQ and query RSP in query trace
+  scsi: ufs: Distinguish between TM request UPIU and response UPIU in TM
+    UPIU trace
+  scsi: ufs: Make UPIU trace easier differentiate among CDB, OSF, and TM
+
+ drivers/scsi/ufs/ufs.h     |  17 ++++++
+ drivers/scsi/ufs/ufshcd.c  |  72 ++++++++++++++++---------
+ include/trace/events/ufs.h | 108 +++++++++++++++++++++++--------------
+ 3 files changed, 131 insertions(+), 66 deletions(-)
+
+-- 
+2.17.1
 
