@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 665702D8EC6
-	for <lists+linux-scsi@lfdr.de>; Sun, 13 Dec 2020 17:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEDF2D91A8
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 03:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436657AbgLMQdE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 13 Dec 2020 11:33:04 -0500
-Received: from labrats.qualcomm.com ([199.106.110.90]:14649 "EHLO
+        id S2437874AbgLNCGf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Dec 2020 21:06:35 -0500
+Received: from labrats.qualcomm.com ([199.106.110.90]:9322 "EHLO
         labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405775AbgLMQcz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Dec 2020 11:32:55 -0500
-IronPort-SDR: wGkbvEQBJudY7y6PcFudy51EpAJD8cwG4lFHTP7YbSxadDgh+AoZlNBtVdRZg9/mAtcd783KUh
- qMJW97vCsILB6mqQYIeeCEv+gWSxA7deinYeGenkgyYQ9ycwhwzkLAQ9vPNJxsF3ic48oUPjfj
- IKxo3EmOh6TtnQavLZ0WKYIXF2Y7gbrC6r8vlH3tqS7BrkzuFtdQg3OtzOi+mQQkstFF+AIdpO
- PTQXbHRS9OUEENwctg0HIJ5p0R13I+hZhvWXeE9YDvb5NQkqTxsfMG+YQcinUNyHS2qK4jYgf3
- dTY=
-X-IronPort-AV: E=Sophos;i="5.78,416,1599548400"; 
-   d="scan'208";a="29356199"
+        with ESMTP id S2437850AbgLNCGf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Dec 2020 21:06:35 -0500
+IronPort-SDR: dkjfAgX34W//Ji8Qi6V0kqvrXq9h1vxhzHKKPyZbAp1HNTyHzjUig6B61UHs+M39t9w4Xu+TYj
+ JrXgQ6NyywfdZcrB+nzmdSXBIG9iKMAgMbCqbAkwBLkq8Ol6Ni1an+0YbhopjwYK4Wd8oYGvJQ
+ E08uU1u+5ou7UpYhe7r5rxwItXvrRKQf8A8BqQGnh3xzRNmht3+OQ8dErY8rI4yDSL0/yOcWm8
+ XcRv5kxrq2AwfkmKlw3iCRkmqxLUb9jyb5G0ioNQwulG07TZ6i5N+UUtTa3vp9IUoHUAxMUKSM
+ RJg=
+X-IronPort-AV: E=Sophos;i="5.78,417,1599548400"; 
+   d="scan'208";a="29359144"
 Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by labrats.qualcomm.com with ESMTP; 13 Dec 2020 08:32:00 -0800
+  by labrats.qualcomm.com with ESMTP; 13 Dec 2020 18:05:54 -0800
 X-QCInternal: smtphost
 Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
-  by ironmsg05-sd.qualcomm.com with ESMTP; 13 Dec 2020 08:31:59 -0800
+  by ironmsg05-sd.qualcomm.com with ESMTP; 13 Dec 2020 18:05:53 -0800
 Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 775B82171F; Sun, 13 Dec 2020 08:31:59 -0800 (PST)
+        id 628B92123A; Sun, 13 Dec 2020 18:05:53 -0800 (PST)
 From:   Can Guo <cang@codeaurora.org>
 To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
         hongwus@codeaurora.org, rnayak@codeaurora.org,
@@ -38,47 +38,56 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         Bean Huo <beanhuo@micron.com>,
         Bart Van Assche <bvanassche@acm.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 3/3] scsi: ufs: Revert "Make sure clk scaling happens only when HBA is runtime ACTIVE"
-Date:   Sun, 13 Dec 2020 08:31:44 -0800
-Message-Id: <1607877104-8916-4-git-send-email-cang@codeaurora.org>
+Subject: [PATCH 1/1] scsi: ufs: Fix a possible NULL pointer issue
+Date:   Sun, 13 Dec 2020 18:05:47 -0800
+Message-Id: <1607911551-18101-1-git-send-email-cang@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1607877104-8916-1-git-send-email-cang@codeaurora.org>
-References: <1607877104-8916-1-git-send-email-cang@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Commit 73cc291c27024 ("Make sure clk scaling happens only when HBA is
-runtime ACTIVE") is no longer needed since commit f7a42540928a8 ("scsi:
-ufs: Protect some contexts from unexpected clock scaling") is a more
-mature fix to protect UFS LLD stability from clock scaling invoked through
-sysfs nodes by users.
+During system resume/suspend, hba could be NULL. In this case, do not touch
+eh_sem.
+
+Fixes: 88a92d6ae4fe ("scsi: ufs: Serialize eh_work with system PM events and async scan")
 
 Signed-off-by: Can Guo <cang@codeaurora.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 80f82cb..052479a 100644
+index c1c401b..140394a 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1300,15 +1300,8 @@ static int ufshcd_devfreq_target(struct device *dev,
- 	}
- 	spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
+@@ -8883,9 +8883,13 @@ int ufshcd_system_suspend(struct ufs_hba *hba)
+ 	int ret = 0;
+ 	ktime_t start = ktime_get();
  
--	pm_runtime_get_noresume(hba->dev);
--	if (!pm_runtime_active(hba->dev)) {
--		pm_runtime_put_noidle(hba->dev);
--		ret = -EAGAIN;
--		goto out;
+-	down(&hba->eh_sem);
+-	if (!hba || !hba->is_powered)
++	if (!hba)
++		return 0;
++
++	if (!hba->is_powered) {
++		down(&hba->eh_sem);
+ 		return 0;
++	}
+ 
+ 	if ((ufs_get_pm_lvl_to_dev_pwr_mode(hba->spm_lvl) ==
+ 	     hba->curr_dev_pwr_mode) &&
+@@ -8932,10 +8936,8 @@ int ufshcd_system_resume(struct ufs_hba *hba)
+ 	int ret = 0;
+ 	ktime_t start = ktime_get();
+ 
+-	if (!hba) {
+-		up(&hba->eh_sem);
++	if (!hba)
+ 		return -EINVAL;
 -	}
- 	start = ktime_get();
- 	ret = ufshcd_devfreq_scale(hba, scale_up);
--	pm_runtime_put(hba->dev);
  
- 	trace_ufshcd_profile_clk_scaling(dev_name(hba->dev),
- 		(scale_up ? "up" : "down"),
+ 	if (!hba->is_powered || pm_runtime_suspended(hba->dev))
+ 		/*
 -- 
 Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
