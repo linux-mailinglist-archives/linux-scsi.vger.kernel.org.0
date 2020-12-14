@@ -2,49 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E94642DA1CE
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 21:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8212DA15B
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Dec 2020 21:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502827AbgLNUVG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 15:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S2503065AbgLNUVT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 15:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727855AbgLNUVG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 15:21:06 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C70C0613D3;
-        Mon, 14 Dec 2020 12:20:26 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id jx16so24341671ejb.10;
-        Mon, 14 Dec 2020 12:20:26 -0800 (PST)
+        with ESMTP id S1727855AbgLNUVH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 15:21:07 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F784C0613D6;
+        Mon, 14 Dec 2020 12:20:27 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id qw4so24334348ejb.12;
+        Mon, 14 Dec 2020 12:20:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=CAtJX87HqXXu8z9DPu1gGW2L6L0r7ONQKKLzHO1fhlQ=;
-        b=C+fe6fZP1TyzKBNGaW3LtoCox4rIcmYQOaU/AZ3k/EnlwAdE11YbebbqXWTORnxWod
-         5ahtEiayO26PSzWmOLPkl32Lyt4MYMW5/LiKiYnUhstsO3Kd2lKOLmnulPwGxoz7ON3j
-         1n9GklV8ykXWFVRfOz0a61IjGRBzKJI5XwMbng3GGO9s+FuCIUH2YLlTL7ODTnlW5NT1
-         Cmp5U+59K9dGVQpqmWRidQZ4sKScemDOzTE5ry5YzO5aiNPF+dWs0OSA7EicWhOqi5EA
-         5akAIGeuk10AatEsiTGYiCsA2ponvV8+ey46LhE1SHYTGuNgVHEt+BQSfo9q6ZRUecSB
-         iiRg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=e2p6ovsTZi3RI/1s5tiOcO3cGPDLijFKcdx9hDvuso4=;
+        b=jhWGEXIsT7wblDPiUbRKmNvCe3+UbZDYw9Cb+ohgdlYrv+8fdsF80eF7JhLeVl3274
+         5r8mD1JVvM0ar8eDyXs58QDvYXVCQJNfMYyQT0q2k7256GBw9IolXB9D6NDEIyizE6tX
+         i3EqNOLyUMO2j63q+o3xGD3/DFVAyee+qyUyqvHt10RiNin+ZHZiUWTRZLrVo7NTUUa+
+         UfEJ3dGTs92SQ7xM9j/YEV7Ja0IgFqcwNsQy87aYHK2M8WRFnaYSladHDHOVUfp0jG71
+         8VecjINNPfcMP9RmXVfpPIuYwZmbp7i9NZLpIiyKvKEgWnHNgOnwqmypsQjcWXXH8y0v
+         EW/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=CAtJX87HqXXu8z9DPu1gGW2L6L0r7ONQKKLzHO1fhlQ=;
-        b=fof6hqXvzj9rDxiXo/atKyQi61Tx0dt/vQRqW7iC3nEMLkz6tXJZ5L3PulExPhMgl+
-         0OneqTAW+A8oJlFYZ4ZrVGY58hy+5YME9IN+NtBBnMeL98KJOQznwEPffftNRAmKW01/
-         pEA2aQiczKzXAr0CQGmGr934gtel4wFNR91dIE4ir+Lzr2drj3piCqpLBHc2JjkCXiEQ
-         S3shSJkqA5BaBm1TpO0/fiP0V45aE4LgBjOP1nwxBKVPCFtf3D2xvYPaBWn9J6JEDfhc
-         Bu5L85QfgtO6gMHniSDW0N7LCwFuyxhseDnxg+aEVdPTyQFntX4bPAJdOdaEJlzfSeUH
-         cYJQ==
-X-Gm-Message-State: AOAM532dMSvg7i8DJugdDEHp4p5GbGSF32X73J563UXC4XUzOgirH68M
-        qbG0AxPauaXNMBJ2yVUchXw=
-X-Google-Smtp-Source: ABdhPJx4TEOVB6AI5rxHDmYP9CjlKqOJ47Mfj2ukov49ocF0SB7yMBvtbk4NqrtVu+OtS/Wc+uIRvA==
-X-Received: by 2002:a17:906:2818:: with SMTP id r24mr23244078ejc.100.1607977224826;
-        Mon, 14 Dec 2020 12:20:24 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=e2p6ovsTZi3RI/1s5tiOcO3cGPDLijFKcdx9hDvuso4=;
+        b=hvYk+0l0zunOuLqvYu7I+9k0U+fRoXetLQDNPAqSyBTyqrlxStMRh5p+bX+8jdzx3R
+         VDbGS3rS0DYCBD26bE83QBvFfyEMjfhWFQhezASI7crPKog1wdGaOGs3c59/7ucIatdO
+         +KgunUl8EQEi1gOAnCbQXuYKwZPKPR3nTffLXvoPQrw0zCuchAh/lHjDCmyQAGJ0uOGS
+         DUFAUkp688zP263QOLy9pZvyP6hD4SPOprOgspMYmIMLmBFZy7pBikopm52ZTL9QyGRP
+         6Vkjlt+IeN9vJdOkM8wVWqluxEuzNCNVRkUxfDaBlGm4E2lyqusBWE+4Jrl+e1yE/qh0
+         9jtg==
+X-Gm-Message-State: AOAM533FDC8hFakFPfaEZ+15YRnrCK5uNV9JbET3wgNYQh+s0qT7d2DK
+        50sbAlH5vtiydUdM3N7M/SE=
+X-Google-Smtp-Source: ABdhPJyUN46LzuPeZ3au8ZcYHb4l6lEitKROqN88NkJ4nLISi9FFJdEtrtK9Oui0eAKRh9Dt5voCyg==
+X-Received: by 2002:a17:906:4705:: with SMTP id y5mr23882838ejq.112.1607977225892;
+        Mon, 14 Dec 2020 12:20:25 -0800 (PST)
 Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.gmail.com with ESMTPSA id r7sm9334634edh.86.2020.12.14.12.20.23
+        by smtp.gmail.com with ESMTPSA id r7sm9334634edh.86.2020.12.14.12.20.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 12:20:24 -0800 (PST)
+        Mon, 14 Dec 2020 12:20:25 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -52,41 +53,96 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org, rostedt@goodmis.org, joe@perches.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/6] Several changes for the UPIU trace
-Date:   Mon, 14 Dec 2020 21:20:08 +0100
-Message-Id: <20201214202014.13835-1-huobean@gmail.com>
+Subject: [PATCH v3 1/6] scsi: ufs: Remove stringize operator '#' restriction
+Date:   Mon, 14 Dec 2020 21:20:09 +0100
+Message-Id: <20201214202014.13835-2-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201214202014.13835-1-huobean@gmail.com>
+References: <20201214202014.13835-1-huobean@gmail.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Changelog:
+Current EM macro definition, we use stringize operator '#', which turns
+the argument it precedes into a quoted string. Thus requires the symbol
+of __print_symbolic() should be the string corresponding to the name of
+the enum.
 
-V2--V3:
-  1. Fix a typo in patch 1/6 (Reported-by: Joe Perches <joe@perches.com>)
+However, we have other cases, the symbol and enum name are not the same,
+we can redefine EM/EMe, but there will introduce some redundant codes.
+This patch is to remove this restriction, let others reuse the current
+EM/EMe definition.
 
-V1--V2:
-  1. Convert __get_str(str) to __print_symbolic()
-  2. Add new patches 1/6, 2/6,3/6
-  3. Use __print_symbolic() in patch 6/6
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Bean Huo <beanhuo@micron.com>
+---
+ include/trace/events/ufs.h | 40 +++++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
-Bean Huo (6):
-  scsi: ufs: Remove stringize operator '#' restriction
-  scsi: ufs: Use __print_symbolic() for UFS trace string print
-  scsi: ufs: Don't call trace_ufshcd_upiu() in case trace poit is
-    disabled
-  scsi: ufs: Distinguish between query REQ and query RSP in query trace
-  scsi: ufs: Distinguish between TM request UPIU and response UPIU in TM
-    UPIU trace
-  scsi: ufs: Make UPIU trace easier differentiate among CDB, OSF, and TM
-
- drivers/scsi/ufs/ufs.h     |  17 ++++++
- drivers/scsi/ufs/ufshcd.c  |  72 ++++++++++++++++---------
- include/trace/events/ufs.h | 108 +++++++++++++++++++++++--------------
- 3 files changed, 131 insertions(+), 66 deletions(-)
-
+diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+index 0bd54a184391..fa755394bc0f 100644
+--- a/include/trace/events/ufs.h
++++ b/include/trace/events/ufs.h
+@@ -20,28 +20,28 @@
+ 		{ SYNCHRONIZE_CACHE,	"SYNC" },			\
+ 		{ UNMAP,		"UNMAP" })
+ 
+-#define UFS_LINK_STATES			\
+-	EM(UIC_LINK_OFF_STATE)		\
+-	EM(UIC_LINK_ACTIVE_STATE)	\
+-	EMe(UIC_LINK_HIBERN8_STATE)
+-
+-#define UFS_PWR_MODES			\
+-	EM(UFS_ACTIVE_PWR_MODE)		\
+-	EM(UFS_SLEEP_PWR_MODE)		\
+-	EM(UFS_POWERDOWN_PWR_MODE)	\
+-	EMe(UFS_DEEPSLEEP_PWR_MODE)
+-
+-#define UFSCHD_CLK_GATING_STATES	\
+-	EM(CLKS_OFF)			\
+-	EM(CLKS_ON)			\
+-	EM(REQ_CLKS_OFF)		\
+-	EMe(REQ_CLKS_ON)
++#define UFS_LINK_STATES						\
++	EM(UIC_LINK_OFF_STATE,		"UIC_LINK_OFF_STATE")		\
++	EM(UIC_LINK_ACTIVE_STATE,	"UIC_LINK_ACTIVE_STATE")	\
++	EMe(UIC_LINK_HIBERN8_STATE,	"UIC_LINK_HIBERN8_STATE")
++
++#define UFS_PWR_MODES							\
++	EM(UFS_ACTIVE_PWR_MODE,		"UFS_ACTIVE_PWR_MODE")		\
++	EM(UFS_SLEEP_PWR_MODE,		"UFS_SLEEP_PWR_MODE")		\
++	EM(UFS_POWERDOWN_PWR_MODE,	"UFS_POWERDOWN_PWR_MODE")	\
++	EMe(UFS_DEEPSLEEP_PWR_MODE,	"UFS_DEEPSLEEP_PWR_MODE")
++
++#define UFSCHD_CLK_GATING_STATES				\
++	EM(CLKS_OFF,			"CLKS_OFF")		\
++	EM(CLKS_ON,			"CLKS_ON")		\
++	EM(REQ_CLKS_OFF,		"REQ_CLKS_OFF")		\
++	EMe(REQ_CLKS_ON,		"REQ_CLKS_ON")
+ 
+ /* Enums require being exported to userspace, for user tool parsing */
+ #undef EM
+ #undef EMe
+-#define EM(a)	TRACE_DEFINE_ENUM(a);
+-#define EMe(a)	TRACE_DEFINE_ENUM(a);
++#define EM(a, b)	TRACE_DEFINE_ENUM(a);
++#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
+ 
+ UFS_LINK_STATES;
+ UFS_PWR_MODES;
+@@ -53,8 +53,8 @@ UFSCHD_CLK_GATING_STATES;
+  */
+ #undef EM
+ #undef EMe
+-#define EM(a)	{ a, #a },
+-#define EMe(a)	{ a, #a }
++#define EM(a, b)	{a, b},
++#define EMe(a, b)	{a, b}
+ 
+ TRACE_EVENT(ufshcd_clk_gating,
+ 
 -- 
 2.17.1
 
