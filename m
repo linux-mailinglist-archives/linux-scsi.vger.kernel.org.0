@@ -2,80 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C5B2DAA46
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 10:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF8F2DAA52
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 10:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728226AbgLOJki (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Dec 2020 04:40:38 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:59050 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727775AbgLOJkb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 04:40:31 -0500
-X-UUID: b036cac9ae994ddabf219e5524b0ba96-20201215
-X-UUID: b036cac9ae994ddabf219e5524b0ba96-20201215
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1662855156; Tue, 15 Dec 2020 17:39:43 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 15 Dec 2020 17:39:35 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Dec 2020 17:39:36 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 4/4] scsi: ufs: Fix build warning by incorrect function description
-Date:   Tue, 15 Dec 2020 17:39:34 +0800
-Message-ID: <20201215093934.21223-5-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201215093934.21223-1-stanley.chu@mediatek.com>
-References: <20201215093934.21223-1-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: BEEA38C008BEBCA6B551BFFEBDBFC0668C4DB8595B9FDBFD0C06C02EE25BEEBB2000:8
-X-MTK:  N
+        id S1727968AbgLOJnT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Dec 2020 04:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726810AbgLOJnS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 04:43:18 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62113C06179C;
+        Tue, 15 Dec 2020 01:42:38 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id ga15so26710773ejb.4;
+        Tue, 15 Dec 2020 01:42:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sbp7bazvQ/Kg/Kx4Lh7f+HzqSKdsXL4CqYh5zWYbn/Q=;
+        b=t6rETd8BKnh9JPwR+wiUit332ATV4QQgbXbdlcS7VK4HhpteabSiMrJPrQWZUc1bxk
+         rgUgKkfy+CX8IGNZj4ONxneMVg0rL9NbDNXk6Lnf0D3D/37hRX+YgUgLAKowX3F6WN9s
+         W2Dobap8Dn0UQiYkgW2MS0yqPIabGP7XcEfRvHjyfcdFkRF/J+z9C4rW9UMteWErlRH/
+         fLxUnkCaQsFKEAqf6Ew7IxigWuaaUBMiAKesebEitcTO+lCBkJuTgQ9DBLWH/Bjl0egY
+         7vdSqWtWoHdebps5n9yqHUAZ2YPgTErQZjHp+1DMubGJUFGznL9hRAstABRDYqimsMyc
+         xKSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sbp7bazvQ/Kg/Kx4Lh7f+HzqSKdsXL4CqYh5zWYbn/Q=;
+        b=XQkwoOn0RUGYd2GIvZoEmy8ZUckhVrLCOO6DOAHSVsu9OdImgCUDK5mAU6hK2YMHjo
+         v5g3GVZQ0GxryJbpKJlPoh1M5hvICa0EWK6/gWDcNRBRPCacVCjefmkjm3TBpaqauqjV
+         1pNoc65+43L7VpWJ7YWsd0cN6kiUfAFpLe9Q/+LL0A6VEptT3+XnxQjfb/6qModzAxgs
+         +5IIgXvqibhnL04a22NB1F1sjCXVO3zRXFTidCWv1xlFff9Wm6kbx4uCLufggPg2+ORq
+         qk4x26xsgCMInxwNmKd71AdKQm3cABwiXtidsOgpwWglYRfnRSstzFMqkAWllcUWj17G
+         FXBA==
+X-Gm-Message-State: AOAM531Vdfw7cpR9FNL9vi8PWJ+ZWg09XgB0rSVblmMR83dgrTGgVLdG
+        Wz0sT6lSAs/MKMUTDLESFiE=
+X-Google-Smtp-Source: ABdhPJx6kGVuVXxkYSZKFdzdahp4EjS2CrcsC3/+ew4xrg1WGte4KZ/gpGX/T8bK/uxCyJFaM2JHuQ==
+X-Received: by 2002:a17:906:a29a:: with SMTP id i26mr25934867ejz.45.1608025357153;
+        Tue, 15 Dec 2020 01:42:37 -0800 (PST)
+Received: from ubuntu-laptop (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
+        by smtp.googlemail.com with ESMTPSA id m7sm943808ejo.125.2020.12.15.01.42.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 15 Dec 2020 01:42:36 -0800 (PST)
+Message-ID: <615bb13dc394dac2b56fa60787e1841d2db12462.camel@gmail.com>
+Subject: Re: [PATCH v4 3/6] scsi: ufs: Group UFS WB related flags to struct
+ ufs_dev_info
+From:   Bean Huo <huobean@gmail.com>
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 15 Dec 2020 10:42:36 +0100
+In-Reply-To: <1608022873.10163.17.camel@mtkswgap22>
+References: <20201211140035.20016-1-huobean@gmail.com>
+         <20201211140035.20016-4-huobean@gmail.com>
+         <1608022873.10163.17.camel@mtkswgap22>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix build warnings as below due to incorrect function description
-of ufshcd_try_to_abort_task().
+On Tue, 2020-12-15 at 17:01 +0800, Stanley Chu wrote:
+> > +     bool    wb_buf_flush_enabled;
+> > +     u8      wb_dedicated_lu;
+> > +     u8      b_wb_buffer_type;
+> > +     u32     d_wb_alloc_units;
+> > +
+> > +     bool    b_rpm_dev_flush_capable;
+> > +     u8      b_presrv_uspc_en;
+> 
+> Perhaps we could unify the style of these WB related stuff to wb_* ?
 
-ufshcd.c:6651: warning: Function parameter or member 'hba' not described in 'ufshcd_try_to_abort_task'
-ufshcd.c:6651: warning: Function parameter or member 'tag' not described in 'ufshcd_try_to_abort_task'
-ufshcd.c:6651: warning: Excess function parameter 'cmd' description in 'ufshcd_try_to_abort_task'
+yes, agree. I will change them.
 
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufshcd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> Besides, I am not sure if using tab instead space between the type
+> and
+> name in this struct is a good idea.
+> 
+using space, in addition single space, type and parameter names are
+mixed. 
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 15e5877411b3..dd1ca22264da 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -6637,7 +6637,8 @@ static void ufshcd_set_req_abort_skip(struct ufs_hba *hba, unsigned long bitmap)
- 
- /**
-  * ufshcd_try_to_abort_task - abort a specific task
-- * @cmd: SCSI command pointer
-+ * @hba: per adapter instance
-+ * @tag: position of the bit to be aborted
-  *
-  * Abort the pending command in device by sending UFS_ABORT_TASK task management
-  * command, and in host controller by clearing the door-bell register. There can
--- 
-2.18.0
+
+use space:
+
+ /* UFS WB related flags */
+bool wb_enabled;
+bool wb_buf_flush_enabled;
+u8
+wb_dedicated_lu;
+u8 b_wb_buffer_type;
+u32 d_wb_alloc_units;
+
+use table:
+
+ /* UFS WB related flags */
+bool    wb_enabled;
+bool    wb_buf_flush_enabled;
+u8      wb_dedicated_lu;
+u8      b_wb_buffer_type;
+u32     d_wb_alloc_units;
+
+I think, the result is very clear comparing above two examples. yes,
+there is no explicit stipulation that we must use space or tab. Both
+styles exist in Linux. Maybe this is just matter of personal interest.
+
+
+Bean
+
+> Thanks,
+> Stanley Chu
 
