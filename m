@@ -2,81 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C8B2DAAA3
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 11:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F492DAAA8
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 11:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgLOKLQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Dec 2020 05:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727046AbgLOKK7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 05:10:59 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB512C06179C
-        for <linux-scsi@vger.kernel.org>; Tue, 15 Dec 2020 02:10:18 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id d26so6027333wrb.12
-        for <linux-scsi@vger.kernel.org>; Tue, 15 Dec 2020 02:10:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=6YbW1AUww5eVgZRJjTNmifbnLL0mORxjDiclOrS8RJc=;
-        b=Vx1td36yY6Nr/MibtiTdvkXXDjy+2kpHj8iBWL1mHkeW/FzFUFyL2cDBB/HyREP9y6
-         EmvXDlHKvydXeHAVdcyYGtDPirmvW/lXJ/Ahh7ternmTuBlnMztaJmbdJ3fnsXQMEqrc
-         jaX7ZXIrZxt/9i/c3AmxhXQjRhb7VmlsZRlL36SiuLo+liX145m+ebQV5cJlxBoC3r8K
-         meIHL/qgCnJfks7/DY1P6RZnOG0xFAHc7y97zi6o5PhhEgIkcGnpdjbd6LIVrg4ws/ab
-         CDWNDxUtrb/xTjd70Owy6s2UI6AltsunxbTqOfTxhsHWgvjnQBqw31Cms73TJ+xQ4UfD
-         PqgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=6YbW1AUww5eVgZRJjTNmifbnLL0mORxjDiclOrS8RJc=;
-        b=Gv424++XUV3J2ppLdChdcI/vn1L+oV32Nu+PJXKoDlVdBy6GD7H7P4S8RaLVeAx4P0
-         VvK5KL4sibO5gR889n/eoHcjypM+XjY6jGpy+g8i8B4m8JhrIrUnLipJED6X03Ldl9jE
-         P0DVVoJ4m1vyhgp93HCyFU4Pqt5q+zGyRYYWN9mWzNSnvrxmwvieJMmAYeHLuI03IB6I
-         ApCzRH/+7bR25nMXOYa/KrkTHZhcyOcL12nv73Oaxoo1ExFyQJjnjccruXN51cv8f8A5
-         y+vHKrX7X+BQ+10bQSFrm3Cp7IbYyGYTtv0jC2D3Z+RFWTT3J4hXxnetU0/Vu+EVHkJ6
-         Sg2A==
-X-Gm-Message-State: AOAM532HKY75EUk4UGd+lIXb2ONCgC8tCibMxPEyCMXOXOFtc6GbnnBW
-        7hpKeFe+4xpwBNtAzmcJtCiGvbgv8zCCybWtbgo=
-X-Google-Smtp-Source: ABdhPJw7AShbTeTNorW1pj68weR7BkBGfRnEPrNStnDqJ4REk5OUr6Zs/9f0P2RmRXqdldFmEx1BhNyaz/OKzCQolU4=
-X-Received: by 2002:adf:eb05:: with SMTP id s5mr33150505wrn.333.1608027017607;
- Tue, 15 Dec 2020 02:10:17 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:adf:ebc7:0:0:0:0:0 with HTTP; Tue, 15 Dec 2020 02:10:17
- -0800 (PST)
-Reply-To: georgemike7031@gmail.com
-From:   george mike <edohkossibrice@gmail.com>
-Date:   Tue, 15 Dec 2020 11:10:17 +0100
-Message-ID: <CAPn8y9K+-3v-jZQqnvn-wxoCYK7B-D8VVHed5E0Q0Kj3YjehXw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        id S1727184AbgLOKM1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Dec 2020 05:12:27 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:55844 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727179AbgLOKMW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 05:12:22 -0500
+X-UUID: 369100d131854b159522192eb9eee32a-20201215
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=2fiUU97l07l7hwAOWALWOPw/Crbf57n2X2dDFxkm7Qk=;
+        b=F0a8IW/y2qV4207ksDFiHjqrau41ITylbRfEJobqe1xKREcy4Ude/WPZrRcrCQT2dd4UZJZRpHZOQNVa7E8eSnfcY50EQLbh+Qiwd5DB1k3m2fNBb1vuSMxLEArUGnRieiOW9/xO306gxqv+GMWV0FRxXmnt3UbB2D2wQf6NagE=;
+X-UUID: 369100d131854b159522192eb9eee32a-20201215
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 315111447; Tue, 15 Dec 2020 18:11:37 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 15 Dec 2020 18:11:35 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Dec 2020 18:11:36 +0800
+Message-ID: <1608027095.10163.27.camel@mtkswgap22>
+Subject: Re: [PATCH v4 3/6] scsi: ufs: Group UFS WB related flags to struct
+ ufs_dev_info
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     Bean Huo <huobean@gmail.com>
+CC:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <asutoshd@codeaurora.org>, <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Dec 2020 18:11:35 +0800
+In-Reply-To: <615bb13dc394dac2b56fa60787e1841d2db12462.camel@gmail.com>
+References: <20201211140035.20016-1-huobean@gmail.com>
+         <20201211140035.20016-4-huobean@gmail.com>
+         <1608022873.10163.17.camel@mtkswgap22>
+         <615bb13dc394dac2b56fa60787e1841d2db12462.camel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 268C207E3F509A246380A2347A81F4907B06979C1EDC8E94A5B68B2F0A4741382000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-dzie=C5=84 dobry
+T24gVHVlLCAyMDIwLTEyLTE1IGF0IDEwOjQyICswMTAwLCBCZWFuIEh1byB3cm90ZToNCj4gT24g
+VHVlLCAyMDIwLTEyLTE1IGF0IDE3OjAxICswODAwLCBTdGFubGV5IENodSB3cm90ZToNCj4gPiA+
+ICsgICAgIGJvb2wgICAgd2JfYnVmX2ZsdXNoX2VuYWJsZWQ7DQo+ID4gPiArICAgICB1OCAgICAg
+IHdiX2RlZGljYXRlZF9sdTsNCj4gPiA+ICsgICAgIHU4ICAgICAgYl93Yl9idWZmZXJfdHlwZTsN
+Cj4gPiA+ICsgICAgIHUzMiAgICAgZF93Yl9hbGxvY191bml0czsNCj4gPiA+ICsNCj4gPiA+ICsg
+ICAgIGJvb2wgICAgYl9ycG1fZGV2X2ZsdXNoX2NhcGFibGU7DQo+ID4gPiArICAgICB1OCAgICAg
+IGJfcHJlc3J2X3VzcGNfZW47DQo+ID4gDQo+ID4gUGVyaGFwcyB3ZSBjb3VsZCB1bmlmeSB0aGUg
+c3R5bGUgb2YgdGhlc2UgV0IgcmVsYXRlZCBzdHVmZiB0byB3Yl8qID8NCj4gDQo+IHllcywgYWdy
+ZWUuIEkgd2lsbCBjaGFuZ2UgdGhlbS4NCj4gDQo+ID4gDQo+ID4gQmVzaWRlcywgSSBhbSBub3Qg
+c3VyZSBpZiB1c2luZyB0YWIgaW5zdGVhZCBzcGFjZSBiZXR3ZWVuIHRoZSB0eXBlDQo+ID4gYW5k
+DQo+ID4gbmFtZSBpbiB0aGlzIHN0cnVjdCBpcyBhIGdvb2QgaWRlYS4NCj4gPiANCj4gdXNpbmcg
+c3BhY2UsIGluIGFkZGl0aW9uIHNpbmdsZSBzcGFjZSwgdHlwZSBhbmQgcGFyYW1ldGVyIG5hbWVz
+IGFyZQ0KPiBtaXhlZC4gDQo+IA0KPiANCj4gdXNlIHNwYWNlOg0KPiANCj4gIC8qIFVGUyBXQiBy
+ZWxhdGVkIGZsYWdzICovDQo+IGJvb2wgd2JfZW5hYmxlZDsNCj4gYm9vbCB3Yl9idWZfZmx1c2hf
+ZW5hYmxlZDsNCj4gdTgNCj4gd2JfZGVkaWNhdGVkX2x1Ow0KPiB1OCBiX3diX2J1ZmZlcl90eXBl
+Ow0KPiB1MzIgZF93Yl9hbGxvY191bml0czsNCj4gDQo+IHVzZSB0YWJsZToNCj4gDQo+ICAvKiBV
+RlMgV0IgcmVsYXRlZCBmbGFncyAqLw0KPiBib29sICAgIHdiX2VuYWJsZWQ7DQo+IGJvb2wgICAg
+d2JfYnVmX2ZsdXNoX2VuYWJsZWQ7DQo+IHU4ICAgICAgd2JfZGVkaWNhdGVkX2x1Ow0KPiB1OCAg
+ICAgIGJfd2JfYnVmZmVyX3R5cGU7DQo+IHUzMiAgICAgZF93Yl9hbGxvY191bml0czsNCj4gDQo+
+IEkgdGhpbmssIHRoZSByZXN1bHQgaXMgdmVyeSBjbGVhciBjb21wYXJpbmcgYWJvdmUgdHdvIGV4
+YW1wbGVzLiB5ZXMsDQo+IHRoZXJlIGlzIG5vIGV4cGxpY2l0IHN0aXB1bGF0aW9uIHRoYXQgd2Ug
+bXVzdCB1c2Ugc3BhY2Ugb3IgdGFiLiBCb3RoDQo+IHN0eWxlcyBleGlzdCBpbiBMaW51eC4gTWF5
+YmUgdGhpcyBpcyBqdXN0IG1hdHRlciBvZiBwZXJzb25hbCBpbnRlcmVzdC4NCg0KSGkgQmVhbiwN
+Cg0KWWVzLCBJIGdvdCB5b3VyIHBvaW50LiBJIGFtIGZpbmUgd2l0aCB0aGlzIHN0eWxlIGNoYW5n
+ZSwgYnV0IGp1c3Qgd29uZGVyDQppZiBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8gY2hhbmdlIGFsbCBz
+dHJ1Y3R1cmVzIGluIGFsbCB1ZnMgaGVhZGVycyAob3IgYXQNCmxlYXN0IGFsbCBzdHJ1Y3R1cmVz
+IGluIHVmcy5oKSBpbiB0aGUgc2FtZSB0aW1lIHRvIG1ha2UgdGhlIHN0eWxlDQp1bmlmaWVkIGlu
+IHRoZSBzYW1lIGZpbGU/DQoNCkJlc2lkZXMsIHdlIG1heSBuZWVkIG90aGVyIHJldmlld2VyJ3Mg
+Y29tbWVudHMgZm9yIHRoZSBuZXcgc3R5bGUuDQoNClRoYW5rcywNClN0YW5sZXkgQ2h1DQoNCj4g
+DQo+IA0KPiBCZWFuDQo+IA0KPiA+IFRoYW5rcywNCj4gPiBTdGFubGV5IENodQ0KPiANCg0K
 
-Nazywam si=C4=99 George Mike. Z zawodu jestem prawnikiem. Chc=C4=99 ci zaof=
-erowa=C4=87
-najbli=C5=BCszy krewny mojego klienta. Odziedziczysz sum=C4=99 (8,5 miliona=
- dolar=C3=B3w)
-dolar=C3=B3w, kt=C3=B3re m=C3=B3j klient zostawi=C5=82 w banku przed =C5=9B=
-mierci=C4=85.
-
-M=C3=B3j klient jest obywatelem twojego kraju, kt=C3=B3ry zgin=C4=85=C5=82 =
-wraz z =C5=BCon=C4=85 w
-wypadku samochodowym
-i jedyny syn. B=C4=99d=C4=99 uprawniony do 50% ca=C5=82kowitego funduszu, p=
-odczas gdy
-50% b=C4=99dzie
-By=C4=87 dla ciebie.
-Aby uzyska=C4=87 wi=C4=99cej informacji, skontaktuj si=C4=99 z moim prywatn=
-ym adresem
-e-mail: georgemike7031gmail.com
-
-Z g=C3=B3ry bardzo dzi=C4=99kuj=C4=99,
-Panie George Mike
