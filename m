@@ -2,86 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCE22DA415
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 00:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FCE2DA4DD
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 01:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729515AbgLNXWM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 18:22:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbgLNXWB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Dec 2020 18:22:01 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E1E32250F;
-        Mon, 14 Dec 2020 23:21:19 +0000 (UTC)
-Date:   Mon, 14 Dec 2020 18:21:17 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Bean Huo' <huobean@gmail.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "joe@perches.com" <joe@perches.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/6] scsi: ufs: Remove stringize operator '#'
- restriction
-Message-ID: <20201214182117.1bbc717d@gandalf.local.home>
-In-Reply-To: <977f3ea155644cd89bc83f2e9dcf281e@AcuMS.aculab.com>
-References: <20201214202014.13835-1-huobean@gmail.com>
-        <20201214202014.13835-2-huobean@gmail.com>
-        <977f3ea155644cd89bc83f2e9dcf281e@AcuMS.aculab.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727211AbgLOAYo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 19:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbgLOAYo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 19:24:44 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961A6C061793;
+        Mon, 14 Dec 2020 16:24:03 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id q75so16855449wme.2;
+        Mon, 14 Dec 2020 16:24:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8jc3AIzkIPReSThseVXRAPm4odmJMoGYu8KGcGUo5xA=;
+        b=UdWHcglApp9RdDZeyVfl7LsJgdxW48tzLbgNRju6ud80NwZdq8pS6rNA48XayxnD2y
+         gxp99ju2U22s0IgeHpYxNkwEmEsSWmjKvkDVgboRjCL0u2BjvWzJuRm3fQuna6NzrVJX
+         tY83rFJle/+8UqxI4cOpq7ZEPwQanA4rNBX48zfg4PVtL5ODTFYQfgYr+oKNqJ85Y/gd
+         599roSuL8vkZuUsB+DMvesJq5/Qay+HaVljVBmkn57M9MaFlDCjvpgkaWPWHAqXbqbH5
+         awkn32y9RHX7Bg8npAuH4ig4MoKopNAyVbodgQEudUlOhmPl/5BfCRzLw7S/Tb6KT7TR
+         Av8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8jc3AIzkIPReSThseVXRAPm4odmJMoGYu8KGcGUo5xA=;
+        b=JjH7Xp3ZjrUPqt0bm0f52mOdf+VEv41WWJNFd5zZmerIWueDZ4ud/4wCS4AHQn//KP
+         yz7xTY1dr+tIjnd+qTmFJ3C8nmB3UamvlZyBkQqVebySh2wZ7ewMbhPSKjjTN2EbMXMm
+         pkC+c6B1isPYgjQ+jgRfaH7J1mErUMrdZm4DAm6L3PzHI5i73sKrY0tNM94kJ21aQudX
+         2X8qjebGo3JUPuKZCgEGC7yLidNoK82iGc5aof7gyDw7T7mtssCSujCHcaBFbXw5zbef
+         DS0ix2m5rk6/U7dFwwfw66FJlxh4HHAiJlOkZrAUc6Rnyv0gvC0RpdiRGewsAWPI9Ett
+         +nVQ==
+X-Gm-Message-State: AOAM531NvqE4EFF++ZUDnUIa/hgiy0BnypCXAdurAe2lnojwulERxGBs
+        wUMdrDWQkqSSQVRaFCw/5r8V+SagMKvQzKLc
+X-Google-Smtp-Source: ABdhPJwGNnrKGp65JFv4dDtyk0FguiKKzh1xTxkYj/G+sMLant4a7Rnm4MCbD8CKdIpwjoDGsmxiog==
+X-Received: by 2002:a05:600c:258:: with SMTP id 24mr30918877wmj.16.1607991842015;
+        Mon, 14 Dec 2020 16:24:02 -0800 (PST)
+Received: from localhost.localdomain ([85.255.232.163])
+        by smtp.gmail.com with ESMTPSA id b19sm5362012wmj.37.2020.12.14.16.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 16:24:01 -0800 (PST)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     linux-block@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v1 0/6] no-copy bvec
+Date:   Tue, 15 Dec 2020 00:20:19 +0000
+Message-Id: <cover.1607976425.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 14 Dec 2020 23:11:40 +0000
-David Laight <David.Laight@ACULAB.COM> wrote:
+Instead of creating a full copy of iter->bvec into bio in direct I/O,
+the patchset makes use of the one provided. It changes semantics and
+obliges users of asynchronous kiocb to track bvec lifetime, and [1/6]
+converts the only place that doesn't.
 
-> > ---
-> >  include/trace/events/ufs.h | 40 +++++++++++++++++++-------------------
-> >  1 file changed, 20 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
-> > index 0bd54a184391..fa755394bc0f 100644
-> > --- a/include/trace/events/ufs.h
-> > +++ b/include/trace/events/ufs.h
-> > @@ -20,28 +20,28 @@  
-> ..
-> > +#define UFS_LINK_STATES						\
-> > +	EM(UIC_LINK_OFF_STATE,		"UIC_LINK_OFF_STATE")		\
-> > +	EM(UIC_LINK_ACTIVE_STATE,	"UIC_LINK_ACTIVE_STATE")	\
-> > +	EMe(UIC_LINK_HIBERN8_STATE,	"UIC_LINK_HIBERN8_STATE")  
-> 
-> If you make EM a parameter to UFS_LINK_STATES then the caller
-> can pass in the name of a #define that does the required expansion.
-> The caller can also add in any required terminator after the last entry.
-> For an enum (which doesn't want a , at the end) just add a dummy entry.
-> You often want a constant for the number of items anyway.
+bio_iov_iter_get_pages() is still does iov_iter_advance(), which is
+not great, but neccessary for revert to work. It's desirable to have
+a fast version of iov_iter_advance(i, i->count), so we may want to
+hack something up for that. E.g. allow to not keep it consistent
+in some cases when i->count==0. Also we can add a separate bio pool
+without inlined bvec. Very easy to do and shrinks bios from 3 to 2
+cachelines.
 
-This is currently the way its done in multiple other places. When creating
-the "EMe" trick, I've thought about it, but then realized it would make the
-other locations look strange without the expected comma, and decided that
-EMe() would be the best solution, as it's only strange in where it's added,
-and not where its used.
+Also as suggested it removes BIO_WORKINGSET from direct paths: blkdev,
+iomap, fs/direct-io. Even though the last one is not very important as
+more filesystems are converted to iomap, but still looks hacky. Maybe,
+as Johannes mentioned in another thread, moving it to the writeback
+code (or other option) would be better in the end. Afterwards?
 
- $ git grep -l EMe include/trace/ |wc -l
-     11
+since RFC:
+- add target_core_file patch by Christoph
+- make no-copy default behaviour, remove iter flag
+- iter_advance() instead of hacks to revert to work
+- add bvec iter_advance() optimisation patch
+- remove PSI annotations from direct IO (iomap, block and fs/direct)
+- note in d/f/porting
 
-It's already used in 11 other files, let's not muck with it now.
+Christoph Hellwig (1):
+  target/file: allocate the bvec array as part of struct
+    target_core_file_cmd
 
--- Steve
+Pavel Begunkov (5):
+  iov_iter: optimise bvec iov_iter_advance()
+  bio: deduplicate adding a page into bio
+  block/psi: remove PSI annotations from direct IO
+  bio: add a helper calculating nr segments to alloc
+  block/iomap: don't copy bvec for direct IO
+
+ Documentation/filesystems/porting.rst |   9 +++
+ block/bio.c                           | 103 ++++++++++++--------------
+ drivers/target/target_core_file.c     |  20 ++---
+ fs/block_dev.c                        |   7 +-
+ fs/direct-io.c                        |   2 +
+ fs/iomap/direct-io.c                  |   9 +--
+ include/linux/bio.h                   |   9 +++
+ lib/iov_iter.c                        |  19 +++++
+ 8 files changed, 102 insertions(+), 76 deletions(-)
+
+-- 
+2.24.0
 
