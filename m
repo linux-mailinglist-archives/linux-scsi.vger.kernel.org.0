@@ -2,76 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A233E2DA5BA
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 02:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFED2DA6D1
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 04:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730720AbgLOBnW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 20:43:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28750 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730724AbgLOBnH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 14 Dec 2020 20:43:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607996498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PChAzdtbpi+PB7J87DcIhi+vl5NjETLfLM7SecPuwcY=;
-        b=HIYY4G0QfQNK2paU2qjqY7ECA3c+OG0FwPcb7+gR9iOTYwWp9hbi6xqW5jGswBD9QL3u5y
-        PVa5LiWBHyF5rpV7X3zbz03LwgYiJImBPnu389TFOGFD5WwYDxyLoKfUvAMewbT39i7N+j
-        gOVEZbSGCGex9hyZTatNPzWzFdgSWL0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-335-VMEMQTasPqiCfO3btqz3Kw-1; Mon, 14 Dec 2020 20:41:34 -0500
-X-MC-Unique: VMEMQTasPqiCfO3btqz3Kw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A3829180A086;
-        Tue, 15 Dec 2020 01:41:31 +0000 (UTC)
-Received: from T590 (ovpn-13-7.pek2.redhat.com [10.72.13.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 29ED213470;
-        Tue, 15 Dec 2020 01:41:18 +0000 (UTC)
-Date:   Tue, 15 Dec 2020 09:41:14 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] no-copy bvec
-Message-ID: <20201215014114.GA1777020@T590>
-References: <cover.1607976425.git.asml.silence@gmail.com>
+        id S1725768AbgLOD3k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 22:29:40 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:36606 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726778AbgLOD3a (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Dec 2020 22:29:30 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id AE72020426C;
+        Tue, 15 Dec 2020 04:28:41 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LpVR8JhqnvDj; Tue, 15 Dec 2020 04:28:40 +0100 (CET)
+Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
+        by smtp.infotech.no (Postfix) with ESMTPA id 5405820418E;
+        Tue, 15 Dec 2020 04:28:39 +0100 (CET)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        bostroesser@gmail.com, ddiss@suse.de
+Subject: [PATCH v2 0/2] scsi_debug: change store from vmalloc to sgl
+Date:   Mon, 14 Dec 2020 22:28:34 -0500
+Message-Id: <20201215032836.437175-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1607976425.git.asml.silence@gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 12:20:19AM +0000, Pavel Begunkov wrote:
-> Instead of creating a full copy of iter->bvec into bio in direct I/O,
-> the patchset makes use of the one provided. It changes semantics and
-> obliges users of asynchronous kiocb to track bvec lifetime, and [1/6]
-> converts the only place that doesn't.
+This patchset is a reworking of a single patch titled:
+"[PATCH] scsi_debug: change store from vmalloc to sgl"
+sent to the linux-scsi list on 20201105.  That patch depended on
+"[PATCH v4 0/4] scatterlist: add new capabilities" which is still
+to be accepted through the linux-block tree. The kernel build robot
+failed to compile the 20201105 patch due to that missing dependency.
 
-Just think of one corner case: iov_iter(BVEC) may pass bvec table with zero
-length bvec, which may not be supported by block layer or driver, so
-this patchset has to address this case first.
+In order to move forward, the first patch in this series adds the
+sgl to sgl handling functions into the scsi_debug driver with a
+"sdeb_" prefix. The second patch in this set is almost the same
+as the original patch from 20201105.
 
-Please see 7e24969022cb ("block: allow for_each_bvec to support zero len bvec").
+This patchset is based on ithe 5.11/scsi-queue branch in MKP's
+repository and builds clean on lk 5.10.0 .
 
+Douglas Gilbert (2):
+  scsi_debug: add sdeb_sgl_copy_sgl and friends
+  scsi_debug: change store from vmalloc to sgl
 
-thanks,
-Ming
+ drivers/scsi/Kconfig      |   3 +-
+ drivers/scsi/scsi_debug.c | 567 ++++++++++++++++++++++++++++----------
+ 2 files changed, 427 insertions(+), 143 deletions(-)
+
+-- 
+2.25.1
 
