@@ -2,183 +2,362 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27DC2DA582
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 02:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A192DA611
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 03:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729625AbgLOBTj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 20:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729395AbgLOBTj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 20:19:39 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7D4C061793;
-        Mon, 14 Dec 2020 17:18:58 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id 91so18213728wrj.7;
-        Mon, 14 Dec 2020 17:18:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:references:from:autocrypt:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sThOrhp2Jm3ClsF9DN8GXzoj1By2BPC+ziqGGyYmU5A=;
-        b=KM76NqpzcJSDKm3cruux4IlQHXvEhtmcz10NaKxb//LUYyGO1ASdDQBfEovObajuEj
-         KWYqzIV1Kbzx6hOZsvXuKTicFgQ48/2MKZIbOBpycwNSXc9sbsQpSpK7kbUUhjnGkA8x
-         q5kfmA+6GTt3OHmGh+AxvM15+H8404SAZWg0G7PzJZTJyTrGbB1JijfelwiPQKAImQJH
-         4Znn9m2RRDbAjoLYDXFyFHBZ0AYFHXRnLqJfhYdoscLi0DFKbC7Emw8uczphtYRvp1iQ
-         IMV0MSrJUAvnzYD2lq7usdNfebh7pwQ/wyUjG8o1XNECJUmYmNwPbcHsxLsdbpCdM9Ki
-         0Z4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:autocrypt:subject
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=sThOrhp2Jm3ClsF9DN8GXzoj1By2BPC+ziqGGyYmU5A=;
-        b=uKxmq10580MOy0NpGGIkdbKq+bRY++vEXmuwnV8JbPeY1PjppBtXaFkL/7fSq5vNAZ
-         Krm5PSCXHlcPejNUI0kwzhL0p61Hou9ObIAnKlfnkQ21zI0R3edsnylDjTDjFLjjl4Bi
-         tCmhLdgXDjm30ldinglxvkE6I0Ca56A6MkOq8oAv7+RO3VopdKTC2zC3NC/sZYA1oI/M
-         h65tNxgeeRMwMPxVumfQ96gjXqO1uLjUrz8Dogvh++oAcK4mOtSwtYwq3T+wnEYN3m5c
-         8bzy+lc5S0zFIb1DCM6aOrx7M5OZM2fDPolWzD55RlJD2HRaT+Q2lcGIxmZX1dG2k7rb
-         7zfQ==
-X-Gm-Message-State: AOAM531/89iuvuwn6op3AGxiN0K5rgNQE4QlCCu/FIEWWQtKND0ehDnW
-        OCnvVyVOEhJFI+IFxXu/KmeYndAu4mx+dtAO
-X-Google-Smtp-Source: ABdhPJyzahnkaqmwFFVkAJTKRinIOi3K9sMDapjeEStepwDn+7cr4XNXPZWg4fgfpEG/Swb/DJgePg==
-X-Received: by 2002:adf:e64b:: with SMTP id b11mr31361359wrn.257.1607995137148;
-        Mon, 14 Dec 2020 17:18:57 -0800 (PST)
-Received: from [192.168.8.128] ([85.255.232.163])
-        by smtp.gmail.com with ESMTPSA id t16sm35394801wri.42.2020.12.14.17.18.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Dec 2020 17:18:56 -0800 (PST)
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ming Lei <ming.lei@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org
-References: <cover.1607976425.git.asml.silence@gmail.com>
- <498b34d746627e874740d8315b2924880c46dbc3.1607976425.git.asml.silence@gmail.com>
- <20201215010921.GH632069@dread.disaster.area>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-Autocrypt: addr=asml.silence@gmail.com; prefer-encrypt=mutual; keydata=
- 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 bA==
-Subject: Re: [PATCH v1 6/6] block/iomap: don't copy bvec for direct IO
-Message-ID: <d2689b7c-7200-24cc-761c-bcbaa21c40ae@gmail.com>
-Date:   Tue, 15 Dec 2020 01:15:37 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <20201215010921.GH632069@dread.disaster.area>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1726231AbgLOCP4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 21:15:56 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:26031 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726511AbgLOCPq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 21:15:46 -0500
+Received: from epcas3p1.samsung.com (unknown [182.195.41.19])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20201215021502epoutp0398b5388ca58efbfe336292a53151b696~Qwh5aCZY42887428874epoutp03x
+        for <linux-scsi@vger.kernel.org>; Tue, 15 Dec 2020 02:15:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20201215021502epoutp0398b5388ca58efbfe336292a53151b696~Qwh5aCZY42887428874epoutp03x
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1607998502;
+        bh=pcC2PQMP9bt3FdLJNAF3fHamBXjvHzwuPrb469EWMu0=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=Dvrlri8W+kUqznhIhCs2cPBL1nEPOsHEreXYl7H3tLKHrRsOjFDzGMA4zYDQl1jjm
+         75CYaDDwerV7mYO0GEHuJ4U3LDO5u1zvaeB1U84fZuLI2/JTb83wx2zWuTPXiD0Dht
+         ZE9FMjJmR1lSE4dGxPfSkPm+svQejKnvKo5W7wx0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas3p4.samsung.com (KnoxPortal) with ESMTP id
+        20201215021501epcas3p4a714181132f086ecb396377e37262dd5~Qwh4xwPzm0984009840epcas3p4O;
+        Tue, 15 Dec 2020 02:15:01 +0000 (GMT)
+Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp2.localdomain
+        (Postfix) with ESMTP id 4Cw205685cz4x9Q5; Tue, 15 Dec 2020 02:15:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: RE: Re: [PATCH v13 1/3] scsi: ufs: Introduce HPB feature
+Reply-To: daejun7.park@samsung.com
+Sender: Daejun Park <daejun7.park@samsung.com>
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Daejun Park <daejun7.park@samsung.com>
+CC:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "gregkh@google.com" <gregkh@google.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>,
+        SEUNGUK SHIN <seunguk.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <X85uqapxck6tfrgQ@kroah.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01607998501831.JavaMail.epsvc@epcpadp3>
+Date:   Tue, 15 Dec 2020 10:24:52 +0900
+X-CMS-MailID: 20201215012452epcms2p7c51767569cd5fc9550664a5026e72f38
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20201103044021epcms2p8f1556853fc23414442b9e958f20781ce
+References: <X85uqapxck6tfrgQ@kroah.com>
+        <2038148563.21604378702426.JavaMail.epsvc@epcpadp3>
+        <1796371666.41604379003890.JavaMail.epsvc@epcpadp3>
+        <CGME20201103044021epcms2p8f1556853fc23414442b9e958f20781ce@epcms2p7>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 15/12/2020 01:09, Dave Chinner wrote:
-> On Tue, Dec 15, 2020 at 12:20:25AM +0000, Pavel Begunkov wrote:
->> The block layer spends quite a while in blkdev_direct_IO() to copy and
->> initialise bio's bvec. However, if we've already got a bvec in the input
->> iterator it might be reused in some cases, i.e. when new
->> ITER_BVEC_FLAG_FIXED flag is set. Simple tests show considerable
->> performance boost, and it also reduces memory footprint.
->>
->> Suggested-by: Matthew Wilcox <willy@infradead.org>
->> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->> ---
->>  Documentation/filesystems/porting.rst |  9 ++++
->>  block/bio.c                           | 64 +++++++++++----------------
->>  include/linux/bio.h                   |  3 ++
->>  3 files changed, 38 insertions(+), 38 deletions(-)
-> 
-> This doesn't touch iomap code, so the title of the patch seems
-> wrong...
+Hi Greg,
 
-yeah, should be bio.
+> > This is a patch for the HPB feature.
+> > This patch adds HPB function calls to UFS core driver.
+> 
+> Ok, I asked if there was anything left to do, and I see some stuff here.
+> 
+> First off, this changelog is really really sparse.  It needs to be much
+> more detailed, saying what HPB is, where in the specification it is
+> defined, and why Linux needs to support it.
+> 
+> Please fill all of that out, otherwise people that do not follow UFS do
+> not know what this is.
 
-> 
->> +For bvec based itererators bio_iov_iter_get_pages() now doesn't copy bvecs but
->> +uses the one provided. Anyone issuing kiocb-I/O should ensure that the bvec and
->> +page references stay until I/O has completed, i.e. until ->ki_complete() has
->> +been called or returned with non -EIOCBQUEUED code.
-> 
-> This is hard to follow. Perhaps:
-> 
-> bio_iov_iter_get_pages() uses the bvecs  provided for bvec based
-> iterators rather than copying them. Hence anyone issuing kiocb based
-> IO needs to ensure the bvecs and pages stay referenced until the
-> submitted I/O is completed by a call to ->ki_complete() or returns
-> with an error other than -EIOCBQUEUED.
+OK, I will add the following description in this patch comment.
 
-Agree, that's easier to read, thanks
+===
+This is a patch for the HPB initialization and adds HPB function calls to
+UFS core driver.
 
+NAND flash-based storage devices, including UFS, have mechanisms to
+translate logical addresses of IO requests to the corresponding physical
+addresses of the flash storage.
+In UFS, Logical-address-to-Physical-address (L2P) map data, which is
+required to identify the physical address for the requested IOs, can only
+be partially stored in SRAM from NAND flash. Due to this partial loading, 
+accessing the flash address area where the L2P information for that address
+is not loaded in the SRAM can result in serious performance degradation.
+
+The basic concept of HPB is to cache L2P mapping entries in host system
+memory so that both physical block address (PBA) and logical block address
+(LBA) can be delivered in HPB read command.
+The HPB READ command allows to read data faster than a read command in UFS
+since it provides the physical address (HPB Entry) of the desired logical
+block in addition to its logical address. The UFS device can access the
+physical block in NAND directly without searching and uploading L2P mapping
+table. This improves read performance because the NAND read operation for
+uploading L2P mapping table is removed.
+
+In HPB initialization, the host checks if the UFS device supports HPB
+feature and retrieves related device capabilities. Then, some HPB
+parameters are configured in the device.
+===
+> > 
+> > Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> > Acked-by: Avri Altman <Avri.Altman@wdc.com>
+> > Tested-by: Bean Huo <beanhuo@micron.com>
+> > Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+> > ---
+> >  drivers/scsi/ufs/Kconfig     |   9 +
+> >  drivers/scsi/ufs/Makefile    |   1 +
+> >  drivers/scsi/ufs/ufs-sysfs.c |  18 ++
+> >  drivers/scsi/ufs/ufs.h       |  13 +
+> >  drivers/scsi/ufs/ufshcd.c    |  48 +++
+> >  drivers/scsi/ufs/ufshcd.h    |  23 +-
+> >  drivers/scsi/ufs/ufshpb.c    | 583 +++++++++++++++++++++++++++++++++++
+> >  drivers/scsi/ufs/ufshpb.h    | 167 ++++++++++
+> >  8 files changed, 861 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/scsi/ufs/ufshpb.c
+> >  create mode 100644 drivers/scsi/ufs/ufshpb.h
+> > 
+> > diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
+> > index dcdb4eb1f90b..fd1cf7bc0eca 100644
+> > --- a/drivers/scsi/ufs/Kconfig
+> > +++ b/drivers/scsi/ufs/Kconfig
+> > @@ -181,3 +181,12 @@ config SCSI_UFS_CRYPTO
+> >  	  Enabling this makes it possible for the kernel to use the crypto
+> >  	  capabilities of the UFS device (if present) to perform crypto
+> >  	  operations on data being transferred to/from the device.
+> > +
+> > +config SCSI_UFS_HPB
+> > +	bool "Support UFS Host Performance Booster"
+> > +	depends on SCSI_UFSHCD
+> > +	help
+> > +	  The UFS HPB feature improves random read performance. It caches
+> > +	  L2P (logical to physical) map of UFS to host DRAM. The driver uses HPB
+> > +	  read command by piggybacking physical page number for bypassing FTL (flash
+> > +	  translation layer)'s L2P address translation.
+> > diff --git a/drivers/scsi/ufs/Makefile b/drivers/scsi/ufs/Makefile
+> > index 4679af1b564e..663e17cee359 100644
+> > --- a/drivers/scsi/ufs/Makefile
+> > +++ b/drivers/scsi/ufs/Makefile
+> > @@ -11,6 +11,7 @@ obj-$(CONFIG_SCSI_UFSHCD) += ufshcd-core.o
+> >  ufshcd-core-y				+= ufshcd.o ufs-sysfs.o
+> >  ufshcd-core-$(CONFIG_SCSI_UFS_BSG)	+= ufs_bsg.o
+> >  ufshcd-core-$(CONFIG_SCSI_UFS_CRYPTO) += ufshcd-crypto.o
+> > +ufshcd-core-$(CONFIG_SCSI_UFS_HPB) += ufshpb.o
+> >  obj-$(CONFIG_SCSI_UFSHCD_PCI) += ufshcd-pci.o
+> >  obj-$(CONFIG_SCSI_UFSHCD_PLATFORM) += ufshcd-pltfrm.o
+> >  obj-$(CONFIG_SCSI_UFS_HISI) += ufs-hisi.o
+> > diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
+> > index bdcd27faa054..6ccda6e57c7f 100644
+> > --- a/drivers/scsi/ufs/ufs-sysfs.c
+> > +++ b/drivers/scsi/ufs/ufs-sysfs.c
+> > @@ -284,6 +284,8 @@ UFS_DEVICE_DESC_PARAM(device_version, _DEV_VER, 2);
+> >  UFS_DEVICE_DESC_PARAM(number_of_secure_wpa, _NUM_SEC_WPA, 1);
+> >  UFS_DEVICE_DESC_PARAM(psa_max_data_size, _PSA_MAX_DATA, 4);
+> >  UFS_DEVICE_DESC_PARAM(psa_state_timeout, _PSA_TMT, 1);
+> > +UFS_DEVICE_DESC_PARAM(hpb_version, _HPB_VER, 2);
+> > +UFS_DEVICE_DESC_PARAM(hpb_control, _HPB_CONTROL, 1);
+> >  UFS_DEVICE_DESC_PARAM(ext_feature_sup, _EXT_UFS_FEATURE_SUP, 4);
+> >  UFS_DEVICE_DESC_PARAM(wb_presv_us_en, _WB_PRESRV_USRSPC_EN, 1);
+> >  UFS_DEVICE_DESC_PARAM(wb_type, _WB_TYPE, 1);
+> > @@ -316,6 +318,8 @@ static struct attribute *ufs_sysfs_device_descriptor[] = {
+> >  	&dev_attr_number_of_secure_wpa.attr,
+> >  	&dev_attr_psa_max_data_size.attr,
+> >  	&dev_attr_psa_state_timeout.attr,
+> > +	&dev_attr_hpb_version.attr,
+> > +	&dev_attr_hpb_control.attr,
 > 
->> diff --git a/include/linux/bio.h b/include/linux/bio.h
->> index 2a9f3f0bbe0a..337f4280b639 100644
->> --- a/include/linux/bio.h
->> +++ b/include/linux/bio.h
->> @@ -444,6 +444,9 @@ static inline void bio_wouldblock_error(struct bio *bio)
->>  
->>  static inline int bio_iov_vecs_to_alloc(struct iov_iter *iter, int max_segs)
->>  {
->> +	/* reuse iter->bvec */
->> +	if (iov_iter_is_bvec(iter))
->> +		return 0;
->>  	return iov_iter_npages(iter, max_segs);
+> You add a bunch of new sysfs attributes, but I do not see any
+> Documentation/ABI/ entries for them.  Why not?  Those are required for
+> any new sysfs files added to the kernel.  Please fix that up when you
+> resend this.
+
+I will add ABI entries for them.
+
+> > --- /dev/null
+> > +++ b/drivers/scsi/ufs/ufshpb.c
+> > @@ -0,0 +1,583 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
 > 
-> Ah, I'm a blind idiot... :/
+> Do you really mean "or later"?  I have to ask, sorry.
+
+I will change this: "// SPDX-License-Identifier: GPL-2.0"
+
+> > +/*
+> > + * Universal Flash Storage Host Performance Booster
+> > + *
+> > + * Copyright (C) 2017-2018 Samsung Electronics Co., Ltd.
 > 
-> Cheers,
-> 
-> Dave.
+> This has not been touched since 2018?  I somehow doubt that :(
 > 
 
--- 
-Pavel Begunkov
+It will be changed to "2017-2020".
+
+> > +static void ufshpb_lu_parameter_init(struct ufs_hba *hba,
+> > +				     struct ufshpb_lu *hpb,
+> > +				     struct ufshpb_dev_info *hpb_dev_info,
+> > +				     struct ufshpb_lu_info *hpb_lu_info)
+> > +{
+> > +	u32 entries_per_rgn;
+> > +	u64 rgn_mem_size, tmp;
+> > +
+> > +	hpb->lu_pinned_start = hpb_lu_info->pinned_start;
+> > +	hpb->lu_pinned_end = hpb_lu_info->num_pinned ?
+> > +		(hpb_lu_info->pinned_start + hpb_lu_info->num_pinned - 1)
+> > +		: PINNED_NOT_SET;
+> > +
+> > +	rgn_mem_size = (1ULL << hpb_dev_info->rgn_size) * HPB_RGN_SIZE_UNIT
+> > +			* HPB_ENTRY_SIZE;
+> > +	do_div(rgn_mem_size, HPB_ENTRY_BLOCK_SIZE);
+> > +	hpb->srgn_mem_size = (1ULL << hpb_dev_info->srgn_size)
+> > +		* HPB_RGN_SIZE_UNIT / HPB_ENTRY_BLOCK_SIZE * HPB_ENTRY_SIZE;
+> > +
+> > +	tmp = rgn_mem_size;
+> > +	do_div(tmp, HPB_ENTRY_SIZE);
+> > +	entries_per_rgn = (u32)tmp;
+> > +	hpb->entries_per_rgn_shift = ilog2(entries_per_rgn);
+> > +	hpb->entries_per_rgn_mask = entries_per_rgn - 1;
+> > +
+> > +	hpb->entries_per_srgn = hpb->srgn_mem_size / HPB_ENTRY_SIZE;
+> > +	hpb->entries_per_srgn_shift = ilog2(hpb->entries_per_srgn);
+> > +	hpb->entries_per_srgn_mask = hpb->entries_per_srgn - 1;
+> > +
+> > +	tmp = rgn_mem_size;
+> > +	do_div(tmp, hpb->srgn_mem_size);
+> > +	hpb->srgns_per_rgn = (int)tmp;
+> > +
+> > +	hpb->rgns_per_lu = DIV_ROUND_UP(hpb_lu_info->num_blocks,
+> > +				entries_per_rgn);
+> > +	hpb->srgns_per_lu = DIV_ROUND_UP(hpb_lu_info->num_blocks,
+> > +				(hpb->srgn_mem_size / HPB_ENTRY_SIZE));
+> > +
+> > +	hpb->pages_per_srgn = DIV_ROUND_UP(hpb->srgn_mem_size, PAGE_SIZE);
+> > +
+> > +	dev_info(hba->dev, "ufshpb(%d): region memory size - %llu (bytes)\n",
+> > +		 hpb->lun, rgn_mem_size);
+> > +	dev_info(hba->dev, "ufshpb(%d): subregion memory size - %u (bytes)\n",
+> > +		 hpb->lun, hpb->srgn_mem_size);
+> > +	dev_info(hba->dev, "ufshpb(%d): total blocks per lu - %d\n",
+> > +		 hpb->lun, hpb_lu_info->num_blocks);
+> > +	dev_info(hba->dev, "ufshpb(%d): subregions per region - %d, regions per lu - %u\n",
+> > +		 hpb->lun, hpb->srgns_per_rgn, hpb->rgns_per_lu);
+> 
+> Why all the kernel log spam for when things are working?  Shouldn't
+> drivers, if all is working properly, be totally silent?  Who will do
+> anything with this?  Worst case, make it dev_dbg(), right?
+
+I will delete these message because it is used for debugging.
+
+> > +/* SYSFS functions */
+> > +#define ufshpb_sysfs_attr_show_func(__name)				\
+> > +static ssize_t __name##_show(struct device *dev,			\
+> > +	struct device_attribute *attr, char *buf)			\
+> > +{									\
+> > +	struct scsi_device *sdev = to_scsi_device(dev);			\
+> > +	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);		\
+> > +									\
+> > +	if (!hpb)							\
+> > +		return -ENOENT;						\
+> 
+> How can this ever be true?
+
+I think it can be removed.
+
+> > +	return snprintf(buf, PAGE_SIZE, "%d\n",				\
+> > +			atomic_read(&hpb->stats.__name));		\
+> 
+> sysfs_emit() is nicer to use now, please use that.
+
+OK,
+
+> And why are your stats atomic variables?  That feels like a waste and a
+> slow-down just for debugging stuff.  What's wrong with a simple u64?
+
+OK, I will change these variables as simple u64.
+
+> > +void ufshpb_reset_host(struct ufs_hba *hba)
+> > +{
+> > +	struct ufshpb_lu *hpb;
+> > +	struct scsi_device *sdev;
+> > +
+> > +	dev_dbg(hba->dev, "ufshpb run reset_host\n");
+> 
+> This is what ftrace is for, no need for this here, or in many other
+> places you have added it, please remove.
+
+OK, I will remove.
+
+> > +void ufshpb_remove(struct ufs_hba *hba)
+> > +{
+> > +}
+> 
+> An empty remove function?  Are you _SURE_ that is ok?  That always is a
+> huge red flag to me...
+
+OK, I will remove it.
+
+> > diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
+> > new file mode 100644
+> > index 000000000000..6fa5db94bcae
+> > --- /dev/null
+> > +++ b/drivers/scsi/ufs/ufshpb.h
+> > @@ -0,0 +1,167 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> 
+> Same license question as before.
+
+OK,
+
+> > +/*
+> > + * Universal Flash Storage Host Performance Booster
+> > + *
+> > + * Copyright (C) 2017-2018 Samsung Electronics Co., Ltd.
+> 
+> Again, date?
+
+OK,
+
+> > + *
+> > + * Authors:
+> > + *	Yongmyung Lee <ymhungry.lee@samsung.com>
+> > + *	Jinyoung Choi <j-young.choi@samsung.com>
+> > + */
+> > +
+> > +#ifndef _UFSHPB_H_
+> > +#define _UFSHPB_H_
+> > +
+> > +/* hpb response UPIU macro */
+> > +#define HPB_RSP_NONE				0x0
+> > +#define	HPB_RSP_REQ_REGION_UPDATE		0x1
+> 
+> Why a tab after "define" on only 1 line?
+
+I will fix it.
+
+Thanks,
+Daejun
