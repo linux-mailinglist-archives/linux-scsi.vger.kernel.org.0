@@ -2,145 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7E42DB66E
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 23:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CC92DB732
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Dec 2020 01:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729546AbgLOWTH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Dec 2020 17:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S1727391AbgLPAAr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Dec 2020 19:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729483AbgLOWS5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 17:18:57 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52401C0613D3;
-        Tue, 15 Dec 2020 14:18:17 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id jx16so29920776ejb.10;
-        Tue, 15 Dec 2020 14:18:17 -0800 (PST)
+        with ESMTP id S1730231AbgLOXGM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 18:06:12 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F22C061793;
+        Tue, 15 Dec 2020 15:05:32 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id u19so22858617edx.2;
+        Tue, 15 Dec 2020 15:05:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i5Dufp+I/oN9gEvVsI5qMjQlYwjWd3gnSbx0Lh129PY=;
-        b=ZWIf2yGPS9yONqFP20l2hiZaDXnmazyFhKB9gABPvvgcKUjcR6CTDNjWPxqgqaDnAW
-         Le7B8d3R1fpeDDryRbWOcMcm/1a6lL9AnXI8WKbLvhG45/1iUZIcyD/N706sr7ilcGCU
-         b9+KLlWqlTJUu9Zl9AsSp8RK7gvHsRzdWMyMVVFk0voZkjdOMR4zlybw86SIA8gfgbxp
-         6jZmxCU9GHfPkt39F0LWYhba54RSO90DYB743zGLlYB/b06oC3TjXyLC1RHT9qGeBtBf
-         KqbKL4ZJcG6YV4+7mLzR40v0VHnqJ/sQtCA9Iw0FOMKGOSEmlnWXgqUL05aVOzlsVd6T
-         7ejA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f7i9PtN45U0UcFrfF4C9zZcvaiZJrrBU8O2nLkXVNNY=;
+        b=vaEJrBaeXVXGjz/7marcrAvcGt+pNp8wFg3xnAEXbXFvrltLW4kVon8tyspPKjRg6B
+         HAq1OkTZKKL0W6D+iU3cOkjuk5waXM6DwT2Cd2C1k5EFYnWjuvnMUJbmtXYjWhHjJiHh
+         qAm3jojaIhzV2R5NPXfaizMMYu6NoRlUbF+0olmuX4f9aaXYf3tTHt2iESYs1xkHacLr
+         t1tXs4lTmOvxZ5KrhhDTuDOAGjRfdXk4gsN/rbnlFSVlE00pRoVgHm8yIGoMzPw9hAXx
+         t44klwYbhsNzDpWsFG2ZrKbkFOOJpEV728dt3rUzQ6ZU/9x8Xn58MAncBm3mfuC9Nt9/
+         VP7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i5Dufp+I/oN9gEvVsI5qMjQlYwjWd3gnSbx0Lh129PY=;
-        b=pnMAgcaGfgiVhtt2FEJc3hQGbjM1I4VmIbNLNc+Dom32KB2PbLyjiPj77LVlYULEnZ
-         6e/KEf5jRyDFsw36oKB4nVpPekexZtt4Za4OO996pFZxabcOpxDGIrk+AD4UwLcKB2Sk
-         m7lT/VV4ldo4kARg8Tz2vcyr4qVf0V4/wvXnaabkUlfd3xDnP5bp4qrB0k+W506B62vg
-         0IfMdk6Cqgus0PW3BzXLnV9q9IseX+bOwWTzRuhZf6u5ppKvNcPocwmA8VX3KX+1/H4r
-         Mnwx0YPvKHAb4vD/3eJ5sFh/zMbvfVrKyE2BbUTNaXEmSHJYPLzXgz98qSEZ72Ook84D
-         Nj2g==
-X-Gm-Message-State: AOAM531QTAdUnNp8bmOSzqKUZ82qbz4DDO4AsvlenzmF2r6hs7pwu8jP
-        TMlmSeHmXtRuDAb+C96p3u0=
-X-Google-Smtp-Source: ABdhPJy91uePyxVTPJ3CwPdFAqW5XWZlLbIxYm/MJtc+HEkhijeLPzQ84wPs4ZOplT4ZhUuGYaZRAw==
-X-Received: by 2002:a17:907:1607:: with SMTP id hb7mr27736431ejc.81.1608070696049;
-        Tue, 15 Dec 2020 14:18:16 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.googlemail.com with ESMTPSA id q25sm19443405eds.85.2020.12.15.14.18.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 15 Dec 2020 14:18:15 -0800 (PST)
-Message-ID: <d1286d29aca18c004c66924a46c70f2d03562769.camel@gmail.com>
-Subject: Re: [PATCH v3 0/6] Several changes for the UPIU trace
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f7i9PtN45U0UcFrfF4C9zZcvaiZJrrBU8O2nLkXVNNY=;
+        b=mMYa2wssNq66V6ol1nzismmX3YBuyGaTWpYAtW+sVjVYbNVrzhIdqbKCAAIfYg5FZi
+         gadC/FSP++8JsSWYpFQcO1chHAmOQhxy6VMbR1c7qvNlon+t0wyH3XAZepPePhIWNNNE
+         A3hhZZdY5BRfXbiQVbOmY8SU2gjdw8ep++S/YPtj5uChf0T5zh6c4lGCL5nLz5Vh85mL
+         OSeaAWW97+DnZI8CV0adzqnz+LE4LjWuorKhQuGet0rzxZKEPKx8rAGKSJCtR7oFAXRt
+         SaWl2zsEoomiHXHSHI3qGcum89jgWSt9j8UCBUYsCwFQ/1HwEvcx7JcmG84XCJv2vQf1
+         tEAg==
+X-Gm-Message-State: AOAM530ntMjzTEh7QZRD2JIEcXUDfSzA18BzwLUF3d5bv9HS/3NGmwUP
+        cUQgwb+jl0fdsvIthDLKMXc=
+X-Google-Smtp-Source: ABdhPJxG/rjDJGeTZhHgpKRGCnYq5XHIiU2WyYVt4L1YCHsj5g6UZUC3FFE4zo1nE2O7N+3BVFa4nw==
+X-Received: by 2002:a50:ec18:: with SMTP id g24mr4299005edr.6.1608073530937;
+        Tue, 15 Dec 2020 15:05:30 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
+        by smtp.gmail.com with ESMTPSA id e11sm19280455edj.44.2020.12.15.15.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Dec 2020 15:05:30 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "joe@perches.com" <joe@perches.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 15 Dec 2020 23:18:14 +0100
-In-Reply-To: <01a4472065034527d57b0866750eb4ecc79b6a83.camel@gmail.com>
-References: <20201214202014.13835-1-huobean@gmail.com>
-         <DM6PR04MB657559FA01C44B411BBDBDBCFCC70@DM6PR04MB6575.namprd04.prod.outlook.com>
-         <01a4472065034527d57b0866750eb4ecc79b6a83.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/7] Several changes for UFS WriteBooster
+Date:   Wed, 16 Dec 2020 00:05:12 +0100
+Message-Id: <20201215230519.15158-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2020-12-14 at 23:37 +0100, Bean Huo wrote:
-> > And another log generated sometime during 2021 after your change is
-> > merged:
-> > "send" <request upiu>
-> > "complete" < ****response upiu ****>
-> > 
-> > The current parser won't be able to differentiate between those
-> > logs.
-> > Just change the prefix strings to be "send_req" and "complete_rsp",
-> > or something,
-> > so the parsing tools that support the new format will be able to
-> > differentiate it from the old one.
-> 
-> Avri,
-> I still don't understand, this change doesn't break you current
-> parser.
-> if you still trace "send", "complete", "CDB", "query_send/complte",
-> they are still there, doesn't change. I suggest you just run on your
-> system. see if there is conflict.
-> 
-> Regarding your suggestion:
-> This is not problem now, we just change this definition.
-> 
-> do you mean just "send" and "complete" or all?
-> 
-> #define
-> UFS_CMD_TRACE_STRINGS                                  
-> \              
->           
->         EM(UFS_CMD_SEND,        "send_req")                        
-> \  
->                                   
->         EM(UFS_CMD_COMP,        "complete_rsp")                    
-> \  
-> 
-> below also need add "req" and "rsp"?
-> 
->                                   
->         EM(UFS_DEV_COMP,        "dev_complete_rsp")                
-> \  
->                                   
->         EM(UFS_QUERY_SEND,      "query_send")                  
-> \      
->                               
->         EM(UFS_QUERY_COMP,      "query_complete")              
-> \      
->                               
->         EM(UFS_QUERY_ERR,       "query_complete_err")          
-> \      
->                               
->         EM(UFS_TM_SEND,         "tm_send")                     
-> \      
->                               
->         EM(UFS_TM_COMP,         "tm_complete")                 
-> \      
->                               
->         EM(UFS_TM_ERR,          "tm_complete_err") 
+From: Bean Huo <beanhuo@micron.com>
 
+Changelog:
+V--V5:
+  1. Add patch "docs: ABI: Add wb_on documentation for UFS sysfs"
+  2. Unify WB related flags with wb_* prefix (Stanley Chu)
+  3. Delete d_ext_ufs_feature_sup (Stanley Chu)
+  4. Incorporate Stanley's suggestion to patch 6/7
+  5. Replace scnprintf() with sysfs_emit() in 1/7 (Greg KH)
 
-Hi Avri
+v3--v4:
+  1. Rebase patch on 5.11/scsi-staging
+  2. Add WB cleanup patches 3/6, 4/6 adn 5/6
 
-I am waiting for your answer. How can I change these strings to back-
-compatible with your tool? Tt seems only you use these strings.
+v2--v3:
+  1. Change multi-line comments style in patch 1/3 (Can Guo)
 
-Thanks,
-Bean
+v1--v2:
+  1. Take is_hibern8_wb_flush checkup out from function
+     ufshcd_wb_need_flush() in patch 2/3
+  2. Add UFSHCD_CAP_CLK_SCALING checkup in patch 1/3. that means
+     only for the platform, which doesn't support UFSHCD_CAP_CLK_SCALING,
+     can control WB through "wb_on".
+
+Bean Huo (7):
+  scsi: ufs: Add "wb_on" sysfs node to control WB on/off
+  docs: ABI: Add wb_on documentation for UFS sysfs
+  scsi: ufs: Changes comment in the function ufshcd_wb_probe()
+  scsi: ufs: Remove two WB related fields from struct ufs_dev_info
+  scsi: ufs: Group UFS WB related flags to struct ufs_dev_info
+  scsi: ufs: Cleanup WB buffer flush toggle implementation
+  scsi: ufs: Keep device active mode only
+    fWriteBoosterBufferFlushDuringHibernate == 1
+
+ Documentation/ABI/testing/sysfs-driver-ufs |   8 ++
+ drivers/scsi/ufs/ufs-sysfs.c               |  41 +++++++
+ drivers/scsi/ufs/ufs.h                     |  30 ++---
+ drivers/scsi/ufs/ufshcd.c                  | 124 +++++++++------------
+ drivers/scsi/ufs/ufshcd.h                  |   6 +-
+ 5 files changed, 122 insertions(+), 87 deletions(-)
+
+-- 
+2.17.1
 
