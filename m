@@ -2,72 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C751D2DA4F3
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 01:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2582DA587
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 02:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726855AbgLOAct (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Dec 2020 19:32:49 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:41927 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726662AbgLOAcf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Dec 2020 19:32:35 -0500
-Received: from cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net ([80.193.200.194] helo=[192.168.0.209])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1koyFt-0006Ai-Ls; Tue, 15 Dec 2020 00:31:53 +0000
-To:     Can Guo <cang@codeaurora.org>
-From:   Colin Ian King <colin.king@canonical.com>
-Subject: re: scsi: ufs: Serialize eh_work with system PM events and async scan
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-ID: <491799be-ea2e-5b60-b14b-bbdfd516d7ac@canonical.com>
-Date:   Tue, 15 Dec 2020 00:31:52 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S1727393AbgLOBZY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Dec 2020 20:25:24 -0500
+Received: from mail108.syd.optusnet.com.au ([211.29.132.59]:55384 "EHLO
+        mail108.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726351AbgLOBZX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Dec 2020 20:25:23 -0500
+Received: from dread.disaster.area (pa49-179-6-140.pa.nsw.optusnet.com.au [49.179.6.140])
+        by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id 0B3671B3D05;
+        Tue, 15 Dec 2020 11:57:00 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1koyeB-00438t-3k; Tue, 15 Dec 2020 11:56:59 +1100
+Date:   Tue, 15 Dec 2020 11:56:59 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v1 4/6] block/psi: remove PSI annotations from direct IO
+Message-ID: <20201215005659.GF632069@dread.disaster.area>
+References: <cover.1607976425.git.asml.silence@gmail.com>
+ <1d3cf86668e44b3a3d35b5dbe759a086a157e434.1607976425.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d3cf86668e44b3a3d35b5dbe759a086a157e434.1607976425.git.asml.silence@gmail.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.3 cv=F8MpiZpN c=1 sm=1 tr=0 cx=a_idp_d
+        a=uDU3YIYVKEaHT0eX+MXYOQ==:117 a=uDU3YIYVKEaHT0eX+MXYOQ==:17
+        a=kj9zAlcOel0A:10 a=zTNgK-yGK50A:10 a=JfrnYn6hAAAA:8 a=ufHFDILaAAAA:8
+        a=pGLkceISAAAA:8 a=7-415B0cAAAA:8 a=x5prtoG_kTW6hDg4jekA:9
+        a=CjuIK1q_8ugA:10 a=1CNFftbPRP8L7MoqJWF3:22 a=ZmIg1sZ3JBWsdXgziEIF:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+On Tue, Dec 15, 2020 at 12:20:23AM +0000, Pavel Begunkov wrote:
+> As reported, we must not do pressure stall information accounting for
+> direct IO, because otherwise it tells that it's thrashing a page when
+> actually doing IO on hot data.
+> 
+> Apparently, bio_iov_iter_get_pages() is used only by paths doing direct
+> IO, so just make it avoid setting BIO_WORKINGSET, it also saves us CPU
+> cycles on doing that. For fs/direct-io.c just clear the flag before
+> submit_bio(), it's not of much concern performance-wise.
+> 
+> Reported-by: Christoph Hellwig <hch@infradead.org>
+> Suggested-by: Christoph Hellwig <hch@infradead.org>
+> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  block/bio.c    | 25 ++++++++++++++++---------
+>  fs/direct-io.c |  2 ++
+>  2 files changed, 18 insertions(+), 9 deletions(-)
+.....
+> @@ -1099,6 +1103,9 @@ static int __bio_iov_append_get_pages(struct bio *bio, struct iov_iter *iter)
+>   * fit into the bio, or are requested in @iter, whatever is smaller. If
+>   * MM encounters an error pinning the requested pages, it stops. Error
+>   * is returned only if 0 pages could be pinned.
+> + *
+> + * It also doesn't set BIO_WORKINGSET, so is intended for direct IO. If used
+> + * otherwise the caller is responsible to do that to keep PSI happy.
+>   */
+>  int bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>  {
+> diff --git a/fs/direct-io.c b/fs/direct-io.c
+> index d53fa92a1ab6..914a7f600ecd 100644
+> --- a/fs/direct-io.c
+> +++ b/fs/direct-io.c
+> @@ -426,6 +426,8 @@ static inline void dio_bio_submit(struct dio *dio, struct dio_submit *sdio)
+>  	unsigned long flags;
+>  
+>  	bio->bi_private = dio;
+> +	/* PSI is only for paging IO */
+> +	bio_clear_flag(bio, BIO_WORKINGSET);
 
-Static analysis on linux-next with Coverity had found a potential null
-pointer dereference issue in the following commit:
+Why only do this for the old direct IO path? Why isn't this
+necessary for the iomap DIO path?
 
-commit 88a92d6ae4fe09b2b27781178c5c9432d27b1ffb
-Author: Can Guo <cang@codeaurora.org>
-Date:   Wed Dec 2 04:04:01 2020 -0800
+Cheers,
 
-    scsi: ufs: Serialize eh_work with system PM events and async scan
-
-The analysis by Coverity is as follows:
-
-8929 int ufshcd_system_suspend(struct ufs_hba *hba)
-8930 {
-8931        int ret = 0;
-8932        ktime_t start = ktime_get();
-8933
-    deref_ptr_in_call: Dereferencing pointer hba.
-
-8934        down(&hba->eh_sem);
-
-    Dereference before null check (REVERSE_INULL)
-
-check_after_deref: Null-checking hba suggests that it may be null, but
-it has already been dereferenced on all paths leading to the check.
-
-8935        if (!hba || !hba->is_powered)
-8936                return 0;
-
-Seeing that the down lock has been added by the commit it suggests the
-commit overlooks the fact that hba may potentially be null. Not sure if
-hba can be null, so I'm not sure if this is a real bug or a false positive.
-
-Colin
-
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
