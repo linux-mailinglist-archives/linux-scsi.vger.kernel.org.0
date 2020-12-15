@@ -2,90 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7052DAA8D
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 11:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C8B2DAAA3
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Dec 2020 11:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727153AbgLOKAu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Dec 2020 05:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S1727083AbgLOKLQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Dec 2020 05:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726995AbgLOKAf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 05:00:35 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3BFC06179C;
-        Tue, 15 Dec 2020 01:59:49 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id b9so1847109ejy.0;
-        Tue, 15 Dec 2020 01:59:49 -0800 (PST)
+        with ESMTP id S1727046AbgLOKK7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Dec 2020 05:10:59 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB512C06179C
+        for <linux-scsi@vger.kernel.org>; Tue, 15 Dec 2020 02:10:18 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id d26so6027333wrb.12
+        for <linux-scsi@vger.kernel.org>; Tue, 15 Dec 2020 02:10:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9VWi9lvVrtm8vqGMgMBrAESVz3nZujJvYtHJX+Z95Jw=;
-        b=BU3TGKZo/XOQEoIXFdM1P4n5pKuFdlZOTA9L9qx7LtQH7SwLjsIr91Lh2D62rpj55c
-         EWPTM+17jHVlpH03T1FiYVU3aoB0qGWcmgcMddTsRXfGOCiAqmHatqHekDpHGRZNuhZ9
-         ZIdWBfa0eyefu6LwH14DJ32NYmYNTP5d5mCH6/Q6iV6FV2CBMiQ6+Ane2hUIkbfiFMuZ
-         rChIQhdBPXgco3juca1zpha87LxNHpOxgRP5j/Pg/zZ6Wp+Cx9aSZOxaDrMA5SLfDXej
-         1VW3cEqVlPzc8GlE77ozLxNuwDZkpquc2fsN/5b7jxvHsUjtLJldTeHNwPpNjH9gSwVP
-         tf8A==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6YbW1AUww5eVgZRJjTNmifbnLL0mORxjDiclOrS8RJc=;
+        b=Vx1td36yY6Nr/MibtiTdvkXXDjy+2kpHj8iBWL1mHkeW/FzFUFyL2cDBB/HyREP9y6
+         EmvXDlHKvydXeHAVdcyYGtDPirmvW/lXJ/Ahh7ternmTuBlnMztaJmbdJ3fnsXQMEqrc
+         jaX7ZXIrZxt/9i/c3AmxhXQjRhb7VmlsZRlL36SiuLo+liX145m+ebQV5cJlxBoC3r8K
+         meIHL/qgCnJfks7/DY1P6RZnOG0xFAHc7y97zi6o5PhhEgIkcGnpdjbd6LIVrg4ws/ab
+         CDWNDxUtrb/xTjd70Owy6s2UI6AltsunxbTqOfTxhsHWgvjnQBqw31Cms73TJ+xQ4UfD
+         PqgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9VWi9lvVrtm8vqGMgMBrAESVz3nZujJvYtHJX+Z95Jw=;
-        b=fee8ny3n+TUXSvDILpT+cD8JdU3sPdEoNCrg1HHhIuOmO/k5GVMsM0hZi/GoTdCAdV
-         Hz8ck95AdCO5ZEdGY8sgXtlIgIWt/R03vMdnuC41QfbZvumZg+s9q+AFXuFcdOyQrY+8
-         E2L5BksHIot0sSjNPCwhpQZ4KuNpd4fiVC+A//dGOo3IUfNRYOzsy4ET2TtIcHaTLmRU
-         1IvROr7fK82Wi0N12EIbpS7dl9wNqe7BZI8+pomVG36YtFV+v3wJMbLiGkp1CsKx84wv
-         TY7hW09jOyQ8zRnx7owiwKSeTXsuynC29GOXkA35my3d6g2PO1ELHmMNhGl841ttN1BE
-         rmWw==
-X-Gm-Message-State: AOAM532UiTLXFHVSNsn3S/SiS6szrcEWPHG7/sk/ZsNKwWjh580AMxop
-        ieH7iCRRYnv3d933YeQCV8Q=
-X-Google-Smtp-Source: ABdhPJwCxl4PpHeih2wMXniKYALjSkU03AHuXby+xZvV9XFwppfN4g9J2/HbB6WB4YNYszHZSJp3zw==
-X-Received: by 2002:a17:906:8587:: with SMTP id v7mr25524315ejx.381.1608026388125;
-        Tue, 15 Dec 2020 01:59:48 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.googlemail.com with ESMTPSA id r24sm17708914edo.4.2020.12.15.01.59.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 15 Dec 2020 01:59:47 -0800 (PST)
-Message-ID: <277a6fd2dd3b3e70a0caeda6283214ed5152aa65.camel@gmail.com>
-Subject: Re: [PATCH v4 4/6] scsi: ufs: Remove d_wb_alloc_units from struct
- ufs_dev_info
-From:   Bean Huo <huobean@gmail.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
-        tomas.winkler@intel.com, cang@codeaurora.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 15 Dec 2020 10:59:46 +0100
-In-Reply-To: <1608022638.10163.14.camel@mtkswgap22>
-References: <20201211140035.20016-1-huobean@gmail.com>
-         <20201211140035.20016-5-huobean@gmail.com>
-         <1608022638.10163.14.camel@mtkswgap22>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=6YbW1AUww5eVgZRJjTNmifbnLL0mORxjDiclOrS8RJc=;
+        b=Gv424++XUV3J2ppLdChdcI/vn1L+oV32Nu+PJXKoDlVdBy6GD7H7P4S8RaLVeAx4P0
+         VvK5KL4sibO5gR889n/eoHcjypM+XjY6jGpy+g8i8B4m8JhrIrUnLipJED6X03Ldl9jE
+         P0DVVoJ4m1vyhgp93HCyFU4Pqt5q+zGyRYYWN9mWzNSnvrxmwvieJMmAYeHLuI03IB6I
+         ApCzRH/+7bR25nMXOYa/KrkTHZhcyOcL12nv73Oaxoo1ExFyQJjnjccruXN51cv8f8A5
+         y+vHKrX7X+BQ+10bQSFrm3Cp7IbYyGYTtv0jC2D3Z+RFWTT3J4hXxnetU0/Vu+EVHkJ6
+         Sg2A==
+X-Gm-Message-State: AOAM532HKY75EUk4UGd+lIXb2ONCgC8tCibMxPEyCMXOXOFtc6GbnnBW
+        7hpKeFe+4xpwBNtAzmcJtCiGvbgv8zCCybWtbgo=
+X-Google-Smtp-Source: ABdhPJw7AShbTeTNorW1pj68weR7BkBGfRnEPrNStnDqJ4REk5OUr6Zs/9f0P2RmRXqdldFmEx1BhNyaz/OKzCQolU4=
+X-Received: by 2002:adf:eb05:: with SMTP id s5mr33150505wrn.333.1608027017607;
+ Tue, 15 Dec 2020 02:10:17 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:adf:ebc7:0:0:0:0:0 with HTTP; Tue, 15 Dec 2020 02:10:17
+ -0800 (PST)
+Reply-To: georgemike7031@gmail.com
+From:   george mike <edohkossibrice@gmail.com>
+Date:   Tue, 15 Dec 2020 11:10:17 +0100
+Message-ID: <CAPn8y9K+-3v-jZQqnvn-wxoCYK7B-D8VVHed5E0Q0Kj3YjehXw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2020-12-15 at 16:57 +0800, Stanley Chu wrote:
-> >        u8      b_wb_buffer_type;
-> > -     u32     d_wb_alloc_units;
-> 
-> Perhaps below two fields could be also removed from struct
-> ufs_dev_info
-> for the same reason?
-> 
-> u32 d_ext_ufs_feature_sup;
-I thought twice before this patch. maybe will be used in near future,
-so I keep d_ext_ufs_feature_sup. Now that you suggest, we can remove it
-as well. 
+dzie=C5=84 dobry
 
-> u32 d_wb_alloc_units;
-This patch is to remove it.
+Nazywam si=C4=99 George Mike. Z zawodu jestem prawnikiem. Chc=C4=99 ci zaof=
+erowa=C4=87
+najbli=C5=BCszy krewny mojego klienta. Odziedziczysz sum=C4=99 (8,5 miliona=
+ dolar=C3=B3w)
+dolar=C3=B3w, kt=C3=B3re m=C3=B3j klient zostawi=C5=82 w banku przed =C5=9B=
+mierci=C4=85.
 
-Thanks,
-Bean
+M=C3=B3j klient jest obywatelem twojego kraju, kt=C3=B3ry zgin=C4=85=C5=82 =
+wraz z =C5=BCon=C4=85 w
+wypadku samochodowym
+i jedyny syn. B=C4=99d=C4=99 uprawniony do 50% ca=C5=82kowitego funduszu, p=
+odczas gdy
+50% b=C4=99dzie
+By=C4=87 dla ciebie.
+Aby uzyska=C4=87 wi=C4=99cej informacji, skontaktuj si=C4=99 z moim prywatn=
+ym adresem
+e-mail: georgemike7031gmail.com
 
+Z g=C3=B3ry bardzo dzi=C4=99kuj=C4=99,
+Panie George Mike
