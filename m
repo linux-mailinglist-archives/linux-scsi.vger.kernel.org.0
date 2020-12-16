@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DA82DC103
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Dec 2020 14:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 046752DC0FC
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Dec 2020 14:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbgLPNRo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Dec 2020 08:17:44 -0500
+        id S1726223AbgLPNR2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Dec 2020 08:17:28 -0500
 Received: from mailgw01.mediatek.com ([210.61.82.183]:60959 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726237AbgLPNRo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Dec 2020 08:17:44 -0500
-X-UUID: b6cf2ffd7d924269b1648e85e37f2489-20201216
-X-UUID: b6cf2ffd7d924269b1648e85e37f2489-20201216
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        with ESMTP id S1726225AbgLPNR2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Dec 2020 08:17:28 -0500
+X-UUID: 0c41cf8a480346bd8b3db880cd8b6ec4-20201216
+X-UUID: 0c41cf8a480346bd8b3db880cd8b6ec4-20201216
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1050888559; Wed, 16 Dec 2020 21:16:42 +0800
+        with ESMTP id 1654199335; Wed, 16 Dec 2020 21:16:43 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Dec 2020 21:16:39 +0800
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Dec 2020 21:16:38 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Wed, 16 Dec 2020 21:16:39 +0800
@@ -36,79 +36,55 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 1/4] scsi: ufs: Refactor cancelling clkscaling works
-Date:   Wed, 16 Dec 2020 21:16:36 +0800
-Message-ID: <20201216131639.4128-2-stanley.chu@mediatek.com>
+Subject: [PATCH v2 2/4] scsi: ufs: Remove redundant null checking of devfreq instance
+Date:   Wed, 16 Dec 2020 21:16:37 +0800
+Message-ID: <20201216131639.4128-3-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201216131639.4128-1-stanley.chu@mediatek.com>
 References: <20201216131639.4128-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-SNTS-SMTP: 25B50F542834B30D2391DB7057EA934F6ACF8A9CC0F1E2E4EB05BB593B2F80292000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Cancelling suspend_work and resume_work is only required while
-suspending clk-scaling. Thus moving these two invokes into
-ufshcd_suspend_clkscaling() function.
+hba->devfreq is zero-initialized thus it is not required
+to check its existence in ufshcd_add_lus() function which
+is invoked during initialization only.
 
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 052479a56a6f..a91b73a1fc48 100644
+index a91b73a1fc48..9cc16598136d 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1451,6 +1451,9 @@ static void ufshcd_suspend_clkscaling(struct ufs_hba *hba)
- 	if (!ufshcd_is_clkscaling_supported(hba))
- 		return;
+@@ -7636,15 +7636,13 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ 			&hba->pwr_info,
+ 			sizeof(struct ufs_pa_layer_attr));
+ 		hba->clk_scaling.saved_pwr_info.is_valid = true;
+-		if (!hba->devfreq) {
+-			hba->clk_scaling.is_allowed = true;
+-			ret = ufshcd_devfreq_init(hba);
+-			if (ret)
+-				goto out;
++		hba->clk_scaling.is_allowed = true;
++		ret = ufshcd_devfreq_init(hba);
++		if (ret)
++			goto out;
  
-+	cancel_work_sync(&hba->clk_scaling.suspend_work);
-+	cancel_work_sync(&hba->clk_scaling.resume_work);
-+
- 	spin_lock_irqsave(hba->host->host_lock, flags);
- 	if (!hba->clk_scaling.is_suspended) {
- 		suspend = true;
-@@ -1514,9 +1517,6 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
- 	pm_runtime_get_sync(hba->dev);
- 	ufshcd_hold(hba, false);
- 
--	cancel_work_sync(&hba->clk_scaling.suspend_work);
--	cancel_work_sync(&hba->clk_scaling.resume_work);
--
- 	if (value) {
- 		ufshcd_resume_clkscaling(hba);
- 	} else {
-@@ -5663,11 +5663,8 @@ static void ufshcd_err_handling_prepare(struct ufs_hba *hba)
- 		ufshcd_vops_resume(hba, UFS_RUNTIME_PM);
- 	} else {
- 		ufshcd_hold(hba, false);
--		if (hba->clk_scaling.is_enabled) {
--			cancel_work_sync(&hba->clk_scaling.suspend_work);
--			cancel_work_sync(&hba->clk_scaling.resume_work);
-+		if (hba->clk_scaling.is_enabled)
- 			ufshcd_suspend_clkscaling(hba);
+-			hba->clk_scaling.is_enabled = true;
+-			ufshcd_clkscaling_init_sysfs(hba);
 -		}
++		hba->clk_scaling.is_enabled = true;
++		ufshcd_clkscaling_init_sysfs(hba);
  	}
- 	down_write(&hba->clk_scaling_lock);
- 	hba->clk_scaling.is_allowed = false;
-@@ -8512,11 +8509,9 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	ufshcd_hold(hba, false);
- 	hba->clk_gating.is_suspended = true;
  
--	if (hba->clk_scaling.is_enabled) {
--		cancel_work_sync(&hba->clk_scaling.suspend_work);
--		cancel_work_sync(&hba->clk_scaling.resume_work);
-+	if (hba->clk_scaling.is_enabled)
- 		ufshcd_suspend_clkscaling(hba);
--	}
-+
- 	down_write(&hba->clk_scaling_lock);
- 	hba->clk_scaling.is_allowed = false;
- 	up_write(&hba->clk_scaling_lock);
+ 	ufs_bsg_probe(hba);
 -- 
 2.18.0
 
