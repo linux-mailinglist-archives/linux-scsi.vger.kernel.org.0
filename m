@@ -2,123 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 954A42DBE38
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Dec 2020 11:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B222DC0FE
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Dec 2020 14:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726057AbgLPKGw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Dec 2020 05:06:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726016AbgLPKGv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 16 Dec 2020 05:06:51 -0500
-Date:   Wed, 16 Dec 2020 11:07:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1608113171;
-        bh=e6bhXWnqJJogoI0fJCOUs72QqeMzbdl+y1fGMDoIG+s=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U1Lg8Xy+6EY/Q10jzZz420/6yyvgMxkp+yn1o4qsFtReokZFzZcAwPdjj7q0ghwsg
-         PeXiV0Od2uhle3mid4hX5z7s4hTsvmZoig7rIMcmGeDm5ZpNuqkfpmWTFK4np734pv
-         5HencNwrqxRi7pVxEWy4uvE/7CbUuMiJD81ln92U=
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Daejun Park <daejun7.park@samsung.com>
-Cc:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "huobean@gmail.com" <huobean@gmail.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>
-Subject: Re: [PATCH v14 0/3] scsi: ufs: Add Host Performance Booster Support
-Message-ID: <X9ncUJH/vHO7Luqi@kroah.com>
-References: <CGME20201215082235epcms2p88c9d8fd4dc773f6a4901dab241063306@epcms2p5>
- <20201216024444epcms2p5e69281911dd675306c473df3d2cef8b2@epcms2p5>
+        id S1726227AbgLPNR3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Dec 2020 08:17:29 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:60973 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726224AbgLPNR3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Dec 2020 08:17:29 -0500
+X-UUID: bea846b11c0f45cba0aa92489afaf1ce-20201216
+X-UUID: bea846b11c0f45cba0aa92489afaf1ce-20201216
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 932496842; Wed, 16 Dec 2020 21:16:43 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Dec 2020 21:16:38 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Dec 2020 21:16:39 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v2 0/4] scsi: ufs: Cleanup and refactor clock scaling
+Date:   Wed, 16 Dec 2020 21:16:35 +0800
+Message-ID: <20201216131639.4128-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201216024444epcms2p5e69281911dd675306c473df3d2cef8b2@epcms2p5>
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 6911A1B75C51CE1585C5596884292F91209385E11FA99098B076F220C13A7F152000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Dec 16, 2020 at 11:44:44AM +0900, Daejun Park wrote:
-> NAND flash memory-based storage devices use Flash Translation Layer (FTL)
-> to translate logical addresses of I/O requests to corresponding flash
-> memory addresses. Mobile storage devices typically have RAM with
-> constrained size, thus lack in memory to keep the whole mapping table.
-> Therefore, mapping tables are partially retrieved from NAND flash on
-> demand, causing random-read performance degradation.
-> 
-> To improve random read performance, JESD220-3 (HPB v1.0) proposes HPB
-> (Host Performance Booster) which uses host system memory as a cache for the
-> FTL mapping table. By using HPB, FTL data can be read from host memory
-> faster than from NAND flash memory. 
-> 
-> The current version only supports the DCM (device control mode).
-> This patch consists of 3 parts to support HPB feature.
-> 
-> 1) HPB probe and initialization process
-> 2) READ -> HPB READ using cached map information
-> 3) L2P (logical to physical) map management
-> 
-> In the HPB probe and init process, the device information of the UFS is
-> queried. After checking supported features, the data structure for the HPB
-> is initialized according to the device information.
-> 
-> A read I/O in the active sub-region where the map is cached is changed to
-> HPB READ by the HPB.
-> 
-> The HPB manages the L2P map using information received from the
-> device. For active sub-region, the HPB caches through ufshpb_map
-> request. For the in-active region, the HPB discards the L2P map.
-> When a write I/O occurs in an active sub-region area, associated dirty
-> bitmap checked as dirty for preventing stale read.
-> 
-> HPB is shown to have a performance improvement of 58 - 67% for random read
-> workload. [1]
-> 
-> We measured the total start-up time of popular applications and observed
-> the difference by enabling the HPB.
-> Popular applications are 12 game apps and 24 non-game apps. Each target
-> applications were launched in order. The cycle consists of running 36
-> applications in sequence. We repeated the cycle for observing performance
-> improvement by L2P mapping cache hit in HPB.
-> 
-> The Following is experiment environment:
->  - kernel version: 4.4.0 
->  - UFS 2.1 (64GB)
-> 
-> Result:
-> +-------+----------+----------+-------+
-> | cycle | baseline | with HPB | diff  |
-> +-------+----------+----------+-------+
-> | 1     | 272.4    | 264.9    | -7.5  |
-> | 2     | 250.4    | 248.2    | -2.2  |
-> | 3     | 226.2    | 215.6    | -10.6 |
-> | 4     | 230.6    | 214.8    | -15.8 |
-> | 5     | 232.0    | 218.1    | -13.9 |
-> | 6     | 231.9    | 212.6    | -19.3 |
-> +-------+----------+----------+-------+
+Hi,
+This series cleans up and refactors clk-scaling feature, and shall not change any functionality.
 
-I feel this was burried in the 00 email, shouldn't it go into the 01
-commit changelog so that you can see this?
+This series is based on Can's series "Three changes related with UFS clock scaling" in 5.10/scsi-fixes branch in Martin's tree.
 
-But why does the "cycle" matter here?
+However this series may not be required to be merged to 5.10. The choice of base branch is simply making these patches easy to be reviewed because this series is based on clk-scaling fixes by Can. If this series is decided not being merged to 5.10, then I would rebase it to 5.11/scsi-queue.
 
-Can you run a normal benchmark, like fio, on here so we can get some
-numbers we know how to compare to other systems with, and possible
-reproduct it ourselves?  I'm sure fio will easily show random read
-performance increases, right?
+Changes since v1:
+  - Refactor ufshcd_clk_scaling_suspend() in patch [3/4]
+  - Change function name from ufshcd_clk_scaling_pm() to ufshcd_clk_scaling_suspend() in patch [3/4]
+  - Refine patch titles
 
-thanks,
+Stanley Chu (4):
+  scsi: ufs: Refactor cancelling clkscaling works
+  scsi: ufs: Remove redundant null checking of devfreq instance
+  scsi: ufs: Cleanup and refactor clk-scaling feature
+  scsi: ufs: Fix build warning by incorrect function description
 
-greg k-h
+ drivers/scsi/ufs/ufshcd.c | 90 +++++++++++++++++++--------------------
+ 1 file changed, 43 insertions(+), 47 deletions(-)
+
+-- 
+2.18.0
+
