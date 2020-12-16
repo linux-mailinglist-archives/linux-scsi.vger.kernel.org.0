@@ -2,208 +2,240 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 640D22DC040
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Dec 2020 13:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F8F2DBAFC
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Dec 2020 07:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbgLPMYz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Dec 2020 07:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725778AbgLPMYz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Dec 2020 07:24:55 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C705C0619DB
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Dec 2020 04:23:45 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id 131so16479487pfb.9
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Dec 2020 04:23:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EtPL2PBwDd77Q8U/crtVYhcG6v0LbZMwpNCUdsTMUT0=;
-        b=MchA5joX/o1jSWu3Q8c9SU+jM859ww0/8AJiuQrouS4WfATw0I/elfbZBloykMAnhZ
-         iqRZ3rTM/RWTtMi5I79X0FP5sku6otTqiO+tR2upKavPUUSbAWaW/4ajDNkda3DGhSEt
-         Bt4kMTI+aCHMGs6sAaIOB9KSLkQSM0VJrI3w0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=EtPL2PBwDd77Q8U/crtVYhcG6v0LbZMwpNCUdsTMUT0=;
-        b=VkIs+HQPiXralJdY9WycZdQUEd29hjtvQTFk87UEAWq3GzZb8+s+uKyNF1FCJPWaet
-         fOOCXySfSd5E3LCeNg1tyAsHqsfEHxHB1I68YgX2dr7iVeuEdYnz9ChFhAYD8qrfehUv
-         TvHZiWMXZfbWPkDNvXNZqQqkj3HF96LWJLe2uyW9ymAceadr9yPi45WLPzSYdpPcU8e0
-         m63H+RIw4gx4PVowqzsFqFovxu1gUpF6aIJpebZ/gxglYsO8ktwclolY+jo/QGEYW+5Z
-         y4NpULygEd+LUut9fOtjjKFulKPorrLGTgYSr106ee4nRr1ZBRNdV/LuNDqBZ0EnH3qm
-         dkYA==
+        id S1725813AbgLPGGA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Dec 2020 01:06:00 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:9615 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725274AbgLPGGA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Dec 2020 01:06:00 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Cwl2b4NdQz15c8c;
+        Wed, 16 Dec 2020 14:04:39 +0800 (CST)
+Received: from [10.174.179.35] (10.174.179.35) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 16 Dec 2020 14:05:08 +0800
+Subject: Re: [RFC PATCH] scsi:libiscsi:Fix possible NULL dereference in
+ iscsi_eh_cmd_timed_out
+To:     <open-iscsi@googlegroups.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        <lduncan@suse.com>, <cleech@redhat.com>, <michaelc@cs.wisc.edu>,
+        <linux-scsi@vger.kernel.org>
+CC:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>,
+        <lutianxiong@huawei.com>, <linfeilong@huawei.com>,
+        <liuzhiqiang26@huawei.com>, <haowenchao@huawei.com>
+References: <1607935317-263599-1-git-send-email-wubo40@huawei.com>
+ <d545b4b0-2c85-8e81-4f78-1d4c6a08c7dd@oracle.com>
+From:   Wu Bo <wubo40@huawei.com>
+Message-ID: <56c13c25-3fc8-b684-4308-dec0dfbc40b3@huawei.com>
+Date:   Wed, 16 Dec 2020 14:05:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-X-Gm-Message-State: AOAM532lO7/+nxyoqFnrNCQqhOgaP6F226QviAOFQBdiB+eTSd/QzHc6
-        gcdbrGBIIgPdQdfU57nC9pgKXUMxvNTnnZKQ4zfszKxhkFZ5VYPpHSnRWUbQnHPKc/yOq0311rd
-        Fmrgi5M/3h7SZ9KvdEeN/36E=
-X-Google-Smtp-Source: ABdhPJyy+6dwj0PPZFiZrnYOnSc3tBKkom9gKX3bghAuJoeKbZVQ8ZXeS6UgD2THpSjA0LJmgKLXmA==
-X-Received: by 2002:a63:4083:: with SMTP id n125mr33154867pga.356.1608121424672;
-        Wed, 16 Dec 2020 04:23:44 -0800 (PST)
-Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id s7sm2477296pfh.207.2020.12.16.04.23.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 16 Dec 2020 04:23:44 -0800 (PST)
-From:   Muneendra <muneendra.kumar@broadcom.com>
-To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        tj@kernel.org, linux-nvme@lists.infradead.org, hare@suse.de
-Cc:     jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com,
-        pbonzini@redhat.com, Muneendra <muneendra.kumar@broadcom.com>
-Subject: [PATCH v5 16/16] scsi: Made changes in Kconfig to select BLK_CGROUP_FC_APPID
-Date:   Wed, 16 Dec 2020 10:59:46 +0530
-Message-Id: <1608096586-21656-17-git-send-email-muneendra.kumar@broadcom.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1608096586-21656-1-git-send-email-muneendra.kumar@broadcom.com>
-References: <1608096586-21656-1-git-send-email-muneendra.kumar@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004dfdfc05b693f2a5"
+In-Reply-To: <d545b4b0-2c85-8e81-4f78-1d4c6a08c7dd@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.35]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000004dfdfc05b693f2a5
-Content-Type: text/plain; charset="US-ASCII"
+On 2020/12/15 1:36, Mike Christie wrote:
+> On 12/14/20 2:41 AM, Wu Bo wrote:
+>> When testing kernel 4.18 version, NULL pointer dereference problem occurs
+>> in iscsi_eh_cmd_timed_out function.
+>>
+>> I think this bug in the upstream is still exists.
+>>
+>> The analysis reasons are as follows:
+>> 1)  For some reason, I/O command did not complete within
+>>      the timeout period. The block layer timer works,
+>>      call scsi_times_out() to handle I/O timeout logic.
+>>      At the same time the command just completes.
+>>
+>> 2)  scsi_times_out() call iscsi_eh_cmd_timed_out()
+>>      to processing timeout logic.  although there is an NULL judgment
+>> 	for the task, the task has not been released yet now.
+>>
+>> 3)  iscsi_complete_task() call __iscsi_put_task(),
+>>      The task reference count reaches zero, the conditions for free task
+>>      is met, then iscsi_free_task () free the task,
+>>      and let sc->SCp.ptr = NULL. After iscsi_eh_cmd_timed_out passes
+>>      the task judgment check, there may be NULL dereference scenarios
+>>      later.
+>> 	
+> 
+> I have a patch for this I think. This is broken out of patchset I was
+> trying to fixup the back lock usage for offload drivers, so I have only
+> compile tested it.
+> 
+> There is another issue where the for lun reset cleanup we could race. The
+> comments mention suspending the rx side, but we only do that for session level
+> cleaup.
+>  > The basic idea is we don't want to add more frwd lock uses in the 
+completion
+> patch like in your patch. In these non perf paths, like the tmf/timeout case
+> we can just take a ref to the cmd so it's not freed from under us.
+> 
 
-Added a new config FC_APPID to select BLK_CGROUP_FC_APPID
-which Enable support to track FC io Traffic.
+You are right, add more frwd lock does affect performance in the completion.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Muneendra <muneendra.kumar@broadcom.com>
+> 
+> 
+> diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+> index f9314f1..f07f8c1 100644
+> --- a/drivers/scsi/libiscsi.c
+> +++ b/drivers/scsi/libiscsi.c
+> @@ -573,18 +573,9 @@ void iscsi_complete_scsi_task(struct iscsi_task *task,
+>   static void fail_scsi_task(struct iscsi_task *task, int err)
+>   {
+>   	struct iscsi_conn *conn = task->conn;
+> -	struct scsi_cmnd *sc;
+> +	struct scsi_cmnd *sc = task->sc;
+>   	int state;
+>   
+> -	/*
+> -	 * if a command completes and we get a successful tmf response
+> -	 * we will hit this because the scsi eh abort code does not take
+> -	 * a ref to the task.
+> -	 */
+> -	sc = task->sc;
+> -	if (!sc)
+> -		return;
+> -
+>   	if (task->state == ISCSI_TASK_PENDING) {
+>   		/*
+>   		 * cmd never made it to the xmit thread, so we should not count
+> @@ -1855,26 +1846,34 @@ static int iscsi_exec_task_mgmt_fn(struct iscsi_conn *conn,
+>   }
+>   
+>   /*
+> - * Fail commands. session lock held and recv side suspended and xmit
+> - * thread flushed
+> + * Fail commands. session frwd lock held and and xmit thread flushed.
+>    */
+>   static void fail_scsi_tasks(struct iscsi_conn *conn, u64 lun, int error)
+>   {
+> +	struct iscsi_session *session = conn->session;
+>   	struct iscsi_task *task;
+>   	int i;
+>   
+> -	for (i = 0; i < conn->session->cmds_max; i++) {
+> -		task = conn->session->cmds[i];
+> -		if (!task->sc || task->state == ISCSI_TASK_FREE)
+> +	for (i = 0; i < session->cmds_max; i++) {
+> +		spin_lock_bh(&session->back_lock);
+> +		task = session->cmds[i];
+> +		if (!task->sc || task->state == ISCSI_TASK_FREE) {
+> +			spin_unlock_bh(&session->back_lock);
+>   			continue;
+> +		}
+>   
+> -		if (lun != -1 && lun != task->sc->device->lun)
+> +		if (lun != -1 && lun != task->sc->device->lun) {
+> +			spin_unlock_bh(&session->back_lock);
+>   			continue;
+> +		}
+> +		__iscsi_get_task(task);
+> +		spin_unlock_bh(&session->back_lock);
+>   
+> -		ISCSI_DBG_SESSION(conn->session,
+> +		ISCSI_DBG_SESSION(session,
+>   				  "failing sc %p itt 0x%x state %d\n",
+>   				  task->sc, task->itt, task->state);
+>   		fail_scsi_task(task, error);
+> +		iscsi_put_task(task);
+>   	}
+>   }
+>   
+> @@ -1953,6 +1952,7 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+>   	ISCSI_DBG_EH(session, "scsi cmd %p timedout\n", sc);
+>   
+>   	spin_lock_bh(&session->frwd_lock);
+> +	spin_lock(&session->back_lock);
+>   	task = (struct iscsi_task *)sc->SCp.ptr;
+>   	if (!task) {
+>   		/*
+> @@ -1960,8 +1960,11 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+>   		 * so let timeout code complete it now.
+>   		 */
+>   		rc = BLK_EH_DONE;
+> +		spin_unlock(&session->back_lock);
+>   		goto done;
+>   	}
+> +	__iscsi_get_task(task);
+> +	spin_unlock(&session->back_lock);
+>   
+>   	if (session->state != ISCSI_STATE_LOGGED_IN) {
+>   		/*
+> @@ -2077,9 +2080,12 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+>   	rc = BLK_EH_RESET_TIMER;
+>   
+>   done:
+> -	if (task)
+> -		task->last_timeout = jiffies;
+>   	spin_unlock_bh(&session->frwd_lock);
+> +
+> +	if (task) {
+> +		task->last_timeout = jiffies;
+> +		iscsi_put_task(task);
+> +	}
+>   	ISCSI_DBG_EH(session, "return %s\n", rc == BLK_EH_RESET_TIMER ?
+>   		     "timer reset" : "shutdown or nh");
+>   	return rc;
+> @@ -2187,15 +2193,20 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+>   	conn->eh_abort_cnt++;
+>   	age = session->age;
+>   
+> -	task = (struct iscsi_task *)sc->SCp.ptr;
+> -	ISCSI_DBG_EH(session, "aborting [sc %p itt 0x%x]\n",
+> -		     sc, task->itt);
+> -
+> -	/* task completed before time out */
+> -	if (!task->sc) {
+> +	spin_lock(&session->back_lock);
+> +	task = (struct iscsi_task *)sc->SCp.ptr;	
+> +	if (!task || !task->sc) {
+> +		/* task completed before time out */
+>   		ISCSI_DBG_EH(session, "sc completed while abort in progress\n");
+> -		goto success;
+> +
+> +		spin_unlock(&session->back_lock);
+> +		spin_unlock_bh(&session->frwd_lock);
+> +		mutex_unlock(&session->eh_mutex);
+> +		return SUCCESS;
+>   	}
+> +	ISCSI_DBG_EH(session, "aborting [sc %p itt 0x%x]\n", sc, task->itt);
+> +	__iscsi_get_task(task);
+> +	spin_unlock(&session->back_lock);
+>   
+>   	if (task->state == ISCSI_TASK_PENDING) {
+>   		fail_scsi_task(task, DID_ABORT);
+> @@ -2258,6 +2269,8 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+>   	ISCSI_DBG_EH(session, "abort success [sc %p itt 0x%x]\n",
+>   		     sc, task->itt);
+>   	mutex_unlock(&session->eh_mutex);
+> +
+> +	iscsi_put_task(task);
+>   	return SUCCESS;
+>   
+>   failed:
+> @@ -2266,6 +2279,8 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+>   	ISCSI_DBG_EH(session, "abort failed [sc %p itt 0x%x]\n", sc,
+>   		     task ? task->itt : 0);
+>   	mutex_unlock(&session->eh_mutex);
+> +
+> +	iscsi_put_task(task);
+>   	return FAILED;
+>   }
+>   EXPORT_SYMBOL_GPL(iscsi_eh_abort);
+> 
 
----
-v5:
-No change
+I have tested this patch, covering IO timeout and IO abort error 
+handling scenarios, it is works well.
 
-v4:
-Addressed the error reported by kernel test robot
-
-v3:
-New patch
----
- drivers/scsi/Kconfig | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 701b61ec76ee..1c73c60e398f 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -235,6 +235,19 @@ config SCSI_FC_ATTRS
- 	  each attached FiberChannel device to sysfs, say Y.
- 	  Otherwise, say N.
- 
-+config FC_APPID
-+	bool "Enable support to track FC io Traffic"
-+	depends on BLOCK && BLK_CGROUP
-+	depends on SCSI
-+	select BLK_CGROUP_FC_APPID
-+	default y
-+	help
-+	  If you say Y here, it enables the support to track
-+	  FC IO traffic over fabric.It enables the Fabric and the
-+	  storage targets to identify, monitor, and handle FC traffic
-+	  based on vm tags by inserting application specific
-+	  identification into the FC frame
-+
- config SCSI_ISCSI_ATTRS
- 	tristate "iSCSI Transport Attributes"
- 	depends on SCSI && NET
--- 
-2.26.2
-
-
--- 
-This electronic communication and the information and any files transmitted 
-with it, or attached to it, are confidential and are intended solely for 
-the use of the individual or entity to whom it is addressed and may contain 
-information that is confidential, legally privileged, protected by privacy 
-laws, or otherwise restricted from disclosure to anyone else. If you are 
-not the intended recipient or the person responsible for delivering the 
-e-mail to the intended recipient, you are hereby notified that any use, 
-copying, distributing, dissemination, forwarding, printing, or copying of 
-this e-mail is strictly prohibited. If you received this e-mail in error, 
-please return the e-mail to the sender, delete it from your computer, and 
-destroy any printed copy of it.
-
---0000000000004dfdfc05b693f2a5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIQTQYJKoZIhvcNAQcCoIIQPjCCEDoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg2iMIIE6DCCA9CgAwIBAgIOSBtqCRO9gCTKXSLwFPMwDQYJKoZIhvcNAQELBQAwTDEgMB4GA1UE
-CxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMT
-Ckdsb2JhbFNpZ24wHhcNMTYwNjE1MDAwMDAwWhcNMjQwNjE1MDAwMDAwWjBdMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTEzMDEGA1UEAxMqR2xvYmFsU2lnbiBQZXJzb25h
-bFNpZ24gMiBDQSAtIFNIQTI1NiAtIEczMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-tpZok2X9LAHsYqMNVL+Ly6RDkaKar7GD8rVtb9nw6tzPFnvXGeOEA4X5xh9wjx9sScVpGR5wkTg1
-fgJIXTlrGESmaqXIdPRd9YQ+Yx9xRIIIPu3Jp/bpbiZBKYDJSbr/2Xago7sb9nnfSyjTSnucUcIP
-ZVChn6hKneVGBI2DT9yyyD3PmCEJmEzA8Y96qT83JmVH2GaPSSbCw0C+Zj1s/zqtKUbwE5zh8uuZ
-p4vC019QbaIOb8cGlzgvTqGORwK0gwDYpOO6QQdg5d03WvIHwTunnJdoLrfvqUg2vOlpqJmqR+nH
-9lHS+bEstsVJtZieU1Pa+3LzfA/4cT7XA/pnwwIDAQABo4IBtTCCAbEwDgYDVR0PAQH/BAQDAgEG
-MGoGA1UdJQRjMGEGCCsGAQUFBwMCBggrBgEFBQcDBAYIKwYBBQUHAwkGCisGAQQBgjcUAgIGCisG
-AQQBgjcKAwQGCSsGAQQBgjcVBgYKKwYBBAGCNwoDDAYIKwYBBQUHAwcGCCsGAQUFBwMRMBIGA1Ud
-EwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFGlygmIxZ5VEhXeRgMQENkmdewthMB8GA1UdIwQYMBaA
-FI/wS3+oLkUkrk1Q+mOai97i3Ru8MD4GCCsGAQUFBwEBBDIwMDAuBggrBgEFBQcwAYYiaHR0cDov
-L29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3RyMzA2BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL3Jvb3QtcjMuY3JsMGcGA1UdIARgMF4wCwYJKwYBBAGgMgEoMAwGCisG
-AQQBoDIBKAowQQYJKwYBBAGgMgFfMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNp
-Z24uY29tL3JlcG9zaXRvcnkvMA0GCSqGSIb3DQEBCwUAA4IBAQConc0yzHxn4gtQ16VccKNm4iXv
-6rS2UzBuhxI3XDPiwihW45O9RZXzWNgVcUzz5IKJFL7+pcxHvesGVII+5r++9eqI9XnEKCILjHr2
-DgvjKq5Jmg6bwifybLYbVUoBthnhaFB0WLwSRRhPrt5eGxMw51UmNICi/hSKBKsHhGFSEaJQALZy
-4HL0EWduE6ILYAjX6BSXRDtHFeUPddb46f5Hf5rzITGLsn9BIpoOVrgS878O4JnfUWQi29yBfn75
-HajifFvPC+uqn+rcVnvrpLgsLOYG/64kWX/FRH8+mhVe+mcSX3xsUpcxK9q9vLTVtroU/yJUmEC4
-OcH5dQsbHBqjMIIDXzCCAkegAwIBAgILBAAAAAABIVhTCKIwDQYJKoZIhvcNAQELBQAwTDEgMB4G
-A1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNV
-BAMTCkdsb2JhbFNpZ24wHhcNMDkwMzE4MTAwMDAwWhcNMjkwMzE4MTAwMDAwWjBMMSAwHgYDVQQL
-ExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMK
-R2xvYmFsU2lnbjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMwldpB5BngiFvXAg7aE
-yiie/QV2EcWtiHL8RgJDx7KKnQRfJMsuS+FggkbhUqsMgUdwbN1k0ev1LKMPgj0MK66X17YUhhB5
-uzsTgHeMCOFJ0mpiLx9e+pZo34knlTifBtc+ycsmWQ1z3rDI6SYOgxXG71uL0gRgykmmKPZpO/bL
-yCiR5Z2KYVc3rHQU3HTgOu5yLy6c+9C7v/U9AOEGM+iCK65TpjoWc4zdQQ4gOsC0p6Hpsk+QLjJg
-6VfLuQSSaGjlOCZgdbKfd/+RFO+uIEn8rUAVSNECMWEZXriX7613t2Saer9fwRPvm2L7DWzgVGkW
-qQPabumDk3F2xmmFghcCAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8w
-HQYDVR0OBBYEFI/wS3+oLkUkrk1Q+mOai97i3Ru8MA0GCSqGSIb3DQEBCwUAA4IBAQBLQNvAUKr+
-yAzv95ZURUm7lgAJQayzE4aGKAczymvmdLm6AC2upArT9fHxD4q/c2dKg8dEe3jgr25sbwMpjjM5
-RcOO5LlXbKr8EpbsU8Yt5CRsuZRj+9xTaGdWPoO4zzUhw8lo/s7awlOqzJCK6fBdRoyV3XpYKBov
-Hd7NADdBj+1EbddTKJd+82cEHhXXipa0095MJ6RMG3NzdvQXmcIfeg7jLQitChws/zyrVQ4PkX42
-68NXSb7hLi18YIvDQVETI53O9zJrlAGomecsMx86OyXShkDOOyyGeMlhLxS67ttVb9+E7gUJTb0o
-2HLO02JQZR7rkpeDMdmztcpHWD9fMIIFTzCCBDegAwIBAgIMX/krgFDQUQNyOf+1MA0GCSqGSIb3
-DQEBCwUAMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQD
-EypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMwHhcNMjAwOTA0MDgz
-NTI5WhcNMjIwOTA1MDgzNTI5WjCBljELMAkGA1UEBhMCSU4xEjAQBgNVBAgTCUthcm5hdGFrYTES
-MBAGA1UEBxMJQmFuZ2Fsb3JlMRYwFAYDVQQKEw1Ccm9hZGNvbSBJbmMuMRowGAYDVQQDExFNdW5l
-ZW5kcmEgS3VtYXIgTTErMCkGCSqGSIb3DQEJARYcbXVuZWVuZHJhLmt1bWFyQGJyb2FkY29tLmNv
-bTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMoadg8/B0JvnQVWQZyfiiEMmDhh0bSq
-BIThkSCjIdy7yOV9fBOs6MdrPZgCDeX5rJvOw6PJiWjeQQ9RkTJH6WccvxwXugoyspkG/RfFdUKk
-t0/bk1Ml9aUobcee2+cC79gyzwpHUjzEpcsx49FskGIxI+n9wybrDhpurtj8mmc1C1sVzKNoIEwC
-/eHrCsDnag9JEGotxVVv0KcLXv7N0CXs03bP8uvocms3+gO1K8dasJkc7noMt/i0/xcZnaABWkgV
-J/4V6ms/nIUi+/4vPYjckYUbRzkXm1/X0IyUfpp5cgdrFn9jBIk69fQGAUEhnVvwcXnHWotYxZFd
-Xew5Fz0CAwEAAaOCAdMwggHPMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEwgY4wTQYI
-KwYBBQUHMAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVyc29uYWxz
-aWduMnNoYTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5j
-b20vZ3NwZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsG
-AQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAA
-MEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJzb25hbHNp
-Z24yc2hhMmczLmNybDAnBgNVHREEIDAegRxtdW5lZW5kcmEua3VtYXJAYnJvYWRjb20uY29tMBMG
-A1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQYMBaAFGlygmIxZ5VEhXeRgMQENkmdewthMB0GA1Ud
-DgQWBBR6On9cEmlB2VsuST951zNMSKtFBzANBgkqhkiG9w0BAQsFAAOCAQEAOGDBLQ17Ge8BVULh
-hsKhgh5eDx0mNmRRdhvTJnxOTRX5QsOKvsJGOUbyrKjD3BTTcGmIUti9HmbqDe/3gRTbhu8LA508
-LbMkW5lUoTb8ycBNOKLYhNE8UEOY8jRTUtMEhzT6NJDEE+1hb3kSGfArrrF3Z8pRYiUUhcpC5GKL
-9KsxA+DECRfSGfXJJQSq6nEZUGKhz+dz5CV1s8UIZLe9HEEfyJO4eRP+Fw9X16cthAbY0kpVnAvT
-/j45FAauY/h87uphdvSb5wC9v5w4VO0JKs0yNUjyWXg/RG+6JCvcViLFLAlRCLrcRcVaQwWZQ3YB
-EpmWnHflnrBcah5Ozy137DGCAm8wggJrAgEBMG0wXTELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEds
-b2JhbFNpZ24gbnYtc2ExMzAxBgNVBAMTKkdsb2JhbFNpZ24gUGVyc29uYWxTaWduIDIgQ0EgLSBT
-SEEyNTYgLSBHMwIMX/krgFDQUQNyOf+1MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEi
-BCDXC58TFl/c/ER2QmtsF4tNw4s5GoLmqY3q8SH8zaBrgDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDEyMTYxMjIzNDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
-AWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEK
-MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAu7VKktdAH7kjK22O
-q5wWznDwKNN5Baof+y9lXsEbfj+NRa6jmzpHCGAB7N4JGC6JE2kYwK1LOvC3Jc3nGN0fFUXn0Rwa
-tMi4nkrZg3gccHgPXPq+vnqzS4mMsDTP0Wy9av/irhKd5evGGupx0T6Uro91e/c7Dr3uWwfXRtdJ
-Ta0AVnWdflNXzf9RNh/+2NmGW4dPDsL6arNZVw8lPdIJfoOS2cuWacjiov3UpNLMGkgLBukkw59Y
-d8rbuD6a+vSOFJi/CO9nTiL5FlMy7DxckkrDHhqL87q9gFZSmboaRvbcJTP4oKK6zBqVMBm2CdVV
-FAOU4+dexKdRyxbEXokkHA==
---0000000000004dfdfc05b693f2a5--
+It is lgtm, Thanks
