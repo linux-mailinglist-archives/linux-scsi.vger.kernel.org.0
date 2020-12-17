@@ -2,57 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 063C22DCC98
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C9A2DCC9B
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbgLQGn1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1726908AbgLQGn1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 17 Dec 2020 01:43:27 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:47796 "EHLO
+Received: from aserp2120.oracle.com ([141.146.126.78]:47792 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726529AbgLQGn1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:43:27 -0500
+        with ESMTP id S1725828AbgLQGn0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:43:26 -0500
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6UIxG164613;
-        Thu, 17 Dec 2020 06:42:35 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6Tk7u164200;
+        Thu, 17 Dec 2020 06:42:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=lASChSrvTm2b/OTpouv3n6Ha2xgXgxmv7BCIjZgAGws=;
- b=x8QmWe3ADU8AQKaXqNGly2WFit+0KHw6uE7C+OEbg3wEBPIwmOhbD1x9Hm/IdXWiDquA
- XDvccVNPBXvTTvwSYTLnJa40gvzGhsORcGr+Xc58ntcQ5mebS8WcXWL1B1N5ZJ654a6K
- Xty3QhGBbhcMH8Stg7rw41eQZfbkHgRZmfxHKX5VlNmpIWbuxoirZNvSy1+M8ojfGv8D
- an1TVFuGLVAcxXu9MAN4+Ewv1yMQIeJxxnAf8CkAIVF4kkVBGxwKv3TZWnMLRZHt8AoX
- FxuUyIHwhOUD/KQiRbgbwk01ynaEIhrX/PwFENXTRBDPWLIEVdMpKqnMlxn/MxqRPKBI 9Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 35cntmbue4-1
+ bh=cc20LU3ca+oS4aOayzS8H7mmdPCfIOHidDK/nqgEJTw=;
+ b=Q/KvoVTgG4Fs2ecoHMAqy8mHNBUyi/5jmo+ZifNXsxDh+z1FSolu9ijlAQozVU4KZbQc
+ JwObJW8hnWMDzoZ+EF8WBVsdDz7qXvTasEdJadqKdOQppYe0Bj8l0mL96TNxpTxCBSUK
+ VfMfTB7FDuY57/RZZdhGhnO4tOw9ZyUZfFcNDUT0cnAJ7KtoYeiYNMrBQbrSueF1oyts
+ tPx9E5caIpQ+zrDFeOv/EqAtaJ4tpkD1Y3ikgGDWlMAgTgLdc0V+EyV7R7gXqlFIdV6b
+ esSnv1wI5fKAp+9/N0t6rcjOlgvnENmgzuOnMlYmNS/Ln5+M5v5okTSItzX+Qb+T+lUH rw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 35cntmbue5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Dec 2020 06:42:35 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VDgF020086;
+        Thu, 17 Dec 2020 06:42:36 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VFoC178150;
         Thu, 17 Dec 2020 06:42:35 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 35e6esvfv3-1
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 35e6jts200-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 17 Dec 2020 06:42:35 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BH6gXZx006668;
-        Thu, 17 Dec 2020 06:42:33 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BH6gYva019169;
+        Thu, 17 Dec 2020 06:42:34 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 16 Dec 2020 22:42:33 -0800
+        with ESMTP ; Wed, 16 Dec 2020 22:42:34 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
         mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
         varun@chelsio.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, jejb@linux.ibm.com
-Subject: [PATCH 15/22] libiscsi: use scsi_host_busy_iter
-Date:   Thu, 17 Dec 2020 00:42:05 -0600
-Message-Id: <1608187332-4434-16-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 16/22] be2iscsi: use scsi_host_busy_iter
+Date:   Thu, 17 Dec 2020 00:42:06 -0600
+Message-Id: <1608187332-4434-17-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
 References: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2012170047
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
@@ -65,244 +65,142 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The next patches remove the session->cmds array for the scsi_cmnd
-iscsi tasks. This patch has us use scsi_host_busy_iter instead of
-looping over that array for the scsi_cmnd case, so we can remove
-it in the next patches when we also switch over to using the blk
-layer cmd allocators.
+Use the iscsi scsi_host_busy_iter helper so we are not digging
+into libiscsi structs and because the session cmds array is
+being removed.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/scsi/libiscsi.c | 160 +++++++++++++++++++++++++++++-------------------
- include/scsi/libiscsi.h |  12 ++++
- 2 files changed, 110 insertions(+), 62 deletions(-)
+ drivers/scsi/be2iscsi/be_main.c | 97 ++++++++++++++++++++++++-----------------
+ 1 file changed, 57 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 0c9e220..2b3dd42 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -1902,39 +1902,66 @@ static int iscsi_exec_task_mgmt_fn(struct iscsi_conn *conn,
- 	return 0;
+diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
+index 221ce17..bb305ee 100644
+--- a/drivers/scsi/be2iscsi/be_main.c
++++ b/drivers/scsi/be2iscsi/be_main.c
+@@ -265,19 +265,59 @@ static int beiscsi_eh_abort(struct scsi_cmnd *sc)
+ 	return iscsi_eh_abort(sc);
  }
  
--/*
-- * Fail commands. session frwd lock held and xmit thread flushed.
-- */
--static void fail_scsi_tasks(struct iscsi_conn *conn, u64 lun, int error)
-+static bool fail_scsi_task_iter(struct scsi_cmnd *sc, void *data, bool rsvd)
- {
-+	struct iscsi_task *task = (struct iscsi_task *)sc->SCp.ptr;
-+	struct iscsi_sc_iter_data *iter_data = data;
-+	struct iscsi_conn *conn = iter_data->conn;
- 	struct iscsi_session *session = conn->session;
--	struct iscsi_task *task;
--	int i;
-+
-+	ISCSI_DBG_SESSION(session, "failing sc %p itt 0x%x state %d\n",
-+			  task->sc, task->itt, task->state);
-+	__iscsi_get_task(task);
-+	spin_unlock_bh(&session->back_lock);
-+
-+	fail_scsi_task(task, *(int *)iter_data->data);
-+
-+	spin_unlock_bh(&session->frwd_lock);
-+	iscsi_put_task(task);
-+	spin_lock_bh(&session->frwd_lock);
- 
- 	spin_lock_bh(&session->back_lock);
--	for (i = 0; i < session->cmds_max; i++) {
--		task = session->cmds[i];
--		if (!task->sc || task->state == ISCSI_TASK_FREE)
--			continue;
-+	return true;
-+}
- 
--		if (lun != -1 && lun != task->sc->device->lun)
--			continue;
-+static bool iscsi_sc_iter(struct scsi_cmnd *sc, void *data, bool rsvd)
-+{
-+	struct iscsi_task *task = (struct iscsi_task *)sc->SCp.ptr;
-+	struct iscsi_sc_iter_data *iter_data = data;
- 
--		__iscsi_get_task(task);
--		spin_unlock_bh(&session->back_lock);
-+	if (!task->sc || task->state == ISCSI_TASK_FREE ||
-+	    task->conn != iter_data->conn)
-+		return true;
- 
--		ISCSI_DBG_SESSION(session,
--				  "failing sc %p itt 0x%x state %d\n",
--				  task->sc, task->itt, task->state);
--		fail_scsi_task(task, error);
-+	if (iter_data->lun != -1 && iter_data->lun != task->sc->device->lun)
-+		return true;
- 
--		spin_unlock_bh(&session->frwd_lock);
--		iscsi_put_task(task);
--		spin_lock_bh(&session->frwd_lock);
-+	return iter_data->fn(sc, iter_data, rsvd);
-+}
- 
--		spin_lock_bh(&session->back_lock);
--	}
-+void iscsi_conn_for_each_sc(struct Scsi_Host *shost,
-+			    struct iscsi_sc_iter_data *iter_data)
-+{
-+	scsi_host_busy_iter(shost, iscsi_sc_iter, iter_data);
-+}
-+EXPORT_SYMBOL_GPL(iscsi_conn_for_each_sc);
-+
-+/*
-+ * Fail commands. session frwd lock held and xmit thread flushed.
-+ */
-+static void fail_scsi_tasks(struct iscsi_conn *conn, u64 lun, int error)
-+{
-+	struct iscsi_session *session = conn->session;
-+
-+	struct iscsi_sc_iter_data iter_data = {
-+		.conn = conn,
-+		.lun = lun,
-+		.fn = fail_scsi_task_iter,
-+		.data = &error,
-+	};
- 
-+	spin_lock_bh(&session->back_lock);
-+	iscsi_conn_for_each_sc(session->host, &iter_data);
- 	spin_unlock_bh(&session->back_lock);
- }
- 
-@@ -1998,14 +2025,49 @@ static int iscsi_has_ping_timed_out(struct iscsi_conn *conn)
- 		return 0;
- }
- 
-+static bool check_scsi_task_iter(struct scsi_cmnd *sc, void *data, bool rsvd)
-+{
-+	struct iscsi_task *task = (struct iscsi_task *)sc->SCp.ptr;
-+	struct iscsi_sc_iter_data *iter_data = data;
-+	struct iscsi_task *timed_out_task = iter_data->data;
-+
-+	/*
-+	 * Only check if cmds started before this one have made
-+	 * progress, or this could never fail
-+	 */
-+	if (time_after(task->sc->jiffies_at_alloc,
-+		       timed_out_task->sc->jiffies_at_alloc))
-+		return true;
-+
-+	if (time_after(task->last_xfer, timed_out_task->last_timeout)) {
-+		/*
-+		 * The timed out task has not made progress, but a task
-+		 * started before us has transferred data since we
-+		 * started/last-checked. We could be queueing too many tasks
-+		 * or the LU is bad.
-+		 *
-+		 * If the device is bad the cmds ahead of us on other devs will
-+		 * complete, and this loop will eventually fail starting the
-+		 * scsi eh.
-+		 */
-+		ISCSI_DBG_EH(task->conn->session,
-+			     "Command has not made progress but commands ahead of it have. Asking scsi-ml for more time to complete. Our last xfer vs running task last xfer %lu/%lu. Last check %lu.\n",
-+			     timed_out_task->last_xfer, task->last_xfer,
-+			     timed_out_task->last_timeout);
-+		iter_data->rc = BLK_EH_RESET_TIMER;
-+		return false;
-+	}
-+	return true;
-+}
-+
- enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
- {
- 	enum blk_eh_timer_return rc = BLK_EH_DONE;
--	struct iscsi_task *task = NULL, *running_task;
-+	struct iscsi_task *task;
- 	struct iscsi_cls_session *cls_session;
-+	struct iscsi_sc_iter_data iter_data;
- 	struct iscsi_session *session;
- 	struct iscsi_conn *conn;
--	int i;
- 
- 	cls_session = starget_to_session(scsi_target(sc->device));
- 	session = cls_session->dd_data;
-@@ -2084,45 +2146,19 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
- 		goto done;
- 	}
- 
--	spin_lock(&session->back_lock);
--	for (i = 0; i < conn->session->cmds_max; i++) {
--		running_task = conn->session->cmds[i];
--		if (!running_task->sc || running_task == task ||
--		     running_task->state != ISCSI_TASK_RUNNING)
--			continue;
--
--		/*
--		 * Only check if cmds started before this one have made
--		 * progress, or this could never fail
--		 */
--		if (time_after(running_task->sc->jiffies_at_alloc,
--			       task->sc->jiffies_at_alloc))
--			continue;
-+	iter_data.conn = conn;
-+	iter_data.data = task;
-+	iter_data.rc = BLK_EH_DONE;
-+	iter_data.fn = check_scsi_task_iter;
-+	iter_data.lun = -1;
- 
--		if (time_after(running_task->last_xfer, task->last_timeout)) {
--			/*
--			 * This task has not made progress, but a task
--			 * started before us has transferred data since
--			 * we started/last-checked. We could be queueing
--			 * too many tasks or the LU is bad.
--			 *
--			 * If the device is bad the cmds ahead of us on
--			 * other devs will complete, and this loop will
--			 * eventually fail starting the scsi eh.
--			 */
--			ISCSI_DBG_EH(session, "Command has not made progress "
--				     "but commands ahead of it have. "
--				     "Asking scsi-ml for more time to "
--				     "complete. Our last xfer vs running task "
--				     "last xfer %lu/%lu. Last check %lu.\n",
--				     task->last_xfer, running_task->last_xfer,
--				     task->last_timeout);
--			spin_unlock(&session->back_lock);
--			rc = BLK_EH_RESET_TIMER;
--			goto done;
--		}
--	}
-+	spin_lock(&session->back_lock);
-+	iscsi_conn_for_each_sc(conn->session->host, &iter_data);
- 	spin_unlock(&session->back_lock);
-+	if (iter_data.rc != BLK_EH_DONE) {
-+		rc = iter_data.rc;
-+		goto done;
-+	}
- 
- 	/* Assumes nop timeout is shorter than scsi cmd timeout */
- 	if (task->have_checked_conn)
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 4f6ca2d..96aaf4b 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -460,6 +460,18 @@ extern void iscsi_complete_scsi_task(struct iscsi_task *task,
- 				     uint32_t exp_cmdsn, uint32_t max_cmdsn);
- extern int iscsi_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
- 
-+struct iscsi_sc_iter_data {
-+	struct iscsi_conn *conn;
-+	/* optional: if set to -1. It will be ignored */
-+	u64 lun;
-+	void *data;
-+	int rc;
-+	bool (*fn)(struct scsi_cmnd *sc, void *data, bool rsvd);
++struct beiscsi_invldt_cmd_tbl {
++	struct invldt_cmd_tbl tbl[BE_INVLDT_CMD_TBL_SZ];
++	struct iscsi_task *task[BE_INVLDT_CMD_TBL_SZ];
 +};
 +
-+extern void iscsi_conn_for_each_sc(struct Scsi_Host *shost,
-+				   struct iscsi_sc_iter_data *iter_data);
++static bool beiscsi_dev_reset_sc_iter(struct scsi_cmnd *sc, void *data,
++				      bool rsvd)
++{
++	struct iscsi_task *task = (struct iscsi_task *)sc->SCp.ptr;
++	struct iscsi_sc_iter_data *iter_data = data;
++	struct beiscsi_invldt_cmd_tbl *inv_tbl = iter_data->data;
++	struct beiscsi_conn *beiscsi_conn = iter_data->conn->dd_data;
++	struct beiscsi_hba *phba = beiscsi_conn->phba;
++	int nents = iter_data->rc;
++	struct beiscsi_io_task *io_task;
 +
- /*
-  * generic helpers
-  */
++	/*
++	 * Can't fit in more cmds? Normally this won't happen b'coz
++	 * BEISCSI_CMD_PER_LUN is same as BE_INVLDT_CMD_TBL_SZ.
++	 */
++	if (iter_data->rc == BE_INVLDT_CMD_TBL_SZ)
++		return false;
++
++	/* get a task ref till FW processes the req for the ICD used */
++	__iscsi_get_task(task);
++	io_task = task->dd_data;
++	/* mark WRB invalid which have been not processed by FW yet */
++	if (is_chip_be2_be3r(phba)) {
++		AMAP_SET_BITS(struct amap_iscsi_wrb, invld,
++			      io_task->pwrb_handle->pwrb, 1);
++	} else {
++		AMAP_SET_BITS(struct amap_iscsi_wrb_v2, invld,
++			      io_task->pwrb_handle->pwrb, 1);
++	}
++
++	inv_tbl->tbl[nents].cid = beiscsi_conn->beiscsi_conn_cid;
++	inv_tbl->tbl[nents].icd = io_task->psgl_handle->sgl_index;
++	inv_tbl->task[nents] = task;
++	nents++;
++
++	iter_data->rc = nents;
++	return true;
++}
++
+ static int beiscsi_eh_device_reset(struct scsi_cmnd *sc)
+ {
+-	struct beiscsi_invldt_cmd_tbl {
+-		struct invldt_cmd_tbl tbl[BE_INVLDT_CMD_TBL_SZ];
+-		struct iscsi_task *task[BE_INVLDT_CMD_TBL_SZ];
+-	} *inv_tbl;
++	struct iscsi_sc_iter_data iter_data;
++	struct beiscsi_invldt_cmd_tbl *inv_tbl;
+ 	struct iscsi_cls_session *cls_session;
+ 	struct beiscsi_conn *beiscsi_conn;
+-	struct beiscsi_io_task *io_task;
+ 	struct iscsi_session *session;
+ 	struct beiscsi_hba *phba;
+ 	struct iscsi_conn *conn;
+-	struct iscsi_task *task;
+ 	unsigned int i, nents;
+ 	int rc, more = 0;
+ 
+@@ -301,45 +341,22 @@ static int beiscsi_eh_device_reset(struct scsi_cmnd *sc)
+ 			    "BM_%d : invldt_cmd_tbl alloc failed\n");
+ 		return FAILED;
+ 	}
+-	nents = 0;
+-	/* take back_lock to prevent task from getting cleaned up under us */
+-	spin_lock(&session->back_lock);
+-	for (i = 0; i < conn->session->cmds_max; i++) {
+-		task = conn->session->cmds[i];
+-		if (!task->sc)
+-			continue;
+ 
+-		if (sc->device->lun != task->sc->device->lun)
+-			continue;
+-		/**
+-		 * Can't fit in more cmds? Normally this won't happen b'coz
+-		 * BEISCSI_CMD_PER_LUN is same as BE_INVLDT_CMD_TBL_SZ.
+-		 */
+-		if (nents == BE_INVLDT_CMD_TBL_SZ) {
+-			more = 1;
+-			break;
+-		}
++	iter_data.data = inv_tbl;
++	iter_data.conn = conn;
++	iter_data.lun = sc->device->lun;
++	iter_data.rc = 0;
++	iter_data.fn = beiscsi_dev_reset_sc_iter;
+ 
+-		/* get a task ref till FW processes the req for the ICD used */
+-		__iscsi_get_task(task);
+-		io_task = task->dd_data;
+-		/* mark WRB invalid which have been not processed by FW yet */
+-		if (is_chip_be2_be3r(phba)) {
+-			AMAP_SET_BITS(struct amap_iscsi_wrb, invld,
+-				      io_task->pwrb_handle->pwrb, 1);
+-		} else {
+-			AMAP_SET_BITS(struct amap_iscsi_wrb_v2, invld,
+-				      io_task->pwrb_handle->pwrb, 1);
+-		}
+-
+-		inv_tbl->tbl[nents].cid = beiscsi_conn->beiscsi_conn_cid;
+-		inv_tbl->tbl[nents].icd = io_task->psgl_handle->sgl_index;
+-		inv_tbl->task[nents] = task;
+-		nents++;
+-	}
++	spin_lock(&session->back_lock);
++	iscsi_conn_for_each_sc(session->host, &iter_data);
+ 	spin_unlock(&session->back_lock);
+ 	spin_unlock_bh(&session->frwd_lock);
+ 
++	nents = iter_data.rc;
++	if (nents == BE_INVLDT_CMD_TBL_SZ)
++		more = 1;
++
+ 	rc = SUCCESS;
+ 	if (!nents)
+ 		goto end_reset;
 -- 
 1.8.3.1
 
