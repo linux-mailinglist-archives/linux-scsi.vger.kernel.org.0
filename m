@@ -2,224 +2,154 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0D52DCCA6
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC39B2DCED5
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 10:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726588AbgLQGpb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Dec 2020 01:45:31 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:49320 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726547AbgLQGpb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:45:31 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6UV5G164696;
-        Thu, 17 Dec 2020 06:44:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=UnrJRZBXw2ScR2i+Xy/NyyL0h6bg4B4HY3yulcepWg0=;
- b=gf7ladDTEDk30WqwFzpJPIFTqBUf0no3fbwTKg8gc1ZJ6V9DsdUQwk1IabtoaJRhGqpi
- Q3jzPcPpxo2PUhDu43GQ/VOuXIXCk2sOMAwS7DmVBhwdZTXDTeo4MAwrVOv4bIfp/v50
- kq3WoJtGswnR+iZ/aezzclQShgKdVc3zw1OKaak7CGZgN2R0E5yo6GJOyW0hlTNqeOOA
- TNSznjLIRSXaGWpeYJw2I7FRyNGFD5Spk10v/MqFwpkMfdMult4e/w7pIshKeuMlJxMV
- NQqjVO+o+mVr3YTXaRF2YBuSI42XIopUnIa5q+JXjOUp60SAYPw1Fw/VdOONlmRNJ8zK GQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 35cntmbujq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Dec 2020 06:44:41 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VF52178234;
-        Thu, 17 Dec 2020 06:42:40 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 35e6jts22j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Dec 2020 06:42:40 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BH6gdXV006694;
-        Thu, 17 Dec 2020 06:42:39 GMT
-Received: from ol2.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 16 Dec 2020 22:42:39 -0800
-From:   Mike Christie <michael.christie@oracle.com>
-To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
-        mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        varun@chelsio.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, jejb@linux.ibm.com
-Subject: [PATCH 22/22] libiscsi: fix conn_send_pdu API
-Date:   Thu, 17 Dec 2020 00:42:12 -0600
-Message-Id: <1608187332-4434-23-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
-References: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012170047
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012170047
+        id S1727160AbgLQJuH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Dec 2020 04:50:07 -0500
+Received: from mga07.intel.com ([134.134.136.100]:52143 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726291AbgLQJuH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Dec 2020 04:50:07 -0500
+IronPort-SDR: TSWyom1TiVbw//sQkQqgOg/pxls0hmqvJp3ZNYGY8HkyTnoOm4+QOqi9Yoz6XhkTPxhUiWo22h
+ YvoiAHG1ZYtQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9837"; a="239311667"
+X-IronPort-AV: E=Sophos;i="5.78,426,1599548400"; 
+   d="scan'208";a="239311667"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2020 01:49:26 -0800
+IronPort-SDR: vDqUN8gdLLG+WhpQ+0que35hOjo+rrs8U50QencIMz4bFIuzwjqts8IIadhAvEqnt8lo+pSh3S
+ GnFe1WUuqntg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,426,1599548400"; 
+   d="scan'208";a="560498076"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.94]) ([10.237.72.94])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Dec 2020 01:49:22 -0800
+Subject: Re: [PATCH V2] scsi: ufs-debugfs: Add error counters
+To:     Bean Huo <huobean@gmail.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Can Guo <cang@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>
+References: <20201216185145.25800-1-adrian.hunter@intel.com>
+ <920b01c29525ff1cf894a2cf9c809750533ddc13.camel@gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <750889b4-19b7-3c0b-c614-a8dddc2dcab2@intel.com>
+Date:   Thu, 17 Dec 2020 11:49:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <920b01c29525ff1cf894a2cf9c809750533ddc13.camel@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The conn_send_pdu API is evil in that it returns a pointer to a
-iscsi_task, but that task might have been freed already so you can't
-touch it. This patch splits the task allocation and transmission, so
-functions like iscsi_send_nopout can access the task before its sent.
-We then can remove that INVALID_SCSI_TASK dance.
+On 16/12/20 10:16 pm, Bean Huo wrote:
+> On Wed, 2020-12-16 at 20:51 +0200, Adrian Hunter wrote:
+>>                 ufshcd_variant_hba_exit(hba);
+>>                 ufshcd_setup_vreg(hba, false);
+>>                 ufshcd_suspend_clkscaling(hba);
+>> @@ -9436,6 +9441,20 @@ int ufshcd_init(struct ufs_hba *hba, void
+>> __iomem *mmio_base, unsigned int irq)
+>>  }
+>>  EXPORT_SYMBOL_GPL(ufshcd_init);
+>>  
+>> +static int __init ufshcd_core_init(void)
+>> +{
+>> +       ufs_debugfs_init();
+>> +       return 0;
+>> +}
+>> +
+>> +static void __exit ufshcd_core_exit(void)
+>> +{
+>> +       ufs_debugfs_exit();
+>> +}
+> 
+> Hi, Adrian
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/libiscsi.c | 68 ++++++++++++++++++++++++++++++++++---------------
- include/scsi/libiscsi.h |  3 ---
- 2 files changed, 48 insertions(+), 23 deletions(-)
+Thanks for looking at the patch.
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 6516900..b902043 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -696,11 +696,10 @@ static int iscsi_prep_mgmt_task(struct iscsi_conn *conn,
- }
- 
- static struct iscsi_task *
--__iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
-+iscsi_alloc_mgmt_task(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
- 		      char *data, uint32_t data_size)
- {
- 	struct iscsi_session *session = conn->session;
--	struct iscsi_host *ihost = shost_priv(session->host);
- 	uint8_t opcode = hdr->opcode & ISCSI_OPCODE_MASK;
- 	struct iscsi_task *task;
- 	itt_t itt;
-@@ -784,25 +783,50 @@ static int iscsi_prep_mgmt_task(struct iscsi_conn *conn,
- 						   task->conn->session->age);
- 	}
- 
--	if (unlikely(READ_ONCE(conn->ping_task) == INVALID_SCSI_TASK))
--		WRITE_ONCE(conn->ping_task, task);
-+	return task;
-+
-+free_task:
-+	iscsi_put_task(task);
-+	return NULL;
-+}
-+
-+static int iscsi_send_mgmt_task(struct iscsi_task *task)
-+{
-+	struct iscsi_conn *conn = task->conn;
-+	struct iscsi_session *session = conn->session;
-+	struct iscsi_host *ihost = shost_priv(conn->session->host);
-+	int rc = 0;
- 
- 	if (!ihost->workq) {
--		if (iscsi_prep_mgmt_task(conn, task))
--			goto free_task;
-+		rc = iscsi_prep_mgmt_task(conn, task);
-+		if (rc)
-+			return rc;
- 
--		if (session->tt->xmit_task(task))
--			goto free_task;
-+		rc = session->tt->xmit_task(task);
-+		if (rc)
-+			return rc;
- 	} else {
- 		list_add_tail(&task->running, &conn->mgmtqueue);
- 		iscsi_conn_queue_work(conn);
- 	}
- 
--	return task;
-+	return 0;
-+}
- 
--free_task:
--	iscsi_put_task(task);
--	return NULL;
-+static int __iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
-+				 char *data, uint32_t data_size)
-+{
-+	struct iscsi_task *task;
-+	int rc;
-+
-+	task = iscsi_alloc_mgmt_task(conn, hdr, data, data_size);
-+	if (!task)
-+		return -ENOMEM;
-+
-+	rc = iscsi_send_mgmt_task(task);
-+	if (rc)
-+		iscsi_put_task(task);
-+	return rc;
- }
- 
- int iscsi_conn_send_pdu(struct iscsi_cls_conn *cls_conn, struct iscsi_hdr *hdr,
-@@ -813,7 +837,7 @@ int iscsi_conn_send_pdu(struct iscsi_cls_conn *cls_conn, struct iscsi_hdr *hdr,
- 	int err = 0;
- 
- 	spin_lock_bh(&session->frwd_lock);
--	if (!__iscsi_conn_send_pdu(conn, hdr, data, data_size))
-+	if (__iscsi_conn_send_pdu(conn, hdr, data, data_size))
- 		err = -EPERM;
- 	spin_unlock_bh(&session->frwd_lock);
- 	return err;
-@@ -988,7 +1012,6 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
- 	if (!rhdr) {
- 		if (READ_ONCE(conn->ping_task))
- 			return -EINVAL;
--		WRITE_ONCE(conn->ping_task, INVALID_SCSI_TASK);
- 	}
- 
- 	memset(&hdr, 0, sizeof(struct iscsi_nopout));
-@@ -1002,10 +1025,18 @@ static int iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
- 	} else
- 		hdr.ttt = RESERVED_ITT;
- 
--	task = __iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)&hdr, NULL, 0);
--	if (!task) {
-+	task = iscsi_alloc_mgmt_task(conn, (struct iscsi_hdr *)&hdr, NULL, 0);
-+	if (!task)
-+		return -ENOMEM;
-+
-+	if (!rhdr)
-+		WRITE_ONCE(conn->ping_task, task);
-+
-+	if (iscsi_send_mgmt_task(task)) {
- 		if (!rhdr)
- 			WRITE_ONCE(conn->ping_task, NULL);
-+		iscsi_put_task(task);
-+
- 		iscsi_conn_printk(KERN_ERR, conn, "Could not send nopout\n");
- 		return -EIO;
- 	} else if (!rhdr) {
-@@ -1840,11 +1871,8 @@ static int iscsi_exec_task_mgmt_fn(struct iscsi_conn *conn,
- 	__must_hold(&session->frwd_lock)
- {
- 	struct iscsi_session *session = conn->session;
--	struct iscsi_task *task;
- 
--	task = __iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)hdr,
--				      NULL, 0);
--	if (!task) {
-+	if (__iscsi_conn_send_pdu(conn, (struct iscsi_hdr *)hdr, NULL, 0)) {
- 		spin_unlock_bh(&session->frwd_lock);
- 		iscsi_conn_printk(KERN_ERR, conn, "Could not send TMF.\n");
- 		iscsi_conn_failure(conn, ISCSI_ERR_CONN_FAILED);
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 3fa7d90..2bc9bf5 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -142,9 +142,6 @@ struct iscsi_task {
- 	void			*dd_data;	/* driver/transport data */
- };
- 
--/* invalid scsi_task pointer */
--#define	INVALID_SCSI_TASK	(struct iscsi_task *)-1l
--
- static inline int iscsi_task_has_unsol_data(struct iscsi_task *task)
- {
- 	return task->unsol_r2t.data_length > task->unsol_r2t.sent;
--- 
-1.8.3.1
+> 
+> The purpose of patch is acceptable, but I don't know why you choose
+> using ufshcd_core_* here. 
+
+Do you mean you would like a different function name?  'ufshcd_init' is used
+already.  The module is called ufshcd-core, so ufshcd_core_* seems appropriate.
+
+> Also. I don't know if module_init()  is a proper way here.
+
+Can you be more specific?  It is normal to do module initialization in
+module_init().
+
+However I do see a problem.  When builtin, initcalls are ordered according
+to link order, but the Makefile does not have ufshcd-core at the top i.e.
+
+$ cat drivers/scsi/ufs/Makefile
+# SPDX-License-Identifier: GPL-2.0
+# UFSHCD makefile
+obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) += tc-dwc-g210-pci.o ufshcd-dwc.o
+tc-dwc-g210.o
+obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) += tc-dwc-g210-pltfrm.o ufshcd-dwc.o
+tc-dwc-g210.o
+obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) += cdns-pltfrm.o
+obj-$(CONFIG_SCSI_UFS_QCOM) += ufs_qcom.o
+ufs_qcom-y += ufs-qcom.o
+ufs_qcom-$(CONFIG_SCSI_UFS_CRYPTO) += ufs-qcom-ice.o
+obj-$(CONFIG_SCSI_UFS_EXYNOS) += ufs-exynos.o
+obj-$(CONFIG_SCSI_UFSHCD) += ufshcd-core.o
+ufshcd-core-y                           += ufshcd.o ufs-sysfs.o
+ufshcd-core-$(CONFIG_DEBUG_FS)          += ufs-debugfs.o
+ufshcd-core-$(CONFIG_SCSI_UFS_BSG)      += ufs_bsg.o
+ufshcd-core-$(CONFIG_SCSI_UFS_CRYPTO) += ufshcd-crypto.o
+obj-$(CONFIG_SCSI_UFSHCD_PCI) += ufshcd-pci.o
+obj-$(CONFIG_SCSI_UFSHCD_PLATFORM) += ufshcd-pltfrm.o
+obj-$(CONFIG_SCSI_UFS_HISI) += ufs-hisi.o
+obj-$(CONFIG_SCSI_UFS_MEDIATEK) += ufs-mediatek.o
+obj-$(CONFIG_SCSI_UFS_TI_J721E) += ti-j721e-ufs.o
+
+Should be:
+
+# SPDX-License-Identifier: GPL-2.0
+# UFSHCD makefile
+# Order here is important. ufshcd-core must initialize first.
+ufshcd-core-y                           += ufshcd.o ufs-sysfs.o
+ufshcd-core-$(CONFIG_DEBUG_FS)          += ufs-debugfs.o
+ufshcd-core-$(CONFIG_SCSI_UFS_BSG)      += ufs_bsg.o
+ufshcd-core-$(CONFIG_SCSI_UFS_CRYPTO) += ufshcd-crypto.o
+obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) += tc-dwc-g210-pci.o ufshcd-dwc.o
+tc-dwc-g210.o
+obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) += tc-dwc-g210-pltfrm.o ufshcd-dwc.o
+tc-dwc-g210.o
+obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) += cdns-pltfrm.o
+obj-$(CONFIG_SCSI_UFS_QCOM) += ufs_qcom.o
+ufs_qcom-y += ufs-qcom.o
+ufs_qcom-$(CONFIG_SCSI_UFS_CRYPTO) += ufs-qcom-ice.o
+obj-$(CONFIG_SCSI_UFS_EXYNOS) += ufs-exynos.o
+obj-$(CONFIG_SCSI_UFSHCD) += ufshcd-core.o
+obj-$(CONFIG_SCSI_UFSHCD_PCI) += ufshcd-pci.o
+obj-$(CONFIG_SCSI_UFSHCD_PLATFORM) += ufshcd-pltfrm.o
+obj-$(CONFIG_SCSI_UFS_HISI) += ufs-hisi.o
+obj-$(CONFIG_SCSI_UFS_MEDIATEK) += ufs-mediatek.o
+obj-$(CONFIG_SCSI_UFS_TI_J721E) += ti-j721e-ufs.o
+
+What do you think?
+
+> 
+> thanks,
+> Bean
+> 
+>>
+>> n
+>> +
+>> +module_init(ufshcd_core_init);
+>> +module_exit(ufshcd_core_exit)
+> 
 
