@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D407A2DCC8F
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EDA2DCC97
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbgLQGnW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Dec 2020 01:43:22 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:44584 "EHLO
+        id S1726983AbgLQGn1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Dec 2020 01:43:27 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:44624 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbgLQGnT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:43:19 -0500
+        with ESMTP id S1726569AbgLQGnU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:43:20 -0500
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6UK1U135130;
-        Thu, 17 Dec 2020 06:42:28 GMT
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6Uf0Z135223;
+        Thu, 17 Dec 2020 06:42:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=ONAZO3j/OxUqtmYOKhNu0VOSf1e1ANVyV1Lm1HlJrRs=;
- b=jmfEhgw5BZDy2dTSjvs0QaGLQEQXZb+HelVhRD6TZN/tlyL8mpa2zgqP0V8iG6LnEUvP
- +B/gUAfEzvfktAfw0FF+96gLH6Dz7XMnadECGiPPo1f/c2aabsR+P1lZkiEcM6Q3v2rj
- DK4q1lXIHtyNF2SdkPSc4pRl9oL/gt7dg6ffy13U3aPICvLnFKh9rj23eM61YKXAAq9/
- gKhjBJlAhKfm51+Z6+ZghiLehkKGx6kcfdhTkhm1MWrmE+HqGFEeWhF8oHAjTE+xyxkO
- bI4E5QiaLUoOubjvrocpRJuzOzlqklyv0hk95lh7xr/givU67G9P+I1as/3wN4LsOmAf +A== 
+ bh=sFBS8byEQv4BOZXnXQuxpIiDFfRauaoUgkk24sTKi+U=;
+ b=GqfqaVktERGnylEk5wGxlFFNClSLl5ydic6WS9jz/b9DMIIMeE5+1hmHBpLJUGNDO38f
+ Jv2PamqC5po04HRybfCFlU7ICnKRmplYVGHlsTi8VMBzfFVUiARVncxnjBKLAtpy5rFA
+ E5hZIJaGLLc7W9RSnMMW8F1SOWPMuXnLzkSs+x9P42IpRqbArs6E/U3EpmeoxUuxhN1/
+ j89v09yz91l+W/Ixf6K8swyWpTHRdwo+BpoT8FeyyJyZpvnaCat8v7PJtG2hu95D1fvc
+ VmwsLCLWXxmwX48QB1FOdsHMfpAPl5swdlSiZO4+bPVzp1gTvLizVAdl3SGbwBV8rfSd aA== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 35cn9rkvqh-1
+        by userp2130.oracle.com with ESMTP id 35cn9rkvqm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Dec 2020 06:42:27 +0000
+        Thu, 17 Dec 2020 06:42:29 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VCsQ020005;
-        Thu, 17 Dec 2020 06:42:27 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 35e6esvfru-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VC31020026;
+        Thu, 17 Dec 2020 06:42:29 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 35e6esvfsg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Dec 2020 06:42:27 +0000
+        Thu, 17 Dec 2020 06:42:29 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0BH6gQNd018177;
-        Thu, 17 Dec 2020 06:42:26 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0BH6gRep021258;
+        Thu, 17 Dec 2020 06:42:27 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 16 Dec 2020 22:42:26 -0800
+        with ESMTP ; Wed, 16 Dec 2020 22:42:27 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
         mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
         varun@chelsio.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, jejb@linux.ibm.com
-Subject: [PATCH 07/22] libiscsi: drop frwd lock for session state
-Date:   Thu, 17 Dec 2020 00:41:57 -0600
-Message-Id: <1608187332-4434-8-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 08/22] libiscsi: add task prealloc/free callouts
+Date:   Thu, 17 Dec 2020 00:41:58 -0600
+Message-Id: <1608187332-4434-9-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
 References: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
@@ -65,99 +65,91 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This drops the frwd lock for the session state checks in queuecommand.
-Like with the transport class case, we only need it as a hint since when
-the session is cleaned up we will block the session which flushes the
-queues, and then we clean up all running IO. So the locking just prevents
-cleaning up extra cmds.
-
-It is still needed:
-1. when accessing suspend_tx in queuecomand because drivers that
-implement ep_disconnect will set that bit from disconnect (called
-before stop) and expect that no new commands will be queued to it.
-Note that the comment for this was wrong and that is fixed in this
-patch.
-
-2. the list addition for the drivers that use the iscsi xmit wq.
+Some drivers need to allocate resources that functions
+like dma_alloc* that can't be allocated with the iscsi_task struct.
+The next patches have the iscsi drivers use the block/scsi mq cmd
+allocators for scsi tasks and the drivers can use the init_cmd_priv
+callout to allocate these extra resource for scsi tasks there. For
+mgmt tasks, drivers can use the callouts added in this patch.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/scsi/libiscsi.c | 10 +++++++---
- include/scsi/libiscsi.h |  5 +++--
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ drivers/scsi/libiscsi.c             | 21 +++++++++++++++++++--
+ include/scsi/scsi_transport_iscsi.h |  5 +++++
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 012b7ea..65bcdcc 100644
+index 65bcdcc..9833fc3 100644
 --- a/drivers/scsi/libiscsi.c
 +++ b/drivers/scsi/libiscsi.c
-@@ -1702,7 +1702,6 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 
- 	cls_session = starget_to_session(scsi_target(sc->device));
- 	session = cls_session->dd_data;
--	spin_lock_bh(&session->frwd_lock);
- 
- 	reason = iscsi_session_chkready(cls_session);
- 	if (reason) {
-@@ -1759,7 +1758,9 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 		goto fault;
+@@ -2904,10 +2904,15 @@ struct iscsi_cls_session *
+ 		task->itt = cmd_i;
+ 		task->state = ISCSI_TASK_FREE;
+ 		INIT_LIST_HEAD(&task->running);
++
++		if (iscsit->alloc_task_priv) {
++			if (iscsit->alloc_task_priv(session, task))
++				goto free_task_priv;
++		}
  	}
  
-+	spin_lock_bh(&session->frwd_lock);
- 	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx)) {
-+		spin_unlock_bh(&session->frwd_lock);
- 		reason = FAILURE_SESSION_IN_RECOVERY;
- 		sc->result = DID_REQUEUE << 16;
- 		goto fault;
-@@ -1767,6 +1768,7 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
+ 	if (!try_module_get(iscsit->owner))
+-		goto module_get_fail;
++		goto free_task_priv;
  
- 	task = iscsi_alloc_task(conn, sc);
- 	if (!task) {
-+		spin_unlock_bh(&session->frwd_lock);
- 		reason = FAILURE_OOM;
- 		goto reject;
- 	}
-@@ -1801,21 +1803,23 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 	return 0;
+ 	if (iscsi_add_session(cls_session, id))
+ 		goto cls_session_fail;
+@@ -2916,7 +2921,12 @@ struct iscsi_cls_session *
  
- prepd_reject:
-+	spin_unlock_bh(&session->frwd_lock);
+ cls_session_fail:
+ 	module_put(iscsit->owner);
+-module_get_fail:
++free_task_priv:
++	for (cmd_i--; cmd_i >= 0; cmd_i--) {
++		if (iscsit->free_task_priv)
++			iscsit->free_task_priv(session, session->cmds[cmd_i]);
++	}
 +
- 	spin_lock_bh(&session->back_lock);
- 	iscsi_complete_task(task, ISCSI_TASK_REQUEUE_SCSIQ);
- 	spin_unlock_bh(&session->back_lock);
- reject:
--	spin_unlock_bh(&session->frwd_lock);
- 	ISCSI_DBG_SESSION(session, "cmd 0x%x rejected (%d)\n",
- 			  sc->cmnd[0], reason);
- 	return SCSI_MLQUEUE_TARGET_BUSY;
- 
- prepd_fault:
-+	spin_unlock_bh(&session->frwd_lock);
+ 	iscsi_pool_free(&session->cmdpool);
+ cmdpool_alloc_fail:
+ 	iscsi_free_session(cls_session);
+@@ -2935,6 +2945,13 @@ void iscsi_session_teardown(struct iscsi_cls_session *cls_session)
+ 	struct iscsi_session *session = cls_session->dd_data;
+ 	struct module *owner = cls_session->transport->owner;
+ 	struct Scsi_Host *shost = session->host;
++	int cmd_i;
 +
- 	spin_lock_bh(&session->back_lock);
- 	iscsi_complete_task(task, ISCSI_TASK_REQUEUE_SCSIQ);
- 	spin_unlock_bh(&session->back_lock);
- fault:
--	spin_unlock_bh(&session->frwd_lock);
- 	ISCSI_DBG_SESSION(session, "iscsi: cmd 0x%x is not queued (%d)\n",
- 			  sc->cmnd[0], reason);
- 	scsi_set_resid(sc, scsi_bufflen(sc));
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 287e46b..2f99ad6 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -326,8 +326,9 @@ struct iscsi_session {
- 	 * can enclose the mutual exclusion zone protected by the backward lock
- 	 * but not vice versa.
- 	 */
--	spinlock_t		frwd_lock;	/* protects session state, *
--						 * cmdsn and session       *
-+	spinlock_t		frwd_lock;	/* protects session state  *
-+						 * in the eh paths, cmdsn  *
-+						 * suspend bit and session *
- 						 * resources:              *
- 						 * - cmdpool kfifo_out ,   *
- 						 * - mgmtpool, queues	   */
++	for (cmd_i = 0; cmd_i < session->cmds_max; cmd_i++) {
++		if (session->tt->free_task_priv)
++			session->tt->free_task_priv(session,
++						    session->cmds[cmd_i]);
++	}
+ 
+ 	iscsi_pool_free(&session->cmdpool);
+ 
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index 8a26a2f..cdd358e 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -22,6 +22,7 @@
+ struct scsi_cmnd;
+ struct iscsi_cls_conn;
+ struct iscsi_conn;
++struct iscsi_session;
+ struct iscsi_task;
+ struct sockaddr;
+ struct iscsi_iface;
+@@ -106,6 +107,10 @@ struct iscsi_transport {
+ 	void (*get_stats) (struct iscsi_cls_conn *conn,
+ 			   struct iscsi_stats *stats);
+ 
++	int (*alloc_task_priv) (struct iscsi_session *session,
++				struct iscsi_task *task);
++	void (*free_task_priv) (struct iscsi_session *session,
++				struct iscsi_task *task);
+ 	int (*init_task) (struct iscsi_task *task);
+ 	int (*xmit_task) (struct iscsi_task *task);
+ 	void (*cleanup_task) (struct iscsi_task *task);
 -- 
 1.8.3.1
 
