@@ -2,92 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CBE2DCC8E
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C122DCCA2
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726503AbgLQGnR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Dec 2020 01:43:17 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:44514 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbgLQGnP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:43:15 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6UL0C135139;
-        Thu, 17 Dec 2020 06:42:24 GMT
+        id S1727025AbgLQGpP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Dec 2020 01:45:15 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:49124 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725988AbgLQGpO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:45:14 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6TuZ9164273;
+        Thu, 17 Dec 2020 06:44:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id; s=corp-2020-01-29;
- bh=SIIF9YGqi1RQkg3FP8eRC5MLJVW3aqdS1KQCsPxTg1A=;
- b=C2WrjbKbtvks9PlxoI8wAOxgg/vQrdWPBqQgblC7vEQORqQUzy16tcUGAC1G/6PGikyU
- RLw577eGTFKtgaBKrkCF1QtYhnwqrL3XNQn6uKw/qDpQYb76dzENjtF9o6itYQOyj7ZU
- +tvwi1XG8t7piEt8k3vYS0TDBPj1YLw1qco+AR3Hx7doRQkCvc625qTGWRubC5c10uJo
- RD7PBs6x4+6usmRoGrb+zY9WPP4odSC7u8gL45ix6fPOedXBZTnY1VIdPS3hAitQeq0P
- 5Q/QqXyqeIUMaPAszHG0cV5fzYzsZyvJKH0zapa9jpjshB+M4hMbQQ7fdTEmm+GipFZL hw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 35cn9rkvq8-1
+ date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=PMi4j0kU8U3BQem9TfgoSNxAN0JzFCnc5oDmAJqyptI=;
+ b=oK4klIhGg0OHLYHjxAFhaEKyXUmev64KPiWuA6XdjZ2PUr8zrNEPN8ljMfbFK2QmM262
+ Vt1pOdaV9tn6roqn9sQt26xIe3E2o27g3q5Uh4Vck79V4qd2mPhmn/iHIvsa5vEVsloR
+ Az4Prfi9bOiTvXJebUp/tI+QiQHFib31bHQJ04OV48UkImP99EQxLmADFTNCTplA8Yk/
+ VChHNS0jF7ryMlzI+QiukKqchJlvtTJgKiMBGMBkqRMC0otXhIsoqlaOnZxiiXCFecvH
+ Vl2+vj6Bo83RCaPioEBpp3xyzhvnXL8iZWwLyRCe2FFF98DL4tJFhXCvv8V+kJo0WidR dg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 35cntmbuj8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Dec 2020 06:42:24 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VHTb143569;
+        Thu, 17 Dec 2020 06:44:24 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VCng020040;
         Thu, 17 Dec 2020 06:42:24 GMT
 Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 35d7eqfaap-1
+        by aserp3020.oracle.com with ESMTP id 35e6esvfqn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 17 Dec 2020 06:42:24 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BH6gK5F006504;
-        Thu, 17 Dec 2020 06:42:20 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BH6gLSa006506;
+        Thu, 17 Dec 2020 06:42:21 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 16 Dec 2020 22:42:20 -0800
+        with ESMTP ; Wed, 16 Dec 2020 22:42:21 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
         mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
         varun@chelsio.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, jejb@linux.ibm.com
-Subject: [RFC PATCH 00/22 V3] iscsi: lock clean ups
-Date:   Thu, 17 Dec 2020 00:41:50 -0600
-Message-Id: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 01/22] libiscsi: fix iscsi_prep_scsi_cmd_pdu error handling
+Date:   Thu, 17 Dec 2020 00:41:51 -0600
+Message-Id: <1608187332-4434-2-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
+References: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
- suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
+ bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2012170047
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0
- malwarescore=0 priorityscore=1501 phishscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012170047
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 mlxscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 impostorscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012170047
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The following patches made over Linus's current tree cleanup the
-locking in libiscsi so we again, for the main SCSI IO path, have the
-frwd lock only used in the xmit/queue path and the back lock used in
-the completion path and no taskqueuelock used in all the paths. The
-EH paths still use both the frwd/back lock though.
+If iscsi_prep_scsi_cmd_pdu fails we try to add it back to the
+cmdqueue, but we leave it partially setup. We don't have functions
+that can undo the pdu and init task setup. We only have cleanup_task
+which can cleanup both parts. So this has us just fail the cmd and
+go through the standard cleanup routine and then have scsi-ml retry
+it like is done when it fails in the queuecommand path.
 
-These patches are still not ready for merging. I have now tested
-iscsi_tcp, ib_iser, and be2iscsi. Manish tested qedi but it failed.
-However, this version should work for qedi and bnx2i's normal IO
-path, but there are still some questions for qedi in patch 18
-"qedi: prep driver for switch to blk tags".
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+---
+ drivers/scsi/libiscsi.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-V3:
-- Fix iscsi task double free that occurs with bnx2i and qedi.
-- Use blk tagging for scsi cmd lookups.
-- Rebase over patches that fixed the timeout/EH use after free
-race.
-
-V2:
-- Fix issue where we used the back lock to make sure all recv
-completion paths saw the window reopened falg.
-- Fix ping_task path, so it accounts for send/completion race Lee
-had fixed.
-- Fix bug hit with qedi and bnx2i during testing where I forgot to
-allow this drivers to preallocate mgmt task resources.
-- Tested ib_iser and be2iscsi.
-
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index f9314f1..ee0786b 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -1532,14 +1532,9 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
+ 		}
+ 		rc = iscsi_prep_scsi_cmd_pdu(conn->task);
+ 		if (rc) {
+-			if (rc == -ENOMEM || rc == -EACCES) {
+-				spin_lock_bh(&conn->taskqueuelock);
+-				list_add_tail(&conn->task->running,
+-					      &conn->cmdqueue);
+-				conn->task = NULL;
+-				spin_unlock_bh(&conn->taskqueuelock);
+-				goto done;
+-			} else
++			if (rc == -ENOMEM || rc == -EACCES)
++				fail_scsi_task(conn->task, DID_IMM_RETRY);
++			else
+ 				fail_scsi_task(conn->task, DID_ABORT);
+ 			spin_lock_bh(&conn->taskqueuelock);
+ 			continue;
+-- 
+1.8.3.1
 
