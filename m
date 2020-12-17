@@ -2,57 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07ADC2DCC9F
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC32A2DCC9E
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Dec 2020 07:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbgLQGnV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Dec 2020 01:43:21 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:47662 "EHLO
+        id S1726580AbgLQGnU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Dec 2020 01:43:20 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:47652 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbgLQGnR (ORCPT
+        with ESMTP id S1726396AbgLQGnR (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Dec 2020 01:43:17 -0500
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6Ttwv164261;
-        Thu, 17 Dec 2020 06:42:26 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6TrrL164257;
+        Thu, 17 Dec 2020 06:42:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=rkx9mmw3ZFDugBiaDjfrKsHPT24kSDN8MswAMrDg9XM=;
- b=w61ZsbSGpDyOL6ZQKpff2v+XrztNzq60Qji9bQmHm+YVAMkLERtQk+HE8EhenL87b1pb
- BKS7uBIGJUeWpttsDJY3psp5tm7aONxMxGKWhrcg44wk8UuFhfUJ/bq6Hb6xVEHPggfD
- k0alxnt+hp1aEywAq3rXGy/EDcXD9lCKAFOCjKpCqKG+CBMwyG5MIlQ0BzN1klv4g9Mp
- Osd0XlRFXX1NJs14g7c5D7NjfWccJFTMb0CJSrVnwBiNu290crKhG2GG4xNBNO1JoTeC
- 64rMGjv26V8oGusvmHWA25W8R0znDkbB9o7CTkexEuRbkzHtu1eeijPxG1JF/OX7is9s CQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 35cntmbudn-1
+ bh=up1FB0VaxJd7CcKaOce0cLFTurd/hpj+G7LtFqauk2Y=;
+ b=zUvuVid+uiEkh4INDwy8de1hZY2fA1Fs54fpgGl+LdhgyyTJ6t9wGiZ8Y0U4Iz+zuhh0
+ KegJFnisvGr9ZE4jAdgjOe/E0QyaIJfp0/mOqhsKFSi7ciHZBbWJwRIHVvIJorhERcqT
+ yODxoGTOxaiDOzYfakzzvh1YANCxsIt4XDaUfsa3y7QBBQMX5aJDxaOjv5OHISQUZyhw
+ 06UmaEg2HIUNj6i6G3iB+HcQqY+TIDR1pfEjY5jmmZc8CnD0ug9X17mdEMsisZqpDAzc
+ MkMXG7M3UH2Exr8/Vw1tjyJ9J6w63QUxjyQ9hA1Q0Z90vLqoBJqj0+tZJVnDlJlEQB/q vg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 35cntmbudm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Dec 2020 06:42:26 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VHlg143597;
+        Thu, 17 Dec 2020 06:42:25 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BH6VCVC019997;
         Thu, 17 Dec 2020 06:42:25 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 35d7eqfab8-1
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 35e6esvfr5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 17 Dec 2020 06:42:25 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BH6gOdY006521;
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0BH6gOkS018113;
         Thu, 17 Dec 2020 06:42:24 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 16 Dec 2020 22:42:23 -0800
+        with ESMTP ; Wed, 16 Dec 2020 22:42:24 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
         mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
         varun@chelsio.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, jejb@linux.ibm.com
-Subject: [PATCH 04/22] qla4xxx: use iscsi_is_session_online
-Date:   Thu, 17 Dec 2020 00:41:54 -0600
-Message-Id: <1608187332-4434-5-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 05/22] iscsi class: drop session lock in iscsi_session_chkready
+Date:   Thu, 17 Dec 2020 00:41:55 -0600
+Message-Id: <1608187332-4434-6-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
 References: <1608187332-4434-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
- suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
+ bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2012170047
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9837 signatures=668683
@@ -65,33 +65,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-__qla4xxx_is_chap_active just wants to know if a session is online and
-does not care about why it's not, so this has it use
-iscsi_is_session_online.
-
-This is not a bug now, but the next patch changes the behavior of
-iscsi_session_chkready so this patch just prepares the driver for that
-change.
+The session lock in iscsi_session_chkready is not needed because when we
+transition from logged into to another state we will blocked and/or
+remove the devices under the session, so no new IO will be sent the
+drivers after the block/remove. IO that races with the block/removal is
+cleaned up by the drivers when it handles all outstanding IO, so this
+just added an extra lock in the main IO path. This patch removes the
+lock like other transport classes.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Reviewed-by: Lee Duncan <lduncan@suse.com>
 ---
- drivers/scsi/qla4xxx/ql4_os.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/scsi_transport_iscsi.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 2c23b69..6996942 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -844,7 +844,7 @@ static int __qla4xxx_is_chap_active(struct device *dev, void *data)
- 	sess = cls_session->dd_data;
- 	ddb_entry = sess->dd_data;
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 2eb3e4f..e9ad04a 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -1701,10 +1701,8 @@ static const char *iscsi_session_state_name(int state)
  
--	if (iscsi_session_chkready(cls_session))
-+	if (iscsi_is_session_online(cls_session))
- 		goto exit_is_chap_active;
+ int iscsi_session_chkready(struct iscsi_cls_session *session)
+ {
+-	unsigned long flags;
+ 	int err;
  
- 	if (ddb_entry->chap_tbl_idx == *chap_tbl_idx)
+-	spin_lock_irqsave(&session->lock, flags);
+ 	switch (session->state) {
+ 	case ISCSI_SESSION_LOGGED_IN:
+ 		err = 0;
+@@ -1719,7 +1717,6 @@ int iscsi_session_chkready(struct iscsi_cls_session *session)
+ 		err = DID_NO_CONNECT << 16;
+ 		break;
+ 	}
+-	spin_unlock_irqrestore(&session->lock, flags);
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(iscsi_session_chkready);
 -- 
 1.8.3.1
 
