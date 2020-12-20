@@ -2,62 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 572922DF59C
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Dec 2020 15:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6A72DF6CC
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Dec 2020 21:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727426AbgLTOKs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Dec 2020 09:10:48 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:56032 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726751AbgLTOKs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 09:10:48 -0500
-X-UUID: 8a4f1b41e08b49dcbc0bb46e66520857-20201220
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=9INxK3G/ANihjUO6Tfm86dtf3DKTzfm6jVNVTXEY5XM=;
-        b=TvzshIaocTWoS09acA4ppNDtqAkYblbOSjwvJhQ9FtCiyADfP4lcjVQqSrHygWNrLjrGgmFc2nPgtbDh6dP/QwxEYXUugoVp9Pm6WOS6rLFMf91Gbkgd5I5fPypHx0kYXYkrR5a/i+weLvVaHj8TwF3pkWpcyuPWD59STiRt8WY=;
-X-UUID: 8a4f1b41e08b49dcbc0bb46e66520857-20201220
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1492412766; Sun, 20 Dec 2020 22:10:00 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 20 Dec
- 2020 22:09:59 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 20 Dec 2020 22:09:56 +0800
-Message-ID: <1608473398.10163.41.camel@mtkswgap22>
-Subject: Re: [RFC PATCH v1] ufs: relocate flush of exceptional event
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Kiwoong Kim <kwmad.kim@samsung.com>
-CC:     <linux-scsi@vger.kernel.org>, <alim.akhtar@samsung.com>,
-        <avri.altman@wdc.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
-        <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
-        <bvanassche@acm.org>, <grant.jung@samsung.com>,
-        <sc.suh@samsung.com>, <hy50.seo@samsung.com>,
-        <sh425.lee@samsung.com>, <bhoon95.kim@samsung.com>
-Date:   Sun, 20 Dec 2020 22:09:58 +0800
-In-Reply-To: <1608360039-16390-1-git-send-email-kwmad.kim@samsung.com>
-References: <CGME20201219065127epcas2p4ee350f78ba75619dfd502dbb2e694a9b@epcas2p4.samsung.com>
-         <1608360039-16390-1-git-send-email-kwmad.kim@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1727410AbgLTUhh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Dec 2020 15:37:37 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:35038 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727130AbgLTUhh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 15:37:37 -0500
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1608496610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mVVnukOOl2W/Eq1oKRWiFcFrNnar7Wbbj/7qOdPasNo=;
+        b=TIqrOQWMMdVka7aYTf6oXbf5HRP2W5AQSGY/p7VY2oVx37VYJijfq2J/APrR4QiyrhDzUK
+        8DpY1lS9/TDOW7SBFnMreKIZjCSHlTreu7sUWwMY3kR4PRtnWGPNL0+R6mt51KTYn2wML/
+        L/fHhGAwieYO5PKp1Q18khOmtJpMX05N+oFWNErA6bugLgZ5z0Zv0qYkG5Hd+TmmwowZlH
+        oWi5xBIsKzhNhylNPqdSf5D8Yxx5zs5i804Q/HO5VJd0GQMy1cllMRqDIntx9RgDTS65HO
+        2j2HCEcRboTFm3rKm9w438YetQC+EoL3V1Fey2yQ6t7gh9bUuz2DxF1/3tEfHg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1608496610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mVVnukOOl2W/Eq1oKRWiFcFrNnar7Wbbj/7qOdPasNo=;
+        b=YJkFz5YU6TkGurJEH36ZcEPBXz9ywhW8o+C6ihQ4GCaFZd3NtZ2/493FtkbmmcYqbFRaPs
+        VGSVi3BCz/tr4TCw==
+To:     target-devel@vger.kernel.org
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ahmed S . Darwish" <a.darwish@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 0/6] scsi: target: Remove in_interrupt() usage.
+Date:   Sun, 20 Dec 2020 21:36:32 +0100
+Message-Id: <20201220203638.43615-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-T24gU2F0LCAyMDIwLTEyLTE5IGF0IDE1OjQwICswOTAwLCBLaXdvb25nIEtpbSB3cm90ZToNCj4g
-SSBmb3VuZCBvbmUgY2FzZSBhcyBmb2xsb3dzIGFuZCB0aGUgY3VycmVudCBmbHVzaA0KPiBsb2Nh
-dGlvbiBkb2Vzbid0IGd1YXJhbnRlZSBkaXNhYmxpbmcgQktPUFMgaW4gdGhlDQo+IGNhc2Ugb2Yg
-cmVxdXN0aW5nIGRldmljZSBwb3dlciBvZmYuDQo+IDEpIFRoZSBleGNlcHRpb25hbCBldmVudCBo
-YW5kbGVyIGlzIHF1ZXVlZC4NCj4gMikgdWZzIHN1c3BlbmQgc3RhcnRzIHdpdGggYSByZXF1ZXN0
-IG9mIGRldmljZSBwb3dlciBvZmYNCj4gMykgQktPUFMgaXMgZGlzYWJsZWQgaW4gdWZzIHN1c3Bl
-bmQNCj4gNCkgVGhlIHF1ZXVlZCB3b3JrIGZvciB0aGUgaGFuZGxlciBpcyBkb25lIGFuZCBCS09Q
-Uw0KPiBpcyBlbmFibGVkIGFnYWluLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogS2l3b29uZyBLaW0g
-PGt3bWFkLmtpbUBzYW1zdW5nLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFN0YW5sZXkgQ2h1IDxzdGFu
-bGV5LmNodUBtZWRpYXRlay5jb20+DQoNCg0K
+Folks,
 
+in the discussion about preempt count consistency across kernel
+configurations:
+
+ https://lore.kernel.org/r/20200914204209.256266093@linutronix.de/
+
+it was concluded that the usage of in_interrupt() and related context
+checks should be removed from non-core code.
+
+In the long run, usage of 'preemptible, in_*irq etc.' should be banned from
+driver code completely.
+
+This series addresses the target subsystem.
+Most of in_interrupt() usage is debugging. There is one function which
+either invokes wait_for_completion() or schedules a timer based on
+in_interrupt().
+
+Sebastian
