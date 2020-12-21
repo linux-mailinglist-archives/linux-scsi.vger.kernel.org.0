@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9637C2DF7B3
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 03:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11022DF7B2
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 03:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727477AbgLUCio (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Dec 2020 21:38:44 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:39882 "EHLO
+        id S1727328AbgLUCie (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Dec 2020 21:38:34 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:39520 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726550AbgLUCio (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 21:38:44 -0500
+        with ESMTP id S1726550AbgLUCie (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 21:38:34 -0500
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2VBUJ087338;
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2UcIX087211;
         Mon, 21 Dec 2020 02:37:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=4Hw6B0msMp6SoSnumOr1CgssFJCEMvswu+0H5lRPs+4=;
- b=B9kizJqO22YHeHh0Kl12wSnfBc25Vo7G6yPg3xgdFxXjRVmDf1vozMsU+aKnXnsrIp3Q
- RxebOPpeMa/enuLmTUMAHBZBrGkMYK3x7Cy08XymFdUP+LodIQ87SSQyHHig5SpuFj7P
- Y7nmJuS+2Oec7ZymTfSE6aoOGUJ14XVI+qQf/RtBH483KLClIwe2aYqFGwheC21nhUNF
- 36xZn7nOX5h2bYwP2IHGjMIlTc2LTWIc9LL7E8IcNnu9vS7/2vIJ/RAnH7+C07sRkEyd
- S553oO1OsTNx9wZXtoelRTo0vqdhd4LzNRIdmlbmXr8jlOtUAl6c01XX6Lk+s0Q9Rtvx sA== 
+ bh=smBJhWpgSaycTPReHIyPVkMbzrWv1nXl9Pj3Ks2iQq0=;
+ b=Bk50hzHbO4DwHP8b3lIB4GkaRjGCE7Rpo1tikJehGmQ4HVf2VL7Z3gbgBwmY07MvHUC1
+ A/5KR12RXFGEKxXfxi+vxZB2ONDbc4XJ6yi5BvvA/aGUMW/M/tLy3KQDdFFHyXxPfCJn
+ YQMi8WBt0/7n5RexXb65nLmGbjSqRcL6LxEOd44PCM+MsFLBlSuRNdVD4uZOHipUGsYR
+ aRXR9QJF23U1QBSbveyGfmIOS+pn2EfoWwsWsRKxj5HDHF+XRN5MVpqC+R9w1v8iZxVf
+ TsBslxab4A6ITnRTkUTa9E2O3tJDCzx3kGOSC6RCngCpJdQhMHfb4yGalDDK1AFQHNBs tA== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 35h8xquaug-1
+        by userp2130.oracle.com with ESMTP id 35h8xquauj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Dec 2020 02:37:30 +0000
+        Mon, 21 Dec 2020 02:37:31 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2ZUBr081666;
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2ZTwP081534;
         Mon, 21 Dec 2020 02:37:30 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 35hu3kugct-1
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 35hu3kugcy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 21 Dec 2020 02:37:30 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0BL2bP5T009374;
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BL2bQ8H013175;
         Mon, 21 Dec 2020 02:37:26 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 20 Dec 2020 18:37:25 -0800
+        with ESMTP ; Sun, 20 Dec 2020 18:37:26 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
 Cc:     lutianxiong@huawei.com, linfeilong@huawei.com,
         liuzhiqiang26@huawei.com, haowenchao@huawei.com
-Subject: [PATCH 4/6 V3] libiscsi: add helper to calc max scsi cmds per session
-Date:   Sun, 20 Dec 2020 20:37:04 -0600
-Message-Id: <1608518226-30376-5-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 5/6 V3] iscsi_tcp: fix shost can_queue initialization
+Date:   Sun, 20 Dec 2020 20:37:05 -0600
+Message-Id: <1608518226-30376-6-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1608518226-30376-1-git-send-email-michael.christie@oracle.com>
 References: <1608518226-30376-1-git-send-email-michael.christie@oracle.com>
@@ -65,143 +65,62 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch just breaks out the code that calculates the number
-of scsi cmds that will be used for a scsi session. It also adds
-a check that we don't go over the host's can_queue value.
+We are setting the shost's can_queue after we add the host which is
+too late, because scsi-ml will have allocated the tag set based on
+the can_queue value at that time. This patch has us use the
+iscsi_host_get_max_scsi_cmds helper to figure out the number of
+scsi cmds, so we can set it properly. We should now not be limited
+to 128 cmds per session.
+
+It also fixes up the template can_queue so it reflects the max scsi
+cmds we can support like how other drivers work.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/scsi/libiscsi.c | 81 ++++++++++++++++++++++++++++++-------------------
- include/scsi/libiscsi.h |  2 ++
- 2 files changed, 51 insertions(+), 32 deletions(-)
+ drivers/scsi/iscsi_tcp.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 796465e..f1ade91 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -2648,6 +2648,51 @@ void iscsi_pool_free(struct iscsi_pool *q)
- }
- EXPORT_SYMBOL_GPL(iscsi_pool_free);
- 
-+int iscsi_host_get_max_scsi_cmds(struct Scsi_Host *shost,
-+				 uint16_t requested_cmds_max)
-+{
-+	int scsi_cmds, total_cmds = requested_cmds_max;
-+
-+	if (!total_cmds)
-+		total_cmds = ISCSI_DEF_XMIT_CMDS_MAX;
-+	/*
-+	 * The iscsi layer needs some tasks for nop handling and tmfs,
-+	 * so the cmds_max must at least be greater than ISCSI_MGMT_CMDS_MAX
-+	 * + 1 command for scsi IO.
-+	 */
-+	if (total_cmds < ISCSI_TOTAL_CMDS_MIN) {
-+		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue must be a power of two that is at least %d.\n",
-+		       total_cmds, ISCSI_TOTAL_CMDS_MIN);
-+		return -EINVAL;
-+	}
-+
-+	if (total_cmds > ISCSI_TOTAL_CMDS_MAX) {
-+		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue must be a power of 2 less than or equal to %d.\n",
-+		       requested_cmds_max, ISCSI_TOTAL_CMDS_MAX);
-+		total_cmds = ISCSI_TOTAL_CMDS_MAX;
-+	}
-+
-+	if (!is_power_of_2(total_cmds)) {
-+		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue must be a power of 2.\n",
-+		       total_cmds);
-+		total_cmds = rounddown_pow_of_two(total_cmds);
-+		if (total_cmds < ISCSI_TOTAL_CMDS_MIN)
-+			return -EINVAL;
-+		printk(KERN_INFO "iscsi: Rounding can_queue to %d.\n",
-+		       total_cmds);
-+	}
-+
-+	scsi_cmds = total_cmds - ISCSI_MGMT_CMDS_MAX;
-+	if (shost->can_queue && scsi_cmds > shost->can_queue) {
-+		scsi_cmds = shost->can_queue - ISCSI_MGMT_CMDS_MAX;
-+		printk(KERN_INFO "iscsi: requested cmds_max %u higher than driver limit. Using driver max %u\n",
-+		       requested_cmds_max, shost->can_queue);
-+	}
-+
-+	return scsi_cmds;
-+}
-+EXPORT_SYMBOL_GPL(iscsi_host_get_max_scsi_cmds);
-+
- /**
-  * iscsi_host_add - add host to system
-  * @shost: scsi host
-@@ -2800,7 +2845,7 @@ struct iscsi_cls_session *
- 	struct iscsi_host *ihost = shost_priv(shost);
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index df47557..7a5aec7 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -847,6 +847,7 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
  	struct iscsi_session *session;
- 	struct iscsi_cls_session *cls_session;
--	int cmd_i, scsi_cmds, total_cmds = cmds_max;
-+	int cmd_i, scsi_cmds;
- 	unsigned long flags;
+ 	struct iscsi_sw_tcp_host *tcp_sw_host;
+ 	struct Scsi_Host *shost;
++	int rc;
  
- 	spin_lock_irqsave(&ihost->lock, flags);
-@@ -2811,37 +2856,9 @@ struct iscsi_cls_session *
- 	ihost->num_sessions++;
- 	spin_unlock_irqrestore(&ihost->lock, flags);
+ 	if (ep) {
+ 		printk(KERN_ERR "iscsi_tcp: invalid ep %p.\n", ep);
+@@ -864,6 +865,11 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
+ 	shost->max_channel = 0;
+ 	shost->max_cmd_len = SCSI_MAX_VARLEN_CDB_SIZE;
  
--	if (!total_cmds)
--		total_cmds = ISCSI_DEF_XMIT_CMDS_MAX;
--	/*
--	 * The iscsi layer needs some tasks for nop handling and tmfs,
--	 * so the cmds_max must at least be greater than ISCSI_MGMT_CMDS_MAX
--	 * + 1 command for scsi IO.
--	 */
--	if (total_cmds < ISCSI_TOTAL_CMDS_MIN) {
--		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue "
--		       "must be a power of two that is at least %d.\n",
--		       total_cmds, ISCSI_TOTAL_CMDS_MIN);
-+	scsi_cmds = iscsi_host_get_max_scsi_cmds(shost, cmds_max);
-+	if (scsi_cmds < 0)
- 		goto dec_session_count;
--	}
--
--	if (total_cmds > ISCSI_TOTAL_CMDS_MAX) {
--		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue "
--		       "must be a power of 2 less than or equal to %d.\n",
--		       cmds_max, ISCSI_TOTAL_CMDS_MAX);
--		total_cmds = ISCSI_TOTAL_CMDS_MAX;
--	}
--
--	if (!is_power_of_2(total_cmds)) {
--		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue "
--		       "must be a power of 2.\n", total_cmds);
--		total_cmds = rounddown_pow_of_two(total_cmds);
--		if (total_cmds < ISCSI_TOTAL_CMDS_MIN)
--			goto dec_session_count;
--		printk(KERN_INFO "iscsi: Rounding can_queue to %d.\n",
--		       total_cmds);
--	}
--	scsi_cmds = total_cmds - ISCSI_MGMT_CMDS_MAX;
++	rc = iscsi_host_get_max_scsi_cmds(shost, cmds_max);
++	if (rc < 0)
++		goto free_host;
++	shost->can_queue = rc;
++
+ 	if (iscsi_host_add(shost, NULL))
+ 		goto free_host;
  
- 	cls_session = iscsi_alloc_session(shost, iscsit,
- 					  sizeof(struct iscsi_session) +
-@@ -2857,7 +2874,7 @@ struct iscsi_cls_session *
- 	session->lu_reset_timeout = 15;
- 	session->abort_timeout = 10;
- 	session->scsi_cmds_max = scsi_cmds;
--	session->cmds_max = total_cmds;
-+	session->cmds_max = scsi_cmds + ISCSI_MGMT_CMDS_MAX;
- 	session->queued_cmdsn = session->cmdsn = initial_cmdsn;
- 	session->exp_cmdsn = initial_cmdsn + 1;
- 	session->max_cmdsn = initial_cmdsn + 1;
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 44a9554..02f966e 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -395,6 +395,8 @@ extern struct Scsi_Host *iscsi_host_alloc(struct scsi_host_template *sht,
- extern void iscsi_host_remove(struct Scsi_Host *shost);
- extern void iscsi_host_free(struct Scsi_Host *shost);
- extern int iscsi_target_alloc(struct scsi_target *starget);
-+extern int iscsi_host_get_max_scsi_cmds(struct Scsi_Host *shost,
-+					uint16_t requested_cmds_max);
+@@ -878,7 +884,6 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
+ 	tcp_sw_host = iscsi_host_priv(shost);
+ 	tcp_sw_host->session = session;
  
- /*
-  * session management
+-	shost->can_queue = session->scsi_cmds_max;
+ 	if (iscsi_tcp_r2tpool_alloc(session))
+ 		goto remove_session;
+ 	return cls_session;
+@@ -981,7 +986,7 @@ static int iscsi_sw_tcp_slave_configure(struct scsi_device *sdev)
+ 	.name			= "iSCSI Initiator over TCP/IP",
+ 	.queuecommand           = iscsi_queuecommand,
+ 	.change_queue_depth	= scsi_change_queue_depth,
+-	.can_queue		= ISCSI_DEF_XMIT_CMDS_MAX - 1,
++	.can_queue		= ISCSI_TOTAL_CMDS_MAX - ISCSI_MGMT_CMDS_MAX,
+ 	.sg_tablesize		= 4096,
+ 	.max_sectors		= 0xFFFF,
+ 	.cmd_per_lun		= ISCSI_DEF_CMD_PER_LUN,
 -- 
 1.8.3.1
 
