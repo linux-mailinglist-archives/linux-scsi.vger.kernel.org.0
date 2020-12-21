@@ -2,57 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8981F2DF7B4
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 03:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBF12DF7B1
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 03:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbgLUCk1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Dec 2020 21:40:27 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:40188 "EHLO
+        id S1727029AbgLUCia (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Dec 2020 21:38:30 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:38570 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725497AbgLUCk1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 21:40:27 -0500
+        with ESMTP id S1726550AbgLUCi3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 21:38:29 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2VWF3103110;
-        Mon, 21 Dec 2020 02:39:30 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2UMQI102551;
+        Mon, 21 Dec 2020 02:37:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=bRmq7XthfWgC083/KnoUv7GqWN5bWFCyrCXPYI2IWd8=;
- b=TBoVmwIdOa8cnEAhwOX2iL8UsGiSpav6tDF0Yo1jKmzbmAHkKZ1xK6e99+Q7P7kQRZom
- KuEHbFN+ICD+W3ZGhP/d8+uCq7JOmOqUwkiSp6oev3BNvDelpPxcUlr7rDs9TNk6U3Bq
- RmnIEMQ/q9NjkRHQWsPI3RGkjCIupnwTKdkpmh4NPIlAkT2eMwMEDEXoKX7lpUp3xfXJ
- DGoOj6m05G6QqNUssSkyrqG2r5KZtfWaw6zDB7nz36n0449S9652ablxwPJDfae2n0+C
- nMsxXdRnR2lRpMcxTGF/291pUI9+dPKsSmS3tz4QCtLKlNNJMIDhmpbAE+ipBookNpH9 YQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2130.oracle.com with ESMTP id 35h71augtn-1
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=PMi4j0kU8U3BQem9TfgoSNxAN0JzFCnc5oDmAJqyptI=;
+ b=BtCkp0yNg+UQSoH07n76c11yrbYnzB81ixgRh0nL8gHJnZs1FXXcsb4QJQS7QRm5ZfWA
+ xEGc1rk3ZtAS9ILnv2iwTBC1fIhyjd0xJ59E5mU2yQAp8IMSmqTvTFoqEBJK31dkSATB
+ TuV4P9Nnc3hRCOu9oLv1JhauPZ+JoyCw7llUs+fz/JbDN0NdO85ZxxxlyerPNDvMwUJb
+ dwRsJQCNjtwhVWwFcCoa3XRWu+/MED6jX+xBYTePc8I87NQXZnqO3Eqx9gUxeDdju8tZ
+ G0WtcuK6tFsmnIVKWmdJV2Sdgxi8ckO/Frdfjw7cxUwf8SHFe4LKibs27F8nMN/N10q5 IA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 35h71augrj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Dec 2020 02:39:30 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2ZjmO179041;
-        Mon, 21 Dec 2020 02:37:30 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 35hudw31pf-1
+        Mon, 21 Dec 2020 02:37:32 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2aaJb119613;
+        Mon, 21 Dec 2020 02:37:31 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 35huev06g1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Dec 2020 02:37:30 +0000
+        Mon, 21 Dec 2020 02:37:31 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0BL2bMPY009307;
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BL2bNmr013169;
         Mon, 21 Dec 2020 02:37:26 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 20 Dec 2020 18:37:22 -0800
+        with ESMTP ; Sun, 20 Dec 2020 18:37:23 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
 Cc:     lutianxiong@huawei.com, linfeilong@huawei.com,
         liuzhiqiang26@huawei.com, haowenchao@huawei.com
-Subject: [PATCH 0/6 V3] iscsi fixes
-Date:   Sun, 20 Dec 2020 20:37:00 -0600
-Message-Id: <1608518226-30376-1-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 1/6 V3] libiscsi: fix iscsi_prep_scsi_cmd_pdu error handling
+Date:   Sun, 20 Dec 2020 20:37:01 -0600
+Message-Id: <1608518226-30376-2-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1608518226-30376-1-git-send-email-michael.christie@oracle.com>
+References: <1608518226-30376-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9841 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012210018
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 malwarescore=0 phishscore=0 bulkscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012210018
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9841 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
  clxscore=1015 suspectscore=0 spamscore=0 phishscore=0 malwarescore=0
@@ -63,21 +65,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The following patches were made over Linus's tree. Martin's staging
-branches were missing fe0a8a95e7134d0b44cd407bc0085b9ba8d8fe31.
+If iscsi_prep_scsi_cmd_pdu fails we try to add it back to the
+cmdqueue, but we leave it partially setup. We don't have functions
+that can undo the pdu and init task setup. We only have cleanup_task
+which can cleanup both parts. So this has us just fail the cmd and
+go through the standard cleanup routine and then have scsi-ml retry
+it like is done when it fails in the queuecommand path.
 
-The patches are mostly fixes. There is one cleanup to the locking
-and non standard task cleanup that is used by a later patch that
-fixes the refcounting during timeouts/TMFs.
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+---
+ drivers/scsi/libiscsi.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-V3:
-- Add some patches for issues found while testing.
-	- session queue depth was stuck at 128
-	- cmd window could not be detected when session was relogged in.
-- Patch "libiscsi: drop taskqueuelock" had a bug where we did not
-disable bhs and during xmit thread suspension leaked the current task.
-V2:
-- Take back_lock when looping over running cmds in iscsi_eh_cmd_timed_out
-in case those complete while we are accessing them.
-
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index f9314f1..ee0786b 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -1532,14 +1532,9 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
+ 		}
+ 		rc = iscsi_prep_scsi_cmd_pdu(conn->task);
+ 		if (rc) {
+-			if (rc == -ENOMEM || rc == -EACCES) {
+-				spin_lock_bh(&conn->taskqueuelock);
+-				list_add_tail(&conn->task->running,
+-					      &conn->cmdqueue);
+-				conn->task = NULL;
+-				spin_unlock_bh(&conn->taskqueuelock);
+-				goto done;
+-			} else
++			if (rc == -ENOMEM || rc == -EACCES)
++				fail_scsi_task(conn->task, DID_IMM_RETRY);
++			else
+ 				fail_scsi_task(conn->task, DID_ABORT);
+ 			spin_lock_bh(&conn->taskqueuelock);
+ 			continue;
+-- 
+1.8.3.1
 
