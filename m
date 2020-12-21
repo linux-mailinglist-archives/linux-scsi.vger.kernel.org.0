@@ -2,104 +2,148 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA442DF7B5
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 03:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34542DF7AF
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 03:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbgLUCk3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Dec 2020 21:40:29 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:42112 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725497AbgLUCk3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 21:40:29 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2cf8O112034;
-        Mon, 21 Dec 2020 02:39:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=XfygN+tle3uqg1kO8O3ZG3mr0CTPrlCINAI1Xs7IN3s=;
- b=JLuB3Rn0eYHDnW8G2c/zBnHSFhX53qH2l/aG47/TXFv4QxdVIRNcNSnuyTlVMzeLollG
- En4Sug1FM/0TsY+oVj3EhlbtYrV2Pr9t6jKCW0F5Lf4suqqx/UxYnM7c4/xkkibVxZxS
- dfkRWRySAhuU5ZopgO/U7z9pg3qSZWr56EAR96c+CFgMxtligzIJkPDX8du2zQKBaTFd
- wB1fn0iq457ki2iaJTI5ADEtMBvPpZPUbhXPR9ribEKc/ltCYQAD0+0XmOHEOqVW6bH+
- DuoARMsKJsaD27A0MkhR2ojZMJjVACZI4zpH7BlgSVSh9y/XYEDVUsuHbP9h9vxIVvi7 AA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 35h8xquawk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Dec 2020 02:39:30 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BL2ZT8O055626;
-        Mon, 21 Dec 2020 02:37:29 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 35hu9p8f59-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Dec 2020 02:37:29 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0BL2bRHC009405;
-        Mon, 21 Dec 2020 02:37:27 GMT
-Received: from ol2.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 20 Dec 2020 18:37:27 -0800
-From:   Mike Christie <michael.christie@oracle.com>
-To:     lduncan@suse.com, cleech@redhat.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Cc:     lutianxiong@huawei.com, linfeilong@huawei.com,
-        liuzhiqiang26@huawei.com, haowenchao@huawei.com
-Subject: [PATCH 6/6 V3] libiscsi: reset max/exp cmdsn during recovery
-Date:   Sun, 20 Dec 2020 20:37:06 -0600
-Message-Id: <1608518226-30376-7-git-send-email-michael.christie@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1608518226-30376-1-git-send-email-michael.christie@oracle.com>
-References: <1608518226-30376-1-git-send-email-michael.christie@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9841 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012210018
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9841 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 impostorscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012210018
+        id S1726636AbgLUCiU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Dec 2020 21:38:20 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:26803 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726550AbgLUCiU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 21:38:20 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1608518274; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=97dgF1cOD7h2R3jEjxNUO21gMCHQ35s85F14RfWUWi8=;
+ b=akddDcNJ+zYTxoZma51+uErlsasjCGaPzz954kt17dx5V6y3glzCg7/T1ksU5RB5OKu6xBM7
+ 8nWMTWjSQqZ5AH+H0QceHAxIqTOcuuzrDdjNVBXs8aNygh0MQiCDkPo0e83ULKfYVrdsFzSE
+ ltawKBrYKq8Ft2BtDsDNCwYeayE=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
+ 5fe00a5a7549779c5b463c8b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Dec 2020 02:37:14
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 30B43C43465; Mon, 21 Dec 2020 02:37:13 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C5F60C433C6;
+        Mon, 21 Dec 2020 02:37:11 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 21 Dec 2020 10:37:11 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Kiwoong Kim <kwmad.kim@samsung.com>
+Cc:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, bvanassche@acm.org,
+        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com
+Subject: Re: [RFC PATCH v1] ufs: relocate turning off device power sources
+In-Reply-To: <000001d6d73a$e44dd770$ace98650$@samsung.com>
+References: <CGME20201219063815epcas2p1ffd277f7e53d9680abb460f55a53c599@epcas2p1.samsung.com>
+ <1608359248-16079-1-git-send-email-kwmad.kim@samsung.com>
+ <3d662ee3155a56108da13e3cf12f17dc@codeaurora.org>
+ <000001d6d73a$e44dd770$ace98650$@samsung.com>
+Message-ID: <ba859a31c04068671dfca42aa7cf9d05@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If we lose the session then relogin, but the new cmdsn window has
-shrunk (due to something like an admin changing a setting) we will
-have the old exp/max_cmdsn values and will never be able to update
-them. For example, max_cmdsn would be 64, but if on the target the
-user set the window to be smaller then the target could try to return
-the max_cmdsn as 32. We will see that new max_cmdsn in the rsp but
-because it's lower than the old max_cmdsn when the window was larger
-we will not update it.
+On 2020-12-21 09:44, Kiwoong Kim wrote:
+>> On 2020-12-19 14:27, Kiwoong Kim wrote:
+>> > UFS specification says that while powering off the device, RST_n
+>> > signal and REF_CLK signal should be between VSS and VCCQ.
+>> > One of ways to make it is to drive both RST_n and REF_CLK to low.
+>> >
+>> > However, the current location of turning off them doesn't guarantee
+>> > that. ufshcd_link_state_transition make enter hibern8 but it's not
+>> > supposed to adjust the level of REF_CLK. Adding
+>> > ufshcd_vops_device_reset isn't proper because it just drives the level
+>> > of RST_n to low and then to high, not keep low.
+>> > In this situation, it could make those levels be diverged from those
+>> > proper ranges with actual hardware situations, especially right when
+>> > the driver turns off power.
+>> >
+>> > The easist way to make it is just to move the location of turning off
+>> > because lowering the levels can be enabled through the callbacks named
+>> > suspend and setup_clocks.
+>> >
+>> > Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+>> > ---
+>> >  drivers/scsi/ufs/ufshcd.c | 9 +++++++--
+>> >  1 file changed, 7 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> > index 92d433d..dab9840 100644
+>> > --- a/drivers/scsi/ufs/ufshcd.c
+>> > +++ b/drivers/scsi/ufs/ufshcd.c
+>> > @@ -8633,8 +8633,6 @@ static int ufshcd_suspend(struct ufs_hba *hba,
+>> > enum ufs_pm_op pm_op)
+>> >  	if (ret)
+>> >  		goto set_dev_active;
+>> >
+>> > -	ufshcd_vreg_set_lpm(hba);
+>> > -
+>> >  disable_clks:
+>> >  	/*
+>> >  	 * Call vendor specific suspend callback. As these callbacks may
+>> > access @@ -8662,6 +8660,13 @@ static int ufshcd_suspend(struct ufs_hba
+>> > *hba, enum ufs_pm_op pm_op)
+>> >  					hba->clk_gating.state);
+>> >  	}
+>> >
+>> > +	/*
+>> > +	 * It should follows driving RST_n and REF_CLK
+>> > +	 * in the range specified in UFS specification
+>> > +	 */
+>> > +	if (!ufshcd_is_ufs_dev_active(hba))
+>> > +		ufshcd_vreg_set_lpm(hba);
+>> > +
+>> >  	/* Put the host controller in low power mode if possible */
+>> >  	ufshcd_hba_vreg_set_lpm(hba);
+>> >  	goto out;
+>> 
+>> Ziqi Chen has a change to totally fix the UFS power-on/off spec 
+>> violation,
+>> see https://lore.kernel.org/patchwork/patch/1351118/ and he is working 
+>> on
+>> V2, can we wait for his change?
+> 
+> Two questions.
+> 1. If his patch covers what I said, it's okay.
 
-So this patch has us reset the windown values during session
-cleanup so they can be updated after a new login.
+Yes, it does cover your fix as you can tell from V1.
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/libiscsi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> 2. What does he plan to post?
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index f1ade91..ff6ba78 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -3268,6 +3268,13 @@ int iscsi_conn_bind(struct iscsi_cls_session *cls_session,
- 	spin_unlock_bh(&session->frwd_lock);
- 
- 	/*
-+	 * The target could have reduced it's window size between logins, so
-+	 * we have to reset max/exp cmdsn so we can see the new values.
-+	 */
-+	spin_lock_bh(&session->back_lock);
-+	session->max_cmdsn = session->exp_cmdsn = session->cmdsn + 1;
-+	spin_unlock_bh(&session->back_lock);
-+	/*
- 	 * Unblock xmitworker(), Login Phase will pass through.
- 	 */
- 	clear_bit(ISCSI_SUSPEND_BIT, &conn->suspend_rx);
--- 
-1.8.3.1
+Within today.
 
+Thanks,
+
+Can Guo.
+
+> What do you think?
+> 
+> Thanks.
+> Kiwoong Kim
+>> 
+>> Thanks,
+>> 
+>> Can Guo.
