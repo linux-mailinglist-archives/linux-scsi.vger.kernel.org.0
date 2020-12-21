@@ -2,152 +2,136 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1562DF77F
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 02:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A19C2DF782
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Dec 2020 02:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbgLUBgU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Dec 2020 20:36:20 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:22069 "EHLO
+        id S1726345AbgLUBiQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Dec 2020 20:38:16 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:23161 "EHLO
         mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbgLUBgT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 20:36:19 -0500
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201221013537epoutp02be70fa6cf720416ee367ebbaef4031f1~Sl3Mw7szi0698206982epoutp02C
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 01:35:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201221013537epoutp02be70fa6cf720416ee367ebbaef4031f1~Sl3Mw7szi0698206982epoutp02C
+        with ESMTP id S1725902AbgLUBiQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Dec 2020 20:38:16 -0500
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201221013733epoutp027cba3f468c4a1d4616330945bfbf83b4~Sl44a7Xip0741907419epoutp02-
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 01:37:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201221013733epoutp027cba3f468c4a1d4616330945bfbf83b4~Sl44a7Xip0741907419epoutp02-
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1608514537;
-        bh=oAZkt8d/EzEdD6gm9i+kuwRAAhZpY0ps41OxDiNtdgU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:In-Reply-To:References:From;
-        b=sOFCK3RToZZhp3uFP7dIHmXvL4lqw/OEXA7IHGndpN6027HJgxKLLrFyDNWYSVV0x
-         p3VuhLVoXzrbzWvoVdNCk2iuuJh0nIUi80z73Z+PzYKWlLUQcv+HU6LLq/Rq7quGGP
-         l9wsHYSmOhybapKJhhnELohSZCOSKtQDy8v8SXO0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20201221013536epcas2p47a179a3dc850681aecfa5eed6ca59941~Sl3L3GXxa0233802338epcas2p4v;
-        Mon, 21 Dec 2020 01:35:36 +0000 (GMT)
+        s=mail20170921; t=1608514653;
+        bh=qb5UDXZL0Ia8BX16Ms1wtn7IaKI3zciuiUQAH9F+zUw=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=W5WKiCMIjwFgY79pzJFIIZ/DSeIDORusS5rYXRPLoR7/16c0FPzBHKE6Z2WzBnhU0
+         1nR5p8Cuw9K/jkbdGnBXaIn1kiBYH1M1plle2yufaUkSjsyOTwAQ193hYCt/OSPtn4
+         /N8ILLHzecASDB+v5uQuCVJRPlg8v9b6zQQY4btU=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20201221013733epcas2p1eb9e6c864f139ef73ab26dfd661b7a39~Sl44EQyrj3070630706epcas2p1I;
+        Mon, 21 Dec 2020 01:37:33 +0000 (GMT)
 Received: from epsmges2p3.samsung.com (unknown [182.195.40.181]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Czhqp6rDvz4x9Q3; Mon, 21 Dec
-        2020 01:35:34 +0000 (GMT)
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Czht22HhDz4x9Ps; Mon, 21 Dec
+        2020 01:37:30 +0000 (GMT)
 Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
         epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        73.26.05262.6EBFFDF5; Mon, 21 Dec 2020 10:35:34 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20201221013533epcas2p39a17300dc5e1659acdea849bea1322e0~Sl3JAviWb1421414214epcas2p3O;
-        Mon, 21 Dec 2020 01:35:33 +0000 (GMT)
+        1C.67.05262.95CFFDF5; Mon, 21 Dec 2020 10:37:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20201221013728epcas2p275c12451584172f2127223c8a70ff609~Sl4z4g_6e1946719467epcas2p2C;
+        Mon, 21 Dec 2020 01:37:28 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201221013533epsmtrp1de168209ba526e26603102a067c5d994~Sl3I-vkVn0617006170epsmtrp1e;
-        Mon, 21 Dec 2020 01:35:33 +0000 (GMT)
-X-AuditID: b6c32a47-b97ff7000000148e-33-5fdffbe6c801
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20201221013728epsmtrp2cce00bf341988626b2f23deb7dd5e5b5~Sl4z30gNZ3172031720epsmtrp2L;
+        Mon, 21 Dec 2020 01:37:28 +0000 (GMT)
+X-AuditID: b6c32a47-b81ff7000000148e-35-5fdffc597e94
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F1.43.08745.5EBFFDF5; Mon, 21 Dec 2020 10:35:33 +0900 (KST)
-Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20201221013533epsmtip2be4e7d9b835a19b2bb81e197d2d97c74~Sl3IzDaNO2619126191epsmtip2I;
-        Mon, 21 Dec 2020 01:35:33 +0000 (GMT)
-From:   Kiwoong Kim <kwmad.kim@samsung.com>
-To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
-        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com
-Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [PATCH v3 2/2] ufs: ufs-exynos: apply vendor specifics for three
- timeouts
-Date:   Mon, 21 Dec 2020 10:24:41 +0900
-Message-Id: <a0ff44f665a4f31d2f945fd71de03571204c576c.1608513782.git.kwmad.kim@samsung.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1608513782.git.kwmad.kim@samsung.com>
-In-Reply-To: <cover.1608513782.git.kwmad.kim@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmqe6z3/fjDfY/FLN4MG8bm8XethPs
-        Fi9/XmWzOPiwk8Xi69JnrBbTPvxktvi0fhmrxa+/69ktVi9+wGKx6MY2JoubW46yWHRf38Fm
-        sfz4PyaLrrs3GC2W/nvL4sDvcfmKt8flvl4mjwmLDjB6fF/fwebx8ektFo++LasYPT5vkvNo
-        P9DNFMARlWOTkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZ
-        A3S8kkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafA0LBArzgxt7g0L10vOT/XytDA
-        wMgUqDIhJ+P2hQ+sBTe5KqZ1P2JpYPzA0cXIySEhYCLx9e5vti5GLg4hgR2MEs/P/WaCcD4x
-        SizcO4EFwvnMKLHz2ls2mJZn/w8wQiR2MUr8b3gKVfWDUWLT3itgVWwCmhJPb04FmyUicIZJ
-        4lrrWVaQBLOAusSuCSeAEhwcwgIhEkfv14CEWQRUJQ5+f8oIYvMKREt0dB9mhdgmJ3HzXCcz
-        iM0pYCnROm0dEyqbC6hmLofE7q3r2EBmSgi4SOxus4PoFZZ4dXwLO4QtJfGyvw3KrpfYN7WB
-        FaK3h1Hi6b5/jBAJY4lZz9oZQeYwAz2wfpc+xEhliSO3WCCu55PoOPyXHSLMK9HRJgTRqCzx
-        a9JkqCGSEjNv3oHa5CExa/sHaPAAbfr86zLLBEb5WQgLFjAyrmIUSy0ozk1PLTYqMEaOvU2M
-        4JSq5b6DccbbD3qHGJk4GA8xSnAwK4nwmkndjxfiTUmsrEotyo8vKs1JLT7EaAoMx4nMUqLJ
-        +cCknlcSb2hqZGZmYGlqYWpmZKEkzhu6si9eSCA9sSQ1OzW1ILUIpo+Jg1OqgWmnSOpxscBl
-        /ptK9XYYsIQsTBXbxVn08cgMx+crFt1e+WXO6sqt/06wLr0Up/9rVlOtgPJ95qYrPYJPZ0pu
-        nMSanr/aRGFK+GpVjct9LOnnxJ/M2SKg95d1x7XyuicGJ1tjd7P8XvxaaZfrpRybRYx5867H
-        V7x/zThh/U3L++t7Qp9uepYu5Hc1T10u6M3UJ4ef6qr+muvQG9a8JZrXf/Hiq7sqW/mn16S0
-        8G8Jf+b6LUK3RO7lVefaG11CHwUfBh5Z4fL10sdjhY0RRVGejqe5OKae//4we9qd5tcTl+r/
-        TJ04MzL2vuxJwx3Nu2clPQoPfLry3/4Jke+nVBgW+x9RUOzaOUfvCZ9DyMrEZSuNlViKMxIN
-        tZiLihMBz0EDCjIEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGLMWRmVeSWpSXmKPExsWy7bCSvO7T3/fjDd5sNLB4MG8bm8XethPs
-        Fi9/XmWzOPiwk8Xi69JnrBbTPvxktvi0fhmrxa+/69ktVi9+wGKx6MY2JoubW46yWHRf38Fm
-        sfz4PyaLrrs3GC2W/nvL4sDvcfmKt8flvl4mjwmLDjB6fF/fwebx8ektFo++LasYPT5vkvNo
-        P9DNFMARxWWTkpqTWZZapG+XwJVx+8IH1oKbXBXTuh+xNDB+4Ohi5OSQEDCRePb/AGMXIxeH
-        kMAORomWM70sEAlJiRM7nzNC2MIS91uOsEIUfWOUOPp6JlgRm4CmxNObU5lAEiIC95gkLk2Y
-        ywySYBZQl9g14QQTiC0sECSxYc42sAYWAVWJg9+fgk3lFYiW6Og+zAqxQU7i5rlOsF5OAUuJ
-        1mnrwHqFBCwk7h16yoRLfAKjwAJGhlWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmbGMFR
-        oaW1g3HPqg96hxiZOBgPMUpwMCuJ8JpJ3Y8X4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8
-        kEB6YklqdmpqQWoRTJaJg1OqgenIgffzjh12NeYQm8eiHHv6xIfjvYW7PW4+mV3np6yl2Xvu
-        e0X+/olWr/rLysJnrmBO3v2e9QL7/de+qxbMWCw1d5po//ztvw6fvvl1+pxFXhrKm+85GD57
-        uWpWK/f0H/ujmsN1q/5W1tnPFQ2ecduW9dpxT22pzHX/9x0U/OtTu6lB5dP79zt4VPRtJ0//
-        vNp3wYGjKW2+dX90Lucvj0v6yjLr95JZm/5cd+FVOShnOu3MzPdvf7o+ncbKInIjnyWcdVPQ
-        xHaX2nc3cjecrL35WkzYf8v2FVJZgUs3HfW7dmOXuNeF1ZYb2Ce8lUk5eNvM+1xm0htxGfbk
-        CgvmylUTbtt6RpxhuJuo8M1DftWG5UosxRmJhlrMRcWJAFar56f5AgAA
-X-CMS-MailID: 20201221013533epcas2p39a17300dc5e1659acdea849bea1322e0
+        0E.A3.08745.85CFFDF5; Mon, 21 Dec 2020 10:37:28 +0900 (KST)
+Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20201221013728epsmtip19dbe2eddd42efeffab6bdb78fc6d3d09~Sl4zuFo0y1177811778epsmtip1h;
+        Mon, 21 Dec 2020 01:37:28 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     "'Avri Altman'" <Avri.Altman@wdc.com>, <linux-scsi@vger.kernel.org>
+In-Reply-To: <DM6PR04MB6575F7B2F1B6EB42C275049CFCC10@DM6PR04MB6575.namprd04.prod.outlook.com>
+Subject: RE: [PATCH v2 0/2] permit vendor specific values of unipro timeouts
+Date:   Mon, 21 Dec 2020 10:37:28 +0900
+Message-ID: <000001d6d739$d7a375d0$86ea6170$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJKkwnskO3Hw/OB6WymW7E2AvOGmQHQR/zqApSr/eGo9iW1AA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLKsWRmVeSWpSXmKPExsWy7bCmqW7kn/vxBj+WsFq8/HmVzaL7+g42
+        ByaPz5vkPNoPdDMFMEXl2GSkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qba
+        Krn4BOi6ZeYAjVdSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFBgaFugVJ+YWl+al
+        6yXn51oZGhgYmQJVJuRkvFj5iblgPVtFw+8GxgbGVyxdjBwcEgImEiv21XYxcnEICexglDg3
+        +zgjhPOJUeLLwetQzmdGiTn/VrB3MXKCdfRf38oGkdjFKHG/dQ9YQkjgBaPE5zV5IDabgLbE
+        tIe7WUFsEQF3iX9frzKD2JwCsRJT159nArGFBXwkPp3tZAI5g0VAVeLCxUwQk1fAUuLdYkuQ
+        Cl4BQYmTM5+wgNjMAvIS29/OYYY4QUHi59NlUNOdJG5/mssOUSMiMbuzjRnkNAmBU+wSX8+e
+        Y4RocJHYu+cGE4QtLPHq+BaoX6QkPr/bywZh10vsm9rACtHcwyjxdN8/qGZjiVnP2hlBjmMW
+        0JRYv0sfEnLKEkduQd3GJ9Fx+C87RJhXoqNNCKJRWeLXpMlQQyQlZt68A7XVQ+LA2wXsExgV
+        ZyH5chaSL2ch+WYWwt4FjCyrGMVSC4pz01OLjQqMkWN6EyM43Wm572Cc8faD3iFGJg7GQ4wS
+        HMxKIrxmUvfjhXhTEiurUovy44tKc1KLDzGaAkN9IrOUaHI+MOHmlcQbmhqZmRlYmlqYmhlZ
+        KInzhq7sixcSSE8sSc1OTS1ILYLpY+LglGpgUows35EVUm8dXz7P3u7h7FynA68Yf1y/+dTL
+        pf+hx7eiwzLJ4jFp0xRDOmTm7LbYMv3Teo473TutK9jvvl/Ef2G9QUjhxsDrgv9fi+VrZ/1j
+        PLYipVtEn2nnvdKZVb3Ka398NuvawuxlueG8tlChC6/FHb2Xlamfw+cKRzZcN93GsvHk+fv2
+        6sLbl5U0BKbJrv+9//jaV/J3xBQ3L+IwFHKz7HZ81sJRkNzGeax/37OpO3uWVr0RnZI0z2HS
+        NBvdtAkTn+1pr5xgHHVTn3/WnGIXs8tNS4uFHulv1i3ZN9NVRDTs3oM+i+qcLJ9n+jqn73kd
+        //VvxuZljwXKK23Ts8tfTF74LG/WExOG+oIvSizFGYmGWsxFxYkAmVMU/wAEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHLMWRmVeSWpSXmKPExsWy7bCSnG7En/vxBvsvKlq8/HmVzaL7+g42
+        ByaPz5vkPNoPdDMFMEVx2aSk5mSWpRbp2yVwZbxY+Ym5YD1bRcPvBsYGxlcsXYycHBICJhL9
+        17eydTFycQgJ7GCUmHXqBRtEQlLixM7njBC2sMT9liOsEEXPGCVmLF3GDJJgE9CWmPZwNyuI
+        LSLgKfFg0S4WiKLbjBLzu7aDdXMKxEpMXX+eCcQWFvCR+HS2E8jm4GARUJW4cDETxOQVsJR4
+        t9gSpIJXQFDi5MwnYMcxA43vfdjKCGHLS2x/O4cZ4h4FiZ9Pl0GtdZK4/WkuO0SNiMTszjbm
+        CYxCs5CMmoVk1Cwko2YhaVnAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4yLW0
+        djDuWfVB7xAjEwfjIUYJDmYlEV4zqfvxQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJI
+        TyxJzU5NLUgtgskycXBKNTCtv37912fvMOG1vsFHGS9Jp7kmSX05yTlfuU1O482q8mNtOfFv
+        5gikMvQfex1VYtCYr8r7ZbPzTbX2RXUCsjrs1fEl3FmLtbX3fNjqrc+9ZsHJbbv36nm1/Xx4
+        o5i39M3rdU03MgSv2tr0ZvRNfqjO1K/pzdKycJLfLq7Vu2dmeX311yyLDOrcyVLlzdSV27Vv
+        26t7k+vO9od1PNi085eF2xEu74xS/2Valtcu/DjkJN7+pTp7y7E0EemnnRZe0zwy0ytPvLG6
+        1hQzVZNhCsuTjtBTMseMPRS/98Uf26Y5S5Hz++78Z9XR8RlKt959sNJ2ldLMcD8ubMXtVdWY
+        5O5fsswi29Eh9Nj6z4J+SizFGYmGWsxFxYkAJb8sd+ECAAA=
+X-CMS-MailID: 20201221013728epcas2p275c12451584172f2127223c8a70ff609
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201221013533epcas2p39a17300dc5e1659acdea849bea1322e0
-References: <cover.1608513782.git.kwmad.kim@samsung.com>
-        <CGME20201221013533epcas2p39a17300dc5e1659acdea849bea1322e0@epcas2p3.samsung.com>
+X-CMS-RootMailID: 20201219030743epcas2p39ee0570eea153915ad8e525e8f508e66
+References: <CGME20201219030743epcas2p39ee0570eea153915ad8e525e8f508e66@epcas2p3.samsung.com>
+        <cover.1608346381.git.kwmad.kim@samsung.com>
+        <DM6PR04MB6575F7B2F1B6EB42C275049CFCC10@DM6PR04MB6575.namprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Set optimized values for those timeouts
-- FC0_PROTECTION_TIMER
-- TC0_REPLAY_TIMER
-- AFC0_REQUEST_TIMER
+> 
+> Your gerrit change-ids still shows, other than that - looks good to me.
+> 
+> Thanks,
+> Avri
 
-Exynos doesn't yet use traffic class #1.
+I missed removing them in the patches. Will take care. Sorry.
 
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
----
- drivers/scsi/ufs/ufs-exynos.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
-index a8770ff..5ca21d1 100644
---- a/drivers/scsi/ufs/ufs-exynos.c
-+++ b/drivers/scsi/ufs/ufs-exynos.c
-@@ -640,6 +640,11 @@ static int exynos_ufs_pre_pwr_mode(struct ufs_hba *hba,
- 		}
- 	}
- 
-+	/* setting for three timeout values for traffic class #0 */
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA0), 8064);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA1), 28224);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA2), 20160);
-+
- 	return 0;
- out:
- 	return ret;
-@@ -1236,7 +1241,8 @@ struct exynos_ufs_drv_data exynos_ufs_drvs = {
- 				  UFSHCI_QUIRK_BROKEN_HCE |
- 				  UFSHCI_QUIRK_SKIP_RESET_INTR_AGGR |
- 				  UFSHCD_QUIRK_BROKEN_OCS_FATAL_ERROR |
--				  UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL,
-+				  UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL |
-+				  UFSHCD_QUIRK_SKIP_DEF_UNIPRO_TIMEOUT_SETTING,
- 	.opts			= EXYNOS_UFS_OPT_HAS_APB_CLK_CTRL |
- 				  EXYNOS_UFS_OPT_BROKEN_AUTO_CLK_CTRL |
- 				  EXYNOS_UFS_OPT_BROKEN_RX_SEL_IDX |
--- 
-2.7.4
+Thanks.
+Kiwoong Kim
+> >
+> > v1 -> v2: change some comments and rename the quirk
+> >
+> > There are some attribute settings before power mode change in ufshcd.c
+> > that should have been variant per vendor.
+> >
+> > Kiwoong Kim (2):
+> >   ufs: add a quirk not to use default unipro timeout values
+> >   ufs: ufs-exynos: apply vendor specifics for three timeouts
+> >
+> >  drivers/scsi/ufs/ufs-exynos.c |  8 +++++++-
+> >  drivers/scsi/ufs/ufshcd.c     | 40 +++++++++++++++++++++----------------
+> ---
+> >  drivers/scsi/ufs/ufshcd.h     |  6 ++++++
+> >  3 files changed, 34 insertions(+), 20 deletions(-)
+> >
+> > --
+> > 2.7.4
+
 
