@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E43A42E08A3
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 11:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7601C2E089B
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 11:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbgLVKOT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Dec 2020 05:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
+        id S1726392AbgLVKN6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Dec 2020 05:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726012AbgLVKOS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 05:14:18 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E21C0611E4
-        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:24 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id n7so8089252pgg.2
-        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:24 -0800 (PST)
+        with ESMTP id S1726350AbgLVKN6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 05:13:58 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30D0C0611BB
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:26 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id q22so8171216pfk.12
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=CQM4z1JCwWMOteoSG4b+eSVvicpAQIKTc9cye891ym0=;
-        b=fooAvLqny7DkzdLm3o7smMKFi550C80rBMIDFzlVUqtMVahn4DoqcTObd7f3dmZOJl
-         e398+Tm5DGAciI9HGuYNu+4/zOG3lRmYtx7NjmerFrW0NM4+nsOqOZ/bnKSGAiOw6gPb
-         BTAfsJKhmmInoos2i+5rIFNWXY1ZQekPBPtvo=
+        bh=YGiWWVA/AYw4tojuv0GRzBtj0enEmmM71zOmgOmgrbs=;
+        b=dSjcgM32JCYqGtl7Jj/XtrfYpSJhKVGYdrqgYseVYoWk40r0KMZLJge8eHFznhpA13
+         6z4jSWNmwQFHq6cijXd2PQK3ZVyIH9oVDbJkTdb0GHcaO0IwMYKXPLX5QTFNbCsfPi+5
+         Zhui48JfgHLVWGKF6dEcsiNlU7a7nivcbRzcw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=CQM4z1JCwWMOteoSG4b+eSVvicpAQIKTc9cye891ym0=;
-        b=ipE4GrwocM5LCzcYvEfk6PnfeTSUm4nzz92AM/wLBpnymEnsBTtXlTkAVwuZexw7Sm
-         aiZs6YTIUyYTLrPmZCKf48yHkKH9YbZOAozcS5PxjFDfT7VsM8t7gDmRBzLsPBUtLXeF
-         uPzA3/OP2PYmZrDxZrvwPrR2JGgj/mfL+b1QCCLHJ6Av/UeilA6JbvdzqbpPXUphkJsX
-         YBtftvfMQ/DHGRO3kyCAgSXk36HtkjitLUmYzacvnKOQtwX65TrMChXEjG/+yMf7c3Wi
-         w/EcHJ1kzTGyiAC06W+o9oisW/+bh8GD6EbHTz9dmWNTYApxfitETbwCGvyNe0WCE3QM
-         mKlA==
-X-Gm-Message-State: AOAM531iwPaDkzoGDqxzYM+ARfaR1Lm451FFKqJGJ2l4Ae7xH7TgZ2xJ
-        X4xXZRG83SeAWc6z90fJ9+ZpF+Npc15s2cz8DvVI/QUdDe+yE7YWWANUQFfVQxSqldL7Gd2aDim
-        k7QA8697iOVs5EcXa3zVDJjYMqYgcO04b/cMwf4FePQNb3rWgVlm1uAXflj3adAfyCtX6yRkqoA
-        /lbqROwuvT
+        bh=YGiWWVA/AYw4tojuv0GRzBtj0enEmmM71zOmgOmgrbs=;
+        b=ca+Ez/4Yje2XY85jetd4PO7HVs71OMZMsOK83TbUpH8R3qPOnSc56fh3hVr4xIUUaU
+         18bi6lK6R0LpkYBoj9f8C/f+G5yhNBh79eWYWkwLNxXvWNyp5XaC1gzmxN/4NzmylV9/
+         uJ1JeWpFgEnd0dl7BJ3H4Bc+y4etpgZeCVdSzJDvQGq/6H4ChC2POd00btVT4wG9YRcS
+         5lp8QtHMjxY0p71LNovq5RzVXiuoI8B3Acx3LF53KhUzLTFrZfjBue+WaL4d0bT9FFDy
+         A0Xo1YFa5/9CUh3OeOZbPb6Zx78HbRUKpA2eXknIxdifsgsbgZglDiplS479K8eRmap5
+         YCNQ==
+X-Gm-Message-State: AOAM533l4bMKSvICEwMOBXinJYA4SvFkgMzRSW0100QlvHGpCfDORXC6
+        eBI3jB/uqftrRdJNfq7qDQThXUA/pNuowBEokCRbCvCw+I7X1cVzNb5GrVprdHO54qLIYY9HT+w
+        Z+HPpVacya8AlGPdURFaGUoT2boqru00sy59SZFgMzCIO6Tmy9NAc8cCXmsUGaNJJpUw39hTo2j
+        u6vvn3fD3h
 MIME-Version: 1.0
-X-Google-Smtp-Source: ABdhPJyqLkT1D1hVu1hsANtHYkRyQk7kTO2aKX1KN5GSFyCVsRBSxamzvTHfVhOxI0wDco1/qgETTA==
-X-Received: by 2002:a63:ca51:: with SMTP id o17mr68455pgi.314.1608632003218;
-        Tue, 22 Dec 2020 02:13:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxXDyPX2VFOEhA3L4wvzm24ey+wEP7UmEzZASSM88fpDCp9V5TST4yqDZZBVooiTAuPu96cfw==
+X-Received: by 2002:a63:62c3:: with SMTP id w186mr19215288pgb.83.1608632006111;
+        Tue, 22 Dec 2020 02:13:26 -0800 (PST)
 Received: from drv-bst-rhel8.static.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id p16sm19148624pju.47.2020.12.22.02.13.20
+        by smtp.gmail.com with ESMTPSA id p16sm19148624pju.47.2020.12.22.02.13.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Dec 2020 02:13:22 -0800 (PST)
+        Tue, 22 Dec 2020 02:13:25 -0800 (PST)
 From:   Kashyap Desai <kashyap.desai@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
@@ -54,130 +54,169 @@ Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
         mpi3mr-linuxdrv.pdl@broadcom.com,
         Kashyap Desai <kashyap.desai@broadcom.com>,
         sathya.prakash@broadcom.com
-Subject: [PATCH 21/24] mpi3mr: add support of PM suspend and resume
-Date:   Tue, 22 Dec 2020 15:41:53 +0530
-Message-Id: <20201222101156.98308-22-kashyap.desai@broadcom.com>
+Subject: [PATCH 22/24] mpi3mr: add support of DSN secure fw check
+Date:   Tue, 22 Dec 2020 15:41:54 +0530
+Message-Id: <20201222101156.98308-23-kashyap.desai@broadcom.com>
 X-Mailer: git-send-email 2.18.1
 In-Reply-To: <20201222101156.98308-1-kashyap.desai@broadcom.com>
 References: <20201222101156.98308-1-kashyap.desai@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000026d0aa05b70ad3bb"
+        boundary="00000000000052be3e05b70ad393"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000026d0aa05b70ad3bb
+--00000000000052be3e05b70ad393
 Content-Type: text/plain; charset="US-ASCII"
+
+Read PCI_EXT_CAP_ID_DSN to know security status.
+
+Driver will throw an warning message when a non-secure type controller
+is detected. Purpose of this interface is to avoid interacting with
+any firmware which is not secured/signed by Broadcom.
+Any tampering on Firmware component will be detected by hardware
+and it will be communicated to the driver to avoid any further
+interaction with that component.
 
 Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
 Cc: sathya.prakash@broadcom.com
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 85 +++++++++++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+ drivers/scsi/mpi3mr/mpi3mr.h    |  9 ++++
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 80 +++++++++++++++++++++++++++++++++
+ 2 files changed, 89 insertions(+)
 
+diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
+index 5554b0e49a58..f0ead83dc16c 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr.h
++++ b/drivers/scsi/mpi3mr/mpi3mr.h
+@@ -149,6 +149,15 @@ extern struct list_head mrioc_list;
+ #define MPI3MR_IRQ_POLL_SLEEP			2
+ #define MPI3MR_IRQ_POLL_TRIGGER_IOCOUNT		8
+ 
++/* Definitions for the controller security status*/
++#define MPI3MR_CTLR_SECURITY_STATUS_MASK	0x0C
++#define MPI3MR_CTLR_SECURE_DBG_STATUS_MASK	0x02
++
++#define MPI3MR_INVALID_DEVICE			0x00
++#define MPI3MR_CONFIG_SECURE_DEVICE		0x04
++#define MPI3MR_HARD_SECURE_DEVICE		0x08
++#define MPI3MR_TAMPERED_DEVICE			0x0C
++
+ /* SGE Flag definition */
+ #define MPI3MR_SGEFLAGS_SYSTEM_SIMPLE_END_OF_LIST \
+ 	(MPI3_SGE_FLAGS_ELEMENT_TYPE_SIMPLE | MPI3_SGE_FLAGS_DLAS_SYSTEM | \
 diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index 1708aca1a5cd..ac47eed74705 100644
+index ac47eed74705..57d9df6662f9 100644
 --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
 +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -3480,6 +3480,87 @@ static void mpi3mr_shutdown(struct pci_dev *pdev)
- 
+@@ -3277,6 +3277,75 @@ static inline void mpi3mr_init_drv_cmd(struct mpi3mr_drv_cmd *cmdptr,
+ 	cmdptr->host_tag = host_tag;
  }
  
-+#ifdef CONFIG_PM
 +/**
-+ * mpi3mr_suspend - PCI power management suspend callback
++ * osintfc_mrioc_security_status -Check controller secure status
 + * @pdev: PCI device instance
-+ * @state: New power state
 + *
-+ * Change the power state to the given value and cleanup the IOC
-+ * by issuing MUR and shutdown notification
++ * Read the Device Serial Number capability from PCI config
++ * space and decide whether the controller is secure or not.
 + *
-+ * Return: 0 always.
++ * Return: 0 on success, non-zero on failure.
 + */
-+static int mpi3mr_suspend(struct pci_dev *pdev, pm_message_t state)
++static int
++osintfc_mrioc_security_status(struct pci_dev *pdev)
 +{
-+	struct Scsi_Host *shost = pci_get_drvdata(pdev);
-+	struct mpi3mr_ioc *mrioc;
-+	pci_power_t device_state;
++	u32 cap_data;
++	int base;
++	u32 ctlr_status;
++	u32 debug_status;
++	int retval = 0;
 +
++	base = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_DSN);
++	if (!base) {
++		dev_err(&pdev->dev,
++		    "%s: PCI_EXT_CAP_ID_DSN is not supported\n", __func__);
++		return -1;
++	}
++
++	pci_read_config_dword(pdev, base + 4, &cap_data);
++
++	debug_status = cap_data & MPI3MR_CTLR_SECURE_DBG_STATUS_MASK;
++	ctlr_status = cap_data & MPI3MR_CTLR_SECURITY_STATUS_MASK;
++
++	switch (ctlr_status) {
++	case MPI3MR_INVALID_DEVICE:
++		dev_err(&pdev->dev,
++		    "%s: Non secure ctlr (Invalid) is detected: DID: 0x%x: SVID: 0x%x: SDID: 0x%x\n",
++		    __func__, pdev->device, pdev->subsystem_vendor,
++		    pdev->subsystem_device);
++		retval = -1;
++		break;
++	case MPI3MR_CONFIG_SECURE_DEVICE:
++		if (!debug_status)
++			dev_info(&pdev->dev,
++			    "%s: Config secure ctlr is detected\n",
++			    __func__);
++		break;
++	case MPI3MR_HARD_SECURE_DEVICE:
++		break;
++	case MPI3MR_TAMPERED_DEVICE:
++		dev_err(&pdev->dev,
++		    "%s: Non secure ctlr (Tampered) is detected: DID: 0x%x: SVID: 0x%x: SDID: 0x%x\n",
++		    __func__, pdev->device, pdev->subsystem_vendor,
++		    pdev->subsystem_device);
++		retval = -1;
++		break;
++	default:
++		retval = -1;
++			break;
++	}
++
++	if (!retval && debug_status) {
++		dev_err(&pdev->dev,
++		    "%s: Non secure ctlr (Secure Dbg) is detected: DID: 0x%x: SVID: 0x%x: SDID: 0x%x\n",
++		    __func__, pdev->device, pdev->subsystem_vendor,
++		    pdev->subsystem_device);
++		retval = -1;
++	}
++
++	return retval;
++}
++
+ /**
+  * mpi3mr_probe - PCI probe callback
+  * @pdev: PCI device instance
+@@ -3299,6 +3368,11 @@ mpi3mr_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	struct Scsi_Host *shost = NULL;
+ 	int retval = 0, i;
+ 
++	if (osintfc_mrioc_security_status(pdev)) {
++		warn_non_secure_ctlr = 1;
++		return 1; /* For Invalid and Tampered device */
++	}
++
+ 	shost = scsi_host_alloc(&mpi3mr_driver_template,
+ 	    sizeof(struct mpi3mr_ioc));
+ 	if (!shost) {
+@@ -3415,6 +3489,9 @@ static void mpi3mr_remove(struct pci_dev *pdev)
+ 	unsigned long flags;
+ 	struct mpi3mr_tgt_dev *tgtdev, *tgtdev_next;
+ 
++	if (!shost)
++		return;
++
+ 	mrioc = shost_priv(shost);
+ 	while (mrioc->reset_in_progress || mrioc->is_driver_loading)
+ 		ssleep(1);
+@@ -3535,6 +3612,9 @@ static int mpi3mr_resume(struct pci_dev *pdev)
+ 	pci_power_t device_state = pdev->current_state;
+ 	int r;
+ 
 +	if (!shost)
 +		return 0;
 +
-+	mrioc = shost_priv(shost);
-+	while (mrioc->reset_in_progress || mrioc->is_driver_loading)
-+		ssleep(1);
-+	mrioc->stop_drv_processing = 1;
-+	mpi3mr_cleanup_fwevt_list(mrioc);
-+	scsi_block_requests(shost);
-+	mpi3mr_stop_watchdog(mrioc);
-+	mpi3mr_cleanup_ioc(mrioc, 1);
-+
-+	device_state = pci_choose_state(pdev, state);
-+	ioc_info(mrioc, "pdev=0x%p, slot=%s, entering operating state [D%d]\n",
-+	    pdev, pci_name(pdev), device_state);
-+	pci_save_state(pdev);
-+	pci_set_power_state(pdev, device_state);
-+	mpi3mr_cleanup_resources(mrioc);
-+
-+	return 0;
-+}
-+
-+/**
-+ * mpi3mr_resume - PCI power management resume callback
-+ * @pdev: PCI device instance
-+ *
-+ * Restore the power state to D0 and reinitialize the controller
-+ * and resume I/O operations to the target devices
-+ *
-+ * Return: 0 on success, non-zero on failure
-+ */
-+static int mpi3mr_resume(struct pci_dev *pdev)
-+{
-+	struct Scsi_Host *shost = pci_get_drvdata(pdev);
-+	struct mpi3mr_ioc *mrioc;
-+	pci_power_t device_state = pdev->current_state;
-+	int r;
-+
-+	mrioc = shost_priv(shost);
-+
-+	ioc_info(mrioc, "pdev=0x%p, slot=%s, previous operating state [D%d]\n",
-+	    pdev, pci_name(pdev), device_state);
-+	pci_set_power_state(pdev, PCI_D0);
-+	pci_enable_wake(pdev, PCI_D0, 0);
-+	pci_restore_state(pdev);
-+	mrioc->pdev = pdev;
-+	mrioc->cpu_count = num_online_cpus();
-+	r = mpi3mr_setup_resources(mrioc);
-+	if (r) {
-+		ioc_info(mrioc, "%s: Setup resoruces failed[%d]\n",
-+		    __func__, r);
-+		return r;
-+	}
-+
-+	mrioc->stop_drv_processing = 0;
-+	mpi3mr_init_ioc(mrioc, 1);
-+	scsi_unblock_requests(shost);
-+	mpi3mr_start_watchdog(mrioc);
-+
-+	return 0;
-+}
-+#endif
-+
-+
- static const struct pci_device_id mpi3mr_pci_id_table[] = {
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_LSI_LOGIC, 0x00A5,
-@@ -3495,6 +3576,10 @@ static struct pci_driver mpi3mr_pci_driver = {
- 	.probe = mpi3mr_probe,
- 	.remove = mpi3mr_remove,
- 	.shutdown = mpi3mr_shutdown,
-+#ifdef CONFIG_PM
-+	.suspend = mpi3mr_suspend,
-+	.resume = mpi3mr_resume,
-+#endif
- };
+ 	mrioc = shost_priv(shost);
  
- static int __init mpi3mr_init(void)
+ 	ioc_info(mrioc, "pdev=0x%p, slot=%s, previous operating state [D%d]\n",
 -- 
 2.18.1
 
@@ -195,7 +234,7 @@ this e-mail is strictly prohibited. If you received this e-mail in error,
 please return the e-mail to the sender, delete it from your computer, and 
 destroy any printed copy of it.
 
---00000000000026d0aa05b70ad3bb
+--00000000000052be3e05b70ad393
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -265,14 +304,14 @@ pNj4hlSJMNNqxNSqrKaD1cR4/oZVPFVnJJYlB01cLVjGMzta9x27e6XEtseo2s7aoPS2l82koMr7
 M+LbYxcXFT2gXvoYd2Ms8zsLrhO2M6pMzeNGWk2HWTof9s7EEHDjis/MRlbYSNaohV23IUzNlBw7
 1FmvvW5GKK0xggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
 IG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0g
-RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgMA991Phh
-LnwoomhtQDOc+llYsoiLSRHCst8nsNzBUMgwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
-hkiG9w0BCQUxDxcNMjAxMjIyMTAxMzIzWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
+RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgRNDh3WIV
+/toRpmweux7ng7GNVx3hYjmL6LG8Hh8OoIwwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
+hkiG9w0BCQUxDxcNMjAxMjIyMTAxMzI2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
 BglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG
-9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAIHxIk2wjDY13ZqmU80G5xx6pSCG
-ZhPBafFv7u0Q2iF1maNDqZkkrE6B9i8jYhiE4b0UCwFX2OQd9SXR0+m578bjegenQfhsDHfmlCcK
-95CrulP073MqY9Z2g3WLlWEyUpNPEOMOoa+QB1lr27Q0hqZCvM1Smv1Rc1t6v3PYs0WwKq9QwEwJ
-mS7TARh7tk/c1FOqgmWeQhP1mqHC+grYFlAn92bh3tK6uhWX7T9iHRikiQ0q06QT+4hO3FV3Nxi6
-kbpks14b7thdcrMlzigW8hj60TaQ7QkOSf+nrs/A387eQxo1/gxVY6cC3r4ZSrg8HMQGDsUxnviq
-4/eULPvRKJw=
---00000000000026d0aa05b70ad3bb--
+9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJmq7wMWKbPmjrCbUjhfvnvlNu4N
+CaopfGyvcfyF1Qi7DRRxnGHLSIykLfo9+cJrMqIdove4DZCfGNkOTiwOvxzDfAlRAt2aZtLheBTt
+Z7G5XgutWcae3tYLjjsO4ah4yzxPVEKlNgHGjOUR6DWqP+Afa62uuEbtK+tcK8y/BK9BYbU30Qfz
+GyIyutfC83TTMS1q+UXELyVr44W6RVah8WSXiMNDHSBdCUphcDe+k/xaFSdH+pGfL+XB+83Majcq
+Aui668bYm7G34V+HYs2JZRK/YeT57SK8Em6TDBhgNh6ReE/I6fLPMqXWEqlE7GG7pRf1v9yQBARa
+X2r+jz1pv9M=
+--00000000000052be3e05b70ad393--
