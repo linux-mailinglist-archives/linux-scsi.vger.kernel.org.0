@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F85C2E0450
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 03:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AF42E044F
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 03:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbgLVCS1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Dec 2020 21:18:27 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:26958 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbgLVCS1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Dec 2020 21:18:27 -0500
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20201222021743epoutp0435a4e1605a2eadb52b4e43a6a324d731~S6FPZqmxP2227622276epoutp04B
-        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:17:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20201222021743epoutp0435a4e1605a2eadb52b4e43a6a324d731~S6FPZqmxP2227622276epoutp04B
+        id S1725946AbgLVCSY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Dec 2020 21:18:24 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:38724 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgLVCSY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Dec 2020 21:18:24 -0500
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201222021741epoutp01012dc5fbbd4d2ab50189ccefa4929898~S6FNOmGO81804918049epoutp01Y
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:17:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201222021741epoutp01012dc5fbbd4d2ab50189ccefa4929898~S6FNOmGO81804918049epoutp01Y
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1608603463;
-        bh=meghjGCzFWRirtyEtM1vEEYNZ8hDVaoWHxiCHcpVicU=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=Nb1OAkgpqQDolBGgN5QeR+fxd9XfUyFRbJhJ71kf/AZk2HsBUaNp7PBAB92IB0q49
-         NI43eL26uF09UiY8+PT14FsoxqjXYYY8tw2Y8I8eIMqFLWc/ZVhncC7nAuhVafW19B
-         C6HNqdSmJvT/HnVejT/f/ayQCPa55R9Hau+HTW+c=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20201222021743epcas2p3baa69d02c78028154afd3970413bf22c~S6FO1_m8R2888228882epcas2p39;
-        Tue, 22 Dec 2020 02:17:43 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.40.186]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4D0Kjw5Hssz4x9QC; Tue, 22 Dec
-        2020 02:17:40 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F2.E9.56312.24751EF5; Tue, 22 Dec 2020 11:17:38 +0900 (KST)
+        s=mail20170921; t=1608603461;
+        bh=6otfCUScQsQqUhT8MT7TE9t5Yf/LoIlk1bakCNDOfgs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:In-Reply-To:References:From;
+        b=kKSE00OyrdZ/y6rYy7OoUaRs57XeD8zndDo/FP5oTKTTSJv2jRCpBsrw2kLzSIUaQ
+         +ifQiU0+jZbsp4UvQM00oWL8kVUPaWVBcxLXY9x32SYOiBx9HP/8SvtZOX5YR/XZLK
+         aaAdrTMwfEnsdMTbB0Zf5gcWeqsiHrKfvCrhaOcc=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20201222021740epcas2p40768d6d079dcea6fd6f2b05779b8d9ce~S6FMmtC9z1254512545epcas2p4v;
+        Tue, 22 Dec 2020 02:17:40 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.40.181]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4D0Kjv4M2Jz4x9Q6; Tue, 22 Dec
+        2020 02:17:39 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9E.52.05262.34751EF5; Tue, 22 Dec 2020 11:17:39 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389~S6FJ7UuTl0152401524epcas2p2Z;
-        Tue, 22 Dec 2020 02:17:37 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        20201222021738epcas2p2e7527ad5ab8a7af8149574516bc1209f~S6FK8FRC53122631226epcas2p26;
+        Tue, 22 Dec 2020 02:17:38 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20201222021737epsmtrp2ae551643cca28f487133e7c337578a4a~S6FJ6My9y0835008350epsmtrp2L;
-        Tue, 22 Dec 2020 02:17:37 +0000 (GMT)
-X-AuditID: b6c32a46-1efff7000000dbf8-88-5fe157420e65
+        20201222021738epsmtrp28368c0e665a19bdd1d82de6b91335c4a~S6FK63mLD0835108351epsmtrp2J;
+        Tue, 22 Dec 2020 02:17:38 +0000 (GMT)
+X-AuditID: b6c32a47-b81ff7000000148e-f8-5fe15743a44f
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3E.73.08745.14751EF5; Tue, 22 Dec 2020 11:17:37 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8A.9C.13470.24751EF5; Tue, 22 Dec 2020 11:17:38 +0900 (KST)
 Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20201222021737epsmtip134813f227fe06a87eaf47dcf78d8aebd~S6FJoD7110718407184epsmtip1U;
-        Tue, 22 Dec 2020 02:17:37 +0000 (GMT)
+        20201222021738epsmtip1482ceb54fcce53641be8a6e0708cdb75~S6FKu4zeV0722807228epsmtip1F;
+        Tue, 22 Dec 2020 02:17:38 +0000 (GMT)
 From:   Kiwoong Kim <kwmad.kim@samsung.com>
 To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
         avri.altman@wdc.com, jejb@linux.ibm.com,
@@ -56,71 +56,107 @@ To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
         grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
         sh425.lee@samsung.com, bhoon95.kim@samsung.com
 Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [PATCH v2 0/2] permit to set block parameters per vendor
-Date:   Tue, 22 Dec 2020 11:06:45 +0900
-Message-Id: <cover.1608602725.git.kwmad.kim@samsung.com>
+Subject: [PATCH v2 1/2] ufs: add a vops to configure block parameter
+Date:   Tue, 22 Dec 2020 11:06:46 +0900
+Message-Id: <dad43ff87d34cea599e35eed46762f87f4af939d.1608602725.git.kwmad.kim@samsung.com>
 X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmk+LIzCtJLcpLzFFi42LZdljTTNcp/GG8wbn7OhYP5m1js9jbdoLd
+In-Reply-To: <cover.1608602725.git.kwmad.kim@samsung.com>
+In-Reply-To: <cover.1608602725.git.kwmad.kim@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmha5z+MN4g+VtChYP5m1js9jbdoLd
         4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZHFzy1EWi+7rO9gs
         lh//x2TRdfcGo8XSf29ZHPg9Ll/x9rjc18vkMWHRAUaP7+s72Dw+Pr3F4tG3ZRWjx+dNch7t
         B7qZAjiicmwyUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJz
         gI5XUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BQYGhboFSfmFpfmpesl5+daGRoY
-        GJkCVSbkZHzq/cRa8JClomX2F7YGxnvMXYycHBICJhJT5z8Asrk4hAR2MEp82fAayvnEKLHl
-        2mFGCOczo8SRBS+AHA6wlkdrNEC6hQR2MUocW1kOEhYS+MEo0eMDEmYT0JR4enMqE0iriMAZ
-        JolrrWdZQRLMAuoSuyacYAKxhQUcJTqPfQQbySKgKvFloi1ImFfAQmLZyTVQx8lJ3DzXCXaP
-        hEArh8Thh0dZIRIuEiseNUIVCUu8Or6FHcKWkvj8bi8bhF0vsW9qAytEcw+jxNN9/xghEsYS
-        s561gy1mBrp0/S59iLeUJY7cYoE4k0+i4/Bfdogwr0RHmxBEo7LEr0mToYZISsy8eQdqq4fE
-        xjWfWSAhEivxa2436wRG2VkI8xcwMq5iFEstKM5NTy02KjBCjqFNjODUqOW2g3HK2w96hxiZ
-        OBgPMUpwMCuJ8JpJ3Y8X4k1JrKxKLcqPLyrNSS0+xGgKDK6JzFKiyfnA5JxXEm9oamRmZmBp
-        amFqZmShJM5bbPAgXkggPbEkNTs1tSC1CKaPiYNTqoFJSHZfke3LrfPnVb6x6V9XlCBZJd5V
-        7rHrn+zWrYXc21/PPLV+ygaFvaXH2jaLpyhuu+w2Ja1NaOcpmRcJKd9s73CqLJnz4nd58jST
-        8tWnUg1aV9g07GSq0lz0NatIfeKWnpNvlgQ8/nT9KeP2A8ekj057Y/i120rAcvqsZvO3c/qX
-        erwwX6ckYcPk0Pm7387gApvDuftHNI7vEV/1aHreucPLdxdekDDLPvch1P3FtVtFp44bV3VP
-        tEg8P0vwWUHIoXnXm00EQ5QEkzyLE6dG12z7cDv+zdc9afOil+Y8igl6pyWrMS3b4ePkRXfq
-        G8+1RPbFXZR+b7qqien339et7xxNeQuOxn61mzBlW6/vUiWW4oxEQy3mouJEAJDZN+sWBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCLMWRmVeSWpSXmKPExsWy7bCSnK5j+MN4g1MrdSwezNvGZrG37QS7
+        GJkCVSbkZGx5eYGp4At3xcwtb9gbGN9zdjFycEgImEhsfM/dxcjFISSwg1Hi58WbzBDOJ0aJ
+        WwumMEE43xglehq+snUxcoJ1tLVsY4dI7GWU6Hy+lhHC+cEosevAerAqNgFNiac3p4K1iwic
+        YZK41nqWFSTBLKAusWvCCSYQW1jAReLK5f3sIDaLgKrEtdczWEBsXoFoibV7OqDWyUncPNfJ
+        DGJzClhKXL2/hhWVzQVUs5BDovdoHxNEg4vEk3cnWCBsYYlXx7ewQ9hSEp/f7YUaWi+xb2oD
+        VHMPo8TTff8YIRLGErOetTOCgoYZ6IX1u/QhoaQsceQWC8T9fBIdh/+yQ4R5JTrahCAalSV+
+        TZoMNURSYubNO1BbPSTWvZwPDUagTavmvGScwCg/C2HBAkbGVYxiqQXFuempxUYFxsjRt4kR
+        nFS13Hcwznj7Qe8QIxMH4yFGCQ5mJRFeM6n78UK8KYmVValF+fFFpTmpxYcYTYEBOZFZSjQ5
+        H5jW80riDU2NzMwMLE0tTM2MLJTEeYsNHsQLCaQnlqRmp6YWpBbB9DFxcEo1MEmUPjrbGzPz
+        7hbR6d8cc7SPTYx3izHd2T/D4TPHkbYOkwuTnA/ErS+f/ST5/YVJbC++98+NCF750MPHr2rh
+        q5QyLY7/VzjPSqy0ym//8H/vCl1pzqsyARMVbc5bOwhwy6f4v7y0I0gjfpn1HG/tAz23nLvq
+        Hy5Jn3lzvR6zUeSdG/yiOum5gdc5yjZtehy3J/PcUmErd86cB0HaDQxz9ef0MxZaZMj0SMkd
+        sVggor6Gy+P3u/fskSf5Xu78FSdWdM/oxjcVr5z8U2cZG2UnO7F06VekMhVy7Pb2ZV5+sk5V
+        sUGie0Vw96+AaO+deQY1CyvlknzWPTySv9mphVFW2t7W34pNRTM6/3lX1W0lluKMREMt5qLi
+        RAAGp8AXMwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGLMWRmVeSWpSXmKPExsWy7bCSnK5T+MN4g7uLTS0ezNvGZrG37QS7
         xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8Zq8evvenaL1YsfsFgsurGNyeLmlqMsFt3Xd7BZ
         LD/+j8mi6+4NRoul/96yOPB7XL7i7XG5r5fJY8KiA4we39d3sHl8fHqLxaNvyypGj8+b5Dza
-        D3QzBXBEcdmkpOZklqUW6dslcGV86v3EWvCQpaJl9he2BsZ7zF2MHBwSAiYSj9ZodDFycQgJ
-        7GCUeLV3L1MXIydQXFLixM7njBC2sMT9liOsEEXfGCX+fJrBApJgE9CUeHpzKhNIQkTgHpPE
-        pQlzmUESzALqErsmnACbJCzgKNF57CMjyDYWAVWJLxNtQcK8AhYSy06uYYZYICdx81wn8wRG
-        ngWMDKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYIDVktrB+OeVR/0DjEycTAeYpTg
-        YFYS4TWTuh8vxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dU
-        AxN7a94prcTdcQUZgXxS2c9/GH2Z1qG3L1dTruhxb0JyqOKXeTbZ+s9XWz168X13pszDzyHX
-        dX8IPDnwq+OL55cF/zMXSH7OTJyckGVlM+HoD+WMQnPpb4XLGf7t6r+/JeyKc5uwxlmrHbV9
-        HEnW7z7fnvnSefOD2YVy4rK9f73SXfbeENx/cGLGxllK7YdeCN6w09vYeb9Dau3LiqhQ3Xp1
-        58NMb913b3vtXP3U9Tbzz6ezpzdfv2JS9qCz+tTUwM2TtVddUe1vTJ79mvEy/8ZlScnFOaWf
-        9/G9/SG/Tm7xn5cCfd2PZc+0yUocsvdrexp0xGgaZ/baOYlXfi9yWn1JTX1/9jar/hVFEw3f
-        /lJVYinOSDTUYi4qTgQAQOL57ccCAAA=
-X-CMS-MailID: 20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389
+        D3QzBXBEcdmkpOZklqUW6dslcGVseXmBqeALd8XMLW/YGxjfc3YxcnJICJhItLVsY+9i5OIQ
+        EtjNKDFx8ix2iISkxImdzxkhbGGJ+y1HWCGKvjFKzG+8wgaSYBPQlHh6cyoTSEJE4B6TxKUJ
+        c5lBEswC6hK7JpxgArGFBVwkrlzeDzaVRUBV4trrGSwgNq9AtMTaPR1sEBvkJG6e6wTr5RSw
+        lLh6fw0riC0kYCGxdtFENlziExgFFjAyrGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93E
+        CI4KLc0djNtXfdA7xMjEwXiIUYKDWUmE10zqfrwQb0piZVVqUX58UWlOavEhRmkOFiVx3gtd
+        J+OFBNITS1KzU1MLUotgskwcnFINTLOlKh/1nu9l+b3d5HKw9JrnPJ2pzUcuLZR193A6d1vW
+        9f+x05mrD8n52p86+vk2S9X1mBT7x4diHz90qG2dKSGUcq1rnejHzHcyGb/l9qyfvWnZp6jj
+        nLc5+u5lW+1Vnzb9zS3X+W6aPvxGM7eZb/TdO3/R4Q7b3fN+fXy+2Gz+CrX0CY6rkq9r7ZrK
+        zL8mhTfChf/TjuupLt/WcHT7xxhst3vzUSOqpzdS9LyERfoBZskHQvJ/zn9kj5k1deaSf48l
+        XvOXvbS20cg45G65/8hL+6aAKAcBfyvrv0W7j1xJkO/4f9Od1+p7R9qeUydur5hyleXtXJOg
+        V7+9ntvnz7FR5N8e0N59himem1st10+JpTgj0VCLuag4EQAFFI7d+QIAAA==
+X-CMS-MailID: 20201222021738epcas2p2e7527ad5ab8a7af8149574516bc1209f
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389
-References: <CGME20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389@epcas2p2.samsung.com>
+X-CMS-RootMailID: 20201222021738epcas2p2e7527ad5ab8a7af8149574516bc1209f
+References: <cover.1608602725.git.kwmad.kim@samsung.com>
+        <CGME20201222021738epcas2p2e7527ad5ab8a7af8149574516bc1209f@epcas2p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-v1 -> v2: rename the vops and fix some typos
+There could be some cases to set block paramters
+per host, because of its own dma structure or whatever.
 
-There are some cases of dispatching a command with more than
-one scatterlist entry and under 4KB size. Device sends just one DATA IN
-but some SoCs transfer could tranfer data to a physically continuous
-area, which should have done per each scatterlist entry.
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 2 ++
+ drivers/scsi/ufs/ufshcd.h | 8 ++++++++
+ 2 files changed, 10 insertions(+)
 
-Kiwoong Kim (2):
-  ufs: add a vops to configure block parameter
-  ufs: ufs-exynos: set dma_alignment to 4095
-
- drivers/scsi/ufs/ufs-exynos.c | 9 +++++++++
- drivers/scsi/ufs/ufshcd.c     | 2 ++
- drivers/scsi/ufs/ufshcd.h     | 8 ++++++++
- 3 files changed, 19 insertions(+)
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 92d433d..5f89b0e 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -4758,6 +4758,8 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
+ 
+ 	ufshcd_crypto_setup_rq_keyslot_manager(hba, q);
+ 
++	ufshcd_vops_slave_configure(hba, sdev);
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 61344c4..4bf4fed 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -329,6 +329,7 @@ struct ufs_hba_variant_ops {
+ 					void *data);
+ 	int	(*program_key)(struct ufs_hba *hba,
+ 			       const union ufs_crypto_cfg_entry *cfg, int slot);
++	void	(*slave_configure)(struct scsi_device *sdev);
+ };
+ 
+ /* clock gating state  */
+@@ -1228,6 +1229,13 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
+ 		hba->vops->config_scaling_param(hba, profile, data);
+ }
+ 
++static inline void ufshcd_vops_slave_configure(struct ufs_hba *hba,
++						    struct scsi_device *sdev)
++{
++	if (hba->vops && hba->vops->slave_configure)
++		hba->vops->slave_configure(sdev);
++}
++
+ extern struct ufs_pm_lvl_states ufs_pm_lvl_states[];
+ 
+ /*
 -- 
 2.7.4
 
