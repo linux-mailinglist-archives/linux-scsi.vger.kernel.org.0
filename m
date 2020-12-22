@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10762E08A0
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 11:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053DF2E088F
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 11:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbgLVKOI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Dec 2020 05:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S1726288AbgLVKNn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Dec 2020 05:13:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbgLVKOI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 05:14:08 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80ECC061793
-        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:05 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id z21so8082283pgj.4
-        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:05 -0800 (PST)
+        with ESMTP id S1726108AbgLVKNn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 05:13:43 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66ADC06179C
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:08 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id z21so8082379pgj.4
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=opHhvQyD6tZmvgygkmZqlQIR/78J/tQHD586Bbko5U0=;
-        b=TF085mjqDvXTkS8O+L+afjAhsMgg7WwBIkEAR86A6/42PsxOZOKYBqv8+8WYvOoM58
-         oachiVhTenmcQ4G5BgGut3aOkTem4aEA1T+V97IRz/F8wGe0pzvQ7Sazonx1wYL8g7pU
-         tNleEBPXENh06+UWeP5meyAfzlBZk7mRrwLXo=
+        bh=hSFuTn4c87Zp1tlZj/IOFhsdE2XdxzRXMSEk2Co6yxY=;
+        b=VAakUyiAoIIzrdXh0nr3Iv5+jL8ZVaIyJDdIu29oxLnUcC8L82XXBzL8SnbMXa5Uwu
+         nsQJfb0umzGWdL04JovnqMYbfnDIrY4vcggUCVXq8913/hXl9Xdwofmni6v0y7nask9T
+         EyK+/OVXI9szMqaZI7GrqqF9mqtm6MUd79Yfc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=opHhvQyD6tZmvgygkmZqlQIR/78J/tQHD586Bbko5U0=;
-        b=mRZYtl3qj9UHPBvTeqtC1DlgM1tjubqp1elB1HZ5gJSN2GqzBMGbL5F6Jtj6xY1Fn5
-         t3mFLiaBTGcptsC6m/tPRVG++QZEiM6Lxt/ILlK8mw5QYE+Gtf8TTdrQnY2KicBdZnDO
-         6DP0RC3i+7tPRTYUHq3NAkI2ATd/Im3pKclDgd/tneBfOEKSBhyBJXWN04MPG6kkjbtV
-         FzneetQGJYbOeuEILUteQXrZ8DJ4ISPsnaKVAX2pneuAHhYaRVMmatwhUKo/dIcLFqzn
-         g1qiZalRPSF8eBZYt3D7jjRMO6WbXscqwFT6wZG7T/yXznNZdZxGIUDMu6qeP+/o5FtC
-         k7lw==
-X-Gm-Message-State: AOAM531bGtZql5c8rH5HkBS3k5nPCfhTcVgKBx3JZb12NzAu1pZNpyg/
-        NF3ceNLgu9cWRJQkohPyVXKzi8RRcrjLJqyOqOSJkC5+iuKI5WwdlRE0dijNYFVaL6YGXH1YqGZ
-        l8PG4OFd4JlotdgexkrZ8ELBohOSFw6Ngv9SG+rQMJlkJ04lUDncWg1C4/vVJAhNVVuA6+QUwa+
-        QjsgrajYgt
+        bh=hSFuTn4c87Zp1tlZj/IOFhsdE2XdxzRXMSEk2Co6yxY=;
+        b=dXEeMLXPuV4y1vqdzk1NbykuUfNdVqooU4knRNr7SLdfX8HRRflRdzGLF0ch5Fgf2R
+         lWCW9MaBArFFRMLYZm9EyiBSP6DhmyHIrCl1gzuW7UZ9y9IXJ7weq2ZAc7fEX7f7Y3bz
+         1Yh3HkJAn9+VxYDdCQm1mq/ETurf1jIroE9/sukMGGlepEoMpNJKlu0wkRH9dIJ6O4+7
+         lRzNV3Dj6vt18dsBfACogUa3JHwU2Ph9fcjHFYRVobton6RvI24x7dWNIu7mKV/s3JsV
+         TzhIVElNDgPAOvJme+q3N998+Z1pi24tMN5uD0xD2l1dnmf6JOUkbilFZX/Atgus2sBZ
+         OLVw==
+X-Gm-Message-State: AOAM532+Twjc76hBB1vN07vFskTd/gKHyQom+iAdU8gsucZkYCS8zsRI
+        O4hHoCCJZkyqAyWAcDQulJmBQ2aJtjaFBGiLRTwLDfvH3V73WRQN45AHX2og2C4C9kCsx5BppK4
+        pux7IovgmEMxRWswNySsniGi7AG/7iXmxbxB2ESgmcl5t5Gc0WSEISSKSvbh8yWj4R/si3Wo8BX
+        IKCAALsWGJ
 MIME-Version: 1.0
-X-Google-Smtp-Source: ABdhPJx3bIp1UK4xG/GcS0t+/I0VbUUbwcRC3Kcy4lAKs/370b9TTG5TJGPLR1cYQpqruH3lxpTCTQ==
-X-Received: by 2002:a63:6207:: with SMTP id w7mr19335717pgb.164.1608631984954;
-        Tue, 22 Dec 2020 02:13:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx9ydENXooi6qrljDeWmobQ4alFvT5KN7AvOE/enGw9oIObCJV7cf2AH4Sdp083FIgospMInQ==
+X-Received: by 2002:a63:c00e:: with SMTP id h14mr16187937pgg.108.1608631988049;
+        Tue, 22 Dec 2020 02:13:08 -0800 (PST)
 Received: from drv-bst-rhel8.static.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id p16sm19148624pju.47.2020.12.22.02.13.02
+        by smtp.gmail.com with ESMTPSA id p16sm19148624pju.47.2020.12.22.02.13.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Dec 2020 02:13:04 -0800 (PST)
+        Tue, 22 Dec 2020 02:13:07 -0800 (PST)
 From:   Kashyap Desai <kashyap.desai@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
@@ -54,73 +54,148 @@ Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
         mpi3mr-linuxdrv.pdl@broadcom.com,
         Kashyap Desai <kashyap.desai@broadcom.com>,
         sathya.prakash@broadcom.com
-Subject: [PATCH 15/24] mpi3mr: allow certain commands during pci-remove hook
-Date:   Tue, 22 Dec 2020 15:41:47 +0530
-Message-Id: <20201222101156.98308-16-kashyap.desai@broadcom.com>
+Subject: [PATCH 16/24] mpi3mr: hardware workaround for UNMAP commands to nvme drives
+Date:   Tue, 22 Dec 2020 15:41:48 +0530
+Message-Id: <20201222101156.98308-17-kashyap.desai@broadcom.com>
 X-Mailer: git-send-email 2.18.1
 In-Reply-To: <20201222101156.98308-1-kashyap.desai@broadcom.com>
 References: <20201222101156.98308-1-kashyap.desai@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000010516d05b70ad221"
+        boundary="0000000000003fbd0705b70ad22d"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000010516d05b70ad221
+--0000000000003fbd0705b70ad22d
 Content-Type: text/plain; charset="US-ASCII"
 
-This patch allows SSU and Sync Cache commands to be sent to the controller
-instead of driver returning DID_NO_CONNECT during driver unload to flush
-any cached data from the drive.
+The controller hardware can not handle certain unmap commands for NVMe
+drives, this patch adds support in the driver to check those commands and
+handle as appropriate.
 
 Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
 Cc: sathya.prakash@broadcom.com
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 99 +++++++++++++++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
 diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index 6f19e5392433..07a7b1efbc4f 100644
+index 07a7b1efbc4f..742cf45d4878 100644
 --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
 +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -2865,6 +2865,27 @@ static int mpi3mr_target_alloc(struct scsi_target *starget)
+@@ -2865,6 +2865,100 @@ static int mpi3mr_target_alloc(struct scsi_target *starget)
  	return retval;
  }
  
-+
 +/**
-+ * mpi3mr_allow_scmd_to_fw - Command is allowed during shutdown
++ * mpi3mr_check_return_unmap - Whether an unmap is allowed
++ * @mrioc: Adapter instance reference
 + * @scmd: SCSI Command reference
 + *
-+ * Checks whether a CDB is allowed during shutdown or not.
++ * The controller hardware cannot handle certain unmap commands
++ * for NVMe drives, this routine checks those and return true
++ * and completes the SCSI command with proper status and sense
++ * data.
 + *
-+ * Return: TRUE for allowed commands, FALSE otherwise.
++ * Return: TRUE for not  allowed unmap, FALSE otherwise.
 + */
-+
-+inline bool mpi3mr_allow_scmd_to_fw(struct scsi_cmnd *scmd)
++static bool mpi3mr_check_return_unmap(struct mpi3mr_ioc *mrioc,
++	struct scsi_cmnd *scmd)
 +{
-+	switch (scmd->cmnd[0]) {
-+	case SYNCHRONIZE_CACHE:
-+	case START_STOP:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
++	unsigned char *buf;
++	u16 param_len, desc_len;
 +
++	param_len = get_unaligned_be16(scmd->cmnd + 7);
++
++	if (!param_len) {
++		ioc_warn(mrioc,
++		    "%s: CDB received with zero parameter length\n",
++		    __func__);
++		scsi_print_command(scmd);
++		scmd->result = DID_OK << 16;
++		scmd->scsi_done(scmd);
++		return true;
++	}
++
++	if (param_len < 24) {
++		ioc_warn(mrioc,
++		    "%s: CDB received with invalid param_len: %d\n",
++		    __func__, param_len);
++		scsi_print_command(scmd);
++		scmd->result = (DRIVER_SENSE << 24) |
++		    SAM_STAT_CHECK_CONDITION;
++		scsi_build_sense_buffer(0, scmd->sense_buffer, ILLEGAL_REQUEST,
++		    0x1A, 0);
++		scmd->scsi_done(scmd);
++		return true;
++	}
++	if (param_len != scsi_bufflen(scmd)) {
++		ioc_warn(mrioc,
++		    "%s: CDB received with param_len: %d bufflen: %d\n",
++		    __func__, param_len, scsi_bufflen(scmd));
++		scsi_print_command(scmd);
++		scmd->result = (DRIVER_SENSE << 24) |
++		    SAM_STAT_CHECK_CONDITION;
++		scsi_build_sense_buffer(0, scmd->sense_buffer, ILLEGAL_REQUEST,
++		    0x1A, 0);
++		scmd->scsi_done(scmd);
++		return true;
++	}
++	buf = kzalloc(scsi_bufflen(scmd), GFP_ATOMIC);
++	if (!buf) {
++		scsi_print_command(scmd);
++		scmd->result = (DRIVER_SENSE << 24) |
++		    SAM_STAT_CHECK_CONDITION;
++		scsi_build_sense_buffer(0, scmd->sense_buffer, ILLEGAL_REQUEST,
++		    0x55, 0x03);
++		scmd->scsi_done(scmd);
++		return true;
++	}
++	scsi_sg_copy_to_buffer(scmd, buf, scsi_bufflen(scmd));
++	desc_len = get_unaligned_be16(&buf[2]);
++
++	if (desc_len < 16) {
++		ioc_warn(mrioc,
++		    "%s: Invalid descriptor length in param list: %d\n",
++		    __func__, desc_len);
++		scsi_print_command(scmd);
++		scmd->result = (DRIVER_SENSE << 24) |
++		    SAM_STAT_CHECK_CONDITION;
++		scsi_build_sense_buffer(0, scmd->sense_buffer, ILLEGAL_REQUEST,
++		    0x26, 0);
++		scmd->scsi_done(scmd);
++		kfree(buf);
++		return true;
++	}
++
++	if (param_len > (desc_len + 8)) {
++		scsi_print_command(scmd);
++		ioc_warn(mrioc,
++		    "%s: Truncating param_len(%d) to desc_len+8(%d)\n",
++		    __func__, param_len, (desc_len + 8));
++		param_len = desc_len + 8;
++		put_unaligned_be16(param_len, scmd->cmnd+7);
++		scsi_print_command(scmd);
++	}
++
++	kfree(buf);
++	return false;
++}
+ 
  /**
-  * mpi3mr_qcmd - I/O request despatcher
-  * @shost: SCSI Host reference
-@@ -2900,7 +2921,8 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
+  * mpi3mr_allow_scmd_to_fw - Command is allowed during shutdown
+@@ -2957,6 +3051,11 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
  		goto out;
  	}
  
--	if (mrioc->stop_drv_processing) {
-+	if (mrioc->stop_drv_processing &&
-+	    !(mpi3mr_allow_scmd_to_fw(scmd))) {
- 		scmd->result = DID_NO_CONNECT << 16;
- 		scmd->scsi_done(scmd);
- 		goto out;
++	if ((scmd->cmnd[0] == UNMAP) &&
++	    (stgt_priv_data->dev_type == MPI3_DEVICE_DEVFORM_PCIE) &&
++	    mpi3mr_check_return_unmap(mrioc, scmd))
++		goto out;
++
+ 	host_tag = mpi3mr_host_tag_for_scmd(mrioc, scmd);
+ 	if (host_tag == MPI3MR_HOSTTAG_INVALID) {
+ 		scmd->result = DID_ERROR << 16;
 -- 
 2.18.1
 
@@ -138,7 +213,7 @@ this e-mail is strictly prohibited. If you received this e-mail in error,
 please return the e-mail to the sender, delete it from your computer, and 
 destroy any printed copy of it.
 
---00000000000010516d05b70ad221
+--0000000000003fbd0705b70ad22d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -208,14 +283,14 @@ pNj4hlSJMNNqxNSqrKaD1cR4/oZVPFVnJJYlB01cLVjGMzta9x27e6XEtseo2s7aoPS2l82koMr7
 M+LbYxcXFT2gXvoYd2Ms8zsLrhO2M6pMzeNGWk2HWTof9s7EEHDjis/MRlbYSNaohV23IUzNlBw7
 1FmvvW5GKK0xggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
 IG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0g
-RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgD579aqQO
-/soRuWbZCM89wWsDeTSdvPIXsd7p59qiZgwwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
-hkiG9w0BCQUxDxcNMjAxMjIyMTAxMzA1WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
+RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgT7E3MoqS
+FjuynMQPLK6al4YivfdzBqYmIYA23iY6JFkwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
+hkiG9w0BCQUxDxcNMjAxMjIyMTAxMzA4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
 BglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG
-9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBABSDRi63MLEk63h2nv/aTKf1dCKn
-1NjghN1hc+UoNLl59d6jWNKsuPB0MfdcSIp7sNNejl4uaiXDJ8ykYKfKpXpugFVTGGXoEgvj6Gtm
-5d+C2raDQ6EPemzZdHOR9/7pQKiCBKOFjnHLtNzfeWF4Yzrq58fIk6W8YroCweeA+r+RFhNvpMqf
-sBviRKeBTiy+sW9hDFyWne7pW5RUcP/Onim811L8o5cDXycLxlYKa4DKLD3EwduaZY72M1NGAcyO
-+NibOTgZiftXNVlG20LoMz2iPgkQHgLA1risklJylVpWK9owDKM6no+qT70k9ObP5MbRZ9UIVPOd
-gKkDdIdyJCU=
---00000000000010516d05b70ad221--
+9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAFe6BrD5MtZZmPOqWJwJd/jBtEIv
+4yfR7FN4452AJBO7rlBGxTwqV8Zd78oV4oWDXdAlT2k9FhuM2zCiMl/+IV6pme/agoUOPbGba9Gj
+ehdIohtp8jBXyRydB6P5SOpKlSCb2oJNabZOficKCdfTRGCVRx8hFqDC9MAqNPjmfHFTopkQa36d
+6WqAuVENm6/nxvZqNJUpZ3ZheF/1/Q5Ky59rfF3V41TemQFlLuh93UbHizvqdgwFlk96nNJ3MMUZ
+Ut386ELoRLTMVh83nbWY1SlBJozlEBwXn1p40eL8lz1bX75Hb4F09czCn+9foefkPbQ41GbEgp80
+mlugdPqAz4M=
+--0000000000003fbd0705b70ad22d--
