@@ -2,147 +2,428 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6082E0603
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 07:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C872E069A
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 08:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725785AbgLVGYr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Dec 2020 01:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725300AbgLVGYr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 01:24:47 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE99EC0613D3;
-        Mon, 21 Dec 2020 22:24:06 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id q137so11027110iod.9;
-        Mon, 21 Dec 2020 22:24:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dvYfLYsFfS43bvrF26hnW/hEbzAkRm7Scm+LXEgVfVU=;
-        b=bYLuiH1oTcVZ/I6H0OVBdf9f3YqrefhYZAyEJdB5TC6xIKwxPhaupenWHD8bSvukj0
-         He9SW7p+RSa3NctkxTKoYhyCXsQPtHrNaN3konj8LhUdsMyFg6dYKP9JkwuJcwIKBX+x
-         LQNKv/FIMS3Jp/cK8Y2hSSLoJ8L7CRNV6OFIS+9oh51CT6iIyayvGHHtGV6tNw1tkCXo
-         yY4qAYEgguc8HVzEP2A0py/XKMmpWcWza2KurgLXLItdf2rSC9YVrmEErjlfj+dTJPxY
-         nZn42AO/OFiptOlofA5Z7FguNSPvqFi8mtf0cDfV7fU65ZLc/y39YQY+S+600ASWJrYp
-         uWYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dvYfLYsFfS43bvrF26hnW/hEbzAkRm7Scm+LXEgVfVU=;
-        b=jstAl/RpQZMleNbPM6yhdNNPEBbJdmS5aZEQXoadTVtMF9YIWoAVAQxrV4DVkyp3zX
-         qKm7lHwneXwa5cP6o299OzR5Ylr4BlSwi+bjOBMBGgJgkXTZfjZA8gZMZ6xUyt3VuOyp
-         b//WKvaEtQmy0JGY/zIBMbv/6rhBHhHuA75SKnr3uYeqqGtC6RNwcCOOncfGbkM5hfAY
-         PdtmS7hzCFSgMmx1ZBrzjP6FI8OUzceLBmba7tRw40v7YpOlwy3GYgJ7swwyYkqYYSZt
-         An2s65HSX1835PFcVGRv1xKUdsssIn7t/99dfLIgjr28lI3cVY9zZmcuy6PyBaFTPixL
-         jmjA==
-X-Gm-Message-State: AOAM531jNOV8xNlYQIMIHOtY+W36prNOWvh1tmSHrv6EiczLUuIeN0Qh
-        PTFsVJNmBSXPX0vXIfQLiU/lQjd2zoQ=
-X-Google-Smtp-Source: ABdhPJxB9wDBA5Ngh+kgnMjiLRbev4Rw8UPKgrWjlAhWtRksNN90MssBBP9rj+JfCQ0GrrHiwWXSRw==
-X-Received: by 2002:a6b:3bc3:: with SMTP id i186mr16958974ioa.192.1608618245892;
-        Mon, 21 Dec 2020 22:24:05 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id x5sm14561731ilm.22.2020.12.21.22.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Dec 2020 22:24:05 -0800 (PST)
-Date:   Mon, 21 Dec 2020 23:24:03 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Tyrel Datwyler <tyreld@linux.ibm.com>
-Cc:     james.bottomley@hansenpartnership.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, brking@linux.ibm.com,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 3/3] ibmvfc: use correlation token to tag commands
-Message-ID: <20201222062403.GA2190683@ubuntu-m3-large-x86>
-References: <20201117185031.129939-1-tyreld@linux.ibm.com>
- <20201117185031.129939-3-tyreld@linux.ibm.com>
+        id S1726010AbgLVHJv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Dec 2020 02:09:51 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:10906 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726174AbgLVHJu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 02:09:50 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1608620970; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=rXmG+yG1PufplSYABUCYYLNiRIqRtfqqzw3wspNfqlc=;
+ b=I8guDgLtCGfXk4IOEj0SWZs4s/uOtEpGM0JsRRqbkhonEEFE7R4OtqQTCGtLveMCEj4YFsMQ
+ e2xziMe1iHtRzd/G476NRFlVN2AKD0eebSMTuqXN6hz0I9AOxqPLYfhMBU6gmnClMvcYoUs9
+ qMoX0ecj1B7m88q63hhyU/BF5Tw=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-west-2.postgun.com with SMTP id
+ 5fe19b8ecfe5dd67db6541d1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 22 Dec 2020 07:09:02
+ GMT
+Sender: ziqichen=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8CDAFC43465; Tue, 22 Dec 2020 07:09:02 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ziqichen)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E2BB2C433CA;
+        Tue, 22 Dec 2020 07:08:58 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201117185031.129939-3-tyreld@linux.ibm.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 22 Dec 2020 15:08:58 +0800
+From:   ziqichen@codeaurora.org
+To:     Kiwoong Kim <kwmad.kim@samsung.com>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        cang@codeaurora.org, hongwus@codeaurora.org, rnayak@codeaurora.org,
+        vinholikatti@gmail.com, jejb@linux.vnet.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        'Alim Akhtar' <alim.akhtar@samsung.com>,
+        'Avri Altman' <avri.altman@wdc.com>,
+        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
+        'Andy Gross' <agross@kernel.org>,
+        'Bjorn Andersson' <bjorn.andersson@linaro.org>,
+        'Matthias Brugger' <matthias.bgg@gmail.com>,
+        'Bean Huo' <beanhuo@micron.com>,
+        'Bart Van Assche' <bvanassche@acm.org>,
+        'Adrian@codeaurora.org, Hunter' <adrian.hunter@intel.com>,
+        'Satya Tangirala' <satyat@google.com>,
+        "'moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER...'" 
+        <linux-mediatek@lists.infradead.org>,
+        'open list' <linux-kernel@vger.kernel.org>,
+        "'open list:ARM/QUALCOMM SUPPORT'" <linux-arm-msm@vger.kernel.org>,
+        "'moderated list:ARM/Mediatek SoC support'" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH RFC v3 1/1] scsi: ufs: Fix ufs power down/on specs
+ violation
+In-Reply-To: <000801d6d827$c8c89100$5a59b300$@samsung.com>
+References: <CGME20201221075209epcas2p489ef5a304a7227ae1ef20e581c08c043@epcas2p4.samsung.com>
+ <1608537091-78575-1-git-send-email-ziqichen@codeaurora.org>
+ <009001d6d806$bbac1a30$33044e90$@samsung.com>
+ <ddaf73587964e543e916368db036f536@codeaurora.org>
+ <000801d6d827$c8c89100$5a59b300$@samsung.com>
+Message-ID: <ded734a45aa6d9045ce568c9d265881c@codeaurora.org>
+X-Sender: ziqichen@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 12:50:31PM -0600, Tyrel Datwyler wrote:
-> The vfcFrame correlation field is 64bit handle that is intended to trace
-> I/O operations through both the client stack and VIOS stack when the
-> underlying physical FC adapter supports tagging.
+On 2020-12-22 14:00, Kiwoong Kim wrote:
+>> On 2020-12-22 10:04, Kiwoong Kim wrote:
+>> >> As per specs, e.g, JESD220E chapter 7.2, while powering off/on the
+>> >> ufs device, RST_N signal and REF_CLK signal should be between
+>> >> VSS(Ground) and VCCQ/VCCQ2.
+>> >>
+>> >> To flexibly control device reset line, re-name the function
+>> >> ufschd_vops_device_reset(sturct ufs_hba *hba) to ufshcd_
+>> >> vops_toggle_device_reset(sturct ufs_hba *hba, bool down). The new
+>> >> parameter "bool down" is used to separate device reset line pulling
+>> >> down from pulling up.
+>> >>
+>> >> Cc: Kiwoong Kim <kwmad.kim@samsung.com>
+>> >> Cc: Stanley Chu <stanley.chu@mediatek.com>
+>> >> Signed-off-by: Ziqi Chen <ziqichen@codeaurora.org>
+>> >> ---
+>> >>  drivers/scsi/ufs/ufs-mediatek.c | 27 +++++++++-----------------
+>> >>  drivers/scsi/ufs/ufs-qcom.c     | 22 ++++++++++-----------
+>> >>  drivers/scsi/ufs/ufshcd.c       | 43
+>> >> ++++++++++++++++++++++++++++++------
+>> > --
+>> >> ---
+>> >>  drivers/scsi/ufs/ufshcd.h       | 10 +++++-----
+>> >>  4 files changed, 56 insertions(+), 46 deletions(-)
+>> >>
+>> >> diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-
+>> >> mediatek.c index 80618af..bff2c42 100644
+>> >> --- a/drivers/scsi/ufs/ufs-mediatek.c
+>> >> +++ b/drivers/scsi/ufs/ufs-mediatek.c
+>> >> @@ -841,27 +841,18 @@ static int ufs_mtk_link_startup_notify(struct
+>> >> ufs_hba *hba,
+>> >>  	return ret;
+>> >>  }
+>> >>
+>> >> -static int ufs_mtk_device_reset(struct ufs_hba *hba)
+>> >> +static int ufs_mtk_toggle_device_reset(struct ufs_hba *hba, bool
+>> >> down)
+>> >>  {
+>> >>  	struct arm_smccc_res res;
+>> >>
+>> >> -	ufs_mtk_device_reset_ctrl(0, res);
+>> >> -
+>> >> -	/*
+>> >> -	 * The reset signal is active low. UFS devices shall detect
+>> >> -	 * more than or equal to 1us of positive or negative RST_n
+>> >> -	 * pulse width.
+>> >> -	 *
+>> >> -	 * To be on safe side, keep the reset low for at least 10us.
+>> >> -	 */
+>> >> -	usleep_range(10, 15);
+>> >> -
+>> >> -	ufs_mtk_device_reset_ctrl(1, res);
+>> >> -
+>> >> -	/* Some devices may need time to respond to rst_n */
+>> >> -	usleep_range(10000, 15000);
+>> >> +	if (down) {
+>> >> +		ufs_mtk_device_reset_ctrl(0, res);
+>> >> +	} else {
+>> >> +		ufs_mtk_device_reset_ctrl(1, res);
+>> >>
+>> >> -	dev_info(hba->dev, "device reset done\n");
+>> >> +		/* Some devices may need time to respond to rst_n */
+>> >> +		usleep_range(10000, 15000);
+>> >> +	}
+>> >>
+>> >>  	return 0;
+>> >>  }
+>> >> @@ -1052,7 +1043,7 @@ static const struct ufs_hba_variant_ops
+>> >> ufs_hba_mtk_vops = {
+>> >>  	.suspend             = ufs_mtk_suspend,
+>> >>  	.resume              = ufs_mtk_resume,
+>> >>  	.dbg_register_dump   = ufs_mtk_dbg_register_dump,
+>> >> -	.device_reset        = ufs_mtk_device_reset,
+>> >> +	.toggle_device_reset        = ufs_mtk_toggle_device_reset,
+>> >>  	.event_notify        = ufs_mtk_event_notify,
+>> >>  };
+>> >>
+>> >> diff --git a/drivers/scsi/ufs/ufs-qcom.c
+>> >> b/drivers/scsi/ufs/ufs-qcom.c index 2206b1e..c2ccaa5 100644
+>> >> --- a/drivers/scsi/ufs/ufs-qcom.c
+>> >> +++ b/drivers/scsi/ufs/ufs-qcom.c
+>> >> @@ -1404,12 +1404,13 @@ static void ufs_qcom_dump_dbg_regs(struct
+>> >> ufs_hba
+>> >> *hba)  }
+>> >>
+>> >>  /**
+>> >> - * ufs_qcom_device_reset() - toggle the (optional) device reset line
+>> >> + * ufs_qcom_toggle_device_reset() - toggle the (optional) device
+>> >> reset
+>> >> + line
+>> >>   * @hba: per-adapter instance
+>> >> + * @down: pull down or pull up device reset line
+>> >>   *
+>> >>   * Toggles the (optional) reset line to reset the attached device.
+>> >>   */
+>> >> -static int ufs_qcom_device_reset(struct ufs_hba *hba)
+>> >> +static int ufs_qcom_toggle_device_reset(struct ufs_hba *hba, bool
+>> >> down)
+>> >>  {
+>> >>  	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+>> >>
+>> >> @@ -1417,15 +1418,12 @@ static int ufs_qcom_device_reset(struct
+>> >> ufs_hba
+>> >> *hba)
+>> >>  	if (!host->device_reset)
+>> >>  		return -EOPNOTSUPP;
+>> >>
+>> >> -	/*
+>> >> -	 * The UFS device shall detect reset pulses of 1us, sleep for 10us
+>> >> to
+>> >> -	 * be on the safe side.
+>> >> -	 */
+>> >> -	gpiod_set_value_cansleep(host->device_reset, 1);
+>> >> -	usleep_range(10, 15);
+>> >> -
+>> >> -	gpiod_set_value_cansleep(host->device_reset, 0);
+>> >> -	usleep_range(10, 15);
+>> >> +	if (down) {
+>> >> +		gpiod_set_value_cansleep(host->device_reset, 1);
+>> >> +	} else {
+>> >> +		gpiod_set_value_cansleep(host->device_reset, 0);
+>> >> +		usleep_range(10, 15);
+>> >> +	}
+>> >>
+>> >>  	return 0;
+>> >>  }
+>> >> @@ -1473,7 +1471,7 @@ static const struct ufs_hba_variant_ops
+>> >> ufs_hba_qcom_vops = {
+>> >>  	.suspend		= ufs_qcom_suspend,
+>> >>  	.resume			= ufs_qcom_resume,
+>> >>  	.dbg_register_dump	= ufs_qcom_dump_dbg_regs,
+>> >> -	.device_reset		= ufs_qcom_device_reset,
+>> >> +	.toggle_device_reset		= ufs_qcom_toggle_device_reset,
+>> >>  	.config_scaling_param = ufs_qcom_config_scaling_param,
+>> >>  	.program_key		= ufs_qcom_ice_program_key,
+>> >>  };
+>> >> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> >> index e221add..2ee905f 100644
+>> >> --- a/drivers/scsi/ufs/ufshcd.c
+>> >> +++ b/drivers/scsi/ufs/ufshcd.c
+>> >> @@ -585,7 +585,20 @@ static void ufshcd_device_reset(struct ufs_hba
+>> >> *hba)
+>> >> {
+>> >>  	int err;
+>> >>
+>> >> -	err = ufshcd_vops_device_reset(hba);
+>> >> +	err = ufshcd_vops_toggle_device_reset(hba, true);
+>> >> +	if (err) {
+>> >> +		dev_err(hba->dev, "device reset pulling down failure: %d\n",
+>> >> err);
+>> >> +		return;
+>> >> +	}
+>> >> +
+>> >> +	/*
+>> >> +	 * The reset signal is active low. The UFS device
+>> >> +	 * shall detect reset pulses of 1us, sleep for at
+>> >> +	 * least 10us to be on the safe side.
+>> >> +	 */
+>> >> +	usleep_range(10, 15);
+>> >
+>> > Is there any point where UFS specification tells this explicitly?
+>> > I think this should be moved only if the number, i.e. 10 and 15  just
+>> > relies on hardware conditions.
+>> >
+>> >
+>> > Thanks.
+>> > Kiwoong Kim
+>> 
+>> Hi Kiwoong,
+>> 
+>> Thanks for your comment. JESD220E Line 610~611 "The UFS device shall
+>> detect more than or equal to 1us of positive or negative RST_n pulse".
+>> Both QCOM and Mediatek use 10~15us. What number do you think more
+>> appropriate?
+>> 
+>> Best Regards,
+>> Ziqi
 > 
-> Tag vfcFrames with the associated ibmvfc_event pointer handle.
+> With yours, all the SoC vendors should wait for around 10us 
+> unconditionally
+> even if there will be a possibility that some can use shorter period.
+> I see this as a sort of optimization point.
 > 
-> Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-> ---
->  drivers/scsi/ibmvscsi/ibmvfc.c | 4 ++++
->  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-> index 0cab4b852b48..3922441a117d 100644
-> --- a/drivers/scsi/ibmvscsi/ibmvfc.c
-> +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-> @@ -1693,6 +1693,8 @@ static int ibmvfc_queuecommand_lck(struct scsi_cmnd *cmnd,
->  		vfc_cmd->iu.pri_task_attr = IBMVFC_SIMPLE_TASK;
->  	}
->  
-> +	vfc_cmd->correlation = cpu_to_be64(evt);
-> +
->  	if (likely(!(rc = ibmvfc_map_sg_data(cmnd, evt, vfc_cmd, vhost->dev))))
->  		return ibmvfc_send_event(evt, vhost, 0);
->  
-> @@ -2370,6 +2372,8 @@ static int ibmvfc_abort_task_set(struct scsi_device *sdev)
->  		tmf->iu.tmf_flags = IBMVFC_ABORT_TASK_SET;
->  		evt->sync_iu = &rsp_iu;
->  
-> +		tmf->correlation = cpu_to_be64(evt);
-> +
->  		init_completion(&evt->comp);
->  		rsp_rc = ibmvfc_send_event(evt, vhost, default_timeout);
->  	}
-> -- 
-> 2.27.0
-> 
+> Thanks.
+> Kiwoong Kim
 
-This patch introduces a clang warning, is this intentional behavior?
+Got your point. As it is a controversial delay among different SoC 
+vendor, I'll
+move it back to vops and handle it by vendor's driver.
 
-$ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- LLVM=1 O=out distclean ppc64le_defconfig drivers/scsi/ibmvscsi/ibmvfc.o
-Using ../arch/powerpc/configs/ppc64_defconfig as base
-Merging ../arch/powerpc/configs/le.config
-#
-# merged configuration written to .config (needs make)
-#
-../drivers/scsi/ibmvscsi/ibmvfc.c:1747:25: warning: incompatible pointer to integer conversion passing 'struct ibmvfc_event *' to parameter of type '__u64' (aka 'unsigned long long') [-Wint-conversion]
-        vfc_cmd->correlation = cpu_to_be64(evt);
-                               ^~~~~~~~~~~~~~~~
-../include/linux/byteorder/generic.h:92:21: note: expanded from macro 'cpu_to_be64'
-#define cpu_to_be64 __cpu_to_be64
-                    ^
-../include/uapi/linux/byteorder/little_endian.h:37:52: note: expanded from macro '__cpu_to_be64'
-#define __cpu_to_be64(x) ((__force __be64)__swab64((x)))
-                                          ~~~~~~~~~^~~~
-../include/uapi/linux/swab.h:133:12: note: expanded from macro '__swab64'
-        __fswab64(x))
-                  ^
-../include/uapi/linux/swab.h:66:57: note: passing argument to parameter 'val' here
-static inline __attribute_const__ __u64 __fswab64(__u64 val)
-                                                        ^
-../drivers/scsi/ibmvscsi/ibmvfc.c:2421:22: warning: incompatible pointer to integer conversion passing 'struct ibmvfc_event *' to parameter of type '__u64' (aka 'unsigned long long') [-Wint-conversion]
-                tmf->correlation = cpu_to_be64(evt);
-                                   ^~~~~~~~~~~~~~~~
-../include/linux/byteorder/generic.h:92:21: note: expanded from macro 'cpu_to_be64'
-#define cpu_to_be64 __cpu_to_be64
-                    ^
-../include/uapi/linux/byteorder/little_endian.h:37:52: note: expanded from macro '__cpu_to_be64'
-#define __cpu_to_be64(x) ((__force __be64)__swab64((x)))
-                                          ~~~~~~~~~^~~~
-../include/uapi/linux/swab.h:133:12: note: expanded from macro '__swab64'
-        __fswab64(x))
-                  ^
-../include/uapi/linux/swab.h:66:57: note: passing argument to parameter 'val' here
-static inline __attribute_const__ __u64 __fswab64(__u64 val)
-                                                        ^
-2 warnings generated.
-
-Cheers,
-Nathan
+Best Regards,
+Ziqi
+>> 
+>> >
+>> >> +	err = ufshcd_vops_toggle_device_reset(hba, false);
+>> >>
+>> >>  	if (!err) {
+>> >>  		ufshcd_set_ufs_dev_active(hba);
+>> >> @@ -593,7 +606,11 @@ static void ufshcd_device_reset(struct ufs_hba
+>> >> *hba)
+>> >>  			hba->wb_enabled = false;
+>> >>  			hba->wb_buf_flush_enabled = false;
+>> >>  		}
+>> >> +		dev_info(hba->dev, "device reset done\n");
+>> >> +	} else {
+>> >> +		dev_err(hba->dev, "device reset pulling up failure: %d\n",
+>> >> err);
+>> >>  	}
+>> >> +
+>> >>  	if (err != -EOPNOTSUPP)
+>> >>  		ufshcd_update_evt_hist(hba, UFS_EVT_DEV_RESET, err);  } @@ -
+>> >> 8686,8 +8703,6 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum
+>> >> ufs_pm_op pm_op)
+>> >>  	if (ret)
+>> >>  		goto set_dev_active;
+>> >>
+>> >> -	ufshcd_vreg_set_lpm(hba);
+>> >> -
+>> >>  disable_clks:
+>> >>  	/*
+>> >>  	 * Call vendor specific suspend callback. As these callbacks may
+>> >> access @@ -8703,6 +8718,9 @@ static int ufshcd_suspend(struct ufs_hba
+>> >> *hba, enum ufs_pm_op pm_op)
+>> >>  	 */
+>> >>  	ufshcd_disable_irq(hba);
+>> >>
+>> >> +	if (ufshcd_is_link_off(hba))
+>> >> +		ufshcd_vops_toggle_device_reset(hba, true);
+>> >> +
+>> >>  	ufshcd_setup_clocks(hba, false);
+>> >>
+>> >>  	if (ufshcd_is_clkgating_allowed(hba)) { @@ -8711,6 +8729,8 @@
+>> >> static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+>> >>  					hba->clk_gating.state);
+>> >>  	}
+>> >>
+>> >> +	ufshcd_vreg_set_lpm(hba);
+>> >> +
+>> >>  	/* Put the host controller in low power mode if possible */
+>> >>  	ufshcd_hba_vreg_set_lpm(hba);
+>> >>  	goto out;
+>> >> @@ -8778,18 +8798,19 @@ static int ufshcd_resume(struct ufs_hba *hba,
+>> >> enum ufs_pm_op pm_op)
+>> >>  	old_link_state = hba->uic_link_state;
+>> >>
+>> >>  	ufshcd_hba_vreg_set_hpm(hba);
+>> >> +
+>> >> +	ret = ufshcd_vreg_set_hpm(hba);
+>> >> +	if (ret)
+>> >> +		goto out;
+>> >> +
+>> >>  	/* Make sure clocks are enabled before accessing controller */
+>> >>  	ret = ufshcd_setup_clocks(hba, true);
+>> >>  	if (ret)
+>> >> -		goto out;
+>> >> +		goto disable_vreg;
+>> >>
+>> >>  	/* enable the host irq as host controller would be active soon */
+>> >>  	ufshcd_enable_irq(hba);
+>> >>
+>> >> -	ret = ufshcd_vreg_set_hpm(hba);
+>> >> -	if (ret)
+>> >> -		goto disable_irq_and_vops_clks;
+>> >> -
+>> >>  	/*
+>> >>  	 * Call vendor specific resume callback. As these callbacks may
+>> >> access
+>> >>  	 * vendor specific host controller register space call them when
+>> >> the @@ -8797,7 +8818,7 @@ static int ufshcd_resume(struct ufs_hba
+>> >> *hba, enum ufs_pm_op pm_op)
+>> >>  	 */
+>> >>  	ret = ufshcd_vops_resume(hba, pm_op);
+>> >>  	if (ret)
+>> >> -		goto disable_vreg;
+>> >> +		goto disable_irq_and_vops_clks;
+>> >>
+>> >>  	/* For DeepSleep, the only supported option is to have the link off
+>> >> */
+>> >>  	WARN_ON(ufshcd_is_ufs_dev_deepsleep(hba)
+>> >> && !ufshcd_is_link_off(hba)); @@ -8864,8 +8885,6 @@ static int
+>> >> ufshcd_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+>> >>  	ufshcd_link_state_transition(hba, old_link_state, 0);
+>> >>  vendor_suspend:
+>> >>  	ufshcd_vops_suspend(hba, pm_op);
+>> >> -disable_vreg:
+>> >> -	ufshcd_vreg_set_lpm(hba);
+>> >>  disable_irq_and_vops_clks:
+>> >>  	ufshcd_disable_irq(hba);
+>> >>  	if (hba->clk_scaling.is_allowed)
+>> >> @@ -8876,6 +8895,8 @@ static int ufshcd_resume(struct ufs_hba *hba,
+>> >> enum ufs_pm_op pm_op)
+>> >>  		trace_ufshcd_clk_gating(dev_name(hba->dev),
+>> >>  					hba->clk_gating.state);
+>> >>  	}
+>> >> +disable_vreg:
+>> >> +	ufshcd_vreg_set_lpm(hba);
+>> >>  out:
+>> >>  	hba->pm_op_in_progress = 0;
+>> >>  	if (ret)
+>> >> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+>> >> index 9bb5f0e..dccc3eb 100644
+>> >> --- a/drivers/scsi/ufs/ufshcd.h
+>> >> +++ b/drivers/scsi/ufs/ufshcd.h
+>> >> @@ -319,7 +319,7 @@ struct ufs_pwr_mode_info {
+>> >>   * @resume: called during host controller PM callback
+>> >>   * @dbg_register_dump: used to dump controller debug information
+>> >>   * @phy_initialization: used to initialize phys
+>> >> - * @device_reset: called to issue a reset pulse on the UFS device
+>> >> + * @toggle_device_reset: called to change logic level of reset gpio
+>> >> on
+>> >> + the UFS device
+>> >>   * @program_key: program or evict an inline encryption key
+>> >>   * @event_notify: called to notify important events
+>> >>   */
+>> >> @@ -350,7 +350,7 @@ struct ufs_hba_variant_ops {
+>> >>  	int     (*resume)(struct ufs_hba *, enum ufs_pm_op);
+>> >>  	void	(*dbg_register_dump)(struct ufs_hba *hba);
+>> >>  	int	(*phy_initialization)(struct ufs_hba *);
+>> >> -	int	(*device_reset)(struct ufs_hba *hba);
+>> >> +	int	(*toggle_device_reset)(struct ufs_hba *hba, bool down);
+>> >>  	void	(*config_scaling_param)(struct ufs_hba *hba,
+>> >>  					struct devfreq_dev_profile *profile,
+>> >>  					void *data);
+>> >> @@ -1216,10 +1216,10 @@ static inline void
+>> >> ufshcd_vops_dbg_register_dump(struct ufs_hba *hba)
+>> >>  		hba->vops->dbg_register_dump(hba);
+>> >>  }
+>> >>
+>> >> -static inline int ufshcd_vops_device_reset(struct ufs_hba *hba)
+>> >> +static inline int ufshcd_vops_toggle_device_reset(struct ufs_hba
+>> >> *hba,
+>> >> +bool down)
+>> >>  {
+>> >> -	if (hba->vops && hba->vops->device_reset)
+>> >> -		return hba->vops->device_reset(hba);
+>> >> +	if (hba->vops && hba->vops->toggle_device_reset)
+>> >> +		return hba->vops->toggle_device_reset(hba, down);
+>> >>
+>> >>  	return -EOPNOTSUPP;
+>> >>  }
+>> >> --
+>> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
+>> >> Forum, a Linux Foundation Collaborative Project
