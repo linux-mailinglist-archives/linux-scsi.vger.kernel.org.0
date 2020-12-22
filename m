@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB68C2E06B0
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 08:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6355F2E06B7
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 08:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725811AbgLVH3y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Dec 2020 02:29:54 -0500
+        id S1725968AbgLVHaM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Dec 2020 02:30:12 -0500
 Received: from mailgw01.mediatek.com ([210.61.82.183]:36462 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725300AbgLVH3y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 02:29:54 -0500
-X-UUID: acd3b05d6aad462ca40b7be72477fd16-20201222
-X-UUID: acd3b05d6aad462ca40b7be72477fd16-20201222
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        with ESMTP id S1725300AbgLVHaM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 02:30:12 -0500
+X-UUID: 3cd5a51e5e004709a699f80155db19ba-20201222
+X-UUID: 3cd5a51e5e004709a699f80155db19ba-20201222
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2124740852; Tue, 22 Dec 2020 15:29:09 +0800
+        with ESMTP id 1625368443; Tue, 22 Dec 2020 15:29:35 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Tue, 22 Dec 2020 15:29:06 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 22 Dec 2020 15:29:05 +0800
+ Transport; Tue, 22 Dec 2020 15:29:06 +0800
 From:   Stanley Chu <stanley.chu@mediatek.com>
 To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
         <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
@@ -36,61 +36,54 @@ CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
         <cc.chou@mediatek.com>, <jiajie.hao@mediatek.com>,
         <alice.chao@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 1/2] scsi: ufs: Fix possible power drain during system suspend
-Date:   Tue, 22 Dec 2020 15:29:04 +0800
-Message-ID: <20201222072905.32221-2-stanley.chu@mediatek.com>
+Subject: [PATCH v2 2/2] scsi: ufs: Relax the condition of UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
+Date:   Tue, 22 Dec 2020 15:29:05 +0800
+Message-ID: <20201222072905.32221-3-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20201222072905.32221-1-stanley.chu@mediatek.com>
 References: <20201222072905.32221-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: F0EAABB76E452A13F2540CD0F980F108AA7D99BB3014DC64699FA1307E8A9B912000:8
+X-TM-SNTS-SMTP: B65B4F093546E7E92EDC095DD3E21509A34147389610B64C8343A39BD48121D02000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently if device needs to do flush or BKOP operations,
-the device VCC power is kept during runtime-suspend period.
+UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL is aimed to skip enabling
+fWriteBoosterBufferFlushEn while WriteBooster is initializing.
+Therefore it is better to apply the checking during WriteBooster
+initialization only.
 
-However, if system suspend is happening while device is
-runtime-suspended, such power may not be disabled successfully.
-
-The reasons may be,
-
-1. If current PM level is the same as SPM level, device will
-   keep runtime-suspended by ufshcd_system_suspend().
-
-2. Flush recheck work may not be scheduled successfully
-   during system suspend period. If it can wake up the system,
-   this is also not the intention of the recheck work.
-
-To fix this issue, simply runtime-resume the device if the flush
-is allowed during runtime suspend period. Flush capability will be
-disabled while leaving runtime suspend, and also not be allowed in
-system suspend period.
-
-Fixes: 51dd905bd2f6 ("scsi: ufs: Fix WriteBooster flush during runtime suspend")
-Reviewed-by: Chaotian Jing <chaotian.jing@mediatek.com>
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/ufs/ufshcd.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index e221add25a7e..9d61dc3eb842 100644
+index 9d61dc3eb842..e50b19925236 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -8903,7 +8903,8 @@ int ufshcd_system_suspend(struct ufs_hba *hba)
- 	if ((ufs_get_pm_lvl_to_dev_pwr_mode(hba->spm_lvl) ==
- 	     hba->curr_dev_pwr_mode) &&
- 	    (ufs_get_pm_lvl_to_link_pwr_state(hba->spm_lvl) ==
--	     hba->uic_link_state))
-+	     hba->uic_link_state) &&
-+	     !hba->dev_info.b_rpm_dev_flush_capable)
- 		goto out;
+@@ -289,7 +289,8 @@ static inline void ufshcd_wb_config(struct ufs_hba *hba)
+ 	if (ret)
+ 		dev_err(hba->dev, "%s: En WB flush during H8: failed: %d\n",
+ 			__func__, ret);
+-	ufshcd_wb_toggle_flush(hba, true);
++	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
++		ufshcd_wb_toggle_flush(hba, true);
+ }
  
- 	if (pm_runtime_suspended(hba->dev)) {
+ static void ufshcd_scsi_unblock_requests(struct ufs_hba *hba)
+@@ -5401,9 +5402,6 @@ static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
+ 
+ static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
+ {
+-	if (hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL)
+-		return;
+-
+ 	if (enable)
+ 		ufshcd_wb_buf_flush_enable(hba);
+ 	else
 -- 
 2.18.0
 
