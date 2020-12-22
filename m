@@ -2,75 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD4C2E0669
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 08:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029FD2E0683
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 08:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgLVHGe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Dec 2020 02:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
+        id S1726330AbgLVHG7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Dec 2020 02:06:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726244AbgLVHGd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 02:06:33 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80BBC0619D7
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 23:05:52 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id b5so845589pjl.0
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 23:05:52 -0800 (PST)
+        with ESMTP id S1726317AbgLVHG6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 02:06:58 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99409C0619D9
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 23:05:57 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id v1so829780pjr.2
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 23:05:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=BdD3hTpuh5dxDCoeTZb0B95QebdqMbthVxe9G5LUDSo=;
-        b=C3wSMD+24mA6eNDkuTtYe4gRtPefmtwAy55lF6eOxo48pmq4OYK47nZEF0P4Pw0j50
-         7Dr4nLmb0wt6j9YYFV4COWx8Q71omPuRkX+D92Bgs2ZZPQvfkFsSMrpHaEuMX3J/aZEA
-         QEIZphfI+8GqH+XFZ6Im1ovuuZtrJH3ekqAQs=
+        bh=ZSpRhTERQijECkK/5+Ql1TcUfiS//HI/sJpcVAbuq+g=;
+        b=WOjgBuCtb6V8vydEqRGORb5VRZIxZ0WomHDk/H7tYg3tJrsx7bjBLn2CgFYILDKaSr
+         FXahZN2opl8ky98Zn4IoyEX5T1Ywh5Z1rquumkBd4WOOTd5AKfxr3nVh2oNTf4plW9C+
+         OBSoNGVmWPJPoiBQuLxShw0OjLrfKKazd3Swc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=BdD3hTpuh5dxDCoeTZb0B95QebdqMbthVxe9G5LUDSo=;
-        b=ENFKVgpnDaQGPOmCeb23f/NQ9MlTuxDfQDdddFvcifCTwvd8u5/96rCakrwWtzHXo8
-         BuinJ6JGXur6ctNhZY+u5zVgXEcV1mjHycW8Fev1OVhrdK+vAh37XOi41+ABXLrBmlPV
-         y43kAxwAagS5NTf9lWvlv0cLRlzryM2JyhJx2HSvtylreQy1+RlJkML2XkixT5Bwmzza
-         8xiKuc48nZN+y+RED9WS1XOzRkD4CSyo528wH+iJKNX64DL6onOpH8IGMbAYkXsP5xg2
-         MC71Am1niLTvGp05a/b+lluUIEVtGPRe5EbEja9z35MWi7R65Ro6xxHVPd1dqSREkoh8
-         0pdQ==
+        bh=ZSpRhTERQijECkK/5+Ql1TcUfiS//HI/sJpcVAbuq+g=;
+        b=WDbsCEHaEjbWi18TwesjCZTn0KvphFQy2+KCOP7g92hxDenXdR5svz2F5+ChUtlmiP
+         xBBQ6gLu5R9XSkTn7MioYqrtHSLoKOJN/o/hi5bcLtaY+E2lohdiWQoEsBkW46Yq/ttM
+         JDQqmn8W/NunUm3hWIlCPDWpOzisaCBPVPzvdftXV5aZbUbMC8P6uJSJvJtjaJ3otKQc
+         Emy4npwbJhz8oAeC0937czZEP357hB9i+PzMqi6LxLuCOBgH1Xp4ckId6GV5JZmhYmwZ
+         sjAtsot5OPLZXG5eg95ZCVrZRHnh9ZRJdGFhGcK0blIiptiPmekesqzAeka8KfLPkaZV
+         wiRg==
 MIME-Version: 1.0
-X-Gm-Message-State: AOAM532Bma7XHf57gzY8TmuKDW/lZnYPvMriMHgHmCpaeraorta9wU9n
-        FDDBG4IPco5t5U2RO24IzztOUpZBSfhIxn0gFDCch/SQJmwh5xtl8K9exf3r2HmqNzW6qq0dxVQ
-        ZtkmdnDswIbX6
-X-Google-Smtp-Source: ABdhPJyT8LBdvTIz2pLMXMVXvnUW/t/qrpjlrCts8W33yBZllrpYC3BIKew8ZJSEzKy7OpbQ3Z+RtA==
-X-Received: by 2002:a17:90b:3845:: with SMTP id nl5mr20908838pjb.108.1608620752238;
-        Mon, 21 Dec 2020 23:05:52 -0800 (PST)
+X-Gm-Message-State: AOAM531gB0pNoUql8zlkkyqnQu361hbhMLGJNawf400kONEpALPCmLTr
+        AZg07aAsPITQEbrzXQ6wUYNVaTnS4CAbhT4Zb+TVLrMspMRRFcL6bcXxVjhk+ou9MWR7VwVdOit
+        4CVNI1tq86Qaf
+X-Google-Smtp-Source: ABdhPJxtEuRNLtVeHUhKz59CxIZq+x/70eZ/Y2zGhM8VOuYD2F4WyuHy20A7Lzkpf15VWlaRX2+ucA==
+X-Received: by 2002:a17:90a:8985:: with SMTP id v5mr20378406pjn.27.1608620756981;
+        Mon, 21 Dec 2020 23:05:56 -0800 (PST)
 Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id t9sm12466082pgh.41.2020.12.21.23.05.48
+        by smtp.gmail.com with ESMTPSA id t9sm12466082pgh.41.2020.12.21.23.05.52
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Dec 2020 23:05:51 -0800 (PST)
+        Mon, 21 Dec 2020 23:05:56 -0800 (PST)
 From:   Muneendra <muneendra.kumar@broadcom.com>
 To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
         tj@kernel.org, linux-nvme@lists.infradead.org, hare@suse.de
 Cc:     jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com,
         pbonzini@redhat.com,
         Gaurav Srivastava <gaurav.srivastava@broadcom.com>
-Subject: [PATCH v6 13/16] lpfc: vmid: Timeout implementation for vmid
-Date:   Tue, 22 Dec 2020 05:41:55 +0530
-Message-Id: <1608595918-21954-14-git-send-email-muneendra.kumar@broadcom.com>
+Subject: [PATCH v6 14/16] lpfc: vmid: Adding qfpa and vmid timeout check in worker thread
+Date:   Tue, 22 Dec 2020 05:41:56 +0530
+Message-Id: <1608595918-21954-15-git-send-email-muneendra.kumar@broadcom.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1608595918-21954-1-git-send-email-muneendra.kumar@broadcom.com>
 References: <1608595918-21954-1-git-send-email-muneendra.kumar@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008aaa1205b7083455"
+        boundary="000000000000d2badd05b7083482"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000008aaa1205b7083455
+--000000000000d2badd05b7083482
 Content-Type: text/plain; charset="US-ASCII"
 
 From: Gaurav Srivastava <gaurav.srivastava@broadcom.com>
 
-This patch implements the timeout functionality for the vmid. After the
-set time period of inactivity, the vmid is deregistered from the switch.
+This patch add the periodic check for issuing of qfpa command and vmid
+timeout in the worker thread. The inactivity timeout check is added via
+the timer function.
 
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Gaurav Srivastava  <gaurav.srivastava@broadcom.com>
@@ -78,7 +79,7 @@ Signed-off-by: James Smart <jsmart2021@gmail.com>
 
 ---
 v6:
-Added Forward declarations
+Added Forward declarations and removed unused variable
 
 v5:
 No change
@@ -92,113 +93,26 @@ No change
 v2:
 Ported the patch on top of 5.10/scsi-queue
 ---
- drivers/scsi/lpfc/lpfc_hbadisc.c | 110 +++++++++++++++++++++++++++++++
- drivers/scsi/lpfc/lpfc_init.c    |  40 +++++++++++
- 2 files changed, 150 insertions(+)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 43 ++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
 diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 2b6b5fc671fe..ed2d65cfd3e3 100644
+index ed2d65cfd3e3..46dad0780368 100644
 --- a/drivers/scsi/lpfc/lpfc_hbadisc.c
 +++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -72,6 +72,7 @@ static void lpfc_disc_flush_list(struct lpfc_vport *vport);
- static void lpfc_unregister_fcfi_cmpl(struct lpfc_hba *, LPFC_MBOXQ_t *);
+@@ -73,6 +73,7 @@ static void lpfc_unregister_fcfi_cmpl(struct lpfc_hba *, LPFC_MBOXQ_t *);
  static int lpfc_fcf_inuse(struct lpfc_hba *);
  static void lpfc_mbx_cmpl_read_sparam(struct lpfc_hba *, LPFC_MBOXQ_t *);
-+static void lpfc_check_inactive_vmid(struct lpfc_hba *phba);
+ static void lpfc_check_inactive_vmid(struct lpfc_hba *phba);
++static void lpfc_check_vmid_qfpa_issue(struct lpfc_hba *phba);
  
  /* The source of a terminate rport I/O is either a dev_loss_tmo
   * event or a call to fc_remove_host.  While the rport should be
-@@ -229,6 +230,115 @@ lpfc_dev_loss_tmo_callbk(struct fc_rport *rport)
- 	return;
+@@ -429,6 +430,32 @@ lpfc_dev_loss_tmo_handler(struct lpfc_nodelist *ndlp)
+ 	return fcf_inuse;
  }
  
-+/**
-+ * lpfc_check_inactive_vmid_one - VMID inactivity checker for a vport
-+ * @vport: Pointer to vport context object.
-+ *
-+ * This function checks for idle vmid entries related to a particular vport. If
-+ * found unused/idle, it frees them accordingly.
-+ **/
-+static void lpfc_check_inactive_vmid_one(struct lpfc_vport *vport)
-+{
-+	u16 i, keep;
-+	u32 difftime = 0, r;
-+	u64 *lta;
-+	int cpu;
-+
-+	write_lock(&vport->vmid_lock);
-+
-+	if (!vport->cur_vmid_cnt)
-+		goto out;
-+
-+	/* iterate through the table */
-+	for (i = 0; i < LPFC_VMID_HASH_SIZE; ++i) {
-+		if (vport->hash_table[i] && (vport->hash_table[i]->flag &
-+					     LPFC_VMID_REGISTERED)) {
-+			/* check if the particular vmid is in use */
-+			/* for all available per cpu variable */
-+			for_each_possible_cpu(cpu) {
-+				/* if last access time is less than timeout */
-+				lta = per_cpu_ptr(
-+					vport->hash_table[i]->last_io_time,
-+					cpu);
-+				if (!lta)
-+					continue;
-+				difftime = (jiffies) - (*lta);
-+				if ((vport->vmid_inactivity_timeout *
-+				     JIFFIES_PER_HR) > difftime) {
-+					keep = 1;
-+					break;
-+				}
-+			}
-+
-+			/* if none of the cpus have been used by the vm, */
-+			/*  remove the entry if already registered */
-+			if (!keep) {
-+				/* mark the entry for deregistration */
-+				vport->hash_table[i]->flag =
-+					LPFC_VMID_DE_REGISTER;
-+				write_unlock(&vport->vmid_lock);
-+				if (vport->vmid_priority_tagging)
-+					r = lpfc_vmid_uvem(vport,
-+							   vport->hash_table[i],
-+							   false);
-+				else
-+					r = lpfc_vmid_cmd(vport,
-+							  SLI_CTAS_DAPP_IDENT,
-+							  vport->hash_table[i]);
-+
-+				/* decrement number of active vms and mark */
-+				/* entry in slot as free */
-+				write_lock(&vport->vmid_lock);
-+				if (!r) {
-+					struct lpfc_vmid *ht =
-+							vport->hash_table[i];
-+					vport->cur_vmid_cnt--;
-+					ht->flag = LPFC_VMID_SLOT_FREE;
-+					free_percpu(ht->last_io_time);
-+					ht->last_io_time = NULL;
-+					vport->hash_table[i] = NULL;
-+				}
-+			}
-+		}
-+		keep = 0;
-+	}
-+ out:
-+	write_unlock(&vport->vmid_lock);
-+}
-+
-+/**
-+ * lpfc_check_inactive_vmid - VMID inactivity checker
-+ * @phba: Pointer to hba context object.
-+ *
-+ * This function is called from the worker thread to determine if an entry in
-+ * the vmid table can be released since there was no IO activity seen from that
-+ * particular VM for the specified time. When this happens, the entry in the
-+ * table is released and also the resources on the switch cleared.
-+ **/
-+
-+static void lpfc_check_inactive_vmid(struct lpfc_hba *phba)
++static void lpfc_check_vmid_qfpa_issue(struct lpfc_hba *phba)
 +{
 +	struct lpfc_vport *vport;
 +	struct lpfc_vport **vports;
@@ -216,72 +130,40 @@ index 2b6b5fc671fe..ed2d65cfd3e3 100644
 +		if (!vport)
 +			break;
 +
-+		lpfc_check_inactive_vmid_one(vport);
++		if (vport->vmid_flag & LPFC_VMID_ISSUE_QFPA) {
++			lpfc_issue_els_qfpa(vport);
++			vport->vmid_flag &= ~LPFC_VMID_ISSUE_QFPA;
++		}
 +	}
 +	lpfc_destroy_vport_work_array(phba, vports);
 +}
 +
  /**
-  * lpfc_dev_loss_tmo_handler - Remote node devloss timeout handler
-  * @ndlp: Pointer to remote node object.
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index dea423bc1293..800164390879 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -4812,6 +4812,42 @@ lpfc_sli4_fcf_redisc_wait_tmo(struct timer_list *t)
- 	lpfc_worker_wake_up(phba);
- }
+  * lpfc_sli4_post_dev_loss_tmo_handler - SLI4 post devloss timeout handler
+  * @phba: Pointer to hba context object.
+@@ -749,6 +776,22 @@ lpfc_work_done(struct lpfc_hba *phba)
+ 	if (ha_copy & HA_LATT)
+ 		lpfc_handle_latt(phba);
  
-+/**
-+ * lpfc_vmid_poll - VMID timeout detection
-+ * @ptr: Map to lpfc_hba data structure pointer.
-+ *
-+ * This routine is invoked when there is no IO on by a VM for the specified
-+ * amount of time. When this situation is detected, the VMID has to be
-+ * deregistered from the switch and all the local resources freed. The VMID
-+ * will be reassigned to the VM once the IO begins.
-+ **/
-+static void
-+lpfc_vmid_poll(struct timer_list *t)
-+{
-+	struct lpfc_hba *phba = from_timer(phba, t, inactive_vmid_poll);
-+	u32 wake_up = 0;
-+
-+	/* check if there is a need to issue QFPA */
-+	if (phba->pport->vmid_priority_tagging) {
-+		wake_up = 1;
-+		phba->pport->work_port_events |= WORKER_CHECK_VMID_ISSUE_QFPA;
++	/* Handle VMID Events */
++	if (lpfc_is_vmid_enabled(phba)) {
++		if (phba->pport->work_port_events &
++		    WORKER_CHECK_VMID_ISSUE_QFPA) {
++			lpfc_check_vmid_qfpa_issue(phba);
++			phba->pport->work_port_events &=
++				~WORKER_CHECK_VMID_ISSUE_QFPA;
++		}
++		if (phba->pport->work_port_events &
++		    WORKER_CHECK_INACTIVE_VMID) {
++			lpfc_check_inactive_vmid(phba);
++			phba->pport->work_port_events &=
++			    ~WORKER_CHECK_INACTIVE_VMID;
++		}
 +	}
 +
-+	/* Is the vmid inactivity timer enabled */
-+	if (phba->pport->vmid_inactivity_timeout ||
-+	    phba->pport->load_flag & FC_DEREGISTER_ALL_APP_ID) {
-+		wake_up = 1;
-+		phba->pport->work_port_events |= WORKER_CHECK_INACTIVE_VMID;
-+	}
-+
-+	if (wake_up)
-+		lpfc_worker_wake_up(phba);
-+
-+	/* restart the timer for the next iteration */
-+	mod_timer(&phba->inactive_vmid_poll, jiffies + msecs_to_jiffies(1000 *
-+							LPFC_VMID_TIMER));
-+}
-+
- /**
-  * lpfc_sli4_parse_latt_fault - Parse sli4 link-attention link fault code
-  * @phba: pointer to lpfc hba data structure.
-@@ -6658,6 +6694,10 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
- 	phba->hbqs[LPFC_ELS_HBQ].hbq_alloc_buffer = lpfc_sli4_rb_alloc;
- 	phba->hbqs[LPFC_ELS_HBQ].hbq_free_buffer = lpfc_sli4_rb_free;
- 
-+	/* for VMID idle timeout if VMID is enabled */
-+	if (lpfc_is_vmid_enabled(phba))
-+		timer_setup(&phba->inactive_vmid_poll, lpfc_vmid_poll, 0);
-+
- 	/*
- 	 * Initialize the SLI Layer to run with lpfc SLI4 HBAs.
- 	 */
+ 	/* Process SLI4 events */
+ 	if (phba->pci_dev_grp == LPFC_PCI_DEV_OC) {
+ 		if (phba->hba_flag & HBA_RRQ_ACTIVE)
 -- 
 2.26.2
 
@@ -299,7 +181,7 @@ this e-mail is strictly prohibited. If you received this e-mail in error,
 please return the e-mail to the sender, delete it from your computer, and 
 destroy any printed copy of it.
 
---0000000000008aaa1205b7083455
+--000000000000d2badd05b7083482
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -370,13 +252,13 @@ LbMkW5lUoTb8ycBNOKLYhNE8UEOY8jRTUtMEhzT6NJDEE+1hb3kSGfArrrF3Z8pRYiUUhcpC5GKL
 EpmWnHflnrBcah5Ozy137DGCAm8wggJrAgEBMG0wXTELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEds
 b2JhbFNpZ24gbnYtc2ExMzAxBgNVBAMTKkdsb2JhbFNpZ24gUGVyc29uYWxTaWduIDIgQ0EgLSBT
 SEEyNTYgLSBHMwIMX/krgFDQUQNyOf+1MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEi
-BCAnbVsnB92rNBUpaiuZmjtDc4AIbPbUAILxUgTZPCLc+TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDEyMjIwNzA1NTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
+BCBQ8lBad+B4PrIZA/kJFAGsYqkvga9Uaq7abGTA9gotQjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
+AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDEyMjIwNzA1NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
 AWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEK
-MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAKXN1QQl0XXkOYnv9
-US4sJA2iO9IXPl2IQ4psmfUIXU0EF+FsFh3uG0Ze6aqBc0/+LoTPkTkcSgpIca3/CMaYVAkvO8h/
-nFMTHOsmpEeVZC2iuLDCT0qBquSGtMClie2+EiVZR7tlRuHPHcFDi6HYknqJ8FHZdTkuALulIFPo
-Uy0OdzheSPZimb/JUKh0zpf0nEocLpvJZ7pGWX8HXgX/+adt6IrUEN8EGxOHPZSz7AkxziwI5pXp
-ZbGBzfB1C/YDE14KZdt0eozccn7QU8nS4kB7yn/gZgT2MfADO+y2aZWn6ezea5v9i+i0jl1QZ6k4
-YKyCL64zpEk1piOkuKiFNg==
---0000000000008aaa1205b7083455--
+MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAgToYKpQDayc41p0e
+fduTgFaGClkMP1VFRBfUp/49lUlFD5Jqktitb40WLjVVV8BUyU+3Mn407/ujlSeljj4JeB8STP4J
+50khpsUG1ozaO5F2z1AzvEdvG9rfHqUAWXTMTGFCbUbSiEnsUbCZ+i3liI4IRP2QRIpCZxfkobLv
+HqoOP64JsB1Rnezpn/UiYABG8C6aVZU04BD1jY6WVG3CqvDSHMEWM3mjKZnnIgzeEFG2qkgZyAFu
+KRos6eU/gyqqYJOcHM1zV5Ywdghpok8vWn8reLZ1NiCeQd172dSDp0/AB7Wsuy6n15HI65yMALhI
++P4ULdp1jmPi9wUpXknfTw==
+--000000000000d2badd05b7083482--
