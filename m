@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0452E089C
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 11:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10762E08A0
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 11:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbgLVKNn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Dec 2020 05:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S1726504AbgLVKOI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Dec 2020 05:14:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbgLVKNm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 05:13:42 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AA0C0611CD
-        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:02 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id l23so1103835pjg.1
-        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:02 -0800 (PST)
+        with ESMTP id S1726371AbgLVKOI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 05:14:08 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80ECC061793
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:05 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id z21so8082283pgj.4
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:13:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=qzkbuJZi7L8fSpBLRMw6L7Q+r3KygVjPgJDxAKBRqPs=;
-        b=YA2jbFWGxllLbYP6Nxki0lLY6ZDcB9Xz+ysmF2fOPubGkQM8NcRdr4cMmVRlzGZciY
-         F4gyR3aFmWJwJB9UYTMqMH8LCdistNbGjtlA8HieVgz1+ROFUHi44moa0X8s/5cPP3K0
-         HvUTNOEQmoJ2Kg4C/2u0fvEn9qHGhHDorjgYw=
+        bh=opHhvQyD6tZmvgygkmZqlQIR/78J/tQHD586Bbko5U0=;
+        b=TF085mjqDvXTkS8O+L+afjAhsMgg7WwBIkEAR86A6/42PsxOZOKYBqv8+8WYvOoM58
+         oachiVhTenmcQ4G5BgGut3aOkTem4aEA1T+V97IRz/F8wGe0pzvQ7Sazonx1wYL8g7pU
+         tNleEBPXENh06+UWeP5meyAfzlBZk7mRrwLXo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=qzkbuJZi7L8fSpBLRMw6L7Q+r3KygVjPgJDxAKBRqPs=;
-        b=FAM7efgMVNg/x5gNGmXurZrsBPbkRpltS/KrbqnaMw+FIVDOzSXQbiWeymLXbSI1NN
-         dRXgLUBVWndF98DFyXOdLvn/lFvBd+3eXZyj6MGg6zSjYHlXU3HaVz0o7evu/X1Ywhcq
-         YYySddqpGZXxqXSaGzh3UF0hySzC/BgJQ3MUPjvtxiS4NRuqoyPsR/IJVTJKuMr+Cklv
-         LSSx6RSADMmGOVFN7xb8buKlqWbOkRxsYdsNboFrsbd0XI2rykNhteToRixmOnZDT1hI
-         dZZD19sw7RfaUww44Le4ABLhJu7OERfJAEHtX+CvX2q1IrpFo1ZXSVtn7m2vT+yDSImc
-         Zh3A==
-X-Gm-Message-State: AOAM531pBV0SbqT0g8wS4JdlOmYU3rsbRcqIknYLjjs5LptsBZ18vuOb
-        vvacq1HKaVisrXE6Z0N667n+slTLCisCiQ3Hz9HYCDFWQt19ZLfYHsnaWCvBVbp1FMtk3Y+LUJC
-        buE+nIp2JPIwRml5RKrbJPhZOpcIsZkcQ7whLkyyEt75kd7TblYpsRr6qNsxH91HbFnyLlVyDne
-        rsIvAB0JVp
+        bh=opHhvQyD6tZmvgygkmZqlQIR/78J/tQHD586Bbko5U0=;
+        b=mRZYtl3qj9UHPBvTeqtC1DlgM1tjubqp1elB1HZ5gJSN2GqzBMGbL5F6Jtj6xY1Fn5
+         t3mFLiaBTGcptsC6m/tPRVG++QZEiM6Lxt/ILlK8mw5QYE+Gtf8TTdrQnY2KicBdZnDO
+         6DP0RC3i+7tPRTYUHq3NAkI2ATd/Im3pKclDgd/tneBfOEKSBhyBJXWN04MPG6kkjbtV
+         FzneetQGJYbOeuEILUteQXrZ8DJ4ISPsnaKVAX2pneuAHhYaRVMmatwhUKo/dIcLFqzn
+         g1qiZalRPSF8eBZYt3D7jjRMO6WbXscqwFT6wZG7T/yXznNZdZxGIUDMu6qeP+/o5FtC
+         k7lw==
+X-Gm-Message-State: AOAM531bGtZql5c8rH5HkBS3k5nPCfhTcVgKBx3JZb12NzAu1pZNpyg/
+        NF3ceNLgu9cWRJQkohPyVXKzi8RRcrjLJqyOqOSJkC5+iuKI5WwdlRE0dijNYFVaL6YGXH1YqGZ
+        l8PG4OFd4JlotdgexkrZ8ELBohOSFw6Ngv9SG+rQMJlkJ04lUDncWg1C4/vVJAhNVVuA6+QUwa+
+        QjsgrajYgt
 MIME-Version: 1.0
-X-Google-Smtp-Source: ABdhPJx2J2cnU9F9zPV8JTGVpDceGlOoNkvme51U998ip6kGXhQ31dj8goPf8ShUc3vYAVN7WHaGCQ==
-X-Received: by 2002:a17:90a:764f:: with SMTP id s15mr20842066pjl.98.1608631981960;
-        Tue, 22 Dec 2020 02:13:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx3bIp1UK4xG/GcS0t+/I0VbUUbwcRC3Kcy4lAKs/370b9TTG5TJGPLR1cYQpqruH3lxpTCTQ==
+X-Received: by 2002:a63:6207:: with SMTP id w7mr19335717pgb.164.1608631984954;
+        Tue, 22 Dec 2020 02:13:04 -0800 (PST)
 Received: from drv-bst-rhel8.static.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id p16sm19148624pju.47.2020.12.22.02.12.59
+        by smtp.gmail.com with ESMTPSA id p16sm19148624pju.47.2020.12.22.02.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Dec 2020 02:13:01 -0800 (PST)
+        Tue, 22 Dec 2020 02:13:04 -0800 (PST)
 From:   Kashyap Desai <kashyap.desai@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
@@ -54,111 +54,73 @@ Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
         mpi3mr-linuxdrv.pdl@broadcom.com,
         Kashyap Desai <kashyap.desai@broadcom.com>,
         sathya.prakash@broadcom.com
-Subject: [PATCH 14/24] mpi3mr: add change queue depth support
-Date:   Tue, 22 Dec 2020 15:41:46 +0530
-Message-Id: <20201222101156.98308-15-kashyap.desai@broadcom.com>
+Subject: [PATCH 15/24] mpi3mr: allow certain commands during pci-remove hook
+Date:   Tue, 22 Dec 2020 15:41:47 +0530
+Message-Id: <20201222101156.98308-16-kashyap.desai@broadcom.com>
 X-Mailer: git-send-email 2.18.1
 In-Reply-To: <20201222101156.98308-1-kashyap.desai@broadcom.com>
 References: <20201222101156.98308-1-kashyap.desai@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e2918605b70ad145"
+        boundary="00000000000010516d05b70ad221"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000e2918605b70ad145
+--00000000000010516d05b70ad221
 Content-Type: text/plain; charset="US-ASCII"
+
+This patch allows SSU and Sync Cache commands to be sent to the controller
+instead of driver returning DID_NO_CONNECT during driver unload to flush
+any cached data from the drive.
 
 Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
 Cc: sathya.prakash@broadcom.com
 ---
- drivers/scsi/mpi3mr/mpi3mr.h    |  3 +++
- drivers/scsi/mpi3mr/mpi3mr_os.c | 35 ++++++++++++++++++++++++++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
-index a677a4b57a2c..74b6b4b6e322 100644
---- a/drivers/scsi/mpi3mr/mpi3mr.h
-+++ b/drivers/scsi/mpi3mr/mpi3mr.h
-@@ -141,6 +141,9 @@ extern struct list_head mrioc_list;
- /* Command retry count definitions */
- #define MPI3MR_DEV_RMHS_RETRY_COUNT 3
- 
-+/* Default target device queue depth */
-+#define MPI3MR_DEFAULT_SDEV_QD	32
-+
- /* SGE Flag definition */
- #define MPI3MR_SGEFLAGS_SYSTEM_SIMPLE_END_OF_LIST \
- 	(MPI3_SGE_FLAGS_ELEMENT_TYPE_SIMPLE | MPI3_SGE_FLAGS_DLAS_SYSTEM | \
 diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index 80de597f8ccf..6f19e5392433 100644
+index 6f19e5392433..07a7b1efbc4f 100644
 --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
 +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -648,6 +648,34 @@ static int mpi3mr_report_tgtdev_to_host(struct mpi3mr_ioc *mrioc,
+@@ -2865,6 +2865,27 @@ static int mpi3mr_target_alloc(struct scsi_target *starget)
  	return retval;
  }
  
++
 +/**
-+ * mpi3mr_change_queue_depth- Change QD callback handler
-+ * @sdev: SCSI device reference
-+ * @q_depth: Queue depth
++ * mpi3mr_allow_scmd_to_fw - Command is allowed during shutdown
++ * @scmd: SCSI Command reference
 + *
-+ * Validate and limit QD and call scsi_change_queue_depth.
++ * Checks whether a CDB is allowed during shutdown or not.
 + *
-+ * Return: return value of scsi_change_queue_depth
++ * Return: TRUE for allowed commands, FALSE otherwise.
 + */
-+static int mpi3mr_change_queue_depth(struct scsi_device *sdev,
-+	int q_depth)
++
++inline bool mpi3mr_allow_scmd_to_fw(struct scsi_cmnd *scmd)
 +{
-+	struct scsi_target *starget = scsi_target(sdev);
-+	struct Scsi_Host *shost = dev_to_shost(&starget->dev);
-+	int retval = 0;
-+
-+	if (!sdev->tagged_supported)
-+		q_depth = 1;
-+	if (q_depth > shost->can_queue)
-+		q_depth = shost->can_queue;
-+	else if (!q_depth)
-+		q_depth = MPI3MR_DEFAULT_SDEV_QD;
-+	retval = scsi_change_queue_depth(sdev, q_depth);
-+
-+	return retval;
++	switch (scmd->cmnd[0]) {
++	case SYNCHRONIZE_CACHE:
++	case START_STOP:
++		return true;
++	default:
++		return false;
++	}
 +}
 +
-+
  /**
-  * mpi3mr_update_sdev - Update SCSI device information
-  * @sdev: SCSI device reference
-@@ -668,6 +696,7 @@ mpi3mr_update_sdev(struct scsi_device *sdev, void *data)
- 	if (!tgtdev)
- 		return;
+  * mpi3mr_qcmd - I/O request despatcher
+  * @shost: SCSI Host reference
+@@ -2900,7 +2921,8 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
+ 		goto out;
+ 	}
  
-+	mpi3mr_change_queue_depth(sdev, tgtdev->q_depth);
- 	switch (tgtdev->dev_type) {
- 	case MPI3_DEVICE_DEVFORM_PCIE:
- 		/*The block layer hw sector size = 512*/
-@@ -2729,9 +2758,12 @@ static int mpi3mr_slave_configure(struct scsi_device *sdev)
- 	spin_lock_irqsave(&mrioc->tgtdev_lock, flags);
- 	tgt_dev = __mpi3mr_get_tgtdev_by_perst_id(mrioc, starget->id);
- 	spin_unlock_irqrestore(&mrioc->tgtdev_lock, flags);
--	if (!tgt_dev)
-+	if (!tgt_dev) {
-+		mpi3mr_change_queue_depth(sdev, MPI3MR_DEFAULT_SDEV_QD);
- 		return retval;
-+	}
- 
-+	mpi3mr_change_queue_depth(sdev, tgt_dev->q_depth);
- 	switch (tgt_dev->dev_type) {
- 	case MPI3_DEVICE_DEVFORM_PCIE:
- 		/*The block layer hw sector size = 512*/
-@@ -2971,6 +3003,7 @@ static struct scsi_host_template mpi3mr_driver_template = {
- 	.slave_destroy			= mpi3mr_slave_destroy,
- 	.scan_finished			= mpi3mr_scan_finished,
- 	.scan_start			= mpi3mr_scan_start,
-+	.change_queue_depth		= mpi3mr_change_queue_depth,
- 	.eh_abort_handler		= mpi3mr_eh_abort,
- 	.eh_device_reset_handler	= mpi3mr_eh_dev_reset,
- 	.eh_target_reset_handler	= mpi3mr_eh_target_reset,
+-	if (mrioc->stop_drv_processing) {
++	if (mrioc->stop_drv_processing &&
++	    !(mpi3mr_allow_scmd_to_fw(scmd))) {
+ 		scmd->result = DID_NO_CONNECT << 16;
+ 		scmd->scsi_done(scmd);
+ 		goto out;
 -- 
 2.18.1
 
@@ -176,7 +138,7 @@ this e-mail is strictly prohibited. If you received this e-mail in error,
 please return the e-mail to the sender, delete it from your computer, and 
 destroy any printed copy of it.
 
---000000000000e2918605b70ad145
+--00000000000010516d05b70ad221
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -246,14 +208,14 @@ pNj4hlSJMNNqxNSqrKaD1cR4/oZVPFVnJJYlB01cLVjGMzta9x27e6XEtseo2s7aoPS2l82koMr7
 M+LbYxcXFT2gXvoYd2Ms8zsLrhO2M6pMzeNGWk2HWTof9s7EEHDjis/MRlbYSNaohV23IUzNlBw7
 1FmvvW5GKK0xggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
 IG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0g
-RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgrtno7iqq
-728L2a/aPXCuKjfW2St0F0gWPyxOIywSZ8swGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
-hkiG9w0BCQUxDxcNMjAxMjIyMTAxMzAyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
+RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgD579aqQO
+/soRuWbZCM89wWsDeTSdvPIXsd7p59qiZgwwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
+hkiG9w0BCQUxDxcNMjAxMjIyMTAxMzA1WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
 BglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG
-9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJzW1JGkAS5XSHO9INosv3RRAjfb
-f5TI9jo7t9eTqT6/yaydDLfGFsM8r+648rZoUQjpszt8XNrPgZPhKaiMkCNAud+Jxz+crYgv2vl3
-PLXHiMjmxzdE6zugB+NVc40uPNvnAJUVINdn060D3AWzpADP+TzgqI3k30Rauwq4oXe4oB5xNISZ
-eT9YqSlBL7EtEHAZ6v0rA5waaFuRNZ3uiaeU4054RNkBkJ1A/jDX+GUoWi+rLFcXpmQTbdT99KhI
-44PbShHFBLBCs12oQlfkaPZm20bPzwIJTY62DA6uKg1QwIsMU+7c8SQPcEiCBuyBXtUCaxk6QxCh
-3OCRXrtpGHI=
---000000000000e2918605b70ad145--
+9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBABSDRi63MLEk63h2nv/aTKf1dCKn
+1NjghN1hc+UoNLl59d6jWNKsuPB0MfdcSIp7sNNejl4uaiXDJ8ykYKfKpXpugFVTGGXoEgvj6Gtm
+5d+C2raDQ6EPemzZdHOR9/7pQKiCBKOFjnHLtNzfeWF4Yzrq58fIk6W8YroCweeA+r+RFhNvpMqf
+sBviRKeBTiy+sW9hDFyWne7pW5RUcP/Onim811L8o5cDXycLxlYKa4DKLD3EwduaZY72M1NGAcyO
++NibOTgZiftXNVlG20LoMz2iPgkQHgLA1risklJylVpWK9owDKM6no+qT70k9ObP5MbRZ9UIVPOd
+gKkDdIdyJCU=
+--00000000000010516d05b70ad221--
