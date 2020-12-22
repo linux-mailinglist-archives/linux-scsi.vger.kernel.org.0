@@ -2,211 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCBE2E0681
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 08:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F85C2E0450
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Dec 2020 03:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726328AbgLVHG7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Dec 2020 02:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726320AbgLVHG7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Dec 2020 02:06:59 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F931C061282
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 23:06:06 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id n10so7792350pgl.10
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Dec 2020 23:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=+U2V77PUx8lTVBmL49agBc/nNKEIL1Ai7U/N4giYvzA=;
-        b=G32oyyEy7Fh9nXd3tHTLVZSQSbkYhS8jeFEpKDgGF+KoCg0HM4PHVq0CjizvVUNncm
-         O7npRhgfswEE2sNHIxQ7yhTZPJYKx7zHSAI5lqj/XK3Px6o+4Lq4T6iTs1OtjHJGoe8N
-         cHKxzjJ6tBHysu1Tz7jOY7tO4ZGNZeOTTHhKQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=+U2V77PUx8lTVBmL49agBc/nNKEIL1Ai7U/N4giYvzA=;
-        b=ohLAbV5I3PbHo6Iu50VyH2XkFqwVOXqfemEHZFyXKrzVg5tPT2X8urHWdB+tr2Ji9n
-         gjiV+SOX9kTitICgTiz9Zril3uv2eFqiQGVH3TRTfn9/X9VQz6ki3nvBlds9IWOIvz+H
-         /P/wcTzKWu0kZdC0K+WBFu6uzQPEXkjxxd6KrOnEincPwxyPFVXmP632+rPIawc7O/vb
-         vKX+NCQv5h97BniudjipB4XyCRdfxpRoH8VnhN7PATknEsnQotLCtWMIKhYZUDgYFHWR
-         m7B6cp/Ss2DIBiyGMNsaA2ZX6Qm4PTQYQawebpVCigU/ZvxLB22OuwSvSL+E0/NdrP8z
-         TqbA==
-MIME-Version: 1.0
-X-Gm-Message-State: AOAM532gMVVnSH26D2q33+PeeWSqwwXXAtNZHbF3LnW+wXsB/ylB2TDD
-        EQSx0b7yIg+oiu8GX28QIStjd4p/2edmSMkio77bsN/HfHDSNlJcT5FvzqTaQLafy8wzPLL6TCx
-        M54JffRPBnbPKE3jxfk4gYvg=
-X-Google-Smtp-Source: ABdhPJxJEgb9LzJO+hRw4mGVcGGwoFoOxJgQk4UwAWCeFOvckG9kVk1kDDYqo9BPM08mkBGYApLONw==
-X-Received: by 2002:a62:ddcd:0:b029:1a6:99ff:a75e with SMTP id w196-20020a62ddcd0000b02901a699ffa75emr18696477pff.42.1608620766073;
-        Mon, 21 Dec 2020 23:06:06 -0800 (PST)
-Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id t9sm12466082pgh.41.2020.12.21.23.06.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Dec 2020 23:06:05 -0800 (PST)
-From:   Muneendra <muneendra.kumar@broadcom.com>
-To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        tj@kernel.org, linux-nvme@lists.infradead.org, hare@suse.de
-Cc:     jsmart2021@gmail.com, emilne@redhat.com, mkumar@redhat.com,
-        pbonzini@redhat.com, Muneendra <muneendra.kumar@broadcom.com>
-Subject: [PATCH v6 16/16] scsi: Made changes in Kconfig to select BLK_CGROUP_FC_APPID
-Date:   Tue, 22 Dec 2020 05:41:58 +0530
-Message-Id: <1608595918-21954-17-git-send-email-muneendra.kumar@broadcom.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1608595918-21954-1-git-send-email-muneendra.kumar@broadcom.com>
-References: <1608595918-21954-1-git-send-email-muneendra.kumar@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005ce95805b7083553"
+        id S1725962AbgLVCS1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Dec 2020 21:18:27 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:26958 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgLVCS1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Dec 2020 21:18:27 -0500
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20201222021743epoutp0435a4e1605a2eadb52b4e43a6a324d731~S6FPZqmxP2227622276epoutp04B
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Dec 2020 02:17:43 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20201222021743epoutp0435a4e1605a2eadb52b4e43a6a324d731~S6FPZqmxP2227622276epoutp04B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1608603463;
+        bh=meghjGCzFWRirtyEtM1vEEYNZ8hDVaoWHxiCHcpVicU=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=Nb1OAkgpqQDolBGgN5QeR+fxd9XfUyFRbJhJ71kf/AZk2HsBUaNp7PBAB92IB0q49
+         NI43eL26uF09UiY8+PT14FsoxqjXYYY8tw2Y8I8eIMqFLWc/ZVhncC7nAuhVafW19B
+         C6HNqdSmJvT/HnVejT/f/ayQCPa55R9Hau+HTW+c=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20201222021743epcas2p3baa69d02c78028154afd3970413bf22c~S6FO1_m8R2888228882epcas2p39;
+        Tue, 22 Dec 2020 02:17:43 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.186]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4D0Kjw5Hssz4x9QC; Tue, 22 Dec
+        2020 02:17:40 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F2.E9.56312.24751EF5; Tue, 22 Dec 2020 11:17:38 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389~S6FJ7UuTl0152401524epcas2p2Z;
+        Tue, 22 Dec 2020 02:17:37 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20201222021737epsmtrp2ae551643cca28f487133e7c337578a4a~S6FJ6My9y0835008350epsmtrp2L;
+        Tue, 22 Dec 2020 02:17:37 +0000 (GMT)
+X-AuditID: b6c32a46-1efff7000000dbf8-88-5fe157420e65
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3E.73.08745.14751EF5; Tue, 22 Dec 2020 11:17:37 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201222021737epsmtip134813f227fe06a87eaf47dcf78d8aebd~S6FJoD7110718407184epsmtip1U;
+        Tue, 22 Dec 2020 02:17:37 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
+        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v2 0/2] permit to set block parameters per vendor
+Date:   Tue, 22 Dec 2020 11:06:45 +0900
+Message-Id: <cover.1608602725.git.kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmk+LIzCtJLcpLzFFi42LZdljTTNcp/GG8wbn7OhYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZHFzy1EWi+7rO9gs
+        lh//x2TRdfcGo8XSf29ZHPg9Ll/x9rjc18vkMWHRAUaP7+s72Dw+Pr3F4tG3ZRWjx+dNch7t
+        B7qZAjiicmwyUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJz
+        gI5XUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BQYGhboFSfmFpfmpesl5+daGRoY
+        GJkCVSbkZHzq/cRa8JClomX2F7YGxnvMXYycHBICJhJT5z8Asrk4hAR2MEp82fAayvnEKLHl
+        2mFGCOczo8SRBS+AHA6wlkdrNEC6hQR2MUocW1kOEhYS+MEo0eMDEmYT0JR4enMqE0iriMAZ
+        JolrrWdZQRLMAuoSuyacYAKxhQUcJTqPfQQbySKgKvFloi1ImFfAQmLZyTVQx8lJ3DzXCXaP
+        hEArh8Thh0dZIRIuEiseNUIVCUu8Or6FHcKWkvj8bi8bhF0vsW9qAytEcw+jxNN9/xghEsYS
+        s561gy1mBrp0/S59iLeUJY7cYoE4k0+i4/Bfdogwr0RHmxBEo7LEr0mToYZISsy8eQdqq4fE
+        xjWfWSAhEivxa2436wRG2VkI8xcwMq5iFEstKM5NTy02KjBCjqFNjODUqOW2g3HK2w96hxiZ
+        OBgPMUpwMCuJ8JpJ3Y8X4k1JrKxKLcqPLyrNSS0+xGgKDK6JzFKiyfnA5JxXEm9oamRmZmBp
+        amFqZmShJM5bbPAgXkggPbEkNTs1tSC1CKaPiYNTqoFJSHZfke3LrfPnVb6x6V9XlCBZJd5V
+        7rHrn+zWrYXc21/PPLV+ygaFvaXH2jaLpyhuu+w2Ja1NaOcpmRcJKd9s73CqLJnz4nd58jST
+        8tWnUg1aV9g07GSq0lz0NatIfeKWnpNvlgQ8/nT9KeP2A8ekj057Y/i120rAcvqsZvO3c/qX
+        erwwX6ckYcPk0Pm7387gApvDuftHNI7vEV/1aHreucPLdxdekDDLPvch1P3FtVtFp44bV3VP
+        tEg8P0vwWUHIoXnXm00EQ5QEkzyLE6dG12z7cDv+zdc9afOil+Y8igl6pyWrMS3b4ePkRXfq
+        G8+1RPbFXZR+b7qqien339et7xxNeQuOxn61mzBlW6/vUiWW4oxEQy3mouJEAJDZN+sWBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCLMWRmVeSWpSXmKPExsWy7bCSnK5j+MN4g1MrdSwezNvGZrG37QS7
+        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8Zq8evvenaL1YsfsFgsurGNyeLmlqMsFt3Xd7BZ
+        LD/+j8mi6+4NRoul/96yOPB7XL7i7XG5r5fJY8KiA4we39d3sHl8fHqLxaNvyypGj8+b5Dza
+        D3QzBXBEcdmkpOZklqUW6dslcGV86v3EWvCQpaJl9he2BsZ7zF2MHBwSAiYSj9ZodDFycQgJ
+        7GCUeLV3L1MXIydQXFLixM7njBC2sMT9liOsEEXfGCX+fJrBApJgE9CUeHpzKhNIQkTgHpPE
+        pQlzmUESzALqErsmnACbJCzgKNF57CMjyDYWAVWJLxNtQcK8AhYSy06uYYZYICdx81wn8wRG
+        ngWMDKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYIDVktrB+OeVR/0DjEycTAeYpTg
+        YFYS4TWTuh8vxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dU
+        AxN7a94prcTdcQUZgXxS2c9/GH2Z1qG3L1dTruhxb0JyqOKXeTbZ+s9XWz168X13pszDzyHX
+        dX8IPDnwq+OL55cF/zMXSH7OTJyckGVlM+HoD+WMQnPpb4XLGf7t6r+/JeyKc5uwxlmrHbV9
+        HEnW7z7fnvnSefOD2YVy4rK9f73SXfbeENx/cGLGxllK7YdeCN6w09vYeb9Dau3LiqhQ3Xp1
+        58NMb913b3vtXP3U9Tbzz6ezpzdfv2JS9qCz+tTUwM2TtVddUe1vTJ79mvEy/8ZlScnFOaWf
+        9/G9/SG/Tm7xn5cCfd2PZc+0yUocsvdrexp0xGgaZ/baOYlXfi9yWn1JTX1/9jar/hVFEw3f
+        /lJVYinOSDTUYi4qTgQAQOL57ccCAAA=
+X-CMS-MailID: 20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389
+References: <CGME20201222021737epcas2p2340d32346f02456c6a715fd2c7c0b389@epcas2p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000005ce95805b7083553
-Content-Type: text/plain; charset="US-ASCII"
+v1 -> v2: rename the vops and fix some typos
 
-Added a new config FC_APPID to select BLK_CGROUP_FC_APPID
-which Enable support to track FC io Traffic.
+There are some cases of dispatching a command with more than
+one scatterlist entry and under 4KB size. Device sends just one DATA IN
+but some SoCs transfer could tranfer data to a physically continuous
+area, which should have done per each scatterlist entry.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Muneendra <muneendra.kumar@broadcom.com>
+Kiwoong Kim (2):
+  ufs: add a vops to configure block parameter
+  ufs: ufs-exynos: set dma_alignment to 4095
 
----
-v6:
-Modified the Kconfig comments
-
-v5:
-No change
-
-v4:
-Addressed the error reported by kernel test robot
-
-v3:
-New patch
----
- drivers/scsi/Kconfig | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 701b61ec76ee..7b41fc3cb7f0 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -235,6 +235,19 @@ config SCSI_FC_ATTRS
- 	  each attached FiberChannel device to sysfs, say Y.
- 	  Otherwise, say N.
- 
-+config FC_APPID
-+	bool "Enable support to track FC io Traffic"
-+	depends on BLOCK && BLK_CGROUP
-+	depends on SCSI
-+	select BLK_CGROUP_FC_APPID
-+	default y
-+	help
-+	  If you say Y here, it enables the support to track
-+	  FC I/O traffic over fabric. It enables the Fabric and the
-+	  storage targets to identify, monitor, and handle FC traffic
-+	  based on VM tags by inserting application specific
-+	  identification into the FC frame.
-+
- config SCSI_ISCSI_ATTRS
- 	tristate "iSCSI Transport Attributes"
- 	depends on SCSI && NET
--- 
-2.26.2
-
+ drivers/scsi/ufs/ufs-exynos.c | 9 +++++++++
+ drivers/scsi/ufs/ufshcd.c     | 2 ++
+ drivers/scsi/ufs/ufshcd.h     | 8 ++++++++
+ 3 files changed, 19 insertions(+)
 
 -- 
-This electronic communication and the information and any files transmitted 
-with it, or attached to it, are confidential and are intended solely for 
-the use of the individual or entity to whom it is addressed and may contain 
-information that is confidential, legally privileged, protected by privacy 
-laws, or otherwise restricted from disclosure to anyone else. If you are 
-not the intended recipient or the person responsible for delivering the 
-e-mail to the intended recipient, you are hereby notified that any use, 
-copying, distributing, dissemination, forwarding, printing, or copying of 
-this e-mail is strictly prohibited. If you received this e-mail in error, 
-please return the e-mail to the sender, delete it from your computer, and 
-destroy any printed copy of it.
+2.7.4
 
---0000000000005ce95805b7083553
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-J/4V6ms/nIUi+/4vPYjckYUbRzkXm1/X0IyUfpp5cgdrFn9jBIk69fQGAUEhnVvwcXnHWotYxZFd
-Xew5Fz0CAwEAAaOCAdMwggHPMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEwgY4wTQYI
-KwYBBQUHMAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVyc29uYWxz
-aWduMnNoYTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5j
-b20vZ3NwZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsG
-AQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAA
-MEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJzb25hbHNp
-Z24yc2hhMmczLmNybDAnBgNVHREEIDAegRxtdW5lZW5kcmEua3VtYXJAYnJvYWRjb20uY29tMBMG
-A1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQYMBaAFGlygmIxZ5VEhXeRgMQENkmdewthMB0GA1Ud
-DgQWBBR6On9cEmlB2VsuST951zNMSKtFBzANBgkqhkiG9w0BAQsFAAOCAQEAOGDBLQ17Ge8BVULh
-hsKhgh5eDx0mNmRRdhvTJnxOTRX5QsOKvsJGOUbyrKjD3BTTcGmIUti9HmbqDe/3gRTbhu8LA508
-LbMkW5lUoTb8ycBNOKLYhNE8UEOY8jRTUtMEhzT6NJDEE+1hb3kSGfArrrF3Z8pRYiUUhcpC5GKL
-9KsxA+DECRfSGfXJJQSq6nEZUGKhz+dz5CV1s8UIZLe9HEEfyJO4eRP+Fw9X16cthAbY0kpVnAvT
-/j45FAauY/h87uphdvSb5wC9v5w4VO0JKs0yNUjyWXg/RG+6JCvcViLFLAlRCLrcRcVaQwWZQ3YB
-EpmWnHflnrBcah5Ozy137DGCAm8wggJrAgEBMG0wXTELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEds
-b2JhbFNpZ24gbnYtc2ExMzAxBgNVBAMTKkdsb2JhbFNpZ24gUGVyc29uYWxTaWduIDIgQ0EgLSBT
-SEEyNTYgLSBHMwIMX/krgFDQUQNyOf+1MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEi
-BCAki2DKMnhgcuOO7ofORh6jUZL454KjXKcMFxVM08k5dTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-AQcBMBwGCSqGSIb3DQEJBTEPFw0yMDEyMjIwNzA2MDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZI
-AWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEK
-MAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAjLN/+Vt01ZSmBXgo
-7nkTPuNpayP/w5uwSyvkRQj0SiMpwKFTq8HqMO0+diBHqEVdg2l+5YSKEQI9hk1cPuTF1+T9bNi9
-s1J9/8So9snwTkIZwvwc4H7usBhQG+fMrP0abz2Lx/IbZHcyTmlh8JZ4osi0LgzaviKbbj+A8U31
-+09EtsksshY7FQV65Q+ic9r+sqNQvd+T9jFdAqkWjVde71vyvZl8JqoSPnR46tDKS/0VZOfdNHVn
-J/3udJkIHSDunNgP5KXGEzZx1HoY93FI06aYrKIUJwkKcfNm7j0DIVzdCdqHN25fpGyLPcAGBW9O
-zGvHaFQF/ZKYg/jYpqluqA==
---0000000000005ce95805b7083553--
