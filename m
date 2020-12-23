@@ -2,28 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D0D2E1D06
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Dec 2020 15:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9532E1D48
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Dec 2020 15:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728829AbgLWOLe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Dec 2020 09:11:34 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:9985 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728576AbgLWOLe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Dec 2020 09:11:34 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4D1FTX4fNzzhwqd;
-        Wed, 23 Dec 2020 22:10:08 +0800 (CST)
+        id S1729204AbgLWOP3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Dec 2020 09:15:29 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:9477 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728650AbgLWOP0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Dec 2020 09:15:26 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4D1FZ55M7vzhvTy;
+        Wed, 23 Dec 2020 22:14:05 +0800 (CST)
 Received: from ubuntu.network (10.175.138.68) by
  DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 23 Dec 2020 22:10:44 +0800
+ 14.3.498.0; Wed, 23 Dec 2020 22:14:29 +0800
 From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
+To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
+        <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <megaraidlinux.pdl@broadcom.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] scsi: target: iscsi: use DEFINE_MUTEX (and mutex_init() had been too late)
-Date:   Wed, 23 Dec 2020 22:11:20 +0800
-Message-ID: <20201223141120.32346-1-zhengyongjun3@huawei.com>
+Subject: [PATCH -next] scsi: megaraid: Use DEFINE_SPINLOCK() for spinlock
+Date:   Wed, 23 Dec 2020 22:15:05 +0800
+Message-ID: <20201223141505.1123-1-zhengyongjun3@huawei.com>
 X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -34,32 +36,36 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+spinlock can be initialized automatically with DEFINE_SPINLOCK()
+rather than explicitly calling spin_lock_init().
+
 Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
 ---
- drivers/target/iscsi/iscsi_target.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas_base.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index 518fac4864cf..b33726229f94 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -50,7 +50,7 @@ static DEFINE_MUTEX(np_lock);
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index e158d3d62056..206089507b9f 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -199,7 +199,7 @@ static bool support_nvme_encapsulation;
+ static bool support_pci_lane_margining;
  
- static struct idr tiqn_idr;
- DEFINE_IDA(sess_ida);
--struct mutex auth_id_lock;
-+DEFINE_MUTEX(auth_id_lock);
+ /* define lock for aen poll */
+-static spinlock_t poll_aen_lock;
++static DEFINE_SPINLOCK(poll_aen_lock);
  
- struct iscsit_global *iscsit_global;
+ extern struct dentry *megasas_debugfs_root;
  
-@@ -690,7 +690,6 @@ static int __init iscsi_target_init_module(void)
- 		return -1;
+@@ -8875,8 +8875,6 @@ static int __init megasas_init(void)
+ 	 */
+ 	pr_info("megasas: %s\n", MEGASAS_VERSION);
  
- 	spin_lock_init(&iscsit_global->ts_bitmap_lock);
--	mutex_init(&auth_id_lock);
- 	idr_init(&tiqn_idr);
- 
- 	ret = target_register_template(&iscsi_ops);
+-	spin_lock_init(&poll_aen_lock);
+-
+ 	support_poll_for_event = 2;
+ 	support_device_change = 1;
+ 	support_nvme_encapsulation = true;
 -- 
 2.22.0
 
