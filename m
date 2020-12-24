@@ -2,122 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5374F2E2858
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Dec 2020 18:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FB12E2867
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Dec 2020 18:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728868AbgLXRVO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Dec 2020 12:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728757AbgLXRVJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Dec 2020 12:21:09 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23782C0613ED;
-        Thu, 24 Dec 2020 09:20:29 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id 6so4037164ejz.5;
-        Thu, 24 Dec 2020 09:20:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=PYycvZZtwv/h41HPPKiYNBu4NL6LfmBrKKP66ExytA8=;
-        b=p8gLsi1W5BS0fLO7h/XP01TZk9IHMhDz2+a0nVYDI1BQULoIXmMGQSy/rVwHmPpsZx
-         jhQa88c7R+ERK2CvwEcNElAqiMz1f1Ms9afTjAh89irUo1YY2FCfL8AeKURciX5DZ6gF
-         nvz132IAObMGwRTbDbiS2qpms8VfaF4AIE2kyxnaDrpwvwT7L2v/Plr2N3AxhdOddKzq
-         eQa/pMeHAadtZroYliX/JK1bOQu9BIOuYpyvR7L6RWwcdjpG63WomFCe+tNc08Hzldq/
-         FaefQZo/wv7SatN5goG7t9X57M3ai15+PRXuQ14bkgp9FhBpFdQhkeU5rsb6rj6gimWA
-         J3bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=PYycvZZtwv/h41HPPKiYNBu4NL6LfmBrKKP66ExytA8=;
-        b=EUqy3DT194KrAV5opTECU7HnzHsej3o5yOnz+/a86zqd5+ld98ZfM1PEBM6QC3y5Dj
-         CF7HRUDHDxZOacV1cQDZVsZcd0AIBlnQ0JY4cqIJwaMc3AjjAXih1ApV8MlTE7d9CG2T
-         +BEganrp86MUNHU0lFHu22UBpEc6PJ7vEqYwLeCss3rk1r0RqCFsGxW4TQ151j3P6q4u
-         n/1Usrcd+Ksp9HZAtGtu5LFhig2fIzE6v+n1rYNGMbvKM3xm2zqocii9KFZrpWuO8ay9
-         ZLVrdyi/GbW5/VGiH3hCemHB+smfF/jhsQcNxva2mZcFIkakBiuQUjtrU+GZjgcO9eqv
-         QClg==
-X-Gm-Message-State: AOAM532rO39d25FQDeoNTTroMJyAywm6jmbcADAn/Toua0l3mbXfKAsf
-        E/YAqNVvy7R8Rmx8r1s52aa5fFjqpmjrKg==
-X-Google-Smtp-Source: ABdhPJwDLNmkh3yZW5f7r/O2OrAwj05q/Ovu3ZsJimwP+OxRmgm+mvBPEqQRIn+R+o0JxLRTi4PKOQ==
-X-Received: by 2002:a17:906:3711:: with SMTP id d17mr28536567ejc.121.1608830427928;
-        Thu, 24 Dec 2020 09:20:27 -0800 (PST)
-Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.gmail.com with ESMTPSA id m5sm12874446eja.11.2020.12.24.09.20.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Dec 2020 09:20:27 -0800 (PST)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rjw@rjwysocki.net
-Subject: [PATCH v2 3/3] scsi: ufs: Let resume callback return -EBUSY after ufshcd_shutdown
-Date:   Thu, 24 Dec 2020 18:20:10 +0100
-Message-Id: <20201224172010.10701-4-huobean@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201224172010.10701-1-huobean@gmail.com>
-References: <20201224172010.10701-1-huobean@gmail.com>
+        id S1728718AbgLXRbA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Dec 2020 12:31:00 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:37900 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726839AbgLXRbA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 24 Dec 2020 12:31:00 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 97C271280937;
+        Thu, 24 Dec 2020 09:30:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1608831019;
+        bh=ZrDKMysEKyRnhYwGjS71SXXWaighP0ldoE8CWdohIrg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=r8mNX+IrqMNTTr696CzKuwaS+Sq91rTomLLBTI6H2DQdIAq2hg33Y7UH5jb+Go3cI
+         tb6nDGo60ZPDH/51WQjOHUSL6ZxKTbUHp+YB5IXye5R/Z2sAeuMEGaBDZTuMX5elLc
+         TByeaVv9dfWCLAVPKYUK4GoJKGCinejD2LtKCi08=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id h3bvsEulAG7l; Thu, 24 Dec 2020 09:30:19 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 8B4791280936;
+        Thu, 24 Dec 2020 09:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1608831019;
+        bh=ZrDKMysEKyRnhYwGjS71SXXWaighP0ldoE8CWdohIrg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=r8mNX+IrqMNTTr696CzKuwaS+Sq91rTomLLBTI6H2DQdIAq2hg33Y7UH5jb+Go3cI
+         tb6nDGo60ZPDH/51WQjOHUSL6ZxKTbUHp+YB5IXye5R/Z2sAeuMEGaBDZTuMX5elLc
+         TByeaVv9dfWCLAVPKYUK4GoJKGCinejD2LtKCi08=
+Message-ID: <bdd002f433928dd545d336a982516afa4e095d49.camel@HansenPartnership.com>
+Subject: Re: [PATCH v1 0/6] no-copy bvec
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     dgilbert@interlog.com, Christoph Hellwig <hch@infradead.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org
+Date:   Thu, 24 Dec 2020 09:30:17 -0800
+In-Reply-To: <8abc56c2-4db8-5ee3-ab2d-8960d0eeeb0d@interlog.com>
+References: <cover.1607976425.git.asml.silence@gmail.com>
+         <20201215014114.GA1777020@T590>
+         <103235c1-e7d0-0b55-65d0-013d1a09304e@gmail.com>
+         <20201215120357.GA1798021@T590>
+         <e755fec3-4181-1414-0603-02e1a1f4e9eb@gmail.com>
+         <20201222141112.GE13079@infradead.org>
+         <933030f0-e428-18fd-4668-68db4f14b976@gmail.com>
+         <20201223155145.GA5902@infradead.org>
+         <f06ece44a86eb9c8ef07bbd9f6f53342366b7751.camel@HansenPartnership.com>
+         <8abc56c2-4db8-5ee3-ab2d-8960d0eeeb0d@interlog.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On Wed, 2020-12-23 at 15:23 -0500, Douglas Gilbert wrote:
+> On 2020-12-23 11:04 a.m., James Bottomley wrote:
+> > On Wed, 2020-12-23 at 15:51 +0000, Christoph Hellwig wrote:
+> > > On Wed, Dec 23, 2020 at 12:52:59PM +0000, Pavel Begunkov wrote:
+> > > > Can scatterlist have 0-len entries? Those are directly
+> > > > translated into bvecs, e.g. in nvme/target/io-cmd-file.c and
+> > > > target/target_core_file.c. I've audited most of others by this
+> > > > moment, they're fine.
+> > > 
+> > > For block layer SGLs we should never see them, and for nvme
+> > > neither. I think the same is true for the SCSI target code, but
+> > > please double check.
+> > 
+> > Right, no-one ever wants to see a 0-len scatter list entry.  The
+> > reason is that every driver uses the sgl to program the device DMA
+> > engine in the way NVME does.  a 0 length sgl would be a dangerous
+> > corner case: some DMA engines would ignore it and others would go
+> > haywire, so if we ever let a 0 length list down into the driver,
+> > they'd have to understand the corner case behaviour of their DMA
+> > engine and filter it accordingly, which is why we disallow them in
+> > the upper levels, since they're effective nops anyway.
+> 
+> When using scatter gather lists at the far end (i.e. on the storage
+> device) the T10 examples (WRITE SCATTERED and POPULATE TOKEN in SBC-
+> 4) explicitly allow the "number of logical blocks" in their sgl_s to
+> be zero and state that it is _not_ to be considered an error.
 
-After ufshcd_shutdown(), both UFS device and UFS LINk are powered off,
-return '0' will mislead the upper PM layer since the device has not been
-successfully resumed yet. This will let pm_runtime_get_sync() caller
-mistakenly believe the device/LINK has been resumed, which leads to
-request processing timeout that was en-queued later.
+But that's pretty irrelevant.  The scatterlists that block has been
+constructing to drive DMA engines pre-date SCSI's addition of SGLs by
+decades (all SCSI commands before the object commands use a linear
+buffer which is implemented in the HBA engine as a scatterlist but not
+described by the SCSI standard as one).
 
-To fix this, let ufshcd_system/runtimie_resume() return -EBUSY in case of
-hba->is_powered == false.
+So the answer to the question should the block layer emit zero length
+sgl elements is "no" because they can confuse some DMA engines.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/ufs/ufshcd.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+If there's a more theoretical question of whether the target driver in
+adding commands it doesn't yet support should inject zero length SGL
+elements into block because SCSI allows it, the answer is still "no"
+because we don't want block to have SGLs that may confuse other DMA
+engines.  There's lots of daft corner cases in the SCSI standard we
+don't implement and a nop for SGL elements seems to be one of the more
+hare brained because it adds no useful feature and merely causes
+compatibility issues.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index e221add25a7e..e1bcac51c01f 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -8950,14 +8950,16 @@ int ufshcd_system_resume(struct ufs_hba *hba)
- 		return -EINVAL;
- 	}
+James
  
--	if (!hba->is_powered || pm_runtime_suspended(hba->dev))
-+	if (!hba->is_powered || pm_runtime_suspended(hba->dev)) {
- 		/*
- 		 * Let the runtime resume take care of resuming
- 		 * if runtime suspended.
- 		 */
-+		ret = -EBUSY;
- 		goto out;
--	else
-+	} else {
- 		ret = ufshcd_resume(hba, UFS_SYSTEM_PM);
-+	}
- out:
- 	trace_ufshcd_system_resume(dev_name(hba->dev), ret,
- 		ktime_to_us(ktime_sub(ktime_get(), start)),
-@@ -9026,10 +9028,12 @@ int ufshcd_runtime_resume(struct ufs_hba *hba)
- 	if (!hba)
- 		return -EINVAL;
- 
--	if (!hba->is_powered)
-+	if (!hba->is_powered) {
-+		ret = -EBUSY;
- 		goto out;
--	else
-+	} else {
- 		ret = ufshcd_resume(hba, UFS_RUNTIME_PM);
-+	}
- out:
- 	trace_ufshcd_runtime_resume(dev_name(hba->dev), ret,
- 		ktime_to_us(ktime_sub(ktime_get(), start)),
--- 
-2.17.1
 
