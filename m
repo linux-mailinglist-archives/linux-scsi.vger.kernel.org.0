@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8876E2E2854
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Dec 2020 18:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0CB2E2856
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Dec 2020 18:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728700AbgLXRVI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Dec 2020 12:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S1728782AbgLXRVJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Dec 2020 12:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727144AbgLXRVH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Dec 2020 12:21:07 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A91EC061757;
-        Thu, 24 Dec 2020 09:20:27 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id b9so4084265ejy.0;
-        Thu, 24 Dec 2020 09:20:26 -0800 (PST)
+        with ESMTP id S1728757AbgLXRVI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Dec 2020 12:21:08 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280BAC0613C1;
+        Thu, 24 Dec 2020 09:20:28 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id g20so4073544ejb.1;
+        Thu, 24 Dec 2020 09:20:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GGGzCG6IsBMm3fKDl4elkBUls6e2qJh6NDI+c/9UOVg=;
-        b=A84eQ8uVK969jiJpPK8vMzc/Lqjy5tRqL3zSTKKnNfLXXRbLO49oKzNcIsl5NvxqkZ
-         /yy2sLywselg8mHHlONdYTQocLy5wRinuSfyYjX7/a+f6Ch1wfXUYGMpjsaLOIBCU187
-         pnGKVoAYsTZgBo27GPBbhqPe12PdgAVsU6d0V9OTEFpz5k4DKFB2QHukyQcP9Mkk8554
-         a2y/kvrPoPHSZV4vw0tBXm5vjZXy+uFrGE9NlmovHSgEsyJO5wpvXlZv92tbfgLxeUtO
-         dN/by6puRFDD3UD+xw5DFdNCrcxMbjk3j59b8py6SIAHGvChuk/Yf865Mc4gurCGNLoz
-         qaMw==
+        bh=M/LQBu//i4RMgFaViCE8yWcfBThRAvtu9np9/z5UKcA=;
+        b=Ms/eruC8VTv6TU8MVGSXjz7bkMOulkKXj8aW/dBzQM/k391Oj2+5HCt21Deuk89pCk
+         gGQpC+FkIkk0+mHk9yCDec4qpsLnJg1JXekl4qxqaGzjAMNX/XeOHS6dPoCwF9E4P4vJ
+         d6rKtbgkUuexYec+s3lpxG4xuQKPEip79i6JOVheWrhAU6Crx28T2OZ5p92Jrvs/Bn7h
+         e/+kbJkESR0tIXZ4IUjr2Kvn6bMz//axjjkM6XQ1Fv5F//Dl6cXiOeV77J0cFvszqNy3
+         vBRTpDC4M0i7fOsjFzF3p8FSBCj/Oq+s24yPUiRDKhHiRUAg4AKFeBW/oLlFYQiP8k65
+         BsVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=GGGzCG6IsBMm3fKDl4elkBUls6e2qJh6NDI+c/9UOVg=;
-        b=H9h5Zk+UFGMqxiybUN+Xxmx1cvzNbj481zcGg40O/gpH1YuIV829VT1X8MYS6L6K3f
-         MmnRxEswZlbXgMf2J4cBoysijiy0iZMBuG0gGA1Qpxloy35KnyvXDSamBqUb6CWQ5Lis
-         y45PtEpI5FRj+2Hbz1IlZ2M2uK9AqwwU/sAbM7rZnI2ayN6Vzndv3PpPjnkFmm1EHNUH
-         dwrvdNzQTugvd/LefpraRiSWeay/CapTQEqHC4NBx6nE20vGHKz3MRxGgfO9RaLYLIlj
-         EirXirX3/0plPOjWFkRUk2LBVz8b4nHt7d5D6tA1Ze78g0t4rPzAnu7DQOHMX9kpid5l
-         f/1g==
-X-Gm-Message-State: AOAM533bEyfVzzk/BUXBMAMDQYHoGyPrnfjryntD//9HJ9HMQgwb7Yom
-        AODWHYK+G7ZQws5QFJ6Ancw=
-X-Google-Smtp-Source: ABdhPJxwfqpAyB2nBZn54mlMWSjbeK9ir7qV1+u+LZm+giSvrDBMjS2wmfYoMIQt+zwAMfeqFTVAhw==
-X-Received: by 2002:a17:907:105e:: with SMTP id oy30mr28636567ejb.495.1608830425752;
-        Thu, 24 Dec 2020 09:20:25 -0800 (PST)
+        bh=M/LQBu//i4RMgFaViCE8yWcfBThRAvtu9np9/z5UKcA=;
+        b=NltxW1FvtvSsFRhqVSNDtdw31PCPaDDsHajjSlgZ0PBvP51eDOUfsvOoOBGQVY2Aw8
+         w3PsxF5ajT3woVXn7tNB4L0dVu2gYNHm8dnpRFM7g4GqFCkaRyVLkF97aqZEK/htvUbw
+         IurUjYHlQccDWVTImLNXgqXoQFtAUeEehrpQhLRCaWYUlozYGy7xvpPaXJxCAhjXjhG5
+         2Thqi+j8BkaNG2Ozl1aB5QKGC3U0lhtEHEInImxOZFfoDvUIInJKodPWZb1CaNrrEo+6
+         QOSo+VjO9kT7jPijpjQ6la+imnvwjXnXeKP/0YrKx7a6WFEJfQ2/4bWpQP9jgfMsC0p+
+         RTQQ==
+X-Gm-Message-State: AOAM533DzXXUC1IcMY+CI/g2erQ4TtKGKRvPRWBnq8bbIS8le19+HxlH
+        qLQgh8iV3GSoSqmpm6yZkFw=
+X-Google-Smtp-Source: ABdhPJzN/gLmuzqyLugtiP/+C7l4ix2b7L87Sg6F/PypGxkJxjWRIHY3iPGhayjhSrMJ+LaMifWMLw==
+X-Received: by 2002:a17:906:59a:: with SMTP id 26mr28356496ejn.309.1608830426883;
+        Thu, 24 Dec 2020 09:20:26 -0800 (PST)
 Received: from localhost.localdomain (ip5f5bfce9.dynamic.kabel-deutschland.de. [95.91.252.233])
-        by smtp.gmail.com with ESMTPSA id m5sm12874446eja.11.2020.12.24.09.20.24
+        by smtp.gmail.com with ESMTPSA id m5sm12874446eja.11.2020.12.24.09.20.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Dec 2020 09:20:25 -0800 (PST)
+        Thu, 24 Dec 2020 09:20:26 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -54,9 +54,9 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         rjw@rjwysocki.net
-Subject: [PATCH v2 1/3] scsi: ufs: Replace sprintf and snprintf with sysfs_emit
-Date:   Thu, 24 Dec 2020 18:20:08 +0100
-Message-Id: <20201224172010.10701-2-huobean@gmail.com>
+Subject: [PATCH v2 2/3] scsi: ufs: Add handling of the return value of pm_runtime_get_sync()
+Date:   Thu, 24 Dec 2020 18:20:09 +0100
+Message-Id: <20201224172010.10701-3-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201224172010.10701-1-huobean@gmail.com>
 References: <20201224172010.10701-1-huobean@gmail.com>
@@ -66,143 +66,105 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-sprintf and snprintf may cause output defect in sysfs content, it is
-better to use new added sysfs_emit function which knows the size of the
-temporary buffer.
+The race issue may exist between UFS access in UFS sysfs context and UFS
+shutdown, thus will cause pm_runtime_get_sync() resume failure.
+Add handling of the return value of pm_runtime_get_sync(). Let it return
+in case pm_runtime_get_sync() resume failed.
 
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/scsi/ufs/ufs-sysfs.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/scsi/ufs/ufs-sysfs.c | 38 ++++++++++++++++++++++++++++++------
+ 1 file changed, 32 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index 08e72b7eef6a..0e1438485133 100644
+index 0e1438485133..8e5e36e01bee 100644
 --- a/drivers/scsi/ufs/ufs-sysfs.c
 +++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -67,7 +67,7 @@ static ssize_t rpm_lvl_show(struct device *dev,
+@@ -154,12 +154,17 @@ static ssize_t auto_hibern8_show(struct device *dev,
+ 				 struct device_attribute *attr, char *buf)
  {
+ 	u32 ahit;
++	int ret;
  	struct ufs_hba *hba = dev_get_drvdata(dev);
  
--	return sprintf(buf, "%d\n", hba->rpm_lvl);
-+	return sysfs_emit(buf, "%d\n", hba->rpm_lvl);
- }
+ 	if (!ufshcd_is_auto_hibern8_supported(hba))
+ 		return -EOPNOTSUPP;
  
- static ssize_t rpm_lvl_store(struct device *dev,
-@@ -81,7 +81,7 @@ static ssize_t rpm_target_dev_state_show(struct device *dev,
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%s\n", ufschd_ufs_dev_pwr_mode_to_string(
-+	return sysfs_emit(buf, "%s\n", ufschd_ufs_dev_pwr_mode_to_string(
- 			ufs_pm_lvl_states[hba->rpm_lvl].dev_state));
- }
- 
-@@ -90,7 +90,7 @@ static ssize_t rpm_target_link_state_show(struct device *dev,
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%s\n", ufschd_uic_link_state_to_string(
-+	return sysfs_emit(buf, "%s\n", ufschd_uic_link_state_to_string(
- 			ufs_pm_lvl_states[hba->rpm_lvl].link_state));
- }
- 
-@@ -99,7 +99,7 @@ static ssize_t spm_lvl_show(struct device *dev,
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%d\n", hba->spm_lvl);
-+	return sysfs_emit(buf, "%d\n", hba->spm_lvl);
- }
- 
- static ssize_t spm_lvl_store(struct device *dev,
-@@ -113,7 +113,7 @@ static ssize_t spm_target_dev_state_show(struct device *dev,
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%s\n", ufschd_ufs_dev_pwr_mode_to_string(
-+	return sysfs_emit(buf, "%s\n", ufschd_ufs_dev_pwr_mode_to_string(
- 				ufs_pm_lvl_states[hba->spm_lvl].dev_state));
- }
- 
-@@ -122,7 +122,7 @@ static ssize_t spm_target_link_state_show(struct device *dev,
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%s\n", ufschd_uic_link_state_to_string(
-+	return sysfs_emit(buf, "%s\n", ufschd_uic_link_state_to_string(
- 				ufs_pm_lvl_states[hba->spm_lvl].link_state));
- }
- 
-@@ -165,7 +165,7 @@ static ssize_t auto_hibern8_show(struct device *dev,
+-	pm_runtime_get_sync(hba->dev);
++	ret = pm_runtime_get_sync(hba->dev);
++	if (ret < 0) {
++		pm_runtime_put_noidle(hba->dev);
++		return ret;
++	}
+ 	ufshcd_hold(hba, false);
+ 	ahit = ufshcd_readl(hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
  	ufshcd_release(hba);
- 	pm_runtime_put_sync(hba->dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", ufshcd_ahit_to_us(ahit));
-+	return sysfs_emit(buf, "%d\n", ufshcd_ahit_to_us(ahit));
- }
- 
- static ssize_t auto_hibern8_store(struct device *dev,
-@@ -233,18 +233,18 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
+@@ -225,7 +230,12 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
+ 	if (param_size > 8)
  		return -EINVAL;
- 	switch (param_size) {
- 	case 1:
--		ret = sprintf(sysfs_buf, "0x%02X\n", *desc_buf);
-+		ret = sysfs_emit(sysfs_buf, "0x%02X\n", *desc_buf);
- 		break;
- 	case 2:
--		ret = sprintf(sysfs_buf, "0x%04X\n",
-+		ret = sysfs_emit(sysfs_buf, "0x%04X\n",
- 			get_unaligned_be16(desc_buf));
- 		break;
- 	case 4:
--		ret = sprintf(sysfs_buf, "0x%08X\n",
-+		ret = sysfs_emit(sysfs_buf, "0x%08X\n",
- 			get_unaligned_be32(desc_buf));
- 		break;
- 	case 8:
--		ret = sprintf(sysfs_buf, "0x%016llX\n",
-+		ret = sysfs_emit(sysfs_buf, "0x%016llX\n",
- 			get_unaligned_be64(desc_buf));
- 		break;
- 	}
-@@ -609,7 +609,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 				      SD_ASCII_STD);			\
- 	if (ret < 0)							\
- 		goto out;						\
--	ret = snprintf(buf, PAGE_SIZE, "%s\n", desc_buf);		\
-+	ret = sysfs_emit(buf, "%s\n", desc_buf);		\
- out:									\
- 	pm_runtime_put_sync(hba->dev);					\
- 	kfree(desc_buf);						\
-@@ -659,7 +659,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 	pm_runtime_put_sync(hba->dev);					\
- 	if (ret)							\
- 		return -EINVAL;						\
--	return sprintf(buf, "%s\n", flag ? "true" : "false"); \
-+	return sysfs_emit(buf, "%s\n", flag ? "true" : "false");	\
- }									\
- static DEVICE_ATTR_RO(_name)
  
-@@ -717,7 +717,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 	pm_runtime_put_sync(hba->dev);					\
- 	if (ret)							\
- 		return -EINVAL;						\
--	return sprintf(buf, "0x%08X\n", value);				\
-+	return sysfs_emit(buf, "0x%08X\n", value);			\
- }									\
- static DEVICE_ATTR_RO(_name)
- 
-@@ -856,7 +856,7 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
+-	pm_runtime_get_sync(hba->dev);
++	ret = pm_runtime_get_sync(hba->dev);
++	if (ret < 0) {
++		pm_runtime_put_noidle(hba->dev);
++		return ret;
++	}
++
+ 	ret = ufshcd_read_desc_param(hba, desc_id, desc_index,
+ 				param_offset, desc_buf, param_size);
  	pm_runtime_put_sync(hba->dev);
- 	if (ret)
- 		return -EINVAL;
--	return sprintf(buf, "0x%08X\n", value);
-+	return sysfs_emit(buf, "0x%08X\n", value);
- }
- static DEVICE_ATTR_RO(dyn_cap_needed_attribute);
+@@ -594,7 +604,11 @@ static ssize_t _name##_show(struct device *dev,				\
+ 	desc_buf = kzalloc(QUERY_DESC_MAX_SIZE, GFP_ATOMIC);		\
+ 	if (!desc_buf)                                                  \
+ 		return -ENOMEM;                                         \
+-	pm_runtime_get_sync(hba->dev);					\
++	ret = pm_runtime_get_sync(hba->dev);				\
++	if (ret < 0) {							\
++		pm_runtime_put_noidle(hba->dev);			\
++		return ret;						\
++	}								\
+ 	ret = ufshcd_query_descriptor_retry(hba,			\
+ 		UPIU_QUERY_OPCODE_READ_DESC, QUERY_DESC_IDN_DEVICE,	\
+ 		0, 0, desc_buf, &desc_len);				\
+@@ -653,7 +667,11 @@ static ssize_t _name##_show(struct device *dev,				\
+ 	struct ufs_hba *hba = dev_get_drvdata(dev);			\
+ 	if (ufshcd_is_wb_flags(QUERY_FLAG_IDN##_uname))			\
+ 		index = ufshcd_wb_get_query_index(hba);			\
+-	pm_runtime_get_sync(hba->dev);					\
++	ret = pm_runtime_get_sync(hba->dev);				\
++	if (ret < 0) {							\
++		pm_runtime_put_noidle(hba->dev);			\
++		return ret;						\
++	}								\
+ 	ret = ufshcd_query_flag(hba, UPIU_QUERY_OPCODE_READ_FLAG,	\
+ 		QUERY_FLAG_IDN##_uname, index, &flag);			\
+ 	pm_runtime_put_sync(hba->dev);					\
+@@ -711,7 +729,11 @@ static ssize_t _name##_show(struct device *dev,				\
+ 	u8 index = 0;							\
+ 	if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN##_uname))			\
+ 		index = ufshcd_wb_get_query_index(hba);			\
+-	pm_runtime_get_sync(hba->dev);					\
++	ret = pm_runtime_get_sync(hba->dev);				\
++	if (ret < 0) {							\
++		pm_runtime_put_noidle(hba->dev);			\
++		return ret;						\
++	}								\
+ 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,	\
+ 		QUERY_ATTR_IDN##_uname, index, 0, &value);		\
+ 	pm_runtime_put_sync(hba->dev);					\
+@@ -850,7 +872,11 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
+ 	u8 lun = ufshcd_scsi_to_upiu_lun(sdev->lun);
+ 	int ret;
  
+-	pm_runtime_get_sync(hba->dev);
++	ret = pm_runtime_get_sync(hba->dev);
++	if (ret < 0) {
++		pm_runtime_put_noidle(hba->dev);
++		return ret;
++	}
+ 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
+ 		QUERY_ATTR_IDN_DYN_CAP_NEEDED, lun, 0, &value);
+ 	pm_runtime_put_sync(hba->dev);
 -- 
 2.17.1
 
