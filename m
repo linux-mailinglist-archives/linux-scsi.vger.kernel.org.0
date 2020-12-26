@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 642C42E2D5D
+	by mail.lfdr.de (Postfix) with ESMTP id DA0CC2E2D5E
 	for <lists+linux-scsi@lfdr.de>; Sat, 26 Dec 2020 07:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726007AbgLZGL0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 26 Dec 2020 01:11:26 -0500
-Received: from spam.zju.edu.cn ([61.164.42.155]:55028 "EHLO zju.edu.cn"
+        id S1726579AbgLZGQF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 26 Dec 2020 01:16:05 -0500
+Received: from mail.zju.edu.cn ([61.164.42.155]:55274 "EHLO zju.edu.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725801AbgLZGLY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 26 Dec 2020 01:11:24 -0500
+        id S1726465AbgLZGQF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 26 Dec 2020 01:16:05 -0500
 Received: from localhost.localdomain (unknown [10.192.85.18])
-        by mail-app3 (Coremail) with SMTP id cC_KCgD3_w_N0+ZfxQQQAA--.59477S4;
-        Sat, 26 Dec 2020 14:10:24 +0800 (CST)
+        by mail-app3 (Coremail) with SMTP id cC_KCgDnzw7o1OZfuQsQAA--.59743S4;
+        Sat, 26 Dec 2020 14:15:08 +0800 (CST)
 From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
 To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
 Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: scsi_debug: Fix memleak in scsi_debug_init
-Date:   Sat, 26 Dec 2020 14:10:19 +0800
-Message-Id: <20201226061019.19034-1-dinghao.liu@zju.edu.cn>
+Subject: [PATCH] [v2] scsi: scsi_debug: Fix memleak in scsi_debug_init
+Date:   Sat, 26 Dec 2020 14:15:03 +0800
+Message-Id: <20201226061503.20050-1-dinghao.liu@zju.edu.cn>
 X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgD3_w_N0+ZfxQQQAA--.59477S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4rur4fXFWxtw15urW3ZFb_yoWDXrXEgw
-        4rtryxGrn0qw4Iv39xW348J3sF9F4rGFs5uF1SqryxZa17X3yDKFW8Zr1Duw45uw429r17
-        Kws8Zrn29w17AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: cC_KCgDnzw7o1OZfuQsQAA--.59743S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4rur4fXFWxtw15urW3ZFb_yoWDtwc_Ww
+        4rtryxGr1Yqw4Iv393W348XwnF9F4rWan5uF1SqryIva17X3yqgFW8Zr1UCw45uw429r17
+        Kws8Zrna9r17AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUb2AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
         wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
         vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
         87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
+        JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
         xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
         aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
         4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgYEBlZdtRrnPgAHs8
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJw
+        CI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgYEBlZdtRrnPgAJsy
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -51,11 +51,16 @@ sdebug_erase_store() on failure of sdeb_zbc_model_str().
 
 Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 ---
- drivers/scsi/scsi_debug.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Changelog:
+
+v2: - Add missed assignment statement for ret.
+---
+ drivers/scsi/scsi_debug.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 24c0f7ec0351..88e785da03ba 100644
+index 24c0f7ec0351..4a08c450b756 100644
 --- a/drivers/scsi/scsi_debug.c
 +++ b/drivers/scsi/scsi_debug.c
 @@ -6740,7 +6740,7 @@ static int __init scsi_debug_init(void)
@@ -67,11 +72,12 @@ index 24c0f7ec0351..88e785da03ba 100644
  		}
  		sdeb_zbc_model = k;
  		switch (sdeb_zbc_model) {
-@@ -6753,7 +6753,7 @@ static int __init scsi_debug_init(void)
+@@ -6753,7 +6753,8 @@ static int __init scsi_debug_init(void)
  			break;
  		default:
  			pr_err("Invalid ZBC model\n");
 -			return -EINVAL;
++			ret = -EINVAL;
 +			goto free_q_arr;
  		}
  	}
