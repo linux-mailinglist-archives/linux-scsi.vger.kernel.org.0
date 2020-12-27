@@ -2,91 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2BF2E2F84
-	for <lists+linux-scsi@lfdr.de>; Sun, 27 Dec 2020 01:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3103E2E3053
+	for <lists+linux-scsi@lfdr.de>; Sun, 27 Dec 2020 07:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726104AbgL0ArY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 26 Dec 2020 19:47:24 -0500
-Received: from mail-1.ca.inter.net ([208.85.220.69]:60078 "EHLO
-        mail-1.ca.inter.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725834AbgL0ArY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Dec 2020 19:47:24 -0500
-Received: from localhost (offload-3.ca.inter.net [208.85.220.70])
-        by mail-1.ca.inter.net (Postfix) with ESMTP id 0CE4F2EA07B;
-        Sat, 26 Dec 2020 19:46:43 -0500 (EST)
-Received: from mail-1.ca.inter.net ([208.85.220.69])
-        by localhost (offload-3.ca.inter.net [208.85.220.70]) (amavisd-new, port 10024)
-        with ESMTP id l43aPXFgTGuZ; Sat, 26 Dec 2020 19:34:37 -0500 (EST)
-Received: from [192.168.48.23] (host-104-157-204-209.dyn.295.ca [104.157.204.209])
-        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail-1.ca.inter.net (Postfix) with ESMTPSA id A7FB52EA02F;
-        Sat, 26 Dec 2020 19:46:39 -0500 (EST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH] [v2] scsi: scsi_debug: Fix memleak in scsi_debug_init
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>, kjlu@umn.edu
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201226061503.20050-1-dinghao.liu@zju.edu.cn>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <fc129fb4-a255-68cd-92e1-3206ac2b085f@interlog.com>
-Date:   Sat, 26 Dec 2020 19:46:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726019AbgL0GgE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 27 Dec 2020 01:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbgL0GgE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 27 Dec 2020 01:36:04 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C330C061794
+        for <linux-scsi@vger.kernel.org>; Sat, 26 Dec 2020 22:35:23 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id r4so6501059wmh.5
+        for <linux-scsi@vger.kernel.org>; Sat, 26 Dec 2020 22:35:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=UGxUxzrlqHeytY2tYkVTI83mh6LjB4oGOmzARc6Pog/CszJ34cSgS1g8+fH1Zr/EvJ
+         rFEHyq7gpCgRLAslZ7/hoyvaqS4zXQxqsZ47N/3mYUq6IjlLjuDmapGojZ8oCR1h1p7r
+         agp439PYEXMin4Q5U9yZCt5PCzdbZ5BEVZQ99ooyB/aBn5hq3A/FaPWZpkANoxY7IQzc
+         OZOfEvyUfJbLbCjdEnk23PWKgFshwEw7pQiQYa5YEYhlZ0HRMoaEstCT5hmWq3T15kqI
+         DPUoJIkNVwh49akgN45bwBY6scLrkwYHsXnLJrXqg9dEzrICqs/vpQbfkEOPloMLMi3v
+         0gPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=GJ/ErI5rNfD1rmhs5aEk3+3XDnhmKihb0ENC5RgdNAGd3s6idVVBmfC8meGhhx3YQn
+         KwkYGD3wBrX4+qY3V8lVSwqfTVCHeOyYGHfbIjToTew3AuKSd/zmA86VAGUh5bSAc3ua
+         ipCoZAHT9fhC0wMpUkKyvcTmk0eAKIJ8iYgDggfqUYMtIkfkiK+AdDEUcMTyuQPRTXU8
+         zh4AfyYAGObXezXKlfN7QJBOO07TfO7GX7D5zPv3VtWkDLWRK499rVDRiL+lioFqxhUs
+         ynzuUck9zo1qa75qoKt77X9guotZ38f8E6UJVSNPxAsc/Jcz+pWn1/++c1S1f/zrcVya
+         1z9A==
+X-Gm-Message-State: AOAM531COYTqAftWEc4AiNlGm+iXLNVo3mL7VDIoguctuLMqqcjA4KwA
+        4cL78MpdJSapYUdTbgi7XmQtfbJzkoOiqGluYZQ=
+X-Google-Smtp-Source: ABdhPJwnx8ja0qKcKQvNF3eezsfHqe8HTJ4ikSRqvpfFADAmCM9MOf4vtRFsbIGuaUjDAGeoYnF+q2Q7+imNl3KpuKc=
+X-Received: by 2002:a1c:e306:: with SMTP id a6mr15284127wmh.66.1609050921963;
+ Sat, 26 Dec 2020 22:35:21 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201226061503.20050-1-dinghao.liu@zju.edu.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a5d:514e:0:0:0:0:0 with HTTP; Sat, 26 Dec 2020 22:35:21
+ -0800 (PST)
+Reply-To: tracymedicinemed3@gmail.com
+From:   Dr Tracy William <bonarikan3@gmail.com>
+Date:   Sun, 27 Dec 2020 07:35:21 +0100
+Message-ID: <CABdGGoCC4pmVgx0AXXmr4BLLhMuztfq63_mdc-QYzs0Fo0O-jQ@mail.gmail.com>
+Subject: From Dr Tracy from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-12-26 1:15 a.m., Dinghao Liu wrote:
-> When sdeb_zbc_model does not match BLK_ZONED_NONE,
-> BLK_ZONED_HA or BLK_ZONED_HM, we should free sdebug_q_arr
-> to prevent memleak. Also there is no need to execute
-> sdebug_erase_store() on failure of sdeb_zbc_model_str().
-> 
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+-- 
+Hello Dear,
+how are you doing?I hope you are good
+Its my pleasure to contact you for friendship as i have been busy with work
+for so long and i believe this is the right time to find someone.
 
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+I was just surfing through the Internet when i found your email,i want
+to make a new
+and special friend.
 
-Thanks.
-
-> ---
-> 
-> Changelog:
-> 
-> v2: - Add missed assignment statement for ret.
-> ---
->   drivers/scsi/scsi_debug.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-> index 24c0f7ec0351..4a08c450b756 100644
-> --- a/drivers/scsi/scsi_debug.c
-> +++ b/drivers/scsi/scsi_debug.c
-> @@ -6740,7 +6740,7 @@ static int __init scsi_debug_init(void)
->   		k = sdeb_zbc_model_str(sdeb_zbc_model_s);
->   		if (k < 0) {
->   			ret = k;
-> -			goto free_vm;
-> +			goto free_q_arr;
->   		}
->   		sdeb_zbc_model = k;
->   		switch (sdeb_zbc_model) {
-> @@ -6753,7 +6753,8 @@ static int __init scsi_debug_init(void)
->   			break;
->   		default:
->   			pr_err("Invalid ZBC model\n");
-> -			return -EINVAL;
-> +			ret = -EINVAL;
-> +			goto free_q_arr;
->   		}
->   	}
->   	if (sdeb_zbc_model != BLK_ZONED_NONE) {
-> 
-
+My name is Dr Tracy William,I am from the United States of America.
+Pls respond to my personal email(tracymedicinemed3@gmail.com) and i
+will send my details and pictures upon hearing from you
+bye
+With love
+Tracy
