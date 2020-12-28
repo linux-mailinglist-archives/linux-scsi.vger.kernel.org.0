@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B95312E3A76
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Dec 2020 14:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23E32E397E
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Dec 2020 14:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390687AbgL1NhP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Dec 2020 08:37:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37084 "EHLO mail.kernel.org"
+        id S2388670AbgL1NYL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Dec 2020 08:24:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52718 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390657AbgL1NhJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 28 Dec 2020 08:37:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 979CE208B3;
-        Mon, 28 Dec 2020 13:36:52 +0000 (UTC)
+        id S2388637AbgL1NYK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 28 Dec 2020 08:24:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C14CA22AAD;
+        Mon, 28 Dec 2020 13:23:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609162613;
-        bh=TLTqXpD2Sp6EJXCfXHmUQ+JTchvHrg/sIhbXQ/OTlAk=;
+        s=korg; t=1609161810;
+        bh=DzQVrDmpBv/nzWuap9GEoQhzLuYOWJZ/LoOP4HLkE0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OWvNYmI9hTkWF+Mp3So7ymBl0CkNEx32d4cLyT/vsjZ336zg8oSswAYAcLT4YIDmX
-         dK6CdkegOv9jVnwgO2DHQp9gUVAF1nUKRXvZcjvV6Rr3KpCJ5xUeXAkRveKpUHcRxo
-         PnrctHykR4xZLzgMAsa8eq0p4F5Avs/6ZtwCITbE=
+        b=FWOiSa9cdM/AZRLgV0e8+krBKk93tSs+cq/8mc/FikT3j4O7A4v1Y6l8GxngXeX6o
+         g/ZcOlAKSkGidR0tbjYrtl1X5YlvP1y23kUr35YdmTfQsEhJERyjPBhy9B29nYYrO+
+         /AFTBc7JWVVDtsUnAbcSFO+1PS21Wz0qjIMv6Z/k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 013/453] scsi: bnx2i: Requires MMU
-Date:   Mon, 28 Dec 2020 13:44:09 +0100
-Message-Id: <20201228124937.886443742@linuxfoundation.org>
+Subject: [PATCH 4.19 059/346] scsi: bnx2i: Requires MMU
+Date:   Mon, 28 Dec 2020 13:46:18 +0100
+Message-Id: <20201228124922.648498092@linuxfoundation.org>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201228124937.240114599@linuxfoundation.org>
-References: <20201228124937.240114599@linuxfoundation.org>
+In-Reply-To: <20201228124919.745526410@linuxfoundation.org>
+References: <20201228124919.745526410@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/scsi/bnx2i/Kconfig b/drivers/scsi/bnx2i/Kconfig
-index 702dc82c9501d..a0c0791abee69 100644
+index ba30ff86d5818..b27a3738d940c 100644
 --- a/drivers/scsi/bnx2i/Kconfig
 +++ b/drivers/scsi/bnx2i/Kconfig
-@@ -4,6 +4,7 @@ config SCSI_BNX2_ISCSI
+@@ -3,6 +3,7 @@ config SCSI_BNX2_ISCSI
  	depends on NET
  	depends on PCI
  	depends on (IPV6 || IPV6=n)
