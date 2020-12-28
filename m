@@ -2,181 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 174002E3472
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Dec 2020 07:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEF02E34B3
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Dec 2020 08:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727861AbgL1GPR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Dec 2020 01:15:17 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:41874 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726511AbgL1GPQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 28 Dec 2020 01:15:16 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BS5xr7c027896;
-        Sun, 27 Dec 2020 22:14:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pfpt0220;
- bh=QQsDTKWoCfByaAijARv/vKHzW0KI4M4473stGViBBlA=;
- b=SOC4k6p/aKPM/QZ5AnI1EJkrw94t7NoBvDksYVyKaC1lxFypfLpbR6pKMTswDkYi4M1T
- 2BRgb9xX3Q4pocF5O6Ic54s7GDgUG6t6z0c1gKSeLzazmqdXvkcU/r2dFIRLY+AqUX35
- emHK+x37VfM/tsAX+RdlQfevvm/JyuZsBlCRqugNX2iBIo8N5ER3EFteO/D+jFlZ8aVy
- NhRaI7sa3ulsJQR7bDeYmF9Qbmj0ikr+iMV8GntGMFS21xvMUrHP46pY2c8ER7HP6+RA
- rXwq8ulb0ocPGhx6643qZVbDk4NHey3wji6N0uFJ66INc3JObjQnS0eFinZTaDF9vGXi vw== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 35p5jtjbhn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sun, 27 Dec 2020 22:14:31 -0800
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 27 Dec
- 2020 22:14:29 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 27 Dec
- 2020 22:14:29 -0800
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (104.47.37.51) by
- DC5-EXCH01.marvell.com (10.69.176.38) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Sun, 27 Dec 2020 22:14:29 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f05HmdixNBppSsvZbBrY8DMGtlbWIe3w8n3wLGDFH+rZMlhl1Hnzu9zgurX8T389ooOFa4QzlygAe9UXO+Va7IpLfat55G80zUCh/tuSZDjIqLZ7UtAM87v8cSLIsUQIhJLDffNG/KJXT22NPbbJcDA3iIGK0QuOQdJWYN8oKYA832FqBjCb0RmdWkktgzNZPQHO70Ioopi0epV80jdT5TpLHjxOeB4hOR9fw3h5djUdTyH+ByrXmx1Co0GFpn3crZoBCZjX4Hi6MqymtHWHsHv4/GvolRWD8Eu7u7GdfwwYiDIVrOeSSTiyKu7FreAa3vJdKt3y/cvuZQhAclapbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QQsDTKWoCfByaAijARv/vKHzW0KI4M4473stGViBBlA=;
- b=ZqHKXHtkfuv2It5SLQ0rMXJsSHB+8BvzYmn+HwFHnSfoH1f+32460IJrBO++ALZgyPDTSl1Q5S/1z33zdrxLqVnBOZfo5drbB3VwExJGNG5JtHaokB/TZ2+YwwtifiiJNcuKnFWW4g2ztYNGOZWwwhbWBnP58PiEo7Ci1euxunXZb413/bXjlyn3hFvPMQtQrnHrgT7jSa5SChDOQMmE9vSu4jfZiztsoXj0gDUMOb+WnH0Jp6x3l55Fam4s4snopOG02XGFt/LCStGe/YXhZbqoCus2AtVjSLzBhsqPNSD4OEG1/T767ZHvvCcDTgIjiQNtiRoVZDYbCevS8mYlQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
+        id S1726348AbgL1HZA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Dec 2020 02:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726253AbgL1HZA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Dec 2020 02:25:00 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D465EC06179B
+        for <linux-scsi@vger.kernel.org>; Sun, 27 Dec 2020 23:24:07 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id z5so8604822iob.11
+        for <linux-scsi@vger.kernel.org>; Sun, 27 Dec 2020 23:24:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QQsDTKWoCfByaAijARv/vKHzW0KI4M4473stGViBBlA=;
- b=mOvioC1Nn63BbDpPsgMGSbbptAk+HmrwhHTAfzOh5IyLDiyUUz+cyV624BVcGr/adYy/skmvFPwG7BZbmAQVZe3kzJfYCdgxkOgR1GQ1ADXgcE3PP/Xcsln7Zjd9+7IHvRGJ/LI5EUMuAZG7e9xZBmlx7gTE2TARryDdLFiOn+A=
-Received: from BYAPR18MB2998.namprd18.prod.outlook.com (2603:10b6:a03:136::14)
- by BY5PR18MB3250.namprd18.prod.outlook.com (2603:10b6:a03:1aa::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3700.27; Mon, 28 Dec
- 2020 06:14:25 +0000
-Received: from BYAPR18MB2998.namprd18.prod.outlook.com
- ([fe80::7475:4e06:6e00:1553]) by BYAPR18MB2998.namprd18.prod.outlook.com
- ([fe80::7475:4e06:6e00:1553%4]) with mapi id 15.20.3700.031; Mon, 28 Dec 2020
- 06:14:25 +0000
-From:   Manish Rangankar <mrangankar@marvell.com>
-To:     "trix@redhat.com" <trix@redhat.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] scsi: qedi: add printf attribute to log function
-Thread-Topic: [PATCH] scsi: qedi: add printf attribute to log function
-Thread-Index: AQHW17X2wSuSr7TtZE6Xoo+9t4tRHqoMEcDw
-Date:   Mon, 28 Dec 2020 06:14:24 +0000
-Message-ID: <BYAPR18MB29986769E1F17A8AACAE038AD8D91@BYAPR18MB2998.namprd18.prod.outlook.com>
-References: <20201221162335.3756353-1-trix@redhat.com>
-In-Reply-To: <20201221162335.3756353-1-trix@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=marvell.com;
-x-originating-ip: [116.74.174.40]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 874f4612-1603-48d1-5c6e-08d8aaf7d33d
-x-ms-traffictypediagnostic: BY5PR18MB3250:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR18MB325064AABD16A1AD13376004D8D91@BY5PR18MB3250.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FD7OSClFOLU0dGnYhCkOxLYEDs2zE0IcM2M1rTPsrrrNP44bhAndNTmFxaPKz6HA3Y51RcTatpuTWzLrK+gmI4y4vcXf3bH9VkxY15hBbnkkPiyyAfIUp/j3cV6kHWo1p2/VH3hB+Pcv6lMf1vxjlNfw5lh+g24uyhm3A384r8iDAGvifPDJPgc16ZoTQYGxIO/YqOerprd/6pVoxKhnadNabYLxmoi2WPzh3CwxTTbOoOL9hMcadWMYx0ag7n/zXgKTVuW49uANI8wRy47VsiIRK+NflBCuaz7J4G+cTIXU3MgbKByQhuLsoeQxVUVatd/bnuYEfwNpbm0SEJ5+eR2NUrlv5FqmkCnuyV3pgL8fG1Y9sOxCUGAdZ9bNfML+ZEuN183g0R3aYJhE5SMNDQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2998.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(346002)(366004)(376002)(39850400004)(54906003)(478600001)(66446008)(66476007)(66946007)(2906002)(71200400001)(53546011)(6506007)(110136005)(64756008)(83380400001)(55016002)(9686003)(5660300002)(33656002)(8676002)(76116006)(186003)(52536014)(8936002)(26005)(4326008)(55236004)(316002)(86362001)(7696005)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?5wWu1OWVaa6+cjhoWze/e+9h1PhU8pmj/BaH9vu+OMhsDQG9wcJ0qe48gAzZ?=
- =?us-ascii?Q?k0m5Z1ILJRZICMVS3/IV3EhXyRJmkogEGK+BrtEFW9nr5TeL11UuDM7MVI7/?=
- =?us-ascii?Q?XlejnY7OUtoxOAEzmbFSbKcGJrMxyi4473bP69gpEoD+/PrMdLYCmxDZRW4X?=
- =?us-ascii?Q?1zlKS8X+kuSBtNoGyaRmplSd82GLSjUcWc7xpbIA16u5F0kEs7lsli00DX2x?=
- =?us-ascii?Q?RGAaQ8GwQrt+qt6uM3aZfLzUzCz078ifGHLW/zcPHZ6Yz3DAvGn0KKLXEReA?=
- =?us-ascii?Q?miaynPedG9m2VDVXakGNXQQbFOrzeN2v78wJh29iARp0GL4x4CZKTrXSQ5OW?=
- =?us-ascii?Q?YAaRkpDKDdrm2OlmrDHeRzNq9QkryLWKS590MVjSVzcDVuc122wFN5RxL4Wo?=
- =?us-ascii?Q?FS+qjYmr2BjtP+CyFq4ps8p7QMJ9/CL6l5Yb2BPgAazXbXfaLKhVR3BTJv8i?=
- =?us-ascii?Q?XH96jbHJc+Tos68CGHswjDAU1u9EQ6dEkg80P65alOMd2Q8UNdyqtfkGU12E?=
- =?us-ascii?Q?WV1xRy6O8AYmOVRXxXCY+AVul7X7N7DDTRH0gwCkHYrk3oFE8Zopn5zllCcx?=
- =?us-ascii?Q?iuqo6pZEhViq7aEmigOKBYZnr79ACJgl+7qL0aKGv7QAQEHa1lYKHjJh9kH7?=
- =?us-ascii?Q?/WYD+/D2APYvvEK9f6Mbk8iRhshFfBSv0bjlnMYyvdr1rRR14sC9JC6haGDy?=
- =?us-ascii?Q?Yk67L/UFSKb0flq0nXndyWOoaoLEBHGN2+nmEcVWVih3tS28gIIVMZzPn3Fv?=
- =?us-ascii?Q?618iZpBViRy2BhJ/OAl9lrmDwy5nbJNT2YpRp2NyB7dktfF2eAQidxWpHDek?=
- =?us-ascii?Q?TEclorbaPbtcJzTT58aMzo7k8pDPX0B5T8ZvkI2E2+BXohATYaQIxI672AoR?=
- =?us-ascii?Q?AWRdqiQveBVwHQS8ed0aLmMz8QQQUWiZXzPbcN6RAjhPAlGv3zztUxJ0iFCN?=
- =?us-ascii?Q?P7VYZXpK4fFxcJVzDE5YPHTBqIIdT8fhCfYvmjhB3zw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=kq2jyHJDfxqOxuShgwYNcAto0qAucvJCi8yLZBnTurg=;
+        b=fOMCIgJQHNx20kYFTdQKQu7/5C0dr9uLNbBYAB32XkU5BLjFNANYkxJV1n2Ebt1rP3
+         4vlg3aA75qJVNEWySieOl12N/QM5QZAdoGW86/sAguX0cdPFZjrHWzOkO84Q+2eY0Cv/
+         SahXDS2J+RytZ5BUzscAVUJqvzmO48U8QbgI5mi62kN49+QKcgq07R87wBs78VLH8ijf
+         9a7+p62jYL+gc/eYVUwMNbh5DN3hfJzmyfnw/LirJyhve1FURqD7RGDY3ApLTS/MLBQA
+         mdiQCkPF9Wgfz38qy1MxQ2/Oc/+UaXbdZ2XuQvrqxbp7MDFxRWjsWVBgs2lO+mMzi/Wc
+         AeqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=kq2jyHJDfxqOxuShgwYNcAto0qAucvJCi8yLZBnTurg=;
+        b=svpgAYYn9yrt8L3r/20tO700qyJEcIeqgTq3SEW1aD05cLwkxcPDiCn2lHAWo5ZNaK
+         mK1ZGRTLkHMkbx6PTj2bL0no9f5KsFuBzPtCTJRN7VCrEP6CSUhfjE3JGt8+4q1TV7Vz
+         j3JHeXg3Fg2Tt+ivxNlK6mXw+8JhLd9aN8QPmnktJexZaVvjU0kqyL20Wut6pjQOrIai
+         GLGDIehpIAm7KSr9+ip0udYvzWk6QsC83/PjoP+HL7HbKhOd2JJVB3WmyUWvmyEKlW7O
+         6VzNkG3QO3Kn8fG6k5YPMDc6UytTslv1ZgLZqs/PRHR0aa8MC/uI+aMmLZqmYlZuALoX
+         9XaA==
+X-Gm-Message-State: AOAM530uWxE6IEJuCtl28LN+rnuIpqYSMz2VGcSXJieiVR+6IgivC7kk
+        pwPHM8FutjCkJAm7QzBouqRwv6OSn7xhq7MStHw=
+X-Google-Smtp-Source: ABdhPJzMBCTQSNEtLib8fKYQFbXGFNQE8o8pBn3X0WJf7LUximTHdLrgFQWueWejQHR/F7NHBIJhyiVzVAKJHyGhouA=
+X-Received: by 2002:a05:6602:2e81:: with SMTP id m1mr35115598iow.131.1609140246551;
+ Sun, 27 Dec 2020 23:24:06 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR18MB2998.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 874f4612-1603-48d1-5c6e-08d8aaf7d33d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Dec 2020 06:14:24.9014
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vWmbVkIltXJToZD6Xt3csKqNwRxssOW6eMJCKvXvLZ58AGJSTTE1hfvKIxSVEFoR5mbLkIi+67y88lLJqf0RcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR18MB3250
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-28_04:2020-12-24,2020-12-28 signatures=0
+Received: by 2002:a6b:490a:0:0:0:0:0 with HTTP; Sun, 27 Dec 2020 23:24:05
+ -0800 (PST)
+Reply-To: hs8qfc11@gmail.com
+From:   "Dr. Dagbo Igho" <dagboigho@gmail.com>
+Date:   Mon, 28 Dec 2020 08:24:05 +0100
+Message-ID: <CANqtXm49kMMhvXKCdkF0MHCG1fnwV5iAGA51AWbDrOh-rCkZkA@mail.gmail.com>
+Subject: Good Morning,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-
-> -----Original Message-----
-> From: trix@redhat.com <trix@redhat.com>
-> Sent: Monday, December 21, 2020 9:54 PM
-> To: Nilesh Javali <njavali@marvell.com>; Manish Rangankar
-> <mrangankar@marvell.com>; jejb@linux.ibm.com;
-> martin.petersen@oracle.com
-> Cc: GR-QLogic-Storage-Upstream <GR-QLogic-Storage-
-> Upstream@marvell.com>; linux-scsi@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Tom Rix <trix@redhat.com>
-> Subject: [PATCH] scsi: qedi: add printf attribute to log function
->=20
-> From: Tom Rix <trix@redhat.com>
->=20
-> Attributing the function allows the compiler to more thoroughly check the
-> use of the function with -Wformat and similar flags.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/scsi/qedi/qedi_dbg.h | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/scsi/qedi/qedi_dbg.h b/drivers/scsi/qedi/qedi_dbg.h
-> index 37d084086fd4..b2c9b0a2db6a 100644
-> --- a/drivers/scsi/qedi/qedi_dbg.h
-> +++ b/drivers/scsi/qedi/qedi_dbg.h
-> @@ -78,13 +78,16 @@ struct qedi_dbg_ctx {
->  #define QEDI_INFO(pdev, level, fmt, ...)	\
->  		qedi_dbg_info(pdev, __func__, __LINE__, level, fmt,	\
->  			      ## __VA_ARGS__)
-> -
-> +__printf(4, 5)
->  void qedi_dbg_err(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
->  		  const char *fmt, ...);
-> +__printf(4, 5)
->  void qedi_dbg_warn(struct qedi_dbg_ctx *qedi, const char *func, u32 line=
-,
->  		   const char *fmt, ...);
-> +__printf(4, 5)
->  void qedi_dbg_notice(struct qedi_dbg_ctx *qedi, const char *func, u32
-> line,
->  		     const char *fmt, ...);
-> +__printf(5, 6)
->  void qedi_dbg_info(struct qedi_dbg_ctx *qedi, const char *func, u32 line=
-,
->  		   u32 info, const char *fmt, ...);
->=20
+-- 
+I'm Dr. Dagbo Igho, did you Receive the (FUND), that was paid to you?
+please, do not hesitate to Let me know with your full name:.. for
+immediate verification notice,
 
 Thanks,
-Acked-by: Manish Rangankar <mrangankar@marvell.com>
+Dr. Dagbo Igho
+Foreign Remittance Director
+
+Sincerely Yours, Respectfully,
+
+Mr Bill T Winters,
+Group Chief Executive Officer & Executive Director,
