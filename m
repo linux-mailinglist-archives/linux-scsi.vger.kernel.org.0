@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD82E2E761E
+	by mail.lfdr.de (Postfix) with ESMTP id DF7FE2E7620
 	for <lists+linux-scsi@lfdr.de>; Wed, 30 Dec 2020 05:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbgL3Etb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 29 Dec 2020 23:49:31 -0500
+        id S1726354AbgL3Etw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 29 Dec 2020 23:49:52 -0500
 Received: from esa.microchip.iphmx.com ([68.232.154.123]:39095 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgL3Etb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Dec 2020 23:49:31 -0500
-IronPort-SDR: xfbiqoVg2qrI3dQYTqJM+Q+tMKCEW4hHC0dK2XgstZsqtmViTrb+owGQSsZXi8+UvKqYfeMafC
- AB9xxtNI8wIr2VKGJ0X2ta55OmDVUZ/on6ZRobhRjvKILvfsOCEaEnfBzE7dPwwiMbrph+xxPz
- mS6kDMA0/yW0IYiqQaif54di5bb1zvjn9sEHXz2kJdXHJhlnwn4fdtR9pRbkHd0JxoTmbkAIDQ
- Ga3z/fL/Fxn2EGLsEAxWF9KsbQykEhRy+/N6FjvUpeIQ63HcegoDD1YhEn49Q9hAMGC8w8yOLn
- tOs=
+        with ESMTP id S1726333AbgL3Etw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Dec 2020 23:49:52 -0500
+IronPort-SDR: rJWQLLV+0JTbI2mk9p9/3anWESmbdsZB/XmF0q+6a3NZOgVctQRRMVT/1aThA8Vp4q73UBc0hO
+ vRIUSldh3AKZVa4kBjPXmYw1rysBeKTLL0EJMMlF9jozOykGHcmLIKmnjNCeojUdHoybhZasys
+ WAUlzHAoH9f0UqfQtHB2ASIownWTRbU6SAaHiLMMhI9Ft7jLa62ikgHuEddR6P9rPHcDvIocif
+ C4/oJ/mfiX3D//jiisqNEGZaKSgcd/KnQSS1SWUXnXD/HB4/sD92XGpU4xI1KrLYHb4fL8phN3
+ YqM=
 X-IronPort-AV: E=Sophos;i="5.78,460,1599548400"; 
-   d="scan'208";a="101338722"
+   d="scan'208";a="101338725"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Dec 2020 21:47:57 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Dec 2020 21:47:59 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 29 Dec 2020 21:47:57 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Tue, 29 Dec 2020 21:47:57 -0700
+ 15.1.1979.3; Tue, 29 Dec 2020 21:47:59 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Tue, 29 Dec 2020 21:47:59 -0700
 From:   Viswas G <Viswas.G@microchip.com.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -34,9 +34,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <yuuzheng@google.com>, <vishakhavc@google.com>, <radha@google.com>,
         <akshatzen@google.com>, <bjashnani@google.com>,
         <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH 6/8] pm80xx: Simultaneous poll for all FW readiness.
-Date:   Wed, 30 Dec 2020 10:27:41 +0530
-Message-ID: <20201230045743.14694-7-Viswas.G@microchip.com.com>
+Subject: [PATCH 7/8] pm80xx: Log SATA IOMB completion status on failure.
+Date:   Wed, 30 Dec 2020 10:27:42 +0530
+Message-ID: <20201230045743.14694-8-Viswas.G@microchip.com.com>
 X-Mailer: git-send-email 2.16.3
 In-Reply-To: <20201230045743.14694-1-Viswas.G@microchip.com.com>
 References: <20201230045743.14694-1-Viswas.G@microchip.com.com>
@@ -46,133 +46,63 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bhavesh Jashnani <bjashnani@google.com>
+From: Vishakha Channapattan <vishakhavc@google.com>
 
-In check_fw_ready() we first wait for ILA to come up and then we
-wait for RAAE to come up and IOPs and so on. This is a sequential check.
-Because of this ILA image seems to be not ready in the allocated time
-and so the driver marks it as "not ready" and then move on to other FW
-images. But ILA does become ready eventually, but is not checked again.
-In this way driver concludes that FW is not ready, when it actually is.
+Added a log message in sata completion path to log the status of failed
+command. If the status does not match any expected status, another
+message will be logged.
 
-Fix: Instead of sequentially polling each image, we keep polling for all
-images to be ready. The timeout for the polling has been set to the sum
-of what was used for each individual image.
+On IO failure with known status, log message will be
 
-Signed-off-by: Bhavesh Jashnani <bjashnani@google.com>
+[ 1712.951735] pm80xx0:: mpi_sata_completion 2269: IO failed device_id
+16385 status 0x1 tag XX
+
+If the firmware returns unexpected status, log message of the following
+format will be logged -
+
+[ 1712.951735] pm80xx0:: mpi_sata_completion XXXX: Unknown status
+device_id XXXXX status 0xX tag XX
+
+Signed-off-by: Vishakha Channapattan <vishakhavc@google.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
 Signed-off-by: Ashokkumar N <Ashokkumar.N@microchip.com>
 Signed-off-by: Radha Ramachandran <radha@google.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 80 ++++++++++++----------------------------
- 1 file changed, 23 insertions(+), 57 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 407c0cf6ab5f..df679e36954a 100644
+index df679e36954a..e7fef42b4f6c 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1043,6 +1043,7 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
- 	u32 value;
- 	u32 max_wait_count;
- 	u32 max_wait_time;
-+	u32 expected_mask;
- 	int ret = 0;
- 
- 	/* reset / PCIe ready */
-@@ -1052,70 +1053,35 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
- 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
- 	} while ((value == 0xFFFFFFFF) && (--max_wait_count));
- 
--	/* check ila status */
--	max_wait_time = max_wait_count = 50;	/* 1000 milli sec */
--	do {
--		msleep(FW_READY_INTERVAL);
--		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
--	} while (((value & SCRATCH_PAD_ILA_READY) !=
--			SCRATCH_PAD_ILA_READY) && (--max_wait_count));
--	if (!max_wait_count)
--		ret = -1;
--	else {
--		pm8001_dbg(pm8001_ha, MSG,
--			   " ila ready status in %d millisec\n",
--			   (max_wait_time - max_wait_count));
--	}
--
--	/* check RAAE status */
--	max_wait_time = max_wait_count = 90;	/* 1800 milli sec */
--	do {
--		msleep(FW_READY_INTERVAL);
--		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
--	} while (((value & SCRATCH_PAD_RAAE_READY) !=
--				SCRATCH_PAD_RAAE_READY) && (--max_wait_count));
--	if (!max_wait_count)
--		ret = -1;
--	else {
--		pm8001_dbg(pm8001_ha, MSG,
--			   " raae ready status in %d millisec\n",
--			   (max_wait_time - max_wait_count));
-+	/* check ila, RAAE and iops status */
-+	if ((pm8001_ha->chip_id != chip_8008) &&
-+			(pm8001_ha->chip_id != chip_8009)) {
-+		max_wait_time = max_wait_count = 180;   /* 3600 milli sec */
-+		expected_mask = SCRATCH_PAD_ILA_READY |
-+			SCRATCH_PAD_RAAE_READY |
-+			SCRATCH_PAD_IOP0_READY |
-+			SCRATCH_PAD_IOP1_READY;
-+	} else {
-+		max_wait_time = max_wait_count = 170;   /* 3400 milli sec */
-+		expected_mask = SCRATCH_PAD_ILA_READY |
-+			SCRATCH_PAD_RAAE_READY |
-+			SCRATCH_PAD_IOP0_READY;
+@@ -2437,10 +2437,11 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 		return;
  	}
--
--	/* check iop0 status */
--	max_wait_time = max_wait_count = 30;	/* 600 milli sec */
- 	do {
- 		msleep(FW_READY_INTERVAL);
- 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
--	} while (((value & SCRATCH_PAD_IOP0_READY) != SCRATCH_PAD_IOP0_READY) &&
--			(--max_wait_count));
--	if (!max_wait_count)
-+	} while (((value & expected_mask) !=
-+				 expected_mask) && (--max_wait_count));
-+	if (!max_wait_count) {
-+		pm8001_dbg(pm8001_ha, INIT,
-+		"At least one FW component failed to load within %d millisec: Scratchpad1: 0x%x\n",
-+			max_wait_time * FW_READY_INTERVAL, value);
- 		ret = -1;
--	else {
-+	} else {
- 		pm8001_dbg(pm8001_ha, MSG,
--			   " iop0 ready status in %d millisec\n",
--			   (max_wait_time - max_wait_count));
-+			"All FW components ready by %d ms\n",
-+			(max_wait_time - max_wait_count) * FW_READY_INTERVAL);
- 	}
--
--	/* check iop1 status only for 16 port controllers */
--	if ((pm8001_ha->chip_id != chip_8008) &&
--			(pm8001_ha->chip_id != chip_8009)) {
--		/* 200 milli sec */
--		max_wait_time = max_wait_count = 10;
--		do {
--			msleep(FW_READY_INTERVAL);
--			value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
--		} while (((value & SCRATCH_PAD_IOP1_READY) !=
--				SCRATCH_PAD_IOP1_READY) && (--max_wait_count));
--		if (!max_wait_count)
--			ret = -1;
--		else {
--			pm8001_dbg(pm8001_ha, MSG,
--				   "iop1 ready status in %d millisec\n",
--				   (max_wait_time - max_wait_count));
--		}
--	}
--
- 	return ret;
- }
  
+-	if (unlikely(status))
+-		pm8001_dbg(pm8001_ha, IOERR,
+-			   "status:0x%x, tag:0x%x, task::0x%p\n",
+-			   status, tag, t);
++	if (status != IO_SUCCESS) {
++		pm8001_dbg(pm8001_ha, FAIL,
++			"IO failed device_id %u status 0x%x tag %d\n",
++			pm8001_dev->device_id, status, tag);
++	}
+ 
+ 	/* Print sas address of IO failed device */
+ 	if ((status != IO_SUCCESS) && (status != IO_OVERFLOW) &&
+@@ -2762,7 +2763,9 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 			atomic_dec(&pm8001_dev->running_req);
+ 		break;
+ 	default:
+-		pm8001_dbg(pm8001_ha, DEVIO, "Unknown status 0x%x\n", status);
++		pm8001_dbg(pm8001_ha, DEVIO,
++				"Unknown status device_id %u status 0x%x tag %d\n",
++			pm8001_dev->device_id, status, tag);
+ 		/* not allowed case. Therefore, return failed status */
+ 		ts->resp = SAS_TASK_COMPLETE;
+ 		ts->stat = SAS_DEV_NO_RESPONSE;
 -- 
 2.16.3
 
