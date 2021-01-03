@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B08E2E896C
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Jan 2021 01:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CA72E896D
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Jan 2021 01:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbhACARc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 2 Jan 2021 19:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S1726846AbhACARf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 2 Jan 2021 19:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbhACARc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Jan 2021 19:17:32 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C996EC0613C1
-        for <linux-scsi@vger.kernel.org>; Sat,  2 Jan 2021 16:16:51 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id iq13so7684888pjb.3
-        for <linux-scsi@vger.kernel.org>; Sat, 02 Jan 2021 16:16:51 -0800 (PST)
+        with ESMTP id S1726687AbhACARe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Jan 2021 19:17:34 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DC3C0613CF
+        for <linux-scsi@vger.kernel.org>; Sat,  2 Jan 2021 16:16:54 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id d2so14150078pfq.5
+        for <linux-scsi@vger.kernel.org>; Sat, 02 Jan 2021 16:16:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JgjUe5w4slwLjxbuMZGbJaaBWik0mmAnLfFJ73jPLKI=;
-        b=FBNCoNFMwklCmvxSfy5O1CiVPsRzHf1xOvQHTPyAeuEUAuCMGbgvKDYWO2vBOJcbgf
-         GEALpNtiK2ZsqwNAHoyzssJ16DF3z6cMuSOrn10GMfY42LsQyTi0GfJgL2DmFLUqLeTE
-         ekB54ppuCsii3M2li3nhghXREuEYfbJSxv5VPMKArhdkJthBuUPENG5C445F2sODw9Yi
-         wbFdRfo4GiWKI0Db+ZEcYEkwfHy80v2QjkHlqjkyfqpVe37vcRFvmqiEh9nceOUUyq5x
-         Om5gtQ8eEliSF8EGCQarYUeA6Fg+U5dSTHOfvoyxGAiDUvxOVtlr5VReWybNh9+GIEjd
-         gxxQ==
+        bh=T5LrTJTp4nEpZV9RVTThS89YsVXbEXL2stXCB+IhZgM=;
+        b=Jc+fE49pu5nfJoJc7wcu/PWmM27eOEzrGqkGYWn6h3p5bw7Q809Xi0Qsdcf+4OLFC4
+         x58MLfJre80Q+eaHuYa1yfBO7Zgc5jK9xcPmbdqC322mXFn+UW+lS8o7EcgecSJ7zqSi
+         AaJVCHTI/5KFFjq5Kxo/vIfn5jTtbM9/RzHvQ1cB/D4VJJgV5aeLsL+/omQ63Iv9dFR8
+         B/7BJ8S37icR6QLYZ11+Uc6L4XolV9I8HBJi3A65Di/FlDCP++zQmAP+zlw0PtTrmn/U
+         trkxVqxPtPonh9D1S/xCaJz2fCMj0AeXqAjt5RyM9y9h5MUSM5b/nncMtqlSIf4GfdfN
+         cn5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JgjUe5w4slwLjxbuMZGbJaaBWik0mmAnLfFJ73jPLKI=;
-        b=oddnoE111RgQhiSUz/boVjDGDV+XnLq4mK7TAqnBoQaz63FY5cjSGqdpOhjgx7DrSc
-         KUsqi6UUXBJd/gFDSm4QvZzJpMx/KrPTuuR2kwTiuJyx//Q+e4m24laNI+2zRzwdhypS
-         hYBrWbnJIN9T8bKHbKyJ3K+EkGHWiByKEpwOm6VOUvRZLt4ZtSEm2tICDoBYophe0Gih
-         iFAts+4syK1Uvf650Qhqny26ugOExsrEwq9ppzy8n5ec9O6x4ac+WBnLqmGHgeeKCs/W
-         a+qR7iYKM5+o9H8sq/eJVnDQe2F5AofTnPQJ3WSO6PIRQtyC9EPRdXIv2VslpGAnZ6ZF
-         p2Tw==
-X-Gm-Message-State: AOAM530XtgnceDpmbgKQuAYXo9c4dRd/fSpKd2If/SBuzru+frjIx5PO
-        3UIx5DIsQk7FqnPoFAE8pN6pIskG68A=
-X-Google-Smtp-Source: ABdhPJzxjkNrhJfqXkK6BdSnmxAjCIS2sMTmXrY580pjkyTSOw/aFpFnXFQy/PuZ9al0eIj/Brv1dw==
-X-Received: by 2002:a17:902:ee0b:b029:db:c808:ccef with SMTP id z11-20020a170902ee0bb02900dbc808ccefmr66724239plb.85.1609633011236;
-        Sat, 02 Jan 2021 16:16:51 -0800 (PST)
+        bh=T5LrTJTp4nEpZV9RVTThS89YsVXbEXL2stXCB+IhZgM=;
+        b=cPIIei1UNWmsZNcgwKexKqp2hGA0/K0szEJ8d5CrxJ90NvHofkluik/MnSlLi7gyuh
+         vSY+QFZzJy686rMNMOrtvfjVAeuaoB9TgZK0PbqkMQOlPw5rENwuu45nspPX14yF/9Sm
+         4TcEOy0ALbGuVlP+DrUCuBZWsGY5PfDshmSe8xdSTz50CQQ4HmKnUzEzMPGXwg3pkHvr
+         hQmsdfyQZdOe2eTl+B0IemGcc68bSr8ko/11WuHU/IcFf0Cfdi+J0T4iweiiPkidgHWW
+         hEsENwWQaahH44tZAM9h93S2CSdoiK0w0P807qAt21SBxhwgxLEQYAwgGQBAdqH/Mrwa
+         KgVQ==
+X-Gm-Message-State: AOAM5318E13wYDsEmMcVluHIQ0xfPN1CBMIO3DEhuajHx/W4hlK3sBpg
+        Zt4wxhYqOZGZ5DLSQTprFe0/mn5kvQY=
+X-Google-Smtp-Source: ABdhPJwUqggVU1MVJSiddEvALAT+8YT9l7p9ZKC459TQa8r94ZH/csTzH9JZ5A7DdSxPnfhCbHFZLQ==
+X-Received: by 2002:aa7:9ab7:0:b029:19d:ac89:39aa with SMTP id x23-20020aa79ab70000b029019dac8939aamr61504846pfi.10.1609633013935;
+        Sat, 02 Jan 2021 16:16:53 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q12sm55671867pgj.24.2021.01.02.16.16.48
+        by smtp.gmail.com with ESMTPSA id q12sm55671867pgj.24.2021.01.02.16.16.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jan 2021 16:16:50 -0800 (PST)
+        Sat, 02 Jan 2021 16:16:53 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 01/15] lpfc: Fix PLOGI S_ID of 0 on pt2pt config
-Date:   Sat,  2 Jan 2021 16:16:25 -0800
-Message-Id: <20210103001639.1995-2-jsmart2021@gmail.com>
+Subject: [PATCH 02/15] lpfc: Fix auto sli_mode and its effect on CONFIG_PORT for SLI3
+Date:   Sat,  2 Jan 2021 16:16:26 -0800
+Message-Id: <20210103001639.1995-3-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210103001639.1995-1-jsmart2021@gmail.com>
 References: <20210103001639.1995-1-jsmart2021@gmail.com>
@@ -63,79 +63,175 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Under some pt2pt situations, the other end of the link may issue a LOGO
-after successfully completing PLOGI and assigning addresses to the port.
-Thus the driver may attempt a new PLOGI to re-create the login, but the
-LOGO handling cleared the address back to 0. Once this happens, the other
-end, which may be address 0, gets all confused and this cannot be
-resolved without an administrative action to bounce the link.
+A very long time ago, there was a feature: auto sli mode. It gave the
+user the ability to auto select the SLI mode (SLI2 or SLI3) to run the
+port in, or even force SLI2 mode if configured.  Because of the
+convoluted logic, the CONFIG_PORT mbox command ends up being called 2 or
+3 times. It should have been called only once.  Additionally, the driver
+no longer supports SLI-2, so only SLI-3 mode should be allowed.
 
-Fix by assuming that address assignment only occurs on the 1st PLOGI
-after link up, and regardless of login state, the address assignment
-sticks.  The FC standards aren't particularly clear in this situation
-(it only describes initial PLOGI), but there is nothing that contradicts
-this and behaviors on the devices tested appears to conform to the
-understanding.
-
-Thus, don't reset the port address to 0 as part of LOGO handling. Port
-addresses will only reset on link down.
+The following changes were made:
+- Force module parameter to SLI3 only.
+- Rip out redundant CONFIG_PORT mbox commands.
+- Force CONFIG_PORT mbox command to be in beginning of enable ISR routine.
+- Added changes for offline to online behavior
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 31 +++++--------------------------
- 1 file changed, 5 insertions(+), 26 deletions(-)
+ drivers/scsi/lpfc/lpfc.h      |  1 +
+ drivers/scsi/lpfc/lpfc_attr.c |  7 ++----
+ drivers/scsi/lpfc/lpfc_init.c | 20 ++++++++-------
+ drivers/scsi/lpfc/lpfc_sli.c  | 46 +++++++++--------------------------
+ 4 files changed, 26 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 96c087b8b474..e099caa04535 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -2815,7 +2815,6 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	struct lpfc_nodelist *ndlp = (struct lpfc_nodelist *) cmdiocb->context1;
- 	struct lpfc_vport *vport = ndlp->vport;
- 	IOCB_t *irsp;
--	struct lpfcMboxq *mbox;
- 	unsigned long flags;
- 	uint32_t skip_recovery = 0;
+diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
+index a54c8da30273..7875552c07d3 100644
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -779,6 +779,7 @@ struct lpfc_hba {
+ 					 */
+ #define HBA_FLOGI_ISSUED	0x100000 /* FLOGI was issued */
+ #define HBA_DEFER_FLOGI		0x800000 /* Defer FLOGI till read_sparm cmpl */
++#define HBA_NEEDS_CFG_PORT	0x2000000 /* SLI3 - needs a CONFIG_PORT mbox */
  
-@@ -2884,31 +2883,11 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	lpfc_els_free_iocb(phba, cmdiocb);
- 	lpfc_nlp_put(ndlp);
+ 	uint32_t fcp_ring_in_use; /* When polling test if intr-hndlr active*/
+ 	struct lpfc_dmabuf slim2p;
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index 4528166dee36..f8bb6a4f780c 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -3441,11 +3441,8 @@ unsigned long lpfc_no_hba_reset[MAX_HBAS_NO_RESET] = {
+ module_param_array(lpfc_no_hba_reset, ulong, &lpfc_no_hba_reset_cnt, 0444);
+ MODULE_PARM_DESC(lpfc_no_hba_reset, "WWPN of HBAs that should not be reset");
  
--	/* If we are in pt2pt mode, we could rcv new S_ID on PLOGI */
--	if ((vport->fc_flag & FC_PT2PT) &&
--		!(vport->fc_flag & FC_PT2PT_PLOGI)) {
--		phba->pport->fc_myDID = 0;
--
--		if ((vport->cfg_enable_fc4_type == LPFC_ENABLE_BOTH) ||
--		    (vport->cfg_enable_fc4_type == LPFC_ENABLE_NVME)) {
--			if (phba->nvmet_support)
--				lpfc_nvmet_update_targetport(phba);
--			else
--				lpfc_nvme_update_localport(phba->pport);
--		}
--
--		mbox = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
--		if (mbox) {
--			lpfc_config_link(phba, mbox);
--			mbox->mbox_cmpl = lpfc_sli_def_mbox_cmpl;
--			mbox->vport = vport;
--			if (lpfc_sli_issue_mbox(phba, mbox, MBX_NOWAIT) ==
--				MBX_NOT_FINISHED) {
--				mempool_free(mbox, phba->mbox_mem_pool);
--				skip_recovery = 1;
+-LPFC_ATTR(sli_mode, 0, 0, 3,
+-	"SLI mode selector:"
+-	" 0 - auto (SLI-3 if supported),"
+-	" 2 - select SLI-2 even on SLI-3 capable HBAs,"
+-	" 3 - select SLI-3");
++LPFC_ATTR(sli_mode, 3, 3, 3,
++	"SLI mode selector: 3 - select SLI-3");
+ 
+ LPFC_ATTR_R(enable_npiv, 1, 0, 1,
+ 	"Enable NPIV functionality");
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index ac67f420ec26..1f0a62ecfad8 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -10728,17 +10728,19 @@ lpfc_sli_enable_intr(struct lpfc_hba *phba, uint32_t cfg_mode)
+ 	uint32_t intr_mode = LPFC_INTR_ERROR;
+ 	int retval;
+ 
++	/* Need to issue conf_port mbox cmd before conf_msi mbox cmd */
++	retval = lpfc_sli_config_port(phba, LPFC_SLI_REV3);
++	if (retval)
++		return intr_mode;
++	phba->hba_flag &= ~HBA_NEEDS_CFG_PORT;
++
+ 	if (cfg_mode == 2) {
+-		/* Need to issue conf_port mbox cmd before conf_msi mbox cmd */
+-		retval = lpfc_sli_config_port(phba, LPFC_SLI_REV3);
++		/* Now, try to enable MSI-X interrupt mode */
++		retval = lpfc_sli_enable_msix(phba);
+ 		if (!retval) {
+-			/* Now, try to enable MSI-X interrupt mode */
+-			retval = lpfc_sli_enable_msix(phba);
+-			if (!retval) {
+-				/* Indicate initialization to MSI-X mode */
+-				phba->intr_type = MSIX;
+-				intr_mode = 2;
 -			}
--		}
--	}
-+	/* At this point, the LOGO processing is complete. NOTE: For a
-+	 * pt2pt topology, we are assuming the NPortID will only change
-+	 * on link up processing. For a LOGO / PLOGI initiated by the
-+	 * Initiator, we are assuming the NPortID is not going to change.
-+	 */
++			/* Indicate initialization to MSI-X mode */
++			phba->intr_type = MSIX;
++			intr_mode = 2;
+ 		}
+ 	}
  
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 95caad764fb7..735fa1d484eb 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -4359,6 +4359,8 @@ lpfc_sli_brdready_s3(struct lpfc_hba *phba, uint32_t mask)
+ 	if (lpfc_readl(phba->HSregaddr, &status))
+ 		return 1;
+ 
++	phba->hba_flag |= HBA_NEEDS_CFG_PORT;
++
  	/*
- 	 * If the node is a target, the handling attempts to recover the port.
+ 	 * Check status register every 100ms for 5 retries, then every
+ 	 * 500ms for 5, then every 2.5 sec for 5, then reset board and
+@@ -4687,6 +4689,7 @@ lpfc_sli_brdreset(struct lpfc_hba *phba)
+ 	/* perform board reset */
+ 	phba->fc_eventTag = 0;
+ 	phba->link_events = 0;
++	phba->hba_flag |= HBA_NEEDS_CFG_PORT;
+ 	if (phba->pport) {
+ 		phba->pport->fc_myDID = 0;
+ 		phba->pport->fc_prevDID = 0;
+@@ -5020,6 +5023,8 @@ lpfc_sli_chipset_init(struct lpfc_hba *phba)
+ 		return -EIO;
+ 	}
+ 
++	phba->hba_flag |= HBA_NEEDS_CFG_PORT;
++
+ 	/* Clear all interrupt enable conditions */
+ 	writel(0, phba->HCregaddr);
+ 	readl(phba->HCregaddr); /* flush */
+@@ -5316,45 +5321,18 @@ int
+ lpfc_sli_hba_setup(struct lpfc_hba *phba)
+ {
+ 	uint32_t rc;
+-	int  mode = 3, i;
++	int  i;
+ 	int longs;
+ 
+-	switch (phba->cfg_sli_mode) {
+-	case 2:
+-		if (phba->cfg_enable_npiv) {
+-			lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+-				"1824 NPIV enabled: Override sli_mode "
+-				"parameter (%d) to auto (0).\n",
+-				phba->cfg_sli_mode);
+-			break;
+-		}
+-		mode = 2;
+-		break;
+-	case 0:
+-	case 3:
+-		break;
+-	default:
+-		lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+-				"1819 Unrecognized sli_mode parameter: %d.\n",
+-				phba->cfg_sli_mode);
+-
+-		break;
++	/* Enable ISR already does config_port because of config_msi mbx */
++	if (phba->hba_flag & HBA_NEEDS_CFG_PORT) {
++		rc = lpfc_sli_config_port(phba, LPFC_SLI_REV3);
++		if (rc)
++			return -EIO;
++		phba->hba_flag &= ~HBA_NEEDS_CFG_PORT;
+ 	}
+ 	phba->fcp_embed_io = 0;	/* SLI4 FC support only */
+ 
+-	rc = lpfc_sli_config_port(phba, mode);
+-
+-	if (rc && phba->cfg_sli_mode == 3)
+-		lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+-				"1820 Unable to select SLI-3.  "
+-				"Not supported by adapter.\n");
+-	if (rc && mode != 2)
+-		rc = lpfc_sli_config_port(phba, 2);
+-	else if (rc && mode == 2)
+-		rc = lpfc_sli_config_port(phba, 3);
+-	if (rc)
+-		goto lpfc_sli_hba_setup_error;
+-
+ 	/* Enable PCIe device Advanced Error Reporting (AER) if configured */
+ 	if (phba->cfg_aer_support == 1 && !(phba->hba_flag & HBA_AER_ENABLED)) {
+ 		rc = pci_enable_pcie_error_reporting(phba->pcidev);
 -- 
 2.26.2
 
