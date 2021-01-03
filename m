@@ -2,107 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1DD2E8D92
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Jan 2021 18:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAF32E8DD0
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Jan 2021 19:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbhACRNl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 3 Jan 2021 12:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727774AbhACRNk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 3 Jan 2021 12:13:40 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6C1C0613C1
-        for <linux-scsi@vger.kernel.org>; Sun,  3 Jan 2021 09:13:25 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id j1so13168302pld.3
-        for <linux-scsi@vger.kernel.org>; Sun, 03 Jan 2021 09:13:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QoqxKsVlVoX1xCsyTY1RGT5tky88ssmn9L6UFbJ5xpQ=;
-        b=EfNcKmZ22J4Antwm8Z0PzzqTscDBtx77eGYY3GwF445zGM35hTJ6LuUAjL6EsB39f9
-         5Uo2jbJXx7c+owcbD+QzgQOJUrrIGJigoBb4rWHYyS18my3uuQUk3wQPrRVhRdgHpT4G
-         kO9Pxlxyw338/1Mm+wbiffDNxoxflD5vyHm0CYHg00vv0//rcqULF6gITkvwdbuyyFbV
-         nyhAUYNP+qEvK0eoXzkQgEhNc0xSaqV25YeCcNPYs1kWwL3PNuE29MDHxEFvkoFqhTLv
-         TTMz7QS4r7DjcF74Q6VmJLCXRaCiFkmdh47sKVT9D1lc5JP74LCw1GmTyYkIsS9GRDlO
-         +6Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QoqxKsVlVoX1xCsyTY1RGT5tky88ssmn9L6UFbJ5xpQ=;
-        b=brH3Z/yv7OHAurNmpM4JZvkXZmeujqsC9ymffDaLMtLHDS/hjX0JJVw+5YC24mdKBH
-         92xmhyvxL3s98NJuSINnGuzsE1uzwfZXN/StPu/XZErHkr0A6Jziy7en3niFpTlVn9+L
-         g1MZs60VhlACYPgXR4WiuX3PkX3hds9tA6kVObf7KIHcBJhkSVjVEy9mQ+4Unue+jk1Y
-         b+CYNfzBWCObd/GQR6gLBcHfMowjByhr19uL1SQBanSXLjEiL1JT04yo1v8lL1/jBWct
-         OMDfVp+S4dyyIcJ1oIPR2HTUUzfndc3JJutLI2DA7wf5/M3Tl3qXgZFtKuE3OhR/NVNC
-         CXRQ==
-X-Gm-Message-State: AOAM532vS+jHOscccMOBFJQllOAVH4KzlOngZhorHrCBjqaJ6i8bRJ64
-        XEZMLk9+FnEG4pAOdwDv+Zfo5C8V1PA=
-X-Google-Smtp-Source: ABdhPJxyx1Kz46WgoQyUNmX/LJ9oRPuI4euRNCq7vPkk5P8u9Z15U5It4PWW3mds6DlwFFwqOMeXcA==
-X-Received: by 2002:a17:90a:970b:: with SMTP id x11mr26138004pjo.16.1609694005193;
-        Sun, 03 Jan 2021 09:13:25 -0800 (PST)
-Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m4sm33145151pgv.16.2021.01.03.09.13.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jan 2021 09:13:24 -0800 (PST)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        kernel test robot <lkp@intel.com>,
-        Hannes Reinecke <hare@suse.de>
-Subject: [PATCH v5 31/31] elx: efct: Tie into kernel Kconfig and build process
-Date:   Sun,  3 Jan 2021 09:11:34 -0800
-Message-Id: <20210103171134.39878-32-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210103171134.39878-1-jsmart2021@gmail.com>
-References: <20210103171134.39878-1-jsmart2021@gmail.com>
+        id S1726713AbhACSnC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 3 Jan 2021 13:43:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44658 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725840AbhACSnB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 3 Jan 2021 13:43:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 19024208BA;
+        Sun,  3 Jan 2021 18:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609699341;
+        bh=4L3XgyChKQ8IA35uR9qT1OHieu31sVWBj36FeIrPlhU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YwP80aSk51+7d6ywizEVBMGLHZYoeMfrCE2SkNILF+Hd3a9R0nYnxeiR1/SRQ3LNG
+         r2ZF6DXSlAVuI/2oWdZ2FmZNgCAALinA7yKd7scTEABfA4IJD7aI/cYxwn9G619rR2
+         6id1kkXdowiKOf3vT6aSIY02o4s4Svn+yeMINJS3bqj3aiQqRvA086IcuogS5hxoMo
+         h04pVTy+6ZOSrcklt1O24vtxPee2HbmUwFfQ15NQcZ56Yatw7RgHnm7CwvazjgOrG2
+         U7lDZrmQd50NfPbzAZ+ajhS/VjOgOxODquf+tLmyzrlt0SE0NWXrPn1jT+xwnhuA0l
+         rr8Z6wiQ7K6/w==
+Received: by mail-ot1-f44.google.com with SMTP id d20so24143124otl.3;
+        Sun, 03 Jan 2021 10:42:21 -0800 (PST)
+X-Gm-Message-State: AOAM532e9tn3uDJZ0c0FYvNiIDf6d/lL7TyVOdGqdDnQf1wZZC653MRR
+        xPCd1T81qlvgh7pHCeaK2dwRyh0dCit1UcFUCPM=
+X-Google-Smtp-Source: ABdhPJxoV0UHMV47rUjuK1A4YEE7xzMJg5iB8e95Fqv6lVNwHEqau83xxT/Pw7Wf1dw7KEBlht/oVwC3UULWMCMl+TQ=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr50452343otm.305.1609699340461;
+ Sun, 03 Jan 2021 10:42:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210103140132.3866665-1-arnd@kernel.org> <75ecb62269cf425164d0fb6f2717d1d0136f43cd.camel@linux.ibm.com>
+In-Reply-To: <75ecb62269cf425164d0fb6f2717d1d0136f43cd.camel@linux.ibm.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sun, 3 Jan 2021 19:42:04 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0hexuwV4VCNOWjANT8xswGbifKfOATwrwi=_1+wjSpMw@mail.gmail.com>
+Message-ID: <CAK8P3a0hexuwV4VCNOWjANT8xswGbifKfOATwrwi=_1+wjSpMw@mail.gmail.com>
+Subject: Re: [PATCH] cxgb4: fix TLS dependencies again
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     Karen Xie <kxie@chelsio.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Tom Seewald <tseewald@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This final patch ties the efct driver into the kernel Kconfig
-and build linkages in the drivers/scsi directory.
+On Sun, Jan 3, 2021 at 5:51 PM James Bottomley <jejb@linux.ibm.com> wrote:
+> On Sun, 2021-01-03 at 15:01 +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > A previous patch tried to avoid a build failure, but missed one case
+> > that Kconfig warns about:
+> >
+> > WARNING: unmet direct dependencies detected for CHELSIO_T4
+> >   Depends on [m]: NETDEVICES [=y] && ETHERNET [=y] &&
+> > NET_VENDOR_CHELSIO [=y] && PCI [=y] && (IPV6 [=y] || IPV6 [=y]=n) &&
+> > (TLS [=m] || TLS [=m]=n)
+> >   Selected by [y]:
+> >   - SCSI_CXGB4_ISCSI [=y] && SCSI_LOWLEVEL [=y] && SCSI [=y] && PCI
+> > [=y] && INET [=y] && (IPV6 [=y] || IPV6 [=y]=n) && ETHERNET [=y]
+> > x86_64-linux-ld: drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.o: in
+> > function `cxgb_select_queue':
+> > cxgb4_main.c:(.text+0xf5df): undefined reference to
+> > `tls_validate_xmit_skb'
+> >
+> > When any of the dependencies of CHELSIO_T4 are not met, then
+> > SCSI_CXGB4_ISCSI must not 'select' it either.
+> >
+> > Fix it by mirroring the network driver dependencies on the iscsi
+> > driver. A more invasive but also more reliable alternative would
+> > be to use 'depends on CHELSIO_T4' instead.
+> >
+> > Fixes: 659fbdcf2f14 ("cxgb4: Fix build failure when CONFIG_TLS=m")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  drivers/scsi/cxgbi/cxgb4i/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/scsi/cxgbi/cxgb4i/Kconfig
+> > b/drivers/scsi/cxgbi/cxgb4i/Kconfig
+> > index 8b0deece9758..2af88a55fbca 100644
+> > --- a/drivers/scsi/cxgbi/cxgb4i/Kconfig
+> > +++ b/drivers/scsi/cxgbi/cxgb4i/Kconfig
+> > @@ -1,7 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  config SCSI_CXGB4_ISCSI
+> >       tristate "Chelsio T4 iSCSI support"
+> > -     depends on PCI && INET && (IPV6 || IPV6=n)
+> > +     depends on PCI && INET && (IPV6 || IPV6=n) && (TLS || TLS=n)
+> >       depends on THERMAL || !THERMAL
+> >       depends on ETHERNET
+> >       depends on TLS || TLS=n
+>
+> I thought all separated depends statements were the equivalent of && in
+> a single statement.  If so, how does repeating TLS || TLS=n twice fix
+> the problem?  This sounds more like we have some sort of bug in our
+> Kconfig apparatus.
 
-Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/Kconfig  | 2 ++
- drivers/scsi/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+No, just a mistake on my end. I had tried v5.10-rc1 to make sure the
+patch was still required, but then rebased on top of torvalds/master
+(close to -rc2) before sending it out, and this contains Randy's version
+of the same patch, cb5253198f10 ("scsi: cxgb4i: Fix TLS dependency").
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 701b61ec76ee..f2d47bf55f97 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1170,6 +1170,8 @@ config SCSI_LPFC_DEBUG_FS
- 	  This makes debugging information from the lpfc driver
- 	  available via the debugfs filesystem.
- 
-+source "drivers/scsi/elx/Kconfig"
-+
- config SCSI_SIM710
- 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
- 	depends on EISA && SCSI
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index c00e3dd57990..844db573283c 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
- obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
- obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
- obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
-+obj-$(CONFIG_SCSI_EFCT)		+= elx/
- obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
- obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
- obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
--- 
-2.26.2
-
+       Arnd
