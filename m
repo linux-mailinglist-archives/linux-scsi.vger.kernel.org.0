@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6282E896E
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Jan 2021 01:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350532E8976
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Jan 2021 01:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbhACASK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 2 Jan 2021 19:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
+        id S1726894AbhACASN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 2 Jan 2021 19:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbhACASK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Jan 2021 19:18:10 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0DDC061795
-        for <linux-scsi@vger.kernel.org>; Sat,  2 Jan 2021 16:17:04 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id i5so16444176pgo.1
-        for <linux-scsi@vger.kernel.org>; Sat, 02 Jan 2021 16:17:04 -0800 (PST)
+        with ESMTP id S1726873AbhACASM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Jan 2021 19:18:12 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D6DC06179E
+        for <linux-scsi@vger.kernel.org>; Sat,  2 Jan 2021 16:17:07 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id iq13so7685056pjb.3
+        for <linux-scsi@vger.kernel.org>; Sat, 02 Jan 2021 16:17:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e+e6PS6MqiXs8IIBjboY/Gk1idWmNALiKP+1QgE6I18=;
-        b=OW9sexi1iZuTCAo3X1s1aoRrrblRr3YbP3XzcQhVPI0GTz1bLnYqGDq4vifvy2HCWu
-         DuapnKoOby+TvIU1d9vwJ3tC33LasRKcrlpOWkqWj0MMhuSPpQ1/Y6Qi+0ECFeWe6YIp
-         gkKAKwdSbxwpquFIerClzUL/+q0jTspwii3tE/Sbq5owpMFQ0iRyidVEDIH7H/Yd9lJA
-         FCHuatC86qsY1HXbp/DcVKcWNdAFnGiDqmlH5040nK9+CNlSyGfWSG0Dzka+dN81OZnl
-         rtNNMyeZk+xv8gB4+M/c5jSJ0sQBh8c9N/+cguU8Oq+QNdr+WkNR730QUhyjwCgABjTR
-         BnHg==
+        bh=xcWlHSzISTzHimq9m8us/OZQ3dcrHRgpNzn9MODjlJM=;
+        b=iowWBwUcf1TzOLOE73wGHh9FHmWOiAQygXleGWGvlza9ECevL/Gmkn/ungMv5QRAyz
+         BtKvEa8QzH+M8gCm0NcsVZz8kaFyEJUEoDaIWpphy7wkl7Pw2jnwYVZ76ii94Lf0Tckr
+         s7hOtae9yQfQkwtoj+kowd7i2fqFn25K3wvqMNYoeUiw4gkzRUYTTLPzsGFwGU+2eaGD
+         BFldqIbPAPpluixMAOReW3UqrDgDZ3f4r5NsRSuAVFgSyNLpNnxcaeCuuNqN0R9PE4Nc
+         zLuhMwijXj47xqTkRP+01WWsLTx/BPMX0xY/jrRYsqL+aU+0kIsawmdvXfrmQFL77rIv
+         m8lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e+e6PS6MqiXs8IIBjboY/Gk1idWmNALiKP+1QgE6I18=;
-        b=mN/JnCfanPp4SDK9ITCQK/thYD3T5Vau/RnXvnEM5iDsNrTfho4/ptiCuxezuSM1f1
-         gpOsei1QSNnznjdf7tuoZT1xpV3Iqn7RKe2myINtf6UT+w1TD6jJImSWV+8SusdlVpgX
-         Blc9m6vsa7kWBp7nn8bYhqzGP8w5u/ifKYmixOY5tYfXXeKPEib9i3lMfsDejupSGcyD
-         L5oOxlKc5zGRjkmIfXyrM8FgoW7NkYgjcT6bD8Y2CJppAyITR46+OwhR7y3M9B44DXfI
-         4MfBgAaCA6lh4uMTuKf/gROO1ucZ7O8N2Zt/AbKo+KuRLyGyeqBlV6Bke/ZIUQR6mk8j
-         BSqA==
-X-Gm-Message-State: AOAM533g8/DeIOrgZfPvUFXGFjkH3D8MaXVpBDLad/eWfdsA+ReR3Jps
-        kQsYDz+lBioM2LIq0POn8jMCChQzSww=
-X-Google-Smtp-Source: ABdhPJzosNkpT2K4hIfXpwMJC9xFcitUxJMaJTuFkQRXuhZy5AMBPUdjlMEvndG/ov8D/nQEogaDXQ==
-X-Received: by 2002:aa7:8f35:0:b029:19b:1258:ec5d with SMTP id y21-20020aa78f350000b029019b1258ec5dmr60777583pfr.9.1609633024273;
-        Sat, 02 Jan 2021 16:17:04 -0800 (PST)
+        bh=xcWlHSzISTzHimq9m8us/OZQ3dcrHRgpNzn9MODjlJM=;
+        b=kEJgRCeFJe7zzza7mquDJhkjBqOeHOismuQjEbryTA0+QVib9+DosdBa9U62q9DIO0
+         QlnoyPkyQbQaMhoio9qUzWIiT5j1BBxcEbEfVippR8zzWF7d8QS70I10/HWb4n8JvK14
+         JeHuROmdprIZGQ8A7aPOyNxT50KFtDzSbQSKfDJEK9KqDYHXrduYm+Mr1z37HE9JDLsn
+         3MqjaCHUt9R9+c662vtLxdojbCDx3SHr0eqM7OpaUVD6oOtC7Av7q6S4/l2GeQj6wAJH
+         TJXVlzDR4gVFKa3ibpVLc2iKgAQ088S9cQt4CZKG3GZaBnEvSwJM1UqNgFYC56diOSLt
+         E4RQ==
+X-Gm-Message-State: AOAM5328h4hqcV+kZAWJyzTGmiVzQt+wL48nSSvaMfqJlLMH4ixg4g/r
+        +Q6R1b4US+Sd8rf7d6Q+RQ1s3j7chgM=
+X-Google-Smtp-Source: ABdhPJyVt6xcktCH7r5Jn8og0jaO1uLzxso9M+cB0VkoJ3GDbmXlmXAss7tstF/4DaCq9yGfhWfGgg==
+X-Received: by 2002:a17:90a:ce0c:: with SMTP id f12mr24077713pju.89.1609633026904;
+        Sat, 02 Jan 2021 16:17:06 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q12sm55671867pgj.24.2021.01.02.16.17.02
+        by smtp.gmail.com with ESMTPSA id q12sm55671867pgj.24.2021.01.02.16.17.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jan 2021 16:17:03 -0800 (PST)
+        Sat, 02 Jan 2021 16:17:06 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 06/15] lpfc: Fix FW reset action if IOs are outstanding
-Date:   Sat,  2 Jan 2021 16:16:30 -0800
-Message-Id: <20210103001639.1995-7-jsmart2021@gmail.com>
+Subject: [PATCH 07/15] lpfc: Prevent duplicate requests to unregister with cpuhp framework
+Date:   Sat,  2 Jan 2021 16:16:31 -0800
+Message-Id: <20210103001639.1995-8-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210103001639.1995-1-jsmart2021@gmail.com>
 References: <20210103001639.1995-1-jsmart2021@gmail.com>
@@ -63,41 +63,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If the port is configured for NVME and has any outstanding IOs when a FW
-reset is requesteed, outstanding I/O's are not properly cleaned up. This
-causes the fw download request to fail.
+In the lpfc offline routine, called for various reasons such as
+sysfs attribute, driver unload, or port error, the driver is calling
+__lpfc_cpuhp_remove() to destroy the hot plug data. Unfortunately, if
+the port then attempts to come back online, such as after the port error,
+the cpuhp elements are no longer valid.
 
-Fix by clearing the LPFC_SLI_ACTIVE flag to signify the I/O must be
-manually flushed by the driver on port reset.
+Fix by only calling the cpuhp removal if the adapter is in the process
+of unloading and the port will not be restarted.
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/scsi/lpfc/lpfc_init.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 1f0a62ecfad8..593b175702eb 100644
+index 593b175702eb..af926768bcae 100644
 --- a/drivers/scsi/lpfc/lpfc_init.c
 +++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -1833,6 +1833,16 @@ lpfc_sli4_port_sta_fn_reset(struct lpfc_hba *phba, int mbx_action,
- 		lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
- 				"2887 Reset Needed: Attempting Port "
- 				"Recovery...\n");
-+
-+	/* If we are no wait, the HBA has been reset and is not
-+	 * functional, thus we should clear LPFC_SLI_ACTIVE flag.
+@@ -3602,7 +3602,11 @@ lpfc_offline(struct lpfc_hba *phba)
+ 			spin_unlock_irq(shost->host_lock);
+ 		}
+ 	lpfc_destroy_vport_work_array(phba, vports);
+-	__lpfc_cpuhp_remove(phba);
++	/* If OFFLINE flag is clear (i.e. unloading), cpuhp removal is handled
++	 * in hba_unset
 +	 */
-+	if (mbx_action == LPFC_MBX_NO_WAIT) {
-+		spin_lock_irq(&phba->hbalock);
-+		phba->sli.sli_flag &= ~LPFC_SLI_ACTIVE;
-+		spin_unlock_irq(&phba->hbalock);
-+	}
-+
- 	lpfc_offline_prep(phba, mbx_action);
- 	lpfc_sli_flush_io_rings(phba);
- 	lpfc_offline(phba);
++	if (phba->pport->fc_flag & FC_OFFLINE_MODE)
++		__lpfc_cpuhp_remove(phba);
+ 
+ 	if (phba->cfg_xri_rebalancing)
+ 		lpfc_destroy_multixri_pools(phba);
 -- 
 2.26.2
 
