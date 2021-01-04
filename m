@@ -2,87 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 855422E926A
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Jan 2021 10:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C50E2E92D1
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Jan 2021 10:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbhADJQ1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Jan 2021 04:16:27 -0500
-Received: from mga06.intel.com ([134.134.136.31]:20029 "EHLO mga06.intel.com"
+        id S1726662AbhADJv1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 4 Jan 2021 04:51:27 -0500
+Received: from post.dks.ru ([194.226.89.161]:53178 "EHLO post.dks.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726029AbhADJQ1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 4 Jan 2021 04:16:27 -0500
-IronPort-SDR: zHbpo+yy1yx8S6yMJ23uwwiK4ahoATJ+NWZJCmS/wpugeI9ewfnZTHCfXKc2rfrzLlmPPZ7cbT
- 2kwp6SGDBFZA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9853"; a="238480473"
-X-IronPort-AV: E=Sophos;i="5.78,473,1599548400"; 
-   d="scan'208";a="238480473"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2021 01:15:45 -0800
-IronPort-SDR: b7X9+Jo+qFrJ1FgbRx9pH3NHIwGowsTxAjKIdaJ0mMTFSovdQ5+zqmk7fLyfZbmcMG0sDkIDUa
- T5szOEwBfyDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,473,1599548400"; 
-   d="scan'208";a="349833423"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.94]) ([10.237.72.94])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Jan 2021 01:15:37 -0800
-Subject: Re: [PATCH RFC v4 1/1] scsi: ufs: Fix ufs power down/on specs
- violation
-To:     Ziqi Chen <ziqichen@codeaurora.org>, asutoshd@codeaurora.org,
-        nguyenb@codeaurora.org, cang@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        vinholikatti@gmail.com, jejb@linux.vnet.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
-        kwmad.kim@samsung.com, stanley.chu@mediatek.com
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Satya Tangirala <satyat@google.com>,
-        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <1608644981-46267-1-git-send-email-ziqichen@codeaurora.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <e8980753-fa48-7862-e5ce-0d756d5d97a6@intel.com>
-Date:   Mon, 4 Jan 2021 11:15:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726236AbhADJv1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Jan 2021 04:51:27 -0500
+Received: from ksmg.dks.lan (unknown [172.17.112.11])
+        by post.dks.ru (Postfix) with ESMTP id 94328270863;
+        Mon,  4 Jan 2021 12:21:42 +0300 (MSK)
+Received: from [192.168.88.237] (unknown [212.154.23.124])
+        (Authenticated sender: zapros@dks.ru)
+        by post.dks.ru (Postfix) with ESMTP id 955CF26F446;
+        Mon,  4 Jan 2021 12:21:36 +0300 (MSK)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <1608644981-46267-1-git-send-email-ziqichen@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: YOUR URGENT RESPONSE !!!!
+To:     Recipients <zapros@dks.ru>
+From:   "Mr. Kim Leang" <zapros@dks.ru>
+Date:   Mon, 04 Jan 2021 01:22:02 -0800
+Reply-To: kimleang575@yahoo.com
+Message-Id: <20210104092136.955CF26F446@post.dks.ru>
+X-KLMS-Rule-ID: 7
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Status: not scanned, disabled by settings
+X-KLMS-AntiSpam-Interceptor-Info: not scanned
+X-KLMS-AntiPhishing: Clean, bases: 2021/01/04 08:40:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2021/01/04 05:34:00 #16008269
+X-KLMS-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 22/12/20 3:49 pm, Ziqi Chen wrote:
-> As per specs, e.g, JESD220E chapter 7.2, while powering
-> off/on the ufs device, RST_N signal and REF_CLK signal
-> should be between VSS(Ground) and VCCQ/VCCQ2.
-> 
-> To flexibly control device reset line, refactor the function
-> ufschd_vops_device_reset(sturct ufs_hba *hba) to ufshcd_
-> vops_device_reset(sturct ufs_hba *hba, bool asserted). The
-> new parameter "bool asserted" is used to separate device reset
-> line pulling down from pulling up.
+Greeting!
 
-This patch assumes the power is controlled by voltage regulators, but for us
-it is controlled by firmware (ACPI), so it is not correct to change RST_n
-for all host controllers as you are doing.
+I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
 
-Also we might need to use a firmware interface for device reset, in which
-case the 'asserted' value doe not make sense.
+I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
 
-Can we leave the device reset callback alone, and instead introduce a new
-variant operation for setting RST_n to match voltage regulator power changes?
+The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
+
+Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
+
+Thanks and have a nice day,
+Mr. Kim Leang
