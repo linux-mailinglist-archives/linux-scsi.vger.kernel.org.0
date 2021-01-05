@@ -2,221 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB562EA9BE
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Jan 2021 12:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3C92EA9F9
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Jan 2021 12:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729462AbhAELWA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Jan 2021 06:22:00 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:10110 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbhAELV7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Jan 2021 06:21:59 -0500
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4D995d61h9z15nny;
-        Tue,  5 Jan 2021 19:20:21 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 5 Jan 2021 19:21:05 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <akshatzen@google.com>, <Viswas.G@microchip.com>,
-        <Ruksar.devadi@microchip.com>, <radha@google.com>,
-        <bjashnani@google.com>, <vishakhavc@google.com>,
-        <jinpu.wang@cloud.ionos.com>, <Ashokkumar.N@microchip.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.de>, <kashyap.desai@broadcom.com>,
-        <ming.lei@redhat.com>, "John Garry" <john.garry@huawei.com>
-Subject: [RFC/RFT PATCH] scsi: pm8001: Expose HW queues for pm80xx hw
-Date:   Tue, 5 Jan 2021 19:17:03 +0800
-Message-ID: <1609845423-110410-1-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+        id S1729379AbhAELfk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Jan 2021 06:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbhAELfk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Jan 2021 06:35:40 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47D0C061574;
+        Tue,  5 Jan 2021 03:34:59 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id c7so30716709edv.6;
+        Tue, 05 Jan 2021 03:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=qPPsLZerWFE51BU3W/KJIZQXqWk6zyP9GwJShb46KIw=;
+        b=dneJjqT+vxmq/8CRmRyETdxa85FevxqTJHh6UJ1r6jU07KcM57uUImPCeGBwgKZP3M
+         Hxgri8LVjpd1YZvCq7JQKnoYEl8OOwDjmZtYE0ncSjRtYI5Wacy9IyJqLwTrEAQ7Pca4
+         fIIJuxfETbRMnkQrSCoHfQAipUwflyhCpqj+vMjdGRXL5t4DdBDpyoGTcnhOwyWUPhyU
+         lu+MzVBoa04xeWunzW77P/mDzlCuUFZtxcgx24UdAX3P+aT4/Cc67cclE+Ab+7NifZPS
+         s7ghnoRZYNpSa3LR6N00x2lW5/LVKMdj3sUrkIN8D1eVn1VXnEBYy9pe8itEM71Rt4yc
+         pQvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=qPPsLZerWFE51BU3W/KJIZQXqWk6zyP9GwJShb46KIw=;
+        b=XHInebBYvow0y6FJsg5z/9nd8y70R8m10r4NluLw9SkAvU+COEdGGgrVIAUQClkWk+
+         ylS6BPbtxSQO7WCGSLa+rCwxKVAcJVdvAzUjbquptcalqTuMXjiiLj1Ot/3kej/BpJB/
+         5qAH0IK6inlwlWT+3nEZEPsAWEI/Igp44jwkc7/mrQH1ItsC/SPRpYKpTNIbMb87uaaf
+         DfFceSNcc3KK2L+/LMZZGxbklqjzWsKD6o+x2tUSDOctzC1D9RVGH9jqJVaPrrQ7aOOO
+         aPPZ6li00HxVMhfebuT2Hjh5t0PVfsANai/YPRjOR39wApiklS/C085b1B15R6eXhNNB
+         M/ew==
+X-Gm-Message-State: AOAM5308VzUm6ZSOjUL33tGfxjZYrSyyy+UnXYjSuTdlWZvyfWHs1zrj
+        Fnz6uVxBnn9VA6RcNn8aAAcypJlOHXV+Vg==
+X-Google-Smtp-Source: ABdhPJxm3USVINeJ8h6gD3kKlwkytvRUK2Vr8pwFVQS3hzpKcxTrhVskjFBUrisRYiEJAepnBfHbEg==
+X-Received: by 2002:a50:9354:: with SMTP id n20mr76891365eda.231.1609846498475;
+        Tue, 05 Jan 2021 03:34:58 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bfcff.dynamic.kabel-deutschland.de. [95.91.252.255])
+        by smtp.gmail.com with ESMTPSA id n17sm24640772ejh.49.2021.01.05.03.34.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 03:34:58 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org, rostedt@goodmis.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/6] Several changes for the UPIU trace
+Date:   Tue,  5 Jan 2021 12:34:40 +0100
+Message-Id: <20210105113446.16027-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In commit 05c6c029a44d ("scsi: pm80xx: Increase number of supported
-queues"), support for 80xx chip was improved by enabling multiple HW
-queues.
+From: Bean Huo <beanhuo@micron.com>
 
-In this, like other SCSI MQ HBA drivers, the HW queues were not exposed
-to upper layer, and instead the driver managed the queues internally.
+Changelog:
 
-However, this management duplicates blk-mq code. In addition, the HW queue
-management is sub-optimal for a system where the number of CPUs exceeds
-the HW queues - this is because queues are selected in a round-robin
-fashion, when it would be better to make adjacent CPUs submit on the same
-queue. And finally, the affinity of the completion queue interrupts is not
-set to mirror the cpu<->HQ queue mapping, which is suboptimal.
+V3--v4:
+ 1. Rebase patch onto 5.12/scsi-queue
+ 2. Incorporate Avri's suggestion in patch 2/6
 
-As such, for when MSIX is supported, expose HW queues to upper layer. Flag
-PCI_IRQ_AFFINITY is set for allocating the MSIX vectors to automatically
-assign affinity for the completion queue interrupts.
+V2--V3:
+  1. Fix a typo in patch 1/6 (Reported-by: Joe Perches <joe@perches.com>)
 
-Signed-off-by: John Garry <john.garry@huawei.com>
+V1--V2:
+  1. Convert __get_str(str) to __print_symbolic()
+  2. Add new patches 1/6, 2/6,3/6
+  3. Use __print_symbolic() in patch 6/6
 
----
-I sent as an RFC/RFT as I have no HW to test. In addition, since HW queue
-#0 is used always for internal commands (like in send_task_abort()), if
-all CPUs associated with HW queue #0 are offlined, the interrupt for that
-queue will be shutdown, and no CPUs would be available to service any
-internal commands completion. To solve that, we need [0] merged first and
-switch over to use the new API. But we can still test performance in the
-meantime.
+Bean Huo (6):
+  scsi: ufs: Remove stringize operator '#' restriction
+  scsi: ufs: Use __print_symbolic() for UFS trace string print
+  scsi: ufs: Don't call trace_ufshcd_upiu() in case trace poit is
+    disabled
+  scsi: ufs: Distinguish between query REQ and query RSP in query trace
+  scsi: ufs: Distinguish between TM request UPIU and response UPIU in TM
+    UPIU trace
+  scsi: ufs: Make UPIU trace easier differentiate among CDB, OSF, and TM
 
-I assume someone else is making the change to use the request tag for IO
-tag management.
+ drivers/scsi/ufs/ufs.h     |  17 ++++++
+ drivers/scsi/ufs/ufshcd.c  |  72 ++++++++++++++++---------
+ include/trace/events/ufs.h | 108 +++++++++++++++++++++++--------------
+ 3 files changed, 131 insertions(+), 66 deletions(-)
 
-[0] https://lore.kernel.org/linux-scsi/47ba045e-a490-198b-1744-529f97192d3b@suse.de/
-
-diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
-index ee2de177d0d0..73479803a23e 100644
---- a/drivers/scsi/pm8001/pm8001_init.c
-+++ b/drivers/scsi/pm8001/pm8001_init.c
-@@ -81,6 +81,15 @@ LIST_HEAD(hba_list);
- 
- struct workqueue_struct *pm8001_wq;
- 
-+static int pm8001_map_queues(struct Scsi_Host *shost)
-+{
-+	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
-+	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+
-+	return blk_mq_pci_map_queues(qmap, pm8001_ha->pdev, 0);
-+}
-+
- /*
-  * The main structure which LLDD must register for scsi core.
-  */
-@@ -106,6 +115,7 @@ static struct scsi_host_template pm8001_sht = {
- #ifdef CONFIG_COMPAT
- 	.compat_ioctl		= sas_ioctl,
- #endif
-+	.map_queues			= pm8001_map_queues,
- 	.shost_attrs		= pm8001_host_attrs,
- 	.track_queue_depth	= 1,
- };
-@@ -923,9 +933,8 @@ static int pm8001_configure_phy_settings(struct pm8001_hba_info *pm8001_ha)
- static u32 pm8001_setup_msix(struct pm8001_hba_info *pm8001_ha)
- {
- 	u32 number_of_intr;
--	int rc, cpu_online_count;
-+	int rc;
- 	unsigned int allocated_irq_vectors;
--
- 	/* SPCv controllers supports 64 msi-x */
- 	if (pm8001_ha->chip_id == chip_8001) {
- 		number_of_intr = 1;
-@@ -933,16 +942,15 @@ static u32 pm8001_setup_msix(struct pm8001_hba_info *pm8001_ha)
- 		number_of_intr = PM8001_MAX_MSIX_VEC;
- 	}
- 
--	cpu_online_count = num_online_cpus();
--	number_of_intr = min_t(int, cpu_online_count, number_of_intr);
--	rc = pci_alloc_irq_vectors(pm8001_ha->pdev, number_of_intr,
--			number_of_intr, PCI_IRQ_MSIX);
-+	/* Use default affinity descriptor, which spreads *all* vectors */
-+	rc = pci_alloc_irq_vectors(pm8001_ha->pdev, 1,
-+			number_of_intr, PCI_IRQ_MSIX | PCI_IRQ_AFFINITY);
- 	allocated_irq_vectors = rc;
- 	if (rc < 0)
- 		return rc;
- 
- 	/* Assigns the number of interrupts */
--	number_of_intr = min_t(int, allocated_irq_vectors, number_of_intr);
-+	number_of_intr = allocated_irq_vectors;
- 	pm8001_ha->number_of_intr = number_of_intr;
- 
- 	/* Maximum queue number updating in HBA structure */
-@@ -1113,6 +1121,16 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
- 	if (rc)
- 		goto err_out_enable;
- 
-+	if (pm8001_ha->number_of_intr > 1) {
-+		shost->nr_hw_queues = pm8001_ha->number_of_intr;
-+		/*
-+		 * For now, ensure we're not sent too many commands by setting
-+		 * host_tagset. This is also required if we start using request
-+		 * tag.
-+		 */
-+		shost->host_tagset = 1;
-+	}
-+
- 	rc = scsi_add_host(shost, &pdev->dev);
- 	if (rc)
- 		goto err_out_ha_free;
-diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
-index f2c8cbad3853..74bc6fed693e 100644
---- a/drivers/scsi/pm8001/pm8001_sas.h
-+++ b/drivers/scsi/pm8001/pm8001_sas.h
-@@ -55,6 +55,8 @@
- #include <scsi/scsi_tcq.h>
- #include <scsi/sas_ata.h>
- #include <linux/atomic.h>
-+#include <linux/blk-mq.h>
-+#include <linux/blk-mq-pci.h>
- #include "pm8001_defs.h"
- 
- #define DRV_NAME		"pm80xx"
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 6772b0924dac..31d65ce91e7d 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4299,12 +4299,13 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
- 	struct domain_device *dev = task->dev;
- 	struct pm8001_device *pm8001_dev = dev->lldd_dev;
- 	struct ssp_ini_io_start_req ssp_cmd;
-+	struct scsi_cmnd *scmd = task->uldd_task;
- 	u32 tag = ccb->ccb_tag;
- 	int ret;
- 	u64 phys_addr, start_addr, end_addr;
- 	u32 end_addr_high, end_addr_low;
- 	struct inbound_queue_table *circularQ;
--	u32 q_index, cpu_id;
-+	u32 blk_tag, q_index;
- 	u32 opc = OPC_INB_SSPINIIOSTART;
- 	memset(&ssp_cmd, 0, sizeof(ssp_cmd));
- 	memcpy(ssp_cmd.ssp_iu.lun, task->ssp_task.LUN, 8);
-@@ -4323,8 +4324,8 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
- 	ssp_cmd.ssp_iu.efb_prio_attr |= (task->ssp_task.task_attr & 7);
- 	memcpy(ssp_cmd.ssp_iu.cdb, task->ssp_task.cmd->cmnd,
- 		       task->ssp_task.cmd->cmd_len);
--	cpu_id = smp_processor_id();
--	q_index = (u32) (cpu_id) % (pm8001_ha->max_q_num);
-+	blk_tag = blk_mq_unique_tag(scmd->request);
-+	q_index = blk_mq_unique_tag_to_hwq(blk_tag);
- 	circularQ = &pm8001_ha->inbnd_q_tbl[q_index];
- 
- 	/* Check if encryption is set */
-@@ -4446,9 +4447,11 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
- 	struct sas_task *task = ccb->task;
- 	struct domain_device *dev = task->dev;
- 	struct pm8001_device *pm8001_ha_dev = dev->lldd_dev;
-+	struct ata_queued_cmd *qc = task->uldd_task;
-+	struct scsi_cmnd *scmd = qc->scsicmd;
- 	u32 tag = ccb->ccb_tag;
- 	int ret;
--	u32 q_index, cpu_id;
-+	u32 q_index, blk_tag;
- 	struct sata_start_req sata_cmd;
- 	u32 hdr_tag, ncg_tag = 0;
- 	u64 phys_addr, start_addr, end_addr;
-@@ -4459,8 +4462,9 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
- 	unsigned long flags;
- 	u32 opc = OPC_INB_SATA_HOST_OPSTART;
- 	memset(&sata_cmd, 0, sizeof(sata_cmd));
--	cpu_id = smp_processor_id();
--	q_index = (u32) (cpu_id) % (pm8001_ha->max_q_num);
-+
-+	blk_tag = blk_mq_unique_tag(scmd->request);
-+	q_index = blk_mq_unique_tag_to_hwq(blk_tag);
- 	circularQ = &pm8001_ha->inbnd_q_tbl[q_index];
- 
- 	if (task->data_dir == DMA_NONE) {
 -- 
-2.26.2
+2.17.1
 
