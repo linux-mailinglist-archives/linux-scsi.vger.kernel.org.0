@@ -2,44 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB742EC5DB
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Jan 2021 22:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDDA2EC5DD
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Jan 2021 22:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbhAFVly (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Jan 2021 16:41:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39294 "EHLO mail.kernel.org"
+        id S1727115AbhAFVlz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Jan 2021 16:41:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39322 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726812AbhAFVly (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 6 Jan 2021 16:41:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DDE5623132;
-        Wed,  6 Jan 2021 21:41:13 +0000 (UTC)
+        id S1726812AbhAFVlz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 6 Jan 2021 16:41:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7DF0F23158;
+        Wed,  6 Jan 2021 21:41:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1609969274;
-        bh=b1FxHFkUPh54WkIcPoJWopFP82NTDeE+9rWNRhcqFfc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eizqZ9+erRWKJG0Qv8IfgjmJgKZ0DoWh3YqMSOe3E90SVTCYCt2axe1H5FMwKFEFq
-         z+npYon2nxRAk//pYp3k9GFrk69mX3GP894GZ6qh6A7aC8God24gP5gjZcxvgphePI
-         qC3d71iJ9RPghMv/IhrE8XxRjTdLXmai3mtmHRX6tbDusPnuTHfCViEuWGteChYixV
-         2w7txZXCNUXLxBJ41qy02VPqb5yUfy5gW/FD0eX09I3QjaAKnUq9wfjamflt+7y1ss
-         yr1zSiGFiyccgpu+l0qBthAmF+lqHKOXKSM+7k2Ci50Or2t/ss+jsKx8L8DMu9cvur
-         H1TX2LfzVadhA==
+        bh=Sg6PHuBnrD/N1YEvncinjBd0H+xRihqqKourTu1UvQc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fsJg+kCOR5qxaVK9ECyB6ghzqyWjRy+SRR+gsJFwPjZE+/jgx4fPzH+q6dqRwEuaW
+         DJ04tJhPYGID1da1Jryxyh7QJ2gY+6+W7oTWEmTPFWMkNbOyG47MPgLtGDE6+i2Y7m
+         9L1BfauGmitThFeDY1UTe/6AaowIHOotJ/XubjpKle4NeEEG0ZdsbrxhiwxQmhOU+/
+         IDbugeUhU9hahVFyMni4zJULkBtOjFW4WwwCwwryrp4tGT6F3s1awMi3V4SaP9CI97
+         mf3tiwBQZOF1VHhYg14slWRJBRij+nvyDE6SAHYlDFepfDEJewnr37ECM7sM/QrmLT
+         BDzaHUSM0YNHQ==
 From:   Jaegeuk Kim <jaegeuk@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         kernel-team@android.com
 Cc:     cang@codeaurora.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
         bvanassche@acm.org, martin.petersen@oracle.com,
-        stanley.chu@mediatek.com
-Subject: [PATH v3 0/2] Two UFS bug fixes
-Date:   Wed,  6 Jan 2021 13:41:07 -0800
-Message-Id: <20210106214109.44041-1-jaegeuk@kernel.org>
+        stanley.chu@mediatek.com, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH v3 1/2] scsi: ufs: fix livelock of ufshcd_clear_ua_wluns
+Date:   Wed,  6 Jan 2021 13:41:08 -0800
+Message-Id: <20210106214109.44041-2-jaegeuk@kernel.org>
 X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
+In-Reply-To: <20210106214109.44041-1-jaegeuk@kernel.org>
+References: <20210106214109.44041-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Change log from v2:
- - fix build warning
+When gate_work/ungate_work gets an error during hibern8_enter or exit,
+ ufshcd_err_handler()
+   ufshcd_scsi_block_requests()
+   ufshcd_reset_and_restore()
+     ufshcd_clear_ua_wluns() -> stuck
+   ufshcd_scsi_unblock_requests()
 
+In order to avoid it, ufshcd_clear_ua_wluns() can be called per recovery flows
+such as suspend/resume, link_recovery, and error_handler.
+
+Fixes: 1918651f2d7e ("scsi: ufs: Clear UAC for RPMB after ufshcd resets")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index bedb822a40a3..1678cec08b51 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -3996,6 +3996,8 @@ int ufshcd_link_recovery(struct ufs_hba *hba)
+ 	if (ret)
+ 		dev_err(hba->dev, "%s: link recovery failed, err %d",
+ 			__func__, ret);
++	else
++		ufshcd_clear_ua_wluns(hba);
+ 
+ 	return ret;
+ }
+@@ -6003,6 +6005,9 @@ static void ufshcd_err_handler(struct work_struct *work)
+ 	ufshcd_scsi_unblock_requests(hba);
+ 	ufshcd_err_handling_unprepare(hba);
+ 	up(&hba->eh_sem);
++
++	if (!err && needs_reset)
++		ufshcd_clear_ua_wluns(hba);
+ }
+ 
+ /**
+@@ -6940,14 +6945,11 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
+ 	ufshcd_set_clk_freq(hba, true);
+ 
+ 	err = ufshcd_hba_enable(hba);
+-	if (err)
+-		goto out;
+ 
+ 	/* Establish the link again and restore the device */
+-	err = ufshcd_probe_hba(hba, false);
+ 	if (!err)
+-		ufshcd_clear_ua_wluns(hba);
+-out:
++		err = ufshcd_probe_hba(hba, false);
++
+ 	if (err)
+ 		dev_err(hba->dev, "%s: Host init failed %d\n", __func__, err);
+ 	ufshcd_update_evt_hist(hba, UFS_EVT_HOST_RESET, (u32)err);
+@@ -8777,6 +8779,7 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 		ufshcd_resume_clkscaling(hba);
+ 	hba->clk_gating.is_suspended = false;
+ 	hba->dev_info.b_rpm_dev_flush_capable = false;
++	ufshcd_clear_ua_wluns(hba);
+ 	ufshcd_release(hba);
+ out:
+ 	if (hba->dev_info.b_rpm_dev_flush_capable) {
+@@ -8887,6 +8890,8 @@ static int ufshcd_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 		cancel_delayed_work(&hba->rpm_dev_flush_recheck_work);
+ 	}
+ 
++	ufshcd_clear_ua_wluns(hba);
++
+ 	/* Schedule clock gating in case of no access to UFS device yet */
+ 	ufshcd_release(hba);
+ 
+-- 
+2.29.2.729.g45daf8777d-goog
 
