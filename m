@@ -2,106 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B19B2EC785
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 01:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2042EC7AE
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 02:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbhAGAwL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Jan 2021 19:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726597AbhAGAwK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jan 2021 19:52:10 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B64C0612B1
-        for <linux-scsi@vger.kernel.org>; Wed,  6 Jan 2021 16:51:04 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id p18so3481260pgm.11
-        for <linux-scsi@vger.kernel.org>; Wed, 06 Jan 2021 16:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pCdFxWMmuOfZWudA0mXbDkmU0asgXU+dhVFKYSWdKR0=;
-        b=FtpSaVYf855cfTtSFiig9cMxJQR9TmUtiZI5GTU7Xvkf1nf8GWPhLwWvszUjAp3y7O
-         pWghKLbPEtIVsXNc6TdQcJVvXwi4RX1MaTBR2DmaVuWT7rdBjStw3bxNHc9uelkDXDyL
-         qCJ03LsgSuU4EO2KHm0r/JuHxCC/bxb0QfGaTHVaotyFHL5mhLijtj8/+P7/lkVWmDTw
-         vye284bN4nK1La4gADumW0dSBax/GY6IYEO/nH41C6DIQIqC6gfxTMppEkIp2lEsMvSV
-         PzxkVtRmw03Jn2NEda22U5hRhQ3RgYLvSIshLUyxuD2NJvpC/qiHwGOx3v2Fvtfboo4z
-         OpKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pCdFxWMmuOfZWudA0mXbDkmU0asgXU+dhVFKYSWdKR0=;
-        b=MLicz/qcO60yYz/JOM3dqGzaDOAUbsJ6w5V+qhXzonW9cCn1R0rEC0OP2oLP8Spcca
-         /FkqNLXglgW54u+NKS9zvc+Whro5pyGDUir+c1y/i4KUha9hoUUC/mpFGf3LGs5BHKN5
-         7U4gAnTFvBAfsNTMQ0JCtKSVlR3zLlzgJECYqNFJyxkdE484smIJOMSWg8rKYDXelXK+
-         nYCSfsVI9+OUna1H/N0ZgxOliXW6HyOSEsPao5p9NVU/2qo0j9RQRiH5R1Aqi6u2z2p4
-         UQEOyA6POhQJuzEdssBzCSirR0EDP9t/OqP3sIdIVYkFyH4vT9Fk6vO/Gfb1FiQi2gqP
-         Vtzg==
-X-Gm-Message-State: AOAM532oVRO5aV4KPgD3h4pT7F9nTlCpRIeTscHl9//zyXDecYPuSzUx
-        rC93PSnle7BIf0zBQoTBVjQ96ss++D0Vng==
-X-Google-Smtp-Source: ABdhPJxT1Ymzj6fTwvd8fFo4wNpiGEwZQ8x4ZeisXonUyE0fJz2gR204ZaiqZh+EqSqWEALhYTC66A==
-X-Received: by 2002:a63:e22:: with SMTP id d34mr7094350pgl.142.1609980664391;
-        Wed, 06 Jan 2021 16:51:04 -0800 (PST)
-Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id w27sm3600634pfq.104.2021.01.06.16.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 16:51:03 -0800 (PST)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v6 31/31] elx: efct: Tie into kernel Kconfig and build process
-Date:   Wed,  6 Jan 2021 16:50:30 -0800
-Message-Id: <20210107005030.2929-32-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210107005030.2929-1-jsmart2021@gmail.com>
-References: <20210107005030.2929-1-jsmart2021@gmail.com>
+        id S1726249AbhAGBYf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Jan 2021 20:24:35 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:62644 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbhAGBYf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jan 2021 20:24:35 -0500
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210107012352epoutp0453d0ed4b7d81b81826fdbf683ea28047~Xzqyqt41y1650516505epoutp04b
+        for <linux-scsi@vger.kernel.org>; Thu,  7 Jan 2021 01:23:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210107012352epoutp0453d0ed4b7d81b81826fdbf683ea28047~Xzqyqt41y1650516505epoutp04b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1609982632;
+        bh=lZQr/BNAVc2zPCCDVpvZSEEd7+/C8Ub6qxHC3FLZMSk=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=KOycJRT5KoKCflTgowFTA61pjUQTgnllsrsbzGAnoOGNKJYwLtLgwip57iZMHt0ef
+         SiXuy73wQ/SYtTlCAdVpwXw44CjXrDMwg4DiLom8qy+CvUkSlT2oB75A9pf31yCUQq
+         hyYH2LupfKodP3V/laTRUAyhEkgEesS1/eniZ9kg=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20210107012352epcas5p18d38c0faac64c151f2d10b93260fa91e~XzqydAx482216122161epcas5p1m;
+        Thu,  7 Jan 2021 01:23:52 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5E.1D.33964.8A266FF5; Thu,  7 Jan 2021 10:23:52 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210107012352epcas5p28217298cc4e6cf7787aff1472d618726~XzqyGkTCA1106611066epcas5p24;
+        Thu,  7 Jan 2021 01:23:52 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210107012352epsmtrp24726259c6b740963d579e384c7278e7c~XzqyFzS8Q3004530045epsmtrp2D;
+        Thu,  7 Jan 2021 01:23:52 +0000 (GMT)
+X-AuditID: b6c32a4b-eb7ff700000184ac-83-5ff662a8d1c1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2C.9F.08745.7A266FF5; Thu,  7 Jan 2021 10:23:52 +0900 (KST)
+Received: from alimakhtar02 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210107012351epsmtip1c0debdb305ba4238bed6831a3d1ebfd0~XzqxEcmI82381423814epsmtip1Q;
+        Thu,  7 Jan 2021 01:23:50 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Randy Dunlap'" <rdunlap@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Cc:     "'Avri Altman'" <avri.altman@wdc.com>,
+        <linux-scsi@vger.kernel.org>,
+        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
+        "'Martin K. Petersen'" <martin.petersen@oracle.com>
+In-Reply-To: <20210106205554.18082-1-rdunlap@infradead.org>
+Subject: RE: [PATCH -next] scsi: ufs: fix all Kconfig help text indentation
+Date:   Thu, 7 Jan 2021 06:53:49 +0530
+Message-ID: <052001d6e493$c1fb0fb0$45f12f10$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQG3tqYHXragKCNirWnPT3uZrpIbEgIXg0mOqkj9U9A=
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBKsWRmVeSWpSXmKPExsWy7bCmpu6KpG/xBp1bZC1e/rzKZrHoxjYm
+        i8u75rBZdF/fwWax/Pg/Jou3d6azOLB5bF6h5TFh0QFGj49Pb7F4fN4k59F+oJspgDWKyyYl
+        NSezLLVI3y6BK6P7snpBO3vFrj0zWRsYG9m6GDk5JARMJA7d+cjUxcjFISSwm1Hi6r11bBDO
+        J0aJQ2sus0M4nxklPs9YzwzTsuLHHKiWXUCJJXNYIZyXjBJT3k8CG8wmoCuxY3EbmC0i4CPx
+        +vQxRpAiZoH1jBJHV/9lB0lwClhLTNrxA6xIWMBb4sLT42BxFgEViR371zKC2LwClhIftyxj
+        gbAFJU7OfAJmMwvIS2x/OwfqJAWJn0+XsUIss5LonDGBFaJGXOLozx6oml4OiUMzzSBsF4kN
+        15qh4sISr45vYYewpSQ+v9sLdA8HkJ0t0bPLGCJcI7F03jEWCNte4sCVOSwgJcwCmhLrd+lD
+        bOKT6P39hAmik1eio00IolpVovndVahOaYmJ3d2sELaHxPmzL5kmMCrOQvLXLCR/zUJy/yyE
+        ZQsYWVYxSqYWFOempxabFhjnpZbrFSfmFpfmpesl5+duYgQnHi3vHYyPHnzQO8TIxMF4iFGC
+        g1lJhNfi2Jd4Id6UxMqq1KL8+KLSnNTiQ4zSHCxK4rw7DB7ECwmkJ5akZqemFqQWwWSZODil
+        GpisM7bIBjIqehvm6v7uYL12RDAoID3r8d8FvjMK5011lbmsecHiW8LDqkXrFRXP2u7a0DxT
+        tblWPyHl/Z1z71Qk2SayS4ZIutxyfWWu3Olsy/ah8Jil5/9bhQcUQxYZ7XNLD1M7P8s3L7Nq
+        wZ8z/6WyzyspvFHd5/Jsj2XLq3ds+x983uP0MPmMCoNmzdcOd/M226U/TwbtdpDOWht6oacs
+        scDX5fac1NK6tNc/jVqWz/v9k+dAcaRA7oHD3/L7ej6LzNyy1CgiyM5gzntv3/Za2Vsh1kH3
+        1u6IE9t3YT7DhJ35Gdfjd5sEx9/rySzI0Nx+mNNh+oU91gFzn/2wisv1PdK4smrfy9scvdM1
+        uJRYijMSDbWYi4oTAbOxeeyrAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRmVeSWpSXmKPExsWy7bCSnO6KpG/xBrveMlm8/HmVzWLRjW1M
+        Fpd3zWGz6L6+g81i+fF/TBZv70xncWDz2LxCy2PCogOMHh+f3mLx+LxJzqP9QDdTAGsUl01K
+        ak5mWWqRvl0CV0b3ZfWCdvaKXXtmsjYwNrJ1MXJySAiYSKz4MYepi5GLQ0hgB6PErva/UAlp
+        iesbJ7BD2MISK/89B7OFBJ4zSjyblAJiswnoSuxY3AZWLyLgJ7H73BE2kEHMAhsZJabNuMYO
+        MbWHUeLJzUdg3ZwC1hKTdvwA6xAW8Ja48PQ4WJxFQEVix/61jCA2r4ClxMcty1ggbEGJkzOf
+        ANkcQFP1JNo2gpUwC8hLbH87hxniOAWJn0+XsUIcYSXROWMCK0SNuMTRnz3MExiFZyGZNAth
+        0iwkk2Yh6VjAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4frS0djDuWfVB7xAj
+        EwfjIUYJDmYlEV6LY1/ihXhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBa
+        BJNl4uCUamCS/r8tf7J5PctVs9uFQs0azQ+1t/EeWc+pz8E3nduAtfFPR+DTud4nMu51SL7u
+        6Ju6INHy178Xb/jXeNuevrXpzKo7dtVrxHbvWPnCNuzSmokxR9ydZwcHmZee/+xxjHXRRo9w
+        IdeurI2cvrNvnJo5ZXqIU3Hf9NfeYndf17MXvSwV7snQSlybOiex+LZX4NVPIpfXZ31kmFOk
+        9Gax0cun+QwBrbI7Tq2+p/JT1+9ia9B7FfkFE9uLywxmyb4I/CbBXHS39XHJ1rMTCrJDpSI3
+        bTjOsKz96ur3SrZ3/89OkDqWmyGnb8/pM61etfLlvf7ZVz8Lln+olLX+pHXypdedqXc7VIyl
+        FZJFDMIf1V9QYinOSDTUYi4qTgQA/aTJgg4DAAA=
+X-CMS-MailID: 20210107012352epcas5p28217298cc4e6cf7787aff1472d618726
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20210106205857epcas5p31c8d9aee87cb459ef431b8e8c965bdfe
+References: <CGME20210106205857epcas5p31c8d9aee87cb459ef431b8e8c965bdfe@epcas5p3.samsung.com>
+        <20210106205554.18082-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This final patch ties the efct driver into the kernel Kconfig
-and build linkages in the drivers/scsi directory.
+Hello Randy,
 
-Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Daniel Wagner <dwagner@suse.de>
----
- drivers/scsi/Kconfig  | 2 ++
- drivers/scsi/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+> -----Original Message-----
+> From: Randy Dunlap <rdunlap@infradead.org>
+> Sent: 07 January 2021 02:26
+> To: linux-kernel@vger.kernel.org
+> Cc: Randy Dunlap <rdunlap@infradead.org>; Alim Akhtar
+> <alim.akhtar@samsung.com>; Avri Altman <avri.altman@wdc.com>; linux-
+> scsi@vger.kernel.org; James E.J. Bottomley <jejb@linux.ibm.com>; Martin K.
+> Petersen <martin.petersen@oracle.com>
+> Subject: [PATCH -next] scsi: ufs: fix all Kconfig help text indentation
+> 
+> Use consistent and expected indentation for all Kconfig text.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: Avri Altman <avri.altman@wdc.com>
+> Cc: linux-scsi@vger.kernel.org
+> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> ---
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 701b61ec76ee..f2d47bf55f97 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1170,6 +1170,8 @@ config SCSI_LPFC_DEBUG_FS
- 	  This makes debugging information from the lpfc driver
- 	  available via the debugfs filesystem.
- 
-+source "drivers/scsi/elx/Kconfig"
-+
- config SCSI_SIM710
- 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
- 	depends on EISA && SCSI
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index c00e3dd57990..844db573283c 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
- obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
- obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
- obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
-+obj-$(CONFIG_SCSI_EFCT)		+= elx/
- obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
- obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
- obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
--- 
-2.26.2
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
 
