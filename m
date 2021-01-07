@@ -2,74 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6332ED6B7
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 19:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AADB2ED6FB
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 19:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728081AbhAGSap (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Jan 2021 13:30:45 -0500
-Received: from bosmailout07.eigbox.net ([66.96.188.7]:37049 "EHLO
-        bosmailout07.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbhAGSap (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Jan 2021 13:30:45 -0500
-X-Greylist: delayed 1919 seconds by postgrey-1.27 at vger.kernel.org; Thu, 07 Jan 2021 13:30:44 EST
-Received: from bosmailscan09.eigbox.net ([10.20.15.9])
-        by bosmailout07.eigbox.net with esmtp (Exim)
-        id 1kxZWj-0001My-KH; Thu, 07 Jan 2021 12:56:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=cdcusgov.info; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nArWNjM9YacFnJk0AgQcdTXbPTsLfJR8SfZgzpVO+qA=; b=AC5tumoXKaDp/HfcSvY6On79CZ
-        QlPJQpACpjeja9vWCV7T6lwbIgyd5N+EjmkxOlKYzuBJUpcQpirTu1TJNYUgH9vkBnfOPIF2HostS
-        vdUCWpkgqbvJb0K9tGaOY6A4NM1IbNJXfoynJ4Xjym3tgGWN6hIa9gMbjXg/vaWuvM6UGI0bykDc/
-        lvOvdS1/aC/kojVtmrHpdJsKiIgWTuTgn/l4D7db8SHHKeigm4YnAlwiXP9CO6lA9O26C0P3O/AKh
-        W+ADloI2vqgsY18qGU6h0bHHNw+LFiGTjUz4x1izhjlUn5SYG/MnQrYhL8fKUPTVd2sCbtgev3Xfw
-        ShBVyerg==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan09.eigbox.net with esmtp (Exim)
-        id 1kxZWj-0000e8-BQ; Thu, 07 Jan 2021 12:56:49 -0500
-Received: from boswebmail13.eigbox.net ([10.20.16.13])
-        by bosimpout12 with 
-        id DtwC240050Gud5E01twXv2; Thu, 07 Jan 2021 12:56:49 -0500
-X-Authority-Analysis: v=2.3 cv=WuawzeXv c=1 sm=1 tr=0
- a=sHJPpiqmOLyIDgchiyROMA==:117 a=MweTYWCsk8q7ca3IHEZN4A==:17
- a=hl1P28mwDW0A:10 a=kj9zAlcOel0A:10 a=MKtGQD3n3ToA:10 a=1oJP67jkp3AA:10
- a=EmqxpYm9HcoA:10 a=F6r8zlrsbE8A:10 a=x7bEGLp0ZPQA:10 a=ZZnuYtJkoWoA:10
- a=yHlkxsexxgbaJ3K3CLkA:9 a=CjuIK1q_8ugA:10 a=mju8rTeU4J3FGJi5f2yl:22
- a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=jd6J4Gguk5HxikPWLKER:22
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail13.eigbox.net with esmtp (Exim)
-        id 1kxZWQ-0001ae-S3; Thu, 07 Jan 2021 12:56:30 -0500
-Received: from [102.178.3.36]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Thu, 07 Jan 2021 12:56:30 -0500
+        id S1728273AbhAGSyH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Jan 2021 13:54:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39848 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727215AbhAGSyH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 7 Jan 2021 13:54:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B758233FD;
+        Thu,  7 Jan 2021 18:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610045606;
+        bh=WCW1zUgM8CscS/yuhzaFDE7+JUy+hzzVU3S0ROR6HbA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AsXhsRNR1eNTR0LZIzMOaVNOtLsRtZxPakzrVPDeOyLqnT88IEfZdtyu2lN3CGlKW
+         MwBxdDptbn1wsB6dEc2TKVBfzd125RzNaY4Ypnj9BCx7PjZZwbsydhomxvgqS8Y3Jp
+         sRfdGOyhprGr2wbk3x3bTazI6+/o4QdK0PhOWaM3SHVwNDamBGnjp7yNpQwfolcbz3
+         BX+BHJe6GSAStnC/ivsM83WoquRMqSSuKIdypSXJ8UMs4MpkoI1ZNOuvsXnDsTzN/+
+         gSq0iNT2/4oc+BCp5NvntE03aL0obtMHcVlNLpwDb7tgWOwIgFXTchE+5X+qFNKWC/
+         qm7G+djodgrSA==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com
+Cc:     cang@codeaurora.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        bvanassche@acm.org, martin.petersen@oracle.com,
+        stanley.chu@mediatek.com
+Subject: [PATCH v5 0/2] Two UFS fixes
+Date:   Thu,  7 Jan 2021 10:53:14 -0800
+Message-Id: <20210107185316.788815-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
 MIME-Version: 1.0
-Date:   Thu, 07 Jan 2021 17:56:30 +0000
-From:   Mrs Rose <y6445@cdcusgov.info>
-To:     undisclosed-recipients:;
-Subject: Regards!!!
-Reply-To: mrallent002@gmail.com
-Mail-Reply-To: mrallent002@gmail.com
-Message-ID: <fed3aa2c544fc18de70ef2a803f8bec1@cdcusgov.info>
-X-Sender: y6445@cdcusgov.info
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: y6445@cdcusgov.info
-Sender:  Mrs Rose <y6445@cdcusgov.info>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Change log from v4:
+ - remove RESERVE tag for tm command
+ - remove waiting IOs and let full reset handle it
+ - avoid verbose error log which causes cpu lock up
 
 
-My dear friend,
-
-why are you not responding to me, it's me Mrs Rose Raya from Indonesia, 
-get back to me as soon as possible? it's important:
-
-Regards,
-Mrs Rose
