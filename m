@@ -2,150 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FF42ED3E3
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 17:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD8A2ED49A
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 17:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728205AbhAGQE0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Jan 2021 11:04:26 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35204 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726780AbhAGQE0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Jan 2021 11:04:26 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 107G2CQT099371;
-        Thu, 7 Jan 2021 11:03:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pp1;
- bh=bRszvytTtodPF9wRkj+mNSdoQGns39vakbpD3IFIyVo=;
- b=ggzhjZpBqc7JZYIKRqhw4aD9wOECvz5iom+LeviFEF15tTiCa2R2uMbId9c74dE8oGlU
- u8r3yx7RTecQEJymSIWE+Ta9dw8QFEjnp9JukDyg/a4oVjvjJpRMUuLLxrMNCJLhNBs7
- 9ZOLnINxqK92tqoKVH8fLb/3ffRmCtdE0CDHg1lABfZt9HCK5+OjXHVAcPoVwAnDKxu1
- PtMoH9nw2ZIy4PkG4wke2esmSgTOObPK6+rkTuoShWVze83RIUmCIDkpTntSsXJsjbEr
- WkauKI3f9x9apVL4Cheeccr1A7FporZKvwTzhRxVrSAjFjJSoPHO5drN5WD5ctdzUdKM 2w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35x58w0c95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jan 2021 11:03:39 -0500
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 107G2goH101149;
-        Thu, 7 Jan 2021 11:03:13 -0500
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35x58w0btg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jan 2021 11:03:08 -0500
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 107FXe27022042;
-        Thu, 7 Jan 2021 16:02:43 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 35wd379581-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jan 2021 16:02:43 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 107G2e6x41288080
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 Jan 2021 16:02:40 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4901A4C052;
-        Thu,  7 Jan 2021 16:02:40 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 13C034C050;
-        Thu,  7 Jan 2021 16:02:40 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  7 Jan 2021 16:02:40 +0000 (GMT)
-From:   Julian Wiedmann <jwi@linux.ibm.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>
-Subject: [PATCH 3/3] scsi: iscsi: let iface class declare its sysfs attributes
-Date:   Thu,  7 Jan 2021 17:02:31 +0100
-Message-Id: <20210107160231.101243-3-jwi@linux.ibm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210107160231.101243-1-jwi@linux.ibm.com>
-References: <20210107160231.101243-1-jwi@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-07_07:2021-01-07,2021-01-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- phishscore=0 spamscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0
- mlxlogscore=999 adultscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101070097
+        id S1726669AbhAGQo0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Jan 2021 11:44:26 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34908 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726441AbhAGQoZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 7 Jan 2021 11:44:25 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1610037818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=81mz4i+qXVRUsgUse3TZ8UbKpk+zuNqwV/MC4/2JEQs=;
+        b=rV3f5QAs85PdLpVU+EIkCRUcS0kAam4iQ3umfqEOAyGn0DYkpqkNTz7SLCnKWZYZRmLd6h
+        zzMVuBDvmgaAjdXjoVOWimqEAFdAYNklXBHTPyu8y8M13dhyKcfSxHdSdP4e5Nd6/fmPL4
+        NJQJNljkujkYm4L7J7ZoX3wIcxDuhsY=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 92C39AD26;
+        Thu,  7 Jan 2021 16:43:38 +0000 (UTC)
+Message-ID: <66c49950d7fc38163a567fc9b2a8d1c925cdd411.camel@suse.com>
+Subject: Re: [PATCH V3 01/25] smartpqi: add support for product id
+From:   Martin Wilck <mwilck@suse.com>
+To:     Don Brace <don.brace@microchip.com>, Kevin.Barnett@microchip.com,
+        scott.teel@microchip.com, Justin.Lindley@microchip.com,
+        scott.benesh@microchip.com, gerry.morong@microchip.com,
+        mahesh.rajashekhara@microchip.com, hch@infradead.org,
+        jejb@linux.vnet.ibm.com, joseph.szczypek@hpe.com, POSWALD@suse.com
+Cc:     linux-scsi@vger.kernel.org
+Date:   Thu, 07 Jan 2021 17:43:37 +0100
+In-Reply-To: <160763246606.26927.4516545707455278972.stgit@brunhilda>
+References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
+         <160763246606.26927.4516545707455278972.stgit@brunhilda>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.38.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Have device_register() create the attributes for us automatically, before
-the KOBJ_ADD uevent is raised.
+On Thu, 2020-12-10 at 14:34 -0600, Don Brace wrote:
+> From: Kevin Barnett <kevin.barnett@microchip.com>
+> 
+> Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+> Reviewed-by: Scott Teel <scott.teel@microchip.com>
+> Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
+> Signed-off-by: Don Brace <don.brace@microchip.com>
+> ---
+>  drivers/scsi/smartpqi/smartpqi.h      |   11 ++++++++++-
+>  drivers/scsi/smartpqi/smartpqi_init.c |   11 +++++++++--
+>  drivers/scsi/smartpqi/smartpqi_sis.c  |    5 +++++
+>  drivers/scsi/smartpqi/smartpqi_sis.h  |    1 +
+>  4 files changed, 25 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/scsi/smartpqi/smartpqi.h
+> b/drivers/scsi/smartpqi/smartpqi.h
+> index 3e54590e6e92..7d3f956e949f 100644
+> 
+> [...]
+> 
+> --- a/drivers/scsi/smartpqi/smartpqi_init.c
+> +++ b/drivers/scsi/smartpqi/smartpqi_init.c
+> @@ -6259,8 +6259,8 @@ static DEVICE_ATTR(model, 0444, pqi_model_show,
+> NULL);
+>  static DEVICE_ATTR(serial_number, 0444, pqi_serial_number_show,
+> NULL);
+>  static DEVICE_ATTR(vendor, 0444, pqi_vendor_show, NULL);
+>  static DEVICE_ATTR(rescan, 0200, NULL, pqi_host_rescan_store);
+> -static DEVICE_ATTR(lockup_action, 0644,
+> -       pqi_lockup_action_show, pqi_lockup_action_store);
+> +static DEVICE_ATTR(lockup_action, 0644, pqi_lockup_action_show,
+> +       pqi_lockup_action_store);
 
-Cc: Lee Duncan <lduncan@suse.com>
-Cc: Chris Leech <cleech@redhat.com>
-Signed-off-by: Julian Wiedmann <jwi@linux.ibm.com>
----
- drivers/scsi/scsi_transport_iscsi.c | 23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+Nitpick: could you please avoid mixing real code changes with unrelated
+whitespace edits? The same applies to several patches of this series.
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index e3d57ba7ca19..d467ae3e46ee 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -286,12 +286,6 @@ static void iscsi_iface_release(struct device *dev)
- 	put_device(parent);
- }
- 
--
--static struct class iscsi_iface_class = {
--	.name = "iscsi_iface",
--	.dev_release = iscsi_iface_release,
--};
--
- #define ISCSI_IFACE_ATTR(_prefix, _name, _mode, _show, _store)	\
- struct device_attribute dev_attr_##_prefix##_##_name =		\
- 	__ATTR(_name, _mode, _show, _store)
-@@ -689,6 +683,14 @@ static struct attribute_group iscsi_iface_group = {
- 	.is_visible = iscsi_iface_attr_is_visible,
- };
- 
-+__ATTRIBUTE_GROUPS(iscsi_iface);
-+
-+static struct class iscsi_iface_class = {
-+	.name = "iscsi_iface",
-+	.dev_groups = iscsi_iface_groups,
-+	.dev_release = iscsi_iface_release,
-+};
-+
- /* convert iscsi_ipaddress_state values to ascii string name */
- static const struct {
- 	enum iscsi_ipaddress_state	value;
-@@ -773,18 +775,10 @@ iscsi_create_iface(struct Scsi_Host *shost, struct iscsi_transport *transport,
- 	if (err)
- 		goto free_iface;
- 
--	err = sysfs_create_group(&iface->dev.kobj, &iscsi_iface_group);
--	if (err)
--		goto unreg_iface;
--
- 	if (dd_size)
- 		iface->dd_data = &iface[1];
- 	return iface;
- 
--unreg_iface:
--	device_unregister(&iface->dev);
--	return NULL;
--
- free_iface:
- 	put_device(iface->dev.parent);
- 	kfree(iface);
-@@ -794,7 +788,6 @@ EXPORT_SYMBOL_GPL(iscsi_create_iface);
- 
- void iscsi_destroy_iface(struct iscsi_iface *iface)
- {
--	sysfs_remove_group(&iface->dev.kobj, &iscsi_iface_group);
- 	device_unregister(&iface->dev);
- }
- EXPORT_SYMBOL_GPL(iscsi_destroy_iface);
--- 
-2.17.1
+Other than that:
+
+Reviewed-by: Martin Wilck <mwilck@suse.com>
+
+
 
