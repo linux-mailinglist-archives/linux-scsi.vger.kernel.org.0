@@ -2,58 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BED2EC76E
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 01:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FC92EC782
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Jan 2021 01:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726390AbhAGAvk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Jan 2021 19:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
+        id S1726559AbhAGAwF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Jan 2021 19:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726262AbhAGAvj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jan 2021 19:51:39 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755F4C061282
-        for <linux-scsi@vger.kernel.org>; Wed,  6 Jan 2021 16:50:50 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id q4so2472811plr.7
-        for <linux-scsi@vger.kernel.org>; Wed, 06 Jan 2021 16:50:50 -0800 (PST)
+        with ESMTP id S1726523AbhAGAwE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jan 2021 19:52:04 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45268C061285
+        for <linux-scsi@vger.kernel.org>; Wed,  6 Jan 2021 16:50:51 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id c22so3465775pgg.13
+        for <linux-scsi@vger.kernel.org>; Wed, 06 Jan 2021 16:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ryF4CPyHk+frAmbHA8UeJYYCozuHLqXrFoYhEbqiW8E=;
-        b=VR0ComhunUtYk3S1pHhK4VF1m/8TNgu3YEvL/zro0zQNKwJUnzEkEHP72t9kCGkGd1
-         moIOpb3AgdrcYRMaCTszoJrH6KzvO04hUcz4lnosM2ySPS33uCJrdqZRj1GpOxZZQJ+d
-         9hBaRNMV82NU7q6wFp+dhiWhllJ2edIwvtmt0bRWl8L18e+J3b8//SDaWnZHb6jVSzRj
-         9IRZ0T3fozX3ajDXwGC3R3qbgdnPsKH2058DIpgb+92zKiblIl9P9/85hgBElnt1JO5d
-         qNetJMykGjyfTQ1hZtnaUCWwPt7mlAWtn+/b9IpBb4QOKRAH4N4wRl5v2HsANmoM71cE
-         IJJg==
+        bh=6mhdrEH7Ql94CdMWjLPFg0vNccprjT4ta8cZLQPCDSY=;
+        b=Ay0GLKfptIoWkcoMiQBOV0Y5J36XYLpzckIauDuX2om+SybPiZIhPwpILWSmewETsJ
+         8keSlT9OrNCyIVKlP/AwI21Ec7E7yuzkzGTGQFdO1EvH6YknFlEeP2aQ3s5TcsQ0wcEs
+         ZCaiPPp/WNjsk5bsZ06iT3PsDMEal4GNNb7Z/9HGfKllO2evqkKMbiqA8GDtEUBM9Qev
+         RBujLWwNgQ6gauVvny0puFq7sR66O9XWy7u5UfL67dbJuoIxngjacN0MzpViqFvlkyRT
+         8sHst1RBm0mtx9MnNTRVtx8tByhK975JD5yU0H2j8RdY9YPbNYt5n+6zmvGY3hzVDRDi
+         l+JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ryF4CPyHk+frAmbHA8UeJYYCozuHLqXrFoYhEbqiW8E=;
-        b=SR6QRuKY0opncZBLDUwYieYySPaw3lz7Pd+pbKaLlhnw8SRdEgs/HgRrgvqmh/Oe8k
-         uUNh5O+LnWCgt2TQr2SamuWENaU4dSnT8h/hq2zpuiFUthplbew3KnWNzeMDRVXy8zBp
-         e/C86IA4iZp+KkvSMgjT35ErwCK4joUAZnrjOqvqpfOuDKQjAJ4HCUfkkm4EqpmUJpCV
-         DmdZxwJpQNhZ2LFbTh6zIvg6FdUko00s1+B3Xwknu1KOCqFqskFGGx48ioOf4XjUdz6X
-         mzM6Una06OwR9Tp0K8ni2ozF5uJcdYz7O5Bw5of87PX3rC9vD2VKhBRZ2Xq3mIxPaaxM
-         RmKQ==
-X-Gm-Message-State: AOAM5326fjT7Zmb0BuCOs/3+Aw6ensEcyt0T0a1wiMHLtf0zyAQcUvch
-        L66vk/DawCcugLmLmNq6XYN79xmhvKHyQw==
-X-Google-Smtp-Source: ABdhPJwFfwEmqt4l+3W0t7WwcphbhYmm4/Ln2SxY/ZCSRKOs5UjNxOCovnG8tzjDe/BEGKlkxv+bHg==
-X-Received: by 2002:a17:902:c193:b029:da:ea4f:af79 with SMTP id d19-20020a170902c193b02900daea4faf79mr6635577pld.14.1609980649330;
-        Wed, 06 Jan 2021 16:50:49 -0800 (PST)
+        bh=6mhdrEH7Ql94CdMWjLPFg0vNccprjT4ta8cZLQPCDSY=;
+        b=cxCoUo7pUbQGxjIpVRLWixtf76a8135pSGJ12VolOsOQVrYPpX9kZ+MFhUh+CjQc1X
+         xH+lQkrXiqub/yVnEEhtUrJLErbkdihMbBgaEyMnSEYJYrhg9DAD5zR4x32vx+60qrwE
+         fHr5OpnLVZpqWzJFsfzWZrlyulXSXIiJau42XRHvvF765HA7NEyML4OE7BtEHZCBtn8r
+         XZRiZgr2c1ieVgMMJ7ABJFu3g/wpwufet+CB99/ZdOECnEpbllkWAngPDYoCH18s8/EE
+         3KqzGdUgAm0nhKl2gfw3UhwuyvCn3G0RUJiehDvROBeR3Kdoaw58u7qsf2fc8iyu9ASp
+         e/OQ==
+X-Gm-Message-State: AOAM532IdI1ogGdM9mYujHHUO9eR9Mk1yR0KN7KDfMzCTy4IcDZK+bFq
+        dwUEHUjuXTgnvGDnCR1gYAgJREko8nLNgw==
+X-Google-Smtp-Source: ABdhPJyEHmZ7emuqAuU+kwbRiqL9/9nK3H0wDpCwDk0KTZcnMzIYdGQpOBy5MmvUUHtVc/M0m5IsSA==
+X-Received: by 2002:a63:50a:: with SMTP id 10mr7110255pgf.273.1609980650168;
+        Wed, 06 Jan 2021 16:50:50 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id w27sm3600634pfq.104.2021.01.06.16.50.48
+        by smtp.gmail.com with ESMTPSA id w27sm3600634pfq.104.2021.01.06.16.50.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 16:50:48 -0800 (PST)
+        Wed, 06 Jan 2021 16:50:49 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH v6 15/31] elx: libefc: Extended link Service IO handling
-Date:   Wed,  6 Jan 2021 16:50:14 -0800
-Message-Id: <20210107005030.2929-16-jsmart2021@gmail.com>
+        Ram Vegesna <ram.vegesna@broadcom.com>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH v6 16/31] elx: libefc: Register discovery objects with hardware
+Date:   Wed,  6 Jan 2021 16:50:15 -0800
+Message-Id: <20210107005030.2929-17-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210107005030.2929-1-jsmart2021@gmail.com>
 References: <20210107005030.2929-1-jsmart2021@gmail.com>
@@ -67,1257 +68,928 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 This patch continues the libefc library population.
 
 This patch adds library interface definitions for:
-Functions to build and send ELS/CT/BLS commands and responses.
+-Registrations for VFI, VPI and RPI.
 
 Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
+Reviewed-by: Daniel Wagner <dwagner@suse.de>
 
 ---
 v6:
- efc_disc_io_complete(): update WARN_ON to WARN_ON_ONCE
- Change els send functions to return status from efc_els_send_req()
+ Ensure an EFC_XX status value is returned (not numerical constants)
+   Includes slight reorg to use return values from calls.
 v5:
- ELS IO mempool changes.
+ EFC_EVT_XXX name changes.
 ---
- drivers/scsi/elx/libefc/efc_els.c | 1113 +++++++++++++++++++++++++++++
- drivers/scsi/elx/libefc/efc_els.h |  107 +++
- 2 files changed, 1220 insertions(+)
- create mode 100644 drivers/scsi/elx/libefc/efc_els.c
- create mode 100644 drivers/scsi/elx/libefc/efc_els.h
+ drivers/scsi/elx/libefc/efc_cmds.c | 855 +++++++++++++++++++++++++++++
+ drivers/scsi/elx/libefc/efc_cmds.h |  35 ++
+ 2 files changed, 890 insertions(+)
+ create mode 100644 drivers/scsi/elx/libefc/efc_cmds.c
+ create mode 100644 drivers/scsi/elx/libefc/efc_cmds.h
 
-diff --git a/drivers/scsi/elx/libefc/efc_els.c b/drivers/scsi/elx/libefc/efc_els.c
+diff --git a/drivers/scsi/elx/libefc/efc_cmds.c b/drivers/scsi/elx/libefc/efc_cmds.c
 new file mode 100644
-index 000000000000..719129a74342
+index 000000000000..d2850d231a7a
 --- /dev/null
-+++ b/drivers/scsi/elx/libefc/efc_els.c
-@@ -0,0 +1,1113 @@
++++ b/drivers/scsi/elx/libefc/efc_cmds.c
+@@ -0,0 +1,855 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2021 Broadcom. All Rights Reserved. The term
 + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
 + */
 +
-+/*
-+ * Functions to build and send ELS/CT/BLS commands and responses.
-+ */
-+
-+#include "efc.h"
-+#include "efc_els.h"
++#include "efclib.h"
 +#include "../libefc_sli/sli4.h"
-+
-+#define EFC_LOG_ENABLE_ELS_TRACE(efc)		\
-+		(((efc) != NULL) ? (((efc)->logmask & (1U << 1)) != 0) : 0)
-+
-+#define node_els_trace()  \
-+	do { \
-+		if (EFC_LOG_ENABLE_ELS_TRACE(efc)) \
-+			efc_log_info(efc, "[%s] %-20s\n", \
-+				node->display_name, __func__); \
-+	} while (0)
-+
-+#define els_io_printf(els, fmt, ...) \
-+	efc_log_err((struct efc *)els->node->efc,\
-+		      "[%s] %-8s " fmt, \
-+		      els->node->display_name,\
-+		      els->display_name, ##__VA_ARGS__)
-+
-+#define EFC_ELS_RSP_LEN			1024
-+#define EFC_ELS_GID_PT_RSP_LEN		8096
-+
-+struct efc_els_io_req *
-+efc_els_io_alloc(struct efc_node *node, u32 reqlen)
-+{
-+	return efc_els_io_alloc_size(node, reqlen, EFC_ELS_RSP_LEN);
-+}
-+
-+struct efc_els_io_req *
-+efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen)
-+{
-+	struct efc *efc;
-+	struct efc_els_io_req *els;
-+	unsigned long flags = 0;
-+
-+	efc = node->efc;
-+
-+	spin_lock_irqsave(&node->els_ios_lock, flags);
-+
-+	if (!READ_ONCE(node->els_io_enabled)) {
-+		efc_log_err(efc, "els io alloc disabled\n");
-+		spin_unlock_irqrestore(&node->els_ios_lock, flags);
-+		return NULL;
-+	}
-+
-+	els = mempool_alloc(efc->els_io_pool, GFP_ATOMIC);
-+	if (!els) {
-+		atomic_add_return(1, &efc->els_io_alloc_failed_count);
-+		spin_unlock_irqrestore(&node->els_ios_lock, flags);
-+		return NULL;
-+	}
-+
-+	/* initialize refcount */
-+	kref_init(&els->ref);
-+	els->release = _efc_els_io_free;
-+
-+	/* populate generic io fields */
-+	els->node = node;
-+
-+	/* now allocate DMA for request and response */
-+	els->io.req.size = reqlen;
-+	els->io.req.virt = dma_alloc_coherent(&efc->pci->dev, els->io.req.size,
-+					       &els->io.req.phys, GFP_DMA);
-+	if (!els->io.req.virt) {
-+		mempool_free(els, efc->els_io_pool);
-+		spin_unlock_irqrestore(&node->els_ios_lock, flags);
-+		return NULL;
-+	}
-+
-+	els->io.rsp.size = rsplen;
-+	els->io.rsp.virt = dma_alloc_coherent(&efc->pci->dev, els->io.rsp.size,
-+						&els->io.rsp.phys, GFP_DMA);
-+	if (!els->io.rsp.virt) {
-+		dma_free_coherent(&efc->pci->dev, els->io.req.size,
-+					els->io.req.virt, els->io.req.phys);
-+		mempool_free(els, efc->els_io_pool);
-+		els = NULL;
-+	}
-+
-+	if (els) {
-+		/* initialize fields */
-+		els->els_retries_remaining = EFC_FC_ELS_DEFAULT_RETRIES;
-+
-+		/* add els structure to ELS IO list */
-+		INIT_LIST_HEAD(&els->list_entry);
-+		list_add_tail(&els->list_entry, &node->els_ios_list);
-+	}
-+
-+	spin_unlock_irqrestore(&node->els_ios_lock, flags);
-+	return els;
-+}
-+
-+void
-+efc_els_io_free(struct efc_els_io_req *els)
-+{
-+	kref_put(&els->ref, els->release);
-+}
-+
-+void
-+_efc_els_io_free(struct kref *arg)
-+{
-+	struct efc_els_io_req *els =
-+				container_of(arg, struct efc_els_io_req, ref);
-+	struct efc *efc;
-+	struct efc_node *node;
-+	int send_empty_event = false;
-+	unsigned long flags = 0;
-+
-+	node = els->node;
-+	efc = node->efc;
-+
-+	spin_lock_irqsave(&node->els_ios_lock, flags);
-+
-+	list_del(&els->list_entry);
-+	/* Send list empty event if the IO allocator
-+	 * is disabled, and the list is empty
-+	 * If node->els_io_enabled was not checked,
-+	 * the event would be posted continually
-+	 */
-+	send_empty_event = (!READ_ONCE(node->els_io_enabled)) &&
-+			   list_empty(&node->els_ios_list);
-+
-+	spin_unlock_irqrestore(&node->els_ios_lock, flags);
-+
-+	/* free ELS request and response buffers */
-+	dma_free_coherent(&efc->pci->dev, els->io.rsp.size,
-+			  els->io.rsp.virt, els->io.rsp.phys);
-+	dma_free_coherent(&efc->pci->dev, els->io.req.size,
-+			  els->io.req.virt, els->io.req.phys);
-+
-+	mempool_free(els, efc->els_io_pool);
-+
-+	if (send_empty_event)
-+		efc_scsi_io_list_empty(node->efc, node);
-+}
++#include "efc_cmds.h"
++#include "efc_sm.h"
 +
 +static void
-+efc_els_retry(struct efc_els_io_req *els);
-+
-+static void
-+efc_els_delay_timer_cb(struct timer_list *t)
++efc_nport_free_resources(struct efc_nport *nport, int evt, void *data)
 +{
-+	struct efc_els_io_req *els = from_timer(els, t, delay_timer);
++	struct efc *efc = nport->efc;
 +
-+	/* Retry delay timer expired, retry the ELS request */
-+	efc_els_retry(els);
++	/* Clear the nport attached flag */
++	nport->attached = false;
++
++	/* Free the service parameters buffer */
++	if (nport->dma.virt) {
++		dma_free_coherent(&efc->pci->dev, nport->dma.size,
++				  nport->dma.virt, nport->dma.phys);
++		memset(&nport->dma, 0, sizeof(struct efc_dma));
++	}
++
++	/* Free the SLI resources */
++	sli_resource_free(efc->sli, SLI4_RSRC_VPI, nport->indicator);
++
++	efc_nport_cb(efc, evt, nport);
 +}
 +
 +static int
-+efc_els_req_cb(void *arg, u32 length, int status, u32 ext_status)
++efc_nport_get_mbox_status(struct efc_nport *nport, u8 *mqe, int status)
 +{
-+	struct efc_els_io_req *els;
-+	struct efc_node *node;
-+	struct efc *efc;
-+	struct efc_node_cb cbdata;
-+	u32 reason_code;
++	struct efc *efc = nport->efc;
++	struct sli4_mbox_command_header *hdr =
++			(struct sli4_mbox_command_header *)mqe;
 +
-+	els = arg;
-+	node = els->node;
-+	efc = node->efc;
-+
-+	if (status)
-+		els_io_printf(els, "status x%x ext x%x\n", status, ext_status);
-+
-+	/* set the response len element of els->rsp */
-+	els->io.rsp.len = length;
-+
-+	cbdata.status = status;
-+	cbdata.ext_status = ext_status;
-+	cbdata.header = NULL;
-+	cbdata.els_rsp = els->io.rsp;
-+
-+	/* set the response len element of els->rsp */
-+	cbdata.rsp_len = length;
-+
-+	/* FW returns the number of bytes received on the link in
-+	 * the WCQE, not the amount placed in the buffer; use this info to
-+	 * check if there was an overrun.
-+	 */
-+	if (length > els->io.rsp.size) {
-+		efc_log_warn(efc,
-+			      "ELS response returned len=%d > buflen=%zu\n",
-+			     length, els->io.rsp.size);
-+		efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_REQ_FAIL, &cbdata);
-+		return EFC_SUCCESS;
-+	}
-+
-+	/* Post event to ELS IO object */
-+	switch (status) {
-+	case SLI4_FC_WCQE_STATUS_SUCCESS:
-+		efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_REQ_OK, &cbdata);
-+		break;
-+
-+	case SLI4_FC_WCQE_STATUS_LS_RJT:
-+		reason_code = (ext_status >> 16) & 0xff;
-+
-+		/* delay and retry if reason code is Logical Busy */
-+		switch (reason_code) {
-+		case ELS_RJT_BUSY:
-+			els->node->els_req_cnt--;
-+			els_io_printf(els,
-+				"LS_RJT Logical Busy, delay and retry\n");
-+			timer_setup(&els->delay_timer,
-+				    efc_els_delay_timer_cb, 0);
-+			mod_timer(&els->delay_timer,
-+				  jiffies + msecs_to_jiffies(5000));
-+			break;
-+		default:
-+			efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_REQ_RJT,
-+					    &cbdata);
-+			break;
-+		}
-+		break;
-+
-+	case SLI4_FC_WCQE_STATUS_LOCAL_REJECT:
-+		switch (ext_status) {
-+		case SLI4_FC_LOCAL_REJECT_SEQUENCE_TIMEOUT:
-+			efc_els_retry(els);
-+			break;
-+		default:
-+			efc_log_err(efc, "LOCAL_REJECT with ext status:%x\n",
-+				    ext_status);
-+			efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_REQ_FAIL,
-+					    &cbdata);
-+			break;
-+		}
-+		break;
-+	default:	/* Other error */
-+		efc_log_warn(efc, "els req failed status x%x, ext_status x%x\n",
-+			     status, ext_status);
-+		efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_REQ_FAIL, &cbdata);
-+		break;
++	if (status || le16_to_cpu(hdr->status)) {
++		efc_log_debug(efc, "bad status vpi=%#x st=%x hdr=%x\n",
++			nport->indicator, status, le16_to_cpu(hdr->status));
++		return EFC_FAIL;
 +	}
 +
 +	return EFC_SUCCESS;
 +}
 +
-+void efc_disc_io_complete(struct efc_disc_io *io, u32 len, u32 status,
-+			  u32 ext_status)
++static int
++efc_nport_free_unreg_vpi_cb(struct efc *efc, int status, u8 *mqe, void *arg)
 +{
-+	struct efc_els_io_req *els =
-+				container_of(io, struct efc_els_io_req, io);
++	struct efc_nport *nport = arg;
++	int evt = EFC_EVT_NPORT_FREE_OK;
++	int rc;
 +
-+	WARN_ON_ONCE(!els->cb);
++	rc = efc_nport_get_mbox_status(nport, mqe, status);
++	if (rc)
++		evt = EFC_EVT_NPORT_FREE_FAIL;
 +
-+	((efc_hw_srrs_cb_t) els->cb) (els, len, status, ext_status);
-+}
-+
-+static int efc_els_send_req(struct efc_node *node, struct efc_els_io_req *els,
-+			     enum efc_disc_io_type io_type)
-+{
-+	int rc = EFC_SUCCESS;
-+	struct efc *efc = node->efc;
-+	struct efc_node_cb cbdata;
-+
-+	/* update ELS request counter */
-+	els->node->els_req_cnt++;
-+
-+	/* Prepare the IO request details */
-+	els->io.io_type = io_type;
-+	els->io.xmit_len = els->io.req.size;
-+	els->io.rsp_len = els->io.rsp.size;
-+	els->io.rpi = node->rnode.indicator;
-+	els->io.vpi = node->nport->indicator;
-+	els->io.s_id = node->nport->fc_id;
-+	els->io.d_id = node->rnode.fc_id;
-+
-+	if (node->rnode.attached)
-+		els->io.rpi_registered = true;
-+
-+	els->cb = efc_els_req_cb;
-+
-+	rc = efc->tt.send_els(efc, &els->io);
-+	if (!rc)
-+		return rc;
-+
-+	cbdata.status = EFC_STATUS_INVALID;
-+	cbdata.ext_status = EFC_STATUS_INVALID;
-+	cbdata.els_rsp = els->io.rsp;
-+	efc_log_err(efc, "efc_els_send failed: %d\n", rc);
-+	efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_REQ_FAIL, &cbdata);
-+
++	efc_nport_free_resources(nport, evt, mqe);
 +	return rc;
 +}
 +
 +static void
-+efc_els_retry(struct efc_els_io_req *els)
++efc_nport_free_unreg_vpi(struct efc_nport *nport)
 +{
-+	struct efc *efc;
-+	struct efc_node_cb cbdata;
-+	u32 rc;
++	struct efc *efc = nport->efc;
++	int rc;
++	u8 data[SLI4_BMBX_SIZE];
 +
-+	efc = els->node->efc;
-+	cbdata.status = EFC_STATUS_INVALID;
-+	cbdata.ext_status = EFC_STATUS_INVALID;
-+	cbdata.els_rsp = els->io.rsp;
-+
-+
-+	if (els->els_retries_remaining) {
-+		els->els_retries_remaining--;
-+		rc = efc->tt.send_els(efc, &els->io);
-+	} else {
-+		rc = EFC_FAIL;
++	rc = sli_cmd_unreg_vpi(efc->sli, data, nport->indicator,
++			       SLI4_UNREG_TYPE_PORT);
++	if (rc) {
++		efc_log_err(efc, "UNREG_VPI format failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_FREE_FAIL, data);
++		return;
 +	}
 +
++	rc = efc->tt.issue_mbox_rqst(efc->base, data,
++				     efc_nport_free_unreg_vpi_cb, nport);
 +	if (rc) {
-+		efc_log_err(efc, "ELS retries exhausted\n");
-+		efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_REQ_FAIL, &cbdata);
++		efc_log_err(efc, "UNREG_VPI command failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_FREE_FAIL, data);
++	}
++}
++
++static void
++efc_nport_send_evt(struct efc_nport *nport, int evt, void *data)
++{
++	struct efc *efc = nport->efc;
++
++	/* Now inform the registered callbacks */
++	efc_nport_cb(efc, evt, nport);
++
++	/* Set the nport attached flag */
++	if (evt == EFC_EVT_NPORT_ATTACH_OK)
++		nport->attached = true;
++
++	/* If there is a pending free request, then handle it now */
++	if (nport->free_req_pending)
++		efc_nport_free_unreg_vpi(nport);
++}
++
++static int
++efc_nport_alloc_init_vpi_cb(struct efc *efc, int status, u8 *mqe, void *arg)
++{
++	struct efc_nport *nport = arg;
++
++	if (efc_nport_get_mbox_status(nport, mqe, status)) {
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ALLOC_FAIL, mqe);
++		return EFC_FAIL;
++	}
++
++	efc_nport_send_evt(nport, EFC_EVT_NPORT_ALLOC_OK, mqe);
++	return EFC_SUCCESS;
++}
++
++static void
++efc_nport_alloc_init_vpi(struct efc_nport *nport)
++{
++	struct efc *efc = nport->efc;
++	u8 data[SLI4_BMBX_SIZE];
++	int rc;
++
++	/* If there is a pending free request, then handle it now */
++	if (nport->free_req_pending) {
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_FREE_OK, data);
++		return;
++	}
++
++	rc = sli_cmd_init_vpi(efc->sli, data,
++			      nport->indicator, nport->domain->indicator);
++	if (rc) {
++		efc_log_err(efc, "INIT_VPI format failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ALLOC_FAIL, data);
++		return;
++	}
++
++	rc = efc->tt.issue_mbox_rqst(efc->base, data,
++			efc_nport_alloc_init_vpi_cb, nport);
++	if (rc) {
++		efc_log_err(efc, "INIT_VPI command failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ALLOC_FAIL, data);
 +	}
 +}
 +
 +static int
-+efc_els_acc_cb(void *arg, u32 length, int status, u32 ext_status)
++efc_nport_alloc_read_sparm64_cb(struct efc *efc, int status, u8 *mqe, void *arg)
 +{
-+	struct efc_els_io_req *els;
-+	struct efc_node *node;
-+	struct efc *efc;
-+	struct efc_node_cb cbdata;
++	struct efc_nport *nport = arg;
++	u8 *payload = NULL;
 +
-+	els = arg;
-+	node = els->node;
-+	efc = node->efc;
++	if (efc_nport_get_mbox_status(nport, mqe, status)) {
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ALLOC_FAIL, mqe);
++		return EFC_FAIL;
++	}
 +
-+	cbdata.status = status;
-+	cbdata.ext_status = ext_status;
-+	cbdata.header = NULL;
-+	cbdata.els_rsp = els->io.rsp;
++	payload = nport->dma.virt;
 +
-+	/* Post node event */
-+	switch (status) {
-+	case SLI4_FC_WCQE_STATUS_SUCCESS:
-+		efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_CMPL_OK, &cbdata);
-+		break;
++	memcpy(&nport->sli_wwpn, payload + SLI4_READ_SPARM64_WWPN_OFFSET,
++		sizeof(nport->sli_wwpn));
++	memcpy(&nport->sli_wwnn, payload + SLI4_READ_SPARM64_WWNN_OFFSET,
++		sizeof(nport->sli_wwnn));
 +
-+	default:	/* Other error */
-+		efc_log_warn(efc, "[%s] %-8s failed status x%x, ext x%x\n",
-+			     node->display_name, els->display_name,
-+			     status, ext_status);
-+		efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_CMPL_FAIL, &cbdata);
-+		break;
++	dma_free_coherent(&efc->pci->dev, nport->dma.size, nport->dma.virt,
++			  nport->dma.phys);
++	memset(&nport->dma, 0, sizeof(struct efc_dma));
++	efc_nport_alloc_init_vpi(nport);
++	return EFC_SUCCESS;
++}
++
++static void
++efc_nport_alloc_read_sparm64(struct efc *efc, struct efc_nport *nport)
++{
++	u8 data[SLI4_BMBX_SIZE];
++	int rc;
++
++	/* Allocate memory for the service parameters */
++	nport->dma.size = EFC_SPARAM_DMA_SZ;
++	nport->dma.virt = dma_alloc_coherent(&efc->pci->dev,
++					     nport->dma.size, &nport->dma.phys,
++					     GFP_DMA);
++	if (!nport->dma.virt) {
++		efc_log_err(efc, "Failed to allocate DMA memory\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ALLOC_FAIL, data);
++		return;
++	}
++
++	rc = sli_cmd_read_sparm64(efc->sli, data,
++				  &nport->dma, nport->indicator);
++	if (rc) {
++		efc_log_err(efc, "READ_SPARM64 format failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ALLOC_FAIL, data);
++		return;
++	}
++
++	rc = efc->tt.issue_mbox_rqst(efc->base, data,
++				     efc_nport_alloc_read_sparm64_cb, nport);
++	if (rc) {
++		efc_log_err(efc, "READ_SPARM64 command failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ALLOC_FAIL, data);
++	}
++}
++
++int
++efc_cmd_nport_alloc(struct efc *efc, struct efc_nport *nport,
++		    struct efc_domain *domain, u8 *wwpn)
++{
++	u32 index;
++
++	nport->indicator = U32_MAX;
++	nport->free_req_pending = false;
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc, "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	if (wwpn)
++		memcpy(&nport->sli_wwpn, wwpn, sizeof(nport->sli_wwpn));
++
++	/*
++	 * allocate a VPI object for the port and stores it in the
++	 * indicator field of the port object.
++	 */
++	if (sli_resource_alloc(efc->sli, SLI4_RSRC_VPI,
++			       &nport->indicator, &index)) {
++		efc_log_err(efc, "VPI allocation failure\n");
++		return EFC_FAIL;
++	}
++
++	if (domain) {
++		/*
++		 * If the WWPN is NULL, fetch the default
++		 * WWPN and WWNN before initializing the VPI
++		 */
++		if (!wwpn)
++			efc_nport_alloc_read_sparm64(efc, nport);
++		else
++			efc_nport_alloc_init_vpi(nport);
++	} else if (!wwpn) {
++		/* domain NULL and wwpn non-NULL */
++		efc_log_err(efc, "need WWN for physical port\n");
++		sli_resource_free(efc->sli, SLI4_RSRC_VPI, nport->indicator);
++		return EFC_FAIL;
++	}
++
++	return EFC_SUCCESS;
++}
++
++static int
++efc_nport_attach_reg_vpi_cb(struct efc *efc, int status, u8 *mqe,
++			       void *arg)
++{
++	struct efc_nport *nport = arg;
++
++	if (efc_nport_get_mbox_status(nport, mqe, status)) {
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ATTACH_FAIL, mqe);
++		return EFC_FAIL;
++	}
++
++	efc_nport_send_evt(nport, EFC_EVT_NPORT_ATTACH_OK, mqe);
++	return EFC_SUCCESS;
++}
++
++int
++efc_cmd_nport_attach(struct efc *efc, struct efc_nport *nport, u32 fc_id)
++{
++	u8 buf[SLI4_BMBX_SIZE];
++	int rc = EFC_SUCCESS;
++
++	if (!nport) {
++		efc_log_err(efc, "bad param(s) nport=%p\n", nport);
++		return EFC_FAIL;
++	}
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc,
++			      "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	nport->fc_id = fc_id;
++
++	/* register previously-allocated VPI with the device */
++	rc = sli_cmd_reg_vpi(efc->sli, buf, nport->fc_id,
++			    nport->sli_wwpn, nport->indicator,
++			    nport->domain->indicator, false);
++	if (rc) {
++		efc_log_err(efc, "REG_VPI format failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ATTACH_FAIL, buf);
++		return rc;
++	}
++
++	rc = efc->tt.issue_mbox_rqst(efc->base, buf,
++				     efc_nport_attach_reg_vpi_cb, nport);
++	if (rc) {
++		efc_log_err(efc, "REG_VPI command failure\n");
++		efc_nport_free_resources(nport, EFC_EVT_NPORT_ATTACH_FAIL, buf);
++	}
++
++	return rc;
++}
++
++int
++efc_cmd_nport_free(struct efc *efc, struct efc_nport *nport)
++{
++	if (!nport) {
++		efc_log_err(efc, "bad parameter(s) nport=%p\n",	nport);
++		return EFC_FAIL;
++	}
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc,
++			      "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	/* Issue the UNREG_VPI command to free the assigned VPI context */
++	if (nport->attached)
++		efc_nport_free_unreg_vpi(nport);
++	else
++		nport->free_req_pending = true;
++
++	return EFC_SUCCESS;
++}
++
++static int
++efc_domain_get_mbox_status(struct efc_domain *domain, u8 *mqe, int status)
++{
++	struct efc *efc = domain->efc;
++	struct sli4_mbox_command_header *hdr =
++			(struct sli4_mbox_command_header *)mqe;
++
++	if (status || le16_to_cpu(hdr->status)) {
++		efc_log_debug(efc, "bad status vfi=%#x st=%x hdr=%x\n",
++			       domain->indicator, status,
++			       le16_to_cpu(hdr->status));
++		return EFC_FAIL;
 +	}
 +
 +	return EFC_SUCCESS;
 +}
 +
 +static void
-+efc_els_send_rsp(struct efc_els_io_req *els, u32 rsplen)
++efc_domain_free_resources(struct efc_domain *domain, int evt, void *data)
 +{
-+	int rc;
-+	struct efc_node_cb cbdata;
-+	struct efc_node *node = els->node;
-+	struct efc *efc = node->efc;
++	struct efc *efc = domain->efc;
 +
-+	/* increment ELS completion counter */
-+	node->els_cmpl_cnt++;
-+
-+	els->io.io_type = EFC_DISC_IO_ELS_RESP;
-+	els->cb = efc_els_acc_cb;
-+
-+	/* Prepare the IO request details */
-+	els->io.xmit_len = rsplen;
-+	els->io.rsp_len = els->io.rsp.size;
-+	els->io.rpi = node->rnode.indicator;
-+	els->io.vpi = node->nport->indicator;
-+	if (node->nport->fc_id != U32_MAX)
-+		els->io.s_id = node->nport->fc_id;
-+	else
-+		els->io.s_id = els->io.iparam.els.s_id;
-+	els->io.d_id = node->rnode.fc_id;
-+
-+	if (node->attached)
-+		els->io.rpi_registered = true;
-+
-+	rc = efc->tt.send_els(efc, &els->io);
-+	if (!rc)
-+		return;
-+
-+	cbdata.status = EFC_STATUS_INVALID;
-+	cbdata.ext_status = EFC_STATUS_INVALID;
-+	cbdata.els_rsp = els->io.rsp;
-+	efc_els_io_cleanup(els, EFC_EVT_SRRS_ELS_CMPL_FAIL, &cbdata);
-+}
-+
-+int
-+efc_send_plogi(struct efc_node *node)
-+{
-+	struct efc_els_io_req *els;
-+	struct efc *efc = node->efc;
-+	struct fc_els_flogi  *plogi;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*plogi));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+	els->display_name = "plogi";
-+
-+	/* Build PLOGI request */
-+	plogi = els->io.req.virt;
-+
-+	memcpy(plogi, node->nport->service_params, sizeof(*plogi));
-+
-+	plogi->fl_cmd = ELS_PLOGI;
-+	memset(plogi->_fl_resvd, 0, sizeof(plogi->_fl_resvd));
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_ELS_REQ);
-+}
-+
-+int
-+efc_send_flogi(struct efc_node *node)
-+{
-+	struct efc_els_io_req *els;
-+	struct efc *efc;
-+	struct fc_els_flogi  *flogi;
-+
-+	efc = node->efc;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*flogi));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
++	/* Free the service parameters buffer */
++	if (domain->dma.virt) {
++		dma_free_coherent(&efc->pci->dev,
++				  domain->dma.size, domain->dma.virt,
++				  domain->dma.phys);
++		memset(&domain->dma, 0, sizeof(struct efc_dma));
 +	}
 +
-+	els->display_name = "flogi";
++	/* Free the SLI resources */
++	sli_resource_free(efc->sli, SLI4_RSRC_VFI, domain->indicator);
 +
-+	/* Build FLOGI request */
-+	flogi = els->io.req.virt;
-+
-+	memcpy(flogi, node->nport->service_params, sizeof(*flogi));
-+	flogi->fl_cmd = ELS_FLOGI;
-+	memset(flogi->_fl_resvd, 0, sizeof(flogi->_fl_resvd));
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_ELS_REQ);
++	efc_domain_cb(efc, evt, domain);
 +}
 +
-+int
-+efc_send_fdisc(struct efc_node *node)
++static void
++efc_domain_send_nport_evt(struct efc_domain *domain,
++			      int port_evt, int domain_evt, void *data)
 +{
-+	struct efc_els_io_req *els;
-+	struct efc *efc;
-+	struct fc_els_flogi *fdisc;
++	struct efc *efc = domain->efc;
 +
-+	efc = node->efc;
++	/* Send alloc/attach ok to the physical nport */
++	efc_nport_send_evt(domain->nport, port_evt, NULL);
 +
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*fdisc));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "fdisc";
-+
-+	/* Build FDISC request */
-+	fdisc = els->io.req.virt;
-+
-+	memcpy(fdisc, node->nport->service_params, sizeof(*fdisc));
-+	fdisc->fl_cmd = ELS_FDISC;
-+	memset(fdisc->_fl_resvd, 0, sizeof(fdisc->_fl_resvd));
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_ELS_REQ);
-+}
-+
-+int
-+efc_send_prli(struct efc_node *node)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els;
-+	struct {
-+		struct fc_els_prli prli;
-+		struct fc_els_spp spp;
-+	} *pp;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*pp));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "prli";
-+
-+	/* Build PRLI request */
-+	pp = els->io.req.virt;
-+
-+	memset(pp, 0, sizeof(*pp));
-+
-+	pp->prli.prli_cmd = ELS_PRLI;
-+	pp->prli.prli_spp_len = 16;
-+	pp->prli.prli_len = cpu_to_be16(sizeof(*pp));
-+	pp->spp.spp_type = FC_TYPE_FCP;
-+	pp->spp.spp_type_ext = 0;
-+	pp->spp.spp_flags = FC_SPP_EST_IMG_PAIR;
-+	pp->spp.spp_params = cpu_to_be32(FCP_SPPF_RD_XRDY_DIS |
-+			       (node->nport->enable_ini ?
-+			       FCP_SPPF_INIT_FCN : 0) |
-+			       (node->nport->enable_tgt ?
-+			       FCP_SPPF_TARG_FCN : 0));
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_ELS_REQ);
-+}
-+
-+int
-+efc_send_logo(struct efc_node *node)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els;
-+	struct fc_els_logo *logo;
-+	struct fc_els_flogi  *sparams;
-+
-+	node_els_trace();
-+
-+	sparams = (struct fc_els_flogi *)node->nport->service_params;
-+
-+	els = efc_els_io_alloc(node, sizeof(*logo));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "logo";
-+
-+	/* Build LOGO request */
-+
-+	logo = els->io.req.virt;
-+
-+	memset(logo, 0, sizeof(*logo));
-+	logo->fl_cmd = ELS_LOGO;
-+	hton24(logo->fl_n_port_id, node->rnode.nport->fc_id);
-+	logo->fl_n_port_wwn = sparams->fl_wwpn;
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_ELS_REQ);
-+}
-+
-+int
-+efc_send_adisc(struct efc_node *node)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els;
-+	struct fc_els_adisc *adisc;
-+	struct fc_els_flogi  *sparams;
-+	struct efc_nport *nport = node->nport;
-+
-+	node_els_trace();
-+
-+	sparams = (struct fc_els_flogi *)node->nport->service_params;
-+
-+	els = efc_els_io_alloc(node, sizeof(*adisc));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "adisc";
-+
-+	/* Build ADISC request */
-+
-+	adisc = els->io.req.virt;
-+
-+	memset(adisc, 0, sizeof(*adisc));
-+	adisc->adisc_cmd = ELS_ADISC;
-+	hton24(adisc->adisc_hard_addr, nport->fc_id);
-+	adisc->adisc_wwpn = sparams->fl_wwpn;
-+	adisc->adisc_wwnn = sparams->fl_wwnn;
-+	hton24(adisc->adisc_port_id, node->rnode.nport->fc_id);
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_ELS_REQ);
-+}
-+
-+int
-+efc_send_scr(struct efc_node *node)
-+{
-+	struct efc_els_io_req *els;
-+	struct efc *efc = node->efc;
-+	struct fc_els_scr *req;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*req));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "scr";
-+
-+	req = els->io.req.virt;
-+
-+	memset(req, 0, sizeof(*req));
-+	req->scr_cmd = ELS_SCR;
-+	req->scr_reg_func = ELS_SCRF_FULL;
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_ELS_REQ);
-+}
-+
-+int
-+efc_send_ls_rjt(struct efc_node *node, u32 ox_id, u32 reason_code,
-+		u32 reason_code_expl, u32 vendor_unique)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els = NULL;
-+	struct fc_els_ls_rjt *rjt;
-+
-+	els = efc_els_io_alloc(node, sizeof(*rjt));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	node_els_trace();
-+
-+	els->display_name = "ls_rjt";
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+
-+	rjt = els->io.req.virt;
-+	memset(rjt, 0, sizeof(*rjt));
-+
-+	rjt->er_cmd = ELS_LS_RJT;
-+	rjt->er_reason = reason_code;
-+	rjt->er_explan = reason_code_expl;
-+
-+	efc_els_send_rsp(els, sizeof(*rjt));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efc_send_plogi_acc(struct efc_node *node, u32 ox_id)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els = NULL;
-+	struct fc_els_flogi  *plogi;
-+	struct fc_els_flogi  *req = (struct fc_els_flogi *)node->service_params;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*plogi));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "plogi_acc";
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+
-+	plogi = els->io.req.virt;
-+
-+	/* copy our port's service parameters to payload */
-+	memcpy(plogi, node->nport->service_params, sizeof(*plogi));
-+	plogi->fl_cmd = ELS_LS_ACC;
-+	memset(plogi->_fl_resvd, 0, sizeof(plogi->_fl_resvd));
-+
-+	/* Set Application header support bit if requested */
-+	if (req->fl_csp.sp_features & cpu_to_be16(FC_SP_FT_BCAST))
-+		plogi->fl_csp.sp_features |= cpu_to_be16(FC_SP_FT_BCAST);
-+
-+	efc_els_send_rsp(els, sizeof(*plogi));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efc_send_flogi_p2p_acc(struct efc_node *node, u32 ox_id, u32 s_id)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els = NULL;
-+	struct fc_els_flogi  *flogi;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*flogi));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "flogi_p2p_acc";
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+	els->io.iparam.els.s_id = s_id;
-+
-+	flogi = els->io.req.virt;
-+
-+	/* copy our port's service parameters to payload */
-+	memcpy(flogi, node->nport->service_params, sizeof(*flogi));
-+	flogi->fl_cmd = ELS_LS_ACC;
-+	memset(flogi->_fl_resvd, 0, sizeof(flogi->_fl_resvd));
-+
-+	memset(flogi->fl_cssp, 0, sizeof(flogi->fl_cssp));
-+
-+	efc_els_send_rsp(els, sizeof(*flogi));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efc_send_prli_acc(struct efc_node *node, u32 ox_id)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els = NULL;
-+	struct {
-+		struct fc_els_prli prli;
-+		struct fc_els_spp spp;
-+	} *pp;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*pp));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "prli_acc";
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+
-+	pp = els->io.req.virt;
-+	memset(pp, 0, sizeof(*pp));
-+
-+	pp->prli.prli_cmd = ELS_LS_ACC;
-+	pp->prli.prli_spp_len = 0x10;
-+	pp->prli.prli_len = cpu_to_be16(sizeof(*pp));
-+	pp->spp.spp_type = FC_TYPE_FCP;
-+	pp->spp.spp_type_ext = 0;
-+	pp->spp.spp_flags = FC_SPP_EST_IMG_PAIR | FC_SPP_RESP_ACK;
-+
-+	pp->spp.spp_params = cpu_to_be32(FCP_SPPF_RD_XRDY_DIS |
-+					(node->nport->enable_ini ?
-+					 FCP_SPPF_INIT_FCN : 0) |
-+					(node->nport->enable_tgt ?
-+					 FCP_SPPF_TARG_FCN : 0));
-+
-+	efc_els_send_rsp(els, sizeof(*pp));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efc_send_prlo_acc(struct efc_node *node, u32 ox_id)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els = NULL;
-+	struct {
-+		struct fc_els_prlo prlo;
-+		struct fc_els_spp spp;
-+	} *pp;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*pp));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "prlo_acc";
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+
-+	pp = els->io.req.virt;
-+	memset(pp, 0, sizeof(*pp));
-+	pp->prlo.prlo_cmd = ELS_LS_ACC;
-+	pp->prlo.prlo_obs = 0x10;
-+	pp->prlo.prlo_len = cpu_to_be16(sizeof(*pp));
-+
-+	pp->spp.spp_type = FC_TYPE_FCP;
-+	pp->spp.spp_type_ext = 0;
-+	pp->spp.spp_flags = FC_SPP_RESP_ACK;
-+
-+	efc_els_send_rsp(els, sizeof(*pp));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efc_send_ls_acc(struct efc_node *node, u32 ox_id)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els = NULL;
-+	struct fc_els_ls_acc *acc;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*acc));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "ls_acc";
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+
-+	acc = els->io.req.virt;
-+	memset(acc, 0, sizeof(*acc));
-+
-+	acc->la_cmd = ELS_LS_ACC;
-+
-+	efc_els_send_rsp(els, sizeof(*acc));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efc_send_logo_acc(struct efc_node *node, u32 ox_id)
-+{
-+	struct efc_els_io_req *els = NULL;
-+	struct efc *efc = node->efc;
-+	struct fc_els_ls_acc *logo;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*logo));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "logo_acc";
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+
-+	logo = els->io.req.virt;
-+	memset(logo, 0, sizeof(*logo));
-+
-+	logo->la_cmd = ELS_LS_ACC;
-+
-+	efc_els_send_rsp(els, sizeof(*logo));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efc_send_adisc_acc(struct efc_node *node, u32 ox_id)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els = NULL;
-+	struct fc_els_adisc *adisc;
-+	struct fc_els_flogi  *sparams;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*adisc));
-+	if (!els) {
-+		efc_log_err(efc, "els IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->display_name = "adisc_acc";
-+
-+	/* Go ahead and send the ELS_ACC */
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+	els->io.iparam.els.ox_id = ox_id;
-+
-+	sparams = (struct fc_els_flogi  *)node->nport->service_params;
-+	adisc = els->io.req.virt;
-+	memset(adisc, 0, sizeof(*adisc));
-+	adisc->adisc_cmd = ELS_LS_ACC;
-+	adisc->adisc_wwpn = sparams->fl_wwpn;
-+	adisc->adisc_wwnn = sparams->fl_wwnn;
-+	hton24(adisc->adisc_port_id, node->rnode.nport->fc_id);
-+
-+	efc_els_send_rsp(els, sizeof(*adisc));
-+
-+	return EFC_SUCCESS;
-+}
-+
-+static inline void
-+fcct_build_req_header(struct fc_ct_hdr  *hdr, u16 cmd, u16 max_size)
-+{
-+	hdr->ct_rev = FC_CT_REV;
-+	hdr->ct_fs_type = FC_FST_DIR;
-+	hdr->ct_fs_subtype = FC_NS_SUBTYPE;
-+	hdr->ct_options = 0;
-+	hdr->ct_cmd = cpu_to_be16(cmd);
-+	/* words */
-+	hdr->ct_mr_size = cpu_to_be16(max_size / (sizeof(u32)));
-+	hdr->ct_reason = 0;
-+	hdr->ct_explan = 0;
-+	hdr->ct_vendor = 0;
-+}
-+
-+int
-+efc_ns_send_rftid(struct efc_node *node)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els;
-+	struct {
-+		struct fc_ct_hdr hdr;
-+		struct fc_ns_rft_id rftid;
-+	} *ct;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*ct));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->io.iparam.ct.r_ctl = FC_RCTL_ELS_REQ;
-+	els->io.iparam.ct.type = FC_TYPE_CT;
-+	els->io.iparam.ct.df_ctl = 0;
-+	els->io.iparam.ct.timeout = EFC_FC_ELS_SEND_DEFAULT_TIMEOUT;
-+
-+	els->display_name = "rftid";
-+
-+	ct = els->io.req.virt;
-+	memset(ct, 0, sizeof(*ct));
-+	fcct_build_req_header(&ct->hdr, FC_NS_RFT_ID,
-+				sizeof(struct fc_ns_rft_id));
-+
-+	hton24(ct->rftid.fr_fid.fp_fid, node->rnode.nport->fc_id);
-+	ct->rftid.fr_fts.ff_type_map[FC_TYPE_FCP / FC_NS_BPW] =
-+		cpu_to_be32(1 << (FC_TYPE_FCP % FC_NS_BPW));
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_CT_REQ);
-+}
-+
-+int
-+efc_ns_send_rffid(struct efc_node *node)
-+{
-+	struct efc *efc = node->efc;
-+	struct efc_els_io_req *els;
-+	struct {
-+		struct fc_ct_hdr hdr;
-+		struct fc_ns_rff_id rffid;
-+	} *ct;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc(node, sizeof(*ct));
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->io.iparam.ct.r_ctl = FC_RCTL_ELS_REQ;
-+	els->io.iparam.ct.type = FC_TYPE_CT;
-+	els->io.iparam.ct.df_ctl = 0;
-+	els->io.iparam.ct.timeout = EFC_FC_ELS_SEND_DEFAULT_TIMEOUT;
-+
-+	els->display_name = "rffid";
-+	ct = els->io.req.virt;
-+
-+	memset(ct, 0, sizeof(*ct));
-+	fcct_build_req_header(&ct->hdr, FC_NS_RFF_ID,
-+			      sizeof(struct fc_ns_rff_id));
-+
-+	hton24(ct->rffid.fr_fid.fp_fid, node->rnode.nport->fc_id);
-+	if (node->nport->enable_ini)
-+		ct->rffid.fr_feat |= FCP_FEAT_INIT;
-+	if (node->nport->enable_tgt)
-+		ct->rffid.fr_feat |= FCP_FEAT_TARG;
-+	ct->rffid.fr_type = FC_TYPE_FCP;
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_CT_REQ);
-+}
-+
-+int
-+efc_ns_send_gidpt(struct efc_node *node)
-+{
-+	struct efc_els_io_req *els = NULL;
-+	struct efc *efc = node->efc;
-+	struct {
-+		struct fc_ct_hdr hdr;
-+		struct fc_ns_gid_pt gidpt;
-+	} *ct;
-+
-+	node_els_trace();
-+
-+	els = efc_els_io_alloc_size(node, sizeof(*ct), EFC_ELS_GID_PT_RSP_LEN);
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
-+		return EFC_FAIL;
-+	}
-+
-+	els->io.iparam.ct.r_ctl = FC_RCTL_ELS_REQ;
-+	els->io.iparam.ct.type = FC_TYPE_CT;
-+	els->io.iparam.ct.df_ctl = 0;
-+	els->io.iparam.ct.timeout = EFC_FC_ELS_SEND_DEFAULT_TIMEOUT;
-+
-+	els->display_name = "gidpt";
-+
-+	ct = els->io.req.virt;
-+
-+	memset(ct, 0, sizeof(*ct));
-+	fcct_build_req_header(&ct->hdr, FC_NS_GID_PT,
-+			      sizeof(struct fc_ns_gid_pt));
-+
-+	ct->gidpt.fn_pt_type = FC_TYPE_FCP;
-+
-+	return efc_els_send_req(node, els, EFC_DISC_IO_CT_REQ);
-+}
-+
-+void
-+efc_els_io_cleanup(struct efc_els_io_req *els, int evt, void *arg)
-+{
-+	/* don't want further events that could come; e.g. abort requests
-+	 * from the node state machine; thus, disable state machine
-+	 */
-+	els->els_req_free = true;
-+	efc_node_post_els_resp(els->node, evt, arg);
-+
-+	efc_els_io_free(els);
++	/* Now inform the registered callbacks */
++	efc_domain_cb(efc, domain_evt, domain);
 +}
 +
 +static int
-+efc_ct_acc_cb(void *arg, u32 length, int status, u32 ext_status)
++efc_domain_alloc_read_sparm64_cb(struct efc *efc, int status, u8 *mqe,
++				 void *arg)
 +{
-+	struct efc_els_io_req *els = arg;
++	struct efc_domain *domain = arg;
 +
-+	efc_els_io_free(els);
++	if (efc_domain_get_mbox_status(domain, mqe, status)) {
++		efc_domain_free_resources(domain,
++					      EFC_HW_DOMAIN_ALLOC_FAIL, mqe);
++		return EFC_FAIL;
++	}
++
++	efc_domain_send_nport_evt(domain, EFC_EVT_NPORT_ALLOC_OK,
++				      EFC_HW_DOMAIN_ALLOC_OK, mqe);
++	return EFC_SUCCESS;
++}
++
++static void
++efc_domain_alloc_read_sparm64(struct efc_domain *domain)
++{
++	struct efc *efc = domain->efc;
++	u8 data[SLI4_BMBX_SIZE];
++	int rc;
++
++	rc = sli_cmd_read_sparm64(efc->sli, data, &domain->dma, 0);
++	if (rc) {
++		efc_log_err(efc, "READ_SPARM64 format failure\n");
++		efc_domain_free_resources(domain,
++					      EFC_HW_DOMAIN_ALLOC_FAIL, data);
++		return;
++	}
++
++	rc = efc->tt.issue_mbox_rqst(efc->base, data,
++				     efc_domain_alloc_read_sparm64_cb, domain);
++	if (rc) {
++		efc_log_err(efc, "READ_SPARM64 command failure\n");
++		efc_domain_free_resources(domain,
++					      EFC_HW_DOMAIN_ALLOC_FAIL, data);
++	}
++}
++
++static int
++efc_domain_alloc_init_vfi_cb(struct efc *efc, int status, u8 *mqe,
++				 void *arg)
++{
++	struct efc_domain *domain = arg;
++
++	if (efc_domain_get_mbox_status(domain, mqe, status)) {
++		efc_domain_free_resources(domain,
++					      EFC_HW_DOMAIN_ALLOC_FAIL, mqe);
++		return EFC_FAIL;
++	}
++
++	efc_domain_alloc_read_sparm64(domain);
++	return EFC_SUCCESS;
++}
++
++static void
++efc_domain_alloc_init_vfi(struct efc_domain *domain)
++{
++	struct efc *efc = domain->efc;
++	struct efc_nport *nport = domain->nport;
++	u8 data[SLI4_BMBX_SIZE];
++	int rc;
++
++	/*
++	 * For FC, the HW alread registered an FCFI.
++	 * Copy FCF information into the domain and jump to INIT_VFI.
++	 */
++	domain->fcf_indicator = efc->fcfi;
++	rc = sli_cmd_init_vfi(efc->sli, data, domain->indicator,
++			      domain->fcf_indicator, nport->indicator);
++	if (rc) {
++		efc_log_err(efc, "INIT_VFI format failure\n");
++		efc_domain_free_resources(domain,
++					      EFC_HW_DOMAIN_ALLOC_FAIL, data);
++		return;
++	}
++
++	efc_log_err(efc, "%s issue mbox\n", __func__);
++	rc = efc->tt.issue_mbox_rqst(efc->base, data,
++				     efc_domain_alloc_init_vfi_cb, domain);
++	if (rc) {
++		efc_log_err(efc, "INIT_VFI command failure\n");
++		efc_domain_free_resources(domain,
++					      EFC_HW_DOMAIN_ALLOC_FAIL, data);
++	}
++}
++
++int
++efc_cmd_domain_alloc(struct efc *efc, struct efc_domain *domain, u32 fcf)
++{
++	u32 index;
++
++	if (!domain || !domain->nport) {
++		efc_log_err(efc, "bad parameter(s) domain=%p nport=%p\n",
++			    domain, domain ? domain->nport : NULL);
++		return EFC_FAIL;
++	}
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc,
++			     "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	/* allocate memory for the service parameters */
++	domain->dma.size = EFC_SPARAM_DMA_SZ;
++	domain->dma.virt = dma_alloc_coherent(&efc->pci->dev,
++					      domain->dma.size,
++					      &domain->dma.phys, GFP_DMA);
++	if (!domain->dma.virt) {
++		efc_log_err(efc, "Failed to allocate DMA memory\n");
++		return EFC_FAIL;
++	}
++
++	domain->fcf = fcf;
++	domain->fcf_indicator = U32_MAX;
++	domain->indicator = U32_MAX;
++
++	if (sli_resource_alloc(efc->sli, SLI4_RSRC_VFI, &domain->indicator,
++			       &index)) {
++		efc_log_err(efc, "VFI allocation failure\n");
++
++		dma_free_coherent(&efc->pci->dev,
++				  domain->dma.size, domain->dma.virt,
++				  domain->dma.phys);
++		memset(&domain->dma, 0, sizeof(struct efc_dma));
++
++		return EFC_FAIL;
++	}
++
++	efc_domain_alloc_init_vfi(domain);
++	return EFC_SUCCESS;
++}
++
++static int
++efc_domain_attach_reg_vfi_cb(struct efc *efc, int status, u8 *mqe,
++				 void *arg)
++{
++	struct efc_domain *domain = arg;
++
++	if (efc_domain_get_mbox_status(domain, mqe, status)) {
++		efc_domain_free_resources(domain,
++					      EFC_HW_DOMAIN_ATTACH_FAIL, mqe);
++		return EFC_FAIL;
++	}
++
++	efc_domain_send_nport_evt(domain, EFC_EVT_NPORT_ATTACH_OK,
++				      EFC_HW_DOMAIN_ATTACH_OK, mqe);
++	return EFC_SUCCESS;
++}
++
++int
++efc_cmd_domain_attach(struct efc *efc, struct efc_domain *domain, u32 fc_id)
++{
++	u8 buf[SLI4_BMBX_SIZE];
++	int rc = EFC_SUCCESS;
++
++	if (!domain) {
++		efc_log_err(efc, "bad param(s) domain=%p\n", domain);
++		return EFC_FAIL;
++	}
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc,
++			      "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	domain->nport->fc_id = fc_id;
++
++	rc = sli_cmd_reg_vfi(efc->sli, buf, SLI4_BMBX_SIZE, domain->indicator,
++			     domain->fcf_indicator, domain->dma,
++			     domain->nport->indicator, domain->nport->sli_wwpn,
++			     domain->nport->fc_id);
++	if (rc) {
++		efc_log_err(efc, "REG_VFI format failure\n");
++		goto cleanup;
++	}
++
++	rc = efc->tt.issue_mbox_rqst(efc->base, buf,
++				     efc_domain_attach_reg_vfi_cb, domain);
++	if (rc) {
++		efc_log_err(efc, "REG_VFI command failure\n");
++		goto cleanup;
++	}
++
++	return rc;
++
++cleanup:
++	efc_domain_free_resources(domain, EFC_HW_DOMAIN_ATTACH_FAIL, buf);
++
++	return rc;
++}
++
++static int
++efc_domain_free_unreg_vfi_cb(struct efc *efc, int status, u8 *mqe, void *arg)
++{
++	struct efc_domain *domain = arg;
++	int evt = EFC_HW_DOMAIN_FREE_OK;
++	int rc;
++
++	rc = efc_domain_get_mbox_status(domain, mqe, status);
++	if (rc) {
++		evt = EFC_HW_DOMAIN_FREE_FAIL;
++		rc = EFC_FAIL;
++	}
++
++	efc_domain_free_resources(domain, evt, mqe);
++	return rc;
++}
++
++static void
++efc_domain_free_unreg_vfi(struct efc_domain *domain)
++{
++	struct efc *efc = domain->efc;
++	int rc;
++	u8 data[SLI4_BMBX_SIZE];
++
++	rc = sli_cmd_unreg_vfi(efc->sli, data, domain->indicator,
++			       SLI4_UNREG_TYPE_DOMAIN);
++	if (rc) {
++		efc_log_err(efc, "UNREG_VFI format failure\n");
++		goto cleanup;
++	}
++
++	rc = efc->tt.issue_mbox_rqst(efc->base, data,
++				     efc_domain_free_unreg_vfi_cb, domain);
++	if (rc) {
++		efc_log_err(efc, "UNREG_VFI command failure\n");
++		goto cleanup;
++	}
++
++	return;
++
++cleanup:
++	efc_domain_free_resources(domain, EFC_HW_DOMAIN_FREE_FAIL, data);
++}
++
++int
++efc_cmd_domain_free(struct efc *efc, struct efc_domain *domain)
++{
++	if (!domain) {
++		efc_log_err(efc, "bad parameter(s) domain=%p\n", domain);
++		return EFC_FAIL;
++	}
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc,
++			      "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	efc_domain_free_unreg_vfi(domain);
++	return EFC_SUCCESS;
++}
++
++int
++efc_cmd_node_alloc(struct efc *efc, struct efc_remote_node *rnode, u32 fc_addr,
++		   struct efc_nport *nport)
++{
++	/* Check for invalid indicator */
++	if (rnode->indicator != U32_MAX) {
++		efc_log_err(efc,
++			     "RPI allocation failure addr=%#x rpi=%#x\n",
++			    fc_addr, rnode->indicator);
++		return EFC_FAIL;
++	}
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc,
++			      "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	/* NULL SLI port indicates an unallocated remote node */
++	rnode->nport = NULL;
++
++	if (sli_resource_alloc(efc->sli, SLI4_RSRC_RPI,
++			       &rnode->indicator, &rnode->index)) {
++		efc_log_err(efc, "RPI allocation failure addr=%#x\n",
++			     fc_addr);
++		return EFC_FAIL;
++	}
++
++	rnode->fc_id = fc_addr;
++	rnode->nport = nport;
++
++	return EFC_SUCCESS;
++}
++
++static int
++efc_cmd_node_attach_cb(struct efc *efc, int status, u8 *mqe, void *arg)
++{
++	struct efc_remote_node *rnode = arg;
++	struct sli4_mbox_command_header *hdr =
++				(struct sli4_mbox_command_header *)mqe;
++	int evt = 0;
++
++	if (status || le16_to_cpu(hdr->status)) {
++		efc_log_debug(efc, "bad status cqe=%#x mqe=%#x\n", status,
++			       le16_to_cpu(hdr->status));
++		rnode->attached = false;
++		evt = EFC_EVT_NODE_ATTACH_FAIL;
++	} else {
++		rnode->attached = true;
++		evt = EFC_EVT_NODE_ATTACH_OK;
++	}
++
++	efc_remote_node_cb(efc, evt, rnode);
 +
 +	return EFC_SUCCESS;
 +}
 +
 +int
-+efc_send_ct_rsp(struct efc *efc, struct efc_node *node, u16 ox_id,
-+		 struct fc_ct_hdr *ct_hdr, u32 cmd_rsp_code,
-+		 u32 reason_code, u32 reason_code_explanation)
++efc_cmd_node_attach(struct efc *efc, struct efc_remote_node *rnode,
++		    struct efc_dma *sparms)
 +{
-+	struct efc_els_io_req *els = NULL;
-+	struct fc_ct_hdr  *rsp = NULL;
++	int rc = EFC_FAIL;
++	u8 buf[SLI4_BMBX_SIZE];
 +
-+	els = efc_els_io_alloc(node, 256);
-+	if (!els) {
-+		efc_log_err(efc, "IO alloc failed\n");
++	if (!rnode || !sparms) {
++		efc_log_err(efc, "bad parameter(s) rnode=%p sparms=%p\n",
++			    rnode, sparms);
 +		return EFC_FAIL;
 +	}
 +
-+	rsp = els->io.rsp.virt;
-+
-+	*rsp = *ct_hdr;
-+
-+	fcct_build_req_header(rsp, cmd_rsp_code, 0);
-+	rsp->ct_reason = reason_code;
-+	rsp->ct_explan = reason_code_explanation;
-+
-+	els->display_name = "ct_rsp";
-+	els->cb = efc_ct_acc_cb;
-+
-+	/* Prepare the IO request details */
-+	els->io.io_type = EFC_DISC_IO_CT_RESP;
-+	els->io.xmit_len = sizeof(*rsp);
-+
-+	els->io.rpi = node->rnode.indicator;
-+	els->io.d_id = node->rnode.fc_id;
-+
-+	memset(&els->io.iparam, 0, sizeof(els->io.iparam));
-+
-+	els->io.iparam.ct.ox_id = ox_id;
-+	els->io.iparam.ct.r_ctl = 3;
-+	els->io.iparam.ct.type = FC_TYPE_CT;
-+	els->io.iparam.ct.df_ctl = 0;
-+	els->io.iparam.ct.timeout = 5;
-+
-+	if (efc->tt.send_els(efc, &els->io)) {
-+		efc_els_io_free(els);
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc, "Chip is in an error state - reset needed\n");
 +		return EFC_FAIL;
 +	}
-+	return EFC_SUCCESS;
++
++	/*
++	 * If the attach count is non-zero, this RPI has already been reg'd.
++	 * Otherwise, register the RPI
++	 */
++	if (rnode->index == U32_MAX) {
++		efc_log_err(efc, "bad parameter rnode->index invalid\n");
++		return EFC_FAIL;
++	}
++
++	/* Update a remote node object with the remote port's service params */
++	if (!sli_cmd_reg_rpi(efc->sli, buf, rnode->indicator,
++			rnode->nport->indicator, rnode->fc_id, sparms, 0, 0))
++		rc = efc->tt.issue_mbox_rqst(efc->base, buf,
++					     efc_cmd_node_attach_cb, rnode);
++
++	return rc;
 +}
 +
 +int
-+efc_send_bls_acc(struct efc_node *node, struct fc_frame_header *hdr)
++efc_node_free_resources(struct efc *efc, struct efc_remote_node *rnode)
 +{
-+	struct sli_bls_params bls;
-+	struct fc_ba_acc *acc;
-+	struct efc *efc = node->efc;
++	int rc = EFC_SUCCESS;
 +
-+	memset(&bls, 0, sizeof(bls));
-+	bls.ox_id = be16_to_cpu(hdr->fh_ox_id);
-+	bls.rx_id = be16_to_cpu(hdr->fh_rx_id);
-+	bls.s_id = ntoh24(hdr->fh_d_id);
-+	bls.d_id = node->rnode.fc_id;
-+	bls.rpi = node->rnode.indicator;
-+	bls.vpi = node->nport->indicator;
++	if (!rnode) {
++		efc_log_err(efc, "bad parameter rnode=%p\n", rnode);
++		return EFC_FAIL;
++	}
 +
-+	acc = (void *)bls.payload;
-+	acc->ba_ox_id = cpu_to_be16(bls.ox_id);
-+	acc->ba_rx_id = cpu_to_be16(bls.rx_id);
-+	acc->ba_high_seq_cnt = cpu_to_be16(U16_MAX);
++	if (rnode->nport) {
++		if (rnode->attached) {
++			efc_log_err(efc, "rnode is still attached\n");
++			return EFC_FAIL;
++		}
++		if (rnode->indicator != U32_MAX) {
++			if (sli_resource_free(efc->sli, SLI4_RSRC_RPI,
++					      rnode->indicator)) {
++				efc_log_err(efc,
++					    "RPI free fail RPI %d addr=%#x\n",
++					    rnode->indicator, rnode->fc_id);
++				rc = EFC_FAIL;
++			} else {
++				rnode->indicator = U32_MAX;
++				rnode->index = U32_MAX;
++			}
++		}
++	}
 +
-+	return efc->tt.send_bls(efc, FC_RCTL_BA_ACC, &bls);
++	return rc;
 +}
-diff --git a/drivers/scsi/elx/libefc/efc_els.h b/drivers/scsi/elx/libefc/efc_els.h
++
++static int
++efc_cmd_node_free_cb(struct efc *efc, int status, u8 *mqe, void *arg)
++{
++	struct efc_remote_node *rnode = arg;
++	struct sli4_mbox_command_header *hdr =
++				(struct sli4_mbox_command_header *)mqe;
++	int evt = EFC_EVT_NODE_FREE_FAIL;
++	int rc = EFC_SUCCESS;
++
++	if (status || le16_to_cpu(hdr->status)) {
++		efc_log_debug(efc, "bad status cqe=%#x mqe=%#x\n", status,
++			       le16_to_cpu(hdr->status));
++
++		/*
++		 * In certain cases, a non-zero MQE status is OK (all must be
++		 * true):
++		 *   - node is attached
++		 *   - status is 0x1400
++		 */
++		if (!rnode->attached ||
++		    (le16_to_cpu(hdr->status) != SLI4_MBX_STATUS_RPI_NOT_REG))
++			rc = EFC_FAIL;
++	}
++
++	if (!rc) {
++		rnode->attached = false;
++		evt = EFC_EVT_NODE_FREE_OK;
++	}
++
++	efc_remote_node_cb(efc, evt, rnode);
++
++	return rc;
++}
++
++int
++efc_cmd_node_detach(struct efc *efc, struct efc_remote_node *rnode)
++{
++	u8 buf[SLI4_BMBX_SIZE];
++	int rc = EFC_FAIL;
++
++	if (!rnode) {
++		efc_log_err(efc, "bad parameter rnode=%p\n", rnode);
++		return EFC_FAIL;
++	}
++
++	/*
++	 * Check if the chip is in an error state (UE'd) before proceeding.
++	 */
++	if (sli_fw_error_status(efc->sli) > 0) {
++		efc_log_crit(efc, "Chip is in an error state - reset needed\n");
++		return EFC_FAIL;
++	}
++
++	if (rnode->nport) {
++		if (!rnode->attached)
++			return EFC_FAIL;
++
++		rc = EFC_FAIL;
++
++		if (!sli_cmd_unreg_rpi(efc->sli, buf, rnode->indicator,
++				      SLI4_RSRC_RPI, U32_MAX))
++			rc = efc->tt.issue_mbox_rqst(efc->base, buf,
++					efc_cmd_node_free_cb, rnode);
++
++		if (rc != EFC_SUCCESS) {
++			efc_log_err(efc, "UNREG_RPI failed\n");
++			rc = EFC_FAIL;
++		}
++	}
++
++	return rc;
++}
+diff --git a/drivers/scsi/elx/libefc/efc_cmds.h b/drivers/scsi/elx/libefc/efc_cmds.h
 new file mode 100644
-index 000000000000..29926e690ec4
+index 000000000000..9c0287799e9e
 --- /dev/null
-+++ b/drivers/scsi/elx/libefc/efc_els.h
-@@ -0,0 +1,107 @@
++++ b/drivers/scsi/elx/libefc/efc_cmds.h
+@@ -0,0 +1,35 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2021 Broadcom. All Rights Reserved. The term
 + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
 + */
 +
-+#ifndef __EFC_ELS_H__
-+#define __EFC_ELS_H__
++#ifndef __EFC_CMDS_H__
++#define __EFC_CMDS_H__
 +
-+#define EFC_STATUS_INVALID	INT_MAX
-+#define EFC_ELS_IO_POOL_SZ	1024
++#define EFC_SPARAM_DMA_SZ	112
++int
++efc_cmd_nport_alloc(struct efc *efc, struct efc_nport *nport,
++		   struct efc_domain *domain, u8 *wwpn);
++int
++efc_cmd_nport_attach(struct efc *efc, struct efc_nport *nport, u32 fc_id);
++int
++efc_cmd_nport_free(struct efc *efc, struct efc_nport *nport);
++int
++efc_cmd_domain_alloc(struct efc *efc, struct efc_domain *domain, u32 fcf);
++int
++efc_cmd_domain_attach(struct efc *efc, struct efc_domain *domain, u32 fc_id);
++int
++efc_cmd_domain_free(struct efc *efc, struct efc_domain *domain);
++int
++efc_cmd_node_detach(struct efc *efc, struct efc_remote_node *rnode);
++int
++efc_node_free_resources(struct efc *efc, struct efc_remote_node *rnode);
++int
++efc_cmd_node_attach(struct efc *efc, struct efc_remote_node *rnode,
++		    struct efc_dma *sparms);
++int
++efc_cmd_node_alloc(struct efc *efc, struct efc_remote_node *rnode, u32 fc_addr,
++		   struct efc_nport *nport);
 +
-+struct efc_els_io_req {
-+	struct list_head	list_entry;
-+	struct kref		ref;
-+	void			(*release)(struct kref *arg);
-+	struct efc_node		*node;
-+	void			*cb;
-+	uint32_t		els_retries_remaining;
-+	bool			els_req_free;
-+	struct timer_list       delay_timer;
-+
-+	const char		*display_name;
-+
-+	struct efc_disc_io	io;
-+};
-+
-+typedef int(*efc_hw_srrs_cb_t)(void *arg, u32 length, int status,
-+			       u32 ext_status);
-+
-+void _efc_els_io_free(struct kref *arg);
-+struct efc_els_io_req *
-+efc_els_io_alloc(struct efc_node *node, u32 reqlen);
-+struct efc_els_io_req *
-+efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen);
-+void efc_els_io_free(struct efc_els_io_req *els);
-+
-+/* ELS command send */
-+typedef void (*els_cb_t)(struct efc_node *node,
-+			 struct efc_node_cb *cbdata, void *arg);
-+int
-+efc_send_plogi(struct efc_node *node);
-+int
-+efc_send_flogi(struct efc_node *node);
-+int
-+efc_send_fdisc(struct efc_node *node);
-+int
-+efc_send_prli(struct efc_node *node);
-+int
-+efc_send_prlo(struct efc_node *node);
-+int
-+efc_send_logo(struct efc_node *node);
-+int
-+efc_send_adisc(struct efc_node *node);
-+int
-+efc_send_pdisc(struct efc_node *node);
-+int
-+efc_send_scr(struct efc_node *node);
-+int
-+efc_ns_send_rftid(struct efc_node *node);
-+int
-+efc_ns_send_rffid(struct efc_node *node);
-+int
-+efc_ns_send_gidpt(struct efc_node *node);
-+void
-+efc_els_io_cleanup(struct efc_els_io_req *els, int evt, void *arg);
-+
-+/* ELS acc send */
-+int
-+efc_send_ls_acc(struct efc_node *node, u32 ox_id);
-+int
-+efc_send_ls_rjt(struct efc_node *node, u32 ox_id, u32 reason_cod,
-+		u32 reason_code_expl, u32 vendor_unique);
-+int
-+efc_send_flogi_p2p_acc(struct efc_node *node, u32 ox_id, u32 s_id);
-+int
-+efc_send_flogi_acc(struct efc_node *node, u32 ox_id, u32 is_fport);
-+int
-+efc_send_plogi_acc(struct efc_node *node, u32 ox_id);
-+int
-+efc_send_prli_acc(struct efc_node *node, u32 ox_id);
-+int
-+efc_send_logo_acc(struct efc_node *node, u32 ox_id);
-+int
-+efc_send_prlo_acc(struct efc_node *node, u32 ox_id);
-+int
-+efc_send_adisc_acc(struct efc_node *node, u32 ox_id);
-+
-+int
-+efc_bls_send_acc_hdr(struct efc *efc, struct efc_node *node,
-+		     struct fc_frame_header *hdr);
-+int
-+efc_bls_send_rjt_hdr(struct efc_els_io_req *io, struct fc_frame_header *hdr);
-+
-+int
-+efc_els_io_list_empty(struct efc_node *node, struct list_head *list);
-+
-+/* CT */
-+int
-+efc_send_ct_rsp(struct efc *efc, struct efc_node *node, u16 ox_id,
-+		 struct fc_ct_hdr *ct_hdr, u32 cmd_rsp_code, u32 reason_code,
-+		 u32 reason_code_explanation);
-+
-+int
-+efc_send_bls_acc(struct efc_node *node, struct fc_frame_header *hdr);
-+
-+#endif /* __EFC_ELS_H__ */
++#endif /* __EFC_CMDS_H */
 -- 
 2.26.2
 
