@@ -2,673 +2,697 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C18F2EE97D
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Jan 2021 00:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB642EE980
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Jan 2021 00:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728873AbhAGXAw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Jan 2021 18:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S1728738AbhAGXBM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Jan 2021 18:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728857AbhAGXAu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Jan 2021 18:00:50 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75579C061240
-        for <linux-scsi@vger.kernel.org>; Thu,  7 Jan 2021 14:59:40 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id c132so6344021pga.3
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Jan 2021 14:59:40 -0800 (PST)
+        with ESMTP id S1727944AbhAGXBM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Jan 2021 18:01:12 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D01C0612A3
+        for <linux-scsi@vger.kernel.org>; Thu,  7 Jan 2021 14:59:28 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id g3so4652327plp.2
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Jan 2021 14:59:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yXuwIMMs4+zd35IR+8pnkHu8txi4XSwNPnH0TUKUJ3Q=;
-        b=ZXRvumCAuLUSUqVXsdF5kSNu5dCuw4qktdLWqurA+Tir098of1vOno5LPIO3nA189s
-         wJxhL3gFO4Bl1cYG83Xnd1QgSI3ZaDACyTxPbeLj2wPkGqr6OUoSPcDV7LgjRgWQ7syi
-         +QfviF2359PgoPYFtdh//l/UDSqd1sFIcRxBcjoFOkA3ACn8N8bAEDC12+DTwHz/KvvW
-         HWXFPXPher8s/xxS3N/o9CN+3S/7m5E6wAUurCHBBDVbXll0wHW/S6/mJRSuv0FpGcbU
-         xeu6Xpp/8gft6w5zI3+d722UmnJ+Dit/l68rEPXuh2Fb04lwmJzWB2gIBJVdF1nqI/zv
-         e/Ag==
+        bh=tmuT4b+5DxigBqE2v783YWpSqdWl0zAqpP6uKRgBpZc=;
+        b=kyGMZS29ptdy5Me0F/lgu+4APZolziDc1/sLZoBo4/LHJIboutVaui/syEihP/yEVG
+         u/USJPfyTYS3c23zxi8oJvyVN7a3aLca7fVqghysNqTp8WiFFY/CMVC34L1OqTxPi1Tf
+         FPjnnYGiBISmHGpiaKrkQJvdfFU0lWSPTG8MR1ud7L0wj0Ui+rlJJb6kU1j06CdAD/qv
+         IngU6LbNQuIjcKqKQFAcBEagpg2zx7S4E6IWlIP04ckBpoMYjetvIrh3IUEbXC1v51jP
+         k1/35B1IEdCURTHJgNZ5i2xV2IUsiUHz7GomKYZgNKIP/i3j5KJJbE7rpM2l2kq1g5ru
+         T+Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yXuwIMMs4+zd35IR+8pnkHu8txi4XSwNPnH0TUKUJ3Q=;
-        b=dgYSEgzncjUvoRmAA7ftQSUP4WZohqJX+JOIT265bkhjswgQSQFFmixJIuNW+Gl3qG
-         79cYZ0V1R7eJtvRUn0hEJboIFiy7j78tH8eVVwWIK1qOez/fNaLDua9OPPz4ZroZQgjJ
-         a1AyHZ+7Rnj5YirVpNrgYsRwUKMsqsEx7AfCihnRXt5znuwflDKYP+6230Ixu3OeODcL
-         sb4ZJ9ZmusmwY+OhJagYtnN559mvc80zUCdp97ANn2II59kZ6Ys9f1SWHcdMZwvcr6YZ
-         1jGRo+nyEQbSxtPYP5aDlgSvL2uiHQgsSA9DMFtRsfS1yJAic6FltOrTiYmqjUyM6tv7
-         w0VA==
-X-Gm-Message-State: AOAM531bzzO4CetjiT2WhkbGUTxDJ4Hj26T93NV/2ki1hqByi8XLsIuM
-        EORAWQ/AqMI55BSPQj8byAp4gRrMsj4gng==
-X-Google-Smtp-Source: ABdhPJz4YiXcU9ljtxoSwquPHTIEdZUq5l7/pO0O7Bu1nOrYEtRC39HouxYYoXUdZFJlJN8ZE57ftQ==
-X-Received: by 2002:aa7:9848:0:b029:19d:c24b:1179 with SMTP id n8-20020aa798480000b029019dc24b1179mr731971pfq.29.1610060379519;
-        Thu, 07 Jan 2021 14:59:39 -0800 (PST)
+        bh=tmuT4b+5DxigBqE2v783YWpSqdWl0zAqpP6uKRgBpZc=;
+        b=hJ1zMEz96lwg9eJ85LjGh54PT3uhmdyiwdg5GtNHgh0LL7Sb0r5tUmXD/ZsttEllQp
+         DvanwIXitL8qqx297+8LqL4XaK4fOhPYcFOyKObT3ZsEW4InmRZ4UyQJWMEr82/xuCMj
+         BmwVza1P7Sk+NtdcLbg+rxZkJkc4kdgVAH6hfU0IAFt+V4xHJTop5/VyGmfCEPGlu+2X
+         p2d/Pu5S/zbbIJfneQtN2v3m/gyw3egIQVa57KJokbcAkc4fZ96Gk59TLTvoFqjs74m4
+         SKqGQbJpYGnsGBQCYWkWDuTf62kk0YmScdJ5OIiNyo+xp1PQP6n7/Ocuui3O8plsCBLd
+         0fhg==
+X-Gm-Message-State: AOAM531v/0TQvrSsMbCE44WNQrQGz2Bpj3fqUhmMSbQX//pYDsJhUMfw
+        +DHHbcoWFCJVTGBPLA+/XOI2emcDgpgexw==
+X-Google-Smtp-Source: ABdhPJyrgyBWecHh9jBqbELPk/CdCZ7/rr8dDXQZAum5XGIhkC03MzMSA4qvgf+b1AV+SVfzn5JAXQ==
+X-Received: by 2002:a17:90a:708b:: with SMTP id g11mr671496pjk.23.1610060367164;
+        Thu, 07 Jan 2021 14:59:27 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l197sm6881405pfd.97.2021.01.07.14.59.38
+        by smtp.gmail.com with ESMTPSA id l197sm6881405pfd.97.2021.01.07.14.59.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 14:59:38 -0800 (PST)
+        Thu, 07 Jan 2021 14:59:26 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>,
-        Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v7 28/31] elx: efct: xport and hardware teardown routines
-Date:   Thu,  7 Jan 2021 14:59:02 -0800
-Message-Id: <20210107225905.18186-29-jsmart2021@gmail.com>
+        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH v7 17/31] elx: efct: Data structures and defines for hw operations
+Date:   Thu,  7 Jan 2021 14:58:51 -0800
+Message-Id: <20210107225905.18186-18-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210107225905.18186-1-jsmart2021@gmail.com>
 References: <20210107225905.18186-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch continues the efct driver population.
+This patch starts the population of the efct target mode
+driver.  The driver is contained in the drivers/scsi/elx/efct
+subdirectory.
 
-This patch adds driver definitions for:
-Routines to detach xport and hardware objects.
+This patch creates the efct directory and starts population of
+the driver by adding SLI-4 configuration parameters, data structures
+for configuring SLI-4 queues, converting from os to SLI-4 IO requests,
+and handling async events.
 
 Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Daniel Wagner <dwagner@suse.de>
 ---
- drivers/scsi/elx/efct/efct_hw.c    | 277 +++++++++++++++++++++++++++++
- drivers/scsi/elx/efct/efct_hw.h    |  27 +++
- drivers/scsi/elx/efct/efct_xport.c | 261 +++++++++++++++++++++++++++
- 3 files changed, 565 insertions(+)
+ drivers/scsi/elx/efct/efct_hw.h | 603 ++++++++++++++++++++++++++++++++
+ 1 file changed, 603 insertions(+)
+ create mode 100644 drivers/scsi/elx/efct/efct_hw.h
 
-diff --git a/drivers/scsi/elx/efct/efct_hw.c b/drivers/scsi/elx/efct/efct_hw.c
-index fca9bff358e3..8486dfaf346f 100644
---- a/drivers/scsi/elx/efct/efct_hw.c
-+++ b/drivers/scsi/elx/efct/efct_hw.c
-@@ -3358,3 +3358,280 @@ efct_hw_firmware_write(struct efct_hw *hw, struct efc_dma *dma, u32 size,
- 
- 	return rc;
- }
-+
-+static int
-+efct_hw_cb_port_control(struct efct_hw *hw, int status, u8 *mqe,
-+			void  *arg)
-+{
-+	return EFC_SUCCESS;
-+}
-+
-+enum efct_hw_rtn
-+efct_hw_port_control(struct efct_hw *hw, enum efct_hw_port ctrl,
-+		     uintptr_t value,
-+		     void (*cb)(int status, uintptr_t value, void *arg),
-+		     void *arg)
-+{
-+	enum efct_hw_rtn rc = EFCT_HW_RTN_ERROR;
-+	u8 link[SLI4_BMBX_SIZE];
-+	u32 speed = 0;
-+	u8 reset_alpa = 0;
-+
-+	switch (ctrl) {
-+	case EFCT_HW_PORT_INIT:
-+		if (!sli_cmd_config_link(&hw->sli, link))
-+			rc = efct_hw_command(hw, link, EFCT_CMD_NOWAIT,
-+					     efct_hw_cb_port_control, NULL);
-+
-+		if (rc != EFCT_HW_RTN_SUCCESS) {
-+			efc_log_err(hw->os, "CONFIG_LINK failed\n");
-+			break;
-+		}
-+		speed = hw->config.speed;
-+		reset_alpa = (u8)(value & 0xff);
-+
-+		rc = EFCT_HW_RTN_ERROR;
-+		if (!sli_cmd_init_link(&hw->sli, link, speed, reset_alpa))
-+			rc = efct_hw_command(hw, link, EFCT_CMD_NOWAIT,
-+					     efct_hw_cb_port_control, NULL);
-+		/* Free buffer on error, since no callback is coming */
-+		if (rc)
-+			efc_log_err(hw->os, "INIT_LINK failed\n");
-+		break;
-+
-+	case EFCT_HW_PORT_SHUTDOWN:
-+		if (!sli_cmd_down_link(&hw->sli, link))
-+			rc = efct_hw_command(hw, link, EFCT_CMD_NOWAIT,
-+					     efct_hw_cb_port_control, NULL);
-+		/* Free buffer on error, since no callback is coming */
-+		if (rc)
-+			efc_log_err(hw->os, "DOWN_LINK failed\n");
-+		break;
-+
-+	default:
-+		efc_log_debug(hw->os, "unhandled control %#x\n", ctrl);
-+		break;
-+	}
-+
-+	return rc;
-+}
-+
-+enum efct_hw_rtn
-+efct_hw_teardown(struct efct_hw *hw)
-+{
-+	u32	i = 0;
-+	u32	iters = 10;
-+	u32 destroy_queues;
-+	u32 free_memory;
-+	struct efc_dma *dma;
-+	struct efct *efct = hw->os;
-+
-+	destroy_queues = (hw->state == EFCT_HW_STATE_ACTIVE);
-+	free_memory = (hw->state != EFCT_HW_STATE_UNINITIALIZED);
-+
-+	/* Cancel Sliport Healthcheck */
-+	if (hw->sliport_healthcheck) {
-+		hw->sliport_healthcheck = 0;
-+		efct_hw_config_sli_port_health_check(hw, 0, 0);
-+	}
-+
-+	if (hw->state != EFCT_HW_STATE_QUEUES_ALLOCATED) {
-+		hw->state = EFCT_HW_STATE_TEARDOWN_IN_PROGRESS;
-+
-+		efct_hw_flush(hw);
-+
-+		/*
-+		 * If there are outstanding commands, wait for them to complete
-+		 */
-+		while (!list_empty(&hw->cmd_head) && iters) {
-+			mdelay(10);
-+			efct_hw_flush(hw);
-+			iters--;
-+		}
-+
-+		if (list_empty(&hw->cmd_head))
-+			efc_log_debug(hw->os,
-+				       "All commands completed on MQ queue\n");
-+		else
-+			efc_log_debug(hw->os,
-+				       "Some cmds still pending on MQ queue\n");
-+
-+		/* Cancel any remaining commands */
-+		efct_hw_command_cancel(hw);
-+	} else {
-+		hw->state = EFCT_HW_STATE_TEARDOWN_IN_PROGRESS;
-+	}
-+
-+	dma_free_coherent(&efct->pci->dev,
-+			  hw->rnode_mem.size, hw->rnode_mem.virt,
-+			  hw->rnode_mem.phys);
-+	memset(&hw->rnode_mem, 0, sizeof(struct efc_dma));
-+
-+	if (hw->io) {
-+		for (i = 0; i < hw->config.n_io; i++) {
-+			if (hw->io[i] && hw->io[i]->sgl &&
-+			    hw->io[i]->sgl->virt) {
-+				dma_free_coherent(&efct->pci->dev,
-+						  hw->io[i]->sgl->size,
-+						  hw->io[i]->sgl->virt,
-+						  hw->io[i]->sgl->phys);
-+			}
-+			kfree(hw->io[i]);
-+			hw->io[i] = NULL;
-+		}
-+		kfree(hw->io);
-+		hw->io = NULL;
-+		kfree(hw->wqe_buffs);
-+		hw->wqe_buffs = NULL;
-+	}
-+
-+	dma = &hw->xfer_rdy;
-+	dma_free_coherent(&efct->pci->dev,
-+			  dma->size, dma->virt, dma->phys);
-+	memset(dma, 0, sizeof(struct efc_dma));
-+
-+	dma = &hw->loop_map;
-+	dma_free_coherent(&efct->pci->dev,
-+			  dma->size, dma->virt, dma->phys);
-+	memset(dma, 0, sizeof(struct efc_dma));
-+
-+	for (i = 0; i < hw->wq_count; i++)
-+		sli_queue_free(&hw->sli, &hw->wq[i], destroy_queues,
-+			       free_memory);
-+
-+	for (i = 0; i < hw->rq_count; i++)
-+		sli_queue_free(&hw->sli, &hw->rq[i], destroy_queues,
-+			       free_memory);
-+
-+	for (i = 0; i < hw->mq_count; i++)
-+		sli_queue_free(&hw->sli, &hw->mq[i], destroy_queues,
-+			       free_memory);
-+
-+	for (i = 0; i < hw->cq_count; i++)
-+		sli_queue_free(&hw->sli, &hw->cq[i], destroy_queues,
-+			       free_memory);
-+
-+	for (i = 0; i < hw->eq_count; i++)
-+		sli_queue_free(&hw->sli, &hw->eq[i], destroy_queues,
-+			       free_memory);
-+
-+	/* Free rq buffers */
-+	efct_hw_rx_free(hw);
-+
-+	efct_hw_queue_teardown(hw);
-+
-+	kfree(hw->wq_cpu_array);
-+
-+	sli_teardown(&hw->sli);
-+
-+	/* record the fact that the queues are non-functional */
-+	hw->state = EFCT_HW_STATE_UNINITIALIZED;
-+
-+	/* free sequence free pool */
-+	kfree(hw->seq_pool);
-+	hw->seq_pool = NULL;
-+
-+	/* free hw_wq_callback pool */
-+	efct_hw_reqtag_pool_free(hw);
-+
-+	mempool_destroy(hw->cmd_ctx_pool);
-+	mempool_destroy(hw->mbox_rqst_pool);
-+
-+	/* Mark HW setup as not having been called */
-+	hw->hw_setup_called = false;
-+
-+	return EFCT_HW_RTN_SUCCESS;
-+}
-+
-+static enum efct_hw_rtn
-+efct_hw_sli_reset(struct efct_hw *hw, enum efct_hw_reset reset,
-+		  enum efct_hw_state prev_state)
-+{
-+	enum efct_hw_rtn rc = EFCT_HW_RTN_SUCCESS;
-+
-+	switch (reset) {
-+	case EFCT_HW_RESET_FUNCTION:
-+		efc_log_debug(hw->os, "issuing function level reset\n");
-+		if (sli_reset(&hw->sli)) {
-+			efc_log_err(hw->os, "sli_reset failed\n");
-+			rc = EFCT_HW_RTN_ERROR;
-+		}
-+		break;
-+	case EFCT_HW_RESET_FIRMWARE:
-+		efc_log_debug(hw->os, "issuing firmware reset\n");
-+		if (sli_fw_reset(&hw->sli)) {
-+			efc_log_err(hw->os, "sli_soft_reset failed\n");
-+			rc = EFCT_HW_RTN_ERROR;
-+		}
-+		/*
-+		 * Because the FW reset leaves the FW in a non-running state,
-+		 * follow that with a regular reset.
-+		 */
-+		efc_log_debug(hw->os, "issuing function level reset\n");
-+		if (sli_reset(&hw->sli)) {
-+			efc_log_err(hw->os, "sli_reset failed\n");
-+			rc = EFCT_HW_RTN_ERROR;
-+		}
-+		break;
-+	default:
-+		efc_log_err(hw->os,
-+			     "unknown reset type - no reset performed\n");
-+		hw->state = prev_state;
-+		rc = EFCT_HW_RTN_INVALID_ARG;
-+		break;
-+	}
-+
-+	return rc;
-+}
-+
-+enum efct_hw_rtn
-+efct_hw_reset(struct efct_hw *hw, enum efct_hw_reset reset)
-+{
-+	enum efct_hw_rtn rc = EFCT_HW_RTN_SUCCESS;
-+	u32 iters;
-+	enum efct_hw_state prev_state = hw->state;
-+
-+	if (hw->state != EFCT_HW_STATE_ACTIVE)
-+		efc_log_debug(hw->os,
-+			      "HW state %d is not active\n", hw->state);
-+
-+	hw->state = EFCT_HW_STATE_RESET_IN_PROGRESS;
-+
-+	/*
-+	 * If the prev_state is already reset/teardown in progress,
-+	 * don't continue further
-+	 */
-+	if (prev_state == EFCT_HW_STATE_RESET_IN_PROGRESS ||
-+	    prev_state == EFCT_HW_STATE_TEARDOWN_IN_PROGRESS)
-+		return efct_hw_sli_reset(hw, reset, prev_state);
-+
-+	if (prev_state != EFCT_HW_STATE_UNINITIALIZED) {
-+		efct_hw_flush(hw);
-+
-+		/*
-+		 * If an mailbox command requiring a DMA is outstanding
-+		 * (SFP/DDM), then the FW will UE when the reset is issued.
-+		 * So attempt to complete all mailbox commands.
-+		 */
-+		iters = 10;
-+		while (!list_empty(&hw->cmd_head) && iters) {
-+			mdelay(10);
-+			efct_hw_flush(hw);
-+			iters--;
-+		}
-+
-+		if (list_empty(&hw->cmd_head))
-+			efc_log_debug(hw->os,
-+				       "All commands completed on MQ queue\n");
-+		else
-+			efc_log_debug(hw->os,
-+				       "Some commands still pending on MQ queue\n");
-+	}
-+
-+	/* Reset the chip */
-+	rc = efct_hw_sli_reset(hw, reset, prev_state);
-+	if (rc == EFCT_HW_RTN_INVALID_ARG)
-+		return EFCT_HW_RTN_ERROR;
-+
-+	return rc;
-+}
 diff --git a/drivers/scsi/elx/efct/efct_hw.h b/drivers/scsi/elx/efct/efct_hw.h
-index 0dc7e210c86a..a87c78d01e18 100644
---- a/drivers/scsi/elx/efct/efct_hw.h
+new file mode 100644
+index 000000000000..e4df0df5fe23
+--- /dev/null
 +++ b/drivers/scsi/elx/efct/efct_hw.h
-@@ -752,4 +752,31 @@ typedef void (*efct_hw_async_cb_t)(struct efct_hw *hw, int status,
- int
- efct_hw_async_call(struct efct_hw *hw, efct_hw_async_cb_t callback, void *arg);
- 
-+struct hw_eq *efct_hw_new_eq(struct efct_hw *hw, u32 entry_count);
-+struct hw_cq *efct_hw_new_cq(struct hw_eq *eq, u32 entry_count);
-+u32
-+efct_hw_new_cq_set(struct hw_eq *eqs[], struct hw_cq *cqs[],
-+		   u32 num_cqs, u32 entry_count);
-+struct hw_mq *efct_hw_new_mq(struct hw_cq *cq, u32 entry_count);
-+struct hw_wq
-+*efct_hw_new_wq(struct hw_cq *cq, u32 entry_count);
-+u32
-+efct_hw_new_rq_set(struct hw_cq *cqs[], struct hw_rq *rqs[],
-+		   u32 num_rq_pairs, u32 entry_count);
-+void efct_hw_del_eq(struct hw_eq *eq);
-+void efct_hw_del_cq(struct hw_cq *cq);
-+void efct_hw_del_mq(struct hw_mq *mq);
-+void efct_hw_del_wq(struct hw_wq *wq);
-+void efct_hw_del_rq(struct hw_rq *rq);
-+void efct_hw_queue_teardown(struct efct_hw *hw);
-+enum efct_hw_rtn efct_hw_teardown(struct efct_hw *hw);
-+enum efct_hw_rtn
-+efct_hw_reset(struct efct_hw *hw, enum efct_hw_reset reset);
+@@ -0,0 +1,603 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2021 Broadcom. All Rights Reserved. The term
++ * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
++ */
 +
-+enum efct_hw_rtn
-+efct_hw_port_control(struct efct_hw *hw, enum efct_hw_port ctrl,
-+		     uintptr_t value,
-+		void (*cb)(int status, uintptr_t value, void *arg),
-+		void *arg);
++#ifndef _EFCT_HW_H
++#define _EFCT_HW_H
 +
- #endif /* __EFCT_H__ */
-diff --git a/drivers/scsi/elx/efct/efct_xport.c b/drivers/scsi/elx/efct/efct_xport.c
-index b19304d6febb..0cf558c03547 100644
---- a/drivers/scsi/elx/efct/efct_xport.c
-+++ b/drivers/scsi/elx/efct/efct_xport.c
-@@ -517,3 +517,264 @@ efct_scsi_release_fc_transport(void)
- 
- 	return EFC_SUCCESS;
- }
++#include "../libefc_sli/sli4.h"
 +
-+int
-+efct_xport_detach(struct efct_xport *xport)
-+{
-+	struct efct *efct = xport->efct;
++/*
++ * EFCT PCI IDs
++ */
++#define EFCT_VENDOR_ID			0x10df
++/* LightPulse 16Gb x 4 FC (lancer-g6) */
++#define EFCT_DEVICE_LANCER_G6		0xe307
++/* LightPulse 32Gb x 4 FC (lancer-g7) */
++#define EFCT_DEVICE_LANCER_G7		0xf407
 +
-+	/* free resources associated with target-server and initiator-client */
-+	efct_scsi_tgt_del_device(efct);
++/*Default RQ entries len used by driver*/
++#define EFCT_HW_RQ_ENTRIES_MIN		512
++#define EFCT_HW_RQ_ENTRIES_DEF		1024
++#define EFCT_HW_RQ_ENTRIES_MAX		4096
 +
-+	efct_scsi_del_device(efct);
++/*Defines the size of the RQ buffers used for each RQ*/
++#define EFCT_HW_RQ_SIZE_HDR             128
++#define EFCT_HW_RQ_SIZE_PAYLOAD         1024
 +
-+	/*Shutdown FC Statistics timer*/
-+	if (timer_pending(&xport->stats_timer))
-+		del_timer(&xport->stats_timer);
++/*Define the maximum number of multi-receive queues*/
++#define EFCT_HW_MAX_MRQS		8
 +
-+	efct_hw_teardown(&efct->hw);
++/*
++ * Define count of when to set the WQEC bit in a submitted
++ * WQE, causing a consummed/released completion to be posted.
++ */
++#define EFCT_HW_WQEC_SET_COUNT		32
 +
-+	efct_xport_delete_debugfs(efct);
++/*Send frame timeout in seconds*/
++#define EFCT_HW_SEND_FRAME_TIMEOUT	10
 +
-+	return EFC_SUCCESS;
-+}
++/*
++ * FDT Transfer Hint value, reads greater than this value
++ * will be segmented to implement fairness. A value of zero disables
++ * the feature.
++ */
++#define EFCT_HW_FDT_XFER_HINT		8192
 +
-+static void
-+efct_xport_domain_free_cb(struct efc *efc, void *arg)
-+{
-+	struct completion *done = arg;
++#define EFCT_HW_TIMECHECK_ITERATIONS	100
++#define EFCT_HW_MAX_NUM_MQ		1
++#define EFCT_HW_MAX_NUM_RQ		32
++#define EFCT_HW_MAX_NUM_EQ		16
++#define EFCT_HW_MAX_NUM_WQ		32
++#define EFCT_HW_DEF_NUM_EQ		1
 +
-+	complete(done);
-+}
++#define OCE_HW_MAX_NUM_MRQ_PAIRS	16
 +
-+static void
-+efct_xport_post_node_event_cb(struct efct_hw *hw, int status,
-+			      u8 *mqe, void *arg)
-+{
-+	struct efct_xport_post_node_event *payload = arg;
++#define EFCT_HW_MQ_DEPTH		128
++#define EFCT_HW_EQ_DEPTH		1024
 +
-+	if (payload) {
-+		efc_node_post_shutdown(payload->node, payload->evt,
-+				       payload->context);
-+		complete(&payload->done);
-+		if (atomic_sub_and_test(1, &payload->refcnt))
-+			kfree(payload);
-+	}
-+}
++/*
++ * A CQ will be assinged to each WQ
++ * (CQ must have 2X entries of the WQ for abort
++ * processing), plus a separate one for each RQ PAIR and one for MQ
++ */
++#define EFCT_HW_MAX_NUM_CQ \
++	((EFCT_HW_MAX_NUM_WQ * 2) + 1 + (OCE_HW_MAX_NUM_MRQ_PAIRS * 2))
 +
-+int
-+efct_xport_control(struct efct_xport *xport, enum efct_xport_ctrl cmd, ...)
-+{
-+	u32 rc = 0;
-+	struct efct *efct = NULL;
-+	va_list argp;
++#define EFCT_HW_Q_HASH_SIZE		128
++#define EFCT_HW_RQ_HEADER_SIZE		128
++#define EFCT_HW_RQ_HEADER_INDEX		0
 +
-+	efct = xport->efct;
++#define EFCT_HW_REQUE_XRI_REGTAG	65534
 +
-+	switch (cmd) {
-+	case EFCT_XPORT_PORT_ONLINE: {
-+		/* Bring the port on-line */
-+		rc = efct_hw_port_control(&efct->hw, EFCT_HW_PORT_INIT, 0,
-+					  NULL, NULL);
-+		if (rc)
-+			efc_log_err(efct,
-+				     "%s: Can't init port\n", efct->desc);
-+		else
-+			xport->configured_link_state = cmd;
-+		break;
-+	}
-+	case EFCT_XPORT_PORT_OFFLINE: {
-+		if (efct_hw_port_control(&efct->hw, EFCT_HW_PORT_SHUTDOWN, 0,
-+					 NULL, NULL))
-+			efc_log_err(efct, "port shutdown failed\n");
-+		else
-+			xport->configured_link_state = cmd;
-+		break;
-+	}
++/* Options for efct_hw_command() */
++enum efct_cmd_opts {
++	/* command executes synchronously and busy-waits for completion */
++	EFCT_CMD_POLL,
++	/* command executes asynchronously. Uses callback */
++	EFCT_CMD_NOWAIT,
++};
 +
-+	case EFCT_XPORT_SHUTDOWN: {
-+		struct completion done;
-+		unsigned long timeout;
++enum efct_hw_rtn {
++	EFCT_HW_RTN_SUCCESS = 0,
++	EFCT_HW_RTN_SUCCESS_SYNC = 1,
++	EFCT_HW_RTN_ERROR = -1,
++	EFCT_HW_RTN_NO_RESOURCES = -2,
++	EFCT_HW_RTN_NO_MEMORY = -3,
++	EFCT_HW_RTN_IO_NOT_ACTIVE = -4,
++	EFCT_HW_RTN_IO_ABORT_IN_PROGRESS = -5,
++	EFCT_HW_RTN_IO_PORT_OWNED_ALREADY_ABORTED = -6,
++	EFCT_HW_RTN_INVALID_ARG = -7,
++};
 +
-+		/* if a PHYSDEV reset was performed (e.g. hw dump), will affect
-+		 * all PCI functions; orderly shutdown won't work,
-+		 * just force free
-+		 */
-+		if (sli_reset_required(&efct->hw.sli)) {
-+			struct efc_domain *domain = efct->efcport->domain;
++#define EFCT_HW_RTN_IS_ERROR(e)	((e) < 0)
 +
-+			if (domain)
-+				efc_domain_cb(efct->efcport, EFC_HW_DOMAIN_LOST,
-+					      domain);
-+		} else {
-+			efct_hw_port_control(&efct->hw, EFCT_HW_PORT_SHUTDOWN,
-+					     0, NULL, NULL);
-+		}
++enum efct_hw_reset {
++	EFCT_HW_RESET_FUNCTION,
++	EFCT_HW_RESET_FIRMWARE,
++	EFCT_HW_RESET_MAX
++};
 +
-+		init_completion(&done);
++enum efct_hw_topo {
++	EFCT_HW_TOPOLOGY_AUTO,
++	EFCT_HW_TOPOLOGY_NPORT,
++	EFCT_HW_TOPOLOGY_LOOP,
++	EFCT_HW_TOPOLOGY_NONE,
++	EFCT_HW_TOPOLOGY_MAX
++};
 +
-+		efc_register_domain_free_cb(efct->efcport,
-+					efct_xport_domain_free_cb, &done);
++/* pack fw revision values into a single uint64_t */
++#define HW_FWREV(a, b, c, d) (((uint64_t)(a) << 48) | ((uint64_t)(b) << 32) \
++			| ((uint64_t)(c) << 16) | ((uint64_t)(d)))
 +
-+		efc_log_debug(efct, "Waiting %d seconds for domain shutdown\n",
-+				(EFC_SHUTDOWN_TIMEOUT_USEC / 1000000));
++#define EFCT_FW_VER_STR(a, b, c, d) (#a "." #b "." #c "." #d)
 +
-+		timeout = usecs_to_jiffies(EFC_SHUTDOWN_TIMEOUT_USEC);
-+		if (!wait_for_completion_timeout(&done, timeout)) {
-+			efc_log_err(efct, "Domain shutdown timed out!!\n");
-+			WARN_ON(1);
-+		}
++enum efct_hw_io_type {
++	EFCT_HW_ELS_REQ,
++	EFCT_HW_ELS_RSP,
++	EFCT_HW_FC_CT,
++	EFCT_HW_FC_CT_RSP,
++	EFCT_HW_BLS_ACC,
++	EFCT_HW_BLS_RJT,
++	EFCT_HW_IO_TARGET_READ,
++	EFCT_HW_IO_TARGET_WRITE,
++	EFCT_HW_IO_TARGET_RSP,
++	EFCT_HW_IO_DNRX_REQUEUE,
++	EFCT_HW_IO_MAX,
++};
 +
-+		efc_register_domain_free_cb(efct->efcport, NULL, NULL);
++enum efct_hw_io_state {
++	EFCT_HW_IO_STATE_FREE,
++	EFCT_HW_IO_STATE_INUSE,
++	EFCT_HW_IO_STATE_WAIT_FREE,
++	EFCT_HW_IO_STATE_WAIT_SEC_HIO,
++};
 +
-+		/* Free up any saved virtual ports */
-+		efc_vport_del_all(efct->efcport);
-+		break;
-+	}
++#define EFCT_TARGET_WRITE_SKIPS	1
++#define EFCT_TARGET_READ_SKIPS	2
 +
-+	/*
-+	 * POST_NODE_EVENT:  post an event to a node object
-+	 *
-+	 * This transport function is used to post an event to a node object.
-+	 * It does this by submitting a NOP mailbox command to defer execution
-+	 * to the interrupt context (thereby enforcing the serialized execution
-+	 * of event posting to the node state machine instances)
-+	 */
-+	case EFCT_XPORT_POST_NODE_EVENT: {
-+		struct efc_node *node;
-+		u32	evt;
-+		void *context;
-+		struct efct_xport_post_node_event *payload = NULL;
-+		struct efct_hw *hw;
++struct efct_hw;
++struct efct_io;
 +
-+		/* Retrieve arguments */
-+		va_start(argp, cmd);
-+		node = va_arg(argp, struct efc_node *);
-+		evt = va_arg(argp, u32);
-+		context = va_arg(argp, void *);
-+		va_end(argp);
++#define EFCT_CMD_CTX_POOL_SZ	32
++/**
++ * HW command context.
++ * Stores the state for the asynchronous commands sent to the hardware.
++ */
++struct efct_command_ctx {
++	struct list_head	list_entry;
++	int (*cb)(struct efct_hw *hw, int status, u8 *mqe, void *arg);
++	void			*arg;	/* Argument for callback */
++	/* buffer holding command / results */
++	u8			buf[SLI4_BMBX_SIZE];
++	void			*ctx;	/* upper layer context */
++};
 +
-+		payload = kzalloc(sizeof(*payload), GFP_KERNEL);
-+		if (!payload)
-+			return EFC_FAIL;
++struct efct_hw_sgl {
++	uintptr_t		addr;
++	size_t			len;
++};
 +
-+		hw = &efct->hw;
++union efct_hw_io_param_u {
++	struct sli_bls_params bls;
++	struct sli_els_params els;
++	struct sli_ct_params fc_ct;
++	struct sli_fcp_tgt_params fcp_tgt;
++};
 +
-+		/* if node's state machine is disabled,
-+		 * don't bother continuing
-+		 */
-+		if (!node->sm.current_state) {
-+			efc_log_debug(efct, "node %p state machine disabled\n",
-+				      node);
-+			kfree(payload);
-+			rc = -1;
-+			break;
-+		}
++/* WQ steering mode */
++enum efct_hw_wq_steering {
++	EFCT_HW_WQ_STEERING_CLASS,
++	EFCT_HW_WQ_STEERING_REQUEST,
++	EFCT_HW_WQ_STEERING_CPU,
++};
 +
-+		/* Setup payload */
-+		init_completion(&payload->done);
++/* HW wqe object */
++struct efct_hw_wqe {
++	struct list_head	list_entry;
++	bool			abort_wqe_submit_needed;
++	bool			send_abts;
++	u32			id;
++	u32			abort_reqtag;
++	u8			*wqebuf;
++};
 +
-+		/* one for self and one for callback */
-+		atomic_set(&payload->refcnt, 2);
-+		payload->node = node;
-+		payload->evt = evt;
-+		payload->context = context;
++struct efct_hw_io;
++/* Typedef for HW "done" callback */
++typedef int (*efct_hw_done_t)(struct efct_hw_io *, u32 len, int status,
++			      u32 ext, void *ul_arg);
 +
-+		if (efct_hw_async_call(hw, efct_xport_post_node_event_cb,
-+				       payload)) {
-+			efc_log_debug(efct, "efct_hw_async_call failed\n");
-+			kfree(payload);
-+			rc = -1;
-+			break;
-+		}
++/**
++ * HW IO object.
++ *
++ * Stores the per-IO information necessary
++ * for both SLI and efct.
++ * @ref:		reference counter for hw io object
++ * @state:		state of IO: free, busy, wait_free
++ * @list_entry		used for busy, wait_free, free lists
++ * @wqe			Work queue object, with link for pending
++ * @hw			pointer back to hardware context
++ * @xfer_rdy		transfer ready data
++ * @type		IO type
++ * @xbusy		Exchange is active in FW
++ * @abort_in_progress	if TRUE, abort is in progress
++ * @status_saved	if TRUE, latched status should be returned
++ * @wq_class		WQ class if steering mode is Class
++ * @reqtag		request tag for this HW IO
++ * @wq			WQ assigned to the exchange
++ * @done		Function called on IO completion
++ * @arg			argument passed to IO done callback
++ * @abort_done		Function called on abort completion
++ * @abort_arg		argument passed to abort done callback
++ * @wq_steering		WQ steering mode request
++ * @saved_status	Saved status
++ * @saved_len		Status length
++ * @saved_ext		Saved extended status
++ * @eq			EQ on which this HIO came up
++ * @sge_offset		SGE data offset
++ * @def_sgl_count	Count of SGEs in default SGL
++ * @abort_reqtag	request tag for an abort of this HW IO
++ * @indicator		Exchange indicator
++ * @def_sgl		default SGL
++ * @sgl			pointer to current active SGL
++ * @sgl_count		count of SGEs in io->sgl
++ * @first_data_sge	index of first data SGE
++ * @n_sge		number of active SGEs
++ */
++struct efct_hw_io {
++	struct kref		ref;
++	enum efct_hw_io_state	state;
++	void			(*release)(struct kref *arg);
++	struct list_head	list_entry;
++	struct efct_hw_wqe	wqe;
 +
-+		/* Wait for completion */
-+		if (wait_for_completion_interruptible(&payload->done)) {
-+			efc_log_debug(efct,
-+				      "POST_NODE_EVENT: completion failed\n");
-+			rc = -1;
-+		}
-+		if (atomic_sub_and_test(1, &payload->refcnt))
-+			kfree(payload);
++	struct efct_hw		*hw;
++	struct efc_dma		xfer_rdy;
++	u16			type;
++	bool			xbusy;
++	bool			abort_in_progress;
++	bool			status_saved;
++	u8			wq_class;
++	u16			reqtag;
 +
-+		break;
-+	}
-+	/*
-+	 * Set wwnn for the port. This will be used instead of the default
-+	 * provided by FW.
-+	 */
-+	case EFCT_XPORT_WWNN_SET: {
-+		u64 wwnn;
++	struct hw_wq		*wq;
++	efct_hw_done_t		done;
++	void			*arg;
++	efct_hw_done_t		abort_done;
++	void			*abort_arg;
 +
-+		/* Retrieve arguments */
-+		va_start(argp, cmd);
-+		wwnn = va_arg(argp, uint64_t);
-+		va_end(argp);
++	enum efct_hw_wq_steering wq_steering;
 +
-+		efc_log_debug(efct, " WWNN %016llx\n", wwnn);
-+		xport->req_wwnn = wwnn;
++	u32			saved_status;
++	u32			saved_len;
++	u32			saved_ext;
 +
-+		break;
-+	}
-+	/*
-+	 * Set wwpn for the port. This will be used instead of the default
-+	 * provided by FW.
-+	 */
-+	case EFCT_XPORT_WWPN_SET: {
-+		u64 wwpn;
++	struct hw_eq		*eq;
++	u32			sge_offset;
++	u32			def_sgl_count;
++	u32			abort_reqtag;
++	u32			indicator;
++	struct efc_dma		def_sgl;
++	struct efc_dma		*sgl;
++	u32			sgl_count;
++	u32			first_data_sge;
++	u32			n_sge;
++};
 +
-+		/* Retrieve arguments */
-+		va_start(argp, cmd);
-+		wwpn = va_arg(argp, uint64_t);
-+		va_end(argp);
 +
-+		efc_log_debug(efct, " WWPN %016llx\n", wwpn);
-+		xport->req_wwpn = wwpn;
++enum efct_hw_port {
++	EFCT_HW_PORT_INIT,
++	EFCT_HW_PORT_SHUTDOWN,
++};
 +
-+		break;
-+	}
++/* Node group rpi reference */
++struct efct_hw_rpi_ref {
++	atomic_t rpi_count;
++	atomic_t rpi_attached;
++};
 +
-+	default:
-+		break;
-+	}
-+	return rc;
-+}
++enum efct_hw_link_stat {
++	EFCT_HW_LINK_STAT_LINK_FAILURE_COUNT,
++	EFCT_HW_LINK_STAT_LOSS_OF_SYNC_COUNT,
++	EFCT_HW_LINK_STAT_LOSS_OF_SIGNAL_COUNT,
++	EFCT_HW_LINK_STAT_PRIMITIVE_SEQ_COUNT,
++	EFCT_HW_LINK_STAT_INVALID_XMIT_WORD_COUNT,
++	EFCT_HW_LINK_STAT_CRC_COUNT,
++	EFCT_HW_LINK_STAT_PRIMITIVE_SEQ_TIMEOUT_COUNT,
++	EFCT_HW_LINK_STAT_ELASTIC_BUFFER_OVERRUN_COUNT,
++	EFCT_HW_LINK_STAT_ARB_TIMEOUT_COUNT,
++	EFCT_HW_LINK_STAT_ADVERTISED_RCV_B2B_CREDIT,
++	EFCT_HW_LINK_STAT_CURR_RCV_B2B_CREDIT,
++	EFCT_HW_LINK_STAT_ADVERTISED_XMIT_B2B_CREDIT,
++	EFCT_HW_LINK_STAT_CURR_XMIT_B2B_CREDIT,
++	EFCT_HW_LINK_STAT_RCV_EOFA_COUNT,
++	EFCT_HW_LINK_STAT_RCV_EOFDTI_COUNT,
++	EFCT_HW_LINK_STAT_RCV_EOFNI_COUNT,
++	EFCT_HW_LINK_STAT_RCV_SOFF_COUNT,
++	EFCT_HW_LINK_STAT_RCV_DROPPED_NO_AER_COUNT,
++	EFCT_HW_LINK_STAT_RCV_DROPPED_NO_RPI_COUNT,
++	EFCT_HW_LINK_STAT_RCV_DROPPED_NO_XRI_COUNT,
++	EFCT_HW_LINK_STAT_MAX,
++};
 +
-+void
-+efct_xport_free(struct efct_xport *xport)
-+{
-+	if (xport) {
-+		efct_io_pool_free(xport->io_pool);
++enum efct_hw_host_stat {
++	EFCT_HW_HOST_STAT_TX_KBYTE_COUNT,
++	EFCT_HW_HOST_STAT_RX_KBYTE_COUNT,
++	EFCT_HW_HOST_STAT_TX_FRAME_COUNT,
++	EFCT_HW_HOST_STAT_RX_FRAME_COUNT,
++	EFCT_HW_HOST_STAT_TX_SEQ_COUNT,
++	EFCT_HW_HOST_STAT_RX_SEQ_COUNT,
++	EFCT_HW_HOST_STAT_TOTAL_EXCH_ORIG,
++	EFCT_HW_HOST_STAT_TOTAL_EXCH_RESP,
++	EFCT_HW_HOSY_STAT_RX_P_BSY_COUNT,
++	EFCT_HW_HOST_STAT_RX_F_BSY_COUNT,
++	EFCT_HW_HOST_STAT_DROP_FRM_DUE_TO_NO_RQ_BUF_COUNT,
++	EFCT_HW_HOST_STAT_EMPTY_RQ_TIMEOUT_COUNT,
++	EFCT_HW_HOST_STAT_DROP_FRM_DUE_TO_NO_XRI_COUNT,
++	EFCT_HW_HOST_STAT_EMPTY_XRI_POOL_COUNT,
++	EFCT_HW_HOST_STAT_MAX,
++};
 +
-+		kfree(xport);
-+	}
-+}
++enum efct_hw_state {
++	EFCT_HW_STATE_UNINITIALIZED,
++	EFCT_HW_STATE_QUEUES_ALLOCATED,
++	EFCT_HW_STATE_ACTIVE,
++	EFCT_HW_STATE_RESET_IN_PROGRESS,
++	EFCT_HW_STATE_TEARDOWN_IN_PROGRESS,
++};
 +
-+void
-+efct_release_fc_transport(struct scsi_transport_template *transport_template)
-+{
-+	if (transport_template)
-+		pr_err("releasing transport layer\n");
++struct efct_hw_link_stat_counts {
++	u8		overflow;
++	u32		counter;
++};
 +
-+	/* Releasing FC transport */
-+	fc_release_transport(transport_template);
-+}
++struct efct_hw_host_stat_counts {
++	u32		counter;
++};
 +
-+static void
-+efct_xport_remove_host(struct Scsi_Host *shost)
-+{
-+	fc_remove_host(shost);
-+}
++/* Structure used for the hash lookup of queue IDs */
++struct efct_queue_hash {
++	bool		in_use;
++	u16		id;
++	u16		index;
++};
 +
-+int efct_scsi_del_device(struct efct *efct)
-+{
-+	if (efct->shost) {
-+		efc_log_debug(efct, "Unregistering with Transport Layer\n");
-+		efct_xport_remove_host(efct->shost);
-+		efc_log_debug(efct, "Unregistering with SCSI Midlayer\n");
-+		scsi_remove_host(efct->shost);
-+		scsi_host_put(efct->shost);
-+		efct->shost = NULL;
-+	}
-+	return EFC_SUCCESS;
-+}
++/* WQ callback object */
++struct hw_wq_callback {
++	u16		instance_index;	/* use for request tag */
++	void (*callback)(void *arg, u8 *cqe, int status);
++	void		*arg;
++	struct list_head list_entry;
++};
++
++struct reqtag_pool {
++	spinlock_t lock;	/* pool lock */
++	struct hw_wq_callback *tags[U16_MAX];
++	struct list_head freelist;
++};
++
++struct efct_hw_config {
++	u32		n_eq;
++	u32		n_cq;
++	u32		n_mq;
++	u32		n_rq;
++	u32		n_wq;
++	u32		n_io;
++	u32		n_sgl;
++	u32		speed;
++	u32		topology;
++	/* size of the buffers for first burst */
++	u32		rq_default_buffer_size;
++	u8		esoc;
++	/* MRQ RQ selection policy */
++	u8		rq_selection_policy;
++	/* RQ quanta if rq_selection_policy == 2 */
++	u8		rr_quanta;
++	u32		filter_def[SLI4_CMD_REG_FCFI_NUM_RQ_CFG];
++};
++
++struct efct_hw {
++	struct efct		*os;
++	struct sli4		sli;
++	u16			ulp_start;
++	u16			ulp_max;
++	u32			dump_size;
++	enum efct_hw_state	state;
++	bool			hw_setup_called;
++	u8			sliport_healthcheck;
++	u16			fcf_indicator;
++
++	/* HW configuration */
++	struct efct_hw_config	config;
++
++	/* calculated queue sizes for each type */
++	u32			num_qentries[SLI4_QTYPE_MAX];
++
++	/* Storage for SLI queue objects */
++	struct sli4_queue	wq[EFCT_HW_MAX_NUM_WQ];
++	struct sli4_queue	rq[EFCT_HW_MAX_NUM_RQ];
++	u16			hw_rq_lookup[EFCT_HW_MAX_NUM_RQ];
++	struct sli4_queue	mq[EFCT_HW_MAX_NUM_MQ];
++	struct sli4_queue	cq[EFCT_HW_MAX_NUM_CQ];
++	struct sli4_queue	eq[EFCT_HW_MAX_NUM_EQ];
++
++	/* HW queue */
++	u32			eq_count;
++	u32			cq_count;
++	u32			mq_count;
++	u32			wq_count;
++	u32			rq_count;
++	u32			cmd_head_count;
++	struct list_head	eq_list;
++
++	struct efct_queue_hash	cq_hash[EFCT_HW_Q_HASH_SIZE];
++	struct efct_queue_hash	rq_hash[EFCT_HW_Q_HASH_SIZE];
++	struct efct_queue_hash	wq_hash[EFCT_HW_Q_HASH_SIZE];
++
++	/* Storage for HW queue objects */
++	struct hw_wq		*hw_wq[EFCT_HW_MAX_NUM_WQ];
++	struct hw_rq		*hw_rq[EFCT_HW_MAX_NUM_RQ];
++	struct hw_mq		*hw_mq[EFCT_HW_MAX_NUM_MQ];
++	struct hw_cq		*hw_cq[EFCT_HW_MAX_NUM_CQ];
++	struct hw_eq		*hw_eq[EFCT_HW_MAX_NUM_EQ];
++	/* count of hw_rq[] entries */
++	u32			hw_rq_count;
++	/* count of multirq RQs */
++	u32			hw_mrq_count;
++
++	struct hw_wq		**wq_cpu_array;
++
++	/* Sequence objects used in incoming frame processing */
++	struct efc_hw_sequence	*seq_pool;
++
++	/* Maintain an ordered, linked list of outstanding HW commands. */
++	struct mutex            bmbx_lock;
++	spinlock_t		cmd_lock;
++	struct list_head	cmd_head;
++	struct list_head	cmd_pending;
++	mempool_t		*cmd_ctx_pool;
++	mempool_t		*mbox_rqst_pool;
++
++	struct sli4_link_event	link;
++
++	/* pointer array of IO objects */
++	struct efct_hw_io	**io;
++	/* array of WQE buffs mapped to IO objects */
++	u8			*wqe_buffs;
++
++	/* IO lock to synchronize list access */
++	spinlock_t		io_lock;
++	/* IO lock to synchronize IO aborting */
++	spinlock_t		io_abort_lock;
++	/* List of IO objects in use */
++	struct list_head	io_inuse;
++	/* List of IO objects waiting to be freed */
++	struct list_head	io_wait_free;
++	/* List of IO objects available for allocation */
++	struct list_head	io_free;
++
++	struct efc_dma		loop_map;
++
++	struct efc_dma		xfer_rdy;
++
++	struct efc_dma		rnode_mem;
++
++	atomic_t		io_alloc_failed_count;
++
++	/* stat: wq sumbit count */
++	u32			tcmd_wq_submit[EFCT_HW_MAX_NUM_WQ];
++	/* stat: wq complete count */
++	u32			tcmd_wq_complete[EFCT_HW_MAX_NUM_WQ];
++
++	atomic_t		send_frame_seq_id;
++	struct reqtag_pool	*wq_reqtag_pool;
++};
++
++enum efct_hw_io_count_type {
++	EFCT_HW_IO_INUSE_COUNT,
++	EFCT_HW_IO_FREE_COUNT,
++	EFCT_HW_IO_WAIT_FREE_COUNT,
++	EFCT_HW_IO_N_TOTAL_IO_COUNT,
++};
++
++/* HW queue data structures */
++struct hw_eq {
++	struct list_head	list_entry;
++	enum sli4_qtype		type;
++	u32			instance;
++	u32			entry_count;
++	u32			entry_size;
++	struct efct_hw		*hw;
++	struct sli4_queue	*queue;
++	struct list_head	cq_list;
++	u32			use_count;
++};
++
++struct hw_cq {
++	struct list_head	list_entry;
++	enum sli4_qtype		type;
++	u32			instance;
++	u32			entry_count;
++	u32			entry_size;
++	struct hw_eq		*eq;
++	struct sli4_queue	*queue;
++	struct list_head	q_list;
++	u32			use_count;
++};
++
++struct hw_q {
++	struct list_head	list_entry;
++	enum sli4_qtype		type;
++};
++
++struct hw_mq {
++	struct list_head	list_entry;
++	enum sli4_qtype		type;
++	u32			instance;
++
++	u32			entry_count;
++	u32			entry_size;
++	struct hw_cq		*cq;
++	struct sli4_queue	*queue;
++
++	u32			use_count;
++};
++
++struct hw_wq {
++	struct list_head	list_entry;
++	enum sli4_qtype		type;
++	u32			instance;
++	struct efct_hw		*hw;
++
++	u32			entry_count;
++	u32			entry_size;
++	struct hw_cq		*cq;
++	struct sli4_queue	*queue;
++	u32			class;
++
++	/* WQ consumed */
++	u32			wqec_set_count;
++	u32			wqec_count;
++	u32			free_count;
++	u32			total_submit_count;
++	struct list_head	pending_list;
++
++	/* HW IO allocated for use with Send Frame */
++	struct efct_hw_io	*send_frame_io;
++
++	/* Stats */
++	u32			use_count;
++	u32			wq_pending_count;
++};
++
++struct hw_rq {
++	struct list_head	list_entry;
++	enum sli4_qtype		type;
++	u32			instance;
++
++	u32			entry_count;
++	u32			use_count;
++	u32			hdr_entry_size;
++	u32			first_burst_entry_size;
++	u32			data_entry_size;
++	bool			is_mrq;
++	u32			base_mrq_id;
++
++	struct hw_cq		*cq;
++
++	u8			filter_mask;
++	struct sli4_queue	*hdr;
++	struct sli4_queue	*first_burst;
++	struct sli4_queue	*data;
++
++	struct efc_hw_rq_buffer	*hdr_buf;
++	struct efc_hw_rq_buffer	*fb_buf;
++	struct efc_hw_rq_buffer	*payload_buf;
++	/* RQ tracker for this RQ */
++	struct efc_hw_sequence	**rq_tracker;
++};
++
++struct efct_hw_send_frame_context {
++	struct efct_hw		*hw;
++	struct hw_wq_callback	*wqcb;
++	struct efct_hw_wqe	wqe;
++	void (*callback)(int status, void *arg);
++	void			*arg;
++
++	/* General purpose elements */
++	struct efc_hw_sequence	*seq;
++	struct efc_dma		payload;
++};
++
++struct efct_hw_grp_hdr {
++	u32			size;
++	__be32			magic_number;
++	u32			word2;
++	u8			rev_name[128];
++	u8			date[12];
++	u8			revision[32];
++};
++
++#endif /* __EFCT_H__ */
 -- 
 2.26.2
 
