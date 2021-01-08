@@ -2,93 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA372EEC62
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Jan 2021 05:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C407A2EEC76
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Jan 2021 05:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbhAHEUl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Jan 2021 23:20:41 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:52452 "EHLO
+        id S1727849AbhAHEWn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Jan 2021 23:22:43 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:54114 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727471AbhAHEUk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Jan 2021 23:20:40 -0500
+        with ESMTP id S1727100AbhAHEWn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Jan 2021 23:22:43 -0500
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10849f67096788;
-        Fri, 8 Jan 2021 04:19:54 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10849j0o096801;
+        Fri, 8 Jan 2021 04:21:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=fJtX/x/q0BSrKpHUkhYtCo9igyPNRl3G/Q1ztLnzj0Q=;
- b=U9tseGlUFLP/vvV2g5YoM4hATBWrA6QsJ1ETiKTLhDA4ZDRWzTfoS69owYthMgcXdgH2
- RpaeGs2Hq18+aCNwITJFr2Ka8cr/nEOICBZoAPFo5F8Tg1wmWlq4HnmaFBUi0oxKVl6y
- olA0JAzLykgohFEwBgQh88jAExNkJ46u6u5rbpBy66qlfaKlhWDD6iLhq0uz/G7DHJzh
- xYS3whqhDP+oKgxRk1ARZ2NIlVLJJretuFKO/BYqUQNhbPGhRjnc4y/43W/ufoZh69J/
- MxKvk0r+Gee3Ofhax2NC1u7QDWwVPmEyfmKPGyoxJ43pLNR9WongIDvlZRM1Gt5UBJ/G tg== 
+ bh=7FkAnWaCZS3Bs4hxyLCFtZjraeMHp1ZAL+y/Yigzdh8=;
+ b=laD7DxK9Bn8NoBQJNesLVWrys5xXc5Njk5OrG1h1dRNJeONcX3I9HH8v/9hnvQVnlXmT
+ oYrDiBbGuaGqqgPXvwvQwJflT4dAr4X1tvNyInbzeoiEo3LNTbSar/pVx/ijVCXAAkRh
+ 1MWjAWcnUzKXb5O24uTyaf0AbXctPGYg2d4yHUuC+s5s5ROn/vfu4Zc6nebvo3b7lm4t
+ XqA6cDGj8Qo3Vupq9P07K/vgz/78EnfsodUkYMYy4aTTrZotAA+ThWmJCtAvy3bmmkhR
+ 5//Widq5WunEYoyrHQodV+sans/BowjJPjf4KHCZOGzKPP+YPxLG1JV161FUfTdXCYDH IQ== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 35wepmfd97-1
+        by aserp2120.oracle.com with ESMTP id 35wepmfddt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 08 Jan 2021 04:19:54 +0000
+        Fri, 08 Jan 2021 04:21:55 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1084AuAi079282;
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1084AueG079346;
         Fri, 8 Jan 2021 04:19:54 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 35v1fc2x8h-1
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 35v1fc2x8j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 08 Jan 2021 04:19:54 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 1084Jqmp018065;
-        Fri, 8 Jan 2021 04:19:52 GMT
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 1084JrfF031011;
+        Fri, 8 Jan 2021 04:19:53 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 08 Jan 2021 04:19:52 +0000
+        with ESMTP ; Fri, 08 Jan 2021 04:19:53 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+To:     lduncan@suse.com, Nilesh Javali <njavali@marvell.com>,
+        cleech@redhat.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        clang-built-linux@googlegroups.com, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: sd: remove obsolete variable in sd_remove()
-Date:   Thu,  7 Jan 2021 23:19:37 -0500
-Message-Id: <161007949339.9892.18140869017043061616.b4-ty@oracle.com>
+        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] qedi: Correct max length of CHAP secret
+Date:   Thu,  7 Jan 2021 23:19:38 -0500
+Message-Id: <161007949338.9892.5837970838931674073.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201214095424.12479-1-lukas.bulwahn@gmail.com>
-References: <20201214095424.12479-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20201217105144.8055-1-njavali@marvell.com>
+References: <20201217105144.8055-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9857 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=850 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
  suspectscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2101080021
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9857 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 spamscore=0
  impostorscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 clxscore=1011 mlxlogscore=859
+ priorityscore=1501 mlxscore=0 malwarescore=0 clxscore=1011 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2101080021
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 14 Dec 2020 10:54:24 +0100, Lukas Bulwahn wrote:
+On Thu, 17 Dec 2020 02:51:44 -0800, Nilesh Javali wrote:
 
-> Commit 140ea3bbf39a ("sd: use __register_blkdev to avoid a modprobe for an
-> unregistered dev_t") removed blk_register_region(devt, ...) in sd_remove()
-> and since then, devt is unused in sd_remove().
-> 
-> Hence, make W=1 warns:
-> 
->   drivers/scsi/sd.c:3516:8:
->       warning: variable 'devt' set but not used [-Wunused-but-set-variable]
-> 
-> [...]
+> The CHAP secret displayed garbage characters causing iSCSI login
+> authentication failure. Correct the CHAP password max length.
 
 Applied to 5.11/scsi-fixes, thanks!
 
-[1/1] scsi: sd: remove obsolete variable in sd_remove()
-      https://git.kernel.org/mkp/scsi/c/be2553358cd4
+[1/1] qedi: Correct max length of CHAP secret
+      https://git.kernel.org/mkp/scsi/c/d50c7986fbf0
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
