@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DEA2EFF68
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 13:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59E42EFF6C
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 13:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbhAIMaS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Jan 2021 07:30:18 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:8242 "EHLO
+        id S1726432AbhAIMaa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Jan 2021 07:30:30 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:45867 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725983AbhAIMaR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 07:30:17 -0500
+        with ESMTP id S1725983AbhAIMaa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 07:30:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1610195417; x=1641731417;
+  t=1610195429; x=1641731429;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=86KVVGkjsxV3CuXgmxLUP4ISNLUjibp0P90ZoI6alJc=;
-  b=V7gHdpMgWlaXifHMMFNzAoqD5o2H/0ecTrgluCWWAoSE04DD1Sy80iHe
-   QoJtlPOe2aN1NA0vP3yMkA3WCtVM+scp5izfEkjVFCcYyCFYAG1uUWJ39
-   /76KK1CG+adCg67xDPm3HGc1DwNIzN9uCD89ZQJ64R6YfEQc8XW0EZr6D
-   J3aYm0e6kZ7/Ls5woxNsQSNCFcOdLx/GV3KmsJhb1Civp7XIpZzJmIiuM
-   kDWQAf2jf7f8LUfu/cZhlHzh8mTDaJ/ZN/kR+FCXCTqIkSq3BHgiPB2EX
-   i4T14Qr/bwFrRb2acss5d4ayztckPDL+f5GHTn+ug+ZE9cNXgreO3V9+i
+  bh=crgptfdo4ZvB/eP/lKCiawEC/FxPXC3A+NiZk4ydCYw=;
+  b=yfEEP0wcIfiaDv3PtygdHkEXtS+8NDy+seKm8L/1cq9EXjGZaJ984cYp
+   xLOV8z6ys4DBpO66bQUEo4kcAcNDlGSk1AUqIXG6xTVgulIxlezzJTgnx
+   7TVllunp4y/U4qaOT286E1WDwL38rDLQnA2j5Z/B1l1cueUdlBfYhumNF
+   sVmu5CJRbWIvJ35vxmzKOsb7qseB+SnHVqFlUk/UlTsha2kwkWXn1TjXG
+   0uIQ0NLDiOAgLI9owURUYIVC1yPuJCu+ayIbSuiMvF0pHb8etEOGRR6NN
+   G8uMQuSq418Z3JcgbyD6z5HTC2rzOq5NQkTkslDmf4DBDFDxTze4emfnK
    A==;
-IronPort-SDR: Pf8rSgAMX/1PCew9I1q9esdzlb6fnF03n/k1iZ68dU6Ra4Dl+KJN4BdJjQIgdElNekEtdFc1DM
- o/IxfFeIuecIb45MJD6VqfTUz6kM/YD5pvQFwrBayALyqrreY5wBV82HBblsEcYjCmuv/eKuAI
- wyavYwyd5SZ68Ve1jR365JGbyP4Rn3BrxmUVORgA/uVrwEoXYpZZR0Wna2NttQxFoiGMcPTR3I
- 0oD9PbGNFf8sddGEYlHmEsMZsi6lzYU5Xhdok2nWE2ZAiWyC5gxnL4EHyEjmkFqMhYm/xyyt4U
- utw=
+IronPort-SDR: 2UKqalPbVB94ePdmiP4HMhX5o2W+t+gLhNEqdWhz73inT/zJlQF4mCd4610xRiOoPtTm7Fy6/M
+ W9Z43pVIlW0+yxXSJpAKePTDW8DVsoI8wORXBxq/zN1Rx443wDOyO2ISApaSLKhHpT0OYSbhYf
+ rbvezR6hk3lfBStBuBanSezupCA3NSUboGb4B4VqPAuiiH/4pEx5L1Q/o9hXve8618s8I1mNU+
+ 2rOwEWO2/pCw9zGBS8FIWOK8MO+IHcy5M5LGfFBsMixa8ty+ZXAXanmtvUSItwKGkNfALljlyq
+ YLY=
 X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
-   d="scan'208";a="99533222"
+   d="scan'208";a="105371470"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2021 05:29:01 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2021 05:29:07 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sat, 9 Jan 2021 05:29:01 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Sat, 9 Jan 2021 05:29:00 -0700
+ 15.1.1979.3; Sat, 9 Jan 2021 05:29:07 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Sat, 9 Jan 2021 05:29:06 -0700
 From:   Viswas G <Viswas.G@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -47,9 +47,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <yuuzheng@google.com>, <vishakhavc@google.com>, <radha@google.com>,
         <akshatzen@google.com>, <bjashnani@google.com>,
         <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH v2 4/8] pm80xx: fix missing tag_free in NVMD DATA req
-Date:   Sat, 9 Jan 2021 18:08:45 +0530
-Message-ID: <20210109123849.17098-5-Viswas.G@microchip.com>
+Subject: [PATCH v2 7/8] pm80xx: Log SATA IOMB completion status on failure.
+Date:   Sat, 9 Jan 2021 18:08:48 +0530
+Message-ID: <20210109123849.17098-8-Viswas.G@microchip.com>
 X-Mailer: git-send-email 2.16.3
 In-Reply-To: <20210109123849.17098-1-Viswas.G@microchip.com>
 References: <20210109123849.17098-1-Viswas.G@microchip.com>
@@ -59,55 +59,64 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: akshatzen <akshatzen@google.com>
+From: Vishakha Channapattan <vishakhavc@google.com>
 
-Tag is not free'd in NVMD get/set data request failure scenario,
-which would have caused tag leak each time the request fails.
+Added a log message in sata completion path to log the status of failed
+command. If the status does not match any expected status, another
+message will be logged.
 
-Signed-off-by: akshatzen <akshatzen@google.com>
+On IO failure with known status, log message will be
+
+[ 1712.951735] pm80xx0:: mpi_sata_completion 2269: IO failed device_id
+16385 status 0x1 tag XX
+
+If the firmware returns unexpected status, log message of the following
+format will be logged -
+
+[ 1712.951735] pm80xx0:: mpi_sata_completion XXXX: Unknown status
+device_id XXXXX status 0xX tag XX
+
+Signed-off-by: Vishakha Channapattan <vishakhavc@google.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
+Signed-off-by: Ashokkumar N <Ashokkumar.N@microchip.com>
 Signed-off-by: Radha Ramachandran <radha@google.com>
 Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index f147193d67bd..9cd6a654f8b2 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -3038,8 +3038,8 @@ void pm8001_mpi_set_nvmd_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 	complete(pm8001_ha->nvmd_completion);
- 	pm8001_dbg(pm8001_ha, MSG, "Set nvm data complete!\n");
- 	if ((dlen_status & NVMD_STAT) != 0) {
--		pm8001_dbg(pm8001_ha, FAIL, "Set nvm data error!\n");
--		return;
-+		pm8001_dbg(pm8001_ha, FAIL, "Set nvm data error %x\n",
-+				dlen_status);
- 	}
- 	ccb->task = NULL;
- 	ccb->ccb_tag = 0xFFFFFFFF;
-@@ -3062,11 +3062,17 @@ pm8001_mpi_get_nvmd_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 
- 	pm8001_dbg(pm8001_ha, MSG, "Get nvm data complete!\n");
- 	if ((dlen_status & NVMD_STAT) != 0) {
--		pm8001_dbg(pm8001_ha, FAIL, "Get nvm data error!\n");
-+		pm8001_dbg(pm8001_ha, FAIL, "Get nvm data error %x\n",
-+				dlen_status);
- 		complete(pm8001_ha->nvmd_completion);
-+		/* We should free tag during failure also, the tag is not being
-+		 * free'd by requesting path anywhere.
-+		 */
-+		ccb->task = NULL;
-+		ccb->ccb_tag = 0xFFFFFFFF;
-+		pm8001_tag_free(pm8001_ha, tag);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index df679e36954a..e7fef42b4f6c 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -2437,10 +2437,11 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
  		return;
  	}
--
- 	if (ir_tds_bn_dps_das_nvm & IPMode) {
- 		/* indirect mode - IR bit set */
- 		pm8001_dbg(pm8001_ha, MSG, "Get NVMD success, IR=1\n");
+ 
+-	if (unlikely(status))
+-		pm8001_dbg(pm8001_ha, IOERR,
+-			   "status:0x%x, tag:0x%x, task::0x%p\n",
+-			   status, tag, t);
++	if (status != IO_SUCCESS) {
++		pm8001_dbg(pm8001_ha, FAIL,
++			"IO failed device_id %u status 0x%x tag %d\n",
++			pm8001_dev->device_id, status, tag);
++	}
+ 
+ 	/* Print sas address of IO failed device */
+ 	if ((status != IO_SUCCESS) && (status != IO_OVERFLOW) &&
+@@ -2762,7 +2763,9 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 			atomic_dec(&pm8001_dev->running_req);
+ 		break;
+ 	default:
+-		pm8001_dbg(pm8001_ha, DEVIO, "Unknown status 0x%x\n", status);
++		pm8001_dbg(pm8001_ha, DEVIO,
++				"Unknown status device_id %u status 0x%x tag %d\n",
++			pm8001_dev->device_id, status, tag);
+ 		/* not allowed case. Therefore, return failed status */
+ 		ts->resp = SAS_TASK_COMPLETE;
+ 		ts->stat = SAS_DEV_NO_RESPONSE;
 -- 
 2.16.3
 
