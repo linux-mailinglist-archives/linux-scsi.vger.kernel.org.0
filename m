@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 790E12EFF6A
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 13:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353D92EFF6B
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 13:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbhAIMaM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Jan 2021 07:30:12 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:58550 "EHLO
+        id S1726377AbhAIMaO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Jan 2021 07:30:14 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:28004 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725983AbhAIMaL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 07:30:11 -0500
+        with ESMTP id S1725983AbhAIMaN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 07:30:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1610195411; x=1641731411;
+  t=1610195414; x=1641731414;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=+UH1GFWNZL0c3SQyIVx/6vcCgjMv4VYJ5Vya3lAHH3c=;
-  b=MYkqtLZoNRL/t7+zXzZ31GKAdi9K9yKSJpUU3CwX2zgXKjPpbzGL+1GF
-   ktB257ukqUYLM8woaVGW+Obi6YGuXmJw6YeT0+PaQjjd6bU/tF4ECTNNc
-   G46cdYBmMLaV+08VhlPESJxEXD0LlCd80BbvxN1yTwqtYQhywe6fsgbtH
-   jkIwTRFHbFzrF2c4W1uxya7F7NZP3bUh5lvar60XOqYbqnZvKmq87bqU5
-   eC8hrjCvZzpd1SyN4i81tMz90mZiIuRgfcnYhXDPqzIFpWU7jehgFvYiZ
-   lfhp9Ayx7L0WjvPecQAsc+ldvJVhNUFqJugeDiwze7+CKJKS7rVhYTTr9
+  bh=0rnYiW3NA9JvDVuKIKr2ZVG8ZPoKm0CDxASyZsb8ziU=;
+  b=Dl21HlDoqVCr5aSgJvD1aJpJ1uBRFs9+SpGY9a0Tg6+5dunX+ZSPLRgX
+   pqU+RtKYFSX5i6rPmWkf1wE60CEaMxEsBEHRkPq9LA4ClASzB/uNYxUVW
+   tLBG2S50UZrhqvbHuMKY9oRDUCsWM56DusId4n6vLzEB3su1xb/7rYZYq
+   Flqb9zLV4ww2Qs0WNMcCsc5faYBuWwwlz7191XmVwjurfnZTlfweizDmx
+   pMIeQse1ISBBf/SiAXrfWhY9aEvX//AJdUuGnmJ6SuJshBmnx+1lVXDC3
+   3DsFOIftVzENJw3Es/bhvrcBhY43DoFd6u4jgGOosn7ll1KkSH+dPG+F9
    Q==;
-IronPort-SDR: BNvaIltLIeFHSCJAZ6uSpKVBdPy9LaZBmJNuEiTVRqBiPNXLe/k0xwp4Az3L07ppdxES3nSrmM
- BWfCFQVZ8CHAjyKuqe2fvuCBI+kN6npfC9MVbMZCletLYjJzTaupmKYcJ7WUoqW1Apy/bReRL3
- 4kwWcMQtUToVL3P1u1T/Q/pLL9dvhOVn4Xeb+A2BhDJaigkFkGU2KahDgkVMB3IGNH24sPX6Am
- 7neGq8EApqldwuMkaul1+gLAS3E71ibUZNfq75G7G+KFtFilyQ4w8MWiJnHP1D3tNL9nbN3FCV
- S3M=
+IronPort-SDR: fKLWRTr2CJubxI9uq+9tP1EESO+/fmJRZGyxsltyv0R1LdRkb+ea2CTSykOrTMlFWzdFkx1b8v
+ sw2yjedMcYOhCXCwNaP3+EPyWxSVcZrGEExspLnc/wpLY6bofi7ieYCUluVNNhj8GxEwAmUrg1
+ QAQnL+tkaJHxo4HlOH+eD2/d3FdQkPrLc3Gf70kj+rODnNIntSYXCysEN35oIbjyTurvegzCh9
+ LJoSnH6PKFVaAPK/jX2s7ywxv0Ra88TlNx6Cj51jWqI378U4mouUdYkLHQuyNHoMOORP1O9kB4
+ APc=
 X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
-   d="scan'208";a="110403305"
+   d="scan'208";a="104838607"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2021 05:28:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2021 05:28:58 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sat, 9 Jan 2021 05:28:55 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Sat, 9 Jan 2021 05:28:55 -0700
+ 15.1.1979.3; Sat, 9 Jan 2021 05:28:57 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Sat, 9 Jan 2021 05:28:56 -0700
 From:   Viswas G <Viswas.G@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -47,9 +47,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <yuuzheng@google.com>, <vishakhavc@google.com>, <radha@google.com>,
         <akshatzen@google.com>, <bjashnani@google.com>,
         <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH v2 1/8] pm80xx: No busywait in MPI init check
-Date:   Sat, 9 Jan 2021 18:08:42 +0530
-Message-ID: <20210109123849.17098-2-Viswas.G@microchip.com>
+Subject: [PATCH v2 2/8] pm80xx: check fatal error
+Date:   Sat, 9 Jan 2021 18:08:43 +0530
+Message-ID: <20210109123849.17098-3-Viswas.G@microchip.com>
 X-Mailer: git-send-email 2.16.3
 In-Reply-To: <20210109123849.17098-1-Viswas.G@microchip.com>
 References: <20210109123849.17098-1-Viswas.G@microchip.com>
@@ -61,10 +61,10 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: akshatzen <akshatzen@google.com>
 
-We do not need to busy wait during mpi_init_check. I confirmed that
-mpi_init_check is not being invoked in an ATOMIC context. It is being
-called from pm8001_pci_resume, pm8001_pci_probe. Hence we are
-replacing the udelay which busy waits with msleep.
+When controller runs into fatal error, commands which expect
+response get stuck due to no response. If the controller is
+in fatal error state, abort request issued to the controller
+gets hung too. Hence we should fail it without trying.
 
 Signed-off-by: akshatzen <akshatzen@google.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
@@ -72,50 +72,145 @@ Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
 Signed-off-by: Radha Ramachandran <radha@google.com>
 Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 6 +++---
- drivers/scsi/pm8001/pm80xx_hwi.h | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c |  1 +
+ drivers/scsi/pm8001/pm8001_sas.c |  9 +++++++++
+ drivers/scsi/pm8001/pm8001_sas.h |  2 ++
+ drivers/scsi/pm8001/pm80xx_hwi.c | 36 ++++++++++++++++++++++++++++++++++++
+ drivers/scsi/pm8001/pm80xx_hwi.h | 13 +++++++++++++
+ 5 files changed, 61 insertions(+)
 
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index c8d4d87c5473..f147193d67bd 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4998,4 +4998,5 @@ const struct pm8001_dispatch pm8001_8001_dispatch = {
+ 	.fw_flash_update_req	= pm8001_chip_fw_flash_update_req,
+ 	.set_dev_state_req	= pm8001_chip_set_dev_state_req,
+ 	.sas_re_init_req	= pm8001_chip_sas_re_initialization,
++	.fatal_errors		= pm80xx_fatal_errors,
+ };
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index d1e9dba2ef19..f8d142f9b9ad 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -1183,12 +1183,21 @@ int pm8001_abort_task(struct sas_task *task)
+ 	int rc = TMF_RESP_FUNC_FAILED, ret;
+ 	u32 phy_id;
+ 	struct sas_task_slow slow_task;
++
+ 	if (unlikely(!task || !task->lldd_task || !task->dev))
+ 		return TMF_RESP_FUNC_FAILED;
++
+ 	dev = task->dev;
+ 	pm8001_dev = dev->lldd_dev;
+ 	pm8001_ha = pm8001_find_ha_by_dev(dev);
+ 	phy_id = pm8001_dev->attached_phy;
++
++	if (PM8001_CHIP_DISP->fatal_errors(pm8001_ha)) {
++		// If the controller is seeing fatal errors
++		// abort task will not get a response from the controller
++		return TMF_RESP_FUNC_FAILED;
++	}
++
+ 	ret = pm8001_find_tag(task, &tag);
+ 	if (ret == 0) {
+ 		pm8001_info(pm8001_ha, "no tag for task:%p\n", task);
+diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
+index f2c8cbad3853..039ed91e9841 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.h
++++ b/drivers/scsi/pm8001/pm8001_sas.h
+@@ -215,6 +215,7 @@ struct pm8001_dispatch {
+ 	int (*sas_diag_execute_req)(struct pm8001_hba_info *pm8001_ha,
+ 		u32 state);
+ 	int (*sas_re_init_req)(struct pm8001_hba_info *pm8001_ha);
++	int (*fatal_errors)(struct pm8001_hba_info *pm8001_ha);
+ };
+ 
+ struct pm8001_chip_info {
+@@ -725,6 +726,7 @@ ssize_t pm80xx_get_fatal_dump(struct device *cdev,
+ ssize_t pm80xx_get_non_fatal_dump(struct device *cdev,
+ 		struct device_attribute *attr, char *buf);
+ ssize_t pm8001_get_gsm_dump(struct device *cdev, u32, char *buf);
++int pm80xx_fatal_errors(struct pm8001_hba_info *pm8001_ha);
+ /* ctl shared API */
+ extern struct device_attribute *pm8001_host_attrs[];
+ 
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 6772b0924dac..9c4b8b374ab8 100644
+index 9c4b8b374ab8..86a3d483749c 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -997,7 +997,7 @@ static int mpi_init_check(struct pm8001_hba_info *pm8001_ha)
- 		max_wait_count = SPC_DOORBELL_CLEAR_TIMEOUT;
- 	}
- 	do {
--		udelay(1);
-+		msleep(FW_READY_INTERVAL);
- 		value = pm8001_cr32(pm8001_ha, 0, MSGU_IBDB_SET);
- 		value &= SPCv_MSGU_CFG_TABLE_UPDATE;
- 	} while ((value != 0) && (--max_wait_count));
-@@ -1010,9 +1010,9 @@ static int mpi_init_check(struct pm8001_hba_info *pm8001_ha)
- 		return -EBUSY;
- 	}
- 	/* check the MPI-State for initialization upto 100ms*/
--	max_wait_count = 100 * 1000;/* 100 msec */
-+	max_wait_count = 5;/* 100 msec */
- 	do {
--		udelay(1);
-+		msleep(FW_READY_INTERVAL);
- 		gst_len_mpistate =
- 			pm8001_mr32(pm8001_ha->general_stat_tbl_addr,
- 					GST_GSTLEN_MPIS_OFFSET);
+@@ -1525,6 +1525,41 @@ static int mpi_uninit_check(struct pm8001_hba_info *pm8001_ha)
+ 	return 0;
+ }
+ 
++/**
++ * pm80xx_fatal_errors - returns non zero *ONLY* when fatal errors
++ * @pm8001_ha: our hba card information
++ *
++ * Fatal errors are recoverable only after a host reboot.
++ */
++int
++pm80xx_fatal_errors(struct pm8001_hba_info *pm8001_ha)
++{
++	int ret = 0;
++	u32 scratch_pad_rsvd0 = pm8001_cr32(pm8001_ha, 0,
++					MSGU_HOST_SCRATCH_PAD_6);
++	u32 scratch_pad_rsvd1 = pm8001_cr32(pm8001_ha, 0,
++					MSGU_HOST_SCRATCH_PAD_7);
++	u32 scratch_pad1 = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
++	u32 scratch_pad2 = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_2);
++	u32 scratch_pad3 = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_3);
++
++	if (pm8001_ha->chip_id != chip_8006 &&
++			pm8001_ha->chip_id != chip_8074 &&
++			pm8001_ha->chip_id != chip_8076) {
++		return 0;
++	}
++
++	if (MSGU_SCRATCHPAD1_STATE_FATAL_ERROR(scratch_pad1)) {
++		pm8001_dbg(pm8001_ha, FAIL,
++			"Fatal error SCRATCHPAD1 = 0x%x SCRATCHPAD2 = 0x%x SCRATCHPAD3 = 0x%x SCRATCHPAD_RSVD0 = 0x%x SCRATCHPAD_RSVD1 = 0x%x\n",
++				scratch_pad1, scratch_pad2, scratch_pad3,
++				scratch_pad_rsvd0, scratch_pad_rsvd1);
++		ret = 1;
++	}
++
++	return ret;
++}
++
+ /**
+  * pm8001_chip_soft_rst - soft reset the PM8001 chip, so that the clear all
+  * the FW register status to the originated status.
+@@ -4959,4 +4994,5 @@ const struct pm8001_dispatch pm8001_80xx_dispatch = {
+ 	.set_nvmd_req		= pm8001_chip_set_nvmd_req,
+ 	.fw_flash_update_req	= pm8001_chip_fw_flash_update_req,
+ 	.set_dev_state_req	= pm8001_chip_set_dev_state_req,
++	.fatal_errors		= pm80xx_fatal_errors,
+ };
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
-index ec48bc276de6..2b6b52551968 100644
+index 2b6b52551968..2c8e85cfdbc4 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.h
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.h
-@@ -220,8 +220,8 @@
- #define SAS_DOPNRJT_RTRY_TMO            128
- #define SAS_COPNRJT_RTRY_TMO            128
+@@ -1368,6 +1368,19 @@ typedef struct SASProtocolTimerConfig SASProtocolTimerConfig_t;
+ #define MSGU_HOST_SCRATCH_PAD_6			0x6C
+ #define MSGU_HOST_SCRATCH_PAD_7			0x70
  
--#define SPCV_DOORBELL_CLEAR_TIMEOUT	(30 * 1000 * 1000) /* 30 sec */
--#define SPC_DOORBELL_CLEAR_TIMEOUT	(15 * 1000 * 1000) /* 15 sec */
-+#define SPCV_DOORBELL_CLEAR_TIMEOUT	(30 * 50) /* 30 sec */
-+#define SPC_DOORBELL_CLEAR_TIMEOUT	(15 * 50) /* 15 sec */
- 
- /*
-   Making ORR bigger than IT NEXUS LOSS which is 2000000us = 2 second.
++#define MSGU_SCRATCHPAD1_RAAE_STATE_ERR(x) ((x & 0x3) == 0x2)
++#define MSGU_SCRATCHPAD1_ILA_STATE_ERR(x) (((x >> 2) & 0x3) == 0x2)
++#define MSGU_SCRATCHPAD1_BOOTLDR_STATE_ERR(x) ((((x >> 4) & 0x7) == 0x7) || \
++						(((x >> 4) & 0x7) == 0x4))
++#define MSGU_SCRATCHPAD1_IOP0_STATE_ERR(x) (((x >> 10) & 0x3) == 0x2)
++#define MSGU_SCRATCHPAD1_IOP1_STATE_ERR(x) (((x >> 12) & 0x3) == 0x2)
++#define MSGU_SCRATCHPAD1_STATE_FATAL_ERROR(x)  \
++			(MSGU_SCRATCHPAD1_RAAE_STATE_ERR(x) ||      \
++			 MSGU_SCRATCHPAD1_ILA_STATE_ERR(x) ||       \
++			 MSGU_SCRATCHPAD1_BOOTLDR_STATE_ERR(x) ||   \
++			 MSGU_SCRATCHPAD1_IOP0_STATE_ERR(x) ||      \
++			 MSGU_SCRATCHPAD1_IOP1_STATE_ERR(x))
++
+ /* bit definition for ODMR register */
+ #define ODMR_MASK_ALL			0xFFFFFFFF/* mask all
+ 					interrupt vector */
 -- 
 2.16.3
 
