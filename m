@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEA52EFF6D
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 13:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 760F32EFF6F
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 13:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbhAIMag (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Jan 2021 07:30:36 -0500
+        id S1726449AbhAIMa5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Jan 2021 07:30:57 -0500
 Received: from esa.microchip.iphmx.com ([68.232.154.123]:63795 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725983AbhAIMag (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 07:30:36 -0500
+        with ESMTP id S1725983AbhAIMa5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 07:30:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1610195436; x=1641731436;
+  t=1610195456; x=1641731456;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=5ya5BFz+18adfq5rPPGG4XfJwN2WDmPc77XTVR5z2IE=;
-  b=qAnl2qfRSx3gBw/wlEadcWFBo0mFQ3bXOajQqVehrUI23xfqz+17kUAS
-   qVS0weXKAYoeUqV9GW8gSL9ccuC30DIXgFALJnjlaX2gwu3ObqSv89opk
-   mfipmmFynZIjISWcmLZJLvqPlk1IKhI6Tk4FaYHDYon8f1Lcj1Jze+/Qv
-   oPBayJ1Z46A42yCZ64MV11fw2vgMMJI2MFtGU/A3vnJqKL2RwhSz6Vd4C
-   Oo/KzhOxmneDRLfjeJ2xj0Ll/2zy44UA/3bZM6kCuIb7gFDLy68hqLVVN
-   bdwEmQ6v0nAsZP/X8c8118gEEkWATJ4Dzi8GobuUfRgDqjFW870KHrtGH
-   A==;
-IronPort-SDR: FyLFuRIztOx7o/IBCP4A/oCbKZkxjWC+Mp4Fth29UXYabh+CSeLL1Q+pd4VUZxIx1/Aw5h5pHo
- KKXIXXNSurtLtwL6J8o4DZmRYAm0jZvYpd+IavDInCZ2BTCLAYEezR0hFKK0bH7De9LMaOTCsS
- Dnfoohjum0KFP8E5bF5hz9WUlvbi6WO11zMRphLruK0JB/ghwUcPTC4QaCb+kaSa+Tls8boAEd
- wAyLGpVbk5Glhm4cs1xvxZbRtRt11uMQKOgaZtQp47djc9Wdqf9FtjGVkrL1JfsLoBS2rLafAv
- dIg=
+  bh=sgRzZaYhzN7qaiiMH6XvnZw3BVhPp7ygvJ3c0xFsRy0=;
+  b=vn97gPFMhXDB15eoXdFbALWiWfDzGGcku6V7Qip9YkVCU+DiIhZ1+07V
+   RDdWeGI9o3mYRNwoMtpTu539yn3W4nkwKYVeSqG1pLv5JDry3rC3evwGI
+   0W5FFA5QfxPaMbPrJwYgOY530pxeVUOTHb279aP5k6BcHtln0NTtVUVKW
+   W2ipR6oZhOMQaYGJX3beymzaTvmrJOAf/LudSqMVKya62WePiKb+QUAZX
+   65wAZgTx5wGikogSmM1sDux+U/VBfdBQGX/cJeqmRwgt78V2KgLBVLcfC
+   /AEq940T1/QiUXZBQJigzHUC616Naa1T4R8e+D/N0BXxK8pSxUfHP30JR
+   w==;
+IronPort-SDR: eOXuuk69oQbh8DfC4Mi76s3UiCvrJnKfw6m/KVbO1/D70tLunPvU68vHm3WJDH/o3H2tgh4Khk
+ s6ICSA9/qGbtTK6qktNNTFeCyFlsL9Z9fyDYld7/pL/KtLw6kFph7PGAhyRdOZ8xAt+7ssAvOS
+ /o0Y5zcYFUHB8QzABDVDOjx1/UCkPWr5oq4Ydi+1Ns3Ajg/09qdLa0X7lrSSPabuvcQxPJPat6
+ /b7dYKeMDbIZkdak5K0pwcRdGJ8qYjVDihdDT3EgMVE4XXFDZMGoQtT6BMHCcgklRX9ij/Dxge
+ AC4=
 X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
-   d="scan'208";a="39871685"
+   d="scan'208";a="39871687"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2021 05:29:03 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2021 05:29:05 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sat, 9 Jan 2021 05:29:03 -0700
+ 15.1.1979.3; Sat, 9 Jan 2021 05:29:05 -0700
 Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Sat, 9 Jan 2021 05:29:02 -0700
+ Transport; Sat, 9 Jan 2021 05:29:04 -0700
 From:   Viswas G <Viswas.G@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -47,9 +47,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <yuuzheng@google.com>, <vishakhavc@google.com>, <radha@google.com>,
         <akshatzen@google.com>, <bjashnani@google.com>,
         <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH v2 5/8] pm80xx: fix driver fatal dump failure.
-Date:   Sat, 9 Jan 2021 18:08:46 +0530
-Message-ID: <20210109123849.17098-6-Viswas.G@microchip.com>
+Subject: [PATCH v2 6/8] pm80xx: Simultaneous poll for all FW readiness.
+Date:   Sat, 9 Jan 2021 18:08:47 +0530
+Message-ID: <20210109123849.17098-7-Viswas.G@microchip.com>
 X-Mailer: git-send-email 2.16.3
 In-Reply-To: <20210109123849.17098-1-Viswas.G@microchip.com>
 References: <20210109123849.17098-1-Viswas.G@microchip.com>
@@ -59,64 +59,134 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The fatal dump function pm80xx_get_fatal_dump() has two issues that
-result in the fatal dump not being completed successfully.
+From: Bhavesh Jashnani <bjashnani@google.com>
 
-1. When trying collect fatal_logs from the application it is getting
-failed, because we are not shifting MEMBASE-II register properly.
-Once we read 64K region of data we have to shift the MEMBASE-II register
-and read the next chunk of data, then only we would be able to get
-complete data.
+In check_fw_ready() we first wait for ILA to come up and then we
+wait for RAAE to come up and IOPs and so on. This is a sequential check.
+Because of this ILA image seems to be not ready in the allocated time
+and so the driver marks it as "not ready" and then move on to other FW
+images. But ILA does become ready eventually, but is not checked again.
+In this way driver concludes that FW is not ready, when it actually is.
 
-2. If timeout occurs our application will get stuck because we are not
-handling this case. In this patch it resolves all these issues.
+Fix: Instead of sequentially polling each image, we keep polling for all
+images to be ready. The timeout for the polling has been set to the sum
+of what was used for each individual image.
 
+Signed-off-by: Bhavesh Jashnani <bjashnani@google.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
 Signed-off-by: Ashokkumar N <Ashokkumar.N@microchip.com>
+Signed-off-by: Radha Ramachandran <radha@google.com>
 Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 80 ++++++++++++----------------------------
+ 1 file changed, 23 insertions(+), 57 deletions(-)
 
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 7d0eada11d3c..407c0cf6ab5f 100644
+index 407c0cf6ab5f..df679e36954a 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -349,10 +349,15 @@ ssize_t pm80xx_get_fatal_dump(struct device *cdev,
- 				sprintf(
- 				pm8001_ha->forensic_info.data_buf.direct_data,
- 				"%08x ", 0xFFFFFFFF);
--				pm8001_cw32(pm8001_ha, 0,
-+				return((char *)pm8001_ha->forensic_info.data_buf.direct_data -
-+						(char *)buf);
-+			}
-+	/* reset fatal_forensic_shift_offset back to zero and reset MEMBASE 2 register to zero */
-+			pm8001_ha->fatal_forensic_shift_offset = 0; /* location in 64k region */
-+			pm8001_cw32(pm8001_ha, 0,
- 					MEMBASE_II_SHIFT_REGISTER,
- 					pm8001_ha->fatal_forensic_shift_offset);
--			}
-+		}
- 			/* Read the next block of the debug data.*/
- 			length_to_read = pm8001_mr32(fatal_table_address,
- 			MPI_FATAL_EDUMP_TABLE_ACCUM_LEN) -
-@@ -373,13 +378,12 @@ ssize_t pm80xx_get_fatal_dump(struct device *cdev,
- 								= 0;
- 				pm8001_ha->forensic_info.data_buf.read_len = 0;
- 			}
--		}
+@@ -1043,6 +1043,7 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
+ 	u32 value;
+ 	u32 max_wait_count;
+ 	u32 max_wait_time;
++	u32 expected_mask;
+ 	int ret = 0;
+ 
+ 	/* reset / PCIe ready */
+@@ -1052,70 +1053,35 @@ static int check_fw_ready(struct pm8001_hba_info *pm8001_ha)
+ 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
+ 	} while ((value == 0xFFFFFFFF) && (--max_wait_count));
+ 
+-	/* check ila status */
+-	max_wait_time = max_wait_count = 50;	/* 1000 milli sec */
+-	do {
+-		msleep(FW_READY_INTERVAL);
+-		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
+-	} while (((value & SCRATCH_PAD_ILA_READY) !=
+-			SCRATCH_PAD_ILA_READY) && (--max_wait_count));
+-	if (!max_wait_count)
+-		ret = -1;
+-	else {
+-		pm8001_dbg(pm8001_ha, MSG,
+-			   " ila ready status in %d millisec\n",
+-			   (max_wait_time - max_wait_count));
+-	}
+-
+-	/* check RAAE status */
+-	max_wait_time = max_wait_count = 90;	/* 1800 milli sec */
+-	do {
+-		msleep(FW_READY_INTERVAL);
+-		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
+-	} while (((value & SCRATCH_PAD_RAAE_READY) !=
+-				SCRATCH_PAD_RAAE_READY) && (--max_wait_count));
+-	if (!max_wait_count)
+-		ret = -1;
+-	else {
+-		pm8001_dbg(pm8001_ha, MSG,
+-			   " raae ready status in %d millisec\n",
+-			   (max_wait_time - max_wait_count));
++	/* check ila, RAAE and iops status */
++	if ((pm8001_ha->chip_id != chip_8008) &&
++			(pm8001_ha->chip_id != chip_8009)) {
++		max_wait_time = max_wait_count = 180;   /* 3600 milli sec */
++		expected_mask = SCRATCH_PAD_ILA_READY |
++			SCRATCH_PAD_RAAE_READY |
++			SCRATCH_PAD_IOP0_READY |
++			SCRATCH_PAD_IOP1_READY;
++	} else {
++		max_wait_time = max_wait_count = 170;   /* 3400 milli sec */
++		expected_mask = SCRATCH_PAD_ILA_READY |
++			SCRATCH_PAD_RAAE_READY |
++			SCRATCH_PAD_IOP0_READY;
  	}
- 	offset = (int)((char *)pm8001_ha->forensic_info.data_buf.direct_data
- 			- (char *)buf);
- 	pm8001_dbg(pm8001_ha, IO, "get_fatal_spcv: return4 0x%x\n", offset);
--	return (char *)pm8001_ha->forensic_info.data_buf.direct_data -
--		(char *)buf;
-+	return ((char *)pm8001_ha->forensic_info.data_buf.direct_data -
-+		(char *)buf);
+-
+-	/* check iop0 status */
+-	max_wait_time = max_wait_count = 30;	/* 600 milli sec */
+ 	do {
+ 		msleep(FW_READY_INTERVAL);
+ 		value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
+-	} while (((value & SCRATCH_PAD_IOP0_READY) != SCRATCH_PAD_IOP0_READY) &&
+-			(--max_wait_count));
+-	if (!max_wait_count)
++	} while (((value & expected_mask) !=
++				 expected_mask) && (--max_wait_count));
++	if (!max_wait_count) {
++		pm8001_dbg(pm8001_ha, INIT,
++		"At least one FW component failed to load within %d millisec: Scratchpad1: 0x%x\n",
++			max_wait_time * FW_READY_INTERVAL, value);
+ 		ret = -1;
+-	else {
++	} else {
+ 		pm8001_dbg(pm8001_ha, MSG,
+-			   " iop0 ready status in %d millisec\n",
+-			   (max_wait_time - max_wait_count));
++			"All FW components ready by %d ms\n",
++			(max_wait_time - max_wait_count) * FW_READY_INTERVAL);
+ 	}
+-
+-	/* check iop1 status only for 16 port controllers */
+-	if ((pm8001_ha->chip_id != chip_8008) &&
+-			(pm8001_ha->chip_id != chip_8009)) {
+-		/* 200 milli sec */
+-		max_wait_time = max_wait_count = 10;
+-		do {
+-			msleep(FW_READY_INTERVAL);
+-			value = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
+-		} while (((value & SCRATCH_PAD_IOP1_READY) !=
+-				SCRATCH_PAD_IOP1_READY) && (--max_wait_count));
+-		if (!max_wait_count)
+-			ret = -1;
+-		else {
+-			pm8001_dbg(pm8001_ha, MSG,
+-				   "iop1 ready status in %d millisec\n",
+-				   (max_wait_time - max_wait_count));
+-		}
+-	}
+-
+ 	return ret;
  }
  
- /* pm80xx_get_non_fatal_dump - dump the nonfatal data from the dma
 -- 
 2.16.3
 
