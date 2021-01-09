@@ -2,58 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C23D2F0108
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 16:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B6A2F0132
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jan 2021 17:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbhAIP5t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Jan 2021 10:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
+        id S1726495AbhAIQH2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Jan 2021 11:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726059AbhAIP5s (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 10:57:48 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6374EC061786;
-        Sat,  9 Jan 2021 07:57:08 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t30so11920416wrb.0;
-        Sat, 09 Jan 2021 07:57:08 -0800 (PST)
+        with ESMTP id S1726059AbhAIQH1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Jan 2021 11:07:27 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C8AC061786;
+        Sat,  9 Jan 2021 08:06:45 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id a6so10177991wmc.2;
+        Sat, 09 Jan 2021 08:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4HHQ9RGvj6Z9FZXDkRGAkIAp92S56tPsxAgDh/4OaCc=;
-        b=u/sYmc5c/Cu8NO4mrleoXIANn1/0yWcpS5qVSuu9Ej40Pg6cIb1W2VHcLIVSdoCM6+
-         092goA2x2vIMKwi5Ke5VYmmG1GErTTCvTzbEfpYmZBw4jtkaelBK82s76kGcemq31HOA
-         xfqL7O2GggO3X/Ddxew5rZQWgIubw+JiMPgcApNTL6KGhsV4T6KP0ofhksy5GlO29DSX
-         3x8b9IwI+DBc3+WIhiMmrbwg3efHOI6dZAB6maG8BDBVlsKpLv9P1C5z6mpef39lCJis
-         0mv4jFNZirOzb331PwKpD4f0JkL7vaf2PnqQsVwR8hEhsXQFFi6ewCYBqwVzo15sxcHx
-         QYwg==
+        bh=HbCju64JezN5aP0eyaXdTCbh4XXGllceBuZwEInsYMA=;
+        b=V6eWj2vQOBLhnXOnb47gMqadM7AX1Rtl4ilBrdmNjQuF6+M/VHgwh90XSfgN9bADPS
+         E6dVUuVffggqdmHzqBopCX9KF8KorzTo4vzPMhq3ikFHlRyVqGGov5d+j6+rPXrPNnH7
+         a85vLqnOEBECzrD3OaUHBWeiuYSoUthGyysmvgH0iSUn7Ocd6X4w9hVXXsmVQtiJCdNB
+         0irXPBcgLwtbXFq2/BP8/MduySxaAr/7nQqEN764dF1e2g0/5Mry8SgC/Obkh82I3RMd
+         3TRySLPSkOs0zGOcn86DZKWRLprviHm59Hnut1SYjV+CbZopoPfrmiCPZHIZxpyisufk
+         H+aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4HHQ9RGvj6Z9FZXDkRGAkIAp92S56tPsxAgDh/4OaCc=;
-        b=bVbNa+kkp/3isdgMGG1VhEBaK3l9RhX679qN1hq+PmWVXVQW4LVewz8i8oPrwzk1QH
-         sim7m4LovsCBERMWFnqd57AjomJl4NRPr/AeVKqhjs5T+uhhlz9KwvqQe3NX9/xWq7lT
-         IQ3U9vJv2ph506vIpU+9Sx8KmEwsFtjsWQcDcRdIX0+VaFwNnNpeFGIsxlhXmQ2dtyTC
-         hTiy33iQnYV/yD7bULfgGYGnePLJHOMfNvUjrHWcpK6ZmOpdkJQu7MvTMtoe1b2GCW7h
-         mwISWkVyBC9k70L/87NfmX6A5B2p17NwY+iAvnL/w3Rq2hdxVkag39UR0jNRx54brIuA
-         uu7A==
-X-Gm-Message-State: AOAM532MS4HNYR8bD3unNJ41EGQIgtVCpIYzC6FxQSzBrfQM6obJ3oL+
-        3uIYupty3eR4xRA5kYOwVNQ=
-X-Google-Smtp-Source: ABdhPJzu3MTQCx9PGGHDjGtBcArNIBFP5vEbHEdINlX+Fuik0EPOehbsiOXBuocEkmu9WGSU1L04IA==
-X-Received: by 2002:a5d:56c3:: with SMTP id m3mr8671869wrw.419.1610207827145;
-        Sat, 09 Jan 2021 07:57:07 -0800 (PST)
+        bh=HbCju64JezN5aP0eyaXdTCbh4XXGllceBuZwEInsYMA=;
+        b=MzvsIW0EeRK6gMsrnuyGrJtbNGVOCOZfT5hxaTaiJcMkI62LmEEhdyOVi8A8vpiT0X
+         GR0JLIZkp8ScHJofc9IrVc5fQWr7dPMuvPFod5Vvwqv2wKhgdwXmYVrmbXoc4veV1bux
+         X+C8B/7mZAgUr1HL+Y/tjSVA8gOlA7sDDaPVRLqhAUoIBvB7NBq8Y90MnTJcrpWoFuQa
+         RPWFOepLh9CpL4zU4IHm8GwmlAAiJa27EC4JUoETq1i2KrI+XebJtCADr1ZKh1OL9XKs
+         00/7sBQleMC4ZW1EZk6/bXQK5Iy6O0mc2mjWtd1cE1qwuz2VZ9syiyNgk13X9EP/0dQF
+         soog==
+X-Gm-Message-State: AOAM533ezZ3WELuiCYazonrFBFpnAHMymhKCFW4Nc2bc8rqJDRrI8bFz
+        VamVZolGAW7MKXL+/HUWLGv10sOY0zphjbY1
+X-Google-Smtp-Source: ABdhPJz86Pohk+Bm+A9/1RhdHTzwGj6SIoPa3IBIhw88i50LQL82IqpT5rAZ5qOLtDaU8dPw6ij2bQ==
+X-Received: by 2002:a1c:4907:: with SMTP id w7mr7810298wma.175.1610208404000;
+        Sat, 09 Jan 2021 08:06:44 -0800 (PST)
 Received: from localhost.localdomain ([185.69.144.125])
-        by smtp.gmail.com with ESMTPSA id g78sm15563568wme.33.2021.01.09.07.57.06
+        by smtp.gmail.com with ESMTPSA id j9sm17403866wrm.14.2021.01.09.08.06.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jan 2021 07:57:06 -0800 (PST)
+        Sat, 09 Jan 2021 08:06:43 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] target/file: don't zero iter before iov_iter_bvec
-Date:   Sat,  9 Jan 2021 15:53:27 +0000
-Message-Id: <34cd22d6cec046e3adf402accb1453cc255b9042.1610207523.git.asml.silence@gmail.com>
+To:     linux-block@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v3 0/7] no-copy bvec
+Date:   Sat,  9 Jan 2021 16:02:56 +0000
+Message-Id: <cover.1610170479.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -61,28 +71,72 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-iov_iter_bvec() initialises iterators well, no need to pre-zero it
-beforehand as done in fd_execute_rw_aio(). Compilers can't optimise it
-out and generate extra code for that (confirmed with assembly).
+Currently, when iomap and block direct IO gets a bvec based iterator
+the bvec will be copied, with all other accounting that takes much
+CPU time and causes additional allocation for larger bvecs. The
+patchset makes it to reuse the passed in iter bvec.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- drivers/target/target_core_file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1,2] are forbidding zero-length bvec segments to not pile special
+cases, [3] skip/fix PSI tracking to not iterate over bvecs extra
+time.
 
-diff --git a/drivers/target/target_core_file.c b/drivers/target/target_core_file.c
-index cce455929778..5a66854def95 100644
---- a/drivers/target/target_core_file.c
-+++ b/drivers/target/target_core_file.c
-@@ -267,7 +267,7 @@ fd_execute_rw_aio(struct se_cmd *cmd, struct scatterlist *sgl, u32 sgl_nents,
- 	struct fd_dev *fd_dev = FD_DEV(dev);
- 	struct file *file = fd_dev->fd_file;
- 	struct target_core_file_cmd *aio_cmd;
--	struct iov_iter iter = {};
-+	struct iov_iter iter;
- 	struct scatterlist *sg;
- 	ssize_t len = 0;
- 	int ret = 0, i;
+
+nullblk completion_nsec=0 submit_queues=NR_CORES, no merges, no stats
+fio/t/io_uring /dev/nullb0 -d 128 -s 32 -c 32 -p 0 -B 1 -F 1 -b BLOCK_SIZE
+
+BLOCK_SIZE             512     4K      8K      16K     32K     64K
+===================================================================
+old (KIOPS)            1208    1208    1131    1039    863     699
+new (KIOPS)            1222    1222    1170    1137    1083    982
+
+Previously, Jens got before 10% difference for polling real HW and small
+block sizes, but that was for an older version that had one
+iov_iter_advance() less
+
+
+since RFC:
+- add target_core_file patch by Christoph
+- make no-copy default behaviour, remove iter flag
+- iter_advance() instead of hacks to revert to work
+- add bvec iter_advance() optimisation patch
+- remove PSI annotations from direct IO (iomap, block and fs/direct)
+- note in d/f/porting
+
+since v1:
+- don't allow zero-length bvec segments (Ming)
+- don't add a BIO_WORKINGSET-less version of bio_add_page(), just clear
+  the flag at the end and leave it for further cleanups (Christoph)
+- commit message and comments rewording (Dave)
+- other nits by Christoph
+
+since v2:
+- add a comment in 1/7 (Christoph)
+- add a note about 0-len bvecs in biovecs.rst (Matthew)
+
+Christoph Hellwig (1):
+  target/file: allocate the bvec array as part of struct
+    target_core_file_cmd
+
+Pavel Begunkov (6):
+  splice: don't generate zero-len segement bvecs
+  bvec/iter: disallow zero-length segment bvecs
+  block/psi: remove PSI annotations from direct IO
+  iov_iter: optimise bvec iov_iter_advance()
+  bio: add a helper calculating nr segments to alloc
+  bio: don't copy bvec for direct IO
+
+ Documentation/block/biovecs.rst       |  2 +
+ Documentation/filesystems/porting.rst | 16 ++++++
+ block/bio.c                           | 71 +++++++++++++--------------
+ drivers/target/target_core_file.c     | 20 +++-----
+ fs/block_dev.c                        |  7 +--
+ fs/direct-io.c                        |  2 +
+ fs/iomap/direct-io.c                  |  9 ++--
+ fs/splice.c                           |  9 ++--
+ include/linux/bio.h                   | 13 +++++
+ lib/iov_iter.c                        | 21 +++++++-
+ 10 files changed, 106 insertions(+), 64 deletions(-)
+
 -- 
 2.24.0
 
