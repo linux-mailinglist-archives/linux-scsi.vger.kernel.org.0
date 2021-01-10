@@ -2,300 +2,427 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B80F82F087C
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Jan 2021 17:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F642F0931
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 Jan 2021 20:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbhAJQzy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 10 Jan 2021 11:55:54 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:43836 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbhAJQzx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 10 Jan 2021 11:55:53 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 7502B2311A1D
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: [PATCH 3/3] aha1542: fix multi-line comment style
-From:   Sergey Shtylyov <s.shtylyov@omprussia.ru>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-References: <2726d35a-ac66-fae9-51e7-ea4f13e89fd7@omprussia.ru>
-Organization: Open Mobile Platform, LLC
-Message-ID: <08c231e5-d86f-9d0b-19ac-ad46fa0c0b58@omprussia.ru>
-Date:   Sun, 10 Jan 2021 19:49:26 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726829AbhAJTGJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 Jan 2021 14:06:09 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:49982 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726267AbhAJTGJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 10 Jan 2021 14:06:09 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A1FF8128038C;
+        Sun, 10 Jan 2021 11:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1610305528;
+        bh=4XW5npyc9zq6QyHgZJfewa8gmDpW7bVmrIyvnkZJ0Zk=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=SLtUMFR8DSlviuJAW606BNV0hMZrVuL3I986DH/+PnWZIL4D1qKXxBjWAKsmcDJ+B
+         UgJkRcQV9v0JboS0cNykgbUCPUQGv8rZ7WKEndkOZmnhfhRdHWvpZYRWufOEjYqqPc
+         +B/PfZCYtALOoeLaZzovuF9XbbRyv1gFSvWhtt90=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9d5BKh-Te1iN; Sun, 10 Jan 2021 11:05:28 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4A4B61280383;
+        Sun, 10 Jan 2021 11:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1610305528;
+        bh=4XW5npyc9zq6QyHgZJfewa8gmDpW7bVmrIyvnkZJ0Zk=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=SLtUMFR8DSlviuJAW606BNV0hMZrVuL3I986DH/+PnWZIL4D1qKXxBjWAKsmcDJ+B
+         UgJkRcQV9v0JboS0cNykgbUCPUQGv8rZ7WKEndkOZmnhfhRdHWvpZYRWufOEjYqqPc
+         +B/PfZCYtALOoeLaZzovuF9XbbRyv1gFSvWhtt90=
+Message-ID: <14455f8f5d119cb74d3dbe66898863a1a79c0f0b.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.11-rc2
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sun, 10 Jan 2021 11:05:27 -0800
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <2726d35a-ac66-fae9-51e7-ea4f13e89fd7@omprussia.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1908.lancloud.ru (fd00:f066::208)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Some comments in this driver don't comply with the preferred multi-line
-comment style, as reported by 'scripts/checkpatch.pl':
+This is two driver fixes (megaraid_sas and hisi_sas).  The megaraid one
+is a revert of a previous revert of a cpu hotplug fix which exposed a
+bug in the block layer which has been fixed in this merge window and
+the hisi_sas performance enhancement comes from switching to interrupt
+managed completion queues, which depended on the addition of
+devm_platform_get_irqs_affinity() which is now upstream via the irq
+tree in the last merge window.
 
-WARNING: Block comments use * on subsequent lines
-WARNING: Block comments use a trailing */ on a separate line
+The patch is available here:
 
-Fix those comments, along with the (unreported for some reason?) starts
-of the multi-line comments not being /* on their own line... 
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
+The short changelog is:
+
+      scsi: hisi_sas: Expose HW queues for v2 hw
+
+Martin K. Petersen (1):
+      Revert "Revert "scsi: megaraid_sas: Added support for shared host tagset for cpuhotplug""
+
+And the diffstat:
+
+ drivers/scsi/hisi_sas/hisi_sas.h            |  4 ++
+ drivers/scsi/hisi_sas/hisi_sas_main.c       | 11 +++++
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c      | 66 +++++++++++++++++++++++------
+ drivers/scsi/megaraid/megaraid_sas_base.c   | 39 +++++++++++++++++
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 29 +++++++------
+ 5 files changed, 123 insertions(+), 26 deletions(-)
+
+With full diff below.
+
+James
 
 ---
- drivers/scsi/aha1542.c |  119 ++++++++++++++++++++++++++++++-------------------
- 1 file changed, 75 insertions(+), 44 deletions(-)
 
-Index: scsi/drivers/scsi/aha1542.c
-===================================================================
---- scsi.orig/drivers/scsi/aha1542.c
-+++ scsi/drivers/scsi/aha1542.c
-@@ -119,8 +119,10 @@ static int aha1542_out(unsigned int base
- 	return 0;
+diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
+index 2b28dd405600..e821dd32dd28 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas.h
++++ b/drivers/scsi/hisi_sas/hisi_sas.h
+@@ -14,6 +14,7 @@
+ #include <linux/debugfs.h>
+ #include <linux/dmapool.h>
+ #include <linux/iopoll.h>
++#include <linux/irq.h>
+ #include <linux/lcm.h>
+ #include <linux/libata.h>
+ #include <linux/mfd/syscon.h>
+@@ -294,6 +295,7 @@ enum {
+ 
+ struct hisi_sas_hw {
+ 	int (*hw_init)(struct hisi_hba *hisi_hba);
++	int (*interrupt_preinit)(struct hisi_hba *hisi_hba);
+ 	void (*setup_itct)(struct hisi_hba *hisi_hba,
+ 			   struct hisi_sas_device *device);
+ 	int (*slot_index_alloc)(struct hisi_hba *hisi_hba,
+@@ -393,6 +395,8 @@ struct hisi_hba {
+ 	u32 refclk_frequency_mhz;
+ 	u8 sas_addr[SAS_ADDR_SIZE];
+ 
++	int *irq_map; /* v2 hw */
++
+ 	int n_phy;
+ 	spinlock_t lock;
+ 	struct semaphore sem;
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index b6d4419c32f2..cf0bfac920a8 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -2614,6 +2614,13 @@ static struct Scsi_Host *hisi_sas_shost_alloc(struct platform_device *pdev,
+ 	return NULL;
  }
  
--/* Only used at boot time, so we do not need to worry about latency as much
--   here */
-+/*
-+ * Only used at boot time, so we do not need to worry about latency as much
-+ * here
-+ */
- 
- static int aha1542_in(unsigned int base, u8 *buf, int len, int timeout)
++static int hisi_sas_interrupt_preinit(struct hisi_hba *hisi_hba)
++{
++	if (hisi_hba->hw->interrupt_preinit)
++		return hisi_hba->hw->interrupt_preinit(hisi_hba);
++	return 0;
++}
++
+ int hisi_sas_probe(struct platform_device *pdev,
+ 		   const struct hisi_sas_hw *hw)
  {
-@@ -142,35 +144,43 @@ static int makecode(unsigned hosterr, un
- 		break;
+@@ -2671,6 +2678,10 @@ int hisi_sas_probe(struct platform_device *pdev,
+ 		sha->sas_port[i] = &hisi_hba->port[i].sas_port;
+ 	}
  
- 	case 0x11:		/* Selection time out-The initiator selection or target
--				   reselection was not complete within the SCSI Time out period */
-+				 * reselection was not complete within the SCSI Time out period
-+				 */
- 		hosterr = DID_TIME_OUT;
- 		break;
++	rc = hisi_sas_interrupt_preinit(hisi_hba);
++	if (rc)
++		goto err_out_ha;
++
+ 	rc = scsi_add_host(shost, &pdev->dev);
+ 	if (rc)
+ 		goto err_out_ha;
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+index b57177b52fac..9adfdefef9ca 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+@@ -3302,6 +3302,28 @@ static irq_handler_t fatal_interrupts[HISI_SAS_FATAL_INT_NR] = {
+ 	fatal_axi_int_v2_hw
+ };
  
- 	case 0x12:		/* Data overrun/underrun-The target attempted to transfer more data
--				   than was allocated by the Data Length field or the sum of the
--				   Scatter / Gather Data Length fields. */
-+				 * than was allocated by the Data Length field or the sum of the
-+				 * Scatter / Gather Data Length fields.
-+				 */
++#define CQ0_IRQ_INDEX (96)
++
++static int hisi_sas_v2_interrupt_preinit(struct hisi_hba *hisi_hba)
++{
++	struct platform_device *pdev = hisi_hba->platform_dev;
++	struct Scsi_Host *shost = hisi_hba->shost;
++	struct irq_affinity desc = {
++		.pre_vectors = CQ0_IRQ_INDEX,
++		.post_vectors = 16,
++	};
++	int resv = desc.pre_vectors + desc.post_vectors, minvec = resv + 1, nvec;
++
++	nvec = devm_platform_get_irqs_affinity(pdev, &desc, minvec, 128,
++					       &hisi_hba->irq_map);
++	if (nvec < 0)
++		return nvec;
++
++	shost->nr_hw_queues = hisi_hba->cq_nvecs = nvec - resv;
++
++	return 0;
++}
++
+ /*
+  * There is a limitation in the hip06 chipset that we need
+  * to map in all mbigen interrupts, even if they are not used.
+@@ -3310,14 +3332,11 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
+ {
+ 	struct platform_device *pdev = hisi_hba->platform_dev;
+ 	struct device *dev = &pdev->dev;
+-	int irq, rc = 0, irq_map[128];
++	int irq, rc = 0;
+ 	int i, phy_no, fatal_no, queue_no;
  
- 	case 0x13:		/* Unexpected bus free-The target dropped the SCSI BSY at an unexpected time. */
+-	for (i = 0; i < 128; i++)
+-		irq_map[i] = platform_get_irq(pdev, i);
+-
+ 	for (i = 0; i < HISI_SAS_PHY_INT_NR; i++) {
+-		irq = irq_map[i + 1]; /* Phy up/down is irq1 */
++		irq = hisi_hba->irq_map[i + 1]; /* Phy up/down is irq1 */
+ 		rc = devm_request_irq(dev, irq, phy_interrupts[i], 0,
+ 				      DRV_NAME " phy", hisi_hba);
+ 		if (rc) {
+@@ -3331,7 +3350,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
+ 	for (phy_no = 0; phy_no < hisi_hba->n_phy; phy_no++) {
+ 		struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
  
- 	case 0x15:		/* MBO command was not 00, 01 or 02-The first byte of the CB was
--				   invalid. This usually indicates a software failure. */
-+				 * invalid. This usually indicates a software failure.
-+				 */
+-		irq = irq_map[phy_no + 72];
++		irq = hisi_hba->irq_map[phy_no + 72];
+ 		rc = devm_request_irq(dev, irq, sata_int_v2_hw, 0,
+ 				      DRV_NAME " sata", phy);
+ 		if (rc) {
+@@ -3343,7 +3362,7 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
+ 	}
  
- 	case 0x16:		/* Invalid CCB Operation Code-The first byte of the CCB was invalid.
--				   This usually indicates a software failure. */
-+				 * This usually indicates a software failure.
-+				 */
- 
- 	case 0x17:		/* Linked CCB does not have the same LUN-A subsequent CCB of a set
--				   of linked CCB's does not specify the same logical unit number as
--				   the first. */
-+				 * of linked CCB's does not specify the same logical unit number as
-+				 * the first.
-+				 */
- 	case 0x18:		/* Invalid Target Direction received from Host-The direction of a
--				   Target Mode CCB was invalid. */
-+				 * Target Mode CCB was invalid.
-+				 */
- 
- 	case 0x19:		/* Duplicate CCB Received in Target Mode-More than once CCB was
--				   received to service data transfer between the same target LUN
--				   and initiator SCSI ID in the same direction. */
-+				 * received to service data transfer between the same target LUN
-+				 * and initiator SCSI ID in the same direction.
-+				 */
- 
- 	case 0x1a:		/* Invalid CCB or Segment List Parameter-A segment list with a zero
--				   length segment or invalid segment list boundaries was received.
--				   A CCB parameter was invalid. */
-+				 * length segment or invalid segment list boundaries was received.
-+				 * A CCB parameter was invalid.
-+				 */
- #ifdef DEBUG
- 		printk("Aha1542: %x %x\n", hosterr, scsierr);
- #endif
-@@ -178,9 +188,10 @@ static int makecode(unsigned hosterr, un
- 		break;
- 
- 	case 0x14:		/* Target bus phase sequence failure-An invalid bus phase or bus
--				   phase sequence was requested by the target. The host adapter
--				   will generate a SCSI Reset Condition, notifying the host with
--				   a SCRD interrupt */
-+				 * phase sequence was requested by the target. The host adapter
-+				 * will generate a SCSI Reset Condition, notifying the host with
-+				 * a SCRD interrupt
-+				 */
- 		hosterr = DID_RESET;
- 		break;
- 	default:
-@@ -216,8 +227,10 @@ static int aha1542_test_port(struct Scsi
- 	if (inb(INTRFLAGS(sh->io_port)) & INTRMASK)
- 		return 0;
- 
--	/* Perform a host adapter inquiry instead so we do not need to set
--	   up the mailboxes ahead of time */
-+	/*
-+	 * Perform a host adapter inquiry instead so we do not need to set
-+	 * up the mailboxes ahead of time
-+	 */
- 
- 	aha1542_outb(sh->io_port, CMD_INQUIRY);
- 
-@@ -292,10 +305,12 @@ static irqreturn_t aha1542_interrupt(int
- 	while (1) {
- 		flag = inb(INTRFLAGS(sh->io_port));
- 
--		/* Check for unusual interrupts.  If any of these happen, we should
--		   probably do something special, but for now just printing a message
--		   is sufficient.  A SCSI reset detected is something that we really
--		   need to deal with in some way. */
-+		/*
-+		 * Check for unusual interrupts.  If any of these happen, we should
-+		 * probably do something special, but for now just printing a message
-+		 * is sufficient.  A SCSI reset detected is something that we really
-+		 * need to deal with in some way.
-+		 */
- 		if (flag & ~MBIF) {
- 			if (flag & MBOA)
- 				printk("MBOF ");
-@@ -355,9 +370,11 @@ static irqreturn_t aha1542_interrupt(int
+ 	for (fatal_no = 0; fatal_no < HISI_SAS_FATAL_INT_NR; fatal_no++) {
+-		irq = irq_map[fatal_no + 81];
++		irq = hisi_hba->irq_map[fatal_no + 81];
+ 		rc = devm_request_irq(dev, irq, fatal_interrupts[fatal_no], 0,
+ 				      DRV_NAME " fatal", hisi_hba);
+ 		if (rc) {
+@@ -3354,24 +3373,22 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
  		}
- 		my_done = tmp_cmd->scsi_done;
- 		aha1542_free_cmd(tmp_cmd);
--		/* Fetch the sense data, and tuck it away, in the required slot.  The
--		   Adaptec automatically fetches it, and there is no guarantee that
--		   we will still have it in the cdb when we come back */
-+		/*
-+		 * Fetch the sense data, and tuck it away, in the required slot.  The
-+		 * Adaptec automatically fetches it, and there is no guarantee that
-+		 * we will still have it in the cdb when we come back
-+		 */
- 		if (ccb[mbo].tarstat == 2)
- 			memcpy(tmp_cmd->sense_buffer, &ccb[mbo].cdb[ccb[mbo].cdblen],
- 			       SCSI_SENSE_BUFFERSIZE);
-@@ -383,7 +400,8 @@ static irqreturn_t aha1542_interrupt(int
- #endif
- 		tmp_cmd->result = errstatus;
- 		aha1542->int_cmds[mbo] = NULL;	/* This effectively frees up the mailbox slot, as
--						   far as queuecommand is concerned */
-+						 * far as queuecommand is concerned
-+						 */
- 		my_done(tmp_cmd);
- 		number_serviced++;
- 	};
-@@ -433,8 +451,10 @@ static int aha1542_queuecommand(struct S
- 			goto out_free_chain;
  	}
  
--	/* Use the outgoing mailboxes in a round-robin fashion, because this
--	   is how the host adapter will scan for them */
-+	/*
-+	 * Use the outgoing mailboxes in a round-robin fashion, because this
-+	 * is how the host adapter will scan for them
-+	 */
+-	for (queue_no = 0; queue_no < hisi_hba->queue_count; queue_no++) {
++	for (queue_no = 0; queue_no < hisi_hba->cq_nvecs; queue_no++) {
+ 		struct hisi_sas_cq *cq = &hisi_hba->cq[queue_no];
  
- 	spin_lock_irqsave(sh->host_lock, flags);
- 	mbo = aha1542->aha1542_last_mbo_used + 1;
-@@ -453,7 +473,8 @@ static int aha1542_queuecommand(struct S
- 		panic("Unable to find empty mailbox for aha1542.\n");
+-		cq->irq_no = irq_map[queue_no + 96];
++		cq->irq_no = hisi_hba->irq_map[queue_no + 96];
+ 		rc = devm_request_threaded_irq(dev, cq->irq_no,
+ 					       cq_interrupt_v2_hw,
+ 					       cq_thread_v2_hw, IRQF_ONESHOT,
+ 					       DRV_NAME " cq", cq);
+ 		if (rc) {
+ 			dev_err(dev, "irq init: could not request cq interrupt %d, rc=%d\n",
+-				irq, rc);
++					cq->irq_no, rc);
+ 			rc = -ENOENT;
+ 			goto err_out;
+ 		}
++		cq->irq_mask = irq_get_affinity_mask(cq->irq_no);
+ 	}
+-
+-	hisi_hba->cq_nvecs = hisi_hba->queue_count;
+-
+ err_out:
+ 	return rc;
+ }
+@@ -3529,6 +3546,26 @@ static struct device_attribute *host_attrs_v2_hw[] = {
+ 	NULL
+ };
  
- 	aha1542->int_cmds[mbo] = cmd;	/* This will effectively prevent someone else from
--					   screwing with this cdb. */
-+					 * screwing with this cdb.
-+					 */
++static int map_queues_v2_hw(struct Scsi_Host *shost)
++{
++	struct hisi_hba *hisi_hba = shost_priv(shost);
++	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
++	const struct cpumask *mask;
++	unsigned int queue, cpu;
++
++	for (queue = 0; queue < qmap->nr_queues; queue++) {
++		mask = irq_get_affinity_mask(hisi_hba->irq_map[96 + queue]);
++		if (!mask)
++			continue;
++
++		for_each_cpu(cpu, mask)
++			qmap->mq_map[cpu] = qmap->queue_offset + queue;
++	}
++
++	return 0;
++
++}
++
+ static struct scsi_host_template sht_v2_hw = {
+ 	.name			= DRV_NAME,
+ 	.proc_name		= DRV_NAME,
+@@ -3553,10 +3590,13 @@ static struct scsi_host_template sht_v2_hw = {
+ #endif
+ 	.shost_attrs		= host_attrs_v2_hw,
+ 	.host_reset		= hisi_sas_host_reset,
++	.map_queues		= map_queues_v2_hw,
++	.host_tagset		= 1,
+ };
  
- 	aha1542->aha1542_last_mbo_used = mbo;
+ static const struct hisi_sas_hw hisi_sas_v2_hw = {
+ 	.hw_init = hisi_sas_v2_init,
++	.interrupt_preinit = hisi_sas_v2_interrupt_preinit,
+ 	.setup_itct = setup_itct_v2_hw,
+ 	.slot_index_alloc = slot_index_alloc_quirk_v2_hw,
+ 	.alloc_dev = alloc_dev_quirk_v2_hw,
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index 6e4bf05c6d77..af192096a82b 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -37,6 +37,7 @@
+ #include <linux/poll.h>
+ #include <linux/vmalloc.h>
+ #include <linux/irq_poll.h>
++#include <linux/blk-mq-pci.h>
  
-@@ -565,8 +586,10 @@ static int aha1542_getconfig(struct Scsi
- 		sh->dma_channel = 0;
- 		break;
- 	case 0:
--		/* This means that the adapter, although Adaptec 1542 compatible, doesn't use a DMA channel.
--		   Currently only aware of the BusLogic BT-445S VL-Bus adapter which needs this. */
-+		/*
-+		 * This means that the adapter, although Adaptec 1542 compatible, doesn't use a DMA channel.
-+		 * Currently only aware of the BusLogic BT-445S VL-Bus adapter which needs this.
-+		 */
- 		sh->dma_channel = 0xFF;
- 		break;
- 	default:
-@@ -600,8 +623,10 @@ static int aha1542_getconfig(struct Scsi
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_cmnd.h>
+@@ -113,6 +114,10 @@ unsigned int enable_sdev_max_qd;
+ module_param(enable_sdev_max_qd, int, 0444);
+ MODULE_PARM_DESC(enable_sdev_max_qd, "Enable sdev max qd as can_queue. Default: 0");
+ 
++int host_tagset_enable = 1;
++module_param(host_tagset_enable, int, 0444);
++MODULE_PARM_DESC(host_tagset_enable, "Shared host tagset enable/disable Default: enable(1)");
++
+ MODULE_LICENSE("GPL");
+ MODULE_VERSION(MEGASAS_VERSION);
+ MODULE_AUTHOR("megaraidlinux.pdl@broadcom.com");
+@@ -3119,6 +3124,19 @@ megasas_bios_param(struct scsi_device *sdev, struct block_device *bdev,
  	return 0;
  }
  
--/* This function should only be called for 1542C boards - we can detect
--   the special firmware settings and unlock the board */
-+/*
-+ * This function should only be called for 1542C boards - we can detect
-+ * the special firmware settings and unlock the board
-+ */
++static int megasas_map_queues(struct Scsi_Host *shost)
++{
++	struct megasas_instance *instance;
++
++	instance = (struct megasas_instance *)shost->hostdata;
++
++	if (shost->nr_hw_queues == 1)
++		return 0;
++
++	return blk_mq_pci_map_queues(&shost->tag_set.map[HCTX_TYPE_DEFAULT],
++			instance->pdev, instance->low_latency_index_start);
++}
++
+ static void megasas_aen_polling(struct work_struct *work);
  
- static int aha1542_mbenable(struct Scsi_Host *sh)
- {
-@@ -655,10 +680,11 @@ static int aha1542_query(struct Scsi_Hos
+ /**
+@@ -3427,6 +3445,7 @@ static struct scsi_host_template megasas_template = {
+ 	.eh_timed_out = megasas_reset_timer,
+ 	.shost_attrs = megaraid_host_attrs,
+ 	.bios_param = megasas_bios_param,
++	.map_queues = megasas_map_queues,
+ 	.change_queue_depth = scsi_change_queue_depth,
+ 	.max_segment_size = 0xffffffff,
+ };
+@@ -6808,6 +6827,26 @@ static int megasas_io_attach(struct megasas_instance *instance)
+ 	host->max_lun = MEGASAS_MAX_LUN;
+ 	host->max_cmd_len = 16;
  
- 	aha1542->bios_translation = BIOS_TRANSLATION_6432;	/* Default case */
- 
--	/* For an AHA1740 series board, we ignore the board since there is a
--	   hardware bug which can lead to wrong blocks being returned if the board
--	   is operating in the 1542 emulation mode.  Since there is an extended mode
--	   driver, we simply ignore the board and let the 1740 driver pick it up.
-+	/*
-+	 * For an AHA1740 series board, we ignore the board since there is a
-+	 * hardware bug which can lead to wrong blocks being returned if the board
-+	 * is operating in the 1542 emulation mode.  Since there is an extended mode
-+	 * driver, we simply ignore the board and let the 1740 driver pick it up.
- 	 */
- 
- 	if (inquiry_result[0] == 0x43) {
-@@ -666,8 +692,10 @@ static int aha1542_query(struct Scsi_Hos
- 		return 1;
- 	};
- 
--	/* Always call this - boards that do not support extended bios translation
--	   will ignore the command, and we will set the proper default */
-+	/*
-+	 * Always call this - boards that do not support extended bios translation
-+	 * will ignore the command, and we will set the proper default
++	/* Use shared host tagset only for fusion adaptors
++	 * if there are managed interrupts (smp affinity enabled case).
++	 * Single msix_vectors in kdump, so shared host tag is also disabled.
 +	 */
++
++	host->host_tagset = 0;
++	host->nr_hw_queues = 1;
++
++	if ((instance->adapter_type != MFI_SERIES) &&
++		(instance->msix_vectors > instance->low_latency_index_start) &&
++		host_tagset_enable &&
++		instance->smp_affinity_enable) {
++		host->host_tagset = 1;
++		host->nr_hw_queues = instance->msix_vectors -
++			instance->low_latency_index_start;
++	}
++
++	dev_info(&instance->pdev->dev,
++		"Max firmware commands: %d shared with nr_hw_queues = %d\n",
++		instance->max_fw_cmds, host->nr_hw_queues);
+ 	/*
+ 	 * Notify the mid-layer about the new controller
+ 	 */
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index b0c01cf0428f..fd607287608e 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -359,24 +359,29 @@ megasas_get_msix_index(struct megasas_instance *instance,
+ {
+ 	int sdev_busy;
  
- 	aha1542->bios_translation = aha1542_mbenable(sh);
+-	/* nr_hw_queue = 1 for MegaRAID */
+-	struct blk_mq_hw_ctx *hctx =
+-		scmd->device->request_queue->queue_hw_ctx[0];
+-
+-	sdev_busy = atomic_read(&hctx->nr_active);
++	/* TBD - if sml remove device_busy in future, driver
++	 * should track counter in internal structure.
++	 */
++	sdev_busy = atomic_read(&scmd->device->device_busy);
  
-@@ -877,8 +905,9 @@ static int aha1542_dev_reset(struct scsi
- 		panic("Unable to find empty mailbox for aha1542.\n");
+ 	if (instance->perf_mode == MR_BALANCED_PERF_MODE &&
+-	    sdev_busy > (data_arms * MR_DEVICE_HIGH_IOPS_DEPTH))
++	    sdev_busy > (data_arms * MR_DEVICE_HIGH_IOPS_DEPTH)) {
+ 		cmd->request_desc->SCSIIO.MSIxIndex =
+ 			mega_mod64((atomic64_add_return(1, &instance->high_iops_outstanding) /
+ 					MR_HIGH_IOPS_BATCH_COUNT), instance->low_latency_index_start);
+-	else if (instance->msix_load_balance)
++	} else if (instance->msix_load_balance) {
+ 		cmd->request_desc->SCSIIO.MSIxIndex =
+ 			(mega_mod64(atomic64_add_return(1, &instance->total_io_count),
+ 				instance->msix_vectors));
+-	else
++	} else if (instance->host->nr_hw_queues > 1) {
++		u32 tag = blk_mq_unique_tag(scmd->request);
++
++		cmd->request_desc->SCSIIO.MSIxIndex = blk_mq_unique_tag_to_hwq(tag) +
++			instance->low_latency_index_start;
++	} else {
+ 		cmd->request_desc->SCSIIO.MSIxIndex =
+ 			instance->reply_map[raw_smp_processor_id()];
++	}
+ }
  
- 	aha1542->int_cmds[mbo] = cmd;	/* This will effectively
--					   prevent someone else from
--					   screwing with this cdb. */
-+					 * prevent someone else from
-+					 * screwing with this cdb.
-+					 */
+ /**
+@@ -956,9 +961,6 @@ megasas_alloc_cmds_fusion(struct megasas_instance *instance)
+ 	if (megasas_alloc_cmdlist_fusion(instance))
+ 		goto fail_exit;
  
- 	aha1542->aha1542_last_mbo_used = mbo;
+-	dev_info(&instance->pdev->dev, "Configured max firmware commands: %d\n",
+-		 instance->max_fw_cmds);
+-
+ 	/* The first 256 bytes (SMID 0) is not used. Don't add to the cmd list */
+ 	io_req_base = fusion->io_request_frames + MEGA_MPI2_RAID_DEFAULT_IO_FRAME_SIZE;
+ 	io_req_base_phys = fusion->io_request_frames_phys + MEGA_MPI2_RAID_DEFAULT_IO_FRAME_SIZE;
+@@ -1102,8 +1104,9 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
+ 		MR_HIGH_IOPS_QUEUE_COUNT) && cur_intr_coalescing)
+ 		instance->perf_mode = MR_BALANCED_PERF_MODE;
  
-@@ -1063,8 +1092,10 @@ static int aha1542_pnp_probe(struct pnp_
+-	dev_info(&instance->pdev->dev, "Performance mode :%s\n",
+-		MEGASAS_PERF_MODE_2STR(instance->perf_mode));
++	dev_info(&instance->pdev->dev, "Performance mode :%s (latency index = %d)\n",
++		MEGASAS_PERF_MODE_2STR(instance->perf_mode),
++		instance->low_latency_index_start);
  
- 		io[indx] = pnp_port_start(pdev, 0);
- 
--		/* The card can be queried for its DMA, we have
--		   the DMA set up that is enough */
-+		/*
-+		 * The card can be queried for its DMA, we have
-+		 * the DMA set up that is enough
-+		 */
- 
- 		dev_info(&pdev->dev, "ISAPnP found an AHA1535 at I/O 0x%03X", io[indx]);
- 	}
+ 	instance->fw_sync_cache_support = (scratch_pad_1 &
+ 		MR_CAN_HANDLE_SYNC_CACHE_OFFSET) ? 1 : 0;
+
