@@ -2,61 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9492F0B16
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Jan 2021 03:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD172F0B26
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Jan 2021 03:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbhAKCtz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 10 Jan 2021 21:49:55 -0500
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:36346 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725919AbhAKCtz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 10 Jan 2021 21:49:55 -0500
-Received: by mail-pg1-f177.google.com with SMTP id c132so11678801pga.3;
-        Sun, 10 Jan 2021 18:49:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mBjywu/JytUrPm5jEBE65SGQ7hTVgYgPqE4uJPglmZg=;
-        b=KhA2vXQQH5jO+40bakLl5SUkhCqvheJwZjwQmo68aEF+vJJT0UPEJ7wDrGYLaDHuCq
-         kLShdFmj2SzjfN0DfGK1IYcI7gVRAn5npqUHSUf0UXCdlIWiJV5liBwg77X4deF0eZ8+
-         JAMXsWRg81UJZRP3SKDgZQ8BCJiyuTxp/riD0+nHLjlAzUv2GGwwJopSjVC5RWdkPNDz
-         nGMOc3lZLscB+BVFeRnQ7bUHmmnb0civkEfQnkbrWKK6YhrdAWRQd1kBkUjJcJ7EDASt
-         QIA7T00KsUkNa/FNrARhBGOolM2tVGbTh9k1laj9lOk6WqxdO+uFF6qhtYLWp17Uf8Lw
-         xn3g==
-X-Gm-Message-State: AOAM533FwjnCNLOHdH5XBS5E2MeGmVmMMwpWq3lpmmAqzPXwqW3iEjFx
-        XugpWb4WTQ6ZGJqnAsPVBd2bLXnrkDA=
-X-Google-Smtp-Source: ABdhPJwx7hHoRkvykENMFtJARWFXfDuoe21ONMt3g8QlDBGcFe9Zq3QEWxncW7AGikPR4S7xLtD+9A==
-X-Received: by 2002:a62:ca:0:b029:19e:67a9:f0f2 with SMTP id 193-20020a6200ca0000b029019e67a9f0f2mr14291608pfa.60.1610333353639;
-        Sun, 10 Jan 2021 18:49:13 -0800 (PST)
-Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id p17sm16378472pfn.52.2021.01.10.18.49.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Jan 2021 18:49:12 -0800 (PST)
-Subject: Re: [PATCH] target/file: don't zero iter before iov_iter_bvec
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <34cd22d6cec046e3adf402accb1453cc255b9042.1610207523.git.asml.silence@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <488fa4ff-3e08-28cc-60f1-b8c5172e1f79@acm.org>
-Date:   Sun, 10 Jan 2021 18:49:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1727194AbhAKCvP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 Jan 2021 21:51:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34442 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727130AbhAKCvL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 10 Jan 2021 21:51:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610333384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zxAid7WiPvqjKj8F4tMeWzHfvAFa68eNjv+UadafvBY=;
+        b=BNG31rWxdwxWY0+aCnpz0V5l/N95w+8jhEBvnrpOU4S8jI/Afs/TsuDXN69aS+2fpWQT6T
+        +o2kIGkN3eqQo/IFQgLW4jYSwpJBXVAmDmqPeJZqJTWiDJz5138xSrlG5qUTuE19GV4Ui1
+        3lb4xL3NiSZNkuQdsgkQu+pSVUMNp7w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-227-j1tcgOlhP2iXb2n7lzgDXQ-1; Sun, 10 Jan 2021 21:49:40 -0500
+X-MC-Unique: j1tcgOlhP2iXb2n7lzgDXQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C7BB4180A093;
+        Mon, 11 Jan 2021 02:49:37 +0000 (UTC)
+Received: from T590 (ovpn-12-180.pek2.redhat.com [10.72.12.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 20AFC36807;
+        Mon, 11 Jan 2021 02:49:25 +0000 (UTC)
+Date:   Mon, 11 Jan 2021 10:49:20 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v3 2/7] bvec/iter: disallow zero-length segment bvecs
+Message-ID: <20210111024920.GC4147870@T590>
+References: <cover.1610170479.git.asml.silence@gmail.com>
+ <4570836cc62137a9ee788d9c820f58ed8efe9b37.1610170479.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <34cd22d6cec046e3adf402accb1453cc255b9042.1610207523.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4570836cc62137a9ee788d9c820f58ed8efe9b37.1610170479.git.asml.silence@gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/9/21 7:53 AM, Pavel Begunkov wrote:
-> iov_iter_bvec() initialises iterators well, no need to pre-zero it
-> beforehand as done in fd_execute_rw_aio(). Compilers can't optimise it
-> out and generate extra code for that (confirmed with assembly).
+On Sat, Jan 09, 2021 at 04:02:58PM +0000, Pavel Begunkov wrote:
+> zero-length bvec segments are allowed in general, but not handled by bio
+> and down the block layer so filtered out. This inconsistency may be
+> confusing and prevent from optimisations. As zero-length segments are
+> useless and places that were generating them are patched, declare them
+> not allowed.
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  Documentation/block/biovecs.rst       | 2 ++
+>  Documentation/filesystems/porting.rst | 7 +++++++
+>  lib/iov_iter.c                        | 2 --
+>  3 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/block/biovecs.rst b/Documentation/block/biovecs.rst
+> index 36771a131b56..ddb867e0185b 100644
+> --- a/Documentation/block/biovecs.rst
+> +++ b/Documentation/block/biovecs.rst
+> @@ -40,6 +40,8 @@ normal code doesn't have to deal with bi_bvec_done.
+>     There is a lower level advance function - bvec_iter_advance() - which takes
+>     a pointer to a biovec, not a bio; this is used by the bio integrity code.
+>  
+> +As of 5.12 bvec segments with zero bv_len are not supported.
+> +
+>  What's all this get us?
+>  =======================
+>  
+> diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
+> index 867036aa90b8..c722d94f29ea 100644
+> --- a/Documentation/filesystems/porting.rst
+> +++ b/Documentation/filesystems/porting.rst
+> @@ -865,3 +865,10 @@ no matter what.  Everything is handled by the caller.
+>  
+>  clone_private_mount() returns a longterm mount now, so the proper destructor of
+>  its result is kern_unmount() or kern_unmount_array().
+> +
+> +---
+> +
+> +**mandatory**
+> +
+> +zero-length bvec segments are disallowed, they must be filtered out before
+> +passed on to an iterator.
+> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> index 1635111c5bd2..7de304269641 100644
+> --- a/lib/iov_iter.c
+> +++ b/lib/iov_iter.c
+> @@ -72,8 +72,6 @@
+>  	__start.bi_bvec_done = skip;			\
+>  	__start.bi_idx = 0;				\
+>  	for_each_bvec(__v, i->bvec, __bi, __start) {	\
+> -		if (!__v.bv_len)			\
+> -			continue;			\
+>  		(void)(STEP);				\
+>  	}						\
+>  }
+> -- 
+> 2.24.0
+> 
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+
+-- 
+Ming
+
