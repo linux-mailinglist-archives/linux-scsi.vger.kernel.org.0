@@ -2,88 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFC12F2416
+	by mail.lfdr.de (Postfix) with ESMTP id 3469E2F2415
 	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 01:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405528AbhALAZo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S2391759AbhALAZo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 11 Jan 2021 19:25:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58608 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390752AbhAKWpq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 11 Jan 2021 17:45:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D5E6222CAF;
-        Mon, 11 Jan 2021 22:45:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610405105;
-        bh=chIuNkxQOqz1a6QXqkz+qMeyAZzOJBFgOOVyoy2AHg4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lXVSvkmweExnqRTKLa4hpHUhuJffG6JpHvCiOnlK86JHt7ENw9EteCKmdUipxAR0J
-         v9yc3z0R6Tb0vKtcvrbJCcEFhAiaWp6us0g7wJo06bmKcI4j3FKVmFlEHWwHF+0iqh
-         OhM/aLkcLfIApH8H3zQbBNjLpbsF8pkMz2XLda9nJ4rGteA6tzhxHnJwWnn55ZPYRU
-         WHIvLyQAS5mVXZx+jKx/Zo143FY44JUZG0ajrJN0RFhwRWSxQJy6KnfK2hXyYf81W/
-         TXJ7pNJoRCmyXXhQUzQqWNsvk8ag1wfFpq83ZDE1KU5w5IC7iXRV8Ru7HD99vKSqNE
-         5fb44Pgt8gEPQ==
-Date:   Mon, 11 Jan 2021 14:45:02 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Bean Huo <huobean@gmail.com>
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403832AbhAKXLw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Jan 2021 18:11:52 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C810C061786;
+        Mon, 11 Jan 2021 15:11:12 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id i24so236757edj.8;
+        Mon, 11 Jan 2021 15:11:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=PNrKOWpeQ8TNDhDgZ+AtRxMiWuAnBXCXVKCEOv6JX3k=;
+        b=slXzPALxignK5OGkPXKWGS1QKbGvx2b/m2Y6iE33SPoQTJCA0t/YYxSFv+i21d+MGS
+         WxnJGlXLtNTB2P8QI7gaWCNKgFsVGCbjPzQxC13t06kRCgAB+VkJCaVsMI5qeFnLNtW/
+         WMTSMR5IeHUV3S8R0GOXKrFQF4ADTI9+QdnmDDeOTXJ0xwEHNvyD2S3jAEP5P0dwXIVZ
+         pjST+UONBFuHdQgUcOSipdmF2wfbqhf0OdO15LmxYcKdMEvszWx/r32cSLrdZ6Rqw7HD
+         1PefNgTVXiBFo+ucJGucqa5WnG4k4M4JK0x78xIkrN91+T2Ky+dI3uB98To3qAeiB6gW
+         fU9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=PNrKOWpeQ8TNDhDgZ+AtRxMiWuAnBXCXVKCEOv6JX3k=;
+        b=Dsi6DrqNwnbpZa5d+PfRKlN9hH/ZuR1NCPSB2JglpmEGqn4POzSHqjMvxKMXuMGfsf
+         oQc/D6nQQ0e04Fxx4djgpGsUYuYRHg0fOVOkjU6Z3VM6PIoYokscEwsGlBgQYQZLBg7i
+         7qdJQDFtafPpH6rGB0r4rVgmIC0qm2x95kMh51pEqALF/04Rhsq8RrJ+cAZrWdIaHDWx
+         DtaTl25p0CLZqDdID8+kllpZogYF/D6SL5uZlLkxw3QxdW+m7At1srFlP4Muz/2S/Dxm
+         ICGFKmVmliFSORpdvJ84NllPrqrqqGsi4jhSeMUETZN4JNIgjofGjLd3b17BXhKnPJX4
+         NUlw==
+X-Gm-Message-State: AOAM533Aug/wsrPxEIh36m3e2SG4VpGpToBXEaHBvAJEBRsR1TREL/6m
+        Gi/pBNLxpiFc/IIWPLdpe8k=
+X-Google-Smtp-Source: ABdhPJyChlVC1zSMOrcRlaoMGKhjGOzpVnhN3kYvxcBhVlZmfYuAhpweS3Yu7CC3rzmbpQ/qb6gq2w==
+X-Received: by 2002:a50:e846:: with SMTP id k6mr1175118edn.245.1610406671087;
+        Mon, 11 Jan 2021 15:11:11 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bfcff.dynamic.kabel-deutschland.de. [95.91.252.255])
+        by smtp.gmail.com with ESMTPSA id ch30sm598175edb.8.2021.01.11.15.11.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 15:11:10 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         john.garry@huawei.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, satyat@google.com,
-        shipujin.t@gmail.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bean Huo <beanhuo@micron.com>
-Subject: Re: [PATCH 2/2] scsi: ufs: Remove unnecessary devm_kfree
-Message-ID: <X/zU7uWK5s22th4B@sol.localdomain>
-References: <20210111223202.26369-1-huobean@gmail.com>
- <20210111223202.26369-3-huobean@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210111223202.26369-3-huobean@gmail.com>
+        martin.petersen@oracle.com, ebiggers@google.com, satyat@google.com,
+        shipujin.t@gmail.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <beanhuo@micron.com>
+Subject: [PATCH v2 0/2] Remove unnecessary devm_kfree
+Date:   Tue, 12 Jan 2021 00:10:56 +0100
+Message-Id: <20210111231058.14559-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 11:32:02PM +0100, Bean Huo wrote:
-> From: Bean Huo <beanhuo@micron.com>
-> 
-> The memory allocated with devm_kzalloc() is freed automatically
-> no need to explicitly call devm_kfree.
-> 
-> Signed-off-by: Bean Huo <beanhuo@micron.com>
-> ---
->  drivers/scsi/ufs/ufshcd-crypto.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd-crypto.c b/drivers/scsi/ufs/ufshcd-crypto.c
-> index 07310b12a5dc..ec80ec83cf85 100644
-> --- a/drivers/scsi/ufs/ufshcd-crypto.c
-> +++ b/drivers/scsi/ufs/ufshcd-crypto.c
-> @@ -182,7 +182,7 @@ int ufshcd_hba_init_crypto_capabilities(struct ufs_hba *hba)
->  	err = blk_ksm_init(&hba->ksm,
->  			   hba->crypto_capabilities.config_count + 1);
->  	if (err)
-> -		goto out_free_caps;
-> +		goto out;
->  
->  	hba->ksm.ksm_ll_ops = ufshcd_ksm_ops;
->  	/* UFS only supports 8 bytes for any DUN */
-> @@ -208,8 +208,6 @@ int ufshcd_hba_init_crypto_capabilities(struct ufs_hba *hba)
->  
->  	return 0;
->  
-> -out_free_caps:
-> -	devm_kfree(hba->dev, hba->crypto_cap_array);
->  out:
->  	/* Indicate that init failed by clearing UFSHCD_CAP_CRYPTO */
->  	hba->caps &= ~UFSHCD_CAP_CRYPTO;
+From: Bean Huo <beanhuo@micron.com>
 
-Looks fine, feel free to add:
+Changelog:
 
-	Reviewed-by: Eric Biggers <ebiggers@google.com>
+V1-V2:
+    1. Remove unused variable i in patch 1/2
+    2. Add Eric Biggers review tag in patch 2/2
 
-I think this was here to free the memory in the case where the crypto support
-gets disabled but the UFS host initialization still continues, so that the space
-wouldn't be wasted.  But that's not what happens, as this is only reached on
-ENOMEM which is a fatal error.
+Bean Huo (2):
+  scsi: hisi_sas: Remove unnecessary devm_kfree
+  scsi: ufs: Remove unnecessary devm_kfree
 
-- Eric
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 28 +-------------------------
+ drivers/scsi/ufs/ufshcd-crypto.c       |  4 +---
+ 2 files changed, 2 insertions(+), 30 deletions(-)
+
+-- 
+2.17.1
+
