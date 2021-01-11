@@ -2,48 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463342F240D
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 01:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1E92F236C
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 01:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405534AbhALAZp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Jan 2021 19:25:45 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:65212 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2403844AbhAKXNU (ORCPT
+        id S2405540AbhALAZs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Jan 2021 19:25:48 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40414 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2403937AbhAKXOn (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 11 Jan 2021 18:13:20 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10BN2UOp175352;
-        Mon, 11 Jan 2021 18:12:35 -0500
+        Mon, 11 Jan 2021 18:14:43 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10BN1fA7094032;
+        Mon, 11 Jan 2021 18:12:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=y2i4GWq5LEr5rklEQ6slWMtaroYCAfGe74ncTmgMpHs=;
- b=iJTiM3e3q/m54PXJUvSrsCAoFFyOx/upTQSbhRAMO0F84qvH6vE37kkUkwfIK8k4njou
- vvYSz3nLA7xcBJVJ9V8AqHQ6LKS2WejQEt74cdGy3FPoysiemoeWGPOqWmPAE/CMT3kS
- Gnuz7WeesXWS8uU3CaFPHXbI/cSjruKaMTy37aiWG87OyHd8RKTVh7w5sgHoqmtnVX6V
- kkOjFWGkUAxhPPlunc6pyfFIxVfl6Txe8fSXB5I5eE7Yn4Nql5p05by6UOY/C+3XXGJF
- Jhn8l88nUdFGTJKBzVzDDpfx7QxeNYGA0tfaO4/IIKDoYUURS6TWv/KVqbb1OURHOUWd Kw== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 360yvkrf42-1
+ bh=hZeV9JzufbxYww9v6JS4tA3P/nR0IZfx3kmIVf3DC8U=;
+ b=VG7ab5UoE+/4X3JX3wTBQQ9+8yiSJOF8x5fPEPsd/A5u/hTKq0NTKjw8JtOZbyC23g+X
+ a6FvlAjM5ijiSWyxqCmjVNo7pSobH2Jm8J8Q+EFZ/2WwoHuzU1VRCk/6UkGg3AWLYDHG
+ rzIW08lfFo9/Dm5Xzpn6AmiZG3lO5Qi4r8+O2Uf2yRInql+x0BS1J1IhC2Tgyhfd7lIW
+ kbW2HLZRJxHhl7H0luCT3Nr/THj9EUeJ/J6VTiz5OHPf6FqAKs0FWj36J6ciUIru8v8m
+ G8YFdeWWsffaG7emJUf6L61bCCTBho6pNM19RK15uVY69wRTZMQgjMW9RARd4piedt9S 7g== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 360yexs1dp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jan 2021 18:12:35 -0500
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10BN89Rf011995;
-        Mon, 11 Jan 2021 23:12:34 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma05wdc.us.ibm.com with ESMTP id 35y448sxff-1
+        Mon, 11 Jan 2021 18:12:37 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10BN7PLV010308;
+        Mon, 11 Jan 2021 23:12:36 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma01wdc.us.ibm.com with ESMTP id 35y448sys9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jan 2021 23:12:34 +0000
+        Mon, 11 Jan 2021 23:12:36 +0000
 Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10BNCWs28323354
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10BNCXVm37159268
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Jan 2021 23:12:32 GMT
+        Mon, 11 Jan 2021 23:12:33 GMT
 Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B28357805C;
-        Mon, 11 Jan 2021 23:12:32 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 32ACF78064;
+        Mon, 11 Jan 2021 23:12:33 +0000 (GMT)
 Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 479D078064;
+        by IMSVA (Postfix) with ESMTP id C573D78067;
         Mon, 11 Jan 2021 23:12:32 +0000 (GMT)
 Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
         by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
@@ -53,9 +53,9 @@ To:     james.bottomley@hansenpartnership.com
 Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH v4 10/21] ibmvfc: define Sub-CRQ interrupt handler routine
-Date:   Mon, 11 Jan 2021 17:12:14 -0600
-Message-Id: <20210111231225.105347-11-tyreld@linux.ibm.com>
+Subject: [PATCH v4 11/21] ibmvfc: map/request irq and register Sub-CRQ interrupt handler
+Date:   Mon, 11 Jan 2021 17:12:15 -0600
+Message-Id: <20210111231225.105347-12-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210111231225.105347-1-tyreld@linux.ibm.com>
 References: <20210111231225.105347-1-tyreld@linux.ibm.com>
@@ -64,43 +64,73 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-11_32:2021-01-11,2021-01-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 priorityscore=1501 suspectscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101110126
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ mlxscore=0 spamscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2101110126
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Simple handler that calls Sub-CRQ drain routine directly.
+Create an irq mapping for the hw_irq number provided from phyp firmware.
+Request an irq assigned our Sub-CRQ interrupt handler. Unmap these irqs
+at Sub-CRQ teardown.
 
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/scsi/ibmvscsi/ibmvfc.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index f3cd092478ee..51bcafad9490 100644
+index 51bcafad9490..d3d7c6b53d4f 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -3571,6 +3571,16 @@ static void ibmvfc_drain_sub_crq(struct ibmvfc_queue *scrq)
+@@ -5292,12 +5292,34 @@ static int ibmvfc_register_scsi_channel(struct ibmvfc_host *vhost,
+ 		goto reg_failed;
  	}
- }
  
-+static irqreturn_t ibmvfc_interrupt_scsi(int irq, void *scrq_instance)
-+{
-+	struct ibmvfc_queue *scrq = (struct ibmvfc_queue *)scrq_instance;
++	scrq->irq = irq_create_mapping(NULL, scrq->hw_irq);
 +
-+	ibmvfc_toggle_scrq_irq(scrq, 0);
-+	ibmvfc_drain_sub_crq(scrq);
++	if (!scrq->irq) {
++		rc = -EINVAL;
++		dev_err(dev, "Error mapping sub-crq[%d] irq\n", index);
++		goto irq_failed;
++	}
 +
-+	return IRQ_HANDLED;
-+}
++	snprintf(scrq->name, sizeof(scrq->name), "ibmvfc-%x-scsi%d",
++		 vdev->unit_address, index);
++	rc = request_irq(scrq->irq, ibmvfc_interrupt_scsi, 0, scrq->name, scrq);
 +
- /**
-  * ibmvfc_init_tgt - Set the next init job step for the target
-  * @tgt:		ibmvfc target struct
++	if (rc) {
++		dev_err(dev, "Couldn't register sub-crq[%d] irq\n", index);
++		irq_dispose_mapping(scrq->irq);
++		goto irq_failed;
++	}
++
+ 	scrq->hwq_id = index;
+ 	scrq->vhost = vhost;
+ 
+ 	LEAVE;
+ 	return 0;
+ 
++irq_failed:
++	do {
++		plpar_hcall_norets(H_FREE_SUB_CRQ, vdev->unit_address, scrq->cookie);
++	} while (rc == H_BUSY || H_IS_LONG_BUSY(rc));
+ reg_failed:
+ 	ibmvfc_free_queue(vhost, scrq);
+ 	LEAVE;
+@@ -5313,6 +5335,9 @@ static void ibmvfc_deregister_scsi_channel(struct ibmvfc_host *vhost, int index)
+ 
+ 	ENTER;
+ 
++	free_irq(scrq->irq, scrq);
++	irq_dispose_mapping(scrq->irq);
++
+ 	do {
+ 		rc = plpar_hcall_norets(H_FREE_SUB_CRQ, vdev->unit_address,
+ 					scrq->cookie);
 -- 
 2.27.0
 
