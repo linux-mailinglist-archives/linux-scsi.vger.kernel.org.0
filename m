@@ -2,40 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E407F2F2D93
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17ECC2F2D8F
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730633AbhALLIi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Jan 2021 06:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S1729643AbhALLJT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Jan 2021 06:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731569AbhALLIe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:08:34 -0500
+        with ESMTP id S1732036AbhALLIj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:08:39 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC87C061794;
-        Tue, 12 Jan 2021 03:07:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0D6C061795;
+        Tue, 12 Jan 2021 03:07:58 -0800 (PST)
 From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610449672;
+        s=2020; t=1610449677;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RCzPm5DxqpDl9GsT8qnDQdC9zPB3mt7eorYvVVflJMg=;
-        b=m01ORvzzlU/FZX+1Ug1ef3VZKyiTywyW/6yqJLntHCyGbDPgaJd/hwYXHRvph7k1ze8y1K
-        v4FBZqRxBoyNl6UOxHL1zVRD9OiVqFH+OVgNFAD7Fm2u/D86cFKjrdIDtgMhvbn8gI/J0L
-        /xGngR8NOcXCLxb88Qy4M8JgFzBONY3Mlvt6mVnyMt4+MByO4Cs5SWdOFPdbYrA6wpcmT5
-        1FndBPgFFbEHAkSqK5Ubp9/rR7sAdnnMDAad4JbH/QWTYZlsUWezv9VA1ypnObFFveF27F
-        anRLxgZPVmP5XNPFzQI5ciHCtRRnAGeqnuXttPfiLw/XdzOLeQ6Vl31wllgzVg==
+        bh=z5qromd4jkMCdMGjXDuFJUGZCAJZuzZwx4w65IZJYx8=;
+        b=1Bzs91JnLLy9VaYOKhloK+2LUv9jaCT8ERLKxGz+Uydas2HZ29F6FtISWSvltZd+tIV3Co
+        nAoHO3oN7kCE58RVyKhoESEit53kBvOkS77D/lbJ6W9CC/WezRHNBBw0HoX6X8t795Olid
+        Ke7G9XX+WRCnOZdmFt6AOtQF8CvUHkhxLfJR7dEUUpFrCijzRDqjDJX8DbfuGBc8xPioJB
+        0bH8FmSbNOoh5Pd17Accith2gc++kim8HXMEUgQaWqPvm+jRDnWfIoSApY8omrMBi6ROxJ
+        Yw9NYV2oovubHqgFxnlTj7iLoAzSqIVUW3IrO77YN/Mc/Glo3YQ+1zkHaK6nTQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610449672;
+        s=2020e; t=1610449677;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RCzPm5DxqpDl9GsT8qnDQdC9zPB3mt7eorYvVVflJMg=;
-        b=Y5Ierh9+MyL7cCYACzp+y9l+0P5iLz8hYK4VoEPrieKCSe9lpxm930WmkCsDS17ahR1x/F
-        lSowVVpPdyM9OiDw==
+        bh=z5qromd4jkMCdMGjXDuFJUGZCAJZuzZwx4w65IZJYx8=;
+        b=wbmEx07qwM5laJS8F05Br6nWjUUBdF9P0iNDrLyhip9sL2Va6qWt+n8AA1efLI8qcEbgek
+        ftFBMV/WHCCu16DQ==
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         John Garry <john.garry@huawei.com>,
@@ -48,9 +48,9 @@ Cc:     linux-scsi@vger.kernel.org, intel-linux-scu@intel.com,
         Thomas Gleixner <tglx@linutronix.de>,
         "Sebastian A. Siewior" <bigeasy@linutronix.de>,
         "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Subject: [PATCH v2 13/19] scsi: hisi_sas: Switch back to original libsas event notifiers
-Date:   Tue, 12 Jan 2021 12:06:41 +0100
-Message-Id: <20210112110647.627783-14-a.darwish@linutronix.de>
+Subject: [PATCH v2 14/19] scsi: aic94xx: Switch back to original libsas event notifiers
+Date:   Tue, 12 Jan 2021 12:06:42 +0100
+Message-Id: <20210112110647.627783-15-a.darwish@linutronix.de>
 In-Reply-To: <20210112110647.627783-1-a.darwish@linutronix.de>
 References: <20210112110647.627783-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
@@ -70,93 +70,92 @@ Switch back to the original libas API, while still passing GFP context.
 The libsas _gfp() variants will be removed afterwards.
 
 Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-Cc: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 8 ++++----
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 2 +-
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 2 +-
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/aic94xx/aic94xx_scb.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index f781b52c6441..625327e99b06 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -627,7 +627,7 @@ static void hisi_sas_bytes_dmaed(struct hisi_hba *hisi_hba, int phy_no,
- 		return;
+diff --git a/drivers/scsi/aic94xx/aic94xx_scb.c b/drivers/scsi/aic94xx/aic94xx_scb.c
+index 18422a3f9ff0..5e19efb38e36 100644
+--- a/drivers/scsi/aic94xx/aic94xx_scb.c
++++ b/drivers/scsi/aic94xx/aic94xx_scb.c
+@@ -80,7 +80,7 @@ static void asd_phy_event_tasklet(struct asd_ascb *ascb,
+ 		ASD_DPRINTK("phy%d: device unplugged\n", phy_id);
+ 		asd_turn_led(asd_ha, phy_id, 0);
+ 		sas_phy_disconnected(&phy->sas_phy);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_LOSS_OF_SIGNAL, GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_LOSS_OF_SIGNAL, GFP_ATOMIC);
+ 		break;
+ 	case CURRENT_OOB_DONE:
+ 		/* hot plugged device */
+@@ -88,12 +88,12 @@ static void asd_phy_event_tasklet(struct asd_ascb *ascb,
+ 		get_lrate_mode(phy, oob_mode);
+ 		ASD_DPRINTK("phy%d device plugged: lrate:0x%x, proto:0x%x\n",
+ 			    phy_id, phy->sas_phy.linkrate, phy->sas_phy.iproto);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_OOB_DONE, GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_OOB_DONE, GFP_ATOMIC);
+ 		break;
+ 	case CURRENT_SPINUP_HOLD:
+ 		/* hot plug SATA, no COMWAKE sent */
+ 		asd_turn_led(asd_ha, phy_id, 1);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_SPINUP_HOLD, GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_SPINUP_HOLD, GFP_ATOMIC);
+ 		break;
+ 	case CURRENT_GTO_TIMEOUT:
+ 	case CURRENT_OOB_ERROR:
+@@ -101,7 +101,7 @@ static void asd_phy_event_tasklet(struct asd_ascb *ascb,
+ 			    dl->status_block[1]);
+ 		asd_turn_led(asd_ha, phy_id, 0);
+ 		sas_phy_disconnected(&phy->sas_phy);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_OOB_ERROR, GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_OOB_ERROR, GFP_ATOMIC);
+ 		break;
  	}
- 
--	sas_notify_phy_event_gfp(sas_phy, PHYE_OOB_DONE, gfp_flags);
-+	sas_notify_phy_event(sas_phy, PHYE_OOB_DONE, gfp_flags);
- 
- 	if (sas_phy->phy) {
- 		struct sas_phy *sphy = sas_phy->phy;
-@@ -655,7 +655,7 @@ static void hisi_sas_bytes_dmaed(struct hisi_hba *hisi_hba, int phy_no,
- 	}
- 
- 	sas_phy->frame_rcvd_size = phy->frame_rcvd_size;
--	sas_notify_port_event_gfp(sas_phy, PORTE_BYTES_DMAED, gfp_flags);
-+	sas_notify_port_event(sas_phy, PORTE_BYTES_DMAED, gfp_flags);
+ }
+@@ -232,7 +232,7 @@ static void asd_bytes_dmaed_tasklet(struct asd_ascb *ascb,
+ 	spin_unlock_irqrestore(&phy->sas_phy.frame_rcvd_lock, flags);
+ 	asd_dump_frame_rcvd(phy, dl);
+ 	asd_form_port(ascb->ha, phy);
+-	sas_notify_port_event_gfp(&phy->sas_phy, PORTE_BYTES_DMAED, GFP_ATOMIC);
++	sas_notify_port_event(&phy->sas_phy, PORTE_BYTES_DMAED, GFP_ATOMIC);
  }
  
- static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
-@@ -1430,7 +1430,7 @@ static void hisi_sas_rescan_topology(struct hisi_hba *hisi_hba, u32 state)
- 				_sas_port = sas_port;
+ static void asd_link_reset_err_tasklet(struct asd_ascb *ascb,
+@@ -268,7 +268,7 @@ static void asd_link_reset_err_tasklet(struct asd_ascb *ascb,
+ 	asd_turn_led(asd_ha, phy_id, 0);
+ 	sas_phy_disconnected(sas_phy);
+ 	asd_deform_port(asd_ha, phy);
+-	sas_notify_port_event_gfp(sas_phy, PORTE_LINK_RESET_ERR, GFP_ATOMIC);
++	sas_notify_port_event(sas_phy, PORTE_LINK_RESET_ERR, GFP_ATOMIC);
  
- 				if (dev_is_expander(dev->dev_type))
--					sas_notify_port_event_gfp(sas_phy,
-+					sas_notify_port_event(sas_phy,
- 							PORTE_BROADCAST_RCVD,
- 							GFP_KERNEL);
- 			}
-@@ -2209,7 +2209,7 @@ void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy,
- 			return;
- 		}
- 		/* Phy down and not ready */
--		sas_notify_phy_event_gfp(sas_phy, PHYE_LOSS_OF_SIGNAL, gfp_flags);
-+		sas_notify_phy_event(sas_phy, PHYE_LOSS_OF_SIGNAL, gfp_flags);
+ 	if (retries_left == 0) {
+ 		int num = 1;
+@@ -313,7 +313,7 @@ static void asd_primitive_rcvd_tasklet(struct asd_ascb *ascb,
+ 			spin_lock_irqsave(&sas_phy->sas_prim_lock, flags);
+ 			sas_phy->sas_prim = ffs(cont);
+ 			spin_unlock_irqrestore(&sas_phy->sas_prim_lock, flags);
+-			sas_notify_port_event_gfp(sas_phy,PORTE_BROADCAST_RCVD, GFP_ATOMIC);
++			sas_notify_port_event(sas_phy,PORTE_BROADCAST_RCVD, GFP_ATOMIC);
+ 			break;
+ 
+ 		case LmUNKNOWNP:
+@@ -334,7 +334,7 @@ static void asd_primitive_rcvd_tasklet(struct asd_ascb *ascb,
+ 			/* The sequencer disables all phys on that port.
+ 			 * We have to re-enable the phys ourselves. */
+ 			asd_deform_port(asd_ha, phy);
+-			sas_notify_port_event_gfp(sas_phy, PORTE_HARD_RESET, GFP_ATOMIC);
++			sas_notify_port_event(sas_phy, PORTE_HARD_RESET, GFP_ATOMIC);
+ 			break;
+ 
+ 		default:
+@@ -565,7 +565,7 @@ static void escb_tasklet_complete(struct asd_ascb *ascb,
+ 		/* the device is gone */
  		sas_phy_disconnected(sas_phy);
- 
- 		if (port) {
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index b0a72ffce4f0..c33f2881d3c4 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1423,7 +1423,7 @@ static irqreturn_t int_bcast_v1_hw(int irq, void *p)
- 	}
- 
- 	if (!test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags))
--		sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
-+		sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
- 
- end:
- 	hisi_sas_phy_write32(hisi_hba, phy_no, CHL_INT2,
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index d8f8fb2ed63b..a9de1939c426 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -2825,7 +2825,7 @@ static void phy_bcast_v2_hw(int phy_no, struct hisi_hba *hisi_hba)
- 	bcast_status = hisi_sas_phy_read32(hisi_hba, phy_no, RX_PRIMS_STATUS);
- 	if ((bcast_status & RX_BCAST_CHG_MSK) &&
- 	    !test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags))
--		sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
-+		sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, CHL_INT0,
- 			     CHL_INT0_SL_RX_BCST_ACK_MSK);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, SL_RX_BCAST_CHK_MSK, 0);
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 87392de60e9d..9ffc429c8d42 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -1607,7 +1607,7 @@ static irqreturn_t phy_bcast_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
- 	bcast_status = hisi_sas_phy_read32(hisi_hba, phy_no, RX_PRIMS_STATUS);
- 	if ((bcast_status & RX_BCAST_CHG_MSK) &&
- 	    !test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags))
--		sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
-+		sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, CHL_INT0,
- 			     CHL_INT0_SL_RX_BCST_ACK_MSK);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, SL_RX_BCAST_CHK_MSK, 0);
+ 		asd_deform_port(asd_ha, phy);
+-		sas_notify_port_event_gfp(sas_phy, PORTE_TIMER_EVENT, GFP_ATOMIC);
++		sas_notify_port_event(sas_phy, PORTE_TIMER_EVENT, GFP_ATOMIC);
+ 		break;
+ 	default:
+ 		ASD_DPRINTK("%s: phy%d: unknown event:0x%x\n", __func__,
 -- 
 2.30.0
 
