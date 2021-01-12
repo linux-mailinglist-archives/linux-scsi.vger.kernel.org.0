@@ -2,46 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 955942F2725
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 05:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0495E2F2730
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 05:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730406AbhALEhj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 11 Jan 2021 23:37:39 -0500
-Received: from mail.univ-alger.dz ([193.194.83.97]:40168 "EHLO
-        mail.univ-alger.dz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbhALEhj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Jan 2021 23:37:39 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.univ-alger.dz (Postfix) with ESMTP id 06D094D6373B;
-        Mon, 11 Jan 2021 13:26:04 +0100 (CET)
-Received: from mail.univ-alger.dz ([127.0.0.1])
-        by localhost (mail.univ-alger.dz [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id I43vIXevYFsv; Mon, 11 Jan 2021 13:26:03 +0100 (CET)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.univ-alger.dz (Postfix) with ESMTP id 06F344D45098;
-        Mon, 11 Jan 2021 13:12:08 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mail.univ-alger.dz
-Received: from mail.univ-alger.dz ([127.0.0.1])
-        by localhost (mail.univ-alger.dz [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id mHqW7N_AlKaP; Mon, 11 Jan 2021 13:12:07 +0100 (CET)
-Received: from MACBOOK341C.localdomain (unknown [209.216.92.203])
-        by mail.univ-alger.dz (Postfix) with ESMTPSA id D62174D073C7;
-        Mon, 11 Jan 2021 12:55:25 +0100 (CET)
-Content-Type: text/plain; charset="utf-8"
+        id S1731049AbhALEjh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Jan 2021 23:39:37 -0500
+Received: from mail-pj1-f51.google.com ([209.85.216.51]:33339 "EHLO
+        mail-pj1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731028AbhALEjh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Jan 2021 23:39:37 -0500
+Received: by mail-pj1-f51.google.com with SMTP id w1so956426pjc.0
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Jan 2021 20:39:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=x5qgj+EZIYvLDvAjcB8kuUG7MhawOyKr3/XQ5AmQv4M=;
+        b=bOjcERujQQ+S1eXRC7i5qxoP3tX+7LziCcisr2X3Zjz9OjG0L3Iik6nx3c3uj2QKFI
+         fYqz1ZUmW8/1QHfhOgvsOSODA3GSOyBQhDTKpLwmKWWpqokSKBpyNSXI/1UIUG0f/stW
+         EeLXpumRatTpKTTwu53CYzpyqHyjJNYYjQePxcTKMBKEMAIO7CsKYAdm3U0V7PcWxqx5
+         qf+OEHz2adDHq6wS5lrOuSxTpuVg2LqnPI5MCID2ZH6zBp4CHPele/UNOklazHcwbUbt
+         Q0gExIE8x7lfHsBtBaY6wrlkdUmXeVCaoI+YEfSOe2n21eAYDPBtSfxYNJ41/5mm5+7q
+         f2rA==
+X-Gm-Message-State: AOAM533BhY8gtvnFWchl05kkyoX1HweHspHXodZXwRVz3dDLxyczq/bS
+        2EjVSSgIlmZW9eEytaLI9cYmSeRV8UM=
+X-Google-Smtp-Source: ABdhPJz6yE3uQY53MAebv49EXmZQplmUCtK7waxtxIRIt7dp8uBnXWpgWQQhKuhYpkkNi98IXEOWfw==
+X-Received: by 2002:a17:902:8203:b029:dc:3371:6b04 with SMTP id x3-20020a1709028203b02900dc33716b04mr2813806pln.81.1610426336170;
+        Mon, 11 Jan 2021 20:38:56 -0800 (PST)
+Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id n28sm1310038pfq.61.2021.01.11.20.38.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jan 2021 20:38:55 -0800 (PST)
+Subject: Re: [PATCH] scsi: scsi_transport_srp: don't block target in failfast
+ state
+To:     mwilck@suse.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.de>
+Cc:     linux-scsi@vger.kernel.org,
+        James Bottomley <jejb@linux.vnet.ibm.com>
+References: <20210111142541.21534-1-mwilck@suse.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <98b70265-83b6-2e1f-3f71-c39989ba581f@acm.org>
+Date:   Mon, 11 Jan 2021 20:38:53 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Sie_haben_eine_Spende_von_=E2=82=AC_5=2E800=2E000=2C00=2E?=
-To:     Recipients <z.benamor@univ-alger.dz>
-From:   "Mrs. Mavis" <z.benamor@univ-alger.dz>
-Date:   Mon, 11 Jan 2021 03:55:13 -0800
-Reply-To: wanczykm61@gmail.com
-Message-Id: <20210111115525.D62174D073C7@mail.univ-alger.dz>
+In-Reply-To: <20210111142541.21534-1-mwilck@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sie haben eine Spende von € 5.800.000,00. von Mavis Wanczyk antworten Sie mit diesem Code [MW530342019], um die Spende zu erhalten
+On 1/11/21 6:25 AM, mwilck@suse.com wrote:
+> From: Martin Wilck <mwilck@suse.com>
+> 
+> If the port is in SRP_RPORT_FAIL_FAST state when srp_reconnect_rport()
+> is entered, a transition to SDEV_BLOCK would be illegal, and a kernel
+> WARNING would be triggered. Skip scsi_target_block() in this case.
+> 
+> Signed-off-by: Martin Wilck <mwilck@suse.com>
+> ---
+>  drivers/scsi/scsi_transport_srp.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/scsi_transport_srp.c b/drivers/scsi/scsi_transport_srp.c
+> index cba1cf6a1c12..1e939a2a387f 100644
+> --- a/drivers/scsi/scsi_transport_srp.c
+> +++ b/drivers/scsi/scsi_transport_srp.c
+> @@ -541,7 +541,14 @@ int srp_reconnect_rport(struct srp_rport *rport)
+>  	res = mutex_lock_interruptible(&rport->mutex);
+>  	if (res)
+>  		goto out;
+> -	scsi_target_block(&shost->shost_gendev);
+> +	if (rport->state != SRP_RPORT_FAIL_FAST)
+> +		/*
+> +		 * sdev state must be SDEV_TRANSPORT_OFFLINE, transition
+> +		 * to SDEV_BLOCK is illegal. Calling scsi_target_unblock()
+> +		 * later is ok though, scsi_internal_device_unblock_nowait()
+> +		 * treats SDEV_TRANSPORT_OFFLINE like SDEV_BLOCK.
+> +		 */
+> +		scsi_target_block(&shost->shost_gendev);
+>  	res = rport->state != SRP_RPORT_LOST ? i->f->reconnect(rport) : -ENODEV;
+>  	pr_debug("%s (state %d): transport.reconnect() returned %d\n",
+>  		 dev_name(&shost->shost_gendev), rport->state, res);
 
-
-Vous avez un don de 5 800 000,00 €. de Mavis Wanczyk répondez avec ce code [MW530342019] pour recevoir le don
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
