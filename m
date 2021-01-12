@@ -2,37 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0942F2D80
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F542F2D82
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731139AbhALLI1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Jan 2021 06:08:27 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:45242 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730794AbhALLIZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:08:25 -0500
+        id S1726571AbhALLIc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Jan 2021 06:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731365AbhALLI3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:08:29 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05083C061786;
+        Tue, 12 Jan 2021 03:07:49 -0800 (PST)
 From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610449662;
+        s=2020; t=1610449667;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TBWzZ0GcwzebbE/wsjf0JM8q8zjLyexE1+i/CwapnjI=;
-        b=npjO/H2DEgIPz5Yn5X0TP6Uid4W4HO/uhbTfg8SJ9CDksABs01WWPblcufrCcifaqxaK8s
-        ji4RqGgrJ8n5SrkuVX7e/SP1rcaV4TwC3QJIp+ohSCcAij6wjZO2lAF6wxTuybGdOts71x
-        a0x2DVk8Y90HZoyfnSNmVjdbV64C3Ll8d2p4FbRAdtH4atMOlHB4K55cLx2C16g1YQx+sF
-        K3Y4V47o8uC8J0B3WuoaUjPiOVfCxEp2jMd5zUShIv2jBO8IcJVtQ4X0lutN+8+uBWpHfc
-        GNHFSjiBLHWjuDfD0Y0B0dK2Rn0T8fDkUGU/aaUvB/91Mg9AHZG51HvLlJZPeQ==
+        bh=SNb2IakLCgQd/7e0qMuWGkyLlnQgmHOVsUAdrqnm4NQ=;
+        b=AtV/73PKX5ybuwwUutUgYOTYhXTVAMZLW9gVcHXNeoDBuGY7Dp7fZtOpXFqCz0yKyXyN6L
+        5aCzvhAAbYy4L2GNt/I3D2hgoQuS/iDD3plTAuIB+ww1svL1pMxuiEW3cGSw5gcEIxDMFA
+        7dN9o5qiYf/kJ0CPockKET9OPk16fqxgPeaqsITTyHVVPd0h9WhuczDMYbCAACNhtud8dj
+        ACY5UXlaO4y9fYOAiVVC4auQBVIR/34KZTP4k8TnGH7GC8uRbYj5yTAZ6q02bXi9V/ecfz
+        uaPgEbKDEiwXDwNGSzAv9JdVbsRrbjqtUOiGqfCMfh4dX2JdgQ+cWvtGnMgcTw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610449662;
+        s=2020e; t=1610449667;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TBWzZ0GcwzebbE/wsjf0JM8q8zjLyexE1+i/CwapnjI=;
-        b=x1VL7TbDU7UW8de6E785ULMlR+ax1c3sfSTViStiucSseDzRft/GUqHBYaD6O8+9yKQVFB
-        89rADHHv5jF0TCCQ==
+        bh=SNb2IakLCgQd/7e0qMuWGkyLlnQgmHOVsUAdrqnm4NQ=;
+        b=zzhC1Twy5xU13oMzTd/orWPcede/eCjDrK7Nn5w0/RYRsyw8w/Vop4GzdufcamzcA50wVT
+        r712V7EERid2bUDQ==
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         John Garry <john.garry@huawei.com>,
@@ -45,9 +48,9 @@ Cc:     linux-scsi@vger.kernel.org, intel-linux-scu@intel.com,
         Thomas Gleixner <tglx@linutronix.de>,
         "Sebastian A. Siewior" <bigeasy@linutronix.de>,
         "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Subject: [PATCH v2 11/19] scsi: hisi_sas: Pass gfp_t flags to libsas event notifiers
-Date:   Tue, 12 Jan 2021 12:06:39 +0100
-Message-Id: <20210112110647.627783-12-a.darwish@linutronix.de>
+Subject: [PATCH v2 12/19] scsi: libsas: event notifiers API: Add gfp_t flags parameter
+Date:   Tue, 12 Jan 2021 12:06:40 +0100
+Message-Id: <20210112110647.627783-13-a.darwish@linutronix.de>
 In-Reply-To: <20210112110647.627783-1-a.darwish@linutronix.de>
 References: <20210112110647.627783-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
@@ -56,237 +59,225 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the new libsas event notifiers API, which requires callers to
-explicitly pass the gfp_t memory allocation flags.
+All call-sites of below libsas APIs:
 
-Below are the context analysis for modified functions:
+  - sas_alloc_event()
+  - sas_notify_port_event()
+  - sas_notify_phy_event()
 
-=> hisi_sas_bytes_dmaed():
+have been converted to use the _gfp()-suffixed version.  Modify the
+original APIs above to take a gfp_t flags parameter by default.
 
-Since it is invoked from both process and atomic contexts, let its
-callers pass the gfp_t flags:
-
-  * hisi_sas_main.c:
-  ------------------
-
-    hisi_sas_phyup_work(): workqueue context
-      -> hisi_sas_bytes_dmaed(..., GFP_KERNEL)
-
-    hisi_sas_controller_reset_done(): has an msleep()
-      -> hisi_sas_rescan_topology()
-        -> hisi_sas_phy_down()
-          -> hisi_sas_bytes_dmaed(..., GFP_KERNEL)
-
-    hisi_sas_debug_I_T_nexus_reset(): calls wait_for_completion_timeout()
-      -> hisi_sas_phy_down()
-        -> hisi_sas_bytes_dmaed(..., GFP_KERNEL)
-
-  * hisi_sas_v1_hw.c:
-  -------------------
-
-    int_abnormal_v1_hw(): irq handler
-      -> hisi_sas_phy_down()
-        -> hisi_sas_bytes_dmaed(..., GFP_ATOMIC)
-
-  * hisi_sas_v[23]_hw.c:
-  ----------------------
-
-    int_phy_updown_v[23]_hw(): irq handler
-      -> phy_down_v[23]_hw()
-        -> hisi_sas_phy_down()
-          -> hisi_sas_bytes_dmaed(..., GFP_ATOMIC)
-
-=> int_bcast_v1_hw() and phy_bcast_v3_hw():
-
-Both are invoked exclusively from irq handlers. Pass GFP_ATOMIC.
+For bisectability, call-sites will be modified again to use the original
+libsas APIs (while passing gfp_t). The temporary _gfp()-suffixed
+versions can then be removed.
 
 Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
 Cc: John Garry <john.garry@huawei.com>
+Cc: Jason Yan <yanaijie@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas.h       |  3 ++-
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 25 ++++++++++++++-----------
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |  5 +++--
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  5 +++--
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  5 +++--
- 5 files changed, 25 insertions(+), 18 deletions(-)
+ Documentation/scsi/libsas.rst      |  4 +-
+ drivers/scsi/libsas/sas_event.c    | 61 +++++++++---------------------
+ drivers/scsi/libsas/sas_init.c     | 12 ++----
+ drivers/scsi/libsas/sas_internal.h |  4 +-
+ include/scsi/libsas.h              |  6 ++-
+ 5 files changed, 30 insertions(+), 57 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index e821dd32dd28..873bfffa626d 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -637,7 +637,8 @@ extern void hisi_sas_scan_start(struct Scsi_Host *shost);
- extern int hisi_sas_host_reset(struct Scsi_Host *shost, int reset_type);
- extern void hisi_sas_phy_enable(struct hisi_hba *hisi_hba, int phy_no,
- 				int enable);
--extern void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy);
-+extern void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy,
-+			      gfp_t gfp_flags);
- extern void hisi_sas_slot_task_free(struct hisi_hba *hisi_hba,
- 				    struct sas_task *task,
- 				    struct hisi_sas_slot *slot);
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 76f8fc3fad59..f781b52c6441 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -612,7 +612,8 @@ static int hisi_sas_task_exec(struct sas_task *task, gfp_t gfp_flags,
- 	return rc;
+diff --git a/Documentation/scsi/libsas.rst b/Documentation/scsi/libsas.rst
+index 0cb0f9ce5e23..73020c1cb019 100644
+--- a/Documentation/scsi/libsas.rst
++++ b/Documentation/scsi/libsas.rst
+@@ -189,8 +189,8 @@ num_phys
+ The event interface::
+ 
+ 	/* LLDD calls these to notify the class of an event. */
+-	void sas_notify_port_event(struct sas_phy *, enum port_event);
+-	void sas_notify_phy_event(struct sas_phy *, enum phy_event);
++	void sas_notify_port_event(struct sas_phy *, enum port_event, gfp_t);
++	void sas_notify_phy_event(struct sas_phy *, enum phy_event, gfp_t);
+ 	void sas_notify_port_event_gfp(struct sas_phy *, enum port_event, gfp_t);
+ 	void sas_notify_phy_event_gfp(struct sas_phy *, enum phy_event, gfp_t);
+ 
+diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
+index 922056644da5..3d0cc407b33f 100644
+--- a/drivers/scsi/libsas/sas_event.c
++++ b/drivers/scsi/libsas/sas_event.c
+@@ -132,14 +132,19 @@ static void sas_phy_event_worker(struct work_struct *work)
+ 	sas_free_event(ev);
  }
  
--static void hisi_sas_bytes_dmaed(struct hisi_hba *hisi_hba, int phy_no)
-+static void hisi_sas_bytes_dmaed(struct hisi_hba *hisi_hba, int phy_no,
-+				 gfp_t gfp_flags)
+-static int __sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+-				   struct asd_sas_event *ev)
++int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
++			  gfp_t gfp_flags)
  {
- 	struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
- 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
-@@ -626,7 +627,7 @@ static void hisi_sas_bytes_dmaed(struct hisi_hba *hisi_hba, int phy_no)
- 		return;
- 	}
+ 	struct sas_ha_struct *ha = phy->ha;
++	struct asd_sas_event *ev;
+ 	int ret;
  
--	sas_notify_phy_event(sas_phy, PHYE_OOB_DONE);
-+	sas_notify_phy_event_gfp(sas_phy, PHYE_OOB_DONE, gfp_flags);
+ 	BUG_ON(event >= PORT_NUM_EVENTS);
  
- 	if (sas_phy->phy) {
- 		struct sas_phy *sphy = sas_phy->phy;
-@@ -654,7 +655,7 @@ static void hisi_sas_bytes_dmaed(struct hisi_hba *hisi_hba, int phy_no)
- 	}
++	ev = sas_alloc_event_gfp(phy, gfp_flags);
++	if (!ev)
++		return -ENOMEM;
++
+ 	INIT_SAS_EVENT(ev, sas_port_event_worker, phy, event);
  
- 	sas_phy->frame_rcvd_size = phy->frame_rcvd_size;
--	sas_notify_port_event(sas_phy, PORTE_BYTES_DMAED);
-+	sas_notify_port_event_gfp(sas_phy, PORTE_BYTES_DMAED, gfp_flags);
+ 	ret = sas_queue_event(event, &ev->work, ha);
+@@ -148,41 +153,28 @@ static int __sas_notify_port_event(struct asd_sas_phy *phy, enum port_event even
+ 
+ 	return ret;
  }
++EXPORT_SYMBOL_GPL(sas_notify_port_event);
  
- static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
-@@ -860,7 +861,7 @@ static void hisi_sas_phyup_work(struct work_struct *work)
- 
- 	if (phy->identify.target_port_protocols == SAS_PROTOCOL_SSP)
- 		hisi_hba->hw->sl_notify_ssp(hisi_hba, phy_no);
--	hisi_sas_bytes_dmaed(hisi_hba, phy_no);
-+	hisi_sas_bytes_dmaed(hisi_hba, phy_no, GFP_KERNEL);
- }
- 
- static void hisi_sas_linkreset_work(struct work_struct *work)
-@@ -1429,11 +1430,12 @@ static void hisi_sas_rescan_topology(struct hisi_hba *hisi_hba, u32 state)
- 				_sas_port = sas_port;
- 
- 				if (dev_is_expander(dev->dev_type))
--					sas_notify_port_event(sas_phy,
--							PORTE_BROADCAST_RCVD);
-+					sas_notify_port_event_gfp(sas_phy,
-+							PORTE_BROADCAST_RCVD,
-+							GFP_KERNEL);
- 			}
- 		} else {
--			hisi_sas_phy_down(hisi_hba, phy_no, 0);
-+			hisi_sas_phy_down(hisi_hba, phy_no, 0, GFP_KERNEL);
- 		}
- 	}
- }
-@@ -1787,7 +1789,7 @@ static int hisi_sas_debug_I_T_nexus_reset(struct domain_device *device)
- 
- 		/* report PHY down if timed out */
- 		if (!ret)
--			hisi_sas_phy_down(hisi_hba, sas_phy->id, 0);
-+			hisi_sas_phy_down(hisi_hba, sas_phy->id, 0, GFP_KERNEL);
- 	} else if (sas_dev->dev_status != HISI_SAS_DEV_INIT) {
- 		/*
- 		 * If in init state, we rely on caller to wait for link to be
-@@ -2187,7 +2189,8 @@ static void hisi_sas_phy_disconnected(struct hisi_sas_phy *phy)
- 	spin_unlock_irqrestore(&phy->lock, flags);
- }
- 
--void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy)
-+void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy,
-+		       gfp_t gfp_flags)
+ int sas_notify_port_event_gfp(struct asd_sas_phy *phy, enum port_event event,
+ 			      gfp_t gfp_flags)
  {
- 	struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
- 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
-@@ -2195,7 +2198,7 @@ void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy)
+-	struct asd_sas_event *ev;
+-
+-	ev = sas_alloc_event_gfp(phy, gfp_flags);
+-	if (!ev)
+-		return -ENOMEM;
+-
+-	return __sas_notify_port_event(phy, event, ev);
++	return sas_notify_port_event(phy, event, gfp_flags);
+ }
+ EXPORT_SYMBOL_GPL(sas_notify_port_event_gfp);
  
- 	if (rdy) {
- 		/* Phy down but ready */
--		hisi_sas_bytes_dmaed(hisi_hba, phy_no);
-+		hisi_sas_bytes_dmaed(hisi_hba, phy_no, gfp_flags);
- 		hisi_sas_port_notify_formed(sas_phy);
- 	} else {
- 		struct hisi_sas_port *port  = phy->port;
-@@ -2206,7 +2209,7 @@ void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy)
- 			return;
- 		}
- 		/* Phy down and not ready */
--		sas_notify_phy_event(sas_phy, PHYE_LOSS_OF_SIGNAL);
-+		sas_notify_phy_event_gfp(sas_phy, PHYE_LOSS_OF_SIGNAL, gfp_flags);
- 		sas_phy_disconnected(sas_phy);
+-int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event)
+-{
+-	struct asd_sas_event *ev;
+-
+-	ev = sas_alloc_event(phy);
+-	if (!ev)
+-		return -ENOMEM;
+-
+-	return __sas_notify_port_event(phy, event, ev);
+-}
+-EXPORT_SYMBOL_GPL(sas_notify_port_event);
+-
+-static inline int __sas_notify_phy_event(struct asd_sas_phy *phy,
+-					 enum phy_event event,
+-					 struct asd_sas_event *ev)
++int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
++			 gfp_t gfp_flags)
+ {
+ 	struct sas_ha_struct *ha = phy->ha;
++	struct asd_sas_event *ev;
+ 	int ret;
  
- 		if (port) {
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index 22eecc89d41b..b0a72ffce4f0 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1423,7 +1423,7 @@ static irqreturn_t int_bcast_v1_hw(int irq, void *p)
- 	}
+ 	BUG_ON(event >= PHY_NUM_EVENTS);
  
- 	if (!test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags))
--		sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD);
-+		sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
++	ev = sas_alloc_event_gfp(phy, gfp_flags);
++	if (!ev)
++		return -ENOMEM;
++
+ 	INIT_SAS_EVENT(ev, sas_phy_event_worker, phy, event);
  
- end:
- 	hisi_sas_phy_write32(hisi_hba, phy_no, CHL_INT2,
-@@ -1452,7 +1452,8 @@ static irqreturn_t int_abnormal_v1_hw(int irq, void *p)
- 		u32 phy_state = hisi_sas_read32(hisi_hba, PHY_STATE);
+ 	ret = sas_queue_event(event, &ev->work, ha);
+@@ -191,28 +183,11 @@ static inline int __sas_notify_phy_event(struct asd_sas_phy *phy,
  
- 		hisi_sas_phy_down(hisi_hba, phy_no,
--				  (phy_state & 1 << phy_no) ? 1 : 0);
-+				  (phy_state & 1 << phy_no) ? 1 : 0,
-+				  GFP_ATOMIC);
- 	}
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(sas_notify_phy_event);
  
- 	if (irq_value & CHL_INT0_ID_TIMEOUT_MSK)
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index 10ba0680da04..d8f8fb2ed63b 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -2734,7 +2734,8 @@ static int phy_down_v2_hw(int phy_no, struct hisi_hba *hisi_hba)
+ int sas_notify_phy_event_gfp(struct asd_sas_phy *phy, enum phy_event event,
+ 			     gfp_t gfp_flags)
+ {
+-	struct asd_sas_event *ev;
+-
+-	ev = sas_alloc_event_gfp(phy, gfp_flags);
+-	if (!ev)
+-		return -ENOMEM;
+-
+-	return __sas_notify_phy_event(phy, event, ev);
++	return sas_notify_phy_event(phy, event, gfp_flags);
+ }
+ EXPORT_SYMBOL_GPL(sas_notify_phy_event_gfp);
+-
+-int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event)
+-{
+-	struct asd_sas_event *ev;
+-
+-	ev = sas_alloc_event(phy);
+-	if (!ev)
+-		return -ENOMEM;
+-
+-	return __sas_notify_phy_event(phy, event, ev);
+-}
+-EXPORT_SYMBOL_GPL(sas_notify_phy_event);
+diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
+index b8567902f0ce..0dc38385ecbd 100644
+--- a/drivers/scsi/libsas/sas_init.c
++++ b/drivers/scsi/libsas/sas_init.c
+@@ -584,8 +584,8 @@ sas_domain_attach_transport(struct sas_domain_function_template *dft)
+ }
+ EXPORT_SYMBOL_GPL(sas_domain_attach_transport);
  
- 	phy_state = hisi_sas_read32(hisi_hba, PHY_STATE);
- 	dev_info(dev, "phydown: phy%d phy_state=0x%x\n", phy_no, phy_state);
--	hisi_sas_phy_down(hisi_hba, phy_no, (phy_state & 1 << phy_no) ? 1 : 0);
-+	hisi_sas_phy_down(hisi_hba, phy_no, (phy_state & 1 << phy_no) ? 1 : 0,
-+			  GFP_ATOMIC);
+-static struct asd_sas_event * __sas_alloc_event(struct asd_sas_phy *phy,
+-						gfp_t gfp_flags)
++struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy,
++				      gfp_t gfp_flags)
+ {
+ 	struct asd_sas_event *event;
+ 	struct sas_ha_struct *sas_ha = phy->ha;
+@@ -617,15 +617,11 @@ static struct asd_sas_event * __sas_alloc_event(struct asd_sas_phy *phy,
+ 	return event;
+ }
  
- 	sl_ctrl = hisi_sas_phy_read32(hisi_hba, phy_no, SL_CONTROL);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, SL_CONTROL,
-@@ -2824,7 +2825,7 @@ static void phy_bcast_v2_hw(int phy_no, struct hisi_hba *hisi_hba)
- 	bcast_status = hisi_sas_phy_read32(hisi_hba, phy_no, RX_PRIMS_STATUS);
- 	if ((bcast_status & RX_BCAST_CHG_MSK) &&
- 	    !test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags))
--		sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD);
-+		sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, CHL_INT0,
- 			     CHL_INT0_SL_RX_BCST_ACK_MSK);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, SL_RX_BCAST_CHK_MSK, 0);
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 9d9dcc11a866..87392de60e9d 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -1580,7 +1580,8 @@ static irqreturn_t phy_down_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
+-struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy)
+-{
+-	return __sas_alloc_event(phy, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
+-}
+-
+ struct asd_sas_event *sas_alloc_event_gfp(struct asd_sas_phy *phy,
+ 					  gfp_t gfp_flags)
+ {
+-	return __sas_alloc_event(phy, gfp_flags);
++
++	return sas_alloc_event(phy, gfp_flags);
+ }
  
- 	phy_state = hisi_sas_read32(hisi_hba, PHY_STATE);
- 	dev_info(dev, "phydown: phy%d phy_state=0x%x\n", phy_no, phy_state);
--	hisi_sas_phy_down(hisi_hba, phy_no, (phy_state & 1 << phy_no) ? 1 : 0);
-+	hisi_sas_phy_down(hisi_hba, phy_no, (phy_state & 1 << phy_no) ? 1 : 0,
-+			  GFP_ATOMIC);
+ void sas_free_event(struct asd_sas_event *event)
+diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+index d70d33b94668..9b39fd478328 100644
+--- a/drivers/scsi/libsas/sas_internal.h
++++ b/drivers/scsi/libsas/sas_internal.h
+@@ -48,7 +48,7 @@ int sas_show_oob_mode(enum sas_oob_mode oob_mode, char *buf);
+ int  sas_register_phys(struct sas_ha_struct *sas_ha);
+ void sas_unregister_phys(struct sas_ha_struct *sas_ha);
  
- 	sl_ctrl = hisi_sas_phy_read32(hisi_hba, phy_no, SL_CONTROL);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, SL_CONTROL,
-@@ -1606,7 +1607,7 @@ static irqreturn_t phy_bcast_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
- 	bcast_status = hisi_sas_phy_read32(hisi_hba, phy_no, RX_PRIMS_STATUS);
- 	if ((bcast_status & RX_BCAST_CHG_MSK) &&
- 	    !test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags))
--		sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD);
-+		sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, CHL_INT0,
- 			     CHL_INT0_SL_RX_BCST_ACK_MSK);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, SL_RX_BCAST_CHK_MSK, 0);
+-struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy);
++struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
+ struct asd_sas_event *sas_alloc_event_gfp(struct asd_sas_phy *phy, gfp_t gfp_flags);
+ void sas_free_event(struct asd_sas_event *event);
+ 
+@@ -77,7 +77,7 @@ int sas_smp_phy_control(struct domain_device *dev, int phy_id,
+ 			enum phy_func phy_func, struct sas_phy_linkrates *);
+ int sas_smp_get_phy_events(struct sas_phy *phy);
+ 
+-int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event);
++int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event, gfp_t flags);
+ int sas_notify_phy_event_gfp(struct asd_sas_phy *phy, enum phy_event event, gfp_t flags);
+ void sas_device_set_phy(struct domain_device *dev, struct sas_port *port);
+ struct domain_device *sas_find_dev_by_rphy(struct sas_rphy *rphy);
+diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+index e6a43163ab5b..fda56e151695 100644
+--- a/include/scsi/libsas.h
++++ b/include/scsi/libsas.h
+@@ -702,8 +702,10 @@ struct sas_phy *sas_get_local_phy(struct domain_device *dev);
+ 
+ int sas_request_addr(struct Scsi_Host *shost, u8 *addr);
+ 
+-int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event);
+-int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event);
++int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
++			  gfp_t gfp_flags);
++int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
++			 gfp_t gfp_flags);
+ int sas_notify_port_event_gfp(struct asd_sas_phy *phy, enum port_event event,
+ 			      gfp_t gfp_flags);
+ int sas_notify_phy_event_gfp(struct asd_sas_phy *phy, enum phy_event event,
 -- 
 2.30.0
 
