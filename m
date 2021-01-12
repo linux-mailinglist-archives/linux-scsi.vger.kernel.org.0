@@ -2,40 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 621142F2D89
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0B72F2D81
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732674AbhALLIt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Jan 2021 06:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
+        id S1731428AbhALLIb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Jan 2021 06:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727146AbhALLIs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:08:48 -0500
+        with ESMTP id S1730247AbhALLI2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:08:28 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64994C0617A4;
-        Tue, 12 Jan 2021 03:08:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3949AC061575;
+        Tue, 12 Jan 2021 03:08:13 -0800 (PST)
 From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610449686;
+        s=2020; t=1610449691;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oselqt4ZgrYmxaaSMDbxPxMVkm0XVJQ5rMdIZRjd8SQ=;
-        b=Ih6v4Syws19oXQpIy3TYhOEsR6tpUJMvZTsBrq9R2N55cDbeRMM17mVfmlArhWTo7UMtye
-        jgvY4/DO0rhqYnYrtkgLHxDbXpt1M+8VeM7tVFU3Paay/wo/qJWm2oqYmu+7/bgPAVyqkD
-        aBprRqhn8CfmThtTlDfofC27j4D99GO5ifOJFsV8UBQ+vd4QH47yO9wCLDSHXAr5hQvLM5
-        qZ6pAlwsf5HUvoemGLQNnhJ+GNSsE/h1V1adkiWx6uH8Ec8dDF1rA3xGLkEYdKde6wZv0V
-        NF1aNI+fzfLpDepD2WthO+LXo4Ui0cZAoVt+wYvahnG6pnpOhgIuc/dAeVxotw==
+        bh=3TnbLozWhzywq75qnxOTIziOzXSSZ/G4k2dP3orgPVs=;
+        b=Z86RL4xFDa+B3JwmO8PrStnj9Y6mCmc6Bd2KuAikMoBJhfL5R8s65jbVQL87TTmCBEKX2K
+        RHry0wzHgl7+8SC6+LfVXv1+fl7rNJ5I5bLWydyxunwATDrGQz0ZLIaYqdRXDkMCRrqajL
+        1n9u5nyfoD1TgUGfy5fLFz5cQ9PP+4+AfDmsT8Qloty8FscbUf69A25l2QB7hFnqhbyFQR
+        qPaYuzST7NuhDgrxAfCHdQA0aiKfLwd6P/MmDjNRNxx+4GJUGvx6bNdz4dfHkwGQ3m0OE4
+        sl6WatTe2mFaJ2M4BV+jx5F7KAKpuW0bd1nGOvjJAn9fAZBHscXl/vZH0GI6YQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610449686;
+        s=2020e; t=1610449691;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oselqt4ZgrYmxaaSMDbxPxMVkm0XVJQ5rMdIZRjd8SQ=;
-        b=VKCl6+GIPtUtCE7z2STzWWRCdvTPEE5/GT8DjuU/kc8QyHBhyyOvHyZxTRpKVGLjPbk227
-        nH7PFznh2Yr4XpDg==
+        bh=3TnbLozWhzywq75qnxOTIziOzXSSZ/G4k2dP3orgPVs=;
+        b=3PrUx8+4JXcbSnWgrfFFdgA5VT8BTe5oGH/OLTS+GGcX0Pn2STfaciWVOFkys5hFPtI8L+
+        95jdK8WuRc+NLACQ==
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         John Garry <john.garry@huawei.com>,
@@ -48,9 +48,9 @@ Cc:     linux-scsi@vger.kernel.org, intel-linux-scu@intel.com,
         Thomas Gleixner <tglx@linutronix.de>,
         "Sebastian A. Siewior" <bigeasy@linutronix.de>,
         "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Subject: [PATCH v2 16/19] scsi: libsas: Switch back to original event notifiers API
-Date:   Tue, 12 Jan 2021 12:06:44 +0100
-Message-Id: <20210112110647.627783-17-a.darwish@linutronix.de>
+Subject: [PATCH v2 17/19] scsi: isci: Switch back to original libsas event notifiers
+Date:   Tue, 12 Jan 2021 12:06:45 +0100
+Message-Id: <20210112110647.627783-18-a.darwish@linutronix.de>
 In-Reply-To: <20210112110647.627783-1-a.darwish@linutronix.de>
 References: <20210112110647.627783-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
@@ -66,70 +66,52 @@ variants and explicitly pass GFP context. Having no callers left, the
 original libsas notifiers were then modified to accept gfp_t flags by
 default.
 
-Switch back to the original event notifiers API, while still passing GFP
-context.  The _gfp() notifier variants will be removed afterwards.
+Switch back to the original libas API, while still passing GFP context.
+The libsas _gfp() variants will be removed afterwards.
 
 Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Jason Yan <yanaijie@huawei.com>
+Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
 ---
- drivers/scsi/libsas/sas_event.c | 6 +++---
- drivers/scsi/libsas/sas_init.c  | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/isci/port.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
-index 3d0cc407b33f..542831887769 100644
---- a/drivers/scsi/libsas/sas_event.c
-+++ b/drivers/scsi/libsas/sas_event.c
-@@ -109,7 +109,7 @@ void sas_enable_revalidation(struct sas_ha_struct *ha)
+diff --git a/drivers/scsi/isci/port.c b/drivers/scsi/isci/port.c
+index e50c3b0deeb3..448a8c31ba35 100644
+--- a/drivers/scsi/isci/port.c
++++ b/drivers/scsi/isci/port.c
+@@ -164,8 +164,8 @@ static void isci_port_bc_change_received(struct isci_host *ihost,
+ 		"%s: isci_phy = %p, sas_phy = %p\n",
+ 		__func__, iphy, &iphy->sas_phy);
  
- 		sas_phy = container_of(port->phy_list.next, struct asd_sas_phy,
- 				port_phy_el);
--		sas_notify_port_event_gfp(sas_phy,
-+		sas_notify_port_event(sas_phy,
- 				PORTE_BROADCAST_RCVD, GFP_KERNEL);
- 	}
- 	mutex_unlock(&ha->disco_mutex);
-@@ -141,7 +141,7 @@ int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+-	sas_notify_port_event_gfp(&iphy->sas_phy,
+-				  PORTE_BROADCAST_RCVD, GFP_ATOMIC);
++	sas_notify_port_event(&iphy->sas_phy,
++			      PORTE_BROADCAST_RCVD, GFP_ATOMIC);
+ 	sci_port_bcn_enable(iport);
+ }
  
- 	BUG_ON(event >= PORT_NUM_EVENTS);
+@@ -224,8 +224,8 @@ static void isci_port_link_up(struct isci_host *isci_host,
+ 	/* Notify libsas that we have an address frame, if indeed
+ 	 * we've found an SSP, SMP, or STP target */
+ 	if (success)
+-		sas_notify_port_event_gfp(&iphy->sas_phy,
+-					  PORTE_BYTES_DMAED, GFP_ATOMIC);
++		sas_notify_port_event(&iphy->sas_phy,
++				      PORTE_BYTES_DMAED, GFP_ATOMIC);
+ }
  
--	ev = sas_alloc_event_gfp(phy, gfp_flags);
-+	ev = sas_alloc_event(phy, gfp_flags);
- 	if (!ev)
- 		return -ENOMEM;
  
-@@ -171,7 +171,7 @@ int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+@@ -271,8 +271,8 @@ static void isci_port_link_down(struct isci_host *isci_host,
+ 	 * isci_port_deformed and isci_dev_gone functions.
+ 	 */
+ 	sas_phy_disconnected(&isci_phy->sas_phy);
+-	sas_notify_phy_event_gfp(&isci_phy->sas_phy,
+-				 PHYE_LOSS_OF_SIGNAL, GFP_ATOMIC);
++	sas_notify_phy_event(&isci_phy->sas_phy,
++			     PHYE_LOSS_OF_SIGNAL, GFP_ATOMIC);
  
- 	BUG_ON(event >= PHY_NUM_EVENTS);
- 
--	ev = sas_alloc_event_gfp(phy, gfp_flags);
-+	ev = sas_alloc_event(phy, gfp_flags);
- 	if (!ev)
- 		return -ENOMEM;
- 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index 0dc38385ecbd..30dd35eb9449 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -404,7 +404,7 @@ void sas_resume_ha(struct sas_ha_struct *ha)
- 
- 		if (phy->suspended) {
- 			dev_warn(&phy->phy->dev, "resume timeout\n");
--			sas_notify_phy_event_gfp(phy, PHYE_RESUME_TIMEOUT, GFP_KERNEL);
-+			sas_notify_phy_event(phy, PHYE_RESUME_TIMEOUT, GFP_KERNEL);
- 		}
- 	}
- 
-@@ -603,7 +603,7 @@ struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy,
- 			if (cmpxchg(&phy->in_shutdown, 0, 1) == 0) {
- 				pr_notice("The phy%d bursting events, shut it down.\n",
- 					  phy->id);
--				sas_notify_phy_event_gfp(phy, PHYE_SHUTDOWN, gfp_flags);
-+				sas_notify_phy_event(phy, PHYE_SHUTDOWN, gfp_flags);
- 			}
- 		} else {
- 			/* Do not support PHY control, stop allocating events */
+ 	dev_dbg(&isci_host->pdev->dev,
+ 		"%s: isci_port = %p - Done\n", __func__, isci_port);
 -- 
 2.30.0
 
