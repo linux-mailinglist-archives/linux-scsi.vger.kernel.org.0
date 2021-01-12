@@ -2,90 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDFB2F2B39
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 10:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E97A2F2B69
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 10:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405869AbhALJZQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Jan 2021 04:25:16 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2312 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405855AbhALJZP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 04:25:15 -0500
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4DFQ6L5NqMz67Zbq;
-        Tue, 12 Jan 2021 17:20:42 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 12 Jan 2021 10:24:33 +0100
-Received: from [10.210.171.61] (10.210.171.61) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 12 Jan 2021 09:24:32 +0000
-Subject: Re: About scsi device queue depth
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>,
-        chenxiang <chenxiang66@hisilicon.com>
-References: <9ff894da-cf2c-9094-2690-1973cc57835a@huawei.com>
- <20210112014203.GA60605@T590>
- <4b50f067-a368-2197-c331-a8c981f5cd02@huawei.com>
- <20210112090634.GA97446@T590>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <e5832d8b-383c-9734-85a1-6f36bdb5a773@huawei.com>
-Date:   Tue, 12 Jan 2021 09:23:25 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
-MIME-Version: 1.0
-In-Reply-To: <20210112090634.GA97446@T590>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.171.61]
-X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+        id S2392656AbhALJfA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Jan 2021 04:35:00 -0500
+Received: from comms.puri.sm ([159.203.221.185]:33640 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731123AbhALJe7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 12 Jan 2021 04:34:59 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 8BBC8DFDE2;
+        Tue, 12 Jan 2021 01:33:49 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bBp79AYO0gXz; Tue, 12 Jan 2021 01:33:48 -0800 (PST)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        stern@rowland.harvard.edu, bvanassche@acm.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH v2 0/3] scsi: add runtime PM workaround for SD cardreaders
+Date:   Tue, 12 Jan 2021 10:33:26 +0100
+Message-Id: <20210112093329.3639-1-martin.kepplinger@puri.sm>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12/01/2021 09:06, Ming Lei wrote:
->> OPs read. Here's the fio script:
->>
->> [global]
->> rw=read
->> direct=1
->> ioengine=libaio
->> iodepth=40
->> numjobs=20
->> bs=4k
->> ;size=10240000m
->> ;zero_buffers=1
->> group_reporting=1
->> ;ioscheduler=noop
->> ;cpumask=0xffe
->> ;cpus_allowed=1-47
->> ;gtod_reduce=1
->> ;iodepth_batch=2
->> ;iodepth_batch_complete=2
->> runtime=60
->> ;thread
->> loops = 10000
-> Is there any effect on random read IOPS when you decrease sdev queue
-> depth? For sequential IO, IO merge can be enhanced by that way.
-> 
+revision history
+----------------
+v2:
+ * move module parameter to sd
+ * add Documentation
 
-Let me check...
+v1:
+https://lore.kernel.org/linux-scsi/20210111152029.28426-1-martin.kepplinger@puri.sm/T/#t
 
-Thanks,
-John
+
+
+hi,
+
+In short: there are SD cardreaders that send MEDIA_CHANGED on
+runtime resume. We cannot use runtime PM with these devices as
+I/O basically always fails. I'd like to discuss a way to fix this
+or at least allow users to work around this problem:
+
+For the full background, the discussion started in June 2020 here:
+https://lore.kernel.org/linux-scsi/20200623111018.31954-1-martin.kepplinger@puri.sm/
+
+and I sent the first of these patches in August, as a reference:
+https://lore.kernel.org/linux-scsi/20200824190400.12339-1-martin.kepplinger@puri.sm/
+so this is where I'm following up on.
+
+I'm not sure whether maintaining an in-kernel quirk for specific devices
+makes sense so here I suggest adding a userspace knob. This way there's at
+least a chance to use runtime PM for sd cardreaders that send MEDIA_CHANGED.
+
+I'd appreciate any feedback.
+
+Martin Kepplinger (3):
+  scsi: add expecting_media_change flag to error path
+  scsi: sd: add ignore_resume_medium_changed disk setting
+  scsi: sd: Documentation: describe ignore_resume_medium_changed
+
+ Documentation/scsi/sd-parameters.rst | 14 ++++++++
+ drivers/scsi/scsi_error.c            | 36 +++++++++++++++++---
+ drivers/scsi/sd.c                    | 50 +++++++++++++++++++++++++++-
+ drivers/scsi/sd.h                    |  1 +
+ include/scsi/scsi_device.h           |  1 +
+ 5 files changed, 96 insertions(+), 6 deletions(-)
+
+-- 
+2.20.1
+
