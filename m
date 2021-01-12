@@ -2,40 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEAE2F2D73
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C662F2D76
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 12:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729932AbhALLHv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Jan 2021 06:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbhALLHu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:07:50 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBB8C061795;
-        Tue, 12 Jan 2021 03:07:09 -0800 (PST)
+        id S1730158AbhALLH5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Jan 2021 06:07:57 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:45158 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726572AbhALLH4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jan 2021 06:07:56 -0500
 From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610449628;
+        s=2020; t=1610449633;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qrVCpeZeiY5FHKiy/PwgrhdiC7AEPIMjamJhWmEWlqI=;
-        b=EhDENl32rzzhSofwLQ14GKjSdEbtztOCsCqcKTOFB4nejw0LW+is3S/8B6ZmrgDIur1BW7
-        B1W6RvnZVcks0sRHq0qsQAXp6TfijW6rojTp92iIz7Sf64pPUJjnb8RCDU3zuGDPTHbKLp
-        EHwkqB0qm23DODAxZmE1JQKSAXnmQbBJf1fxGcYeKKmaTB0bYlgbt3RPHb8xcJTBmFvxXX
-        YWrIL8tzaf+Qrw1BNJu8G0FkyDbp60rPLnsoi0v4/DRG56t6mQE4Qf+qBomqO7K/xJ7mDK
-        mpzwziKJQOVKSit2fnR6WnmnstsFKV2IhFqq/B24qB9A4nArEnWVUs/MewYP3Q==
+        bh=XwE3NWOoqRuJWC9QHIg8MEniBW1ChmIXc8KitBchGV0=;
+        b=tiMCVFBrZjrzJTbvMk991vvpVJyDz+vwy6czBNOh0jTKoHLpYh6T6kKAIsdX87YA99UOgg
+        WUbrrW1D1hvh/0aBjjkdohZ8P1wC2JC1OxzjJq8hXo6kiA1VdYRjBoKG88huXOS43WIyzX
+        GqTdmFU7gq/V0XE+oQzqWqjaxaC85n7+H36FY5ngULZ1yyA1t/esh5jW5aVwAiZuXIONVw
+        EF8L1nZ29Xw5infLKGX/7IA4uke0H8czRc+dUixbQIXAcDlM1CV//sMKbLaNJBiSPjskra
+        QO4psFA3cpjkPNDKJOk464ixTyy8Y1zY/B5fgwrjxD0q2M43GH4EppwCtBu62w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610449628;
+        s=2020e; t=1610449633;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qrVCpeZeiY5FHKiy/PwgrhdiC7AEPIMjamJhWmEWlqI=;
-        b=KlVY1/zUbdQ9miofaMAlElr2mF3jMHuWTMiIrv175+hhAMM6QRKIZUOO2fnCO9DKGmpVCE
-        hhoxvLZbYhH2eBCw==
+        bh=XwE3NWOoqRuJWC9QHIg8MEniBW1ChmIXc8KitBchGV0=;
+        b=Q3NNyfvJeAklW83HiScosADNvUA+LHsZ1rqZ0xyoOCxKcEnp+rVStG8s/RBk/STdFXNMpA
+        wxrAwS3MhmDyK7Cw==
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         John Garry <john.garry@huawei.com>,
@@ -48,9 +45,9 @@ Cc:     linux-scsi@vger.kernel.org, intel-linux-scu@intel.com,
         Thomas Gleixner <tglx@linutronix.de>,
         "Sebastian A. Siewior" <bigeasy@linutronix.de>,
         "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Subject: [PATCH v2 04/19] scsi: mvsas: Pass gfp_t flags to libsas event notifiers
-Date:   Tue, 12 Jan 2021 12:06:32 +0100
-Message-Id: <20210112110647.627783-5-a.darwish@linutronix.de>
+Subject: [PATCH v2 05/19] scsi: isci: port: link down: Pass gfp_t flags
+Date:   Tue, 12 Jan 2021 12:06:33 +0100
+Message-Id: <20210112110647.627783-6-a.darwish@linutronix.de>
 In-Reply-To: <20210112110647.627783-1-a.darwish@linutronix.de>
 References: <20210112110647.627783-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
@@ -59,132 +56,238 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-mvsas calls the non _gfp version of the libsas event notifiers API,
-leading to the buggy call chains below:
-
-  mvsas/mv_sas.c: mvs_work_queue() [process context]
-  spin_lock_irqsave(mvs_info::lock, )
-    -> libsas/sas_event.c: sas_notify_phy_event()
-      -> sas_alloc_event()
-        -> in_interrupt() = false
-          -> invalid GFP_KERNEL allocation
-    -> libsas/sas_event.c: sas_notify_port_event()
-      -> sas_alloc_event()
-        -> in_interrupt() = false
-          -> invalid GFP_KERNEL allocation
-
-Use the new event notifiers API instead, which requires callers to
+Use the new libsas event notifiers API, which requires callers to
 explicitly pass the gfp_t memory allocation flags.
 
-Below are context analysis for the modified functions:
+sas_notify_phy_event() is exclusively called by isci_port_link_down().
+Below is the context analysis for all of its call chains:
 
-=> mvs_bytes_dmaed():
+port.c: port_timeout(), atomic, timer callback                  (*)
+spin_lock_irqsave(isci_host::scic_lock, )
+  -> port_state_machine_change(..., SCI_PORT_FAILED)
+    -> enter SCI port state: *SCI_PORT_FAILED*
+      -> sci_port_failed_state_enter()
+        -> isci_port_hard_reset_complete()
+          -> isci_port_link_down()
 
-Since it is invoked from both process and atomic contexts, let its
-callers pass the gfp_t flags. Call chains:
+port.c: isci_port_perform_hard_reset()
+spin_lock_irqsave(isci_host::scic_lock, )
+  -> port.c: sci_port_hard_reset(), atomic                      (*)
+    -> phy.c: sci_phy_reset()
+      -> sci_change_state(SCI_PHY_RESETTING)
+        -> enter SCI PHY state: *SCI_PHY_RESETTING*
+          -> sci_phy_resetting_state_enter()
+            -> port.c: sci_port_deactivate_phy()
+	      -> isci_port_link_down()
 
-  scsi_scan.c: do_scsi_scan_host() [has msleep()]
-    -> shost->hostt->scan_start()
-    -> [mvsas/mv_init.c: Scsi_Host::scsi_host_template .scan_start = mvs_scan_start()]
-    -> mvsas/mv_sas.c: mvs_scan_start()
-      -> mvs_bytes_dmaed(..., GFP_KERNEL)
+port.c: enter SCI port state: *SCI_PORT_READY*                  # Cont. from [1]
+  -> sci_port_ready_state_enter()
+    -> isci_port_hard_reset_complete()
+      -> isci_port_link_down()
 
-  mvsas/mv_sas.c: mvs_work_queue()
-  spin_lock_irqsave(mvs_info::lock,)
-    -> mvs_bytes_dmaed(..., GFP_ATOMIC)
+phy.c: enter SCI state: *SCI_PHY_STOPPED*                       # Cont. from [2]
+  -> sci_phy_stopped_state_enter()
+    -> host.c: sci_controller_link_down()
+      -> ->link_down_handler()
+      == port_config.c: sci_apc_agent_link_down()
+        -> port.c: sci_port_remove_phy()
+          -> sci_port_deactivate_phy()
+            -> isci_port_link_down()
+      == port_config.c: sci_mpc_agent_link_down()
+        -> port.c: sci_port_link_down()
+          -> sci_port_deactivate_phy()
+            -> isci_port_link_down()
 
-  mvsas/mv_64xx.c: mvs_64xx_isr() || mvsas/mv_94xx.c: mvs_94xx_isr()
-    -> mvsas/mv_chips.h: mvs_int_full()
-      -> mvsas/mv_sas.c: mvs_int_port()
-        -> mvs_bytes_dmaed(..., GFP_ATOMIC);
+phy.c: enter SCI state: *SCI_PHY_STARTING*                      # Cont. from [3]
+  -> sci_phy_starting_state_enter()
+    -> host.c: sci_controller_link_down()
+      -> ->link_down_handler()
+      == port_config.c: sci_apc_agent_link_down()
+        -> port.c: sci_port_remove_phy()
+          -> isci_port_link_down()
+      == port_config.c: sci_mpc_agent_link_down()
+        -> port.c: sci_port_link_down()
+          -> sci_port_deactivate_phy()
+            -> isci_port_link_down()
 
-=> mvs_work_queue():
+[1] Call chains for 'enter SCI port state: *SCI_PORT_READY*'
+------------------------------------------------------------
 
-Invoked from process context, but it calls all the libsas event notifier
-APIs under a spin_lock_irqsave(). Pass GFP_ATOMIC.
+host.c: isci_host_init()                                        (@)
+spin_lock_irq(isci_host::scic_lock)
+  -> sci_controller_initialize(), atomic                        (*)
+    -> port_config.c: sci_port_configuration_agent_initialize()
+      -> sci_mpc_agent_validate_phy_configuration()
+        -> port.c: sci_port_add_phy()
+          -> sci_port_general_link_up_handler()
+            -> port_state_machine_change(, SCI_PORT_READY)
+              -> enter port state *SCI_PORT_READY*
+
+host.c: isci_host_start()                                       (@)
+spin_lock_irq(isci_host::scic_lock)
+  -> host.c: sci_controller_start(), atomic                     (*)
+    -> host.c: sci_port_start()
+      -> port.c: port_state_machine_change(, SCI_PORT_READY)
+        -> enter port state *SCI_PORT_READY*
+
+port_config.c: apc_agent_timeout(), atomic, timer callback      (*)
+  -> sci_apc_agent_configure_ports()
+    -> port.c: sci_port_add_phy()
+      -> sci_port_general_link_up_handler()
+        -> port_state_machine_change(, SCI_PORT_READY)
+          -> enter port state *SCI_PORT_READY*
+
+port_config.c: mpc_agent_timeout(), atomic, timer callback      (*)
+spin_lock_irqsave(isci_host::scic_lock, )
+  -> ->link_up_handler()
+  == port.c: sci_apc_agent_link_up()
+    -> sci_port_general_link_up_handler()
+      -> port_state_machine_change(, SCI_PORT_READY)
+        -> enter port state *SCI_PORT_READY*
+  == port.c: sci_mpc_agent_link_up()
+    -> port.c: sci_port_link_up()
+      -> sci_port_general_link_up_handler()
+        -> port_state_machine_change(, SCI_PORT_READY)
+          -> enter port state *SCI_PORT_READY*
+
+phy.c: enter SCI state: SCI_PHY_SUB_FINAL                       # Cont. from [1A]
+  -> sci_phy_starting_final_substate_enter()
+    -> sci_change_state(SCI_PHY_READY)
+      -> enter SCI state: *SCI_PHY_READY*
+        -> sci_phy_ready_state_enter()
+          -> host.c: sci_controller_link_up()
+            -> port_agent.link_up_handler()
+            == port_config.c: sci_apc_agent_link_up()
+              -> port.c: sci_port_link_up()
+                -> sci_port_general_link_up_handler()
+                  -> port_state_machine_change(, SCI_PORT_READY)
+                    -> enter port state *SCI_PORT_READY*
+            == port_config.c: sci_mpc_agent_link_up()
+              -> port.c: sci_port_link_up()
+                -> sci_port_general_link_up_handler()
+                  -> port_state_machine_change(, SCI_PORT_READY)
+                    -> enter port state *SCI_PORT_READY*
+
+[1A] Call chains for entering SCI state: *SCI_PHY_SUB_FINAL*
+------------------------------------------------------------
+
+host.c: power_control_timeout(), atomic, timer callback         (*)
+spin_lock_irqsave(isci_host::scic_lock, )
+  -> phy.c: sci_phy_consume_power_handler()
+    -> phy.c: sci_change_state(SCI_PHY_SUB_FINAL)
+
+host.c: sci_controller_error_handler(): atomic, irq handler     (*)
+OR host.c: sci_controller_completion_handler(), atomic, tasklet (*)
+  -> sci_controller_process_completions()
+    -> sci_controller_unsolicited_frame()
+      -> phy.c: sci_phy_frame_handler()
+        -> sci_change_state(SCI_PHY_SUB_AWAIT_SAS_POWER)
+          -> sci_phy_starting_await_sas_power_substate_enter()
+            -> host.c: sci_controller_power_control_queue_insert()
+              -> phy.c: sci_phy_consume_power_handler()
+                -> sci_change_state(SCI_PHY_SUB_FINAL)
+        -> sci_change_state(SCI_PHY_SUB_FINAL)
+    -> sci_controller_event_completion()
+      -> phy.c: sci_phy_event_handler()
+        -> sci_phy_start_sata_link_training()
+          -> sci_change_state(SCI_PHY_SUB_AWAIT_SATA_POWER)
+            -> sci_phy_starting_await_sata_power_substate_enter
+              -> host.c: sci_controller_power_control_queue_insert()
+                -> phy.c: sci_phy_consume_power_handler()
+                  -> sci_change_state(SCI_PHY_SUB_FINAL)
+
+[2] Call chains for entering state: *SCI_PHY_STOPPED*
+-----------------------------------------------------
+
+host.c: isci_host_init()                                        (@)
+spin_lock_irq(isci_host::scic_lock)
+  -> sci_controller_initialize(), atomic                        (*)
+      -> phy.c: sci_phy_initialize()
+        -> phy.c: sci_phy_link_layer_initialization()
+          -> phy.c: sci_change_state(SCI_PHY_STOPPED)
+
+init.c: PCI ->remove() || PM_OPS ->suspend,  process context    (+)
+  -> host.c: isci_host_deinit()
+    -> sci_controller_stop_phys()
+      -> phy.c: sci_phy_stop()
+	-> sci_change_state(SCI_PHY_STOPPED)
+
+phy.c: isci_phy_control()
+spin_lock_irqsave(isci_host::scic_lock, )
+  -> sci_phy_stop(), atomic                                     (*)
+    -> sci_change_state(SCI_PHY_STOPPED)
+
+[3] Call chains for entering state: *SCI_PHY_STARTING*
+------------------------------------------------------
+
+phy.c: phy_sata_timeout(), atimer, timer callback               (*)
+spin_lock_irqsave(isci_host::scic_lock, )
+  -> sci_change_state(SCI_PHY_STARTING)
+
+host.c: phy_startup_timeout(), atomic, timer callback           (*)
+spin_lock_irqsave(isci_host::scic_lock, )
+  -> sci_controller_start_next_phy()
+    -> sci_phy_start()
+      -> sci_change_state(SCI_PHY_STARTING)
+
+host.c: isci_host_start()                                       (@)
+spin_lock_irq(isci_host::scic_lock)
+  -> sci_controller_start(), atomic                             (*)
+    -> sci_controller_start_next_phy()
+      -> sci_phy_start()
+        -> sci_change_state(SCI_PHY_STARTING)
+
+phy.c: Enter SCI state *SCI_PHY_SUB_FINAL*, atomic, check above (*)
+  -> sci_change_state(SCI_PHY_SUB_FINAL)
+    -> sci_phy_starting_final_substate_enter()
+      -> sci_change_state(SCI_PHY_READY)
+        -> Enter SCI state: *SCI_PHY_READY*
+          -> sci_phy_ready_state_enter()
+            -> host.c: sci_controller_link_up()
+              -> sci_controller_start_next_phy()
+                -> sci_phy_start()
+                  -> sci_change_state(SCI_PHY_STARTING)
+
+phy.c: sci_phy_event_handler(), atomic, discussed earlier       (*)
+  -> sci_change_state(SCI_PHY_STARTING), 11 instances
+
+phy.c: enter SCI state: *SCI_PHY_RESETTING*, atomic, discussed  (*)
+  -> sci_phy_resetting_state_enter()
+    -> sci_change_state(SCI_PHY_STARTING)
+
+As can be seen from the "(*)" markers above, almost all the call-chains
+are atomic. The only exception, marked with "(+)", is a PCI ->remove()
+and PM_OPS ->suspend() cold path. Thus, pass GFP_ATOMIC to the libsas
+phy event notifier.
+
+Note, The now-replaced libsas APIs used in_interrupt() to implicitly
+decide which memory allocation type to use.  This was only partially
+correct, as it fails to choose the correct GFP flags when just
+preemption or interrupts are disabled. Such buggy code paths are marked
+with "(@)" in the call chains above.
 
 Fixes: 1c393b970e0f ("scsi: libsas: Use dynamic alloced work to avoid sas event lost")
 Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Jason Yan <yanaijie@huawei.com>
+Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
 ---
- drivers/scsi/mvsas/mv_sas.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/scsi/isci/port.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/mvsas/mv_sas.c b/drivers/scsi/mvsas/mv_sas.c
-index e5e3e95f78b0..e80f760f8abd 100644
---- a/drivers/scsi/mvsas/mv_sas.c
-+++ b/drivers/scsi/mvsas/mv_sas.c
-@@ -216,7 +216,7 @@ void mvs_set_sas_addr(struct mvs_info *mvi, int port_id, u32 off_lo,
- 	MVS_CHIP_DISP->write_port_cfg_data(mvi, port_id, hi);
- }
+diff --git a/drivers/scsi/isci/port.c b/drivers/scsi/isci/port.c
+index 8d9349738067..a3c58718c260 100644
+--- a/drivers/scsi/isci/port.c
++++ b/drivers/scsi/isci/port.c
+@@ -269,8 +269,8 @@ static void isci_port_link_down(struct isci_host *isci_host,
+ 	 * isci_port_deformed and isci_dev_gone functions.
+ 	 */
+ 	sas_phy_disconnected(&isci_phy->sas_phy);
+-	sas_notify_phy_event(&isci_phy->sas_phy,
+-					   PHYE_LOSS_OF_SIGNAL);
++	sas_notify_phy_event_gfp(&isci_phy->sas_phy,
++				 PHYE_LOSS_OF_SIGNAL, GFP_ATOMIC);
  
--static void mvs_bytes_dmaed(struct mvs_info *mvi, int i)
-+static void mvs_bytes_dmaed(struct mvs_info *mvi, int i, gfp_t gfp_flags)
- {
- 	struct mvs_phy *phy = &mvi->phy[i];
- 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
-@@ -229,7 +229,7 @@ static void mvs_bytes_dmaed(struct mvs_info *mvi, int i)
- 		return;
- 	}
- 
--	sas_notify_phy_event(sas_phy, PHYE_OOB_DONE);
-+	sas_notify_phy_event_gfp(sas_phy, PHYE_OOB_DONE, gfp_flags);
- 
- 	if (sas_phy->phy) {
- 		struct sas_phy *sphy = sas_phy->phy;
-@@ -261,7 +261,7 @@ static void mvs_bytes_dmaed(struct mvs_info *mvi, int i)
- 
- 	sas_phy->frame_rcvd_size = phy->frame_rcvd_size;
- 
--	sas_notify_port_event(sas_phy, PORTE_BYTES_DMAED);
-+	sas_notify_port_event_gfp(sas_phy, PORTE_BYTES_DMAED, gfp_flags);
- }
- 
- void mvs_scan_start(struct Scsi_Host *shost)
-@@ -277,7 +277,7 @@ void mvs_scan_start(struct Scsi_Host *shost)
- 	for (j = 0; j < core_nr; j++) {
- 		mvi = ((struct mvs_prv_info *)sha->lldd_ha)->mvi[j];
- 		for (i = 0; i < mvi->chip->n_phy; ++i)
--			mvs_bytes_dmaed(mvi, i);
-+			mvs_bytes_dmaed(mvi, i, GFP_KERNEL);
- 	}
- 	mvs_prv->scan_finished = 1;
- }
-@@ -1892,20 +1892,20 @@ static void mvs_work_queue(struct work_struct *work)
- 			if (!(tmp & PHY_READY_MASK)) {
- 				sas_phy_disconnected(sas_phy);
- 				mvs_phy_disconnected(phy);
--				sas_notify_phy_event(sas_phy,
--					PHYE_LOSS_OF_SIGNAL);
-+				sas_notify_phy_event_gfp(sas_phy,
-+					PHYE_LOSS_OF_SIGNAL, GFP_ATOMIC);
- 				mv_dprintk("phy%d Removed Device\n", phy_no);
- 			} else {
- 				MVS_CHIP_DISP->detect_porttype(mvi, phy_no);
- 				mvs_update_phyinfo(mvi, phy_no, 1);
--				mvs_bytes_dmaed(mvi, phy_no);
-+				mvs_bytes_dmaed(mvi, phy_no, GFP_ATOMIC);
- 				mvs_port_notify_formed(sas_phy, 0);
- 				mv_dprintk("phy%d Attached Device\n", phy_no);
- 			}
- 		}
- 	} else if (mwq->handler & EXP_BRCT_CHG) {
- 		phy->phy_event &= ~EXP_BRCT_CHG;
--		sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD);
-+		sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
- 		mv_dprintk("phy%d Got Broadcast Change\n", phy_no);
- 	}
- 	list_del(&mwq->entry);
-@@ -2022,7 +2022,7 @@ void mvs_int_port(struct mvs_info *mvi, int phy_no, u32 events)
- 				mdelay(10);
- 			}
- 
--			mvs_bytes_dmaed(mvi, phy_no);
-+			mvs_bytes_dmaed(mvi, phy_no, GFP_ATOMIC);
- 			/* whether driver is going to handle hot plug */
- 			if (phy->phy_event & PHY_PLUG_OUT) {
- 				mvs_port_notify_formed(&phy->sas_phy, 0);
+ 	dev_dbg(&isci_host->pdev->dev,
+ 		"%s: isci_port = %p - Done\n", __func__, isci_port);
 -- 
 2.30.0
 
