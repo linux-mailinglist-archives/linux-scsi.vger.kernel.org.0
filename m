@@ -2,120 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3772F236E
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 01:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7EC2F2513
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jan 2021 02:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405538AbhALAZs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Jan 2021 19:25:48 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17604 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2403902AbhAKXN1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 11 Jan 2021 18:13:27 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10BN1Q9l093675;
-        Mon, 11 Jan 2021 18:12:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=OCeqXqTg76Y0WcH/KI/byd9/8vHZqFTCU6yOhsYJqt8=;
- b=Wf4VU+0rh3h1LzOaPCugHkxlezrad9NmmDbC+er4jDxv5GhnAsiqIdxL0wczk+0Gj1gL
- uVKiavzYHTqIr7lrQ5hXxLQOUFXNQ49ye3uebPe0RDzOk/9otJbodgQQaigmiK9GlP3a
- Gd3xdgKJcGYSi3Vd1affXtQRJKUetb2Ful9GnlauOr8pTkkE6iFIWcPDEb6cLlN+nLYN
- hvcxLYdj+WGXM9P6JVkLHCCsBQ2mT1oty+Aon07LRuazVOlKt83ysWpKiESfuwDcCzXi
- lLIM8t0w/GO9EBm4FJxIC7vAmNJtRCiL0qVD9rb6ogZEvv6tbQaBBKTOzujfGgfvJj0P 4g== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 360wgfmekf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jan 2021 18:12:41 -0500
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10BN7Q1I010322;
-        Mon, 11 Jan 2021 23:12:40 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma01wdc.us.ibm.com with ESMTP id 35y448sysj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jan 2021 23:12:40 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10BNCbfl27656688
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Jan 2021 23:12:37 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B84C7805C;
-        Mon, 11 Jan 2021 23:12:37 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E71678060;
-        Mon, 11 Jan 2021 23:12:36 +0000 (GMT)
-Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 11 Jan 2021 23:12:36 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH v4 19/21] ibmvfc: purge scsi channels after transport loss/reset
-Date:   Mon, 11 Jan 2021 17:12:23 -0600
-Message-Id: <20210111231225.105347-20-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210111231225.105347-1-tyreld@linux.ibm.com>
-References: <20210111231225.105347-1-tyreld@linux.ibm.com>
+        id S1731556AbhALAql (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Jan 2021 19:46:41 -0500
+Received: from so254-31.mailgun.net ([198.61.254.31]:56362 "EHLO
+        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731235AbhALAqf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Jan 2021 19:46:35 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1610412370; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=Nv/zP2h6yHmultnitPDgLlwcKLI62F6LDdyCUTp686A=;
+ b=uukft+lCOJ+3a63Qz055xp2svanPRdAr2a9kXDm2DP6uVdRGhBL+jdauCCuwcj0Tf6yu7Sla
+ dlAk0vLCnVucmiM0Ycr14zyChPp1QP+z1Cm652oX7xP+GWtlp2ez1T27IH7ewfkveytipJSV
+ eGZYl3q1yDObVu4rHhtVrCktibk=
+X-Mailgun-Sending-Ip: 198.61.254.31
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n09.prod.us-west-2.postgun.com with SMTP id
+ 5ffcf12bd84bad3547658e9f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 12 Jan 2021 00:45:31
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id DC9DEC43478; Tue, 12 Jan 2021 00:45:30 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7F5D2C433C6;
+        Tue, 12 Jan 2021 00:45:29 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-11_32:2021-01-11,2021-01-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=999 spamscore=0 adultscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101110126
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 12 Jan 2021 08:45:29 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Bean Huo <huobean@gmail.com>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, ziqichen@codeaurora.org,
+        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        rjw@rjwysocki.net, Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Nitin Rawat <nitirawa@codeaurora.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Satya Tangirala <satyat@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] scsi: ufs: Protect PM ops and err_handler from user
+ access through sysfs
+In-Reply-To: <6eaa5c51c0b17968e0169b8a16bdbfa4934af5d8.camel@gmail.com>
+References: <1609595975-12219-1-git-send-email-cang@codeaurora.org>
+ <1609595975-12219-3-git-send-email-cang@codeaurora.org>
+ <80a15afab8024d0b61d312b57585c9322ac91958.camel@gmail.com>
+ <7d49c1dfc3f648c484076f3c3a7f4e1e@codeaurora.org>
+ <1514403adf486ac8069253c09f45b021bad32e00.camel@gmail.com>
+ <f814b71d1d4ea87a72df4851a8190807@codeaurora.org>
+ <cb388d8ea15b2c80a072dec74d9ededecb183a08.camel@gmail.com>
+ <e69bd5a6b73d5c652130bf4fa077aac0@codeaurora.org>
+ <606774efd4d89f0ea78cefeb428cc9e1@codeaurora.org>
+ <146b46a5c38f4582a9a8e6df1d87cdfc0684f549.camel@gmail.com>
+ <fa0e976387070c64752c972d32ce15df@codeaurora.org>
+ <976641f42211af23d90464d0c4841cc40740b0d7.camel@gmail.com>
+ <7f193fe5abfb41aa72d17f7884cbd113@codeaurora.org>
+ <6eaa5c51c0b17968e0169b8a16bdbfa4934af5d8.camel@gmail.com>
+Message-ID: <9d74b57f9a26878705b7162a36b2bceb@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Grab the queue and list lock for each Sub-CRQ and add any uncompleted
-events to the host purge list.
+On 2021-01-11 18:04, Bean Huo wrote:
+> On Mon, 2021-01-11 at 17:22 +0800, Can Guo wrote:
+>> > > meaning you are tring to access a register when clocks are
+>> > > disabled.
+>> > > This
+>> > > leads to system CRASH.
+>> > >
+>> >
+>> > OK, let it simple, share this kind of crash log becuase of access
+>> > sysfs
+>> > node in the shutdown flow.
+>> >
+>> >
+>> > > [2] OCP is over current protection. While UFS shutting down, you
+>> > > may
+>> > > have put UFS regulators to LPM. After that, if you are still
+>> > > trying
+>> > > to
+>> > > talk to UFS, OCP can happen on VCCQ/VCCQ2. This leads to system
+>> > > CRASH
+>> > > too.
+>> >
+>> > the same as above, share the crash log.
+>> >
+>> 
+>> If you have hand-on experiences on NoC and/or OCP issues, you won't
+>> ask
+>> for the crash log. The tricky parts about critial NoC and OCP issues
+>> is
+> 
+> OK, interesting. would you tell me which register access node in ufs-
+> sysfs.c can trigger this crash? let me verify your statement.
+> 
+> 
 
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
----
- drivers/scsi/ibmvscsi/ibmvfc.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+I believe I have explained enough to prove we need this change.
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 24e1278acfeb..b413f5da71ce 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -1056,7 +1056,13 @@ static void ibmvfc_fail_request(struct ibmvfc_event *evt, int error_code)
- static void ibmvfc_purge_requests(struct ibmvfc_host *vhost, int error_code)
- {
- 	struct ibmvfc_event *evt, *pos;
-+	struct ibmvfc_queue *queues = vhost->scsi_scrqs.scrqs;
- 	unsigned long flags;
-+	int hwqs = 0;
-+	int i;
-+
-+	if (vhost->using_channels)
-+		hwqs = vhost->scsi_scrqs.active_queues;
- 
- 	ibmvfc_dbg(vhost, "Purging all requests\n");
- 	spin_lock_irqsave(&vhost->crq.l_lock, flags);
-@@ -1064,6 +1070,16 @@ static void ibmvfc_purge_requests(struct ibmvfc_host *vhost, int error_code)
- 		ibmvfc_fail_request(evt, error_code);
- 	list_splice_init(&vhost->crq.sent, &vhost->purge);
- 	spin_unlock_irqrestore(&vhost->crq.l_lock, flags);
-+
-+	for (i = 0; i < hwqs; i++) {
-+		spin_lock_irqsave(queues[i].q_lock, flags);
-+		spin_lock(&queues[i].l_lock);
-+		list_for_each_entry_safe(evt, pos, &queues[i].sent, queue_list)
-+			ibmvfc_fail_request(evt, error_code);
-+		list_splice_init(&queues[i].sent, &vhost->purge);
-+		spin_unlock(&queues[i].l_lock);
-+		spin_unlock_irqrestore(queues[i].q_lock, flags);
-+	}
- }
- 
- /**
--- 
-2.27.0
+If you are really interested in NoC and OCP, feel free to ping me
+on teams, I will show you how to trigger one and what is it like
+on my setup.
 
+Can Guo.
+
+> Bean
+> 
+>> 
