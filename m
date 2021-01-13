@@ -2,32 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC6E2F56B0
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 02:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B4F2F55D0
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 02:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726959AbhANBvY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 20:51:24 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:50140 "EHLO smtp.infotech.no"
+        id S1727494AbhANB2F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 20:28:05 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:50497 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729797AbhANALI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 Jan 2021 19:11:08 -0500
+        id S1727134AbhANB1n (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 13 Jan 2021 20:27:43 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id D54372042AF;
-        Wed, 13 Jan 2021 23:45:59 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTP id 1161B204296;
+        Wed, 13 Jan 2021 23:46:13 +0100 (CET)
 X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
 Received: from smtp.infotech.no ([127.0.0.1])
         by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Z70zhSOVXBet; Wed, 13 Jan 2021 23:45:58 +0100 (CET)
+        with ESMTP id k8GlfN7XdLSv; Wed, 13 Jan 2021 23:46:11 +0100 (CET)
 Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
-        by smtp.infotech.no (Postfix) with ESMTPA id 2CA7D20426D;
-        Wed, 13 Jan 2021 23:45:57 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTPA id 5527A2042A5;
+        Wed, 13 Jan 2021 23:46:10 +0100 (CET)
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
         kashyap.desai@broadcom.com
-Subject: [PATCH v13 22/45] sg: printk change %p to %pK
-Date:   Wed, 13 Jan 2021 17:45:03 -0500
-Message-Id: <20210113224526.861000-23-dgilbert@interlog.com>
+Subject: [PATCH v13 33/45] sg: move procfs objects to avoid forward decls
+Date:   Wed, 13 Jan 2021 17:45:14 -0500
+Message-Id: <20210113224526.861000-34-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210113224526.861000-1-dgilbert@interlog.com>
 References: <20210113224526.861000-1-dgilbert@interlog.com>
@@ -37,156 +37,163 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This driver does a lot of buffer juggling in an attempt to
-take some of that chore away from its users. When debugging
-problems associated with that buffer juggling getting
-sensible pointer values is a major aid. So change %p
-to %pK. The system administrator can choose to obfuscate
-%pK pointers. The "pK" is also easier to search for in the
-code if further changes are required.
+Move the procfs related file_operations and seq_operations
+definitions toward the end of the source file to minimize the
+need for forward declarations of the functions they name.
 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 ---
- drivers/scsi/sg.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/scsi/sg.c | 129 +++++++++++++++++++++-------------------------
+ 1 file changed, 58 insertions(+), 71 deletions(-)
 
 diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 54aac9d6ac7e..6897053f3a90 100644
+index 0b9436e978a7..b27a719774fe 100644
 --- a/drivers/scsi/sg.c
 +++ b/drivers/scsi/sg.c
-@@ -911,7 +911,7 @@ sg_receive_v3(struct sg_fd *sfp, struct sg_request *srp, size_t count,
- 		err = -EINVAL;
- 		goto err_out;
- 	}
--	SG_LOG(3, sfp, "%s: srp=0x%p\n", __func__, srp);
-+	SG_LOG(3, sfp, "%s: srp=0x%pK\n", __func__, srp);
- 	err = sg_rec_state_v3(sfp, srp);
- 	if (hp->masked_status || hp->host_status || hp->driver_status)
- 		hp->info |= SG_INFO_CHECK;
-@@ -1698,7 +1698,7 @@ sg_mmap(struct file *filp, struct vm_area_struct *vma)
- 		return -ENXIO;
- 	}
- 	req_sz = vma->vm_end - vma->vm_start;
--	SG_LOG(3, sfp, "%s: vm_start=%p, len=%d\n", __func__,
-+	SG_LOG(3, sfp, "%s: vm_start=%pK, len=%d\n", __func__,
- 	       (void *)vma->vm_start, (int)req_sz);
- 	if (vma->vm_pgoff)
- 		return -EINVAL; /* only an offset of 0 accepted */
-@@ -1746,7 +1746,7 @@ sg_rq_end_io_usercontext(struct work_struct *work)
- 		WARN_ONCE(1, "%s: sfp unexpectedly NULL\n", __func__);
- 		return;
- 	}
--	SG_LOG(3, sfp, "%s: srp=0x%p\n", __func__, srp);
-+	SG_LOG(3, sfp, "%s: srp=0x%pK\n", __func__, srp);
- 	sg_finish_scsi_blk_rq(srp);
- 	sg_deact_request(sfp, srp);
- 	kref_put(&sfp->f_ref, sg_remove_sfp);
-@@ -1919,7 +1919,7 @@ sg_add_device_helper(struct gendisk *disk, struct scsi_device *scsidp)
- 	k = error;
+@@ -3766,77 +3766,6 @@ sg_rq_st_str(enum sg_rq_state rq_st, bool long_str)
+ #endif
  
- 	SCSI_LOG_TIMEOUT(3, sdev_printk(KERN_INFO, scsidp,
--			 "%s: dev=%d, sdp=0x%p ++\n", __func__, k, sdp));
-+			 "%s: dev=%d, sdp=0x%pK ++\n", __func__, k, sdp));
- 	sprintf(disk->disk_name, "sg%d", k);
- 	disk->first_minor = k;
- 	sdp->disk = disk;
-@@ -2028,7 +2028,7 @@ sg_device_destroy(struct kref *kref)
- 	struct sg_device *sdp = container_of(kref, struct sg_device, d_ref);
- 	unsigned long flags;
+ #if IS_ENABLED(CONFIG_SCSI_PROC_FS)     /* long, almost to end of file */
+-static int sg_proc_seq_show_int(struct seq_file *s, void *v);
+-
+-static int sg_proc_single_open_adio(struct inode *inode, struct file *filp);
+-static ssize_t sg_proc_write_adio(struct file *filp, const char __user *buffer,
+-			          size_t count, loff_t *off);
+-static const struct proc_ops adio_proc_ops = {
+-	.proc_open	= sg_proc_single_open_adio,
+-	.proc_read	= seq_read,
+-	.proc_lseek	= seq_lseek,
+-	.proc_write	= sg_proc_write_adio,
+-	.proc_release	= single_release,
+-};
+-
+-static int sg_proc_single_open_dressz(struct inode *inode, struct file *filp);
+-static ssize_t sg_proc_write_dressz(struct file *filp, 
+-		const char __user *buffer, size_t count, loff_t *off);
+-static const struct proc_ops dressz_proc_ops = {
+-	.proc_open	= sg_proc_single_open_dressz,
+-	.proc_read	= seq_read,
+-	.proc_lseek	= seq_lseek,
+-	.proc_write	= sg_proc_write_dressz,
+-	.proc_release	= single_release,
+-};
+-
+-static int sg_proc_seq_show_version(struct seq_file *s, void *v);
+-static int sg_proc_seq_show_devhdr(struct seq_file *s, void *v);
+-static int sg_proc_seq_show_dev(struct seq_file *s, void *v);
+-static void * dev_seq_start(struct seq_file *s, loff_t *pos);
+-static void * dev_seq_next(struct seq_file *s, void *v, loff_t *pos);
+-static void dev_seq_stop(struct seq_file *s, void *v);
+-static const struct seq_operations dev_seq_ops = {
+-	.start = dev_seq_start,
+-	.next  = dev_seq_next,
+-	.stop  = dev_seq_stop,
+-	.show  = sg_proc_seq_show_dev,
+-};
+-
+-static int sg_proc_seq_show_devstrs(struct seq_file *s, void *v);
+-static const struct seq_operations devstrs_seq_ops = {
+-	.start = dev_seq_start,
+-	.next  = dev_seq_next,
+-	.stop  = dev_seq_stop,
+-	.show  = sg_proc_seq_show_devstrs,
+-};
+-
+-static int sg_proc_seq_show_debug(struct seq_file *s, void *v);
+-static const struct seq_operations debug_seq_ops = {
+-	.start = dev_seq_start,
+-	.next  = dev_seq_next,
+-	.stop  = dev_seq_stop,
+-	.show  = sg_proc_seq_show_debug,
+-};
+-
+-static int
+-sg_proc_init(void)
+-{
+-	struct proc_dir_entry *p;
+-
+-	p = proc_mkdir("scsi/sg", NULL);
+-	if (!p)
+-		return 1;
+-
+-	proc_create("allow_dio", 0644, p, &adio_proc_ops);
+-	proc_create_seq("debug", 0444, p, &debug_seq_ops);
+-	proc_create("def_reserved_size", 0644, p, &dressz_proc_ops);
+-	proc_create_single("device_hdr", 0444, p, sg_proc_seq_show_devhdr);
+-	proc_create_seq("devices", 0444, p, &dev_seq_ops);
+-	proc_create_seq("device_strs", 0444, p, &devstrs_seq_ops);
+-	proc_create_single("version", 0444, p, sg_proc_seq_show_version);
+-	return 0;
+-}
  
--	SCSI_LOG_TIMEOUT(1, pr_info("[tid=%d] %s: sdp idx=%d, sdp=0x%p --\n",
-+	SCSI_LOG_TIMEOUT(1, pr_info("[tid=%d] %s: sdp idx=%d, sdp=0x%pK --\n",
- 				    (current ? current->pid : -1), __func__,
- 				    sdp->index, sdp));
- 	/*
-@@ -2060,7 +2060,7 @@ sg_remove_device(struct device *cl_dev, struct class_interface *cl_intf)
- 		return; /* only want to do following once per device */
- 
- 	SCSI_LOG_TIMEOUT(3, sdev_printk(KERN_INFO, sdp->device,
--					"%s: 0x%p\n", __func__, sdp));
-+					"%s: 0x%pK\n", __func__, sdp));
- 
- 	read_lock_irqsave(&sdp->sfd_lock, iflags);
- 	list_for_each_entry(sfp, &sdp->sfds, sfd_entry) {
-@@ -2188,7 +2188,7 @@ sg_start_req(struct sg_request *srp, u8 *cmd)
- 		long_cmdp = kzalloc(hp->cmd_len, GFP_KERNEL);
- 		if (!long_cmdp)
- 			return -ENOMEM;
--		SG_LOG(5, sfp, "%s: long_cmdp=0x%p ++\n", __func__, long_cmdp);
-+		SG_LOG(5, sfp, "%s: long_cmdp=0x%pK ++\n", __func__, long_cmdp);
- 	}
- 	SG_LOG(4, sfp, "%s: dxfer_len=%d, data-%s\n", __func__, dxfer_len,
- 	       (r0w ? "OUT" : "IN"));
-@@ -2296,7 +2296,7 @@ sg_finish_scsi_blk_rq(struct sg_request *srp)
- 	struct sg_fd *sfp = srp->parentfp;
- 	struct sg_scatter_hold *req_schp = &srp->data;
- 
--	SG_LOG(4, sfp, "%s: srp=0x%p%s\n", __func__, srp,
-+	SG_LOG(4, sfp, "%s: srp=0x%pK%s\n", __func__, srp,
- 	       (srp->res_used) ? " rsv" : "");
- 	if (!srp->sg_io_owned) {
- 		atomic_dec(&sfp->submitted);
-@@ -2341,7 +2341,7 @@ sg_mk_sgat(struct sg_scatter_hold *schp, struct sg_fd *sfp, int minlen)
- 	align_sz = ALIGN(minlen, SG_DEF_SECTOR_SZ);
- 
- 	schp->pages = kcalloc(mx_sgat_elems, ptr_sz, mask_kz);
--	SG_LOG(4, sfp, "%s: minlen=%d, align_sz=%d [sz=%zu, 0x%p ++]\n",
-+	SG_LOG(4, sfp, "%s: minlen=%d, align_sz=%d [sz=%zu, 0x%pK ++]\n",
- 	       __func__, minlen, align_sz, mx_sgat_elems * ptr_sz,
- 	       schp->pages);
- 	if (unlikely(!schp->pages))
-@@ -2359,7 +2359,7 @@ sg_mk_sgat(struct sg_scatter_hold *schp, struct sg_fd *sfp, int minlen)
- 		schp->pages[k] = alloc_pages(mask_ap, order);
- 		if (!schp->pages[k])
- 			goto err_out;
--		SG_LOG(5, sfp, "%s: k=%d, order=%d [0x%p ++]\n", __func__, k,
-+		SG_LOG(5, sfp, "%s: k=%d, order=%d [0x%pK ++]\n", __func__, k,
- 		       order, schp->pages[k]);
- 	}
- 	schp->page_order = order;
-@@ -2395,12 +2395,12 @@ sg_remove_sgat_helper(struct sg_fd *sfp, struct sg_scatter_hold *schp)
- 		return;
- 	for (k = 0; k < schp->num_sgat; ++k) {
- 		p = schp->pages[k];
--		SG_LOG(5, sfp, "%s: pg[%d]=0x%p --\n", __func__, k, p);
-+		SG_LOG(5, sfp, "%s: pg[%d]=0x%pK --\n", __func__, k, p);
- 		if (unlikely(!p))
- 			continue;
- 		__free_pages(p, schp->page_order);
- 	}
--	SG_LOG(5, sfp, "%s: pg_order=%u, free pgs=0x%p --\n", __func__,
-+	SG_LOG(5, sfp, "%s: pg_order=%u, free pgs=0x%pK --\n", __func__,
- 	       schp->page_order, schp->pages);
- 	kfree(schp->pages);
- }
-@@ -2637,7 +2637,7 @@ sg_add_sfp(struct sg_device *sdp)
- 	}
- 	list_add_tail(&sfp->sfd_entry, &sdp->sfds);
- 	write_unlock_irqrestore(&sdp->sfd_lock, iflags);
--	SG_LOG(3, sfp, "%s: sfp=0x%p\n", __func__, sfp);
-+	SG_LOG(3, sfp, "%s: sfp=0x%pK\n", __func__, sfp);
- 	if (unlikely(sg_big_buff != def_reserved_size))
- 		sg_big_buff = def_reserved_size;
- 
-@@ -2647,7 +2647,7 @@ sg_add_sfp(struct sg_device *sdp)
- 
- 	kref_get(&sdp->d_ref);
- 	__module_get(THIS_MODULE);
--	SG_LOG(3, sfp, "%s: success, sfp=0x%p ++\n", __func__, sfp);
-+	SG_LOG(3, sfp, "%s: success, sfp=0x%pK ++\n", __func__, sfp);
- 	return sfp;
+ static int
+ sg_last_dev(void)
+@@ -4209,6 +4138,64 @@ sg_proc_seq_show_debug(struct seq_file *s, void *v)
+ 	return 0;
  }
  
-@@ -2690,7 +2690,7 @@ sg_remove_sfp_usercontext(struct work_struct *work)
- 		sg_remove_sgat(sfp, &sfp->reserve);
- 	}
++static const struct proc_ops adio_proc_ops = {
++	.proc_open      = sg_proc_single_open_adio,
++	.proc_read      = seq_read,
++	.proc_lseek     = seq_lseek,
++	.proc_write     = sg_proc_write_adio,
++	.proc_release   = single_release,
++};
++
++static const struct proc_ops dressz_proc_ops = {
++	.proc_open      = sg_proc_single_open_dressz,
++	.proc_read      = seq_read,
++	.proc_lseek     = seq_lseek,
++	.proc_write     = sg_proc_write_dressz,
++	.proc_release   = single_release,
++};
++
++static const struct seq_operations dev_seq_ops = {
++	.start = dev_seq_start,
++	.next  = dev_seq_next,
++	.stop  = dev_seq_stop,
++	.show  = sg_proc_seq_show_dev,
++};
++
++static const struct seq_operations devstrs_seq_ops = {
++	.start = dev_seq_start,
++	.next  = dev_seq_next,
++	.stop  = dev_seq_stop,
++	.show  = sg_proc_seq_show_devstrs,
++};
++
++static const struct seq_operations debug_seq_ops = {
++	.start = dev_seq_start,
++	.next  = dev_seq_next,
++	.stop  = dev_seq_stop,
++	.show  = sg_proc_seq_show_debug,
++};
++
++static int
++sg_proc_init(void)
++{
++	struct proc_dir_entry *p;
++
++	p = proc_mkdir("scsi/sg", NULL);
++	if (!p)
++		return 1;
++
++	proc_create("allow_dio", 0644, p, &adio_proc_ops);
++	proc_create_seq("debug", 0444, p, &debug_seq_ops);
++	proc_create("def_reserved_size", 0644, p, &dressz_proc_ops);
++	proc_create_single("device_hdr", 0444, p, sg_proc_seq_show_devhdr);
++	proc_create_seq("devices", 0444, p, &dev_seq_ops);
++	proc_create_seq("device_strs", 0444, p, &devstrs_seq_ops);
++	proc_create_single("version", 0444, p, sg_proc_seq_show_version);
++	return 0;
++}
++
++/* remove_proc_subtree("scsi/sg", NULL) in exit_sg() does cleanup */
++
+ #endif				/* CONFIG_SCSI_PROC_FS (~400 lines back) */
  
--	SG_LOG(6, sfp, "%s: sfp=0x%p\n", __func__, sfp);
-+	SG_LOG(6, sfp, "%s: sfp=0x%pK\n", __func__, sfp);
- 	kfree(sfp);
- 
- 	if (sdp) {
+ module_init(init_sg);
 -- 
 2.25.1
 
