@@ -2,96 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E992F442D
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EDB2F4426
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbhAMFvm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 00:51:42 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:35386 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726535AbhAMFvl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:51:41 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5nwZN170908;
-        Wed, 13 Jan 2021 05:50:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
+        id S1726489AbhAMFuN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 00:50:13 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:37256 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbhAMFuN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:50:13 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5i7jT096277;
+        Wed, 13 Jan 2021 05:49:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
+ message-id : date : from : to : cc : subject : references : in-reply-to :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=SedtQit5XrcXPxSi63MAXCoE17t1q9k7AjveDhzCY+4=;
- b=EM89Tv0hTXem4VRWnmfAEwtKiK7D9hPlh7WqKHQRRPxIFVf8XFAcC4T9w0leTjZfIhud
- ozxCjA9Wh1hVjJEGfnVSQIZVMrGkC5/QUiPX375jzpWadZBtj1Jpc8MZ+XFCIB7uvlcO
- 5togkNAcdP7+ZgyLrhonlAQ7CPmjIe8+jgQomuOTmU1kKv7f0OHXe69yhRwDLyPAneVx
- NsyHMxAODOKzukpJvYCEpXsPLMiVSsqDYqIBW8pccrWwH7nYIla1Iay1qCmVF+mhyTYz
- ClAN2J4mZhQwWa/buuLjwx8jjwg6utj6ARZSu5kw0o2gD7+aX92xv1gGd6SydAyQnCTC /Q== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 360kg1sp0q-1
+ bh=Gf1QDWGX+0TpoVLmuwqjv9HvqUj0wHUQztxmJ0/kLSI=;
+ b=nlW0jzhWd4GUjwvAaPgwpCwVCEQEic6rMyBLXdHKQWJU6JrNXodDZlmrW36QTyfv1ujQ
+ OU2RrZNRjUG9nrSmEJNy8bjddQ1j9SPVLNyuySJo3BKmvcv0H+TlMYEagQx4aCSHmQFp
+ PcFky7hJLoM+xqkSd8gcNJgAz412PFZnt4pba5vTrfiyzecZvmfQvNjXJcmJhv+H9oj+
+ 68Lv2wmnKaUWFIF/eC5Pkna1MYnkAdgjCmTuvIDW9KlK5Xbev0lsm8xbbIO+T0guOPzz
+ dSy7oUMBygU31YiPMpd3YTEb2iRtkw3a31OP9dEHze1/JMDWtt/2IwPRIzhUnZCGcvzr hg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 360kcysp4p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 05:50:50 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5eVgu058740;
-        Wed, 13 Jan 2021 05:48:49 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 360kf6w07y-1
+        Wed, 13 Jan 2021 05:49:25 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5dhJS159263;
+        Wed, 13 Jan 2021 05:49:25 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 360ke7rmb1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 05:48:49 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10D5mmor011521;
-        Wed, 13 Jan 2021 05:48:48 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 12 Jan 2021 21:48:36 -0800
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     bhoon95.kim@samsung.com, sh425.lee@samsung.com, beanhuo@micron.com,
-        jejb@linux.ibm.com, Kiwoong Kim <kwmad.kim@samsung.com>,
-        alim.akhtar@samsung.com, bvanassche@acm.org,
-        grant.jung@samsung.com, hy50.seo@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, linux-scsi@vger.kernel.org,
-        sc.suh@samsung.com, cang@codeaurora.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v3 0/2] permit vendor specific values of unipro timeouts
-Date:   Wed, 13 Jan 2021 00:48:25 -0500
-Message-Id: <161050726818.14224.9504573132098411358.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1608513782.git.kwmad.kim@samsung.com>
-References: <CGME20201221013532epcas2p4cfd78329e4d56e3ac5317ae23c27bc8c@epcas2p4.samsung.com> <cover.1608513782.git.kwmad.kim@samsung.com>
+        Wed, 13 Jan 2021 05:49:25 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 10D5nNHL024123;
+        Wed, 13 Jan 2021 05:49:23 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201) by default (Oracle
+ Beehive Gateway v4.0) with ESMTP ; Tue, 12 Jan 2021 21:48:39 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-ID: <161050726820.14224.523425689626280700.b4-ty@oracle.com>
+Date:   Tue, 12 Jan 2021 21:48:26 -0800 (PST)
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Juan Vazquez <juvazq@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org,
+        Saruhan Karademir <skarade@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>
+Subject: Re: [PATCH 0/3] scsi: storvsc: Validate length of incoming packet in
+ storvsc_on_channel_callback() -- Take 2
+References: <20201217203321.4539-1-parri.andrea@gmail.com>
+In-Reply-To: <20201217203321.4539-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.29.2
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 phishscore=0 bulkscore=0 spamscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101130034
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501 mlxscore=0
- phishscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 lowpriorityscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=998 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101130035
+ definitions=main-2101130034
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101130034
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 21 Dec 2020 10:24:39 +0900, Kiwoong Kim wrote:
+On Thu, 17 Dec 2020 21:33:18 +0100, Andrea Parri (Microsoft) wrote:
 
-> v2 -> v3: remove change ids
-> v1 -> v2: change some comments and rename the quirk
+> This series is to address the problems mentioned in:
 > 
-> There are some attribute settings before power mode change in ufshcd.c
-> that should have been variant per vendor.
+>   4da3a54f5a0258 ("Revert "scsi: storvsc: Validate length of incoming packet in storvsc_on_channel_callback()"")
 > 
-> Kiwoong Kim (2):
->   ufs: add a quirk not to use default unipro timeout values
->   ufs: ufs-exynos: apply vendor specifics for three timeouts
+> (cf., in particular, patch 2/3) and to re-introduce the validation in
+> question (patch 3/3); patch 1/3 emerged from internal review of these
+> two patches and is a related fix.
 > 
 > [...]
 
 Applied to 5.12/scsi-queue, thanks!
 
-[1/2] ufs: add a quirk not to use default unipro timeout values
-      https://git.kernel.org/mkp/scsi/c/b1d0d2eb89d4
-[2/2] ufs: ufs-exynos: apply vendor specifics for three timeouts
-      https://git.kernel.org/mkp/scsi/c/a967ddb22d94
+[1/3] scsi: storvsc: Fix max_outstanding_req_per_channel for Win8 and newer
+      https://git.kernel.org/mkp/scsi/c/ab548fd21e1c
+[2/3] scsi: storvsc: Resolve data race in storvsc_probe()
+      https://git.kernel.org/mkp/scsi/c/244808e03029
+[3/3] scsi: storvsc: Validate length of incoming packet in storvsc_on_channel_callback()
+      https://git.kernel.org/mkp/scsi/c/91b1b640b834
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
