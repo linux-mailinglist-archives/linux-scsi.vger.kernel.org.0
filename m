@@ -2,28 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB39A2F4738
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 10:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFC72F471F
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 10:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727656AbhAMJH2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 04:07:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:53814 "EHLO mx2.suse.de"
+        id S1727415AbhAMJGg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 04:06:36 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53832 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727620AbhAMJHG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 Jan 2021 04:07:06 -0500
+        id S1727535AbhAMJGb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 13 Jan 2021 04:06:31 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E09C1B8FD;
-        Wed, 13 Jan 2021 09:05:04 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id E75A9B745;
+        Wed, 13 Jan 2021 09:05:03 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Don Brace <don.brace@microchip.com>
-Subject: [PATCH 16/35] hpsa: do not set COMMAND_COMPLETE
-Date:   Wed, 13 Jan 2021 10:04:41 +0100
-Message-Id: <20210113090500.129644-17-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 17/35] stex: do not set COMMAND_COMPLETE
+Date:   Wed, 13 Jan 2021 10:04:42 +0100
+Message-Id: <20210113090500.129644-18-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210113090500.129644-1-hare@suse.de>
 References: <20210113090500.129644-1-hare@suse.de>
@@ -33,38 +32,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-COMMAND_COMPLETE is defined as '0', and it is a SCSI parallel message
-to boot. So drop the call to set_msg_byte().
+COMMAND_COMPLETE is defined as '0', so setting it is quite pointless.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/hpsa.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/scsi/stex.c | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index f4d3747cfa0b..337d3aa91945 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -2396,7 +2396,6 @@ static int handle_ioaccel_mode2_error(struct ctlr_info *h,
+diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
+index 40473e4f850f..12471208c7a8 100644
+--- a/drivers/scsi/stex.c
++++ b/drivers/scsi/stex.c
+@@ -625,7 +625,7 @@ stex_queuecommand_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd *))
+ 		if (page == 0x8 || page == 0x3f) {
+ 			scsi_sg_copy_from_buffer(cmd, ms10_caching_page,
+ 						 sizeof(ms10_caching_page));
+-			cmd->result = DID_OK << 16 | COMMAND_COMPLETE << 8;
++			cmd->result = DID_OK << 16;
+ 			done(cmd);
+ 		} else
+ 			stex_invalid_field(cmd, done);
+@@ -644,7 +644,7 @@ stex_queuecommand_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd *))
+ 		break;
+ 	case TEST_UNIT_READY:
+ 		if (id == host->max_id - 1) {
+-			cmd->result = DID_OK << 16 | COMMAND_COMPLETE << 8;
++			cmd->result = DID_OK << 16;
+ 			done(cmd);
+ 			return 0;
+ 		}
+@@ -661,7 +661,7 @@ stex_queuecommand_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd *))
+ 			(cmd->cmnd[1] & INQUIRY_EVPD) == 0) {
+ 			scsi_sg_copy_from_buffer(cmd, (void *)console_inq_page,
+ 						 sizeof(console_inq_page));
+-			cmd->result = DID_OK << 16 | COMMAND_COMPLETE << 8;
++			cmd->result = DID_OK << 16;
+ 			done(cmd);
+ 		} else
+ 			stex_invalid_field(cmd, done);
+@@ -679,9 +679,10 @@ stex_queuecommand_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd *))
+ 			ver.console_id = host->max_id - 1;
+ 			ver.host_no = hba->host->host_no;
+ 			cp_len = scsi_sg_copy_from_buffer(cmd, &ver, cp_len);
+-			cmd->result = sizeof(ver) == cp_len ?
+-				DID_OK << 16 | COMMAND_COMPLETE << 8 :
+-				DID_ERROR << 16 | COMMAND_COMPLETE << 8;
++			if (sizeof(ver) == cp_len)
++				cmd->result = DID_OK << 16;
++			else
++				cmd->result = DID_ERROR << 16;
+ 			done(cmd);
+ 			return 0;
+ 		}
+@@ -736,16 +737,16 @@ static void stex_scsi_done(struct st_ccb *ccb)
+ 		result = ccb->scsi_status;
+ 		switch (ccb->scsi_status) {
+ 		case SAM_STAT_GOOD:
+-			result |= DID_OK << 16 | COMMAND_COMPLETE << 8;
++			result |= DID_OK << 16;
  			break;
- 		case IOACCEL2_STATUS_SR_UNDERRUN:
- 			cmd->result = (DID_OK << 16);		/* host byte */
--			cmd->result |= (COMMAND_COMPLETE << 8);	/* msg byte */
- 			ioaccel2_resid = get_unaligned_le32(
- 						&c2->error_data.resid_cnt[0]);
- 			scsi_set_resid(cmd, ioaccel2_resid);
-@@ -2597,8 +2596,7 @@ static void complete_scsi_command(struct CommandList *cp)
- 		(c2->sg[0].chain_indicator == IOACCEL2_CHAIN))
- 		hpsa_unmap_ioaccel2_sg_chain_block(h, c2);
+ 		case SAM_STAT_CHECK_CONDITION:
+ 			result |= DRIVER_SENSE << 24;
+ 			break;
+ 		case SAM_STAT_BUSY:
+-			result |= DID_BUS_BUSY << 16 | COMMAND_COMPLETE << 8;
++			result |= DID_BUS_BUSY << 16;
+ 			break;
+ 		default:
+-			result |= DID_ERROR << 16 | COMMAND_COMPLETE << 8;
++			result |= DID_ERROR << 16;
+ 			break;
+ 		}
+ 	}
+@@ -753,15 +754,15 @@ static void stex_scsi_done(struct st_ccb *ccb)
+ 		result = DRIVER_SENSE << 24 | SAM_STAT_CHECK_CONDITION;
+ 	else switch (ccb->srb_status) {
+ 		case SRB_STATUS_SELECTION_TIMEOUT:
+-			result = DID_NO_CONNECT << 16 | COMMAND_COMPLETE << 8;
++			result = DID_NO_CONNECT << 16;
+ 			break;
+ 		case SRB_STATUS_BUSY:
+-			result = DID_BUS_BUSY << 16 | COMMAND_COMPLETE << 8;
++			result = DID_BUS_BUSY << 16;
+ 			break;
+ 		case SRB_STATUS_INVALID_REQUEST:
+ 		case SRB_STATUS_ERROR:
+ 		default:
+-			result = DID_ERROR << 16 | COMMAND_COMPLETE << 8;
++			result = DID_ERROR << 16;
+ 			break;
+ 	}
  
--	cmd->result = (DID_OK << 16); 		/* host byte */
--	cmd->result |= (COMMAND_COMPLETE << 8);	/* msg byte */
-+	cmd->result = (DID_OK << 16);		/* host byte */
- 
- 	/* SCSI command has already been cleaned up in SML */
- 	if (dev->was_removed) {
 -- 
 2.29.2
 
