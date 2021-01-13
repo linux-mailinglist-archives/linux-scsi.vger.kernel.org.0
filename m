@@ -2,101 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EDB2F4426
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E192F4419
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbhAMFuN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 00:50:13 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:37256 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbhAMFuN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:50:13 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5i7jT096277;
-        Wed, 13 Jan 2021 05:49:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
- message-id : date : from : to : cc : subject : references : in-reply-to :
+        id S1726023AbhAMFti (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 00:49:38 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:46156 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbhAMFti (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:49:38 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5jWoH130964;
+        Wed, 13 Jan 2021 05:48:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=Gf1QDWGX+0TpoVLmuwqjv9HvqUj0wHUQztxmJ0/kLSI=;
- b=nlW0jzhWd4GUjwvAaPgwpCwVCEQEic6rMyBLXdHKQWJU6JrNXodDZlmrW36QTyfv1ujQ
- OU2RrZNRjUG9nrSmEJNy8bjddQ1j9SPVLNyuySJo3BKmvcv0H+TlMYEagQx4aCSHmQFp
- PcFky7hJLoM+xqkSd8gcNJgAz412PFZnt4pba5vTrfiyzecZvmfQvNjXJcmJhv+H9oj+
- 68Lv2wmnKaUWFIF/eC5Pkna1MYnkAdgjCmTuvIDW9KlK5Xbev0lsm8xbbIO+T0guOPzz
- dSy7oUMBygU31YiPMpd3YTEb2iRtkw3a31OP9dEHze1/JMDWtt/2IwPRIzhUnZCGcvzr hg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 360kcysp4p-1
+ bh=Iz/mqM1EspQxmhUg8dlxKFhiApeoEtRGU4l6y7rqj4k=;
+ b=JAOOTQMZoMO0/YY0vOE3E++xB/HKC66nJo3N01SeEcm1kI3oJr9JkYOhMLZo8DSexwNN
+ iqiv9aNct8kXbH1H4XuOwoC8Z00pw809js/qCoRydoL6M4x+K5TVEghho137vL5YWybZ
+ cVwN+H4nuReGA5M3mXQQ17GCNIZW5WvchyT9hHP8sgyAmOBC1U/aiVaAsNigdXT+hnqX
+ vAITc1dWHwtr1CnwXphj9hf+kI+YShw42QTlhj/S49asDCS17nWbbB5ddm3Z2UXcuTfq
+ 8D99n0u3Zp3Hfk7gaLQWQVRNE2r4vy3mWCmNGHxNsWsi1sZ5Uq9Jca99CSdvH/NKtO8/ EA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 360kvk1k4k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 05:49:25 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5dhJS159263;
-        Wed, 13 Jan 2021 05:49:25 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 360ke7rmb1-1
+        Wed, 13 Jan 2021 05:48:43 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5e605134080;
+        Wed, 13 Jan 2021 05:48:42 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 360kf00ppn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 05:49:25 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 10D5nNHL024123;
-        Wed, 13 Jan 2021 05:49:23 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201) by default (Oracle
- Beehive Gateway v4.0) with ESMTP ; Tue, 12 Jan 2021 21:48:39 -0800
-MIME-Version: 1.0
-Message-ID: <161050726820.14224.523425689626280700.b4-ty@oracle.com>
-Date:   Tue, 12 Jan 2021 21:48:26 -0800 (PST)
+        Wed, 13 Jan 2021 05:48:42 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10D5mf4t011490;
+        Wed, 13 Jan 2021 05:48:41 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 12 Jan 2021 21:48:41 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Juan Vazquez <juvazq@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org,
-        Saruhan Karademir <skarade@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>
-Subject: Re: [PATCH 0/3] scsi: storvsc: Validate length of incoming packet in
- storvsc_on_channel_callback() -- Take 2
-References: <20201217203321.4539-1-parri.andrea@gmail.com>
-In-Reply-To: <20201217203321.4539-1-parri.andrea@gmail.com>
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH -next] scsi: ufs: fix all Kconfig help text indentation
+Date:   Wed, 13 Jan 2021 00:48:27 -0500
+Message-Id: <161050726819.14224.18159316717892296377.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210106205554.18082-1-rdunlap@infradead.org>
+References: <20210106205554.18082-1-rdunlap@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
- mlxlogscore=998 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 spamscore=0 mlxlogscore=976 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2101130034
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
- impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 impostorscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2101130034
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 17 Dec 2020 21:33:18 +0100, Andrea Parri (Microsoft) wrote:
+On Wed, 6 Jan 2021 12:55:54 -0800, Randy Dunlap wrote:
 
-> This series is to address the problems mentioned in:
-> 
->   4da3a54f5a0258 ("Revert "scsi: storvsc: Validate length of incoming packet in storvsc_on_channel_callback()"")
-> 
-> (cf., in particular, patch 2/3) and to re-introduce the validation in
-> question (patch 3/3); patch 1/3 emerged from internal review of these
-> two patches and is a related fix.
-> 
-> [...]
+> Use consistent and expected indentation for all Kconfig text.
 
 Applied to 5.12/scsi-queue, thanks!
 
-[1/3] scsi: storvsc: Fix max_outstanding_req_per_channel for Win8 and newer
-      https://git.kernel.org/mkp/scsi/c/ab548fd21e1c
-[2/3] scsi: storvsc: Resolve data race in storvsc_probe()
-      https://git.kernel.org/mkp/scsi/c/244808e03029
-[3/3] scsi: storvsc: Validate length of incoming packet in storvsc_on_channel_callback()
-      https://git.kernel.org/mkp/scsi/c/91b1b640b834
+[1/1] scsi: ufs: fix all Kconfig help text indentation
+      https://git.kernel.org/mkp/scsi/c/aaac0ea98390
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
