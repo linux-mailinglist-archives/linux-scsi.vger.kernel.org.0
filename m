@@ -2,85 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EB22F4429
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD8F2F442F
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725910AbhAMFvd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 00:51:33 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:35260 "EHLO
+        id S1726207AbhAMFv7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 00:51:59 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:35696 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbhAMFvd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:51:33 -0500
+        with ESMTP id S1725831AbhAMFv6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:51:58 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5npu9170814;
-        Wed, 13 Jan 2021 05:50:40 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5ne9t170789;
+        Wed, 13 Jan 2021 05:50:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=3aTGR28ZQ7/qlWyIHk7iuIcdv1I6c3bO857k2v3eGD4=;
- b=Y5VmEnfSL3qYCRIGz8Us9+YPgHUGLk/6IY/hIY9CB39aG56oFTCSavoi60rDTbc78mOI
- yjvFfMJmkO4MQln3Te58AA/FqxxSb/SK8EnWEYepdbb33M0cvZN+Z5JpSOKuEbnXxo/s
- /dwfPr1bqf72I8jH/iXcYnMxuN+SQUc4EA7tar5tOFUNTUrEy3s+Gka7ZAJiuUsTFZJE
- p+XtnkX3GgDAYVMSJl2HRhYmDxhmmHNEGocl1vdHb4xjTypynXD+IPoz9g6ZbsahzFIR
- TzrO7iJv6HT3Cf2ZmF3ZfQfzt7eSj6bQdBPBeMATI+QmaXMW638/DR0KZO/oFBEl4Xbf Wg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 360kg1sp05-1
+ bh=Fa53x9KCB45aZToeaa6imRFJDCfKeEZyIw4w0UELXYU=;
+ b=qNX1fy3863Uc+9Cdm1risWemmIyLPaAvwCb15uuQu8JI6ajp/MZfa6QiroaWVLyFnsF4
+ RSfD8hzMdcojJMI9x2VUp7Iu5qP+w/YC4esGXGgzHdOAXI5d5fbDfMOWkQZwNT96w36M
+ XN//udxOhHgtw2QPuiU0Wop7ojgQzp/o88Tb10JTAnHZY9FA+T9lHgWj5BCD+DP7MME5
+ L81GehSrUiyQ4J5jE6N+tpusvXRl42xWN7cjzDIh22SclAvnqyDQq8Y4pTobPLBfO2Q4
+ vOI4qz03OiGXwSae8VqkBaaq8+VwbK19JeY3iowxkO6dIAOPlUXYPFRhF1WzH1HOdxEU TQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 360kg1sp04-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 13 Jan 2021 05:50:39 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5eWPr058820;
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5dcoH158982;
         Wed, 13 Jan 2021 05:48:39 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 360kf6vyt5-1
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 360ke7rkjb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 13 Jan 2021 05:48:39 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10D5mUUu028497;
-        Wed, 13 Jan 2021 05:48:33 GMT
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 10D5mWOQ023651;
+        Wed, 13 Jan 2021 05:48:32 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 12 Jan 2021 21:48:30 -0800
+        with ESMTP ; Tue, 12 Jan 2021 21:48:31 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     stanley.chu@mediatek.com, beanhuo@micron.com, jejb@linux.ibm.com,
         Bean Huo <huobean@gmail.com>, alim.akhtar@samsung.com,
-        bvanassche@acm.org, tomas.winkler@intel.com,
+        rostedt@goodmis.org, bvanassche@acm.org, tomas.winkler@intel.com,
         asutoshd@codeaurora.org, avri.altman@wdc.com, cang@codeaurora.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v3] scsi: ufs: Replace sprintf and snprintf with sysfs_emit
-Date:   Wed, 13 Jan 2021 00:48:21 -0500
-Message-Id: <161050726819.14224.2936301272114808437.b4-ty@oracle.com>
+Subject: Re: [PATCH v4 0/6] Several changes for the UPIU trace
+Date:   Wed, 13 Jan 2021 00:48:22 -0500
+Message-Id: <161050726819.14224.15923940659426155067.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210106211541.23039-1-huobean@gmail.com>
-References: <20210106211541.23039-1-huobean@gmail.com>
+In-Reply-To: <20210105113446.16027-1-huobean@gmail.com>
+References: <20210105113446.16027-1-huobean@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxlogscore=958 phishscore=0 bulkscore=0 spamscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101130034
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101130034
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
  clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501 mlxscore=0
- phishscore=0 mlxlogscore=968 bulkscore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 lowpriorityscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2101130035
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 6 Jan 2021 22:15:41 +0100, Bean Huo wrote:
+On Tue, 5 Jan 2021 12:34:40 +0100, Bean Huo wrote:
 
-> sprintf and snprintf may cause output defect in sysfs content, it is
-> better to use new added sysfs_emit function which knows the size of the
-> temporary buffer.
+> Changelog:
+> 
+> V3--v4:
+>  1. Rebase patch onto 5.12/scsi-queue
+>  2. Incorporate Avri's suggestion in patch 2/6
+> 
+> V2--V3:
+>   1. Fix a typo in patch 1/6 (Reported-by: Joe Perches <joe@perches.com>)
+> 
+> [...]
 
 Applied to 5.12/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Replace sprintf and snprintf with sysfs_emit
-      https://git.kernel.org/mkp/scsi/c/d9edeb8b4768
+[1/6] scsi: ufs: Remove stringize operator '#' restriction
+      https://git.kernel.org/mkp/scsi/c/c7c730ac6a88
+[2/6] scsi: ufs: Use __print_symbolic() for UFS trace string print
+      https://git.kernel.org/mkp/scsi/c/28fa68fc557a
+[3/6] scsi: ufs: Don't call trace_ufshcd_upiu() in case trace poit is disabled
+      https://git.kernel.org/mkp/scsi/c/9d5095e74c83
+[4/6] scsi: ufs: Distinguish between query REQ and query RSP in query trace
+      https://git.kernel.org/mkp/scsi/c/be20b51cfd85
+[5/6] scsi: ufs: Distinguish between TM request UPIU and response UPIU in TM UPIU trace
+      https://git.kernel.org/mkp/scsi/c/0ed083e91662
+[6/6] scsi: ufs: Make UPIU trace easier differentiate among CDB, OSF, and TM
+      https://git.kernel.org/mkp/scsi/c/867fdc2d6e34
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
