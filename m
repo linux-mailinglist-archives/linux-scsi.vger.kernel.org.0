@@ -2,111 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7002F4417
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E992F442D
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 06:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbhAMFt0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 00:49:26 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:33792 "EHLO
+        id S1726543AbhAMFvm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 00:51:42 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:35386 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbhAMFt0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:49:26 -0500
+        with ESMTP id S1726535AbhAMFvl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 00:51:41 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5ha77166607;
-        Wed, 13 Jan 2021 05:48:44 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5nwZN170908;
+        Wed, 13 Jan 2021 05:50:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=wYhsKu9BSZ+pRiNiAtqcpk1WXAXbUtbCxKbj8ISp4IA=;
- b=MfEAdu11k3eUE4tZrKsRF+yz9a4+SNSbAJkwgeGnb5f+KuAFZXLlY1zXrY5pyxkezp2x
- r0R4e2v43P2juaKwAuLFwyAmWrDnq/2adG+e9arTE+RZgtndz7cLyXNlJGWa4SjQfKUr
- tH4oAXTzCUfMKoBwGU46Rq1/pU4oN4q+ZTzAy+0iObAAseOgGSekHy9Z4vzdScsH6jty
- 8QQdCUXzYPgKj9zQO1PpTfraauR87M8ttRS9sny9gyAusuYvPdHTtOKp/OkM6P0xAHwN
- 3sIACqB36KEnV6TQWBnH/QMrdkrALQi9xJtpTgqe8SQgaxxN89qrXrSQhdQearJGv9Fv AQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 360kg1snsb-1
+ bh=SedtQit5XrcXPxSi63MAXCoE17t1q9k7AjveDhzCY+4=;
+ b=EM89Tv0hTXem4VRWnmfAEwtKiK7D9hPlh7WqKHQRRPxIFVf8XFAcC4T9w0leTjZfIhud
+ ozxCjA9Wh1hVjJEGfnVSQIZVMrGkC5/QUiPX375jzpWadZBtj1Jpc8MZ+XFCIB7uvlcO
+ 5togkNAcdP7+ZgyLrhonlAQ7CPmjIe8+jgQomuOTmU1kKv7f0OHXe69yhRwDLyPAneVx
+ NsyHMxAODOKzukpJvYCEpXsPLMiVSsqDYqIBW8pccrWwH7nYIla1Iay1qCmVF+mhyTYz
+ ClAN2J4mZhQwWa/buuLjwx8jjwg6utj6ARZSu5kw0o2gD7+aX92xv1gGd6SydAyQnCTC /Q== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 360kg1sp0q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 05:48:44 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5e5q9133922;
-        Wed, 13 Jan 2021 05:48:44 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 360kf00pqh-1
+        Wed, 13 Jan 2021 05:50:50 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D5eVgu058740;
+        Wed, 13 Jan 2021 05:48:49 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 360kf6w07y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 05:48:44 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 10D5mhgx011640;
-        Wed, 13 Jan 2021 05:48:43 GMT
+        Wed, 13 Jan 2021 05:48:49 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10D5mmor011521;
+        Wed, 13 Jan 2021 05:48:48 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 12 Jan 2021 21:48:34 -0800
+        with ESMTP ; Tue, 12 Jan 2021 21:48:36 -0800
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+To:     bhoon95.kim@samsung.com, sh425.lee@samsung.com, beanhuo@micron.com,
+        jejb@linux.ibm.com, Kiwoong Kim <kwmad.kim@samsung.com>,
+        alim.akhtar@samsung.com, bvanassche@acm.org,
+        grant.jung@samsung.com, hy50.seo@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, linux-scsi@vger.kernel.org,
+        sc.suh@samsung.com, cang@codeaurora.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2 00/15] lpfc: Update lpfc to revision 12.8.0.7
-Date:   Wed, 13 Jan 2021 00:48:24 -0500
-Message-Id: <161050726820.14224.8991501570955551588.b4-ty@oracle.com>
+Subject: Re: [PATCH v3 0/2] permit vendor specific values of unipro timeouts
+Date:   Wed, 13 Jan 2021 00:48:25 -0500
+Message-Id: <161050726818.14224.9504573132098411358.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210104180240.46824-1-jsmart2021@gmail.com>
-References: <20210104180240.46824-1-jsmart2021@gmail.com>
+In-Reply-To: <cover.1608513782.git.kwmad.kim@samsung.com>
+References: <CGME20201221013532epcas2p4cfd78329e4d56e3ac5317ae23c27bc8c@epcas2p4.samsung.com> <cover.1608513782.git.kwmad.kim@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
- suspectscore=0 adultscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101130034
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101130034
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
  clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501 mlxscore=0
  phishscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 lowpriorityscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101130034
+ definitions=main-2101130035
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 4 Jan 2021 10:02:25 -0800, James Smart wrote:
+On Mon, 21 Dec 2020 10:24:39 +0900, Kiwoong Kim wrote:
 
-> Update lpfc to revision 12.8.0.7
+> v2 -> v3: remove change ids
+> v1 -> v2: change some comments and rename the quirk
 > 
-> This patch set contains fixes and a cleanup of trace logging.
+> There are some attribute settings before power mode change in ufshcd.c
+> that should have been variant per vendor.
 > 
-> The patches were cut against Martin's 5.11/scsi-queue tree
+> Kiwoong Kim (2):
+>   ufs: add a quirk not to use default unipro timeout values
+>   ufs: ufs-exynos: apply vendor specifics for three timeouts
+> 
+> [...]
 
 Applied to 5.12/scsi-queue, thanks!
 
-[01/15] lpfc: Fix PLOGI S_ID of 0 on pt2pt config
-        https://git.kernel.org/mkp/scsi/c/8e062ce305ad
-[02/15] lpfc: Fix auto sli_mode and its effect on CONFIG_PORT for SLI3
-        https://git.kernel.org/mkp/scsi/c/d2f2547efd39
-[03/15] lpfc: Refresh ndlp when a new PRLI is received in the PRLI issue state
-        https://git.kernel.org/mkp/scsi/c/ecf041fe9895
-[04/15] lpfc: Fix crash when a fabric node is released prematurely.
-        https://git.kernel.org/mkp/scsi/c/07aaefdf75c5
-[05/15] lpfc: Use the nvme-fc transport supplied timeout for LS requests
-        https://git.kernel.org/mkp/scsi/c/c33b1609344f
-[06/15] lpfc: Fix FW reset action if IOs are outstanding
-        https://git.kernel.org/mkp/scsi/c/3ba6216aaded
-[07/15] lpfc: Prevent duplicate requests to unregister with cpuhp framework
-        https://git.kernel.org/mkp/scsi/c/f0871ab68a8b
-[08/15] lpfc: Fix error log messages being logged following scsi task mgnt
-        https://git.kernel.org/mkp/scsi/c/da09ae4864e1
-[09/15] lpfc: Fix target reset failing
-        https://git.kernel.org/mkp/scsi/c/31051249f12e
-[10/15] lpfc: Fix NVME recovery after mailbox timeout
-        https://git.kernel.org/mkp/scsi/c/9ec58ec7d41a
-[11/15] lpfc: Fix vport create logging
-        https://git.kernel.org/mkp/scsi/c/ff8a44bff5ef
-[12/15] lpfc: Fix crash when nvmet transport calls host_release
-        https://git.kernel.org/mkp/scsi/c/243156c0108d
-[13/15] lpfc: Implement health checking when aborting io
-        https://git.kernel.org/mkp/scsi/c/a22d73b655a8
-[14/15] lpfc: Enhancements to LOG_TRACE_EVENT for better readability
-        https://git.kernel.org/mkp/scsi/c/0b3ad32e2646
-[15/15] lpfc: Update lpfc version to 12.8.0.7
-        https://git.kernel.org/mkp/scsi/c/181dd9a4c2c6
+[1/2] ufs: add a quirk not to use default unipro timeout values
+      https://git.kernel.org/mkp/scsi/c/b1d0d2eb89d4
+[2/2] ufs: ufs-exynos: apply vendor specifics for three timeouts
+      https://git.kernel.org/mkp/scsi/c/a967ddb22d94
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
