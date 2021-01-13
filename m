@@ -2,128 +2,173 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7892F4709
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 10:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89EF32F4719
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jan 2021 10:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727449AbhAMJCz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 04:02:55 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:58884 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727359AbhAMJCz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 04:02:55 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D8rsYx034820;
-        Wed, 13 Jan 2021 08:56:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=8EDoujIDsGwoilKxZxueX3IIZMbuWWBloyCuYjbPz+I=;
- b=Ufh52U1P5u2vOKVTUPfFtHa09dFD1ZIsdTyAyLjoXffWO5Ky3fpuiXt/JGAPZS9EvoGq
- RKWZ3XwB0Yr5wnVmxlHjyEZLJNqYry22qXS5MdcVbdU96QG3yE56bKrcBGyXrUtoEjov
- V2DWMadho/wZyfusnzOJnF7+92Ljt3Y8VXY4qMGk/Bdt7DkKheeyJLyk29KpD/N/YVqC
- Pb7vi2GVksxhuZ316YF2bvVu4Lp1Y8s/XOdKDVSwbIX+DCVIlwk/Oa10OSTEmXzMLUhW
- wd0D+39Ze9JERksRT/T3Nt2sqyUpoM/CEPiSltizrarbuH9StOqrqQoDNZiid/9wG9+F SQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 360kcyt9yp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 08:56:13 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10D8negJ043579;
-        Wed, 13 Jan 2021 08:56:13 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 360ke80h5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jan 2021 08:56:13 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10D8uC7i019606;
-        Wed, 13 Jan 2021 08:56:12 GMT
-Received: from mwanda (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 13 Jan 2021 00:56:12 -0800
-Date:   Wed, 13 Jan 2021 11:56:06 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     james.smart@emulex.com
-Cc:     linux-scsi@vger.kernel.org
-Subject: [bug report] [SCSI] lpfc 8.3.24: Extend BSG infrastructure and add
- link diagnostics
-Message-ID: <X/61pr0UpP0M45ME@mwanda>
+        id S1727527AbhAMJFw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 04:05:52 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53034 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727412AbhAMJFq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 13 Jan 2021 04:05:46 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6942CB733;
+        Wed, 13 Jan 2021 09:05:03 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv4 00/35] [PATCHv3 00/35] SCSI result handling cleanup, part 1
+Date:   Wed, 13 Jan 2021 10:04:25 +0100
+Message-Id: <20210113090500.129644-1-hare@suse.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
- mlxlogscore=956 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101130053
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9862 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
- impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1011 mlxlogscore=961 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101130053
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello James Smart,
+Hi all,
 
-The patch 7ad20aa9d39a: "[SCSI] lpfc 8.3.24: Extend BSG
-infrastructure and add link diagnostics" from May 24, 2011, leads to
-the following static checker warning:
+this is the first part of an attempt to clean up SCSI result handling.
+The patchset primarily cleans up various drivers by fixing up
+whitespaces or move to standard definitions.
+It also fixes some minor issues in some drivers which set the
+wrong result values.
+And, of course, another attempt to kill the gdth driver
 
-	drivers/scsi/lpfc/lpfc_bsg.c:4989 lpfc_bsg_issue_mbox()
-	warn: 'dmabuf' was already freed.
+I have a larger patchset based on this one to update the SCSI result
+handling for all drivers, but decided to split things in two to not
+overload reviewers
 
-The problem is that lpfc_bsg_issue_mbox() call lpfc_bsg_handle_sli_cfg_ext()
-which calls lpfc_bsg_handle_sli_cfg_ebuf() which is where the bug really
-is, I think.
+As usual, comments and reviews are welcome.
 
-drivers/scsi/lpfc/lpfc_bsg.c
-  4584  static int
-  4585  lpfc_bsg_handle_sli_cfg_ebuf(struct lpfc_hba *phba, struct bsg_job *job,
-  4586                               struct lpfc_dmabuf *dmabuf)
-  4587  {
-  4588          int rc;
-  4589  
-  4590          lpfc_printf_log(phba, KERN_INFO, LOG_LIBDFC,
-  4591                          "2971 SLI_CONFIG buffer (type:x%x)\n",
-  4592                          phba->mbox_ext_buf_ctx.mboxType);
-  4593  
-  4594          if (phba->mbox_ext_buf_ctx.mboxType == mbox_rd) {
-  4595                  if (phba->mbox_ext_buf_ctx.state != LPFC_BSG_MBOX_DONE) {
-  4596                          lpfc_printf_log(phba, KERN_ERR, LOG_LIBDFC,
-  4597                                          "2972 SLI_CONFIG rd buffer state "
-  4598                                          "mismatch:x%x\n",
-  4599                                          phba->mbox_ext_buf_ctx.state);
-  4600                          lpfc_bsg_mbox_ext_abort(phba);
-  4601                          return -EPIPE;
-  4602                  }
-  4603                  rc = lpfc_bsg_read_ebuf_get(phba, job);
-  4604                  if (rc == SLI_CONFIG_HANDLED)
-  4605                          lpfc_bsg_dma_page_free(phba, dmabuf);
+Changes to v1:
+- Add reviews from Christoph
+- Included review from Finn Thain
+- Add set_status_byte() helper
+- Add cleanup for dc395c
+- Add additional patch for using SAM status values instead
+  of the shifted linux versions
 
-I think this path is correct.
+Changes to v2:
+- Add Reviewed-by: tags
+- Drop additional patches again
 
-  4606          } else { /* phba->mbox_ext_buf_ctx.mboxType == mbox_wr */
-  4607                  if (phba->mbox_ext_buf_ctx.state != LPFC_BSG_MBOX_HOST) {
-  4608                          lpfc_printf_log(phba, KERN_ERR, LOG_LIBDFC,
-  4609                                          "2973 SLI_CONFIG wr buffer state "
-  4610                                          "mismatch:x%x\n",
-  4611                                          phba->mbox_ext_buf_ctx.state);
-  4612                          lpfc_bsg_mbox_ext_abort(phba);
-  4613                          return -EPIPE;
-  4614                  }
-  4615                  rc = lpfc_bsg_write_ebuf_set(phba, job, dmabuf);
+Changes to v3:
+- Rebased to 5.12/scsi-queue
+- Fixup kbuild failures
+- Correct review tag from hch
 
-But this path has two bugs.  If lpfc_bsg_write_ebuf_set() then it frees
-three things but it should not free anything.  This leads to the double
-free bug which Smatch is complaining about.  (Smatch only catches one of
-the problems).  The second bug is that if lpfc_bsg_write_ebuf_set()
-return SLI_CONFIG_HANDLED then this patch should call
-lpfc_bsg_dma_page_free(phba, dmabuf);
+Hannes Reinecke (35):
+  scsi: drop gdth driver
+  3w-xxxx: Whitespace cleanup
+  3w-9xxx: Whitespace cleanup
+  3w-sas: Whitespace cleanup
+  atp870u: Whitespace cleanup
+  aic7xxx,aic79xx: Whitespace cleanup
+  aic7xxx,aic79xx: kill pointless forward declarations
+  aic7xxx,aic79xxx: remove driver-defined SAM status definitions
+  bfa: drop driver-defined SCSI status codes
+  acornscsi: use standard defines
+  nsp32: fixup status handling
+  dc395: drop private SAM status code definitions
+  qla4xxx: use standard SAM status definitions
+  zfcp: do not set COMMAND_COMPLETE
+  aacraid: avoid setting message byte on completion
+  hpsa: do not set COMMAND_COMPLETE
+  stex: do not set COMMAND_COMPLETE
+  nsp_cs: drop internal SCSI message definition
+  aic7xxx,aic79xx: drop internal SCSI message definition
+  dc395x: drop internal SCSI message definitions
+  initio: drop internal SCSI message definition
+  scsi_debug: do not set COMMAND_COMPLETE
+  ufshcd: do not set COMMAND_COMPLETE
+  atp870u: use standard definitions
+  mac53c94: Do not set invalid command result
+  dpt_i2o: use DID_ERROR instead of INITIATOR_ERROR message
+  scsi: add 'set_status_byte()' accessor
+  esp_scsi: use host byte as last argument to esp_cmd_is_done()
+  esp_scsi: do not set SCSI message byte
+  wd33c93: use SCSI status
+  ips: use correct command completion on error
+  storvsc: Return DID_ERROR for invalid commands
+  qla2xxx: fc_remote_port_chkready() returns a SCSI result value
+  advansys: kill driver_defined status byte accessors
+  ncr53c8xx: Use SAM status values
 
-  4616          }
-  4617          return rc;
-  4618  }
+ Documentation/kbuild/makefiles.rst            |    4 +-
+ Documentation/process/magic-number.rst        |    2 -
+ Documentation/scsi/scsi-parameters.rst        |    3 -
+ .../userspace-api/ioctl/ioctl-number.rst      |    1 -
+ drivers/s390/scsi/zfcp_fc.h                   |    1 -
+ drivers/scsi/3w-9xxx.c                        |   56 +-
+ drivers/scsi/3w-9xxx.h                        |  156 +-
+ drivers/scsi/3w-sas.c                         |   52 +-
+ drivers/scsi/3w-sas.h                         |  118 +-
+ drivers/scsi/3w-xxxx.c                        |  251 +-
+ drivers/scsi/3w-xxxx.h                        |  199 +-
+ drivers/scsi/Kconfig                          |   15 +-
+ drivers/scsi/Makefile                         |    2 -
+ drivers/scsi/aacraid/aachba.c                 |  173 +-
+ drivers/scsi/advansys.c                       |   84 +-
+ drivers/scsi/aic7xxx/aic79xx.h                |   36 +-
+ drivers/scsi/aic7xxx/aic79xx_core.c           |  257 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.c            |   20 +-
+ drivers/scsi/aic7xxx/aic79xx_osm.h            |   37 +-
+ drivers/scsi/aic7xxx/aic79xx_osm_pci.c        |    6 +-
+ drivers/scsi/aic7xxx/aic79xx_proc.c           |   13 +-
+ drivers/scsi/aic7xxx/aic7xxx_93cx6.c          |    4 +-
+ drivers/scsi/aic7xxx/aic7xxx_core.c           |  263 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.c            |   88 +-
+ drivers/scsi/aic7xxx/aic7xxx_osm.h            |   39 +-
+ drivers/scsi/aic7xxx/aic7xxx_proc.c           |   15 +-
+ drivers/scsi/aic7xxx/aiclib.h                 |   15 -
+ drivers/scsi/aic7xxx/scsi_message.h           |   41 -
+ drivers/scsi/arm/acornscsi.c                  |   14 +-
+ drivers/scsi/atp870u.c                        |  451 +-
+ drivers/scsi/atp870u.h                        |   14 +-
+ drivers/scsi/bfa/bfa_fc.h                     |   15 -
+ drivers/scsi/bfa/bfa_fcpim.c                  |    2 +-
+ drivers/scsi/bfa/bfad_im.c                    |    2 +-
+ drivers/scsi/dc395x.c                         |   28 +-
+ drivers/scsi/dc395x.h                         |   38 -
+ drivers/scsi/dpt_i2o.c                        |    2 +-
+ drivers/scsi/esp_scsi.c                       |   23 +-
+ drivers/scsi/gdth.c                           | 4322 -----------------
+ drivers/scsi/gdth.h                           |  981 ----
+ drivers/scsi/gdth_ioctl.h                     |  251 -
+ drivers/scsi/gdth_proc.c                      |  586 ---
+ drivers/scsi/gdth_proc.h                      |   18 -
+ drivers/scsi/hpsa.c                           |    4 +-
+ drivers/scsi/initio.c                         |   64 +-
+ drivers/scsi/initio.h                         |   25 -
+ drivers/scsi/ips.c                            |    9 +-
+ drivers/scsi/mac53c94.c                       |    1 -
+ drivers/scsi/ncr53c8xx.c                      |   83 +-
+ drivers/scsi/ncr53c8xx.h                      |   16 -
+ drivers/scsi/nsp32.c                          |    2 +-
+ drivers/scsi/pcmcia/nsp_cs.c                  |   12 +-
+ drivers/scsi/pcmcia/nsp_cs.h                  |   11 -
+ drivers/scsi/qla2xxx/qla_os.c                 |    2 +-
+ drivers/scsi/qla4xxx/ql4_fw.h                 |    1 -
+ drivers/scsi/qla4xxx/ql4_isr.c                |    2 +-
+ drivers/scsi/scsi_debug.c                     |    2 +-
+ drivers/scsi/stex.c                           |   25 +-
+ drivers/scsi/storvsc_drv.c                    |    2 +-
+ drivers/scsi/ufs/ufshcd.c                     |    4 +-
+ drivers/scsi/wd33c93.c                        |    6 +-
+ include/scsi/scsi.h                           |    1 +
+ include/scsi/scsi_cmnd.h                      |    5 +
+ 63 files changed, 1307 insertions(+), 7668 deletions(-)
+ delete mode 100644 drivers/scsi/gdth.c
+ delete mode 100644 drivers/scsi/gdth.h
+ delete mode 100644 drivers/scsi/gdth_ioctl.h
+ delete mode 100644 drivers/scsi/gdth_proc.c
+ delete mode 100644 drivers/scsi/gdth_proc.h
 
-regards,
-dan carpenter
+-- 
+2.29.2
+
