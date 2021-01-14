@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A122F6C39
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 21:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD632F6C4A
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 21:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729220AbhANUdx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 14 Jan 2021 15:33:53 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:21854 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727056AbhANUcm (ORCPT
+        id S1730331AbhANUfW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 14 Jan 2021 15:35:22 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31014 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730143AbhANUfP (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 14 Jan 2021 15:32:42 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10EK2JWD115719;
-        Thu, 14 Jan 2021 15:31:56 -0500
+        Thu, 14 Jan 2021 15:35:15 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10EKW9S1086990;
+        Thu, 14 Jan 2021 15:32:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=Tp7Apfjr247x8ESCxwtc0OwFyKGd4qn1wU74cmHH1kg=;
- b=E8Sc1OR4p8MCWVZSTBWv5UU2+Yb1oJXYmjwfqnlh+KTEqv/CQbt6HVLz70aXlty6tMYq
- fVKzrxFZpzf6EbwYit69wrQAf+XC+jEjHOPQircdsHnIl8I/dwZzpkZMFFQKc1iqOr8/
- UK0rxzxpcFQPokgBkCEmAkcGzOE1A3uWnGozmUXpiE1BJIGIk2W1973+bHLTN7z4HwiS
- RBgEgb8QcfVagW8eWsNvcBRG5kg0raPHjibHuzqlgUaTcBM7MgcVV7e/X/PEQ+P1SJSA
- ef0SZMuOGuzHRLiRz8r3IfTMGAM1sV4LL/zDFeF+rYJ5HqfpAFAHXjb9mUWlqS09LZbG sw== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 362vf4900x-1
+ bh=FPqU0gK+vFLag/1Y+iJtqWIyGFSfnPgAKvI4hLlWICc=;
+ b=WM3V+kW5CrtRz+Vmuz95KqQvKY7anXd/e3z8vGyTnmgvFy+Wp1JIyRIV4c6qfkXNN8wx
+ lQ3EybjUEjODahR5N4yB7EjJ2cMUNU/TlDMTNXO60XcjcbdZH3tiOzTDEK/ViWAVmpKs
+ od7DyALSCkwF16V1ZKhwMj4tx+5WKn7KOv2qJ9f8tKu5Y8qSu5HZxc2ggK9JnlVabXfK
+ B43wiwgQqi8s6ilZ9K6Zs6Ux8IYVysrJEsjvl/YaL0Nzkp+gx2ipzqQjMUh16a4RAVxj
+ PD4ye3dlt6qlmB/8GwJaIyua6SFaWACO4Iw92f+0GCzSxscaJYAxqV8tTB4H1m34wvsh KQ== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 362v01hsjs-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jan 2021 15:31:56 -0500
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10EKRP43032079;
-        Thu, 14 Jan 2021 20:31:55 GMT
+        Thu, 14 Jan 2021 15:32:14 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10EKSB69015079;
+        Thu, 14 Jan 2021 20:31:56 GMT
 Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04wdc.us.ibm.com with ESMTP id 35y449fsk6-1
+        by ppma02dal.us.ibm.com with ESMTP id 35y44a1q39-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jan 2021 20:31:55 +0000
+        Thu, 14 Jan 2021 20:31:56 +0000
 Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10EKVsT915466844
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10EKVspl23200068
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 14 Jan 2021 20:31:54 GMT
 Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 13BB66E054;
+        by IMSVA (Postfix) with ESMTP id 7F2316E054;
         Thu, 14 Jan 2021 20:31:54 +0000 (GMT)
 Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B48556E04E;
-        Thu, 14 Jan 2021 20:31:53 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 229046E04E;
+        Thu, 14 Jan 2021 20:31:54 +0000 (GMT)
 Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
         by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 14 Jan 2021 20:31:53 +0000 (GMT)
+        Thu, 14 Jan 2021 20:31:54 +0000 (GMT)
 From:   Tyrel Datwyler <tyreld@linux.ibm.com>
 To:     james.bottomley@hansenpartnership.com
 Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>,
         Brian King <brking@linux.vnet.ibm.com>
-Subject: [PATCH v5 09/21] ibmvfc: add handlers to drain and complete Sub-CRQ responses
-Date:   Thu, 14 Jan 2021 14:31:36 -0600
-Message-Id: <20210114203148.246656-10-tyreld@linux.ibm.com>
+Subject: [PATCH v5 10/21] ibmvfc: define Sub-CRQ interrupt handler routine
+Date:   Thu, 14 Jan 2021 14:31:37 -0600
+Message-Id: <20210114203148.246656-11-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210114203148.246656-1-tyreld@linux.ibm.com>
 References: <20210114203148.246656-1-tyreld@linux.ibm.com>
@@ -65,117 +65,39 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-14_07:2021-01-14,2021-01-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
- clxscore=1015 bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101140111
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 adultscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101140115
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The logic for iterating over the Sub-CRQ responses is similiar to that
-of the primary CRQ. Add the necessary handlers for processing those
-responses.
+Simple handler that calls Sub-CRQ drain routine directly.
 
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 86 ++++++++++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
+ drivers/scsi/ibmvscsi/ibmvfc.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 5d7ada0ed0d6..f3cd092478ee 100644
+index f3cd092478ee..51bcafad9490 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -3485,6 +3485,92 @@ static int ibmvfc_toggle_scrq_irq(struct ibmvfc_queue *scrq, int enable)
- 	return rc;
+@@ -3571,6 +3571,16 @@ static void ibmvfc_drain_sub_crq(struct ibmvfc_queue *scrq)
+ 	}
  }
  
-+static void ibmvfc_handle_scrq(struct ibmvfc_crq *crq, struct ibmvfc_host *vhost,
-+			       struct list_head *evt_doneq)
++static irqreturn_t ibmvfc_interrupt_scsi(int irq, void *scrq_instance)
 +{
-+	struct ibmvfc_event *evt = (struct ibmvfc_event *)be64_to_cpu(crq->ioba);
++	struct ibmvfc_queue *scrq = (struct ibmvfc_queue *)scrq_instance;
 +
-+	switch (crq->valid) {
-+	case IBMVFC_CRQ_CMD_RSP:
-+		break;
-+	case IBMVFC_CRQ_XPORT_EVENT:
-+		return;
-+	default:
-+		dev_err(vhost->dev, "Got and invalid message type 0x%02x\n", crq->valid);
-+		return;
-+	}
++	ibmvfc_toggle_scrq_irq(scrq, 0);
++	ibmvfc_drain_sub_crq(scrq);
 +
-+	/* The only kind of payload CRQs we should get are responses to
-+	 * things we send. Make sure this response is to something we
-+	 * actually sent
-+	 */
-+	if (unlikely(!ibmvfc_valid_event(&evt->queue->evt_pool, evt))) {
-+		dev_err(vhost->dev, "Returned correlation_token 0x%08llx is invalid!\n",
-+			crq->ioba);
-+		return;
-+	}
-+
-+	if (unlikely(atomic_read(&evt->free))) {
-+		dev_err(vhost->dev, "Received duplicate correlation_token 0x%08llx!\n",
-+			crq->ioba);
-+		return;
-+	}
-+
-+	spin_lock(&evt->queue->l_lock);
-+	list_move_tail(&evt->queue_list, evt_doneq);
-+	spin_unlock(&evt->queue->l_lock);
-+}
-+
-+static struct ibmvfc_crq *ibmvfc_next_scrq(struct ibmvfc_queue *scrq)
-+{
-+	struct ibmvfc_crq *crq;
-+
-+	crq = &scrq->msgs.scrq[scrq->cur].crq;
-+	if (crq->valid & 0x80) {
-+		if (++scrq->cur == scrq->size)
-+			scrq->cur = 0;
-+		rmb();
-+	} else
-+		crq = NULL;
-+
-+	return crq;
-+}
-+
-+static void ibmvfc_drain_sub_crq(struct ibmvfc_queue *scrq)
-+{
-+	struct ibmvfc_crq *crq;
-+	struct ibmvfc_event *evt, *temp;
-+	unsigned long flags;
-+	int done = 0;
-+	LIST_HEAD(evt_doneq);
-+
-+	spin_lock_irqsave(scrq->q_lock, flags);
-+	while (!done) {
-+		while ((crq = ibmvfc_next_scrq(scrq)) != NULL) {
-+			ibmvfc_handle_scrq(crq, scrq->vhost, &evt_doneq);
-+			crq->valid = 0;
-+			wmb();
-+		}
-+
-+		ibmvfc_toggle_scrq_irq(scrq, 1);
-+		if ((crq = ibmvfc_next_scrq(scrq)) != NULL) {
-+			ibmvfc_toggle_scrq_irq(scrq, 0);
-+			ibmvfc_handle_scrq(crq, scrq->vhost, &evt_doneq);
-+			crq->valid = 0;
-+			wmb();
-+		} else
-+			done = 1;
-+	}
-+	spin_unlock_irqrestore(scrq->q_lock, flags);
-+
-+	list_for_each_entry_safe(evt, temp, &evt_doneq, queue_list) {
-+		del_timer(&evt->timer);
-+		list_del(&evt->queue_list);
-+		ibmvfc_trc_end(evt);
-+		evt->done(evt);
-+	}
++	return IRQ_HANDLED;
 +}
 +
  /**
