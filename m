@@ -2,104 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5AD2F587E
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 04:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6016D2F58C5
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 04:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727727AbhANCfU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 21:35:20 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:50805 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727402AbhANCfS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 Jan 2021 21:35:18 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 848922042BC;
-        Wed, 13 Jan 2021 23:46:26 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Jh+VdBxHYifY; Wed, 13 Jan 2021 23:46:25 +0100 (CET)
-Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
-        by smtp.infotech.no (Postfix) with ESMTPA id 3CDAD2042CA;
-        Wed, 13 Jan 2021 23:46:24 +0100 (CET)
+        id S1725943AbhANC7k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 21:59:40 -0500
+Received: from mail-1.ca.inter.net ([208.85.220.69]:56256 "EHLO
+        mail-1.ca.inter.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725888AbhANC7j (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 21:59:39 -0500
+Received: from localhost (offload-3.ca.inter.net [208.85.220.70])
+        by mail-1.ca.inter.net (Postfix) with ESMTP id 79DF72EA00F;
+        Wed, 13 Jan 2021 21:58:58 -0500 (EST)
+Received: from mail-1.ca.inter.net ([208.85.220.69])
+        by localhost (offload-3.ca.inter.net [208.85.220.70]) (amavisd-new, port 10024)
+        with ESMTP id 5rXEq1ltfbW9; Wed, 13 Jan 2021 21:45:41 -0500 (EST)
+Received: from [192.168.48.23] (host-104-157-204-209.dyn.295.ca [104.157.204.209])
+        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail-1.ca.inter.net (Postfix) with ESMTPSA id A88882EA00E;
+        Wed, 13 Jan 2021 21:58:57 -0500 (EST)
+Subject: Re: [PATCH v13 44/45] sg: [RFC] add blk_poll support
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
         kashyap.desai@broadcom.com
-Subject: [PATCH v13 45/45] sg: bump version to 4.0.12
-Date:   Wed, 13 Jan 2021 17:45:26 -0500
-Message-Id: <20210113224526.861000-46-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210113224526.861000-1-dgilbert@interlog.com>
 References: <20210113224526.861000-1-dgilbert@interlog.com>
+ <20210113224526.861000-45-dgilbert@interlog.com>
+Message-ID: <e6f5fda6-9fca-6981-fe67-9b11bbf0bb49@interlog.com>
+Date:   Wed, 13 Jan 2021 21:58:57 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210113224526.861000-45-dgilbert@interlog.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that the sg version 4 interface is supported:
-  - with ioctl(SG_IO) for synchronous/blocking use
-  - with ioctl(SG_IOSUBMIT) and ioctl(SG_IORECEIVE) for
-    async/non-blocking use
-Plus new ioctl(SG_IOSUBMIT_V3) and ioctl(SG_IORECEIVE_V3)
-potentially replace write() and read() for the sg
-version 3 interface. Bump major driver version number
-from 3 to 4.
+On 2021-01-13 5:45 p.m., Douglas Gilbert wrote:
+> The support is added via the new SGV4_FLAG_HIPRI command flag which
+> causes REQ_HIPRI to be set on the request. Before waiting on an
+> inflight request, it is checked to see if it has SGV4_FLAG_HIPRI,
+> and if so blk_poll() is called instead of the wait. In situations
+> where only the file descriptor is known (e.g. sg_poll() and
+> ioctl(SG_GET_NUM_WAITING)) all inflight requests associated with
+> the file descriptor that have SGV4_FLAG_HIPRI set, have sg_poll()
 
-The main new feature is the removal of the fixed 16 element
-array of requests per file descriptor. It is replaced by
-a xarray (eXtensible array) in their parent which is a
-sg_fd object (i.e. a file descriptor). The sg_request
-objects are not freed until the owning file descriptor is
-closed; instead these objects are re-used when multiple
-commands are sent to the same file descriptor.
+s/have sg_poll/have blk_poll/
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/sg.c      | 11 ++++++-----
- include/uapi/scsi/sg.h |  4 ++--
- 2 files changed, 8 insertions(+), 7 deletions(-)
+> called on them.
+> 
+> Note that the implementation of blk_poll() calls mq_poll() in the
+> LLD associated with the request. Then for any request found to be
+> ready, blk_poll() invokes the scsi_done() callback. So this means
+> if blk_poll() returns 1 then sg_rq_end_io() has already been
+> called for the polled request.
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index b396d3fb7bb7..d5f04b0671ac 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -7,13 +7,14 @@
-  *
-  * Original driver (sg.c):
-  *        Copyright (C) 1992 Lawrence Foard
-- * Version 2 and 3 extensions to driver:
-- *        Copyright (C) 1998 - 2019 Douglas Gilbert
-+ * Version 2, 3 and 4 extensions to driver:
-+ *        Copyright (C) 1998 - 2021 Douglas Gilbert
-+ *
-  */
- 
--static int sg_version_num = 30901;  /* [x]xyyzz where [x] empty when x=0 */
--#define SG_VERSION_STR "3.9.01"		/* [x]x.[y]y.zz */
--static char *sg_version_date = "20190606";
-+static int sg_version_num = 40012;  /* [x]xyyzz where [x] empty when x=0 */
-+#define SG_VERSION_STR "4.0.12"		/* [x]x.[y]y.zz */
-+static char *sg_version_date = "20210111";
- 
- #include <linux/module.h>
- 
-diff --git a/include/uapi/scsi/sg.h b/include/uapi/scsi/sg.h
-index a0e11d87aa2e..f15d930a4b62 100644
---- a/include/uapi/scsi/sg.h
-+++ b/include/uapi/scsi/sg.h
-@@ -12,9 +12,9 @@
-  *   Copyright (C) 1992 Lawrence Foard
-  *
-  * Later extensions (versions 2, 3 and 4) to driver:
-- *   Copyright (C) 1998 - 2018 Douglas Gilbert
-+ *   Copyright (C) 1998 - 2021 Douglas Gilbert
-  *
-- * Version 4.0.11 (20190502)
-+ * Version 4.0.12 (20210111)
-  *  This version is for Linux 4 and 5 series kernels.
-  *
-  * Documentation
--- 
-2.25.1
-
+<snip>
