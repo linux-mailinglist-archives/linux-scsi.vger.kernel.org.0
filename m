@@ -2,133 +2,156 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C30DC2F5633
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 02:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EED2F560B
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jan 2021 02:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727309AbhANBoX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jan 2021 20:44:23 -0500
-Received: from m43-15.mailgun.net ([69.72.43.15]:26711 "EHLO
-        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726959AbhANBTL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jan 2021 20:19:11 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1610587132; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=kslj8Wj8U87VV6ybtvsgQSgYNIBVEXh0ztirzXBMiJ0=;
- b=jQn9ZBvT5v57TrMgjFxJDhglSZbDcPEfRPR/rNUu9nM0l1oz5EDNbG+PO+vHWETGlZsE3PFc
- 1pa1oS0erE1DMwJbhm+E1FS08HgV90dZxBPO1HygEwrDrs0xa9Ypg8wD8/fNdnOl/6l6daWo
- rh9mooEpFTwjYx+OXNIwetfOfWM=
-X-Mailgun-Sending-Ip: 69.72.43.15
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 5fff94c9c88af061078450de (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 14 Jan 2021 00:48:09
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 01AD9C43467; Thu, 14 Jan 2021 00:48:07 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        id S1727632AbhANBaS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jan 2021 20:30:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42208 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727535AbhANB3u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 13 Jan 2021 20:29:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610587677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HUOvlaCkrm/U0Zg0GZ+mc9xEDctf6SlBoM2x9QYlFlc=;
+        b=fE6A3bEPXy4D/zTCikiD+6fcDwc/A6YAoqs/lShi82lLpf5xmePre3z8UwiA/SwVCEE/ih
+        gHMvXuc4E5+8+8wV9c5ql2R9oM6lqq0a/t73JzhCtsXjMNtj/Z/PdgvcGGtYO8BrQqMqX7
+        9tleYlkwETaOLHIV0Ln4fH1oEp6t2vU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-147-QnMTOfp_N76wQ8VrFfkD4w-1; Wed, 13 Jan 2021 20:27:53 -0500
+X-MC-Unique: QnMTOfp_N76wQ8VrFfkD4w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3C32BC433C6;
-        Thu, 14 Jan 2021 00:48:06 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5CDE8C28A;
+        Thu, 14 Jan 2021 01:27:51 +0000 (UTC)
+Received: from T590 (ovpn-13-18.pek2.redhat.com [10.72.13.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D3134100AE3B;
+        Thu, 14 Jan 2021 01:27:42 +0000 (UTC)
+Date:   Thu, 14 Jan 2021 09:27:38 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Brian King <brking@linux.vnet.ibm.com>
+Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+        james.bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, brking@linux.ibm.com,
+        james.smart@broadcom.com
+Subject: Re: [PATCH v4 01/21] ibmvfc: add vhost fields and defaults for MQ
+ enablement
+Message-ID: <20210114012738.GA237540@T590>
+References: <20210111231225.105347-1-tyreld@linux.ibm.com>
+ <20210111231225.105347-2-tyreld@linux.ibm.com>
+ <0525bee7-433f-dcc7-9e35-e8706d6edee5@linux.vnet.ibm.com>
+ <a8623705-6d49-2056-09bb-80190e0b6f52@linux.ibm.com>
+ <51bfc34b-c2c4-bf14-c903-d37015f65361@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 14 Jan 2021 08:48:06 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Nitin Rawat <nitirawa@codeaurora.org>,
-        Satya Tangirala <satyat@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v4 2/2] scsi: ufs: Protect PM ops and err_handler from
- user access through sysfs
-In-Reply-To: <b32a2064-4ff9-509c-cdaf-434264837917@intel.com>
-References: <1610546230-14732-1-git-send-email-cang@codeaurora.org>
- <1610546230-14732-3-git-send-email-cang@codeaurora.org>
- <b32a2064-4ff9-509c-cdaf-434264837917@intel.com>
-Message-ID: <6908e7103529d12fd6ca0e5fa696b4bc@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51bfc34b-c2c4-bf14-c903-d37015f65361@linux.vnet.ibm.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2021-01-13 22:53, Adrian Hunter wrote:
-> On 13/01/21 3:57 pm, Can Guo wrote:
->> User layer may access sysfs nodes when system PM ops or error handling
->> is running, which can cause various problems. Rename eh_sem to 
->> host_sem
->> and use it to protect PM ops and error handling from user layer 
->> intervene.
->> 
->> Acked-by: Avri Altman <avri.altman@wdc.com>
->> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
->> Signed-off-by: Can Guo <cang@codeaurora.org>
->> ---
->>  drivers/scsi/ufs/ufs-sysfs.c | 106 
->> ++++++++++++++++++++++++++++++++++++-------
->>  drivers/scsi/ufs/ufshcd.c    |  42 ++++++++++-------
->>  drivers/scsi/ufs/ufshcd.h    |  10 +++-
->>  3 files changed, 125 insertions(+), 33 deletions(-)
->> 
->> diff --git a/drivers/scsi/ufs/ufs-sysfs.c 
->> b/drivers/scsi/ufs/ufs-sysfs.c
->> index 0e14384..7cafffc 100644
->> --- a/drivers/scsi/ufs/ufs-sysfs.c
->> +++ b/drivers/scsi/ufs/ufs-sysfs.c
->> @@ -154,18 +154,29 @@ static ssize_t auto_hibern8_show(struct device 
->> *dev,
->>  				 struct device_attribute *attr, char *buf)
->>  {
->>  	u32 ahit;
->> +	int ret;
->>  	struct ufs_hba *hba = dev_get_drvdata(dev);
->> 
->>  	if (!ufshcd_is_auto_hibern8_supported(hba))
->>  		return -EOPNOTSUPP;
->> 
->> +	down(&hba->host_sem);
->> +	if (!ufshcd_is_sysfs_allowed(hba)) {
+On Wed, Jan 13, 2021 at 11:13:07AM -0600, Brian King wrote:
+> On 1/12/21 6:33 PM, Tyrel Datwyler wrote:
+> > On 1/12/21 2:54 PM, Brian King wrote:
+> >> On 1/11/21 5:12 PM, Tyrel Datwyler wrote:
+> >>> Introduce several new vhost fields for managing MQ state of the adapter
+> >>> as well as initial defaults for MQ enablement.
+> >>>
+> >>> Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+> >>> ---
+> >>>  drivers/scsi/ibmvscsi/ibmvfc.c | 8 ++++++++
+> >>>  drivers/scsi/ibmvscsi/ibmvfc.h | 9 +++++++++
+> >>>  2 files changed, 17 insertions(+)
+> >>>
+> >>> diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+> >>> index ba95438a8912..9200fe49c57e 100644
+> >>> --- a/drivers/scsi/ibmvscsi/ibmvfc.c
+> >>> +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+> >>> @@ -3302,6 +3302,7 @@ static struct scsi_host_template driver_template = {
+> >>>  	.max_sectors = IBMVFC_MAX_SECTORS,
+> >>>  	.shost_attrs = ibmvfc_attrs,
+> >>>  	.track_queue_depth = 1,
+> >>> +	.host_tagset = 1,
+> >>
+> >> This doesn't seem right. You are setting host_tagset, which means you want a
+> >> shared, host wide, tag set for commands. It also means that the total
+> >> queue depth for the host is can_queue. However, it looks like you are allocating
+> >> max_requests events for each sub crq, which means you are over allocating memory.
+> > 
+> > With the shared tagset yes the queue depth for the host is can_queue, but this
+> > also implies that the max queue depth for each hw queue is also can_queue. So,
+> > in the worst case that all commands are queued down the same hw queue we need an
+> > event pool with can_queue commands.
+> > 
+> >>
+> >> Looking at this closer, we might have bigger problems. There is a host wide
+> >> max number of commands that the VFC host supports, which gets returned on
+> >> NPIV Login. This value can change across a live migration event.
+> > 
+> > From what I understand the max commands can only become less.
+> > 
+> >>
+> >> The ibmvfc driver, which does the same thing the lpfc driver does, modifies
+> >> can_queue on the scsi_host *after* the tag set has been allocated. This looks
+> >> to be a concern with ibmvfc, not sure about lpfc, as it doesn't look like
+> >> we look at can_queue once the tag set is setup, and I'm not seeing a good way
+> >> to dynamically change the host queue depth once the tag set is setup. 
+> >>
+> >> Unless I'm missing something, our best options appear to either be to implement
+> >> our own host wide busy reference counting, which doesn't sound very good, or
+> >> we need to add some API to block / scsi that allows us to dynamically change
+> >> can_queue.
+> > 
+> > Changing can_queue won't do use any good with the shared tagset becasue each
+> > queue still needs to be able to queue can_queue number of commands in the worst
+> > case.
 > 
-> I expect debugfs has the same potential problem, so maybe
-> ufshcd_is_sysfs_allowed() is not quite the right name.
+> The issue I'm trying to highlight here is the following scenario:
+> 
+> 1. We set shost->can_queue, then call scsi_add_host, which allocates the tag set.
+> 
+> 2. On our NPIV login response from the VIOS, we might get a lower value than we
+> initially set in shost->can_queue, so we update it, but nobody ever looks at it
+> again, and we don't have any protection against sending too many commands to the host.
+> 
+> 
+> Basically, we no longer have any code that ensures we don't send more
+> commands to the VIOS than we are told it supports. According to the architecture,
+> if we actually do this, the VIOS will do an h_free_crq, which would be a bit
+> of a bug on our part.
+> 
+> I don't think it was ever clearly defined in the API that a driver can
+> change shost->can_queue after calling scsi_add_host, but up until
+> commit 6eb045e092efefafc6687409a6fa6d1dabf0fb69, this worked and now
+> it doesn't. 
 
-I noticed your debugfs change - currently it is only printing
-error counts recorded in hba struct, which is fine.
-Even in this patch, the check is only added for those entries
-which need to talk with HW. Sysfs nodes like show/store rpm/spm_lvl
-does not need this check.
+Actually it isn't related with commit 6eb045e092ef, because blk_mq_alloc_tag_set()
+uses .can_queue to create driver tag sbitmap and request pool.
+
+So even thought without 6eb045e092ef, the updated .can_queue can't work
+as expected because the max driver tag depth has been fixed by blk-mq already.
+
+What 6eb045e092ef does is just to remove the double check on max
+host-wide allowed commands because that has been respected by blk-mq
+driver tag allocation already.
+
+> 
+> I started looking through drivers that do this, and so far, it looks like the
+> following drivers do: ibmvfc, lpfc, aix94xx, libfc, BusLogic, and likely others...
+> 
+> We probably need an API that lets us change shost->can_queue dynamically.
+
+I'd suggest to confirm changing .can_queue is one real usecase.
+
 
 Thanks,
-Can Guo.
+Ming
 
-> 
->> +		ret = -EBUSY;
->> +		goto out;
->> +	}
->> +
