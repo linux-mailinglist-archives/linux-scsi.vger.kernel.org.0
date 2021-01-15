@@ -2,101 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3889A2F77BA
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Jan 2021 12:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456C62F789A
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Jan 2021 13:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbhAOLes (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Jan 2021 06:34:48 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2356 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726137AbhAOLer (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jan 2021 06:34:47 -0500
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4DHJpn61gPz67c1b;
-        Fri, 15 Jan 2021 19:28:49 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Fri, 15 Jan 2021 12:34:04 +0100
-Received: from [10.47.4.21] (10.47.4.21) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Fri, 15 Jan
- 2021 11:34:02 +0000
-Subject: Re: [RESEND PATCH v3 0/4] iommu/iova: Solve longterm IOVA issue
-To:     <robin.murphy@arm.com>, <joro@8bytes.org>, <will@kernel.org>
-CC:     <xiyou.wangcong@gmail.com>, <iommu@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <chenxiang66@hisilicon.com>,
-        "linuxarm@openeuler.org" <linuxarm@openeuler.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Kashyap Desai <kashyap.desai@broadcom.com>
-References: <1605608734-84416-1-git-send-email-john.garry@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <8830b44d-3893-6096-0cf1-37a1e8bc6c6b@huawei.com>
-Date:   Fri, 15 Jan 2021 11:32:52 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1727241AbhAOMTA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Jan 2021 07:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727562AbhAOMS6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jan 2021 07:18:58 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3D1C061793
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Jan 2021 04:18:15 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id a109so8348957otc.1
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Jan 2021 04:18:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=TaHxnKsVVUjjlYWbb5WM8lULkRobrhCkf872o49hI5Y=;
+        b=uJ6AN+4JaxmMp6vcPRxSoScYISXIhei100d7+CTFQ5KdDEZUjPGNvb//86G9Jdqir6
+         S71mdeeLCorcgCnnMq/g90vmbYvmJfXEPIl3cUZNxH/4G9xXaqYvRHj011UoeRC2/lx5
+         AMR1DskdM+AaSxrtmH5MhQPUA41MAhrYL9644tCM0NRo0oTpssotIqPTIQs6GPwU1ipw
+         KVZ8tGzqv3upjQWMg4XJkFD9RQTZC0rC7SZ7qkSDwNusCeyx4lYgwM/nTFLUkjNUOv5h
+         oNf7EMQfIuak7A7G3+etI93IQ7qRrn1gPlkInDwjfoYUQpIquwxaU7YjXvmZSK7HuNTM
+         yqrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=TaHxnKsVVUjjlYWbb5WM8lULkRobrhCkf872o49hI5Y=;
+        b=lOCi2e1FGkKCVa/EWpEewjzznFZbKl7miLPemRYsdOANXJ0lsOvnZEd88ebIkXIZp/
+         DDJiX7bUPMwLfsl9EysQwNki+wxrHf7vhkDjb8z/dOHpfkRgUoGAP57b9WQ7rW5szXYA
+         niKRSbuXAc7uJmPrDeW90FNk8OCa71QT0X083LPNtl1MB21gFsGQhYo8oMYqq0ompowS
+         kz3JjbY3eQPA/X80HfQ2T9julI+sDaN445qeLt/f/XDLu/wYFeG/2cNpXOgivvWO5+Qr
+         9291Xg0RB8uPkExQM/0V5HFAaZTm9U5kEEXpgKLRNoCaUVw0dilYyaxgDqOGYcb8R+O4
+         0wGQ==
+X-Gm-Message-State: AOAM5338l2Wcovdlae4YWanjZawi23KNk7wngOEDiJRLwgiqyaWXdpb7
+        uuL+oenGAk+KUQPxOB0o/7+Tw9DPQ8ACEQL/wu8=
+X-Google-Smtp-Source: ABdhPJzyZeiSijHfeRzspySVQl2p2rRlUPge9bqaCbxGNxzjyQ3MzpgF61BzgR7h/G7qRCpADFZgwEjZQbKiJSQJ9H4=
+X-Received: by 2002:a9d:4816:: with SMTP id c22mr7790384otf.358.1610713095046;
+ Fri, 15 Jan 2021 04:18:15 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1605608734-84416-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.4.21]
-X-ClientProxiedBy: lhreml708-chm.china.huawei.com (10.201.108.57) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Received: by 2002:ac9:56a4:0:0:0:0:0 with HTTP; Fri, 15 Jan 2021 04:18:14
+ -0800 (PST)
+Reply-To: laurentgaborit747@yahoo.com
+From:   Laurent Gaborit <universitelavalcanada2@gmail.com>
+Date:   Fri, 15 Jan 2021 13:18:14 +0100
+Message-ID: <CAAMPQKNsbC+5u5TNkWtSUvaib3EbD-kZ=yxy4ktkrnj-QwZ2jw@mail.gmail.com>
+Subject: OFFRE DE PRET
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-+ linux-scsi (see 
-https://lore.kernel.org/linux-iommu/1607538189-237944-4-git-send-email-john.garry@huawei.com/)
-
-On 17/11/2020 10:25, John Garry wrote:
-> This series contains a patch to solve the longterm IOVA issue which
-> leizhen originally tried to address at [0].
-> 
-> A sieved kernel log is at the following, showing periodic dumps of IOVA
-> sizes, per CPU and per depot bin, per IOVA size granule:
-> https://raw.githubusercontent.com/hisilicon/kernel-dev/topic-iommu-5.10-iova-debug-v3/aging_test
-> 
-> Notice, for example, the following logs:
-> [13175.355584] print_iova1 cpu_total=40135 depot_total=3866 total=44001
-> [83483.457858] print_iova1 cpu_total=62532 depot_total=24476 total=87008
-> 
-> Where total IOVA rcache size has grown from 44K->87K over a long time.
-> 
-
-JFYI, I am able to reproduce this aging issue on another storage card, 
-an LSI SAS 3008, so now it's harder to say it's an issue specific to a 
-(buggy) single driver.
-
-A log of the IOVA size dumps is here:
-https://raw.githubusercontent.com/hisilicon/kernel-dev/064c4dc8869b3f2ad07edffceafde0b129f276b0/lsi3008_dmesg
-
-Notice again how the total IOVA size goes up over time, like:
-[ 68.176914] print_iova1 cpu_total=23663 depot_total=256 total=23919
-[ 2337.008194] print_iova1 cpu_total=67361 depot_total=9088 total=76449
-[17141.860078] print_iova1 cpu_total=73397 depot_total=10368 total=83765
-[27087.850830] print_iova1 cpu_total=73386 depot_total=10624 total=84010
-[10434.042877] print_iova1 cpu_total=90652 depot_total=12928 total=103580
-
-I had to change some settings for that storage card to reproduce, though 
-[0]. Could explain why no other reports.
-
-So please consider this issue again...
-
-Thanks,
-john
-
-[0] 
-https://lore.kernel.org/linux-scsi/dd8e6fdc-397d-b6ad-3371-0b65d1932ad1@huawei.com/T/#m953d21446a5756981412c92d0924ca65c8d2f3a5
-
-> Along with this patch, I included the following:
-> - A smaller helper to clear all IOVAs for a domain
-> - Change polarity of the IOVA magazine helpers
-> - Small optimisation from Cong Wang included, which was never applied [1].
->    There was some debate of the other patches in that series, but this one
->    is quite straightforward.
-> 
-> Differnces to v2:
-> - Update commit message for patch 3/4
+Hallo,
+Sie brauchten Geldkredite zwischen Einzelpersonen, um damit fertig zu werde=
+n
+finanzielle Schwierigkeiten, um endlich die Sackgasse zu durchbrechen
+provozieren Sie die Banken, indem Sie Ihre Bewerbungsunterlagen f=C3=BCr ab=
+lehnen
+Credits?
+Ich bin ein franz=C3=B6sischer Staatsb=C3=BCrger, der Sie dazu bringen kann
+ein Darlehen von 5.000 Euro zu 2.000.000 Euro mit einem Zinssatz von
+2% und unter Bedingungen, die Sie
+wird das Leben leichter machen. Hier sind die Bereiche, in denen ich
+Ihnen helfen kann
+Hilfe:
+* Finanziell
+* Immobilienkredit
+* Investitionsdarlehen
+* Autokredit
+* Konsolidierungsschulden
+* Kreditlinie
+* Zweite Hypothek
+* Kreditr=C3=BCckkauf
+* Privat Darlehen
+Sie stecken fest, sind vom Bankgesch=C3=A4ft ausgeschlossen und haben nicht
+die Gunst von
+Banken oder besser Sie haben ein Projekt und ben=C3=B6tigen eine Finanzieru=
+ng, a
+schlechte Kredit oder brauchen Geld, um Rechnungen zu bezahlen,
+Mittel, um in Unternehmen zu investieren.
+Wenn Sie also Geldkredite ben=C3=B6tigen, z=C3=B6gern Sie nicht, mich zu ko=
+ntaktieren
+Kontakt per E-Mail: laurentgaborit747@yahoo.com, um mehr dar=C3=BCber zu er=
+fahren
+meine sehr g=C3=BCnstigen Bedingungen.
+NB: Person, die es nicht ernst meint, sich zu enthalten
+Mit freundlichen Gr=C3=BC=C3=9Fen ...
+Laurent GABORIT.
