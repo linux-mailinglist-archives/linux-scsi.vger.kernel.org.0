@@ -2,37 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E342FAC51
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 22:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 572F22FAC5F
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 22:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394461AbhARVMu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 16:12:50 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55212 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389745AbhARKN3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 05:13:29 -0500
+        id S2437643AbhARVPf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 16:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389749AbhARKN1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 05:13:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BDFC0613C1;
+        Mon, 18 Jan 2021 02:12:46 -0800 (PST)
 From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610964665;
+        s=2020; t=1610964675;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xTiNsIBa59THcsevJRE+EeFn5TKH8F5bbL95uC706VA=;
-        b=ka1t3IR86Q+9e2uN+9+j13J1LdMnq89Zvppoq+Zl/6r7n9KT1qO4DKNd819mNFKLfYM+aE
-        hrLesJUrQ+tA3rpgTRc82+VK5kp7DJFxuk49Ejqw31EQxfUi7Ku5lPCUaOKKzA6iOLJqpR
-        NHKZscIxzIEVBSuUKc+ttMeKCz28MSxNcsda/Zsq3iTc9N6MNi521ivHrVeL62Skz1cnZ/
-        vWswQP5r6oXEoNHe4oujx2Y7Zx8wVMaInX+0IVmCoc2i7QkHJ8NOjVBwf7oeeNn3GE7CnG
-        FdbzRlNHb97NNoPy0zFj5oOMnheSZz11gxdpqc8nlODbvaCUj4o1hQN5yUtVZA==
+        bh=xqHw2udYdfrv+Zy2Tozyr68OvQ7itsLtdUshJ43k/3Y=;
+        b=CGjdiavR5s9vxvT5iQCrmSRmh/F0NUugQmaPNV8KWhghUXv1UcApccpmoCp/HkdVymTOUb
+        gE3G5fbmrXpMrok+Op/hjFOcX1wBL4aQIzIq5XsYgARCbKoR2pH83vuc+G7jVLlMxa1zko
+        m8nst3d76vxM7thBGsxaUW+DeoeYEjOLcXXUnSa5bqCSN+/K+EeCqUeisKvRwYdtrcsUFY
+        zPAFlIpwDVykjL1TymmcHRVxhYz6XWhyqxitmBbkZuyAGpMtwaSdx4RKthRhEGbBM9Bx7R
+        jjkqB1LQn9dJnuNuDh7LQjJZBzfHMffY6siTR0c9/KZMprmXxDWoTOzd5e0+xw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610964665;
+        s=2020e; t=1610964675;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xTiNsIBa59THcsevJRE+EeFn5TKH8F5bbL95uC706VA=;
-        b=W6R5b8bJ9oT5kC2wqiGwDm7TsvE9HMtXqz4qlRRfBsez/E4RDQERKePEnINBhTs/5GgWJo
-        ObTFszyjZIaK1BDA==
+        bh=xqHw2udYdfrv+Zy2Tozyr68OvQ7itsLtdUshJ43k/3Y=;
+        b=l6Zd9y4PKvSi7T+L5mA111083/IlaXpTkWzQYz8OA4G25CrnBJ8LI/UZ0p4G+ssUzPMvZs
+        q1cFfz/uPl96/sDg==
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -45,9 +48,9 @@ Cc:     linux-scsi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Sebastian A. Siewior" <bigeasy@linutronix.de>,
         "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Subject: [PATCH v3 12/19] scsi: libsas: event notifiers API: Add gfp_t flags parameter
-Date:   Mon, 18 Jan 2021 11:09:48 +0100
-Message-Id: <20210118100955.1761652-13-a.darwish@linutronix.de>
+Subject: [PATCH v3 14/19] scsi: aic94xx: Switch back to original libsas event notifiers
+Date:   Mon, 18 Jan 2021 11:09:50 +0100
+Message-Id: <20210118100955.1761652-15-a.darwish@linutronix.de>
 In-Reply-To: <20210118100955.1761652-1-a.darwish@linutronix.de>
 References: <20210118100955.1761652-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
@@ -56,227 +59,115 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-All call-sites of below libsas APIs:
+libsas event notifiers required an extension where gfp_t flags must be
+explicitly passed. For bisectability, a temporary _gfp() variant of such
+functions were added. All call sites then got converted use the _gfp()
+variants and explicitly pass GFP context. Having no callers left, the
+original libsas notifiers were then modified to accept gfp_t flags by
+default.
 
-  - sas_alloc_event()
-  - sas_notify_port_event()
-  - sas_notify_phy_event()
-
-have been converted to use the _gfp()-suffixed version.  Modify the
-original APIs above to take a gfp_t flags parameter by default.
-
-For bisectability, call-sites will be modified again to use the original
-libsas APIs (while passing gfp_t). The temporary _gfp()-suffixed
-versions can then be removed.
+Switch back to the original libas API, while still passing GFP context.
+The libsas _gfp() variants will be removed afterwards.
 
 Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
 Reviewed-by: John Garry <john.garry@huawei.com>
-Cc: Jason Yan <yanaijie@huawei.com>
 ---
- Documentation/scsi/libsas.rst      |  4 +-
- drivers/scsi/libsas/sas_event.c    | 62 +++++++++---------------------
- drivers/scsi/libsas/sas_init.c     | 12 ++----
- drivers/scsi/libsas/sas_internal.h |  5 ++-
- include/scsi/libsas.h              |  6 ++-
- 5 files changed, 31 insertions(+), 58 deletions(-)
+ drivers/scsi/aic94xx/aic94xx_scb.c | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/scsi/libsas.rst b/Documentation/scsi/libsas.rst
-index ea63ab3a9216..c65086470a15 100644
---- a/Documentation/scsi/libsas.rst
-+++ b/Documentation/scsi/libsas.rst
-@@ -189,8 +189,8 @@ num_phys
- The event interface::
- 
- 	/* LLDD calls these to notify the class of an event. */
--	void sas_notify_port_event(struct sas_phy *, enum port_event);
--	void sas_notify_phy_event(struct sas_phy *, enum phy_event);
-+	void sas_notify_port_event(struct sas_phy *, enum port_event, gfp_t);
-+	void sas_notify_phy_event(struct sas_phy *, enum phy_event, gfp_t);
- 	void sas_notify_port_event_gfp(struct sas_phy *, enum port_event, gfp_t);
- 	void sas_notify_phy_event_gfp(struct sas_phy *, enum phy_event, gfp_t);
- 
-diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
-index 25f3aaea8142..3d0cc407b33f 100644
---- a/drivers/scsi/libsas/sas_event.c
-+++ b/drivers/scsi/libsas/sas_event.c
-@@ -132,15 +132,19 @@ static void sas_phy_event_worker(struct work_struct *work)
- 	sas_free_event(ev);
+diff --git a/drivers/scsi/aic94xx/aic94xx_scb.c b/drivers/scsi/aic94xx/aic94xx_scb.c
+index 76a4c21144d8..68214a58b160 100644
+--- a/drivers/scsi/aic94xx/aic94xx_scb.c
++++ b/drivers/scsi/aic94xx/aic94xx_scb.c
+@@ -80,8 +80,8 @@ static void asd_phy_event_tasklet(struct asd_ascb *ascb,
+ 		ASD_DPRINTK("phy%d: device unplugged\n", phy_id);
+ 		asd_turn_led(asd_ha, phy_id, 0);
+ 		sas_phy_disconnected(&phy->sas_phy);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_LOSS_OF_SIGNAL,
+-					 GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_LOSS_OF_SIGNAL,
++				     GFP_ATOMIC);
+ 		break;
+ 	case CURRENT_OOB_DONE:
+ 		/* hot plugged device */
+@@ -89,14 +89,13 @@ static void asd_phy_event_tasklet(struct asd_ascb *ascb,
+ 		get_lrate_mode(phy, oob_mode);
+ 		ASD_DPRINTK("phy%d device plugged: lrate:0x%x, proto:0x%x\n",
+ 			    phy_id, phy->sas_phy.linkrate, phy->sas_phy.iproto);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_OOB_DONE,
+-					 GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_OOB_DONE, GFP_ATOMIC);
+ 		break;
+ 	case CURRENT_SPINUP_HOLD:
+ 		/* hot plug SATA, no COMWAKE sent */
+ 		asd_turn_led(asd_ha, phy_id, 1);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_SPINUP_HOLD,
+-					 GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_SPINUP_HOLD,
++				     GFP_ATOMIC);
+ 		break;
+ 	case CURRENT_GTO_TIMEOUT:
+ 	case CURRENT_OOB_ERROR:
+@@ -104,8 +103,7 @@ static void asd_phy_event_tasklet(struct asd_ascb *ascb,
+ 			    dl->status_block[1]);
+ 		asd_turn_led(asd_ha, phy_id, 0);
+ 		sas_phy_disconnected(&phy->sas_phy);
+-		sas_notify_phy_event_gfp(&phy->sas_phy, PHYE_OOB_ERROR,
+-					 GFP_ATOMIC);
++		sas_notify_phy_event(&phy->sas_phy, PHYE_OOB_ERROR, GFP_ATOMIC);
+ 		break;
+ 	}
+ }
+@@ -236,7 +234,7 @@ static void asd_bytes_dmaed_tasklet(struct asd_ascb *ascb,
+ 	spin_unlock_irqrestore(&phy->sas_phy.frame_rcvd_lock, flags);
+ 	asd_dump_frame_rcvd(phy, dl);
+ 	asd_form_port(ascb->ha, phy);
+-	sas_notify_port_event_gfp(&phy->sas_phy, PORTE_BYTES_DMAED, GFP_ATOMIC);
++	sas_notify_port_event(&phy->sas_phy, PORTE_BYTES_DMAED, GFP_ATOMIC);
  }
  
--static int __sas_notify_port_event(struct asd_sas_phy *phy,
--				   enum port_event event,
--				   struct asd_sas_event *ev)
-+int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
-+			  gfp_t gfp_flags)
- {
- 	struct sas_ha_struct *ha = phy->ha;
-+	struct asd_sas_event *ev;
- 	int ret;
+ static void asd_link_reset_err_tasklet(struct asd_ascb *ascb,
+@@ -272,7 +270,7 @@ static void asd_link_reset_err_tasklet(struct asd_ascb *ascb,
+ 	asd_turn_led(asd_ha, phy_id, 0);
+ 	sas_phy_disconnected(sas_phy);
+ 	asd_deform_port(asd_ha, phy);
+-	sas_notify_port_event_gfp(sas_phy, PORTE_LINK_RESET_ERR, GFP_ATOMIC);
++	sas_notify_port_event(sas_phy, PORTE_LINK_RESET_ERR, GFP_ATOMIC);
  
- 	BUG_ON(event >= PORT_NUM_EVENTS);
+ 	if (retries_left == 0) {
+ 		int num = 1;
+@@ -317,8 +315,8 @@ static void asd_primitive_rcvd_tasklet(struct asd_ascb *ascb,
+ 			spin_lock_irqsave(&sas_phy->sas_prim_lock, flags);
+ 			sas_phy->sas_prim = ffs(cont);
+ 			spin_unlock_irqrestore(&sas_phy->sas_prim_lock, flags);
+-			sas_notify_port_event_gfp(sas_phy, PORTE_BROADCAST_RCVD,
+-						  GFP_ATOMIC);
++			sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD,
++					      GFP_ATOMIC);
+ 			break;
  
-+	ev = sas_alloc_event_gfp(phy, gfp_flags);
-+	if (!ev)
-+		return -ENOMEM;
-+
- 	INIT_SAS_EVENT(ev, sas_port_event_worker, phy, event);
+ 		case LmUNKNOWNP:
+@@ -339,8 +337,8 @@ static void asd_primitive_rcvd_tasklet(struct asd_ascb *ascb,
+ 			/* The sequencer disables all phys on that port.
+ 			 * We have to re-enable the phys ourselves. */
+ 			asd_deform_port(asd_ha, phy);
+-			sas_notify_port_event_gfp(sas_phy, PORTE_HARD_RESET,
+-						  GFP_ATOMIC);
++			sas_notify_port_event(sas_phy, PORTE_HARD_RESET,
++					      GFP_ATOMIC);
+ 			break;
  
- 	ret = sas_queue_event(event, &ev->work, ha);
-@@ -149,41 +153,28 @@ static int __sas_notify_port_event(struct asd_sas_phy *phy,
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(sas_notify_port_event);
- 
- int sas_notify_port_event_gfp(struct asd_sas_phy *phy, enum port_event event,
- 			      gfp_t gfp_flags)
- {
--	struct asd_sas_event *ev;
--
--	ev = sas_alloc_event_gfp(phy, gfp_flags);
--	if (!ev)
--		return -ENOMEM;
--
--	return __sas_notify_port_event(phy, event, ev);
-+	return sas_notify_port_event(phy, event, gfp_flags);
- }
- EXPORT_SYMBOL_GPL(sas_notify_port_event_gfp);
- 
--int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event)
--{
--	struct asd_sas_event *ev;
--
--	ev = sas_alloc_event(phy);
--	if (!ev)
--		return -ENOMEM;
--
--	return __sas_notify_port_event(phy, event, ev);
--}
--EXPORT_SYMBOL_GPL(sas_notify_port_event);
--
--static inline int __sas_notify_phy_event(struct asd_sas_phy *phy,
--					 enum phy_event event,
--					 struct asd_sas_event *ev)
-+int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
-+			 gfp_t gfp_flags)
- {
- 	struct sas_ha_struct *ha = phy->ha;
-+	struct asd_sas_event *ev;
- 	int ret;
- 
- 	BUG_ON(event >= PHY_NUM_EVENTS);
- 
-+	ev = sas_alloc_event_gfp(phy, gfp_flags);
-+	if (!ev)
-+		return -ENOMEM;
-+
- 	INIT_SAS_EVENT(ev, sas_phy_event_worker, phy, event);
- 
- 	ret = sas_queue_event(event, &ev->work, ha);
-@@ -192,28 +183,11 @@ static inline int __sas_notify_phy_event(struct asd_sas_phy *phy,
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(sas_notify_phy_event);
- 
- int sas_notify_phy_event_gfp(struct asd_sas_phy *phy, enum phy_event event,
- 			     gfp_t gfp_flags)
- {
--	struct asd_sas_event *ev;
--
--	ev = sas_alloc_event_gfp(phy, gfp_flags);
--	if (!ev)
--		return -ENOMEM;
--
--	return __sas_notify_phy_event(phy, event, ev);
-+	return sas_notify_phy_event(phy, event, gfp_flags);
- }
- EXPORT_SYMBOL_GPL(sas_notify_phy_event_gfp);
--
--int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event)
--{
--	struct asd_sas_event *ev;
--
--	ev = sas_alloc_event(phy);
--	if (!ev)
--		return -ENOMEM;
--
--	return __sas_notify_phy_event(phy, event, ev);
--}
--EXPORT_SYMBOL_GPL(sas_notify_phy_event);
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index 9ce0cd214eb9..f06b83211e3b 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -585,8 +585,8 @@ sas_domain_attach_transport(struct sas_domain_function_template *dft)
- }
- EXPORT_SYMBOL_GPL(sas_domain_attach_transport);
- 
--static struct asd_sas_event *__sas_alloc_event(struct asd_sas_phy *phy,
--					       gfp_t gfp_flags)
-+struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy,
-+				      gfp_t gfp_flags)
- {
- 	struct asd_sas_event *event;
- 	struct sas_ha_struct *sas_ha = phy->ha;
-@@ -619,15 +619,11 @@ static struct asd_sas_event *__sas_alloc_event(struct asd_sas_phy *phy,
- 	return event;
- }
- 
--struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy)
--{
--	return __sas_alloc_event(phy, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
--}
--
- struct asd_sas_event *sas_alloc_event_gfp(struct asd_sas_phy *phy,
- 					  gfp_t gfp_flags)
- {
--	return __sas_alloc_event(phy, gfp_flags);
-+
-+	return sas_alloc_event(phy, gfp_flags);
- }
- 
- void sas_free_event(struct asd_sas_event *event)
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 52e09c3e2b50..294cdcb4ce42 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -48,7 +48,7 @@ int sas_show_oob_mode(enum sas_oob_mode oob_mode, char *buf);
- int  sas_register_phys(struct sas_ha_struct *sas_ha);
- void sas_unregister_phys(struct sas_ha_struct *sas_ha);
- 
--struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy);
-+struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
- struct asd_sas_event *sas_alloc_event_gfp(struct asd_sas_phy *phy,
- 					  gfp_t gfp_flags);
- void sas_free_event(struct asd_sas_event *event);
-@@ -78,7 +78,8 @@ int sas_smp_phy_control(struct domain_device *dev, int phy_id,
- 			enum phy_func phy_func, struct sas_phy_linkrates *);
- int sas_smp_get_phy_events(struct sas_phy *phy);
- 
--int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event);
-+int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
-+			 gfp_t flags);
- int sas_notify_phy_event_gfp(struct asd_sas_phy *phy, enum phy_event event,
- 			     gfp_t flags);
- void sas_device_set_phy(struct domain_device *dev, struct sas_port *port);
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index e6a43163ab5b..fda56e151695 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -702,8 +702,10 @@ struct sas_phy *sas_get_local_phy(struct domain_device *dev);
- 
- int sas_request_addr(struct Scsi_Host *shost, u8 *addr);
- 
--int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event);
--int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event);
-+int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
-+			  gfp_t gfp_flags);
-+int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
-+			 gfp_t gfp_flags);
- int sas_notify_port_event_gfp(struct asd_sas_phy *phy, enum port_event event,
- 			      gfp_t gfp_flags);
- int sas_notify_phy_event_gfp(struct asd_sas_phy *phy, enum phy_event event,
+ 		default:
+@@ -571,8 +569,7 @@ static void escb_tasklet_complete(struct asd_ascb *ascb,
+ 		/* the device is gone */
+ 		sas_phy_disconnected(sas_phy);
+ 		asd_deform_port(asd_ha, phy);
+-		sas_notify_port_event_gfp(sas_phy, PORTE_TIMER_EVENT,
+-					  GFP_ATOMIC);
++		sas_notify_port_event(sas_phy, PORTE_TIMER_EVENT, GFP_ATOMIC);
+ 		break;
+ 	default:
+ 		ASD_DPRINTK("%s: phy%d: unknown event:0x%x\n", __func__,
 -- 
 2.30.0
 
