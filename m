@@ -2,108 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5612FABA0
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E152FABD1
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388980AbhARUgW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 15:36:22 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:40936 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394365AbhARUfw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:35:52 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IKXXeH181892;
-        Mon, 18 Jan 2021 20:34:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=4up9Di5+jLSiZ88Gvc1Cf2lvFn+rKKliDK1IcEHrPLo=;
- b=JQMlG0EVlho+2tua5QR7n0QDrKZYc3y9wLXyNV6Ky43y9VtFDkN12arCDym7NnT+JiS4
- 8YrA/v0SfuLMunlnEv494r8xWPu1svgPhHUAyuhct0htoToXHEFlQ3QtQMe/oNZyUg6P
- S5KZna/hZ4Sb5A7YR01Ba68ApORTpM+bHNqC6PtpA7T5b99dUXc0/xKdJgcNnn1s2xDJ
- jMZYBjsQsSCGSUcVpciZjWsNn+2nSIXATCwEZDFyXqLbTjxs/1zN0Qw7D0AnsEP0vvrQ
- L0KrVfQ7EWZ549ScO4A4TO+IWr7L8fb7l9dH6BZ3HrfXhBUjOqd/TIebJd/GKyHXH/DT iQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 363xyhnxbr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jan 2021 20:34:47 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IKPPSS026139;
-        Mon, 18 Jan 2021 20:34:46 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 364a2vhh1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jan 2021 20:34:46 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10IKYjl2026607;
-        Mon, 18 Jan 2021 20:34:45 GMT
-Received: from localhost.localdomain (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 18 Jan 2021 12:34:45 -0800
-From:   Mike Christie <michael.christie@oracle.com>
-To:     lduncan@suse.com, cleech@redhat.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
-Cc:     lutianxiong@huawei.com, linfeilong@huawei.com,
-        liuzhiqiang26@huawei.com, haowenchao@huawei.com
-Subject: [PATCH 7/7] libiscsi: reset max/exp cmdsn during recovery
-Date:   Mon, 18 Jan 2021 14:34:30 -0600
-Message-Id: <20210118203430.4921-8-michael.christie@oracle.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210118203430.4921-1-michael.christie@oracle.com>
-References: <20210118203430.4921-1-michael.christie@oracle.com>
+        id S2394365AbhARUsa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 15:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390629AbhARUrZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:47:25 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C7FC0613C1;
+        Mon, 18 Jan 2021 12:46:45 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id ox12so1207764ejb.2;
+        Mon, 18 Jan 2021 12:46:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ygrJIf/V9fcQY2vP6K2WakhuD9/WSpQGkCDpBWvrw+w=;
+        b=GfNJd8Bome7/jm5mGMRJq/2PGTWvhg5ZCKz66AxPNV2hoSI9nhWQm5G+Q13ESwlBTb
+         Q+fotg9Nu3aoV/y5K56QiFVnmB/x97U6700/bpPqaMsj4xWMFLii82VaQNIx4qUn6uv6
+         lmrgiPS3YEUb+oXg39q5lAS3mAO8lD5BTK4Yy99Y6ZLFMaaPsT90RgSNXBn8fQiLemUK
+         Na+YIBF1+phvg6ZRgTSRjWrgnmQuFyhKzVI+t9WqmjWubB3VyN+itPnVH8U8LzHHoLJy
+         DwTuRN1vk9jmT78vGCk/aCzFq0cIPzE3JXUcyc1pCR1U2PZ9zY71ubAfM40Ec057UXH9
+         fPJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ygrJIf/V9fcQY2vP6K2WakhuD9/WSpQGkCDpBWvrw+w=;
+        b=lFzAXeUmnq1qMYWoQVvSDpYB6SoCO2izUZKgRpf3iBB5N6XVIhhFM0zt+5jltNs1qD
+         eZUNKLQ7Zlb16uNdE6yifRMMDXZVPqklWSqMdHWwYuHq9zxvuDVwT3sy/2NHdEe9Szh+
+         43tfWqzJNb2E2UNZAmiTySUt+nX7xxNymbGxOYyXfKEKf0nW5+2AuH4FnfYzqxs53+g+
+         Jqp/ESoxksyVCMzNpjoQF2fEShbSVRRXJyhEV8ZpuTXGA/qBdv1JX2HFDEYmdg0A9pHx
+         3kYYDUr6KAJmDc7tGuV0ZTht0jHuLjE66vU2Pikv4PZXLl+E7wZTJgmTvNtY5XHipt3C
+         Zp3Q==
+X-Gm-Message-State: AOAM5324PBWy7JlmHlD/CYJ61Sekr8KmVlGYOAWE5vwv3ZA+txBuJeCf
+        U3iDgXGG56zWIRSpuwvIanLL5TSg6Yc=
+X-Google-Smtp-Source: ABdhPJxtZe6bht9xG+8tf8UzqMKs8TtIiE9m2K+EFRJ/KFv/dySA1PlH1NY1AaBwGzX8kw6hUWSDxg==
+X-Received: by 2002:a17:906:2785:: with SMTP id j5mr883728ejc.527.1611002804082;
+        Mon, 18 Jan 2021 12:46:44 -0800 (PST)
+Received: from [192.168.178.40] (ipbcc06d06.dynamic.kabel-deutschland.de. [188.192.109.6])
+        by smtp.gmail.com with ESMTPSA id v9sm1066417ejd.92.2021.01.18.12.46.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 12:46:43 -0800 (PST)
+Subject: Re: [PATCH v6 1/4] sgl_alloc_order: remove 4 GiB limit, sgl_free()
+ warning
+To:     dgilbert@interlog.com, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        jejb@linux.vnet.ibm.com, ddiss@suse.de, bvanassche@acm.org
+References: <20210118163006.61659-1-dgilbert@interlog.com>
+ <20210118163006.61659-2-dgilbert@interlog.com>
+ <20210118182854.GJ4605@ziepe.ca>
+ <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
+From:   Bodo Stroesser <bostroesser@gmail.com>
+Message-ID: <abee94bf-a6ec-7659-21d2-4253582a1730@gmail.com>
+Date:   Mon, 18 Jan 2021 21:46:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9868 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
- phishscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101180123
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9868 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101180124
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If we lose the session then relogin, but the new cmdsn window has
-shrunk (due to something like an admin changing a setting) we will
-have the old exp/max_cmdsn values and will never be able to update
-them. For example, max_cmdsn would be 64, but if on the target the
-user set the window to be smaller then the target could try to return
-the max_cmdsn as 32. We will see that new max_cmdsn in the rsp but
-because it's lower than the old max_cmdsn when the window was larger
-we will not update it.
+On 18.01.21 21:08, Douglas Gilbert wrote:
+> On 2021-01-18 1:28 p.m., Jason Gunthorpe wrote:
+>> On Mon, Jan 18, 2021 at 11:30:03AM -0500, Douglas Gilbert wrote:
+>>
+>>> After several flawed attempts to detect overflow, take the fastest
+>>> route by stating as a pre-condition that the 'order' function argument
+>>> cannot exceed 16 (2^16 * 4k = 256 MiB).
+>>
+>> That doesn't help, the point of the overflow check is similar to
+>> overflow checks in kcalloc: to prevent the routine from allocating
+>> less memory than the caller might assume.
+>>
+>> For instance ipr_store_update_fw() uses request_firmware() (which is
+>> controlled by userspace) to drive the length argument to
+>> sgl_alloc_order(). If userpace gives too large a value this will
+>> corrupt kernel memory.
+>>
+>> So this math:
+>>
+>>        nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + 
+>> order);
+> 
+> But that check itself overflows if order is too large (e.g. 65).
+> A pre-condition says that the caller must know or check a value
+> is sane, and if the user space can have a hand in the value passed
+> the caller _must_ check pre-conditions IMO. A pre-condition also
+> implies that the function's implementation will not have code to
+> check the pre-condition.
+> 
+> My "log of both sides" proposal at least got around the overflowing
+> left shift problem. And one reviewer, Bodo Stroesser, liked it.
 
-So this patch has us reset the windown values during session
-cleanup so they can be updated after a new login.
+I added my Reviewed-by after you added a working check of nent overflow.
+I did not oppose to the usage of ilog() there. But now I think Jason is
+right that indeed ilog usage is a bit 'indirect'.
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
----
- drivers/scsi/libiscsi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Anyway I still think, there should be a check for nent overflow.
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 195006a08e0d..be29837372c2 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -3271,6 +3271,13 @@ int iscsi_conn_bind(struct iscsi_cls_session *cls_session,
- 		session->leadconn = conn;
- 	spin_unlock_bh(&session->frwd_lock);
- 
-+	/*
-+	 * The target could have reduced it's window size between logins, so
-+	 * we have to reset max/exp cmdsn so we can see the new values.
-+	 */
-+	spin_lock_bh(&session->back_lock);
-+	session->max_cmdsn = session->exp_cmdsn = session->cmdsn + 1;
-+	spin_unlock_bh(&session->back_lock);
- 	/*
- 	 * Unblock xmitworker(), Login Phase will pass through.
- 	 */
--- 
-2.25.1
-
+> 
+>> Needs to be checked, add a precondition to order does not help. I
+>> already proposed a straightforward algorithm you can use.
+> 
+> It does help, it stops your proposed check from being flawed :-)
+> 
+> Giving a false sense of security seems more dangerous than a
+> pre-condition statement IMO. Bart's original overflow check (in
+> the mainline) limits length to 4GB (due to wrapping inside a 32
+> bit unsigned).
+> 
+> Also note there is another pre-condition statement in that function's
+> definition, namely that length cannot be 0.
+> 
+> So perhaps you, Bart Van Assche and Bodo Stroesser, should compare
+> notes and come up with a solution that you are _all_ happy with.
+> The pre-condition works for me and is the fastest. The 'length'
+> argument might be large, say > 1 GB [I use 1 GB in testing but
+> did try 4GB and found the bug I'm trying to fix] but having
+> individual elements greater than say 32 MB each does not
+> seem very practical (and fails on the systems that I test with).
+> In my testing the largest element size is 4 MB.
+> 
+> 
+> Doug Gilbert
+> 
