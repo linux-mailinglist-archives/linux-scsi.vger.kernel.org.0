@@ -2,138 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E152FABD1
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C273B2FAC9A
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 22:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394365AbhARUsa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 15:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390629AbhARUrZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:47:25 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C7FC0613C1;
-        Mon, 18 Jan 2021 12:46:45 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ox12so1207764ejb.2;
-        Mon, 18 Jan 2021 12:46:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ygrJIf/V9fcQY2vP6K2WakhuD9/WSpQGkCDpBWvrw+w=;
-        b=GfNJd8Bome7/jm5mGMRJq/2PGTWvhg5ZCKz66AxPNV2hoSI9nhWQm5G+Q13ESwlBTb
-         Q+fotg9Nu3aoV/y5K56QiFVnmB/x97U6700/bpPqaMsj4xWMFLii82VaQNIx4qUn6uv6
-         lmrgiPS3YEUb+oXg39q5lAS3mAO8lD5BTK4Yy99Y6ZLFMaaPsT90RgSNXBn8fQiLemUK
-         Na+YIBF1+phvg6ZRgTSRjWrgnmQuFyhKzVI+t9WqmjWubB3VyN+itPnVH8U8LzHHoLJy
-         DwTuRN1vk9jmT78vGCk/aCzFq0cIPzE3JXUcyc1pCR1U2PZ9zY71ubAfM40Ec057UXH9
-         fPJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ygrJIf/V9fcQY2vP6K2WakhuD9/WSpQGkCDpBWvrw+w=;
-        b=lFzAXeUmnq1qMYWoQVvSDpYB6SoCO2izUZKgRpf3iBB5N6XVIhhFM0zt+5jltNs1qD
-         eZUNKLQ7Zlb16uNdE6yifRMMDXZVPqklWSqMdHWwYuHq9zxvuDVwT3sy/2NHdEe9Szh+
-         43tfWqzJNb2E2UNZAmiTySUt+nX7xxNymbGxOYyXfKEKf0nW5+2AuH4FnfYzqxs53+g+
-         Jqp/ESoxksyVCMzNpjoQF2fEShbSVRRXJyhEV8ZpuTXGA/qBdv1JX2HFDEYmdg0A9pHx
-         3kYYDUr6KAJmDc7tGuV0ZTht0jHuLjE66vU2Pikv4PZXLl+E7wZTJgmTvNtY5XHipt3C
-         Zp3Q==
-X-Gm-Message-State: AOAM5324PBWy7JlmHlD/CYJ61Sekr8KmVlGYOAWE5vwv3ZA+txBuJeCf
-        U3iDgXGG56zWIRSpuwvIanLL5TSg6Yc=
-X-Google-Smtp-Source: ABdhPJxtZe6bht9xG+8tf8UzqMKs8TtIiE9m2K+EFRJ/KFv/dySA1PlH1NY1AaBwGzX8kw6hUWSDxg==
-X-Received: by 2002:a17:906:2785:: with SMTP id j5mr883728ejc.527.1611002804082;
-        Mon, 18 Jan 2021 12:46:44 -0800 (PST)
-Received: from [192.168.178.40] (ipbcc06d06.dynamic.kabel-deutschland.de. [188.192.109.6])
-        by smtp.gmail.com with ESMTPSA id v9sm1066417ejd.92.2021.01.18.12.46.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jan 2021 12:46:43 -0800 (PST)
-Subject: Re: [PATCH v6 1/4] sgl_alloc_order: remove 4 GiB limit, sgl_free()
- warning
-To:     dgilbert@interlog.com, Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        jejb@linux.vnet.ibm.com, ddiss@suse.de, bvanassche@acm.org
-References: <20210118163006.61659-1-dgilbert@interlog.com>
- <20210118163006.61659-2-dgilbert@interlog.com>
- <20210118182854.GJ4605@ziepe.ca>
- <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
-From:   Bodo Stroesser <bostroesser@gmail.com>
-Message-ID: <abee94bf-a6ec-7659-21d2-4253582a1730@gmail.com>
-Date:   Mon, 18 Jan 2021 21:46:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2394607AbhARV0y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 16:26:54 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:54900 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389173AbhARKLJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 05:11:09 -0500
+From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1610964605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zi87JU1wtYK7u/9EdBeQmfwuSvWpL6Dl6md8k/4q3TA=;
+        b=vmmHzRErECNDY4i8p0Uw2lqTGSxAzYWkTqg8U/HTNsEkGRDsPM6ORRmQBUBt4rbPg0b9ap
+        hrKvpr6n9ciCKpwZ/SmSorh76TqxmXnRS3wS/8adasC5vQzs5RgZeQg6IiwyOHKD3Pz8LO
+        aREoYZ1hFodaFCqtaGd5nJxOxzeyhf0MbaAAOUDlcX+vQf6jzDU4wwg89S0o7eQ6j9Ft8h
+        xkvz8Bt66ymeTys7kkVIceza7e2/HSDKAuZDW5gLEAUSvwh4KkPVvekGEYqi1S8B+wbijB
+        bqxBBOMBcSNsdBvHagkrit8fs4L0meLz+w2BqRbzZ/sBHkVLMPeVmMgBr4zMwg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1610964605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zi87JU1wtYK7u/9EdBeQmfwuSvWpL6Dl6md8k/4q3TA=;
+        b=TqGab2doXTK6ZVTCop+70ObWN/mZW7jLhxlq0+eklJvJ5OUHqE+rRZPJU78FC9ZtHZMOOP
+        N/OEVOE5UgcpEgAQ==
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        John Garry <john.garry@huawei.com>,
+        Jason Yan <yanaijie@huawei.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>
+Cc:     linux-scsi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>
+Subject: [PATCH v3 01/19] Documentation: scsi: libsas: Remove notify_ha_event()
+Date:   Mon, 18 Jan 2021 11:09:37 +0100
+Message-Id: <20210118100955.1761652-2-a.darwish@linutronix.de>
+In-Reply-To: <20210118100955.1761652-1-a.darwish@linutronix.de>
+References: <20210118100955.1761652-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 18.01.21 21:08, Douglas Gilbert wrote:
-> On 2021-01-18 1:28 p.m., Jason Gunthorpe wrote:
->> On Mon, Jan 18, 2021 at 11:30:03AM -0500, Douglas Gilbert wrote:
->>
->>> After several flawed attempts to detect overflow, take the fastest
->>> route by stating as a pre-condition that the 'order' function argument
->>> cannot exceed 16 (2^16 * 4k = 256 MiB).
->>
->> That doesn't help, the point of the overflow check is similar to
->> overflow checks in kcalloc: to prevent the routine from allocating
->> less memory than the caller might assume.
->>
->> For instance ipr_store_update_fw() uses request_firmware() (which is
->> controlled by userspace) to drive the length argument to
->> sgl_alloc_order(). If userpace gives too large a value this will
->> corrupt kernel memory.
->>
->> So this math:
->>
->>        nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + 
->> order);
-> 
-> But that check itself overflows if order is too large (e.g. 65).
-> A pre-condition says that the caller must know or check a value
-> is sane, and if the user space can have a hand in the value passed
-> the caller _must_ check pre-conditions IMO. A pre-condition also
-> implies that the function's implementation will not have code to
-> check the pre-condition.
-> 
-> My "log of both sides" proposal at least got around the overflowing
-> left shift problem. And one reviewer, Bodo Stroesser, liked it.
+The ->notify_ha_event() hook has long been removed from the libsas event
+interface.
 
-I added my Reviewed-by after you added a working check of nent overflow.
-I did not oppose to the usage of ilog() there. But now I think Jason is
-right that indeed ilog usage is a bit 'indirect'.
+Remove it from documentation.
 
-Anyway I still think, there should be a check for nent overflow.
+Fixes: 042ebd293b86 ("scsi: libsas: kill useless ha_event and do some cleanup")
+Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+Reviewed-by: John Garry <john.garry@huawei.com>
+Cc: stable@vger.kernel.org
+---
+ Documentation/scsi/libsas.rst | 1 -
+ 1 file changed, 1 deletion(-)
 
-> 
->> Needs to be checked, add a precondition to order does not help. I
->> already proposed a straightforward algorithm you can use.
-> 
-> It does help, it stops your proposed check from being flawed :-)
-> 
-> Giving a false sense of security seems more dangerous than a
-> pre-condition statement IMO. Bart's original overflow check (in
-> the mainline) limits length to 4GB (due to wrapping inside a 32
-> bit unsigned).
-> 
-> Also note there is another pre-condition statement in that function's
-> definition, namely that length cannot be 0.
-> 
-> So perhaps you, Bart Van Assche and Bodo Stroesser, should compare
-> notes and come up with a solution that you are _all_ happy with.
-> The pre-condition works for me and is the fastest. The 'length'
-> argument might be large, say > 1 GB [I use 1 GB in testing but
-> did try 4GB and found the bug I'm trying to fix] but having
-> individual elements greater than say 32 MB each does not
-> seem very practical (and fails on the systems that I test with).
-> In my testing the largest element size is 4 MB.
-> 
-> 
-> Doug Gilbert
-> 
+diff --git a/Documentation/scsi/libsas.rst b/Documentation/scsi/libsas.rst
+index 7216b5d25800..f9b77c7879db 100644
+--- a/Documentation/scsi/libsas.rst
++++ b/Documentation/scsi/libsas.rst
+@@ -189,7 +189,6 @@ num_phys
+ The event interface::
+ 
+ 	/* LLDD calls these to notify the class of an event. */
+-	void (*notify_ha_event)(struct sas_ha_struct *, enum ha_event);
+ 	void (*notify_port_event)(struct sas_phy *, enum port_event);
+ 	void (*notify_phy_event)(struct sas_phy *, enum phy_event);
+ 
+-- 
+2.30.0
+
