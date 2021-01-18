@@ -2,52 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 552942FABEC
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C3C2FABE3
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394333AbhARUmT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 15:42:19 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:38060 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437942AbhARUlK (ORCPT
+        id S2438017AbhARUnD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 15:43:03 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:47464 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437944AbhARUlK (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:41:10 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IKdajE115903;
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IKdUBN185661;
         Mon, 18 Jan 2021 20:40:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2020-01-29; bh=U3FQH8ZHkbiS8ocDTrfmXg40L6zO5AbRj3cIYu5ACdw=;
- b=WUXZ3LDgn8VDXpNorf5OiY8cUlY4Yvh/+NGhM/NeMQ9KkV4nN853SQkgpohd6+kzD3hG
- /KaP6+kzDq7mxQrae1MtXRN7wjtRmnwHPsaDDFI+cCXqGUJqr8A5vyv/aC/kRXNYC+Im
- R+KulecHTiFtvkS16iZOdhqP15awUWgqfIcwLkmhSgSVPv2kMOcrL09nAQXz7CehFAy5
- cQhkQZek6dbiGPXMUWkzWY+ubV/Zb+EtAz6nqi3jgWjXJrP9AN9WZCjlnDZRAn9ZxcrL
- tncmtKAw8oDM+8CPE2l3bswv7CYTnj5+IVTm2+4LGJ09Y3SP2c/Kf7I8OoyehOKGpxya FQ== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=Ug42sge7obdQ9l3QP/YnwoHy2xUqve80OzhxVRG6CFc=;
+ b=JTr9U2MRoXi1oEshFrCHp1J+5lacbKgj3g1a8rAgEV7FxrFH71cSdgvqtAzAiQTAYJVf
+ oybpbFfEFtQVJMUEw1vw02clkhNQRk10QIDvDwlvGweyrUiewQiaFzKypm73yirsgtfF
+ EpVRvqZag6YzwdbznDcZP87dlDUnTziGNks/wGU4XwUFlsigNDF36dv2X+f1OO2Um6MV
+ TkG/Tk9IWUzrkSEYOH7goy1ua6uExMLBpdKMz8fk09v/areRgPDWUjQz33piLyp1SEBz
+ QYQjLhbrEc3JfstlTjH7H1XvFz5nzqD++Ied9Lr8MLvxHQHv8kahdJ/MpvOj/ARab6Bc Og== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 363nnaer6e-1
+        by userp2130.oracle.com with ESMTP id 363xyhnxmr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jan 2021 20:40:11 +0000
+        Mon, 18 Jan 2021 20:40:10 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IKbrCI072057;
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IKbrLp072082;
         Mon, 18 Jan 2021 20:38:10 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 3649wqetdt-1
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 3649wqetdv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 18 Jan 2021 20:38:10 +0000
 Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 10IKYfoR021780;
-        Mon, 18 Jan 2021 20:34:43 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10IKYfG3026297;
+        Mon, 18 Jan 2021 20:34:42 GMT
 Received: from localhost.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 18 Jan 2021 12:34:40 -0800
+        with ESMTP ; Mon, 18 Jan 2021 12:34:41 -0800
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
 Cc:     lutianxiong@huawei.com, linfeilong@huawei.com,
         liuzhiqiang26@huawei.com, haowenchao@huawei.com
-Subject: [PATCH 0/7] iscsi fixes/cleanups
-Date:   Mon, 18 Jan 2021 14:34:23 -0600
-Message-Id: <20210118203430.4921-1-michael.christie@oracle.com>
+Subject: [PATCH 1/7] libiscsi: fix iscsi_prep_scsi_cmd_pdu error handling
+Date:   Mon, 18 Jan 2021 14:34:24 -0600
+Message-Id: <20210118203430.4921-2-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210118203430.4921-1-michael.christie@oracle.com>
+References: <20210118203430.4921-1-michael.christie@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9868 signatures=668683
@@ -56,36 +59,50 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlog
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2101180124
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9868 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 spamscore=0
- mlxlogscore=999 clxscore=1015 bulkscore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501 spamscore=0
+ mlxscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1015
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101180124
+ definitions=main-2101180125
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-These patches were made over Martin's 5.12 branches because they are
-mostly fixes, but there's also one cleanup that one of the fixes is
-built on top, so it's probably more appropriate for 5.12 since its
-later in the cycle.
+If iscsi_prep_scsi_cmd_pdu fails we try to add it back to the
+cmdqueue, but we leave it partially setup. We don't have functions
+that can undo the pdu and init task setup. We only have cleanup_task
+which can cleanup both parts. So this has us just fail the cmd and
+go through the standard cleanup routine and then have scsi-ml retry
+it like is done when it fails in the queuecommand path.
 
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+---
+ drivers/scsi/libiscsi.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-V4:
-- Add patch:
-[PATCH 4/7] libiscsi: fix iscsi host workq destruction
-to fix an issue where the user might only call iscsi_host_alloc then
-iscsi_host_free and that was leaving the iscsi workqueue running.
-- Add check for if a driver were to set can_queue to ISCSI_MGMT_CMDS_MAX
-or less.
-V3:
-- Add some patches for issues found while testing.
-	- session queue depth was stuck at 128
-	- cmd window could not be detected when session was relogged in.
-- Patch "libiscsi: drop taskqueuelock" had a bug where we did not
-disable bhs and during xmit thread suspension leaked the current task.
-V2:
-- Take back_lock when looping over running cmds in iscsi_eh_cmd_timed_out
-in case those complete while we are accessing them.
-
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index 4e668aafbcca..cee1dbaa1b93 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -1532,14 +1532,9 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
+ 		}
+ 		rc = iscsi_prep_scsi_cmd_pdu(conn->task);
+ 		if (rc) {
+-			if (rc == -ENOMEM || rc == -EACCES) {
+-				spin_lock_bh(&conn->taskqueuelock);
+-				list_add_tail(&conn->task->running,
+-					      &conn->cmdqueue);
+-				conn->task = NULL;
+-				spin_unlock_bh(&conn->taskqueuelock);
+-				goto done;
+-			} else
++			if (rc == -ENOMEM || rc == -EACCES)
++				fail_scsi_task(conn->task, DID_IMM_RETRY);
++			else
+ 				fail_scsi_task(conn->task, DID_ABORT);
+ 			spin_lock_bh(&conn->taskqueuelock);
+ 			continue;
+-- 
+2.25.1
 
