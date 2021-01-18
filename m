@@ -2,50 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FE82FAB1E
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 271592FAB4D
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437751AbhARUMw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 15:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S2393961AbhARUVd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 15:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437838AbhARULk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:11:40 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE79C0613D6;
-        Mon, 18 Jan 2021 12:10:59 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id rv9so6598917ejb.13;
-        Mon, 18 Jan 2021 12:10:59 -0800 (PST)
+        with ESMTP id S2389149AbhARUNY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:13:24 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEFC061574;
+        Mon, 18 Jan 2021 12:12:44 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id 6so25400151ejz.5;
+        Mon, 18 Jan 2021 12:12:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=fRVeJFHSbx0u4PcEewve+lvBzm+Q5dzCsl6CUEyzawk=;
-        b=n7+6hKeJB/Fz3XHtf81zow6s4OMrwMLi9QFbuO1utYopq5HGH0Rlhi1y6SIBTKMQiP
-         +enK3OXDKTbs6oXmI9VaV0G8KIWfIQxoTNKWkyKSyourTyYWQIulJrhuznl/vym/cjN3
-         57GxUJv9HBBbQ7gkQI+IDd+DNdAOlsHg3I4i0pxhOYJwYv/cvQ3oGaclj5JD7sT61uf4
-         ARHK/nFpLFo3Kt3v0vOjlXI8om+HN6mzGC/9WhXMJ16QxHUPV0cMS73mAhZmVQ5PACFG
-         Mt5AF+/SytLG2fT18/Q4P3IZr6mGoPcAxI6s5d2ooNxbglb9beyiqrphKJsf15+o9e81
-         QiTA==
+        h=from:to:cc:subject:date:message-id;
+        bh=gH+4Frr0s9M4PbdHZalRxKsdYMgIkqyHipMQ4MN8TGQ=;
+        b=n82MKzZYTlqux0ENwULSnC03Od6KoHbR+sFrRCVvhYKTxSRkSEShhohkhJnq6hzBSP
+         c9jWG6DbhxziIoY4xVq/xHS/6LC+ZwqXOjKv4r9Do4zvfniGCgO+UfUuvimDRQJ9HMqz
+         VG+dn+IcYYWC16L/jtDB+0TQmRon9u7Y5hSDLhhY5Q8PwngG5m2SrAOKaS/ChMTcfiBq
+         3kc2MyYdUkdvzEaNQNnkj96P1zVdsquV7hUlmqn5XpSY+vPzPd67ZX7Ax9/JkF09A2Jc
+         hkmNe8tAm7oA2CfzEzb45U3R/ISXGUzHRVpAobFuFzy2GauPTV0C725igZEqMQKh2bCA
+         mJTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=fRVeJFHSbx0u4PcEewve+lvBzm+Q5dzCsl6CUEyzawk=;
-        b=RR8z6BlpIjPJQbidpE7mw49dueSmk8uL86poLR90Futkz6qw0w+/UkeZqvkKSrjaCN
-         NXbL6SeU8FQ4svxFejBWyubeKXTymQ2sL3bWSJ47jW82XJomjKkhRuQNlybkOjUq9ej/
-         iSFTek+8NQ2yH7d/ByjJHK6/TqktwiLyBFFRSYkjO7jXEQaOSFGcEVF384vZl6y05ZMp
-         Tuy1CFK8dEP45u3XeGkGObG05s9c7UXP8upILWv71lmAmTs/V7ywmvtJL+O1qjOPLsF5
-         U38FMsaVpFuKz7bsX0NU/AqxazTnRkTWZKxj5cWSWBZ7mJa72ruo9lv2FVCst4pNEOj/
-         dFkw==
-X-Gm-Message-State: AOAM531dKhySgsYg3LvUkqhKoX45PuPkr1JEmqMJEAUiyX0u3hey0FVT
-        gU6fr07YM4089BEQLPlwvcw=
-X-Google-Smtp-Source: ABdhPJwk8R8GnHh0gWYN7oDsd3SWhLTBfFUCuF2rToevpkMPR2/5z6Ctv6aOJuFgrVmTC7drsfJJSQ==
-X-Received: by 2002:a17:907:7356:: with SMTP id dq22mr882714ejc.318.1611000658457;
-        Mon, 18 Jan 2021 12:10:58 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gH+4Frr0s9M4PbdHZalRxKsdYMgIkqyHipMQ4MN8TGQ=;
+        b=Q+gM+YdvQS/ngAGn7EqPwJOaHBAL0QiOboMxH8cmRLUAqM93I94ZnNM4zS/2+3PwUj
+         lUmedCeSV+0txcwuv/uLdHrEtfCr+sM2wxb2ku1UsYUliRbIhOCMQIxVCl3/m80lv4hW
+         4TsN+HsSD2O9dUia+FPM2GuYnJDhgjAQJ5b9ij4uOzjgUuBa8s3//IME+PqlNY28syh/
+         5gz+wQgSsCpOhdJLI8WwiELFXEhJI80t8H+uyuI/l4gdEaWNkLA9i2E8D2bOAOM7FN1A
+         wjCc9seX/JxjObAEaYt7ka0fVh8JwDipMPXXbPjg5AJpmR4673wMBOr1JPxcGXBDw84w
+         fOcA==
+X-Gm-Message-State: AOAM532nXcgUtOH3lhVpQfoORT8o3ZuEXKOJ7TqpaT79bOJzQzh+gl+e
+        6TrivR6m425fdC2ATzyDkXo=
+X-Google-Smtp-Source: ABdhPJzmTvtHPN3ZUm421f9+5SSsCeltpdp+mjww6Z2gVgYMWzt5FMLnRRg9EqUg1Ruuva1QwZiaLw==
+X-Received: by 2002:a17:906:2e04:: with SMTP id n4mr850802eji.289.1611000763080;
+        Mon, 18 Jan 2021 12:12:43 -0800 (PST)
 Received: from localhost.localdomain (ip5f5bee1b.dynamic.kabel-deutschland.de. [95.91.238.27])
-        by smtp.gmail.com with ESMTPSA id qh13sm3972543ejb.33.2021.01.18.12.10.57
+        by smtp.gmail.com with ESMTPSA id bm12sm9992081ejb.117.2021.01.18.12.12.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jan 2021 12:10:58 -0800 (PST)
+        Mon, 18 Jan 2021 12:12:42 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -53,125 +52,37 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 6/6] scsi: ufs: Cleanup WB buffer flush toggle implementation
-Date:   Mon, 18 Jan 2021 21:10:39 +0100
-Message-Id: <20210118201039.2398-7-huobean@gmail.com>
+Subject: [PATCH] scsi: ufs: delete redundant if statement in ufshcd_intr()
+Date:   Mon, 18 Jan 2021 21:12:33 +0100
+Message-Id: <20210118201233.3043-1-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210118201039.2398-1-huobean@gmail.com>
-References: <20210118201039.2398-1-huobean@gmail.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Delete ufshcd_wb_buf_flush_enable() and ufshcd_wb_buf_flush_disable(),
-move the implementation into ufshcd_wb_toggle_flush().
+Once going into while-do loop, intr_status is already true,
+this if-statement is redundant, remove it.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Reviewed-by: Can Guo <cang@codeaurora.org>
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 66 +++++++++++++--------------------------
- 1 file changed, 21 insertions(+), 45 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 9f857af3766a..10bee49ccbc8 100644
+index 9b387d6a2a25..5c6ee9394af3 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -247,10 +247,8 @@ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
- static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
- 					 struct ufs_vreg *vreg);
- static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
--static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba);
--static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba);
- static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
--static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
-+static inline int ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
- 
-@@ -5460,60 +5458,38 @@ static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
- 				index, NULL);
- }
- 
--static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
--{
--	if (hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL)
--		return;
--
--	if (enable)
--		ufshcd_wb_buf_flush_enable(hba);
--	else
--		ufshcd_wb_buf_flush_disable(hba);
--
--}
--
--static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba)
-+static inline int ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 	u8 index;
-+	enum query_opcode opcode;
- 
--	if (!ufshcd_is_wb_allowed(hba) || hba->dev_info.wb_buf_flush_enabled)
-+	if (hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL)
- 		return 0;
- 
--	index = ufshcd_wb_get_query_index(hba);
--	ret = ufshcd_query_flag_retry(hba, UPIU_QUERY_OPCODE_SET_FLAG,
--				      QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN,
--				      index, NULL);
--	if (ret)
--		dev_err(hba->dev, "%s WB - buf flush enable failed %d\n",
--			__func__, ret);
--	else
--		hba->dev_info.wb_buf_flush_enabled = true;
--
--	dev_dbg(hba->dev, "WB - Flush enabled: %d\n", ret);
--	return ret;
--}
--
--static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba)
--{
--	int ret;
--	u8 index;
--
--	if (!ufshcd_is_wb_allowed(hba) || !hba->dev_info.wb_buf_flush_enabled)
-+	if (!ufshcd_is_wb_allowed(hba) ||
-+	    hba->dev_info.wb_buf_flush_enabled == enable)
- 		return 0;
- 
-+	if (enable)
-+		opcode = UPIU_QUERY_OPCODE_SET_FLAG;
-+	else
-+		opcode = UPIU_QUERY_OPCODE_CLEAR_FLAG;
-+
- 	index = ufshcd_wb_get_query_index(hba);
--	ret = ufshcd_query_flag_retry(hba, UPIU_QUERY_OPCODE_CLEAR_FLAG,
--				      QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN,
--				      index, NULL);
-+	ret = ufshcd_query_flag_retry(hba, opcode,
-+				      QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN, index,
-+				      NULL);
- 	if (ret) {
--		dev_warn(hba->dev, "%s: WB - buf flush disable failed %d\n",
--			 __func__, ret);
--	} else {
--		hba->dev_info.wb_buf_flush_enabled = false;
--		dev_dbg(hba->dev, "WB - Flush disabled: %d\n", ret);
-+		dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
-+			enable ? "enable" : "disable", ret);
-+		goto out;
- 	}
- 
-+	hba->dev_info.wb_buf_flush_enabled = enable;
-+
-+	dev_dbg(hba->dev, "WB-Buf Flush %s\n", enable ? "enabled" : "disabled");
-+out:
- 	return ret;
- }
+@@ -6317,8 +6317,7 @@ static irqreturn_t ufshcd_intr(int irq, void *__hba)
+ 	while (intr_status && retries--) {
+ 		enabled_intr_status =
+ 			intr_status & ufshcd_readl(hba, REG_INTERRUPT_ENABLE);
+-		if (intr_status)
+-			ufshcd_writel(hba, intr_status, REG_INTERRUPT_STATUS);
++		ufshcd_writel(hba, intr_status, REG_INTERRUPT_STATUS);
+ 		if (enabled_intr_status)
+ 			retval |= ufshcd_sl_intr(hba, enabled_intr_status);
  
 -- 
 2.17.1
