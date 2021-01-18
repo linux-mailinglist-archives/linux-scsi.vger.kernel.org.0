@@ -2,51 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606272FAB16
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA152FAB20
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437842AbhARULm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 15:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S2437903AbhARUM7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 15:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437857AbhARULa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:11:30 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAE6C061573;
-        Mon, 18 Jan 2021 12:10:50 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id s11so11670823edd.5;
-        Mon, 18 Jan 2021 12:10:49 -0800 (PST)
+        with ESMTP id S2437858AbhARULc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:11:32 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43691C061757;
+        Mon, 18 Jan 2021 12:10:52 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id p22so18940427edu.11;
+        Mon, 18 Jan 2021 12:10:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J2lGSje/t96HRnhu7U2uaaKspvjeI4RxTKrY+0OroNo=;
-        b=HCo5aaSUvJDkL5g8BT99WGeWQTYwt9Km77uI5q1/PdWgXrDRWwCHXPmS2oYb5lGgkP
-         xV3QFvYD4JiZUPpMFqGmsduB9yg+GfwiJl/FurnaWhdmjKZPDVT0wiNGDak4gr0EdLSE
-         0NS5RAhptwI5CzeWIRoOzku8t5D70rOevZMcbjnjRAEFiWsUiCJrB/+yHas0/eptmTj2
-         v/MJ1yG2VvPAthHjsqsuImzuS8aKeESsSoLdvEBEDe/Y7GewcgmlvwH8YC3N/S0DdgJJ
-         lWSSfJOPF2Yk8HVqiq241CPtK5CHBY+pUmIFftt3b4YnlkrsypgCbPt3xHzpp2odhNx8
-         JWyQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=qswzafYry+G5B5UE7dVKcDDvMag33fJ8LeQJQxtybQk=;
+        b=JtOSolS9NclYRLpUpHvMyLGiJH27+PhY/tBJLEzk78LGNq3niIBA7VpXPeEYbqj0UZ
+         aRsozWxIgRQy2kINFEE+oywG8Pv3UrcsQUCPbNenOEg449wOhRWdLx4d5Ec0effzvWbs
+         Qk3hmL+3HRJzLD6CSrlkrj6JcKCN9NqjKwKgwHqcBe7EphejSJMIgRE2yy/A6vMshUnA
+         BW/P7pZoaj51Q3JXhhdfz9yDCD2rgxcAYHNTSPMwflp9i0yiV8AGJBJ3tOiM1qQvmlZ6
+         B48/XNeaSG0ojygeC5ZjTAE/PbDVPbCjz+MyHQEECB6/RlRfEjrKn3b1EkJsvjOwAZjm
+         B2NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J2lGSje/t96HRnhu7U2uaaKspvjeI4RxTKrY+0OroNo=;
-        b=sx2InV28uLcN3+NbAMX3PH4V2EJLI8DoY3CV3Q8PpJTrUxyCn1+uNCHX2i2gunQUK2
-         TZSl2oPgoq3bs93LZ7JX5ZN5KX55SyxpUDjBIZOhM7LnhTutk9N/aZ3ca8KlE/Qm4DVj
-         K8rarAszdDRRnKs1nsFjD11+D11Uv4pXcMRTCiYGzgrMeW7E3bEYhCSqfhVaUhJJXhnA
-         OQCygXIMk4m17uOOrHx1AjzwuR6U/Sh4fwrqCy4MzIrf64xQUYHiaPFoT18vVF6rmszA
-         COx+L92Cbaa612y4J79rAvM9YtVsgrCSRjMaRWeEUCQnYTA5FpO0v/QMT8xcxAn+b+7n
-         eTUg==
-X-Gm-Message-State: AOAM532DmGlF74yLFfzMxxCeiV9Ip7I0thRK0yn4GWScQRXYo+SdBNCh
-        PVlG9rLR+PkQmRZHK51AS9Q=
-X-Google-Smtp-Source: ABdhPJwsPGDVkoWyMaKh4k/5jFkQDyIAlKMitx5et0e6NS019tRR/reJIBp1FbTZaER81rPV2ArwPA==
-X-Received: by 2002:a05:6402:70a:: with SMTP id w10mr878192edx.184.1611000648770;
-        Mon, 18 Jan 2021 12:10:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=qswzafYry+G5B5UE7dVKcDDvMag33fJ8LeQJQxtybQk=;
+        b=Nt+lQsClPOaurinKZ8Vu74HYgc7Wr4DzK0yTcyC1E0NFAA3UkLyPS413feZpogJdzU
+         vcXke8ioAXQAiMvoNqbBhmvv/DFgpdAtBl3fflxCZ/JFzLNfUJncN+Ha1EFJE+6KYzSq
+         QdHA/G+gOPmsiuYFXekSF2pEMPmX4uicTrHgk3whD8+3aKwNEPTt81AYSKURfB1v+Qr2
+         V1hSMi/Hdzf/4rlOmMHxSfXZO0JGcQ9ERvmIu9l+RIQ/WYEuOGMKFIuj/06IWYdBKhF+
+         mT0uEIaJA4Gu1Cad4P6cTkv3e46h9lJZpfycjuZO/MSD5lfS95VjxD44BStOyfLiMHfV
+         sJqg==
+X-Gm-Message-State: AOAM5312w4SJXwuc72B1Jj8L4tdUSDUDW6jVP2V97C5REk/iTpy/dk23
+        B7MjRYk2iu3gQqdunM17OOU=
+X-Google-Smtp-Source: ABdhPJynLmX+bZFHMlkl+uBTtadEamev70AL6CWzy7J6gz2LvJsDd5xp1UExyaatiPDRjj0GPHO3VA==
+X-Received: by 2002:a05:6402:34c3:: with SMTP id w3mr868998edc.3.1611000650870;
+        Mon, 18 Jan 2021 12:10:50 -0800 (PST)
 Received: from localhost.localdomain (ip5f5bee1b.dynamic.kabel-deutschland.de. [95.91.238.27])
-        by smtp.gmail.com with ESMTPSA id qh13sm3972543ejb.33.2021.01.18.12.10.47
+        by smtp.gmail.com with ESMTPSA id qh13sm3972543ejb.33.2021.01.18.12.10.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jan 2021 12:10:48 -0800 (PST)
+        Mon, 18 Jan 2021 12:10:50 -0800 (PST)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -54,63 +53,137 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 0/6] Several changes for UFS WriteBooster
-Date:   Mon, 18 Jan 2021 21:10:33 +0100
-Message-Id: <20210118201039.2398-1-huobean@gmail.com>
+Subject: [PATCH v6 1/6] scsi: ufs: Add "wb_on" sysfs node to control WB on/off
+Date:   Mon, 18 Jan 2021 21:10:34 +0100
+Message-Id: <20210118201039.2398-2-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210118201039.2398-1-huobean@gmail.com>
+References: <20210118201039.2398-1-huobean@gmail.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Changelog:
+Currently UFS WriteBooster driver uses clock scaling up/down to set
+WB on/off, for the platform which doesn't support UFSHCD_CAP_CLK_SCALING,
+WB will be always on. Provide a sysfs attribute to enable/disable WB
+during runtime. Write 1/0 to "wb_on" sysfs node to enable/disable UFS WB.
 
-v5--v6:
- 1. Remove original patch 7/7:
- "scsi: ufs: Keep device active mode only fWriteBoosterBufferFlushDuringHibernate == 1"
- 2. Rebased patch onto 5.12/scsi-staging
- 3. Add protection of PM ops and err_handler for the wb_on entry access
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Bean Huo <beanhuo@micron.com>
+---
+ drivers/scsi/ufs/ufs-sysfs.c | 46 ++++++++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufshcd.c    |  3 +--
+ drivers/scsi/ufs/ufshcd.h    |  2 ++
+ 3 files changed, 49 insertions(+), 2 deletions(-)
 
-V4--V5:
-  1. Add patch "docs: ABI: Add wb_on documentation for UFS sysfs"
-  2. Unify WB related flags with wb_* prefix (Stanley Chu)
-  3. Delete d_ext_ufs_feature_sup (Stanley Chu)
-  4. Incorporate Stanley's suggestion to patch 6/7
-  5. Replace scnprintf() with sysfs_emit() in 1/7 (Greg KH)
-
-v3--v4:
-  1. Rebase patch on 5.11/scsi-staging
-  2. Add WB cleanup patches 3/6, 4/6 adn 5/6
-
-v2--v3:
-  1. Change multi-line comments style in patch 1/3 (Can Guo)
-
-v1--v2:
-  1. Take is_hibern8_wb_flush checkup out from function
-     ufshcd_wb_need_flush() in patch 2/3
-  2. Add UFSHCD_CAP_CLK_SCALING checkup in patch 1/3. that means
-     only for the platform, which doesn't support UFSHCD_CAP_CLK_SCALING,
-     can control WB through "wb_on".
-
-Bean Huo (6):
-  scsi: ufs: Add "wb_on" sysfs node to control WB on/off
-  docs: ABI: Add wb_on documentation for UFS sysfs
-  scsi: ufs: Changes comment in the function ufshcd_wb_probe()
-  scsi: ufs: Remove two WB related fields from struct ufs_dev_info
-  scsi: ufs: Group UFS WB related flags to struct ufs_dev_info
-  scsi: ufs: Cleanup WB buffer flush toggle implementation
-
- Documentation/ABI/testing/sysfs-driver-ufs |   8 ++
- drivers/scsi/ufs/ufs-sysfs.c               |  46 +++++++++
- drivers/scsi/ufs/ufs.h                     |  29 +++---
- drivers/scsi/ufs/ufshcd.c                  | 103 ++++++++-------------
- drivers/scsi/ufs/ufshcd.h                  |   6 +-
- 5 files changed, 110 insertions(+), 82 deletions(-)
-
+diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
+index c092f249d6f9..76db8593ca09 100644
+--- a/drivers/scsi/ufs/ufs-sysfs.c
++++ b/drivers/scsi/ufs/ufs-sysfs.c
+@@ -209,6 +209,50 @@ static ssize_t auto_hibern8_store(struct device *dev,
+ 	return ret ? ret : count;
+ }
+ 
++static ssize_t wb_on_show(struct device *dev, struct device_attribute *attr,
++			  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", hba->wb_enabled);
++}
++
++static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
++			   const char *buf, size_t count)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++	unsigned int wb_enable;
++	ssize_t res;
++
++	if (!ufshcd_is_wb_allowed(hba) || ufshcd_is_clkscaling_supported(hba)) {
++		/*
++		 * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
++		 * on/off will be done while clock scaling up/down.
++		 */
++		dev_warn(dev, "To control WB through wb_on is not allowed!\n");
++		return -EOPNOTSUPP;
++	}
++
++	if (kstrtouint(buf, 0, &wb_enable))
++		return -EINVAL;
++
++	if (wb_enable != 0 && wb_enable != 1)
++		return -EINVAL;
++
++	down(&hba->host_sem);
++	if (!ufshcd_is_user_access_allowed(hba)) {
++		res = -EBUSY;
++		goto out;
++	}
++
++	pm_runtime_get_sync(hba->dev);
++	res = ufshcd_wb_ctrl(hba, wb_enable);
++	pm_runtime_put_sync(hba->dev);
++out:
++	up(&hba->host_sem);
++	return res < 0 ? res : count;
++}
++
+ static DEVICE_ATTR_RW(rpm_lvl);
+ static DEVICE_ATTR_RO(rpm_target_dev_state);
+ static DEVICE_ATTR_RO(rpm_target_link_state);
+@@ -216,6 +260,7 @@ static DEVICE_ATTR_RW(spm_lvl);
+ static DEVICE_ATTR_RO(spm_target_dev_state);
+ static DEVICE_ATTR_RO(spm_target_link_state);
+ static DEVICE_ATTR_RW(auto_hibern8);
++static DEVICE_ATTR_RW(wb_on);
+ 
+ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+ 	&dev_attr_rpm_lvl.attr,
+@@ -225,6 +270,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+ 	&dev_attr_spm_target_dev_state.attr,
+ 	&dev_attr_spm_target_link_state.attr,
+ 	&dev_attr_auto_hibern8.attr,
++	&dev_attr_wb_on.attr,
+ 	NULL
+ };
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 5c6ee9394af3..3f2b495b36ee 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -249,7 +249,6 @@ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
+ static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
+ static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba);
+ static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba);
+-static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable);
+ static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
+ static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
+ static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
+@@ -5413,7 +5412,7 @@ static void ufshcd_bkops_exception_event_handler(struct ufs_hba *hba)
+ 				__func__, err);
+ }
+ 
+-static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
++int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
+ {
+ 	int ret;
+ 	u8 index;
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 5bbe4715d4e9..ac0f03f69e42 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -1089,6 +1089,8 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
+ 			     u8 *desc_buff, int *buff_len,
+ 			     enum query_opcode desc_op);
+ 
++int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable);
++
+ /* Wrapper functions for safely calling variant operations */
+ static inline const char *ufshcd_get_var_name(struct ufs_hba *hba)
+ {
 -- 
 2.17.1
 
