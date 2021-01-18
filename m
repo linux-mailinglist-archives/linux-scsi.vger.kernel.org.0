@@ -2,225 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A392FA94C
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 19:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69042FAB0E
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 21:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407712AbhARSwP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 13:52:15 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:50856 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407529AbhARSv6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 13:51:58 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IIeloR102230;
-        Mon, 18 Jan 2021 18:50:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=8GefXcpZPbzkuLk9I0fDJwYB6Bx6bVC/7hGxIaOiLgU=;
- b=wgmKcvSxLKWr6kgoJdnaLGYQY7CSMtmVJ2vVS1ViztbicyrXf/M54344TkMvz9IEqOAD
- xnRYUiTNxr3b3hrOf2MQ/QHZW+8hON+KoMC9O3zVRAuiifzI4jH/fc20bnoBNbKH9wzr
- A5uX+6LkxMsFSy2vQxCYTn9bXJW/cxqNXSOiqiZC556xDZOQYTKOWdb3SXfFitalm7G5
- CEnXIbd0Tly+JcrvQKEWnD5eeZtr4s4C3pPrHd8ihVgyYxUlxWZayEJmZGO5I8EGyBst
- mnv+QkyXZFEfh4a1KqMgrAZ+pkxBJgSsqVKioR+loKJEoLDK6efxfJOuM0prsCSEZJOi 0w== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 363nnaegpm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jan 2021 18:50:52 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10IIiKMa028695;
-        Mon, 18 Jan 2021 18:50:51 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 3649wqbx53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jan 2021 18:50:51 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10IIoigB018752;
-        Mon, 18 Jan 2021 18:50:45 GMT
-Received: from [20.15.0.204] (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 18 Jan 2021 10:50:43 -0800
-Subject: Re: [PATCH] iscsi: Do Not set param when sock is NULL
-To:     Gulam Mohamed <gulam.mohamed@oracle.com>
-Cc:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Martin Petersen <martin.petersen@oracle.com>,
-        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Junxiao Bi <junxiao.bi@oracle.com>
-References: <1a8aaa17-b1a3-4d6a-b87a-ff49d61a0d0b@default>
- <9df96d73-015c-4de6-96fa-2f315b066909@default>
- <05277786-2E1F-432D-AE73-F39565C6BEA4@oracle.com>
- <0abfcf5b-5ab8-4968-bf6d-eb4dee32e2f4@default>
-From:   Mike Christie <michael.christie@oracle.com>
-Message-ID: <ca8ea0a8-37a5-0ebd-a73e-70edb82ac2b4@oracle.com>
-Date:   Mon, 18 Jan 2021 12:50:42 -0600
+        id S2437679AbhARUJn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 15:09:43 -0500
+Received: from mail-1.ca.inter.net ([208.85.220.69]:41946 "EHLO
+        mail-1.ca.inter.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394185AbhARUJh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 15:09:37 -0500
+Received: from localhost (offload-3.ca.inter.net [208.85.220.70])
+        by mail-1.ca.inter.net (Postfix) with ESMTP id 17EE32EA2F1;
+        Mon, 18 Jan 2021 15:08:53 -0500 (EST)
+Received: from mail-1.ca.inter.net ([208.85.220.69])
+        by localhost (offload-3.ca.inter.net [208.85.220.70]) (amavisd-new, port 10024)
+        with ESMTP id 6wxIMQiKLd4y; Mon, 18 Jan 2021 14:55:17 -0500 (EST)
+Received: from [192.168.48.23] (host-104-157-204-209.dyn.295.ca [104.157.204.209])
+        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail-1.ca.inter.net (Postfix) with ESMTPSA id 06E792EA2DB;
+        Mon, 18 Jan 2021 15:08:51 -0500 (EST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH v6 1/4] sgl_alloc_order: remove 4 GiB limit, sgl_free()
+ warning
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        jejb@linux.vnet.ibm.com, bostroesser@gmail.com, ddiss@suse.de,
+        bvanassche@acm.org
+References: <20210118163006.61659-1-dgilbert@interlog.com>
+ <20210118163006.61659-2-dgilbert@interlog.com>
+ <20210118182854.GJ4605@ziepe.ca>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
+Date:   Mon, 18 Jan 2021 15:08:51 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <0abfcf5b-5ab8-4968-bf6d-eb4dee32e2f4@default>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20210118182854.GJ4605@ziepe.ca>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9868 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 bulkscore=0
- spamscore=0 phishscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101180112
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9868 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 spamscore=0
- mlxlogscore=999 clxscore=1015 bulkscore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101180112
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/7/21 9:48 AM, Gulam Mohamed wrote:
-> Hi Michael,
+On 2021-01-18 1:28 p.m., Jason Gunthorpe wrote:
+> On Mon, Jan 18, 2021 at 11:30:03AM -0500, Douglas Gilbert wrote:
 > 
->              As per your suggestions in below mail, I have completed the suggested changes and tested them. Can you please review and let me know your comments? Here is the patch:
+>> After several flawed attempts to detect overflow, take the fastest
+>> route by stating as a pre-condition that the 'order' function argument
+>> cannot exceed 16 (2^16 * 4k = 256 MiB).
 > 
-> Description
-> ===========
-> 1. This Kernel panic could be due to a timing issue when there is a race between the sync thread and the initiator was processing of a login response from the target. The session re-open can be invoked from two places
->   a. Sessions sync thread when the iscsid restart
->   b. From iscsid through iscsi error handler 2. The session reopen sequence is as follows in user-space (iscsi-initiator-utils)
->    a. Disconnect the connection
->    b. Then send the stop connection request to the kernel which releases the connection (releases the socket)
->    c. Queues the reopen for 2 seconds delay
->    d. Once the delay expires, create the TCP connection again by calling the connect() call
->    e. Poll for the connection
->    f. When poll is successful i.e when the TCP connection is established, it performs
->       i. Creation of session and connection data structures
->       ii. Bind the connection to the session. This is the place where we assign the sock to tcp_sw_conn->sock
->       iii. Sets the parameters like target name, persistent address etc .
->       iv. Creates the login pdu
->        v. Sends the login pdu to kernel
->       vi. Returns to the main loop to process further events. The kernel then sends the login request over to the target node
->    g. Once login response with success is received, it enters into full feature phase and sets the negotiable parameters like max_recv_data_length, max_transmit_length, data_digest etc .
-> 3. While setting the negotiable parameters by calling "iscsi_session_set_neg_params()", kernel panicked as sock was NULL
+> That doesn't help, the point of the overflow check is similar to
+> overflow checks in kcalloc: to prevent the routine from allocating
+> less memory than the caller might assume.
 > 
-> What happened here is
-> ---------------------
-> 1. Before initiator received the login response mentioned in above point 2.f.v, another reopen request was sent from the error handler/sync session for the same session, as the initiator utils was in main loop to process further events (as mentioned in point 2.f.vi above).
-> 2. While processing this reopen, it stopped the connection which released the socket and queued this connection and at this point of time the login response was received for the earlier on
+> For instance ipr_store_update_fw() uses request_firmware() (which is
+> controlled by userspace) to drive the length argument to
+> sgl_alloc_order(). If userpace gives too large a value this will
+> corrupt kernel memory.
 > 
-> Fix
-> ---
+> So this math:
 > 
-> 1. Create a flag "set_param_fail" in iscsi_cls_conn structure 2. On ep_disconnect and stop_conn set this flag to indicate set_param calls for connection level settings should fail 3. This way, scsi_transport_iscsi can set and check this bit for all drivers 2. On bind_conn clear the bit
-> 
-> Signed-off-by: Gulam Mohamed <gulam.mohamed@oracle.com>
-> ---
->  drivers/scsi/scsi_transport_iscsi.c | 6 ++++++  include/scsi/scsi_transport_iscsi.h | 3 +++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-> index 2e68c0a87698..15c5a7223a40 100644
-> --- a/drivers/scsi/scsi_transport_iscsi.c
-> +++ b/drivers/scsi/scsi_transport_iscsi.c
-> @@ -2473,6 +2473,8 @@ static void iscsi_if_stop_conn(struct iscsi_cls_conn *conn, int flag)
->  	 * it works.
->  	 */
->  	mutex_lock(&conn_mutex);
-> +	if (!test_bit(ISCSI_SET_PARAM_FAIL_BIT, &conn->set_param_fail))
-> +		set_bit(ISCSI_SET_PARAM_FAIL_BIT, &conn->set_param_fail);
+>    	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
 
-You can just do a test_and_set_bit.
+But that check itself overflows if order is too large (e.g. 65).
+A pre-condition says that the caller must know or check a value
+is sane, and if the user space can have a hand in the value passed
+the caller _must_ check pre-conditions IMO. A pre-condition also
+implies that the function's implementation will not have code to
+check the pre-condition.
 
->  	conn->transport->stop_conn(conn, flag);
->  	mutex_unlock(&conn_mutex);
->  
-> @@ -2895,6 +2897,8 @@ iscsi_set_param(struct iscsi_transport *transport, struct iscsi_uevent *ev)
->  			session->recovery_tmo = value;
->  		break;
->  	default:
-> +		if (test_bit(ISCSI_SET_PARAM_FAIL_BIT, &conn->set_param_fail))
-> +			return -ENOTCONN;
->  		err = transport->set_param(conn, ev->u.set_param.param,
->  					   data, ev->u.set_param.len);
->  	}
-> @@ -2956,6 +2960,7 @@ static int iscsi_if_ep_disconnect(struct iscsi_transport *transport,
->  		mutex_lock(&conn->ep_mutex);
->  		conn->ep = NULL;
->  		mutex_unlock(&conn->ep_mutex);
-> +		set_bit(ISCSI_SET_PARAM_FAIL_BIT, &conn->set_param_fail);
->  	}
->  
->  	transport->ep_disconnect(ep);
-> @@ -3716,6 +3721,7 @@ iscsi_if_recv_msg(struct sk_buff *skb, struct nlmsghdr *nlh, uint32_t *group)
->  		ev->r.retcode =	transport->bind_conn(session, conn,
->  						ev->u.b_conn.transport_eph,
->  						ev->u.b_conn.is_leading);
-> +		clear_bit(ISCSI_SET_PARAM_FAIL_BIT, &conn->set_param_fail);
+My "log of both sides" proposal at least got around the overflowing
+left shift problem. And one reviewer, Bodo Stroesser, liked it.
 
-You should check retcode and only clear if it indicates success.
+> Needs to be checked, add a precondition to order does not help. I
+> already proposed a straightforward algorithm you can use.
+
+It does help, it stops your proposed check from being flawed :-)
+
+Giving a false sense of security seems more dangerous than a
+pre-condition statement IMO. Bart's original overflow check (in
+the mainline) limits length to 4GB (due to wrapping inside a 32
+bit unsigned).
+
+Also note there is another pre-condition statement in that function's
+definition, namely that length cannot be 0.
+
+So perhaps you, Bart Van Assche and Bodo Stroesser, should compare
+notes and come up with a solution that you are _all_ happy with.
+The pre-condition works for me and is the fastest. The 'length'
+argument might be large, say > 1 GB [I use 1 GB in testing but
+did try 4GB and found the bug I'm trying to fix] but having
+individual elements greater than say 32 MB each does not
+seem very practical (and fails on the systems that I test with).
+In my testing the largest element size is 4 MB.
 
 
->  		mutex_unlock(&conn_mutex);
->  
->  		if (ev->r.retcode || !transport->ep_connect) diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
-> index 8a26a2ffa952..71b1952b913b 100644
-> --- a/include/scsi/scsi_transport_iscsi.h
-> +++ b/include/scsi/scsi_transport_iscsi.h
-> @@ -29,6 +29,8 @@ struct bsg_job;
->  struct iscsi_bus_flash_session;
->  struct iscsi_bus_flash_conn;
->  
-> +#define ISCSI_SET_PARAM_FAIL_BIT	1
-> +
->  /**
->   * struct iscsi_transport - iSCSI Transport template
->   *
-> @@ -206,6 +208,7 @@ struct iscsi_cls_conn {
->  
->  	struct device dev;		/* sysfs transport/container device */
->  	enum iscsi_connection_state state;
-> +	unsigned long set_param_fail; /* set_param for connection should fail 
+Doug Gilbert
 
-You don't need a comment since the bit and field name say the same thing.
-
-Th implementation is a little odd, because it's a bitmap with only one bit,
-and named specifically for the one bit. It would be best to either do:
-
-1. single bool/bit:
-
-unsigned conn_bound:1;
-or
-bool conn_bound;
-
-2. generic bitmap:
-
-#define ISCSI_CONN_FLAGS_BOUND 1
-
-unsigned long conn_state_flags;
-
-3. fix up the iscsi_cls_conn->state values so it works in general and also
-for your case.
-
-For this conn state one we would fix up the conn state, because it's currently
-looks wrong, and when the conn is down it still shows "up", and it doesn't seem
-to show "failed".
-
-So add a new state ISCSI_CONN_BOUND in:
-
-static const char *const connection_state_names[] = {
-        [ISCSI_CONN_UP] = "up",
-        [ISCSI_CONN_DOWN] = "down",
-        [ISCSI_CONN_FAILED] = "failed"
-};
-
-In iscsi_if_ep_disconnect and iscsi_if_stop_conn set:
-
-conn->state = ISCSI_CONN_DOWN.
-
-In that code where we call transport->bind_conn() do
-
-if (!ev->r.retcode)
-	conn->state = ISCSI_CONN_BOUND
-
-and then in iscsi_set_param do
-
-if (conn->state != ISCSI_CONN_BOUND)
-	return -ENOTCONN
