@@ -2,135 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AB12FAC58
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 22:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13182FAC91
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jan 2021 22:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389745AbhARVOR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 16:14:17 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55220 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389750AbhARKN2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 05:13:28 -0500
-From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610964684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/UXteJ4q1RUvbDYgjdibBzKfEcwwMRlj+E7dvre1TI0=;
-        b=pAqmAlg1z7mJ+SViKIpMJGSPkSknvLg8+gCfWhK/NRenAFZPKzb0j2sKy+GRDZjkwNOogm
-        IcT7MdKYlqgJ5Xg0KFqdEhxpYD0r81nQUZJRx5A7/mQadalPTAqkY/2qoGmHxPh9IzddTI
-        IkGGriiXMZ4Ta3F5mq9DuPndXKjllNP069RGeKLvJJmsuPO/5J8vbbKoKK9B4A257qf882
-        OeAdRjIRt/jqdIW0I3CxYqAROBZ/sMrnKXgo8sOzT22sNAdUNfCLZZQRgYo58D4jLPzziv
-        kFbRyzv6MqRit2iiq7zD7VGllcBeMoDKbHZe9Ea4+DuCKXfIWJv8cTgxi+62KQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610964684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/UXteJ4q1RUvbDYgjdibBzKfEcwwMRlj+E7dvre1TI0=;
-        b=ehG/U/01RZlEXQDkzKHw3AFchjNZA+XgsHlywWTQuQ1TkxMP6ntbv6Tahk9Dsh/V7y8p1N
-        aQL5x0wwy2qvKNBg==
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        John Garry <john.garry@huawei.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Daniel Wagner <dwagner@suse.de>,
-        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>
-Cc:     linux-scsi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Subject: [PATCH v3 16/19] scsi: libsas: Switch back to original event notifiers API
-Date:   Mon, 18 Jan 2021 11:09:52 +0100
-Message-Id: <20210118100955.1761652-17-a.darwish@linutronix.de>
-In-Reply-To: <20210118100955.1761652-1-a.darwish@linutronix.de>
-References: <20210118100955.1761652-1-a.darwish@linutronix.de>
+        id S2437970AbhARVYk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 16:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438052AbhARVXq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 16:23:46 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D54C061573;
+        Mon, 18 Jan 2021 13:22:59 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ox12so1321569ejb.2;
+        Mon, 18 Jan 2021 13:22:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Giv0GJHiR0U7EHzqjMGjtNcbBY4s91RtnAoeLxvrwL4=;
+        b=fqJW2k5L9DSKd2FkqB1VRaQcaE9/yIOY+GHwrsIGzeGPSqi6pAez/9o8N24ga5378M
+         tX8s/np4npMdreeXn0+jUSPr3/nyhMHX7JcQYCx9EgKStEU6extVGTmhBtvDv1/OpGCy
+         z3tZkkDB7HMXR8lIR9gjUPxO3LN9AdxP/gdl4d0Oy/MUmCkLYLBNq7ueX/uSLA95ryxG
+         G+7HTEEJfHJ1QfLjThUwYefr5GYQDkw/cY95YElyTa/rDUJbxVkEsRSrEgr+b3PBfB2n
+         VeQwm/n3XYoUzszQr2hD3S42MjfoXkULKPWOt5PC0tc1zdlBCjoGYrZ4BOcQ7jAUyQT2
+         KeSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Giv0GJHiR0U7EHzqjMGjtNcbBY4s91RtnAoeLxvrwL4=;
+        b=Z3qy+aNpC9kjdEbRLoPQCrHaBQaFCe4Gp8VYU4xeFm0H34afuDRFMTQvdY5vzWvpXu
+         txIftvA2kY7ANTZJwpu0s6GR6LwCIaNsbTg4vrD+94BX7mO9HlPIcVTdjrd4IQxwUqeM
+         jiS5ZycMNAuFTY4g4fl8UvhOyc3rLoH1RN6B6nVk4L0zsMMrNYkFVR7xUBR8cL3jybJZ
+         as6d/dL7b1zNjzBML23MgYGny67IamE65l+W38I4Ojy+oEn0tGiQbICxiEgSfRToucT0
+         zVmKbD97VfGIceMHMYkz8r2P+2fHw5gVI71Q2Gppup6Iof3g8RrFnfKZmHS3SULc2hne
+         27aw==
+X-Gm-Message-State: AOAM530t2J8h6065YBtU7aWEzJNksI8aOUBPZLXntz4nw+gD6nomTFKX
+        67NDSrJuU3Jm/y7P3FHpaWs=
+X-Google-Smtp-Source: ABdhPJzUtiGI8cqGbVVsOEIghLaawZpYS1WoHneVMPFuQMBKqIao3ek/l4qpxvvLjkU1v34FnSi3fg==
+X-Received: by 2002:a17:906:7798:: with SMTP id s24mr1012838ejm.19.1611004977974;
+        Mon, 18 Jan 2021 13:22:57 -0800 (PST)
+Received: from [192.168.178.40] (ipbcc06d06.dynamic.kabel-deutschland.de. [188.192.109.6])
+        by smtp.gmail.com with ESMTPSA id h16sm11583847edw.34.2021.01.18.13.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 13:22:57 -0800 (PST)
+Subject: Re: [PATCH v6 1/4] sgl_alloc_order: remove 4 GiB limit, sgl_free()
+ warning
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Douglas Gilbert <dgilbert@interlog.com>
+Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        jejb@linux.vnet.ibm.com, ddiss@suse.de, bvanassche@acm.org
+References: <20210118163006.61659-1-dgilbert@interlog.com>
+ <20210118163006.61659-2-dgilbert@interlog.com>
+ <20210118182854.GJ4605@ziepe.ca>
+ <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
+ <20210118202431.GO4605@ziepe.ca>
+From:   Bodo Stroesser <bostroesser@gmail.com>
+Message-ID: <7f443666-b210-6f99-7b50-6c26d87fa7ca@gmail.com>
+Date:   Mon, 18 Jan 2021 22:22:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210118202431.GO4605@ziepe.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-libsas event notifiers required an extension where gfp_t flags must be
-explicitly passed. For bisectability, a temporary _gfp() variant of such
-functions were added. All call sites then got converted use the _gfp()
-variants and explicitly pass GFP context. Having no callers left, the
-original libsas notifiers were then modified to accept gfp_t flags by
-default.
+On 18.01.21 21:24, Jason Gunthorpe wrote:
+> On Mon, Jan 18, 2021 at 03:08:51PM -0500, Douglas Gilbert wrote:
+>> On 2021-01-18 1:28 p.m., Jason Gunthorpe wrote:
+>>> On Mon, Jan 18, 2021 at 11:30:03AM -0500, Douglas Gilbert wrote:
+>>>
+>>>> After several flawed attempts to detect overflow, take the fastest
+>>>> route by stating as a pre-condition that the 'order' function argument
+>>>> cannot exceed 16 (2^16 * 4k = 256 MiB).
+>>>
+>>> That doesn't help, the point of the overflow check is similar to
+>>> overflow checks in kcalloc: to prevent the routine from allocating
+>>> less memory than the caller might assume.
+>>>
+>>> For instance ipr_store_update_fw() uses request_firmware() (which is
+>>> controlled by userspace) to drive the length argument to
+>>> sgl_alloc_order(). If userpace gives too large a value this will
+>>> corrupt kernel memory.
+>>>
+>>> So this math:
+>>>
+>>>     	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
+>>
+>> But that check itself overflows if order is too large (e.g. 65).
+> 
+> I don't reall care about order. It is always controlled by the kernel
+> and it is fine to just require it be low enough to not
+> overflow. length is the data under userspace control so math on it
+> must be checked for overflow.
+> 
+>> Also note there is another pre-condition statement in that function's
+>> definition, namely that length cannot be 0.
+> 
+> I don't see callers checking for that either, if it is true length 0
+> can't be allowed it should be blocked in the function
+> 
+> Jason
+> 
 
-Switch back to the original event notifiers API, while still passing GFP
-context.  The _gfp() notifier variants will be removed afterwards.
+A already said, I also think there should be a check for length or
+rather nent overflow.
 
-Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
-Reviewed-by: John Garry <john.garry@huawei.com>
-Cc: Jason Yan <yanaijie@huawei.com>
----
- drivers/scsi/libsas/sas_event.c | 6 +++---
- drivers/scsi/libsas/sas_init.c  | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+I like the easy to understand check in your proposed code:
 
-diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
-index 3d0cc407b33f..542831887769 100644
---- a/drivers/scsi/libsas/sas_event.c
-+++ b/drivers/scsi/libsas/sas_event.c
-@@ -109,7 +109,7 @@ void sas_enable_revalidation(struct sas_ha_struct *ha)
- 
- 		sas_phy = container_of(port->phy_list.next, struct asd_sas_phy,
- 				port_phy_el);
--		sas_notify_port_event_gfp(sas_phy,
-+		sas_notify_port_event(sas_phy,
- 				PORTE_BROADCAST_RCVD, GFP_KERNEL);
- 	}
- 	mutex_unlock(&ha->disco_mutex);
-@@ -141,7 +141,7 @@ int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
- 
- 	BUG_ON(event >= PORT_NUM_EVENTS);
- 
--	ev = sas_alloc_event_gfp(phy, gfp_flags);
-+	ev = sas_alloc_event(phy, gfp_flags);
- 	if (!ev)
- 		return -ENOMEM;
- 
-@@ -171,7 +171,7 @@ int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
- 
- 	BUG_ON(event >= PHY_NUM_EVENTS);
- 
--	ev = sas_alloc_event_gfp(phy, gfp_flags);
-+	ev = sas_alloc_event(phy, gfp_flags);
- 	if (!ev)
- 		return -ENOMEM;
- 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index f06b83211e3b..62260e84ca2d 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -404,8 +404,8 @@ void sas_resume_ha(struct sas_ha_struct *ha)
- 
- 		if (phy->suspended) {
- 			dev_warn(&phy->phy->dev, "resume timeout\n");
--			sas_notify_phy_event_gfp(phy, PHYE_RESUME_TIMEOUT,
--						 GFP_KERNEL);
-+			sas_notify_phy_event(phy, PHYE_RESUME_TIMEOUT,
-+					     GFP_KERNEL);
- 		}
- 	}
- 
-@@ -604,8 +604,8 @@ struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy,
- 			if (cmpxchg(&phy->in_shutdown, 0, 1) == 0) {
- 				pr_notice("The phy%d bursting events, shut it down.\n",
- 					  phy->id);
--				sas_notify_phy_event_gfp(phy, PHYE_SHUTDOWN,
--							 gfp_flags);
-+				sas_notify_phy_event(phy, PHYE_SHUTDOWN,
-+						     gfp_flags);
- 			}
- 		} else {
- 			/* Do not support PHY control, stop allocating events */
--- 
-2.30.0
+	if (length >> (PAGE_SHIFT + order) >= UINT_MAX)
+		return NULL;
 
+
+But I don't understand, why you open-coded the nent calculation:
+
+	nent = length >> (PAGE_SHIFT + order);
+	if (length & ((1ULL << (PAGE_SHIFT + order)) - 1))
+		nent++;
+
+Wouldn't it be better to keep the original line instead:
+
+	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
+
+Or maybe even better:
+
+	nent = DIV_ROUND_UP(length, PAGE_SIZE << order);
+
+
+I think, combining the above lines results in short and easily readable code:
+
+
+	u32 elem_len;
+
+	if (length >> (PAGE_SHIFT + order) >= UINT_MAX)
+		return NULL;
+	nent = DIV_ROUND_UP(length, PAGE_SIZE << order);
+
+	if (chainable) {
+		if (check_add_overflow(nent, 1, &nalloc))
+			return NULL;
+	}
+	else
+		nalloc = nent;
+
+
+Thank you,
+Bodo
+
+
+	
