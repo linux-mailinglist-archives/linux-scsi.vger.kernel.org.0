@@ -2,142 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CFE2FAF2D
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 04:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABB22FB078
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 06:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728662AbhASDn1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 22:43:27 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:20917 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728655AbhASDnS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 22:43:18 -0500
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210119034227epoutp014a8326c4298f256b289bb705d89bb1d7~bhTNr0G9y0338603386epoutp01E
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Jan 2021 03:42:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210119034227epoutp014a8326c4298f256b289bb705d89bb1d7~bhTNr0G9y0338603386epoutp01E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1611027747;
-        bh=0/XyJc2skLxvc6UmT4S2F0mrnpfpXZkdDpauvVsUM7w=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=Fmg/hgvcr7OhVnsi92I23Hn9Hkv758uvqRw9kQY+NCRIWPBXb7GYK8fdyUipWi2cD
-         667CityQX5X/tAGdaxnYYzWIjaPR6fKGJG3K3D1edcnM9jgacV5D4uBjetrVjDyOa3
-         4d57LnwmLHIjiosgRMmZX6sy+cjrFfgY1K1GsAb0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20210119034226epcas2p11ffee3d0f5ffd484fb309ea3321c2851~bhTNCb2bB0932309323epcas2p1d;
-        Tue, 19 Jan 2021 03:42:26 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.40.184]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4DKZGl4HTzz4x9Q1; Tue, 19 Jan
-        2021 03:42:23 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9F.7B.10621.F1556006; Tue, 19 Jan 2021 12:42:23 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20210119034223epcas2p490651ec80b51251bfb810fdbe9c104af~bhTJaUPC_2918429184epcas2p4j;
-        Tue, 19 Jan 2021 03:42:23 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210119034223epsmtrp1391a72ae22790ff966b0739a83077436~bhTJZdKsD1144811448epsmtrp1c;
-        Tue, 19 Jan 2021 03:42:23 +0000 (GMT)
-X-AuditID: b6c32a45-337ff7000001297d-9a-6006551feea1
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C1.B1.08745.E1556006; Tue, 19 Jan 2021 12:42:22 +0900 (KST)
-Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20210119034222epsmtip16618ade425e8c0371256379bbf1a521a~bhTJIIwgR2163121631epsmtip1G;
-        Tue, 19 Jan 2021 03:42:22 +0000 (GMT)
-From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
-To:     <linux-scsi@vger.kernel.org>, <alim.akhtar@samsung.com>,
-        <avri.altman@wdc.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
-        <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
-        <bvanassche@acm.org>, <grant.jung@samsung.com>,
-        <sc.suh@samsung.com>, <hy50.seo@samsung.com>,
-        <sh425.lee@samsung.com>, <bhoon95.kim@samsung.com>
-In-Reply-To: <cover.1611023224.git.kwmad.kim@samsung.com>
-Subject: RE: [ PATCH v6 0/2] introduce a quirk to allow only page-aligned sg
- entries
-Date:   Tue, 19 Jan 2021 12:42:22 +0900
-Message-ID: <047d01d6ee15$1892dc10$49b89430$@samsung.com>
+        id S2388513AbhASF2C (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 00:28:02 -0500
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:40885 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726604AbhASFJH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jan 2021 00:09:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1611032947; x=1642568947;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BdkhQGouvUAsTue8hQMttohkdblbLZM4YtE7j1r1v9I=;
+  b=nXDc6rBpYYh3KgicBrsz+4B1yGfZwfu7pi+SGuFr0oyMk5tKUc9fEDIR
+   G9kyrbRswQfZWyJ5KWLJNQAIGhRPG31KLzn5O0f8U9MZaSyFqNuKu9Uph
+   lvJ+lRjaiAzfVmrD6hbtKA6ijgFY/pWAgvuZfbdRHNsyRTJsKTiulIiB8
+   bmsQNv/gdKF1HfhxYXqsgzGvbXz1cBbiDTkPQa6svGINma2bE0skIZd3C
+   EeEfqB0T3/11mKtv8jQD5GDWglkem0pYH4owjeQDtaLo2HQm7MNGe6ZhF
+   mAGq9IaYl5O0dVmO2LMsydXadIKRP52XnHBuvQqGN5K6E8Y/GNlJErhsy
+   Q==;
+IronPort-SDR: DsAUJ8KGpBuWdH1KM2dnlSssxJPv3hVDssM8H1NyIbuPkOwpDo2qZXipnbXvwhPgOJt1WUbzhn
+ wJcv8DiTmKp0ohDo9JHLCZKv5BbZwjB97XFGCkPRsh4aK2DWbJ/av/J7BAScV8gP3q5tNMUxE1
+ ul2adS1FNcTikw5HLBP3Adw5jgfiqHr11teqV+nAilAu/sFZqSLh0GF/ijXzNPorJibMgIkoPL
+ Qckwvcz6ATTbSrCCBzD6TJ3NUdiHdR19hj3RsYwck4pY/J9++44qPpiT3rsgG/IZUKDTQTCODM
+ JDs=
+X-IronPort-AV: E=Sophos;i="5.79,357,1602518400"; 
+   d="scan'208";a="157758529"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 19 Jan 2021 13:07:26 +0800
+IronPort-SDR: Z7Qz8Lpdh2IaPyi7eFhDozHQYRGLcjl5HQvxJIvHANhGeE0Xtu6AkL7GVsPHS4MmNp1KZFBRik
+ Efl/BZErOJ3nrCMkFNeIh0tEuvASTJWMmWOSgUUAm4AXbIZgKnLdkTF8NBJ1hxF5cMrEn7oBC+
+ pqVwCYY4pAkh0CHA9rCMP5/AfeCj8A4L2igxEUx4g8F8nCsU3t8Xq7HkPR1bq6Wmx3w+eH9iwg
+ VOsHRm91dUEUvtBdbtIDFWCM+QISHmGLYhPTGjYMXfvWqK6o8l/mOEhdO+9O7hCBccDmxpAN1A
+ iq5hPOhpni2VsDE3owZdyKUb
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 20:50:01 -0800
+IronPort-SDR: RfcxC1FWYGpS0fNCrOs8BtNtAvGS3Soo9XuKQebXkTCgbWAqTp1EKLrasZ0evXuMWoITBnHtNY
+ 2oxDBYpgHVdIOlbC//vNMX0StFZhGCaZIsKA9cFY7fNqh1OY5fcl3ycEabv+HgHkEc/CXDDC1y
+ fzmKDnwNyp8ppyfiLjfpBXI3+rhzN33czQz3Cn2qnuTvExV9IqScOwNt057FA/Z+bR+5w8O/JO
+ uiXUS8DdnaYj0tdtbLaCu8GXso9K+bCVoTPbDi0BV1XABhEY6VgIhePNhopNBAIoFyoLyU4M28
+ AtU=
+WDCIronportException: Internal
+Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
+  by uls-op-cesaip02.wdc.com with ESMTP; 18 Jan 2021 21:07:26 -0800
+From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+To:     linux-block@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-bcache@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com
+Cc:     jfs-discussion@lists.sourceforge.net, dm-devel@redhat.com,
+        axboe@kernel.dk, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, efremov@linux.com, colyli@suse.de,
+        kent.overstreet@gmail.com, agk@redhat.com, snitzer@redhat.com,
+        song@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, viro@zeniv.linux.org.uk, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
+        darrick.wong@oracle.com, shaggy@kernel.org, damien.lemoal@wdc.com,
+        naohiro.aota@wdc.com, jth@kernel.org, tj@kernel.org,
+        osandov@fb.com, bvanassche@acm.org, gustavo@embeddedor.com,
+        asml.silence@gmail.com, jefflexu@linux.alibaba.com,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Subject: [RFC PATCH 07/37] gfs2: use bio_init_fields in meta_io
+Date:   Mon, 18 Jan 2021 21:06:01 -0800
+Message-Id: <20210119050631.57073-8-chaitanya.kulkarni@wdc.com>
+X-Mailer: git-send-email 2.22.1
+In-Reply-To: <20210119050631.57073-1-chaitanya.kulkarni@wdc.com>
+References: <20210119050631.57073-1-chaitanya.kulkarni@wdc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIzesnF+mLCsBdJMfotOaCZn7Z9bQEph7lpqWvoBxA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNJsWRmVeSWpSXmKPExsWy7bCmqa58KFuCwdmlshYP5m1js9jbdoLd
-        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZNF9fQebxfLj/5gs
-        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
-        VI5NRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtDdSgpl
-        iTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCQ8MCveLE3OLSvHS95PxcK0MDAyNToMqE
-        nIwzy66wFvSwVpxd3sbcwPiWuYuRk0NCwERiVfN1li5GLg4hgR2MEvtOHmaCcD4xShz7fRLK
-        +cwosez6PriWI3umQSV2MUpMmtrEDOG8YJRYcHIfC0gVm4C2xLSHu1lBEiICL5gkbqy9zwaS
-        4BSwlJi9+AwjiC0sECax8NUfMJtFQFXi2/P3YDW8IDX3XjFD2IISJ2c+ARvKLCAvsf3tHKgz
-        FCR+Pl3GCmKLCFhJvLzaygxRIyIxu7MN7CIJgRMcEpu71zFCNLhIfL18ix3CFpZ4dXwLlC0l
-        8bK/Dcqul9g3tYEVormHUeLpvn9QzcYSs561A9kcQBs0Jdbv0gcxJQSUJY7cgrqNT6Lj8F92
-        iDCvREebEESjssSvSZOhhkhKzLx5B2qTh8T61jNMExgVZyH5chaSL2ch+WYWwt4FjCyrGMVS
-        C4pz01OLjQoMkaN7EyM4VWu57mCc/PaD3iFGJg7GQ4wSHMxKIryl65gShHhTEiurUovy44tK
-        c1KLDzGaAsN9IrOUaHI+MFvklcQbmhqZmRlYmlqYmhlZKInzFhs8iBcSSE8sSc1OTS1ILYLp
-        Y+LglGpg0pXXMF2qpuV8Q+rB8aC6jwevCnj2P/56/IUgj/zCNibOl/7MdozMa/vSNp802lRZ
-        dO+OKPOEr2wNR661SpzT0b8Rfs1Kb3K3nK+me3Bg7v38pa6mV09kNV+LCP7hnXXhQiCz27QD
-        t4V4+Q+6Tpc317r/RjYr+XzMzhP1JtEySj/iK+P2rGdpvMqRYXy0h/dqdfLrZV7dvqIX7oZ/
-        vxVhZTf/VUVu0CH1rQoBKX+Oqpk32tXFPn6/TLPpoFtnsUqKfFMI8+7l04plDq73y3+nWZob
-        0Xg+sM8hx6O47i1XzQ0ZCcWHFvk35P5+UlRu/pf/zX5p65ZltzfZB+mYx4burGWanjO/RXXR
-        n8liikosxRmJhlrMRcWJALjOSnBeBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFIsWRmVeSWpSXmKPExsWy7bCSnK5cKFuCwZvjphYP5m1js9jbdoLd
-        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZNF9fQebxfLj/5gs
-        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
-        FJdNSmpOZllqkb5dAlfGmWVXWAt6WCvOLm9jbmB8y9zFyMkhIWAicWTPNKYuRi4OIYEdjBJv
-        /hxhhEhISpzY+RzKFpa433KEFaLoGaPE9SvrWUESbALaEtMe7gZLiAj8YpK4dmwzVFUXo8SZ
-        la1gVZwClhKzF58BGyUsECKx790lNhCbRUBV4tvz92A2L0jNvVfMELagxMmZT1hAbGagDb0P
-        WxkhbHmJ7W/nQN2tIPHz6TKw+SICVhIvr7YyQ9SISMzubGOewCg0C8moWUhGzUIyahaSlgWM
-        LKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYKjU0trB+OeVR/0DjEycTAeYpTgYFYS
-        4S1dx5QgxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA9PU
-        m3OjzJMVTPsE7jztu51t43Dd0tjDs7VRZmYx4/3rIYsy+jZbte4/MXXulhWxlwIuxhj4sKZ+
-        2RAk2+h5nkfApGxJovv/g3sniHDunLTnpnL9/53Xk64c7GcpZelnU/U0ZFp3tcB9VfQszcjm
-        wiXzubsdDtZlzrBLj7m+dGJjp+efjt4NDV/VmbXtGI9Ymh4XenNk8xtPzkWzLqxZaD3F++X2
-        Lm3JpTnrl638sLI3TLzlf1Hrw5iO/DkPpzoue1P2YvYWR+ktKbk/2gTrjRxPmYSXLvUpP6+3
-        Wj7TI+XhBweD6wvXJl7Y0X7G7ZCf45TTf/+mGAmETRPqF2FJufO7K6hycmLxM3+j42wClUos
-        xRmJhlrMRcWJAGbDS6Y9AwAA
-X-CMS-MailID: 20210119034223epcas2p490651ec80b51251bfb810fdbe9c104af
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210119024011epcas2p45256028f99195958140a6846d40b9143
-References: <CGME20210119024011epcas2p45256028f99195958140a6846d40b9143@epcas2p4.samsung.com>
-        <cover.1611023224.git.kwmad.kim@samsung.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> v5 -> v6: collect received tags
+Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+---
+ fs/gfs2/meta_io.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-
-There is a mistake on the part of this commit message.
-Sorry, I'll post again.
-
-
-Thanks.
-Kiwoong Kim
-> v4 -> v5: collect received tags
-> v3 -> v4: fix some typos
-> v2 -> v3: rename exynos functions
-> v1 -> v2: rename the vops and fix some typos
-> 
-> Kiwoong Kim (2):
->   ufs: introduce a quirk to allow only page-aligned sg entries
->   ufs: ufs-exynos: use UFSHCD_QUIRK_ALIGN_SG_WITH_PAGE_SIZE
-> 
->  drivers/scsi/ufs/ufs-exynos.c | 3 ++-
->  drivers/scsi/ufs/ufshcd.c     | 2 ++
->  drivers/scsi/ufs/ufshcd.h     | 4 ++++
->  3 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> --
-> 2.7.4
-
+diff --git a/fs/gfs2/meta_io.c b/fs/gfs2/meta_io.c
+index 2db573e31f78..822489b10aec 100644
+--- a/fs/gfs2/meta_io.c
++++ b/fs/gfs2/meta_io.c
+@@ -217,8 +217,8 @@ static void gfs2_submit_bhs(int op, int op_flags, struct buffer_head *bhs[],
+ 		struct bio *bio;
+ 
+ 		bio = bio_alloc(GFP_NOIO, num);
+-		bio->bi_iter.bi_sector = bh->b_blocknr * (bh->b_size >> 9);
+-		bio_set_dev(bio, bh->b_bdev);
++		bio_init_fields(bio, bh->b_bdev, bh->b_blocknr * (bh->b_size >> 9), NULL,
++				gfs2_meta_read_endio, 0, 0);
+ 		while (num > 0) {
+ 			bh = *bhs;
+ 			if (!bio_add_page(bio, bh->b_page, bh->b_size, bh_offset(bh))) {
+@@ -228,7 +228,6 @@ static void gfs2_submit_bhs(int op, int op_flags, struct buffer_head *bhs[],
+ 			bhs++;
+ 			num--;
+ 		}
+-		bio->bi_end_io = gfs2_meta_read_endio;
+ 		bio_set_op_attrs(bio, op, op_flags);
+ 		submit_bio(bio);
+ 	}
+-- 
+2.22.1
 
