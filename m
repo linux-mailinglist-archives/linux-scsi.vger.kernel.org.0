@@ -2,69 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E7C2FBDEA
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 18:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1862FBE87
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 19:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389019AbhASOiy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 09:38:54 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60670 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389055AbhASLvJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Jan 2021 06:51:09 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id AE34BAC7B;
-        Tue, 19 Jan 2021 11:50:16 +0000 (UTC)
-Date:   Tue, 19 Jan 2021 12:50:15 +0100
-From:   David Disseldorp <ddiss@suse.de>
-To:     Douglas Gilbert <dgilbert@interlog.com>
-Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        id S2404298AbhASSF0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 13:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404191AbhASSFM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jan 2021 13:05:12 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACEDC0613D3
+        for <linux-scsi@vger.kernel.org>; Tue, 19 Jan 2021 10:03:29 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id n142so22777912qkn.2
+        for <linux-scsi@vger.kernel.org>; Tue, 19 Jan 2021 10:03:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j1M3uq+mXePAcpFXiBOTYof3FY5bhcapXrpc6RKaHY0=;
+        b=Hh9SblNojKOb5EYq3K8qUhYmB3i+erqETW1LvC5Uy6ZQG4qMseKDpiMEz841rNTZtM
+         piAYeqNY5m2TdjvJhkSAWhKNgGCOjG4i/PpQj5QuIIUpP8/qZO/rPv5EdJ1icP8JF/RV
+         zpK2vpvYwcHH2bud0iHBJxcdsOjCrzvlc7iOnWumPvzG4N1kvFI2AfXfG5+Z1Qshu0FK
+         pMwTb9bFOG2y5hZzWellK8LRib/HfIn066Mstgx+ewJPy6QpF/PbTZsnl1A7hBuWbhga
+         zLA/rKh1y/1AVUtAGOnEkigIKTS2hwFmgvEQbdveQmrPiAbvLMAGZA+FpscMSuo87voy
+         w3gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=j1M3uq+mXePAcpFXiBOTYof3FY5bhcapXrpc6RKaHY0=;
+        b=OCuRk5yE5Ju869Q096kEgRF/PtdDF8+bqCLPAs5J3s9Oe9znfmtOLGp87+whMRJE8M
+         a/mNg8I2/dOxgTOU+YrZFg9WTsrETNmrEVJE89/EcelwpL8kNNrtCwNHRTt+NuWEsbWU
+         xukH9OiBJA5Cp5+bhz36+RNDG1gRrEp+8f74ywaaN0eY9TKTrOvUI3h2rIQPrtC2lPRu
+         2rEHNDmPjWtHp64b5uWhYHMuF4ox6Tm99/Av7V1BDSx6EN2kgFwtABJjg6O5iQRIm2y7
+         T4yx6lspRQMdlcV76gWB+YfyUao1q642NVOgb2b1kzc9E8w4EWKEGK6n2smdx31L6jaD
+         REmQ==
+X-Gm-Message-State: AOAM533j0vDKqU0HE91raXV9jPcpbgpv9cueziQBoSubSnM/w5Rx2emk
+        pFwDwxJcGAcn6KJfCRyaIfNLOg==
+X-Google-Smtp-Source: ABdhPJw2XCT7fzRIheQITlzWVeRsNY4eXnLldryVnmv9+vJo9i0eBjqYTuC3jm5yDDU9pEhFsVWc3A==
+X-Received: by 2002:a05:620a:2149:: with SMTP id m9mr5538332qkm.60.1611079408965;
+        Tue, 19 Jan 2021 10:03:28 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
+        by smtp.gmail.com with ESMTPSA id s30sm12979164qte.44.2021.01.19.10.03.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 10:03:28 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1l1vLj-003pDY-Qf; Tue, 19 Jan 2021 14:03:27 -0400
+Date:   Tue, 19 Jan 2021 14:03:27 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Bodo Stroesser <bostroesser@gmail.com>
+Cc:     Douglas Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
         target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
         linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        jejb@linux.vnet.ibm.com, bostroesser@gmail.com, bvanassche@acm.org,
-        jgg@ziepe.ca
-Subject: Re: [PATCH v6 3/4] scatterlist: add sgl_compare_sgl() function
-Message-ID: <20210119125015.2f063af5@suse.de>
-In-Reply-To: <d0b8312b-5dbf-6196-d962-40851c5cbbf7@interlog.com>
+        jejb@linux.vnet.ibm.com, ddiss@suse.de, bvanassche@acm.org
+Subject: Re: [PATCH v6 1/4] sgl_alloc_order: remove 4 GiB limit, sgl_free()
+ warning
+Message-ID: <20210119180327.GX4605@ziepe.ca>
 References: <20210118163006.61659-1-dgilbert@interlog.com>
-        <20210118163006.61659-4-dgilbert@interlog.com>
-        <20210119002741.4dbc290e@suse.de>
-        <d0b8312b-5dbf-6196-d962-40851c5cbbf7@interlog.com>
+ <20210118163006.61659-2-dgilbert@interlog.com>
+ <20210118182854.GJ4605@ziepe.ca>
+ <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
+ <20210118202431.GO4605@ziepe.ca>
+ <7f443666-b210-6f99-7b50-6c26d87fa7ca@gmail.com>
+ <20210118234818.GP4605@ziepe.ca>
+ <6faed1e2-13bc-68ba-7726-91924cf21b66@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6faed1e2-13bc-68ba-7726-91924cf21b66@gmail.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 18 Jan 2021 20:04:20 -0500, Douglas Gilbert wrote:
-
-> >> +bool sgl_compare_sgl(struct scatterlist *x_sgl, unsigned int x_nents, off_t x_skip,
-> >> +		     struct scatterlist *y_sgl, unsigned int y_nents, off_t y_skip,
-> >> +		     size_t n_bytes);
-> >> +
-> >> +bool sgl_compare_sgl_idx(struct scatterlist *x_sgl, unsigned int x_nents, off_t x_skip,
-> >> +			 struct scatterlist *y_sgl, unsigned int y_nents, off_t y_skip,
-> >> +			 size_t n_bytes, size_t *miscompare_idx);  
-> > 
-> > 
-> > This patch looks good and works fine as a replacement for
-> > compare_and_write_do_cmp(). One minor suggestion would be to name it
-> > sgl_equal() or similar, to perhaps better reflect the bool return and
-> > avoid memcmp() confusion. Either way:
-> > Reviewed-by: David Disseldorp <ddiss@suse.de>  
+On Tue, Jan 19, 2021 at 06:24:49PM +0100, Bodo Stroesser wrote:
 > 
-> Thanks. NVMe calls the command that does this Compare and SCSI uses
-> COMPARE AND WRITE (and VERIFY(BYTCHK=1) ) but "equal" is fine with me.
-> There will be another patchset version (at least) so there is time
-> to change.
-> 
-> Do you want:
->    - sgl_equal(...), or
->    - sgl_equal_sgl(...) ?
+> I had a second look into math.h, but I don't find any reason why round_up
+> could overflow. Can you give a hint please?
 
-I'd probably prefer the former as it's shorter, but I don't feel
-strongly about it. The latter would make sense if you expect sgl compare
-helpers for other buffer types.
+#define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
+                                                    ^^^^^
 
-Cheers, David
+That +1 can overflow
+
+It looks like it would not be so bad to implement some
+check_round_up_overflow() if people prefer
+
+Jason
