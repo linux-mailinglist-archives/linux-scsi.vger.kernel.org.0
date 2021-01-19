@@ -2,84 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AFC2FB9DB
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 15:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7212FB9E5
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 15:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389292AbhASOiB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 09:38:01 -0500
-Received: from mga01.intel.com ([192.55.52.88]:46234 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389261AbhASKCX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Jan 2021 05:02:23 -0500
-IronPort-SDR: T6sK1g08LkbFLJzdSfpTw3p9YLG3N0XsKCTGQ1k6RyPBHTA+7M2OcpK3D5hCJqsCPelW6XOKu9
- 8z/ay9RILxgQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9868"; a="197606669"
+        id S2389643AbhASOjB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 09:39:01 -0500
+Received: from labrats.qualcomm.com ([199.106.110.90]:49451 "EHLO
+        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390373AbhASLyM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jan 2021 06:54:12 -0500
+IronPort-SDR: Ux6YGD4UtoX8otGJOxUDfPgWL7JEK6akdKgKiZ4/WQDMu59F9745jG4oi9wVsZFWCyNG6XSr+e
+ 5a3rgGX0MVO/KOlnKhxLTLks27Ff0XKVP44eDqaAPQ3i9vwTMUZVmSdhFWyn0wxx/yee/p+a0G
+ enwKjcB/2/WuvRqzF0vpuAE9LQEIZx9SvhDpZco2x0fyiKgNsOK8SoT/KMcDWiX9Qb5f86W4KK
+ Qkv/Hi4ttG6ZIeHB4X3d2pVuS48M9+9tn+Lpm7cawuVfMAvofw8ecobIfDj+1Po0rDgU2qPpGo
+ ndw=
 X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
-   d="scan'208";a="197606669"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 02:00:10 -0800
-IronPort-SDR: YdqSs5Psq+23YLCpXN6FumFnhAAHgaRxKZ2jG/c1XZ2oRMo/e+avm521ANqo5It3JJVgMutKMw
- yQoVZJ32nHNQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
-   d="scan'208";a="391042310"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.149]) ([10.237.72.149])
-  by orsmga007.jf.intel.com with ESMTP; 19 Jan 2021 02:00:06 -0800
-Subject: Re: [PATCH v6 1/6] scsi: ufs: Add "wb_on" sysfs node to control WB
- on/off
-To:     Bean Huo <huobean@gmail.com>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+   d="scan'208";a="47679370"
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by labrats.qualcomm.com with ESMTP; 19 Jan 2021 03:53:18 -0800
+X-QCInternal: smtphost
+Received: from stor-presley.qualcomm.com ([192.168.140.85])
+  by ironmsg02-sd.qualcomm.com with ESMTP; 19 Jan 2021 03:53:17 -0800
+Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
+        id ED71B218E7; Tue, 19 Jan 2021 03:53:17 -0800 (PST)
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, ziqichen@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
         cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210118201039.2398-1-huobean@gmail.com>
- <20210118201039.2398-2-huobean@gmail.com>
- <0a9971aa-e508-2aaa-1379-fb898471a252@intel.com>
- <fabf0e83387f6155efea521a15b00bb1225d35a4.camel@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <9ad2cf1a-68df-47ef-9fe7-01954d2d6181@intel.com>
-Date:   Tue, 19 Jan 2021 12:00:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <fabf0e83387f6155efea521a15b00bb1225d35a4.camel@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v10 0/3] Three changes related with UFS clock scaling
+Date:   Tue, 19 Jan 2021 03:52:58 -0800
+Message-Id: <1611057183-6925-1-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19/01/21 11:33 am, Bean Huo wrote:
-> On Tue, 2021-01-19 at 09:01 +0200, Adrian Hunter wrote:
->> On 18/01/21 10:10 pm, Bean Huo wrote:
->>> From: Bean Huo <beanhuo@micron.com>
->>>
->>> Currently UFS WriteBooster driver uses clock scaling up/down to set
->>> WB on/off, for the platform which doesn't support
->>> UFSHCD_CAP_CLK_SCALING,
->>> WB will be always on. Provide a sysfs attribute to enable/disable
->>> WB
->>> during runtime. Write 1/0 to "wb_on" sysfs node to enable/disable
->>> UFS WB.
->>
->> Is it so, that after a full reset, WB is always enabled again?  Is
->> that
->> intended?
-> 
-> Hello Adrian
-> Good questions. yes, after a full reset, the UFS device side by default
-> is wb disabled,  then WB will be always enabled agaion in
-> ufshcd_wb_config(hba). but, for the platform which
-> supports UFSHCD_CAP_CLK_SCALING, wb will be disabled again while clk
-> scaling down and enabled while clk scaling up.
-> 
-> Regarding the last question, I think OEM wants to do that. maybe they
-> suppose there will be a lot of writing after reset?? From the UFS
-> device's point of view, the control of WB is up to the user.
+This series is made based on 5.12/scsi-queue branch.
 
-If it is by design enabled after reset, then perhaps it should be mentioned
-in the sysfs documentation.
+Current devfreq framework allows sysfs nodes like governor, min_freq and max_freq to be changed even after devfreq device is suspended.
+Meanwhile, devfreq_suspend_device() cannot/wouldn't synchronize clock scaling which has already been invoked through devfreq sysfs nodes menitioned above.
+It means that clock scaling invoked through these devfreq sysfs nodes can happen at any time regardless of the state of UFS host and/or device.
+We need to control and synchronize clock scaling in this scenario.
+
+The 1st change allows contexts to prevent clock scaling from being invoked through devfreq sysfs nodes.
+The 2nd change is just a code cleanup for clk_scaling/gating initialization routine.
+The 3rd change reverts one old change which can be covered by the 1st change. For branches which do not have this change yet, it can be ignored.
+
+Change since v9:
+- Minor update in the 1st change.
+
+Change since v8:
+- Rebased on 5.12/scsi-queue
+
+Change since v7:
+- Slightly updated the 1st change: changed the up_write() before ufshcd_wb_ctrl() to downgrade_write() in ufshcd_devfreq_scale(),
+  so that ufshcd_wb_ctrl() is called with clk_scale_lock held, this is to make sure race condition won't happen to ufshcd_wb_ctrl().
+
+Change since v6:
+- Updated the 2nd change
+
+Change since v5:
+- Reomved the code change in ufshcd_shutdown() since it is not quite relevant with this fix
+
+Change since v4:
+- Updated some comment lines as requested by Stanley
+
+Change since v3:
+- Slightly updated the 1st change
+
+Change since v2:
+- Split the 1st change to two changes, which become the 1st change and the 3rd change
+
+Change since v1:
+- Updated the 2nd change
+
+*** BLURB HERE ***
+
+Can Guo (3):
+  scsi: ufs: Protect some contexts from unexpected clock scaling
+  scsi: ufs: Refactor ufshcd_init/exit_clk_scaling/gating()
+  scsi: ufs: Revert "Make sure clk scaling happens only when HBA is
+    runtime ACTIVE"
+
+ drivers/scsi/ufs/ufshcd.c | 214 +++++++++++++++++++++++++---------------------
+ drivers/scsi/ufs/ufshcd.h |  10 ++-
+ 2 files changed, 127 insertions(+), 97 deletions(-)
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+
