@@ -2,62 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840E82FB24D
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 08:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4046F2FB4A3
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 09:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730587AbhASHCZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 02:02:25 -0500
-Received: from mga04.intel.com ([192.55.52.120]:59542 "EHLO mga04.intel.com"
+        id S1729531AbhASI4E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 03:56:04 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53938 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729511AbhASHCM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Jan 2021 02:02:12 -0500
-IronPort-SDR: yohp0pNJrzRtd1LwIKkf6udobFMROwxeYTYjddvDytoo/6Kz6kufZFspaDPVtK965fFYieqJOb
- RcCfa+y57Yog==
-X-IronPort-AV: E=McAfee;i="6000,8403,9868"; a="176315503"
-X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
-   d="scan'208";a="176315503"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 23:01:43 -0800
-IronPort-SDR: QgMEs7Dtt8OusFvqMteOPWLCuCZkED8sb01FqVvbFxjQhhxatv+Jj/OSKl1Tx/LeEs8bIhd9PK
- xAgEHIdrGekQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
-   d="scan'208";a="350417164"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.149]) ([10.237.72.149])
-  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2021 23:01:38 -0800
-Subject: Re: [PATCH v6 1/6] scsi: ufs: Add "wb_on" sysfs node to control WB
- on/off
-To:     Bean Huo <huobean@gmail.com>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210118201039.2398-1-huobean@gmail.com>
- <20210118201039.2398-2-huobean@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <0a9971aa-e508-2aaa-1379-fb898471a252@intel.com>
-Date:   Tue, 19 Jan 2021 09:01:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1730749AbhASIzy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 19 Jan 2021 03:55:54 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 4F03CB815;
+        Tue, 19 Jan 2021 08:55:04 +0000 (UTC)
+Date:   Tue, 19 Jan 2021 09:55:03 +0100
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Enzo Matsumiya <ematsumiya@suse.de>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arun Easi <aeasi@marvell.com>, Quinn Tran <qutran@marvell.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: Re: [PATCH] scsi: qla2xxx: fix description for parameter
+ ql2xenforce_iocb_limit
+Message-ID: <20210119085503.wrc3ujjhj7a2kfhs@beryllium.lan>
+References: <20210118184922.23793-1-ematsumiya@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <20210118201039.2398-2-huobean@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210118184922.23793-1-ematsumiya@suse.de>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 18/01/21 10:10 pm, Bean Huo wrote:
-> From: Bean Huo <beanhuo@micron.com>
+On Mon, Jan 18, 2021 at 03:49:22PM -0300, Enzo Matsumiya wrote:
+> Parameter ql2xenforce_iocb_limit is enabled by default.
 > 
-> Currently UFS WriteBooster driver uses clock scaling up/down to set
-> WB on/off, for the platform which doesn't support UFSHCD_CAP_CLK_SCALING,
-> WB will be always on. Provide a sysfs attribute to enable/disable WB
-> during runtime. Write 1/0 to "wb_on" sysfs node to enable/disable UFS WB.
+> Fixes: 89c72f4245a8 ("scsi: qla2xxx: Add IOCB resource tracking")
+> Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
 
-Is it so, that after a full reset, WB is always enabled again?  Is that
-intended?
+Reviewed-by: Daniel Wagner <dwagner@suse.de>
+
