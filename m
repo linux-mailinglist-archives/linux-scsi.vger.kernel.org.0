@@ -2,155 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F8A2FBD87
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 18:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03882FBDE7
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 18:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389793AbhASR0H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 12:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390855AbhASRZc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jan 2021 12:25:32 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE67BC061573;
-        Tue, 19 Jan 2021 09:24:51 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id g3so10244155ejb.6;
-        Tue, 19 Jan 2021 09:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Qy8mcYDslRubqQMPczlIvoAYWYvQDOq96eQu0PafMfE=;
-        b=eYfwUxhXfHaIuxuNwRrS8kQvPBRik+2A3J6NIRPhdjdSewQ2FD4YP6cz0CzJ/dRyni
-         3Nl8SNvf0ZfUSIH8M8bHbgPvVZvfOZh0F1olxQfRGqmUlZJvT4CTvQ1IDetZNfnsywLS
-         YTJObCiYFz8qs4JmrJZDJYx5rTXYoq16cu9z8PGpv1+jUY7yoMBmJNHhjOqw0/673aU1
-         yQvFUpoKeMzBAzJWh6m+uMLYfNoqwWB9COa2EkQvGd1kF5yH+8MjCmiKVDLrMSlI80B3
-         Tp0X5UjNbZ7UilcKIoJ4Si85g+Hc0vOra2v3AuTTGdKTsvo2eg2Qd2ujYfLeZdBrFosQ
-         BYmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Qy8mcYDslRubqQMPczlIvoAYWYvQDOq96eQu0PafMfE=;
-        b=Za0i2LrP7pnw2SHBT7m8MKwhmTaRnIwXstgAzRFjlDT/NB8+Coat7Yymuym6CI2NPS
-         l9nzXgq0IVtetQQ9InLpAK9S2viTxi5aGgK2NY4+z0Sgbcuf2yBEcGlEDqk+4NwtAaM/
-         +dofHkd9tlVqy06APZJ4oOxzElrmsMThYSGa7zySIa188Zbpe0fSSxbJxu6+Dqxp1HS4
-         2eUWyKVAl8ZUG3lQkOWjZ61CnfP+Ea7ZvgGohu7lOzUCVodog+lbfjoccei80TaaMRdo
-         qHGFQJIRLOFBldCxuI6Z5RVm39Ht/W/FQ/0++6rsdMr6E2/uJTxZ8Qy+K3jo5WQTqSuX
-         LWTw==
-X-Gm-Message-State: AOAM533bnQrhnWaaCcrtUPiUTIBd7C2ckmn/A24uCNg+4n0riS8qjZyf
-        Q9DtaAKJUsl/1xJoSz4DZTA=
-X-Google-Smtp-Source: ABdhPJwIemtsVHlkxlk8JB7ypAMSs0GcJ4fX03fAf9hgs661+3MwI0c+/ccJWxE9OP0oPSEYjCWTVQ==
-X-Received: by 2002:a17:906:dfce:: with SMTP id jt14mr2794501ejc.435.1611077090638;
-        Tue, 19 Jan 2021 09:24:50 -0800 (PST)
-Received: from [192.168.178.40] (ipbcc06d06.dynamic.kabel-deutschland.de. [188.192.109.6])
-        by smtp.gmail.com with ESMTPSA id s19sm13021962edx.7.2021.01.19.09.24.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jan 2021 09:24:50 -0800 (PST)
-Subject: Re: [PATCH v6 1/4] sgl_alloc_order: remove 4 GiB limit, sgl_free()
- warning
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Douglas Gilbert <dgilbert@interlog.com>,
-        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        jejb@linux.vnet.ibm.com, ddiss@suse.de, bvanassche@acm.org
-References: <20210118163006.61659-1-dgilbert@interlog.com>
- <20210118163006.61659-2-dgilbert@interlog.com>
- <20210118182854.GJ4605@ziepe.ca>
- <59707b66-0b6c-b397-82fe-5ad6a6f99ba1@interlog.com>
- <20210118202431.GO4605@ziepe.ca>
- <7f443666-b210-6f99-7b50-6c26d87fa7ca@gmail.com>
- <20210118234818.GP4605@ziepe.ca>
-From:   Bodo Stroesser <bostroesser@gmail.com>
-Message-ID: <6faed1e2-13bc-68ba-7726-91924cf21b66@gmail.com>
-Date:   Tue, 19 Jan 2021 18:24:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1732083AbhASOiS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 09:38:18 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2369 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404390AbhASKff (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jan 2021 05:35:35 -0500
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4DKlKx4GFXz67bhy;
+        Tue, 19 Jan 2021 18:30:45 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 19 Jan 2021 11:34:52 +0100
+Received: from [10.47.10.61] (10.47.10.61) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Tue, 19 Jan
+ 2021 10:34:50 +0000
+Subject: Re: [PATCH V3 15/25] smartpqi: fix host qdepth limit
+To:     <Don.Brace@microchip.com>, <mwilck@suse.com>,
+        <pmenzel@molgen.mpg.de>, <Kevin.Barnett@microchip.com>,
+        <Scott.Teel@microchip.com>, <Justin.Lindley@microchip.com>,
+        <Scott.Benesh@microchip.com>, <Gerry.Morong@microchip.com>,
+        <Mahesh.Rajashekhara@microchip.com>, <hch@infradead.org>,
+        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <it+linux-scsi@molgen.mpg.de>,
+        <buczek@molgen.mpg.de>, <gregkh@linuxfoundation.org>,
+        Ming Lei <ming.lei@redhat.com>
+References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
+ <160763254769.26927.9249430312259308888.stgit@brunhilda>
+ <ddd8bca4-2ae7-a2dc-cca6-0a2ff85a7d35@molgen.mpg.de>
+ <SN6PR11MB28487527276CEBC75D36A732E1C60@SN6PR11MB2848.namprd11.prod.outlook.com>
+ <85c6e1705c55fb930ac13bc939279f0d1faa526f.camel@suse.com>
+ <SN6PR11MB2848C1195C65F87C910E979BE1A70@SN6PR11MB2848.namprd11.prod.outlook.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <b3e4e597-779b-7c1e-0d3c-07bc3dab1bb5@huawei.com>
+Date:   Tue, 19 Jan 2021 10:33:36 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <20210118234818.GP4605@ziepe.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <SN6PR11MB2848C1195C65F87C910E979BE1A70@SN6PR11MB2848.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.10.61]
+X-ClientProxiedBy: lhreml742-chm.china.huawei.com (10.201.108.192) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19.01.21 00:48, Jason Gunthorpe wrote:
-> On Mon, Jan 18, 2021 at 10:22:56PM +0100, Bodo Stroesser wrote:
->> On 18.01.21 21:24, Jason Gunthorpe wrote:
->>> On Mon, Jan 18, 2021 at 03:08:51PM -0500, Douglas Gilbert wrote:
->>>> On 2021-01-18 1:28 p.m., Jason Gunthorpe wrote:
->>>>> On Mon, Jan 18, 2021 at 11:30:03AM -0500, Douglas Gilbert wrote:
->>>>>
->>>>>> After several flawed attempts to detect overflow, take the fastest
->>>>>> route by stating as a pre-condition that the 'order' function argument
->>>>>> cannot exceed 16 (2^16 * 4k = 256 MiB).
->>>>>
->>>>> That doesn't help, the point of the overflow check is similar to
->>>>> overflow checks in kcalloc: to prevent the routine from allocating
->>>>> less memory than the caller might assume.
->>>>>
->>>>> For instance ipr_store_update_fw() uses request_firmware() (which is
->>>>> controlled by userspace) to drive the length argument to
->>>>> sgl_alloc_order(). If userpace gives too large a value this will
->>>>> corrupt kernel memory.
->>>>>
->>>>> So this math:
->>>>>
->>>>>      	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
->>>>
->>>> But that check itself overflows if order is too large (e.g. 65).
+>>
+>> Am 10.12.20 um 21:35 schrieb Don Brace:
+>>> From: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
 >>>
->>> I don't reall care about order. It is always controlled by the kernel
->>> and it is fine to just require it be low enough to not
->>> overflow. length is the data under userspace control so math on it
->>> must be checked for overflow.
->>>
->>>> Also note there is another pre-condition statement in that function's
->>>> definition, namely that length cannot be 0.
->>>
->>> I don't see callers checking for that either, if it is true length 0
->>> can't be allowed it should be blocked in the function
->>>
->>> Jason
->>>
+>>> * Correct scsi-mid-layer sending more requests than
+>>>     exposed host Q depth causing firmware ASSERT issue.
+>>>     * Add host Qdepth counter.
 >>
->> A already said, I also think there should be a check for length or
->> rather nent overflow.
+>> This supposedly fixes the regression between Linux 5.4 and 5.9, which
+>> we reported in [1].
 >>
->> I like the easy to understand check in your proposed code:
+>>       kernel: smartpqi 0000:89:00.0: controller is offline: status code
+>> 0x6100c
+>>       kernel: smartpqi 0000:89:00.0: controller offline
 >>
->> 	if (length >> (PAGE_SHIFT + order) >= UINT_MAX)
->> 		return NULL;
+>> Thank you for looking into this issue and fixing it. We are going to
+>> test this.
 >>
+>> For easily finding these things in the git history or the WWW, it
+>> would be great if these log messages could be included (in the
+>> future).
+>> DON> Thanks for your suggestion. Well add them in the next time.
 >>
->> But I don't understand, why you open-coded the nent calculation:
+>> Also, that means, that the regression is still present in Linux 5.10,
+>> released yesterday, and this commit does not apply to these versions.
 >>
->> 	nent = length >> (PAGE_SHIFT + order);
->> 	if (length & ((1ULL << (PAGE_SHIFT + order)) - 1))
->> 		nent++;
+>> DON> They have started 5.10-RC7 now. So possibly 5.11 or 5.12
+>> depending when all of the patches are applied. The patch in question
+>> is among 28 other patches.
+>>
+>> Mahesh, do you have any idea, what commit caused the regression and
+>> why the issue started to show up?
+>> DON> The smartpqi driver sets two scsi_host_template member fields:
+>> .can_queue and .nr_hw_queues. But we have not yet converted to
+>> host_tagset. So the queue_depth becomes nr_hw_queues * can_queue,
+>> which is more than the hw can support. That can be verified by looking
+>> at scsi_host.h.
+>>          /*
+>>           * In scsi-mq mode, the number of hardware queues supported by
+>> the LLD.
+>>           *
+>>           * Note: it is assumed that each hardware queue has a queue
+>> depth of
+>>           * can_queue. In other words, the total queue depth per host
+>>           * is nr_hw_queues * can_queue. However, for when host_tagset
+>> is set,
+>>           * the total queue depth is can_queue.
+>>           */
+>>
+>> So, until we make this change, the queue_depth change prevents the
+>> above issue from happening.
 > 
-> It is necessary to properly check for overflow, because the easy to
-> understand check doesn't prove that round_up will work, only that >>
-> results in something that fits in an int and that +1 won't overflow
-> the int.
+> can_queue and nr_hw_queues have been set like this as long as the driver existed. Why did Paul observe a regression with 5.9?
 > 
->> Wouldn't it be better to keep the original line instead:
->>
->> 	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
+> And why can't you simply set can_queue to (ctrl_info->scsi_ml_can_queue / nr_hw_queues)?
 > 
-> This can overflow inside the round_up
+> Don: I did this in an internal patch, but this patch seemed to work the best for our driver. HBA performance remained steady when running benchmarks.
+> 
 
-I had a second look into math.h, but I don't find any reason why 
-round_up could overflow. Can you give a hint please?
+I guess that this is a fallout from commit 6eb045e092ef ("scsi:
+  core: avoid host-wide host_busy counter for scsi_mq"). But that commit 
+is correct.
 
-Regarding the overflow checks: would it be a good idea to not check
-length >> (PAGE_SHIFT + order) in the beginning, but check nalloc
-immediately before the kmalloc_array() as the only overrun check:
+If .can_queue is set to (ctrl_info->scsi_ml_can_queue / nr_hw_queues), 
+then blk-mq can send each hw queue only (ctrl_info->scsi_ml_can_queue / 
+nr_hw_queues) commands, while it should be possible to send 
+ctrl_info->scsi_ml_can_queue commands.
 
-	if ((unsigned long long)nalloc << (PAGE_SHIFT + order) < length)
-		return NULL;
+I think that this can alternatively be solved by setting .host_tagset flag.
 
--Bodo
+Thanks,
+John
+
+
