@@ -2,136 +2,142 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A002FAF3A
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 04:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CFE2FAF2D
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 04:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728738AbhASDs1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jan 2021 22:48:27 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:48267 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728725AbhASDp5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 22:45:57 -0500
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210119034508epoutp033922a461299b9a35d03d8c1c4cf95c55~bhVjfMg1H2549825498epoutp03r
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Jan 2021 03:45:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210119034508epoutp033922a461299b9a35d03d8c1c4cf95c55~bhVjfMg1H2549825498epoutp03r
+        id S1728662AbhASDn1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jan 2021 22:43:27 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:20917 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728655AbhASDnS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jan 2021 22:43:18 -0500
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210119034227epoutp014a8326c4298f256b289bb705d89bb1d7~bhTNr0G9y0338603386epoutp01E
+        for <linux-scsi@vger.kernel.org>; Tue, 19 Jan 2021 03:42:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210119034227epoutp014a8326c4298f256b289bb705d89bb1d7~bhTNr0G9y0338603386epoutp01E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1611027908;
-        bh=IUvNu4dNPyTjKtls0lrz2Urf0qov0F2gqycSUqGOIkg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:In-Reply-To:References:From;
-        b=YqbprX8N1P3msUo12KblDdXM8aYTEHhblsPPhHn+0gj8tkfEiW806T8m8SRB7r+Jm
-         tGNsmSTUmMbi+xRRuQcqvCoZnHWvQDrs5hgMFcNr1xMqZDtlzBHb6L3JO2lkcYq7Ct
-         fEVmtPDZp7JUW8jIOHsvwkw9zmdkt1TyJbgCIKXQ=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20210119034507epcas2p3cc01858b045148ceb1d90fa30d90d717~bhVix0SAY0516005160epcas2p3Q;
-        Tue, 19 Jan 2021 03:45:07 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.40.183]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4DKZKt0v0Nz4x9QH; Tue, 19 Jan
-        2021 03:45:06 +0000 (GMT)
+        s=mail20170921; t=1611027747;
+        bh=0/XyJc2skLxvc6UmT4S2F0mrnpfpXZkdDpauvVsUM7w=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=Fmg/hgvcr7OhVnsi92I23Hn9Hkv758uvqRw9kQY+NCRIWPBXb7GYK8fdyUipWi2cD
+         667CityQX5X/tAGdaxnYYzWIjaPR6fKGJG3K3D1edcnM9jgacV5D4uBjetrVjDyOa3
+         4d57LnwmLHIjiosgRMmZX6sy+cjrFfgY1K1GsAb0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20210119034226epcas2p11ffee3d0f5ffd484fb309ea3321c2851~bhTNCb2bB0932309323epcas2p1d;
+        Tue, 19 Jan 2021 03:42:26 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.184]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4DKZGl4HTzz4x9Q1; Tue, 19 Jan
+        2021 03:42:23 +0000 (GMT)
 Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        04.F9.56312.0C556006; Tue, 19 Jan 2021 12:45:04 +0900 (KST)
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.7B.10621.F1556006; Tue, 19 Jan 2021 12:42:23 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20210119034504epcas2p478f76a8f9cb0cbecff219a2098cb2eaf~bhVfvQgXD3241732417epcas2p4u;
-        Tue, 19 Jan 2021 03:45:04 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        20210119034223epcas2p490651ec80b51251bfb810fdbe9c104af~bhTJaUPC_2918429184epcas2p4j;
+        Tue, 19 Jan 2021 03:42:23 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210119034504epsmtrp1178b8c50594df5ab622f7f8ae85d92d7~bhVfuMWig1244212442epsmtrp1f;
-        Tue, 19 Jan 2021 03:45:04 +0000 (GMT)
-X-AuditID: b6c32a46-777d6a800000dbf8-93-600655c02b03
+        20210119034223epsmtrp1391a72ae22790ff966b0739a83077436~bhTJZdKsD1144811448epsmtrp1c;
+        Tue, 19 Jan 2021 03:42:23 +0000 (GMT)
+X-AuditID: b6c32a45-337ff7000001297d-9a-6006551feea1
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        50.8E.13470.0C556006; Tue, 19 Jan 2021 12:45:04 +0900 (KST)
-Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20210119034504epsmtip1462125dad2440652919c0a7ce49f08bc~bhVffXeWY2314823148epsmtip1Z;
-        Tue, 19 Jan 2021 03:45:04 +0000 (GMT)
-From:   Kiwoong Kim <kwmad.kim@samsung.com>
-To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
-        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com
-Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [RESEND PATCH -6 2/2] ufs: ufs-exynos: use
- UFSHCD_QUIRK_ALIGN_SG_WITH_PAGE_SIZE
-Date:   Tue, 19 Jan 2021 12:33:42 +0900
-Message-Id: <80d7e27d6ec537e650a6bd74897b6c60618efcdc.1611026909.git.kwmad.kim@samsung.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1611026909.git.kwmad.kim@samsung.com>
-In-Reply-To: <cover.1611026909.git.kwmad.kim@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmqe6BULYEg13XjSwezNvGZrG37QS7
-        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8Zq8evvenaL1YsfsFgsurGNyeLmlqMsFt3Xd7BZ
-        LD/+j8mi6+4NRoul/96yOPB7XL7i7XG5r5fJY8KiA4we39d3sHl8fHqLxaNvyypGj8+b5Dza
-        D3QzBXBE5dhkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXm
-        AB2vpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwNCzQK07MLS7NS9dLzs+1MjQw
-        MDIFqkzIyZh5+DNbwTL2ipUHJrA1MDaxdTFyckgImEhc3dgNZHNxCAnsYJR4+HIbM0hCSOAT
-        o8TmB64QiW+MEk+//WWG6Tjw8QwTRGIvo0TLjzdQ7T8YJRbtP8YCUsUmoCnx9OZUsCoRgTNM
-        Etdaz7KCJJgF1CV2TTjBBGILC0RJTD61DcxmEVCV2DDvDJjNKxAtsfnDG3aIdXISN891gq3m
-        FLCUmNmxhwmVzQVUM5dD4lvPTCaIBheJ9e+PQtnCEq+Ob4EaJCXxsr8Nyq6X2De1gRWiuQfo
-        uX3/GCESxhKznrUD2RxAl2pKrN+lD2JKCChLHLnFAnE/n0TH4b/sEGFeiY42IYhGZYlfkyZD
-        DZGUmHnzDlSJh8TJa6KQ8AFadP/rYdYJjPKzEOYvYGRcxSiWWlCcm55abFRghBx7mxjBKVXL
-        bQfjlLcf9A4xMnEwHmKU4GBWEuEtXceUIMSbklhZlVqUH19UmpNafIjRFBiOE5mlRJPzgUk9
-        ryTe0NTIzMzA0tTC1MzIQkmct9jgQbyQQHpiSWp2ampBahFMHxMHp1QDk2Eru+oTjqu21876
-        LloTIRx00vYvW9pqKcXHpUxK/x6aufrzGn44nXdrVunX0z1xgZUuCZnu0uyT4meLM0hdnHS7
-        xrI3XUzqv+78CTyHJ/676ZB/pKw1xrhG1cPY5EAbt8omqfb0l7YZyvcPvQisZop47b+npvHb
-        bMsNiSsqa/4u2HWo/ULWlitMsbdyGaKDyiUV37R28syILxXMN+F9K2BgF1R1/GFP8w4bI6cl
-        kY9WWT1ofHmt65ZnzLWvRQZMBU9934SENIev86/d/tSQtTfAe592r5rO6vY1x/hs9jtuFbjM
-        aLzQWn6Od+TCvOTQisQVD9Z4Zj37VqqV9N893TnYpCtvU0wu863IG0osxRmJhlrMRcWJAJQV
-        +nQyBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGLMWRmVeSWpSXmKPExsWy7bCSnO6BULYEg0/bRSwezNvGZrG37QS7
-        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8Zq8evvenaL1YsfsFgsurGNyeLmlqMsFt3Xd7BZ
-        LD/+j8mi6+4NRoul/96yOPB7XL7i7XG5r5fJY8KiA4we39d3sHl8fHqLxaNvyypGj8+b5Dza
-        D3QzBXBEcdmkpOZklqUW6dslcGXMPPyZrWAZe8XKAxPYGhib2LoYOTkkBEwkDnw8w9TFyMUh
-        JLCbUWL66vtQCUmJEzufM0LYwhL3W46wQhR9Y5R4cX4DO0iCTUBT4unNqWDdIgL3mCQuTZjL
-        DJJgFlCX2DXhBBOILSwQIfGh/yeYzSKgKrFh3hkwm1cgWmLzhzfsEBvkJG6e6wTr5RSwlJjZ
-        sQesRkjAQmLhzp8suMQnMAosYGRYxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kRHBVa
-        mjsYt6/6oHeIkYmD8RCjBAezkghv6TqmBCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJ
-        pCeWpGanphakFsFkmTg4pRqY1r+UujTxW+DsEzFtLvzz3c4eu/5Yf+tdhsy5cvdTd4V/Xf03
-        54TLiaV3Gm7bC8mLy+3fPGe/3c5NzVkLN+z8YTf5ww3O6Wwrnio+fZ3wR/u5t+l368kf4r6f
-        Oat5ePWkclY7l0VKjbHWybF1HctjfcXaJzAtndr33HXK9B1NAcdO2iSuK+Qwq5v8LizQ4+Oi
-        S2cVPnNdPPni8f6WGG63j7tYln44fbmxcJ56zdrdk/feMnY9vPnwgxPZ6XkHcmcpz12wxyfg
-        oz8H56bpU6eff3VU7qzZs5fv5QriFBuvW86+95I/c98OjtM1q6bLaD/997td+2vJjN6NfNui
-        D8/5FPhIN0F6V4ZO9k83H3EFUV8WJZbijERDLeai4kQAr/a2N/kCAAA=
-X-CMS-MailID: 20210119034504epcas2p478f76a8f9cb0cbecff219a2098cb2eaf
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C1.B1.08745.E1556006; Tue, 19 Jan 2021 12:42:22 +0900 (KST)
+Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210119034222epsmtip16618ade425e8c0371256379bbf1a521a~bhTJIIwgR2163121631epsmtip1G;
+        Tue, 19 Jan 2021 03:42:22 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     <linux-scsi@vger.kernel.org>, <alim.akhtar@samsung.com>,
+        <avri.altman@wdc.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
+        <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
+        <bvanassche@acm.org>, <grant.jung@samsung.com>,
+        <sc.suh@samsung.com>, <hy50.seo@samsung.com>,
+        <sh425.lee@samsung.com>, <bhoon95.kim@samsung.com>
+In-Reply-To: <cover.1611023224.git.kwmad.kim@samsung.com>
+Subject: RE: [ PATCH v6 0/2] introduce a quirk to allow only page-aligned sg
+ entries
+Date:   Tue, 19 Jan 2021 12:42:22 +0900
+Message-ID: <047d01d6ee15$1892dc10$49b89430$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIzesnF+mLCsBdJMfotOaCZn7Z9bQEph7lpqWvoBxA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNJsWRmVeSWpSXmKPExsWy7bCmqa58KFuCwdmlshYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZNF9fQebxfLj/5gs
+        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
+        VI5NRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtDdSgpl
+        iTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCQ8MCveLE3OLSvHS95PxcK0MDAyNToMqE
+        nIwzy66wFvSwVpxd3sbcwPiWuYuRk0NCwERiVfN1li5GLg4hgR2MEvtOHmaCcD4xShz7fRLK
+        +cwosez6PriWI3umQSV2MUpMmtrEDOG8YJRYcHIfC0gVm4C2xLSHu1lBEiICL5gkbqy9zwaS
+        4BSwlJi9+AwjiC0sECax8NUfMJtFQFXi2/P3YDW8IDX3XjFD2IISJ2c+ARvKLCAvsf3tHKgz
+        FCR+Pl3GCmKLCFhJvLzaygxRIyIxu7MN7CIJgRMcEpu71zFCNLhIfL18ix3CFpZ4dXwLlC0l
+        8bK/Dcqul9g3tYEVormHUeLpvn9QzcYSs561A9kcQBs0Jdbv0gcxJQSUJY7cgrqNT6Lj8F92
+        iDCvREebEESjssSvSZOhhkhKzLx5B2qTh8T61jNMExgVZyH5chaSL2ch+WYWwt4FjCyrGMVS
+        C4pz01OLjQoMkaN7EyM4VWu57mCc/PaD3iFGJg7GQ4wSHMxKIryl65gShHhTEiurUovy44tK
+        c1KLDzGaAsN9IrOUaHI+MFvklcQbmhqZmRlYmlqYmhlZKInzFhs8iBcSSE8sSc1OTS1ILYLp
+        Y+LglGpg0pXXMF2qpuV8Q+rB8aC6jwevCnj2P/56/IUgj/zCNibOl/7MdozMa/vSNp802lRZ
+        dO+OKPOEr2wNR661SpzT0b8Rfs1Kb3K3nK+me3Bg7v38pa6mV09kNV+LCP7hnXXhQiCz27QD
+        t4V4+Q+6Tpc317r/RjYr+XzMzhP1JtEySj/iK+P2rGdpvMqRYXy0h/dqdfLrZV7dvqIX7oZ/
+        vxVhZTf/VUVu0CH1rQoBKX+Oqpk32tXFPn6/TLPpoFtnsUqKfFMI8+7l04plDq73y3+nWZob
+        0Xg+sM8hx6O47i1XzQ0ZCcWHFvk35P5+UlRu/pf/zX5p65ZltzfZB+mYx4burGWanjO/RXXR
+        n8liikosxRmJhlrMRcWJALjOSnBeBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFIsWRmVeSWpSXmKPExsWy7bCSnK5cKFuCwZvjphYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZNF9fQebxfLj/5gs
+        uu7eYLRY+u8tiwOfx+Ur3h6X+3qZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBH
+        FJdNSmpOZllqkb5dAlfGmWVXWAt6WCvOLm9jbmB8y9zFyMkhIWAicWTPNKYuRi4OIYEdjBJv
+        /hxhhEhISpzY+RzKFpa433KEFaLoGaPE9SvrWUESbALaEtMe7gZLiAj8YpK4dmwzVFUXo8SZ
+        la1gVZwClhKzF58BGyUsECKx790lNhCbRUBV4tvz92A2L0jNvVfMELagxMmZT1hAbGagDb0P
+        WxkhbHmJ7W/nQN2tIPHz6TKw+SICVhIvr7YyQ9SISMzubGOewCg0C8moWUhGzUIyahaSlgWM
+        LKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYKjU0trB+OeVR/0DjEycTAeYpTgYFYS
+        4S1dx5QgxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA9PU
+        m3OjzJMVTPsE7jztu51t43Dd0tjDs7VRZmYx4/3rIYsy+jZbte4/MXXulhWxlwIuxhj4sKZ+
+        2RAk2+h5nkfApGxJovv/g3sniHDunLTnpnL9/53Xk64c7GcpZelnU/U0ZFp3tcB9VfQszcjm
+        wiXzubsdDtZlzrBLj7m+dGJjp+efjt4NDV/VmbXtGI9Ymh4XenNk8xtPzkWzLqxZaD3F++X2
+        Lm3JpTnrl638sLI3TLzlf1Hrw5iO/DkPpzoue1P2YvYWR+ktKbk/2gTrjRxPmYSXLvUpP6+3
+        Wj7TI+XhBweD6wvXJl7Y0X7G7ZCf45TTf/+mGAmETRPqF2FJufO7K6hycmLxM3+j42wClUos
+        xRmJhlrMRcWJAGbDS6Y9AwAA
+X-CMS-MailID: 20210119034223epcas2p490651ec80b51251bfb810fdbe9c104af
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210119034504epcas2p478f76a8f9cb0cbecff219a2098cb2eaf
-References: <cover.1611026909.git.kwmad.kim@samsung.com>
-        <CGME20210119034504epcas2p478f76a8f9cb0cbecff219a2098cb2eaf@epcas2p4.samsung.com>
+X-CMS-RootMailID: 20210119024011epcas2p45256028f99195958140a6846d40b9143
+References: <CGME20210119024011epcas2p45256028f99195958140a6846d40b9143@epcas2p4.samsung.com>
+        <cover.1611023224.git.kwmad.kim@samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Exynos needs alignment with page size because it isn't capable
-to transfer data in one DATA IN to seversal areas.
+> v5 -> v6: collect received tags
 
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
----
- drivers/scsi/ufs/ufs-exynos.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
-index a8770ff..d1f0031 100644
---- a/drivers/scsi/ufs/ufs-exynos.c
-+++ b/drivers/scsi/ufs/ufs-exynos.c
-@@ -1236,7 +1236,8 @@ struct exynos_ufs_drv_data exynos_ufs_drvs = {
- 				  UFSHCI_QUIRK_BROKEN_HCE |
- 				  UFSHCI_QUIRK_SKIP_RESET_INTR_AGGR |
- 				  UFSHCD_QUIRK_BROKEN_OCS_FATAL_ERROR |
--				  UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL,
-+				  UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL |
-+				  UFSHCD_QUIRK_ALIGN_SG_WITH_PAGE_SIZE,
- 	.opts			= EXYNOS_UFS_OPT_HAS_APB_CLK_CTRL |
- 				  EXYNOS_UFS_OPT_BROKEN_AUTO_CLK_CTRL |
- 				  EXYNOS_UFS_OPT_BROKEN_RX_SEL_IDX |
--- 
-2.7.4
+There is a mistake on the part of this commit message.
+Sorry, I'll post again.
+
+
+Thanks.
+Kiwoong Kim
+> v4 -> v5: collect received tags
+> v3 -> v4: fix some typos
+> v2 -> v3: rename exynos functions
+> v1 -> v2: rename the vops and fix some typos
+> 
+> Kiwoong Kim (2):
+>   ufs: introduce a quirk to allow only page-aligned sg entries
+>   ufs: ufs-exynos: use UFSHCD_QUIRK_ALIGN_SG_WITH_PAGE_SIZE
+> 
+>  drivers/scsi/ufs/ufs-exynos.c | 3 ++-
+>  drivers/scsi/ufs/ufshcd.c     | 2 ++
+>  drivers/scsi/ufs/ufshcd.h     | 4 ++++
+>  3 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> --
+> 2.7.4
+
 
