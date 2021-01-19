@@ -2,96 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E3E2FC44C
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Jan 2021 00:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D8B2FC473
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Jan 2021 00:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728530AbhASW6g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 17:58:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35989 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404082AbhASOTe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Jan 2021 09:19:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611065887;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ycJhE8mXTZkoJTspQiF4eAdjjIOqaHJTzxw51QUBpw=;
-        b=iH91giBXcrvLWkxZafRwzhtnAaqC4UgOyL2/svKS5JpqN4aXD9uZoHjHC1ghixJvzFQFwB
-        wLFBArEfZwc4Z7vEzAYFoEYWqEGfkJemKwWQ+7hEoy/NTkYb2K/87UEluBwNSQI9TmihSg
-        YrK+WSWmMbUsVGj8AVkkO22Ba2gkMuA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-504-Na2rrFESP2-59Jhvxs6BgA-1; Tue, 19 Jan 2021 09:14:34 -0500
-X-MC-Unique: Na2rrFESP2-59Jhvxs6BgA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B9A58806661;
-        Tue, 19 Jan 2021 14:14:29 +0000 (UTC)
-Received: from localhost (unknown [10.18.25.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2AA0D19C47;
-        Tue, 19 Jan 2021 14:14:23 +0000 (UTC)
-Date:   Tue, 19 Jan 2021 09:14:22 -0500
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Cc:     linux-block@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-bcache@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        cluster-devel@redhat.com, jfs-discussion@lists.sourceforge.net,
-        dm-devel@redhat.com, axboe@kernel.dk, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, efremov@linux.com, colyli@suse.de,
-        kent.overstreet@gmail.com, agk@redhat.com, song@kernel.org,
-        hch@lst.de, sagi@grimberg.me, martin.petersen@oracle.com,
-        viro@zeniv.linux.org.uk, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com, tytso@mit.edu, adilger.kernel@dilger.ca,
-        rpeterso@redhat.com, agruenba@redhat.com, darrick.wong@oracle.com,
-        shaggy@kernel.org, damien.lemoal@wdc.com, naohiro.aota@wdc.com,
-        jth@kernel.org, tj@kernel.org, osandov@fb.com, bvanassche@acm.org,
-        gustavo@embeddedor.com, asml.silence@gmail.com,
-        jefflexu@linux.alibaba.com
-Subject: Re: [RFC PATCH 00/37] block: introduce bio_init_fields()
-Message-ID: <20210119141422.GA23758@redhat.com>
-References: <20210119050631.57073-1-chaitanya.kulkarni@wdc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210119050631.57073-1-chaitanya.kulkarni@wdc.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        id S1729142AbhASXHs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 18:07:48 -0500
+Received: from mga17.intel.com ([192.55.52.151]:24134 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2395357AbhASORN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 19 Jan 2021 09:17:13 -0500
+IronPort-SDR: VLBjqwI9I2oiOkaxUaZy8bSlQX2Rj1+HGsTYt9Y4F2W4LWllUu/VifteQ5nlvWamQV5ypeADgY
+ IUOlXe6OqNrA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9868"; a="158704789"
+X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
+   d="scan'208";a="158704789"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 06:15:40 -0800
+IronPort-SDR: Dnqod0Yp7Qpga45GQeKJSJk6Aq4E9GR4s6K0z+VhJOsxz0jy0YqtuPUjVbpgwR9q2cz/ARzqXX
+ 7buV+2qDLw7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
+   d="scan'208";a="347189908"
+Received: from ahunter-desktop.fi.intel.com ([10.237.72.149])
+  by fmsmga007.fm.intel.com with ESMTP; 19 Jan 2021 06:15:37 -0800
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH 0/4] scsi: ufs-debugfs: Add UFS Exception Event reporting
+Date:   Tue, 19 Jan 2021 16:15:38 +0200
+Message-Id: <20210119141542.3808-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.17.1
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jan 19 2021 at 12:05am -0500,
-Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com> wrote:
+Hi
 
-> Hi,
-> 
-> This is a *compile only RFC* which adds a generic helper to initialize
-> the various fields of the bio that is repeated all the places in
-> file-systems, block layer, and drivers.
-> 
-> The new helper allows callers to initialize various members such as
-> bdev, sector, private, end io callback, io priority, and write hints.
-> 
-> The objective of this RFC is to only start a discussion, this it not 
-> completely tested at all.                                                                                                            
-> Following diff shows code level benefits of this helper :-
->  38 files changed, 124 insertions(+), 236 deletions(-)
+Here are patches to add a tracepoint for UFS Exception Events and to allow
+users to enable specific exception events without affecting the driver's
+use of exception events.
 
 
-Please no... this is just obfuscation.
+Adrian Hunter (4):
+      scsi: ufs: Add exception event tracepoint
+      scsi: ufs: Add exception event definitions
+      scsi: ufs-debugfs: Add user-defined exception_event_mask
+      scsi: ufs-debugfs: Add user-defined exception event rate limiting
 
-Adding yet another field to set would create a cascade of churn
-throughout kernel (and invariably many callers won't need the new field
-initialized, so you keep passing 0 for more and more fields).
+ drivers/scsi/ufs/ufs-debugfs.c | 90 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufs-debugfs.h |  2 +
+ drivers/scsi/ufs/ufs.h         | 10 ++++-
+ drivers/scsi/ufs/ufshcd.c      | 87 +++++++++++++++++++++++++---------------
+ drivers/scsi/ufs/ufshcd.h      | 26 +++++++++++-
+ include/trace/events/ufs.h     | 21 ++++++++++
+ 6 files changed, 201 insertions(+), 35 deletions(-)
 
-Nacked-by: Mike Snitzer <snitzer@redhat.com>
 
+Regards
+Adrian
