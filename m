@@ -2,71 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 296352FC49A
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Jan 2021 00:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7162FC4CB
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Jan 2021 00:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730395AbhASXQo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 18:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727895AbhASXPk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jan 2021 18:15:40 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E701C0613D3
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Jan 2021 15:14:59 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id r32so7937380ybd.5
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Jan 2021 15:14:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Marg7pjTRtpl09VyTT0jCfl3UMPAKnBqUunBe2OgC58=;
-        b=TKSYhYiP2tTGQZc9sbRFcM1T3K1NFpIAC+H5XtvnYTzAlPs2J03WjRiDZruXmEkE+I
-         u6Sug9gorg1W5siqZWi/2KTcL+J6q9lSyN9nkXefRpVu1uZg6NMSBnliNQfz0ZVP+Wvv
-         aZE101jRtqJ/iOghJQP7M7Q1TPeZZKcC1K39LdsiUJ3xA2hrMsVMz1G8HN3oBkpf8WPd
-         IXHJExRPEA84RY7rgPv4SWTUlDawwVJhts+JY7G6wl35gSwe4G0lWwR92mBEdRDRHIr0
-         +AHhZRnr5ULX37uqfagyndXyQaKXEfYSfiDFRAWMexiPCV1n73bON6QKXCr8r4/S3tIo
-         dp3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Marg7pjTRtpl09VyTT0jCfl3UMPAKnBqUunBe2OgC58=;
-        b=XbiYEHFMzb4vDffyTUZ5b5O1kah/UmHJ+sZh9IizMb8Heiu89ZNIL46taHncrPBdTM
-         RrzTmBGxVHPP/iC9dye7nHjyd0vWs04u8h9OI157iWEQjqRa4wmgMAiONd98pAj2P+DR
-         c02GKLJ1ZwO+OVHa5CH0BlFb/5Cpm1eol62C/VWYgm87gik4GcmM5jxpbsGOqrX6KoY/
-         DZHWDIuLJpMkfqWqHOjxKmi9+mUB1S6rqmr/sdycOxtXcKQEQ60HzvVwAmQ2AAd4xvnv
-         KZEg+wjiHyI/qUXukFvApn0HvL+BE4L6mF0b/qRZ2ll+/J4kTLT8JMJALfukiOd/8cP6
-         MjGg==
-X-Gm-Message-State: AOAM531zX6fQNtTZXuAtJtbLHi3YNhxwoKY0kGdlSnL+A15FYfW7oZuP
-        yld9kcrg+im1F2xCPpQl3M6dkp4zQPadoOjOMA0=
-X-Google-Smtp-Source: ABdhPJxbiDRHpwt+9UcYayL+Xg1d2kHHfCHdlAMKlBcunBREdjMEkIMfu7mpbjuGoJX+r4G8g2qsx5q5P/s8H+rfoqE=
-X-Received: by 2002:a25:dac6:: with SMTP id n189mr9637303ybf.85.1611098098022;
- Tue, 19 Jan 2021 15:14:58 -0800 (PST)
+        id S1728062AbhASXei (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 18:34:38 -0500
+Received: from mx2.suse.de ([195.135.220.15]:58372 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2395297AbhASONc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 19 Jan 2021 09:13:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611065564; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/fmwjCE7PKfVMK4jAVDbqI8JqCx2zIE0oHsnCHO+Zsc=;
+        b=oilN6tMTXOvyF9Dl/uELpsnNLCnU3H975oSFm9Ye7TeJYfWgBuCJ+TlayTI/mqFJ8XTh76
+        OOvWvFsXV5izz8GmTyqo5uPKG8Qx6ZO6/scbuIrrM30k4gaEi36xN9pUOTFZl+SXbPOP3K
+        suz8ze2BHTHvv0Cp2K1uY1C2UnItoyA=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 77BCDAB9F;
+        Tue, 19 Jan 2021 14:12:44 +0000 (UTC)
+Message-ID: <4555695d649afada5d4358485f0a146aa0848f65.camel@suse.com>
+Subject: Re: [PATCH V3 15/25] smartpqi: fix host qdepth limit
+From:   Martin Wilck <mwilck@suse.com>
+To:     John Garry <john.garry@huawei.com>, Don.Brace@microchip.com,
+        pmenzel@molgen.mpg.de, Kevin.Barnett@microchip.com,
+        Scott.Teel@microchip.com, Justin.Lindley@microchip.com,
+        Scott.Benesh@microchip.com, Gerry.Morong@microchip.com,
+        Mahesh.Rajashekhara@microchip.com, hch@infradead.org,
+        joseph.szczypek@hpe.com, POSWALD@suse.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     linux-scsi@vger.kernel.org, it+linux-scsi@molgen.mpg.de,
+        buczek@molgen.mpg.de, gregkh@linuxfoundation.org
+Date:   Tue, 19 Jan 2021 15:12:43 +0100
+In-Reply-To: <b3e4e597-779b-7c1e-0d3c-07bc3dab1bb5@huawei.com>
+References: <160763241302.26927.17487238067261230799.stgit@brunhilda>
+         <160763254769.26927.9249430312259308888.stgit@brunhilda>
+         <ddd8bca4-2ae7-a2dc-cca6-0a2ff85a7d35@molgen.mpg.de>
+         <SN6PR11MB28487527276CEBC75D36A732E1C60@SN6PR11MB2848.namprd11.prod.outlook.com>
+         <85c6e1705c55fb930ac13bc939279f0d1faa526f.camel@suse.com>
+         <SN6PR11MB2848C1195C65F87C910E979BE1A70@SN6PR11MB2848.namprd11.prod.outlook.com>
+         <b3e4e597-779b-7c1e-0d3c-07bc3dab1bb5@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.38.2 
 MIME-Version: 1.0
-Received: by 2002:a05:7110:3311:b029:32:43a0:9516 with HTTP; Tue, 19 Jan 2021
- 15:14:57 -0800 (PST)
-Reply-To: sroomf70@gmail.com
-From:   "Mrs. Nefi Setu" <mrs.nefisetu@gmail.com>
-Date:   Wed, 20 Jan 2021 00:14:57 +0100
-Message-ID: <CANyAxoY7zEgBBp5j--Qx0Yy=+V+=e8bkmGT+wy1B_Qr7jQXkLg@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-I'm Mrs. Nefi Setu, did you Receive the (FUND), that was paid to you?
-please, do not hesitate to Let me know with your full name:.. for
-immediate verification notice,
+On Tue, 2021-01-19 at 10:33 +0000, John Garry wrote:
+> > > 
+> > > Am 10.12.20 um 21:35 schrieb Don Brace:
+> > > > From: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
+> > > > 
+> > > > * Correct scsi-mid-layer sending more requests than
+> > > >     exposed host Q depth causing firmware ASSERT issue.
+> > > >     * Add host Qdepth counter.
+> > > 
+> > > This supposedly fixes the regression between Linux 5.4 and 5.9,
+> > > which
+> > > we reported in [1].
+> > > 
+> > >       kernel: smartpqi 0000:89:00.0: controller is offline:
+> > > status code
+> > > 0x6100c
+> > >       kernel: smartpqi 0000:89:00.0: controller offline
+> > > 
+> > > Thank you for looking into this issue and fixing it. We are going
+> > > to
+> > > test this.
+> > > 
+> > > For easily finding these things in the git history or the WWW, it
+> > > would be great if these log messages could be included (in the
+> > > future).
+> > > DON> Thanks for your suggestion. Well add them in the next time.
+> > > 
+> > > Also, that means, that the regression is still present in Linux
+> > > 5.10,
+> > > released yesterday, and this commit does not apply to these
+> > > versions.
+> > > 
+> > > DON> They have started 5.10-RC7 now. So possibly 5.11 or 5.12
+> > > depending when all of the patches are applied. The patch in
+> > > question
+> > > is among 28 other patches.
+> > > 
+> > > Mahesh, do you have any idea, what commit caused the regression
+> > > and
+> > > why the issue started to show up?
+> > > DON> The smartpqi driver sets two scsi_host_template member
+> > > fields:
+> > > .can_queue and .nr_hw_queues. But we have not yet converted to
+> > > host_tagset. So the queue_depth becomes nr_hw_queues * can_queue,
+> > > which is more than the hw can support. That can be verified by
+> > > looking
+> > > at scsi_host.h.
+> > >          /*
+> > >           * In scsi-mq mode, the number of hardware queues
+> > > supported by
+> > > the LLD.
+> > >           *
+> > >           * Note: it is assumed that each hardware queue has a
+> > > queue
+> > > depth of
+> > >           * can_queue. In other words, the total queue depth per
+> > > host
+> > >           * is nr_hw_queues * can_queue. However, for when
+> > > host_tagset
+> > > is set,
+> > >           * the total queue depth is can_queue.
+> > >           */
+> > > 
+> > > So, until we make this change, the queue_depth change prevents
+> > > the
+> > > above issue from happening.
+> > 
+> > can_queue and nr_hw_queues have been set like this as long as the
+> > driver existed. Why did Paul observe a regression with 5.9?
+> > 
+> > And why can't you simply set can_queue to (ctrl_info-
+> > >scsi_ml_can_queue / nr_hw_queues)?
+> > 
+> > Don: I did this in an internal patch, but this patch seemed to work
+> > the best for our driver. HBA performance remained steady when
+> > running benchmarks.
 
-Thanks,
+That was a stupid suggestion on my part. Sorry.
 
-Mrs. Nefi Setu,
-Foreign Remittance Director
+> I guess that this is a fallout from commit 6eb045e092ef ("scsi:
+>   core: avoid host-wide host_busy counter for scsi_mq"). But that
+> commit 
+> is correct.
 
-Sincerely Yours, Respectfully,
+It would be good if someone (Paul?) could verify whether that commit
+actually caused the regression they saw.
 
-Mr Bill T Winters,
-Group Chief Executive Officer & Executive Director,
+Looking at that 6eb045e092ef, I notice this hunk:
+
+ 
+-       busy = atomic_inc_return(&shost->host_busy) - 1;
+        if (atomic_read(&shost->host_blocked) > 0) {
+-               if (busy)
++               if (scsi_host_busy(shost) > 0)
+                        goto starved;
+
+Before 6eb045e092ef, the busy count was incremented with membarrier
+before looking at "host_blocked". The new code does this instead:
+
+@ -1403,6 +1400,8 @@ static inline int scsi_host_queue_ready(struct request_queue *q,
+                spin_unlock_irq(shost->host_lock);
+        }
+ 
++       __set_bit(SCMD_STATE_INFLIGHT, &cmd->state);
++
+
+but it happens *after* the "host_blocked" check. Could that perhaps
+have caused the regression?
+
+Thanks
+Martin
+
