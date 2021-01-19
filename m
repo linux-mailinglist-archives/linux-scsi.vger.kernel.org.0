@@ -2,70 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3329A2FBCFE
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 17:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767C22FBC9A
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jan 2021 17:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390331AbhASQyK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 11:54:10 -0500
-Received: from m12-15.163.com ([220.181.12.15]:57949 "EHLO m12-15.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389631AbhASQx4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Jan 2021 11:53:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=0U+pRaymnbrvdWHk/1
-        qG3LeFSFiwut3uSGl7JwDYbSk=; b=jUowwnWQtrrXZDWheB3aV/2xyj4pLVhArt
-        vh7u+ywDzl5GbizMOMjxDe9LvPtRGqshlOvEaQIbzqOLALSAyFRVBDPNap59uL+/
-        pOx+OMZdvhJ/lb26B7iPcDLBUnksUCEJJXR7fkGDbefAA5vW0g0xBgzIIxQZiY0R
-        d9sIBJYoY=
-Received: from localhost.localdomain (unknown [119.3.119.20])
-        by smtp11 (Coremail) with SMTP id D8CowADHzH2J0QZg3sXTAA--.28998S4;
-        Tue, 19 Jan 2021 20:33:17 +0800 (CST)
-From:   Pan Bian <bianpan2016@163.com>
-To:     FUJITA Tomonori <fujita.tomonori@lab.ntt.co.jp>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pan Bian <bianpan2016@163.com>
-Subject: [PATCH 1/1] bsg: free the request before return error code
-Date:   Tue, 19 Jan 2021 04:33:11 -0800
-Message-Id: <20210119123311.108137-1-bianpan2016@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: D8CowADHzH2J0QZg3sXTAA--.28998S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWDCFW5Gr1UJFWrAryDAwb_yoWxtFb_GF
-        yUKFs7JrZ5Cr45ursFva45t3WIkF1UGF4Iyw18tF9Fq345JasrJw1Ivwn8XF9xWFWUW3sx
-        G3WxX34fAFnayjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU57CztUUUUU==
-X-Originating-IP: [119.3.119.20]
-X-CM-SenderInfo: held01tdqsiiqw6rljoofrz/xtbBZA0fclQHMCpPDgAAsM
+        id S1728594AbhASQgJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 11:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730158AbhASQc3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jan 2021 11:32:29 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB9DC061757;
+        Tue, 19 Jan 2021 08:31:49 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id d22so11260190edy.1;
+        Tue, 19 Jan 2021 08:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=C+NDxqcVq/gZ4wgLmYCGjXjhQkRMK4EGpwM/xyan4pU=;
+        b=IXa3p/V0Pkgy7Fe4C9/I4iR2+SgQ/8eNXSJ/7q50BxaE2M5vfhY/0ZrSSlWPOOZy1b
+         Nm+bBTdfXzvS5MlYpL3qgp6bv5vel8al9W7CU3hSIdOlbfaWlgZR3M0nNTAqVtEv4v5o
+         TlHIfnFhQ6vB8dbyALLF10syipIIpfd654oY2nvNoLvJNq6UcUZPggoM2aluiU2i6vWX
+         j5EvwJfTRzcsAG5vBlRPbSwpTOSswqUz6TN06leM6rpxLEOGzGdJEf5JFKsR/lhTK0BN
+         +Xd9tQdDb6HSsYKeMKeUO+lyKEcZFmE1zzaz6KBkRbUYTRtHvM/kkYkkJuigdBXAL3c9
+         syfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=C+NDxqcVq/gZ4wgLmYCGjXjhQkRMK4EGpwM/xyan4pU=;
+        b=SQ1/iDWka0wL+sQ2nWqfoDccKNKBVhB9qkU20LVQPLFqt7qLexR8FZ8wC8n5JTpQbB
+         sqUACb7mo/fwBLpSDYXg9ArFtLZkI20ctCMexVCozzibaC3z/AeV7HM8CcE7yMc9+HDM
+         OcBYFXd7jRuJ0cRResh/zq8IuO/ziCoohuoETo60ahfC7UDbJG2xvj51wlYsDmssAN6m
+         E3EPtHnkH0sA1kf1asr/CtIhW1+2auvIQ4CQ0vmdIDITSZcE9hIFO1f+PydWBCGzrMvW
+         CuIIxw+orHd8pvB/CGpwWEe14uoyhrNJ6+lNh1f5i5IX/iZw9Ajbmqwyy112OR7H1Ley
+         LDQA==
+X-Gm-Message-State: AOAM530YGdJPvrzzEbTxSVa1v8JtaTC5nyN8DKFcSpE7bd1kEnQoEp0m
+        CoaxXWBqhcyIg5zCP4+jJzI=
+X-Google-Smtp-Source: ABdhPJyM6KC3U2jokYgi070SBgfotc8Gz+xI1KCaXMZBzwekdDp/4y3A11D/gRr1ImosHL7SYKfGSg==
+X-Received: by 2002:a50:8004:: with SMTP id 4mr4041262eda.155.1611073908036;
+        Tue, 19 Jan 2021 08:31:48 -0800 (PST)
+Received: from ubuntu-laptop (ip5f5bee1b.dynamic.kabel-deutschland.de. [95.91.238.27])
+        by smtp.googlemail.com with ESMTPSA id h12sm11297196ejx.81.2021.01.19.08.31.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 Jan 2021 08:31:47 -0800 (PST)
+Message-ID: <0fb16957375cc5916b61aa6ea2c13c64455f1d35.camel@gmail.com>
+Subject: Re: [PATCH v6 1/6] scsi: ufs: Add "wb_on" sysfs node to control WB
+ on/off
+From:   Bean Huo <huobean@gmail.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 19 Jan 2021 17:31:45 +0100
+In-Reply-To: <9ad2cf1a-68df-47ef-9fe7-01954d2d6181@intel.com>
+References: <20210118201039.2398-1-huobean@gmail.com>
+         <20210118201039.2398-2-huobean@gmail.com>
+         <0a9971aa-e508-2aaa-1379-fb898471a252@intel.com>
+         <fabf0e83387f6155efea521a15b00bb1225d35a4.camel@gmail.com>
+         <9ad2cf1a-68df-47ef-9fe7-01954d2d6181@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Free the request rq before returning error code.
+On Tue, 2021-01-19 at 12:00 +0200, Adrian Hunter wrote:
+> > > Is it so, that after a full reset, WB is always enabled again? 
+> > > Is
+> > > that
+> > > intended?
+> > 
+> > Hello Adrian
+> > Good questions. yes, after a full reset, the UFS device side by
+> > default
+> > is wb disabled,  then WB will be always enabled agaion in
+> > ufshcd_wb_config(hba). but, for the platform which
+> > supports UFSHCD_CAP_CLK_SCALING, wb will be disabled again while
+> > clk
+> > scaling down and enabled while clk scaling up.
+> > 
+> > Regarding the last question, I think OEM wants to do that. maybe
+> > they
+> > suppose there will be a lot of writing after reset?? From the UFS
+> > device's point of view, the control of WB is up to the user.
+> 
+> If it is by design enabled after reset, then perhaps it should be
+> mentioned
+> in the sysfs documentation.
 
-Fixes: 972248e9111e ("scsi: bsg-lib: handle bidi requests without block layer help")
-Signed-off-by: Pan Bian <bianpan2016@163.com>
----
- block/bsg.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ok, will add it in the next version.
 
-diff --git a/block/bsg.c b/block/bsg.c
-index d7bae94b64d9..3d78e843a83f 100644
---- a/block/bsg.c
-+++ b/block/bsg.c
-@@ -157,8 +157,10 @@ static int bsg_sg_io(struct request_queue *q, fmode_t mode, void __user *uarg)
- 		return PTR_ERR(rq);
- 
- 	ret = q->bsg_dev.ops->fill_hdr(rq, &hdr, mode);
--	if (ret)
-+	if (ret) {
-+		blk_put_request(rq);
- 		return ret;
-+	}
- 
- 	rq->timeout = msecs_to_jiffies(hdr.timeout);
- 	if (!rq->timeout)
--- 
-2.17.1
-
+thanks,
+Bean
 
