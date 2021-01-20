@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE162FC781
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Jan 2021 03:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC852FC78F
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Jan 2021 03:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728369AbhATCI5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jan 2021 21:08:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47344 "EHLO mail.kernel.org"
+        id S1728599AbhATCM4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jan 2021 21:12:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47270 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730871AbhATB3q (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1730883AbhATB3q (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Tue, 19 Jan 2021 20:29:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E7A282332A;
-        Wed, 20 Jan 2021 01:28:18 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 947342332B;
+        Wed, 20 Jan 2021 01:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611106100;
-        bh=6s/Zt7W+Wkg1fAW8F+7rxzIrH/88u0za87HrNngqBCU=;
+        s=k20201202; t=1611106106;
+        bh=InmBjXPqY172wkeRAp73VtZAVF0Qr1IWDs4BFc+7Kvo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xjay960n1aYnj1AFVw8xaK8sJmgQeJgO5vbQjDKnWWsgUt3pfOO6ZvReEc5mls34X
-         fTxv4BZYrkz+oj/2//MiaJeVAtllJxe1wx75TPvVBHzXg5BiO6pz4/cODedT0nJ/3t
-         9WTujEWEb+YrPbv/qnkIUF+mBWoxMFwDFs973rs15CnpWHRge+Ja/sF6MEL2qv8R1G
-         tOL727xHpieZ8NiNshikFbhRk1k5COGxqBw56y+tcomkyBGMGerSOj2lk8WSbDhSd0
-         9vIbFxinpk7iQUh4pvec/VLXDIIZaW1Z4at0YNBi2OvrwNhJbF+7jCtwbFICiBHT05
-         SWKAK0zC1EJ4g==
+        b=AGGej/kb6QK4Ow1JkmKThTezeZe82dHS+/hMtEKjhCS28RQPOToP7pXTeeVrVus9+
+         6FKb+z8UPbg0xVGUpgumK18jlO/i9TXKJR47174TOePpkR93aZx3dcOj3nvMtyUF2b
+         G2E3KkWYZTOMT5liRkB5RbGHK0iuYPJkkUcsJpNxB1mJSDYHckyWp8UDipALWnCxT0
+         Y1ElAWF+sSTzwIpwYdKkDoR0ASdp+twMe1WarnJzmuTP+U3EDTtB4hvrNUabFQYJqJ
+         seh2SkSD9CVYsHSg3K+k+8Y6QnypURGhVEKWuVqL5kYUR2L3SxoeMHkrACApikM0So
+         vxT78ImM+8tlw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Can Guo <cang@codeaurora.org>, Avri Altman <avri.altman@wdc.com>,
@@ -31,12 +31,12 @@ Cc:     Can Guo <cang@codeaurora.org>, Avri Altman <avri.altman@wdc.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.9 2/4] scsi: ufs: Correct the LUN used in eh_device_reset_handler() callback
-Date:   Tue, 19 Jan 2021 20:28:14 -0500
-Message-Id: <20210120012816.770648-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 2/4] scsi: ufs: Correct the LUN used in eh_device_reset_handler() callback
+Date:   Tue, 19 Jan 2021 20:28:21 -0500
+Message-Id: <20210120012823.770731-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210120012816.770648-1-sashal@kernel.org>
-References: <20210120012816.770648-1-sashal@kernel.org>
+In-Reply-To: <20210120012823.770731-1-sashal@kernel.org>
+References: <20210120012823.770731-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index ad80e4223c2d3..a767d942bfca5 100644
+index e37f6db0dd156..5e1d922e9a6ff 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -4552,19 +4552,16 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
+@@ -3818,19 +3818,16 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
  {
  	struct Scsi_Host *host;
  	struct ufs_hba *hba;
@@ -93,7 +93,7 @@ index ad80e4223c2d3..a767d942bfca5 100644
  	if (err || resp != UPIU_TASK_MANAGEMENT_FUNC_COMPL) {
  		if (!err)
  			err = resp;
-@@ -4573,7 +4570,7 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
+@@ -3839,7 +3836,7 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
  
  	/* clear the commands that were pending for corresponding LUN */
  	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs) {
