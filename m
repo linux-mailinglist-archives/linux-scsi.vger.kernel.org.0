@@ -2,92 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F8A2FEFF8
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 17:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E032FF178
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 18:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732183AbhAUQQp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Jan 2021 11:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S2388393AbhAURLc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Jan 2021 12:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732040AbhAUQQS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Jan 2021 11:16:18 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB560C061756;
-        Thu, 21 Jan 2021 08:15:37 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id hs11so3422773ejc.1;
-        Thu, 21 Jan 2021 08:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=l5RECMC/UZiLa9CjXR39r8x2ssvcHHs78h5TJlU06LQ=;
-        b=BficDcR+oe8bQAmTHSDQoDle1d8W2bEMWN6b/69rK5ZsV51D3sAauEztEVQoQYw4XP
-         ExVaI16sp18UvwTht1H6GFNF5YortjsdH3rfDCFdGeJ8eUWo3h08lDgHlWyNEAHe7cbC
-         Uz1KDBzSRohwcpKvZFyqP73mBaA0BA3BrCyFK1sv7vifVDHTSuf9zRjoQFC7X9BfsPrx
-         PWzQGQPZmTWk10lVBC18aSeeJ+/mazmqmHXQ48lBuyZ5c/JwWYbTfDwKrYdUu6mvVi1F
-         ALLREr2+lnuvMnKdlOsciO0q3a+7CgOgfHQmG7QJlj8BU8gJPZrmJxwT2riYddkUhNpJ
-         4csg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=l5RECMC/UZiLa9CjXR39r8x2ssvcHHs78h5TJlU06LQ=;
-        b=PXpN7+Ad0dBaB2CrbdiU4vCptYEt186+56ndmSN9Mpy/mlWCgOFuR338f6DUeYPC0p
-         zL5yNt06tawLW1e8uETsC0z28dM27Kitz3VwQkugkxOguWc+vb1VShvIEpWhqDCMPCA+
-         UN1Cn6/BW3wJw1a3G8N7n9W79duiR4MF+lhyY8Hv9JDtXL6jhaUHONVtJEb9zm6p2ULd
-         PQIVYPF11fa4HaHx5gIIrZTL2vDWmcshleJ0wWkoh1NcCj//5osrZLdqrpJhOQYdd+4F
-         wLl4an5BbULsHMTTk1edQGWmw951yiyU7b0bYuwix7CRwkZ2O5DmEJ62reiW0lESXgD1
-         qNQg==
-X-Gm-Message-State: AOAM53361yQm+C7g/WS/q9LreGvbAJsxJmnKdYd3IXxPDWXtgLtbW5GK
-        ElrV9JjnXLN1vN4jUqYXwSo=
-X-Google-Smtp-Source: ABdhPJxOjMAb78L405u1aCIm/2XrgwQPxT5WMpvhSefgJo6zY5WPweEkO4xvnjz3zPNxxtSoyGnLnw==
-X-Received: by 2002:a17:906:690:: with SMTP id u16mr168733ejb.186.1611245736490;
-        Thu, 21 Jan 2021 08:15:36 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bee1b.dynamic.kabel-deutschland.de. [95.91.238.27])
-        by smtp.googlemail.com with ESMTPSA id w17sm2382919ejk.124.2021.01.21.08.15.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Jan 2021 08:15:36 -0800 (PST)
-Message-ID: <151f95faf537717ec480d9a256ba2d62b2c9aa44.camel@gmail.com>
-Subject: Re: [PATCH v7 0/6] Several changes for UFS WriteBooster
-From:   Bean Huo <huobean@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        stanley.chu@mediatek.com, beanhuo@micron.com, bvanassche@acm.org,
-        tomas.winkler@intel.com, cang@codeaurora.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 21 Jan 2021 17:15:33 +0100
-In-Reply-To: <yq14kjbgey8.fsf@ca-mkp.ca.oracle.com>
-References: <20210119163847.20165-1-huobean@gmail.com>
-         <yq14kjbgey8.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S2388298AbhAURE5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Jan 2021 12:04:57 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABDDC0613D6;
+        Thu, 21 Jan 2021 09:03:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QzyNyEp1YsTE5vSV+3cDru2rTzeX2CsFjS3xBz6a990=; b=m/sCpkjOMCVgP4VoWYhFT+pNFA
+        XsN5cp/1QMUAEvRGYKVrcCWtT0K0Qc1rUYrY8tnWtvRBGAzYQF1aJcWF3PjXrGGN5DB6crvK52Uhq
+        VmNi8hTrqhlV+i2i9NAfj+R5YQr9uVin10+P+GGGvl4s+Wro8U/2/QQy8nAXo/5hPnH9AZL+NWlnM
+        toPoiBaqrmygPeFA0pi51swSnxTXmB2rXAaBa2z16O2JBwXvSZdc+MGy9skDIY3SNinDpyuqYtJ3N
+        cyelbC61FxOX5f44I6+AYEzvIq/k8mhEfUgaLp9Knoar2TChae7OQQlHwtAFdMat/0mm5SWvcQ2ZF
+        9pImn9Kw==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1l2dMH-00HI8V-2u; Thu, 21 Jan 2021 17:03:07 +0000
+Date:   Thu, 21 Jan 2021 17:02:57 +0000
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-ide@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-nfs@vger.kernel.org
+Subject: Re: [PATCH 1/2] block: remove unnecessary argument from
+ blk_execute_rq_nowait
+Message-ID: <20210121170257.GA4120717@infradead.org>
+References: <20210121142905.13089-1-guoqing.jiang@cloud.ionos.com>
+ <20210121142905.13089-2-guoqing.jiang@cloud.ionos.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121142905.13089-2-guoqing.jiang@cloud.ionos.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 2021-01-20 at 22:15 -0500, Martin K. Petersen wrote:
-> Bean,
-> 
-> > Bean Huo (6):
-> >    scsi: ufs: Add "wb_on" sysfs node to control WB on/off
-> >    docs: ABI: Add wb_on documentation for new entry wb_on
-> >    scsi: ufs: Changes comment in the function ufshcd_wb_probe()
-> >    scsi: ufs: Remove two WB related fields from struct ufs_dev_info
-> >    scsi: ufs: Group UFS WB related flags to struct ufs_dev_info
-> >    scsi: ufs: Cleanup WB buffer flush toggle implementation
-> 
-> Applied patches 1-5 to 5.12/scsi-staging. Patch 6 didn't apply,
-> please
-> resubmit.
-> 
-> Also, I had to fix up your sysfs ABI documentation indentation.
+On Thu, Jan 21, 2021 at 03:29:04PM +0100, Guoqing Jiang wrote:
+> The 'q' is not used since commit a1ce35fa4985 ("block: remove dead
+> elevator code"), also update the comment of the function.
 
-Martin,
-thanks.  I will update patch 6 later.
+And more importantly it never really was needed to start with given
+that we can triviall derive it from struct request.
 
-Thanks,
-Bean
-
+> -extern void blk_execute_rq_nowait(struct request_queue *, struct gendisk *,
+> +extern void blk_execute_rq_nowait(struct gendisk *,
+>  				  struct request *, int, rq_end_io_fn *);
