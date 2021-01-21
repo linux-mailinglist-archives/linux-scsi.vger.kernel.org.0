@@ -2,97 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CF82FEE8E
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 16:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10D92FEFF7
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 17:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730981AbhAUP0i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Jan 2021 10:26:38 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:42970 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732345AbhAUPZT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 21 Jan 2021 10:25:19 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 43E3241364;
-        Thu, 21 Jan 2021 15:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        mime-version:content-transfer-encoding:content-id:content-type
-        :content-type:content-language:accept-language:in-reply-to
-        :references:message-id:date:date:subject:subject:from:from
-        :received:received:received:received; s=mta-01; t=1611242673; x=
-        1613057074; bh=mfnnHUBis89XQEwFI+ZjsP8ISLbJZer+HpOVTE+4EWc=; b=S
-        Ce3+S9ZFGfUpMs0t7eXIUxUwSLODtHsMd4zwFGOe11wTHHOPGI+UEvx8qK68QS26
-        lsAbcmSDo4rwNeqh1ljsHGjgzie3KD1mpHyYhBmMJNgwDXBwpp2HetFZ22LLUCQ6
-        soRGm2yExz+VmKaqE1o7CjeirWROQUawNKlhPWd0uQ=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JfylFlvp_xFO; Thu, 21 Jan 2021 18:24:33 +0300 (MSK)
-Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id DA7254135E;
-        Thu, 21 Jan 2021 18:24:33 +0300 (MSK)
-Received: from T-EXCH-03.corp.yadro.com (172.17.100.103) by
- T-EXCH-03.corp.yadro.com (172.17.100.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Thu, 21 Jan 2021 18:24:33 +0300
-Received: from T-EXCH-03.corp.yadro.com ([fe80::39f4:7b05:b1d3:5272]) by
- T-EXCH-03.corp.yadro.com ([fe80::39f4:7b05:b1d3:5272%14]) with mapi id
- 15.01.0669.032; Thu, 21 Jan 2021 18:24:33 +0300
-From:   Anastasia Kovaleva <a.kovaleva@yadro.com>
-To:     "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux@yadro.com" <linux@yadro.com>
-Subject: Re: [RESEND PATCH 0/3] scsi: target: Set correct residual data
-Thread-Topic: [RESEND PATCH 0/3] scsi: target: Set correct residual data
-Thread-Index: AQHWyU0/4PeqapwhvkiV8Nbm2ITN9aoygG2A
-Date:   Thu, 21 Jan 2021 15:24:33 +0000
-Message-ID: <D7B55F16-12CB-42BE-9ED7-B5E7577E71C2@yadro.com>
-References: <20201203082035.54566-1-a.kovaleva@yadro.com>
-In-Reply-To: <20201203082035.54566-1-a.kovaleva@yadro.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [10.199.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D8A915FFC7E8934D8D1A9B46C43BDE41@yadro.com>
-Content-Transfer-Encoding: base64
+        id S1732608AbhAUQQ0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Jan 2021 11:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731845AbhAUQPa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Jan 2021 11:15:30 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B061DC0613D6
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Jan 2021 08:14:49 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id bx12so3134047edb.8
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Jan 2021 08:14:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=t6b2Z/5Xc3bRNWBPdk1CMNbrgUWrC+LrSlsH7Kw705wv8XVa2y67ZyRTJL+9ml14UX
+         83bI/RDXzIo0UAG/8cxvRz96OZehe5WMOCl3rP0muY+5LIFG7MH093zmQpDTwz3kuSSC
+         VFBlSS+K/0Q67L5Hq4NksrgcLNvs9W+brJuDSOQ4fQownWWlUN51jSeirQobDUJ4Om/Q
+         4DNbnRF8AQuMS94u8W3oJc+0HhAELNXtBE8wSr+T+anPK75p3UU4QOAkDYjDyC8kX4r+
+         cHN4IRVlfHCNUEDQyURnEYTz/DMKrndNrlNdMv3iqNhY3R4QpWeenlqcAmIl5mQZDb/+
+         VkpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=VVqMzyaND5bSuDthrP9ygTHud8vSNAd049mkGQujXbfhuvYdKZFJi1TYip/aDhN6XL
+         01RIjoUAtmHdD/a/lG2Lcd0BvTsUBOu9hVe0mUUqXP6gYnjOt56x/oQZMgJNLyfcjjgo
+         36coV8mvxsDmiVs9uFpznsVEH+RPyZvrid7eg08F/w369gG5Aqos/224337V7TelZeAM
+         hs9k/q5QkJ2Wd9MC55fJun0wEcI7CPoyCK+nb8pJOmk56T29qLMIZAiFB0wVwz36S7i1
+         kqtcVXOsPd08I8osrH8+7WVy2BnxGwSRlrP1bgTOHPW83tbu4E5OpfibsQPBXsLCw5j7
+         9bzw==
+X-Gm-Message-State: AOAM530OumY1IClGIaKl+ZGyyCD5sc4W+IvavYXZquxIhc0MJwP8BM04
+        RSl2rkfp2wQ2InzB3WDVrUCBR3nFxc86WO3cYzM=
+X-Google-Smtp-Source: ABdhPJxo9d/95Gi2a7gbI/TzD2gRs5JzgjogLKlgoa01NgvkQfn9poHbwjof1d9EFhpCNoWfevhIUBh+lgeVGZY2cD0=
+X-Received: by 2002:aa7:d9c3:: with SMTP id v3mr11520292eds.133.1611245688281;
+ Thu, 21 Jan 2021 08:14:48 -0800 (PST)
 MIME-Version: 1.0
+Received: by 2002:a54:35cb:0:0:0:0:0 with HTTP; Thu, 21 Jan 2021 08:14:47
+ -0800 (PST)
+Reply-To: tracymedicinemed3@gmail.com
+From:   Dr Tracy William <bonarikan@gmail.com>
+Date:   Thu, 21 Jan 2021 17:14:47 +0100
+Message-ID: <CA+KHXtiUkBqW0A4h2moPUDVFWb35iz4_ewriGwj6_BY_qXcgMA@mail.gmail.com>
+Subject: From Dr Tracy from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGksDQoNCkNvdWxkIHlvdSBwbGVhc2UgdGVsbCBtZSBpZiB0aGVyZSBhcmUgYW55IG9iamVjdGlv
-bnMgdG8gdGhlc2UgY2hhbmdlcz8NClRoZXNlIHBhdGNoZXMgYXJlIGFwcGxpY2FibGUgdG8gNS4x
-Mi9zY3NpLXF1ZXVlLg0KDQpUaGFua3MsDQpBbmFzdGFzaWENCg0K77u/T24gMDMuMTIuMjAyMCwg
-MTE6MjEsICJBbmFzdGFzaWEgS292YWxldmEiIDxhLmtvdmFsZXZhQHlhZHJvLmNvbT4gd3JvdGU6
-DQoNCiAgICBIaSBNYXJ0aW4sDQogICAgUGxlYXNlIGFwcGx5IHRoZSBjaGFuZ2VzIHRvIDUuMTEv
-c2NzaS1xdWV1ZSBhdCB5b3VyIGVhcmxpZXN0DQogICAgY29udmVuaWVuY2UuDQoNCiAgICBUaGUg
-c2VyaWVzIGNoYW5nZXMgdGhlIGJlaGF2aW9yIG9mIHRoZSB0YXJnZXQgaW4gcmVnYXJkIHRvIHBy
-b2Nlc3NpbmcNCiAgICBjb21tYW5kcyB3aXRoIG92ZXJmbG93L3VuZGVyZmxvdyBpbiBhY2NvcmRh
-bmNlIHdpdGggdGhlIHN0YW5kYXJ0cy4NCg0KICAgIFRoZSB0YXJnZXQgZHJpdmVyIHVzZWQgdG8g
-cHJvY2VzcyB0aGUgRE1BX1RPX0RFVklDRSBjb21tYW5kcyB3aXRoDQogICAgcmVzaWR1YWxzIChp
-biBwYXJ0aWN1bGFyLCBXUklURSBjb21tYW5kKSBpbmNvcnJlY3RseS4gVGhlIHRhcmdldA0KICAg
-IHJlc3BvbnNlIGNvbnRhaW5lZCBuZWl0aGVyIGEgcmVzaWR1YWwgY291bnQsIG5vciBhbiBPVkVS
-RkxPVy9VTkRFUkZMT1cNCiAgICBiaXQuIFN1Y2ggYmVoYXZpb3IgZGlkIG5vdCBjb21wbHkgd2l0
-aCB0aGUgUkZDIDcxNDMuIEFsc28gdGhlDQogICAgcmV0dXJuZWQgQVNDIGFuZCBBU0NRIHdlcmUg
-aW5jb3JyZWN0IGFjY29yZGluZyB0byBGQ1AtNCwNCiAgICBhbmQgcmVzaWR1YWxzIHdlcmUgbm90
-IHNldCBmb3IgdGhlIDRLbiBkZXZpY2VzLg0KDQogICAgVGhpcyBwYXRjaGVzIGZpeCB0aGUgbWFq
-b3IgaW5jb25zaXN0YW5jZXMgaW4gcHJvY2Vzc2luZyB0aGVzZSBraW5kIG9mDQogICAgY29tbWFu
-ZHMuDQoNCiAgICBUaGlzIHBhdGNoIHNlcmllcyBoYXMgYmVlbiB0ZXN0ZWQgd2l0aCBhIG1vZGlm
-aWVkIGxpYmlzY3NpIHRlc3RpbmcNCiAgICBsaWJyYXJ5Lg0KICAgIFRoZSBsaW5rIHRvIHRoZSBw
-dWxsIHJlcXVlc3Q6DQogICAgaHR0cHM6Ly9naXRodWIuY29tL3NhaGxiZXJnL2xpYmlzY3NpL3B1
-bGwvMzQ1DQoNCiAgICBXcml0ZTEwUmVzaWR1YWxzLCBXcml0ZTEyUmVzaWR1YWxzLCBXcml0ZTE2
-UmVzaWR1YWxzIHRlc3RzIGhhdmUgcGFzc2VkLg0KDQogICAgVGhhbmtzLA0KICAgIEFuYXN0YXNp
-YQ0KDQogICAgQW5hc3Rhc2lhIEtvdmFsZXZhICgyKToNCiAgICAgIHNjc2k6IHRhcmdldDogY29y
-ZTogU2lnbmFsIFdSSVRFIHJlc2lkdWFscw0KICAgICAgc2NzaTogdGFyZ2V0OiBjb3JlOiBDaGFu
-Z2UgQVNDUSBmb3IgcmVzaWR1YWwgd3JpdGUNCg0KICAgIFJvbWFuIEJvbHNoYWtvdiAoMSk6DQog
-ICAgICBzY3NpOiB0YXJnZXQ6IGNvcmU6IFNldCByZXNpZHVhbHMgZm9yIDRLbiBkZXZpY2VzDQoN
-CiAgICAgZHJpdmVycy90YXJnZXQvdGFyZ2V0X2NvcmVfdHJhbnNwb3J0LmMgfCA1MyArKysrKysr
-KysrKysrLS0tLS0tLS0tLS0tLQ0KICAgICBpbmNsdWRlL3RhcmdldC90YXJnZXRfY29yZV9iYXNl
-LmggICAgICB8ICAxICsNCiAgICAgMiBmaWxlcyBjaGFuZ2VkLCAyOCBpbnNlcnRpb25zKCspLCAy
-NiBkZWxldGlvbnMoLSkNCg0KICAgIC0tIA0KICAgIDIuMjQuMyAoQXBwbGUgR2l0LTEyOCkNCg0K
-DQo=
+-- 
+Hello Dear,
+how are you doing?I hope you are good
+Its my pleasure to contact you for friendship as i have been busy with work
+for so long and i believe this is the right time to find someone.
+
+I was just surfing through the Internet when i found your email,i want
+to make a new
+and special friend.
+
+My name is Dr Tracy William,I am from the United States of America.
+Pls respond to my personal email(tracymedicinemed3@gmail.com) and i
+will send my details and pictures upon hearing from you
+bye
+With love
+Tracy
