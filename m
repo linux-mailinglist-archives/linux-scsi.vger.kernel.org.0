@@ -2,165 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6632FE0DE
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 05:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318DC2FE145
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 05:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbhAUEEK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Jan 2021 23:04:10 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:51520 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727047AbhAUD6U (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Jan 2021 22:58:20 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=abaci-bugfix@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0UMOCsi0_1611201439;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:abaci-bugfix@linux.alibaba.com fp:SMTPD_---0UMOCsi0_1611201439)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 21 Jan 2021 11:57:24 +0800
-From:   Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-To:     njavali@marvell.com
+        id S1727610AbhAUE5F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Jan 2021 23:57:05 -0500
+Received: from mail-pf1-f180.google.com ([209.85.210.180]:43935 "EHLO
+        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726893AbhAUEzt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Jan 2021 23:55:49 -0500
+Received: by mail-pf1-f180.google.com with SMTP id q131so773748pfq.10;
+        Wed, 20 Jan 2021 20:55:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PBIzSn5Y6foZ7Tj9M6MKSIos+ef1dkG6dprinExElvI=;
+        b=Otys6HvmLSsifO5cFMrfGKZm1HDTwdgPPP3URXjwXcop0BTwSo/zAJ8J5LtXUvuKg5
+         45kqf0h43sK1vzkFUDbFlhW85g633z/qJCC/4jCuufAz9KVcn1qhJYb/sC14bq2srd6S
+         OKRDQ4O1mp/DzY5MHTaUGWZCP0ZujTHOEi1ATVNqcElJDZzGATlOwV9QoTmwU+qNqGG2
+         ahUpnfLQoC+f/WRQ1zX84XjQUiAvn/cLZhNnUnYIf41RFMirz1gUcMebzATGMtjkp7dT
+         ZE7hZnXVsKsXZN+Md9EhJlnp4i1TnikN1+nDGuFYRhLeZSE4n9X3vUr2Dpz/hGucw/yc
+         RWJA==
+X-Gm-Message-State: AOAM5305zPLfUxKPiOMOouH5CV3MejQ0MBTaEGDgJmVFUU842+ALgQNI
+        VS97gnbmTGn04LqENdRnL251Ym9jIto=
+X-Google-Smtp-Source: ABdhPJwLBbh9u2kcoS9CMW/M27MDUr3Du3tURIRWHdLf1+MPNb8nb6g0zMF8G0BWogzuMwPlMBp1iQ==
+X-Received: by 2002:a63:d814:: with SMTP id b20mr12628905pgh.202.1611204907616;
+        Wed, 20 Jan 2021 20:55:07 -0800 (PST)
+Received: from ?IPv6:2601:647:4000:d7:b5ed:474a:81d5:2e31? ([2601:647:4000:d7:b5ed:474a:81d5:2e31])
+        by smtp.gmail.com with ESMTPSA id y22sm3646907pfb.132.2021.01.20.20.55.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jan 2021 20:55:06 -0800 (PST)
+Subject: Re: [PATCH v2] scsi/qla4xxx: convert sysfs sprintf/snprintf family to
+ sysfs_emit/sysfs_emit_at
+To:     Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>, njavali@marvell.com
 Cc:     mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
         jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-Subject: [PATCH v2] scsi/qla4xxx: convert sysfs sprintf/snprintf family to sysfs_emit/sysfs_emit_at
-Date:   Thu, 21 Jan 2021 11:57:17 +0800
-Message-Id: <1611201437-111938-1-git-send-email-abaci-bugfix@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1611201437-111938-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <9d745731-f8a3-98bf-3ca8-6367ef53aa8d@acm.org>
+Date:   Wed, 20 Jan 2021 20:55:05 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <1611201437-111938-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix the following coccicheck warning:
+On 1/20/21 7:57 PM, Jiapeng Zhong wrote:
+> -		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
+> +		return sysfs_emit_at(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
+>  				ha->fw_info.fw_major, ha->fw_info.fw_minor,
+>  				ha->fw_info.fw_patch, ha->fw_info.fw_build);
 
-./drivers/scsi/qla4xxx/ql4_attr.c: WARNING: use scnprintf or
-sprintf.
+From the sysfs_emit_at() source code:
 
-Reported-by: Abaci Robot<abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
----
-Changes in v2:
-  - convert snprintf family to sysfs_emit_at.
+WARN(... || at >= PAGE_SIZE, "invalid sysfs_emit_at: buf:%p at:%d\n",
+buf, at)
 
- drivers/scsi/qla4xxx/ql4_attr.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+In other words, this patch is wrong. sysfs_emit() should have been used
+instead of sysfs_emit_at().
 
-diff --git a/drivers/scsi/qla4xxx/ql4_attr.c b/drivers/scsi/qla4xxx/ql4_attr.c
-index ec43528..ad9b021 100644
---- a/drivers/scsi/qla4xxx/ql4_attr.c
-+++ b/drivers/scsi/qla4xxx/ql4_attr.c
-@@ -156,11 +156,11 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
- 
- 	if (is_qla80XX(ha))
--		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
-+		return sysfs_emit_at(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
- 				ha->fw_info.fw_major, ha->fw_info.fw_minor,
- 				ha->fw_info.fw_patch, ha->fw_info.fw_build);
- 	else
--		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
-+		return sysfs_emit_at(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
- 				ha->fw_info.fw_major, ha->fw_info.fw_minor,
- 				ha->fw_info.fw_patch, ha->fw_info.fw_build);
- }
-@@ -170,7 +170,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 			char *buf)
- {
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
--	return snprintf(buf, PAGE_SIZE, "%s\n", ha->serial_number);
-+	return sysfs_emit_at(buf, PAGE_SIZE, "%s\n", ha->serial_number);
- }
- 
- static ssize_t
-@@ -178,7 +178,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 			   char *buf)
- {
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
--	return snprintf(buf, PAGE_SIZE, "%d.%02d\n", ha->fw_info.iscsi_major,
-+	return sysfs_emit_at(buf, PAGE_SIZE, "%d.%02d\n", ha->fw_info.iscsi_major,
- 			ha->fw_info.iscsi_minor);
- }
- 
-@@ -187,7 +187,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 			    char *buf)
- {
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
--	return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
-+	return sysfs_emit_at(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
- 			ha->fw_info.bootload_major, ha->fw_info.bootload_minor,
- 			ha->fw_info.bootload_patch, ha->fw_info.bootload_build);
- }
-@@ -197,7 +197,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 		      char *buf)
- {
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
--	return snprintf(buf, PAGE_SIZE, "0x%08X\n", ha->board_id);
-+	return sysfs_emit_at(buf, PAGE_SIZE, "0x%08X\n", ha->board_id);
- }
- 
- static ssize_t
-@@ -207,7 +207,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
- 
- 	qla4xxx_get_firmware_state(ha);
--	return snprintf(buf, PAGE_SIZE, "0x%08X%8X\n", ha->firmware_state,
-+	return sysfs_emit_at(buf, PAGE_SIZE, "0x%08X%8X\n", ha->firmware_state,
- 			ha->addl_fw_state);
- }
- 
-@@ -220,7 +220,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 	if (is_qla40XX(ha))
- 		return -ENOSYS;
- 
--	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_cnt);
-+	return sysfs_emit_at(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_cnt);
- }
- 
- static ssize_t
-@@ -232,7 +232,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 	if (is_qla40XX(ha))
- 		return -ENOSYS;
- 
--	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_num);
-+	return sysfs_emit_at(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_num);
- }
- 
- static ssize_t
-@@ -244,7 +244,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 	if (is_qla40XX(ha))
- 		return -ENOSYS;
- 
--	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->iscsi_pci_func_cnt);
-+	return sysfs_emit_at(buf, PAGE_SIZE, "0x%04X\n", ha->iscsi_pci_func_cnt);
- }
- 
- static ssize_t
-@@ -253,7 +253,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- {
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", ha->model_name);
-+	return sysfs_emit_at(buf, PAGE_SIZE, "%s\n", ha->model_name);
- }
- 
- static ssize_t
-@@ -261,7 +261,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- 			  char *buf)
- {
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
--	return snprintf(buf, PAGE_SIZE, "%s %s\n", ha->fw_info.fw_build_date,
-+	return sysfs_emit_at(buf, PAGE_SIZE, "%s %s\n", ha->fw_info.fw_build_date,
- 			ha->fw_info.fw_build_time);
- }
- 
-@@ -309,7 +309,7 @@ void qla4_8xxx_free_sysfs_attr(struct scsi_qla_host *ha)
- {
- 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
- 	qla4xxx_about_firmware(ha);
--	return snprintf(buf, PAGE_SIZE, "%u.%u secs\n", ha->fw_uptime_secs,
-+	return sysfs_emit_at(buf, PAGE_SIZE, "%u.%u secs\n", ha->fw_uptime_secs,
- 			ha->fw_uptime_msecs);
- }
- 
--- 
-1.8.3.1
-
+Bart.
