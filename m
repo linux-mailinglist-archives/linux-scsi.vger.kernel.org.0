@@ -2,73 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10D92FEFF7
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 17:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F8A2FEFF8
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Jan 2021 17:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732608AbhAUQQ0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Jan 2021 11:16:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S1732183AbhAUQQp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Jan 2021 11:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731845AbhAUQPa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Jan 2021 11:15:30 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B061DC0613D6
-        for <linux-scsi@vger.kernel.org>; Thu, 21 Jan 2021 08:14:49 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id bx12so3134047edb.8
-        for <linux-scsi@vger.kernel.org>; Thu, 21 Jan 2021 08:14:49 -0800 (PST)
+        with ESMTP id S1732040AbhAUQQS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Jan 2021 11:16:18 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB560C061756;
+        Thu, 21 Jan 2021 08:15:37 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id hs11so3422773ejc.1;
+        Thu, 21 Jan 2021 08:15:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
-        b=t6b2Z/5Xc3bRNWBPdk1CMNbrgUWrC+LrSlsH7Kw705wv8XVa2y67ZyRTJL+9ml14UX
-         83bI/RDXzIo0UAG/8cxvRz96OZehe5WMOCl3rP0muY+5LIFG7MH093zmQpDTwz3kuSSC
-         VFBlSS+K/0Q67L5Hq4NksrgcLNvs9W+brJuDSOQ4fQownWWlUN51jSeirQobDUJ4Om/Q
-         4DNbnRF8AQuMS94u8W3oJc+0HhAELNXtBE8wSr+T+anPK75p3UU4QOAkDYjDyC8kX4r+
-         cHN4IRVlfHCNUEDQyURnEYTz/DMKrndNrlNdMv3iqNhY3R4QpWeenlqcAmIl5mQZDb/+
-         VkpA==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=l5RECMC/UZiLa9CjXR39r8x2ssvcHHs78h5TJlU06LQ=;
+        b=BficDcR+oe8bQAmTHSDQoDle1d8W2bEMWN6b/69rK5ZsV51D3sAauEztEVQoQYw4XP
+         ExVaI16sp18UvwTht1H6GFNF5YortjsdH3rfDCFdGeJ8eUWo3h08lDgHlWyNEAHe7cbC
+         Uz1KDBzSRohwcpKvZFyqP73mBaA0BA3BrCyFK1sv7vifVDHTSuf9zRjoQFC7X9BfsPrx
+         PWzQGQPZmTWk10lVBC18aSeeJ+/mazmqmHXQ48lBuyZ5c/JwWYbTfDwKrYdUu6mvVi1F
+         ALLREr2+lnuvMnKdlOsciO0q3a+7CgOgfHQmG7QJlj8BU8gJPZrmJxwT2riYddkUhNpJ
+         4csg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
-        b=VVqMzyaND5bSuDthrP9ygTHud8vSNAd049mkGQujXbfhuvYdKZFJi1TYip/aDhN6XL
-         01RIjoUAtmHdD/a/lG2Lcd0BvTsUBOu9hVe0mUUqXP6gYnjOt56x/oQZMgJNLyfcjjgo
-         36coV8mvxsDmiVs9uFpznsVEH+RPyZvrid7eg08F/w369gG5Aqos/224337V7TelZeAM
-         hs9k/q5QkJ2Wd9MC55fJun0wEcI7CPoyCK+nb8pJOmk56T29qLMIZAiFB0wVwz36S7i1
-         kqtcVXOsPd08I8osrH8+7WVy2BnxGwSRlrP1bgTOHPW83tbu4E5OpfibsQPBXsLCw5j7
-         9bzw==
-X-Gm-Message-State: AOAM530OumY1IClGIaKl+ZGyyCD5sc4W+IvavYXZquxIhc0MJwP8BM04
-        RSl2rkfp2wQ2InzB3WDVrUCBR3nFxc86WO3cYzM=
-X-Google-Smtp-Source: ABdhPJxo9d/95Gi2a7gbI/TzD2gRs5JzgjogLKlgoa01NgvkQfn9poHbwjof1d9EFhpCNoWfevhIUBh+lgeVGZY2cD0=
-X-Received: by 2002:aa7:d9c3:: with SMTP id v3mr11520292eds.133.1611245688281;
- Thu, 21 Jan 2021 08:14:48 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a54:35cb:0:0:0:0:0 with HTTP; Thu, 21 Jan 2021 08:14:47
- -0800 (PST)
-Reply-To: tracymedicinemed3@gmail.com
-From:   Dr Tracy William <bonarikan@gmail.com>
-Date:   Thu, 21 Jan 2021 17:14:47 +0100
-Message-ID: <CA+KHXtiUkBqW0A4h2moPUDVFWb35iz4_ewriGwj6_BY_qXcgMA@mail.gmail.com>
-Subject: From Dr Tracy from United States
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=l5RECMC/UZiLa9CjXR39r8x2ssvcHHs78h5TJlU06LQ=;
+        b=PXpN7+Ad0dBaB2CrbdiU4vCptYEt186+56ndmSN9Mpy/mlWCgOFuR338f6DUeYPC0p
+         zL5yNt06tawLW1e8uETsC0z28dM27Kitz3VwQkugkxOguWc+vb1VShvIEpWhqDCMPCA+
+         UN1Cn6/BW3wJw1a3G8N7n9W79duiR4MF+lhyY8Hv9JDtXL6jhaUHONVtJEb9zm6p2ULd
+         PQIVYPF11fa4HaHx5gIIrZTL2vDWmcshleJ0wWkoh1NcCj//5osrZLdqrpJhOQYdd+4F
+         wLl4an5BbULsHMTTk1edQGWmw951yiyU7b0bYuwix7CRwkZ2O5DmEJ62reiW0lESXgD1
+         qNQg==
+X-Gm-Message-State: AOAM53361yQm+C7g/WS/q9LreGvbAJsxJmnKdYd3IXxPDWXtgLtbW5GK
+        ElrV9JjnXLN1vN4jUqYXwSo=
+X-Google-Smtp-Source: ABdhPJxOjMAb78L405u1aCIm/2XrgwQPxT5WMpvhSefgJo6zY5WPweEkO4xvnjz3zPNxxtSoyGnLnw==
+X-Received: by 2002:a17:906:690:: with SMTP id u16mr168733ejb.186.1611245736490;
+        Thu, 21 Jan 2021 08:15:36 -0800 (PST)
+Received: from ubuntu-laptop (ip5f5bee1b.dynamic.kabel-deutschland.de. [95.91.238.27])
+        by smtp.googlemail.com with ESMTPSA id w17sm2382919ejk.124.2021.01.21.08.15.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 21 Jan 2021 08:15:36 -0800 (PST)
+Message-ID: <151f95faf537717ec480d9a256ba2d62b2c9aa44.camel@gmail.com>
+Subject: Re: [PATCH v7 0/6] Several changes for UFS WriteBooster
+From:   Bean Huo <huobean@gmail.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        stanley.chu@mediatek.com, beanhuo@micron.com, bvanassche@acm.org,
+        tomas.winkler@intel.com, cang@codeaurora.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 21 Jan 2021 17:15:33 +0100
+In-Reply-To: <yq14kjbgey8.fsf@ca-mkp.ca.oracle.com>
+References: <20210119163847.20165-1-huobean@gmail.com>
+         <yq14kjbgey8.fsf@ca-mkp.ca.oracle.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello Dear,
-how are you doing?I hope you are good
-Its my pleasure to contact you for friendship as i have been busy with work
-for so long and i believe this is the right time to find someone.
+On Wed, 2021-01-20 at 22:15 -0500, Martin K. Petersen wrote:
+> Bean,
+> 
+> > Bean Huo (6):
+> >    scsi: ufs: Add "wb_on" sysfs node to control WB on/off
+> >    docs: ABI: Add wb_on documentation for new entry wb_on
+> >    scsi: ufs: Changes comment in the function ufshcd_wb_probe()
+> >    scsi: ufs: Remove two WB related fields from struct ufs_dev_info
+> >    scsi: ufs: Group UFS WB related flags to struct ufs_dev_info
+> >    scsi: ufs: Cleanup WB buffer flush toggle implementation
+> 
+> Applied patches 1-5 to 5.12/scsi-staging. Patch 6 didn't apply,
+> please
+> resubmit.
+> 
+> Also, I had to fix up your sysfs ABI documentation indentation.
 
-I was just surfing through the Internet when i found your email,i want
-to make a new
-and special friend.
+Martin,
+thanks.  I will update patch 6 later.
 
-My name is Dr Tracy William,I am from the United States of America.
-Pls respond to my personal email(tracymedicinemed3@gmail.com) and i
-will send my details and pictures upon hearing from you
-bye
-With love
-Tracy
+Thanks,
+Bean
+
