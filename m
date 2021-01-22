@@ -2,113 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32716300241
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Jan 2021 13:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE05A300302
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Jan 2021 13:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727718AbhAVK4w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 Jan 2021 05:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727365AbhAVJ3Q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 Jan 2021 04:29:16 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDD5C061788
-        for <linux-scsi@vger.kernel.org>; Fri, 22 Jan 2021 01:28:35 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id bx12so5746704edb.8
-        for <linux-scsi@vger.kernel.org>; Fri, 22 Jan 2021 01:28:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloud.ionos.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=e8zlznAImcFn6aUQKKQ/ezvduZl3NWTYoAtSuyukN7E=;
-        b=BRbFnfHDIs/smHNgoUrxYDsFF05nDbpo8aSX5PfzleHap763MuKQwDfK8u29Egxixj
-         LCg013vU1qCYwBh/SMZ8szaUPk+K5RJooP2EyszdG93GCzNP0+yTdjHxZgJ//gzygcOz
-         jArtPCqymk9K81zX3cm4IOjMeFbE06eym3lNUPhR4WZokG/h+vhIOlluYchjHAJe2/wv
-         ctoKg+wMd5of+A0178pvtkJUHW891tZo2G4b1lAcikc1QrB/V+fkdJXpi0rQp0EsOl4w
-         045fYov7QDjRjW6IQ2u5TVSfVF76TRDw+xRa7zVuj5ORUtWyC7ZzUfDYAr3l4ETfM5CW
-         A5pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=e8zlznAImcFn6aUQKKQ/ezvduZl3NWTYoAtSuyukN7E=;
-        b=LqSsN8G7/QIDHQZSniXeN69+ySSmsP1v1tMDgdzrZhcKgrWcZ47AXWVKR9bJVsDfY0
-         WQLqYLDlY5b6CZTHvqMsW9YFZ83YBN2SX4NPwGLjlwq77qIZlN4SEu2WYLaMpo++FzM2
-         ZwghGXgTJmnJExNZenjppMgGF35d+ONmgZTWXWdzfEE5sii7SCDR9bVHhM5qCbGgYt8a
-         8YvrersgvHdDLwljPR03JSES5zoaFPvQaZ+5NYH9Qmp7cw6/qqupQzQiXIe3S7GSHS3T
-         SblWv+q5BgI9aBWJTd63zwlcJ/WMUMA0PJnTZRRB4prJ4mQ4yYYHVIXiQCz99jiw+0eP
-         g+JQ==
-X-Gm-Message-State: AOAM531SR6POYt2HTT0xC/pqX35M77TOeIqJmPSDQdz8bfDReE4GqrYz
-        cI2Wx32bWCRfaeD9HpXNYnzLzw==
-X-Google-Smtp-Source: ABdhPJyMaoODmdy8RXoi2rfv+If9xXYUfirTcZFY48nRrUmzOPPhl1zUfZ7bEVx62nyqAu1KqG1gJA==
-X-Received: by 2002:a50:bacb:: with SMTP id x69mr2476714ede.39.1611307713947;
-        Fri, 22 Jan 2021 01:28:33 -0800 (PST)
-Received: from ls00508.pb.local ([2001:1438:4010:2540:481b:68e3:af3e:e933])
-        by smtp.gmail.com with ESMTPSA id g17sm4684508edb.39.2021.01.22.01.28.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 01:28:33 -0800 (PST)
-From:   Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-ide@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-nfs@vger.kernel.org,
-        hch@infradead.org, Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
-Subject: [PATCH V2 0/2] remove unused argument from blk_execute_rq_nowait and blk_execute_rq
-Date:   Fri, 22 Jan 2021 10:28:22 +0100
-Message-Id: <20210122092824.20971-1-guoqing.jiang@cloud.ionos.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727015AbhAVJ0P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 Jan 2021 04:26:15 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33964 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727156AbhAVJB6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 22 Jan 2021 04:01:58 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 15E19AEAC;
+        Fri, 22 Jan 2021 09:01:16 +0000 (UTC)
+Date:   Fri, 22 Jan 2021 10:01:15 +0100
+Message-ID: <s5hv9bp8hwk.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pau Oliva Fora <pof@eslack.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v1 2/2] isa: Make the remove callback for isa drivers return void
+In-Reply-To: <20210121204812.402589-3-uwe@kleine-koenig.org>
+References: <20210121204812.402589-1-uwe@kleine-koenig.org>
+        <20210121204812.402589-3-uwe@kleine-koenig.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-V2 changes:
-1. update commit header per Christoph's comment.
+On Thu, 21 Jan 2021 21:48:12 +0100,
+Uwe Kleine-König wrote:
+> 
+> The driver core ignores the return value of the remove callback, so
+> don't give isa drivers the chance to provide a value.
+> 
+> Adapt all isa_drivers with a remove callbacks accordingly; they all
+> return 0 unconditionally anyhow.
+> 
+> Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
 
-Hi Jens,
+For the sound/* changes:
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
-This series remove unused 'q' from blk_execute_rq_nowait and blk_execute_rq.
-Also update the comment for blk_execute_rq_nowait.
+BTW, how will we take the patches?
+Judging from the LOCs, sound/* are mostly affected, so I may merge
+them via sound.git tree, if other people have no objection.
 
-Thanks,
-Guoqing
 
-Guoqing Jiang (2):
-  block: remove unnecessary argument from blk_execute_rq_nowait
-  block: remove unnecessary argument from blk_execute_rq
+thanks,
 
- block/blk-exec.c                   | 13 +++++--------
- block/bsg.c                        |  2 +-
- block/scsi_ioctl.c                 |  6 +++---
- drivers/block/mtip32xx/mtip32xx.c  |  2 +-
- drivers/block/paride/pd.c          |  2 +-
- drivers/block/pktcdvd.c            |  2 +-
- drivers/block/sx8.c                |  4 ++--
- drivers/block/virtio_blk.c         |  2 +-
- drivers/cdrom/cdrom.c              |  2 +-
- drivers/ide/ide-atapi.c            |  2 +-
- drivers/ide/ide-cd.c               |  2 +-
- drivers/ide/ide-cd_ioctl.c         |  2 +-
- drivers/ide/ide-devsets.c          |  2 +-
- drivers/ide/ide-disk.c             |  2 +-
- drivers/ide/ide-ioctls.c           |  4 ++--
- drivers/ide/ide-park.c             |  2 +-
- drivers/ide/ide-pm.c               |  4 ++--
- drivers/ide/ide-tape.c             |  2 +-
- drivers/ide/ide-taskfile.c         |  2 +-
- drivers/mmc/core/block.c           | 10 +++++-----
- drivers/nvme/host/core.c           |  8 ++++----
- drivers/nvme/host/lightnvm.c       |  4 ++--
- drivers/nvme/host/pci.c            |  4 ++--
- drivers/nvme/target/passthru.c     |  2 +-
- drivers/scsi/scsi_error.c          |  2 +-
- drivers/scsi/scsi_lib.c            |  2 +-
- drivers/scsi/sg.c                  |  3 +--
- drivers/scsi/st.c                  |  2 +-
- drivers/target/target_core_pscsi.c |  3 +--
- fs/nfsd/blocklayout.c              |  2 +-
- include/linux/blkdev.h             |  5 ++---
- 31 files changed, 50 insertions(+), 56 deletions(-)
-
--- 
-2.17.1
-
+Takashi
