@@ -2,171 +2,168 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C091B301305
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 Jan 2021 05:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE187301394
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 Jan 2021 07:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbhAWEYE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 Jan 2021 23:24:04 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:54788 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726694AbhAWEXi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 Jan 2021 23:23:38 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10N4G55u165125;
-        Sat, 23 Jan 2021 04:22:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=pZ20lCoM5IY88vUSyLmhFx32uBKZGcmX4fzPxFo+9Js=;
- b=u5TK4u4DMl3RCBdzEQtJMf7miPp5GZaG7gC96wGN+TSW9HJeSSMdHNC+h8uvKJj/Cfhk
- yGGdOMndlm+ANwEDWNlRBqstEK7qDVIwKCeauyshiGw6lZAlSNbWvgAWPIXX9GeWZgpI
- khcKkhmBd7Q4n0w6PPQ5K3a1xy1w8JtDZOwpnTCgO0hYFGEap4yVJSjVoTa/hPfxUYiB
- ymEA2YoPV/SDyEodbEEU7reBGpFBs0ZxqLHAZA2ZbdfuB7uOIWvlMMa/PxJdFQKKpX72
- oU/MO4hmi6ihi2/+2x7ZbgWc1oycAnILWY7orrEByb0afzjEbYT4uH9DgSSCQYy+hyVC Ag== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 3689aa8a5a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 23 Jan 2021 04:22:37 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10N4KoGL078540;
-        Sat, 23 Jan 2021 04:22:37 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2171.outbound.protection.outlook.com [104.47.55.171])
-        by aserp3030.oracle.com with ESMTP id 3689u8v0ru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 23 Jan 2021 04:22:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XOCMzym967nkd2YNfv74nvms8s+sea+e7GDUc51gnaz/9wq0fU7JQBvVOgiHjF+IFBbYsqZz4SPkrd3tRtwzwLRJyGDSMVlJ/yDIBe6bWzMn0oSdgctXSVy/rUX0tR6OZ/6o2CKHAZGHkepZUpO3iW/XL4f9ZSOIWR2lsZcN3xfpQuJvE8UM9AZkD98dB267mbJnB1dzzCfkapnof3kd1mn+vFP/JgO9XjDDOWv3hkRzrQpvmB0lfvBvcJu7pp6TVdm7zh85X/hJHlM7D42qjnJ2nm8i62m0WS9r6LsfWWHFiKhKTA0nTkbP5BLUWiHJNTmwpt1Nk0OdAzolp5kP/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZ20lCoM5IY88vUSyLmhFx32uBKZGcmX4fzPxFo+9Js=;
- b=mZF1miyFeHHb/FdEA1sd+g8tF/D+p0Dgt+QzSVF9z5Rx0su1XxKHj9PR2aUlwB6v6HNdqVaJVc6ov9aI5cQ6p9pC7OX+VI8Qibp0ctAouBamdu8HJUaIlL1LIolDMtS8bUZlQVw/yek6mFjQBol7/aoGSr2UgZRWOUqi/wfExKukkWX26oBdFNTM5zTWz30nFU7+aSUkhjjnSmpYjnvrPuPn2WmklSaglANRT4ET9dMRdKSdFdCGQ+ZAtfMu7i7bo/0wDfdDkG/6sdKi925TWuR8yfi45XzYtF/9Vi6nu2nk0QBQQzR4cuZNPtQP74XA5OGoIUAKzRLKpSHDBJ34ZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZ20lCoM5IY88vUSyLmhFx32uBKZGcmX4fzPxFo+9Js=;
- b=Gx9s+kIlnSoA6snY5nCTwbHbBg2Dow0ZwMrcebFER6UhHzscRu8jYq6YwnHCvPO0Om0XGlE+AmX+59tKd/XZOA3R1KZNDaXFcQyzAR56GkSqWBFPvN2j3E7qv9dXaY9EDgXVYQzwSp0eqHrP7/d4N+Lc3/iyOEEOkDVTk4ZOMG0=
-Authentication-Results: samsung.com; dkim=none (message not signed)
- header.d=none;samsung.com; dmarc=none action=none header.from=oracle.com;
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by PH0PR10MB4439.namprd10.prod.outlook.com (2603:10b6:510:41::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.13; Sat, 23 Jan
- 2021 04:22:35 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::54f3:a8aa:a2cd:a3a4]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::54f3:a8aa:a2cd:a3a4%5]) with mapi id 15.20.3784.016; Sat, 23 Jan 2021
- 04:22:35 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     alim.akhtar@samsung.com, Stanley Chu <stanley.chu@mediatek.com>,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org, avri.altman@wdc.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        matthias.bgg@gmail.com, chaotian.jing@mediatek.com,
-        asutoshd@codeaurora.org, kuohong.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, jiajie.hao@mediatek.com,
-        andy.teng@mediatek.com, linux-kernel@vger.kernel.org,
-        beanhuo@micron.com, bvanassche@acm.org,
-        linux-mediatek@lists.infradead.org, alice.chao@mediatek.com,
-        cang@codeaurora.org, cc.chou@mediatek.com,
-        linux-arm-kernel@lists.infradead.org, peter.wang@mediatek.com
-Subject: Re: [PATCH v3 0/3] scsi: ufs: Cleanup and refactor clock scaling
-Date:   Fri, 22 Jan 2021 23:22:10 -0500
-Message-Id: <161136635067.28733.13879662006883873463.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120150142.5049-1-stanley.chu@mediatek.com>
-References: <20210120150142.5049-1-stanley.chu@mediatek.com>
+        id S1726101AbhAWG0O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 23 Jan 2021 01:26:14 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:34974 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbhAWG0N (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 23 Jan 2021 01:26:13 -0500
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210123062529epoutp04861ea80630fa68a05dec658279197eb8~cyGsfIwL12964029640epoutp04f
+        for <linux-scsi@vger.kernel.org>; Sat, 23 Jan 2021 06:25:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210123062529epoutp04861ea80630fa68a05dec658279197eb8~cyGsfIwL12964029640epoutp04f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1611383129;
+        bh=YBUdDDrkpvsLb6HxjCiLBnck1J1xSu5/Bi2p9OPEm0o=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=R3/Y4VJi8jW+WX/BygoOr04CDEhFZQ6XgufRX8rxPTIW8Jaz/5xshpR4bZKLI/WRX
+         DpSFFhI0wF6NnWRqespfz4QZNICWpwXPyYrU5V/O1XJGy0uv/IHg7z0/kpPjtIeQfM
+         EeGG1zVdnSGdHmpftq/TvIMhKlW9sdu8J5zdAovQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20210123062527epcas2p11097445dcdb6319deed61ff77e2b041b~cyGq7xks32236222362epcas2p1G;
+        Sat, 23 Jan 2021 06:25:27 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.190]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4DN5j146pVz4x9Pp; Sat, 23 Jan
+        2021 06:25:25 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.CD.10621.551CB006; Sat, 23 Jan 2021 15:25:25 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20210123062524epcas2p30522ab83455f8e2cc78d2824f0def515~cyGoE-ces2299422994epcas2p3t;
+        Sat, 23 Jan 2021 06:25:24 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210123062524epsmtrp2fdd893f53ff32ec6cd36c957c061cbd5~cyGoEEvnO1092210922epsmtrp2R;
+        Sat, 23 Jan 2021 06:25:24 +0000 (GMT)
+X-AuditID: b6c32a45-337ff7000001297d-4f-600bc155ea95
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        14.C2.08745.451CB006; Sat, 23 Jan 2021 15:25:24 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20210123062524epsmtip10dab625b0175451f5cb4cef89b42374b~cyGn2WadK2504925049epsmtip1k;
+        Sat, 23 Jan 2021 06:25:24 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
+        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v1] scsi: ufs: export ufshcd_wb_ctrl func
+Date:   Sat, 23 Jan 2021 15:13:57 +0900
+Message-Id: <1611382437-187970-1-git-send-email-kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgk+LIzCtJLcpLzFFi42LZdljTVDf0IHeCwf958hYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZHFzy1EWi+7rO9gs
+        lh//x2TRdfcGo8XSf29ZHPg9Ll/x9rjc18vkMWHRAUaP7+s72Dw+Pr3F4tG3ZRWjx+dNch7t
+        B7qZAjiicmwyUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJz
+        gI5XUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BQYGhboFSfmFpfmpesl5+daGRoY
+        GJkCVSbkZBx8/Yq94JBQRW/TTKYGxof8XYycHBICJhJdE7czdjFycQgJ7GCUaJnxgxnC+cQo
+        0XtyIlTmM6PEw/cv2WFa5uzfxwKR2MUocWHZCyYI5wejxL7T65hAqtgENCWe3pwKlhAROMMk
+        ca31LCtIgllAXWLXhBNgRcIClhK/Oo6DxVkEVCUO7n/LDGLzCrhJXDt+jxlinZzEzXOdYEdJ
+        CDRySHw72gGVcJE4fm46K4QtLPHq+Bao+6QkPr/bywZh10vsm9rACtHcwyjxdN8/RoiEscSs
+        Z+1ANgfQRZoS63fpg5gSAsoSR26xQNzJJ9Fx+C87RJhXoqNNCKJRWeLXpMlQQyQlZt68A7XV
+        Q+J1bwvYViGBWImVzavYJzDKzkKYv4CRcRWjWGpBcW56arFRgSFyNG1iBCdJLdcdjJPfftA7
+        xMjEwXiIUYKDWUmE95ElR4IQb0piZVVqUX58UWlOavEhRlNgeE1klhJNzgem6bySeENTIzMz
+        A0tTC1MzIwslcd5igwfxQgLpiSWp2ampBalFMH1MHJxSDUzNu77bPiw2XD4rPvWNbkaV2oRl
+        pcsuv3WZZSp2mvv+C4EXbzMmzI2vq5N8zr1iheIRpqdHXs1uF6rQ2HRJ/KK4a8tvSaPTsiEn
+        45fpHe5+uNdH8gDnETulDcr3nMuawue85M5IntJZ6HWLR14wNy3B7/iZ6nUun2v08vqfHTac
+        L1fyMP0wh1ATs+vmzYs7BBmUs+6eTLW97JPj336dfbXNmTPvRE8EH6iXBKZqa5Htcvfj5h+8
+        5XJvp+bW2Bnevge01ZbvEp/y6pKLtN6Bf9Ix3ucTr0lsWnK+LXHZ5dwJK5T/LU+7vcApIcvW
+        Ol+jZ8nmlYfKzTtPep4ruW7rlrVwm+6Ho4c/zf2RuVF9WYQSS3FGoqEWc1FxIgDzZ4OLGwQA
+        AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGLMWRmVeSWpSXmKPExsWy7bCSnG7IQe4Eg6Wv+SwezNvGZrG37QS7
+        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8Zq8evvenaL1YsfsFgsurGNyeLmlqMsFt3Xd7BZ
+        LD/+j8mi6+4NRoul/96yOPB7XL7i7XG5r5fJY8KiA4we39d3sHl8fHqLxaNvyypGj8+b5Dza
+        D3QzBXBEcdmkpOZklqUW6dslcGUcfP2KveCQUEVv00ymBsaH/F2MnBwSAiYSc/bvY+li5OIQ
+        EtjBKNG65BILREJS4sTO54wQtrDE/ZYjrBBF3xglHm+7CJZgE9CUeHpzKhNIQkTgHpPEpQlz
+        mUESzALqErsmnGACsYUFLCV+dRxnBbFZBFQlDu5/C1bDK+Amce34PWaIDXISN891Mk9g5FnA
+        yLCKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4aLW0djDuWfVB7xAjEwfjIUYJDmYl
+        Ed5HlhwJQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTCt
+        bzMP1fr7XmFdx6SgZMHLVw2My8OLMnK9rc89Dsu8OOvOhjBRazNhhcvfFvIrarronFNYwnsi
+        cqVYbcyRlk/b/qotdS62jLsbMu8bz4mIZ67265qPunoqui/0MFe01Llw9N1Svr5ji87lnmSs
+        MBWbyP4yLPxl4vf1kRc/TmU/YfFDTGJVzuNVmuzmtV6a3KrTHizqCJRbzSnWc0+Kab/nz1Lr
+        S3WKeUxB10U/Ve2fnbP1eeyzBr21x5y2zbvKu/L4ik0b2r5NLo4L3awkkrFR4BF36iR9R6m9
+        636qHqt+EjSrxVdQ7X9RTt9sk4b4WxIyj1JLnnQ6389vezxdRyR01XamLTuKTtYk63+7wK/E
+        UpyRaKjFXFScCADTkSkayQIAAA==
+X-CMS-MailID: 20210123062524epcas2p30522ab83455f8e2cc78d2824f0def515
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [138.3.200.9]
-X-ClientProxiedBy: DM5PR12CA0019.namprd12.prod.outlook.com (2603:10b6:4:1::29)
- To PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from ca-mkp.mkp.ca.oracle.com (138.3.200.9) by DM5PR12CA0019.namprd12.prod.outlook.com (2603:10b6:4:1::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.14 via Frontend Transport; Sat, 23 Jan 2021 04:22:31 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d44c2123-130d-4e92-d963-08d8bf568288
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4439:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <PH0PR10MB44390906555DF5C3123272118EBF9@PH0PR10MB4439.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dq9rbJWBxWYsiSk2nL3LhkSue0F5OIEW1sburzh1POcs5HK9GsocxEUHrdTq9GtExq0DlAOxxU9CgIiG38L1xfZPp4m42wYxmN4voFcqIK6dH9FUY4pauKjZZmk4lno2Z5Q9cnYeaIe1MZB6pSntaAKgEZTtmfInpudt2ZGD4H+W2I8KEkYH9uLGnR7p1t+unFkp4M3Kjkrm8vUi9If7JkHtZaSugLhnUqoq+5J4JF8xVhO9nlvCbSMNUu1DtreoSkq0o/3vDAh3kghAmDf4nLmS8mtEwTrZDRXJ4M1oSZdIN2ttZEUcKSv7vuXb2r6CrLVoFDoXa/DRA3dM2Y+YgMu3ZZ5KbJiAj+PT9oJreYGaq7mM0Y+KqwL11ot2B95qqUgifMkmRD7EMpQrQFzt7ArCXIyElAwzo6a5+hU9uGXfdTKjZZrHUJkas0i36s4m7Timyq5HN9DLeVbZXQr5SQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39860400002)(396003)(136003)(376002)(346002)(52116002)(6486002)(7696005)(2616005)(186003)(316002)(4326008)(5660300002)(8676002)(478600001)(956004)(16526019)(4744005)(86362001)(103116003)(966005)(83380400001)(66946007)(2906002)(66556008)(26005)(8936002)(7416002)(66476007)(36756003)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?Y2JTaHNlM2owMnR2dkc5MU5SOEFxWW9XWFZsT0VnWW5oSzFjM1dBWDdBOUpl?=
- =?utf-8?B?S1RlL1pweWRhY3Z4aUUzL2wzS1VpaFJKdDU1bEZpZ0VUbUdKUnR6b0JFdjB6?=
- =?utf-8?B?S3FyTXBaenQ5S2M5TjRFZTE0NXZ4eVFzK2NUbDU1UUhaN0hPejF0RFdaWGxE?=
- =?utf-8?B?NHV3SWFSNHl6SlIrc0FHVjROWnRhRW50NFMzaWdGd0lHOEFuUU4rQ0tqOFJr?=
- =?utf-8?B?Nlh0VGR4UXViWHYxSXhGUjN6L0hoVW5yQzBwa1VBKzNpTU5JWG5TNjRsQVIr?=
- =?utf-8?B?SU4wZ2hlUUllcHA1OXNkaTVJVW1ETHRHVThQVW52dlV5WUMvMlRqTi9aMHFR?=
- =?utf-8?B?Z3pyaGdZbWxaYWhla2IxeFRsUjN4QkpneXpldzRDcFZDdGl0cm9qeHkxZmxv?=
- =?utf-8?B?eGlPcWJURXNhaUh2RlZ0TkpQaUR3Vk8zbVEwaWVvRE0rMFlxUDVmcTRlQnk5?=
- =?utf-8?B?Wi9GNkNoamdTbWUyaklUVGkwMVRsbDIwbG1GUmg1bmIwc1puc2VhT3UzaktF?=
- =?utf-8?B?dUoxVUhnQVM1TW1IZUxjVTFzdDFkb01qaTNlSHBkeXpSRXZxUkEzR3FiRzVj?=
- =?utf-8?B?N0dTa1BSRDdzL3E5amRwRkxNL2Q1Ull2QVkwL3Y2V2QxUWpqYjZZVVF2MUk4?=
- =?utf-8?B?MXh6eGFyMkJadWI2REoyMzlpRExvUEJkRUo3RGRrV0Urc0VaTytFd1MyK3NQ?=
- =?utf-8?B?R2pudXhLQkZkZzV5YkErTlFFcFRmYUc5MjV3dkFaOU1yQTd6RklXYVpUQldR?=
- =?utf-8?B?ZjVTbjR5ZEo1Y0tlS3oyQklPMnp3Q0lubXROMXBjakYrTU80L1RHWHVKckVs?=
- =?utf-8?B?U3Ixeng1Rm0vYjNGWVFqWFBRRERSa2hMd0M2SVZ4Nk9yTXFTZlhNYXJESVRM?=
- =?utf-8?B?UFdQSmQ4NjBlOElHNFV5L25QOVJuUjRXMVhPQUh5NGtlZnJuTHMrLzYreXA3?=
- =?utf-8?B?YmlZU1VMQW56TW5EMndvUmR2S2tFZ2p1TFU3ZVJMbCtzU2tDRXNhdGdXa0Y3?=
- =?utf-8?B?R29JK3Vob1h1eGs2RDlwSGJOcDRRcmtoZTJaaFI2ZnlicEZDN3EwZ3NncnRv?=
- =?utf-8?B?TUgxUG0zdGVRYjZ1TlJQZUoxaDBocGZ1SFo1RlVYNWdwV3pHbko3U2FUOG1H?=
- =?utf-8?B?SGhTNXgzL3NKY21LRzFMRENyR05nTlJwK0wxa0JXRmNjMzdmQjdlcVBJWTc3?=
- =?utf-8?B?VWxFcDJ6UlZzekwrTDJHRlU5NEZXRWFpLzc1ZmlwSW9wRFZHUEh2bTBpWlpw?=
- =?utf-8?B?ZE5jQlRWNnMraXRzK0hFQllNTWtXcjN4NmNBemcva3RrZzZEd3VEcjdBZmk4?=
- =?utf-8?B?OHFHZnlpcy8yamJ5Q3cwMzFuSUg2WlpyM3BhOFJjU1ZoVGNNRDdTWG9laG8w?=
- =?utf-8?B?S0hrSmxSWkJjRFVpNXk1dlBNTHZHelNPdXFERDgvbGE4VEsyMHY5VCsxalBI?=
- =?utf-8?Q?6nRq0nmr?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d44c2123-130d-4e92-d963-08d8bf568288
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2021 04:22:35.3632
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lV6a7v4cWv2UZ6gdJX/vqhBhv81q+p46kgLo3IpYDv+O66legGi+lwnTdX8gIAQKAVQD8UHOfQKWZYFXu/Qz4P5XgnbPWvXbijK0AtuiPCk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4439
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9872 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101230022
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9872 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 phishscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 suspectscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101230021
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210123062524epcas2p30522ab83455f8e2cc78d2824f0def515
+References: <CGME20210123062524epcas2p30522ab83455f8e2cc78d2824f0def515@epcas2p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 20 Jan 2021 23:01:39 +0800, Stanley Chu wrote:
+From: SEO HOYOUNG <hy50.seo@samsung.com>
 
-> This series cleans up and refactors clk-scaling feature, and shall not change any functionality.
-> 
-> This series is based on Can's series "Three changes related with UFS clock scaling" in 5.12/scsi-queue branch in Martin's tree.
-> 
-> Changes since v2:
->   - Remove patch 4
->   - Rebase to Can's series: [v11] Three changes related with UFS clock scaling
-> 
-> [...]
+Turning on write booster should eventually lead to
+increasing power consumption and it needs be controlled
+by a policy which should be vendor specific. Becasue
+it's derived from system requirements.
 
-Applied to 5.12/scsi-queue, thanks!
+So need to make this be called from outside.
 
-[1/3] scsi: ufs: Refactor cancelling clkscaling works
-      https://git.kernel.org/mkp/scsi/c/f9a7fa345aec
-[2/3] scsi: ufs: Remove redundant null checking of devfreq instance
-      https://git.kernel.org/mkp/scsi/c/b058fa868234
-[3/3] scsi: ufs: Cleanup and refactor clk-scaling feature
-      https://git.kernel.org/mkp/scsi/c/348e1bc5f4b7
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 5 +++--
+ drivers/scsi/ufs/ufshcd.h | 1 +
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index e221add..23603a6 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -246,7 +246,7 @@ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
+ static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
+ static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba);
+ static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba);
+-static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable);
++int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable);
+ static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
+ static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
+ static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
+@@ -5351,7 +5351,7 @@ static void ufshcd_bkops_exception_event_handler(struct ufs_hba *hba)
+ 				__func__, err);
+ }
+ 
+-static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
++int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
+ {
+ 	int ret;
+ 	u8 index;
+@@ -5382,6 +5382,7 @@ static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(ufshcd_wb_ctrl);
+ 
+ static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
+ {
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 9bb5f0e..abd710e 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -1060,6 +1060,7 @@ void ufshcd_map_desc_id_to_length(struct ufs_hba *hba, enum desc_idn desc_id,
+ u32 ufshcd_get_local_unipro_ver(struct ufs_hba *hba);
+ 
+ int ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd);
++int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable);
+ 
+ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
+ 			     struct utp_upiu_req *req_upiu,
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.7.4
+
