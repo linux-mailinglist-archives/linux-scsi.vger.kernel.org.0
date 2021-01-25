@@ -2,262 +2,175 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC768302B86
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Jan 2021 20:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49E7302C55
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Jan 2021 21:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731788AbhAYTX3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 25 Jan 2021 14:23:29 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:48749 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731773AbhAYTWv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 25 Jan 2021 14:22:51 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id DBB0C2042AA;
-        Mon, 25 Jan 2021 20:12:23 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qFG2DQrWeFSZ; Mon, 25 Jan 2021 20:12:21 +0100 (CET)
-Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
-        by smtp.infotech.no (Postfix) with ESMTPA id CA67C2042C1;
-        Mon, 25 Jan 2021 20:12:20 +0100 (CET)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        kashyap.desai@broadcom.com
-Subject: [PATCH v15 44/45] sg: add blk_poll support
-Date:   Mon, 25 Jan 2021 14:11:21 -0500
-Message-Id: <20210125191122.345858-45-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210125191122.345858-1-dgilbert@interlog.com>
-References: <20210125191122.345858-1-dgilbert@interlog.com>
+        id S1732062AbhAYUPO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 25 Jan 2021 15:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731193AbhAYUOw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Jan 2021 15:14:52 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F347BC061756
+        for <linux-scsi@vger.kernel.org>; Mon, 25 Jan 2021 12:14:11 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id p72so29138843iod.12
+        for <linux-scsi@vger.kernel.org>; Mon, 25 Jan 2021 12:14:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5oPVxsDUHFnjzZ37jztimVx7kT5rl5MLP23lod84D8k=;
+        b=O7ObVy/vbDbvYgKIJLJJe1Y9IKfOCCLlQ6AzYhjLSNlxQ1feUkOZBwlBjw+UCjoO68
+         SoONYMJJPORKbbwddqa0AP8EdbK0fP3GezYgLp2C7FF3PJT9bdhP+7EtHDzxCH3z1Hgr
+         ZaDtA2Pb5lNw5h7P7YQp2ybuW1FNCqIq3AjX5MFuiFDJfI5sJ+tgm+v+KDfaSNsbZA3D
+         t6QCSDvG9sY9qA0cmzpFWbArfD3avEasYZvSHAsSXvxqmTUst4QOhxubnaG2MPygpyIm
+         r2s7yZdAYKTJFhAfIJwa2MgmhNICTcpq16Bcb8DmgRQdQ4y61MZsVNfs0dXPo5QNUSZd
+         sFUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5oPVxsDUHFnjzZ37jztimVx7kT5rl5MLP23lod84D8k=;
+        b=ZSf1zj8otIX2pagWOodicyPTclgfod1OkSER2o3xLLkhTkvC56USEQpZVDit2Xb3Ni
+         5qVWhvCZEzlpnPgaQa+XGJMWm0O8/fv4POlKg6gFnzOFXZYtvQiDleGaIGUZBv98gFpz
+         eAdI5aNhGUfZB3QOzPTMEtN+RoDEQ11TGXBasJejV+Is3fzNuwu41zp5ZsiG6IrEs3LB
+         voxwWQXJd9WItKOoBwjsIc94Wrso0DpHJDg3zZRb1rtqfKxNLLQk75j3Y/iSqW/RApNw
+         PZTunsqwcpqDv7il6nc5r1oOm1WH0a9yC0dWBMsD7JYom6QBrMUOuuliL2+YCTPTtu6l
+         SDyg==
+X-Gm-Message-State: AOAM533Q5GvkAa9T+Q7NoWv3mdZJwgDMChLgHkTPWbXmsNqM95AQzajp
+        Q4L5iR3OLrd/eKNN3UK7m+0gm/KBvDgup3J++SmVOQ==
+X-Google-Smtp-Source: ABdhPJzMjR4NyG/6n7ZBSL9gkgUVYaYxJ5W7f+6z3TKM10CBC8DzB/dFVXPVii8iOsQguaod82m7mEWmkYOU3l7Har4=
+X-Received: by 2002:a5e:8905:: with SMTP id k5mr1836963ioj.140.1611605651165;
+ Mon, 25 Jan 2021 12:14:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210121082155.111333-1-ebiggers@kernel.org> <20210121082155.111333-2-ebiggers@kernel.org>
+In-Reply-To: <20210121082155.111333-2-ebiggers@kernel.org>
+From:   Satya Tangirala <satyat@google.com>
+Date:   Mon, 25 Jan 2021 12:14:00 -0800
+Message-ID: <CAA+FYZerh02JXSKghCKuG29ATdYU_=2O93moGnLgD6Jv2v2auQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] block/keyslot-manager: introduce devm_blk_ksm_init()
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-block@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The support is added via the new SGV4_FLAG_HIPRI command flag which
-causes REQ_HIPRI to be set on the request. Before waiting on an
-inflight request, it is checked to see if it has SGV4_FLAG_HIPRI,
-and if so blk_poll() is called instead of the wait. In situations
-where only the file descriptor is known (e.g. sg_poll() and
-ioctl(SG_GET_NUM_WAITING)) all inflight requests associated with
-the file descriptor that have SGV4_FLAG_HIPRI set, have blk_poll()
-called on them.
-
-Note that the implementation of blk_poll() calls mq_poll() in the
-LLD associated with the request. Then for any request found to be
-ready, blk_poll() invokes the scsi_done() callback. So this means
-if blk_poll() returns 1 then sg_rq_end_io() has already been
-called for the polled request.
-
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/sg.c      | 100 ++++++++++++++++++++++++++++++++++++++---
- include/uapi/scsi/sg.h |   1 +
- 2 files changed, 96 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 37258b4804ab..4278a576e4d7 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -122,7 +122,8 @@ enum sg_rq_state {	/* N.B. sg_rq_state_arr assumes SG_RS_AWAIT_RCV==2 */
- #define SG_FFD_FORCE_PACKID	0	/* receive only given pack_id/tag */
- #define SG_FFD_CMD_Q		1	/* clear: only 1 active req per fd */
- #define SG_FFD_KEEP_ORPHAN	2	/* policy for this fd */
--#define SG_FFD_Q_AT_TAIL	3	/* set: queue reqs at tail of blk q */
-+#define SG_FFD_HIPRI_SEEN	3	/* could have HIPRI requests active */
-+#define SG_FFD_Q_AT_TAIL	4	/* set: queue reqs at tail of blk q */
- 
- /* Bit positions (flags) for sg_device::fdev_bm bitmask follow */
- #define SG_FDEV_EXCLUDE		0	/* have fd open with O_EXCL */
-@@ -300,6 +301,8 @@ static struct sg_device *sg_get_dev(int min_dev);
- static void sg_device_destroy(struct kref *kref);
- static struct sg_request *sg_mk_srp_sgat(struct sg_fd *sfp, bool first,
- 					 int db_len);
-+static int sg_sfp_blk_poll(struct sg_fd *sfp, int loop_count);
-+static int sg_srp_blk_poll(struct sg_request *srp, int loop_count);
- #if IS_ENABLED(CONFIG_SCSI_LOGGING) && IS_ENABLED(SG_DEBUG)
- static const char *sg_rq_st_str(enum sg_rq_state rq_st, bool long_str);
- #endif
-@@ -1032,6 +1035,8 @@ sg_execute_cmd(struct sg_fd *sfp, struct sg_request *srp)
- 		atomic_inc(&sfp->submitted);
- 		set_bit(SG_FRQ_COUNT_ACTIVE, srp->frq_bm);
- 	}
-+	if (srp->rq_flags & SGV4_FLAG_HIPRI)
-+		srp->rq->cmd_flags |= REQ_HIPRI;
- 	blk_execute_rq_nowait(sdp->device->request_queue, sdp->disk,
- 			      srp->rq, (int)at_head, sg_rq_end_io);
- }
-@@ -1704,6 +1709,12 @@ sg_wait_event_srp(struct file *filp, struct sg_fd *sfp, void __user *p,
- 
- 	if (atomic_read(&srp->rq_st) != SG_RS_INFLIGHT)
- 		goto skip_wait;		/* and skip _acquire() */
-+	if (srp->rq_flags & SGV4_FLAG_HIPRI) {
-+		res = sg_srp_blk_poll(srp, -1);	/* spin till found */
-+		if (unlikely(res < 0))
-+			return res;
-+		goto skip_wait;
-+	}
- 	SG_LOG(3, sfp, "%s: about to wait_event...()\n", __func__);
- 	/* usually will be woken up by sg_rq_end_io() callback */
- 	res = wait_event_interruptible(sfp->read_wait,
-@@ -2030,6 +2041,8 @@ sg_ioctl_common(struct file *filp, struct sg_device *sdp, struct sg_fd *sfp,
- 		SG_LOG(3, sfp, "%s:    SG_GET_PACK_ID=%d\n", __func__, val);
- 		return put_user(val, ip);
- 	case SG_GET_NUM_WAITING:
-+		if (test_bit(SG_FFD_HIPRI_SEEN, sfp->ffd_bm))
-+			sg_sfp_blk_poll(sfp, 0);	/* LLD may have some ready push */
- 		val = atomic_read(&sfp->waiting);
- 		if (val)
- 			return put_user(val, ip);
-@@ -2239,6 +2252,72 @@ sg_compat_ioctl(struct file *filp, unsigned int cmd_in, unsigned long arg)
- }
- #endif
- 
-+static int
-+sg_srp_q_blk_poll(struct sg_request *srp, struct request *rqq, struct request_queue *q,
-+		  int loop_count)
-+{
-+	int k, n, num;
-+	blk_qc_t cookie;
-+
-+	if (rqq && rqq->mq_hctx)
-+		cookie = request_to_qc_t(rqq->mq_hctx, rqq);
-+	else
-+		return 0;
-+	num = (loop_count < 1) ? 1 : loop_count;
-+	for (k = 0; k < num; ++k) {
-+		if (atomic_read(&srp->rq_st) != SG_RS_INFLIGHT)
-+			return 0;
-+		n = blk_poll(q, cookie, loop_count < 0 /* spin if negative */);
-+		if (n != 0)
-+			return n;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Check all requests on this sfp that are both inflight and HIPRI. That check involves calling
-+ * blk_poll(spin<-false) loop_count times. If loop_count is 0 then call blk_poll once.
-+ * If loop_count is negative then call blk_poll(spin<-true)) once for each request.
-+ * Returns number found (could be 0) or a negated errno value.
-+ */
-+static int
-+sg_sfp_blk_poll(struct sg_fd *sfp, int loop_count)
-+{
-+	int res = 0;
-+	int n;
-+	unsigned long idx, iflags;
-+	struct sg_request *srp;
-+	struct request *rqq;
-+	struct scsi_device *sdev = sfp->parentdp->device;
-+	struct request_queue *q = sdev ? sdev->request_queue : NULL;
-+	struct xarray *xafp = &sfp->srp_arr;
-+
-+	if (!q)
-+		return -EINVAL;
-+	xa_lock_irqsave(xafp, iflags);
-+	xa_for_each(xafp, idx, srp) {
-+		rqq = srp->rq;
-+		if (rqq && (srp->rq_flags & SGV4_FLAG_HIPRI) &&
-+		    atomic_read(&srp->rq_st) == SG_RS_INFLIGHT) {
-+			xa_unlock_irqrestore(xafp, iflags);
-+			n = sg_srp_q_blk_poll(srp, rqq, q, loop_count);
-+			if (unlikely(n < 0))
-+				return n;
-+			xa_lock_irqsave(xafp, iflags);
-+			res += n;
-+		}
-+	}
-+	xa_unlock_irqrestore(xafp, iflags);
-+	return res;
-+}
-+
-+static inline int
-+sg_srp_blk_poll(struct sg_request *srp, int loop_count)
-+{
-+	return sg_srp_q_blk_poll(srp, srp->rq, srp->parentfp->parentdp->device->request_queue,
-+				 loop_count);
-+}
-+
- /*
-  * Implements the poll(2) system call for this driver. Returns various EPOLL*
-  * flags OR-ed together.
-@@ -2250,6 +2329,8 @@ sg_poll(struct file *filp, poll_table * wait)
- 	__poll_t p_res = 0;
- 	struct sg_fd *sfp = filp->private_data;
- 
-+	if (test_bit(SG_FFD_HIPRI_SEEN, sfp->ffd_bm))
-+		sg_sfp_blk_poll(sfp, 0);	/* LLD may have some ready to push up */
- 	num = atomic_read(&sfp->waiting);
- 	if (num < 1) {
- 		poll_wait(filp, &sfp->read_wait, wait);
-@@ -2561,7 +2642,8 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
- 
- 	if (likely(rqq_state == SG_RS_AWAIT_RCV)) {
- 		/* Wake any sg_read()/ioctl(SG_IORECEIVE) awaiting this req */
--		wake_up_interruptible(&sfp->read_wait);
-+		if (!(srp->rq_flags & SGV4_FLAG_HIPRI))
-+			wake_up_interruptible(&sfp->read_wait);
- 		kill_fasync(&sfp->async_qp, SIGPOLL, POLL_IN);
- 		kref_put(&sfp->f_ref, sg_remove_sfp);
- 	} else {        /* clean up orphaned request that aren't being kept */
-@@ -3004,6 +3086,8 @@ sg_start_req(struct sg_request *srp, struct sg_comm_wr_t *cwrp, int dxfer_dir)
- 	/* current sg_request protected by SG_RS_BUSY state */
- 	scsi_rp = scsi_req(rq);
- 	srp->rq = rq;
-+	if (rq_flags & SGV4_FLAG_HIPRI)
-+		set_bit(SG_FFD_HIPRI_SEEN, sfp->ffd_bm);
- 
- 	if (cwrp->cmd_len > BLK_MAX_CDB)
- 		scsi_rp->cmd = long_cmdp;
-@@ -3117,7 +3201,10 @@ sg_finish_scsi_blk_rq(struct sg_request *srp)
- 	SG_LOG(4, sfp, "%s: srp=0x%pK%s\n", __func__, srp,
- 	       (srp->parentfp->rsv_srp == srp) ? " rsv" : "");
- 	if (test_and_clear_bit(SG_FRQ_COUNT_ACTIVE, srp->frq_bm)) {
--		atomic_dec(&sfp->submitted);
-+		bool now_zero = !atomic_dec_and_test(&sfp->submitted);
-+
-+		if (now_zero)
-+			clear_bit(SG_FFD_HIPRI_SEEN, sfp->ffd_bm);
- 		atomic_dec(&sfp->waiting);
- 	}
- 
-@@ -3318,6 +3405,8 @@ sg_find_srp_by_id(struct sg_fd *sfp, int pack_id)
- 	struct sg_request *srp = NULL;
- 	struct xarray *xafp = &sfp->srp_arr;
- 
-+	if (test_bit(SG_FFD_HIPRI_SEEN, sfp->ffd_bm))
-+		sg_sfp_blk_poll(sfp, 0);	/* LLD may have some ready to push up */
- 	if (num_waiting < 1) {
- 		num_waiting = atomic_read_acquire(&sfp->waiting);
- 		if (num_waiting < 1)
-@@ -4124,8 +4213,9 @@ sg_proc_debug_sreq(struct sg_request *srp, int to, char *obp, int len)
- 	else if (dur < U32_MAX)	/* in-flight or busy (so ongoing) */
- 		n += scnprintf(obp + n, len - n, " t_o/elap=%us/%ums",
- 			       to / 1000, dur);
--	n += scnprintf(obp + n, len - n, " sgat=%d op=0x%02x\n",
--		       srp->sgat_h.num_sgat, srp->cmd_opcode);
-+	cp = (srp->rq_flags & SGV4_FLAG_HIPRI) ? "hipri " : "";
-+	n += scnprintf(obp + n, len - n, " sgat=%d %sop=0x%02x\n",
-+		       srp->sgat_h.num_sgat, cp, srp->cmd_opcode);
- 	return n;
- }
- 
-diff --git a/include/uapi/scsi/sg.h b/include/uapi/scsi/sg.h
-index 6162a5d5995c..11b58b279241 100644
---- a/include/uapi/scsi/sg.h
-+++ b/include/uapi/scsi/sg.h
-@@ -110,6 +110,7 @@ typedef struct sg_io_hdr {
- #define SGV4_FLAG_Q_AT_TAIL SG_FLAG_Q_AT_TAIL
- #define SGV4_FLAG_Q_AT_HEAD SG_FLAG_Q_AT_HEAD
- #define SGV4_FLAG_IMMED 0x400 /* for polling with SG_IOR, ignored in SG_IOS */
-+#define SGV4_FLAG_HIPRI 0x800 /* request will use blk_poll to complete */
- 
- /* Output (potentially OR-ed together) in v3::info or v4::info field */
- #define SG_INFO_OK_MASK 0x1
--- 
-2.25.1
-
+On Thu, Jan 21, 2021 at 12:23 AM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> From: Eric Biggers <ebiggers@google.com>
+>
+> Add a resource-managed variant of blk_ksm_init() so that drivers don't
+> have to worry about calling blk_ksm_destroy().
+>
+> Note that the implementation uses a custom devres action to call
+> blk_ksm_destroy() rather than switching the two allocations to be
+> directly devres-managed, e.g. with devm_kmalloc().  This is because we
+> need to keep zeroing the memory containing the keyslots when it is
+> freed, and also because we want to continue using kvmalloc() (and there
+> is no devm_kvmalloc()).
+>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>  Documentation/block/inline-encryption.rst | 12 +++++-----
+>  block/keyslot-manager.c                   | 29 +++++++++++++++++++++++
+>  include/linux/keyslot-manager.h           |  3 +++
+>  3 files changed, 38 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/block/inline-encryption.rst b/Documentation/block/inline-encryption.rst
+> index e75151e467d39..7f9b40d6b416b 100644
+> --- a/Documentation/block/inline-encryption.rst
+> +++ b/Documentation/block/inline-encryption.rst
+> @@ -182,8 +182,9 @@ API presented to device drivers
+>
+>  A :c:type:``struct blk_keyslot_manager`` should be set up by device drivers in
+>  the ``request_queue`` of the device. The device driver needs to call
+> -``blk_ksm_init`` on the ``blk_keyslot_manager``, which specifying the number of
+> -keyslots supported by the hardware.
+> +``blk_ksm_init`` (or its resource-managed variant ``devm_blk_ksm_init``) on the
+> +``blk_keyslot_manager``, while specifying the number of keyslots supported by
+> +the hardware.
+>
+>  The device driver also needs to tell the KSM how to actually manipulate the
+>  IE hardware in the device to do things like programming the crypto key into
+> @@ -202,10 +203,9 @@ needs each and every of its keyslots to be reprogrammed with the key it
+>  "should have" at the point in time when the function is called. This is useful
+>  e.g. if a device loses all its keys on runtime power down/up.
+>
+> -``blk_ksm_destroy`` should be called to free up all resources used by a keyslot
+> -manager upon ``blk_ksm_init``, once the ``blk_keyslot_manager`` is no longer
+> -needed.
+> -
+> +If the driver used ``blk_ksm_init`` instead of ``devm_blk_ksm_init``, then
+> +``blk_ksm_destroy`` should be called to free up all resources used by a
+> +``blk_keyslot_manager`` once it is no longer needed.
+>
+>  Layered Devices
+>  ===============
+> diff --git a/block/keyslot-manager.c b/block/keyslot-manager.c
+> index 86f8195d8039e..324bf4244f5fb 100644
+> --- a/block/keyslot-manager.c
+> +++ b/block/keyslot-manager.c
+> @@ -29,6 +29,7 @@
+>  #define pr_fmt(fmt) "blk-crypto: " fmt
+>
+>  #include <linux/keyslot-manager.h>
+> +#include <linux/device.h>
+>  #include <linux/atomic.h>
+>  #include <linux/mutex.h>
+>  #include <linux/pm_runtime.h>
+> @@ -127,6 +128,34 @@ int blk_ksm_init(struct blk_keyslot_manager *ksm, unsigned int num_slots)
+>  }
+>  EXPORT_SYMBOL_GPL(blk_ksm_init);
+>
+> +static void blk_ksm_destroy_callback(void *ksm)
+> +{
+> +       blk_ksm_destroy(ksm);
+> +}
+> +
+> +/**
+> + * devm_blk_ksm_init() - Resource-managed blk_ksm_init()
+> + * @dev: The device which owns the blk_keyslot_manager.
+> + * @ksm: The blk_keyslot_manager to initialize.
+> + * @num_slots: The number of key slots to manage.
+> + *
+> + * Like blk_ksm_init(), but causes blk_ksm_destroy() to be called automatically
+> + * on driver detach.
+> + *
+> + * Return: 0 on success, or else a negative error code.
+> + */
+> +int devm_blk_ksm_init(struct device *dev, struct blk_keyslot_manager *ksm,
+> +                     unsigned int num_slots)
+> +{
+> +       int err = blk_ksm_init(ksm, num_slots);
+> +
+> +       if (err)
+> +               return err;
+> +
+> +       return devm_add_action_or_reset(dev, blk_ksm_destroy_callback, ksm);
+> +}
+> +EXPORT_SYMBOL_GPL(devm_blk_ksm_init);
+> +
+>  static inline struct hlist_head *
+>  blk_ksm_hash_bucket_for_key(struct blk_keyslot_manager *ksm,
+>                             const struct blk_crypto_key *key)
+> diff --git a/include/linux/keyslot-manager.h b/include/linux/keyslot-manager.h
+> index 18f3f5346843f..443ad817c6c57 100644
+> --- a/include/linux/keyslot-manager.h
+> +++ b/include/linux/keyslot-manager.h
+> @@ -85,6 +85,9 @@ struct blk_keyslot_manager {
+>
+>  int blk_ksm_init(struct blk_keyslot_manager *ksm, unsigned int num_slots);
+>
+> +int devm_blk_ksm_init(struct device *dev, struct blk_keyslot_manager *ksm,
+> +                     unsigned int num_slots);
+> +
+>  blk_status_t blk_ksm_get_slot_for_key(struct blk_keyslot_manager *ksm,
+>                                       const struct blk_crypto_key *key,
+>                                       struct blk_ksm_keyslot **slot_ptr);
+> --
+> 2.30.0
+Looks good to me. Please feel free to add
+Reviewed-by: Satya Tangirala <satyat@google.com>
