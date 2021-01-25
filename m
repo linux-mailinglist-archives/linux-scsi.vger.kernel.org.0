@@ -2,137 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 608B5304931
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 20:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD74304978
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 21:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387681AbhAZFae (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 00:30:34 -0500
-Received: from a1.mail.mailgun.net ([198.61.254.60]:57931 "EHLO
-        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726564AbhAZCLm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Jan 2021 21:11:42 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611627075; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=kBJZDG2tUANkOa6JriIfIEN3HbEWWrkMH6tsmb1Uudg=;
- b=XAsMDjXgDNfw0ndtQNrHZL7aS06eKoiOgHiRbrItvZ9kdGy0Vzn3+63eUy8MnX2bOCiC6YW0
- vETY1bfSHHDHU/0SI5CUFjPHba/uIxPzPYe5wBWw/hClJ1UxFFedi6A4wEmGd/xPlOshHOlj
- TBcZYp5FCvAO2BPr95io+jjxLVo=
-X-Mailgun-Sending-Ip: 198.61.254.60
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 600f7a18ad4c9e395b687c2e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 26 Jan 2021 02:10:32
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6FACAC43465; Tue, 26 Jan 2021 02:10:32 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 92270C433CA;
-        Tue, 26 Jan 2021 02:10:31 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 26 Jan 2021 10:10:31 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Avri Altman <Avri.Altman@wdc.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>, jaegeuk@kernel.org,
-        asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, Alim Akhtar <alim.akhtar@samsung.com>,
+        id S1732837AbhAZF16 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 00:27:58 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:59554 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726765AbhAYJnD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Jan 2021 04:43:03 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10P8hkLA031898;
+        Mon, 25 Jan 2021 08:44:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=xD0aLkep0O0ztrxHEAKgiehLDzdRg7ouOuFGlmLu46g=;
+ b=AVuuxMrUSolBWpVKPpA64A8FnVA+PksbYXPw9cVRKnixcUEVuuZPeL4pDk4DifQ56NW3
+ P0+MHMZLjW9bzqdUQukEgrEwcfBMQV9/X/o4FOz0sWLc8OhEin9IcWFpUOhtYBqlMy8d
+ msUmXZxzR1XJcoPsO6+LrIMOafhFG0XMeLJUwbD60VZsmezJ4StZmFRki8xYwIhaCe+N
+ RuzcvmVAAtpGNOMD37TBlhJEM/F2T2v1Dx3ZZ5ZVSmn9l/MFel3+WRx0vDNW6Ds2e+g2
+ ubOcaDgQasf7Il+rSzJ5UZ0wDR91037mUUStBA5Gs4QgJst+rvJBM97BS3vwO9naB1Hc Ew== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 368b7qm54a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Jan 2021 08:44:13 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10P8a1Fv176118;
+        Mon, 25 Jan 2021 08:44:12 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 368wqunj56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Jan 2021 08:44:12 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10P8iAiK019015;
+        Mon, 25 Jan 2021 08:44:10 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 25 Jan 2021 00:44:10 -0800
+Date:   Mon, 25 Jan 2021 11:44:02 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Nilesh Javali <njavali@marvell.com>
+Cc:     GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] scsi: ufs: Fix some problems in task management
- request implementation
-In-Reply-To: <DM6PR04MB65754B0CF70B9A3EB036D157FCBD9@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <1611199388-24668-1-git-send-email-cang@codeaurora.org>
- <DM6PR04MB65754B0CF70B9A3EB036D157FCBD9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Message-ID: <6362e6f2117237b934eea44f700fd13a@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] scsi: qla2xxx: fix some memory corruption
+Message-ID: <YA6E0geUlL9Hs04A@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9874 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101250051
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9874 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 phishscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1011 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101250052
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2021-01-25 19:36, Avri Altman wrote:
->> Current task management request send/compl implementation is broken, 
->> the
->> problems and fixes are listed as below:
->> 
->> Problem: TMR completion timeout. ufshcd_tmc_handler() calls
->>          blk_mq_tagset_busy_iter(fn == ufshcd_compl_tm()), but since
->>          blk_mq_tagset_busy_iter() only iterates over all reserved 
->> tags and
->>          started requests, so ufshcd_compl_tm() never gets a chance to 
->> run.
->> Fix:     Call blk_mq_start_request() in __ufshcd_issue_tm_cmd().
->> 
->> Problem: Race condition in send/compl paths. ufshcd_compl_tm() looks 
->> for
->>          all 0 bits in the REG_UTP_TASK_REQ_DOOR_BELL and call 
->> complete()
->>          for each req who has the req->end_io_data set. There can be a 
->> race
->>          condition btw tmc send/compl, because req->end_io_data is 
->> set, in
->>          __ufshcd_issue_tm_cmd(), without host lock protection, so it 
->> is
->>          possible that when ufshcd_compl_tm() checks the 
->> req->end_io_data,
->>          req->end_io_data is set but the corresponding tag has not 
->> been set
->>          in the REG_UTP_TASK_REQ_DOOR_BELL. Thus, ufshcd_tmc_handler()
->> may
->>          wrongly complete TMRs which have not been sent.
->> Fix:     Protect req->end_io_data with host lock. And let 
->> ufshcd_compl_tm()
->>          only handle those tm cmds which have been completed instead 
->> of
->>          looking for 0 bits in the REG_UTP_TASK_REQ_DOOR_BELL.
->> 
->> Problem: In __ufshcd_issue_tm_cmd(), it is not right to use hba->nutrs 
->> +
->>          req->tag as the Task Tag in one TMR UPIU.
->> Fix:     Directly use req->tag as Task Tag.
->> 
->> Cc: Jaegeuk Kim <jaegeuk@kernel.org>
-> Since you are practically reverting Bart's change (69a6c269c097),
-> maybe cc him as well,
-> And add a fixes tag?
-> 
+This was supposed to be "data" instead of "&data".  The current code
+will corrupt the stack.
 
-Hi Avri,
+Fixes: dbf1f53cfd23 ("scsi: qla2xxx: Implementation to get and manage host, target stats and initiator port")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/scsi/qla2xxx/qla_bsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It is not reverting Bart's change, but making TMR work properly based
-on it. I am ok with the Bart's idea of getting a tag for TMR from
-blk_get_request(), and this patch respects that idea.
+diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
+index e45da05383cd..bee8cf9f8123 100644
+--- a/drivers/scsi/qla2xxx/qla_bsg.c
++++ b/drivers/scsi/qla2xxx/qla_bsg.c
+@@ -2667,7 +2667,7 @@ qla2x00_get_tgt_stats(struct bsg_job *bsg_job)
+ 
+ 		bsg_reply->reply_payload_rcv_len =
+ 			sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
+-					    bsg_job->reply_payload.sg_cnt, &data,
++					    bsg_job->reply_payload.sg_cnt, data,
+ 					    sizeof(struct ql_vnd_tgt_stats_resp));
+ 
+ 		bsg_reply->result = DID_OK;
+-- 
+2.29.2
 
-> Also, even though all those fixes are around the same place, but
-> fixing different issues,
-> You might want to consider to separate those.  Whatever you think.
-> 
-
-Thanks for the suggestion. I treat it as a whole because it is 
-convenient
-for me to get it ported and tested over different platforms. I may
-revise it in next version after more comments come on it.
-
-Thanks,
-Can Guo.
-
-> Thanks,
-> Avri
