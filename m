@@ -2,32 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 481C4301FF1
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Jan 2021 02:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD9E301FEF
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Jan 2021 02:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726588AbhAYBdU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 24 Jan 2021 20:33:20 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:45796 "EHLO smtp.infotech.no"
+        id S1726247AbhAYBcg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 24 Jan 2021 20:32:36 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:45793 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726625AbhAYBca (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 24 Jan 2021 20:32:30 -0500
+        id S1726605AbhAYBcP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 24 Jan 2021 20:32:15 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 32AF32042BC;
-        Mon, 25 Jan 2021 02:27:52 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTP id 86B252042B2;
+        Mon, 25 Jan 2021 02:27:54 +0100 (CET)
 X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
 Received: from smtp.infotech.no ([127.0.0.1])
         by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mIWV+yZBXTtM; Mon, 25 Jan 2021 02:27:49 +0100 (CET)
+        with ESMTP id TmvJAMn8jMsD; Mon, 25 Jan 2021 02:27:52 +0100 (CET)
 Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
-        by smtp.infotech.no (Postfix) with ESMTPA id 36B4820429F;
-        Mon, 25 Jan 2021 02:27:39 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTPA id 8B53D2042C2;
+        Mon, 25 Jan 2021 02:27:42 +0100 (CET)
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
         kashyap.desai@broadcom.com
-Subject: [PATCH v14 39/45] sg: add mmap_sz tracking
-Date:   Sun, 24 Jan 2021 20:26:44 -0500
-Message-Id: <20210125012650.269411-40-dgilbert@interlog.com>
+Subject: [PATCH v14 42/45] sg: remove unit attention check for device changed
+Date:   Sun, 24 Jan 2021 20:26:47 -0500
+Message-Id: <20210125012650.269411-43-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210125012650.269411-1-dgilbert@interlog.com>
 References: <20210125012650.269411-1-dgilbert@interlog.com>
@@ -37,110 +37,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Track mmap_sz from prior mmap(2) call, per sg file descriptor. Also
-reset this value whenever munmap(2) is called. Fail SG_FLAG_MMAP_IO
-uses if mmap(2) hasn't been called or the memory associated with it
-is not large enough for the current request.
+The SCSI mid-layer now checks for SCSI UNIT ATTENTIONs and takes
+the appropriate actions. This means that the sg driver no longer
+needs to do this check.
 
-Remove SG_FFD_MMAP_CALLED bit as it can be deduced from
-sfp->mmap_sz where a value of 0 implies no mmap() call active.
-
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 ---
- drivers/scsi/sg.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/scsi/sg.c | 49 ++++++++++++-----------------------------------
+ 1 file changed, 12 insertions(+), 37 deletions(-)
 
 diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 9b1686c093bf..ef1f29ecc065 100644
+index eb1906c51d30..f33c32626a4e 100644
 --- a/drivers/scsi/sg.c
 +++ b/drivers/scsi/sg.c
-@@ -122,8 +122,7 @@ enum sg_rq_state {	/* N.B. sg_rq_state_arr assumes SG_RS_AWAIT_RCV==2 */
- #define SG_FFD_FORCE_PACKID	0	/* receive only given pack_id/tag */
- #define SG_FFD_CMD_Q		1	/* clear: only 1 active req per fd */
- #define SG_FFD_KEEP_ORPHAN	2	/* policy for this fd */
--#define SG_FFD_MMAP_CALLED	3	/* mmap(2) system call made on fd */
--#define SG_FFD_Q_AT_TAIL	5	/* set: queue reqs at tail of blk q */
-+#define SG_FFD_Q_AT_TAIL	3	/* set: queue reqs at tail of blk q */
- 
- /* Bit positions (flags) for sg_device::fdev_bm bitmask follow */
- #define SG_FDEV_EXCLUDE		0	/* have fd open with O_EXCL */
-@@ -232,6 +231,7 @@ struct sg_fd {		/* holds the state of a file descriptor */
- 	atomic_t waiting;	/* number of requests awaiting receive */
- 	atomic_t req_cnt;	/* number of requests */
- 	int sgat_elem_sz;	/* initialized to scatter_elem_sz */
-+	int mmap_sz;		/* byte size of previous mmap() call */
- 	unsigned long ffd_bm[1];	/* see SG_FFD_* defines above */
- 	pid_t tid;		/* thread id when opened */
- 	u8 next_cmd_len;	/* 0: automatic, >0: use on next write() */
-@@ -725,10 +725,14 @@ sg_write(struct file *filp, const char __user *p, size_t count, loff_t *ppos)
- static inline int
- sg_chk_mmap(struct sg_fd *sfp, int rq_flags, int len)
- {
-+	if (unlikely(sfp->mmap_sz == 0))
-+		return -EBADFD;
- 	if (atomic_read(&sfp->submitted) > 0)
- 		return -EBUSY;  /* already active requests on fd */
- 	if (len > sfp->rsv_srp->sgat_h.buflen)
- 		return -ENOMEM; /* MMAP_IO size must fit in reserve */
-+	if (unlikely(len > sfp->mmap_sz))
-+		return -ENOMEM; /* MMAP_IO size can't exceed mmap() size */
- 	if (rq_flags & SG_FLAG_DIRECT_IO)
- 		return -EINVAL; /* not both MMAP_IO and DIRECT_IO */
- 	return 0;
-@@ -1800,8 +1804,7 @@ sg_set_reserved_sz(struct sg_fd *sfp, int want_rsv_sz)
- 		res = -EPROTO;
- 		goto fini;
- 	}
--	if (SG_RS_ACTIVE(o_srp) ||
--	    test_bit(SG_FFD_MMAP_CALLED, sfp->ffd_bm)) {
-+	if (SG_RS_ACTIVE(o_srp) || sfp->mmap_sz > 0) {
- 		res = -EBUSY;
- 		goto fini;
- 	}
-@@ -2262,6 +2265,7 @@ sg_vma_close(struct vm_area_struct *vma)
- 		pr_warn("%s: sfp null\n", __func__);
- 		return;
- 	}
-+	sfp->mmap_sz = 0;
- 	kref_put(&sfp->f_ref, sg_remove_sfp); /* get in: sg_vma_open() */
+@@ -2454,39 +2454,6 @@ sg_rq_end_io_usercontext(struct work_struct *work)
+ 	kref_put(&sfp->f_ref, sg_remove_sfp);
  }
  
-@@ -2352,7 +2356,7 @@ sg_mmap(struct file *filp, struct vm_area_struct *vma)
- 	req_sz = vma->vm_end - vma->vm_start;
- 	SG_LOG(3, sfp, "%s: vm_start=%pK, len=%d\n", __func__,
- 	       (void *)vma->vm_start, (int)req_sz);
--	if (vma->vm_pgoff) {
-+	if (unlikely(vma->vm_pgoff || req_sz < SG_DEF_SECTOR_SZ)) {
- 		res = -EINVAL; /* only an offset of 0 accepted */
- 		goto fini;
+-static void
+-sg_check_sense(struct sg_device *sdp, struct sg_request *srp, int sense_len)
+-{
+-	int driver_stat;
+-	u32 rq_res = srp->rq_result;
+-	struct scsi_request *scsi_rp = scsi_req(srp->rq);
+-	u8 *sbp = scsi_rp ? scsi_rp->sense : NULL;
+-
+-	if (!sbp)
+-		return;
+-	driver_stat = driver_byte(rq_res);
+-	if (driver_stat & DRIVER_SENSE) {
+-		struct scsi_sense_hdr ssh;
+-
+-		if (scsi_normalize_sense(sbp, sense_len, &ssh)) {
+-			if (!scsi_sense_is_deferred(&ssh)) {
+-				if (ssh.sense_key == UNIT_ATTENTION) {
+-					if (sdp->device->removable)
+-						sdp->device->changed = 1;
+-				}
+-			}
+-		}
+-	}
+-	if (test_bit(SG_FDEV_LOG_SENSE, sdp->fdev_bm) > 0) {
+-		int scsi_stat = rq_res & 0xff;
+-
+-		if (scsi_stat == SAM_STAT_CHECK_CONDITION ||
+-		    scsi_stat == SAM_STAT_COMMAND_TERMINATED)
+-			__scsi_print_sense(sdp->device, __func__, sbp,
+-					   sense_len);
+-	}
+-}
+-
+ /*
+  * This "bottom half" (soft interrupt) handler is called by the mid-level
+  * when a request has completed or failed. This callback is registered in a
+@@ -2498,6 +2465,7 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
+ {
+ 	enum sg_rq_state rqq_state = SG_RS_AWAIT_RCV;
+ 	int a_resid, slen;
++	u32 rq_result;
+ 	struct sg_request *srp = rq->end_io_data;
+ 	struct scsi_request *scsi_rp = scsi_req(rq);
+ 	struct sg_device *sdp;
+@@ -2511,7 +2479,8 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
+ 	sfp = srp->parentfp;
+ 	sdp = sfp->parentdp;
+ 
+-	srp->rq_result = scsi_rp->result;
++	rq_result = scsi_rp->result;
++	srp->rq_result = rq_result;
+ 	slen = min_t(int, scsi_rp->sense_len, SCSI_SENSE_BUFFERSIZE);
+ 	a_resid = scsi_rp->resid_len;
+ 
+@@ -2527,10 +2496,16 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
  	}
-@@ -2366,7 +2370,7 @@ sg_mmap(struct file *filp, struct vm_area_struct *vma)
- 		res = -ENOMEM;
- 		goto fini;
- 	}
--	if (test_and_set_bit(SG_FFD_MMAP_CALLED, sfp->ffd_bm)) {
-+	if (sfp->mmap_sz > 0) {
- 		SG_LOG(1, sfp, "%s: multiple invocations on this fd\n",
- 		       __func__);
- 		res = -EADDRINUSE;
-@@ -2383,6 +2387,7 @@ sg_mmap(struct file *filp, struct vm_area_struct *vma)
- 			goto fini;
- 		}
- 	}
-+	sfp->mmap_sz = req_sz;
- 	vma->vm_flags |= VM_IO | VM_DONTEXPAND | VM_DONTDUMP;
- 	vma->vm_private_data = sfp;
- 	vma->vm_ops = &sg_mmap_vm_ops;
-@@ -4048,8 +4053,7 @@ sg_proc_debug_fd(struct sg_fd *fp, char *obp, int len, unsigned long idx)
- 		       (int)test_bit(SG_FFD_FORCE_PACKID, fp->ffd_bm),
- 		       (int)test_bit(SG_FFD_KEEP_ORPHAN, fp->ffd_bm),
- 		       fp->ffd_bm[0]);
--	n += scnprintf(obp + n, len - n, "   mmap_called=%d\n",
--		       test_bit(SG_FFD_MMAP_CALLED, fp->ffd_bm));
-+	n += scnprintf(obp + n, len - n, "   mmap_sz=%d\n", fp->mmap_sz);
- 	n += scnprintf(obp + n, len - n,
- 		       "   submitted=%d waiting=%d   open thr_id=%d\n",
- 		       atomic_read(&fp->submitted),
+ 
+ 	SG_LOG(6, sfp, "%s: pack_id=%d, res=0x%x\n", __func__, srp->pack_id,
+-	       srp->rq_result);
++	       rq_result);
+ 	srp->duration = sg_calc_rq_dur(srp);
+-	if (unlikely((srp->rq_result & SG_ML_RESULT_MSK) && slen > 0))
+-		sg_check_sense(sdp, srp, slen);
++	if (unlikely((rq_result & SG_ML_RESULT_MSK) && slen > 0 &&
++		     test_bit(SG_FDEV_LOG_SENSE, sdp->fdev_bm))) {
++		u32 scsi_stat = rq_result & 0xff;
++
++		if (scsi_stat == SAM_STAT_CHECK_CONDITION ||
++		    scsi_stat == SAM_STAT_COMMAND_TERMINATED)
++			__scsi_print_sense(sdp->device, __func__, scsi_rp->sense, slen);
++	}
+ 	if (slen > 0) {
+ 		if (scsi_rp->sense && !srp->sense_bp) {
+ 			srp->sense_bp = mempool_alloc(sg_sense_pool,
 -- 
 2.25.1
 
