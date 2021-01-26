@@ -2,107 +2,168 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C9E3044F7
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 18:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E2B3046E1
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 19:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390649AbhAZRTl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 12:19:41 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:43094 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389340AbhAZJOf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 26 Jan 2021 04:14:35 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 7BBE041306;
-        Tue, 26 Jan 2021 09:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=mta-01; t=1611652425;
-         x=1613466826; bh=pAwTHpdgiRj9rF1GL0yAcUFqatPELVV254k99kwCScg=; b=
-        aSMXm7DZMBYY2TwO97yWNjk0+nb/e/4Al0UkAdTiONrJn3vV3kJXXJIVvHSgFRjU
-        u7hTiIwAJYOp0KgYNVa5MK/raWOd2VR2kbQMx374onBxFPT6JtWqePue5ETttjd2
-        l3M7vVSSk0x3fLaT1vKVqPl2dSkgoSACqHsuAhJiPqw=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NlMHm_nbvn1d; Tue, 26 Jan 2021 12:13:45 +0300 (MSK)
-Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id C55DD41280;
-        Tue, 26 Jan 2021 12:13:45 +0300 (MSK)
-Received: from localhost (172.17.204.212) by T-EXCH-03.corp.yadro.com
- (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Tue, 26
- Jan 2021 12:13:45 +0300
-Date:   Tue, 26 Jan 2021 12:13:44 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     David Disseldorp <ddiss@suse.de>
-CC:     Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux@yadro.com>
-Subject: Re: [PATCH v2] scsi: target: core: check SR field in REPORT LUNS
-Message-ID: <YA/dSDH2NYSRi9Bi@SPB-NB-133.local>
-References: <20210120102700.5514-1-d.bogdanov@yadro.com>
- <20210122234251.595d5b7a@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210122234251.595d5b7a@suse.de>
-X-Originating-IP: [172.17.204.212]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-03.corp.yadro.com (172.17.100.103)
+        id S2390582AbhAZRTZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 12:19:25 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:16409 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727284AbhAZGqF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 01:46:05 -0500
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210126064513epoutp0399c7fa5811b3ad984a0fdb17e2ec6298~dtTypJQ2s2737927379epoutp03X
+        for <linux-scsi@vger.kernel.org>; Tue, 26 Jan 2021 06:45:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210126064513epoutp0399c7fa5811b3ad984a0fdb17e2ec6298~dtTypJQ2s2737927379epoutp03X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1611643513;
+        bh=fXkc/J8P35LYNPusVhQ+9QBrxVTdlboL1ax5vgyVZ0Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:In-Reply-To:References:From;
+        b=nTgjkR4U8ABqUnxYKFtus/l0rfWDUPAkyo5JwztJ8IBLsPS0HrD5cs01/80Scx83Z
+         s+CxUlqW/jGoUXA335yPb+jPWY9vxvZSQL6WPKH9W+XPA6X0YqMYLOlOlRoZWBrzB0
+         HACGWKNRWvd5kijT2jy9wTDdKq66NEb1C8v1PNkc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20210126064512epcas2p3a53150acde1a5fdfe5486d3779852992~dtTxyVl_t2298922989epcas2p3J;
+        Tue, 26 Jan 2021 06:45:12 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.181]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4DPy0P6r10z4x9Pr; Tue, 26 Jan
+        2021 06:45:09 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C4.98.10621.47ABF006; Tue, 26 Jan 2021 15:45:08 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210126064507epcas2p198d2843a8e4952ac6d99f9743d213b45~dtTtBKCUc1089710897epcas2p1X;
+        Tue, 26 Jan 2021 06:45:07 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210126064507epsmtrp27f9cf5b7e8d211e9dd2a780783e63f90~dtTtAUH4E1454614546epsmtrp2V;
+        Tue, 26 Jan 2021 06:45:07 +0000 (GMT)
+X-AuditID: b6c32a45-337ff7000001297d-b4-600fba7485c1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        36.09.13470.37ABF006; Tue, 26 Jan 2021 15:45:07 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210126064507epsmtip2e675da9a39c2b5f8ddf5913fb499fea0~dtTs0JogF0891408914epsmtip2_;
+        Tue, 26 Jan 2021 06:45:07 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
+        grant.jung@samsung.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v8 1/2] ufs: introduce a callback to get info of command
+ completion
+Date:   Tue, 26 Jan 2021 15:33:34 +0900
+Message-Id: <ebacbd8c23ca29a340e91a7f563a49440e69e528.1611642467.git.kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1611642467.git.kwmad.kim@samsung.com>
+In-Reply-To: <cover.1611642467.git.kwmad.kim@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmuW7JLv4Eg/b5HBYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZHFzy1EWi+7rO9gs
+        lh//x2TRdfcGo8XSf29ZHPg9Ll/x9rjc18vkMWHRAUaP7+s72Dw+Pr3F4tG3ZRWjx+dNch7t
+        B7qZAjiicmwyUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJz
+        gI5XUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BQYGhboFSfmFpfmpesl5+daGRoY
+        GJkCVSbkZKx5s5K54I1AxfFHRg2MDXxdjBwcEgImEhPXyHYxcnEICexglPi3/AI7hPOJUeJY
+        32omCOcbo8TDh8tZuhg5wTpmfnzCBGILCexllNi9yhWi6AejxP5nq8ASbAKaEk9vTgXrFhE4
+        wyRxrfUsK0iCWUBdYteEE2BFwgKhEktubWECuYNFQFXizgRdkDCvQLTE63eroZbJSdw818kM
+        YnMKWEpMOb6fEZXNBVQzk0Pi5oK/rBANLhIb1/VBNQtLvDq+hR3ClpL4/G4vG4RdL7FvagMr
+        RHMPo8TTff8YIRLGErOetTOCHMQM9MH6XfqQMFKWOHKLBeJ8PomOw3/ZIcK8Eh1tQhCNyhK/
+        Jk2GGiIpMfPmHaitHhLrHu5hgYQPyKZDl5knMMrPQliwgJFxFaNYakFxbnpqsVGBIXLcbWIE
+        p1Mt1x2Mk99+0DvEyMTBeIhRgoNZSYR3tx5PghBvSmJlVWpRfnxRaU5q8SFGU2A4TmSWEk3O
+        Byb0vJJ4Q1MjMzMDS1MLUzMjCyVx3mKDB/FCAumJJanZqakFqUUwfUwcnFINTEd/eGZfOSzE
+        07S2snmGTOZG454pbx25lNsmz/iqZVdjsO35lE+Lb5WtTzf7luU2pff84X2cu7p7DJ0Sp06R
+        ZtuQ6ykYsy8tIDFkykXFj7FmKRf4hNP8pq30D/944Ev5AwProN8aYeK5GyyDO9bv9xd796jm
+        xF5tkxsyvPPO3TTUOKyjqXLQrfvNvB8ckTYTtn5eEB9oHivSnNeZwF7ukDxhzsU4GbGdSnnT
+        1MXis42DJk7dGr/rY3qRl4WuSfdzvUWGths62e99/mFpd+rpj9x/mTWi8fPcgtcn3V3hzPFm
+        QWfHPp9TK2KXcvjYXExzbXKQe376ec4MDeU3ysbB9Qf+rq84wB+yKWXxI4epSizFGYmGWsxF
+        xYkA8rQEgzAEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsWy7bCSvG7xLv4Eg4tNmhYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1+PV3PbvF6sUPWCwW3djGZHFzy1EWi+7rO9gs
+        lh//x2TRdfcGo8XSf29ZHPg9Ll/x9rjc18vkMWHRAUaP7+s72Dw+Pr3F4tG3ZRWjx+dNch7t
+        B7qZAjiiuGxSUnMyy1KL9O0SuDLWvFnJXPBGoOL4I6MGxga+LkZODgkBE4mZH58wdTFycQgJ
+        7GaUmDF7OxNEQlLixM7njBC2sMT9liOsEEXfGCXm9zWAFbEJaEo8vTkVrFtE4B6TxKUJc5lB
+        EswC6hK7JpwAKxIWCJbom3IayObgYBFQlbgzQRckzCsQLfH63WoWiAVyEjfPdYK1cgpYSkw5
+        vh9ssZCAhUTntn/suMQnMAosYGRYxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kRHBFa
+        mjsYt6/6oHeIkYmD8RCjBAezkgjvbj2eBCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJ
+        pCeWpGanphakFsFkmTg4pRqYdI/WlikumHRl5+cVGy+7TTrw7OaGiSzrJvYbZCwK4JpfcSQx
+        PORwasThxR8SeZyy+v6xO3x7ZhZn/kTWp8tn2dKE/4KB5/3+CRvu6WvfUrb5Gbc1z6k1ercE
+        LgfsUrlbdlODv+J/iMRDl4UPP3b2eJbX7+gKn3LicHfCtGdsvjcan93RbxHwcN3QrX0h9ITb
+        xydiFhsL1zFdnzjj/mctFkFlcZMtPx3/7D99J7BvbaJWQdGt7pviBkdvz5a8rcNzu233Ssud
+        65wezku+ZPtI4rvOm+lc6yI0LY9XhT9bqze9NFrf+9o1Do0ZE7R+lrYbMD5IcBT9fMHlNMce
+        8ewi7n+/75kUT/+6vtz9gt2pJUosxRmJhlrMRcWJAEM1YS33AgAA
+X-CMS-MailID: 20210126064507epcas2p198d2843a8e4952ac6d99f9743d213b45
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210126064507epcas2p198d2843a8e4952ac6d99f9743d213b45
+References: <cover.1611642467.git.kwmad.kim@samsung.com>
+        <CGME20210126064507epcas2p198d2843a8e4952ac6d99f9743d213b45@epcas2p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 11:42:51PM +0100, David Disseldorp wrote:
-> On Wed, 20 Jan 2021 13:27:00 +0300, Dmitry Bogdanov wrote:
-> 
-> > Now REPORT LUNS for software device servers always reports all luns
-> > regardless of SELECT REPORT field.
-> > Add handling of that field according to SPC-4:
-> > * accept known values,
-> > * reject unknown values.
-> 
-> We currently advertise SPC-3 VERSION compliance via standard INQUIRY
-> data, so I think we should either support SPC-3 SELECT REPORT values or
-> bump the VERSION field (SPC-4 behaviour is already scattered throughout
-> LIO).
-> Out of curiosity, do you know of any initiators which use this field?
-> 
+Some SoC specific might need command history for
+various reasons, such as stacking command contexts
+in system memory to check for debugging in the future
+or scaling some DVFS knobs to boost IO throughput.
 
-Hi David,
+What you would do with the information could be
+variant per SoC vendor.
 
-SELECT REPORT field can be used for vVOL (LU conglomerate) discovery and
-for well-known lun listing.
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Acked-by: Stanley Chu <stanley.chu@mediatek.com>
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 1 +
+ drivers/scsi/ufs/ufshcd.h | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-The field is used by VMware ESXi:
-https://support.purestorage.com/Solutions/VMware_Platform_Guide/User_Guides_for_VMware_Solutions/Virtual_Volumes_User_Guide/vVols_User_Guide%3A_Protocol_Endpoints
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 9c691e4..af0548a 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -5093,6 +5093,7 @@ static void __ufshcd_transfer_req_compl(struct ufs_hba *hba,
+ 		lrbp->in_use = false;
+ 		lrbp->compl_time_stamp = ktime_get();
+ 		cmd = lrbp->cmd;
++		ufshcd_vops_compl_xfer_req(hba, index, (cmd) ? true : false);
+ 		if (cmd) {
+ 			ufshcd_add_command_trace(hba, index, UFS_CMD_COMP);
+ 			result = ufshcd_transfer_rsp_status(hba, lrbp);
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index ee61f82..0178365 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -343,6 +343,7 @@ struct ufs_hba_variant_ops {
+ 					struct ufs_pa_layer_attr *,
+ 					struct ufs_pa_layer_attr *);
+ 	void	(*setup_xfer_req)(struct ufs_hba *, int, bool);
++	void	(*compl_xfer_req)(struct ufs_hba *hba, int tag, bool is_scsi);
+ 	void	(*setup_task_mgmt)(struct ufs_hba *, int, u8);
+ 	void    (*hibern8_notify)(struct ufs_hba *, enum uic_cmd_dme,
+ 					enum ufs_notify_change_status);
+@@ -1199,6 +1200,13 @@ static inline void ufshcd_vops_setup_xfer_req(struct ufs_hba *hba, int tag,
+ 		return hba->vops->setup_xfer_req(hba, tag, is_scsi_cmd);
+ }
+ 
++static inline void ufshcd_vops_compl_xfer_req(struct ufs_hba *hba,
++					      int tag, bool is_scsi)
++{
++	if (hba->vops && hba->vops->compl_xfer_req)
++		hba->vops->compl_xfer_req(hba, tag, is_scsi);
++}
++
+ static inline void ufshcd_vops_setup_task_mgmt(struct ufs_hba *hba,
+ 					int tag, u8 tm_function)
+ {
+-- 
+2.7.4
 
-"PEs greatly extend the number of vVols that can be connected to an ESXi
-cluster; each PE can have up to 16,383 vVols per host bound to it
-simultaneously. Moreover, a new binding does not require a complete I/O
-rescan. Instead, ESXi issues a REPORT_LUNS SCSI command with SELECT
-REPORT to the PE to which the sub-lun is bound. The PE returns a list of
-sub-lun IDs for the vVols bound to that host. In large clusters,
-REPORT_LUNS is significantly faster than a full I/O rescan because it is
-more precisely targeted."
-
-The post also confirms that:
-https://sourceforge.net/p/scst/mailman/message/33030432/
-
-A few more targets that support SELECT REPORT field below.
-
-Sun/Oracle tape library:
-https://docs.oracle.com/en/storage/tape-storage/storagetek-sl150-modular-tape-library/slorm/report-luns-a0h.html#GUID-4140F40D-BD9A-495C-9A86-8BD7E91C985C
-
-IBM Flash Storage:
-https://www.ibm.com/support/pages/sites/default/files/support/ssg/ssgdocs.nsf/0/95d7115d7eb428e485257f80005cc3a7/%24FILE/FlashSystem_840_SCSI_Interface_Manual_1.2.pdf
-
-With regards to bumping TCM to SPC-4, are there any objections if we
-submit a separate patch for that? Or resubmit a series with the patch?
-
-Thanks,
-Roman
