@@ -2,160 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E03553044F3
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 18:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C9E3044F7
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 18:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389356AbhAZRT2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 12:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389796AbhAZIUT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 03:20:19 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92317C061574
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Jan 2021 00:19:38 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id dj23so18658419edb.13
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Jan 2021 00:19:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DRtA6cvtWyfCFCqP1PPon/3Ltv//Jni4BYN4KUpPY+I=;
-        b=fdmN/lmb+E/X1Ho8KLfa3pBiKXCIswMEG3Za8SfnfMATk0tXW7CS2l2a220qiCal5I
-         8LI29DL6sZNl7CZelqNCKnW4ETaF0KJT+5olUCD2VYSW+kb7yskEHTTFav6zs6tB1Uzr
-         SSgcZye6jcc0pV/7ryNd5gixbIML/tny5nOeFQCgOOIIBYX+wl4Z4kIKmwfimpyEXYaF
-         +Qml3GiYc6txOe29de1Xy63Xa5IqVuA6RijE2ssp0mS+xgF8+WkILQI45hzteq0xr1MG
-         jaPpoYFuOpfXhn3/TD0IVgq+n4wfJshqOOXOH9mMZUoeTVkL3O2odrUEouCQ0/jszPK6
-         hlsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=DRtA6cvtWyfCFCqP1PPon/3Ltv//Jni4BYN4KUpPY+I=;
-        b=LvnA9uUwzFSDX6nwThnXyXL/a3b0yUehlL5e3hW7XWL7ep2tWozZwR+dTbiCJ4f3PP
-         L4HB4DHuunF9F7RHntrz6wBxBeVWYclK7r7QHJAzJXANNsuP9E/htiMbKiJv3yWrXKzB
-         kpgN+04pOXkruPw92TgbgJ85JODZXjrAJLMB9xaDEo6sYGpfoNi28FOf3ztUNIVBbDga
-         ul5A2zHHSUlchffqEVRvzHVySRiiPexjcAGK73VkTCK3b5SDzE+HTirHJK6XJNEfLYpq
-         lLgmAP2yYqDgIjjoCvWSd6MwP+1YyAvqmbAqVHpb6YhUNXdosYzxaZT+SRzSqjSMB+Qx
-         UHig==
-X-Gm-Message-State: AOAM533+yv0KCiTTv354C3GJPEjJG45oXWuc96Yyj0krxNG+sOoRQwBP
-        6QLA8feMCkGt6JbH0GtJ2smYeJsENkUCzwb0VHk=
-X-Google-Smtp-Source: ABdhPJyByHfft4Riby45qwNQZyzAe2vQfjTV9Vp75bURjWocEeWgJdKm7iuOHLmhrrnFWy07hHh+0ZZIzoB1z7y20Bo=
-X-Received: by 2002:aa7:c583:: with SMTP id g3mr3784717edq.357.1611649177035;
- Tue, 26 Jan 2021 00:19:37 -0800 (PST)
+        id S2390649AbhAZRTl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 12:19:41 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:43094 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2389340AbhAZJOf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 26 Jan 2021 04:14:35 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 7BBE041306;
+        Tue, 26 Jan 2021 09:13:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received; s=mta-01; t=1611652425;
+         x=1613466826; bh=pAwTHpdgiRj9rF1GL0yAcUFqatPELVV254k99kwCScg=; b=
+        aSMXm7DZMBYY2TwO97yWNjk0+nb/e/4Al0UkAdTiONrJn3vV3kJXXJIVvHSgFRjU
+        u7hTiIwAJYOp0KgYNVa5MK/raWOd2VR2kbQMx374onBxFPT6JtWqePue5ETttjd2
+        l3M7vVSSk0x3fLaT1vKVqPl2dSkgoSACqHsuAhJiPqw=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NlMHm_nbvn1d; Tue, 26 Jan 2021 12:13:45 +0300 (MSK)
+Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id C55DD41280;
+        Tue, 26 Jan 2021 12:13:45 +0300 (MSK)
+Received: from localhost (172.17.204.212) by T-EXCH-03.corp.yadro.com
+ (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Tue, 26
+ Jan 2021 12:13:45 +0300
+Date:   Tue, 26 Jan 2021 12:13:44 +0300
+From:   Roman Bolshakov <r.bolshakov@yadro.com>
+To:     David Disseldorp <ddiss@suse.de>
+CC:     Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux@yadro.com>
+Subject: Re: [PATCH v2] scsi: target: core: check SR field in REPORT LUNS
+Message-ID: <YA/dSDH2NYSRi9Bi@SPB-NB-133.local>
+References: <20210120102700.5514-1-d.bogdanov@yadro.com>
+ <20210122234251.595d5b7a@suse.de>
 MIME-Version: 1.0
-Reply-To: atm_visacardoffice@t-online.de
-Sender: ecob962@gmail.com
-Received: by 2002:a54:3f09:0:0:0:0:0 with HTTP; Tue, 26 Jan 2021 00:19:36
- -0800 (PST)
-From:   lotto winner <lottoaward9@gmail.com>
-Date:   Tue, 26 Jan 2021 08:19:36 +0000
-X-Google-Sender-Auth: kRqd-TVw2Z59Eoxu6k_6LwSYZ7E
-Message-ID: <CALQGt45mCaJjkquqpzockkAU+Yw1bpZvyRnRoxogjmsZXqE6cQ@mail.gmail.com>
-Subject: DEAR LUCKY WINNER !!!CONGRATULATIONS!!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210122234251.595d5b7a@suse.de>
+X-Originating-IP: [172.17.204.212]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-03.corp.yadro.com (172.17.100.103)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Date: Tuesday 26th January 2021 03:41:54 +1200
-Subject: CONTACT:FOR YOUR PRIZE YOU WON
-Website/ www.lotto.nl
+On Fri, Jan 22, 2021 at 11:42:51PM +0100, David Disseldorp wrote:
+> On Wed, 20 Jan 2021 13:27:00 +0300, Dmitry Bogdanov wrote:
+> 
+> > Now REPORT LUNS for software device servers always reports all luns
+> > regardless of SELECT REPORT field.
+> > Add handling of that field according to SPC-4:
+> > * accept known values,
+> > * reject unknown values.
+> 
+> We currently advertise SPC-3 VERSION compliance via standard INQUIRY
+> data, so I think we should either support SPC-3 SELECT REPORT values or
+> bump the VERSION field (SPC-4 behaviour is already scattered throughout
+> LIO).
+> Out of curiosity, do you know of any initiators which use this field?
+> 
 
-The Acculotto Group Organization Collaburation with New Zealand lotto
-award, Operators of The National Lottery.
+Hi David,
 
-12th AVENUE KWAME NKRUMAH 01 BP, ouagadougou Burkina Faso,
-REF N=C2=BA:AL/74-A0802742020.
-BATCH N=C2=BA: 2020AL-01
-REF Number: AL/74-A0802742020
+SELECT REPORT field can be used for vVOL (LU conglomerate) discovery and
+for well-known lun listing.
 
-Congratulations to you as we bring to your notice, the results of the
-First Category draws of THE LOTTO PROMO INT We are happy to inform you
-that you have emerged a winner under the First Category, which is part
-of our promotional draws.
+The field is used by VMware ESXi:
+https://support.purestorage.com/Solutions/VMware_Platform_Guide/User_Guides_for_VMware_Solutions/Virtual_Volumes_User_Guide/vVols_User_Guide%3A_Protocol_Endpoints
 
-The draws are being officially announced today 26th  January 2021.
-Participants were selected through a computer ballot system drawn from
-2,500,000 email addresses of individuals and companies from Africa,
-America, Asia, Australia, Europe, Middle East, and Oceania as part of
-our International Promotions Program.
+"PEs greatly extend the number of vVols that can be connected to an ESXi
+cluster; each PE can have up to 16,383 vVols per host bound to it
+simultaneously. Moreover, a new binding does not require a complete I/O
+rescan. Instead, ESXi issues a REPORT_LUNS SCSI command with SELECT
+REPORT to the PE to which the sub-lun is bound. The PE returns a list of
+sub-lun IDs for the vVols bound to that host. In large clusters,
+REPORT_LUNS is significantly faster than a full I/O rescan because it is
+more precisely targeted."
 
-Your e-mail address, attached to ticket number 20511465463-7655, with
-serial number 472-9768-79 drew the lucky numbers 8-66-97-22-65-55 and
-consequently won in the First Category. You have therefore been
-awarded a lump sum pay out of =E2=82=AC2.500,000,000,00 (Two Million Five
-Hundred Thousand Euro), which is the winning payout for Category A
-winners. This is from a total cash prize of =E2=82=AC20,000,000.00 {Twenty
-Million Euro) shared amongst the first Eight (8) lucky winners in this
-category.
+The post also confirms that:
+https://sourceforge.net/p/scst/mailman/message/33030432/
 
-CONGRATULATIONS ! ! !
+A few more targets that support SELECT REPORT field below.
 
-Your fund is now deposited with the paying Bank.In your best interest
-to avoid mix up of numbers and names of any kind, we request that you
-keep the entire details of your award strictly from public notice
-until the process of transferring your claims has been completed, and
-your funds remitted to your account.
+Sun/Oracle tape library:
+https://docs.oracle.com/en/storage/tape-storage/storagetek-sl150-modular-tape-library/slorm/report-luns-a0h.html#GUID-4140F40D-BD9A-495C-9A86-8BD7E91C985C
 
-This is part of our security protocol to avoid double claiming or
-unscrupulous acts by participants/nonparticipants of this
-program.Please contact Eco-Bank through the (International Remittance
-Dept)immediately for due processing and remittance of your prize money
-to a designated account of your choice:
+IBM Flash Storage:
+https://www.ibm.com/support/pages/sites/default/files/support/ssg/ssgdocs.nsf/0/95d7115d7eb428e485257f80005cc3a7/%24FILE/FlashSystem_840_SCSI_Interface_Manual_1.2.pdf
 
-NOTE: For easy reference and identification, find below your Reference
-and Batch numbers. Remember to quote these numbers in your
-correspondence with claims agent.
+With regards to bumping TCM to SPC-4, are there any objections if we
+submit a separate patch for that? Or resubmit a series with the patch?
 
-REF Number: AL/74-A0802742020
-BATCH No: UOS/15/096/TVFS
-TICKET No:20511465463-7655
-SERIAL No:472-9768-79
-LUCKY No:8-66-97-22-65-5
-
-To claim your funds, please contact your claim officer.
-
-International Remittance Department.(Eco-Bank)
-Contact Director: Mr Ibrahime S. Zongo.
-E-mail: atm_visacardoffice@t-online.de
-
-Your are advice to provide him with the following bellow?
-
-Personal Verification Form:
-
-1.) Full Name:
-2.) Age:
-3.) Sex:
-4.) Address:
-5.) Zip/Postal Code:
-6.) State/Province:
-7) Country:
-8) Phone:
-9.) Occupation/Position:
-10.) Company:
-11.) International Passport;
-12.) Email Address:
-13.) Ref N=C2=BA:
-14.) Batch N=C2=BA:
-
-Bank account information;
-
-15.) Account Name;
-16.) Account Number;
-17.) Bank Name;
-18.) Bank Address;
-19.) Iban;
-20.) Swift Code;
-
-Congratulations once again from all our staff and thank you for being
-part of our promotions program.
-
-Yours Sincerely,
-
-The Management,
-Lottery Organisation.
-
-N.B: All claims must be completed within 7 working days of notification.
+Thanks,
+Roman
