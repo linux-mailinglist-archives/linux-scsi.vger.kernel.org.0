@@ -2,69 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AA1303A8B
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 11:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEBD303CB4
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404264AbhAZKlK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 05:41:10 -0500
-Received: from mail-m973.mail.163.com ([123.126.97.3]:59830 "EHLO
-        mail-m973.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404256AbhAZKk4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 05:40:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=84Y9h
-        S/hcQTEsxI71PSydVVNvKNfRlJa3uPZUddnRwM=; b=XAAKBjyyNTG3QzvWxLa/H
-        +y5QB0v9fsw2e9lely1iEVu55+ce1qqKlDpn4iUgvt87HzN4iWCjvCU6NNKaxNAZ
-        A+h7ByJXhbZqV8waUCtmninJCyjQneRLQfqUKYBpLtmLJ901+/qsBKt2g9S1W4Yh
-        NVuaP4mvMO9dwjsrTsRBLE=
-Received: from COOL-20201222LC.ccdomain.com (unknown [218.94.48.178])
-        by smtp3 (Coremail) with SMTP id G9xpCgAnPHtWrQ9gGw6oUg--.51898S2;
-        Tue, 26 Jan 2021 13:49:14 +0800 (CST)
-From:   dingsenjie@163.com
-To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dingsenjie <dingsenjie@yulong.com>
-Subject: [PATCH] scsi/megaraid: fix spelling typo of allocated
-Date:   Tue, 26 Jan 2021 13:49:08 +0800
-Message-Id: <20210126054908.45468-1-dingsenjie@163.com>
-X-Mailer: git-send-email 2.21.0.windows.1
+        id S2392027AbhAZMN5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 07:13:57 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:11880 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404908AbhAZLJS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 06:09:18 -0500
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DQ3pw2pd9z7bF4;
+        Tue, 26 Jan 2021 19:07:20 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 26 Jan 2021 19:08:24 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/5] hisi_sas: More misc patches
+Date:   Tue, 26 Jan 2021 19:04:23 +0800
+Message-ID: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgAnPHtWrQ9gGw6oUg--.51898S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw4xWF1xXrWUJw4UJryfCrg_yoWDCrbEgr
-        W8trn7tryayrs7C34xJ3yrZrZ7t3yYv3WkJ3Wvqr9xuwnrZrsIyF1j9r13Jay7J3yDCasI
-        y345Kr1Ikw1vqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5h18PUUUUU==
-X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: 5glqw25hqmxvi6rwjhhfrp/1tbiHhomyFSIsgdKdgAAs-
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: dingsenjie <dingsenjie@yulong.com>
+This is a collection of misc patches picked up during the latest dev
+cycle, targeted at 5.12 .
 
-allocted -> allocated
+Features include:
+- Some tidy-up from after recent change to expose HW queues on v2 HW
+- Add trace FIFO DFX debugfs support
+- Flush wq for driver removal
+- Add ability to enable debugfs support as a kernel config option
 
-Signed-off-by: dingsenjie <dingsenjie@yulong.com>
----
- drivers/scsi/megaraid/megaraid_mbox.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks!
 
-diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
-index 4a27ac8..d57e938 100644
---- a/drivers/scsi/megaraid/megaraid_mbox.c
-+++ b/drivers/scsi/megaraid/megaraid_mbox.c
-@@ -1165,7 +1165,7 @@ static DEVICE_ATTR(megaraid_mbox_app_hndl, S_IRUSR, megaraid_sysfs_show_app_hndl
- 	 * structure
- 	 * Since passthru and extended passthru commands are exclusive, they
- 	 * share common memory pool. Passthru structures piggyback on memory
--	 * allocted to extended passthru since passthru is smaller of the two
-+	 * allocated to extended passthru since passthru is smaller of the two
- 	 */
- 	raid_dev->epthru_pool_handle = dma_pool_create("megaraid mbox pthru",
- 			&adapter->pdev->dev, sizeof(mraid_epassthru_t), 128, 0);
+John Garry (2):
+  scsi: hisi_sas: Remove deferred probe check in hisi_sas_v2_probe()
+  scsi: hisi_sas: Don't check .nr_hw_queues in hisi_sas_task_prep()
+
+Luo Jiaxing (3):
+  scsi: hisi_sas: Enable debugfs support by default
+  scsi: hisi_sas: Flush workqueue in hisi_sas_v3_remove()
+  scsi: hisi_sas: Add trace FIFO debugfs support
+
+ drivers/scsi/hisi_sas/Kconfig          |   6 +
+ drivers/scsi/hisi_sas/hisi_sas.h       |  15 ++
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |  19 +-
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  12 --
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 252 +++++++++++++++++++++++++
+ 5 files changed, 286 insertions(+), 18 deletions(-)
+
 -- 
-1.9.1
+2.26.2
 
