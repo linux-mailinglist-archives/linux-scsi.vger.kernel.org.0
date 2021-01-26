@@ -2,117 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EC7303072
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 00:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9983030D5
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 01:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732665AbhAYXrK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 25 Jan 2021 18:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S1732745AbhAZAHp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 25 Jan 2021 19:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732558AbhAYVRj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Jan 2021 16:17:39 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19006C061574
-        for <linux-scsi@vger.kernel.org>; Mon, 25 Jan 2021 13:16:32 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id t29so9126170pfg.11
-        for <linux-scsi@vger.kernel.org>; Mon, 25 Jan 2021 13:16:32 -0800 (PST)
+        with ESMTP id S1732672AbhAZAHn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Jan 2021 19:07:43 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DD8C06174A;
+        Mon, 25 Jan 2021 16:07:02 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id r9so11079827qtp.11;
+        Mon, 25 Jan 2021 16:07:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+xXlGKTVDgIyvWhOoljB9Gs9FebPS3Flyvxw1e08Ee4=;
-        b=NdK/uI7VhBO9KWdGbLnVxZKhox4QUgowO1vpru6G1PeartHOjKFh8WvQlF0fhdPl5q
-         mIKgSpdJ+WvOOnLJcgqMvgONzmyPe9PDyw/yFcX33n45HgJJgmlsXSx1kuaMomVt/N5W
-         osFpkbr1DVcEkYoEXaU4vIk52KZkVSFgS8YkpLIzU64oGgcI44BzqlTlKjLIJL0DTace
-         ENKiFrM+ATIX/9iI2oSLmKgx6mpwqfBObVg+NvFCBLfMfULuFtG+WiOFZ/7vf7IAAu12
-         3ArfEIKUs/wSdNPilvkqKr33g5B8lK38kWT9GMJff3a7tx0lRCfU+eHbtkOMLLbtL01t
-         Ymeg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N6LXBrjg+bB/2+WBjCTrxF6qvgdWtiQma/8rh0wKxUk=;
+        b=hW/YdWhwfBFWw3mYF6n5RNvWDzReO5HABiplOpXnk0/ieoSFPQsH1IvkMaM3AMykKC
+         xy09myn4AaRDPUrNAC+bKbY2CAunsU8/xTN3ZeZnnjjqXIyPHcZuGdrbeo7EVgjRCjSy
+         h0FDbG2H6SaSSEJcj8jOuoYHNUDKYwMIPctrkQQG/fs9HzwQeP4A99VWn7tY4+0Lcr3R
+         aEr3G1IHUZjVLuyhaKBwcWXFACA2Uoj6j4pbOBALFmZRKeSJdpx7JhNl60HISl5XZFIX
+         LO+jnjPfWUbid+35dE9V+BB9ie3dLUZaBTUdM9w/FD4zGKxYFkKCn/A6gJSD6YR+o/+2
+         BJKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+xXlGKTVDgIyvWhOoljB9Gs9FebPS3Flyvxw1e08Ee4=;
-        b=frPTmylBuuWU/UlltsaaG+z7onoNXA/xviiu/ANChr+EhvPAZDugjlX9sbXyRzfRqz
-         ZcJI5hDuP9lgNBObZP0plLWlELDLy9fmxCdKxuhdDXLeWpfCBM/m+qFUHmPFHOmiqjBh
-         oBaDQwKR6YqH4LDdqIdDNVW05ePCq54gkUsi4QkQJrs6V+nmIxIanD3vocAhYRv9Wrxz
-         NvJ1sbVow9iVE8FCRTddezK2rUOP18FhNiFkWQQlojyRoyiqvb45JVRYQkw3PocRGqyV
-         qm/2ir09b+niZ++gmxVzRYdgCdKxR114LjYPlxcGbehxbkspwInrkH09Ig5balIu7pqg
-         n67Q==
-X-Gm-Message-State: AOAM531xtQn96XgO7ftBEUwlIX4RP9BXo0ZufeNC9rKJwtuwcfaeRLIe
-        QP/FtPzOKV+hPNJCnxh8YOiYwQ==
-X-Google-Smtp-Source: ABdhPJwzuZn6IAHaUTKcz4pq9UDRKZp32og5hS04jcTF9nG6ejx0eeknVKsRuMOrUgoTmKNsC5GZKA==
-X-Received: by 2002:a65:6290:: with SMTP id f16mr2400670pgv.69.1611609391559;
-        Mon, 25 Jan 2021 13:16:31 -0800 (PST)
-Received: from [192.168.4.41] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id 6sm17653269pfz.34.2021.01.25.13.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jan 2021 13:16:30 -0800 (PST)
-Subject: Re: [PATCH 1/2] block/keyslot-manager: introduce devm_blk_ksm_init()
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Satya Tangirala <satyat@google.com>
-Cc:     linux-block@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-References: <20210121082155.111333-1-ebiggers@kernel.org>
- <20210121082155.111333-2-ebiggers@kernel.org>
- <CAA+FYZerh02JXSKghCKuG29ATdYU_=2O93moGnLgD6Jv2v2auQ@mail.gmail.com>
- <YA8pMDqHsKZA0zfR@sol.localdomain>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <3b1b6a94-f283-e8a3-8638-6475d0323c30@kernel.dk>
-Date:   Mon, 25 Jan 2021 14:16:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        bh=N6LXBrjg+bB/2+WBjCTrxF6qvgdWtiQma/8rh0wKxUk=;
+        b=gZqkvytEJ7HfJnSn7JaeExreZSL3wJ7DKB5A9fMA0q6GAerOFQP0A8AVPNj4QlOCRV
+         /OEqgtjj3Z7joVz/vmkLn1eSmiDSrfR2Tjgz6sw9LMNxFu3Fq3JYMIhioWLMzHnwvr3q
+         pskhiHVMRhxwV2GwP8MPBniv4bVY/nIPTKbFtFAJke1JNnfyfFJ+vg5dmCr9Oc3hF0pa
+         w+B4O/DX4DtcsinnHXGlPToqZZt+40NgMiKihZisKCriQRrKcSp4AQKiUfdjs4gaOf8u
+         teiFmyjjD0s8iXpXw3GQD1ysw7Tcuos0niXUU9oY5es7s5MUSZRXDfQBk7/K6mRmhLGf
+         z6Hg==
+X-Gm-Message-State: AOAM533rl9FeSs3oQosmuNnn5iiVCXwSV0wwy7u4eM56UrLU2PeGrgV1
+        wACcuqu1GqM2YA7GfYIRADc=
+X-Google-Smtp-Source: ABdhPJzGPNNQphuBVAFkY4woM8KHgzTBfveuo+G8JIC5qbpE+3i4pkNtg6YkvgrAGubfaLLObWZNuw==
+X-Received: by 2002:ac8:6049:: with SMTP id k9mr2933402qtm.104.1611619622060;
+        Mon, 25 Jan 2021 16:07:02 -0800 (PST)
+Received: from tong-desktop.local ([2601:5c0:c200:27c6:c7f3:98:3560:1329])
+        by smtp.googlemail.com with ESMTPSA id t14sm3148128qkt.50.2021.01.25.16.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jan 2021 16:07:01 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ztong0001@gmail.com
+Subject: [PATCH v1] scsi: lpfc: Add auto select on IRQ_POLL
+Date:   Mon, 25 Jan 2021 19:05:54 -0500
+Message-Id: <20210126000554.309858-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YA8pMDqHsKZA0zfR@sol.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/25/21 1:25 PM, Eric Biggers wrote:
-> On Mon, Jan 25, 2021 at 12:14:00PM -0800, Satya Tangirala wrote:
->> On Thu, Jan 21, 2021 at 12:23 AM Eric Biggers <ebiggers@kernel.org> wrote:
->>>
->>> From: Eric Biggers <ebiggers@google.com>
->>>
->>> Add a resource-managed variant of blk_ksm_init() so that drivers don't
->>> have to worry about calling blk_ksm_destroy().
->>>
->>> Note that the implementation uses a custom devres action to call
->>> blk_ksm_destroy() rather than switching the two allocations to be
->>> directly devres-managed, e.g. with devm_kmalloc().  This is because we
->>> need to keep zeroing the memory containing the keyslots when it is
->>> freed, and also because we want to continue using kvmalloc() (and there
->>> is no devm_kvmalloc()).
->>>
->>> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> [..]
->>> diff --git a/include/linux/keyslot-manager.h b/include/linux/keyslot-manager.h
->>> index 18f3f5346843f..443ad817c6c57 100644
->>> --- a/include/linux/keyslot-manager.h
->>> +++ b/include/linux/keyslot-manager.h
->>> @@ -85,6 +85,9 @@ struct blk_keyslot_manager {
->>>
->>>  int blk_ksm_init(struct blk_keyslot_manager *ksm, unsigned int num_slots);
->>>
->>> +int devm_blk_ksm_init(struct device *dev, struct blk_keyslot_manager *ksm,
->>> +                     unsigned int num_slots);
->>> +
->>>  blk_status_t blk_ksm_get_slot_for_key(struct blk_keyslot_manager *ksm,
->>>                                       const struct blk_crypto_key *key,
->>>                                       struct blk_ksm_keyslot **slot_ptr);
->>> --
->>
->> Looks good to me. Please feel free to add
->> Reviewed-by: Satya Tangirala <satyat@google.com>
-> 
-> Thanks Satya.  Jens, any objection to this patch going in through the MMC tree?
+lpfc depends on irq_poll library, but it is not selected automatically.
+When irq_poll is not selected, compiling it can run into following error
 
-No objections from me, doesn't look like we have any real worries of
-conflicts.
+ERROR: modpost: "irq_poll_init" [drivers/scsi/lpfc/lpfc.ko] undefined!
+ERROR: modpost: "irq_poll_sched" [drivers/scsi/lpfc/lpfc.ko] undefined!
+ERROR: modpost: "irq_poll_complete" [drivers/scsi/lpfc/lpfc.ko] undefined!
 
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ drivers/scsi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index 701b61ec76ee..c79ac0731b13 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -1159,6 +1159,7 @@ config SCSI_LPFC
+ 	depends on NVME_TARGET_FC || NVME_TARGET_FC=n
+ 	depends on NVME_FC || NVME_FC=n
+ 	select CRC_T10DIF
++	select IRQ_POLL
+ 	help
+           This lpfc driver supports the Emulex LightPulse
+           Family of Fibre Channel PCI host adapters.
 -- 
-Jens Axboe
+2.25.1
 
