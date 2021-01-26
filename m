@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8B0303CB0
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED7D303CB5
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405132AbhAZMNT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 07:13:19 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:11882 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404910AbhAZLJS (ORCPT
+        id S2405019AbhAZMOD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 07:14:03 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:11597 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404899AbhAZLJS (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 06:09:18 -0500
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DQ3pw35q2z7bKw;
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DQ3pw1yM6z15yMc;
         Tue, 26 Jan 2021 19:07:20 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
@@ -20,10 +20,11 @@ Received: from localhost.localdomain (10.69.192.58) by
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 2/5] scsi: hisi_sas: Don't check .nr_hw_queues in hisi_sas_task_prep()
-Date:   Tue, 26 Jan 2021 19:04:25 +0800
-Message-ID: <1611659068-131975-3-git-send-email-john.garry@huawei.com>
+        <linuxarm@openeuler.org>, Luo Jiaxing <luojiaxing@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 3/5] scsi: hisi_sas: Enable debugfs support by default
+Date:   Tue, 26 Jan 2021 19:04:26 +0800
+Message-ID: <1611659068-131975-4-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
 References: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
@@ -35,46 +36,62 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that v2 and v3 hw expose their HW queues (and so shost.nr_hw_queues is
-set), remove the conditional checks in hisi_sas_task_prep().
+From: Luo Jiaxing <luojiaxing@huawei.com>
 
-This change would affect v1 HW performance (as it does not expose HW
-queues), but nobody uses it and support may be dropped soon.
+Add a config option to enable debugfs support by default. And if debugfs
+support is enabled by default, dump count default value is increased to 50
+as generally users want something bigger than the current default in that
+situation.
 
-Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
+Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/scsi/hisi_sas/Kconfig         |  6 ++++++
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 13 +++++++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/scsi/hisi_sas/Kconfig b/drivers/scsi/hisi_sas/Kconfig
+index b8148b1733f8..4ba3a8eadb77 100644
+--- a/drivers/scsi/hisi_sas/Kconfig
++++ b/drivers/scsi/hisi_sas/Kconfig
+@@ -18,3 +18,9 @@ config SCSI_HISI_SAS_PCI
+ 	depends on ACPI
+ 	help
+ 		This driver supports HiSilicon's SAS HBA based on PCI device
++
++config SCSI_HISI_SAS_DEBUGFS_DEFAULT_ENABLE
++	bool "HiSilicon SAS debugging default enable"
++	depends on SCSI_HISI_SAS
++	help
++		Set Y to default enable DEBUGFS for SCSI_HISI_SAS
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 625327e99b06..d469ffda9008 100644
+index d469ffda9008..a979edfd9a78 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -445,21 +445,19 @@ static int hisi_sas_task_prep(struct sas_task *task,
- 		}
- 	}
+@@ -2722,12 +2722,21 @@ int hisi_sas_remove(struct platform_device *pdev)
+ }
+ EXPORT_SYMBOL_GPL(hisi_sas_remove);
  
--	if (scmd && hisi_hba->shost->nr_hw_queues) {
-+	if (scmd) {
- 		unsigned int dq_index;
- 		u32 blk_tag;
++#if IS_ENABLED(CONFIG_SCSI_HISI_SAS_DEBUGFS_DEFAULT_ENABLE)
++#define DEBUGFS_ENABLE_DEFAULT  "enabled"
++bool hisi_sas_debugfs_enable = true;
++u32 hisi_sas_debugfs_dump_count = 50;
++#else
++#define DEBUGFS_ENABLE_DEFAULT "disabled"
+ bool hisi_sas_debugfs_enable;
++u32 hisi_sas_debugfs_dump_count = 1;
++#endif
++
+ EXPORT_SYMBOL_GPL(hisi_sas_debugfs_enable);
+ module_param_named(debugfs_enable, hisi_sas_debugfs_enable, bool, 0444);
+-MODULE_PARM_DESC(hisi_sas_debugfs_enable, "Enable driver debugfs (default disabled)");
++MODULE_PARM_DESC(hisi_sas_debugfs_enable,
++		 "Enable driver debugfs (default "DEBUGFS_ENABLE_DEFAULT")");
  
- 		blk_tag = blk_mq_unique_tag(scmd->request);
- 		dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
- 		*dq_pointer = dq = &hisi_hba->dq[dq_index];
--	} else if (hisi_hba->shost->nr_hw_queues)  {
-+	} else {
- 		struct Scsi_Host *shost = hisi_hba->shost;
- 		struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
- 		int queue = qmap->mq_map[raw_smp_processor_id()];
- 
- 		*dq_pointer = dq = &hisi_hba->dq[queue];
--	} else {
--		*dq_pointer = dq = sas_dev->dq;
- 	}
- 
- 	port = to_hisi_sas_port(sas_port);
+-u32 hisi_sas_debugfs_dump_count = 1;
+ EXPORT_SYMBOL_GPL(hisi_sas_debugfs_dump_count);
+ module_param_named(debugfs_dump_count, hisi_sas_debugfs_dump_count, uint, 0444);
+ MODULE_PARM_DESC(hisi_sas_debugfs_dump_count, "Number of debugfs dumps to allow");
 -- 
 2.26.2
 
