@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BED7D303CB5
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C53303CB3
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405019AbhAZMOD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 07:14:03 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:11597 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404899AbhAZLJS (ORCPT
+        id S2405444AbhAZMNx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 07:13:53 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:11883 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404902AbhAZLJS (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 06:09:18 -0500
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DQ3pw1yM6z15yMc;
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DQ3pw3Ky8z7bL0;
         Tue, 26 Jan 2021 19:07:20 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
@@ -22,9 +22,9 @@ To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@openeuler.org>, Luo Jiaxing <luojiaxing@huawei.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH 3/5] scsi: hisi_sas: Enable debugfs support by default
-Date:   Tue, 26 Jan 2021 19:04:26 +0800
-Message-ID: <1611659068-131975-4-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 4/5] scsi: hisi_sas: Flush workqueue in hisi_sas_v3_remove()
+Date:   Tue, 26 Jan 2021 19:04:27 +0800
+Message-ID: <1611659068-131975-5-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
 References: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
@@ -38,60 +38,39 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Luo Jiaxing <luojiaxing@huawei.com>
 
-Add a config option to enable debugfs support by default. And if debugfs
-support is enabled by default, dump count default value is increased to 50
-as generally users want something bigger than the current default in that
-situation.
+If the controller reset occurs at the same time as driver removal, it may
+be possible that the interrupts have been released prior to the host
+softreset, and calling pci_irq_vector() there causes a WARN:
+
+WARNING: CPU: 37 PID: 1542 /pci/msi.c:1275 pci_irq_vector+0xc0/0xd0
+Call trace:
+pci_irq_vector+0xc0/0xd0
+disable_host_v3_hw+0x58/0x5b0 [hisi_sas_v3_hw]
+soft_reset_v3_hw+0x40/0xc0 [hisi_sas_v3_hw]
+hisi_sas_controller_reset+0x150/0x260 [hisi_sas_main]
+hisi_sas_rst_work_handler+0x3c/0x58 [hisi_sas_main]
+
+To fix, flush the driver workqueue prior to releasing the interrupts
+to ensure any resets have been completed.
 
 Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/Kconfig         |  6 ++++++
- drivers/scsi/hisi_sas/hisi_sas_main.c | 13 +++++++++++--
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/hisi_sas/Kconfig b/drivers/scsi/hisi_sas/Kconfig
-index b8148b1733f8..4ba3a8eadb77 100644
---- a/drivers/scsi/hisi_sas/Kconfig
-+++ b/drivers/scsi/hisi_sas/Kconfig
-@@ -18,3 +18,9 @@ config SCSI_HISI_SAS_PCI
- 	depends on ACPI
- 	help
- 		This driver supports HiSilicon's SAS HBA based on PCI device
-+
-+config SCSI_HISI_SAS_DEBUGFS_DEFAULT_ENABLE
-+	bool "HiSilicon SAS debugging default enable"
-+	depends on SCSI_HISI_SAS
-+	help
-+		Set Y to default enable DEBUGFS for SCSI_HISI_SAS
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index d469ffda9008..a979edfd9a78 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -2722,12 +2722,21 @@ int hisi_sas_remove(struct platform_device *pdev)
- }
- EXPORT_SYMBOL_GPL(hisi_sas_remove);
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index e91df469e36b..4cc344ca121c 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -4572,6 +4572,7 @@ static void hisi_sas_v3_remove(struct pci_dev *pdev)
+ 		del_timer(&hisi_hba->timer);
  
-+#if IS_ENABLED(CONFIG_SCSI_HISI_SAS_DEBUGFS_DEFAULT_ENABLE)
-+#define DEBUGFS_ENABLE_DEFAULT  "enabled"
-+bool hisi_sas_debugfs_enable = true;
-+u32 hisi_sas_debugfs_dump_count = 50;
-+#else
-+#define DEBUGFS_ENABLE_DEFAULT "disabled"
- bool hisi_sas_debugfs_enable;
-+u32 hisi_sas_debugfs_dump_count = 1;
-+#endif
-+
- EXPORT_SYMBOL_GPL(hisi_sas_debugfs_enable);
- module_param_named(debugfs_enable, hisi_sas_debugfs_enable, bool, 0444);
--MODULE_PARM_DESC(hisi_sas_debugfs_enable, "Enable driver debugfs (default disabled)");
-+MODULE_PARM_DESC(hisi_sas_debugfs_enable,
-+		 "Enable driver debugfs (default "DEBUGFS_ENABLE_DEFAULT")");
+ 	sas_unregister_ha(sha);
++	flush_workqueue(hisi_hba->wq);
+ 	sas_remove_host(sha->core.shost);
  
--u32 hisi_sas_debugfs_dump_count = 1;
- EXPORT_SYMBOL_GPL(hisi_sas_debugfs_dump_count);
- module_param_named(debugfs_dump_count, hisi_sas_debugfs_dump_count, uint, 0444);
- MODULE_PARM_DESC(hisi_sas_debugfs_dump_count, "Number of debugfs dumps to allow");
+ 	hisi_sas_v3_destroy_irqs(pdev, hisi_hba);
 -- 
 2.26.2
 
