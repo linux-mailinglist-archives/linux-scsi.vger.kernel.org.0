@@ -2,152 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 677C5303CAB
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C794303E9E
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 14:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392114AbhAZMMk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 07:12:40 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:56264 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392109AbhAZLOO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 06:14:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1611659654; x=1643195654;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=exyPuAaXuF99GCNoJABPf989V4+RE5MjJUg8tpGtAKQ=;
-  b=MdrEd69Afdpvibfbiqba/kL/9tPWlaXAnY0P5zu+NTWyGKnr2w9YbxD7
-   +8cb5hoQ70XlpDM8NFtEdFp73u2VnyWiJoYpfo5tDy3SIK4/NlnOsU2il
-   xdqmcC+vt9zT+feVEP/a+SUa844+FJeq1lVhpoB4/gQzCWs0oSXi5Lwuz
-   BVEPUD60BPSLUjbMzoUE12YDMtCHZO4i8QoMIhTWsvIoVOGw/KBGwX2Bf
-   PyOZW926zhZqKkL1v9Qicuhkbz5UDW5YqLEEHVq5P56WMmeEfpmNbgZiu
-   hRNT9/kaugPpYNJ9r/LFZbUtB5JxWsPAiAFYk46CW1UPZUJiUAgq6Omte
-   g==;
-IronPort-SDR: G/i3wP0cpe1HWnnTrsKgr7bRd9hlKi6WUajs/F6Vj9bJaZ/ghAqUXdBhpYwXZ7eamXI0YKkyUT
- yHbdV69RzagGLoqMLW28+J2aAnZqsdq/m3bBtdw6pMzbvL8kx1uVTZCXg9SSfWpAYMHaKdHpyk
- CTvbYUQmMBQcjFOXBe0F5YPPzGyNiN/RNVhv7kyn89Gw2+ehGp6u+xP/6qjiYWsfYCFv3yNVri
- 8Czn9zTovFv6hd7gQz4m9tWcR8v6OObaXpi8jBUyunGINGT8scQcjJKbX4o+svwkZZVVibQLBx
- Qj4=
-X-IronPort-AV: E=Sophos;i="5.79,375,1602518400"; 
-   d="scan'208";a="159516454"
-Received: from mail-dm6nam11lp2172.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.172])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Jan 2021 19:13:08 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OBy1XceV9oOQxmk3+X0VIWMO2xPkOeQFIIQ+EwrMTWnyuhrNpHSnRv7TbbBgCs9uxLh8l8AnN9MvOykAvcMAWzE2CkS7qoqlNfj1PYF/GWSAS3cWBFYnzqzm/lCgzPHmWSSJzieMp/rb0VfIvwmLZdVXLLEVw38UaDM26c8855rI7WScBjlPaL5HJanCRGLvfvhef3Ym4/Pcx/QA5MoYMrkQB7bMq7ZWLOO2Z9Lpk/FB/CF/7IExQ1gmjQfThl5NDFXflTGTTEr3aSM57/gm7Vbe/P4O0qMyG/LjS6DqiikS7YrtkUMvAFtnT/57I/6VhskrNUT87ALS9ZYiqBVG5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=exyPuAaXuF99GCNoJABPf989V4+RE5MjJUg8tpGtAKQ=;
- b=oYlKpfiwg2v9uPpb1R6gw3+WQ076i7g7EMEmdkG3PqGtUwvHsamhtVfUUpCmCqYru/+hFr9Rg28hHkVxVXGoOPXQObLrctHMyZfjdGLMwvpESN5fNznDZ22TsdmHgDy2BPQsDegsEvk02rxYZTA+mdGKD0XM6LXkxBv7FC27CTA5tXa/bGksLngBKK1yHJXVs8Qhfl3h4SSOGUe4XVdxGxQbxbYCd6I8hSutE4Oc7a7G7Rn5uNCix04QgmNrcpicKSV36pP2cdB9CijKu9nJQd3XdwrO7FzzJhJhn45ICUKgYwPWbwgOtNenFUq6pdZuxyViMxhTiKtFny9koYUz+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        id S1731252AbhAZNZr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 08:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731118AbhAZJ6s (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 04:58:48 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4CDC061794
+        for <linux-scsi@vger.kernel.org>; Tue, 26 Jan 2021 01:58:33 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id n18so8693491vsa.12
+        for <linux-scsi@vger.kernel.org>; Tue, 26 Jan 2021 01:58:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=exyPuAaXuF99GCNoJABPf989V4+RE5MjJUg8tpGtAKQ=;
- b=w+SNUAH22ylCBPLqc5WePWjmusNniET4cejtXiJyTLG9GzFBe4tTRZKfUQWucE3zkLVZoNk3MEo2YiuufSWV7rgz0IeoZjVsBLa6L0qDQwZnmtqjhKKrfvKkfRnV2MkSXP80G3bkN0zI1oBl8JnGIlj7AO4LeeBb8VlmP5We3XU=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- DM6PR04MB5081.namprd04.prod.outlook.com (2603:10b6:5:fe::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3784.16; Tue, 26 Jan 2021 11:13:06 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::a564:c676:b866:34f6]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::a564:c676:b866:34f6%9]) with mapi id 15.20.3784.019; Tue, 26 Jan 2021
- 11:13:06 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Kiwoong Kim <kwmad.kim@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "grant.jung@samsung.com" <grant.jung@samsung.com>,
-        "sc.suh@samsung.com" <sc.suh@samsung.com>,
-        "hy50.seo@samsung.com" <hy50.seo@samsung.com>,
-        "sh425.lee@samsung.com" <sh425.lee@samsung.com>,
-        "bhoon95.kim@samsung.com" <bhoon95.kim@samsung.com>
-Subject: RE: [PATCH v8 2/2] ufs: exynos: introduce command history
-Thread-Topic: [PATCH v8 2/2] ufs: exynos: introduce command history
-Thread-Index: AQHW867RP2vI8AtugkiwZI90gE8Srao5vw/w
-Date:   Tue, 26 Jan 2021 11:13:06 +0000
-Message-ID: <DM6PR04MB65758E89AC1F171814CADFACFCBC9@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <cover.1611642467.git.kwmad.kim@samsung.com>
-        <CGME20210126064508epcas2p3c1132f7b6895d344784629a0d2e74c12@epcas2p3.samsung.com>
- <d2e077fc8e8cd49ada614a08bb3dda85e8222c8f.1611642467.git.kwmad.kim@samsung.com>
-In-Reply-To: <d2e077fc8e8cd49ada614a08bb3dda85e8222c8f.1611642467.git.kwmad.kim@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: samsung.com; dkim=none (message not signed)
- header.d=none;samsung.com; dmarc=none action=none header.from=wdc.com;
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b2d11def-2222-46ca-06ff-08d8c1eb5b63
-x-ms-traffictypediagnostic: DM6PR04MB5081:
-x-microsoft-antispam-prvs: <DM6PR04MB508149A67273D9038E564EFFFCBC9@DM6PR04MB5081.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:3173;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xMfaNM7AKL0z8YxuDZHlJOGNN1KRKT9vnGb80oXuFhHhklamwyHI3Ez2gwuzINxsO/vcY0P/lWTSGDhpiaTf4kVYoGZ7SvGTmkCDgLqKpmlJhQrRFV/vHtJsb4HG3x1yoa0HPsVIzx4oEDSQgB8uNo492p3c4Mxl/brcS8akUqKSVMRhCcgv60pOd/vxBpeqgKOJSGYspiAOELmMzRW7sabhr2f2oFOr9dPBYzZz5Fp0VmULgJpPdKeGzpvl55tLOksV6nuY5sxkzBH9+VrbNYHMbmXy5scuO1etxumTQJ4fA13SeGShqaPsaOPahpUQZW9DVMWiCEaPQQP4QndPifAKt3nvFR89qUk+afXSkG5Vo5wE6yuZwlk/SgB6Tc5tzc2CpuP+wM4o6LXnBGctAH9AniM7cHI/Mno+Y+0saRkfbRzLGcdBV/jmkIW6iJRVEw+z9yRg+mY4Y242tgtsaxpvGFOVRiiZLs15IiFU+NdHZ5xUX6uiqQOyI2B9tNHDOcpjyvX9GEqYR9KdRDRG7iRAjCBGB24stZF9wW6EgHXpnXP1uvTtGhJnilwnM2Is
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(8936002)(5660300002)(71200400001)(478600001)(55016002)(66446008)(9686003)(4744005)(66556008)(66476007)(52536014)(66946007)(2906002)(76116006)(33656002)(64756008)(186003)(26005)(7696005)(921005)(110136005)(6506007)(86362001)(316002)(8676002)(7416002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?NlJxeWlwQWtGUDhYaXJOTXBLMUtjZ1Y4WlYwalR6REpCNm1KM1JpWFlKNWdZ?=
- =?utf-8?B?a0RqcjV3dDIrcDVwQnBEQkhseFYzTEFGZXJMOTdESUEwcHFHb1JmVDBKMGNT?=
- =?utf-8?B?cGVXVUdSRTgrSlV5YXZ4ZFk0MzUvWlBmT2txL1lvVmV0eDhBMGg3dDg5Z0Rm?=
- =?utf-8?B?eXU5U3FUaldwMzl5NGhMTmppU21iMmlycXFCOW1obUpZcXRQOUQ3aHF2dWJL?=
- =?utf-8?B?c0QxUFRQZWZnQmZ4UzVvV09oSUUwZTZETnppdTJqelg5NmZpT3RXNGVNQ0Ru?=
- =?utf-8?B?MHN0N0VYVVBaL05JRHI3OFZ5QTlzbk1KTUltWGFxeFZ5OFpnSVpVVjdYd2dG?=
- =?utf-8?B?em93OEMrRjh2YUdPb0p0ZmxtUWZqQmNqeWdKNEJMc1hLM1Z5RXVRTDhuNUNQ?=
- =?utf-8?B?MHUxa0hxd056SmZUdSt4a3RqQzJrd2tqMUVrOWZDSGl3MzI5MzZOQ3hsS3VO?=
- =?utf-8?B?WkY0NGx4a2hMbDhjTFJ3cEZCeXZrTGIyOFdrOENuV01lVWpxM1FVdDNjZ3I1?=
- =?utf-8?B?cXhQeUZEVUlVTnBMYWdudkE5eU1xdjczSkNQcjJwSDB4MUVPb3Z4TTlieDV1?=
- =?utf-8?B?M1lMQ1FTbzFlOGNCVlVBRzN2U1NGaEtGMDI2REc1V1NtUTZ6ZWRnOFE5blZP?=
- =?utf-8?B?K3g4YzNYVGhhcE9rcmNUYXU0UGtHUDNpZlVTRGZxRHB6TUt6Z05mWlhwL2lk?=
- =?utf-8?B?c2dFdzd1VnhCb0YxdzVvUXNWL0Vmc1lCT3ZXUldmVkpCNkN6VzVFVU9TeCt4?=
- =?utf-8?B?TXJHUkZoNFBRdzhtZ2VOZW0rYnQ0c0xZalJjRWVZV3VWS2loVWk4SllnSHBV?=
- =?utf-8?B?RHd0Q09IT0NibW9Lb0gyeWxpUzhDUG1rV2VjbmVjTDR0QVhFRElJMmtUR1R6?=
- =?utf-8?B?T3NpVHFFKzB4eXZxdGVwTDM5dVl3bmZrRVZlRWJxYmNZaUxNd0ZqaGR3RUlo?=
- =?utf-8?B?d2tPWGJnR3FXQ0p2bTVyRDZ2ZHU3MVFJNEYwRTZIaE5PYVhzd0tHV0NYY2VO?=
- =?utf-8?B?NGxwOTZQekVpamZDT3dXQmVBU0w1UWZpcjQ3WHF0MklMWVE2TVE0WkYzYVZr?=
- =?utf-8?B?bEtOaFUrNVR6a01lY3pYcjE5cGk2aXBYS1BwREdkZ0owR1hmNXZqZXJSY3RZ?=
- =?utf-8?B?VC9MdXgwVlp1ZGhrZDBEdHVjWENST2pJT3lvRFJia3FnWHNwMkJTRDdrWGwx?=
- =?utf-8?B?VDlqVWdwV1RzWkZkdFRTeVJZb0hlRWFvYkcrNUR0YjkvUkZEZmhUdnllZTlD?=
- =?utf-8?B?OTJtS084NEZzSWFjRWI4STlEL0d2YVMzb1dvWUpXOU5ScDZ1NGR2SjVpZTZn?=
- =?utf-8?B?SjNzdEY1ZENYZjNQL3dIaWNreS96YXZ2SkRyem5WK25mcDlHalpaYitrMERG?=
- =?utf-8?B?UUU1MzVtQ1RReFBhcmFkOEZaSzRiQ1UwMlBHYkFES0ZZM0hVSVpxMklwdDdV?=
- =?utf-8?Q?DbpW4q1S?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V09Ue7aLBQ6MasDKq8tKkbzc8OyCG8WfSUIi+pxHZ0A=;
+        b=CHlVroXsOgdhhTPTerkwYExyowok7JnOu1dgx3Qe5C+WdAY9SuwbHHYtgflWAiyHXA
+         6nk/cPRyb5qitgEgrQ12v8btdOrwCH8AVbfR2laYZKDz9gIq8s04GFaa8x7ElPb8GbKT
+         oOqLh6fukCxIin4MRGYp8DW83XwqXltmRrbonhhJnmIVBkrjVn8FwpIfUufmCoRazpIz
+         82fdB/S7WvPikAR9P3PR8RboYxAWzp+XCg7dvH9rw7hJ2wqNHi2YgpHDfMqYnhe3ZBpS
+         9SK3HgV7HU9TxNcbi+YXXZ0B88xcLL3pB3p45beQAXEZ5qXZJKE0nrXFxMFEcaokAX0k
+         XoSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V09Ue7aLBQ6MasDKq8tKkbzc8OyCG8WfSUIi+pxHZ0A=;
+        b=qOtyIG2cspja5jQE+ceJ06LOEzMYpgv9m/kXVRTJLN97PE9O+Q3cIDsZgpiho2MYWp
+         k+4yKspkDSRpt3iqqVaxs3fje+Nd0snL+/vBBxAt557OvsGu9HrJZkBeLqkge8+0uMsv
+         eDwITIIjAWQuKEeHOhrCUIraXpGq2vSI385+mYIfoFYJuISUEuYhBF7DHrq5wB8fBacG
+         wxCu2www3aRkSZB9Iyi077rx5QSzku5Eb6PP9tGw+Pr0pGyUZJyN8MvUCd97E27vlzOw
+         6uHO1ix0BHgEvH421oaA2URecbrqSSGOQQybY84+cSwtILkLyGCLmB8F9Jo8G++AVES2
+         xDJA==
+X-Gm-Message-State: AOAM532McdfCwo4GAejGzjyM1AyZK0SegBPKVg0irV0LvrsAnyQXVm4G
+        oHWdMi8NKC67HZZcuJNyFH3LG1aNjoXxt+oS4bP+1LVDfeJxAg==
+X-Google-Smtp-Source: ABdhPJyxfS6eXOv4r25zRNMylO+JLPVa+hbsuQ550KJ78Oyz1/Jpr4fsWYgKLy/30YnR5meyw9A4c2VWMyETl9lCtpM=
+X-Received: by 2002:a67:7f41:: with SMTP id a62mr3552156vsd.55.1611655112263;
+ Tue, 26 Jan 2021 01:58:32 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2d11def-2222-46ca-06ff-08d8c1eb5b63
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2021 11:13:06.6272
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yLG7UeZT8EntmIu+/s11Lg4VGJvGFOnZ/1qfru8TyoFdDlDW/VD/SmPdoFHsjIQkAjn0WfH2U4Y6rodvX2uNog==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5081
+References: <20210121082155.111333-1-ebiggers@kernel.org> <20210121082155.111333-2-ebiggers@kernel.org>
+ <CAA+FYZerh02JXSKghCKuG29ATdYU_=2O93moGnLgD6Jv2v2auQ@mail.gmail.com>
+ <YA8pMDqHsKZA0zfR@sol.localdomain> <3b1b6a94-f283-e8a3-8638-6475d0323c30@kernel.dk>
+In-Reply-To: <3b1b6a94-f283-e8a3-8638-6475d0323c30@kernel.dk>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 26 Jan 2021 10:57:55 +0100
+Message-ID: <CAPDyKFoU1ciLfDig5XkULK-CBkCsmsbAgpyo51O8LEsTr3Q+Sg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] block/keyslot-manager: introduce devm_blk_ksm_init()
+To:     Jens Axboe <axboe@kernel.dk>, Eric Biggers <ebiggers@kernel.org>
+Cc:     Satya Tangirala <satyat@google.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-PiArDQo+ICsgICAgICAgZm9yIChpID0gMCA7IGkgPCBjb3VudCA7IGkrKywgZGF0YSsrKSB7DQo+
-ICsgICAgICAgICAgICAgICBkZXZfZXJyKGRldiwgIjogMHglMDJ4LCAlMDJkLCAweCUwOGxseCwg
-MHglMDR4LCAlZCwgJWxsdSwgJWxsdSwNCj4gMHglbGx4IiwNCj4gKyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBkYXRhLT5vcCwgZGF0YS0+dGFnLCBkYXRhLT5sYmEsIGRhdGEtPnNjdCwg
-ZGF0YS0+cmV0cmllcywNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkYXRhLT5z
-dGFydF90aW1lLCBkYXRhLT5lbmRfdGltZSwgZGF0YS0NCj4gPm91dHN0YW5kaW5nX3JlcXMpOw0K
-PiArICAgICAgICAgICAgICAgaWR4ID0gKGlkeCA9PSBNQVhfQ01EX0xPR1MgLSAxKSA/IDAgOiBp
-ZHggKyAxOw0KPiArICAgICAgIH0NCk1heWJlIGp1c3Qgb3V0c2lkZSBvZiB0aGUgbG9vcDoNCmlk
-eCArPSBjb3VudDsNCmlkeCAlPSAoTUFYX0NNRF9MT0dTIC0gMSk7DQoNCg==
+On Mon, 25 Jan 2021 at 22:16, Jens Axboe <axboe@kernel.dk> wrote:
+>
+> On 1/25/21 1:25 PM, Eric Biggers wrote:
+> > On Mon, Jan 25, 2021 at 12:14:00PM -0800, Satya Tangirala wrote:
+> >> On Thu, Jan 21, 2021 at 12:23 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> >>>
+> >>> From: Eric Biggers <ebiggers@google.com>
+> >>>
+> >>> Add a resource-managed variant of blk_ksm_init() so that drivers don't
+> >>> have to worry about calling blk_ksm_destroy().
+> >>>
+> >>> Note that the implementation uses a custom devres action to call
+> >>> blk_ksm_destroy() rather than switching the two allocations to be
+> >>> directly devres-managed, e.g. with devm_kmalloc().  This is because we
+> >>> need to keep zeroing the memory containing the keyslots when it is
+> >>> freed, and also because we want to continue using kvmalloc() (and there
+> >>> is no devm_kvmalloc()).
+> >>>
+> >>> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> > [..]
+> >>> diff --git a/include/linux/keyslot-manager.h b/include/linux/keyslot-manager.h
+> >>> index 18f3f5346843f..443ad817c6c57 100644
+> >>> --- a/include/linux/keyslot-manager.h
+> >>> +++ b/include/linux/keyslot-manager.h
+> >>> @@ -85,6 +85,9 @@ struct blk_keyslot_manager {
+> >>>
+> >>>  int blk_ksm_init(struct blk_keyslot_manager *ksm, unsigned int num_slots);
+> >>>
+> >>> +int devm_blk_ksm_init(struct device *dev, struct blk_keyslot_manager *ksm,
+> >>> +                     unsigned int num_slots);
+> >>> +
+> >>>  blk_status_t blk_ksm_get_slot_for_key(struct blk_keyslot_manager *ksm,
+> >>>                                       const struct blk_crypto_key *key,
+> >>>                                       struct blk_ksm_keyslot **slot_ptr);
+> >>> --
+> >>
+> >> Looks good to me. Please feel free to add
+> >> Reviewed-by: Satya Tangirala <satyat@google.com>
+> >
+> > Thanks Satya.  Jens, any objection to this patch going in through the MMC tree?
+>
+> No objections from me, doesn't look like we have any real worries of
+> conflicts.
+
+Applied to my mmc for the next branch, by adding Jens' ack. Thanks everybody!
+
+Kind regards
+Uffe
