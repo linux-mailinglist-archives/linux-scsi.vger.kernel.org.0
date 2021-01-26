@@ -2,111 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C794303E9E
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 14:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5AE303E00
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 14:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731252AbhAZNZr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 08:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731118AbhAZJ6s (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 04:58:48 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4CDC061794
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Jan 2021 01:58:33 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id n18so8693491vsa.12
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Jan 2021 01:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V09Ue7aLBQ6MasDKq8tKkbzc8OyCG8WfSUIi+pxHZ0A=;
-        b=CHlVroXsOgdhhTPTerkwYExyowok7JnOu1dgx3Qe5C+WdAY9SuwbHHYtgflWAiyHXA
-         6nk/cPRyb5qitgEgrQ12v8btdOrwCH8AVbfR2laYZKDz9gIq8s04GFaa8x7ElPb8GbKT
-         oOqLh6fukCxIin4MRGYp8DW83XwqXltmRrbonhhJnmIVBkrjVn8FwpIfUufmCoRazpIz
-         82fdB/S7WvPikAR9P3PR8RboYxAWzp+XCg7dvH9rw7hJ2wqNHi2YgpHDfMqYnhe3ZBpS
-         9SK3HgV7HU9TxNcbi+YXXZ0B88xcLL3pB3p45beQAXEZ5qXZJKE0nrXFxMFEcaokAX0k
-         XoSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V09Ue7aLBQ6MasDKq8tKkbzc8OyCG8WfSUIi+pxHZ0A=;
-        b=qOtyIG2cspja5jQE+ceJ06LOEzMYpgv9m/kXVRTJLN97PE9O+Q3cIDsZgpiho2MYWp
-         k+4yKspkDSRpt3iqqVaxs3fje+Nd0snL+/vBBxAt557OvsGu9HrJZkBeLqkge8+0uMsv
-         eDwITIIjAWQuKEeHOhrCUIraXpGq2vSI385+mYIfoFYJuISUEuYhBF7DHrq5wB8fBacG
-         wxCu2www3aRkSZB9Iyi077rx5QSzku5Eb6PP9tGw+Pr0pGyUZJyN8MvUCd97E27vlzOw
-         6uHO1ix0BHgEvH421oaA2URecbrqSSGOQQybY84+cSwtILkLyGCLmB8F9Jo8G++AVES2
-         xDJA==
-X-Gm-Message-State: AOAM532McdfCwo4GAejGzjyM1AyZK0SegBPKVg0irV0LvrsAnyQXVm4G
-        oHWdMi8NKC67HZZcuJNyFH3LG1aNjoXxt+oS4bP+1LVDfeJxAg==
-X-Google-Smtp-Source: ABdhPJyxfS6eXOv4r25zRNMylO+JLPVa+hbsuQ550KJ78Oyz1/Jpr4fsWYgKLy/30YnR5meyw9A4c2VWMyETl9lCtpM=
-X-Received: by 2002:a67:7f41:: with SMTP id a62mr3552156vsd.55.1611655112263;
- Tue, 26 Jan 2021 01:58:32 -0800 (PST)
+        id S2391208AbhAZNDV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 08:03:21 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37820 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392465AbhAZNDA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 26 Jan 2021 08:03:00 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id CE717AD19;
+        Tue, 26 Jan 2021 13:02:14 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Martin Wilck <martin.wilck@suse.com>,
+        Hannes Reinecke <hare@suse.com>
+Subject: [PATCH] scsi: do not retry FAILFAST commands on DID_TRANSPORT_DISRUPTED
+Date:   Tue, 26 Jan 2021 14:02:12 +0100
+Message-Id: <20210126130212.47998-1-hare@suse.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20210121082155.111333-1-ebiggers@kernel.org> <20210121082155.111333-2-ebiggers@kernel.org>
- <CAA+FYZerh02JXSKghCKuG29ATdYU_=2O93moGnLgD6Jv2v2auQ@mail.gmail.com>
- <YA8pMDqHsKZA0zfR@sol.localdomain> <3b1b6a94-f283-e8a3-8638-6475d0323c30@kernel.dk>
-In-Reply-To: <3b1b6a94-f283-e8a3-8638-6475d0323c30@kernel.dk>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 26 Jan 2021 10:57:55 +0100
-Message-ID: <CAPDyKFoU1ciLfDig5XkULK-CBkCsmsbAgpyo51O8LEsTr3Q+Sg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] block/keyslot-manager: introduce devm_blk_ksm_init()
-To:     Jens Axboe <axboe@kernel.dk>, Eric Biggers <ebiggers@kernel.org>
-Cc:     Satya Tangirala <satyat@google.com>,
-        linux-block <linux-block@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 25 Jan 2021 at 22:16, Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 1/25/21 1:25 PM, Eric Biggers wrote:
-> > On Mon, Jan 25, 2021 at 12:14:00PM -0800, Satya Tangirala wrote:
-> >> On Thu, Jan 21, 2021 at 12:23 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> >>>
-> >>> From: Eric Biggers <ebiggers@google.com>
-> >>>
-> >>> Add a resource-managed variant of blk_ksm_init() so that drivers don't
-> >>> have to worry about calling blk_ksm_destroy().
-> >>>
-> >>> Note that the implementation uses a custom devres action to call
-> >>> blk_ksm_destroy() rather than switching the two allocations to be
-> >>> directly devres-managed, e.g. with devm_kmalloc().  This is because we
-> >>> need to keep zeroing the memory containing the keyslots when it is
-> >>> freed, and also because we want to continue using kvmalloc() (and there
-> >>> is no devm_kvmalloc()).
-> >>>
-> >>> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> > [..]
-> >>> diff --git a/include/linux/keyslot-manager.h b/include/linux/keyslot-manager.h
-> >>> index 18f3f5346843f..443ad817c6c57 100644
-> >>> --- a/include/linux/keyslot-manager.h
-> >>> +++ b/include/linux/keyslot-manager.h
-> >>> @@ -85,6 +85,9 @@ struct blk_keyslot_manager {
-> >>>
-> >>>  int blk_ksm_init(struct blk_keyslot_manager *ksm, unsigned int num_slots);
-> >>>
-> >>> +int devm_blk_ksm_init(struct device *dev, struct blk_keyslot_manager *ksm,
-> >>> +                     unsigned int num_slots);
-> >>> +
-> >>>  blk_status_t blk_ksm_get_slot_for_key(struct blk_keyslot_manager *ksm,
-> >>>                                       const struct blk_crypto_key *key,
-> >>>                                       struct blk_ksm_keyslot **slot_ptr);
-> >>> --
-> >>
-> >> Looks good to me. Please feel free to add
-> >> Reviewed-by: Satya Tangirala <satyat@google.com>
-> >
-> > Thanks Satya.  Jens, any objection to this patch going in through the MMC tree?
->
-> No objections from me, doesn't look like we have any real worries of
-> conflicts.
+When a command is return with DID_TRANSPORT_DISRUPTED we should
+be looking at the REQ_FAILFAST_TRANSPORT flag and do not retry
+the command if set.
+Otherwise multipath will be requeuing a command on the failed
+path and not fail it over to one of the working paths.
 
-Applied to my mmc for the next branch, by adding Jens' ack. Thanks everybody!
+Cc: Martin Wilck <martin.wilck@suse.com>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
+---
+ drivers/scsi/scsi_error.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Kind regards
-Uffe
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index a52665eaf288..005118385b70 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -1753,6 +1753,7 @@ int scsi_noretry_cmd(struct scsi_cmnd *scmd)
+ 	case DID_TIME_OUT:
+ 		goto check_type;
+ 	case DID_BUS_BUSY:
++	case DID_TRANSPORT_DISRUPTED:
+ 		return (scmd->request->cmd_flags & REQ_FAILFAST_TRANSPORT);
+ 	case DID_PARITY:
+ 		return (scmd->request->cmd_flags & REQ_FAILFAST_DEV);
+-- 
+2.29.2
+
