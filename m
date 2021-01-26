@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEBD303CB4
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C22D303CAF
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Jan 2021 13:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392027AbhAZMN5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 07:13:57 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:11880 "EHLO
+        id S2405096AbhAZMNR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 07:13:17 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:11881 "EHLO
         szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404908AbhAZLJS (ORCPT
+        with ESMTP id S2404904AbhAZLJS (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jan 2021 06:09:18 -0500
 Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DQ3pw2pd9z7bF4;
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DQ3pw2Y5sz7Zpw;
         Tue, 26 Jan 2021 19:07:20 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
@@ -21,10 +21,12 @@ From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@openeuler.org>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 0/5] hisi_sas: More misc patches
-Date:   Tue, 26 Jan 2021 19:04:23 +0800
-Message-ID: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 1/5] scsi: hisi_sas: Remove deferred probe check in hisi_sas_v2_probe()
+Date:   Tue, 26 Jan 2021 19:04:24 +0800
+Message-ID: <1611659068-131975-2-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
+References: <1611659068-131975-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.58]
@@ -33,33 +35,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is a collection of misc patches picked up during the latest dev
-cycle, targeted at 5.12 .
+The platform_get_irq() check for -EPROBE_DEFER was to ensure that all
+the steps to add the SCSI host are not done and then only to realise that
+the probe needs to be deferred.
 
-Features include:
-- Some tidy-up from after recent change to expose HW queues on v2 HW
-- Add trace FIFO DFX debugfs support
-- Flush wq for driver removal
-- Add ability to enable debugfs support as a kernel config option
+However, since there is now an earlier check for this in
+hisi_sas_interrupt_preinit(), this check is superfluous and may be removed.
 
-Thanks!
+Signed-off-by: John Garry <john.garry@huawei.com>
+---
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-John Garry (2):
-  scsi: hisi_sas: Remove deferred probe check in hisi_sas_v2_probe()
-  scsi: hisi_sas: Don't check .nr_hw_queues in hisi_sas_task_prep()
-
-Luo Jiaxing (3):
-  scsi: hisi_sas: Enable debugfs support by default
-  scsi: hisi_sas: Flush workqueue in hisi_sas_v3_remove()
-  scsi: hisi_sas: Add trace FIFO debugfs support
-
- drivers/scsi/hisi_sas/Kconfig          |   6 +
- drivers/scsi/hisi_sas/hisi_sas.h       |  15 ++
- drivers/scsi/hisi_sas/hisi_sas_main.c  |  19 +-
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  12 --
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 252 +++++++++++++++++++++++++
- 5 files changed, 286 insertions(+), 18 deletions(-)
-
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+index 502ad3e4f7cd..46f60fc2a069 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+@@ -3627,18 +3627,6 @@ static const struct hisi_sas_hw hisi_sas_v2_hw = {
+ 
+ static int hisi_sas_v2_probe(struct platform_device *pdev)
+ {
+-	/*
+-	 * Check if we should defer the probe before we probe the
+-	 * upper layer, as it's hard to defer later on.
+-	 */
+-	int ret = platform_get_irq(pdev, 0);
+-
+-	if (ret < 0) {
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "cannot obtain irq\n");
+-		return ret;
+-	}
+-
+ 	return hisi_sas_probe(pdev, &hisi_sas_v2_hw);
+ }
+ 
 -- 
 2.26.2
 
