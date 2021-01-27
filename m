@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA5B305F5C
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B87C3305F41
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbhA0PT0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jan 2021 10:19:26 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:46031 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbhA0POo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 10:14:44 -0500
+        id S235585AbhA0PO4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jan 2021 10:14:56 -0500
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:25658 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235437AbhA0POm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 10:14:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1611760483; x=1643296483;
+  t=1611760482; x=1643296482;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Pdp00ko/BXv1nquiuxIwLaZHqLcdvOgRkvfcz0tbUgY=;
-  b=Oz2ZaqBf39evtQt0en59730/oYAMFCDBL0zRDQYVAhPhPA3LxDVvNdTA
-   3OSq6XvM3Gbm74gwzuwrFm2+/Tm6PQOcb7RFRaGKRQZ8VgGqLiAqNWcXQ
-   Qragj7jekBwmNTO5DGmWgcrbxOmQC4IV9jompsYKPAjcG+vM8Ckv0BzEq
-   zXs7jG1EgHzcb+pKtuOaGngx5oJlSgmsIOIjNsFiEVrzEsvaDhMltoDFO
-   Qn2QnPb2a341FKNVg2WBwTXAAGXlt9q6owIMpulbPNNmGXYP4tnSetu8E
-   JfCXP+qPFDutEV3pvOwNMk8iVCZb1rCB+Yl9baYpiDLMGFlTXUyMnbKOa
+  bh=FjmDrGo/SvhF+h3fNWWxJ6aaSFusGpBlATpzroPSKmo=;
+  b=DRM5r0zABkBd8ClhyevDx3PIDVlIhlA2+xnMqj/yphmsn7XFB7FEqI8s
+   M9XFeOpe7pnA0Xa39TikZCbqIextJqU0tXI/GQesp6kMTtcmDA9G85eKS
+   kE2jKVWw6fBz0Vn/KgGHe8FkSDLE3RTRZCX2xT/a2jIBFiSXyf/UPqtA0
+   MsQBKTkCl1VV5MyE2SZUTOh94RybmFX+NSoix2MHV7UsQdGi3lmSJJxY0
+   356fojHpj9QzCnjZSbVz17hew/OnxNkTme17vt0c5lf9DqhgWA8o00iJG
+   z7f8+13ooVfY/Vik4C3Pvt6RcO/bUxveuquf0yvZsldWWqM+6H+JAEirj
    w==;
-IronPort-SDR: fWk0L/jqTVvGlQCP4Q+NI6KdFzpkTHsgwP7nhQUIaSpRmWtVevD4mLb6pSOJPWGqlaY4Pp1kdI
- 36+3lRA2rLDPVRkyvCM7wI29e60iS8hZaAmyIQ/qcv8Zz4uVIF7pWoLUpeH6c2ntnwM6NehKhf
- 6VyZBp1vIPmsLnVQkPxeD/YlqcFEt4+2m8hv4hWi4ldqvJp4Njr+DLkLMHskfycM5pvUhRM0UQ
- hVGFwsaxx9fenU/mhQIWd3FRVs7ROKPjB+PeRiwna9w5aBcTVh6Mzs9gv+tfZv2N6Hw8o7Ftis
- LFY=
+IronPort-SDR: 3b2P9lR0BtvkgvOt+sjuadIg4djg/mdv+yn7B8NK/r1xRvjPPO5gGYtWptdFFdi6McOaNIB8fi
+ Yfg30FlHpiRT8HnfDw5frC/aNHwhstet4LpjqkXbcddzt56YHML2EtUtoej7RW4n9k9x4oWfq4
+ 9bjDdETMp6NMUq0DYnLYvRcIJduDsCAU/tGN2HVtDOaBEpPXk46f6iV2LxLghFLcsDUraBs6Do
+ vKuoV+zCmVpJwujXXbO1YkZ5HgPX23Cx5Y/jzjJjOjpILyWy/+vyMi6flxxGl4ugXXXvYsgiwJ
+ oXE=
 X-IronPort-AV: E=Sophos;i="5.79,379,1602518400"; 
-   d="scan'208";a="162900980"
+   d="scan'208";a="159631226"
 Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 23:13:24 +0800
-IronPort-SDR: 6elZPfMKOwleYU3U8IMoN7Y499P3YfgodhKrtm2FpuMGwRc719XDFuyw08RJWinUwRwGFTbQWD
- db7DK7vdOIfV3PJPCXSm+rfrVXLIVMPnXcU0Kj3kpKFB4mSkz9nYOYqGhPmXu+l3k+/22L6hN8
- r3n7ewd9Ut1ciQaMV4NvaMOVjj6T1X9TYLmaN3xnKaykVUMT2vJtnaxrL7KhBWGQznmSBQvG99
- g4+1chtk+A7yIglzYGKEzEvk/Jn/IB5NgKGZI+80L8rpLBTgE1i94Y6tokSWHiaZY9UJj+NzzN
- cK/Hw0vFf4HOY/Gwf0aitEel
+  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 23:13:31 +0800
+IronPort-SDR: HoRmLC8W69ki6Y0cJnVu5SbJBv0q1aDgXtfejaAwYJys8YhCraYP76CJ/mfbmGz/PztZRzETtB
+ TUR8mI2a2YzG17X5qTtq9hrVCHngStcM7QGKWoKpZwBftMmSp/jIXWhzKLUwD+i5OFBm/1gLSv
+ UrGnsuqgAJliFWUSbre4tD3Q1iKJeOgz/dhJwygWSskMNmQRnQTvNzIfKvfwWOwG1fLkePT5sL
+ U3mwiOPqbttVZi1iUxn9FyPZ0hCm/Ad5c8QAH+qrJSQZresTdq6WYR/F9/l+ipSQvZ0cKUuhD6
+ laTfWgr5AdIXPoAtrAyL78R/
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 06:55:43 -0800
-IronPort-SDR: v5NbBKQE6kS+PQEC262KkZesCe0NZ2CTQetXbSsZIB9pQMmYfZYl0tL3bBhSJrPjzeY3GmA1EK
- X+fgBmQVCfqySuZmI5W1UlfjFLQzOLwYGJwZQasBCqPDn9XFwT95py8KmE9eHDq381rXdzYeco
- GhcfS5jDZW5Zj7pyvUd+Vsa8hj9VCoJThYNFH/EIspUmtP5lRleAh5B2ZNhc9GXusd2jtQulDI
- gu6RhtTb8LT6LU+51nLXXUFJTNJRqJ47mg9Y4Z1dT4ntjhPYMH5hzzrA0biMzOFzg2arSg90QN
- XYI=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 06:55:50 -0800
+IronPort-SDR: c30zxQEYMLgwpBwamwYeHZowFmVWOvSWWE9eASk7rPG3iaMTAolktzVZBN6YumzmFtTHW9jKcm
+ JW+AW9Yg6SclhiRov4LREPL11BDuCWQYJHDT+OpIPnhHNkUfyizwyzbkKYmYw7Zt9hW/SPYUzV
+ KJS+2yQRzaJOw60FyUUeHarEjNkOSD3Q00JB0aLZ4irQ/I+d0DkeMRrjHa9UXKYF4jyb5JI8yI
+ boI7x/6CgvFbghDdmIlbcyT0Z076wWEUyRRMQSFdVxSBCmrwDaFRPQ1tlhSsk1Z/e4nqJZm6xF
+ eYg=
 WDCIronportException: Internal
 Received: from bxygm33.sdcorp.global.sandisk.com ([10.0.231.247])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Jan 2021 07:13:21 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 27 Jan 2021 07:13:28 -0800
 From:   Avri Altman <avri.altman@wdc.com>
 To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -60,9 +60,9 @@ Cc:     gregkh@linuxfoundation.org, Bart Van Assche <bvanassche@acm.org>,
         Avi Shchislowski <avi.shchislowski@wdc.com>,
         Bean Huo <beanhuo@micron.com>, cang@codeaurora.org,
         stanley.chu@mediatek.com, Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH 5/8] scsi: ufshpb: Region inactivation in host mode
-Date:   Wed, 27 Jan 2021 17:12:14 +0200
-Message-Id: <20210127151217.24760-6-avri.altman@wdc.com>
+Subject: [PATCH 6/8] scsi: ufshpb: Add hpb dev reset response
+Date:   Wed, 27 Jan 2021 17:12:15 +0200
+Message-Id: <20210127151217.24760-7-avri.altman@wdc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210127151217.24760-1-avri.altman@wdc.com>
 References: <20210127151217.24760-1-avri.altman@wdc.com>
@@ -72,252 +72,141 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I host mode, the host is expected to send HPB-WRITE-BUFFER with
-buffer-id = 0x1 when it inactivates a region.
+The spec does not define what is the host's recommended response when
+the device send hpb dev reset response (oper 0x2).
 
-Use the map-requests pool as there is no point in assigning a
-designated cache for umap-requests.
+We will update all active hpb regions: mark them and do that on the next
+read.
 
 Signed-off-by: Avri Altman <avri.altman@wdc.com>
 ---
- drivers/scsi/ufs/ufshpb.c | 120 +++++++++++++++++++++++++++++++-------
- drivers/scsi/ufs/ufshpb.h |   4 ++
- 2 files changed, 104 insertions(+), 20 deletions(-)
+ drivers/scsi/ufs/ufshpb.c | 55 ++++++++++++++++++++++++++++++++++++---
+ drivers/scsi/ufs/ufshpb.h |  1 +
+ 2 files changed, 53 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index a16c0f2d5fac..c09c8dce0745 100644
+index c09c8dce0745..cb99b57b4319 100644
 --- a/drivers/scsi/ufs/ufshpb.c
 +++ b/drivers/scsi/ufs/ufshpb.c
-@@ -386,49 +386,66 @@ void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 	hpb->stats.hit_cnt++;
+@@ -17,6 +17,7 @@
+ #include "../sd.h"
+ 
+ #define WORK_PENDING 0
++#define RESET_PENDING 1
+ #define ACTIVATION_THRSHLD 4 /* 4 IOs */
+ #define EVICTION_THRSHLD (ACTIVATION_THRSHLD << 6) /* 256 IOs */
+ 
+@@ -344,7 +345,8 @@ void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 		 * in host control mode, reads are the main source for
+ 		 * activation trials.
+ 		 */
+-		if (reads == ACTIVATION_THRSHLD) {
++		if (reads == ACTIVATION_THRSHLD ||
++		    test_and_clear_bit(RGN_FLAG_UPDATE, &rgn->rgn_flags)) {
+ 			spin_lock_irqsave(&hpb->rsp_list_lock, flags);
+ 			ufshpb_update_active_info(hpb, rgn_idx, srgn_idx);
+ 			hpb->stats.rb_active_cnt++;
+@@ -1061,6 +1063,24 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 	case HPB_RSP_DEV_RESET:
+ 		dev_warn(&hpb->sdev_ufs_lu->sdev_dev,
+ 			 "UFS device lost HPB information during PM.\n");
++
++		if (ufshpb_mode == HPB_HOST_CONTROL) {
++			struct ufshpb_lu *h;
++			struct scsi_device *sdev;
++
++			shost_for_each_device(sdev, hba->host) {
++				h = sdev->hostdata;
++				if (!h)
++					continue;
++
++				if (test_and_set_bit(RESET_PENDING,
++						     &h->work_data_bits))
++					continue;
++
++				schedule_work(&h->ufshpb_lun_reset_work);
++			}
++		}
++
+ 		break;
+ 	default:
+ 		dev_notice(&hpb->sdev_ufs_lu->sdev_dev,
+@@ -1193,6 +1213,28 @@ static void ufshpb_run_inactive_region_list(struct ufshpb_lu *hpb)
+ 	spin_unlock_irqrestore(&hpb->rsp_list_lock, flags);
  }
  
-+static struct ufshpb_req *ufshpb_get_req(struct ufshpb_lu *hpb,
-+					 int rgn_idx, enum req_opf dir)
++static void ufshpb_reset_work_handler(struct work_struct *work)
 +{
-+	struct ufshpb_req *rq;
-+	struct request *req;
++	struct ufshpb_lu *hpb;
++	struct victim_select_info *lru_info;
++	struct ufshpb_region *rgn, *next_rgn;
++	unsigned long flags;
 +
-+	rq = kmem_cache_alloc(hpb->map_req_cache, GFP_KERNEL);
-+	if (!rq)
-+		return NULL;
++	hpb = container_of(work, struct ufshpb_lu, ufshpb_lun_reset_work);
 +
-+	req = blk_get_request(hpb->sdev_ufs_lu->request_queue,
-+			      dir, 0);
-+	if (IS_ERR(req))
-+		goto free_rq;
++	lru_info = &hpb->lru_info;
 +
-+	rq->hpb = hpb;
-+	rq->req = req;
-+	rq->rgn_idx = rgn_idx;
++	spin_lock_irqsave(&hpb->rgn_state_lock, flags);
 +
-+	return rq;
++	list_for_each_entry_safe(rgn, next_rgn, &lru_info->lh_lru_rgn,
++				 list_lru_rgn)
++		set_bit(RGN_FLAG_UPDATE, &rgn->rgn_flags);
 +
-+free_rq:
-+	kmem_cache_free(hpb->map_req_cache, rq);
-+	return NULL;
++	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
++
++	clear_bit(RESET_PENDING, &hpb->work_data_bits);
 +}
 +
-+static void ufshpb_put_req(struct ufshpb_lu *hpb, struct ufshpb_req *rq)
-+{
-+	blk_put_request(rq->req);
-+	kmem_cache_free(hpb->map_req_cache, rq);
-+}
-+
- static struct ufshpb_req *ufshpb_get_map_req(struct ufshpb_lu *hpb,
- 					     struct ufshpb_subregion *srgn)
+ static void ufshpb_normalization_work_handler(struct work_struct *work)
  {
- 	struct ufshpb_req *map_req;
--	struct request *req;
- 	struct bio *bio;
- 
--	map_req = kmem_cache_alloc(hpb->map_req_cache, GFP_KERNEL);
-+	map_req = ufshpb_get_req(hpb, srgn->rgn_idx, REQ_OP_SCSI_IN);
- 	if (!map_req)
- 		return NULL;
- 
--	req = blk_get_request(hpb->sdev_ufs_lu->request_queue,
--			      REQ_OP_SCSI_IN, 0);
--	if (IS_ERR(req))
--		goto free_map_req;
--
- 	bio = bio_alloc(GFP_KERNEL, hpb->pages_per_srgn);
- 	if (!bio) {
--		blk_put_request(req);
--		goto free_map_req;
-+		ufshpb_put_req(hpb, map_req);
-+		return NULL;
+ 	struct ufshpb_lu *hpb;
+@@ -1379,6 +1421,8 @@ static int ufshpb_alloc_region_tbl(struct ufs_hba *hba, struct ufshpb_lu *hpb)
+ 		} else {
+ 			rgn->rgn_state = HPB_RGN_INACTIVE;
+ 		}
++
++		rgn->rgn_flags = 0;
  	}
  
--	map_req->hpb = hpb;
--	map_req->req = req;
- 	map_req->bio = bio;
--
--	map_req->rgn_idx = srgn->rgn_idx;
- 	map_req->srgn_idx = srgn->srgn_idx;
- 	map_req->mctx = srgn->mctx;
+ 	return 0;
+@@ -1487,9 +1531,12 @@ static int ufshpb_lu_hpb_init(struct ufs_hba *hba, struct ufshpb_lu *hpb)
+ 	INIT_LIST_HEAD(&hpb->list_hpb_lu);
  
- 	return map_req;
--
--free_map_req:
--	kmem_cache_free(hpb->map_req_cache, map_req);
--	return NULL;
- }
+ 	INIT_WORK(&hpb->map_work, ufshpb_map_work_handler);
+-	if (ufshpb_mode == HPB_HOST_CONTROL)
++	if (ufshpb_mode == HPB_HOST_CONTROL) {
+ 		INIT_WORK(&hpb->ufshpb_normalization_work,
+ 			  ufshpb_normalization_work_handler);
++		INIT_WORK(&hpb->ufshpb_lun_reset_work,
++			  ufshpb_reset_work_handler);
++	}
  
- static void ufshpb_put_map_req(struct ufshpb_lu *hpb,
--				      struct ufshpb_req *map_req)
-+			       struct ufshpb_req *map_req)
+ 	hpb->map_req_cache = kmem_cache_create("ufshpb_req_cache",
+ 			  sizeof(struct ufshpb_req), 0, 0, NULL);
+@@ -1576,8 +1623,10 @@ static void ufshpb_discard_rsp_lists(struct ufshpb_lu *hpb)
+ 
+ static void ufshpb_cancel_jobs(struct ufshpb_lu *hpb)
  {
- 	bio_put(map_req->bio);
--	blk_put_request(map_req->req);
--	kmem_cache_free(hpb->map_req_cache, map_req);
-+	ufshpb_put_req(hpb, map_req);
+-	if (ufshpb_mode == HPB_HOST_CONTROL)
++	if (ufshpb_mode == HPB_HOST_CONTROL) {
++		cancel_work_sync(&hpb->ufshpb_lun_reset_work);
+ 		cancel_work_sync(&hpb->ufshpb_normalization_work);
++	}
+ 	cancel_work_sync(&hpb->map_work);
  }
  
- static int ufshpb_clear_dirty_bitmap(struct ufshpb_lu *hpb,
-@@ -483,6 +500,13 @@ static void ufshpb_activate_subregion(struct ufshpb_lu *hpb,
- 	srgn->srgn_state = HPB_SRGN_VALID;
- }
- 
-+static void ufshpb_umap_req_compl_fn(struct request *req, blk_status_t error)
-+{
-+	struct ufshpb_req *umap_req = (struct ufshpb_req *)req->end_io_data;
-+
-+	ufshpb_put_req(umap_req->hpb, umap_req);
-+}
-+
- static void ufshpb_map_req_compl_fn(struct request *req, blk_status_t error)
- {
- 	struct ufshpb_req *map_req = (struct ufshpb_req *) req->end_io_data;
-@@ -501,6 +525,14 @@ static void ufshpb_map_req_compl_fn(struct request *req, blk_status_t error)
- 	ufshpb_put_map_req(map_req->hpb, map_req);
- }
- 
-+static void ufshpb_set_write_buf_cmd(unsigned char *cdb, int rgn_idx)
-+{
-+	cdb[0] = UFSHPB_WRITE_BUFFER;
-+	cdb[1] = UFSHPB_WRITE_BUFFER_ID;
-+	put_unaligned_be16(rgn_idx, &cdb[2]);
-+	cdb[9] = 0x00;
-+}
-+
- static void ufshpb_set_read_buf_cmd(unsigned char *cdb, int rgn_idx,
- 					   int srgn_idx, int srgn_mem_size)
- {
-@@ -514,6 +546,27 @@ static void ufshpb_set_read_buf_cmd(unsigned char *cdb, int rgn_idx,
- 	cdb[9] = 0x00;
- }
- 
-+static int ufshpb_execute_umap_req(struct ufshpb_lu *hpb,
-+				   struct ufshpb_req *umap_req)
-+{
-+	struct request_queue *q;
-+	struct request *req;
-+	struct scsi_request *rq;
-+
-+	q = hpb->sdev_ufs_lu->request_queue;
-+	req = umap_req->req;
-+	req->timeout = 0;
-+	req->end_io_data = (void *)umap_req;
-+	rq = scsi_req(req);
-+	ufshpb_set_write_buf_cmd(rq->cmd, umap_req->rgn_idx);
-+	rq->cmd_len = HPB_WRITE_BUFFER_CMD_LENGTH;
-+
-+	blk_execute_rq_nowait(q, NULL, req, 1, ufshpb_umap_req_compl_fn);
-+
-+	hpb->stats.umap_req_cnt++;
-+	return 0;
-+}
-+
- static int ufshpb_execute_map_req(struct ufshpb_lu *hpb,
- 				  struct ufshpb_req *map_req)
- {
-@@ -673,6 +726,25 @@ static void ufshpb_purge_active_subregion(struct ufshpb_lu *hpb,
- 	}
- }
- 
-+static int ufshpb_issue_umap_req(struct ufshpb_lu *hpb,
-+				 struct ufshpb_region *rgn)
-+{
-+	struct ufshpb_req *umap_req;
-+
-+	umap_req = ufshpb_get_req(hpb, rgn->rgn_idx, REQ_OP_SCSI_OUT);
-+	if (!umap_req)
-+		return -ENOMEM;
-+
-+	if (ufshpb_execute_umap_req(hpb, umap_req))
-+		goto free_umap_req;
-+
-+	return 0;
-+
-+free_umap_req:
-+	ufshpb_put_req(hpb, umap_req);
-+	return -EAGAIN;
-+}
-+
- static void __ufshpb_evict_region(struct ufshpb_lu *hpb,
- 				  struct ufshpb_region *rgn)
- {
-@@ -680,6 +752,11 @@ static void __ufshpb_evict_region(struct ufshpb_lu *hpb,
- 	struct ufshpb_subregion *srgn;
- 	int srgn_idx;
- 
-+
-+	if (ufshpb_mode == HPB_HOST_CONTROL &&
-+	    ufshpb_issue_umap_req(hpb, rgn))
-+		return;
-+
- 	lru_info = &hpb->lru_info;
- 
- 	dev_dbg(&hpb->sdev_ufs_lu->sdev_dev, "evict region %d\n", rgn->rgn_idx);
-@@ -1368,6 +1445,7 @@ ufshpb_sysfs_attr_show_func(rb_noti_cnt);
- ufshpb_sysfs_attr_show_func(rb_active_cnt);
- ufshpb_sysfs_attr_show_func(rb_inactive_cnt);
- ufshpb_sysfs_attr_show_func(map_req_cnt);
-+ufshpb_sysfs_attr_show_func(umap_req_cnt);
- 
- static struct attribute *hpb_dev_attrs[] = {
- 	&dev_attr_hit_cnt.attr,
-@@ -1376,6 +1454,7 @@ static struct attribute *hpb_dev_attrs[] = {
- 	&dev_attr_rb_active_cnt.attr,
- 	&dev_attr_rb_inactive_cnt.attr,
- 	&dev_attr_map_req_cnt.attr,
-+	&dev_attr_umap_req_cnt.attr,
- 	NULL,
- };
- 
-@@ -1392,6 +1471,7 @@ static void ufshpb_stat_init(struct ufshpb_lu *hpb)
- 	hpb->stats.rb_active_cnt = 0;
- 	hpb->stats.rb_inactive_cnt = 0;
- 	hpb->stats.map_req_cnt = 0;
-+	hpb->stats.umap_req_cnt = 0;
- }
- 
- static int ufshpb_lu_hpb_init(struct ufs_hba *hba, struct ufshpb_lu *hpb)
 diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-index b0e78728af38..47a8877f9cdb 100644
+index 47a8877f9cdb..4bf77169af00 100644
 --- a/drivers/scsi/ufs/ufshpb.h
 +++ b/drivers/scsi/ufs/ufshpb.h
-@@ -35,8 +35,11 @@
- /* hpb vender defined opcode */
- #define UFSHPB_READ				0xF8
- #define UFSHPB_READ_BUFFER			0xF9
-+#define UFSHPB_WRITE_BUFFER			0xFA
- #define UFSHPB_READ_BUFFER_ID			0x01
-+#define UFSHPB_WRITE_BUFFER_ID			0x01
- #define HPB_READ_BUFFER_CMD_LENGTH		10
-+#define HPB_WRITE_BUFFER_CMD_LENGTH		10
- #define LU_ENABLED_HPB_FUNC			0x02
+@@ -183,6 +183,7 @@ struct ufshpb_lu {
+ 	/* for selecting victim */
+ 	struct victim_select_info lru_info;
+ 	struct work_struct ufshpb_normalization_work;
++	struct work_struct ufshpb_lun_reset_work;
+ 	unsigned long work_data_bits;
  
- #define HPB_RESET_REQ_RETRIES			10
-@@ -158,6 +161,7 @@ struct ufshpb_stats {
- 	u64 rb_active_cnt;
- 	u64 rb_inactive_cnt;
- 	u64 map_req_cnt;
-+	u64 umap_req_cnt;
- };
- 
- struct ufshpb_lu {
+ 	/* pinned region information */
 -- 
 2.25.1
 
