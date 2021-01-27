@@ -2,157 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04721305408
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 08:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C53130545E
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 08:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbhA0HJD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jan 2021 02:09:03 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:14103 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbhA0HFY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 02:05:24 -0500
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210127070441epoutp04d3537f0139c4179d2a9a9bf01f6fa214~eBOEASbx50474704747epoutp049
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Jan 2021 07:04:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210127070441epoutp04d3537f0139c4179d2a9a9bf01f6fa214~eBOEASbx50474704747epoutp049
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1611731081;
-        bh=/9GXwtk+Q8GHQwdg9UnSZMO0QoLlwz57chrmsVfWQNU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AOAs4G62ZSFlIC3EHo86of9Tt1vckdYuquQEzQ375TR/7snjdPaVdhCtAdeqJofoY
-         gQ5MJD9MV0UbAdtRbM45uNP1DbfIkviKy9JivgII6lDj845yOY/XRJ8H1B3qiaYfV8
-         l3adg7Evd5BW0JvZuc38fp/Vyv2y2zpPya1meD7s=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20210127070440epcas1p2ed4265e43fe14f38a48eaa4b77c82bbf~eBODKy6pX2500625006epcas1p21;
-        Wed, 27 Jan 2021 07:04:40 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.164]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4DQZNR0pFJz4x9Q3; Wed, 27 Jan
-        2021 07:04:39 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A7.F4.09582.68011106; Wed, 27 Jan 2021 16:04:38 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20210127070438epcas1p417a8c9288df420b0af1ed9d185c87a22~eBOBhwOAd2976129761epcas1p4-;
-        Wed, 27 Jan 2021 07:04:38 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210127070438epsmtrp11b07975bee6c1e8030ab2cfd88a99d91~eBOBg4km90481904819epsmtrp1k;
-        Wed, 27 Jan 2021 07:04:38 +0000 (GMT)
-X-AuditID: b6c32a37-899ff7000000256e-d2-60111086bd67
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AD.D9.13470.68011106; Wed, 27 Jan 2021 16:04:38 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.253.99.105]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210127070438epsmtip2934a782075884d33a8cfa3cb852a3267~eBOBP7WJ52627226272epsmtip2C;
-        Wed, 27 Jan 2021 07:04:38 +0000 (GMT)
-From:   Changheun Lee <nanich.lee@samsung.com>
-To:     martin.petersen@oracle.com
-Cc:     Damien.LeMoal@wdc.com, arnd@arndb.de, hch@lst.de,
-        jejb@linux.ibm.com, jisoo2146.oh@samsung.com,
-        junho89.kim@samsung.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, michael.christie@oracle.com,
-        mj0123.lee@samsung.com, nanich.lee@samsung.com, oneukum@suse.com,
-        seunghwan.hyun@samsung.com, sookwan7.kim@samsung.com,
-        woosung2.lee@samsung.com, yt0928.kim@samsung.com
-Subject: Re: [PATCH 1/1] scsi: sd: use max_xfer_blocks for set rw_max if
- max_xfer_blocks is available
-Date:   Wed, 27 Jan 2021 15:49:08 +0900
-Message-Id: <20210127064908.13571-1-nanich.lee@samsung.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <yq1tur3vzkz.fsf@ca-mkp.ca.oracle.com>
+        id S233514AbhA0HTt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jan 2021 02:19:49 -0500
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:33867 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232950AbhA0HK3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 02:10:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1611731428; x=1643267428;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=uCa2GMUpKz+2S5SNgBMzR6fSnZ94mL+mmLlK+vjuzoU=;
+  b=has3bIYH/2TZdw18nHGBKcTGIFXJKIFeFOBWfrT/qd3NlLksdVTGWgW5
+   y7mvAcc6KPrCGeFdIoca4rtshQv4W5gY3TLB052DqWNlzWxsv1WQ3iU1s
+   VUwqzEGLxMBronzgpTWvZEuIA9cnLObdGTOq5rJ4dahPAf7r6cJkvTIte
+   a8oWNGed1Bd5Z/ZlL4ASpOI3B3Wa5ULhoLe6R2pe7CrZsCrAznwPMqqmI
+   IB/LOPK8nBAWAhCUTwVl+xn/zOTujq4Kh+WNiS9teC4P+b82TrqR9n9it
+   USBr7UgeadPxqPMAzGmzX+8ArWxklzHXQOob2LP9L/L+Xvs+zoXu5i7j5
+   A==;
+IronPort-SDR: /1a6EppGGM7pxwM3sWej5+Q8xiXtwywOyy12wrFJ4ssaBJVw2SO8jjLyNxeSvxrIUxzF9VChV2
+ S73vWuEt9LjdPdtFIzAOs2gH3GdtbfwXAXZwe0ad2VNV+QKdXVyUN6R6+05U2cuQSp0TEiSIcY
+ SD3PBHUG8c1nTHyG1/KbMiT9TgKJZwdCwA6aTJv8UvDysQ2qv+Z+86L/kAeyeTTXfXRyzQ+Ts9
+ l7jBcux8Q0BdyJTa0Kle/2M0crK/Hc1jQx3MAGwOK72YEa+4AA/4xjvzsTy1/GnekHM/v1kLWG
+ AxY=
+X-IronPort-AV: E=Sophos;i="5.79,378,1602518400"; 
+   d="scan'208";a="158424717"
+Received: from mail-dm6nam10lp2106.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.106])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 15:09:18 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LYBLEYfEte6uTRqsmAlzzbZ2KE8M1dKHwSRO3DHNcmEjFcMTUhI9aQC3H5XKRV5pj01d7cacDt9NxKElb2zuiwtJeBBC56CQg88yJ4mcOwr0ahDF1ZDzqObep3yrH17Burwaq6K12IL+273KxvbtyPhArmFOuK03/qfPfaqbJXV8NlG06VOtpBmPyQdLOVO0nt9tQV9n5Ki1Kmkf12/36fyMISxr2IrrI9YEN8nEL3C06BZuC9+cLj0KMghM1qfeSie/gVVHWGykSUPwi7usYgwVwqp8t36GZ+T4LGBbq2O2QcSQAuLvMNoH3opDaPAe324pzQYsKN+xAPNs7fZ2dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uCa2GMUpKz+2S5SNgBMzR6fSnZ94mL+mmLlK+vjuzoU=;
+ b=Po3gyslE8io4ilXT2/aGjf4qi/T7cLVcfZBJYp/NlvtRlW8MHjX8crXFMb4Kj3qKF2CL1HjRtrpS13X47VaEJoEDN22yIIkGeoRLPhJYg/G79gZLDzpGzFm5j9fJDh8WyX0UGBccRly1OcRfb4g2OvLRWkSgHWZVuwMlT6uyfXXiwRLwPy2CF5FIvlj1J8sBbxoLvSTsvwKeJ1oSLMFgFwFDH5JMU39tn52JdXX50gPWQ4TkDvs+XCCFgsNdvk0Q94qo7kX7IsAbp9rbLqXNp243nTR0X3adHZdfQ39oVz/UMRrfr/pY+/DiSKm+d9JLTSRXZlXlBWtdkrUsfjE6Cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uCa2GMUpKz+2S5SNgBMzR6fSnZ94mL+mmLlK+vjuzoU=;
+ b=gqcIijBq1cHZD/C8UJWBnYK8es8kzwkJeMihrCM5y6Gv6OzbIT07XU/comDrNA1Tp6z8FZ3NpjKpjLrX8CHZevZWpbWQB9oogDleI4KxdXBb4LDGWzCt4LzC0BjKiWAc4y6GJkzR8yU2danAdvXUuZwP+sOKMmI//cPdITsdGuo=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ DM5PR04MB0410.namprd04.prod.outlook.com (2603:10b6:3:a9::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3784.15; Wed, 27 Jan 2021 07:09:17 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::a564:c676:b866:34f6]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::a564:c676:b866:34f6%9]) with mapi id 15.20.3784.019; Wed, 27 Jan 2021
+ 07:09:17 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Asutosh Das <asutoshd@codeaurora.org>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+CC:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "Bao D . Nguyen" <nguyenb@codeaurora.org>,
+        FUJITA Tomonori <fujita.tomonori@lab.ntt.co.jp>,
+        Jens Axboe <axboe@kernel.dk>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH v1 1/2] block: bsg: resume scsi device before
+ accessing
+Thread-Topic: [RFC PATCH v1 1/2] block: bsg: resume scsi device before
+ accessing
+Thread-Index: AQHW9GS91lSjV2CWj0GEr0fs2ZDDFKo7DS1g
+Date:   Wed, 27 Jan 2021 07:09:16 +0000
+Message-ID: <DM6PR04MB6575D64869B24B4275D63503FCBB9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <cover.1611719814.git.asutoshd@codeaurora.org>
+ <c04a11a590628c2497cef113b0dfea781de90416.1611719814.git.asutoshd@codeaurora.org>
+In-Reply-To: <c04a11a590628c2497cef113b0dfea781de90416.1611719814.git.asutoshd@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: codeaurora.org; dkim=none (message not signed)
+ header.d=none;codeaurora.org; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 0ade7e32-c65d-467f-e571-08d8c29275cb
+x-ms-traffictypediagnostic: DM5PR04MB0410:
+x-microsoft-antispam-prvs: <DM5PR04MB0410BAF648D04705D1ACCAF9FCBB9@DM5PR04MB0410.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:199;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tF/nc2nIaIeKN/uyPQY0uP5MxsWNG1c/PQ4VBhcbsyuxiQiIZeEdi13G7t46LHpLB0PqduPF/teKWSCabizJeX2mSbElA7Mscp6eLmWjlbwSpXWNb696jSd9XSqo9aQNwWFc0DhHDOgt3f/Ir2J7HneFVi5CxM8CED6sPl3tR9w0ziXCdXv8h9jHp9/nZsFj6NZqvFFkXITjZzdstifufVslXKWqRN0YW/W0NnKlpnDcnZwEe26kAEtaP9MtHJC3VxTjLnqH/Kjsh8fwQTOfwDoR4bMmpgmr6oL7Y+awPdg/UG31LMKNvrqYyfCxgfhYFdgtKa1U4uk3r6sRNl/+7/L8dbiII2UqwaLjWUcpmOaflITELCP4swlgt8aRdwswH6Le3z6LUX98N4KxfDHQAg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(6506007)(316002)(86362001)(8936002)(66946007)(64756008)(2906002)(478600001)(186003)(26005)(4326008)(76116006)(66446008)(66476007)(66556008)(7416002)(8676002)(83380400001)(52536014)(9686003)(5660300002)(55016002)(71200400001)(54906003)(7696005)(558084003)(110136005)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?WqWjZnJiBN9Iht47imiHr0zqAbq3VTZqfXGYFPJCWvIgQu64VVgYq3t4f2Nw?=
+ =?us-ascii?Q?LCogH7T2rtUBvMXYUdQV/UjvgtjYQCICxmiD+ZGyI/VaFW4hT7fqAqpGaR0v?=
+ =?us-ascii?Q?Q4qZ/FuH60BcUWSLfUlhkOUu4cbqsNtFzzi2XI4Ygo9mgBpjg60ZMknUKaq2?=
+ =?us-ascii?Q?XiCq+oJ3N/Ks433RY+0FFAAY5nStJkbxEOeYMTZm9p+itNEdsHXjaEf3WmL9?=
+ =?us-ascii?Q?/7AFNMvuCLVTGrmJaPUd4zg7J4D8jRJuZvctrqxJjT+LcPuKWg2ARCu65nlS?=
+ =?us-ascii?Q?cJ7+1VmJRwCwL16bMWJtgr3nSQKJajo8oz87BD5CrZJnowyw81HDNAQrW2v1?=
+ =?us-ascii?Q?hvh+gtujMIUbR/LKw2IWB9E/zdcmRdkOQeNpcEOt73Zrk/VuQ89d+v4FqTO3?=
+ =?us-ascii?Q?bx43VqDYhmrimmmzCRtASxGmWtCtHn8wUDFc4EwgQO0cTT+Ds3xa1Zyj4EFr?=
+ =?us-ascii?Q?vEClvF24UxEAysFlkyuGZuDnacuB275m4iAruW4V/M0b4K/jCLeO+vjNz19+?=
+ =?us-ascii?Q?EgzzgQJy5WvOzPlzUq8SeHCAseHuj9HROv+pUjrFa07CMB6WDJqDc+gUYR/+?=
+ =?us-ascii?Q?4HTzJKWCXlzCQYBQjhPUZUMFlm0odJz9daY2uQZvjSGr+6ilhAYqAWvC5xXP?=
+ =?us-ascii?Q?2re+uTV7Ku/4IP0w+QoCLUM6nlHReyHgi9Q2wOa/Ey0ppuLWn6RE7ikqYjad?=
+ =?us-ascii?Q?FHSHkzVCVaNawir5PmlXBle6CVXm5D7ZUPwy0WCcYypweQcERNlG2UnRdOnF?=
+ =?us-ascii?Q?TIDbt2ehZWD2lt+N2Z5Ur3hETtAAIcEslgksZPrCwLNtiS8oBBaCfCwBoQci?=
+ =?us-ascii?Q?APsoOke6NTvikw+Q+k4QtywFfTqJc4AjhWENzsq7wxHbZwGOTYMG8iECXjcC?=
+ =?us-ascii?Q?0rJwdf6vZ+NAkNoaq7nHuepU8rZ+uyErQyouWBa5Sw9mnQDnasOJZ6ytS9AG?=
+ =?us-ascii?Q?cxfV3+3NUi2L8HcfC6SgVS+iEEPfufIiMpZDPdTR9/wGDwDsOKtbOt62SXtO?=
+ =?us-ascii?Q?V0bD4cwTHiCfgr/BH+uqyn9ZxTFMUZWAoBqpF0Brz19CQuqFlKDPZH8Y1ykf?=
+ =?us-ascii?Q?DU6Ti0xr?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmrm67gGCCwWkji7+TjrFbtLZ/Y7JY
-        ufook8WiG9uYLHqeNLFafH1YbHF51xw2i+7rO9gslh//xwRUe4PVYvrmOcwW1+6fYbfoeryS
-        zeLcyU+sFvMeO1ic2jGZ2WL93p9sDoIev39NYvSYsOgAo8fumw1sHh+f3mLx6NuyitFj/Zar
-        LB6fN8l5tB/oZgrgiMqxyUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVV
-        cvEJ0HXLzAF6QkmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYGhQoFecmFtcmpeu
-        l5yfa2VoYGBkClSZkJNx++xbloJTfBXvnu1kbGC8wN3FyMkhIWAicWfdSvYuRi4OIYEdjBLT
-        e98yQzifGCVWnl4O5XxjlOi8vYQNpuX4vqOMEIm9jBJzmmeyQDifGSX2ztjHCFLFJqAj0ff2
-        FliHiICcxKTX35hAipgF2pglWtpfAzkcHMIC6RLffoPVswioSnxa/pAJxOYVsJb41f0Gapu8
-        xNNekDM4OTgFjCWObH0FVSMocXLmExYQmxmopnnrbLBTJQROcEhcvDWbGaLZReLygqWsELaw
-        xKvjW9ghbCmJl/1t7BAN3YwSzW3zGSGcCYwSS54vY4KoMpb49PkzI8ilzAKaEut36UOEFSV2
-        /p7LCLGZT+Ld1x5WkBIJAV6JjjYhiBIViTMt95lhdj1fuxNqoofEq+2XwG4QEmhjlLi22W8C
-        o8IsJP/MQvLPLITFCxiZVzGKpRYU56anFhsWGCPH8SZGcLrWMt/BOO3tB71DjEwcjIcYJTiY
-        lUR43ysLJAjxpiRWVqUW5ccXleakFh9iNAWG9kRmKdHkfGDGyCuJNzQ1MjY2tjAxMzczNVYS
-        500yeBAvJJCeWJKanZpakFoE08fEwSnVwPTYQGSTv1L0zZMfyjsqjP6ecTWeIv+x4qzWlSC9
-        omyH6R9vpy+2fy3DKrnl7ux28V8epkkdrd8kpl/Z5zs/orruqHEFW0Ts9Ru7r16Xd570OTdl
-        XaFqjr/Gvfx5z9gVk9KrN1gHTDyqIu94bNM36fU/F55Y46rQyv5/yVG/r64fDFw/eEo45WWF
-        BypsdK0s13qs7Ri0YtLFZf0+kixvnjoHhjRfk+M4uPrG/4MxytWLps5Jzo2tOvPml2X2uoPT
-        l0w4Fcm7fXXK9l/RGorrLthkr7q443Df97cxrFOaQte8OpWg9ShwhqbJ3ti1R1ewhmt3sJY0
-        ak3tubvjmpcVl2LgiscbFD94fTspNvXB5T4lluKMREMt5qLiRABXtSngYAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXrdNQDDB4NU2fou/k46xW7S2f2Oy
-        WLn6KJPFohvbmCx6njSxWnx9WGxxedccNovu6zvYLJYf/8cEVHuD1WL65jnMFtfun2G36Hq8
-        ks3i3MlPrBbzHjtYnNoxmdli/d6fbA6CHr9/TWL0mLDoAKPH7psNbB4fn95i8ejbsorRY/2W
-        qywenzfJebQf6GYK4IjisklJzcksSy3St0vgyrh99i1LwSm+infPdjI2MF7g7mLk5JAQMJE4
-        vu8oYxcjF4eQwG5GianLNrJCJKQkjp94C2RzANnCEocPF0PUfGSUuPP5HjtIDZuAjkTf21ts
-        ILaIgJzEpNffmECKmAVmMUs8+3cOrFlYIFVi7yw7kBoWAVWJT8sfMoHYvALWEr+637BB7JKX
-        eNq7nBnE5hQwljiy9RVYjZCAkcSNrsNsEPWCEidnPmEBsZmB6pu3zmaewCgwC0lqFpLUAkam
-        VYySqQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsYwTGlpbmDcfuqD3qHGJk4GA8xSnAwK4nw
-        vlcWSBDiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qBaeoF
-        lsVakhXrFhy/2T1Ba81uz37HhTMnTdn+MSONdw1D06pzC9xXVHq7fmv8NXuJoe+vmq+susv0
-        XLa0sj1Srv30c853/Qzj9K6lpa0OnRON+nRt255Ef+tcM1Odc7veu7hX/UrbH+s1OT04kX5F
-        /cjm9IVlGwMCS/3757jeP7hzTY1j9RH95SwTplYHXHYynJ7jGbn6rJ2ZhqY304y/OrEXS0P+
-        T/YOnykkxTH7gdK+gJm/Zj35vv/VC41sNaOiiGC7O+7xrYWcz6s3LpzAIGzPmzE797iNX/M3
-        D+vtJ5Z97Z3Vtynz4uSLpyt2f3jEPOubQGXrI5NJKSt2c7T07ZN9/fM18+FLArY27tqK65RY
-        ijMSDbWYi4oTAQvoXPIYAwAA
-X-CMS-MailID: 20210127070438epcas1p417a8c9288df420b0af1ed9d185c87a22
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210127070438epcas1p417a8c9288df420b0af1ed9d185c87a22
-References: <yq1tur3vzkz.fsf@ca-mkp.ca.oracle.com>
-        <CGME20210127070438epcas1p417a8c9288df420b0af1ed9d185c87a22@epcas1p4.samsung.com>
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ade7e32-c65d-467f-e571-08d8c29275cb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2021 07:09:16.9384
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D939hl67ltLeqPTRphTG+0bOsKG8AeCQEhTnk+IHXesF1MLqPZ24hOG9DwNOxwZU3rHYXwelXaLObvxlachRcQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0410
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> Hello Changheun!
-> 
-> > I want to discuss using max_xfer_blocks instead of opt_xfer_blocks as
-> > a optional.  For example, device reports opt_xfer_blocks is 512KB and
-> > 1MB as a max_xfer_blocks too. Currently rw_max is set with 512KB only.
-> 
-> Because that's what the device asks for. If a device explicitly requests
-> us to use 512 KB I/Os we should not be sending it 1 MB requests.
-> 
-> The spec is very clear. It says that if you send a command *larger* than
-> opt_xfer_blocks, you should expect *slower* performance. That makes
-> max_xfer_blocks a particularly poor choice for setting the default I/O
-> size.
-> 
-> In addition to being slower, max_xfer_blocks could potentially also be
-> much, much larger than opt_xfer_blocks. I understand your 512 KB vs. 1
-> MB example. But if the max_xfer_blocks limit is reported as 1 GB, is
-> that then the right value to use instead of 512 KB? Probably not.
-> 
-> If a device does not report an opt_xfer_blocks value that suits your
-> workload, just override the resulting max_sectors_kb in sysfs. This is
-> intentionally a soft limit so it can be adjusted by the user without
-> having to change the kernel.
-> 
-> -- 
-> Martin K. Petersen	Oracle Linux Engineering
-> 
+>=20
+> Resumes the scsi device before accessing it.
+>=20
+> Change-Id: I2929af60f2a92c89704a582fcdb285d35b429fde
+> Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
+> Signed-off-by: Can Guo <cang@codeaurora.org>
+> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
+Following this patch, is it possible to revert commit 74e5e468b664d?
 
-I understood what you said. I reviewed meaning of opt_xfer_blocks from
-SCSI spec again. I think below is what you saw in spec.
+Thanks,
+Avri
 
-The OPTIMAL TRANSFER LENGTH field indicates the optimal transfer size in
-logical blocks for a single command shown in table 197. If a device server
-receives one of these commands with a transfer size greater than this value,
-then the device server may incur significant delays in processing the
-command. If the OPTIMAL TRANSFER LENGTH field is set to zero, then there
-is no reported optimal transfer size.
-
-Thank you for kindly feedback. :)
-
----
-Changheun Lee
-Samsung Electronics
