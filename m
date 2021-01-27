@@ -2,100 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 200CF305F4D
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BA0305F69
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235599AbhA0PQW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jan 2021 10:16:22 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:25658 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbhA0PP3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 10:15:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1611760528; x=1643296528;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=C2n2qbZr6K8K8MlNh1JdDi0Gp2waOLViiNEO8MOhZ0s=;
-  b=Uonukni7nqGl1uJYZqoYwV6v9MoOr07sS90UPToepsxOxi38oN2Y87nK
-   TPKAvlM4iihAUVVwx/2OQsqs4wzLkpBGVxqLwzojoFVdZCh+t535TN+M2
-   LGk/erislm+CdOD7FfAVp6aG68z8HaIBmuD2dFl//LTj5qm9CCwTkfT6K
-   Yhy0f7b7AnSYkSPQmUEQzjvkD2rQ5EuA8OVckHL8m3JPMuba7Q2MWSfE7
-   8lHNbNmdL3vp9TtA55GAyZTmi57BmhjU0fNJVAWMbswjEeb+jvF4IzJ+6
-   +AF/0yUWkztzWsHCqHD9TiL2Gb7dUmHfnk1ald1AlTWX5efs6Qn1dLGBH
-   g==;
-IronPort-SDR: hwLWqOL9bWDVA/StNymDDFvmFEw64d47dpOrn1os+1A+p1SZeFX4NT7KBFTvbiOsSS9E690yE0
- J22QsvhYueHZVB4+NRZuC6POFFKgaQrZuJhaPIBz9HABhObDmrlQbfds+PvxGKzMkbG4iNjwcD
- wLYYG85nARvAz78bp2URatH+v/OsVO7j2JzM0atrbTRqOiMzB/dMaeWQ/nEC0G9/8jCqNcvNcC
- G4OJRY/7iLNsW2kbAPErqqWR0GLGf5kegno7loI+elgZ2dGi5GMbzRgOeEGRORBEUmbemTc6OR
- Mzk=
-X-IronPort-AV: E=Sophos;i="5.79,379,1602518400"; 
-   d="scan'208";a="159631247"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 23:13:45 +0800
-IronPort-SDR: OGeUd8Ln1ZDER3s9Lv/aGn+y+1jPuceKcrY2Pi5U43bWaMSnYGO9XwoiVP9Vcp51VeaZ4NvU/J
- 9iWkUafBYpJDCAKMAbX7nN6IfTQAkUGtsm0G87rEbxSiUS1CjYlNden3NPUEq2UGdCG7DK9y1z
- 5c48ET/IP8pJiot/ricZ743l61l3rZlXv50eydYUbFkjRfPZdQrpW/B7Un78aMigckByUTHTpM
- ljfiRsDrM7hFSbuQOlOWbgQW+tFnMeaaq1qvhbV6lFtW7EgcUIuVBNyLsVqglpN7vyYaE7QkuN
- prl29T63d1W9PBt9+Do+rxvO
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 06:56:04 -0800
-IronPort-SDR: o489SMbUEnyxQWr0H2UZf+VKLk5mCIyRERRszbtbajz3gCxfZiZ4cH/cCjfwtFRNsbcP6Mcbiu
- Kpk42Onft1VInu73GYHn42xhGdusAF0n5+6cCXDjHsZJCuoezJsoVmTvM/1GuIvTSumtCLMDTa
- a9YUvyKXXmmRn4v7OtqHn2OVbaJnYtpM4ppARefBzXv66x8AtME/IiaxQm7TEp6i1DsOxBBXlC
- eVjsDH5uBnOAu2EwxQ/SQvzR1ry4G1jBe8G04W2FbrGl2OMLBDb5WWxuSIsAdOeytLoWcQkn3p
- Tf4=
-WDCIronportException: Internal
-Received: from bxygm33.sdcorp.global.sandisk.com ([10.0.231.247])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Jan 2021 07:13:41 -0800
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        id S1343796AbhA0PUs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jan 2021 10:20:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60320 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343804AbhA0PUT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 27 Jan 2021 10:20:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 15E77207DE;
+        Wed, 27 Jan 2021 15:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1611760777;
+        bh=RA9rQ2xvdGOXteA6WC38jMW+W5EiTIher3eJGUoXFGo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eww1VXmficGkOu+NTZPjeWxDouV9+uM9TJD/LHYCXyDE6v2YkA9cle4ruggIWAI7A
+         Gr2i0PfLPm3ISme1vpjnkoCLqKMq8O0ri5dHz2mHwrorHiMufGMU0V2fw6wgteYfX9
+         +R9O+mo8wNUSBWhuq0UPx8SDQeAmrhnaPnxc9+/o=
+Date:   Wed, 27 Jan 2021 16:19:35 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Avri Altman <avri.altman@wdc.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
         yongmyung lee <ymhungry.lee@samsung.com>,
         Daejun Park <daejun7.park@samsung.com>,
         alim.akhtar@samsung.com, asutoshd@codeaurora.org,
         Zang Leigang <zangleigang@hisilicon.com>,
         Avi Shchislowski <avi.shchislowski@wdc.com>,
         Bean Huo <beanhuo@micron.com>, cang@codeaurora.org,
-        stanley.chu@mediatek.com, Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH 8/8] scsi: ufshpb: Add support for host control mode
-Date:   Wed, 27 Jan 2021 17:12:17 +0200
-Message-Id: <20210127151217.24760-9-avri.altman@wdc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210127151217.24760-1-avri.altman@wdc.com>
+        stanley.chu@mediatek.com
+Subject: Re: [PATCH 1/8] scsi: ufshpb: Cache HPB Control mode on init
+Message-ID: <YBGEh4cfPldXoQxI@kroah.com>
 References: <20210127151217.24760-1-avri.altman@wdc.com>
+ <20210127151217.24760-2-avri.altman@wdc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210127151217.24760-2-avri.altman@wdc.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Support devices that report they are using host control mode.
+On Wed, Jan 27, 2021 at 05:12:10PM +0200, Avri Altman wrote:
+> We will use it later, when we'll need to differentiate between device
+> and host control modes.
+> 
+> Signed-off-by: Avri Altman <avri.altman@wdc.com>
+> ---
+>  drivers/scsi/ufs/ufshpb.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+> index d3e6c5b32328..183bdf35f2d0 100644
+> --- a/drivers/scsi/ufs/ufshpb.c
+> +++ b/drivers/scsi/ufs/ufshpb.c
+> @@ -26,6 +26,8 @@ static int tot_active_srgn_pages;
+>  
+>  static struct workqueue_struct *ufshpb_wq;
+>  
+> +static enum UFSHPB_MODE ufshpb_mode;
 
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
----
- drivers/scsi/ufs/ufshpb.c | 6 ------
- 1 file changed, 6 deletions(-)
+How are you allowed to have a single variable for a device-specific
+thing?  What happens when you have two controllers or disks or whatever
+you are binding to here?  How does this work at all?
 
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index 482f01c3b3ee..3ea9f7079189 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -2035,12 +2035,6 @@ void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf)
- 	int version;
- 
- 	ufshpb_mode = desc_buf[DEVICE_DESC_PARAM_HPB_CONTROL];
--	if (ufshpb_mode == HPB_HOST_CONTROL) {
--		dev_err(hba->dev, "%s: host control mode is not supported.\n",
--			__func__);
--		hpb_dev_info->hpb_disabled = true;
--		return;
--	}
- 
- 	version = get_unaligned_be16(desc_buf + DEVICE_DESC_PARAM_HPB_VER);
- 	if (version != HPB_SUPPORT_VERSION) {
--- 
-2.25.1
+This should be per-device, right?
 
+thanks,
+
+greg k-h
