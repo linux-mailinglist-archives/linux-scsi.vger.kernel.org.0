@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF5B305F81
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1964A305F40
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235801AbhA0PYd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jan 2021 10:24:33 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:51782 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbhA0POV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 10:14:21 -0500
+        id S235334AbhA0POc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jan 2021 10:14:32 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:50687 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235184AbhA0POF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 10:14:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1611760460; x=1643296460;
+  t=1611760444; x=1643296444;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pYqNFpWu5gdPAJjbMMciUgh9gaj1oKk/cLrxHPOh+G8=;
-  b=QpuCXwWra1axa5mmSilLb3WVeC9awCyru0dLvVjjTMkphhw9n0rW/aCp
-   6zEw/rqj74XauWFc56QoRlKCuBJYzMymidnQMyvAoHOzlV3Ft6pu+qDCn
-   HTMZIqauxKGvxozfCz4dg69YeVNBTziTQsblhiyHj1mrNkToyatD951pq
-   EfvVr+LyCs41aKZISdlH49E4j+024BtlT212OuWvamj6LzeFUCNQS9+yZ
-   ggXBhMFVZILVtzBPPiBLO+NM7mhPwZsP7CLcWMA1NNSXefZQSupSec0lc
-   Hn+yxksNfpICrzhrtLNHANwatZhv+HgGb+WM+vu8aG7+hVv7Z4puqz5sq
+  bh=a+gWe1zrtM/8RLwHT911hun5GdaHlKNsD1TIXe6zByI=;
+  b=buwOj/236dNnjVyNfZd2+PkIcnI/OWh8EnplpA+czUPhiHt1lVFbKclI
+   mwEHHfnnjnqXmb4k5qZYKWgSFcwtFHV+Ry53iuijEWRd0mj8FcuQtTc+9
+   Zx9NODqTO2GgEvYG9e98fkLw/0kwZqlD5zMaVCo7/82AEtBy7UeiIQiO+
+   niontr9qni/GY7vI/7MbnmNBJSl8UAhy4wGDc+0K0V9sXoZfW7vxF50Wv
+   9ztl7FBGowAYLA6iy8NRLBIEmrUWG1/0gZnA/+RjAjqM8e7S3vf68Ox53
+   s9fyUftJFJ+GwjmjPoVw1TBxxPW+9+a151YPqQgXMUPz62Wqbu1GSrDyB
    w==;
-IronPort-SDR: DM3vvhmWQPZ22e0speaI34nn/kafJkycYudWC5F0GCDsr3nkj2SySXuEfTFXMNhnDVRR+2cY4y
- FdWTbYXH5O1JT1zj47tIF3X9FGVkjxBgq4YXcjvS256/RfK3Sm61vj58SriQrXhw+kJHGvFBot
- 2XrWcqy2aLmwF2G9Orj0dib3HAymusvHAU5vs0UD0TuLWR7kkWiXWCKq72QtxyYxElph0ZJenj
- d8Uqrg9+LC82fnr1SY7QZHe6JTTGeIySsIBRGiErnyqDC32Trh6FRuH1oR1beBrJasXFDY5T6B
- Q9M=
+IronPort-SDR: qDfAqTVYjZTmh8CrmAHISAenGC47nLLXsxjTZotaOmLfqUdSTEZ8zFTh+BZOGqXL1OCHszfDJ1
+ saal5r2xWEg/4WBn/msOjIW+ZUeVBHALWeWZBx/s5DQMOpDeY7uTPDtuIT48Hd7NnXeqhSQmuL
+ nsXsd9QRp44WDdfiCyOUybHgV+4f2ybLPIk9TE6hTsMEAKorTTDOLs+pObxOzgd9SzSDj2MPvI
+ CZ9HMHs1z37QO8VegNP8ODjNFaBgMQJhNMMfdUK2Lu8htlwTn6hWalBP4c/mwM1wnBipMONzNV
+ Eao=
 X-IronPort-AV: E=Sophos;i="5.79,379,1602518400"; 
-   d="scan'208";a="158454188"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 23:12:50 +0800
-IronPort-SDR: j9uaeg9ovkYwmvKrEmEgQK442LzxJQ6vVZugPyksY8DbenSeuhqTvkkPE0VEBGFNWVwBGtFKaH
- EKCPGk1hUqoQtR0pfl9HC8gJs7ozpTfoRd0IthWRJpsFZbg7K5nLF6gTSB5869nvB5m63bjrRz
- Vj6Iq5HEFq34QBkh32UpDhkz01cYJ0hmR80IKHX8q1zgTrOapdkutddYkg3XjipVg3kuZL1cUl
- rihoztpYY7Fdss/o5SAon52hexqQrRZTrwWvRjG5qrDdXAZjRa7IaotwTNziuwewGnJLiVeMrO
- QDgwlgvqzCjLFTnhmo/Kh7hG
+   d="scan'208";a="158455365"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 23:12:57 +0800
+IronPort-SDR: ISRKgmjQpZsI2bGuDLVpQmJKAE49ZVr5m8139S81nAZW71RtzPtF+SLem6KMThTWEPMU+DZg4W
+ qtzYJ3uTo4oxx9r42XkyrqCpZ/Z6rajKsVfKKGuVbB9sDouz5Q8xYlqKJeFoei2KaFba39Ahs2
+ y14uwTLU8VjtpJDFZf3qazEEIiobBoCQlvSABDwpDMLI6i7emIqKbbNbGr1EFREzQji3AKatSM
+ DuUkF+Aawe2rUdx/sHG27aUbyWOBmBwCbpcf9/eOrj3ssi6BVYtkZxoeTsGVzUwknoTyGyqr6E
+ 64SNskYmKl+WKMrnFe0kGsQ9
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 06:57:10 -0800
-IronPort-SDR: OoREcpqAz05j/2BjvIBTgK++qemH9rDka295k2VVoMO+Qei8qKNmtT3C30E+Y4pGEjjB8NYgNi
- AckljoYNl9XRWGFtMXZFB8aR2DjhenFG1070ZobvUhcVm5DaRVF0E+nRXlvCGLFs6LQQE9czZu
- fl/ufdYjO441BWlnLsQmvsXnvP3GlQ9ayiSjQ2bzgV4hX+0F8bs/eEwkIm21dq7tHnvMG4c34e
- 1BDcTsAyDfz3AvA4Hvt8PV3JpLNwIJP9D4L7nRImmz4d6DYUdxfGcct5ZLBLC8kpxGE2VwwOMi
- E44=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 06:55:16 -0800
+IronPort-SDR: pdTIneKST+RSvixuV5IMDyjTAi3rhAkexGajfSaUmIh1iN1yXX6RTQiilhzkAgp1V8vOrhCvf2
+ lbWOXMX3C5XScqt697SLgwjz7FOMAuasp5KuAQxXxo8stPveTXimKJPHPUQS8W4Vb6nOrabjOp
+ eYNHElX4TGRdSgDKg0+KNMpC4Edm2TURtkpf93Wiplw0X9Q9JjUBmebHKWVtsrXzQ/PjO0HY46
+ YkwWHVu/4vYGb2c0FHMowTiEQx+CswIxzg/1jTKyvOOOxs2bKilrj4dwcLj1YH/dkKcxNCB2+C
+ tXs=
 WDCIronportException: Internal
 Received: from bxygm33.sdcorp.global.sandisk.com ([10.0.231.247])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Jan 2021 07:12:46 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 27 Jan 2021 07:12:54 -0800
 From:   Avri Altman <avri.altman@wdc.com>
 To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -60,9 +60,9 @@ Cc:     gregkh@linuxfoundation.org, Bart Van Assche <bvanassche@acm.org>,
         Avi Shchislowski <avi.shchislowski@wdc.com>,
         Bean Huo <beanhuo@micron.com>, cang@codeaurora.org,
         stanley.chu@mediatek.com, Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH 1/8] scsi: ufshpb: Cache HPB Control mode on init
-Date:   Wed, 27 Jan 2021 17:12:10 +0200
-Message-Id: <20210127151217.24760-2-avri.altman@wdc.com>
+Subject: [PATCH 2/8] scsi: ufshpb: Add host control mode support to rsp_upiu
+Date:   Wed, 27 Jan 2021 17:12:11 +0200
+Message-Id: <20210127151217.24760-3-avri.altman@wdc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210127151217.24760-1-avri.altman@wdc.com>
 References: <20210127151217.24760-1-avri.altman@wdc.com>
@@ -72,40 +72,126 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We will use it later, when we'll need to differentiate between device
-and host control modes.
+There are some limitations to activations / inactivations in host
+control mode - Add those.
 
 Signed-off-by: Avri Altman <avri.altman@wdc.com>
 ---
- drivers/scsi/ufs/ufshpb.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ufshpb.c | 35 +++++++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufshpb.h |  6 ++++++
+ 2 files changed, 41 insertions(+)
 
 diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index d3e6c5b32328..183bdf35f2d0 100644
+index 183bdf35f2d0..5fa1f5bc08e6 100644
 --- a/drivers/scsi/ufs/ufshpb.c
 +++ b/drivers/scsi/ufs/ufshpb.c
-@@ -26,6 +26,8 @@ static int tot_active_srgn_pages;
+@@ -140,6 +140,8 @@ static void ufshpb_set_ppn_dirty(struct ufshpb_lu *hpb, int rgn_idx,
+ 	else
+ 		set_bit_len = cnt;
  
- static struct workqueue_struct *ufshpb_wq;
- 
-+static enum UFSHPB_MODE ufshpb_mode;
++	set_bit(RGN_FLAG_DIRTY, &rgn->rgn_flags);
 +
- bool ufshpb_is_allowed(struct ufs_hba *hba)
- {
- 	return !(hba->ufshpb_dev.hpb_disabled);
-@@ -1690,10 +1692,9 @@ void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf)
- {
- 	struct ufshpb_dev_info *hpb_dev_info = &hba->ufshpb_dev;
- 	int version;
--	u8 hpb_mode;
+ 	if (rgn->rgn_state != HPB_RGN_INACTIVE &&
+ 	    srgn->srgn_state == HPB_SRGN_VALID)
+ 		bitmap_set(srgn->mctx->ppn_dirty, srgn_offset, set_bit_len);
+@@ -201,6 +203,11 @@ static bool ufshpb_test_ppn_dirty(struct ufshpb_lu *hpb, int rgn_idx,
+ 	return false;
+ }
  
--	hpb_mode = desc_buf[DEVICE_DESC_PARAM_HPB_CONTROL];
--	if (hpb_mode == HPB_HOST_CONTROL) {
-+	ufshpb_mode = desc_buf[DEVICE_DESC_PARAM_HPB_CONTROL];
++static inline bool is_rgn_dirty(struct ufshpb_region *rgn)
++{
++	return test_bit(RGN_FLAG_DIRTY, &rgn->rgn_flags);
++}
++
+ static u64 ufshpb_get_ppn(struct ufshpb_lu *hpb,
+ 			  struct ufshpb_map_ctx *mctx, int pos, int *error)
+ {
+@@ -380,8 +387,12 @@ static void ufshpb_put_map_req(struct ufshpb_lu *hpb,
+ static int ufshpb_clear_dirty_bitmap(struct ufshpb_lu *hpb,
+ 				     struct ufshpb_subregion *srgn)
+ {
++	struct ufshpb_region *rgn;
++
+ 	WARN_ON(!srgn->mctx);
+ 	bitmap_zero(srgn->mctx->ppn_dirty, hpb->entries_per_srgn);
++	rgn = hpb->rgn_tbl + srgn->rgn_idx;
++	clear_bit(RGN_FLAG_DIRTY, &rgn->rgn_flags);
+ 	return 0;
+ }
+ 
+@@ -814,17 +825,39 @@ static void ufshpb_rsp_req_region_update(struct ufshpb_lu *hpb,
+ 	 */
+ 	spin_lock(&hpb->rsp_list_lock);
+ 	for (i = 0; i < rsp_field->active_rgn_cnt; i++) {
++		struct ufshpb_region *rgn;
++
+ 		rgn_idx =
+ 			be16_to_cpu(rsp_field->hpb_active_field[i].active_rgn);
+ 		srgn_idx =
+ 			be16_to_cpu(rsp_field->hpb_active_field[i].active_srgn);
+ 
++		rgn = hpb->rgn_tbl + rgn_idx;
++		if (ufshpb_mode == HPB_HOST_CONTROL &&
++		    (rgn->rgn_state != HPB_RGN_ACTIVE || is_rgn_dirty(rgn))) {
++			/*
++			 * in host control mode, subregion activation
++			 * recommendations are only allowed to active regions.
++			 * Also, ignore recommendations for dirty regions - the
++			 * host will make decisions concerning those by himself
++			 */
++			continue;
++		}
++
+ 		dev_dbg(&hpb->sdev_ufs_lu->sdev_dev,
+ 			"activate(%d) region %d - %d\n", i, rgn_idx, srgn_idx);
+ 		ufshpb_update_active_info(hpb, rgn_idx, srgn_idx);
+ 		hpb->stats.rb_active_cnt++;
+ 	}
+ 
 +	if (ufshpb_mode == HPB_HOST_CONTROL) {
- 		dev_err(hba->dev, "%s: host control mode is not supported.\n",
- 			__func__);
- 		hpb_dev_info->hpb_disabled = true;
++		/*
++		 * in host control mode the device is not allowed to inactivate
++		 * regions
++		 */
++		goto out_unlock;
++	}
++
+ 	for (i = 0; i < rsp_field->inactive_rgn_cnt; i++) {
+ 		rgn_idx = be16_to_cpu(rsp_field->hpb_inactive_field[i]);
+ 		dev_dbg(&hpb->sdev_ufs_lu->sdev_dev,
+@@ -832,6 +865,8 @@ static void ufshpb_rsp_req_region_update(struct ufshpb_lu *hpb,
+ 		ufshpb_update_inactive_info(hpb, rgn_idx);
+ 		hpb->stats.rb_inactive_cnt++;
+ 	}
++
++out_unlock:
+ 	spin_unlock(&hpb->rsp_list_lock);
+ 
+ 	dev_dbg(&hpb->sdev_ufs_lu->sdev_dev, "Noti: #ACT %u #INACT %u\n",
+diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
+index 2c43a03b66b6..8a34b0f42754 100644
+--- a/drivers/scsi/ufs/ufshpb.h
++++ b/drivers/scsi/ufs/ufshpb.h
+@@ -48,6 +48,11 @@ enum UFSHPB_MODE {
+ 	HPB_DEVICE_CONTROL,
+ };
+ 
++enum HPB_RGN_FLAGS {
++	RGN_FLAG_UPDATE = 0,
++	RGN_FLAG_DIRTY,
++};
++
+ enum UFSHPB_STATE {
+ 	HPB_PRESENT = 1,
+ 	HPB_SUSPEND,
+@@ -109,6 +114,7 @@ struct ufshpb_region {
+ 
+ 	/* below information is used by lru */
+ 	struct list_head list_lru_rgn;
++	unsigned long rgn_flags;
+ };
+ 
+ #define for_each_sub_region(rgn, i, srgn)				\
 -- 
 2.25.1
 
