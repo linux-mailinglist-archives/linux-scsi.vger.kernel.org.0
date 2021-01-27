@@ -2,65 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3683050A5
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 05:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F173050AC
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 05:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343657AbhA0EVh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jan 2021 23:21:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45046 "EHLO mail.kernel.org"
+        id S1343664AbhA0EVy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jan 2021 23:21:54 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39066 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728325AbhAZVOK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 26 Jan 2021 16:14:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D91BF221EF;
-        Tue, 26 Jan 2021 21:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611695572;
-        bh=dCL2AuuUtM5dPRsG6o+bpmbCzvVA4DZcIH0XNZ24YV4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eLFJiOW1a0PI35bnD7RigcQwKmXffd8RVbZ7WO3is5wSdFYCDhgrwRj7rmUP9mF0u
-         pOMIV1QM2i7CP6Pc6xK0IR3xKE/9JroLQfeYV3QKE5MnYghLjI0Z0W0HzYQs5LXw3R
-         Ur7gVb9oRNCCX5e2/PbQn9JIj1cq/NUw9Y9pN5XdCCmBlzgPCfxsn7DODVWmLV8aal
-         km0R+bjqdY1lUf3fFRzqTqLokE4Z0EjvSD3rCPACJUZ/j93ylVuA7st4W1DRFqgMsx
-         cQHosxzZUAcX1KzoEkbt4wuGJhSJnyOaid7/ikH+Lnfa1FRH07RM+tySBMEuAaYnM+
-         YSN68jPrJjjRQ==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH] scsi: lpfc: Fix 'physical' typos
-Date:   Tue, 26 Jan 2021 15:12:48 -0600
-Message-Id: <20210126211248.2920028-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S2404732AbhA0BoQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 26 Jan 2021 20:44:16 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id BE3E6AD0B;
+        Wed, 27 Jan 2021 01:21:25 +0000 (UTC)
+Received: by localhost (Postfix, from userid 1000)
+        id 366415BD6DE; Tue, 26 Jan 2021 17:21:24 -0800 (PST)
+From:   Lee Duncan <leeman.duncan@gmail.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hannes Reinecke <hare@suse.de>, stable@vger.kernel.org,
+        Lee Duncan <lduncan@suse.com>
+Subject: [PATCH] fnic: fixup patch to resolve stack frame issues
+Date:   Tue, 26 Jan 2021 17:21:24 -0800
+Message-Id: <20210127012124.22241-1-leeman.duncan@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+From: Hannes Reinecke <hare@suse.de>
 
-Fix misspellings of "physical".
+Commit 42ec15ceaea7 fixed a gcc issue with unused variables, but
+introduced errors since it allocated an array of two u64-s but
+then used more than that. Set the arrays to the proper size.
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Fixes: 42ec15ceaea74b5f7a621fc6686cbf69ca66c4cf
+Cc: stable@vger.kernel.org
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Lee Duncan <lduncan@suse.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/fnic/vnic_dev.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 96c087b8b474..78af645f6c5f 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -732,7 +732,7 @@ lpfc_cmpl_els_flogi_fabric(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 			spin_unlock_irq(&phba->hbalock);
- 		} else {
- 			/* Because we asked f/w for NPIV it still expects us
--			to call reg_vnpid atleast for the physcial host */
-+			to call reg_vnpid at least for the physical host */
- 			lpfc_printf_vlog(vport, KERN_WARNING,
- 					 LOG_ELS | LOG_VPORT,
- 					 "1817 Fabric does not support NPIV "
+diff --git a/drivers/scsi/fnic/vnic_dev.c b/drivers/scsi/fnic/vnic_dev.c
+index 5988c300cc82..d29999064b89 100644
+--- a/drivers/scsi/fnic/vnic_dev.c
++++ b/drivers/scsi/fnic/vnic_dev.c
+@@ -697,7 +697,7 @@ int vnic_dev_hang_notify(struct vnic_dev *vdev)
+ 
+ int vnic_dev_mac_addr(struct vnic_dev *vdev, u8 *mac_addr)
+ {
+-	u64 a[2] = {};
++	u64 a[ETH_ALEN] = {};
+ 	int wait = 1000;
+ 	int err, i;
+ 
+@@ -734,7 +734,7 @@ void vnic_dev_packet_filter(struct vnic_dev *vdev, int directed, int multicast,
+ 
+ void vnic_dev_add_addr(struct vnic_dev *vdev, u8 *addr)
+ {
+-	u64 a[2] = {};
++	u64 a[ETH_ALEN] = {};
+ 	int wait = 1000;
+ 	int err;
+ 	int i;
+@@ -749,7 +749,7 @@ void vnic_dev_add_addr(struct vnic_dev *vdev, u8 *addr)
+ 
+ void vnic_dev_del_addr(struct vnic_dev *vdev, u8 *addr)
+ {
+-	u64 a[2] = {};
++	u64 a[ETH_ALEN] = {};
+ 	int wait = 1000;
+ 	int err;
+ 	int i;
 -- 
-2.25.1
+2.26.2
 
