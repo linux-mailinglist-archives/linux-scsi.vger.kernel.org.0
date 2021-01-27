@@ -2,81 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E84306771
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 00:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8B13067D5
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 00:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbhA0XCl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jan 2021 18:02:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57412 "EHLO
+        id S235537AbhA0XZA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jan 2021 18:25:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39205 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233487AbhA0XA1 (ORCPT
+        by vger.kernel.org with ESMTP id S232390AbhA0W42 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 27 Jan 2021 18:00:27 -0500
+        Wed, 27 Jan 2021 17:56:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611788341;
+        s=mimecast20190719; t=1611788102;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=vBHFNuNd0sGZfvZTnew2a8X7tuzzNGLciFYmtwH/6J4=;
-        b=Fq9azxCery2z4Grul9Nn5neZFeqG2xow8JQZPa98pu9rcv5UNtHd/dxSSTMNHe864o4ada
-        tdX6qK7gRp1ecRzDJyKSI6Lognkc3LpcjujrmMg99psVLW/XAfQh1Ez+TicklJn0/w5zVB
-        g/xjLMFaTWwsTCaSkpiu6PdpCx4hpGU=
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M8Db6OQTFMtJ9Vv1KMcnjVs7A6/Ib7/81Vec9f6LkSg=;
+        b=JIi2YTGBLV695ynWEWFxisDaXX6xtA//HBhQzzWfFaWok9cigBYBswFaEHG5V/tUFVtPYI
+        XJv14pKlQOGehwVCbO9y0b58cHomCrogoL8bTZ9UAZar5jhTp56rUC9/g3JWIwFGj1N1pZ
+        AgcZIbZ82u9HgM62mYdhxHLMZZ+YLXw=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-368-qVCjZU2-MbiTZ32aYvi-Hg-1; Wed, 27 Jan 2021 17:38:52 -0500
-X-MC-Unique: qVCjZU2-MbiTZ32aYvi-Hg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-252-xAUwIh3PMouW2YoRpGRX0g-1; Wed, 27 Jan 2021 17:45:15 -0500
+X-MC-Unique: xAUwIh3PMouW2YoRpGRX0g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A21BB190A7A0;
-        Wed, 27 Jan 2021 22:38:50 +0000 (UTC)
-Received: from T590 (ovpn-12-152.pek2.redhat.com [10.72.12.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C02CF19726;
-        Wed, 27 Jan 2021 22:38:44 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 06:38:40 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [MPT3SAS bug] wrong queue setting for HDD. drive
-Message-ID: <20210127223840.GB1350451@T590>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5384C107ACE8;
+        Wed, 27 Jan 2021 22:45:14 +0000 (UTC)
+Received: from ovpn-113-224.phx2.redhat.com (ovpn-113-224.phx2.redhat.com [10.3.113.224])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 02B9E60BE5;
+        Wed, 27 Jan 2021 22:45:13 +0000 (UTC)
+Message-ID: <87fa97430ea20f45ac02124297cb0655dcdb70a6.camel@redhat.com>
+Subject: Re: [PATCH] lpfc: Fix EEH encountering oops with nvme traffic
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+Date:   Wed, 27 Jan 2021 17:45:13 -0500
+In-Reply-To: <20210127221601.84878-1-jsmart2021@gmail.com>
+References: <20210127221601.84878-1-jsmart2021@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Guys,
+On Wed, 2021-01-27 at 14:16 -0800, James Smart wrote:
+> In testing, in a configuration with Redfish and native nvme multipath
+> when an EEH is injected, a kernel oops is being encountered:
+> (unreliable)
+> lpfc_nvme_ls_req+0x328/0x720 [lpfc]
+> __nvme_fc_send_ls_req.constprop.13+0x1d8/0x3d0 [nvme_fc]
+> nvme_fc_create_association+0x224/0xd10 [nvme_fc]
+> nvme_fc_reset_ctrl_work+0x110/0x154 [nvme_fc]
+> process_one_work+0x304/0x5d
+> 
+> the nvme transport is issuing a Disconnect LS request, which the
+> driver
+> receives and tries to post but the work queue used by the driver is
+> already being torn down by the eeh.
+> 
+> Fix by validating the validity of the work queue before proceeding
+> with
+> the LS transmit.
+> 
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
+> ---
+>  drivers/scsi/lpfc/lpfc_nvme.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/scsi/lpfc/lpfc_nvme.c
+> b/drivers/scsi/lpfc/lpfc_nvme.c
+> index 5e990f4c1ca6..4d819e52496a 100644
+> --- a/drivers/scsi/lpfc/lpfc_nvme.c
+> +++ b/drivers/scsi/lpfc/lpfc_nvme.c
+> @@ -559,6 +559,9 @@ __lpfc_nvme_ls_req(struct lpfc_vport *vport,
+> struct lpfc_nodelist *ndlp,
+>  		return -ENODEV;
+>  	}
+>  
+> +	if (!vport->phba->sli4_hba.nvmels_wq)
+> +		return -ENOMEM;
+> +
+>  	/*
+>  	 * there are two dma buf in the request, actually there is one
+> and
+>  	 * the second one is just the start address + cmd size.
 
-The commit[1] is supposed for NVMe device only, but we found the change is
-actually done on the following mpt3sas HDD. drive:
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
 
-	#sginfo /dev/sdc
-	INQUIRY response (cmd: 0x12)
-	----------------------------
-	Device Type                        0
-	Vendor:                    SEAGATE
-	Product:                   ST16000NM002G
-	Revision level:            E003)
-
-So NOMERGES is enabled, and virt boundary limit is applied on this HDD.
-device, and performance drop is observed, can you take a look at the
-issue?
-
-
-[1] commit d1b01d14b7baa8a4bb4c11305c8cca73456b2f7c
-Author: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Date:   Tue Oct 31 18:02:33 2017 +0530
-
-    scsi: mpt3sas: Set NVMe device queue depth as 128
-
-    Sets nvme device queue depth, name and displays device capabilities
-
-
-
-Thanks,
-Ming
 
