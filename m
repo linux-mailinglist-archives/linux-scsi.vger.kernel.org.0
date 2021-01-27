@@ -2,190 +2,345 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B8A305960
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 12:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A358305A8A
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 13:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236318AbhA0LP1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jan 2021 06:15:27 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:46056 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236504AbhA0LNY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 06:13:24 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10RB9BNS105085;
-        Wed, 27 Jan 2021 11:12:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=EX6HZJ9b9FxkPsQlItz08LigH9FcyVGJGsFJG3Nwfi0=;
- b=Vt6bjmu/tPSP9s2X/j949ozKDCJ2aHUO3rjoK+RxAMPTQ8vU/wU31+8/nJ1UYkEThCl3
- kZiXitynMxGr41cXm8/tZK+mXii8nd9CQSLJACivNKKokPyZh4bigKsH1QbwV86sIqe5
- QdYGaBnPRmorblxqogUNFYi8yq8i5uO74zpdlcrKd0UtQV0CTeLqQCk+fBj8LUSQ8icG
- 7NE7GyPWX3uusycPSpeE4SD2sqtsiQoQAwF/dn8VHUKfqLXRufMJCiEI0qaQ79tDiG/y
- j/zMLLrovnMXTR64YKKt4esDQOB4x7EvQlZ0wA2vW6a2bG5/FCzTLk3YhJ+CB3ZkQGZM jg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2130.oracle.com with ESMTP id 3689aapqda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Jan 2021 11:12:38 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10RBAYdL131738;
-        Wed, 27 Jan 2021 11:10:36 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 368wq04rp7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Jan 2021 11:10:36 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10RBAYki006820;
-        Wed, 27 Jan 2021 11:10:34 GMT
-Received: from mwanda (/10.175.203.212)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 27 Jan 2021 03:10:33 -0800
-Date:   Wed, 27 Jan 2021 14:10:27 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     adheer.chandravanshi@qlogic.com, QLogic-Storage-Upstream@qlogic.com
-Cc:     linux-scsi@vger.kernel.org
-Subject: [bug report] [SCSI] qla4xxx: Add flash node mgmt support
-Message-ID: <YBFKI1rjC6opxDUa@mwanda>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9876 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
- adultscore=0 bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101270060
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9876 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1011 phishscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 suspectscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101270060
+        id S237207AbhA0MAB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jan 2021 07:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237248AbhA0L6E (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 06:58:04 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073A9C061797
+        for <linux-scsi@vger.kernel.org>; Wed, 27 Jan 2021 03:55:21 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id q2so912562plk.4
+        for <linux-scsi@vger.kernel.org>; Wed, 27 Jan 2021 03:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=hrVj4fkHEI3lpH3zt8fi8mSOBp/7wXeP+DAf4Bl727Q=;
+        b=JBIAFSmOerz9rK7HdSMl7M2FXhpdv9dhglhGhFeOgY+1RIgEw+7RS+uY79v4YNzG5F
+         Kx6rVVEALmjPcMbJr4oejsmGE9HwLATB6hyEVjnqw4NmA+dyZ40HNjvkCtP8bSJtG6Yt
+         FZxqPgYaIWcbkEVwAX99UxzdZZpM3pVTAZ9aA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=hrVj4fkHEI3lpH3zt8fi8mSOBp/7wXeP+DAf4Bl727Q=;
+        b=CnqG7BD1Gzi3c63mz6BRJVR/O03yFkeDlkvH9FCVKgvm7qscTs8MIwdfmfJMHpYD1F
+         M0Psa9lRkFI57oNZFxpQuAINvUERKjw5nQrgqIYFclZvZ7xl0XkoXjtF5ayeW1ZUMOoF
+         85qf+GH+y1LONUKnJmtz9uzlv6VYJ8LOLrUXJxJ9Va/HMscM0tz8w/I/U1zFRBic69WT
+         GbNEIVAG1H9966RtF5d0gqGHevomp3BEANYQZXgag4BRlAOORx08OL++kOsyUGdW+sOK
+         H030IuxxzDJYq0GK7rFDMPuwIKzsZYwENtbDzaGCK0CTDCz3YEfGLY0ZZJGPc9t1s2Uh
+         x+7g==
+X-Gm-Message-State: AOAM532XxI8wKE9r1I7boK5RNX5GkPBF2iANi9/nSz914umSoLu0VFb0
+        eGW/L5LRYsCX/mL+fKKJ4zIzUZageJ16zoTAarC9RqhibobCrW3Dl/oRveZ6gxKk2juPSU54lfX
+        hHH5yUvvLnDXkjN3e20hipHZLInCg4kDNr0dTcNyS6HM8Bz0KXtYyt9ux/jl6ri8Tt2gcQWSVJg
+        ANZ9BSxT6d
+X-Google-Smtp-Source: ABdhPJyxS1jhPHi/v275A9AzEG6YznhuCZqb4E1zcZOMUNspho9TFpIVW46m9MiDZ6rwac9Nm96GDQ==
+X-Received: by 2002:a17:90a:5403:: with SMTP id z3mr5409138pjh.198.1611748520104;
+        Wed, 27 Jan 2021 03:55:20 -0800 (PST)
+Received: from drv-bst-rhel8.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id l190sm2235552pfl.205.2021.01.27.03.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jan 2021 03:55:19 -0800 (PST)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>, dgilbert@interlog.com,
+        linux-block@vger.kernel.org
+Subject: [RESEND PATCH v2 3/4] scsi_debug : iouring iopoll support
+Date:   Wed, 27 Jan 2021 09:25:26 +0530
+Message-Id: <20210127035527.40622-4-kashyap.desai@broadcom.com>
+X-Mailer: git-send-email 2.18.1
+In-Reply-To: <20210127035527.40622-1-kashyap.desai@broadcom.com>
+References: <20210127035527.40622-1-kashyap.desai@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000008654805b9e072cb"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Adheer Chandravanshi,
+--00000000000008654805b9e072cb
 
-The patch 1e9e2be3ee03: "[SCSI] qla4xxx: Add flash node mgmt support"
-from Mar 22, 2013, leads to the following static checker warning:
+Add support of iouring iopoll interface in scsi_debug.
+This feature requires shared hosttag support in kernel and driver.
 
-	drivers/scsi/qla4xxx/ql4_os.c:3723 qla4xxx_copy_to_fwddb_param()
-	warn: 'conn->redirect_ipaddr' sometimes too small '16' size = 32
+Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
+Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+Tested-by: Douglas Gilbert <dgilbert@interlog.com>
 
-drivers/scsi/qla4xxx/ql4_os.c
-  3637  static int qla4xxx_copy_to_fwddb_param(struct iscsi_bus_flash_session *sess,
-  3638                                         struct iscsi_bus_flash_conn *conn,
-  3639                                         struct dev_db_entry *fw_ddb_entry)
-  3640  {
-  3641          uint16_t options;
-  3642          int rc = 0;
-  3643  
-  3644          options = le16_to_cpu(fw_ddb_entry->options);
-  3645          SET_BITVAL(conn->is_fw_assigned_ipv6,  options, BIT_11);
-  3646          if (!strncmp(sess->portal_type, PORTAL_TYPE_IPV6, 4))
-  3647                  options |= BIT_8;
-  3648          else
-  3649                  options &= ~BIT_8;
-  3650  
-  3651          SET_BITVAL(sess->auto_snd_tgt_disable, options, BIT_6);
-  3652          SET_BITVAL(sess->discovery_sess, options, BIT_4);
-  3653          SET_BITVAL(sess->entry_state, options, BIT_3);
-  3654          fw_ddb_entry->options = cpu_to_le16(options);
-  3655  
-  3656          options = le16_to_cpu(fw_ddb_entry->iscsi_options);
-  3657          SET_BITVAL(conn->hdrdgst_en, options, BIT_13);
-  3658          SET_BITVAL(conn->datadgst_en, options, BIT_12);
-  3659          SET_BITVAL(sess->imm_data_en, options, BIT_11);
-  3660          SET_BITVAL(sess->initial_r2t_en, options, BIT_10);
-  3661          SET_BITVAL(sess->dataseq_inorder_en, options, BIT_9);
-  3662          SET_BITVAL(sess->pdu_inorder_en, options, BIT_8);
-  3663          SET_BITVAL(sess->chap_auth_en, options, BIT_7);
-  3664          SET_BITVAL(conn->snack_req_en, options, BIT_6);
-  3665          SET_BITVAL(sess->discovery_logout_en, options, BIT_5);
-  3666          SET_BITVAL(sess->bidi_chap_en, options, BIT_4);
-  3667          SET_BITVAL(sess->discovery_auth_optional, options, BIT_3);
-  3668          SET_BITVAL(sess->erl & BIT_1, options, BIT_1);
-  3669          SET_BITVAL(sess->erl & BIT_0, options, BIT_0);
-  3670          fw_ddb_entry->iscsi_options = cpu_to_le16(options);
-  3671  
-  3672          options = le16_to_cpu(fw_ddb_entry->tcp_options);
-  3673          SET_BITVAL(conn->tcp_timestamp_stat, options, BIT_6);
-  3674          SET_BITVAL(conn->tcp_nagle_disable, options, BIT_5);
-  3675          SET_BITVAL(conn->tcp_wsf_disable, options, BIT_4);
-  3676          SET_BITVAL(conn->tcp_timer_scale & BIT_2, options, BIT_3);
-  3677          SET_BITVAL(conn->tcp_timer_scale & BIT_1, options, BIT_2);
-  3678          SET_BITVAL(conn->tcp_timer_scale & BIT_0, options, BIT_1);
-  3679          SET_BITVAL(conn->tcp_timestamp_en, options, BIT_0);
-  3680          fw_ddb_entry->tcp_options = cpu_to_le16(options);
-  3681  
-  3682          options = le16_to_cpu(fw_ddb_entry->ip_options);
-  3683          SET_BITVAL(conn->fragment_disable, options, BIT_4);
-  3684          fw_ddb_entry->ip_options = cpu_to_le16(options);
-  3685  
-  3686          fw_ddb_entry->iscsi_max_outsnd_r2t = cpu_to_le16(sess->max_r2t);
-  3687          fw_ddb_entry->iscsi_max_rcv_data_seg_len =
-  3688                                 cpu_to_le16(conn->max_recv_dlength / BYTE_UNITS);
-  3689          fw_ddb_entry->iscsi_max_snd_data_seg_len =
-  3690                                 cpu_to_le16(conn->max_xmit_dlength / BYTE_UNITS);
-  3691          fw_ddb_entry->iscsi_first_burst_len =
-  3692                                  cpu_to_le16(sess->first_burst / BYTE_UNITS);
-  3693          fw_ddb_entry->iscsi_max_burst_len = cpu_to_le16(sess->max_burst /
-  3694                                              BYTE_UNITS);
-  3695          fw_ddb_entry->iscsi_def_time2wait = cpu_to_le16(sess->time2wait);
-  3696          fw_ddb_entry->iscsi_def_time2retain = cpu_to_le16(sess->time2retain);
-  3697          fw_ddb_entry->tgt_portal_grp = cpu_to_le16(sess->tpgt);
-  3698          fw_ddb_entry->mss = cpu_to_le16(conn->max_segment_size);
-  3699          fw_ddb_entry->tcp_xmt_wsf = (uint8_t) cpu_to_le32(conn->tcp_xmit_wsf);
-  3700          fw_ddb_entry->tcp_rcv_wsf = (uint8_t) cpu_to_le32(conn->tcp_recv_wsf);
-  3701          fw_ddb_entry->ipv6_flow_lbl = cpu_to_le16(conn->ipv6_flow_label);
-  3702          fw_ddb_entry->ka_timeout = cpu_to_le16(conn->keepalive_timeout);
-  3703          fw_ddb_entry->lcl_port = cpu_to_le16(conn->local_port);
-  3704          fw_ddb_entry->stat_sn = cpu_to_le32(conn->statsn);
-  3705          fw_ddb_entry->exp_stat_sn = cpu_to_le32(conn->exp_statsn);
-  3706          fw_ddb_entry->ddb_link = cpu_to_le16(sess->discovery_parent_idx);
-  3707          fw_ddb_entry->chap_tbl_idx = cpu_to_le16(sess->chap_out_idx);
-  3708          fw_ddb_entry->tsid = cpu_to_le16(sess->tsid);
-  3709          fw_ddb_entry->port = cpu_to_le16(conn->port);
-  3710          fw_ddb_entry->def_timeout =
-  3711                                  cpu_to_le16(sess->default_taskmgmt_timeout);
-  3712  
-  3713          if (!strncmp(sess->portal_type, PORTAL_TYPE_IPV6, 4))
-  3714                  fw_ddb_entry->ipv4_tos = conn->ipv6_traffic_class;
-  3715          else
-  3716                  fw_ddb_entry->ipv4_tos = conn->ipv4_tos;
-  3717  
-  3718          if (conn->ipaddress)
-  3719                  memcpy(fw_ddb_entry->ip_addr, conn->ipaddress,
-  3720                         sizeof(fw_ddb_entry->ip_addr));
-  3721  
-  3722          if (conn->redirect_ipaddr)
-  3723                  memcpy(fw_ddb_entry->tgt_addr, conn->redirect_ipaddr,
-  3724                         sizeof(fw_ddb_entry->tgt_addr));
+Cc: dgilbert@interlog.com
+Cc: linux-block@vger.kernel.org
+---
+ drivers/scsi/scsi_debug.c | 130 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 130 insertions(+)
 
-The conn->redirect_ipaddr is IPv6_ADDR_LEN (16) bytes.  It is allocated
-in qla4xxx_copy_from_fwddb_param().  The w_ddb_entry->tgt_addr[] is a
-32 byte buffer.  So this is definitely a read overflow and copying
-garbage from beyond the end of the buffer.
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index d1b0cbe1b5f1..746eec521f79 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -829,6 +829,7 @@ static int sdeb_zbc_max_open = DEF_ZBC_MAX_OPEN_ZONES;
+ static int sdeb_zbc_nr_conv = DEF_ZBC_NR_CONV_ZONES;
+ 
+ static int submit_queues = DEF_SUBMIT_QUEUES;  /* > 1 for multi-queue (mq) */
++static int poll_queues; /* iouring iopoll interface.*/
+ static struct sdebug_queue *sdebug_q_arr;  /* ptr to array of submit queues */
+ 
+ static DEFINE_RWLOCK(atomic_rw);
+@@ -5432,6 +5433,14 @@ static int schedule_resp(struct scsi_cmnd *cmnd, struct sdebug_dev_info *devip,
+ 	cmnd->host_scribble = (unsigned char *)sqcp;
+ 	sd_dp = sqcp->sd_dp;
+ 	spin_unlock_irqrestore(&sqp->qc_lock, iflags);
++
++	/* Do not complete IO from default completion path.
++	 * Let it to be on queue.
++	 * Completion should happen from mq_poll interface.
++	 */
++	if ((sqp - sdebug_q_arr) >= (submit_queues - poll_queues))
++		return 0;
++
+ 	if (!sd_dp) {
+ 		sd_dp = kzalloc(sizeof(*sd_dp), GFP_ATOMIC);
+ 		if (!sd_dp) {
+@@ -5615,6 +5624,7 @@ module_param_named(sector_size, sdebug_sector_size, int, S_IRUGO);
+ module_param_named(statistics, sdebug_statistics, bool, S_IRUGO | S_IWUSR);
+ module_param_named(strict, sdebug_strict, bool, S_IRUGO | S_IWUSR);
+ module_param_named(submit_queues, submit_queues, int, S_IRUGO);
++module_param_named(poll_queues, poll_queues, int, S_IRUGO);
+ module_param_named(tur_ms_to_ready, sdeb_tur_ms_to_ready, int, S_IRUGO);
+ module_param_named(unmap_alignment, sdebug_unmap_alignment, int, S_IRUGO);
+ module_param_named(unmap_granularity, sdebug_unmap_granularity, int, S_IRUGO);
+@@ -5677,6 +5687,7 @@ MODULE_PARM_DESC(opt_xferlen_exp, "optimal transfer length granularity exponent
+ MODULE_PARM_DESC(opts, "1->noise, 2->medium_err, 4->timeout, 8->recovered_err... (def=0)");
+ MODULE_PARM_DESC(per_host_store, "If set, next positive add_host will get new store (def=0)");
+ MODULE_PARM_DESC(physblk_exp, "physical block exponent (def=0)");
++MODULE_PARM_DESC(poll_queues, "support for iouring iopoll queues (1 to max(submit_queues - 1)");
+ MODULE_PARM_DESC(ptype, "SCSI peripheral type(def=0[disk])");
+ MODULE_PARM_DESC(random, "If set, uniformly randomize command duration between 0 and delay_in_ns");
+ MODULE_PARM_DESC(removable, "claim to have removable media (def=0)");
+@@ -7201,6 +7212,104 @@ static int resp_not_ready(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	return check_condition_result;
+ }
+ 
++static int sdebug_map_queues(struct Scsi_Host *shost)
++{
++	int i, qoff;
++
++	if (shost->nr_hw_queues == 1)
++		return 0;
++
++	for (i = 0, qoff = 0; i < HCTX_MAX_TYPES; i++) {
++		struct blk_mq_queue_map *map = &shost->tag_set.map[i];
++
++		map->nr_queues  = 0;
++
++		if (i == HCTX_TYPE_DEFAULT)
++			map->nr_queues = submit_queues - poll_queues;
++		else if (i == HCTX_TYPE_POLL)
++			map->nr_queues = poll_queues;
++
++		if (!map->nr_queues) {
++			BUG_ON(i == HCTX_TYPE_DEFAULT);
++			continue;
++		}
++
++		map->queue_offset = qoff;
++		blk_mq_map_queues(map);
++
++		qoff += map->nr_queues;
++	}
++
++	return 0;
++
++}
++
++static int sdebug_blk_mq_poll(struct Scsi_Host *shost, unsigned int queue_num)
++{
++	int qc_idx;
++	int retiring = 0;
++	unsigned long iflags;
++	struct sdebug_queue *sqp;
++	struct sdebug_queued_cmd *sqcp;
++	struct scsi_cmnd *scp;
++	struct sdebug_dev_info *devip;
++	int num_entries = 0;
++
++	sqp = sdebug_q_arr + queue_num;
++
++	do {
++		spin_lock_irqsave(&sqp->qc_lock, iflags);
++		qc_idx = find_first_bit(sqp->in_use_bm, sdebug_max_queue);
++		if (unlikely((qc_idx < 0) || (qc_idx >= sdebug_max_queue)))
++			goto out;
++
++		sqcp = &sqp->qc_arr[qc_idx];
++		scp = sqcp->a_cmnd;
++		if (unlikely(scp == NULL)) {
++			pr_err("scp is NULL, queue_num=%d, qc_idx=%d from %s\n",
++			       queue_num, qc_idx, __func__);
++			goto out;
++		}
++		devip = (struct sdebug_dev_info *)scp->device->hostdata;
++		if (likely(devip))
++			atomic_dec(&devip->num_in_q);
++		else
++			pr_err("devip=NULL from %s\n", __func__);
++		if (unlikely(atomic_read(&retired_max_queue) > 0))
++			retiring = 1;
++
++		sqcp->a_cmnd = NULL;
++		if (unlikely(!test_and_clear_bit(qc_idx, sqp->in_use_bm))) {
++			pr_err("Unexpected completion sqp %p queue_num=%d qc_idx=%d from %s\n",
++				sqp, queue_num, qc_idx, __func__);
++			goto out;
++		}
++
++		if (unlikely(retiring)) {	/* user has reduced max_queue */
++			int k, retval;
++
++			retval = atomic_read(&retired_max_queue);
++			if (qc_idx >= retval) {
++				pr_err("index %d too large\n", retval);
++				goto out;
++			}
++			k = find_last_bit(sqp->in_use_bm, retval);
++			if ((k < sdebug_max_queue) || (k == retval))
++				atomic_set(&retired_max_queue, 0);
++			else
++				atomic_set(&retired_max_queue, k + 1);
++		}
++		spin_unlock_irqrestore(&sqp->qc_lock, iflags);
++		scp->scsi_done(scp); /* callback to mid level */
++		num_entries++;
++	} while (1);
++
++out:
++	spin_unlock_irqrestore(&sqp->qc_lock, iflags);
++	return num_entries;
++}
++
++
+ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
+ 				   struct scsi_cmnd *scp)
+ {
+@@ -7380,6 +7489,8 @@ static struct scsi_host_template sdebug_driver_template = {
+ 	.ioctl =		scsi_debug_ioctl,
+ 	.queuecommand =		scsi_debug_queuecommand,
+ 	.change_queue_depth =	sdebug_change_qdepth,
++	.map_queues =		sdebug_map_queues,
++	.mq_poll =		sdebug_blk_mq_poll,
+ 	.eh_abort_handler =	scsi_debug_abort,
+ 	.eh_device_reset_handler = scsi_debug_device_reset,
+ 	.eh_target_reset_handler = scsi_debug_target_reset,
+@@ -7427,6 +7538,25 @@ static int sdebug_driver_probe(struct device *dev)
+ 	if (sdebug_host_max_queue)
+ 		hpnt->host_tagset = 1;
+ 
++	/* poll queues are possible for nr_hw_queues > 1 */
++	if (hpnt->nr_hw_queues == 1 || (poll_queues < 1)) {
++		pr_warn("%s: trim poll_queues to 0. poll_q/nr_hw = (%d/%d)\n",
++			 my_name, poll_queues, hpnt->nr_hw_queues);
++		poll_queues = 0;
++	}
++
++	/*
++	 * Poll queues don't need interrupts, but we need at least one I/O queue
++	 * left over for non-polled I/O.
++	 * If condition not met, trim poll_queues to 1 (just for simplicity).
++	 */
++	if (poll_queues >= submit_queues) {
++		pr_warn("%s: trim poll_queues to 1\n", my_name);
++		poll_queues = 1;
++	}
++	if (poll_queues)
++		hpnt->nr_maps = 3;
++
+ 	sdbg_host->shost = hpnt;
+ 	*((struct sdebug_host_info **)hpnt->hostdata) = sdbg_host;
+ 	if ((hpnt->this_id >= 0) && (sdebug_num_tgts > hpnt->this_id))
+-- 
+2.18.1
 
-I guess ->redirect_ipaddr has the first part of fw_ddb_entry->tgt_addr?
 
-  3725  
-  3726          if (conn->link_local_ipv6_addr)
-  3727                  memcpy(fw_ddb_entry->link_local_ipv6_addr,
-  3728                         conn->link_local_ipv6_addr,
-  3729                         sizeof(fw_ddb_entry->link_local_ipv6_addr));
-  3730  
-  3731          if (sess->targetname)
-  3732                  memcpy(fw_ddb_entry->iscsi_name, sess->targetname,
-  3733                         sizeof(fw_ddb_entry->iscsi_name));
-  3734  
-  3735          if (sess->targetalias)
-  3736                  memcpy(fw_ddb_entry->iscsi_alias, sess->targetalias,
-  3737                         sizeof(fw_ddb_entry->iscsi_alias));
-  3738  
-  3739          COPY_ISID(fw_ddb_entry->isid, sess->isid);
-  3740  
-  3741          return rc;
-  3742  }
+--00000000000008654805b9e072cb
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-regards,
-dan carpenter
+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
+yfWKfxJx8FcWmsjkSlrwDu+oVuDUa2wqeKBU12HQ4JAVd+LOb5edsbbFQxgGHu+MPuc/1hl9kTkC
+AwEAAaOCAdEwggHNMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEwgY4wTQYIKwYBBQUH
+MAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVyc29uYWxzaWduMnNo
+YTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vZ3Nw
+ZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIB
+FiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEQGA1Ud
+HwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJzb25hbHNpZ24yc2hh
+MmczLmNybDAlBgNVHREEHjAcgRprYXNoeWFwLmRlc2FpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAK
+BggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJnXsLYTAdBgNVHQ4EFgQU4dX1
+Yg4eoWXbqyPW/N1ZD/LPIWcwDQYJKoZIhvcNAQELBQADggEBABBuHYKGUwHIhCjd3LieJwKVuJNr
+YohEnZzCoNaOj33/j5thiA4cZehCh6SgrIlFBIktLD7jW9Dwl88Gfcy+RrVa7XK5Hyqwr1JlCVsW
+pNj4hlSJMNNqxNSqrKaD1cR4/oZVPFVnJJYlB01cLVjGMzta9x27e6XEtseo2s7aoPS2l82koMr7
+8S/v9LyyP4X2aRTWOg9RG8D/13rLxFAApfYvCrf0quIUBWw2BXlq3+e3r7pU7j40d6P04VV3Zxws
+M+LbYxcXFT2gXvoYd2Ms8zsLrhO2M6pMzeNGWk2HWTof9s7EEHDjis/MRlbYSNaohV23IUzNlBw7
+1FmvvW5GKK0xggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
+IG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0g
+RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgUJqBUvuK
+OZ1dt6VnVxHVQieu2NF0+sOhra91wFbL+RMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
+hkiG9w0BCQUxDxcNMjEwMTI3MTE1NTIwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
+BglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG
+9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAH4kSC0+9qSs5f+wFKnbFR4iRQJJ
+P6xamJfxmtIIpazdZFkEByvHjjJQYEtKrvgdamsuyEsoYieJx+DnRg7t9p5poMdTq9ChuQM9ZIyF
+NmWT/3g5qx+sILZr4a8OkEdT+h3Q74SbzZeUvOzquTQ+QnJlzIijY4TNZz6o7Rx74YSQ61SrB84z
+ChFOA8GgWXNEL50LlecdhFw12yD0IVERZ/MXMmrxDOKwet6QAOavf2oHqQIK2p9fk2wvoRA+sWRv
+WQoukkw6BuxhaezzXxeyJUAKhZUcYtLeyeFWhW3baXcbqgglWXTUeSI5sz5PAfW4poixfuHTqFqD
+13iszCdT3DE=
+--00000000000008654805b9e072cb--
