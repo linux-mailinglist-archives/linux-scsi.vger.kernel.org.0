@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7840305F39
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF5B305F81
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jan 2021 16:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbhA0POG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jan 2021 10:14:06 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:30681 "EHLO
+        id S235801AbhA0PYd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jan 2021 10:24:33 -0500
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:51782 "EHLO
         esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343745AbhA0PNo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 10:13:44 -0500
+        with ESMTP id S235284AbhA0POV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jan 2021 10:14:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1611760423; x=1643296423;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Cs+pTXz7SUNQuOGw5qtZD6Wu/SDnaXgmW3BV9okxO9Y=;
-  b=h5iG2mQBEDlyB3u1PXQdKP97nR8Cp/k4gBol+bwqlQ4pJ7R3JFZXiHFM
-   u/dUihXx/N2K9tQP74LaGWl3SyiQ/jI2FkFs5wY3VUq591ZLtK2ZOISfF
-   l0sB1A/duIIq4ZXaKa9DL78b3zzIBhaFonV0kcAiDZYpzAC+9d/fYTrii
-   QHAVAFzGcfVYopE1AfavdA30zlCqioIu0zg2pRfG2Vz4m9DWo8vYamUV5
-   dedlUHtuYs9c+uTJde6aIzHe8I/a8Qf30fUUTWh81LBAh5F4iS0wTxifR
-   b9+ZfpC9mZJLQFZ8DCyG4CQyCTFnn43NYFLme0g0xXxCcL8tpJOtAd/Gu
-   g==;
-IronPort-SDR: yt5I8pYSBZDPgQ4PhwEusCd4zx6qf7J+3IaQN5SDPc3jU9lKPBh9FVGfJHilhPLlYulYMYfOXe
- b83+z66z05w5xlaCuczYk62mkhPDuyDfo+wxyLno+f/OkAzyXsenCi1CasueH5/jEP/ck+nuKS
- u6sG2SNuxW5gK7tKjfMDAAm23UzP/pZec3nwHDr9FqsSlPVSWg+S+9W0M/83JhmOWzqKxD87Yh
- ml1jJk4t5xV7J9Ve2u4dhm7EwvNU0zlk9LTuo8HcK08C+rdCz3rkUq5Cq/dtgdnM8foBqYQzQI
- GmE=
+  t=1611760460; x=1643296460;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=pYqNFpWu5gdPAJjbMMciUgh9gaj1oKk/cLrxHPOh+G8=;
+  b=QpuCXwWra1axa5mmSilLb3WVeC9awCyru0dLvVjjTMkphhw9n0rW/aCp
+   6zEw/rqj74XauWFc56QoRlKCuBJYzMymidnQMyvAoHOzlV3Ft6pu+qDCn
+   HTMZIqauxKGvxozfCz4dg69YeVNBTziTQsblhiyHj1mrNkToyatD951pq
+   EfvVr+LyCs41aKZISdlH49E4j+024BtlT212OuWvamj6LzeFUCNQS9+yZ
+   ggXBhMFVZILVtzBPPiBLO+NM7mhPwZsP7CLcWMA1NNSXefZQSupSec0lc
+   Hn+yxksNfpICrzhrtLNHANwatZhv+HgGb+WM+vu8aG7+hVv7Z4puqz5sq
+   w==;
+IronPort-SDR: DM3vvhmWQPZ22e0speaI34nn/kafJkycYudWC5F0GCDsr3nkj2SySXuEfTFXMNhnDVRR+2cY4y
+ FdWTbYXH5O1JT1zj47tIF3X9FGVkjxBgq4YXcjvS256/RfK3Sm61vj58SriQrXhw+kJHGvFBot
+ 2XrWcqy2aLmwF2G9Orj0dib3HAymusvHAU5vs0UD0TuLWR7kkWiXWCKq72QtxyYxElph0ZJenj
+ d8Uqrg9+LC82fnr1SY7QZHe6JTTGeIySsIBRGiErnyqDC32Trh6FRuH1oR1beBrJasXFDY5T6B
+ Q9M=
 X-IronPort-AV: E=Sophos;i="5.79,379,1602518400"; 
-   d="scan'208";a="158454180"
+   d="scan'208";a="158454188"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 23:12:38 +0800
-IronPort-SDR: G35u0EhCeayDmEiUDxnJMs3P0jcha64DLj8o5UzBxFkpEIc9HB9DZcA6roejzPtWBoYY7IACCa
- ej1DhORmn5KEpoSz0wxhtZGlo+Yaqi1+aWVpXQd+eXuoK8xWxEqq2aOmD6AVZROCrEjkAZlkDZ
- l8A4f3IMCPjIqzX0QzAO1hf07EKWE5gyeRLBabvmjy+tcHQJNJ+qJsmAbiYl87C0BUIl31KB6h
- 03Uc5sZdykbHTuC6v4xNZaak/aUPvBxSzg/xbiouOZQCwePjNi+ifuffVSN4d8yXrxPOB9YTc5
- N60tYvCFHbK6zx/WIGbA3D8S
+  by ob1.hgst.iphmx.com with ESMTP; 27 Jan 2021 23:12:50 +0800
+IronPort-SDR: j9uaeg9ovkYwmvKrEmEgQK442LzxJQ6vVZugPyksY8DbenSeuhqTvkkPE0VEBGFNWVwBGtFKaH
+ EKCPGk1hUqoQtR0pfl9HC8gJs7ozpTfoRd0IthWRJpsFZbg7K5nLF6gTSB5869nvB5m63bjrRz
+ Vj6Iq5HEFq34QBkh32UpDhkz01cYJ0hmR80IKHX8q1zgTrOapdkutddYkg3XjipVg3kuZL1cUl
+ rihoztpYY7Fdss/o5SAon52hexqQrRZTrwWvRjG5qrDdXAZjRa7IaotwTNziuwewGnJLiVeMrO
+ QDgwlgvqzCjLFTnhmo/Kh7hG
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 06:56:59 -0800
-IronPort-SDR: lhhlUqcQtSw94TjPLC+KIW883fojWPhE+GuLNzaCkbobT4YpBvXAB+mlMqz2oxHWPeICLkdGLH
- cPWxyxc1cS8+oydpjgkVGedboXcV4nZ8n/G9m4cmuNR/poTLe6THJGOGGDxEIlavumY+tLKi1q
- kitC7FhILl3Y/2i7K+gPbDjqfhIqkmIMgdJx7qI+ZugSuSxpvWh0PwsOh6t5bgYwDJLvQT4Q29
- TXHfNxpi8D8gDvAb8houp7PfgA7tK6wEgUTkQZ0j8lFk71v59dA9z23yknwym+tSD8Um8Xq8hZ
- WnM=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 06:57:10 -0800
+IronPort-SDR: OoREcpqAz05j/2BjvIBTgK++qemH9rDka295k2VVoMO+Qei8qKNmtT3C30E+Y4pGEjjB8NYgNi
+ AckljoYNl9XRWGFtMXZFB8aR2DjhenFG1070ZobvUhcVm5DaRVF0E+nRXlvCGLFs6LQQE9czZu
+ fl/ufdYjO441BWlnLsQmvsXnvP3GlQ9ayiSjQ2bzgV4hX+0F8bs/eEwkIm21dq7tHnvMG4c34e
+ 1BDcTsAyDfz3AvA4Hvt8PV3JpLNwIJP9D4L7nRImmz4d6DYUdxfGcct5ZLBLC8kpxGE2VwwOMi
+ E44=
 WDCIronportException: Internal
 Received: from bxygm33.sdcorp.global.sandisk.com ([10.0.231.247])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Jan 2021 07:12:34 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 27 Jan 2021 07:12:46 -0800
 From:   Avri Altman <avri.altman@wdc.com>
 To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -60,55 +60,52 @@ Cc:     gregkh@linuxfoundation.org, Bart Van Assche <bvanassche@acm.org>,
         Avi Shchislowski <avi.shchislowski@wdc.com>,
         Bean Huo <beanhuo@micron.com>, cang@codeaurora.org,
         stanley.chu@mediatek.com, Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH 0/8] Add Host control mode to HPB
-Date:   Wed, 27 Jan 2021 17:12:09 +0200
-Message-Id: <20210127151217.24760-1-avri.altman@wdc.com>
+Subject: [PATCH 1/8] scsi: ufshpb: Cache HPB Control mode on init
+Date:   Wed, 27 Jan 2021 17:12:10 +0200
+Message-Id: <20210127151217.24760-2-avri.altman@wdc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210127151217.24760-1-avri.altman@wdc.com>
+References: <20210127151217.24760-1-avri.altman@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The HPB spec defines 2 control modes - device control mode and host
-control mode. In oppose to device control mode, in which the host obey
-to whatever recommendation received from the device - In host control
-mode, the host uses its own algorithms to decide which regions should
-be activated or inactivated.
+We will use it later, when we'll need to differentiate between device
+and host control modes.
 
-We kept the host managed heuristic simple and concise.
+Signed-off-by: Avri Altman <avri.altman@wdc.com>
+---
+ drivers/scsi/ufs/ufshpb.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Aside from adding a by-spec functionality, host control mode entails
-some further potential benefits: makes the hpb logic transparent and
-readable, while allow tuning / scaling its various parameters, and
-utilize system-wide info to optimize HPB potential.
-
-This series is based on Samsung's V18 device-control HPB1.0 driver, see
-msg-id: 20201222015704epcms2p643f0c5011064a7ce56b08331811a8509@epcms2p6
-in lore.kernel.org. The patches are also available in wdc ufs repo:
-https://github.com/westerndigitalcorporation/WDC-UFS-REPO/tree/hpb-v18
-
-This version was tested on Galaxy S20, and Xiaomi Mi10 pro.
-Your meticulous review and testing is mostly welcome and appreciated.
-
-Thanks,
-Avri
-
-Avri Altman (8):
-  scsi: ufshpb: Cache HPB Control mode on init
-  scsi: ufshpb: Add host control mode support to rsp_upiu
-  scsi: ufshpb: Add region's reads counter
-  scsi: ufshpb: Make eviction depends on region's reads
-  scsi: ufshpb: Region inactivation in host mode
-  scsi: ufshpb: Add hpb dev reset response
-  scsi: ufshpb: Add "Cold" regions timer
-  scsi: ufshpb: Add support for host control mode
-
- drivers/scsi/ufs/ufshpb.c | 430 +++++++++++++++++++++++++++++++++-----
- drivers/scsi/ufs/ufshpb.h |  23 ++
- 2 files changed, 406 insertions(+), 47 deletions(-)
-
+diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+index d3e6c5b32328..183bdf35f2d0 100644
+--- a/drivers/scsi/ufs/ufshpb.c
++++ b/drivers/scsi/ufs/ufshpb.c
+@@ -26,6 +26,8 @@ static int tot_active_srgn_pages;
+ 
+ static struct workqueue_struct *ufshpb_wq;
+ 
++static enum UFSHPB_MODE ufshpb_mode;
++
+ bool ufshpb_is_allowed(struct ufs_hba *hba)
+ {
+ 	return !(hba->ufshpb_dev.hpb_disabled);
+@@ -1690,10 +1692,9 @@ void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf)
+ {
+ 	struct ufshpb_dev_info *hpb_dev_info = &hba->ufshpb_dev;
+ 	int version;
+-	u8 hpb_mode;
+ 
+-	hpb_mode = desc_buf[DEVICE_DESC_PARAM_HPB_CONTROL];
+-	if (hpb_mode == HPB_HOST_CONTROL) {
++	ufshpb_mode = desc_buf[DEVICE_DESC_PARAM_HPB_CONTROL];
++	if (ufshpb_mode == HPB_HOST_CONTROL) {
+ 		dev_err(hba->dev, "%s: host control mode is not supported.\n",
+ 			__func__);
+ 		hpb_dev_info->hpb_disabled = true;
 -- 
 2.25.1
 
