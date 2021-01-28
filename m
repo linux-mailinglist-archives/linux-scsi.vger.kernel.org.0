@@ -2,139 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E12307B78
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 17:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B676307BAA
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 18:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbhA1Q4g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Jan 2021 11:56:36 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:62233 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbhA1Q4e (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Jan 2021 11:56:34 -0500
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 28 Jan 2021 08:55:31 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 28 Jan 2021 08:55:30 -0800
-X-QCInternal: smtphost
-Received: from nitirawa-linux.qualcomm.com ([10.206.25.176])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 28 Jan 2021 22:25:08 +0530
-Received: by nitirawa-linux.qualcomm.com (Postfix, from userid 2342877)
-        id 05A052A73; Thu, 28 Jan 2021 22:25:07 +0530 (IST)
-From:   Nitin Rawat <nitirawa@codeaurora.org>
-To:     asutoshd@codeaurora.org, cang@codeaurora.org,
-        stummala@codeaurora.org, vbadigan@codeaurora.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com
-Cc:     bvanassche@acm.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nitin Rawat <nitirawa@codeaurora.org>,
-        "Bao D . Nguyen" <nguyenb@codeaurora.org>
-Subject: [PATCH V1 3/3] scsi: ufs-qcom: configure VCC voltage level in vendor file
-Date:   Thu, 28 Jan 2021 22:24:59 +0530
-Message-Id: <1611852899-2171-4-git-send-email-nitirawa@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1611852899-2171-1-git-send-email-nitirawa@codeaurora.org>
-References: <1611852899-2171-1-git-send-email-nitirawa@codeaurora.org>
+        id S232327AbhA1RBY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Jan 2021 12:01:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47062 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232683AbhA1RA2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 28 Jan 2021 12:00:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EEE564E0E;
+        Thu, 28 Jan 2021 16:59:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611853187;
+        bh=f6FDYR+2fbZ3ZjuVDKmJrkeFHlqyA4P3vGdmoyOPa1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rzag2xxRHgFBGSJ365/QUldWd9CTCZVGt3cs71rJutBhKs94QB4O0wVHJ78U0xIF9
+         n96V7cXtAmPsB9hu9gUYvKXwcH1SXtYNdkFw15Hr/lW1MQ6ApKzq4voIl5psE+u1SS
+         oIYlBt3CEfmzYKr/W9GKeV1ES9XtHwmC1KiXTL4cmN2/9EoY9kXCbDD71u9sIp+Nfr
+         FbyyfdHM+E5ZA+F8801PzzCElIq3kyLXwweF8LRAnfmH79wwG+57YuSijr3uE7kbk9
+         /DpcS6Ckt3f1RwDjmwI1QhKt/MkNHods9aX+BJj1ComGJOXJH3o25qnvlVltgShwCo
+         r/bA/dJbtb2Sw==
+Date:   Thu, 28 Jan 2021 08:59:46 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        xen-devel@lists.xenproject.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
+        ocfs2-devel@oss.oracle.com, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org, axboe@kernel.dk, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, minchan@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, agk@redhat.com,
+        snitzer@redhat.com, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, viro@zeniv.linux.org.uk, tytso@mit.edu,
+        jaegeuk@kernel.org, ebiggers@kernel.org, shaggy@kernel.org,
+        konishi.ryusuke@gmail.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, damien.lemoal@wdc.com,
+        naohiro.aota@wdc.com, jth@kernel.org, rjw@rjwysocki.net,
+        len.brown@intel.com, pavel@ucw.cz, akpm@linux-foundation.org,
+        hare@suse.de, gustavoars@kernel.org, tiwai@suse.de,
+        alex.shi@linux.alibaba.com, asml.silence@gmail.com,
+        ming.lei@redhat.com, tj@kernel.org, osandov@fb.com,
+        bvanassche@acm.org, jefflexu@linux.alibaba.com
+Subject: Re: [RFC PATCH 17/34] iomap: use bio_new in iomap_dio_zero
+Message-ID: <20210128165946.GL7698@magnolia>
+References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
+ <20210128071133.60335-18-chaitanya.kulkarni@wdc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210128071133.60335-18-chaitanya.kulkarni@wdc.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As a part of vops handler, VCC voltage is updated
-as per the ufs device probed after reading the device
-descriptor. We follow below steps to configure voltage
-level.
+On Wed, Jan 27, 2021 at 11:11:16PM -0800, Chaitanya Kulkarni wrote:
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 
-1. Set the device to SLEEP state.
-2. Disable the Vcc Regulator.
-3. Set the vcc voltage according to the device type and reenable
-   the regulator.
-4. Set the device mode back to ACTIVE.
+Looks ok to me,
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-Signed-off-by: Nitin Rawat <nitirawa@codeaurora.org>
-Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
-Signed-off-by: Veerabhadrarao Badiganti <vbadigan@codeaurora.org>
----
- drivers/scsi/ufs/ufs-qcom.c | 51 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+--D
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index f97d7b0..ca35f5c 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -21,6 +21,17 @@
- #define UFS_QCOM_DEFAULT_DBG_PRINT_EN	\
- 	(UFS_QCOM_DBG_PRINT_REGS_EN | UFS_QCOM_DBG_PRINT_TEST_BUS_EN)
-
-+#define	ANDROID_BOOT_DEV_MAX	30
-+static char android_boot_dev[ANDROID_BOOT_DEV_MAX];
-+
-+/* Min and Max VCC voltage values for ufs 2.x and
-+ * ufs 3.x devices
-+ */
-+#define UFS_3X_VREG_VCC_MIN_UV	2540000 /* uV */
-+#define UFS_3X_VREG_VCC_MAX_UV	2700000 /* uV */
-+#define UFS_2X_VREG_VCC_MIN_UV	2950000 /* uV */
-+#define UFS_2X_VREG_VCC_MAX_UV	2960000 /* uV */
-+
- enum {
- 	TSTBUS_UAWM,
- 	TSTBUS_UARM,
-@@ -1293,6 +1304,45 @@ static void ufs_qcom_print_hw_debug_reg_all(struct ufs_hba *hba,
- 	print_fn(hba, reg, 9, "UFS_DBG_RD_REG_TMRLUT ", priv);
- }
-
-+  /**
-+   * ufs_qcom_setup_vcc_regulators - Update VCC voltage
-+   * @hba: host controller instance
-+   * Update VCC voltage based on UFS device(ufs 2.x or
-+   * ufs 3.x probed)
-+   */
-+static int ufs_qcom_setup_vcc_regulators(struct ufs_hba *hba)
-+{
-+	struct ufs_dev_info *dev_info = &hba->dev_info;
-+	struct ufs_vreg *vreg = hba->vreg_info.vcc;
-+	int ret;
-+
-+	/* Put the device in sleep before lowering VCC level */
-+	ret = ufshcd_set_dev_pwr_mode(hba, UFS_SLEEP_PWR_MODE);
-+
-+	/* Switch off VCC before switching it ON at 2.5v or 2.96v */
-+	ret = ufshcd_disable_vreg(hba->dev, vreg);
-+
-+	/* add ~2ms delay before renabling VCC at lower voltage */
-+	usleep_range(2000, 2100);
-+
-+	/* set VCC min and max voltage according to ufs device type */
-+	if (dev_info->wspecversion >= 0x300) {
-+		vreg->min_uV = UFS_3X_VREG_VCC_MIN_UV;
-+		vreg->max_uV = UFS_3X_VREG_VCC_MAX_UV;
-+	}
-+
-+	else {
-+		vreg->min_uV = UFS_2X_VREG_VCC_MIN_UV;
-+		vreg->max_uV = UFS_2X_VREG_VCC_MAX_UV;
-+	}
-+
-+	ret = ufshcd_enable_vreg(hba->dev, vreg);
-+
-+	/* Bring the device in active now */
-+	ret = ufshcd_set_dev_pwr_mode(hba, UFS_ACTIVE_PWR_MODE);
-+	return ret;
-+}
-+
- static void ufs_qcom_enable_test_bus(struct ufs_qcom_host *host)
- {
- 	if (host->dbg_print_en & UFS_QCOM_DBG_PRINT_TEST_BUS_EN) {
-@@ -1490,6 +1540,7 @@ static const struct ufs_hba_variant_ops ufs_hba_qcom_vops = {
- 	.device_reset		= ufs_qcom_device_reset,
- 	.config_scaling_param = ufs_qcom_config_scaling_param,
- 	.program_key		= ufs_qcom_ice_program_key,
-+	.setup_vcc_regulators	= ufs_qcom_setup_vcc_regulators,
- };
-
- /**
---
-2.7.4
-
+> ---
+>  fs/iomap/direct-io.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+> index ea1e8f696076..f6c557a1bd25 100644
+> --- a/fs/iomap/direct-io.c
+> +++ b/fs/iomap/direct-io.c
+> @@ -189,15 +189,13 @@ iomap_dio_zero(struct iomap_dio *dio, struct iomap *iomap, loff_t pos,
+>  	int flags = REQ_SYNC | REQ_IDLE;
+>  	struct bio *bio;
+>  
+> -	bio = bio_alloc(GFP_KERNEL, 1);
+> -	bio_set_dev(bio, iomap->bdev);
+> -	bio->bi_iter.bi_sector = iomap_sector(iomap, pos);
+> +	bio = bio_new(iomap->bdev, iomap_sector(iomap, pos), REQ_OP_WRITE,
+> +		      flags, 1, GFP_KERNEL);
+>  	bio->bi_private = dio;
+>  	bio->bi_end_io = iomap_dio_bio_end_io;
+>  
+>  	get_page(page);
+>  	__bio_add_page(bio, page, len, 0);
+> -	bio_set_op_attrs(bio, REQ_OP_WRITE, flags);
+>  	iomap_dio_submit_bio(dio, iomap, bio, pos);
+>  }
+>  
+> -- 
+> 2.22.1
+> 
