@@ -2,86 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E7A3073B9
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 11:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA5E307435
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 11:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbhA1K25 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Jan 2021 05:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S229596AbhA1KyT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Jan 2021 05:54:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbhA1K2x (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Jan 2021 05:28:53 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE264C061573;
-        Thu, 28 Jan 2021 02:28:12 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id c2so5953078edr.11;
-        Thu, 28 Jan 2021 02:28:12 -0800 (PST)
+        with ESMTP id S231582AbhA1KyM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Jan 2021 05:54:12 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B4DC061573
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Jan 2021 02:53:32 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id a20so3639076pjs.1
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Jan 2021 02:53:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jQ5Hlu/ZfdYUm4Mstk8XMC0psWWUDqeKF2vH90g7FI0=;
-        b=sm8mLVrrlk3rdtTrwvsW4NGujP3HAlJZlmofB65pxL5iNBh8s/6G2gfxIIjIR9/fzn
-         8X6rkeR0NP3Redik3XApoPkjp+1aWf/gmecBUxOvjLqNQ7RLxumhKUhtsqZVuhJ66Bg2
-         klCWRlh0QtlkeXa3LnmHlGOiKj0yMvNJF4wWBzlq+9PPMAnfh5m2dOBJC4SwVsesyCfE
-         JukSQpf/QCjpQFzZAK/7mz6v9h6RwgrUaC1JVxSuO9eh9AymygsGMqLcPrfNMAAsuzey
-         QB2K6T4g023tUEzzG7yCyll3l+ZRKsetJx6YIohdMB5wXzV9QFoJ9Y+KkJnU1Usnzo5U
-         /XxQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=XLTdSQ4m93qjMPC0OSEfJS3QMGUzelIGE/ovYxtzqR0=;
+        b=Jywu6bMLWNRj+s6gxxjMo0+gYEAO4xTgjYvFJJFr7A28YQ0MLmQMT7sAPUM5m55Okm
+         o9/ohIoGh5GdFQeEJc6xylOsQRAUnK0GKZflQv80yhWfbgKXexxTus55cOCNzmxGZ/M6
+         eL506j1j29Z9gpxw+Z2PqZKXLQVCIYMATeJoaafTvZlJmF6ZGfVoOjPcreGvNtungf61
+         XV5QNUy/WW1ChQajXAucLKasgQMoudaHNaAHpls/oZoxrHRzTNBmUAjDhykkhr7hMyUt
+         RM89mMnKrvQVojeXEY3yg8ijpd0mGM+YF4aUJWptAe1dbJHgTS6wAGsblmx7mmczMwmu
+         e4fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jQ5Hlu/ZfdYUm4Mstk8XMC0psWWUDqeKF2vH90g7FI0=;
-        b=FiBAXp7jfsJEVbFR37j2P+obuAwoffxm4ULoB4nihLQy/HkxXa2MHc7+DFvQ6WX/6j
-         y7q1WTljJ06ZUSrkajcyHt9pEXPTmrk9IG34FSS4CdFi+UkJ3qhh4RQu85klskRfOHxL
-         3QpK4gdH542qPkc8U6bEOBJkfurKCnQKmN63+KTzwK6ma/Q0NK5uT+Ntc35xtk+4sdUG
-         9t4OFPm530BeLWe9C9+micjT11TwcnTjcSZHteK5in22s7z9iWMfnTcnbStFhKCXoNxp
-         fZ0pN6gYWzs3vzbnaUBtlVk0TWjlOY5LcdEUK8Z1OkoFkhVWi9C6K1Sei8tWVNoBEYAi
-         /1Bg==
-X-Gm-Message-State: AOAM533GPHE9dEPyI/rdjjH3agVvcINFlRuxhkX5aAcSZSEbhOY2AwGD
-        EdsVYm5uG/7G5m0kNULFW8Cb2ssFvFg=
-X-Google-Smtp-Source: ABdhPJypo1mcpMMpDB4PqZKFmSy/mCBuuqGMWZhFqSfRu0ZmlaavYLQoxiSuoBENI6C97sV3WkXjLA==
-X-Received: by 2002:a50:f288:: with SMTP id f8mr13159540edm.388.1611829691430;
-        Thu, 28 Jan 2021 02:28:11 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bee1b.dynamic.kabel-deutschland.de. [95.91.238.27])
-        by smtp.googlemail.com with ESMTPSA id l1sm2054762eje.12.2021.01.28.02.28.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 28 Jan 2021 02:28:10 -0800 (PST)
-Message-ID: <7436d052ddf9e59cfa7358069d3e0f3a84f89777.camel@gmail.com>
-Subject: Re: [PATCH v2] scsi: ufs: Give clk scaling min gear a value
-From:   Bean Huo <huobean@gmail.com>
-To:     Can Guo <cang@codeaurora.org>, jaegeuk@kernel.org,
-        asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, bjorn.andersson@linaro.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Thu, 28 Jan 2021 11:28:08 +0100
-In-Reply-To: <1611802172-37802-1-git-send-email-cang@codeaurora.org>
-References: <1611802172-37802-1-git-send-email-cang@codeaurora.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=XLTdSQ4m93qjMPC0OSEfJS3QMGUzelIGE/ovYxtzqR0=;
+        b=pp6vGlk0WBer7l4h5R89LzHTMqKz25CWPl7fTIRXmJ22PX0VsQU7550VzvhK0jOYaV
+         OGi7TkTO28gB82s9ELfA3oUfSOXYuldUQ9oXUSV7b4JxQJMLJeVxAl8tyKMLlBIBfD2Z
+         3MpXtaqmCuWMGPjnjvprUwUN9fDYQJLwMdb8zkCGlNG/kl7F8wJBdTD9tkkGaIxCztX4
+         nSVclFbPdolNWwLl3GuNk3Qt/54TsBGKh9uBPOkbkI3hX9DGmgn0UjshPHlvZFXXvvRH
+         qyOTaAYZoovRrCLHkMGDH1P0FO2c2PcNdWx8gHniqqlZ05tcsWoi0hYBtoWMWf7Y9TxO
+         P7lw==
+X-Gm-Message-State: AOAM531nPfmo8f6YBX+/FqYtwfTJkm0MZMpzaHcEIGnYCG15+scl5r8F
+        sCLfH+xMoMNJ2XJa/RKd9CGJb5w1D/SrcyyRi9M=
+X-Google-Smtp-Source: ABdhPJw1IqNjtEAxCeaUm3oxhQg1UyDt/HzgHyHrnEi0iMTvNvZy/me0WVuQk7He6ttfeOMTf302WiyqzFgPnWK1KdQ=
+X-Received: by 2002:a17:90b:1a86:: with SMTP id ng6mr10304636pjb.113.1611831211888;
+ Thu, 28 Jan 2021 02:53:31 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a17:90a:2e14:0:0:0:0 with HTTP; Thu, 28 Jan 2021 02:53:31
+ -0800 (PST)
+Reply-To: georgemike7031@gmail.com
+From:   george mike <missdonnahistory@gmail.com>
+Date:   Thu, 28 Jan 2021 11:53:31 +0100
+Message-ID: <CACROPfFB84E0oH-kLS_RpMEsvye8Wswpbb7xbhWh4PtScWiZpA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 2021-01-27 at 18:49 -0800, Can Guo wrote:
-> The initialization of clk_scaling.min_gear was removed by mistake.
-> This
-> change adds it back, otherwise clock scaling down would fail.
-> 
-> Fixes: 4543d9d78227 ("scsi: ufs: Refactor
-> ufshcd_init/exit_clk_scaling/gating()")
-> 
-> Signed-off-by: Can Guo <cang@codeaurora.org>
+zdravo
 
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Tested-by: Bean Huo <beanhuo@micron.com>
+Zovem se George Mike, po zanimanju sam pravnik. =C5=BDelim vam ponuditi
+najbli=C5=BEi srodnik mog klijenta. Naslijedit =C4=87ete zbroj od (8,5 mili=
+juna USD)
+dolara koje je moj klijent ostavio u banci prije svoje smrti.
 
+Moj klijent je dr=C5=BEavljanin va=C5=A1e zemlje koji je umro u automobilsk=
+oj
+nesre=C4=87i sa svojom suprugom
+i jedini sin. Imat =C4=87u pravo s 50% ukupnog fonda, dok =C4=87e 50% imati
+biti za vas.
+Molimo kontaktirajte moju privatnu e-po=C5=A1tu ovdje za vi=C5=A1e detalja:
+georgemike@7031gmail.com
+
+Unaprijed hvala,
+Gospodin George Mike,
