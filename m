@@ -2,209 +2,268 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CD1306ECD
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 08:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056D4306F37
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Jan 2021 08:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbhA1HSx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Jan 2021 02:18:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbhA1HQi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Jan 2021 02:16:38 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679FAC061574
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Jan 2021 23:15:58 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id i30so4300057ota.6
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Jan 2021 23:15:58 -0800 (PST)
+        id S231928AbhA1HY6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Jan 2021 02:24:58 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:8270 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231808AbhA1HWz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Jan 2021 02:22:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1611818574; x=1643354574;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=9Hp1mmxIhP12exuHZUs6f4NIF64JekIbMU2y2gjowsY=;
+  b=KmiMkW4ERc8uQLBvck7mIo06Arcipz/SnNoovMstKYQsL/25huj/Eoxo
+   RQY0mm1mc5i1cSAkKi9LbydoKmryrqzzuzCNf2Y4DTooKcIM5UMwHy9o2
+   7wWTR/L5qt3I+fJ1jjHJde/0nIsnwwrgTaP7dUGFHg6l0j8ks83NCJ86f
+   amlkS/kUYpR5XWUitwRUoO9CsBDC/X74h/mO4jSEUqhAyl+ovzbKTKNwL
+   aqr74gYpSq2XQbRYgyrmwcLjymehuqz/06Gkhl0/TzugBQU+j6aqTpkNz
+   W2IyVuIggmdJ5g9BKU+RbUGEEquhjx2C2PXoLJuPQ8eGoqpE6eifKcxOH
+   A==;
+IronPort-SDR: QEF+8TGngCqTGDYAfES0k7Iq8Lj8Z1j23hWw3M3LnFhL6QZih1XM5LZxSRsfTJXgpv5E1SblKM
+ Bsu7V10JhP5TnAvBjYRtRxEqUPv2HJm33T5x70FdtpKeTam8Lku0k8SIl7hluBD5ij/As5Vw9s
+ nKuDQlS8VQ8KHSrpBH6erXI92dE58YUlccMAgxKbmkG5Krj4uGkirZn5TulPgUw8Qky4rfx2PQ
+ aWCuLtWfwtNgNSyX+xM2wVuWWfLlJn8a8AVx4NTLiKKss4UTZKw7CG5gC5hQr1D2fM05/SrZuv
+ r5A=
+X-IronPort-AV: E=Sophos;i="5.79,381,1602518400"; 
+   d="scan'208";a="158517951"
+Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2021 15:21:44 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XGvTFC0yVocA1hFeGOYvjQ+f/YSuD75Q/8tkuiyNxQkF23UxvMywneYGAln1lw8Xhs3qjQvWItdgd+CqdoCZOLpmuH4ptIfJkiKypbJOF8fjo6xly5kpeejMCcmb9TV+VYlceFyaNhO46nha82bqmy7/luCs/lrsoL/cArREno60UHuMizWsEmdy4Bxfq7LnJpERyi07H9ww2vM5jeFFQj0tMeAigkwO1DsWafJt0Fq839vVOSa6z1KrJTZS1iJDKKe3rPYdaA3pbji5icSyWi0MHi2Av8SuAEzbzvSxch0j+tb0kMkBwUJVhvH8tc9lyxzjLZbBWdlEFDj4KAQoSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rZQ79VfW37oEjUPhbUXgVDt26btMTlh35TXahcKTIxw=;
+ b=ewcyy+f5pm0Gvfuq66QLUzmljFfxV1XcSt+FlXT110bCllm3RqvEk+y6rdwmDmRsLuIdGvXsMnFhphdnjfxABcalxu6RrTkW7MnOnWh9EF/8L3nffa7eXXB95G3BRw9RE5QltDcCZ1vcJ9c2HoEAI4HaooQEfE5prpKhyIBJc+z2sT8ynyDdElAtc2TQJJC8yAuAd8n0jS7Wc+YTaNR4fwo2ziu1wBo7rB+4xYRJnj/90sIzgR+/oyqJ8hNKi14vk4mwaZnVXoctiOqF4V0CjyJ2prws95UPtxPw9I8GHkzSJXn0TdiFJJTWo1ZfduzHSE90W7Sesm7qKNrg2W5Wag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mL2u/pZgwa4rAkIWydl2SqcXSXaaCsKqWURlavUcG1Y=;
-        b=OU+JNnyohUbECUwlJv/TGgyQe2S1E9XeBxDf2eObJEjlM6ZpwfSuqZXuysah7xXVI/
-         d6is0yGErOnByENzwi6PE3vc4pK1bdOVrEpi8elJdC/5e+Kajs++sQjC5/4z3ZUM630m
-         nQpsZRUCs47oHEagg89EHatdglepdETp4AonM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mL2u/pZgwa4rAkIWydl2SqcXSXaaCsKqWURlavUcG1Y=;
-        b=Vst+wo+2CXG+UyF/tPN4A/6y4R0wboAyb0Nf4rACKe0S2gOo8tKDV0kzjBBxTs5ZPF
-         wGFfLmKwfi+RP6VzxK/xcrD+RZMKKVyDiUSuGH7v1zU6OF8+X2rD5zgXduJgDI85JQ8G
-         j6ReYjohBAEr5QcRGw99/3ag00iI184vfGqrfpBXUNWDiFamWF2K8vT19lGePievhVnu
-         RMho0em2yBw0m49FtA102PMYZaFwSv4RVQcr7rmpZKX1NJP55omUwUt5MpvxqLygxfwW
-         s/Zaoiczo8SsT4pknqkRezUqgWAl7dSejP/5KQgO+HHXuKAeQHm4K8pJePpbOgd3+VEU
-         66zQ==
-X-Gm-Message-State: AOAM533KdLd806Wkc6uS1pNJtcZVabOyN8CbCBlgQNuG6fvQ7n9VjSn9
-        yOfoOTVvE6Vb9i4nUHzIn/yUmOXCmaz5RPTwqTAE/w==
-X-Google-Smtp-Source: ABdhPJxHL59i+JPAydim3b7PQcdGo8/EQnKf43hkcfGcSrddx7Z3wfib5zgRHlBEwkOHFz0I89WyP2ZblLIk7cpT+RU=
-X-Received: by 2002:a9d:1c9a:: with SMTP id l26mr10464807ota.316.1611818157530;
- Wed, 27 Jan 2021 23:15:57 -0800 (PST)
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rZQ79VfW37oEjUPhbUXgVDt26btMTlh35TXahcKTIxw=;
+ b=hrFaGwglVnPWcvrZYYTSLmKDzWe4Ql8MYzMhE/ZNdzUUxZaQHpa0WUmIc6fKPln6CA7rT0gIe3GHUdejLdgow6Yj1ChwX6iG2QGP9vTtBq0U3ZLqwlykpawLR4D2R+Htay7VfWrlfDvS5SjOdFc1MzrgeW8k4qfHTZmC0UwhJ90=
+Received: from BL0PR04MB6514.namprd04.prod.outlook.com (2603:10b6:208:1ca::23)
+ by MN2PR04MB6352.namprd04.prod.outlook.com (2603:10b6:208:1ab::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.17; Thu, 28 Jan
+ 2021 07:21:42 +0000
+Received: from BL0PR04MB6514.namprd04.prod.outlook.com
+ ([fe80::b880:19d5:c7fe:329d]) by BL0PR04MB6514.namprd04.prod.outlook.com
+ ([fe80::b880:19d5:c7fe:329d%7]) with mapi id 15.20.3784.017; Thu, 28 Jan 2021
+ 07:21:42 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "jfs-discussion@lists.sourceforge.net" 
+        <jfs-discussion@lists.sourceforge.net>,
+        "linux-nilfs@vger.kernel.org" <linux-nilfs@vger.kernel.org>,
+        "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "philipp.reisner@linbit.com" <philipp.reisner@linbit.com>,
+        "lars.ellenberg@linbit.com" <lars.ellenberg@linbit.com>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "sergey.senozhatsky.work@gmail.com" 
+        <sergey.senozhatsky.work@gmail.com>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "shaggy@kernel.org" <shaggy@kernel.org>,
+        "konishi.ryusuke@gmail.com" <konishi.ryusuke@gmail.com>,
+        "mark@fasheh.com" <mark@fasheh.com>,
+        "jlbec@evilplan.org" <jlbec@evilplan.org>,
+        "joseph.qi@linux.alibaba.com" <joseph.qi@linux.alibaba.com>,
+        Naohiro Aota <Naohiro.Aota@wdc.com>,
+        "jth@kernel.org" <jth@kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hare@suse.de" <hare@suse.de>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>,
+        "tiwai@suse.de" <tiwai@suse.de>,
+        "alex.shi@linux.alibaba.com" <alex.shi@linux.alibaba.com>,
+        "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "tj@kernel.org" <tj@kernel.org>, "osandov@fb.com" <osandov@fb.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jefflexu@linux.alibaba.com" <jefflexu@linux.alibaba.com>
+Subject: Re: [RFC PATCH 02/34] block: introduce and use bio_new
+Thread-Topic: [RFC PATCH 02/34] block: introduce and use bio_new
+Thread-Index: AQHW9UTnP+XqlvwCeEC+5iodtWSeNA==
+Date:   Thu, 28 Jan 2021 07:21:42 +0000
+Message-ID: <BL0PR04MB6514C554B4AC96866BC1B16FE7BA9@BL0PR04MB6514.namprd04.prod.outlook.com>
+References: <20210128071133.60335-1-chaitanya.kulkarni@wdc.com>
+ <20210128071133.60335-3-chaitanya.kulkarni@wdc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: wdc.com; dkim=none (message not signed)
+ header.d=none;wdc.com; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [2400:2411:43c0:6000:47a:7b5a:7dfa:1b1e]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: eb871fa1-3f12-44a2-a077-08d8c35d5ca2
+x-ms-traffictypediagnostic: MN2PR04MB6352:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR04MB6352DBDFAB902914B9C585EEE7BA9@MN2PR04MB6352.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: M09uEpCy2sHYnN+orzp8d3r4sKwPwnS+kovdPTr+X2vGltHHUOiuwt35YiL4pwUTQFJb9lI/cctrcvMtSEsYDG11B6WuQeQ5LhCFOm8xnCx/j7IUhZfAc+BSTsEsxty8tkWMahat2Us5tDlHI9XpWnzEpUBuIiTIis6CFGcSzDbZQv+YTkDwb0pb6zKYryvjjNyuaDbfN6d7lDvAFgMe/S84pCGpf8NIYlMhpfcnANa9rtVk1fEfaQ11KXM8VaoFYslEaC8FtVVKMdMiSlVm1G6wR6EIe9QpF54CPrt28byH/cHhwj053vEXp8RFF07hlGeGEHLWbouozYb93iT1K6F5OPFCWV/ewR8z5Kn/uykKQypwrh09HC+m3KNohPQSss4YboxRFNRKIUOjUD9KDfOD2dh3DMVG9Wehar1cknnRs6eoICQxgNf9XdAqhQxkvWGbAdwofxGFVG96zdq+KiRY7l6iGEQ9lizBBRpl1Cl5YsTWF3Ebz7haDS4uRI4CUlc0EEMGTEpRabqGyepXSSCQauC0I01aeQXMPzWGYL5JlkA/UoQC4yu0QYoNvMSIgo+cZP34MN7KkNUL2U0tyA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR04MB6514.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(366004)(136003)(396003)(7366002)(7406005)(64756008)(66556008)(66476007)(66946007)(5660300002)(7416002)(316002)(6506007)(186003)(66446008)(76116006)(110136005)(83380400001)(53546011)(7696005)(91956017)(54906003)(52536014)(9686003)(86362001)(55016002)(71200400001)(2906002)(478600001)(33656002)(4326008)(921005)(8676002)(8936002)(21314003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?ilRnIHb2W+3T2C2caNzRqpDzJ0Ea0Xivh3HFrmVjFepbjG/4fJPeoU7kjRlT?=
+ =?us-ascii?Q?4cfEdoxq1pKIhTR8YC8VWpTJjQgCARNQwY+MfHwWAHyq7XzZrTJ+W5zBB4Nr?=
+ =?us-ascii?Q?gbqboym+VApr7h2E6XSe0FmXOz+omKq6DFZVboi3NwQAYnWCDCcygMa0n5ZC?=
+ =?us-ascii?Q?i+orw+uEOMmnA8L/tMdOkJYMmLEyVDh+G9pnjfMmYkt0blpGnFBWHNDym39U?=
+ =?us-ascii?Q?dIrdmaQbh6883La06gFXbWGdjQgjXOXLEnZ3UgQdxTZ3JyxZKLQ71jVVbmhr?=
+ =?us-ascii?Q?0p2pkHIwQoMPz5HKOnR6V80LYTmpcP7VgrO091zZ/4rct/lsBVwykJza+GD5?=
+ =?us-ascii?Q?IHbQu1IRlEAKFeXGAtTjEb578LsnTaSvJCJYoQS2vP+axrzwvVVw8mOt+5k0?=
+ =?us-ascii?Q?KL2XZSeojWALtQsww9PwXxXKo/u++tt+9E5GT2jM5O4BtWCGYIeHt1uhRADL?=
+ =?us-ascii?Q?gJ0hzvvlILRjU/TqEgmmCXBE50OH3C99QT7ii97n4+QFDEjw2bGLKb5lrf6H?=
+ =?us-ascii?Q?IHyTRN7gvNFJTUay5wTAkpCCUyYWXZIjEb2UFpB6lV531wPPtNPC4ZXwwrWy?=
+ =?us-ascii?Q?UUwx0RViz7R7iLMJP7kZUpan/n9xAtlMTSdfuUl+LJK65X0ynOT4EUBmjZh1?=
+ =?us-ascii?Q?7f2FeVb24U1zoxD5JnIuvykDuOYgmJlnvf2GvI4IfNA9RybrTxAbVd7Ev1uE?=
+ =?us-ascii?Q?iYKXh1HRo38Gzl+/krexExV4e0GgKuB8ROJUM1mrrLxC0PLvUJVZZWIIKY/T?=
+ =?us-ascii?Q?EtWttQJe8PPeFmAWMbSTnlaoUKPvNyDC93hjlfGSDIjTTLIFZ4iZg/v8/mfl?=
+ =?us-ascii?Q?vPF743c6M4QtXnUUQcdd8jMU2Xffoi6iuon4E7e6TeLOR0e7niaTBUf3bgPv?=
+ =?us-ascii?Q?W2AR7teeocTc9v/wp1bkGDqoO4PDXnCni+0tsViRKD+BHAkawcDVDIjbtPby?=
+ =?us-ascii?Q?TmOiQAj1HhTITExgPZ3Am1ML0xT8XHeZOcxCj8XLjunGXY367EkeICLa7oc4?=
+ =?us-ascii?Q?Hx+SgjQnG25wJn9UaUXUtvbZ+SxW0OdUJGfxAAPJaG/AhMr+s6nN+ezf5jC+?=
+ =?us-ascii?Q?TnbTVjltXe3BweymPazgpv3fxkvT/+e3/ihgd/xwUglKOJv1POJWqDO9pOjp?=
+ =?us-ascii?Q?vVmRwBKsvdP+eIgHWtuWTOV2jEyOlzJg4w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20210127223840.GB1350451@T590>
-In-Reply-To: <20210127223840.GB1350451@T590>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Thu, 28 Jan 2021 12:45:46 +0530
-Message-ID: <CAK=zhgok5X45F-SpFkeTLe9ufA8PozUc7HESEzXDJNMLcxDJ7Q@mail.gmail.com>
-Subject: Re: [MPT3SAS bug] wrong queue setting for HDD. drive
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c0709b05b9f0a8cf"
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR04MB6514.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb871fa1-3f12-44a2-a077-08d8c35d5ca2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2021 07:21:42.3813
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HOBO+8eTXWVmpt6dgIHyBBjDN753lOgBMYt0QXNGr1qUdGHKogIJ1c3Ww3ZO4DM7PeQNbxVnSGwrctGN0hiVFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6352
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000c0709b05b9f0a8cf
-Content-Type: text/plain; charset="UTF-8"
-
-Ming,
-
-Below referred commit changes apply only for NVMe drives.
-
-Driver sets nomerges & virtual boundary under below if condition. And
-the driver sets MPT_TARGET_FLAGS_PCIE_DEVICE bit in
-sas_target_priv_data->flags only for NVMe drives.
-
-if (sas_target_priv_data->flags & MPT_TARGET_FLAGS_PCIE_DEVICE) {
-           ...
-                blk_queue_flag_set(QUEUE_FLAG_NOMERGES,
-                                sdev->request_queue);
-                blk_queue_virt_boundary(sdev->request_queue,
-                                ioc->page_size - 1);
-}
-
-on my local setup, I have both SAS HDD and NVMe drives as shown below,
-
-[11:0:20:0]  disk    SEAGATE  ST600MP0005      VS09  /dev/sdz
-[11:2:0:0]   disk    NVMe     INTEL SSDPE2MW40 0174  /dev/sdab
-
-and default nomerge setting for these drives is as show below,
-/sys/devices/pci0000:80/0000:80:03.0/0000:85:00.0/host11/port-11:0/expander-11:0/port-11:0:19/end_device-11:0:19/target11:0:20/11:0:20:0/block/sdz/queue/nomerges:0
-/sys/devices/pci0000:80/0000:80:03.0/0000:85:00.0/host11/target11:2:0/11:2:0:0/block/sdab/queue/nomerges:2
-
-so, for SAS HDD drive default nomerge setting is zero and for NVMe
-drive the default nomerge setting is two.
-
- Thanks,
-Sreekanth
-
-On Thu, Jan 28, 2021 at 4:08 AM Ming Lei <ming.lei@redhat.com> wrote:
->
-> Hello Guys,
->
-> The commit[1] is supposed for NVMe device only, but we found the change is
-> actually done on the following mpt3sas HDD. drive:
->
->         #sginfo /dev/sdc
->         INQUIRY response (cmd: 0x12)
->         ----------------------------
->         Device Type                        0
->         Vendor:                    SEAGATE
->         Product:                   ST16000NM002G
->         Revision level:            E003)
->
-> So NOMERGES is enabled, and virt boundary limit is applied on this HDD.
-> device, and performance drop is observed, can you take a look at the
-> issue?
->
->
-> [1] commit d1b01d14b7baa8a4bb4c11305c8cca73456b2f7c
-> Author: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-> Date:   Tue Oct 31 18:02:33 2017 +0530
->
->     scsi: mpt3sas: Set NVMe device queue depth as 128
->
->     Sets nvme device queue depth, name and displays device capabilities
->
->
->
-> Thanks,
-> Ming
->
-
---000000000000c0709b05b9f0a8cf
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-Rag/s/0IKyxAQsoBcla5ZufuDE5ir/mlnYktkPJdg+kns/OPDsINSyWqNYE9PKy9+3cp/fItNFtH
-krg1AgMBAAGjggHTMIIBzzAOBgNVHQ8BAf8EBAMCBaAwgZ4GCCsGAQUFBwEBBIGRMIGOME0GCCsG
-AQUFBzAChkFodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc3BlcnNvbmFsc2ln
-bjJzaGEyZzNvY3NwLmNydDA9BggrBgEFBQcwAYYxaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29t
-L2dzcGVyc29uYWxzaWduMnNoYTJnMzBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEF
-BQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBE
-BgNVHR8EPTA7MDmgN6A1hjNodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzcGVyc29uYWxzaWdu
-MnNoYTJnMy5jcmwwJwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNV
-HSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJnXsLYTAdBgNVHQ4E
-FgQU1CyhXqcQo40SZ7kFS/AiOnRW6lMwDQYJKoZIhvcNAQELBQADggEBAFeMmmz112eNFAV8Ense
-5WremClV5F3Md1xS0yXKqxlgakUJaOI/Fai7OLQaQqsEoxW6/QqWEi1wbZOccbdritOkL5b7sVUp
-SU9OfuIlV8c3XMLaWSIluy+0ImtRJ49jDCI4KtQESHrqfQRZcc1C/avZvNED3U4b10U6N3SY+59b
-fm2Vlwacwp+8ESTp49DsLcJqc4U/0rUZxLWtgPokzS+ovX+JAu8zx1SmOzUC4hj4Bp6Vnfd5KWUK
-JJQBmQHXii+acSeTgHmPWUYs3tYQ0uIX0Yy8LUWPdGbEq+KWepzY2otC+iVWdngCCv8Nf1Xo1jki
-AGJ6hrlWFE0qJVWv25sxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
-YWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hB
-MjU2IC0gRzMCDBmG1a14/wFg8qBhUjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg
-5coQef7H80rkTaZAmqg6ozAiMDAqZufQ53JglrVcVnAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEH
-ATAcBgkqhkiG9w0BCQUxDxcNMjEwMTI4MDcxNTU4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFl
-AwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjAL
-BgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBADldeaGXaS8Ci6epj8vO
-AR2dNTPGj6QyejGqpfX3/hATllsx8pTW7tmLmekNLBhUwRWMfu/jZ2/0HhCOeG18zMK0elUfyCZW
-waa5B3fl+DFL8tVzTl020eoUTEIzHIbjCYooQJEfTMQ4P2lBrj1ZjdeEHICdbH8a+F2LBl4iC9CM
-M4F0SHNGqT6/6OFG2+JpwI1lckft5k17smX8mcBvpr6WeZfhEdwcEhZR0yw9FQLXPu69pIPFTxyh
-IXGHeHeYiuQLwjQOJuRizFNSZW51VZpVlx329+Ih/Jvyt9BpBNf6wxgn7MkVteNDuCWc8heGviMX
-hkBFsmNmO76SzSG3idM=
---000000000000c0709b05b9f0a8cf--
+On 2021/01/28 16:12, Chaitanya Kulkarni wrote:=0A=
+> Introduce bio_new() helper and use it in blk-lib.c to allocate and=0A=
+> initialize various non-optional or semi-optional members of the bio=0A=
+> along with bio allocation done with bio_alloc(). Here we also calmp the=
+=0A=
+> max_bvecs for bio with BIO_MAX_PAGES before we pass to bio_alloc().=0A=
+> =0A=
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>=0A=
+> ---=0A=
+>  block/blk-lib.c     |  6 +-----=0A=
+>  include/linux/bio.h | 25 +++++++++++++++++++++++++=0A=
+>  2 files changed, 26 insertions(+), 5 deletions(-)=0A=
+> =0A=
+> diff --git a/block/blk-lib.c b/block/blk-lib.c=0A=
+> index fb486a0bdb58..ec29415f00dd 100644=0A=
+> --- a/block/blk-lib.c=0A=
+> +++ b/block/blk-lib.c=0A=
+> @@ -14,17 +14,13 @@ struct bio *blk_next_bio(struct bio *bio, struct bloc=
+k_device *bdev,=0A=
+>  			sector_t sect, unsigned op, unsigned opf,=0A=
+>  			unsigned int nr_pages, gfp_t gfp)=0A=
+>  {=0A=
+> -	struct bio *new =3D bio_alloc(gfp, nr_pages);=0A=
+> +	struct bio *new =3D bio_new(bdev, sect, op, opf, gfp, nr_pages);=0A=
+>  =0A=
+>  	if (bio) {=0A=
+>  		bio_chain(bio, new);=0A=
+>  		submit_bio(bio);=0A=
+>  	}=0A=
+>  =0A=
+> -	new->bi_iter.bi_sector =3D sect;=0A=
+> -	bio_set_dev(new, bdev);=0A=
+> -	bio_set_op_attrs(new, op, opf);=0A=
+> -=0A=
+>  	return new;=0A=
+>  }=0A=
+>  =0A=
+> diff --git a/include/linux/bio.h b/include/linux/bio.h=0A=
+> index c74857cf1252..2a09ba100546 100644=0A=
+> --- a/include/linux/bio.h=0A=
+> +++ b/include/linux/bio.h=0A=
+> @@ -826,5 +826,30 @@ static inline void bio_set_polled(struct bio *bio, s=
+truct kiocb *kiocb)=0A=
+>  	if (!is_sync_kiocb(kiocb))=0A=
+>  		bio->bi_opf |=3D REQ_NOWAIT;=0A=
+>  }=0A=
+> +/**=0A=
+> + * bio_new -	allcate and initialize new bio=0A=
+> + * @bdev:	blockdev to issue discard for=0A=
+> + * @sector:	start sector=0A=
+> + * @op:		REQ_OP_XXX from enum req_opf=0A=
+> + * @op_flags:	REQ_XXX from enum req_flag_bits=0A=
+> + * @max_bvecs:	maximum bvec to be allocated for this bio=0A=
+> + * @gfp_mask:	memory allocation flags (for bio_alloc)=0A=
+> + *=0A=
+> + * Description:=0A=
+> + *    Allocates, initializes common members, and returns a new bio.=0A=
+> + */=0A=
+> +static inline struct bio *bio_new(struct block_device *bdev, sector_t se=
+ctor,=0A=
+> +				  unsigned int op, unsigned int op_flags,=0A=
+> +				  unsigned int max_bvecs, gfp_t gfp_mask)=0A=
+> +{=0A=
+> +	unsigned nr_bvec =3D clamp_t(unsigned int, max_bvecs, 0, BIO_MAX_PAGES)=
+;=0A=
+> +	struct bio *bio =3D bio_alloc(gfp_mask, nr_bvec);=0A=
+=0A=
+I think that depending on the gfp_mask passed, bio can be NULL. So this sho=
+uld=0A=
+be checked.=0A=
+=0A=
+> +=0A=
+> +	bio_set_dev(bio, bdev);=0A=
+> +	bio->bi_iter.bi_sector =3D sector;=0A=
+> +	bio_set_op_attrs(bio, op, op_flags);=0A=
+=0A=
+This function is obsolete. Open code this.=0A=
+=0A=
+> +=0A=
+> +	return bio;=0A=
+> +}=0A=
+>  =0A=
+>  #endif /* __LINUX_BIO_H */=0A=
+> =0A=
+=0A=
+=0A=
+-- =0A=
+Damien Le Moal=0A=
+Western Digital Research=0A=
