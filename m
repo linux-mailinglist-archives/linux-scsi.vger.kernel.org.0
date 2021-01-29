@@ -2,61 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E37813082FD
-	for <lists+linux-scsi@lfdr.de>; Fri, 29 Jan 2021 02:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB8C30842A
+	for <lists+linux-scsi@lfdr.de>; Fri, 29 Jan 2021 04:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbhA2BIr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Jan 2021 20:08:47 -0500
-Received: from vmh16998.hosting24.com.au ([223.27.28.158]:60803 "EHLO
-        vmh20853.hosting24.com.au" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231713AbhA2BIV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 28 Jan 2021 20:08:21 -0500
-X-Greylist: delayed 7136 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Jan 2021 20:07:53 EST
-Received: from vmh20853.hosting24.com.au (localhost [IPv6:::1])
-        by vmh20853.hosting24.com.au (Postfix) with ESMTPSA id 72E39165F2A;
-        Fri, 29 Jan 2021 09:15:14 +1100 (AEDT)
-Received: from Adsl-41.66.45.80.aviso.ci (Adsl-41.66.45.80.aviso.ci
- [41.66.45.80]) by webmail.callentaxation.com.au (Horde Framework) with HTTP;
- Thu, 28 Jan 2021 22:15:14 +0000
-Date:   Thu, 28 Jan 2021 22:15:14 +0000
-Message-ID: <20210128221514.Horde.YkQnISVVnCTQ5SLLXuLqiiV@webmail.callentaxation.com.au>
-From:   DIANA MARKUS <test@callentaxation.com.au>
-Subject: DONATION FUND FROM MRS. DIANA MARKUS,
-Reply-to: dianamarkus07@gmail.com
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S231513AbhA2DQl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Jan 2021 22:16:41 -0500
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:43346 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229786AbhA2DQk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Jan 2021 22:16:40 -0500
+Received: by mail-pl1-f181.google.com with SMTP id 31so4483905plb.10;
+        Thu, 28 Jan 2021 19:16:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gDBgruowPbxD5gxpyUbLRP7J45dUpLZjOstK4g+zCw0=;
+        b=ekwQH4B2/K+z2xApZsRioz+QytwXe/NZWAiIr2eycdmuJE2I9JDRkSMLwcIa3J0hZp
+         iJ3VF2HluyWuMPGy+vxI7hk3uALGCjfJPbYhNwXBg1jYyAP3Ur5qX3xYDGgS1S6ARzH1
+         7JqllhisAdZHaaHWEdvAxO9byVwNVEul07ejPEOvOUTaAK/L5ZIwRhzmSk+SgskCAetN
+         GlhYi/JxSzaQM+jRkgYntS1FIbg5EQKwB8c4d6SHBY2oNsETbQjpvhDBdFUVYCIBO5AC
+         D7BBYffH53VxMdoNZK4Xnb28ExyHLcIZpFL1EEBucE1zuGfR+jY3uolPIZenmsvzYB8u
+         X04g==
+X-Gm-Message-State: AOAM5322qE1jYRZHW0PRn4juePx/jL1ffwpKJ1UEaV3+0YSHYfrHVtb0
+        +5vvCUdR4nDgH1zkeP3u5eA3Cdr7aCw=
+X-Google-Smtp-Source: ABdhPJx+KritiAwb0V42iVvyAmgk2Pxfn44xi8+9b2LOvWv+kygqhrOlr73s/6D6BrjJ1wYncrQYWg==
+X-Received: by 2002:a17:90a:fc6:: with SMTP id 64mr2443280pjz.79.1611890159253;
+        Thu, 28 Jan 2021 19:15:59 -0800 (PST)
+Received: from ?IPv6:2601:647:4000:d7:fd12:a590:9797:4acb? ([2601:647:4000:d7:fd12:a590:9797:4acb])
+        by smtp.gmail.com with ESMTPSA id a31sm6899616pgb.93.2021.01.28.19.15.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jan 2021 19:15:58 -0800 (PST)
+Subject: Re: [PATCH v3 3/3] scsi: ufs: Fix wrong Task Tag used in task
+ management request UPIUs
+To:     Can Guo <cang@codeaurora.org>, jaegeuk@kernel.org,
+        asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Sujit Reddy Thumma <sthumma@codeaurora.org>,
+        Vinayak Holikatti <vinholikatti@gmail.com>,
+        Yaniv Gardi <ygardi@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1611807365-35513-1-git-send-email-cang@codeaurora.org>
+ <1611807365-35513-4-git-send-email-cang@codeaurora.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <8351747f-0ec9-3c66-1bdf-b4b73fcee698@acm.org>
+Date:   Thu, 28 Jan 2021 19:15:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Disposition: inline
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <1611807365-35513-4-git-send-email-cang@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 1/27/21 8:16 PM, Can Guo wrote:
+> In __ufshcd_issue_tm_cmd(), it is not right to use hba->nutrs + req->tag as
+> the Task Tag in one TMR UPIU. Directly use req->tag as the Task Tag.
 
+Why is the current code wrong and why is this patch the proper fix?
+Please explain this in the patch description.
 
--- 
-How are you and family.
-I am Mrs. Diana Markus. I have a (2,900,000.00 USD) MILLION fund that  
-I inherited from my late husband and want to donate through you for an  
-orphanage and charity project, but I have been suffering from cancer  
-for so long now that I was hospitalized for treatment. My fear now is  
-what the doctor informed me, after a series of tests on me that I may  
-not live long because of the disease and I am afraid of losing this  
-fund to the government because they don't care about the poor in  
-society.
+> +	 * blk_get_request() used here is only to get a free tag.
 
-I will appreciate your honesty and courage to handle this fund to help  
-orphans and the charity home.
-As soon as I receive your message regarding your interest in this fund  
-to help the charity home and the less privileged, I will give you more  
-details regarding this fund.
+Please fix the word order in this comment ("blk_get_request() is used
+here only to get a free tag").
 
-Please contact me immediately after reading this message for more  
-details regarding this humanitarian agenda.
+> +	ufshcd_release(hba);
+>  	blk_put_request(req);
+>  
+> -	ufshcd_release(hba);
 
-God bless you while I await your response.
-Your sister.
+An explanation for this change is missing from the patch description.
 
-Ms. Diana Markus
+Thanks,
 
+Bart.
