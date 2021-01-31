@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F067D309CD6
-	for <lists+linux-scsi@lfdr.de>; Sun, 31 Jan 2021 15:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B04309CDE
+	for <lists+linux-scsi@lfdr.de>; Sun, 31 Jan 2021 15:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbhAaOXu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 31 Jan 2021 09:23:50 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:37358 "EHLO
+        id S232330AbhAaOYA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 31 Jan 2021 09:24:00 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:37617 "EHLO
         esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbhAaOBn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 31 Jan 2021 09:01:43 -0500
+        with ESMTP id S229983AbhAaOD1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 31 Jan 2021 09:03:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1612101701; x=1643637701;
+  t=1612101805; x=1643637805;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=BS8BGfrq1dJT5GZxyDK1Sv89fzYYmrqP6xvx+mP6DAo=;
-  b=QZFqNuVkxxzW/zSUQ5vFiOO0hOe/kcEIYeYMqhDY6lkWkyRIXzPJE8Im
-   BhB06fod3/vAYuXcxcuznqUCiP9gXLELJ3fA0U9UlTc4weLAas3MGwYaS
-   b/Krk7MnyYFwPJN2w+zVcXLap2qSWgrVQH2FUTKVEz/2JWqlbn355DbnR
-   OwnMjy+jaJt1AxedvSTUaETk3K+SLD305QlLw6mI8cjToFXU4d6ZraMH7
-   1rB9QxOylV0ZSujc+WY/qZeMIL6b/D4iPurWDaFnLWbxvCR8MKhenSXdy
-   c0AYOyMeSHipre//z8Toj98rrSXGCgc8HTAKa0dMcgG39GQ8KgHGEoPEs
-   w==;
-IronPort-SDR: ygyXPUKZKG3oZDYENr7E4vckWjxFhovOT9pHZ5lfVSoURtvjW83TMkVFLuuzALrbh+yfm3Ybzn
- OI84anvsaJCPEsp0jhLy8swZKLowgOp5BYA8yqif9Kw17LHeJjEhE/h3VUBELseH9IheQV1BT+
- MUnBzZjOWVTikJEwwyP+P1EoynKF3S8qTQUUHg2sBcGSsv0AyGUEEY2u7GygBIen7ygAwOPe6/
- qZxR/LHKExzFyMRcNmXH590TwAJXc6VedYb+Wb8lvJqCfcFEPH/Z+atJ3Lmv3Ld2XsciYNu2eE
- SXs=
+  bh=Gseb56BKRDUAHQwFgeHZtPKi4gNsQNw0mgUD7MU+Ps8=;
+  b=qzlYLJf3sq0PJTvQxEJ5G3kngsPEVhoIS+2s3xDhRn2tt2z5CkCsOQwI
+   UjfXyauyKFuRP5mkzDEhg1mUq41mHCWUflHWIO+VcHgmGH1hwTtaRTyqg
+   EXoEmVBF08k9+9QyFGelSa49HOKUDhSnSWCsR2JEWsWJj9kk/lkuAlash
+   jkNHws2m08l9ICYkFpfYqXwa0w0P6Mnn1QHuUGeGLoAuAmLaUWRvy6C+h
+   TK9yXzBia6Kz2ORzrFLTZ5zMIllIvpcTgQhUf58sBXybPtjaOYD8y7JZN
+   ZXcU614Jbgtb4UuSPbk1KSX3ndYgSBx2Ffcy51B76xBiYV0PSo01yBz0L
+   Q==;
+IronPort-SDR: MHOYHFiLNm6kx8UTBzMp9T90QjgezWr3FKv8vD2z3Tdlpas8Xixrbz3bNNItJGU/5Zgt1afeIF
+ zh/ZpME2GoLv3XMI2HFGkT1QRTqHTSEY6GAa3+pNje7l/9XbucZEEK3C+ExZMiooHKwlo41ato
+ um24/6l++/nZlMJH3zXjmD1krDDadiNVaHGTzaDEW9yNlHfJt2cRVn2lxuUTympy4EpEvnSBUR
+ /YSor3c4p5vpppMGKEJfM5PEL+UKE5Me4p8uF2pKoaa18niTP7wFQAYkeEyL/sCNZnb8zRXc+6
+ Aqo=
 X-IronPort-AV: E=Sophos;i="5.79,390,1602518400"; 
-   d="scan'208";a="158741643"
-Received: from mail-bl2nam02lp2056.outbound.protection.outlook.com (HELO NAM02-BL2-obe.outbound.protection.outlook.com) ([104.47.38.56])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Jan 2021 21:59:57 +0800
+   d="scan'208";a="158741773"
+Received: from mail-bl2nam02lp2054.outbound.protection.outlook.com (HELO NAM02-BL2-obe.outbound.protection.outlook.com) ([104.47.38.54])
+  by ob1.hgst.iphmx.com with ESMTP; 31 Jan 2021 22:02:14 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZjWeGR8Iqn3qNm4vdNivny/+17rPZhnHEi/G/C+R5QnASP5LlE2Qdpbml9TKdIjw9xXqUeEvr8DR/2GhJ2PM3WaIgZmbgRJR2O8MLbHJJK/r0FRfpXnRD9ZnQaqctwd91iQmsAgKAmaC33iHwFelIvzGSdVtlLchIMg0bC7qElbV+LNnutC7uNrmdK6r5XY+D3zpwg6vy0BiYzyTKrqJMfWHAMMJHhrBtN9H3YFfGmj/1nW16EBIxeK4ynMhd3cZUeOmOc+QFVC4WUa4We7tGU/TEx5Rrxy8vXWXcBHdlUtEh0hdEaEZQ8Fr3Ya6USxARKcNxMw94OpzYf9Dw9nHMQ==
+ b=bwedgGipTNVFPoQiKGb4GyKe7Shqs+X8ETQ5bGEHta2qyRWGQBFBXfT0HZ4csTgIt/1sXuRTMth5z4WSM6KsN63bUMCZEP5/IlPy1+VEjPTiXk87HCZeZ2yyFkvhvzFPQQ7/TFWOxudv+LXfwsC+FNiWSDHYkN2TiKE3geFf5kcDwIxuFDblGyKiDdIGdCxKezTBLcDuZcaiZEPE3KgPIWydc1sc2x0bryfzzsx/prUms/qf/iejz/vBR2IsD/ShIof115Nm62wdLfCC5kj2g7Qz4waAKQ70+/zJZf9UOL3IEy4iP0X5cZvJsGXG/Mh2iwSrO9G5+NqoVovt9dTriA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=De35CkTHFiD65pSRQI7cbhCBHD6dUS7gS834X9GJMMg=;
- b=nPJQdD6LaM6qiYTcbw+I1q82/KXraEjoDpoBKOPeZ8ggdyn0rjMxvlc4rA0zF1UyJR41m8xO/nXUqjO4V3ijqP5JP6+8cUftaSvq9eyUrRO4GsmsByfJXWoTv2RNJaKArhQPjVwV3iw6VkDxTLQCBVCyczakVgxpbFIscY7i2AAskvGqR5gGhK+JHyiGCYOGwMbO3IYzRE+LxIMx7UU3axr1ho/8swblkXKO4/Pw/UgYwuTSRSGCN0kXbNxq1klkPjCW/DGprFLurWNg3YYKnuAN8jxVNYwbeTgktUHneAuiSDvG+pnJwejtHXk0xXmdourAIID1C2Pbi3uMroOgkA==
+ bh=wujt4MOWscDpIYXXNA09O0ZEpAYy75Nx5u33g36FF6g=;
+ b=AHR18pTcsZpaArxXHieEwS6C/Gp6FU4Gl7J82fBwfymSfJt/GGQ7V9NdJj6S4DQltpA+ZzN8QlrESBO72h/h7aurwni7H9XIIOEVI1AB6P4gdmHUQI/CHyzmCVW3ihMaNeUE4PNX2C4WUH5oIL4lKAveRlSblpnUdCa6ZDcAAEqTIcouESGBYVbGA9Cb2u9nE6mJ73e2Fc5I7jucQ/QYlr3FWN5pQUB2W3zeFqCyeufLMM6Z2rXFMyCpwvbxe8L18iPi+LSe2C23ruBdC7cwORrYcp4Rp5avvh9AeCvxSVmA1FIUCcM/UyS1gbE6YJGTX4XwCjCX8q9Dn+O4EWj9Kw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
  header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=De35CkTHFiD65pSRQI7cbhCBHD6dUS7gS834X9GJMMg=;
- b=nX+xGfI7wz24vWsuEAV5uYdA4TQSZfju5vaPCHTK2sNjUCbSIVHCMdbMcf1gsrOuQNKLMQqR89fK5akEbgVMT3Sq9+Ych+0pKDnQVB3PUW5ZZaamapnez3HVuQNK32vxuRoTfoFQen8d5w9eoHMQpBDfcv4oU/SLkHknPNv4ug8=
+ bh=wujt4MOWscDpIYXXNA09O0ZEpAYy75Nx5u33g36FF6g=;
+ b=QhScjKt1FehEQ/Verg5OPG5OJkkod91WlQRyUkDcf4tlaYlYzC7NTH9970uRiyM82UGmXpMkN/TnNW1uKng7BYSOEBTjZcOAL9ASSh6z7MikxfhutP5/843fTblEgrXyyUmi9lCxFb2IoXXdslEcRQNfFg9kHgXpsfvdstFTGDY=
 Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
  DM6PR04MB7129.namprd04.prod.outlook.com (2603:10b6:5:24b::16) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3805.19; Sun, 31 Jan 2021 13:59:56 +0000
+ 15.20.3805.19; Sun, 31 Jan 2021 14:02:12 +0000
 Received: from DM6PR04MB6575.namprd04.prod.outlook.com
  ([fe80::e824:f31b:38cf:ef66]) by DM6PR04MB6575.namprd04.prod.outlook.com
  ([fe80::e824:f31b:38cf:ef66%3]) with mapi id 15.20.3805.024; Sun, 31 Jan 2021
- 13:59:56 +0000
+ 14:02:12 +0000
 From:   Avri Altman <Avri.Altman@wdc.com>
 To:     Nitin Rawat <nitirawa@codeaurora.org>,
         "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
@@ -69,16 +69,16 @@ To:     Nitin Rawat <nitirawa@codeaurora.org>,
         "beanhuo@micron.com" <beanhuo@micron.com>
 CC:     "bvanassche@acm.org" <bvanassche@acm.org>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Bao D . Nguyen" <nguyenb@codeaurora.org>
-Subject: RE: [PATCH V1 1/3] scsi: ufs: export api for use in vendor file
-Thread-Topic: [PATCH V1 1/3] scsi: ufs: export api for use in vendor file
-Thread-Index: AQHW9ZZmo/O9RzKnuUyM4+Bc9yWaJ6pBxLcw
-Date:   Sun, 31 Jan 2021 13:59:56 +0000
-Message-ID: <DM6PR04MB657574D3D8B99F3A4997D810FCB79@DM6PR04MB6575.namprd04.prod.outlook.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V1 0/3] scsi: ufs: Add a vops to configure VCC voltage
+ level
+Thread-Topic: [PATCH V1 0/3] scsi: ufs: Add a vops to configure VCC voltage
+ level
+Thread-Index: AQHW9ZZmeK7PA8AawUSfMfIJOx/dhapBx6jw
+Date:   Sun, 31 Jan 2021 14:02:12 +0000
+Message-ID: <DM6PR04MB6575D0348161330D21A9B6C5FCB79@DM6PR04MB6575.namprd04.prod.outlook.com>
 References: <1611852899-2171-1-git-send-email-nitirawa@codeaurora.org>
- <1611852899-2171-2-git-send-email-nitirawa@codeaurora.org>
-In-Reply-To: <1611852899-2171-2-git-send-email-nitirawa@codeaurora.org>
+In-Reply-To: <1611852899-2171-1-git-send-email-nitirawa@codeaurora.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -88,34 +88,34 @@ authentication-results: codeaurora.org; dkim=none (message not signed)
 x-originating-ip: [212.25.79.133]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 92fec424-57f3-4f03-06b3-08d8c5f07dbe
+x-ms-office365-filtering-correlation-id: 78840d30-e7b7-4157-56d0-08d8c5f0cf0b
 x-ms-traffictypediagnostic: DM6PR04MB7129:
-x-microsoft-antispam-prvs: <DM6PR04MB71291882DAD3CAE52CF05ED1FCB79@DM6PR04MB7129.namprd04.prod.outlook.com>
+x-microsoft-antispam-prvs: <DM6PR04MB7129320CF57CCA0A53B5CB33FCB79@DM6PR04MB7129.namprd04.prod.outlook.com>
 wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /zTsCHxkBS93p7Z6xUkvknHPg/+czPLMEzcsxP01X/m61yEJIVMZNv8eVLHmqWBaGWdTrTOCqpnovvic6qRtoa4V/PzcuyOvEDCXYBKDap7yAJc5VEWEvl216oYnKc6fpY+FDYtD4/N/qzkXepRxbk4j5dJBPeF1OX1PRzSrus1Yg6nFtLigQa+5ouvasyzXy0KAmLv4oTqvp1KjBLnKa/uEGRDuWLgEcPh0/2uwxePFw2yv9+TFKmc2YZrUsWjgPu7R7FwWHhQL+0ZAMpkWCNge78T037Qc5cqCx3pliYIBjjmJBrOYs+FYkTmR1UzgQ+uxkXqDa/pU7myR6sxqWQRnPTxnzXOsrcSiTfaOMpuMV+Gr0IhlergQOZP4tmzPshItwDuBDoLwr75ZTgS5LfuEySJb9G0Gbepf6Lw6fUpnWLUA+NfUWHbatyFyP+JQLvciMbRVjk93ufuhya1ArgvxNV/fKSnaE51Vgm8zQrDA33js6bHlE5z1yTm6jmE7zI5qdDvg9Giaam6whyXTVqWYYHE/zNC6JspCymWbej1BQiEywos6HsgzWBUlfiGM
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(366004)(396003)(136003)(66476007)(66946007)(110136005)(9686003)(55016002)(6506007)(71200400001)(186003)(2906002)(4326008)(316002)(76116006)(52536014)(8936002)(66446008)(66556008)(64756008)(54906003)(921005)(7696005)(83380400001)(5660300002)(86362001)(478600001)(7416002)(8676002)(26005)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?IBRnNmwkXv9yfyo9V35+oRQktXgof6wWftT5Bkho237PGmJ0fYCzx2w6v/Cj?=
- =?us-ascii?Q?gCDSJjZEW1jPvbsy4raXGBytFw98n7HZek7hPyQU3AlYQbdZ0WVXeMcpvMQd?=
- =?us-ascii?Q?PAYK1CP4ZaVC1hG/7hucbSq7+OTf6HbXTJvzX/+oF3dXB/m/W/5yZESNCj4Z?=
- =?us-ascii?Q?mJskF7E6ADsNyf3gI97GArzb31sA3Z9zz2BCMdvySyBsDvMpOzS2S7ZDcxLc?=
- =?us-ascii?Q?XgW/JcXI4VmrP/EMoGmkMeE25P9Wu1cC7BML7ZBfWCxX6N/s3z5LTltMXvx+?=
- =?us-ascii?Q?PujNqgzzrms5KQq3aCuWw3V5bcVfdM2Pd06Eo7B4VfKq5xEqu4gfhKLSouQl?=
- =?us-ascii?Q?pgNbjULJYshCkh3vSsjRCP32FcFJ2hm5kAoHdnCmufZ8CVaqFmN4AvfCi3js?=
- =?us-ascii?Q?vytq5/zq7QMiDsJCgZ20PIGwghkQUuPUQLnDEM0xzIQubwq8k+mZvqB7/o6x?=
- =?us-ascii?Q?jVaRx7kmy+JXJwDw3kP0uLyk/corM8Uvi8ioYCqle0kDmJTx/Klz/Ls4aUsR?=
- =?us-ascii?Q?F+cIjHi1++7RuhPnKN4JdCsjBLb12dBMw54Lo38Kx/X4JPkK4hKVjqDDa0xN?=
- =?us-ascii?Q?iZ88AUcbmwtGBGdk/NcP00gn44Q4k9KVIN7lg5tbCC63R/lSATVJRfQFJiMK?=
- =?us-ascii?Q?cbjw/32nzlkC/9Ck5qkB1gqGqiaILhS8mp1t2Kn1+/UNTw8JBdR1HRSbPHUz?=
- =?us-ascii?Q?tO7MItmL+p30fzd/q/3CT71nk5qecJf/fEBX6ZXYUKvmkDQ80Js/12zYrPiV?=
- =?us-ascii?Q?f11pzIP9o7grzJ/4nE5MDl9o0t+qKtI0yxabUWBXL4/+v1aBb7DlUeiZgqIK?=
- =?us-ascii?Q?31GXelVterXzlmq7L3QWP5rlf7wkgde+gXFdQPZooqS7ck2JqDSbevMbic7j?=
- =?us-ascii?Q?GIryLOOKyCaWtY4WweX99JFdcNcZIeUF4xQzCJr32/fIDUslJauGgcvs4q8+?=
- =?us-ascii?Q?Nrljp6DuynSTRUFJ0FCUFl7RWqnlMeaCA5agdrVwmnziOeB7FRVE+anwuMsU?=
- =?us-ascii?Q?AJHCqcgT8IagxjDzVV9Wp3hbSVOHfKmwPxIhe4BYM+Ypi2Hy9GDrYfxfsE3b?=
- =?us-ascii?Q?vPHaFUAl?=
+x-microsoft-antispam-message-info: VTQyAyBY34kk6pMu9UF7eLNh4A4h525e4M4vbSHxnx2CoN42HLH8LA3bGBbS47LIOqYChyqLeKDlfLzTT9GnC01LtILxW4Hfn2xUMB981ftzpnYJxSdwBlz2LcQcvGNTqujnGc6wy/xJU/MIwPe/j1Xv+k3aB+RTTeJrtFx49bh2NILYa7HV+vHFgI5JxpBH2dm82zE89nVHxyq6lb5Z6WOE/rT6mHPWwFU57col1wtqmdLL6wdEhaaNtuSPd2aBeAVaBnL+LxlgdSxDB+T0CYZcNoN8nX9xKDkgpc5krtmvsTYbZFWcOkKHENgy2rSUTcPFwQziyykA/3/7j8ASwxgSPHKyrvU7k8a6GVqOzMXfOoG1UKlGUEJLBV/oGCsibB8DRXW1WaSFqboo6TBT5QRTSN9VPuJaEgLkvZi9qA+82rw4YuSAVbjnrtvNtjQC9Xbttl8Gb8RoeU5ENQDFqJ0IFIKh3PEObOkVrYDwwYDle1rNnv30aC78+RhiDSnmwgm2wFcpxyQntbMNKyf08+JSQyTVMDa9mPAhZUtACrBV6A+oahjwxvOU3y/CIL3y
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(366004)(376002)(346002)(39860400002)(478600001)(7416002)(26005)(33656002)(8676002)(5660300002)(86362001)(186003)(2906002)(4326008)(110136005)(66476007)(66946007)(6506007)(55016002)(9686003)(71200400001)(66446008)(66556008)(8936002)(921005)(7696005)(64756008)(54906003)(316002)(52536014)(76116006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?YSTcidjOLHNdvXST3QSEb3J6d15WMpcXI5PeOyYaqhm9yFdY/6TwW5R7chGa?=
+ =?us-ascii?Q?1DPvIqIsEpUM6wJ9GQw12H41iHHNbiZekYVjzFUYMuFa+C100fI5KJMlOSio?=
+ =?us-ascii?Q?t4awGzzVND1z6Dk2PENGfW2y35Ed6BCrhXW8A15H88CyRU69kLKkPC+aOkzo?=
+ =?us-ascii?Q?ZMY/OEiNOHplUHCLApnd08WhbK+39Fx4aHTUPjr7lynt73LdMqaO8aooamOp?=
+ =?us-ascii?Q?bQhHST9YG59f8DMfaDvAEcJuq6gOZn10TU6/87wqS6mU84EgHI764uq2pA7N?=
+ =?us-ascii?Q?ofHK72wmA2REvyWKqnZPybP9Kq0FK8Z9yJ+k8cFdF4w/Sik9c5YpvbXl6HLC?=
+ =?us-ascii?Q?SUSvQD4KDpGooJ9xEFGwDRPF9J/b+O9ss/TbezBnvKvAID7noIJB8ySXl6y3?=
+ =?us-ascii?Q?BNvrry7W4E/m1zs2gVV1sSWOW/L8xgPkAqrjN5+NvQcoM3HvhVsnMcnOM3BN?=
+ =?us-ascii?Q?rv/rYvLfKcPVHkdutjQ0fkbDAVelQZOSCbqsv23AGNttGxQCRrzrmxO8g/AQ?=
+ =?us-ascii?Q?HjWKPio/95xmj/G6RQZTar1EfDoT2YVDs266zuqe3ycQ/bIHSqrP/M6uCL8x?=
+ =?us-ascii?Q?uW5UpKxy/cpwj0g6rs6N/W0rXw/TIUEnvhJ8MCt7EmI1hu4HVkJxOk62Cz49?=
+ =?us-ascii?Q?OE/XcJq5dXU8wEXtm7e/kHC5a3Vv70TrA12tMrfHPBm6OUu7GzW8ZiGhhXny?=
+ =?us-ascii?Q?yQRY5uO92CN0XgeDs0gKc7ciqRLx7/bJXhsouShjm3tTaxYEE86z+Nru6uC6?=
+ =?us-ascii?Q?OkifIgvi0/sJoLaFydWuFe4t1r8keFodMBDNggGjz+Mtmn04eMQNQEy1jQdr?=
+ =?us-ascii?Q?r7WbA/9FCvzrdXjTXUBZnzzlNOdDecwc2PJsrmBF47N6dT58qhjMVmGYbklX?=
+ =?us-ascii?Q?P3Hkjp/naIPsYeGeCMD5cLCKtEA0qJsvlZsWx5AmHdBsnADhAzdcLXvoHlfP?=
+ =?us-ascii?Q?eo2jDvBb/mOY1PyOsYurLxK1ae2zLlSCn8Wnky5pIqi4wmTO52oidfK3RCys?=
+ =?us-ascii?Q?Ydx+biGcCpSBa5e38s0QA/ZN2iBwvv2a3K6JXn0CZQmEVkKTBF3XsQdLWGny?=
+ =?us-ascii?Q?1fxqYgih?=
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -123,113 +123,47 @@ MIME-Version: 1.0
 X-OriginatorOrg: wdc.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92fec424-57f3-4f03-06b3-08d8c5f07dbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2021 13:59:56.3461
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78840d30-e7b7-4157-56d0-08d8c5f0cf0b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2021 14:02:12.8588
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tGo2kpJIxNBMDA0FnmNFeWJfXHy6PqiZj4e+ne41aXZWQZyVANG3KpIBKukDfrlP25IcgTSi2su7W7gPoLhEag==
+X-MS-Exchange-CrossTenant-userprincipalname: RjIuSDwKa7hU7wUUQhGeXvQ99ezMLZ74m1Gsn4irPE6k692ffasCUmcXOiCEUXgL35n3wL9PJc42UakuideftA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB7129
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 >=20
-> Exporting functions ufshcd_set_dev_pwr_mode, ufshcd_disable_vreg
-> and ufshcd_enable_vreg so that vendor drivers can make use of
-> them in setting vendor specific regulator setting
-> in vendor specific file.
-As for ufshcd_{enable,disable}_vreg - maybe inline ufshcd_toggle_vreg and u=
-se it instead?
+> UFS specification allows different VCC configurations for UFS devices,
+> for example,
+>         (1)2.70V - 3.60V (For UFS 2.x devices)
+>         (2)2.40V - 2.70V (For UFS 3.x devices)
+> For platforms supporting both ufs 2.x (2.7v-3.6v) and
+> ufs 3.x (2.4v-2.7v), the voltage requirements (VCC) is 2.4v-3.6v.
+> So to support this, we need to start the ufs device initialization with
+> the common VCC voltage(2.7v) and after reading the device descriptor we
+> need to switch to the correct range(vcc min and vcc max) of VCC voltage
+> as per UFS device type since 2.7v is the marginal voltage as per specs
+> for both type of devices.
+>=20
+> Once VCC regulator supply has been intialised to 2.7v and UFS device
+> type is read from device descriptor, we follows below steps to
+> change the VCC voltage values.
+>=20
+> 1. Set the device to SLEEP state.
+> 2. Disable the Vcc Regulator.
+> 3. Set the vcc voltage according to the device type and reenable
+>    the regulator.
+> 4. Set the device mode back to ACTIVE.
+>=20
+> The above changes are done in vendor specific file by
+> adding a vops which will be needed for platform
+> supporting both ufs 2.x and ufs 3.x devices.
+The flow should be generic - isn't it?
+Why do you need the entire flow to be vendor-specific?
+Why not just the parameters vendor-specific?
 
->=20
-> Signed-off-by: Nitin Rawat <nitirawa@codeaurora.org>
-> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
-> Signed-off-by: Veerabhadrarao Badiganti <vbadigan@codeaurora.org>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 9 ++++++---
->  drivers/scsi/ufs/ufshcd.h | 4 ++++
->  2 files changed, 10 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 9c691e4..000a03a 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -8091,7 +8091,7 @@ static int ufshcd_config_vreg(struct device *dev,
->         return ret;
->  }
->=20
-> -static int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg)
-> +int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg)
->  {
->         int ret =3D 0;
->=20
-> @@ -8110,8 +8110,9 @@ static int ufshcd_enable_vreg(struct device *dev,
-> struct ufs_vreg *vreg)
->  out:
->         return ret;
->  }
-> +EXPORT_SYMBOL(ufshcd_enable_vreg);
-Why do you need to export it across the kernel?
-Isn't making it non-static suffices?
-Do you need it for a loadable module?
-
->=20
-> -static int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg=
-)
-> +int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg)
->  {
->         int ret =3D 0;
->=20
-> @@ -8131,6 +8132,7 @@ static int ufshcd_disable_vreg(struct device *dev,
-> struct ufs_vreg *vreg)
->  out:
->         return ret;
->  }
-> +EXPORT_SYMBOL(ufshcd_disable_vreg);
->=20
->  static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on)
->  {
-> @@ -8455,7 +8457,7 @@ ufshcd_send_request_sense(struct ufs_hba *hba,
-> struct scsi_device *sdp)
->   * Returns 0 if requested power mode is set successfully
->   * Returns non-zero if failed to set the requested power mode
->   */
-> -static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
-> +int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
->                                      enum ufs_dev_pwr_mode pwr_mode)
->  {
->         unsigned char cmd[6] =3D { START_STOP };
-> @@ -8513,6 +8515,7 @@ static int ufshcd_set_dev_pwr_mode(struct ufs_hba
-> *hba,
->         hba->host->eh_noresume =3D 0;
->         return ret;
->  }
-> +EXPORT_SYMBOL(ufshcd_set_dev_pwr_mode);
->=20
->  static int ufshcd_link_state_transition(struct ufs_hba *hba,
->                                         enum uic_link_state req_link_stat=
-e,
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index ee61f82..1410c95 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -997,6 +997,10 @@ extern int ufshcd_dme_get_attr(struct ufs_hba *hba,
-> u32 attr_sel,
->                                u32 *mib_val, u8 peer);
->  extern int ufshcd_config_pwr_mode(struct ufs_hba *hba,
->                         struct ufs_pa_layer_attr *desired_pwr_mode);
-> +extern int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
-> +                                               enum ufs_dev_pwr_mode pwr=
-_mode);
-> +extern int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg)=
-;
-> +extern int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg=
-);
->=20
->  /* UIC command interfaces for DME primitives */
->  #define DME_LOCAL      0
-> --
-> 2.7.4
-
+Thanks,
+Avri
