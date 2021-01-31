@@ -2,93 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFBD309AFA
-	for <lists+linux-scsi@lfdr.de>; Sun, 31 Jan 2021 08:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA63C309BCF
+	for <lists+linux-scsi@lfdr.de>; Sun, 31 Jan 2021 13:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbhAaHga (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 31 Jan 2021 02:36:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54346 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229474AbhAaHgJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 31 Jan 2021 02:36:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AD7C664E24;
-        Sun, 31 Jan 2021 07:35:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612078528;
-        bh=hfWoFSzQSusZX74pIPkuz0bi7jBqX9foozhC+sJESbI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MWbOIR/KKjXuDPQ0SFqFzHGsrvekMNeiDHAJLQr/ZVNj8HWfcuSKJ1IiZD8TER9JB
-         yWTtLBR4OSnkCwyhCYFHnL2SG4fK/nPW51HV1+UKTnVn2WbDTYMj0i1cFipK1yv8be
-         j8bJ5TCF8w2ZoBszwXv6QZu+qNO0LA7ql4qJijYA=
-Date:   Sun, 31 Jan 2021 08:35:24 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Avri Altman <Avri.Altman@wdc.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        Zang Leigang <zangleigang@hisilicon.com>,
-        Avi Shchislowski <Avi.Shchislowski@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>
-Subject: Re: [PATCH 3/8] scsi: ufshpb: Add region's reads counter
-Message-ID: <YBZdvE8JrNOj3QSa@kroah.com>
-References: <20210127151217.24760-1-avri.altman@wdc.com>
- <20210127151217.24760-4-avri.altman@wdc.com>
- <YBGFC+XcibjRg7Y/@kroah.com>
- <BL0PR04MB6564C0EB1584AE599A13E120FCB79@BL0PR04MB6564.namprd04.prod.outlook.com>
+        id S231633AbhAaL5o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 31 Jan 2021 06:57:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33246 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231628AbhAaLzm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 31 Jan 2021 06:55:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612094010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WG13qxzAHqFe1MQbE7W/8kC+O/GfX1klD+C5fHLEO/o=;
+        b=CJQdELUrDKcler+3Aj/eQuQcjUC61Wk7yb5+xe117t7Sj1iEdXMdqUw/TtYwIld3HAFPWi
+        iQg9VoVfit52SXiIrPIkB+0EzZcoPvlQTGYCND9u67Rt6w0cfYujzLVJHTtYFbbxUbrDkn
+        Ld6lc/OnJNP5L/AbhlRMFTVZ//6KeaY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-61-Zn9-5MhqM_CXRJJafohhmw-1; Sun, 31 Jan 2021 06:53:27 -0500
+X-MC-Unique: Zn9-5MhqM_CXRJJafohhmw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DC098107ACE6;
+        Sun, 31 Jan 2021 11:53:25 +0000 (UTC)
+Received: from T590 (ovpn-12-51.pek2.redhat.com [10.72.12.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 293A460C17;
+        Sun, 31 Jan 2021 11:53:17 +0000 (UTC)
+Date:   Sun, 31 Jan 2021 19:52:45 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Omar Sandoval <osandov@fb.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH V7 00/13] blk-mq/scsi: tracking device queue depth via
+ sbitmap
+Message-ID: <20210131115245.GA1979183@T590>
+References: <20210122023317.687987-1-ming.lei@redhat.com>
+ <yq1a6sr1v87.fsf@ca-mkp.ca.oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BL0PR04MB6564C0EB1584AE599A13E120FCB79@BL0PR04MB6564.namprd04.prod.outlook.com>
+In-Reply-To: <yq1a6sr1v87.fsf@ca-mkp.ca.oracle.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, Jan 31, 2021 at 07:25:37AM +0000, Avri Altman wrote:
-> > >
-> > > +     if (ufshpb_mode == HPB_HOST_CONTROL)
-> > > +             reads = atomic64_inc_return(&rgn->reads);
-> > > +
-> > >       if (!ufshpb_is_support_chunk(transfer_len))
-> > >               return;
-> > >
-> > > +     if (ufshpb_mode == HPB_HOST_CONTROL) {
-> > > +             /*
-> > > +              * in host control mode, reads are the main source for
-> > > +              * activation trials.
-> > > +              */
-> > > +             if (reads == ACTIVATION_THRSHLD) {
-> Oops - this is a bug...
+On Fri, Jan 29, 2021 at 01:02:12PM -0500, Martin K. Petersen wrote:
 > 
-> > > +
-> > > +     /* region reads - for host mode */
-> > > +     atomic64_t reads;
-> > 
-> > Why do you need an atomic variable for this?  What are you trying to
-> > "protect" here by flushing the cpus all the time?  What protects this
-> > variable from changing right after you have read from it (hint, you do
-> > that above...)
-> > 
-> > atomics are not race-free, use a real lock if you need that.
-> We are on the data path here - this is called from queuecommand.
-> The "reads" counter is being symmetrically read and written,
-> so adding a spin lock here might become a source for contention.
+> Ming,
+> 
+> > The last four patches changes SCSI for switching to track device queue
+> > depth via sbitmap.
+> >
+> > The patchset have been tested by Broadcom, and obvious performance boost
+> > can be observed on megaraid_sas.
+> 
+> This series deadlocks SCSI scanning for me on every system I have in my
+> test setup (mpt2sas, mpt3sas, megaraid_sas, qla2xxx, lpfc).
 
-And an atomic varible is not?  You do know what spinlocks are made of,
-right?  :)
+Martin, thanks for your test.
 
-> Also I am not worried about the exact value of this counter, except of one place - 
-> See above.  Will fix it.
+BTW, which tree are you based for applying this patchset?
 
-So it's not really needed?
+I apply the patchset against for-5.12/block, and run it on kvm with
+'megasas' device(LSI MegaRAID SAS 1078), looks it works well, and not
+see the hang issue.
 
-thanks,
 
-greg k-h
+Thanks,
+Ming
+
