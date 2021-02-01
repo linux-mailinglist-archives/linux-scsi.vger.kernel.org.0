@@ -2,64 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF75F30CF09
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Feb 2021 23:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE3230A057
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Feb 2021 03:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbhBBWec (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Feb 2021 17:34:32 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:61037 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S230091AbhBBWeU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 2 Feb 2021 17:34:20 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=Z/qoYR5e93G/1E5Uh8tLreepyziGYShILI7fcXozE97A3DqZKBadv9kcBZBcmHZnqAUcLkt0g+COxgI6WqJ5gdfKqksQSW540KJaAE4DNiZ+EZYtErJhsiZnZCgjfp9yI8W2dpgN2EsH5zUvgVY6Bl2MWU8ziaGqy1DCXSk4DXXi+2CTtkJX9uQrf2ohPvP7bhav6zr4dJxTQjQYoopWjV3h9j7RqQq/UIXqX3VBjVDZARoXQTZUB0KN0A
-        F7X8DeijiSCFEdYkkdQwasjHi3K0B6KloKBXegK0TgQ39PHt5t2MVnmtmeZadY0DbdImfujjk25mqjLTG700JJRoTl9A==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Sat, 30 Jan 2021 02:14:15 +0000
-Message-ID: <B0CC978E-0149-4652-A2D0-17DE1F49BCC1@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Sat, 30 Jan 2021 02:14:13 -0000
+        id S231312AbhBAC2f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 31 Jan 2021 21:28:35 -0500
+Received: from mail-pg1-f175.google.com ([209.85.215.175]:33854 "EHLO
+        mail-pg1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229765AbhBAC21 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 31 Jan 2021 21:28:27 -0500
+Received: by mail-pg1-f175.google.com with SMTP id o7so11046294pgl.1;
+        Sun, 31 Jan 2021 18:28:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ARGvhnM43cJPff0XjargiMIzKCXDBX6OR95+IhVDQ+w=;
+        b=CNTF5K9YuSv6GUgCLNv0dWWe6kV4Jsi0i1Ajr7I88kcGFu4GQaEidQh7+D90hvP3+v
+         /w1XrfqODWxjxLgMU75grzq+DIfwOnxxXWdSXc0npjXPHiCriDEJiC+L/GW1Aaxz/dKd
+         AOG0OXYXMpLjW47/Qtxs1I+bNrelvmAex6rd3b+56pejngRL0fUtwiuPIPK8N1b8iUQw
+         f8Lku4v2hvI8pEmMJR34bcw5E/LWTQ8gqSJVZPN1cMgDM/94SZ3U+apIr5mRoGprfYXo
+         xMp78rztMwHwDthmt+t40qZM+Ff+ZfoFDBkFpalLZT6YYcmSBViwc4v8OBxVnR/pZL/L
+         tjBw==
+X-Gm-Message-State: AOAM530A1huanHDTbkz6tZIrDWGfxnn1MjWmONRFJnvu6CnTzIR9UyED
+        D1PLderIdf+feKW+8kRlbez5wwu+EwQ=
+X-Google-Smtp-Source: ABdhPJyKK4eKW9eYtRPds+vHvAOxv3JfScWepWr8H+XKACzLjnzaOEBvFsgvVWDOKkYfD4SvgkZy2g==
+X-Received: by 2002:a63:9811:: with SMTP id q17mr15077930pgd.238.1612146465273;
+        Sun, 31 Jan 2021 18:27:45 -0800 (PST)
+Received: from ?IPv6:2601:647:4000:d7:50bb:dc2d:705:e8e2? ([2601:647:4000:d7:50bb:dc2d:705:e8e2])
+        by smtp.gmail.com with ESMTPSA id hs21sm13450661pjb.6.2021.01.31.18.27.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jan 2021 18:27:43 -0800 (PST)
+Subject: Re: [PATCH v3 2/3] scsi: ufs: Fix a race condition btw task
+ management request send and compl
+To:     Can Guo <cang@codeaurora.org>
+Cc:     jaegeuk@kernel.org, asutoshd@codeaurora.org,
+        nguyenb@codeaurora.org, hongwus@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1611807365-35513-1-git-send-email-cang@codeaurora.org>
+ <1611807365-35513-3-git-send-email-cang@codeaurora.org>
+ <73362ca9-93be-c38f-a881-4b7cf690fbc1@acm.org>
+ <5f77542d66732003f0154a4e8a6ae13b@codeaurora.org>
+ <56b26318de92eb88d663bbdc7096edcf@codeaurora.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <687cc78a-cb07-bd4f-e1c7-1ff0aeaef6b5@acm.org>
+Date:   Sun, 31 Jan 2021 18:27:41 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
+In-Reply-To: <56b26318de92eb88d663bbdc7096edcf@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello,
+On 1/28/21 10:29 PM, Can Guo wrote:
+> On second thought, actually the 1st fix alone is enough to eliminate the
+> race condition. Because blk_mq_tagset_busy_iter() only iterates over all
+> requests which are not in IDLE state, if blk_mq_start_request() is called
+> within the protection of host spin lock, ufshcd_compl_tm() shall not run
+> into the scenario where req->end_io_data is set but
+> REG_UTP_TASK_REQ_DOOR_BELL
+> has not been set. What do you think?
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+That sounds reasonable to me.
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+Thanks,
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
-
-Regards,
-Ms. Reem.
-
+Bart.
