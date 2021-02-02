@@ -2,584 +2,383 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 414C730B9FF
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Feb 2021 09:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DC030BB8D
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Feb 2021 10:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbhBBIdP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Feb 2021 03:33:15 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:42154 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbhBBIcr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Feb 2021 03:32:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1612254765; x=1643790765;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/CXkI06zrTCTDCLIGSit9yI0yNHWnYJP68CgDGiaPi4=;
-  b=i8pOVeInKgaI1KRLQ+4OPcE9Ag8bAHdw4jSANsnfks0+WN+KyE+QE8QP
-   N4iky6cRqVRXgtjLmEekyWzoNI1d3CtAbLoJjKxndUBhvvYEdY+arn0M/
-   ECidODTia8IFtRVItOp/StiX1vyQxdhD8sVh3vF4ePNGIu98gxs66/bla
-   5Gffer2br+iW8770VvCyGoYN1Z0gQ/uBTwwkavJAreWNcknl1BPk5CqEW
-   tOYyY0Vp0eTKAsK3puKcHThIROMqLzOTQoDgaSCAm7gCMFNoNXjJluLzL
-   E+sGCRw6H6IJ8uaOzElacjT2xKaOOY4tGnV8wkjwqqBoSo1dpePO4+8Mo
-   Q==;
-IronPort-SDR: NvHZjNaseUiBxn5uyVlHNzbiwoPXG28ipj+fYtUW7NQ61v6BjX0ikGlYnSX89zEwF09tjQ14Qb
- xm3Bzjf31y/40LmpHw67f1fwQucdP2W+E3IRJRvc7NI/M3niAC8QIYH8C2FMGUkaNMsmrZit6u
- ujjGVnn7q2BMqkfYyaZ/G9FPmH1aV/lZS/1NqWzaOAZ+lImNwbpWy8jFsADl+eGmwY8pWUEqSv
- 5UVhwd1zu02JcJf3rncbLCP1QZ5eWJPo3EBUrXxDlPIMNJutG7A6gNO7G8BA1b6oyDLl6RXCnr
- +TQ=
-X-IronPort-AV: E=Sophos;i="5.79,394,1602518400"; 
-   d="scan'208";a="160083631"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Feb 2021 16:31:58 +0800
-IronPort-SDR: /hzAcCydIV7/Qpni2XANgMV9oo2cesNR66IFmDVo3kkKIrIHgWiiGrM6ICA6FbRYqmoXASuMyl
- wP5zlFKBDFND68oopGzdy5xrm4AjfuEJ4/zWVhlWDcEl2TUkxFPw7QiqyipEaMZqQqzA8vtDa8
- VW6yj25BHN6r85bdkbGhwk3Bg8bFyYOhaIsSsnUzJDyUy5t0nYsGq3czs2xEOJIKSqHq/24daC
- WYf9m5cFERpKzeKeC9tfybk4K/5+VzoJ/IKdLMP5ji587YD4o2rE3zaVXx3XqOc/8dFdsOFcxc
- FbJUH9tG+uJVC83Q74s3EwmR
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 00:16:06 -0800
-IronPort-SDR: z1VJcjcPSmCfRBBKoi5UGFY0ZX7IMKOz/Z+pJEBNrd14MWmi8KVp2RomlqeT4fb6ck5+rpqXA6
- WwkBkwsh7CyTA/G7CgrSCC/TRu6MzL2ejYRfq48c0ZQWt3tHQFbebqrwEPxRWSsx7vIDIaJ20t
- bwgEkmKmTXtElo3RRY6gWu3yWEDg6hithYv/bVbmOvmbu8KRHWisiHetv13JQLeR7DcArF1h8W
- /fdJ2RwaHtLmIHUhLxrzBL0CmtASpqL+3/eXfaSU66WYwkYK8KSPr5sN9M4pJUqYQtSj67JLlp
- hqM=
-WDCIronportException: Internal
-Received: from bxygm33.sdcorp.global.sandisk.com ([10.0.231.247])
-  by uls-op-cesaip01.wdc.com with ESMTP; 02 Feb 2021 00:31:54 -0800
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, Bart Van Assche <bvanassche@acm.org>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        alim.akhtar@samsung.com, asutoshd@codeaurora.org,
-        Zang Leigang <zangleigang@hisilicon.com>,
-        Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Bean Huo <beanhuo@micron.com>, cang@codeaurora.org,
-        stanley.chu@mediatek.com, Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH v2 9/9] scsi: ufshpb: Make host mode parameters configurable
-Date:   Tue,  2 Feb 2021 10:30:07 +0200
-Message-Id: <20210202083007.104050-10-avri.altman@wdc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210202083007.104050-1-avri.altman@wdc.com>
-References: <20210202083007.104050-1-avri.altman@wdc.com>
+        id S229975AbhBBJ4s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Feb 2021 04:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229693AbhBBJ4V (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Feb 2021 04:56:21 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C7C061573
+        for <linux-scsi@vger.kernel.org>; Tue,  2 Feb 2021 01:55:40 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d13so12186811plg.0
+        for <linux-scsi@vger.kernel.org>; Tue, 02 Feb 2021 01:55:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=m+bW6ZuLGDn/1O3vGW596NeSMdSo322VT2idbSe8z14=;
+        b=CXqe1zDP/ok9Xowd1U50rGgOR9taEUWRo9lAwJrIaLDwQU1kZn0ylUSlyTccoNmmo9
+         ZmJ9SzU/uYqBCzlrrmkJyRBpsZp6UzYMMtaRrTJfzMNlpRoW4V4FJRS8RFhQ8sCNKx6y
+         jhHmgRoikUYeKrA/8m8nQliRrrdOJ+JUJNO+o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=m+bW6ZuLGDn/1O3vGW596NeSMdSo322VT2idbSe8z14=;
+        b=O8rK6bx4/2G2gdrdxy8vNfTolU1nyolBwpabIzWeB7+mQ/FC8Xoeg3tzaJRBlu/IXU
+         7/2PlPY8ZPFv6n3caqERucO2wDWj5v2cZJIoEPvSs7F3Xlq3yz0KNxTeMb7Jib0EziQd
+         9oEvWbKsgnhEnFW6o/Qhb2kMb6FJQxc9E6LD52Ypabsttdg92U50RIwAxOYWDtdcaJBy
+         eYxBuJfZhgFq1RhHrnnowBzz2xZPqhizQSZZebJ9Xe/AEwmS8RYBK8KeV68MeNr+bY3U
+         ifVNcAb3mmnNmjqHxhHshdyw5OM6WjqE5rRosUXnwdv9E30JRMgYEBZY/snOEU4qIf5w
+         c8Xw==
+X-Gm-Message-State: AOAM531NDyaRieWLDJ80vfhB8dzMgZInc3X8ZxjLE8DzdwH5yjMQDeJb
+        edKlZ1Uo59it9IbeArQz3b/Lbz8ePMSf1Tte
+X-Google-Smtp-Source: ABdhPJwbHjnnGtvdfKcuWk0W1ispjV9kocfoDQ+3kBXxc0hwdn0fy4xPGXTlJ8EY4XQrpkryciCr3A==
+X-Received: by 2002:a17:90a:5317:: with SMTP id x23mr3496549pjh.154.1612259739944;
+        Tue, 02 Feb 2021 01:55:39 -0800 (PST)
+Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id m1sm2335583pjz.16.2021.02.02.01.55.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Feb 2021 01:55:38 -0800 (PST)
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, sathya.prakash@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, kashyap.desai@broadcom.com,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] mpt3sas: Added support for shared host tagset for cpuhotplug
+Date:   Tue,  2 Feb 2021 15:28:32 +0530
+Message-Id: <20210202095832.23072-1-sreekanth.reddy@broadcom.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001d9cb305ba577931"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We can make use of this commit, to elaborate some more of the host
-control mode logic, explaining what role play each and every variable:
+--0000000000001d9cb305ba577931
+Content-Transfer-Encoding: 8bit
 
- - activation_thld - In host control mode, reads are the major source of
-    activation trials.  once this threshold hs met, the region is added
-    to the "to-be-activated" list.  Since we reset the read counter upon
-    write, this include sending a rb command updating the region ppn as
-    well.
+MPT Fusion adapters can steer completions to individual queues, and
+we now have support for shared host-wide tags.
+So we can enable multiqueue support for MPT fusion adapters.
 
-- normalization_factor - We think of the regions as "buckets".  Those
-    buckets are being filled with reads, and emptied on write.  We use
-    entries_per_srgn - the amount of blocks in a subregion as our bucket
-    size.  This applies because HPB1.0 only concern a single-block
-    reads.  Once the bucket size is crossed, we trigger a normalization
-    work - not only to avoid overflow, but mainly because we want to
-    keep those counters normalized, as we are using those reads as a
-    comparative score, to make various decisions. The normalization is
-    dividing (shift right) the read counter by the normalization_factor.
-    If during consecutive normalizations an active region has exhaust
-    its reads - inactivate it.
+Once driver enable shared host-wide tags, cpu hotplug feature is also
+supported as it was enabled using below patchsets -
+commit bf0beec060 ("blk-mq: drain I/O when all CPUs in a hctx are
+offline")
 
-- eviction_thld_enter - Region deactivation is often due to the fact
-    that eviction took place: a region become active on the expense of
-    another. This is happening when the max-active-regions limit has
-    crossed. In host mode, eviction is considered an extreme measure.
-    We want to verify that the entering region has enough reads, and the
-    exiting region has much less reads.  eviction_thld_enter is the min
-    reads that a region must have in order to be considered as a
-    candidate to evict other region.
+Currently the driver has provision to disable host-wide tags using
+"host_tagset_enable" module parameter.
 
-- eviction_thld_exit - same as above for the exiting region.  A region
-    is consider to be a candidate to be evicted, only if it has less
-    reads than eviction_thld_exit.
+Once we do not have any major performance regression using host-wide
+tags, we will drop the hand-crafted interrupt affinity settings.
 
- - read_timeout_ms - In order not to hang on to “cold” regions, we
-    shall inactivate a region that has no READ access for a predefined
-    amount of time - read_timeout_ms. If read_timeout_ms has expired,
-    and the region is dirty - it is less likely that we can make any
-    use of HPB-READing it.  So we inactivate it.  Still, deactivation
-    has its overhead, and we may still benefit from HPB-READing this
-    region if it is clean - see read_timeout_expiries.
+Performance is also meeting the expectation - (used both none and
+mq-deadline scheduler)
+24 Drive SSD on Aero with/without this patch can get 3.1M IOPs"
 
-- read_timeout_expiries - if the region read timeout has expired, but
-    the region is clean, just re-wind its timer for another spin.  Do
-    that as long as it is clean and did not exhaust its
-    read_timeout_expiries threshold.
-
-- timeout_polling_interval_ms - the frequency in which the delayed
-    worker that checks the read_timeouts is awaken.
-
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/ufs/ufshcd.c |   1 +
- drivers/scsi/ufs/ufshpb.c | 284 +++++++++++++++++++++++++++++++++++---
- drivers/scsi/ufs/ufshpb.h |  22 +++
- 3 files changed, 290 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 1b521b366067..8dac66783c46 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -8014,6 +8014,7 @@ static const struct attribute_group *ufshcd_driver_groups[] = {
- 	&ufs_sysfs_lun_attributes_group,
- #ifdef CONFIG_SCSI_UFS_HPB
- 	&ufs_sysfs_hpb_stat_group,
-+	&ufs_sysfs_hpb_param_group,
- #endif
- 	NULL,
- };
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index cec6f641a103..69a742acf0ee 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -351,7 +351,7 @@ void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 		 */
- 		spin_lock_irqsave(&rgn->rgn_lock, flags);
- 		rgn->reads++;
--		if (rgn->reads == ACTIVATION_THRSHLD)
-+		if (rgn->reads == hpb->params.activation_thld)
- 			activate = true;
- 		spin_unlock_irqrestore(&rgn->rgn_lock, flags);
- 		if (activate ||
-@@ -687,6 +687,7 @@ static void ufshpb_read_to_handler(struct work_struct *work)
- 	struct victim_select_info *lru_info;
- 	struct ufshpb_region *rgn;
- 	unsigned long flags;
-+	unsigned int poll;
- 	LIST_HEAD(expired_list);
+v2:
+   Fix the error reported by kernel test robot
+
+ drivers/scsi/mpt3sas/mpt3sas_base.c  | 50 ++++++++++++++++++----------
+ drivers/scsi/mpt3sas/mpt3sas_base.h  |  1 +
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 42 ++++++++++++++++++++++-
+ 3 files changed, 75 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index f5582c8..84663d1 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -3648,25 +3648,16 @@ _base_get_msix_index(struct MPT3SAS_ADAPTER *ioc,
+ 		    base_mod64(atomic64_add_return(1,
+ 		    &ioc->total_io_cnt), ioc->reply_queue_count) : 0;
  
- 	hpb = container_of(dwork, struct ufshpb_lu, ufshpb_read_to_work);
-@@ -713,8 +714,9 @@ static void ufshpb_read_to_handler(struct work_struct *work)
- 		if (dirty || expired)
- 			list_add(&rgn->list_expired_rgn, &expired_list);
- 		else
--			rgn->read_timeout = ktime_add_ms(ktime_get(),
--							 READ_TO_MS);
-+			rgn->read_timeout =
-+				ktime_add_ms(ktime_get(),
-+					     hpb->params.read_timeout_ms);
- 	}
+-	return ioc->cpu_msix_table[raw_smp_processor_id()];
+-}
++	if (scmd && ioc->shost->nr_hw_queues > 1) {
++		u32 tag = blk_mq_unique_tag(scmd->request);
  
- 	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
-@@ -729,8 +731,9 @@ static void ufshpb_read_to_handler(struct work_struct *work)
- 
- 	clear_bit(TIMEOUT_WORK_PENDING, &hpb->work_data_bits);
- 
-+	poll = hpb->params.timeout_polling_interval_ms;
- 	schedule_delayed_work(&hpb->ufshpb_read_to_work,
--			      msecs_to_jiffies(POLLING_INTERVAL_MS));
-+			      msecs_to_jiffies(poll));
- }
- 
- static void ufshpb_add_lru_info(struct victim_select_info *lru_info,
-@@ -740,8 +743,11 @@ static void ufshpb_add_lru_info(struct victim_select_info *lru_info,
- 	list_add_tail(&rgn->list_lru_rgn, &lru_info->lh_lru_rgn);
- 	atomic_inc(&lru_info->active_cnt);
- 	if (rgn->hpb->is_hcm) {
--		rgn->read_timeout = ktime_add_ms(ktime_get(), READ_TO_MS);
--		rgn->read_timeout_expiries = READ_TO_EXPIRIES;
-+		rgn->read_timeout =
-+			ktime_add_ms(ktime_get(),
-+				     rgn->hpb->params.read_timeout_ms);
-+		rgn->read_timeout_expiries =
-+			rgn->hpb->params.read_timeout_expiries;
- 	}
- }
- 
-@@ -765,7 +771,8 @@ static struct ufshpb_region *ufshpb_victim_lru_info(struct ufshpb_lu *hpb)
- 		 * in host control mode, verify that the exiting region
- 		 * has less reads
- 		 */
--		if (hpb->is_hcm && rgn->reads > (EVICTION_THRSHLD >> 1))
-+		if (hpb->is_hcm &&
-+		    rgn->reads > hpb->params.eviction_thld_exit)
- 			continue;
- 
- 		victim_rgn = rgn;
-@@ -979,7 +986,8 @@ static int ufshpb_add_region(struct ufshpb_lu *hpb, struct ufshpb_region *rgn)
- 			 * in host control mode, verify that the entering
- 			 * region has enough reads
- 			 */
--			if (hpb->is_hcm && rgn->reads < EVICTION_THRSHLD) {
-+			if (hpb->is_hcm &&
-+			    rgn->reads < hpb->params.eviction_thld_enter) {
- 				ret = -EACCES;
- 				goto out;
- 			}
-@@ -1306,8 +1314,10 @@ static void ufshpb_normalization_work_handler(struct work_struct *work)
- {
- 	struct ufshpb_lu *hpb;
- 	int rgn_idx;
-+	u8 factor;
- 
- 	hpb = container_of(work, struct ufshpb_lu, ufshpb_normalization_work);
-+	factor = hpb->params.normalization_factor;
- 
- 	for (rgn_idx = 0; rgn_idx < hpb->rgns_per_lu; rgn_idx++) {
- 		struct ufshpb_region *rgn = hpb->rgn_tbl + rgn_idx;
-@@ -1316,7 +1326,7 @@ static void ufshpb_normalization_work_handler(struct work_struct *work)
- 			unsigned long flags;
- 
- 			spin_lock_irqsave(&rgn->rgn_lock, flags);
--			rgn->reads = (rgn->reads >> 1);
-+			rgn->reads = (rgn->reads >> factor);
- 			spin_unlock_irqrestore(&rgn->rgn_lock, flags);
- 		}
- 
-@@ -1546,6 +1556,238 @@ static void ufshpb_destroy_region_tbl(struct ufshpb_lu *hpb)
- }
- 
- /* SYSFS functions */
-+#define ufshpb_sysfs_param_show_func(__name)				\
-+static ssize_t __name##_show(struct device *dev,			\
-+	struct device_attribute *attr, char *buf)			\
-+{									\
-+	struct scsi_device *sdev = to_scsi_device(dev);			\
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);		\
-+	if (!hpb)							\
-+		return -ENODEV;						\
-+	if (!hpb->is_hcm)						\
-+		return -EOPNOTSUPP;					\
-+									\
-+	return sysfs_emit(buf, "%d\n", hpb->params.__name);		\
-+}
-+
-+
-+ufshpb_sysfs_param_show_func(activation_thld);
-+static ssize_t
-+activation_thld_store(struct device *dev, struct device_attribute *attr,
-+		      const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (!hpb->is_hcm)
-+		return -EOPNOTSUPP;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= 0)
-+		return -EINVAL;
-+
-+	hpb->params.activation_thld = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(activation_thld);
-+
-+ufshpb_sysfs_param_show_func(normalization_factor);
-+static ssize_t
-+normalization_factor_store(struct device *dev, struct device_attribute *attr,
-+			   const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (!hpb->is_hcm)
-+		return -EOPNOTSUPP;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= 0 || val > ilog2(hpb->entries_per_srgn))
-+		return -EINVAL;
-+
-+	hpb->params.normalization_factor = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(normalization_factor);
-+
-+ufshpb_sysfs_param_show_func(eviction_thld_enter);
-+static ssize_t
-+eviction_thld_enter_store(struct device *dev, struct device_attribute *attr,
-+			  const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (!hpb->is_hcm)
-+		return -EOPNOTSUPP;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= hpb->params.eviction_thld_exit)
-+		return -EINVAL;
-+
-+	hpb->params.eviction_thld_enter = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(eviction_thld_enter);
-+
-+ufshpb_sysfs_param_show_func(eviction_thld_exit);
-+static ssize_t
-+eviction_thld_exit_store(struct device *dev, struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (!hpb->is_hcm)
-+		return -EOPNOTSUPP;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= hpb->params.activation_thld)
-+		return -EINVAL;
-+
-+	hpb->params.eviction_thld_exit = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(eviction_thld_exit);
-+
-+ufshpb_sysfs_param_show_func(read_timeout_ms);
-+static ssize_t
-+read_timeout_ms_store(struct device *dev, struct device_attribute *attr,
-+		      const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (!hpb->is_hcm)
-+		return -EOPNOTSUPP;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= 0)
-+		return -EINVAL;
-+
-+	hpb->params.read_timeout_ms = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(read_timeout_ms);
-+
-+ufshpb_sysfs_param_show_func(read_timeout_expiries);
-+static ssize_t
-+read_timeout_expiries_store(struct device *dev, struct device_attribute *attr,
-+			    const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (!hpb->is_hcm)
-+		return -EOPNOTSUPP;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= 0)
-+		return -EINVAL;
-+
-+	hpb->params.read_timeout_expiries = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(read_timeout_expiries);
-+
-+ufshpb_sysfs_param_show_func(timeout_polling_interval_ms);
-+static ssize_t
-+timeout_polling_interval_ms_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (!hpb->is_hcm)
-+		return -EOPNOTSUPP;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= 0)
-+		return -EINVAL;
-+
-+	hpb->params.timeout_polling_interval_ms = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(timeout_polling_interval_ms);
-+
-+static struct attribute *hpb_dev_param_attrs[] = {
-+	&dev_attr_activation_thld.attr,
-+	&dev_attr_normalization_factor.attr,
-+	&dev_attr_eviction_thld_enter.attr,
-+	&dev_attr_eviction_thld_exit.attr,
-+	&dev_attr_read_timeout_ms.attr,
-+	&dev_attr_read_timeout_expiries.attr,
-+	&dev_attr_timeout_polling_interval_ms.attr,
-+	NULL,
-+};
-+
-+struct attribute_group ufs_sysfs_hpb_param_group = {
-+	.name = "hpb_param_sysfs",
-+	.attrs = hpb_dev_param_attrs,
-+};
-+
-+static void ufshpb_param_init(struct ufshpb_lu *hpb)
-+{
-+	hpb->params.activation_thld = ACTIVATION_THRSHLD;
-+	hpb->params.normalization_factor = 1;
-+	hpb->params.eviction_thld_enter = (ACTIVATION_THRSHLD << 6);
-+	hpb->params.eviction_thld_exit = (ACTIVATION_THRSHLD << 5);
-+	hpb->params.read_timeout_ms = READ_TO_MS;
-+	hpb->params.read_timeout_expiries = READ_TO_EXPIRIES;
-+	hpb->params.timeout_polling_interval_ms = POLLING_INTERVAL_MS;
-+}
-+
- #define ufshpb_sysfs_attr_show_func(__name)				\
- static ssize_t __name##_show(struct device *dev,			\
- 	struct device_attribute *attr, char *buf)			\
-@@ -1568,7 +1810,7 @@ ufshpb_sysfs_attr_show_func(rb_inactive_cnt);
- ufshpb_sysfs_attr_show_func(map_req_cnt);
- ufshpb_sysfs_attr_show_func(umap_req_cnt);
- 
--static struct attribute *hpb_dev_attrs[] = {
-+static struct attribute *hpb_dev_stat_attrs[] = {
- 	&dev_attr_hit_cnt.attr,
- 	&dev_attr_miss_cnt.attr,
- 	&dev_attr_rb_noti_cnt.attr,
-@@ -1580,8 +1822,8 @@ static struct attribute *hpb_dev_attrs[] = {
- };
- 
- struct attribute_group ufs_sysfs_hpb_stat_group = {
--	.name = "hpb_sysfs",
--	.attrs = hpb_dev_attrs,
-+	.name = "hpb_stat_sysfs",
-+	.attrs = hpb_dev_stat_attrs,
- };
- 
- static void ufshpb_stat_init(struct ufshpb_lu *hpb)
-@@ -1641,9 +1883,14 @@ static int ufshpb_lu_hpb_init(struct ufs_hba *hba, struct ufshpb_lu *hpb)
- 
- 	ufshpb_stat_init(hpb);
- 
--	if (hpb->is_hcm)
-+	if (hpb->is_hcm) {
-+		unsigned int poll;
-+
-+		ufshpb_param_init(hpb);
-+		poll = hpb->params.timeout_polling_interval_ms;
- 		schedule_delayed_work(&hpb->ufshpb_read_to_work,
--				      msecs_to_jiffies(POLLING_INTERVAL_MS));
-+				      msecs_to_jiffies(poll));
+-/**
+- * _base_sdev_nr_inflight_request -get number of inflight requests
+- *				   of a request queue.
+- * @q: request_queue object
+- *
+- * returns number of inflight request of a request queue.
+- */
+-inline unsigned long
+-_base_sdev_nr_inflight_request(struct request_queue *q)
+-{
+-	struct blk_mq_hw_ctx *hctx = q->queue_hw_ctx[0];
++		return blk_mq_unique_tag_to_hwq(tag) +
++			ioc->high_iops_queues;
 +	}
  
- 	return 0;
- 
-@@ -1818,10 +2065,13 @@ void ufshpb_resume(struct ufs_hba *hba)
- 			continue;
- 		ufshpb_set_state(hpb, HPB_PRESENT);
- 		ufshpb_kick_map_work(hpb);
--		if (hpb->is_hcm)
--			schedule_delayed_work(&hpb->ufshpb_read_to_work,
--				msecs_to_jiffies(POLLING_INTERVAL_MS));
-+		if (hpb->is_hcm) {
-+			unsigned int poll =
-+				hpb->params.timeout_polling_interval_ms;
- 
-+			schedule_delayed_work(&hpb->ufshpb_read_to_work,
-+				msecs_to_jiffies(poll));
-+		}
- 	}
+-	return atomic_read(&hctx->nr_active);
++	return ioc->cpu_msix_table[raw_smp_processor_id()];
  }
  
-diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-index 207925cf1f44..fafc64943c53 100644
---- a/drivers/scsi/ufs/ufshpb.h
-+++ b/drivers/scsi/ufs/ufshpb.h
-@@ -160,6 +160,26 @@ struct victim_select_info {
- 	atomic_t active_cnt;
- };
+-
+ /**
+  * _base_get_high_iops_msix_index - get the msix index of
+  *				high iops queues
+@@ -3686,7 +3677,8 @@ _base_get_high_iops_msix_index(struct MPT3SAS_ADAPTER *ioc,
+ 	 * reply queues in terms of batch count 16 when outstanding
+ 	 * IOs on the target device is >=8.
+ 	 */
+-	if (_base_sdev_nr_inflight_request(scmd->device->request_queue) >
++
++	if (atomic_read(&scmd->device->device_busy) >
+ 	    MPT3SAS_DEVICE_HIGH_IOPS_DEPTH)
+ 		return base_mod64((
+ 		    atomic64_add_return(1, &ioc->high_iops_outstanding) /
+@@ -3739,8 +3731,23 @@ mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
+ 	struct scsi_cmnd *scmd)
+ {
+ 	struct scsiio_tracker *request = scsi_cmd_priv(scmd);
+-	unsigned int tag = scmd->request->tag;
+ 	u16 smid;
++	u32 tag, unique_tag;
++
++	unique_tag = blk_mq_unique_tag(scmd->request);
++	tag = blk_mq_unique_tag_to_tag(unique_tag);
++
++	/*
++	 * store hw queue number corresponding to the tag,
++	 * this hw queue number is used later to determine
++	 * the unqiue_tag using below logic. This unique_tag
++	 * is used to retrieve the scmd pointer corresponding
++	 * to tag using scsi_host_find_tag() API,
++	 *
++	 * tag = smid - 1;
++	 * unique_tag = ioc->io_queue_num[tag] << BLK_MQ_UNIQUE_TAG_BITS | tag;
++	 */
++	ioc->io_queue_num[tag] = blk_mq_unique_tag_to_hwq(unique_tag);
+ 
+ 	smid = tag + 1;
+ 	request->cb_idx = cb_idx;
+@@ -3831,6 +3838,7 @@ mpt3sas_base_free_smid(struct MPT3SAS_ADAPTER *ioc, u16 smid)
+ 
+ 		mpt3sas_base_clear_st(ioc, st);
+ 		_base_recovery_check(ioc);
++		ioc->io_queue_num[smid - 1] = 0;
+ 		return;
+ 	}
+ 
+@@ -5362,6 +5370,9 @@ _base_release_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 		kfree(ioc->chain_lookup);
+ 		ioc->chain_lookup = NULL;
+ 	}
++
++	kfree(ioc->io_queue_num);
++	ioc->io_queue_num = NULL;
+ }
+ 
+ /**
+@@ -5772,6 +5783,11 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 		    ioc_info(ioc, "internal(0x%p): depth(%d), start smid(%d)\n",
+ 			     ioc->internal,
+ 			     ioc->internal_depth, ioc->internal_smid));
++
++	ioc->io_queue_num = kcalloc(ioc->scsiio_depth,
++	    sizeof(u16), GFP_KERNEL);
++	if (!ioc->io_queue_num)
++		goto out;
+ 	/*
+ 	 * The number of NVMe page sized blocks needed is:
+ 	 *     (((sg_tablesize * 8) - 1) / (page_size - 8)) + 1
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index 2def7a3..2eb94e4 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -1439,6 +1439,7 @@ struct MPT3SAS_ADAPTER {
+ 	spinlock_t	scsi_lookup_lock;
+ 	int		pending_io_count;
+ 	wait_queue_head_t reset_wq;
++	u16		*io_queue_num;
+ 
+ 	/* PCIe SGL */
+ 	struct dma_pool *pcie_sgl_dma_pool;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index c8b09a8..6973041 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -54,6 +54,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/aer.h>
+ #include <linux/raid_class.h>
++#include <linux/blk-mq-pci.h>
+ #include <asm/unaligned.h>
+ 
+ #include "mpt3sas_base.h"
+@@ -168,6 +169,11 @@ MODULE_PARM_DESC(multipath_on_hba,
+ 	"\t SAS 2.0 & SAS 3.0 HBA - This will be disabled,\n\t\t"
+ 	"\t SAS 3.5 HBA - This will be enabled)");
+ 
++static int host_tagset_enable = 1;
++module_param(host_tagset_enable, int, 0444);
++MODULE_PARM_DESC(host_tagset_enable,
++	"Shared host tagset enable/disable Default: enable(1)");
++
+ /* raid transport support */
+ static struct raid_template *mpt3sas_raid_template;
+ static struct raid_template *mpt2sas_raid_template;
+@@ -1743,10 +1749,12 @@ mpt3sas_scsih_scsi_lookup_get(struct MPT3SAS_ADAPTER *ioc, u16 smid)
+ 	struct scsi_cmnd *scmd = NULL;
+ 	struct scsiio_tracker *st;
+ 	Mpi25SCSIIORequest_t *mpi_request;
++	u16 tag = smid - 1;
+ 
+ 	if (smid > 0  &&
+ 	    smid <= ioc->scsiio_depth - INTERNAL_SCSIIO_CMDS_COUNT) {
+-		u32 unique_tag = smid - 1;
++		u32 unique_tag =
++		    ioc->io_queue_num[tag] << BLK_MQ_UNIQUE_TAG_BITS | tag;
+ 
+ 		mpi_request = mpt3sas_base_get_msg_frame(ioc, smid);
+ 
+@@ -11599,6 +11607,22 @@ scsih_scan_finished(struct Scsi_Host *shost, unsigned long time)
+ 	return 1;
+ }
  
 +/**
-+ * ufshpb_params - parameters for host control logic
-+ * @activation_thld - min reads [IOs] to activate/update a region
-+ * @normalization_factor - shift right the region's reads
-+ * @eviction_thld_enter - min reads [IOs] for the entering region in eviction
-+ * @eviction_thld_exit - max reads [IOs] for the exiting region in eviction
-+ * @read_timeout_ms - timeout [ms] from the last read IO to the region
-+ * @read_timeout_expiries - amount of allowable timeout expireis
-+ * @timeout_polling_interval_ms - frequency in which timeouts are checked
++ * scsih_map_queues - map reply queues with request queues
++ * @shost: SCSI host pointer
 + */
-+struct ufshpb_params {
-+	unsigned int activation_thld;
-+	unsigned int normalization_factor;
-+	unsigned int eviction_thld_enter;
-+	unsigned int eviction_thld_exit;
-+	unsigned int read_timeout_ms;
-+	unsigned int read_timeout_expiries;
-+	unsigned int timeout_polling_interval_ms;
-+};
++static int scsih_map_queues(struct Scsi_Host *shost)
++{
++	struct MPT3SAS_ADAPTER *ioc =
++	    (struct MPT3SAS_ADAPTER *)shost->hostdata;
 +
- struct ufshpb_stats {
- 	u64 hit_cnt;
- 	u64 miss_cnt;
-@@ -212,6 +232,7 @@ struct ufshpb_lu {
- 	bool is_hcm;
++	if (ioc->shost->nr_hw_queues == 1)
++		return 0;
++
++	return blk_mq_pci_map_queues(&shost->tag_set.map[HCTX_TYPE_DEFAULT],
++	    ioc->pdev, ioc->high_iops_queues);
++}
++
+ /* shost template for SAS 2.0 HBA devices */
+ static struct scsi_host_template mpt2sas_driver_template = {
+ 	.module				= THIS_MODULE,
+@@ -11666,6 +11690,7 @@ static struct scsi_host_template mpt3sas_driver_template = {
+ 	.sdev_attrs			= mpt3sas_dev_attrs,
+ 	.track_queue_depth		= 1,
+ 	.cmd_size			= sizeof(struct scsiio_tracker),
++	.map_queues			= scsih_map_queues,
+ };
  
- 	struct ufshpb_stats stats;
-+	struct ufshpb_params params;
+ /* raid transport support for SAS 3.0 HBA devices */
+@@ -12028,6 +12053,21 @@ _scsih_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	} else
+ 		ioc->hide_drives = 0;
  
- 	struct kmem_cache *map_req_cache;
- 	struct kmem_cache *m_page_cache;
-@@ -251,6 +272,7 @@ bool ufshpb_is_allowed(struct ufs_hba *hba);
- void ufshpb_get_geo_info(struct ufs_hba *hba, u8 *geo_buf);
- void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf);
- extern struct attribute_group ufs_sysfs_hpb_stat_group;
-+extern struct attribute_group ufs_sysfs_hpb_param_group;
- #endif
- 
- #endif /* End of Header */
++	shost->host_tagset = 0;
++	shost->nr_hw_queues = 1;
++
++	if (ioc->is_gen35_ioc && ioc->reply_queue_count > 1 &&
++	    host_tagset_enable && ioc->smp_affinity_enable) {
++
++		shost->host_tagset = 1;
++		shost->nr_hw_queues =
++		    ioc->reply_queue_count - ioc->high_iops_queues;
++
++		dev_info(&ioc->pdev->dev,
++		    "Max SCSIIO MPT commands: %d shared with nr_hw_queues = %d\n",
++		    shost->can_queue, shost->nr_hw_queues);
++	}
++
+ 	rv = scsi_add_host(shost, &pdev->dev);
+ 	if (rv) {
+ 		ioc_err(ioc, "failure at %s:%d/%s()!\n",
 -- 
-2.25.1
+2.27.0
 
+
+--0000000000001d9cb305ba577931
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+Rag/s/0IKyxAQsoBcla5ZufuDE5ir/mlnYktkPJdg+kns/OPDsINSyWqNYE9PKy9+3cp/fItNFtH
+krg1AgMBAAGjggHTMIIBzzAOBgNVHQ8BAf8EBAMCBaAwgZ4GCCsGAQUFBwEBBIGRMIGOME0GCCsG
+AQUFBzAChkFodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc3BlcnNvbmFsc2ln
+bjJzaGEyZzNvY3NwLmNydDA9BggrBgEFBQcwAYYxaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29t
+L2dzcGVyc29uYWxzaWduMnNoYTJnMzBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEF
+BQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBE
+BgNVHR8EPTA7MDmgN6A1hjNodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzcGVyc29uYWxzaWdu
+MnNoYTJnMy5jcmwwJwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNV
+HSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJnXsLYTAdBgNVHQ4E
+FgQU1CyhXqcQo40SZ7kFS/AiOnRW6lMwDQYJKoZIhvcNAQELBQADggEBAFeMmmz112eNFAV8Ense
+5WremClV5F3Md1xS0yXKqxlgakUJaOI/Fai7OLQaQqsEoxW6/QqWEi1wbZOccbdritOkL5b7sVUp
+SU9OfuIlV8c3XMLaWSIluy+0ImtRJ49jDCI4KtQESHrqfQRZcc1C/avZvNED3U4b10U6N3SY+59b
+fm2Vlwacwp+8ESTp49DsLcJqc4U/0rUZxLWtgPokzS+ovX+JAu8zx1SmOzUC4hj4Bp6Vnfd5KWUK
+JJQBmQHXii+acSeTgHmPWUYs3tYQ0uIX0Yy8LUWPdGbEq+KWepzY2otC+iVWdngCCv8Nf1Xo1jki
+AGJ6hrlWFE0qJVWv25sxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
+YWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hB
+MjU2IC0gRzMCDBmG1a14/wFg8qBhUjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg
+ZM9Vw+AsRvAJTArd3C3vtkBARxZCTZwh0w/aa0Nrvm8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEH
+ATAcBgkqhkiG9w0BCQUxDxcNMjEwMjAyMDk1NTQwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFl
+AwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjAL
+BgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBABefc7k0WRPWQ9vjWcLC
+JldM4As+W3a9G9AkcT3BTc6HlSRwT8X8lyTCOZ+SShvXGph3WQJqNvyTlOHHq9jOMn4AafTE6YoP
+HJDGoZcoiRCdb0f0/xGFNJa2w+RZdIzHRKU7lSUwOAdqUfkqNdYxUXFc1NiGuDvHHT7rC7wiI+I1
+8lJew3RsCF9npuTP/p8sRkpC/ari5Hn/mkLQA3pFEEvKnM5mNQACaFzwrReEif8oQV5Ems2BRoXb
+ZCK6mgmDIzm42POTMZYCLMCkoIn6ips1vkNnuUV2qJh+lmgBkg7M8oztDcLeYC3MG8c2iCXmV/4y
+NefW83Ku7W8NeULihn4=
+--0000000000001d9cb305ba577931--
