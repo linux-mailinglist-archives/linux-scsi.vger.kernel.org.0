@@ -2,68 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA2130DDDD
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Feb 2021 16:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A555B30D409
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Feb 2021 08:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbhBCPQc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Feb 2021 10:16:32 -0500
-Received: from 198-20-226-115.unifiedlayer.com ([198.20.226.115]:42716 "EHLO
-        198-20-226-115.unifiedlayer.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233759AbhBCPOw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Feb 2021 10:14:52 -0500
-X-Greylist: delayed 28096 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 10:14:46 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=carnivalassure.com.bd; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=miRpAdBSO5eDo01VDX+EK9bqGCmqMjXHS3kO16T6iWw=; b=w0lK0VI/z8H0duCatAteN0Iwc5
-        3G/G54MwGNKCfqonH6LHTViaP8936x7eQK7+re2PBNWY4tVbChNBcJyeAJfnieX/3WISXqPlMwWOC
-        fl7fvJ1xZpB4SP6ggH7J9g1MIqK6ZpQXo4+y7tK4qobcbm6QHPDPvTn+fJ1KnlpXIkyaAwiKZIg3+
-        AaI+TpfhTlxhAdHttFu2ogg1F+UklUQvcNwyV7oyRuJIIioseeYpfZZ9fjg2p6LGrb1qfupeXXTpo
-        Zk277PG4P2oOVwGioBRam0zGTwQWVIN7rioU987VZDnZDGscFlAousTOyLt6QntFSQhAVrF2OLcYd
-        k+0e1Nyg==;
-Received: from [127.0.0.1] (port=45548 helo=dot.dotlines.com.sg)
-        by dot.dotlines.com.sg with esmtpa (Exim 4.93)
-        (envelope-from <noreply@carnivalassure.com.bd>)
-        id 1l7CVT-0005U9-8i; Wed, 03 Feb 2021 01:23:19 -0600
+        id S231855AbhBCH2Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Feb 2021 02:28:16 -0500
+Received: from mga06.intel.com ([134.134.136.31]:40661 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231726AbhBCH2Q (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 3 Feb 2021 02:28:16 -0500
+IronPort-SDR: Ud1eXVJ0EJNkzntf7Olgn/tXK9vhTOZTxPfv6IVuWHrdonpxIKYYi/XZtZwBMOaKkCTf5MrCNc
+ JFQyJiLBD80w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="242510598"
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="242510598"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 23:27:30 -0800
+IronPort-SDR: RAC83/tyOV4Dx5Hm/3R31G5h5YyqEQKbPo1074KIWo5D/lLrS7aG670XVQRLSpuqNEhn95aJgy
+ LGkRjP/nX3iQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="372279762"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.149]) ([10.237.72.149])
+  by orsmga002.jf.intel.com with ESMTP; 02 Feb 2021 23:27:23 -0800
+Subject: Re: [PATCH] scsi: ufs: Add total count for each error history
+To:     DooHyun Hwang <dh0421.hwang@samsung.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        cang@codeaurora.org, asutoshd@codeaurora.org, beanhuo@micron.com,
+        jaegeuk@kernel.org, satyat@google.com
+Cc:     grant.jung@samsung.com, jt77.jang@samsung.com,
+        junwoo80.lee@samsung.com, jangsub.yi@samsung.com,
+        sh043.lee@samsung.com, cw9316.lee@samsung.com,
+        sh8267.baek@samsung.com, wkon.kim@samsung.com
+References: <CGME20210203070741epcas1p20ce8cc24d06b3c82d735dff59f0459de@epcas1p2.samsung.com>
+ <20210203065346.26606-1-dh0421.hwang@samsung.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <fb6603bb-f5ae-826f-a303-c5168a06d290@intel.com>
+Date:   Wed, 3 Feb 2021 09:27:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Date:   Wed, 03 Feb 2021 01:23:18 -0600
-From:   Francois Pinault <noreply@carnivalassure.com.bd>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Organization: Donation
-Reply-To: francoispinault1936@outlook.com
-Mail-Reply-To: francoispinault1936@outlook.com
-Message-ID: <daf030622886954284fef423f887a757@carnivalassure.com.bd>
-X-Sender: noreply@carnivalassure.com.bd
-User-Agent: Roundcube Webmail/1.3.15
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - dot.dotlines.com.sg
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - carnivalassure.com.bd
-X-Get-Message-Sender-Via: dot.dotlines.com.sg: authenticated_id: noreply@carnivalassure.com.bd
-X-Authenticated-Sender: dot.dotlines.com.sg: noreply@carnivalassure.com.bd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+In-Reply-To: <20210203065346.26606-1-dh0421.hwang@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 3/02/21 8:53 am, DooHyun Hwang wrote:
+> Since the total error history count is unknown because the error history
+> records only the number of UFS_EVENT_HIST_LENGTH, add a member to count
+> each error history.
+> 
+> Signed-off-by: DooHyun Hwang <dh0421.hwang@samsung.com>
+
+Hi
+
+Please note that the following patch is already queued - see linux-next
+
+                                                                                       
+commit b6cacaf2044fd9b82e5ceac88d8d17e04a01982f                                                                                                                                           
+Author: Adrian Hunter <adrian.hunter@intel.com>                                                                                                                                           
+Date:   Thu Jan 7 09:25:38 2021 +0200                                                                                                                                                     
+                                                                                                                                                                                          
+    scsi: ufs: ufs-debugfs: Add error counters                                                                                                                                            
+                                                                                                                                                                                          
+    People testing have a need to know how many errors might be occurring over                                                                                                            
+    time. Add error counters and expose them via debugfs.                                                                                                                                 
+                                                                                                                                                                                          
+    A module initcall is used to create a debugfs root directory for                                                                                                                      
+    ufshcd-related items. In the case that modules are built-in, then                                                                                                                     
+    initialization is done in link order, so move ufshcd-core to the top of the
+    Makefile.
+    
+    Link: https://lore.kernel.org/r/20210107072538.21782-1-adrian.hunter@intel.com
+    Reviewed-by: Avri Altman <avri.altman@wdc.com>
+    Reviewed-by: Bean Huo <beanhuo@micron.com>
+    Reviewed-by: Can Guo <cang@codeaurora.org>
+    Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+    Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 
 
--- 
-Hallo, ich bin Herr Francois Pinault, ich habe Ihnen gespendet. Sie 
-können mein Profil auf Wikipedia, Google oder Forbes überprüfen.
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 3 +++
+>  drivers/scsi/ufs/ufshcd.h | 1 +
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index fb32d122f2e3..7ebc892553fc 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -437,6 +437,8 @@ static void ufshcd_print_evt(struct ufs_hba *hba, u32 id,
+>  
+>  	if (!found)
+>  		dev_err(hba->dev, "No record of %s\n", err_name);
+> +	else
+> +		dev_err(hba->dev, "%s: total count=%u\n", err_name, e->count);
+>  }
+>  
+>  static void ufshcd_print_evt_hist(struct ufs_hba *hba)
+> @@ -4544,6 +4546,7 @@ void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val)
+>  	e->val[e->pos] = val;
+>  	e->tstamp[e->pos] = ktime_get();
+>  	e->pos = (e->pos + 1) % UFS_EVENT_HIST_LENGTH;
+> +	e->count++;
+>  
+>  	ufshcd_vops_event_notify(hba, id, &val);
+>  }
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index aa9ea3552323..df28d3fc89a5 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -450,6 +450,7 @@ struct ufs_event_hist {
+>  	int pos;
+>  	u32 val[UFS_EVENT_HIST_LENGTH];
+>  	ktime_t tstamp[UFS_EVENT_HIST_LENGTH];
+> +	u32 count;
+>  };
+>  
+>  /**
+> 
 
-Für Ihren Spendenanspruch und weitere Informationen kontaktieren Sie 
-mich umgehend unter francoispinault1936@outlook.com
-
-Mit freundlichen Grüßen,
-Herr Francois Pinault
