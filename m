@@ -2,92 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F153114BA
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Feb 2021 23:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1804731162A
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Feb 2021 23:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232805AbhBEWNN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Feb 2021 17:13:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26899 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231723AbhBEOkd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Feb 2021 09:40:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612541860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=khNEiGi3gSDvPl4eGhmwPqK2s3UCa52HPIkP8Eu2Bsc=;
-        b=bpRSFNolmSuPtYuN13RbkEGPUZUyVq3sJ+Ik5Ddi9QNacuAlSft69RxtAz0dxmBhNIA23T
-        Ig3hPnr2eNC2EIEOAFvP7WgypMchr4q3zMDdF9pW4c+6a1zFgpPzKR5FDS/a9PKd1P8+le
-        oIougAwWgzPBue6tQRY2C5FEFL1GPhM=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-55--kQxqC4vMvOahs5gXbIbJQ-1; Fri, 05 Feb 2021 11:17:24 -0500
-X-MC-Unique: -kQxqC4vMvOahs5gXbIbJQ-1
-Received: by mail-ed1-f69.google.com with SMTP id o8so7248294edh.12
-        for <linux-scsi@vger.kernel.org>; Fri, 05 Feb 2021 08:17:23 -0800 (PST)
+        id S232197AbhBEWyY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 Feb 2021 17:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232227AbhBEM4v (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Feb 2021 07:56:51 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6B2C06178A;
+        Fri,  5 Feb 2021 04:56:05 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id n15so6685097qkh.8;
+        Fri, 05 Feb 2021 04:56:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MCmKjFqSwv+F771D19x9HxFaY8G1DMaBhMHn/mZeuP8=;
+        b=UkSsxPTliFfvfYGPJaBmwNnr3/8C81SIPyQLpfW3UPc/HuurcezIlIdAOfJzrlYLQH
+         3m4s+wnpOXA52QDNFmSA0QdvFM6vcJLS477sRTToBujn2ISx3MGhUWfTL63dlTWPexBv
+         9nh0XDkVxm+kZq5vDUZTh9DnJvYvHHFcluH6CBDsuxWTr2Dolgzuu/kwGv5aWQ5/WAv4
+         dDZmXv0CAMRoAopyEEP+HFGhQFX43flvYYJlV6kMS2xpUIuZI4DtRfceqBkRqWoGYg/m
+         v2inKbTrXNYSrFjlFlWALuFIACBEiJW73uLyUPmbjxvcnFOLb74+JGRJTjNB77hDBt8H
+         wMOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=khNEiGi3gSDvPl4eGhmwPqK2s3UCa52HPIkP8Eu2Bsc=;
-        b=GO7sazzn/Q8u9IdmpcYaUKgCi9PQQ4x/BxQhThsB4hqSOo0kp2C+RH/A/kVxeB6iVq
-         MiLFPkY++2PMm2n9EPwcP5dx9N2jm2Vi2uA+GfBTbcPwJYxpUxPwikvqaAYVc53/pkoE
-         /Fc4PcaHKwP6DG3rg9Tazzx/o9MbxeSxVvrpgQ0jCc3TIs0LGDkn0wuGqC9+D4YsyWfO
-         R0z8lNfp1GCTeJChKyYnTJ3vuzgWzI8WRNU0XA1QyWsXSIA9aCnSzZwmeV0j6oMjfoNg
-         OXrDZnJZmuv8X0OWDY0XNKVZXdiPkGjcbifevM2PDYzu+K7S0Y8IgbEjxsBVhgH1GHl/
-         iQXA==
-X-Gm-Message-State: AOAM532gYDrs/JertBBFdDV+2Fk2Sw36FeEA9FAscDyKM1HacB4vshmn
-        ccnnCGNPnxc9T/kdaEnwQkSD1XJIUWS+FzPVUr3l1x0nztKCPGjKUp0uCy1lDV2FBYct4X2ToZT
-        rKlxuKlRatthBvSops/Hk8w==
-X-Received: by 2002:a17:906:169b:: with SMTP id s27mr343276ejd.396.1612541842914;
-        Fri, 05 Feb 2021 08:17:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxASMO+xswfNgpQwV8wyefPe1EMyJevJ53IOHaWEyDD08C7S3RPlbtBmcuhKVYuF8c/fBWAdQ==
-X-Received: by 2002:a17:906:169b:: with SMTP id s27mr343257ejd.396.1612541842771;
-        Fri, 05 Feb 2021 08:17:22 -0800 (PST)
-Received: from redhat.com (bzq-79-180-2-31.red.bezeqint.net. [79.180.2.31])
-        by smtp.gmail.com with ESMTPSA id 94sm2442486edq.91.2021.02.05.08.17.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MCmKjFqSwv+F771D19x9HxFaY8G1DMaBhMHn/mZeuP8=;
+        b=BdP+z8NxRf02BjraaORQiLGxpUYREtGBH07om2M9I3ix6Tk+vYE93fl1N+P4GwX68+
+         x8Q9RTMdAxxSkWoFvuo15XX2LlA3GNaaaT/Osh4K/QqkcBXw4n86XDYIyqPff58M4PX8
+         aaQ8rOhjB5Kho9Jkn1OruhHDzXJTlCEHRqrAb92q2Su/CLQZjJrOLHRXV4eP7h/kyadp
+         Q1U+hAmZaRlV7KrdzoauwScmTI4Vz8YGJfV1ve2nN1084exN0DH3P0eTR6hGcDk+tE8i
+         635pvv60WzEVEJX9Yowxe2IQyfM6esUkrI9mzYwDDqkLQaXqDErdXNEc2OIVjA9JZ/UE
+         TQVA==
+X-Gm-Message-State: AOAM532vGO6Zc/7CJyNiEw8/S0ia8DF3RV7ZO5XSmpWYbHryPqEII2VP
+        tVNzhnZlzcsClCDhqq71XOI=
+X-Google-Smtp-Source: ABdhPJwFQWEtOxbCYaVlbFyNfWlIa+g9zEKX+LEPfZLNaLKf5E7PzbD8fA/vxAHRgaWzPNNJlEsDxw==
+X-Received: by 2002:a37:ad1:: with SMTP id 200mr4249147qkk.195.1612529765280;
+        Fri, 05 Feb 2021 04:56:05 -0800 (PST)
+Received: from localhost.localdomain ([138.199.10.106])
+        by smtp.gmail.com with ESMTPSA id s5sm8782679qke.71.2021.02.05.04.56.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 08:17:22 -0800 (PST)
-Date:   Fri, 5 Feb 2021 11:17:19 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, jasowang@redhat.com,
-        stefanha@redhat.com, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 05/11] vhost scsi: use lio wq cmd submission helper
-Message-ID: <20210205111638-mutt-send-email-mst@kernel.org>
-References: <20210204113513.93204-1-michael.christie@oracle.com>
- <20210204113513.93204-6-michael.christie@oracle.com>
+        Fri, 05 Feb 2021 04:56:04 -0800 (PST)
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Subject: [PATCH] drivers: scsi: Describe and replace a word with better one in the file qlogicpti.h
+Date:   Fri,  5 Feb 2021 18:25:52 +0530
+Message-Id: <20210205125552.1417492-1-unixbhaskar@gmail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210204113513.93204-6-michael.christie@oracle.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 05:35:07AM -0600, Mike Christie wrote:
-> @@ -1132,14 +1127,8 @@ vhost_scsi_handle_vq(struct vhost_scsi *vs, struct vhost_virtqueue *vq)
->  		 * vhost_scsi_queue_data_in() and vhost_scsi_queue_status()
->  		 */
->  		cmd->tvc_vq_desc = vc.head;
-> -		/*
-> -		 * Dispatch cmd descriptor for cmwq execution in process
-> -		 * context provided by vhost_scsi_workqueue.  This also ensures
-> -		 * cmd is executed on the same kworker CPU as this vhost
-> -		 * thread to gain positive L2 cache locality effects.
-> -		 */
-> -		INIT_WORK(&cmd->work, vhost_scsi_submission_work);
-> -		queue_work(vhost_scsi_workqueue, &cmd->work);
-> +		target_queue_cmd_submit(tpg->tpg_nexus->tvn_se_sess,
-> +					&cmd->tvc_se_cmd);
->  		ret = 0;
->  err:
->  		/*
 
-What about this aspect? Will things still stay on the same CPU?
 
--- 
-MST
+s/fucking/awful/
+
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+---
+ drivers/scsi/qlogicpti.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/qlogicpti.h b/drivers/scsi/qlogicpti.h
+index 2b6374e08a7d..4a47631b22ea 100644
+--- a/drivers/scsi/qlogicpti.h
++++ b/drivers/scsi/qlogicpti.h
+@@ -62,7 +62,7 @@
+ #define REQUEST_QUEUE_WAKEUP		0x8005
+ #define EXECUTION_TIMEOUT_RESET		0x8006
+
+-/* Am I fucking pedantic or what? */
++/* Am I awful pedantic or what? */
+ struct Entry_header {
+ #ifdef __BIG_ENDIAN
+ 	u8	entry_cnt;
+--
+2.30.0
 
