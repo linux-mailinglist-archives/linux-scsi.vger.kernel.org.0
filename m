@@ -2,169 +2,212 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A5E311266
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Feb 2021 21:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856813114ED
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Feb 2021 23:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbhBEShP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Feb 2021 13:37:15 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:12944 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbhBEPKZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Feb 2021 10:10:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1612543752; x=1644079752;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=uGT+jCEIm8uAtXyx7HSAG4VFynnr/XzbYU05Tx1hxC4=;
-  b=GvE4T3aGlnSbcGUa3dOK3JylVpZOGSccZevTWOXxCr18bCCwQVFLV9sc
-   jMjG4PCf6LRWIqf0Zrz6N/2K4Kn1WZCIbWBEBpRlKlss97qHbZEPU/cm4
-   +k7qtxJF0LEi2rmOl2OUkz12TTI9p4X6Z/GcSftCZfH+Cf2rCjQ70bOBm
-   W1wwYCNojxtFImEsNW/6CyazsEb1MGvscZkt0gsBv13Zn3JpyScWdxSlI
-   uQhK3MFiAcjNK+NYKhh2+5MYxlDDJJp9X+kfjVzUtmbOpDdMQtxzBfooI
-   T3u33fGg9vycDERw/KE7Ncz2BURv+ZGWjF1It2kSbNdi9SPfnyLFFv1gv
-   Q==;
-IronPort-SDR: dauakS5rYvbHrIFfZtV2qBvvczOJWNWv1lYPaHv2s8/chqDaa2emdjnFZHT6ri0YQpVeRPu6vk
- cXl2UEUozbSne07xWoAfHVvkywcRDRzd8DL2ZMMioq1jB+Ilwe+ZWpZKQqMgoBn0Xc3Refzqe9
- wNb5IIx4YVquf6Vvi3rOzMl9w04fBhHYvjhmAucNdy+D63mNZ5x+5bHxlugWeN1Zx3jan3u8Gs
- LPuj8vbzOo5PyS9RobkK5A0HGTyyzbukuuYaBIkNM7PqWlos0tjB5nCjARqe1S0BC5l97YfzNV
- h1A=
-X-IronPort-AV: E=Sophos;i="5.81,155,1610380800"; 
-   d="scan'208";a="159232436"
-Received: from mail-dm6nam10lp2103.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.103])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Feb 2021 22:06:22 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NY/h4BWZPSxqRoiagde/W0DHq0DIztztthuvvVw3VvLL9PflibZWweD/+tlpQ7oUC32RHEgmZUzDpE0+C4OYYQtEwP1WLi9k2CArKK2NYTPYLwRT0hl0ZNBRFJtfXvxgngYDU5LxM1WnbY3u+JU6KFp/IsXEhf/Zpc79y92ptupQNuhMIvzZMWm9R9b86rmHqul7LOtC/cdMkre1KJKES0ARtk1S/FoqACle0ogd3iuOjsO0f9250WmNbDgN9CbYH3NOm48J8/hNjzyOOFsR/Qu5faTvttzYxYx9L1qCMnwrMCoqioQXlnzf+de/zhLZHz8iYJbDvLTXis0T9uUGjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uGT+jCEIm8uAtXyx7HSAG4VFynnr/XzbYU05Tx1hxC4=;
- b=S/ATqDqF5NW9nUk3eR/mvC7YtnCd8BTPYRX4nuK1zF7JgZ3enBZ/8T8tM0e4urhvpjcLTwZ1i6+sSa4pJwPh7+kmqGCDe6aM7oJbzV2SLMU4gan9HvtmP4O8yb6ytZt6ibsWV/iZPXWbWIa0OH8McslubxxLsX8bakFOJBK1dWhtJNn0cEuS1/c3qFKTGrKyXp6yFhlT/PHlyN7T9l9NXgVN/U1GyeVe3marQuKk+1R19ayfEpZ2+vRTLhRvv4jm0AXdz0UTlARmIOAUEhxCLXHiDXzqFZozx38IsKjSnVJneS7tvc+wLh06R8dEr0YIH65VQpDp7UHB4qPwXQ4aWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uGT+jCEIm8uAtXyx7HSAG4VFynnr/XzbYU05Tx1hxC4=;
- b=btCfQaG6WsNMKOjqiLbUT1SXGkttbovC7xBhyN/6tbd0KyQAxogMF070NbGiK0lNHoQxTWnmG8ikvCl7rjWyfXR5XIlXED18mojsvrZCNNYxLmryri2Rq7n5gZR3FeNJCojw9WPoeutVykJQe+HBX0fccJqpEVOQNsZ8u6H4GKg=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- DM5PR04MB1258.namprd04.prod.outlook.com (2603:10b6:4:43::38) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3805.23; Fri, 5 Feb 2021 14:06:18 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::e824:f31b:38cf:ef66]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::e824:f31b:38cf:ef66%3]) with mapi id 15.20.3805.027; Fri, 5 Feb 2021
- 14:06:18 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
-        "daejun7.park@samsung.com" <daejun7.park@samsung.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        id S233209AbhBEWSv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 Feb 2021 17:18:51 -0500
+Received: from so15.mailgun.net ([198.61.254.15]:20397 "EHLO so15.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232695AbhBEOdU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 5 Feb 2021 09:33:20 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1612541493; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=KAzH7tCJId+h5JSCihS+FaheGWIFSeiWWbMU0s2+TME=; b=Mniu17kc9L74qkLpCzPGSe3UuvXXX9dpeyFnC+le8ZM3DTA2WheT1z3bRXgYRV5VrRTZGyj/
+ eO+jls3qFC7jJLXh1Jo4Zs7t0GIlWHsEL0C8ql7gwTJa5p/9pfuScoOsDIuBXKh3REzI5mgQ
+ m5gR6s5r8PUArDDAGrMQtHn65cw=
+X-Mailgun-Sending-Ip: 198.61.254.15
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 601d6e1934db06ef79767e9b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 05 Feb 2021 16:11:05
+ GMT
+Sender: asutoshd=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 49F4DC433ED; Fri,  5 Feb 2021 16:11:05 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from stor-presley.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: asutoshd)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DADB6C433C6;
+        Fri,  5 Feb 2021 16:11:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DADB6C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=asutoshd@codeaurora.org
+Date:   Fri, 5 Feb 2021 08:11:02 -0800
+From:   Asutosh Das <asutoshd@codeaurora.org>
+To:     Avri Altman <Avri.Altman@wdc.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>
-Subject: RE: [PATCH v19 3/3] scsi: ufs: Prepare HPB read for cached sub-region
-Thread-Topic: [PATCH v19 3/3] scsi: ufs: Prepare HPB read for cached
- sub-region
-Thread-Index: AQHW9f/qdUh60Je+wEOqZcug0RLrV6pI8k8AgACYY4CAABha8A==
-Date:   Fri, 5 Feb 2021 14:06:18 +0000
-Message-ID: <DM6PR04MB657522B94AB436CF096460F6FCB29@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <20210129052848epcms2p6e5797efd94e6282b76ad9ae6c99e3ab5@epcms2p6>
-         <CGME20210129052848epcms2p6e5797efd94e6282b76ad9ae6c99e3ab5@epcms2p5>
-         <20210129053042epcms2p538e7fa396c3c2104594c44e48be53eb8@epcms2p5>
-         <7f25ccb1d857131baa1c0424c4542e33@codeaurora.org>
- <b6a8652c00411e3f71d33e7a6322f49eb5701039.camel@gmail.com>
-In-Reply-To: <b6a8652c00411e3f71d33e7a6322f49eb5701039.camel@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=wdc.com;
-x-originating-ip: [77.138.4.172]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: bbfbece1-b988-4ef2-5ec1-08d8c9df3596
-x-ms-traffictypediagnostic: DM5PR04MB1258:
-x-microsoft-antispam-prvs: <DM5PR04MB1258CF89CB36C2DB359E5CB3FCB29@DM5PR04MB1258.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cwIDxe1SelG74JwPY/swIWp6Ag4BcpD7AoDWXLD37j8JSXL2oq43z0c8J7xV2lAd+2cCjUy3FZMn+1T6IVvP2r9d2V2PX/kNWSTLIezHdy+5yyM6CMoFuPhI1iNCZcdncBhFOltHq8uwdOlp7xf7gg162I+PluengmK1xeB0k2KSdU52fpUpB+Zycd3wvf6QURrsTpKJ68AxdYGMEWuLEfuwo7i1Hkz41DKUdezGwSDbBjCrwXMpddnzPoXQRdAhMuyVUNYouamu9Ua95Daepm1A7OgmfhO150Dg9qH6CqLtoIelJtd6rGrGFbBpVCsN441HWaPpVVL71MJM0wxp/DDnbR1yk4O+fBDAj7vCuJbgDvLasU0Q3phKwBVB0NijJjSetFbWM4HMs0yMjB5DQEyHpeN4C+KRVZ71PPSnBuiN/jqS7ippeOJ+5B0TTvs8zO88RMYMZsBhqA9VyFHEgFOqRnnM+vrUCPbTE7VYhUQboDaduATbAj7SLBgpgIPRGbTISAFL9OV/UrUwGjejiQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(376002)(346002)(366004)(39860400002)(64756008)(478600001)(71200400001)(66946007)(66556008)(76116006)(66476007)(4326008)(66446008)(6506007)(86362001)(9686003)(54906003)(110136005)(8936002)(7696005)(83380400001)(52536014)(186003)(2906002)(8676002)(4744005)(55016002)(5660300002)(33656002)(7416002)(316002)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?eUQwV3BLdW54MUV4QlUvK3JDZVd1cm8xc3dIbGpHMHlTdzJpdStKVWRPTzdk?=
- =?utf-8?B?WHpEMDZwR1RKcDlmQW8ya2R4OWNScm1XbzYxSDh6dVpzb3RHTnlCaEkvK0xi?=
- =?utf-8?B?aWpWQUM1M1dOa3l4VnMwMVJRNzUrcU9wSE1FVkNkNEw5TmVDbWFrK1JjYkJt?=
- =?utf-8?B?YVBpc3lMNURkSEJKM041bmpnSFFPTzEvYkliRU13b2lxNlo0OEdMcG4xSGZr?=
- =?utf-8?B?akhLY1V0aEFuckxmSkNvOVdlUnZuQkdGZ0pla1ZMcElVZVRPcWpPYnhybmlv?=
- =?utf-8?B?M3ZraVZ2dS82VThOSi9KZ0JXTFA2T2trdCtDNHl2RmlFbU0yaGt4aXlKaGdv?=
- =?utf-8?B?Q2FnWXNGRDFpdDROOUd5NmM1RGtIbFBPVEsrQi8xOS9JZi95dUNmM25xcFVY?=
- =?utf-8?B?aEVBTTBvQ2Q0aWpHZHBOZzh2LzJVNnBpMWw4WGFvTEFoeWRZSmtzR2VNeUY4?=
- =?utf-8?B?bUFiZ1BsVHZuNzRKM0Zpd3podkxibENSVUJqYXI5bTlLR292WUR5bTBNZXdV?=
- =?utf-8?B?cXFFVTRGUHlRMFkvZDFJQitKaGEzTFdyd29CN0F3WWF0c3BHV1hTcjVTMGY2?=
- =?utf-8?B?NGRURjhaQjZ5NDJlU2Y2cFJta0J4Zlk5bFI2THJ4RS9CMi9jMDB0VWozT2JO?=
- =?utf-8?B?ZlR4a2lWL1kra2o2OFFaVmVuTGpnMDBETVpteTZCNlVlcGFkY1JWYlBxWjB6?=
- =?utf-8?B?ZkkvcnBlSmdsdlpRcEZJSk5henNVVnFpM0dNOXg1NnlvUmhBS3FURUd6Y0k0?=
- =?utf-8?B?eVJwSncvcmxjcjZNQyt5UGVueThQNndDcW0rOFlaUmlIRUl1QmZ3YjZOVGZv?=
- =?utf-8?B?VGVFMGN3b29JdlRKNkMwYU16cEJaNFZKQVlZeitaZzdrakpXdktQdWFNaW1j?=
- =?utf-8?B?S2NqaTdkc1RsSzhvc0Z2YlVYaXpBNWd1T1hlMy92WHVyZjR4TnVzZkVRTzZn?=
- =?utf-8?B?WE8zSlZ0ODMwRVZJRm9ZdFRZS1ZBNmg1aGZwSC9POU1Rck1ESG5jSlhtSmtr?=
- =?utf-8?B?VFpMZzdhRHQ3eVJxM0xnN3IvS1hUVVA0WUlwSzc5eWw4TnVIK1FkUW1RWWlK?=
- =?utf-8?B?d21OZ3U3UC9pTHR0OS9sNUxScCtuVkhqTEV4Mk1MdmQxaStrSm9wbCs0NzR1?=
- =?utf-8?B?ZEw0Z2tRajZMZUwxekRwdy9uVkp0UzFlcGZPRDlzSmpHOWdPblZiK0dtUCtZ?=
- =?utf-8?B?VWkxS1pOTXJ2M2syckprbndrSVFtdWFYNXk0SC8xeFEzT25OVHlXQU5WREU0?=
- =?utf-8?B?WTArRWVobi93R3Q4QlpxYStDTkJ6VEZwS01FOFhRUGlIOFlhNUJVckZycXQ4?=
- =?utf-8?B?aGFOcGZvRGZFM2lRS2tMb0xyNGxpYSt4QmtzcWZEdzlqN1ZGRnc0cTJHYWZi?=
- =?utf-8?B?NXNNNEVMVkptWG9MWitDYkxpcW5oMVMrYnRFaHJ5eGtwUFdNeVg3c0pZcnlz?=
- =?utf-8?B?eXBXVGlucmgwY25GdW9EeXFZN1F2L3dVQ1NCYjk0QTkzRXpOZTBydW4yRGU2?=
- =?utf-8?B?d0JQeGc5b2xDcWQ0UnhQUTNtUGhYTjVkUXlYWE1TdUREei9abGE2d0taWEZ3?=
- =?utf-8?B?TlpDTWgrU3lTSzFYem8rcUhwWXJWbzN4Q2dVd2R1aUJ2M1lyNllUaDYvWWUx?=
- =?utf-8?B?ZkhRc3JWK3F5ek40b2VRbEY3Q1FTK0FadTN6aS9qVCtlUUtBdkt4SytvSjF6?=
- =?utf-8?B?Q091dklNSlNRZVNDenhtbk8zbVhFS1p3VTZiYTNVZXRBSE5TN1RHcjJVTGRF?=
- =?utf-8?Q?wH4Lps3TwRLH29nPw66aQJPhYKZknbVU84o0kOs?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Bart Van Assche <bvanassche@acm.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 0/2] Fix deadlock in ufs
+Message-ID: <20210205161102.GJ37557@stor-presley.qualcomm.com>
+References: <cover.1611719814.git.asutoshd@codeaurora.org>
+ <84a182cc-de9c-4d6d-2193-3a44e4c88c8b@codeaurora.org>
+ <20210201214802.GB420232@rowland.harvard.edu>
+ <20210202205245.GA8444@stor-presley.qualcomm.com>
+ <20210202220536.GA464234@rowland.harvard.edu>
+ <20210204001354.GD37557@stor-presley.qualcomm.com>
+ <20210204194831.GA567391@rowland.harvard.edu>
+ <20210204211424.GH37557@stor-presley.qualcomm.com>
+ <DM6PR04MB6575692524202EC91E2A5480FCB29@DM6PR04MB6575.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbfbece1-b988-4ef2-5ec1-08d8c9df3596
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Feb 2021 14:06:18.5707
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PL1mZbOtrxG2bbS7iwURNqzLEfV4IczGse3DfU6R/Eq9Cdz2KrSUowks0Aar/Ui0FjzFaDNq5Ffft67mnOFBng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB1258
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <DM6PR04MB6575692524202EC91E2A5480FCB29@DM6PR04MB6575.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-PiA+ID4gKyAgICAgcHV0X3VuYWxpZ25lZF9iZTY0KHBwbiwgJmNkYls2XSk7DQo+ID4NCj4gPiBZ
-b3UgYXJlIGFzc3VtaW5nIHRoZSBIUEIgZW50cmllcyByZWFkIG91dCBieSAiSFBCIFJlYWQgQnVm
-ZmVyIiBjbWQNCj4gPiBhcmUNCj4gPiBpbiBMaXR0bGUNCj4gPiBFbmRpYW4sIHdoaWNoIGlzIHdo
-eSB5b3UgYXJlIHVzaW5nIHB1dF91bmFsaWduZWRfYmU2NCBoZXJlLiBIb3dldmVyLA0KPiA+IHRo
-aXMgYXNzdW1wdGlvbg0KPiA+IGlzIG5vdCByaWdodCBmb3IgYWxsIHRoZSBvdGhlciBmbGFzaCB2
-ZW5kb3JzIC0gSFBCIGVudHJpZXMgcmVhZCBvdXQNCj4gPiBieQ0KPiA+ICJIUEIgUmVhZCBCdWZm
-ZXIiDQo+ID4gY21kIG1heSBjb21lIGluIEJpZyBFbmRpYW4sIGlmIHNvLCB0aGVpciByYW5kb20g
-cmVhZCBwZXJmb3JtYW5jZSBhcmUNCj4gPiBzY3Jld2VkLg0KPiANCj4gRm9yIHRoaXMgcXVlc3Rp
-b24sIGl0IGlzIHZlcnkgaGFyZCB0byBtYWtlIGEgY29ycmVjdCBmb3JtYXQgc2luY2UgdGhlDQo+
-IFNwZWMgZG9lc24ndCBnaXZlIGEgY2xlYXIgZGVmaW5pdGlvbi4gU2hvdWxkIHdlIGhhdmUgYSBk
-ZWZhdWx0IGZvcm1hdCwNCj4gaWYgdGhlcmUgaXMgY29uZmxpY3QsIGFuZCB0aGVuIGFkZCBxdWly
-ayBvciBhZGQgYSB2ZW5kb3Itc3BlY2lmaWMNCj4gdGFibGU/DQo+IA0KPiBIaSBBdnJpDQo+IERv
-IHlvdSBoYXZlIGEgZ29vZCBpZGVhPw0KSSBkb24ndCBrbm93LiAgQmV0dGVyIGxldCBEYWVqdW4g
-YW5zd2VyIHRoaXMuDQpUaGlzIHdhcyB3b3JraW5nIGZvciBtZSBmb3IgYm90aCBHYWxheHkgUzIw
-IChFeHlub3MpIGFzIHdlbGwgYXMgWGlhb21pIE1pMTAgKDgyNTApLg0KDQpUaGFua3MsDQpBdnJp
-DQo=
+On Fri, Feb 05 2021 at 23:56 -0800, Avri Altman wrote:
+>>
+>> On Thu, Feb 04 2021 at 11:48 -0800, Alan Stern wrote:
+>> >On Wed, Feb 03, 2021 at 04:13:54PM -0800, Asutosh Das wrote:
+>> >> Thanks Alan.
+>> >> I understand the issues with the current ufs design.
+>> >>
+>> >> ufs has a wlun (well-known lun) that handles power management
+>> commands,
+>> >> such as SSUs. Now this wlun (device wlun) is registered as a scsi_device.
+>> >> It's queue is also set up for runtime-pm. Likewise there're 2
+>> >> more wluns, BOOT and RPMB.
+>> >>
+>> >> Currently, the scsi devices independently runtime suspend/resume - request
+>> driven.
+>> >> So to send SSU while suspending wlun (scsi_device) this scsi device should
+>> >> be the last to be runtime suspended amongst all other ufs luns (scsi devices).
+>> The
+>> >> reason is syncronize_cache() is sent to luns during their suspend and if SSU
+>> has
+>> >> been sent already, it mostly would fail.
+>> >
+>> >The SCSI subsystem assumes that different LUNs operate independently.
+>> >Evidently that isn't true here.
+>> >
+>> >> Perhaps that's the reason to send SSU during platform-device suspend. I'm
+>> not
+>> >> sure if that's the right thing to do, but that's what it is now and is causing
+>> >> this deadlock.
+>> >> Now this wlun is also registered to bsg and some applications interact with
+>> rpmb
+>> >> wlun and the device-wlun using that interface. Registering the
+>> corresponding
+>> >> queues to runtime-pm ensures that the whole path is resumed before the
+>> request
+>> >> is issued.
+>> >> Because, we see this deadlock, in the RFC patch, I skipped registering the
+>> >> queues representing the wluns to runtime-pm, thus removing the
+>> restrictions to
+>> >> issue the request until queue is resumed.
+>> >> But when the requests come-in via bsg, the device has to be resumed. Hence
+>> the
+>> >> get_sync()/put_sync() in bsg driver.
+>> >
+>> >Does the bsg interface send its I/O requests to the LUNs through the
+>> >block request queue?
+>> >
+>> >
+>> >> The reason for initiating get_sync()/put_sync() on the parent device was
+>> because
+>> >> the corresponding queue of this wlun was not setup for runtime-pm
+>> anymore.
+>> >> And for ufs resuming the scsi device essentially means sending a SSU to wlun
+>> >> which the ufs platform device does in its runtime resume now. I'm not sure
+>> if
+>> >> that was a good idea though, hence the RFC on the patches.
+>> >>
+>> >> And now it looks to me that adding a cb to sd_suspend_runtime may not
+>> work.
+>> >> Because the scsi devices suspend asynchronously and the wlun suspends
+>> earlier than the others.
+>> >>
+>> >> [    7.846165]scsi 0:0:0:49488: scsi_runtime_idle
+>> >> [    7.851547]scsi 0:0:0:49488: device wlun
+>> >> [    7.851809]sd 0:0:0:49488: scsi_runtime_idle
+>> >> [    7.861536]sd 0:0:0:49488: scsi_runtime_suspend < suspends prior to other
+>> luns
+>> >> [...]
+>> >> [   12.861984]sd 0:0:0:1: [sdb] Synchronizing SCSI cache
+>> >> [   12.868894]sd 0:0:0:2: [sdc] Synchronizing SCSI cache
+>> >> [   13.124331]sd 0:0:0:0: [sda] Synchronizing SCSI cache
+>> >> [   13.143961]sd 0:0:0:3: [sdd] Synchronizing SCSI cache
+>> >> [   13.163876]sd 0:0:0:6: [sdg] Synchronizing SCSI cache
+>> >> [   13.164024]sd 0:0:0:4: [sde] Synchronizing SCSI cache
+>> >> [   13.167066]sd 0:0:0:5: [sdf] Synchronizing SCSI cache
+>> >> [   17.101285]sd 0:0:0:7: [sdh] Synchronizing SCSI cache
+>> >> [   73.889551]sd 0:0:0:4: [sde] Synchronizing SCSI cache
+>> >>
+>> >> I'm not sure if there's a way to force the wlun to suspend only after all other
+>> luns are suspended.
+>> >> Is there? I hope Bart/others help provide some inputs on this.
+>> >
+>> >I don't know what would work best for you; it depends on how the LUNs
+>> >are used.  But one possibility is to make sure that whenever the boot
+>> >and rpmb wluns are resumed, the device wlun is also resumed.  So for
+>> >example, the runtime-resume callback routines for the rpmb and boot
+>> >wluns could call pm_runtime_get_sync() for the device wlun, and their
+>> >runtime-suspend callback routines could call pm_runtime_put() for the
+>> >device wlun.  And of course there would have to be appropriate
+>> >operations when those LUNs are bound to and unbound from their drivers.
+>> >
+>> >Alan Stern
+>> >
+>> Thanks Alan.
+>> CanG & I had some discussions on it as well the other day.
+>> I'm now looking into creating a device link between the siblings.
+>> e.g. make the device wlun as a supplier for all the other luns & wluns.
+>> So device wlun (supplier) wouldn't suspend (runtime/system) until all of the
+>> other
+>> consumers are suspended. After this linking, I can move all the
+>> pm commands that are being sent by host to the dedicated suspend routine of
+>> the device
+>> wlun and the host needn't send any cmds during its suspend and layering
+>> violation wouldn't take place.
+>Regardless of your above proposal, as for the issues you were witnessing with rpmb,
+>That started this RFC in the first place, and the whole clearing uac series for that matter:
+> "In order to conduct FFU or RPMB operations, UFS needs to clear UNIT ATTENTION condition...."
+>
+>Functionally, This was already done for the device wlun, and only added the rpmb wlun.
+>
+>Now you are trying to solve stuff because the rpmb is not provisioned.
+>a) There should be no relation between response to request-sense command,
+> and if the key is programmed or not. And
+>b) rpmb is accessed from user-space.  If it is not provisioned, it should processed the error (-7)
+>    and realize that by itself.  And also, It only makes sense that if needed,
+>    the access sequence will include  the request-sense command.
+>
+>Therefore, IMHO, just reverting Randall commit (1918651f2d7e) and fixing the user-space code
+>Should suffice.
+>
+>Thanks,
+>Avri
+>
+Hi Avri
+
+Thanks.
+
+I don't think reverting 1918651f2d7e would fix this.
+
+[   12.182750] ufshcd-qcom 1d84000.ufshc: ufshcd_suspend: Setting power mode
+[   12.190467] ufshcd-qcom 1d84000.ufshc: wlun_dev_clr_ua: 0 <-- uac wasn't sent
+[   12.196735] ufshcd-qcom 1d84000.ufshc: Sending ssu
+[   12.202412] scsi 0:0:0:49488: Queue rpm status b4 ssu: 2 <- sdev_ufs_device queue is suspended
+[   12.208613] ufshcd-qcom 1d84000.ufshc: Wait for resume - <-- deadlock!
+
+The issue is sending any command to any lun which is registered for blk
+runtime-pm in ufs host's suspend path would deadlock; since, it'd try to resume
+the ufs host in the same suspend calling sequence.
+
+-asd
