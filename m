@@ -2,90 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEE2311F2E
-	for <lists+linux-scsi@lfdr.de>; Sat,  6 Feb 2021 18:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AA6311F9B
+	for <lists+linux-scsi@lfdr.de>; Sat,  6 Feb 2021 20:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbhBFRlV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 6 Feb 2021 12:41:21 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:41414 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230327AbhBFRlO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 12:41:14 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 22D57128015D;
-        Sat,  6 Feb 2021 09:40:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1612633233;
-        bh=wztkNCBX/ZeuHiJS/Vj2aETWcPrKfBF2Wrx0Qm5SnUA=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=ZX1O3cJ2hNAmo/oJqzwZLv0No7NRNGqB6mvicWUAXTQyXltAEIqESfgXCV6tg4Hs8
-         R3Rdj3Qvb7D+t8RvFBjoOhpEBuxmGEZn1Cr3mskSoHw5N3u6i+3RQ2e21zYDanL1oR
-         0arTj7koS7vH5MuEE4RkNQIvm9AVYKp6jrbJyAtY=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id G__BCZz8wh2Y; Sat,  6 Feb 2021 09:40:33 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C2E5712800EE;
-        Sat,  6 Feb 2021 09:40:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1612633233;
-        bh=wztkNCBX/ZeuHiJS/Vj2aETWcPrKfBF2Wrx0Qm5SnUA=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=ZX1O3cJ2hNAmo/oJqzwZLv0No7NRNGqB6mvicWUAXTQyXltAEIqESfgXCV6tg4Hs8
-         R3Rdj3Qvb7D+t8RvFBjoOhpEBuxmGEZn1Cr3mskSoHw5N3u6i+3RQ2e21zYDanL1oR
-         0arTj7koS7vH5MuEE4RkNQIvm9AVYKp6jrbJyAtY=
-Message-ID: <4694bcc43696d52e6a81c915c2215bc8022918fc.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.11-rc6
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sat, 06 Feb 2021 09:40:32 -0800
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S230029AbhBFTUR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 6 Feb 2021 14:20:17 -0500
+Received: from mail.xenproject.org ([104.130.215.37]:55394 "EHLO
+        mail.xenproject.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230027AbhBFTUL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 14:20:11 -0500
+X-Greylist: delayed 1943 seconds by postgrey-1.27 at vger.kernel.org; Sat, 06 Feb 2021 14:20:09 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
+        s=20200302mail; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject;
+        bh=t6RLyrgrl+6icHjlUcT9RbYfFIeBzwHbjcRTiWQRm98=; b=43EaaP4+j2FIHADQ+iNmhrZtp0
+        GLLA9A9bhzBLCUTEmZpoYo6oq6x56VWfSamlcEe/O4+HBPeu8pCDytu4q9Bzkgv7ilF9il4FX1NOD
+        K7jLFGXa7skQOkAsb39MmrKdRzJI8/tOs0ZLz1rkmDtI72Y9XJ/WSlFNsht6iZoWXYVs=;
+Received: from xenbits.xenproject.org ([104.239.192.120])
+        by mail.xenproject.org with esmtp (Exim 4.92)
+        (envelope-from <julien@xen.org>)
+        id 1l8SbJ-0006wh-UU; Sat, 06 Feb 2021 18:46:33 +0000
+Received: from [54.239.6.185] (helo=a483e7b01a66.ant.amazon.com)
+        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <julien@xen.org>)
+        id 1l8SbJ-0001KW-JY; Sat, 06 Feb 2021 18:46:33 +0000
+Subject: Re: [PATCH 0/7] xen/events: bug fixes and some diagnostic aids
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        stable@vger.kernel.org,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
+        Jens Axboe <axboe@kernel.dk>, Wei Liu <wei.liu@kernel.org>,
+        Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20210206104932.29064-1-jgross@suse.com>
+From:   Julien Grall <julien@xen.org>
+Message-ID: <bd63694e-ac0c-7954-ec00-edad05f8da1c@xen.org>
+Date:   Sat, 6 Feb 2021 18:46:30 +0000
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.7.0
 MIME-Version: 1.0
+In-Reply-To: <20210206104932.29064-1-jgross@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-One fix in drivers (lpfc) that stops an oops on resource exhaustion.
+Hi Juergen,
 
-The patch is available here:
+On 06/02/2021 10:49, Juergen Gross wrote:
+> The first three patches are fixes for XSA-332. The avoid WARN splats
+> and a performance issue with interdomain events.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Thanks for helping to figure out the problem. Unfortunately, I still see 
+reliably the WARN splat with the latest Linux master (1e0d27fce010) + 
+your first 3 patches.
 
-The short changelog is:
+I am using Xen 4.11 (1c7d984645f9) and dom0 is forced to use the 2L 
+events ABI.
 
-James Smart (1):
-      scsi: lpfc: Fix EEH encountering oops with NVMe traffic
+After some debugging, I think I have an idea what's went wrong. The 
+problem happens when the event is initially bound from vCPU0 to a 
+different vCPU.
 
-And the diffstat:
+ From the comment in xen_rebind_evtchn_to_cpu(), we are masking the 
+event to prevent it being delivered on an unexpected vCPU. However, I 
+believe the following can happen:
 
- drivers/scsi/lpfc/lpfc_nvme.c | 3 +++
- 1 file changed, 3 insertions(+)
+vCPU0				| vCPU1
+				|
+				| Call xen_rebind_evtchn_to_cpu()
+receive event X			|
+				| mask event X
+				| bind to vCPU1
+<vCPU descheduled>		| unmask event X
+				|
+				| receive event X
+				|
+				| handle_edge_irq(X)
+handle_edge_irq(X)		|  -> handle_irq_event()
+				|   -> set IRQD_IN_PROGRESS
+  -> set IRQS_PENDING		|
+				|   -> evtchn_interrupt()
+				|   -> clear IRQD_IN_PROGRESS
+				|  -> IRQS_PENDING is set
+				|  -> handle_irq_event()
+				|   -> evtchn_interrupt()
+				|     -> WARN()
+				|
 
-With full diff below
+All the lateeoi handlers expect a ONESHOT semantic and 
+evtchn_interrupt() is doesn't tolerate any deviation.
 
-James
+I think the problem was introduced by 7f874a0447a9 ("xen/events: fix 
+lateeoi irq acknowledgment") because the interrupt was disabled 
+previously. Therefore we wouldn't do another iteration in handle_edge_irq().
 
----
+Aside the handlers, I think it may impact the defer EOI mitigation 
+because in theory if a 3rd vCPU is joining the party (let say vCPU A 
+migrate the event from vCPU B to vCPU C). So info->{eoi_cpu, irq_epoch, 
+eoi_time} could possibly get mangled?
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 1cb82fa6a60e..39d147e251bf 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -559,6 +559,9 @@ __lpfc_nvme_ls_req(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 		return -ENODEV;
- 	}
- 
-+	if (!vport->phba->sli4_hba.nvmels_wq)
-+		return -ENOMEM;
-+
- 	/*
- 	 * there are two dma buf in the request, actually there is one and
- 	 * the second one is just the start address + cmd size.
+For a fix, we may want to consider to hold evtchn_rwlock with the write 
+permission. Although, I am not 100% sure this is going to prevent 
+everything.
 
+Does my write-up make sense to you?
+
+Cheers,
+
+-- 
+Julien Grall
