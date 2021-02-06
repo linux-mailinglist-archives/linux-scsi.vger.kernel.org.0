@@ -2,69 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6599B311E2D
-	for <lists+linux-scsi@lfdr.de>; Sat,  6 Feb 2021 15:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEE2311F2E
+	for <lists+linux-scsi@lfdr.de>; Sat,  6 Feb 2021 18:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbhBFO5r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 6 Feb 2021 09:57:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbhBFO5J (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 09:57:09 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302CBC061225
-        for <linux-scsi@vger.kernel.org>; Sat,  6 Feb 2021 06:56:04 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id y18so12857608edw.13
-        for <linux-scsi@vger.kernel.org>; Sat, 06 Feb 2021 06:56:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=LKTydslwkBHjRBD/0U/iTEH4rnbV3bQM+PEGCYVnKRWqCpBuxiyyJWlH+XxoDVh2b/
-         HFZWTfmHMpqHsMdZMtB/2gIQb6SrU7HNNg4Pbg6aDUnwTTYa4ErmhrI4rReQ/aAXsVVq
-         wwdcwN/6PaD+QIBMSCrJ3tjlNWUWWctCNR4ZtJFT9jJA61Cvt48scMGk7sXyE5r6ccDR
-         P3Y4T1+1qudMtHcSBxbPHr6TwKJ2cZ6qwDAUiEhK7eJUvy9B8fetIBZUma+T+Fz/B+MD
-         X/a9+Uu3zKZgMCYnPeP2cVIikCY3zOffZKfAVZgicLkOAYPws+uBFNEJqRYUVgffaWvv
-         FXrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=RHPgfhU1yTy0O51v51zoSX2de+0m+ft9WfX6jK7eDbEvqtk73GFVu2g+sqHwwcp77i
-         LRCFc8tEs/m78tU587rp9mvMidi4+2hYeaAMLXDyI7AcPWUQe6Y34JfEigVl3SRk8FSU
-         ob+h6GbInAp1RjjAvDLy1Z7IhCLf6U5KSsARwXlz/qcV92bORnq4DH9Xk+P+xNTrZQqe
-         yp4o1kKgRSdKhrWQjdWNJoClKCNahJuk47+wjpB0g5A7I3lqzsJ7OMKlKtWyU7NxYvM/
-         3oh/mKeRPMOosB8qt0n214ERYt2Nq5UDz/xoMAovPNnRrET/w5EKw4Yp2xUMgvdq3DXN
-         /5ug==
-X-Gm-Message-State: AOAM530PL+9caCOuYdf5ofOZqTTzi2dqV476lNBX8XDurb+tMyzSscSW
-        U0VaJMzq3EbPnCaTmEvNJb7WSb6llq16eYvbE2ehJuOJCxA=
-X-Google-Smtp-Source: ABdhPJzHuK3LvHqbpz7y7FkmfdCO+mLpCyAcQI6UI8feOQjxzQakBQkfzu17R8y2ODfxQ2tLrHWIUKNuNGqsXo7YnO0=
-X-Received: by 2002:a05:6402:3508:: with SMTP id b8mr8823036edd.341.1612623362722;
- Sat, 06 Feb 2021 06:56:02 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:56:02
- -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada9@gmail.com>
-Date:   Sat, 6 Feb 2021 15:56:02 +0100
-Message-ID: <CAGSHw-BTtjFX0_eZQxh6ESq0ccY53ZvhP0ukJTUOzzjPJEQARQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        id S230382AbhBFRlV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 6 Feb 2021 12:41:21 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:41414 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230327AbhBFRlO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 12:41:14 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 22D57128015D;
+        Sat,  6 Feb 2021 09:40:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1612633233;
+        bh=wztkNCBX/ZeuHiJS/Vj2aETWcPrKfBF2Wrx0Qm5SnUA=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=ZX1O3cJ2hNAmo/oJqzwZLv0No7NRNGqB6mvicWUAXTQyXltAEIqESfgXCV6tg4Hs8
+         R3Rdj3Qvb7D+t8RvFBjoOhpEBuxmGEZn1Cr3mskSoHw5N3u6i+3RQ2e21zYDanL1oR
+         0arTj7koS7vH5MuEE4RkNQIvm9AVYKp6jrbJyAtY=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id G__BCZz8wh2Y; Sat,  6 Feb 2021 09:40:33 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C2E5712800EE;
+        Sat,  6 Feb 2021 09:40:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1612633233;
+        bh=wztkNCBX/ZeuHiJS/Vj2aETWcPrKfBF2Wrx0Qm5SnUA=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=ZX1O3cJ2hNAmo/oJqzwZLv0No7NRNGqB6mvicWUAXTQyXltAEIqESfgXCV6tg4Hs8
+         R3Rdj3Qvb7D+t8RvFBjoOhpEBuxmGEZn1Cr3mskSoHw5N3u6i+3RQ2e21zYDanL1oR
+         0arTj7koS7vH5MuEE4RkNQIvm9AVYKp6jrbJyAtY=
+Message-ID: <4694bcc43696d52e6a81c915c2215bc8022918fc.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.11-rc6
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 06 Feb 2021 09:40:32 -0800
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+One fix in drivers (lpfc) that stops an oops on resource exhaustion.
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+The patch is available here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+
+The short changelog is:
+
+James Smart (1):
+      scsi: lpfc: Fix EEH encountering oops with NVMe traffic
+
+And the diffstat:
+
+ drivers/scsi/lpfc/lpfc_nvme.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+With full diff below
+
+James
+
+---
+
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
+index 1cb82fa6a60e..39d147e251bf 100644
+--- a/drivers/scsi/lpfc/lpfc_nvme.c
++++ b/drivers/scsi/lpfc/lpfc_nvme.c
+@@ -559,6 +559,9 @@ __lpfc_nvme_ls_req(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 		return -ENODEV;
+ 	}
+ 
++	if (!vport->phba->sli4_hba.nvmels_wq)
++		return -ENOMEM;
++
+ 	/*
+ 	 * there are two dma buf in the request, actually there is one and
+ 	 * the second one is just the start address + cmd size.
+
