@@ -2,73 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E97E31215F
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 05:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5381D312163
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 05:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbhBGEsT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 6 Feb 2021 23:48:19 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:38674 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbhBGEr3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 23:47:29 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174k8Z9168246;
-        Sun, 7 Feb 2021 04:46:27 GMT
+        id S229681AbhBGEsy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 6 Feb 2021 23:48:54 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:49840 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229741AbhBGEre (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 23:47:34 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174kSqo151605;
+        Sun, 7 Feb 2021 04:46:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2020-01-29; bh=1tWtUab7ch6wmPkyaW7fD2E6/Jg4CuZZ12/6+GejAtc=;
- b=tpaaKsVI2Kr+0N7GG8TpAv5hWz/QgWNad7PmzWYje8Rwc7qZqs4TZ9P0nCCTnzyFKlT/
- QFVH9cU830rdnIjHafhpBIj2e+j95vB66XnW4flYmTwJLeH5Mgfa78e8NAyZSHd5zKlK
- sJa8fRi0blZRKrxarnA0u2dzY3t1L/mxkbt9uDz3jv/DOGFfseYN7W0xvhUXnQ73Vh7G
- yusdSvoP/IlY5BXeBlpIhTya0I9ihDPbRCNpTmgl5smYo8ht6ZUTqWzFDFsURFSdkKH0
- 0NHXHmy0jLwHFdb33FCktd+UhjZoPPaYnms+YyRWNcAD+Z3yTQpWk8ke7IcAYS39gfw9 xA== 
+ s=corp-2020-01-29; bh=qZ6X1PhkkpKFhCy/QAAPyGD6yYOlfifebmxonTWXKoE=;
+ b=CsX2eOdaXCjuD5Ty9ZgGm3JuZvoOjAfkDefgHf+4uPcb8h79pbqQTctvksmzUAiqYlmt
+ MgbJcAYo5uAlYoMxbHfeHx0X39xjT3HXzn0FCTJe03r5BxYvpUxBvFo9XMHN06cJRBJK
+ I9Gxm4eOYyJJolOf93l/wPFDwi4qllgej1+jsMeRHHGKkgok+UVsAt8DcMssYpV56cuz
+ BQUqaBCtsEyXL+D5YFsoFBu74Pz7jXA0OioW0pxVgia2l1NIDpZspuzO53lgAFDSKl5M
+ z7LtIz5QE+PVIBTpSW2GMyufVdLM5540uJ7wR2nh/IoO4S3WGZJOvSgQvlMzp2TLLBK/ IQ== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 36hgma9fnu-1
+        by userp2120.oracle.com with ESMTP id 36hkrmsa2j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Sun, 07 Feb 2021 04:46:27 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174ixmh004585;
-        Sun, 7 Feb 2021 04:46:26 GMT
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174ixmi004585;
+        Sun, 7 Feb 2021 04:46:27 GMT
 Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2057.outbound.protection.outlook.com [104.47.38.57])
-        by userp3030.oracle.com with ESMTP id 36j51tcnyt-3
+        by userp3030.oracle.com with ESMTP id 36j51tcnyt-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 07 Feb 2021 04:46:26 +0000
+        Sun, 07 Feb 2021 04:46:27 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oAXwFsj0gcnXFTsd0DTq+iiQLHB/MZH18s3ochS0WXX/CTWbfXY5xsKA5ouBPHBhLv4xUGZ3dVR55K1/APCUvVZREYUpkUELdzIMD8ixR6Db2Ra43Kn4sOIcqxZReky/LlR9b4/6Ec3xQxehV6sYtnUz2zpfb13nCF5ABq5B/eqeCsxdmc6dc4JWGbxLwc1AeAR+lx33gapjNHweQv5AjdCh85IdZWU028yPhxMEA0iLuvNTTPQf+9KokDi8SQZFIv+RZhVwIUPXj2e9LQJSwGBeW2wszQ8cJe67pj4aKWIg2EbgfeSUCrMZdVBcOkPowKmWYWYdYmqyv1IFnjhEqQ==
+ b=haUcF3jxXkjCNuKIx9rZB2H6p4c+7wE/1jcDe5X+QaJ2iJtdpUmhEBuhOyYHBxi6zJ0gxX8iOIQBd8BhYUxCk1y/3EvVrEvi9Hk4/2kEmOCyqmjCHMDFtN8bCsjU5LORZ5QJPDagB8HyzJoe9FdCwzwCE7InOgDVI8j8bE1HOU+F59WKwLNuy71eBhbbgUxo58lHmDAo1ucDDOOP0fRzYRNGw5evD3EOk0bO6INzFw3Y3mVT0d3DjlB+T2ON+Bs88NlCbeALKVPGL7mE1WVwYhKCNHgBGCSw+Q8hCu0jYFV+unm3ECexHeX93ivev+M3jrbBo2ewDwt3vY1szX/Lew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1tWtUab7ch6wmPkyaW7fD2E6/Jg4CuZZ12/6+GejAtc=;
- b=b39BsIDd40pGaxZ5M92xFVCvOf4eIbu0sULS5NLjyglqDbZ5C8Bge/42qujbADg5bWUR/WIBJwcny12VXNeA3K5y/2F9rzX0s/c1jkc4Hbe6iFPDNxQbR2OPnd0knbtjuOogD4R2kUN6fDILkJeVszQRikYbugyudtLa4XvkW6r0iFxTURl62pBY3iQ8zW10vi638gdhUjrLplyEp0nmCxO1fhyLPr+v1Hd998UDrVGJKbGVsbe+g3xPlwxuKQ3OD7Gfkwr8PHWyGU0zSNOzZ2nLkZHVW4fmPCkpDP6nfZAwJ+H7oUj4utpUjCN2tYPIfBx0bYkiipvHTv9QDV6PZg==
+ bh=qZ6X1PhkkpKFhCy/QAAPyGD6yYOlfifebmxonTWXKoE=;
+ b=ixp94uo7UJwWo7cDR4iMnkkhovPAg+zsang+RtylVfFA86vklPK+q+/ek0sb4s47RT0AO5sgQ06UADfDltIgeWglN/YaLjHMUp9Q9gQJkA+fvIQl+Mr8G+MOACcR9+mvVkrSLSBRKymzfe5E3mEweJ3mIGhzduzkOJV4d78O/2pkBSFTOeVhK++FX0j0CtcZoQWENK65d4eoEYUy2oTA7CNah8b7uobzCtPuwS7LM7WudN845jNVr37tLy+if8aGjN88rfly39s/f/oBWqtkiEmgxtJhZSUJHU3HMy7Tlbb1L0kdQ299B/s6fmdwt0ZmJraFjth72u6azMssoUFqeA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1tWtUab7ch6wmPkyaW7fD2E6/Jg4CuZZ12/6+GejAtc=;
- b=OYO8FhlbMkGR/DNxHHohwC4QFc9MU6Mt6q5sn4MIfSsfnA8+CkVsbSAfjt2/adO9KNFn/k54I/qYQrQXR83vEJTw2gbkh6jOssFjt6Ule2iB04rcgA/0iogAvluq9YMrbIzMmolGX1bxTwUwaWrlRKm9drGrgSYRpdJozOvVRos=
+ bh=qZ6X1PhkkpKFhCy/QAAPyGD6yYOlfifebmxonTWXKoE=;
+ b=Njk6cAvm34tek4hj9YBiMPgAeh8WfZLGVxYv+t8XThnkZUiXj+yET6FZILz/cMZa+G/IjgnJYIm6tixuJREBJWcnBK6fFTLvZ1B1j+LrKGJJjm1zrXIvmtk+xB+UsunUnJhnFzkNFCLgyzanf+5bm2z04N3XtxrwvYKumaLdF2U=
 Authentication-Results: suse.com; dkim=none (message not signed)
  header.d=none;suse.com; dmarc=none action=none header.from=oracle.com;
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
  by BYAPR10MB3429.namprd10.prod.outlook.com (2603:10b6:a03:81::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.30; Sun, 7 Feb
- 2021 04:46:23 +0000
+ 2021 04:46:25 +0000
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::1d86:b9d7:c9ef:ba20]) by BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::1d86:b9d7:c9ef:ba20%7]) with mapi id 15.20.3825.030; Sun, 7 Feb 2021
- 04:46:23 +0000
+ 04:46:25 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
 Cc:     lutianxiong@huawei.com, linfeilong@huawei.com,
         liuzhiqiang26@huawei.com, haowenchao@huawei.com,
-        Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH 2/9] libiscsi: drop taskqueuelock
-Date:   Sat,  6 Feb 2021 22:46:01 -0600
-Message-Id: <20210207044608.27585-3-michael.christie@oracle.com>
+        Mike Christie <michael.christie@oracle.com>,
+        Wu Bo <wubo40@huawei.com>
+Subject: [PATCH 3/9] libiscsi: fix iscsi_task use after free
+Date:   Sat,  6 Feb 2021 22:46:02 -0600
+Message-Id: <20210207044608.27585-4-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210207044608.27585-1-michael.christie@oracle.com>
 References: <20210207044608.27585-1-michael.christie@oracle.com>
@@ -80,50 +81,50 @@ X-ClientProxiedBy: CH2PR20CA0009.namprd20.prod.outlook.com
  (2603:10b6:a03:11e::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (73.88.28.6) by CH2PR20CA0009.namprd20.prod.outlook.com (2603:10b6:610:58::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.19 via Frontend Transport; Sun, 7 Feb 2021 04:46:22 +0000
+Received: from localhost.localdomain (73.88.28.6) by CH2PR20CA0009.namprd20.prod.outlook.com (2603:10b6:610:58::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.19 via Frontend Transport; Sun, 7 Feb 2021 04:46:23 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1cf7c4ef-03c2-4e3e-c3ff-08d8cb235229
+X-MS-Office365-Filtering-Correlation-Id: 23f78c6a-6a0e-4317-3f54-08d8cb23530a
 X-MS-TrafficTypeDiagnostic: BYAPR10MB3429:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR10MB342980C351D2B9B76C1FE764F1B09@BYAPR10MB3429.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <BYAPR10MB3429B7278335FCB008C8EBD2F1B09@BYAPR10MB3429.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:486;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8XRY4QIv+XOagdDp/SnSmQMOgdpiBlhqsyBtKwcvGrtWMWyrGN29zipP9H9nc8XHqd4DwcIM9g0e1X+GKqF1YIps/EJSqwyM4wJfEEO5n/303mlDq9wF7zDc2OPW2mammy7/Wf4W8v6MTlpMFOtHBNsGp3GIBhueI0am03lczSqbsckjs0S3Qt5lkJI5pS1qx6qnx+kvOL22aCrgTL/JCUdet8N+54nw7WSr2Gz24rZYrGfqlaCOwmiHLAsH69ET8o+cfQIDogyP8uxDqvAw9vTN+B19B7XRnk0rd7WlsAh70kkGV0YeL/x55Pn7pm78C684b4sFWcRyqmT4HcB5ZH5WgR1iZHMa784M/wJW1dlWRdJCc8z8orJjGfZE6/swEwuv49wa2Oh4YDf0YtGCzfoQdDwGpdLLf5qWCLpTAOQ51HCucDQowYn+41nlGGs5k2Ws45BmH+y9RwTcFsmMBRxkeym5lXP6IUOvhTH99fD/Uw7lp/66twtS+D9ABsOSrlzjkeEbHuY5C58TvEGrcddri+hyNPs+uVKkMXHmsxfGe7GvYOeB6q9dQBvh+L1Y/i2rn5s7inuTNlURZePlyQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(366004)(396003)(376002)(346002)(136003)(1076003)(6666004)(316002)(956004)(2616005)(5660300002)(66946007)(66476007)(66556008)(30864003)(6486002)(69590400011)(83380400001)(86362001)(36756003)(52116002)(107886003)(6512007)(26005)(478600001)(8676002)(2906002)(8936002)(16526019)(186003)(4326008)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?3MqmdOXTYjORvm12IHNWRGP+hFIgHSw5c0Zurn+l3n2wEtXTWoACW/qbJaLa?=
- =?us-ascii?Q?xtF6VnbK2z/8KCBYwn6gQZPmf5RWOdNwavVP+TohjAqS1bZ8+6y83OWryjss?=
- =?us-ascii?Q?IZcS3By73wbzLISs+kP6heImJaSydb95SKqVGaXxmScgRc8AqQUWyDJjQrRl?=
- =?us-ascii?Q?g6GUnb1kNJPLtysJqucQpWQS2TuIfzb71GhqOGArHnOwhmzl13Q0SdraQXsJ?=
- =?us-ascii?Q?B6ZDHnY5yqhm4s3JwVq6Gm1TAj1Y1+TXDdQVj32bUK6uwItWEKZroOxZsuwX?=
- =?us-ascii?Q?Gvacjhl4XV1DRV0W2rVGygUtB2JGGN5o0OfIn8/vgT7Jp7ixCxhVOL4JLSY9?=
- =?us-ascii?Q?RFSXtorEC+zvRsClDFXKew7UMfU5GuxC/vk8B7QIoB0M/ROUvTbfB36kVcaC?=
- =?us-ascii?Q?AYE8Czwv8zqjeTStoT3jV9v6tRLkzVyeSqteXu6kwHXVmHTrgRMhkhNXYklM?=
- =?us-ascii?Q?vpmar6gH+1QD087Fwms8KtPH0rkrCWCKeCQvY9ArKmi5+uta674kGfHKn2SZ?=
- =?us-ascii?Q?3nkIgPJD3J3s0U5KgzPV6KnTHzoJFQstxOGwRI9uGdN8EwjGrDbeBg3v52eV?=
- =?us-ascii?Q?6H+A2ABfud7h3nukVtzZkKUCH4P/zSPeDqKBKZ95tDYuLUgD3U/ehLvlpvFO?=
- =?us-ascii?Q?vRl7xTvK8kxzV+Ch1PJlcVqm7EGisFgFlTk2pguVAHwO5YkdPSshKqMUs0gL?=
- =?us-ascii?Q?DhxrX2EIm8WAltyFZHwm0D+TSUJBweGmmuXKlcncRyVio6QXSVrWtK9Z2VL5?=
- =?us-ascii?Q?YkMB9vGiVcpxZyDHzbpWmsVlVnJ5SGWchuw6BM6uV4xQ8aJFHtrSjQgSTqXN?=
- =?us-ascii?Q?D0PYP2HRBBOFSCx/CXk5uED9egwrTi73wnxKLWXpGCPN57j3zSOfiZgEx6Cy?=
- =?us-ascii?Q?Gql+xyHs8u36DS9nvX8BpNTwycxxczsIl+4BPuPWWyD6GpBWpNMduoALW/H0?=
- =?us-ascii?Q?0CKzxgWLwk41iZfZBMNPkK8Ec9IEKyHfnV2O5CLBC+elcGfiqtfEjTGnbgb6?=
- =?us-ascii?Q?D1eB9U0CWAFd2P9msj7JwmFk0QmZ9qRUBkMK9ksQy3l3tY7hGtqf9anVx32j?=
- =?us-ascii?Q?RSbA5MWAtufV+kw4PXB4/OJhnJDzS+Cl8gnMq+JHqwrgTku+Dtap8XmYgxX+?=
- =?us-ascii?Q?sHflv3jwtO/MUzWJhOShX21K9K7iJLo4AvEWbR3HC4Yu6DJhq7YkmPirc/Y1?=
- =?us-ascii?Q?sgmEDCyhmwr/bR5tSvjfDUhVYOSHXtPcXdRcGTo1rIykJxwLs5p8ANFWZFo+?=
- =?us-ascii?Q?ma0ITN9gavQwUu7uAfUKBf/jbTxt9W4QBoUk0E3eIwgKZJxtkLspm0G0OY0J?=
- =?us-ascii?Q?3ls8ciVbdvgI8Ep+TfL3ScCs?=
+X-Microsoft-Antispam-Message-Info: 6tKcHC95NFtrI2+q9R4O1dJgg4GcEDxTzvyQpS8FOcHk+/dfgoqmXrbg8RWILivzY5AWWzELl0PHfCGJXUxqKXofmwEE+3JQfPM4lCd0KuyyVLYvIAMzdL8nK4mA6ut6fLLGC9uGJU9aPt0IJyM/mzN8K2E61OgcMJKl/J4ZCvzS1NZHyEeJpLnXuWW2pa/fijPsmQaf++7mUK2H0p0r7TzfmWWVEhhZevHS8AWIGsC/VcAJ+betAyjnxIGG9nro5vsDOJDNY1t5FTtwu9sC+6mz+bQNbbpdRt+JgtczAgU1h5xcndgfNtp1hVVpC0mjCyMF2bdMdJvrWwnJj86xvYrCKXYuvkBsEo/6dLlFmcYguYnMgGReKOAMwPJ7RrBBVxUPmq1pezeLkE9Bn4gN2B/j+TOuoT09qxIb+o8LxSufb/YziHdi0XYnKLcWRxqq2osfV2ypyk5IwVgLAzdexkqRe4JaAfyIQyGyj5gxflOZzCP54Ayn4DLEgCzqCZJXkti+n8OZgVFTbFsd+YvjzBRxPsjJhWOwi5nZvqMfOlrXN52i8lXuKMCqe196DZxgdzSgAOzncQk/vukUsW4hgA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(366004)(396003)(376002)(346002)(136003)(1076003)(54906003)(6666004)(316002)(956004)(2616005)(5660300002)(66946007)(66476007)(66556008)(30864003)(6486002)(69590400011)(83380400001)(86362001)(36756003)(52116002)(6512007)(26005)(478600001)(8676002)(2906002)(8936002)(16526019)(186003)(4326008)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?PjY+gjgsxZXN6tCnadaMmoYYUISWlJ2JmpjvkvMJN8sDp4fbVXctO2va+lY+?=
+ =?us-ascii?Q?/VpopvTBvWnExryTOyrXfbF/MZpdFL6oGEVzmWgpiVaQC5qSq8Y3vB8bu2Cw?=
+ =?us-ascii?Q?RU8Rw5Dq/XC0s+yNvJIW6+yIh4rxeolclNPe6XXXSEQg6uEnrze1618ad4Kw?=
+ =?us-ascii?Q?Bi86Bq1nLH/XIR5Bl3gKOAYF832h8ND6daOSNkjOu+6Tx20DBX8O0Huxx0Xk?=
+ =?us-ascii?Q?jd8QeDp+6Y5WGdzISn7tPnXXtlKFnkKaX0bieady5YmXGiUTzQzL7nu5ndzP?=
+ =?us-ascii?Q?PZACTs2jlod6G6tb3zYOi+jreD3nJFvglXTL1UOoK7aLtufnkj5TeNcNsN2J?=
+ =?us-ascii?Q?CiINN4EZJbCa8anREgM1jalafKZvjXa3N5Ys547w0hl2jS6pgT9AONjR4mac?=
+ =?us-ascii?Q?p2l1zh6SuJ6xU+sbajreh8nYvahe1An7TCWxC5BOn8HPBkuv/07c6XjSTTUW?=
+ =?us-ascii?Q?LY1Xy153w6rgOQO43M2x4+CoHd64dXLk62agvp2nORH5guNxGaeaIOkBYQWg?=
+ =?us-ascii?Q?eIB0TonO2GWCNPxqX2drrRE1tuN/i7ely60P1SQmSX5Mv5kmXCl/KrUJxzmO?=
+ =?us-ascii?Q?zyap6Ojfz4rNd14kSeeRgy7goG39rgvV0tYG+84l7mheLr8uS9lqgrItwzwE?=
+ =?us-ascii?Q?jd/YMES0GJwVzRdnX4mZYZVCW30vmZhZnlHUFFEDFtiPeDnfSeKu22eqZ9Uu?=
+ =?us-ascii?Q?s7EqirDDK6Zr4Y4SNwwoUVr0cvmkFhw3saCunhHjMpwzgrvu3gM/ZDT2Ba4e?=
+ =?us-ascii?Q?so3f3UQAsUnq3gKSnEjJxdx/hCr1LBJz+axOD3X5bUdAjqtMEnzdkwMjXQGO?=
+ =?us-ascii?Q?Qeq48yedFyjflT8i+Gwc9zv3xxKyVLvR2UOF12+Mz5gRVc8KrPcw+HBIBBrN?=
+ =?us-ascii?Q?eJSSBJ7bPL2DXofjur8VFnEIMi1T1cXuGFJQHs9MLmVRnRXGeIgdgI1cNN4a?=
+ =?us-ascii?Q?hioRUPLQEFUKPeahGRhCWN8RZnVX/r30vCAFexeySKgR08JW6O1cHvy/HB3y?=
+ =?us-ascii?Q?J1Ca+oYO+VPynfjGYK0Mv5rTInT/QhdA3SuBzHJ1+auDpuqsMgOZ5hgPvwc1?=
+ =?us-ascii?Q?TMScjp4HqNwvqzs03zHuxoPCbz2bjtbAmsKBhk/Q9n6lrAcUGgfbJzGVw0d3?=
+ =?us-ascii?Q?LpnMdmVVJk3HPD1/xdJ008TGHHS23GHSoDSCUBHPr+NApE5eC51kKSasknuQ?=
+ =?us-ascii?Q?g8QG1eL7Ir1YbTdMNsEVIf8hxKKYj50wD2Ppr/p3lcqBFUX9jwNi0UPmaEy0?=
+ =?us-ascii?Q?AWbBGsuuK/832VEo+WpHqJ4Oee3rHN964TOGzrZQ3iwFvPwb4RNg2WoWY0I5?=
+ =?us-ascii?Q?YIZ0AwsqDsaEq6J8niPWGBlO?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cf7c4ef-03c2-4e3e-c3ff-08d8cb235229
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23f78c6a-6a0e-4317-3f54-08d8cb23530a
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2021 04:46:23.7836
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2021 04:46:25.2378
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l9+1iusqwffcr1QGuHSmNulXNuMyYLzdFpMBohU5o3StuJSSjvNUvaHhIWF/fbzbdnVu1BTT6eGfVkEyLWja+JHK5xJSsk95TNMEfalx8Hk=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3TP5SyAV3HD7RdvTVBuFRMIVsv+hvCiXhnEqy6X5jAfEzRKNsFzP3l7ItcXd5ATDz5qysKORfywnZzLb1Mjw7D5D7mrIvGcHhDYNdGkv8kU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3429
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9887 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 phishscore=0
@@ -131,553 +132,377 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 sp
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2102070033
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9887 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102070033
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 impostorscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102070033
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The purpose of the taskqueuelock was to handle the issue where a bad
-target decides to send a R2T and before it's data has been sent
-decides to send a cmd response to complete the cmd. The following
-patches fix up the frwd/back locks so they are taken from the
-queue/xmit (frwd) and completion (back) paths again. To get there
-this patch removes the taskqueuelock which for iscsi xmit wq based
-drivers was taken in the queue, xmit and completion paths.
+The following bug was reported and debugged by wubo40@huawei.com:
 
-Instead of the lock, we just make sure we have a ref to the task
-when we queue a R2T, and then we always remove the task from the
-requeue list in the xmit path or the forced cleanup paths.
+When testing kernel 4.18 version, NULL pointer dereference problem
+occurs
+in iscsi_eh_cmd_timed_out function.
 
+I think this bug in the upstream is still exists.
+
+The analysis reasons are as follows:
+1)  For some reason, I/O command did not complete within
+    the timeout period. The block layer timer works,
+    call scsi_times_out() to handle I/O timeout logic.
+    At the same time the command just completes.
+
+2)  scsi_times_out() call iscsi_eh_cmd_timed_out()
+    to processing timeout logic.  although there is an NULL judgment
+        for the task, the task has not been released yet now.
+
+3)  iscsi_complete_task() call __iscsi_put_task(),
+    The task reference count reaches zero, the conditions for free task
+    is met, then iscsi_free_task () free the task,
+    and let sc->SCp.ptr = NULL. After iscsi_eh_cmd_timed_out passes
+    the task judgment check, there may be NULL dereference scenarios
+    later.
+
+   CPU0                                                CPU3
+
+    |- scsi_times_out()                                 |-
+iscsi_complete_task()
+    |                                                   |
+    |- iscsi_eh_cmd_timed_out()                         |-
+__iscsi_put_task()
+    |                                                   |
+    |- task=sc->SCp.ptr, task is not NUL, check passed  |-
+iscsi_free_task(task)
+    |                                                   |
+    |                                                   |-> sc->SCp.ptr
+= NULL
+    |                                                   |
+    |- task is NULL now, NULL pointer dereference       |
+    |                                                   |
+   \|/                                                 \|/
+
+Calltrace:
+[380751.840862] BUG: unable to handle kernel NULL pointer dereference at
+0000000000000138
+[380751.843709] PGD 0 P4D 0
+[380751.844770] Oops: 0000 [#1] SMP PTI
+[380751.846283] CPU: 0 PID: 403 Comm: kworker/0:1H Kdump: loaded
+Tainted: G
+[380751.851467] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+[380751.856521] Workqueue: kblockd blk_mq_timeout_work
+[380751.858527] RIP: 0010:iscsi_eh_cmd_timed_out+0x15e/0x2e0 [libiscsi]
+[380751.861129] Code: 83 ea 01 48 8d 74 d0 08 48 8b 10 48 8b 4a 50 48 85
+c9 74 2c 48 39 d5 74
+[380751.868811] RSP: 0018:ffffc1e280a5fd58 EFLAGS: 00010246
+[380751.870978] RAX: ffff9fd1e84e15e0 RBX: ffff9fd1e84e6dd0 RCX:
+0000000116acc580
+[380751.873791] RDX: ffff9fd1f97a9400 RSI: ffff9fd1e84e1800 RDI:
+ffff9fd1e4d6d420
+[380751.876059] RBP: ffff9fd1e4d49000 R08: 0000000116acc580 R09:
+0000000116acc580
+[380751.878284] R10: 0000000000000000 R11: 0000000000000000 R12:
+ffff9fd1e6e931e8
+[380751.880500] R13: ffff9fd1e84e6ee0 R14: 0000000000000010 R15:
+0000000000000003
+[380751.882687] FS:  0000000000000000(0000) GS:ffff9fd1fac00000(0000)
+knlGS:0000000000000000
+[380751.885236] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[380751.887059] CR2: 0000000000000138 CR3: 000000011860a001 CR4:
+00000000003606f0
+[380751.889308] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+0000000000000000
+[380751.891523] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
+0000000000000400
+[380751.893738] Call Trace:
+[380751.894639]  scsi_times_out+0x60/0x1c0
+[380751.895861]  blk_mq_check_expired+0x144/0x200
+[380751.897302]  ? __switch_to_asm+0x35/0x70
+[380751.898551]  blk_mq_queue_tag_busy_iter+0x195/0x2e0
+[380751.900091]  ? __blk_mq_requeue_request+0x100/0x100
+[380751.901611]  ? __switch_to_asm+0x41/0x70
+[380751.902853]  ? __blk_mq_requeue_request+0x100/0x100
+[380751.904398]  blk_mq_timeout_work+0x54/0x130
+[380751.905740]  process_one_work+0x195/0x390
+[380751.907228]  worker_thread+0x30/0x390
+[380751.908713]  ? process_one_work+0x390/0x390
+[380751.910350]  kthread+0x10d/0x130
+[380751.911470]  ? kthread_flush_work_fn+0x10/0x10
+[380751.913007]  ret_from_fork+0x35/0x40
+
+crash> dis -l iscsi_eh_cmd_timed_out+0x15e
+xxxxx/drivers/scsi/libiscsi.c: 2062
+
+1970 enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd
+*sc)
+{
+...
+1984         spin_lock_bh(&session->frwd_lock);
+1985         task = (struct iscsi_task *)sc->SCp.ptr;
+1986         if (!task) {
+1987                 /*
+1988                  * Raced with completion. Blk layer has taken
+ownership
+1989                  * so let timeout code complete it now.
+1990                  */
+1991                 rc = BLK_EH_DONE;
+1992                 goto done;
+1993         }
+
+...
+
+2052         for (i = 0; i < conn->session->cmds_max; i++) {
+2053                 running_task = conn->session->cmds[i];
+2054                 if (!running_task->sc || running_task == task ||
+2055                      running_task->state != ISCSI_TASK_RUNNING)
+2056                         continue;
+2057
+2058                 /*
+2059                  * Only check if cmds started before this one have
+made
+2060                  * progress, or this could never fail
+2061                  */
+2062                 if (time_after(running_task->sc->jiffies_at_alloc,
+2063                                task->sc->jiffies_at_alloc))    <---
+2064                         continue;
+2065
+...
+}
+
+carsh> struct scsi_cmnd ffff9fd1e6e931e8
+struct scsi_cmnd {
+  ...
+  SCp = {
+    ptr = 0x0,   <--- iscsi_task
+    this_residual = 0,
+    ...
+  },
+}
+
+To prevent this, we take a ref to the cmd under the back (completion)
+lock so if the completion side were to call iscsi_complete_task on the
+task while the timer/eh paths are not holding the back_lock it will
+not be freed from under us.
+
+Note that this requires the previous patch, "libiscsi: drop
+taskqueuelock" because bnx2i sleeps in its cleanup_task callout if the
+cmd is aborted. If the EH/timer and completion path are racing we don't
+know which path will do the last put. The previous patch moved the
+operations we needed to do under the forward lock to cleanup_queued_task.
+Once that has run we can drop the forward lock for the cmd and bnx2i no
+longer has to worry about if the EH, timer or completion path did the
+ast put and if the forward lock is held or not since it won't be.
+
+Reported-by: Wu Bo <wubo40@huawei.com>
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Reviewed-by: Lee Duncan <lduncan@suse.com>
 ---
- drivers/scsi/libiscsi.c     | 178 +++++++++++++++++++++++-------------
- drivers/scsi/libiscsi_tcp.c |  86 +++++++++++------
- include/scsi/libiscsi.h     |   4 +-
- 3 files changed, 172 insertions(+), 96 deletions(-)
+ drivers/scsi/bnx2i/bnx2i_iscsi.c |  2 -
+ drivers/scsi/libiscsi.c          | 71 ++++++++++++++++++++------------
+ 2 files changed, 45 insertions(+), 28 deletions(-)
 
+diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+index fdd446765311..1e6d8f62ea3c 100644
+--- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
++++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+@@ -1171,10 +1171,8 @@ static void bnx2i_cleanup_task(struct iscsi_task *task)
+ 		bnx2i_send_cmd_cleanup_req(hba, task->dd_data);
+ 
+ 		spin_unlock_bh(&conn->session->back_lock);
+-		spin_unlock_bh(&conn->session->frwd_lock);
+ 		wait_for_completion_timeout(&bnx2i_conn->cmd_cleanup_cmpl,
+ 				msecs_to_jiffies(ISCSI_CMD_CLEANUP_TIMEOUT));
+-		spin_lock_bh(&conn->session->frwd_lock);
+ 		spin_lock_bh(&conn->session->back_lock);
+ 	}
+ 	bnx2i_iscsi_unmap_sg_list(task->dd_data);
 diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index cee1dbaa1b93..3d74fdd9f31a 100644
+index 3d74fdd9f31a..ec159bcb7460 100644
 --- a/drivers/scsi/libiscsi.c
 +++ b/drivers/scsi/libiscsi.c
-@@ -523,16 +523,6 @@ static void iscsi_complete_task(struct iscsi_task *task, int state)
- 	WARN_ON_ONCE(task->state == ISCSI_TASK_FREE);
- 	task->state = state;
- 
--	spin_lock_bh(&conn->taskqueuelock);
--	if (!list_empty(&task->running)) {
--		pr_debug_once("%s while task on list", __func__);
--		list_del_init(&task->running);
--	}
--	spin_unlock_bh(&conn->taskqueuelock);
--
--	if (conn->task == task)
--		conn->task = NULL;
--
- 	if (READ_ONCE(conn->ping_task) == task)
- 		WRITE_ONCE(conn->ping_task, NULL);
- 
-@@ -564,9 +554,40 @@ void iscsi_complete_scsi_task(struct iscsi_task *task,
+@@ -587,9 +587,8 @@ static bool cleanup_queued_task(struct iscsi_task *task)
  }
- EXPORT_SYMBOL_GPL(iscsi_complete_scsi_task);
- 
-+/*
-+ * Must be called with back and frwd lock
-+ */
-+static bool cleanup_queued_task(struct iscsi_task *task)
-+{
-+	struct iscsi_conn *conn = task->conn;
-+	bool early_complete = false;
-+
-+	/* Bad target might have completed task while it was still running */
-+	if (task->state == ISCSI_TASK_COMPLETED)
-+		early_complete = true;
-+
-+	if (!list_empty(&task->running)) {
-+		list_del_init(&task->running);
-+		/*
-+		 * If it's on a list but still running, this could be from
-+		 * a bad target sending a rsp early, cleanup from a TMF, or
-+		 * session recovery.
-+		 */
-+		if (task->state == ISCSI_TASK_RUNNING ||
-+		    task->state == ISCSI_TASK_COMPLETED)
-+			__iscsi_put_task(task);
-+	}
-+
-+	if (conn->task == task) {
-+		conn->task = NULL;
-+		__iscsi_put_task(task);
-+	}
-+
-+	return early_complete;
-+}
  
  /*
-- * session back_lock must be held and if not called for a task that is
-+ * session frwd_lock must be held and if not called for a task that is
-  * still pending or from the xmit thread, then xmit thread must
-  * be suspended.
+- * session frwd_lock must be held and if not called for a task that is
+- * still pending or from the xmit thread, then xmit thread must
+- * be suspended.
++ * session frwd lock must be held and if not called for a task that is still
++ * pending or from the xmit thread, then xmit thread must be suspended
   */
-@@ -585,6 +606,13 @@ static void fail_scsi_task(struct iscsi_task *task, int err)
- 	if (!sc)
- 		return;
+ static void fail_scsi_task(struct iscsi_task *task, int err)
+ {
+@@ -597,16 +596,6 @@ static void fail_scsi_task(struct iscsi_task *task, int err)
+ 	struct scsi_cmnd *sc;
+ 	int state;
  
-+	/* regular RX path uses back_lock */
-+	spin_lock_bh(&conn->session->back_lock);
-+	if (cleanup_queued_task(task)) {
-+		spin_unlock_bh(&conn->session->back_lock);
-+		return;
-+	}
-+
- 	if (task->state == ISCSI_TASK_PENDING) {
- 		/*
- 		 * cmd never made it to the xmit thread, so we should not count
-@@ -600,9 +628,6 @@ static void fail_scsi_task(struct iscsi_task *task, int err)
- 
- 	sc->result = err << 16;
- 	scsi_set_resid(sc, scsi_bufflen(sc));
+-	/*
+-	 * if a command completes and we get a successful tmf response
+-	 * we will hit this because the scsi eh abort code does not take
+-	 * a ref to the task.
+-	 */
+-	sc = task->sc;
+-	if (!sc)
+-		return;
 -
 -	/* regular RX path uses back_lock */
--	spin_lock_bh(&conn->session->back_lock);
- 	iscsi_complete_task(task, state);
- 	spin_unlock_bh(&conn->session->back_lock);
- }
-@@ -748,9 +773,7 @@ __iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
- 		if (session->tt->xmit_task(task))
- 			goto free_task;
- 	} else {
--		spin_lock_bh(&conn->taskqueuelock);
- 		list_add_tail(&task->running, &conn->mgmtqueue);
--		spin_unlock_bh(&conn->taskqueuelock);
- 		iscsi_conn_queue_work(conn);
- 	}
- 
-@@ -1411,31 +1434,61 @@ static int iscsi_check_cmdsn_window_closed(struct iscsi_conn *conn)
- 	return 0;
- }
- 
--static int iscsi_xmit_task(struct iscsi_conn *conn)
-+static int iscsi_xmit_task(struct iscsi_conn *conn, struct iscsi_task *task,
-+			   bool was_requeue)
- {
--	struct iscsi_task *task = conn->task;
- 	int rc;
- 
--	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx))
--		return -ENODATA;
--
  	spin_lock_bh(&conn->session->back_lock);
--	if (conn->task == NULL) {
-+
-+	if (!conn->task) {
-+		/* Take a ref so we can access it after xmit_task() */
-+		__iscsi_get_task(task);
-+	} else {
-+		/* Already have a ref from when we failed to send it last call */
-+		conn->task = NULL;
-+	}
-+
-+	/*
-+	 * If this was a requeue for a R2T we have an extra ref on the task in
-+	 * case a bad target sends a cmd rsp before we have handled the task.
-+	 */
-+	if (was_requeue)
-+		__iscsi_put_task(task);
-+
-+	/*
-+	 * Do this after dropping the extra ref because if this was a requeue
-+	 * it's removed from that list and cleanup_queued_task would miss it.
-+	 */
-+	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx)) {
-+		/*
-+		 * Save the task and ref in case we weren't cleaning up this
-+		 * task and get woken up again.
-+		 */
-+		conn->task = task;
+ 	if (cleanup_queued_task(task)) {
  		spin_unlock_bh(&conn->session->back_lock);
- 		return -ENODATA;
- 	}
--	__iscsi_get_task(task);
- 	spin_unlock_bh(&conn->session->back_lock);
-+
- 	spin_unlock_bh(&conn->session->frwd_lock);
- 	rc = conn->session->tt->xmit_task(task);
- 	spin_lock_bh(&conn->session->frwd_lock);
- 	if (!rc) {
- 		/* done with this task */
- 		task->last_xfer = jiffies;
--		conn->task = NULL;
- 	}
- 	/* regular RX path uses back_lock */
- 	spin_lock(&conn->session->back_lock);
-+	if (rc && task->state == ISCSI_TASK_RUNNING) {
-+		/*
-+		 * get an extra ref that is released next time we access it
-+		 * as conn->task above.
-+		 */
-+		__iscsi_get_task(task);
-+		conn->task = task;
-+	}
-+
- 	__iscsi_put_task(task);
- 	spin_unlock(&conn->session->back_lock);
- 	return rc;
-@@ -1445,9 +1498,7 @@ static int iscsi_xmit_task(struct iscsi_conn *conn)
-  * iscsi_requeue_task - requeue task to run from session workqueue
-  * @task: task to requeue
-  *
-- * LLDs that need to run a task from the session workqueue should call
-- * this. The session frwd_lock must be held. This should only be called
-- * by software drivers.
-+ * Callers must have taken a ref to the task that is going to be requeued.
-  */
- void iscsi_requeue_task(struct iscsi_task *task)
- {
-@@ -1457,11 +1508,18 @@ void iscsi_requeue_task(struct iscsi_task *task)
- 	 * this may be on the requeue list already if the xmit_task callout
- 	 * is handling the r2ts while we are adding new ones
- 	 */
--	spin_lock_bh(&conn->taskqueuelock);
--	if (list_empty(&task->running))
-+	spin_lock_bh(&conn->session->frwd_lock);
-+	if (list_empty(&task->running)) {
- 		list_add_tail(&task->running, &conn->requeue);
--	spin_unlock_bh(&conn->taskqueuelock);
-+	} else {
-+		/*
-+		 * Don't need the extra ref since it's already requeued and
-+		 * has a ref.
-+		 */
-+		iscsi_put_task(task);
-+	}
- 	iscsi_conn_queue_work(conn);
-+	spin_unlock_bh(&conn->session->frwd_lock);
- }
- EXPORT_SYMBOL_GPL(iscsi_requeue_task);
+@@ -626,6 +615,7 @@ static void fail_scsi_task(struct iscsi_task *task, int err)
+ 	else
+ 		state = ISCSI_TASK_ABRT_TMF;
  
-@@ -1487,7 +1545,7 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
- 	}
- 
- 	if (conn->task) {
--		rc = iscsi_xmit_task(conn);
-+		rc = iscsi_xmit_task(conn, conn->task, false);
- 	        if (rc)
- 		        goto done;
- 	}
-@@ -1497,49 +1555,41 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
- 	 * only have one nop-out as a ping from us and targets should not
- 	 * overflow us with nop-ins
- 	 */
--	spin_lock_bh(&conn->taskqueuelock);
- check_mgmt:
- 	while (!list_empty(&conn->mgmtqueue)) {
--		conn->task = list_entry(conn->mgmtqueue.next,
--					 struct iscsi_task, running);
--		list_del_init(&conn->task->running);
--		spin_unlock_bh(&conn->taskqueuelock);
--		if (iscsi_prep_mgmt_task(conn, conn->task)) {
-+		task = list_entry(conn->mgmtqueue.next, struct iscsi_task,
-+				  running);
-+		list_del_init(&task->running);
-+		if (iscsi_prep_mgmt_task(conn, task)) {
- 			/* regular RX path uses back_lock */
- 			spin_lock_bh(&conn->session->back_lock);
--			__iscsi_put_task(conn->task);
-+			__iscsi_put_task(task);
- 			spin_unlock_bh(&conn->session->back_lock);
--			conn->task = NULL;
--			spin_lock_bh(&conn->taskqueuelock);
- 			continue;
- 		}
--		rc = iscsi_xmit_task(conn);
-+		rc = iscsi_xmit_task(conn, task, false);
- 		if (rc)
- 			goto done;
--		spin_lock_bh(&conn->taskqueuelock);
- 	}
- 
- 	/* process pending command queue */
- 	while (!list_empty(&conn->cmdqueue)) {
--		conn->task = list_entry(conn->cmdqueue.next, struct iscsi_task,
--					running);
--		list_del_init(&conn->task->running);
--		spin_unlock_bh(&conn->taskqueuelock);
-+		task = list_entry(conn->cmdqueue.next, struct iscsi_task,
-+				  running);
-+		list_del_init(&task->running);
- 		if (conn->session->state == ISCSI_STATE_LOGGING_OUT) {
--			fail_scsi_task(conn->task, DID_IMM_RETRY);
--			spin_lock_bh(&conn->taskqueuelock);
-+			fail_scsi_task(task, DID_IMM_RETRY);
- 			continue;
- 		}
--		rc = iscsi_prep_scsi_cmd_pdu(conn->task);
-+		rc = iscsi_prep_scsi_cmd_pdu(task);
- 		if (rc) {
- 			if (rc == -ENOMEM || rc == -EACCES)
--				fail_scsi_task(conn->task, DID_IMM_RETRY);
-+				fail_scsi_task(task, DID_IMM_RETRY);
- 			else
--				fail_scsi_task(conn->task, DID_ABORT);
--			spin_lock_bh(&conn->taskqueuelock);
-+				fail_scsi_task(task, DID_ABORT);
- 			continue;
- 		}
--		rc = iscsi_xmit_task(conn);
-+		rc = iscsi_xmit_task(conn, task, false);
- 		if (rc)
- 			goto done;
- 		/*
-@@ -1547,7 +1597,6 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
- 		 * we need to check the mgmt queue for nops that need to
- 		 * be sent to aviod starvation
- 		 */
--		spin_lock_bh(&conn->taskqueuelock);
- 		if (!list_empty(&conn->mgmtqueue))
- 			goto check_mgmt;
- 	}
-@@ -1561,21 +1610,17 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
- 
- 		task = list_entry(conn->requeue.next, struct iscsi_task,
- 				  running);
-+
- 		if (iscsi_check_tmf_restrictions(task, ISCSI_OP_SCSI_DATA_OUT))
- 			break;
- 
--		conn->task = task;
--		list_del_init(&conn->task->running);
--		conn->task->state = ISCSI_TASK_RUNNING;
--		spin_unlock_bh(&conn->taskqueuelock);
--		rc = iscsi_xmit_task(conn);
-+		list_del_init(&task->running);
-+		rc = iscsi_xmit_task(conn, task, true);
- 		if (rc)
- 			goto done;
--		spin_lock_bh(&conn->taskqueuelock);
- 		if (!list_empty(&conn->mgmtqueue))
- 			goto check_mgmt;
- 	}
--	spin_unlock_bh(&conn->taskqueuelock);
- 	spin_unlock_bh(&conn->session->frwd_lock);
- 	return -ENODATA;
- 
-@@ -1741,9 +1786,7 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 			goto prepd_reject;
- 		}
- 	} else {
--		spin_lock_bh(&conn->taskqueuelock);
- 		list_add_tail(&task->running, &conn->cmdqueue);
--		spin_unlock_bh(&conn->taskqueuelock);
- 		iscsi_conn_queue_work(conn);
- 	}
- 
-@@ -2914,7 +2957,6 @@ iscsi_conn_setup(struct iscsi_cls_session *cls_session, int dd_size,
- 	INIT_LIST_HEAD(&conn->mgmtqueue);
- 	INIT_LIST_HEAD(&conn->cmdqueue);
- 	INIT_LIST_HEAD(&conn->requeue);
--	spin_lock_init(&conn->taskqueuelock);
- 	INIT_WORK(&conn->xmitwork, iscsi_xmitworker);
- 
- 	/* allocate login_task used for the login/text sequences */
-@@ -3080,10 +3122,16 @@ fail_mgmt_tasks(struct iscsi_session *session, struct iscsi_conn *conn)
- 		ISCSI_DBG_SESSION(conn->session,
- 				  "failing mgmt itt 0x%x state %d\n",
- 				  task->itt, task->state);
-+
-+		spin_lock_bh(&session->back_lock);
-+		if (cleanup_queued_task(task)) {
-+			spin_unlock_bh(&session->back_lock);
-+			continue;
-+		}
-+
- 		state = ISCSI_TASK_ABRT_SESS_RECOV;
- 		if (task->state == ISCSI_TASK_PENDING)
- 			state = ISCSI_TASK_COMPLETED;
--		spin_lock_bh(&session->back_lock);
- 		iscsi_complete_task(task, state);
- 		spin_unlock_bh(&session->back_lock);
- 	}
-diff --git a/drivers/scsi/libiscsi_tcp.c b/drivers/scsi/libiscsi_tcp.c
-index 83f14b2c8804..2e9ffe3d1a55 100644
---- a/drivers/scsi/libiscsi_tcp.c
-+++ b/drivers/scsi/libiscsi_tcp.c
-@@ -524,48 +524,79 @@ static int iscsi_tcp_data_in(struct iscsi_conn *conn, struct iscsi_task *task)
- /**
-  * iscsi_tcp_r2t_rsp - iSCSI R2T Response processing
-  * @conn: iscsi connection
-- * @task: scsi command task
-+ * @hdr: PDU header
-  */
--static int iscsi_tcp_r2t_rsp(struct iscsi_conn *conn, struct iscsi_task *task)
-+static int iscsi_tcp_r2t_rsp(struct iscsi_conn *conn, struct iscsi_hdr *hdr)
- {
- 	struct iscsi_session *session = conn->session;
--	struct iscsi_tcp_task *tcp_task = task->dd_data;
--	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
--	struct iscsi_r2t_rsp *rhdr = (struct iscsi_r2t_rsp *)tcp_conn->in.hdr;
-+	struct iscsi_tcp_task *tcp_task;
-+	struct iscsi_tcp_conn *tcp_conn;
-+	struct iscsi_r2t_rsp *rhdr;
- 	struct iscsi_r2t_info *r2t;
--	int r2tsn = be32_to_cpu(rhdr->r2tsn);
-+	struct iscsi_task *task;
- 	u32 data_length;
- 	u32 data_offset;
-+	int r2tsn;
- 	int rc;
- 
-+	spin_lock(&session->back_lock);
-+	task = iscsi_itt_to_ctask(conn, hdr->itt);
-+	if (!task) {
-+		spin_unlock(&session->back_lock);
-+		return ISCSI_ERR_BAD_ITT;
-+	} else if (task->sc->sc_data_direction != DMA_TO_DEVICE) {
-+		spin_unlock(&session->back_lock);
-+		return ISCSI_ERR_PROTO;
-+	}
-+	/*
-+	 * A bad target might complete the cmd before we have handled R2Ts
-+	 * so get a ref to the task that will be dropped in the xmit path.
-+	 */
-+	if (task->state != ISCSI_TASK_RUNNING) {
-+		spin_unlock(&session->back_lock);
-+		/* Let the path that got the early rsp complete it */
-+		return 0;
-+	}
-+	task->last_xfer = jiffies;
-+	__iscsi_get_task(task);
-+
-+	tcp_conn = conn->dd_data;
-+	rhdr = (struct iscsi_r2t_rsp *)tcp_conn->in.hdr;
-+	/* fill-in new R2T associated with the task */
-+	iscsi_update_cmdsn(session, (struct iscsi_nopin *)rhdr);
-+	spin_unlock(&session->back_lock);
-+
- 	if (tcp_conn->in.datalen) {
- 		iscsi_conn_printk(KERN_ERR, conn,
- 				  "invalid R2t with datalen %d\n",
- 				  tcp_conn->in.datalen);
--		return ISCSI_ERR_DATALEN;
-+		rc = ISCSI_ERR_DATALEN;
-+		goto put_task;
- 	}
- 
-+	tcp_task = task->dd_data;
-+	r2tsn = be32_to_cpu(rhdr->r2tsn);
- 	if (tcp_task->exp_datasn != r2tsn){
- 		ISCSI_DBG_TCP(conn, "task->exp_datasn(%d) != rhdr->r2tsn(%d)\n",
- 			      tcp_task->exp_datasn, r2tsn);
--		return ISCSI_ERR_R2TSN;
-+		rc = ISCSI_ERR_R2TSN;
-+		goto put_task;
- 	}
- 
--	/* fill-in new R2T associated with the task */
--	iscsi_update_cmdsn(session, (struct iscsi_nopin*)rhdr);
--
--	if (!task->sc || session->state != ISCSI_STATE_LOGGED_IN) {
-+	if (session->state != ISCSI_STATE_LOGGED_IN) {
- 		iscsi_conn_printk(KERN_INFO, conn,
- 				  "dropping R2T itt %d in recovery.\n",
- 				  task->itt);
--		return 0;
-+		rc = 0;
-+		goto put_task;
- 	}
- 
- 	data_length = be32_to_cpu(rhdr->data_length);
- 	if (data_length == 0) {
- 		iscsi_conn_printk(KERN_ERR, conn,
- 				  "invalid R2T with zero data len\n");
--		return ISCSI_ERR_DATALEN;
-+		rc = ISCSI_ERR_DATALEN;
-+		goto put_task;
- 	}
- 
- 	if (data_length > session->max_burst)
-@@ -579,7 +610,8 @@ static int iscsi_tcp_r2t_rsp(struct iscsi_conn *conn, struct iscsi_task *task)
- 				  "invalid R2T with data len %u at offset %u "
- 				  "and total length %d\n", data_length,
- 				  data_offset, task->sc->sdb.length);
--		return ISCSI_ERR_DATALEN;
-+		rc = ISCSI_ERR_DATALEN;
-+		goto put_task;
- 	}
- 
- 	spin_lock(&tcp_task->pool2queue);
-@@ -589,7 +621,8 @@ static int iscsi_tcp_r2t_rsp(struct iscsi_conn *conn, struct iscsi_task *task)
- 				  "Target has sent more R2Ts than it "
- 				  "negotiated for or driver has leaked.\n");
- 		spin_unlock(&tcp_task->pool2queue);
--		return ISCSI_ERR_PROTO;
-+		rc = ISCSI_ERR_PROTO;
-+		goto put_task;
- 	}
- 
- 	r2t->exp_statsn = rhdr->statsn;
-@@ -607,6 +640,10 @@ static int iscsi_tcp_r2t_rsp(struct iscsi_conn *conn, struct iscsi_task *task)
- 
- 	iscsi_requeue_task(task);
- 	return 0;
-+
-+put_task:
-+	iscsi_put_task(task);
-+	return rc;
++	sc = task->sc;
+ 	sc->result = err << 16;
+ 	scsi_set_resid(sc, scsi_bufflen(sc));
+ 	iscsi_complete_task(task, state);
+@@ -1893,27 +1883,39 @@ static int iscsi_exec_task_mgmt_fn(struct iscsi_conn *conn,
  }
  
  /*
-@@ -730,20 +767,11 @@ iscsi_tcp_hdr_dissect(struct iscsi_conn *conn, struct iscsi_hdr *hdr)
- 		rc = iscsi_complete_pdu(conn, hdr, NULL, 0);
- 		break;
- 	case ISCSI_OP_R2T:
--		spin_lock(&conn->session->back_lock);
--		task = iscsi_itt_to_ctask(conn, hdr->itt);
--		spin_unlock(&conn->session->back_lock);
--		if (!task)
--			rc = ISCSI_ERR_BAD_ITT;
--		else if (ahslen)
-+		if (ahslen) {
- 			rc = ISCSI_ERR_AHSLEN;
--		else if (task->sc->sc_data_direction == DMA_TO_DEVICE) {
--			task->last_xfer = jiffies;
--			spin_lock(&conn->session->frwd_lock);
--			rc = iscsi_tcp_r2t_rsp(conn, task);
--			spin_unlock(&conn->session->frwd_lock);
--		} else
--			rc = ISCSI_ERR_PROTO;
-+			break;
-+		}
-+		rc = iscsi_tcp_r2t_rsp(conn, hdr);
- 		break;
- 	case ISCSI_OP_LOGIN_RSP:
- 	case ISCSI_OP_TEXT_RSP:
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index b3bbd10eb3f0..44a9554aea62 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -187,7 +187,7 @@ struct iscsi_conn {
- 	struct iscsi_task	*task;		/* xmit task in progress */
+- * Fail commands. session lock held and recv side suspended and xmit
+- * thread flushed
++ * Fail commands. session frwd lock held and xmit thread flushed.
+  */
+ static void fail_scsi_tasks(struct iscsi_conn *conn, u64 lun, int error)
+ {
++	struct iscsi_session *session = conn->session;
+ 	struct iscsi_task *task;
+ 	int i;
  
- 	/* xmit */
--	spinlock_t		taskqueuelock;  /* protects the next three lists */
-+	/* items must be added/deleted under frwd lock */
- 	struct list_head	mgmtqueue;	/* mgmt (control) xmit queue */
- 	struct list_head	cmdqueue;	/* data-path cmd queue */
- 	struct list_head	requeue;	/* tasks needing another run */
-@@ -332,7 +332,7 @@ struct iscsi_session {
- 						 * cmdsn, queued_cmdsn     *
- 						 * session resources:      *
- 						 * - cmdpool kfifo_out ,   *
--						 * - mgmtpool,		   */
-+						 * - mgmtpool, queues	   */
- 	spinlock_t		back_lock;	/* protects cmdsn_exp      *
- 						 * cmdsn_max,              *
- 						 * cmdpool kfifo_in        */
+-	for (i = 0; i < conn->session->cmds_max; i++) {
+-		task = conn->session->cmds[i];
++	spin_lock_bh(&session->back_lock);
++	for (i = 0; i < session->cmds_max; i++) {
++		task = session->cmds[i];
+ 		if (!task->sc || task->state == ISCSI_TASK_FREE)
+ 			continue;
+ 
+ 		if (lun != -1 && lun != task->sc->device->lun)
+ 			continue;
+ 
+-		ISCSI_DBG_SESSION(conn->session,
++		__iscsi_get_task(task);
++		spin_unlock_bh(&session->back_lock);
++
++		ISCSI_DBG_SESSION(session,
+ 				  "failing sc %p itt 0x%x state %d\n",
+ 				  task->sc, task->itt, task->state);
+ 		fail_scsi_task(task, error);
++
++		spin_unlock_bh(&session->frwd_lock);
++		iscsi_put_task(task);
++		spin_lock_bh(&session->frwd_lock);
++
++		spin_lock_bh(&session->back_lock);
+ 	}
++
++	spin_unlock_bh(&session->back_lock);
+ }
+ 
+ /**
+@@ -1991,6 +1993,7 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 	ISCSI_DBG_EH(session, "scsi cmd %p timedout\n", sc);
+ 
+ 	spin_lock_bh(&session->frwd_lock);
++	spin_lock(&session->back_lock);
+ 	task = (struct iscsi_task *)sc->SCp.ptr;
+ 	if (!task) {
+ 		/*
+@@ -1998,8 +2001,11 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 		 * so let timeout code complete it now.
+ 		 */
+ 		rc = BLK_EH_DONE;
++		spin_unlock(&session->back_lock);
+ 		goto done;
+ 	}
++	__iscsi_get_task(task);
++	spin_unlock(&session->back_lock);
+ 
+ 	if (session->state != ISCSI_STATE_LOGGED_IN) {
+ 		/*
+@@ -2058,6 +2064,7 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 		goto done;
+ 	}
+ 
++	spin_lock(&session->back_lock);
+ 	for (i = 0; i < conn->session->cmds_max; i++) {
+ 		running_task = conn->session->cmds[i];
+ 		if (!running_task->sc || running_task == task ||
+@@ -2090,10 +2097,12 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 				     "last xfer %lu/%lu. Last check %lu.\n",
+ 				     task->last_xfer, running_task->last_xfer,
+ 				     task->last_timeout);
++			spin_unlock(&session->back_lock);
+ 			rc = BLK_EH_RESET_TIMER;
+ 			goto done;
+ 		}
+ 	}
++	spin_unlock(&session->back_lock);
+ 
+ 	/* Assumes nop timeout is shorter than scsi cmd timeout */
+ 	if (task->have_checked_conn)
+@@ -2115,9 +2124,12 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
+ 	rc = BLK_EH_RESET_TIMER;
+ 
+ done:
+-	if (task)
+-		task->last_timeout = jiffies;
+ 	spin_unlock_bh(&session->frwd_lock);
++
++	if (task) {
++		task->last_timeout = jiffies;
++		iscsi_put_task(task);
++	}
+ 	ISCSI_DBG_EH(session, "return %s\n", rc == BLK_EH_RESET_TIMER ?
+ 		     "timer reset" : "shutdown or nh");
+ 	return rc;
+@@ -2225,15 +2237,20 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+ 	conn->eh_abort_cnt++;
+ 	age = session->age;
+ 
++	spin_lock(&session->back_lock);
+ 	task = (struct iscsi_task *)sc->SCp.ptr;
+-	ISCSI_DBG_EH(session, "aborting [sc %p itt 0x%x]\n",
+-		     sc, task->itt);
+-
+-	/* task completed before time out */
+-	if (!task->sc) {
++	if (!task || !task->sc) {
++		/* task completed before time out */
+ 		ISCSI_DBG_EH(session, "sc completed while abort in progress\n");
+-		goto success;
++
++		spin_unlock(&session->back_lock);
++		spin_unlock_bh(&session->frwd_lock);
++		mutex_unlock(&session->eh_mutex);
++		return SUCCESS;
+ 	}
++	ISCSI_DBG_EH(session, "aborting [sc %p itt 0x%x]\n", sc, task->itt);
++	__iscsi_get_task(task);
++	spin_unlock(&session->back_lock);
+ 
+ 	if (task->state == ISCSI_TASK_PENDING) {
+ 		fail_scsi_task(task, DID_ABORT);
+@@ -2295,6 +2312,7 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+ success_unlocked:
+ 	ISCSI_DBG_EH(session, "abort success [sc %p itt 0x%x]\n",
+ 		     sc, task->itt);
++	iscsi_put_task(task);
+ 	mutex_unlock(&session->eh_mutex);
+ 	return SUCCESS;
+ 
+@@ -2303,6 +2321,7 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
+ failed_unlocked:
+ 	ISCSI_DBG_EH(session, "abort failed [sc %p itt 0x%x]\n", sc,
+ 		     task ? task->itt : 0);
++	iscsi_put_task(task);
+ 	mutex_unlock(&session->eh_mutex);
+ 	return FAILED;
+ }
 -- 
 2.25.1
 
