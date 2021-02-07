@@ -2,108 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F143123A5
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 11:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39813123D8
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 12:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbhBGKpm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Feb 2021 05:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhBGKpk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 05:45:40 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D2DC06174A;
-        Sun,  7 Feb 2021 02:45:00 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id hs11so20122831ejc.1;
-        Sun, 07 Feb 2021 02:44:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3IGbIM3G5/TPBw50jfxVOTum5oKaSu4oHa8fy1eVeCg=;
-        b=ZhqUx+/OVXJaazlJ1KTjrpIlkFBKBh6euygDDz7fw5of/OoOAD8j+nf/p+Ct6QPme8
-         Az0TXMycKD7OMzgMg225sA18v3cgMjSqbV0wrisZ2cGLpx5vCwtqFP01XAObDPolrz1T
-         gT3ZuDIW7I+Nqw5wBooMvVvqQBefSutMhLqZmMqIgzFkcq3acZgfEAmiklzgOnA7A67p
-         Ru0Q12A6O83Jz/4Lt+zpcTfs4k7+HbInuL4YZkXgDo9iQLViw0eXOnmsr5cTWunoPXqO
-         swpHArmO/6iNilkvtFKkLXBtTkCJrvx5wXSGoxVztnVobcbgTaVm7n49CGIp5SwcOaqT
-         wqAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3IGbIM3G5/TPBw50jfxVOTum5oKaSu4oHa8fy1eVeCg=;
-        b=h/PeTNCAz28dTIiNAFw8pgoOZsvB+IPDJ9kp/buPB0DMndI1DJM05dMR538He1TgXh
-         J/s9gqu9irhg+3lWIoIOLEcRtdUvSmFq4UaZdhFDGX3GMSckiDcf6/poMkR6r9/eLzOd
-         asl0+fMAxaVkAi3mLFUE93jvi2iim8irTk+7LXT5MDmyMUkKlbmQdTK5/z4dphoixPrw
-         8ZzDQTriEjxZQKLAP3pBRPPcA2prV2meKAitOEwPQntgMrTs5KDXpApxXzzPJbgfuJI6
-         QDVQhZwFZ7yA5g2nR7I42v/AVSsiAO2m0twwVXjBXOPVmGiXG0jD3G0yp1eKRy1VHeua
-         4m8Q==
-X-Gm-Message-State: AOAM532UHXLbFvXY28GEbbjV1hP0DB46GFtvInKiOlT8uYM+hYGTeCoK
-        iShLjxb11PqL1NnRoDNLilk=
-X-Google-Smtp-Source: ABdhPJy29cByRXEPWMZGZSLuR/2jLDllsyl7Dv+ArERUaYgpHwrqkpWmcvB75hzanxOZIzxQIWE6Ug==
-X-Received: by 2002:a17:906:b106:: with SMTP id u6mr11973612ejy.313.1612694698816;
-        Sun, 07 Feb 2021 02:44:58 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bee1b.dynamic.kabel-deutschland.de. [95.91.238.27])
-        by smtp.googlemail.com with ESMTPSA id e24sm1855425ejb.121.2021.02.07.02.44.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 07 Feb 2021 02:44:58 -0800 (PST)
-Message-ID: <19a3cf32c556455f43f9c0f61a408eda65f6d7ec.camel@gmail.com>
-Subject: Re: [PATCH v19 3/3] scsi: ufs: Prepare HPB read for cached
- sub-region
-From:   Bean Huo <huobean@gmail.com>
-To:     Can Guo <cang@codeaurora.org>
-Cc:     Avri Altman <Avri.Altman@wdc.com>, daejun7.park@samsung.com,
-        Greg KH <gregkh@linuxfoundation.org>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, asutoshd@codeaurora.org,
-        stanley.chu@mediatek.com, bvanassche@acm.org,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>
-Date:   Sun, 07 Feb 2021 11:44:56 +0100
-In-Reply-To: <ba7943ab40720df96a9fedb04ab0e4c8@codeaurora.org>
-References: <20210129052848epcms2p6e5797efd94e6282b76ad9ae6c99e3ab5@epcms2p6>
-         <CGME20210129052848epcms2p6e5797efd94e6282b76ad9ae6c99e3ab5@epcms2p5>
-         <20210129053042epcms2p538e7fa396c3c2104594c44e48be53eb8@epcms2p5>
-         <7f25ccb1d857131baa1c0424c4542e33@codeaurora.org>
-         <b6a8652c00411e3f71d33e7a6322f49eb5701039.camel@gmail.com>
-         <DM6PR04MB657522B94AB436CF096460F6FCB29@DM6PR04MB6575.namprd04.prod.outlook.com>
-         <12a011cd895dc9be5ec6c4f964b6011af492f06d.camel@gmail.com>
-         <ba7943ab40720df96a9fedb04ab0e4c8@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S229754AbhBGLkr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Feb 2021 06:40:47 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12477 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229510AbhBGLkW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 06:40:22 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRx03xKvzjKnb;
+        Sun,  7 Feb 2021 19:38:12 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.498.0; Sun, 7 Feb 2021 19:39:23 +0800
+From:   Xiaofei Tan <tanxiaofei@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, Xiaofei Tan <tanxiaofei@huawei.com>
+Subject: [PATCH for-next 00/32] spin lock usage optimization for SCSI drivers
+Date:   Sun, 7 Feb 2021 19:36:31 +0800
+Message-ID: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
+X-Mailer: git-send-email 2.8.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 2021-02-07 at 15:36 +0800, Can Guo wrote:
-> > 
-> > Thanks, I tested Daejun's patchset before, it is also ok (I don't
-> > know
-> > which version patchset). maybe we can keep current implementation
-> > as
-> > default, then if there is conflict, and submit the quirk.
-> > 
-> 
-> Yeah, you've tested it, are you sure that Micron's UFS devices are OK
-> with this specific code line?
-> 
-> Micron UFS FW team has confirmed that Micron's HPB entries read out
-> by
-> "HPB Buffer Read" cmd are in big-endian byte ordering.
+Replace spin_lock_irqsave with spin_lock in hard IRQ of SCSI drivers.
+There are no function changes, but may speed up if interrupt happen
+too often.
 
-Aha, I think you didn't check with right person :), ping me, let me
-tell you this confusing story. and see my HPB patch, I didn't the same
-with here:
+Xiaofei Tan (32):
+  scsi: 53c700: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: ipr: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: lpfc: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: qla4xxx: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: BusLogic: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: a100u2w: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: a2091: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: a3000: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: aha1740: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: bfa: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: esp_scsi: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: gvp11: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: hptiop: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: ibmvscsi: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: initio: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: megaraid: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: mac53c94: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: mesh: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: mvumi: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: myrb: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: myrs: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: ncr53c8xx: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: nsp32: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: pmcraid: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: pcmcia: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: qlogicfas408: Replace spin_lock_irqsave with spin_lock in hard
+    IRQ
+  scsi: qlogicpti: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: sgiwd93: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: stex: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: vmw_pvscsi: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: wd719x: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  scsi: advansys: Replace spin_lock_irqsave with spin_lock in hard IRQ
 
-https://patchwork.kernel.org/project/linux-scsi/patch/20200504142032.16619-6-beanhuo@micron.com/
+ drivers/scsi/53c700.c                     |  5 ++--
+ drivers/scsi/BusLogic.c                   |  5 ++--
+ drivers/scsi/a100u2w.c                    |  5 ++--
+ drivers/scsi/a2091.c                      |  5 ++--
+ drivers/scsi/a3000.c                      |  5 ++--
+ drivers/scsi/advansys.c                   |  5 ++--
+ drivers/scsi/aha1740.c                    |  5 ++--
+ drivers/scsi/bfa/bfad.c                   | 20 ++++++-------
+ drivers/scsi/esp_scsi.c                   |  5 ++--
+ drivers/scsi/gvp11.c                      |  5 ++--
+ drivers/scsi/hptiop.c                     |  5 ++--
+ drivers/scsi/ibmvscsi/ibmvfc.c            |  5 ++--
+ drivers/scsi/initio.c                     |  5 ++--
+ drivers/scsi/ipr.c                        | 21 ++++++-------
+ drivers/scsi/lpfc/lpfc_sli.c              | 49 +++++++++++++------------------
+ drivers/scsi/mac53c94.c                   |  5 ++--
+ drivers/scsi/megaraid.c                   | 10 +++----
+ drivers/scsi/megaraid/megaraid_sas_base.c |  5 ++--
+ drivers/scsi/mesh.c                       |  5 ++--
+ drivers/scsi/mvumi.c                      |  7 ++---
+ drivers/scsi/myrb.c                       | 20 +++++--------
+ drivers/scsi/myrs.c                       | 15 ++++------
+ drivers/scsi/ncr53c8xx.c                  |  5 ++--
+ drivers/scsi/nsp32.c                      |  5 ++--
+ drivers/scsi/pcmcia/sym53c500_cs.c        |  5 ++--
+ drivers/scsi/pmcraid.c                    |  8 ++---
+ drivers/scsi/qla4xxx/ql4_isr.c            | 15 ++++------
+ drivers/scsi/qlogicfas408.c               |  5 ++--
+ drivers/scsi/qlogicpti.c                  |  5 ++--
+ drivers/scsi/sgiwd93.c                    |  5 ++--
+ drivers/scsi/stex.c                       | 16 +++++-----
+ drivers/scsi/vmw_pvscsi.c                 |  4 +--
+ drivers/scsi/wd719x.c                     |  7 ++---
+ 33 files changed, 122 insertions(+), 175 deletions(-)
 
-Bean
-
-
+-- 
+2.8.1
 
