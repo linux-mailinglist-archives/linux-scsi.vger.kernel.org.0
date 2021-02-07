@@ -2,28 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5844B3123E8
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 12:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12633123D3
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 12:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbhBGLm2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Feb 2021 06:42:28 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12088 "EHLO
+        id S229731AbhBGLki (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Feb 2021 06:40:38 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12082 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbhBGLlE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 06:41:04 -0500
+        with ESMTP id S229587AbhBGLkV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 06:40:21 -0500
 Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRwg4rpXzMWRG;
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRwg48JvzMWRN;
         Sun,  7 Feb 2021 19:37:55 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.24) by
  DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Sun, 7 Feb 2021 19:39:28 +0800
+ 14.3.498.0; Sun, 7 Feb 2021 19:39:29 +0800
 From:   Xiaofei Tan <tanxiaofei@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@openeuler.org>, Xiaofei Tan <tanxiaofei@huawei.com>
-Subject: [PATCH for-next 09/32] scsi: aha1740: Replace spin_lock_irqsave with spin_lock in hard IRQ
-Date:   Sun, 7 Feb 2021 19:36:40 +0800
-Message-ID: <1612697823-8073-10-git-send-email-tanxiaofei@huawei.com>
+Subject: [PATCH for-next 10/32] scsi: bfa: Replace spin_lock_irqsave with spin_lock in hard IRQ
+Date:   Sun, 7 Feb 2021 19:36:41 +0800
+Message-ID: <1612697823-8073-11-git-send-email-tanxiaofei@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
 References: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
@@ -40,38 +40,69 @@ it has been in a irq-disabled context.
 
 Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
 ---
- drivers/scsi/aha1740.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/scsi/bfa/bfad.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/aha1740.c b/drivers/scsi/aha1740.c
-index 0dc8310..fd9787d 100644
---- a/drivers/scsi/aha1740.c
-+++ b/drivers/scsi/aha1740.c
-@@ -214,14 +214,13 @@ static irqreturn_t aha1740_intr_handle(int irq, void *dev_id)
- 	struct ecb *ecbptr;
- 	struct scsi_cmnd *SCtmp;
- 	unsigned int base;
--	unsigned long flags;
- 	int handled = 0;
- 	struct aha1740_sg *sgptr;
- 	struct eisa_device *edev;
- 	
- 	if (!host)
- 		panic("aha1740.c: Irq from unknown host!\n");
--	spin_lock_irqsave(host->host_lock, flags);
-+	spin_lock(host->host_lock);
- 	base = host->io_port;
- 	number_serviced = 0;
- 	edev = HOSTDATA(host)->edev;
-@@ -308,7 +307,7 @@ static irqreturn_t aha1740_intr_handle(int irq, void *dev_id)
- 		number_serviced++;
+diff --git a/drivers/scsi/bfa/bfad.c b/drivers/scsi/bfa/bfad.c
+index 440ef32..8c6f3eb 100644
+--- a/drivers/scsi/bfa/bfad.c
++++ b/drivers/scsi/bfa/bfad.c
+@@ -1089,25 +1089,24 @@ bfad_intx(int irq, void *dev_id)
+ {
+ 	struct bfad_s	*bfad = dev_id;
+ 	struct list_head	doneq;
+-	unsigned long	flags;
+ 	bfa_boolean_t rc;
+ 
+-	spin_lock_irqsave(&bfad->bfad_lock, flags);
++	spin_lock(&bfad->bfad_lock);
+ 	rc = bfa_intx(&bfad->bfa);
+ 	if (!rc) {
+-		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++		spin_unlock(&bfad->bfad_lock);
+ 		return IRQ_NONE;
  	}
  
--	spin_unlock_irqrestore(host->host_lock, flags);
-+	spin_unlock(host->host_lock);
- 	return IRQ_RETVAL(handled);
- }
+ 	bfa_comp_deq(&bfad->bfa, &doneq);
+-	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++	spin_unlock(&bfad->bfad_lock);
  
+ 	if (!list_empty(&doneq)) {
+ 		bfa_comp_process(&bfad->bfa, &doneq);
+ 
+-		spin_lock_irqsave(&bfad->bfad_lock, flags);
++		spin_lock(&bfad->bfad_lock);
+ 		bfa_comp_free(&bfad->bfa, &doneq);
+-		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++		spin_unlock(&bfad->bfad_lock);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+@@ -1120,20 +1119,19 @@ bfad_msix(int irq, void *dev_id)
+ 	struct bfad_msix_s *vec = dev_id;
+ 	struct bfad_s *bfad = vec->bfad;
+ 	struct list_head doneq;
+-	unsigned long   flags;
+ 
+-	spin_lock_irqsave(&bfad->bfad_lock, flags);
++	spin_lock(&bfad->bfad_lock);
+ 
+ 	bfa_msix(&bfad->bfa, vec->msix.entry);
+ 	bfa_comp_deq(&bfad->bfa, &doneq);
+-	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++	spin_unlock(&bfad->bfad_lock);
+ 
+ 	if (!list_empty(&doneq)) {
+ 		bfa_comp_process(&bfad->bfa, &doneq);
+ 
+-		spin_lock_irqsave(&bfad->bfad_lock, flags);
++		spin_lock(&bfad->bfad_lock);
+ 		bfa_comp_free(&bfad->bfa, &doneq);
+-		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++		spin_unlock(&bfad->bfad_lock);
+ 	}
+ 
+ 	return IRQ_HANDLED;
 -- 
 2.8.1
 
