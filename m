@@ -2,29 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F39813123D8
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 12:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE983123E4
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 12:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbhBGLkr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Feb 2021 06:40:47 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12477 "EHLO
+        id S229590AbhBGLlv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Feb 2021 06:41:51 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12482 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbhBGLkW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 06:40:22 -0500
+        with ESMTP id S229793AbhBGLlD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 06:41:03 -0500
 Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRx03xKvzjKnb;
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRx03TTMzjKgD;
         Sun,  7 Feb 2021 19:38:12 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.24) by
  DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Sun, 7 Feb 2021 19:39:23 +0800
+ 14.3.498.0; Sun, 7 Feb 2021 19:39:24 +0800
 From:   Xiaofei Tan <tanxiaofei@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@openeuler.org>, Xiaofei Tan <tanxiaofei@huawei.com>
-Subject: [PATCH for-next 00/32] spin lock usage optimization for SCSI drivers
-Date:   Sun, 7 Feb 2021 19:36:31 +0800
-Message-ID: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
+Subject: [PATCH for-next 01/32] scsi: 53c700: Replace spin_lock_irqsave with spin_lock in hard IRQ
+Date:   Sun, 7 Feb 2021 19:36:32 +0800
+Message-ID: <1612697823-8073-2-git-send-email-tanxiaofei@huawei.com>
 X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
+References: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.165.24]
@@ -33,80 +35,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Replace spin_lock_irqsave with spin_lock in hard IRQ of SCSI drivers.
-There are no function changes, but may speed up if interrupt happen
-too often.
+It is redundant to do irqsave and irqrestore in hardIRQ context, where
+it has been in a irq-disabled context.
 
-Xiaofei Tan (32):
-  scsi: 53c700: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: ipr: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: lpfc: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: qla4xxx: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: BusLogic: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: a100u2w: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: a2091: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: a3000: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: aha1740: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: bfa: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: esp_scsi: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: gvp11: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: hptiop: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: ibmvscsi: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: initio: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: megaraid: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: mac53c94: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: mesh: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: mvumi: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: myrb: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: myrs: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: ncr53c8xx: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: nsp32: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: pmcraid: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: pcmcia: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: qlogicfas408: Replace spin_lock_irqsave with spin_lock in hard
-    IRQ
-  scsi: qlogicpti: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: sgiwd93: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: stex: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: vmw_pvscsi: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: wd719x: Replace spin_lock_irqsave with spin_lock in hard IRQ
-  scsi: advansys: Replace spin_lock_irqsave with spin_lock in hard IRQ
+Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
+---
+ drivers/scsi/53c700.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- drivers/scsi/53c700.c                     |  5 ++--
- drivers/scsi/BusLogic.c                   |  5 ++--
- drivers/scsi/a100u2w.c                    |  5 ++--
- drivers/scsi/a2091.c                      |  5 ++--
- drivers/scsi/a3000.c                      |  5 ++--
- drivers/scsi/advansys.c                   |  5 ++--
- drivers/scsi/aha1740.c                    |  5 ++--
- drivers/scsi/bfa/bfad.c                   | 20 ++++++-------
- drivers/scsi/esp_scsi.c                   |  5 ++--
- drivers/scsi/gvp11.c                      |  5 ++--
- drivers/scsi/hptiop.c                     |  5 ++--
- drivers/scsi/ibmvscsi/ibmvfc.c            |  5 ++--
- drivers/scsi/initio.c                     |  5 ++--
- drivers/scsi/ipr.c                        | 21 ++++++-------
- drivers/scsi/lpfc/lpfc_sli.c              | 49 +++++++++++++------------------
- drivers/scsi/mac53c94.c                   |  5 ++--
- drivers/scsi/megaraid.c                   | 10 +++----
- drivers/scsi/megaraid/megaraid_sas_base.c |  5 ++--
- drivers/scsi/mesh.c                       |  5 ++--
- drivers/scsi/mvumi.c                      |  7 ++---
- drivers/scsi/myrb.c                       | 20 +++++--------
- drivers/scsi/myrs.c                       | 15 ++++------
- drivers/scsi/ncr53c8xx.c                  |  5 ++--
- drivers/scsi/nsp32.c                      |  5 ++--
- drivers/scsi/pcmcia/sym53c500_cs.c        |  5 ++--
- drivers/scsi/pmcraid.c                    |  8 ++---
- drivers/scsi/qla4xxx/ql4_isr.c            | 15 ++++------
- drivers/scsi/qlogicfas408.c               |  5 ++--
- drivers/scsi/qlogicpti.c                  |  5 ++--
- drivers/scsi/sgiwd93.c                    |  5 ++--
- drivers/scsi/stex.c                       | 16 +++++-----
- drivers/scsi/vmw_pvscsi.c                 |  4 +--
- drivers/scsi/wd719x.c                     |  7 ++---
- 33 files changed, 122 insertions(+), 175 deletions(-)
-
+diff --git a/drivers/scsi/53c700.c b/drivers/scsi/53c700.c
+index 3242ff6..6c2ef46 100644
+--- a/drivers/scsi/53c700.c
++++ b/drivers/scsi/53c700.c
+@@ -1491,7 +1491,6 @@ NCR_700_intr(int irq, void *dev_id)
+ 	__u8 istat;
+ 	__u32 resume_offset = 0;
+ 	__u8 pun = 0xff, lun = 0xff;
+-	unsigned long flags;
+ 	int handled = 0;
+ 
+ 	/* Use the host lock to serialise access to the 53c700
+@@ -1499,7 +1498,7 @@ NCR_700_intr(int irq, void *dev_id)
+ 	 * lock to enter the done routines.  When that happens, we
+ 	 * need to ensure that for this driver, the host lock and the
+ 	 * queue lock point to the same thing. */
+-	spin_lock_irqsave(host->host_lock, flags);
++	spin_lock(host->host_lock);
+ 	if((istat = NCR_700_readb(host, ISTAT_REG))
+ 	      & (SCSI_INT_PENDING | DMA_INT_PENDING)) {
+ 		__u32 dsps;
+@@ -1748,7 +1747,7 @@ NCR_700_intr(int irq, void *dev_id)
+ 		}
+ 	}
+  out_unlock:
+-	spin_unlock_irqrestore(host->host_lock, flags);
++	spin_unlock(host->host_lock);
+ 	return IRQ_RETVAL(handled);
+ }
+ 
 -- 
 2.8.1
 
