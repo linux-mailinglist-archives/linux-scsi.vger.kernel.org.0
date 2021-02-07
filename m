@@ -2,73 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CEE31215C
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 05:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CD2312162
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 05:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbhBGErp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 6 Feb 2021 23:47:45 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:41640 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhBGEr1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 23:47:27 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174iOOA107572;
-        Sun, 7 Feb 2021 04:46:28 GMT
+        id S229767AbhBGEs0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 6 Feb 2021 23:48:26 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:38696 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229715AbhBGEra (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Feb 2021 23:47:30 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174kVo1168284;
+        Sun, 7 Feb 2021 04:46:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2020-01-29; bh=eLvjdxoSH/zTAbl4x6JLodnVmaUEkNxPVYI0EocdgXY=;
- b=Fh4mBejevCUHQK0meR5dWK+TRPDfbUxjJsALLqC27XQVclbmdBAixPiC0Klu6zf9/pQT
- HLyynIOmNWtHJUj2Gzo6TJKm2p0ztRpccUOPkH18nRDP9zGGAKP4v9JzjsEYcccZZ82X
- gWO+27wtflNyovvFdalIlW9OQtSSeKxE9QHfJkh38V/XfyFmQYnRCLeoD4O0QXr2SmOf
- xkRvg6ESipSIEVyccejtNfVchMZLkXbvcUUSPzE6+BVZE8cALbHMFV9u//fi3zKCgkOa
- UcRo6sD70jRPX1KqPloedlY9vNuNMFCZtqSAoS9BWlKIqUi2ChCoVWD8v5jAXWW/qf4j Gw== 
+ s=corp-2020-01-29; bh=fXLWGDb0Awq2YgQWc8+hl/MWbXDYQdV3tzHjFEVwbyY=;
+ b=y2cUMmo57L+YpW6CtEV13VVcS5bWj+iShow0y5lttB2CXN90KmUoTWVLhyjVQCXc2ti9
+ bVC8AmJdbSo6LXCbixH3FADNX4rAgmiQYUht6WZWh98qDqrwlr8EmY04xGblJhuYtr4j
+ t3wszLFNmQ/zpoHVx8P9lm0WJVcY8mAFg0PGXetv5yrUTTmUOfLJh/Sm0GA7zqXtoWPv
+ ejxXICFzEu3TyqJUnZ3IMKWSnTwHirM4TVM4R8qn112ibTAjRKYy4GNzECN0YZvokzxo
+ zIjpSuWwuML7a6Y5cf84DNl5KC3W3Gkul28kAhYGW0ZBwk3HV9EwyBODUnvTL9aJEfeL zw== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 36hjhqhbt9-1
+        by aserp2130.oracle.com with ESMTP id 36hgma9fnx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 07 Feb 2021 04:46:28 +0000
+        Sun, 07 Feb 2021 04:46:31 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174ixmj004585;
-        Sun, 7 Feb 2021 04:46:28 GMT
-Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2057.outbound.protection.outlook.com [104.47.38.57])
-        by userp3030.oracle.com with ESMTP id 36j51tcnyt-5
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1174inaL004118;
+        Sun, 7 Feb 2021 04:46:30 GMT
+Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2058.outbound.protection.outlook.com [104.47.38.58])
+        by userp3030.oracle.com with ESMTP id 36j51tcp26-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 07 Feb 2021 04:46:28 +0000
+        Sun, 07 Feb 2021 04:46:30 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O0NaQ6l2N2vMXjilxiHPnzAmDe/hZwuSATrI/KwZqeGyqIjN4u0R1YjubPpNOa4Xq+EfDPkM8hQsZcgjgNvNCLqa+xwI3svKemmnfH6XRFm+A97cspKWe/5BC3UDZAKLZnbn86JH7U+/edpwm+sBMQp1NLJ0JYHxZZfqUHUj9J447l8CABopsW2/IYXuGXouIFvI7TQxVMSEWKrt8Fbc/7CWUYrg7xmC+18WqH+YhnyA6u06x8mjjVFetPwSYJzQLPaXtgDJ7xQRfBVCuKS2AMNx4Sfl1jBUknPp1k/SWFilgzcoHkqFTi4uPjGg0uZlCxr39RVPFdpJmCTYSTkzLw==
+ b=PFAvsOFgloJw+A9vHfFU+TO3inG1aegP2NP+PByyhk/4GctmMYPyrd+AjFnqdK2gd/js/2zrQz0Mt/LshgQ8e6FiXhsAS45saBgK4gjjbL+lx0Tdw5oQbtkWyoWvqMLzhUrEA5faBuqCF4UXkrgdHfiYu7f92Xnd5fFgOaXTNDrVnDYWwfILdpRo4s8uz6BcapM9OalCMugG6a/XoBOhnHgNJ9GU3JNKnUhgcgSDWnyQtLroeylNROiQ7Ik8RXmwy0CY2evhTNdFbK91soxE8oKDLYUxytf/b9QcgrX2C82gB+I3loyRLn8oLj5zigg7dTLPDtOQRPSYG6F39BDY5A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eLvjdxoSH/zTAbl4x6JLodnVmaUEkNxPVYI0EocdgXY=;
- b=WK0naZXCnpKPCS2z/72nv+j0Q48pWgfZpE1fztlt65pBFW8oAdS0vzY67mu6kEUZxgUClw0cowZ/VmVl2cz40l6U9QzzK0dCj9jEMoBFSYaao0FlJgar07H3NyW3HHKvx6ZNTuQDx2ftatFFk6iaDGdLIhRuC7Do7QFNCPqnut8SJxuTHexaE+NCIqXU4O7a7VKKaGQnFgeaQKn/h8Sc9iaDMR32HZChO2iDvsEFGMDzoq3Cf9U/NUtHUdOhQgqqWzM5RdrQLWgzW8VVK9sDT76SFn9EOzNeZmwHay8Ss4/Ic4XAud9mDV9xBZUkiEurzCtcZcC6WcFDnoTtN2N8yg==
+ bh=fXLWGDb0Awq2YgQWc8+hl/MWbXDYQdV3tzHjFEVwbyY=;
+ b=MRELMQ8joGRVXUS816TNGndUJxetcem8dFU9jbzTUS6C67N45zBz2P4X0jKzXQw1SxUGzPVkfptDsNwpNMfBeWYcG1gDoEpY2NNnVrrfWSRkrK+243nWmYb7Tdp3w5T5i5yxdffD93b94XRbrZN55IwbZ9c17H1wuOp1+7ODsjYFTZNZ6nn6A9s5QoiZ/mgNuAH+UGd9wIcmD/BQWS/Z03SFBsXooWMNuGxjLqf1Ih3tQ9WfH5ah9SWwjUunfNlO2da8SYYUkItnUwOPkgKFu4L4TGui8g7Gesow63w1XWL0gCnQvclzeEEHwzbNdZ8UbO+hn/heobjHiq3Cdw50PQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eLvjdxoSH/zTAbl4x6JLodnVmaUEkNxPVYI0EocdgXY=;
- b=TNtV1QiNs6Z8ujL5BF8pBHJmC1yisMmmN2CJKKkMbMoIW+sv9ABkoXWxXq+rIJMBVugEzuPRLUPP1K2Z1uyJh/8ZNn7oO5U7A7LdEw+0lj9/YMqsh0v6wEdHLyP2ymh2YTTqD3nBy6y55TeAQlY4I2yv2Xfv6q3/+6wuKBJ/V+k=
+ bh=fXLWGDb0Awq2YgQWc8+hl/MWbXDYQdV3tzHjFEVwbyY=;
+ b=QDtYB7EHX2Dt+YYY7fqYZWaIODOv07y+q3LcL3ra5vVK6LIqqwV5KFjei6A2sitEfW4U64JGuDLJGYz0Omn00W+5tfASBlNgT2/div+FWh/ulhOcbW80HtHFQIwIUklAqkjd0E2AqLf3asUIumQVTsTlJxdh9/e5rsuqjURHY98=
 Authentication-Results: suse.com; dkim=none (message not signed)
  header.d=none;suse.com; dmarc=none action=none header.from=oracle.com;
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
  by BYAPR10MB3429.namprd10.prod.outlook.com (2603:10b6:a03:81::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.30; Sun, 7 Feb
- 2021 04:46:26 +0000
+ 2021 04:46:28 +0000
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::1d86:b9d7:c9ef:ba20]) by BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::1d86:b9d7:c9ef:ba20%7]) with mapi id 15.20.3825.030; Sun, 7 Feb 2021
- 04:46:26 +0000
+ 04:46:28 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
 Cc:     lutianxiong@huawei.com, linfeilong@huawei.com,
         liuzhiqiang26@huawei.com, haowenchao@huawei.com,
         Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH 4/9] libiscsi: fix iscsi host workq destruction
-Date:   Sat,  6 Feb 2021 22:46:03 -0600
-Message-Id: <20210207044608.27585-5-michael.christie@oracle.com>
+Subject: [PATCH 5/9] libiscsi: add helper to calc max scsi cmds per session
+Date:   Sat,  6 Feb 2021 22:46:04 -0600
+Message-Id: <20210207044608.27585-6-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210207044608.27585-1-michael.christie@oracle.com>
 References: <20210207044608.27585-1-michael.christie@oracle.com>
@@ -80,50 +80,50 @@ X-ClientProxiedBy: CH2PR20CA0009.namprd20.prod.outlook.com
  (2603:10b6:a03:11e::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (73.88.28.6) by CH2PR20CA0009.namprd20.prod.outlook.com (2603:10b6:610:58::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.19 via Frontend Transport; Sun, 7 Feb 2021 04:46:25 +0000
+Received: from localhost.localdomain (73.88.28.6) by CH2PR20CA0009.namprd20.prod.outlook.com (2603:10b6:610:58::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.19 via Frontend Transport; Sun, 7 Feb 2021 04:46:26 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 019d56c4-aae8-4307-610e-08d8cb2353d5
+X-MS-Office365-Filtering-Correlation-Id: e54b3a00-fe1f-43ac-8ee4-08d8cb2354ac
 X-MS-TrafficTypeDiagnostic: BYAPR10MB3429:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR10MB34296D48F2C3EE033DD7916FF1B09@BYAPR10MB3429.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
+X-Microsoft-Antispam-PRVS: <BYAPR10MB34294928AED48A913366F095F1B09@BYAPR10MB3429.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fQG7B6AQU4oJX4y41+nX/G9KthV360pZexwKGJwudKjQdMVKZKjStheFoiJ2VQ0FpwRTiZ57uVF5yMZYJfHjazwxXb9eUUNXJuJFlHzsvSmXeU0uUntAZafV3cUcqBnzPZTet8+YdV4nPABVAKZKzYM4GDD1SmhOk6p8lvmw8c9e9dgrm14fS6TsLeN9vP+88HSTTRLK39Q9INNvvSZ4gqCbWvSbJidyfSIOfoTuKgiWSie/q4JONrhsSZHNIx6oVhF2OtBoBX2oKfDO953TEwuFEKd/x0Kv2IFdEhSEVRzL3HE3F0ucOr8C6T1OF8uVsOD+uzD0bDqkLJnZUwIbB1AzBNLCpcmSv9h+eV/hMg3aQnKNmFiKbifLgulwy18NIPNfysmSnWkzsFhLbuWBi5PjTYyKQTEGTGmwWPMndnh+0o6eflC8qaLgCwboggjH0hgAt2F4gSmq6ZkUnktG7Mov+uxkUXjMcjIu2ogd2DtvxQG2Y8/EOHp5hDqcKsdOd3XksiP6ZT4+QYZDSKOr+8s36iT1wazJedX3NbraVz7w1LUiadiaa6XewBT6xzOqp3wDQlu8LsGhdNs17VyBMA==
+X-Microsoft-Antispam-Message-Info: r8TfBEVpztcuMw2DB9BmH/Nnj+Zfq1iduUc01zK2qp3/pwSBgz9E52k7Z4TqGA+mDrPSIHtaos/7UCZ+BHtLsjdkrd1Pa+/KJXklI9fZujE43PA5qOQHEWSYZvIdOWZvkAo4TzONVUTuRWVuG0Zrd+VBpNgHbAW9Sp0GzUXz5tbbaympPiy4Q09OoGKKpvREEVlyJ9z5x9ksHYxTmXHivyu7qxoQsC4dk7L4zIgqVJ9Zv/lqflG+944V1MfHb+ddUHitK0mJe+loks3sW1Pmwi2sH0eyCrby6B21kn1I38xB4JkRtnDuRh7SizVZzaY3LMNxzh36gswlQrYWMDdF6gNb6s9Ng/m0SusZPDhu2rUxXNMlZNwB6ByQpJYzvBuRgeQ0BIBwCCgpc9r9/WzJNlzm4b5JA5LbdBYVQdQCD/RRsgvtkdXbJcAPW+bq2VinHbvYeLK7G9yBuezDNpV+huajswMgy1hd+YgBMh5/poGB/anCZtBvKIEGj3+nBJymidaLwBk91NsLW6rombChpIB8ySK8zB0Zq8zyyNASsSDeo5qgPgpdHS9BzWxd2/Q5YuDpxFipAZPl09ce365Odw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(366004)(396003)(376002)(346002)(136003)(1076003)(6666004)(316002)(956004)(2616005)(5660300002)(66946007)(66476007)(66556008)(6486002)(69590400011)(83380400001)(86362001)(36756003)(52116002)(107886003)(6512007)(26005)(478600001)(8676002)(2906002)(8936002)(16526019)(186003)(4326008)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?oavgv74KrWLmX2WuSjQKNCMBi4c4zNxNIZVsaZqywqEaxk7X8EEYaWIJvPsX?=
- =?us-ascii?Q?G0EOnEo9cs2LHBr/crqr51v7c0muU4T92oWV/flZGJ60O+IQ9JAhfuoXTnox?=
- =?us-ascii?Q?Hi0d++sfKC2MEdtAjD+EdI1PU5oLHaGLK1G49TedOlZs4awDIq4FUBUqUpm5?=
- =?us-ascii?Q?/OT92lmcnLO6cPKwuLVyMqJ2B1QAAn/qXd66uaz/gtP1CZrIYCEGDdKY+Fol?=
- =?us-ascii?Q?CmDvQz8IxZMI4uxmnBKXcy8cQEdDaPO9zStm4rwdpe9U9i+p88339aBNSNBU?=
- =?us-ascii?Q?0GTeSH4AP/F4M/ASBz2ny/MVo+hPR0k4at5nrvt7X9nxuTnLVgQWYeFb3rhW?=
- =?us-ascii?Q?akWjvbmD+9M5BrSH4EzARSqQ7A0mo6zjrQGbyZ6IItUKYFzobGt+px/ZOopz?=
- =?us-ascii?Q?VKw0ujWvdCv0hAYnSc/Ik/61AVWdPiFCHYQ0qH9l+Iyd6sRIZcJvOGfRab9D?=
- =?us-ascii?Q?ffhMFo3Nmgj6T5dTmi2zzniKl2f62b78okpJ18r3vwFWipbmOG903OBecLNk?=
- =?us-ascii?Q?Rbs2KsnZx8Mrbm7CHsNGon9PkQC6Lr5oGo/7557XGrh1xDYK5Kv1StLUxlkv?=
- =?us-ascii?Q?nSHRE9bJiwsGlHKPU1On016JEajruo1BN0LBJ1kPJqwPcHeOtnYOK8JQesfs?=
- =?us-ascii?Q?//8yf4bGCfbdgVNswuuqp8QztEsa4tQ4dk/Dp8/s0mwn1I9Uy3UtEk99ZZu0?=
- =?us-ascii?Q?OdBtb6BXisIrtkINKXYsYtaBwYHesati6MxupPPw6gX4KtjGhaYfH1MY7Pib?=
- =?us-ascii?Q?QSI+qu2TCYHsSmE6vy4GXPRKrXs5gGdZ0rtZCpmUd/+pFsxup/DnXti7LWbw?=
- =?us-ascii?Q?nIPUE7HgXUNAEADGKOPkKim5YtAJWzjK9kvNKHmux0lRyZARZKmlnNQwPcdf?=
- =?us-ascii?Q?LfxsFL8fK4cH8mTpqBfA3ZeOL6l59vzo3bDE2Q3MEZSmX83lswMDvjfh1qLp?=
- =?us-ascii?Q?Xw+CytG5TxbWl3wFg/Ob6SnwJ1kANPlYsQzlRARYSFZgi8v7xKpJCsp7ZXAN?=
- =?us-ascii?Q?C5LVJWp1AF8V1Rhpq224yVCUzjoTCEDv3Qme/NsGeqXuxHkNsQnFHd51KolO?=
- =?us-ascii?Q?3ykaVqc0JSdNUSrPFj/qxJ2ix8OeF9R27+Ue/9WkxevUYWLS7/T3ANfXmQjh?=
- =?us-ascii?Q?oanCz8z6dKIkKiHRfFo2Ue2zfXkuHJtox3GsVeCFZJEvr63FepMOc79NEh98?=
- =?us-ascii?Q?sk42NLBYlpPZGHbEJF0hagXvoinU1doz4ZLngvAtJihyDUVDJAkQxdtAA+Oj?=
- =?us-ascii?Q?v2RchViA/ggJI3V7wwLsJtKUJTiXEAaV78W3IKruFxsbraNsa6ud9JmxlH19?=
- =?us-ascii?Q?P8HFUw0SUYS/gxNblp1HYIvQ?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?vmspqmi0/4NZLKrggXd1qy3UwcHxFs5WjroOKAMbR5y6SmvUFnvRgzUKudJU?=
+ =?us-ascii?Q?WJTRhWESWrlFebGiMjwMGXEmvMre1Lou5zscZzBqp+g0LIN/Xh2zKi5SkFI/?=
+ =?us-ascii?Q?aiKVV8jy7FN1/RZAG98uZHqXjbjygCNa6iDJtyt4CP0WTisff3cTE7Cqfz8s?=
+ =?us-ascii?Q?rIFg+IWMPUlIFqkbDKM8wKklhXs/H1KRHuO/5GfNXNCq7X8tSNWoZfJMzjbU?=
+ =?us-ascii?Q?z61FIkbgD+XuCplfkWa8OAFaB4Sc9B9vaZIGFIbspYuxJQbF0Y80yXYC647M?=
+ =?us-ascii?Q?ZPvPNGr66PqI/irxDC/gjYp72N+M+GcRek1IjbP9JPN4RO6GPXsfyRjXbTXB?=
+ =?us-ascii?Q?H8iyL/lMAqvS+e6C8LcPSF5D3EqBmBYjFNb105ad+bux2AfghLdGD4GEYxTA?=
+ =?us-ascii?Q?XAcgpjOYSlY+ZdMT7gJre1vnpTCRXK2ftWJmtKg8dbzGWfRIp+efsOsfstQJ?=
+ =?us-ascii?Q?0OAbERLH845vn3yA7Opk38JyCmK3b5ZFc8hazhkdcEYaTuQJVrzX79D1wxRV?=
+ =?us-ascii?Q?73yVzKYecLwDRX9Rch3YrJiJu3sjdHSPahhHQB+2EFzhC+xhDYU388adW7YE?=
+ =?us-ascii?Q?QsgjaUx0NPD8dv/Gu652F68sbFpSHF390l1zmz9omjzbqi9GeKPpeu7LoPJH?=
+ =?us-ascii?Q?yxAQ5O2Datnr8Igq60IiHe05nbhDos+SQe4opjUfbJnsWm2HnxSLYjw9ms81?=
+ =?us-ascii?Q?HYYEq82Ypn+2BWagrX6WuXhrmNMei59gMWqLDkJaNZN2k5E+KtiF50t1XVSX?=
+ =?us-ascii?Q?Zo2zvmM+z+TGbd3NpBHT9FFw4hsxVEQFA87WAnC/5MtcYyZPzzGM+Hw+Eg8t?=
+ =?us-ascii?Q?OBjQRT8A+hzMbwwVbDsOVWyu4yCgvSrk6HrfsMUShlzqWdxErqDafcKSXiPm?=
+ =?us-ascii?Q?lYxbDhxBEZse3IP75qvUIzFXKxQ8Q9UerXQg5GqB/4JVzGDCJl1zg1sziHHY?=
+ =?us-ascii?Q?0gUhM1cOmv3UhkbK+HVSosKl4iaNynnJSHLwYfQpy6f6XdJ3sP7guwq4CMDh?=
+ =?us-ascii?Q?po9cILk7pDPx3GEfshI6jgVxRcW0sMFnrjf/IH8PBO7I/XDOV+KdoR36dk05?=
+ =?us-ascii?Q?Gdfxzyk3FPcVR0jE5q/U/886yUgiFCY3AmfkwbdfZDeYk+hwEygI6v1r1kNh?=
+ =?us-ascii?Q?CbkakcGaLp8kuFxWf7ao0H6qnF5SUkFrZaC7T2OLMq7zsx+LkO0+0EZX26wM?=
+ =?us-ascii?Q?BOkD02aji7wVW5lVwZi9ww9+OptyLrYBRQUoGtIHilvzniHrMKMCokLHTSuK?=
+ =?us-ascii?Q?Oi2BoYx9RET1PKdqIwUMtzY3GyGxaA0Obgdem414GAFf3StXkP7+/RO8gk86?=
+ =?us-ascii?Q?fVxyHUwHuTSrtXE3ix2TCKt3?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 019d56c4-aae8-4307-610e-08d8cb2353d5
+X-MS-Exchange-CrossTenant-Network-Message-Id: e54b3a00-fe1f-43ac-8ee4-08d8cb2354ac
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2021 04:46:26.6280
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2021 04:46:28.0022
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kCZK/8krkKLOTfaKWunWabd2RGlWxgUhUdfP+6v8v+jHtDMnz7oAmaJqejz8UP0SgV4/kyOPZqgHVsAxnz3wSRfgPTV7ikjpFabsDcUT02E=
+X-MS-Exchange-CrossTenant-UserPrincipalName: eVQwQGAjZb0gATZqXDMR4whwfvP2du1xWrepG5r4j0aAtngIJVNrSC/GGxsL+NIwUXIaScBSJQO4fg2xZKPyOL1h19CBLHOIvY9cYOqgdr8=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3429
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9887 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 phishscore=0
@@ -131,49 +131,158 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 sp
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2102070033
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9887 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 impostorscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2102070033
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We allocate the iscsi host workq in iscsi_host_alloc so iscsi_host_free
-should do the destruction. Drivers can then do their error/goto handling
-and call iscsi_host_free to clean up what has been allocated in
-iscsi_host_alloc.
+This patch just breaks out the code that calculates the number
+of scsi cmds that will be used for a scsi session. It also adds
+a check that we don't go over the host's can_queue value.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Reviewed-by: Lee Duncan <lduncan@suse.com>
 ---
- drivers/scsi/libiscsi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/libiscsi.c | 86 ++++++++++++++++++++++++++---------------
+ include/scsi/libiscsi.h |  2 +
+ 2 files changed, 56 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index ec159bcb7460..b271d3accd2a 100644
+index b271d3accd2a..f64e2077754c 100644
 --- a/drivers/scsi/libiscsi.c
 +++ b/drivers/scsi/libiscsi.c
-@@ -2738,8 +2738,6 @@ void iscsi_host_remove(struct Scsi_Host *shost)
- 		flush_signals(current);
- 
- 	scsi_remove_host(shost);
--	if (ihost->workq)
--		destroy_workqueue(ihost->workq);
+@@ -2648,6 +2648,56 @@ void iscsi_pool_free(struct iscsi_pool *q)
  }
- EXPORT_SYMBOL_GPL(iscsi_host_remove);
+ EXPORT_SYMBOL_GPL(iscsi_pool_free);
  
-@@ -2747,6 +2745,9 @@ void iscsi_host_free(struct Scsi_Host *shost)
- {
- 	struct iscsi_host *ihost = shost_priv(shost);
- 
-+	if (ihost->workq)
-+		destroy_workqueue(ihost->workq);
++int iscsi_host_get_max_scsi_cmds(struct Scsi_Host *shost,
++				 uint16_t requested_cmds_max)
++{
++	int scsi_cmds, total_cmds = requested_cmds_max;
 +
- 	kfree(ihost->netdev);
- 	kfree(ihost->hwaddress);
- 	kfree(ihost->initiatorname);
++check:
++	if (!total_cmds)
++		total_cmds = ISCSI_DEF_XMIT_CMDS_MAX;
++	/*
++	 * The iscsi layer needs some tasks for nop handling and tmfs,
++	 * so the cmds_max must at least be greater than ISCSI_MGMT_CMDS_MAX
++	 * + 1 command for scsi IO.
++	 */
++	if (total_cmds < ISCSI_TOTAL_CMDS_MIN) {
++		printk(KERN_ERR "iscsi: invalid max cmds of %d. Must be a power of two that is at least %d.\n",
++		       total_cmds, ISCSI_TOTAL_CMDS_MIN);
++		return -EINVAL;
++	}
++
++	if (total_cmds > ISCSI_TOTAL_CMDS_MAX) {
++		printk(KERN_INFO "iscsi: invalid max cmds of %d. Must be a power of 2 less than or equal to %d. Using %d.\n",
++		       requested_cmds_max, ISCSI_TOTAL_CMDS_MAX,
++		       ISCSI_TOTAL_CMDS_MAX);
++		total_cmds = ISCSI_TOTAL_CMDS_MAX;
++	}
++
++	if (!is_power_of_2(total_cmds)) {
++		total_cmds = rounddown_pow_of_two(total_cmds);
++		if (total_cmds < ISCSI_TOTAL_CMDS_MIN) {
++			printk(KERN_ERR "iscsi: invalid max cmds of %d. Must be a power of 2 greater than %d.\n", requested_cmds_max, ISCSI_TOTAL_CMDS_MIN);
++			return -EINVAL;
++		}
++
++		printk(KERN_INFO "iscsi: invalid max cmds %d. Must be a power of 2. Rounding max cmds down to %d.\n",
++		       requested_cmds_max, total_cmds);
++	}
++
++	scsi_cmds = total_cmds - ISCSI_MGMT_CMDS_MAX;
++	if (shost->can_queue && scsi_cmds > shost->can_queue) {
++		total_cmds = shost->can_queue;
++
++		printk(KERN_INFO "iscsi: requested max cmds %u is higher than driver limit. Using driver limit %u\n",
++		       requested_cmds_max, shost->can_queue);
++		goto check;
++	}
++
++	return scsi_cmds;
++}
++EXPORT_SYMBOL_GPL(iscsi_host_get_max_scsi_cmds);
++
+ /**
+  * iscsi_host_add - add host to system
+  * @shost: scsi host
+@@ -2801,7 +2851,7 @@ iscsi_session_setup(struct iscsi_transport *iscsit, struct Scsi_Host *shost,
+ 	struct iscsi_host *ihost = shost_priv(shost);
+ 	struct iscsi_session *session;
+ 	struct iscsi_cls_session *cls_session;
+-	int cmd_i, scsi_cmds, total_cmds = cmds_max;
++	int cmd_i, scsi_cmds;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&ihost->lock, flags);
+@@ -2812,37 +2862,9 @@ iscsi_session_setup(struct iscsi_transport *iscsit, struct Scsi_Host *shost,
+ 	ihost->num_sessions++;
+ 	spin_unlock_irqrestore(&ihost->lock, flags);
+ 
+-	if (!total_cmds)
+-		total_cmds = ISCSI_DEF_XMIT_CMDS_MAX;
+-	/*
+-	 * The iscsi layer needs some tasks for nop handling and tmfs,
+-	 * so the cmds_max must at least be greater than ISCSI_MGMT_CMDS_MAX
+-	 * + 1 command for scsi IO.
+-	 */
+-	if (total_cmds < ISCSI_TOTAL_CMDS_MIN) {
+-		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue "
+-		       "must be a power of two that is at least %d.\n",
+-		       total_cmds, ISCSI_TOTAL_CMDS_MIN);
++	scsi_cmds = iscsi_host_get_max_scsi_cmds(shost, cmds_max);
++	if (scsi_cmds < 0)
+ 		goto dec_session_count;
+-	}
+-
+-	if (total_cmds > ISCSI_TOTAL_CMDS_MAX) {
+-		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue "
+-		       "must be a power of 2 less than or equal to %d.\n",
+-		       cmds_max, ISCSI_TOTAL_CMDS_MAX);
+-		total_cmds = ISCSI_TOTAL_CMDS_MAX;
+-	}
+-
+-	if (!is_power_of_2(total_cmds)) {
+-		printk(KERN_ERR "iscsi: invalid can_queue of %d. can_queue "
+-		       "must be a power of 2.\n", total_cmds);
+-		total_cmds = rounddown_pow_of_two(total_cmds);
+-		if (total_cmds < ISCSI_TOTAL_CMDS_MIN)
+-			goto dec_session_count;
+-		printk(KERN_INFO "iscsi: Rounding can_queue to %d.\n",
+-		       total_cmds);
+-	}
+-	scsi_cmds = total_cmds - ISCSI_MGMT_CMDS_MAX;
+ 
+ 	cls_session = iscsi_alloc_session(shost, iscsit,
+ 					  sizeof(struct iscsi_session) +
+@@ -2858,7 +2880,7 @@ iscsi_session_setup(struct iscsi_transport *iscsit, struct Scsi_Host *shost,
+ 	session->lu_reset_timeout = 15;
+ 	session->abort_timeout = 10;
+ 	session->scsi_cmds_max = scsi_cmds;
+-	session->cmds_max = total_cmds;
++	session->cmds_max = scsi_cmds + ISCSI_MGMT_CMDS_MAX;
+ 	session->queued_cmdsn = session->cmdsn = initial_cmdsn;
+ 	session->exp_cmdsn = initial_cmdsn + 1;
+ 	session->max_cmdsn = initial_cmdsn + 1;
+diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
+index 44a9554aea62..02f966e9358f 100644
+--- a/include/scsi/libiscsi.h
++++ b/include/scsi/libiscsi.h
+@@ -395,6 +395,8 @@ extern struct Scsi_Host *iscsi_host_alloc(struct scsi_host_template *sht,
+ extern void iscsi_host_remove(struct Scsi_Host *shost);
+ extern void iscsi_host_free(struct Scsi_Host *shost);
+ extern int iscsi_target_alloc(struct scsi_target *starget);
++extern int iscsi_host_get_max_scsi_cmds(struct Scsi_Host *shost,
++					uint16_t requested_cmds_max);
+ 
+ /*
+  * session management
 -- 
 2.25.1
 
