@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2377B3123EE
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 12:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5844B3123E8
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Feb 2021 12:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhBGLnJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Feb 2021 06:43:09 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12526 "EHLO
+        id S229870AbhBGLm2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Feb 2021 06:42:28 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12088 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbhBGLlI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 06:41:08 -0500
+        with ESMTP id S229797AbhBGLlE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Feb 2021 06:41:04 -0500
 Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRwg604XzMWS8;
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRwg4rpXzMWRG;
         Sun,  7 Feb 2021 19:37:55 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.24) by
  DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
@@ -21,9 +21,9 @@ From:   Xiaofei Tan <tanxiaofei@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@openeuler.org>, Xiaofei Tan <tanxiaofei@huawei.com>
-Subject: [PATCH for-next 08/32] scsi: a3000: Replace spin_lock_irqsave with spin_lock in hard IRQ
-Date:   Sun, 7 Feb 2021 19:36:39 +0800
-Message-ID: <1612697823-8073-9-git-send-email-tanxiaofei@huawei.com>
+Subject: [PATCH for-next 09/32] scsi: aha1740: Replace spin_lock_irqsave with spin_lock in hard IRQ
+Date:   Sun, 7 Feb 2021 19:36:40 +0800
+Message-ID: <1612697823-8073-10-git-send-email-tanxiaofei@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
 References: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
@@ -40,30 +40,38 @@ it has been in a irq-disabled context.
 
 Signed-off-by: Xiaofei Tan <tanxiaofei@huawei.com>
 ---
- drivers/scsi/a3000.c | 5 ++---
+ drivers/scsi/aha1740.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/a3000.c b/drivers/scsi/a3000.c
-index 86f1da2..ac063a5 100644
---- a/drivers/scsi/a3000.c
-+++ b/drivers/scsi/a3000.c
-@@ -28,14 +28,13 @@ static irqreturn_t a3000_intr(int irq, void *data)
- 	struct Scsi_Host *instance = data;
- 	struct a3000_hostdata *hdata = shost_priv(instance);
- 	unsigned int status = hdata->regs->ISTR;
+diff --git a/drivers/scsi/aha1740.c b/drivers/scsi/aha1740.c
+index 0dc8310..fd9787d 100644
+--- a/drivers/scsi/aha1740.c
++++ b/drivers/scsi/aha1740.c
+@@ -214,14 +214,13 @@ static irqreturn_t aha1740_intr_handle(int irq, void *dev_id)
+ 	struct ecb *ecbptr;
+ 	struct scsi_cmnd *SCtmp;
+ 	unsigned int base;
 -	unsigned long flags;
- 
- 	if (!(status & ISTR_INT_P))
- 		return IRQ_NONE;
- 	if (status & ISTR_INTS) {
--		spin_lock_irqsave(instance->host_lock, flags);
-+		spin_lock(instance->host_lock);
- 		wd33c93_intr(instance);
--		spin_unlock_irqrestore(instance->host_lock, flags);
-+		spin_unlock(instance->host_lock);
- 		return IRQ_HANDLED;
+ 	int handled = 0;
+ 	struct aha1740_sg *sgptr;
+ 	struct eisa_device *edev;
+ 	
+ 	if (!host)
+ 		panic("aha1740.c: Irq from unknown host!\n");
+-	spin_lock_irqsave(host->host_lock, flags);
++	spin_lock(host->host_lock);
+ 	base = host->io_port;
+ 	number_serviced = 0;
+ 	edev = HOSTDATA(host)->edev;
+@@ -308,7 +307,7 @@ static irqreturn_t aha1740_intr_handle(int irq, void *dev_id)
+ 		number_serviced++;
  	}
- 	pr_warn("Non-serviced A3000 SCSI-interrupt? ISTR = %02x\n", status);
+ 
+-	spin_unlock_irqrestore(host->host_lock, flags);
++	spin_unlock(host->host_lock);
+ 	return IRQ_RETVAL(handled);
+ }
+ 
 -- 
 2.8.1
 
