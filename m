@@ -2,209 +2,337 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D24523159EE
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Feb 2021 00:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4938D3159F0
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Feb 2021 00:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234632AbhBIXQO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 9 Feb 2021 18:16:14 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:60872 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234575AbhBIWdn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Feb 2021 17:33:43 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 119ItPnZ080343;
-        Tue, 9 Feb 2021 18:59:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=LXQt5NPbpMBGIGXjnR5sSrvt6KZ8poW87e8GnYtf/A0=;
- b=i+EIBR9VOYvtIjaKmDnQjUqUapYkp4Ef/dyvLuGic5Zviy1eeaAPR7mSHKhvNh4bd2sb
- NQOUlRC2Dt3c9HbiKX7U9oo62v492XriS9aO+KbDz6+u7EdWTtLkHPLdNUrv7dd0HOAo
- pb4bAHQKWfA1chBtMtuE6ImhYSXqfiWo+pSVObCVVQmviOmfhpCjaLVGE3AlGNZH/eip
- 8qWajbQqGg+lXzhrE+KNyV3+u8lHy01CeULvpU9QdbZ5Hwf3DTnnMIgHGXiCHSHx7f5K
- ylELv2NAjKj0Q/MXMgMaN1bZTXrb6IoMp1+f2QWcIZ7IHp2Ww4v8k4GHGDecScza1svm PQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 36hgmagsgu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 09 Feb 2021 18:59:39 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 119Ij2vw001504;
-        Tue, 9 Feb 2021 18:59:38 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2170.outbound.protection.outlook.com [104.47.73.170])
-        by userp3030.oracle.com with ESMTP id 36j51wgtuk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 09 Feb 2021 18:59:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I/l7BwP5dePzUE/GrZhaA2XvDHSg3J7mvoU+4Qg4SyNEaDLw2RA186xpJ5rlFXs3hr5LnxVdnkvZqDWiT9tGHV+DlX4fuwKg3vwVOFasKWfftUYDO2CZlDTybvVSVCTssBHWm+T861k1Sm76qhZ1dsBJfUi1DvwqHG4MqBqtB2Esll0etJriBBlHbqsqkuym/xk2pJ+evY8OcZM/jjmJhirq2umEb2QEt25gBSLMUOObcF5oLsV8fhi69cGSJP+UsoxXR9No+avUzhk4Xatz2wFFENe8OZ0drL40OLbhMFogsTYfWXWg1wnuvAiCQZGraiSKozfUqpXf1hR4Ak34BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LXQt5NPbpMBGIGXjnR5sSrvt6KZ8poW87e8GnYtf/A0=;
- b=amqnQSjtyRT2Sh8HdNVnVuQY4pyDJd+WFhKuCl1xIK7TqzVVQWN+35EUzhdFLT+ha+KQKv0qzBAXmJwLptn6lMhark9lHXuCmuTMFjeB5o+8VK71/bHfKGczUNc2rM4N9KGu3S6JqplvT8PO0s6Ex6irKUxg6VUwI6FYjL7IYZpRSkKubEFJV06wTG/LLBA+R6wK+Wa5bCxPdad2bi+IrCjIn06dTV9+fi/07W43eiV4SkMZosLOqc+ll+GrPBqfN0HZ7ofLWZjapTDnw7oF397QQVPDI2xJ0n9Qg7H/OgkPI6vf7c4DoYnPtFxL5PBPvjPgWTqN7DqLSOcI40N/LQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LXQt5NPbpMBGIGXjnR5sSrvt6KZ8poW87e8GnYtf/A0=;
- b=D4WIGrHGIy/UsoTSCljZzbwUSocesJhM85Sp/GdgBciBqPT9hO3IRgDBdd0qpxA09YRNcx05jIQBe1wMtS3NpDus7NDz8sYSaIvv8+fYuSFIhLMN8Mr7CTd4Ju0uWnF+PCnuXMZWBL6VJNsCOGsayJ0zrj4asUCW0Exz8giJK64=
-Authentication-Results: lists.linux-foundation.org; dkim=none (message not
- signed) header.d=none;lists.linux-foundation.org; dmarc=none action=none
- header.from=oracle.com;
-Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
- by SJ0PR10MB4719.namprd10.prod.outlook.com (2603:10b6:a03:2d1::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.20; Tue, 9 Feb
- 2021 18:59:36 +0000
-Received: from BYAPR10MB3573.namprd10.prod.outlook.com
- ([fe80::1d86:b9d7:c9ef:ba20]) by BYAPR10MB3573.namprd10.prod.outlook.com
- ([fe80::1d86:b9d7:c9ef:ba20%7]) with mapi id 15.20.3825.030; Tue, 9 Feb 2021
- 18:59:36 +0000
-Subject: Re: [PATCH 10/13] target_core_user: add backend plug/unplug callouts
-To:     Bodo Stroesser <bostroesser@gmail.com>, Chaitanya.Kulkarni@wdc.com,
-        loberman@redhat.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        mst@redhat.com, stefanha@redhat.com,
-        virtualization@lists.linux-foundation.org
-References: <20210209123845.4856-1-michael.christie@oracle.com>
- <20210209123845.4856-11-michael.christie@oracle.com>
- <c316642b-0b9b-49b5-0d1f-db1d1fea9e99@gmail.com>
-From:   Mike Christie <michael.christie@oracle.com>
-Message-ID: <439e3f72-e786-967a-c07d-54cb826e2683@oracle.com>
-Date:   Tue, 9 Feb 2021 12:59:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-In-Reply-To: <c316642b-0b9b-49b5-0d1f-db1d1fea9e99@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [73.88.28.6]
-X-ClientProxiedBy: CH0PR03CA0084.namprd03.prod.outlook.com
- (2603:10b6:610:cc::29) To BYAPR10MB3573.namprd10.prod.outlook.com
- (2603:10b6:a03:11e::32)
+        id S234881AbhBIXRJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 9 Feb 2021 18:17:09 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:59923 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233986AbhBIW50 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 9 Feb 2021 17:57:26 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 668DA204259;
+        Tue,  9 Feb 2021 23:56:29 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AdBtQEgDdNOL; Tue,  9 Feb 2021 23:56:27 +0100 (CET)
+Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
+        by smtp.infotech.no (Postfix) with ESMTPA id 382C9204172;
+        Tue,  9 Feb 2021 23:56:25 +0100 (CET)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        kashyap.desai@broadcom.com
+Subject: [PATCH v3] scsi_debug: add new defer_type for mq_poll
+Date:   Tue,  9 Feb 2021 17:56:24 -0500
+Message-Id: <20210209225624.108341-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [20.15.0.204] (73.88.28.6) by CH0PR03CA0084.namprd03.prod.outlook.com (2603:10b6:610:cc::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25 via Frontend Transport; Tue, 9 Feb 2021 18:59:35 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5edf3a3e-6a0f-41fc-e30f-08d8cd2cd85d
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB4719:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB47194A92EB27F1D4C04CCF0FF18E9@SJ0PR10MB4719.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2iOVKIqtTbcxUwLOGEhHEpp0RMPL7h4vuZsFvKja3LXve1HT3gFAPV5XQGs/Zcnp05zbxw4MH7Z+Mu+QpPgtVOD10J+cs+EjMB3yNNApQUU3kE9MvWFUto4GeCGN6BzSLatQn1+ajCOf+Nnbuf6vDGerpQIvImj72y3G9BoiZt8MKQzULELIKETTVZVn/ww+U7fxhQd6NdApufePdoaBB1/vm4tulJ5O1yhLmHSBGSwk5NsP5ai7H174PyWRVMjdW9OFN2KMmcoSw7MhAWYgd6ij53X4WQRJwr6WOQGsQ4fWDeuo/7aHovDeVqLGsYFfESV7SSNRieISaV+tyVnFn7J9lQLhjDA0k7NeZSLnfBp59vI9SdEzCAZxWk0UF+0NqaqSXSS+ICVKT+/z9RMo2OHeYN3R3XOVojVlqWS0DxySLPvg0OSq3eIbRuAW9ewqMGKl7IALu7K0uRsVgNKIVXJcVpNG0O09F9wbv39zoOBhkm3xU0kiURxtPunjjSNwjU+PDjze23I2bOeqmXSBQxB/yu7PVRuIqy5gwDDauRUGsYOmeWJSIjpNnJYDD9k2ey9FSFYn3p9ACV1Zq+hc6aGCyiKp5MucRKJGsXAvtlS94WuN5e4pyFNUvSpANnpY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(366004)(396003)(376002)(346002)(36756003)(66556008)(8676002)(31686004)(16576012)(53546011)(6706004)(66946007)(66476007)(956004)(6486002)(5660300002)(186003)(316002)(86362001)(31696002)(26005)(2906002)(8936002)(2616005)(83380400001)(478600001)(16526019)(78286007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?b2h0c2ZBZmwrajlqakU5eVdSTm5JbFBqNUVTYTRRS25iWVlSRGFNTFg4T0FH?=
- =?utf-8?B?SmN1Qmo4clRzT3lBaUdpVGN6akpwVUxQc3RZbkdyRE9KUGcrb2ZXQloxNTdX?=
- =?utf-8?B?QWNKL1luR1owOTMvTTdYZE16bzc5eGEvV21UWlI5blgxS0p3ZnlqMjFUdVpI?=
- =?utf-8?B?TVp1ZEJJT0dxNWZZWnR6eVo5ZVdsVFRqV094KzJrKzJ6Yjh0U2hZVExPTHky?=
- =?utf-8?B?TDdVNlhaelhPdEFYZXdIRCtieEtsYmRWTmxId0dVU2JydTdQVUFUaS8zd1Rp?=
- =?utf-8?B?QWtVQVErbURFU0VZY2hiWXIzK1ZOZ1ZPNWVncnkwdzhzY05LZ2lreVNtd2Zp?=
- =?utf-8?B?ZnVmaktVaXJWazNkbDRyNnE2R3lNSWdVMTJYK3crYnM5Ym81dlYxNkh5MWpO?=
- =?utf-8?B?ck9XRFNxeGVzcDRuMUllMjJVQnd0RzhTRnQ0ekt6b1cveS9mWE0vcTN4WkZL?=
- =?utf-8?B?ampMdWE0S0k1NE9JS1ZuWGpld2w5aHE2YmtEY1JFWHF3UHZDbDhpMUY2UXJK?=
- =?utf-8?B?QkZsTmZ5ZXVQbmM5dWlPcTQwWTkxN0J0V21LU1hDN3M4czBwS0tBT3puSHRR?=
- =?utf-8?B?Z2paOWFyb0lTSit0cDJTUjZLKzd2RWNFUk10b3V6ZnFVOWF5eFRLa2hjS05Z?=
- =?utf-8?B?ZlY1dy9pUFN3OFIwT0ZtSTNiM0RldTU2Y1hNRTNEK2JkT1pnS3loUjI5b1Rr?=
- =?utf-8?B?K0VWVEZMVzJvRUYrMWp2Vm1ZNWI1VzZsMEJ6QTdIbER4VEJNR2pNUDVUeWhs?=
- =?utf-8?B?Y1hqbDF1VUx2VjFHcmdZd1FxUHRWQ3RnNFV3UG9DOWt0ZGFVQnZwZExreWlH?=
- =?utf-8?B?YXBwVkZKamNtcmlxQmtBR3IzbFJreUpWYzU4c0FoMEZGYVBCVk5HdGxvVVV6?=
- =?utf-8?B?NFdmUS9ZOVF0Rm5nVlFZcTNaSE1MdCtLNkloejJHQldtSUdUdFFRQS9WclJ2?=
- =?utf-8?B?eUNqOVI5RmRZbGVydVI3NWwxNHdKczRickVUUkN3UjlQcmUxSUdDZVp4QVYr?=
- =?utf-8?B?Z3FiK1ZnREdBdTJyYWRiQ2xORmFFM3JJMW15ZU5VVmhHRlRCT0lVVFZIemhw?=
- =?utf-8?B?d2VWTnorQVFTQzlIWS8yakkzOHMrZGV4RkZMZUdVS09MQmxkcHdWS0ozTTYx?=
- =?utf-8?B?MzduRUY3b2Y0Rm56SG5oKzQxalhWL1lxeWhIZEtJdnhCdEoyRk5JTzFzR1B1?=
- =?utf-8?B?eWtIWkFuS1BxL3U5aGN6WFFYUE9xTzdlTEpxWG1adEY4eHlHbTRMM2t6Qkhs?=
- =?utf-8?B?a1NqRkpCVDJwNHlkUHlGWC9BSEw4ODg5MWJ6NTlDZlhBdkZQRGpyd25EcGJC?=
- =?utf-8?B?L2ppOTNWL21PTFoxTmRxeVhRdVJ5MlpKQ1VzR0k3b20wYUFQK2daTHJTdVhn?=
- =?utf-8?B?WXBRZTdQazBmOFFnMEZyOCsyc3d6Z0o5QW15UUZUQ3luRVl3MVd2OTdSUWhw?=
- =?utf-8?B?bVlWWGV2eXhlZEJCcmJLWGhpQXZ5UE45TVd5UzNtL3NMZUF0L3FXQ0l2ZWt0?=
- =?utf-8?B?YXZnSUd2bDB0eUNRY3VTck92bGFqYmNoN0c0dVZ1Q1p3UWtmYzM2Uks0TFI5?=
- =?utf-8?B?MjdZUWwxYUJ5cHQ2emJsZmNhYWR1c3l3WG9JRzlpVWJhVHJYUTYxenI1YlQ5?=
- =?utf-8?B?eWRNVENwK0RDRDNBVERJT0pOSlYraE10cmh0bFgxSmQxV2o5MnFaMmhzRS9Z?=
- =?utf-8?B?Z0N6T1pUeVVIRWhtQXJPbTM0QXYvSXgyb3ZwWUU2blcraUR2U1pRTEFSTnRz?=
- =?utf-8?Q?Ixbz2sTvRp6asC9iknzOA1EnFTMhj/KkW444Qru?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5edf3a3e-6a0f-41fc-e30f-08d8cd2cd85d
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2021 18:59:36.8540
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mQ6XNHM0bi4kiZmERmHXOlhTszi5MLmG6yhuHH/uAfirlhRfwtfLsxsN0WU8oGeryyU7RXCZXFu8oTqG8bG6P5R9jquKKBDD2SflaRG86jw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4719
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9890 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 phishscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102090089
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9890 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102090089
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/9/21 10:32 AM, Bodo Stroesser wrote:
-> On 09.02.21 13:38, Mike Christie wrote:
->> This patch adds plug/unplug callouts for tcmu, so we can avoid the
->> number of times we switch to userspace. Using this driver with tcm
->> loop is a common config, and dependng on the nr_hw_queues
->> (nr_hw_queues=1 performs much better) and fio jobs (lower num jobs
->> around 4) this patch can increase IOPs by only around 5-10% because
->> we hit other issues like the big per tcmu device mutex.> 
->> Signed-off-by: Mike Christie <michael.christie@oracle.com>
->> ---
->>   drivers/target/target_core_user.c | 27 +++++++++++++++++++++++++--
->>   1 file changed, 25 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
->> index a5991df23581..a030ca6f0f4c 100644
->> --- a/drivers/target/target_core_user.c
->> +++ b/drivers/target/target_core_user.c
->> @@ -111,6 +111,7 @@ struct tcmu_dev {
->>   	struct kref kref;
->>   
->>   	struct se_device se_dev;
->> +	struct se_dev_plug se_plug;
->>   
->>   	char *name;
->>   	struct se_hba *hba;
->> @@ -119,6 +120,7 @@ struct tcmu_dev {
->>   #define TCMU_DEV_BIT_BROKEN 1
->>   #define TCMU_DEV_BIT_BLOCKED 2
->>   #define TCMU_DEV_BIT_TMR_NOTIFY 3
->> +#define TCM_DEV_BIT_PLUGGED 4
->>   	unsigned long flags;
->>   
->>   	struct uio_info uio_info;
->> @@ -959,6 +961,25 @@ static uint32_t ring_insert_padding(struct tcmu_dev *udev, size_t cmd_size)
->>   	return cmd_head;
->>   }
->>   
->> +static void tcmu_unplug_device(struct se_dev_plug *se_plug)
->> +{
->> +	struct se_device *se_dev = se_plug->se_dev;
->> +	struct tcmu_dev *udev = TCMU_DEV(se_dev);
->> +
->> +	uio_event_notify(&udev->uio_info);
-> 
-> Don't we have a race here?
-> 
-> Let's assume that
->  - just here the thread is interrupted
->  - userspace starts,empties the ring and sleeps again
->  - another cpu queues a new CDB in the ring
-> In that - of course very rare condition - userspace will not wake up for the freshly queued CDB.
-> 
-> I think, first clearing the bit, then doing the uio_event_notify would work (without need to take the big tcmu mutex).
+Add a new sdeb_defer_type enumeration: SDEB_DEFER_POLL for requests
+that have REQ_HIPRI set in cmd_flags field. It is expected that
+these requests will be polled via the mq_poll entry point which
+is driven by calls to blk_poll() in the block layer. Therefore
+timer events are not 'wired up' in the normal fashion.
 
-You,re right. Will fix. I have the same issue in iblock and there
-I made a mistake where it per cpu when it should be per task.
+There are still cases with short delays (e.g. < 10 microseconds)
+where by the time the command response processing occurs, the delay
+is already exceeded in which case the code calls scsi_done()
+directly. In such cases there is no window for mq_poll() to be
+called.
+
+Add 'mq_polls' counter that increments on each scsi_done() called
+via the mq_poll entry point. Can be used to show (with 'cat
+/proc/scsi/scsi_debug/<host_id>') that blk_poll() is causing
+completions rather than some other mechanism.
+
+
+This patch is against the 5.12/scsi-staging branch which includes
+   a98d6bdf181eb71bf4686666eaf47c642a061642
+   scsi_debug : iouring iopoll support
+which it alters. So this patch is a fix of that patch.
+
+Changes since version 2 [sent 20210206 to linux-scsi list]
+  - the sdebug_blk_mq_poll() callback didn't cope with the
+    uncommon case where sqcp->sd_dp is NULL. Fix.
+
+Changes since version 1 [sent 20210201 to linux-scsi list]
+  - harden SDEB_DEFER_POLL which broke under testing
+  - add mq_polls counter for debug output
+
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+---
+ drivers/scsi/scsi_debug.c | 141 +++++++++++++++++++++++++-------------
+ 1 file changed, 94 insertions(+), 47 deletions(-)
+
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 746eec521f79..b9ec3a47fbf1 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -322,17 +322,19 @@ struct sdeb_store_info {
+ 	container_of(d, struct sdebug_host_info, dev)
+ 
+ enum sdeb_defer_type {SDEB_DEFER_NONE = 0, SDEB_DEFER_HRT = 1,
+-		      SDEB_DEFER_WQ = 2};
++		      SDEB_DEFER_WQ = 2, SDEB_DEFER_POLL = 3};
+ 
+ struct sdebug_defer {
+ 	struct hrtimer hrt;
+ 	struct execute_work ew;
++	ktime_t cmpl_ts;/* time since boot to complete this cmd */
+ 	int sqa_idx;	/* index of sdebug_queue array */
+ 	int qc_idx;	/* index of sdebug_queued_cmd array within sqa_idx */
+ 	int hc_idx;	/* hostwide tag index */
+ 	int issuing_cpu;
+ 	bool init_hrt;
+ 	bool init_wq;
++	bool init_poll;
+ 	bool aborted;	/* true when blk_abort_request() already called */
+ 	enum sdeb_defer_type defer_t;
+ };
+@@ -357,6 +359,7 @@ static atomic_t sdebug_completions;  /* count of deferred completions */
+ static atomic_t sdebug_miss_cpus;    /* submission + completion cpus differ */
+ static atomic_t sdebug_a_tsf;	     /* 'almost task set full' counter */
+ static atomic_t sdeb_inject_pending;
++static atomic_t sdeb_mq_poll_count;  /* bumped when mq_poll returns > 0 */
+ 
+ struct opcode_info_t {
+ 	u8 num_attached;	/* 0 if this is it (i.e. a leaf); use 0xff */
+@@ -4730,7 +4733,6 @@ static void sdebug_q_cmd_complete(struct sdebug_defer *sd_dp)
+ 	struct scsi_cmnd *scp;
+ 	struct sdebug_dev_info *devip;
+ 
+-	sd_dp->defer_t = SDEB_DEFER_NONE;
+ 	if (unlikely(aborted))
+ 		sd_dp->aborted = false;
+ 	qc_idx = sd_dp->qc_idx;
+@@ -4745,6 +4747,7 @@ static void sdebug_q_cmd_complete(struct sdebug_defer *sd_dp)
+ 		return;
+ 	}
+ 	spin_lock_irqsave(&sqp->qc_lock, iflags);
++	sd_dp->defer_t = SDEB_DEFER_NONE;
+ 	sqcp = &sqp->qc_arr[qc_idx];
+ 	scp = sqcp->a_cmnd;
+ 	if (unlikely(scp == NULL)) {
+@@ -5517,40 +5520,66 @@ static int schedule_resp(struct scsi_cmnd *cmnd, struct sdebug_dev_info *devip,
+ 				kt -= d;
+ 			}
+ 		}
+-		if (!sd_dp->init_hrt) {
+-			sd_dp->init_hrt = true;
+-			sqcp->sd_dp = sd_dp;
+-			hrtimer_init(&sd_dp->hrt, CLOCK_MONOTONIC,
+-				     HRTIMER_MODE_REL_PINNED);
+-			sd_dp->hrt.function = sdebug_q_cmd_hrt_complete;
+-			sd_dp->sqa_idx = sqp - sdebug_q_arr;
+-			sd_dp->qc_idx = k;
++		sd_dp->cmpl_ts = ktime_add(ns_to_ktime(ns_from_boot), kt);
++		if (cmnd->request->cmd_flags & REQ_HIPRI) {
++			spin_lock_irqsave(&sqp->qc_lock, iflags);
++			if (!sd_dp->init_poll) {
++				sd_dp->init_poll = true;
++				sqcp->sd_dp = sd_dp;
++				sd_dp->sqa_idx = sqp - sdebug_q_arr;
++				sd_dp->qc_idx = k;
++			}
++			sd_dp->defer_t = SDEB_DEFER_POLL;
++			spin_unlock_irqrestore(&sqp->qc_lock, iflags);
++		} else {
++			if (!sd_dp->init_hrt) {
++				sd_dp->init_hrt = true;
++				sqcp->sd_dp = sd_dp;
++				hrtimer_init(&sd_dp->hrt, CLOCK_MONOTONIC,
++					     HRTIMER_MODE_REL_PINNED);
++				sd_dp->hrt.function = sdebug_q_cmd_hrt_complete;
++				sd_dp->sqa_idx = sqp - sdebug_q_arr;
++				sd_dp->qc_idx = k;
++			}
++			sd_dp->defer_t = SDEB_DEFER_HRT;
++			/* schedule the invocation of scsi_done() for a later time */
++			hrtimer_start(&sd_dp->hrt, kt, HRTIMER_MODE_REL_PINNED);
+ 		}
+ 		if (sdebug_statistics)
+ 			sd_dp->issuing_cpu = raw_smp_processor_id();
+-		sd_dp->defer_t = SDEB_DEFER_HRT;
+-		/* schedule the invocation of scsi_done() for a later time */
+-		hrtimer_start(&sd_dp->hrt, kt, HRTIMER_MODE_REL_PINNED);
+ 	} else {	/* jdelay < 0, use work queue */
+-		if (!sd_dp->init_wq) {
+-			sd_dp->init_wq = true;
+-			sqcp->sd_dp = sd_dp;
+-			sd_dp->sqa_idx = sqp - sdebug_q_arr;
+-			sd_dp->qc_idx = k;
+-			INIT_WORK(&sd_dp->ew.work, sdebug_q_cmd_wq_complete);
+-		}
+-		if (sdebug_statistics)
+-			sd_dp->issuing_cpu = raw_smp_processor_id();
+-		sd_dp->defer_t = SDEB_DEFER_WQ;
+ 		if (unlikely((sdebug_opts & SDEBUG_OPT_CMD_ABORT) &&
+ 			     atomic_read(&sdeb_inject_pending)))
+ 			sd_dp->aborted = true;
+-		schedule_work(&sd_dp->ew.work);
+-		if (unlikely((sdebug_opts & SDEBUG_OPT_CMD_ABORT) &&
+-			     atomic_read(&sdeb_inject_pending))) {
++		sd_dp->cmpl_ts = ns_to_ktime(ns_from_boot);
++		if (cmnd->request->cmd_flags & REQ_HIPRI) {
++			spin_lock_irqsave(&sqp->qc_lock, iflags);
++			if (!sd_dp->init_poll) {
++				sd_dp->init_poll = true;
++				sqcp->sd_dp = sd_dp;
++				sd_dp->sqa_idx = sqp - sdebug_q_arr;
++				sd_dp->qc_idx = k;
++			}
++			sd_dp->defer_t = SDEB_DEFER_POLL;
++			spin_unlock_irqrestore(&sqp->qc_lock, iflags);
++		} else {
++			if (!sd_dp->init_wq) {
++				sd_dp->init_wq = true;
++				sqcp->sd_dp = sd_dp;
++				sd_dp->sqa_idx = sqp - sdebug_q_arr;
++				sd_dp->qc_idx = k;
++				INIT_WORK(&sd_dp->ew.work, sdebug_q_cmd_wq_complete);
++			}
++			sd_dp->defer_t = SDEB_DEFER_WQ;
++			schedule_work(&sd_dp->ew.work);
++		}
++		if (sdebug_statistics)
++			sd_dp->issuing_cpu = raw_smp_processor_id();
++		if (unlikely(sd_dp->aborted)) {
+ 			sdev_printk(KERN_INFO, sdp, "abort request tag %d\n", cmnd->request->tag);
+ 			blk_abort_request(cmnd->request);
+ 			atomic_set(&sdeb_inject_pending, 0);
++			sd_dp->aborted = false;
+ 		}
+ 	}
+ 	if (unlikely((SDEBUG_OPT_Q_NOISE & sdebug_opts) && scsi_result == device_qfull_result))
+@@ -5779,11 +5808,12 @@ static int scsi_debug_show_info(struct seq_file *m, struct Scsi_Host *host)
+ 		   dix_reads, dix_writes, dif_errors);
+ 	seq_printf(m, "usec_in_jiffy=%lu, statistics=%d\n", TICK_NSEC / 1000,
+ 		   sdebug_statistics);
+-	seq_printf(m, "cmnd_count=%d, completions=%d, %s=%d, a_tsf=%d\n",
++	seq_printf(m, "cmnd_count=%d, completions=%d, %s=%d, a_tsf=%d, mq_polls=%d\n",
+ 		   atomic_read(&sdebug_cmnd_count),
+ 		   atomic_read(&sdebug_completions),
+ 		   "miss_cpus", atomic_read(&sdebug_miss_cpus),
+-		   atomic_read(&sdebug_a_tsf));
++		   atomic_read(&sdebug_a_tsf),
++		   atomic_read(&sdeb_mq_poll_count));
+ 
+ 	seq_printf(m, "submit_queues=%d\n", submit_queues);
+ 	for (j = 0, sqp = sdebug_q_arr; j < submit_queues; ++j, ++sqp) {
+@@ -7246,52 +7276,68 @@ static int sdebug_map_queues(struct Scsi_Host *shost)
+ 
+ static int sdebug_blk_mq_poll(struct Scsi_Host *shost, unsigned int queue_num)
+ {
+-	int qc_idx;
+-	int retiring = 0;
++	bool first;
++	bool retiring = false;
++	int num_entries = 0;
++	unsigned int qc_idx = 0;
+ 	unsigned long iflags;
++	ktime_t kt_from_boot = ktime_get_boottime();
+ 	struct sdebug_queue *sqp;
+ 	struct sdebug_queued_cmd *sqcp;
+ 	struct scsi_cmnd *scp;
+ 	struct sdebug_dev_info *devip;
+-	int num_entries = 0;
++	struct sdebug_defer *sd_dp;
+ 
+ 	sqp = sdebug_q_arr + queue_num;
++	spin_lock_irqsave(&sqp->qc_lock, iflags);
+ 
+-	do {
+-		spin_lock_irqsave(&sqp->qc_lock, iflags);
+-		qc_idx = find_first_bit(sqp->in_use_bm, sdebug_max_queue);
+-		if (unlikely((qc_idx < 0) || (qc_idx >= sdebug_max_queue)))
+-			goto out;
++	for (first = true; first || qc_idx + 1 < sdebug_max_queue; )   {
++		if (first) {
++			qc_idx = find_first_bit(sqp->in_use_bm, sdebug_max_queue);
++			first = false;
++		} else {
++			qc_idx = find_next_bit(sqp->in_use_bm, sdebug_max_queue, qc_idx + 1);
++		}
++		if (unlikely(qc_idx >= sdebug_max_queue))
++			break;
+ 
+ 		sqcp = &sqp->qc_arr[qc_idx];
++		sd_dp = sqcp->sd_dp;
++		if (unlikely(!sd_dp))
++			continue;
+ 		scp = sqcp->a_cmnd;
+ 		if (unlikely(scp == NULL)) {
+-			pr_err("scp is NULL, queue_num=%d, qc_idx=%d from %s\n",
++			pr_err("scp is NULL, queue_num=%d, qc_idx=%u from %s\n",
+ 			       queue_num, qc_idx, __func__);
+-			goto out;
++			break;
+ 		}
++		if (sd_dp->defer_t == SDEB_DEFER_POLL) {
++			if (kt_from_boot < sd_dp->cmpl_ts)
++				continue;
++
++		} else		/* ignoring non REQ_HIPRI requests */
++			continue;
+ 		devip = (struct sdebug_dev_info *)scp->device->hostdata;
+ 		if (likely(devip))
+ 			atomic_dec(&devip->num_in_q);
+ 		else
+ 			pr_err("devip=NULL from %s\n", __func__);
+ 		if (unlikely(atomic_read(&retired_max_queue) > 0))
+-			retiring = 1;
++			retiring = true;
+ 
+ 		sqcp->a_cmnd = NULL;
+ 		if (unlikely(!test_and_clear_bit(qc_idx, sqp->in_use_bm))) {
+-			pr_err("Unexpected completion sqp %p queue_num=%d qc_idx=%d from %s\n",
++			pr_err("Unexpected completion sqp %p queue_num=%d qc_idx=%u from %s\n",
+ 				sqp, queue_num, qc_idx, __func__);
+-			goto out;
++			break;
+ 		}
+-
+ 		if (unlikely(retiring)) {	/* user has reduced max_queue */
+ 			int k, retval;
+ 
+ 			retval = atomic_read(&retired_max_queue);
+ 			if (qc_idx >= retval) {
+ 				pr_err("index %d too large\n", retval);
+-				goto out;
++				break;
+ 			}
+ 			k = find_last_bit(sqp->in_use_bm, retval);
+ 			if ((k < sdebug_max_queue) || (k == retval))
+@@ -7299,17 +7345,18 @@ static int sdebug_blk_mq_poll(struct Scsi_Host *shost, unsigned int queue_num)
+ 			else
+ 				atomic_set(&retired_max_queue, k + 1);
+ 		}
++		sd_dp->defer_t = SDEB_DEFER_NONE;
+ 		spin_unlock_irqrestore(&sqp->qc_lock, iflags);
+ 		scp->scsi_done(scp); /* callback to mid level */
++		spin_lock_irqsave(&sqp->qc_lock, iflags);
+ 		num_entries++;
+-	} while (1);
+-
+-out:
++	}
+ 	spin_unlock_irqrestore(&sqp->qc_lock, iflags);
++	if (num_entries > 0)
++		atomic_add(num_entries, &sdeb_mq_poll_count);
+ 	return num_entries;
+ }
+ 
+-
+ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
+ 				   struct scsi_cmnd *scp)
+ {
+-- 
+2.25.1
+
