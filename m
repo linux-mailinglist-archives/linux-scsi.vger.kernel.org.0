@@ -2,86 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 469FD3151B2
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Feb 2021 15:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B27F315325
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Feb 2021 16:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbhBIOcz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 9 Feb 2021 09:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S232458AbhBIPtK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 9 Feb 2021 10:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbhBIOcj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Feb 2021 09:32:39 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734EBC06178B;
-        Tue,  9 Feb 2021 06:31:59 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id u20so18063373qku.7;
-        Tue, 09 Feb 2021 06:31:59 -0800 (PST)
+        with ESMTP id S232277AbhBIPtG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Feb 2021 10:49:06 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1430C061574;
+        Tue,  9 Feb 2021 07:48:25 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y8so24365595ede.6;
+        Tue, 09 Feb 2021 07:48:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z4RbdotA04C5B3ThdFiLXJ4zTAivJHaUQ7uU1yZj3aA=;
-        b=XYc+i519sq9/P2+HCHRkrwo5aRhblNzDDiQiAr8VJdzHkv+Fw7Ho++jkmNAeKiSTuf
-         X2mWzkFw0od/fbKaCl6+n2RUSeAxB5WsfJ7uDFHCllBtmCJVdhkCwziTShMwSCg3QPsm
-         sDUyTFdlc2Ph6FAkZ2/QcMqCvu9jOQmiW7EHPvW95SOj7cyb9c1jhc4W1SCL96Q88KW/
-         IyDSRE0OwbPMxHFwmT1Ph2vn1GY/5HCmhicbl9lHklq7T5Phd1iD4MdVuGil7K5bmiHT
-         FmqxxbfewUGZ9tyMPid8sSXYbwhuT7MGBNe9+UBMF2z3/is81JQaI7A5zjl/8I6rBIAd
-         xpJA==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=EHdc5MxxE9Sh4g9MhPbkHUF1trYkD5OS8srkwgeUE/A=;
+        b=dOEoEnBnNq0hsnh5EgTbGQajS+vAqMzgKmSWgek8j6UlExwN3JflYY2vC34Kbtia5c
+         BugzqI4ay47OnI8BwYmxKWKAWVKRfgsPVg7oNVtXxtT7bZA6NT2G1gW0BeLcSohk75jq
+         FUp3EN72bqEEoRJn6y4x1+35yHl2lps9WgCDPa6eGa3QgB2G9J3PLIrlvrqOIlGlkT7t
+         +o68kC5hPwfaqp8Ch+Lv6M8r7Ig2HWMndlW638GGIHee5nr+Z8qq1y1PI66yd91muddC
+         PEjqQ++rhuKvDF4keh1m7/vQG+SipwHa2bWnjdMfLtHbHNMBIq8O3/wi9nV0jYCyXFHD
+         ao3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Z4RbdotA04C5B3ThdFiLXJ4zTAivJHaUQ7uU1yZj3aA=;
-        b=ldeaFYQ9mJElh3AcC9gtpCDQaVFrHjUKlln61jcbnw6XJyJNWjvxqA7F+dSmapPWTp
-         VoeHnRCk4OWNPFa89h5QeEn/500GIh7JBtWQ9W0n6vTlxqAgevkmCr3NqLRugp8wWy6x
-         W/rSHoIUjTNDw71w5P4lYSqOJ7WpVtVgyawYOWPg9aND1Hh01kwtPBSUOefe3+IEOfyV
-         jU/4N7pT5C24cMUzVnKby7FKivdZhUq1SM/D5lHfUJ+Be/n52+WF3kIR1YQ1BK4bz/HR
-         tWKfzm3M3Q0QfUgGhiZaC00pOhlp3ChqPHIAy0oP2ap3/LZaTz6fcyVoDCwoydZmQ6Ba
-         Dg6A==
-X-Gm-Message-State: AOAM532AHxyHH58L2cqA3gp/92fg5qz4QEsGt9mHYSsiX750+tjoJ2QH
-        /c+wctj8UpPXv6h9zW78gAs=
-X-Google-Smtp-Source: ABdhPJyYu//mrtl5BlfX2DeubgcH5BasnO/N4NO/ThhKr67QjUYr3EZymd9I6wCLU/JdwpsA+YrrQw==
-X-Received: by 2002:a37:b96:: with SMTP id 144mr10730254qkl.314.1612881118762;
-        Tue, 09 Feb 2021 06:31:58 -0800 (PST)
-Received: from localhost.localdomain ([156.146.37.186])
-        by smtp.gmail.com with ESMTPSA id n20sm8276567qke.128.2021.02.09.06.31.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 06:31:58 -0800 (PST)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     hare@suse.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Subject: [PATCH] drivers: scsi: aic7xxx: Fix the spelling verson to version in the file aic79xx.h
-Date:   Tue,  9 Feb 2021 20:01:46 +0530
-Message-Id: <20210209143146.3987352-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.30.0
+        bh=EHdc5MxxE9Sh4g9MhPbkHUF1trYkD5OS8srkwgeUE/A=;
+        b=dPB1xI35XTR9at4X19fVspbbD9P4SrIAcmeeV5nY2qC8ROZ0H7+5k/TQAqPlCdqhY7
+         QxeEb70M/GasHwe4BH/VBTyYlNmolv0WzoWQDwCstd7OqM7LR+cie9Rn/W5XpOR4UmDb
+         6SfQkM/8UwKyuSNgW1dLLJ06rA7gHJ7jbUOMwIPS7ZhOYQrdRnjez41ww4I94iXu56Hk
+         rt5G3EPfMHl8cJcFyT/wV6D+bNue5zS7qwbc44HiB7fRVZSRFT9ZZxt3q0qFSSAvSpxc
+         ZuEl+hPBj3SDB7x9WKckUSgOph+xm1bjydiD+v/5pltyYUITaHHZ9kwciu+pgsnM3bSg
+         uqaA==
+X-Gm-Message-State: AOAM530EBtKVjoJor8B+82rXrSuz/z6wDlaTbu2vSROUyJOhmnewylxm
+        JdOmAblxQ3lpbQ2Ut6D+ThE=
+X-Google-Smtp-Source: ABdhPJzxpLkfRbz2TBifas2PCPNxE2UnYMjPRVXkthKEk4fbHxsCLK4awEQ1I96GOy7HtIEukjwURg==
+X-Received: by 2002:aa7:dc0d:: with SMTP id b13mr23644609edu.170.1612885704808;
+        Tue, 09 Feb 2021 07:48:24 -0800 (PST)
+Received: from [192.168.178.40] (ipbcc06d06.dynamic.kabel-deutschland.de. [188.192.109.6])
+        by smtp.gmail.com with ESMTPSA id u17sm10849511ejr.59.2021.02.09.07.48.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Feb 2021 07:48:24 -0800 (PST)
+Subject: Re: [PATCH 03/13] target: add workqueue based cmd submission
+To:     Mike Christie <michael.christie@oracle.com>,
+        Chaitanya.Kulkarni@wdc.com, loberman@redhat.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, mst@redhat.com, stefanha@redhat.com,
+        virtualization@lists.linux-foundation.org
+References: <20210209123845.4856-1-michael.christie@oracle.com>
+ <20210209123845.4856-4-michael.christie@oracle.com>
+From:   Bodo Stroesser <bostroesser@gmail.com>
+Message-ID: <206a3f41-dea8-2152-4811-817138ffb580@gmail.com>
+Date:   Tue, 9 Feb 2021 16:48:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210209123845.4856-4-michael.christie@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 09.02.21 13:38, Mike Christie wrote:
+>   
+> +void target_queued_submit_work(struct work_struct *work)
+> +{
+> +	struct se_cmd_queue *sq = container_of(work, struct se_cmd_queue, work);
+> +	struct se_cmd *se_cmd, *next_cmd;
+> +	struct llist_node *cmd_list;
+> +	unsigned char *cdb;
+> +
+> +	cmd_list = llist_del_all(&sq->cmd_list);
+> +	if (!cmd_list)
+> +		/* Previous call took what we were queued to submit */
+> +		return;
+> +
+> +	cmd_list = llist_reverse_order(cmd_list);
+> +	llist_for_each_entry_safe(se_cmd, next_cmd, cmd_list, se_cmd_list) {
+> +		cdb = se_cmd->se_tfo->get_cdb(se_cmd);
 
-s/verson/version/
+If I got it right, get_cdb is a new, optional callback.
+So, should we check, whether it is set?
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- drivers/scsi/aic7xxx/aic79xx.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/aic7xxx/aic79xx.h b/drivers/scsi/aic7xxx/aic79xx.h
-index dd5dfd4f30a5..c31e48fcebc7 100644
---- a/drivers/scsi/aic7xxx/aic79xx.h
-+++ b/drivers/scsi/aic7xxx/aic79xx.h
-@@ -1175,7 +1175,7 @@ struct ahd_softc {
- 	uint8_t			  tqinfifonext;
-
- 	/*
--	 * Cached verson of the hs_mailbox so we can avoid
-+	 * Cached version of the hs_mailbox so we can avoid
- 	 * pausing the sequencer during mailbox updates.
- 	 */
- 	uint8_t			  hs_mailbox;
---
-2.30.0
+Maybe the check better could be done early in target_queue_cmd_submit.
 
