@@ -2,81 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EDB3147F3
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Feb 2021 06:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDD0314842
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Feb 2021 06:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhBIFMg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 9 Feb 2021 00:12:36 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:50874 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbhBIFMV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Feb 2021 00:12:21 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id A65662B3DE;
-        Tue,  9 Feb 2021 00:11:36 -0500 (EST)
-Date:   Tue, 9 Feb 2021 16:11:40 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     tanxiaofei <tanxiaofei@huawei.com>
-cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@openeuler.org, linux-m68k@vger.kernel.org
-Subject: Re: [PATCH for-next 00/32] spin lock usage optimization for SCSI
- drivers
-In-Reply-To: <a555f4b2-4df9-7bf4-e76c-3556d5ccb4ff@huawei.com>
-Message-ID: <e18f571-d848-84a-13e5-47315c2a5f5@telegraphics.com.au>
-References: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com> <31cd807d-3d0-ed64-60d-fde32cb3833c@telegraphics.com.au> <a555f4b2-4df9-7bf4-e76c-3556d5ccb4ff@huawei.com>
+        id S229772AbhBIFen convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 9 Feb 2021 00:34:43 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:2581 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229517AbhBIFej (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Feb 2021 00:34:39 -0500
+Received: from DGGEMM405-HUB.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4DZWj933nkzW18j;
+        Tue,  9 Feb 2021 13:31:41 +0800 (CST)
+Received: from dggemi709-chm.china.huawei.com (10.3.20.108) by
+ DGGEMM405-HUB.china.huawei.com (10.3.20.213) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Tue, 9 Feb 2021 13:33:56 +0800
+Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
+ dggemi709-chm.china.huawei.com (10.3.20.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2106.2; Tue, 9 Feb 2021 13:33:55 +0800
+Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
+ dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.2106.006;
+ Tue, 9 Feb 2021 13:33:55 +0800
+From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+To:     Finn Thain <fthain@telegraphics.com.au>
+CC:     tanxiaofei <tanxiaofei@huawei.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxarm@openeuler.org" <linuxarm@openeuler.org>,
+        "linux-m68k@vger.kernel.org" <linux-m68k@vger.kernel.org>
+Subject: RE: [Linuxarm]  Re: [PATCH for-next 00/32] spin lock usage
+ optimization for SCSI drivers
+Thread-Topic: [Linuxarm]  Re: [PATCH for-next 00/32] spin lock usage
+ optimization for SCSI drivers
+Thread-Index: AQHW/fAMrBMz1ua2YUiLJwcWnjqnW6pPDROA//+zewCAAIlDYA==
+Date:   Tue, 9 Feb 2021 05:33:55 +0000
+Message-ID: <6712a7f16b99489db2828098dc3e03b2@hisilicon.com>
+References: <1612697823-8073-1-git-send-email-tanxiaofei@huawei.com>
+ <31cd807d-3d0-ed64-60d-fde32cb3833c@telegraphics.com.au>
+ <e949a474a9284ac6951813bfc8b34945@hisilicon.com>
+ <f0a3339d-b1db-6571-fa2f-6765e150eb9d@telegraphics.com.au>
+In-Reply-To: <f0a3339d-b1db-6571-fa2f-6765e150eb9d@telegraphics.com.au>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.200.92]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 9 Feb 2021, tanxiaofei wrote:
 
-> Hi Finn,
-> Thanks for reviewing the patch set.
+
+> -----Original Message-----
+> From: Finn Thain [mailto:fthain@telegraphics.com.au]
+> Sent: Tuesday, February 9, 2021 6:06 PM
+> To: Song Bao Hua (Barry Song) <song.bao.hua@hisilicon.com>
+> Cc: tanxiaofei <tanxiaofei@huawei.com>; jejb@linux.ibm.com;
+> martin.petersen@oracle.com; linux-scsi@vger.kernel.org;
+> linux-kernel@vger.kernel.org; linuxarm@openeuler.org;
+> linux-m68k@vger.kernel.org
+> Subject: RE: [Linuxarm] Re: [PATCH for-next 00/32] spin lock usage optimization
+> for SCSI drivers
 > 
-> On 2021/2/8 15:57, Finn Thain wrote:
-> > On Sun, 7 Feb 2021, Xiaofei Tan wrote:
-> > 
-> > > Replace spin_lock_irqsave with spin_lock in hard IRQ of SCSI drivers.
-> > > There are no function changes, but may speed up if interrupt happen too
-> > > often.
-> > 
-> > This change doesn't necessarily work on platforms that support nested
-> > interrupts.
-> > 
+> On Tue, 9 Feb 2021, Song Bao Hua (Barry Song) wrote:
 > 
-> Linux doesn't support nested interrupts anymore after the following 
-> patch, so please don't worry this.
+> > > -----Original Message-----
+> > > From: Finn Thain [mailto:fthain@telegraphics.com.au]
+> > > Sent: Monday, February 8, 2021 8:57 PM
+> > > To: tanxiaofei <tanxiaofei@huawei.com>
+> > > Cc: jejb@linux.ibm.com; martin.petersen@oracle.com;
+> > > linux-scsi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > > linuxarm@openeuler.org
+> > > Subject: [Linuxarm] Re: [PATCH for-next 00/32] spin lock usage optimization
+> > > for SCSI drivers
+> > >
+> > > On Sun, 7 Feb 2021, Xiaofei Tan wrote:
+> > >
+> > > > Replace spin_lock_irqsave with spin_lock in hard IRQ of SCSI drivers.
+> > > > There are no function changes, but may speed up if interrupt happen too
+> > > > often.
+> > >
+> > > This change doesn't necessarily work on platforms that support nested
+> > > interrupts.
+> > >
+> > > Were you able to measure any benefit from this change on some other
+> > > platform?
+> >
+> > I think the code disabling irq in hardIRQ is simply wrong.
+> > Since this commit
+> >
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/
+> ?id=e58aa3d2d0cc
+> > genirq: Run irq handlers with interrupts disabled
+> >
+> > interrupt handlers are definitely running in a irq-disabled context
+> > unless irq handlers enable them explicitly in the handler to permit
+> > other interrupts.
+> >
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e58aa3d2d0cc
+> Repeating the same claim does not somehow make it true. If you put your
+
+Sorry for I didn't realize xiaofei had replied.
+
+> claim to the test, you'll see that that interrupts are not disabled on
+> m68k when interrupt handlers execute.
+
+Sounds like an implementation issue of m68k since IRQF_DISABLED has
+been totally removed.
+
+> 
+> The Interrupt Priority Level (IPL) can prevent any given irq handler from
+> being re-entered, but an irq with a higher priority level may be handled
+> during execution of a lower priority irq handler.
 > 
 
-Clearly that patch did not disable interrupts. It removed a statement that 
-enabled them.
+We used to have IRQF_DISABLED to support so-called "fast interrupt" to avoid
+this. But the concept has been totally removed. That is interesting if m68k
+still has this issue.
 
-> > Were you able to measure any benefit from this change on some other 
-> > platform?
-> > 
-> 
-> It's hard to measure the benefit of this change. 
+> sonic_interrupt() uses an irq lock within an interrupt handler to avoid
+> issues relating to this. This kind of locking may be needed in the drivers
+> you are trying to patch. Or it might not. Apparently, no-one has looked.
 
-It's hard to see any benefit. But it's easy to see risk, when there's no 
-indication that you've confirmed that the affected drivers do not rely on 
-the irq lock, nor tested them for regressions, nor checked whether the 
-affected platforms meet your assumuptions.
+Thanks
+Barry
 
-> Hmm, you could take this patch set as cleanup. thanks.
-> 
-
-A "cleanup" does not change program behaviour. Can you demonstrate that 
-program behaviour is unchanged?
-
-> > Please see also,
-> > https://lore.kernel.org/linux-scsi/89c5cb05cb844939ae684db0077f675f@h3c.com/
-> > 
-> > .
-> > 
-> 
-> 
