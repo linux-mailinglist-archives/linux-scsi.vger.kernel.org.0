@@ -2,78 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 870B7316F93
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Feb 2021 20:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9D231706B
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Feb 2021 20:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234272AbhBJTFK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 10 Feb 2021 14:05:10 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:49924 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234345AbhBJTEl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Feb 2021 14:04:41 -0500
-X-ASG-Debug-ID: 1612983751-112c0d6a799edf0001-ziuLRu
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id 5uUbz3ZeGsqrpfdl; Wed, 10 Feb 2021 14:02:31 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:41:04 -0500
-Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:40:17 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <d46ecc4f-b603-47c1-83c7-0caec3f47064@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612983751
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87891
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+        id S232880AbhBJTlj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Feb 2021 14:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232024AbhBJTle (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Feb 2021 14:41:34 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C595C061574;
+        Wed, 10 Feb 2021 11:40:53 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a9so6290175ejr.2;
+        Wed, 10 Feb 2021 11:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=po5ijgXq/itNxq2NSDWsJQ01HRqO1u556savPbCFYF0=;
+        b=DH7oHCUbtmVf+gBb6G/xuBR7BeeOjeVnQ1nBGFlTRj8CvGeFEgEkAOYQnephetB5ub
+         ztJ2+LmLlgqqyTTox6bxO3cJoMk4ADb8DuvjpXFFuHoheqMEK+DutF15lvRhCxKXQuPq
+         Mm15GPOXfUnhJBYpBexXdTbDeLJ4JnlZxpKagVLEeacY3IpxQHYFl0y3IlswtW6BD32z
+         U3POtX7NT2R4AulhJadvOY3HMS2M5bisIbnrAWqgW9ORIKnaeltzgBXwHTslqqvKAPuc
+         LYGJ6xgJFTiOq9ddFdhckuqn2VIjmbb01AG61j/Lv1f23wgoBvQBnoK2GQ5jGb+gEI9W
+         YeNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=po5ijgXq/itNxq2NSDWsJQ01HRqO1u556savPbCFYF0=;
+        b=EbfchscHvIQaqTFpUTQrVYRGQyEv3n6iHvPTsfycnxCr9QgMtt6NkriQfUeD7McAeL
+         jkhJiVpYdz4v2KYMev/j5S/EY9vo+hcbCx1z4RF1p0NOuuWyNw8oY+DP67LkQ/0Mg789
+         sBW90kYtINU8AvUvOVv/J1528N61lpyDJHl8bahgtRtEbdtaayu3D32rUpzXZC28IT2H
+         3rL1YajAFsfZv3qPTdFZX4hfF9R/xv6CXZsKVXYi3IxC54JYPqwwx41NArt6iiXlhaup
+         C3p2aTgD/5sj9o7B14WrAV/pDl4f39I/cwe1jbpvipbwmhuyMGLGeZYrhHc/UHECzFn2
+         aFtQ==
+X-Gm-Message-State: AOAM532MQJOFJemolhSqN3+7WYLkTFb1ydAfJCdsmTvZBaXXDntoKr9f
+        hoU0XSo434tqS1xmm+lWXw2ZXgQKtwU=
+X-Google-Smtp-Source: ABdhPJy147kpEscUld58sqEFbgwJZtFXXVovhx/sE5ZrNbimsKtgl82qCYeqpDeyb2HbUzbnP/4tYg==
+X-Received: by 2002:a17:906:7e42:: with SMTP id z2mr4524458ejr.177.1612986052293;
+        Wed, 10 Feb 2021 11:40:52 -0800 (PST)
+Received: from localhost (ipbcc06d06.dynamic.kabel-deutschland.de. [188.192.109.6])
+        by smtp.gmail.com with ESMTPSA id u18sm2041825ejc.76.2021.02.10.11.40.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Feb 2021 11:40:51 -0800 (PST)
+From:   Bodo Stroesser <bostroesser@gmail.com>
+To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Bodo Stroesser <bostroesser@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>
+Subject: [PATCH 0/2] uio and tcmu: Fix memory leak in tcmu by adding new uio feature
+Date:   Wed, 10 Feb 2021 20:40:29 +0100
+Message-Id: <20210210194031.7422-1-bostroesser@gmail.com>
+X-Mailer: git-send-email 2.12.3
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+A couple of weeks ago I found a huge memory leak in tcmu:
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
+tcmu needs to keep resources as long as userspace holds the uio
+device open or mmap'ed. Therefore tcmu increments and decrements
+a refcnt during uio_info::uio_open (tcmu_open) and
+uio_info::uio_release (tcmu_release).
 
-Please contact us for more details;
+If via configFS user tries to destroy a tcmu device, tcmu calls
+uio_unregister_device(). If during this call userspace daemon
+still holds the uio device open or mmap'ed, uio does not call
+tcmu_release when userspace later closes and munmaps the uio
+device. So refcnt never drops to 0 and resources are not freed.
+
+My first attempt to fix the problem you can find here:
+  https://lore.kernel.org/linux-scsi/20201218141534.9918-1-bostroesser@gmail.com/
+That fix delayed calling uio_unregister_device until tcmu_release
+was called. To make userspace aware of the device going to be
+destroyed without calling uio_unregister_device, the patch
+inserted the following code snippet in tcmu:
+
+  /* reset uio_info->irq, so uio will reject read() and write() */
+  udev->uio_info.irq = 0;
+  /* Set bit, so we can reject later calls to tcmu_open and tcmu_mmap */
+  set_bit(TCMU_DEV_BIT_GOING_DOWN, &udev->flags);
+  /* wake up possible sleeper in uio_read(), it will return -EIO */
+  uio_event_notify(&udev->uio_info);
+
+Especially resetting uio_info::irq on an alive uio device is not
+very clean, I think.
+
+Therefore I'm sending a small series of two patches as a second
+attempt to fix the memory leak.
+
+Patch 1 adds the new optional callback uio_info::late_release
+which is called if userspace closes or munmaps the uio device
+after uio_register_device was called.
+
+Patch 2 is a one liner that uses the new feature in tcmu.
+No further changes in tcmu are necessary.
+
+I'm wondering whether the new feature in uio can be useful for
+other drivers also, e.g. uio_hv_generic?
 
 
-Kind regards,
+The patches were made on top of Martin's for-next branch.
+But they probably will apply to most other recent trees.
 
-Paul McCann
+
+Bode Stroesser (2):
+  uio: Add late_release callback to uio_info
+  scsi: target: tcmu: Fix memory leak by using new uio callback
+
+ Documentation/driver-api/uio-howto.rst | 10 ++++++++++
+ drivers/target/target_core_user.c      |  1 +
+ drivers/uio/uio.c                      |  4 ++++
+ include/linux/uio_driver.h             |  4 ++++
+ 4 files changed, 19 insertions(+)
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+2.12.3
 
