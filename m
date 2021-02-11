@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666EB3196F3
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 00:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD253196D7
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 00:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbhBKXr4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Feb 2021 18:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S230050AbhBKXpq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Feb 2021 18:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbhBKXq6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Feb 2021 18:46:58 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA5CC061223
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:45:10 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id my11so5352655pjb.1
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:45:10 -0800 (PST)
+        with ESMTP id S229988AbhBKXpe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Feb 2021 18:45:34 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EA8C061786
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:44:54 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id b21so5066820pgk.7
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:44:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=odLf/WAD6xKWM86AG3jHvrBwC5m7u2gSqIwh0Ct7qRM=;
-        b=Btcet1/sbVwRJigO6zS6PGiOLsEoETT2xnPwKE8p3ruS48AoENAIGkgYa95BhGF6gV
-         p404gOb4qxNsLj3epVjBhgneRTUpaLdtnFAZ5jfI2B8AJLWuYsztDVdPaow14uIXyvXJ
-         Gqdrj7Ho0bpweKb5iwSmGi3vXGvkxJRv57xhkN6dUNxuCfVj8ZSQu9GED9Tg//2lKVpR
-         eABb39o3DcLrPi3tTuv53UmdIWlDadNADy8NarUL+HdNG6NdCxGPeJl7YOXdYZlpbrhM
-         hOqvVORXPWIgIjGAbvYDMRlqVWiXYToKh2uwKBPA45DMztDc1RuUpzShKShJk/7httR+
-         Fq6w==
+        bh=hzlsgTfYah0Qt23g2v+3UTHuaupqpIjgpQG5TKl4Dno=;
+        b=cwHR0aVuPuN9Vejso9ga6KbAYt7TN2sDA1eBwws0V2HhI5R70Su+AuIJbJp59L+M4D
+         xoEUNvvBOSW4jT+nWI1REI/FmjYU3azZKMnYKw7YJjvJITnQr6VAhhMk2mPxOXCogFGi
+         3hN4JotmmVDujz6XJHQt2xlER9kw4k6RCmLhNjBrUGBH5aeD/c6QWtIbCp67IAuusVvC
+         d4x+RCwIqxwtNZ7+Ifv2JuFkv7XjXGTg9466hJpwORtb3+B1mVwMvatmMofsFfVn0/r5
+         g334DgAC0ckcXwWpU+Q6eOkp79jRNmh96IxWVrO93qpUXAVn2LlKLL4c2e5vVKzSeXHG
+         b1og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=odLf/WAD6xKWM86AG3jHvrBwC5m7u2gSqIwh0Ct7qRM=;
-        b=WfZWM/UmCw1fuaY7umvbfZ93t8d07xwtSeSvLsW0Z64SBNNJVFRTrYNJ9sGZLiJ0gP
-         HRyyZFNrclHr7YQJMtZFXwjvfTQ3RwBxW1HJyrrLDOkBS6ySap3miQ68IHAnXyU4EUKl
-         Jdeoym4DkCcTWY6oKpKnWsdFTdcectL0Sb44MCA4ySqA3v66hmQLEuCDrZ8r+/MBx+eq
-         RoZ3COuOLLhBzVgTfPvxwCJTpYjRTpxUQ0EGRkSevVlYrevSHwscXeCd4rmrIypO8Fpn
-         I0+59LPLJqYj+NTgR/84yc1Yl0TWPW/fFghZjALU6cu1WPPo0AwA8bQBdp/HawLtK7Va
-         iLdA==
-X-Gm-Message-State: AOAM530Xw5jSxVxyTDvlmLlqf5LqRlq8OyQ1oUsM2CpFavfVfIw5+oxF
-        cHwGMhukXBCIGdj8mNXlwadeqxk5/p8=
-X-Google-Smtp-Source: ABdhPJwuIHeptVBsRnLpzhYLuHtC/eSnrlh7xxrfbPuRa2bWguTKNTW4lo01ZE/TscN+Y3PdM5Y93Q==
-X-Received: by 2002:a17:902:c404:b029:e2:cb8e:6b78 with SMTP id k4-20020a170902c404b02900e2cb8e6b78mr411484plk.3.1613087092697;
-        Thu, 11 Feb 2021 15:44:52 -0800 (PST)
+        bh=hzlsgTfYah0Qt23g2v+3UTHuaupqpIjgpQG5TKl4Dno=;
+        b=sBgXn92162nim+xakkLVfKyIYus025d19TLCG0yx09lUgwgvN1r3x31SrwtEXfOG5F
+         XeqUmGc5nrl262eyvT/SIpNUQ5CtLk+Y+tSm+fPOf7IriR2kP/Vdh1rP+HqaxuJr5eGx
+         QNQRSfoz9nQOKlyiZzvO2qaG0At50mJlmpWexMExgEOi1dGqE2IZURVRg7Zhf9TV+BdN
+         ZwfWWfEdQJ9yDlRAZzzT8TML8U2733yG7xIQ1f7f/JKHsHKY+njtLUFeGK4zssyA9URV
+         jl3ut56n1BYz7VBTPJu53eBS96R1UE6HAldGI5fgswVLnuaokBTu2S3WoAYEzAro133W
+         kzxw==
+X-Gm-Message-State: AOAM531MhFdT7F9TOEdeM99u1JUsS48j0/KBxNSVOZK0CG1eTcnzqq0D
+        nsYvxrQmv061cNifuq+ZFW8Ep6lsUxo=
+X-Google-Smtp-Source: ABdhPJy/Vsp3+0/g/jWz5AHIwXtwk11PQM62C0V7o3lHLsnKJEKzD29ko3w9H6wzneHQnMb7ZWTjTQ==
+X-Received: by 2002:a05:6a00:1385:b029:1be:ac19:3a9d with SMTP id t5-20020a056a001385b02901beac193a9dmr467833pfg.65.1613087093445;
+        Thu, 11 Feb 2021 15:44:53 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
         by smtp.gmail.com with ESMTPSA id i67sm6808035pfe.19.2021.02.11.15.44.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 15:44:52 -0800 (PST)
+        Thu, 11 Feb 2021 15:44:53 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 03/22] lpfc: Fix reftag generation sizing errors
-Date:   Thu, 11 Feb 2021 15:44:24 -0800
-Message-Id: <20210211234443.3107-4-jsmart2021@gmail.com>
+Subject: [PATCH 04/22] lpfc: Fix stale node accesses on stale RRQ request
+Date:   Thu, 11 Feb 2021 15:44:25 -0800
+Message-Id: <20210211234443.3107-5-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210211234443.3107-1-jsmart2021@gmail.com>
 References: <20210211234443.3107-1-jsmart2021@gmail.com>
@@ -63,285 +63,167 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-An LBA is 8 bytes. The driver generates a reftag from the LBA but the
-reftag is 4 bytes. Thus scsi_get_lba() could return a value that exceeds
-our reftag size.
+Whenever an RRQ needs to be triggered, the DID from the node structure
+and node pointer are stored in the RRQ data structure and the RRQ is
+scheduled for later transmission. However, at the point in time that
+the timer triggers, there's no validation on the node pointer. Reference
+counters may have freed the structure. Additionally the DID in the node
+may no longer be valid.
 
-Fix by creating a common routine used for creating reftags that ensures
-a 4byte value. Also correct a few code lines that access lba directly and
-ensure 64bit data types are used.
+Fix by not tracking the node pointer in the RRQ, only the DID. At the
+time of the timer expiration, look up the node with the did and if
+present, send the RRQ. If no node exists, no need to send the RRQ.
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 109 ++++++++++++++++++++++------------
- 1 file changed, 71 insertions(+), 38 deletions(-)
+ drivers/scsi/lpfc/lpfc_disc.h |  1 -
+ drivers/scsi/lpfc/lpfc_els.c  | 32 ++++++++------------------------
+ drivers/scsi/lpfc/lpfc_sli.c  | 18 ++++++++----------
+ 3 files changed, 16 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index a4d697373c71..1a9343e5b8f2 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -132,6 +132,27 @@ lpfc_sli4_set_rsp_sgl_last(struct lpfc_hba *phba,
+diff --git a/drivers/scsi/lpfc/lpfc_disc.h b/drivers/scsi/lpfc/lpfc_disc.h
+index 8ce13ef3cac3..3bd5bb17035a 100644
+--- a/drivers/scsi/lpfc/lpfc_disc.h
++++ b/drivers/scsi/lpfc/lpfc_disc.h
+@@ -159,7 +159,6 @@ struct lpfc_node_rrq {
+ 	uint16_t rxid;
+ 	uint32_t         nlp_DID;		/* FC D_ID of entry */
+ 	struct lpfc_vport *vport;
+-	struct lpfc_nodelist *ndlp;
+ 	unsigned long rrq_stop_time;
+ };
+ 
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index d1bb99220495..4687830e06da 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -1849,7 +1849,7 @@ lpfc_cmpl_els_rrq(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ {
+ 	struct lpfc_vport *vport = cmdiocb->vport;
+ 	IOCB_t *irsp;
+-	struct lpfc_nodelist *ndlp;
++	struct lpfc_nodelist *ndlp = cmdiocb->context1;
+ 	struct lpfc_node_rrq *rrq;
+ 
+ 	/* we pass cmdiocb to state machine which needs rspiocb as well */
+@@ -1862,22 +1862,12 @@ lpfc_cmpl_els_rrq(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		irsp->ulpStatus, irsp->un.ulpWord[4],
+ 		irsp->un.elsreq64.remoteID);
+ 
+-	ndlp = lpfc_findnode_did(vport, irsp->un.elsreq64.remoteID);
+-	if (!ndlp || ndlp != rrq->ndlp) {
+-		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
+-				 "2882 RRQ completes to NPort x%x "
+-				 "with no ndlp. Data: x%x x%x x%x\n",
+-				 irsp->un.elsreq64.remoteID,
+-				 irsp->ulpStatus, irsp->un.ulpWord[4],
+-				 irsp->ulpIoTag);
+-		goto out;
+-	}
+-
+ 	/* rrq completes to NPort <nlp_DID> */
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS,
+-			 "2880 RRQ completes to NPort x%x "
++			 "2880 RRQ completes to DID x%x "
+ 			 "Data: x%x x%x x%x x%x x%x\n",
+-			 ndlp->nlp_DID, irsp->ulpStatus, irsp->un.ulpWord[4],
++			 irsp->un.elsreq64.remoteID,
++			 irsp->ulpStatus, irsp->un.ulpWord[4],
+ 			 irsp->ulpTimeout, rrq->xritag, rrq->rxid);
+ 
+ 	if (irsp->ulpStatus) {
+@@ -1893,10 +1883,8 @@ lpfc_cmpl_els_rrq(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 					 ndlp->nlp_DID, irsp->ulpStatus,
+ 					 irsp->un.ulpWord[4]);
  	}
+-out:
+-	if (rrq)
+-		lpfc_clr_rrq_active(phba, rrq->xritag, rrq);
+ 
++	lpfc_clr_rrq_active(phba, rrq->xritag, rrq);
+ 	lpfc_els_free_iocb(phba, cmdiocb);
+ 	lpfc_nlp_put(ndlp);
+ 	return;
+@@ -7619,9 +7607,6 @@ lpfc_issue_els_rrq(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 	uint16_t cmdsize;
+ 	int ret;
+ 
+-
+-	if (ndlp != rrq->ndlp)
+-		ndlp = rrq->ndlp;
+ 	if (!ndlp)
+ 		return 1;
+ 
+@@ -7651,9 +7636,9 @@ lpfc_issue_els_rrq(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 		did, rrq->xritag, rrq->rxid);
+ 	elsiocb->context_un.rrq = rrq;
+ 	elsiocb->iocb_cmpl = lpfc_cmpl_els_rrq;
+-	elsiocb->context1 = lpfc_nlp_get(ndlp);
+-	if (!elsiocb->context1)
+-		goto node_err;
++
++	lpfc_nlp_get(ndlp);
++	elsiocb->context1 = ndlp;
+ 
+ 	ret = lpfc_sli_issue_iocb(phba, LPFC_ELS_RING, elsiocb, 0);
+ 	if (ret == IOCB_ERROR)
+@@ -7662,7 +7647,6 @@ lpfc_issue_els_rrq(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 
+  io_err:
+ 	lpfc_nlp_put(ndlp);
+- node_err:
+ 	lpfc_els_free_iocb(phba, elsiocb);
+ 	return 1;
  }
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index fa1a714a78f0..99307bb7b62c 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -987,16 +987,10 @@ lpfc_clr_rrq_active(struct lpfc_hba *phba,
+ {
+ 	struct lpfc_nodelist *ndlp = NULL;
  
-+#define LPFC_INVALID_REFTAG ((u32)-1)
-+
-+/*
-+ * lpfc_scsi_get_reftag - Get truncated LBA for a SCSI command
-+ * @sc: The SCSI Layer structure for the IO in question.
-+ *
-+ * The LBA of a SCSI command can be up to 8 bytes in length, for DIF
-+ * reftag applications and some log messages, we need to use a
-+ * truncated LBA (4 bytes)
-+ */
-+static u32
-+lpfc_scsi_get_reftag(struct scsi_cmnd *sc)
-+{
-+	sector_t lba;
-+
-+	lba = scsi_get_lba(sc);
-+
-+	/* Now truncate the LBA to 4 bytes, reftag size */
-+	return (u32)(lba & 0xffffffff);
-+}
-+
- /**
-  * lpfc_update_stats - Update statistical data for the command completion
-  * @vport: The virtual port on which this call is executing.
-@@ -1000,7 +1021,7 @@ lpfc_bg_err_inject(struct lpfc_hba *phba, struct scsi_cmnd *sc,
- 	uint32_t op = scsi_get_prot_op(sc);
- 	uint32_t blksize;
- 	uint32_t numblks;
--	sector_t lba;
-+	u32 lba;
- 	int rc = 0;
- 	int blockoff = 0;
++	/* Lookup did to verify if did is still active on this vport */
+ 	if (rrq->vport)
+ 		ndlp = lpfc_findnode_did(rrq->vport, rrq->nlp_DID);
  
-@@ -1008,7 +1029,9 @@ lpfc_bg_err_inject(struct lpfc_hba *phba, struct scsi_cmnd *sc,
- 		return 0;
- 
- 	sgpe = scsi_prot_sglist(sc);
--	lba = scsi_get_lba(sc);
-+	lba = lpfc_scsi_get_reftag(sc);
-+	if (lba == LPFC_INVALID_REFTAG)
-+		return 0;
- 
- 	/* First check if we need to match the LBA */
- 	if (phba->lpfc_injerr_lba != LPFC_INJERR_LBA_OFF) {
-@@ -1016,11 +1039,11 @@ lpfc_bg_err_inject(struct lpfc_hba *phba, struct scsi_cmnd *sc,
- 		numblks = (scsi_bufflen(sc) + blksize - 1) / blksize;
- 
- 		/* Make sure we have the right LBA if one is specified */
--		if ((phba->lpfc_injerr_lba < lba) ||
--			(phba->lpfc_injerr_lba >= (lba + numblks)))
-+		if (phba->lpfc_injerr_lba < (u64)lba ||
-+		    (phba->lpfc_injerr_lba >= (u64)(lba + numblks)))
- 			return 0;
- 		if (sgpe) {
--			blockoff = phba->lpfc_injerr_lba - lba;
-+			blockoff = phba->lpfc_injerr_lba - (u64)lba;
- 			numblks = sg_dma_len(sgpe) /
- 				sizeof(struct scsi_dif_tuple);
- 			if (numblks < blockoff)
-@@ -1589,7 +1612,9 @@ lpfc_bg_setup_bpl(struct lpfc_hba *phba, struct scsi_cmnd *sc,
+-	/* The target DID could have been swapped (cable swap)
+-	 * we should use the ndlp from the findnode if it is
+-	 * available.
+-	 */
+-	if ((!ndlp) && rrq->ndlp)
+-		ndlp = rrq->ndlp;
+-
+ 	if (!ndlp)
  		goto out;
  
- 	/* extract some info from the scsi command for pde*/
--	reftag = (uint32_t)scsi_get_lba(sc); /* Truncate LBA */
-+	reftag = lpfc_scsi_get_reftag(sc);
-+	if (reftag == LPFC_INVALID_REFTAG)
-+		goto out;
- 
- #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
- 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
-@@ -1750,7 +1775,9 @@ lpfc_bg_setup_bpl_prot(struct lpfc_hba *phba, struct scsi_cmnd *sc,
- 
- 	/* extract some info from the scsi command */
- 	blksize = lpfc_cmd_blksize(sc);
--	reftag = (uint32_t)scsi_get_lba(sc); /* Truncate LBA */
-+	reftag = lpfc_scsi_get_reftag(sc);
-+	if (reftag == LPFC_INVALID_REFTAG)
-+		goto out;
- 
- #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
- 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
-@@ -1979,7 +2006,9 @@ lpfc_bg_setup_sgl(struct lpfc_hba *phba, struct scsi_cmnd *sc,
- 		goto out;
- 
- 	/* extract some info from the scsi command for pde*/
--	reftag = (uint32_t)scsi_get_lba(sc); /* Truncate LBA */
-+	reftag = lpfc_scsi_get_reftag(sc);
-+	if (reftag == LPFC_INVALID_REFTAG)
-+		goto out;
- 
- #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
- 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
-@@ -2178,7 +2207,9 @@ lpfc_bg_setup_sgl_prot(struct lpfc_hba *phba, struct scsi_cmnd *sc,
- 
- 	/* extract some info from the scsi command */
- 	blksize = lpfc_cmd_blksize(sc);
--	reftag = (uint32_t)scsi_get_lba(sc); /* Truncate LBA */
-+	reftag = lpfc_scsi_get_reftag(sc);
-+	if (reftag == LPFC_INVALID_REFTAG)
-+		goto out;
- 
- #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
- 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
-@@ -2770,7 +2801,9 @@ lpfc_calc_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
- 			chk_guard = 1;
- 
- 		src = (struct scsi_dif_tuple *)sg_virt(sgpe);
--		start_ref_tag = (uint32_t)scsi_get_lba(cmd); /* Truncate LBA */
-+		start_ref_tag = lpfc_scsi_get_reftag(cmd);
-+		if (start_ref_tag == LPFC_INVALID_REFTAG)
-+			goto out;
- 		start_app_tag = src->app_tag;
- 		len = sgpe->length;
- 		while (src && protsegcnt) {
-@@ -2861,8 +2894,8 @@ lpfc_calc_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
- 			      SAM_STAT_CHECK_CONDITION;
- 		phba->bg_guard_err_cnt++;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9069 BLKGRD: LBA %lx grd_tag error %x != %x\n",
--				(unsigned long)scsi_get_lba(cmd),
-+				"9069 BLKGRD: reftag %x grd_tag err %x != %x\n",
-+				lpfc_scsi_get_reftag(cmd),
- 				sum, guard_tag);
- 
- 	} else if (err_type == BGS_REFTAG_ERR_MASK) {
-@@ -2873,8 +2906,8 @@ lpfc_calc_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
- 
- 		phba->bg_reftag_err_cnt++;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9066 BLKGRD: LBA %lx ref_tag error %x != %x\n",
--				(unsigned long)scsi_get_lba(cmd),
-+				"9066 BLKGRD: reftag %x ref_tag err %x != %x\n",
-+				lpfc_scsi_get_reftag(cmd),
- 				ref_tag, start_ref_tag);
- 
- 	} else if (err_type == BGS_APPTAG_ERR_MASK) {
-@@ -2885,8 +2918,8 @@ lpfc_calc_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
- 
- 		phba->bg_apptag_err_cnt++;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9041 BLKGRD: LBA %lx app_tag error %x != %x\n",
--				(unsigned long)scsi_get_lba(cmd),
-+				"9041 BLKGRD: reftag %x app_tag err %x != %x\n",
-+				lpfc_scsi_get_reftag(cmd),
- 				app_tag, start_app_tag);
+@@ -1118,9 +1112,14 @@ lpfc_cleanup_vports_rrqs(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 		lpfc_sli4_vport_delete_fcp_xri_aborted(vport);
  	}
- }
-@@ -3062,10 +3095,10 @@ lpfc_parse_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd,
- 	if (lpfc_bgs_get_invalid_prof(bgstat)) {
- 		cmd->result = DID_ERROR << 16;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9072 BLKGRD: Invalid BG Profile in cmd"
--				" 0x%x lba 0x%llx blk cnt 0x%x "
-+				"9072 BLKGRD: Invalid BG Profile in cmd "
-+				"0x%x reftag 0x%x blk cnt 0x%x "
- 				"bgstat=x%x bghm=x%x\n", cmd->cmnd[0],
--				(unsigned long long)scsi_get_lba(cmd),
-+				lpfc_scsi_get_reftag(cmd),
- 				blk_rq_sectors(cmd->request), bgstat, bghm);
- 		ret = (-1);
- 		goto out;
-@@ -3074,10 +3107,10 @@ lpfc_parse_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd,
- 	if (lpfc_bgs_get_uninit_dif_block(bgstat)) {
- 		cmd->result = DID_ERROR << 16;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9073 BLKGRD: Invalid BG PDIF Block in cmd"
--				" 0x%x lba 0x%llx blk cnt 0x%x "
-+				"9073 BLKGRD: Invalid BG PDIF Block in cmd "
-+				"0x%x reftag 0x%x blk cnt 0x%x "
- 				"bgstat=x%x bghm=x%x\n", cmd->cmnd[0],
--				(unsigned long long)scsi_get_lba(cmd),
-+				lpfc_scsi_get_reftag(cmd),
- 				blk_rq_sectors(cmd->request), bgstat, bghm);
- 		ret = (-1);
- 		goto out;
-@@ -3092,10 +3125,10 @@ lpfc_parse_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd,
- 			      SAM_STAT_CHECK_CONDITION;
- 		phba->bg_guard_err_cnt++;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9055 BLKGRD: Guard Tag error in cmd"
--				" 0x%x lba 0x%llx blk cnt 0x%x "
-+				"9055 BLKGRD: Guard Tag error in cmd "
-+				"0x%x reftag 0x%x blk cnt 0x%x "
- 				"bgstat=x%x bghm=x%x\n", cmd->cmnd[0],
--				(unsigned long long)scsi_get_lba(cmd),
-+				lpfc_scsi_get_reftag(cmd),
- 				blk_rq_sectors(cmd->request), bgstat, bghm);
- 	}
+ 	spin_lock_irqsave(&phba->hbalock, iflags);
+-	list_for_each_entry_safe(rrq, nextrrq, &phba->active_rrq_list, list)
+-		if ((rrq->vport == vport) && (!ndlp  || rrq->ndlp == ndlp))
++	list_for_each_entry_safe(rrq, nextrrq, &phba->active_rrq_list, list) {
++		if (rrq->vport != vport)
++			continue;
++
++		if (!ndlp || ndlp == lpfc_findnode_did(vport, rrq->nlp_DID))
+ 			list_move(&rrq->list, &rrq_list);
++
++	}
+ 	spin_unlock_irqrestore(&phba->hbalock, iflags);
  
-@@ -3109,10 +3142,10 @@ lpfc_parse_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd,
- 
- 		phba->bg_reftag_err_cnt++;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9056 BLKGRD: Ref Tag error in cmd"
--				" 0x%x lba 0x%llx blk cnt 0x%x "
-+				"9056 BLKGRD: Ref Tag error in cmd "
-+				"0x%x reftag 0x%x blk cnt 0x%x "
- 				"bgstat=x%x bghm=x%x\n", cmd->cmnd[0],
--				(unsigned long long)scsi_get_lba(cmd),
-+				lpfc_scsi_get_reftag(cmd),
- 				blk_rq_sectors(cmd->request), bgstat, bghm);
- 	}
- 
-@@ -3126,10 +3159,10 @@ lpfc_parse_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd,
- 
- 		phba->bg_apptag_err_cnt++;
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9061 BLKGRD: App Tag error in cmd"
--				" 0x%x lba 0x%llx blk cnt 0x%x "
-+				"9061 BLKGRD: App Tag error in cmd "
-+				"0x%x reftag 0x%x blk cnt 0x%x "
- 				"bgstat=x%x bghm=x%x\n", cmd->cmnd[0],
--				(unsigned long long)scsi_get_lba(cmd),
-+				lpfc_scsi_get_reftag(cmd),
- 				blk_rq_sectors(cmd->request), bgstat, bghm);
- 	}
- 
-@@ -3170,10 +3203,10 @@ lpfc_parse_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd,
- 	if (!ret) {
- 		/* No error was reported - problem in FW? */
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_FCP | LOG_BG,
--				"9057 BLKGRD: Unknown error in cmd"
--				" 0x%x lba 0x%llx blk cnt 0x%x "
-+				"9057 BLKGRD: Unknown error in cmd "
-+				"0x%x reftag 0x%x blk cnt 0x%x "
- 				"bgstat=x%x bghm=x%x\n", cmd->cmnd[0],
--				(unsigned long long)scsi_get_lba(cmd),
-+				lpfc_scsi_get_reftag(cmd),
- 				blk_rq_sectors(cmd->request), bgstat, bghm);
- 
- 		/* Calcuate what type of error it was */
-@@ -5252,10 +5285,10 @@ lpfc_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *cmnd)
- 			lpfc_printf_vlog(vport,
- 					 KERN_INFO, LOG_SCSI_CMD,
- 					 "9033 BLKGRD: rcvd %s cmd:x%x "
--					 "sector x%llx cnt %u pt %x\n",
-+					 "reftag x%x cnt %u pt %x\n",
- 					 dif_op_str[scsi_get_prot_op(cmnd)],
- 					 cmnd->cmnd[0],
--					 (unsigned long long)scsi_get_lba(cmnd),
-+					 lpfc_scsi_get_reftag(cmnd),
- 					 blk_rq_sectors(cmnd->request),
- 					 (cmnd->cmnd[1]>>5));
- 		}
-@@ -5265,9 +5298,9 @@ lpfc_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *cmnd)
- 			lpfc_printf_vlog(vport,
- 					 KERN_INFO, LOG_SCSI_CMD,
- 					 "9038 BLKGRD: rcvd PROT_NORMAL cmd: "
--					 "x%x sector x%llx cnt %u pt %x\n",
-+					 "x%x reftag x%x cnt %u pt %x\n",
- 					 cmnd->cmnd[0],
--					 (unsigned long long)scsi_get_lba(cmnd),
-+					 lpfc_scsi_get_reftag(cmnd),
- 					 blk_rq_sectors(cmnd->request),
- 					 (cmnd->cmnd[1]>>5));
- 		}
+ 	list_for_each_entry_safe(rrq, nextrrq, &rrq_list, list) {
+@@ -1213,7 +1212,6 @@ lpfc_set_rrq_active(struct lpfc_hba *phba, struct lpfc_nodelist *ndlp,
+ 	rrq->xritag = xritag;
+ 	rrq->rrq_stop_time = jiffies +
+ 				msecs_to_jiffies(1000 * (phba->fc_ratov + 1));
+-	rrq->ndlp = ndlp;
+ 	rrq->nlp_DID = ndlp->nlp_DID;
+ 	rrq->vport = ndlp->vport;
+ 	rrq->rxid = rxid;
 -- 
 2.26.2
 
