@@ -2,112 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 437C23196D0
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 00:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3123196D2
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 00:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbhBKXpf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Feb 2021 18:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        id S230019AbhBKXph (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Feb 2021 18:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhBKXpb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Feb 2021 18:45:31 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3122CC061574
+        with ESMTP id S229960AbhBKXpc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Feb 2021 18:45:32 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38DDC061756
         for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:44:51 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id c11so4710010pfp.10
+Received: by mail-pf1-x434.google.com with SMTP id 189so4714639pfy.6
         for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:44:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6bQP/J6QAgH//gzC8/MD4o1mT+lSa0ZtUkoKgXrKl5M=;
-        b=nT/r1wYoBnYe6eHc6J3nzl23L1XSmRbHgp1zzDoD3xjF18277/CTZem9BgceS6FI5a
-         M0674Xv8BEfyZnUzgufiJgwhtzoFZzVcuqZ647mTi4ABlo3Ny82xqWvKXG16Kv/yj89s
-         izk5FeXkGLloftUDaLWvWckfHiVNa+dXHuTys1HW6Jc/MHsO2p5HIiAkPxg4BTXjfQM+
-         odv9Y+blmWwkDR/zAeIYigibg1/YCJw5Tsje9V2QPIcdjLAp1Nu37tXQxhY6fDwEQA9v
-         /s9X7IuKo44UQ9iM+OjwwozUetQvvdWtdIq/cDa4pNb3MoBcbSP5h07L1sNU3iO16eiU
-         RF+Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ak1E0xkuYN1qakVwPgq0NC9IML9/AUm8rrw3eyJlwZI=;
+        b=Xfm5jD3Wl3cmsuTYwQ7AP9zRMMY1/PJUsPkwto6u6Q/yZUKm2MBEVYK9DF0b/MafEm
+         +kg//L5MPKQQJFZDKxl2mi2PyNxWMfhG5IEQs4pygfjJpC3WpgWJgxWSND+Ql13Gz9NZ
+         1/mABAx3hdOHcKagjF/FWMHdNSVxileF2VBoSDosuUGjRUxi/wb0Srsauqtn03uuR+rt
+         UYGVbKxwyQavey17mvaqvyeNUumLkkFE8W522FDzJq6dpVvCAoAK6OQuKjk+9KxpFVyt
+         HttbCrUhhmajTvbivLzGFvMIyq01/ZhCdJfjFgpm5UR8pJcZkWWDcqoZTrSuyqpuLYMu
+         Yp+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6bQP/J6QAgH//gzC8/MD4o1mT+lSa0ZtUkoKgXrKl5M=;
-        b=cSRbaRU8P8QKce6xASQMK5fxAAC7mpXUuY1PfjIaErWeiDkw+1d3AuX+Nqo8XPOvft
-         yXT1swCnpB8K1f4LQen3uTFnKwUjToH/MKadf40rx3vSPHarB4WoOd1SnjY1HArRoi0k
-         7hNuy6o4losVf/wUmLJTq1ehOU2Ls3i139kr3rg1a/K35maO1SHIE2YtajmjSZWPhkrA
-         ZckM3AIZC1QDNeJi/oPTeHIpMJ7dtqaKIyp1QGU3btvvLgWDfIBGF8XcMWV9pAZsJlsN
-         HfyaWhqMxHSMxK8hKpSe6PCj7oWZkggVt4hpqAe81KcjPS5W87zRNf3xilLjHNg5QsmH
-         FfJQ==
-X-Gm-Message-State: AOAM532dGuWl3xNNk1YBkRNI45SaOSUM0f3S6Y7LjbUMg+aLmPP3nAwo
-        n4iCTWgOR5HYR0YoG16HTtpkuT4MZJM=
-X-Google-Smtp-Source: ABdhPJy5qRFwmEWiG1EMVOg0NsfMcbXamIRrjJcnwNyicf3huof9r/4R2aSoeiLY0rKhTOGsnAB2Vg==
-X-Received: by 2002:a63:1611:: with SMTP id w17mr523699pgl.330.1613087090678;
-        Thu, 11 Feb 2021 15:44:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ak1E0xkuYN1qakVwPgq0NC9IML9/AUm8rrw3eyJlwZI=;
+        b=XVaLO3Gp3WQzl4gyAhjMFgW90QOMgU4afgquchrUdnp493dBsFItvA4hIruVfg0zn1
+         CpZTzKsh0oGA+vFC5XrRqp/fYqv6AaxudhnPtLyKV3joYEiT5u89vX2tmwaQct62QFM/
+         OFGYnsiola6ySztDwScD811mw3OF7KjIAy5fwpSg5mVAMjHLvmPcWUjlRNbC1Xr4M506
+         fk5ZjrxQyIcQL/Vm8R3oyPltN2a5IM6s9XGuSgpMg8V43+fXDLkbVOiy8fKoSzn7jSO8
+         PMbydKnYCp2yNpGbyH+Vv7Qgt/vK6237h3ykua/k2zkwDcGCMYzlDml/lfa3tyC72pys
+         I+7g==
+X-Gm-Message-State: AOAM533VfNqe64ILTfYLkGmVqNGHH5uCkCHyc719nxE6wl/0tce01Yz3
+        PfHrpOngjFaCA/ASg7pj4LQ5NcsZvtI=
+X-Google-Smtp-Source: ABdhPJxvu9o5o9PY75WZl0sVBJwLjHLeeb87W9aUGWApSA7M1MmnFQrDbOLO6jInMp9nE6h49KTxQw==
+X-Received: by 2002:a62:2f07:0:b029:1bb:5f75:f985 with SMTP id v7-20020a622f070000b02901bb5f75f985mr350459pfv.76.1613087091279;
+        Thu, 11 Feb 2021 15:44:51 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
         by smtp.gmail.com with ESMTPSA id i67sm6808035pfe.19.2021.02.11.15.44.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 15:44:50 -0800 (PST)
+        Thu, 11 Feb 2021 15:44:51 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>
-Subject: [PATCH 00/22] lpfc: Update lpfc to revision 12.8.0.8
-Date:   Thu, 11 Feb 2021 15:44:21 -0800
-Message-Id: <20210211234443.3107-1-jsmart2021@gmail.com>
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Subject: [PATCH 01/22] lpfc: Fix incorrect dbde assignment when building target abts wqe
+Date:   Thu, 11 Feb 2021 15:44:22 -0800
+Message-Id: <20210211234443.3107-2-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210211234443.3107-1-jsmart2021@gmail.com>
+References: <20210211234443.3107-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc to revision 12.8.0.8
+The wqe_dbde field indicates whether a Data BDE is present in Words 0:2
+and should therefore should be clear in the abts request wqe. By setting
+the bit we can be misleading fw into error cases.
 
-This patch set contains fixes and a cleanup patches.
+Clear the wqe_dbde field
 
-The patches were cut against Martin's 5.11/scsi-queue tree
+Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_nvmet.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-James Smart (22):
-  lpfc: Fix incorrect dbde assignment when building target abts wqe
-  lpfc: Fix vport indices in lpfc_find_vport_by_vpid()
-  lpfc: Fix reftag generation sizing errors
-  lpfc: Fix stale node accesses on stale RRQ request
-  lpfc: Fix FLOGI failure due to accessing a freed node
-  lpfc: Fix lpfc_els_retry() possible null pointer dereference
-  lpfc: Fix pt2pt connection does not recover after LOGO
-  lpfc: Fix unnecessary null check in lpfc_release_scsi_buf
-  lpfc: Fix null pointer dereference in lpfc_prep_els_iocb()
-  lpfc: Fix use after free in lpfc_els_free_iocb
-  lpfc: Fix status returned in lpfc_els_retry() error exit path
-  lpfc: Fix dropped FLOGI during pt2pt discovery recovery
-  lpfc: Fix PLOGI ACC to be transmit after REG_LOGIN
-  lpfc: Fix ADISC handling that never frees nodes
-  lpfc: Fix nodeinfo debugfs output
-  lpfc: Fix pt2pt state transition causing rmmod hang
-  lpfc: Fix crash caused by switch reboot
-  lpfc: Change wording of invalid pci reset log message
-  lpfc: Reduce LOG_TRACE_EVENT logging for vports
-  lpfc: Correct function header comments related to ndlp reference
-    counting
-  lpfc: Update lpfc version to 12.8.0.8
-  lpfc: update copyrights for 12.8.0.7 and 12.8.0.8 changes
-
- drivers/scsi/lpfc/lpfc.h           |   3 +-
- drivers/scsi/lpfc/lpfc_attr.c      |   2 +-
- drivers/scsi/lpfc/lpfc_crtn.h      |   4 +-
- drivers/scsi/lpfc/lpfc_debugfs.c   |  13 +-
- drivers/scsi/lpfc/lpfc_disc.h      |   3 +-
- drivers/scsi/lpfc/lpfc_els.c       | 639 ++++++++++++++---------------
- drivers/scsi/lpfc/lpfc_hbadisc.c   |   6 +-
- drivers/scsi/lpfc/lpfc_init.c      |   2 +-
- drivers/scsi/lpfc/lpfc_nportdisc.c | 272 +++++-------
- drivers/scsi/lpfc/lpfc_nvme.c      |   2 +-
- drivers/scsi/lpfc/lpfc_nvmet.c     |   5 +-
- drivers/scsi/lpfc/lpfc_scsi.c      | 117 ++++--
- drivers/scsi/lpfc/lpfc_sli.c       |  29 +-
- drivers/scsi/lpfc/lpfc_version.h   |   6 +-
- drivers/scsi/lpfc/lpfc_vport.c     |  10 +-
- 15 files changed, 516 insertions(+), 597 deletions(-)
-
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index bb2a4a0d1295..a3fd959f7431 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -3304,7 +3304,6 @@ lpfc_nvmet_unsol_issue_abort(struct lpfc_hba *phba,
+ 	bf_set(wqe_rcvoxid, &wqe_abts->xmit_sequence.wqe_com, xri);
+ 
+ 	/* Word 10 */
+-	bf_set(wqe_dbde, &wqe_abts->xmit_sequence.wqe_com, 1);
+ 	bf_set(wqe_iod, &wqe_abts->xmit_sequence.wqe_com, LPFC_WQE_IOD_WRITE);
+ 	bf_set(wqe_lenloc, &wqe_abts->xmit_sequence.wqe_com,
+ 	       LPFC_WQE_LENLOC_WORD12);
 -- 
 2.26.2
 
