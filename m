@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C544C3196E6
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 00:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C833196F0
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 00:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbhBKXrO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Feb 2021 18:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        id S229809AbhBKXrs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Feb 2021 18:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbhBKXqb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Feb 2021 18:46:31 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C715CC06121D
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:45:03 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 18so4729159pfz.3
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:45:03 -0800 (PST)
+        with ESMTP id S230187AbhBKXq4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Feb 2021 18:46:56 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBB1C06121E
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:45:04 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 189so4714917pfy.6
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Feb 2021 15:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CkHaf4S1rspxuNXLcRzaWZQzXhiJ7fIoupCM3XgrDs8=;
-        b=X+hRVIuS3+AqucFJIX91If37Fb6SG1HjpMVQY6PY++S1PtChPnYm9XXILYhs7aKu3O
-         Z47tblqdOsET0JW2HTe7qt6ISkHndn4WrzrrIO9C5H64QRlpc+NsnVqCuzBIwUHqO0Oq
-         BQ0EuGsAWSNG4KWnx1Im7OLNNist+t+/dCZH0hRGfS5yVzuwQBAShSvLyKpdEiw6aU4E
-         MjjqssNkZVd1acjD6aSkKwDGpyfb+DkybGnUMau8AlcaXP4fsaPwI86Asm0qlGO3x1i/
-         QjOPWjTiTNxhIb87VXR0CG7COgbIp/bEbnlF3s0FnXEQQCNM+zr8ziGT1z1lxLLKeoHU
-         MoYQ==
+        bh=oQB1dAaUqsMnmq94iSdRzzEk5JowgE6V55+PiCf8re8=;
+        b=s8ShMmJfppC11a9vzQvFakMZdEIT8zVLNchxdXGkCZJ3CZXJJ/O1VCQacKnfi5E2xt
+         OcCALFWVMiQzkJnQngkIxDk75QPPAhFogVu9dP6iNCCg1au3/SDyPkoB5s6u8FdwiF78
+         byWKGwKjKWIq9iPQQ/PXSSsxhKp+0TFUibXpoajjKx4dO18gJJrt2t8QljHSybifSUfg
+         zsMyxOKaT5ZDYIOAXKcMzy0bCl9GOi8oVe9st4ybnyFq39VgFLUo1YDBRZPD1QAJDR2f
+         5ORvxXpgijoJxuzvtv52h9Yxuy0IXYvPlxeXJcqR/QOeSF/LjoECzQ9wf1Kb3Dw+Snz8
+         gVEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CkHaf4S1rspxuNXLcRzaWZQzXhiJ7fIoupCM3XgrDs8=;
-        b=PMLj83B5uWdYIgOk+ATia5mRBHT7OjkiKfx0SiHdZmC0n4E/t2tI576kqVDbmpNH2R
-         JEAWs4aymB5zGU2OT/GWodzt5kw3EzRgvDTQaSrDrQB7KT/MnxdNHxu4fAq/D6mcL6eW
-         Dc0ju/6ucT0k0KYFzXaa3YFcWwz8gDB0+kPlb2cQjiVfnTBBpVB7IYuZfpyVPYR3xUMt
-         z6Fd/HSo8RJhSL6zusNASKSo/aXR2nw5xDmaUMjUQSUBPKydkaKsIJYeq7fAAhQsve7c
-         sooWzqKt1xCRTJkz/S5rAOw+SD/n8yMp5LmkZTGcEbIfI6cMDAHOjVAFLtQLFv/BCwoV
-         UUGw==
-X-Gm-Message-State: AOAM5338w9AOONVmF1uzfzcmnpc2x9u5vC/Pm/nB99c8hk45khVdMORD
-        hmXudPQEjVF1UwBaSLdcQkuyvRAxK+8=
-X-Google-Smtp-Source: ABdhPJxV5cqt7lYHdDUFGjVc8F9Wf94KubQWGdDAFl0twSGlblnCjQVjwwfV5bo/MJaBTpr18+Teeg==
-X-Received: by 2002:aa7:808c:0:b029:1d5:c9d4:d39a with SMTP id v12-20020aa7808c0000b02901d5c9d4d39amr371332pff.46.1613087103303;
+        bh=oQB1dAaUqsMnmq94iSdRzzEk5JowgE6V55+PiCf8re8=;
+        b=lET336JJ19t8askgwR2FeIJG1ThRtcUZ7UEK/G+3Y+Bn1AlDH4OBdWTdindKnmLSA8
+         QwkQGM1NHgZaIlVG0V5c3TM7yNXfHxzpi+sEzlGt6HqLUxK8j6GEtP9WeGNOPYSXWH46
+         bdQHLhuZLrP3OeaHcVZ47JOrNv2RcCpiRM9jIj+Ch/ypKpAUD1ET71YafEV6GOEC56AZ
+         sqlGHlTMiEoyFrk7b8xjZM2//fM6iSpNVgHJe+DoKG8bOzM1Fd5cZc2w+5ypIomz1DPs
+         hekElCLePUkXnuPIUat7JJVuS4TPsW4O+pGqWKgMWOmwQhzNwCLP84fADoiL04IYg8Ii
+         eszg==
+X-Gm-Message-State: AOAM531wUw51pixVbklmxQSQ/QjjZBQD/uwX2IK2LapWc0bTuMYj1rlI
+        73kORZH4STUN4uT/oSvsC16j7D/9tXk=
+X-Google-Smtp-Source: ABdhPJzT9yLYd3cq8uj1d+K0UQNpad4xS5PqgLYGqMmB52e2SdmOQDbjc+VtlJLVgH40Ldfr6xy1eA==
+X-Received: by 2002:a05:6a00:2305:b029:1b4:8368:13fd with SMTP id h5-20020a056a002305b02901b4836813fdmr445183pfh.0.1613087103902;
         Thu, 11 Feb 2021 15:45:03 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i67sm6808035pfe.19.2021.02.11.15.45.02
+        by smtp.gmail.com with ESMTPSA id i67sm6808035pfe.19.2021.02.11.15.45.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 11 Feb 2021 15:45:03 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 18/22] lpfc: Change wording of invalid pci reset log message
-Date:   Thu, 11 Feb 2021 15:44:39 -0800
-Message-Id: <20210211234443.3107-19-jsmart2021@gmail.com>
+Subject: [PATCH 19/22] lpfc: Reduce LOG_TRACE_EVENT logging for vports
+Date:   Thu, 11 Feb 2021 15:44:40 -0800
+Message-Id: <20210211234443.3107-20-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210211234443.3107-1-jsmart2021@gmail.com>
 References: <20210211234443.3107-1-jsmart2021@gmail.com>
@@ -63,32 +63,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Message 8347 Invalid device found log message is logged when an LPe12000
-adapter is installed.  The log message is supposed to indicate an
-unsupported pci reset adapter rather than an invalid device.
+Lots of discovery messages are flooding the console log when testing
+NPIV.
 
-Change the wording to: Incapable PCI reset device.
+Informational message for vports should have LOG_VPORT associated with
+it as opposed to LOG_TRACE_EVENT.
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_vport.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index 8446165b15ba..9786c368baeb 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -5031,7 +5031,7 @@ lpfc_check_pci_resettable(struct lpfc_hba *phba)
- 			break;
- 		default:
- 			lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
--					"8347 Invalid device found: "
-+					"8347 Incapable PCI reset device: "
- 					"0x%04x\n", ptr->device);
- 			return -EBADSLT;
- 		}
+diff --git a/drivers/scsi/lpfc/lpfc_vport.c b/drivers/scsi/lpfc/lpfc_vport.c
+index ccf7b6cd0bd8..2fb6904f3209 100644
+--- a/drivers/scsi/lpfc/lpfc_vport.c
++++ b/drivers/scsi/lpfc/lpfc_vport.c
+@@ -190,7 +190,7 @@ lpfc_valid_wwn_format(struct lpfc_hba *phba, struct lpfc_name *wwn,
+ 	      ((wwn->u.wwn[0] & 0xf) != 0 || (wwn->u.wwn[1] & 0xf) != 0)))
+ 		return 1;
+ 
+-	lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
++	lpfc_printf_log(phba, KERN_ERR, LOG_VPORT,
+ 			"1822 Invalid %s: %02x:%02x:%02x:%02x:"
+ 			"%02x:%02x:%02x:%02x\n",
+ 			name_type,
+@@ -531,7 +531,7 @@ disable_vport(struct fc_vport *fc_vport)
+ 	}
+ 
+ 	lpfc_vport_set_state(vport, FC_VPORT_DISABLED);
+-	lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
++	lpfc_printf_vlog(vport, KERN_ERR, LOG_VPORT,
+ 			 "1826 Vport Disabled.\n");
+ 	return VPORT_OK;
+ }
+@@ -579,7 +579,7 @@ enable_vport(struct fc_vport *fc_vport)
+ 	}
+ 
+ out:
+-	lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
++	lpfc_printf_vlog(vport, KERN_ERR, LOG_VPORT,
+ 			 "1827 Vport Enabled.\n");
+ 	return VPORT_OK;
+ }
+@@ -725,7 +725,7 @@ lpfc_vport_delete(struct fc_vport *fc_vport)
+ 	spin_lock_irq(&phba->port_list_lock);
+ 	list_del_init(&vport->listentry);
+ 	spin_unlock_irq(&phba->port_list_lock);
+-	lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
++	lpfc_printf_vlog(vport, KERN_ERR, LOG_VPORT,
+ 			 "1828 Vport Deleted.\n");
+ 	scsi_host_put(shost);
+ 	return VPORT_OK;
 -- 
 2.26.2
 
