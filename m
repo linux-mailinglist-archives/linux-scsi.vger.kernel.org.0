@@ -2,106 +2,219 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6BF3192B0
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Feb 2021 20:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA603192C9
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Feb 2021 20:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbhBKTBG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Feb 2021 14:01:06 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12904 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231341AbhBKS6d (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Feb 2021 13:58:33 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11BIXS2p012550;
-        Thu, 11 Feb 2021 13:57:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=FoOed3gbJNkCHcMmZvPwVEtCy29QqfwRk6OBDnuXjIk=;
- b=UveRk1uaYDJN8KWHs5sKAUhCL/lH60v7MWh+lwILFjxNAfjVCVS1Gsb/vQT5A73DNt0U
- sl1XozTaqnC8vm1z4Jv+Oj0fmwG4sElx7WsIrTAmOGsn0C3VnbCWsVlQeIALUo8Noexr
- 37A5ZqOJOubbKEgDMA/kISDXarUGH12y9lWk/DF3syH+umgvymcidaNfJgdtO9bvWFQM
- cpwh44bvxZQGJvKetS2voss01H5cbPetTQsrrFpEszPUE0aIljeB072L4cQA0/XJzrvS
- hfwTVtVrbHtR4DRmkTWBKPEDBcPrDAfmgZ5l68Y6mUogyADaRKOubTkSfWNYf5aaDs0C Iw== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36n9vq13ey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 13:57:49 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11BIvW1C020828;
-        Thu, 11 Feb 2021 18:57:48 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04dal.us.ibm.com with ESMTP id 36hjra1pxe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 18:57:48 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11BIvkYn28508508
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Feb 2021 18:57:46 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 98DDC136053;
-        Thu, 11 Feb 2021 18:57:46 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42FB813604F;
-        Thu, 11 Feb 2021 18:57:46 +0000 (GMT)
-Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 11 Feb 2021 18:57:46 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH 4/4] ibmvfc: store return code of H_FREE_SUB_CRQ during cleanup
-Date:   Thu, 11 Feb 2021 12:57:42 -0600
-Message-Id: <20210211185742.50143-5-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210211185742.50143-1-tyreld@linux.ibm.com>
-References: <20210211185742.50143-1-tyreld@linux.ibm.com>
+        id S231217AbhBKTFY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Feb 2021 14:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229553AbhBKTEM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Feb 2021 14:04:12 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBB0C061756;
+        Thu, 11 Feb 2021 11:03:31 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id df22so8115783edb.1;
+        Thu, 11 Feb 2021 11:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kPhjJXfm6+kQOfWXztpcCTmvFWPa71ZgKqQVo0Ho3dI=;
+        b=LbEITIm2GF+EoJHZQsnzpUgZgvHIg5RwynEU8X4cKVwcjKRQR2RsxXo51p/+1zFcws
+         QGC+VhHbZ+k6ZZHoC77bPdXNybPWU8F195qO3EuBjlLnkuzC8nuolstUQtygL4yS0wg7
+         +ybDxAHK92k01MK0Bo6ohfv25/rM7+ZldYlZKYJMIBhiPLC36mhPjjBkcRjYDIEObD9H
+         IFZ0uTiLNCLtJrc818Pq38rMOX5DO7sO+vXaP/x8vMr8paxiexMElapjeFWsi0PVwhNe
+         oPFIEteK+DFnC8XYMYqEczsvsrFKK3gs815OGb4Js0Imr2IEzsnlI8vLf7/bhCbGmSAH
+         u9Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kPhjJXfm6+kQOfWXztpcCTmvFWPa71ZgKqQVo0Ho3dI=;
+        b=L5ePyR/t5B/Q0UQbqJMlCtK3hPBMIhYqJ77vUgg+wyifXBZfJrpRi2zM9dw+YSYHJB
+         aQwN7+GDzNsQdAn8PBIwXTP2f6DeqC/v0BD9C/zy27EDNN5c/Jvf5OmybcXygJyptirw
+         SZ8vVC67d1pPw7oKksJ+4/u+HRY0n+uGlvMhdLPWkQzn1ZgYGKVA8CHpE+QuYGKGgYna
+         AfGKS7nh+D0pKp8O6he+QbkMLSAAdrAfQEslCiCwdeMao28fgTjtvpZk5zNLPkHeot2C
+         //6e1406/EnzKZoGo3jr4/b33+hQXdIZB/+bDt9OUme4fvgmJAB9Mqm7ssiQpGkkGifv
+         JvGA==
+X-Gm-Message-State: AOAM532C6ytSlAPgGGG8GG5swRZbL4NNgI0sxOwK4R6qApHvTVFD3zlb
+        d+AZggVfiBOdIQEH1BIyobT5yP6jN78=
+X-Google-Smtp-Source: ABdhPJyv83sxlk478XZcaUgFcnkwG3zGSGIsUAkaWmG7NrTEmMV7xeaMHHKhQtpVfdcTmBIe2qMf8Q==
+X-Received: by 2002:a05:6402:1383:: with SMTP id b3mr9336825edv.131.1613070210543;
+        Thu, 11 Feb 2021 11:03:30 -0800 (PST)
+Received: from [192.168.178.40] (ipbcc06d06.dynamic.kabel-deutschland.de. [188.192.109.6])
+        by smtp.gmail.com with ESMTPSA id r23sm5045171ejd.56.2021.02.11.11.03.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Feb 2021 11:03:30 -0800 (PST)
+Subject: Re: [PATCH 1/2] uio: Add late_release callback to uio_info
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>
+References: <20210210194031.7422-1-bostroesser@gmail.com>
+ <20210210194031.7422-2-bostroesser@gmail.com> <YCQ4aEz29P26ZxaL@kroah.com>
+ <7bc9eef9-0a9e-58a9-11f1-2c32010c70f0@gmail.com> <YCTT8HQ7PobTyUz4@kroah.com>
+From:   Bodo Stroesser <bostroesser@gmail.com>
+Message-ID: <fb4d82c3-2add-d745-2044-bb90c98c954f@gmail.com>
+Date:   Thu, 11 Feb 2021 20:03:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-11_07:2021-02-11,2021-02-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102110148
+In-Reply-To: <YCTT8HQ7PobTyUz4@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The H_FREE_SUB_CRQ hypercall can return a retry delay return code that
-indicates the call needs to be retried after a specific amount of time
-delay. The error path to free a sub-CRQ in case of a failure during
-channel registration fails to capture the return code of H_FREE_SUB_CRQ
-which will result in the delay loop being skipped in the case of a retry
-delay return code.
+On 11.02.21 07:51, Greg Kroah-Hartman wrote:
+> On Wed, Feb 10, 2021 at 08:57:11PM +0100, Bodo Stroesser wrote:
+>> On 10.02.21 20:47, Greg Kroah-Hartman wrote:
+>>> On Wed, Feb 10, 2021 at 08:40:30PM +0100, Bodo Stroesser wrote:
+>>>> If uio_unregister_device() is called while userspace daemon
+>>>> still holds the uio device open or mmap'ed, uio will not call
+>>>> uio_info->release() on later close / munmap.
+>>>>
+>>>> At least one user of uio (tcmu) should not free resources (pages
+>>>> allocated by tcmu which are mmap'ed to userspace) while uio
+>>>> device still is open, because that could cause userspace daemon
+>>>> to be killed by SIGSEGV or SIGBUS. Therefore tcmu frees the
+>>>> pages only after it called uio_unregister_device _and_ the device
+>>>> was closed.
+>>>> So, uio not calling uio_info->release causes trouble.
+>>>> tcmu currently leaks memory in that case.
+>>>>
+>>>> Just waiting for userspace daemon to exit before calling
+>>>> uio_unregister_device I think is not the right solution, because
+>>>> daemon would not become aware of kernel code wanting to destroy
+>>>> the uio device.
+>>>> After uio_unregister_device was called, reading or writing the
+>>>> uio device returns -EIO, which normally results in daemon exit.
+>>>>
+>>>> This patch adds new callback pointer 'late_release' to struct
+>>>> uio_info. If uio user sets this callback, it will be called by
+>>>> uio if userspace closes / munmaps the device after
+>>>> uio_unregister_device was executed.
+>>>>
+>>>> That way we can use uio_unregister_device() to notify userspace
+>>>> that we are going to destroy the device, but still get a call
+>>>> to late_release when uio device is finally closed.
+>>>>
+>>>> Signed-off-by: Bodo Stroesser <bostroesser@gmail.com>
+>>>> ---
+>>>>    Documentation/driver-api/uio-howto.rst | 10 ++++++++++
+>>>>    drivers/uio/uio.c                      |  4 ++++
+>>>>    include/linux/uio_driver.h             |  4 ++++
+>>>>    3 files changed, 18 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/driver-api/uio-howto.rst b/Documentation/driver-api/uio-howto.rst
+>>>> index 907ffa3b38f5..a2d57a7d623a 100644
+>>>> --- a/Documentation/driver-api/uio-howto.rst
+>>>> +++ b/Documentation/driver-api/uio-howto.rst
+>>>> @@ -265,6 +265,16 @@ the members are required, others are optional.
+>>>>       function. The parameter ``irq_on`` will be 0 to disable interrupts
+>>>>       and 1 to enable them.
+>>>> +-  ``int (*late_release)(struct uio_info *info, struct inode *inode)``:
+>>>> +   Optional. If you define your own :c:func:`open()`, you will
+>>>> +   in certain cases also want a custom :c:func:`late_release()`
+>>>> +   function. If uio device is unregistered - by calling
+>>>> +   :c:func:`uio_unregister_device()` - while it is open or mmap'ed by
+>>>> +   userspace, the custom :c:func:`release()` function will not be
+>>>> +   called when userspace later closes the device. An optionally
+>>>> +   specified :c:func:`late_release()` function will be called in that
+>>>> +   situation.
+>>>> +
+>>>>    Usually, your device will have one or more memory regions that can be
+>>>>    mapped to user space. For each region, you have to set up a
+>>>>    ``struct uio_mem`` in the ``mem[]`` array. Here's a description of the
+>>>> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+>>>> index ea96e319c8a0..0b2636f8d373 100644
+>>>> --- a/drivers/uio/uio.c
+>>>> +++ b/drivers/uio/uio.c
+>>>> @@ -532,6 +532,8 @@ static int uio_release(struct inode *inode, struct file *filep)
+>>>>    	mutex_lock(&idev->info_lock);
+>>>>    	if (idev->info && idev->info->release)
+>>>>    		ret = idev->info->release(idev->info, inode);
+>>>> +	else if (idev->late_info && idev->late_info->late_release)
+>>>> +		ret = idev->late_info->late_release(idev->late_info, inode);
+>>>>    	mutex_unlock(&idev->info_lock);
+>>>
+>>> Why can't release() be called here?  Why doesn't your driver define a
+>>> release() if it cares about this information?  Why do we need 2
+>>> different callbacks that fire at exactly the same time?
+>>>
+>>> This feels really wrong.
+>>>
+>>> greg k-h
+>>>
+>>
+>> tcmu has a release callback. But uio can't call it after
+>> uio_unregister_device was executed, because in uio_unregister_device
+>> uio sets the uio_device::info to NULL.
+> 
+> As it should because the driver could then be gone.  It should NEVER
+> call back into it again.
 
-Store the return code result of the H_FREE_SUB_CRQ call such that the
-return code check in the delay loop evaluates a meaningful value.
+OTOH, uio does try_module_get(idev->owner) in uio_open before calling
+the driver's open callback and module_put(idev_owner) in uio_release
+after calling driver's release callback. So driver's release callback
+is guaranteed to exist until last release is done.
 
-Fixes: 9288d35d70b5 ("ibmvfc: map/request irq and register Sub-CRQ interrupt handler")
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
----
- drivers/scsi/ibmvscsi/ibmvfc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Apart from that, tcmu also has an uio_info::mmap callback. In that
+callback it installs its own vm_operations_struct::fault handler.
+This handler also can happen to be called as long as userspace holds
+the uio device mmap'ed. I think, this is not a problem due to the
+above mentioned mechanism.
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index ba6fcf9cbc57..23b803ac4a13 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -5670,7 +5670,7 @@ static int ibmvfc_register_scsi_channel(struct ibmvfc_host *vhost,
- 
- irq_failed:
- 	do {
--		plpar_hcall_norets(H_FREE_SUB_CRQ, vdev->unit_address, scrq->cookie);
-+		rc = plpar_hcall_norets(H_FREE_SUB_CRQ, vdev->unit_address, scrq->cookie);
- 	} while (rc == H_BUSY || H_IS_LONG_BUSY(rc));
- reg_failed:
- 	ibmvfc_free_queue(vhost, scrq);
--- 
-2.27.0
+tcmu just has to ensure, that the tcmu device, which contains the 
+uio_info - is kept until the final release call happens. Unfortunately
+this call will not happen if uio device is open during
+uio_unregister_device. That's why tcmu sometimes leaks memory.
 
+> 
+>> So, uio would never call both callbacks for the same release action,
+>> but would call release before uio_unregister_device is executed, and
+>> late_release after that.
+> 
+> That's not ok.
+> 
+>> Of course it would be good for tcmu if uio would call uio_info:release even
+>> after uio_unregister_device, but changing this AFAICS could cause
+>> trouble in other drivers using uio.
+> 
+> You are confusing two different lifetime rules here it seems.  One is
+> the char device and one is the struct device.  They work independently
+> as different users affect them.
+I'm not sure I get your point.
+
+> 
+> So if one is removed from the system, do not try to keep a callback to
+> it, otherwise you will crash.
+
+That's why I tried to change uio in a compatible way, so other drivers
+based on it are not afflicted by the change. I saw, that some drivers
+based on uio free their resources directly after calling
+uio_unregister_device. Executing their release callback later would
+definitely cause trouble.
+
+> 
+> And why is scsi using the uio driver in the first place?  That feels
+> really odd to me.  Why not just make a "real" driver if you want to
+> somehow tie these two lifetimes together?
+
+Why tcmu driver is based on uio I don't know. I inherited the driver as
+it is. Maybe it would have been better to not base it on uio, I don't
+know. But changing this now would cause an API change for all existing
+userspace apps, e.g. tcmu-runner. I think I should avoid that and
+therefore have to find an acceptable solution for the tcmu/uio
+combination.
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
