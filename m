@@ -2,30 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 426EA318E4F
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Feb 2021 16:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78154318DED
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Feb 2021 16:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhBKPYe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Feb 2021 10:24:34 -0500
-Received: from verein.lst.de ([213.95.11.211]:55810 "EHLO verein.lst.de"
+        id S229845AbhBKPQq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Feb 2021 10:16:46 -0500
+Received: from verein.lst.de ([213.95.11.211]:55759 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230023AbhBKPWM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Feb 2021 10:22:12 -0500
+        id S230197AbhBKPNd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Feb 2021 10:13:33 -0500
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9ABAD68B02; Thu, 11 Feb 2021 16:10:25 +0100 (CET)
-Date:   Thu, 11 Feb 2021 16:10:25 +0100
+        id 71BCC68BFE; Thu, 11 Feb 2021 16:12:47 +0100 (CET)
+Date:   Thu, 11 Feb 2021 16:12:47 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Mike Christie <michael.christie@oracle.com>
 Cc:     hch@lst.de, loberman@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        mst@redhat.com, stefanha@redhat.com
-Subject: Re: [PATCH 03/14] target: rename transport_init_se_cmd
-Message-ID: <20210211151025.GB22082@lst.de>
-References: <20210211122728.31721-1-michael.christie@oracle.com> <20210211122728.31721-4-michael.christie@oracle.com>
+        mst@redhat.com, stefanha@redhat.com,
+        Bart Van Assche <bvanassche@acm.org>,
+        Juergen Gross <jgross@suse.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Nilesh Javali <njavali@marvell.com>,
+        Michael Cyr <mikecyr@linux.ibm.com>,
+        Chris Boot <bootc@bootc.net>, Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH 04/14] target: break up target_submit_cmd_map_sgls
+Message-ID: <20210211151247.GC22082@lst.de>
+References: <20210211122728.31721-1-michael.christie@oracle.com> <20210211122728.31721-5-michael.christie@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210211122728.31721-4-michael.christie@oracle.com>
+In-Reply-To: <20210211122728.31721-5-michael.christie@oracle.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
