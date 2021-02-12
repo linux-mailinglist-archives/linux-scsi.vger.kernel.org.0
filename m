@@ -2,72 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3D8319A3E
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 08:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CF9319A4D
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Feb 2021 08:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbhBLH1t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Feb 2021 02:27:49 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:59514 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbhBLH1o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Feb 2021 02:27:44 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11C7P3mW177047;
-        Fri, 12 Feb 2021 07:26:56 GMT
+        id S229837AbhBLH2w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Feb 2021 02:28:52 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:58862 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229861AbhBLH2K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Feb 2021 02:28:10 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11C7Q13W171560;
+        Fri, 12 Feb 2021 07:27:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2020-01-29; bh=PcDMkIOGiiiNNCS4SxqjW648dqtIY2qb3MzjfLpuMXY=;
- b=qyYlFxbvANLaNVBdlBgZIVS2ByZEOM7VE6TJNorG8se9NgpexpqDJZL1AnE8BN6dHGEQ
- V+s7DDMlPN5WfbTo6ZgKEKPHLTqQaAm7BSdejHAqwgCKYuF/qg0DhQvqiRG3HVltJxUb
- VyrbiVSMh53GKtTAwp3l2hVWGEmVyTFiUtw/h/iNL74HS5PzlwiO7kIT6mFG77OFO9+i
- 9Pj4JZgUJjZz7EIamWMbKACEN7b8D4jpaQEZ+pAUA0HD1lmGEHyaKKXMI6MSwAQ6Idrr
- J42oucESMQB/DGtudk+QycYX05BZVgg/DPlAS13nO6Mg4PbOzNFxCSND3l8bz8TXePeQ bw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2130.oracle.com with ESMTP id 36hgmatavq-1
+ s=corp-2020-01-29; bh=ZUJBODL1IXVQSYFfl92SL6pxemZJ3XrNJ7gAgMaSyYE=;
+ b=P58TIr4ooYcFC+a6A3BKyE7jQqhXy8pshKfeIppjhpBy09QUhSp4z05tMcgkg14mo9DY
+ 7EBVaa+dsgpdTHBb97U5ogxbPc8joID8mvJuOTwgXuKBHs9EkZhp/I8iZfFna1GoLWQl
+ fVx8r0sYrGo4WL0/GQxvHZZuIetDIFPU+QFDlfo218BjHTtWNBCMXrYGDYiJCeHrIMDJ
+ zFgclDQc7Cc7bthzb/DCAXnrsIaOzBADz8CEEtRJbw6X7ue4TxYgWghjbn8xfxZQQlOP
+ ifnIDmO3lx8mMWvSJxRnOhJm/mcuMNevNIvgHHMADODIBo1rj7V9czEqvEsdcoGw3OCs MA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 36hkrna54y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Feb 2021 07:26:56 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11C7PZdP022757;
-        Fri, 12 Feb 2021 07:26:56 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2170.outbound.protection.outlook.com [104.47.58.170])
-        by aserp3020.oracle.com with ESMTP id 36j5155a2x-4
+        Fri, 12 Feb 2021 07:26:59 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11C7OnuN012963;
+        Fri, 12 Feb 2021 07:26:59 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2171.outbound.protection.outlook.com [104.47.73.171])
+        by userp3020.oracle.com with ESMTP id 36j4vvcbub-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Feb 2021 07:26:55 +0000
+        Fri, 12 Feb 2021 07:26:59 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ecxm1KhLomo3P8wRqY3mJ9yiSjSCq6AzFKlJKWTbtbfHqDAfQ1upB+4FRZHB/RtXGjgoMT21aGoNnPs5k3GdnaHmID+zAEcL/Pihz2GRC0delZR7tFNrsPCXsFSmf0BX+PKg3G7tn0E22UxrfXyVcA30KtPU8XaHNutwbM/GkX7TPCSTfduG4sga9LwTS3ezGKVaHyUValPoFIZ0SWdUxZcmfySFHi1iVqbc7g5TGZinnpAB1tazrB5ltB48Qv6QnVzqnvwczX68WOy8XOXEA4UKoNMYBDYe4ONBC5wlRnVZfTqddCvt/iy4bhyIZiN/xdwKcLOczo+w+fwYL5meAQ==
+ b=OgUVKcvXHPzf/ve6ZY8TT0VutNHlWwMa4+nhV+BE6/kTD2URWbEFqksVEYcHP4axgl15AhP1XrfEyHPK5TNS+EFvNuvQ+8hfMIaJuYtFfShFEeR+jBsTsrxjpWW02WSHuDG9RcZFa7PgIB49d5t1O8iDCrOvz8oQ99yAFyaSvJ7pzYA6I//g9fkoCdc9MehJQo0Eio8IhnlWnSjvPTGMsQPZe8PdA0WQqiXpkhlZbb8DWhXyQhg+lI17Qznwq/MaUaVRuSPNqPCIRxx2KgthLXQb3QoJ+brf3thRTfzfvz+JUgGD2b1hFoTQ6++upuyKifBp6uX5Y4/02dp/Jq7dnQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PcDMkIOGiiiNNCS4SxqjW648dqtIY2qb3MzjfLpuMXY=;
- b=LRR0gjtAG5dL0LRBbngL9/IWtC0ba7cCdTzGVZ7BLJsI3WLUXRyAuUe6ZdGGRpd6uTGtVRDf/5ZQfQmsx4bTSL/h6DoswslzEbLAvqWfhx+qDWiN+BfyRiV/6NeiAMRng7TW0ZqOtVb8WC6U+3S/PBzQdR6rUbfZ1jszuPtSr+6AAZId0NQcSTgQ3y60WXMA0/I5rD5iK3JrbWLaZjbF6HSmc2GQxNYwIZ08CUQXC/sYKhJrWGcjY/qX/Q1D7kliwaKiq+sBs9rXL57sjGXTeeMx3/4YxalIsi4Mnp3IzbrVODyyXuL4bP76omfO/MppA/02Ez5YAqPwPEa37eqkew==
+ bh=ZUJBODL1IXVQSYFfl92SL6pxemZJ3XrNJ7gAgMaSyYE=;
+ b=V561QaTUu7XupuiVLjFLv20AShwiNx7OeHmhgnnVIBS5D7/woLoOFBtJD64864jDC/7de3T6vmWbbewFlE7nwk90xJ7SjYBNJ4llZJTz0FtTMhgX35bEZNlUXyIM+nJ/5yRfOUUEMKKzg5nXRJhDFE8Op/Yaih/yeVQo4y6ddbP+R0ESinxiFMXSgejDYUqyWUSdiR5l815aHyb9unv9lwMv9UqMs3NQFvBkJReh1iAu1/SwGQidjhHrxhXqr6fcxtonY5CNdFeSaiihMJ74117OjptEkoQFWS6khL2Qj4KwgHuSispsO9e05nl1VrwAtttwMBN6i/I+6aCDnt5JIA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PcDMkIOGiiiNNCS4SxqjW648dqtIY2qb3MzjfLpuMXY=;
- b=RtlvNtVQgji4MH1ES9zqnZhnJYLMKaR4pKUBIhxfZR6+f6cl3jv3iFnW5sqnZuprjjSh5WxK1POhN7RfpeB6E64vi+DI/IHxeMFnlUSKpZvWNDFA9+GMU204W1sGJi/stINl2H/WFFEInV+h4KJetZGEG0uugwFUiC1Bz2A4ldQ=
+ bh=ZUJBODL1IXVQSYFfl92SL6pxemZJ3XrNJ7gAgMaSyYE=;
+ b=xiHVzseNDPYAGK4zaF0eHeSDc8IEoEDDVpu/xyYTx0Mg0FTz/ldeqpujE1+NAcbAloicJXREmq1aLjMKjzpzp6AO1BC2JP9qmtvaHrXzvX3bPgJTvNuNhGPCB2sKd+6rCBLA4dsjsrIGRDrIshyw+sI+ZMfHHTiNhPpvct1F8f0=
 Authentication-Results: redhat.com; dkim=none (message not signed)
  header.d=none;redhat.com; dmarc=none action=none header.from=oracle.com;
 Received: from BN8PR10MB3570.namprd10.prod.outlook.com (2603:10b6:408:ae::12)
- by BN0PR10MB5256.namprd10.prod.outlook.com (2603:10b6:408:12f::20) with
+ by BN0PR10MB5254.namprd10.prod.outlook.com (2603:10b6:408:12f::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27; Fri, 12 Feb
- 2021 07:26:54 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25; Fri, 12 Feb
+ 2021 07:26:56 +0000
 Received: from BN8PR10MB3570.namprd10.prod.outlook.com
  ([fe80::513a:2259:52d5:e495]) by BN8PR10MB3570.namprd10.prod.outlook.com
  ([fe80::513a:2259:52d5:e495%4]) with mapi id 15.20.3846.027; Fri, 12 Feb 2021
- 07:26:54 +0000
+ 07:26:56 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     mst@redhat.com, stefanha@redhat.com, Chaitanya.Kulkarni@wdc.com,
         hch@lst.de, loberman@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH 03/25] target: rename transport_init_se_cmd
-Date:   Fri, 12 Feb 2021 01:26:20 -0600
-Message-Id: <20210212072642.17520-4-michael.christie@oracle.com>
+Cc:     Mike Christie <michael.christie@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Juergen Gross <jgross@suse.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Nilesh Javali <njavali@marvell.com>,
+        Michael Cyr <mikecyr@linux.ibm.com>,
+        Chris Boot <bootc@bootc.net>, Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH 04/25] target: break up target_submit_cmd_map_sgls
+Date:   Fri, 12 Feb 2021 01:26:21 -0600
+Message-Id: <20210212072642.17520-5-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210212072642.17520-1-michael.christie@oracle.com>
 References: <20210212072642.17520-1-michael.christie@oracle.com>
@@ -79,247 +85,406 @@ X-ClientProxiedBy: CH2PR14CA0050.namprd14.prod.outlook.com
  (2603:10b6:408:ae::12)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (73.88.28.6) by CH2PR14CA0050.namprd14.prod.outlook.com (2603:10b6:610:56::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27 via Frontend Transport; Fri, 12 Feb 2021 07:26:53 +0000
+Received: from localhost.localdomain (73.88.28.6) by CH2PR14CA0050.namprd14.prod.outlook.com (2603:10b6:610:56::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27 via Frontend Transport; Fri, 12 Feb 2021 07:26:54 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b0ba6ef5-51fe-41ca-8b3a-08d8cf279268
-X-MS-TrafficTypeDiagnostic: BN0PR10MB5256:
+X-MS-Office365-Filtering-Correlation-Id: c66f10e9-eb59-45e6-fd41-08d8cf27934c
+X-MS-TrafficTypeDiagnostic: BN0PR10MB5254:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN0PR10MB52566910B5A17FA370C6E11DF18B9@BN0PR10MB5256.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-Microsoft-Antispam-PRVS: <BN0PR10MB5254F54525F328D08F103FE6F18B9@BN0PR10MB5254.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /S060754TmRc54AQ5Hcu8NpJiq3Yk6sTPYriWNMj6h1+NutAm6Q0eAwnUu+vS+bdT4Eahfn3nGKwjiWP3EHGUeHV7sjTh/8vzgsiKStbOgLY3W/IaGMSNqMFNbHK7wXoPSZqLZt36vjl0pCXeBGGyBflNr8zo04hVmAPEeXzv+rQJ4KJX+NqVd7KS5vRTN8lDnqTPC84lmrUy9A1ictnG76mWer9uIHBHyHkOV+QRdQFEMUyiBLJng8Ba37YMuEvaUkARBBCjBTt+5xPHloL3c84Uqu3gTveepFPiGg3g6xZbuJybIOc4zOrTDjcCRuv20jWoBzz+X2m/FkY3NolSAa4PdCuqMYZUx0GHXNQowqc3v2wHjIT7/uFaBWu2AdzYUFrpS2pz5igLgPXKkt3D1G2XyaGJ0HTK2FLgnkslnSSfrPsNX5u/fQ+BNtH+NUwHwjpuXZ2pBEEie9y+evQe3n25eIE6F5f0jkO+bMQzjodrg1y4HZ+VSZ4rmLZg2LkLBHB5CxWBYxKCJJc69rK55AcCiW+BlVcLSQQYlSEvK/fcVTs2sLDg+lfdMp/HfzrD+lf6g2FPh3T4ioDGxKWog==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3570.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(396003)(366004)(39860400002)(136003)(478600001)(1076003)(107886003)(6512007)(83380400001)(8676002)(66556008)(5660300002)(316002)(66476007)(6666004)(8936002)(69590400011)(4326008)(36756003)(86362001)(6506007)(16526019)(2906002)(186003)(2616005)(956004)(6486002)(52116002)(26005)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?XnTwPOHA8gl7AQAFNBqbyQ3lHxg9V4YqQDImiyDSOQBFwByTeqk1Q6WulAoS?=
- =?us-ascii?Q?1VVGyqKvwIIFTms55BHEVVS76FbV+p/n33bUqIVKuZsAUunsSCXgt1hxiJQf?=
- =?us-ascii?Q?G3bg5fsAUEnAW8augXRkn5nCvwephqZ4ln4K1nTceoTPtQrmpJPEDJfy2mY3?=
- =?us-ascii?Q?a22Mo8Y9JADNuijHV/1wFobOndTShHTBVmwxIcM4Paxm+I1TO/6A43cUuzME?=
- =?us-ascii?Q?FbUFId0OSUwRgN2FFkjSp1XSmhhSpW/AhQ75aMepb6QXsBbEHQvsTvJuCIT8?=
- =?us-ascii?Q?mcVaHdvUEMkXHDLBefOlS5U1V4LE++H7qkSjlT4zwSpxOTFosEhd+N9WEdHO?=
- =?us-ascii?Q?0/Q0wc2R4tuoM0OtiIvhaRPjL4T4Emrx0tNJzttHKKxCIncNkTDdxguc0sHs?=
- =?us-ascii?Q?uQqCVfwawSkmFJz/t3GobPfBApZyPhvJRsScEx73ajPMBHCSNhnbpT8jwK3f?=
- =?us-ascii?Q?8oHc7IEEC2/HZliScgIbeDBs86GH1qAQRlJA2VvV+GQhxPntpLtH89bh1xLw?=
- =?us-ascii?Q?JM3ohIEPBeR8yb5wkFU4cJvZTJFJE6NbXmPJ9QCy8mWiRGd2EklYvbP57NDO?=
- =?us-ascii?Q?3s7+UOmfA9IhGs3TkVrAJk89KlDQsYZnVV9aybnenRzrxl5aMcdvi0gFDAW4?=
- =?us-ascii?Q?D9tWb3w7QhKxHDQ7G1YxxevytdH8kf43JbwSbk48e8AnTOUJoIMKvuMx4T3+?=
- =?us-ascii?Q?eSvPDVjapdb61Ig8hV6aFhZDuUvLHnwNNZfyXA4BYrROZx5Q6cl5q/81yCYj?=
- =?us-ascii?Q?iQBKhIqmB2CSPBopKz/SgzgaZNBIztBQJENAj84FSTz7rOzklGWuMYa0bm9l?=
- =?us-ascii?Q?OLf6NyzKOHOhsb0bx+Z4MnFmyxFDfctVLULzCTNZLHjkPgqxR8axZMeuBGze?=
- =?us-ascii?Q?aQmt5o67jsj7x0Epb03L28rlAW8cHyXdAautBklc7SqPISBQntdit/gyZVwf?=
- =?us-ascii?Q?zcZN51lrCoxAiV5MJBHwXqWjkfwfgHoUXYk5uLetYW7F5a8A/hqMSTDLNSQM?=
- =?us-ascii?Q?wBkwafyiDQFDV33ftQ5NnHqz4N4O0P0Jm49axGPijnOUFvj3jj1RcLV7N650?=
- =?us-ascii?Q?5xUvVm0GadBU8QDqxaVSVbrhWcUFkq0Zz8lA9DYBmh9vHbn59eXIVu7N0XU1?=
- =?us-ascii?Q?NznQfNZh4/giI1cB2yFz7vNGNYfwRbc8hGENKCdUHBrbgs4e0r1fYvpwAoDS?=
- =?us-ascii?Q?AMMqiVT+n0jiII6XFbz2s8VNficWQUhgLhLOA+3j3E00BXf/CzF3FlL2rcpC?=
- =?us-ascii?Q?UOfY2AB1s9JvyXKwgF9kFAWbGPPFmiotI4nxW2SDTvHLxIYS2P5WCfHLv10J?=
- =?us-ascii?Q?q4IsTUKflF/zuyyDbgPfu23P?=
+X-Microsoft-Antispam-Message-Info: MUgetz7SYkr2G3wq3HBB3hvBYEou5Uk5t6QxLg32WUC0FFtuYhkdReQ21FDbnIXBkLkofrQq0/GGoUL5TFvJKjS5i1/ea2e8oEh2MHE2HCkw8xVvn+afRfulLKCpSzp2lKzYslMhgODW9o0irKOVKkzk483mtVJiUs8B0DvHmLy/o3ES9KMWuOzFkusXqtmy3rEtdXDyry61xolM+4VCS8GyMVEu2lWKt6O54WDB8qVwjMZs/kgxvK+2+nLOImNIoxFbxHZpjGo6Mpqjby6APdG2JOLa3gdbagYYzfaNBVNDSQxz1CuTkP4HKfRx+zGrEpG1MRtSrDCnAvNxz9nDcQ2d/b/lDi0U+pLQxXybRgtFmtDR90d4Pz/yZeimGEBhmh1gpB3vpWRnIAKOOlrQvgr+q3FZFQVH98nK//nL/bAvSokCSsxvkpdPOVs1H6a8dCrlyWfmZfNlm0ZFfATZKVrx21czMkDQw9bQ7RUPEcrjbQC2tT02YRo/O0dN/5AAV4EVcyPvkQ6H8jOPazngWIn6LSV9+OigrpVepqBki/o29wa+AvcN+w2SYQI8CtC24qkknCIkAoq3LhpacFT48g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3570.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(346002)(136003)(366004)(376002)(8676002)(2616005)(4326008)(316002)(8936002)(6512007)(66476007)(16526019)(26005)(956004)(6666004)(54906003)(69590400011)(186003)(83380400001)(36756003)(5660300002)(52116002)(1076003)(66556008)(478600001)(66946007)(86362001)(7416002)(6506007)(30864003)(2906002)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?rA5+Vwm5i8w0PXe2K59Re+0ZE6RgDD6nkZlXmYK285XZmYtTOxmC5VfJLQlQ?=
+ =?us-ascii?Q?rVcwHJEOjLmRhQMSJFFLmtSaEZePpDgEGWWwUzMZ9AIr2xnww2LDKinFxhh5?=
+ =?us-ascii?Q?eIgTNtD5qLohPJZh4DvOo5O42Y+vo6ni6xsARi9qXxCHenwdlpKlIbc0/EsD?=
+ =?us-ascii?Q?iGvRIx/1WrcEmYrDXZqnQtx4fE4SIt6HFlvQPYzKEaSOvxKPiBYU4dzGfRza?=
+ =?us-ascii?Q?bFkhwlV3lQw3qrVeEG1FexP/aZLpjfk9lWKwqgVd5KCHNJDOe+ICDqCQ1IHE?=
+ =?us-ascii?Q?9Yy588ZD4RvYLZDDNS1g8rrwEYoVCxg0VfKkOSryudKTYSHaBPD0avl4t+cX?=
+ =?us-ascii?Q?rOKD+JwjU+K4qCgVtHbCBGoA3R7LrVeFjqeKtY++5ExWdUL+Hpwp2I7g5xbx?=
+ =?us-ascii?Q?3Z/yvB3R21P9x6rZN8QFjcp/EbDOb0F8E/QH0y8sOoG3tjBSWW7BLUUaWDUK?=
+ =?us-ascii?Q?ePXfXFD0eU7pQbQrFlrztMwwtF7ZuMOYiWipUNjWU6aXXCNlnyjU373iTv4y?=
+ =?us-ascii?Q?d5DRL9lw9ieCehLOR1YOVv7HHO9SBnlxuZNRXsnDH+WlkDB2P2ZZGYaM1Zky?=
+ =?us-ascii?Q?b2l8XxZCOvMX4gWd+dPrQVg8BMNaLktnuvrWD5xwNiJlIMXKK284WZn/PajN?=
+ =?us-ascii?Q?q8xaprnnYOpTSotRyVROMiO+jN+MDvfS+P9qHMYKn7qDrsRE6S2KiFJ2Lbxf?=
+ =?us-ascii?Q?6hr+1N0iByC4uCqZlIHXBqibEfzF95PI+m//k2mLuCtswX6OK9KJ4Qc8Rswv?=
+ =?us-ascii?Q?WrvfFfDoqCheOTF8iYxMhV9yZzJLiEmz7zlIcg3ydOwvc6H05y7dwEIcHeON?=
+ =?us-ascii?Q?IbHAqgsxYqp4phEop+VfnAftgRO3DIFHvX8kh3ZinH0FwBohXzU3X2SgvnVO?=
+ =?us-ascii?Q?q7StkbL4R4UMPLRdTW4vDJkqXVRsIn6/1UDQYd79fkgecX5nYKSvixiJu0S/?=
+ =?us-ascii?Q?McMS1pKIvElcOTkSDxmblNs+bG7fBh5GfrdDgVAR97E+n0u2LVLm2VTNRNSh?=
+ =?us-ascii?Q?5ib078lqasTRjsUuD9j2AknURsJo1pPGsV2NyAMyPUd2um+YErmln4mhZAt2?=
+ =?us-ascii?Q?Xn1fgSrVk9dkbCI3IO6ux50ICfPNQD6pVcKYCe3Cdobbsg7Ieh+gxpzTWC4U?=
+ =?us-ascii?Q?CR5t6mXCMrNC3nqNX0C/LV6ekPYhQJHPANbsPvh1MgBgL7Peuy4el/Hcve4T?=
+ =?us-ascii?Q?VYRHQNR9AmdCh9s6pVip/GUQjpjTcCFY6wE0NWSKIuqRnVna+n9Lf03lNH+e?=
+ =?us-ascii?Q?xVL+H92X5FMuiDeVdah7qe9FZscMNOBgdC2zCyuC3n1NkKonfY/AUT8odxb7?=
+ =?us-ascii?Q?IrFbWbsxfoE2Wmhn2oNNoK46?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0ba6ef5-51fe-41ca-8b3a-08d8cf279268
+X-MS-Exchange-CrossTenant-Network-Message-Id: c66f10e9-eb59-45e6-fd41-08d8cf27934c
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3570.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2021 07:26:54.2602
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2021 07:26:56.5879
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: h7ooEqBaBnaYpJEGbn8Q4RemO4K2NbGYe0vZjbZvrKr3ZpiKNU1YrAcnbBrVOV0a0N1pS2haZsc1NFY3YFXj24//vN6H9a2j+ZsDIvHW9o4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5256
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7+nXB3nm8JfyraJCWPpKBZwOCROckV/9trjk5cORZyWgaawgbMB0k4M2AgoHtocScz5InqcEr14VsW6MNwUPK+7FiIDHP1jiR9bUYpbalXs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5254
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9892 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 phishscore=0 spamscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102120053
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 suspectscore=0 malwarescore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102120053
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9892 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102120053
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 impostorscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102120053
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Rename transport_init_se_cmd to __target_init_cmd to reflect that
-it's more of an internal function that drivers should normally not
-use (usb seems to use it wrong and iscsi is that weird guy), and
-because we are going to add a new init function in the next patches.
+This breaks up target_submit_cmd_map_sgls into 3 helpers:
 
+- target_init_cmd: Do the basic general setup and get a refcount to
+the session to make sure the caller can execute the cmd.
+
+- target_submit_prep: Do the mapping, cdb processing and get a ref
+to the lun.
+
+- target_submit: Pass the cmd to LIO core for execution.
+
+The above functions must be used by drivers that either:
+1. rely on lio for session shutdown synchronization by calling
+target_stop_session.
+2. need to map sgls
+
+When the next patches are applied then simple drivers that
+do not need the extra functionality above can use
+target_submit_cmd and not worry about failures being returned
+and how to handle them, since many drivers were getting this
+wrong and would have hit refcount bugs.
+
+Also, by breaking target_submit_cmd_map_sgls up into these 3
+helper functions, we can allow the later patches to do the init/prep
+from interrupt context and then do the submission from a workqueue.
+
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Nilesh Javali <njavali@marvell.com>
+Cc: Michael Cyr <mikecyr@linux.ibm.com>
+Cc: Chris Boot <bootc@bootc.net>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Stefan Hajnoczi <stefanha@redhat.com>
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/target/iscsi/iscsi_target.c    | 16 ++++++++--------
- drivers/target/target_core_transport.c | 16 ++++++++--------
- drivers/target/target_core_xcopy.c     |  8 ++++----
- drivers/usb/gadget/function/f_tcm.c    | 20 ++++++++++----------
- include/target/target_core_fabric.h    |  2 +-
- 5 files changed, 31 insertions(+), 31 deletions(-)
+ drivers/target/target_core_transport.c | 200 +++++++++++++++++--------
+ include/target/target_core_fabric.h    |   8 +
+ 2 files changed, 147 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index 518fac4864cf..f2107705f2ea 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -1154,10 +1154,10 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 	/*
- 	 * Initialize struct se_cmd descriptor from target_core_mod infrastructure
- 	 */
--	transport_init_se_cmd(&cmd->se_cmd, &iscsi_ops,
--			conn->sess->se_sess, be32_to_cpu(hdr->data_length),
--			cmd->data_direction, sam_task_attr,
--			cmd->sense_buffer + 2, scsilun_to_int(&hdr->lun));
-+	__target_init_cmd(&cmd->se_cmd, &iscsi_ops,
-+			 conn->sess->se_sess, be32_to_cpu(hdr->data_length),
-+			 cmd->data_direction, sam_task_attr,
-+			 cmd->sense_buffer + 2, scsilun_to_int(&hdr->lun));
- 
- 	pr_debug("Got SCSI Command, ITT: 0x%08x, CmdSN: 0x%08x,"
- 		" ExpXferLen: %u, Length: %u, CID: %hu\n", hdr->itt,
-@@ -2013,10 +2013,10 @@ iscsit_handle_task_mgt_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 					     buf);
- 	}
- 
--	transport_init_se_cmd(&cmd->se_cmd, &iscsi_ops,
--			      conn->sess->se_sess, 0, DMA_NONE,
--			      TCM_SIMPLE_TAG, cmd->sense_buffer + 2,
--			      scsilun_to_int(&hdr->lun));
-+	__target_init_cmd(&cmd->se_cmd, &iscsi_ops,
-+			  conn->sess->se_sess, 0, DMA_NONE,
-+			  TCM_SIMPLE_TAG, cmd->sense_buffer + 2,
-+			  scsilun_to_int(&hdr->lun));
- 
- 	target_get_sess_cmd(&cmd->se_cmd, true);
- 
 diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index b5427e26187b..013f4a5e8972 100644
+index 013f4a5e8972..a82b7da09872 100644
 --- a/drivers/target/target_core_transport.c
 +++ b/drivers/target/target_core_transport.c
-@@ -1297,7 +1297,7 @@ target_check_max_data_sg_nents(struct se_cmd *cmd, struct se_device *dev,
-  * Compare the data buffer size from the CDB with the data buffer limit from the transport
-  * header. Set @cmd->residual_count and SCF_OVERFLOW_BIT or SCF_UNDERFLOW_BIT if necessary.
-  *
-- * Note: target drivers set @cmd->data_length by calling transport_init_se_cmd().
-+ * Note: target drivers set @cmd->data_length by calling __target_init_cmd().
-  *
-  * Return: TCM_NO_SENSE
-  */
-@@ -1369,7 +1369,7 @@ target_cmd_size_check(struct se_cmd *cmd, unsigned int size)
-  *
-  * Preserves the value of @cmd->tag.
-  */
--void transport_init_se_cmd(
-+void __target_init_cmd(
- 	struct se_cmd *cmd,
- 	const struct target_core_fabric_ops *tfo,
- 	struct se_session *se_sess,
-@@ -1403,7 +1403,7 @@ void transport_init_se_cmd(
- 
- 	cmd->state_active = false;
+@@ -1571,46 +1571,31 @@ transport_generic_map_mem_to_cmd(struct se_cmd *cmd, struct scatterlist *sgl,
  }
--EXPORT_SYMBOL(transport_init_se_cmd);
-+EXPORT_SYMBOL(__target_init_cmd);
  
- static sense_reason_t
- transport_check_alloc_task_attr(struct se_cmd *cmd)
-@@ -1623,9 +1623,9 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
+ /**
+- * target_submit_cmd_map_sgls - lookup unpacked lun and submit uninitialized
+- * 			 se_cmd + use pre-allocated SGL memory.
+- *
+- * @se_cmd: command descriptor to submit
++ * target_init_cmd - initialize se_cmd
++ * @se_cmd: command descriptor to init
+  * @se_sess: associated se_sess for endpoint
+- * @cdb: pointer to SCSI CDB
+  * @sense: pointer to SCSI sense buffer
+  * @unpacked_lun: unpacked LUN to reference for struct se_lun
+  * @data_length: fabric expected data transfer length
+  * @task_attr: SAM task attribute
+  * @data_dir: DMA data direction
+  * @flags: flags for command submission from target_sc_flags_tables
+- * @sgl: struct scatterlist memory for unidirectional mapping
+- * @sgl_count: scatterlist count for unidirectional mapping
+- * @sgl_bidi: struct scatterlist memory for bidirectional READ mapping
+- * @sgl_bidi_count: scatterlist count for bidirectional READ mapping
+- * @sgl_prot: struct scatterlist memory protection information
+- * @sgl_prot_count: scatterlist count for protection information
+  *
+  * Task tags are supported if the caller has set @se_cmd->tag.
+  *
+- * Returns non zero to signal active I/O shutdown failure.  All other
+- * setup exceptions will be returned as a SCSI CHECK_CONDITION response,
+- * but still return zero here.
++ * Returns:
++ *	- less than zero to signal active I/O shutdown failure.
++ *	- zero on success.
+  *
+- * This may only be called from process context, and also currently
+- * assumes internal allocation of fabric payload buffer by target-core.
++ * If the fabric driver calls target_stop_session, then it must check the
++ * return code and handle failures. This will never fail for other drivers,
++ * and the return code can be ignored.
+  */
+-int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess,
+-		unsigned char *cdb, unsigned char *sense, u64 unpacked_lun,
+-		u32 data_length, int task_attr, int data_dir, int flags,
+-		struct scatterlist *sgl, u32 sgl_count,
+-		struct scatterlist *sgl_bidi, u32 sgl_bidi_count,
+-		struct scatterlist *sgl_prot, u32 sgl_prot_count)
++int target_init_cmd(struct se_cmd *se_cmd, struct se_session *se_sess,
++		    unsigned char *sense, u64 unpacked_lun,
++		    u32 data_length, int task_attr, int data_dir, int flags)
+ {
+ 	struct se_portal_group *se_tpg;
+-	sense_reason_t rc;
+-	int ret;
+-
+-	might_sleep();
+ 
+ 	se_tpg = se_sess->se_tpg;
+ 	BUG_ON(!se_tpg);
+@@ -1618,53 +1603,69 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
+ 
+ 	if (flags & TARGET_SCF_USE_CPUID)
+ 		se_cmd->se_cmd_flags |= SCF_USE_CPUID;
++	/*
++	 * Signal bidirectional data payloads to target-core
++	 */
++	if (flags & TARGET_SCF_BIDI_OP)
++		se_cmd->se_cmd_flags |= SCF_BIDI;
++
++	if (flags & TARGET_SCF_UNKNOWN_SIZE)
++		se_cmd->unknown_data_length = 1;
+ 	/*
+ 	 * Initialize se_cmd for target operation.  From this point
  	 * exceptions are handled by sending exception status via
  	 * target_core_fabric_ops->queue_status() callback
  	 */
--	transport_init_se_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
--				data_length, data_dir, task_attr, sense,
--				unpacked_lun);
-+	__target_init_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
-+			  data_length, data_dir, task_attr, sense,
-+			  unpacked_lun);
+-	__target_init_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
+-			  data_length, data_dir, task_attr, sense,
+-			  unpacked_lun);
++	__target_init_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess, data_length,
++			  data_dir, task_attr, sense, unpacked_lun);
  
- 	if (flags & TARGET_SCF_UNKNOWN_SIZE)
- 		se_cmd->unknown_data_length = 1;
-@@ -1797,8 +1797,8 @@ int target_submit_tmr(struct se_cmd *se_cmd, struct se_session *se_sess,
- 	se_tpg = se_sess->se_tpg;
- 	BUG_ON(!se_tpg);
- 
--	transport_init_se_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
--			      0, DMA_NONE, TCM_SIMPLE_TAG, sense, unpacked_lun);
-+	__target_init_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
-+			  0, DMA_NONE, TCM_SIMPLE_TAG, sense, unpacked_lun);
+-	if (flags & TARGET_SCF_UNKNOWN_SIZE)
+-		se_cmd->unknown_data_length = 1;
  	/*
- 	 * FIXME: Currently expect caller to handle se_cmd->se_tmr_req
- 	 * allocation failure.
-diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
-index 66d6f1d06f21..e86cc6135587 100644
---- a/drivers/target/target_core_xcopy.c
-+++ b/drivers/target/target_core_xcopy.c
-@@ -615,8 +615,8 @@ static int target_xcopy_read_source(
- 	pr_debug("XCOPY: Built READ_16: LBA: %llu Sectors: %u Length: %u\n",
- 		(unsigned long long)src_lba, src_sectors, length);
+ 	 * Obtain struct se_cmd->cmd_kref reference. A second kref_get here is
+ 	 * necessary for fabrics using TARGET_SCF_ACK_KREF that expect a second
+ 	 * kref_put() to happen during fabric packet acknowledgement.
+ 	 */
+-	ret = target_get_sess_cmd(se_cmd, flags & TARGET_SCF_ACK_KREF);
+-	if (ret)
+-		return ret;
+-	/*
+-	 * Signal bidirectional data payloads to target-core
+-	 */
+-	if (flags & TARGET_SCF_BIDI_OP)
+-		se_cmd->se_cmd_flags |= SCF_BIDI;
++	return target_get_sess_cmd(se_cmd, flags & TARGET_SCF_ACK_KREF);
++}
++EXPORT_SYMBOL_GPL(target_init_cmd);
++
++/**
++ * target_submit_prep - prepare cmd for submission
++ * @se_cmd: command descriptor to prep
++ * @cdb: pointer to SCSI CDB
++ * @sgl: struct scatterlist memory for unidirectional mapping
++ * @sgl_count: scatterlist count for unidirectional mapping
++ * @sgl_bidi: struct scatterlist memory for bidirectional READ mapping
++ * @sgl_bidi_count: scatterlist count for bidirectional READ mapping
++ * @sgl_prot: struct scatterlist memory protection information
++ * @sgl_prot_count: scatterlist count for protection information
++ *
++ * Returns:
++ *	- less than zero to signal failure.
++ *	- zero on success.
++ * If failure is returned, lio will the callers queue_status to complete
++ * the cmd.
++ */
++int target_submit_prep(struct se_cmd *se_cmd, unsigned char *cdb,
++		       struct scatterlist *sgl, u32 sgl_count,
++		       struct scatterlist *sgl_bidi, u32 sgl_bidi_count,
++		       struct scatterlist *sgl_prot, u32 sgl_prot_count)
++{
++	sense_reason_t rc;
  
--	transport_init_se_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
--			      DMA_FROM_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
-+	__target_init_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
-+			  DMA_FROM_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
+ 	rc = target_cmd_init_cdb(se_cmd, cdb);
+-	if (rc) {
+-		transport_send_check_condition_and_sense(se_cmd, rc, 0);
+-		target_put_sess_cmd(se_cmd);
+-		return 0;
+-	}
++	if (rc)
++		goto send_cc_direct;
  
- 	rc = target_xcopy_setup_pt_cmd(&xpt_cmd, xop, src_dev, &cdb[0],
- 				remote_port);
-@@ -660,8 +660,8 @@ static int target_xcopy_write_destination(
- 	pr_debug("XCOPY: Built WRITE_16: LBA: %llu Sectors: %u Length: %u\n",
- 		(unsigned long long)dst_lba, dst_sectors, length);
+ 	/*
+ 	 * Locate se_lun pointer and attach it to struct se_cmd
+ 	 */
+ 	rc = transport_lookup_cmd_lun(se_cmd);
+-	if (rc) {
+-		transport_send_check_condition_and_sense(se_cmd, rc, 0);
+-		target_put_sess_cmd(se_cmd);
+-		return 0;
+-	}
++	if (rc)
++		goto send_cc_direct;
  
--	transport_init_se_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
--			      DMA_TO_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
-+	__target_init_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
-+			  DMA_TO_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
+ 	rc = target_cmd_parse_cdb(se_cmd);
+-	if (rc != 0) {
+-		transport_generic_request_failure(se_cmd, rc);
+-		return 0;
+-	}
++	if (rc != 0)
++		goto generic_fail;
  
- 	rc = target_xcopy_setup_pt_cmd(&xpt_cmd, xop, dst_dev, &cdb[0],
- 				remote_port);
-diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
-index 410fa89eae8f..dcce6e2605f5 100644
---- a/drivers/usb/gadget/function/f_tcm.c
-+++ b/drivers/usb/gadget/function/f_tcm.c
-@@ -1050,11 +1050,11 @@ static void usbg_cmd_work(struct work_struct *work)
- 	tv_nexus = tpg->tpg_nexus;
- 	dir = get_cmd_dir(cmd->cmd_buf);
- 	if (dir < 0) {
--		transport_init_se_cmd(se_cmd,
--				tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
--				tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
--				cmd->prio_attr, cmd->sense_iu.sense,
--				cmd->unpacked_lun);
-+		__target_init_cmd(se_cmd,
-+				  tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
-+				  tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
-+				  cmd->prio_attr, cmd->sense_iu.sense,
-+				  cmd->unpacked_lun);
- 		goto out;
+ 	/*
+ 	 * Save pointers for SGLs containing protection information,
+@@ -1684,6 +1685,41 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
+ 	if (sgl_count != 0) {
+ 		BUG_ON(!sgl);
+ 
++		rc = transport_generic_map_mem_to_cmd(se_cmd, sgl, sgl_count,
++				sgl_bidi, sgl_bidi_count);
++		if (rc != 0)
++			goto generic_fail;
++	}
++
++	return 0;
++
++send_cc_direct:
++	transport_send_check_condition_and_sense(se_cmd, rc, 0);
++	target_put_sess_cmd(se_cmd);
++	return -EIO;
++
++generic_fail:
++	transport_generic_request_failure(se_cmd, rc);
++	return -EIO;
++}
++EXPORT_SYMBOL_GPL(target_submit_prep);
++
++/**
++ * target_submit - perform final initialization and submit cmd to LIO core
++ * @se_cmd: command descriptor to submit
++ *
++ * target_submit_prep must have been called on the cmd, and this must be
++ * called from process context.
++ */
++void target_submit(struct se_cmd *se_cmd)
++{
++	struct scatterlist *sgl = se_cmd->t_data_sg;
++	unsigned char *buf = NULL;
++
++	might_sleep();
++
++	if (se_cmd->t_data_nents != 0) {
++		BUG_ON(!sgl);
+ 		/*
+ 		 * A work-around for tcm_loop as some userspace code via
+ 		 * scsi-generic do not memset their associated read buffers,
+@@ -1694,8 +1730,6 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
+ 		 */
+ 		if (!(se_cmd->se_cmd_flags & SCF_SCSI_DATA_CDB) &&
+ 		     se_cmd->data_direction == DMA_FROM_DEVICE) {
+-			unsigned char *buf = NULL;
+-
+ 			if (sgl)
+ 				buf = kmap(sg_page(sgl)) + sgl->offset;
+ 
+@@ -1705,12 +1739,6 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
+ 			}
+ 		}
+ 
+-		rc = transport_generic_map_mem_to_cmd(se_cmd, sgl, sgl_count,
+-				sgl_bidi, sgl_bidi_count);
+-		if (rc != 0) {
+-			transport_generic_request_failure(se_cmd, rc);
+-			return 0;
+-		}
  	}
  
-@@ -1181,11 +1181,11 @@ static void bot_cmd_work(struct work_struct *work)
- 	tv_nexus = tpg->tpg_nexus;
- 	dir = get_cmd_dir(cmd->cmd_buf);
- 	if (dir < 0) {
--		transport_init_se_cmd(se_cmd,
--				tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
--				tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
--				cmd->prio_attr, cmd->sense_iu.sense,
--				cmd->unpacked_lun);
-+		__target_init_cmd(se_cmd,
-+				  tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
-+				  tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
-+				  cmd->prio_attr, cmd->sense_iu.sense,
-+				  cmd->unpacked_lun);
- 		goto out;
- 	}
+ 	/*
+@@ -1720,6 +1748,56 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
+ 	core_alua_check_nonop_delay(se_cmd);
  
+ 	transport_handle_cdb_direct(se_cmd);
++}
++EXPORT_SYMBOL_GPL(target_submit);
++
++/**
++ * target_submit_cmd_map_sgls - lookup unpacked lun and submit uninitialized
++ *					se_cmd + use pre-allocated SGL memory.
++ *
++ * @se_cmd: command descriptor to submit
++ * @se_sess: associated se_sess for endpoint
++ * @cdb: pointer to SCSI CDB
++ * @sense: pointer to SCSI sense buffer
++ * @unpacked_lun: unpacked LUN to reference for struct se_lun
++ * @data_length: fabric expected data transfer length
++ * @task_attr: SAM task attribute
++ * @data_dir: DMA data direction
++ * @flags: flags for command submission from target_sc_flags_tables
++ * @sgl: struct scatterlist memory for unidirectional mapping
++ * @sgl_count: scatterlist count for unidirectional mapping
++ * @sgl_bidi: struct scatterlist memory for bidirectional READ mapping
++ * @sgl_bidi_count: scatterlist count for bidirectional READ mapping
++ * @sgl_prot: struct scatterlist memory protection information
++ * @sgl_prot_count: scatterlist count for protection information
++ *
++ * Task tags are supported if the caller has set @se_cmd->tag.
++ *
++ * Returns non zero to signal active I/O shutdown failure.  All other
++ * setup exceptions will be returned as a SCSI CHECK_CONDITION response,
++ * but still return zero here.
++ *
++ * This may only be called from process context, and also currently
++ * assumes internal allocation of fabric payload buffer by target-core.
++ */
++int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess,
++		unsigned char *cdb, unsigned char *sense, u64 unpacked_lun,
++		u32 data_length, int task_attr, int data_dir, int flags,
++		struct scatterlist *sgl, u32 sgl_count,
++		struct scatterlist *sgl_bidi, u32 sgl_bidi_count,
++		struct scatterlist *sgl_prot, u32 sgl_prot_count)
++{
++	int rc;
++
++	rc = target_init_cmd(se_cmd, se_sess, sense, unpacked_lun,
++			     data_length, task_attr, data_dir, flags);
++	if (rc < 0)
++		return rc;
++
++
++	target_submit_prep(se_cmd, cdb, sgl, sgl_count, sgl_bidi,
++			   sgl_bidi_count, sgl_prot, sgl_prot_count);
++	target_submit(se_cmd);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(target_submit_cmd_map_sgls);
 diff --git a/include/target/target_core_fabric.h b/include/target/target_core_fabric.h
-index d60a3eb7517a..4975c4d2a933 100644
+index 4975c4d2a933..4b5f6687393a 100644
 --- a/include/target/target_core_fabric.h
 +++ b/include/target/target_core_fabric.h
-@@ -148,7 +148,7 @@ void	transport_deregister_session_configfs(struct se_session *);
- void	transport_deregister_session(struct se_session *);
- 
- 
--void	transport_init_se_cmd(struct se_cmd *,
-+void	__target_init_cmd(struct se_cmd *,
+@@ -151,6 +151,14 @@ void	transport_deregister_session(struct se_session *);
+ void	__target_init_cmd(struct se_cmd *,
  		const struct target_core_fabric_ops *,
  		struct se_session *, u32, int, int, unsigned char *, u64);
++int	target_init_cmd(struct se_cmd *se_cmd, struct se_session *se_sess,
++		unsigned char *sense, u64 unpacked_lun, u32 data_length,
++		int task_attr, int data_dir, int flags);
++int	target_submit_prep(struct se_cmd *se_cmd, unsigned char *cdb,
++		struct scatterlist *sgl, u32 sgl_count,
++		struct scatterlist *sgl_bidi, u32 sgl_bidi_count,
++		struct scatterlist *sgl_prot, u32 sgl_prot_count);
++void	target_submit(struct se_cmd *se_cmd);
  sense_reason_t transport_lookup_cmd_lun(struct se_cmd *);
+ sense_reason_t target_cmd_init_cdb(struct se_cmd *, unsigned char *);
+ sense_reason_t target_cmd_parse_cdb(struct se_cmd *);
 -- 
 2.25.1
 
