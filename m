@@ -2,138 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D82231BD4F
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Feb 2021 16:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFB231BE50
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Feb 2021 17:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbhBOPoC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Feb 2021 10:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S232049AbhBOQHX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Feb 2021 11:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhBOPnZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Feb 2021 10:43:25 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488CFC0617A7
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Feb 2021 07:40:35 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id e9so4146418pjj.0
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Feb 2021 07:40:35 -0800 (PST)
+        with ESMTP id S231209AbhBOPr4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Feb 2021 10:47:56 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DEEC061786
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Feb 2021 07:40:25 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id gx20so4140279pjb.1
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Feb 2021 07:40:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ghAL0+h3u1cX9VyWJd2C9M5FvR34M42h2tqveRBuqus=;
-        b=M4S4achrnOe/5b9+HVprlhmTffhmiWsOUFewAcv+hIpD+WYa1b2AHcCQM+7BI5+uhe
-         W+8B0eXV0Wvm3i+mW+m5diTJPI+hgO3jvhq/lNtRUxlHQ+fn9qGK+pNmHPnO/biBRkxr
-         ymiHtGvB9DHV8wtFyLfoJnjJzRxLcCM3epji8=
+        h=from:to:cc:subject:date:message-id;
+        bh=A6QzahvyaSfp2UWOam+EBuhZMAevNzh1YdwFtjgK84E=;
+        b=DM7Iv2oV/WuU7oXJ0MeVR90RTvlwthfLV5S+kz5oHI0jIcLi6PpVkLJz2GPimQZcfx
+         wfDRmy2C8IkrPxKcrd7wkAg112mGhXWuXGyh6P5/zzDhWd3j7C/AUUP/EAvk/vNyw3jH
+         LnLW0iUBv5iy6+D8QpDtdERjLvPj/1diHXbeY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ghAL0+h3u1cX9VyWJd2C9M5FvR34M42h2tqveRBuqus=;
-        b=FZovrbp0xjt3CF1dvoQYPfTrMVTr5Aviq8HOEzlufFts+t1emCgoxcpFcx22iqeCRC
-         zarViCHwcvCnpVcq7x/hof1eizQp5h7X/W+VpIb1kl2B8vZLnMh/aQz5tmeKz4Q4nk0W
-         pq837DhgPUpX7gHxKoKDAAa9Zeo3adgpY+AvowJIFlUd1XuEfmqhLV5cyG12DhetlFeN
-         wEDtM3iryMxxC+gq7Ynvt+VcoUEhrqFSn3jJ0W3TnakugS/8YeNVk/oocIfZc93mQgjh
-         UnU9I3NTPB9wtFMTUIctdIO+ZlNddg3+nZljevmNQsG4FSyhfoSjWtcDmwnIF5BIkUW9
-         upyQ==
-X-Gm-Message-State: AOAM531t4SHBOAJj7x82MgFEwoZXLVOFAxvkf6H5VeNeEC67GW1pXARZ
-        Cu5SCGbYiHX1ZdRC+1GtlsQe6GyfCfqUgJEjGon+SCluWA5Tj1RHlZWgWwy7oimD7iD94tRE0u0
-        J2YM1qOWUuXCU2U/LhIkZlJMtoJ2LWn7qUFpfgp2SeM77Z0pPiSxBmpdPdGmegLJl7cORSrPwLT
-        RUnLO0XZL5
-X-Google-Smtp-Source: ABdhPJz4z+vS2l8D/WxfuaWIKgXTCPuM75quW8qVK5TZMY85DO50sU4akhCvlsVZ/uDW/16zaw6XjQ==
-X-Received: by 2002:a17:90a:517:: with SMTP id h23mr16827138pjh.108.1613403634434;
-        Mon, 15 Feb 2021 07:40:34 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=A6QzahvyaSfp2UWOam+EBuhZMAevNzh1YdwFtjgK84E=;
+        b=N1nK7F26FSllKPviARGpIhEPm802UdTA+gl1U479uEEYaI42rTuU4NHyiFIiUh7LSZ
+         0WdN7iw2vVa1kkB+7Usc9YyAdUkbnl/4/KrMMgedISe0I0ndyJXqnJAuFXxwDJvGfeeA
+         3HZSvAs+mcLqGT0fpe2NrdCzwEDjBdYCdME+kk6Hxa6XKdpqsDe853+LNOOfaZagltF9
+         tAH7xSgmLyPKCbhBnE2HKrTVFj0nd6QIgGjXEHdrRJBKdnT74vT6UWxllejkzJDdYKAv
+         VmagAZjo3rlSGP02GCbBVjsbmueiZTNQf8yz9J3D+autseHdo/UniaIa7HXgGGZM+T1m
+         k1jg==
+X-Gm-Message-State: AOAM5317SIrQ/Iw94q+fO/+enNESzKhMaE7u6aMR96K3MmnC5swhL/a4
+        iYAUQOmwNxTmOCWURpYS2Byaj7BwbykvrA5w8gUE8ckvqPNwTgnW6037YGX5Oz1z/4FAZjCr+4h
+        eCbp7dO5FpdtvRlXgjaoAm+shbUw6nv1yYI2MoRXW0Vt8Dn/bL5ecwEAqI8PSrUqs4QoRweLbPX
+        Fa1Zg1taI3
+X-Google-Smtp-Source: ABdhPJz3psfC9q6lAHi6PwJQPj/Wt+Xg2HVqIr45R/ZU6X0M6PEe8vUmpVcatXsZLP2XJ4JkyM/1pw==
+X-Received: by 2002:a17:90a:9918:: with SMTP id b24mr3745754pjp.127.1613403624103;
+        Mon, 15 Feb 2021 07:40:24 -0800 (PST)
 Received: from drv-bst-rhel8.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id m4sm18031341pgu.4.2021.02.15.07.40.33
+        by smtp.gmail.com with ESMTPSA id m4sm18031341pgu.4.2021.02.15.07.40.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Feb 2021 07:40:34 -0800 (PST)
+        Mon, 15 Feb 2021 07:40:23 -0800 (PST)
 From:   Kashyap Desai <kashyap.desai@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     Kashyap Desai <kashyap.desai@broadcom.com>
-Subject: [PATCH v4 5/5] scsi: set shost as hctx driver_data
-Date:   Mon, 15 Feb 2021 13:10:48 +0530
-Message-Id: <20210215074048.19424-6-kashyap.desai@broadcom.com>
+Subject: [PATCH v4 0/5] io_uring iopoll in scsi layer
+Date:   Mon, 15 Feb 2021 13:10:43 +0530
+Message-Id: <20210215074048.19424-1-kashyap.desai@broadcom.com>
 X-Mailer: git-send-email 2.18.1
-In-Reply-To: <20210215074048.19424-1-kashyap.desai@broadcom.com>
-References: <20210215074048.19424-1-kashyap.desai@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000089050e05bb61ce31"
+        boundary="000000000000f0344c05bb61cd48"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000089050e05bb61ce31
+--000000000000f0344c05bb61cd48
 
-hctx->driver_data is not set for SCSI currently.
-Separately set hctx->driver_data = shost.
+This patch series is to support io_uring iopoll feature
+in scsi stack. This patch set requires shared hosttag support.
 
-Suggested-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/scsi_lib.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+This patch set is created on top of 5.12/scsi-staging branch.
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/mkp/scsi/+/refs/heads/5.12/scsi-staging
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 8c29bf0e4cfd..f661c50f3b88 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1792,9 +1792,7 @@ static void scsi_mq_exit_request(struct blk_mq_tag_set *set, struct request *rq,
- 
- static int scsi_mq_poll(struct blk_mq_hw_ctx *hctx)
- {
--	struct request_queue *q = hctx->queue;
--	struct scsi_device *sdev = q->queuedata;
--	struct Scsi_Host *shost = sdev->host;
-+	struct Scsi_Host *shost = hctx->driver_data;
- 
- 	if (shost->hostt->mq_poll)
- 		return shost->hostt->mq_poll(shost, hctx->queue_num);
-@@ -1802,6 +1800,15 @@ static int scsi_mq_poll(struct blk_mq_hw_ctx *hctx)
- 	return 0;
- }
- 
-+static int scsi_init_hctx(struct blk_mq_hw_ctx *hctx, void *data,
-+			  unsigned int hctx_idx)
-+{
-+	struct Scsi_Host *shost = data;
-+
-+	hctx->driver_data = shost;
-+	return 0;
-+}
-+
- static int scsi_map_queues(struct blk_mq_tag_set *set)
- {
- 	struct Scsi_Host *shost = container_of(set, struct Scsi_Host, tag_set);
-@@ -1869,15 +1876,14 @@ static const struct blk_mq_ops scsi_mq_ops_no_commit = {
- 	.cleanup_rq	= scsi_cleanup_rq,
- 	.busy		= scsi_mq_lld_busy,
- 	.map_queues	= scsi_map_queues,
-+	.init_hctx	= scsi_init_hctx,
- 	.poll		= scsi_mq_poll,
- };
- 
- 
- static void scsi_commit_rqs(struct blk_mq_hw_ctx *hctx)
- {
--	struct request_queue *q = hctx->queue;
--	struct scsi_device *sdev = q->queuedata;
--	struct Scsi_Host *shost = sdev->host;
-+	struct Scsi_Host *shost = hctx->driver_data;
- 
- 	shost->hostt->commit_rqs(shost, hctx->queue_num);
- }
-@@ -1898,6 +1904,7 @@ static const struct blk_mq_ops scsi_mq_ops = {
- 	.cleanup_rq	= scsi_cleanup_rq,
- 	.busy		= scsi_mq_lld_busy,
- 	.map_queues	= scsi_map_queues,
-+	.init_hctx	= scsi_init_hctx,
- 	.poll		= scsi_mq_poll,
- };
- 
+v4 ->
+- Merge "[PATCH v3] scsi_debug: add new defer_type for mq_poll" into
+  this series.
+- Fix IO hang issue of above patch and created v4.  
+
+v3 ->  
+- added reviewed-by tag
+- Fix comment provided by Hannes for below patch.
+https://patchwork.kernel.org/project/linux-scsi/patch/20201203034100.29716-3-kashyap.desai@broadcom.com/
+- Fix Functional issue of poll_queues settings not working in v2.
+
+v2 -> 
+- updated feedback from v1.
+- added reviewed-by & tested-by tag
+- remove flood of prints in scsi_debug driver during iopoll
+  reported by Douglas Gilbert.
+- added new patch to support to get shost from hctx.
+  added new helper function "scsi_init_hctx"
+
+v1 -> 
+Fixed warnings in scsi_debug driver.
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+Kashyap Desai (5):
+  add io_uring with IOPOLL support in scsi layer
+  megaraid_sas: iouring iopoll support
+  scsi_debug : iouring iopoll support
+  scsi_debug: add new defer type for mq poll
+  scsi: set shost as hctx driver_data
+
+ drivers/scsi/megaraid/megaraid_sas.h        |   3 +
+ drivers/scsi/megaraid/megaraid_sas_base.c   |  87 +++++++-
+ drivers/scsi/megaraid/megaraid_sas_fusion.c |  42 +++-
+ drivers/scsi/megaraid/megaraid_sas_fusion.h |   2 +
+ drivers/scsi/scsi_debug.c                   | 226 +++++++++++++++++---
+ drivers/scsi/scsi_lib.c                     |  29 ++-
+ include/scsi/scsi_cmnd.h                    |   1 +
+ include/scsi/scsi_host.h                    |  11 +
+ 8 files changed, 359 insertions(+), 42 deletions(-)
+
+
+base-commit: d39bfd0686fd2b21f857c61bb2753db3a932cb24
 -- 
 2.18.1
 
 
---00000000000089050e05bb61ce31
+--000000000000f0344c05bb61cd48
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -203,14 +182,14 @@ pNj4hlSJMNNqxNSqrKaD1cR4/oZVPFVnJJYlB01cLVjGMzta9x27e6XEtseo2s7aoPS2l82koMr7
 M+LbYxcXFT2gXvoYd2Ms8zsLrhO2M6pMzeNGWk2HWTof9s7EEHDjis/MRlbYSNaohV23IUzNlBw7
 1FmvvW5GKK0xggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
 IG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0g
-RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgw4CRQBdg
-ORj8jCNSKdZtXtudlYwNDSwscohmmm8htWAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
-hkiG9w0BCQUxDxcNMjEwMjE1MTU0MDM0WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
+RzMCDDSdoX7GqonhoE7TszANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg53tUubCO
+zcNq8IcT0JVp1u9rI0s304snX+GsZBIPjI0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkq
+hkiG9w0BCQUxDxcNMjEwMjE1MTU0MDI0WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjAL
 BglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG
-9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAGiWbqpSGSRdVKD/4gMWH9epdT9d
-xmPt4ROwjSgDezOSFzIcBjDEfmd7mVETzdegMsMPzYX43aALk3lfd3+em5LHoJm9OWholM0IkXun
-+UG7q02aGZw4KBTYyyYugyC24dajHZTTxH+IrM+19KouvNoy1eaXmRP+9cohJ++X+8PWEt2qS8KA
-z5ScygTglgmI5HqB+USC7Q5zt2Dm+QGm0CbvgMpfaCBZalk3kW+hdycATHZ3LL5BVvs/ALmDmled
-LsKGQbnhNjBozfd3WWYeYatdijUpAnSGMWrZI1vF4qXLxYSDSNp9iCyeHM9MUtAKqB+9bUSgpKAG
-EFxTpeuIXfg=
---00000000000089050e05bb61ce31--
+9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAGH+sPq6FB/5QyzItU9JPT6eGGEj
+2FgUOlLzgSDpUxC8lJL6SnfngF/ZuCVP/GXCExSYrt3ReDMxEeu/j6GK+OTvNkZus2mWPxtkgp1A
+HYdRtlAVYNOKgB9Bc2ZVLeLk8W4gooeCzOxOAFXEsEj3TxY8RxNIrv+jP7njrfpEJChhMx420D+5
+5cZLx+3F+/9AtsNuAvMJ8wspngs5LkUe3zF02M7zuTDHzVma+SGXx8u2oTgNq5MlN+JnynUlu+wc
+C+SCeouu6ZqMCXEl24fcsrHjlXap8Hv9fSPNEJUTk5UoMZKTpN577yZyNg/mFTt08i3BZThsg1jJ
+kaC4z9eI11Y=
+--000000000000f0344c05bb61cd48--
