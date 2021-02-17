@@ -2,74 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A6C31E055
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Feb 2021 21:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBEB31E05D
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Feb 2021 21:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbhBQU32 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Feb 2021 15:29:28 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:52960 "EHLO
+        id S234276AbhBQU3z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Feb 2021 15:29:55 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:53060 "EHLO
         aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbhBQU3S (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Feb 2021 15:29:18 -0500
+        with ESMTP id S235040AbhBQU30 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Feb 2021 15:29:26 -0500
 Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11HKOe5s017886;
-        Wed, 17 Feb 2021 20:28:30 GMT
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11HKOW49017856;
+        Wed, 17 Feb 2021 20:28:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2020-01-29; bh=tjgPReFSRffGv6tKdFo9A9l/oA1V9dfNKG+TQ18QE4s=;
- b=vr2C/jOPfX7aMPsri3xoH/RkmbMraheLlfYAxTnHSlIgChx45gKq7x5e8Dv9zmha+6Ne
- 31n6l0SzkarFKEw2D4QsD2teRT/K5mIVZ+ijYWcVA1YDiN3SbM/zGRClXbpd1cHz/7OB
- VpPW5ubkw2zq21x1lAKyYqRYYhb5issFzGgdacjtK/z4wyNnJJvWbrmKs6inBVZZVX3C
- AvZQ941r7U2ww1KWgcDG1C0BGKKJgjULzuOc3b5ZFWWK1EPO4AtBOOuGQF+WhMOZxfxr
- Uc1QOJUK84ErQ7xt8ctXrMMy5vYtsukfmYchmKFx+hvEbFxTmWM8gzRTgTKCKl5WiUT2 zw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 36p49bbwwj-1
+ s=corp-2020-01-29; bh=IIGvzMJTnj7LCDuzrwvw4HdY5QbD9p3SIVclTcSvc3s=;
+ b=PF1PX0wCh0kwntngZy92HZFaXoDLgx+4betPw1K7DvQqi0hZe9LSQMcM34tFVrC7bIhO
+ euzwf6lMlPZCUN7rzGoKkGehbYqor0RKfHiBOC8HLuWb6pVJBDVFs0EAIFZrJNIrVCMK
+ BSJHlYZhQmpl5/8CJCrXe7ERnW03e7ylxCQjH6qL5HuQCJ8ZCjPYhoSKkyeGVbZOr0X/
+ VEu8IAu1f9tJMLBbEy9WfpZr50dZ4sdSTY0JCxvsLxlYrnQZoQh27iDadD1dSGlYubFg
+ A8g5PRg98xzkwIaaOPumrcc4iy9zd5iAu2UUnYzHzteVekAzVI0QM6ZtvVZlAIMIYf/d cw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 36p49bbwx1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Feb 2021 20:28:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11HKQ61d111852;
-        Wed, 17 Feb 2021 20:28:29 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
-        by userp3030.oracle.com with ESMTP id 36prpykf3p-1
+        Wed, 17 Feb 2021 20:28:35 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11HKQB6C191515;
+        Wed, 17 Feb 2021 20:28:34 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2171.outbound.protection.outlook.com [104.47.58.171])
+        by aserp3020.oracle.com with ESMTP id 36prp0p684-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Feb 2021 20:28:29 +0000
+        Wed, 17 Feb 2021 20:28:34 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZEQrZ/f1XVb/ESGmOO5Pz2MpvaZM9zfTDxbMuQaaYNwZVgAgRh9CTRBFs8H2HHurgPS5jW5qxtUGwgWvZiDGleHQEHe+uVbHzai/Mz3PEIeNrLcBmGKr2Pi9w5m4kg0Okdd5fj5b1Mq6Bs+Y9wMEcAl/xEu30sFdk5mEexA9AKDMfWN9j+TyY2tFRid6UFo5qS28Fij0ixf0dYKoTtRPTWP1yPeqrRwdWVjanq3QullK7Ed/hlFw7ljlNAB3tITTKcprWhUi9mZdo4SAqJSL2cnU4lsRYrmnFPYuaptYyEOTEi2a3X7SGNhH3z+rc1vQOL9iAHrW/LqPIUc3jxbhdQ==
+ b=Lhgd+dfoFF60sZTHJhVec3pmVb2PeFOcDJTYnH1DBSRVUf9ye03U6PBJXO+9E2+ddRnaDBV0mbCmkUstgPi4yBmttxcdG46WTS4hkWDsBHxfsvbJ9sj6c5DBgVc0EVhSkbJf9PP5JC601JuK9IIEX3lezUl8dMSwdef10FDrO02JrevL2aJsZQrjheqhu3RcVr/rL7fXMTru5TJDyiqdnEvVigvf6ZJwgKr8dCDmyS3Wl75KfVwgQQYfoYDm2LRnJ3ZbYskugPwlj66huP+NgRR55ByVtmmb1AFTsqZjMEsV2VKI1U40KI3EejsKBkga6HYXjb7hKOHhPtB4Z7+MTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tjgPReFSRffGv6tKdFo9A9l/oA1V9dfNKG+TQ18QE4s=;
- b=DNCoOIGwWkoGNV7ibHkO3ImzYi3e+iAqi1fml/RvYL7rLk2ovqJlm+9sK5X2N9mD4ND8uLTBdCOwwdQwmQUuRVhhA6cuyWtNNd7BuudVxFoEN4skUjlM3PVGeSCX+AnBdseDLanUqhfq8namzHZ+396d+V3iQK86DAJoFALqavVJm98GTRk2KohUp+9Xovf/EWWCLu3/2YxAGF4dbNhDuw/Xnz3hPVS8mveNMPxV0UpWENqn+qnhQ2kdoKjv2ICXrOysiz+YkbJrxwhU2oA8l8BC0Q05Tdn/NmkcTzbfxehVYrHr1z/4k2YFeeF72/e1bkvmDpzMrXjHKa1I28Eyhw==
+ bh=IIGvzMJTnj7LCDuzrwvw4HdY5QbD9p3SIVclTcSvc3s=;
+ b=gXvsBFuWE9THjJawWMSBAatbLyNNZFEctSWkR7svsEQH68iUdpuIrM9NU2nmioNYpR4YRcRfNdjZ4C3erNc3HndhCkooS0SlIJhYoB2Op2xgY1wVrM8jdHdNs3AM9G52P9oj6XV5PYy71nakOotYtIiN3ruNvZBvDUoI54fFix8tR4Z105gNEPQQ2lXoE9FkkWcf2UA5AcR2ux1V3t90UaP/jHYGEZd0mfAWH/l7ax/4QAVHkwoihuveyGU9zqQYjUeYl5Y/KvdJP+/tmhMygDZER3x5Xyq8TY7+4ZHKA/VvvXyV8kFXS2EenH2r0k+wVEvZBXyyG47qNeGZh5LPdA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tjgPReFSRffGv6tKdFo9A9l/oA1V9dfNKG+TQ18QE4s=;
- b=sM8J7FZE4XHUUpVKUMkZvM+MTNeSIMcnmDUSeg2fsBtW5U4CcllrR7usw+ByVspkoCjfR1TzCM8lsBD+mTYW6/jyOpJMtAmDW/VApPA47RER347ZWHfBkZBgF/F1KDW7EUPH7mYdmB/wt1rd3Ib12vmUSk4kQD+LNSldzx3JC9U=
+ bh=IIGvzMJTnj7LCDuzrwvw4HdY5QbD9p3SIVclTcSvc3s=;
+ b=PVzfXRJgqPuOgd5YZm1iNvuTrlABU8lQxpYXRwDFAQleKk+Ff4tFrcF0JTI+aJrW77bLqOdaPWgVbzzVpEkSiAzbMrmg2LhZvkQCMf/xC1lm1/tB5kJxyUwGogUHLov1u+rMEq2BxRSlNji5tg8KrqZn1NpoOmVpl3smR00DxDw=
 Authentication-Results: gmail.com; dkim=none (message not signed)
  header.d=none;gmail.com; dmarc=none action=none header.from=oracle.com;
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
  by BYAPR10MB4101.namprd10.prod.outlook.com (2603:10b6:a03:120::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.31; Wed, 17 Feb
- 2021 20:28:27 +0000
+ 2021 20:28:32 +0000
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::1d86:b9d7:c9ef:ba20]) by BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::1d86:b9d7:c9ef:ba20%7]) with mapi id 15.20.3846.042; Wed, 17 Feb 2021
- 20:28:27 +0000
+ 20:28:32 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     bostroesser@gmail.com, mst@redhat.com, stefanha@redhat.com,
         Chaitanya.Kulkarni@wdc.com, hch@lst.de, loberman@redhat.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
 Cc:     Mike Christie <michael.christie@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>
-Subject: [PATCH 03/25] target: rename transport_init_se_cmd
-Date:   Wed, 17 Feb 2021 14:27:49 -0600
-Message-Id: <20210217202811.5575-4-michael.christie@oracle.com>
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH 05/25] srpt: Convert to new submission API
+Date:   Wed, 17 Feb 2021 14:27:51 -0600
+Message-Id: <20210217202811.5575-6-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210217202811.5575-1-michael.christie@oracle.com>
 References: <20210217202811.5575-1-michael.christie@oracle.com>
@@ -81,55 +81,55 @@ X-ClientProxiedBy: CH2PR15CA0001.namprd15.prod.outlook.com
  (2603:10b6:a03:11e::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (73.88.28.6) by CH2PR15CA0001.namprd15.prod.outlook.com (2603:10b6:610:51::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend Transport; Wed, 17 Feb 2021 20:28:26 +0000
+Received: from localhost.localdomain (73.88.28.6) by CH2PR15CA0001.namprd15.prod.outlook.com (2603:10b6:610:51::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend Transport; Wed, 17 Feb 2021 20:28:30 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 84ba6441-a6d5-4264-81be-08d8d382951e
+X-MS-Office365-Filtering-Correlation-Id: 9cccddb8-6436-4911-0ad8-08d8d38297b6
 X-MS-TrafficTypeDiagnostic: BYAPR10MB4101:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR10MB4101B9C2BF2251DF3C61A012F1869@BYAPR10MB4101.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-Microsoft-Antispam-PRVS: <BYAPR10MB4101A953EE3D3A71058ABA14F1869@BYAPR10MB4101.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kTAkINjX0z5/ymTr3mC+6W9QLZ53nk0NsozxMI1GEDiQ4gFlFNcI+nHN+kkNRulcgyy0jNwh1mBA6sFP9W/6M4uFos40XeZgNnlr44uRyf8gC3aVaCnh7ILbcxduqMj/XrgAomPCVt72rDh8IfpHf0kYUDNyqFrY7+N/H38TkAqHHNhCFEO0FN+NhV4TUXkfKQHwlZN/x6iO/tDtBqZTX6SdG6gcvhl6AYFWQrySXoopcD21+yXqP5zJUO6AgquMJYuuAIyA81ULA4Yk73MQN0EUEQWZf2ctxMoGwdikAaFXtbj383rEe2PGdS/LiZh3NAtrRLydaREX2TS1H/ui9nAaWzkAVXNn+rdKvnOGCGgWZJVM9Cn+IjilRP/RcAGb7SolpUwFXRk7sY8wcYGWiw/M60OjfpzKFjA/aK+VIsNWWtzBPdDOePUS85buxaOX/nEPURLCS+CjJ4kY4/mj2139YsMsAOKzQjVei6FiMM00Tp6Gj0GCDHOsusdl94e7VbxqvQ53ZCbCAc43cQkbznA7Qm4szaSVEfcXKVJrxjK7E7ik+UX4On5oHIgVt8hPOmr/NWq8rIR+W+ITXcfQhQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(376002)(39860400002)(396003)(136003)(346002)(1076003)(107886003)(6486002)(26005)(316002)(54906003)(478600001)(2906002)(186003)(86362001)(6666004)(2616005)(6506007)(52116002)(956004)(36756003)(66946007)(8936002)(6512007)(8676002)(4326008)(66556008)(66476007)(69590400012)(5660300002)(16526019)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?rTONyLHOckUcpuDTwzzAf38lxbYwNU4lhC3BOyVSGcKNwNCpz7uagLvkI00S?=
- =?us-ascii?Q?3+VYjuNe96/JYNJem0bQMsVET8e7iAqQLlfdMmiD426hlzlWXSJiJJIS8eJV?=
- =?us-ascii?Q?lzq7keVcRPzuOFcvsYrXEhpQPOBcpGG6q0dLY2/04qWpIMMrXJU9/Ko6djTp?=
- =?us-ascii?Q?uSNXSGhFQKPmZ8PvtVM9JVuTUk7H1roIagnPe4gkwPOqzs2Av57VnaSeqROR?=
- =?us-ascii?Q?aolu9kvr2AmV1zTocnoyFVjDeGZpljrQl4pal0atEq3YdGLlHgAXUgAkadjp?=
- =?us-ascii?Q?mvKeEP7TvbuVHbynTtwY72Tb+DiBoe4O8fcWRlD0nZinmV5Yjjn5WJtLJA0/?=
- =?us-ascii?Q?teIjxE5skcDLOHCLoOd9Jdb3cwuNay1dPeur5WNpsRqsBmbQjeUymxH5A6/j?=
- =?us-ascii?Q?Q+g6W6OzYxV063gcoEJ4wKLey+8zrnU4NaQn0EfbXPXTqu5ZwLktJlEv1JxW?=
- =?us-ascii?Q?GScgRZIDV+ETA3yBmf8+d9VZmbaP6UZUlk2hxqh5J2DPtADcPeFoR3j7r7/z?=
- =?us-ascii?Q?kkgzBDGIMbVmCbrS8Vqm9MiWCOT5q+OXwnldwr9p0baRvcw3gKPweAGPdFdU?=
- =?us-ascii?Q?z+p/y3pMILN2yDNXD49uTI5IFaoBejmN+asSghLztgfrTytcGRE/dg8yDs1c?=
- =?us-ascii?Q?4+0bkhy0qj03H3vSVxWv5FKg3QrtF3fk2kxlclq8lMDn2dEOyxYQjiR3umy9?=
- =?us-ascii?Q?b4PkVNoTaooxN6GP/FID/nak/Jjg1hd3IEYbt1RUN7EI8vBzX3deoTdc3xhn?=
- =?us-ascii?Q?88ypBrz8YtgoIysDZzCuJkGxHugKcR4gKblrXEPmsg9jwimzhwH+gHM1BmC5?=
- =?us-ascii?Q?7QX/1jf0Wy4FBU3r1sZc8HaS4yGjt3YsdpOWXR+eusdF+v0rtQcpbJq8oEKJ?=
- =?us-ascii?Q?MryTydZq3hxIH4bii/JGPaLwxAUIyZyyt2PuIVoSa5nb3eIvq4FWCEBgj6aB?=
- =?us-ascii?Q?PPPBvT1FhDNQaBVANJeRm8TRCr2nLugdxVotVJpVana9bA+p9n9/Vlh8Ac0d?=
- =?us-ascii?Q?620nF1NTerWJZUTGHjmysTRIE3vipxQqMlmmEpW9FLFeIHAIzTlSZUchcSth?=
- =?us-ascii?Q?ekAV/fYudYc6BinDXv2jQq3yjE9hLE9dEjL82EoPm1n1JdFypCvvjyowaq/i?=
- =?us-ascii?Q?S86boJ54l4IOeg9p//vxrpDKx154igCFF4l5YB2+rmTrRQO/aP9aXhTpKA2d?=
- =?us-ascii?Q?wmnPJTllOPVDO+Qedk3oS9PNh3mdiQWglOiruKTI+MG9L1e7bK9w5JF49gPB?=
- =?us-ascii?Q?9eAisMtTRSTDJU48cvHNmcNlpuPRjhs94GAOKwcV9yHL7WiNi+qkQaZBl42W?=
- =?us-ascii?Q?O24gIfH1e4f6/3AjJ3+BIRUJ?=
+X-Microsoft-Antispam-Message-Info: s+iQuBGeaowv/LZa0Xd+pqRCm8gC43/6AkPgsleXcfbd+UmQmA7QcLkmntW5cC1QVJBoi9YhtjB1nx4KPwUWFTReXydKQvKwZGAgW/6CHdnYL9NqM2cC1aDminv/wxzeUyzqhBvz1rsofMHaXNR8JD8NMr3335nTLKeiEy20HnEU1bEXR/WHebp3HlhdXHMit+A60EJZrBPoQ4nAHsgXfr2C5VT1c8EIfhUryYFEeCw7pexCsXei6esWl3LpHPL7oF/xQXYjM1+XDZSD+OxtAjyELDCyK4KcC5ib6gs3nS4SLmi7M8vTn/NA5Yqm3yYZisdJeMLR4AyY7F9BjuTxo9DagZOurzjCpRD7eBeR+mat5BHc7gzrSjQE6CWmgQru3ZFyndKUeiVXOHknGBJw+kKFzjcx5E7ZAZTAWHffirqIsdhs9zLkPilIzR7wQHfxL8f5mEXQ2aXeIpb98fSlfFrXcbcbbXVtywjLkH6J6VG+X779IY9fHtOfBc9EqTRnPxKdchF/V099cFHFTNg7l2KxZm1/ttsqFRqiYw+PXxoY4dYoyOXyipqED0Xq2YNs5jp53QGH1Bx2XW7bEbqdIA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(376002)(39860400002)(396003)(136003)(346002)(1076003)(6486002)(26005)(316002)(54906003)(478600001)(2906002)(186003)(86362001)(6666004)(2616005)(6506007)(52116002)(956004)(36756003)(66946007)(8936002)(6512007)(8676002)(4326008)(66556008)(66476007)(69590400012)(5660300002)(16526019)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?APhCWhYbt6ES9klOuYDLVZpQsBgssqzoNxiYVbb8VMVHx5fIIkGRP/hzZdY1?=
+ =?us-ascii?Q?6/b7YuGOtbpTW1+BDaSLAEc771HjrNgzRggoGJT6wx7IltB6gBS0MJzIgzO1?=
+ =?us-ascii?Q?nEJOIia4mdkWcYCyCWKUJphA96YZ2RiL8gQGJo/jMY9p13vDWuDX6RoiQomW?=
+ =?us-ascii?Q?ke3LtNfRFErgizONr5nhWxhUdiw9RNpoX++JmrESI3N3zNopaorliFnShImH?=
+ =?us-ascii?Q?Him5gMgmoMebE3UTXl9gLt2h6JG3kacCLsN6F9fxmC/Wgd6NNpVjC9SBBbBx?=
+ =?us-ascii?Q?EoUD0Lwdgd7yobWn5GZhQp25RpaPlDYrheKUG4ZKsIxoB7sidCajl5qHdIPU?=
+ =?us-ascii?Q?5zpOJIC/sDrRMDXBClEn3+rFOqCAkG8ixHMGEzGbPNKb1kGfJKUnysnKWQoR?=
+ =?us-ascii?Q?z2/W02h/9q6YLlKs3XLKTLO8U0+bIjxmcccu41gvyb9KcmlF37gOL/yPfOfY?=
+ =?us-ascii?Q?+FJiPoiIdq+7fjUXPD+SdT1EC5jWVQ0Iv/is5220uDvGb6hv3bTh2qMwOYDb?=
+ =?us-ascii?Q?VqLK+VuT17Oiti0dKOUarg7OLdUNhbz2+zqmsYSigucfccj/G3+TUtjNG09i?=
+ =?us-ascii?Q?r9gvOIUXviKrEiQh4/h0T0qfytYTNaPK//W+zuwI3s3SOqI82NRX5Zk41b8R?=
+ =?us-ascii?Q?q6dhEklLfoEDoN+FHm+S+PWFBnnu3Mm0TZmVOpWW9e876um9+nsxynCRjr6k?=
+ =?us-ascii?Q?ft/a/C1cNtMYOsBkhAx4+0GvplB+FJ67LpI2CND4cCYP5MyErxSPBlfa+kNI?=
+ =?us-ascii?Q?l36d503O/gF5VeMY8UMgASfsbU3wHuPKPdXAt6KdGHioH2syFohvh448miV4?=
+ =?us-ascii?Q?kp+irt/g3t9aF1bZBtvxNOkBtzdMG+ovFgXyDgeLPfNAEw2QVigV5LBt/inn?=
+ =?us-ascii?Q?dKch922KBRUxqRjjUx2csLMqWhfd/rwzLD6qjij7sNVtx9ROmZOgi+ir1ok7?=
+ =?us-ascii?Q?A4LOf8kqAku5SrnONRrmk8Bysy3RDf9IQEZwaF6g1D47l295jZNoeAvHm835?=
+ =?us-ascii?Q?zX/gdnyldX/bRws2JCF6kmk+7Vj2LIlJdwvcCFYL07KmQfqcc5cECXe4BHDT?=
+ =?us-ascii?Q?a6jtMg0HsXSf/vsbk0QD7z1DdMjPos9eoKOyNayj6xktujKvmQb3qyP9USKo?=
+ =?us-ascii?Q?8v+N/4Qs3BJnSgbC6+zCb9Oz9umUi2ovn43tAZFnzNMkIMPtcsDnC4woYKF+?=
+ =?us-ascii?Q?jWkUFeqUXLhuaNpmKzYGJP4725QOoRCNar1kfg3ApaEuy2/i+kdqZKjhCWbX?=
+ =?us-ascii?Q?niZcFPcLIYoMZo7NZOb9C7XwrHOl+cJZBk2Hfa4Ubd5PHlmuU/0o3+n0llVt?=
+ =?us-ascii?Q?OpguPVgimz71FgA2dRaJOfzD?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84ba6441-a6d5-4264-81be-08d8d382951e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cccddb8-6436-4911-0ad8-08d8d38297b6
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2021 20:28:27.6377
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2021 20:28:32.7818
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QxG6bRiU8e++fUnnp27B488MvDYZRRIvV3ifNfyph7YerGO5MbUMq8WGXidBIU7DCJeYEgSajn8hj13i8OzyshZNV4U493LL/d/t1Kdtbn0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: TVWd5l2xteNWc2oQinhEsyvOIRlZ79Gbgp8f+3u89n3pIHW+7vCI9a4FmsAcfWTHOS5wFM2wQco2MxblughiAnDv24T4q4qBfmtDHQEC+2s=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB4101
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9898 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
- phishscore=0 adultscore=0 mlxscore=0 suspectscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
+ bulkscore=0 suspectscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2102170152
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9898 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 priorityscore=1501
@@ -141,188 +141,51 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Rename transport_init_se_cmd to __target_init_cmd to reflect that
-it's more of an internal function that drivers should normally not
-use (usb seems to use it wrong and iscsi is that weird guy), and
-because we are going to add a new init function in the next patches.
+target_submit_cmd_map_sgls is being removed, so convert srpt to
+the new submission API.
 
+srpt uses target_stop_session to sync session shutdown with lio core,
+so we use target_init_cmd/target_submit_prep/target_submit, because
+target_init_cmd will detect the target_stop_session call and return
+an error.
+
+Cc: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/target/iscsi/iscsi_target.c    | 16 ++++++++--------
- drivers/target/target_core_transport.c | 16 ++++++++--------
- drivers/target/target_core_xcopy.c     |  8 ++++----
- drivers/usb/gadget/function/f_tcm.c    | 20 ++++++++++----------
- include/target/target_core_fabric.h    |  2 +-
- 5 files changed, 31 insertions(+), 31 deletions(-)
+ drivers/infiniband/ulp/srpt/ib_srpt.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index 518fac4864cf..f2107705f2ea 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -1154,10 +1154,10 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 	/*
- 	 * Initialize struct se_cmd descriptor from target_core_mod infrastructure
- 	 */
--	transport_init_se_cmd(&cmd->se_cmd, &iscsi_ops,
--			conn->sess->se_sess, be32_to_cpu(hdr->data_length),
--			cmd->data_direction, sam_task_attr,
--			cmd->sense_buffer + 2, scsilun_to_int(&hdr->lun));
-+	__target_init_cmd(&cmd->se_cmd, &iscsi_ops,
-+			 conn->sess->se_sess, be32_to_cpu(hdr->data_length),
-+			 cmd->data_direction, sam_task_attr,
-+			 cmd->sense_buffer + 2, scsilun_to_int(&hdr->lun));
- 
- 	pr_debug("Got SCSI Command, ITT: 0x%08x, CmdSN: 0x%08x,"
- 		" ExpXferLen: %u, Length: %u, CID: %hu\n", hdr->itt,
-@@ -2013,10 +2013,10 @@ iscsit_handle_task_mgt_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 					     buf);
+diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/ulp/srpt/ib_srpt.c
+index 6be60aa5ffe2..87741e0b4bca 100644
+--- a/drivers/infiniband/ulp/srpt/ib_srpt.c
++++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
+@@ -1528,16 +1528,19 @@ static void srpt_handle_cmd(struct srpt_rdma_ch *ch,
+ 		goto busy;
  	}
  
--	transport_init_se_cmd(&cmd->se_cmd, &iscsi_ops,
--			      conn->sess->se_sess, 0, DMA_NONE,
--			      TCM_SIMPLE_TAG, cmd->sense_buffer + 2,
--			      scsilun_to_int(&hdr->lun));
-+	__target_init_cmd(&cmd->se_cmd, &iscsi_ops,
-+			  conn->sess->se_sess, 0, DMA_NONE,
-+			  TCM_SIMPLE_TAG, cmd->sense_buffer + 2,
-+			  scsilun_to_int(&hdr->lun));
- 
- 	target_get_sess_cmd(&cmd->se_cmd, true);
- 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index b5427e26187b..013f4a5e8972 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -1297,7 +1297,7 @@ target_check_max_data_sg_nents(struct se_cmd *cmd, struct se_device *dev,
-  * Compare the data buffer size from the CDB with the data buffer limit from the transport
-  * header. Set @cmd->residual_count and SCF_OVERFLOW_BIT or SCF_UNDERFLOW_BIT if necessary.
-  *
-- * Note: target drivers set @cmd->data_length by calling transport_init_se_cmd().
-+ * Note: target drivers set @cmd->data_length by calling __target_init_cmd().
-  *
-  * Return: TCM_NO_SENSE
-  */
-@@ -1369,7 +1369,7 @@ target_cmd_size_check(struct se_cmd *cmd, unsigned int size)
-  *
-  * Preserves the value of @cmd->tag.
-  */
--void transport_init_se_cmd(
-+void __target_init_cmd(
- 	struct se_cmd *cmd,
- 	const struct target_core_fabric_ops *tfo,
- 	struct se_session *se_sess,
-@@ -1403,7 +1403,7 @@ void transport_init_se_cmd(
- 
- 	cmd->state_active = false;
- }
--EXPORT_SYMBOL(transport_init_se_cmd);
-+EXPORT_SYMBOL(__target_init_cmd);
- 
- static sense_reason_t
- transport_check_alloc_task_attr(struct se_cmd *cmd)
-@@ -1623,9 +1623,9 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
- 	 * exceptions are handled by sending exception status via
- 	 * target_core_fabric_ops->queue_status() callback
- 	 */
--	transport_init_se_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
--				data_length, data_dir, task_attr, sense,
--				unpacked_lun);
-+	__target_init_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
-+			  data_length, data_dir, task_attr, sense,
-+			  unpacked_lun);
- 
- 	if (flags & TARGET_SCF_UNKNOWN_SIZE)
- 		se_cmd->unknown_data_length = 1;
-@@ -1797,8 +1797,8 @@ int target_submit_tmr(struct se_cmd *se_cmd, struct se_session *se_sess,
- 	se_tpg = se_sess->se_tpg;
- 	BUG_ON(!se_tpg);
- 
--	transport_init_se_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
--			      0, DMA_NONE, TCM_SIMPLE_TAG, sense, unpacked_lun);
-+	__target_init_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
-+			  0, DMA_NONE, TCM_SIMPLE_TAG, sense, unpacked_lun);
- 	/*
- 	 * FIXME: Currently expect caller to handle se_cmd->se_tmr_req
- 	 * allocation failure.
-diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
-index 66d6f1d06f21..e86cc6135587 100644
---- a/drivers/target/target_core_xcopy.c
-+++ b/drivers/target/target_core_xcopy.c
-@@ -615,8 +615,8 @@ static int target_xcopy_read_source(
- 	pr_debug("XCOPY: Built READ_16: LBA: %llu Sectors: %u Length: %u\n",
- 		(unsigned long long)src_lba, src_sectors, length);
- 
--	transport_init_se_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
--			      DMA_FROM_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
-+	__target_init_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
-+			  DMA_FROM_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
- 
- 	rc = target_xcopy_setup_pt_cmd(&xpt_cmd, xop, src_dev, &cdb[0],
- 				remote_port);
-@@ -660,8 +660,8 @@ static int target_xcopy_write_destination(
- 	pr_debug("XCOPY: Built WRITE_16: LBA: %llu Sectors: %u Length: %u\n",
- 		(unsigned long long)dst_lba, dst_sectors, length);
- 
--	transport_init_se_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
--			      DMA_TO_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
-+	__target_init_cmd(se_cmd, &xcopy_pt_tfo, &xcopy_pt_sess, length,
-+			  DMA_TO_DEVICE, 0, &xpt_cmd.sense_buffer[0], 0);
- 
- 	rc = target_xcopy_setup_pt_cmd(&xpt_cmd, xop, dst_dev, &cdb[0],
- 				remote_port);
-diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
-index 410fa89eae8f..dcce6e2605f5 100644
---- a/drivers/usb/gadget/function/f_tcm.c
-+++ b/drivers/usb/gadget/function/f_tcm.c
-@@ -1050,11 +1050,11 @@ static void usbg_cmd_work(struct work_struct *work)
- 	tv_nexus = tpg->tpg_nexus;
- 	dir = get_cmd_dir(cmd->cmd_buf);
- 	if (dir < 0) {
--		transport_init_se_cmd(se_cmd,
--				tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
--				tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
--				cmd->prio_attr, cmd->sense_iu.sense,
--				cmd->unpacked_lun);
-+		__target_init_cmd(se_cmd,
-+				  tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
-+				  tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
-+				  cmd->prio_attr, cmd->sense_iu.sense,
-+				  cmd->unpacked_lun);
- 		goto out;
+-	rc = target_submit_cmd_map_sgls(cmd, ch->sess, srp_cmd->cdb,
+-			       &send_ioctx->sense_data[0],
+-			       scsilun_to_int(&srp_cmd->lun), data_len,
+-			       TCM_SIMPLE_TAG, dir, TARGET_SCF_ACK_KREF,
+-			       sg, sg_cnt, NULL, 0, NULL, 0);
++	rc = target_init_cmd(cmd, ch->sess, &send_ioctx->sense_data[0],
++			     scsilun_to_int(&srp_cmd->lun), data_len,
++			     TCM_SIMPLE_TAG, dir, TARGET_SCF_ACK_KREF);
+ 	if (rc != 0) {
+ 		pr_debug("target_submit_cmd() returned %d for tag %#llx\n", rc,
+ 			 srp_cmd->tag);
+ 		goto busy;
  	}
++
++	if (target_submit_prep(cmd, srp_cmd->cdb, sg, sg_cnt, NULL, 0, NULL, 0))
++		return;
++
++	target_submit(cmd);
+ 	return;
  
-@@ -1181,11 +1181,11 @@ static void bot_cmd_work(struct work_struct *work)
- 	tv_nexus = tpg->tpg_nexus;
- 	dir = get_cmd_dir(cmd->cmd_buf);
- 	if (dir < 0) {
--		transport_init_se_cmd(se_cmd,
--				tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
--				tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
--				cmd->prio_attr, cmd->sense_iu.sense,
--				cmd->unpacked_lun);
-+		__target_init_cmd(se_cmd,
-+				  tv_nexus->tvn_se_sess->se_tpg->se_tpg_tfo,
-+				  tv_nexus->tvn_se_sess, cmd->data_len, DMA_NONE,
-+				  cmd->prio_attr, cmd->sense_iu.sense,
-+				  cmd->unpacked_lun);
- 		goto out;
- 	}
- 
-diff --git a/include/target/target_core_fabric.h b/include/target/target_core_fabric.h
-index d60a3eb7517a..4975c4d2a933 100644
---- a/include/target/target_core_fabric.h
-+++ b/include/target/target_core_fabric.h
-@@ -148,7 +148,7 @@ void	transport_deregister_session_configfs(struct se_session *);
- void	transport_deregister_session(struct se_session *);
- 
- 
--void	transport_init_se_cmd(struct se_cmd *,
-+void	__target_init_cmd(struct se_cmd *,
- 		const struct target_core_fabric_ops *,
- 		struct se_session *, u32, int, int, unsigned char *, u64);
- sense_reason_t transport_lookup_cmd_lun(struct se_cmd *);
+ busy:
 -- 
 2.25.1
 
