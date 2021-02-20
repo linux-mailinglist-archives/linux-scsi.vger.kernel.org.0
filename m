@@ -2,96 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2595320771
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Feb 2021 22:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9898832078F
+	for <lists+linux-scsi@lfdr.de>; Sat, 20 Feb 2021 23:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhBTVmZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 20 Feb 2021 16:42:25 -0500
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:27052 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbhBTVmU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 20 Feb 2021 16:42:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1613857540; x=1645393540;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CvMOpSgoYytlC6qwwSYq5xzOl3ZXzVL0I3PPdQ/+aGM=;
-  b=MKtclAtBrETtmMYkb8WtRwLzhYrbbCE0ljF1fw9tSwEBEzdBUElzPDb5
-   LAVRWj1cPKkYCPf1dSBg+2otFq/2p6ksQhncHNjN2RgYUx/M/Lr3xiwhS
-   MxeKlrMuA2xGrdJlHWwak+7ca6B+RnkOqQaDs7mXpDUEWSRFQ6Xng3uRi
-   QGZXZC7LTBTMh9be/p+Sl5FK81eSchDt2w7OppuRAuG5MmrSib4jZcFKT
-   zXr22dzhxK3mffRy6yRUKrjxK+h/8n9WT7a+aQaaAyTApJnAejQLtmoUf
-   0FmImBi7cKbyJDJrbsGbttLusX10OM++wbhdzlE6echduA2spHiYAh0D5
-   w==;
-IronPort-SDR: KxRjWZNGZCUG/MI3VcbLG0B99yugeMl3MNvRtSFZ0F9smwF/SsmUY7Y5zMRB//wr3k5pfwPzEA
- eB/RB3nDn7iq0iDTPYQzJSfNG0xwG+8nRyJncXy21z9gUWKfYdQ4zjsoNB0NQt+AP+326MCtsj
- iVjsdF8SXFaCrewBy3RJm+DLwmD/w6ccOhnQef4rzVJCQm8FMWhtySDJBa9sGM7GaJ16TpItLT
- bs7QxzxJGcao1RfmawydNX5dpV4/5iEA/RjQaamwvOsaCx9vUmo+1h89BEH17LCHDsBHBgeGHY
- W0M=
-X-IronPort-AV: E=Sophos;i="5.81,193,1610380800"; 
-   d="scan'208";a="264605693"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Feb 2021 05:44:01 +0800
-IronPort-SDR: MrtJcFsefka4juUgNVQNWjMwLfW5KQbYptDwDaiKZK0V3pyt9izumA20YuBcybM4s7/AMhQF8X
- MdV29u/ra0eQXcklxSkp34/lSoyx8gefU09ZQ5YHu+8ZIC12fTMTCMqg76h9cREixnzx7jTNZ8
- FYWLm0BSEPo9knFKfDs4Pwf6ZtEi4qmDbvHLoAO8hyyPNhIqADuyLuaTFC9EskITev9XwMb3Zk
- A0Wy6giY7Zf4P9ypRcjvKBpcKZ/WRjrQTLI9qwxRj8Pa6ZhUuF5yYcZ/BrQyPdBpUL/jyy4RGU
- tQmzFYOJFtiNQ1EkWqiUpRpi
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2021 13:24:36 -0800
-IronPort-SDR: mWPvCoPDxxt1+6tkL4srfghJL9yRuxw9QWAErNNz4h5NoJhuppXaHQiD8HnBhtfd9V4opwTaMB
- e4putINBRUWOvXw6iYuC5MvZOlumq6hFNRgFMIAdTRV95MjO/YgjxPN7n9/+NkNZyd6if9IiwS
- tvWNDr57t10UwrxknfNpIAi6qj8ag5kHEx0ddblHDB2oLaNPAlq+H3t+SkRLBjzY3HUJlnu9M2
- Om8ejVjLNipEQhUklOCpa2mtAVRVdaGmI1mp/AdudvEbchXhTksjLYQh5ZQxvkusj1XA+XEj+7
- 4fo=
-WDCIronportException: Internal
-Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
-  by uls-op-cesaip02.wdc.com with ESMTP; 20 Feb 2021 13:41:14 -0800
-From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+        id S229862AbhBTW5O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 20 Feb 2021 17:57:14 -0500
+Received: from mail-pf1-f170.google.com ([209.85.210.170]:45939 "EHLO
+        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229847AbhBTW5L (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 20 Feb 2021 17:57:11 -0500
+Received: by mail-pf1-f170.google.com with SMTP id j12so4255971pfj.12;
+        Sat, 20 Feb 2021 14:56:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KioCzgeVnMPMKWiyJ0+0mRWV/9IcxBVrTZwjFRyX89c=;
+        b=sLpFLDFek84d7TeTq+c7695b0V6I0C4ZWN6CGjCGJMlqJzn8gm35p2MTxDzHvMBRHe
+         7buCINetLE+QoPgDmZV5oOL27z0ftWsLKvBySaMzTkw8SEr2YkBqsjeiPVbxtIGCJolp
+         gCH1L+TbFvcvYcHw9WmQX2nAm5uj4vBqKlwc+x6OveF4gSx2fcwzkDfoMnMSsHPxJbVa
+         A5+0BA+jMLw+n58qCWVJPJISwS6W1UI+2zfFCiFvO0sfYYFsYwOBfzidhnKVx3E1CeV+
+         xC7Ag9R6VW0uAERfne6/jQwd7sqQUsAuVZH+mM5SzkYALcxMAD1f2QwITknNi4WxPBnr
+         F0jg==
+X-Gm-Message-State: AOAM533cFgggWUmQ5unoQYn9gxZpx+2GkZHqk2j5e7KtygnlvIlvVZMO
+        FkI1KPkd1OiiO5ARQFhRJhVGR0dTaSs=
+X-Google-Smtp-Source: ABdhPJwC5OskOsWLBsBMqDUGbzsHtodTQ1hk4DIrKCKeSFSNcUI3SHXxafkKD9bSf/AgdnWsXnpRaQ==
+X-Received: by 2002:a63:e747:: with SMTP id j7mr14021256pgk.235.1613861790854;
+        Sat, 20 Feb 2021 14:56:30 -0800 (PST)
+Received: from ?IPv6:2601:647:4000:d7:a813:9a51:fed9:102b? ([2601:647:4000:d7:a813:9a51:fed9:102b])
+        by smtp.gmail.com with ESMTPSA id y7sm6107685pfc.162.2021.02.20.14.56.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Feb 2021 14:56:30 -0800 (PST)
+Subject: Re: [RFC PATCH 24/24] target: mark __rcu to avoid warning
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     martin.petersen@oracle.com, hare@suse.de, jejb@linux.ibm.com,
         mlombard@redhat.com, michael.christie@oracle.com,
-        houpu@bytedance.com,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [RFC PATCH 24/24] target: mark __rcu to avoid warning
-Date:   Sat, 20 Feb 2021 13:41:12 -0800
-Message-Id: <20210220214112.7469-1-chaitanya.kulkarni@wdc.com>
-X-Mailer: git-send-email 2.22.1.dirty
+        houpu@bytedance.com
+References: <20210220214112.7469-1-chaitanya.kulkarni@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <1bd73abb-2c02-8aa5-b583-f711fcae2c0c@acm.org>
+Date:   Sat, 20 Feb 2021 14:56:28 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210220214112.7469-1-chaitanya.kulkarni@wdc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Mark struct fc_lport member prov with __rcu that fixes following
-warning :-
+On 2/20/21 1:41 PM, Chaitanya Kulkarni wrote:
+> Mark struct fc_lport member prov with __rcu that fixes following
+> warning :-
+> 
+> drivers/target/tcm_fc/tfc_sess.c:47:17: error: incompatible types in comparison expression (different address spaces):
+> drivers/target/tcm_fc/tfc_sess.c:47:17:    void [noderef] __rcu *
+> drivers/target/tcm_fc/tfc_sess.c:47:17:    void *
+> drivers/target/tcm_fc/tfc_sess.c:72:9: error: incompatible types in comparison expression (different address spaces):
+> drivers/target/tcm_fc/tfc_sess.c:72:9:    void [noderef] __rcu *
+> drivers/target/tcm_fc/tfc_sess.c:72:9:    void *
+> 
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+> ---
+>  include/scsi/libfc.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/scsi/libfc.h b/include/scsi/libfc.h
+> index 9b87e1a1c646..0446513e46d8 100644
+> --- a/include/scsi/libfc.h
+> +++ b/include/scsi/libfc.h
+> @@ -746,7 +746,7 @@ struct fc_lport {
+>  	struct mutex		       lp_mutex;
+>  	struct list_head	       list;
+>  	struct delayed_work	       retry_work;
+> -	void			       *prov[FC_FC4_PROV_SIZE];
+> +	void			       __rcu *prov[FC_FC4_PROV_SIZE];
+>  	struct list_head	       lport_list;
+>  };
 
-drivers/target/tcm_fc/tfc_sess.c:47:17: error: incompatible types in comparison expression (different address spaces):
-drivers/target/tcm_fc/tfc_sess.c:47:17:    void [noderef] __rcu *
-drivers/target/tcm_fc/tfc_sess.c:47:17:    void *
-drivers/target/tcm_fc/tfc_sess.c:72:9: error: incompatible types in comparison expression (different address spaces):
-drivers/target/tcm_fc/tfc_sess.c:72:9:    void [noderef] __rcu *
-drivers/target/tcm_fc/tfc_sess.c:72:9:    void *
+This patch looks suspicious to me. Although the tcm_fc driver uses RCU
+to modify 'prov', this is a choice that has been made in the tcm_fc
+driver and not something that other libfc users are required to do. In
+other words, I think this should be fixed in the tcm_fc driver instead
+of in the libfc header.
 
-Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
----
- include/scsi/libfc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/scsi/libfc.h b/include/scsi/libfc.h
-index 9b87e1a1c646..0446513e46d8 100644
---- a/include/scsi/libfc.h
-+++ b/include/scsi/libfc.h
-@@ -746,7 +746,7 @@ struct fc_lport {
- 	struct mutex		       lp_mutex;
- 	struct list_head	       list;
- 	struct delayed_work	       retry_work;
--	void			       *prov[FC_FC4_PROV_SIZE];
-+	void			       __rcu *prov[FC_FC4_PROV_SIZE];
- 	struct list_head	       lport_list;
- };
- 
--- 
-2.22.1
-
+Bart.
