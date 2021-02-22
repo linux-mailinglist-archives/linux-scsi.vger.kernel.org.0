@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEAB3218C9
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Feb 2021 14:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E51D3218C5
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Feb 2021 14:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbhBVNav (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Feb 2021 08:30:51 -0500
-Received: from mx2.suse.de ([195.135.220.15]:47796 "EHLO mx2.suse.de"
+        id S231897AbhBVNac (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Feb 2021 08:30:32 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47788 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231260AbhBVN2R (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 22 Feb 2021 08:28:17 -0500
+        id S231274AbhBVN2S (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 22 Feb 2021 08:28:18 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4CD8FB01D;
+        by mx2.suse.de (Postfix) with ESMTP id 643F8B02E;
         Mon, 22 Feb 2021 13:24:16 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
         Christoph Hellwig <hch@lst.de>,
         John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 23/31] pm8001: kill 'dev' argument from pm8001_exec_internal_task_abort()
-Date:   Mon, 22 Feb 2021 14:23:57 +0100
-Message-Id: <20210222132405.91369-24-hare@suse.de>
+Subject: [PATCH 24/31] pm8001: use libsas-provided domain devices for SATA
+Date:   Mon, 22 Feb 2021 14:23:58 +0100
+Message-Id: <20210222132405.91369-25-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210222132405.91369-1-hare@suse.de>
 References: <20210222132405.91369-1-hare@suse.de>
@@ -33,118 +33,96 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-'dev' is always pm8001_dev->sas_device, so we can kill it.
+The pm8001 driver assumes that libsas does not provide any domain
+devices for SATA, which is actually not true.
+So use the libsas-provided domain devices for SATA and don't
+allocate private ones.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/pm8001/pm8001_sas.c | 31 ++++++++++++++++---------------
- 1 file changed, 16 insertions(+), 15 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 14 +-------------
+ drivers/scsi/pm8001/pm80xx_hwi.c | 15 +--------------
+ 2 files changed, 2 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-index 6e1c1bbbfdd9..01e91347eb41 100644
---- a/drivers/scsi/pm8001/pm8001_sas.c
-+++ b/drivers/scsi/pm8001/pm8001_sas.c
-@@ -791,9 +791,10 @@ static int pm8001_exec_internal_tmf_task(struct domain_device *dev,
- 
- static int
- pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
--	struct pm8001_device *pm8001_dev, struct domain_device *dev, u32 flag,
-+	struct pm8001_device *pm8001_dev, u32 flag,
- 	u32 task_tag)
- {
-+	struct domain_device *dev = pm8001_dev->sas_device;
- 	int res, retry;
- 	u32 ccb_tag;
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index 49bf2f70a470..3998fcd69acb 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -1749,7 +1749,7 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
  	struct pm8001_ccb_info *ccb;
-@@ -879,8 +880,8 @@ static void pm8001_dev_gone_notify(struct domain_device *dev)
- 			   pm8001_dev->device_id, pm8001_dev->dev_type);
- 		if (atomic_read(&pm8001_dev->running_req)) {
- 			spin_unlock_irqrestore(&pm8001_ha->lock, flags);
--			pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev ,
--				dev, 1, 0);
-+			pm8001_exec_internal_task_abort(pm8001_ha,
-+				pm8001_dev, 1, 0);
- 			while (atomic_read(&pm8001_dev->running_req))
- 				msleep(20);
- 			spin_lock_irqsave(&pm8001_ha->lock, flags);
-@@ -1003,8 +1004,8 @@ int pm8001_I_T_nexus_reset(struct domain_device *dev)
- 			goto out;
- 		}
- 		msleep(2000);
--		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev ,
--			dev, 1, 0);
-+		rc = pm8001_exec_internal_task_abort(pm8001_ha,
-+			pm8001_dev, 1, 0);
- 		if (rc) {
- 			pm8001_dbg(pm8001_ha, EH, "task abort failed %x\n"
- 				   "with rc %d\n", pm8001_dev->device_id, rc);
-@@ -1049,8 +1050,8 @@ int pm8001_I_T_nexus_event_handler(struct domain_device *dev)
- 			goto out;
- 		}
- 		/* send internal ssp/sata/smp abort command to FW */
--		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev ,
--							dev, 1, 0);
-+		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev,
-+						     1, 0);
- 		msleep(100);
+ 	struct sas_task *task = NULL;
+ 	struct host_to_dev_fis fis;
+-	struct domain_device *dev;
++	struct domain_device *dev = pm8001_ha_dev->sas_device;
+ 	struct inbound_queue_table *circularQ;
+ 	u32 opc = OPC_INB_SATA_HOST_OPSTART;
  
- 		/* deregister the target device */
-@@ -1065,8 +1066,8 @@ int pm8001_I_T_nexus_event_handler(struct domain_device *dev)
- 		wait_for_completion(&completion_setstate);
- 	} else {
- 		/* send internal ssp/sata/smp abort command to FW */
--		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev ,
--							dev, 1, 0);
-+		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev,
-+						     1, 0);
- 		msleep(100);
- 
- 		/* deregister the target device */
-@@ -1094,8 +1095,8 @@ int pm8001_lu_reset(struct domain_device *dev, u8 *lun)
- 	DECLARE_COMPLETION_ONSTACK(completion_setstate);
- 	if (dev_is_sata(dev)) {
- 		struct sas_phy *phy = sas_get_local_phy(dev);
--		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev ,
--			dev, 1, 0);
-+		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev,
-+			1, 0);
- 		rc = sas_phy_reset(phy, 1);
- 		sas_put_local_phy(phy);
- 		pm8001_dev->setds_completion = &completion_setstate;
-@@ -1210,7 +1211,7 @@ int pm8001_abort_task(struct sas_task *task)
- 						   &tmf_task);
- 		if (rc == TMF_RESP_FUNC_SUCC)
- 			pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev,
--				pm8001_dev->sas_device, 0, tag);
-+				0, tag);
- 	} else if (task->task_proto & SAS_PROTOCOL_SATA ||
- 		task->task_proto & SAS_PROTOCOL_STP) {
- 		if (pm8001_ha->chip_id == chip_8006) {
-@@ -1279,7 +1280,7 @@ int pm8001_abort_task(struct sas_task *task)
- 			 * going to free the task.
- 			 */
- 			ret = pm8001_exec_internal_task_abort(pm8001_ha,
--				pm8001_dev, pm8001_dev->sas_device, 1, tag);
-+				pm8001_dev, 1, tag);
- 			if (ret)
- 				goto out;
- 			ret = wait_for_completion_timeout(
-@@ -1296,13 +1297,13 @@ int pm8001_abort_task(struct sas_task *task)
- 			wait_for_completion(&completion);
- 		} else {
- 			rc = pm8001_exec_internal_task_abort(pm8001_ha,
--				pm8001_dev, pm8001_dev->sas_device, 0, tag);
-+				pm8001_dev, 0, tag);
- 		}
- 		rc = TMF_RESP_FUNC_COMPLETE;
- 	} else if (task->task_proto & SAS_PROTOCOL_SMP) {
- 		/* SMP */
- 		rc = pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev,
--			pm8001_dev->sas_device, 0, tag);
-+			0, tag);
- 
+@@ -1768,17 +1768,6 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 		return;
  	}
- out:
+ 
+-	/* allocate domain device by ourselves as libsas
+-	 * is not going to provide any
+-	*/
+-	dev = kzalloc(sizeof(struct domain_device), GFP_ATOMIC);
+-	if (!dev) {
+-		sas_free_task(task);
+-		pm8001_tag_free(pm8001_ha, ccb_tag);
+-		pm8001_dbg(pm8001_ha, FAIL,
+-			   "Domain device cannot be allocated\n");
+-		return;
+-	}
+ 	task->dev = dev;
+ 	task->dev->lldd_dev = pm8001_ha_dev;
+ 
+@@ -1810,7 +1799,6 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 	if (res) {
+ 		sas_free_task(task);
+ 		pm8001_tag_free(pm8001_ha, ccb_tag);
+-		kfree(dev);
+ 	}
+ }
+ 
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 84315560e8e1..bc1929b230c4 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1824,7 +1824,7 @@ static void pm80xx_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 	struct pm8001_ccb_info *ccb;
+ 	struct sas_task *task = NULL;
+ 	struct host_to_dev_fis fis;
+-	struct domain_device *dev;
++	struct domain_device *dev = pm8001_ha_dev->sas_device;
+ 	struct inbound_queue_table *circularQ;
+ 	u32 opc = OPC_INB_SATA_HOST_OPSTART;
+ 
+@@ -1843,18 +1843,6 @@ static void pm80xx_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 		return;
+ 	}
+ 
+-	/* allocate domain device by ourselves as libsas
+-	 * is not going to provide any
+-	*/
+-	dev = kzalloc(sizeof(struct domain_device), GFP_ATOMIC);
+-	if (!dev) {
+-		sas_free_task(task);
+-		pm8001_tag_free(pm8001_ha, ccb_tag);
+-		pm8001_dbg(pm8001_ha, FAIL,
+-			   "Domain device cannot be allocated\n");
+-		return;
+-	}
+-
+ 	task->dev = dev;
+ 	task->dev->lldd_dev = pm8001_ha_dev;
+ 
+@@ -1888,7 +1876,6 @@ static void pm80xx_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 	if (res) {
+ 		sas_free_task(task);
+ 		pm8001_tag_free(pm8001_ha, ccb_tag);
+-		kfree(dev);
+ 	}
+ }
+ 
 -- 
 2.29.2
 
