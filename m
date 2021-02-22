@@ -2,95 +2,183 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26072321599
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Feb 2021 12:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EEB32189E
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Feb 2021 14:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbhBVL6X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Feb 2021 06:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbhBVL6Q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Feb 2021 06:58:16 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD7C06178A;
-        Mon, 22 Feb 2021 03:57:35 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id t11so28841233ejx.6;
-        Mon, 22 Feb 2021 03:57:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4y7BXbCaoSy8pcfvh1FBhUbCtj/O5tRWQAH/XOjXyKg=;
-        b=HLTyMuhK9Vg+w8AORWrIVwa+cCF2eqsH28sl5TBQmyOtjU6LX+n+uURVooqvwC00Be
-         aDu9svXUUz4N8Uzs5rkKYO+/mur83q5rjWTSCwBTBxLo79IZwXancOzctloRBGRFG7hp
-         wtTVvcm4mwbv91Gj5JJvNYCGjc7Xsa7WWI4J1MWg0K9bOOIszrnwHp6tebH0t9uwnpss
-         W+b2DdEJbsBPOxD+xMHXGnKyZeRVmMoDNv8ia/lzaFs3bgwjttWTbjqFMPyt2iZFPB8M
-         y/sscJxJB8AZ9KyKYC0dxBptIgK9vZHEUKgycav/GoH6KtiVFXOJFn0wcvIJx+8kZWMg
-         8XbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4y7BXbCaoSy8pcfvh1FBhUbCtj/O5tRWQAH/XOjXyKg=;
-        b=AnbyO2eaAk9cwZf5FDXgrc761raZUmuVFnHBxPVTAGZFxWKvMKC27l2QFeY5bnTNf7
-         U7NN8q6vmA53im7NRXaozwluXBdac+ayJ1ufgEgroZ7RR1BA21h5DWy7tF9p65MaH03s
-         W5DMJUsiwQJICajwAdjzrVU0KOKIUap8NU46wrghA/r0V/zK0uTTpo5wsB0wCRbML4cO
-         ODcLAk1sxhoM5j5oSnIXgflwm9Gpgzx3kknPPugPtswB91N67q75LM1WOf1Flrf+Gyf+
-         Job/v4Ptw5WVIF80eSUvCgY7RquEM6o5n0sL6N1yK7SnK/0gmVUcEugSrPLLyhcps45D
-         VSRw==
-X-Gm-Message-State: AOAM532VK3Omi9IckDUOdHKGYpwGx7GDc4MoUlnLbWOPUu40EWkicLQH
-        HPuwZhWOIK72nSM1e88fV6Q=
-X-Google-Smtp-Source: ABdhPJz39+SdxiXFr5MMnpEJiLHx3DSeN1Lq85wDaSV9T4iNTINmkI3flM+bQR/2/XTK38naYu6Vig==
-X-Received: by 2002:a17:906:2c44:: with SMTP id f4mr3158242ejh.234.1613995054362;
-        Mon, 22 Feb 2021 03:57:34 -0800 (PST)
-Received: from ubuntu-laptop (ip5f5bec1d.dynamic.kabel-deutschland.de. [95.91.236.29])
-        by smtp.googlemail.com with ESMTPSA id e11sm10291120ejz.94.2021.02.22.03.57.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 22 Feb 2021 03:57:33 -0800 (PST)
-Message-ID: <62be9fcfbd79b5977b34de85e486409ec74b7359.camel@gmail.com>
-Subject: Re: [PATCH v22 4/4] scsi: ufs: Add HPB 2.0 support
-From:   Bean Huo <huobean@gmail.com>
-To:     daejun7.park@samsung.com, Greg KH <gregkh@linuxfoundation.org>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        JinHwan Park <jh.i.park@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-Date:   Mon, 22 Feb 2021 12:57:32 +0100
-In-Reply-To: <20210222093150epcms2p155352e2255e6bfd8f8d71c737ed05e76@epcms2p1>
-References: <20210222092957epcms2p728b0c563f3cfbecbf8692d7e86f9afed@epcms2p7>
-         <20210222092907epcms2p307f3c4116349ebde6eed05c767287449@epcms2p3>
-         <CGME20210222092907epcms2p307f3c4116349ebde6eed05c767287449@epcms2p1>
-         <20210222093150epcms2p155352e2255e6bfd8f8d71c737ed05e76@epcms2p1>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S230496AbhBVN1f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Feb 2021 08:27:35 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45138 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231620AbhBVNY6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 22 Feb 2021 08:24:58 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 71E79AE47;
+        Mon, 22 Feb 2021 13:24:15 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv7 00/31] scsi: enable reserved commands for LLDDs
+Date:   Mon, 22 Feb 2021 14:23:34 +0100
+Message-Id: <20210222132405.91369-1-hare@suse.de>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2021-02-22 at 18:31 +0900, Daejun Park wrote:
-> +}
-> +static DEVICE_ATTR_RW(requeue_timeout_ms);
-> +
-> +static struct attribute *hpb_dev_param_attrs[] = {
-> +       &dev_attr_requeue_timeout_ms.attr,
-> +};
+Hi all,
 
-here, you lost a NULL member at the end of attribute struct.
+quite some drivers use internal commands for various purposes, most
+commonly sending TMFs or querying the HBA status.
+While these commands use the same submission mechanism than normal
+I/O commands, they will not be counted as outstanding commands,
+requiring those drivers to implement their own mechanism to figure
+out outstanding commands.
+The block layer already has the concept of 'reserved' tags for
+precisely this purpose, namely non-I/O tags which live off a separate
+tag pool. That guarantees that these commands can always be sent,
+and won't be influenced by tag starvation from the I/O tag pool.
+This patchset enables the use of reserved tags for the SCSI midlayer
+by allocating a virtual LUN for the HBA itself which just serves
+as a resource to allocate valid tags from.
+This removes quite some hacks which were required for some
+drivers (eg. fnic or snic), and allows the use of tagset
+iterators within the drivers.
 
-Bean
+The entire patchset can be found at
+
+git://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+reserved-tags.v7
+
+As usual, comments and reviews are welcome.
+
+Changes to v6:
+- Remove patch to drop gdth
+- Rework libsas to use a tag per slow task
+- Update hisi_sas, pm8001, and mv_sas
+
+Changes to v5:
+- Remove patch for csiostor
+- Warn on normal commands in scsi_put_reserved_cmd()
+- Fixup aacraid to not only scsi_put_internal_cmd() for
+  reserved commands
+  - Add 'nr_reserved_cmds' field to host template
+  - Reshuffle patches
+
+Changes to v4:
+- Fixup kbuild warning
+- Include reviews from Bart
+
+Changes to v3:
+- Kill gdth
+- Only convert fnic, snic, hpsa, and aacraid
+- Drop command emulation for pseudo host device
+- make 'can_queue' exclude the number or reserved tags
+- Drop persistent commands proposal
+- Sanitize host device handling
+
+Changes to v2:
+- Update patches from John Garry
+- Use virtual LUN as suggested by Christoph
+- Improve SCSI Host device to present a real SCSI device
+- Implement 'persistent' commands for AENs
+- Convert Megaraid SAS
+
+Changes to v1:
+- Make scsi_{get, put}_reserved_cmd() for Scsi host
+- Previously we separate scsi_{get, put}_reserved_cmd() for sdev
+  and scsi_host_get_reserved_cmd() for the host
+  - Fix how Scsi_Host.can_queue is set in the virtio-scsi change
+  - Drop Scsi_Host.use_reserved_cmd_q
+  - Drop scsi_is_reserved_cmd()
+  - Add support in libsas and associated HBA drivers
+  - Allocate reserved command in slow task
+  - Switch hisi_sas to use reserved Scsi command
+  - Reorder the series a little
+  - Some tidying
+
+Hannes Reinecke (29):
+  block: add flag for internal commands
+  scsi: add scsi_{get,put}_internal_cmd() helper
+  fnic: use internal commands
+  fnic: use scsi_host_busy_iter() to traverse commands
+  fnic: check for started requests in fnic_wq_copy_cleanup_handler()
+  scsi: use real inquiry data when initialising devices
+  scsi: Use dummy inquiry data for the host device
+  scsi: revamp host device handling
+  snic: use reserved commands
+  snic: use tagset iter for traversing commands
+  snic: check for started requests in snic_hba_reset_cmpl_handler()
+  scsi: implement reserved command handling
+  hpsa: move hpsa_hba_inquiry after scsi_add_host()
+  hpsa: use reserved commands
+  hpsa: use scsi_host_busy_iter() to traverse outstanding commands
+  hpsa: drop refcount field from CommandList
+  aacraid: move scsi_add_host()
+  aacraid: store target id in host_scribble
+  aacraid: use scsi_get_internal_cmd()
+  aacraid: use scsi_host_busy_iter() to traverse outstanding commands
+  mv_sas: kill mvsas_debug_issue_ssp_tmf()
+  pm8001: kill pm8001_issue_ssp_tmf()
+  pm8001: kill 'dev' argument from pm8001_exec_internal_task_abort()
+  pm8001: use libsas-provided domain devices for SATA
+  libsas: add SCSI target pointer to struct domain_device
+  libsas: add tag to struct sas_task
+  hisi_sas: use task tag to reference the slot
+  mv_sas: use reserved tags and drop private tag allocation
+  pm8001: use block-layer tags for ccb allocation
+
+John Garry (2):
+  scsi: libsas,hisi_sas,mvsas,pm8001: Allocate Scsi_cmd for slow task
+  scsi: hisi_sas: Use libsas slow task SCSI command
+
+ block/blk-exec.c                       |   5 +
+ drivers/scsi/aacraid/aachba.c          | 137 ++--
+ drivers/scsi/aacraid/aacraid.h         |  10 +-
+ drivers/scsi/aacraid/commctrl.c        |  25 +-
+ drivers/scsi/aacraid/comminit.c        |   2 +-
+ drivers/scsi/aacraid/commsup.c         | 109 ++-
+ drivers/scsi/aacraid/dpcsup.c          |   2 +-
+ drivers/scsi/aacraid/linit.c           | 175 +++--
+ drivers/scsi/fnic/fnic_scsi.c          | 944 +++++++++++--------------
+ drivers/scsi/hisi_sas/hisi_sas.h       |   1 -
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 137 ++--
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |   5 +-
+ drivers/scsi/hosts.c                   |   3 +
+ drivers/scsi/hpsa.c                    | 368 +++++-----
+ drivers/scsi/hpsa.h                    |   3 +-
+ drivers/scsi/hpsa_cmd.h                |   1 -
+ drivers/scsi/libsas/sas_ata.c          |   4 +
+ drivers/scsi/libsas/sas_expander.c     |   7 +-
+ drivers/scsi/libsas/sas_init.c         |  63 +-
+ drivers/scsi/libsas/sas_scsi_host.c    |   4 +-
+ drivers/scsi/mvsas/mv_init.c           |  10 +-
+ drivers/scsi/mvsas/mv_sas.c            | 136 +---
+ drivers/scsi/mvsas/mv_sas.h            |  13 +-
+ drivers/scsi/pm8001/pm8001_hwi.c       | 154 ++--
+ drivers/scsi/pm8001/pm8001_init.c      |  24 +-
+ drivers/scsi/pm8001/pm8001_sas.c       | 193 +++--
+ drivers/scsi/pm8001/pm8001_sas.h       |  14 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c       | 143 ++--
+ drivers/scsi/scsi_devinfo.c            |   1 +
+ drivers/scsi/scsi_lib.c                |  55 +-
+ drivers/scsi/scsi_scan.c               |  96 ++-
+ drivers/scsi/scsi_sysfs.c              |   3 +-
+ drivers/scsi/snic/snic.h               |   4 +-
+ drivers/scsi/snic/snic_main.c          |   7 +
+ drivers/scsi/snic/snic_scsi.c          | 525 +++++++-------
+ include/linux/blk_types.h              |   2 +
+ include/linux/blkdev.h                 |   5 +
+ include/scsi/libsas.h                  |  11 +-
+ include/scsi/scsi_device.h             |   4 +
+ include/scsi/scsi_host.h               |  36 +-
+ 40 files changed, 1647 insertions(+), 1794 deletions(-)
+
+-- 
+2.29.2
 
