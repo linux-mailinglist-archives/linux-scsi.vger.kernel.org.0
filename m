@@ -2,78 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E8F3228BD
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Feb 2021 11:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B0A322A0C
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Feb 2021 13:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbhBWKT1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Feb 2021 05:19:27 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2596 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbhBWKT0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Feb 2021 05:19:26 -0500
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4DlFFX5d8Nz67rvq;
-        Tue, 23 Feb 2021 18:11:28 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 23 Feb 2021 11:18:44 +0100
-Received: from [10.47.0.222] (10.47.0.222) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Tue, 23 Feb
- 2021 10:18:43 +0000
-Subject: Re: [PATCHv7 00/31] scsi: enable reserved commands for LLDDs
-To:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     James Bottomley <james.bottomley@hansenpartnership.com>,
-        Christoph Hellwig <hch@lst.de>, <linux-scsi@vger.kernel.org>,
-        "Viswas.G@microchip.com" <Viswas.G@microchip.com>
-References: <20210222132405.91369-1-hare@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <a6234ede-74bd-81f0-9d39-db398b79f50a@huawei.com>
-Date:   Tue, 23 Feb 2021 10:16:56 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S232753AbhBWL5W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Feb 2021 06:57:22 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:54491 "EHLO mail.JVPinto.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232501AbhBWLyb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 23 Feb 2021 06:54:31 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 23 Feb 2021 03:52:35 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Tue, 23 Feb 2021
+ 03:52:20 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Tue, 23 Feb 2021 11:52:34 +0000
 MIME-Version: 1.0
-In-Reply-To: <20210222132405.91369-1-hare@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.0.222]
-X-ClientProxiedBy: lhreml742-chm.china.huawei.com (10.201.108.192) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <933f089f49b04946b97b7d0f2a305064@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 22/02/2021 13:23, Hannes Reinecke wrote:
-> Hi all,
+Hello,
 
-+
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-> 
-> quite some drivers use internal commands for various purposes, most
-> commonly sending TMFs or querying the HBA status.
-> While these commands use the same submission mechanism than normal
-> I/O commands, they will not be counted as outstanding commands,
-> requiring those drivers to implement their own mechanism to figure
-> out outstanding commands.
-> The block layer already has the concept of 'reserved' tags for
-> precisely this purpose, namely non-I/O tags which live off a separate
-> tag pool. That guarantees that these commands can always be sent,
-> and won't be influenced by tag starvation from the I/O tag pool.
-> This patchset enables the use of reserved tags for the SCSI midlayer
-> by allocating a virtual LUN for the HBA itself which just serves
-> as a resource to allocate valid tags from.
-> This removes quite some hacks which were required for some
-> drivers (eg. fnic or snic), and allows the use of tagset
-> iterators within the drivers.
-> 
-> The entire patchset can be found at
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-> reserved-tags.v7
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-Thanks for doing this, I'll have a look.
+Regards,
+Ms. Reem.
