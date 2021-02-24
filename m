@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C467C3241C7
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Feb 2021 17:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65763241C3
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Feb 2021 17:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbhBXQKQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Feb 2021 11:10:16 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:45563 "EHLO
+        id S234030AbhBXQJa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Feb 2021 11:09:30 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:20345 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbhBXPuD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Feb 2021 10:50:03 -0500
+        with ESMTP id S232806AbhBXPt5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Feb 2021 10:49:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1614181797; x=1645717797;
+  t=1614181791; x=1645717791;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=w+I8785vdoQ0HwGDTReBpi2ApzBHVLlsCl7k/uGKiKE=;
-  b=PUBZiWwEKCP+XYXtMIaCkEpnZTgdEKqqumM4EG6c4apY/qyKLGhMQcZ1
-   GS1yUUbIdJY5RSHsuKZXpNQK0fftmB3y1CeBrSzO0z/SAQX7klIupSyIL
-   L30jR3VYSYrBTxjsx646kenwKUcEXum2DUce8piPXnbYhzFJg1qWicv0f
-   u7/UQLAwY/VCoQhxhDFCHgANUnCwahCHq9ephxIsg92bYX6ZFOP6U76g9
-   EQC1anAf8diPjOUhusYDmNlHmdQisEy0I6ybCN/YymuZ/8ugY4SwnhSUv
-   0Db+5WHRS776jtWkGB/4QaY2eWiuz+y7NwxlXUuqOZFidj0MqoXcKJGKk
-   A==;
-IronPort-SDR: uPFPlMm169ePeR8r0q8EREzg5o7yjxsrzApVJ3OO/OyDouRZ3Vcjsa4mNVB+QfcX3ZOagv774Z
- rZRyWbpLgI2pu5h+LuFhy5hM46Bgx6uP7GSLvYC5NYr5mgoa0RGhwzQoh1rrPIbSN3sIPnb22D
- 2jsaNfNTNRXqAHCfmDb2/xduSpXT3byc1lQhWzAt9ckMGiVv7XmjhUhIG8inMSMw7P5TKimhVt
- H4mY9iiETcGjgDlHnrNZFkcI/ABwJ7lUpcWd+hSrVydJfb/1CMFtG+U5wngerAzmzL96DGuI0k
- DM4=
+  bh=l29CYZFnO8Xp+rAt0cwfaaHuF7JsDAwyBx7Zkfmr/E4=;
+  b=j2HE+F+WQfev2luRYzgB0ovp6MyTfZUh+bWPw2cJ1S3xP3qwTjQ3XfOu
+   5C1SPnxBX+c3qTEzE80jFkGzHaLzMCPIjbmdgfNSdGM3wkF7yH8U0QDdS
+   rpShoTvtDc7cVq3/riNq8Mxlty9JvcvD/YReMOChABdMc5ukJOaviybzF
+   CWaNbphGAIZN/Rr69DRxUpgmjFSl6/x3wp/oMpWXV8lsSWGG5hY45W0Y3
+   jL1nYHYiteW4aUd3bxe6edAK2gNzG50nlH4PyUpqT8Gk/Cxwczoi0AuCw
+   M4rEUt8DmjjtzHgndgcb4sDRiXS/WSyzAzINS1QEtt/N+nJ+rfgMTJQkL
+   w==;
+IronPort-SDR: MpGcq7uz6wVLhBh7j/pA1m3yYMD9/lRfeKDmMOBeMBDLmWulWQQ1h3X293eHZd8zskCG73eR3A
+ iSDez0Dy9l1vghBSjIpCZZGDC++t/hyVyWAkovTkPsUa+uADHqbg+nO+kEQeImhiw+aNiKo4Kt
+ jxkI17AVBinmCPjTwUB0kZ4Fl8wGFgEqOYmN+Tz/TIz6MAzl+wxN1DfQWvw9Np767Zp+gsOzQc
+ RGvQ2UZAASC0uFeDh82LzXGb7qO6UhHQ0JoXC7Zmd+RHBwzxFn3HIRFxA9sDhtHsAlC/40AzzK
+ Jig=
 X-IronPort-AV: E=Sophos;i="5.81,203,1610434800"; 
-   d="scan'208";a="110474144"
+   d="scan'208";a="110952342"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2021 08:48:30 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2021 08:48:29 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 24 Feb 2021 08:48:27 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Wed, 24 Feb 2021 08:48:27 -0700
+ 15.1.1979.3; Wed, 24 Feb 2021 08:48:29 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Wed, 24 Feb 2021 08:48:29 -0700
 From:   Viswas G <Viswas.G@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <Viswas.G@microchip.com>, <Ruksar.devadi@microchip.com>,
         <vishakhavc@google.com>, <radha@google.com>,
         <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH 6/7] pm80xx: Reset PI and CI memory during re-initialize
-Date:   Wed, 24 Feb 2021 21:28:01 +0530
-Message-ID: <20210224155802.13292-7-Viswas.G@microchip.com>
+Subject: [PATCH 7/7] pm80xx: remove global lock from outbound queue processing
+Date:   Wed, 24 Feb 2021 21:28:02 +0530
+Message-ID: <20210224155802.13292-8-Viswas.G@microchip.com>
 X-Mailer: git-send-email 2.16.3
 In-Reply-To: <20210224155802.13292-1-Viswas.G@microchip.com>
 References: <20210224155802.13292-1-Viswas.G@microchip.com>
@@ -58,58 +58,87 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Producer index(PI) outbound queue and consumer index(CI)
-for Outbound queue are in DMA memory. These values should
-be reset to 0 during driver reinitialization.
+Introduced spin lock for outbound queue. With this, driver need not
+acquire hba global lock for outbound queue processing.
 
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
 Signed-off-by: Ashokkumar N <Ashokkumar.N@microchip.com>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 2 ++
- drivers/scsi/pm8001/pm80xx_hwi.c | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/scsi/pm8001/pm8001_init.c | 9 ++++++---
+ drivers/scsi/pm8001/pm8001_sas.h  | 1 +
+ drivers/scsi/pm8001/pm80xx_hwi.c  | 4 ++--
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 4e0ce044ac69..783149b8b127 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -240,6 +240,7 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
- 			pm8001_ha->memoryMap.region[ci_offset + i].phys_addr_lo;
- 		pm8001_ha->inbnd_q_tbl[i].ci_virt		=
- 			pm8001_ha->memoryMap.region[ci_offset + i].virt_ptr;
-+		pm8001_write_32(pm8001_ha->inbnd_q_tbl[i].ci_virt, 0, 0);
- 		offsetib = i * 0x20;
- 		pm8001_ha->inbnd_q_tbl[i].pi_pci_bar		=
- 			get_pci_bar_index(pm8001_mr32(addressib,
-@@ -268,6 +269,7 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
- 			0 | (10 << 16) | (i << 24);
- 		pm8001_ha->outbnd_q_tbl[i].pi_virt		=
- 			pm8001_ha->memoryMap.region[pi_offset + i].virt_ptr;
-+		pm8001_write_32(pm8001_ha->outbnd_q_tbl[i].pi_virt, 0, 0);
- 		offsetob = i * 0x24;
- 		pm8001_ha->outbnd_q_tbl[i].ci_pci_bar		=
- 			get_pci_bar_index(pm8001_mr32(addressob,
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index bd626ef876da..a3c8fb9a885f 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -267,7 +267,8 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
+ {
+ 	int i, count = 0, rc = 0;
+ 	u32 ci_offset, ib_offset, ob_offset, pi_offset;
+-	struct inbound_queue_table *circularQ;
++	struct inbound_queue_table *ibq;
++	struct outbound_queue_table *obq;
+ 
+ 	spin_lock_init(&pm8001_ha->lock);
+ 	spin_lock_init(&pm8001_ha->bitmap_lock);
+@@ -315,8 +316,8 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
+ 	pm8001_ha->memoryMap.region[IOP].alignment = 32;
+ 
+ 	for (i = 0; i < count; i++) {
+-		circularQ = &pm8001_ha->inbnd_q_tbl[i];
+-		spin_lock_init(&circularQ->iq_lock);
++		ibq = &pm8001_ha->inbnd_q_tbl[i];
++		spin_lock_init(&ibq->iq_lock);
+ 		/* MPI Memory region 3 for consumer Index of inbound queues */
+ 		pm8001_ha->memoryMap.region[ci_offset+i].num_elements = 1;
+ 		pm8001_ha->memoryMap.region[ci_offset+i].element_size = 4;
+@@ -345,6 +346,8 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
+ 	}
+ 
+ 	for (i = 0; i < count; i++) {
++		obq = &pm8001_ha->outbnd_q_tbl[i];
++		spin_lock_init(&obq->oq_lock);
+ 		/* MPI Memory region 4 for producer Index of outbound queues */
+ 		pm8001_ha->memoryMap.region[pi_offset+i].num_elements = 1;
+ 		pm8001_ha->memoryMap.region[pi_offset+i].element_size = 4;
+diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
+index 36cd37c8c29a..f835557ee354 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.h
++++ b/drivers/scsi/pm8001/pm8001_sas.h
+@@ -457,6 +457,7 @@ struct outbound_queue_table {
+ 	u32			dinterrup_to_pci_offset;
+ 	__le32			producer_index;
+ 	u32			consumer_idx;
++	spinlock_t		oq_lock;
+ };
+ struct pm8001_hba_memspace {
+ 	void __iomem  		*memvirtaddr;
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 1aa3a499c85a..0f2c57e054ac 100644
+index 0f2c57e054ac..f1276baebe1d 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -787,6 +787,7 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
- 			pm8001_ha->memoryMap.region[ci_offset + i].phys_addr_lo;
- 		pm8001_ha->inbnd_q_tbl[i].ci_virt		=
- 			pm8001_ha->memoryMap.region[ci_offset + i].virt_ptr;
-+		pm8001_write_32(pm8001_ha->inbnd_q_tbl[i].ci_virt, 0, 0);
- 		offsetib = i * 0x20;
- 		pm8001_ha->inbnd_q_tbl[i].pi_pci_bar		=
- 			get_pci_bar_index(pm8001_mr32(addressib,
-@@ -820,6 +821,7 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
- 		pm8001_ha->outbnd_q_tbl[i].interrup_vec_cnt_delay = (i << 24);
- 		pm8001_ha->outbnd_q_tbl[i].pi_virt		=
- 			pm8001_ha->memoryMap.region[pi_offset + i].virt_ptr;
-+		pm8001_write_32(pm8001_ha->outbnd_q_tbl[i].pi_virt, 0, 0);
- 		offsetob = i * 0x24;
- 		pm8001_ha->outbnd_q_tbl[i].ci_pci_bar		=
- 			get_pci_bar_index(pm8001_mr32(addressob,
+@@ -4133,8 +4133,8 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
+ 			return ret;
+ 		}
+ 	}
+-	spin_lock_irqsave(&pm8001_ha->lock, flags);
+ 	circularQ = &pm8001_ha->outbnd_q_tbl[vec];
++	spin_lock_irqsave(&circularQ->oq_lock, flags);
+ 	do {
+ 		/* spurious interrupt during setup if kexec-ing and
+ 		 * driver doing a doorbell access w/ the pre-kexec oq
+@@ -4160,7 +4160,7 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
+ 				break;
+ 		}
+ 	} while (1);
+-	spin_unlock_irqrestore(&pm8001_ha->lock, flags);
++	spin_unlock_irqrestore(&circularQ->oq_lock, flags);
+ 	return ret;
+ }
+ 
 -- 
 2.16.3
 
