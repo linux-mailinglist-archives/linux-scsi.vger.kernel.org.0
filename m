@@ -2,78 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF1632413E
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Feb 2021 17:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5663B3241CC
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Feb 2021 17:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbhBXPox (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Feb 2021 10:44:53 -0500
-Received: from mx2.suse.de ([195.135.220.15]:44106 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234878AbhBXOgi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 24 Feb 2021 09:36:38 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A8F48AD5C;
-        Wed, 24 Feb 2021 14:35:45 +0000 (UTC)
-Subject: Re: [PATCH 08/31] scsi: revamp host device handling
-To:     John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <james.bottomley@hansenpartnership.com>,
-        Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org
-References: <20210222132405.91369-1-hare@suse.de>
- <20210222132405.91369-9-hare@suse.de>
- <f612cac5-6dce-45af-1a9e-da32ddbeaa54@huawei.com>
- <facfb988-9224-b78e-c6e1-935dabe98747@suse.de>
- <ff3bf318-0eef-bdbb-9364-d17dc17cbde0@huawei.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <2f56f2f5-d0fd-e3b7-4472-fb345dc3a59f@suse.de>
-Date:   Wed, 24 Feb 2021 15:35:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S235361AbhBXQLI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Feb 2021 11:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236864AbhBXPx7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Feb 2021 10:53:59 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BC5C06174A;
+        Wed, 24 Feb 2021 07:53:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2cfgLrUfwrBlhLqmvNFBxhy8YJ0VUlYc9/uzyh409x8=; b=PLMfKC9Zl0Xs9PY1AWvKDemuIZ
+        O81VZ0aTNn2cxF0DsfkwLcsNoQt5pmX5qDQ+SlLfshqOZWBoS4AWzGQ6wM2DxH2OQ7zh6i6eGh4+a
+        14QyAaEdeyDtZOVR703re0UkUKxR6rv/XCxtBPS7dZe3XW2W/cx/8Io8qhnJCbde9A9DDwmqkTo1R
+        w3+G0aXRm9D9DIH7+r6wJb6B2f63cYiE7mAee85gevTeHJmhielnac8iAoizCGj80EUaVTscWD0Ty
+        M/Y+rtiVywNYy8FuQBgoEaQ2Joq7IpNao70f4QIFxhXC+6TpkE4+cCA/yb/OeE06ZmyImBAfz33Fn
+        FiCtjTrg==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lEwSv-009aWA-Fd; Wed, 24 Feb 2021 15:52:49 +0000
+Date:   Wed, 24 Feb 2021 15:52:41 +0000
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Michael Kelley <mikelley@microsoft.com>, kys@microsoft.com,
+        martin.petersen@oracle.com, longli@microsoft.com,
+        wei.liu@kernel.org, jejb@linux.ibm.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 1/1] scsi: storvsc: Enable scatterlist entry lengths >
+ 4Kbytes
+Message-ID: <20210224155241.GA2284544@infradead.org>
+References: <1613682087-102535-1-git-send-email-mikelley@microsoft.com>
+ <874ki2yhzm.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <ff3bf318-0eef-bdbb-9364-d17dc17cbde0@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874ki2yhzm.fsf@vitty.brq.redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/24/21 3:31 PM, John Garry wrote:
-> On 24/02/2021 14:24, Hannes Reinecke wrote:
->> On 2/24/21 2:12 PM, John Garry wrote:
->>> On 22/02/2021 13:23, Hannes Reinecke wrote:
->>>>    void scsi_forget_host(struct Scsi_Host *shost)
->>>>    {
->>>> -    struct scsi_device *sdev;
->>>> +    struct scsi_device *sdev, *host_sdev = NULL;
->>>>        unsigned long flags;
->>>>       restart:
->>>>        spin_lock_irqsave(shost->host_lock, flags);
->>>>        list_for_each_entry(sdev, &shost->__devices, siblings) {
->>>> +        if (scsi_device_is_host_dev(sdev)) {
->>>> +            host_sdev = sdev;
->>> Is there actually a limit of 1x host_sdev always?
->>>
->> I would have thought so, as the whole point of having a host device is
->> that you have a (virtual) device which simulates access to the host
->> itself.
->> And as such has a 1:1 relationship to the HBA.
-> 
-> Sure, but I think that each call to scsi_get_host_dev() for the same
-> host will give a new sdev each time, right?
-> 
-> We should protect against what is sensible and what is possible - not
-> always the same :)
-> 
-The original implementation, yes.
-With my patch series, no.
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Shouldn't storvsc just use blk_queue_virt_boundary instead of all this
+mess?
