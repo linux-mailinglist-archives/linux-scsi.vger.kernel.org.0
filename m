@@ -2,153 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E6932490C
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Feb 2021 04:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314D6324976
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Feb 2021 04:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236902AbhBYDBX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Feb 2021 22:01:23 -0500
-Received: from labrats.qualcomm.com ([199.106.110.90]:22187 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236898AbhBYDBW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Feb 2021 22:01:22 -0500
-IronPort-SDR: A2p3YEObhS82c1WeKUAT+iVO3yw4sCqT63Kxd3oXH25fUejGwdeVKKASdE0G5eP4RRwgqks5wn
- CZmK870h8qkRJZJg4lG3fB7HGUpXqqVzc+H3XIgWxqGOezji6d8cgTBFyk4oR2pW8pgO7hLMuP
- U/uXFve3xiI0r50cyvtCuTau+pz74mJVz/o9ZXw2vtTHIHH6Uu1TN4M3YLmz4TVlUk3VSAe9GU
- nz3wMsmMtsHtoCWqwZ8A7/mAg30fund9R8sXN0+HMalDi3ii5sWchH6jDTOHnawyawsAdYCPKB
- Vd0=
-X-IronPort-AV: E=Sophos;i="5.81,203,1610438400"; 
-   d="scan'208";a="47789821"
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by labrats.qualcomm.com with ESMTP; 24 Feb 2021 19:00:39 -0800
-X-QCInternal: smtphost
-Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
-  by ironmsg02-sd.qualcomm.com with ESMTP; 24 Feb 2021 19:00:38 -0800
-Received: by stor-presley.qualcomm.com (Postfix, from userid 92687)
-        id 555E821A29; Wed, 24 Feb 2021 19:00:38 -0800 (PST)
-From:   Asutosh Das <asutoshd@codeaurora.org>
-To:     cang@codeaurora.org, martin.petersen@oracle.com,
-        adrian.hunter@intel.com, linux-scsi@vger.kernel.org
-Cc:     Asutosh Das <asutoshd@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "Bao D. Nguyen" <nguyenb@codeaurora.org>,
-        Nitin Rawat <nitirawa@codeaurora.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v7 2/2] ufs: sysfs: Resume the proper scsi device
-Date:   Wed, 24 Feb 2021 19:00:15 -0800
-Message-Id: <d9ea5dd3bea11e51d7feeee531aad7025298a9c1.1614221843.git.asutoshd@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1614221843.git.asutoshd@codeaurora.org>
-References: <cover.1614221843.git.asutoshd@codeaurora.org>
-In-Reply-To: <cover.1614221843.git.asutoshd@codeaurora.org>
-References: <cover.1614221843.git.asutoshd@codeaurora.org>
+        id S235286AbhBYD02 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Feb 2021 22:26:28 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:13125 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234256AbhBYD0X (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Feb 2021 22:26:23 -0500
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210225032537epoutp03ca53368fa42c9651b96aca64c74d3b3d~m38ExS_vX0310603106epoutp03y
+        for <linux-scsi@vger.kernel.org>; Thu, 25 Feb 2021 03:25:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210225032537epoutp03ca53368fa42c9651b96aca64c74d3b3d~m38ExS_vX0310603106epoutp03y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1614223537;
+        bh=vdHMQ9cj5fSLY+qawb39ZN8USKDpHdE2wqUvWNmLv2c=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=DH0gMXidt+oO794iVHGDXA5XzzutrDuhBrHEA40jqlDFFdKWtcqGitGVElaCyttV/
+         QaZ1ENsjOIVFJYN/F5HZGsjH/m98ux60qm4CQoRIOT7YMM8yPTCv5b9nabyefHVa7K
+         LRMBCHoKgrlrgx1no9N0fpFuupO2ys5aMYrrN1bo=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20210225032536epcas2p40bab6d28a9c2026a68e68c9a6cd7d3b4~m38D8LEoh0953709537epcas2p4E;
+        Thu, 25 Feb 2021 03:25:36 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.181]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4DmJ8H2Hzbz4x9QK; Thu, 25 Feb
+        2021 03:25:35 +0000 (GMT)
+X-AuditID: b6c32a45-34dff7000001297d-5b-603718af009e
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F7.D3.10621.FA817306; Thu, 25 Feb 2021 12:25:35 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: RE: [PATCH v24 4/4] scsi: ufs: Add HPB 2.0 support
+Reply-To: daejun7.park@samsung.com
+Sender: Daejun Park <daejun7.park@samsung.com>
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "huobean@gmail.com" <huobean@gmail.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        JinHwan Park <jh.i.park@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        SEUNGUK SHIN <seunguk.shin@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <DM6PR04MB6575ECC05596740425EC948EFC9F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20210225032534epcms2p5cf03d488df6c16923eb1ddfaa50c1266@epcms2p5>
+Date:   Thu, 25 Feb 2021 12:25:34 +0900
+X-CMS-MailID: 20210225032534epcms2p5cf03d488df6c16923eb1ddfaa50c1266
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA12Te1BUVRzH5+y97F222bzy0MOSSpcgYNoXuXBgIJsR4xbRUM7kjE6zrHDd
+        JffF3qWUalqFQnkJoyO4wUawwIjoisCyQCRCGRKWSokCJiRMs9OsUTjlSjCxLKTTf9/zOd/z
+        e51zeFjANFfIy9GZGKNOqaG4fNwxGB0nssP4TOlQjwBNWR1c1PfpEIFcnp+4aHDiPoFOznkw
+        9Ke9yQ+5BqJRy9QuVNBg56Kaq2YOKjvWyUX3JucJVH/LwUHHlopwNNpTw0UlY04uav52iYMm
+        OviosfM2QEerWnFU/0Uv/nIwPfpjGj1aXsahuy13CLqivh/QF2tbCbrwykWc/mN2HKfLO1oA
+        PX9hM13UX8LJ4O/WJKkZZTZjDGN0WfrsHJ0qmUrbqdiukMdJZSJZAoqnwnRKLZNMpbyeIXol
+        R7PcIRX2nlKTt4wylCxLSV5KMurzTEyYWs+akinGkK0xyGQGMavUsnk6lThLr02USaWx8mVn
+        pkZ945KVMNznHShsrMXN4HtuMeDxILkVVrk3FgM+L4B0AnjjyxHcywXkerjoDCwG/rxAchus
+        /3sY9+oAkoL26xbCx8VwfLoVeDWXfAFWDd0lvHGCyAUMXnef9PMuMLIRg2dmzZjXBUkBrC6a
+        xX06FHY1dwJvMn/yHbg4ssWHo+DDprJVezC8fcZNrOnfL38OfDoIfvLz1VXPejjl6V3lIfBy
+        7xzHpz+GnZOPgLcGSJYCONg97ufbkMCbR9pWahCQ6fD8g/MrgXAyAt4rLMN9Q0mB/9hCvBgj
+        t8Audw3mxRgZDe09Ep8jHH49jq81ZW5bIP6vMfJpeGRw8T/utM6sVhYJz3nsnAoQbnk8aMsT
+        uSyPc9UBrAVsYAysVsWwsQbZk1d7Aay89ZgdTnDcPSceABweGACQh1FBgvYleWaAIFt5MJ8x
+        6hXGPA3DDgD5cpOVmDA4S7/8WXQmhUweGxcnTZAjeVwsojYKWOmUIoBUKU3MfoYxMMa1cxye
+        v9DM2f3cw4IFZ47RZrt2J7RS3tg+F12ZvznFLL674aDHVn1o0wnrb1rPXzNvrhv+aqwvsieh
+        VLhn5Nyz4RGmOkmmpjzl0SV1Wdq1U00FqZENQ/hh5+mzEdIsXft0ktXPLXIC/vvq+Fvf5Oe9
+        GuU4lSh6vv2j0X3iiX7Xd3sn6naGbrfxj77YIPnBsYdwuvcNllSoCp6ZIjBdc/a6A7mHs6KE
+        qYrP3vqFTsUSXfOyvl7LmOrB291nhenHt+W+W/pBYKfmKe1MmGQTdqI+5rRgJNdvqTby5hul
+        Wla5y9agnix9TX+oMmTrQp2jyxjsyshvY0VF+zv2ourCYdmvLaHpVz4ssLocFM6qlbIYzMgq
+        /wWHp5yjdAQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210224045323epcms2p66cc6a4b73086621e050da37f12f432f0
+References: <DM6PR04MB6575ECC05596740425EC948EFC9F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+        <20210224045323epcms2p66cc6a4b73086621e050da37f12f432f0@epcms2p6>
+        <20210224045532epcms2p2215025506b062e2fdbad73e51563dca6@epcms2p2>
+        <DM6PR04MB65759C2968CDEFF32A0A95FDFC9F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+        <CGME20210224045323epcms2p66cc6a4b73086621e050da37f12f432f0@epcms2p5>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Resumes the actual scsi device the unit descriptor of which
-is being accessed instead of the hba alone.
+> > 
+> > > +static int ufshpb_issue_umap_all_req(struct ufshpb_lu *hpb)
+> > Maybe ufshpb_issue_umap_all_req is just a wrapper for
+> > ufshpb_issue_umap_req?
+> > e.g it calls ufshpb_issue_umap_req(hpb, int read_buferr_id = 0x3) ?
+> > Then on host mode inactivation:
+> > static int ufshpb_issue_umap_single_req(struct ufshpb_lu *hpb)
+> > {
+> >         return ufshpb_issue_umap_req(hpb, 0x1);
+> > }
+> Better yet, ufshpb_execute_umap_req can get *rgn as an extra argument.
+> ufshpb_issue_umap_all_req will call it with NULL, while
+> ufshpb_issue_umap_single_req will call it with the rgn to inactivate.
+> 
+> Then,  ufshpb_set_unmap_cmd takes the form:
+> static void ufshpb_set_unmap_cmd(unsigned char *cdb, struct ufshpb_region *rgn)
+> {
+>         cdb[0] = UFSHPB_WRITE_BUFFER;
+> 
+>         if (rgn) {
+>                 cdb[1] = UFSHPB_WRITE_BUFFER_INACT_SINGLE_ID;
+>                 put_unaligned_be16(rgn->rgn_idx, &cdb[2]);
+>         } else {
+>                 cdb[1] = UFSHPB_WRITE_BUFFER_INACT_ALL_ID;
+>         }
+> 
+>         cdb[9] = 0x00;
+> }
+> 
+> Does it make sense?
 
-Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
----
- drivers/scsi/ufs/ufs-sysfs.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+I got it.
 
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index acc54f5..34481e3 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -297,10 +297,10 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	ret = ufshcd_read_desc_param(hba, desc_id, desc_index,
- 				param_offset, desc_buf, param_size);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -678,7 +678,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		up(&hba->host_sem);					\
- 		return -ENOMEM;						\
- 	}								\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_descriptor_retry(hba,			\
- 		UPIU_QUERY_OPCODE_READ_DESC, QUERY_DESC_IDN_DEVICE,	\
- 		0, 0, desc_buf, &desc_len);				\
-@@ -695,7 +695,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		goto out;						\
- 	ret = sysfs_emit(buf, "%s\n", desc_buf);			\
- out:									\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	kfree(desc_buf);						\
- 	up(&hba->host_sem);						\
- 	return ret;							\
-@@ -744,10 +744,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_flags(QUERY_FLAG_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_flag(hba, UPIU_QUERY_OPCODE_READ_FLAG,	\
- 		QUERY_FLAG_IDN##_uname, index, &flag);			\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -813,10 +813,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,	\
- 		QUERY_ATTR_IDN##_uname, index, 0, &value);		\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -899,11 +899,15 @@ static ssize_t _pname##_show(struct device *dev,			\
- 	struct scsi_device *sdev = to_scsi_device(dev);			\
- 	struct ufs_hba *hba = shost_priv(sdev->host);			\
- 	u8 lun = ufshcd_scsi_to_upiu_lun(sdev->lun);			\
-+	int ret;							\
- 	if (!ufs_is_valid_unit_desc_lun(&hba->dev_info, lun,		\
- 				_duname##_DESC_PARAM##_puname))		\
- 		return -EINVAL;						\
--	return ufs_sysfs_read_desc_param(hba, QUERY_DESC_IDN_##_duname,	\
-+	scsi_autopm_get_device(sdev);					\
-+	ret = ufs_sysfs_read_desc_param(hba, QUERY_DESC_IDN_##_duname,	\
- 		lun, _duname##_DESC_PARAM##_puname, buf, _size);	\
-+	scsi_autopm_put_device(sdev);					\
-+	return ret;							\
- }									\
- static DEVICE_ATTR_RO(_pname)
- 
-@@ -964,10 +968,10 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
- 		QUERY_ATTR_IDN_DYN_CAP_NEEDED, lun, 0, &value);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-
+Thanks,
+Daejun
