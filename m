@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B46743270F5
-	for <lists+linux-scsi@lfdr.de>; Sun, 28 Feb 2021 07:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78053270F2
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Feb 2021 07:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbhB1GA5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 28 Feb 2021 01:00:57 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:30790 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbhB1GAv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 01:00:51 -0500
+        id S230209AbhB1GA3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Feb 2021 01:00:29 -0500
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:23195 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230282AbhB1GAV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 01:00:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1614492050; x=1646028050;
+  t=1614492021; x=1646028021;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tCXTOesn64fsAQikVkAZ/PeVOCP1HPHoYAPxZhx39Vw=;
-  b=kKZI5CLZPStnPOVtbKreQcxuR0u0ecq0vzFEB4ysLv5RAJ8NWxBtlqKP
-   UzZWqASHRLIOJIdn6VY3DU9cqngDsG61A4DzpuaSbS14TYgJx9xgvwqUM
-   sI1Y9DYdrAX0CXk+lY5aMhb5eJapKeXug+yKF/LKJU2j09PyJDDlbeFO0
-   36CELPzLCboSBQDfJOTddfSCkPxI4mGbhLImKrcH8v2dMgUyXVs05+ZWJ
-   mVtlrC+NWStSN6r++CMo9saWY0HWL5dKUbVG98mxnxmNAtN2qZiBhzNgL
-   fjXYpJJj0Ehl7V+yWbm40MW3ig5qrte2SIfmvTUSeNYXZGlwYq6MJRUbb
-   w==;
-IronPort-SDR: YjztxMNDfgLOBpO31GV8qMlxErYP8DWIo4gb0igegenSQweY+FO3AzHkYt+V/i/1+KRwl6Wh2V
- lAP8pRsqbYxdgXeKjXgsIj5VSoykjsRcV440xm6gB1YyxG11AL3JwtKv9inP/76U4VzafiEWDX
- ypVUUmwyNOE4PpEZOav538Tgo9TZRNhNWlDiAyj2CJJW9qxdwDQxBDS7rJhKWGmeNDAroOGYCN
- dLjWUBy0qmDt/G2wDzwbTmiX1ANflkl09tVnqtmkqMF+xPNlF5/2NrKulDHe7FFLvfVX+sj6ad
- 89E=
+  bh=feaqJwNnP7EHgX/qxcCklxVwpQTYvYQWDP0TbE2wIfs=;
+  b=UD1GRdMhTTaEIsrXB7y4wh2ne4n7LATZSbDm/qGuc5r9JQikEKjvothR
+   ylIC9b4xTUD7ppdu/hTXxWjcrbkU/ZEidFZvg0JZsz6LiJRtUO0asKuQR
+   6BdV+2YCXxshbna6MEv7IARYuFo0y827k8QtPfLnNp9G1f4C0jgD4qgn4
+   3NIda1TjProGjUNBSxVNbcDTTHQrI5svhoK1UUKkTNAjDDX0OFWMh4c20
+   iz5NIaGCB3JTezhYkcjWQn1Iq8K4C8TVunpxpHCqiFIo4ZzqadHFp0Y9g
+   L1JT35kwRclM4lSNQ0rYuJb5JQvemRRrVAjs/Ov3pJx7mQ1iw+t+CpClC
+   Q==;
+IronPort-SDR: AUKOrtjMIyjkP/Wa3LCIKEM4b9Pvf4xGFrPX23Y/1ubnTWegv2ZZfGkNLqE5W+aMqWoNYpyFFd
+ a6xJbbkaUVUVhqxO8ZU/YwoISgOrdvolyEYkPVuA/FnE40aEjdNjC/qFv7pPyAM2vHiL7+SKId
+ GWTJ2ACQcNqciVF2Ng/A7gTLpB90i1211T0Xp9Fbs5X6RTJt1/Ef52tjkcVOehB9tsLvUs0cAX
+ Lb2Eh3+AmV47yYQTZEypqYJE5YciTgJYMTdNvXR8oYX32ewmsh5pIQmQ/hn9afbMOkpD/0ufsQ
+ 4WQ=
 X-IronPort-AV: E=Sophos;i="5.81,211,1610380800"; 
-   d="scan'208";a="160972997"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 13:59:09 +0800
-IronPort-SDR: +LxA4Iq0a6qVmcu1LyEan6GBB/HYWExt9bxCJ4T7YA4TDkADtZr/TTxuQYCL7iC/BIrau1D+FG
- Bg1Ek2qc946xQ2P4N2Ddt1cOlAJ+0dHy0yrsQvRmO2zduPIHkHkQt3stoit4wswvd8cz0w12rX
- 84SNxcA2goMmHV3+3fEdrS/tAdXLUWMh0uyEFtosiokYqPO7ydlP8X+ExFrTMCcFsgfqQ3Xcz/
- jmWGEeTOycICO8qfJpG9tnGTxCIX47J3jmSfYVZUlOoIqtCNkkURGLO4ktMJdbTDSlbxpa4nF4
- A95/TyjRa+kuARSwAG3x0EVe
+   d="scan'208";a="271564110"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 13:59:15 +0800
+IronPort-SDR: YHtLpvbc+v6eAkNOjfJ0yAT5TzjuDy1dRcfUHl/1yWR/cYaZqUB2rtx6h2/ZP20Dfl9jnEfvrP
+ R2f8gGOxb45/syIJn4EDJuuLJ8xLG4ifDLLZVVuycFg7ctgfmWhXrRDjNrRmOo1ovk2EYR86w/
+ ieDkKcBJqK/VveONnd7bUoA0kjH4DyQM5ciFGL9WG6XRPlCD8s/nI8kMR/LCAC+aOz/v1ZGj98
+ p8M5T61yB0MtrSmVXof05hjZuG//nfZkg6PT3lh902BiwozXjbDLCnyoSqX3/d/bVYIZ1UaxGU
+ 7jguONO0uMpZ3MdcJEYhXEcS
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:40:28 -0800
-IronPort-SDR: QwYpMdK3VfqdjcuEoXn05nm+JES2/a3sTUkMJApcrOjc/kMTHZatZ0+NjHqiALS9TWcs8yM2ed
- L4n95lorUa3QC2+ZRYgBft3dZTxsdhNXgtqORhEJDKWemJiTuiEe/O726AfE7tZwAK6OrfPvht
- 2xI6QIaEfipVTj9sWJxZ0Bx2wKL1swJGO9VgxlgqPZi2UTCcN5VvmHmw50XGr8mtjGwu5mxelp
- WH+iNZwef+9f4XdG5D6YX8x3V1MvBp5VywV/TLmifDv/8H1OxSDILwXKX319b07/1ANIQFZROz
- 3eQ=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:40:34 -0800
+IronPort-SDR: g5jzM4czVp4/qdlRh1bY5i51iufh5JD1TtqrMfVIGHyLV4npe/6N7vlR0qHfpimmmjwvHkBOZW
+ ji4u1XnjAg0zky5GUL+E/IYCVeLarAtXG98ju5Le/NPmhXwkisT30rCf8EV8RjaieVWZOQILPv
+ 6nAA0l3q3ocAcNl5G3XowVpKLObjAFeMyyHZ2a5nIf2CrQ02jGqgQOCV52nfEsBLfsZ5Pnsif1
+ kIBi7mUnvIN0C+2dzhMQkE66zYJ8IomOx2uH2U6XqbBLtSO0Pp6ODkzKFdJGbCL5EKikJC9mhO
+ 6Ig=
 WDCIronportException: Internal
 Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:59:09 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:59:15 -0800
 From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     martin.petersen@oracle.com, hare@suse.de, jejb@linux.ibm.com,
         mlombard@redhat.com, michael.christie@oracle.com,
         bvanassche@acm.org, houpu@bytedance.com,
         Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [PATCH 15/23] target/configfs: remove the memset with declare-init
-Date:   Sat, 27 Feb 2021 21:56:37 -0800
-Message-Id: <20210228055645.22253-16-chaitanya.kulkarni@wdc.com>
+Subject: [PATCH 16/23] target/configfs: remove the memset with declare-init
+Date:   Sat, 27 Feb 2021 21:56:38 -0800
+Message-Id: <20210228055645.22253-17-chaitanya.kulkarni@wdc.com>
 X-Mailer: git-send-email 2.22.1.dirty
 In-Reply-To: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
 References: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
@@ -72,30 +72,24 @@ the memset call.
 
 Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 ---
- drivers/target/target_core_configfs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/target/target_core_configfs.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index 4c60334a1e9f..315791b5554a 100644
+index 315791b5554a..ca5b083d2958 100644
 --- a/drivers/target/target_core_configfs.c
 +++ b/drivers/target/target_core_configfs.c
-@@ -2283,7 +2283,7 @@ static ssize_t target_dev_alua_lu_gp_store(struct config_item *item,
- 	struct se_hba *hba = dev->se_hba;
- 	struct t10_alua_lu_gp *lu_gp = NULL, *lu_gp_new = NULL;
- 	struct t10_alua_lu_gp_member *lu_gp_mem;
--	unsigned char buf[LU_GROUP_NAME_BUF];
-+	unsigned char buf[LU_GROUP_NAME_BUF] = { };
- 	int move = 0;
+@@ -1660,9 +1660,7 @@ static ssize_t target_core_dev_pr_show_spc3_res(struct se_device *dev,
+ {
+ 	struct se_node_acl *se_nacl;
+ 	struct t10_pr_registration *pr_reg;
+-	char i_buf[PR_REG_ISID_ID_LEN];
+-
+-	memset(i_buf, 0, PR_REG_ISID_ID_LEN);
++	char i_buf[PR_REG_ISID_ID_LEN] = { };
  
- 	lu_gp_mem = dev->dev_alua_lu_gp_mem;
-@@ -2294,7 +2294,6 @@ static ssize_t target_dev_alua_lu_gp_store(struct config_item *item,
- 		pr_err("ALUA LU Group Alias too large!\n");
- 		return -EINVAL;
- 	}
--	memset(buf, 0, LU_GROUP_NAME_BUF);
- 	memcpy(buf, page, count);
- 	/*
- 	 * Any ALUA logical unit alias besides "NULL" means we will be
+ 	pr_reg = dev->dev_pr_res_holder;
+ 	if (!pr_reg)
 -- 
 2.22.1
 
