@@ -2,109 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DCA3270F0
+	by mail.lfdr.de (Postfix) with ESMTP id 00FD53270EF
 	for <lists+linux-scsi@lfdr.de>; Sun, 28 Feb 2021 07:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbhB1GAN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 28 Feb 2021 01:00:13 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:6288 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbhB1GAK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 01:00:10 -0500
+        id S230258AbhB1F7x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Feb 2021 00:59:53 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:36622 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230235AbhB1F7w (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 00:59:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1614492010; x=1646028010;
+  t=1614492696; x=1646028696;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1wbH/tii0VH/dbuuyyUFSquAFgn70CaFzqbRksUlvyU=;
-  b=ClzdxL617TOUdFz7/r9QLiEeDQ3Yu7s9mv+7F5Z774j6iXsauX9ClQFp
-   zYGz2hwMHr/8UhH2dyyEYin8u8hMTkmy3KyLr1o3B+PXHt9UeqmAAWDBq
-   /Wg0pdULMGUHaEnXli0mNcwZxaaxsCSO0mA8Q/X6VW35Mbs/OqDC/NKqi
-   IiVksWKOMpsXT+I8xgK7aWfLrSaX3oYgG0BWo0+4UYyMbbRGz3kWp/OTc
-   gFFyOlrSocF1W8COp46MYswLm44y7QQkRgyE7vbQhmb9LdXIE5WYdWkqV
-   Mn+1GlthG1aFGYfnNodg0r/HKwh3OJrHlGphkfqozGm2e4K9iz9SqF224
+  bh=vXAxN9MI62o8rzI8RxdTpG+7QbGBO45tb1tY17jlbrA=;
+  b=RLFBF9uw9IzXbdI7pLoG2wb1Uvj++lm22wT3HHUwVamc+ouCcLW1BaE3
+   54GUUbSxqRUcbCUAB/LWIg1xuHwHnSyS+r3fDqsxszH1kdw45H8hLHFhO
+   5LZKG347d3uWvdbK/rQarDqUMS05yCdkm7yuoo1fHUx/hVrjRvoBYXgCt
+   wWj9cfvggX6F0mstcJ+D4GeIxUjfOf4cTqItfTnr0c2YrBaB1NuueminC
+   GLR74SDT/bY5fDTgW4b1zJBCpO/UWGICB4LB/23Cbg1QhGnEosUIXQPoS
+   PS6xiFyMwyzBQOrXwkPZgONE05GsbpqotSGcz0ssgv2/6st0N92LU/mqX
    Q==;
-IronPort-SDR: CVpfMFUhMSfR9rykoiBQR5mm6Ax7gH0LwHp6hih+I3M4dQsT6bBdrsqxFigudansQvREekRBKF
- kEm3rsPo327zvl6M60CXQoWnCOvBx5cw+p6mGrch7O9msj40ySGl6AWrv/VmOKsYsj5uMM09TW
- JY3GanO8ZAhVJkCQ5aNjdI/NdBR6DBRxhClKbJt1G1nn8qH9eoMrUAuJH9erQf4e9yedsJvNt0
- mi7JzFJTNZmDKKAYHy41IvunHfWBJJTtUfqZpV/nCaWkutVE0TuF9xKxPaTgPgOdrcQtTxD2vw
- 8Lw=
+IronPort-SDR: isxWMgOGj72Ft+c+iPOEZMhV7jqRZJnleR+AkhAFYIvgHxuPfrvKZB02O+Up2Lzt6iM3AcsIFs
+ LlCp16jaTSQx2VkSRsKOtPYnSA3fjZ2PR0GwgL+YgEQZkpQxNJQnVHdjG4wZg/CECcnQGMymD5
+ NELLEbw178flxDuwMSIgTNdnA5QZ7r3VfHZkQwHUrFrOhTbkcO3CJWVza4ftgTNZvIqxa/aLy+
+ WQnAs0QLI6SIsB1d+1GMeqU6Umyft8W6nmdYCzysGUEKaRH6MVt+oOe+qtEChJXcIvtxHZYxMd
+ OKA=
 X-IronPort-AV: E=Sophos;i="5.81,211,1610380800"; 
-   d="scan'208";a="165466159"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 13:58:38 +0800
-IronPort-SDR: CyXwvX5SI23vUzm0QmvOX8LwKyABxdo6ucA3vH49N5hyYJs6lt7ludImtmsj/+ObexR7BiyeYE
- 7Q/Gmo9Np2mXj7YqmY8R8ZKj2qCfFxg6K2/EcO4P4xaXcHBZX2uXA7WVgxxHL3QLwVTS2rYXWB
- 693TpkdQOWFs0vgx1ZTsZgPwvuXe8joGJh6EU9EOZk+neu/qZX6w3RpCF59rZuLtMqTZzmpxhe
- ycC7cIc+RdLhy5fHJJk6MF0rzd/Geuw+NGNst9cpm6mNqRHOaZis/NqsVGAsz5MWqBEaRNzelT
- I5OyvBEO7J+xOB1DiZ7BgLwW
+   d="scan'208";a="265236109"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 14:09:57 +0800
+IronPort-SDR: dk0V30zFNCZIsK9q3X0OLldThY6E+pzYLKwhDXqKxSqMY+DtQWIbW4+rdKnLKD7LXKzqzi+M3I
+ tJTcfC/vdEjLsWHS3s2Pzb0v5mgXPZuPu+r2g5JEalAdi0dG60ckYBY/ta+ygNkbEp0qzSbEGP
+ 5/Rq5eXecpTzFvxNPuL67nhxd+u8DvLblMaVlXv2AHjFn0ymWPxcroDPTPIr4D7MnBESqP1MQq
+ OoG2HIwZC2Em8G1Vikoyn+UNxxvuu8rGnqqsGqqRyA5UoCbqkaRVd8yWuFbcUhD+qtepWH3tA/
+ EvXI0qiCyVAoi0DJGTMnUXAl
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:41:48 -0800
-IronPort-SDR: lJWeujZDKckaZd3TUpDcX/PyE2mZ/idmvqCXuP8lOwdHcpX84p4qLJzTgdIN2XP+irshYqkzxZ
- 52/KOqcc1Wqi06ZhsN27MecTIDzC2pkVMO2DrZgGFyYktUO87umUzCpzX2jdvso+1QK5hU++dT
- 3DaSBNCi229MHH6EHxmoE/rKJM9tz0elzooDiRQB0wioE5V3Lp1y6paDxgFhrdDq2n3EJKB9jI
- BU8CQigTgzO9od3HOyk3CRWwJ0Q1iZ5f2mZJr4CgFKjErYQ/WYv3yfM7buP0eunwiMu1ucQ3PZ
- ymE=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:40:05 -0800
+IronPort-SDR: mPJJyq0aBsbsbuh1AqP7rtu1M/g+jB0syfjksUEaZ9/6wOR+FcZFn4rnYgCZA8bFIp43NOiuYQ
+ YJ82RTp67xt5cZQCH9My5pZB+yVc7jID/uzII1wtbdLZKD+zDUGdGETkgIF110VOBAdlESGaPQ
+ 5DnyFLy84m0kkxWvFrlgm7V1YTT03i8m/QdaOgoL4ljd2LviM0/2C/a0FlQhBOTyvkiEKk0mTC
+ AvgCZAL4PA6ZHR9Iwne37nADzLg2S8/99YiyAh7wHcfRcFL+uJx0jyJaMlOqbqjbi3U9j0PXYf
+ /kA=
 WDCIronportException: Internal
 Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:58:37 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:58:46 -0800
 From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     martin.petersen@oracle.com, hare@suse.de, jejb@linux.ibm.com,
         mlombard@redhat.com, michael.christie@oracle.com,
         bvanassche@acm.org, houpu@bytedance.com,
         Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [PATCH 11/23] target/iscsi: remove unsed macro PRINT_BUF
-Date:   Sat, 27 Feb 2021 21:56:33 -0800
-Message-Id: <20210228055645.22253-12-chaitanya.kulkarni@wdc.com>
+Subject: [PATCH 12/23] target/iscsi: remove the memset with declare-init
+Date:   Sat, 27 Feb 2021 21:56:34 -0800
+Message-Id: <20210228055645.22253-13-chaitanya.kulkarni@wdc.com>
 X-Mailer: git-send-email 2.22.1.dirty
 In-Reply-To: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
 References: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove the unused macro that fixes the following compilation warning:-
-
-drivers/target//iscsi/iscsi_target_util.c:31: warning: macro "PRINT_BUFF" is not used [-Wunused-macros]
-#define PRINT_BUFF(buff, len)     \
+Instead of initializing the array with memset, use declare init pattern
+that is present under the kernel tree in other drivers so we can remove
+the memset call.
 
 Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 ---
- drivers/target/iscsi/iscsi_target_util.c | 17 -----------------
- 1 file changed, 17 deletions(-)
+ drivers/target/iscsi/iscsi_target_configfs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_util.c b/drivers/target/iscsi/iscsi_target_util.c
-index 9468b017b4a7..6dd5810e2af1 100644
---- a/drivers/target/iscsi/iscsi_target_util.c
-+++ b/drivers/target/iscsi/iscsi_target_util.c
-@@ -28,23 +28,6 @@
- #include "iscsi_target_util.h"
- #include "iscsi_target.h"
+diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/target/iscsi/iscsi_target_configfs.c
+index 0fa1d57b26fa..f4a24fa5058e 100644
+--- a/drivers/target/iscsi/iscsi_target_configfs.c
++++ b/drivers/target/iscsi/iscsi_target_configfs.c
+@@ -161,14 +161,13 @@ static struct se_tpg_np *lio_target_call_addnptotpg(
+ 	char *str, *str2, *ip_str, *port_str;
+ 	struct sockaddr_storage sockaddr = { };
+ 	int ret;
+-	char buf[MAX_PORTAL_LEN + 1];
++	char buf[MAX_PORTAL_LEN + 1] = { };
  
--#define PRINT_BUFF(buff, len)					\
--{								\
--	int zzz;						\
--								\
--	pr_debug("%d:\n", __LINE__);				\
--	for (zzz = 0; zzz < len; zzz++) {			\
--		if (zzz % 16 == 0) {				\
--			if (zzz)				\
--				pr_debug("\n");			\
--			pr_debug("%4i: ", zzz);			\
--		}						\
--		pr_debug("%02x ", (unsigned char) (buff)[zzz]);	\
--	}							\
--	if ((len + 1) % 16)					\
--		pr_debug("\n");					\
--}
--
- extern struct list_head g_tiqn_list;
- extern spinlock_t tiqn_lock;
+ 	if (strlen(name) > MAX_PORTAL_LEN) {
+ 		pr_err("strlen(name): %d exceeds MAX_PORTAL_LEN: %d\n",
+ 			(int)strlen(name), MAX_PORTAL_LEN);
+ 		return ERR_PTR(-EOVERFLOW);
+ 	}
+-	memset(buf, 0, MAX_PORTAL_LEN + 1);
+ 	snprintf(buf, MAX_PORTAL_LEN + 1, "%s", name);
  
+ 	str = strstr(buf, "[");
 -- 
 2.22.1
 
