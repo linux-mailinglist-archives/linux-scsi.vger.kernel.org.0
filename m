@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A97173270DE
-	for <lists+linux-scsi@lfdr.de>; Sun, 28 Feb 2021 06:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756D83270E5
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Feb 2021 06:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbhB1F7J (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 28 Feb 2021 00:59:09 -0500
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:1366 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbhB1F7F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 00:59:05 -0500
+        id S230248AbhB1F7u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Feb 2021 00:59:50 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:34894 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230235AbhB1F7q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 00:59:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1614491945; x=1646027945;
+  t=1614492687; x=1646028687;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WtNMMAgFJuO/rCrjBbOX1Y+YFKzRHWrQ6/oJa5ZpzLM=;
-  b=Z/R1/Ss0RtrA/9J9KCWsAI7GiLmzAW7vRDoZdHLvroWtVYesCM8rf+z6
-   f4E1G43MrC9Fa1Pobw+d+myQqESGAVL2ErrOT2OhEcXsShVIbuLJQFfiD
-   jlArII964oct8Sn19bZPtAHlTRETo75ftrd1JOATIbx6Z5pNuqkQqId+M
-   I2+0G0dtBNPiD91j5UK/pgJbRbfjLji4ofHW8jZbiWhrhsohz75epoEzZ
-   8pFsjN1bSS37BrJcXov5+mNzQlWRdp+eq35MByw2FgE0CQ2st+SbzkQWd
-   o1oNCrTHO8GVWpwb8RoUlfpY7kq62tKS/hQeG1hWclRc7Pgcsw8nNfhrE
-   w==;
-IronPort-SDR: EVxhdmjhwjgXFWTMOFcnCXtZgcDaaj+WIhAmQKOwuFDKKH1WsN9pjp0T8UopNTnEjzf4zegYv2
- QsZJ/G3wC5YsT+1++1ogpE/9QLPddfNvz+0ljC+BCQUrbyY4gS0FYn7qeICcdttAGXdAqInghc
- qlrcyH+0Gh/ZPFkDS0M49Hpr6QzVxxTQPytKgsxra97ElBprHOVXmr8p9goUIYo+3VIsbPEIV0
- p7lHOkzrazuoUCQ6rGeeumyOFIQ5chB0zPnd1tCIl8LjVKuaUTHHDSR5yW+SlgXt8Y7WgW2jZ9
- mF4=
+  bh=wPdIvppD0YsC5I7aHdBmZrV0Q8Rh2FzwPy4aY7o3FMk=;
+  b=pIlPnPgWak9YcrRUId9w96jN2Dxcq4r2W2lsdvu3zYGVxTMcIcO3Yna+
+   fIGbm7eWUyrzjEsuiOI9A0ONR8qT9TNqDcFlE2MkDbfzT8QG1ImJn8zKS
+   obbicbXy+I7sKIjsTWGFKla4kXRl15sL/ioX9A0RDwsDAfHu+54bE/oXQ
+   B05bj55agX90VBaPmov6wRNrHYkRYITX+EwogOwQQXe05Dh3csypjZCkj
+   WSI34o2qnGxKl7tsIkvvjFq/O4Bc8q/Z/4AW+elD7OEXhvBohWlthDinE
+   QukCwsbOtYWGaFJyPKuD4/qDP0RIs8QQLh5GvNMVyQer4XYJjAn3vhkXV
+   A==;
+IronPort-SDR: Ug8pQgtoMs5+E061BMwemvCTkFUtZ1CJxR690L6eQhTFX2RxrV4roQyVqTC5neJjaAqTtGljQ1
+ svBsFvMZyaMQGGdFnGvsuxjm8RIEm4AamD8uHmZq6V10/q9S65OjGVASwdN116hx9MRtXyf/ye
+ pdrHg2ZDLXIwGLcLnF6yx9ldevRwJTLhbHUbO1ePbBjNoxp8Z40tQYXIbWbn/0v9F2ekJdTZA6
+ lQsRFC9nfQWju/699xORQ8xIxrMG0U2bvIwI8TNgP2EFB8EL2E0g8ZGuc4dbVnOtYHC91jP0Dx
+ ZR0=
 X-IronPort-AV: E=Sophos;i="5.81,211,1610380800"; 
-   d="scan'208";a="271564073"
+   d="scan'208";a="265236080"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 13:58:00 +0800
-IronPort-SDR: OcYEG/mt8p57+78wXBYOMHPjyoC89uCM7onqPS16QRFZ0XqZyzZeS4y1ORJnNbFw0rA6bvEvMN
- yMv1fa1Y2irgyXLhnBGqKAUwjUyr2b+0ROZYLEL8ESWfSn8tyeHVeeW4lE3aBo0qqoX/+WcHIL
- 5k3I/7bR1HDRl8M7ceCI8f4GebIfS1ss0azIDTx0dtK0jaf+dTmxd/SITPvRVxJ5hWZvx7vhY3
- oTzOHtYzHkRwlc812NinsDKOJGawI5JRx18g4gxqVaQ1ny55+KiuTWbupkTTK5ANBYbM3hPPQD
- 5SpdIHIoqmLWkip+ft+DvnST
+  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 14:08:59 +0800
+IronPort-SDR: Fp2xBH0LQTu/Ba8VMc1E9X0Pxqn5pD1w18Pfn3RHRQikvemoZRwv+C11H3Ilu51X7bB1RxGfXO
+ ew/fuhV2AVzroh9C9O4RvIi5RORsXlwv2AGdSAs3vxzT3LGR4xntwV7yCDeEpsPhxDkm/4cRar
+ cO0GF+q6mdVwh5D1XncoqS22vJh6RcWWtMiRWOrMi+Zta+J3G3OfzcPUBe5KCT0mejFl8rD+Iu
+ v4GLoaQvs29+9ORKy25ZFpzua0J28Xr3FUOZParbic2RNR+7MUM9Hzi8HYEEEtUGDgX1RCH/+7
+ mR/l8BDbySi/8l2X3czogr3W
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:41:10 -0800
-IronPort-SDR: GL/VQWbHLKGHW2/D8fYnwdqdRqdbdHUMEP90WLrQdbwPr1oKE7RGNwzVo06Xmcmc+eBgUxzMve
- eVAdxgoJvBeX91Xq+jm0fO/u+wh6FGipr64D6IR/5RvJVnNqeMiRd31uwzqqpU4haKf6J91yeN
- yGjnD0kdUiqIxj+LSzbF/FnSArpY9QAAD5f7WhpNS92w3yjx0YLAywZ7TyhxmJElfzYVzP//w8
- DQaqMXjS4XFF2OfFJIgFeLb4oehbBBkqgXjkP99IruqzBES/7NWyopu5Ic2BLGIlIehxYlA6sn
- xio=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:41:18 -0800
+IronPort-SDR: zc63QTPprKAyK0tS4S22G+LQT1cONyRWNTeWQTBCiUJcOEbi/Ewx1u7lYJbyB1GTKQZhzoas2i
+ AIWAEL0sCmX92F0jEiBM4/OiaSwYa5kic+h3ypLvFr/y0ywc9pzMkvkbjb6Pzvr0EiIV55R47R
+ TRyUEmmm4sn+qjaC4GuIx9/PHZQgYjXpSd8viCiPYHUOH/H4BSgUvYhPa9Df2/JQRZreNm4ofh
+ eRW8NUIoQCox93EW2slwejn9tEH9CUG97trxOzpjUxaPY/7BPbJNGvpHa1oDZRBNjtARQeMzSJ
+ Mek=
 WDCIronportException: Internal
 Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:57:59 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:58:08 -0800
 From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     martin.petersen@oracle.com, hare@suse.de, jejb@linux.ibm.com,
         mlombard@redhat.com, michael.christie@oracle.com,
         bvanassche@acm.org, houpu@bytedance.com,
         Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [PATCH 06/23] target/pscsi: remove unsed macro ISPRINT
-Date:   Sat, 27 Feb 2021 21:56:28 -0800
-Message-Id: <20210228055645.22253-7-chaitanya.kulkarni@wdc.com>
+Subject: [PATCH 07/23] target/stat: remove unsed macro ISPRINT
+Date:   Sat, 27 Feb 2021 21:56:29 -0800
+Message-Id: <20210228055645.22253-8-chaitanya.kulkarni@wdc.com>
 X-Mailer: git-send-email 2.22.1.dirty
 In-Reply-To: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
 References: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
@@ -69,27 +69,26 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Remove the unused macro that fixes the following compilation warning:-
 
-drivers/target//target_core_pscsi.c:37: warning: macro "ISPRINT" is not used [-Wunused-macros]
- #define ISPRINT(a)  ((a >= ' ') && (a <= '~'))
+drivers/target//iscsi/iscsi_target_stat.c:36: warning: macro "ISPRINT" is not used [-Wunused-macros]
+#define ISPRINT(a)   ((a >= ' ') && (a <= '~'))
 
 Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 ---
- drivers/target/target_core_pscsi.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/target/target_core_stat.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
-index 689e503e3301..7b1035e08419 100644
---- a/drivers/target/target_core_pscsi.c
-+++ b/drivers/target/target_core_pscsi.c
-@@ -34,8 +34,6 @@
- #include "target_core_internal.h"
- #include "target_core_pscsi.h"
+diff --git a/drivers/target/target_core_stat.c b/drivers/target/target_core_stat.c
+index 237309db4b33..2d2c7e377722 100644
+--- a/drivers/target/target_core_stat.c
++++ b/drivers/target/target_core_stat.c
+@@ -32,7 +32,6 @@
+ #endif
  
--#define ISPRINT(a)  ((a >= ' ') && (a <= '~'))
--
- static inline struct pscsi_dev_virt *PSCSI_DEV(struct se_device *dev)
- {
- 	return container_of(dev, struct pscsi_dev_virt, dev);
+ #define NONE		"None"
+-#define ISPRINT(a)   ((a >= ' ') && (a <= '~'))
+ 
+ #define SCSI_LU_INDEX			1
+ #define LU_COUNT			1
 -- 
 2.22.1
 
