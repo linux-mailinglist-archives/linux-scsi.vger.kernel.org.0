@@ -2,65 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7053270EA
-	for <lists+linux-scsi@lfdr.de>; Sun, 28 Feb 2021 07:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DCA3270F0
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Feb 2021 07:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbhB1F7q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 28 Feb 2021 00:59:46 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:2540 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbhB1F7n (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 00:59:43 -0500
+        id S230281AbhB1GAN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Feb 2021 01:00:13 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:6288 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230203AbhB1GAK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Feb 2021 01:00:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1614491984; x=1646027984;
+  t=1614492010; x=1646028010;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QvrZhvR2RwJAY+XI+wFrZuuLCAZRVw5n7M7KIGaG594=;
-  b=BIyJ7jEA7NmvttJPp9ayO8feeQMMUYoGX8PzKCkUBT+DinaNtUte1FOu
-   7GxFJbL5E21eagZ/yyGVSG4++Hv8umL9G0Yk1WIOWBQOez9B1ora8xy2/
-   1LpHRM7xyLR2Kv3DYdtIwyG3pp1mu4kzMfPexHAub7ckBM2mkkdx3AMOJ
-   Rdsl96LPtwoeCqS/BgvR5HbLAvuQve1+Q77Cvzavo6tfwKmAcuHrukojZ
-   CtCmoT7r8dGJhNlnO7LsKUFQitLB0Nh9vOzehRvbkJA9Dzg9FOc8ve6cx
-   sH8C27ZOSvEEh1CzO+QmohEhbQ1+4hOY4JA9oe6LvLeld7u3KNFeciDnW
-   A==;
-IronPort-SDR: KA5s8ZgOKQvSF3prb+fvVXd2iOl5X+ZAXYj/fZDl/aRFHSea90t+0xHAaZy73nUP+Wnh88Zogk
- BsPlKRu0Um9TjSHrvR2Fvvzc/SX9PY1Melmw5zCMr0awIMh3DQm7LScpRjWU9/qnKwIRToxFOC
- 4EdWLe8AuPIYSzS5RZ46W/2PrQTjXfWoEsa185nfPxwC+/GzAjFU4+E5agVWAEkI4N8+V9B3V1
- gTFT0kS2IluB35HLX7nQDThs1ewjb/JafI8A7UfKzUF7prYXzMkiZmflTzqm5RBohYQviluyR3
- DMI=
+  bh=1wbH/tii0VH/dbuuyyUFSquAFgn70CaFzqbRksUlvyU=;
+  b=ClzdxL617TOUdFz7/r9QLiEeDQ3Yu7s9mv+7F5Z774j6iXsauX9ClQFp
+   zYGz2hwMHr/8UhH2dyyEYin8u8hMTkmy3KyLr1o3B+PXHt9UeqmAAWDBq
+   /Wg0pdULMGUHaEnXli0mNcwZxaaxsCSO0mA8Q/X6VW35Mbs/OqDC/NKqi
+   IiVksWKOMpsXT+I8xgK7aWfLrSaX3oYgG0BWo0+4UYyMbbRGz3kWp/OTc
+   gFFyOlrSocF1W8COp46MYswLm44y7QQkRgyE7vbQhmb9LdXIE5WYdWkqV
+   Mn+1GlthG1aFGYfnNodg0r/HKwh3OJrHlGphkfqozGm2e4K9iz9SqF224
+   Q==;
+IronPort-SDR: CVpfMFUhMSfR9rykoiBQR5mm6Ax7gH0LwHp6hih+I3M4dQsT6bBdrsqxFigudansQvREekRBKF
+ kEm3rsPo327zvl6M60CXQoWnCOvBx5cw+p6mGrch7O9msj40ySGl6AWrv/VmOKsYsj5uMM09TW
+ JY3GanO8ZAhVJkCQ5aNjdI/NdBR6DBRxhClKbJt1G1nn8qH9eoMrUAuJH9erQf4e9yedsJvNt0
+ mi7JzFJTNZmDKKAYHy41IvunHfWBJJTtUfqZpV/nCaWkutVE0TuF9xKxPaTgPgOdrcQtTxD2vw
+ 8Lw=
 X-IronPort-AV: E=Sophos;i="5.81,211,1610380800"; 
-   d="scan'208";a="162152825"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 13:58:31 +0800
-IronPort-SDR: 6tfBvxKLI0XFh6LLTyw/4bBLEnE2n/sDpbMPE3JbNQb2z6l6kqq7Croebm7KBnTWsrv0ollOXR
- 4Sh4vYW+W88tJ59rWU3oz3Lb0Mom6RS13AgHfNOsKVkLN9PbKfW1F93Bwg+GMbP68EAq4MZcf1
- fFnpsIdNdrp/H0neL5pADq1U8eFh+Piss7sRl/LLXX+C6OqSi2XndIRql3TrWjdwzQki6/Bm/n
- EZnPTxSnfnnoW6u1X7lZjXanrdo4SJ+Q5HZmYIKNGk2zCuPS+gLbl+MycNi+IhWKoWv66f9lcn
- DSQOodXLki002fKPDO6UJz7B
+   d="scan'208";a="165466159"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2021 13:58:38 +0800
+IronPort-SDR: CyXwvX5SI23vUzm0QmvOX8LwKyABxdo6ucA3vH49N5hyYJs6lt7ludImtmsj/+ObexR7BiyeYE
+ 7Q/Gmo9Np2mXj7YqmY8R8ZKj2qCfFxg6K2/EcO4P4xaXcHBZX2uXA7WVgxxHL3QLwVTS2rYXWB
+ 693TpkdQOWFs0vgx1ZTsZgPwvuXe8joGJh6EU9EOZk+neu/qZX6w3RpCF59rZuLtMqTZzmpxhe
+ ycC7cIc+RdLhy5fHJJk6MF0rzd/Geuw+NGNst9cpm6mNqRHOaZis/NqsVGAsz5MWqBEaRNzelT
+ I5OyvBEO7J+xOB1DiZ7BgLwW
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:39:49 -0800
-IronPort-SDR: 6hth63V4yCu2NcZQZmh0CBvH1bhkcN6LRj/dAjeTjayay2NaGXa9jEV1wE4rgvRlubnNeUStSO
- NPQXoEwXrA8Ust/O5rYa2D3Sjqt8Y9zoQu1qlyriNx5MtEcaYaEezNXIA4awMwEThlOhCEwP5W
- D7ATSbpHy6Uq8Ljc6TM+97zYAjFv/09n2avGF/DcfFR+zoF7K8EPXKNK1QUvqrW2m27CjBOdcY
- wPuSNyXmx8zLMPz4aVbUCWqZBSb8yr0WapJ704dlVuaadu0QA1xOV5Od1gCmSfv+ZgRbCNiE1t
- 3XA=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2021 21:41:48 -0800
+IronPort-SDR: lJWeujZDKckaZd3TUpDcX/PyE2mZ/idmvqCXuP8lOwdHcpX84p4qLJzTgdIN2XP+irshYqkzxZ
+ 52/KOqcc1Wqi06ZhsN27MecTIDzC2pkVMO2DrZgGFyYktUO87umUzCpzX2jdvso+1QK5hU++dT
+ 3DaSBNCi229MHH6EHxmoE/rKJM9tz0elzooDiRQB0wioE5V3Lp1y6paDxgFhrdDq2n3EJKB9jI
+ BU8CQigTgzO9od3HOyk3CRWwJ0Q1iZ5f2mZJr4CgFKjErYQ/WYv3yfM7buP0eunwiMu1ucQ3PZ
+ ymE=
 WDCIronportException: Internal
 Received: from vm.labspan.wdc.com (HELO vm.sc.wdc.com) ([10.6.137.102])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:58:30 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 27 Feb 2021 21:58:37 -0800
 From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     martin.petersen@oracle.com, hare@suse.de, jejb@linux.ibm.com,
         mlombard@redhat.com, michael.christie@oracle.com,
         bvanassche@acm.org, houpu@bytedance.com,
         Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [PATCH 10/23] target/iscsi: remove unsed macro TEXT_LEN
-Date:   Sat, 27 Feb 2021 21:56:32 -0800
-Message-Id: <20210228055645.22253-11-chaitanya.kulkarni@wdc.com>
+Subject: [PATCH 11/23] target/iscsi: remove unsed macro PRINT_BUF
+Date:   Sat, 27 Feb 2021 21:56:33 -0800
+Message-Id: <20210228055645.22253-12-chaitanya.kulkarni@wdc.com>
 X-Mailer: git-send-email 2.22.1.dirty
 In-Reply-To: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
 References: <20210228055645.22253-1-chaitanya.kulkarni@wdc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -68,26 +69,42 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Remove the unused macro that fixes the following compilation warning:-
 
-drivers/target//iscsi/iscsi_target_nego.c:31: warning: macro "TEXT_LEN" is not used [-Wunused-macros]
-#define TEXT_LEN 4096
+drivers/target//iscsi/iscsi_target_util.c:31: warning: macro "PRINT_BUFF" is not used [-Wunused-macros]
+#define PRINT_BUFF(buff, len)     \
 
 Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
 ---
- drivers/target/iscsi/iscsi_target_nego.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/target/iscsi/iscsi_target_util.c | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
-index 8b40f10976ff..151e2949bb75 100644
---- a/drivers/target/iscsi/iscsi_target_nego.c
-+++ b/drivers/target/iscsi/iscsi_target_nego.c
-@@ -28,7 +28,6 @@
- #include "iscsi_target_auth.h"
+diff --git a/drivers/target/iscsi/iscsi_target_util.c b/drivers/target/iscsi/iscsi_target_util.c
+index 9468b017b4a7..6dd5810e2af1 100644
+--- a/drivers/target/iscsi/iscsi_target_util.c
++++ b/drivers/target/iscsi/iscsi_target_util.c
+@@ -28,23 +28,6 @@
+ #include "iscsi_target_util.h"
+ #include "iscsi_target.h"
  
- #define MAX_LOGIN_PDUS  7
--#define TEXT_LEN	4096
+-#define PRINT_BUFF(buff, len)					\
+-{								\
+-	int zzz;						\
+-								\
+-	pr_debug("%d:\n", __LINE__);				\
+-	for (zzz = 0; zzz < len; zzz++) {			\
+-		if (zzz % 16 == 0) {				\
+-			if (zzz)				\
+-				pr_debug("\n");			\
+-			pr_debug("%4i: ", zzz);			\
+-		}						\
+-		pr_debug("%02x ", (unsigned char) (buff)[zzz]);	\
+-	}							\
+-	if ((len + 1) % 16)					\
+-		pr_debug("\n");					\
+-}
+-
+ extern struct list_head g_tiqn_list;
+ extern spinlock_t tiqn_lock;
  
- void convert_null_to_semi(char *buf, int len)
- {
 -- 
 2.22.1
 
