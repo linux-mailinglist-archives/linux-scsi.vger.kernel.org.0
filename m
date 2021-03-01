@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5079C328736
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 18:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63746328744
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 18:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238059AbhCARWE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Mar 2021 12:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S238069AbhCARWi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Mar 2021 12:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237835AbhCARTM (ORCPT
+        with ESMTP id S237838AbhCARTM (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Mar 2021 12:19:12 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE1AC061797
-        for <linux-scsi@vger.kernel.org>; Mon,  1 Mar 2021 09:18:26 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id s7so3128307plg.5
-        for <linux-scsi@vger.kernel.org>; Mon, 01 Mar 2021 09:18:26 -0800 (PST)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A37C0617A7
+        for <linux-scsi@vger.kernel.org>; Mon,  1 Mar 2021 09:18:27 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id p5so10329328plo.4
+        for <linux-scsi@vger.kernel.org>; Mon, 01 Mar 2021 09:18:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ak1E0xkuYN1qakVwPgq0NC9IML9/AUm8rrw3eyJlwZI=;
-        b=GJf/k1XIOaQsfJ/vTXOll55vFxHx4eTjTsdqfJ4XPIB+a9oHJSNIHbE1ofIUFTWRq3
-         oVZHRk2PH93/gGANWIfx5LbtVT+OzEHl1Q6u81CeTZ4prYpIkRjfcHNjM/KHVeBNK/sp
-         AKPRlcqhQbNX1FealOzq6cQpBLubp9ENikArnlN1Odn+xJUStXwVKRMotsCNj9TIOaIp
-         n5q9GNuiSN/kYJTuk1NblyP7PW/SLB+GxbRK004eXTxI00Y0MKXbn/I6vEm4bWyzAs2w
-         EQrAqSIcTifquakzNRWENf/K4IL3PucrE4fLb5E+AIOinOClnV4YMoyQ27RdNER1dGYT
-         gQ1w==
+        bh=4p43K1HN6fO81bEyQcwOb3iUbzlwS3ZUXijLBb/8iZ4=;
+        b=AIYyw98C3a7zV8mf1A68MPf6N28agJLXk+XunjDOYTovmuagy/oYqvwUtam+jn6ztd
+         WI6F+KGUhAsakq2KLueULhVC7LjGxNEUb8rscPvQMIL08Xij9S995Bp/ktFKfdEy5l8n
+         3utpfLqXD2LOzR9n93tQXAEMri+wM/xfr9pUh2ExzwlntuNpqVOaSueizLcCcFEBSLG0
+         XBx7F1vaSlUQA+xvbPwjXwfujaPfm1WQZ2qnEdhxvaet//m1E/JGi1s6Y44uNcnV36Aq
+         QkOSG8lbekBdrPzhjRoJXownS4lt9D8lbwyFrnbr53/t3Hfc9ZFSjDkSA7pZnunRMgjt
+         puvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ak1E0xkuYN1qakVwPgq0NC9IML9/AUm8rrw3eyJlwZI=;
-        b=oyVz2q1XG22oCpzJ3CwqM4+ELaZLab33EDxdK3G9iYBKwFzVY9xS9WTTz6jrWNJboL
-         2L5MuOy2iNCfddNJzXB3Th4UHSqENpfnKd+Aj+q7xxIftkaBzYJfwCx5qx45M9VzeGJ7
-         pojQ8C3EjqX9zza1xq006u6KPhmZBTUe0gQmtXeszDW7JZqxiqBLos38/eGKhNhFxcoR
-         4I3b8Uqwh+rCIXB5X5VYO4NE360lPnrmJ9l+ueubXvfuMadO8FvAncd6nfdt3eq1eGVs
-         n3yyTyLGDK4PPw9kTTbVdTlYz087Z1SLrQF+GCj4Cz/OpLXsf1i/GfHVqMsV8a8IMiBH
-         4Wgg==
-X-Gm-Message-State: AOAM533xolHZZGxTnkxYQF4nw9a2R+wyiSy97c9tUYgF13EBFwNuDCGe
-        igA5wHVE/W6SC/B7qRml2g/x8sI2mYA=
-X-Google-Smtp-Source: ABdhPJz/gWAIuDACvjoc3/u34xCT1KQDTzfITqwLBYrK6zkeMFlP3XOPzm0qdVdEuAfALuPXn6I8kw==
-X-Received: by 2002:a17:90a:e28c:: with SMTP id d12mr16336829pjz.167.1614619106472;
-        Mon, 01 Mar 2021 09:18:26 -0800 (PST)
+        bh=4p43K1HN6fO81bEyQcwOb3iUbzlwS3ZUXijLBb/8iZ4=;
+        b=K1ZSOrvQVrB9aRQxOPRlbsMH7Fw9klUe+gZqQYOmkJ3KNGSxTcmA9JAm6sQ/rqx6di
+         7ndzc3/jBPKS7rp3WDFqpveSJoULg1NoiuPCS9wYufZqQTLl/aPrqnfeR1BpICjmihfx
+         JBOr0lspoePJi+/k3Z6Q36+6HekrSL7tOP7kwmLDbaem4mK7I6CWHmgXxqsXyErcwFqA
+         +UOkGqXzLYAw94L2nXXMOnd8imdkC8X0xBofpitBLkg29v6helCV9aL+SZDCFwmKceZB
+         /nWklzmWwzBE38QkofxtxkJcTKWjuBNcEG+FfItmzCkx8HOb10/3jknJQTt/NvdQsern
+         gHqQ==
+X-Gm-Message-State: AOAM532O3+DZhqhmQTV4e8MLj8GD97NFx17pqn9/HbRHj/CX0KKdhk/s
+        FvaeYsExzyA4R3RUKGLvhSPBTKgVRxs=
+X-Google-Smtp-Source: ABdhPJwldLl8alZTMovkmSnxl+SGO0QmnzznQAX9LrMK8XbryIdn7HY/YeWRatYesEXlZsWhpklUSg==
+X-Received: by 2002:a17:90b:1649:: with SMTP id il9mr18022705pjb.62.1614619107159;
+        Mon, 01 Mar 2021 09:18:27 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t19sm10133602pgj.8.2021.03.01.09.18.25
+        by smtp.gmail.com with ESMTPSA id t19sm10133602pgj.8.2021.03.01.09.18.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 01 Mar 2021 09:18:26 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH v2 01/22] lpfc: Fix incorrect dbde assignment when building target abts wqe
-Date:   Mon,  1 Mar 2021 09:18:00 -0800
-Message-Id: <20210301171821.3427-2-jsmart2021@gmail.com>
+Subject: [PATCH v2 02/22] lpfc: Fix vport indices in lpfc_find_vport_by_vpid()
+Date:   Mon,  1 Mar 2021 09:18:01 -0800
+Message-Id: <20210301171821.3427-3-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210301171821.3427-1-jsmart2021@gmail.com>
 References: <20210301171821.3427-1-jsmart2021@gmail.com>
@@ -63,31 +63,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The wqe_dbde field indicates whether a Data BDE is present in Words 0:2
-and should therefore should be clear in the abts request wqe. By setting
-the bit we can be misleading fw into error cases.
+Calls to lpfc_find_vport_by_vpid() for the highest indexed vport fails
+with error, "2936 Could not find Vport mapped to vpi XXX".  Our vport
+indices in the loop and if-clauses were off by one.
 
-Clear the wqe_dbde field
+Correct the vpid range used for vpi lookup to include the
+highest possible vpid.
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_nvmet.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
-index bb2a4a0d1295..a3fd959f7431 100644
---- a/drivers/scsi/lpfc/lpfc_nvmet.c
-+++ b/drivers/scsi/lpfc/lpfc_nvmet.c
-@@ -3304,7 +3304,6 @@ lpfc_nvmet_unsol_issue_abort(struct lpfc_hba *phba,
- 	bf_set(wqe_rcvoxid, &wqe_abts->xmit_sequence.wqe_com, xri);
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 48ca4a612f80..a60fa3f67076 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -6081,12 +6081,12 @@ lpfc_find_vport_by_vpid(struct lpfc_hba *phba, uint16_t vpi)
+ 		 * Translate the physical vpi to the logical vpi.  The
+ 		 * vport stores the logical vpi.
+ 		 */
+-		for (i = 0; i < phba->max_vpi; i++) {
++		for (i = 0; i <= phba->max_vpi; i++) {
+ 			if (vpi == phba->vpi_ids[i])
+ 				break;
+ 		}
  
- 	/* Word 10 */
--	bf_set(wqe_dbde, &wqe_abts->xmit_sequence.wqe_com, 1);
- 	bf_set(wqe_iod, &wqe_abts->xmit_sequence.wqe_com, LPFC_WQE_IOD_WRITE);
- 	bf_set(wqe_lenloc, &wqe_abts->xmit_sequence.wqe_com,
- 	       LPFC_WQE_LENLOC_WORD12);
+-		if (i >= phba->max_vpi) {
++		if (i > phba->max_vpi) {
+ 			lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+ 					"2936 Could not find Vport mapped "
+ 					"to vpi %d\n", vpi);
 -- 
 2.26.2
 
