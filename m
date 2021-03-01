@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5533283D5
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 17:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AE5328477
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 17:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233087AbhCAQZb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Mar 2021 11:25:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60002 "EHLO mail.kernel.org"
+        id S232373AbhCAQgV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Mar 2021 11:36:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36256 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231185AbhCAQXs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 1 Mar 2021 11:23:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D94264F2B;
-        Mon,  1 Mar 2021 16:20:10 +0000 (UTC)
+        id S232474AbhCAQbz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 1 Mar 2021 11:31:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 417E164F30;
+        Mon,  1 Mar 2021 16:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614615611;
-        bh=SdHd928UuMCaRSkSWIFAgCDzY0CyXGvRVC5GjNxfzQg=;
+        s=korg; t=1614615868;
+        bh=EM+Wqcb0VfnGORtrM6ZqObuFYdx4JuuV92yGw2kEbpc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hR7QD50BYz6nbhRjdZnS3SyT0irZ706QhDn7NU0x8ZNxHzyy8JGyMwhjAz+bhPUsK
-         9YP5GWcdqzNfR0kcWnB0PFXppSdAAEKlaNuaFoRzCzFbl28xJ9RFHaMratvcWJ0rQD
-         bPJTaxcbxXtqjnTtIOgoJ6T6/TPrP3LHkynvUznE=
+        b=hzyfmvY0HUhmmPqpg1XCSKMMu4r1kQEBoqQH40O3u/ZBf/JQ9krAfzS/y8D78Ohrb
+         QBh0dRgLzoo1EtADBtBfu5kNL4a0sp8OmDd0ohCRTn9g6uco4DahYF+UyOt9p488Ag
+         3srDceaCn41czjfHuUac9cyhrnG6ojVCPZactYgM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-scsi@vger.kernel.org, kernel test robot <lkp@intel.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 61/93] scsi: bnx2fc: Fix Kconfig warning & CNIC build errors
-Date:   Mon,  1 Mar 2021 17:13:13 +0100
-Message-Id: <20210301161009.890709141@linuxfoundation.org>
+Subject: [PATCH 4.9 088/134] scsi: bnx2fc: Fix Kconfig warning & CNIC build errors
+Date:   Mon,  1 Mar 2021 17:13:09 +0100
+Message-Id: <20210301161017.901969389@linuxfoundation.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210301161006.881950696@linuxfoundation.org>
-References: <20210301161006.881950696@linuxfoundation.org>
+In-Reply-To: <20210301161013.585393984@linuxfoundation.org>
+References: <20210301161013.585393984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -79,9 +79,11 @@ Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/bnx2fc/Kconfig |    1 +
+ drivers/scsi/bnx2fc/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
+diff --git a/drivers/scsi/bnx2fc/Kconfig b/drivers/scsi/bnx2fc/Kconfig
+index d401a096dfc7e..2eb2476852b11 100644
 --- a/drivers/scsi/bnx2fc/Kconfig
 +++ b/drivers/scsi/bnx2fc/Kconfig
 @@ -4,6 +4,7 @@ config SCSI_BNX2X_FCOE
@@ -92,5 +94,8 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  	select NETDEVICES
  	select ETHERNET
  	select NET_VENDOR_BROADCOM
+-- 
+2.27.0
+
 
 
