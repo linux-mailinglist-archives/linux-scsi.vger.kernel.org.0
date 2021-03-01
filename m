@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE3A328740
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 18:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7840328733
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 18:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237927AbhCARW2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Mar 2021 12:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S232328AbhCARVo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Mar 2021 12:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237839AbhCARTM (ORCPT
+        with ESMTP id S237243AbhCARTM (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Mar 2021 12:19:12 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27627C06178A
-        for <linux-scsi@vger.kernel.org>; Mon,  1 Mar 2021 09:18:30 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id jx13so8236192pjb.1
-        for <linux-scsi@vger.kernel.org>; Mon, 01 Mar 2021 09:18:30 -0800 (PST)
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD32C06178B
+        for <linux-scsi@vger.kernel.org>; Mon,  1 Mar 2021 09:18:31 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id d13-20020a17090abf8db02900c0590648b1so2632846pjs.1
+        for <linux-scsi@vger.kernel.org>; Mon, 01 Mar 2021 09:18:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WySWF1YYXPBKD6hUT6VjoTWcYnR1Fng7ndyua9yFt2E=;
-        b=HeCOSGQnmJ2jJXAc3QU+bvzZK3eFZVuJitcSQqgrFe79ICV7VJm6e011f51+FA57pB
-         HXnVAng09yLrB2QWW1min6kLnONrTdmV6DifxzriplbFEslADFw+q+vYvFAAd91cp4gj
-         uNpAxLVlsVM/Z1b7jTGycyj8WL1nEysjWz6IN2ZZET32w9AwKRjkMdkDumt2ofNK0i0N
-         HKgokltgai6A6j//OflPu0VqF7Gh+ZdwoXP4rtwJWNegzirt9mwp/kXXZ+ouE4c3y68f
-         eoyusDrx1dh6iLVRw8FVfKLrRgoiOPEr9h1cuVwhWt8JvNKE0+amVyIVuK0ECyx/9L3c
-         iNtA==
+        bh=ohwnhBhMn+VpcmeGr7FMjYbMSUpORud4TJ/XkMXv4u4=;
+        b=dtcfS6bGK2Un8Kk6vLwac55MIPkkUV4r0aJo3/5oexem+Xz/7qo1Q2PSqMojbh69zD
+         o8ooTA46lbXXghljJ+OO1tah0dbc/0+UHNt1nbfn7TCQW023DiPdfxiioOlMscN9f1nV
+         gjUd901/dhbRjUFwFtTEaeb1IdCIsP7Kx1auNTLduV5/B2r5MI+mk0ETCQ+76rP8/bkP
+         XKtR/pAFojn8hhVdojCNlIzmXspfVlJ97s4QYwTem2aOl2Q4oQ80tv54IuTN1rdANbTt
+         WXxL30jAaJB2KnsHjDMBwhoS5dV1rXVIWtt2Rb+tW9uDk6ONFYZ8dzsYrPYOnYLtR6TA
+         m3Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WySWF1YYXPBKD6hUT6VjoTWcYnR1Fng7ndyua9yFt2E=;
-        b=gUKc4qWBPdv3K95e13VIvxYa9PM1aymK/dehWXLvsMKjaKmTaiJt4o3YpjQpEJFBBF
-         teCLfW0CYTKqwEGcqzmO5wBc3hjuF0BNoKqm6Gklps6nQZvLwmwB8gpm4VqiqRH9igZv
-         DelAHhRBZ/KP8Rs5aeyvtfYFKmOGeA8khlVVNcQ1KmIhHI41Wivlf6gBxZ38TgWv80tV
-         GYpy5f0/HErYA8rOjLGN2HjsIpYINw1lGjUm5iFJiqcdQYdwooNHA0Cw10rn9VisiQAz
-         r2OPBLdLIZ5FKVBS/hTaVhryYIFDq5qJ904mi6wueUxYf5erL2m+mDLeopXhwkNKI430
-         +PCQ==
-X-Gm-Message-State: AOAM533GjuUnxgLN2WrUBoZRtX5HyG05r/hBPBM3NJesS+Fsa/44rPUv
-        dnPj8qcDgIqGIf/EHOgVMPP3xose4oU=
-X-Google-Smtp-Source: ABdhPJzbW95HFoF5dXRXTBn5nyDjv7Rn7/45/QEgO+z4yGwtLghWQQPZYYe44BPToSmiK/49/r6MiQ==
-X-Received: by 2002:a17:90a:4fc1:: with SMTP id q59mr19360681pjh.129.1614619108900;
-        Mon, 01 Mar 2021 09:18:28 -0800 (PST)
+        bh=ohwnhBhMn+VpcmeGr7FMjYbMSUpORud4TJ/XkMXv4u4=;
+        b=XKjtVbW9GJHAo4GG5QGp/itww0KE9uht0ISa37c6rBOdCCTDFBhU/On0pDgTfEIUPS
+         aem+MuANfC6n3HawVmyw65w+jl6EqreP2AxIxdtazGyV8byEwP+Kv73fTfFwk2uICJTV
+         yJDMGNueTFDdSJnZuyeluhjje77cimlJ6gmPACnOmrFVgWyZvJx1W/xITJsTgNpmAWeg
+         GkFKooM3LZPHQmo2rIeh+ssQjkah+zA+3C/VOAz+jvDn0pugfHEoDOYkiNVDne3+m4gV
+         LBDkvr5Mlbk1d9QkcG8SyV22H3rJMnYtcpOl2RyF/82KrZbJAFsuawigOKSfUlKDkvZC
+         5LVA==
+X-Gm-Message-State: AOAM532w8r9dspHKpG7+18481vP+s1FeDX+KEhCFY9EQzmKFnvj7u5Xr
+        uF3qD9hqZpNdEe6+/Udo0QwmKMBhhxk=
+X-Google-Smtp-Source: ABdhPJw2rttVNFCN+Vr7UWDbWAUUtMvyXl3VjVKo/CeN+u8IMccPjRGy3SpWU8+XTAECC9ocTNCHDg==
+X-Received: by 2002:a17:90a:f986:: with SMTP id cq6mr18785835pjb.175.1614619109713;
+        Mon, 01 Mar 2021 09:18:29 -0800 (PST)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t19sm10133602pgj.8.2021.03.01.09.18.28
+        by smtp.gmail.com with ESMTPSA id t19sm10133602pgj.8.2021.03.01.09.18.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 09:18:28 -0800 (PST)
+        Mon, 01 Mar 2021 09:18:29 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH v2 04/22] lpfc: Fix stale node accesses on stale RRQ request
-Date:   Mon,  1 Mar 2021 09:18:03 -0800
-Message-Id: <20210301171821.3427-5-jsmart2021@gmail.com>
+Subject: [PATCH v2 05/22] lpfc: Fix FLOGI failure due to accessing a freed node
+Date:   Mon,  1 Mar 2021 09:18:04 -0800
+Message-Id: <20210301171821.3427-6-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210301171821.3427-1-jsmart2021@gmail.com>
 References: <20210301171821.3427-1-jsmart2021@gmail.com>
@@ -63,167 +63,38 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Whenever an RRQ needs to be triggered, the DID from the node structure
-and node pointer are stored in the RRQ data structure and the RRQ is
-scheduled for later transmission. However, at the point in time that
-the timer triggers, there's no validation on the node pointer. Reference
-counters may have freed the structure. Additionally the DID in the node
-may no longer be valid.
+After an initial successful FLOGI into the switch, if a subsequent FLOGI
+fails the driver crashed accessing a node struct. On FLOGI error, the
+flogi completion logic triggers the final dereference on the node
+structure without checking if it is registered with a backend. The
+devloss logic is triggered after node is freed leading to the access
+of freed node.
 
-Fix by not tracking the node pointer in the RRQ, only the DID. At the
-time of the timer expiration, look up the node with the did and if
-present, send the RRQ. If no node exists, no need to send the RRQ.
+Fix by adjusting the error path to not take the final dereferece if there
+is an outstanding transport registration. Let the transport devloss call
+remove the final reference.
 
 Co-developed-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_disc.h |  1 -
- drivers/scsi/lpfc/lpfc_els.c  | 32 ++++++++------------------------
- drivers/scsi/lpfc/lpfc_sli.c  | 18 ++++++++----------
- 3 files changed, 16 insertions(+), 35 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_disc.h b/drivers/scsi/lpfc/lpfc_disc.h
-index 8ce13ef3cac3..3bd5bb17035a 100644
---- a/drivers/scsi/lpfc/lpfc_disc.h
-+++ b/drivers/scsi/lpfc/lpfc_disc.h
-@@ -159,7 +159,6 @@ struct lpfc_node_rrq {
- 	uint16_t rxid;
- 	uint32_t         nlp_DID;		/* FC D_ID of entry */
- 	struct lpfc_vport *vport;
--	struct lpfc_nodelist *ndlp;
- 	unsigned long rrq_stop_time;
- };
- 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index f0a758138ae8..cc0b4f2661ab 100644
+index cc0b4f2661ab..27e2f8136f73 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -1849,7 +1849,7 @@ lpfc_cmpl_els_rrq(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- {
- 	struct lpfc_vport *vport = cmdiocb->vport;
- 	IOCB_t *irsp;
--	struct lpfc_nodelist *ndlp;
-+	struct lpfc_nodelist *ndlp = cmdiocb->context1;
- 	struct lpfc_node_rrq *rrq;
+@@ -1182,7 +1182,8 @@ lpfc_cmpl_els_flogi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 	phba->fcf.fcf_flag &= ~FCF_DISCOVERY;
+ 	spin_unlock_irq(&phba->hbalock);
  
- 	/* we pass cmdiocb to state machine which needs rspiocb as well */
-@@ -1862,22 +1862,12 @@ lpfc_cmpl_els_rrq(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		irsp->ulpStatus, irsp->un.ulpWord[4],
- 		irsp->un.elsreq64.remoteID);
- 
--	ndlp = lpfc_findnode_did(vport, irsp->un.elsreq64.remoteID);
--	if (!ndlp || ndlp != rrq->ndlp) {
--		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
--				 "2882 RRQ completes to NPort x%x "
--				 "with no ndlp. Data: x%x x%x x%x\n",
--				 irsp->un.elsreq64.remoteID,
--				 irsp->ulpStatus, irsp->un.ulpWord[4],
--				 irsp->ulpIoTag);
--		goto out;
--	}
--
- 	/* rrq completes to NPort <nlp_DID> */
- 	lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS,
--			 "2880 RRQ completes to NPort x%x "
-+			 "2880 RRQ completes to DID x%x "
- 			 "Data: x%x x%x x%x x%x x%x\n",
--			 ndlp->nlp_DID, irsp->ulpStatus, irsp->un.ulpWord[4],
-+			 irsp->un.elsreq64.remoteID,
-+			 irsp->ulpStatus, irsp->un.ulpWord[4],
- 			 irsp->ulpTimeout, rrq->xritag, rrq->rxid);
- 
- 	if (irsp->ulpStatus) {
-@@ -1893,10 +1883,8 @@ lpfc_cmpl_els_rrq(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 					 ndlp->nlp_DID, irsp->ulpStatus,
- 					 irsp->un.ulpWord[4]);
- 	}
--out:
--	if (rrq)
--		lpfc_clr_rrq_active(phba, rrq->xritag, rrq);
- 
-+	lpfc_clr_rrq_active(phba, rrq->xritag, rrq);
- 	lpfc_els_free_iocb(phba, cmdiocb);
- 	lpfc_nlp_put(ndlp);
- 	return;
-@@ -7619,9 +7607,6 @@ lpfc_issue_els_rrq(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 	uint16_t cmdsize;
- 	int ret;
- 
--
--	if (ndlp != rrq->ndlp)
--		ndlp = rrq->ndlp;
- 	if (!ndlp)
- 		return 1;
- 
-@@ -7651,9 +7636,9 @@ lpfc_issue_els_rrq(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 		did, rrq->xritag, rrq->rxid);
- 	elsiocb->context_un.rrq = rrq;
- 	elsiocb->iocb_cmpl = lpfc_cmpl_els_rrq;
--	elsiocb->context1 = lpfc_nlp_get(ndlp);
--	if (!elsiocb->context1)
--		goto node_err;
-+
-+	lpfc_nlp_get(ndlp);
-+	elsiocb->context1 = ndlp;
- 
- 	ret = lpfc_sli_issue_iocb(phba, LPFC_ELS_RING, elsiocb, 0);
- 	if (ret == IOCB_ERROR)
-@@ -7662,7 +7647,6 @@ lpfc_issue_els_rrq(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 
-  io_err:
- 	lpfc_nlp_put(ndlp);
-- node_err:
- 	lpfc_els_free_iocb(phba, elsiocb);
- 	return 1;
- }
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index fa1a714a78f0..99307bb7b62c 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -987,16 +987,10 @@ lpfc_clr_rrq_active(struct lpfc_hba *phba,
- {
- 	struct lpfc_nodelist *ndlp = NULL;
- 
-+	/* Lookup did to verify if did is still active on this vport */
- 	if (rrq->vport)
- 		ndlp = lpfc_findnode_did(rrq->vport, rrq->nlp_DID);
- 
--	/* The target DID could have been swapped (cable swap)
--	 * we should use the ndlp from the findnode if it is
--	 * available.
--	 */
--	if ((!ndlp) && rrq->ndlp)
--		ndlp = rrq->ndlp;
--
- 	if (!ndlp)
- 		goto out;
- 
-@@ -1118,9 +1112,14 @@ lpfc_cleanup_vports_rrqs(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- 		lpfc_sli4_vport_delete_fcp_xri_aborted(vport);
- 	}
- 	spin_lock_irqsave(&phba->hbalock, iflags);
--	list_for_each_entry_safe(rrq, nextrrq, &phba->active_rrq_list, list)
--		if ((rrq->vport == vport) && (!ndlp  || rrq->ndlp == ndlp))
-+	list_for_each_entry_safe(rrq, nextrrq, &phba->active_rrq_list, list) {
-+		if (rrq->vport != vport)
-+			continue;
-+
-+		if (!ndlp || ndlp == lpfc_findnode_did(vport, rrq->nlp_DID))
- 			list_move(&rrq->list, &rrq_list);
-+
-+	}
- 	spin_unlock_irqrestore(&phba->hbalock, iflags);
- 
- 	list_for_each_entry_safe(rrq, nextrrq, &rrq_list, list) {
-@@ -1213,7 +1212,6 @@ lpfc_set_rrq_active(struct lpfc_hba *phba, struct lpfc_nodelist *ndlp,
- 	rrq->xritag = xritag;
- 	rrq->rrq_stop_time = jiffies +
- 				msecs_to_jiffies(1000 * (phba->fc_ratov + 1));
--	rrq->ndlp = ndlp;
- 	rrq->nlp_DID = ndlp->nlp_DID;
- 	rrq->vport = ndlp->vport;
- 	rrq->rxid = rxid;
+-	lpfc_nlp_put(ndlp);
++	if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD)))
++		lpfc_nlp_put(ndlp);
+ 	if (!lpfc_error_lost_link(irsp)) {
+ 		/* FLOGI failed, so just use loop map to make discovery list */
+ 		lpfc_disc_list_loopmap(vport);
 -- 
 2.26.2
 
