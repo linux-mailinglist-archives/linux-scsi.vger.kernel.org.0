@@ -2,98 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A495327FC7
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 14:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9022B328166
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 15:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235678AbhCANob (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Mar 2021 08:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235506AbhCANoa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Mar 2021 08:44:30 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B432BC061756;
-        Mon,  1 Mar 2021 05:43:50 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id s7so2716170plg.5;
-        Mon, 01 Mar 2021 05:43:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qfAZvtIygNFdBK63fVviAdwDHt8uPCG5pASN7/qd2Kc=;
-        b=uQLww7m9+73xMFaqdHyrLxYjc7kc1XasgbudiD0TT7oED3m6p93rjDX3Hyq+8GWXzx
-         cf+JynprThekzYhDjCzv6mRCGVaAXzMRfANxEwG+9MnnWkRjPmJOaL1Aalbnzo6+8r5B
-         UlNznfSfqW3pWyz/VkJFEd2bOQbbSvOqZN3hDCK6Um1PuDWEUBpE4CW3MbqgqaH6D36d
-         gpNotei/kYhV3YXyhSSRHZjtWhaf0rFlwJVZuOEMJWaHTqsEJGYxH/z5fEXrDF1qpMXQ
-         +9Rw/AfX+cJUjTrtDJzP5g9nWIgOUBIgSReATuew3i2aQdXBTnamkPZjCV8ApLNDztbe
-         x6xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qfAZvtIygNFdBK63fVviAdwDHt8uPCG5pASN7/qd2Kc=;
-        b=ljbnrhn7MbkVnWZrUcSTOxXCRSBYn+rmDpfHydIqKa13e9XFLSWyiI05YKPYcZETOg
-         DlxIh+hN+qcg2iQpmsO3QeeymgZpjvDxoq/GGSAxfdhpjdp1GirVwbBgILV8lD66DhgK
-         lSMfVItufzD7g0itaoHJdIcTNCfgogeWeDeYW1M3Ht19TvAtKF0mipHQ4KGtCDQKVOYK
-         Hnb4kccin9UWQKjlOiKlWLovAqlIOiSZhvrgzypljtTvBbPIVBDDcOtvNHzMH5jg5zpO
-         6kGOOl0e4HKhWThew/qMST0MU4Y7UjjpgDUVfOBfgbOG8c3w/YW1F5AAfP4m2RBH4rkQ
-         m++A==
-X-Gm-Message-State: AOAM530zxTVOGLyj4yaArgc90iRoaeF+dxQ8pZQ4fN+dCMbEe2sbvums
-        DruNLqyft3qm69W15wmediA=
-X-Google-Smtp-Source: ABdhPJztNTO8OOssYR2Xrrgrpt5t41ko6mjdpqhOv/LpuEBeU6on3uCr23u+NUC38mKfbCt21tAzWA==
-X-Received: by 2002:a17:90a:4603:: with SMTP id w3mr17922576pjg.125.1614606230291;
-        Mon, 01 Mar 2021 05:43:50 -0800 (PST)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id v3sm17156974pff.217.2021.03.01.05.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Mar 2021 05:43:49 -0800 (PST)
-Subject: Re: [RFC PATCH 12/12] HV/Storvsc: Add bounce buffer support for
- Storvsc
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com,
-        sunilmut@microsoft.com
-References: <20210228150315.2552437-1-ltykernel@gmail.com>
- <20210228150315.2552437-13-ltykernel@gmail.com>
- <20210301065454.GA3669027@infradead.org>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <9a5d3809-f1e1-0f4a-8249-9ce1c6df6453@gmail.com>
-Date:   Mon, 1 Mar 2021 21:43:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S236621AbhCAOwx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Mar 2021 09:52:53 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:33655 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236572AbhCAOw0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 1 Mar 2021 09:52:26 -0500
+Received: from [192.168.0.7] (ip5f5aea9e.dynamic.kabel-deutschland.de [95.90.234.158])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D8D4820647913;
+        Mon,  1 Mar 2021 15:51:41 +0100 (CET)
+Subject: Re: [PATCH] scsi: scsi_host_queue_ready: increase busy count early
+To:     Roger Willcocks <roger@filmlight.ltd.uk>, Don.Brace@microchip.com
+Cc:     mwilck@suse.com, john.garry@huawei.com, buczek@molgen.mpg.de,
+        martin.petersen@oracle.com, ming.lei@redhat.com,
+        jejb@linux.vnet.ibm.com, linux-scsi@vger.kernel.org, hare@suse.de,
+        Kevin.Barnett@microchip.com, hare@suse.com,
+        linux-scsi@vger.kernel.org
+References: <20210120184548.20219-1-mwilck@suse.com>
+ <37579c64-1cdb-8864-6a30-4d912836f28a@huawei.com>
+ <231d9fcd-14f4-6abf-c41a-56315877a3dc@molgen.mpg.de>
+ <87b7f873-46c4-140b-ee45-f724b50b6aca@huawei.com>
+ <d48f98a9-77e3-dfe3-af5c-91b0ef45586b@molgen.mpg.de>
+ <361d5a2f-fb8e-c400-2818-29aea435aff2@huawei.com>
+ <SN6PR11MB2848BC0AF824B45CA39A6348E1B59@SN6PR11MB2848.namprd11.prod.outlook.com>
+ <2e4cca87aaa27220e186025573ae7c24579e8b7b.camel@suse.com>
+ <SN6PR11MB28482D89B75197B742459063E1B49@SN6PR11MB2848.namprd11.prod.outlook.com>
+ <0DB85ADC-B962-4AF9-B106-3F3B412CE4DB@filmlight.ltd.uk>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Message-ID: <19037a33-da34-3a4b-c326-f97a26e251b1@molgen.mpg.de>
+Date:   Mon, 1 Mar 2021 15:51:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <20210301065454.GA3669027@infradead.org>
+In-Reply-To: <0DB85ADC-B962-4AF9-B106-3F3B412CE4DB@filmlight.ltd.uk>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Christoph:
-      Thanks a lot for your review. There are some reasons.
-      1) Vmbus drivers don't use DMA API now.
-      2) Hyper-V Vmbus channel ring buffer already play bounce buffer 
-role for most vmbus drivers. Just two kinds of packets from 
-netvsc/storvsc are uncovered.
-      3) In AMD SEV-SNP based Hyper-V guest, the access physical address 
-of shared memory should be bounce buffer memory physical address plus
-with a shared memory boundary(e.g, 48bit) reported Hyper-V CPUID. It's
-called virtual top of memory(vTom) in AMD spec and works as a watermark. 
-So it needs to ioremap/memremap the associated physical address above 
-the share memory boundary before accessing them. swiotlb_bounce() uses
-low end physical address to access bounce buffer and this doesn't work 
-in this senario. If something wrong, please help me correct me.
 
-Thanks.
+Dear Roger,
 
 
-On 3/1/2021 2:54 PM, Christoph Hellwig wrote:
-> This should be handled by the DMA mapping layer, just like for native
-> SEV support.
+Am 22.02.21 um 15:23 schrieb Roger Willcocks:
+> FYI we have exactly this issue on a machine here running CentOS 8.3
+> (kernel 4.18.0-240.1.1) (so presumably this happens in RHEL 8 too.)
+
+What driver version do you use?
+
+> Controller is MSCC / Adaptec 3154-8i16e driving 60 x 12TB HGST drives
+> configured as five x twelve-drive raid-6, software striped using md,
+> and formatted with xfs.
 > 
+> Test software writes to the array using multiple threads in
+> parallel.
+> 
+> The smartpqi driver would report controller offline within ten
+> minutes or so, with status code 0x6100c
+> 
+> Changed the driver to set 'nr_hw_queues = 1’ and then tested by
+> filling the array with random files (which took a couple of days),
+> which completed fine, so it looks like that one-line change fixes
+> it.
+> 
+> Would, of course, be helpful if this was back-ported.
+We only noticed the issue starting with Linux 5.5 (commit 6eb045e092ef 
+("scsi: core: avoid host-wide host_busy counter for scsi_mq").
+
+So I am curious how this problem can be in CentOS 8.3 (Linux kernel 4.18.x).
+
+> —
+> Roger
+
+Apple Mail mangled your signature delimiter (-- ).
+
+
+Kind regards,
+
+Paul
