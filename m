@@ -2,25 +2,26 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC642327CE0
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 12:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7E5327D5E
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Mar 2021 12:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbhCALKp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Mar 2021 06:10:45 -0500
-Received: from authsmtp06.register.it ([81.88.48.56]:46365 "EHLO
+        id S232564AbhCALez (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Mar 2021 06:34:55 -0500
+Received: from authsmtp02.register.it ([81.88.48.52]:38745 "EHLO
         authsmtp.register.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233671AbhCALKQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Mar 2021 06:10:16 -0500
+        with ESMTP id S233891AbhCALeF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Mar 2021 06:34:05 -0500
 Received: from [192.168.43.2] ([176.201.234.222])
         by cmsmtp with ESMTPSA
-        id GgOslzagMQ36QGgOulJ00R; Mon, 01 Mar 2021 12:07:47 +0100
+        id Ggnbl03NEQ36QGgndlJMfK; Mon, 01 Mar 2021 12:33:18 +0100
 X-Rid:  guido@trentalancia.com@176.201.234.222
-Message-ID: <1614600461.4338.9.camel@trentalancia.com>
+Message-ID: <1614598394.4338.18.camel@trentalancia.com>
 Subject: Re: [PATCH RESEND v2] scsi: ignore Synchronize Cache command
  failures to keep using drives not supporting it
 From:   Guido Trentalancia <guido@trentalancia.com>
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>, linux-scsi@vger.kernel.org
-Date:   Mon, 01 Mar 2021 13:07:41 +0100
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Date:   Mon, 01 Mar 2021 12:33:14 +0100
 In-Reply-To: <BL0PR04MB65146856C07649917652E540E79A9@BL0PR04MB6514.namprd04.prod.outlook.com>
 References: <1614502908.6594.6.camel@trentalancia.com>
          <443d92dd844e329bcd40a1e59b7cc3784ed3db94.camel@HansenPartnership.com>
@@ -31,25 +32,26 @@ Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfJX4QPz22zuagD6syEmku80EPhGjFfpO/2ygfnIWiYlPQ5dUDPHLkkgFcOavXjzLq7EpcINiM96BelZP1Sl5qVfMcUMTOdOXjXyG3ifTUs+48uhDggHU
+ dKrqSYo9BW9I9X4SPZW+aGnPW6SYG8ML4AH1yf+Kcz+Zoz5Aee8iZU/kPenf/+odzGKjmJ6n1I4yoGaJ1hxCPZxGBD26Gy7nGYNP+gG0aR8TQ1tKjiwt9PT2
+ vqiR4K+jezMCNypkablBZw==
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Damien,
+I have just checked the drive and I can now confirm that you are right
+about the capabilities reported: it is indeed reporting Write Caching.
 
-what tells you the drive is reporting write cache ? I am not sure about
-this...
+However the point is that the current kernel behaviour is wrong and
+leading to data corruption on such drives, as the sync function fails
+due to missing Synchronize Cache command.
 
-Consider, we are talking about rather old drives.
+Once again, this is because of very old HD specifications that were
+implementing Write Caching without that command.
 
-I suppose the point is that they were designed with very different
-specifications compared to recent drives, surely including the absence
-of Synchronize Cache but possibly Write Caching too: the point of
-failure is at the Synchronize Cache issuing code, so I patched there.
-
-Whatever the case and as already pointed out, if you are willing to
-propose an alternative patch, I will be happy to test it and report
-back, as long as the issue is resolved as soon as possible.
+The way forward is to treat the command failure as non-critical (see
+attached patch) because clearly it's not implemented in all drives, but
+only more recent ones.
 
 Guido
 
