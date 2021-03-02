@@ -2,48 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E2532BBA5
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77ABB32BBA6
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239380AbhCCMq2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 07:46:28 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29906 "EHLO
+        id S239565AbhCCMqd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 07:46:33 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46518 "EHLO
         mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1840160AbhCBXHw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Mar 2021 18:07:52 -0500
+        by vger.kernel.org with ESMTP id S2360935AbhCBXIF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Mar 2021 18:08:05 -0500
 Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 122N3ShX085219;
-        Tue, 2 Mar 2021 18:07:05 -0500
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 122N3RO6085202;
+        Tue, 2 Mar 2021 18:07:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=mh59kqzS3Vta0WgtVShW7Y2yOas9L+oy4a7h3f2fbPk=;
- b=tQZKdrq51BDN9mZQ96+PE/+LfmXaua2l78xv+25ftd1LtSiIsPWA/U+M5tcERiAJHIAN
- j+Xn76QrDlvjJS0b2PFOXy1ap1yLyZynOMAyBIkG0JyjCQ5wV3aP4L2gH/LkoE/WpJnj
- ku4I/IOtEQ96CpCrilmO0TBEXjGEGq7tgkP4T/zPnOQwFRpHoQP/OqGuOu7kQtSSdzee
- jJuDKWcF2esirY1i5mrhN/Y0MTordYoXD3CuL3iNVR333NwKXcNiZ5aBdEjmmph+rBFY
- /Ncm0IVJEVBK4CwUdQqS3rFdxXlxwqcuSuhhxWzSBWP7AVF0WpDs/1MGLYSr+/aoTBwF +Q== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 371xmwrg4f-1
+ bh=Owsg7r6i09zRTjczmkzjnuSkxpwtC+uMxU9OVC0fK1M=;
+ b=C3vS/cZ9Pl33I7WlaVyjOMiZtwiZi6Xntb/hZxCYXX3f9VOYFT9VPVgYkPPn9XUzur7q
+ V0ezDabgFnavsUpCg3PbT1kt90OthZKo9XWUzqHdYN2WBE4L9OYoCK1xGFat3RAdZBY4
+ JFfGm09IXCmHjB9FXpIl0w6DluMFFLaN2Bz386bqqMgmmqDEP7sP4PmfGv/L4AjGpjon
+ EBx137c6OEM6ftd+Pj/qmK+3gYl7WPLE/nWdUAYbFVApmecavDMy+HMdQ8BX2Vqn6Jtl
+ 9uNRorst2LkcvuzMafvh2+ZJ4n3t6ne2ZUFD6DfKDbWEh2nZv/k4QL3H+aQPtHeVGiUc UQ== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 371xmwrg9u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Mar 2021 18:07:04 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 122N2YNh011270;
-        Tue, 2 Mar 2021 23:05:48 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 3710sqpaxg-1
+        Tue, 02 Mar 2021 18:07:18 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 122MwJVW029519;
+        Tue, 2 Mar 2021 23:05:49 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01wdc.us.ibm.com with ESMTP id 36ydq92hv6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Mar 2021 23:05:48 +0000
+        Tue, 02 Mar 2021 23:05:49 +0000
 Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 122N5kYI16384470
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 122N5lgv10617524
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 2 Mar 2021 23:05:47 GMT
 Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3E8B6E04E;
-        Tue,  2 Mar 2021 23:05:46 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 605516E050;
+        Tue,  2 Mar 2021 23:05:47 +0000 (GMT)
 Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 758C96E056;
-        Tue,  2 Mar 2021 23:05:46 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 020606E04C;
+        Tue,  2 Mar 2021 23:05:47 +0000 (GMT)
 Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
         by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
         Tue,  2 Mar 2021 23:05:46 +0000 (GMT)
@@ -52,9 +52,9 @@ To:     james.bottomley@hansenpartnership.com
 Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH v5 4/5] ibmvfc: store return code of H_FREE_SUB_CRQ during cleanup
-Date:   Tue,  2 Mar 2021 17:05:42 -0600
-Message-Id: <20210302230543.9905-5-tyreld@linux.ibm.com>
+Subject: [PATCH v5 5/5] ibmvfc: reinitialize sub-CRQs and perform channel enquiry after LPM
+Date:   Tue,  2 Mar 2021 17:05:43 -0600
+Message-Id: <20210302230543.9905-6-tyreld@linux.ibm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210302230543.9905-1-tyreld@linux.ibm.com>
 References: <20210302230543.9905-1-tyreld@linux.ibm.com>
@@ -72,48 +72,55 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The H_FREE_SUB_CRQ hypercall can return a retry delay return code that
-indicates the call needs to be retried after a specific amount of time
-delay. The error path to free a sub-CRQ in case of a failure during
-channel registration fails to capture the return code of H_FREE_SUB_CRQ
-which will result in the delay loop being skipped in the case of a retry
-delay return code.
+A live partition migration (LPM) results in a CRQ disconnect similar to
+a hard reset. In this LPM case the hypervisor moslty perserves the CRQ
+transport such that it simply needs to be reenabled. However, the
+capabilities may have changed such as fewer channels, or no channels at
+all. Further, its possible that there may be sub-CRQ support, but no
+channel support. The CRQ reenable path currently doesn't take any of
+this into consideration.
 
-Store the return code result of the H_FREE_SUB_CRQ call such that the
-return code check in the delay loop evaluates a meaningful value. Also,
-use the rtas_busy_delay() to check the rc value and delay for the
-appropriate amount of time.
+For simpilicty release and reinitialize sub-CRQs during reenable, and
+set do_enquiry and using_channels with the appropriate values to trigger
+channel renegotiation.
 
-Fixes: 39e461fddff0 ("ibmvfc: map/request irq and register Sub-CRQ interrupt handler")
+fixes: 3034ebe26389 ("ibmvfc: add alloc/dealloc routines for SCSI Sub-CRQ Channels")
 Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 Reviewed-by: Brian King <brking@linux.ibm.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 1d9f961715ca..ef03fa559433 100644
+index ef03fa559433..1e2ea21713ad 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -21,6 +21,7 @@
- #include <linux/bsg-lib.h>
- #include <asm/firmware.h>
- #include <asm/irq.h>
-+#include <asm/rtas.h>
- #include <asm/vio.h>
- #include <scsi/scsi.h>
- #include <scsi/scsi_cmnd.h>
-@@ -5670,8 +5671,8 @@ static int ibmvfc_register_scsi_channel(struct ibmvfc_host *vhost,
+@@ -903,6 +903,9 @@ static int ibmvfc_reenable_crq_queue(struct ibmvfc_host *vhost)
+ {
+ 	int rc = 0;
+ 	struct vio_dev *vdev = to_vio_dev(vhost->dev);
++	unsigned long flags;
++
++	ibmvfc_release_sub_crqs(vhost);
  
- irq_failed:
+ 	/* Re-enable the CRQ */
  	do {
--		plpar_hcall_norets(H_FREE_SUB_CRQ, vdev->unit_address, scrq->cookie);
--	} while (rc == H_BUSY || H_IS_LONG_BUSY(rc));
-+		rc = plpar_hcall_norets(H_FREE_SUB_CRQ, vdev->unit_address, scrq->cookie);
-+	} while (rtas_busy_delay(rc));
- reg_failed:
- 	ibmvfc_free_queue(vhost, scrq);
- 	LEAVE;
+@@ -914,6 +917,15 @@ static int ibmvfc_reenable_crq_queue(struct ibmvfc_host *vhost)
+ 	if (rc)
+ 		dev_err(vhost->dev, "Error enabling adapter (rc=%d)\n", rc);
+ 
++	spin_lock_irqsave(vhost->host->host_lock, flags);
++	spin_lock(vhost->crq.q_lock);
++	vhost->do_enquiry = 1;
++	vhost->using_channels = 0;
++	spin_unlock(vhost->crq.q_lock);
++	spin_unlock_irqrestore(vhost->host->host_lock, flags);
++
++	ibmvfc_init_sub_crqs(vhost);
++
+ 	return rc;
+ }
+ 
 -- 
 2.27.0
 
