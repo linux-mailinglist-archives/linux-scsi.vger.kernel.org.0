@@ -2,81 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0620132A9CE
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Mar 2021 19:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6DC32A9D1
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Mar 2021 19:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581413AbhCBSvQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Mar 2021 13:51:16 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:58265 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1382684AbhCBJlg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Mar 2021 04:41:36 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0UQ4Q0Ci_1614678045;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UQ4Q0Ci_1614678045)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 02 Mar 2021 17:40:52 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     lduncan@suse.com
-Cc:     cleech@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] scsi: iscsi: Switch to using the new API kobj_to_dev()
-Date:   Tue,  2 Mar 2021 17:40:44 +0800
-Message-Id: <1614678044-5635-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1581427AbhCBSv2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Mar 2021 13:51:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38730 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1383603AbhCBL4d (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 2 Mar 2021 06:56:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 27F5564F14;
+        Tue,  2 Mar 2021 11:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614686139;
+        bh=Cd0eVel9AGZGGertR3fyXI4RXhCQuYVAsF2IOVW2H00=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=l2B3gwYdOng46a8niq2RGSfuewLWcC6FPhTbMbh5xtnRBr5mBt+hljwYqnmHqeVOB
+         MHS6fRTZAunSwArc6P3uJL6KxCts3jBsHs490C8N82rhXAwmLUhv06mEYr/+nXsbSb
+         1idd6li1X33QbSq3/CgSg/JMTQsDrAW0rVa5AgnecszTEJPrRGe+vunn4pVa2rWUtw
+         ql2iNfy5HCM0q9vBK72/BhvcfRpRpTRxghe1yoa4+3SeqqrNqFN1qaoDI49ccrk2uq
+         COLrxheVEheRsM84xJyhujvMHMEsAsp+UpIayVi+NNxxMtfiluSK+AOrM7zmhFlqUF
+         Qy5+IQd0ZWlgQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 03/52] scsi: ufs: Add a quirk to permit overriding UniPro defaults
+Date:   Tue,  2 Mar 2021 06:54:44 -0500
+Message-Id: <20210302115534.61800-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210302115534.61800-1-sashal@kernel.org>
+References: <20210302115534.61800-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix the following coccicheck warnings:
+From: Kiwoong Kim <kwmad.kim@samsung.com>
 
-./drivers/scsi/scsi_transport_iscsi.c:4453:61-62: WARNING opportunity
-for kobj_to_dev().
+[ Upstream commit b1d0d2eb89d4e3a25b212a9d836587503537067e ]
 
-./drivers/scsi/scsi_transport_iscsi.c:4309:61-62: WARNING opportunity
-for kobj_to_dev().
+The UniPro specification states that attribute IDs of the following
+parameters are vendor-specific so some SoCs could have no regions at the
+defined addresses:
 
-./drivers/scsi/scsi_transport_iscsi.c:4040:61-62: WARNING opportunity
-for kobj_to_dev().
+ - DME_LocalFC0ProtectionTimeOutVal
+ - DME_LocalTC0ReplayTimeOutVal
+ - DME_LocalAFC0ReqTimeOutVal
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+In addition, the following parameters should be set considering the
+compatibility between host and device.
+
+ - PA_PWRMODEUSERDATA0
+ - PA_PWRMODEUSERDATA1
+ - PA_PWRMODEUSERDATA2
+ - PA_PWRMODEUSERDATA3
+ - PA_PWRMODEUSERDATA4
+ - PA_PWRMODEUSERDATA5
+
+Introduce a quirk to allow vendor drivers to override the UniPro defaults.
+
+Link: https://lore.kernel.org/r/1fedd3dea0ccc980913a5995a10510d86a5b01b9.1608513782.git.kwmad.kim@samsung.com
+Acked-by: Avri Altman <Avri.Altman@wdc.com>
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 40 ++++++++++++++++++++-------------------
+ drivers/scsi/ufs/ufshcd.h |  6 ++++++
+ 2 files changed, 27 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 969d24d..debedcd 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -4037,7 +4037,7 @@ static ISCSI_CLASS_ATTR(conn, field, S_IRUGO,				\
- static umode_t iscsi_conn_attr_is_visible(struct kobject *kobj,
- 					 struct attribute *attr, int i)
- {
--	struct device *cdev = container_of(kobj, struct device, kobj);
-+	struct device *cdev = kobj_to_dev(kobj);
- 	struct iscsi_cls_conn *conn = transport_class_to_conn(cdev);
- 	struct iscsi_transport *t = conn->transport;
- 	int param;
-@@ -4306,7 +4306,7 @@ static ISCSI_CLASS_ATTR(priv_sess, field, S_IRUGO | S_IWUSR,		\
- static umode_t iscsi_session_attr_is_visible(struct kobject *kobj,
- 					    struct attribute *attr, int i)
- {
--	struct device *cdev = container_of(kobj, struct device, kobj);
-+	struct device *cdev = kobj_to_dev(kobj);
- 	struct iscsi_cls_session *session = transport_class_to_session(cdev);
- 	struct iscsi_transport *t = session->transport;
- 	int param;
-@@ -4450,7 +4450,7 @@ static ISCSI_CLASS_ATTR(host, field, S_IRUGO, show_host_param_##param,	\
- static umode_t iscsi_host_attr_is_visible(struct kobject *kobj,
- 					 struct attribute *attr, int i)
- {
--	struct device *cdev = container_of(kobj, struct device, kobj);
-+	struct device *cdev = kobj_to_dev(kobj);
- 	struct Scsi_Host *shost = transport_class_to_shost(cdev);
- 	struct iscsi_internal *priv = to_iscsi_internal(shost->transportt);
- 	int param;
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index fb32d122f2e3..2a715f13fe1d 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -4218,25 +4218,27 @@ static int ufshcd_change_power_mode(struct ufs_hba *hba,
+ 		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_HSSERIES),
+ 						pwr_mode->hs_rate);
+ 
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA0),
+-			DL_FC0ProtectionTimeOutVal_Default);
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA1),
+-			DL_TC0ReplayTimeOutVal_Default);
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA2),
+-			DL_AFC0ReqTimeOutVal_Default);
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA3),
+-			DL_FC1ProtectionTimeOutVal_Default);
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA4),
+-			DL_TC1ReplayTimeOutVal_Default);
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA5),
+-			DL_AFC1ReqTimeOutVal_Default);
+-
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalFC0ProtectionTimeOutVal),
+-			DL_FC0ProtectionTimeOutVal_Default);
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalTC0ReplayTimeOutVal),
+-			DL_TC0ReplayTimeOutVal_Default);
+-	ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalAFC0ReqTimeOutVal),
+-			DL_AFC0ReqTimeOutVal_Default);
++	if (!(hba->quirks & UFSHCD_QUIRK_SKIP_DEF_UNIPRO_TIMEOUT_SETTING)) {
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA0),
++				DL_FC0ProtectionTimeOutVal_Default);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA1),
++				DL_TC0ReplayTimeOutVal_Default);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA2),
++				DL_AFC0ReqTimeOutVal_Default);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA3),
++				DL_FC1ProtectionTimeOutVal_Default);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA4),
++				DL_TC1ReplayTimeOutVal_Default);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_PWRMODEUSERDATA5),
++				DL_AFC1ReqTimeOutVal_Default);
++
++		ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalFC0ProtectionTimeOutVal),
++				DL_FC0ProtectionTimeOutVal_Default);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalTC0ReplayTimeOutVal),
++				DL_TC0ReplayTimeOutVal_Default);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(DME_LocalAFC0ReqTimeOutVal),
++				DL_AFC0ReqTimeOutVal_Default);
++	}
+ 
+ 	ret = ufshcd_uic_change_pwr_mode(hba, pwr_mode->pwr_rx << 4
+ 			| pwr_mode->pwr_tx);
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index aa9ea3552323..85f9d0fbfbd9 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -551,6 +551,12 @@ enum ufshcd_quirks {
+ 	 */
+ 	UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL		= 1 << 12,
+ 
++	/*
++	 * This quirk needs to disable unipro timeout values
++	 * before power mode change
++	 */
++	UFSHCD_QUIRK_SKIP_DEF_UNIPRO_TIMEOUT_SETTING = 1 << 13,
++
+ };
+ 
+ enum ufshcd_caps {
 -- 
-1.8.3.1
+2.30.1
 
