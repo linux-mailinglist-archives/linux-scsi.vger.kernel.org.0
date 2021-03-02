@@ -2,90 +2,179 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B1932AA1A
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Mar 2021 20:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7177832A9FE
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Mar 2021 20:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581570AbhCBS6q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Mar 2021 13:58:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46502 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351411AbhCBOW4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 2 Mar 2021 09:22:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D8F9F64FCC;
-        Tue,  2 Mar 2021 11:59:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614686374;
-        bh=c1cd63hbhjSLcRxTtytJhfWOencZB9u8ztclFFA8eHw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k6fgQStLmsW38k2prpeebTwm3gYiB4oZHEboqmFrEygb4K4ysw6ZYPSpMrWUV4OuU
-         dKR0ftp9GWoxxyILFTtGEYd7J5fmSXBsFWn2xRhUtshpXmAvKDdeMgC+nVCdQ77Luy
-         HPBguAEIhrXOAkl8G2nvXq9PNBGbGIY50QbMDOCPhhEvef7cgHDE0ap1q1+u7WX9PM
-         heezA5ptuz3Fm+pEBe9gWbbdOjL4+dl7QsSgTxkwtQPZhR9pQKVN2/NNtILtpGiQcy
-         Jxz7yrGPJ/LLCg3Vhl2NQz0ydGB8MCO2OLLmCOdNmYsh61g2iY7N4luHTwZonGME0I
-         VXLMaPB2gqNuw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 10/10] scsi: libiscsi: Fix iscsi_prep_scsi_cmd_pdu() error handling
-Date:   Tue,  2 Mar 2021 06:59:21 -0500
-Message-Id: <20210302115921.63636-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302115921.63636-1-sashal@kernel.org>
-References: <20210302115921.63636-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S245312AbhCBSwY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Mar 2021 13:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1446121AbhCBNQl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Mar 2021 08:16:41 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8235BC061221;
+        Tue,  2 Mar 2021 05:02:33 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id hs11so35089278ejc.1;
+        Tue, 02 Mar 2021 05:02:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=03fMenL1JcVf3REoLCDjJM5wD7/kclW1skBkKJBLspM=;
+        b=qyQ8NZko5e0fbSww/SDJz7zYoihVR2YZ+NQ0eET1ITBoQ2gDtVgbSTlwxTR4co/1mM
+         rC/nNLykdjjbNcQdwqexR8M8GaZV5bcB5E7yuW3gMmGBoMqFvUMgqswWjt12MJNmog4L
+         2+oeC5yXbdnN5P6ttJLvs1zZZrR393kIDwoejSfcS6v+jFL930nP+30Ib8J3UIe2ZJGs
+         HWSJl1T/H5c+t7QiBbMPqZ0tgVDmf7kMwtm5Hlibd5qe1SJgZZzHvqKA8IQL910/NsFw
+         gPU7FNnVthipk5mGshnygFQ+dj28yCjhUsIW5Bm5pr+eE1m9Gfp9Cr7up60f5nT/j67F
+         NCAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=03fMenL1JcVf3REoLCDjJM5wD7/kclW1skBkKJBLspM=;
+        b=jK8iOGkSVgAA14+ozisOSoR3qTDYtowA6rpoQU7StXnE+v1S48sSHipIIvprmPVues
+         A3RAFrOsJ7uduq+IvE7sx4J1VXU4G6jgL6Dm0lQkyzPIG843wh6CRdyMdVrVPwEtuWgL
+         gCDEUGhhnLkLBfFxOurlnZVhDuHjwM7AGl6HVqNtx+jREaZAzmCYQzJEZHVE7yunjCD9
+         FVuoRZ3GJcnu81/Lh+HyaoakUrqMUSJWsmw0yu+lxkSevhXMcS4kBSVRb/9Y+racMYOH
+         gwcKmiageO0f2CwoNGl75GS2TWg1tEUBrH8EwcAylCj0Ou+3FytF+WOavWoG8svfkkPP
+         4uVg==
+X-Gm-Message-State: AOAM532wIHuNmFakz2JB86UVVvox+zXvb/+Xgj/BRM/Cbdqf3YbZfBiO
+        RRBV1X9pdEnS+X1ssdkTjr0=
+X-Google-Smtp-Source: ABdhPJz9gdq9wuFle+WX2DcfIqDowLQm8M9JTLewXzkqXffSR3xEchGQoJyEK8JD36+iUD+rTm2/2w==
+X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr20782239ejc.408.1614690152275;
+        Tue, 02 Mar 2021 05:02:32 -0800 (PST)
+Received: from ubuntu-laptop (ip5f5bec5d.dynamic.kabel-deutschland.de. [95.91.236.93])
+        by smtp.googlemail.com with ESMTPSA id l18sm9486088ejk.86.2021.03.02.05.02.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Mar 2021 05:02:32 -0800 (PST)
+Message-ID: <f5cb5a04dd25984c4ddf7713ce0ffbbbbb969ea4.camel@gmail.com>
+Subject: Re: [PATCH v25 4/4] scsi: ufs: Add HPB 2.0 support
+From:   Bean Huo <huobean@gmail.com>
+To:     daejun7.park@samsung.com, Greg KH <gregkh@linuxfoundation.org>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        JinHwan Park <jh.i.park@samsung.com>,
+        SEUNGUK SHIN <seunguk.shin@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+Date:   Tue, 02 Mar 2021 14:02:29 +0100
+In-Reply-To: <20210226073525epcms2p5e7ddd6e92b2f76b2b3dcded49f8ff256@epcms2p5>
+References: <20210226073233epcms2p80fca2dffabea03143a9414838f757633@epcms2p8>
+         <CGME20210226073233epcms2p80fca2dffabea03143a9414838f757633@epcms2p5>
+         <20210226073525epcms2p5e7ddd6e92b2f76b2b3dcded49f8ff256@epcms2p5>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+On Fri, 2021-02-26 at 16:35 +0900, Daejun Park wrote:
+> 
+> 
+>  static void __ufshpb_evict_region(struct ufshpb_lu *hpb,
+>  				  struct ufshpb_region *rgn)
+>  {
+> @@ -1209,6 +1579,16 @@ static void ufshpb_lu_parameter_init(struct
+> ufs_hba *hba,
+>  	u32 entries_per_rgn;
+>  	u64 rgn_mem_size, tmp;
+>  
+> +	/* for pre_req */
+> +	if (hpb_dev_info->max_hpb_single_cmd)
+> +		hpb->pre_req_min_tr_len = hpb_dev_info-
+> >max_hpb_single_cmd;
+> +	else
+> +		hpb->pre_req_min_tr_len = HPB_MULTI_CHUNK_LOW;
 
-[ Upstream commit d28d48c699779973ab9a3bd0e5acfa112bd4fdef ]
 
-If iscsi_prep_scsi_cmd_pdu() fails we try to add it back to the cmdqueue,
-but we leave it partially setup. We don't have functions that can undo the
-pdu and init task setup. We only have cleanup_task which can clean up both
-parts. So this has us just fail the cmd and go through the standard cleanup
-routine and then have the SCSI midlayer retry it like is done when it fails
-in the queuecommand path.
+Here is not correct. according to Spec:
 
-Link: https://lore.kernel.org/r/20210207044608.27585-2-michael.christie@oracle.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/libiscsi.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+The size is calculated as ( bMAX_DATA_SIZE_FOR_HPB_SINGLE_CMD +1 )*4KB.
+00h: 4KB
+01h: 8KB
+02h: 12KB
+03h: 16KB
+...
+FEh: 1020KB
+FFh: 1024KB
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index a84b473d4a08..c0c8b97f6e90 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -1568,14 +1568,9 @@ check_mgmt:
- 		}
- 		rc = iscsi_prep_scsi_cmd_pdu(conn->task);
- 		if (rc) {
--			if (rc == -ENOMEM || rc == -EACCES) {
--				spin_lock_bh(&conn->taskqueuelock);
--				list_add_tail(&conn->task->running,
--					      &conn->cmdqueue);
--				conn->task = NULL;
--				spin_unlock_bh(&conn->taskqueuelock);
--				goto done;
--			} else
-+			if (rc == -ENOMEM || rc == -EACCES)
-+				fail_scsi_task(conn->task, DID_IMM_RETRY);
-+			else
- 				fail_scsi_task(conn->task, DID_ABORT);
- 			spin_lock_bh(&conn->taskqueuelock);
- 			continue;
--- 
-2.30.1
+so, here if hpb_dev_info->max_hpb_single_cmd is 0x00, means 4KB, not
+36KB.
+
+
+
+> +	hpb->pre_req_max_tr_len = max(HPB_MULTI_CHUNK_HIGH,
+> +				      hpb->pre_req_min_tr_len);
+> +
+> 
+>  out:
+>  	/* All LUs are initialized */
+>  	if (atomic_dec_and_test(&hba->ufshpb_dev.slave_conf_cnt))
+> @@ -1812,8 +2307,9 @@ void ufshpb_get_geo_info(struct ufs_hba *hba,
+> u8 *geo_buf)
+>  void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf)
+>  {
+>  	struct ufshpb_dev_info *hpb_dev_info = &hba->ufshpb_dev;
+> -	int version;
+> +	int version, ret;
+>  	u8 hpb_mode;
+> +	u32 max_hpb_sigle_cmd = 0;
+>  
+>  	hpb_mode = desc_buf[DEVICE_DESC_PARAM_HPB_CONTROL];
+>  	if (hpb_mode == HPB_HOST_CONTROL) {
+> @@ -1824,13 +2320,27 @@ void ufshpb_get_dev_info(struct ufs_hba *hba,
+> u8 *desc_buf)
+>  	}
+>  
+>  	version = get_unaligned_be16(desc_buf +
+> DEVICE_DESC_PARAM_HPB_VER);
+> -	if (version != HPB_SUPPORT_VERSION) {
+> +	if ((version != HPB_SUPPORT_VERSION) &&
+> +	    (version != HPB_SUPPORT_LEGACY_VERSION)) {
+>  		dev_err(hba->dev, "%s: HPB %x version is not
+> supported.\n",
+>  			__func__, version);
+>  		hpb_dev_info->hpb_disabled = true;
+>  		return;
+>  	}
+>  
+> +	if (version == HPB_SUPPORT_LEGACY_VERSION)
+> +		hpb_dev_info->is_legacy = true;
+> +
+> +	pm_runtime_get_sync(hba->dev);
+> +	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
+> +		QUERY_ATTR_IDN_MAX_HPB_SINGLE_CMD, 0, 0,
+> &max_hpb_sigle_cmd);
+> +	pm_runtime_put_sync(hba->dev);
+> +
+> +	if (ret)
+> +		dev_err(hba->dev, "%s: idn: read max size of single hpb
+> cmd query request failed",
+> +			__func__);
+> +	hpb_dev_info->max_hpb_single_cmd = max_hpb_sigle_cmd;
+> +
+
+Here you didn't add 1, if you read out the
+QUERY_ATTR_IDN_MAX_HPB_SINGLE_CMD == 7, means device can support
+maximum HPB Data size for using single HPB command is 7+1
+((7+1)*4=32KB), not 7.
+
+
+Bean
+
+
+
 
