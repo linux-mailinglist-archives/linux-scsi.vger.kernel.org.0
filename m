@@ -2,67 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BE832AA1C
+	by mail.lfdr.de (Postfix) with ESMTP id B25F432AA1D
 	for <lists+linux-scsi@lfdr.de>; Tue,  2 Mar 2021 20:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581576AbhCBS7J (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Mar 2021 13:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448630AbhCBPHs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Mar 2021 10:07:48 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92535C0698D5
-        for <linux-scsi@vger.kernel.org>; Tue,  2 Mar 2021 07:03:15 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id g27so20646290iox.2
-        for <linux-scsi@vger.kernel.org>; Tue, 02 Mar 2021 07:03:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=AkEGqYMvDXfdqXGtEQVGA6u/vJOunFX3Hhi5b2/4cJY=;
-        b=V6jG6RcTLpHtoSku0K60CubRJkn2kqel1QaecsZKQ+/3IhL/2Ja3iqy4RzNrxH19EN
-         2qf8HeHgOgUtyCOkJf7rtGIxygUV6fb2ufqvLyDPes7GfMO2ykTB1ZRW5AHtWh3PJLBZ
-         +yTTVl9J9oanWZZT1TX0ORZzgm6r7TXgWG7ZmKcb+bVJceRERNEuENFsNnrhezw88ZSP
-         9o6JR5zGXH9A+AGZtAQkDF5/yklIE+HBayAXEfo8DMe9mOLJkWX3g1jmb2fV70tm4IBh
-         L1NQ0D/nhE/0fC1+6fLrR1FUv2hAezJmIY+klAnHO/+hEh3dS4QbtkkW1Ci/JqpfEaWc
-         CfGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=AkEGqYMvDXfdqXGtEQVGA6u/vJOunFX3Hhi5b2/4cJY=;
-        b=RwH+D/SWFXswmYaJ5+so3FiV1TDdMFj/Z1VXYJyxRZw/B8MU/i4eCsRwq1AKgBAOIn
-         IYNhCjBjPd3Gj0GVnp9k84vu4UYlO4loYJQLfLv5Q3mw0nYuDJLwjJL3dqL1Mszsc3MK
-         mXyTOso6phuC7G/cVGA6KnV9I2Y11r//4JaS3aR3lyj/SZqo/8/H+kgemL9MSsC54VRg
-         xNkOHEM86bd4pjpu+7//YndnizSX30DteDxRf2KqhN/GJV+bguD82mLZ+85XvcXxZ78S
-         ouiAyCwWGIuTuYxS84ZUIUi9IdVeyeK1AkpMm3L6uK2PQFyjSj2FYDJPKF+3SIz29Nm7
-         pLjw==
-X-Gm-Message-State: AOAM532sFwbiqg5GNAL/n1COB3sqV02uWwCsIBDrlc829sCLArXM68Dp
-        Xt4ZIYq8cx5GhF2d6HEpgUf9RPXeJ/grCq+6Yxg=
-X-Google-Smtp-Source: ABdhPJwJ6jDRvY4g2UnDodPCgt/clG2brBt7c14roxXrmpvdcSnuQKCk2398VqDa0Zw7aIVHX3f95dvkHcikybyfwcc=
-X-Received: by 2002:a02:866d:: with SMTP id e100mr21073952jai.139.1614697394504;
- Tue, 02 Mar 2021 07:03:14 -0800 (PST)
+        id S1581578AbhCBS7L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Mar 2021 13:59:11 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40374 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347838AbhCBP2X (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 2 Mar 2021 10:28:23 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 71F8AAC24;
+        Tue,  2 Mar 2021 15:27:31 +0000 (UTC)
+Subject: Re: [PATCH v5 04/31] elx: libefc_sli: queue create/destroy/parse
+ routines
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+Cc:     Ram Vegesna <ram.vegesna@broadcom.com>
+References: <20210103171134.39878-1-jsmart2021@gmail.com>
+ <20210103171134.39878-5-jsmart2021@gmail.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <5fe46cc2-f3cd-2e32-02f0-10d22a441679@suse.de>
+Date:   Tue, 2 Mar 2021 16:27:30 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Sender: internationalmonetaryfund414@gmail.com
-Received: by 2002:a5d:8502:0:0:0:0:0 with HTTP; Tue, 2 Mar 2021 07:03:13 -0800 (PST)
-From:   hauck man <hauckpristman@gmail.com>
-Date:   Tue, 2 Mar 2021 07:03:13 -0800
-X-Google-Sender-Auth: PXyhaMxCPyk8ty0iunWM89AtBr4
-Message-ID: <CA+WsxLWCLM7Fm8eUm0SvRCn6cDR0bO9ab0v5vmznKmhvi7Cf=A@mail.gmail.com>
-Subject: URGENT RESPONSE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210103171134.39878-5-jsmart2021@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
- Sir / Madam,
+On 1/3/21 6:11 PM, James Smart wrote:
+> This patch continues the libefc_sli SLI-4 library population.
+> 
+> This patch adds service routines to create mailbox commands
+> and adds APIs to create/destroy/parse SLI-4 EQ, CQ, RQ and MQ queues.
+> 
+> Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
+> Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
+> 
+> ---
+> v5:
+>   Remove efc_log_test.
+> ---
+>   drivers/scsi/elx/include/efc_common.h |   16 +
+>   drivers/scsi/elx/libefc_sli/sli4.c    | 1363 +++++++++++++++++++++++++
+>   drivers/scsi/elx/libefc_sli/sli4.h    |    9 +
+>   3 files changed, 1388 insertions(+)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Hi Friend I am the auditing director of the International Finance Bank
-Plc bf I want to transfer an abandoned sum of 10.5 millions USD  to
-your account.50% will be for you.
-No risk involved. Contact me for more details.
-Kindly reply me back to my alternative email address (hauckpristman@gmail.com)
-Thanks
-Mr Hauck Pristman.
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
