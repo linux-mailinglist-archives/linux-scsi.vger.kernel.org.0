@@ -2,165 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6929632BB9C
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE0F32BBA4
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbhCCMow (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 07:44:52 -0500
-Received: from labrats.qualcomm.com ([199.106.110.90]:21524 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2360926AbhCBWyA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Mar 2021 17:54:00 -0500
-IronPort-SDR: xei4uRtz6IiGsbh+1qQsY43qcPsfjRY5Pvm4gryk40E9yoGtaZwZpQBegC9gk6x0ntuH4gppxg
- C9OCkY2dKa0e8dQG4R4aEjNwBSFR18mhAPWxpn8d4rgB5vJ9WYTZNv1CT9ma4nTBynuN1sCD5g
- 6UYu68xe4s0mqscQJxiNadIPQBwQd0IdHCMDMP3aRbxuN7noOysHdcA3arL7rGeX8TM2cjx+9/
- rLk0iEXUiVRL5fp9e+bnio1O3jnThMNCqyw22LsIwH9DVNpcksMRCZu7pRz3iAVtWNN320psFA
- yd0=
-X-IronPort-AV: E=Sophos;i="5.81,218,1610438400"; 
-   d="scan'208";a="29681799"
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by labrats.qualcomm.com with ESMTP; 02 Mar 2021 14:53:02 -0800
-X-QCInternal: smtphost
-Received: from stor-presley.qualcomm.com ([192.168.140.85])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 02 Mar 2021 14:53:02 -0800
-Received: by stor-presley.qualcomm.com (Postfix, from userid 92687)
-        id 13AF221A50; Tue,  2 Mar 2021 14:53:02 -0800 (PST)
-From:   Asutosh Das <asutoshd@codeaurora.org>
-To:     cang@codeaurora.org, martin.petersen@oracle.com,
-        adrian.hunter@intel.com, linux-scsi@vger.kernel.org
-Cc:     Asutosh Das <asutoshd@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Nitin Rawat <nitirawa@codeaurora.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v10 2/2] ufs: sysfs: Resume the proper scsi device
-Date:   Tue,  2 Mar 2021 14:52:35 -0800
-Message-Id: <5d7c0cd1ff4bc5295015244f057d252fe9040993.1614725302.git.asutoshd@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1614725302.git.asutoshd@codeaurora.org>
-References: <cover.1614725302.git.asutoshd@codeaurora.org>
-In-Reply-To: <cover.1614725302.git.asutoshd@codeaurora.org>
-References: <cover.1614725302.git.asutoshd@codeaurora.org>
+        id S239312AbhCCMqY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 07:46:24 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60704 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1840153AbhCBXHu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Mar 2021 18:07:50 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 122N3Sat085251;
+        Tue, 2 Mar 2021 18:07:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=gmpbvxbo4cLey2rMQ4sak+ZhmhUX5jKWeOXZGGg7iO0=;
+ b=RBH7tp48YLKIH4lvfJwWYr+TRl1erRmNeX9O61g9MZbrwb7bRrY2aWA2PhHRO1vg+Szj
+ CClfOrrKtPjp/izj2x5i7gppIlVDBih4eXdqVHzR6PZnpOmwsKUZtCUdzoSTFR6Ic/Oa
+ 8KZcvW8j/qwok0IU9gWPPN2IW9bjnGW35ZZlc0TX4Yeeva+PEFPA/rpwanLeiwq0Scmx
+ ItQTHc5p44IbJL3iX1Fa750YIotAWsYGVNXBQd/6zd+Y+QNNCc9rc+lr03Lu1cjfQcF4
+ RUL30hteXEowF+RtrTmfNNLy+I5XhYk/RrlJWzigSDLQxpLYoY0zf5g9MNL6GoraiXPZ Gw== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 371xmwrfvt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Mar 2021 18:07:02 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 122N26Qc016821;
+        Tue, 2 Mar 2021 23:05:46 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03dal.us.ibm.com with ESMTP id 37103w6raf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Mar 2021 23:05:46 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 122N5ihq27984372
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 Mar 2021 23:05:45 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E19586E052;
+        Tue,  2 Mar 2021 23:05:44 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 78AEF6E04C;
+        Tue,  2 Mar 2021 23:05:44 +0000 (GMT)
+Received: from vios4361.aus.stglabs.ibm.com (unknown [9.3.43.61])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  2 Mar 2021 23:05:44 +0000 (GMT)
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+To:     james.bottomley@hansenpartnership.com
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        brking@linux.ibm.com, Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: [PATCH v5 0/5] ibmvfc: hard reset fixes
+Date:   Tue,  2 Mar 2021 17:05:38 -0600
+Message-Id: <20210302230543.9905-1-tyreld@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-02_08:2021-03-01,2021-03-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 mlxlogscore=999
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103020170
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Resumes the actual scsi device the unit descriptor of which
-is being accessed instead of the hba alone.
+This series contains a minor simplification of ibmvfc_init_sub_crqs() followed
+by a couple fixes for sub-CRQ handling which effect hard reset of the
+client/host adapter CRQ pair.
 
-Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
----
- drivers/scsi/ufs/ufs-sysfs.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+changes in v5:
+Patches 2-5: Corrected upstream commit ids for Fixes: tags
 
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index acc54f5..3fc182b 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -245,9 +245,9 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	res = ufshcd_wb_ctrl(hba, wb_enable);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- out:
- 	up(&hba->host_sem);
- 	return res < 0 ? res : count;
-@@ -297,10 +297,10 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	ret = ufshcd_read_desc_param(hba, desc_id, desc_index,
- 				param_offset, desc_buf, param_size);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -678,7 +678,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		up(&hba->host_sem);					\
- 		return -ENOMEM;						\
- 	}								\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_descriptor_retry(hba,			\
- 		UPIU_QUERY_OPCODE_READ_DESC, QUERY_DESC_IDN_DEVICE,	\
- 		0, 0, desc_buf, &desc_len);				\
-@@ -695,7 +695,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		goto out;						\
- 	ret = sysfs_emit(buf, "%s\n", desc_buf);			\
- out:									\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	kfree(desc_buf);						\
- 	up(&hba->host_sem);						\
- 	return ret;							\
-@@ -744,10 +744,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_flags(QUERY_FLAG_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_flag(hba, UPIU_QUERY_OPCODE_READ_FLAG,	\
- 		QUERY_FLAG_IDN##_uname, index, &flag);			\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -813,10 +813,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,	\
- 		QUERY_ATTR_IDN##_uname, index, 0, &value);		\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -899,11 +899,15 @@ static ssize_t _pname##_show(struct device *dev,			\
- 	struct scsi_device *sdev = to_scsi_device(dev);			\
- 	struct ufs_hba *hba = shost_priv(sdev->host);			\
- 	u8 lun = ufshcd_scsi_to_upiu_lun(sdev->lun);			\
-+	int ret;							\
- 	if (!ufs_is_valid_unit_desc_lun(&hba->dev_info, lun,		\
- 				_duname##_DESC_PARAM##_puname))		\
- 		return -EINVAL;						\
--	return ufs_sysfs_read_desc_param(hba, QUERY_DESC_IDN_##_duname,	\
-+	scsi_autopm_get_device(sdev);					\
-+	ret = ufs_sysfs_read_desc_param(hba, QUERY_DESC_IDN_##_duname,	\
- 		lun, _duname##_DESC_PARAM##_puname, buf, _size);	\
-+	scsi_autopm_put_device(sdev);					\
-+	return ret;							\
- }									\
- static DEVICE_ATTR_RO(_pname)
- 
-@@ -964,10 +968,10 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
- 		QUERY_ATTR_IDN_DYN_CAP_NEEDED, lun, 0, &value);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
+changes in v4:
+Patch 2: dropped Reviewed-by tag and moved sub-crq init to after locked region
+Patch 5: moved sub-crq init to after locked region
+
+changes in v3:
+* Patch 1 & 5: moved ibmvfc_init_sub_crqs out of locked patch
+
+changes in v2:
+* added Reviewed-by tags for patches 1-3
+* Patch 4: use rtas_busy_delay to test rc and delay correct amount of time
+* Patch 5: (new) similar fix for LPM case where CRQ pair needs re-enablement
+
+Tyrel Datwyler (5):
+  powerpc/pseries: extract host bridge from pci_bus prior to bus removal
+  ibmvfc: simplify handling of sub-CRQ initialization
+  ibmvfc: fix invalid sub-CRQ handles after hard reset
+  ibmvfc: treat H_CLOSED as success during sub-CRQ registration
+  ibmvfc: store return code of H_FREE_SUB_CRQ during cleanup
+
+ arch/powerpc/platforms/pseries/pci_dlpar.c |  4 +-
+ drivers/scsi/ibmvscsi/ibmvfc.c             | 49 ++++++++++------------
+ 2 files changed, 26 insertions(+), 27 deletions(-)
+
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+2.27.0
 
