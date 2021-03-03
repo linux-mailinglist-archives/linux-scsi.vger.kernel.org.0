@@ -2,1409 +2,204 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6679832BBBA
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA56532BBBF
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446926AbhCCMrW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 07:47:22 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:30975 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1841611AbhCCGaO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 01:30:14 -0500
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210303062929epoutp01c259832727cd6736601e1d5d1f4ed9e6~owUVP2Kr_1037010370epoutp01I
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 06:29:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210303062929epoutp01c259832727cd6736601e1d5d1f4ed9e6~owUVP2Kr_1037010370epoutp01I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1614752969;
-        bh=ZeskZ7vAdiWykYI8Zxwk9nrHqIVqd4i5kq4t0P+RKHY=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=NEwmoSyj/zJN7Y9+odGOuMr9o+jncuov+kdepE8+t3ovWSxg+bWbPwMQdmOZy759Y
-         uC5mO73vMODnWeT5abIToRgAMYfWs1H/5Y0i0CdbgiEK+u7xSQUXjEmHYiX/eH3cGT
-         5x/Xf1w5surWIri/Xa+u1z4rDSnKY1QIMAfFzzsU=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20210303062929epcas2p499832fff231c5ee7395870a9b9765912~owUUfNRwp1639716397epcas2p4m;
-        Wed,  3 Mar 2021 06:29:29 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.40.184]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Dr3xf5kkFz4x9QG; Wed,  3 Mar
-        2021 06:29:26 +0000 (GMT)
-X-AuditID: b6c32a46-1efff7000000dbf8-74-603f2cc68835
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        27.AD.56312.6CC2F306; Wed,  3 Mar 2021 15:29:26 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v26 4/4] scsi: ufs: Add HPB 2.0 support
-Reply-To: daejun7.park@samsung.com
-Sender: Daejun Park <daejun7.park@samsung.com>
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Daejun Park <daejun7.park@samsung.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "huobean@gmail.com" <huobean@gmail.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        JinHwan Park <jh.i.park@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20210303062633epcms2p252227acd30ad15c1ca821d7e3f547b9e@epcms2p2>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20210303062926epcms2p6aa6737e5ed3916eed9ab80011aad3d83@epcms2p6>
-Date:   Wed, 03 Mar 2021 15:29:26 +0900
-X-CMS-MailID: 20210303062926epcms2p6aa6737e5ed3916eed9ab80011aad3d83
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA12TfUwTZxzH89wd14Os2wFlPmMLI8em0kFpG1seDJ1uc6YZgnUkMjGxXOAC
-        ZKXtesWMkQGbMgRX8IXIrPgyGoGwZh0GsOAWsCydyFjccJMCCou4WBQF3IyMgWtpmWb/fZ5v
-        fm/f3/M8FB4xSUZThXozZ9KzOoYMI7r645WJ7oRNOdKL1WvR5KkuEn332SUB8i78SqL+sXsC
-        dGx2AUfzjuYQ5HXFo7bJLLTP5iBR41AFhix1nSS6Of5AgJpGujBUt1xFoOGeRhIdvOYkUcsP
-        yxga6whDZzs9AFU32InNIvXw1TT1cK0FU3dbrwvUh5r6gLr3pF2g3j/QS6jnbo0S6tqONqB+
-        cC5GXdV3ENOEZetSCzg2jzPFcvpcQ16hPl/FpGVq39IqlFJZoiwFJTOxeraIUzFbtmkStxbq
-        fOaY2L2srtgnaVieZ5JeTzUZis1cbIGBN6sYzpinM8pkRgnPFvHF+nxJrqFoo0wqlSt8kTm6
-        ghN/dAPjL99iH96tniIqgO1TrAaEUpDeAG9ODYT4OYJ2Ajg/AGsARQnpcLjkjPTLkXQyrPuz
-        hwyEMNDxs1UQ0CVw9Hc78DNJJ8CGSxM+PYwS0ZUEbBpqwfwHnF7EoG3gMRloJoRfVN0iAvwi
-        PN/SuZIdSmdA96AtJKCvh4+aLXiAo6DnqxnBKt93nwYBFsHKG0PBmHA4uXAhqL8A3Rdmg8bK
-        Yef438A/BKQ/B7C/ezTYIAn+dqB9ZQghnQ7dPZYVJuhX4UDrkWDyFjg9UrlSFKdfhudnGnH/
-        VnA6Hjp6kvwI6Tj4/SixaquifVHwf8bpZ+GB/qX/dOepqWD1tfDrBQd2CMRZn6za+lQv65Ne
-        ZwDeBp7njHxRPsfLjfKnr/ccWHnq4q1OUD8zK3EBjAIuACmcEQnXeFU5EcI8tuQjzmTQmop1
-        HO8CCp/Lw3h0VK7B91f0Zq1MIVcqpSkKpFDKEbNGyEsntRF0Pmvm3uc4I2dazcOo0OgKLOIh
-        oqzbqouzPDnlkWV9pT1SWG9pPHHZHnMH1t8l7QnJxnXayLF2rKr3YcP0dMPbmozh7YL90bZ3
-        0p3CSKZq2D1vlwsl2K7a05ujF0MLRUP3nmvbaRaYLK33d2SXio4nTnglj+CXY7J9Vz/+oC9l
-        nef4RfEnR1nxgnYvcXmT/Q1VTUd/7NJfdzaaFFjmRBxhyHqzKP3antdKUg5HfbOHqjt7Zr29
-        RLOh3Vvpss2kHav+p6zUcnKkzKbZJSbHbz/Gu+UO5e5Bnep6d3m998buIxnLzTFzz8y1/ohl
-        dpYabntyX3n3p3jZ0faysBRLyNSV1CuD80Mv6aVlyeFY9nuenQzBF7AyMW7i2X8B4Nhc+3ME
-        AAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210303062633epcms2p252227acd30ad15c1ca821d7e3f547b9e
-References: <20210303062633epcms2p252227acd30ad15c1ca821d7e3f547b9e@epcms2p2>
-        <CGME20210303062633epcms2p252227acd30ad15c1ca821d7e3f547b9e@epcms2p6>
+        id S1446951AbhCCMrZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 07:47:25 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:54582 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1449277AbhCCHTo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 02:19:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1614755983; x=1646291983;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=jFOYEqUOOAnl/kpNcNpzWfTSVq4huD+CdsdbzSAz/Lo=;
+  b=l1Q6zo/K/2jox6IT24XpeCbwLA0tzHeOWgI9HCz2XwehMqqb721K6y8D
+   M1Jl9MCywld3KXRp9VnBoOiOhyZDaWeDGWn4W2D5pMktKsHbhK87XQ+pZ
+   ZAZhuB/IzRnTA8Vk5TShCnAKLB53y+AoyZdTHWOW2Ndt8mnoN083YAHZc
+   VpdvgMu+bPigQ/GDvZxWbddH29dfdrmgHg/mB9875GhMc9oeQSDD56Xyh
+   jf3ZjPEAuujFnEnp5S0oeaHlTQhI0kdgh9mWpOBbswNFRbhSiRzgpMCkh
+   NJpeYTOr0r9ZJ/HWcnEECaFms3XhFxgQZ7K1jNIYYRyCCb7Nf5Hv9gcZA
+   A==;
+IronPort-SDR: CY42w2rmYCAIHPoQSuCA28e00dKF92hEq8ziF1WJPfKZcYGhNEyvcN2AEKj1BtVsguKPLx0r3W
+ xoxaSNwMKstcEjPONWauY2yYN4HwJtUHnDnXeq028W84cyYRFqVVZuHUPbuj7o3Z5zZ1YKmLQQ
+ HDfopSYzdcBWWB/HzfgJHk/FvRiD8Oqp6ZpiM5ZRkwnS6cC3h+Hi3DRRMOMo5vUdkF6q76MNEz
+ jVLk7OXdvPbmO5CKVtfyBDALWFDKrUscu5YXaNT8NXXnFMnqQySI6IiSKvj6T8RKNWPWN4EZP8
+ kYY=
+X-IronPort-AV: E=Sophos;i="5.81,219,1610380800"; 
+   d="scan'208";a="161220462"
+Received: from mail-sn1nam02lp2052.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.36.52])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Mar 2021 15:18:31 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LKRIsF9d1wAPznnGj0Qji45aR5Uyjvx44ZHOvkIWKfFZhSBjX/yTidJkUG4wgPGKkqJNzjXez0ySIUEwkZdVfL8mifnNRNm+MVp26oXavthpgRPKYvZFFj0ZGia5rzag5CT3w6JV0rPwIX3iED7qWM+6aoSFOHqIA09A+NP7ROfacYdWmMZ6o7rV5ozxgP6zUMXkiglYpldRafy3PCxIp7lmav3D9NkZbuwzGoQcTBO7BCKy/ic6ofTfQor2VTK1/bp7eyxHKOPgaN+5C50RRuQx6do1mULziclerZMrqLwqYW04WPHsqS2slOSLElkFQDf4zSJ9/BKeb3f0u96Bgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GGHC02C/c2A9biw8oqaOfs0Or4YxxSNiDbVSBxlTZdE=;
+ b=UIdwaXZx7FMsGqmOG6KU67NUPoF7gqJoFybXtNYc7STkX1ZMGs7RvOZNk0iKqQl5C6CpNviaT62ENBtlOooAZLNY1f8ilS9l8HsN6ltKgvmHIb0BDAGoX+tO3GFHtJqAl0LPgTx7Ppt38VMztMHrtqjQP5kKX7TzjxyVeUMbv1U0YzTUHPh1Bo32bNxjKZibdGfz07JxbWaCyx+lHwt64suLSv1OzGLMkHx3qBIXfAzdyzUH3fDCcGf/gSQlUjE2LwuFQzkZt/x37zkhxOqP/JRqg27uXv4fK/FeizW10U91SHsIgK/vXq//9OWjpQymabynmdrMu0HgGSH1Yz7tCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GGHC02C/c2A9biw8oqaOfs0Or4YxxSNiDbVSBxlTZdE=;
+ b=EoBZ+XT2pv0n0c0RNpliTW+Tt/jWuEFngOYirazcxxxdaq5M/U5s/z4Xd/zCk97QbEl+FpYQkc/NjWk5Ns7Dn/vJNYb9JGZR4OffDeK9h9sfbCUvpy+KXi4sozkOJBHi5j/SRODkPxaKmgeTrXxGlpS4572N7wrVkXntsNc6aUU=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ DM5PR04MB0970.namprd04.prod.outlook.com (2603:10b6:4:47::28) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3890.19; Wed, 3 Mar 2021 07:18:29 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::e824:f31b:38cf:ef66]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::e824:f31b:38cf:ef66%3]) with mapi id 15.20.3890.030; Wed, 3 Mar 2021
+ 07:18:29 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Can Guo <cang@codeaurora.org>
+CC:     "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "nguyenb@codeaurora.org" <nguyenb@codeaurora.org>,
+        "hongwus@codeaurora.org" <hongwus@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Nitin Rawat <nitirawa@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/3] scsi: ufs-qcom: Disable interrupt in reset path
+Thread-Topic: [PATCH v2 2/3] scsi: ufs-qcom: Disable interrupt in reset path
+Thread-Index: AQHXCm8WN+YhHnByLUS9jf8kgHZH/KptpKGwgAQL7YCAADUxUA==
+Date:   Wed, 3 Mar 2021 07:18:29 +0000
+Message-ID: <DM6PR04MB65756A436EF1004976E183B3FC989@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <1614145010-36079-1-git-send-email-cang@codeaurora.org>
+ <1614145010-36079-3-git-send-email-cang@codeaurora.org>
+ <DM6PR04MB65753665BA9BF63ABF20656FFC9B9@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <96fbfe6fba7a7cd4d2d764186bb8650b@codeaurora.org>
+In-Reply-To: <96fbfe6fba7a7cd4d2d764186bb8650b@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: codeaurora.org; dkim=none (message not signed)
+ header.d=none;codeaurora.org; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 904914db-84da-4e01-feee-08d8de148ba7
+x-ms-traffictypediagnostic: DM5PR04MB0970:
+x-microsoft-antispam-prvs: <DM5PR04MB0970ED452C25F8AF578085CFFC989@DM5PR04MB0970.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:1122;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: M3bqmIjxlnboofYLGl4FStcZCLVmPcydHgfkWsx2TQx2G4v+7tX+VdyKAaswn08rfNbc+ivwe7RodYxjVqIPFWGK8qI0VgstQ4EwF7SIeAik9uqyBwI8PKR0lqQo5yCIpka6q33f1FS1AAN5jW7JGuxXAW7Jf4sxUoGAVLgvkjcO5Ga/51Wl/Sh+XNjgaw2yGcRUGvbHMYVfqIXDYWlcUG79BcJyWziVGe6yWd7zgy0WIvYM82lWncNQw2UYxTUHk1iJM4YXqkXqu6u15c1n9jTpZu+sm0bVLVj9KPIE7ZsBLdurdEHT5JYAAu8HGMB75VA4k0mMRpLOMfcwUc5885gRMSqlTEROR+Il8nlRsdIN3YVOf0WHovRqeYqepscrhH4PbkytFOydUyBjTlHCsUAaLpp2+THrZKtGuGl/ZI4AsXvFN/eqQRjhQPqj7lnr72RRlDBchkZh7qUVrJgWEczCsuVbVqOyeR79yuIZx/mkBibLVU2Iw3EdL0vLij0ryiMdu91fkfhlezb517HhAw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(396003)(376002)(366004)(136003)(71200400001)(54906003)(7416002)(26005)(6506007)(86362001)(52536014)(186003)(53546011)(8936002)(9686003)(2906002)(5660300002)(8676002)(55016002)(64756008)(7696005)(33656002)(6916009)(66476007)(4326008)(66446008)(316002)(478600001)(66946007)(76116006)(66556008)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?ROQyXtLvxZy5VHGnkEEMj6WoWQC+5zc93FLBDL56wUlSYYwRDr0zydjNet/u?=
+ =?us-ascii?Q?k0As3/vBAdeqWhXS0/ueCyVF7f0HdSTKjPtifiCbjiPenzWf+yHAu/QmX7kj?=
+ =?us-ascii?Q?m7dcS6+beLi/tEfKHcalOuvJRESvLdwk/yuesEHEKYxmtBUYsBMfEU7H0izo?=
+ =?us-ascii?Q?zjGIONw3iH65PnlHDwnfmWNNMTQmBc0h45y/3BZGVDqLWFcogKO5UFupy3/e?=
+ =?us-ascii?Q?CYP2bRh54Pmnog9vyYiUlMj7nfaV6CZdwGf3B1EFJ/eXUjsZynoNDwzQlQ6U?=
+ =?us-ascii?Q?b5e3XDqGnd/d4PYUWr3jT5zb2s9QIyokXvs8efzBIuyNePIE5Iw6BCGO6JQH?=
+ =?us-ascii?Q?XXf/jXBqpu6gu1c8FTMbJu20IjyAGAdBvzGcoYzJH8Th/bHqMp5Ia798mff8?=
+ =?us-ascii?Q?Bv1toYR9p/Rl8iwTnkL5sNjfiSF8kRHXkDtQ/zNgAVXQqrD2se0PA69j8tGf?=
+ =?us-ascii?Q?agwu1prjyvNsvyx0BlrqtIqLo831DmZXtro1ATx+7QpS1Wqjkb3UJ7hsk5VJ?=
+ =?us-ascii?Q?HDRqU1/XCzZhfTSjN2InNfCwdK6vvnq4Bp2U34COucJsBS6RLn+sWbrlPu8J?=
+ =?us-ascii?Q?Yt3s0ra57QNPwTXoXhdiAIdCV/iJEdurfJmSKOEVwYOdi8vpNGACzOGZb6nO?=
+ =?us-ascii?Q?oNFukBON1cofiSnLswctCu0edEweyjPJDNowdJaW6Vf+QoMOaRE4G27AkENe?=
+ =?us-ascii?Q?FE7YIfXZKmRFhPZQ376H9K1wNFZMw1Pepdb8W0VxdpgygHzpV5qSRkDpNGBF?=
+ =?us-ascii?Q?FgkLgbzCFMznnNyWKAJz0eu+ud3bXEeUYN6A3XDXKtIXNWHx6pwYu//7c/4T?=
+ =?us-ascii?Q?wW65jsXtuZyRfhvLG8XdLvO9WbfwfQRF+32OK+dN1IVdjhJuQuhdZFF3kWwK?=
+ =?us-ascii?Q?Vi9yB5/yzvK0IMaCW8QP4hWJ3fwbkzChSKMQSZ3EZayKfK6dCldw7S2AZksF?=
+ =?us-ascii?Q?BVxrTAHlI9CtEijIZaTiYQ1cWX6F06eJz85VXUZidRRZf+IR2uqLZTKcIorD?=
+ =?us-ascii?Q?qrK7E2Scb/vzGSmVzWuOUp9JtcUCBovgzkv2bf8rNxEDanT33r7G4eKHkZV0?=
+ =?us-ascii?Q?f1dFrIusqxG2mme9ZZfU5x7y1edYY/1dziVvFBglMjxvsKaz27tET7G2u6LZ?=
+ =?us-ascii?Q?i6T2NaZ7I7tIk99JgkStvgDBo7G2h56GOuFZHk14HzqJhWFeE3Gua3vKQV6q?=
+ =?us-ascii?Q?k8FBBxOjZ8fBJR/XUE8gdxjwDUlRxu7TXIJuvp/C9A4m7Oi9u7ndqSsHpcLZ?=
+ =?us-ascii?Q?cjLYSXLNv537ymZ82F7wAELZnqjEKLlGExOckyVovJkJ1RCkCFBpl5X3mL5Y?=
+ =?us-ascii?Q?Z/6PHIoSpPNZCTxDDNI61Snv?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 904914db-84da-4e01-feee-08d8de148ba7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2021 07:18:29.5196
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4n0Sne9eynFrcZOYIz0wCQm1C+Wwi1xBkWFmBHwkhDO3fePWhEPZLFmYvnNdj85ZrWncyXpijUncbO4WJICuZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0970
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch supports the HPB 2.0.
+>=20
+> On 2021-02-28 22:23, Avri Altman wrote:
+> >>
+> >> From: Nitin Rawat <nitirawa@codeaurora.org>
+> >>
+> >> Disable interrupt in reset path to flush pending IRQ handler in order
+> >> to
+> >> avoid possible NoC issues.
+> >>
+> >> Signed-off-by: Nitin Rawat <nitirawa@codeaurora.org>
+> >> Signed-off-by: Can Guo <cang@codeaurora.org>
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
 
-The HPB 2.0 supports read of varying sizes from 4KB to 512KB.
-In the case of Read (<= 32KB) is supported as single HPB read.
-In the case of Read (36KB ~ 512KB) is supported by as a combination of
-write buffer command and HPB read command to deliver more PPN.
-The write buffer commands may not be issued immediately due to busy tags.
-To use HPB read more aggressively, the driver can requeue the write buffer
-command. The requeue threshold is implemented as timeout and can be
-modified with requeue_timeout_ms entry in sysfs.
 
-Signed-off-by: Daejun Park <daejun7.park@samsung.com>
----
- Documentation/ABI/testing/sysfs-driver-ufs |  35 +-
- drivers/scsi/ufs/ufs-sysfs.c               |   2 +
- drivers/scsi/ufs/ufs.h                     |   3 +-
- drivers/scsi/ufs/ufshcd.c                  |  22 +-
- drivers/scsi/ufs/ufshcd.h                  |   7 +
- drivers/scsi/ufs/ufshpb.c                  | 622 +++++++++++++++++++--
- drivers/scsi/ufs/ufshpb.h                  |  67 ++-
- 7 files changed, 679 insertions(+), 79 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
-index bf5cb8846de1..0017eaf89cbe 100644
---- a/Documentation/ABI/testing/sysfs-driver-ufs
-+++ b/Documentation/ABI/testing/sysfs-driver-ufs
-@@ -1253,14 +1253,14 @@ Description:	This entry shows the number of HPB pinned regions assigned to
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_sysfs/hit_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stat_sysfs/hit_cnt
- Date:		February 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
- Description:	This entry shows the number of reads that changed to HPB read.
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_sysfs/miss_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stat_sysfs/miss_cnt
- Date:		February 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
- Description:	This entry shows the number of reads that cannot be changed to
-@@ -1268,7 +1268,7 @@ Description:	This entry shows the number of reads that cannot be changed to
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_sysfs/rb_noti_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stat_sysfs/rb_noti_cnt
- Date:		February 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
- Description:	This entry shows the number of response UPIUs that has
-@@ -1276,7 +1276,7 @@ Description:	This entry shows the number of response UPIUs that has
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_sysfs/rb_active_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stat_sysfs/rb_active_cnt
- Date:		February 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
- Description:	This entry shows the number of active sub-regions recommended by
-@@ -1284,7 +1284,7 @@ Description:	This entry shows the number of active sub-regions recommended by
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_sysfs/rb_inactive_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stat_sysfs/rb_inactive_cnt
- Date:		February 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
- Description:	This entry shows the number of inactive regions recommended by
-@@ -1292,10 +1292,33 @@ Description:	This entry shows the number of inactive regions recommended by
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_sysfs/map_req_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stat_sysfs/map_req_cnt
- Date:		February 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
- Description:	This entry shows the number of read buffer commands for
- 		activating sub-regions recommended by response UPIUs.
- 
- 		The file is read only.
-+
-+What:		/sys/class/scsi_device/*/device/hpb_param_sysfs/requeue_timeout_ms
-+Date:		February 2021
-+Contact:	Daejun Park <daejun7.park@samsung.com>
-+Description:	This entry shows the requeue timeout threshold for write buffer
-+		command in ms. This value can be changed by writing proper integer to
-+		this entry.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/attributes/max_data_size_hpb_single_cmd
-+Date:		February 2021
-+Contact:	Daejun Park <daejun7.park@samsung.com>
-+Description:	This entry shows the maximum HPB data size for using single HPB
-+		command.
-+
-+		===  ========
-+		00h  4KB
-+		01h  8KB
-+		02h  12KB
-+		...
-+		FFh  1024KB
-+		===  ========
-+
-+		The file is read only.
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index 2546e7a1ac4f..00fb519406cf 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -841,6 +841,7 @@ out:									\
- static DEVICE_ATTR_RO(_name)
- 
- UFS_ATTRIBUTE(boot_lun_enabled, _BOOT_LU_EN);
-+UFS_ATTRIBUTE(max_data_size_hpb_single_cmd, _MAX_HPB_SINGLE_CMD);
- UFS_ATTRIBUTE(current_power_mode, _POWER_MODE);
- UFS_ATTRIBUTE(active_icc_level, _ACTIVE_ICC_LVL);
- UFS_ATTRIBUTE(ooo_data_enabled, _OOO_DATA_EN);
-@@ -864,6 +865,7 @@ UFS_ATTRIBUTE(wb_cur_buf, _CURR_WB_BUFF_SIZE);
- 
- static struct attribute *ufs_sysfs_attributes[] = {
- 	&dev_attr_boot_lun_enabled.attr,
-+	&dev_attr_max_data_size_hpb_single_cmd.attr,
- 	&dev_attr_current_power_mode.attr,
- 	&dev_attr_active_icc_level.attr,
- 	&dev_attr_ooo_data_enabled.attr,
-diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-index 957763db1006..e0b748777a1b 100644
---- a/drivers/scsi/ufs/ufs.h
-+++ b/drivers/scsi/ufs/ufs.h
-@@ -123,12 +123,13 @@ enum flag_idn {
- 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN                 = 0x0F,
- 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8     = 0x10,
- 	QUERY_FLAG_IDN_HPB_RESET                        = 0x11,
-+	QUERY_FLAG_IDN_HPB_EN				= 0x12,
- };
- 
- /* Attribute idn for Query requests */
- enum attr_idn {
- 	QUERY_ATTR_IDN_BOOT_LU_EN		= 0x00,
--	QUERY_ATTR_IDN_RESERVED			= 0x01,
-+	QUERY_ATTR_IDN_MAX_HPB_SINGLE_CMD	= 0x01,
- 	QUERY_ATTR_IDN_POWER_MODE		= 0x02,
- 	QUERY_ATTR_IDN_ACTIVE_ICC_LVL		= 0x03,
- 	QUERY_ATTR_IDN_OOO_DATA_EN		= 0x04,
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 851c01a26207..f7e491ad4fa8 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -2656,7 +2656,12 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 
- 	lrbp->req_abort_skip = false;
- 
--	ufshpb_prep(hba, lrbp);
-+	err = ufshpb_prep(hba, lrbp);
-+	if (err == -EAGAIN) {
-+		lrbp->cmd = NULL;
-+		ufshcd_release(hba);
-+		goto out;
-+	}
- 
- 	ufshcd_comp_scsi_upiu(hba, lrbp);
- 
-@@ -3110,7 +3115,7 @@ int ufshcd_query_attr(struct ufs_hba *hba, enum query_opcode opcode,
-  *
-  * Returns 0 for success, non-zero in case of failure
- */
--static int ufshcd_query_attr_retry(struct ufs_hba *hba,
-+int ufshcd_query_attr_retry(struct ufs_hba *hba,
- 	enum query_opcode opcode, enum attr_idn idn, u8 index, u8 selector,
- 	u32 *attr_val)
- {
-@@ -7447,8 +7452,18 @@ static int ufs_get_device_desc(struct ufs_hba *hba)
- 
- 	if (dev_info->wspecversion >= UFS_DEV_HPB_SUPPORT_VERSION &&
- 	    (b_ufs_feature_sup & UFS_DEV_HPB_SUPPORT)) {
--		dev_info->hpb_enabled = true;
-+		bool hpb_en = false;
-+
- 		ufshpb_get_dev_info(hba, desc_buf);
-+
-+		if (!ufshpb_is_legacy(hba))
-+			err = ufshcd_query_flag_retry(hba,
-+						      UPIU_QUERY_OPCODE_READ_FLAG,
-+						      QUERY_FLAG_IDN_HPB_EN, 0,
-+						      &hpb_en);
-+
-+		if (ufshpb_is_legacy(hba) || (!err && hpb_en))
-+			dev_info->hpb_enabled = true;
- 	}
- 
- 	err = ufshcd_read_string_desc(hba, model_index,
-@@ -8019,6 +8034,7 @@ static const struct attribute_group *ufshcd_driver_groups[] = {
- 	&ufs_sysfs_lun_attributes_group,
- #ifdef CONFIG_SCSI_UFS_HPB
- 	&ufs_sysfs_hpb_stat_group,
-+	&ufs_sysfs_hpb_param_group,
- #endif
- 	NULL,
- };
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 961fc5b77943..7d85517464ef 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -654,6 +654,8 @@ struct ufs_hba_variant_params {
-  * @srgn_size: device reported HPB sub-region size
-  * @slave_conf_cnt: counter to check all lu finished initialization
-  * @hpb_disabled: flag to check if HPB is disabled
-+ * @max_hpb_single_cmd: maximum size of single HPB command
-+ * @is_legacy: flag to check HPB 1.0
-  */
- struct ufshpb_dev_info {
- 	int num_lu;
-@@ -661,6 +663,8 @@ struct ufshpb_dev_info {
- 	int srgn_size;
- 	atomic_t slave_conf_cnt;
- 	bool hpb_disabled;
-+	int max_hpb_single_cmd;
-+	bool is_legacy;
- };
- #endif
- 
-@@ -1091,6 +1095,9 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- 			   u8 param_offset,
- 			   u8 *param_read_buf,
- 			   u8 param_size);
-+int ufshcd_query_attr_retry(struct ufs_hba *hba, enum query_opcode opcode,
-+			    enum attr_idn idn, u8 index, u8 selector,
-+			    u32 *attr_val);
- int ufshcd_query_attr(struct ufs_hba *hba, enum query_opcode opcode,
- 		      enum attr_idn idn, u8 index, u8 selector, u32 *attr_val);
- int ufshcd_query_flag(struct ufs_hba *hba, enum query_opcode opcode,
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index c75a6816a03f..ae092a442023 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -31,6 +31,11 @@ bool ufshpb_is_allowed(struct ufs_hba *hba)
- 	return !(hba->ufshpb_dev.hpb_disabled);
- }
- 
-+bool ufshpb_is_legacy(struct ufs_hba *hba)
-+{
-+	return hba->ufshpb_dev.is_legacy;
-+}
-+
- static struct ufshpb_lu *ufshpb_get_hpb_data(struct scsi_device *sdev)
- {
- 	return sdev->hostdata;
-@@ -64,9 +69,19 @@ static bool ufshpb_is_write_or_discard_cmd(struct scsi_cmnd *cmd)
- 	       op_is_discard(req_op(cmd->request));
- }
- 
--static bool ufshpb_is_support_chunk(int transfer_len)
-+static bool ufshpb_is_support_chunk(struct ufshpb_lu *hpb, int transfer_len)
- {
--	return transfer_len <= HPB_MULTI_CHUNK_HIGH;
-+	return transfer_len <= hpb->pre_req_max_tr_len;
-+}
-+
-+/*
-+ * In this driver, WRITE_BUFFER CMD support 36KB (len=9) ~ 512KB (len=128) as
-+ * default. It is possible to change range of transfer_len through sysfs.
-+ */
-+static inline bool ufshpb_is_required_wb(struct ufshpb_lu *hpb, int len)
-+{
-+	return (len > hpb->pre_req_min_tr_len &&
-+		len <= hpb->pre_req_max_tr_len);
- }
- 
- static bool ufshpb_is_general_lun(int lun)
-@@ -74,8 +89,7 @@ static bool ufshpb_is_general_lun(int lun)
- 	return lun < UFS_UPIU_MAX_UNIT_NUM_ID;
- }
- 
--static bool
--ufshpb_is_pinned_region(struct ufshpb_lu *hpb, int rgn_idx)
-+static bool ufshpb_is_pinned_region(struct ufshpb_lu *hpb, int rgn_idx)
- {
- 	if (hpb->lu_pinned_end != PINNED_NOT_SET &&
- 	    rgn_idx >= hpb->lu_pinned_start &&
-@@ -264,7 +278,8 @@ ufshpb_get_pos_from_lpn(struct ufshpb_lu *hpb, unsigned long lpn, int *rgn_idx,
- 
- static void
- ufshpb_set_hpb_read_to_upiu(struct ufshpb_lu *hpb, struct ufshcd_lrb *lrbp,
--			    u32 lpn, u64 ppn, unsigned int transfer_len)
-+			    u32 lpn, u64 ppn, unsigned int transfer_len,
-+			    int read_id)
- {
- 	unsigned char *cdb = lrbp->cmd->cmnd;
- 
-@@ -273,15 +288,269 @@ ufshpb_set_hpb_read_to_upiu(struct ufshpb_lu *hpb, struct ufshcd_lrb *lrbp,
- 	/* ppn value is stored as big-endian in the host memory */
- 	memcpy(&cdb[6], &ppn, sizeof(u64));
- 	cdb[14] = transfer_len;
-+	cdb[15] = read_id;
- 
- 	lrbp->cmd->cmd_len = UFS_CDB_SIZE;
- }
- 
-+static inline void ufshpb_set_write_buf_cmd(unsigned char *cdb,
-+					    unsigned long lpn, unsigned int len,
-+					    int read_id)
-+{
-+	cdb[0] = UFSHPB_WRITE_BUFFER;
-+	cdb[1] = UFSHPB_WRITE_BUFFER_PREFETCH_ID;
-+
-+	put_unaligned_be32(lpn, &cdb[2]);
-+	cdb[6] = read_id;
-+	put_unaligned_be16(len * HPB_ENTRY_SIZE, &cdb[7]);
-+
-+	cdb[9] = 0x00;	/* Control = 0x00 */
-+}
-+
-+static struct ufshpb_req *ufshpb_get_pre_req(struct ufshpb_lu *hpb)
-+{
-+	struct ufshpb_req *pre_req;
-+
-+	if (hpb->num_inflight_pre_req >= hpb->throttle_pre_req) {
-+		dev_info(&hpb->sdev_ufs_lu->sdev_dev,
-+			 "pre_req throttle. inflight %d throttle %d",
-+			 hpb->num_inflight_pre_req, hpb->throttle_pre_req);
-+		return NULL;
-+	}
-+
-+	pre_req = list_first_entry_or_null(&hpb->lh_pre_req_free,
-+					   struct ufshpb_req, list_req);
-+	if (!pre_req) {
-+		dev_info(&hpb->sdev_ufs_lu->sdev_dev, "There is no pre_req");
-+		return NULL;
-+	}
-+
-+	list_del_init(&pre_req->list_req);
-+	hpb->num_inflight_pre_req++;
-+
-+	return pre_req;
-+}
-+
-+static inline void ufshpb_put_pre_req(struct ufshpb_lu *hpb,
-+				      struct ufshpb_req *pre_req)
-+{
-+	pre_req->req = NULL;
-+	pre_req->bio = NULL;
-+	list_add_tail(&pre_req->list_req, &hpb->lh_pre_req_free);
-+	hpb->num_inflight_pre_req--;
-+}
-+
-+static void ufshpb_pre_req_compl_fn(struct request *req, blk_status_t error)
-+{
-+	struct ufshpb_req *pre_req = (struct ufshpb_req *)req->end_io_data;
-+	struct ufshpb_lu *hpb = pre_req->hpb;
-+	unsigned long flags;
-+	struct scsi_sense_hdr sshdr;
-+
-+	if (error) {
-+		dev_err(&hpb->sdev_ufs_lu->sdev_dev, "block status %d", error);
-+		scsi_normalize_sense(pre_req->sense, SCSI_SENSE_BUFFERSIZE,
-+				     &sshdr);
-+		dev_err(&hpb->sdev_ufs_lu->sdev_dev,
-+			"code %x sense_key %x asc %x ascq %x",
-+			sshdr.response_code,
-+			sshdr.sense_key, sshdr.asc, sshdr.ascq);
-+		dev_err(&hpb->sdev_ufs_lu->sdev_dev,
-+			"byte4 %x byte5 %x byte6 %x additional_len %x",
-+			sshdr.byte4, sshdr.byte5,
-+			sshdr.byte6, sshdr.additional_length);
-+	}
-+
-+	bio_put(pre_req->bio);
-+	blk_mq_free_request(req);
-+	spin_lock_irqsave(&hpb->rgn_state_lock, flags);
-+	ufshpb_put_pre_req(pre_req->hpb, pre_req);
-+	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
-+}
-+
-+static int ufshpb_prep_entry(struct ufshpb_req *pre_req, struct page *page)
-+{
-+	struct ufshpb_lu *hpb = pre_req->hpb;
-+	struct ufshpb_region *rgn;
-+	struct ufshpb_subregion *srgn;
-+	u64 *addr;
-+	int offset = 0;
-+	int copied;
-+	unsigned long lpn = pre_req->wb.lpn;
-+	int rgn_idx, srgn_idx, srgn_offset;
-+	unsigned long flags;
-+
-+	addr = page_address(page);
-+	ufshpb_get_pos_from_lpn(hpb, lpn, &rgn_idx, &srgn_idx, &srgn_offset);
-+
-+	spin_lock_irqsave(&hpb->rgn_state_lock, flags);
-+
-+next_offset:
-+	rgn = hpb->rgn_tbl + rgn_idx;
-+	srgn = rgn->srgn_tbl + srgn_idx;
-+
-+	if (!ufshpb_is_valid_srgn(rgn, srgn))
-+		goto mctx_error;
-+
-+	if (!srgn->mctx)
-+		goto mctx_error;
-+
-+	copied = ufshpb_fill_ppn_from_page(hpb, srgn->mctx, srgn_offset,
-+					   pre_req->wb.len - offset,
-+					   &addr[offset]);
-+
-+	if (copied < 0)
-+		goto mctx_error;
-+
-+	offset += copied;
-+	srgn_offset += copied;
-+
-+	if (srgn_offset == hpb->entries_per_srgn) {
-+		srgn_offset = 0;
-+
-+		if (++srgn_idx == hpb->srgns_per_rgn) {
-+			srgn_idx = 0;
-+			rgn_idx++;
-+		}
-+	}
-+
-+	if (offset < pre_req->wb.len)
-+		goto next_offset;
-+
-+	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
-+	return 0;
-+mctx_error:
-+	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
-+	return -ENOMEM;
-+}
-+
-+static int ufshpb_pre_req_add_bio_page(struct ufshpb_lu *hpb,
-+				       struct request_queue *q,
-+				       struct ufshpb_req *pre_req)
-+{
-+	struct page *page = pre_req->wb.m_page;
-+	struct bio *bio = pre_req->bio;
-+	int entries_bytes, ret;
-+
-+	if (!page)
-+		return -ENOMEM;
-+
-+	if (ufshpb_prep_entry(pre_req, page))
-+		return -ENOMEM;
-+
-+	entries_bytes = pre_req->wb.len * sizeof(u64);
-+
-+	ret = bio_add_pc_page(q, bio, page, entries_bytes, 0);
-+	if (ret != entries_bytes) {
-+		dev_err(&hpb->sdev_ufs_lu->sdev_dev,
-+			"bio_add_pc_page fail: %d", ret);
-+		return -ENOMEM;
-+	}
-+	return 0;
-+}
-+
-+static inline int ufshpb_get_read_id(struct ufshpb_lu *hpb)
-+{
-+	if (++hpb->cur_read_id >= MAX_HPB_READ_ID)
-+		hpb->cur_read_id = 0;
-+	return hpb->cur_read_id;
-+}
-+
-+static int ufshpb_execute_pre_req(struct ufshpb_lu *hpb, struct scsi_cmnd *cmd,
-+				  struct ufshpb_req *pre_req, int read_id)
-+{
-+	struct scsi_device *sdev = cmd->device;
-+	struct request_queue *q = sdev->request_queue;
-+	struct request *req;
-+	struct scsi_request *rq;
-+	struct bio *bio = pre_req->bio;
-+
-+	pre_req->hpb = hpb;
-+	pre_req->wb.lpn = sectors_to_logical(cmd->device,
-+					     blk_rq_pos(cmd->request));
-+	pre_req->wb.len = sectors_to_logical(cmd->device,
-+					     blk_rq_sectors(cmd->request));
-+	if (ufshpb_pre_req_add_bio_page(hpb, q, pre_req))
-+		return -ENOMEM;
-+
-+	req = pre_req->req;
-+
-+	/* 1. request setup */
-+	blk_rq_append_bio(req, &bio);
-+	req->rq_disk = NULL;
-+	req->end_io_data = (void *)pre_req;
-+	req->end_io = ufshpb_pre_req_compl_fn;
-+
-+	/* 2. scsi_request setup */
-+	rq = scsi_req(req);
-+	rq->retries = 1;
-+
-+	ufshpb_set_write_buf_cmd(rq->cmd, pre_req->wb.lpn, pre_req->wb.len,
-+				 read_id);
-+	rq->cmd_len = scsi_command_size(rq->cmd);
-+
-+	if (blk_insert_cloned_request(q, req) != BLK_STS_OK)
-+		return -EAGAIN;
-+
-+	hpb->stats.pre_req_cnt++;
-+
-+	return 0;
-+}
-+
-+static int ufshpb_issue_pre_req(struct ufshpb_lu *hpb, struct scsi_cmnd *cmd,
-+				int *read_id)
-+{
-+	struct ufshpb_req *pre_req;
-+	struct request *req = NULL;
-+	struct bio *bio = NULL;
-+	unsigned long flags;
-+	int _read_id;
-+	int ret = 0;
-+
-+	req = blk_get_request(cmd->device->request_queue,
-+			      REQ_OP_SCSI_OUT | REQ_SYNC, BLK_MQ_REQ_NOWAIT);
-+	if (IS_ERR(req))
-+		return -EAGAIN;
-+
-+	bio = bio_alloc(GFP_ATOMIC, 1);
-+	if (!bio) {
-+		blk_put_request(req);
-+		return -EAGAIN;
-+	}
-+
-+	spin_lock_irqsave(&hpb->rgn_state_lock, flags);
-+	pre_req = ufshpb_get_pre_req(hpb);
-+	if (!pre_req) {
-+		ret = -EAGAIN;
-+		goto unlock_out;
-+	}
-+	_read_id = ufshpb_get_read_id(hpb);
-+	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
-+
-+	pre_req->req = req;
-+	pre_req->bio = bio;
-+
-+	ret = ufshpb_execute_pre_req(hpb, cmd, pre_req, _read_id);
-+	if (ret)
-+		goto free_pre_req;
-+
-+	*read_id = _read_id;
-+
-+	return ret;
-+free_pre_req:
-+	spin_lock_irqsave(&hpb->rgn_state_lock, flags);
-+	ufshpb_put_pre_req(hpb, pre_req);
-+unlock_out:
-+	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
-+	bio_put(bio);
-+	blk_put_request(req);
-+	return ret;
-+}
-+
- /*
-  * This function will set up HPB read command using host-side L2P map data.
-- * In HPB v1.0, maximum size of HPB read command is 4KB.
-  */
--void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
-+int ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- {
- 	struct ufshpb_lu *hpb;
- 	struct ufshpb_region *rgn;
-@@ -291,26 +560,27 @@ void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 	u64 ppn;
- 	unsigned long flags;
- 	int transfer_len, rgn_idx, srgn_idx, srgn_offset;
-+	int read_id = 0;
- 	int err = 0;
- 
- 	hpb = ufshpb_get_hpb_data(cmd->device);
- 	if (!hpb)
--		return;
-+		return -ENODEV;
- 
- 	if (ufshpb_get_state(hpb) != HPB_PRESENT) {
- 		dev_notice(&hpb->sdev_ufs_lu->sdev_dev,
- 			   "%s: ufshpb state is not PRESENT", __func__);
--		return;
-+		return -ENODEV;
- 	}
- 
- 	if (!ufshpb_is_write_or_discard_cmd(cmd) &&
- 	    !ufshpb_is_read_cmd(cmd))
--		return;
-+		return 0;
- 
- 	transfer_len = sectors_to_logical(cmd->device,
- 					  blk_rq_sectors(cmd->request));
- 	if (unlikely(!transfer_len))
--		return;
-+		return 0;
- 
- 	lpn = sectors_to_logical(cmd->device, blk_rq_pos(cmd->request));
- 	ufshpb_get_pos_from_lpn(hpb, lpn, &rgn_idx, &srgn_idx, &srgn_offset);
-@@ -323,18 +593,19 @@ void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 		ufshpb_set_ppn_dirty(hpb, rgn_idx, srgn_idx, srgn_offset,
- 				 transfer_len);
- 		spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
--		return;
-+		return 0;
- 	}
- 
--	if (!ufshpb_is_support_chunk(transfer_len))
--		return;
-+	if (!ufshpb_is_support_chunk(hpb, transfer_len) &&
-+	    (ufshpb_is_legacy(hba) && (transfer_len != HPB_LEGACY_CHUNK_HIGH)))
-+		return 0;
- 
- 	spin_lock_irqsave(&hpb->rgn_state_lock, flags);
- 	if (ufshpb_test_ppn_dirty(hpb, rgn_idx, srgn_idx, srgn_offset,
- 				   transfer_len)) {
- 		hpb->stats.miss_cnt++;
- 		spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
--		return;
-+		return 0;
- 	}
- 
- 	err = ufshpb_fill_ppn_from_page(hpb, srgn->mctx, srgn_offset, 1, &ppn);
-@@ -347,28 +618,46 @@ void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 		 * active state.
- 		 */
- 		dev_err(hba->dev, "get ppn failed. err %d\n", err);
--		return;
-+		return err;
-+	}
-+
-+	if (!ufshpb_is_legacy(hba) &&
-+	    ufshpb_is_required_wb(hpb, transfer_len)) {
-+		err = ufshpb_issue_pre_req(hpb, cmd, &read_id);
-+		if (err) {
-+			unsigned long timeout;
-+
-+			timeout = cmd->jiffies_at_alloc + msecs_to_jiffies(
-+				  hpb->params.requeue_timeout_ms);
-+
-+			if (time_before(jiffies, timeout))
-+				return -EAGAIN;
-+
-+			hpb->stats.miss_cnt++;
-+			return 0;
-+		}
- 	}
- 
--	ufshpb_set_hpb_read_to_upiu(hpb, lrbp, lpn, ppn, transfer_len);
-+	ufshpb_set_hpb_read_to_upiu(hpb, lrbp, lpn, ppn, transfer_len, read_id);
- 
- 	hpb->stats.hit_cnt++;
-+	return 0;
- }
--static struct ufshpb_req *ufshpb_get_map_req(struct ufshpb_lu *hpb,
--					     struct ufshpb_subregion *srgn)
-+
-+static struct ufshpb_req *ufshpb_get_req(struct ufshpb_lu *hpb,
-+					 int rgn_idx, enum req_opf dir)
- {
--	struct ufshpb_req *map_req;
-+	struct ufshpb_req *rq;
- 	struct request *req;
--	struct bio *bio;
- 	int retries = HPB_MAP_REQ_RETRIES;
- 
--	map_req = kmem_cache_alloc(hpb->map_req_cache, GFP_KERNEL);
--	if (!map_req)
-+	rq = kmem_cache_alloc(hpb->map_req_cache, GFP_KERNEL);
-+	if (!rq)
- 		return NULL;
- 
- retry:
--	req = blk_get_request(hpb->sdev_ufs_lu->request_queue,
--			      REQ_OP_SCSI_IN, BLK_MQ_REQ_NOWAIT);
-+	req = blk_get_request(hpb->sdev_ufs_lu->request_queue, dir,
-+			      BLK_MQ_REQ_NOWAIT);
- 
- 	if ((PTR_ERR(req) == -EWOULDBLOCK) && (--retries > 0)) {
- 		usleep_range(3000, 3100);
-@@ -376,35 +665,54 @@ static struct ufshpb_req *ufshpb_get_map_req(struct ufshpb_lu *hpb,
- 	}
- 
- 	if (IS_ERR(req))
--		goto free_map_req;
-+		goto free_rq;
-+
-+	rq->hpb = hpb;
-+	rq->req = req;
-+	rq->rb.rgn_idx = rgn_idx;
-+
-+	return rq;
-+
-+free_rq:
-+	kmem_cache_free(hpb->map_req_cache, rq);
-+	return NULL;
-+}
-+
-+static void ufshpb_put_req(struct ufshpb_lu *hpb, struct ufshpb_req *rq)
-+{
-+	blk_put_request(rq->req);
-+	kmem_cache_free(hpb->map_req_cache, rq);
-+}
-+
-+static struct ufshpb_req *ufshpb_get_map_req(struct ufshpb_lu *hpb,
-+					     struct ufshpb_subregion *srgn)
-+{
-+	struct ufshpb_req *map_req;
-+	struct bio *bio;
-+
-+	map_req = ufshpb_get_req(hpb, srgn->rgn_idx, REQ_OP_SCSI_IN);
-+	if (!map_req)
-+		return NULL;
- 
- 	bio = bio_alloc(GFP_KERNEL, hpb->pages_per_srgn);
- 	if (!bio) {
--		blk_put_request(req);
--		goto free_map_req;
-+		ufshpb_put_req(hpb, map_req);
-+		return NULL;
- 	}
- 
--	map_req->hpb = hpb;
--	map_req->req = req;
- 	map_req->bio = bio;
- 
--	map_req->rgn_idx = srgn->rgn_idx;
--	map_req->srgn_idx = srgn->srgn_idx;
--	map_req->mctx = srgn->mctx;
-+	map_req->rb.srgn_idx = srgn->srgn_idx;
-+	map_req->rb.mctx = srgn->mctx;
- 
- 	return map_req;
--
--free_map_req:
--	kmem_cache_free(hpb->map_req_cache, map_req);
--	return NULL;
- }
- 
- static void ufshpb_put_map_req(struct ufshpb_lu *hpb,
- 			       struct ufshpb_req *map_req)
- {
- 	bio_put(map_req->bio);
--	blk_put_request(map_req->req);
--	kmem_cache_free(hpb->map_req_cache, map_req);
-+	ufshpb_put_req(hpb, map_req);
- }
- 
- static int ufshpb_clear_dirty_bitmap(struct ufshpb_lu *hpb,
-@@ -487,6 +795,13 @@ static void ufshpb_activate_subregion(struct ufshpb_lu *hpb,
- 	srgn->srgn_state = HPB_SRGN_VALID;
- }
- 
-+static void ufshpb_umap_req_compl_fn(struct request *req, blk_status_t error)
-+{
-+	struct ufshpb_req *umap_req = (struct ufshpb_req *)req->end_io_data;
-+
-+	ufshpb_put_req(umap_req->hpb, umap_req);
-+}
-+
- static void ufshpb_map_req_compl_fn(struct request *req, blk_status_t error)
- {
- 	struct ufshpb_req *map_req = (struct ufshpb_req *) req->end_io_data;
-@@ -494,8 +809,8 @@ static void ufshpb_map_req_compl_fn(struct request *req, blk_status_t error)
- 	struct ufshpb_subregion *srgn;
- 	unsigned long flags;
- 
--	srgn = hpb->rgn_tbl[map_req->rgn_idx].srgn_tbl +
--		map_req->srgn_idx;
-+	srgn = hpb->rgn_tbl[map_req->rb.rgn_idx].srgn_tbl +
-+		map_req->rb.srgn_idx;
- 
- 	ufshpb_clear_dirty_bitmap(hpb, srgn);
- 	spin_lock_irqsave(&hpb->rgn_state_lock, flags);
-@@ -505,6 +820,16 @@ static void ufshpb_map_req_compl_fn(struct request *req, blk_status_t error)
- 	ufshpb_put_map_req(map_req->hpb, map_req);
- }
- 
-+static void ufshpb_set_unmap_cmd(unsigned char *cdb, struct ufshpb_region *rgn)
-+{
-+	cdb[0] = UFSHPB_WRITE_BUFFER;
-+	cdb[1] = rgn ? UFSHPB_WRITE_BUFFER_INACT_SINGLE_ID :
-+			  UFSHPB_WRITE_BUFFER_INACT_ALL_ID;
-+	if (rgn)
-+		put_unaligned_be16(rgn->rgn_idx, &cdb[2]);
-+	cdb[9] = 0x00;
-+}
-+
- static void ufshpb_set_read_buf_cmd(unsigned char *cdb, int rgn_idx,
- 				    int srgn_idx, int srgn_mem_size)
- {
-@@ -518,6 +843,27 @@ static void ufshpb_set_read_buf_cmd(unsigned char *cdb, int rgn_idx,
- 	cdb[9] = 0x00;
- }
- 
-+static int ufshpb_execute_umap_req(struct ufshpb_lu *hpb,
-+				   struct ufshpb_req *umap_req,
-+				   struct ufshpb_region *rgn)
-+{
-+	struct request_queue *q;
-+	struct request *req;
-+	struct scsi_request *rq;
-+
-+	q = hpb->sdev_ufs_lu->request_queue;
-+	req = umap_req->req;
-+	req->timeout = 0;
-+	req->end_io_data = (void *)umap_req;
-+	rq = scsi_req(req);
-+	ufshpb_set_unmap_cmd(rq->cmd, rgn);
-+	rq->cmd_len = HPB_WRITE_BUFFER_CMD_LENGTH;
-+
-+	blk_execute_rq_nowait(q, NULL, req, 1, ufshpb_umap_req_compl_fn);
-+
-+	return 0;
-+}
-+
- static int ufshpb_execute_map_req(struct ufshpb_lu *hpb,
- 				  struct ufshpb_req *map_req, bool last)
- {
-@@ -530,12 +876,12 @@ static int ufshpb_execute_map_req(struct ufshpb_lu *hpb,
- 
- 	q = hpb->sdev_ufs_lu->request_queue;
- 	for (i = 0; i < hpb->pages_per_srgn; i++) {
--		ret = bio_add_pc_page(q, map_req->bio, map_req->mctx->m_page[i],
-+		ret = bio_add_pc_page(q, map_req->bio, map_req->rb.mctx->m_page[i],
- 				      PAGE_SIZE, 0);
- 		if (ret != PAGE_SIZE) {
- 			dev_err(&hpb->sdev_ufs_lu->sdev_dev,
- 				   "bio_add_pc_page fail %d - %d\n",
--				   map_req->rgn_idx, map_req->srgn_idx);
-+				   map_req->rb.rgn_idx, map_req->rb.srgn_idx);
- 			return ret;
- 		}
- 	}
-@@ -551,8 +897,8 @@ static int ufshpb_execute_map_req(struct ufshpb_lu *hpb,
- 	if (unlikely(last))
- 		mem_size = hpb->last_srgn_entries * HPB_ENTRY_SIZE;
- 
--	ufshpb_set_read_buf_cmd(rq->cmd, map_req->rgn_idx,
--				map_req->srgn_idx, mem_size);
-+	ufshpb_set_read_buf_cmd(rq->cmd, map_req->rb.rgn_idx,
-+				map_req->rb.srgn_idx, mem_size);
- 	rq->cmd_len = HPB_READ_BUFFER_CMD_LENGTH;
- 
- 	blk_execute_rq_nowait(q, NULL, req, 1, ufshpb_map_req_compl_fn);
-@@ -684,6 +1030,31 @@ static void ufshpb_purge_active_subregion(struct ufshpb_lu *hpb,
- 	}
- }
- 
-+static int ufshpb_issue_umap_req(struct ufshpb_lu *hpb,
-+				 struct ufshpb_region *rgn)
-+{
-+	struct ufshpb_req *umap_req;
-+	int rgn_idx = rgn ? rgn->rgn_idx : 0;
-+
-+	umap_req = ufshpb_get_req(hpb, rgn_idx, REQ_OP_SCSI_OUT);
-+	if (!umap_req)
-+		return -ENOMEM;
-+
-+	if (ufshpb_execute_umap_req(hpb, umap_req, rgn))
-+		goto free_umap_req;
-+
-+	return 0;
-+
-+free_umap_req:
-+	ufshpb_put_req(hpb, umap_req);
-+	return -EAGAIN;
-+}
-+
-+static int ufshpb_issue_umap_all_req(struct ufshpb_lu *hpb)
-+{
-+	return ufshpb_issue_umap_req(hpb, NULL);
-+}
-+
- static void __ufshpb_evict_region(struct ufshpb_lu *hpb,
- 				  struct ufshpb_region *rgn)
- {
-@@ -1209,6 +1580,13 @@ static void ufshpb_lu_parameter_init(struct ufs_hba *hba,
- 	u32 entries_per_rgn;
- 	u64 rgn_mem_size, tmp;
- 
-+	/* for pre_req */
-+	hpb->pre_req_min_tr_len = hpb_dev_info->max_hpb_single_cmd + 1;
-+	hpb->pre_req_max_tr_len = max(HPB_MULTI_CHUNK_HIGH,
-+				      hpb->pre_req_min_tr_len);
-+
-+	hpb->cur_read_id = 0;
-+
- 	hpb->lu_pinned_start = hpb_lu_info->pinned_start;
- 	hpb->lu_pinned_end = hpb_lu_info->num_pinned ?
- 		(hpb_lu_info->pinned_start + hpb_lu_info->num_pinned - 1)
-@@ -1356,7 +1734,7 @@ ufshpb_sysfs_attr_show_func(rb_active_cnt);
- ufshpb_sysfs_attr_show_func(rb_inactive_cnt);
- ufshpb_sysfs_attr_show_func(map_req_cnt);
- 
--static struct attribute *hpb_dev_attrs[] = {
-+static struct attribute *hpb_dev_stat_attrs[] = {
- 	&dev_attr_hit_cnt.attr,
- 	&dev_attr_miss_cnt.attr,
- 	&dev_attr_rb_noti_cnt.attr,
-@@ -1367,10 +1745,109 @@ static struct attribute *hpb_dev_attrs[] = {
- };
- 
- struct attribute_group ufs_sysfs_hpb_stat_group = {
--	.name = "hpb_sysfs",
--	.attrs = hpb_dev_attrs,
-+	.name = "hpb_stat_sysfs",
-+	.attrs = hpb_dev_stat_attrs,
-+};
-+
-+/* SYSFS functions */
-+#define ufshpb_sysfs_param_show_func(__name)				\
-+static ssize_t __name##_show(struct device *dev,			\
-+	struct device_attribute *attr, char *buf)			\
-+{									\
-+	struct scsi_device *sdev = to_scsi_device(dev);			\
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);		\
-+	if (!hpb)							\
-+		return -ENODEV;						\
-+									\
-+	return sysfs_emit(buf, "%d\n", hpb->params.__name);		\
-+}
-+
-+ufshpb_sysfs_param_show_func(requeue_timeout_ms);
-+static ssize_t
-+requeue_timeout_ms_store(struct device *dev, struct device_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	struct ufshpb_lu *hpb = ufshpb_get_hpb_data(sdev);
-+	int val;
-+
-+	if (!hpb)
-+		return -ENODEV;
-+
-+	if (kstrtouint(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val <= 0)
-+		return -EINVAL;
-+
-+	hpb->params.requeue_timeout_ms = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(requeue_timeout_ms);
-+
-+static struct attribute *hpb_dev_param_attrs[] = {
-+	&dev_attr_requeue_timeout_ms.attr,
-+	NULL,
-+};
-+
-+struct attribute_group ufs_sysfs_hpb_param_group = {
-+	.name = "hpb_param_sysfs",
-+	.attrs = hpb_dev_param_attrs,
- };
- 
-+static int ufshpb_pre_req_mempool_init(struct ufshpb_lu *hpb)
-+{
-+	struct ufshpb_req *pre_req = NULL;
-+	int qd = hpb->sdev_ufs_lu->queue_depth / 2;
-+	int i, j;
-+
-+	INIT_LIST_HEAD(&hpb->lh_pre_req_free);
-+
-+	hpb->pre_req = kcalloc(qd, sizeof(struct ufshpb_req), GFP_KERNEL);
-+	hpb->throttle_pre_req = qd;
-+	hpb->num_inflight_pre_req = 0;
-+
-+	if (!hpb->pre_req)
-+		goto release_mem;
-+
-+	for (i = 0; i < qd; i++) {
-+		pre_req = hpb->pre_req + i;
-+		INIT_LIST_HEAD(&pre_req->list_req);
-+		pre_req->req = NULL;
-+		pre_req->bio = NULL;
-+
-+		pre_req->wb.m_page = alloc_page(GFP_KERNEL | __GFP_ZERO);
-+		if (!pre_req->wb.m_page) {
-+			for (j = 0; j < i; j++)
-+				__free_page(hpb->pre_req[j].wb.m_page);
-+
-+			goto release_mem;
-+		}
-+		list_add_tail(&pre_req->list_req, &hpb->lh_pre_req_free);
-+	}
-+
-+	return 0;
-+release_mem:
-+	kfree(hpb->pre_req);
-+	return -ENOMEM;
-+}
-+
-+static void ufshpb_pre_req_mempool_destroy(struct ufshpb_lu *hpb)
-+{
-+	struct ufshpb_req *pre_req = NULL;
-+	int i;
-+
-+	for (i = 0; i < hpb->throttle_pre_req; i++) {
-+		pre_req = hpb->pre_req + i;
-+		if (!pre_req->wb.m_page)
-+			__free_page(hpb->pre_req[i].wb.m_page);
-+		list_del_init(&pre_req->list_req);
-+	}
-+
-+	kfree(hpb->pre_req);
-+}
-+
- static void ufshpb_stat_init(struct ufshpb_lu *hpb)
- {
- 	hpb->stats.hit_cnt = 0;
-@@ -1381,6 +1858,11 @@ static void ufshpb_stat_init(struct ufshpb_lu *hpb)
- 	hpb->stats.map_req_cnt = 0;
- }
- 
-+static void ufshpb_param_init(struct ufshpb_lu *hpb)
-+{
-+	hpb->params.requeue_timeout_ms = HPB_REQUEUE_TIME_MS;
-+}
-+
- static int ufshpb_lu_hpb_init(struct ufs_hba *hba, struct ufshpb_lu *hpb)
- {
- 	int ret;
-@@ -1413,14 +1895,24 @@ static int ufshpb_lu_hpb_init(struct ufs_hba *hba, struct ufshpb_lu *hpb)
- 		goto release_req_cache;
- 	}
- 
-+	ret = ufshpb_pre_req_mempool_init(hpb);
-+	if (ret) {
-+		dev_err(hba->dev, "ufshpb(%d) pre_req_mempool init fail",
-+			hpb->lun);
-+		goto release_m_page_cache;
-+	}
-+
- 	ret = ufshpb_alloc_region_tbl(hba, hpb);
- 	if (ret)
--		goto release_m_page_cache;
-+		goto release_pre_req_mempool;
- 
- 	ufshpb_stat_init(hpb);
-+	ufshpb_param_init(hpb);
- 
- 	return 0;
- 
-+release_pre_req_mempool:
-+	ufshpb_pre_req_mempool_destroy(hpb);
- release_m_page_cache:
- 	kmem_cache_destroy(hpb->m_page_cache);
- release_req_cache:
-@@ -1429,7 +1921,7 @@ static int ufshpb_lu_hpb_init(struct ufs_hba *hba, struct ufshpb_lu *hpb)
- }
- 
- static struct ufshpb_lu *
--ufshpb_alloc_hpb_lu(struct ufs_hba *hba, int lun,
-+ufshpb_alloc_hpb_lu(struct ufs_hba *hba, struct scsi_device *sdev,
- 		    struct ufshpb_dev_info *hpb_dev_info,
- 		    struct ufshpb_lu_info *hpb_lu_info)
- {
-@@ -1440,7 +1932,8 @@ ufshpb_alloc_hpb_lu(struct ufs_hba *hba, int lun,
- 	if (!hpb)
- 		return NULL;
- 
--	hpb->lun = lun;
-+	hpb->lun = sdev->lun;
-+	hpb->sdev_ufs_lu = sdev;
- 
- 	ufshpb_lu_parameter_init(hba, hpb, hpb_dev_info, hpb_lu_info);
- 
-@@ -1450,6 +1943,7 @@ ufshpb_alloc_hpb_lu(struct ufs_hba *hba, int lun,
- 		goto release_hpb;
- 	}
- 
-+	sdev->hostdata = hpb;
- 	return hpb;
- 
- release_hpb:
-@@ -1652,6 +2146,7 @@ void ufshpb_destroy_lu(struct ufs_hba *hba, struct scsi_device *sdev)
- 
- 	ufshpb_cancel_jobs(hpb);
- 
-+	ufshpb_pre_req_mempool_destroy(hpb);
- 	ufshpb_destroy_region_tbl(hpb);
- 
- 	kmem_cache_destroy(hpb->map_req_cache);
-@@ -1691,6 +2186,7 @@ static void ufshpb_hpb_lu_prepared(struct ufs_hba *hba)
- 			ufshpb_set_state(hpb, HPB_PRESENT);
- 			if ((hpb->lu_pinned_end - hpb->lu_pinned_start) > 0)
- 				queue_work(ufshpb_wq, &hpb->map_work);
-+			ufshpb_issue_umap_all_req(hpb);
- 		} else {
- 			dev_err(hba->dev, "destroy HPB lu %d\n", hpb->lun);
- 			ufshpb_destroy_lu(hba, sdev);
-@@ -1715,7 +2211,7 @@ void ufshpb_init_hpb_lu(struct ufs_hba *hba, struct scsi_device *sdev)
- 	if (ret)
- 		goto out;
- 
--	hpb = ufshpb_alloc_hpb_lu(hba, lun, &hba->ufshpb_dev,
-+	hpb = ufshpb_alloc_hpb_lu(hba, sdev, &hba->ufshpb_dev,
- 				  &hpb_lu_info);
- 	if (!hpb)
- 		goto out;
-@@ -1723,9 +2219,6 @@ void ufshpb_init_hpb_lu(struct ufs_hba *hba, struct scsi_device *sdev)
- 	tot_active_srgn_pages += hpb_lu_info.max_active_rgns *
- 			hpb->srgns_per_rgn * hpb->pages_per_srgn;
- 
--	hpb->sdev_ufs_lu = sdev;
--	sdev->hostdata = hpb;
--
- out:
- 	/* All LUs are initialized */
- 	if (atomic_dec_and_test(&hba->ufshpb_dev.slave_conf_cnt))
-@@ -1812,8 +2305,9 @@ void ufshpb_get_geo_info(struct ufs_hba *hba, u8 *geo_buf)
- void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf)
- {
- 	struct ufshpb_dev_info *hpb_dev_info = &hba->ufshpb_dev;
--	int version;
-+	int version, ret;
- 	u8 hpb_mode;
-+	u32 max_hpb_single_cmd = 0;
- 
- 	hpb_mode = desc_buf[DEVICE_DESC_PARAM_HPB_CONTROL];
- 	if (hpb_mode == HPB_HOST_CONTROL) {
-@@ -1824,13 +2318,27 @@ void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf)
- 	}
- 
- 	version = get_unaligned_be16(desc_buf + DEVICE_DESC_PARAM_HPB_VER);
--	if (version != HPB_SUPPORT_VERSION) {
-+	if ((version != HPB_SUPPORT_VERSION) &&
-+	    (version != HPB_SUPPORT_LEGACY_VERSION)) {
- 		dev_err(hba->dev, "%s: HPB %x version is not supported.\n",
- 			__func__, version);
- 		hpb_dev_info->hpb_disabled = true;
- 		return;
- 	}
- 
-+	if (version == HPB_SUPPORT_LEGACY_VERSION)
-+		hpb_dev_info->is_legacy = true;
-+
-+	pm_runtime_get_sync(hba->dev);
-+	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
-+		QUERY_ATTR_IDN_MAX_HPB_SINGLE_CMD, 0, 0, &max_hpb_single_cmd);
-+	pm_runtime_put_sync(hba->dev);
-+
-+	if (ret)
-+		dev_err(hba->dev, "%s: idn: read max size of single hpb cmd query request failed",
-+			__func__);
-+	hpb_dev_info->max_hpb_single_cmd = max_hpb_single_cmd;
-+
- 	/*
- 	 * Get the number of user logical unit to check whether all
- 	 * scsi_device finish initialization
-diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-index c70e73546e35..c319b8a0a0d9 100644
---- a/drivers/scsi/ufs/ufshpb.h
-+++ b/drivers/scsi/ufs/ufshpb.h
-@@ -30,19 +30,28 @@
- #define PINNED_NOT_SET				U32_MAX
- 
- /* hpb support chunk size */
--#define HPB_MULTI_CHUNK_HIGH			1
-+#define HPB_LEGACY_CHUNK_HIGH			1
-+#define HPB_MULTI_CHUNK_HIGH			128
- 
- /* hpb vender defined opcode */
- #define UFSHPB_READ				0xF8
- #define UFSHPB_READ_BUFFER			0xF9
- #define UFSHPB_READ_BUFFER_ID			0x01
-+#define UFSHPB_WRITE_BUFFER			0xFA
-+#define UFSHPB_WRITE_BUFFER_INACT_SINGLE_ID	0x01
-+#define UFSHPB_WRITE_BUFFER_PREFETCH_ID		0x02
-+#define UFSHPB_WRITE_BUFFER_INACT_ALL_ID	0x03
-+#define HPB_WRITE_BUFFER_CMD_LENGTH		10
-+#define MAX_HPB_READ_ID				0x7F
- #define HPB_READ_BUFFER_CMD_LENGTH		10
- #define LU_ENABLED_HPB_FUNC			0x02
- 
- #define HPB_RESET_REQ_RETRIES			10
- #define HPB_MAP_REQ_RETRIES			5
-+#define HPB_REQUEUE_TIME_MS			0
- 
--#define HPB_SUPPORT_VERSION			0x100
-+#define HPB_SUPPORT_VERSION			0x200
-+#define HPB_SUPPORT_LEGACY_VERSION		0x100
- 
- enum UFSHPB_MODE {
- 	HPB_HOST_CONTROL,
-@@ -118,23 +127,39 @@ struct ufshpb_region {
- 	     (i)++)
- 
- /**
-- * struct ufshpb_req - UFSHPB READ BUFFER (for caching map) request structure
-- * @req: block layer request for READ BUFFER
-- * @bio: bio for holding map page
-- * @hpb: ufshpb_lu structure that related to the L2P map
-+ * struct ufshpb_req - HPB related request structure (write/read buffer)
-+ * @req: block layer request structure
-+ * @bio: bio for this request
-+ * @hpb: ufshpb_lu structure that related to
-+ * @list_req: ufshpb_req mempool list
-+ * @sense: store its sense data
-  * @mctx: L2P map information
-  * @rgn_idx: target region index
-  * @srgn_idx: target sub-region index
-  * @lun: target logical unit number
-+ * @m_page: L2P map information data for pre-request
-+ * @len: length of host-side cached L2P map in m_page
-+ * @lpn: start LPN of L2P map in m_page
-  */
- struct ufshpb_req {
- 	struct request *req;
- 	struct bio *bio;
- 	struct ufshpb_lu *hpb;
--	struct ufshpb_map_ctx *mctx;
--
--	unsigned int rgn_idx;
--	unsigned int srgn_idx;
-+	struct list_head list_req;
-+	char sense[SCSI_SENSE_BUFFERSIZE];
-+	union {
-+		struct {
-+			struct ufshpb_map_ctx *mctx;
-+			unsigned int rgn_idx;
-+			unsigned int srgn_idx;
-+			unsigned int lun;
-+		} rb;
-+		struct {
-+			struct page *m_page;
-+			unsigned int len;
-+			unsigned long lpn;
-+		} wb;
-+	};
- };
- 
- struct victim_select_info {
-@@ -143,6 +168,10 @@ struct victim_select_info {
- 	atomic_t active_cnt;
- };
- 
-+struct ufshpb_params {
-+	unsigned int requeue_timeout_ms;
-+};
-+
- struct ufshpb_stats {
- 	u64 hit_cnt;
- 	u64 miss_cnt;
-@@ -150,6 +179,7 @@ struct ufshpb_stats {
- 	u64 rb_active_cnt;
- 	u64 rb_inactive_cnt;
- 	u64 map_req_cnt;
-+	u64 pre_req_cnt;
- };
- 
- struct ufshpb_lu {
-@@ -165,6 +195,15 @@ struct ufshpb_lu {
- 	struct list_head lh_act_srgn; /* hold rsp_list_lock */
- 	struct list_head lh_inact_rgn; /* hold rsp_list_lock */
- 
-+	/* pre request information */
-+	struct ufshpb_req *pre_req;
-+	int num_inflight_pre_req;
-+	int throttle_pre_req;
-+	struct list_head lh_pre_req_free;
-+	int cur_read_id;
-+	int pre_req_min_tr_len;
-+	int pre_req_max_tr_len;
-+
- 	/* cached L2P map management worker */
- 	struct work_struct map_work;
- 
-@@ -189,6 +228,7 @@ struct ufshpb_lu {
- 	u32 pages_per_srgn;
- 
- 	struct ufshpb_stats stats;
-+	struct ufshpb_params params;
- 
- 	struct kmem_cache *map_req_cache;
- 	struct kmem_cache *m_page_cache;
-@@ -200,7 +240,7 @@ struct ufs_hba;
- struct ufshcd_lrb;
- 
- #ifndef CONFIG_SCSI_UFS_HPB
--static void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp) {}
-+static int ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp) { return 0; }
- static void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp) {}
- static void ufshpb_resume(struct ufs_hba *hba) {}
- static void ufshpb_suspend(struct ufs_hba *hba) {}
-@@ -213,8 +253,9 @@ static void ufshpb_remove(struct ufs_hba *hba) {}
- static bool ufshpb_is_allowed(struct ufs_hba *hba) { return false; }
- static void ufshpb_get_geo_info(struct ufs_hba *hba, u8 *geo_buf) {}
- static void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf) {}
-+static bool ufshpb_is_legacy(struct ufs_hba *hba) { return false; }
- #else
--void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
-+int ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
- void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp);
- void ufshpb_resume(struct ufs_hba *hba);
- void ufshpb_suspend(struct ufs_hba *hba);
-@@ -227,7 +268,9 @@ void ufshpb_remove(struct ufs_hba *hba);
- bool ufshpb_is_allowed(struct ufs_hba *hba);
- void ufshpb_get_geo_info(struct ufs_hba *hba, u8 *geo_buf);
- void ufshpb_get_dev_info(struct ufs_hba *hba, u8 *desc_buf);
-+bool ufshpb_is_legacy(struct ufs_hba *hba);
- extern struct attribute_group ufs_sysfs_hpb_stat_group;
-+extern struct attribute_group ufs_sysfs_hpb_param_group;
- #endif
- 
- #endif /* End of Header */
--- 
-2.25.1
-
+> >> ---
+> >>  drivers/scsi/ufs/ufs-qcom.c | 10 ++++++++++
+> >>  1 file changed, 10 insertions(+)
+> >>
+> >> diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+> >> index f97d7b0..a9dc8d7 100644
+> >> --- a/drivers/scsi/ufs/ufs-qcom.c
+> >> +++ b/drivers/scsi/ufs/ufs-qcom.c
+> >> @@ -253,12 +253,17 @@ static int ufs_qcom_host_reset(struct ufs_hba
+> >> *hba)
+> >>  {
+> >>         int ret =3D 0;
+> >>         struct ufs_qcom_host *host =3D ufshcd_get_variant(hba);
+> >> +       bool reenable_intr =3D false;
+> >>
+> >>         if (!host->core_reset) {
+> >>                 dev_warn(hba->dev, "%s: reset control not set\n",
+> >> __func__);
+> >>                 goto out;
+> >>         }
+> >>
+> >> +       reenable_intr =3D hba->is_irq_enabled;
+> >> +       disable_irq(hba->irq);
+> >> +       hba->is_irq_enabled =3D false;
+> >> +
+> >>         ret =3D reset_control_assert(host->core_reset);
+> >>         if (ret) {
+> >>                 dev_err(hba->dev, "%s: core_reset assert failed, err =
+=3D
+> >> %d\n",
+> >> @@ -280,6 +285,11 @@ static int ufs_qcom_host_reset(struct ufs_hba
+> >> *hba)
+> >>
+> >>         usleep_range(1000, 1100);
+> >>
+> >> +       if (reenable_intr) {
+> >> +               enable_irq(hba->irq);
+> >> +               hba->is_irq_enabled =3D true;
+> >> +       }
+> >> +
+> > If in the future, you will enable UFSHCI_QUIRK_BROKEN_HCE on your
+> > platform (currently only for Exynos),
+> > Will this code still work?
+>=20
+> Yes, it still works.
+>=20
+> Thanks,
+> Can Guo.
