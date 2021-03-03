@@ -2,85 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA56532BBBF
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D333B32BBC0
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446951AbhCCMrZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 07:47:25 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:54582 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449277AbhCCHTo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 02:19:44 -0500
+        id S1446980AbhCCMr0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 07:47:26 -0500
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:24107 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1452227AbhCCHUa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 02:20:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1614755983; x=1646291983;
+  t=1614756030; x=1646292030;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=jFOYEqUOOAnl/kpNcNpzWfTSVq4huD+CdsdbzSAz/Lo=;
-  b=l1Q6zo/K/2jox6IT24XpeCbwLA0tzHeOWgI9HCz2XwehMqqb721K6y8D
-   M1Jl9MCywld3KXRp9VnBoOiOhyZDaWeDGWn4W2D5pMktKsHbhK87XQ+pZ
-   ZAZhuB/IzRnTA8Vk5TShCnAKLB53y+AoyZdTHWOW2Ndt8mnoN083YAHZc
-   VpdvgMu+bPigQ/GDvZxWbddH29dfdrmgHg/mB9875GhMc9oeQSDD56Xyh
-   jf3ZjPEAuujFnEnp5S0oeaHlTQhI0kdgh9mWpOBbswNFRbhSiRzgpMCkh
-   NJpeYTOr0r9ZJ/HWcnEECaFms3XhFxgQZ7K1jNIYYRyCCb7Nf5Hv9gcZA
-   A==;
-IronPort-SDR: CY42w2rmYCAIHPoQSuCA28e00dKF92hEq8ziF1WJPfKZcYGhNEyvcN2AEKj1BtVsguKPLx0r3W
- xoxaSNwMKstcEjPONWauY2yYN4HwJtUHnDnXeq028W84cyYRFqVVZuHUPbuj7o3Z5zZ1YKmLQQ
- HDfopSYzdcBWWB/HzfgJHk/FvRiD8Oqp6ZpiM5ZRkwnS6cC3h+Hi3DRRMOMo5vUdkF6q76MNEz
- jVLk7OXdvPbmO5CKVtfyBDALWFDKrUscu5YXaNT8NXXnFMnqQySI6IiSKvj6T8RKNWPWN4EZP8
- kYY=
+  bh=4USR5ChpWh444UJVlkNCRG+y3RE5QArdMmf7LMDdPoc=;
+  b=XjC/cSaFDWNnXMBucRvA49nlDw7gbaHieX62pANoyLy8rKhkizx6bGB8
+   63SOdKzyDGQLTS/Qs/jSMhekHfrLXDe6hjNhRbwI6z0OgHWbKTzaVCgS+
+   +oI36u3/cUJ5fFQH60pY3k4K19f+8bo3mfgLJny6YhBxEYYzyu5UEgb4p
+   PKmcGRzqM/RYdb8G+vkzL2Cmnbc/1o/taIPmzKvS+Op81IBq1FYcZpkU8
+   7OHJgAygYQBI+p2j65P/35P+pfyJSjwyA/3LRMm8IvGVb+Vj5vLruH1K9
+   v5xPqCoU7RtveM2ZThiENAxSOUD3Pw97F8ZCQABElvVUCV9oYAz3IiOty
+   g==;
+IronPort-SDR: G74SV63rezumexV4OVufwISfMpOeHqABQUq+tclndUzXBQnWqsxAlg4YAwIA6kMJsNhrN+jT3r
+ 3JHPzLjXCy5Pcyn4xf4zdT1VJNPozuqi4S+NGe7XQ1tRahP201bIK8NPq3+x4DEfhKQBg+70R5
+ dKY8XxIjlBgcllz2smmtqywfYF9tLcap/ps9l07R0HM6lUQx2v8Esd2kxgsMLrMPA8wmhXiIY3
+ Uz44pciWhfR8/nh/c+dC8h/o1nvNs6r5jXz5z7C8cHZae/vOO2e1CsOXXcJzd5BMk7I6A3ks1R
+ PmI=
 X-IronPort-AV: E=Sophos;i="5.81,219,1610380800"; 
-   d="scan'208";a="161220462"
-Received: from mail-sn1nam02lp2052.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.36.52])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Mar 2021 15:18:31 +0800
+   d="scan'208";a="162398752"
+Received: from mail-co1nam11lp2173.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.173])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Mar 2021 15:19:23 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LKRIsF9d1wAPznnGj0Qji45aR5Uyjvx44ZHOvkIWKfFZhSBjX/yTidJkUG4wgPGKkqJNzjXez0ySIUEwkZdVfL8mifnNRNm+MVp26oXavthpgRPKYvZFFj0ZGia5rzag5CT3w6JV0rPwIX3iED7qWM+6aoSFOHqIA09A+NP7ROfacYdWmMZ6o7rV5ozxgP6zUMXkiglYpldRafy3PCxIp7lmav3D9NkZbuwzGoQcTBO7BCKy/ic6ofTfQor2VTK1/bp7eyxHKOPgaN+5C50RRuQx6do1mULziclerZMrqLwqYW04WPHsqS2slOSLElkFQDf4zSJ9/BKeb3f0u96Bgw==
+ b=bt14E1Xug4Ty46IA1W+DxJofjiOFiB9aVgQA2wWj486wM/OHCLOtGXw+WC/R76QLQ/GSXdlRQFQXkTcTrqjC8wIErXkjOoiNI8KxEXpsun0TZ1t+Bde3/knooMpULKUXyfS9bXh0tzTPI05T0061AlvT8w4xhHlbhtwGxYbFngEj1J/X66Hicf02ZyhqjiMRvb2M9hsG0lvDSSipmE9N5m3J3SbTF+WBZjsPRpUdKeD4XoA1LB52P7CQgWmSFtZKoV1jYz3MbJ5u8oYKgr3+pWVMS4xsVCKN2FAahW+UlAVVzt9/j8tb5+BLDC6LeA/pUJFN4oz3yfRC8QjCBdheRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GGHC02C/c2A9biw8oqaOfs0Or4YxxSNiDbVSBxlTZdE=;
- b=UIdwaXZx7FMsGqmOG6KU67NUPoF7gqJoFybXtNYc7STkX1ZMGs7RvOZNk0iKqQl5C6CpNviaT62ENBtlOooAZLNY1f8ilS9l8HsN6ltKgvmHIb0BDAGoX+tO3GFHtJqAl0LPgTx7Ppt38VMztMHrtqjQP5kKX7TzjxyVeUMbv1U0YzTUHPh1Bo32bNxjKZibdGfz07JxbWaCyx+lHwt64suLSv1OzGLMkHx3qBIXfAzdyzUH3fDCcGf/gSQlUjE2LwuFQzkZt/x37zkhxOqP/JRqg27uXv4fK/FeizW10U91SHsIgK/vXq//9OWjpQymabynmdrMu0HgGSH1Yz7tCQ==
+ bh=zyLR3B1W4axGu8NWMjSqG+oyaI2i+ak64Vw5SGIQ8dE=;
+ b=X3pvSLCZmDLMdGeBAra+h6z6mrPhUejKyG2YYPiK8Vkpyn51SBbaZvhHmBUFjtH9DVavIjkzxKD7BoV9DTLVCrVU3TLPgiPDgNi8jx961ZAh/6AIErTLZozcOgBOeeep1OHu515ZWooiudf+Lz9sPakl+r9PLP8vMZ+xiRG+YwiSDINR/9wyhHpNeSIkRoqf69r0gXJN3NyBr4t822JWWGhMHiOXN6uU6BPiWV4uwmbmQysbEEEsbfzffXYvxq35gkR/c7FxJFUgdOPPPgNR3ErwYUr/sjX7T9ST2/R1P2Y7Zfty0QLhI/YPu3WNbtXTzML+rboaiVUHJI+gmf1rcA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
  header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GGHC02C/c2A9biw8oqaOfs0Or4YxxSNiDbVSBxlTZdE=;
- b=EoBZ+XT2pv0n0c0RNpliTW+Tt/jWuEFngOYirazcxxxdaq5M/U5s/z4Xd/zCk97QbEl+FpYQkc/NjWk5Ns7Dn/vJNYb9JGZR4OffDeK9h9sfbCUvpy+KXi4sozkOJBHi5j/SRODkPxaKmgeTrXxGlpS4572N7wrVkXntsNc6aUU=
+ bh=zyLR3B1W4axGu8NWMjSqG+oyaI2i+ak64Vw5SGIQ8dE=;
+ b=i9BGg2DVzQpesDO6UQgo2XgMCtbffFUL2fJ7ei2S6DYiKV684XHdRLYCgZP88xMJqmvO/QukY3qpVOAslelZH1GrbhKUqM976iNVcTHKY1DPDi2aoLppLK+VTG1qtuR/dcb7xi6uzXi5iSNCAATRcTosLKrqog4Ah8XxmDqECo8=
 Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
  DM5PR04MB0970.namprd04.prod.outlook.com (2603:10b6:4:47::28) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3890.19; Wed, 3 Mar 2021 07:18:29 +0000
+ 15.20.3890.19; Wed, 3 Mar 2021 07:19:22 +0000
 Received: from DM6PR04MB6575.namprd04.prod.outlook.com
  ([fe80::e824:f31b:38cf:ef66]) by DM6PR04MB6575.namprd04.prod.outlook.com
  ([fe80::e824:f31b:38cf:ef66%3]) with mapi id 15.20.3890.030; Wed, 3 Mar 2021
- 07:18:29 +0000
+ 07:19:22 +0000
 From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Can Guo <cang@codeaurora.org>
-CC:     "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+To:     Can Guo <cang@codeaurora.org>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
         "nguyenb@codeaurora.org" <nguyenb@codeaurora.org>,
         "hongwus@codeaurora.org" <hongwus@codeaurora.org>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Nitin Rawat <nitirawa@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
+        "kernel-team@android.com" <kernel-team@android.com>
+CC:     Alim Akhtar <alim.akhtar@samsung.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/3] scsi: ufs-qcom: Disable interrupt in reset path
-Thread-Topic: [PATCH v2 2/3] scsi: ufs-qcom: Disable interrupt in reset path
-Thread-Index: AQHXCm8WN+YhHnByLUS9jf8kgHZH/KptpKGwgAQL7YCAADUxUA==
-Date:   Wed, 3 Mar 2021 07:18:29 +0000
-Message-ID: <DM6PR04MB65756A436EF1004976E183B3FC989@DM6PR04MB6575.namprd04.prod.outlook.com>
+Subject: RE: [PATCH v2 3/3] scsi: ufs: Remove redundant checks of !hba in
+ suspend/resume callbacks
+Thread-Topic: [PATCH v2 3/3] scsi: ufs: Remove redundant checks of !hba in
+ suspend/resume callbacks
+Thread-Index: AQHXCm9gO8v0f6H3g0amtwRrqOzM0qpx5goQ
+Date:   Wed, 3 Mar 2021 07:19:22 +0000
+Message-ID: <DM6PR04MB657592719F6C029BA23B49E3FC989@DM6PR04MB6575.namprd04.prod.outlook.com>
 References: <1614145010-36079-1-git-send-email-cang@codeaurora.org>
- <1614145010-36079-3-git-send-email-cang@codeaurora.org>
- <DM6PR04MB65753665BA9BF63ABF20656FFC9B9@DM6PR04MB6575.namprd04.prod.outlook.com>
- <96fbfe6fba7a7cd4d2d764186bb8650b@codeaurora.org>
-In-Reply-To: <96fbfe6fba7a7cd4d2d764186bb8650b@codeaurora.org>
+ <1614145010-36079-4-git-send-email-cang@codeaurora.org>
+In-Reply-To: <1614145010-36079-4-git-send-email-cang@codeaurora.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -90,38 +89,38 @@ authentication-results: codeaurora.org; dkim=none (message not signed)
 x-originating-ip: [212.25.79.133]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 904914db-84da-4e01-feee-08d8de148ba7
+x-ms-office365-filtering-correlation-id: 76c5b6dd-fa2e-4b73-9fd5-08d8de14aaf2
 x-ms-traffictypediagnostic: DM5PR04MB0970:
-x-microsoft-antispam-prvs: <DM5PR04MB0970ED452C25F8AF578085CFFC989@DM5PR04MB0970.namprd04.prod.outlook.com>
+x-microsoft-antispam-prvs: <DM5PR04MB09705793EB17B8294ED558D0FC989@DM5PR04MB0970.namprd04.prod.outlook.com>
 wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:1122;
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: M3bqmIjxlnboofYLGl4FStcZCLVmPcydHgfkWsx2TQx2G4v+7tX+VdyKAaswn08rfNbc+ivwe7RodYxjVqIPFWGK8qI0VgstQ4EwF7SIeAik9uqyBwI8PKR0lqQo5yCIpka6q33f1FS1AAN5jW7JGuxXAW7Jf4sxUoGAVLgvkjcO5Ga/51Wl/Sh+XNjgaw2yGcRUGvbHMYVfqIXDYWlcUG79BcJyWziVGe6yWd7zgy0WIvYM82lWncNQw2UYxTUHk1iJM4YXqkXqu6u15c1n9jTpZu+sm0bVLVj9KPIE7ZsBLdurdEHT5JYAAu8HGMB75VA4k0mMRpLOMfcwUc5885gRMSqlTEROR+Il8nlRsdIN3YVOf0WHovRqeYqepscrhH4PbkytFOydUyBjTlHCsUAaLpp2+THrZKtGuGl/ZI4AsXvFN/eqQRjhQPqj7lnr72RRlDBchkZh7qUVrJgWEczCsuVbVqOyeR79yuIZx/mkBibLVU2Iw3EdL0vLij0ryiMdu91fkfhlezb517HhAw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(396003)(376002)(366004)(136003)(71200400001)(54906003)(7416002)(26005)(6506007)(86362001)(52536014)(186003)(53546011)(8936002)(9686003)(2906002)(5660300002)(8676002)(55016002)(64756008)(7696005)(33656002)(6916009)(66476007)(4326008)(66446008)(316002)(478600001)(66946007)(76116006)(66556008)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?ROQyXtLvxZy5VHGnkEEMj6WoWQC+5zc93FLBDL56wUlSYYwRDr0zydjNet/u?=
- =?us-ascii?Q?k0As3/vBAdeqWhXS0/ueCyVF7f0HdSTKjPtifiCbjiPenzWf+yHAu/QmX7kj?=
- =?us-ascii?Q?m7dcS6+beLi/tEfKHcalOuvJRESvLdwk/yuesEHEKYxmtBUYsBMfEU7H0izo?=
- =?us-ascii?Q?zjGIONw3iH65PnlHDwnfmWNNMTQmBc0h45y/3BZGVDqLWFcogKO5UFupy3/e?=
- =?us-ascii?Q?CYP2bRh54Pmnog9vyYiUlMj7nfaV6CZdwGf3B1EFJ/eXUjsZynoNDwzQlQ6U?=
- =?us-ascii?Q?b5e3XDqGnd/d4PYUWr3jT5zb2s9QIyokXvs8efzBIuyNePIE5Iw6BCGO6JQH?=
- =?us-ascii?Q?XXf/jXBqpu6gu1c8FTMbJu20IjyAGAdBvzGcoYzJH8Th/bHqMp5Ia798mff8?=
- =?us-ascii?Q?Bv1toYR9p/Rl8iwTnkL5sNjfiSF8kRHXkDtQ/zNgAVXQqrD2se0PA69j8tGf?=
- =?us-ascii?Q?agwu1prjyvNsvyx0BlrqtIqLo831DmZXtro1ATx+7QpS1Wqjkb3UJ7hsk5VJ?=
- =?us-ascii?Q?HDRqU1/XCzZhfTSjN2InNfCwdK6vvnq4Bp2U34COucJsBS6RLn+sWbrlPu8J?=
- =?us-ascii?Q?Yt3s0ra57QNPwTXoXhdiAIdCV/iJEdurfJmSKOEVwYOdi8vpNGACzOGZb6nO?=
- =?us-ascii?Q?oNFukBON1cofiSnLswctCu0edEweyjPJDNowdJaW6Vf+QoMOaRE4G27AkENe?=
- =?us-ascii?Q?FE7YIfXZKmRFhPZQ376H9K1wNFZMw1Pepdb8W0VxdpgygHzpV5qSRkDpNGBF?=
- =?us-ascii?Q?FgkLgbzCFMznnNyWKAJz0eu+ud3bXEeUYN6A3XDXKtIXNWHx6pwYu//7c/4T?=
- =?us-ascii?Q?wW65jsXtuZyRfhvLG8XdLvO9WbfwfQRF+32OK+dN1IVdjhJuQuhdZFF3kWwK?=
- =?us-ascii?Q?Vi9yB5/yzvK0IMaCW8QP4hWJ3fwbkzChSKMQSZ3EZayKfK6dCldw7S2AZksF?=
- =?us-ascii?Q?BVxrTAHlI9CtEijIZaTiYQ1cWX6F06eJz85VXUZidRRZf+IR2uqLZTKcIorD?=
- =?us-ascii?Q?qrK7E2Scb/vzGSmVzWuOUp9JtcUCBovgzkv2bf8rNxEDanT33r7G4eKHkZV0?=
- =?us-ascii?Q?f1dFrIusqxG2mme9ZZfU5x7y1edYY/1dziVvFBglMjxvsKaz27tET7G2u6LZ?=
- =?us-ascii?Q?i6T2NaZ7I7tIk99JgkStvgDBo7G2h56GOuFZHk14HzqJhWFeE3Gua3vKQV6q?=
- =?us-ascii?Q?k8FBBxOjZ8fBJR/XUE8gdxjwDUlRxu7TXIJuvp/C9A4m7Oi9u7ndqSsHpcLZ?=
- =?us-ascii?Q?cjLYSXLNv537ymZ82F7wAELZnqjEKLlGExOckyVovJkJ1RCkCFBpl5X3mL5Y?=
- =?us-ascii?Q?Z/6PHIoSpPNZCTxDDNI61Snv?=
+x-microsoft-antispam-message-info: SUb7NXb24eiIBEjpLqxpy++MCfrmZ5g6+6o/Fx96/JzDsfJPHbZg6ygm3j4SN02sQUKj3HEw15GWKAzljN/M4LnOmp0HSi1Qb5ufIiAHxGruyUJ3PzAdyKKthhZeHgJmlk9cxqx2trhlTp7eGbtHWU1SGfanio2J4Kj/juuXXNVmWBw0cuA2mGio1kCU4D+EMCrF7mZrolNx0bxA8lcV7OyVR5efvpD7cGU6W9+oVHy5kvEqIHWxbMBwz9LQnBn0wrcGg7AfOo3OLISrYO/vXzkht9dHL/Q055r+0HSoZ7S/td3nYaSBWbDMCYjRIoi3LgRDsDl5nxN9jDNoO2GkkvRIPFUQEj2ofvheVCP4cgmlKzn6qcBhyozSe3Aw0KmNfjN5jC6YlfYP0iWJty0ejs1zpJuiuqhMZdo7/fOpL+v9NCV13Co62f0V6LxBfZ0yTDJm8MffF3JDUJl2LKpbewEZ6+e+QXMskc+lIy9FtnP9T9ubvGxbaik/xRMIJiuFPS4IfTfGa5eA+JTQsI3J2A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(396003)(376002)(366004)(136003)(71200400001)(54906003)(7416002)(26005)(6506007)(86362001)(52536014)(186003)(8936002)(9686003)(2906002)(5660300002)(15650500001)(8676002)(55016002)(64756008)(7696005)(33656002)(110136005)(66476007)(4326008)(66446008)(316002)(478600001)(66946007)(76116006)(66556008)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?XKbIP28VmTbz87+szdDlb1uDNqLHwGXmk+BvLHdHgKjXcF2eBj21CBkYnT/l?=
+ =?us-ascii?Q?ivxYCYL9k8SlwgcPa6wsVF8ux+rg9gvy5wDZtQDWj0EDzAtRbLUSNF4ywZYA?=
+ =?us-ascii?Q?LOKd9QN4cKoakqvunjHaGBeV/1umCHwkxhjnbFF+RlK5VK+J8F99kxZgMaot?=
+ =?us-ascii?Q?kLoksCalXGJ/jSufiNTBmJJXJf1toMRI96HsMcKZTGNWl72NM/x1NjTsV1LC?=
+ =?us-ascii?Q?3FgHryvn2lpoAt1R3NYVSXu4rs3xl2PO9HqCr/z0UlHWktfcDPKYe5LYAAaI?=
+ =?us-ascii?Q?WdnVJQz8agB54UScYDCfCjVs5ZJ+xhjfofGvUmQ6oprJ5ENB5U0fbbXYMVll?=
+ =?us-ascii?Q?heemIVbCTKsbEvfgJyhdr4VfCvHt2E3/CXwwCcMbg6MD9I3M4yIh/qkxUovR?=
+ =?us-ascii?Q?Gq2kqL6CVobdjo8H43/1LmdaXt45VqHm2sCs2Lfw92+UsXGjnQus9KbpP+JO?=
+ =?us-ascii?Q?Y5T///s475scJbIuxRAzSNhZYG7Ku0mRfjI3F1z34iqohzeva+bsWO5Rux7i?=
+ =?us-ascii?Q?0jJbdxxaVNKcwyuoNDdDDAFiq3k/TQNWG5avpDLe00OeHg3jjPLP1pKhxhs6?=
+ =?us-ascii?Q?0cfHcpNOtwiI/AhnZUvz34p/NJqcb64rXq4gmuvxiVtNfa84wnUZdj095iRb?=
+ =?us-ascii?Q?1Hgaod39T8Qc9jQj3isUXdqLjaLA52gkA4b3jbVWxfkY2AuSDAmhp/nR8ru3?=
+ =?us-ascii?Q?MFWmahIN99O1vYDmUwmRnSL+asyDilvp7KwT2sf7DFOdmZCA1VuOQz6gxrAL?=
+ =?us-ascii?Q?m4Co5+tCgIChOrt3hM2Q9O/pFFXiURXnqdXtok2Kd5dTALT42iGd1ShWHr7e?=
+ =?us-ascii?Q?yt0byA1QuZkdclsWeSFXMDUBtUg03FWJ642FXcvubLaJwgzZ6g3mLdy5yDPJ?=
+ =?us-ascii?Q?lQRWgJcuWgtmnIpikkCpgbDhrCBTzhBWlNCtNf/00Gzrrbh2RN9B4XmgDUZ2?=
+ =?us-ascii?Q?g4bqy1BsRsdIcBLnf40qfPLGVwkXRbkN+cgQbSKP1LW02q71GNntd5kC57oN?=
+ =?us-ascii?Q?CZeHc5wlXY0VlVYBmBceAVchdOIdAbKNREffU0HfGDwwbf41ogoicHuGc4ya?=
+ =?us-ascii?Q?WXSdOIlR9H3NKFeFosun6goZJSqaAa+5SDEZzEKyXMWsWDu3/XkjiRNDE04O?=
+ =?us-ascii?Q?3zDG27/YLfyFfVhhfJLr9y3Gr+0llDff2K6iQotZR2nDhhCkcysJubLrM8k2?=
+ =?us-ascii?Q?TKDqDMMPIpE7vIf6KcJtwWvHpoD8QISPa29HixZFj/FHx9GtVY06ICdWTuvw?=
+ =?us-ascii?Q?vUou49oZ8nVpU5pT1A6pD7q28Y1AILZ9oAopbP5jE+amKdR0odbsw7DfeQZK?=
+ =?us-ascii?Q?B6tM380AxllPWnWH2KdmTh4j?=
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -129,77 +128,94 @@ MIME-Version: 1.0
 X-OriginatorOrg: wdc.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 904914db-84da-4e01-feee-08d8de148ba7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2021 07:18:29.5196
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76c5b6dd-fa2e-4b73-9fd5-08d8de14aaf2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2021 07:19:22.0410
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4n0Sne9eynFrcZOYIz0wCQm1C+Wwi1xBkWFmBHwkhDO3fePWhEPZLFmYvnNdj85ZrWncyXpijUncbO4WJICuZA==
+X-MS-Exchange-CrossTenant-userprincipalname: oJQKiiqlNztkBGjll19wpyRmMFTSNOexFIVM+WOXaBH1bTujypUvZd8B2t3CkkDT30rZmCJ4aXTpQUpZMXDQuA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0970
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 >=20
-> On 2021-02-28 22:23, Avri Altman wrote:
-> >>
-> >> From: Nitin Rawat <nitirawa@codeaurora.org>
-> >>
-> >> Disable interrupt in reset path to flush pending IRQ handler in order
-> >> to
-> >> avoid possible NoC issues.
-> >>
-> >> Signed-off-by: Nitin Rawat <nitirawa@codeaurora.org>
-> >> Signed-off-by: Can Guo <cang@codeaurora.org>
+> Runtime and system suspend/resume can only come after hba probe invokes
+> platform_set_drvdata(pdev, hba), meaning hba cannot be NULL in these PM
+> callbacks, so remove the checks of !hba.
+>=20
+> Signed-off-by: Can Guo <cang@codeaurora.org>
 Reviewed-by: Avri Altman <avri.altman@wdc.com>
 
 
-> >> ---
-> >>  drivers/scsi/ufs/ufs-qcom.c | 10 ++++++++++
-> >>  1 file changed, 10 insertions(+)
-> >>
-> >> diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-> >> index f97d7b0..a9dc8d7 100644
-> >> --- a/drivers/scsi/ufs/ufs-qcom.c
-> >> +++ b/drivers/scsi/ufs/ufs-qcom.c
-> >> @@ -253,12 +253,17 @@ static int ufs_qcom_host_reset(struct ufs_hba
-> >> *hba)
-> >>  {
-> >>         int ret =3D 0;
-> >>         struct ufs_qcom_host *host =3D ufshcd_get_variant(hba);
-> >> +       bool reenable_intr =3D false;
-> >>
-> >>         if (!host->core_reset) {
-> >>                 dev_warn(hba->dev, "%s: reset control not set\n",
-> >> __func__);
-> >>                 goto out;
-> >>         }
-> >>
-> >> +       reenable_intr =3D hba->is_irq_enabled;
-> >> +       disable_irq(hba->irq);
-> >> +       hba->is_irq_enabled =3D false;
-> >> +
-> >>         ret =3D reset_control_assert(host->core_reset);
-> >>         if (ret) {
-> >>                 dev_err(hba->dev, "%s: core_reset assert failed, err =
-=3D
-> >> %d\n",
-> >> @@ -280,6 +285,11 @@ static int ufs_qcom_host_reset(struct ufs_hba
-> >> *hba)
-> >>
-> >>         usleep_range(1000, 1100);
-> >>
-> >> +       if (reenable_intr) {
-> >> +               enable_irq(hba->irq);
-> >> +               hba->is_irq_enabled =3D true;
-> >> +       }
-> >> +
-> > If in the future, you will enable UFSHCI_QUIRK_BROKEN_HCE on your
-> > platform (currently only for Exynos),
-> > Will this code still work?
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 21 ---------------------
+>  1 file changed, 21 deletions(-)
 >=20
-> Yes, it still works.
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 013eb73..2517ef1 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -95,8 +95,6 @@
+>                        16, 4, buf, __len, false);                        =
+\
+>  } while (0)
 >=20
-> Thanks,
-> Can Guo.
+> -static bool early_suspend;
+> -
+>  int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
+>                      const char *prefix)
+>  {
+> @@ -8978,11 +8976,6 @@ int ufshcd_system_suspend(struct ufs_hba *hba)
+>         int ret =3D 0;
+>         ktime_t start =3D ktime_get();
+>=20
+> -       if (!hba) {
+> -               early_suspend =3D true;
+> -               return 0;
+> -       }
+> -
+>         down(&hba->host_sem);
+>=20
+>         if (!hba->is_powered)
+> @@ -9034,14 +9027,6 @@ int ufshcd_system_resume(struct ufs_hba *hba)
+>         int ret =3D 0;
+>         ktime_t start =3D ktime_get();
+>=20
+> -       if (!hba)
+> -               return -EINVAL;
+> -
+> -       if (unlikely(early_suspend)) {
+> -               early_suspend =3D false;
+> -               down(&hba->host_sem);
+> -       }
+> -
+>         if (!hba->is_powered || pm_runtime_suspended(hba->dev))
+>                 /*
+>                  * Let the runtime resume take care of resuming
+> @@ -9074,9 +9059,6 @@ int ufshcd_runtime_suspend(struct ufs_hba *hba)
+>         int ret =3D 0;
+>         ktime_t start =3D ktime_get();
+>=20
+> -       if (!hba)
+> -               return -EINVAL;
+> -
+>         if (!hba->is_powered)
+>                 goto out;
+>         else
+> @@ -9115,9 +9097,6 @@ int ufshcd_runtime_resume(struct ufs_hba *hba)
+>         int ret =3D 0;
+>         ktime_t start =3D ktime_get();
+>=20
+> -       if (!hba)
+> -               return -EINVAL;
+> -
+>         if (!hba->is_powered)
+>                 goto out;
+>         else
+> --
+> Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linu=
+x
+> Foundation Collaborative Project.
+
