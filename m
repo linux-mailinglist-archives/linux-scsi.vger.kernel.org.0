@@ -2,62 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E14A932C7CF
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 02:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F2832C7D8
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 02:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344206AbhCDAcu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 19:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
+        id S1351819AbhCDAc5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 19:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbhCCOw2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 09:52:28 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AC6C0610D4
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 06:47:46 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id k66so6597479wmf.1
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 06:47:46 -0800 (PST)
+        with ESMTP id S237968AbhCCOxX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 09:53:23 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E0C0610E1
+        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 06:47:47 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id 7so23993354wrz.0
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 06:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lBd3mhum3iznaNqZKn6V0dfRsruKQEBvPHwSxnJLfOw=;
-        b=TA2ez8f1+NR17l8Kjs4orjAaRYg+zV3POcSh9BRZj/iq+c5wSnTeqe5tUo3QL04/e9
-         +CR9MwU87UNZP69kNmstRS90LeXzoR6cQbcN9QIi8KbxMwnlwX9geOH8iykT+OS6OiXW
-         HhUGm8MrzFONvdUBzyQ0a3vpLk7TZHvHG/PHJ6HH+lYWPnn8m2/zRc0c+4wRRLWXeG1/
-         qjyllCGCgHJ+8kc456nPvVo/p4UB4uI/yAz/wb6HcgDl9VedE5DL92TsUulu13GfnKRT
-         Im+miH5KyuHozlU+1RLgYoU7jJR2rkCBuLJH9QUh30NQd9R0sAzpn4NdpQFUazIS3dlq
-         RuGg==
+        bh=3nQ26BmiCafa3FcoFatnT2ebufwkcfecUnddyGMPtQw=;
+        b=ekehDAxn4FmhM98+yYpuGr+pA1hZiyxKHaz1+qp1m9jcuqFRBZQsPLha7siQv0+1AI
+         UcB0fGztuRW2T/+vypyQ2fF/flUEcLr2YxVrw7NGWFB8Qc5kOp/lUj/AlXGGLz0ozNRU
+         2v6vt12cwVQbyoKU1wSUPesepL8hNle0APTEXZEVgDmrwhnz6OSv+d1p0yjI7AjykTXs
+         hYq6AckV1NKVnpq7gUULvwJje5EYarukB0/FBNMnqFknQdDpKgkScPj6lQDSeyw/LDtJ
+         4X/A1PmKxfjass0cgIkKvsDDyPl+7qYdUwiMpstxELNBsc1SWI269fZ8fL0PnuCH9g5d
+         5XIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lBd3mhum3iznaNqZKn6V0dfRsruKQEBvPHwSxnJLfOw=;
-        b=KVxF2hiWW1zLNGHrinu/lQ1OZJ8JUd4jk4bRweBNcvs0XqLpjsFJs/a6TNUIezgoiU
-         RKBet+1acVC5ib1QQqXfzSMHOSJw/oQYbUClLDVkdEa+sWGSnHvPMU3RSShgOKlSPUge
-         iu6hrUV4OfsbrRBGNwsuCkMxa/s39XKT+2h8wFBj8jiHWpfcJAt+R/mNV0hbRD3gBFkt
-         i9bmOO98/76vILPjo0+uzwnRBJypkncGMr1LZp36lSIhgMX1qtFXe09kM3ehFW7CrtGf
-         DotpEmndobscx97idchmpMnZq1o/bhc4L2vCNjj61GmKzOIkfWB4UhkEUI4hLVkgGIGd
-         DPvg==
-X-Gm-Message-State: AOAM533lKtZb5uDoh3WPee3NmuSqfBjGnbgylMwJMH3vX2tH79FEoAT7
-        Ylw2RPTVcyxZ6NB4SVv1elYjHg==
-X-Google-Smtp-Source: ABdhPJyoUpg+wabiSX2sgKaMiIAIZGMnh5GPtY5xy2cqfeln3gomca4nX0KM/2O9xjq8DEUaNKzUcw==
-X-Received: by 2002:a1c:7715:: with SMTP id t21mr9377894wmi.132.1614782865345;
-        Wed, 03 Mar 2021 06:47:45 -0800 (PST)
+        bh=3nQ26BmiCafa3FcoFatnT2ebufwkcfecUnddyGMPtQw=;
+        b=DM1/3wLlihlgnNh8i2gBgUVpbJjX3vx0sqAAbutT5IQ6HGlmqv3GTolkplHxLl/VcY
+         wmfhHzAbR3dkhg9J0Uzq+EkTtMnI8d/VPmADvOYoqTMyO+xe3pkASfV5YzEFwg319oyI
+         dFP5KQa62sd4RxL0Z/LzqjoIo9qO2G8O3GF9xIcALf/K+2O/wsb08hfLG08fm7nMW7iG
+         EC8CntPahy8pHa24K+s4+AQuQAiSQiqyAMuKetKFNKkvaJfYlxIV8/HcY0Auk1OR/X3c
+         2ZOacnrbDXI1XlfGGntyL5FJpKU2TIJH+DwCC26hu0gjvw5HtR+kSZ4BLW5R61sAAGmD
+         zoRQ==
+X-Gm-Message-State: AOAM5320LkA7irduWH6ZKNNpQhDUDaV+DGGzsEXItXOwy+T+yUWk9ZAE
+        S1HpkpcoA6HPtIaiawoC3dEPmg==
+X-Google-Smtp-Source: ABdhPJwRp4SUIDdZh0ks87Egn0EpEVb1DjR0onSjQk0goGxGTDAmM9M6831gGZ3GEUPi/6eeuMGsNg==
+X-Received: by 2002:a5d:544c:: with SMTP id w12mr28465741wrv.310.1614782866386;
+        Wed, 03 Mar 2021 06:47:46 -0800 (PST)
 Received: from dell.default ([91.110.221.155])
-        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.47.44
+        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 06:47:44 -0800 (PST)
+        Wed, 03 Mar 2021 06:47:45 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 27/30] scsi: lpfc: lpfc_hbadisc: Fix incorrect naming of __lpfc_update_fcf_record()
-Date:   Wed,  3 Mar 2021 14:46:28 +0000
-Message-Id: <20210303144631.3175331-28-lee.jones@linaro.org>
+        MPT-FusionLinux.pdl@avagotech.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH 28/30] scsi: mpt3sas: mpt3sas_base: Fix misspelling of _base_put_smid_default_atomic()
+Date:   Wed,  3 Mar 2021 14:46:29 +0000
+Message-Id: <20210303144631.3175331-29-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210303144631.3175331-1-lee.jones@linaro.org>
 References: <20210303144631.3175331-1-lee.jones@linaro.org>
@@ -69,31 +72,34 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/lpfc/lpfc_hbadisc.c:1505: warning: expecting prototype for lpfc_update_fcf_record(). Prototype was for __lpfc_update_fcf_record() instead
+ drivers/scsi/mpt3sas/mpt3sas_base.c:4185: warning: expecting prototype for _base_put_smid_default(). Prototype was for _base_put_smid_default_atomic() instead
 
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Dick Kennedy <dick.kennedy@broadcom.com>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>
+Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: MPT-FusionLinux.pdl@avagotech.com
+Cc: MPT-FusionLinux.pdl@broadcom.com
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/lpfc/lpfc_hbadisc.c | 2 +-
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 48ca4a612f801..15d6d88333c10 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -1486,7 +1486,7 @@ lpfc_copy_fcf_record(struct lpfc_fcf_rec *fcf_rec,
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 504ed856d4797..69586ab16cb65 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -4172,7 +4172,7 @@ _base_put_smid_hi_priority_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid,
  }
  
  /**
-- * lpfc_update_fcf_record - Update driver fcf record
-+ * __lpfc_update_fcf_record - Update driver fcf record
-  * @phba: pointer to lpfc hba data structure.
-  * @fcf_rec: pointer to driver fcf record.
-  * @new_fcf_record: pointer to hba fcf record.
+- * _base_put_smid_default - Default, primarily used for config pages
++ * _base_put_smid_default_atomic - Default, primarily used for config pages
+  * use Atomic Request Descriptor
+  * @ioc: per adapter object
+  * @smid: system request message index
 -- 
 2.27.0
 
