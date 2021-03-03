@@ -2,78 +2,177 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6F732BBC8
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9787032BBC7
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447055AbhCCMre (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1447045AbhCCMre (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Wed, 3 Mar 2021 07:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843058AbhCCKZE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 05:25:04 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C682C08ECB7
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 02:02:12 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 18so1062797pfo.6
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 02:02:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=cNGljFPZRpYFKEu48myr7eYFUT4vLWZX348426Ewac8=;
-        b=NJ38I1RlIfaZbWAbPkA9+cdkSgmtPguU4DHYOc7A2q6EdxV6FboH3Sa97xuS/Cjo+W
-         q7T3MpFFccCdT23Kd3w+NSRj21t3Mikc7zVtntnUjcnatRDFMc55NntXjXmkX5BuKYre
-         C7Y7nhrqvYJQn0eQqUp8EGYfhNAifwC92W1TQ3BpMDeaCrttiQrifh+l2qEJKWCQ5Vt9
-         lvK8YsDcHarCxeR7poXom1F4KIibPiQmXaRgWIZJleQdMoqoU0pZd6Rs1zJlUdwcP7ts
-         7CKYs3uPW9NjKDof8cwl31mM4b0g/PFLbriNQfm/ehsp8RSHGsr2AxAbDwoSvf/rRxqE
-         qccQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=cNGljFPZRpYFKEu48myr7eYFUT4vLWZX348426Ewac8=;
-        b=Lfq+77v+kOh0n7vPBNtP7JTO5tNTT/OUeRUijHpby9AYWUavnm6LqmwvisSTfOUkYq
-         fhhsT9sSz0aZfZUtmy/P+hlCAYwMzN3UhTppDcf6ze09YYiZxexG2lZ8yW8Ineezudkr
-         rADSdLtueU3bzYJhZ1ViKQUAJYiVkQUZnaXYYH15N0lXglncnTJvOZ5xZFKRyxlHQuf4
-         Je9/P/5O4MuPLQSTrDkvkS5eeK2VJDzHU1FMXikjAGsRct9RcEw2wxjlxdDQIJWfOCP0
-         +ZW24GCj7SHsK+cQkwh+ewJqJZFePruEANMEX8BwogciCi/gKHpzlvLjAygRYu4DrWhx
-         ulQA==
-X-Gm-Message-State: AOAM530Bittdm26ir/XSozWDswJoeM6ukTJHIiCUsQxTo2nk8/HnpP+7
-        MFP1XE4Iu5dep65eWi8juGYh9Ld7SIvciAxtTKA=
-X-Google-Smtp-Source: ABdhPJyb4mSUNfFeH+Xu1wEnOFIui28UM+BgfDPZIE2hgmQ84v0CWizP0TtRSTxHDzP4OtWPh0zebw+PcOu/TT19p5A=
-X-Received: by 2002:a05:6a00:1385:b029:1be:ac19:3a9d with SMTP id
- t5-20020a056a001385b02901beac193a9dmr2365211pfg.65.1614765731711; Wed, 03 Mar
- 2021 02:02:11 -0800 (PST)
+Received: from z11.mailgun.us ([104.130.96.11]:32227 "EHLO z11.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1452388AbhCCKUf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 3 Mar 2021 05:20:35 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1614766814; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=QvDPOoM+Z0w8Vvhv9dvc3TRDzSP3WYUluNgQqtl528M=;
+ b=xf7fqfS104vMS6yCsTL2X8+Cbx7KxK3zxb1Rx0uxAXRQenFX0es+xyKC/56/GgGZnNS8eMxr
+ mgoJvn0soRvbS5pHonF8TmtDgvrnF/ZGo+X1C+OHRinjAR6XekJSac0/M0k4q7YE0ajREtIo
+ x7l+Byzaa7zoGZEIAUccec0joRs=
+X-Mailgun-Sending-Ip: 104.130.96.11
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 603f5f004fd7814d5fc602b1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 03 Mar 2021 10:03:44
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0402EC43461; Wed,  3 Mar 2021 10:03:43 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DF25AC433C6;
+        Wed,  3 Mar 2021 10:03:42 +0000 (UTC)
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:6d0c:0:0:0:0 with HTTP; Wed, 3 Mar 2021 02:02:11
- -0800 (PST)
-Reply-To: georgemike7031@gmail.com
-From:   george mike <crepinak.vainqueur@gmail.com>
-Date:   Wed, 3 Mar 2021 11:02:11 +0100
-Message-ID: <CAHwNn8LYe_ykT7HK7kdpvofvcH1sAO3zE7r8+Z+0T9WNJqbdUQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 03 Mar 2021 18:03:42 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Avri Altman <Avri.Altman@wdc.com>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] scsi: ufs: Minor adjustments to error handling
+In-Reply-To: <DM6PR04MB657549A42A64963CA134609CFC989@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <1614145010-36079-1-git-send-email-cang@codeaurora.org>
+ <1614145010-36079-2-git-send-email-cang@codeaurora.org>
+ <DM6PR04MB657549A42A64963CA134609CFC989@DM6PR04MB6575.namprd04.prod.outlook.com>
+Message-ID: <3c6df42fef5a1e52e655753aadec4a11@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hallo
+Hi Avri,
 
-Ich hei=C3=9Fe George Mike. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte=
- dir anbieten
-engster Verwandter meines Klienten. Sie erben die Gesamtsumme (8,5
-Millionen US-Dollar).
-Dollar, die mein Kunde vor seinem Tod auf der Bank gelassen hat.
+On 2021-03-03 15:22, Avri Altman wrote:
+>> 
+>> 
+>> In error handling prepare stage, after SCSI requests are blocked, do a
+>> down/up_write(clk_scaling_lock) to clean up the queuecommand() path.
+>> Meanwhile, stop eeh_work in case it disturbs error recovery. Moreover,
+>> reset ufshcd_state at the entrance of ufshcd_probe_hba(), since it may 
+>> be
+>> called multiple times during error recovery.
+>> 
+>> Signed-off-by: Can Guo <cang@codeaurora.org>
+> I noticed that you tagged Adrian's patch -
+> https://lore.kernel.org/lkml/20210301191940.15247-1-adrian.hunter@intel.com/
+> So this patch needs to be adjusted accordingly?
 
-Mein Klient ist ein Staatsangeh=C3=B6riger Ihres Landes, der mit seiner
-Frau bei einem Autounfall ums Leben gekommen ist
-und einziger Sohn. Ich habe Anspruch auf 50% des Gesamtfonds, w=C3=A4hrend
-50% davon berechtigt sind
-Sein f=C3=BCr dich.
-F=C3=BCr weitere Informationen wenden Sie sich bitte an meine private
-E-Mail-Adresse: georgemike7031@gmail.com
+Thanks for pointing me to that one, I will rebase mine.
 
-Vielen Dank im Voraus,
-Herr George Mike,
+Regards,
+Can Guo.
+
+> 
+> Thanks,
+> Avri
+> 
+>> ---
+>>  drivers/scsi/ufs/ufshcd.c | 18 ++++++++++++------
+>>  1 file changed, 12 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> index 80620c8..013eb73 100644
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -4987,6 +4987,7 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba,
+>> struct ufshcd_lrb *lrbp)
+>>                          * UFS device needs urgent BKOPs.
+>>                          */
+>>                         if (!hba->pm_op_in_progress &&
+>> +                           !ufshcd_eh_in_progress(hba) &&
+>>                             
+>> ufshcd_is_exception_event(lrbp->ucd_rsp_ptr) &&
+>>                             schedule_work(&hba->eeh_work)) {
+>>                                 /*
+>> @@ -5784,13 +5785,20 @@ static void ufshcd_err_handling_prepare(struct
+>> ufs_hba *hba)
+>>                         ufshcd_suspend_clkscaling(hba);
+>>                 ufshcd_clk_scaling_allow(hba, false);
+>>         }
+>> +       ufshcd_scsi_block_requests(hba);
+>> +       /* Drain ufshcd_queuecommand() */
+>> +       down_write(&hba->clk_scaling_lock);
+>> +       up_write(&hba->clk_scaling_lock);
+>> +       cancel_work_sync(&hba->eeh_work);
+>>  }
+>> 
+>>  static void ufshcd_err_handling_unprepare(struct ufs_hba *hba)
+>>  {
+>> +       ufshcd_scsi_unblock_requests(hba);
+>>         ufshcd_release(hba);
+>>         if (ufshcd_is_clkscaling_supported(hba))
+>>                 ufshcd_clk_scaling_suspend(hba, false);
+>> +       ufshcd_clear_ua_wluns(hba);
+>>         pm_runtime_put(hba->dev);
+>>  }
+>> 
+>> @@ -5882,8 +5890,8 @@ static void ufshcd_err_handler(struct 
+>> work_struct
+>> *work)
+>>         spin_unlock_irqrestore(hba->host->host_lock, flags);
+>>         ufshcd_err_handling_prepare(hba);
+>>         spin_lock_irqsave(hba->host->host_lock, flags);
+>> -       ufshcd_scsi_block_requests(hba);
+>> -       hba->ufshcd_state = UFSHCD_STATE_RESET;
+>> +       if (hba->ufshcd_state != UFSHCD_STATE_ERROR)
+>> +               hba->ufshcd_state = UFSHCD_STATE_RESET;
+>> 
+>>         /* Complete requests that have door-bell cleared by h/w */
+>>         ufshcd_complete_requests(hba);
+>> @@ -6042,12 +6050,8 @@ static void ufshcd_err_handler(struct 
+>> work_struct
+>> *work)
+>>         }
+>>         ufshcd_clear_eh_in_progress(hba);
+>>         spin_unlock_irqrestore(hba->host->host_lock, flags);
+>> -       ufshcd_scsi_unblock_requests(hba);
+>>         ufshcd_err_handling_unprepare(hba);
+>>         up(&hba->host_sem);
+>> -
+>> -       if (!err && needs_reset)
+>> -               ufshcd_clear_ua_wluns(hba);
+>>  }
+>> 
+>>  /**
+>> @@ -7858,6 +7862,8 @@ static int ufshcd_probe_hba(struct ufs_hba *hba,
+>> bool async)
+>>         unsigned long flags;
+>>         ktime_t start = ktime_get();
+>> 
+>> +       hba->ufshcd_state = UFSHCD_STATE_RESET;
+>> +
+>>         ret = ufshcd_link_startup(hba);
+>>         if (ret)
+>>                 goto out;
+>> --
+>> Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a 
+>> Linux
+>> Foundation Collaborative Project.
