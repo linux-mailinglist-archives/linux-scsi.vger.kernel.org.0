@@ -2,60 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17F532C7DF
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 02:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D150D32C76D
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 02:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355707AbhCDAdA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 19:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S1388057AbhCDAb6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 19:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244719AbhCCO6a (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 09:58:30 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FA1C0613DE
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 06:46:42 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id u16so5966950wrt.1
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 06:46:42 -0800 (PST)
+        with ESMTP id S244419AbhCCOs0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 09:48:26 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8CFC0613E2
+        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 06:46:44 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id u14so23984637wri.3
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 06:46:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WNQAPxGMnqLL7g3LltPLuvKvyAOeTz8LyxGMxNVsyHE=;
-        b=sVSVp9AxBtfr9XnMsMLHY+Za2AdiIrWKn4fsk+8hYwtrvDV7QnyEYYyptJ4Kbctavg
-         2Mr1ByDFM+WvEJr2kRUwFcR5jblcTFpP3XzGbNKLX8R6J0QAmgVJEPr9qSxdV8r8Sja4
-         Rjggve1rDqlK8Bj9wf+F7imYLbeOMy8RnVijKXgyP5LACWRkPa35nfeARfMcIwleM1XY
-         BUHCKHOrzAl5Qvzz2Yca8DjZa1EQTJCWVeZF3KBvmvMKkuVkVDzyucKx/dEMNzpGHsno
-         goFv0W4F+yAE2kxqNHDYMaABbhaf71ehoTFQOBCH+Ly3U1Lq4xmQIOmdcT/8MvJldPdx
-         /Tqg==
+        bh=QFi9T+E/g8V3YsAnSZJJVAc9TXJo52o0NpqktVEIKdw=;
+        b=ZYh5jmZHnR3UgmUDrFZUwUXHTN8rG1lpAeCiLfkVk9wOllZP5B463CAeaE5CPiTXBU
+         PaTq0vpL/WvMIVCrJYsTd+pzenjEU8khfmgTqOO/tIPAlUxH8evimfYnKpAV9rWLYmgn
+         0Mx9jZPaVk6bqWHDW7FD8pU8UxX0Cg0M4ZyX60LoeCA4Ptpq6f+wV+BTqTmVBlFtWL1U
+         5Sm+fPLpMJM74M5LwXxINJ0h7bfItbIlkq1FynPDAPq+GM8kZGez0JGWfYiWsOwiAos7
+         LaV5E0NzoR5E8lrcq83Zaf9SKITfXrvj3c5+VL3jBoJOIeGTRCsLGuviwbiLhj9eVTy5
+         6LvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WNQAPxGMnqLL7g3LltPLuvKvyAOeTz8LyxGMxNVsyHE=;
-        b=Mo1NdsQc4KXweYk/8FxPXoBaIE+g/lOL+3LBLvS/rwD19dJ+5c9K2IGIaa/454hRnu
-         O/p5pf75Lxn5KCEzRa/SLV4S5+J9dtT08ucb2zZmFtINzQ1zIVMT1vfJHu/hJJeUea0J
-         4Q/0ijYfhVyEEHn4e5wplG9AwdEXPCmcQmxpFtsYCP2d1Keum4YHeR5o8PFWFckypK1Q
-         0QpWs5FTH1nBAEcgSbzA4DtAIBZ5XDjMsKrm9ofjANNh5WlqmRcdvZAaHg66tHgjQmtW
-         pzAnacj5esyf3iGcGqa/lr2AfebpxxRH49VOFSoH6FD9VkUWHsBl1lhjI/XXO4RwTA5N
-         TK4A==
-X-Gm-Message-State: AOAM530U1zLOXMI13KV7TyYlaS46BMurwHHNU9p3EatZKdf3DLVNhGJ9
-        S1X3D2yt3+t7hL+WcfCqQFPENw==
-X-Google-Smtp-Source: ABdhPJwz7Cbb5q6oZiB21g3fYOlbJ9E2LU3Ob3H595o8I3XgXxqkikxXdx4eIh6JmOjiR51ogLMcIA==
-X-Received: by 2002:adf:c101:: with SMTP id r1mr27898465wre.38.1614782801291;
-        Wed, 03 Mar 2021 06:46:41 -0800 (PST)
+        bh=QFi9T+E/g8V3YsAnSZJJVAc9TXJo52o0NpqktVEIKdw=;
+        b=BFJriRR44DkGCosvptIB4LYdWyUGQVIAMEsGLheJZlFCukO8B4d0bR0VvF5coCfUEA
+         n7SPwBUTQWhVkGKck10eLTCxwmrYMRVgtgWSlFXaTejgyh/cfipSxq6RywBPpUU1H7k7
+         YbpJY2qOxyaFRa1h7Jgyd8HlXrVikdtsgchpkxf8yPcwRvRPp3HnFOLByu63aH3GH8lA
+         s2GPIWrFyBPtbthm3uH5YnvhZR+p5MAFNxGc+EbLvA0yuVSGSFiPVqqU4gAORzhu5bGS
+         6kdksPbUr2wDWOCmVO9c07URdLU130FLIdEk8fibl6gJqti7lxUHjzG5Qfuujapzourv
+         SFGQ==
+X-Gm-Message-State: AOAM531hVqj96DYDoiQ4fC4Z7wQ+0wo7fKOzNInuvrbvDfwAP5rttMCM
+        +JuxFfAeXBRcx9vn3REBg09WsA==
+X-Google-Smtp-Source: ABdhPJyFEYZyODmwSj8L4In3YWPgE8FpGflz9nPBfBP0ld8nT3CDiDCvShIovuKdMp8S9fyjSsQWKQ==
+X-Received: by 2002:adf:d1ce:: with SMTP id b14mr27612863wrd.126.1614782803009;
+        Wed, 03 Mar 2021 06:46:43 -0800 (PST)
 Received: from dell.default ([91.110.221.155])
-        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.46.39
+        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.46.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 06:46:40 -0800 (PST)
+        Wed, 03 Mar 2021 06:46:42 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+Cc:     linux-kernel@vger.kernel.org,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 03/30] scsi: fcoe: Fix function name fcoe_set_vport_symbolic_name() in description
-Date:   Wed,  3 Mar 2021 14:46:04 +0000
-Message-Id: <20210303144631.3175331-4-lee.jones@linaro.org>
+        Atul Mukker <Atul.Mukker@lsi.com>,
+        Sreenivas Bagalkote <Sreenivas.Bagalkote@lsi.com>,
+        Manoj Jose <Manoj.Jose@lsi.com>, megaraidlinux@lsi.com,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH 04/30] scsi: megaraid: megaraid_mbox: Fix function name megaraid_queue_command_lck() in description
+Date:   Wed,  3 Mar 2021 14:46:05 +0000
+Message-Id: <20210303144631.3175331-5-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210303144631.3175331-1-lee.jones@linaro.org>
 References: <20210303144631.3175331-1-lee.jones@linaro.org>
@@ -67,30 +73,37 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/fcoe/fcoe.c:2782: warning: expecting prototype for fcoe_vport_set_symbolic_name(). Prototype was for fcoe_set_vport_symbolic_name() instead
+ drivers/scsi/megaraid/megaraid_mbox.c:1438: warning: expecting prototype for megaraid_queue_command(). Prototype was for megaraid_queue_command_lck() instead
 
-Cc: Hannes Reinecke <hare@suse.de>
+Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+Cc: Sumit Saxena <sumit.saxena@broadcom.com>
+Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Atul Mukker <Atul.Mukker@lsi.com>
+Cc: Sreenivas Bagalkote <Sreenivas.Bagalkote@lsi.com>
+Cc: Manoj Jose <Manoj.Jose@lsi.com>
+Cc: megaraidlinux@lsi.com
+Cc: megaraidlinux.pdl@broadcom.com
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/fcoe/fcoe.c | 2 +-
+ drivers/scsi/megaraid/megaraid_mbox.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/fcoe/fcoe.c b/drivers/scsi/fcoe/fcoe.c
-index 03bf49adaafe6..89ec735929c3e 100644
---- a/drivers/scsi/fcoe/fcoe.c
-+++ b/drivers/scsi/fcoe/fcoe.c
-@@ -2771,7 +2771,7 @@ static int fcoe_vport_disable(struct fc_vport *vport, bool disable)
- }
+diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
+index d57e93872d7b5..b1a2d3536add6 100644
+--- a/drivers/scsi/megaraid/megaraid_mbox.c
++++ b/drivers/scsi/megaraid/megaraid_mbox.c
+@@ -1427,7 +1427,7 @@ mbox_post_cmd(adapter_t *adapter, scb_t *scb)
+ 
  
  /**
-- * fcoe_vport_set_symbolic_name() - append vport string to symbolic name
-+ * fcoe_set_vport_symbolic_name() - append vport string to symbolic name
-  * @vport: fc_vport with a new symbolic name string
+- * megaraid_queue_command - generic queue entry point for all LLDs
++ * megaraid_queue_command_lck - generic queue entry point for all LLDs
+  * @scp		: pointer to the scsi command to be executed
+  * @done	: callback routine to be called after the cmd has be completed
   *
-  * After generating a new symbolic name string, a new RSPN_ID request is
 -- 
 2.27.0
 
