@@ -2,65 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F2832C7D8
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 02:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2856232C7D2
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 02:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351819AbhCDAc5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 19:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S1355693AbhCDAcw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 19:32:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237968AbhCCOxX (ORCPT
+        with ESMTP id S238097AbhCCOxX (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 09:53:23 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E0C0610E1
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 06:47:47 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id 7so23993354wrz.0
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 06:47:47 -0800 (PST)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB2FC0604DD
+        for <linux-scsi@vger.kernel.org>; Wed,  3 Mar 2021 06:47:51 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id k66so6597708wmf.1
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 06:47:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3nQ26BmiCafa3FcoFatnT2ebufwkcfecUnddyGMPtQw=;
-        b=ekehDAxn4FmhM98+yYpuGr+pA1hZiyxKHaz1+qp1m9jcuqFRBZQsPLha7siQv0+1AI
-         UcB0fGztuRW2T/+vypyQ2fF/flUEcLr2YxVrw7NGWFB8Qc5kOp/lUj/AlXGGLz0ozNRU
-         2v6vt12cwVQbyoKU1wSUPesepL8hNle0APTEXZEVgDmrwhnz6OSv+d1p0yjI7AjykTXs
-         hYq6AckV1NKVnpq7gUULvwJje5EYarukB0/FBNMnqFknQdDpKgkScPj6lQDSeyw/LDtJ
-         4X/A1PmKxfjass0cgIkKvsDDyPl+7qYdUwiMpstxELNBsc1SWI269fZ8fL0PnuCH9g5d
-         5XIA==
+        bh=dVGY+2eVCzb/plLTl5wPYqGdorDqWqmvQcwoi8RclRE=;
+        b=LU402gc4bmHicdpFm3WTCCDyVaNj3gfK0eQ//P/3UXc0RO37znWGJtNg9MHCyf7uJH
+         WgXVe1rH2uCSKfu8f95QI1C32rE6gGg/NHcHQAhkNLAnICzS/SGjdgfoWW9VX9hpqP1A
+         Adf3dXrYLsIusqq0czBOqaw/2ZsHx3aVmfG9V6QfgmHpAFsjZR/ZKKsyJNAst3ZwIJDI
+         5hqRtUnX1KOZR2Ci/ZCMafK472Enx+NgS8k0j01WsZvZRaOt0NKwQYLRDswC6AahQdlk
+         ufusJWii89hzbTXZluOqEiZynfI9/y5VZeYtOV59PtPqykJHtbuJQbd7U6tEmFGFrl4O
+         tplw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3nQ26BmiCafa3FcoFatnT2ebufwkcfecUnddyGMPtQw=;
-        b=DM1/3wLlihlgnNh8i2gBgUVpbJjX3vx0sqAAbutT5IQ6HGlmqv3GTolkplHxLl/VcY
-         wmfhHzAbR3dkhg9J0Uzq+EkTtMnI8d/VPmADvOYoqTMyO+xe3pkASfV5YzEFwg319oyI
-         dFP5KQa62sd4RxL0Z/LzqjoIo9qO2G8O3GF9xIcALf/K+2O/wsb08hfLG08fm7nMW7iG
-         EC8CntPahy8pHa24K+s4+AQuQAiSQiqyAMuKetKFNKkvaJfYlxIV8/HcY0Auk1OR/X3c
-         2ZOacnrbDXI1XlfGGntyL5FJpKU2TIJH+DwCC26hu0gjvw5HtR+kSZ4BLW5R61sAAGmD
-         zoRQ==
-X-Gm-Message-State: AOAM5320LkA7irduWH6ZKNNpQhDUDaV+DGGzsEXItXOwy+T+yUWk9ZAE
-        S1HpkpcoA6HPtIaiawoC3dEPmg==
-X-Google-Smtp-Source: ABdhPJwRp4SUIDdZh0ks87Egn0EpEVb1DjR0onSjQk0goGxGTDAmM9M6831gGZ3GEUPi/6eeuMGsNg==
-X-Received: by 2002:a5d:544c:: with SMTP id w12mr28465741wrv.310.1614782866386;
-        Wed, 03 Mar 2021 06:47:46 -0800 (PST)
+        bh=dVGY+2eVCzb/plLTl5wPYqGdorDqWqmvQcwoi8RclRE=;
+        b=Qo4bJksETEvwnHedy1ytl2DTJOkKzPUnbDgYJk73VP5RT/ipnAZn+0LjxB1EKvnIo5
+         ZAup3otZQNVS77KSOHs66rtPKORUjw5XUbj7tPUvmuvXY9MZNA6rUoxwvlyO4zApYwGs
+         8QDX/AwsoohDxHwy5I7KKO6z7Psyy+PhcW9SKhZTxGhjZ6F6zvSq98rh9Rny5u1CN7Mx
+         q1xCUB89erJwxI9lpPrdjiN5vFEFGTMosXDMk4N4lbB4eb34r6RQ4ulDFVdqLS8BRY/z
+         9JkvmnJpJPSF1JCEzjzjGic0XCslisMozFE7zdi6SjRLtFFkiRJT9qICXiyG1LmRJQbC
+         C4fg==
+X-Gm-Message-State: AOAM532wvy4nrAlwewJi8JNDlwlPONW71kj693xryZKywiIlDI86ovVM
+        2oKEtKY1X2GbOa3wnpBSrpVFWQ==
+X-Google-Smtp-Source: ABdhPJy+7UfIOPpgeTPojOLx8GUyLfk9FGzs0T3v9/Bdp6I9M66m5yG0d1EAmp8cuc7Aci1NZr8jOA==
+X-Received: by 2002:a7b:c10c:: with SMTP id w12mr9672843wmi.112.1614782868292;
+        Wed, 03 Mar 2021 06:47:48 -0800 (PST)
 Received: from dell.default ([91.110.221.155])
-        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.47.45
+        by smtp.gmail.com with ESMTPSA id a14sm36567233wrg.84.2021.03.03.06.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 06:47:45 -0800 (PST)
+        Wed, 03 Mar 2021 06:47:46 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@avagotech.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH 28/30] scsi: mpt3sas: mpt3sas_base: Fix misspelling of _base_put_smid_default_atomic()
-Date:   Wed,  3 Mar 2021 14:46:29 +0000
-Message-Id: <20210303144631.3175331-29-lee.jones@linaro.org>
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 29/30] scsi: lpfc: lpfc_nportdisc: Fix misspelling of lpfc_defer_acc_rsp()
+Date:   Wed,  3 Mar 2021 14:46:30 +0000
+Message-Id: <20210303144631.3175331-30-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210303144631.3175331-1-lee.jones@linaro.org>
 References: <20210303144631.3175331-1-lee.jones@linaro.org>
@@ -72,34 +69,31 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/mpt3sas/mpt3sas_base.c:4185: warning: expecting prototype for _base_put_smid_default(). Prototype was for _base_put_smid_default_atomic() instead
+ drivers/scsi/lpfc/lpfc_nportdisc.c:345: warning: expecting prototype for lpfc_defer_tgt_acc(). Prototype was for lpfc_defer_acc_rsp() instead
 
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Dick Kennedy <dick.kennedy@broadcom.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: MPT-FusionLinux.pdl@avagotech.com
-Cc: MPT-FusionLinux.pdl@broadcom.com
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 504ed856d4797..69586ab16cb65 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -4172,7 +4172,7 @@ _base_put_smid_hi_priority_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid,
+diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
+index 135d8e8a42ba2..ffd41cc7c96c6 100644
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -329,7 +329,7 @@ lpfc_defer_pt2pt_acc(struct lpfc_hba *phba, LPFC_MBOXQ_t *link_mbox)
  }
  
  /**
-- * _base_put_smid_default - Default, primarily used for config pages
-+ * _base_put_smid_default_atomic - Default, primarily used for config pages
-  * use Atomic Request Descriptor
-  * @ioc: per adapter object
-  * @smid: system request message index
+- * lpfc_defer_tgt_acc - Progress SLI4 target rcv PLOGI handler
++ * lpfc_defer_acc_rsp - Progress SLI4 target rcv PLOGI handler
+  * @phba: Pointer to HBA context object.
+  * @pmb: Pointer to mailbox object.
+  *
 -- 
 2.27.0
 
