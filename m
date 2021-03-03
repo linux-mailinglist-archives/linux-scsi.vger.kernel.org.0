@@ -2,192 +2,226 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C0F32BBC9
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0466532BBCC
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Mar 2021 22:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447066AbhCCMrg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Mar 2021 07:47:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843060AbhCCKZJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 05:25:09 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA81C0610CE;
-        Wed,  3 Mar 2021 00:55:44 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id i9so4480787wml.0;
-        Wed, 03 Mar 2021 00:55:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zdJ5hx+mYbfNreiVWKd99KRYazRIfUe4brAtRfe/xF4=;
-        b=K+6wg9BUznm5a/+9b9QJ7i9CChtLVD4n5KpT38ZA7QuZ71i/zpE6c5PwKFC5vlJVh6
-         DhhowwzJ76bXSS0tQp4FXcUh1skR513TO5ktNOi0c03sUdRBG73n1d5THMiMZDsmN339
-         wRqGWi4Qi7zNv+UkUWrn5CskAi6Jl9sFYGf3Ygjt7vc9S4QLLZD+0NIPewtfRslu3qdJ
-         j74C1vM98bGMvHT1RfoU5NMfcNVz/NNzY4vZ8Rr5r9IQ/Yo6sOLTs60QygBWVb19pc1S
-         j7KcwVVdncAxdiPLaegbiS4FUQjOedYDq3IzUNFcUw7udfrRHkOQxBeJgtHp53hdwE4c
-         xGxQ==
+        id S1447100AbhCCMrk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Mar 2021 07:47:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42517 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1444283AbhCCMP2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Mar 2021 07:15:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1614773641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUoH8Vyn/B9sleJnzpy65y0LAnQtC6/RFAeTcmxlxsw=;
+        b=CqmxghloPlivpFlx/h+MIgNhnzTlxc9H4n49cY5DMTIpdsGlwdXyelG0dRnCyMv1M8skVP
+        Z9mRv6sR+eIHrap1TAT+QR6fitRXUPzGxvySQDw8cXhgMXeFOA9ssiP0HYyV84+qDd4mYL
+        H7arPI91t0iUJPYAjQ2WivZmP1TPX1I=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-299-NqkKJvZ6NJCjHgtsS5BoQA-1; Wed, 03 Mar 2021 04:08:35 -0500
+X-MC-Unique: NqkKJvZ6NJCjHgtsS5BoQA-1
+Received: by mail-ed1-f72.google.com with SMTP id h5so1995166edf.17
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Mar 2021 01:08:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zdJ5hx+mYbfNreiVWKd99KRYazRIfUe4brAtRfe/xF4=;
-        b=HtumlKycCgRUz413V+rEfk7u1Nu0iW/jLB9dok6x4ET+cpihUOAVdzYggzQMUailXs
-         3JW3Hwy6R0WJu3CCxJbUlGeqTju95Ej7VpCGvN/LntodZjqYNF78wnS7yoWy7ca3E/ge
-         G2qzcImkwwKQRsWVvYRLnxkwvf0Mi8wdtOvQ1Uqi4j2rpVrqCM+iFfnTBjM26sYlwM8/
-         LxHigQamagS1iBpw8PQYEZfqAR8JRLgQs621I+RSpefyKE/LffHn0TCVAHRj69DmwT2O
-         LEPy4dXJesdBUmtw5ObalvP34mIPhGfXW7jQGQrWx1Sbl6OidbH7oNNgXXh8wC0Dlg2V
-         0EbQ==
-X-Gm-Message-State: AOAM533B3u0z1iL2p70QrPgGBRrqqkdb5pCwybEXAWcSESqJQySRkxwC
-        jUf6GC/CVYHe7YHJgsXzUortyFWhiGXWlxSs
-X-Google-Smtp-Source: ABdhPJzJvBnty9HzqVrRuMbMGPJYYS2k+vddEpLtCemcM5SBQTqtepuxSPjcO7s0q2vFbZGw/WguyA==
-X-Received: by 2002:a1c:8041:: with SMTP id b62mr8441707wmd.0.1614761742701;
-        Wed, 03 Mar 2021 00:55:42 -0800 (PST)
-Received: from sf (tunnel547699-pt.tunnel.tserv1.lon2.ipv6.he.net. [2001:470:1f1c:3e6::2])
-        by smtp.gmail.com with ESMTPSA id n6sm11688949wrt.1.2021.03.03.00.55.40
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=kUoH8Vyn/B9sleJnzpy65y0LAnQtC6/RFAeTcmxlxsw=;
+        b=MDzXBBu9q+v7khdUE2oR8Xu5psO+QA0XSDewYDsB4DyFyF1esIoUDsj2ExKqvG0rd5
+         zRLAmjDTPBsAODMFjEQCyAIZgT72t6zNgp0Zhf3NMWQU0C5cJqJfar6w1blAMRzsOyB0
+         e1m6W0iQ/UnPUCD096tZ8EwUaBWbBZkP0zSofeMOtC9EFd38JK6XSzqaJwZi7CjSr7Id
+         AtYi/BW6HI+CPvouXKhIJ10gRXOtxZbnRBxHFDbKdvJGIrjxTpmVcUcaYKE/n8UoGkf5
+         7eKxgy//1r4zIV1w1htybUPk3kaJ0Lhn/CrXGz4zWs4aWh9y+ysaeS6vMPixhYCGtfAg
+         rvrw==
+X-Gm-Message-State: AOAM533U2pXxex22GZgKUhLgnIVDXXvscKrv9okNq/COqXakRnaPVVgG
+        ATwUM9OkcL3LHKAlTu/bXE31aGpGyQkB/RNjGY1ZUyuNH6hUwKA8/fhZb94MKh6UVtrYCUrQfVL
+        iPlQ8k9kBibSPWxB1bNPxZzUlYxjlu6AwpyLn8PM9AEpXZbV9v1SX+m08Pn3uGQJy6kjcw0PvfQ
+        ==
+X-Received: by 2002:a17:907:1b1c:: with SMTP id mp28mr21956413ejc.243.1614762513762;
+        Wed, 03 Mar 2021 01:08:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzPRNyHGfOzCGecv1dJXu51I4Fb07WNs03fEQ81eIx+y8OXe5aoHUBPL/wnYdvm/NHmI8Q0kg==
+X-Received: by 2002:a17:907:1b1c:: with SMTP id mp28mr21956387ejc.243.1614762513495;
+        Wed, 03 Mar 2021 01:08:33 -0800 (PST)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id bv9sm15083248ejb.21.2021.03.03.01.08.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 00:55:42 -0800 (PST)
-Date:   Wed, 3 Mar 2021 08:55:33 +0000
-From:   Sergei Trofimovich <slyich@gmail.com>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Don Brace <don.brace@microchip.com>, storagedev@microchip.com,
+        Wed, 03 Mar 2021 01:08:33 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     kys@microsoft.com, martin.petersen@oracle.com,
+        longli@microsoft.com, wei.liu@kernel.org, jejb@linux.ibm.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Cc:     linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joe Szczypek <jszczype@redhat.com>,
-        Scott Benesh <scott.benesh@microchip.com>,
-        Scott Teel <scott.teel@microchip.com>,
-        Tomas Henzl <thenzl@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: [bisected] 5.12-rc1 hpsa regression: "scsi: hpsa: Correct dev
- cmds outstanding for retried cmds" breaks hpsa P600
-Message-ID: <20210303085533.505b1590@sf>
-In-Reply-To: <20210303002236.2f4ec01f@sf>
-References: <20210222230519.73f3e239@sf>
-        <cc658b61-530e-90bf-3858-36cc60468a24@kernel.dk>
-        <8decdd2e-a380-9951-3ebb-2bc3e48aa1c3@physik.fu-berlin.de>
-        <20210223083507.43b5a6dd@sf>
-        <51cbf584-07ef-1e62-7a3b-81494a04faa6@physik.fu-berlin.de>
-        <9441757f-d4bc-a5b5-5fb0-967c9aaca693@physik.fu-berlin.de>
-        <20210223192743.0198d4a9@sf>
-        <20210302222630.5056f243@sf>
-        <25dfced0-88b2-b5b3-f1b6-8b8a9931bf90@physik.fu-berlin.de>
-        <20210303002236.2f4ec01f@sf>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Subject: Re: [PATCH v2 1/1] scsi: storvsc: Enable scatterlist entry lengths
+ > 4Kbytes
+In-Reply-To: <1614120294-1930-1-git-send-email-mikelley@microsoft.com>
+References: <1614120294-1930-1-git-send-email-mikelley@microsoft.com>
+Date:   Wed, 03 Mar 2021 10:08:32 +0100
+Message-ID: <87mtvkeh9r.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 3 Mar 2021 00:22:36 +0000
-Sergei Trofimovich <slyich@gmail.com> wrote:
+Michael Kelley <mikelley@microsoft.com> writes:
 
-> On Tue, 2 Mar 2021 23:31:32 +0100
-> John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de> wrote:
-> 
-> > Hi Sergei!
-> > 
-> > On 3/2/21 11:26 PM, Sergei Trofimovich wrote:  
-> > > Gave v5.12-rc1 a try today and got a similar boot failure around
-> > > hpsa queue initialization, but my failure is later:
-> > >     https://dev.gentoo.org/~slyfox/configs/guppy-dmesg-5.12-rc1
-> > > Maybe I get different error because I flipped on most debugging
-> > > kernel options :)
-> > > 
-> > > Looks like 'ERROR: Invalid distance value range' while being
-> > > very scary are harmless. It's just a new spammy way for kernel
-> > > to report lack of NUMA config on the machine (no SRAT and SLIT
-> > > ACPI tables).
-> > > 
-> > > At least I get hpsa detected on PCI bus. But I guess it's discovered
-> > > configuration is very wrong as I get unaligned accesses:
-> > >     [   19.811570] kernel unaligned access to 0xe000000105dd8295, ip=0xa000000100b874d1
-> > > 
-> > > Bisecting now.    
-> > 
-> > Sounds good. I guess we should get Jens' fix for the signal regression
-> > merged as well as your two fixes for strace.  
-> 
-> "bisected" (cheated halfway through) and verified that reverting
-> f749d8b7a9896bc6e5ffe104cc64345037e0b152 makes rx3600 boot again.
-> 
-> CCing authors who might be able to help us here.
-> 
-> commit f749d8b7a9896bc6e5ffe104cc64345037e0b152
-> Author: Don Brace <don.brace@microchip.com>
-> Date:   Mon Feb 15 16:26:57 2021 -0600
-> 
->     scsi: hpsa: Correct dev cmds outstanding for retried cmds
-> 
->     Prevent incrementing device->commands_outstanding for ioaccel command
->     retries that are driver initiated.  If the command goes through the retry
->     path, the device->commands_outstanding counter has already accounted for
->     the number of commands outstanding to the device.  Only commands going
->     through function hpsa_cmd_resolve_events decrement this counter.
-> 
->      - ioaccel commands go to either HBA disks or to logical volumes comprised
->        of SSDs.
-> 
->     The extra increment is causing device resets to hang.
-> 
->      - Resets wait for all device outstanding commands to complete before
->        returning.
-> 
->     Replace unused field abort_pending with retry_pending. This is a
->     maintenance driver so these changes have the least impact/risk.
-> 
->     Link: https://lore.kernel.org/r/161342801747.29388.13045495968308188518.stgit@brunhilda
->     Tested-by: Joe Szczypek <jszczype@redhat.com>
->     Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
->     Reviewed-by: Scott Teel <scott.teel@microchip.com>
->     Reviewed-by: Tomas Henzl <thenzl@redhat.com>
->     Signed-off-by: Don Brace <don.brace@microchip.com>
->     Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-> 
-> Don, do you happen to know why this patch caused some controller init failure
-> for device
->     14:01.0 RAID bus controller: Hewlett-Packard Company Smart Array P600
-> ?
-> 
-> Boot failure: https://dev.gentoo.org/~slyfox/configs/guppy-dmesg-5.12-rc1
-> Boot success: https://dev.gentoo.org/~slyfox/configs/guppy-dmesg-5.12-rc1-good
-> 
-> The difference between the two boots is 
-> f749d8b7a9896bc6e5ffe104cc64345037e0b152 reverted on top of 5.12-rc1
-> in -good case.
-> 
-> Looks like hpsa controller fails to initialize in bad case (could be a race?).
+> storvsc currently sets .dma_boundary to limit scatterlist entries
+> to 4 Kbytes, which is less efficient with huge pages that offer
+> large chunks of contiguous physical memory. Improve the algorithm
+> for creating the Hyper-V guest physical address PFN array so
+> that scatterlist entries with lengths > 4Kbytes are handled.
+> As a result, remove the .dma_boundary setting.
+>
+> The improved algorithm also adds support for scatterlist
+> entries with offsets >= 4Kbytes, which is supported by many
+> other SCSI low-level drivers.  And it retains support for
+> architectures where possibly PAGE_SIZE != HV_HYP_PAGE_SIZE
+> (such as ARM64).
+>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>
+> Changes in v2:
+> * Add HVPFN_DOWN() macro and use it instead of open coding
+>   [Vitaly Kuznetsov]
+> * Change loop that fills pfn array and its initialization
+>   [Vitaly Kuznetsov]
+> * Use offset_in_hvpage() instead of open coding
+>
+>
+>  drivers/scsi/storvsc_drv.c | 66 ++++++++++++++++------------------------------
+>  include/linux/hyperv.h     |  1 +
+>  2 files changed, 24 insertions(+), 43 deletions(-)
+>
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index 2e4fa77..5ba3145 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -1678,9 +1678,8 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>  	struct storvsc_cmd_request *cmd_request = scsi_cmd_priv(scmnd);
+>  	int i;
+>  	struct scatterlist *sgl;
+> -	unsigned int sg_count = 0;
+> +	unsigned int sg_count;
+>  	struct vmscsi_request *vm_srb;
+> -	struct scatterlist *cur_sgl;
+>  	struct vmbus_packet_mpb_array  *payload;
+>  	u32 payload_sz;
+>  	u32 length;
+> @@ -1759,8 +1758,8 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>  	payload_sz = sizeof(cmd_request->mpb);
+>  
+>  	if (sg_count) {
+> -		unsigned int hvpgoff = 0;
+> -		unsigned long offset_in_hvpg = sgl->offset & ~HV_HYP_PAGE_MASK;
+> +		unsigned int hvpgoff, hvpfns_to_add;
+> +		unsigned long offset_in_hvpg = offset_in_hvpage(sgl->offset);
+>  		unsigned int hvpg_count = HVPFN_UP(offset_in_hvpg + length);
+>  		u64 hvpfn;
+>  
+> @@ -1773,51 +1772,34 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>  				return SCSI_MLQUEUE_DEVICE_BUSY;
+>  		}
+>  
+> -		/*
+> -		 * sgl is a list of PAGEs, and payload->range.pfn_array
+> -		 * expects the page number in the unit of HV_HYP_PAGE_SIZE (the
+> -		 * page size that Hyper-V uses, so here we need to divide PAGEs
+> -		 * into HV_HYP_PAGE in case that PAGE_SIZE > HV_HYP_PAGE_SIZE.
+> -		 * Besides, payload->range.offset should be the offset in one
+> -		 * HV_HYP_PAGE.
+> -		 */
+>  		payload->range.len = length;
+>  		payload->range.offset = offset_in_hvpg;
+> -		hvpgoff = sgl->offset >> HV_HYP_PAGE_SHIFT;
+>  
+> -		cur_sgl = sgl;
+> -		for (i = 0; i < hvpg_count; i++) {
+> +
+> +		for (i = 0; sgl != NULL; sgl = sg_next(sgl)) {
+>  			/*
+> -			 * 'i' is the index of hv pages in the payload and
+> -			 * 'hvpgoff' is the offset (in hv pages) of the first
+> -			 * hv page in the the first page. The relationship
+> -			 * between the sum of 'i' and 'hvpgoff' and the offset
+> -			 * (in hv pages) in a payload page ('hvpgoff_in_page')
+> -			 * is as follow:
+> -			 *
+> -			 * |------------------ PAGE -------------------|
+> -			 * |   NR_HV_HYP_PAGES_IN_PAGE hvpgs in total  |
+> -			 * |hvpg|hvpg| ...              |hvpg|... |hvpg|
+> -			 * ^         ^                                 ^                 ^
+> -			 * +-hvpgoff-+                                 +-hvpgoff_in_page-+
+> -			 *           ^                                                   |
+> -			 *           +--------------------- i ---------------------------+
+> +			 * Init values for the current sgl entry. hvpgoff
+> +			 * and hvpfns_to_add are in units of Hyper-V size
+> +			 * pages. Handling the PAGE_SIZE != HV_HYP_PAGE_SIZE
+> +			 * case also handles values of sgl->offset that are
+> +			 * larger than PAGE_SIZE. Such offsets are handled
+> +			 * even on other than the first sgl entry, provided
+> +			 * they are a multiple of PAGE_SIZE.
+>  			 */
+> -			unsigned int hvpgoff_in_page =
+> -				(i + hvpgoff) % NR_HV_HYP_PAGES_IN_PAGE;
+> +			hvpgoff = HVPFN_DOWN(sgl->offset);
+> +			hvpfn = page_to_hvpfn(sg_page(sgl)) + hvpgoff;
+> +			hvpfns_to_add =	HVPFN_UP(sgl->offset + sgl->length) -
+> +						hvpgoff;
+>  
+>  			/*
+> -			 * Two cases that we need to fetch a page:
+> -			 * 1) i == 0, the first step or
+> -			 * 2) hvpgoff_in_page == 0, when we reach the boundary
+> -			 *    of a page.
+> +			 * Fill the next portion of the PFN array with
+> +			 * sequential Hyper-V PFNs for the continguous physical
+> +			 * memory described by the sgl entry. The end of the
+> +			 * last sgl should be reached at the same time that
+> +			 * the PFN array is filled.
+>  			 */
+> -			if (hvpgoff_in_page == 0 || i == 0) {
+> -				hvpfn = page_to_hvpfn(sg_page(cur_sgl));
+> -				cur_sgl = sg_next(cur_sgl);
+> -			}
+> -
+> -			payload->range.pfn_array[i] = hvpfn + hvpgoff_in_page;
+> +			while (hvpfns_to_add--)
+> +				payload->range.pfn_array[i++] =	hvpfn++;
+>  		}
+>  	}
+>  
+> @@ -1851,8 +1833,6 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>  	.slave_configure =	storvsc_device_configure,
+>  	.cmd_per_lun =		2048,
+>  	.this_id =		-1,
+> -	/* Make sure we dont get a sg segment crosses a page boundary */
+> -	.dma_boundary =		PAGE_SIZE-1,
+>  	/* Ensure there are no gaps in presented sgls */
+>  	.virt_boundary_mask =	PAGE_SIZE-1,
+>  	.no_write_same =	1,
+> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+> index 5ddb479..a1eed76 100644
+> --- a/include/linux/hyperv.h
+> +++ b/include/linux/hyperv.h
+> @@ -1717,6 +1717,7 @@ static inline unsigned long virt_to_hvpfn(void *addr)
+>  #define NR_HV_HYP_PAGES_IN_PAGE	(PAGE_SIZE / HV_HYP_PAGE_SIZE)
+>  #define offset_in_hvpage(ptr)	((unsigned long)(ptr) & ~HV_HYP_PAGE_MASK)
+>  #define HVPFN_UP(x)	(((x) + HV_HYP_PAGE_SIZE-1) >> HV_HYP_PAGE_SHIFT)
+> +#define HVPFN_DOWN(x)	((x) >> HV_HYP_PAGE_SHIFT)
+>  #define page_to_hvpfn(page)	(page_to_pfn(page) * NR_HV_HYP_PAGES_IN_PAGE)
+>  
+>  #endif /* _HYPERV_H */
 
-Also CCing hpsa maintainer mailing lists.
+Thank you for implementing my suggestion in v2,
 
-Looking more into the suspect commit
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f749d8b7a9896bc6e5ffe104cc64345037e0b152
-it roughly does the:
-
-@@ -448,7 +448,7 @@ struct CommandList {
- 	 */
- 	struct hpsa_scsi_dev_t *phys_disk;
- 
--	int abort_pending;
-+	bool retry_pending;
- 	struct hpsa_scsi_dev_t *device;
- 	atomic_t refcount; /* Must be last to avoid memset in hpsa_cmd_init() */
- } __aligned(COMMANDLIST_ALIGNMENT);
-...
-@@ -1151,7 +1151,10 @@ static void __enqueue_cmd_and_start_io(struct ctlr_info *h,
- {
-        dial_down_lockup_detection_during_fw_flash(h, c);
-        atomic_inc(&h->commands_outstanding);
--       if (c->device)
-+       /*
-+        * Check to see if the command is being retried.
-+        */
-+       if (c->device && !c->retry_pending)
-                atomic_inc(&c->device->commands_outstanding);
-
-But I don't immediately see anything wrong with it.
+Reviewed-by:  Vitaly Kuznetsov <vkuznets@redhat.com>
 
 -- 
+Vitaly
 
-  Sergei
