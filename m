@@ -2,122 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB2632CE9C
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 09:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38AF32CFA5
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Mar 2021 10:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbhCDIiV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 Mar 2021 03:38:21 -0500
-Received: from z11.mailgun.us ([104.130.96.11]:42636 "EHLO z11.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236124AbhCDIhw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 4 Mar 2021 03:37:52 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1614847049; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=mEqUGAmQIw80rVkgfOpohiF/Cg6qjh2EbNOd+LrIMdU=;
- b=CSfdbUYHiREjolyniy2AMfE+OaMpGL/NVGL7CoUUXlP7JYanSw2kRQUiRqMb7d6aFkqNwR42
- Xjjnh47nc70JSzlfMDe5jZ0NWw6eSCqYga7OzDH6OrozVeITKyfbiqUgc6TebHAWwpbI7+Fs
- O4e8xDHQ4W/W1i51KhWVWBJH3Ks=
-X-Mailgun-Sending-Ip: 104.130.96.11
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 60409c431a5c93533f2ab510 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 04 Mar 2021 08:37:23
- GMT
-Sender: cang=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 993F8C43462; Thu,  4 Mar 2021 08:37:22 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id DF3DFC433C6;
-        Thu,  4 Mar 2021 08:37:21 +0000 (UTC)
+        id S237550AbhCDJ3C (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 Mar 2021 04:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237502AbhCDJ2a (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 Mar 2021 04:28:30 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1372EC061756
+        for <linux-scsi@vger.kernel.org>; Thu,  4 Mar 2021 01:27:50 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id do6so48067590ejc.3
+        for <linux-scsi@vger.kernel.org>; Thu, 04 Mar 2021 01:27:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloud.ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tPzgvcfuQI2TTIkS6HPusvjeYhr+bcNBY0z/OD4coVM=;
+        b=R6JYpfsOiR9nidZUjJjrRlFwbAZJP8DQqu6lc8kJVeLDfw5Lb/R3P5kgFnPoexIuQO
+         BiFIAxgme2g5L5WB56v+i03nrrIHEyVD3uNhSFCKzOuy8gbaiWJpmh/Sou9qsYeg+tVP
+         UoUcl7dFdszgl8cONA7yf/1rcOZTUCDHQ3yGAr/YU0Tg6ll5VMUxvqrqZipnzIRS2Qpl
+         QB070coqG7pQF+//0zxuVg9A7T7Av+BDPS2PPWze2h1jxMpLUfspDEtXC5qnS5F1iSdX
+         pnMIh/qCcu9HlHPo5Q51nOhXc4pcLob1YC+f7yWRe4840Q7gfFO6Nx380U2E02g4gb2P
+         wRvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tPzgvcfuQI2TTIkS6HPusvjeYhr+bcNBY0z/OD4coVM=;
+        b=lEhq3HTZG1OghWhcMQjihnyvr1b44o1phlc98AUsSvjV59P+U/SazU7yLpwTm4FqW3
+         sHZRj+mMW82Mp8e0b1+j8FqVS6jjjbSf5H+ravQ+Cbj0RFp1ST68vVqebpuueLxICW8o
+         4bv060FgHoWyCnNadr6aDaQOA3+I9pWmhP+fypZ7WwCi/n6fsOuHDrg5Dp6cxVxvsd3Z
+         dlYAdgMMDiCFYVFV6d62egGnWdY47j0Tz8aaS11pnp7umQKvjMd2F/AN2FvbcileBTfS
+         3IUKZjJE5wPgmkUUap+4QKQpCaBNAd48zsAcyTsrpKcf/WsXEywbM6Jz31AfbeslfR+b
+         IAlA==
+X-Gm-Message-State: AOAM533yEM/wGPWMQ7/OLV6eeUsKHXAk+xlHJk9gYQQFcSUukORmUBQv
+        wmtervqpox5rYYHDTTJSXBqvhTOll6pzMKn6xGQ4bg==
+X-Google-Smtp-Source: ABdhPJzExbZOBdmDX8PiD5oVV+cXTqVhSeHsbXtirlc8si3GPxmdF3nCoZAvhxNQqkauMCPUTGqAkYKds7JNlNKpu8g=
+X-Received: by 2002:a17:906:d18e:: with SMTP id c14mr3107344ejz.62.1614850068851;
+ Thu, 04 Mar 2021 01:27:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 04 Mar 2021 16:37:21 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Bean Huo <huobean@gmail.com>
-Cc:     daejun7.park@samsung.com, Greg KH <gregkh@linuxfoundation.org>,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, asutoshd@codeaurora.org,
-        stanley.chu@mediatek.com, bvanassche@acm.org,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        JinHwan Park <jh.i.park@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        SEUNGUK SHIN <seunguk.shin@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-Subject: Re: [PATCH v26 4/4] scsi: ufs: Add HPB 2.0 support
-In-Reply-To: <2f1b8ff5aec540ef731bf5b2c3691dd23ea2e6b0.camel@gmail.com>
-References: <20210303062633epcms2p252227acd30ad15c1ca821d7e3f547b9e@epcms2p2>
- <CGME20210303062633epcms2p252227acd30ad15c1ca821d7e3f547b9e@epcms2p6>
- <20210303062926epcms2p6aa6737e5ed3916eed9ab80011aad3d83@epcms2p6>
- <2f1b8ff5aec540ef731bf5b2c3691dd23ea2e6b0.camel@gmail.com>
-Message-ID: <bffa984b28a4b3a8af3eefba39de6b18@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+References: <20210224155802.13292-1-Viswas.G@microchip.com> <20210224155802.13292-2-Viswas.G@microchip.com>
+In-Reply-To: <20210224155802.13292-2-Viswas.G@microchip.com>
+From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Date:   Thu, 4 Mar 2021 10:27:38 +0100
+Message-ID: <CAMGffEk2cDmnyusWRmABpCLrBAe3if0U8FKz-9M3mMvE_rEGJA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] pm80xx: Add sysfs attribute to check mpi state
+To:     Viswas G <Viswas.G@microchip.com>
+Cc:     Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
+        Vasanthalakshmi.Tharmarajan@microchip.com,
+        Ruksar.devadi@microchip.com,
+        Vishakha Channapattan <vishakhavc@google.com>,
+        Radha Ramachandran <radha@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2021-03-03 22:50, Bean Huo wrote:
-> On Wed, 2021-03-03 at 15:29 +0900, Daejun Park wrote:
->> +
->> +static inline void ufshpb_put_pre_req(struct ufshpb_lu *hpb,
->> +                                     struct ufshpb_req *pre_req)
->> +{
->> +       pre_req->req = NULL;
->> +       pre_req->bio = NULL;
->> +       list_add_tail(&pre_req->list_req, &hpb->lh_pre_req_free);
->> +       hpb->num_inflight_pre_req--;
->> +}
->> +
->> +static void ufshpb_pre_req_compl_fn(struct request *req,
->> blk_status_t error)
->> +{
->> +       struct ufshpb_req *pre_req = (struct ufshpb_req *)req-
->> >end_io_data;
->> +       struct ufshpb_lu *hpb = pre_req->hpb;
->> +       unsigned long flags;
->> +       struct scsi_sense_hdr sshdr;
->> +
->> +       if (error) {
->> +               dev_err(&hpb->sdev_ufs_lu->sdev_dev, "block status
->> %d", error);
->> +               scsi_normalize_sense(pre_req->sense,
->> SCSI_SENSE_BUFFERSIZE,
->> +                                    &sshdr);
->> +               dev_err(&hpb->sdev_ufs_lu->sdev_dev,
->> +                       "code %x sense_key %x asc %x ascq %x",
->> +                       sshdr.response_code,
->> +                       sshdr.sense_key, sshdr.asc, sshdr.ascq);
->> +               dev_err(&hpb->sdev_ufs_lu->sdev_dev,
->> +                       "byte4 %x byte5 %x byte6 %x additional_len
->> %x",
->> +                       sshdr.byte4, sshdr.byte5,
->> +                       sshdr.byte6, sshdr.additional_length);
->> +       }
-> 
-> 
-> How can you print out sense_key and sense code here? sense code will
-> not be copied to pre_req->sense. you should directly use
-> scsi_request->sense or let pre_req->sense point to scsi_request->sense.
-> 
-> You update the new version patch so quickly. In another word, I am
-> wondering if you tested your patch before submitting?
-> 
-> Bean
+On Wed, Feb 24, 2021 at 4:48 PM Viswas G <Viswas.G@microchip.com> wrote:
+>
+> From: Vishakha Channapattan <vishakhavc@google.com>
+>
+> A new sysfs variable 'ctl_mpi_state' is being introduced to
+> check the state of mpi.
+>
+> Tested: Using 'ctl_mpi_state' sysfs variable we check the mpi state
+> mvae14:~# cat /sys/class/scsi_host/host*/ctl_mpi_state
+> MPI-S=MPI is successfully initialized   HMI_ERR=0
+> MPI-S=MPI is successfully initialized   HMI_ERR=0
+>
+> Signed-off-by: Vishakha Channapattan <vishakhavc@google.com>
+> Signed-off-by: Viswas G <Viswas.G@microchip.com>
+> Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
+> Signed-off-by: Ashokkumar N <Ashokkumar.N@microchip.com>
+> Signed-off-by: Radha Ramachandran <radha@google.com>
+> ---
+>  drivers/scsi/pm8001/pm8001_ctl.c | 36 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 35 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+> index 12035baf0997..035969ed1c2e 100644
+> --- a/drivers/scsi/pm8001/pm8001_ctl.c
+> +++ b/drivers/scsi/pm8001/pm8001_ctl.c
+> @@ -41,6 +41,7 @@
+>  #include <linux/slab.h>
+>  #include "pm8001_sas.h"
+>  #include "pm8001_ctl.h"
+> +#include "pm8001_chips.h"
+>
+>  /* scsi host attributes */
+>
+> @@ -883,9 +884,41 @@ static ssize_t pm8001_show_update_fw(struct device *cdev,
+>                         flash_error_table[i].err_code,
+>                         flash_error_table[i].reason);
+>  }
+> -
+>  static DEVICE_ATTR(update_fw, S_IRUGO|S_IWUSR|S_IWGRP,
+>         pm8001_show_update_fw, pm8001_store_update_fw);
+> +
+> +/**
+> + * ctl_mpi_state_show - controller MPI state check
+> + * @cdev: pointer to embedded class device
+> + * @buf: the buffer returned
+> + *
+> + * A sysfs 'read-only' shost attribute.
+> + */
+> +
+> +char mpiStateText[][80] = {
+> +       "MPI is not initialized",
+> +       "MPI is successfully initialized",
+> +       "MPI termination is in progress",
+> +       "MPI initialization failed with error in [31:16]"
+> +};
+> +
+> +static ssize_t ctl_mpi_state_show(struct device *cdev,
+> +               struct device_attribute *attr, char *buf)
+> +{
+> +       struct Scsi_Host *shost = class_to_shost(cdev);
+> +       struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+> +       struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+> +       unsigned int mpidw0 = 0;
+> +       int c;
+> +
+> +       pm8001_dbg(pm8001_ha, IOCTL, "%s\n", __func__);
+> +       mpidw0 = pm8001_mr32(pm8001_ha->general_stat_tbl_addr, 0);
+> +       c = sprintf(buf, "MPI-S=%s\t HMI_ERR=%x\n", mpiStateText[mpidw0 & 0x0003],
+> +                       ((mpidw0 & 0xff00) >> 16));
+> +       return c;
+> +}
+> +static DEVICE_ATTR_RO(ctl_mpi_state);
+> +
+New file should use  sysfs_emit instead of sprintf.
 
-Bean is right about the sense buffer...
+Thanks!
