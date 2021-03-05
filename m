@@ -2,159 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F67B32E669
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Mar 2021 11:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9171532E66D
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Mar 2021 11:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbhCEK34 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Mar 2021 05:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S229642AbhCEKaZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 Mar 2021 05:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbhCEK3w (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Mar 2021 05:29:52 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA53C061574
-        for <linux-scsi@vger.kernel.org>; Fri,  5 Mar 2021 02:29:52 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id o38so1066105pgm.9
-        for <linux-scsi@vger.kernel.org>; Fri, 05 Mar 2021 02:29:52 -0800 (PST)
+        with ESMTP id S229813AbhCEK3z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Mar 2021 05:29:55 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED97BC061574
+        for <linux-scsi@vger.kernel.org>; Fri,  5 Mar 2021 02:29:54 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id x29so1067938pgk.6
+        for <linux-scsi@vger.kernel.org>; Fri, 05 Mar 2021 02:29:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=EECy5bSckiPYGsnBg4Zcm/6sLlGAk9HQRcTK7FGBack=;
-        b=E8uKG732gPkmd+puKqhONNT+d3nuzHEXA53pKuCin4SkGhmcRUUFbOWUDhrno1MTQX
-         zG4qeHGH8morXFivIczPiTi9+K/nJfKifIMDzskoRD78drFPwnTW6i4241DaEm59ywJu
-         UQyoSwzGgRTzESQzGatGXayZ8DolVSiNHyxqg=
+        bh=TjDhSOZ1UtHy3WTIzoB0KQNp1k0QBeXJxthNjGnL2Vg=;
+        b=S+Md4r6I6c28WIbsVgoRyV9F0DTWhUIs8NHfALCWaU4O6CeB0rdHIaKrIHcLkV1cjd
+         KSfA9yRErgnemPuMfcK99Lk2BjdJfB4kPnsfZi+MFSq2/c/czSYIs7FMM0ZFWecT1mQ6
+         AxLmb1jNx61JrvZf7EcGHAX56DyC50w1OchtA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=EECy5bSckiPYGsnBg4Zcm/6sLlGAk9HQRcTK7FGBack=;
-        b=ZpIjkGhPWAO6NJX8bjJtpe5ETzaWy1OQswc9mSL1Bj88J39h2UJl0TRYAar8ZpE8JF
-         r7UMgJCUm2NISEc8PkurJGqOYpwIIr2HCVVZIqJarb91WlIikbRoPNqgY/d+LYTcOksm
-         DMAYn5wMl8WEywPY/ckCNXTEjXelV7GfBOlUK3l+UKOA6GTeNprX1OA5Qib3BQj/QM1q
-         PxAF32gSOsMMH5RaY7tweNQpdP1qh/aMwkvI/I/jD2qyH9uFgAmHN+BFT7X/pTXl4GJp
-         6vw8pOLVqMkIhdPoTgUiQX5HJRifjri3ZSsoaHriCXhXRDORlpdw//pCE115Ol8u+n9W
-         sZiA==
-X-Gm-Message-State: AOAM530ZSh5kl+M0UhBfIwtyNXbP2X5CdACheqazDwDPnpyQ0ecP/4GG
-        RJn8K08K2Jav8WMLpwqNiitrEQmIT4su+3UN+ERAfjxK0vA/UL42KDedAZinT/0ldqLmNd0lKzo
-        MLBCGhTyqdf/S6ot8DJn74BStVjlrD6RAUwDyrB2eXTveHA7qz4KY7EPJxB89XAlXMq7rrT1jCb
-        clQiUFIOXan37aQT2B+PRG
-X-Google-Smtp-Source: ABdhPJzNpBrmMsm9TXpo8toDyt6E2p2OIKG1MOArmDLY9V37kb9l6kU7nqiyqVTHDaRveIwo6VPHpw==
-X-Received: by 2002:aa7:900e:0:b029:1ee:14ea:f719 with SMTP id m14-20020aa7900e0000b02901ee14eaf719mr8327517pfo.46.1614940191161;
-        Fri, 05 Mar 2021 02:29:51 -0800 (PST)
+        bh=TjDhSOZ1UtHy3WTIzoB0KQNp1k0QBeXJxthNjGnL2Vg=;
+        b=sjyvz9TeR79S9F9fFJwiU+2gc/3bsIEQ34FESbRTReCXxAmP8Z/0O0atuMUmvNRN/Z
+         gOgxxpN7EklQeHQkggAyl+eUOGEAF/uWbT4vo6Y7MSfq8I1c+/abogFCSlI2DXTuyD+a
+         THqnDCo3g7N5kMp3ITKZ9q0WekypntKS2oqlGnOGCYgFMwGnZ64AUWM1rQ0PvG+SEdAa
+         CxpvoZQbSzdO1d6OoqRfnqyivZrBZUgUfkDW/KPg6c1/HpUteQBRPM7ym/nshjMnc/9x
+         uTXWA/orTEWlRCCHYQF7Gtw/seUcIcgfCeRdEj2H5tFhObkw+FwRb2qwiAJXR7ktO3Q5
+         8RGA==
+X-Gm-Message-State: AOAM531Mjm1fqLyhYB36Viksuc5cPuPANocDpw7HDLm4NF7M5CnsDPVh
+        XCXgVJzAAwg/Nu1fVVwA9XthiWxlstOyDSK6X+HQ9/P7lp9CfTXdP4BRVpoAX7pYUYSng4rfh6T
+        wt/4tPMT4lC/zUlwLKqlNdJOtOXW8ICpViCNQ5pgiwOLJy/5+esZWC7sGfEos+7GgvGIetQP8+7
+        Cdx3UOjqvD3KvzQNa6PEjz
+X-Google-Smtp-Source: ABdhPJyBt6WUH1a/i+Uhs1gcUc1Hr/Qn/4mEunANE1a9imsFmZW4Awp0mnFwBE3JQGS/+yGEQ9LS1A==
+X-Received: by 2002:a63:4084:: with SMTP id n126mr7781069pga.80.1614940193650;
+        Fri, 05 Mar 2021 02:29:53 -0800 (PST)
 Received: from dhcp-10-123-20-76.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id v15sm2015983pgl.44.2021.03.05.02.29.49
+        by smtp.gmail.com with ESMTPSA id v15sm2015983pgl.44.2021.03.05.02.29.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Mar 2021 02:29:50 -0800 (PST)
+        Fri, 05 Mar 2021 02:29:53 -0800 (PST)
 From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
 Cc:     Sathya.Prakash@broadcom.com, sreekanth.reddy@broadcom.com,
         Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-Subject: [PATCH 6/7] mpt3sas: Handle reply post array DMA allocations in same  4G region
-Date:   Fri,  5 Mar 2021 15:59:03 +0530
-Message-Id: <20210305102904.7560-7-suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH 7/7] mpt3sas : Update driver version to 37.101.00.00
+Date:   Fri,  5 Mar 2021 15:59:04 +0530
+Message-Id: <20210305102904.7560-8-suganath-prabu.subramani@broadcom.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210305102904.7560-1-suganath-prabu.subramani@broadcom.com>
 References: <20210305102904.7560-1-suganath-prabu.subramani@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007cfb1405bcc790c4"
+        boundary="0000000000009fa80305bcc79035"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000007cfb1405bcc790c4
+--0000000000009fa80305bcc79035
 Content-Transfer-Encoding: 8bit
 
-According to MPI Specification Reply post Array buffer should not cross
-4GB boundary. So while allocating Reply Post Array buffer, if it
-crosses the 4GB boundary then,
-* Release the already allocated memory pools and
-* Reallocate them by changing the DMA coherent mask to 32 bit.
+Update driver version to 37.101.00.00
 
 Signed-off-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 55 ++++++++++++++++++++---------
- 1 file changed, 39 insertions(+), 16 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index bd180db..a74aab9 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -5630,6 +5630,39 @@ _base_allocate_reply_free_dma_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 	return 0;
- }
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index b86eced..98558d9 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -77,9 +77,9 @@
+ #define MPT3SAS_DRIVER_NAME		"mpt3sas"
+ #define MPT3SAS_AUTHOR "Avago Technologies <MPT-FusionLinux.pdl@avagotech.com>"
+ #define MPT3SAS_DESCRIPTION	"LSI MPT Fusion SAS 3.0 Device Driver"
+-#define MPT3SAS_DRIVER_VERSION		"37.100.00.00"
++#define MPT3SAS_DRIVER_VERSION		"37.101.00.00"
+ #define MPT3SAS_MAJOR_VERSION		37
+-#define MPT3SAS_MINOR_VERSION		100
++#define MPT3SAS_MINOR_VERSION		101
+ #define MPT3SAS_BUILD_VERSION		0
+ #define MPT3SAS_RELEASE_VERSION	00
  
-+/**
-+ * _base_allocate_reply_post_free_array - Allocating DMA'able memory
-+ *			for reply post free array.
-+ * @ioc: Adapter object
-+ * @reply_post_free_array_sz: DMA Pool size
-+ * Return: 0 for success, non-zero for failure.
-+ */
-+
-+static int
-+_base_allocate_reply_post_free_array(struct MPT3SAS_ADAPTER *ioc,
-+	u32 reply_post_free_array_sz)
-+{
-+	ioc->reply_post_free_array_dma_pool =
-+	    dma_pool_create("reply_post_free_array pool",
-+	    &ioc->pdev->dev, reply_post_free_array_sz, 16, 0);
-+	if (!ioc->reply_post_free_array_dma_pool)
-+		return -ENOMEM;
-+	ioc->reply_post_free_array =
-+	    dma_pool_alloc(ioc->reply_post_free_array_dma_pool,
-+	    GFP_KERNEL, &ioc->reply_post_free_array_dma);
-+	if (!ioc->reply_post_free_array)
-+		return -EAGAIN;
-+	if (!mpt3sas_check_same_4gb_region((long)ioc->reply_post_free_array,
-+	    reply_post_free_array_sz)) {
-+		dinitprintk(ioc, pr_err(
-+		    "Bad Reply Free Pool! Reply Free (0x%p) Reply Free dma = (0x%llx)\n",
-+		    ioc->reply_free,
-+		    (unsigned long long) ioc->reply_free_dma));
-+		ioc->use_32bit_dma = true;
-+		return -EAGAIN;
-+	}
-+	return 0;
-+}
- /**
-  * base_alloc_rdpq_dma_pool - Allocating DMA'able memory
-  *                     for reply queues.
-@@ -6102,22 +6135,12 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
- 	if (ioc->rdpq_array_enable) {
- 		reply_post_free_array_sz = ioc->reply_queue_count *
- 		    sizeof(Mpi2IOCInitRDPQArrayEntry);
--		ioc->reply_post_free_array_dma_pool =
--		    dma_pool_create("reply_post_free_array pool",
--		    &ioc->pdev->dev, reply_post_free_array_sz, 16, 0);
--		if (!ioc->reply_post_free_array_dma_pool) {
--			dinitprintk(ioc,
--				    ioc_info(ioc, "reply_post_free_array pool: dma_pool_create failed\n"));
--			goto out;
--		}
--		ioc->reply_post_free_array =
--		    dma_pool_alloc(ioc->reply_post_free_array_dma_pool,
--		    GFP_KERNEL, &ioc->reply_post_free_array_dma);
--		if (!ioc->reply_post_free_array) {
--			dinitprintk(ioc,
--				    ioc_info(ioc, "reply_post_free_array pool: dma_pool_alloc failed\n"));
--			goto out;
--		}
-+		rc = _base_allocate_reply_post_free_array(ioc,
-+		    reply_post_free_array_sz);
-+		if (rc == -ENOMEM)
-+			return -ENOMEM;
-+		else if (rc == -EAGAIN)
-+			goto try_32bit_dma;
- 	}
- 	ioc->config_page_sz = 512;
- 	ioc->config_page = dma_alloc_coherent(&ioc->pdev->dev,
 -- 
 2.27.0
 
 
---0000000000007cfb1405bcc790c4
+--0000000000009fa80305bcc79035
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -226,13 +165,13 @@ dDLaJg39U0ikF3NHtNMaXXHgh6TMs3OsWhH4+zlvkC0eSC6dvasGxmpPQPQe/0huBB8gDbzGrRg/
 cRn2ctMmNHxZO4EBJ5SzsV/lHimTk+5K39lzkzYxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQ
 ZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwgHNo/eviKB1udONIwDQYJYIZIAWUDBAIBBQCggdQwLwYJ
-KoZIhvcNAQkEMSIEILv2uTpS7CDEXmUYD4uZ8DrAIEZXnF7kE1l4IrRgoiaLMBgGCSqGSIb3DQEJ
-AzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIxMDMwNTEwMjk1MlowaQYJKoZIhvcNAQkP
+KoZIhvcNAQkEMSIEILZQeuTwvbMjhlTinSztDY3hzbHXETS5LWS9yVW21A8lMBgGCSqGSIb3DQEJ
+AzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIxMDMwNTEwMjk1NFowaQYJKoZIhvcNAQkP
 MVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAL
-BgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAI
-oHRhLhZoibiY5UWvRVn4IxjOIO4AuQmMzW6EMP7uTrctR3+s6PexEh/XoS3EmQqW6G+U/HfInM9b
-adFglzBKs4GDGdo3Fwg+hFZO/4BCKOQ04OseZ7QhOdOfN1Y1wrleXE6+oxFia0/0In54/53SNnTm
-Zdjk4wi1oO2BMLkJMwEE7LUvLJswSYZAb8U/s8npjiKn+XgOB7fsaHYODMh6pX7NmiSDf2ZSTjJA
-qRo4txzo06xHJDWRdvVpjQJvx09nViRpm49L/bYwsK3yfZ9Uj5y0Yy+IN++VU19df6RXGeuCIfsG
-1Yy95UXLx5KSfv3liiXGTNxxZ6cELQBeHX/Y
---0000000000007cfb1405bcc790c4--
+BgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBB
+MkZ4aQh5obrcpZZLQei8J6Lf/lyZHw7Yq7inGPOTK8NiPMglDAnDQLcehuyotcKzk6rtoc3co0tD
+ZVbwabNWgoKGWxmsfEp+NebSD0kQYNlxUVYI73v+PZDjWm8LNmMt/o7uYbX7L6mrCdNPf9Fu1dS+
+y4gbrOr2/K1DRLuofJmvNCdPxvW2QfgaowSQ75NSoBKLKsVNiCqwRdxWDxNGnbjHFAMLx6r9wkhg
+njq/jdHYr0b9IhlJbuhTDxyZWd6d9huTWvDQbyQRqxLh8cb7WpXfN7kwLuFTMytRUsTsgV3ALcjK
+BpeQvVQFTtD3onxSsqi30rbR/GYfvb0YPVGC
+--0000000000009fa80305bcc79035--
