@@ -2,60 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A98032F1EC
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Mar 2021 18:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C6732F35C
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Mar 2021 20:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbhCERzT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Mar 2021 12:55:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
+        id S229693AbhCETA4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 Mar 2021 14:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbhCERys (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Mar 2021 12:54:48 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32780C061574
-        for <linux-scsi@vger.kernel.org>; Fri,  5 Mar 2021 09:54:48 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id d3so1056689uap.4
-        for <linux-scsi@vger.kernel.org>; Fri, 05 Mar 2021 09:54:48 -0800 (PST)
+        with ESMTP id S229446AbhCETAZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Mar 2021 14:00:25 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582B6C061574;
+        Fri,  5 Mar 2021 11:00:25 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id e19so5521130ejt.3;
+        Fri, 05 Mar 2021 11:00:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=T4y7hsWkAfb8OBTEg3avGQFXXvthRmqSS1abQJErodQ=;
-        b=MS284BnbhASHQiTMJ4BAlc0cEwfc1TMDR+saeGAleDvTLqZSXQx541O7H2LKJyn840
-         VHWCEC2oiVd0S70UrQZ/ffhH4LG+qIWJIe9yt9+LN7tCQxnJSvpSahEbXD2N3lEdjM13
-         aatRNJQPyXiZg2scLW+zZfaGnMUsCkPzji+nejC41iWmmPueWg0VPS72wLIoLM9rs4v5
-         i58Ojex4rWCnVYEAWuIcz613G3lyq4rkE6o/k+RbAR6Cx774w+xZTmCRoECdGpAB8Gbq
-         NoSV0qlxd4Qcq0m1pU7hvhkioo7aSAHLfkl7ZN9cxKmxaEY2oscZfO6KvMAVkz/Lp2M8
-         BWNA==
+        h=from:to:cc:subject:date:message-id;
+        bh=KMdaJSUMmLRk5FOS+WMQdoLbWsr2JVXLoAfRRHzV4ac=;
+        b=g+VuYp/6NZtF7tFXTNcHh54w/DG/LYdbEZOL99k+Fdtau+nNyAH/0/sJREFXLJTp60
+         /I7dagVs2fx7vcT+MDtJeg8AnLxhYtVmdoo5dGR63cPaLS/SaIO9dvz19TGjilW2fHjH
+         4x3g6MF1EF9FaNh/JN3Ca8WrxEmpoOURSKKOGtRL6vPs9CT3AEKSugb5i+t8Va+Wz8Nm
+         xOqELjIWSdSmjM0AbSwOyacDD2Z42rvoBuQotgMwQu5i2Y/549peGaKsvplkTcdvvaNC
+         slKdPLBOG/O4SXwxxF/RS7p3o7ZxnpDxtBaKF9vio1WhlOBNpycxg7lb9bzRfhY1afKX
+         cz0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=T4y7hsWkAfb8OBTEg3avGQFXXvthRmqSS1abQJErodQ=;
-        b=RB3WBWHPQAIj9FaykVgU0jKOZVgmhkWDeKvnLQ/Y89G+fERu4Q4kMjFur1mnQp5pwO
-         qfY0ph60c4AbejWc8mJdGZpM+NAGGMVqFMEwxbme8tM+EaRnxrMQFvog+Qugu4VWhVEG
-         V085RHbmwuiMbpaKCsCQQm47GsWM8RHfF0QyVawabThEZ7Ftp/XZ0f8hGZJ7uLC5GPNR
-         lprlRHqI2+ofk5SqaR8dVTrsvw+EUv6k7nD64G+t0pbHAT0oCwN5z+rcirxkgWKHaxEM
-         2G3PVB6bpB1CjzVgjQMX8DuEwY1OojCO7nXy5qElFIh4T63KjHkQb3CY+9HGk9kUraNf
-         Po8Q==
-X-Gm-Message-State: AOAM533okWXbn6sZISl/aIrslZHJrnl+avTzXt8ERhH+hyp4azArmJ2Q
-        2sSrfl9xXciVlao/yzVdHqJYSf9f9j1Wsz5OlBA=
-X-Google-Smtp-Source: ABdhPJz8pREgCTjtxHDNohycOgRys12y5y8+YvZwlnxYmgVaUkP/rp6HDIqbQdSopq770USXqKkq9qOEr7aNxPLQRbk=
-X-Received: by 2002:ab0:205:: with SMTP id 5mr7034130uas.117.1614966887463;
- Fri, 05 Mar 2021 09:54:47 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ab0:7c49:0:0:0:0:0 with HTTP; Fri, 5 Mar 2021 09:54:46 -0800 (PST)
-From:   Fofo Coucou <fofocoucou.fc@gmail.com>
-Date:   Fri, 5 Mar 2021 09:54:47 -0800
-Message-ID: <CADeoM3eou2Dw+vf3fxvMk9OXp3BWDSyB_JQRvxdKUjDds74X7Q@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KMdaJSUMmLRk5FOS+WMQdoLbWsr2JVXLoAfRRHzV4ac=;
+        b=HqE04gUK2u7FNxiAqIdzmLGpibQOhvF+Bh+hdtrt5LjYMs7v8oGg554r6pyLvW0LcA
+         FeVBvNf96jeTDzXNcq7/RgHIrB00NflVY4puBaozhBlh8pdPDc2GrmF4Uu62ZQVvnQ3r
+         r0gObB+Qsnl56QFSKLB3G62szXDjzX6kFZHOhnp7icRyaTOtcHONCvLhdK8mvipCxAMi
+         t141ccmal1LtMVax4FIXRcfYdeWdEbe8K7tSZj97Jojsh0ohe5GlCniqxqDOFADjvLmi
+         en/PKok4wpO+3HVtXFyYjzvQgAEBrPxriuTCWogJ1oR3aiQAtu8b6WlMxs+OzDBaz/eO
+         mijw==
+X-Gm-Message-State: AOAM530W4a7FHsAm5FMg5v5gLOO98fz3CcCqvassbONIdoqJRTyXZaq8
+        GXAesnl0/2YmXYCClwMl7FvKqguqql0=
+X-Google-Smtp-Source: ABdhPJxZ1arKLdcaw7ZzQSDFL+ahdZ1OQzJpcpwVXD4iD9MPDZOTy/TFKFhuoXLQzT0w6CZyx/9lrw==
+X-Received: by 2002:a17:906:38da:: with SMTP id r26mr3785618ejd.251.1614970821991;
+        Fri, 05 Mar 2021 11:00:21 -0800 (PST)
+Received: from localhost ([188.193.20.102])
+        by smtp.gmail.com with ESMTPSA id bv9sm1946269ejb.21.2021.03.05.11.00.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Mar 2021 11:00:21 -0800 (PST)
+From:   Bodo Stroesser <bostroesser@gmail.com>
+To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>
+Cc:     Bodo Stroesser <bostroesser@gmail.com>
+Subject: [PATCH] scsi: target: tcmu: Use GFP_NOIO while handling cmds or holding cmdr_lock
+Date:   Fri,  5 Mar 2021 20:00:09 +0100
+Message-Id: <20210305190009.32242-1-bostroesser@gmail.com>
+X-Mailer: git-send-email 2.12.3
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi
-You received my previous message? I contacted you before but the
-message failed back, so i decided to write again. Please confirm if
-you receive this so that i can proceed.
-Regards,
-petry
+Especially when using tcmu with tcm_loop, memory allocations with
+GFP_KERNEL for a LUN can cause write back to the same LUN.
+
+So we have to use GFP_NOIO when allocation is done while handling
+commands or while holding cmdr_lock.
+
+Signed-off-by: Bodo Stroesser <bostroesser@gmail.com>
+---
+
+This patch is based on Martin's for-next branch plus my short
+series "scsi: target: tcmu: Replace IDR and radix_tree with XArray"
+See:
+ https://lore.kernel.org/linux-scsi/20210224185335.13844-1-bostroesser@gmail.com/
+
+ drivers/target/target_core_user.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index ada3ef982969..9e1b115cb032 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -518,7 +518,7 @@ static inline int tcmu_get_empty_block(struct tcmu_dev *udev,
+ 		if (!page)
+ 			goto err_alloc;
+ 
+-		if (xa_store(&udev->data_blocks, dbi, page, GFP_KERNEL))
++		if (xa_store(&udev->data_blocks, dbi, page, GFP_NOIO))
+ 			goto err_insert;
+ 	}
+ 
+@@ -1272,7 +1272,7 @@ tcmu_tmr_notify(struct se_device *se_dev, enum tcm_tmreq_table tmf,
+ 	pr_debug("TMR event %d on dev %s, aborted cmds %d, afflicted cmd_ids %d\n",
+ 		 tcmu_tmr_type(tmf), udev->name, i, cmd_cnt);
+ 
+-	tmr = kmalloc(sizeof(*tmr) + cmd_cnt * sizeof(*cmd_ids), GFP_KERNEL);
++	tmr = kmalloc(sizeof(*tmr) + cmd_cnt * sizeof(*cmd_ids), GFP_NOIO);
+ 	if (!tmr)
+ 		goto unlock;
+ 
+-- 
+2.12.3
+
