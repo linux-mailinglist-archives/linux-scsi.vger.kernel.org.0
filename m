@@ -2,84 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA33B330023
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Mar 2021 11:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F3633007E
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Mar 2021 12:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbhCGKhP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Mar 2021 05:37:15 -0500
-Received: from wind.enjellic.com ([76.10.64.91]:43800 "EHLO wind.enjellic.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231325AbhCGKg7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 7 Mar 2021 05:36:59 -0500
-X-Greylist: delayed 473 seconds by postgrey-1.27 at vger.kernel.org; Sun, 07 Mar 2021 05:36:59 EST
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 127ASsZJ003728;
-        Sun, 7 Mar 2021 04:28:54 -0600
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 127ASs7F003727;
-        Sun, 7 Mar 2021 04:28:54 -0600
-Date:   Sun, 7 Mar 2021 04:28:54 -0600
-From:   "Dr. G.W. Wettstein" <greg@wind.enjellic.com>
-Message-Id: <202103071028.127ASs7F003727@wind.enjellic.com>
-Reply-To: greg@enjellic.com
-X-Mailer: Mail User's Shell (7.2.6-ESD1.0 03/31/2012)
-To:     linux-scsi@vger.kernel.org
-Subject: qla2xxx initiator mode fails in EXCLUSIVE mode.
-Cc:     bvanassche@acm.org
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Sun, 07 Mar 2021 04:28:54 -0600 (CST)
+        id S230412AbhCGLvf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Mar 2021 06:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230111AbhCGLvO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Mar 2021 06:51:14 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3DBC06174A
+        for <linux-scsi@vger.kernel.org>; Sun,  7 Mar 2021 03:51:14 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id b10so7136845ybn.3
+        for <linux-scsi@vger.kernel.org>; Sun, 07 Mar 2021 03:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=tK9+oluddhYE1y6+vcMj+TPM/NY0V1ncs6jMbGXJvC4=;
+        b=DdYFt/x2qzrAFNrkectk5hCZCFCma3z1en5HcrP9D/YFpLN7f8ErJLdTzV5JDOx97X
+         QUjU6q2AwfuVs3Dh047RH2Nme/aWPx7wxm38nrcB2ek8+BM1vka0mAmOK3g3+A1xDV6Y
+         wpE9q8YZA2bofWcxwwBzfRlm/C0+5sKhHIS2k2NcdnHE0osyalZP949FF4Es8gfKtYKJ
+         1j4acu9aPgKb7/HfMy7sVPBfcoYfVw50zkeJVnBUIPslsIKwGTJ96wejtaQJ8Vv9/XjR
+         YoKClnEijbgsgFlu1W9ghOAygeZfWTo3c2aNSDQHksHZx5TTT18ZYF0/5rIba5ZYJyk3
+         E4Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=tK9+oluddhYE1y6+vcMj+TPM/NY0V1ncs6jMbGXJvC4=;
+        b=nDVikLnmpsOUTWfb7PennV4QKyQp0Eh7graL1tosrcISitDCqA6Yi+99lHWLTXVskt
+         DyQiKaNwA4cjC/XefcAQxJCFdvjfHpbuiGM4T+yF5JVcJ7OW0Uzp35ObWPJG/CsNfVDm
+         Jh961iIdjh01d6bapH5dWZKtIKZA/XdRa49C7Y4vIfGD6lhk94/ndXnb7eGJR4gytK8c
+         KxWWNERFTb5L7iFhBYyxqNHJiYtNqjXmtWFx+4dRdCNSoa+9i4pOpa/bh+j1UFafScXv
+         QdXXW6aR9u9+Uj2URvcZSJDpOkJl+KBVPibGAiiZBs8z0t/IxuKfWiHwFQ+2ufy2R+LQ
+         yfeg==
+X-Gm-Message-State: AOAM532PV0ybP++nwfXNDMelYegd/ftqFroqaCq2XGsjm4HLeduJNy97
+        mZvzScy8vuVyzt2q0Tu+f5omsSNmn4AXzHgEqGo=
+X-Google-Smtp-Source: ABdhPJwXkeOHZVZo9yMwGhmE+xT2fwM3JgD+vlVW4bfkhBDDMxmDu84knT44f+AVNMbss0NuvUfNFeDHc5kOktb9Q40=
+X-Received: by 2002:a25:4054:: with SMTP id n81mr25316424yba.39.1615117873263;
+ Sun, 07 Mar 2021 03:51:13 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:7110:3355:b029:31:9414:7f4 with HTTP; Sun, 7 Mar 2021
+ 03:51:13 -0800 (PST)
+Reply-To: erick_koffa@mail.com
+From:   Erick Koffa <erickerickkoffa@gmail.com>
+Date:   Sun, 7 Mar 2021 12:51:13 +0100
+Message-ID: <CAJ5udMsiA=O7ogA9ZvXCqybtXw82EhAYuo9eumnkb9E8N=bOxA@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi, I hope the weekend is going well for everyone.
-
-In an upgrade to the 5.4 kernel for our storage targets and proxies we
-noted what appears to be a regression with respect to the behavior of
-interfaces that are used in initiator mode when the qlini_ini mode
-variable is set to EXCLUSIVE.
-
-The problem also appears to present itself when qlini_mode is set to
-DUAL.
-
-When the driver initializes, the interface comes up but appears to be
-in a non-functional state.  As a result the enumeration of block
-devices does not occur as would be expected.
-
-Instead the driver ends up initiating a target, bus, adapter reset
-sequence that ultimately ends up with the interface functioning in
-initiator mode, but only after a 3-4 minute delay.
-
-We reproduced this on a 5.11.2 kernel, so the problem still appears to
-be there and is probably in current mainline.
-
-We've reproduced the problem on both 16 GIG (2672) and 32 GIG (2742)
-cards so it doesn't appear to be card specific.
-
-On the switch side (Cisco) we see the interface initially come up when
-the driver initializes the card.  After approximately 60-90 seconds
-the switch notes an NOS event (No Operational Sequences received) and
-then drops and re-enables the interface.  Approximately one minute
-later the interface drops again due to the ADAPTER RESET after which
-everything takes off.
-
-I haven't worked through all of the code paths but it 'feels' like a
-DPC reset or the equivalent is missing when EXCLUSIVE or DUAL mode is
-in effect.
-
-We are in a position to do additional testing if anyone has any
-thoughts.
-
-Have a good week.
-
-Dr. Greg
-
-As always,
-Dr. G.W. Wettstein, Ph.D.   Enjellic Systems Development, LLC.
-4206 N. 19th Ave.           Specializing in information infra-structure
-Fargo, ND  58102            development.
-PH: 701-281-1686            EMAIL: greg@enjellic.com
-------------------------------------------------------------------------------
-"We know that communication is a problem, but the company is not going
- to discuss it with the employees."
-                                -- Switching supervisor
-                                   AT&T Long Lines Division
+Greetings from Mr. Erick Koffa, I can talk to you, very important please
