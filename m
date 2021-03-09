@@ -2,26 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA53332486
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Mar 2021 12:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AB433248C
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Mar 2021 12:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbhCILz2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 9 Mar 2021 06:55:28 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:47948 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbhCILzS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Mar 2021 06:55:18 -0500
-Date:   Tue, 09 Mar 2021 11:55:13 +0000
+        id S230341AbhCILz7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 9 Mar 2021 06:55:59 -0500
+Received: from mail-40131.protonmail.ch ([185.70.40.131]:12862 "EHLO
+        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229980AbhCILz2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Mar 2021 06:55:28 -0500
+Date:   Tue, 09 Mar 2021 11:55:19 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1615290916;
-        bh=VAaoHzPUuviXWZuHpXivJNsABEQ935p5HTpQ7ZaoB2w=;
+        s=protonmail; t=1615290926;
+        bh=brHsaCtOjl6MivQM5JJde4HEiWC8nBnkoSck0wfdshI=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=qNXClnM7sU1Zna0Jl+6S/Fl/ZQzw22kdzuprFtmzzwtcj9PQWUev6tICt2R4yCBv7
-         UZjzcBlV88lGdVAj05iFQ9XHzMjYbrUC2724b1smet0oWqfbq/TGiTw6aUmlrz8A8L
-         kehRn1eRykeuB9AiAHHSDDmcrS6ZbnBhWzDeXl4o=
-To:     caleb@connolly.tech, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
+        b=GcC1guE+S6HRGRa9GM8U1AY983YwbssMHCAIU4NjzLIB/jIVr7XM5zmGplEEwdtD7
+         ZT+bNJ0la6y+cSxkCTicp4wnZ6GNESntpTBOYPeNYjtYK56u5A1CRH6rIQyWp3d8rS
+         tp3BbZuzRRivLrUbe19GNyna6hitJiaBuPC3g1Fk=
+To:     caleb@connolly.tech, Alim Akhtar <alim.akhtar@samsung.com>,
         Avri Altman <avri.altman@wdc.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -29,10 +27,10 @@ From:   Caleb Connolly <caleb@connolly.tech>
 Cc:     ejb@linux.ibm.com, stanley.chu@mediatek.com, cang@codeaurora.org,
         beanhuo@micron.com, jaegeuk@kernel.org, asutoshd@codeaurora.org,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
+        Nitin Rawat <nitirawa@codeaurora.org>
 Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: [PATCH v2 2/3] scsi: ufs: qcom: use ufshci_version function
-Message-ID: <20210309115336.117206-3-caleb@connolly.tech>
+Subject: [PATCH v2 3/3] scsi: ufshcd: remove version check
+Message-ID: <20210309115336.117206-4-caleb@connolly.tech>
 In-Reply-To: <20210309115336.117206-1-caleb@connolly.tech>
 References: <20210309115336.117206-1-caleb@connolly.tech>
 MIME-Version: 1.0
@@ -47,30 +45,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Replace the UFSHCI_VERSION_xy macros.
+This check is redundant as all UFS versions are currently supported.
 
+Signed-off-by: Nitin Rawat <nitirawa@codeaurora.org>
 Signed-off-by: Caleb Connolly <caleb@connolly.tech>
 ---
- drivers/scsi/ufs/ufs-qcom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index f97d7b0ae3b6..2d54dce0eeda 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -809,9 +809,9 @@ static u32 ufs_qcom_get_ufs_hci_version(struct ufs_hba =
-*hba)
- =09struct ufs_qcom_host *host =3D ufshcd_get_variant(hba);
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index a458c248e5ef..a6f317f0dc9b 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -9291,10 +9291,6 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *m=
+mio_base, unsigned int irq)
+ =09/* Get UFS version supported by the controller */
+ =09hba->ufs_version =3D ufshcd_get_ufs_version(hba);
 =20
- =09if (host->hw_ver.major =3D=3D 0x1)
--=09=09return UFSHCI_VERSION_11;
-+=09=09return ufshci_version(1, 1);
- =09else
--=09=09return UFSHCI_VERSION_20;
-+=09=09return ufshci_version(2, 0);
- }
+-=09if (hba->ufs_version < UFSHCI_VER(1, 0))
+-=09=09dev_err(hba->dev, "invalid UFS version 0x%x\n",
+-=09=09=09hba->ufs_version);
+-
+ =09/* Get Interrupt bit mask per version */
+ =09hba->intr_mask =3D ufshcd_get_intr_mask(hba);
 =20
- /**
 --=20
 2.29.2
 
