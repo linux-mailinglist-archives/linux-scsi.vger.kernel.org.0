@@ -2,46 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A16D33489B
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Mar 2021 21:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B19BB334898
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Mar 2021 21:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbhCJUEA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Mar 2021 15:04:00 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:38591 "EHLO
+        id S230215AbhCJUD7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Mar 2021 15:03:59 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:22841 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbhCJUDy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Mar 2021 15:03:54 -0500
+        with ESMTP id S231301AbhCJUDm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Mar 2021 15:03:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1615406633; x=1646942633;
+  t=1615406622; x=1646942622;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=libaO7361Fie9I0PS+qJ50MdjBQBa0J8Ak+x0QGKWdo=;
-  b=ci5fdOc+fnMlwsoydY0vvTJWdpOW+2uRHBCI9nkDmBXzdpcC2BLRUfSu
-   Y6xSbTOWsvl/m/CnJNG5smLomp8I5vAxcGbh3cMuxrrtMGzyoBVSIx32r
-   JP+0sdX2qPx3Dw9fa8/2NpFVLz+CLT0z2ME6apJmyWGnKdJJSe9VVvUlj
-   Rcv+qBaXuJbRCieRNpTf+Ont7qDQ0u2ZDDkxpsay7Zerh5xLig6ahj7AR
-   D4cDyPIeOa2ZVFCywJ9MiCoLap26jNvfBxafRsug+3UYCLj7Cg3ge1EPo
-   Ov4HylSbWqew8+G/rkQooM+8dMBotwBsHy97qDrl4HjkW5T/H/VJOHCML
-   w==;
-IronPort-SDR: Rg9q+vg7ooZ4/jeFoe64tPZFvBgTsLQE7F/Q0B9iMPdupD4yICpw64UflHVH+2lt/gtUkvCvGl
- bjNksnHh2ZUDZM9EmFcBA/TpabVVdMhazAVAENbr6V2erCBX9LgNU/uocMqrDfhZbDVx0S47c0
- v8fqyEvGXvHu8xHiBn9/IxlGX+DshqrLvcHCUmAZ1MLakb5njDZlc9DWNvVNPZgAk4vm2A+FvZ
- ET/IibpKRdLV30xYeJ7ZQD1ATmy4jcn60OjSnUdQ9BneB0x12874tT70kqHAVl8bxVqIqQeA4Z
- BT8=
+  bh=UHTqW8LEwwTZRYjHUQm3G7VLiu8nCxuJ0ishtuLixBk=;
+  b=HOjK1uWAt1zw+e/GGoj/AXxzF6enWMoETMxymGILn8Y4wf8o0VHHzz9G
+   3/iD0lQIrcDnfJyj0ArHzNHVlJAbcT9+J9ogIHl1FUXIztx5ZL9EhVZUJ
+   WyEVLPIit1Bgs6zc5inujGKxaWEiqEj4YNS4CdVnuyX5xQZ5f3u4M++31
+   sMJ2Cbngk1husW/9M3iW+Pfru1VyX6kJnVoWqvx7oAPRV/2VaddeC0JG/
+   xKte2V2i3Z7/AXCUN1kF5wlXorcELq5kfM0v/kkSDuARoK268m5FMfSa+
+   kTi08YI6cbr6nvU2kDkJWLMiHq77Hv9hZMTKutEJqT/dpnkHR+w3JGOkZ
+   A==;
+IronPort-SDR: gd3g48PV7x6UL4E20xX+ApaiH7jR7bkyxtD3otQ1Xng5fBnSEaqkikp1aNFYjXKoa6SybAkC6G
+ U6HhkKnDq14/a+fQr90h4kNBlZA8ZkUaSE0Z9HpIfIiIWSZqyfpifx7psg0Qhm+7TDLySBydoT
+ CgTxkKNgA5twz+muAjVebBDvxc9hvcgn/XCMK1P49oJdZ4xUgWs/hKdU7BsHAiZa5MZ4lnQ6CR
+ ra7v+t4kivmho/9o5x5scsA9xlLhnRagfqkiqWi8rXNCzfIkWRVrBDtNFEKOPMht/FOx01XAWe
+ bTM=
 X-IronPort-AV: E=Sophos;i="5.81,238,1610434800"; 
-   d="scan'208";a="106699618"
+   d="scan'208";a="118389804"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2021 13:03:53 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2021 13:03:41 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 10 Mar 2021 13:03:35 -0700
-Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Wed, 10 Mar 2021 13:03:34 -0700
-Subject: [PATCH V4 29/31] smartpqi: correct system hangs when resuming from
- hibernation
+ 15.1.2176.2; Wed, 10 Mar 2021 13:03:40 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Wed, 10 Mar 2021 13:03:40 -0700
+Subject: [PATCH V4 30/31] smartpqi: add new pci ids
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -50,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
         <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Wed, 10 Mar 2021 14:03:34 -0600
-Message-ID: <161540661452.19430.1006952941211641788.stgit@brunhilda>
+Date:   Wed, 10 Mar 2021 14:03:40 -0600
+Message-ID: <161540662032.19430.6765830964779450761.stgit@brunhilda>
 In-Reply-To: <161540568064.19430.11157730901022265360.stgit@brunhilda>
 References: <161540568064.19430.11157730901022265360.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -64,47 +63,210 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Kevin Barnett <kevin.barnett@microchip.com>
 
-* Correct system hangs when resuming from hibernation after
-  first successful hibernation/resume cycle.
-  * Rare condition involving OFA.
-
-Note: suspend/resume is not supported on many platforms.
-      It was originally intended for workstations. This patch
-      is already in our out-of-box driver and has undergone a
-      lot of testing.
+* Add support for newer HW.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Acked-by: Martin Wilck <mwilck@suse.com>
 Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/scsi/smartpqi/smartpqi_init.c |  156 +++++++++++++++++++++++++++++++++
+ 1 file changed, 156 insertions(+)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 330688c32808..48eddfdf0a08 100644
+index 48eddfdf0a08..ec1859e2e420 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -8651,14 +8651,21 @@ static __maybe_unused int pqi_resume(struct pci_dev *pci_dev)
- 				pci_dev->irq, rc);
- 			return rc;
- 		}
-+		pqi_ctrl_unblock_device_reset(ctrl_info);
- 		pqi_ctrl_unblock_requests(ctrl_info);
- 		pqi_scsi_unblock_requests(ctrl_info);
-+		pqi_ctrl_unblock_scan(ctrl_info);
- 		return 0;
- 	}
- 
- 	pci_set_power_state(pci_dev, PCI_D0);
- 	pci_restore_state(pci_dev);
- 
-+	pqi_ctrl_unblock_device_reset(ctrl_info);
-+	pqi_ctrl_unblock_requests(ctrl_info);
-+	pqi_scsi_unblock_requests(ctrl_info);
-+	pqi_ctrl_unblock_scan(ctrl_info);
-+
- 	return pqi_ctrl_init_resume(ctrl_info);
- }
- 
+@@ -8699,6 +8699,10 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x152d, 0x8a37)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x193d, 0x8460)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x193d, 0x1104)
+@@ -8771,6 +8775,22 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x1bd4, 0x004f)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1bd4, 0x0051)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1bd4, 0x0052)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1bd4, 0x0053)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1bd4, 0x0054)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x19e5, 0xd227)
+@@ -8931,6 +8951,122 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       PCI_VENDOR_ID_ADAPTEC2, 0x1380)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1400)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1402)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1410)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1411)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1412)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1420)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1430)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1440)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1441)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1450)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1452)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1460)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1461)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1462)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1470)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1471)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1472)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1480)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1490)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x1491)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14a0)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14a1)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14b0)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14b1)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14c0)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14c1)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14d0)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14e0)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_ADAPTEC2, 0x14f0)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       PCI_VENDOR_ID_ADVANTECH, 0x8312)
+@@ -8995,6 +9131,10 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       PCI_VENDOR_ID_HP, 0x1001)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       PCI_VENDOR_ID_HP, 0x1002)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       PCI_VENDOR_ID_HP, 0x1100)
+@@ -9003,6 +9143,22 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       PCI_VENDOR_ID_HP, 0x1101)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1590, 0x0294)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1590, 0x02db)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1590, 0x02dc)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1590, 0x032e)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x1d8d, 0x0800)
 
