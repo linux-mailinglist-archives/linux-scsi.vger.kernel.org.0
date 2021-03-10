@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DDB33488E
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Mar 2021 21:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCABB334890
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Mar 2021 21:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbhCJUC5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Mar 2021 15:02:57 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:2512 "EHLO
+        id S232695AbhCJUC6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Mar 2021 15:02:58 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:2524 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbhCJUCn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Mar 2021 15:02:43 -0500
+        with ESMTP id S231126AbhCJUCt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Mar 2021 15:02:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1615406563; x=1646942563;
+  t=1615406569; x=1646942569;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=R/STKQypHgTEIW+z8Uo6IGDqC9JFNMPlcrnG0DuRcoQ=;
-  b=0giqEInLmj2hZv4bEyzgt4noxmS2RMmVgOz8EgtwMhL1gpDWbtdEqKAf
-   +H7LoJRyhfXmyCJOHdKvnTECttLtwh2hXRlzFD6fZ79+lw7VahrbY5tEx
-   4ylxzeqfpGmQEyaJIGogmpr3Ei3OxxDXb+Z3VNzCE00JhTgJuqVATLUxD
-   4jq4+EFaZoooU0swcuA4KJGdgDPNXInpMorNGBuqedAeHFRLnH9cSgNRA
-   STQfIXvsNwmbOOPE6pwjEdGY6W7WZCm9vO0MYw02HuX/mau+Vxdp/Z2v2
-   AV8hfsyivy/NU7okcv0/2KJefb1k/E+ISfUg6xfq/MhKa3jNUcDHyXyvn
+  bh=gFd/zMq8CXWfFvI0HQYANmuc+qxsiLMddheUcUsung8=;
+  b=PqviWHpRxtnGo/7BrB3FhuxfPVYWNB34M143o57J3dsyj/uQiA3kA4Oi
+   /8HPuLtHpTu/DE0k0dUciHAxaecp3KffZ6Ptq0qh6OVE9SNyGzgRW1fEa
+   CxuHltmE1EaN6QbFEGtAiuemutWpdU1SlqqMzujACfWZcglYtQVoMua2B
+   sB0wR/G5Qv92j3lVcNiP20+6LYj1x9P8hMsMgjOFOpCRgs2sFu68Jvmf1
+   xlJjwK+Wf6y+uNQJkwJydPjBomObYEG1tuQK5J1RBvVNS2pSmMGoOnUA8
+   Fj8vZSQTq0yXrHhXeZFema1l55nbFkWHJxorv6tDYY1dtc6W2noXbPdqv
    Q==;
-IronPort-SDR: qVV1PMjxA2dHL3C0WfNQ0wFichZavXjrxjkhxs0fAHdI8fgMKpc/6sLMiHx44yDaGExkUT3Vg5
- 2OOMaPEXYPTgcgRTVzwwDV8qJwHjOF/0tfZ5BcCl5bzvmSkzIwzDbGPa0izNTVbKtd5GMv3APp
- qSKlQVqJMU86vSKLiQFy65zbCTkEDbszjzbHDkPU1cy8pp33qfrw1+amsaKD8vHkgC8WMqsdOp
- As5D9GMiu8Ahx3/4g7+pKxlpCy567waRDJe949DVkaf2InK91r2b1TXtJVW4uTtVhmmFq6VDYm
- Fcs=
+IronPort-SDR: 4SuFUWFaglcT7aIo4urV/xH5xEloliIkleNNMBfAhAW9xQkgT+nT5lVLllxoVyhNPxtyfZ6KS+
+ NmsMM7X8l/kb7ZJEARvPY0/diBl+df7etSLDJoaxOErBZDluz/DZPmjO3dwfWMzXx4LmyGxJTq
+ 9jtM0aYT5SySc7T0ZrHs+Wy238CVM97+kUSFpsdTWoKpRnjMuPeyyiUGedlZHMRGvw+Y6d+jFm
+ RIi3tSQoK/tcHm1ByuMZpIfRCvqtQSad1nwOB9Kni2bB68ERwtsF28KBcdCPlpJ9PMR4eFyQXS
+ DF8=
 X-IronPort-AV: E=Sophos;i="5.81,238,1610434800"; 
-   d="scan'208";a="109505759"
+   d="scan'208";a="109505770"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2021 13:02:43 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2021 13:02:49 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 10 Mar 2021 13:02:42 -0700
+ 15.1.2176.2; Wed, 10 Mar 2021 13:02:48 -0700
 Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Wed, 10 Mar 2021 13:02:41 -0700
-Subject: [PATCH V4 20/31] smartpqi: update raid bypass handling
+ Transport; Wed, 10 Mar 2021 13:02:47 -0700
+Subject: [PATCH V4 21/31] smartpqi: update ofa management
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -49,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
         <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Wed, 10 Mar 2021 14:02:41 -0600
-Message-ID: <161540656181.19430.8015829080211904463.stgit@brunhilda>
+Date:   Wed, 10 Mar 2021 14:02:47 -0600
+Message-ID: <161540656763.19430.15328241537764068794.stgit@brunhilda>
 In-Reply-To: <161540568064.19430.11157730901022265360.stgit@brunhilda>
 References: <161540568064.19430.11157730901022265360.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -63,278 +63,777 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Kevin Barnett <kevin.barnett@microchip.com>
 
-Simplify aio retry management by removing retry list and
-list management. Need to retry is already set in the response status.
-Also remove the bypass worker thread.
+OFA - Online Firmware Activation.
+      Allows users to update firmware without a reboot.
 
-AIO - Accelerated I/O
-  I/O requests bypass the RAID engine and go directly to
-  either an HBA disk or to a physical component of a RAID
-  volume.
+ * Change OFA setup to a worker thread.
+ * Delay soft resets.
+ * Add in OFA event handler to allow FW to
+   initiate OFA.
+ * Add in memory allocation to OFA events.
+   * Update ofa buffer size calculations.
+ * Add in ability to cancel OFA events.
+ * Update OFA quiesce/un-quiesce.
+ * Prevent Kernel crashes while issuing ioctl during OFA.
+ * Returned EBUSY for pass-through IOCTLs throughout
+   all stages of OFA.
+ * Add in mutex to prevent parallel OFA updates.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi.h      |    4 -
- drivers/scsi/smartpqi/smartpqi_init.c |  172 ++++-----------------------------
- 2 files changed, 19 insertions(+), 157 deletions(-)
+ drivers/scsi/smartpqi/smartpqi.h      |   18 +-
+ drivers/scsi/smartpqi/smartpqi_init.c |  374 +++++++++++++++++----------------
+ 2 files changed, 196 insertions(+), 196 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index fa1ebeea777d..1b9aa6e9e04c 100644
+index 1b9aa6e9e04c..0b94c755a74c 100644
 --- a/drivers/scsi/smartpqi/smartpqi.h
 +++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -1347,10 +1347,6 @@ struct pqi_ctrl_info {
+@@ -511,10 +511,6 @@ struct pqi_vendor_general_response {
+ #define PQI_OFA_SIGNATURE		"OFA_QRM"
+ #define PQI_OFA_MAX_SG_DESCRIPTORS	64
+ 
+-#define PQI_OFA_MEMORY_DESCRIPTOR_LENGTH \
+-	(offsetof(struct pqi_ofa_memory, sg_descriptor) + \
+-	(PQI_OFA_MAX_SG_DESCRIPTORS * sizeof(struct pqi_sg_descriptor)))
+-
+ struct pqi_ofa_memory {
+ 	__le64	signature;	/* "OFA_QRM" */
+ 	__le16	version;	/* version of this struct (1 = 1st version) */
+@@ -522,7 +518,7 @@ struct pqi_ofa_memory {
+ 	__le32	bytes_allocated;	/* total allocated memory in bytes */
+ 	__le16	num_memory_descriptors;
+ 	u8	reserved1[2];
+-	struct pqi_sg_descriptor sg_descriptor[1];
++	struct pqi_sg_descriptor sg_descriptor[PQI_OFA_MAX_SG_DESCRIPTORS];
+ };
+ 
+ struct pqi_aio_error_info {
+@@ -1075,7 +1071,6 @@ struct pqi_scsi_dev {
+ 	u8	volume_offline : 1;
+ 	u8	rescan : 1;
+ 	bool	aio_enabled;		/* only valid for physical disks */
+-	bool	in_reset;
+ 	bool	in_remove;
+ 	bool	device_offline;
+ 	u8	vendor[8];		/* bytes 8-15 of inquiry data */
+@@ -1219,8 +1214,6 @@ struct pqi_event {
+ 	u8	event_type;
+ 	u16	event_id;
+ 	u32	additional_event_id;
+-	__le32	ofa_bytes_requested;
+-	__le16	ofa_cancel_reason;
+ };
+ 
+ #define PQI_RESERVED_IO_SLOTS_LUN_RESET			1
+@@ -1292,12 +1285,9 @@ struct pqi_ctrl_info {
+ 
+ 	struct mutex	scan_mutex;
+ 	struct mutex	lun_reset_mutex;
+-	struct mutex	ofa_mutex; /* serialize ofa */
+ 	bool		controller_online;
+ 	bool		block_requests;
+ 	bool		scan_blocked;
+-	bool		in_ofa;
+-	bool		in_shutdown;
+ 	u8		inbound_spanning_supported : 1;
+ 	u8		outbound_spanning_supported : 1;
+ 	u8		pqi_mode_enabled : 1;
+@@ -1347,10 +1337,14 @@ struct pqi_ctrl_info {
  	atomic_t	num_blocked_threads;
  	wait_queue_head_t block_requests_wait;
  
--	struct list_head raid_bypass_retry_list;
--	spinlock_t	raid_bypass_retry_list_lock;
--	struct work_struct raid_bypass_retry_work;
--
++	struct mutex	ofa_mutex;
  	struct pqi_ofa_memory *pqi_ofa_mem_virt_addr;
  	dma_addr_t	pqi_ofa_mem_dma_handle;
  	void		**pqi_ofa_chunk_virt_addr;
+-	atomic_t	sync_cmds_outstanding;
++	struct work_struct ofa_memory_alloc_work;
++	struct work_struct ofa_quiesce_work;
++	u32		ofa_bytes_requested;
++	u16		ofa_cancel_reason;
+ };
+ 
+ enum pqi_ctrl_mode {
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 7d0ab509c2c5..48761cb340c9 100644
+index 48761cb340c9..235be3165006 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -5280,12 +5280,6 @@ static inline int pqi_raid_submit_scsi_cmd(struct pqi_ctrl_info *ctrl_info,
- 		device, scmd, queue_group);
+@@ -45,6 +45,9 @@
+ 
+ #define PQI_EXTRA_SGL_MEMORY	(12 * sizeof(struct pqi_sg_descriptor))
+ 
++#define PQI_POST_RESET_DELAY_SECS			5
++#define PQI_POST_OFA_RESET_DELAY_UPON_TIMEOUT_SECS	10
++
+ MODULE_AUTHOR("Microsemi");
+ MODULE_DESCRIPTION("Driver for Microsemi Smart Family Controller version "
+ 	DRIVER_VERSION);
+@@ -76,9 +79,8 @@ static int pqi_aio_submit_r56_write_io(struct pqi_ctrl_info *ctrl_info,
+ 	struct pqi_scsi_dev_raid_map_data *rmd);
+ static void pqi_ofa_ctrl_quiesce(struct pqi_ctrl_info *ctrl_info);
+ static void pqi_ofa_ctrl_unquiesce(struct pqi_ctrl_info *ctrl_info);
+-static int pqi_ofa_ctrl_restart(struct pqi_ctrl_info *ctrl_info);
+-static void pqi_ofa_setup_host_buffer(struct pqi_ctrl_info *ctrl_info,
+-	u32 bytes_requested);
++static int pqi_ofa_ctrl_restart(struct pqi_ctrl_info *ctrl_info, unsigned int delay_secs);
++static void pqi_ofa_setup_host_buffer(struct pqi_ctrl_info *ctrl_info);
+ static void pqi_ofa_free_host_buffer(struct pqi_ctrl_info *ctrl_info);
+ static int pqi_ofa_host_memory_update(struct pqi_ctrl_info *ctrl_info);
+ static int pqi_device_wait_for_pending_io(struct pqi_ctrl_info *ctrl_info,
+@@ -345,24 +347,25 @@ static inline bool pqi_device_offline(struct pqi_scsi_dev *device)
+ 	return device->device_offline;
  }
  
--static inline void pqi_schedule_bypass_retry(struct pqi_ctrl_info *ctrl_info)
--{
--	if (!pqi_ctrl_blocked(ctrl_info))
--		schedule_work(&ctrl_info->raid_bypass_retry_work);
--}
--
- static bool pqi_raid_bypass_retry_needed(struct pqi_io_request *io_request)
+-static inline bool pqi_device_in_reset(struct pqi_scsi_dev *device)
++static inline void pqi_ctrl_ofa_start(struct pqi_ctrl_info *ctrl_info)
  {
- 	struct scsi_cmnd *scmd;
-@@ -5302,7 +5296,7 @@ static bool pqi_raid_bypass_retry_needed(struct pqi_io_request *io_request)
- 		return false;
- 
- 	device = scmd->device->hostdata;
--	if (pqi_device_offline(device))
-+	if (pqi_device_offline(device) || pqi_device_in_remove(device))
- 		return false;
- 
- 	ctrl_info = shost_to_hba(scmd->device->host);
-@@ -5312,132 +5306,6 @@ static bool pqi_raid_bypass_retry_needed(struct pqi_io_request *io_request)
- 	return true;
+-	return device->in_reset;
++	mutex_lock(&ctrl_info->ofa_mutex);
  }
  
--static inline void pqi_add_to_raid_bypass_retry_list(
--	struct pqi_ctrl_info *ctrl_info,
--	struct pqi_io_request *io_request, bool at_head)
--{
--	unsigned long flags;
--
--	spin_lock_irqsave(&ctrl_info->raid_bypass_retry_list_lock, flags);
--	if (at_head)
--		list_add(&io_request->request_list_entry,
--			&ctrl_info->raid_bypass_retry_list);
--	else
--		list_add_tail(&io_request->request_list_entry,
--			&ctrl_info->raid_bypass_retry_list);
--	spin_unlock_irqrestore(&ctrl_info->raid_bypass_retry_list_lock, flags);
--}
--
--static void pqi_queued_raid_bypass_complete(struct pqi_io_request *io_request,
--	void *context)
--{
--	struct scsi_cmnd *scmd;
--
--	scmd = io_request->scmd;
--	pqi_free_io_request(io_request);
--	pqi_scsi_done(scmd);
--}
--
--static void pqi_queue_raid_bypass_retry(struct pqi_io_request *io_request)
--{
--	struct scsi_cmnd *scmd;
--	struct pqi_ctrl_info *ctrl_info;
--
--	io_request->io_complete_callback = pqi_queued_raid_bypass_complete;
--	scmd = io_request->scmd;
--	scmd->result = 0;
--	ctrl_info = shost_to_hba(scmd->device->host);
--
--	pqi_add_to_raid_bypass_retry_list(ctrl_info, io_request, false);
--	pqi_schedule_bypass_retry(ctrl_info);
--}
--
--static int pqi_retry_raid_bypass(struct pqi_io_request *io_request)
--{
--	struct scsi_cmnd *scmd;
--	struct pqi_scsi_dev *device;
--	struct pqi_ctrl_info *ctrl_info;
--	struct pqi_queue_group *queue_group;
--
--	scmd = io_request->scmd;
--	device = scmd->device->hostdata;
--	if (pqi_device_in_reset(device)) {
--		pqi_free_io_request(io_request);
--		set_host_byte(scmd, DID_RESET);
--		pqi_scsi_done(scmd);
--		return 0;
--	}
--
--	ctrl_info = shost_to_hba(scmd->device->host);
--	queue_group = io_request->queue_group;
--
--	pqi_reinit_io_request(io_request);
--
--	return pqi_raid_submit_scsi_cmd_with_io_request(ctrl_info, io_request,
--		device, scmd, queue_group);
--}
--
--static inline struct pqi_io_request *pqi_next_queued_raid_bypass_request(
--	struct pqi_ctrl_info *ctrl_info)
--{
--	unsigned long flags;
--	struct pqi_io_request *io_request;
--
--	spin_lock_irqsave(&ctrl_info->raid_bypass_retry_list_lock, flags);
--	io_request = list_first_entry_or_null(
--		&ctrl_info->raid_bypass_retry_list,
--		struct pqi_io_request, request_list_entry);
--	if (io_request)
--		list_del(&io_request->request_list_entry);
--	spin_unlock_irqrestore(&ctrl_info->raid_bypass_retry_list_lock, flags);
--
--	return io_request;
--}
--
--static void pqi_retry_raid_bypass_requests(struct pqi_ctrl_info *ctrl_info)
--{
--	int rc;
--	struct pqi_io_request *io_request;
--
--	pqi_ctrl_busy(ctrl_info);
--
--	while (1) {
--		if (pqi_ctrl_blocked(ctrl_info))
--			break;
--		io_request = pqi_next_queued_raid_bypass_request(ctrl_info);
--		if (!io_request)
--			break;
--		rc = pqi_retry_raid_bypass(io_request);
--		if (rc) {
--			pqi_add_to_raid_bypass_retry_list(ctrl_info, io_request,
--				true);
--			pqi_schedule_bypass_retry(ctrl_info);
--			break;
--		}
--	}
--
--	pqi_ctrl_unbusy(ctrl_info);
--}
--
--static void pqi_raid_bypass_retry_worker(struct work_struct *work)
--{
--	struct pqi_ctrl_info *ctrl_info;
--
--	ctrl_info = container_of(work, struct pqi_ctrl_info,
--		raid_bypass_retry_work);
--	pqi_retry_raid_bypass_requests(ctrl_info);
--}
--
--static void pqi_clear_all_queued_raid_bypass_retries(
--	struct pqi_ctrl_info *ctrl_info)
--{
--	unsigned long flags;
--
--	spin_lock_irqsave(&ctrl_info->raid_bypass_retry_list_lock, flags);
--	INIT_LIST_HEAD(&ctrl_info->raid_bypass_retry_list);
--	spin_unlock_irqrestore(&ctrl_info->raid_bypass_retry_list_lock, flags);
--}
--
- static void pqi_aio_io_complete(struct pqi_io_request *io_request,
- 	void *context)
+-static inline void pqi_ctrl_ofa_start(struct pqi_ctrl_info *ctrl_info)
++static inline void pqi_ctrl_ofa_done(struct pqi_ctrl_info *ctrl_info)
  {
-@@ -5445,12 +5313,11 @@ static void pqi_aio_io_complete(struct pqi_io_request *io_request,
+-	ctrl_info->in_ofa = true;
++	mutex_unlock(&ctrl_info->ofa_mutex);
+ }
  
- 	scmd = io_request->scmd;
- 	scsi_dma_unmap(scmd);
--	if (io_request->status == -EAGAIN)
-+	if (io_request->status == -EAGAIN || pqi_raid_bypass_retry_needed(io_request)) {
- 		set_host_byte(scmd, DID_IMM_RETRY);
--	else if (pqi_raid_bypass_retry_needed(io_request)) {
--		pqi_queue_raid_bypass_retry(io_request);
+-static inline void pqi_ctrl_ofa_done(struct pqi_ctrl_info *ctrl_info)
++static inline void pqi_wait_until_ofa_finished(struct pqi_ctrl_info *ctrl_info)
+ {
+-	ctrl_info->in_ofa = false;
++	mutex_lock(&ctrl_info->ofa_mutex);
++	mutex_unlock(&ctrl_info->ofa_mutex);
+ }
+ 
+-static inline bool pqi_ctrl_in_ofa(struct pqi_ctrl_info *ctrl_info)
++static inline bool pqi_ofa_in_progress(struct pqi_ctrl_info *ctrl_info)
+ {
+-	return ctrl_info->in_ofa;
++	return mutex_is_locked(&ctrl_info->ofa_mutex);
+ }
+ 
+ static inline void pqi_device_remove_start(struct pqi_scsi_dev *device)
+@@ -375,14 +378,20 @@ static inline bool pqi_device_in_remove(struct pqi_scsi_dev *device)
+ 	return device->in_remove;
+ }
+ 
+-static inline void pqi_ctrl_shutdown_start(struct pqi_ctrl_info *ctrl_info)
++static inline int pqi_event_type_to_event_index(unsigned int event_type)
+ {
+-	ctrl_info->in_shutdown = true;
++	int index;
++
++	for (index = 0; index < ARRAY_SIZE(pqi_supported_event_types); index++)
++		if (event_type == pqi_supported_event_types[index])
++			return index;
++
++	return -1;
+ }
+ 
+-static inline bool pqi_ctrl_in_shutdown(struct pqi_ctrl_info *ctrl_info)
++static inline bool pqi_is_supported_event(unsigned int event_type)
+ {
+-	return ctrl_info->in_shutdown;
++	return pqi_event_type_to_event_index(event_type) != -1;
+ }
+ 
+ static inline void pqi_schedule_rescan_worker_with_delay(struct pqi_ctrl_info *ctrl_info,
+@@ -390,8 +399,6 @@ static inline void pqi_schedule_rescan_worker_with_delay(struct pqi_ctrl_info *c
+ {
+ 	if (pqi_ctrl_offline(ctrl_info))
+ 		return;
+-	if (pqi_ctrl_in_ofa(ctrl_info))
 -		return;
-+		scmd->SCp.this_residual++;
- 	}
-+
- 	pqi_free_io_request(io_request);
- 	pqi_scsi_done(scmd);
+ 
+ 	schedule_delayed_work(&ctrl_info->rescan_work, delay);
  }
-@@ -5667,6 +5534,14 @@ static inline u16 pqi_get_hw_queue(struct pqi_ctrl_info *ctrl_info,
- 	return hw_queue;
+@@ -1982,8 +1989,18 @@ static void pqi_update_device_list(struct pqi_ctrl_info *ctrl_info,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	if (pqi_ctrl_in_ofa(ctrl_info))
+-		pqi_ctrl_ofa_done(ctrl_info);
++	/*
++	 * If OFA is in progress and there are devices that need to be deleted,
++	 * allow any pending reset operations to continue and unblock any SCSI
++	 * requests before removal.
++	 */
++	if (pqi_ofa_in_progress(ctrl_info)) {
++		list_for_each_entry_safe(device, next, &delete_list, delete_list_entry)
++			if (pqi_is_device_added(device))
++				pqi_device_remove_start(device);
++		pqi_ctrl_unblock_device_reset(ctrl_info);
++		pqi_scsi_unblock_requests(ctrl_info);
++	}
+ 
+ 	/* Remove all devices that have gone away. */
+ 	list_for_each_entry_safe(device, next, &delete_list, delete_list_entry) {
+@@ -2318,8 +2335,6 @@ static void pqi_scan_start(struct Scsi_Host *shost)
+ 	struct pqi_ctrl_info *ctrl_info;
+ 
+ 	ctrl_info = shost_to_hba(shost);
+-	if (pqi_ctrl_in_ofa(ctrl_info))
+-		return;
+ 
+ 	pqi_scan_scsi_devices(ctrl_info);
+ }
+@@ -2336,24 +2351,6 @@ static int pqi_scan_finished(struct Scsi_Host *shost,
+ 	return !mutex_is_locked(&ctrl_info->scan_mutex);
  }
  
-+static inline bool pqi_is_bypass_eligible_request(struct scsi_cmnd *scmd)
-+{
-+	if (blk_rq_is_passthrough(scmd->request))
-+		return false;
+-static void pqi_wait_until_scan_finished(struct pqi_ctrl_info *ctrl_info)
+-{
+-	mutex_lock(&ctrl_info->scan_mutex);
+-	mutex_unlock(&ctrl_info->scan_mutex);
+-}
+-
+-static void pqi_wait_until_lun_reset_finished(struct pqi_ctrl_info *ctrl_info)
+-{
+-	mutex_lock(&ctrl_info->lun_reset_mutex);
+-	mutex_unlock(&ctrl_info->lun_reset_mutex);
+-}
+-
+-static void pqi_wait_until_ofa_finished(struct pqi_ctrl_info *ctrl_info)
+-{
+-	mutex_lock(&ctrl_info->ofa_mutex);
+-	mutex_unlock(&ctrl_info->ofa_mutex);
+-}
+-
+ static inline void pqi_set_encryption_info(struct pqi_encryption_info *encryption_info,
+ 	struct raid_map *raid_map, u64 first_block)
+ {
+@@ -3320,6 +3317,7 @@ static enum pqi_soft_reset_status pqi_poll_for_soft_reset_status(
+ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ {
+ 	int rc;
++	unsigned int delay_secs;
+ 	enum pqi_soft_reset_status reset_status;
+ 
+ 	if (ctrl_info->soft_reset_handshake_supported)
+@@ -3327,8 +3325,11 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ 	else
+ 		reset_status = RESET_INITIATE_FIRMWARE;
+ 
++	delay_secs = PQI_POST_RESET_DELAY_SECS;
 +
-+	return scmd->SCp.this_residual == 0;
+ 	switch (reset_status) {
+ 	case RESET_TIMEDOUT:
++		delay_secs = PQI_POST_OFA_RESET_DELAY_UPON_TIMEOUT_SECS;
+ 		fallthrough;
+ 	case RESET_INITIATE_DRIVER:
+ 		dev_info(&ctrl_info->pci_dev->dev,
+@@ -3338,7 +3339,7 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ 	case RESET_INITIATE_FIRMWARE:
+ 		ctrl_info->pqi_mode_enabled = false;
+ 		pqi_save_ctrl_mode(ctrl_info, SIS_MODE);
+-		rc = pqi_ofa_ctrl_restart(ctrl_info);
++		rc = pqi_ofa_ctrl_restart(ctrl_info, delay_secs);
+ 		pqi_ofa_free_host_buffer(ctrl_info);
+ 		pqi_ctrl_ofa_done(ctrl_info);
+ 		dev_info(&ctrl_info->pci_dev->dev,
+@@ -3368,43 +3369,74 @@ static void pqi_process_soft_reset(struct pqi_ctrl_info *ctrl_info)
+ 	}
+ }
+ 
+-static void pqi_ofa_process_event(struct pqi_ctrl_info *ctrl_info,
+-	struct pqi_event *event)
++static void pqi_ofa_memory_alloc_worker(struct work_struct *work)
+ {
+-	u16 event_id;
++	struct pqi_ctrl_info *ctrl_info;
+ 
+-	event_id = get_unaligned_le16(&event->event_id);
++	ctrl_info = container_of(work, struct pqi_ctrl_info, ofa_memory_alloc_work);
+ 
+-	mutex_lock(&ctrl_info->ofa_mutex);
++	pqi_ctrl_ofa_start(ctrl_info);
++	pqi_ofa_setup_host_buffer(ctrl_info);
++	pqi_ofa_host_memory_update(ctrl_info);
++}
+ 
+-	if (event_id == PQI_EVENT_OFA_QUIESCE) {
++static void pqi_ofa_quiesce_worker(struct work_struct *work)
++{
++	struct pqi_ctrl_info *ctrl_info;
++	struct pqi_event *event;
++
++	ctrl_info = container_of(work, struct pqi_ctrl_info, ofa_quiesce_work);
++
++	event = &ctrl_info->events[pqi_event_type_to_event_index(PQI_EVENT_TYPE_OFA)];
++
++	pqi_ofa_ctrl_quiesce(ctrl_info);
++	pqi_acknowledge_event(ctrl_info, event);
++	pqi_process_soft_reset(ctrl_info);
 +}
 +
- /*
-  * This function gets called just before we hand the completed SCSI request
-  * back to the SML.
-@@ -5792,9 +5667,7 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
- 		return 0;
++static bool pqi_ofa_process_event(struct pqi_ctrl_info *ctrl_info,
++	struct pqi_event *event)
++{
++	bool ack_event;
++
++	ack_event = true;
++
++	switch (event->event_id) {
++	case PQI_EVENT_OFA_MEMORY_ALLOCATION:
+ 		dev_info(&ctrl_info->pci_dev->dev,
+-			"Received Online Firmware Activation quiesce event for controller %u\n",
+-			ctrl_info->ctrl_id);
+-		pqi_ofa_ctrl_quiesce(ctrl_info);
+-		pqi_acknowledge_event(ctrl_info, event);
+-		pqi_process_soft_reset(ctrl_info);
+-	} else if (event_id == PQI_EVENT_OFA_MEMORY_ALLOCATION) {
+-		pqi_acknowledge_event(ctrl_info, event);
+-		pqi_ofa_setup_host_buffer(ctrl_info,
+-			le32_to_cpu(event->ofa_bytes_requested));
+-		pqi_ofa_host_memory_update(ctrl_info);
+-	} else if (event_id == PQI_EVENT_OFA_CANCELED) {
+-		pqi_ofa_free_host_buffer(ctrl_info);
+-		pqi_acknowledge_event(ctrl_info, event);
++			"received Online Firmware Activation memory allocation request\n");
++		schedule_work(&ctrl_info->ofa_memory_alloc_work);
++		break;
++	case PQI_EVENT_OFA_QUIESCE:
+ 		dev_info(&ctrl_info->pci_dev->dev,
+-			"Online Firmware Activation(%u) cancel reason : %u\n",
+-			ctrl_info->ctrl_id, event->ofa_cancel_reason);
++			"received Online Firmware Activation quiesce request\n");
++		schedule_work(&ctrl_info->ofa_quiesce_work);
++		ack_event = false;
++		break;
++	case PQI_EVENT_OFA_CANCELED:
++		dev_info(&ctrl_info->pci_dev->dev,
++			"received Online Firmware Activation cancel request: reason: %u\n",
++			ctrl_info->ofa_cancel_reason);
++		pqi_ofa_free_host_buffer(ctrl_info);
++		pqi_ctrl_ofa_done(ctrl_info);
++		break;
++	default:
++		dev_err(&ctrl_info->pci_dev->dev,
++			"received unknown Online Firmware Activation request: event ID: %u\n",
++			event->event_id);
++		break;
  	}
  
--	pqi_ctrl_busy(ctrl_info);
--	if (pqi_ctrl_blocked(ctrl_info) || pqi_device_in_reset(device) ||
--	    pqi_ctrl_in_ofa(ctrl_info) || pqi_ctrl_in_shutdown(ctrl_info)) {
-+	if (pqi_ctrl_blocked(ctrl_info)) {
- 		rc = SCSI_MLQUEUE_HOST_BUSY;
+-	mutex_unlock(&ctrl_info->ofa_mutex);
++	return ack_event;
+ }
+ 
+ static void pqi_event_worker(struct work_struct *work)
+ {
+ 	unsigned int i;
++	bool rescan_needed;
+ 	struct pqi_ctrl_info *ctrl_info;
+ 	struct pqi_event *event;
++	bool ack_event;
+ 
+ 	ctrl_info = container_of(work, struct pqi_ctrl_info, event_work);
+ 
+@@ -3413,22 +3445,26 @@ static void pqi_event_worker(struct work_struct *work)
+ 	if (pqi_ctrl_offline(ctrl_info))
  		goto out;
- 	}
-@@ -5811,13 +5684,12 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
- 	if (pqi_is_logical_device(device)) {
- 		raid_bypassed = false;
- 		if (device->raid_bypass_enabled &&
--			!blk_rq_is_passthrough(scmd->request)) {
--			if (!pqi_is_parity_write_stream(ctrl_info, scmd)) {
--				rc = pqi_raid_bypass_submit_scsi_cmd(ctrl_info, device, scmd, queue_group);
--				if (rc == 0 || rc == SCSI_MLQUEUE_HOST_BUSY) {
--					raid_bypassed = true;
--					atomic_inc(&device->raid_bypass_cnt);
--				}
-+			pqi_is_bypass_eligible_request(scmd) &&
-+			!pqi_is_parity_write_stream(ctrl_info, scmd)) {
-+			rc = pqi_raid_bypass_submit_scsi_cmd(ctrl_info, device, scmd, queue_group);
-+			if (rc == 0 || rc == SCSI_MLQUEUE_HOST_BUSY) {
-+				raid_bypassed = true;
-+				atomic_inc(&device->raid_bypass_cnt);
+ 
+-	pqi_schedule_rescan_worker_delayed(ctrl_info);
+-
++	rescan_needed = false;
+ 	event = ctrl_info->events;
+ 	for (i = 0; i < PQI_NUM_SUPPORTED_EVENTS; i++) {
+ 		if (event->pending) {
+ 			event->pending = false;
+ 			if (event->event_type == PQI_EVENT_TYPE_OFA) {
+-				pqi_ctrl_unbusy(ctrl_info);
+-				pqi_ofa_process_event(ctrl_info, event);
+-				return;
++				ack_event = pqi_ofa_process_event(ctrl_info, event);
++			} else {
++				ack_event = true;
++				rescan_needed = true;
  			}
+-			pqi_acknowledge_event(ctrl_info, event);
++			if (ack_event)
++				pqi_acknowledge_event(ctrl_info, event);
  		}
- 		if (!raid_bypassed)
-@@ -8255,11 +8127,6 @@ static struct pqi_ctrl_info *pqi_alloc_ctrl_info(int numa_node)
+ 		event++;
+ 	}
+ 
++	if (rescan_needed)
++		pqi_schedule_rescan_worker_delayed(ctrl_info);
++
+ out:
+ 	pqi_ctrl_unbusy(ctrl_info);
+ }
+@@ -3485,37 +3521,18 @@ static inline void pqi_stop_heartbeat_timer(struct pqi_ctrl_info *ctrl_info)
+ 	del_timer_sync(&ctrl_info->heartbeat_timer);
+ }
+ 
+-static inline int pqi_event_type_to_event_index(unsigned int event_type)
++static void pqi_ofa_capture_event_payload(struct pqi_ctrl_info *ctrl_info,
++	struct pqi_event *event, struct pqi_event_response *response)
+ {
+-	int index;
+-
+-	for (index = 0; index < ARRAY_SIZE(pqi_supported_event_types); index++)
+-		if (event_type == pqi_supported_event_types[index])
+-			return index;
+-
+-	return -1;
+-}
+-
+-static inline bool pqi_is_supported_event(unsigned int event_type)
+-{
+-	return pqi_event_type_to_event_index(event_type) != -1;
+-}
+-
+-static void pqi_ofa_capture_event_payload(struct pqi_event *event,
+-	struct pqi_event_response *response)
+-{
+-	u16 event_id;
+-
+-	event_id = get_unaligned_le16(&event->event_id);
+-
+-	if (event->event_type == PQI_EVENT_TYPE_OFA) {
+-		if (event_id == PQI_EVENT_OFA_MEMORY_ALLOCATION) {
+-			event->ofa_bytes_requested =
+-			response->data.ofa_memory_allocation.bytes_requested;
+-		} else if (event_id == PQI_EVENT_OFA_CANCELED) {
+-			event->ofa_cancel_reason =
+-			response->data.ofa_cancelled.reason;
+-		}
++	switch (event->event_id) {
++	case PQI_EVENT_OFA_MEMORY_ALLOCATION:
++		ctrl_info->ofa_bytes_requested =
++			get_unaligned_le32(&response->data.ofa_memory_allocation.bytes_requested);
++		break;
++	case PQI_EVENT_OFA_CANCELED:
++		ctrl_info->ofa_cancel_reason =
++			get_unaligned_le16(&response->data.ofa_cancelled.reason);
++		break;
+ 	}
+ }
+ 
+@@ -3559,7 +3576,7 @@ static int pqi_process_event_intr(struct pqi_ctrl_info *ctrl_info)
+ 			event->additional_event_id =
+ 				get_unaligned_le32(&response->additional_event_id);
+ 			if (event->event_type == PQI_EVENT_TYPE_OFA)
+-				pqi_ofa_capture_event_payload(event, response);
++				pqi_ofa_capture_event_payload(ctrl_info, event, response);
+ 		}
+ 
+ 		oq_ci = (oq_ci + 1) % PQI_NUM_EVENT_QUEUE_ELEMENTS;
+@@ -6282,6 +6299,8 @@ static int pqi_passthru_ioctl(struct pqi_ctrl_info *ctrl_info, void __user *arg)
+ 
+ 	if (pqi_ctrl_offline(ctrl_info))
+ 		return -ENXIO;
++	if (pqi_ofa_in_progress(ctrl_info) && pqi_ctrl_blocked(ctrl_info))
++		return -EBUSY;
+ 	if (!arg)
+ 		return -EINVAL;
+ 	if (!capable(CAP_SYS_RAWIO))
+@@ -6418,9 +6437,6 @@ static int pqi_ioctl(struct scsi_device *sdev, unsigned int cmd,
+ 
+ 	ctrl_info = shost_to_hba(sdev->host);
+ 
+-	if (pqi_ctrl_in_ofa(ctrl_info) || pqi_ctrl_in_shutdown(ctrl_info))
+-		return -EBUSY;
+-
+ 	switch (cmd) {
+ 	case CCISS_DEREGDISK:
+ 	case CCISS_REGNEWDISK:
+@@ -8003,7 +8019,8 @@ static int pqi_ctrl_init_resume(struct pqi_ctrl_info *ctrl_info)
+ 		return rc;
+ 	}
+ 
+-	pqi_schedule_update_time_worker(ctrl_info);
++	if (pqi_ofa_in_progress(ctrl_info))
++		pqi_ctrl_unblock_scan(ctrl_info);
+ 
+ 	pqi_scan_scsi_devices(ctrl_info);
+ 
+@@ -8123,6 +8140,9 @@ static struct pqi_ctrl_info *pqi_alloc_ctrl_info(int numa_node)
+ 	timer_setup(&ctrl_info->heartbeat_timer, pqi_heartbeat_timer_handler, 0);
+ 	INIT_WORK(&ctrl_info->ctrl_offline_work, pqi_ctrl_offline_worker);
+ 
++	INIT_WORK(&ctrl_info->ofa_memory_alloc_work, pqi_ofa_memory_alloc_worker);
++	INIT_WORK(&ctrl_info->ofa_quiesce_work, pqi_ofa_quiesce_worker);
++
+ 	sema_init(&ctrl_info->sync_request_sem,
  		PQI_RESERVED_IO_SLOTS_SYNCHRONOUS_REQUESTS);
  	init_waitqueue_head(&ctrl_info->block_requests_wait);
+@@ -8191,11 +8211,9 @@ static void pqi_remove_ctrl(struct pqi_ctrl_info *ctrl_info)
  
--	INIT_LIST_HEAD(&ctrl_info->raid_bypass_retry_list);
--	spin_lock_init(&ctrl_info->raid_bypass_retry_list_lock);
--	INIT_WORK(&ctrl_info->raid_bypass_retry_work,
--		pqi_raid_bypass_retry_worker);
--
- 	ctrl_info->ctrl_id = atomic_inc_return(&pqi_controller_count) - 1;
- 	ctrl_info->irq_mode = IRQ_MODE_NONE;
- 	ctrl_info->max_msix_vectors = PQI_MAX_MSIX_VECTORS;
-@@ -8585,7 +8452,6 @@ static void pqi_take_ctrl_offline_deferred(struct pqi_ctrl_info *ctrl_info)
- 	pqi_cancel_update_time_worker(ctrl_info);
+ static void pqi_ofa_ctrl_quiesce(struct pqi_ctrl_info *ctrl_info)
+ {
+-	pqi_cancel_update_time_worker(ctrl_info);
+-	pqi_cancel_rescan_worker(ctrl_info);
+-	pqi_wait_until_lun_reset_finished(ctrl_info);
+-	pqi_wait_until_scan_finished(ctrl_info);
+-	pqi_ctrl_ofa_start(ctrl_info);
++	pqi_ctrl_block_scan(ctrl_info);
++	pqi_scsi_block_requests(ctrl_info);
++	pqi_ctrl_block_device_reset(ctrl_info);
+ 	pqi_ctrl_block_requests(ctrl_info);
  	pqi_ctrl_wait_until_quiesced(ctrl_info);
- 	pqi_fail_all_outstanding_requests(ctrl_info);
--	pqi_clear_all_queued_raid_bypass_retries(ctrl_info);
- 	pqi_ctrl_unblock_requests(ctrl_info);
+ 	pqi_ctrl_wait_for_pending_io(ctrl_info, PQI_PENDING_IO_TIMEOUT_SECS);
+@@ -8208,63 +8226,47 @@ static void pqi_ofa_ctrl_quiesce(struct pqi_ctrl_info *ctrl_info)
+ 
+ static void pqi_ofa_ctrl_unquiesce(struct pqi_ctrl_info *ctrl_info)
+ {
+-	pqi_ofa_free_host_buffer(ctrl_info);
+-	ctrl_info->pqi_mode_enabled = true;
+-	pqi_save_ctrl_mode(ctrl_info, PQI_MODE);
+-	ctrl_info->controller_online = true;
+-	pqi_ctrl_unblock_requests(ctrl_info);
+ 	pqi_start_heartbeat_timer(ctrl_info);
+-	pqi_schedule_update_time_worker(ctrl_info);
+-	pqi_clear_soft_reset_status(ctrl_info);
+-	pqi_scan_scsi_devices(ctrl_info);
++	pqi_ctrl_unblock_requests(ctrl_info);
++	pqi_ctrl_unblock_device_reset(ctrl_info);
++	pqi_scsi_unblock_requests(ctrl_info);
++	pqi_ctrl_unblock_scan(ctrl_info);
+ }
+ 
+-static int pqi_ofa_alloc_mem(struct pqi_ctrl_info *ctrl_info,
+-	u32 total_size, u32 chunk_size)
++static int pqi_ofa_alloc_mem(struct pqi_ctrl_info *ctrl_info, u32 total_size, u32 chunk_size)
+ {
+-	u32 sg_count;
+-	u32 size;
+ 	int i;
+-	struct pqi_sg_descriptor *mem_descriptor = NULL;
++	u32 sg_count;
+ 	struct device *dev;
+ 	struct pqi_ofa_memory *ofap;
+-
+-	dev = &ctrl_info->pci_dev->dev;
+-
+-	sg_count = (total_size + chunk_size - 1);
+-	sg_count /= chunk_size;
++	struct pqi_sg_descriptor *mem_descriptor;
++	dma_addr_t dma_handle;
+ 
+ 	ofap = ctrl_info->pqi_ofa_mem_virt_addr;
+ 
+-	if (sg_count*chunk_size < total_size)
++	sg_count = DIV_ROUND_UP(total_size, chunk_size);
++	if (sg_count == 0 || sg_count > PQI_OFA_MAX_SG_DESCRIPTORS)
+ 		goto out;
+ 
+-	ctrl_info->pqi_ofa_chunk_virt_addr =
+-				kcalloc(sg_count, sizeof(void *), GFP_KERNEL);
++	ctrl_info->pqi_ofa_chunk_virt_addr = kmalloc_array(sg_count, sizeof(void *), GFP_KERNEL);
+ 	if (!ctrl_info->pqi_ofa_chunk_virt_addr)
+ 		goto out;
+ 
+-	for (size = 0, i = 0; size < total_size; size += chunk_size, i++) {
+-		dma_addr_t dma_handle;
++	dev = &ctrl_info->pci_dev->dev;
+ 
++	for (i = 0; i < sg_count; i++) {
+ 		ctrl_info->pqi_ofa_chunk_virt_addr[i] =
+-			dma_alloc_coherent(dev, chunk_size, &dma_handle,
+-					   GFP_KERNEL);
+-
++			dma_alloc_coherent(dev, chunk_size, &dma_handle, GFP_KERNEL);
+ 		if (!ctrl_info->pqi_ofa_chunk_virt_addr[i])
+-			break;
+-
++			goto out_free_chunks;
+ 		mem_descriptor = &ofap->sg_descriptor[i];
+ 		put_unaligned_le64((u64)dma_handle, &mem_descriptor->address);
+ 		put_unaligned_le32(chunk_size, &mem_descriptor->length);
+ 	}
+ 
+-	if (!size || size < total_size)
+-		goto out_free_chunks;
+-
+ 	put_unaligned_le32(CISS_SG_LAST, &mem_descriptor->flags);
+ 	put_unaligned_le16(sg_count, &ofap->num_memory_descriptors);
+-	put_unaligned_le32(size, &ofap->bytes_allocated);
++	put_unaligned_le32(sg_count * chunk_size, &ofap->bytes_allocated);
+ 
+ 	return 0;
+ 
+@@ -8272,82 +8274,87 @@ static int pqi_ofa_alloc_mem(struct pqi_ctrl_info *ctrl_info,
+ 	while (--i >= 0) {
+ 		mem_descriptor = &ofap->sg_descriptor[i];
+ 		dma_free_coherent(dev, chunk_size,
+-				ctrl_info->pqi_ofa_chunk_virt_addr[i],
+-				get_unaligned_le64(&mem_descriptor->address));
++			ctrl_info->pqi_ofa_chunk_virt_addr[i],
++			get_unaligned_le64(&mem_descriptor->address));
+ 	}
+ 	kfree(ctrl_info->pqi_ofa_chunk_virt_addr);
+ 
+ out:
+-	put_unaligned_le32 (0, &ofap->bytes_allocated);
+ 	return -ENOMEM;
+ }
+ 
+ static int pqi_ofa_alloc_host_buffer(struct pqi_ctrl_info *ctrl_info)
+ {
+ 	u32 total_size;
++	u32 chunk_size;
+ 	u32 min_chunk_size;
+-	u32 chunk_sz;
+ 
+-	total_size = le32_to_cpu(
+-			ctrl_info->pqi_ofa_mem_virt_addr->bytes_allocated);
+-	min_chunk_size = total_size / PQI_OFA_MAX_SG_DESCRIPTORS;
++	if (ctrl_info->ofa_bytes_requested == 0)
++		return 0;
++
++	total_size = PAGE_ALIGN(ctrl_info->ofa_bytes_requested);
++	min_chunk_size = DIV_ROUND_UP(total_size, PQI_OFA_MAX_SG_DESCRIPTORS);
++	min_chunk_size = PAGE_ALIGN(min_chunk_size);
+ 
+-	for (chunk_sz = total_size; chunk_sz >= min_chunk_size; chunk_sz /= 2)
+-		if (!pqi_ofa_alloc_mem(ctrl_info, total_size, chunk_sz))
++	for (chunk_size = total_size; chunk_size >= min_chunk_size;) {
++		if (pqi_ofa_alloc_mem(ctrl_info, total_size, chunk_size) == 0)
+ 			return 0;
++		chunk_size /= 2;
++		chunk_size = PAGE_ALIGN(chunk_size);
++	}
+ 
+ 	return -ENOMEM;
+ }
+ 
+-static void pqi_ofa_setup_host_buffer(struct pqi_ctrl_info *ctrl_info,
+-	u32 bytes_requested)
++static void pqi_ofa_setup_host_buffer(struct pqi_ctrl_info *ctrl_info)
+ {
+-	struct pqi_ofa_memory *pqi_ofa_memory;
+ 	struct device *dev;
++	struct pqi_ofa_memory *ofap;
+ 
+ 	dev = &ctrl_info->pci_dev->dev;
+-	pqi_ofa_memory = dma_alloc_coherent(dev,
+-					    PQI_OFA_MEMORY_DESCRIPTOR_LENGTH,
+-					    &ctrl_info->pqi_ofa_mem_dma_handle,
+-					    GFP_KERNEL);
+ 
+-	if (!pqi_ofa_memory)
++	ofap = dma_alloc_coherent(dev, sizeof(*ofap),
++		&ctrl_info->pqi_ofa_mem_dma_handle, GFP_KERNEL);
++	if (!ofap)
+ 		return;
+ 
+-	put_unaligned_le16(PQI_OFA_VERSION, &pqi_ofa_memory->version);
+-	memcpy(&pqi_ofa_memory->signature, PQI_OFA_SIGNATURE,
+-					sizeof(pqi_ofa_memory->signature));
+-	pqi_ofa_memory->bytes_allocated = cpu_to_le32(bytes_requested);
+-
+-	ctrl_info->pqi_ofa_mem_virt_addr = pqi_ofa_memory;
++	ctrl_info->pqi_ofa_mem_virt_addr = ofap;
+ 
+ 	if (pqi_ofa_alloc_host_buffer(ctrl_info) < 0) {
+-		dev_err(dev, "Failed to allocate host buffer of size = %u",
+-			bytes_requested);
++		dev_err(dev,
++			"failed to allocate host buffer for Online Firmware Activation\n");
++		dma_free_coherent(dev, sizeof(*ofap), ofap, ctrl_info->pqi_ofa_mem_dma_handle);
++		ctrl_info->pqi_ofa_mem_virt_addr = NULL;
++		return;
+ 	}
+ 
+-	return;
++	put_unaligned_le16(PQI_OFA_VERSION, &ofap->version);
++	memcpy(&ofap->signature, PQI_OFA_SIGNATURE, sizeof(ofap->signature));
+ }
+ 
+ static void pqi_ofa_free_host_buffer(struct pqi_ctrl_info *ctrl_info)
+ {
+-	int i;
+-	struct pqi_sg_descriptor *mem_descriptor;
++	unsigned int i;
++	struct device *dev;
+ 	struct pqi_ofa_memory *ofap;
++	struct pqi_sg_descriptor *mem_descriptor;
++	unsigned int num_memory_descriptors;
+ 
+ 	ofap = ctrl_info->pqi_ofa_mem_virt_addr;
+-
+ 	if (!ofap)
+ 		return;
+ 
+-	if (!ofap->bytes_allocated)
++	dev = &ctrl_info->pci_dev->dev;
++
++	if (get_unaligned_le32(&ofap->bytes_allocated) == 0)
+ 		goto out;
+ 
+ 	mem_descriptor = ofap->sg_descriptor;
++	num_memory_descriptors =
++		get_unaligned_le16(&ofap->num_memory_descriptors);
+ 
+-	for (i = 0; i < get_unaligned_le16(&ofap->num_memory_descriptors);
+-		i++) {
+-		dma_free_coherent(&ctrl_info->pci_dev->dev,
++	for (i = 0; i < num_memory_descriptors; i++) {
++		dma_free_coherent(dev,
+ 			get_unaligned_le32(&mem_descriptor[i].length),
+ 			ctrl_info->pqi_ofa_chunk_virt_addr[i],
+ 			get_unaligned_le64(&mem_descriptor[i].address));
+@@ -8355,46 +8362,45 @@ static void pqi_ofa_free_host_buffer(struct pqi_ctrl_info *ctrl_info)
+ 	kfree(ctrl_info->pqi_ofa_chunk_virt_addr);
+ 
+ out:
+-	dma_free_coherent(&ctrl_info->pci_dev->dev,
+-			PQI_OFA_MEMORY_DESCRIPTOR_LENGTH, ofap,
+-			ctrl_info->pqi_ofa_mem_dma_handle);
++	dma_free_coherent(dev, sizeof(*ofap), ofap,
++		ctrl_info->pqi_ofa_mem_dma_handle);
+ 	ctrl_info->pqi_ofa_mem_virt_addr = NULL;
+ }
+ 
+ static int pqi_ofa_host_memory_update(struct pqi_ctrl_info *ctrl_info)
+ {
++	u32 buffer_length;
+ 	struct pqi_vendor_general_request request;
+-	size_t size;
+ 	struct pqi_ofa_memory *ofap;
+ 
+ 	memset(&request, 0, sizeof(request));
+ 
+-	ofap = ctrl_info->pqi_ofa_mem_virt_addr;
+-
+ 	request.header.iu_type = PQI_REQUEST_IU_VENDOR_GENERAL;
+ 	put_unaligned_le16(sizeof(request) - PQI_REQUEST_HEADER_LENGTH,
+ 		&request.header.iu_length);
+ 	put_unaligned_le16(PQI_VENDOR_GENERAL_HOST_MEMORY_UPDATE,
+ 		&request.function_code);
+ 
++	ofap = ctrl_info->pqi_ofa_mem_virt_addr;
++
+ 	if (ofap) {
+-		size = offsetof(struct pqi_ofa_memory, sg_descriptor) +
++		buffer_length = offsetof(struct pqi_ofa_memory, sg_descriptor) +
+ 			get_unaligned_le16(&ofap->num_memory_descriptors) *
+ 			sizeof(struct pqi_sg_descriptor);
+ 
+ 		put_unaligned_le64((u64)ctrl_info->pqi_ofa_mem_dma_handle,
+ 			&request.data.ofa_memory_allocation.buffer_address);
+-		put_unaligned_le32(size,
++		put_unaligned_le32(buffer_length,
+ 			&request.data.ofa_memory_allocation.buffer_length);
+-
+ 	}
+ 
+ 	return pqi_submit_raid_request_synchronous(ctrl_info, &request.header, 0, NULL);
+ }
+ 
+-static int pqi_ofa_ctrl_restart(struct pqi_ctrl_info *ctrl_info)
++static int pqi_ofa_ctrl_restart(struct pqi_ctrl_info *ctrl_info, unsigned int delay_secs)
+ {
+-	msleep(PQI_POST_RESET_DELAY_B4_MSGU_READY);
++	ssleep(delay_secs);
++
+ 	return pqi_ctrl_init_resume(ctrl_info);
  }
  
 
