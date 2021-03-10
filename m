@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299B6334885
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Mar 2021 21:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79382334883
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Mar 2021 21:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbhCJUCX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Mar 2021 15:02:23 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:25945 "EHLO
+        id S233414AbhCJUCY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Mar 2021 15:02:24 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:22617 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbhCJUBy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Mar 2021 15:01:54 -0500
+        with ESMTP id S232171AbhCJUB5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Mar 2021 15:01:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1615406513; x=1646942513;
+  t=1615406517; x=1646942517;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ttnmdutUrG/R31/QVZk+pdRxcBu1tU9cohdx6BX08S8=;
-  b=Oec8dCLu5/aStdwUqVN2v5zJToGlIu+tQJbariunTyLUz0EGYry3DxDT
-   vgepbCZeVmhw/0WVuZgXh7jiP478FUA34FZW4/qikoQQP5Ohf4kssUBKk
-   wDrhKCCqGyGMGZmYRQ1cxLSwBOzDAIy6qMkFMJ2HO01iw55QML5EVvuvk
-   uu4/2DrU4sRgIqC60e/5qDlNXdlgH1xdcxJdDIFQimk11I/VvQgyXfnxm
-   +AFGMOpK+VVKujw3BXFORpl8NAYXxpmxxCOFi8Md+JvfIw9lULEkeV1G5
-   4ELZFus7y7qnZHnajdvQhResCapx2UBsEDcPU6QlbfzLyX8fAy94HIt/a
-   Q==;
-IronPort-SDR: PE1q6UZ2i6E6yUH45wMpOw5xn0W20i0mKADIdLLpWgEfrxwJAG1gGB1JIGUmCy7xXA7H4uUH/J
- M3GgKOfMoVCQFZdLVQB28h/V2yrbgqff3rLwKW9hgwRGRbAhIpSUsGZWzXF9svr/YUvsBrK1GJ
- TBsCsWVDWOqsSnY9lM2C5aYl6k1F4Y2OtC5tGCQLj9oRFWtaFHXCxipyEDbubk6X+b2q770Ad7
- PQogwZeMQ5lhgjla7Dca2P6WbltQeZOOoWdbfZR8HtwRYFVCVhiJygzenDIHUHRpfy8BRzbaOB
- Gwc=
+  bh=VBMUaUMicppnIbKd7+RJ+PkZhNq1eyCxXIlOsZouwwI=;
+  b=QqmNXkQJHsXmj+hb0GVzsgCo4cXjwgcnBgWXtBgCSZjIbApNVaMQ9Pog
+   6jZ/utHg1UhuerReuuv1ItDoFCxD5trSSOViB4jlftB7iX2z9G5krhoWB
+   o6dHx5qymOltaGRKaiTg8wrgOoFdyr49wf0l493Eh9PXCUvekGwY75H5O
+   J2nm/p3eYqcvD/DV1s0jCAdi6ozQ8S+nA/FpnW3uDmihBuKTJY2R91Hfz
+   boGre+oVgk95kbI2sCCATdxRk/TAxoOFtJlyHUAac+8Cf4UU2Mm89Tr9Z
+   TfRZzNnMpdCqKVY1b2K5H70xaxAoEA/WvCzlUeCKI1Xm8bjvnwNFsBnR9
+   A==;
+IronPort-SDR: 6bXb5DoBNW2+/GNCUD0SDWuO3Y3CyUTOiWgR9GYFB3l0+wgu/FZ+RnLr+w8revaH6hODsvvMz+
+ TV6c+aHpGpCfKTZ2fBbnaz4P2sNxGBXtl449cp+8BUmrPPpnk18oxk4ozCbO6W4xDby5KUEtO0
+ NfZjlSOhcYGvsH48qSwRBD/vaZtTP00R6gSzFBqj07X7o7qMkWrWN+yFNNEKXE9T+sQDQx5oCS
+ 7yKicQh2G/W3mpkNTXw+7qeGffb89jiGaATzwmNnIrt58JHGKKXUlKRpmYx8MOVMB6fncCTI2T
+ Dzg=
 X-IronPort-AV: E=Sophos;i="5.81,238,1610434800"; 
-   d="scan'208";a="112731747"
+   d="scan'208";a="118389597"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2021 13:01:53 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2021 13:01:57 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 10 Mar 2021 13:01:50 -0700
-Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Wed, 10 Mar 2021 13:01:49 -0700
-Subject: [PATCH V4 11/31] smartpqi: add stream detection
+ 15.1.2176.2; Wed, 10 Mar 2021 13:01:55 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Wed, 10 Mar 2021 13:01:55 -0700
+Subject: [PATCH V4 12/31] smartpqi: add host level stream detection enable
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -49,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
         <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Wed, 10 Mar 2021 14:01:49 -0600
-Message-ID: <161540650939.19430.10433163236914945375.stgit@brunhilda>
+Date:   Wed, 10 Mar 2021 14:01:55 -0600
+Message-ID: <161540651522.19430.5706835202837667563.stgit@brunhilda>
 In-Reply-To: <161540568064.19430.11157730901022265360.stgit@brunhilda>
 References: <161540568064.19430.11157730901022265360.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -61,166 +61,96 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-* Enhance performance by adding sequential stream detection.
-  for R5/R6 sequential write requests.
-  * Reduce stripe lock contention with full-stripe write
-    operations.
-    * There is one common stripe lock for each RAID volume
-      that can be set by either the RAID engine or the AIO engine.
-      * The AIO path has I/O request sizes well below the
-        stripe size resulting in many Read-Modify-Write operations.
-      * Sending the request to the RAID engine allows for coalescing
-        requests into full stripe operations resulting in reduced
-        Read-Modify-Write operations.
+* Allow R5/R6 stream detection to be disabled/enabled.
+  using sysfs entry enable_stream_detection.
+
+Example usage:
+
+lsscsi
+[2:2:0:0]    storage Adaptec  3258P-32i /e     0010
+ ^
+ |
+ +---- NOTE: here host is host2
+
+find /sys -name \*enable_stream\*
+/sys/devices/pci0000:36/0000:36:00.0/0000:37:00.0/0000:38:00.0/0000:39:00.0/host2/scsi_host/host2/enable_stream_detection
+/sys/devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host3/scsi_host/host3/enable_stream_detection
+
+Current stream detection:
+cat /sys/devices/pci0000:36/0000:36:00.0/0000:37:00.0/0000:38:00.0/0000:39:00.0/host2/scsi_host/host2/enable_stream_detection
+1
+
+Turn off stream detection:
+echo 0 > /sys/devices/pci0000:36/0000:36:00.0/0000:37:00.0/0000:38:00.0/0000:39:00.0/host2/scsi_host/host2/enable_stream_detection
+
+Turn on stream detection:
+echo 1 > /sys/devices/pci0000:36/0000:36:00.0/0000:37:00.0/0000:38:00.0/0000:39:00.0/host2/scsi_host/host2/enable_stream_detection
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Reviewed-by: Martin Wilck <mwilck@suse.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi.h      |    9 +++
- drivers/scsi/smartpqi/smartpqi_init.c |   87 +++++++++++++++++++++++++++++++--
- 2 files changed, 90 insertions(+), 6 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |   32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index 6639432f3dab..976bfd8c5192 100644
---- a/drivers/scsi/smartpqi/smartpqi.h
-+++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -1043,6 +1043,13 @@ struct pqi_scsi_dev_raid_map_data {
- 
- #define RAID_CTLR_LUNID		"\0\0\0\0\0\0\0\0"
- 
-+#define NUM_STREAMS_PER_LUN	8
-+
-+struct pqi_stream_data {
-+	u64	next_lba;
-+	u32	last_accessed;
-+};
-+
- struct pqi_scsi_dev {
- 	int	devtype;		/* as reported by INQUIRY commmand */
- 	u8	device_type;		/* as reported by */
-@@ -1097,6 +1104,7 @@ struct pqi_scsi_dev {
- 	struct list_head add_list_entry;
- 	struct list_head delete_list_entry;
- 
-+	struct pqi_stream_data stream_data[NUM_STREAMS_PER_LUN];
- 	atomic_t scsi_cmds_outstanding;
- 	atomic_t raid_bypass_cnt;
- };
-@@ -1296,6 +1304,7 @@ struct pqi_ctrl_info {
- 	u8		enable_r5_writes : 1;
- 	u8		enable_r6_writes : 1;
- 	u8		lv_drive_type_mix_valid : 1;
-+	u8		enable_stream_detection : 1;
- 
- 	u8		ciss_report_log_flags;
- 	u32		max_transfer_encrypted_sas_sata;
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 73c5a8adb8ad..c2f366c614d7 100644
+index c2f366c614d7..991883ada641 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -5688,8 +5688,82 @@ void pqi_prep_for_scsi_done(struct scsi_cmnd *scmd)
- 	atomic_dec(&device->scsi_cmds_outstanding);
+@@ -6696,6 +6696,34 @@ static ssize_t pqi_lockup_action_store(struct device *dev,
+ 	return -EINVAL;
  }
  
--static int pqi_scsi_queue_command(struct Scsi_Host *shost,
-+static bool pqi_is_parity_write_stream(struct pqi_ctrl_info *ctrl_info,
- 	struct scsi_cmnd *scmd)
++static ssize_t pqi_host_enable_stream_detection_show(struct device *dev,
++	struct device_attribute *attr, char *buffer)
 +{
-+	u32 oldest_jiffies;
-+	u8 lru_index;
-+	int i;
-+	int rc;
-+	struct pqi_scsi_dev *device;
-+	struct pqi_stream_data *pqi_stream_data;
-+	struct pqi_scsi_dev_raid_map_data rmd;
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct pqi_ctrl_info *ctrl_info = shost_to_hba(shost);
 +
-+	if (!ctrl_info->enable_stream_detection)
-+		return false;
-+
-+	rc = pqi_get_aio_lba_and_block_count(scmd, &rmd);
-+	if (rc)
-+		return false;
-+
-+	/* Check writes only. */
-+	if (!rmd.is_write)
-+		return false;
-+
-+	device = scmd->device->hostdata;
-+
-+	/* Check for RAID 5/6 streams. */
-+	if (device->raid_level != SA_RAID_5 && device->raid_level != SA_RAID_6)
-+		return false;
-+
-+	/*
-+	 * If controller does not support AIO RAID{5,6} writes, need to send
-+	 * requests down non-AIO path.
-+	 */
-+	if ((device->raid_level == SA_RAID_5 && !ctrl_info->enable_r5_writes) ||
-+		(device->raid_level == SA_RAID_6 && !ctrl_info->enable_r6_writes))
-+		return true;
-+
-+	lru_index = 0;
-+	oldest_jiffies = INT_MAX;
-+	for (i = 0; i < NUM_STREAMS_PER_LUN; i++) {
-+		pqi_stream_data = &device->stream_data[i];
-+		/*
-+		 * Check for adjacent request or request is within
-+		 * the previous request.
-+		 */
-+		if ((pqi_stream_data->next_lba &&
-+			rmd.first_block >= pqi_stream_data->next_lba) &&
-+			rmd.first_block <= pqi_stream_data->next_lba +
-+				rmd.block_cnt) {
-+			pqi_stream_data->next_lba = rmd.first_block +
-+				rmd.block_cnt;
-+			pqi_stream_data->last_accessed = jiffies;
-+			return true;
-+		}
-+
-+		/* unused entry */
-+		if (pqi_stream_data->last_accessed == 0) {
-+			lru_index = i;
-+			break;
-+		}
-+
-+		/* Find entry with oldest last accessed time. */
-+		if (pqi_stream_data->last_accessed <= oldest_jiffies) {
-+			oldest_jiffies = pqi_stream_data->last_accessed;
-+			lru_index = i;
-+		}
-+	}
-+
-+	/* Set LRU entry. */
-+	pqi_stream_data = &device->stream_data[lru_index];
-+	pqi_stream_data->last_accessed = jiffies;
-+	pqi_stream_data->next_lba = rmd.first_block + rmd.block_cnt;
-+
-+	return false;
++	return scnprintf(buffer, 10, "%x\n",
++			ctrl_info->enable_stream_detection);
 +}
 +
-+static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
++static ssize_t pqi_host_enable_stream_detection_store(struct device *dev,
++	struct device_attribute *attr, const char *buffer, size_t count)
++{
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct pqi_ctrl_info *ctrl_info = shost_to_hba(shost);
++	u8 set_stream_detection = 0;
++
++	if (kstrtou8(buffer, 0, &set_stream_detection))
++		return -EINVAL;
++
++	if (set_stream_detection > 0)
++		set_stream_detection = 1;
++
++	ctrl_info->enable_stream_detection = set_stream_detection;
++
++	return count;
++}
++
+ static ssize_t pqi_host_enable_r5_writes_show(struct device *dev,
+ 	struct device_attribute *attr, char *buffer)
  {
- 	int rc;
- 	struct pqi_ctrl_info *ctrl_info;
-@@ -5736,11 +5810,12 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost,
- 		raid_bypassed = false;
- 		if (device->raid_bypass_enabled &&
- 			!blk_rq_is_passthrough(scmd->request)) {
--			rc = pqi_raid_bypass_submit_scsi_cmd(ctrl_info, device,
--				scmd, queue_group);
--			if (rc == 0 || rc == SCSI_MLQUEUE_HOST_BUSY) {
--				raid_bypassed = true;
--				atomic_inc(&device->raid_bypass_cnt);
-+			if (!pqi_is_parity_write_stream(ctrl_info, scmd)) {
-+				rc = pqi_raid_bypass_submit_scsi_cmd(ctrl_info, device, scmd, queue_group);
-+				if (rc == 0 || rc == SCSI_MLQUEUE_HOST_BUSY) {
-+					raid_bypassed = true;
-+					atomic_inc(&device->raid_bypass_cnt);
-+				}
- 			}
- 		}
- 		if (!raid_bypassed)
+@@ -6758,6 +6786,9 @@ static DEVICE_ATTR(vendor, 0444, pqi_vendor_show, NULL);
+ static DEVICE_ATTR(rescan, 0200, NULL, pqi_host_rescan_store);
+ static DEVICE_ATTR(lockup_action, 0644, pqi_lockup_action_show,
+ 	pqi_lockup_action_store);
++static DEVICE_ATTR(enable_stream_detection, 0644,
++	pqi_host_enable_stream_detection_show,
++	pqi_host_enable_stream_detection_store);
+ static DEVICE_ATTR(enable_r5_writes, 0644,
+ 	pqi_host_enable_r5_writes_show, pqi_host_enable_r5_writes_store);
+ static DEVICE_ATTR(enable_r6_writes, 0644,
+@@ -6771,6 +6802,7 @@ static struct device_attribute *pqi_shost_attrs[] = {
+ 	&dev_attr_vendor,
+ 	&dev_attr_rescan,
+ 	&dev_attr_lockup_action,
++	&dev_attr_enable_stream_detection,
+ 	&dev_attr_enable_r5_writes,
+ 	&dev_attr_enable_r6_writes,
+ 	NULL
 
