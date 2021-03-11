@@ -2,84 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6905C337A9B
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 18:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE18337CA4
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 19:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbhCKRRl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Mar 2021 12:17:41 -0500
-Received: from mail-1.ca.inter.net ([208.85.220.69]:42557 "EHLO
-        mail-1.ca.inter.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbhCKRRc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Mar 2021 12:17:32 -0500
-Received: from localhost (offload-3.ca.inter.net [208.85.220.70])
-        by mail-1.ca.inter.net (Postfix) with ESMTP id BFFBB2EA2D9;
-        Thu, 11 Mar 2021 12:17:31 -0500 (EST)
-Received: from mail-1.ca.inter.net ([208.85.220.69])
-        by localhost (offload-3.ca.inter.net [208.85.220.70]) (amavisd-new, port 10024)
-        with ESMTP id 7dcAuVDwxokd; Thu, 11 Mar 2021 12:00:29 -0500 (EST)
-Received: from [192.168.48.23] (host-45-58-219-4.dyn.295.ca [45.58.219.4])
-        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail-1.ca.inter.net (Postfix) with ESMTPSA id 2C5382EA2E9;
-        Thu, 11 Mar 2021 12:17:31 -0500 (EST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH][next] scsi: sg: Fix use of pointer sfp after it has been
- kfree'd
-To:     Colin King <colin.king@canonical.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        id S230107AbhCKS0s convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 11 Mar 2021 13:26:48 -0500
+Received: from fgw20-4.mail.saunalahti.fi ([62.142.5.107]:16035 "EHLO
+        fgw20-4.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229796AbhCKS00 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Mar 2021 13:26:26 -0500
+X-Greylist: delayed 963 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Mar 2021 13:26:25 EST
+Received: from imac.makisara.private (87-92-207-71.rev.dnainternet.fi [87.92.207.71])
+        by fgw20.mail.saunalahti.fi (Halon) with ESMTPSA
+        id 0a96d4ae-8295-11eb-ba24-005056bd6ce9;
+        Thu, 11 Mar 2021 20:10:21 +0200 (EET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
+Subject: Re: [PATCH] scsi: Fix a use after free in st_open
+From:   =?utf-8?B?IkthaSBNw6RraXNhcmEgKEtvbHVtYnVzKSI=?= 
+        <kai.makisara@kolumbus.fi>
+In-Reply-To: <20210311064636.10522-1-lyl2019@mail.ustc.edu.cn>
+Date:   Thu, 11 Mar 2021 20:10:18 +0200
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210311103717.7523-1-colin.king@canonical.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <a1e80cea-a1b3-9471-8022-2e25eb6c635c@interlog.com>
-Date:   Thu, 11 Mar 2021 12:17:30 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20210311103717.7523-1-colin.king@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <00362659-A275-4415-B2B0-78E6183C8272@kolumbus.fi>
+References: <20210311064636.10522-1-lyl2019@mail.ustc.edu.cn>
+To:     Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+X-Mailer: Apple Mail (2.3654.60.0.2.21)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2021-03-11 5:37 a.m., Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> Currently SG_LOG is referencing sfp after it has been kfree'd which
-> is probably a bad thing to do. Fix this by kfree'ing sfp after
-> SG_LOG.
-> 
-> Addresses-Coverity: ("Use after free")
-> Fixes: af1fc95db445 ("scsi: sg: Replace rq array with xarray")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
 
-Thanks.
+> On 11. Mar 2021, at 8.46, Lv Yunlong <lyl2019@mail.ustc.edu.cn> wrote:
+> 
+> In st_open, if STp->in_use is true, STp will be freed by
+> scsi_tape_put(). However, STp is still used by DEBC_printk()
+> after. It is better to DEBC_printk() before scsi_tape_put().
+> 
+> Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+
+Acked-by: Kai Mäkisara <kai.makisara@kolumbus.fi>
 
 > ---
->   drivers/scsi/sg.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> drivers/scsi/st.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-> index 2d4bbc1a1727..79f05afa4407 100644
-> --- a/drivers/scsi/sg.c
-> +++ b/drivers/scsi/sg.c
-> @@ -3799,10 +3799,10 @@ sg_add_sfp(struct sg_device *sdp)
->   	if (rbuf_len > 0) {
->   		srp = sg_build_reserve(sfp, rbuf_len);
->   		if (IS_ERR(srp)) {
-> -			kfree(sfp);
->   			err = PTR_ERR(srp);
->   			SG_LOG(1, sfp, "%s: build reserve err=%ld\n", __func__,
->   			       -err);
-> +			kfree(sfp);
->   			return ERR_PTR(err);
->   		}
->   		if (srp->sgat_h.buflen < rbuf_len) {
-> 
+> diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+> index 841ad2fc369a..9ca536aae784 100644
+> --- a/drivers/scsi/st.c
+> +++ b/drivers/scsi/st.c
+> @@ -1269,8 +1269,8 @@ static int st_open(struct inode *inode, struct file *filp)
+> 	spin_lock(&st_use_lock);
+> 	if (STp->in_use) {
+> 		spin_unlock(&st_use_lock);
+> -		scsi_tape_put(STp);
+> 		DEBC_printk(STp, "Device already in use.\n");
+> +		scsi_tape_put(STp);
+> 		return (-EBUSY);
+> 	}
+
+Potential problem only when debugging enabled, but should be fixed.
+
+Thanks,
+Kai
 
