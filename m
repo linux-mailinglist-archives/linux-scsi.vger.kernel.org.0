@@ -2,164 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF1533802C
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 23:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEB93380FD
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 23:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbhCKWUc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Mar 2021 17:20:32 -0500
-Received: from labrats.qualcomm.com ([199.106.110.90]:23361 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbhCKWU0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Mar 2021 17:20:26 -0500
-IronPort-SDR: 6KenlCSms4cTQYBsfLjg/CFrPlmb6WUOcBqAcJuEQH+416atzJ13VlOKJ/PtaCst0SkhLIgNjm
- xW7aqc85rmt2dZ39qL5nVUYZhmaWqMtOaZjQLc2km0QSJm4LAILF4q26lE1VgZmhA+rT5pwynB
- 6BRqjZg28lAcPTe4p3iBg8f9Sm5B2xUiXh0kaPahToESYxJ0GKTi2FIN/WvxY8PplPvAOJyZog
- MiJ12gVrCRUsoWVQaOFm4wNsGj5g/2dkBvqpU6IMJkz+JLffvjL8m43Ud15vM8Ligi09eRSWSv
- vEQ=
-X-IronPort-AV: E=Sophos;i="5.81,241,1610438400"; 
-   d="scan'208";a="29688096"
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by labrats.qualcomm.com with ESMTP; 11 Mar 2021 14:20:24 -0800
-X-QCInternal: smtphost
-Received: from stor-presley.qualcomm.com ([192.168.140.85])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP; 11 Mar 2021 14:20:23 -0800
-Received: by stor-presley.qualcomm.com (Postfix, from userid 92687)
-        id E3B4A20F71; Thu, 11 Mar 2021 14:20:23 -0800 (PST)
-From:   Asutosh Das <asutoshd@codeaurora.org>
-To:     cang@codeaurora.org, martin.petersen@oracle.com,
-        adrian.hunter@intel.com, linux-scsi@vger.kernel.org
-Cc:     Asutosh Das <asutoshd@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Nitin Rawat <nitirawa@codeaurora.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v11 2/2] ufs: sysfs: Resume the proper scsi device
-Date:   Thu, 11 Mar 2021 14:19:35 -0800
-Message-Id: <fb3b49a985cea12b4db39f00d920c82a7c8be468.1615500685.git.asutoshd@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1615500685.git.asutoshd@codeaurora.org>
-References: <cover.1615500685.git.asutoshd@codeaurora.org>
-In-Reply-To: <cover.1615500685.git.asutoshd@codeaurora.org>
-References: <cover.1615500685.git.asutoshd@codeaurora.org>
+        id S229678AbhCKW6Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Mar 2021 17:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229564AbhCKW5w (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Mar 2021 17:57:52 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB941C061574
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Mar 2021 14:57:50 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id kk2-20020a17090b4a02b02900c777aa746fso10099355pjb.3
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Mar 2021 14:57:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google;
+        h=from:content-transfer-encoding:mime-version:subject:message-id:date
+         :to;
+        bh=dl24h6rvUnlGzkqonk3cydn40MXkH1vG2xIqeXvOik8=;
+        b=L0sUfMxXHWGXDkgKBF7nN6nMJUtedt5bGuCPY28mZwTcMcgEgN+APQQ0SeHOraTMs7
+         HaMx1W2agLBLGvSvr/AAxQ4Xqwdjf+IfROYyjplQwPY+w6Pb3iL4LQdP8Zd3AJFUOr5a
+         BheN0Qw2epy9V8Qr/7vwJWtYldfMmLRqkQ4K4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:content-transfer-encoding:mime-version
+         :subject:message-id:date:to;
+        bh=dl24h6rvUnlGzkqonk3cydn40MXkH1vG2xIqeXvOik8=;
+        b=f7liBDLTFbjfG5crDfUBS/Kxdcp19sbXos/rpK6R0JgdBxy9ty+EBMhATu3f7GJDNa
+         bzHbEpX1bXxdHKgMncLKfzLoLQc46k58jcniFTOfxR1mXF2j6ZyfTfKJtxpFBlhjmOSy
+         r7LoluzsIPJp6w2MiNfGEIqBebq3tuI5fxDujaBb4jKUIRxTEZLNYAOM5YxfIKobJGHh
+         lZZMbpEpwv32zZup9oXnFArh67jjveIKAdgVTZTP8xAsJA6zX4uly/JoTUfLoeeHd4WY
+         +aLEoqdqvE7ag/P7If77d07dQj3NrK4j6TYSdcvKAr1dR75arFcNGu8P8tJLq+RBC9q8
+         pMag==
+X-Gm-Message-State: AOAM531yc55hLDokScTZ47oBiZA3W/ydJy5jxEm/rgf9osmlari8QmsO
+        IrGdsaWkujLpZmWhtnb5vO7Y8b0u3u6MZ53lASf/uANdVLe3yRGZYnj6e5Et2v7PeGKW9YYwrRK
+        4p4aYIdb/muKWvcpCarvLl1AMnoVhDVcNaK+0e7wNxbOsER07WmaxDpePMXp3l/ogFXV0BjqMh6
+        cYAc8=
+X-Google-Smtp-Source: ABdhPJwsfhIkJxRlWRUwsL9+I6SDJX2awZjYLLiX0k6sqbQZNJhv2PVbMgbaVjAscfsJamjS3iWmIw==
+X-Received: by 2002:a17:90a:f40c:: with SMTP id ch12mr10971335pjb.176.1615503469553;
+        Thu, 11 Mar 2021 14:57:49 -0800 (PST)
+Received: from smtpclient.apple ([192.30.189.3])
+        by smtp.gmail.com with ESMTPSA id 23sm3523508pge.0.2021.03.11.14.57.48
+        for <linux-scsi@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Mar 2021 14:57:48 -0800 (PST)
+From:   Brian Bunker <brian@purestorage.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.80.0.2.41\))
+Subject: ALUA state unavailable and device discovery
+Message-Id: <2DB5910B-736D-4191-8645-9673EA2B2699@purestorage.com>
+Date:   Thu, 11 Mar 2021 14:57:47 -0800
+To:     linux-scsi@vger.kernel.org
+X-Mailer: Apple Mail (2.3654.80.0.2.41)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Resumes the actual scsi device the unit descriptor of which
-is being accessed instead of the hba alone.
+Hello All,
 
-Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
----
- drivers/scsi/ufs/ufs-sysfs.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+There seems to be an incompatibility in the Linux SCSI code between SCSI =
+disk
+discovery and the ALUA state unavailable. =46rom the SPC specification =
+if you use
+ALUA state unavailable you also set the peripheral qualifier for that =
+path.
 
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index acc54f5..3fc182b 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -245,9 +245,9 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	res = ufshcd_wb_ctrl(hba, wb_enable);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- out:
- 	up(&hba->host_sem);
- 	return res < 0 ? res : count;
-@@ -297,10 +297,10 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	ret = ufshcd_read_desc_param(hba, desc_id, desc_index,
- 				param_offset, desc_buf, param_size);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -678,7 +678,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		up(&hba->host_sem);					\
- 		return -ENOMEM;						\
- 	}								\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_descriptor_retry(hba,			\
- 		UPIU_QUERY_OPCODE_READ_DESC, QUERY_DESC_IDN_DEVICE,	\
- 		0, 0, desc_buf, &desc_len);				\
-@@ -695,7 +695,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		goto out;						\
- 	ret = sysfs_emit(buf, "%s\n", desc_buf);			\
- out:									\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	kfree(desc_buf);						\
- 	up(&hba->host_sem);						\
- 	return ret;							\
-@@ -744,10 +744,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_flags(QUERY_FLAG_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_flag(hba, UPIU_QUERY_OPCODE_READ_FLAG,	\
- 		QUERY_FLAG_IDN##_uname, index, &flag);			\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -813,10 +813,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	scsi_autopm_get_device(hba->sdev_ufs_device);			\
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,	\
- 		QUERY_ATTR_IDN##_uname, index, 0, &value);		\
--	pm_runtime_put_sync(hba->dev);					\
-+	scsi_autopm_put_device(hba->sdev_ufs_device);			\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -899,11 +899,15 @@ static ssize_t _pname##_show(struct device *dev,			\
- 	struct scsi_device *sdev = to_scsi_device(dev);			\
- 	struct ufs_hba *hba = shost_priv(sdev->host);			\
- 	u8 lun = ufshcd_scsi_to_upiu_lun(sdev->lun);			\
-+	int ret;							\
- 	if (!ufs_is_valid_unit_desc_lun(&hba->dev_info, lun,		\
- 				_duname##_DESC_PARAM##_puname))		\
- 		return -EINVAL;						\
--	return ufs_sysfs_read_desc_param(hba, QUERY_DESC_IDN_##_duname,	\
-+	scsi_autopm_get_device(sdev);					\
-+	ret = ufs_sysfs_read_desc_param(hba, QUERY_DESC_IDN_##_duname,	\
- 		lun, _duname##_DESC_PARAM##_puname, buf, _size);	\
-+	scsi_autopm_put_device(sdev);					\
-+	return ret;							\
- }									\
- static DEVICE_ATTR_RO(_pname)
- 
-@@ -964,10 +968,10 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	scsi_autopm_get_device(hba->sdev_ufs_device);
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
- 		QUERY_ATTR_IDN_DYN_CAP_NEEDED, lun, 0, &value);
--	pm_runtime_put_sync(hba->dev);
-+	scsi_autopm_put_device(hba->sdev_ufs_device);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+While in the unavailable primary target port asymmetric access state, =
+the device
+server shall support those of the following commands that it supports =
+while in the=20
+active/optimized state:
+a) INQUIRY (the peripheral qualifier (see 6.6.2) shall be set to 001b)
+...
+
+The problem with that is that it limits when the host can discover disks =
+or reboot.
+In order for an sd device to be created, the PQ must be 0. This seems to =
+come from the
+scsi_bus_match function in scsi_sysfs.c.
+
+return (sdp->inq_periph_qual =3D=3D SCSI_INQ_PQ_CON)? 1: 0;
+
+So it only will return 1, if the PQ is 0.=20
+
+As a result if a SCSI device is discovered while the ALUA state for that =
+path is
+in the unavailable state, an sd device will not be created. An sg device =
+will but
+not an sd one. As a result multipath will not create a dm device. Or, if =
+an existing
+dm device exists, a path for this newly discovered device will not be =
+created. This
+means when the device moves out of unavailable to an active ALUA state, =
+or even
+standby, there is no device, so no path to change the state of in =
+multipath's dm
+device.
+
+For this reason the ALUA state standby looks attractive since it doesn't =
+have
+the PQ requirement. But looking at the commands required for support in =
+the standby
+ALUA state, there are some that are difficult to support in the =
+disconnected peer
+state, most notably persistent reservations, where not having access to =
+a peer
+can result in an inability to keep a consistent state when and if the =
+path again
+becomes available. The unavailable ALUA state has the right command list =
+to support
+in being disconnected from the source of truth, but the PQ requirement =
+is the
+trade off.
+
+Is the PQ check here because of INQUIRY requests sent to non-existent =
+LUNs leading
+to sd devices being created?
+
+In response to an INQUIRY command received by an incorrect logical unit, =
+the SCSI
+target device shall return the INQUIRY data with the peripheral =
+qualifier set to the
+value defined in 6.6.2.
+
+As a test, I changed this line to this to allow sd to create devices =
+where the
+peripheral qualifier is not 011b as opposed to needing to be 000b.
+
+return (sdp->inq_periph_qual !=3D SCSI_INQ_PQ_NOT_CAP)? 1: 0;
+
+This does allow an sd device to be created and multipath to create a =
+path for it
+in a dm device.
+
+3624a93706a10c27f300a496100011010 dm-2 PURE    ,FlashArray     =20
+size=3D2.0T features=3D'0' hwhandler=3D'1 alua' wp=3Drw
+`-+- policy=3D'service-time 0' prio=3D0 status=3Denabled
+  `- 7:0:0:1 sdb 8:16 failed undef running
+
+It is in the failed state, but when it comes back to an online ALUA =
+state, the path
+will return to active. There is an inconsistency since if the device was =
+in any other
+state than unavailable when it was discovered and then transitions to =
+the unavailable
+state, the device is already created so it can be transitioned in =
+multipath and all
+is good.
+
+Is there a way to handle both unintended consequence and the ALUA =
+unavailable state?
+
+Thanks,
+Brian
+
+Brian Bunker
+SW Eng
+brian@purestorage.com
+
+
 
