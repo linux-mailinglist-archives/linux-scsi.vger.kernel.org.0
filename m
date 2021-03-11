@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C021C337EE7
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 21:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882BE337EEB
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 21:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhCKUR2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Mar 2021 15:17:28 -0500
+        id S229490AbhCKUR6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Mar 2021 15:17:58 -0500
 Received: from esa.microchip.iphmx.com ([68.232.153.233]:49199 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbhCKURW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Mar 2021 15:17:22 -0500
+        with ESMTP id S230439AbhCKURY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Mar 2021 15:17:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1615493842; x=1647029842;
+  t=1615493844; x=1647029844;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Qpv8j9BCn4w05E8SSLir2jrdRZZVJRJZc2no4Bsqwwc=;
-  b=oLCVP++0edDtv1juFFzYgX1lh8ma3Fwe0NznkdXGyUklfswbA4FdJAuF
-   3bhX5L9xeltHiRFJITNK+pR1JCdyjh5l6enOcAnJim6HKQKlc4Ykzusws
-   IwpPXzpUAVuUfx/x/vma3xPv1FvGS26EZ/LuPBCGsQBQYpRIX9IxYSRuR
-   Hm7KlrFcTEbUNv+iDbasrxjWEJaPVnxq3beMUXCD559mD82v6QDjSXYu4
-   IszTOZa3KrUeBnMePnzydJQF31wHvyLijjTGRLLkCeQUqP59bEzaKTvJ+
-   G2jJT0aUqHWzlSMrJ7UhlssbuGhD7vPrRMJEJp1hWW71GFXVATeWc/QtR
-   Q==;
-IronPort-SDR: i503+r3rSBhtwA5aINvGoT97+xNJE6ezaM3IZKX3kppnjRAiz6LGX/K+52QhEm3uASm7cxayHW
- nxxpiDqbVSgn0U7L0Br8LT80p4LTKYRwuhJ/sGXiTeF56tnR9Lo8fibr5sYjCTXo0s/v/+lECb
- 1IHhRltJbPsJt+/gzn07XhIPjnkkj2zQEvCdLxAJ9InuJx4r5IbMs8kQt+TcJfm1IW08hCq8xG
- XbMTIxBoGPWU+BoYd1Ns4K7AH1NFmroyiWQ+ydRP9E42tbmGV5kzdEbq2+kp33rdPUN2QbvVQx
- gD8=
+  bh=sItFnv8InDTCK+FrYZVZp96L4CvRZ3UGQD8p49XbwPA=;
+  b=FHCpDhKUYmzAteIKDHX9wHVDNURVG4PeGWpKIDgLfiJP3EUIneEzXhab
+   HTkZvioioT1Pqq5j8ykZjHRUVppYDO8O72Ah61jYUFuN4UR0Bcxh1avnW
+   Cx4STG145MXgI0SV9BmN2qx0nYJSYbHtIAaVmsFQoVRM+U+YrHyIa6jTV
+   NhU3OiJRvIm/tJ5Kh1sC10lNJ1pfi5fBcqZtI+E78FkizgmS6j4CCsgOZ
+   K9/lXJyMhivuKpB1ATorrM7Fd/kn2ACaZqmrixOiNhh7+5U6ohHAXoHqM
+   mIJCTx5v/cIeJAPopImzWBqA/iJg9DPJR2QRQqY/SKlGPs1NUbTnLgo/d
+   A==;
+IronPort-SDR: NJpg8DmUWMCzjaL79ZWxFnk5BvIDXp+KODj1Mrkgh1hCTwSU0GqmVVyAiOTKDY8QvaBMqhWpg4
+ qitPxt/HzAg0efvxNGSo+iEk+5iHVsJE/kQVWvRNVX5dRPbAB9w8oBb+60yEGGy8wN9MUiViAu
+ ET+zEpmFZ47KN95kP7kwr/8mfgYATZhKuR4CpPFm5NP+t14l6kRdontjdAa4KezgdrnSIe6f0b
+ CtBgp/XQHoz19AajVk5wCi8wvARtFIq7eQhu9yN/pVYz+mkcAl+PD+IuzqiD6s2IGOqleFZuC1
+ 0KM=
 X-IronPort-AV: E=Sophos;i="5.81,241,1610434800"; 
-   d="scan'208";a="118559140"
+   d="scan'208";a="118559157"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Mar 2021 13:17:21 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Mar 2021 13:17:24 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 11 Mar 2021 13:17:08 -0700
+ 15.1.2176.2; Thu, 11 Mar 2021 13:17:14 -0700
 Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Thu, 11 Mar 2021 13:17:07 -0700
-Subject: [PATCH V5 23/31] smartpqi: fix driver synchronization issues
+ Transport; Thu, 11 Mar 2021 13:17:13 -0700
+Subject: [PATCH V5 24/31] smartpqi: convert snprintf to scnprintf
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -49,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Thu, 11 Mar 2021 14:17:07 -0600
-Message-ID: <161549382770.25025.789855864026860170.stgit@brunhilda>
+Date:   Thu, 11 Mar 2021 14:17:13 -0600
+Message-ID: <161549383357.25025.12363435617789964291.stgit@brunhilda>
 In-Reply-To: <161549045434.25025.17473629602756431540.stgit@brunhilda>
 References: <161549045434.25025.17473629602756431540.stgit@brunhilda>
 User-Agent: StGit/0.23-dirty
@@ -63,204 +63,121 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Kevin Barnett <kevin.barnett@microchip.com>
 
-* Synchronize: OFA, and controller offline events.
-  Prevent I/O during the above conditions.
-* Cleanup pqi_device_wait_for_pending_io by checking
-  the device->scsi_cmds_outstanding instead of walking
-  the devices list of commands.
-* Stop failing all I/O for all devices. This was causing OS
-  to retry them delaying OFA.
-* Cleanup cache flush. The controller is checked for offline
-  status in lower level functions.
+The entire Linux kernel has been slowly migrating from snprintf
+to scnprintf, so we are doing our part. This article explains
+the rationale for this change:
+    https: //lwn.net/Articles/69419/
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Reviewed-by: Martin Wilck <mwilck@suse.com>
 Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c |  106 +--------------------------------
- 1 file changed, 3 insertions(+), 103 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |   23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 9f6ab2f4144f..8b512f39f9d9 100644
+index 8b512f39f9d9..761d7ec6d2b2 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -813,13 +813,6 @@ static int pqi_flush_cache(struct pqi_ctrl_info *ctrl_info,
- 	int rc;
- 	struct bmic_flush_cache *flush_cache;
+@@ -1749,7 +1749,7 @@ static void pqi_dev_info(struct pqi_ctrl_info *ctrl_info,
+ 	ssize_t count;
+ 	char buffer[PQI_DEV_INFO_BUFFER_LENGTH];
  
--	/*
--	 * Don't bother trying to flush the cache if the controller is
--	 * locked up.
--	 */
--	if (pqi_ctrl_offline(ctrl_info))
--		return -ENXIO;
--
- 	flush_cache = kzalloc(sizeof(*flush_cache), GFP_KERNEL);
- 	if (!flush_cache)
- 		return -ENOMEM;
-@@ -998,9 +991,6 @@ static void pqi_update_time_worker(struct work_struct *work)
- 	ctrl_info = container_of(to_delayed_work(work), struct pqi_ctrl_info,
- 		update_time_work);
+-	count = snprintf(buffer, PQI_DEV_INFO_BUFFER_LENGTH,
++	count = scnprintf(buffer, PQI_DEV_INFO_BUFFER_LENGTH,
+ 		"%d:%d:", ctrl_info->scsi_host->host_no, device->bus);
  
--	if (pqi_ctrl_offline(ctrl_info))
--		return;
--
- 	rc = pqi_write_current_time_to_host_wellness(ctrl_info);
- 	if (rc)
- 		dev_warn(&ctrl_info->pci_dev->dev,
-@@ -5725,7 +5715,6 @@ static int pqi_scsi_queue_command(struct Scsi_Host *shost, struct scsi_cmnd *scm
- 	}
+ 	if (device->target_lun_valid)
+@@ -6382,14 +6382,13 @@ static ssize_t pqi_firmware_version_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
  
- out:
--	pqi_ctrl_unbusy(ctrl_info);
- 	if (rc)
- 		atomic_dec(&device->scsi_cmds_outstanding);
- 
-@@ -5837,102 +5826,22 @@ static void pqi_fail_io_queued_for_device(struct pqi_ctrl_info *ctrl_info,
- 	}
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->firmware_version);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->firmware_version);
  }
  
--static void pqi_fail_io_queued_for_all_devices(struct pqi_ctrl_info *ctrl_info)
--{
--	unsigned int i;
--	unsigned int path;
--	struct pqi_queue_group *queue_group;
--	unsigned long flags;
--	struct pqi_io_request *io_request;
--	struct pqi_io_request *next;
--	struct scsi_cmnd *scmd;
--
--	for (i = 0; i < ctrl_info->num_queue_groups; i++) {
--		queue_group = &ctrl_info->queue_groups[i];
--
--		for (path = 0; path < 2; path++) {
--			spin_lock_irqsave(&queue_group->submit_lock[path],
--						flags);
--
--			list_for_each_entry_safe(io_request, next,
--				&queue_group->request_list[path],
--				request_list_entry) {
--
--				scmd = io_request->scmd;
--				if (!scmd)
--					continue;
--
--				list_del(&io_request->request_list_entry);
--				set_host_byte(scmd, DID_RESET);
--				pqi_free_io_request(io_request);
--				scsi_dma_unmap(scmd);
--				pqi_scsi_done(scmd);
--			}
--
--			spin_unlock_irqrestore(
--				&queue_group->submit_lock[path], flags);
--		}
--	}
--}
--
- static int pqi_device_wait_for_pending_io(struct pqi_ctrl_info *ctrl_info,
- 	struct pqi_scsi_dev *device, unsigned long timeout_secs)
+ static ssize_t pqi_driver_version_show(struct device *dev,
+ 	struct device_attribute *attr, char *buffer)
  {
- 	unsigned long timeout;
- 
--	timeout = (timeout_secs * PQI_HZ) + jiffies;
--
--	while (atomic_read(&device->scsi_cmds_outstanding)) {
--		pqi_check_ctrl_health(ctrl_info);
--		if (pqi_ctrl_offline(ctrl_info))
--			return -ENXIO;
--		if (timeout_secs != NO_TIMEOUT) {
--			if (time_after(jiffies, timeout)) {
--				dev_err(&ctrl_info->pci_dev->dev,
--					"timed out waiting for pending IO\n");
--				return -ETIMEDOUT;
--			}
--		}
--		usleep_range(1000, 2000);
--	}
--
--	return 0;
--}
--
--static int pqi_ctrl_wait_for_pending_io(struct pqi_ctrl_info *ctrl_info,
--	unsigned long timeout_secs)
--{
--	bool io_pending;
--	unsigned long flags;
--	unsigned long timeout;
--	struct pqi_scsi_dev *device;
- 
- 	timeout = (timeout_secs * PQI_HZ) + jiffies;
--	while (1) {
--		io_pending = false;
--
--		spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
--		list_for_each_entry(device, &ctrl_info->scsi_device_list,
--			scsi_device_list_entry) {
--			if (atomic_read(&device->scsi_cmds_outstanding)) {
--				io_pending = true;
--				break;
--			}
--		}
--		spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock,
--					flags);
--
--		if (!io_pending)
--			break;
- 
-+	while (atomic_read(&device->scsi_cmds_outstanding)) {
- 		pqi_check_ctrl_health(ctrl_info);
- 		if (pqi_ctrl_offline(ctrl_info))
- 			return -ENXIO;
--
- 		if (timeout_secs != NO_TIMEOUT) {
- 			if (time_after(jiffies, timeout)) {
- 				dev_err(&ctrl_info->pci_dev->dev,
--					"timed out waiting for pending IO\n");
-+					"timed out waiting for pending I/O\n");
- 				return -ETIMEDOUT;
- 			}
- 		}
-@@ -6013,8 +5922,6 @@ static int pqi_lun_reset(struct pqi_ctrl_info *ctrl_info,
- 	return rc;
+-	return snprintf(buffer, PAGE_SIZE, "%s\n",
+-			DRIVER_VERSION BUILD_TIMESTAMP);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", DRIVER_VERSION BUILD_TIMESTAMP);
  }
  
--/* Performs a reset at the LUN level. */
--
- #define PQI_LUN_RESET_RETRIES			3
- #define PQI_LUN_RESET_RETRY_INTERVAL_MSECS	10000
- #define PQI_LUN_RESET_PENDING_IO_TIMEOUT_SECS	120
-@@ -7659,8 +7566,6 @@ static int pqi_force_sis_mode(struct pqi_ctrl_info *ctrl_info)
- 	return pqi_revert_to_sis_mode(ctrl_info);
+ static ssize_t pqi_serial_number_show(struct device *dev,
+@@ -6401,7 +6400,7 @@ static ssize_t pqi_serial_number_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->serial_number);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->serial_number);
  }
  
--#define PQI_POST_RESET_DELAY_B4_MSGU_READY	5000
--
- static int pqi_ctrl_init(struct pqi_ctrl_info *ctrl_info)
- {
- 	int rc;
-@@ -7668,7 +7573,7 @@ static int pqi_ctrl_init(struct pqi_ctrl_info *ctrl_info)
+ static ssize_t pqi_model_show(struct device *dev,
+@@ -6413,7 +6412,7 @@ static ssize_t pqi_model_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
  
- 	if (reset_devices) {
- 		sis_soft_reset(ctrl_info);
--		msleep(PQI_POST_RESET_DELAY_B4_MSGU_READY);
-+		msleep(PQI_POST_RESET_DELAY_SECS * PQI_HZ);
- 	} else {
- 		rc = pqi_force_sis_mode(ctrl_info);
- 		if (rc)
-@@ -8222,12 +8127,7 @@ static void pqi_ofa_ctrl_quiesce(struct pqi_ctrl_info *ctrl_info)
- 	pqi_ctrl_block_device_reset(ctrl_info);
- 	pqi_ctrl_block_requests(ctrl_info);
- 	pqi_ctrl_wait_until_quiesced(ctrl_info);
--	pqi_ctrl_wait_for_pending_io(ctrl_info, PQI_PENDING_IO_TIMEOUT_SECS);
--	pqi_fail_io_queued_for_all_devices(ctrl_info);
--	pqi_wait_until_inbound_queues_empty(ctrl_info);
- 	pqi_stop_heartbeat_timer(ctrl_info);
--	ctrl_info->pqi_mode_enabled = false;
--	pqi_save_ctrl_mode(ctrl_info, SIS_MODE);
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->model);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->model);
  }
  
- static void pqi_ofa_ctrl_unquiesce(struct pqi_ctrl_info *ctrl_info)
+ static ssize_t pqi_vendor_show(struct device *dev,
+@@ -6425,7 +6424,7 @@ static ssize_t pqi_vendor_show(struct device *dev,
+ 	shost = class_to_shost(dev);
+ 	ctrl_info = shost_to_hba(shost);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->vendor);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", ctrl_info->vendor);
+ }
+ 
+ static ssize_t pqi_host_rescan_store(struct device *dev,
+@@ -6619,7 +6618,7 @@ static ssize_t pqi_unique_id_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE,
++	return scnprintf(buffer, PAGE_SIZE,
+ 		"%02X%02X%02X%02X%02X%02X%02X%02X"
+ 		"%02X%02X%02X%02X%02X%02X%02X%02X\n",
+ 		unique_id[0], unique_id[1], unique_id[2], unique_id[3],
+@@ -6652,7 +6651,7 @@ static ssize_t pqi_lunid_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "0x%8phN\n", lunid);
++	return scnprintf(buffer, PAGE_SIZE, "0x%8phN\n", lunid);
+ }
+ 
+ #define MAX_PATHS	8
+@@ -6764,7 +6763,7 @@ static ssize_t pqi_sas_address_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "0x%016llx\n", sas_address);
++	return scnprintf(buffer, PAGE_SIZE, "0x%016llx\n", sas_address);
+ }
+ 
+ static ssize_t pqi_ssd_smart_path_enabled_show(struct device *dev,
+@@ -6822,7 +6821,7 @@ static ssize_t pqi_raid_level_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", raid_level);
++	return scnprintf(buffer, PAGE_SIZE, "%s\n", raid_level);
+ }
+ 
+ static ssize_t pqi_raid_bypass_cnt_show(struct device *dev,
+@@ -6849,7 +6848,7 @@ static ssize_t pqi_raid_bypass_cnt_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return snprintf(buffer, PAGE_SIZE, "0x%x\n", raid_bypass_cnt);
++	return scnprintf(buffer, PAGE_SIZE, "0x%x\n", raid_bypass_cnt);
+ }
+ 
+ static DEVICE_ATTR(lunid, 0444, pqi_lunid_show, NULL);
 
