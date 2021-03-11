@@ -2,151 +2,177 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AFA33694A
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 01:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF6C336902
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 01:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbhCKAx4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Mar 2021 19:53:56 -0500
-Received: from gateway22.websitewelcome.com ([192.185.46.187]:32875 "EHLO
-        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229646AbhCKAxs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 10 Mar 2021 19:53:48 -0500
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id AA1F714A8B
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Mar 2021 18:06:53 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id K8qrlH7ljkscSK8qrlEOd9; Wed, 10 Mar 2021 18:06:53 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tnn1NfTKvXdkVIEGC71LezrIsubA1kaJf3yIpzYvmrw=; b=e+baLI1+wGugzndicla0y8r6ra
-        Bh3nfj10AzCJsqYjoN3r84Wk6xyuLEXoiaw54rMwj7wxfrfvRmaYcpNvCqgxHIPZ6FxplUcaHmrx/
-        tUPUTJRLDTRcTWViV6FYLZucybJA1V4fs9ePe8EEAk9yM3n1PMNMpjAxNdyw4gQEnfaSWbfhKOBpl
-        1MSEqsPSDcp98MDr9o1ENaAD21P9lG+Q8D/XAx61Lvt6P+ySxUz6QNHU7QEdSRFta8+9ogP95yN1X
-        oztU4tiHrCeOShRuorn/P0H2HpoQwJDRD79wzaz8rQFSFQ6gL4DWeVfoVCuva0CsBfQtqw+f2gZjl
-        lgm3fhLQ==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:36282 helo=[192.168.15.8])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1lK8qr-004JNM-72; Wed, 10 Mar 2021 18:06:53 -0600
-Subject: Re: [PATCH v2][next] scsi: mpt3sas: Replace one-element array with
- flexible-array in struct _MPI2_CONFIG_PAGE_IO_UNIT_3
-To:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20210202235118.GA314410@embeddedor>
- <20210308193237.GA212624@embeddedor>
- <88d9dda39a70df25b48e72247b9752d3dc5e2e8d.camel@linux.ibm.com>
- <20210308204129.GA214076@embeddedor> <202103101058.16ED27BE3@keescook>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Message-ID: <855e73f8-9b84-25b9-01e3-8ce368165b25@embeddedor.com>
-Date:   Wed, 10 Mar 2021 18:06:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S230139AbhCKAhQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Mar 2021 19:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231128AbhCKAgx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Mar 2021 19:36:53 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC9DC061762
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Mar 2021 16:36:52 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id v2so23755064lft.9
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Mar 2021 16:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EEzbsSCDR9QboIA8OrN63K5HZEwShS0wIkxT1lrzd0Y=;
+        b=riZjyH1NfHDCunME5Ebgwcbph2FiEIMHDSKKFitpNg0U8iOTWuJwtB6GzHL3vNfxn3
+         bKC6k1jMXjsf5GoCwsYzyYIe9V8eRGIjZxbtrzAHA4cWo/kfcaVq0a2yxRHziD/UHYtL
+         KrJVPIzP09ibIN4SoXEEPVGDtIxaHre5IZ2sYsYyR9ToplAng35DTKF6bOubx+i39R1f
+         Dyh6YNTaIYGkqNxapf4Gtw75AiC382TPw8+LxMz+fxeVGy15sf7k73kyLEtXBsVNkWpt
+         etsNBpGlXtrr7f+X+XS+9XGQN3Nqb1sTEg7ly23GPExeT193DJfFsQE4BqchIm93na3Z
+         gRrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EEzbsSCDR9QboIA8OrN63K5HZEwShS0wIkxT1lrzd0Y=;
+        b=WV2aaFI21JESU0S5pTOycDpI9wKwACAZxJHlNiFsAc1LwvRjPNoNJjwCHhFYALa+1a
+         baLyO/QndZtHeJHU9xVjOnBr+OL2RdQPpXw1l6L/kuY/ZtqZVou8Id3Q0R2x/PPbXFFe
+         9HzPvt9UyujNnZmRHvrfMXBTeS6l/0hkMvGI899Iz0KwLT8SkJg46o9AEzSa5TdNDBUy
+         7iyhZmt7CCPVpxmNsug/8iDOJAN08GBKO2BX9DCaPU34DD9dcu/PzAFBtfzWcucgWOMx
+         ivcpMOVoTmt2Lo3Jm9JTTtqmN2LsREwuCLCZVl1JSTYvKsOI1uuJoUusXUBeX8GMMPbi
+         oxYg==
+X-Gm-Message-State: AOAM532rPoQ6MYzlo8VS/fJItdX6Gj6pbL3joqsKMjXn/Qv1CtN9OQzC
+        FEVFvTUXF+Kdenx5/P8E0kmVr2MsPdNreZOzmec0NA==
+X-Google-Smtp-Source: ABdhPJxPA73QJEO2P06IeIm6xha2IwSe1nk/jxmy8+2H6YjUfx61sOITuBIwpepPUOCRRsAhsWRrIoW1PKscdwIJ+Vc=
+X-Received: by 2002:a19:4c08:: with SMTP id z8mr638983lfa.157.1615423011194;
+ Wed, 10 Mar 2021 16:36:51 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <202103101058.16ED27BE3@keescook>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.31.110
-X-Source-L: No
-X-Exim-ID: 1lK8qr-004JNM-72
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:36282
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 9
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+References: <20210303135500.24673-1-alex.bennee@linaro.org>
+ <20210303135500.24673-2-alex.bennee@linaro.org> <CAK8P3a0W5X8Mvq0tDrz7d67SfQA=PqthpnGDhn8w1Xhwa030-A@mail.gmail.com>
+ <20210305075131.GA15940@goby> <CAK8P3a0qtByN4Fnutr1yetdVZkPJn87yK+w+_DAUXOMif-13aA@mail.gmail.com>
+ <CACRpkdb4RkQvDBgTMW_+7yYBsHNRyJZiT5bn04uQJgk7tKGDOA@mail.gmail.com>
+ <6c542548-cc16-af68-c755-df52bd13b209@marcan.st> <CAFA6WYOYmTgguVDwpyjnt3gLssqW48qzAkRD_nyPYg0nNhxT2A@mail.gmail.com>
+ <beca6bc8-8970-bd01-8de0-6ded1fb69be2@marcan.st> <CACRpkdbQks5pRFNHkNLVvLHCBhh0XCv7pHYq25EVAbU60PcwsA@mail.gmail.com>
+ <0a26713a-8988-1713-4358-bc62364b9e25@marcan.st>
+In-Reply-To: <0a26713a-8988-1713-4358-bc62364b9e25@marcan.st>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 11 Mar 2021 01:36:39 +0100
+Message-ID: <CACRpkda9f-BNmu-CaNsghnDoOcSXvvvji=tag2Xos+tg_nNZ0w@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/5] rpmb: add Replay Protected Memory Block (RPMB) subsystem
+To:     Hector Martin <marcan@marcan.st>
+Cc:     David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Arnd Bergmann <arnd@linaro.org>,
+        Joakim Bech <joakim.bech@linaro.org>,
+        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Maxim Uvarov <maxim.uvarov@linaro.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Ruchika Gupta <ruchika.gupta@linaro.org>,
+        "Winkler, Tomas" <tomas.winkler@intel.com>, yang.huang@intel.com,
+        bing.zhu@intel.com, Matti.Moell@opensynergy.com,
+        hmo@opensynergy.com, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-nvme@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd.bergmann@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Wed, Mar 10, 2021 at 2:52 PM Hector Martin <marcan@marcan.st> wrote:
 
+> This relies on having a secure boot chain to start with (otherwise you
+> can just bypass policy that way; the RPMB is merely storage to give you
+> anti-rollback properties, it can't enforce anything itself). So you
+> would have to have a laptop with a fully locked down secure boot, which
+> can only boot some version of Linux signed by you until, say, LUKS
+> decryption. And then the tooling around that needs to be integrated with
+> RPMB, to use it as an attempt counter.
 
-On 3/10/21 13:07, Kees Cook wrote:
+Yes and no. For secure boot yes. For other use cases it can
+still be useful.
 
->> diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
->> index 43a3bf8ff428..d00431f553e1 100644
->> --- a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
->> +++ b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
->> @@ -992,7 +992,7 @@ typedef struct _MPI2_CONFIG_PAGE_IO_UNIT_1 {
->>   *one and check the value returned for GPIOCount at runtime.
->>   */
->>  #ifndef MPI2_IO_UNIT_PAGE_3_GPIO_VAL_MAX
->> -#define MPI2_IO_UNIT_PAGE_3_GPIO_VAL_MAX    (1)
->> +#define MPI2_IO_UNIT_PAGE_3_GPIO_VAL_MAX    (36)
->>  #endif
->>
->>  typedef struct _MPI2_CONFIG_PAGE_IO_UNIT_3 {
->> diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
->> index 44f9a05db94e..23fcf29bfd67 100644
->> --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
->> +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
->> @@ -3203,7 +3203,7 @@ BRM_status_show(struct device *cdev, struct device_attribute *attr,
->>  {
->>         struct Scsi_Host *shost = class_to_shost(cdev);
->>         struct MPT3SAS_ADAPTER *ioc = shost_priv(shost);
->> -       Mpi2IOUnitPage3_t *io_unit_pg3 = NULL;
->> +       Mpi2IOUnitPage3_t io_unit_pg3;
->>         Mpi2ConfigReply_t mpi_reply;
->>         u16 backup_rail_monitor_status = 0;
->>         u16 ioc_status;
->> @@ -3221,16 +3221,10 @@ BRM_status_show(struct device *cdev, struct device_attribute *attr,
->>                 goto out;
->>
->>         /* allocate upto GPIOVal 36 entries */
->> -       sz = offsetof(Mpi2IOUnitPage3_t, GPIOVal) + (sizeof(u16) * 36);
->> -       io_unit_pg3 = kzalloc(sz, GFP_KERNEL);
->> -       if (!io_unit_pg3) {
->> -               rc = -ENOMEM;
->> -               ioc_err(ioc, "%s: failed allocating memory for iounit_pg3: (%d) bytes\n",
->> -                       __func__, sz);
->> -               goto out;
->> -       }
->> +       sz = sizeof(io_unit_pg3);
->> +       memset(&io_unit_pg3, 0, sz);
-> 
-> I like this a lot. It makes the code way simpler.
-> 
-> Putting this on the stack makes it faster, and it's less than 100 bytes,
-> which seems entirely reasonable.
-> 
->>
->> -       if (mpt3sas_config_get_iounit_pg3(ioc, &mpi_reply, io_unit_pg3, sz) !=
->> +       if (mpt3sas_config_get_iounit_pg3(ioc, &mpi_reply, &io_unit_pg3, sz) !=
-> 
-> The only thing I can imagine is if this ends up doing DMA, which isn't
-> allowed on the stack. However, in looking down through the call path,
-> it's _copied_ into DMA memory, so this appears entirely safe.
->  
-> Can you send this as a "normal" patch? Feel free to include:
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+The way I understand it, there are people (not me) with secure boot
+ambitions but I wouldn't say that is the only use case, see below.
 
-Done: https://lore.kernel.org/lkml/20210310235951.GA108661@embeddedor/
+> But now this ends up having to involve userspace anyway; the kernel key
+> stuff doesn't support policy like this, does it? So having the kernel
+> automagically use RPMB wouldn't get us there.
 
-Thanks for the comments!
---
-Gustavo
+Yes, you are right, I had the wrong idea. It needs to be something
+the user (or the users agent such as an organization) decides to
+make use of, and it is policy so it should be in userspace. We
+may standardize the key format on the device though.
+
+> I may be wrong on the details here, but as far as I know RPMB is
+> strictly equivalent to a simple secure increment-only counter in what it
+> buys you. The stuff about writing data to it securely is all a red
+> herring - you can implement secure storage elsewhere, and with secure
+> storage + a single secure counter, you can implement anti-rollback.
+>
+> It is not intended to store keys in a way that is somehow safer than
+> other mechanisms. After all, you need to securely store the RPMB key to
+> begin with; you might as well use that to encrypt a keystore on any
+> random block device.
+
+The typical use-case mentioned in one reference is to restrict
+the number of password/pin attempts and  combine that with
+secure time to make sure that longer and longer intervals are
+required between password attempts.
+
+This seems pretty neat to me.
+
+> But RPMB does not enforce any of this policy for you. RPMB only gives
+> you a primitive: the ability to have storage that cannot be externally
+> rolled back. So none of this works unless the entire system is set up to
+> securely boot all the way until the drive unlock happens, and there are
+> no other blatant code execution avenues.
+
+This is true for firmware anti-rollback or say secure boot.
+
+But RPMB can also be used for example for restricting the
+number of PIN attempts.
+
+A typical attack vector on phones (I think candybar phones
+even) was a robot that was punching PIN codes to unlock
+the phone, combined with an electronic probe that would
+cut the WE (write enable) signal to the flash right after
+punching a code. The counter was stored in the flash.
+
+(A bit silly example as this can be countered by reading back
+the counter from flash and checking etc, but you get the idea,
+various versions of this attack is possible,)
+
+With RPMB this can be properly protected against because
+the next attempt can not be made until after the RPMB
+monotonic counter has been increased.
+
+Of course the system can be compromised in other ways,
+(like, maybe it doesn't even have secure boot or even
+no encrypted drive) but this is one of the protection
+mechanisms that can plug one hole.
+
+It is thus a countermeasure to keyboard emulators and other
+evil hardware trying to brute force their way past screen
+locks and passwords. Such devices exist, sadly.
+
+> There isn't even any encryption involved in the protocol, so all the
+> data stored in the RPMB is public and available to any attacker.
+
+You need to pass the symmetric key to increase a counter
+and store a new "key" (data chunk, 256 bytes). But as you say
+one can read it without the symmetric key.
+
+AFAICT that is not a problem for any use case for RPMB.
+
+> So unless the kernel grows a subsystem/feature to enforce complex key
+> policies (with things like use counts, retry times, etc), I don't think
+> there's a place to integrate RPMB kernel-side. You still need a trusted
+> userspace tool to glue it all together.
+
+Yes, I understand such ambitions may exist and pretty much why
+I CC the keyring people. So the question is whether they think
+that is something they would go and use for e.g. passphrase
+retries.
+
+Yours,
+Linus Walleij
