@@ -2,212 +2,240 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 918FD337EA4
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 21:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B46337ECF
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Mar 2021 21:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbhCKUCq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Mar 2021 15:02:46 -0500
-Received: from [212.63.208.185] ([212.63.208.185]:43780 "EHLO
-        mail.marcansoft.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229796AbhCKUCh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Mar 2021 15:02:37 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7A616424D9;
-        Thu, 11 Mar 2021 20:02:24 +0000 (UTC)
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Arnd Bergmann <arnd@linaro.org>,
-        Joakim Bech <joakim.bech@linaro.org>,
-        =?UTF-8?Q?Alex_Benn=c3=a9e?= <alex.bennee@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Maxim Uvarov <maxim.uvarov@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Ruchika Gupta <ruchika.gupta@linaro.org>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>, yang.huang@intel.com,
-        bing.zhu@intel.com, Matti.Moell@opensynergy.com,
-        hmo@opensynergy.com, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-nvme@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd.bergmann@linaro.org>
-References: <20210303135500.24673-1-alex.bennee@linaro.org>
- <20210303135500.24673-2-alex.bennee@linaro.org>
- <CAK8P3a0W5X8Mvq0tDrz7d67SfQA=PqthpnGDhn8w1Xhwa030-A@mail.gmail.com>
- <20210305075131.GA15940@goby>
- <CAK8P3a0qtByN4Fnutr1yetdVZkPJn87yK+w+_DAUXOMif-13aA@mail.gmail.com>
- <CACRpkdb4RkQvDBgTMW_+7yYBsHNRyJZiT5bn04uQJgk7tKGDOA@mail.gmail.com>
- <6c542548-cc16-af68-c755-df52bd13b209@marcan.st>
- <CAFA6WYOYmTgguVDwpyjnt3gLssqW48qzAkRD_nyPYg0nNhxT2A@mail.gmail.com>
- <beca6bc8-8970-bd01-8de0-6ded1fb69be2@marcan.st>
- <CACRpkdbQks5pRFNHkNLVvLHCBhh0XCv7pHYq25EVAbU60PcwsA@mail.gmail.com>
- <0a26713a-8988-1713-4358-bc62364b9e25@marcan.st>
- <CACRpkda9f-BNmu-CaNsghnDoOcSXvvvji=tag2Xos+tg_nNZ0w@mail.gmail.com>
- <32bdceb1-e70d-7481-96e3-a064a7108eb9@marcan.st>
- <CACRpkdZ_-rqGBUOxUcBPeqVkLzX=Q9pjO9M+zY20-S9tNXAE0Q@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [RFC PATCH 1/5] rpmb: add Replay Protected Memory Block (RPMB)
- subsystem
-Message-ID: <d7f8a732-7a44-f609-52dc-3ba824a3d192@marcan.st>
-Date:   Fri, 12 Mar 2021 05:02:22 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S229796AbhCKUPR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Mar 2021 15:15:17 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:63158 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229468AbhCKUO7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Mar 2021 15:14:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1615493700; x=1647029700;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wA1WCIngPxVCNi7/8G1HN04dsEDC84w37e/X/0tO4pk=;
+  b=DWMjbS8HcK3Mw9lYRFK3TQqtKTbINKMyJbC47wPnL5bm2oTIACmMDTIO
+   HvhwxM0Sygv3nCRxjmGv5CssyKySZFyRBI8uwoopR3JUXeylLgAnI+NCy
+   SvfVN0xg2EBqRQbkmdPLfCLtHLf32Ay3jgW760isbqIkKjO79aky4Kefs
+   KbQjmru153zb9m5q0eU9W0wyIkhwJa8FYZ7HEBd3GjtrmSbuZqrcFHd5Y
+   11dRFCaLGSBt7EaN3Azt7tN5fo6W9K7Nz29ledhjwTqZmZE09ucGXOq7a
+   QY1I0EJImTQs3n00N3rKHiAvdzKQ3F5ds9w2IC69iFJewQeHnkcqG77D+
+   Q==;
+IronPort-SDR: dbFAg8enfH+A7q5VqmETbKV9sJkJpvXcLtZr4Nzh9Oy60wzdLBWZCd6Q7PrXguWckp4dCQV2kh
+ P1xbYZ63oTzZEroHog3PMR3H6Aqm++sb5NO/ZQ80yIYMsdf9YaGIMz2R3MI87zRXdrj0SYLHOe
+ 8wL7UwwWRRhTHTkS5ikhBaoPIgK2V3KkDtcW146GHiHesga820i5/ghWrYwcz7G7JnBfarfR3S
+ z2hyQyjC6mkT8cg+RundbvBjlFHyFLd5Ez9B5A9UIdAYRDpDJVPa8sYcD5W0Q0Z2iqLTt7hRik
+ MbI=
+X-IronPort-AV: E=Sophos;i="5.81,241,1610434800"; 
+   d="scan'208";a="112405888"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Mar 2021 13:14:59 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 11 Mar 2021 13:14:52 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Thu, 11 Mar 2021 13:14:52 -0700
+Subject: [PATCH V5 00/31] smartpqi updates
+From:   Don Brace <don.brace@microchip.com>
+To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
+        <mike.mcgowen@microchip.com>, <murthy.bhat@microchip.com>,
+        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
+        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
+CC:     <linux-scsi@vger.kernel.org>
+Date:   Thu, 11 Mar 2021 14:14:51 -0600
+Message-ID: <161549045434.25025.17473629602756431540.stgit@brunhilda>
+User-Agent: StGit/0.23-dirty
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdZ_-rqGBUOxUcBPeqVkLzX=Q9pjO9M+zY20-S9tNXAE0Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/03/2021 23.06, Linus Walleij wrote:
-> Yes. And this is what mobile phone vendors typically did.
-> 
-> But the nature of different electrical attacks made them worried
-> about different schemes involving cutting power and disturbing
-> signals with different probes, so they wanted this counter
-> implemented in hardware and that is why RPMB exists at all
-> (IIUC).
+These patches are based on Martin Peterson's 5.13/scsi-queue tree
 
-No, prior to RPMB there was no such secure counter at all. The problem 
-is that non-volatile erasable storage (i.e. EEPROM/Flash) is 
-incompatible with modern SoC manufacturing processes, so there is no way 
-to embed a secure counter into the main SoC. And once your counter needs 
-to be external, there needs to be a secure communications protocol to 
-access it. This is what RPMB implements.
+Note that these patches depend on the following three patches
+applied to Martin Peterson's tree:
+  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+  5.13/scsi-queue
+Depends-on: 5443bdc4cc77 scsi: smartpqi: Update version to 1.2.16-012
+Depends-on: 408bdd7e5845 scsi: smartpqi: Correct pqi_sas_smp_handler busy condition
+Depends-on: 1bdf6e934387 scsi: smartpqi: Correct driver removal with HBA disks
 
-For preventing software downgrades, especially of bootloader code, this 
-can be implemented with one-time fuses embedded in the SoC, but there is 
-a limited supply of those. So this doesn't work for things like PIN 
-attempt counters. For that you need a secure external counter.
+This set of changes consist of:
+  * Add support for newer controller hardware.
+    * Refactor AIO and s/g processing code. (No functional changes)
+    * Add write support for RAID 5/6/1 Raid bypass path (or accelerated I/O path).
+    * Add check for sequential streaming.
+    * Add in new PCI-IDs.
+  * Format changes to re-align with our in-house driver. (No functional changes.)
+  * Correct some issues relating to suspend/hibernation/OFA/shutdown.
+    * Block I/O requests during these conditions.
+  * Add in qdepth limit check to limit outstanding commands.
+    to the max values supported by the controller.
+  * Correct some minor issues found during regression testing.
+  * Update the driver version.
 
-> It is fine to be of the opinion that this entire piece of hardware
-> is pointless because the same can be achieved using
-> well written software.
+Changes since V1:
+  * Re-added 32bit calculations to correct i386 compile issues
+    to patch smartpqi-refactor-aio-submission-code 
+    Reported-by: kernel test robot <lkp@intel.com>
+    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/VMBBGGGE5446SVEOQBRCKBTRRWTSH4AB/
 
-You've misunderstood me. RPMB isn't pointless; what I am saying is that 
-if you strip away everything but the counter functionality, you can 
-still build equivalent security guarantees. You still need the counter. 
-There is no way to get that counter without RPMB or something like it 
-(another option is e.g. to use a smartcard IC as a secure element; AIUI 
-modern Apple devices do this). Software alone doesn't work. This is why 
-I wrote that article about how the FBI cracks iPhones; that works 
-because they weren't using a secure rollback-protected storage/counter 
-chip of any kind.
+Changes since V2:
+  * Added 32bit division to correct i386 compile issues
+    to patch smartpqi-add-support-for-raid5-and-raid6-writes
+    Reported-by: kernel test robot <lkp@intel.com>
+    https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/ZCXJJDGPPTTXLZCSCGWEY6VXPRB3IFOQ/
 
-> The position that the kernel community shall just ignore this
-> hardware is a possible outcome of this discussion, but we need
-> to have the discussion anyway, because now a RPMB framework
-> is being promoted. The people who want it will need to sell it to
-> us.
+Changes since V3:
+    Martin Wilck's Review:
+    smartpqi-add-support-for-product-id
+      * Moved a formatting HUNK to smartpqi-align-code-with-oob-driver
+      * Added more patch description detail.
+    smartpqi-refactor-aio-submission-code
+      * Updated patch description.
+    smartpqi-add-support-for-raid5-and-raid6-writes
+      * Removed two manifest constants from smartpqi.h
+      * Changed scnprintf format from %hhx to %x for sysfs entries:
+          pqi_host_enable_r5_writes_show:ctrl_info->enable_r5_writes
+          pqi_host_enable_r6_writes_show:ctrl_info->enable_r6_writes
+      * Corrected disabling of R1 reads
+      * Added comment on raid_map calculations.
+        Changed how parity indexes are calculated.
+      * Changed DMA direction in function pqi_aio_submit_r56_write_io
+        to DMA_TO_DEVICE.
+    smartpqi-add-support-for-raid1-writes
+      * Changed DMA direction in function pqi_aio_submit_r1_write_io
+        to DMA_TO_DEVICE.
+    smartpqi-add-support-for-BMIC-sense-feature-cmd-and-feature-bits
+      * Squashed smartpqi-update-AIO-Sub-Page-0x02-support
+        This effectively moved function pqi_aio_limit_to_bytes into this patch.
+      * Squashed smartpqi-enable-support-for-NVMe-encryption since
+        this was adding in another feature.
+      * Moved formatting HUNK for pqi_scsi_dev_raid_map_data into
+        smartpqi-refactor-aio-submission-code.
+      * Moved structure pqi_aio_r56_path_request formatting HUNKS into
+        smartpqi-add-support-for-raid5-and-raid6-writes.
+      * Moved remaining formatting HUNKs into
+        smartpqi-align-code-with-oob-driver.
+    smartpqi-add-support-for-long-firmware-version
+      * Updated setting of ctrl_info->firmware_version to avoid overflows.
+      * Moved a formatting HUNK into smartpqi-align-code-with-oob-driver.
+    smartpqi-align-code-with-oob-driver
+      * Updated with formatting HUNKs in other reviews.
+    smartpqi-add-stream-detection
+      * Updated patch description to better describe what the patch does.
+    smartpqi-add-host-level-stream-detection-enable
+      * Changed snprintf formate from 0x%hhx to 0x%x.
+    smartpqi-enable-support-for-NVMe-encryption
+      * Squashed into patch
+        smartpqi-add-support-for-BMIC-sense-feature-cmd-and-feature-bits
+    smartpqi-fix-driver-synchronization-issues
+      * Split into 10 patches.
+        smartpqi-remove-timeouts-from-internal-cmds
+        smartpqi-add-support-for-wwid
+        smartpqi-update-event-handler
+        smartpqi-update-soft-reset-management-for-OFA
+          * Squashed smartpqi-change-timing-of-release-of-QRM-memory-during-OFA
+        smartpqi-synchronize-device-resets-with-mutex
+          * Note: still using mutex. Our OOB driver has been well tested with
+                  this synchronization construct. Changing this here will
+                  mandate a change in our OOB driver and kick off another
+                  round of regression tests that have already passed.
+        smartpqi-update-suspend-resume-and-shutdown
+          * Note: suspend/resume is not supported on many servers. This
+                  has passed our internal tests on the few that do. This
+                  patch was originally intended for a workstation platform.
+                  So I left the mutex code alone. We would like to address any
+                  subsequent issues in the future.
+        smartpqi-update-raid-bypass-handling
+        smartpqi-update-ofa-management
+          * Squashed smartpqi-return-busy-indication-for-IOCTLs-when-ofa-is-active
+        smartpqi-update-device-scan-operations
+        smartpqi-fix-driver-synchronization-issues
+          * Original patch with all un-related HUNKs moved into the above
+            9 patches.
+    smartpqi-fix_host_qdepth_limit
+      * Patch removed and replaced with patch smartpqi-use-host-wide-tagspace
+    smartpqi-change-timing-of-release-of-QRM-memory-during-OFA
+      * Squashed into patch smartpqi-update-soft-reset-management-for-OFA
+    smartpqi-add-additional-logging-for-LUN-resets
+      * Updated patch description
+    smartpqi-update-enclosure-identifier-in-sysfs
+      * Updated patch description.
+    smartpqi-correct-system-hangs-when-resuming-from-hibernation
+      * Updated patch description.
+      * Note: suspend/resume is not widely supported. The platform this
+              patch was added for was a workstation. There has been a lot
+              of testing on the supported platforms and all of the tests
+              have passed. We would rather not make changes to this patch
+              because of the rare usage. We would rather correct any issues
+              (if any) in subsequent patches.
+    smartpqi-update-version-to-2.1.8-045
+      * Previous patch was smartpqi-update-version-to-2.1.6-005
+        We bumped the version up since the patch set was originally pushed.
 
-Again, you're kind of misunderstanding me here. I'm not saying the 
-feature is useless. What I'm saying is that, to understand *how* it is 
-useful, it helps if you forget about the read/write commands and treat 
-it as a simple counter.
+Changes since V4:
+	smartpqi-use-host-wide-tagspace
+            John Garry <john.garry@huawei.com> review:
+            https://marc.info/?l=linux-scsi&m=161541732830890&w=2
+            * Changed driver to only set shost->host_tagset = 1, and reverted
+              setting nm_hw_queue back to original setting.
+            * Corrected John's email address.
+---
 
-Once you do that, you'll realize that e.g. putting keys in RPMB doesn't 
-really make sense as a kernel primitive. The usefulness of RPMB is 
-purely in the integration of that counter (which is equivalent to 
-rollback-protected storage) with a policy system. Everything else is 
-icing on the cake; it doesn't create new use cases.
+Don Brace (8):
+      smartpqi: use host wide tagspace
+      smartpqi: refactor aio submission code
+      smartpqi: refactor build sg list code
+      smartpqi: add support for raid5 and raid6 writes
+      smartpqi: add support for raid1 writes
+      smartpqi: add stream detection
+      smartpqi: add host level stream detection enable
+      smartpqi: update version to 2.1.8-045
 
-Consider this:
+Kevin Barnett (19):
+      smartpqi: add support for product id
+      smartpqi: add support for BMIC sense feature cmd and feature bits
+      smartpqi: add support for long firmware version
+      smartpqi: align code with oob driver
+      smartpqi: disable write_same for nvme hba disks
+      smartpqi: remove timeouts from internal cmds
+      smartpqi: add support for wwid
+      smartpqi: update event handler
+      smartpqi: update soft reset management for OFA
+      smartpqi: synchronize device resets with mutex
+      smartpqi: update suspend resume and shutdown
+      smartpqi: update raid bypass handling
+      smartpqi: update ofa management
+      smartpqi: update device scan operations
+      smartpqi: fix driver synchronization issues
+      smartpqi: convert snprintf to scnprintf
+      smartpqi: add additional logging for LUN resets
+      smartpqi: correct system hangs when resuming from hibernation
+      smartpqi: add new pci ids
 
-* You have RPMB, but you will use it as a counter only.
-* To use RPMB, you need to have a secure shared key.
-* You use the RPMB key (or a hash, or whatever) to encrypt a GPG key in 
-your filesystem
-* You have a Git repo. This is your secure rollback-protected storage.
-* We assume the filesystem can be potentially read, written, and 
-intercepted.
+Murthy Bhat (4):
+      smartpqi: fix request leakage
+      smartpqi: add phy id support for the physical drives
+      smartpqi: update sas initiator_port_protocols and target_port_protocols
+      smartpqi: update enclosure identifier in sysfs
 
-To read from your rollback-protected storage, you:
 
-* Read the RPMB counter securely
-* Fetch the Git tag named "v%d" with the counter value
-* Ensure the Git tag is correctly signed with your secure GPG key
-* Ensure the commit description of the signed commit is also "v%d"
+ drivers/scsi/smartpqi/smartpqi.h              |  310 +-
+ drivers/scsi/smartpqi/smartpqi_init.c         | 3106 ++++++++++-------
+ .../scsi/smartpqi/smartpqi_sas_transport.c    |   39 +-
+ drivers/scsi/smartpqi/smartpqi_sis.c          |    9 +-
+ drivers/scsi/smartpqi/smartpqi_sis.h          |    1 +
+ 5 files changed, 2184 insertions(+), 1281 deletions(-)
 
-To write to your rollback protected storage, you:
-
-* Commit your changes to the repository (as a child of the current known 
-good commit, which you know is secure via the prevous read process) with 
-the commit message "v%d" with the counter value + 1
-* Tag it "v%d" with the current counter value + 1, signing the tag with 
-your GPG private key
-* Ensure all changes are flushed to disk
-* Perform an increment operation on the RPMB counter
-
-You have now built a secure, rollback-protected Git repository, with 
-similar security properties to RPMB storage, without using RPMB storage; 
-just a counter.
-
-Just like RPMB storage, the repo is readable without a key.
-Just like RPMB storage, you need to have a secured master key stored 
-somewhere; if the attacker gets your key it is game over.
-Just like RPMB storage, the repo can only be updated (in a way that 
-would be accepted) with the key available
-Just like RPMB storage, the repo cannot be rolled back to a prior 
-version (because it would not match the counter value)
-
-Thus, we can conclude that the storage features of RPMB do not provide 
-additional security properties that cannot be derived from a simple counter.
-
-* Disclaimer: please don't actually deploy this; I'm trying to make a 
-point here, it's 5AM and I'm not claiming this is a perfectly secure 
-design and I haven't missed anything. Please don't design 
-rollback-protected Git repositories without expert review. I am assuming 
-filesystem mutations only happen between operations and handwaving away 
-active attacks, which I doubt Git is designed to be robust against. A 
-scheme like this can be implemented securely with care, but not naively.
-
->>> With RPMB this can be properly protected against because
->>> the next attempt can not be made until after the RPMB
->>> monotonic counter has been increased.
->>
->> But this is only enforced by software. If you do not have secure boot,
->> you can just patch software to allow infinite tries without touching the
->> RPMB. The RPMB doesn't check PINs for you, it doesn't even gate read
->> access to data in any way. All it does is promise you cannot make the
->> counter count down, or make the data stored within go back in time.
-> 
-> This is true, I guess the argument is something along the
-> line that if one link in the chain is weaker, why harden
-> any other link, the chain will break anyway?
-
-This is how security works, yes :-)
-
-I'm not saying hardening a link in the chain is pointless in every case, 
-but in this case it's like heat treating one link in the chain, then 
-joining it to the next one with a ziptie. Only once you at least have 
-the entire chain of steel does it make sense to start thinking about 
-heat treatment.
-
-> I am more of the position let's harden this link if we can
-> and then deal with the others when they come up, i.e.
-> my concern is this piece of the puzzle, even if it is not
-> the centerpiece (maybe the centerpiece is secure boot
-> what do I know).
-
-Well, that's what I'm saying, you do need secureboot for this to make 
-sense :-)
-
-RPMB isn't useless and some systems should implement it; but there's no 
-real way for the kernel to transparently use it to improve security in 
-general (for anyone) without the user being aware. Since any security 
-benefit from RPMB must come from integration with user policy, it 
-doesn't make sense to "well, just do something else with RPMB because 
-it's better than nothing"; just doing "something" doesn't make systems 
-more secure. There needs to be a specific, practical use case that we'd 
-be trying to solve with RPMB here.
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+--
+Signature
