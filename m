@@ -2,61 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A54573388F9
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 901B833890F
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbhCLJsd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Mar 2021 04:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S233256AbhCLJsq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Mar 2021 04:48:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbhCLJsB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:01 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C363C061764
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:00 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v11so1399569wro.7
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:00 -0800 (PST)
+        with ESMTP id S233120AbhCLJsQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:16 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903DFC061764
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:01 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id v11so1399591wro.7
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ulNuxr60llkoiFafxIlb+CHi87OxQ5J+B08tO2koRaI=;
-        b=wLD8PaXskYr/2V4CFDzAJ3PEojmrvZ1xIEyZ6Jhnt/KibWadsZT5+wQ/2YL0HVLrSk
-         SE96kMx96abgp4/G5W8rQz0jlm0YMfEybvT/Wvd1nuaqgqNUxWaajR6VtM8xV4HvEvfw
-         Bbx/W03Tvi2yKmyrV05s6Shlf+u2jp06Wbta0PiNCk7RXTBoeDFbMKw3ABOxPrg1RTzM
-         T1iy7YPjiO9Sul+uLBawusQd+njEVUYUYKbgz4CEruL8pCRdPbXNWz/SlhNBzM9y4aW1
-         NKM36rCUGigDmnm2gkR+X96I/sgHwDReXna0h9TREBV+DYvMT5HKBU4gGoAfnSeSmrMX
-         jhPA==
+        bh=N9wGEZYJoAIhx351pyXi5TmAw4uiOf0aUU7wFJx73AA=;
+        b=aT+b5fgyqnDqnX7G5hdmSnKGdVhd9/KtvR4wfW6CaqISTqzo1QWxh7kdAkq/1Ibjpc
+         qpeXdoXLK6hueG+4qGj7plD0J70Wm6rd7ElVOEdFvRCj+mkkj3PZhzhmztTfbNTphipW
+         028VkRDg4vGaTVotU4tB73nUGkhIrqiVKJLNMeSPqwzStwybxdzQ/9GiL1+hIqnPH/7f
+         axRG75uF9535F3DGUbQUqCymVWkQxv4cB6m37A4LC9BW9qSUE+JQcYK3g7jHEYARZLlf
+         gYZThZbE0Ym7c7yMJ2i7NYSIQBXiLSD673ZvEOP14ROber75e9NknV+mVPrJfy1u1Kwz
+         8tPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ulNuxr60llkoiFafxIlb+CHi87OxQ5J+B08tO2koRaI=;
-        b=t39Oe5vJUI4WWnslm9rXrge1I00X3ZI346hEiF2RmQs1OFlKAgY0PHHEe94g5eU6em
-         l0wDnc9BIrj8T0ExOmz2xplFeS18FumqGt7ihcQFf57K0cIZFQmrVOeFqZ4prImzFOBK
-         TvEl4ASz4oDzcW4Iiy3x3DK14EzPv7yOD6d4fSa8boN015axXqw61DYqCuIgnLW+7W7O
-         eK6NSUYsxyHvzw4gZY5JFsiTfhAJqZ2KjC0oZdNMR00HMwVZCPrlt0p91AdkZH5CjxFd
-         LBDoAt07BPWqRTBnpS51/kG9uKMGxRx7FBl23n/gnFTKHbeniTO6+kDsEm6HQIrotyje
-         xP2w==
-X-Gm-Message-State: AOAM532gu6VEbkPk1YHZa4IjtoOgYfp8iPCC2p5H+fEvAPkTiguIjtoR
-        lvwsBRbXBXgDXCIci+i9PlDALg==
-X-Google-Smtp-Source: ABdhPJxo8uCvmvswyteyIJyt3Ic0kUyiaOa1EnkhnWi0vvcbV05Oc/wdTagCI2PErKTC3uAktABG5Q==
-X-Received: by 2002:adf:f144:: with SMTP id y4mr13185758wro.408.1615542479341;
-        Fri, 12 Mar 2021 01:47:59 -0800 (PST)
+        bh=N9wGEZYJoAIhx351pyXi5TmAw4uiOf0aUU7wFJx73AA=;
+        b=RaymuOEcF6MHM3tT9v9kw6WJlilMnZgYYOw7BCGL/9u2eeBUAtoUjqjejJ9oTaYLtU
+         v88cGIhfXpamnIgnNv/ZNh2Z1J7NVNvz3g9oUXs6sTKSRDxoUq3/82Yo88gO1gWvd2Di
+         /sbpVH1UcFoVuD/1WDBUeW5nYGTrt7MnpVxhoEyp/lgAd0yjuJLJyYi1gVOs6CoJlOFt
+         W6gh+o0Z14iqP6q60V0wkuWEYHY2cAI0ZRSqrfzS/2rjUzFtZ1W9iGd1pc3HyoirlUmL
+         rDl+DIvlupIsl8yn/Cs/pneHqy3qMEuRIBA42CKekLo8zAQf14pb6cq8+fg6d2HZDyaf
+         ppUQ==
+X-Gm-Message-State: AOAM533CIZLeEl9vGikNDYnx0disIey4Nwditueg/4CBGJj0AFXHnbds
+        RujvGYcrvt47boYrbNq3L7gyfA==
+X-Google-Smtp-Source: ABdhPJy4jSKuKcRpT3rqMHJb0ZPqCblkctt5Ebx8UNzjoft9Q7wfdmHUGu0Dun5/0VYuxQw+cWMWrg==
+X-Received: by 2002:adf:e482:: with SMTP id i2mr13034372wrm.392.1615542480270;
+        Fri, 12 Mar 2021 01:48:00 -0800 (PST)
 Received: from dell.default ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.47.58
+        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.47.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 01:47:58 -0800 (PST)
+        Fri, 12 Mar 2021 01:47:59 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
         GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Vladislav Bolkhovitin <vst@vlnb.net>,
+        Nathaniel Clark <nate@misrule.us>,
+        "Nicholas A. Bellinger" <nab@kernel.org>,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 10/30] scsi: qla2xxx: qla_nx2: Fix incorrectly named function qla8044_check_temp()
-Date:   Fri, 12 Mar 2021 09:47:18 +0000
-Message-Id: <20210312094738.2207817-11-lee.jones@linaro.org>
+Subject: [PATCH 11/30] scsi: qla2xxx: qla_target: Fix a couple of misdocumented functions
+Date:   Fri, 12 Mar 2021 09:47:19 +0000
+Message-Id: <20210312094738.2207817-12-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210312094738.2207817-1-lee.jones@linaro.org>
 References: <20210312094738.2207817-1-lee.jones@linaro.org>
@@ -68,31 +71,44 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/qla2xxx/qla_nx2.c:2038: warning: expecting prototype for qla4_8xxx_check_temp(). Prototype was for qla8044_check_temp() instead
+ drivers/scsi/qla2xxx/qla_target.c:6476: warning: expecting prototype for qla_tgt_lport_register(). Prototype was for qlt_lport_register() instead
+ drivers/scsi/qla2xxx/qla_target.c:6546: warning: expecting prototype for qla_tgt_lport_deregister(). Prototype was for qlt_lport_deregister() instead
 
 Cc: Nilesh Javali <njavali@marvell.com>
 Cc: GR-QLogic-Storage-Upstream@marvell.com
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Vladislav Bolkhovitin <vst@vlnb.net>
+Cc: Nathaniel Clark <nate@misrule.us>
+Cc: "Nicholas A. Bellinger" <nab@kernel.org>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/qla2xxx/qla_nx2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_target.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_nx2.c b/drivers/scsi/qla2xxx/qla_nx2.c
-index 68a16c95dcb77..7c413f93d53ee 100644
---- a/drivers/scsi/qla2xxx/qla_nx2.c
-+++ b/drivers/scsi/qla2xxx/qla_nx2.c
-@@ -2028,7 +2028,7 @@ qla8044_device_state_handler(struct scsi_qla_host *vha)
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index c48daf52725d9..67c6a2710360a 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -6462,7 +6462,7 @@ static void qlt_lport_dump(struct scsi_qla_host *vha, u64 wwpn,
  }
  
  /**
-- * qla4_8xxx_check_temp - Check the ISP82XX temperature.
-+ * qla8044_check_temp - Check the ISP82XX temperature.
-  * @vha: adapter block pointer.
+- * qla_tgt_lport_register - register lport with external module
++ * qlt_lport_register - register lport with external module
   *
-  * Note: The caller should not hold the idc lock.
+  * @target_lport_ptr: pointer for tcm_qla2xxx specific lport data
+  * @phys_wwpn: physical port WWPN
+@@ -6538,7 +6538,7 @@ int qlt_lport_register(void *target_lport_ptr, u64 phys_wwpn,
+ EXPORT_SYMBOL(qlt_lport_register);
+ 
+ /**
+- * qla_tgt_lport_deregister - Degister lport
++ * qlt_lport_deregister - Degister lport
+  *
+  * @vha:  Registered scsi_qla_host pointer
+  */
 -- 
 2.27.0
 
