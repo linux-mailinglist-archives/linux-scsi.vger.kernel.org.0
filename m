@@ -2,62 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF520338910
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35EC338913
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbhCLJsr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Mar 2021 04:48:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
+        id S233302AbhCLJss (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Mar 2021 04:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233122AbhCLJsR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:17 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72F1C0613D9
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:16 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id 61so1405118wrm.12
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:16 -0800 (PST)
+        with ESMTP id S233131AbhCLJsS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:18 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC86C061764
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:17 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o26so3398747wmc.5
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jXzZsgME51o5a4S3G/qD/qZyWpfOm8qpjFIuUNjewrU=;
-        b=RzDHHxJIrMTYsGLtnjmh448nDAU6vYH3+2i3jhfv9Yf7Bum4BYw4rNx29JA4HMXlZr
-         GxvreTK/UTMpv2fgwZUqNITRSEtDrRDoTYeIy4i0v6XyvSUP/LXNjws7sKFl7xvHR28t
-         L7KansPbqqzqOVIlWPwjjQAXwqyYutcuqDI1IEmGJzo6s0Rb2ryGPRrWAh6ETFs1MQKN
-         bUsQzUYjqKkmbDQSSm3PPwkUOKIQOXogUANenFZMZAdeovFMJAsIzY9qDYnZClEuLIOB
-         DP55HmbJ6u7ZDqmMz3fuwrgH4pvZ6bbdOOXAhc0k9pFfiP6M99cjitSgd/MMUNaG3/lZ
-         D5iA==
+        bh=6g1k4NOJoIyIgRaKDu88zZvT9OX+R02WPv1Cq13vbSs=;
+        b=GCHdIzAfYgsCay1B9SS+ZnYX0FYvTV60z5kscOccdfQV3WQUrWFvmOu2dh4+gP89WM
+         bvP80g3F7eroGfdguGDDSx4CjsyHon4vWTUBzei/1s99cuO2eHYz98pRvVCveRwwSwZT
+         UYokGX4YRNP/W1xJhVn7xnIXvDQXNT3mTKcbs5L8MLLRiQ/5prYIip+cmM/E3f8FCKhl
+         UytLiD2rl+tZT9E8/edeF5IccIxaFomixfihGZWAxohzM5NqsjEn4eSj1ufE14Po8N1j
+         ltteuMX4MDBUHBaTcngGraUBgKyxbrxHyLdhkIiDG3krqtoTR6rsQebt+C1bLmiKbJBV
+         3LSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jXzZsgME51o5a4S3G/qD/qZyWpfOm8qpjFIuUNjewrU=;
-        b=HjYp5UbnLfZKKkl+Gn5yssMdqMrPMZGtF7JJHPduG6hZ6sJkHIike/tNlGmvGtyJ+O
-         2f07QvSpZ9QBpoupd7yQGS6JSNUDFNh1pxG6RdX6iMNDoZaWob5Q+vRBYFsF6Gpp0PKf
-         XwxAF7ajZufexNLiYM58IefEqWvYJORZfi0cpxJldezXMW8UDbqgDEXm23CchRTz6CDf
-         2Z3tNF9BbR/67RvkJ4I0/z3jaZxfaXububLtCu3jyghMLyWHjGJANYe9RHkwOGsv/VLf
-         SmbJykuDvR+iOfsGRNXpQhkbdVxFf7Y/vD+RIhS5Y9FC+4MjI5nMdThqsBLCq5Rkv0tk
-         IB3Q==
-X-Gm-Message-State: AOAM533g4ZlzjJiRNH74XiYaW906oNVZ83uTqQz3E9FU+nXpTjyreFqG
-        5lig20w74KTXk9DfMQjLUQzemg==
-X-Google-Smtp-Source: ABdhPJxYl7bqyU5JTM3AB7hrDocTa5Yda5nTYn2IUc7mVithIahnHmSDLT/pNp3q/FF6TYv0lTQGZw==
-X-Received: by 2002:adf:a418:: with SMTP id d24mr12943172wra.187.1615542495551;
-        Fri, 12 Mar 2021 01:48:15 -0800 (PST)
+        bh=6g1k4NOJoIyIgRaKDu88zZvT9OX+R02WPv1Cq13vbSs=;
+        b=diFoeA4OrM97SCyV6uP9iRd6NtDdOwISe3755vXzGZDvynUQJVUbyy6tYpBcNUOwWZ
+         C15UYt+w9TBK3bg0aHx1wcJeVzQ1bPhy9H1N8cpBVg/UU8uM8XVmgoFeZW6flmvfTtr8
+         HQuEEdwFvPey/JaCCOE8gif27fic0SS5gykcr82bhTR2IQ+wWubY9paU3ciGaCYyaYCX
+         EaiuJC/mjWNa376kxF5rBD6fN5G/bMlk8q21RtaxZ2pyuI8uh77jx7KaiP4aY+1bwHsk
+         J8KfiAOnJTJqW+sPQSYaLX3A1T2PNznyAOGwIjgsgcCxTzOPmh5GR4csW5DRlpz/z+MU
+         hgGw==
+X-Gm-Message-State: AOAM532yO/ras6yEW6ayIqJK8kUY/SfBhzeag5oZzeqX3nBZppmSXkwy
+        /tfg0K6Vb5vHl0HOQI9com8EYg==
+X-Google-Smtp-Source: ABdhPJyTjzB26opz3HQn+LVBBuiOy0UuqXf2qbpSM1j3b5m1i7Lc/kJkb4ZwVFW3xsVria9vr0PCRg==
+X-Received: by 2002:a1c:7916:: with SMTP id l22mr12001434wme.86.1615542496455;
+        Fri, 12 Mar 2021 01:48:16 -0800 (PST)
 Received: from dell.default ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.48.14
+        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.48.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 01:48:15 -0800 (PST)
+        Fri, 12 Mar 2021 01:48:16 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Hannes Reinecke <hare@kernel.org>,
+Cc:     linux-kernel@vger.kernel.org, Adam Radford <aradford@gmail.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Linux GmbH <hare@suse.com>,
-        "Leonard N. Zubkoff" <lnz@dandelion.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 27/30] scsi: myrs: Remove a couple of unused 'status' variables
-Date:   Fri, 12 Mar 2021 09:47:35 +0000
-Message-Id: <20210312094738.2207817-28-lee.jones@linaro.org>
+        Joel Jacobson <linux@3ware.com>,
+        de Melo <acme@conectiva.com.br>,
+        Andre Hedrick <andre@suse.com>, linux-scsi@vger.kernel.org
+Subject: [PATCH 28/30] scsi: 3w-xxxx: Remove 2 unused variables 'response_que_value' and 'tw_dev'
+Date:   Fri, 12 Mar 2021 09:47:36 +0000
+Message-Id: <20210312094738.2207817-29-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210312094738.2207817-1-lee.jones@linaro.org>
 References: <20210312094738.2207817-1-lee.jones@linaro.org>
@@ -70,59 +70,53 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/myrs.c: In function ‘consistency_check_show’:
- drivers/scsi/myrs.c:1193:16: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
- drivers/scsi/myrs.c: In function ‘myrs_get_resync’:
- drivers/scsi/myrs.c:1984:5: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/3w-xxxx.c: In function ‘tw_empty_response_que’:
+ drivers/scsi/3w-xxxx.c:463:24: warning: variable ‘response_que_value’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/3w-xxxx.c: In function ‘tw_scsi_biosparam’:
+ drivers/scsi/3w-xxxx.c:1345:23: warning: variable ‘tw_dev’ set but not used [-Wunused-but-set-variable]
 
-Cc: Hannes Reinecke <hare@kernel.org>
+Cc: Adam Radford <aradford@gmail.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Linux GmbH <hare@suse.com>
-Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
+Cc: Joel Jacobson <linux@3ware.com>
+Cc: de Melo <acme@conectiva.com.br>
+Cc: Andre Hedrick <andre@suse.com>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/myrs.c | 6 ++----
+ drivers/scsi/3w-xxxx.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
-index 4adf9ded296aa..48e399f057d5c 100644
---- a/drivers/scsi/myrs.c
-+++ b/drivers/scsi/myrs.c
-@@ -1190,7 +1190,6 @@ static ssize_t consistency_check_show(struct device *dev,
- 	struct myrs_hba *cs = shost_priv(sdev->host);
- 	struct myrs_ldev_info *ldev_info;
- 	unsigned short ldev_num;
--	unsigned char status;
+diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
+index d90b9fca4aea2..a7292883b72bc 100644
+--- a/drivers/scsi/3w-xxxx.c
++++ b/drivers/scsi/3w-xxxx.c
+@@ -460,12 +460,12 @@ static int tw_check_errors(TW_Device_Extension *tw_dev)
+ /* This function will empty the response que */
+ static void tw_empty_response_que(TW_Device_Extension *tw_dev)
+ {
+-	u32 status_reg_value, response_que_value;
++	u32 status_reg_value;
  
- 	if (sdev->channel < cs->ctlr_info->physchan_present)
- 		return snprintf(buf, 32, "physical device - not checking\n");
-@@ -1199,7 +1198,7 @@ static ssize_t consistency_check_show(struct device *dev,
- 	if (!ldev_info)
- 		return -ENXIO;
- 	ldev_num = ldev_info->ldev_num;
--	status = myrs_get_ldev_info(cs, ldev_num, ldev_info);
-+	myrs_get_ldev_info(cs, ldev_num, ldev_info);
- 	if (ldev_info->cc_active)
- 		return snprintf(buf, 32, "checking block %zu of %zu\n",
- 				(size_t)ldev_info->cc_lba,
-@@ -1981,14 +1980,13 @@ myrs_get_resync(struct device *dev)
- 	struct myrs_hba *cs = shost_priv(sdev->host);
- 	struct myrs_ldev_info *ldev_info = sdev->hostdata;
- 	u64 percent_complete = 0;
--	u8 status;
+ 	status_reg_value = inl(TW_STATUS_REG_ADDR(tw_dev));
  
- 	if (sdev->channel < cs->ctlr_info->physchan_present || !ldev_info)
- 		return;
- 	if (ldev_info->rbld_active) {
- 		unsigned short ldev_num = ldev_info->ldev_num;
- 
--		status = myrs_get_ldev_info(cs, ldev_num, ldev_info);
-+		myrs_get_ldev_info(cs, ldev_num, ldev_info);
- 		percent_complete = ldev_info->rbld_lba * 100;
- 		do_div(percent_complete, ldev_info->cfg_devsize);
+ 	while ((status_reg_value & TW_STATUS_RESPONSE_QUEUE_EMPTY) == 0) {
+-		response_que_value = inl(TW_RESPONSE_QUEUE_REG_ADDR(tw_dev));
++		inl(TW_RESPONSE_QUEUE_REG_ADDR(tw_dev));
+ 		status_reg_value = inl(TW_STATUS_REG_ADDR(tw_dev));
  	}
+ } /* End tw_empty_response_que() */
+@@ -1342,10 +1342,8 @@ static int tw_scsi_biosparam(struct scsi_device *sdev, struct block_device *bdev
+ 			     sector_t capacity, int geom[])
+ {
+ 	int heads, sectors, cylinders;
+-	TW_Device_Extension *tw_dev;
+ 
+ 	dprintk(KERN_NOTICE "3w-xxxx: tw_scsi_biosparam()\n");
+-	tw_dev = (TW_Device_Extension *)sdev->host->hostdata;
+ 
+ 	heads = 64;
+ 	sectors = 32;
 -- 
 2.27.0
 
