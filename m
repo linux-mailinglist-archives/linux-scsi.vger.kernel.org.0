@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7264A3388EE
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F4F338901
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbhCLJsA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Mar 2021 04:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
+        id S233181AbhCLJsg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Mar 2021 04:48:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbhCLJrx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:47:53 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482E9C061761
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:47:53 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id f22-20020a7bc8d60000b029010c024a1407so15401199wml.2
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:47:53 -0800 (PST)
+        with ESMTP id S233065AbhCLJsF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:05 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6A0C061574
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:47:54 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id e18so1402442wrt.6
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:47:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QZLmH1LS3dvFu0B5FfwUETpqGDJKxfDe2SvKPVD/Hhw=;
-        b=MWTXK+6VXn0O2eVB/e4l+XXDBvETAJFvZIMxNL0LloSGain13IcVkP/CElZ5lqO1Nc
-         SlW+PSSG6w1xXoVYu+XrvWfAFFMeyDIa3U2KCbNQTMMsqOMorzSTxligLKNj8/UlaBUb
-         sUj7djB/F3UCje2Uj+KuAkldupzH7JinsFwmVe7H+eOmKNE1GNiqLS/XJKWOp0ZDdFmv
-         X4HAWMMYQHwsFE9R4YWmKWPNFkfOtWkhG2Xc48Y8GW0ujL++BG7tZ7Oyt64SBF1QA3r4
-         sU842jQwhH8RYAME4fNadhUfwJChJRa3zIG9S6GTkTpyG5LUqugtJcV5sazG1rupbzY0
-         w7Eg==
+        bh=8It0TlKiH23HHYeagj0RrwZW3jVqJUmFhLQQRIEz+M0=;
+        b=I2w2lAc9bV5OeVHfiVDOYDJeo247UNTvywDVv3GJIUIDJMDZczSbdNk4298es766WF
+         lBhQBQFDOahEKvmm3ts4zwwEfyhVQx4xObNrJg/FBlVmcsqWMBy78hUI9xXMQNgdhzEM
+         nCzFKMSZQCHefkEtviqW1JBDMOxlmF8rUhq2oAw0yWEPgVPTN2N/ygV2sLPGgsXEtHR8
+         Qjcwl4zibINwl4GLyI7p0o9/7cVrhHYuD5fiNxHOXqDFHQ9GZgw4I/y9WhwKa40+8gUu
+         Axf0pWLp9927KbAM9plRNAzFz3hef3waPSm6T0qjdoG1lhl6xc031nSHtC/0FrIeQPYg
+         kzLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QZLmH1LS3dvFu0B5FfwUETpqGDJKxfDe2SvKPVD/Hhw=;
-        b=dYOHPUXjLkhPRLxz1MavYr2Pc+DjIGsy/1fRQkm92LNKsyl114iCZMpuy/evzX7vru
-         01nlaoUYqpHaLxlpo7jKvHDBXePGtqYHkyKnJz0Vg4wN3P/YCJquU2JdkJnIWhX/agSJ
-         GiBNa7haoicbmWmVsCbm5sBQc0CzzJGvWSz7O3MdUv3C8YpKNEFijEutTG1VWOI2EZPY
-         bO4uypOkOqw9DQYB0fcsI1QDHbpsHgPj1prc9ED1/cFBoyWpt6i6DWJb1lQS9tv/idNM
-         MhzxCk2z301cFkHdop2LdR88h+G78rFSBPCzkfrcrh6UYsk84Nv1edv4LrU52UQSO4BI
-         8D+g==
-X-Gm-Message-State: AOAM533Pdemy5mIpFHJXRzq7dJeJuASc7fXqS2wOec0VPaYpdY5ZC9gT
-        ZQCE2KeM4MeLK4kL3FoJvLY9EA==
-X-Google-Smtp-Source: ABdhPJwMXc1Mh4ZmwJ6pzzlAFZJucA91pXmFg8AMtYupOUOt6P+cF4qOMaacj2jZraMimgYrg1puxA==
-X-Received: by 2002:a1c:7916:: with SMTP id l22mr11999576wme.86.1615542472003;
+        bh=8It0TlKiH23HHYeagj0RrwZW3jVqJUmFhLQQRIEz+M0=;
+        b=nuXqIE/98osr+YSmR02B8qJu0nA+MyvHp+2q1KfCYXOvkKB3LGa/kQXMmaKhVOhVTy
+         vJPzrjAYF/XxdaeyJsDyNfrR2Anqn0zaUlKb5dmt44Xi2balwRVB7Xh5PUKl9pBaMPCx
+         R9xx3jVZ4K29W7rgzBO/XOvgl++UdyNO5ooINf6W3Ih2B/1bSRgYH3py35J+M4m3RjWE
+         1Fqgb8EI9RC4H5B4cNlQgNFL9qL7aOcwqxUC7LdhMNl79JuNAM8WFJWzgfNGMT3tEeuh
+         CtD5DUFO0V4zAmZaSF63KU38rq7MkQrN0U+lO9I9B2xve/YlEI/Ce484QLO9PrIZwtV8
+         rZzQ==
+X-Gm-Message-State: AOAM533ApLCx/krmpHFAa6PsMmhe51Rv9QEgbmmj+Hy/jKcYAv20+E3t
+        +AfSEiiz5iBcRrnxGGKN1gcwXg==
+X-Google-Smtp-Source: ABdhPJyuE4tGtkv7eTzySF5dng9LAuNEfBhJ2l0qTSlu/wKRagVAvV+ieqATeszOy8PLnYyEXoPFaA==
+X-Received: by 2002:a05:6000:192:: with SMTP id p18mr12928007wrx.403.1615542472867;
         Fri, 12 Mar 2021 01:47:52 -0800 (PST)
 Received: from dell.default ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.47.51
+        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.47.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 01:47:51 -0800 (PST)
+        Fri, 12 Mar 2021 01:47:52 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 03/30] scsi: lpfc: lpfc_scsi: Fix a bunch of kernel-doc misdemeanours
-Date:   Fri, 12 Mar 2021 09:47:11 +0000
-Message-Id: <20210312094738.2207817-4-lee.jones@linaro.org>
+Subject: [PATCH 04/30] scsi: lpfc: lpfc_attr: Fix a bunch of misnamed functions
+Date:   Fri, 12 Mar 2021 09:47:12 +0000
+Message-Id: <20210312094738.2207817-5-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210312094738.2207817-1-lee.jones@linaro.org>
 References: <20210312094738.2207817-1-lee.jones@linaro.org>
@@ -69,22 +69,12 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/lpfc/lpfc_scsi.c:746: warning: expecting prototype for lpfc_release_scsi_buf(). Prototype was for lpfc_release_scsi_buf_s3() instead
- drivers/scsi/lpfc/lpfc_scsi.c:979: warning: expecting prototype for App checking is required for(). Prototype was for BG_ERR_CHECK() instead
- drivers/scsi/lpfc/lpfc_scsi.c:3701: warning: Function parameter or member 'vport' not described in 'lpfc_scsi_prep_cmnd_buf'
- drivers/scsi/lpfc/lpfc_scsi.c:3701: warning: Excess function parameter 'phba' description in 'lpfc_scsi_prep_cmnd_buf'
- drivers/scsi/lpfc/lpfc_scsi.c:3717: warning: Function parameter or member 'fcpi_parm' not described in 'lpfc_send_scsi_error_event'
- drivers/scsi/lpfc/lpfc_scsi.c:3717: warning: Excess function parameter 'rsp_iocb' description in 'lpfc_send_scsi_error_event'
- drivers/scsi/lpfc/lpfc_scsi.c:3837: warning: Function parameter or member 'fcpi_parm' not described in 'lpfc_handle_fcp_err'
- drivers/scsi/lpfc/lpfc_scsi.c:3837: warning: expecting prototype for lpfc_handler_fcp_err(). Prototype was for lpfc_handle_fcp_err() instead
- drivers/scsi/lpfc/lpfc_scsi.c:4021: warning: Function parameter or member 'wcqe' not described in 'lpfc_fcp_io_cmd_wqe_cmpl'
- drivers/scsi/lpfc/lpfc_scsi.c:4021: warning: Excess function parameter 'pwqeOut' description in 'lpfc_fcp_io_cmd_wqe_cmpl'
- drivers/scsi/lpfc/lpfc_scsi.c:4621: warning: Function parameter or member 'vport' not described in 'lpfc_scsi_prep_cmnd_buf_s3'
- drivers/scsi/lpfc/lpfc_scsi.c:4621: warning: Excess function parameter 'phba' description in 'lpfc_scsi_prep_cmnd_buf_s3'
- drivers/scsi/lpfc/lpfc_scsi.c:4698: warning: Function parameter or member 'vport' not described in 'lpfc_scsi_prep_cmnd_buf_s4'
- drivers/scsi/lpfc/lpfc_scsi.c:4698: warning: Excess function parameter 'phba' description in 'lpfc_scsi_prep_cmnd_buf_s4'
- drivers/scsi/lpfc/lpfc_scsi.c:4954: warning: expecting prototype for lpfc_taskmgmt_def_cmpl(). Prototype was for lpfc_tskmgmt_def_cmpl() instead
- drivers/scsi/lpfc/lpfc_scsi.c:5094: warning: expecting prototype for lpfc_poll_rearm_time(). Prototype was for lpfc_poll_rearm_timer() instead
+ drivers/scsi/lpfc/lpfc_attr.c:880: warning: expecting prototype for lpfc_state_show(). Prototype was for lpfc_link_state_show() instead
+ drivers/scsi/lpfc/lpfc_attr.c:3834: warning: expecting prototype for lpfc_tgt_queue_depth_store(). Prototype was for lpfc_tgt_queue_depth_set() instead
+ drivers/scsi/lpfc/lpfc_attr.c:4027: warning: expecting prototype for lpfc_topology_set(). Prototype was for lpfc_topology_store() instead
+ drivers/scsi/lpfc/lpfc_attr.c:4481: warning: expecting prototype for lpfc_link_speed_set(). Prototype was for lpfc_link_speed_store() instead
+ drivers/scsi/lpfc/lpfc_attr.c:4879: warning: expecting prototype for lpfc_request_firmware_store(). Prototype was for lpfc_request_firmware_upgrade_store() instead
+ drivers/scsi/lpfc/lpfc_attr.c:5235: warning: expecting prototype for lpfc_state_show(). Prototype was for lpfc_fcp_cpu_map_show() instead
 
 Cc: James Smart <james.smart@broadcom.com>
 Cc: Dick Kennedy <dick.kennedy@broadcom.com>
@@ -93,111 +83,67 @@ Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/scsi/lpfc/lpfc_attr.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index f0caf923f38c2..85f6a066de5a8 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -736,7 +736,7 @@ lpfc_get_scsi_buf(struct lpfc_hba *phba, struct lpfc_nodelist *ndlp,
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index 98594d6bc26b9..8b4c42016865f 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -864,7 +864,7 @@ lpfc_option_rom_version_show(struct device *dev, struct device_attribute *attr,
  }
  
  /**
-- * lpfc_release_scsi_buf - Return a scsi buffer back to hba scsi buf list
-+ * lpfc_release_scsi_buf_s3 - Return a scsi buffer back to hba scsi buf list
-  * @phba: The Hba for which this call is being executed.
-  * @psb: The scsi buffer which is being released.
-  *
-@@ -974,10 +974,10 @@ lpfc_scsi_prep_dma_buf_s3(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
- #define BG_ERR_TGT	0x2
- /* Return BG_ERR_SWAP if swapping CSUM<-->CRC is required for error injection */
- #define BG_ERR_SWAP	0x10
--/**
-+/*
-  * Return BG_ERR_CHECK if disabling Guard/Ref/App checking is required for
-  * error injection
-- **/
-+ */
- #define BG_ERR_CHECK	0x20
+- * lpfc_state_show - Return the link state of the port
++ * lpfc_link_state_show - Return the link state of the port
+  * @dev: class converted to a Scsi_host structure.
+  * @attr: device attribute, not used.
+  * @buf: on return contains text describing the state of the link.
+@@ -3819,7 +3819,7 @@ lpfc_vport_param_init(tgt_queue_depth, LPFC_MAX_TGT_QDEPTH,
+ 		      LPFC_MIN_TGT_QDEPTH, LPFC_MAX_TGT_QDEPTH);
  
  /**
-@@ -3699,7 +3699,7 @@ lpfc_bg_scsi_prep_dma_buf(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
- /**
-  * lpfc_scsi_prep_cmnd_buf - Wrapper function for IOCB/WQE mapping of scsi
-  * buffer
-- * @phba: The Hba for which this call is being executed.
-+ * @vport: Pointer to vport object.
-  * @lpfc_cmd: The scsi buffer which is going to be mapped.
-  * @tmo: Timeout value for IO
+- * lpfc_tgt_queue_depth_store: Sets an attribute value.
++ * lpfc_tgt_queue_depth_set: Sets an attribute value.
+  * @vport: lpfc vport structure pointer.
+  * @val: integer attribute value.
   *
-@@ -3721,7 +3721,7 @@ lpfc_scsi_prep_cmnd_buf(struct lpfc_vport *vport, struct lpfc_io_buf *lpfc_cmd,
-  * @phba: Pointer to hba context object.
-  * @vport: Pointer to vport object.
-  * @lpfc_cmd: Pointer to lpfc scsi command which reported the error.
-- * @rsp_iocb: Pointer to response iocb object which reported error.
-+ * @fcpi_parm: FCP Initiator parameter.
-  *
-  * This function posts an event when there is a SCSI command reporting
-  * error from the scsi device.
-@@ -3836,10 +3836,10 @@ lpfc_scsi_unprep_dma_buf(struct lpfc_hba *phba, struct lpfc_io_buf *psb)
- }
+@@ -4004,7 +4004,7 @@ LPFC_ATTR(topology, 0, 0, 6,
+ 	"Select Fibre Channel topology");
  
  /**
-- * lpfc_handler_fcp_err - FCP response handler
-+ * lpfc_handle_fcp_err - FCP response handler
-  * @vport: The virtual port for which this call is being executed.
-  * @lpfc_cmd: Pointer to lpfc_io_buf data structure.
-- * @rsp_iocb: The response IOCB which contains FCP error.
-+ * @fcpi_parm: FCP Initiator parameter.
-  *
-  * This routine is called to process response IOCB with status field
-  * IOSTAT_FCP_RSP_ERROR. This routine sets result field of scsi command
-@@ -4023,7 +4023,7 @@ lpfc_handle_fcp_err(struct lpfc_vport *vport, struct lpfc_io_buf *lpfc_cmd,
-  * lpfc_fcp_io_cmd_wqe_cmpl - Complete a FCP IO
-  * @phba: The hba for which this call is being executed.
-  * @pwqeIn: The command WQE for the scsi cmnd.
-- * @pwqeOut: The response WQE for the scsi cmnd.
-+ * @wcqe: Pointer to driver response CQE object.
-  *
-  * This routine assigns scsi command result by looking into response WQE
-  * status field appropriately. This routine handles QUEUE FULL condition as
-@@ -4619,7 +4619,7 @@ lpfc_scsi_cmd_iocb_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pIocbIn,
+- * lpfc_topology_set - Set the adapters topology field
++ * lpfc_topology_store - Set the adapters topology field
+  * @dev: class device that is converted into a scsi_host.
+  * @attr:device attribute, not used.
+  * @buf: buffer for passing information.
+@@ -4457,7 +4457,7 @@ static struct bin_attribute sysfs_drvr_stat_data_attr = {
+ # Value range is [0,16]. Default value is 0.
+ */
+ /**
+- * lpfc_link_speed_set - Set the adapters link speed
++ * lpfc_link_speed_store - Set the adapters link speed
+  * @dev: Pointer to class device.
+  * @attr: Unused.
+  * @buf: Data buffer.
+@@ -4858,7 +4858,7 @@ lpfc_param_show(sriov_nr_virtfn)
+ static DEVICE_ATTR_RW(lpfc_sriov_nr_virtfn);
  
  /**
-  * lpfc_scsi_prep_cmnd_buf_s3 - SLI-3 IOCB init for the IO
-- * @phba: Pointer to vport object for which I/O is executed
-+ * @vport: Pointer to vport object.
-  * @lpfc_cmd: The scsi buffer which is going to be prep'ed.
-  * @tmo: timeout value for the IO
+- * lpfc_request_firmware_store - Request for Linux generic firmware upgrade
++ * lpfc_request_firmware_upgrade_store - Request for Linux generic firmware upgrade
   *
-@@ -4696,7 +4696,7 @@ static int lpfc_scsi_prep_cmnd_buf_s3(struct lpfc_vport *vport,
+  * @dev: class device that is converted into a Scsi_host.
+  * @attr: device attribute, not used.
+@@ -5222,7 +5222,7 @@ lpfc_cq_max_proc_limit_init(struct lpfc_hba *phba, int val)
+ static DEVICE_ATTR_RW(lpfc_cq_max_proc_limit);
  
  /**
-  * lpfc_scsi_prep_cmnd_buf_s4 - SLI-4 WQE init for the IO
-- * @phba: Pointer to vport object for which I/O is executed
-+ * @vport: Pointer to vport object.
-  * @lpfc_cmd: The scsi buffer which is going to be prep'ed.
-  * @tmo: timeout value for the IO
-  *
-@@ -4953,7 +4953,7 @@ lpfc_scsi_api_table_setup(struct lpfc_hba *phba, uint8_t dev_grp)
- }
- 
- /**
-- * lpfc_taskmgmt_def_cmpl - IOCB completion routine for task management command
-+ * lpfc_tskmgmt_def_cmpl - IOCB completion routine for task management command
-  * @phba: The Hba for which this call is being executed.
-  * @cmdiocbq: Pointer to lpfc_iocbq data structure.
-  * @rspiocbq: Pointer to lpfc_iocbq data structure.
-@@ -5098,7 +5098,7 @@ lpfc_info(struct Scsi_Host *host)
- }
- 
- /**
-- * lpfc_poll_rearm_time - Routine to modify fcp_poll timer of hba
-+ * lpfc_poll_rearm_timer - Routine to modify fcp_poll timer of hba
-  * @phba: The Hba for which this call is being executed.
-  *
-  * This routine modifies fcp_poll_timer  field of @phba by cfg_poll_tmo.
+- * lpfc_state_show - Display current driver CPU affinity
++ * lpfc_fcp_cpu_map_show - Display current driver CPU affinity
+  * @dev: class converted to a Scsi_host structure.
+  * @attr: device attribute, not used.
+  * @buf: on return contains text describing the state of the link.
 -- 
 2.27.0
 
