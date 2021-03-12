@@ -2,64 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 901B833890F
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C140F3388FC
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbhCLJsq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Mar 2021 04:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S232930AbhCLJse (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Mar 2021 04:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbhCLJsQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:16 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903DFC061764
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:01 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v11so1399591wro.7
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:01 -0800 (PST)
+        with ESMTP id S233036AbhCLJsE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:04 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0D0C061765
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:03 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j4-20020a05600c4104b029010c62bc1e20so14792030wmi.3
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=N9wGEZYJoAIhx351pyXi5TmAw4uiOf0aUU7wFJx73AA=;
-        b=aT+b5fgyqnDqnX7G5hdmSnKGdVhd9/KtvR4wfW6CaqISTqzo1QWxh7kdAkq/1Ibjpc
-         qpeXdoXLK6hueG+4qGj7plD0J70Wm6rd7ElVOEdFvRCj+mkkj3PZhzhmztTfbNTphipW
-         028VkRDg4vGaTVotU4tB73nUGkhIrqiVKJLNMeSPqwzStwybxdzQ/9GiL1+hIqnPH/7f
-         axRG75uF9535F3DGUbQUqCymVWkQxv4cB6m37A4LC9BW9qSUE+JQcYK3g7jHEYARZLlf
-         gYZThZbE0Ym7c7yMJ2i7NYSIQBXiLSD673ZvEOP14ROber75e9NknV+mVPrJfy1u1Kwz
-         8tPA==
+        bh=JI6G3CFZx8fwaZ+wMXfyA1uTc9sykYtKryE0jb27AH8=;
+        b=LvZZjQqh+hYVHovFbGfa2YimjbNcopAKf2FZ41k0JafVuhVFK5teA3JpIbZo04IirG
+         T3FE3HwLMHe3hRd4f1e7pYFuzKcngzqClIHRJv58wKOf6YLyHr3oW4NEZFrlvIPqiAAD
+         umvPHJzcpzO3EazANHiX3Z7AWtRY+KMq52oDleuaqE9FW91NrAZefDoeKN0dTnaSosX7
+         2x2qTmSphRDpvMTdnfVqbdq2Tp0ry+NQoyXkK+cxZOn14bKVik5jWKcbf0LTIfBpgqwi
+         qvPSsYPc25e6pL72RE1CUAk1N+qZT0yk5IYUEdanwW0Ul3rymue2UDxEZXoyyu9DE5ab
+         7TXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=N9wGEZYJoAIhx351pyXi5TmAw4uiOf0aUU7wFJx73AA=;
-        b=RaymuOEcF6MHM3tT9v9kw6WJlilMnZgYYOw7BCGL/9u2eeBUAtoUjqjejJ9oTaYLtU
-         v88cGIhfXpamnIgnNv/ZNh2Z1J7NVNvz3g9oUXs6sTKSRDxoUq3/82Yo88gO1gWvd2Di
-         /sbpVH1UcFoVuD/1WDBUeW5nYGTrt7MnpVxhoEyp/lgAd0yjuJLJyYi1gVOs6CoJlOFt
-         W6gh+o0Z14iqP6q60V0wkuWEYHY2cAI0ZRSqrfzS/2rjUzFtZ1W9iGd1pc3HyoirlUmL
-         rDl+DIvlupIsl8yn/Cs/pneHqy3qMEuRIBA42CKekLo8zAQf14pb6cq8+fg6d2HZDyaf
-         ppUQ==
-X-Gm-Message-State: AOAM533CIZLeEl9vGikNDYnx0disIey4Nwditueg/4CBGJj0AFXHnbds
-        RujvGYcrvt47boYrbNq3L7gyfA==
-X-Google-Smtp-Source: ABdhPJy4jSKuKcRpT3rqMHJb0ZPqCblkctt5Ebx8UNzjoft9Q7wfdmHUGu0Dun5/0VYuxQw+cWMWrg==
-X-Received: by 2002:adf:e482:: with SMTP id i2mr13034372wrm.392.1615542480270;
-        Fri, 12 Mar 2021 01:48:00 -0800 (PST)
+        bh=JI6G3CFZx8fwaZ+wMXfyA1uTc9sykYtKryE0jb27AH8=;
+        b=mbJr13CPrVOoYFSy2PXwxha8IxmbxeOHS++4rRKKTqKScKWPaso+4Gdyv0nUG+10FI
+         gcafGQRisUlkZq+c5RmI+usdikrzruKNgvItIjMMSBGr18D4UjF3J7AcVWEU6Dg5p4WA
+         izN4WVvTtNF5emtCS6XgF3F35qoMH3sJX6EWWwfacWx9HXcd+tIg6Aslv+7w6sBRIgVq
+         9DGWw3u2eB6EaRMn6d3SAU9Tp0dvHcbRQ0QcSsgwceDXYMVeTc1flwIzI+nEQDeJYYY2
+         1D+QcFZL5hhjlV9er3GpANKaCC0RI4ziKQ5+6oLncoaHk/GwfXiK69BRoSJvJ0IMjNZS
+         3ERA==
+X-Gm-Message-State: AOAM530jdWo4RAoGFF9pnQV4z9PlVZ8g6jHRHFB5HKFQmNL7rieIfd8y
+        GulIGZ/585mmWYNERW9WQn3OSg==
+X-Google-Smtp-Source: ABdhPJwgu+dYkUSJIPzhrkavhgPa19SJxwU7Gw7kkrY+EIpO5oTC5zDDwsUJvZSioQsoR2R3olJXOQ==
+X-Received: by 2002:a1c:9817:: with SMTP id a23mr12073936wme.57.1615542482068;
+        Fri, 12 Mar 2021 01:48:02 -0800 (PST)
 Received: from dell.default ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.47.59
+        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.48.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 01:47:59 -0800 (PST)
+        Fri, 12 Mar 2021 01:48:01 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
+Cc:     linux-kernel@vger.kernel.org,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Vladislav Bolkhovitin <vst@vlnb.net>,
-        Nathaniel Clark <nate@misrule.us>,
-        "Nicholas A. Bellinger" <nab@kernel.org>,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 11/30] scsi: qla2xxx: qla_target: Fix a couple of misdocumented functions
-Date:   Fri, 12 Mar 2021 09:47:19 +0000
-Message-Id: <20210312094738.2207817-12-lee.jones@linaro.org>
+Subject: [PATCH 12/30] scsi: lpfc: lpfc_debugfs: Fix incorrectly documented function lpfc_debugfs_commonxripools_data()
+Date:   Fri, 12 Mar 2021 09:47:20 +0000
+Message-Id: <20210312094738.2207817-13-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210312094738.2207817-1-lee.jones@linaro.org>
 References: <20210312094738.2207817-1-lee.jones@linaro.org>
@@ -71,44 +69,31 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/qla2xxx/qla_target.c:6476: warning: expecting prototype for qla_tgt_lport_register(). Prototype was for qlt_lport_register() instead
- drivers/scsi/qla2xxx/qla_target.c:6546: warning: expecting prototype for qla_tgt_lport_deregister(). Prototype was for qlt_lport_deregister() instead
+ drivers/scsi/lpfc/lpfc_debugfs.c:405: warning: expecting prototype for lpfc_debugfs_common_xri_data(). Prototype was for lpfc_debugfs_commonxripools_data() instead
 
-Cc: Nilesh Javali <njavali@marvell.com>
-Cc: GR-QLogic-Storage-Upstream@marvell.com
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Dick Kennedy <dick.kennedy@broadcom.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Vladislav Bolkhovitin <vst@vlnb.net>
-Cc: Nathaniel Clark <nate@misrule.us>
-Cc: "Nicholas A. Bellinger" <nab@kernel.org>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index c48daf52725d9..67c6a2710360a 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -6462,7 +6462,7 @@ static void qlt_lport_dump(struct scsi_qla_host *vha, u64 wwpn,
- }
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index ec5328f7f1d41..c23a535ac89ac 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -381,7 +381,7 @@ lpfc_debugfs_hbqinfo_data(struct lpfc_hba *phba, char *buf, int size)
+ static int lpfc_debugfs_last_xripool;
  
  /**
-- * qla_tgt_lport_register - register lport with external module
-+ * qlt_lport_register - register lport with external module
-  *
-  * @target_lport_ptr: pointer for tcm_qla2xxx specific lport data
-  * @phys_wwpn: physical port WWPN
-@@ -6538,7 +6538,7 @@ int qlt_lport_register(void *target_lport_ptr, u64 phys_wwpn,
- EXPORT_SYMBOL(qlt_lport_register);
- 
- /**
-- * qla_tgt_lport_deregister - Degister lport
-+ * qlt_lport_deregister - Degister lport
-  *
-  * @vha:  Registered scsi_qla_host pointer
-  */
+- * lpfc_debugfs_common_xri_data - Dump Hardware Queue info to a buffer
++ * lpfc_debugfs_commonxripools_data - Dump Hardware Queue info to a buffer
+  * @phba: The HBA to gather host buffer info from.
+  * @buf: The buffer to dump log into.
+  * @size: The maximum amount of data to process.
 -- 
 2.27.0
 
