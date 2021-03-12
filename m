@@ -2,214 +2,253 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD60338882
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAD33388E7
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbhCLJW7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Mar 2021 04:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S232970AbhCLJr5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Mar 2021 04:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232832AbhCLJWi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:22:38 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0F1C061764
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:22:37 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id d3so44556225lfg.10
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:22:37 -0800 (PST)
+        with ESMTP id S232902AbhCLJru (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:47:50 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5CEC061761
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:47:50 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id e18so1402340wrt.6
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:47:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oc5bTi7/1MBiAyWrb/BCqxKaS2n3HhEl1VJrsEcMc6k=;
-        b=KDFdseRP1eAOQEMh2Ks3MiJXJtEoNybe7gdJzx1f/I/PLG7U3A/Moiz1/CxbjuJp72
-         fpQqvBBkdC/hcLc3wA5TCEOTBLQ2aFBVwqDB97xSBmttxHg/ydqlbdZzR84D1tQsdnS/
-         76mH37N6q/1iS6dVN96PQqaGQEN2ckQV9xhaYowqgSr3ZxIvxDJz8j8WiV8HgEyWOqUH
-         RVq1S9eXjzn4oixocusNCm6/y08R7v8wf3TE8TRbjFbF6Ph0n578RuEXpmi1m1rvxszD
-         4WYDpUzpSr4gMYS0qyXesNgBNsnLP3EK6sYBecZmnUrFJwYRLvnAdQKzJfJDs2R7APZw
-         aFdQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=em20XkthwICjiY73AZrmRzIE2o4bcVYz3Wx+RRleUw8=;
+        b=qWhWXHynw6L7tdvIznjScb03heP0XtJwArJFYycejfWffaIDD+mus/hJLY17eM1NDv
+         CVQGMyKdDwWEBZFi8KLrtslwPux/3ZWqueepGcArHbI9Ar1ATwZ/04VkLr7Qn1EQ+Kbx
+         hI4WNfYBVQd1cx7sZdgyuSM5GijmJk5yY1r7x7Ch82RANAjLvVif1z2KwxwB51ZKBf7Q
+         C8QTX6Cz6831VoTbTqsKa2CV5+aVMvv5IZ9AGrqCBsA6YBqiIejMUuF9V03pTIkGywwj
+         pr1y9cIZA42AXY6ZOmngahjsUpre1tCDkCAKMMu7s//p2qOw1f+/WOVdSkqkfITgROQ3
+         LDuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oc5bTi7/1MBiAyWrb/BCqxKaS2n3HhEl1VJrsEcMc6k=;
-        b=i6QJt3FioL0mVvxX3xUZwqp6rKI0AYTZxxQ9vSmPPJR+lv2p31RhuvEo7790vGoSiC
-         BWkUYvlgtwuHYL0o8WjX45afOLAvp0Gp+B9JUb6oFRRqhIW1x9r0kmKY7pWljPADR29S
-         iuL+3Eb9TUxJEZYBOfq11DQ/EEBlWAcsmCOOJKKMLaVRyWmw8+B+aZ/vxWUJzm5M1G0P
-         QqsmMt5u+LFLBFGB3VUI89Zp00h4ad/MqHlBHdUJ27UjfHugtsCvsmbRQPcHUcoZebni
-         paKBx0LyllkuuyMCQ3bwZpxaORIBORu5FkA5i7X5SwRw3+cL3krbU2SN1ZhXE8HFTIld
-         7rbA==
-X-Gm-Message-State: AOAM533naERG8QuqheS+FL5/U20KECO4e66g7O0HH+fHbHtTrRMGDTB8
-        fgkeJ4dj+vRBmrMfTxNvlBPAMCUdL/5xNIJKzTQw+A==
-X-Google-Smtp-Source: ABdhPJwi966hWS07LJwz9bEWS3611t5gBvrGW9dceY/bml/CRf47iE8bUw+ljH42WS1Quj2YyGgFvZuR2EaxJaPOnZE=
-X-Received: by 2002:a05:6512:243:: with SMTP id b3mr4968951lfo.529.1615540955761;
- Fri, 12 Mar 2021 01:22:35 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=em20XkthwICjiY73AZrmRzIE2o4bcVYz3Wx+RRleUw8=;
+        b=qDxUv9/gb9AvJR9kRSCqEJkH25rAi5hvKk5fdFU7t/JdMgLD24XLZ13zPDEYgeF2yJ
+         ZYEr7S9IKhs68tZcKxm4a2nMRJ5DoDfZ1QKQTKLl+iuUGbCey4aP3l2896rZ9VpLYRTv
+         EzuLC71NVrlRIrLplu9va6/q7qTLpw7ekGqy+dEBKsiNODZy/jP3SA0S/zve7bsLnsVX
+         jO4Y1C5JLBwZPZ+HJbBYl7Mr3HeSZi57KKPwW4k2j80DMyexltVGwaoEhgexDiFWkcjY
+         jJ2i5Eg8GaoKshjrczHsOijWzLBZOMPy/Rxx1Jlg+ANxZ1NwSbp5prCaVAIPd2JDSnyy
+         kmKQ==
+X-Gm-Message-State: AOAM533qWNM3u/0iBqz5WF788HWbEep1sHkio6jNGRtOemrkrMUuvUke
+        SBJg3s86jzNnqwiD5Vk53ONwbA==
+X-Google-Smtp-Source: ABdhPJzYvThiLKP/sQoUTU8EbxldMH+/VO2nLSI6jWOTcyd248Iul68f6eueUFLMEeUxhQQ9atnVow==
+X-Received: by 2002:adf:b30f:: with SMTP id j15mr13088971wrd.132.1615542468763;
+        Fri, 12 Mar 2021 01:47:48 -0800 (PST)
+Received: from dell.default ([91.110.221.204])
+        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.47.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Mar 2021 01:47:48 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Adam Radford <aradford@gmail.com>,
+        Alan Cox <alan@lxorguk.ukuu.org.uk>,
+        Ali Akcaagac <aliakc@web.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andre Hedrick <andre@suse.com>,
+        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Anil Veerabhadrappa <anilgv@broadcom.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bas Vermeulen <bvermeul@blackstar.xs4all.nl>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        Brian Macy <bmacy@sunshinecomputing.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "C.L. Huang" <ching@tekram.com.tw>, dc395x@twibble.org,
+        de Melo <acme@conectiva.com.br>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Dimitris Michailidis <dm@chelsio.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Eddie Wai <eddie.wai@broadcom.com>,
+        Erich Chen <erich@tekram.com.tw>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Hannes Reinecke <hare@kernel.org>,
+        Hannes Reinecke <hare@suse.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        Jamie Lenehan <lenehan@twibble.org>,
+        Jan Kotas <jank@cadence.com>,
+        Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
+        Joel Jacobson <linux@3ware.com>, Karen Xie <kxie@chelsio.com>,
+        Ketan Mukadam <ketan.mukadam@broadcom.com>,
+        Kurt Garloff <garloff@suse.de>,
+        "Leonard N. Zubkoff" <lnz@dandelion.com>,
+        linux-drivers@broadcom.com, Linux GmbH <hare@suse.com>,
+        linux-scsi@vger.kernel.org,
+        Manish Rangankar <mrangankar@marvell.com>,
+        Marcelo Tosatti <marcelo@conectiva.com.br>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@avagotech.com,
+        MPT-FusionLinux.pdl@broadcom.com,
+        Nathaniel Clark <nate@misrule.us>,
+        "Nicholas A. Bellinger" <nab@kernel.org>,
+        Nilesh Javali <njavali@marvell.com>,
+        Oliver Neukum <oliver@neukum.org>,
+        QLogic-Storage-Upstream@qlogic.com,
+        Santosh Yaraganavi <santosh.sy@samsung.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Vinayak Holikatti <h.vinayak@samsung.com>,
+        Vladislav Bolkhovitin <vst@vlnb.net>
+Subject: [PATCH 00/30] [Set 2] Rid W=1 warnings in SCSI
+Date:   Fri, 12 Mar 2021 09:47:08 +0000
+Message-Id: <20210312094738.2207817-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20210303135500.24673-1-alex.bennee@linaro.org>
- <20210303135500.24673-2-alex.bennee@linaro.org> <CAK8P3a0W5X8Mvq0tDrz7d67SfQA=PqthpnGDhn8w1Xhwa030-A@mail.gmail.com>
- <20210305075131.GA15940@goby> <CAK8P3a0qtByN4Fnutr1yetdVZkPJn87yK+w+_DAUXOMif-13aA@mail.gmail.com>
- <CACRpkdb4RkQvDBgTMW_+7yYBsHNRyJZiT5bn04uQJgk7tKGDOA@mail.gmail.com>
- <6c542548-cc16-af68-c755-df52bd13b209@marcan.st> <CAFA6WYOYmTgguVDwpyjnt3gLssqW48qzAkRD_nyPYg0nNhxT2A@mail.gmail.com>
- <beca6bc8-8970-bd01-8de0-6ded1fb69be2@marcan.st> <CACRpkdbQks5pRFNHkNLVvLHCBhh0XCv7pHYq25EVAbU60PcwsA@mail.gmail.com>
- <0a26713a-8988-1713-4358-bc62364b9e25@marcan.st> <CACRpkda9f-BNmu-CaNsghnDoOcSXvvvji=tag2Xos+tg_nNZ0w@mail.gmail.com>
- <32bdceb1-e70d-7481-96e3-a064a7108eb9@marcan.st> <CACRpkdZ_-rqGBUOxUcBPeqVkLzX=Q9pjO9M+zY20-S9tNXAE0Q@mail.gmail.com>
- <d7f8a732-7a44-f609-52dc-3ba824a3d192@marcan.st>
-In-Reply-To: <d7f8a732-7a44-f609-52dc-3ba824a3d192@marcan.st>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 12 Mar 2021 10:22:24 +0100
-Message-ID: <CACRpkdZmXMgAWkPDoi=_tDHuC4W2_PMa892XLLHJz27ChDLD2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/5] rpmb: add Replay Protected Memory Block (RPMB) subsystem
-To:     Hector Martin <marcan@marcan.st>
-Cc:     David Howells <dhowells@redhat.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Arnd Bergmann <arnd@linaro.org>,
-        Joakim Bech <joakim.bech@linaro.org>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Maxim Uvarov <maxim.uvarov@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Ruchika Gupta <ruchika.gupta@linaro.org>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>, yang.huang@intel.com,
-        bing.zhu@intel.com, Matti.Moell@opensynergy.com,
-        hmo@opensynergy.com, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-nvme@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd.bergmann@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Hector,
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-thanks for the long and detailed answer! I learn new things
-all the time. (Maybe one day I add something too, who knows.)
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-I hope I'm not taking too much of your time, we're having fun :)
+Lee Jones (30):
+  scsi: mpt3sas: mpt3sas_config: Fix a bunch of potential naming doc-rot
+  scsi: ufs: ufshcd: Fix incorrectly named
+    ufshcd_find_max_sup_active_icc_level()
+  scsi: lpfc: lpfc_scsi: Fix a bunch of kernel-doc misdemeanours
+  scsi: lpfc: lpfc_attr: Fix a bunch of misnamed functions
+  scsi: libfc: fc_rport: Fix incorrect naming of fc_rport_adisc_resp()
+  scsi: mpt3sas: mpt3sas_transport: Fix a couple of misdocumented
+    functions/params
+  scsi: libfc: fc_fcp: Fix misspelling of fc_fcp_destroy()
+  scsi: qla2xxx: qla_mr: Fix a couple of misnamed functions
+  scsi: mpt3sas: mpt3sas_ctl: Fix some kernel-doc misnaming issues
+  scsi: qla2xxx: qla_nx2: Fix incorrectly named function
+    qla8044_check_temp()
+  scsi: qla2xxx: qla_target: Fix a couple of misdocumented functions
+  scsi: lpfc: lpfc_debugfs: Fix incorrectly documented function
+    lpfc_debugfs_commonxripools_data()
+  scsi: lpfc: lpfc_bsg: Fix a few incorrectly named functions
+  scsi: bfa: bfa_fcs_lport: Move a large struct from the stack onto the
+    heap
+  scsi: lpfc: lpfc_nvme: Fix kernel-doc formatting issue
+  scsi: ufs: cdns-pltfrm: Supply function names for headers
+  scsi: cxgbi: cxgb3i: cxgb3i: Fix misnaming of ddp_setup_conn_digest()
+  scsi: esas2r: esas2r_log: Supply __printf(x, y) formatting for
+    esas2r_log_master()
+  scsi: be2iscsi: be_iscsi: Fix incorrect naming of
+    beiscsi_iface_config_vlan()
+  scsi: be2iscsi: be_main: Provide missing function name in header
+  scsi: be2iscsi: be_mgmt: Fix beiscsi_phys_port()'s name in header
+  scsi: bnx2i: bnx2i_sysfs: Fix bnx2i_set_ccell_info()'s name in
+    description
+  scsi: initio: Remove unused variable 'prev'
+  scsi: a100u2w: Remove unused variable 'bios_phys'
+  scsi: dc395x: Fix incorrect naming in function headers
+  scsi: atp870u: Fix naming and demote incorrect and non-conformant
+    kernel-doc header
+  scsi: myrs: Remove a couple of unused 'status' variables
+  scsi: 3w-xxxx: Remove 2 unused variables 'response_que_value' and
+    'tw_dev'
+  scsi: 3w-9xxx: Remove a few set but unused variables
+  scsi: 3w-sas: Remove unused variables 'sglist' and 'tw_dev'
 
-On Thu, Mar 11, 2021 at 9:02 PM Hector Martin <marcan@marcan.st> wrote:
-> On 11/03/2021 23.06, Linus Walleij wrote:
-> > Yes. And this is what mobile phone vendors typically did.
-> >
-> > But the nature of different electrical attacks made them worried
-> > about different schemes involving cutting power and disturbing
-> > signals with different probes, so they wanted this counter
-> > implemented in hardware and that is why RPMB exists at all
-> > (IIUC).
->
-> No, prior to RPMB there was no such secure counter at all. The problem
-> is that non-volatile erasable storage (i.e. EEPROM/Flash) is
-> incompatible with modern SoC manufacturing processes, so there is no way
-> to embed a secure counter into the main SoC. And once your counter needs
-> to be external, there needs to be a secure communications protocol to
-> access it. This is what RPMB implements.
->
-> For preventing software downgrades, especially of bootloader code, this
-> can be implemented with one-time fuses embedded in the SoC, but there is
-> a limited supply of those. So this doesn't work for things like PIN
-> attempt counters. For that you need a secure external counter.
+ drivers/scsi/3w-9xxx.c                   | 14 ++++----------
+ drivers/scsi/3w-sas.c                    | 10 ++--------
+ drivers/scsi/3w-xxxx.c                   |  6 ++----
+ drivers/scsi/a100u2w.c                   |  2 --
+ drivers/scsi/atp870u.c                   |  7 +++----
+ drivers/scsi/be2iscsi/be_iscsi.c         |  2 +-
+ drivers/scsi/be2iscsi/be_main.c          |  1 +
+ drivers/scsi/be2iscsi/be_mgmt.c          |  2 +-
+ drivers/scsi/bfa/bfa_fcs_lport.c         | 20 ++++++++++++++------
+ drivers/scsi/bnx2i/bnx2i_sysfs.c         |  2 +-
+ drivers/scsi/cxgbi/cxgb3i/cxgb3i.c       |  2 +-
+ drivers/scsi/dc395x.c                    |  6 +++---
+ drivers/scsi/esas2r/esas2r_log.c         |  7 +++++++
+ drivers/scsi/initio.c                    |  5 ++---
+ drivers/scsi/libfc/fc_fcp.c              |  2 +-
+ drivers/scsi/libfc/fc_rport.c            |  2 +-
+ drivers/scsi/lpfc/lpfc_attr.c            | 12 ++++++------
+ drivers/scsi/lpfc/lpfc_bsg.c             |  6 +++---
+ drivers/scsi/lpfc/lpfc_debugfs.c         |  2 +-
+ drivers/scsi/lpfc/lpfc_nvme.c            |  2 +-
+ drivers/scsi/lpfc/lpfc_scsi.c            | 24 ++++++++++++------------
+ drivers/scsi/mpt3sas/mpt3sas_config.c    | 10 +++++-----
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c       | 16 ++++++++--------
+ drivers/scsi/mpt3sas/mpt3sas_transport.c |  7 ++++---
+ drivers/scsi/myrs.c                      |  6 ++----
+ drivers/scsi/qla2xxx/qla_mr.c            |  4 ++--
+ drivers/scsi/qla2xxx/qla_nx2.c           |  2 +-
+ drivers/scsi/qla2xxx/qla_target.c        |  4 ++--
+ drivers/scsi/ufs/cdns-pltfrm.c           |  4 ++++
+ drivers/scsi/ufs/ufshcd.c                |  2 +-
+ 30 files changed, 96 insertions(+), 95 deletions(-)
 
-Actually what we did (I was there, kind of) was to go to the flash vendors
-(IIRC first Intel) and require what is today called "fuses" in the flash
-memory.
+Cc: Adam Radford <aradford@gmail.com>
+Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>
+Cc: Ali Akcaagac <aliakc@web.de>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Andre Hedrick <andre@suse.com>
+Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>
+Cc: Anil Veerabhadrappa <anilgv@broadcom.com>
+Cc: Avri Altman <avri.altman@wdc.com>
+Cc: Bas Vermeulen <bvermeul@blackstar.xs4all.nl>
+Cc: Bradley Grove <linuxdrivers@attotech.com>
+Cc: Brian Macy <bmacy@sunshinecomputing.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: "C.L. Huang" <ching@tekram.com.tw>
+Cc: dc395x@twibble.org
+Cc: de Melo <acme@conectiva.com.br>
+Cc: Dick Kennedy <dick.kennedy@broadcom.com>
+Cc: Dimitris Michailidis <dm@chelsio.com>
+Cc: Doug Ledford <dledford@redhat.com>
+Cc: Eddie Wai <eddie.wai@broadcom.com>
+Cc: Erich Chen <erich@tekram.com.tw>
+Cc: GR-QLogic-Storage-Upstream@marvell.com
+Cc: Hannes Reinecke <hare@kernel.org>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Jamie Lenehan <lenehan@twibble.org>
+Cc: Jan Kotas <jank@cadence.com>
+Cc: Jitendra Bhivare <jitendra.bhivare@broadcom.com>
+Cc: Joel Jacobson <linux@3ware.com>
+Cc: Karen Xie <kxie@chelsio.com>
+Cc: Ketan Mukadam <ketan.mukadam@broadcom.com>
+Cc: Kurt Garloff <garloff@suse.de>
+Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
+Cc: linux-drivers@broadcom.com
+Cc: Linux GmbH <hare@suse.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: Manish Rangankar <mrangankar@marvell.com>
+Cc: Marcelo Tosatti <marcelo@conectiva.com.br>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: MPT-FusionLinux.pdl@avagotech.com
+Cc: MPT-FusionLinux.pdl@broadcom.com
+Cc: Nathaniel Clark <nate@misrule.us>
+Cc: "Nicholas A. Bellinger" <nab@kernel.org>
+Cc: Nilesh Javali <njavali@marvell.com>
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: QLogic-Storage-Upstream@qlogic.com
+Cc: Santosh Yaraganavi <santosh.sy@samsung.com>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>
+Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Cc: Stanley Chu <stanley.chu@mediatek.com>
+Cc: Subbu Seetharaman <subbu.seetharaman@broadcom.com>
+Cc: Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
+Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Cc: Vinayak Holikatti <h.vinayak@samsung.com>
+Cc: Vladislav Bolkhovitin <vst@vlnb.net>
+-- 
+2.27.0
 
-Originally this was for things like unique serial numbers set in
-production. But they could easily add some more of it for other
-use cases.
-
-This became what is known as OTP (one time programmable flash).
-The OTP was all set to 1:s when the flash was new, then what we
-did for anti-rollback was to designate some bits for software versions.
-
-To make sure the OTP readout wasn't tampered with, some additional
-hashes of the OTP was stored in the flash and MAC signed. This was
-recalculated when we changed a bit from 1->0 in the OTP to indicate
-a new firmware version.
-
-Clever, isn't it? :)
-
-I think the scheme in RPMB was based in part on the needs
-solved by that crude mechanism.
-
-(Linux MTD did actually even gain some support for OTP recently,
-it is used only from userspace AFIAK.)
-
-> RPMB isn't pointless; what I am saying is that
-> if you strip away everything but the counter functionality, you can
-> still build equivalent security guarantees. You still need the counter.
-> There is no way to get that counter without RPMB or something like it
-> (another option is e.g. to use a smartcard IC as a secure element; AIUI
-> modern Apple devices do this). Software alone doesn't work. This is why
-> I wrote that article about how the FBI cracks iPhones; that works
-> because they weren't using a secure rollback-protected storage/counter
-> chip of any kind.
-
-Yeah. Hm, actually if they had flash memory they should have
-used the OTP... But I suppose they were all on eMMC.
-
-> it helps if you forget about the read/write commands and treat
-> it as a simple counter.
-
-Yep you're right.
-
-> Once you do that, you'll realize that e.g. putting keys in RPMB doesn't
-> really make sense as a kernel primitive. The usefulness of RPMB is
-> purely in the integration of that counter (which is equivalent to
-> rollback-protected storage) with a policy system. Everything else is
-> icing on the cake; it doesn't create new use cases.
-
-OK I understand. So what you're saying is we can't develop
-anything without also developing a full policy system.
-
-> Consider this:
-(...)
-> You have now built a secure, rollback-protected Git repository, with
-> similar security properties to RPMB storage, without using RPMB storage;
-> just a counter.
-
-This example of using the RPMB to protect rollback of a git
-was really nice! I think I understood as much before but
-maybe I don't explain that well enough :/
-
-> Thus, we can conclude that the storage features of RPMB do not provide
-> additional security properties that cannot be derived from a simple counter.
-
-I agree.
-
-> * Disclaimer: please don't actually deploy this; I'm trying to make a
-> point here, it's 5AM and I'm not claiming this is a perfectly secure
-> design and I haven't missed anything. Please don't design
-> rollback-protected Git repositories without expert review. I am assuming
-> filesystem mutations only happen between operations and handwaving away
-> active attacks, which I doubt Git is designed to be robust against. A
-> scheme like this can be implemented securely with care, but not naively.
-
-It's an example all kernel developers can relate to, so the
-educational value is high!
-
-> Well, that's what I'm saying, you do need secureboot for this to make
-> sense :-)
->
-> RPMB isn't useless and some systems should implement it; but there's no
-> real way for the kernel to transparently use it to improve security in
-> general (for anyone) without the user being aware. Since any security
-> benefit from RPMB must come from integration with user policy, it
-> doesn't make sense to "well, just do something else with RPMB because
-> it's better than nothing"; just doing "something" doesn't make systems
-> more secure. There needs to be a specific, practical use case that we'd
-> be trying to solve with RPMB here.
-
-As of now there are no other real world examples than TEE
-for this user policy. TPM and secure enclave exist, but they both
-have their own counters and does not need this.
-
-Can one realistically imagine another secure environment
-needing a RPMB counter? If not, then TEE (tee-supplicant is
-the name of the software daemon in userspace for OP-TEE,
-then some vendors have their own version of TEE)
-will ever be the only user, and then we only need to design
-for that.
-
-Yours,
-Linus Walleij
