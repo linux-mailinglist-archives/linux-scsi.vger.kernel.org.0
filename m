@@ -2,63 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C8F338904
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D15338917
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Mar 2021 10:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbhCLJsi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Mar 2021 04:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        id S233322AbhCLJsv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Mar 2021 04:48:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbhCLJsH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:07 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DAEC061574
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:07 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id k8so1400360wrc.3
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:06 -0800 (PST)
+        with ESMTP id S233141AbhCLJsV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Mar 2021 04:48:21 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F00C061574
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:09 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id l19so3399649wmh.1
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Mar 2021 01:48:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hb0h53+N/nT00wb74f1MjjQ1bTOb0RVG4vqVQWcHEZE=;
-        b=P9B9CY2lD1RdF3q6iypPdFIU6at6cohz33wf9IqIkmzQbrlSn4Fsuw17QK/UZKPAhP
-         ASbDjeI+KkpcxYf6NDz/oTk3ICjql66swpNRESmOpxbPMuWlaY9vIvCZbYJpJHtEcTUn
-         rXaHQ9sCz9SbTNaRUSJUPM0GG9XAU7z7IogPGxd9zELtdCTZ05IkfZRHSCThYER5NGqU
-         Ho2/dJngFDhZJkpI9IoHP/P2HYJKSQmGBKRigNKIaYQ83WnLkrBBRzK9vk16ektyswNM
-         pix6qOdIdeav+F255QcqumBdOHkhJ81O3iJqZfADq/2Xhp1zi868k8/RN+SiALY0FMej
-         h6ZQ==
+        bh=cAgrlXd2l1LJdhAbUiQiEGzy9+X15djTsbIgtd+mY2I=;
+        b=lVMCHULUc5/aA9eGRFFQrjna7vIsiRzLtnqSsoC0NJMHqsv/u8vvcgXmV6Cqq8tRDa
+         MHdCbm9U1qbzrGZJhJL3k1zKbbjt/SwoVE91G4peiMCu0bQzrQN0/lzOu7g9leTDUEi5
+         a8X/Y3TwSYRE6y1WsHvze5bFHmLgPq5tgSumBnDRe5iSEWaLyjPjhwWld48S/Ddp5iwG
+         pBgnAxqhCyeoZB9+R8q2++w0gN2CP8I0ulVZNlJvcoecnG0LoGlV80vFU2P4v9Ped6+4
+         ash1+yOFmYD0afs62CoH6VLeKAXPSpbH9+pK54Vyi/SNC08nB+xGwthDnf0hqgNIQMee
+         BJCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hb0h53+N/nT00wb74f1MjjQ1bTOb0RVG4vqVQWcHEZE=;
-        b=FzFagpg4Z+xWBTHK1j2VxchTjAd3YwPyCmmiErSkChX5wyIlRw411fOP2Rm2aBCnHC
-         JfRno/6mEsUwMx34BGsQcJlysMOX6/mqD4JBXMOXdNc/eY53xbVvIaSqy/6MyOaAtBUD
-         Rg72Vd+5KOAQzrKCYFiYyvQExK8HuMOn7jTSfWl5lqOyflXbnLxQ7sROBWX3k3a5pwI8
-         7ELo1hlsQ7k30EN0k3V77m2t0Hc3vQZvSTyACH1j+1bsXchNHMsImAzN1vaDAbyWiDDJ
-         v76h4tHM3gNyVI0VxNp3R2JAs9C/kSZFobOZEhzewCkmBMvsiAEvdwFHaOIYjqvf70es
-         CPFw==
-X-Gm-Message-State: AOAM533rQrlAEsPS/qdJ8DJ6aGLv72/VOMV4ERMQpOgpPWP6ibLFKBoI
-        Ce5x9C3C2AjeHmPykcU0JdIgtg==
-X-Google-Smtp-Source: ABdhPJw9hVpTqUn8hfq8z50GtH+UEJaYIa62uf4N+tcmdzYne1haCmli1AcNq2/MJJLn7bCD7XfTow==
-X-Received: by 2002:a05:6000:245:: with SMTP id m5mr13372111wrz.284.1615542485738;
-        Fri, 12 Mar 2021 01:48:05 -0800 (PST)
+        bh=cAgrlXd2l1LJdhAbUiQiEGzy9+X15djTsbIgtd+mY2I=;
+        b=bC2fuvWnRLFkbDDsPlf3kxi1xRInBu/RQWqDeddQCxfaPo8k2QSszNtODJDRXelcxn
+         dSKu4quYtM4mEqN68qCMLg3QbCAbOsi8CAbzpAS3kkFuCIIsEJbvBwNHiMXoFDznD2Fa
+         3OHGx+3swBq8+HHI4L4yKF1rZj6zIFMUABwb/X7CGgYzBCEbt8MZTlaXoPycJm+YoyYX
+         qFp3jcDacnQKx7SsqDSkpWUx0VcUErfsigcCh6L8BR586Hby8rWP/1GmdLbP5WhxlPcB
+         59NSwoJ2g8ciY5OjI7FpJkztrL6TSUaZ8UUIGcUsw0X+yx0tGIYdCEIOIqCAD/Qn/+X3
+         aaPA==
+X-Gm-Message-State: AOAM532keHn6XIwSL5avAR3p1qk85HRBKnC/WB2ue4q4kYY3sczFc0ia
+        wNL/lrxqeegAuePAy7Q1WXcWKX0kvMyIqw==
+X-Google-Smtp-Source: ABdhPJxtxs+yAdlG3bLdXNsyC/3JEqEfDxibDtPZ2HJjVgqSmtWHsn8Q0+9JVZCgM1P++N0ANZzplg==
+X-Received: by 2002:a1c:5416:: with SMTP id i22mr12228165wmb.146.1615542486634;
+        Fri, 12 Mar 2021 01:48:06 -0800 (PST)
 Received: from dell.default ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.48.04
+        by smtp.gmail.com with ESMTPSA id f7sm1539536wmq.11.2021.03.12.01.48.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 01:48:05 -0800 (PST)
+        Fri, 12 Mar 2021 01:48:06 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
+Cc:     linux-kernel@vger.kernel.org, Karen Xie <kxie@chelsio.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Jan Kotas <jank@cadence.com>, linux-scsi@vger.kernel.org
-Subject: [PATCH 16/30] scsi: ufs: cdns-pltfrm: Supply function names for headers
-Date:   Fri, 12 Mar 2021 09:47:24 +0000
-Message-Id: <20210312094738.2207817-17-lee.jones@linaro.org>
+        Dimitris Michailidis <dm@chelsio.com>,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 17/30] scsi: cxgbi: cxgb3i: cxgb3i: Fix misnaming of ddp_setup_conn_digest()
+Date:   Fri, 12 Mar 2021 09:47:25 +0000
+Message-Id: <20210312094738.2207817-18-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210312094738.2207817-1-lee.jones@linaro.org>
 References: <20210312094738.2207817-1-lee.jones@linaro.org>
@@ -70,59 +68,31 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/ufs/cdns-pltfrm.c:109: warning: expecting prototype for Sets HCLKDIV register value based on the core_clk(). Prototype was for cdns_ufs_set_hclkdiv() instead
- drivers/scsi/ufs/cdns-pltfrm.c:144: warning: wrong kernel-doc identifier on line:
- drivers/scsi/ufs/cdns-pltfrm.c:160: warning: wrong kernel-doc identifier on line:
- drivers/scsi/ufs/cdns-pltfrm.c:176: warning: wrong kernel-doc identifier on line:
+ drivers/scsi/cxgbi/cxgb3i/cxgb3i.c:1189: warning: expecting prototype for cxgb3i_setup_conn_digest(). Prototype was for ddp_setup_conn_digest() instead
 
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Avri Altman <avri.altman@wdc.com>
+Cc: Karen Xie <kxie@chelsio.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Stanley Chu <stanley.chu@mediatek.com>
-Cc: Jan Kotas <jank@cadence.com>
+Cc: Dimitris Michailidis <dm@chelsio.com>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/ufs/cdns-pltfrm.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/cxgbi/cxgb3i/cxgb3i.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
-index 149391faa19c1..13d92043e13b0 100644
---- a/drivers/scsi/ufs/cdns-pltfrm.c
-+++ b/drivers/scsi/ufs/cdns-pltfrm.c
-@@ -100,6 +100,7 @@ static void cdns_ufs_set_l4_attr(struct ufs_hba *hba)
+diff --git a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
+index 37d99357120fa..203f938fca7e5 100644
+--- a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
++++ b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
+@@ -1177,7 +1177,7 @@ static int ddp_setup_conn_pgidx(struct cxgbi_sock *csk,
  }
  
  /**
-+ * cdns_ufs_set_hclkdiv()
-  * Sets HCLKDIV register value based on the core_clk
-  * @hba: host controller instance
-  *
-@@ -141,6 +142,7 @@ static int cdns_ufs_set_hclkdiv(struct ufs_hba *hba)
- }
- 
- /**
-+ * cdns_ufs_hce_enable_notify()
-  * Called before and after HCE enable bit is set.
-  * @hba: host controller instance
-  * @status: notify stage (pre, post change)
-@@ -157,6 +159,7 @@ static int cdns_ufs_hce_enable_notify(struct ufs_hba *hba,
- }
- 
- /**
-+ * cdns_ufs_hibern8_notify()
-  * Called around hibern8 enter/exit.
-  * @hba: host controller instance
-  * @cmd: UIC Command
-@@ -173,6 +176,7 @@ static void cdns_ufs_hibern8_notify(struct ufs_hba *hba, enum uic_cmd_dme cmd,
- }
- 
- /**
-+ * cdns_ufs_link_startup_notify()
-  * Called before and after Link startup is carried out.
-  * @hba: host controller instance
-  * @status: notify stage (pre, post change)
+- * cxgb3i_setup_conn_digest - setup conn. digest setting
++ * ddp_setup_conn_digest - setup conn. digest setting
+  * @csk: cxgb tcp socket
+  * @tid: connection id
+  * @hcrc: header digest enabled
 -- 
 2.27.0
 
