@@ -2,335 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5551C33A3C2
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Mar 2021 10:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2583033A48C
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Mar 2021 12:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbhCNJLR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 14 Mar 2021 05:11:17 -0400
-Received: from mga11.intel.com ([192.55.52.93]:53684 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234904AbhCNJLI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 14 Mar 2021 05:11:08 -0400
-IronPort-SDR: RUj4kGG1QLbyTle3TnbiOnSZ6GOIKXfIdcEFneo0CvHNs5KWG+KZRmaBpitJH5xobAyhOS1Dw8
- slxCY5WX0rBw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9922"; a="185622924"
-X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
-   d="scan'208";a="185622924"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2021 01:11:05 -0800
-IronPort-SDR: W4Pgrv411RMHKDlBXBestqy3b70NnWFlbNwtzC3925eFFTt0bxoJmYWcacH/mhfTD4wzGRqT0e
- BhyvAbVIkt5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,245,1610438400"; 
-   d="scan'208";a="590015788"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by orsmga005.jf.intel.com with ESMTP; 14 Mar 2021 01:10:56 -0800
-Subject: Re: [PATCH v10 1/2] scsi: ufs: Enable power management for wlun
-To:     "Asutosh Das (asd)" <asutoshd@codeaurora.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, cang@codeaurora.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Satya Tangirala <satyat@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux-PM mailing list <linux-pm@vger.kernel.org>
-References: <cover.1614725302.git.asutoshd@codeaurora.org>
- <0576d6eae15486740c25767e2d8805f7e94eb79d.1614725302.git.asutoshd@codeaurora.org>
- <85086647-7292-b0a2-d842-290818bd2858@intel.com>
- <6e98724d-2e75-d1fe-188f-a7010f86c509@codeaurora.org>
- <20210306161616.GC74411@rowland.harvard.edu>
- <CAJZ5v0ihJe8rNjWRwNic_BQUvKbALNcjx8iiPAh5nxLhOV9duw@mail.gmail.com>
- <CAJZ5v0iJ4yqRTt=mTCC930HULNFNTgvO4f9ToVO6pNz53kxFkw@mail.gmail.com>
- <f1e9b21d-1722-d20b-4bae-df7e6ce50bbc@codeaurora.org>
- <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <b13086f3-eea1-51a7-2117-579d520f21fc@intel.com>
-Date:   Sun, 14 Mar 2021 11:11:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S235100AbhCNLYh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 Mar 2021 07:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235181AbhCNLYD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Mar 2021 07:24:03 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A80CC061762
+        for <linux-scsi@vger.kernel.org>; Sun, 14 Mar 2021 04:24:02 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id lr13so61596429ejb.8
+        for <linux-scsi@vger.kernel.org>; Sun, 14 Mar 2021 04:24:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6jvCnFAChVgr0bDeUOpr9sCfC2TvR0HZZn9jM91gtpk=;
+        b=EDlutrInTIXqStpJNsjcAMWB5DxV3sLlpLV6ewFdrE8W8KXDcx+HNGeoJqYMMhsbny
+         e3/SQXY7cIl3Nz75/noGxIll0JzDreGnsMcvkUGSOtKE3K/DUSxvSRx3mVbW/Q5YKHsJ
+         FqDQ9Mzob7t0nxDQNa1wTJpNkaEPG/TDq/4yGZMDY/AqYCyoVagi3JFHPXDfTR+1abU5
+         DKmxI/4a0A2I36F0fpIsO0XGjtO0xLCbqaqrxTlL+5nwznLtoJDsOnnwNm32HssTylJ0
+         TyOD8qbbAFZzhjIyBjIa5m/R5kgHe1WHcY/J3b/dCnOuWL8KzinXQiBIklD85aM+WsdI
+         PwlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=6jvCnFAChVgr0bDeUOpr9sCfC2TvR0HZZn9jM91gtpk=;
+        b=FeiurLikkceeiKLbhaQNI9vn0woFXatBG/pW4fjZmRJPWLypaGxlbFziDi3duCfS0N
+         uQILr7QaiJ4ljcwyavfB9AHq6zr9c4K32pOVAFroX35t8o+s0CXMJDOkAgzVZH5bolDp
+         2/cs0vI92CFJq/ObUWyBJ2sLmrE660TO6Pd0ApTHYxmGQJMNjSUsIlodXKS/orua6w5v
+         oPBUKC5QyYcHR7glMvgbT6B9uEGyJJIahXOlqiOHvBcWibfZMZxQp/F4BuUw2IxWBoxI
+         UhllkzYCGD2p2Bl1Yi++Dh6sQPMH2WD6T0i4GPYzVsyLFctPyXeqlorIvFRKqxuoK7Dk
+         tjTw==
+X-Gm-Message-State: AOAM531RDlM36WIizvoJYQc38jP+BTU+pbkPMcEeTTUHv74qxwDLzIl6
+        hOXiFBtWIediz60rbJdUBpq1q1dBe1eLrKe7220=
+X-Google-Smtp-Source: ABdhPJwCvQBENzTTNrmAZXinpcI7DWBvUaviof0EWFOK6IV9gfMhe5MFJsQQjK/idLKRqnXIGfAVEg8fxQPXxVkuRTg=
+X-Received: by 2002:a17:907:2d9f:: with SMTP id gt31mr18076609ejc.233.1615721040946;
+ Sun, 14 Mar 2021 04:24:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <2bd90336-18a9-9acd-5abb-5b52b27fc535@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:907:96a1:0:0:0:0 with HTTP; Sun, 14 Mar 2021 04:24:00
+ -0700 (PDT)
+Reply-To: vicricardo77@gmail.com
+From:   Victoria Ricardo <isabellelagace5@gmail.com>
+Date:   Sun, 14 Mar 2021 12:24:00 +0100
+Message-ID: <CAOXknML6kb-69kP7pxR-VdZVcp3AgMV9t_oAkn9ggFC0O0Pynw@mail.gmail.com>
+Subject: Pray for me!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/03/21 5:04 am, Asutosh Das (asd) wrote:
-> On 3/9/2021 7:56 AM, Asutosh Das (asd) wrote:
->> On 3/8/2021 9:17 AM, Rafael J. Wysocki wrote:
->>> On Mon, Mar 8, 2021 at 5:21 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>>
->>>> On Sat, Mar 6, 2021 at 5:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->>>>>
->>>>> On Fri, Mar 05, 2021 at 06:54:24PM -0800, Asutosh Das (asd) wrote:
->>>>>
->>>>>> Now during my testing I see a weird issue sometimes (1 in 7).
->>>>>> Scenario - bootups
->>>>>>
->>>>>> Issue:
->>>>>> The supplier 'ufs_device_wlun 0:0:0:49488' goes into runtime suspend even
->>>>>> when one/more of its consumers are in RPM_ACTIVE state.
->>>>>>
->>>>>> *Log:
->>>>>> [   10.056379][  T206] sd 0:0:0:1: [sdb] Synchronizing SCSI cache
->>>>>> [   10.062497][  T113] sd 0:0:0:5: [sdf] Synchronizing SCSI cache
->>>>>> [   10.356600][   T32] sd 0:0:0:7: [sdh] Synchronizing SCSI cache
->>>>>> [   10.362944][  T174] sd 0:0:0:3: [sdd] Synchronizing SCSI cache
->>>>>> [   10.696627][   T83] sd 0:0:0:2: [sdc] Synchronizing SCSI cache
->>>>>> [   10.704562][  T170] sd 0:0:0:6: [sdg] Synchronizing SCSI cache
->>>>>> [   10.980602][    T5] sd 0:0:0:0: [sda] Synchronizing SCSI cache
->>>>>>
->>>>>> /** Printing all the consumer nodes of supplier **/
->>>>>> [   10.987327][    T5] ufs_device_wlun 0:0:0:49488: usage-count @ suspend: 0
->>>>>> <-- this is the usage_count
->>>>>> [   10.994440][    T5] ufs_rpmb_wlun 0:0:0:49476: PM state - 2
->>>>>> [   11.000402][    T5] scsi 0:0:0:49456: PM state - 2
->>>>>> [   11.005453][    T5] sd 0:0:0:0: PM state - 2
->>>>>> [   11.009958][    T5] sd 0:0:0:1: PM state - 2
->>>>>> [   11.014469][    T5] sd 0:0:0:2: PM state - 2
->>>>>> [   11.019072][    T5] sd 0:0:0:3: PM state - 2
->>>>>> [   11.023595][    T5] sd 0:0:0:4: PM state - 0 << RPM_ACTIVE
->>>>>> [   11.353298][    T5] sd 0:0:0:5: PM state - 2
->>>>>> [   11.357726][    T5] sd 0:0:0:6: PM state - 2
->>>>>> [   11.362155][    T5] sd 0:0:0:7: PM state - 2
->>>>>> [   11.366584][    T5] ufshcd-qcom 1d84000.ufshc: __ufshcd_wl_suspend - 8709
->>>>>> [   11.374366][    T5] ufs_device_wlun 0:0:0:49488: __ufshcd_wl_suspend -
->>>>>> (0) has rpm_active flags
->>>>
->>>> Do you mean that rpm_active of the link between the consumer and the
->>>> supplier is greater than 0 at this point and the consumer is
->>>
->>> I mean is rpm_active of the link greater than 1 (because 1 means "no
->>> active references to the supplier")?
->> Hi Rafael:
->> No - it is not greater than 1.
->>
->> I'm trying to understand what's going on in it; will update when I've something.
->>
->>>
->>>> RPM_ACTIVE, but the supplier suspends successfully nevertheless?
->>>>
->>>>>> [   11.383376][    T5] ufs_device_wlun 0:0:0:49488:
->>>>>> ufshcd_wl_runtime_suspend <-- Supplier suspends fine.
->>>>>> [   12.977318][  T174] sd 0:0:0:4: [sde] Synchronizing SCSI cache
->>>>>>
->>>>>> And the the suspend of sde is stuck now:
->>>>>> schedule+0x9c/0xe0
->>>>>> schedule_timeout+0x40/0x128
->>>>>> io_schedule_timeout+0x44/0x68
->>>>>> wait_for_common_io+0x7c/0x100
->>>>>> wait_for_completion_io+0x14/0x20
->>>>>> blk_execute_rq+0x90/0xcc
->>>>>> __scsi_execute+0x104/0x1c4
->>>>>> sd_sync_cache+0xf8/0x2a0
->>>>>> sd_suspend_common+0x74/0x11c
->>>>>> sd_suspend_runtime+0x14/0x20
->>>>>> scsi_runtime_suspend+0x64/0x94
->>>>>> __rpm_callback+0x80/0x2a4
->>>>>> rpm_suspend+0x308/0x614
->>>>>> pm_runtime_work+0x98/0xa8
->>>>>>
->>>>>> I added 'DL_FLAG_RPM_ACTIVE' while creating links.
->>>>>>        if (hba->sdev_ufs_device) {
->>>>>>                link = device_link_add(&sdev->sdev_gendev,
->>>>>>                                    &hba->sdev_ufs_device->sdev_gendev,
->>>>>>                                   DL_FLAG_PM_RUNTIME|DL_FLAG_RPM_ACTIVE);
->>>>>> I didn't expect this to resolve the issue anyway and it didn't.
->>>>>>
->>>>>> Another interesting point here is when I resume any of the above suspended
->>>>>> consumers, it all goes back to normal, which is kind of expected. I tried
->>>>>> resuming the consumer and the supplier is resumed and the supplier is
->>>>>> suspended when all the consumers are suspended.
->>>>>>
->>>>>> Any pointers on this issue please?
->>>>>>
->>>>>> @Bart/@Alan - Do you've any pointers please?
->>>>>
->>>>> It's very noticeable that although you seem to have isolated a bug in
->>>>> the power management subsystem (supplier goes into runtime suspend
->>>>> even when one of its consumers is still active), you did not CC the
->>>>> power management maintainer or mailing list.
->>>>>
->>>>> I have added the appropriate CC's.
->>>>
->>>> Thanks Alan!
->>
->>
-> 
-> Hello
-> I & Can (thanks CanG) debugged this further:
-> 
-> Looks like this issue can occur if the sd probe is asynchronous.
-> 
-> Essentially, the sd_probe() is done asynchronously and driver_probe_device() invokes pm_runtime_get_suppliers() before invoking sd_probe().
-> 
-> But scsi_probe_and_add_lun() runs in a separate context.
-> So the scsi_autopm_put_device() invoked from scsi_scan_host() context reduces the link->rpm_active to 1. And sd_probe() invokes scsi_autopm_put_device() and starts a timer. And then driver_probe_device() invoked from __device_attach_async_helper context reduces the link->rpm_active to 1 thus enabling the supplier to suspend before the consumer suspends.
-> 
-> So if:
-> Context T1:
-> [1] scsi_probe_and_add_lun()
-> [2]    |- scsi_autopm_put_device() - reduce the link->rpm_active to 1
-> 
-> Context T2:
-> __device_attach_async_helper()
->     |- driver_probe_device()
->         |- sd_probe()
-> In between [1] and [2] say, driver_probe_device() -> sd_probe() is invoked in a separate context from __device_attach_async_helper().
-> The driver_probe_device() -> pm_runtime_get_suppliers() but [2] would reduce link->rpm_active to 1.
-> Then sd_probe() would invoke rpm_resume() and proceed as is.
-> When sd_probe() invokes scsi_autopm_put_device() it'd start a timer, dev->power.timer_autosuspends = 1.
-> 
-> Now then, pm_runtime_put_suppliers() is invoked from driver_probe_device() and that makes the link->rpm_active = 1.
-> But by now, the corresponding 'sd dev' (consumer) usage_count = 0, state = RPM_ACTIVE and link->rpm_active = 1.
-> At this point of time, all other 'sd dev' (consumers) _may_ be suspended or active but would have the link->rpm_active = 1.
+Dear Friend,
 
-Is this with DL_FLAG_RPM_ACTIVE?  In that case, wouldn't active
-consumers have link->rpm_active = 2 and also have incremented
-the supplier's usage_count?
+Please forgive me for stressing you with my predicaments as I know
+that this letter may come to you as big surprise. I came across your
+E-mail from my personal search, and I decided to email you directly
+believing that you will be honest to fulfill my final wish before or
+after my death.
 
-Another outstanding issue that comes to mind, is to ensure
-hba->sdev_ufs_device does not runtime suspend before it is probed.
-I suggest changing ufshcd_slave_configure() so it does not set
-sdev->rpm_autosuspend for hba->sdev_ufs_device, and instead do
-pm_runtime_allow / pm_runtime_forbid() in ufshcd_wl_probe() /
-ufshcd_wl_remove() respectively.
+ Meanwhile, I am Madam Victoria Ricardo, 73 years, am from USA, Iam
+still childless. I am suffering from Breast Cancer  for the past 8
+years and from all indication my condition is really deteriorating as
+my doctors have confirmed and courageously advised me that I may not
+live beyond few months from now for the reason that my breast cancer
+tumor has reached a critical stage which has defiled all forms of
+medical treatment.i was married to Mr Alexander Ricardo from Latin
+Ameirca who was a lucrative business merchant who deals on gold dust
+in asia.I lost my deareast husband last years due to this pademic
+corona virus (covid19) when he visited his country,since then i have
+been a widow.
 
-However we still want to stop hba->sdev_ufs_device runtime
-suspending while consumers are being added.  With that in mind,
-I would expect pm_runtime_get_noresume(&hba->sdev_ufs_device->sdev_gendev)
-in ufshcd_scsi_add_wlus() to come *before*
-ufshcd_blk_pm_runtime_init(hba->sdev_ufs_device).  In fact, it would
-be more logical to make it, pm_runtime_get_sync() since we require
-hba->sdev_ufs_device to be active at that point.
+Since my days are numbered, I=E2=80=99ve decided willingly to fulfill my
+long-time vow to donate to the less priviledge and orphans in your
+country the sum of Eighteen million five hundred thousand dollars
+($18.5m) My late husband deposited in a different account over 8 years
+now which i am the right beneficiary of the fund.
 
+If you will be honest, kind and willing to assist me handle this
+charity project as I=E2=80=99ve mentioned here, I will like you to provide =
+me
+your personal data like. Contact me through this email address
+(victoriaalexander90@yahoo.com) and also send me your private email
+address.This transaction is 100 percent risk free and its an agreement
+with my late husband to help the poor within your juridiction.
+Kindly reply me with this above email address so i can update you the
+full details of this great business.
+After the execution of this transaction i will map out 40percent for
+your expenditure you might procure for the success fo this fund to hit
+into your nominated account.
+Iam waiting to read from you at the earliest
 
-> 
-> Since the supplier has 0 auto-suspend delay, it now suspends!
-> 
-> 
-> Context [T1]
-> Call trace:
-> dump_backtrace+0x0/0x1d4
-> show_stack+0x18/0x24
-> dump_stack+0xc4/0x144
-> __pm_runtime_idle+0xb4/0x184
-> scsi_autopm_put_device+0x18/0x24
-> scsi_sysfs_add_sdev+0x26c/0x278
-> scsi_probe_and_add_lun+0xbac/0xd48
-> __scsi_scan_target+0x38c/0x510
-> scsi_scan_host_selected+0x14c/0x1e4
-> scsi_scan_host+0x1e0/0x228
-> ufshcd_async_scan+0x39c/0x408
-> async_run_entry_fn+0x48/0x128
-> process_one_work+0x1f0/0x470
-> worker_thread+0x26c/0x4c8
-> kthread+0x13c/0x320
-> ret_from_fork+0x10/0x18
-> 
-> 
-> Context [T2]
-> Call trace:
-> dump_backtrace+0x0/0x1d4
-> show_stack+0x18/0x24
-> dump_stack+0xc4/0x144
-> rpm_get_suppliers+0x48/0x1ac
-> __rpm_callback+0x58/0x12c
-> rpm_resume+0x3a4/0x618
-> __pm_runtime_resume+0x50/0x80
-> scsi_autopm_get_device+0x20/0x54
-> sd_probe+0x40/0x3d0
-> really_probe+0x1bc/0x4a0
-> driver_probe_device+0x84/0xf0
-> __device_attach_driver+0x114/0x138
-> bus_for_each_drv+0x84/0xd0
-> __device_attach_async_helper+0x7c/0xf0
-> async_run_entry_fn+0x48/0x128
-> process_one_work+0x1f0/0x470
-> worker_thread+0x26c/0x4c8
-> kthread+0x13c/0x320
-> ret_from_fork+0x10/0x18
-> 
-> Below prints show how link->rpm_active becomes 1 for sd 0:0:0:4
-> [    7.574654][  T212] Call trace:
-> [    7.574657][  T212]  dump_backtrace+0x0/0x1d4
-> [    7.574661][  T212]  show_stack+0x18/0x24
-> [    7.574665][  T212]  dump_stack+0xc4/0x144
-> [    7.574668][  T212]  __pm_runtime_idle+0xb4/0x184
-> [    7.574671][  T212]  scsi_autopm_put_device+0x18/0x24
-> [    7.574675][  T212]  sd_probe+0x314/0x3d0
-> [    7.574677][  T212]  really_probe+0x1bc/0x4a0
-> [    7.574680][  T212]  driver_probe_device+0x84/0xf0
-> [    7.574683][  T212]  __device_attach_driver+0x114/0x138
-> [    7.574686][  T212]  bus_for_each_drv+0x84/0xd0
-> [    7.574689][  T212]  __device_attach_async_helper+0x7c/0xf0
-> [    7.574692][  T212]  async_run_entry_fn+0x48/0x128
-> [    7.574695][  T212]  process_one_work+0x1f0/0x470
-> [    7.574698][  T212]  worker_thread+0x26c/0x4c8
-> [    7.574700][  T212]  kthread+0x13c/0x320
-> [    7.574703][  T212]  ret_from_fork+0x10/0x18
-> [    7.574706][  T212] sd 0:0:0:4: scsi_runtime_idle
-> [    7.574712][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: -16 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
-> [    7.574715][  T212] sd 0:0:0:4: sd_probe: [UFSDBG]: Exit
-> [    7.574738][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
-> 
-> [    7.574752][  T212] Workqueue: events_unbound async_run_entry_fn
-> [    7.574754][  T212] Call trace:
-> [    7.574758][  T212]  dump_backtrace+0x0/0x1d4
-> [    7.574761][  T212]  show_stack+0x18/0x24
-> [    7.574765][  T212]  dump_stack+0xc4/0x144
-> [    7.574767][  T212]  __pm_runtime_idle+0xb4/0x184
-> [    7.574770][  T212]  driver_probe_device+0x94/0xf0
-> [    7.574773][  T212]  __device_attach_driver+0x114/0x138
-> [    7.574775][  T212]  bus_for_each_drv+0x84/0xd0
-> [    7.574778][  T212]  __device_attach_async_helper+0x7c/0xf0
-> [    7.574781][  T212]  async_run_entry_fn+0x48/0x128
-> [    7.574783][  T212]  process_one_work+0x1f0/0x470
-> [    7.574786][  T212]  worker_thread+0x26c/0x4c8
-> [    7.574788][  T212]  kthread+0x13c/0x320
-> [    7.574791][  T212]  ret_from_fork+0x10/0x18
-> [    7.574848][   T80] sd 0:0:0:4: scsi_runtime_idle
-> [    7.574858][  T212] sd 0:0:0:4: __pm_runtime_idle: aft: [UFSDBG]: pwr.timer_autosuspends: 1 pwr.request_pending: 0 retval: 0 pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:2
-> [    7.574863][  T212] sd 0:0:0:4: pm_runtime_put_suppliers: [UFSDBG]: rpm_status: 0 link-rpm_active:1
-> [    7.574866][  T212] sd 0:0:0:4: async probe completed
-> [    7.574870][  T212] sd 0:0:0:4: __pm_runtime_idle: b4: [UFSDBG]: pwr.request: 0 usage_count: 0 rpm_status: 0 link-rpm_active:1
-> 
-> 
-> So, from the above it looks like when async probe is enabled this is a possibility.
-> 
-> I don't see a way around this. Please let me know if you (@Alan/@Bart/@Adrian) have any thoughts on this.
-> 
-> Thanks,
-> -asd
-> 
-
+Best Regards!
+Madam Victoria Ricardo
