@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B0033CC5D
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Mar 2021 04:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB3333CC5C
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Mar 2021 04:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbhCPD5V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Mar 2021 23:57:21 -0400
-Received: from mail-pj1-f51.google.com ([209.85.216.51]:56164 "EHLO
-        mail-pj1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbhCPD5H (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Mar 2021 23:57:07 -0400
-Received: by mail-pj1-f51.google.com with SMTP id bt4so9923349pjb.5
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Mar 2021 20:57:07 -0700 (PDT)
+        id S233328AbhCPD5W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Mar 2021 23:57:22 -0400
+Received: from mail-pf1-f178.google.com ([209.85.210.178]:40264 "EHLO
+        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233405AbhCPD5J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Mar 2021 23:57:09 -0400
+Received: by mail-pf1-f178.google.com with SMTP id x7so7916532pfi.7
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Mar 2021 20:57:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7IKYsOC1X4EjHUenVf724LnE6hJ//GY2O7wGY4ce7Ro=;
-        b=b0evG7NAP1PRqTrNcZzK0mWfrAR/I8lUQYyAc/yzy/GzV3E/IELWYtQQ9Fd0LmcQaM
-         mknFNz30Qj6uGmeswfCHxKlxG/EL8/JOfm7PS48FZvUfbJyPguS7SgNr1xX2CV3LDv7A
-         5V17+Ww5G9RnsHIR8mD/J8JYCgcZj43Rpph9dOiBO02yAO+mEBeK8g0ZpmFAkniHmya+
-         5e+esrDyzEG4Z0bpf7ayvLkZSqbot33tJm1EpeAEIQAWwJoocjWlC9BoHlrg2BZRlkVH
-         Ikdo/sjRA+jlf6sh9Z1266W0aBQ+/PjuoaxSx2ySsEASvcR2nHs1lCVtQDWzhHrH9dKN
-         fgJw==
-X-Gm-Message-State: AOAM530stvGFDx82Jk6NSySMVJ2UZrd2NwotrHwp/s5b/BmdC8Lasd5d
-        tsxJix+aJ4YrmXbYRLQ6Uqk=
-X-Google-Smtp-Source: ABdhPJz9TOntbhBHok6WfAPwoMOhrTBU9DLyFvqA98qzDWPDJrLOA55/Lz+U2cFZDxOjxwZsUNWtOw==
-X-Received: by 2002:a17:90b:38f:: with SMTP id ga15mr2580403pjb.149.1615867027150;
-        Mon, 15 Mar 2021 20:57:07 -0700 (PDT)
+        bh=sv6Of24ONRKWaT0mpomdGbT1PFh1mtbQymJBI5MJtlA=;
+        b=QT8V2dZk4QliLVZelvNSie+my4oZVuF8HO/++ZbGejRouwfgGL1m6EMGSlvEVBWCUa
+         jUWT+nBNNX+iU6rRST/ThcfHBXRm61Tt+u8hHR14VtJEhOk+oHvn9pBpp8y79Oh/m2sn
+         U8AQ7Y/EFByL0VnFQ6X8+VEW+UNrBbWWcWlsHfDchC6l/fCk361fub3QZhq6pExsP8sM
+         zgF8vwkf4ZcvGcV5eddAEFiN947RpRxDlcFmAMoqRqRb/25buEz33osBB3gFED0+NZq+
+         L/8zYZAsPZ9tQ6hci7mRx029yccYgAQX8KYcV7xkbQ016oAmmboukOi2ZX5JuliSoNVZ
+         3hdA==
+X-Gm-Message-State: AOAM531rChZ6AvCI32/jhkklWKQs0MClvjpoDBul90ROlI6NIVaoOSQE
+        YFLdin7uDLH3+4tovJPRPUzENZelRso=
+X-Google-Smtp-Source: ABdhPJxgH0LsLZIuRa1ytwMkBEC8nZZOWkN07j/z67T7q61OSZ5QQfWn5jPj6s+EW1iwCGMq3rFsNQ==
+X-Received: by 2002:a05:6a00:ac8:b029:1ed:f8dc:cb3b with SMTP id c8-20020a056a000ac8b02901edf8dccb3bmr12961038pfl.60.1615867028591;
+        Mon, 15 Mar 2021 20:57:08 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:8641:766a:ce30:8278])
-        by smtp.gmail.com with ESMTPSA id fs9sm1031673pjb.40.2021.03.15.20.57.05
+        by smtp.gmail.com with ESMTPSA id fs9sm1031673pjb.40.2021.03.15.20.57.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 20:57:06 -0700 (PDT)
+        Mon, 15 Mar 2021 20:57:08 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -41,9 +41,9 @@ Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Mike Christie <michael.christie@oracle.com>,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
         Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH 4/7] qla2xxx: qla82xx_pinit_from_rom(): Initialize 'n' before using it
-Date:   Mon, 15 Mar 2021 20:56:52 -0700
-Message-Id: <20210316035655.2835-5-bvanassche@acm.org>
+Subject: [PATCH 5/7] qla2xxx: Suppress Coverity complaints about dseg_r*
+Date:   Mon, 15 Mar 2021 20:56:53 -0700
+Message-Id: <20210316035655.2835-6-bvanassche@acm.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210316035655.2835-1-bvanassche@acm.org>
 References: <20210316035655.2835-1-bvanassche@acm.org>
@@ -53,9 +53,9 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch suppresses the following sparse warning:
-
-qla_nx.c:1218: qla82xx_pinit_from_rom() error: uninitialized symbol 'n'.
+Change dseq_rq and dseg_rsp from scalar structure members into
+single-element arrays such that Coverity does not complain about the
+(*cur_dsd)++ statement in append_dsd64().
 
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Mike Christie <michael.christie@oracle.com>
@@ -63,19 +63,66 @@ Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
 Cc: Daniel Wagner <dwagner@suse.de>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_nx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_mr.c | 12 ++++++------
+ drivers/scsi/qla2xxx/qla_mr.h |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_nx.c b/drivers/scsi/qla2xxx/qla_nx.c
-index 0677295957bc..5683126e0cbc 100644
---- a/drivers/scsi/qla2xxx/qla_nx.c
-+++ b/drivers/scsi/qla2xxx/qla_nx.c
-@@ -1095,7 +1095,7 @@ qla82xx_pinit_from_rom(scsi_qla_host_t *vha)
- 	int i ;
- 	struct crb_addr_pair *buf;
- 	unsigned long off;
--	unsigned offset, n;
-+	unsigned offset, n = 0;
- 	struct qla_hw_data *ha = vha->hw;
+diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
+index ca7306685325..61eaf6c4ac47 100644
+--- a/drivers/scsi/qla2xxx/qla_mr.c
++++ b/drivers/scsi/qla2xxx/qla_mr.c
+@@ -3266,8 +3266,8 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
+ 			fx_iocb.req_xfrcnt =
+ 			    cpu_to_le16(fxio->u.fxiocb.req_len);
+ 			put_unaligned_le64(fxio->u.fxiocb.req_dma_handle,
+-					   &fx_iocb.dseg_rq.address);
+-			fx_iocb.dseg_rq.length =
++					   &fx_iocb.dseg_rq[0].address);
++			fx_iocb.dseg_rq[0].length =
+ 			    cpu_to_le32(fxio->u.fxiocb.req_len);
+ 		}
  
- 	struct crb_addr_pair {
+@@ -3276,8 +3276,8 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
+ 			fx_iocb.rsp_xfrcnt =
+ 			    cpu_to_le16(fxio->u.fxiocb.rsp_len);
+ 			put_unaligned_le64(fxio->u.fxiocb.rsp_dma_handle,
+-					   &fx_iocb.dseg_rsp.address);
+-			fx_iocb.dseg_rsp.length =
++					   &fx_iocb.dseg_rsp[0].address);
++			fx_iocb.dseg_rsp[0].length =
+ 			    cpu_to_le32(fxio->u.fxiocb.rsp_len);
+ 		}
+ 
+@@ -3314,7 +3314,7 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
+ 			    cpu_to_le16(bsg_job->request_payload.sg_cnt);
+ 			tot_dsds =
+ 			    bsg_job->request_payload.sg_cnt;
+-			cur_dsd = &fx_iocb.dseg_rq;
++			cur_dsd = &fx_iocb.dseg_rq[0];
+ 			avail_dsds = 1;
+ 			for_each_sg(bsg_job->request_payload.sg_list, sg,
+ 			    tot_dsds, index) {
+@@ -3369,7 +3369,7 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
+ 			fx_iocb.rsp_dsdcnt =
+ 			   cpu_to_le16(bsg_job->reply_payload.sg_cnt);
+ 			tot_dsds = bsg_job->reply_payload.sg_cnt;
+-			cur_dsd = &fx_iocb.dseg_rsp;
++			cur_dsd = &fx_iocb.dseg_rsp[0];
+ 			avail_dsds = 1;
+ 
+ 			for_each_sg(bsg_job->reply_payload.sg_list, sg,
+diff --git a/drivers/scsi/qla2xxx/qla_mr.h b/drivers/scsi/qla2xxx/qla_mr.h
+index 73be8348402a..eefbae9d7547 100644
+--- a/drivers/scsi/qla2xxx/qla_mr.h
++++ b/drivers/scsi/qla2xxx/qla_mr.h
+@@ -176,8 +176,8 @@ struct fxdisc_entry_fx00 {
+ 	uint8_t flags;
+ 	uint8_t reserved_1;
+ 
+-	struct dsd64 dseg_rq;
+-	struct dsd64 dseg_rsp;
++	struct dsd64 dseg_rq[1];
++	struct dsd64 dseg_rsp[1];
+ 
+ 	__le32 dataword;
+ 	__le32 adapid;
