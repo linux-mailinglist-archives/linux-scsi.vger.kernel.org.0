@@ -2,152 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC8F33CBF2
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Mar 2021 04:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413C533CC58
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Mar 2021 04:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhCPDS5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Mar 2021 23:18:57 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:33628 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234796AbhCPDSb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Mar 2021 23:18:31 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12G39ocf168109;
-        Tue, 16 Mar 2021 03:18:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2020-01-29;
- bh=IQp+MqOX3uXGZzdFNhMSfZSnQAWHStCWdN7iiMkzJ4k=;
- b=dVGktv+bQBVsjECaCjmu7Aq7Kwh5dTak70WNwx1tVhA24Ahu7z3ns7sIc2ExDqcgvHFG
- Q9NS2ZE2zw1wVjVah3UG+zeFdQYUxlEPTMEYYX1yreuSmK/8DuzC+o+kUoXZwQOvR3Oy
- hePCrthkNhyawlRiAiBCIwZvIrxvkOwbNlcB68PnYsBsMP87rrtJmk2cxHabesp0ahCQ
- tE56S3fbr9HypZaq4K1V90Q8Vuow1mXN98c9eaMgGDdZN8ArerkMEiBj2DLB8uo9MYAK
- AdX5hBqKecgFlrlYLg5opvSTNzMXN0QkemTBpobyJL53UuyXYgCTaNEQwTLlQOa8lxxQ ow== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 378jwbe7wb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Mar 2021 03:18:29 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12G3AabS193863;
-        Tue, 16 Mar 2021 03:18:29 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
-        by aserp3030.oracle.com with ESMTP id 3796yswd5r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Mar 2021 03:18:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kNNGmH5X8ZbjiNoA+l3vlupTk8IuEO08hgkkEOEKLeH6ZMsUmlQ1adXdep/l0BovoGQgDwQfhrj0cvIuANGJcSZhoPNiD3BfL/p49RAy66hXg8GscMeSpPc7jMrDACJ+NpCIpAZAAJ+bQaOMUW+VVz9aphUWytoYZCeZtVwXOxSU5AFql1PQNKLbLKyvCYsuAkwHBzuJUS6/gE/vGIv8IDbyrOgwlGG/vRcma0r3Bg3y1j9dPWa+WFERMzI4h5Ut4xTNih4s7wcrPnNr8qH5fZRJyx0rk7SMQz2EuYfQXh/oYewORlIZ0mF+ARaRB0VqCZmIsjrbY9QJzd9c/J4XVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IQp+MqOX3uXGZzdFNhMSfZSnQAWHStCWdN7iiMkzJ4k=;
- b=fcrdoZoDYtMkLefq7iEc5XZqTYcQTp6D6Z5HZVZPxfHMoHnyCG6vJpTJRmi+Y6G1EcZXi+iL7WTWhUpKRXTdltxKGD2eie0J9d4GoLM4c9sUC9K7PMWPT62rgXhrA61JnENktyEdThwh535XwG+5i+7cslOTkYfvgqthzb8o/Mv+JMIEwKmnffAtpmDHWw2n//7e6+gmlSi4KV9J5JAeU9ylhGHxqUBwZnHkHIj1awtKAuLYakK0XVrGVJC/5sBdvG9H5dR+8Fs3PhNmfRUzw83SWNtANftk6N+RHcPCNa3GmF++9kRBTNeqTM1ML8OFpMdSqKyRFYdAX7WVjq2ohA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IQp+MqOX3uXGZzdFNhMSfZSnQAWHStCWdN7iiMkzJ4k=;
- b=h+LDu1yKgjgY6E/4j4KZDqm1S7I2bDMrL621xbKF80BqONt+y/nUOZ4++eQqetjDLBcsfBIRxyWeVqCix4GkMBLOuWZCvCWT3oWHu8R50yh4s98gz7g/Gy6QQG3ciRZv+1ce1+kD4gfDzkIHK1hkHJu2v0kP5aLmOzejDLfZ7Nw=
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=oracle.com;
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by PH0PR10MB4647.namprd10.prod.outlook.com (2603:10b6:510:43::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Tue, 16 Mar
- 2021 03:18:27 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::dc39:c9fa:7365:8c8e]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::dc39:c9fa:7365:8c8e%5]) with mapi id 15.20.3933.032; Tue, 16 Mar 2021
- 03:18:27 +0000
-To:     Bodo Stroesser <bostroesser@gmail.com>
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>
-Subject: Re: [PATCH] scsi: target: tcmu: Adjust parameter in call to
- tcmu_blocks_release
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1zgz34whx.fsf@ca-mkp.ca.oracle.com>
-References: <20210310184458.10741-1-bostroesser@gmail.com>
-Date:   Mon, 15 Mar 2021 23:18:25 -0400
-In-Reply-To: <20210310184458.10741-1-bostroesser@gmail.com> (Bodo Stroesser's
-        message of "Wed, 10 Mar 2021 19:44:58 +0100")
-Content-Type: text/plain
-X-Originating-IP: [138.3.200.58]
-X-ClientProxiedBy: BYAPR06CA0029.namprd06.prod.outlook.com
- (2603:10b6:a03:d4::42) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        id S233798AbhCPD5T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Mar 2021 23:57:19 -0400
+Received: from mail-pg1-f180.google.com ([209.85.215.180]:47024 "EHLO
+        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231340AbhCPD5B (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Mar 2021 23:57:01 -0400
+Received: by mail-pg1-f180.google.com with SMTP id 16so15317062pgo.13
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Mar 2021 20:57:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3LFspRPureJLTZJOtYwbIwpbp986KimI385CmxQKpx4=;
+        b=ntQDd3kIxRfgAja1cMsWLV9EZfIsZQTvBWwUJmUzaSLs6AkCsT/cBYdcLevmCdny2r
+         FglTuwSwaHrHP30Jr4So9UlvgjUc94do7FAc8hlfULjHkoeuHoeHFEUaTZ1ZBy64uW2d
+         IfH8+xA+XlG/dvm4rnDKZxotIwsVzPdUaT+i2QYhzE7yzGQ4XgFSh3bb9g0oNIOTEy+5
+         u9o3GbeocGvfN9zaQPFFo8byFrne/bMyIHTCXRcYhaPqBV973Mbq4oRHMjCCRNDwyFVv
+         0mjpAsaspYRXhYLqNwu2TRzP7fBQhsBgX0Gi+dyLRGVXtqxz0gdnlVAgWggk5575z9g7
+         oLiA==
+X-Gm-Message-State: AOAM533wpcnqmqkZl6m5QvmdrLQ9MRNqPUSluTjYWFLxBwfMtseRqEzH
+        kMLRetcUplF+Z4vFoZGn3vlsfJW9L2Q=
+X-Google-Smtp-Source: ABdhPJzJptptmyxymz9DSl9ogUxfAdKr4sbA3UHmL89tcszqLFmTbb9uufuJfOvQGuQb2Lvdms5pLA==
+X-Received: by 2002:aa7:99c6:0:b029:1f5:c49d:dce7 with SMTP id v6-20020aa799c60000b02901f5c49ddce7mr12948812pfi.78.1615867021413;
+        Mon, 15 Mar 2021 20:57:01 -0700 (PDT)
+Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:8641:766a:ce30:8278])
+        by smtp.gmail.com with ESMTPSA id fs9sm1031673pjb.40.2021.03.15.20.57.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Mar 2021 20:57:00 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH 0/7] qla2xxx patches for kernel v5.12 and v5.13
+Date:   Mon, 15 Mar 2021 20:56:48 -0700
+Message-Id: <20210316035655.2835-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from ca-mkp.ca.oracle.com (138.3.200.58) by BYAPR06CA0029.namprd06.prod.outlook.com (2603:10b6:a03:d4::42) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32 via Frontend Transport; Tue, 16 Mar 2021 03:18:27 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9029afa0-1e8e-4669-f739-08d8e82a2aa6
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4647:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <PH0PR10MB4647E799E54F436EEAB08A1A8E6B9@PH0PR10MB4647.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G0GxW6/pJZ8ics372l/Lse1SWFMnOlkUDMEh3tjomyZ8yEaLqASxoyugnu7JEpPsiwLMhNgpRJtLXHhuuHtEANmPT0f+y9sfp83hgDKBuJ1L2XxZFqUkP3qKtWxgVM/ygre18JMzSo+9o/FGMCkQB06cEsgnFQNFPK2POyhtbfoj0zsy1oXB32UXBOZKuOyrCHW7ax36fzSatfFD3TA/bXQz1wyPVP3hqzT8XVWp/rvpkKVu9+nza1+JQFxyP9ZeRyOuWm5A+Jor67GRb7XHOtU02VBRZqkmCF+kpOmXkPlF06CNxeqtur4cKjk16hFKDubfs9u75qvXYsZLDXHuf5m1C773//Emcd9UXwJwCKAzP3Wx2BegDGa9N0F7vbVMRTC8XAiUetZ7cuymSOb7dAbw+5NOJtuvcjZwUnQ7+Xx15DOfC28iAUO6AdxOpO6lIpwVvSLzJ+SX4+oIV3eqXnCSxcMKEwCRuhqecYxLKNEr4NDWyRZpMewfjOMiI+rAkTA7/JaIf0p+uoW/BDYMwT419R1ncEUiKy2vQtyqXUfWmoEMgS6b6s3cER0TKXlG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39860400002)(376002)(396003)(136003)(346002)(2906002)(5660300002)(558084003)(55016002)(4326008)(54906003)(478600001)(66946007)(86362001)(83380400001)(26005)(316002)(107886003)(956004)(8936002)(6916009)(8676002)(186003)(7696005)(16526019)(66556008)(52116002)(66476007)(36916002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?Vj9npeywEsx2SmwDzICp+HsDaxTfo9OkV6y7OOVM5V4wp7FdXJcBZxeTFRrz?=
- =?us-ascii?Q?lj+TqYxhfKmJXkxrAv7cp0UUprWFtvWc5DGTpIwGec9Dnfbq6sqP+D+Uk1q6?=
- =?us-ascii?Q?KBKL9XAl0gT4zeNx7YUieiP5QhyPcjhZhhpEryMKZCJI0pABdsZjaUltVQ6J?=
- =?us-ascii?Q?DaO45JIkEUF+jCmly6mtj0PxEMFO3LEa20U79KiFgWWPD9UpAnQO3LpSsqpj?=
- =?us-ascii?Q?A00EINGn9EhqdsL4GDb5W0kRRv3F9vEHnw223q3mr8tXsDJMJLQjTg1j4yaQ?=
- =?us-ascii?Q?mmfZROPf0lhbwztcyj5ekvMpf1xNjcgMNC9X2T14087fUHny5xV3mL8dYcly?=
- =?us-ascii?Q?L+z0qVsg1eGX41d5ohfvVs36w9eohLRj7UiEyDdM0Eedr4Qolsm4FqT8yopI?=
- =?us-ascii?Q?yoOCWZx3G8EEcPbyaEWZdVFcq4qk8ZMBVQkQS76pAKI31zL5Tzf7cu1IFC0W?=
- =?us-ascii?Q?ifZAd2755cEjUgKadnd6GNdOXTHPY6+9poIUKl02xlOd9cSBCBYjixyR8eOl?=
- =?us-ascii?Q?7RSUfR/r8821AmLwi5ewKnHapmAtRB41tvHhI4z3zOC9soWsuvBkzD7070VK?=
- =?us-ascii?Q?SW7Csetz3QkDfwjAvzGDEpDJTHlFCxzstnBIQmcaPTcDzjiV0rn0zbbO2LDh?=
- =?us-ascii?Q?a3ujEXJ4za0k2REZDgyxteIba5vsAC1tNzIFnM7V5PwjCQ4EAq7BTPsdpOjz?=
- =?us-ascii?Q?XG+jsZRGY5fFq9kZiIaUX4CaCQyr9M+40OdAgXzkW4ru5B5DL6nEXGK6d1fI?=
- =?us-ascii?Q?ma+7YaTjeXo4iL1jNixuq13ICk+9LxG91Hb14PlC20n6y6faGPIpEcb0TuAB?=
- =?us-ascii?Q?iemWn4ko4Z2urOntt+2/jNQs1wbAM6gcmptPtde1vKEJ2WEvqL+e18hAH8EL?=
- =?us-ascii?Q?uHsEWK30UBvZItWGjqlc9tQ4m6SxuPLfX8zoQbJQbCeYj5jlSOe9yh6UGU31?=
- =?us-ascii?Q?IwlIbfaNqwgR2MWJ6H/EEE/+QdYnUqb9TpgYJ6UseLd/IG40W2585sJsc7ii?=
- =?us-ascii?Q?mGdsjoqVpVKw53wxuaeqWecv3PcgvHGgfsAFkGgMOKN0p/shLp2cxRpYCgHW?=
- =?us-ascii?Q?r129Wn1aWASn4ti/i8fwjp3pujHiQZnkQefqrzVYYzkBcL1/WxesCH02IYkS?=
- =?us-ascii?Q?enFhyKgVZhM5w2fsqzjnWdUt0PaR/sqo1wCjiUgppt2UP0/jLwkWbJrJmon8?=
- =?us-ascii?Q?1H4JnFyVkzTFOw60PfsYnCL8bS4oqYblGUQGPftUKAFJOPJn0V5eJShrtkkS?=
- =?us-ascii?Q?eVs8PIfeNgqrsQatZR5/V+6Itcepb848+hNj4OYuESM8JGptIUnL3t4JKS4S?=
- =?us-ascii?Q?sqXSzmaJp6Fk5ldV1chBNjMV?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9029afa0-1e8e-4669-f739-08d8e82a2aa6
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2021 03:18:27.5667
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8u/IAAmL2Tv8LIePNdDGHuhOUX+a73rwXFSYhjoTg98UrU910P2ZA6WVw7Ih8JWBzQgX7lODEZNqd8tTr+Yp3hjvFY7Sc/z1tRBpKABdJqY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4647
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9924 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 spamscore=0
- bulkscore=0 mlxlogscore=822 mlxscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2103160021
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9924 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 adultscore=0 phishscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2103160021
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Martin,
 
-Bodo,
+Please consider the first patch in this series for kernel v5.12 and the
+remaining patches for kernel v5.13.
 
-> In patch "scsi: target: tcmu: Replace radix_tree with XArray" meaning
-> of last parameter of tcmu_blocks_release was changed.  So in the
-> callers we should subtract 1 from the previous parameter.
+Thanks,
 
-Applied to 5.13/scsi-staging, thanks!
+Bart.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Bart Van Assche (7):
+  Revert "qla2xxx: Make sure that aborted commands are freed"
+  qla2xxx: Constify struct qla_tgt_func_tmpl
+  qla2xxx: Fix endianness annotations
+  qla2xxx: qla82xx_pinit_from_rom(): Initialize 'n' before using it
+  qla2xxx: Suppress Coverity complaints about dseg_r*
+  qla2xxx: Simplify qla8044_minidump_process_control()
+  qla2xxx: Always check the return value of qla24xx_get_isp_stats()
+
+ drivers/scsi/qla2xxx/qla_attr.c    |  5 ++++-
+ drivers/scsi/qla2xxx/qla_def.h     |  4 ++--
+ drivers/scsi/qla2xxx/qla_iocb.c    |  3 ++-
+ drivers/scsi/qla2xxx/qla_isr.c     |  2 +-
+ drivers/scsi/qla2xxx/qla_mr.c      | 12 ++++++------
+ drivers/scsi/qla2xxx/qla_mr.h      |  4 ++--
+ drivers/scsi/qla2xxx/qla_nx.c      |  2 +-
+ drivers/scsi/qla2xxx/qla_nx2.c     |  8 --------
+ drivers/scsi/qla2xxx/qla_sup.c     |  9 +++++----
+ drivers/scsi/qla2xxx/qla_target.c  | 13 +++++--------
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c |  6 +-----
+ 11 files changed, 29 insertions(+), 39 deletions(-)
+
