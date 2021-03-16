@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 000EF33CC57
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Mar 2021 04:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B0033CC5D
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Mar 2021 04:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbhCPD5V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S233327AbhCPD5V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 15 Mar 2021 23:57:21 -0400
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:39317 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbhCPD5G (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Mar 2021 23:57:06 -0400
-Received: by mail-pf1-f180.google.com with SMTP id 18so7926284pfo.6
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Mar 2021 20:57:06 -0700 (PDT)
+Received: from mail-pj1-f51.google.com ([209.85.216.51]:56164 "EHLO
+        mail-pj1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233365AbhCPD5H (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Mar 2021 23:57:07 -0400
+Received: by mail-pj1-f51.google.com with SMTP id bt4so9923349pjb.5
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Mar 2021 20:57:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qo5tsFMy+gBhTZedrYPLx3HlofKn5YmGY6AB6TmW4fo=;
-        b=RmGei7IkLkuBJFBo56Dzxn5GdhfB07/3GQf8yMpjXcHpFS8TqEChlo/wqSsAJXTkgr
-         1pU6f0+8I1TajRTG27mZR29CmuuwAquhjqaYlFgpfgiPsEDSSk9talZs07PONOvUrGhX
-         06icRfrg9cvbnl9wbDTkKc8/IWCwSRKc/PJ0OQrv/TYQIi7kpMtyDMLwmo+201nQ1SjC
-         ofj/QZ2nZuL2Wv9SlHnxtJshhrBBjgNcPmZK5bQZ5EH6/EF2fcRlKBAtLntiVciP8UFn
-         HXsF+Lw68CdarndVqzEyxhnbjqobfJMrnesI++PTtsV+w5Ok90I9PWbjQjxlhD0pCQFO
-         w5Cw==
-X-Gm-Message-State: AOAM532Pxot5lKSDsccW8l99q+GJsvACyxETlInl8PXfmJ1o451AIbFe
-        AJ5KqiTSXvzUoEo4JEPYlhA=
-X-Google-Smtp-Source: ABdhPJxhhIJGJTY/6SDqfSDZii5npshmcbPEp7SsDRGV1ubVpe1fExHkGsazrgfrdEV3dhsBojuhJw==
-X-Received: by 2002:a62:1c93:0:b029:1fd:2216:fb45 with SMTP id c141-20020a621c930000b02901fd2216fb45mr26186323pfc.13.1615867025729;
-        Mon, 15 Mar 2021 20:57:05 -0700 (PDT)
+        bh=7IKYsOC1X4EjHUenVf724LnE6hJ//GY2O7wGY4ce7Ro=;
+        b=b0evG7NAP1PRqTrNcZzK0mWfrAR/I8lUQYyAc/yzy/GzV3E/IELWYtQQ9Fd0LmcQaM
+         mknFNz30Qj6uGmeswfCHxKlxG/EL8/JOfm7PS48FZvUfbJyPguS7SgNr1xX2CV3LDv7A
+         5V17+Ww5G9RnsHIR8mD/J8JYCgcZj43Rpph9dOiBO02yAO+mEBeK8g0ZpmFAkniHmya+
+         5e+esrDyzEG4Z0bpf7ayvLkZSqbot33tJm1EpeAEIQAWwJoocjWlC9BoHlrg2BZRlkVH
+         Ikdo/sjRA+jlf6sh9Z1266W0aBQ+/PjuoaxSx2ySsEASvcR2nHs1lCVtQDWzhHrH9dKN
+         fgJw==
+X-Gm-Message-State: AOAM530stvGFDx82Jk6NSySMVJ2UZrd2NwotrHwp/s5b/BmdC8Lasd5d
+        tsxJix+aJ4YrmXbYRLQ6Uqk=
+X-Google-Smtp-Source: ABdhPJz9TOntbhBHok6WfAPwoMOhrTBU9DLyFvqA98qzDWPDJrLOA55/Lz+U2cFZDxOjxwZsUNWtOw==
+X-Received: by 2002:a17:90b:38f:: with SMTP id ga15mr2580403pjb.149.1615867027150;
+        Mon, 15 Mar 2021 20:57:07 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:8641:766a:ce30:8278])
-        by smtp.gmail.com with ESMTPSA id fs9sm1031673pjb.40.2021.03.15.20.57.04
+        by smtp.gmail.com with ESMTPSA id fs9sm1031673pjb.40.2021.03.15.20.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 20:57:05 -0700 (PDT)
+        Mon, 15 Mar 2021 20:57:06 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -41,9 +41,9 @@ Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Mike Christie <michael.christie@oracle.com>,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
         Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH 3/7] qla2xxx: Fix endianness annotations
-Date:   Mon, 15 Mar 2021 20:56:51 -0700
-Message-Id: <20210316035655.2835-4-bvanassche@acm.org>
+Subject: [PATCH 4/7] qla2xxx: qla82xx_pinit_from_rom(): Initialize 'n' before using it
+Date:   Mon, 15 Mar 2021 20:56:52 -0700
+Message-Id: <20210316035655.2835-5-bvanassche@acm.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210316035655.2835-1-bvanassche@acm.org>
 References: <20210316035655.2835-1-bvanassche@acm.org>
@@ -53,7 +53,9 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix all recently introduced endianness annotation issues.
+This patch suppresses the following sparse warning:
+
+qla_nx.c:1218: qla82xx_pinit_from_rom() error: uninitialized symbol 'n'.
 
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Mike Christie <michael.christie@oracle.com>
@@ -61,78 +63,19 @@ Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
 Cc: Daniel Wagner <dwagner@suse.de>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h  | 2 +-
- drivers/scsi/qla2xxx/qla_iocb.c | 3 ++-
- drivers/scsi/qla2xxx/qla_isr.c  | 2 +-
- drivers/scsi/qla2xxx/qla_sup.c  | 9 +++++----
- 4 files changed, 9 insertions(+), 7 deletions(-)
+ drivers/scsi/qla2xxx/qla_nx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 3bdf55bb0833..52ba75591f9a 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -1527,7 +1527,7 @@ struct init_sf_cb {
- 	 * BIT_12 = Remote Write Optimization (1 - Enabled, 0 - Disabled)
- 	 * BIT 11-0 = Reserved
- 	 */
--	uint16_t flags;
-+	__le16	flags;
- 	uint8_t	reserved1[32];
- 	uint16_t discard_OHRB_timeout_value;
- 	uint16_t remote_write_opt_queue_num;
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 8b41cbaf8535..eb2376b138c1 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2379,7 +2379,8 @@ qla24xx_prli_iocb(srb_t *sp, struct logio_entry_24xx *logio)
- 				cpu_to_le32(NVME_PRLI_SP_FIRST_BURST);
- 		if (sp->vha->flags.nvme2_enabled) {
- 			/* Set service parameter BIT_7 for NVME CONF support */
--			logio->io_parameter[0] |= NVME_PRLI_SP_CONF;
-+			logio->io_parameter[0] |=
-+				cpu_to_le32(NVME_PRLI_SP_CONF);
- 			/* Set service parameter BIT_8 for SLER support */
- 			logio->io_parameter[0] |=
- 				cpu_to_le32(NVME_PRLI_SP_SLER);
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 27165abda96d..0fa7082f3cc8 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -3440,7 +3440,7 @@ qla24xx_abort_iocb_entry(scsi_qla_host_t *vha, struct req_que *req,
- 		return;
+diff --git a/drivers/scsi/qla2xxx/qla_nx.c b/drivers/scsi/qla2xxx/qla_nx.c
+index 0677295957bc..5683126e0cbc 100644
+--- a/drivers/scsi/qla2xxx/qla_nx.c
++++ b/drivers/scsi/qla2xxx/qla_nx.c
+@@ -1095,7 +1095,7 @@ qla82xx_pinit_from_rom(scsi_qla_host_t *vha)
+ 	int i ;
+ 	struct crb_addr_pair *buf;
+ 	unsigned long off;
+-	unsigned offset, n;
++	unsigned offset, n = 0;
+ 	struct qla_hw_data *ha = vha->hw;
  
- 	abt = &sp->u.iocb_cmd;
--	abt->u.abt.comp_status = le16_to_cpu(pkt->comp_status);
-+	abt->u.abt.comp_status = pkt->comp_status;
- 	orig_sp = sp->cmd_sp;
- 	/* Need to pass original sp */
- 	if (orig_sp)
-diff --git a/drivers/scsi/qla2xxx/qla_sup.c b/drivers/scsi/qla2xxx/qla_sup.c
-index f771fabcba59..060c89237777 100644
---- a/drivers/scsi/qla2xxx/qla_sup.c
-+++ b/drivers/scsi/qla2xxx/qla_sup.c
-@@ -2621,10 +2621,11 @@ qla24xx_read_optrom_data(struct scsi_qla_host *vha, void *buf,
- }
- 
- static int
--qla28xx_extract_sfub_and_verify(struct scsi_qla_host *vha, uint32_t *buf,
-+qla28xx_extract_sfub_and_verify(struct scsi_qla_host *vha, __le32 *buf,
-     uint32_t len, uint32_t buf_size_without_sfub, uint8_t *sfub_buf)
- {
--	uint32_t *p, check_sum = 0;
-+	uint32_t check_sum = 0;
-+	__le32 *p;
- 	int i;
- 
- 	p = buf + buf_size_without_sfub;
-@@ -2790,8 +2791,8 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, uint32_t *dwptr, uint32_t faddr,
- 			goto done;
- 		}
- 
--		rval = qla28xx_extract_sfub_and_verify(vha, dwptr, dwords,
--			buf_size_without_sfub, (uint8_t *)sfub);
-+		rval = qla28xx_extract_sfub_and_verify(vha, (__le32 *)dwptr,
-+			dwords, buf_size_without_sfub, (uint8_t *)sfub);
- 
- 		if (rval != QLA_SUCCESS)
- 			goto done;
+ 	struct crb_addr_pair {
