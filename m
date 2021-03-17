@@ -2,60 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C19D833EC00
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 09:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8323233EBFC
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 09:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbhCQI56 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 04:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        id S229896AbhCQI54 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 04:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbhCQI5V (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 04:57:21 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B86CC06174A
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:20 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id x16so960535wrn.4
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:20 -0700 (PDT)
+        with ESMTP id S229748AbhCQI5W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 04:57:22 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C63C0613D9
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:21 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id e9so946906wrw.10
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RHS0YjWdwFJSN1VWVbYNsptYDs5Fwc3UmjtJJxuBnoI=;
-        b=bd2kG5EPTmQJeA6t8WaOQnFRXKkDR3BMi8kDcQikR5twG4YRU3gLdOjJDKAoej7ZGL
-         wZwGwuS6cWBS81PFhdOHVoQ7Oljwl88rHPcre4OcRLOHZwlSXHmEUJ4hSTxFOiRoBwjB
-         QpqGk74mim16Za7N+MVQrY5SBbtJNkB28Z3/FJtEXQyY/W0FV69s/uSl74HmJxzVYUg0
-         NMJVuqubf2JLrHVLNaC4rW7xWh1JoWKbWJYCcTyp66H2SJpwWlqXWcvZT8Y+5Bg+9kCC
-         efO2hQ6/rbEVfQGOW05A7XwV0Qazx5BbzjQpUtvzKfQHsdIk2BkWl9XvvlqP3FZzv7yR
-         b1mw==
+        bh=uknjZgyKbyTHbovaIRwNwS9vIyXMZbr0zBj7lwglxO0=;
+        b=jyM5AtVqD1gbwSyCgL+XC69BhPp58i7rui/GQduzTndKglMY0QDRJiMINMn9pqzRI9
+         FacVRjketCFrOI9jkEpRwxco361TWUUJqNwJcZubfxro7ILh1mYgKldo0fvHDRPub1Z4
+         MMdFipRIYAGSSeixDl1jFrYrvXr90kreByWKhCz6T8h6lrvRmu3BF129zP/QUEMXWWC8
+         XM7pQWLyopi7Q5zrQaXQULTS9EBinMxlMAT9M1aimg8J7N0/GB33WAIK98KjRQIK7nIy
+         mvv2pBjDOiculG/h4lyTapmXYGS2ihH5AbBRQzJsXfo2OZnD/1/AJmEGFhsbwmqzfUmv
+         k82Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RHS0YjWdwFJSN1VWVbYNsptYDs5Fwc3UmjtJJxuBnoI=;
-        b=kms5ZISL0mnU0X1RBG2on3dy/x2K7DQcnfm7Lb4ckJzkpKvqOCIfkaQSAg/drSVfPp
-         D2zLVJR+aAoHyBFk5t+SDxmkF9AWhar5FEC0LJWQIHqezBvOPqBB0vwg/SasuaDHwsWQ
-         7vgFuYAqYWbIGVQRrBVTwQ+1WRDGeo6oaFJQgTl3V/LSbOOFzSHHoOHQxjaIWRDssYhL
-         WVGxQk4gq6LmyOvUI6zGzc8ime2QiuIQcdGMleWnYEAtU+ek0yczMGg6xGFYlMaoYfCP
-         agGNFZEaxeyj3BPfvaL6FpET0QlHy4H4D/KpSJIBs62TgAAow62LUj8qUgun5qfDrPy0
-         eK6A==
-X-Gm-Message-State: AOAM533kPiF650nXcGyzToQrkl+fYK3t8D09IOosBNxL2qGHRu+F54QP
-        0dFhHgLg7QlraEPTv0uB2pLrCA==
-X-Google-Smtp-Source: ABdhPJw7IDG/Hu+h6a5Wu25E5StVwC8pvUyd1nxG8QhvDpv4nG2qOmqcsEVTeYDANh7nkWJteGYFsQ==
-X-Received: by 2002:adf:ea47:: with SMTP id j7mr3121325wrn.377.1615971439380;
-        Wed, 17 Mar 2021 01:57:19 -0700 (PDT)
+        bh=uknjZgyKbyTHbovaIRwNwS9vIyXMZbr0zBj7lwglxO0=;
+        b=d8uTTOCjM6MBI0YJi2t/yy+DwcR3g0CqyDLzfVzVMrUIdcbZF8Vp7ovPntEkgkFCRp
+         xgqPzZm26/nQZnM65H5xWfIH/J/u5sWfMZBuZcVdLiaesRpm0ZXdR5FcxRiY4o7HisqJ
+         814gz3xZML+BO6Ij2Oa0fHCxKuiu8nEjMOCSIbrT/yBBrL2/yJVaYJZn8XMEKdL8pzAc
+         5T2mnRkATC8DQjjwE0FdgrUE6g2ZxCq8+fg8C3N8T3wQGrOuj6/68g+FRTjiwOvENlLX
+         qqc14vXrxwLa7NKEPc6d0Tfm7kPNX5HX86zK8mtAxdzAr9+zaDLe71nxd5w9qD5XvQmQ
+         vpaw==
+X-Gm-Message-State: AOAM531Glier5Wgxh+L6jMpwF4+wabzBU6VLqDh5NYTi725scQg64K+2
+        hSdUhcXe2G28y69Y042jQXG9Tg==
+X-Google-Smtp-Source: ABdhPJx+GlNNh0KH6vMpIl5u5vhs56iee2KFJdoue8jlx2OnR2y+cQgqHzC+YWhg2AlgZ3S8cr5uPg==
+X-Received: by 2002:adf:e441:: with SMTP id t1mr3251524wrm.21.1615971440343;
+        Wed, 17 Mar 2021 01:57:20 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id j123sm1807243wmb.1.2021.03.17.01.57.18
+        by smtp.gmail.com with ESMTPSA id j123sm1807243wmb.1.2021.03.17.01.57.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 01:57:18 -0700 (PDT)
+        Wed, 17 Mar 2021 01:57:19 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Khalid Aziz <khalid@gonehiking.org>,
+Cc:     linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 14/18] scsi: FlashPoint: Remove unused variable 'TID' from 'FlashPoint_AbortCCB()'
-Date:   Wed, 17 Mar 2021 08:56:57 +0000
-Message-Id: <20210317085701.2891231-15-lee.jones@linaro.org>
+        Richard Hirst <richard@sleepie.demon.co.uk>,
+        c by <James.Bottomley@SteelEye.com>, linux-scsi@vger.kernel.org
+Subject: [PATCH 15/18] scsi: sim710: Remove unused variable 'err' from sim710_init()
+Date:   Wed, 17 Mar 2021 08:56:58 +0000
+Message-Id: <20210317085701.2891231-16-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317085701.2891231-1-lee.jones@linaro.org>
 References: <20210317085701.2891231-1-lee.jones@linaro.org>
@@ -66,42 +67,55 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Take the opportunity to rework the comment a little.
+
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/FlashPoint.c: In function ‘FlashPoint_AbortCCB’:
- drivers/scsi/FlashPoint.c:1618:16: warning: variable ‘TID’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/sim710.c: In function ‘sim710_init’:
+ drivers/scsi/sim710.c:216:6: warning: variable ‘err’ set but not used [-Wunused-but-set-variable]
 
-Cc: Khalid Aziz <khalid@gonehiking.org>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Richard Hirst <richard@sleepie.demon.co.uk>
+Cc: c by <James.Bottomley@SteelEye.com>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/FlashPoint.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/scsi/sim710.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/FlashPoint.c b/drivers/scsi/FlashPoint.c
-index f479c542e787c..0464e37c806a4 100644
---- a/drivers/scsi/FlashPoint.c
-+++ b/drivers/scsi/FlashPoint.c
-@@ -1615,7 +1615,6 @@ static int FlashPoint_AbortCCB(void *pCurrCard, struct sccb *p_Sccb)
+diff --git a/drivers/scsi/sim710.c b/drivers/scsi/sim710.c
+index 22302612e032b..e519df68d603d 100644
+--- a/drivers/scsi/sim710.c
++++ b/drivers/scsi/sim710.c
+@@ -213,21 +213,19 @@ static struct eisa_driver sim710_eisa_driver = {
  
- 	unsigned char thisCard;
- 	CALL_BK_FN callback;
--	unsigned char TID;
- 	struct sccb *pSaveSCCB;
- 	struct sccb_mgr_tar_info *currTar_Info;
- 
-@@ -1652,9 +1651,6 @@ static int FlashPoint_AbortCCB(void *pCurrCard, struct sccb *p_Sccb)
- 			}
- 
- 			else {
+ static int __init sim710_init(void)
+ {
+-	int err = -ENODEV;
 -
--				TID = p_Sccb->TargID;
+ #ifdef MODULE
+ 	if (sim710)
+ 		param_setup(sim710);
+ #endif
+ 
+ #ifdef CONFIG_EISA
+-	err = eisa_driver_register(&sim710_eisa_driver);
++	/*
++	 * FIXME: We'd really like to return -ENODEV if no devices have actually
++	 * been found.  However eisa_driver_register() only reports problems
++	 * with kobject_register() so simply return success for now.
++	 */
++	eisa_driver_register(&sim710_eisa_driver);
+ #endif
+-	/* FIXME: what we'd really like to return here is -ENODEV if
+-	 * no devices have actually been found.  Instead, the err
+-	 * above actually only reports problems with kobject_register,
+-	 * so for the moment return success */
 -
- 				if (p_Sccb->Sccb_tag) {
- 					MDISABLE_INT(ioport);
- 					if (((struct sccb_card *)pCurrCard)->
+ 	return 0;
+ }
+ 
 -- 
 2.27.0
 
