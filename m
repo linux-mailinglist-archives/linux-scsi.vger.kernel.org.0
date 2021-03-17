@@ -2,78 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1115A33F01F
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 13:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD4033F10A
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 14:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbhCQMUB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 08:20:01 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:14392 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhCQMTh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 08:19:37 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F0q1P2VBbzkbT5;
-        Wed, 17 Mar 2021 20:18:01 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.498.0; Wed, 17 Mar 2021
- 20:19:24 +0800
-From:   Wu Bo <wubo40@huawei.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linfeilong@huawei.com>, <wubo40@huawei.com>
-Subject: [PATCH] scsi: Add numbers of lun for scan debug log
-Date:   Wed, 17 Mar 2021 20:37:13 +0800
-Message-ID: <1615984633-294344-1-git-send-email-wubo40@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S230518AbhCQNUC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 17 Mar 2021 09:20:02 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:43015 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230507AbhCQNTc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Mar 2021 09:19:32 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-55-3sGq2adXMGirCyN93jbuVw-1; Wed, 17 Mar 2021 13:19:24 +0000
+X-MC-Unique: 3sGq2adXMGirCyN93jbuVw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Wed, 17 Mar 2021 13:19:23 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.012; Wed, 17 Mar 2021 13:19:23 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Martin K. Petersen'" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     "Don.Brace@microchip.com" <Don.Brace@microchip.com>,
+        Sergei Trofimovich <slyfox@gentoo.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "storagedev@microchip.com" <storagedev@microchip.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "jszczype@redhat.com" <jszczype@redhat.com>,
+        "Scott.Benesh@microchip.com" <Scott.Benesh@microchip.com>,
+        "Scott.Teel@microchip.com" <Scott.Teel@microchip.com>,
+        "thenzl@redhat.com" <thenzl@redhat.com>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>
+Subject: RE: [PATCH] hpsa: fix boot on ia64 (atomic_t alignment)
+Thread-Topic: [PATCH] hpsa: fix boot on ia64 (atomic_t alignment)
+Thread-Index: AQHXGtT0rSNa450uZ0SMu8nCYRzH7aqIKWKQ
+Date:   Wed, 17 Mar 2021 13:19:23 +0000
+Message-ID: <4b2a64d91c4c478f881d9713cac5001b@AcuMS.aculab.com>
+References: <5532f9ab-7555-d51b-f4d5-f9b72a61f248@redhat.com>
+        <20210312222718.4117508-1-slyfox@gentoo.org>
+        <SN6PR11MB2848561E3D85A8F55EB86977E16B9@SN6PR11MB2848.namprd11.prod.outlook.com>
+        <CAK8P3a3JYmhbN3TXB2cWGfXGKgsUa9Hg=ZvWckTaL_31OMgbtQ@mail.gmail.com>
+ <yq1zgz21rkz.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq1zgz21rkz.fsf@ca-mkp.ca.oracle.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.124.27]
-X-CFilter-Loop: Reflected
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sometimes, want to know the number of LUN in the REPORT LUN or
-sequential scan LUN. Adding the numbers of LUN is
-convenient for debugging.
+From: Martin K. Petersen 
+> Sent: 17 March 2021 02:26
+> 
+> Arnd,
+> 
+> > Actually that still feels wrong: the annotation of the struct is to
+> > pack every member, which causes the access to be done in byte units on
+> > architectures that do not have hardware unaligned load/store
+> > instructions, at least for things like atomic_read() that does not go
+> > through a cmpxchg() or ll/sc cycle.
+> 
+> > This change may fix itanium, but it's still not correct. Other
+> > architectures would have already been broken before the recent change,
+> > but that's not a reason against fixing them now.
+> 
+> I agree. I understand why there are restrictions on fields consumed by
+> the hardware. But for fields internal to the driver the packing doesn't
+> make sense to me.
 
-Signed-off-by: Wu Bo <wubo40@huawei.com>
----
- drivers/scsi/scsi_scan.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Jeepers -- that global #pragma pack(1) is bollocks.
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 9af50e6..ea679d7 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -1201,9 +1201,6 @@ static void scsi_sequential_lun_scan(struct scsi_target *starget,
- 	u64 sparse_lun, lun;
- 	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
- 
--	SCSI_LOG_SCAN_BUS(3, starget_printk(KERN_INFO, starget,
--		"scsi scan: Sequential scan\n"));
+I think there are a couple of __u64 that are 32bit aligned.
+Just marking those field __packed __aligned(4) should have
+the desired effect.
+Or use a typedef for '__u64 with 32bit alignment'.
+(There probably ought to be one in types.h)
+
+Then add compile-time asserts that any non-trivial structures
+the hardware accesses are the right size.
+
+	David
+
 -
- 	max_dev_lun = min(max_scsi_luns, shost->max_lun);
- 	/*
- 	 * If this device is known to support sparse multiple units,
-@@ -1253,6 +1250,8 @@ static void scsi_sequential_lun_scan(struct scsi_target *starget,
- 	else
- 		max_dev_lun = min(256U, max_dev_lun);
- 
-+	SCSI_LOG_SCAN_BUS(3, starget_printk(KERN_INFO, starget,
-+		"scsi scan: Sequential scan, max LUNs:%u\n", max_dev_lun));
- 	/*
- 	 * We have already scanned LUN 0, so start at LUN 1. Keep scanning
- 	 * until we reach the max, or no LUN is found and we are not
-@@ -1413,7 +1412,7 @@ static int scsi_report_lun_scan(struct scsi_target *starget, blist_flags_t bflag
- 	num_luns = (length / sizeof(struct scsi_lun));
- 
- 	SCSI_LOG_SCAN_BUS(3, sdev_printk (KERN_INFO, sdev,
--		"scsi scan: REPORT LUN scan\n"));
-+		"scsi scan: REPORT LUN scan, total LUNs%u\n", num_luns));
- 
- 	/*
- 	 * Scan the luns in lun_data. The entry at offset 0 is really
--- 
-1.8.3.1
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
