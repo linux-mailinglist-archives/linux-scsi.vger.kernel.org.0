@@ -2,132 +2,276 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D96D33EC4D
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D4E33EC63
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbhCQJL5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S229987AbhCQJNA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbhCQJLh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:11:37 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F14BC061763
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:37 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id r10-20020a05600c35cab029010c946c95easo829872wmq.4
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:37 -0700 (PDT)
+        with ESMTP id S230160AbhCQJMl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:12:41 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161FC06174A
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:40 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id e9so995525wrw.10
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PdNAYGEf3HErZd1qMy9Fio2Q6mTHXUXt55dWtvm2uqs=;
-        b=KoI4pQgLlCN8e9y0ULjwArxZGVHgE65tgmu+pIBdoAfjkPAL3ETIwM5PA8C8HqEj5i
-         OmAmH+Cja8knY9rm+oohq/XjrAyFZ+P1xuNAvAvSKdzq5v+J3O8q0+oj5wxMb1/vtC52
-         b7p4uHR6Ba3P7Kg9KGScByrPQh/Hph7zja8aQvLMGzs5ddXwZ2deqKiHCrOGPd/m/6Fp
-         KfS1/9KbSe9sH7DaL7l64Vsbx0vsrKX01XDy5vT0eHLLwUPGYI/2wRPHxPehm8RF4l5R
-         15LzwLhmvGUw3qQ+FV7JDEJUhJQnfbupA2HA+ivw8zt4lFm83z45Kdw/nrCliL/iMTX2
-         6tNA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ISKg/iwBQz7CPlp+U8011svc51lofKx9uSYbTL21B/U=;
+        b=qEkvvGwq4ou+j09IT2hRU/qvUjgSWSCOe45KQqgVsEthhPy9Sa3JKnnpMaJKLxbwke
+         JLLENYkkuWjOCKr2EpZh+HVJdlDZ0aHzbAGNBzDLhHgY12utiYihaBb2bJMbRzjk/ENi
+         uKt/bU0qe+GrSCUiT9Gqp2X3A4aGkSFxYrAoicGWu7ijzCzI3hm88mzExqtp7vPdemUM
+         BqJ6S2OcEeSFZ1vxEAetVqW8iigO20sW9vHAhwX97Z0vQY8bnJDn9F8O8CuCS9j45ITu
+         zzKoiL2XcgLmw6hOvUmHz0PTx2Xa07kKDj4PdMG5SA1HSVDW6exvYScTKJgwWLvY1i9H
+         0Aiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PdNAYGEf3HErZd1qMy9Fio2Q6mTHXUXt55dWtvm2uqs=;
-        b=C23d1RaIP61yomueOz3e6V5og2sp01/u0eBvcKq3mek03PxDMA4bq8/TZhpjhssffS
-         0wbCkGEP5UqLz5URDjGOEbvU8PyvMalwHrQQxPZIwyqIivxunXB/NaJ39TUgoEcKv2ls
-         ndcsSFgnawiCH02EMung3ycQ5dKR4DiFcvFcLJ7niRQQ8OU2K8gRUQcZpYraKG+YmuMR
-         GGZ6u8/EwACPfJ7P07yakOAVGG7rCRfjvpW2cI6GXI3fXFN1obffZTO5BBeB7YEp9dm+
-         V6sre4KM23W1dsrS3fZjskseUSvLEwutHMl4UAdiIXuYwlfMQYn0unbFd6XXPRNLEqbf
-         xA9Q==
-X-Gm-Message-State: AOAM531O1t+tqs2AVR3rHXn611e11LlOZYjr8N5n3FAudm0pXj8NyGqa
-        Dzv+lDl347nZFE4pqtoOSr2s4Q==
-X-Google-Smtp-Source: ABdhPJwKnx+JQa5kLVp55k1jrbwyMuKQk8QBlnUzaKW+0g0lPwZTWljk9O1RUtO4MIuVoV3n8ds4KA==
-X-Received: by 2002:a05:600c:3546:: with SMTP id i6mr2682279wmq.104.1615972296229;
-        Wed, 17 Mar 2021 02:11:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ISKg/iwBQz7CPlp+U8011svc51lofKx9uSYbTL21B/U=;
+        b=begcZFZplSVzZ2FTjy0oh0T3CCQAA2bHLb+KOKWDFKr6p62jll0cWW3MiSIDEr8KOX
+         ujf3vzj8jtnXRWDk7yNuMRAyrKyPBDFbScUZmbhbzI8cKnNtGpx7jol90Aa+1ma06n5z
+         Mve5jQPKxb5FDB1CQKecMuxkLhnjJ4q+Y8G4LI1/nhHlMtixyrgRAjksr0bNdKTQHLvz
+         xXg4RvVE1UH7dwxay6oolDzgdxwc1MTCGpd8t7hxe2wn1rC8LEx48p19N4xxSzxr9GXq
+         DoAG1VNoYkXIBsroA+S7zKYM4IFdy3fK/KcORqEfpZUgOSGAcnh+eZEYOxyFd+zvFX7G
+         D/Pw==
+X-Gm-Message-State: AOAM530uzJHCmLMWNLmdE36CHBkeoE5kCbTEPCWdYC7jkCNzWQN1QCCs
+        TXYM6zN46tRT6AGI6Ix/gBNbGhxidsYfpg==
+X-Google-Smtp-Source: ABdhPJx4jE1xGizjBkwwSiVeurLS8NDV4il8pjxUOd25LpFWTAD2G/HRR5q/KCo4sMGl54BLhnhPXw==
+X-Received: by 2002:adf:ecca:: with SMTP id s10mr3193723wro.324.1615972359524;
+        Wed, 17 Mar 2021 02:12:39 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id s83sm1709279wms.16.2021.03.17.02.11.35
+        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:11:35 -0700 (PDT)
+        Wed, 17 Mar 2021 02:12:38 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, GOTO Masanori <gotom@debian.or.jp>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+Cc:     linux-kernel@vger.kernel.org, Alan Cox <alan@lxorguk.ukuu.org.uk>,
+        Alex Davis <letmein@erols.com>, Ali Akcaagac <aliakc@web.de>,
+        Anil Ravindranath <anil_ravindranath@pmc-sierra.com>,
+        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
+        Badari Pulavarty <pbadari@us.ibm.com>,
+        Bas Vermeulen <bvermeul@blackstar.xs4all.nl>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        Brian King <brking@us.ibm.com>,
+        Brian Macy <bmacy@sunshinecomputing.com>,
+        "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "C.L. Huang" <ching@tekram.com.tw>,
+        Colin DeVilbiss <devilbis@us.ibm.com>,
+        Dave Boutcher <boutcher@us.ibm.com>,
+        Dave Boutcher <sleddog@us.ibm.com>,
+        David Chaw <david_chaw@adaptec.com>, dc395x@twibble.org,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Drew Eckhardt <drew@colorado.edu>,
+        Erich Chen <erich@tekram.com.tw>,
+        Eric Youngdale <eric@andante.org>,
+        FUJITA Tomonori <tomof@acm.org>,
+        Hannes Reinecke <hare@kernel.org>,
+        Hannes Reinecke <hare@suse.de>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jamie Lenehan <lenehan@twibble.org>,
+        Jirka Hanika <geo@ff.cuni.cz>,
+        Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        Ketan Mukadam <ketan.mukadam@broadcom.com>,
+        Kurt Garloff <garloff@suse.de>,
+        Le Moal <damien.lemoal@hgst.com>,
+        "Leonard N. Zubkoff" <lnz@dandelion.com>,
+        Linda Xie <lxie@us.ibm.com>, linux-drivers@broadcom.com,
+        Linux GmbH <hare@suse.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-scsi@vger.kernel.org,
+        Luben Tuikov <luben_tuikov@adaptec.com>,
+        "Manoj N. Kumar" <manoj@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        gotom@debian.org, linux-scsi@vger.kernel.org
-Subject: [PATCH 8/8] scsi: nsp32: Correct expected types in debug print formatting
-Date:   Wed, 17 Mar 2021 09:11:25 +0000
-Message-Id: <20210317091125.2910058-9-lee.jones@linaro.org>
+        Marvell <jyli@marvell.com>,
+        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
+        Michael Cyr <mikecyr@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        MPT-FusionLinux.pdl@avagotech.com,
+        MPT-FusionLinux.pdl@broadcom.com,
+        "Nicholas A. Bellinger" <nab@kernel.org>,
+        Oliver Neukum <oliver@neukum.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Richard Gooch <rgooch@atnf.csiro.au>,
+        Santiago Leon <santil@us.ibm.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Satish Kharat <satishkh@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        Shaun Tancheff <shaun.tancheff@seagate.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        target-devel@vger.kernel.org, Torben Mathiasen <tmm@image.dk>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Uma Krishnan <ukrishn@linux.ibm.com>, willy@debian.org
+Subject: [PATCH 00/36] [Set 4] Rid W=1 warnings in SCSI
+Date:   Wed, 17 Mar 2021 09:11:54 +0000
+Message-Id: <20210317091230.2912389-1-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210317091125.2910058-1-lee.jones@linaro.org>
-References: <20210317091125.2910058-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
- drivers/scsi/nsp32.c: In function ‘nsp32_setup_sg_table’:
- drivers/scsi/nsp32.c:879:6: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 5 has type ‘unsigned int’ [-Wformat=]
- drivers/scsi/nsp32.c:280:69: note: in definition of macro ‘nsp32_msg’
- drivers/scsi/nsp32.c:879:52: note: format string is defined here
- drivers/scsi/nsp32.c: In function ‘nsp32_detect’:
- drivers/scsi/nsp32.c:2719:6: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 5 has type ‘int’ [-Wformat=]
- drivers/scsi/nsp32.c:280:69: note: in definition of macro ‘nsp32_msg’
- drivers/scsi/nsp32.c:2719:22: note: format string is defined here
- drivers/scsi/nsp32.c:2719:6: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 6 has type ‘int’ [-Wformat=]
- drivers/scsi/nsp32.c:280:69: note: in definition of macro ‘nsp32_msg’
- drivers/scsi/nsp32.c:2719:28: note: format string is defined here
- drivers/scsi/nsp32.c: In function ‘nsp32_suspend’:
- drivers/scsi/nsp32.c:3267:23: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 6 has type ‘pm_message_t’ {aka ‘struct pm_message’} [-Wformat=]
- drivers/scsi/nsp32.c:280:69: note: in definition of macro ‘nsp32_msg’
- drivers/scsi/nsp32.c:3267:56: note: format string is defined here
+Lee Jones (36):
+  scsi: myrb: Demote non-conformant kernel-doc headers and fix others
+  scsi: ipr: Fix incorrect function names in their headers
+  scsi: mvumi: Fix formatting and doc-rot issues
+  scsi: sd_zbc: Place function name into header
+  scsi: pmcraid: Fix a whole host of kernel-doc issues
+  scsi: sd: Fix function name in header
+  scsi: aic94xx: aic94xx_dump: Correct misspelling of function
+    asd_dump_seq_state()
+  scsi: be2iscsi: be_main: Ensure function follows directly after its
+    header
+  scsi: dc395x: Fix some function param descriptions
+  scsi: initio: Fix a few kernel-doc misdemeanours
+  scsi: a100u2w: Fix some misnaming and formatting issues
+  scsi: myrs: Add missing ':' to make the kernel-doc checker happy
+  scsi: pmcraid: Correct function name pmcraid_show_adapter_id() in
+    header
+  scsi: mpt3sas: mpt3sas_scs: Fix a few kernel-doc issues
+  scsi: be2iscsi: be_main: Demote incomplete/non-conformant kernel-doc
+    header
+  scsi: isci: phy: Fix a few different kernel-doc related issues
+  scsi: fnic: fnic_scsi: Demote non-conformant kernel-doc headers
+  scsi: fnic: fnic_fcs: Kernel-doc headers must contain the function
+    name
+  scsi: isci: phy: Provide function name and demote non-conforming
+    header
+  scsi: isci: request: Fix a myriad of kernel-doc issues
+  scsi: isci: host: Fix bunch of kernel-doc related issues
+  scsi: isci: task: Demote non-conformant header and remove superfluous
+    param
+  scsi: isci: remote_node_table: Fix a bunch of kernel-doc misdemeanours
+  scsi: isci: remote_node_context: Fix one function header and demote a
+    couple more
+  scsi: isci: port_config: Fix a bunch of doc-rot and demote abuses
+  scsi: isci: remote_device: Fix a bunch of doc-rot issues
+  scsi: isci: request: Fix doc-rot issue relating to 'ireq' param
+  scsi: isci: port: Fix a bunch of kernel-doc issues
+  scsi: isci: remote_node_context: Demote kernel-doc abuse
+  scsi: isci: remote_node_table: Provide some missing params and remove
+    others
+  scsi: cxlflash: main: Fix a little do-rot
+  scsi: cxlflash: superpipe: Fix a few misnaming issues
+  scsi: ibmvscsi: Fix a bunch of kernel-doc related issues
+  scsi: ibmvscsi: ibmvfc: Fix a bunch of misdocumentation
+  scsi: ibmvscsi_tgt: ibmvscsi_tgt: Remove duplicate section 'NOTE'
+  scsi: cxlflash: vlun: Fix some misnaming related doc-rot
 
-Cc: GOTO Masanori <gotom@debian.or.jp>
-Cc: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
+ drivers/scsi/a100u2w.c                   |  8 +--
+ drivers/scsi/aic94xx/aic94xx_dump.c      |  2 +-
+ drivers/scsi/be2iscsi/be_main.c          |  5 +-
+ drivers/scsi/cxlflash/main.c             |  8 +--
+ drivers/scsi/cxlflash/superpipe.c        |  6 +-
+ drivers/scsi/cxlflash/vlun.c             |  8 +--
+ drivers/scsi/dc395x.c                    |  3 +-
+ drivers/scsi/fnic/fnic_fcs.c             |  2 +-
+ drivers/scsi/fnic/fnic_scsi.c            |  6 +-
+ drivers/scsi/ibmvscsi/ibmvfc.c           | 29 ++++++----
+ drivers/scsi/ibmvscsi/ibmvscsi.c         | 70 ++++++++++++------------
+ drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c |  8 +--
+ drivers/scsi/initio.c                    | 13 ++---
+ drivers/scsi/ipr.c                       |  8 +--
+ drivers/scsi/isci/host.c                 | 37 ++++++-------
+ drivers/scsi/isci/phy.c                  | 34 ++++++------
+ drivers/scsi/isci/port.c                 | 58 ++++++++++----------
+ drivers/scsi/isci/port_config.c          | 37 +++++++------
+ drivers/scsi/isci/remote_device.c        | 31 ++++++-----
+ drivers/scsi/isci/remote_node_context.c  | 13 +----
+ drivers/scsi/isci/remote_node_table.c    | 64 +++++++++++-----------
+ drivers/scsi/isci/request.c              | 60 ++++++++++----------
+ drivers/scsi/isci/task.c                 |  3 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c     | 18 +++---
+ drivers/scsi/mvumi.c                     |  5 +-
+ drivers/scsi/myrb.c                      | 47 ++++++++--------
+ drivers/scsi/myrs.c                      |  6 +-
+ drivers/scsi/pmcraid.c                   | 70 ++++++++++++------------
+ drivers/scsi/sd.c                        |  2 +-
+ drivers/scsi/sd_zbc.c                    |  2 +-
+ 30 files changed, 329 insertions(+), 334 deletions(-)
+
+Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>
+Cc: Alex Davis <letmein@erols.com>
+Cc: Ali Akcaagac <aliakc@web.de>
+Cc: Anil Ravindranath <anil_ravindranath@pmc-sierra.com>
+Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+Cc: Badari Pulavarty <pbadari@us.ibm.com>
+Cc: Bas Vermeulen <bvermeul@blackstar.xs4all.nl>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Brian King <brking@linux.vnet.ibm.com>
+Cc: Brian King <brking@us.ibm.com>
+Cc: Brian Macy <bmacy@sunshinecomputing.com>
+Cc: "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: "C.L. Huang" <ching@tekram.com.tw>
+Cc: Colin DeVilbiss <devilbis@us.ibm.com>
+Cc: Dave Boutcher <boutcher@us.ibm.com>
+Cc: Dave Boutcher <sleddog@us.ibm.com>
+Cc: David Chaw <david_chaw@adaptec.com>
+Cc: dc395x@twibble.org
+Cc: Douglas Gilbert <dgilbert@interlog.com>
+Cc: Doug Ledford <dledford@redhat.com>
+Cc: Drew Eckhardt <drew@colorado.edu>
+Cc: Erich Chen <erich@tekram.com.tw>
+Cc: Eric Youngdale <eric@andante.org>
+Cc: FUJITA Tomonori <tomof@acm.org>
+Cc: Hannes Reinecke <hare@kernel.org>
+Cc: Hannes Reinecke <hare@suse.de>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: gotom@debian.org
+Cc: Jamie Lenehan <lenehan@twibble.org>
+Cc: Jirka Hanika <geo@ff.cuni.cz>
+Cc: Jitendra Bhivare <jitendra.bhivare@broadcom.com>
+Cc: Karan Tilak Kumar <kartilak@cisco.com>
+Cc: Ketan Mukadam <ketan.mukadam@broadcom.com>
+Cc: Kurt Garloff <garloff@suse.de>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Le Moal <damien.lemoal@hgst.com>
+Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
+Cc: Linda Xie <lxie@us.ibm.com>
+Cc: linux-drivers@broadcom.com
+Cc: Linux GmbH <hare@suse.com>
+Cc: linuxppc-dev@lists.ozlabs.org
 Cc: linux-scsi@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/scsi/nsp32.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
-index 54abda4d07c64..134bbd2d8b667 100644
---- a/drivers/scsi/nsp32.c
-+++ b/drivers/scsi/nsp32.c
-@@ -876,7 +876,7 @@ static int nsp32_setup_sg_table(struct scsi_cmnd *SCpnt)
- 
- 			if (le32_to_cpu(sgt[i].len) > 0x10000) {
- 				nsp32_msg(KERN_ERR,
--					"can't transfer over 64KB at a time, size=0x%lx", le32_to_cpu(sgt[i].len));
-+					"can't transfer over 64KB at a time, size=0x%x", le32_to_cpu(sgt[i].len));
- 				return FALSE;
- 			}
- 			nsp32_dbg(NSP32_DEBUG_SGLIST,
-@@ -2716,7 +2716,7 @@ static int nsp32_detect(struct pci_dev *pdev)
- 	res = request_region(host->io_port, host->n_io_port, "nsp32");
- 	if (res == NULL) {
- 		nsp32_msg(KERN_ERR, 
--			  "I/O region 0x%lx+0x%lx is already used",
-+			  "I/O region 0x%x+0x%x is already used",
- 			  data->BaseAddress, data->NumAddress);
- 		goto free_irq;
-         }
-@@ -3264,7 +3264,8 @@ static int nsp32_suspend(struct pci_dev *pdev, pm_message_t state)
- {
- 	struct Scsi_Host *host = pci_get_drvdata(pdev);
- 
--	nsp32_msg(KERN_INFO, "pci-suspend: pdev=0x%p, state=%ld, slot=%s, host=0x%p", pdev, state, pci_name(pdev), host);
-+	nsp32_msg(KERN_INFO, "pci-suspend: pdev=0x%p, state.event=%x, slot=%s, host=0x%p",
-+		  pdev, state.event, pci_name(pdev), host);
- 
- 	pci_save_state     (pdev);
- 	pci_disable_device (pdev);
+Cc: Luben Tuikov <luben_tuikov@adaptec.com>
+Cc: "Manoj N. Kumar" <manoj@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Marvell <jyli@marvell.com>
+Cc: "Matthew R. Ochs" <mrochs@linux.ibm.com>
+Cc: Michael Cyr <mikecyr@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: MPT-FusionLinux.pdl@avagotech.com
+Cc: MPT-FusionLinux.pdl@broadcom.com
+Cc: "Nicholas A. Bellinger" <nab@kernel.org>
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Richard Gooch <rgooch@atnf.csiro.au>
+Cc: Santiago Leon <santil@us.ibm.com>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>
+Cc: Satish Kharat <satishkh@cisco.com>
+Cc: Sesidhar Baddela <sebaddel@cisco.com>
+Cc: Shaun Tancheff <shaun.tancheff@seagate.com>
+Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Cc: Subbu Seetharaman <subbu.seetharaman@broadcom.com>
+Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Cc: target-devel@vger.kernel.org
+Cc: Torben Mathiasen <tmm@image.dk>
+Cc: Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc: Uma Krishnan <ukrishn@linux.ibm.com>
+Cc: willy@debian.org
 -- 
 2.27.0
 
