@@ -2,65 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C538533EC9C
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFE133EC9E
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbhCQJNv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S230401AbhCQJNw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbhCQJNR (ORCPT
+        with ESMTP id S230416AbhCQJNR (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:13:17 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960D9C061762
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:16 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id e9so997507wrw.10
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:16 -0700 (PDT)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A52C06175F
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:17 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e18so1004702wrt.6
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vbchzHiCvuybExCdVEvNdwmkJDXghXDN62HPrZ8RY5o=;
-        b=c+MHb1JQmfOXLDV+3WNH4O28BETw2lg0J/MTZ4AxVEqcxNEkyvb1/0GvTJoY9jbaHQ
-         mGRlki8xCC2lbvr7VJK3gfJfAzG11KyjxUQS/d8wv5Y6k/hYiorMwF7zIEXdykm7Yiq9
-         IOLE/HHhZXw8zg/3K34Abk9Girs63O3H8tobZKe1jaj6aDfbXJQ7VIbdasc1wYgP/qEb
-         bkqwZeFQMQ2Wl8xXFAWrZ1yymbORIzjB35OfgA3DBQkFtOQXT+3DyRFLPmUS4Bt99rzw
-         LvMVAyNK2pdPCb5gIjmoTo+ytglgomWYrPt75ZgQiugft2u6eu5INCug6q0fP+ipTmyO
-         KaqA==
+        bh=nCn5H1/QIbfIGeplEbT1o6zOISUD7vSXkO5mBkf4PfU=;
+        b=Z23F2lfnZHIs7s7AqP3HTgAl6LmZWclA5RVsNpn8IsUOzzgA/Y1G/xEywmR5rTZURj
+         LDpoYlz/DT9LnOkK4VHUBY8u/JOiy1wseCY0kEvoUZFQzK8ZKAH+8s59Q594l0parmKx
+         +v4E3ZWFOhNfyFKUy+nR7yoiiF/mfTN/WyzKrT6oQ73Q58UgHO/s4RfXPO+qvl25fLp1
+         F9S6AwqR/ziE3kPa/lVy8JPH/buY0YVMY/9NlGibqSWEe4r4h4dVaZi5RanB89O+LHvw
+         tqPpZGm4wZm3TKj6qDr0inGpBV8zRZ/rpx3yHxRxAgfLdghkBFMzOzR4W55xvI1MrOFl
+         pnYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vbchzHiCvuybExCdVEvNdwmkJDXghXDN62HPrZ8RY5o=;
-        b=rDziCjAdvpF32XRvFJk5RJyDG/GZpEMZcwP0L3feQWFISmX3kTwGBtxbFSVUNCCdKk
-         BmtLqsAIe5xZYI/Jwrwjnm/Y16QEyrjGsT/IQnL/mLXJMLGqDhIeUGoKB/SHF2zPrYzH
-         8r2ua+11JkaY7000jNkQPR+bmfSCyrafxgdZIXb7+iF7WBMNy3dJyZqKD6YHDLKdJxSZ
-         PBVTLIF99wJHLpGMXwFirGJDuSGeIb2t0R+cyQSeqI794VnKHOdyIJI9UMezytnqoOs9
-         fFPhmkgz4Oa21oWQAEYWRnUii5oMqnuyCvTCifzq1QA1VVx7HoepKHtOzo4rAJwrXt4b
-         7cWQ==
-X-Gm-Message-State: AOAM533KBfVaRDm6Yw7HIX7t1imyWTAThWbkqk6SvZHQmYXvOiFCqkkV
-        FsSpV5BvFhAiOw6gn0LSySvNDg==
-X-Google-Smtp-Source: ABdhPJwDbrsb4UQMLL0mRYdouDzxdsekpPMAQLftKnrUTc6dcOZm4Ge7DdcbnNX5ybF2uM2jUh4thw==
-X-Received: by 2002:adf:fac1:: with SMTP id a1mr3452780wrs.98.1615972395408;
-        Wed, 17 Mar 2021 02:13:15 -0700 (PDT)
+        bh=nCn5H1/QIbfIGeplEbT1o6zOISUD7vSXkO5mBkf4PfU=;
+        b=LS533IkxG8wMSiEq4t2LXzbN1eSuaXdfF9CU7GSD2B+0DCdcJSqhYqpEyuYhQk15wT
+         zF/puDXgwh59mX0bzg9BDIG6Tu9EjbGVMxoBR7hfLQ+0Zpu3D6ZHjcgXT+l9+QhcKEus
+         Mj6wyvVWCUrKzkp29/JzZte9nXOaixPuJS4wXrEnqMUT+mHKfLnQVVL9UL7COMl1cjTa
+         RUmDzgtQoPi5UROZvXQ3iOzYiRWkSLRIZWgINL6/mR4NFwbL/waPIw3A2JZAtD+jszWX
+         3JzuYUpRPaF6W4+9YymcNhcVsi8hvGCAC9XfrdjqywbvF+zZpX26hS3agoKfJnrptsP4
+         q6lA==
+X-Gm-Message-State: AOAM531GTRxEhPDdPJ86Cal4VnPoU+mB5Ws8hc6tFM4lBiR0MOHiEyaE
+        iHAiMuD6fsAU/BgEcr0bgCu5Pg==
+X-Google-Smtp-Source: ABdhPJxRav9dSnwsd2DWKrGi/Awk4vHnMvcslJTEsCpGHU6jEtb1uuH3ikGUKdTXwYpH5pu1l+qP2g==
+X-Received: by 2002:adf:ecca:: with SMTP id s10mr3196351wro.324.1615972396331;
+        Wed, 17 Mar 2021 02:13:16 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.13.14
+        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.13.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:13:14 -0700 (PDT)
+        Wed, 17 Mar 2021 02:13:15 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Michael Cyr <mikecyr@linux.ibm.com>,
+Cc:     linux-kernel@vger.kernel.org,
+        "Manoj N. Kumar" <manoj@linux.ibm.com>,
+        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
+        Uma Krishnan <ukrishn@linux.ibm.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Dave Boutcher <boutcher@us.ibm.com>,
-        Santiago Leon <santil@us.ibm.com>, Linda Xie <lxie@us.ibm.com>,
-        FUJITA Tomonori <tomof@acm.org>,
-        "Nicholas A. Bellinger" <nab@kernel.org>,
-        "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH 35/36] scsi: ibmvscsi_tgt: ibmvscsi_tgt: Remove duplicate section 'NOTE'
-Date:   Wed, 17 Mar 2021 09:12:29 +0000
-Message-Id: <20210317091230.2912389-36-lee.jones@linaro.org>
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 36/36] scsi: cxlflash: vlun: Fix some misnaming related doc-rot
+Date:   Wed, 17 Mar 2021 09:12:30 +0000
+Message-Id: <20210317091230.2912389-37-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317091230.2912389-1-lee.jones@linaro.org>
 References: <20210317091230.2912389-1-lee.jones@linaro.org>
@@ -72,43 +70,66 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:136: warning: duplicate section name 'NOTE'
+ drivers/scsi/cxlflash/vlun.c:48: warning: Function parameter or member 'release' not described in 'marshal_clone_to_rele'
+ drivers/scsi/cxlflash/vlun.c:48: warning: Excess function parameter 'rele' description in 'marshal_clone_to_rele'
+ drivers/scsi/cxlflash/vlun.c:238: warning: Function parameter or member 'bali' not described in 'validate_alloc'
+ drivers/scsi/cxlflash/vlun.c:238: warning: Excess function parameter 'ba_lun_info' description in 'validate_alloc'
+ drivers/scsi/cxlflash/vlun.c:308: warning: Function parameter or member 'to_clone' not described in 'ba_clone'
+ drivers/scsi/cxlflash/vlun.c:308: warning: Excess function parameter 'to_free' description in 'ba_clone'
+ drivers/scsi/cxlflash/vlun.c:369: warning: Function parameter or member 'lli' not described in 'init_vlun'
+ drivers/scsi/cxlflash/vlun.c:369: warning: Excess function parameter 'lun_info' description in 'init_vlun'
 
-Cc: Michael Cyr <mikecyr@linux.ibm.com>
+Cc: "Manoj N. Kumar" <manoj@linux.ibm.com>
+Cc: "Matthew R. Ochs" <mrochs@linux.ibm.com>
+Cc: Uma Krishnan <ukrishn@linux.ibm.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Dave Boutcher <boutcher@us.ibm.com>
-Cc: Santiago Leon <santil@us.ibm.com>
-Cc: Linda Xie <lxie@us.ibm.com>
-Cc: FUJITA Tomonori <tomof@acm.org>
-Cc: "Nicholas A. Bellinger" <nab@kernel.org>
-Cc: "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>
 Cc: linux-scsi@vger.kernel.org
-Cc: target-devel@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 8 ++++----
+ drivers/scsi/cxlflash/vlun.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-index b65d50d03428a..41ac9477df7ad 100644
---- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-+++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-@@ -128,10 +128,10 @@ static bool connection_broken(struct scsi_info *vscsi)
-  * This function calls h_free_q then frees the interrupt bit etc.
-  * It must release the lock before doing so because of the time it can take
-  * for h_free_crq in PHYP
-- * NOTE: the caller must make sure that state and or flags will prevent
-- *	 interrupt handler from scheduling work.
-- * NOTE: anyone calling this function may need to set the CRQ_CLOSED flag
-- *	 we can't do it here, because we don't have the lock
-+ * NOTE: * the caller must make sure that state and or flags will prevent
-+ *	   interrupt handler from scheduling work.
-+ *       * anyone calling this function may need to set the CRQ_CLOSED flag
-+ *	   we can't do it here, because we don't have the lock
+diff --git a/drivers/scsi/cxlflash/vlun.c b/drivers/scsi/cxlflash/vlun.c
+index f1406ac77b0d5..01917b28cdb65 100644
+--- a/drivers/scsi/cxlflash/vlun.c
++++ b/drivers/scsi/cxlflash/vlun.c
+@@ -41,7 +41,7 @@ static void marshal_virt_to_resize(struct dk_cxlflash_uvirtual *virt,
+ /**
+  * marshal_clone_to_rele() - translate clone to release structure
+  * @clone:	Source structure from which to translate/copy.
+- * @rele:	Destination structure for the translate/copy.
++ * @release:	Destination structure for the translate/copy.
+  */
+ static void marshal_clone_to_rele(struct dk_cxlflash_clone *clone,
+ 				  struct dk_cxlflash_release *release)
+@@ -229,7 +229,7 @@ static u64 ba_alloc(struct ba_lun *ba_lun)
+ 
+ /**
+  * validate_alloc() - validates the specified block has been allocated
+- * @ba_lun_info:	LUN info owning the block allocator.
++ * @bali:		LUN info owning the block allocator.
+  * @aun:		Block to validate.
   *
-  * EXECUTION ENVIRONMENT:
-  *	Process level
+  * Return: 0 on success, -1 on failure
+@@ -300,7 +300,7 @@ static int ba_free(struct ba_lun *ba_lun, u64 to_free)
+ /**
+  * ba_clone() - Clone a chunk of the block allocation table
+  * @ba_lun:	Block allocator from which to allocate a block.
+- * @to_free:	Block to free.
++ * @to_clone:	Block to clone.
+  *
+  * Return: 0 on success, -1 on failure
+  */
+@@ -361,7 +361,7 @@ void cxlflash_ba_terminate(struct ba_lun *ba_lun)
+ 
+ /**
+  * init_vlun() - initializes a LUN for virtual use
+- * @lun_info:	LUN information structure that owns the block allocator.
++ * @lli:	LUN information structure that owns the block allocator.
+  *
+  * Return: 0 on success, -errno on failure
+  */
 -- 
 2.27.0
 
