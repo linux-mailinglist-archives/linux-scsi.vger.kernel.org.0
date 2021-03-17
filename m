@@ -2,88 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6291E33F8C9
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 20:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C761133F8C7
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 20:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbhCQTJH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 15:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S232865AbhCQTJI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 15:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbhCQTIn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 15:08:43 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B16C06174A
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 12:08:43 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id z5so1242282plg.3
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 12:08:43 -0700 (PDT)
+        with ESMTP id S232907AbhCQTIz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 15:08:55 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4823C06174A
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 12:08:55 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id g15so1803476pfq.3
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 12:08:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=xLYvuPoW4vB7uFqf5ny2dg4MXZE/HYnKFSiDcGPxYeQ=;
-        b=N8ITJhIQcjpBPqQN+BYq1UNv3FG6idlM/ivP9qscijU3LvEKsfg2mF9e7B0TeOao69
-         wf267oQQj5gH7/LhjqOZrr8U5nmBspuM4jtIjJOlHZypX0k3dLdufqOaWKp8efl5KIye
-         oeTJJQW5KCAbDIq92znJFlBt+H3L4D9+d8984=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=He7DX3iRuO9/WVBe7wbzkyCQ9hGXeS7TyqX1/mD7KFo=;
+        b=dtOMNcdHD5OWon8DLE6xhjbrxxXgJ4tAmTSfB3x2GHrmkjn4CuX+0xyQDRrqa3a4+H
+         0Ajm9KQBBjduZmxt0D7ZuPQq+ERE8Xq2+CNxAyig/pFudvhLLXa2wxK5tnI/mTsWDUFv
+         JGJmMgpBusyZVTclQaaUZ2zwwx+DZq3kNUBdQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=xLYvuPoW4vB7uFqf5ny2dg4MXZE/HYnKFSiDcGPxYeQ=;
-        b=ak7+l4l/PSZDHWLiSyDR2jpNFpUfvdm7Xbr8zvnv0uojHzvhP0PXHTgxdIqNurBoSF
-         Kn7mAVEAnT06oaGq6bFwI5EPsUX8wLipbAJpfPyUrat+BHS0WxR63p+DcURGdZ72tVQT
-         g667KD7Uedq6DBLlB4tAPLL8MyMjl427GhUD4KBN3HYHG5YFIPhBPRXLziWV+KHQwCYW
-         Qo3tjLp2ji/b4rG9Aoc8ub7MM9dgDr8d5z21us6HlijUsdZk6l/3iYNhxVdm2vCQa4GG
-         Y5qkk0+vT2f9nSnyeNJTFt09koypCsL4C6jp0OQBkCk4hn4VqqyWXPbQnOwvRKuLX1Tj
-         Tpvg==
-X-Gm-Message-State: AOAM532Lj7yvXE233cHyzci0EXkoE4wwOXRmk7oUJIcoPNzfV8fa2sGO
-        YmTJu3gXItGl03R3zPR5Ez/VbzKrre/Id4BNdrw/p/dx9yO7y4ZN/KgP8IrI1PnhoAJDdc1SIfh
-        TXepPNpcnIGQEKiy02a9HwNeM0C9otl15WSdNfqsZJh9KufNjBJyE4JKUqxdSuwHEJkolmk4/2k
-        Ms0J0kPEUAMQYM
-X-Google-Smtp-Source: ABdhPJwBDSsuoke7elH8tAib4UbRiygSlucagI119cx5gTrMZJ4ETPzZE7lsQMdhShPtp9DEljAYcQ==
-X-Received: by 2002:a17:90a:c257:: with SMTP id d23mr343593pjx.102.1616008122125;
-        Wed, 17 Mar 2021 12:08:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=He7DX3iRuO9/WVBe7wbzkyCQ9hGXeS7TyqX1/mD7KFo=;
+        b=V7ZAeiPvntyrqR42zKJ8f4yQW13dz6fZFRlfO5pj4+J/HerkN+rIdJX7Z/9XrdDV2M
+         qYPxrkkRCsXFoifTl6Sgc+Tr8ezZctQnSCJltWqXZWwkwTzeAyjZMZueHgwAdV+22UOv
+         SVAVxRi8OpKje2YJB7KRQa7BS0FoBxAIpLzyWqkI+UvFNE/gaLDS+6PY4N1cpKHn5Fz3
+         4BigchFLmjDiY5MGDwfLmx21cpZ+Ehe0KOiqrL8LADYn4S0yRVGLA6fycALJCqg4lbrI
+         kE0GCOkqbZfZsu+CckA47D9wMmhDbijj71kszE4HAaDUXoMQRiWLb59BaJA7KyQIel2C
+         pQAA==
+X-Gm-Message-State: AOAM5305Ov7NyoRwiLnK6B+aQ+6GnxbyIeE4njGYl9pjcY20sw1LR1Y7
+        zWAoXNDnXvHHQtFAahbaj6pk77hqfU2RbqtjK4UIfryiD2ukFsEESvju0h+eK95WcYCEHlrnyo5
+        FTM8lWdG0PmcCm6xcC/uoYcAqDHOb84RdszQTd8obdAEs43Aex4oWKadJhhy7nbzTg1t89PMLfP
+        dXGES4xgfHroRd
+X-Google-Smtp-Source: ABdhPJym0xwXRikJ6GEWuRwrJ5dH2ylrr5revtn3/l8f6IId+/3QrXB3y7/6tf1ECnl6qUNfLj6i6w==
+X-Received: by 2002:a63:f754:: with SMTP id f20mr3724735pgk.382.1616008134894;
+        Wed, 17 Mar 2021 12:08:54 -0700 (PDT)
 Received: from dhcp-10-123-20-75.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id w2sm20569437pgh.54.2021.03.17.12.08.38
+        by smtp.gmail.com with ESMTPSA id w2sm20569437pgh.54.2021.03.17.12.08.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 12:08:40 -0700 (PDT)
+        Wed, 17 Mar 2021 12:08:54 -0700 (PDT)
 From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
         sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
         anand.lodnoor@broadcom.com,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH 0/5] megaraid_sas: Update driver version to 07.717.01.00-rc1
-Date:   Thu, 18 Mar 2021 00:38:19 +0530
-Message-Id: <20210317190824.3050-1-chandrakanth.patil@broadcom.com>
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/5] megaraid_sas: Send all non-RW IOs for TYPE_ENCLOSURE device through firmware
+Date:   Thu, 18 Mar 2021 00:38:20 +0530
+Message-Id: <20210317190824.3050-2-chandrakanth.patil@broadcom.com>
 X-Mailer: git-send-email 2.18.1
+In-Reply-To: <20210317190824.3050-1-chandrakanth.patil@broadcom.com>
+References: <20210317190824.3050-1-chandrakanth.patil@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000019cecc05bdc03665"
+        boundary="000000000000dbaab005bdc03680"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000019cecc05bdc03665
+--000000000000dbaab005bdc03680
 
-This patchset contains few critical fixes and enhancements.
+Driver issues all non-ReadWrite IOs for TYPE_ENCLOSURE devices through
+the fast path with invalid dev handle and fast path inturn directs all
+the IOs to the firmware. As firmware stopped handling those IOs from
+SAS3.5 generation of controllers (Ventura and its onward generations)
+lead to IOs failure.
 
-Chandrakanth Patil (5):
-  megaraid_sas: Send all non-RW IOs for TYPE_ENCLOSURE device through
-    firmware
-  megaraid_sas: Fix the resource leak in case of probe failure
-  megaraid_sas: Early detection of VD deletion through RaidMap update
-  megaraid_sas: Handle missing interrupts while re-enabling IRQs
-  megaraid_sas: Update driver version to 07.717.01.00-rc1
+The driver will issue all the non-ReadWrite IOs for TYPE_ENCLOSURE devices
+directly to firmware from SAS3.5 generation of controllers.
 
- drivers/scsi/megaraid/megaraid_sas.h        |  8 ++-
- drivers/scsi/megaraid/megaraid_sas_base.c   | 76 ++++++++++++++++++++-
- drivers/scsi/megaraid/megaraid_sas_fp.c     |  6 +-
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 33 ++++++---
- 4 files changed, 110 insertions(+), 13 deletions(-)
+Cc: <stable@vger.kernel.org> # v5.10+
+Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
+Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 38fc9467c625..73295cf74cbe 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -3167,6 +3167,8 @@ megasas_build_io_fusion(struct megasas_instance *instance,
+ {
+ 	int sge_count;
+ 	u8  cmd_type;
++	u16 pd_index = 0;
++	u8 drive_type = 0;
+ 	struct MPI2_RAID_SCSI_IO_REQUEST *io_request = cmd->io_request;
+ 	struct MR_PRIV_DEVICE *mr_device_priv_data;
+ 	mr_device_priv_data = scp->device->hostdata;
+@@ -3201,8 +3203,12 @@ megasas_build_io_fusion(struct megasas_instance *instance,
+ 		megasas_build_syspd_fusion(instance, scp, cmd, true);
+ 		break;
+ 	case NON_READ_WRITE_SYSPDIO:
+-		if (instance->secure_jbod_support ||
+-		    mr_device_priv_data->is_tm_capable)
++		pd_index = MEGASAS_PD_INDEX(scp);
++		drive_type = instance->pd_list[pd_index].driveType;
++		if ((instance->secure_jbod_support ||
++		     mr_device_priv_data->is_tm_capable) ||
++		     (instance->adapter_type >= VENTURA_SERIES &&
++		     drive_type == TYPE_ENCLOSURE))
+ 			megasas_build_syspd_fusion(instance, scp, cmd, false);
+ 		else
+ 			megasas_build_syspd_fusion(instance, scp, cmd, true);
 -- 
 2.18.1
 
 
---00000000000019cecc05bdc03665
+--000000000000dbaab005bdc03680
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -154,14 +186,14 @@ Zpnb0pToIvDm+Ur3N2MiX3nSNdXYjeMdwB0OAs05pMciX6VfrXagLKEdSRHtOo/W/JA7fToB0eJS
 Ky1ZxnSRQGTL4yIIMw43kd0GQyTIM6KyMy8uprn32g7HcYJf07P/tjC196OWjB5Qr7dSv3vtjU8N
 2J0Xc13/AGfXSZ8xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxT
 aWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAy
-MDIwAgxLE6Al5lQBqzmVPS8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIB0N6+Dt
-Gkjq2x3ry9H/zHLY/6Vi+MA4hxmcxH41/1qhMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
-KoZIhvcNAQkFMQ8XDTIxMDMxNzE5MDg0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
+MDIwAgxLE6Al5lQBqzmVPS8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPQjJL9T
+fpnm+DgzP4dKbaDVPnAySDaBzdIaRkadMsrzMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
+KoZIhvcNAQkFMQ8XDTIxMDMxNzE5MDg1NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
 CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
-hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAaw8i7AYiPUz0sR108vXlL3T+S
-ZwatCfFybPH5lXFK9fHZUd4xijhGlrwu0n3CU416vZt+/3BhxVreY8kJRI2yQ8XAujnceqkq3vAy
-5cRqt9GThIwZA3mkQjXMJcJCp3OLyJARv6GTLBUXKj9OAgvuOfdqRwJAfCnv84C2x1+htTwb3UUq
-mwq8+jRHtTqHbf8Ys3uV5/nL/YYRKv5xgiLdY+1IIvKylgVKQG0DijJbU0wifA4vMkM4T6/mTHgL
-avmBkoRItAyYAgrkT+205UrGefqJ/xesj47X73YDxP46OL68PlcSNp7hyTAwQYS0KENyDod+hY0Q
-mqZpPc9iz3iz
---00000000000019cecc05bdc03665--
+hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAK1IbTM4+9RWFi5wzd6tNQp1fX
+wHh+keIbNdjc62cvv/Zlq+t6C2W3ZYCCzWyHyKCRkS1whaDvrXHlayg4pW/UJhEZzkC2zqiIYepl
+MJD+DsyXQERDtS6lTJlBGMOvvZNHUzXOF5uigyJ57hg8XtZzQvnw3vAfLXrTKhayyzdiycg5LYYj
+rIkex9WzCYDOW4GdNqUFziZt+J5SQsA99mLHigVGHRMGkkhYBeae/zq+lFhtSdzVKvbBPsPb1eMC
+nhWgOuiI+c1fp+3rktSCd/HGGQMVyrT8eVurmcI2GPSp045QQ6PwpXSEvWPWZ2329nOMTXMMeeUf
+hMWWt01dgt4i
+--000000000000dbaab005bdc03680--
