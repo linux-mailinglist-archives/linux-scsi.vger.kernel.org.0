@@ -2,62 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BDF33EBEB
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 09:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C3133EBF3
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 09:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbhCQI5W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 04:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        id S229849AbhCQI5t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 04:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbhCQI5P (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 04:57:15 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0179C061760
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:14 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id y124-20020a1c32820000b029010c93864955so2908107wmy.5
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:14 -0700 (PDT)
+        with ESMTP id S229688AbhCQI5Q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 04:57:16 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC79C061760
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:15 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id n11-20020a05600c4f8bb029010e5cf86347so4963218wmq.1
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=l+1EJFBCtfo9l4gZLbyeXef//j2IlwdufiBKnHN8Ms4=;
-        b=SKA3psbfj5f7Um44JGG8FKNE9H0hMuOoWt6WNZmaOG3Zqzw4HRofNMesdpsoJxVplR
-         j4yvm5gbPpdspzpBGwdC1paXhtqKo0lblnAavll/x0LLH2fW1iJR1qnrrGGkW8i0u3R0
-         ibov7RikkU5XHX3MtoFuzFsbG8BD5l2If2FkQDcc3PdWALyJSxekxL62SZa53XdVWyQr
-         Vya6eZRAf2PQ8Y0oh1GEQtFLV9Y4RAJxba+YdVg5dk2R9xbf9rPPLvsdKLIh+v/gl3LT
-         i5FPw5F6clmJxzE8ljdyz3ZbHwm8EYKC0rEb1Pxm1Llx1B6F6drv6BmFmvYeLiNhVfRQ
-         agAQ==
+        bh=jXzZsgME51o5a4S3G/qD/qZyWpfOm8qpjFIuUNjewrU=;
+        b=QGHZI5JZVjfZ5Tep79BLQwCQgui+6efCtb3xulzDRViNdHHCrKeA9iGbsam5qHCR4F
+         gY5m3K642uohesxcMXHKjHWXIWZ47/XuEx2konxYR6T+rcJd70So+lDNa7l6dqB1HjlH
+         Jb59p8pF15hJ14Vux6S8wVGLkwhYSy2KvTBaV3rvFufg7+1RDRd4co7Cg3XPXYe3nTK1
+         TMB/DOouGq0U9JhIPkGRGwF6AmwqLuBp89OlYBgvpyicBDXIyuvim0IoehV1s/5ITCHD
+         6l6h3aLIG/Ij/daPoiMZAWU2YtkvkbhnmbTV0/MvamzGBwm0tmlo5hZOq0zVpgCzSMvs
+         IWgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l+1EJFBCtfo9l4gZLbyeXef//j2IlwdufiBKnHN8Ms4=;
-        b=dKWj76UI6pKX4sMSNFXUHreIDKYQRQ5kHBe3FnMrUokGV/V8GfhoR/11R40hVBnfBP
-         TTVyNu0ZY2vKNX1Xbe+STy19B+5GLPgok6w6fks01JGnUYtW6fEiB5FLEvpNxXl6T4Ad
-         rYxWXl9+hGDmCMMFYOg/JrW396PQvSpeU0sUM8BK4z2YT41gp6hMG3opra4IgMld0d7o
-         TWzpwYr5R/SXH/2136yuAn7hBv/i1oSd0C0f8HycqLnM17COI+JYmubwwfxD0J7dusIl
-         bmU/ZOrMnlwRxS7VieK+LbHqez7lcUW+r+SyG1F6lBebSO2htmNZE/k/mQ52pF9fimkj
-         iNIw==
-X-Gm-Message-State: AOAM530/zUVSv+agyK1+BpzhxRi2CbA1ez1oT1AEAC6FuIBwVeKMp6tR
-        kKSITlM4mBh/zVN/7gPQe9h+gA==
-X-Google-Smtp-Source: ABdhPJz181LhBLmutFOYGnihVIaN6OavW4rkwV7VElcenpA9Qb98+4DwhdTWR24irt6eFOE5AFPGEg==
-X-Received: by 2002:a05:600c:210a:: with SMTP id u10mr2649152wml.147.1615971433784;
-        Wed, 17 Mar 2021 01:57:13 -0700 (PDT)
+        bh=jXzZsgME51o5a4S3G/qD/qZyWpfOm8qpjFIuUNjewrU=;
+        b=Djco/4uN/304YSBG9tOH39vtHV65vbudr+oPXi81zlpVREnhvPzXM0DO0lBrGzKTVT
+         HX45oECdc1G0ZPCxlSGkv3r6egnEZCFoI/J4KUeMdrAWBihenRZwsNR3qWqA00+fbV7G
+         QEx1DeTFGIHLJ+gCge2QrAeVdUszi8zRCOkjmjdeSgyqgxPp/du8UXzCSSKdxHf85k+H
+         s0+YiyZ8CMVpNBOB+k1gFpg7noUcxcaSRazbEZGcushP2wEu/3Md4/DI56lh9ba3Y3Tx
+         76AfvM5njXMvJGePexzJbFeS4KU4BS0C21/Num2aoV+14nAUOexXkgkqUGXczW2aRBwB
+         g42g==
+X-Gm-Message-State: AOAM531c/TlijxFNnD9E5EImNCCrrr22a3YV/vXOX8oHX0irLtI+SM7U
+        FzMcsXeAdPG6Af3MGU8PPiLATQ==
+X-Google-Smtp-Source: ABdhPJwKpTHxLaetDBDHclcEHKeMcsLIkvwLk9lByiEkCRoyiM00PiF+OHH8mHkrLiqBPZVObm6hhw==
+X-Received: by 2002:a1c:67d6:: with SMTP id b205mr2684189wmc.118.1615971434702;
+        Wed, 17 Mar 2021 01:57:14 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
         by smtp.gmail.com with ESMTPSA id j123sm1807243wmb.1.2021.03.17.01.57.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 01:57:13 -0700 (PDT)
+        Wed, 17 Mar 2021 01:57:14 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, Hannes Reinecke <hare@kernel.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Alan Cox <alan@lxorguk.ukuu.org.uk>, linux-scsi@vger.kernel.org
-Subject: [PATCH 08/18] scsi: a100u2w: Remove unused variable 'bios_phys'
-Date:   Wed, 17 Mar 2021 08:56:51 +0000
-Message-Id: <20210317085701.2891231-9-lee.jones@linaro.org>
+        Linux GmbH <hare@suse.com>,
+        "Leonard N. Zubkoff" <lnz@dandelion.com>,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 09/18] scsi: myrs: Remove a couple of unused 'status' variables
+Date:   Wed, 17 Mar 2021 08:56:52 +0000
+Message-Id: <20210317085701.2891231-10-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317085701.2891231-1-lee.jones@linaro.org>
 References: <20210317085701.2891231-1-lee.jones@linaro.org>
@@ -70,40 +70,59 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/a100u2w.c: In function ‘inia100_probe_one’:
- drivers/scsi/a100u2w.c:1092:8: warning: variable ‘bios_phys’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/myrs.c: In function ‘consistency_check_show’:
+ drivers/scsi/myrs.c:1193:16: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
+ drivers/scsi/myrs.c: In function ‘myrs_get_resync’:
+ drivers/scsi/myrs.c:1984:5: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
 
+Cc: Hannes Reinecke <hare@kernel.org>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Doug Ledford <dledford@redhat.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>
+Cc: Linux GmbH <hare@suse.com>
+Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/a100u2w.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/myrs.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
-index 66c514310f3c5..c99224a128f82 100644
---- a/drivers/scsi/a100u2w.c
-+++ b/drivers/scsi/a100u2w.c
-@@ -1089,7 +1089,6 @@ static int inia100_probe_one(struct pci_dev *pdev,
- 	int error = -ENODEV;
- 	u32 sz;
- 	unsigned long biosaddr;
--	char *bios_phys;
+diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+index 4adf9ded296aa..48e399f057d5c 100644
+--- a/drivers/scsi/myrs.c
++++ b/drivers/scsi/myrs.c
+@@ -1190,7 +1190,6 @@ static ssize_t consistency_check_show(struct device *dev,
+ 	struct myrs_hba *cs = shost_priv(sdev->host);
+ 	struct myrs_ldev_info *ldev_info;
+ 	unsigned short ldev_num;
+-	unsigned char status;
  
- 	if (pci_enable_device(pdev))
- 		goto out;
-@@ -1141,7 +1140,6 @@ static int inia100_probe_one(struct pci_dev *pdev,
+ 	if (sdev->channel < cs->ctlr_info->physchan_present)
+ 		return snprintf(buf, 32, "physical device - not checking\n");
+@@ -1199,7 +1198,7 @@ static ssize_t consistency_check_show(struct device *dev,
+ 	if (!ldev_info)
+ 		return -ENXIO;
+ 	ldev_num = ldev_info->ldev_num;
+-	status = myrs_get_ldev_info(cs, ldev_num, ldev_info);
++	myrs_get_ldev_info(cs, ldev_num, ldev_info);
+ 	if (ldev_info->cc_active)
+ 		return snprintf(buf, 32, "checking block %zu of %zu\n",
+ 				(size_t)ldev_info->cc_lba,
+@@ -1981,14 +1980,13 @@ myrs_get_resync(struct device *dev)
+ 	struct myrs_hba *cs = shost_priv(sdev->host);
+ 	struct myrs_ldev_info *ldev_info = sdev->hostdata;
+ 	u64 percent_complete = 0;
+-	u8 status;
  
- 	biosaddr = host->BIOScfg;
- 	biosaddr = (biosaddr << 4);
--	bios_phys = phys_to_virt(biosaddr);
- 	if (init_orchid(host)) {	/* Initialize orchid chip */
- 		printk("inia100: initial orchid fail!!\n");
- 		goto out_free_escb_array;
+ 	if (sdev->channel < cs->ctlr_info->physchan_present || !ldev_info)
+ 		return;
+ 	if (ldev_info->rbld_active) {
+ 		unsigned short ldev_num = ldev_info->ldev_num;
+ 
+-		status = myrs_get_ldev_info(cs, ldev_num, ldev_info);
++		myrs_get_ldev_info(cs, ldev_num, ldev_info);
+ 		percent_complete = ldev_info->rbld_lba * 100;
+ 		do_div(percent_complete, ldev_info->cfg_devsize);
+ 	}
 -- 
 2.27.0
 
