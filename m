@@ -2,283 +2,240 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2899933EFBD
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 12:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552A433F00B
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 13:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbhCQLpB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 07:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbhCQLo5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 07:44:57 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC27C06174A;
-        Wed, 17 Mar 2021 04:44:56 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id j6-20020a17090adc86b02900cbfe6f2c96so1201297pjv.1;
-        Wed, 17 Mar 2021 04:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gIEhr5+I33uCJK4hfiEJOvKhBOp5tgUkDWs4HI7OXXU=;
-        b=K8fjDSTVXiwtbGw61wz8suZ8mf8W6yPErEHKhxATHqr856ayYowet0kcJESpL0auTP
-         QROUf3LEnwARBy10m3yte/AZrFdrDiDd+bFPku0F3VcSo41/PvBEBoabFvGxpfWN6XOD
-         9RDGIIZGNpWRbbrVmbDYmMOWN1K+aP8zh/97ATJfrg9e4YTv6XnmwqaXLI2Y+xHfm4GC
-         lZgUkxI65fTERRKfu8lU0EMpiiIHTzxVZ6F2XSHADFNHoNx+nA0JbZ5YnN51XijO5SOU
-         JBvJw8kUX5vrG8RyFteUkz29VCIMIG4upv56QzuJHzhl7wCUlLMbwmNGdIgc/HhdkskO
-         fzhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gIEhr5+I33uCJK4hfiEJOvKhBOp5tgUkDWs4HI7OXXU=;
-        b=PmglNg/jJzbUEhSLe0FiqbQaznc8XLgWs5ekpSXBEeUgRcd3MwrbvKS1hEB3q5kCJA
-         TyK2jX40YMIIPDT4YTxvUpqvXB8kFoMasg/scfRpmxsrAmgib0KorKqN0CjuScv31qFM
-         sHuvwB+yseFMboMICWRrnQZRjWbG7n4gTEYKJZh7MzfbjZQTf752JtRXD2yp5aVqdxv1
-         82p99mw2SVc/l9RyrhJ5xNRKZ40ktsRufjQd6YPnEzi0+6eCpUXE//Xuwpypk2mLLjDO
-         ZAQuBGWMY5YNSrM15YXY/rCqCUXTp8blimbD9LcJKrYcTHyt+a20v9APyX/BbtIeZLqB
-         UJgA==
-X-Gm-Message-State: AOAM5318UFIwPqRPXbw21hu55sAgZlG2HojYL8cWfsww425JpAEijdQ0
-        3YSI7Nu9grUI9UWFi1zNsVs=
-X-Google-Smtp-Source: ABdhPJysXKEq6p/EviZy/Qo6olsTRVSHLMem5j8jprkNZB2EToUg/c46okGUO6GgdKWyj0Ro1sIPKA==
-X-Received: by 2002:a17:90a:c207:: with SMTP id e7mr4168734pjt.188.1615981496467;
-        Wed, 17 Mar 2021 04:44:56 -0700 (PDT)
-Received: from tj.ccdomain.com ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id j5sm18554790pgl.55.2021.03.17.04.44.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 04:44:56 -0700 (PDT)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com,
-        linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, huyue2@yulong.com, zbestahu@163.com
-Subject: [PATCH] scsi: ufs: Tidy up WB configuration code
-Date:   Wed, 17 Mar 2021 19:44:38 +0800
-Message-Id: <20210317114438.1900-1-zbestahu@gmail.com>
-X-Mailer: git-send-email 2.29.2.windows.3
+        id S229601AbhCQMMR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 08:12:17 -0400
+Received: from m42-10.mailgun.net ([69.72.42.10]:11868 "EHLO
+        m42-10.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229535AbhCQMMG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 08:12:06 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1615983125; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=LTIBg0w55xOXk1pOPZGrIdiuibgse0XRpR2wxcb2toQ=;
+ b=l9Rav9vak26/F0EoFki5oiWpZyb4DBfwX7W67BxgrGB53DYsuycPU20rPawTA1OiD+X5U3kr
+ w9cxLwPMfNzgASuM0G+AbWIjSU0zydgiJUM+xAO+rGwb1ZFHtciazkFatpU7HLFPfUMnr8p0
+ 6tWgvVcGCXyhUjfIw0iGrb6jPhY=
+X-Mailgun-Sending-Ip: 69.72.42.10
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 6051f2144db3bb68017be316 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 17 Mar 2021 12:12:04
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E241BC433C6; Wed, 17 Mar 2021 12:12:03 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8DB64C433CA;
+        Wed, 17 Mar 2021 12:12:02 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 17 Mar 2021 20:12:02 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Avri Altman <Avri.Altman@wdc.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, Bart Van Assche <bvanassche@acm.org>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        alim.akhtar@samsung.com, asutoshd@codeaurora.org,
+        Zang Leigang <zangleigang@hisilicon.com>,
+        Avi Shchislowski <Avi.Shchislowski@wdc.com>,
+        Bean Huo <beanhuo@micron.com>, stanley.chu@mediatek.com
+Subject: Re: [PATCH v5 06/10] scsi: ufshpb: Add hpb dev reset response
+In-Reply-To: <DM6PR04MB6575006E0682C3D11F54965DFC6A9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20210302132503.224670-1-avri.altman@wdc.com>
+ <20210302132503.224670-7-avri.altman@wdc.com>
+ <59a62fc17ec9229a8498e696eb0474be@codeaurora.org>
+ <DM6PR04MB6575006E0682C3D11F54965DFC6A9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Message-ID: <1d0e3c5441ecf14b6614ec0af0d30af6@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Yue Hu <huyue2@yulong.com>
+On 2021-03-17 19:23, Avri Altman wrote:
+>> 
+>> On 2021-03-02 21:24, Avri Altman wrote:
+>> > The spec does not define what is the host's recommended response when
+>> > the device send hpb dev reset response (oper 0x2).
+>> >
+>> > We will update all active hpb regions: mark them and do that on the
+>> > next
+>> > read.
+>> >
+>> > Signed-off-by: Avri Altman <avri.altman@wdc.com>
+>> > ---
+>> >  drivers/scsi/ufs/ufshpb.c | 47
+>> ++++++++++++++++++++++++++++++++++++---
+>> >  drivers/scsi/ufs/ufshpb.h |  2 ++
+>> >  2 files changed, 46 insertions(+), 3 deletions(-)
+>> >
+>> > diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+>> > index 0744feb4d484..0034fa03fdc6 100644
+>> > --- a/drivers/scsi/ufs/ufshpb.c
+>> > +++ b/drivers/scsi/ufs/ufshpb.c
+>> > @@ -642,7 +642,8 @@ int ufshpb_prep(struct ufs_hba *hba, struct
+>> > ufshcd_lrb *lrbp)
+>> >               if (rgn->reads == ACTIVATION_THRESHOLD)
+>> >                       activate = true;
+>> >               spin_unlock_irqrestore(&rgn->rgn_lock, flags);
+>> > -             if (activate) {
+>> > +             if (activate ||
+>> > +                 test_and_clear_bit(RGN_FLAG_UPDATE, &rgn->rgn_flags)) {
+>> >                       spin_lock_irqsave(&hpb->rsp_list_lock, flags);
+>> >                       ufshpb_update_active_info(hpb, rgn_idx, srgn_idx);
+>> >                       hpb->stats.rb_active_cnt++;
+>> > @@ -1480,6 +1481,20 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba,
+>> > struct ufshcd_lrb *lrbp)
+>> >       case HPB_RSP_DEV_RESET:
+>> >               dev_warn(&hpb->sdev_ufs_lu->sdev_dev,
+>> >                        "UFS device lost HPB information during PM.\n");
+>> > +
+>> > +             if (hpb->is_hcm) {
+>> > +                     struct scsi_device *sdev;
+>> > +
+>> > +                     __shost_for_each_device(sdev, hba->host) {
+>> > +                             struct ufshpb_lu *h = sdev->hostdata;
+>> > +
+>> > +                             if (!h)
+>> > +                                     continue;
+>> > +
+>> > +                             schedule_work(&hpb->ufshpb_lun_reset_work);
+>> > +                     }
+>> > +             }
+>> > +
+>> >               break;
+>> >       default:
+>> >               dev_notice(&hpb->sdev_ufs_lu->sdev_dev,
+>> > @@ -1594,6 +1609,25 @@ static void
+>> > ufshpb_run_inactive_region_list(struct ufshpb_lu *hpb)
+>> >       spin_unlock_irqrestore(&hpb->rsp_list_lock, flags);
+>> >  }
+>> >
+>> > +static void ufshpb_reset_work_handler(struct work_struct *work)
+>> 
+>> Just curious, directly doing below things inside ufshpb_rsp_upiu() 
+>> does
+>> not
+>> seem a problem to me, does this really deserve a separate work?
+> I don't know, I never even consider of doing this.
+> The active region list may contain up to few thousands of regions -
+> It is not rare to see configurations that covers the entire device.
+> 
 
-There are similar code implemetentions for WB configurations in
-ufshcd_wb_{ctrl, toggle_flush_during_h8, toggle_flush}. We can
-extract the part to create a new helper with a flag parameter to
-reduce code duplication.
+Yes, true, it can be a huge list. But what does the ops 
+"HPB_RSP_DEV_RESET"
+really mean? The specs says "Device reset HPB Regions information", but 
+I
+don't know what is really happening. Could you please elaborate?
 
-Meanwhile, change ufshcd_wb_ctrl() -> ufshcd_wb_toggle() for better
-readability.
+Thanks,
+Can Guo.
 
-And remove unnecessary log messages from ufshcd_wb_config() since
-relevant toggle function will spew log respectively. Also change
-ufshcd_wb_toggle_flush{__during_h8} to void type accordingly.
-
-Signed-off-by: Yue Hu <huyue2@yulong.com>
----
- drivers/scsi/ufs/ufs-sysfs.c |  2 +-
- drivers/scsi/ufs/ufshcd.c    | 99 +++++++++++++++++++-------------------------
- drivers/scsi/ufs/ufshcd.h    |  2 +-
- 3 files changed, 44 insertions(+), 59 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index acc54f5..d7c3cff 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -246,7 +246,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 	}
- 
- 	pm_runtime_get_sync(hba->dev);
--	res = ufshcd_wb_ctrl(hba, wb_enable);
-+	res = ufshcd_wb_toggle(hba, wb_enable);
- 	pm_runtime_put_sync(hba->dev);
- out:
- 	up(&hba->host_sem);
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 7716175..1368f9e 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -247,8 +247,8 @@ static int ufshcd_change_power_mode(struct ufs_hba *hba,
- static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
- 					 struct ufs_vreg *vreg);
- static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
--static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
--static inline int ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
-+static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
-+static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
- 
-@@ -275,20 +275,12 @@ static inline void ufshcd_disable_irq(struct ufs_hba *hba)
- 
- static inline void ufshcd_wb_config(struct ufs_hba *hba)
- {
--	int ret;
--
- 	if (!ufshcd_is_wb_allowed(hba))
- 		return;
- 
--	ret = ufshcd_wb_ctrl(hba, true);
--	if (ret)
--		dev_err(hba->dev, "%s: Enable WB failed: %d\n", __func__, ret);
--	else
--		dev_info(hba->dev, "%s: Write Booster Configured\n", __func__);
--	ret = ufshcd_wb_toggle_flush_during_h8(hba, true);
--	if (ret)
--		dev_err(hba->dev, "%s: En WB flush during H8: failed: %d\n",
--			__func__, ret);
-+	ufshcd_wb_toggle(hba, true);
-+
-+	ufshcd_wb_toggle_flush_during_h8(hba, true);
- 	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
- 		ufshcd_wb_toggle_flush(hba, true);
- }
-@@ -1268,7 +1260,7 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
- 	/* Enable Write Booster if we have scaled up else disable it */
- 	downgrade_write(&hba->clk_scaling_lock);
- 	is_writelock = false;
--	ufshcd_wb_ctrl(hba, scale_up);
-+	ufshcd_wb_toggle(hba, scale_up);
- 
- out_unprepare:
- 	ufshcd_clock_scaling_unprepare(hba, is_writelock);
-@@ -5432,85 +5424,78 @@ static void ufshcd_bkops_exception_event_handler(struct ufs_hba *hba)
- 				__func__, err);
- }
- 
--int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
-+static int __ufshcd_wb_toggle(struct ufs_hba *hba, bool set, enum flag_idn idn)
- {
--	int ret;
-+	int val;
- 	u8 index;
--	enum query_opcode opcode;
-+
-+	if (set)
-+		val = UPIU_QUERY_OPCODE_SET_FLAG;
-+	else
-+		val = UPIU_QUERY_OPCODE_CLEAR_FLAG;
-+
-+	index = ufshcd_wb_get_query_index(hba);
-+	return ufshcd_query_flag_retry(hba, val, idn, index, NULL);
-+}
-+
-+int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
-+{
-+	int ret;
- 
- 	if (!ufshcd_is_wb_allowed(hba))
- 		return 0;
- 
- 	if (!(enable ^ hba->dev_info.wb_enabled))
- 		return 0;
--	if (enable)
--		opcode = UPIU_QUERY_OPCODE_SET_FLAG;
--	else
--		opcode = UPIU_QUERY_OPCODE_CLEAR_FLAG;
- 
--	index = ufshcd_wb_get_query_index(hba);
--	ret = ufshcd_query_flag_retry(hba, opcode,
--				      QUERY_FLAG_IDN_WB_EN, index, NULL);
-+	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
- 	if (ret) {
--		dev_err(hba->dev, "%s write booster %s failed %d\n",
-+		dev_err(hba->dev, "%s Write Booster %s failed %d\n",
- 			__func__, enable ? "enable" : "disable", ret);
- 		return ret;
- 	}
- 
- 	hba->dev_info.wb_enabled = enable;
--	dev_dbg(hba->dev, "%s write booster %s %d\n",
--			__func__, enable ? "enable" : "disable", ret);
-+	dev_info(hba->dev, "%s Write Booster %s\n",
-+			__func__, enable ? "enabled" : "disabled");
- 
- 	return ret;
- }
- 
--static int ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
-+static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
- {
--	int val;
--	u8 index;
--
--	if (set)
--		val =  UPIU_QUERY_OPCODE_SET_FLAG;
--	else
--		val = UPIU_QUERY_OPCODE_CLEAR_FLAG;
-+	int ret;
- 
--	index = ufshcd_wb_get_query_index(hba);
--	return ufshcd_query_flag_retry(hba, val,
--				QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8,
--				index, NULL);
-+	ret = __ufshcd_wb_toggle(hba, set,
-+			QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
-+	if (ret) {
-+		dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: %d\n",
-+			__func__, set ? "enable" : "disable", ret);
-+		return;
-+	}
-+	dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
-+			__func__, set ? "enabled" : "disabled");
- }
- 
--static inline int ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
-+static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
--	u8 index;
--	enum query_opcode opcode;
- 
- 	if (!ufshcd_is_wb_allowed(hba) ||
- 	    hba->dev_info.wb_buf_flush_enabled == enable)
--		return 0;
--
--	if (enable)
--		opcode = UPIU_QUERY_OPCODE_SET_FLAG;
--	else
--		opcode = UPIU_QUERY_OPCODE_CLEAR_FLAG;
-+		return;
- 
--	index = ufshcd_wb_get_query_index(hba);
--	ret = ufshcd_query_flag_retry(hba, opcode,
--				      QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN, index,
--				      NULL);
-+	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
- 	if (ret) {
- 		dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
- 			enable ? "enable" : "disable", ret);
--		goto out;
-+		return;
- 	}
- 
- 	hba->dev_info.wb_buf_flush_enabled = enable;
- 
--	dev_dbg(hba->dev, "WB-Buf Flush %s\n", enable ? "enabled" : "disabled");
--out:
--	return ret;
--
-+	dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
-+			__func__, enable ? "enabled" : "disabled");
- }
- 
- static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 18e56c1..eddc819 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -1099,7 +1099,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 			     u8 *desc_buff, int *buff_len,
- 			     enum query_opcode desc_op);
- 
--int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable);
-+int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
- 
- /* Wrapper functions for safely calling variant operations */
- static inline const char *ufshcd_get_var_name(struct ufs_hba *hba)
--- 
-1.9.1
-
+> But yes, I can do that.
+> Better to get ack from Daejun first.
+> 
+> Thanks,
+> Avri
+> 
+>> 
+>> Thanks,
+>> Can Guo.
+>> 
+>> > +{
+>> > +     struct ufshpb_lu *hpb;
+>> > +     struct victim_select_info *lru_info;
+>> > +     struct ufshpb_region *rgn;
+>> > +     unsigned long flags;
+>> > +
+>> > +     hpb = container_of(work, struct ufshpb_lu, ufshpb_lun_reset_work);
+>> > +
+>> > +     lru_info = &hpb->lru_info;
+>> > +
+>> > +     spin_lock_irqsave(&hpb->rgn_state_lock, flags);
+>> > +
+>> > +     list_for_each_entry(rgn, &lru_info->lh_lru_rgn, list_lru_rgn)
+>> > +             set_bit(RGN_FLAG_UPDATE, &rgn->rgn_flags);
+>> > +
+>> > +     spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
+>> > +}
+>> > +
+>> >  static void ufshpb_normalization_work_handler(struct work_struct
+>> > *work)
+>> >  {
+>> >       struct ufshpb_lu *hpb;
+>> > @@ -1798,6 +1832,8 @@ static int ufshpb_alloc_region_tbl(struct
+>> > ufs_hba *hba, struct ufshpb_lu *hpb)
+>> >               } else {
+>> >                       rgn->rgn_state = HPB_RGN_INACTIVE;
+>> >               }
+>> > +
+>> > +             rgn->rgn_flags = 0;
+>> >       }
+>> >
+>> >       return 0;
+>> > @@ -2012,9 +2048,12 @@ static int ufshpb_lu_hpb_init(struct ufs_hba
+>> > *hba, struct ufshpb_lu *hpb)
+>> >       INIT_LIST_HEAD(&hpb->list_hpb_lu);
+>> >
+>> >       INIT_WORK(&hpb->map_work, ufshpb_map_work_handler);
+>> > -     if (hpb->is_hcm)
+>> > +     if (hpb->is_hcm) {
+>> >               INIT_WORK(&hpb->ufshpb_normalization_work,
+>> >                         ufshpb_normalization_work_handler);
+>> > +             INIT_WORK(&hpb->ufshpb_lun_reset_work,
+>> > +                       ufshpb_reset_work_handler);
+>> > +     }
+>> >
+>> >       hpb->map_req_cache = kmem_cache_create("ufshpb_req_cache",
+>> >                         sizeof(struct ufshpb_req), 0, 0, NULL);
+>> > @@ -2114,8 +2153,10 @@ static void ufshpb_discard_rsp_lists(struct
+>> > ufshpb_lu *hpb)
+>> >
+>> >  static void ufshpb_cancel_jobs(struct ufshpb_lu *hpb)
+>> >  {
+>> > -     if (hpb->is_hcm)
+>> > +     if (hpb->is_hcm) {
+>> > +             cancel_work_sync(&hpb->ufshpb_lun_reset_work);
+>> >               cancel_work_sync(&hpb->ufshpb_normalization_work);
+>> > +     }
+>> >       cancel_work_sync(&hpb->map_work);
+>> >  }
+>> >
+>> > diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
+>> > index 84598a317897..37c1b0ea0c0a 100644
+>> > --- a/drivers/scsi/ufs/ufshpb.h
+>> > +++ b/drivers/scsi/ufs/ufshpb.h
+>> > @@ -121,6 +121,7 @@ struct ufshpb_region {
+>> >       struct list_head list_lru_rgn;
+>> >       unsigned long rgn_flags;
+>> >  #define RGN_FLAG_DIRTY 0
+>> > +#define RGN_FLAG_UPDATE 1
+>> >
+>> >       /* region reads - for host mode */
+>> >       spinlock_t rgn_lock;
+>> > @@ -217,6 +218,7 @@ struct ufshpb_lu {
+>> >       /* for selecting victim */
+>> >       struct victim_select_info lru_info;
+>> >       struct work_struct ufshpb_normalization_work;
+>> > +     struct work_struct ufshpb_lun_reset_work;
+>> >
+>> >       /* pinned region information */
+>> >       u32 lu_pinned_start;
