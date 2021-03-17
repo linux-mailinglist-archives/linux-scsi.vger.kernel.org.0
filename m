@@ -2,143 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D50233EC2E
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F3933EC51
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbhCQJFx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S229923AbhCQJL5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbhCQJF1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:05:27 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B454C06174A
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:05:16 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id 61so968690wrm.12
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:05:16 -0700 (PDT)
+        with ESMTP id S229854AbhCQJLk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:11:40 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5913C06175F
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:29 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x13so998051wrs.9
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=OcOkwCkyvLuke/iNw2LLAogSWUiyJtcxO/hC/X9eTec=;
-        b=YYc0KLEbBxgH+ZUG7LiDYEtZcpBX4RqAPYmaegxRr+9NyuAkGQTaj9vShjjBp1kz4G
-         xRjTbxsmGrK2E+8mvtXdJ/1lYYdR/lE/s5YzOBGfvtH/p2nb3GgXN9avsy/spkxpqP8l
-         q1K4fnyloW5Al7EXVqZXBQKueUdoEM1Wl+9IUQMyiCCozmQjeXudZHHFEJZ1/3dVvyXi
-         ZBSGjq8Wwq2ZoRTgheOFZV8Hjw9BT7LMD4gr6AlaCmCCqxHkHgWBKmnee6Wr0dHG31wD
-         NYvtj0e9xx5DXQt+3YuFkZlKKNHMvZZSECEc+Ng5H8w55K2qTxzKie+GWL63tSdTMVfN
-         mnhg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I82Btd+WVHIiPCtw03KBCwnnKsQgGGYmx7xND9MdwYA=;
+        b=E9L3JiUARuk60dnHpdoLup8xflMxXQLLQdzgkIFwAmFHyHDWahFyYI4qSAhLEH/KYR
+         haUWnCDT5Y4vnZCGMsbBGveaakPnwqS3uVB9yDMe4Kb5o5Km4+RWTzKaniq0WwfTa2P8
+         fZ51IJjnUQVA/GLsIElaoTQauOBK6X1eAVivrvAbZNXOW6kSRbM0DdHNPzUKLt2JF2El
+         FXcVoGEETVmIaBi1jccm4zGy3HPIPYSNLbQWVX1DPChjKg9xVO/trDOXB+Y9vbe49Pta
+         IcqSMNktuQmijCgsjOgq1hTQXULQgXd1i1IhmjzFwYMFww5ErCb6z51nQAMV431Virg+
+         lRxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=OcOkwCkyvLuke/iNw2LLAogSWUiyJtcxO/hC/X9eTec=;
-        b=JuNWphdGBbo0T4/JpnTryUVdnYN1sSy+d1GiI8L0wRtSGR8KT/OEEEdU6riQQsjIZN
-         UpNooosSo8vgC/jUfGunIO+B5i9s4x1n9IVt0+1ru5NUspfUVyHeSQETqYhSnTmdhc2u
-         OiabqhrpLyFuroA4CRV+iP6qbVuCshRvqOaz30CWsfeS2/CZcr30VweaId3R4k33ZjgC
-         nBCwbLAJ/3MxOUWnWhpAOpI5wA/1pvcu3z/t80iS7eoQ6TV78Bw6e9Vdzb5F7J+/HDuj
-         WCvOil05dwN92C9MUdMRtBESlt1X2Oyy21heAXAsMOvBe4REplLmwbY5b9Jc2FHKSmHe
-         zCbg==
-X-Gm-Message-State: AOAM532VFKRCPR45FZn29WYozlCgCUFDNsequlT+UV9vGzNmY+qNmXxF
-        dw/ld8Ld/XaSJXcypeNLgT4QKA==
-X-Google-Smtp-Source: ABdhPJxlU7tk/HVjonZcyAbzBtH+m2MESpX+2byaucGFATA64RJfU7n4jVMSy1FWKxWcitvmtWV8KA==
-X-Received: by 2002:adf:f3c2:: with SMTP id g2mr3331553wrp.300.1615971915310;
-        Wed, 17 Mar 2021 02:05:15 -0700 (PDT)
-Received: from dell ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id o7sm24710724wrs.16.2021.03.17.02.05.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I82Btd+WVHIiPCtw03KBCwnnKsQgGGYmx7xND9MdwYA=;
+        b=jvGVxiaBwxB8tD8k6XutsXSZueVMzXR+g++xfP0RL3kn+5rrjOIYsu5BwVbjYbQ3C/
+         zRyE/MbjFvdV+I/BT7LsIRlmAVbeMjLlE31j2V04xWZUqjyFLWU5pRe2kgzzKC1y/q6t
+         Fe6Pgg1XjSa+Rw5BlUYedVxEDPsPrlVBDnjRazrcs0efw4fSvMgJEvsgswfbK8RA9EoU
+         gawwf4QnwR/c42eKKMEfAlXR3zckn39Vr/BL4l4ETAxeGEomHyOxqCtMQY7r1H7yvGwa
+         LE95WWjoXp+XSEb3ka4386RKowFKUWTX5tq+mX1UsZyCCFf8AtkAuUeTRwg6eyWGeoYh
+         moog==
+X-Gm-Message-State: AOAM530OBz2CvzozepkWvAInzGty++JUVuuyxTSfim2AtF9on+jMBcHw
+        Nsp82nnoHbWxcbJpYZJQWYYpvw==
+X-Google-Smtp-Source: ABdhPJy7uZ6IRh01G4V7CU7eVy6v4zESEGtViXUZMTass0PqzEtjjb9v+wpS+58fer4PEC+gBMu5oA==
+X-Received: by 2002:a5d:5105:: with SMTP id s5mr3472218wrt.140.1615972288457;
+        Wed, 17 Mar 2021 02:11:28 -0700 (PDT)
+Received: from dell.default ([91.110.221.194])
+        by smtp.gmail.com with ESMTPSA id s83sm1709279wms.16.2021.03.17.02.11.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:05:14 -0700 (PDT)
-Date:   Wed, 17 Mar 2021 09:05:12 +0000
+        Wed, 17 Mar 2021 02:11:28 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
-To:     linux-kernel@vger.kernel.org, Adam Radford <aradford@gmail.com>,
-        Alan Cox <alan@lxorguk.ukuu.org.uk>,
-        Andre Hedrick <andre@suse.com>,
-        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
         Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
-        Bas Vermeulen <bvermeul@blackstar.xs4all.nl>,
-        Bradley Grove <linuxdrivers@attotech.com>,
-        Brian Macy <bmacy@sunshinecomputing.com>,
-        c by <James.Bottomley@steeleye.com>,
-        Christoph Hellwig <hch@lst.de>,
-        David Chaw <david_chaw@adaptec.com>,
-        de Melo <acme@conectiva.com.br>,
-        Doug Ledford <dledford@redhat.com>,
+        c by <James.Bottomley@SteelEye.com>,
         GOTO Masanori <gotom@debian.or.jp>, gotom@debian.org,
-        Hannes Reinecke <hare@kernel.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Joel Jacobson <linux@3ware.com>,
         Khalid Aziz <khalid@gonehiking.org>,
         "Leonard N. Zubkoff" <lnz@dandelion.com>,
-        Linux GmbH <hare@suse.com>, linux-scsi@vger.kernel.org,
-        Luben Tuikov <luben_tuikov@adaptec.com>,
+        linux-scsi@vger.kernel.org,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@avagotech.com,
-        MPT-FusionLinux.pdl@broadcom.com,
         Richard Hirst <richard@sleepie.demon.co.uk>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
         YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
-Subject: Re: [PATCH 00/18] [Set 3] Rid W=1 warnings in SCSI
-Message-ID: <20210317090512.GI701493@dell>
-References: <20210317085701.2891231-1-lee.jones@linaro.org>
+Subject: [PATCH 0/8] [Set 3 v2] Rid W=1 warnings in SCSI
+Date:   Wed, 17 Mar 2021 09:11:17 +0000
+Message-Id: <20210317091125.2910058-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210317085701.2891231-1-lee.jones@linaro.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 17 Mar 2021, Lee Jones wrote:
+This set contains functional changes.
 
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
-> 
-> This set contains functional changes.
-> 
-> This set is part of a larger effort attempting to clean-up W=1
-> kernel builds, which are currently overwhelmingly riddled with
-> niggly little warnings.
-> 
-> Lee Jones (18):
->   scsi: aic94xx: aic94xx_dump: Remove code that has been unused for at
->     least 13 years
->   scsi: mpt3sas: mpt3sas_scs: Move a little data from the stack onto the
->     heap
->   scsi: bfa: bfa_fcs_lport: Move a large struct from the stack onto the
->     heap
->   scsi: esas2r: esas2r_log: Supply __printf(x, y) formatting for
->     esas2r_log_master()
->   scsi: BusLogic: Supply __printf(x, y) formatting for blogic_msg()
->   scsi: nsp32: Supply __printf(x, y) formatting for nsp32_message()
->   scsi: initio: Remove unused variable 'prev'
->   scsi: a100u2w: Remove unused variable 'bios_phys'
->   scsi: myrs: Remove a couple of unused 'status' variables
->   scsi: 3w-xxxx: Remove 2 unused variables 'response_que_value' and
->     'tw_dev'
->   scsi: 3w-9xxx: Remove a few set but unused variables
->   scsi: 3w-sas: Remove unused variables 'sglist' and 'tw_dev'
->   scsi: nsp32: Remove or exclude unused variables
->   scsi: FlashPoint: Remove unused variable 'TID' from
->     'FlashPoint_AbortCCB()'
->   scsi: sim710: Remove unused variable 'err' from sim710_init()
->   scsi: isci: port: Make local function 'port_state_name()' static
->   scsi: isci: remote_device: Make local function
->     isci_remote_device_wait_for_resume_from_abort() static
->   scsi: nsp32: Correct expected types in debug print formatting
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-Oh dear! Looks like I also took functional patches from sets that
-have already been sent out.
+Lee Jones (8):
+  scsi: BusLogic: Supply __printf(x, y) formatting for blogic_msg()
+  scsi: nsp32: Supply __printf(x, y) formatting for nsp32_message()
+  scsi: nsp32: Remove or exclude unused variables
+  scsi: FlashPoint: Remove unused variable 'TID' from
+    'FlashPoint_AbortCCB()'
+  scsi: sim710: Remove unused variable 'err' from sim710_init()
+  scsi: isci: remote_device: Make local function
+    isci_remote_device_wait_for_resume_from_abort() static
+  scsi: isci: port: Make local function 'port_state_name()' static
+  scsi: nsp32: Correct expected types in debug print formatting
 
-Please silently disregard this set. Sorry for the noise.
+ drivers/scsi/BusLogic.c           |  2 +-
+ drivers/scsi/FlashPoint.c         |  4 ----
+ drivers/scsi/isci/port.c          |  2 +-
+ drivers/scsi/isci/remote_device.c |  2 +-
+ drivers/scsi/nsp32.c              | 31 +++++++++----------------------
+ drivers/scsi/sim710.c             | 14 ++++++--------
+ 6 files changed, 18 insertions(+), 37 deletions(-)
 
+Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+Cc: c by <James.Bottomley@SteelEye.com>
+Cc: GOTO Masanori <gotom@debian.or.jp>
+Cc: gotom@debian.org
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: Khalid Aziz <khalid@gonehiking.org>
+Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Richard Hirst <richard@sleepie.demon.co.uk>
+Cc: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.27.0
+
