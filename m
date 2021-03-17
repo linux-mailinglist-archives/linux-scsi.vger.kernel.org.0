@@ -2,276 +2,338 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D4E33EC63
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D528033EC61
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbhCQJNA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S229972AbhCQJMz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbhCQJMl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:12:41 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161FC06174A
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:40 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id e9so995525wrw.10
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:40 -0700 (PDT)
+        with ESMTP id S230166AbhCQJMm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:12:42 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8681C061763
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:41 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id v4so990637wrp.13
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ISKg/iwBQz7CPlp+U8011svc51lofKx9uSYbTL21B/U=;
-        b=qEkvvGwq4ou+j09IT2hRU/qvUjgSWSCOe45KQqgVsEthhPy9Sa3JKnnpMaJKLxbwke
-         JLLENYkkuWjOCKr2EpZh+HVJdlDZ0aHzbAGNBzDLhHgY12utiYihaBb2bJMbRzjk/ENi
-         uKt/bU0qe+GrSCUiT9Gqp2X3A4aGkSFxYrAoicGWu7ijzCzI3hm88mzExqtp7vPdemUM
-         BqJ6S2OcEeSFZ1vxEAetVqW8iigO20sW9vHAhwX97Z0vQY8bnJDn9F8O8CuCS9j45ITu
-         zzKoiL2XcgLmw6hOvUmHz0PTx2Xa07kKDj4PdMG5SA1HSVDW6exvYScTKJgwWLvY1i9H
-         0Aiw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=789UHYUvVMzCBbNg3UASk3n+nFZmY80q4S9W+NeV8Bg=;
+        b=WFW0sq+ziqOsjD8Iegw5o3qclzUow5ppaB10QpJpjUdB1ZS/1pwY3QhWX4IKKISPH0
+         VADtvkNA40g7exp5m9DEu0cx6qSrq/lVF4Naq+wafPw0wAUrm/nH44pAm19tV5lwe2K1
+         9BtL9UMOSf8KQyukj8TeTg4wPddjnjaN6+CjYF806OnRKJ0fuaVOcrAIFXsXWv8FCxae
+         fWC17C/eg2eimNcSG7JV4Bybk3/emq7L4Dli3Yai4zhrjbFkiwQwAhukjLjixHxn5AU6
+         Z/h0tzwLyb3Xs0hFnvsOosHdTJ8LSZFltvClu4n6TPgvx+ByJMpfDFVykWq8/7vLSomr
+         /nEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ISKg/iwBQz7CPlp+U8011svc51lofKx9uSYbTL21B/U=;
-        b=begcZFZplSVzZ2FTjy0oh0T3CCQAA2bHLb+KOKWDFKr6p62jll0cWW3MiSIDEr8KOX
-         ujf3vzj8jtnXRWDk7yNuMRAyrKyPBDFbScUZmbhbzI8cKnNtGpx7jol90Aa+1ma06n5z
-         Mve5jQPKxb5FDB1CQKecMuxkLhnjJ4q+Y8G4LI1/nhHlMtixyrgRAjksr0bNdKTQHLvz
-         xXg4RvVE1UH7dwxay6oolDzgdxwc1MTCGpd8t7hxe2wn1rC8LEx48p19N4xxSzxr9GXq
-         DoAG1VNoYkXIBsroA+S7zKYM4IFdy3fK/KcORqEfpZUgOSGAcnh+eZEYOxyFd+zvFX7G
-         D/Pw==
-X-Gm-Message-State: AOAM530uzJHCmLMWNLmdE36CHBkeoE5kCbTEPCWdYC7jkCNzWQN1QCCs
-        TXYM6zN46tRT6AGI6Ix/gBNbGhxidsYfpg==
-X-Google-Smtp-Source: ABdhPJx4jE1xGizjBkwwSiVeurLS8NDV4il8pjxUOd25LpFWTAD2G/HRR5q/KCo4sMGl54BLhnhPXw==
-X-Received: by 2002:adf:ecca:: with SMTP id s10mr3193723wro.324.1615972359524;
-        Wed, 17 Mar 2021 02:12:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=789UHYUvVMzCBbNg3UASk3n+nFZmY80q4S9W+NeV8Bg=;
+        b=uFX6Q1Y/b/Ev1Dr9IyXFVtff5l3WE99C6R1ui75hVyRejMiq1whZfZ5rnddCdP7JA5
+         q2+/tEmQcuFB2uVvz821DBE/KaMrnCBjp7LcnO05Dz8IH860+FgrEC1xzuPyv9ZTI2um
+         Cgpb0E12B86zNOoHsv2XIQkck7H06OXulxEJU+wMZTgn1rYSwPtRT7A0M4w+GiZCe0N3
+         bKsyE1Q0S1a+K7F2zKsaLvAA6dNWfvPK0UDqYfU6XKE79YrHAvzoTsYy12Dc8ZNhskl6
+         CIlLrza8GHrzKqi7KKn2YDX6bYmrm7YX7d807sk3ZvpzpSVeWbV/VWbxXq55MEz8X5o3
+         Vwag==
+X-Gm-Message-State: AOAM533tMdo9via6ax/UfxF6lVX9A8NJb2+O74uD7r8qLojZmqGi6Rug
+        DR3CbJ9E/yZnKt2zby04eh4IEQ==
+X-Google-Smtp-Source: ABdhPJwc0anQ2uWCMoYF1ZmFduPTo3+KlLFKm/knVP5icK/xLxR8ksWkzZhsaVCDyON6q1qxwDx7xg==
+X-Received: by 2002:a5d:6412:: with SMTP id z18mr3343778wru.214.1615972360513;
+        Wed, 17 Mar 2021 02:12:40 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.12.37
+        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.12.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:12:38 -0700 (PDT)
+        Wed, 17 Mar 2021 02:12:40 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Alan Cox <alan@lxorguk.ukuu.org.uk>,
-        Alex Davis <letmein@erols.com>, Ali Akcaagac <aliakc@web.de>,
-        Anil Ravindranath <anil_ravindranath@pmc-sierra.com>,
-        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
-        Badari Pulavarty <pbadari@us.ibm.com>,
-        Bas Vermeulen <bvermeul@blackstar.xs4all.nl>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        Brian King <brking@us.ibm.com>,
-        Brian Macy <bmacy@sunshinecomputing.com>,
-        "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "C.L. Huang" <ching@tekram.com.tw>,
-        Colin DeVilbiss <devilbis@us.ibm.com>,
-        Dave Boutcher <boutcher@us.ibm.com>,
-        Dave Boutcher <sleddog@us.ibm.com>,
-        David Chaw <david_chaw@adaptec.com>, dc395x@twibble.org,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Drew Eckhardt <drew@colorado.edu>,
-        Erich Chen <erich@tekram.com.tw>,
-        Eric Youngdale <eric@andante.org>,
-        FUJITA Tomonori <tomof@acm.org>,
-        Hannes Reinecke <hare@kernel.org>,
-        Hannes Reinecke <hare@suse.de>,
+Cc:     linux-kernel@vger.kernel.org, Hannes Reinecke <hare@kernel.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        Jirka Hanika <geo@ff.cuni.cz>,
-        Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>,
-        Kurt Garloff <garloff@suse.de>,
-        Le Moal <damien.lemoal@hgst.com>,
-        "Leonard N. Zubkoff" <lnz@dandelion.com>,
-        Linda Xie <lxie@us.ibm.com>, linux-drivers@broadcom.com,
-        Linux GmbH <hare@suse.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-scsi@vger.kernel.org,
-        Luben Tuikov <luben_tuikov@adaptec.com>,
-        "Manoj N. Kumar" <manoj@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Marvell <jyli@marvell.com>,
-        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
-        Michael Cyr <mikecyr@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        MPT-FusionLinux.pdl@avagotech.com,
-        MPT-FusionLinux.pdl@broadcom.com,
-        "Nicholas A. Bellinger" <nab@kernel.org>,
-        Oliver Neukum <oliver@neukum.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Richard Gooch <rgooch@atnf.csiro.au>,
-        Santiago Leon <santil@us.ibm.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Satish Kharat <satishkh@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        Shaun Tancheff <shaun.tancheff@seagate.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        target-devel@vger.kernel.org, Torben Mathiasen <tmm@image.dk>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Uma Krishnan <ukrishn@linux.ibm.com>, willy@debian.org
-Subject: [PATCH 00/36] [Set 4] Rid W=1 warnings in SCSI
-Date:   Wed, 17 Mar 2021 09:11:54 +0000
-Message-Id: <20210317091230.2912389-1-lee.jones@linaro.org>
+        Linux GmbH <hare@suse.com>,
+        "Leonard N. Zubkoff" <lnz@dandelion.com>,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 01/36] scsi: myrb: Demote non-conformant kernel-doc headers and fix others
+Date:   Wed, 17 Mar 2021 09:11:55 +0000
+Message-Id: <20210317091230.2912389-2-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210317091230.2912389-1-lee.jones@linaro.org>
+References: <20210317091230.2912389-1-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+Fixes the following W=1 kernel build warning(s):
 
-Lee Jones (36):
-  scsi: myrb: Demote non-conformant kernel-doc headers and fix others
-  scsi: ipr: Fix incorrect function names in their headers
-  scsi: mvumi: Fix formatting and doc-rot issues
-  scsi: sd_zbc: Place function name into header
-  scsi: pmcraid: Fix a whole host of kernel-doc issues
-  scsi: sd: Fix function name in header
-  scsi: aic94xx: aic94xx_dump: Correct misspelling of function
-    asd_dump_seq_state()
-  scsi: be2iscsi: be_main: Ensure function follows directly after its
-    header
-  scsi: dc395x: Fix some function param descriptions
-  scsi: initio: Fix a few kernel-doc misdemeanours
-  scsi: a100u2w: Fix some misnaming and formatting issues
-  scsi: myrs: Add missing ':' to make the kernel-doc checker happy
-  scsi: pmcraid: Correct function name pmcraid_show_adapter_id() in
-    header
-  scsi: mpt3sas: mpt3sas_scs: Fix a few kernel-doc issues
-  scsi: be2iscsi: be_main: Demote incomplete/non-conformant kernel-doc
-    header
-  scsi: isci: phy: Fix a few different kernel-doc related issues
-  scsi: fnic: fnic_scsi: Demote non-conformant kernel-doc headers
-  scsi: fnic: fnic_fcs: Kernel-doc headers must contain the function
-    name
-  scsi: isci: phy: Provide function name and demote non-conforming
-    header
-  scsi: isci: request: Fix a myriad of kernel-doc issues
-  scsi: isci: host: Fix bunch of kernel-doc related issues
-  scsi: isci: task: Demote non-conformant header and remove superfluous
-    param
-  scsi: isci: remote_node_table: Fix a bunch of kernel-doc misdemeanours
-  scsi: isci: remote_node_context: Fix one function header and demote a
-    couple more
-  scsi: isci: port_config: Fix a bunch of doc-rot and demote abuses
-  scsi: isci: remote_device: Fix a bunch of doc-rot issues
-  scsi: isci: request: Fix doc-rot issue relating to 'ireq' param
-  scsi: isci: port: Fix a bunch of kernel-doc issues
-  scsi: isci: remote_node_context: Demote kernel-doc abuse
-  scsi: isci: remote_node_table: Provide some missing params and remove
-    others
-  scsi: cxlflash: main: Fix a little do-rot
-  scsi: cxlflash: superpipe: Fix a few misnaming issues
-  scsi: ibmvscsi: Fix a bunch of kernel-doc related issues
-  scsi: ibmvscsi: ibmvfc: Fix a bunch of misdocumentation
-  scsi: ibmvscsi_tgt: ibmvscsi_tgt: Remove duplicate section 'NOTE'
-  scsi: cxlflash: vlun: Fix some misnaming related doc-rot
+ drivers/scsi/myrb.c:91: warning: Function parameter or member 'pdev' not described in 'myrb_create_mempools'
+ drivers/scsi/myrb.c:91: warning: Function parameter or member 'cb' not described in 'myrb_create_mempools'
+ drivers/scsi/myrb.c:141: warning: Function parameter or member 'cb' not described in 'myrb_destroy_mempools'
+ drivers/scsi/myrb.c:153: warning: Function parameter or member 'cmd_blk' not described in 'myrb_reset_cmd'
+ drivers/scsi/myrb.c:164: warning: Function parameter or member 'cb' not described in 'myrb_qcmd'
+ drivers/scsi/myrb.c:164: warning: Function parameter or member 'cmd_blk' not described in 'myrb_qcmd'
+ drivers/scsi/myrb.c:187: warning: Function parameter or member 'cb' not described in 'myrb_exec_cmd'
+ drivers/scsi/myrb.c:187: warning: Function parameter or member 'cmd_blk' not described in 'myrb_exec_cmd'
+ drivers/scsi/myrb.c:208: warning: Function parameter or member 'cb' not described in 'myrb_exec_type3'
+ drivers/scsi/myrb.c:208: warning: Function parameter or member 'op' not described in 'myrb_exec_type3'
+ drivers/scsi/myrb.c:208: warning: Function parameter or member 'addr' not described in 'myrb_exec_type3'
+ drivers/scsi/myrb.c:231: warning: Function parameter or member 'cb' not described in 'myrb_exec_type3D'
+ drivers/scsi/myrb.c:231: warning: Function parameter or member 'op' not described in 'myrb_exec_type3D'
+ drivers/scsi/myrb.c:231: warning: Function parameter or member 'sdev' not described in 'myrb_exec_type3D'
+ drivers/scsi/myrb.c:231: warning: Function parameter or member 'pdev_info' not described in 'myrb_exec_type3D'
+ drivers/scsi/myrb.c:341: warning: Function parameter or member 'cb' not described in 'myrb_get_errtable'
+ drivers/scsi/myrb.c:388: warning: Function parameter or member 'cb' not described in 'myrb_get_ldev_info'
+ drivers/scsi/myrb.c:440: warning: Function parameter or member 'cb' not described in 'myrb_get_rbld_progress'
+ drivers/scsi/myrb.c:440: warning: Function parameter or member 'rbld' not described in 'myrb_get_rbld_progress'
+ drivers/scsi/myrb.c:472: warning: Function parameter or member 'cb' not described in 'myrb_update_rbld_progress'
+ drivers/scsi/myrb.c:533: warning: Function parameter or member 'cb' not described in 'myrb_get_cc_progress'
+ drivers/scsi/myrb.c:580: warning: Function parameter or member 'cb' not described in 'myrb_bgi_control'
+ drivers/scsi/myrb.c:671: warning: Function parameter or member 'cb' not described in 'myrb_hba_enquiry'
+ drivers/scsi/myrb.c:782: warning: Function parameter or member 'cb' not described in 'myrb_set_pdev_state'
+ drivers/scsi/myrb.c:782: warning: Function parameter or member 'sdev' not described in 'myrb_set_pdev_state'
+ drivers/scsi/myrb.c:782: warning: Function parameter or member 'state' not described in 'myrb_set_pdev_state'
+ drivers/scsi/myrb.c:808: warning: Function parameter or member 'cb' not described in 'myrb_enable_mmio'
+ drivers/scsi/myrb.c:808: warning: Function parameter or member 'mmio_init_fn' not described in 'myrb_enable_mmio'
+ drivers/scsi/myrb.c:913: warning: Function parameter or member 'cb' not described in 'myrb_get_hba_config'
+ drivers/scsi/myrb.c:1200: warning: Function parameter or member 'cb' not described in 'myrb_unmap'
+ drivers/scsi/myrb.c:1236: warning: Function parameter or member 'cb' not described in 'myrb_cleanup'
+ drivers/scsi/myrb.c:2249: warning: Function parameter or member 'dev' not described in 'myrb_is_raid'
+ drivers/scsi/myrb.c:2260: warning: Function parameter or member 'dev' not described in 'myrb_get_resync'
+ drivers/scsi/myrb.c:2287: warning: Function parameter or member 'dev' not described in 'myrb_get_state'
+ drivers/scsi/myrb.c:2493: warning: Function parameter or member 'cb' not described in 'myrb_err_status'
+ drivers/scsi/myrb.c:2493: warning: Function parameter or member 'error' not described in 'myrb_err_status'
+ drivers/scsi/myrb.c:2493: warning: Function parameter or member 'parm0' not described in 'myrb_err_status'
+ drivers/scsi/myrb.c:2493: warning: Function parameter or member 'parm1' not described in 'myrb_err_status'
 
- drivers/scsi/a100u2w.c                   |  8 +--
- drivers/scsi/aic94xx/aic94xx_dump.c      |  2 +-
- drivers/scsi/be2iscsi/be_main.c          |  5 +-
- drivers/scsi/cxlflash/main.c             |  8 +--
- drivers/scsi/cxlflash/superpipe.c        |  6 +-
- drivers/scsi/cxlflash/vlun.c             |  8 +--
- drivers/scsi/dc395x.c                    |  3 +-
- drivers/scsi/fnic/fnic_fcs.c             |  2 +-
- drivers/scsi/fnic/fnic_scsi.c            |  6 +-
- drivers/scsi/ibmvscsi/ibmvfc.c           | 29 ++++++----
- drivers/scsi/ibmvscsi/ibmvscsi.c         | 70 ++++++++++++------------
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c |  8 +--
- drivers/scsi/initio.c                    | 13 ++---
- drivers/scsi/ipr.c                       |  8 +--
- drivers/scsi/isci/host.c                 | 37 ++++++-------
- drivers/scsi/isci/phy.c                  | 34 ++++++------
- drivers/scsi/isci/port.c                 | 58 ++++++++++----------
- drivers/scsi/isci/port_config.c          | 37 +++++++------
- drivers/scsi/isci/remote_device.c        | 31 ++++++-----
- drivers/scsi/isci/remote_node_context.c  | 13 +----
- drivers/scsi/isci/remote_node_table.c    | 64 +++++++++++-----------
- drivers/scsi/isci/request.c              | 60 ++++++++++----------
- drivers/scsi/isci/task.c                 |  3 +-
- drivers/scsi/mpt3sas/mpt3sas_scsih.c     | 18 +++---
- drivers/scsi/mvumi.c                     |  5 +-
- drivers/scsi/myrb.c                      | 47 ++++++++--------
- drivers/scsi/myrs.c                      |  6 +-
- drivers/scsi/pmcraid.c                   | 70 ++++++++++++------------
- drivers/scsi/sd.c                        |  2 +-
- drivers/scsi/sd_zbc.c                    |  2 +-
- 30 files changed, 329 insertions(+), 334 deletions(-)
-
-Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>
-Cc: Alex Davis <letmein@erols.com>
-Cc: Ali Akcaagac <aliakc@web.de>
-Cc: Anil Ravindranath <anil_ravindranath@pmc-sierra.com>
-Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
-Cc: Badari Pulavarty <pbadari@us.ibm.com>
-Cc: Bas Vermeulen <bvermeul@blackstar.xs4all.nl>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Brian King <brking@linux.vnet.ibm.com>
-Cc: Brian King <brking@us.ibm.com>
-Cc: Brian Macy <bmacy@sunshinecomputing.com>
-Cc: "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: "C.L. Huang" <ching@tekram.com.tw>
-Cc: Colin DeVilbiss <devilbis@us.ibm.com>
-Cc: Dave Boutcher <boutcher@us.ibm.com>
-Cc: Dave Boutcher <sleddog@us.ibm.com>
-Cc: David Chaw <david_chaw@adaptec.com>
-Cc: dc395x@twibble.org
-Cc: Douglas Gilbert <dgilbert@interlog.com>
-Cc: Doug Ledford <dledford@redhat.com>
-Cc: Drew Eckhardt <drew@colorado.edu>
-Cc: Erich Chen <erich@tekram.com.tw>
-Cc: Eric Youngdale <eric@andante.org>
-Cc: FUJITA Tomonori <tomof@acm.org>
 Cc: Hannes Reinecke <hare@kernel.org>
-Cc: Hannes Reinecke <hare@suse.de>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: Jamie Lenehan <lenehan@twibble.org>
-Cc: Jirka Hanika <geo@ff.cuni.cz>
-Cc: Jitendra Bhivare <jitendra.bhivare@broadcom.com>
-Cc: Karan Tilak Kumar <kartilak@cisco.com>
-Cc: Ketan Mukadam <ketan.mukadam@broadcom.com>
-Cc: Kurt Garloff <garloff@suse.de>
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: Le Moal <damien.lemoal@hgst.com>
-Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
-Cc: Linda Xie <lxie@us.ibm.com>
-Cc: linux-drivers@broadcom.com
-Cc: Linux GmbH <hare@suse.com>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-scsi@vger.kernel.org
-Cc: Luben Tuikov <luben_tuikov@adaptec.com>
-Cc: "Manoj N. Kumar" <manoj@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Marvell <jyli@marvell.com>
-Cc: "Matthew R. Ochs" <mrochs@linux.ibm.com>
-Cc: Michael Cyr <mikecyr@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: MPT-FusionLinux.pdl@avagotech.com
-Cc: MPT-FusionLinux.pdl@broadcom.com
-Cc: "Nicholas A. Bellinger" <nab@kernel.org>
-Cc: Oliver Neukum <oliver@neukum.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Richard Gooch <rgooch@atnf.csiro.au>
-Cc: Santiago Leon <santil@us.ibm.com>
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Satish Kharat <satishkh@cisco.com>
-Cc: Sesidhar Baddela <sebaddel@cisco.com>
-Cc: Shaun Tancheff <shaun.tancheff@seagate.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Subbu Seetharaman <subbu.seetharaman@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Cc: target-devel@vger.kernel.org
-Cc: Torben Mathiasen <tmm@image.dk>
-Cc: Tyrel Datwyler <tyreld@linux.ibm.com>
-Cc: Uma Krishnan <ukrishn@linux.ibm.com>
-Cc: willy@debian.org
+Cc: Linux GmbH <hare@suse.com>
+Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
+Cc: linux-scsi@vger.kernel.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/scsi/myrb.c | 47 ++++++++++++++++++++++-----------------------
+ 1 file changed, 23 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
+index 3d8e91c07dc77..d469a48897774 100644
+--- a/drivers/scsi/myrb.c
++++ b/drivers/scsi/myrb.c
+@@ -82,7 +82,7 @@ static const char *myrb_raidlevel_name(enum myrb_raidlevel level)
+ 	return NULL;
+ }
+ 
+-/**
++/*
+  * myrb_create_mempools - allocates auxiliary data structures
+  *
+  * Return: true on success, false otherwise.
+@@ -134,7 +134,7 @@ static bool myrb_create_mempools(struct pci_dev *pdev, struct myrb_hba *cb)
+ 	return true;
+ }
+ 
+-/**
++/*
+  * myrb_destroy_mempools - tears down the memory pools for the controller
+  */
+ static void myrb_destroy_mempools(struct myrb_hba *cb)
+@@ -146,7 +146,7 @@ static void myrb_destroy_mempools(struct myrb_hba *cb)
+ 	dma_pool_destroy(cb->dcdb_pool);
+ }
+ 
+-/**
++/*
+  * myrb_reset_cmd - reset command block
+  */
+ static inline void myrb_reset_cmd(struct myrb_cmdblk *cmd_blk)
+@@ -157,7 +157,7 @@ static inline void myrb_reset_cmd(struct myrb_cmdblk *cmd_blk)
+ 	cmd_blk->status = 0;
+ }
+ 
+-/**
++/*
+  * myrb_qcmd - queues command block for execution
+  */
+ static void myrb_qcmd(struct myrb_hba *cb, struct myrb_cmdblk *cmd_blk)
+@@ -177,7 +177,7 @@ static void myrb_qcmd(struct myrb_hba *cb, struct myrb_cmdblk *cmd_blk)
+ 	cb->next_cmd_mbox = next_mbox;
+ }
+ 
+-/**
++/*
+  * myrb_exec_cmd - executes command block and waits for completion.
+  *
+  * Return: command status
+@@ -198,7 +198,7 @@ static unsigned short myrb_exec_cmd(struct myrb_hba *cb,
+ 	return cmd_blk->status;
+ }
+ 
+-/**
++/*
+  * myrb_exec_type3 - executes a type 3 command and waits for completion.
+  *
+  * Return: command status
+@@ -220,7 +220,7 @@ static unsigned short myrb_exec_type3(struct myrb_hba *cb,
+ 	return status;
+ }
+ 
+-/**
++/*
+  * myrb_exec_type3D - executes a type 3D command and waits for completion.
+  *
+  * Return: command status
+@@ -332,7 +332,7 @@ static void myrb_get_event(struct myrb_hba *cb, unsigned int event)
+ 			  ev_buf, ev_addr);
+ }
+ 
+-/**
++/*
+  * myrb_get_errtable - retrieves the error table from the controller
+  *
+  * Executes a type 3 command and logs the error table from the controller.
+@@ -377,7 +377,7 @@ static void myrb_get_errtable(struct myrb_hba *cb)
+ 	}
+ }
+ 
+-/**
++/*
+  * myrb_get_ldev_info - retrieves the logical device table from the controller
+  *
+  * Executes a type 3 command and updates the logical device table.
+@@ -427,7 +427,7 @@ static unsigned short myrb_get_ldev_info(struct myrb_hba *cb)
+ 	return status;
+ }
+ 
+-/**
++/*
+  * myrb_get_rbld_progress - get rebuild progress information
+  *
+  * Executes a type 3 command and returns the rebuild progress
+@@ -462,11 +462,10 @@ static unsigned short myrb_get_rbld_progress(struct myrb_hba *cb,
+ 	return status;
+ }
+ 
+-/**
++/*
+  * myrb_update_rbld_progress - updates the rebuild status
+  *
+  * Updates the rebuild status for the attached logical devices.
+- *
+  */
+ static void myrb_update_rbld_progress(struct myrb_hba *cb)
+ {
+@@ -523,7 +522,7 @@ static void myrb_update_rbld_progress(struct myrb_hba *cb)
+ 	cb->last_rbld_status = status;
+ }
+ 
+-/**
++/*
+  * myrb_get_cc_progress - retrieve the rebuild status
+  *
+  * Execute a type 3 Command and fetch the rebuild / consistency check
+@@ -571,7 +570,7 @@ static void myrb_get_cc_progress(struct myrb_hba *cb)
+ 			  rbld_buf, rbld_addr);
+ }
+ 
+-/**
++/*
+  * myrb_bgi_control - updates background initialisation status
+  *
+  * Executes a type 3B command and updates the background initialisation status
+@@ -660,7 +659,7 @@ static void myrb_bgi_control(struct myrb_hba *cb)
+ 			  bgi, bgi_addr);
+ }
+ 
+-/**
++/*
+  * myrb_hba_enquiry - updates the controller status
+  *
+  * Executes a DAC_V1_Enquiry command and updates the controller status.
+@@ -772,7 +771,7 @@ static unsigned short myrb_hba_enquiry(struct myrb_hba *cb)
+ 	return MYRB_STATUS_SUCCESS;
+ }
+ 
+-/**
++/*
+  * myrb_set_pdev_state - sets the device state for a physical device
+  *
+  * Return: command status
+@@ -796,7 +795,7 @@ static unsigned short myrb_set_pdev_state(struct myrb_hba *cb,
+ 	return status;
+ }
+ 
+-/**
++/*
+  * myrb_enable_mmio - enables the Memory Mailbox Interface
+  *
+  * PD and P controller types have no memory mailbox, but still need the
+@@ -901,7 +900,7 @@ static bool myrb_enable_mmio(struct myrb_hba *cb, mbox_mmio_init_t mmio_init_fn)
+ 	return true;
+ }
+ 
+-/**
++/*
+  * myrb_get_hba_config - reads the configuration information
+  *
+  * Reads the configuration information from the controller and
+@@ -1193,7 +1192,7 @@ static int myrb_get_hba_config(struct myrb_hba *cb)
+ 	return ret;
+ }
+ 
+-/**
++/*
+  * myrb_unmap - unmaps controller structures
+  */
+ static void myrb_unmap(struct myrb_hba *cb)
+@@ -1229,7 +1228,7 @@ static void myrb_unmap(struct myrb_hba *cb)
+ 	}
+ }
+ 
+-/**
++/*
+  * myrb_cleanup - cleanup controller structures
+  */
+ static void myrb_cleanup(struct myrb_hba *cb)
+@@ -2243,7 +2242,7 @@ static struct scsi_host_template myrb_template = {
+ 
+ /**
+  * myrb_is_raid - return boolean indicating device is raid volume
+- * @dev the device struct object
++ * @dev: the device struct object
+  */
+ static int myrb_is_raid(struct device *dev)
+ {
+@@ -2254,7 +2253,7 @@ static int myrb_is_raid(struct device *dev)
+ 
+ /**
+  * myrb_get_resync - get raid volume resync percent complete
+- * @dev the device struct object
++ * @dev: the device struct object
+  */
+ static void myrb_get_resync(struct device *dev)
+ {
+@@ -2281,7 +2280,7 @@ static void myrb_get_resync(struct device *dev)
+ 
+ /**
+  * myrb_get_state - get raid volume status
+- * @dev the device struct object
++ * @dev: the device struct object
+  */
+ static void myrb_get_state(struct device *dev)
+ {
+@@ -2480,7 +2479,7 @@ static void myrb_monitor(struct work_struct *work)
+ 	queue_delayed_work(cb->work_q, &cb->monitor_work, interval);
+ }
+ 
+-/**
++/*
+  * myrb_err_status - reports controller BIOS messages
+  *
+  * Controller BIOS messages are passed through the Error Status Register
 -- 
 2.27.0
 
