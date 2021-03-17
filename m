@@ -2,63 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EC533EC98
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0933533EC9F
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbhCQJNu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S231225AbhCQJNx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbhCQJNN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:13:13 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEA1C061760
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:13 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id k8so1006096wrc.3
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:13 -0700 (PDT)
+        with ESMTP id S229914AbhCQJNZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:13:25 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C36BC061760
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:14 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id e18so1004541wrt.6
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qZ7whSvid6Pc3xtKuqRZT/9oZ2iuDHT7pBFCqGUvkpY=;
-        b=r1SRHSkYIwyEfqsq1wyBuRYYAgpRk5Sc8j6/XO7RQoR88xSQS+2pccnHAiXSUyUePC
-         k+2ERUT63Dg5OVo3KcFE04zGcdoui5LVqz7jJ0iV3u0SwENiQWc4QvTXyPj1gubsv2f2
-         XK+94NY3vk0d68kIBp1iLX8YgS0JWlbTKxgnI/eZmznFw6g58oDeIR32aEgP1rLrApLt
-         +khv26cStuAufRAjNlImMvBWXmOZEHLz3q4nFaShCJJDX0KTYC8dfCVpKLWJgUpNN4XC
-         4fqAnReU1aLl6jrN6Bfv1fynWtML/i2RJVjqv43lvl9ggNWDGCPA0x7SUKa+/lGQ/yO3
-         +mzA==
+        bh=RAN4ynbW/anRZapL8VFvkYH+oK0hgHEKhtHWyGXNsOA=;
+        b=FktGAXs/eoUNfYdWLU7tDWHTlujziL8THin6aXwC0mLXOx9l5PwsLY1kGyrloBn4Xr
+         VRFG1jCW4G3OzR02bgNRaCJ/ZeW4MXwjWnGRhZSScDJcASdxBsJkTngAnq2YZxT3llQ6
+         2/VYrDuob3EKFqnTCzF9hdTfinHqE1b9yI/v6dtgiPKFBRiwze9IsCrKnPUdI778dkih
+         R9alWxabkffHiAbQwu4Jy572SZ/5ckc3EhwkTaGL7YxRimuT3eatfB5ptGT42Lr7iaRz
+         dtPjQWlh0Aa1V5UasZH/k3uPMTBujtWS4ahRJJ5Iig9wKavld0BZExhRm/rXz1x5LckV
+         GIaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qZ7whSvid6Pc3xtKuqRZT/9oZ2iuDHT7pBFCqGUvkpY=;
-        b=UIx+iLbt+EGd5rtqXAD9zuj5y21qKVUagX03Edh04V6VJODsJsECzWu9eNnlo2Casb
-         JaXbXSr94TY81+2EMELyTtuqWzBKhl/YrRpJIrBw8BVMHD/LxGyOHH2CTKAslOOLQxti
-         Kt70c2AQBKCMSoQ9j7T2cRdmXnCanJN0IA7PuBoKBUyTonlzEPD8nwkkM5d2VojZaPNY
-         rnV/gT2fcWlu/qlI48CMl7IKk0TVZrPRK+cK9J+nd2j+837UOJV7cFKnNERcXWccfjYz
-         TeqXp37GxE2KA8Kvg90jATOFDBmdwQRtoi+pAw+4NH2fyPkH9rGpgiJYpID0+ixHZlNV
-         7F+Q==
-X-Gm-Message-State: AOAM531cquPV9GWHs3qUdgWpLuBY/VtVPSiypoPFjWXkCbsxpJxhTwLc
-        S4R44fQ380udezqK7NaoIlo01/pp8G/nWA==
-X-Google-Smtp-Source: ABdhPJwNIHLF7R6FsY/PyfuMJ6IgEnQzJ3ODYLqiR4aB1hX0XocL01mKbckFvANubQtpk+U0GKrB9Q==
-X-Received: by 2002:a05:6000:23c:: with SMTP id l28mr3408383wrz.251.1615972392244;
-        Wed, 17 Mar 2021 02:13:12 -0700 (PDT)
+        bh=RAN4ynbW/anRZapL8VFvkYH+oK0hgHEKhtHWyGXNsOA=;
+        b=WTnu1Ybn9fD/pC3LZXojnXEbFjiC2/rPNE53cbJnjbnI0634pj2/hvSPoLx9Vykixm
+         x1eeGsBHqrJ7buka9dDSt172KudFF0JmV1b+MUvBrpsizYwjRmp8HL0QoqD8sGmUCg24
+         Auoai7ItGc90VnIPJjRoSZnm9qtAce0aHy43IOV801w1ausdwbpeZMpdr6Vns9+ulTLO
+         hgLaXqjbwmoQADut218Q6DSBw9SRZccI6neGwNaqRL/JlK5GQ4Itb9aCoU+9VxvlmMNB
+         orSeR/yYto4eqC8LowRaly7sd9gDkP8YPZLANSs7wI/SkN8xz+Sk/sxzz7uRMxtRUhXT
+         42AQ==
+X-Gm-Message-State: AOAM532QqRdZPqgzicnn1klS5pn1EfZfB/FLdHSSUV6pqxjLg9Fa5MgF
+        VzQSF9Z482lD5kyMAVFNJE1wKQ==
+X-Google-Smtp-Source: ABdhPJz6XZjHnqaL2uMWijHsG8W9O6bEgDTV6HVzVyEjLfg6g3YE/V6PVqb5sqpaBoQvxmqaANDDvw==
+X-Received: by 2002:adf:9c86:: with SMTP id d6mr3323500wre.306.1615972393301;
+        Wed, 17 Mar 2021 02:13:13 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.13.11
+        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.13.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:13:11 -0700 (PDT)
+        Wed, 17 Mar 2021 02:13:12 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        "Manoj N. Kumar" <manoj@linux.ibm.com>,
-        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
-        Uma Krishnan <ukrishn@linux.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 32/36] scsi: cxlflash: superpipe: Fix a few misnaming issues
-Date:   Wed, 17 Mar 2021 09:12:26 +0000
-Message-Id: <20210317091230.2912389-33-lee.jones@linaro.org>
+        Colin DeVilbiss <devilbis@us.ibm.com>,
+        Santiago Leon <santil@us.ibm.com>,
+        Dave Boutcher <sleddog@us.ibm.com>, linux-scsi@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 33/36] scsi: ibmvscsi: Fix a bunch of kernel-doc related issues
+Date:   Wed, 17 Mar 2021 09:12:27 +0000
+Message-Id: <20210317091230.2912389-34-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317091230.2912389-1-lee.jones@linaro.org>
 References: <20210317091230.2912389-1-lee.jones@linaro.org>
@@ -70,54 +74,308 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/cxlflash/superpipe.c:38: warning: Function parameter or member 'release' not described in 'marshal_rele_to_resize'
- drivers/scsi/cxlflash/superpipe.c:38: warning: Excess function parameter 'rele' description in 'marshal_rele_to_resize'
- drivers/scsi/cxlflash/superpipe.c:51: warning: Function parameter or member 'release' not described in 'marshal_det_to_rele'
- drivers/scsi/cxlflash/superpipe.c:51: warning: Excess function parameter 'rele' description in 'marshal_det_to_rele'
- drivers/scsi/cxlflash/superpipe.c:528: warning: expecting prototype for rhte_format1(). Prototype was for rht_format1() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:143: warning: Function parameter or member 'hostdata' not described in 'ibmvscsi_release_crq_queue'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:143: warning: Function parameter or member 'max_requests' not described in 'ibmvscsi_release_crq_queue'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:143: warning: expecting prototype for release_crq_queue(). Prototype was for ibmvscsi_release_crq_queue() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:286: warning: expecting prototype for reset_crq_queue(). Prototype was for ibmvscsi_reset_crq_queue() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:328: warning: Function parameter or member 'max_requests' not described in 'ibmvscsi_init_crq_queue'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:328: warning: expecting prototype for initialize_crq_queue(). Prototype was for ibmvscsi_init_crq_queue() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:414: warning: expecting prototype for reenable_crq_queue(). Prototype was for ibmvscsi_reenable_crq_queue() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:536: warning: expecting prototype for ibmvscsi_free(). Prototype was for free_event_struct() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:558: warning: expecting prototype for get_evt_struct(). Prototype was for get_event_struct() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:587: warning: Function parameter or member 'evt_struct' not described in 'init_event_struct'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:587: warning: Excess function parameter 'evt' description in 'init_event_struct'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:608: warning: Function parameter or member 'cmd' not described in 'set_srp_direction'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:608: warning: Function parameter or member 'srp_cmd' not described in 'set_srp_direction'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:608: warning: Function parameter or member 'numbuf' not described in 'set_srp_direction'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:641: warning: Function parameter or member 'evt_struct' not described in 'unmap_cmd_data'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:683: warning: Function parameter or member 'evt_struct' not described in 'map_sg_data'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:757: warning: Function parameter or member 'evt_struct' not described in 'map_data_for_srp_cmd'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:783: warning: Function parameter or member 'error_code' not described in 'purge_requests'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:846: warning: Function parameter or member 't' not described in 'ibmvscsi_timeout'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:846: warning: Excess function parameter 'evt_struct' description in 'ibmvscsi_timeout'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1043: warning: Function parameter or member 'cmnd' not described in 'ibmvscsi_queuecommand_lck'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1043: warning: expecting prototype for ibmvscsi_queue(). Prototype was for ibmvscsi_queuecommand_lck() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1351: warning: expecting prototype for init_host(). Prototype was for enable_fast_fail() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1464: warning: Function parameter or member 'hostdata' not described in 'init_adapter'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1475: warning: Function parameter or member 'evt_struct' not described in 'sync_completion'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1488: warning: Function parameter or member 'cmd' not described in 'ibmvscsi_eh_abort_handler'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1488: warning: expecting prototype for ibmvscsi_abort(). Prototype was for ibmvscsi_eh_abort_handler() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1627: warning: Function parameter or member 'cmd' not described in 'ibmvscsi_eh_device_reset_handler'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:1893: warning: Excess function parameter 'reason' description in 'ibmvscsi_change_queue_depth'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:2221: warning: Function parameter or member 'vdev' not described in 'ibmvscsi_probe'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:2221: warning: Function parameter or member 'id' not described in 'ibmvscsi_probe'
+ drivers/scsi/ibmvscsi/ibmvscsi.c:2221: warning: expecting prototype for Called by bus code for each adapter(). Prototype was for ibmvscsi_probe() instead
+ drivers/scsi/ibmvscsi/ibmvscsi.c:2381: warning: cannot understand function prototype: 'const struct vio_device_id ibmvscsi_device_table[] = '
 
-Cc: "Manoj N. Kumar" <manoj@linux.ibm.com>
-Cc: "Matthew R. Ochs" <mrochs@linux.ibm.com>
-Cc: Uma Krishnan <ukrishn@linux.ibm.com>
+Cc: Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Colin DeVilbiss <devilbis@us.ibm.com>
+Cc: Santiago Leon <santil@us.ibm.com>
+Cc: Dave Boutcher <sleddog@us.ibm.com>
 Cc: linux-scsi@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/cxlflash/superpipe.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvscsi.c | 70 ++++++++++++++++----------------
+ 1 file changed, 35 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/scsi/cxlflash/superpipe.c b/drivers/scsi/cxlflash/superpipe.c
-index 5dddf67dfa24a..ee11ec340654a 100644
---- a/drivers/scsi/cxlflash/superpipe.c
-+++ b/drivers/scsi/cxlflash/superpipe.c
-@@ -30,7 +30,7 @@ struct cxlflash_global global;
- 
- /**
-  * marshal_rele_to_resize() - translate release to resize structure
-- * @rele:	Source structure from which to translate/copy.
-+ * @release:	Source structure from which to translate/copy.
-  * @resize:	Destination structure for the translate/copy.
-  */
- static void marshal_rele_to_resize(struct dk_cxlflash_release *release,
-@@ -44,7 +44,7 @@ static void marshal_rele_to_resize(struct dk_cxlflash_release *release,
- /**
-  * marshal_det_to_rele() - translate detach to release structure
-  * @detach:	Destination structure for the translate/copy.
-- * @rele:	Source structure from which to translate/copy.
-+ * @release:	Source structure from which to translate/copy.
-  */
- static void marshal_det_to_rele(struct dk_cxlflash_detach *detach,
- 				struct dk_cxlflash_release *release)
-@@ -517,7 +517,7 @@ void rhte_checkin(struct ctx_info *ctxi,
+diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+index 77fafb1bc173a..9ffd71e425f90 100644
+--- a/drivers/scsi/ibmvscsi/ibmvscsi.c
++++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+@@ -130,9 +130,10 @@ static irqreturn_t ibmvscsi_handle_event(int irq, void *dev_instance)
  }
  
  /**
-- * rhte_format1() - populates a RHTE for format 1
-+ * rht_format1() - populates a RHTE for format 1
-  * @rhte:	RHTE to populate.
-  * @lun_id:	LUN ID of LUN associated with RHTE.
-  * @perm:	Desired permissions for RHTE.
+- * release_crq_queue: - Deallocates data and unregisters CRQ
+- * @queue:	crq_queue to initialize and register
+- * @host_data:	ibmvscsi_host_data of host
++ * ibmvscsi_release_crq_queue() - Deallocates data and unregisters CRQ
++ * @queue:		crq_queue to initialize and register
++ * @hostdata:		ibmvscsi_host_data of host
++ * @max_requests:	maximum requests (unused)
+  *
+  * Frees irq, deallocates a page for messages, unmaps dma, and unregisters
+  * the crq with the hypervisor.
+@@ -276,10 +277,9 @@ static void set_adapter_info(struct ibmvscsi_host_data *hostdata)
+ }
+ 
+ /**
+- * reset_crq_queue: - resets a crq after a failure
++ * ibmvscsi_reset_crq_queue() - resets a crq after a failure
+  * @queue:	crq_queue to initialize and register
+  * @hostdata:	ibmvscsi_host_data of host
+- *
+  */
+ static int ibmvscsi_reset_crq_queue(struct crq_queue *queue,
+ 				    struct ibmvscsi_host_data *hostdata)
+@@ -314,9 +314,10 @@ static int ibmvscsi_reset_crq_queue(struct crq_queue *queue,
+ }
+ 
+ /**
+- * initialize_crq_queue: - Initializes and registers CRQ with hypervisor
+- * @queue:	crq_queue to initialize and register
+- * @hostdata:	ibmvscsi_host_data of host
++ * ibmvscsi_init_crq_queue() - Initializes and registers CRQ with hypervisor
++ * @queue:		crq_queue to initialize and register
++ * @hostdata:		ibmvscsi_host_data of host
++ * @max_requests:	maximum requests (unused)
+  *
+  * Allocates a page for messages, maps it for dma, and registers
+  * the crq with the hypervisor.
+@@ -404,10 +405,9 @@ static int ibmvscsi_init_crq_queue(struct crq_queue *queue,
+ }
+ 
+ /**
+- * reenable_crq_queue: - reenables a crq after
++ * ibmvscsi_reenable_crq_queue() - reenables a crq after
+  * @queue:	crq_queue to initialize and register
+  * @hostdata:	ibmvscsi_host_data of host
+- *
+  */
+ static int ibmvscsi_reenable_crq_queue(struct crq_queue *queue,
+ 				       struct ibmvscsi_host_data *hostdata)
+@@ -439,7 +439,7 @@ static int ibmvscsi_reenable_crq_queue(struct crq_queue *queue,
+  * @hostdata:	ibmvscsi_host_data who owns the event pool
+  *
+  * Returns zero on success.
+-*/
++ */
+ static int initialize_event_pool(struct event_pool *pool,
+ 				 int size, struct ibmvscsi_host_data *hostdata)
+ {
+@@ -478,12 +478,12 @@ static int initialize_event_pool(struct event_pool *pool,
+ }
+ 
+ /**
+- * release_event_pool: - Frees memory of an event pool of a host
++ * release_event_pool() - Frees memory of an event pool of a host
+  * @pool:	event_pool to be released
+  * @hostdata:	ibmvscsi_host_data who owns the even pool
+  *
+  * Returns zero on success.
+-*/
++ */
+ static void release_event_pool(struct event_pool *pool,
+ 			       struct ibmvscsi_host_data *hostdata)
+ {
+@@ -526,11 +526,10 @@ static int valid_event_struct(struct event_pool *pool,
+ }
+ 
+ /**
+- * ibmvscsi_free-event_struct: - Changes status of event to "free"
++ * free_event_struct() - Changes status of event to "free"
+  * @pool:	event_pool that contains the event
+  * @evt:	srp_event_struct to be modified
+- *
+-*/
++ */
+ static void free_event_struct(struct event_pool *pool,
+ 				       struct srp_event_struct *evt)
+ {
+@@ -547,7 +546,7 @@ static void free_event_struct(struct event_pool *pool,
+ }
+ 
+ /**
+- * get_evt_struct: - Gets the next free event in pool
++ * get_event_struct() - Gets the next free event in pool
+  * @pool:	event_pool that contains the events to be searched
+  *
+  * Returns the next event in "free" state, and NULL if none are free.
+@@ -575,7 +574,7 @@ static struct srp_event_struct *get_event_struct(struct event_pool *pool)
+ /**
+  * init_event_struct: Initialize fields in an event struct that are always 
+  *                    required.
+- * @evt:        The event
++ * @evt_struct: The event
+  * @done:       Routine to call when the event is responded to
+  * @format:     SRP or MAD format
+  * @timeout:    timeout value set in the CRQ
+@@ -597,7 +596,7 @@ static void init_event_struct(struct srp_event_struct *evt_struct,
+  * Routines for receiving SCSI responses from the hosting partition
+  */
+ 
+-/**
++/*
+  * set_srp_direction: Set the fields in the srp related to data
+  *     direction and number of buffers based on the direction in
+  *     the scsi_cmnd and the number of buffers
+@@ -632,9 +631,9 @@ static void set_srp_direction(struct scsi_cmnd *cmd,
+ /**
+  * unmap_cmd_data: - Unmap data pointed in srp_cmd based on the format
+  * @cmd:	srp_cmd whose additional_data member will be unmapped
++ * @evt_struct: the event
+  * @dev:	device for which the memory is mapped
+- *
+-*/
++ */
+ static void unmap_cmd_data(struct srp_cmd *cmd,
+ 			   struct srp_event_struct *evt_struct,
+ 			   struct device *dev)
+@@ -671,6 +670,7 @@ static int map_sg_list(struct scsi_cmnd *cmd, int nseg,
+ /**
+  * map_sg_data: - Maps dma for a scatterlist and initializes descriptor fields
+  * @cmd:	struct scsi_cmnd with the scatterlist
++ * @evt_struct:	struct srp_event_struct to map
+  * @srp_cmd:	srp_cmd that contains the memory descriptor
+  * @dev:	device for which to map dma memory
+  *
+@@ -745,6 +745,7 @@ static int map_sg_data(struct scsi_cmnd *cmd,
+ /**
+  * map_data_for_srp_cmd: - Calls functions to map data for srp cmds
+  * @cmd:	struct scsi_cmnd with the memory to be mapped
++ * @evt_struct:	struct srp_event_struct to map
+  * @srp_cmd:	srp_cmd that contains the memory descriptor
+  * @dev:	dma device for which to map dma memory
+  *
+@@ -778,6 +779,7 @@ static int map_data_for_srp_cmd(struct scsi_cmnd *cmd,
+ /**
+  * purge_requests: Our virtual adapter just shut down.  purge any sent requests
+  * @hostdata:    the adapter
++ * @error_code:  error code to return as the 'result'
+  */
+ static void purge_requests(struct ibmvscsi_host_data *hostdata, int error_code)
+ {
+@@ -838,7 +840,7 @@ static void ibmvscsi_reset_host(struct ibmvscsi_host_data *hostdata)
+ 
+ /**
+  * ibmvscsi_timeout - Internal command timeout handler
+- * @evt_struct:	struct srp_event_struct that timed out
++ * @t:	struct srp_event_struct that timed out
+  *
+  * Called when an internally generated command times out
+ */
+@@ -1034,8 +1036,8 @@ static inline u16 lun_from_dev(struct scsi_device *dev)
+ }
+ 
+ /**
+- * ibmvscsi_queue: - The queuecommand function of the scsi template 
+- * @cmd:	struct scsi_cmnd to be executed
++ * ibmvscsi_queuecommand_lck() - The queuecommand function of the scsi template 
++ * @cmnd:	struct scsi_cmnd to be executed
+  * @done:	Callback function to be called when cmd is completed
+ */
+ static int ibmvscsi_queuecommand_lck(struct scsi_cmnd *cmnd,
+@@ -1342,7 +1344,7 @@ static void fast_fail_rsp(struct srp_event_struct *evt_struct)
+ }
+ 
+ /**
+- * init_host - Start host initialization
++ * enable_fast_fail() - Start host initialization
+  * @hostdata:	ibmvscsi_host_data of host
+  *
+  * Returns zero if successful.
+@@ -1456,16 +1458,15 @@ static void send_mad_adapter_info(struct ibmvscsi_host_data *hostdata)
+ 	spin_unlock_irqrestore(hostdata->host->host_lock, flags);
+ };
+ 
+-/**
+- * init_adapter: Start virtual adapter initialization sequence
+- *
++/*
++ * init_adapter() - Start virtual adapter initialization sequence
+  */
+ static void init_adapter(struct ibmvscsi_host_data *hostdata)
+ {
+ 	send_mad_adapter_info(hostdata);
+ }
+ 
+-/**
++/*
+  * sync_completion: Signal that a synchronous command has completed
+  * Note that after returning from this call, the evt_struct is freed.
+  * the caller waiting on this completion shouldn't touch the evt_struct
+@@ -1480,8 +1481,8 @@ static void sync_completion(struct srp_event_struct *evt_struct)
+ 	complete(&evt_struct->comp);
+ }
+ 
+-/**
+- * ibmvscsi_abort: Abort a command...from scsi host template
++/*
++ * ibmvscsi_eh_abort_handler: Abort a command...from scsi host template
+  * send this over to the server and wait synchronously for the response
+  */
+ static int ibmvscsi_eh_abort_handler(struct scsi_cmnd *cmd)
+@@ -1618,7 +1619,7 @@ static int ibmvscsi_eh_abort_handler(struct scsi_cmnd *cmd)
+ 	return SUCCESS;
+ }
+ 
+-/**
++/*
+  * ibmvscsi_eh_device_reset_handler: Reset a single LUN...from scsi host 
+  * template send this over to the server and wait synchronously for the 
+  * response
+@@ -1884,7 +1885,6 @@ static int ibmvscsi_slave_configure(struct scsi_device *sdev)
+  * ibmvscsi_change_queue_depth - Change the device's queue depth
+  * @sdev:	scsi device struct
+  * @qdepth:	depth to set
+- * @reason:	calling context
+  *
+  * Return value:
+  * 	actual depth set
+@@ -2214,7 +2214,7 @@ static int ibmvscsi_work(void *data)
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Called by bus code for each adapter
+  */
+ static int ibmvscsi_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+@@ -2374,7 +2374,7 @@ static int ibmvscsi_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * ibmvscsi_device_table: Used by vio.c to match devices in the device tree we 
+  * support.
+  */
 -- 
 2.27.0
 
