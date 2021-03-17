@@ -2,134 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFE133EC9E
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3D933ECE0
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbhCQJNw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbhCQJNR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:13:17 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A52C06175F
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:17 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id e18so1004702wrt.6
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:13:17 -0700 (PDT)
+        id S229705AbhCQJUX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:20:23 -0400
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:13624 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229730AbhCQJT7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:19:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1615972800; x=1647508800;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=uyOInxMX590ETuy+GQzZv8CJFxdZh9SlrpvgnSRW4Rw=;
+  b=HyDp3FaEVN4aqUFgl6ywtWlLrYhHcsOEEcSagaUEhpgPpDcuuL6/n1qA
+   ABK+vzd9x9oxU3bsADSFtvpazY1zAvq8w815f/JEeZTgzwCVsHrJbt0wH
+   gUH9V6LNtMBns1mQu9+EZtP3QeZEUp6lwD/+1usbznnsrHuIpCcXkbIhB
+   wZECUQUV0H516QRHcCzoDEbaVv3OYAsyWr4VACHWR7Rlei7O2V437k9yY
+   L98K0RIGg2bb8HoI23elL/cla9pSFZOCF7SLKhtHeoG08/IW4Pi0hlsOf
+   v9K8udmsI6Tn5lHI6FtKRkOzEgueNcwSrzKTzB+hmXdW9W2G5ZQvY2/If
+   A==;
+IronPort-SDR: WZfzYMq0BVSKN0rAVDJ8ULKl2tilpsYO5Sd/x5JyyiIvBmtTC0VQYlMliY59cZJwMpa4IvDLVj
+ JVXO9rLLS4TqyTWesQD7F4y7I5iRD6llLIzOMUspyx7wiF2CBhCInWIxncUVClbjjb2asXtxMV
+ +RWzhZeNd5ftiykzlrleDXpB2lNl15KjN7MTG/KRtbN4B0dKFnp8eIT5dv/arILnGsWZ/9Dl7y
+ 3zXURnDnyOy1r9ox7Td1VhEumbXLCht39O4wWWMSOI2ALuJeazujzXdi0lQC39RJ09qfHCP7em
+ rZc=
+X-IronPort-AV: E=Sophos;i="5.81,255,1610380800"; 
+   d="scan'208";a="163492311"
+Received: from mail-co1nam11lp2168.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.168])
+  by ob1.hgst.iphmx.com with ESMTP; 17 Mar 2021 17:19:58 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bhYbbwDgs/AqJjcuTx0iCejLiExUfl2P2ArX/3qLmn0nOYAVOTOGkQ7LB6gxmf78E1dDNmEbcpoVmdrLaLZIX3UVvkYU86HybRXkGWvGUybTr934l91hgMbfC3gDxy3nDpKiSom5SSBklAKHWc8c00xqf2Z4+ffNtyUK47FWbGCVM2lsc+YBGvcMTG826S5Os4muxDACIW4DRkx5xvfQj7ZMgCvntRgBQ9T+u2yh+JR+yI4R43O2H7pw4Oj6cII8l5ZSoqKt5UqSValIsZJ8eHndlyv1ZcCqH2J+gmGbJvJoQw4Wq8B7YZL7IC5Lj7BBVOS4Xmf8OCZQ6xgNGl8q6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2vemDPiFFr2NqJkKkwmAXZlcgc7GYbAe988Mhvr5LoA=;
+ b=V8wKb8DALoVHmGp2tdvtcANb6s1cvboTgE2Y+uEZ8FZPNehEkndSOTzpCSebM8Mj9gRzIGxLNeSQW6buykxZxqTo73Nbyna+gq47jUajPVvzSBx/ez+B3JITZaoLm7Ol2QrJNjMLPswfkVbA6ektPX23mX4IP6O9suFaOu2jmQLaY/FygroxbIKkDgDseP6dRNIAq7E34Q172ngzZ79Uds0ZvEoQLvPtpzTFAIHbj1OhpPJXeDdJu+zW7mSs78K/bc5gFUpktmmFv/Fm92w2boi4kgGy4IJms13+cVpi8fd/AgdFLNBNKiHmt3gtrfEvkGuzmEpsxHiqyTaiRuCBcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nCn5H1/QIbfIGeplEbT1o6zOISUD7vSXkO5mBkf4PfU=;
-        b=Z23F2lfnZHIs7s7AqP3HTgAl6LmZWclA5RVsNpn8IsUOzzgA/Y1G/xEywmR5rTZURj
-         LDpoYlz/DT9LnOkK4VHUBY8u/JOiy1wseCY0kEvoUZFQzK8ZKAH+8s59Q594l0parmKx
-         +v4E3ZWFOhNfyFKUy+nR7yoiiF/mfTN/WyzKrT6oQ73Q58UgHO/s4RfXPO+qvl25fLp1
-         F9S6AwqR/ziE3kPa/lVy8JPH/buY0YVMY/9NlGibqSWEe4r4h4dVaZi5RanB89O+LHvw
-         tqPpZGm4wZm3TKj6qDr0inGpBV8zRZ/rpx3yHxRxAgfLdghkBFMzOzR4W55xvI1MrOFl
-         pnYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nCn5H1/QIbfIGeplEbT1o6zOISUD7vSXkO5mBkf4PfU=;
-        b=LS533IkxG8wMSiEq4t2LXzbN1eSuaXdfF9CU7GSD2B+0DCdcJSqhYqpEyuYhQk15wT
-         zF/puDXgwh59mX0bzg9BDIG6Tu9EjbGVMxoBR7hfLQ+0Zpu3D6ZHjcgXT+l9+QhcKEus
-         Mj6wyvVWCUrKzkp29/JzZte9nXOaixPuJS4wXrEnqMUT+mHKfLnQVVL9UL7COMl1cjTa
-         RUmDzgtQoPi5UROZvXQ3iOzYiRWkSLRIZWgINL6/mR4NFwbL/waPIw3A2JZAtD+jszWX
-         3JzuYUpRPaF6W4+9YymcNhcVsi8hvGCAC9XfrdjqywbvF+zZpX26hS3agoKfJnrptsP4
-         q6lA==
-X-Gm-Message-State: AOAM531GTRxEhPDdPJ86Cal4VnPoU+mB5Ws8hc6tFM4lBiR0MOHiEyaE
-        iHAiMuD6fsAU/BgEcr0bgCu5Pg==
-X-Google-Smtp-Source: ABdhPJxRav9dSnwsd2DWKrGi/Awk4vHnMvcslJTEsCpGHU6jEtb1uuH3ikGUKdTXwYpH5pu1l+qP2g==
-X-Received: by 2002:adf:ecca:: with SMTP id s10mr3196351wro.324.1615972396331;
-        Wed, 17 Mar 2021 02:13:16 -0700 (PDT)
-Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:13:15 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Manoj N. Kumar" <manoj@linux.ibm.com>,
-        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
-        Uma Krishnan <ukrishn@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 36/36] scsi: cxlflash: vlun: Fix some misnaming related doc-rot
-Date:   Wed, 17 Mar 2021 09:12:30 +0000
-Message-Id: <20210317091230.2912389-37-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210317091230.2912389-1-lee.jones@linaro.org>
-References: <20210317091230.2912389-1-lee.jones@linaro.org>
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2vemDPiFFr2NqJkKkwmAXZlcgc7GYbAe988Mhvr5LoA=;
+ b=Ft8ELxv2ckdhlvgc1Cj0ck1/lcav9nXuN7vNALdLK5doK+u9jy/yQEF3FPu/DkCorumhPwaVHuHlpVMS0vKXcjZqaKHeCVzm+45IQ2j4bYdgR7HZtaVLeNgpnvnEw8Ac5ZH3vy/PI/PtsnWM01oQE05biKpX+NNaYKBUB80xe6Q=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ DM6PR04MB4156.namprd04.prod.outlook.com (2603:10b6:5:98::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3933.32; Wed, 17 Mar 2021 09:19:55 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::e824:f31b:38cf:ef66]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::e824:f31b:38cf:ef66%3]) with mapi id 15.20.3933.032; Wed, 17 Mar 2021
+ 09:19:55 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Can Guo <cang@codeaurora.org>
+CC:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        Zang Leigang <zangleigang@hisilicon.com>,
+        Avi Shchislowski <Avi.Shchislowski@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>
+Subject: RE: [PATCH v5 03/10] scsi: ufshpb: Add region's reads counter
+Thread-Topic: [PATCH v5 03/10] scsi: ufshpb: Add region's reads counter
+Thread-Index: AQHXD2ei7j8moNyDbkOuTIbGJCHBHqqEdEEAgABlUmCAAAN7AIADIMEw
+Date:   Wed, 17 Mar 2021 09:19:54 +0000
+Message-ID: <DM6PR04MB65751E20BCECAF49FB7912ACFC6A9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20210302132503.224670-1-avri.altman@wdc.com>
+ <20210302132503.224670-4-avri.altman@wdc.com>
+ <343d6b0d7802b58bec6e3c06e6f9be57@codeaurora.org>
+ <DM6PR04MB6575A58446F1EB9ABDFBB7A6FC6C9@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <aa82d7011c102b5d0991cad8908ac9ee@codeaurora.org>
+In-Reply-To: <aa82d7011c102b5d0991cad8908ac9ee@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: codeaurora.org; dkim=none (message not signed)
+ header.d=none;codeaurora.org; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 2193903f-2418-4ce4-b032-08d8e925d3d6
+x-ms-traffictypediagnostic: DM6PR04MB4156:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR04MB415624427F5FCCE1780EA124FC6A9@DM6PR04MB4156.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 05pA6WGBMeygp5JtHXPel/IMqn2vF1UQZTZ1e8WhAatMYSNkt1tGwz50Qiuvo04wBuLTBqQ7cLVtgkaJ5F2rZo+OgI+6yw0uvqO7KAX2b6uCmtI45G1+YH4t0fLhZTzIumgPHVatJmtqJta/HXakL1z33OCyP//TzQbb2Fj5ptmSbkuoCcXTA+O7JZCiItip+JKYkpGy84eW0arDCUmJ33d3XEYiWuwGQ/XSGT0FEFhgCq0VH5ayfh0gBv9tdMF5Wsr/u8SEnm/0qQ7Vm/NelfIBreT35ifErs8xyNSL6ms0wDqvciRFkQDWkMW+PLp2d00YJC4uE6SyjuI9Ia6dtOvRW/8KqcTlvcmEOmhnUOgYplSmGtr53tSB9IN/OjJ5ZZqUx7ck0ic0x4Mty8WN3Upx02oyFcF1hw9JCR9FtORC8PoyvSWqcSFO3jlR1UB1xYUchb0sWdOL9oQWhTxSW0FvlvNkxf9WwIJBMWZtBJPgHOZ4qTZcqGAVK+1IvNcBeL2sQ/b1UKJYnj4Reli/EO90CgxaJ8LzcsS87AsRlPhBY/+kb+MfaCXmb0/HGZ5r
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(376002)(346002)(366004)(136003)(54906003)(66946007)(7696005)(8936002)(33656002)(71200400001)(2906002)(6916009)(26005)(5660300002)(8676002)(55016002)(316002)(52536014)(9686003)(186003)(478600001)(66446008)(66556008)(4744005)(66476007)(64756008)(4326008)(7416002)(86362001)(83380400001)(76116006)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?7b7GOAaEci3Jj2azDBaXjKeoWZ9p5llgMQKhK11VCMMjoxntmtPh+nk1L2SS?=
+ =?us-ascii?Q?EcokV9BLQ67MLpwtI+GkkkMAcPaXssTRINkX6S9bciXYd7CRob6eIuEJ5QvC?=
+ =?us-ascii?Q?X5m0n3gO2u5OFhQnlSLtiSHAyxmcmLZcZI741eay2CW72G1T2urSfOiz+MqE?=
+ =?us-ascii?Q?4u3R6zYk14/eTtGIzJs+jas2N2RGXB8R7feMHYxJuGuxaP/nnO/IIIbu3sFv?=
+ =?us-ascii?Q?XYqVrxRQbtjnQCp/s+DOLLih6g0ods+yoMqKvtK4Qi8ExcX1rITfjkvDc5L4?=
+ =?us-ascii?Q?Znnnc2xuU7kjaFv255yRDDAEGJf1C+lo0fbcr4FN4Ig071Qj+EYb/rTQzv6C?=
+ =?us-ascii?Q?ry2A/Xg7SyFFdfUzD6EKHLhKMFrmFs3nyXYbELP2z8qyWzC8+gyrHBtarnfp?=
+ =?us-ascii?Q?+909C/i6noDt4gjQPCmj4QCtJWRCsHAxKk3urc6PqxPHfBauArw+hObfHQAe?=
+ =?us-ascii?Q?keAYGgOfEwpk4djQNo4EEdFFw9yVEWRQFlexit1b0+tkF1UrjUHkv7yk/7nB?=
+ =?us-ascii?Q?ovXJprp0BId736rPjHK589cxHOsgKlgml0GHg278EEVP8QmCk6Il3zSKn5/J?=
+ =?us-ascii?Q?nIyqT30mqbTAXCuNpmI0hBLokdnVYz5ojaBuOjQWTjZV26F+Jc5NqtY1HsRU?=
+ =?us-ascii?Q?jyyKuFDgAV0guCTNTpYy+YTuyTGeiN0/4D87ym1wT/vQ7skui5VWaahTeMry?=
+ =?us-ascii?Q?XWIHpGFUHtzwZNFKl6ykzq7dNqNZOytFvQlvCJ3KDMCYLeth3oQexd3qYjac?=
+ =?us-ascii?Q?IwLxTvLVON6ObQ/xOsTU46RMqlHEE9Lz9C8DscFWP+kHkNWzNsynerbx6Ge1?=
+ =?us-ascii?Q?iTBmS23u3+At9rY5EkuQZJEkC55VQfaQx2Wcdx6wagR2J6CG5osaKuj/ikKd?=
+ =?us-ascii?Q?gdWlrlFfqrlbhkx0FQFy+HVQ16tw8O59IOSczelPD63ANNJHM84LjnZVQ0Et?=
+ =?us-ascii?Q?T+SgPPY7SvG8ihu9QL8a6fPd0ZNeibqCZsrgfNWCxnBFkagNIK/zhcN7PAQX?=
+ =?us-ascii?Q?WIyLViHX+fDfKdW0TVYRDN0XV+ByhNLjmFac42RmNo9q2c7ZzYtPTsZNal4T?=
+ =?us-ascii?Q?6WZ81c6I0rnZyaQOhS3XAncVUodHulgIjvoQsTuIHatSPJpKsf/5acI7p+Rj?=
+ =?us-ascii?Q?+WnUlUlq96tgAI25gcjl3Vuo3XtNVgdl0jy9CS4AXknSmQGhSGUiCimy6Coa?=
+ =?us-ascii?Q?iD8zOnkbWdDAUDb6RVF/w0DEl790XVh/aw1Rq3Hxfx6VoB6ZRL3nxobYkT/B?=
+ =?us-ascii?Q?1xrXwr6WDSKhydgwzkxjFizGBKScV4J9f+3UHuPvEvIBiK8qZF96a6R6tghe?=
+ =?us-ascii?Q?z8t6D6HIH9HKXXAjjOX2A7pR?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2193903f-2418-4ce4-b032-08d8e925d3d6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2021 09:19:54.8446
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VcnTG3ub1IP7p5KhAxYuyn7xB2lo8almZUI5YInokeYLbjzk6hKhGPN9ZL1GiAwHAm/safaL065kIv8q/bziQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB4156
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+> >> > @@ -1079,6 +1113,14 @@ static void __ufshpb_evict_region(struct
+> >> > ufshpb_lu *hpb,
+> >> >
+> >> >       ufshpb_cleanup_lru_info(lru_info, rgn);
+> >> >
+> >> > +     if (hpb->is_hcm) {
+> >> > +             unsigned long flags;
+> >> > +
+> >> > +             spin_lock_irqsave(&rgn->rgn_lock, flags);
+> >> > +             rgn->reads =3D 0;
+> >> > +             spin_unlock_irqrestore(&rgn->rgn_lock, flags);
+> >> > +     }
+> >> > +
+While at it, Following your comments concerning the unmap request,
+Better move this as well outside of __ufshpb_evict_region while rgn_state_l=
+ock is not held.
 
- drivers/scsi/cxlflash/vlun.c:48: warning: Function parameter or member 'release' not described in 'marshal_clone_to_rele'
- drivers/scsi/cxlflash/vlun.c:48: warning: Excess function parameter 'rele' description in 'marshal_clone_to_rele'
- drivers/scsi/cxlflash/vlun.c:238: warning: Function parameter or member 'bali' not described in 'validate_alloc'
- drivers/scsi/cxlflash/vlun.c:238: warning: Excess function parameter 'ba_lun_info' description in 'validate_alloc'
- drivers/scsi/cxlflash/vlun.c:308: warning: Function parameter or member 'to_clone' not described in 'ba_clone'
- drivers/scsi/cxlflash/vlun.c:308: warning: Excess function parameter 'to_free' description in 'ba_clone'
- drivers/scsi/cxlflash/vlun.c:369: warning: Function parameter or member 'lli' not described in 'init_vlun'
- drivers/scsi/cxlflash/vlun.c:369: warning: Excess function parameter 'lun_info' description in 'init_vlun'
-
-Cc: "Manoj N. Kumar" <manoj@linux.ibm.com>
-Cc: "Matthew R. Ochs" <mrochs@linux.ibm.com>
-Cc: Uma Krishnan <ukrishn@linux.ibm.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/scsi/cxlflash/vlun.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/cxlflash/vlun.c b/drivers/scsi/cxlflash/vlun.c
-index f1406ac77b0d5..01917b28cdb65 100644
---- a/drivers/scsi/cxlflash/vlun.c
-+++ b/drivers/scsi/cxlflash/vlun.c
-@@ -41,7 +41,7 @@ static void marshal_virt_to_resize(struct dk_cxlflash_uvirtual *virt,
- /**
-  * marshal_clone_to_rele() - translate clone to release structure
-  * @clone:	Source structure from which to translate/copy.
-- * @rele:	Destination structure for the translate/copy.
-+ * @release:	Destination structure for the translate/copy.
-  */
- static void marshal_clone_to_rele(struct dk_cxlflash_clone *clone,
- 				  struct dk_cxlflash_release *release)
-@@ -229,7 +229,7 @@ static u64 ba_alloc(struct ba_lun *ba_lun)
- 
- /**
-  * validate_alloc() - validates the specified block has been allocated
-- * @ba_lun_info:	LUN info owning the block allocator.
-+ * @bali:		LUN info owning the block allocator.
-  * @aun:		Block to validate.
-  *
-  * Return: 0 on success, -1 on failure
-@@ -300,7 +300,7 @@ static int ba_free(struct ba_lun *ba_lun, u64 to_free)
- /**
-  * ba_clone() - Clone a chunk of the block allocation table
-  * @ba_lun:	Block allocator from which to allocate a block.
-- * @to_free:	Block to free.
-+ * @to_clone:	Block to clone.
-  *
-  * Return: 0 on success, -1 on failure
-  */
-@@ -361,7 +361,7 @@ void cxlflash_ba_terminate(struct ba_lun *ba_lun)
- 
- /**
-  * init_vlun() - initializes a LUN for virtual use
-- * @lun_info:	LUN information structure that owns the block allocator.
-+ * @lli:	LUN information structure that owns the block allocator.
-  *
-  * Return: 0 on success, -errno on failure
-  */
--- 
-2.27.0
-
+Thanks,
+Avri
