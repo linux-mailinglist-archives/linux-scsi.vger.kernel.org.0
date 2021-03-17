@@ -2,63 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C49AC33EC6C
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F40433EC6E
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbhCQJNE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
+        id S230236AbhCQJNF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbhCQJMt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:12:49 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154A8C061762
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:49 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id z2so1002513wrl.5
+        with ESMTP id S230196AbhCQJMu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:12:50 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FD8C061760
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:50 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id d8-20020a1c1d080000b029010f15546281so616967wmd.4
         for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JOb+P/qw104YPM5H9Pk4ZXuOVMmz3snbpqZtEzxVXZA=;
-        b=F1h9XpvvlAIfIaTIkV910sK2Dtfb9XwkVVfR/pBYqkkhyXvxA6dE/288OwsBxgb0+h
-         kuNekb0Wva2qFigdWkqcNEOXvOoiAUK7KKb20zkPxk3Lo2IBg4gCQ/S7x40AXiIcVXBt
-         xaHoN3HLXxGGbrOLe0/O1u3xMDQtPiK6bM0lD2QhG48Qfskhi+Qc4vaT/ImCWVMN8h1n
-         UhSpU54xHEmcIz6v14p2tFZ5sMcJjalNQWiOrErgbSYL3499emaJbMxxwmsVHwIBIrTy
-         W4lX0d9BiGRxtBPKYqxWnFJwWRZq/dfZ/SQpX9SDzU9Jwc9sBPlDwqV8+oMhIluNllQ0
-         TMLg==
+        bh=+cTXQTsH/Sbo5QzGWeCU2MjhmNBDgdRBi7pc9b8SsmM=;
+        b=VYhSNkK+JDvxaEmc3cWAiu0oGoUR+6g+rSTKcBpFdz8wa43BR/IgIZj5E8XtoWoQpW
+         SquXLOqc70jaB0HmeT4WGikLKxwDP4k8D4xwliE/brjI+/xnZ9hIM/juN/LNu3xw+Xnf
+         A1Ok6qqfvoV7mRusCOcAGvafZNT3c1mIRTMmvew9G+LEtUisK+e+SfPTBDJJBCv8ZQ2e
+         ssINX80lsZIijxEIMMtgvf9lTfLJO2j8ZVYWvHZOuLw404fiTjkOgePdQRnVsJrBHm5N
+         TbPMQZrw798p5fPCCJkf4I4Z+oSumTsauziu0BvMYuSHs66hyMpTmkp7aKTAdEAN+nP8
+         OERw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JOb+P/qw104YPM5H9Pk4ZXuOVMmz3snbpqZtEzxVXZA=;
-        b=e+8y2rqxFxWMBQQmERfhR4K7XW9Bvan+o2UQ7i0MsLlkJ9f1WPSe4QtQKRdmOPhCjq
-         wokkvxl4MrXa5wZf8MlW8y5IMKTKR48XCcyktqgD/jq8FDNLdI4Xxo8P98Z4SnRfEWw2
-         U+3gIKe9kSoHExLOzmk9coJEyhTWrxtjJLc+v3F4lweEC2ZIebARMfK9WAHRiyLCXm+F
-         2FE7VNs2vg4U5P8T+tJXdqG2rX4dPg5RoKVIBot6fZkh7g5/SxuH0Xv92AzEOxAmEI4b
-         OHZpjSrLg4ADfUI+9YI7y0xKZoxS1jCozdNVL+8RzXqrih43KWaUg7YKwm5sIYzErkrm
-         8GuQ==
-X-Gm-Message-State: AOAM533tbGsa/HEK4Gm1VlsZQjoILiHWqCqaF/v4rWbVQVOFLvSOdZkQ
-        Z9VI+X7lsnVLdSFIfQs3gs6WmpXLKblZlg==
-X-Google-Smtp-Source: ABdhPJwyw3IY56GgaarfpoxnIhJ43nSxiB70jKffGjLrw+e5KuXQi2wAjXliozYP4OSdytEqE1mBMw==
-X-Received: by 2002:adf:df10:: with SMTP id y16mr3323925wrl.372.1615972367856;
-        Wed, 17 Mar 2021 02:12:47 -0700 (PDT)
+        bh=+cTXQTsH/Sbo5QzGWeCU2MjhmNBDgdRBi7pc9b8SsmM=;
+        b=qH9i2yTnO9+IKGtI1O6r0DRWmGAi1rUKaBL8dLNo5D+9CShcbtijQkdY9oLfxYYyjD
+         UtTYYsnoPogaf3wz/EGUmCWlBLM2afM1Bq3MfFtnUL5zuEIIpIcSQ581jYRj7E+cp9aV
+         2/FNYQ9tBImIJYWHtCJcfv3NKldXPLdQ6XcWBxBi3EJZWxEGz3vSOyNbRe8DSnSlz7/n
+         IRKvwLLYXEcWuUPMAG/d7UWZrFTs/iaLHC8UnBwAPtjliTo+0zzDRMiiyvCAwYWA/esg
+         H2/17xD/27BKYk/ZEax8AqB3p5xOGs3bGCLp2vB+ZwXbtlzBOj+S53UNPefPuuE0+1qp
+         FpGw==
+X-Gm-Message-State: AOAM533JmX1WFcibtwew9ZclcI9PkprJJIJMffhYx3txIKTTQVKdxvvu
+        DNSr7xz8Hb91rfyAekT7EJbn9g==
+X-Google-Smtp-Source: ABdhPJwZCa2AE19dHCjnrYQNeHohRMm19sA+K9A0b+yfc3ONTDGtCEo2MmZswFOSIbAQMugGGvWgOw==
+X-Received: by 2002:a1c:7519:: with SMTP id o25mr2646901wmc.35.1615972368750;
+        Wed, 17 Mar 2021 02:12:48 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.12.46
+        by smtp.gmail.com with ESMTPSA id e18sm12695886wru.73.2021.03.17.02.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:12:47 -0700 (PDT)
+        Wed, 17 Mar 2021 02:12:48 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>,
-        Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
+Cc:     linux-kernel@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+        Ali Akcaagac <aliakc@web.de>,
+        Jamie Lenehan <lenehan@twibble.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-drivers@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH 08/36] scsi: be2iscsi: be_main: Ensure function follows directly after its header
-Date:   Wed, 17 Mar 2021 09:12:02 +0000
-Message-Id: <20210317091230.2912389-9-lee.jones@linaro.org>
+        "C.L. Huang" <ching@tekram.com.tw>,
+        Erich Chen <erich@tekram.com.tw>,
+        Kurt Garloff <garloff@suse.de>, dc395x@twibble.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 09/36] scsi: dc395x: Fix some function param descriptions
+Date:   Wed, 17 Mar 2021 09:12:03 +0000
+Message-Id: <20210317091230.2912389-10-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317091230.2912389-1-lee.jones@linaro.org>
 References: <20210317091230.2912389-1-lee.jones@linaro.org>
@@ -70,40 +72,40 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/be2iscsi/be_main.c:4935: warning: expecting prototype for beiscsi_show_boot_tgt_info(). Prototype was for BEISCSI_SYSFS_ISCSI_BOOT_FLAGS() instead
+ drivers/scsi/dc395x.c:4353: warning: Function parameter or member 'acb' not described in 'adapter_init'
+ drivers/scsi/dc395x.c:4353: warning: Function parameter or member 'io_port_len' not described in 'adapter_init'
+ drivers/scsi/dc395x.c:4353: warning: Excess function parameter 'host' description in 'adapter_init'
 
-Cc: Subbu Seetharaman <subbu.seetharaman@broadcom.com>
-Cc: Ketan Mukadam <ketan.mukadam@broadcom.com>
-Cc: Jitendra Bhivare <jitendra.bhivare@broadcom.com>
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: Ali Akcaagac <aliakc@web.de>
+Cc: Jamie Lenehan <lenehan@twibble.org>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-drivers@broadcom.com
+Cc: "C.L. Huang" <ching@tekram.com.tw>
+Cc: Erich Chen <erich@tekram.com.tw>
+Cc: Kurt Garloff <garloff@suse.de>
+Cc: dc395x@twibble.org
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/be2iscsi/be_main.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/dc395x.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
-index ab32ca535078d..eac67878b2b1b 100644
---- a/drivers/scsi/be2iscsi/be_main.c
-+++ b/drivers/scsi/be2iscsi/be_main.c
-@@ -4926,14 +4926,13 @@ void beiscsi_start_boot_work(struct beiscsi_hba *phba, unsigned int s_handle)
- 	schedule_work(&phba->boot_work);
- }
- 
-+#define BEISCSI_SYSFS_ISCSI_BOOT_FLAGS	3
- /**
-  * beiscsi_show_boot_tgt_info()
-  * Boot flag info for iscsi-utilities
-  * Bit 0 Block valid flag
-  * Bit 1 Firmware booting selected
-  */
--#define BEISCSI_SYSFS_ISCSI_BOOT_FLAGS	3
--
- static ssize_t beiscsi_show_boot_tgt_info(void *data, int type, char *buf)
- {
- 	struct beiscsi_hba *phba = data;
+diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
+index e28f8931e23f8..5503230006f87 100644
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -4341,8 +4341,9 @@ static void adapter_init_chip(struct AdapterCtlBlk *acb)
+  * tables etc etc. This basically gets all adapter information all up
+  * to date, initialised and gets the chip in sync with it.
+  *
+- * @host:	This hosts adapter structure
++ * @acb:	The adapter which we are to init.
+  * @io_port:	The base I/O port
++ * @io_port_len: The I/O port size
+  * @irq:	IRQ
+  *
+  * Returns 0 if the initialization succeeds, any other value on
 -- 
 2.27.0
 
