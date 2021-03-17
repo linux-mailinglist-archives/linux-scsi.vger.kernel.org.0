@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE01F33EC4E
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9334433EC4B
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 10:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbhCQJL4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 05:11:56 -0400
+        id S229900AbhCQJLz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 05:11:55 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbhCQJLg (ORCPT
+        with ESMTP id S229845AbhCQJLg (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 05:11:36 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC61C061760
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:35 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id 61so987415wrm.12
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:35 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70095C061763
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:36 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id g8so1011102wmd.4
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 02:11:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=omHoCGEAHHfzGsCXWaSPZZFL53Kydw/eMLAhlkpH1KI=;
-        b=NOs1xeXimZT1FQY+Ocg69tjJxLZq/xMp3D5060fTK4rW+F/DEsGLmdmyXIHTzt1f9Z
-         7ak1G7Rbtp8ULeiqAZxM4ipL7uGSXIrNT4wrhcDHpFI2ZMZObqN9JtH68SFyhmVxA+yP
-         hBKqtQ8L0Vize5FdnfU8pGnTAVqtvVctIWXtdoXhSrlJkZrKF5QCg3z3rZZke50toe6v
-         Gv3ya0UhriLKS8776/30epLokDBbALSBn3k9DyHz+V/G78qxPkOJCMzGXR0kFryI/Ybb
-         QFR9AH4sJrHIBG7xnKQObLDfnfd8zx6Vw2x5moOnzUa/336kofXchmRKpDt5SVn4/oRM
-         U6+A==
+        bh=tIEkLMKAtbUUByHxgsDytjqimEjUNe0j+Mn0l5iX50M=;
+        b=beT5usMG3If2KF1utJqGVevHtxdNjcQepVLaxWYxU1o3CpqNnj4tOgQTOQbx9uvuLX
+         XAhIUvVibTUp+QlH5m+orjgjE/+qs/LKGKnd2ek1DXKyzpkUCLq1FAU8PhKV38RtXpqb
+         P6uU8D4hoC+FnIoDIvHhFK5CN/uF9UneLa7ytP9q77xdL6XbiQCKM437reUVhm4Iud5p
+         +kIQ2VSGGI6U9A7m/wjWyEcD5WBQ49pNr7Jays6D6HECETN3wCNkcaEVg8177PEFoJvO
+         pWkHO/n/Quxy+54eNEpA5SnYpHALHwveSqjT8auzMH+onsAsK5jRKETYKNXix+ZJfFU3
+         ZrWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=omHoCGEAHHfzGsCXWaSPZZFL53Kydw/eMLAhlkpH1KI=;
-        b=t9S0AWvsSsK1MURl2Yaq3ZYv8HEbf5BG4kBrefTatLfH6b3Quls54LQDOYcFFUMSKF
-         ESm5Sic8XIGnJrWjrg1AzDw8rlI5pm2GAK8zVXR7oNW8H1QGUeYG0CekBNsXl15pKn7Z
-         YAHZe5vFH4z9m0UNc1oGxUjSpxrBEpD4CelayrjXy9g5XVBeFUSd2YMl9CSnFTR+5zxQ
-         9knsTIMnmVmpyf1Vnvkk/46FG2tPPJn6u/0VgJEp1zDf5pZj57NpwoXVvlwBtzqQ1J07
-         vNjCJGnWcw9HixKWf1mkbjpfbemHTGWXFDXdv8lNO1Duy5/dvcIjB9PSxI8r1K4a76CJ
-         LJlA==
-X-Gm-Message-State: AOAM533UG7ze5XuJ07yJ9gFwj55Sns+CjgHWtbDBWcZSwZMkf3FY9H9z
-        92Le2K6zVLYSVf5zkWwN1BGpqQ==
-X-Google-Smtp-Source: ABdhPJwyC6BzxEhifslpYQC6x8udphgqiggUDCfi2SKTbSnWZ2V4oREh2OGLAvUiUcQYvfmezHynXQ==
-X-Received: by 2002:a5d:6290:: with SMTP id k16mr3161670wru.177.1615972294389;
-        Wed, 17 Mar 2021 02:11:34 -0700 (PDT)
+        bh=tIEkLMKAtbUUByHxgsDytjqimEjUNe0j+Mn0l5iX50M=;
+        b=L9EM3wC28blBzSHPAPhilWEdZHoz2GPY7o985g60QUM/LR6WH47Sg9EjEs5PR7UBUf
+         ajsQH0ygx9/ZAG1EjSU6z5Pel0lWNq7WqwOxV6SNkLxT2NIJahoTLwSns3n6OkHHq9pY
+         nsa8/crBGI5whlzM6UaRS3iCtlpBLnTVc0xmO9awhaTHMU/tDwAJnwnWtFkCdwruiGn1
+         Urx7cmtKmOz/52WFULg8vnZmq4413RN+5IX1BJc3suZOtST9A/hVcSjg2IHkK2TcixR/
+         Te4Oey2EGtwy2nh0mtKu9iGkzIBqfP6qZQBp+OTyFAf2KiqfY6gh/2TDFYPb2EqQjNkH
+         eCsA==
+X-Gm-Message-State: AOAM53347BxvysJQYkqyVNeX2dgbD7LUDDKcHUZXXgB99jdiJ0dpiOfE
+        4tqYOFfRg1ScekykkwM1KdLbGw==
+X-Google-Smtp-Source: ABdhPJxesWgN9n7epwFj7KRVaeP+ukmkLVjhbB7GXclayYOZWP60lGWAJlD20eoju237hkY9sJ2WtA==
+X-Received: by 2002:a1c:318b:: with SMTP id x133mr2752054wmx.154.1615972295255;
+        Wed, 17 Mar 2021 02:11:35 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id s83sm1709279wms.16.2021.03.17.02.11.33
+        by smtp.gmail.com with ESMTPSA id s83sm1709279wms.16.2021.03.17.02.11.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 02:11:33 -0700 (PDT)
+        Wed, 17 Mar 2021 02:11:34 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc:     linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 6/8] scsi: isci: remote_device: Make local function isci_remote_device_wait_for_resume_from_abort() static
-Date:   Wed, 17 Mar 2021 09:11:23 +0000
-Message-Id: <20210317091125.2910058-7-lee.jones@linaro.org>
+Subject: [PATCH 7/8] scsi: isci: port: Make local function 'port_state_name()' static
+Date:   Wed, 17 Mar 2021 09:11:24 +0000
+Message-Id: <20210317091125.2910058-8-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317091125.2910058-1-lee.jones@linaro.org>
 References: <20210317091125.2910058-1-lee.jones@linaro.org>
@@ -69,7 +69,7 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/isci/remote_device.c:1387:6: warning: no previous prototype for ‘isci_remote_device_wait_for_resume_from_abort’ [-Wmissing-prototypes]
+ drivers/scsi/isci/port.c:65:13: warning: no previous prototype for ‘port_state_name’ [-Wmissing-prototypes]
 
 Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
@@ -77,22 +77,22 @@ Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/isci/remote_device.c | 2 +-
+ drivers/scsi/isci/port.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/isci/remote_device.c b/drivers/scsi/isci/remote_device.c
-index c3f540b556895..b1276f7e49c89 100644
---- a/drivers/scsi/isci/remote_device.c
-+++ b/drivers/scsi/isci/remote_device.c
-@@ -1384,7 +1384,7 @@ static bool isci_remote_device_test_resume_done(
- 	return done;
- }
+diff --git a/drivers/scsi/isci/port.c b/drivers/scsi/isci/port.c
+index 448a8c31ba359..5a362ba76d63f 100644
+--- a/drivers/scsi/isci/port.c
++++ b/drivers/scsi/isci/port.c
+@@ -62,7 +62,7 @@
  
--void isci_remote_device_wait_for_resume_from_abort(
-+static void isci_remote_device_wait_for_resume_from_abort(
- 	struct isci_host *ihost,
- 	struct isci_remote_device *idev)
+ #undef C
+ #define C(a) (#a)
+-const char *port_state_name(enum sci_port_states state)
++static const char *port_state_name(enum sci_port_states state)
  {
+ 	static const char * const strings[] = PORT_STATES;
+ 
 -- 
 2.27.0
 
