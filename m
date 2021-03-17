@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B4333EC03
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 09:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FFC33EBFE
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 09:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbhCQI57 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 04:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        id S229912AbhCQI56 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 04:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbhCQI5V (ORCPT
+        with ESMTP id S229730AbhCQI5V (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 04:57:21 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A6DC06175F
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:12 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e9so946413wrw.10
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02892C061762
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:13 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r10-20020a05600c35cab029010c946c95easo804630wmq.4
         for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bN4fpSzo8exezj3x7f+Hv5XSvvEKZvIRblLuzQg15wk=;
-        b=xuGfcjmNoUNXdROabMzOnp0WZczjaQntC401d3z0wxWnRyuDoOC7cLATKwINdfklxQ
-         ipodwjPR8/UKrJCUnSuLoBWX4J0+zkWPgZHwfVRFq/JCNTTTEKFlDd6wichhADg5l51h
-         ow0XgtK2MhaMGdfWq2GJegVsAtdoTw2zrNGdL4x/VjKv6cFSUd3V3Nj5/ziTWD5p7mdx
-         w3v/8Vp2sRo1m64T/B55BCiLrYVzuE3YIbmIEY85Y9uQjMwcTjyOrOV9mZOrXR8EBPwx
-         EpgZzlvSTGDUvbcYNllIid91Jejxd9CJ8edLszNiRwbD5juw6PWeFdc3BPlBBmvL0dKg
-         J5MA==
+        bh=QUcUbYzVq4WAbYCHC6A4U/IWUbOjJbgRMpmZlOoFPaU=;
+        b=D0YkNBCYTamiXrgPRgqVt+oGtaNIahNih1zVi3JKpExNJovdhGEzRski9jHwxTVYsS
+         oZsaTDTrC+reO7lrS5Vk7P4YhRpbgdpgxDPYZ311JVftUG04ixF8ZvUW9GHagMdn9Ypa
+         1paDvFYIvxO/+sD5a076CFTNSSaxqghBAR4e5zPEIehRkZvm6loUtHO4SW4AIbczZzad
+         5ozQpPUQD0HjK3zxPE+Y4on2H2VdeJ38f/opy4xsRZzgAvIoa836WgjLO6FmhIWBsIFq
+         JFKSAxClEw4wclve1ds0Ni6hI5VcExEUynhWwogfo+xLSzBJpu66LmnGz1NS4GOd3Flj
+         aFng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bN4fpSzo8exezj3x7f+Hv5XSvvEKZvIRblLuzQg15wk=;
-        b=YvjLZY3Wu7HN0+6PxU/Whog9JnqpXahB6URvz7cjIwGgFiJLzHss0Ri8odva1rqC00
-         mN/SAA0fnzuJ2iW1a5kibpEhzSFn7HBycHERbm1MEvFH+A3qRT9faJiV05N3QeBkEK31
-         nfUIIR+0E/ZW2NImYRelWgyh5spUeKNuz3bLXkOrWc5MHxvFPXf/prZePwEsJFLcOT6X
-         CXi7TnlzwXZPPEQfLFRAHuzrzE/wm6zdANMI9rHENi+ymDgqkZZnbRb5XdN++Kr99cXs
-         7n/dKpLeUlILDHcFxXRtMFoANGTSkgHXPskQU1bk6fKi/ElvF79u2tcd5sFI+mfTRs+f
-         +f/g==
-X-Gm-Message-State: AOAM533ToWGfLWRTkf6jWol5jEkAE9/61ctwvrU5E0NYfp+9cqO7eg6b
-        8YOj2dEcvW3q8rLSfKbgDqsyJQ==
-X-Google-Smtp-Source: ABdhPJy5t8wI6UT8Xo/n7g49VzgKzqRcjwyHyXv4pFUXBOJOi2gYDFERdSuMSgbcsfCFzpwvQuN0ng==
-X-Received: by 2002:a5d:6443:: with SMTP id d3mr3287356wrw.292.1615971430935;
-        Wed, 17 Mar 2021 01:57:10 -0700 (PDT)
+        bh=QUcUbYzVq4WAbYCHC6A4U/IWUbOjJbgRMpmZlOoFPaU=;
+        b=bAT+VNtVZ//ZhBXd08NvbNlmS/zQmbcZ+JmgZZrVo7WJiybP8tUJWUF68p67KOUitj
+         5aqWZ91T6ndV4WWT3GVq4Hbk/XundgWOM8XRJSj9nNr9IN83JoQDthsoIAerhOVRZm7u
+         gQYQvXvY5E23qk459izMPqtJOIY01H3vBqoIQWejmP5RskV19Ylnmdi5ZkiDh3awrrkq
+         HF+jKDz1yNU5nnVW/rH6ZxqslYnsCo2EKMnaT/bxM0folxukLUeofFuJhuKzyfjN/gne
+         2G6EV1CAstKP42X2u/jqSmRnBanUFbvtnqatHHwfzK8l01YPdQObK760H7dSre1tQ1nT
+         kk3w==
+X-Gm-Message-State: AOAM533EtTA/cll1oGHiUJFiUm7DZa518HkaGPXwXO9dJInBCkAe5hVv
+        t1kssVHmTupJGOHhOXUwXtzugg==
+X-Google-Smtp-Source: ABdhPJwcugoR+ehbObpRf84pGmeg8jmjF9eXyBPY2141WPr9ws3tvsLgZGZSUPCd3OkkDPm0sai2Ww==
+X-Received: by 2002:a1c:7406:: with SMTP id p6mr2599861wmc.103.1615971431794;
+        Wed, 17 Mar 2021 01:57:11 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id j123sm1807243wmb.1.2021.03.17.01.57.10
+        by smtp.gmail.com with ESMTPSA id j123sm1807243wmb.1.2021.03.17.01.57.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 01:57:10 -0700 (PDT)
+        Wed, 17 Mar 2021 01:57:11 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Khalid Aziz <khalid@gonehiking.org>,
+Cc:     linux-kernel@vger.kernel.org, GOTO Masanori <gotom@debian.or.jp>,
+        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Leonard N. Zubkoff" <lnz@dandelion.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 05/18] scsi: BusLogic: Supply __printf(x, y) formatting for blogic_msg()
-Date:   Wed, 17 Mar 2021 08:56:48 +0000
-Message-Id: <20210317085701.2891231-6-lee.jones@linaro.org>
+        gotom@debian.org, linux-scsi@vger.kernel.org
+Subject: [PATCH 06/18] scsi: nsp32: Supply __printf(x, y) formatting for nsp32_message()
+Date:   Wed, 17 Mar 2021 08:56:49 +0000
+Message-Id: <20210317085701.2891231-7-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317085701.2891231-1-lee.jones@linaro.org>
 References: <20210317085701.2891231-1-lee.jones@linaro.org>
@@ -69,33 +69,32 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- In file included from drivers/scsi/BusLogic.c:51:
- drivers/scsi/BusLogic.c: In function ‘blogic_msg’:
- drivers/scsi/BusLogic.c:3591:2: warning: function ‘blogic_msg’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
+ drivers/scsi/nsp32.c: In function ‘nsp32_message’:
+ drivers/scsi/nsp32.c:318:2: warning: function ‘nsp32_message’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
 
-Cc: Khalid Aziz <khalid@gonehiking.org>
+Cc: GOTO Masanori <gotom@debian.or.jp>
+Cc: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: "Leonard N. Zubkoff" <lnz@dandelion.com>
+Cc: gotom@debian.org
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/BusLogic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/nsp32.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-index ccb061ab0a0ad..0ac3f713fc212 100644
---- a/drivers/scsi/BusLogic.c
-+++ b/drivers/scsi/BusLogic.c
-@@ -3578,7 +3578,7 @@ Target	Requested Completed  Requested Completed  Requested Completed\n\
- /*
-   blogic_msg prints Driver Messages.
- */
--
-+__printf(2, 4)
- static void blogic_msg(enum blogic_msglevel msglevel, char *fmt,
- 			struct blogic_adapter *adapter, ...)
+diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
+index e44b1a0f67099..d5aa96f05bce4 100644
+--- a/drivers/scsi/nsp32.c
++++ b/drivers/scsi/nsp32.c
+@@ -309,6 +309,7 @@ static struct scsi_host_template nsp32_template = {
+ 
+ #define NSP32_DEBUG_BUF_LEN		100
+ 
++__printf(4, 5)
+ static void nsp32_message(const char *func, int line, char *type, char *fmt, ...)
  {
+ 	va_list args;
 -- 
 2.27.0
 
