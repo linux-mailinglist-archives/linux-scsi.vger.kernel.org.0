@@ -2,65 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 054D633EBE7
+	by mail.lfdr.de (Postfix) with ESMTP id A7C4733EBE9
 	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 09:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbhCQI5S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 04:57:18 -0400
+        id S229705AbhCQI5T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 04:57:19 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbhCQI5J (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 04:57:09 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DDAC061760
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:09 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id o16so969826wrn.0
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:09 -0700 (PDT)
+        with ESMTP id S229646AbhCQI5K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 04:57:10 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A101C061760
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:10 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id x16so959983wrn.4
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 01:57:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nA9wVETTE+l5uPS+DZDdIXSJ2iBKhK6p+7XSOzWKHSU=;
-        b=IpdBPhyKk00RIO/U1dBVMIyjhNggRxNiKxQ1Ne9aLwjQov2ko42z2b8zf+M/92BgHo
-         N5pApE/eK+0PFoBnBqxtgT6un/LSFXhA/iRRslyBIqR29bg0esYI2FXihV/fXvXUN30I
-         43XxadPKXofRgd9zY/tiTjp0k2UHCD0iFkMhyRlBn0p4MAHe+d8pkPfUKKIVuM6KybBc
-         A1nSNpEiXGPu/50pqUkBoTAf7NRMuHDu2iwAE6lFShqzy8FtJAsS/3XXPmtZZQF6qf/c
-         suOCldk6SO6n1k2Cjbb4P4EzRLMJR5TxXtz98N+rg83PMBujGKfYpD9GUBNAlFqE8nL+
-         oZLQ==
+        bh=8874Mz34yg9EJ3yZWmxIP9iMB3o9NkD0mVwqsVKhHmY=;
+        b=CKGmUYUpwZOzR8gWVNitbosI+8/vpSWLSEKNDwLKELUv3oIDgkyAcSWNJ1I5tm2Tm0
+         fWChB1QAcqLYtX3s55tGvEnRd6Iv3yDx2McS/qNnBUQiQunGSgSjqeRBtIgw145CVnwy
+         E8bUdNlN5G9AbMeMHeFDezFROeobMZ/nUT6VygBS95Z1itSTFrj+z75Rt66xA6zAKE4A
+         BMrqd5ci1eeuTE+EtSQHNoaV7LAPi7MoZpS/Q5a1yuyySHlMwqHq31SB1bnFqe2KP5r2
+         5g+B5Mf0WaUGL4ogMCQb3VJd65aO1QhZFG/WPap7I37mB9ezpbGlkv8svlW1drpd9hjb
+         NEOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nA9wVETTE+l5uPS+DZDdIXSJ2iBKhK6p+7XSOzWKHSU=;
-        b=P5v4UqtWoJBQgGnM4G+7RMq8g4AoHGCrPvNf9EuMUEnhnNcSgQatI12AnyN/RiF+zW
-         IReV9wv7DktW2RKZC6pZ0Vpfr3DgaNAmKVyMGc+HzvbSlgJ9jgRXCiPviw46OmQiEb/z
-         vAUz2X9tiDapyMFlp4e7nH9Cr8ykP6VGzanqWcJHsJ0Wh+aHuJpWt7t9bCJohwrWHAEa
-         vn2sDW6dK2MQt+2KPS1JIWLjE6x/iMljNFQnSQsAJWYVwQQGQyYMbWxVeyiP89FdOT17
-         HOqb1+tUCmx/M5iJKZ8wb8eA+Bt/Ju1j/OFov5iQkxvhDjFCT82sXDQGcVlknnhOx/MZ
-         oBSA==
-X-Gm-Message-State: AOAM53272xNLZ347sOdGdYKFyDg3gkjQbdD6it5078FRH4GoIk3A8dt9
-        iSsL4cY3XTR0zyvdVy/Z9TObEQ==
-X-Google-Smtp-Source: ABdhPJzcfW5vsBPQIw18Etx1koK5A46+8gpgVbmzPhoOyR9LddKs/Y713OCbzU6GInd9sSgZFBiXWA==
-X-Received: by 2002:adf:ecca:: with SMTP id s10mr3123127wro.324.1615971427969;
-        Wed, 17 Mar 2021 01:57:07 -0700 (PDT)
+        bh=8874Mz34yg9EJ3yZWmxIP9iMB3o9NkD0mVwqsVKhHmY=;
+        b=Gn78MnvTrZBx109kFD0nGTwOdipO+WYx87vro+nb5XDPMe1tuH841iLgHcApgVDAUX
+         U2aJfJvZErGb17drf0dvtjs5f45JQ0Q03aP9WV10bgvk8L0XFDOFa6MWDSqfeFGyCAOh
+         5ejAEvJc3lUfxeyZ0Lpsi5xViMEvETDMOHSCoG/WItOLe9ta+UP2dG0brQ3gv8GOqg53
+         VVcJrpUPO/GPGtmgW9fZt6csSH0VN2X5Qz0RRtO1bMAQV/nLqD+/dG9CI2a+Fw3N+ZOY
+         YKVDjgSjifYtAqPe44Fj0nKbFe/SdO14MNEBaST3sQkPYgahOVexkn3W3vasSN+oc40K
+         8lUA==
+X-Gm-Message-State: AOAM530WkB7hbp9PD5gmJCtLJ1rGfQifeuyPBX67W7CIpybw8bdXB3g8
+        gRPaHbU+qdJbwyB04ljbonFaVA==
+X-Google-Smtp-Source: ABdhPJwEaEN+lO1BXC85/Urtt4ByXSxTUMs35cKgWOXH1pfSrxv2rxSZ3Hld1wBvoRvtOu/5jLnYkA==
+X-Received: by 2002:adf:8b4e:: with SMTP id v14mr2190343wra.103.1615971429053;
+        Wed, 17 Mar 2021 01:57:09 -0700 (PDT)
 Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id j123sm1807243wmb.1.2021.03.17.01.57.07
+        by smtp.gmail.com with ESMTPSA id j123sm1807243wmb.1.2021.03.17.01.57.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 01:57:07 -0700 (PDT)
+        Wed, 17 Mar 2021 01:57:08 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
+        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@avagotech.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH 02/18] scsi: mpt3sas: mpt3sas_scs: Move a little data from the stack onto the heap
-Date:   Wed, 17 Mar 2021 08:56:45 +0000
-Message-Id: <20210317085701.2891231-3-lee.jones@linaro.org>
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 03/18] scsi: bfa: bfa_fcs_lport: Move a large struct from the stack onto the heap
+Date:   Wed, 17 Mar 2021 08:56:46 +0000
+Message-Id: <20210317085701.2891231-4-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210317085701.2891231-1-lee.jones@linaro.org>
 References: <20210317085701.2891231-1-lee.jones@linaro.org>
@@ -73,117 +70,77 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/scsi/mpt3sas/mpt3sas_scsih.c: In function ‘_scsih_scan_for_devices_after_reset’:
- drivers/scsi/mpt3sas/mpt3sas_scsih.c:10473:1: warning: the frame size of 1064 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+ drivers/scsi/bfa/bfa_fcs_lport.c: In function ‘bfa_fcs_lport_fdmi_build_rhba_pyld’:
+ drivers/scsi/bfa/bfa_fcs_lport.c:2152:1: warning: the frame size of 1200 bytes is larger than 1024 bytes [-Wframe-larger-than=]
 
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>
+Cc: Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
 Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
 Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: MPT-FusionLinux.pdl@avagotech.com
-Cc: MPT-FusionLinux.pdl@broadcom.com
 Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 38 +++++++++++++++++++---------
- 1 file changed, 26 insertions(+), 12 deletions(-)
+ drivers/scsi/bfa/bfa_fcs_lport.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index 7bd0a57e5b928..945531e94d7e4 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -10219,8 +10219,8 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 	Mpi2ExpanderPage0_t expander_pg0;
- 	Mpi2SasDevicePage0_t sas_device_pg0;
- 	Mpi26PCIeDevicePage0_t pcie_device_pg0;
--	Mpi2RaidVolPage1_t volume_pg1;
--	Mpi2RaidVolPage0_t volume_pg0;
-+	Mpi2RaidVolPage1_t *volume_pg1;
-+	Mpi2RaidVolPage0_t *volume_pg0;
- 	Mpi2RaidPhysDiskPage0_t pd_pg0;
- 	Mpi2EventIrConfigElement_t element;
- 	Mpi2ConfigReply_t mpi_reply;
-@@ -10235,6 +10235,16 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 	u8 retry_count;
- 	unsigned long flags;
- 
-+	volume_pg0 = kzalloc(sizeof(*volume_pg0), GFP_KERNEL);
-+	if (!volume_pg0)
+diff --git a/drivers/scsi/bfa/bfa_fcs_lport.c b/drivers/scsi/bfa/bfa_fcs_lport.c
+index 49a14157f123c..b12afcc4b1894 100644
+--- a/drivers/scsi/bfa/bfa_fcs_lport.c
++++ b/drivers/scsi/bfa/bfa_fcs_lport.c
+@@ -1408,7 +1408,7 @@ static void     bfa_fcs_lport_fdmi_rpa_response(void *fcsarg,
+ 					       u32 resid_len,
+ 					       struct fchs_s *rsp_fchs);
+ static void     bfa_fcs_lport_fdmi_timeout(void *arg);
+-static u16 bfa_fcs_lport_fdmi_build_rhba_pyld(struct bfa_fcs_lport_fdmi_s *fdmi,
++static int bfa_fcs_lport_fdmi_build_rhba_pyld(struct bfa_fcs_lport_fdmi_s *fdmi,
+ 						  u8 *pyld);
+ static u16 bfa_fcs_lport_fdmi_build_rprt_pyld(struct bfa_fcs_lport_fdmi_s *fdmi,
+ 						  u8 *pyld);
+@@ -1887,6 +1887,8 @@ bfa_fcs_lport_fdmi_send_rhba(void *fdmi_cbarg, struct bfa_fcxp_s *fcxp_alloced)
+ 		bfa_fcs_lport_fdmi_build_rhba_pyld(fdmi,
+ 					  (u8 *) ((struct ct_hdr_s *) pyld
+ 						       + 1));
++	if (attr_len < 0)
 +		return;
-+
-+	volume_pg1 = kzalloc(sizeof(*volume_pg1), GFP_KERNEL);
-+	if (!volume_pg1) {
-+		kfree(volume_pg0);
-+		return;
-+	}
-+
- 	ioc_info(ioc, "scan devices: start\n");
  
- 	_scsih_sas_host_refresh(ioc);
-@@ -10344,7 +10354,7 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 	/* volumes */
- 	handle = 0xFFFF;
- 	while (!(mpt3sas_config_get_raid_volume_pg1(ioc, &mpi_reply,
--	    &volume_pg1, MPI2_RAID_VOLUME_PGAD_FORM_GET_NEXT_HANDLE, handle))) {
-+	    volume_pg1, MPI2_RAID_VOLUME_PGAD_FORM_GET_NEXT_HANDLE, handle))) {
- 		ioc_status = le16_to_cpu(mpi_reply.IOCStatus) &
- 		    MPI2_IOCSTATUS_MASK;
- 		if (ioc_status != MPI2_IOCSTATUS_SUCCESS) {
-@@ -10352,15 +10362,15 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 				 ioc_status, le32_to_cpu(mpi_reply.IOCLogInfo));
- 			break;
- 		}
--		handle = le16_to_cpu(volume_pg1.DevHandle);
-+		handle = le16_to_cpu(volume_pg1->DevHandle);
- 		spin_lock_irqsave(&ioc->raid_device_lock, flags);
- 		raid_device = _scsih_raid_device_find_by_wwid(ioc,
--		    le64_to_cpu(volume_pg1.WWID));
-+		    le64_to_cpu(volume_pg1->WWID));
- 		spin_unlock_irqrestore(&ioc->raid_device_lock, flags);
- 		if (raid_device)
- 			continue;
- 		if (mpt3sas_config_get_raid_volume_pg0(ioc, &mpi_reply,
--		    &volume_pg0, MPI2_RAID_VOLUME_PGAD_FORM_HANDLE, handle,
-+		    volume_pg0, MPI2_RAID_VOLUME_PGAD_FORM_HANDLE, handle,
- 		     sizeof(Mpi2RaidVolPage0_t)))
- 			continue;
- 		ioc_status = le16_to_cpu(mpi_reply.IOCStatus) &
-@@ -10370,17 +10380,17 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 				 ioc_status, le32_to_cpu(mpi_reply.IOCLogInfo));
- 			break;
- 		}
--		if (volume_pg0.VolumeState == MPI2_RAID_VOL_STATE_OPTIMAL ||
--		    volume_pg0.VolumeState == MPI2_RAID_VOL_STATE_ONLINE ||
--		    volume_pg0.VolumeState == MPI2_RAID_VOL_STATE_DEGRADED) {
-+		if (volume_pg0->VolumeState == MPI2_RAID_VOL_STATE_OPTIMAL ||
-+		    volume_pg0->VolumeState == MPI2_RAID_VOL_STATE_ONLINE ||
-+		    volume_pg0->VolumeState == MPI2_RAID_VOL_STATE_DEGRADED) {
- 			memset(&element, 0, sizeof(Mpi2EventIrConfigElement_t));
- 			element.ReasonCode = MPI2_EVENT_IR_CHANGE_RC_ADDED;
--			element.VolDevHandle = volume_pg1.DevHandle;
-+			element.VolDevHandle = volume_pg1->DevHandle;
- 			ioc_info(ioc, "\tBEFORE adding volume: handle (0x%04x)\n",
--				 volume_pg1.DevHandle);
-+				 volume_pg1->DevHandle);
- 			_scsih_sas_volume_add(ioc, &element);
- 			ioc_info(ioc, "\tAFTER adding volume: handle (0x%04x)\n",
--				 volume_pg1.DevHandle);
-+				 volume_pg1->DevHandle);
- 		}
- 	}
- 
-@@ -10468,6 +10478,10 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 		ioc_info(ioc, "\tAFTER adding pcie end device: handle (0x%04x), wwid(0x%016llx)\n",
- 			 handle, (u64)le64_to_cpu(pcie_device_pg0.WWID));
- 	}
-+
-+	kfree(volume_pg0);
-+	kfree(volume_pg1);
-+
- 	ioc_info(ioc, "\tpcie devices: pcie end devices complete\n");
- 	ioc_info(ioc, "scan devices: complete\n");
+ 	bfa_fcxp_send(fcxp, NULL, port->fabric->vf_id, port->lp_tag, BFA_FALSE,
+ 			  FC_CLASS_3, (len + attr_len), &fchs,
+@@ -1896,17 +1898,20 @@ bfa_fcs_lport_fdmi_send_rhba(void *fdmi_cbarg, struct bfa_fcxp_s *fcxp_alloced)
+ 	bfa_sm_send_event(fdmi, FDMISM_EVENT_RHBA_SENT);
  }
+ 
+-static          u16
++static int
+ bfa_fcs_lport_fdmi_build_rhba_pyld(struct bfa_fcs_lport_fdmi_s *fdmi, u8 *pyld)
+ {
+ 	struct bfa_fcs_lport_s *port = fdmi->ms->port;
+-	struct bfa_fcs_fdmi_hba_attr_s hba_attr;
+-	struct bfa_fcs_fdmi_hba_attr_s *fcs_hba_attr = &hba_attr;
++	struct bfa_fcs_fdmi_hba_attr_s *fcs_hba_attr;
+ 	struct fdmi_rhba_s *rhba = (struct fdmi_rhba_s *) pyld;
+ 	struct fdmi_attr_s *attr;
++	int        len;
+ 	u8        *curr_ptr;
+-	u16        len, count;
+-	u16	templen;
++	u16	templen, count;
++
++	fcs_hba_attr = kzalloc(sizeof(*fcs_hba_attr), GFP_KERNEL);
++	if (!fcs_hba_attr)
++		return -ENOMEM;
+ 
+ 	/*
+ 	 * get hba attributes
+@@ -2148,6 +2153,9 @@ bfa_fcs_lport_fdmi_build_rhba_pyld(struct bfa_fcs_lport_fdmi_s *fdmi, u8 *pyld)
+ 	len += ((sizeof(attr->type) + sizeof(attr->len)) * count);
+ 
+ 	rhba->hba_attr_blk.attr_count = cpu_to_be32(count);
++
++	kfree(fcs_hba_attr);
++
+ 	return len;
+ }
+ 
 -- 
 2.27.0
 
