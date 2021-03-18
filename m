@@ -2,73 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 526A433FB86
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Mar 2021 23:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6ED33FC33
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Mar 2021 01:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbhCQWym (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Mar 2021 18:54:42 -0400
-Received: from mga07.intel.com ([134.134.136.100]:47152 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229494AbhCQWyX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Mar 2021 18:54:23 -0400
-IronPort-SDR: wlizUNRAzQgR19OWeYOl8z2PKb0nY7jOmLjbEacVJiaT2IVCQMIixb4tdgyPeUU/rYVbMSC+kJ
- j4//z8iH/u7w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9926"; a="253571505"
-X-IronPort-AV: E=Sophos;i="5.81,257,1610438400"; 
-   d="scan'208";a="253571505"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2021 15:54:23 -0700
-IronPort-SDR: ASwbiLKsd30lU7VnETPpYOrZIj0Fo3LBq85QeST7tI0QXTHaST2fBixZgHF+DOjdBaUEi9UlW5
- uneBRLIz6Z9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,257,1610438400"; 
-   d="scan'208";a="374333136"
-Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2021 15:54:20 -0700
-Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lMf3U-0000tU-Aq; Wed, 17 Mar 2021 22:54:20 +0000
-Date:   Thu, 18 Mar 2021 06:53:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, kiran-kumar.kasturi@broadcom.com,
-        sankar.patra@broadcom.com, sasikumar.pc@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com,
-        anand.lodnoor@broadcom.com,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [RFC PATCH] megaraid_sas: megasas_set_sdev_removed_by_fw can be
- static
-Message-ID: <20210317225325.GA48350@453058ecf1e7>
-References: <20210317190824.3050-4-chandrakanth.patil@broadcom.com>
+        id S230157AbhCRAZM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Mar 2021 20:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230145AbhCRAYz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Mar 2021 20:24:55 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C165C06174A
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 17:24:55 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id v23so389762ple.9
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Mar 2021 17:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=62xgyuajU6tPw+M6TsZi2hiokYvIOr5Uaenxy/zAlGg=;
+        b=WI0VP6TtBL+cnRViHv7of0jXPRhATu5KFZ/BcWIMdApFfQJkhUP7LkF0M+RYMD4sVA
+         11AWfppCK9H3XEcYaoiaFjrkqx6eoT/NGqHBnyyRysqGOAxIJFe8O15Fy5CA03VmfwSI
+         l28WWneVh2/QnaY+NCOK2wLlK7sfucZHd9q2lsxrWDLBvWw6KJLv7NX+RDZynH8D8fM9
+         QbIiNPwfP0XS4Buanio/I+GBH6d+SWNSVCwqnhu4DPqwV3ok04fYQ+H3mr8McZ9bsVwj
+         bvTyPr/F7kCtMDRu5l/RGB5MAmlQfiXYzmu4aaOauC4es79EWQzmTRdqBPmmrfiRTueZ
+         nbHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=62xgyuajU6tPw+M6TsZi2hiokYvIOr5Uaenxy/zAlGg=;
+        b=jOCL/bY3hvqiAvSgUGR4IXExHVt8R2N/kLXNkjuEMLiEPvt3o/OQl8muG4dThP5Mit
+         p41ZaJ7OAbvgr6zbnXd34V8k3EU2JLeJHL+5Uc/W9ny47RW5w8NOJg0TTjCEciR+PhD5
+         7ujxl40vZ/Wy5JsEuzdE2GHl+btQ90l744LXKq9I+iM/cx8qUvTivJ/TBODyXGixP42w
+         M13g8TViGvfOcY94VSRH6WR7XZbAAIihYtaM3QXBQP+BzptYz4Sd/b26xzYCjx9vBnhC
+         +r591szWnu8SOQ2SYjjB/yKUNL62LGCacz7WseW5e6dtuqzOrEmsRXK4Os0qxnWpMz5S
+         ll/A==
+X-Gm-Message-State: AOAM532BiqadzE8MtPELE7hng6NRzQmRcqBFljap8mxfGN7fELJZgu1l
+        ZAks1JIB1F/aIAOfrJPnw3s8NWil19fWZEBaIbNcaw==
+X-Google-Smtp-Source: ABdhPJzWI3PAehWugN6WUCwZTKYZmT4l1xfy3zClMuUAJQGMw+FDmDgjxsz23qtHVd1KWB5WITvmwfo7Jbp5U6EJf4g=
+X-Received: by 2002:a17:902:bf01:b029:e6:6b59:a48b with SMTP id
+ bi1-20020a170902bf01b02900e66b59a48bmr6959147plb.55.1616027094933; Wed, 17
+ Mar 2021 17:24:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210317190824.3050-4-chandrakanth.patil@broadcom.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20210316193905.1673600-1-jollys@google.com> <5e2c35b6-a9c4-0637-738b-ff6920635425@huawei.com>
+In-Reply-To: <5e2c35b6-a9c4-0637-738b-ff6920635425@huawei.com>
+From:   Jolly Shah <jollys@google.com>
+Date:   Wed, 17 Mar 2021 17:24:44 -0700
+Message-ID: <CABGCNpDdK2+DNTJpzjig3hX3W_7JB8nEcRcuRnv8Z4oRSq2-dA@mail.gmail.com>
+Subject: Re: [PATCH] scsi: libsas: Reset num_scatter if libata mark qc as NODATA
+To:     John Garry <john.garry@huawei.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        a.darwish@linutronix.de, Jason Yan <yanaijie@huawei.com>,
+        luojiaxing@huawei.com, dan.carpenter@oracle.com,
+        b.zolnierkie@samsung.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi John,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- megaraid_sas_base.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the review.
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index f3716f7e1d105..09a8b37eb425a 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3498,7 +3498,7 @@ megasas_complete_abort(struct megasas_instance *instance,
- 	}
- }
- 
--void
-+static void
- megasas_set_sdev_removed_by_fw(struct megasas_instance *instance)
- {
- 	struct scsi_device *sdev;
+
+On Wed, Mar 17, 2021 at 4:44 AM John Garry <john.garry@huawei.com> wrote:
+>
+> On 16/03/2021 19:39, Jolly Shah wrote:
+> > When the cache_type for the scsi device is changed, the scsi layer
+> > issues a MODE_SELECT command. The caching mode details are communicated
+> > via a request buffer associated with the scsi command with data
+> > direction set as DMA_TO_DEVICE (scsi_mode_select). When this command
+> > reaches the libata layer, as a part of generic initial setup, libata
+> > layer sets up the scatterlist for the command using the scsi command
+> > (ata_scsi_qc_new). This command is then translated by the libata layer
+> > into ATA_CMD_SET_FEATURES (ata_scsi_mode_select_xlat). The libata layer
+> > treats this as a non data command (ata_mselect_caching), since it only
+> > needs an ata taskfile to pass the caching on/off information to the
+> > device. It does not need the scatterlist that has been setup, so it does
+> > not perform dma_map_sg on the scatterlist (ata_qc_issue).
+>
+> So if we don't perform the dma_map_sg() on the sgl at this point, then
+> it seems to me that we should not perform for_each_sg() on it either,
+> right? That is still what happens in sas_ata_qc_issue() in this case.
+>
+
+Yes that's right. To avoid that, I can add elseif block for
+ATA_PROT_NODATA before for_each_sg() is performed. Currently there's
+existing code block for ATA_PROT_NODATA after for_each_sg()  is
+performed,
+reused that to reset num_scatter. Please suggest.
+
+> > Unfortunately,
+> > when this command reaches the libsas layer(sas_ata_qc_issue), libsas
+> > layer sees it as a non data command with a scatterlist. It cannot
+> > extract the correct dma length, since the scatterlist has not been
+> > mapped with dma_map_sg for a DMA operation. When this partially
+> > constructed SAS task reaches pm80xx LLDD, it results in below warning.
+> >
+> > "pm80xx_chip_sata_req 6058: The sg list address
+> > start_addr=0x0000000000000000 data_len=0x0end_addr_high=0xffffffff
+> > end_addr_low=0xffffffff has crossed 4G boundary"
+> >
+> > This patch assigns appropriate value to  num_sectors for ata non data
+> > commands.
+> >
+> > Signed-off-by: Jolly Shah <jollys@google.com>
+> > ---
+> >   drivers/scsi/libsas/sas_ata.c | 6 ++++--
+> >   1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+> > index 024e5a550759..94ec08cebbaa 100644
+> > --- a/drivers/scsi/libsas/sas_ata.c
+> > +++ b/drivers/scsi/libsas/sas_ata.c
+> > @@ -209,10 +209,12 @@ static unsigned int sas_ata_qc_issue(struct ata_queued_cmd *qc)
+> >               task->num_scatter = si;
+> >       }
+> >
+> > -     if (qc->tf.protocol == ATA_PROT_NODATA)
+> > +     if (qc->tf.protocol == ATA_PROT_NODATA) {
+> >               task->data_dir = DMA_NONE;
+> > -     else
+> > +             task->num_scatter = 0;
+>
+> task->num_scatter has already been set in this function. Best not set it
+> twice.
+>
+
+Sure. Please suggest if I should update patch to above suggested
+approach. That will avoid setting num_scatter twice.
+
+Thanks,
+Jolly Shah
+
+> Thanks,
+> John
+>
+> > +     } else {
+> >               task->data_dir = qc->dma_dir;
+> > +     }
+> >       task->scatter = qc->sg;
+> >       task->ata_task.retry_count = 1;
+> >       task->task_state_flags = SAS_TASK_STATE_PENDING;
+> >
+>
