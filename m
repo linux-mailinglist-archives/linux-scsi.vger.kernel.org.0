@@ -2,87 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 790C634182B
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Mar 2021 10:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E3A3419C4
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Mar 2021 11:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbhCSJ0F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Mar 2021 05:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbhCSJZc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Mar 2021 05:25:32 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE80C06174A;
-        Fri, 19 Mar 2021 02:25:32 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id c4so2150371qkg.3;
-        Fri, 19 Mar 2021 02:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FRCh2wX8tgMUCklcnZV+Qo3HupS3FlJjITrZLEDGD4g=;
-        b=q1nJjhnRV5OcbsC6B50JNzLkKnOZ/oVBGivWeTPwJJ5GqDoRwdF2z3g8Wilo811rL9
-         oBth0jmpWFdNtvphQ7HWLB0F5yz40y/R74tDysE/9+0EFRDzbTZVHjkhzPlDGfJcLy29
-         SwrG/zsckK7yrJzq7gZiodZEaPY6h8rDIcWMZOr8R1uKUnS6UQnE1VF8+MlgHrapEPP+
-         kfPkt1eSbv/FjoAWk+1dH7I9YclYxde3A43i3uMfmDQQIb7mF++fAsXAeC35DEpeCMjB
-         9GbZ5q7JvDEtodMYnpRkDD4ZKIi4xl0RErxBAjG5uZUJisM454L7vQ0TRm1dYAEQObWq
-         UrwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FRCh2wX8tgMUCklcnZV+Qo3HupS3FlJjITrZLEDGD4g=;
-        b=cGoWfWvSvYsMq7FBWeT7oHDBFupbqyPwpCB5UFf7PYGORpsKPc0WMI5EZ9J5OPo+Sn
-         NW2F3ItkCdi1Rai1iqeYKGuPAo25hFW95pkug9d0YoWBR0GnCN9xMOboDdP0SSKNTZ9U
-         N3XjY1c1YrZXVmFMCCwFM2uetgFQ74BRNbYDY/4slNwmsnhm2SiBx8rwcqo7xa94QFum
-         sJX46WLhP2UlhmGyFsY+o51ADX41noQTLGpW8f+fGN8JmNld8v+u9XdUP036CTbuSy7T
-         5D3+MV1vlXT6cEcpbXZcqfoV43bwmmG7w6H0I4xO9ssoupVibYVQIdexWUygPozW3LmE
-         slRA==
-X-Gm-Message-State: AOAM530FY/4xXpuaVE2g+4bS9GzE/RCGYKE+O5U4tNBd2N7iIcUhczUs
-        TJqWFzHyejfhwQ5oUy0DMEkEkNbtcNYMD/qM
-X-Google-Smtp-Source: ABdhPJwA+QL6CEKzMcSjMX02ysy42INTYOMwQEteAeSMuRLORWfY/QCg3BHwJb/HSO3yMcxFYyxhSg==
-X-Received: by 2002:a37:bc43:: with SMTP id m64mr1397070qkf.186.1616145931321;
-        Fri, 19 Mar 2021 02:25:31 -0700 (PDT)
-Received: from localhost.localdomain ([37.19.198.87])
-        by smtp.gmail.com with ESMTPSA id r2sm3318539qti.4.2021.03.19.02.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Mar 2021 02:25:30 -0700 (PDT)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        unixbhaskar@gmail.com, lee.jones@linaro.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org
-Subject: [PATCH] scsi: csiostor: Fix a typo
-Date:   Fri, 19 Mar 2021 14:53:11 +0530
-Message-Id: <20210319092311.31776-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        id S229844AbhCSKSI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Mar 2021 06:18:08 -0400
+Received: from smtp.rcn.com ([69.168.97.78]:57666 "EHLO smtp.rcn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229838AbhCSKRs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 19 Mar 2021 06:17:48 -0400
+DKIM-Signature: v=1; a=rsa-sha1; d=rcn.com; s=20180516; c=relaxed/simple;
+        q=dns/txt; i=@rcn.com; t=1616149067;
+        h=From:Subject:Date:To:MIME-Version:Content-Type;
+        bh=q2GP5DZBFTz7jChuUzU/gNh/GMo=;
+        b=WnXNOG5z3Inr+/s3fF9D1adM+jk47QZUUTk1SC8E/vje4pjHTIXF3pPDxnsA8MBO
+        ldqjkvIBDuhLjklm3+uqvqPThZQpSc+5Q7uVPy8+yNi59QDEJuBy2F3ilsyED0L8
+        dNaGIronyyNayhA9P00nSeeNIDkaTLrXAoyUtvAyG22ayM8539AcG49M/tlgL8Kz
+        ZncdUFn2m2FeTauEp6xHqYyAwz0HrbqK2jLfm9tDXJe+u8cgqdkQ4DxXWB8Vw9ah
+        5RZVDpY03tXoBgBKk0SfgFWSpxM0ofbqlQbRedXaPEHHdEhRZ86Gho7SU4F4Yelb
+        U6k2wjsV4UdZZ/vjp52klA==;
+X-Authed-Username: YWxvMUByY24uY29t
+Authentication-Results: smtp01.rcn.cmh.synacor.com header.from=alo1@rcn.com; sender-id=softfail
+Authentication-Results: smtp01.rcn.cmh.synacor.com smtp.mail=alo1@rcn.com; spf=softfail; sender-id=softfail
+Received: from [10.33.66.0] ([10.33.66.0:36949] helo=md01.rcn.cmh.synacor.com)
+        by smtp.rcn.com (envelope-from <alo1@rcn.com>)
+        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
+        id 4B/1A-35882-94A74506; Fri, 19 Mar 2021 06:17:47 -0400
+Date:   Fri, 19 Mar 2021 06:17:45 -0400 (EDT)
+From:   "v. sharma" <alo1@rcn.com>
+Reply-To: "v. sharma" <vsharmaa475@gmail.com>
+To:     alo1@rcn.com
+Message-ID: <1327049472.2144031.1616149065470.JavaMail.root@rcn.com>
+In-Reply-To: <324967520.2140215.1616148653402.JavaMail.root@rcn.com>
+Subject: Re: hii
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [193.37.254.78]
+X-Mailer: Zimbra 7.2.7_GA_2942 (zclient/7.2.7_GA_2942)
+X-Vade-Verdict: clean
+X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgeduledrudefkedgudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuufgjpfetvefqtfdptfevpfdpqfgfvfenuceurghilhhouhhtmecufedtudenucgoteeftdduqddtudculdduhedmnecujfgurhepfffhrhfvkfgjufggtgfgihfosehtjegttdertdejnecuhfhrohhmpedfvhdruchshhgrrhhmrgdfuceorghlohdusehrtghnrdgtohhmqeenucggtffrrghtthgvrhhnpeevheevffetuedvkeejfffhkeevkedtjeffieduteejhffhudegledtfeegieelvdenucfkphepuddtrdeffedrieeirddtpdduleefrdefjedrvdehgedrjeeknecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepuddtrdeffedrieeirddtnedpmhgrihhlfhhrohhmpegrlhhoudesrhgtnhdrtghomhenpdhrtghpthhtoheplhhlvggtthhorhdqrhhslhesthgvlhgrnhhgrghnrgdrghhovhdrihhnne
+X-Vade-Client: RCN
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-s/boudaries/boundaries/
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- drivers/scsi/csiostor/csio_hw_t5.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/csiostor/csio_hw_t5.c b/drivers/scsi/csiostor/csio_hw_t5.c
-index 1df8891d3725..86fded97d799 100644
---- a/drivers/scsi/csiostor/csio_hw_t5.c
-+++ b/drivers/scsi/csiostor/csio_hw_t5.c
-@@ -244,7 +244,7 @@ csio_t5_edc_read(struct csio_hw *hw, int idx, uint32_t addr, __be32 *data,
-  *
-  * Reads/writes an [almost] arbitrary memory region in the firmware: the
-  * firmware memory address, length and host buffer must be aligned on
-- * 32-bit boudaries.  The memory is transferred as a raw byte sequence
-+ * 32-bit boundaries.  The memory is transferred as a raw byte sequence
-  * from/to the firmware's memory.  If this memory contains data
-  * structures which contain multi-byte integers, it's the callers
-  * responsibility to perform appropriate byte order conversions.
---
-2.26.2
+                         !!
 
