@@ -2,61 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE14342EB9
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Mar 2021 19:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1780334304E
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Mar 2021 00:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbhCTSGd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 20 Mar 2021 14:06:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229769AbhCTSGZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 20 Mar 2021 14:06:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 2F40161944;
-        Sat, 20 Mar 2021 18:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616263585;
-        bh=VkpKXK3pi6O79Mj26B+jxmkQNW1Q7aYAIuqrB1jhEag=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=KYmWf6BkXjAeWXxmUgR8kxrl1DG8+wlKVdHMkYllz57rMdKqBQW2ZvEVuyg0GWz/G
-         nLGXjykdWxx+GcoOFgOYxSJbAtuxvZkhsnwiKFYNgDytmLHti272pOoQOJAVn4Vg0F
-         wgnRSpB8Zu73CbmkCkDsVbtc8nO1IQ7o0iU2fdOwe45pjul8DZythNIFP4c+UG3ITZ
-         EkI2JyFt+4ZKyuIvExnZTEeXzIA3Ik6y2ioaullwpB3PnQc61IIwoMD2COjp6rqPOe
-         QxqkN/avSJe2xhhn5kYB8y4tWdHjZH7VvI7FpWpC0pA/5Q3QJiqMnOsVAEJ13RgeHB
-         y5wk3P/tlL6PQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2AB016096D;
-        Sat, 20 Mar 2021 18:06:25 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 5.12-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <04bf2656fe347fa20b3d6599c18322426720b084.camel@HansenPartnership.com>
-References: <04bf2656fe347fa20b3d6599c18322426720b084.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-scsi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <04bf2656fe347fa20b3d6599c18322426720b084.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: a50bd64616907ed126ffbdbaa06c5ce708c4a404
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: af97713dff9f877922af35f0796e1d76b8a4be00
-Message-Id: <161626358516.25184.6388468735282244373.pr-tracker-bot@kernel.org>
-Date:   Sat, 20 Mar 2021 18:06:25 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S229805AbhCTXYP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 20 Mar 2021 19:24:15 -0400
+Received: from mail-pg1-f174.google.com ([209.85.215.174]:37584 "EHLO
+        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229834AbhCTXYI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 20 Mar 2021 19:24:08 -0400
+Received: by mail-pg1-f174.google.com with SMTP id o11so6161356pgs.4
+        for <linux-scsi@vger.kernel.org>; Sat, 20 Mar 2021 16:24:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r4wa/ons1kAqT9sjRLuzoe8n2hh1ST9Wt6gXAqyPgy4=;
+        b=Gne3qvmsKC8XpVirh1xcCN4OGZoVju9tf+myGTJVrGFyC9YZA740K663cgFXV8XDbm
+         hxvztbRQGEumXC1LEBEJSEWwBNmTvXh+vcbc04ECw3QCmEf3s5bGazyihLIEoQQbplk0
+         pO/S9M4chdy62+6A3vNkzokOT3pqWvhaV0hVnjhXCJlwNvCM06DYbxzeP2ESLU5VbbGZ
+         NSHJxor+sQebsLd8V6nAQTLy5y4WyAIJm6+h0cugs7C3cGnvx8PnfI2/+k9g4fhHUgh0
+         ov4uJVCLUsh7KUMW/SOP8j1/nokrjwtbRRpl2cllRFT6NVrjZQTQWR7E33aTr3ndjghy
+         ayAQ==
+X-Gm-Message-State: AOAM532LoZTWiwMgd7yXUr8TZKT7US0DCEcWZgoApNqAGUSKnDmZObmu
+        HUZjvow36YPxG3vOuXmcmII=
+X-Google-Smtp-Source: ABdhPJwBZB+BpvOCZ2vIqCIENHqzd6onjPUhOqwvLM0mQflVba2RonmZ5x51E/qdbg3LUA1TXfEzVA==
+X-Received: by 2002:a65:44c5:: with SMTP id g5mr17239909pgs.295.1616282646841;
+        Sat, 20 Mar 2021 16:24:06 -0700 (PDT)
+Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:9252:a76b:2952:3189])
+        by smtp.gmail.com with ESMTPSA id u7sm8869159pfh.150.2021.03.20.16.24.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Mar 2021 16:24:06 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v3 0/7] qla2xxx patches for kernel v5.12 and v5.13
+Date:   Sat, 20 Mar 2021 16:23:52 -0700
+Message-Id: <20210320232359.941-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.30.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 20 Mar 2021 09:48:46 -0700:
+Hi Martin,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Please consider the first patch in this series for kernel v5.12 and the
+remaining patches for kernel v5.13.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/af97713dff9f877922af35f0796e1d76b8a4be00
+Thanks,
 
-Thank you!
+Bart.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Changes compared to v2:
+- Addressed the v2 review comments.
+- Added a seventh patch that adds a kzalloc() return value check.
+
+Changes compared to v1:
+- Improved the description of patch 1/6.
+- Dropped one patch that is already upstream.
+
+Bart Van Assche (7):
+  Revert "qla2xxx: Make sure that aborted commands are freed"
+  qla2xxx: Constify struct qla_tgt_func_tmpl
+  qla2xxx: Fix endianness annotations
+  qla2xxx: Suppress Coverity complaints about dseg_r*
+  qla2xxx: Simplify qla8044_minidump_process_control()
+  qla2xxx: Always check the return value of qla24xx_get_isp_stats()
+  qla2xxx: Check kzalloc() return value
+
+ drivers/scsi/qla2xxx/qla_attr.c    |  8 +++++++-
+ drivers/scsi/qla2xxx/qla_bsg.c     |  4 ++++
+ drivers/scsi/qla2xxx/qla_def.h     |  4 ++--
+ drivers/scsi/qla2xxx/qla_iocb.c    |  3 ++-
+ drivers/scsi/qla2xxx/qla_isr.c     |  2 +-
+ drivers/scsi/qla2xxx/qla_mr.c      | 12 ++++++------
+ drivers/scsi/qla2xxx/qla_mr.h      |  8 ++++++--
+ drivers/scsi/qla2xxx/qla_nx2.c     |  8 --------
+ drivers/scsi/qla2xxx/qla_sup.c     |  9 +++++----
+ drivers/scsi/qla2xxx/qla_target.c  | 13 +++++--------
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c |  6 +-----
+ 11 files changed, 39 insertions(+), 38 deletions(-)
+
