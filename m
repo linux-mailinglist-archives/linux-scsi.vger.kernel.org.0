@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37360343051
-	for <lists+linux-scsi@lfdr.de>; Sun, 21 Mar 2021 00:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32EF343052
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Mar 2021 00:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbhCTXYR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 20 Mar 2021 19:24:17 -0400
-Received: from mail-pl1-f177.google.com ([209.85.214.177]:37676 "EHLO
-        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbhCTXYN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 20 Mar 2021 19:24:13 -0400
-Received: by mail-pl1-f177.google.com with SMTP id h20so4670973plr.4
-        for <linux-scsi@vger.kernel.org>; Sat, 20 Mar 2021 16:24:13 -0700 (PDT)
+        id S229840AbhCTXYw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 20 Mar 2021 19:24:52 -0400
+Received: from mail-pg1-f175.google.com ([209.85.215.175]:45612 "EHLO
+        mail-pg1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229884AbhCTXYP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 20 Mar 2021 19:24:15 -0400
+Received: by mail-pg1-f175.google.com with SMTP id n11so6154287pgm.12
+        for <linux-scsi@vger.kernel.org>; Sat, 20 Mar 2021 16:24:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ee5/Hwk/CNy9tnnYkU7iuKSqoOTwFuRXxBxJ32zQfKg=;
-        b=oAM53hThA4xjCNHSHgv4zks9sibzglRe87l/FKEawPVjeZhKrwXDj34h7vVYvAkXYh
-         XtZwCCuLH8ovxp0JSQlY4ocbrXMoteQq4s/hl+W1QrrxnJFLpUVmMFM1s4DVa4QNKonK
-         71/mG/ZFyIZHQ6i6FtJnZvQkjVWiMAm6M1A2YOriIsXmyP+qnwL1Hwoz86wr3ieKzgXT
-         +f4GvhNzczyWNDlDszHdhaIo8uycLzR1kupmCHUbDmGtD+b1vFTv96myIIB9nX2eQi0a
-         7RWUpacHc5UEw+d4nx5eHhc1m7ZXPnGxwVNldjhjCl7FVUZzZ8wB7YSjNDUz6lTYI0Oa
-         P3cQ==
-X-Gm-Message-State: AOAM5332bYCci4+vOCzSKwihFzvuQwRM49Dz+13N3Tl7EC75VDTZLCd6
-        Y+EOK+A2kK4zfcS/d5RA9BgmbhV0T5Q=
-X-Google-Smtp-Source: ABdhPJwqUlIRGWoxi1I37ZEXrKnnGcnc1Q1AiKdQ7hx9OHNqf3LIHZ/RINE3t3TwCFrWTb8mn+X+LA==
-X-Received: by 2002:a17:902:c1d5:b029:e6:52e0:6bdd with SMTP id c21-20020a170902c1d5b02900e652e06bddmr20459483plc.49.1616282653013;
-        Sat, 20 Mar 2021 16:24:13 -0700 (PDT)
+        bh=73EC2KzqpTqzE9VJFT6gqXuYYsYR6UX9nfEh/uhD7Ho=;
+        b=lhsMJ90M+DNnwg5CNazCI/CvzVcjA8ekU6KNYwQ0/z12mXbSNn6lQv5yWwjCF5BpkO
+         tmKzqHEFsPTkep4gKFiWBi7b+eBkuPlA3lNlb5qHqjm0GCXe4H1S0eYUKQygT1SCDbYd
+         Seu/slXuDp4ajydqxVdv4q9vXNt9q+pfDkM4pWT09Ese1F1yAbIW/DB+LIOqw2YktPdY
+         6sQDvPlTRMz4Thnu3mtaT9ZGbY+U0Pncl7EvCeNIkKZcJjJDfAphTpswFDCbLMjBznf7
+         pcXqxfYPdCHklFbu6pUzDSCSe7I+YATTKP6VImGKDx+alKxjMfKAMlpdTEKtX/Y4te8I
+         NJ/w==
+X-Gm-Message-State: AOAM532R+KFTXbJjJCTbSvf54wY9L81bOHOAInk55JVwq6lUF4yB7lfZ
+        xct5nBWe4V7yfP9D14Xs5/Y=
+X-Google-Smtp-Source: ABdhPJypu4hmLWFlQkNiUJcna7ieYgbmE7YRtFz8Vq22WEa139M27Sd4AbqBt8Vhn39eDQgLJehhiA==
+X-Received: by 2002:a63:508:: with SMTP id 8mr2803872pgf.220.1616282654511;
+        Sat, 20 Mar 2021 16:24:14 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:9252:a76b:2952:3189])
-        by smtp.gmail.com with ESMTPSA id u7sm8869159pfh.150.2021.03.20.16.24.11
+        by smtp.gmail.com with ESMTPSA id u7sm8869159pfh.150.2021.03.20.16.24.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Mar 2021 16:24:12 -0700 (PDT)
+        Sat, 20 Mar 2021 16:24:14 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -42,9 +42,9 @@ Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Daniel Wagner <dwagner@suse.de>,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
         Lee Duncan <lduncan@suse.com>
-Subject: [PATCH v3 4/7] qla2xxx: Suppress Coverity complaints about dseg_r*
-Date:   Sat, 20 Mar 2021 16:23:56 -0700
-Message-Id: <20210320232359.941-5-bvanassche@acm.org>
+Subject: [PATCH v3 5/7] qla2xxx: Simplify qla8044_minidump_process_control()
+Date:   Sat, 20 Mar 2021 16:23:57 -0700
+Message-Id: <20210320232359.941-6-bvanassche@acm.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210320232359.941-1-bvanassche@acm.org>
 References: <20210320232359.941-1-bvanassche@acm.org>
@@ -54,9 +54,11 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Change dseq_rq and dseg_rsp from scalar structure members into
-single-element arrays such that Coverity does not complain about the
-(*cur_dsd)++ statement in append_dsd64().
+This patch fixes the following Coverity complaint:
+
+    CID 177490 (#1 of 1): Unused value (UNUSED_VALUE)
+    assigned_value: Assigning value from opcode & 0xffffff7fU to opcode
+    here, but that stored value is overwritten before it can be used.
 
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Mike Christie <michael.christie@oracle.com>
@@ -65,70 +67,70 @@ Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Reviewed-by: Lee Duncan <lduncan@suse.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_mr.c | 12 ++++++------
- drivers/scsi/qla2xxx/qla_mr.h |  8 ++++++--
- 2 files changed, 12 insertions(+), 8 deletions(-)
+ drivers/scsi/qla2xxx/qla_nx2.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
-index d488ae95e149..6e920da64863 100644
---- a/drivers/scsi/qla2xxx/qla_mr.c
-+++ b/drivers/scsi/qla2xxx/qla_mr.c
-@@ -3266,8 +3266,8 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
- 			fx_iocb.req_xfrcnt =
- 			    cpu_to_le16(fxio->u.fxiocb.req_len);
- 			put_unaligned_le64(fxio->u.fxiocb.req_dma_handle,
--					   &fx_iocb.dseg_rq.address);
--			fx_iocb.dseg_rq.length =
-+					   &fx_iocb.dseg_rq[0].address);
-+			fx_iocb.dseg_rq[0].length =
- 			    cpu_to_le32(fxio->u.fxiocb.req_len);
+diff --git a/drivers/scsi/qla2xxx/qla_nx2.c b/drivers/scsi/qla2xxx/qla_nx2.c
+index 7c413f93d53e..5ceecc9642fc 100644
+--- a/drivers/scsi/qla2xxx/qla_nx2.c
++++ b/drivers/scsi/qla2xxx/qla_nx2.c
+@@ -2226,19 +2226,16 @@ qla8044_minidump_process_control(struct scsi_qla_host *vha,
+ 		if (opcode & QLA82XX_DBG_OPCODE_WR) {
+ 			qla8044_wr_reg_indirect(vha, crb_addr,
+ 			    crb_entry->value_1);
+-			opcode &= ~QLA82XX_DBG_OPCODE_WR;
  		}
  
-@@ -3276,8 +3276,8 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
- 			fx_iocb.rsp_xfrcnt =
- 			    cpu_to_le16(fxio->u.fxiocb.rsp_len);
- 			put_unaligned_le64(fxio->u.fxiocb.rsp_dma_handle,
--					   &fx_iocb.dseg_rsp.address);
--			fx_iocb.dseg_rsp.length =
-+					   &fx_iocb.dseg_rsp[0].address);
-+			fx_iocb.dseg_rsp[0].length =
- 			    cpu_to_le32(fxio->u.fxiocb.rsp_len);
+ 		if (opcode & QLA82XX_DBG_OPCODE_RW) {
+ 			qla8044_rd_reg_indirect(vha, crb_addr, &read_value);
+ 			qla8044_wr_reg_indirect(vha, crb_addr, read_value);
+-			opcode &= ~QLA82XX_DBG_OPCODE_RW;
  		}
  
-@@ -3314,7 +3314,7 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
- 			    cpu_to_le16(bsg_job->request_payload.sg_cnt);
- 			tot_dsds =
- 			    bsg_job->request_payload.sg_cnt;
--			cur_dsd = &fx_iocb.dseg_rq;
-+			cur_dsd = &fx_iocb.dseg_rq[0];
- 			avail_dsds = 1;
- 			for_each_sg(bsg_job->request_payload.sg_list, sg,
- 			    tot_dsds, index) {
-@@ -3369,7 +3369,7 @@ qlafx00_fxdisc_iocb(srb_t *sp, struct fxdisc_entry_fx00 *pfxiocb)
- 			fx_iocb.rsp_dsdcnt =
- 			   cpu_to_le16(bsg_job->reply_payload.sg_cnt);
- 			tot_dsds = bsg_job->reply_payload.sg_cnt;
--			cur_dsd = &fx_iocb.dseg_rsp;
-+			cur_dsd = &fx_iocb.dseg_rsp[0];
- 			avail_dsds = 1;
+ 		if (opcode & QLA82XX_DBG_OPCODE_AND) {
+ 			qla8044_rd_reg_indirect(vha, crb_addr, &read_value);
+ 			read_value &= crb_entry->value_2;
+-			opcode &= ~QLA82XX_DBG_OPCODE_AND;
+ 			if (opcode & QLA82XX_DBG_OPCODE_OR) {
+ 				read_value |= crb_entry->value_3;
+ 				opcode &= ~QLA82XX_DBG_OPCODE_OR;
+@@ -2249,7 +2246,6 @@ qla8044_minidump_process_control(struct scsi_qla_host *vha,
+ 			qla8044_rd_reg_indirect(vha, crb_addr, &read_value);
+ 			read_value |= crb_entry->value_3;
+ 			qla8044_wr_reg_indirect(vha, crb_addr, read_value);
+-			opcode &= ~QLA82XX_DBG_OPCODE_OR;
+ 		}
+ 		if (opcode & QLA82XX_DBG_OPCODE_POLL) {
+ 			poll_time = crb_entry->crb_strd.poll_timeout;
+@@ -2269,7 +2265,6 @@ qla8044_minidump_process_control(struct scsi_qla_host *vha,
+ 					    crb_addr, &read_value);
+ 				}
+ 			} while (1);
+-			opcode &= ~QLA82XX_DBG_OPCODE_POLL;
+ 		}
  
- 			for_each_sg(bsg_job->reply_payload.sg_list, sg,
-diff --git a/drivers/scsi/qla2xxx/qla_mr.h b/drivers/scsi/qla2xxx/qla_mr.h
-index 73be8348402a..4f63aff333db 100644
---- a/drivers/scsi/qla2xxx/qla_mr.h
-+++ b/drivers/scsi/qla2xxx/qla_mr.h
-@@ -176,8 +176,12 @@ struct fxdisc_entry_fx00 {
- 	uint8_t flags;
- 	uint8_t reserved_1;
+ 		if (opcode & QLA82XX_DBG_OPCODE_RDSTATE) {
+@@ -2283,7 +2278,6 @@ qla8044_minidump_process_control(struct scsi_qla_host *vha,
+ 			qla8044_rd_reg_indirect(vha, addr, &read_value);
+ 			index = crb_entry->crb_ctrl.state_index_v;
+ 			tmplt_hdr->saved_state_array[index] = read_value;
+-			opcode &= ~QLA82XX_DBG_OPCODE_RDSTATE;
+ 		}
  
--	struct dsd64 dseg_rq;
--	struct dsd64 dseg_rsp;
-+	/*
-+	 * Use array size 1 below to prevent that Coverity complains about
-+	 * the append_dsd64() calls for the two arrays below.
-+	 */
-+	struct dsd64 dseg_rq[1];
-+	struct dsd64 dseg_rsp[1];
+ 		if (opcode & QLA82XX_DBG_OPCODE_WRSTATE) {
+@@ -2303,7 +2297,6 @@ qla8044_minidump_process_control(struct scsi_qla_host *vha,
+ 			}
  
- 	__le32 dataword;
- 	__le32 adapid;
+ 			qla8044_wr_reg_indirect(vha, addr, read_value);
+-			opcode &= ~QLA82XX_DBG_OPCODE_WRSTATE;
+ 		}
+ 
+ 		if (opcode & QLA82XX_DBG_OPCODE_MDSTATE) {
+@@ -2316,7 +2309,6 @@ qla8044_minidump_process_control(struct scsi_qla_host *vha,
+ 			read_value |= crb_entry->value_3;
+ 			read_value += crb_entry->value_1;
+ 			tmplt_hdr->saved_state_array[index] = read_value;
+-			opcode &= ~QLA82XX_DBG_OPCODE_MDSTATE;
+ 		}
+ 		crb_addr += crb_entry->crb_strd.addr_stride;
+ 	}
