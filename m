@@ -2,70 +2,177 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47843342881
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Mar 2021 23:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1468F342C96
+	for <lists+linux-scsi@lfdr.de>; Sat, 20 Mar 2021 12:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbhCSWLl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Mar 2021 18:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbhCSWLS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Mar 2021 18:11:18 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4270DC061764
-        for <linux-scsi@vger.kernel.org>; Fri, 19 Mar 2021 15:11:18 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id j25so6832952pfe.2
-        for <linux-scsi@vger.kernel.org>; Fri, 19 Mar 2021 15:11:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Zvd0Ap6L4o6JZrVLV8y+IeTjkBA7X+C7BCxEgSrzsJE=;
-        b=caDU1q73hzQ02Jdo879uOeLmUecPhxF/9qVVPBN1Q/xrNr8BEbilrPGNP705FJLHue
-         VtDZnXV18jH0Mb8v7iHRbNdG3FSY1pGY8NXxkFToC20eichF0b4F4drXQUuUkIaaepir
-         V524eg12EP4ZZeTBRiihExPrvNfENMWVHfhgLh0zJXZdipSp9GsW3kaufjJpKrHkbC3I
-         459aXibjg9UMldRPGhAr8PSx0Ato5SR0p22kiOm0Mp6EyIaxWy3dEDXb0P4zQtW0tCVX
-         07ejc+dVUFig3E+6L4OdSUiIuNSQm5/+YjxdKyNbF1BbhPRUlNPNNYBSSSgVbKl+Lz3j
-         a8zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Zvd0Ap6L4o6JZrVLV8y+IeTjkBA7X+C7BCxEgSrzsJE=;
-        b=pikqUiUt5ogquJgFGWVlF/XTMdPOjaMtvIyVjKY/avpHvWtH09mYPnsGA1xZqQkF/1
-         4lXzDoghYDUGvUQuqJsiSbP9FmD3sNT3z+DfYg+vUiGd0LFiP5L+Vh7iKAiaPoTGacT5
-         CTzl5GF+QLG8iuJsHeQNxnhYm3G2oJCOIBVrjGt428wzlVLEaYVJZVssqOuTtbzoLZao
-         qYtuwkgdNwVtHQwQGaSPpOKLFrcclpYZlT5dOJp56JBYdbRGFpSEV/BYAwGK4LjjTgL1
-         wW32Uo9ogwomM/24o5JnUKXc/yXTY4okHP+O39PNRedGEqnIpNnoFQwZPD2SI5KJmbID
-         aS0w==
-X-Gm-Message-State: AOAM532z81x2YDBEY8kisJLXUx9TGlrxVzh+bkYcdRIg9FOIMeIxjXuO
-        NNZSSRbTMNLnm2esh+P5wD1rRix9SJVitd/IDCc=
-X-Google-Smtp-Source: ABdhPJzCabJZfv3RXPuxBrS0AIvj08nYPhbk1J+F3bLHon/hRc3LMGq6BH8EEqxFIwASI9dpbR8M7KjLyZs0rbQDY8g=
-X-Received: by 2002:aa7:96c9:0:b029:200:503d:19df with SMTP id
- h9-20020aa796c90000b0290200503d19dfmr11339738pfq.46.1616191877625; Fri, 19
- Mar 2021 15:11:17 -0700 (PDT)
+        id S229849AbhCTLza (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 20 Mar 2021 07:55:30 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:14112 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230218AbhCTLzS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 20 Mar 2021 07:55:18 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F2XCS2qQyz16H17;
+        Sat, 20 Mar 2021 15:17:40 +0800 (CST)
+Received: from [127.0.0.1] (10.174.176.117) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.498.0; Sat, 20 Mar 2021
+ 15:19:26 +0800
+To:     <agk@redhat.com>, <snitzer@redhat.com>, <dm-devel@redhat.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        linfeilong <linfeilong@huawei.com>,
+        lixiaokeng <lixiaokeng@huawei.com>,
+        "wubo (T)" <wubo40@huawei.com>, <liuzhiqiang26@huawei.com>
+From:   Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Subject: [PATCH] md/dm-mpath: check whether all pgpaths have same uuid in
+ multipath_ctr()
+Message-ID: <c8f86351-3036-0945-90d2-2e020d68ccf2@huawei.com>
+Date:   Sat, 20 Mar 2021 15:19:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Received: by 2002:a17:90b:358c:0:0:0:0 with HTTP; Fri, 19 Mar 2021 15:11:17
- -0700 (PDT)
-Reply-To: owusup021@gmail.com
-From:   Marcus <aquahdr@gmail.com>
-Date:   Fri, 19 Mar 2021 22:11:17 +0000
-Message-ID: <CANc3xnZKV2OBsbGBtdMCNUJTbphXx-bisEoDtCJvpksP6aeLJQ@mail.gmail.com>
-Subject: Reply Soon.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.176.117]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My Greetings,
-I am a banker, the Chief Auditor in our bank. I have the ability to
-transfer unclaimed funds that belong to one of our late customer who
-died in a car crash along with his family and no one came to claim the
-funds, if left unclaimed the fund will be transferred to the state
-treasury in the bank so I invite you to a deal where we can facilitate
-the transfer of this fund and I promise to share it equal with you
-when it is transferred into your account.
-Let me know your interest to do this business with me for more details.
-I wait to hear from you soon.
-Best Regards,
-Marcus.
+From: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+
+When we make IO stress test on multipath device, there will
+be a metadata err because of wrong path. In the test, we
+concurrent execute 'iscsi device login|logout' and
+'multipath -r' command with IO stress on multipath device.
+In some case, systemd-udevd may have not time to process
+uevents of iscsi device logout|login, and then 'multipath -r'
+command triggers multipathd daemon calls ioctl to load table
+with incorrect old device info from systemd-udevd.
+Then, one iscsi path may be incorrectly attached to another
+multipath which has different uuid. Finally, the metadata err
+occurs when umounting filesystem to down write metadata on
+the iscsi device which is actually not owned by the multipath
+device.
+
+So we need to check whether all pgpaths of one multipath have
+the same uuid, if not, we should throw a error.
+
+Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Signed-off-by: lixiaokeng <lixiaokeng@huawei.com>
+Signed-off-by: linfeilong <linfeilong@huawei.com>
+Signed-off-by: Wubo <wubo40@huawei.com>
+---
+ drivers/md/dm-mpath.c   | 52 +++++++++++++++++++++++++++++++++++++++++
+ drivers/scsi/scsi_lib.c |  1 +
+ 2 files changed, 53 insertions(+)
+
+diff --git a/drivers/md/dm-mpath.c b/drivers/md/dm-mpath.c
+index bced42f082b0..f0b995784b53 100644
+--- a/drivers/md/dm-mpath.c
++++ b/drivers/md/dm-mpath.c
+@@ -24,6 +24,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/delay.h>
+ #include <scsi/scsi_dh.h>
++#include <linux/dm-ioctl.h>
+ #include <linux/atomic.h>
+ #include <linux/blk-mq.h>
+
+@@ -1169,6 +1170,45 @@ static int parse_features(struct dm_arg_set *as, struct multipath *m)
+ 	return r;
+ }
+
++#define SCSI_VPD_LUN_ID_PREFIX_LEN 4
++#define MPATH_UUID_PREFIX_LEN 7
++static int check_pg_uuid(struct priority_group *pg, char *md_uuid)
++{
++	char pgpath_uuid[DM_UUID_LEN] = {0};
++	struct request_queue *q;
++	struct pgpath *pgpath;
++	struct scsi_device *sdev;
++	ssize_t count;
++	int r = 0;
++
++	list_for_each_entry(pgpath, &pg->pgpaths, list) {
++		q = bdev_get_queue(pgpath->path.dev->bdev);
++		sdev = scsi_device_from_queue(q);
++		if (!sdev) {
++			r = -EINVAL;
++			goto out;
++		}
++
++		count = scsi_vpd_lun_id(sdev, pgpath_uuid, DM_UUID_LEN);
++		if (count <= SCSI_VPD_LUN_ID_PREFIX_LEN) {
++			r = -EINVAL;
++			put_device(&sdev->sdev_gendev);
++			goto out;
++		}
++
++		if (strcmp(md_uuid + MPATH_UUID_PREFIX_LEN,
++			   pgpath_uuid + SCSI_VPD_LUN_ID_PREFIX_LEN)) {
++			r = -EINVAL;
++			put_device(&sdev->sdev_gendev);
++			goto out;
++		}
++		put_device(&sdev->sdev_gendev);
++	}
++
++out:
++	return r;
++}
++
+ static int multipath_ctr(struct dm_target *ti, unsigned argc, char **argv)
+ {
+ 	/* target arguments */
+@@ -1183,6 +1223,7 @@ static int multipath_ctr(struct dm_target *ti, unsigned argc, char **argv)
+ 	unsigned pg_count = 0;
+ 	unsigned next_pg_num;
+ 	unsigned long flags;
++	char md_uuid[DM_UUID_LEN] = {0};
+
+ 	as.argc = argc;
+ 	as.argv = argv;
+@@ -1220,6 +1261,11 @@ static int multipath_ctr(struct dm_target *ti, unsigned argc, char **argv)
+ 		goto bad;
+ 	}
+
++	if (dm_copy_name_and_uuid(dm_table_get_md(ti->table), NULL, md_uuid)) {
++		r = -ENXIO;
++		goto bad;
++	}
++
+ 	/* parse the priority groups */
+ 	while (as.argc) {
+ 		struct priority_group *pg;
+@@ -1231,6 +1277,12 @@ static int multipath_ctr(struct dm_target *ti, unsigned argc, char **argv)
+ 			goto bad;
+ 		}
+
++		if (check_pg_uuid(pg, md_uuid)) {
++			ti->error = "uuid of pgpaths mismatch";
++			r = -EINVAL;
++			goto bad;
++		}
++
+ 		nr_valid_paths += pg->nr_pgpaths;
+ 		atomic_set(&m->nr_valid_paths, nr_valid_paths);
+
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 7d52a11e1b61..fee82262a227 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1953,6 +1953,7 @@ struct scsi_device *scsi_device_from_queue(struct request_queue *q)
+
+ 	return sdev;
+ }
++EXPORT_SYMBOL(scsi_device_from_queue);
+
+ /**
+  * scsi_block_requests - Utility function used by low-level drivers to prevent
+-- 
+2.19.1
+
+
