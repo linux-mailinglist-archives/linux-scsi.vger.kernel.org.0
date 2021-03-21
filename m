@@ -2,25 +2,25 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 946A0343540
-	for <lists+linux-scsi@lfdr.de>; Sun, 21 Mar 2021 22:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C796D343543
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Mar 2021 22:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbhCUV6s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S231630AbhCUV6s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Sun, 21 Mar 2021 17:58:48 -0400
 Received: from alexa-out.qualcomm.com ([129.46.98.28]:40323 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbhCUV6W (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 21 Mar 2021 17:58:22 -0400
+        with ESMTP id S231570AbhCUV6X (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 21 Mar 2021 17:58:23 -0400
 Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 21 Mar 2021 14:58:22 -0700
+  by alexa-out.qualcomm.com with ESMTP; 21 Mar 2021 14:58:23 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Mar 2021 14:58:20 -0700
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Mar 2021 14:58:22 -0700
 X-QCInternal: smtphost
 Received: from maggarwa.ap.qualcomm.com (HELO nitirawa-linux.qualcomm.com) ([10.206.25.176])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 22 Mar 2021 03:27:46 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 22 Mar 2021 03:27:47 +0530
 Received: by nitirawa-linux.qualcomm.com (Postfix, from userid 2342877)
-        id BF2C22E19; Mon, 22 Mar 2021 03:27:45 +0530 (IST)
+        id BB5752E1C; Mon, 22 Mar 2021 03:27:46 +0530 (IST)
 From:   Nitin Rawat <nitirawa@codeaurora.org>
 To:     asutoshd@codeaurora.org, cang@codeaurora.org,
         stummala@codeaurora.org, vbadigan@codeaurora.org,
@@ -30,9 +30,9 @@ To:     asutoshd@codeaurora.org, cang@codeaurora.org,
         adrian.hunter@intel.com, bvanassche@acm.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nitin Rawat <nitirawa@codeaurora.org>
-Subject: [PATCH V2 1/3] scsi: ufs: export api for use in vendor file
-Date:   Mon, 22 Mar 2021 03:27:35 +0530
-Message-Id: <1616363857-26760-2-git-send-email-nitirawa@codeaurora.org>
+Subject: [PATCH V2 2/3] scsi: ufs: add a vops to configure VCC voltage level
+Date:   Mon, 22 Mar 2021 03:27:36 +0530
+Message-Id: <1616363857-26760-3-git-send-email-nitirawa@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1616363857-26760-1-git-send-email-nitirawa@codeaurora.org>
 References: <1616363857-26760-1-git-send-email-nitirawa@codeaurora.org>
@@ -40,81 +40,69 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Exporting functions ufshcd_set_dev_pwr_mode, ufshcd_disable_vreg
-and ufshcd_enable_vreg so that vendor drivers can make use of
-them in setting vendor specific regulator setting
-in vendor specific file.
+Add a vops to configure VCC voltage VCC voltage level
+for platform supporting both ufs2.x and ufs 3.x devices.
 
+Suggested-by: Stanley Chu <stanley.chu@mediatek.com>
+Suggested-by: Asutosh Das <asutoshd@codeaurora.org>
+Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Nitin Rawat <nitirawa@codeaurora.org>
+Signed-off-by: Veerabhadrarao Badiganti <vbadigan@codeaurora.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 9 ++++++---
- drivers/scsi/ufs/ufshcd.h | 4 ++++
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ufshcd.c |  4 ++++
+ drivers/scsi/ufs/ufshcd.h | 10 ++++++++++
+ 2 files changed, 14 insertions(+)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 80620c8..633ca8e 100644
+index 633ca8e..5bfe987 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -8081,7 +8081,7 @@ static int ufshcd_config_vreg(struct device *dev,
- 	return ret;
- }
+@@ -7763,6 +7763,10 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ 		goto out;
 
--static int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg)
-+int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg)
- {
- 	int ret = 0;
+ 	ufshcd_clear_ua_wluns(hba);
++	if (ufshcd_vops_setup_vcc_regulators(hba))
++		dev_err(hba->dev,
++			"%s: Failed to set the VCC regulator values, continue with 2.7v\n",
++			__func__);
 
-@@ -8100,8 +8100,9 @@ static int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg)
- out:
- 	return ret;
- }
-+EXPORT_SYMBOL(ufshcd_enable_vreg);
-
--static int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg)
-+int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg)
- {
- 	int ret = 0;
-
-@@ -8121,6 +8122,7 @@ static int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg)
- out:
- 	return ret;
- }
-+EXPORT_SYMBOL(ufshcd_disable_vreg);
-
- static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on)
- {
-@@ -8445,7 +8447,7 @@ ufshcd_send_request_sense(struct ufs_hba *hba, struct scsi_device *sdp)
-  * Returns 0 if requested power mode is set successfully
-  * Returns non-zero if failed to set the requested power mode
-  */
--static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
-+int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
- 				     enum ufs_dev_pwr_mode pwr_mode)
- {
- 	unsigned char cmd[6] = { START_STOP };
-@@ -8503,6 +8505,7 @@ static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
- 	hba->host->eh_noresume = 0;
- 	return ret;
- }
-+EXPORT_SYMBOL(ufshcd_set_dev_pwr_mode);
-
- static int ufshcd_link_state_transition(struct ufs_hba *hba,
- 					enum uic_link_state req_link_state,
+ 	/* Initialize devfreq after UFS device is detected */
+ 	if (ufshcd_is_clkscaling_supported(hba)) {
 diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 18e56c1..0db796a 100644
+index 0db796a..8f0945d 100644
 --- a/drivers/scsi/ufs/ufshcd.h
 +++ b/drivers/scsi/ufs/ufshcd.h
-@@ -997,6 +997,10 @@ extern int ufshcd_dme_get_attr(struct ufs_hba *hba, u32 attr_sel,
- 			       u32 *mib_val, u8 peer);
- extern int ufshcd_config_pwr_mode(struct ufs_hba *hba,
- 			struct ufs_pa_layer_attr *desired_pwr_mode);
-+extern int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
-+						enum ufs_dev_pwr_mode pwr_mode);
-+extern int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg);
-+extern int ufshcd_disable_vreg(struct device *dev, struct ufs_vreg *vreg);
+@@ -324,6 +324,7 @@ struct ufs_pwr_mode_info {
+  * @device_reset: called to issue a reset pulse on the UFS device
+  * @program_key: program or evict an inline encryption key
+  * @event_notify: called to notify important events
++ * @setup_vcc_regulators : update vcc regulator level
+  */
+ struct ufs_hba_variant_ops {
+ 	const char *name;
+@@ -360,6 +361,7 @@ struct ufs_hba_variant_ops {
+ 			       const union ufs_crypto_cfg_entry *cfg, int slot);
+ 	void	(*event_notify)(struct ufs_hba *hba,
+ 				enum ufs_event_type evt, void *data);
++	int    (*setup_vcc_regulators)(struct ufs_hba *hba);
+ };
 
- /* UIC command interfaces for DME primitives */
- #define DME_LOCAL	0
+ /* clock gating state  */
+@@ -1269,6 +1271,14 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
+ 		hba->vops->config_scaling_param(hba, profile, data);
+ }
+
++static inline int ufshcd_vops_setup_vcc_regulators(struct ufs_hba *hba)
++{
++	if (hba->vops && hba->vops->setup_vcc_regulators)
++		return hba->vops->setup_vcc_regulators(hba);
++
++	return 0;
++}
++
+ extern struct ufs_pm_lvl_states ufs_pm_lvl_states[];
+
+ /*
 --
 2.7.4
 
