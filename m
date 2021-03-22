@@ -2,95 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFD6344BE6
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 17:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAE6344C29
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 17:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbhCVQkk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Mar 2021 12:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbhCVQkG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Mar 2021 12:40:06 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDE8C061574
-        for <linux-scsi@vger.kernel.org>; Mon, 22 Mar 2021 09:40:05 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id a143so7232360ybg.7
-        for <linux-scsi@vger.kernel.org>; Mon, 22 Mar 2021 09:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DYfaicAOehb5zQydfeSGelJNMvzJ7Pby8HrjoL/bqDo=;
-        b=pXSh5SBhukSWztfzSeIa1d3OaD7TsCsUxdC2L2bfx6GL5BXWBTgQdYXyYOTK3Hkkoo
-         utVNBL3AIStWQfK7D+LiWb+HrwfRJ1dan/Z3pS491/ymVYq7EzqmDmRELG8/3R0gd6bQ
-         4FWWA/f+Ccygjf83Xn0pFRGJNOoBaGAtvVklouDPgIz09Biz18oZ2zy9cMMQPbS2xZO2
-         n28htWaID9q/c3iVMSUBMgZVmbURhiWAi5uMrMj4Wlhjf+BZMq2Xh9cSCNxXeR4O/NNO
-         6wYaoOGCiWFhUFSOjkRx3FbixI7nEr6waIwtgg7FLRzfR3f8oJCuyjb4JWGrdAFhAp/8
-         A+Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DYfaicAOehb5zQydfeSGelJNMvzJ7Pby8HrjoL/bqDo=;
-        b=nH52bLNl+/5zEZbBmrwdwo+bydv+QtKMlOMng9lRyCLkj02+TZuE2/UB9JJxRhj1jW
-         o4xjU6VJXG4mbJMQ2D6rg2VCqJkD38DzelYN/2y6MyOsHwkq6IgoEh4TGpPJTZbF7kR8
-         FknxMJlJ//uzhuVB1XBvksrGG4X6ua2+yXTUjBOrnHY0mya1RtpqUBsiMcQcVm0BETLL
-         +icsgbONUxnUsrhZTYcTKLjHucZV4mJoyfiYIS3g2sXd52egTt6z0oBgM24898QOI+Oi
-         mbc+CPYyt1Hjaqzvbjz3fSC47sG8WLNVyJA0MO24C2NOtNpTJjhQwJTvv1FewYVUU8Lk
-         XpTQ==
-X-Gm-Message-State: AOAM531m7bX3qKtnJBF3W6q3Sm3Qn3yf16o22vpgjzRGkQIN8trd8gdk
-        Ix2gOg54ysydnSL7gMcquPXmu10CZFEy+vgKtLg=
-X-Google-Smtp-Source: ABdhPJxfVNXDm/5jiy2GyKXakg47Z6d89aKilRkqgfGFrkSFaRxfYyrG1srVsADs3w3y6Xu6e7z0gluzsbwBTyrppB4=
-X-Received: by 2002:a25:aca1:: with SMTP id x33mr566857ybi.412.1616431204885;
- Mon, 22 Mar 2021 09:40:04 -0700 (PDT)
+        id S231374AbhCVQrY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Mar 2021 12:47:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36152 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231304AbhCVQrH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 22 Mar 2021 12:47:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3093560249;
+        Mon, 22 Mar 2021 16:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616431626;
+        bh=7jkwwQTMKRF9ZixAWWyF6DidhPZvbea3WyoahROBIyw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=G8gq65AfreIBay9epyWXjQoS6rNig65gO8hvNqXH5F/0d3XGyxdKqaAcinh12c5cI
+         TshE9ie+EEOgjybdaKWMBV/mSQ+G4AiUtfN9ySg5OY8qITWuD71GZ2QVlCi2tDKczt
+         ihGwHVpod9PEWv51NVFg5eNrVo+KCH9h+i2OyOwjTKFEgwRFNd5laj7A8r3SP5b75m
+         jTZ9Q6eDSB5bh8DwdlfVu2FCj9FMGkj/8pEGIajWSNcdIY3QW9dQLEpKuaWMntywJ+
+         AO2mE2Ee4uFqt7be4EZiKpe5JBvn3i7Gu1y95B/E8z35NsJxBjwJPTR6zcGv6QiAZ3
+         9WzYB8LZXL9xg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Hannes Reinecke <hare@suse.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Robert Love <robert.w.love@intel.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Vasu Dev <vasu.dev@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: fcoe: fix mismatched fcoe_wwn_from_mac declaration
+Date:   Mon, 22 Mar 2021 17:46:59 +0100
+Message-Id: <20210322164702.957810-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Received: by 2002:a05:7110:8044:b029:3e:402f:1c5b with HTTP; Mon, 22 Mar 2021
- 09:40:04 -0700 (PDT)
-Reply-To: bazaatg@gmail.com
-From:   Tchao Ago Bazaa <pokpouku@gmail.com>
-Date:   Mon, 22 Mar 2021 09:40:04 -0700
-Message-ID: <CAGUTktwfPmG=yb6NfNDmrxr2ULALmDPBvw0xdRiOZz6SxAFVEQ@mail.gmail.com>
-Subject: Hei
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hei
+From: Arnd Bergmann <arnd@arndb.de>
 
-Pahoittelen, ett=C3=A4 k=C3=A4ytin t=C3=A4t=C3=A4 mediaa ottaakseni yhteytt=
-=C3=A4 sinuun.
-Nimeni on Tchao Ago Bazaa ja olen ammatiltani asianajaja. Otan sinuun
-yhteytt=C3=A4 my=C3=B6h=C3=A4isest=C3=A4 asiakkaastani, jolla on sama sukun=
-imi kuin sin=C3=A4
-ja maasi kansalainen. Edesmennyt asiakkaani kuoli auto-onnettomuudessa
-perheens=C3=A4 kanssa vuosia sitten, j=C3=A4tt=C3=A4en l=C3=A4hisukulaisens=
-a. My=C3=B6h=C3=A4inen
-asiakkaani oli liikemies, joka harjoitteli =C3=B6ljy- ja
-kulta-liiketoimintaa t=C3=A4=C3=A4ll=C3=A4 maassani.
+An old cleanup changed the array size from MAX_ADDR_LEN to
+unspecified in the declaration, but now gcc-11 warns about this:
 
-H=C3=A4n j=C3=A4tti rahan talletuksen arvon (vain viiden miljoonan yhdeks=
-=C3=A4n
-sadan tuhannen Yhdysvaltain dollarin arvosta) pankki, johon n=C3=A4m=C3=A4 =
-rahat
-talletettiin, yritt=C3=A4=C3=A4 takavarikoida sen, koska en l=C3=B6yd=C3=A4=
- yht=C3=A4=C3=A4n
-perheenj=C3=A4sent=C3=A4 kauan h=C3=A4nen kuolemansa j=C3=A4lkeen, joten et=
-si
-kumppanuutesi, koska sinulla on samat sukunimet my=C3=B6h=C3=A4styneeni kan=
-ssa
-asiakas ja luultavasti samasta maasta, =C3=A4l=C3=A4 ep=C3=A4r=C3=B6i l=C3=
-=A4hett=C3=A4=C3=A4 minulle
-seuraavat tiedot alla olevan viestinn=C3=A4n helpottamiseksi ja yrit=C3=A4
-vastata yksityisen s=C3=A4hk=C3=B6postiosoitteeni kautta saadaksesi lis=C3=
-=A4tietoja:
+drivers/scsi/fcoe/fcoe_ctlr.c:1972:37: error: argument 1 of type ‘unsigned char[32]’ with mismatched bound [-Werror=array-parameter=]
+ 1972 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN],
+      |                       ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+In file included from /git/arm-soc/drivers/scsi/fcoe/fcoe_ctlr.c:33:
+include/scsi/libfcoe.h:252:37: note: previously declared as ‘unsigned char[]’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[], unsigned int, unsigned int);
+      |                       ~~~~~~~~~~~~~~^~~~~
 
-T=C3=A4ydelliset nimesi
-S=C3=A4hk=C3=B6postiosoitteesi
-Yksityinen puhelinnumerosi
+Change the type back to what the function definition uses.
 
-Kiitos
+Fixes: fdd78027fd47 ("[SCSI] fcoe: cleans up libfcoe.h and adds fcoe.h for fcoe module")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/scsi/libfcoe.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Herra Tchao Ago Bazaa
+diff --git a/include/scsi/libfcoe.h b/include/scsi/libfcoe.h
+index 2568cb0627ec..fac8e89aed81 100644
+--- a/include/scsi/libfcoe.h
++++ b/include/scsi/libfcoe.h
+@@ -249,7 +249,7 @@ int fcoe_ctlr_recv_flogi(struct fcoe_ctlr *, struct fc_lport *,
+ 			 struct fc_frame *);
+ 
+ /* libfcoe funcs */
+-u64 fcoe_wwn_from_mac(unsigned char mac[], unsigned int, unsigned int);
++u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+ int fcoe_libfc_config(struct fc_lport *, struct fcoe_ctlr *,
+ 		      const struct libfc_function_template *, int init_fcp);
+ u32 fcoe_fc_crc(struct fc_frame *fp);
+-- 
+2.29.2
+
