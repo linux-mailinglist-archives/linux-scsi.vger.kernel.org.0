@@ -2,102 +2,185 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E06034380E
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 05:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C57343822
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 06:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbhCVE6R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Mar 2021 00:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbhCVE5x (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Mar 2021 00:57:53 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FCBC061574
-        for <linux-scsi@vger.kernel.org>; Sun, 21 Mar 2021 21:57:53 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id i20-20020a4a8d940000b02901bc71746525so3802326ook.2
-        for <linux-scsi@vger.kernel.org>; Sun, 21 Mar 2021 21:57:53 -0700 (PDT)
+        id S229621AbhCVFF3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Mar 2021 01:05:29 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:47530 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229548AbhCVFFE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 22 Mar 2021 01:05:04 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12M51L9p018898;
+        Sun, 21 Mar 2021 22:04:54 -0700
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-0016f401.pphosted.com with ESMTP id 37dedrby5d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 21 Mar 2021 22:04:53 -0700
+Received: from m0045849.ppops.net (m0045849.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12M54rL5024606;
+        Sun, 21 Mar 2021 22:04:53 -0700
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
+        by mx0a-0016f401.pphosted.com with ESMTP id 37dedrby59-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 21 Mar 2021 22:04:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jXF9tY44EfN3jDSPCMIHI7sgDcaE0XjI+p36TXGVYeAZJz2XxSVvXsmL8r57sLIQdHhSTEj8bRLeCSey41oSgRhbzRMvj4q29KgM01gPrzpSmsxKjsukWk8I5Zz+JiJcGH+vjzkg//neQnFz4Bn8gxTySd9+fGU7Q87Be7qpZ6BgCeIa3GvXWA5Uh55eVSXjcQaQTEktpiw41fU9aOP2u0Uv0ML+nlPr9tee8ATVR3z5wtGpXdS4JsjOb1A7blceOuh8o2VC5A91BFmtSqMFt53KC4EUA+35R26vaIqqKOZ6mwNwKEzHdz2NKrtg9DNIOhM8L2ErESgiSq5NhuS8Qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PKp2q+tMePxuGAV3siPjRjvg2iZ3J6QT9Gng3Y4EJsM=;
+ b=ocGfLi7yu5y/5TUaoxSvgMzjBjwXLXRhWiMBCnBQvrbBWHHgciu/+8QgrMuvnvZsz27KcyfF0br1U/U+b766UIbz8vGL2uacuTsHyDlb4J9U4vjy2eCbH0e1ArLWWKwOpTYG6dpgX/MctDmMe6yisErPfkgZqNOUlt+EOAmOq8Gzx3i3wwgb2hq8INr0i7kiL9h2sVkHZJXDdN+z2UgmEelyLSh5+QA/+snlcNgxsVWY3RnkVSa60/nrIafjGF2Y2Ny/0xwG8AaW022pYj5H9ToJ+jXMEPEUZY4XN2QYqDOkG4KCw8/KaZdKcRxzaKxFeJ2M1PcwdlE69xO2YAkpVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=f0diHZG+82ndNyHo8V+HbwGWvNa7YcE0ap2vBDFZAAI=;
-        b=Arf2SvKOK1KOE5sIcCHbeFY0Vxw7+GwgbAzuyij0BVNORLMmZW1X6OFFD8Sv3CmNHx
-         +5RPblH226cOBKWSAl+sWCN/DfoCQMQihYpfbeR4xioC1bgQ5XotfMViSwt9QS6T8HNn
-         c0hXu1kAv2P6Sd0BW6kc5GdiL93IocTiNrRjzb1fXPXQcu0vouhd58ow/xnYguxArhaR
-         ZbR2AqH73ibjoodp8S5QB2Rs0lZmcpKXwLVLCPcoOv6dTIqrDklLqVDCTMrfaJYiu0Un
-         WJAV66wnlPZPVV9GFUsk1V7CRHDrfdd94/x0gAjnkYzG5aIufHPEjZU775XwX0GOdPUX
-         EaWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=f0diHZG+82ndNyHo8V+HbwGWvNa7YcE0ap2vBDFZAAI=;
-        b=bDiSQ+G79uz8zhIKt/eBohMP0JWPk5bQEhlGMWzNseQwhOfsIaYcmNrvEUkyaNtKnF
-         WNHXPgtI6Y6YBvpVHa4gNr1R9+7ft5mRlcXF54mb8qWDAdAt17jxfJOcf361+NnszdwI
-         Qw4YiXAPNj1Ph64PdUJ3RNZ8rSOKWu1hUt6a9ux3hgVK3JKLViir+Y668xORyr2Ku7Kn
-         dset6SVsJ9ZbJH3yu5Z5ao31yDMyFl28Xam74Sw01o/DaSmifhgieVUZe0eSF3bVGteU
-         Jj+PGQR4TRNNjeu7j5S80SXJDYSzAJ2Q0xkk3v1h+Drm4ePid4SHbuoG/+Y49exl1VdU
-         9ZNw==
-X-Gm-Message-State: AOAM532sem2fdMGP4ivBRa+TJC4AHDSOJ7EK+6cIcBobrVZy5QynG7/b
-        OHrZnT5tA7NH8gYmyuffrtbOXTUlOrfwzn3tfg0=
-X-Google-Smtp-Source: ABdhPJzE+9qQveTcv8tm2OShHeDdCVjegJu1dIecYkdg6VWQlDDfqUOMvFPYaXz4e5uRdArTy6ZZGxAoEmncv1LZ3JY=
-X-Received: by 2002:a4a:ea11:: with SMTP id x17mr9725063ood.81.1616389072732;
- Sun, 21 Mar 2021 21:57:52 -0700 (PDT)
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PKp2q+tMePxuGAV3siPjRjvg2iZ3J6QT9Gng3Y4EJsM=;
+ b=A7VYtUjtjDfbk/tDu31mjpiqAWpMknjemFzL3PCG1M34jTiVBY53+z2mtd3jUMmF6FCxnV2fRgdR1w+gW9xddEE8VW9VRwBviyHh8j+P3/dYTpIt4V4CxzBOHGRg34z7lVnq8iH5vkSxJYP79ncgQESnyUVyYHiUtEHnnaGH2mg=
+Received: from DM6PR18MB3034.namprd18.prod.outlook.com (2603:10b6:5:18c::32)
+ by DM5PR18MB1164.namprd18.prod.outlook.com (2603:10b6:3:31::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18; Mon, 22 Mar
+ 2021 05:04:51 +0000
+Received: from DM6PR18MB3034.namprd18.prod.outlook.com
+ ([fe80::4db6:bc53:ff3b:bd85]) by DM6PR18MB3034.namprd18.prod.outlook.com
+ ([fe80::4db6:bc53:ff3b:bd85%7]) with mapi id 15.20.3955.027; Mon, 22 Mar 2021
+ 05:04:51 +0000
+From:   Saurav Kashyap <skashyap@marvell.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Daniel Wagner <dwagner@suse.de>, Lee Duncan <lduncan@suse.com>
+Subject: RE: [EXT] [PATCH v3 7/7] qla2xxx: Check kzalloc() return value
+Thread-Topic: [EXT] [PATCH v3 7/7] qla2xxx: Check kzalloc() return value
+Thread-Index: AQHXHeAp0FGpcsdzlESs7d9GzLiaMaqPdcqA
+Date:   Mon, 22 Mar 2021 05:04:51 +0000
+Message-ID: <DM6PR18MB3034B07300BC22F4154E6DEAD2659@DM6PR18MB3034.namprd18.prod.outlook.com>
+References: <20210320232359.941-1-bvanassche@acm.org>
+ <20210320232359.941-8-bvanassche@acm.org>
+In-Reply-To: <20210320232359.941-8-bvanassche@acm.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: acm.org; dkim=none (message not signed)
+ header.d=none;acm.org; dmarc=none action=none header.from=marvell.com;
+x-originating-ip: [122.161.47.251]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3fbbcfdd-a092-4b8e-c6b1-08d8ecf0064d
+x-ms-traffictypediagnostic: DM5PR18MB1164:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR18MB1164DE5DD57C5FFB7EDB63C9D2659@DM5PR18MB1164.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2803;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HjBUUYFqwdlK/F8HQG7VTtTe2lYfoJdrCW8KkhuCvbxozLkLA6/T7KPS3xvHbX+3yBQ9A+FE27l40aZjyIAvxdlTpFE0E7BIpHehpK+g8xC3q6FTPMZc+2CaZ04jVjyA6AvQfQ7qdgoJOSvACB4GXqDrG/aSwdffZoaYiBn27sUWVvoxB4RLn1TQPkSc22DUac2mLSB0+/qa4yX6ekijmnnsN76O/cYdQtrNbrKFUGxaKTHAOACwp9JoD/i62CEYpwYTLqIs7UN6lyjTnCVOMuENMh2083Wg/O5eo/nUaY91AfCjKdnxiYs349AlPmPHK4pG4UQVa79wjDgAjZP8XZ7iDE81OTPLHWdFmgdiW4glZSBO2GPg0/NVKFb8Z94Rha0BVaT3hesPEPvo3xELcyl9uVhrZLOaMQk9e0e7sKuIks2jdtgDiBe2u4pQTi6NoL7dwcJnuImSxS+dJfdv2PuO9keDgMP6qN3bf0zkfuBTrYFxPq9VCojgPtStAYzgigjVjAabJV2xM6nqIqbVVYB0YBhQyop/dpmcXZ6DMF03/0GvQQQwIAOx4K3tWwctPczO/fBDunZ9yYslnGiZhw9iheCX97Q3trh9p66nK32aP4xy5ToD4xEEwf95quSINv0IluCmOqoHQx4oa0UCuU7afS02pw3c67mNsNbi1/I=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR18MB3034.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(366004)(39860400002)(346002)(2906002)(66556008)(316002)(64756008)(76116006)(110136005)(66476007)(66446008)(5660300002)(54906003)(478600001)(66946007)(71200400001)(38100700001)(55236004)(7696005)(26005)(186003)(8676002)(4326008)(52536014)(9686003)(33656002)(83380400001)(55016002)(8936002)(86362001)(53546011)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?2UJHYFF41RvH/zIhCSIKxt0w3PtmOvEU/jWwgCoHrkOHveWpcHQIOZkuAu6l?=
+ =?us-ascii?Q?bKK7M0IMrVyVILPX8a85q5Apucw/zQKrn0XIFw4cHVO6YaH2Z+DZBdQF6snJ?=
+ =?us-ascii?Q?EFFcWf8qwIc46G/pAFZZ59wCbnfq9MkB5nyLqRhrPbR+UlT7h/Q6NvmG1n3b?=
+ =?us-ascii?Q?NPB2za0BkhuVXl4hD/1gIyfoiqTDuSBJaLVWOWsFJBHgb1mkBzOoRGEnnSsX?=
+ =?us-ascii?Q?iuHXyBONSPAOwSKLC7lm6l3O3l319FeQwEKkqxQuAt7WuTZYckDpcRhi2gBT?=
+ =?us-ascii?Q?NUGg2EaFjKS/3YVPdneX5GU8FZTNs2KtRpyKqGrIse8Jt/RBLiK/aoVWqNJF?=
+ =?us-ascii?Q?Pfw8JeL9gbC6i1ha8HiIL4T1hNmlM/e1xkS6v8cFR9hotlyya/EGAiTL7zOG?=
+ =?us-ascii?Q?EKCUPvQRYJl0bufEtz7+6PGzRr5/9Wj5LE8Q2AZ5ikVxW89T5+Mr3sf+7o2z?=
+ =?us-ascii?Q?QQAQgC+UilNbUjr6zYtDMeXR1jbHAJcD5/25EOJ5357D6BHiKxZoVAjPWfDs?=
+ =?us-ascii?Q?ll5k5vq3MAAJuAJjLFF3H2526lhZ75hoquFkHlK7iKAPS03JhoNaHbbxGYiS?=
+ =?us-ascii?Q?3nDzXPa5Vr6lByCl+DpM99pSVN+S3ANtx59sSCQxsqSSLD3mXz3JNcDhLSop?=
+ =?us-ascii?Q?q+v+4Tjc87tEVfN3r8iusY93su0fkZ5187bh8cOhVw/sa0XOmLP2c1htbt+G?=
+ =?us-ascii?Q?fs/eFOInhPVBPJduSAkNP9mHJjBPwr5Vvb2rvKSyEoN0qfhoKfmCiajdkPKj?=
+ =?us-ascii?Q?ml4KdVJl3G3Y42N/TT4YJdgfCBJ3FOwymqBcPX/6lSpZTRsEccEDaMMVrcFr?=
+ =?us-ascii?Q?WfU93Wr8DDMnM9RCN7rb5zQLpS3QM6Yd3zn6n9Ly7fsyoPOPSPon6dKZDFQ/?=
+ =?us-ascii?Q?4ZmJj6ppU7OcQObzMCfQKnV648MTVVE02Rzfsd1djdUFRdvAJ4NNcj0bYZF1?=
+ =?us-ascii?Q?S3Y0Ptjw+mK/q1NFP6kpaShSYKrDDA8ZCWJNfG2RS3uvlPDty0IbijDMgJEH?=
+ =?us-ascii?Q?xQr9dH+4xSNcUYw+j144CV5myoraz86ME3dD2K5Tsd8nJwWbulHKCDN/EWUD?=
+ =?us-ascii?Q?WtBUWDMq/5ixIUV51ZBiDQYE0NcFGaOXH3GM7gIojIRy54QYL0JaNTtieDHJ?=
+ =?us-ascii?Q?InMT8Q+OmEBPFLh6pfj74mNmwCzPBKtmHDUG3ntFh7JL9EYPNWA2598fI/Q6?=
+ =?us-ascii?Q?wRsnzqURGqDQF6vw8LrSPf50+StFmbEIUkV0l/KC7D8kZex/Q8uDoW75EFDT?=
+ =?us-ascii?Q?HnWOGydxW+RaAtqYzScZ25pYai+eXoCW0zYfWqwjKUWeFRSMo074/eIWtpXz?=
+ =?us-ascii?Q?/hPIKZBjqS0hXaZM8jO5Wwn/?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Sender: a0sis4ite31@gmail.com
-Received: by 2002:a4a:a601:0:0:0:0:0 with HTTP; Sun, 21 Mar 2021 21:57:52
- -0700 (PDT)
-From:   "Ms.Nancy" <ms.edwardnancy2008@gmail.com>
-Date:   Sun, 21 Mar 2021 21:57:52 -0700
-X-Google-Sender-Auth: 1_R5I6gZRf01nrrSqJ9ETBX6Q60
-Message-ID: <CAPEHS53pN-KoJJgJ8wpCYZD=uLPZ2y+ox9OjdkykzcKJ0QOYKw@mail.gmail.com>
-Subject: Dear sir/madam
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR18MB3034.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fbbcfdd-a092-4b8e-c6b1-08d8ecf0064d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2021 05:04:51.3762
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jUS5+yUWk9fdQq2aWBOupiZPRh3zS75KLlZboTgylE2rfTyebJRKBT+n0PbiKqp3uKrKlq3XCmWZhyQegYmKHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR18MB1164
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-22_01:2021-03-22,2021-03-22 signatures=0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear sir/madam
+Hi Bart,
 
-Mrs Nancy Edward, I have decided to seek confidential cooperation with
-you for the execution of the deal described here under for our mutual
-benefit. I Hope you will keep it a secret due to the nature of the
-transaction. During the course of our audit last month, I discovered
-an unclaimed/abandoned fund totaling US$3.5 million in a bank account
-that belongs to a customer who unfortunately lost his life and entire
-family in a car accident.
+> -----Original Message-----
+> From: Bart Van Assche <bvanassche@acm.org>
+> Sent: Sunday, March 21, 2021 4:54 AM
+> To: Martin K . Petersen <martin.petersen@oracle.com>; James E . J .
+> Bottomley <jejb@linux.vnet.ibm.com>
+> Cc: linux-scsi@vger.kernel.org; Bart Van Assche <bvanassche@acm.org>;
+> Himanshu Madhani <himanshu.madhani@oracle.com>; Saurav Kashyap
+> <skashyap@marvell.com>; Nilesh Javali <njavali@marvell.com>; Quinn Tran
+> <qutran@marvell.com>; Mike Christie <michael.christie@oracle.com>;
+> Daniel Wagner <dwagner@suse.de>; Lee Duncan <lduncan@suse.com>
+> Subject: [EXT] [PATCH v3 7/7] qla2xxx: Check kzalloc() return value
+>=20
+> External Email
+>=20
+> ----------------------------------------------------------------------
+> Instead of crashing if kzalloc() fails, make qla2x00_get_host_stats()
+> return -ENOMEM.
+>=20
+> Fixes: dbf1f53cfd23 ("scsi: qla2xxx: Implementation to get and manage hos=
+t,
+> target stats and initiator port")
+> Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
+> Cc: Saurav Kashyap <skashyap@marvell.com>
+> Cc: Nilesh Javali <njavali@marvell.com>
+> Cc: Quinn Tran <qutran@marvell.com>
+> Cc: Mike Christie <michael.christie@oracle.com>
+> Cc: Daniel Wagner <dwagner@suse.de>
+> Cc: Lee Duncan <lduncan@suse.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>  drivers/scsi/qla2xxx/qla_bsg.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bs=
+g.c
+> index bee8cf9f8123..bc84b2f389f8 100644
+> --- a/drivers/scsi/qla2xxx/qla_bsg.c
+> +++ b/drivers/scsi/qla2xxx/qla_bsg.c
+> @@ -2583,6 +2583,10 @@ qla2x00_get_host_stats(struct bsg_job *bsg_job)
+>  	}
+>=20
+>  	data =3D kzalloc(response_len, GFP_KERNEL);
+> +	if (!data) {
+> +		kfree(req_data);
+> +		return -ENOMEM;
+> +	}
+>=20
+>  	ret =3D qla2xxx_get_ini_stats(fc_bsg_to_shost(bsg_job), req_data-
+> >stat_type,
+>  				    data, response_len);
 
-Now our bank has been waiting for any of the relatives to come-up for
-the claim but nobody has done that. I personally has been unsuccessful
-in locating any of the relatives, now, I sincerely seek your consent
-to present you as the next of kin / Will Beneficiary to the deceased
-so that the proceeds of this account valued at {US$3.5 Million United
-State Dollars} can be paid to you, which we will share in these
-percentages ratio, 60% to me and 40% to you. All I request is your
-utmost sincere co- operation; trust and maximum confidentiality to
-achieve this project successfully. I have carefully mapped out the
-moralities for execution of this transaction under a legitimate
-arrangement to protect you from any breach of the law both in your
-country and here in my country when the fund is being transferred to
-your bank account.
+Thanks for the patch.
+Acked-by: Saurav Kashyap <skashyap@marvell.com>
 
-I will have to provide the entire relevant document that will be
-requested to indicate that you are the rightful beneficiary of this
-legacy and our bank will release the fund to you without any further
-delay, upon your consideration and acceptance of this offer, please
-send me the following information as stated below so we can proceed
-and get this fund transferred to your designated bank account
-immediately. I know much about the existence of this fund and the
-secrets surrounding this money.
-
--Your Full Name:
--Your Contact Address:
--Your direct Mobile telephone Number:
--Your Date of Birth:
--Your occupation:
-I await your swift response and re-assurance so we commence this
-transaction immediately. Please reply to me through my private e-mail
-id. (ms.edwardnancy2008@gmail.com)
-
-Best regards,
-Mrs Nancy edward.
