@@ -2,108 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7E3344A8F
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 17:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B961344AA7
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 17:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbhCVQGo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Mar 2021 12:06:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231776AbhCVQFq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 22 Mar 2021 12:05:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 49D21619CF;
-        Mon, 22 Mar 2021 16:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616429143;
-        bh=ppc9fZupOrjA6hpvzPGCige1HMZi82rKq0OzuPiwp30=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KfNQhB8I6TCilI9rWZIUvrD60VxxXK7zzzf2CzYQVcPCX4dTFC+5vrq57/HXue9eN
-         7bPBi+K09Uuo8FgLHJN5cLADDDnPtd+D6sEhJhO/VLvKBoLaRa1BESfKHtMpZuvnwh
-         D3Vc4uZU9Dcg74j9eeiZa4qkcbeOz2ZvcezhMcicUmJ4FzCGExiFKR4ER32CvaOaWV
-         akMTcdJNfGrFGH5JvGZ7qns0oNxpRTzGH0qZ76EqyoQfhjLJvxqyHurET1PBvf6svb
-         dBMESSwDo3iJsmPDGBQ1mVtfw03/ahNqDciEznfWOfvZZJNzU8YYxi4I1doMFPdTRo
-         oo8eGNoKcMUqQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-kernel@vger.kernel.org, Martin Sebor <msebor@gcc.gnu.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        Ning Sun <ning.sun@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Simon Kelley <simon@thekelleys.org.uk>,
-        James Smart <james.smart@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Anders Larsen <al@alarsen.net>, Tejun Heo <tj@kernel.org>,
-        Serge Hallyn <serge@hallyn.com>,
-        Imre Deak <imre.deak@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        tboot-devel@lists.sourceforge.net, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Manasi Navare <manasi.d.navare@intel.com>,
-        Uma Shankar <uma.shankar@intel.com>,
-        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Animesh Manna <animesh.manna@intel.com>,
-        Sean Paul <seanpaul@chromium.org>
-Subject: [PATCH 11/11] [RFC] drm/i915/dp: fix array overflow warning
-Date:   Mon, 22 Mar 2021 17:02:49 +0100
-Message-Id: <20210322160253.4032422-12-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210322160253.4032422-1-arnd@kernel.org>
-References: <20210322160253.4032422-1-arnd@kernel.org>
+        id S230358AbhCVQIX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Mar 2021 12:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230300AbhCVQHr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Mar 2021 12:07:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3180C061574;
+        Mon, 22 Mar 2021 09:07:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WnvXnJzljojS8tgnkv0qyX+4X9mX4IsbTi96GynIueY=; b=ArtuoRXw+MQxkBTgpMWQHo9aLO
+        Bqy+gGcBB7EpHPjwSB+HJ5qYLkF0Tf48XE/eZ+hhB0+9yxlcDDMa+c8iaS/fTcHZGnbyUNhP2uPTz
+        tXgNMwbNbKXU3diYnR/Vs1gdk3gtjXD4y7lCdx3jI7fVyXLBP6HMsa/SoxBj9XLPLZp5zkujykaP2
+        yACZiMrg2uRbPVcwlbmObfZDRLgrLtKNCp6PjH7Sbz1z93aHQCZaGzeuV3pPiscWylmYqA8MOvuCb
+        MjD8e4JWQAVY5b5glxuQ9Cma/iWupffbeA6Ib70uuoaOxOdAy/Bltik7aQuk/kAJmCrE+SSBVn9ih
+        gA9NWfsA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lON4Z-008krr-Bd; Mon, 22 Mar 2021 16:06:48 +0000
+Date:   Mon, 22 Mar 2021 16:06:31 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Bodo Stroesser <bstroesser@ts.fujitsu.com>,
+        Guoqing Jiang <guoqing.jiang@cloud.ionos.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] target: pscsi: avoid Wempty-body warning
+Message-ID: <20210322160631.GQ1719932@casper.infradead.org>
+References: <20210322114441.3479365-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210322114441.3479365-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Mar 22, 2021 at 12:44:34PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Building with 'make W=1' shows a harmless warning for pscsi:
+> 
+> drivers/target/target_core_pscsi.c: In function 'pscsi_complete_cmd':
+> drivers/target/target_core_pscsi.c:624:33: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+>   624 |                                 ; /* XXX: TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE */
+>       |                                 ^
+> 
+> Rework the coding style as suggested by gcc to avoid the warning.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/target/target_core_pscsi.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
+> index 3cbc074992bc..913b092955f6 100644
+> --- a/drivers/target/target_core_pscsi.c
+> +++ b/drivers/target/target_core_pscsi.c
+> @@ -620,8 +620,9 @@ static void pscsi_complete_cmd(struct se_cmd *cmd, u8 scsi_status,
+>  			unsigned char *buf;
+>  
+>  			buf = transport_kmap_data_sg(cmd);
+> -			if (!buf)
+> -				; /* XXX: TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE */
+> +			if (!buf) {
+> +				/* XXX: TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE */
+> +			}
 
-gcc-11 warns that intel_dp_check_mst_status() has a local array of
-fourteen bytes and passes the last four bytes into a function that
-expects a six-byte array:
+But why not just delete the code?
 
-drivers/gpu/drm/i915/display/intel_dp.c: In function ‘intel_dp_check_mst_status’:
-drivers/gpu/drm/i915/display/intel_dp.c:4556:22: error: ‘drm_dp_channel_eq_ok’ reading 6 bytes from a region of size 4 [-Werror=stringop-overread]
- 4556 |                     !drm_dp_channel_eq_ok(&esi[10], intel_dp->lane_count)) {
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/i915/display/intel_dp.c:4556:22: note: referencing argument 1 of type ‘const u8 *’ {aka ‘const unsigned char *’}
-In file included from drivers/gpu/drm/i915/display/intel_dp.c:38:
-include/drm/drm_dp_helper.h:1459:6: note: in a call to function ‘drm_dp_channel_eq_ok’
- 1459 | bool drm_dp_channel_eq_ok(const u8 link_status[DP_LINK_STATUS_SIZE],
-      |      ^~~~~~~~~~~~~~~~~~~~
+			buf = transport_kmap_data_sg(cmd);
+			/* XXX: TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE */
 
-Clearly something is wrong here, but I can't quite figure out what.
-Changing the array size to 16 bytes avoids the warning, but is
-probably the wrong solution here.
+I mean, this seems like a real warning here.  We're not actually
+handling the failure to allocate 'buf'.  It's not marked as __must_check,
+but watch the code flow:
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/gpu/drm/i915/display/intel_dp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+                        buf = transport_kmap_data_sg(cmd);
+                        if (!buf)
+                                ; /* XXX: TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE */
 
-diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-index 8c12d5375607..830e2515f119 100644
---- a/drivers/gpu/drm/i915/display/intel_dp.c
-+++ b/drivers/gpu/drm/i915/display/intel_dp.c
-@@ -65,7 +65,7 @@
- #include "intel_vdsc.h"
- #include "intel_vrr.h"
- 
--#define DP_DPRX_ESI_LEN 14
-+#define DP_DPRX_ESI_LEN 16
- 
- /* DP DSC throughput values used for slice count calculations KPixels/s */
- #define DP_DSC_PEAK_PIXEL_RATE			2720000
--- 
-2.29.2
+                        if (cdb[0] == MODE_SENSE_10) {
+                                if (!(buf[3] & 0x80))
+                                        buf[3] |= 0x80;
+                        } else {
+                                if (!(buf[2] & 0x80))
+                                        buf[2] |= 0x80;
+                        }
 
+we're about to do a NULL ptr dereference.  So this should be handled
+somehow.
