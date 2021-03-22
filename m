@@ -2,78 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95169343D8E
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 11:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25F8343DB6
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Mar 2021 11:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbhCVKNe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Mar 2021 06:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbhCVKNH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Mar 2021 06:13:07 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A3DC061574
-        for <linux-scsi@vger.kernel.org>; Mon, 22 Mar 2021 03:13:05 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id g12so5943107ybh.9
-        for <linux-scsi@vger.kernel.org>; Mon, 22 Mar 2021 03:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1P1ylb+0K8r+W1E1V6incN0kq8bWpLVNDCMYMUCyg3s=;
-        b=bzi9vD6E2AUdbZQcvIbscwiGt+DTHszzRZNSiBV+xdfdy2AobAc2RBvwcUXty1qzph
-         schx+6gUrFpQg0kwbHHoMsFJDccEcNvvbjUMxxV6KxIPypgWWbj2LGGKiUec6xy+O3+t
-         p/fW+5MPGtAaHwUiHzDOHJRlA7ZYNtV//X0pXNts//QazAVxCBKOqQXYhFYEzXkTU6Up
-         0nlElbgwuDHWF4fFBdhg0f8lHFfzBWClSKXcII+GyYatrzZnnBOpLcpytN39rwbHfQtU
-         BMyqXek+dvZTu/7zOoCwu/luW8bIUY0aZgEu5k6tvmsaap6jkZXzxxd9Ag3zqERDjWFh
-         Ldtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1P1ylb+0K8r+W1E1V6incN0kq8bWpLVNDCMYMUCyg3s=;
-        b=Df2km5MpkJk+d7CB+qXJXIIGG2TM9ZLChwFqeCAl8XHcYN801MqDhUhM0J/fbtCw6Q
-         7a2ZyqWhBMsZx1CRc/fpBt9yJTCzKFPgenQhVo/ler5p9309JHcTnDmNqX6ejKv87YBz
-         vp1oILXqE0tzDRdW7+lykTDIPFkORsRbynDQkcKymiWnNvhe7FQdDgke/8qfyl5Y09AW
-         JGM/D2ZrhuOZ4FjP9pzVdTs1bv4jnaJYzmsw0h4S5JJEkh0pLLvVUQh8BdwVfiIwiNuB
-         PrhFdVyQi9CcD98oVMOY8eS35dbsrXACQWAXrHk5aceXEGzvzJavPDnvF9ahthggON01
-         tIxg==
-X-Gm-Message-State: AOAM5315sV5CaWabtpMoQLWROekTYXefVjAYVpouBmSOeIq4CFoGEiW+
-        V/hUa2OcjjoqGO16MSIGUdYkggp+2ukbBejex2I=
-X-Google-Smtp-Source: ABdhPJzjNDesOHgKan6gxFJnQcCnxqWFwfXjKBzQkeRAMHPfDcIokyDaoMBrEXJUCuRcGyHQuXGl5HGb2+GMC6unNto=
-X-Received: by 2002:a25:d44f:: with SMTP id m76mr24827956ybf.101.1616407984718;
- Mon, 22 Mar 2021 03:13:04 -0700 (PDT)
+        id S230087AbhCVK0L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Mar 2021 06:26:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51068 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230118AbhCVKZx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 22 Mar 2021 06:25:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5348B6198E;
+        Mon, 22 Mar 2021 10:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616408753;
+        bh=Y2Gm2lzUjPtqdTmpCFTNGu0eofrp3F1qO7+4yRpZXeI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PDkoQjr9uWfM7vXiOzcPbJhDtAC3bxlW2FN3rapr2A8Q5I88fO1JfUvfY0B3Vb0th
+         092SvZRmqTAFbTFvpNrCcT0OV/1vbMQn4DHlteY5RetAWN1dvX6LdSvz1/KWXOrG7n
+         e5YJWcF8U11Igi1E5Boo0EIHronSBCm76+uhmHtDJhnodRdsE7xZNz7DeIPR6dRZ6W
+         54KrcM8zRjoVKNy1dvka4f4bOqr+TJwR4Kh3cklaU43x+6thXjsEvyHneLudKqjQPw
+         F5g0CFmM6Z768LK1XK8jl7/nvlk1vsWOfPjojesMP8PiYzMYGilXrlE+E6MwvuVK33
+         h3YxdbKwgbKUw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, YueHaibing <yuehaibing@huawei.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] aic94xx: avoid -Wempty-body warning
+Date:   Mon, 22 Mar 2021 11:25:43 +0100
+Message-Id: <20210322102549.278661-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Received: by 2002:a05:7108:2b49:0:0:0:0 with HTTP; Mon, 22 Mar 2021 03:13:02
- -0700 (PDT)
-Reply-To: sarandan122@yahoo.com
-From:   Mrs Sarah Daniel <nrevpeter@gmail.com>
-Date:   Mon, 22 Mar 2021 11:13:02 +0100
-Message-ID: <CA+kTmTfLmEmbxVWGSEe7oHH404SBdR=jaPtOmz2GvwgyU51x9w@mail.gmail.com>
-Subject: Donation for charity work of God
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Donation for charity work of God
+From: Arnd Bergmann <arnd@arndb.de>
 
-Greetings to you and sorry if this message came to you as a
-surprise.My name is Mrs Sarah Daniel a widow, I found your email
-address through my late husbands internet dater late Mr. Daniel
+Building with 'make W=1' shows a harmless -Wempty-body warning:
 
-I am presently admitted at the hospital suffering from a blood cancer
-and Parkinson diseases. I have only about a few months to live and I
-want you to Transfer the sum of ( $6.200,000.00) united states dollars
-to your account so you can assist me Distribute my funds to charity
-homes in your country ,
+drivers/scsi/aic94xx/aic94xx_init.c: In function 'asd_free_queues':
+drivers/scsi/aic94xx/aic94xx_init.c:858:62: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+  858 |                 ASD_DPRINTK("Uh-oh! Pending is not empty!\n");
 
-I have set aside 20% for you and your family keep while you donate 80%
-to the less privilege people,
+Change the empty ASD_DPRINTK() macro to no_printk(), which avoids this
+warning and adds format string checking.
 
-I will give you more details or full story as soon as i receive your
-reply as the fund was deposited with a bank
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/scsi/aic94xx/aic94xx.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Remain Blessed
+diff --git a/drivers/scsi/aic94xx/aic94xx.h b/drivers/scsi/aic94xx/aic94xx.h
+index 98978bc199ff..8f24180646c2 100644
+--- a/drivers/scsi/aic94xx/aic94xx.h
++++ b/drivers/scsi/aic94xx/aic94xx.h
+@@ -33,7 +33,7 @@
+ #ifdef ASD_DEBUG
+ #define ASD_DPRINTK asd_printk
+ #else
+-#define ASD_DPRINTK(fmt, ...)
++#define ASD_DPRINTK(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+ #endif
+ 
+ /* 2*ITNL timeout + 1 second */
+-- 
+2.29.2
 
-Mrs Sarah Daniel
