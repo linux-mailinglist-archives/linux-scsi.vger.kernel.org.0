@@ -2,61 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E48346988
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Mar 2021 21:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE82C346AF6
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Mar 2021 22:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbhCWUEY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Mar 2021 16:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbhCWUEL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Mar 2021 16:04:11 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59688C061574
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Mar 2021 13:04:11 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id o10so28496532lfb.9
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Mar 2021 13:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mdmEkoGQF7pB+x5oJsizFBzso7j8fVmxmRkAViY7ai0=;
-        b=GmAgGkotu5ybZAfMo4f5CUcgdMF0JIc+qpO/FCOv9wCevKJov1gfladr0REXORxxiY
-         Fnx5aA1Cw9QaKlGAy6wroIC5s4KC/JPvj29z5lmTgM2w/sz+nXro6AeK38xzK9ATciTW
-         cSIWWyzoy/RnBTr9zgEPBcvXUHsNRyrZ15+itUKxajpV3HEEhudHRhiVHsGYNkdyMULB
-         32T4yRWYvj3azcK/5JOJY4r4llkyZH5imogR6JHcfMu9jZnAd1pbju/N+6Z8Rd7+++t4
-         6spkBq0V7SBiDL4CJxN1WUbCNFaWQun79U2BTYIgILgQLNDQfwoFbHfCPl9fEk9qlZ0u
-         MDtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mdmEkoGQF7pB+x5oJsizFBzso7j8fVmxmRkAViY7ai0=;
-        b=VCA8syq75kK8PDIh5wSh7bA43PsCkvMCqJrsQqueKBRQjR/v2Iq7drUzSbznh/RuXH
-         zmO0HnuSPfdDs/0X8ouko6FHu1JMOAIkE0LC5PYlqXOqi1MLtp8k44F5qUi/KujzGlKL
-         q03hzHBRl1YWEQCMy45tegc/1mrNsozAHxsShGehf2Lj/bQstEkkbM0H5S7WGN588Jwm
-         VGcBoijJUhQXXlvdsS2zOPsZWKjEPPRETi9RfR00Vcw86Vt14zcdeNr2vYu2SQtQc6dG
-         fsPXKrfzYYqq8oaQse7AvFC8xsacY37Pc9KLu1zBCmdQZK8bDd/uRyaUkPVVFnvTBQCQ
-         MDKQ==
-X-Gm-Message-State: AOAM53052fIoVSOM0xscbJNpMqHB6EMiSW9/RaObO3FF3Kyat/0SpDYZ
-        HUlcQhzbLhFFLj1DoGK9ZoKMjIJJi5sk++K9DCQ=
-X-Google-Smtp-Source: ABdhPJxZkwExOY6OvzL5b8wFiNxCLUWfMk/h/hVyCwhN7tlM5dwr1xLemaKTod9x0GvWq6ID/yXIUt9RAq74yf8Rbmg=
-X-Received: by 2002:a19:c14c:: with SMTP id r73mr3532512lff.581.1616529849727;
- Tue, 23 Mar 2021 13:04:09 -0700 (PDT)
+        id S233525AbhCWVVG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Mar 2021 17:21:06 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47756 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233506AbhCWVU4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 23 Mar 2021 17:20:56 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1616534455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rh7UiV11siYZzroNsXRIUQBsl9EwjWLE0W39QrqhoN4=;
+        b=jG7i4x9XyqPygIbFC2ZOyLHZ/MfG0RuRrg22IPbXl4hLgYRvJ6x2vYMMUOmi1QOkM82HgL
+        sbWdmNQSIHlWluf19S5IfriegoVuNGpWpUS3yv1Huq2SWZELeJTRXESVas0FiNCtQ2vvh6
+        Br9eVwA3vvL2Bioz2Y8gupj58oIGKPE=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 090D2ADFC;
+        Tue, 23 Mar 2021 21:20:55 +0000 (UTC)
+Message-ID: <225fe1d4a8d579308583fdad4f23221596355931.camel@suse.com>
+Subject: Re: [PATCH] target: pscsi: avoid OOM in pscsi_map_sg()
+From:   Martin Wilck <mwilck@suse.com>
+To:     Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
+        David Disseldorp <ddiss@suse.com>,
+        =?ISO-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>
+Date:   Tue, 23 Mar 2021 22:20:54 +0100
+In-Reply-To: <BYAPR04MB4965DC898570F11C1B4CF06D86649@BYAPR04MB4965.namprd04.prod.outlook.com>
+References: <20210323162203.30942-1-mwilck@suse.com>
+         <BYAPR04MB4965DC898570F11C1B4CF06D86649@BYAPR04MB4965.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.38.4 
 MIME-Version: 1.0
-Received: by 2002:a2e:b524:0:0:0:0:0 with HTTP; Tue, 23 Mar 2021 13:04:09
- -0700 (PDT)
-Reply-To: owusup021@gmail.com
-From:   Marcus <jofred883@gmail.com>
-Date:   Tue, 23 Mar 2021 20:04:09 +0000
-Message-ID: <CADdSqdMAJOiYXK7i9V0z32d7U-D+ZO54EBz=9LJ5mfpAjtza1w@mail.gmail.com>
-Subject: I have sent you several emails no responds.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I need you to confirm the information i sent to you so i can be rest
-assured you received it.
-Regards.
-Marcus.
+On Tue, 2021-03-23 at 18:07 +0000, Chaitanya Kulkarni wrote:
+> Martin,
+> 
+> On 3/23/21 09:23, mwilck@suse.com wrote:
+> > From: Martin Wilck <mwilck@suse.com>
+> > 
+> > pscsi_map_sg() uses the variable nr_pages as a hint for
+> > bio_kmalloc()
+> > how many vector elements to allocate. If nr_pages is <
+> > BIO_MAX_PAGES,
+> > it will be reset to 0 after successful allocation of the bio.
+> 
+> I think BIO_MAX_PAGES is replaced by BIO_MAX_VECS with
+> commit a8affc03a9b3 ("block: rename BIO_MAX_PAGES to BIO_MAX_VECS").
+
+Right. I made my patch against mkp/queue, which doesn't include this
+commit yet. As this is just in the description, I don't think it
+matters much, does it?
+
+Martin
+
+
