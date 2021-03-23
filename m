@@ -2,78 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D29C346980
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Mar 2021 21:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E48346988
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Mar 2021 21:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbhCWUCO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Mar 2021 16:02:14 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54132 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233109AbhCWUBq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 23 Mar 2021 16:01:46 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1616529705; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2nH4eBFmmb845DbKELeZnF2FwGS1+JCzT4+3wcopkag=;
-        b=XXT4b5iIaz2Kh3G2WpQd6zsDBuX61vjIVIz9wAqNkgWMZrlBpxQuOdFq1g4Ck3Q9MZ42za
-        YwI5gNeNttEh5KUvFBr/vNQXxFblpAZ/mBMyrbNdPKXOUzLwkVaqGiimnErKDHTpSnWB3R
-        9I/ne7hogEwi6OOE+VWDtjtv4W/ELUU=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 24C31AF28;
-        Tue, 23 Mar 2021 20:01:45 +0000 (UTC)
-Message-ID: <40dacd0ec8d6b2e8db457e4cd6b7869193a83ec9.camel@suse.com>
-Subject: Re: [PATCH] target: pscsi: avoid OOM in pscsi_map_sg()
-From:   Martin Wilck <mwilck@suse.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        David Disseldorp <ddiss@suse.com>,
-        J??rgen Gro?? <jgross@suse.com>
-Date:   Tue, 23 Mar 2021 21:01:44 +0100
-In-Reply-To: <20210323162905.GA2449048@infradead.org>
-References: <20210323162203.30942-1-mwilck@suse.com>
-         <20210323162905.GA2449048@infradead.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.38.4 
+        id S231621AbhCWUEY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Mar 2021 16:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230247AbhCWUEL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Mar 2021 16:04:11 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59688C061574
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Mar 2021 13:04:11 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id o10so28496532lfb.9
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Mar 2021 13:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mdmEkoGQF7pB+x5oJsizFBzso7j8fVmxmRkAViY7ai0=;
+        b=GmAgGkotu5ybZAfMo4f5CUcgdMF0JIc+qpO/FCOv9wCevKJov1gfladr0REXORxxiY
+         Fnx5aA1Cw9QaKlGAy6wroIC5s4KC/JPvj29z5lmTgM2w/sz+nXro6AeK38xzK9ATciTW
+         cSIWWyzoy/RnBTr9zgEPBcvXUHsNRyrZ15+itUKxajpV3HEEhudHRhiVHsGYNkdyMULB
+         32T4yRWYvj3azcK/5JOJY4r4llkyZH5imogR6JHcfMu9jZnAd1pbju/N+6Z8Rd7+++t4
+         6spkBq0V7SBiDL4CJxN1WUbCNFaWQun79U2BTYIgILgQLNDQfwoFbHfCPl9fEk9qlZ0u
+         MDtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mdmEkoGQF7pB+x5oJsizFBzso7j8fVmxmRkAViY7ai0=;
+        b=VCA8syq75kK8PDIh5wSh7bA43PsCkvMCqJrsQqueKBRQjR/v2Iq7drUzSbznh/RuXH
+         zmO0HnuSPfdDs/0X8ouko6FHu1JMOAIkE0LC5PYlqXOqi1MLtp8k44F5qUi/KujzGlKL
+         q03hzHBRl1YWEQCMy45tegc/1mrNsozAHxsShGehf2Lj/bQstEkkbM0H5S7WGN588Jwm
+         VGcBoijJUhQXXlvdsS2zOPsZWKjEPPRETi9RfR00Vcw86Vt14zcdeNr2vYu2SQtQc6dG
+         fsPXKrfzYYqq8oaQse7AvFC8xsacY37Pc9KLu1zBCmdQZK8bDd/uRyaUkPVVFnvTBQCQ
+         MDKQ==
+X-Gm-Message-State: AOAM53052fIoVSOM0xscbJNpMqHB6EMiSW9/RaObO3FF3Kyat/0SpDYZ
+        HUlcQhzbLhFFLj1DoGK9ZoKMjIJJi5sk++K9DCQ=
+X-Google-Smtp-Source: ABdhPJxZkwExOY6OvzL5b8wFiNxCLUWfMk/h/hVyCwhN7tlM5dwr1xLemaKTod9x0GvWq6ID/yXIUt9RAq74yf8Rbmg=
+X-Received: by 2002:a19:c14c:: with SMTP id r73mr3532512lff.581.1616529849727;
+ Tue, 23 Mar 2021 13:04:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a2e:b524:0:0:0:0:0 with HTTP; Tue, 23 Mar 2021 13:04:09
+ -0700 (PDT)
+Reply-To: owusup021@gmail.com
+From:   Marcus <jofred883@gmail.com>
+Date:   Tue, 23 Mar 2021 20:04:09 +0000
+Message-ID: <CADdSqdMAJOiYXK7i9V0z32d7U-D+ZO54EBz=9LJ5mfpAjtza1w@mail.gmail.com>
+Subject: I have sent you several emails no responds.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2021-03-23 at 16:29 +0000, Christoph Hellwig wrote:
-> On Tue, Mar 23, 2021 at 05:22:03PM +0100, mwilck@suse.com wrote:
-> > Avoid this by simply not resetting nr_pages to 0 after allocating the
-> > bio. This way, the client receives an IO error when it tries to send
-> > requests exceeding the devices max_sectors_kb, and eventually gets
-> > it right. The client must still limit max_sectors_kb e.g. by an udev
-> > rule if (like in my case) the driver doesn't report valid block
-> > limits, otherwise it encounters I/O errors.
-> 
-> FYI, I think the what you did here is correct, but not enough.
-> When pscsi_get_bio (that is bio_kmalloc) fails, this function needs
-> to unwind and return an error insted of blindly retrying the
-> allocation,
-> else we can't recover from a memory shortage.
-
-I can try to do that, but in the tests I ran, I never observed
-bio_kmalloc() failing. I saw it eat all memory, and various processes
-being killed by the OOM killer, before the system eventually panicked
-with OOM. It takes only fractions of a second until this happens:
-
-[   57.356238] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/,task=lightdm-gtk-gre,pid=4586,uid=481
-[   57.369635] Out of memory: Killed process 4586 (lightdm-gtk-gre) total-vm:1035752kB, anon-rss:0kB, file-rss:2936kB, shmem-rss:0kB
-...
-[   57.698656] Node 0 Normal free:54828kB min:55008kB low:68760kB high:82512kB active_anon:4kB inactive_anon:0kB active_file:936kB inactive_file:1164kB unevictable:58036kB writepending:720kB present:13631488kB managed:13310252kB mlocked:58036kB kernel_stack:5808kB pagetables:8972kB bounce:0kB free_pcp:564kB local_pcp:0kB free_cma:0kB
-...
-[   57.818978] Unreclaimable slab info:
-[   58.254160] kmalloc-192         15683546KB   15683546KB
-
-(system has 16GiB memory).
-
-Martin
-
-
+I need you to confirm the information i sent to you so i can be rest
+assured you received it.
+Regards.
+Marcus.
