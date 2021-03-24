@@ -2,71 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 618F234828F
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Mar 2021 21:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E885348344
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Mar 2021 21:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238087AbhCXUF0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Mar 2021 16:05:26 -0400
-Received: from mga18.intel.com ([134.134.136.126]:26214 "EHLO mga18.intel.com"
+        id S230292AbhCXUx6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Mar 2021 16:53:58 -0400
+Received: from namei.org ([65.99.196.166]:51310 "EHLO mail.namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238101AbhCXUFG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 24 Mar 2021 16:05:06 -0400
-IronPort-SDR: uDNc1gDTYPc5Wfc+2IDODODWfhE+UkEOOx2t82P4ukToctBfhrGnTn2hm8yXx8Azs8D6DD9BBl
- R+uY6C8A+IBw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="178332338"
-X-IronPort-AV: E=Sophos;i="5.81,275,1610438400"; 
-   d="scan'208";a="178332338"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 13:05:05 -0700
-IronPort-SDR: XGIbAoAednz+FF2k4MaSq4eFZamnvd4ANXu7B3P6TPsCsFtLH92Gg073PzXcVLiSWZU5NWvi95
- r7+DL7zAvdrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,275,1610438400"; 
-   d="scan'208";a="409004048"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Mar 2021 13:05:03 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lP9kU-0001UR-Sx; Wed, 24 Mar 2021 20:05:02 +0000
-Date:   Thu, 25 Mar 2021 04:04:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Viswas G <Viswas.G@microchip.com>, linux-scsi@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Vasanthalakshmi.Tharmarajan@microchip.com,
-        Viswas.G@microchip.com, Ruksar.devadi@microchip.com,
-        vishakhavc@google.com, radha@google.com,
-        jinpu.wang@cloud.ionos.com,
-        Ashokkumar N <Ashokkumar.N@microchip.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [RFC PATCH] pm80xx: mpiStateText[] can be static
-Message-ID: <20210324200407.GA42444@3b6556a627b1>
-References: <20210324170357.9765-2-Viswas.G@microchip.com>
+        id S230336AbhCXUx3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 24 Mar 2021 16:53:29 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.namei.org (Postfix) with ESMTPS id 507624E1;
+        Wed, 24 Mar 2021 20:50:33 +0000 (UTC)
+Date:   Thu, 25 Mar 2021 07:50:33 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+cc:     linux-kernel@vger.kernel.org, Martin Sebor <msebor@gcc.gnu.org>,
+        Serge Hallyn <serge@hallyn.com>, Arnd Bergmann <arnd@arndb.de>,
+        x86@kernel.org, Ning Sun <ning.sun@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Simon Kelley <simon@thekelleys.org.uk>,
+        James Smart <james.smart@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Anders Larsen <al@alarsen.net>, Tejun Heo <tj@kernel.org>,
+        Imre Deak <imre.deak@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        tboot-devel@lists.sourceforge.net, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Tycho Andersen <tycho@tycho.pizza>
+Subject: Re: [PATCH 03/11] security: commoncap: fix -Wstringop-overread
+ warning
+In-Reply-To: <20210322160253.4032422-4-arnd@kernel.org>
+Message-ID: <b8ebab59-1cec-42d-6fb9-44aa1a464ae2@namei.org>
+References: <20210322160253.4032422-1-arnd@kernel.org> <20210322160253.4032422-4-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210324170357.9765-2-Viswas.G@microchip.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/mixed; boundary="1665246916-699807841-1616619033=:3443171"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- pm8001_ctl.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--1665246916-699807841-1616619033=:3443171
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-index ce4846b1377c9..f8fe919133b6e 100644
---- a/drivers/scsi/pm8001/pm8001_ctl.c
-+++ b/drivers/scsi/pm8001/pm8001_ctl.c
-@@ -895,7 +895,7 @@ static DEVICE_ATTR(update_fw, S_IRUGO|S_IWUSR|S_IWGRP,
-  * A sysfs 'read-only' shost attribute.
-  */
- 
--char mpiStateText[][80] = {
-+static char mpiStateText[][80] = {
- 	"MPI is not initialized",
- 	"MPI is successfully initialized",
- 	"MPI termination is in progress",
+On Mon, 22 Mar 2021, Arnd Bergmann wrote:
+
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> gcc-11 introdces a harmless warning for cap_inode_getsecurity:
+> 
+> security/commoncap.c: In function ‘cap_inode_getsecurity’:
+> security/commoncap.c:440:33: error: ‘memcpy’ reading 16 bytes from a region of size 0 [-Werror=stringop-overread]
+>   440 |                                 memcpy(&nscap->data, &cap->data, sizeof(__le32) * 2 * VFS_CAP_U32);
+>       |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> The problem here is that tmpbuf is initialized to NULL, so gcc assumes
+> it is not accessible unless it gets set by vfs_getxattr_alloc().  This is
+> a legitimate warning as far as I can tell, but the code is correct since
+> it correctly handles the error when that function fails.
+> 
+> Add a separate NULL check to tell gcc about it as well.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Applied to
+git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git fixes-v5.12
+
+-- 
+James Morris
+<jmorris@namei.org>
+
+--1665246916-699807841-1616619033=:3443171--
