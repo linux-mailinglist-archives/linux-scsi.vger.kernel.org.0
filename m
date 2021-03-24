@@ -2,78 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5680B3485C3
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Mar 2021 01:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F68234842A
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Mar 2021 22:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbhCYAPF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 24 Mar 2021 20:15:05 -0400
-Received: from 8.mo1.mail-out.ovh.net ([178.33.110.239]:36279 "EHLO
-        8.mo1.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbhCYAPD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Mar 2021 20:15:03 -0400
-X-Greylist: delayed 4201 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Mar 2021 20:15:02 EDT
-Received: from player774.ha.ovh.net (unknown [10.109.146.175])
-        by mo1.mail-out.ovh.net (Postfix) with ESMTP id 1E5531FC177
-        for <linux-scsi@vger.kernel.org>; Wed, 24 Mar 2021 22:46:58 +0100 (CET)
-Received: from ai0.uk (host-92-7-103-66.as43234.net [92.7.103.66])
-        (Authenticated sender: ash@ai0.uk)
-        by player774.ha.ovh.net (Postfix) with ESMTPSA id 368F91C7B46C5;
-        Wed, 24 Mar 2021 21:46:53 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-98R002c8451615-4408-474f-92c3-dd969735d59a,
-                    709C8AB8CE36D75EAFFFA631B5D7D35D8760AF8E) smtp.auth=ash@ai0.uk
-X-OVh-ClientIp: 92.7.103.66
-From:   "Ash Izat" <ash@ai0.uk>
-To:     <Viswas.G@microchip.com>, <jinpu.wang@cloud.ionos.com>,
-        <Ruksar.devadi@microchip.com>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>
-Cc:     <linux-scsi@vger.kernel.org>
-References: <009d01d71cb1$3fbd5200$bf37f600$@ai0.uk> <CAMGffE=B9QRncb2UO3aCfbH9naYU6-pP_c6T3PuHNRKRpnkDJA@mail.gmail.com> <SN6PR11MB3488473F4D3CAEEBE583AB159D689@SN6PR11MB3488.namprd11.prod.outlook.com> <SN6PR11MB3488B82D4D39713C6AEE270F9D639@SN6PR11MB3488.namprd11.prod.outlook.com>
-In-Reply-To: <SN6PR11MB3488B82D4D39713C6AEE270F9D639@SN6PR11MB3488.namprd11.prod.outlook.com>
-Subject: RE: [REGRESSION] pm8001: Adaptec 6805H fails to initialize after v5.10.0
-Date:   Wed, 24 Mar 2021 21:46:51 -0000
-Message-ID: <012c01d720f7$361de9e0$a259bda0$@ai0.uk>
+        id S231945AbhCXVva (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Mar 2021 17:51:30 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:39996 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234578AbhCXVvV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 24 Mar 2021 17:51:21 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 657544131F;
+        Wed, 24 Mar 2021 21:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received; s=mta-01; t=1616622679;
+         x=1618437080; bh=1xLhmrlm56CGNHui4+V1hNsy6UNkhH1NglMLyFHn0bs=; b=
+        DHnMYUfNCDXdRUC4HWiIXwjH5YXPw6kcy8BdrIIeUCfV73IPhRUXPEuWjhEfHghM
+        7pz/9puhVqY45Vk5lcuH9tfkTjOD3uJfIDLqqZBc6mO5pmf7UWDXPybwosWo2zks
+        KOtEvfXoHjA5EHEG9Ye++iSJJd0gsIiehUnMRaOJPK0=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id O0koYXOT_QBH; Thu, 25 Mar 2021 00:51:19 +0300 (MSK)
+Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 16772412ED;
+        Thu, 25 Mar 2021 00:51:17 +0300 (MSK)
+Received: from yadro.com (10.199.0.74) by T-EXCH-03.corp.yadro.com
+ (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 25
+ Mar 2021 00:51:17 +0300
+Date:   Thu, 25 Mar 2021 00:51:16 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     Dmitry Bogdanov <d.bogdanov@yadro.com>
+CC:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux@yadro.com>, Nilesh Javali <njavali@marvell.com>,
+        Chris Boot <bootc@bootc.net>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Michael Cyr <mikecyr@linux.ibm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+Subject: Re: [PATCH v2 1/7] target: core: add common tpg/enable attribute
+Message-ID: <YFu0VFEJjUJy+vF9@yadro.com>
+References: <20210322080554.7611-1-d.bogdanov@yadro.com>
+ <20210322080554.7611-2-d.bogdanov@yadro.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AQIEZhkRl1DSEXCvKDGFO+KKzJoBugLdwgrCALmVbjUBf56YZqoQZ2jA
-X-Ovh-Tracer-Id: 12921108808251466907
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudegkedgudehfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvfhgjufffkfggtgfgofhtsehtqhhgtddvtdejnecuhfhrohhmpedftehshhcukfiirghtfdcuoegrshhhsegrihdtrdhukheqnecuggftrfgrthhtvghrnhepvedtudfhueeffeevfefguddugfeuheffudehvedtfeffvdfhtdeijeegfeehleeknecukfhppedtrddtrddtrddtpdelvddrjedruddtfedrieeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeejgedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrshhhsegrihdtrdhukhdprhgtphhtthhopehlihhnuhigqdhstghsihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210322080554.7611-2-d.bogdanov@yadro.com>
+X-Originating-IP: [10.199.0.74]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-03.corp.yadro.com (172.17.100.103)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Viswas,
+On Mon, Mar 22, 2021 at 11:05:48AM +0300, Dmitry Bogdanov wrote:
+> +static int
+> +target_fabric_setup_tpg_base_cit(struct target_fabric_configfs *tf)
+> +{
+> +	int i, k, len = 0;
+> +	struct config_item_type *cit = &tf->tf_tpg_base_cit;
+> +	struct configfs_attribute **attrs;
+> +
+> +	if (tf->tf_ops->fabric_enable_tpg)
+> +		for (i = 0; core_tpg_base_enable_attrs[i]; i++)
+> +			len += sizeof(struct configfs_attribute *);
+...
+> +	if (tf->tf_ops->fabric_enable_tpg)
+> +		for (i = 0; core_tpg_base_enable_attrs[i]; i++)
+...
+>+CONFIGFS_ATTR(core_tpg_base_, enable);
+>+
+>+struct configfs_attribute *core_tpg_base_enable_attrs[] = {
+>+       &core_tpg_base_attr_enable,
+>+       NULL,
 
-Patch applied on top of 5.12-rc4 and it is working perfectly now.
-Double checked and without the patch the issue is still present in 5.12-rc4.
-
-Thank you very much for the prompt response.
-
-Is there any chance this will be backported to longterm (5.10) once it is merged?
-
-Cheers,
-
-Ash Izat
-
-> -----Original Message-----
-> From: Viswas.G@microchip.com <Viswas.G@microchip.com>
-> Sent: 24 March 2021 18:07
-> To: jinpu.wang@cloud.ionos.com; ash@ai0.uk; Ruksar.devadi@microchip.com;
-> Vasanthalakshmi.Tharmarajan@microchip.com
-> Cc: linux-scsi@vger.kernel.org
-> Subject: RE: [REGRESSION] pm8001: Adaptec 6805H fails to initialize after
-> v5.10.0
-> 
-> Hi Ash,
-> 
-> Can you please try this patch ?
-> 
-> Regards,
-> Viswas G
-
-
+I believe that there is no real benefit in core_tpg_base_enable_attrs[]
+with only one attribute. Just use core_tpg_base_attr_enable directly.
