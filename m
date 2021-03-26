@@ -2,101 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B45AB34A051
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Mar 2021 04:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2CA34A13F
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Mar 2021 06:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbhCZDjm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 Mar 2021 23:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S229920AbhCZF7P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Mar 2021 01:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbhCZDjb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Mar 2021 23:39:31 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298B4C06174A
-        for <linux-scsi@vger.kernel.org>; Thu, 25 Mar 2021 20:39:31 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id l15so1193261uao.12
-        for <linux-scsi@vger.kernel.org>; Thu, 25 Mar 2021 20:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=eSv3qH6HOyZ7dG/iQuWe40jHVuPnKp2FQC4S699xoPI=;
-        b=nsDXPsWtVmwBkjTgn+ro6hUBIlTTa3UqaYBYmZTfkMd4Ci1zHiZs3GYSmDpj2+WiHF
-         76BQGmVgARdTbj83cEJmXIDunZhIDDcdUx2D05gaenpAtVx+G0TxaSn7kSnUZuzmTLB0
-         tEpOqJJ7y1UHKJW8XviGc7Jl2PbqWX8AOjb1hiNbvdGI1H/1QWkJT4t/QfqfW+SZZ3au
-         DAN02f3TH82+qbH0C5lENJE49Wzy/MkYIz9gUFmUIXFYvLEDLWK/0081uzrSel4bRnJf
-         YCWrEy9oecJbkCFWXW965bo2VkQiT2o4q1Ce11oQXH6lHYC0/zMGpS+eWwFEx/25taDA
-         9NYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=eSv3qH6HOyZ7dG/iQuWe40jHVuPnKp2FQC4S699xoPI=;
-        b=d93i2ghGuRv2fsivJGAoRPofCg6nMaUR0Ay/5FHW25EbuUD5+dxuvd5ipPw80GebZe
-         Nbancl8UdD2C/djnNaj50WgwSOodfWyJs+s/H/AlF4ys3uKXyCWkkZCAggoXxVy0GGRP
-         739GVc1Y8maioncypcvYAR8UGqxBiyWUd0T6SHSLTA13HiTCiQTgda4TcAka5nfyvF78
-         khLMKVO8N1HMwhftzCM4UUOx+cPsIZG5UuajC5cbUaRq8aKR/xWQFrzeWAbYfF8o+4OR
-         z84uxPnL6PO9Np1Qzri8vWnmqsLcEM5FLCEtHdVEYI8xh3kBG0EYHpRAhnWCxABTyleh
-         0cvg==
-X-Gm-Message-State: AOAM530WfnjvUu2NmMVecgnbX7OCIk8614gNmVJKEiQUf/6MueCSKrgD
-        6+2x09+M2P/1vy4mbhVIwclKcPT7WrPubxeTfxk=
-X-Google-Smtp-Source: ABdhPJxByQV56s65+30znWhwDVjuG6Zdqkkn5Vjt698ijdbDjCWyoJqxOrBPaJloBrlV8DcYUGgpAWre0LowxuNmOB0=
-X-Received: by 2002:ab0:6585:: with SMTP id v5mr6582356uam.35.1616729970236;
- Thu, 25 Mar 2021 20:39:30 -0700 (PDT)
+        with ESMTP id S229458AbhCZF6r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Mar 2021 01:58:47 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4BBC0613AA;
+        Thu, 25 Mar 2021 22:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=j+/oBDdloN3o8INq+rDm+PXgibKfwME4qvVJRKkAE3w=; b=LYOlhVtISmUlD5eLhrg1Y3VvE+
+        SL+YEpW3Qyc4XafPaldRkFpx8nLUAxvl15mQHgYA52azoulgbrnOCf088Oh5+lENKL9XqE8J4XwC3
+        lMPLpeAvdycxqHoVsw1l88o+nHZ0sDmj5Wko1RjN49g++K961oVHLsua/XWU4ySC/RZ5sG03VpFvc
+        a05A+Nse+lpgsAOTtiQ/D9qTdajvdp+PQxJxfg/olotehiAjQuyeFpx+p//g2T4SaHKQT1RXbE+jG
+        3t2D3d0Ui6EqGYqG2qSRJZkhGGoY1JyYy6Ox5bJIyEXysN5Ec0GFx0rX17mHmsPWvywnca2GFUgzA
+        T7BI6hGw==;
+Received: from [2001:4bb8:191:f692:97ff:1e47:aee2:c7e5] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lPfUG-005AOD-Dy; Fri, 26 Mar 2021 05:58:24 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>, Khalid Aziz <khalid@gonehiking.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Ondrej Zary <linux@rainbow-software.org>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: start removing block bounce buffering support v2
+Date:   Fri, 26 Mar 2021 06:58:14 +0100
+Message-Id: <20210326055822.1437471-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Received: by 2002:ab0:604:0:0:0:0:0 with HTTP; Thu, 25 Mar 2021 20:39:29 -0700 (PDT)
-Reply-To: rukianimine56@gmail.com
-From:   Mrs Rukia Nimine <rukianimine8@gmail.com>
-Date:   Thu, 25 Mar 2021 20:39:29 -0700
-Message-ID: <CACWRkZw0zEc_2fWqQcB-e73KL4KM-mi=xQBHjU0SKSJuOJmMyg@mail.gmail.com>
-Subject: I'AM SUFFERING FROM CANCER OF THE HEART
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I'AM SUFFERING FROM CANCER OF THE HEART
+Hi all,
 
-Dear Friend.
+this series starts to clean up and remove the impact of the legacy old
+block layer bounce buffering code.
 
-Greetings to you in the name of the Lord God Almighty am Mrs Rukia
-Nimine. From (Paris) France, but am based in Burkina Faso Africa for
-eight years now as a business woman dealing on gold exportation and
-cotton Sales. But I have been suffering from this deadly disease
-called cancer for long and the doctor just said I have just few weeks
-to live. I know it will be difficult for you to believe my story now,
-but this is the situation I found myself in, it=E2=80=99s not my desire to =
-be
-on a sick bed today but God knows best,
+First it removes support for ISA bouncing.  This was used by three SCSI
+drivers.  One of them actually had an active user and developer 5 years
+ago so I've converted it to use a local bounce buffer - Ondrej, can you
+test the coversion?  The next one has been known broken for years, and
+the third one looks like it has no users for the ISA support so they
+are just dropped.
 
-Now that I am about to end the race like this, without any family
-Members and no child. I have $5.8 Million US DOLLARS in BANK OF AFRICA
-(B.O.A) Burkina Faso it=E2=80=99s all my life savings, I instructed the Ban=
-k
-to give it to St Andrews Missionary and Home Kizito Orphanage in
-Burkina Faso. But my mind is not at rest because i do not trust them,
-I am writing this letter now through the help of my computer beside my
-sick bed.
+It then removes support for dealing with bounce buffering highmem pages
+for passthrough requests as we can just use the copy instead of the map
+path for them.  This will reduce efficiency for such setups on highmem
+systems (e.g. usb-storage attached DVD drives), but then again that is
+what you get for using a driver not using modern interfaces on a 32-bit
+highmem system.  It does allow to streamline the common path pretty nicely.
 
-I will instruct the bank to transfer this fund to you as a foreigner
-but you have to promise me that you will take 40 Percent(%) of the
-total money for your personal use While 60 Percent (%) of the money
-will go to charity, Orphanage and less Privileges" people in the
-street and helping the Needy. I grew up as an Orphan and I don't have
-anybody as my family member, just to Endeavour that the house of God
-is maintained. Am doing this so that God will forgive my sins and
-accept my soul because this sickness has suffered me so much.
 
-As soon as I receive your reply I shall give you the contact of the
-bank and I will also instruct my Bank Manager to issue you an
-authority letter that will prove you the present beneficiary of the
-money in the bank that is if you assure me that you will act
-accordingly as I Stated herein.
-
-I look forward to getting a reply from you.
-
-Thanks and God bless you,
-
-Mrs Rukia Nimine.
+Changes since v1:
+ - remove more dead code in advansys.c
+ - fix the bounce limit stacking in blk_stack_limits
