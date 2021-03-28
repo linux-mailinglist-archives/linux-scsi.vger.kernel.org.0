@@ -2,62 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3283B34BE1A
-	for <lists+linux-scsi@lfdr.de>; Sun, 28 Mar 2021 20:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAD334BE77
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Mar 2021 21:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbhC1SIB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 28 Mar 2021 14:08:01 -0400
-Received: from mail.hanoi.gov.vn ([113.160.32.33]:32049 "EHLO
-        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbhC1SHi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Mar 2021 14:07:38 -0400
-X-Greylist: delayed 483 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:32 EDT
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B597EC3DB;
-        Mon, 29 Mar 2021 00:58:07 +0700 (+07)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
-        s=default; t=1616954288;
-        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
-        b=MnJpubbCOoNzrGbdl4opA9pGiqD1qL1TzNpy60QO4II5VnNpsotVl818lYgRa6I3d
-         Omzy1cLH1+oH7hvhrvWFGEjWO4Du7emM//yWycfTmkwXhJBSFfgFLpRpJNgbPUcm37
-         IfeanaeGGyboioiPWx6i9EzzU+DQGarsjKQF0WLA=
-X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 713EBEC3DD;
-        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
-        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
-Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 7EB1F7F41B5D;
-        Mon, 29 Mar 2021 00:57:59 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 9F9587F41B42;
-        Mon, 29 Mar 2021 00:57:56 +0700 (+07)
-Received: from mail.hanoi.gov.vn ([127.0.0.1])
-        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5aziPsZZzTJX; Mon, 29 Mar 2021 00:57:52 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 923357F41B59;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Date:   Mon, 29 Mar 2021 00:57:49 +0700 (ICT)
-From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
-Reply-To: Mackenzie Scott <propack@propck.net>
-Message-ID: <338153864.25920933.1616954269522.JavaMail.zimbra@hanoi.gov.vn>
-Subject: Congratulations ($ 100,800,000.00)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [185.107.80.217]
-X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
-Thread-Index: /8qcKB84H/IsUnGyWvfkptZHVH6P1Q==
-Thread-Topic: Congratulations ($ 100,800,000.00)
-To:     undisclosed-recipients:;
-X-TM-AS-GCONF: 00
+        id S231578AbhC1TLo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Mar 2021 15:11:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229655AbhC1TL0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 28 Mar 2021 15:11:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 958AB61958;
+        Sun, 28 Mar 2021 19:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616958686;
+        bh=PMA4oqqReBmtAX2ZAQmQ/Ij1yc01H45ZOkLzxC2sfBA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ekkDR4P1dxkrDgGLnDZ2l+RhaE+WWWaha+FwLK1qJIy1XrBmm2MniuKfJXSHpi12h
+         JDwdME/E+8oAi+TwBYLINg4OzojiI+15srN7NmqXkM6EQEc+6IXuNo5oxFV/tyGmGQ
+         gMm4hF8SiAgmnXjPFrFa2oP1wNx5+rW3SDOFJ4gXxMubn5ZWApMQjJlvFMtoWPDFol
+         IthyQ5M5VoXVMFWUDj2gsErqXi4ZqNDy8vvJ6ZOnZuNvhXsdQnpGTAvkBz4lLBSDln
+         Tu+eBs6W7VMPumoi+lB2lwhwsD0Io7oHuMiAFa/0t0IbBJTPMM9JDfjD/58UuCtiyk
+         aLLMYUZikpZoA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7F5F3609E8;
+        Sun, 28 Mar 2021 19:11:26 +0000 (UTC)
+Subject: Re: [GIT PULL] SCSI fixes for 5.12-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <466055c2bdf8d6e61b616bc9e1f7393516365bcf.camel@HansenPartnership.com>
+References: <466055c2bdf8d6e61b616bc9e1f7393516365bcf.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-scsi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <466055c2bdf8d6e61b616bc9e1f7393516365bcf.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+X-PR-Tracked-Commit-Id: 36fa766faa0c822c860e636fe82b1affcd022974
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e8cfe8fa22b6c3d12595f68fde6ef10121795267
+Message-Id: <161695868646.24587.12820068379331819503.pr-tracker-bot@kernel.org>
+Date:   Sun, 28 Mar 2021 19:11:26 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+The pull request you sent on Sat, 27 Mar 2021 18:04:06 -0700:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e8cfe8fa22b6c3d12595f68fde6ef10121795267
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
