@@ -2,72 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4BE34BBA7
-	for <lists+linux-scsi@lfdr.de>; Sun, 28 Mar 2021 10:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C993234BBAA
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Mar 2021 10:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbhC1INq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 28 Mar 2021 04:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S229668AbhC1IQ2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Mar 2021 04:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbhC1IN0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Mar 2021 04:13:26 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FB0C061762
-        for <linux-scsi@vger.kernel.org>; Sun, 28 Mar 2021 01:13:25 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id v3so7476256pgq.2
-        for <linux-scsi@vger.kernel.org>; Sun, 28 Mar 2021 01:13:25 -0700 (PDT)
+        with ESMTP id S229489AbhC1IQU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Mar 2021 04:16:20 -0400
+Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20050C061762;
+        Sun, 28 Mar 2021 01:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=Nv9Vc7XK1tql+EsAQozHoZ4tLpXrIijDlw0vIJ8eI6s=;
-        b=HT2K3E2lf0HF5TlKy/tIoiNUkh/RYT9zzR6DUelT3nW94cfJE2/UICRgTyJ1AOhtr7
-         Nu01qMR++anUk7bg3z+C3NE3uEFhdGKZhSWEScjzSVhqRqTUVCfAtZPRJ2MaV51DfMcT
-         y7gbaVE/8Uk09JCxIFonzi5uGmXiEUb1pJ6SyAgwRoR79itLSZpZ0jWpwNIz8y+sBp8j
-         oWa4eQXlq/Kd6cA5si9EWGYRs/3YLX43YZa4U2eXO1Hk/O3TSAKq911RD0nnAS1jYhxJ
-         hP+VwK41K4tl5bnlxgol0vfFZk+662XkNaOS/M80LNZoAeJIX0rpRHUmkPvQ2hirRvEn
-         W/OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=Nv9Vc7XK1tql+EsAQozHoZ4tLpXrIijDlw0vIJ8eI6s=;
-        b=ISPS1VQMomyLZ+TGNGN+WarNcOkw/BV9ovt8ADRio+YRmjJrbr5/uQn7DzN/cW3mXf
-         X80Ok3KvpgSwijegYASsE57121l9Kn5rnKxfpmmsq5kSwd5ncoyJ26cR/lC35rB+GnXE
-         qgu+UgxD4SVdhmBQvL+OsAw2rdbfxQ/KwYB8qjALyCqeAWfEXrYfxT0SBSBzsc6Wd+/1
-         4xbFtCHmhwW5Uex89Az7g+UmVUApudQDVL3PWUofC+xEuHbEq9E9xDJLiJXzuuZB2S7j
-         VjcggC1TSVae0VchCyOckHrw5z2kEEQZfsQTy2NUh/9fCnjf1LZa71HF/U4vnhLuPTr8
-         ZxqQ==
-X-Gm-Message-State: AOAM532RDNALriRCt9KicX03FvrDAWKml7n+8LOIVNyGOFxYmFnNhNvc
-        Y8RuMWQkFDKwdl+nG/APaNXkAawd7Hrs3CHPBz0=
-X-Google-Smtp-Source: ABdhPJzlyy6OMcZs/OY/El5WI2VoXpYHx723M8K1Ans7APlMIC4Q2WWEqZinza7vY7Jc7kzKEvIxedQjgfDJLUta5tU=
-X-Received: by 2002:a62:cd:0:b029:1ef:55e:e374 with SMTP id
- 196-20020a6200cd0000b02901ef055ee374mr20741024pfa.31.1616919205359; Sun, 28
- Mar 2021 01:13:25 -0700 (PDT)
+        d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=7u9Bgk9oEJ
+        z1bBIjfI12UBnidj1IuNItVEUVU4M2CdE=; b=hd+WDkqbWzLawkk/MHeknDiIgL
+        JO4Q6yCCBnFs5DGcWBgqwetl9+0B59Zku8kzl65bSZU/WfkpPDR5VeZ93tg+pZfA
+        mXVhxMvkgp+TRnusvYNZQc78fWJyR1ukOT4LH4IwTARCStip5Oy3pWjSRnFcn/ou
+        obEKF/t3wkeBArMyk=
+Received: from ubuntu.localdomain (unknown [202.38.69.14])
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAHDk5HO2BgDdNcAA--.3711S4;
+        Sun, 28 Mar 2021 16:16:07 +0800 (CST)
+From:   Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+To:     skashyap@marvell.com, jhasan@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Subject: [PATCH] scsi/bnx2fc/bnx2fx_fcore: Fix a double free in bnx2fc_rcv
+Date:   Sun, 28 Mar 2021 01:16:03 -0700
+Message-Id: <20210328081603.5428-1-lyl2019@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: isiaka0809@gmail.com
-Received: by 2002:a05:6a10:614c:0:0:0:0 with HTTP; Sun, 28 Mar 2021 01:13:24
- -0700 (PDT)
-From:   BECKY DONALD <donbecky.uk@gmail.com>
-Date:   Sun, 28 Mar 2021 08:13:24 +0000
-X-Google-Sender-Auth: 5VGYS-frEDlC2cqKja7FCgtbBBc
-Message-ID: <CALE41xjMSsTKYoZObvN_C_A-74Ty3qU6W74b_PgoGAqRpCG6Pg@mail.gmail.com>
-Subject: SEASONAL FUND RELEASE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LkAmygAHDk5HO2BgDdNcAA--.3711S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7XFyxXFWUWr45ur15JFy5Jwb_yoW8Jr4xpa
+        n2q3W5CFs5Cw4jkr4jq3yUGw15Ca4rJr9xKayxKan8CayfJr1FyF95tay0qr45GFWrCw42
+        qrn5tFyY9a1qqF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+        rcIFxwCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUeFALDUUUU
+X-CM-SenderInfo: ho1ojiyrz6zt1loo32lwfovvfxof0/
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+In bnx2fc_rcv, it calls skb_share_check(skb,GFP_ATOMIC) to clone
+the skb. But if skb_clone() failed, skb_share_check() will free
+the skb in the first time and return NULL. Then skb_share_check()
+returns NULL and goto err.
+
+Unfortunately, the same skb is freed in the second time in err.
+
+I think moving skb = tmp_skb in front of if(!tmp_err) goto err
+is a good solution, because freeing a NULL skb is safe.
+
+Fixes: 01a4cc4d0cd6a ("bnx2fc: do not add shared skbs to the fcoe_rx_list")
+Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+---
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+index 16bb6d2f98de..2e213d336ebe 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -445,11 +445,11 @@ static int bnx2fc_rcv(struct sk_buff *skb, struct net_device *dev,
+ 	}
+ 
+ 	tmp_skb = skb_share_check(skb, GFP_ATOMIC);
++	skb = tmp_skb;
++
+ 	if (!tmp_skb)
+ 		goto err;
+ 
+-	skb = tmp_skb;
+-
+ 	if (unlikely(eth_hdr(skb)->h_proto != htons(ETH_P_FCOE))) {
+ 		printk(KERN_ERR PFX "bnx2fc_rcv: Wrong FC type frame\n");
+ 		goto err;
 -- 
-Hello dear,
-
-My name is Mrs. Becky Donald, a General Operation and Regional
-Accountant for the late Dr. Adam. I have a suggestion for you
-regarding my late client Dr. Adam. If you are interested in listening
-to me, please write back to me for more details.
+2.25.1
 
 
-
-Best Regard,
-Mrs. Becky Donald.
-United Kingdom.
