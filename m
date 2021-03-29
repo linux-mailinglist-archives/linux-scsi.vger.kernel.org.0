@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB1B34CC08
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Mar 2021 11:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F52B34CC0A
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Mar 2021 11:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbhC2IzJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Mar 2021 04:55:09 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:13846 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236329AbhC2IxX (ORCPT
+        id S235584AbhC2IzM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Mar 2021 04:55:12 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:16942 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236506AbhC2Ixq (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Mar 2021 04:53:23 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12T8oKNi025294;
-        Mon, 29 Mar 2021 01:53:20 -0700
+        Mon, 29 Mar 2021 04:53:46 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12T8oiHR002086;
+        Mon, 29 Mar 2021 01:53:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=XzqEGYCn2wjMKFnlhDrzTtBbGc8yto/T9mdFIhHNxx8=;
- b=dq0BrYblSOjP9vfvcl0ml2/qFj9JU5lVKQu6umvJwtKqydAG0qoBqVsrTxefY8kyOe2A
- zhbh+pvNRIwFLYAiK1US6rid64canMrOu0qVR3ijegkomwV8ggNw/UaeaXPCmaGs917D
- 2jTn33ObEyHIygBmNBc6K8oRPNLWnYF828gZfQlTXjsSC+CwjpBQN3XacZz1bqqjmirb
- U+wDO2mFGHd0oNzFLYAHdTOFb5mohlYzNILAlx/GztsQPNzpgjimad7k5jA2hQYk5VC2
- pFD3rAPW128hDQnqtq8XFZRmD0VUTi1i3Vc3dmL19u5AAXvXoKpCwjXdeAJXLKf+ppmn Ew== 
+ content-type; s=pfpt0220; bh=m/jCcTxTa7VaktAIX3znBk8oBFOf5nmHHIaDaEFmewY=;
+ b=L4caxvG283uMu9Hxh7LLvbE1w31zpO3/e0XFsNqFpQjYkFkdjV6qtlmxczwedNpW2SR4
+ gHpwk8UkW81TZBpGsQQMlGjenKb7FR4yG+1j7LNyxjDx916DkQPfPgu5N5j6Jsq6Fu0+
+ mIIMrg8LlI8ob9kmfe7VzIP7LUDvxqdoRqzAgX77GKUDuI8F9C36hYBN6OQc8JzidaWI
+ pP6GEqIBQQKAok/0lV9dnpM8hiV6orNoGRygom+2Cdp9TeUh5TeWoLxzMUKiGq3/PSM4
+ 77hwIaHsksNJNa4SfDSC4DIqEW8RQF4de0YLsXLtKFGna/zPEsvOysLv/RQ+X17NXG8G Eg== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 37j47p4asw-1
+        by mx0a-0016f401.pphosted.com with ESMTP id 37k63b8vdp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 29 Mar 2021 01:53:20 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+        Mon, 29 Mar 2021 01:53:43 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 29 Mar
- 2021 01:53:18 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 29 Mar 2021 01:53:18 -0700
+ 2021 01:53:42 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 29 Mar 2021 01:53:42 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 368113F7044;
-        Mon, 29 Mar 2021 01:53:18 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 4F3723F7041;
+        Mon, 29 Mar 2021 01:53:42 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 12T8rIRn004414;
-        Mon, 29 Mar 2021 01:53:18 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 12T8rgkT004418;
+        Mon, 29 Mar 2021 01:53:42 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 12T8rIgO004413;
-        Mon, 29 Mar 2021 01:53:18 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 12T8rgDw004417;
+        Mon, 29 Mar 2021 01:53:42 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>, <loberman@redhat.com>
-Subject: [PATCH v2 01/12] qla2xxx: Fix IOPS drop seen in some adapters
-Date:   Mon, 29 Mar 2021 01:52:18 -0700
-Message-ID: <20210329085229.4367-2-njavali@marvell.com>
+Subject: [PATCH v2 02/12] qla2xxx: Add H:C:T info in the log message for fc ports
+Date:   Mon, 29 Mar 2021 01:52:19 -0700
+Message-ID: <20210329085229.4367-3-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20210329085229.4367-1-njavali@marvell.com>
 References: <20210329085229.4367-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: 9oxmaQ9HwBuA7FqXtEHGnN-mIpmtkCad
-X-Proofpoint-ORIG-GUID: 9oxmaQ9HwBuA7FqXtEHGnN-mIpmtkCad
+X-Proofpoint-ORIG-GUID: ADKcdnz5Qh1A3BNGbqSSUQn00vfGNzsb
+X-Proofpoint-GUID: ADKcdnz5Qh1A3BNGbqSSUQn00vfGNzsb
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-29_04:2021-03-26,2021-03-29 signatures=0
 Precedence: bulk
@@ -64,87 +64,40 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Arun Easi <aeasi@marvell.com>
 
-Removing the response queue processing in the send path is showing IOPS
-drop. Add back the process_response_queue() call in the send path.
+The host:channel:scsi_target_id information is helpful in matching
+an fc port with a scsi device, so add it. For initiator fc ports,
+a -1 would be displayed for "target" part.
 
 Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 ---
- drivers/scsi/qla2xxx/qla_iocb.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/scsi/qla2xxx/qla_init.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 8b41cbaf8535..f26a7a14fce9 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -1600,12 +1600,14 @@ qla24xx_start_scsi(srb_t *sp)
- 	uint16_t	req_cnt;
- 	uint16_t	tot_dsds;
- 	struct req_que *req = NULL;
-+	struct rsp_que *rsp;
- 	struct scsi_cmnd *cmd = GET_CMD_SP(sp);
- 	struct scsi_qla_host *vha = sp->vha;
- 	struct qla_hw_data *ha = vha->hw;
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index f01f07116bd3..af237c485389 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -5512,13 +5512,14 @@ qla2x00_reg_remote_port(scsi_qla_host_t *vha, fc_port_t *fcport)
+ 	if (fcport->port_type & FCT_NVME_DISCOVERY)
+ 		rport_ids.roles |= FC_PORT_ROLE_NVME_DISCOVERY;
  
- 	/* Setup device pointers. */
- 	req = vha->req;
-+	rsp = req->rsp;
- 
- 	/* So we know we haven't pci_map'ed anything yet */
- 	tot_dsds = 0;
-@@ -1707,6 +1709,11 @@ qla24xx_start_scsi(srb_t *sp)
- 	/* Set chip new ring index. */
- 	wrt_reg_dword(req->req_q_in, req->ring_index);
- 
-+	/* Manage unprocessed RIO/ZIO commands in response queue. */
-+	if (vha->flags.process_response_queue &&
-+	    rsp->ring_ptr->signature != RESPONSE_PROCESSED)
-+		qla24xx_process_response_queue(vha, rsp);
++	fc_remote_port_rolechg(rport, rport_ids.roles);
 +
- 	spin_unlock_irqrestore(&ha->hardware_lock, flags);
- 	return QLA_SUCCESS;
+ 	ql_dbg(ql_dbg_disc, vha, 0x20ee,
+-	    "%s %8phN. rport %p is %s mode\n",
+-	    __func__, fcport->port_name, rport,
++	    "%s: %8phN. rport %ld:0:%d (%p) is %s mode\n",
++	    __func__, fcport->port_name, vha->host_no,
++	    rport->scsi_target_id, rport,
+ 	    (fcport->port_type == FCT_TARGET) ? "tgt" :
+ 	    ((fcport->port_type & FCT_NVME) ? "nvme" : "ini"));
+-
+-	fc_remote_port_rolechg(rport, rport_ids.roles);
+ }
  
-@@ -1897,6 +1904,11 @@ qla24xx_dif_start_scsi(srb_t *sp)
- 	/* Set chip new ring index. */
- 	wrt_reg_dword(req->req_q_in, req->ring_index);
- 
-+	/* Manage unprocessed RIO/ZIO commands in response queue. */
-+	if (vha->flags.process_response_queue &&
-+	    rsp->ring_ptr->signature != RESPONSE_PROCESSED)
-+		qla24xx_process_response_queue(vha, rsp);
-+
- 	spin_unlock_irqrestore(&ha->hardware_lock, flags);
- 
- 	return QLA_SUCCESS;
-@@ -1931,6 +1943,7 @@ qla2xxx_start_scsi_mq(srb_t *sp)
- 	uint16_t	req_cnt;
- 	uint16_t	tot_dsds;
- 	struct req_que *req = NULL;
-+	struct rsp_que *rsp;
- 	struct scsi_cmnd *cmd = GET_CMD_SP(sp);
- 	struct scsi_qla_host *vha = sp->fcport->vha;
- 	struct qla_hw_data *ha = vha->hw;
-@@ -1941,6 +1954,7 @@ qla2xxx_start_scsi_mq(srb_t *sp)
- 
- 	/* Setup qpair pointers */
- 	req = qpair->req;
-+	rsp = qpair->rsp;
- 
- 	/* So we know we haven't pci_map'ed anything yet */
- 	tot_dsds = 0;
-@@ -2041,6 +2055,11 @@ qla2xxx_start_scsi_mq(srb_t *sp)
- 	/* Set chip new ring index. */
- 	wrt_reg_dword(req->req_q_in, req->ring_index);
- 
-+	/* Manage unprocessed RIO/ZIO commands in response queue. */
-+	if (vha->flags.process_response_queue &&
-+	    rsp->ring_ptr->signature != RESPONSE_PROCESSED)
-+		qla24xx_process_response_queue(vha, rsp);
-+
- 	spin_unlock_irqrestore(&qpair->qp_lock, flags);
- 	return QLA_SUCCESS;
- 
+ /*
 -- 
 2.19.0.rc0
 
