@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C9134CC0C
+	by mail.lfdr.de (Postfix) with ESMTP id 8E52434CC0D
 	for <lists+linux-scsi@lfdr.de>; Mon, 29 Mar 2021 11:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbhC2IzO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Mar 2021 04:55:14 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:29108 "EHLO
+        id S235769AbhC2IzQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Mar 2021 04:55:16 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:56902 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236680AbhC2IyZ (ORCPT
+        by vger.kernel.org with ESMTP id S236741AbhC2Iye (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Mar 2021 04:54:25 -0400
+        Mon, 29 Mar 2021 04:54:34 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12T8oY2d001996;
-        Mon, 29 Mar 2021 01:54:08 -0700
+        by mx0a-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12T8sWVU008951;
+        Mon, 29 Mar 2021 01:54:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=0bSF7o1em1nkzNNu2O78CNPwIu0uvbpPveLJ5XuQ/hc=;
- b=dcYVqxvzr16ObCIQg97HKZ2HbIJKGoBhmtzWw69Fmqz2Mw9gekum8xy8zl1soQ+az1Qu
- uGhIPyC0SlIRAdet4J5ePi2/SugojpNqtKwRiPfNLrkmY8j4D0/tz4AxAzzjpdncgsMA
- rbWQHCMufJX6CY4vmnsQS5TKjnCiPPeemODWjCl1+JEGN9NUgbgwh7Tg+vN/2ouzFHZP
- aTyNGvCUOUpWtmC3dURpeItUGIDeFTlC8u7afvpz3isFWDA9k4ZywyS8UMARaBFDSK7I
- cIAfsbucFhYbQY//m98r6cnNX3UakPZCrx2pddSxlt8OQUSygZiVEmd9BfyKBnrYiQdY vQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 37k63b8ve9-1
+ content-type; s=pfpt0220; bh=cxXr//Y4cSyCITjI/p+va12i7VK4u/vj7OIjIWXfJDk=;
+ b=AuTCcvLghjHHCEzPjOkUTisHSuzYdM02hjPPVslGgJSc9bzg23e2CvEn+rQpbscrxxSD
+ IkLT+B5y5Ch4AQllac2z+RSu6+HEV8Y/RrWXjBdVMbKVQ3VcV9g8swZpHFGbuXfWkhjb
+ DUAHzmGeXt9rvx+zJXi7QfHWo2zq0yW9AO+ZuUwoBQqUMvrPpfB0oVerkGnxGXmADyMn
+ 4pIilt4rmCtPzqtpbCfmI2huiS5tlHUunt87T3zSZMZkQiPGjj7KcpQizbydIoPEhK3i
+ UIt3FbeoVjcu89zY4WyzmgPlAXz/v0hScSrbByzJgsmvRPgX/IVJk3qqN96rpYqqbcZn Yg== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com with ESMTP id 37k63b8vfb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 29 Mar 2021 01:54:08 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 29 Mar
- 2021 01:54:06 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 29 Mar 2021 01:54:06 -0700
+        Mon, 29 Mar 2021 01:54:31 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 29 Mar
+ 2021 01:54:30 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 29 Mar 2021 01:54:30 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 6F8173F703F;
-        Mon, 29 Mar 2021 01:54:06 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 992703F703F;
+        Mon, 29 Mar 2021 01:54:30 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 12T8s6r7004430;
-        Mon, 29 Mar 2021 01:54:06 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 12T8sUuS004435;
+        Mon, 29 Mar 2021 01:54:30 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 12T8s6HJ004421;
-        Mon, 29 Mar 2021 01:54:06 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 12T8sUux004433;
+        Mon, 29 Mar 2021 01:54:30 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>, <loberman@redhat.com>
-Subject: [PATCH v2 03/12] qla2xxx: fix stuck session
-Date:   Mon, 29 Mar 2021 01:52:20 -0700
-Message-ID: <20210329085229.4367-4-njavali@marvell.com>
+Subject: [PATCH v2 04/12] qla2xxx: consolidate zio threshold setting for both fcp & nvme
+Date:   Mon, 29 Mar 2021 01:52:21 -0700
+Message-ID: <20210329085229.4367-5-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20210329085229.4367-1-njavali@marvell.com>
 References: <20210329085229.4367-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: nIqLTRNkRxMTtCu24PuaIrL5OWt66UT3
-X-Proofpoint-GUID: nIqLTRNkRxMTtCu24PuaIrL5OWt66UT3
+X-Proofpoint-ORIG-GUID: 4vYPoYsryulEvPlx2RdBA3CPs3VXKSVk
+X-Proofpoint-GUID: 4vYPoYsryulEvPlx2RdBA3CPs3VXKSVk
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-29_04:2021-03-26,2021-03-29 signatures=0
 Precedence: bulk
@@ -64,46 +64,90 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-Session was stuck due to explicit logout to target was timed out.
-The target was in an unresponsive state. This timeout induced an error
-to the GNL command from moving forward.
+consolidate zio threshold setting for both fcp & nvme to prevent
+one protocol from clobbering the setting of the other protocol.
 
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Tested-by: Laurence Oberman <loberman@redhat.com>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c   | 1 +
- drivers/scsi/qla2xxx/qla_target.c | 6 +++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_def.h |  1 -
+ drivers/scsi/qla2xxx/qla_os.c  | 34 ++++++++++++++--------------------
+ 2 files changed, 14 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index af237c485389..f6dc8166e7ba 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -718,6 +718,7 @@ static void qla24xx_handle_gnl_done_event(scsi_qla_host_t *vha,
- 		ql_dbg(ql_dbg_disc, vha, 0x20e0,
- 		    "%s %8phC login gen changed\n",
- 		    __func__, fcport->port_name);
-+		set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
- 		return;
- 	}
- 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index c48daf52725d..0d9117a30ff6 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -1029,7 +1029,11 @@ void qlt_free_session_done(struct work_struct *work)
- 			}
- 			msleep(100);
- 			cnt++;
--			if (cnt > 200)
-+			/*
-+			 * wait for logout to complete before advance. Otherwise,
-+			 * straddling logout can interfere with relogin.
-+			 */
-+			if (cnt > 230)
- 				break;
+diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
+index 49b42b430df4..3d09f31895e7 100644
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -4727,7 +4727,6 @@ typedef struct scsi_qla_host {
+ #define FX00_CRITEMP_RECOVERY	25
+ #define FX00_HOST_INFO_RESEND	26
+ #define QPAIR_ONLINE_CHECK_NEEDED	27
+-#define SET_NVME_ZIO_THRESHOLD_NEEDED	28
+ #define DETECT_SFP_CHANGE	29
+ #define N2N_LOGIN_NEEDED	30
+ #define IOCB_WORK_ACTIVE	31
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 074392560f3d..6563d69706ba 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -6969,28 +6969,23 @@ qla2x00_do_dpc(void *data)
+ 			mutex_unlock(&ha->mq_lock);
  		}
+ 
+-		if (test_and_clear_bit(SET_NVME_ZIO_THRESHOLD_NEEDED,
+-		    &base_vha->dpc_flags)) {
++		if (test_and_clear_bit(SET_ZIO_THRESHOLD_NEEDED,
++				       &base_vha->dpc_flags)) {
++			u16 threshold = ha->nvme_last_rptd_aen + ha->last_zio_threshold;
++
++			if (threshold > ha->orig_fw_xcb_count)
++				threshold = ha->orig_fw_xcb_count;
++
+ 			ql_log(ql_log_info, base_vha, 0xffffff,
+-				"nvme: SET ZIO Activity exchange threshold to %d.\n",
+-						ha->nvme_last_rptd_aen);
+-			if (qla27xx_set_zio_threshold(base_vha,
+-			    ha->nvme_last_rptd_aen)) {
++			       "SET ZIO Activity exchange threshold to %d.\n",
++			       threshold);
++			if (qla27xx_set_zio_threshold(base_vha, threshold)) {
+ 				ql_log(ql_log_info, base_vha, 0xffffff,
+-				    "nvme: Unable to SET ZIO Activity exchange threshold to %d.\n",
+-				    ha->nvme_last_rptd_aen);
++				       "Unable to SET ZIO Activity exchange threshold to %d.\n",
++				       threshold);
+ 			}
+ 		}
+ 
+-		if (test_and_clear_bit(SET_ZIO_THRESHOLD_NEEDED,
+-		    &base_vha->dpc_flags)) {
+-			ql_log(ql_log_info, base_vha, 0xffffff,
+-			    "SET ZIO Activity exchange threshold to %d.\n",
+-			    ha->last_zio_threshold);
+-			qla27xx_set_zio_threshold(base_vha,
+-			    ha->last_zio_threshold);
+-		}
+-
+ 		if (!IS_QLAFX00(ha))
+ 			qla2x00_do_dpc_all_vps(base_vha);
+ 
+@@ -7218,14 +7213,13 @@ qla2x00_timer(struct timer_list *t)
+ 	index = atomic_read(&ha->nvme_active_aen_cnt);
+ 	if (!vha->vp_idx &&
+ 	    (index != ha->nvme_last_rptd_aen) &&
+-	    (index >= DEFAULT_ZIO_THRESHOLD) &&
+ 	    ha->zio_mode == QLA_ZIO_MODE_6 &&
+ 	    !ha->flags.host_shutting_down) {
++		ha->nvme_last_rptd_aen = atomic_read(&ha->nvme_active_aen_cnt);
+ 		ql_log(ql_log_info, vha, 0x3002,
+ 		    "nvme: Sched: Set ZIO exchange threshold to %d.\n",
+ 		    ha->nvme_last_rptd_aen);
+-		ha->nvme_last_rptd_aen = atomic_read(&ha->nvme_active_aen_cnt);
+-		set_bit(SET_NVME_ZIO_THRESHOLD_NEEDED, &vha->dpc_flags);
++		set_bit(SET_ZIO_THRESHOLD_NEEDED, &vha->dpc_flags);
+ 		start_dpc++;
+ 	}
  
 -- 
 2.19.0.rc0
