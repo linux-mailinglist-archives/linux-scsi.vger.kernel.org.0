@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E0334E142
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 08:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0102934E144
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 08:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbhC3Gah (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Mar 2021 02:30:37 -0400
+        id S230243AbhC3GbH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Mar 2021 02:31:07 -0400
 Received: from esa.microchip.iphmx.com ([68.232.153.233]:24622 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbhC3Gaf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 02:30:35 -0400
+        with ESMTP id S230223AbhC3Gah (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 02:30:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617085834; x=1648621834;
+  t=1617085836; x=1648621836;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=EUO7W3UoiLuKTVKFXjO3jUrdFwQT+kfpKx78jOZCwQY=;
-  b=2bFXIuEFhcmMh635w/R4MGBBVT8oKcGzz4zaMEZ0ppWxhb6RGv2bhw+e
-   mOBtjEaFn2s70kwZ4mm5LDJVWfziZji4nwTy1gY+g2AjNRADwnN5dISak
-   LoQ9DK4Hr9Hzo1MzRBubGs1YUH9JM7XHT3PGnr68+aUOznJ+GR2jzVS9z
-   7iY9NkADLxDJkgUYBrskOfkDS61ocQeobDjGdmXdxl3hw2aPLvbwUIEHg
-   L9BwdKlem5HzmJ4A08pbt1fTCFpuDGmPHx2vwRI4AlKhM5B+bD00Mij7R
-   ocTRsTqpPQrWw2c279QeEWsliE312Wm+jJrFY3NWeofLNo9Gp19sRXj+c
-   A==;
-IronPort-SDR: ljuDUU0xG3hnyJtr+j5pbJklazb+uuQ9QLOD48B2PsxjnI+MWZJcy4sj/xvDsCYDLluHCHO1im
- NH1usOegfEHMF2su7cVQkI+JVHZy/elg9UdcYFzaKyz3slgasDwJhQsLZQZSgrgSS8j1XhFNpS
- LkkzUKf1c+z7y2IY+26YUisF2F1+zxhKgcQCBApr+6qJYBork28Timd1FZwSgPYTHIzVXIgtZY
- mO5MY6NVx+ErgemTWkvjEhVeIPDX/1iHVttGQvsqoS3LtZMljnYn8AaWibmZpfRZzAFQxImFTp
- XpI=
+  bh=0qHZsooElUIy6cjDrzlLPBgPPLS2IXz/T1JiASN45DA=;
+  b=G4cgO2P67RLE+v7OW2KdQD87pODpMoAPHHar8jVM4tE9sbTaFJ0Cu2Cc
+   Wz0HjohDevjs+P31cLQf+YxS78T5RpA6mPWAv5eg7Iq9fu9RfohI7LTW+
+   3/2XJKBLsgGmUJeM8xjyfDdcWRAfrQyzZZmZ83ZdD+e9RoCtpWZtadjBj
+   upW6tcGs0c9mjmy2/IMz4xvdKHEjucUpbnnwzDpXBIx42tFs03T+ZYRIX
+   zPCP4PcU9HoWNtoD5YdhAGIjUApozr67kBdpYybvjrg6PnjJmTmpFiWx8
+   8IBjp8HfQ0MGDBoJhVggb45lCdj/f8KUcNvodU/qhH/nH0c7fkbJlPR6f
+   w==;
+IronPort-SDR: x3cgkYJX/ofaF3bjVwJibYUa+rPmUlB/wheEIevb5pFJNi6N/0oThiqbfOMJJVljVFRBkRFFBi
+ 4UecM+/op4b671xjKPWFK+GmuTFLif2ovFsGtWCEb3xhdB/+9Oi0kSkOQcx4WwJGMHsIOHKRwI
+ rIxB9SgHjxx04yWq0FAEBGlSbXeIlwXAnV87iA40HA4cgtvetBivHDckxADQY7GKCi7vL67F+y
+ 2t1yxF2rL9VttbRWiWOPHhDF1pji0Ut9no6gKxseiThSiRLr00aSdHwU6Je1oNhuaAskeQ4Sy5
+ zCs=
 X-IronPort-AV: E=Sophos;i="5.81,290,1610434800"; 
-   d="scan'208";a="121012020"
+   d="scan'208";a="121012023"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2021 23:30:34 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2021 23:30:36 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 29 Mar 2021 23:30:34 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Mon, 29 Mar 2021 23:30:34 -0700
+ 15.1.2176.2; Mon, 29 Mar 2021 23:30:36 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Mon, 29 Mar 2021 23:30:36 -0700
 From:   Viswas G <Viswas.G@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -48,9 +48,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <jinpu.wang@cloud.ionos.com>,
         Ashokkumar N <Ashokkumar.N@microchip.com>,
         "John Garry" <john.garry@huawei.com>
-Subject: [PATCH v3 2/7] pm80xx: Add sysfs attribute to track RAAE count
-Date:   Tue, 30 Mar 2021 12:10:03 +0530
-Message-ID: <20210330064008.9666-3-Viswas.G@microchip.com>
+Subject: [PATCH v3 3/7] pm80xx: Add sysfs attribute to track iop0 count
+Date:   Tue, 30 Mar 2021 12:10:04 +0530
+Message-ID: <20210330064008.9666-4-Viswas.G@microchip.com>
 X-Mailer: git-send-email 2.16.3
 In-Reply-To: <20210330064008.9666-1-Viswas.G@microchip.com>
 References: <20210330064008.9666-1-Viswas.G@microchip.com>
@@ -62,17 +62,18 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Vishakha Channapattan <vishakhavc@google.com>
 
-A new sysfs variable 'ctl_raae_count' is being introduced that tells if
+A new sysfs variable 'ctl_iop0_count' is being introduced that tells if
 the controller is alive by indicating controller ticks. If on subsequent
-run we see the ticks changing in RAAE count that indicates that
-controller is not dead.
+run we see the ticks changing that indicates that controller is not
+dead.
 
-Tested: Using 'ctl_raae_count' sysfs variable we can see ticks
+Tested: Using 'ctl_iop0_count' sysfs variable we can see ticks
 incrementing
-mvae14:~# cat  /sys/class/scsi_host/host*/ctl_raae_count
-0x00002245
-0x00002253
-0x0000225e
+mvae14:~# cat  /sys/class/scsi_host/host*/ctl_iop0_count
+0x000000a3
+0x000001db
+0x000001e4
+0x000001e7
 
 Signed-off-by: Vishakha Channapattan <vishakhavc@google.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
@@ -85,44 +86,44 @@ Acked-by: Jack Wang <jinpu.wang@ionos.com>
  1 file changed, 24 insertions(+)
 
 diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-index 6b6b774c455e..890d6faf18e9 100644
+index 890d6faf18e9..dd546d2c35d7 100644
 --- a/drivers/scsi/pm8001/pm8001_ctl.c
 +++ b/drivers/scsi/pm8001/pm8001_ctl.c
-@@ -918,6 +918,29 @@ static ssize_t ctl_mpi_state_show(struct device *cdev,
+@@ -941,6 +941,29 @@ static ssize_t ctl_raae_count_show(struct device *cdev,
  }
- static DEVICE_ATTR_RO(ctl_mpi_state);
+ static DEVICE_ATTR_RO(ctl_raae_count);
  
 +/**
-+ * ctl_raae_count_show - controller raae count check
++ * ctl_iop0_count_show - controller iop0 count check
 + * @cdev: pointer to embedded class device
 + * @buf: the buffer returned
 + *
 + * A sysfs 'read-only' shost attribute.
 + */
 +
-+static ssize_t ctl_raae_count_show(struct device *cdev,
++static ssize_t ctl_iop0_count_show(struct device *cdev,
 +		struct device_attribute *attr, char *buf)
 +{
 +	struct Scsi_Host *shost = class_to_shost(cdev);
 +	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
 +	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
-+	unsigned int raaecnt;
++	unsigned int iop0cnt;
 +	int c;
 +
-+	raaecnt = pm8001_mr32(pm8001_ha->general_stat_tbl_addr, 12);
-+	c = sysfs_emit(buf, "0x%08x\n", raaecnt);
++	iop0cnt = pm8001_mr32(pm8001_ha->general_stat_tbl_addr, 16);
++	c = sysfs_emit(buf, "0x%08x\n", iop0cnt);
 +	return c;
 +}
-+static DEVICE_ATTR_RO(ctl_raae_count);
++static DEVICE_ATTR_RO(ctl_iop0_count);
 +
  struct device_attribute *pm8001_host_attrs[] = {
  	&dev_attr_interface_rev,
  	&dev_attr_controller_fatal_error,
-@@ -942,6 +965,7 @@ struct device_attribute *pm8001_host_attrs[] = {
- 	&dev_attr_ila_version,
+@@ -966,6 +989,7 @@ struct device_attribute *pm8001_host_attrs[] = {
  	&dev_attr_inc_fw_ver,
  	&dev_attr_ctl_mpi_state,
-+	&dev_attr_ctl_raae_count,
+ 	&dev_attr_ctl_raae_count,
++	&dev_attr_ctl_iop0_count,
  	NULL,
  };
  
