@@ -2,43 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4C634E141
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 08:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3731A34E143
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 08:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbhC3Gaf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Mar 2021 02:30:35 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:24622 "EHLO
+        id S230248AbhC3Gag (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Mar 2021 02:30:36 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:15317 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbhC3Gab (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 02:30:31 -0400
+        with ESMTP id S230415AbhC3Gad (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 02:30:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617085831; x=1648621831;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=7190iZ7kBCVKYL2aAdkIbWyifq8HBZN8VkDtHzDTvtk=;
-  b=JV3s6/Td4uoDJJnUsfyrRcUFcGIaBZER4cDwyULecHCyBAkR8dRHaNsA
-   6l5A/iVY6BXhycu0dEusSvyuxYT8HOGFs0bUnNnvcSsNWTGGuSwZctsWY
-   9k+ph3HU11lDMc72lM1HKRvbFWsULE7UkoPnNquj0VhSsaKQP3r9pCgsH
-   O2SKtJQPuDAc3DfySulb5k+Pr4AOiKxLMBxpZE9ols341zG/lu51HHVll
-   PzeZdvnLM2HtSxELFSAzTZy08IJBPmZJCS2Tys21LNPHTbveQHAS9j9mc
-   bajsjP/JAkcWti3PRIBbCvcChWOt4JiJITI68GGfiekhA36EGJq3OCEra
+  t=1617085833; x=1648621833;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=2zYOfQCF9sYaeZ1eLABgXjriOL2PSLWniTP5zDL9AM8=;
+  b=i1R/MajAA8Tlye+k8z5JI8wTONlv+SVukvUruWomK0zwuMB5E9dU9Yo2
+   W98Y5OwEZS7SovbvM72ymt+FeJfaXe8ruI6mTIYpOk3Lnki+cAMyRRsHh
+   4orgMzxOFqbKzYsZxKRJlnN1Gk3BcoApm2jtSxQjW9p7b3kuPL+GkVVHt
+   OBnNex9Y3+0Yq0Sprk4IXGJZN1U/kXGOIbnkRsodrqFJb99+BxZrWSrn4
+   NmEx7f2KDjRFfkDQcmcrwO4AtaxR/RrjjhGOvIsr8+5vWRsOi1d49TIVX
+   vSv6Es4xfhHWDeBKCSOWyYnC5euP+uWbajh6oqze0yZDG2q1UpACdMTOZ
    A==;
-IronPort-SDR: RU440R5FFaGOJ9ke7VetM1W29obGc4xkAx6g53wOTGgabFPeQtvgJL/QERoKBVcquefEmvXrUm
- 4Mjd4sgrKeD9WZmtyqyiN56U6c5JAfGv98r+7PUUIHoyylF/zszCA1YPPTJaVu6uomWEzXBDCN
- cye8RMPuB3Hw5S2hGxHTPWEPSPyGgH5dGyROXptVaza7BayeSew2F2447uRkQTFh96ZTUb81lJ
- d7wcIgWQNNz2SBEev6S9ug0RFdD07gPYnv1nQtFJie/YDdCmcwSXbCD6U9cp1SNfKYbcGZFLcG
- FoU=
+IronPort-SDR: L/4vJnaEbbCOb8IbJ3dUjthYxVm7Y234uY2UCgy2u6OlJiuTrCodmKJrKjN3ADWsLK/Jfkys06
+ uVWaAzzsznHmI0Nnt45lTw8TdN8QkJ0AJevRpyS8GSGjfEVXjgXf0ZbvnvZgMAyjiwTYOXbJ36
+ tG2Vdp2OLz5BbWN54lyvnubzVaWGBX8cdj+/FP/5GquLiGso6o/d2ybqwpNaq0TAyCnMYi5sSo
+ bHtfCr9Q5pWYDCW4hpbr14CBy967kZGluIiCCSinqeeW3MOq2ajJ21qm+OUnM9xOVavmBvUQjU
+ +jQ=
 X-IronPort-AV: E=Sophos;i="5.81,290,1610434800"; 
-   d="scan'208";a="121012007"
+   d="scan'208";a="114635622"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2021 23:30:30 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2021 23:30:33 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 29 Mar 2021 23:30:30 -0700
+ 15.1.2176.2; Mon, 29 Mar 2021 23:30:32 -0700
 Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Mon, 29 Mar 2021 23:30:30 -0700
+ Transport; Mon, 29 Mar 2021 23:30:32 -0700
 From:   Viswas G <Viswas.G@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -47,55 +48,102 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <jinpu.wang@cloud.ionos.com>,
         Ashokkumar N <Ashokkumar.N@microchip.com>,
         "John Garry" <john.garry@huawei.com>
-Subject: [PATCH v3 0/7] pm80xx updates
-Date:   Tue, 30 Mar 2021 12:10:01 +0530
-Message-ID: <20210330064008.9666-1-Viswas.G@microchip.com>
+Subject: [PATCH v3 1/7] pm80xx: Add sysfs attribute to check mpi state
+Date:   Tue, 30 Mar 2021 12:10:02 +0530
+Message-ID: <20210330064008.9666-2-Viswas.G@microchip.com>
 X-Mailer: git-send-email 2.16.3
+In-Reply-To: <20210330064008.9666-1-Viswas.G@microchip.com>
+References: <20210330064008.9666-1-Viswas.G@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch set include some bug fixes and enhancements for pm80xx driver.
+From: Vishakha Channapattan <vishakhavc@google.com>
 
-Changes from v2 to v3:
-	- For "Add sysfs attribute to check mpi state" patch
-		Fixed "warn: mask and shift to zero"
-		Made mpiStateText static, as suggested by buildbot
+A new sysfs variable 'ctl_mpi_state' is being introduced to
+check the state of mpi.
 
-Changes from v1 to v2:
-	- For sysfs attribute patches
-		Used sysfs_emit instead of sprintf for sysfs attribute patches.
-		Removed debug message for sysfs attribute patches.
-	- For "Reset PI and CI memory during re-initialize" patch
-		Improved commit message.
+Tested: Using 'ctl_mpi_state' sysfs variable we check the mpi state
+mvae14:~# cat /sys/class/scsi_host/host*/ctl_mpi_state
+MPI-S=MPI is successfully initialized   HMI_ERR=0
+MPI-S=MPI is successfully initialized   HMI_ERR=0
 
-		
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Vishakha Channapattan <vishakhavc@google.com>
+Signed-off-by: Viswas G <Viswas.G@microchip.com>
+Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
+Signed-off-by: Ashokkumar N <Ashokkumar.N@microchip.com>
+Signed-off-by: Radha Ramachandran <radha@google.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ drivers/scsi/pm8001/pm8001_ctl.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-Ruksar Devadi (1):
-  pm80xx: Completing pending IO after fatal error
-
-Vishakha Channapattan (4):
-  pm80xx: Add sysfs attribute to check mpi state
-  pm80xx: Add sysfs attribute to track RAAE count
-  pm80xx: Add sysfs attribute to track iop0 count
-  pm80xx: Add sysfs attribute to track iop1 count
-
-Viswas G (2):
-  pm80xx: Reset PI and CI memory during re-initialize
-  pm80xx: remove global lock from outbound queue processing
-
- drivers/scsi/pm8001/pm8001_ctl.c  | 107 +++++++++++++++++++++++++++++++++++++-
- drivers/scsi/pm8001/pm8001_hwi.c  |  68 +++++++++++++++++++++---
- drivers/scsi/pm8001/pm8001_hwi.h  |   1 +
- drivers/scsi/pm8001/pm8001_init.c |   9 ++--
- drivers/scsi/pm8001/pm8001_sas.c  |   2 +-
- drivers/scsi/pm8001/pm8001_sas.h  |   2 +
- drivers/scsi/pm8001/pm80xx_hwi.c  |   7 ++-
- drivers/scsi/pm8001/pm80xx_hwi.h  |   1 +
- 8 files changed, 184 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+index 12035baf0997..6b6b774c455e 100644
+--- a/drivers/scsi/pm8001/pm8001_ctl.c
++++ b/drivers/scsi/pm8001/pm8001_ctl.c
+@@ -41,6 +41,7 @@
+ #include <linux/slab.h>
+ #include "pm8001_sas.h"
+ #include "pm8001_ctl.h"
++#include "pm8001_chips.h"
+ 
+ /* scsi host attributes */
+ 
+@@ -883,9 +884,40 @@ static ssize_t pm8001_show_update_fw(struct device *cdev,
+ 			flash_error_table[i].err_code,
+ 			flash_error_table[i].reason);
+ }
+-
+ static DEVICE_ATTR(update_fw, S_IRUGO|S_IWUSR|S_IWGRP,
+ 	pm8001_show_update_fw, pm8001_store_update_fw);
++
++/**
++ * ctl_mpi_state_show - controller MPI state check
++ * @cdev: pointer to embedded class device
++ * @buf: the buffer returned
++ *
++ * A sysfs 'read-only' shost attribute.
++ */
++
++static char mpiStateText[][80] = {
++	"MPI is not initialized",
++	"MPI is successfully initialized",
++	"MPI termination is in progress",
++	"MPI initialization failed with error in [31:16]"
++};
++
++static ssize_t ctl_mpi_state_show(struct device *cdev,
++		struct device_attribute *attr, char *buf)
++{
++	struct Scsi_Host *shost = class_to_shost(cdev);
++	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
++	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
++	unsigned int mpidw0;
++	int c;
++
++	mpidw0 = pm8001_mr32(pm8001_ha->general_stat_tbl_addr, 0);
++	c = sysfs_emit(buf, "MPI-S=%s\t HMI_ERR=%x\n", mpiStateText[mpidw0 & 0x0003],
++			(mpidw0 >> 16));
++	return c;
++}
++static DEVICE_ATTR_RO(ctl_mpi_state);
++
+ struct device_attribute *pm8001_host_attrs[] = {
+ 	&dev_attr_interface_rev,
+ 	&dev_attr_controller_fatal_error,
+@@ -909,6 +941,7 @@ struct device_attribute *pm8001_host_attrs[] = {
+ 	&dev_attr_ob_log,
+ 	&dev_attr_ila_version,
+ 	&dev_attr_inc_fw_ver,
++	&dev_attr_ctl_mpi_state,
+ 	NULL,
+ };
+ 
 -- 
 2.16.3
 
