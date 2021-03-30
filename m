@@ -2,20 +2,20 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CC534E204
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 09:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4368034E202
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 09:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhC3HVI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Mar 2021 03:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S231194AbhC3HVJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Mar 2021 03:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbhC3HUj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 03:20:39 -0400
+        with ESMTP id S230209AbhC3HUm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 03:20:42 -0400
 Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C310DC061762;
-        Tue, 30 Mar 2021 00:20:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2788CC061762
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Mar 2021 00:20:42 -0700 (PDT)
 Received: by sf.home (Postfix, from userid 1000)
-        id 7C4D25A22062; Tue, 30 Mar 2021 08:20:31 +0100 (BST)
+        id 4D9CE5A22063; Tue, 30 Mar 2021 08:20:32 +0100 (BST)
 From:   Sergei Trofimovich <slyfox@gentoo.org>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Arnd Bergmann <arnd@kernel.org>,
@@ -27,9 +27,9 @@ To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Scott Teel <scott.teel@microchip.com>, thenzl@redhat.com
 Cc:     linux-kernel@vger.kernel.org,
         Sergei Trofimovich <slyfox@gentoo.org>
-Subject: [PATCH v2 2/3] hpsa: fix boot on ia64 (atomic_t alignment)
-Date:   Tue, 30 Mar 2021 08:19:57 +0100
-Message-Id: <20210330071958.3788214-2-slyfox@gentoo.org>
+Subject: [PATCH v2 3/3] hpsa: add an assert to prevent from __packed reintroduction
+Date:   Tue, 30 Mar 2021 08:19:58 +0100
+Message-Id: <20210330071958.3788214-3-slyfox@gentoo.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210330071958.3788214-1-slyfox@gentoo.org>
 References: <yq1wntpgxxr.fsf@ca-mkp.ca.oracle.com>
@@ -40,26 +40,7 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The failure initially observed as boot failure on rx3600 ia64 machine
-with RAID bus controller: Hewlett-Packard Company Smart Array P600:
-
-    kernel unaligned access to 0xe000000105dd8b95, ip=0xa000000100b87551
-    kernel unaligned access to 0xe000000105dd8e95, ip=0xa000000100b87551
-    hpsa 0000:14:01.0: Controller reports max supported commands of 0 Using 16 instead. Ensure that firmware is up to date.
-    swapper/0[1]: error during unaligned kernel access
-
-Here unaligned access comes from 'struct CommandList' that happens
-to be packed. The change f749d8b7a ("scsi: hpsa: Correct dev cmds
-outstanding for retried cmds") introduced unexpected padding and
-un-aligned atomic_t from natural alignment to something else.
-
-This change removes packing annotation from struct not intended to be
-sent to controller as is. This restores natural `atomic_t` alignment.
-
-The change is tested on the same rx3600 machine.
-
 CC: linux-ia64@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
 CC: storagedev@microchip.com
 CC: linux-scsi@vger.kernel.org
 CC: Joe Szczypek <jszczype@redhat.com>
@@ -73,22 +54,39 @@ Suggested-by: Don Brace <don.brace@microchip.com>
 Fixes: f749d8b7a "scsi: hpsa: Correct dev cmds outstanding for retried cmds"
 Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
 ---
- drivers/scsi/hpsa_cmd.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/hpsa_cmd.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/scsi/hpsa_cmd.h b/drivers/scsi/hpsa_cmd.h
-index 280e933d27e7..885b1f1fb20a 100644
+index 885b1f1fb20a..ba6a3aa8d954 100644
 --- a/drivers/scsi/hpsa_cmd.h
 +++ b/drivers/scsi/hpsa_cmd.h
-@@ -452,7 +452,7 @@ struct CommandList {
- 	bool retry_pending;
- 	struct hpsa_scsi_dev_t *device;
- 	atomic_t refcount; /* Must be last to avoid memset in hpsa_cmd_init() */
--} __packed __aligned(COMMANDLIST_ALIGNMENT);
-+} __aligned(COMMANDLIST_ALIGNMENT);
+@@ -22,6 +22,9 @@
  
+ #include <linux/compiler.h>
+ 
++#include <linux/build_bug.h> /* static_assert */
++#include <linux/stddef.h> /* offsetof */
++
+ /* general boundary defintions */
+ #define SENSEINFOBYTES          32 /* may vary between hbas */
+ #define SG_ENTRIES_IN_CMD	32 /* Max SG entries excluding chain blocks */
+@@ -454,6 +457,15 @@ struct CommandList {
+ 	atomic_t refcount; /* Must be last to avoid memset in hpsa_cmd_init() */
+ } __aligned(COMMANDLIST_ALIGNMENT);
+ 
++/*
++ * Make sure our embedded atomic variable is aligned. Otherwise we break atomic
++ * operations on architectures that don't support unaligned atomics like IA64.
++ *
++ * The assert guards against reintroductin against unwanted __packed to
++ * the struct CommandList.
++ */
++static_assert(offsetof(struct CommandList, refcount) % __alignof__(atomic_t) == 0);
++
  /* Max S/G elements in I/O accelerator command */
  #define IOACCEL1_MAXSGENTRIES           24
+ #define IOACCEL2_MAXSGENTRIES		28
 -- 
 2.31.1
 
