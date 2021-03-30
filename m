@@ -2,91 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2909A34EF2A
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 19:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2159734EF2E
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Mar 2021 19:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbhC3RP5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Mar 2021 13:15:57 -0400
-Received: from mailout.easymail.ca ([64.68.200.34]:39838 "EHLO
-        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbhC3RPe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 13:15:34 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mailout.easymail.ca (Postfix) with ESMTP id 3967425F46;
-        Tue, 30 Mar 2021 17:15:33 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at emo06-pco.easydns.vpn
-Received: from mailout.easymail.ca ([127.0.0.1])
-        by localhost (emo06-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id C5lNTJyh4u5R; Tue, 30 Mar 2021 17:15:33 +0000 (UTC)
-Received: from mail.gonehiking.org (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        by mailout.easymail.ca (Postfix) with ESMTPA id 8239B25F43;
-        Tue, 30 Mar 2021 17:15:23 +0000 (UTC)
-Received: from [192.168.1.4] (internal [192.168.1.4])
-        by mail.gonehiking.org (Postfix) with ESMTP id 3CD593EE35;
-        Tue, 30 Mar 2021 11:15:22 -0600 (MDT)
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Ondrej Zary <linux@rainbow-software.org>,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20210326055822.1437471-1-hch@lst.de>
- <20210326055822.1437471-3-hch@lst.de>
- <90427abe-f0a3-c6fc-a674-7a3967e20882@gonehiking.org>
- <20210330170320.GC13829@lst.de>
-From:   Khalid Aziz <khalid@gonehiking.org>
-Subject: Re: [PATCH 2/8] Buslogic: remove ISA support
-Message-ID: <45e94e2d-e359-732b-f704-a789774ed901@gonehiking.org>
-Date:   Tue, 30 Mar 2021 11:15:22 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S231532AbhC3RRA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Mar 2021 13:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232221AbhC3RQ3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 13:16:29 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC18DC061764
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Mar 2021 10:16:28 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id z3so17201649ioc.8
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Mar 2021 10:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=GjAq/XEwt35RTJ74+Tc1OCZ7eabWKieP8ePMbxKZwWM=;
+        b=ZRnxpTMscY8SJ6GUuDfGxZFi6ziTjPKRTIj7LmAPXPr7rbFHvZB+gftTWtILTOIrEs
+         ilDSB7X4sucrEjc91vGLhJixb2Jwf8dbJ4/9wv5vuTDsjzBdjRbDitoMrz6fTUhiJKcd
+         TYhN5neh045XorPkJ0M5TIsNsgMgwM1TLGt3eVwMZdLw1YvuA6ZkiIo1VUV7mnFGfZTN
+         aEcUwCiXd7FC9Kebi2FGkMKo1I9wKmy9YStOCKhgJvrr42Zfj01zsZb4Cj3RlwHB833i
+         +7stIZpZmZivkIj9BEjhl/lJuUT4JMaPVjFk5sugh6eeN/IOgK/y6N23pAmdIdWzKbDT
+         SIbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=GjAq/XEwt35RTJ74+Tc1OCZ7eabWKieP8ePMbxKZwWM=;
+        b=snUjwR0Hwqo2zo3ap6iEqnBcDvBjxfifNGHs5rvLZD6HNPvI1HnS7OwKgJd/cvnIMI
+         /0KirkNKIOUJ5cifDv/vFIkD5vVg9M5dTbe7dUx9ZpIYTns1lLrjDa1X4eaGs3hJNosQ
+         MvsJ1CEFX/XOxx84l0ljho2OD7RCRFbH8Ecdh0OrT/SvozkUqRMaBR4/o0zI/o8XP7cd
+         Rk4RdoRj9cDTpBWGpSzbn0WSruz3hWMv5pRecDcqL11NkQDt2MLF3zUdoNwwJleJPhrc
+         iD8LPUNXbHMQ6dQFLdL80hNXB6snJ/WsxifDPEENgOZnrhZkFCUZBylSyqgz8YudQS06
+         mhOQ==
+X-Gm-Message-State: AOAM5326+1+AS1MUDl8BQsLbZA0c22S7TYxzr+FZMnR1XyFsnqR1bEZ0
+        YXA/03iBiS2U5cYsmHddVj+oLm1i6CZ60tSzhGI=
+X-Google-Smtp-Source: ABdhPJyqPeQKOJiKaUu3p7F5no1smXRwJWjb3CFUCBuYq6jeJgMyuc3ODw5r/ia8ZEPG0a45Zr9ssCpw9EE/OHas4cA=
+X-Received: by 2002:a02:c908:: with SMTP id t8mr11229623jao.78.1617124588354;
+ Tue, 30 Mar 2021 10:16:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210330170320.GC13829@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Sender: nmesomakalu01@gmail.com
+Received: by 2002:a05:6e02:1a69:0:0:0:0 with HTTP; Tue, 30 Mar 2021 10:16:27
+ -0700 (PDT)
+From:   "Dee Parson's" <deeparsons137@gmail.com>
+Date:   Tue, 30 Mar 2021 09:16:27 -0800
+X-Google-Sender-Auth: AZWQHbXisEhonhTHw2inQHWJjtM
+Message-ID: <CAHMQAuN3NJNd1SC9JUs8mov4wd49=48caYv0X4X_9VPkmWYmfA@mail.gmail.com>
+Subject: Greetings Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/30/21 11:03 AM, Christoph Hellwig wrote:
-> On Mon, Mar 29, 2021 at 02:29:21PM -0600, Khalid Aziz wrote:
->> On 3/25/21 11:58 PM, Christoph Hellwig wrote:
->>> The ISA support in Buslogic has been broken for a long time, as all
->>> the I/O path expects a struct device for DMA mapping that is derived from
->>> the PCI device, which would simply crash for ISA adapters.
->>>
->>> Signed-off-by: Christoph Hellwig <hch@lst.de>
->>> ---
->>>  drivers/scsi/BusLogic.c | 156 ++--------------------------------------
->>>  drivers/scsi/BusLogic.h |   3 -
->>>  drivers/scsi/Kconfig    |   2 +-
->>>  3 files changed, 6 insertions(+), 155 deletions(-)
->>>
->>
->> Hi Chris,
->>
->> This looks good. There is more code that can be removed, for instance
->> all of the code that supports "IO:" driver option to specify ISA port
->> addresses. enum blogic_adapter_bus_type can shrink. "limited_isa" and
->> "probe*" members of struct blogic_probe_options can go away. You could
->> add those to this patch, or if you would like, I can create a follow-on
->> patch to remove that code.
-> 
-> I've added the above suggestions.  If there is anything more you
-> can easily think of let me know.
-> 
+Hello and Greetings Dear Friend,
 
-Awesome! Thanks. Updates to Documentation/scsi/BusLogic.rst to match
-these changes would be great. Doc currently lists "IO:" and "NoProbeISA"
-which can go away. "Supported Host Adapters: section lists ISA and EISA
-adapters that can go away as well. There is reference to ISA in
-"QueueDepth:<integer>" - "For Host Adapters that require ISA Bounce
-Buffers, the Queue Depth is automatically set by default to
-BusLogic_TaggedQueueDepthBB or BusLogic_UntaggedQueueDepthBB to avoid
-excessive preallocation of DMA Bounce Buffer memory." which is
-irrelevant now.
+I know it will be a great surprise to you reading this message from me
+today. Haven't known each other or met before. But I want you to
+consider this as God divine intervention and opportunity which I
+believe that You and I can cooperate together in this humanitarian
+social project only for the glory and honor of God. My names are Mrs.
+Dee Parsons,  I am a dying widow hospitalized undergoing treatment for
+brain tumor disease. Because of this reason i decided to seek for your
+sincerity and ability to carry out this transaction and fulfill my
+final wish in implementing the charitable social project in your
+country as it requires absolute trust and devotion without any
+failure, which i believe that you are a reliable person and you will
+not expose or betray this trust and confident that I'm about to
+entrust on you. My late husband made a substantial deposit with the
+bank with my name as the beneficiary which I decided to hand over and
+entrust the sum of ($ 12,500,000.00, Dollars) in the account to you to
+invest into the humanitarian social project. Based on my present
+health status as I'm permanently indisposed to handle finances or any
+financial related project, following my diagnoses. Having known my
+present health condition, I decided to seek for your assistance in
+reclaiming the fund for the support and mutual benefit of the less
+privileged as I don't have any relation, and I have been touched by
+God to donate from what I have to the needy because it will be a great
+loss in spending the fund on my health treatment hence my doctor has
+confirmed to me that i will not survive this illness.
 
-Thanks,
-Khalid
+This is the reason I contacted you for your support and help to stand
+as my rightful beneficiary and claim the money for humanitarian
+purposes for the mutual benefits of the less privileged ones. Because
+If the money remains unclaimed with the bank after my death, those
+greedy bank executives will place the money as an unclaimed Fund and
+share it for their selfish and worthless ventures. It will be my
+pleasure to compensate you with part of the money as my Investment
+Manager/Partner for your effort in handling the transaction, while the
+remaining amount of the money will be invested into the charity
+project there in your country.
+
+Can you handle the transaction? and use the fund for the support and
+mutual benefit of the less privileged ones.
+
+Regards.
+Mrs. Parsons Dee.
