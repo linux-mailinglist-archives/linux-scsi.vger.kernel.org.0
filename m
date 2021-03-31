@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB5934FB09
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Mar 2021 10:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F3234FB3B
+	for <lists+linux-scsi@lfdr.de>; Wed, 31 Mar 2021 10:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234075AbhCaIB4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 31 Mar 2021 04:01:56 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2751 "EHLO
+        id S234320AbhCaIIz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 31 Mar 2021 04:08:55 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2752 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbhCaIBk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Mar 2021 04:01:40 -0400
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4F9JWK4cvMz684bH;
-        Wed, 31 Mar 2021 15:54:53 +0800 (CST)
-Received: from lhreml723-chm.china.huawei.com (10.201.108.74) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Wed, 31 Mar 2021 10:01:37 +0200
+        with ESMTP id S234363AbhCaIIZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Mar 2021 04:08:25 -0400
+Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4F9JcH0vpGz6842b;
+        Wed, 31 Mar 2021 15:59:11 +0800 (CST)
+Received: from lhreml735-chm.china.huawei.com (10.201.108.86) by
+ fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 31 Mar 2021 10:08:18 +0200
 Received: from lhreml703-chm.china.huawei.com (10.201.108.52) by
- lhreml723-chm.china.huawei.com (10.201.108.74) with Microsoft SMTP Server
+ lhreml735-chm.china.huawei.com (10.201.108.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Wed, 31 Mar 2021 09:01:36 +0100
+ 15.1.2106.2; Wed, 31 Mar 2021 09:08:18 +0100
 Received: from lhreml703-chm.china.huawei.com ([10.201.68.198]) by
  lhreml703-chm.china.huawei.com ([10.201.68.198]) with mapi id 15.01.2106.013;
- Wed, 31 Mar 2021 09:01:36 +0100
+ Wed, 31 Mar 2021 09:08:18 +0100
 From:   Salil Mehta <salil.mehta@huawei.com>
 To:     Robin Murphy <robin.murphy@arm.com>,
         John Garry <john.garry@huawei.com>,
@@ -40,9 +40,9 @@ CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         Linuxarm <linuxarm@huawei.com>
 Subject: RE: [PATCH 5/6] dma-mapping/iommu: Add dma_set_max_opt_size()
 Thread-Topic: [PATCH 5/6] dma-mapping/iommu: Add dma_set_max_opt_size()
-Thread-Index: AQHXHMQXnn0Ai8cuTkuBkW77wwOhrKqLiR4AgBJBpmA=
-Date:   Wed, 31 Mar 2021 08:01:36 +0000
-Message-ID: <4eda43a40b8c4940a982787e0f542458@huawei.com>
+Thread-Index: AQHXHMQXnn0Ai8cuTkuBkW77wwOhrKqLiR4AgBJGVlA=
+Date:   Wed, 31 Mar 2021 08:08:18 +0000
+Message-ID: <e9ec4d0117f049fc87d985dde6c0d7e1@huawei.com>
 References: <1616160348-29451-1-git-send-email-john.garry@huawei.com>
  <1616160348-29451-6-git-send-email-john.garry@huawei.com>
  <9ecb6980-7f40-0333-572f-f9d4b8238353@arm.com>
@@ -59,6 +59,8 @@ X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
+
+(+) correction below, sorry for the typo in earlier post.
 
 > From: iommu [mailto:iommu-bounces@lists.linux-foundation.org] On Behalf Of
 > Robin Murphy
@@ -84,9 +86,8 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 > hard to make a reasonable decision.
 
 
-This is also the case in networking workloads where we have MTU set but
+This is also the case for networking workloads where we have MTU set but
 actual packet sizes might vary.
-
 
 > 
 > Being largely workload-dependent is why I still think this should be a
@@ -101,8 +102,9 @@ actual packet sizes might vary.
 > fly, but I can easily imagine that having enough inherent overhead to
 > end up being an impractical (but fun) waste of time.
 
+
 This might be particularly useful for the NICs where packet sizes vary
-from 64K to 9K. Hence, without optimal strategy this can affect the
+from 64B to 9K. But without optimal strategy this can affect the
 performance of networking workloads.
 
 
