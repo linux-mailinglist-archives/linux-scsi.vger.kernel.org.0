@@ -2,196 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3453E34F747
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Mar 2021 05:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C85034F763
+	for <lists+linux-scsi@lfdr.de>; Wed, 31 Mar 2021 05:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbhCaDPc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Mar 2021 23:15:32 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:8843 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233455AbhCaDPY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 23:15:24 -0400
-IronPort-SDR: YVzuiWkmVj6Con7R2oTa/LsrRoqHrfTT3VfLt/4pMYxX7iL+D0tzwbQbvgMvZ/k9h/g4Nlwsd4
- 2+W/mGmzt7msRazXlu9GB/1/57jnoTkA4cPla+ir7cjWULFCvmLphKvG0+7KrzSK6zO4pmw38d
- rNQOxNsRtW6o8KTihHbjj53INzySFCQJRajdvhnCjsXwGSppVI2rQw3DCzs6jcwZmDGKYShEnJ
- WwYSgsay7SZzYfxhjOkNiXgRT4ssuO0P8B6dWmbZXM+V/QJjOvgF/GiDJWe8bj+oGVJ99KYEKQ
- 5uQ=
-X-IronPort-AV: E=Sophos;i="5.81,291,1610438400"; 
-   d="scan'208";a="29735512"
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by labrats.qualcomm.com with ESMTP; 30 Mar 2021 20:15:24 -0700
-X-QCInternal: smtphost
-Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP; 30 Mar 2021 20:15:24 -0700
-Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 00E25210A6; Tue, 30 Mar 2021 20:15:23 -0700 (PDT)
+        id S230160AbhCaDV4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Mar 2021 23:21:56 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:41512 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233431AbhCaDVt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Mar 2021 23:21:49 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1617160909; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=ivUpf+CR1j921S+V2zzG1O7pU102BuBZciI4i8H1+m0=;
+ b=R2alvtBmbdzPMqdNIvcnIpY5OOasnAmalYHzuR1jmKE+enY1EUxiEDNZqGVA90CB2Er3ZdR7
+ L97qz50fIbyQLrdWtWL2d7KjVpEoKOxDqQdmgqPoS53eYqIueWTPQCxvaZh1hjj6yJzq6LWy
+ kSJw2R+pmrFuNNSPkz9FgzhJhps=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 6063eacc8166b7eff7b51dae (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 31 Mar 2021 03:21:48
+ GMT
+Sender: cang=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 13AFFC43462; Wed, 31 Mar 2021 03:21:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id EB476C433CA;
+        Wed, 31 Mar 2021 03:21:46 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 31 Mar 2021 11:21:46 +0800
 From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, cang@codeaurora.org
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 2/2] scsi: ufs: Add support for hba performance monitor
-Date:   Tue, 30 Mar 2021 20:14:34 -0700
-Message-Id: <1617160475-1550-3-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1617160475-1550-1-git-send-email-cang@codeaurora.org>
-References: <1617160475-1550-1-git-send-email-cang@codeaurora.org>
+To:     daejun7.park@samsung.com
+Cc:     Greg KH <gregkh@linuxfoundation.org>, avri.altman@wdc.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        asutoshd@codeaurora.org, stanley.chu@mediatek.com,
+        bvanassche@acm.org, huobean@gmail.com,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        JinHwan Park <jh.i.park@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Dukhyun Kwon <d_hyun.kwon@samsung.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        Jaemyung Lee <jaemyung.lee@samsung.com>,
+        Jieon Seol <jieon.seol@samsung.com>
+Subject: Re: [PATCH v32 4/4] scsi: ufs: Add HPB 2.0 support
+In-Reply-To: <20210331011839epcms2p45d3d059fcd9e85a548014a79c3f388bc@epcms2p4>
+References: <20210331011526epcms2p37684869a9781d1eb45bfcbfe9babd217@epcms2p3>
+ <CGME20210331011526epcms2p37684869a9781d1eb45bfcbfe9babd217@epcms2p4>
+ <20210331011839epcms2p45d3d059fcd9e85a548014a79c3f388bc@epcms2p4>
+Message-ID: <0c05e460470d2b9f5aebd9b6935ef42d@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add a new sysfs group which has nodes to monitor data/request transfer
-performance. This sysfs group has nodes showing total sectors/requests
-transferred, total busy time spent and max/min/avg/sum latencies.
+On 2021-03-31 09:18, Daejun Park wrote:
+> This patch supports the HPB 2.0.
+> 
+> The HPB 2.0 supports read of varying sizes from 4KB to 512KB.
+> In the case of Read (<= 32KB) is supported as single HPB read.
+> In the case of Read (36KB ~ 512KB) is supported by as a combination of
+> write buffer command and HPB read command to deliver more PPN.
+> The write buffer commands may not be issued immediately due to busy 
+> tags.
+> To use HPB read more aggressively, the driver can requeue the write 
+> buffer
+> command. The requeue threshold is implemented as timeout and can be
+> modified with requeue_timeout_ms entry in sysfs.
+> 
+> Reviewed-by: Can Guo <cang@codeaurora.org>
+> Reviewed-by: Bean Huo <beanhuo@micron.com>
+> Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+> ---
 
-Signed-off-by: Can Guo <cang@codeaurora.org>
----
- Documentation/ABI/testing/sysfs-driver-ufs | 126 +++++++++++++++++++++++++++++
- 1 file changed, 126 insertions(+)
+Please allow me a few more days in April to have this whole series
+tested one more time.
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
-index d1bc23c..8380866 100644
---- a/Documentation/ABI/testing/sysfs-driver-ufs
-+++ b/Documentation/ABI/testing/sysfs-driver-ufs
-@@ -995,6 +995,132 @@ Description:	This entry shows the target state of an UFS UIC link
- 
- 		The file is read only.
- 
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/monitor_enable
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the status of performance monitor enablement
-+		and it can be used to start/stop the monitor. When the monitor
-+		is stopped, the performance data collected is also cleared.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/monitor_chunk_size
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file tells the monitor to focus on requests transferring
-+		data of specific chunk size (in Bytes). 0 means any chunk size.
-+		It can only be changed when monitor is disabled.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/read_total_sectors
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows how many sectors (in 512 Bytes) have been
-+		sent from device to host after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/read_total_busy
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows how long (in micro seconds) has been spent
-+		sending data from device to host after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/read_nr_requests
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows how many read requests have been sent after
-+		monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/read_req_latency_max
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the maximum latency (in micro seconds) of
-+		read requests after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/read_req_latency_min
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the minimum latency (in micro seconds) of
-+		read requests after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/read_req_latency_avg
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the average latency (in micro seconds) of
-+		read requests after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/read_req_latency_sum
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the total latency (in micro seconds) of
-+		read requests sent after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/write_total_sectors
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows how many sectors (in 512 Bytes) have been sent
-+		from host to device after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/write_total_busy
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows how long (in micro seconds) has been spent
-+		sending data from host to device after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/write_nr_requests
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows how many write requests have been sent after
-+		monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/write_req_latency_max
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the maximum latency (in micro seconds) of write
-+		requests after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/write_req_latency_min
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the minimum latency (in micro seconds) of write
-+		requests after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/write_req_latency_avg
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the average latency (in micro seconds) of write
-+		requests after monitor gets started.
-+
-+		The file is read only.
-+
-+What:		/sys/bus/platform/drivers/ufshcd/*/monitor/write_req_latency_sum
-+Date:		January 2021
-+Contact:	Can Guo <cang@codeaurora.org>
-+Description:	This file shows the total latency (in micro seconds) of write
-+		requests after monitor gets started.
-+
-+		The file is read only.
-+
- What:		/sys/bus/platform/drivers/ufshcd/*/device_descriptor/wb_presv_us_en
- Date:		June 2020
- Contact:	Asutosh Das <asutoshd@codeaurora.org>
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-
+Thanks,
+Can Guo.
