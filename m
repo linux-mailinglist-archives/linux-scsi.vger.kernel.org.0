@@ -2,80 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AF6351195
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 11:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283D535186B
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 19:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbhDAJLc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Apr 2021 05:11:32 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45542 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233604AbhDAJLW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 1 Apr 2021 05:11:22 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1617268281; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=r61cobOzD5Z1IIlyTpsn5NMbAhJSa0S16t24uwaQdHY=;
-        b=dHjeyT1kG7rO42Ck4zR16MHd4kasRiJzBA5tOg87mLm/2uM8QpTH13tKEor93kO41/FRwt
-        fAkHZMhoL8e1zfGhiXjIVvTphV40zvgRHHb9iR/aX9BF372pxbaEslbQdQYrgrNADsMCmO
-        +eoUu2gvLpJR5G78gaFCjPtYgC/cTiA=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9CF73B0B6;
-        Thu,  1 Apr 2021 09:11:21 +0000 (UTC)
-From:   mwilck@suse.com
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <Bart.VanAssche@sandisk.com>
-Cc:     Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
-        James Bottomley <jejb@linux.vnet.ibm.com>,
-        Martin Wilck <mwilck@suse.com>
-Subject: [PATCH] scsi: scsi_transport_srp: don't block target in SRP_PORT_LOST state
-Date:   Thu,  1 Apr 2021 11:11:05 +0200
-Message-Id: <20210401091105.8046-1-mwilck@suse.com>
-X-Mailer: git-send-email 2.30.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S234877AbhDARpt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Apr 2021 13:45:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55568 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234608AbhDARiW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Apr 2021 13:38:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617298702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yca0kxerzJI0XjjV2uA9g5GMtSi2AHRJaLJF8A2epeI=;
+        b=c7P+bC5iJBog1FA4UbBT2vBgFip8BYD+HVasD+UsCVZw2yqHWPq7ic53CMuYOwiQ9F+t2Y
+        2q+GcFhdDpu7BlGyEAxbebexsuieijIur1B/LfQVPcOTs2I/HFBqyRb/VZNF6fP0KNd63N
+        wnIbRWjV9xoReKNze8mHdx69+goTNnc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-55--ocCDsbiP8WkTl6TbEr-Bw-1; Thu, 01 Apr 2021 08:21:48 -0400
+X-MC-Unique: -ocCDsbiP8WkTl6TbEr-Bw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 476C8817469;
+        Thu,  1 Apr 2021 12:21:47 +0000 (UTC)
+Received: from ovpn-112-207.phx2.redhat.com (ovpn-112-207.phx2.redhat.com [10.3.112.207])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D366351C3E;
+        Thu,  1 Apr 2021 12:21:46 +0000 (UTC)
+Message-ID: <8470762d5f9840f7d80389be3f89f7f53989a400.camel@redhat.com>
+Subject: Re: [PATCH] scsi_dh_alua: remove check for ASC 24h when
+ ILLEGAL_REQUEST returned on RTPG w/extended header
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     dgilbert@interlog.com, linux-scsi@vger.kernel.org
+Cc:     hare@suse.de
+Date:   Thu, 01 Apr 2021 08:21:46 -0400
+In-Reply-To: <2c505c60-9ba0-9ce6-46a6-e6edea2ada03@interlog.com>
+References: <20210331201154.20348-1-emilne@redhat.com>
+         <2c505c60-9ba0-9ce6-46a6-e6edea2ada03@interlog.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Martin Wilck <mwilck@suse.com>
+On Thu, 2021-04-01 at 00:24 -0400, Douglas Gilbert wrote:
+> On 2021-03-31 4:11 p.m., Ewan D. Milne wrote:
+> > Some arrays return ILLEGAL_REQUEST with ASC 00h if they don't
+> > support the
+> > extended header, so remove the check for INVALID FIELD IN CDB.
+> 
+> Wow. Referring to the 18 byte sense buffer as an extended header
+> sounds
+> like it comes from the transition of SCSI-1 to SCSI-2, about 30 years
+> ago.
+> Those arrays need to be named and shamed.
 
-rport_dev_loss_timedout() sets the rport state to SRP_PORT_LOST and
-the SCSI target state to SDEV_TRANSPORT_OFFLINE. If this races with
-srp_reconnect_work(), a warning is printed:
+Sorry, I was referring to the RTPG command, not the sense header.
 
-Mar 27 18:48:07 ictm1604s01h4 kernel: dev_loss_tmo expired for SRP port-18:1 / host18.
-Mar 27 18:48:07 ictm1604s01h4 kernel: ------------[ cut here ]------------
-Mar 27 18:48:07 ictm1604s01h4 kernel: scsi_internal_device_block(18:0:0:100) failed: ret = -22
-Mar 27 18:48:07 ictm1604s01h4 kernel: Call Trace:
-Mar 27 18:48:07 ictm1604s01h4 kernel:  ? scsi_target_unblock+0x50/0x50 [scsi_mod]
-Mar 27 18:48:07 ictm1604s01h4 kernel:  starget_for_each_device+0x80/0xb0 [scsi_mod]
-Mar 27 18:48:07 ictm1604s01h4 kernel:  target_block+0x24/0x30 [scsi_mod]
-Mar 27 18:48:07 ictm1604s01h4 kernel:  device_for_each_child+0x57/0x90
-Mar 27 18:48:07 ictm1604s01h4 kernel:  srp_reconnect_rport+0xe4/0x230 [scsi_transport_srp]
-Mar 27 18:48:07 ictm1604s01h4 kernel:  srp_reconnect_work+0x40/0xc0 [scsi_transport_srp]
+        cdb[0] = MAINTENANCE_IN;
+        if (!(flags & ALUA_RTPG_EXT_HDR_UNSUPP))
+                cdb[1] = MI_REPORT_TARGET_PGS | MI_EXT_HDR_PARAM_FMT;
+        else
+                cdb[1] = MI_REPORT_TARGET_PGS;
 
-Avoid this by not trying to block targets for rports in SRP_PORT_LOST
-state.
+The array returned an error when the MI_EXT_HDR_PARAM_FMT bit was set
+but worked fine without it.
 
-Signed-off-by: Martin Wilck <mwilck@suse.com>
----
- drivers/scsi/scsi_transport_srp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It was an older array, it worked with older kernels until we removed
+the ability to detach the device handler.  So RTPG needs to work.
 
-diff --git a/drivers/scsi/scsi_transport_srp.c b/drivers/scsi/scsi_transport_srp.c
-index 1e939a2a387f..98a34ed10f1a 100644
---- a/drivers/scsi/scsi_transport_srp.c
-+++ b/drivers/scsi/scsi_transport_srp.c
-@@ -541,7 +541,7 @@ int srp_reconnect_rport(struct srp_rport *rport)
- 	res = mutex_lock_interruptible(&rport->mutex);
- 	if (res)
- 		goto out;
--	if (rport->state != SRP_RPORT_FAIL_FAST)
-+	if (rport->state != SRP_RPORT_FAIL_FAST && rport->state != SRP_RPORT_LOST)
- 		/*
- 		 * sdev state must be SDEV_TRANSPORT_OFFLINE, transition
- 		 * to SDEV_BLOCK is illegal. Calling scsi_target_unblock()
--- 
-2.30.1
+-Ewan
+
+> 
+> Doug Gilbert
+> Hmm, it is April first ...
+> 
+> > Signed-off-by: Ewan D. Milne <emilne@redhat.com>
+> > ---
+> >   drivers/scsi/device_handler/scsi_dh_alua.c | 5 +++--
+> >   1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c
+> > b/drivers/scsi/device_handler/scsi_dh_alua.c
+> > index e42390333c6e..c4c2f23cf79f 100644
+> > --- a/drivers/scsi/device_handler/scsi_dh_alua.c
+> > +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+> > @@ -587,10 +587,11 @@ static int alua_rtpg(struct scsi_device
+> > *sdev, struct alua_port_group *pg)
+> >   		 * even though it shouldn't according to T10.
+> >   		 * The retry without rtpg_ext_hdr_req set
+> >   		 * handles this.
+> > +		 * Note:  some arrays return a sense key of
+> > ILLEGAL_REQUEST
+> > +		 * with ASC 00h if they don't support the extended
+> > header.
+> >   		 */
+> >   		if (!(pg->flags & ALUA_RTPG_EXT_HDR_UNSUPP) &&
+> > -		    sense_hdr.sense_key == ILLEGAL_REQUEST &&
+> > -		    sense_hdr.asc == 0x24 && sense_hdr.ascq == 0) {
+> > +		    sense_hdr.sense_key == ILLEGAL_REQUEST) {
+> >   			pg->flags |= ALUA_RTPG_EXT_HDR_UNSUPP;
+> >   			goto retry;
+> >   		}
+> > 
+> 
+> 
 
