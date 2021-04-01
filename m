@@ -2,72 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0139350F0D
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 08:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE95350F1B
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 08:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbhDAG35 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Apr 2021 02:29:57 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36648 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233024AbhDAG3k (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 1 Apr 2021 02:29:40 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DAF9CAF2A;
-        Thu,  1 Apr 2021 06:29:38 +0000 (UTC)
-Subject: Re: [PATCH] scsi_dh_alua: remove check for ASC 24h when
- ILLEGAL_REQUEST returned on RTPG w/extended header
-To:     "Ewan D. Milne" <emilne@redhat.com>, linux-scsi@vger.kernel.org
-References: <20210331201154.20348-1-emilne@redhat.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <4f241afd-33be-dd0d-c748-6bafddcd2235@suse.de>
-Date:   Thu, 1 Apr 2021 08:29:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S233102AbhDAGhI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Apr 2021 02:37:08 -0400
+Received: from mail-m17637.qiye.163.com ([59.111.176.37]:44064 "EHLO
+        mail-m17637.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233143AbhDAGgl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Apr 2021 02:36:41 -0400
+Received: from wanjb-virtual-machine.localdomain (unknown [36.152.145.182])
+        by mail-m17637.qiye.163.com (Hmail) with ESMTPA id 9DD73980149;
+        Thu,  1 Apr 2021 14:36:38 +0800 (CST)
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] scsi: bfa: Remove unnecessary struct declaration
+Date:   Thu,  1 Apr 2021 14:35:34 +0800
+Message-Id: <20210401063535.992487-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210331201154.20348-1-emilne@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZGUIdGkgaGUgYGkhLVkpNSkxJTkNCQkJLSUxVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hKTFVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PBA6NTo4ED8KODRNTAgJAT4o
+        DBJPC0JVSlVKTUpMSU5DQkJCSEtPVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
+        TVVKTklVSk9OVUpDSVlXWQgBWUFKQ09NNwY+
+X-HM-Tid: 0a788c25eca3d992kuws9dd73980149
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/31/21 10:11 PM, Ewan D. Milne wrote:
-> Some arrays return ILLEGAL_REQUEST with ASC 00h if they don't support the
-> extended header, so remove the check for INVALID FIELD IN CDB.
-> 
-> Signed-off-by: Ewan D. Milne <emilne@redhat.com>
-> ---
->  drivers/scsi/device_handler/scsi_dh_alua.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-> index e42390333c6e..c4c2f23cf79f 100644
-> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
-> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-> @@ -587,10 +587,11 @@ static int alua_rtpg(struct scsi_device *sdev, struct alua_port_group *pg)
->  		 * even though it shouldn't according to T10.
->  		 * The retry without rtpg_ext_hdr_req set
->  		 * handles this.
-> +		 * Note:  some arrays return a sense key of ILLEGAL_REQUEST
-> +		 * with ASC 00h if they don't support the extended header.
->  		 */
->  		if (!(pg->flags & ALUA_RTPG_EXT_HDR_UNSUPP) &&
-> -		    sense_hdr.sense_key == ILLEGAL_REQUEST &&
-> -		    sense_hdr.asc == 0x24 && sense_hdr.ascq == 0) {
-> +		    sense_hdr.sense_key == ILLEGAL_REQUEST) {
->  			pg->flags |= ALUA_RTPG_EXT_HDR_UNSUPP;
->  			goto retry;
->  		}
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+struct bfa_fcs_s is declared twice. One is declared
+at 50th line. Remove the duplicate.
+struct bfa_fcs_fabric_s is defined at 175th line.
+Remove unnecessary declaration.
 
-Cheers,
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/scsi/bfa/bfa_fcs.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Hannes
+diff --git a/drivers/scsi/bfa/bfa_fcs.h b/drivers/scsi/bfa/bfa_fcs.h
+index 3e117fed95c9..c1baf5cd0d3e 100644
+--- a/drivers/scsi/bfa/bfa_fcs.h
++++ b/drivers/scsi/bfa/bfa_fcs.h
+@@ -217,9 +217,6 @@ struct bfa_vf_event_s {
+ 	u32        undefined;
+ };
+ 
+-struct bfa_fcs_s;
+-struct bfa_fcs_fabric_s;
+-
+ /*
+  * @todo : need to move to a global config file.
+  * Maximum Rports supported per port (physical/logical).
 -- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+2.25.1
+
