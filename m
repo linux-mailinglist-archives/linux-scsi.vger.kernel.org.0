@@ -2,33 +2,33 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6661351908
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 19:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD4C351878
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 19:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234558AbhDARtB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Apr 2021 13:49:01 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:34637 "EHLO
+        id S235417AbhDARpw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Apr 2021 13:45:52 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:63060 "EHLO
         so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236071AbhDARq7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Apr 2021 13:46:59 -0400
+        with ESMTP id S234999AbhDARl6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Apr 2021 13:41:58 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1617299220; h=Message-ID: References: In-Reply-To: Subject:
+ s=smtp; t=1617298917; h=Message-ID: References: In-Reply-To: Subject:
  Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=umKbm8N9QR1ITCNfEI8UNCb/d98JCMacMjQP959z5lE=;
- b=ubSzgZutP9N4UdUfk+VIFBmpWXci6sBH1pOa+Jn+rHsSxZrmRq9RPkmkSF8k7IzltCge0LnN
- e4jQZJv2sdDw9SQjQ2cXb/3SYwNhBOpQTcPEBSFmEpe+TBCvWucUhBl4tXJomDRQxOcPaOnt
- 8sTfzL+zlr3VOZ+b5gJIB8NF4+I=
+ MIME-Version: Sender; bh=bHbr7KBSlGV8bKA1algZFTTPRBsvH2U+aHDd0G/QszY=;
+ b=K+Ib09350xPkGb62RZ6slk8T+V98TuIEXDRv0zAGK67Sv58FODou1Ep8fqi8hp60tG71XvHd
+ zebgCQG8XxbpbhZ9qx1wY9VvAHsgo/Vxh7ZStjO5qSsogUCYexxgAOfdZL9TzhGDT72ZCoPo
+ 9Vi8svAPi7eiy6jX+fiSAW6Cp78=
 X-Mailgun-Sending-Ip: 198.61.254.9
 X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 6065e0229a9ff96d955ca101 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 01 Apr 2021 15:00:50
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 6065e0d48166b7eff77a57fd (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 01 Apr 2021 15:03:48
  GMT
 Sender: nitirawa=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BB3BEC43465; Thu,  1 Apr 2021 15:00:50 +0000 (UTC)
+        id EFE16C43466; Thu,  1 Apr 2021 15:03:47 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -38,13 +38,13 @@ Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: nitirawa)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 46FA5C433CA;
-        Thu,  1 Apr 2021 15:00:49 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 74421C433CA;
+        Thu,  1 Apr 2021 15:03:46 +0000 (UTC)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 01 Apr 2021 20:30:49 +0530
+Date:   Thu, 01 Apr 2021 20:33:46 +0530
 From:   nitirawa@codeaurora.org
 To:     "Asutosh Das (asd)" <asutoshd@codeaurora.org>
 Cc:     cang@codeaurora.org, stummala@codeaurora.org,
@@ -61,7 +61,7 @@ In-Reply-To: <80f681a6-165f-0610-dfea-6b66ce4abddc@codeaurora.org>
 References: <1616363857-26760-1-git-send-email-nitirawa@codeaurora.org>
  <1616363857-26760-3-git-send-email-nitirawa@codeaurora.org>
  <80f681a6-165f-0610-dfea-6b66ce4abddc@codeaurora.org>
-Message-ID: <73019fc8a71748496cd6a974600e37de@codeaurora.org>
+Message-ID: <0681d6426135afebf4feca549bf0a79c@codeaurora.org>
 X-Sender: nitirawa@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
@@ -98,12 +98,6 @@ On 2021-03-31 23:30, Asutosh Das (asd) wrote:
 > regulator voltages from dts due to different voltage requirements of
 > 2.x and 3.x, should request the driver to set the voltages. And the
 > driver may do so after determining the device version.
-
-Hi Asutosh,
-Thanks for the suggestion. I will check and try to accommodate your 
-suggestion.
-Regards,
-Nitin
 > 
 >> +		dev_err(hba->dev,
 >> +			"%s: Failed to set the VCC regulator values, continue with 
@@ -152,3 +146,9 @@ Nitin
 >> --
 >> 2.7.4
 >> 
+
+Hi Asutosh,
+Thanks for the suggestion. I will check and try to accommodate your 
+suggestion.
+Regards,
+Nitin
