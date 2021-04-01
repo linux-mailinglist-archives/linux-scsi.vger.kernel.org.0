@@ -2,64 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F91351034
+	by mail.lfdr.de (Postfix) with ESMTP id F12E3351035
 	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 09:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbhDAHjU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S233283AbhDAHjU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 1 Apr 2021 03:39:20 -0400
 Received: from labrats.qualcomm.com ([199.106.110.90]:49605 "EHLO
         labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbhDAHjN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Apr 2021 03:39:13 -0400
-IronPort-SDR: TuonfCjVWSHQWs6NhUTDBBxI/ajqPPiXFD4+jQcpqPYKP0fP81AWqIg/8U2oBM8hHA1gBlLNz8
- ysrHz+zfEGDWlaTqcvHvhTwd+CObiKngpkbasAnGv8o2eZf79AhiHZ+WEQRQPktemsl5OFWE16
- 9TfNddxrh8amnK5MAf0LhAzJf1Ru4FY01PswiAXRxTEFm+4fw6cEeO/Ab2826Px2dP3xBL96wl
- 09TdNUDNnrXGTs/md0gM2SzyJWGs+p4ORI2TJWdMe9+1stB9TIKw6JQBNTHqVx34Aa7e837lB8
- rq0=
+        with ESMTP id S233353AbhDAHjP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Apr 2021 03:39:15 -0400
+IronPort-SDR: wGTYIz9+kjcTO99VPBy0frlZ80GQmPAoz1yXnuoY+v+gEDx4MQ8G4o+55oxuWjG6IwEPR71VCg
+ g8l+JhG++wNj0IzTdyW4CoW5S0aheLTDSMPH3o/B1kIi3C1xSASBe5SNuBA4bGbfknmWS26OKZ
+ YuOmhx7UNj4YHQbYkQ0ztuMDgDbtOWOfoie43oxZuyZD+U38V/FIG3DA0evxkSLRmUpGJcKO/J
+ bjP7NsqDV0YC80lRFH/Rx0RxMsqooM5MtYOMTfcssCK0Z1nZHf3/GcQcy89+RjH3tHB5QsBaCE
+ Fp4=
 X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="29736675"
+   d="scan'208";a="29736676"
 Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by labrats.qualcomm.com with ESMTP; 01 Apr 2021 00:39:12 -0700
+  by labrats.qualcomm.com with ESMTP; 01 Apr 2021 00:39:15 -0700
 X-QCInternal: smtphost
 Received: from stor-presley.qualcomm.com ([192.168.140.85])
-  by ironmsg02-sd.qualcomm.com with ESMTP; 01 Apr 2021 00:39:10 -0700
+  by ironmsg02-sd.qualcomm.com with ESMTP; 01 Apr 2021 00:39:14 -0700
 Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id DF96C210A9; Thu,  1 Apr 2021 00:39:10 -0700 (PDT)
+        id A457B210A9; Thu,  1 Apr 2021 00:39:14 -0700 (PDT)
 From:   Can Guo <cang@codeaurora.org>
 To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
         hongwus@codeaurora.org, linux-scsi@vger.kernel.org,
         kernel-team@android.com, cang@codeaurora.org
-Subject: [PATCH v5 0/2] Two fixes for task management request implementation
-Date:   Thu,  1 Apr 2021 00:39:07 -0700
-Message-Id: <1617262750-4864-1-git-send-email-cang@codeaurora.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v5 1/2] scsi: ufs: Fix task management request completion timeout
+Date:   Thu,  1 Apr 2021 00:39:08 -0700
+Message-Id: <1617262750-4864-2-git-send-email-cang@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1617262750-4864-1-git-send-email-cang@codeaurora.org>
+References: <1617262750-4864-1-git-send-email-cang@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-These fixes are based on Jaegeuk's change - https://git.kernel.org/mkp/scsi/c/eeb1b55b6e25
+ufshcd_tmc_handler() calls blk_mq_tagset_busy_iter(fn = ufshcd_compl_tm()),
+but since blk_mq_tagset_busy_iter() only iterates over all reserved tags
+and requests which are not in IDLE state, ufshcd_compl_tm() never gets a
+chance to run. Thus, TMR always ends up with completion timeout. Fix it by
+calling blk_mq_start_request() in  __ufshcd_issue_tm_cmd().
 
-Change since v4:
-- Incorporated Daejun's comments
+Fixes: 69a6c269c097 ("scsi: ufs: Use blk_{get,put}_request() to allocate and free TMFs")
 
-Change since v3:
-- Deleted the 2nd change
-- Incorporated Bart's comments
+Signed-off-by: Can Guo <cang@codeaurora.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Change since v2:
-- Split one change into 3 changes
-
-Change since v1:
-- Typo fixed
-
-
-Can Guo (2):
-  scsi: ufs: Fix task management request completion timeout
-  scsi: ufs: Fix wrong Task Tag used in task management request UPIUs
-
- drivers/scsi/ufs/ufshcd.c | 31 ++++++++++++++-----------------
- 1 file changed, 14 insertions(+), 17 deletions(-)
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index b49555fa..d4f8cb2 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6464,6 +6464,7 @@ static int __ufshcd_issue_tm_cmd(struct ufs_hba *hba,
+ 
+ 	spin_lock_irqsave(host->host_lock, flags);
+ 	task_tag = hba->nutrs + free_slot;
++	blk_mq_start_request(req);
+ 
+ 	treq->req_header.dword_0 |= cpu_to_be32(task_tag);
+ 
 -- 
 Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
