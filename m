@@ -2,115 +2,236 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 283D535186B
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 19:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0722351921
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Apr 2021 19:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbhDARpt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Apr 2021 13:45:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55568 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234608AbhDARiW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Apr 2021 13:38:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617298702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yca0kxerzJI0XjjV2uA9g5GMtSi2AHRJaLJF8A2epeI=;
-        b=c7P+bC5iJBog1FA4UbBT2vBgFip8BYD+HVasD+UsCVZw2yqHWPq7ic53CMuYOwiQ9F+t2Y
-        2q+GcFhdDpu7BlGyEAxbebexsuieijIur1B/LfQVPcOTs2I/HFBqyRb/VZNF6fP0KNd63N
-        wnIbRWjV9xoReKNze8mHdx69+goTNnc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-55--ocCDsbiP8WkTl6TbEr-Bw-1; Thu, 01 Apr 2021 08:21:48 -0400
-X-MC-Unique: -ocCDsbiP8WkTl6TbEr-Bw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S234000AbhDARvl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Apr 2021 13:51:41 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:54345 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235918AbhDARp6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 1 Apr 2021 13:45:58 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1617299158; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=h4rZg3loUeGrmbFwxfTS2JVTeQDuJOSIq3TF+e6Bitg=;
+ b=mzBkgQ2dp5VvvBObYKAcC+WW99ZpMWc11gThslaVPcNRJKDqOzKEYZ3U7wZ8I9/8z5X/ZhB/
+ EdV2MeR/RBFLLKUcgHnvRFFKGiLer7THhQy/t5WkQj7Q73X8BE0DjYfOcpkkDb8kRGoEpPGr
+ GRlMn5X9G4eZPYLFIxewMNSe5+E=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 6065dfb38807bcde1d6d50a2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 01 Apr 2021 14:58:59
+ GMT
+Sender: nitirawa=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6F000C433ED; Thu,  1 Apr 2021 14:58:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 476C8817469;
-        Thu,  1 Apr 2021 12:21:47 +0000 (UTC)
-Received: from ovpn-112-207.phx2.redhat.com (ovpn-112-207.phx2.redhat.com [10.3.112.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D366351C3E;
-        Thu,  1 Apr 2021 12:21:46 +0000 (UTC)
-Message-ID: <8470762d5f9840f7d80389be3f89f7f53989a400.camel@redhat.com>
-Subject: Re: [PATCH] scsi_dh_alua: remove check for ASC 24h when
- ILLEGAL_REQUEST returned on RTPG w/extended header
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     dgilbert@interlog.com, linux-scsi@vger.kernel.org
-Cc:     hare@suse.de
-Date:   Thu, 01 Apr 2021 08:21:46 -0400
-In-Reply-To: <2c505c60-9ba0-9ce6-46a6-e6edea2ada03@interlog.com>
-References: <20210331201154.20348-1-emilne@redhat.com>
-         <2c505c60-9ba0-9ce6-46a6-e6edea2ada03@interlog.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+        (Authenticated sender: nitirawa)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ED74DC433C6;
+        Thu,  1 Apr 2021 14:58:57 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Date:   Thu, 01 Apr 2021 20:28:57 +0530
+From:   nitirawa@codeaurora.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     asutoshd@codeaurora.org, cang@codeaurora.org,
+        stummala@codeaurora.org, vbadigan@codeaurora.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, adrian.hunter@intel.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 3/3] scsi: ufs-qcom: configure VCC voltage level in
+ vendor file
+In-Reply-To: <20210331181959.GL904837@yoga>
+References: <1616363857-26760-1-git-send-email-nitirawa@codeaurora.org>
+ <1616363857-26760-4-git-send-email-nitirawa@codeaurora.org>
+ <20210323152834.GH5254@yoga>
+ <f27b4fde8092088ec5dc6232cc4b2318@codeaurora.org>
+ <20210331181959.GL904837@yoga>
+Message-ID: <d9d7d6fb9241bbe48b3f8df5d2c0bc4e@codeaurora.org>
+X-Sender: nitirawa@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2021-04-01 at 00:24 -0400, Douglas Gilbert wrote:
-> On 2021-03-31 4:11 p.m., Ewan D. Milne wrote:
-> > Some arrays return ILLEGAL_REQUEST with ASC 00h if they don't
-> > support the
-> > extended header, so remove the check for INVALID FIELD IN CDB.
+On 2021-03-31 23:49, Bjorn Andersson wrote:
+> On Wed 24 Mar 16:55 CDT 2021, nitirawa@codeaurora.org wrote:
 > 
-> Wow. Referring to the 18 byte sense buffer as an extended header
-> sounds
-> like it comes from the transition of SCSI-1 to SCSI-2, about 30 years
-> ago.
-> Those arrays need to be named and shamed.
-
-Sorry, I was referring to the RTPG command, not the sense header.
-
-        cdb[0] = MAINTENANCE_IN;
-        if (!(flags & ALUA_RTPG_EXT_HDR_UNSUPP))
-                cdb[1] = MI_REPORT_TARGET_PGS | MI_EXT_HDR_PARAM_FMT;
-        else
-                cdb[1] = MI_REPORT_TARGET_PGS;
-
-The array returned an error when the MI_EXT_HDR_PARAM_FMT bit was set
-but worked fine without it.
-
-It was an older array, it worked with older kernels until we removed
-the ability to detach the device handler.  So RTPG needs to work.
-
--Ewan
-
+>> On 2021-03-23 20:58, Bjorn Andersson wrote:
+>> > On Sun 21 Mar 16:57 CDT 2021, Nitin Rawat wrote:
+>> >
+>> > > As a part of vops handler, VCC voltage is updated
+>> > > as per the ufs device probed after reading the device
+>> > > descriptor. We follow below steps to configure voltage
+>> > > level.
+>> > >
+>> > > 1. Set the device to SLEEP state.
+>> > > 2. Disable the Vcc Regulator.
+>> > > 3. Set the vcc voltage according to the device type and reenable
+>> > >    the regulator.
+>> > > 4. Set the device mode back to ACTIVE.
+>> > >
+>> >
+>> > When we discussed this a while back this was described as a requirement
+>> > from the device specification, you only operate on objects "owned" by
+>> > ufshcd and you invoke ufshcd operations to perform the actions.
+>> >
+>> > So why is this a ufs-qcom patch and not something in ufshcd?
+>> >
+>> > Regards,
+>> > Bjorn
+>> >
+>> > > Signed-off-by: Nitin Rawat <nitirawa@codeaurora.org>
+>> > > Signed-off-by: Veerabhadrarao Badiganti <vbadigan@codeaurora.org>
+>> > > ---
+>> > >  drivers/scsi/ufs/ufs-qcom.c | 51
+>> > > +++++++++++++++++++++++++++++++++++++++++++++
+>> > >  1 file changed, 51 insertions(+)
+>> > >
+>> > > diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+>> > > index f97d7b0..ca35f5c 100644
+>> > > --- a/drivers/scsi/ufs/ufs-qcom.c
+>> > > +++ b/drivers/scsi/ufs/ufs-qcom.c
+>> > > @@ -21,6 +21,17 @@
+>> > >  #define UFS_QCOM_DEFAULT_DBG_PRINT_EN	\
+>> > >  	(UFS_QCOM_DBG_PRINT_REGS_EN | UFS_QCOM_DBG_PRINT_TEST_BUS_EN)
+>> > >
+>> > > +#define	ANDROID_BOOT_DEV_MAX	30
+>> > > +static char android_boot_dev[ANDROID_BOOT_DEV_MAX];
+>> > > +
+>> > > +/* Min and Max VCC voltage values for ufs 2.x and
+>> > > + * ufs 3.x devices
+>> > > + */
+>> > > +#define UFS_3X_VREG_VCC_MIN_UV	2540000 /* uV */
+>> > > +#define UFS_3X_VREG_VCC_MAX_UV	2700000 /* uV */
+>> > > +#define UFS_2X_VREG_VCC_MIN_UV	2950000 /* uV */
+>> > > +#define UFS_2X_VREG_VCC_MAX_UV	2960000 /* uV */
+>> > > +
+>> > >  enum {
+>> > >  	TSTBUS_UAWM,
+>> > >  	TSTBUS_UARM,
+>> > > @@ -1293,6 +1304,45 @@ static void
+>> > > ufs_qcom_print_hw_debug_reg_all(struct ufs_hba *hba,
+>> > >  	print_fn(hba, reg, 9, "UFS_DBG_RD_REG_TMRLUT ", priv);
+>> > >  }
+>> > >
+>> > > +  /**
+>> > > +   * ufs_qcom_setup_vcc_regulators - Update VCC voltage
+>> > > +   * @hba: host controller instance
+>> > > +   * Update VCC voltage based on UFS device(ufs 2.x or
+>> > > +   * ufs 3.x probed)
+>> > > +   */
+>> > > +static int ufs_qcom_setup_vcc_regulators(struct ufs_hba *hba)
+>> > > +{
+>> > > +	struct ufs_dev_info *dev_info = &hba->dev_info;
+>> > > +	struct ufs_vreg *vreg = hba->vreg_info.vcc;
+>> > > +	int ret;
+>> > > +
+>> > > +	/* Put the device in sleep before lowering VCC level */
+>> > > +	ret = ufshcd_set_dev_pwr_mode(hba, UFS_SLEEP_PWR_MODE);
+>> > > +
+>> > > +	/* Switch off VCC before switching it ON at 2.5v or 2.96v */
+>> > > +	ret = ufshcd_disable_vreg(hba->dev, vreg);
+>> > > +
+>> > > +	/* add ~2ms delay before renabling VCC at lower voltage */
+>> > > +	usleep_range(2000, 2100);
+>> > > +
+>> > > +	/* set VCC min and max voltage according to ufs device type */
+>> > > +	if (dev_info->wspecversion >= 0x300) {
+>> > > +		vreg->min_uV = UFS_3X_VREG_VCC_MIN_UV;
+>> > > +		vreg->max_uV = UFS_3X_VREG_VCC_MAX_UV;
+>> > > +	}
+>> > > +
+>> > > +	else {
+>> > > +		vreg->min_uV = UFS_2X_VREG_VCC_MIN_UV;
+>> > > +		vreg->max_uV = UFS_2X_VREG_VCC_MAX_UV;
+>> > > +	}
+>> > > +
+>> > > +	ret = ufshcd_enable_vreg(hba->dev, vreg);
+>> > > +
+>> > > +	/* Bring the device in active now */
+>> > > +	ret = ufshcd_set_dev_pwr_mode(hba, UFS_ACTIVE_PWR_MODE);
+>> > > +	return ret;
+>> > > +}
+>> > > +
+>> > >  static void ufs_qcom_enable_test_bus(struct ufs_qcom_host *host)
+>> > >  {
+>> > >  	if (host->dbg_print_en & UFS_QCOM_DBG_PRINT_TEST_BUS_EN) {
+>> > > @@ -1490,6 +1540,7 @@ static const struct ufs_hba_variant_ops
+>> > > ufs_hba_qcom_vops = {
+>> > >  	.device_reset		= ufs_qcom_device_reset,
+>> > >  	.config_scaling_param = ufs_qcom_config_scaling_param,
+>> > >  	.program_key		= ufs_qcom_ice_program_key,
+>> > > +	.setup_vcc_regulators	= ufs_qcom_setup_vcc_regulators,
+>> > >  };
+>> > >
+>> > >  /**
+>> > > --
+>> > > 2.7.4
+>> > >
+>> 
+>> Hi Bjorn,
+>> Thanks for your review.
+>> But As per the earlier discussion regarding handling of vcc voltage
+>> for platform supporting both ufs 2.x and ufs 3.x , it was finally 
+>> concluded
+>> to
+>> use "vops and let vendors handle it, until specs or someone
+>> has a better suggestion". Please correct me in case i am wrong.
+>> 
 > 
-> Doug Gilbert
-> Hmm, it is April first ...
+> I was under the impression that this would result in something custom
+> per platform, but what I'm objecting to now that I see the code is that
+> this is completely generic.
 > 
-> > Signed-off-by: Ewan D. Milne <emilne@redhat.com>
-> > ---
-> >   drivers/scsi/device_handler/scsi_dh_alua.c | 5 +++--
-> >   1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c
-> > b/drivers/scsi/device_handler/scsi_dh_alua.c
-> > index e42390333c6e..c4c2f23cf79f 100644
-> > --- a/drivers/scsi/device_handler/scsi_dh_alua.c
-> > +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-> > @@ -587,10 +587,11 @@ static int alua_rtpg(struct scsi_device
-> > *sdev, struct alua_port_group *pg)
-> >   		 * even though it shouldn't according to T10.
-> >   		 * The retry without rtpg_ext_hdr_req set
-> >   		 * handles this.
-> > +		 * Note:  some arrays return a sense key of
-> > ILLEGAL_REQUEST
-> > +		 * with ASC 00h if they don't support the extended
-> > header.
-> >   		 */
-> >   		if (!(pg->flags & ALUA_RTPG_EXT_HDR_UNSUPP) &&
-> > -		    sense_hdr.sense_key == ILLEGAL_REQUEST &&
-> > -		    sense_hdr.asc == 0x24 && sense_hdr.ascq == 0) {
-> > +		    sense_hdr.sense_key == ILLEGAL_REQUEST) {
-> >   			pg->flags |= ALUA_RTPG_EXT_HDR_UNSUPP;
-> >   			goto retry;
-> >   		}
-> > 
+> And the concerns we discussed regarding these regulators being shared
+> with other devices is not considered in this implementation. But in
+> practice I don't see how you could support 2.x, 3.x and rail sharing at
+> the same time.
 > 
+> Regards,
+> Bjorn
 > 
+>> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2399116.html
+>> 
+>> Regards,
+>> Nitin
 
+Hi Bjorn,
+Thanks for your feedback.
+Regarding your query for regulator being shared with other device,
+Imho, the soc/pmic designer should share only those device
+with ufs regulator which has the same voltage range (2.4-3.6v).
+If that is not considered by the pmic designer,
+wouldn't that would be a board design issue ???
+
+And I agree with you that - the code looks generic but
+since the below steps is not part of the specs,
+I had to keep it in vendor specific file for which I
+had to export few api from ufshcd.c to use in vendor
+specific files.
+
+1. Set the device to SLEEP state.
+2. Disable the Vcc Regulator.
+3. Set the vcc voltage according to the device type and reenable
+    the regulator.
+4. Set the device mode back to ACTIVE.
+
+Please correct me if my understanding is not correct.
+
+Regards,
+Nitin
