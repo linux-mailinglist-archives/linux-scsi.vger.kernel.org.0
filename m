@@ -2,78 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6901635282B
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Apr 2021 11:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA3C352892
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Apr 2021 11:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbhDBJIc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Apr 2021 05:08:32 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15591 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235080AbhDBJI0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Apr 2021 05:08:26 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FBZ0l0VWMz1BG8P;
-        Fri,  2 Apr 2021 17:06:15 +0800 (CST)
-Received: from huawei.com (10.69.192.56) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.498.0; Fri, 2 Apr 2021
- 17:08:13 +0800
-From:   Luo Jiaxing <luojiaxing@huawei.com>
-To:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <luojiaxing@huawei.com>
-Subject: [PATCH v1 2/2] scsi: pm8001: clean up for open brace
-Date:   Fri, 2 Apr 2021 17:08:42 +0800
-Message-ID: <1617354522-17113-3-git-send-email-luojiaxing@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1617354522-17113-1-git-send-email-luojiaxing@huawei.com>
-References: <1617354522-17113-1-git-send-email-luojiaxing@huawei.com>
+        id S234652AbhDBJWP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Apr 2021 05:22:15 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:15469 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229599AbhDBJWP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Apr 2021 05:22:15 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FBZJk11jBzyNjd;
+        Fri,  2 Apr 2021 17:20:06 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.498.0; Fri, 2 Apr 2021
+ 17:22:10 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <target-devel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+CC:     <martin.petersen@oracle.com>
+Subject: [PATCH -next] scsi: target: iscsi: Switch to kmemdup_nul()
+Date:   Fri, 2 Apr 2021 17:25:17 +0800
+Message-ID: <20210402092517.2445595-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There are few error about open brace is reported by checkpatch.pl:
+Use kmemdup_nul() helper instead of open-coding to
+simplify the code.
 
-ERROR: that open brace { should be on the previous line
-+static struct error_fw flash_error_table[] =
-+{
-
-So fix them all.
-
-Signed-off-by: Jianqin Xie <xiejianqin@hisilicon.com>
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/scsi/pm8001/pm8001_ctl.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/target/iscsi/iscsi_target_nego.c       | 4 +---
+ drivers/target/iscsi/iscsi_target_parameters.c | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-index ffb4387..8802fe4 100644
---- a/drivers/scsi/pm8001/pm8001_ctl.c
-+++ b/drivers/scsi/pm8001/pm8001_ctl.c
-@@ -647,8 +647,7 @@ struct flash_command {
-      int     code;
- };
+diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
+index 151e2949bb75..9a4a632f631d 100644
+--- a/drivers/target/iscsi/iscsi_target_nego.c
++++ b/drivers/target/iscsi/iscsi_target_nego.c
+@@ -1082,14 +1082,12 @@ int iscsi_target_locate_portal(
+ 	login_req = (struct iscsi_login_req *) login->req;
+ 	payload_length = ntoh24(login_req->dlength);
  
--static struct flash_command flash_command_table[] =
--{
-+static struct flash_command flash_command_table[] = {
-      {"set_nvmd",    FLASH_CMD_SET_NVMD},
-      {"update",      FLASH_CMD_UPDATE},
-      {"",            FLASH_CMD_NONE} /* Last entry should be NULL. */
-@@ -659,8 +658,7 @@ struct error_fw {
-      int     err_code;
- };
+-	tmpbuf = kzalloc(payload_length + 1, GFP_KERNEL);
++	tmpbuf = kmemdup_nul(login->req_buf, payload_length, GFP_KERNEL);
+ 	if (!tmpbuf) {
+ 		pr_err("Unable to allocate memory for tmpbuf.\n");
+ 		return -1;
+ 	}
  
--static struct error_fw flash_error_table[] =
--{
-+static struct error_fw flash_error_table[] = {
-      {"Failed to open fw image file",	FAIL_OPEN_BIOS_FILE},
-      {"image header mismatch",		FLASH_UPDATE_HDR_ERR},
-      {"image offset mismatch",		FLASH_UPDATE_OFFSET_ERR},
+-	memcpy(tmpbuf, login->req_buf, payload_length);
+-	tmpbuf[payload_length] = '\0';
+ 	start = tmpbuf;
+ 	end = (start + payload_length);
+ 
+diff --git a/drivers/target/iscsi/iscsi_target_parameters.c b/drivers/target/iscsi/iscsi_target_parameters.c
+index 7a461fbb1566..6bc3aaf655fc 100644
+--- a/drivers/target/iscsi/iscsi_target_parameters.c
++++ b/drivers/target/iscsi/iscsi_target_parameters.c
+@@ -1357,14 +1357,12 @@ int iscsi_decode_text_input(
+ 	struct iscsi_param_list *param_list = conn->param_list;
+ 	char *tmpbuf, *start = NULL, *end = NULL;
+ 
+-	tmpbuf = kzalloc(length + 1, GFP_KERNEL);
++	tmpbuf = kmemdup_nul(textbuf, length, GFP_KERNEL);
+ 	if (!tmpbuf) {
+ 		pr_err("Unable to allocate %u + 1 bytes for tmpbuf.\n", length);
+ 		return -ENOMEM;
+ 	}
+ 
+-	memcpy(tmpbuf, textbuf, length);
+-	tmpbuf[length] = '\0';
+ 	start = tmpbuf;
+ 	end = (start + length);
+ 
 -- 
-2.7.4
+2.25.1
 
