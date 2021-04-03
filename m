@@ -2,55 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55516353366
-	for <lists+linux-scsi@lfdr.de>; Sat,  3 Apr 2021 12:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA31353461
+	for <lists+linux-scsi@lfdr.de>; Sat,  3 Apr 2021 16:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236514AbhDCKUE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 3 Apr 2021 06:20:04 -0400
-Received: from 93804.cloudwaysapps.com ([178.62.255.238]:19318 "EHLO
-        93804.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235256AbhDCKUA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 3 Apr 2021 06:20:00 -0400
-Received: from 127.0.0.1 (93804.cloudwaysapps.com [127.0.0.1])
-        by 93804.cloudwaysapps.com (Postfix) with SMTP id 1E47527B72;
-        Thu,  1 Apr 2021 22:32:59 +0000 (UTC)
-Received: from [169.200.169.180] by 127.0.0.1 with ESMTP id 07269287 for <linux-cluster@redhat.com>; Thu, 01 Apr 2021 17:26:04 -0600
-Message-ID: <ok46pq$gxb3$wa$6$-6$48uy42b@k1ka6cg>
-From:   "FM CONSULTING LTD" <fkinneyofd@tampabay.rr.com>
-Reply-To: "FM CONSULTING LTD" <fkinneyofd@tampabay.rr.com>
-To:     linux-cluster@redhat.com
-Subject: WE OFFER  INVESTMENT FUNDING
-Date:   Thu, 01 Apr 21 17:26:04 GMT
-X-Mailer: QUALCOMM Windows Eudora Version 5.1
+        id S236697AbhDCOv6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 3 Apr 2021 10:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236380AbhDCOv6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 3 Apr 2021 10:51:58 -0400
+Received: from smtp.gentoo.org (mail.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A048C0613E6;
+        Sat,  3 Apr 2021 07:51:55 -0700 (PDT)
+Date:   Sat, 3 Apr 2021 15:51:48 +0100
+From:   Sergei Trofimovich <slyfox@gentoo.org>
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        Don Brace - C33706 <don.brace@microchip.com>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "storagedev@microchip.com" <storagedev@microchip.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "jszczype@redhat.com" <jszczype@redhat.com>,
+        Scott Benesh <scott.benesh@microchip.com>,
+        Scott Teel <scott.teel@microchip.com>,
+        "thenzl@redhat.com" <thenzl@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] hpsa: add an assert to prevent from __packed
+ reintroduction
+Message-ID: <20210403155148.0f5c94ff@sf>
+In-Reply-To: <TU4PR8401MB1055C76F16F4D8A2DCF541F8AB7A9@TU4PR8401MB1055.NAMPRD84.PROD.OUTLOOK.COM>
+References: <yq1wntpgxxr.fsf@ca-mkp.ca.oracle.com>
+        <20210330071958.3788214-1-slyfox@gentoo.org>
+        <20210330071958.3788214-3-slyfox@gentoo.org>
+        <CAK8P3a2CmQpKynwGbtdWH+1L4=SkX2y4XKggT=8DrnsjxU4hSw@mail.gmail.com>
+        <TU4PR8401MB1055C76F16F4D8A2DCF541F8AB7A9@TU4PR8401MB1055.NAMPRD84.PROD.OUTLOOK.COM>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="F9C_16BD7D_06DC0"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Fri, 2 Apr 2021 14:40:39 +0000
+"Elliott, Robert (Servers)" <elliott@hpe.com> wrote:
 
---F9C_16BD7D_06DC0
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+> It looks like ia64 implements atomic_t as a 64-bit value and expects atomic_t
+> to be 64-bit aligned, but does nothing to ensure that.
+> 
+> For x86, atomic_t is a 32-bit value and atomic64_t is a 64-bit value, and
+> the definition of atomic64_t is overridden in a way that ensures
+> 64-bit (8 byte) alignment:
+> 
+> Generic definitions are in include/linux/types.h:
+>     typedef struct {
+>             int counter;
+>     } atomic_t;
+> 
+>     #define ATOMIC_INIT(i) { (i) }
+> 
+>     #ifdef CONFIG_64BIT
+>     typedef struct {
+>             s64 counter;
+>     } atomic64_t;
+>     #endif
+> 
+> Override in arch/x86/include/asm/atomic64_32.h:
+>     typedef struct {
+>             s64 __aligned(8) counter;
+>     } atomic64_t;
+> 
+> Perhaps ia64 needs to take over the definition of both atomic_t and atomic64_t
+> and do the same?
 
-We introduce ourselves as mandated capital providers. 
-We are interested in having your company represents us exclusively in your=
- jurisdiction for the placement of loan and investment financing.
-Being direct financiers we offer financing for businesses for expansion, w=
-orking capital, construction projects, factoring, energy, manufacturing, t=
-elecommunications and the real estate sector to name a few.
-Our pool of funds is provided by high net worth individuals, trust funds, =
-family office funds as well as corporate and institutional funds. We act a=
-s the direct custodian of these funds provided by our clients who request =
-that we operate with the utmost of privacy and discretion. As a result we =
-normally fund individual projects starting from USD3 million well into the=
- 100 to 200 million dollar range.
-Sincerely 
-Rix Anthony
-FM Consultant New Zealand
+I don't think it's needed. ia64 is a 64-bit arch with expected
+natural alignment for s64: alignof(s64)=8.
 
---F9C_16BD7D_06DC0--
+Also if my understanding is correct adding __aligned(8) would not fix
+use case of embedding locks into packed structs even on x86_64 (or i386):
 
+    $ cat a.c
+    #include <stdio.h>
+    #include <stddef.h>
+
+    typedef struct { unsigned long long __attribute__((aligned(8))) l; } lock_t;
+    struct s { char c; lock_t lock; } __attribute__((packed));
+    int main() { printf ("offsetof(struct s, lock) = %lu\nsizeof(struct s) = %lu\n", offsetof(struct s, lock), sizeof(struct s)); }
+
+    $ x86_64-pc-linux-gnu-gcc a.c -o a && ./a
+    offsetof(struct s, lock) = 1
+    sizeof(struct s) = 9
+
+    $ x86_64-pc-linux-gnu-gcc a.c -o a -m32 && ./a
+    offsetof(struct s, lock) = 1
+    sizeof(struct s) = 9
+
+Note how alignment of 'lock' stays 1 byte in both cases.
+
+8-byte alignment added for i386 in
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bbf2a330d92c5afccfd17592ba9ccd50f41cf748
+is only as a performance optimization (not a correctness fix).
+
+Larger alignment on i386 is preferred because alignof(s64)=4 on
+that target which might make atomic op span cache lines that
+leads to performance degradation.
+
+-- 
+
+  Sergei
