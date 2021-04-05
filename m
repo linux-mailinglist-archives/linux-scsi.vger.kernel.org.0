@@ -2,122 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 813BF3540F6
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Apr 2021 12:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D2E354133
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Apr 2021 12:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbhDEJuM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Apr 2021 05:50:12 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:43333 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232347AbhDEJuK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Apr 2021 05:50:10 -0400
-Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210405095002epoutp0246bd6dd80f0da8abe2e8b3c69d9b9292~y7V2f48_Y2522725227epoutp02H
-        for <linux-scsi@vger.kernel.org>; Mon,  5 Apr 2021 09:50:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210405095002epoutp0246bd6dd80f0da8abe2e8b3c69d9b9292~y7V2f48_Y2522725227epoutp02H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1617616202;
-        bh=1PMaMXD8DunwBAE3oS7QwUwYsC3fXmu8ojzljQqoA9U=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=cbYp5ACp1cfwQGsvUmlgiuPqw0c2UTf0wfTkiMDhss83vP086hPPs9P7LnBmeaOlB
-         vII+hlBjFc6aj3YVausvlXDPwkcWrGb42u28pBXl+NILQTQs1WH+WxjLOKjpyxF5bu
-         83TtPoAyhnsapahDsqPw0cpd2PQJjH4bk2jhbFCs=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
-        20210405095001epcas3p1e89f0f9432ee012c9d5de1062fa8d1b5~y7V16hUKB1490214902epcas3p1A;
-        Mon,  5 Apr 2021 09:50:01 +0000 (GMT)
-Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp3.localdomain
-        (Postfix) with ESMTP id 4FDQqs6CsCz4x9Q8; Mon,  5 Apr 2021 09:50:01 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: RE: [PATCH v7 00/11] Add Host control mode to HPB
-Reply-To: daejun7.park@samsung.com
-Sender: Daejun Park <daejun7.park@samsung.com>
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        Zang Leigang <zangleigang@hisilicon.com>,
-        Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        JinHwan Park <jh.i.park@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20210331073952.102162-1-avri.altman@wdc.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1891546521.01617616201846.JavaMail.epsvc@epcpadp3>
-Date:   Mon, 05 Apr 2021 18:29:23 +0900
-X-CMS-MailID: 20210405092923epcms2p60e202f0b795f1bc6630dc69cd5887209
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20210331074004epcas2p3e6d0b2d1bf0f43708902b2d5583069c4
-References: <20210331073952.102162-1-avri.altman@wdc.com>
-        <CGME20210331074004epcas2p3e6d0b2d1bf0f43708902b2d5583069c4@epcms2p6>
+        id S232632AbhDEKiF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Apr 2021 06:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232562AbhDEKiE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Apr 2021 06:38:04 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A885C061756
+        for <linux-scsi@vger.kernel.org>; Mon,  5 Apr 2021 03:37:57 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id l18so12059424edc.9
+        for <linux-scsi@vger.kernel.org>; Mon, 05 Apr 2021 03:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7jNLi4HEFtQqmvis9f/qM/vvgZqDD6Ky2+ciyTAkQzE=;
+        b=izW7jnNu3uljIXwJ8gxswlQ3mZ/ZBFV3tWX+PT0bGqxAv+0w1MJL54Z3PSOiJ1DVRb
+         OBi1h2rWjebedmyRYXKqqjko3TeND6maoRpHjVTZXWGW4+pxgjaCk1/YX5Kw1PRNQNcc
+         7wFEQ1Tlvauh0HFvIjm+IC/B5FHBOyVC0p4723tLOvke3pTvgnD7Wb2t9k3FOpCdbrZF
+         qZ4j1aJXXDRRnPtF1Zoh399G4OyyKDw7G+S6JVHVn9sNt62IVw6XQs7Bd3FxvOyaufrV
+         eG5kiDnQCDyXRJ327h14xHy32sBIUDFHl6c73IYk+xs+it32z+jiIxGOWG1s4OdHCl8W
+         XJgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=7jNLi4HEFtQqmvis9f/qM/vvgZqDD6Ky2+ciyTAkQzE=;
+        b=b0wr+i7Riuvs46uPxj2eHzkO5QENElHgdqCwm+hEVFxf4VFCx0Fjc+nPkGFoaUHhGC
+         h7I5X5tZKE3PBsw+HFfNAwsRxOjWrpHlYHQIDYCe89wm2IkGsu9O5PkNC6TLFJzwFBFh
+         AHTtOyVDXpl46rx8Goq5VdQsT7gCMn48aFb+OTfkQHO6cKh+uh1s2MuLvdTFb15kcDQA
+         lXUv+yqB897gP6p/kpSXhlxgmc4OmxAFz4zDbKEz9a2wL0if26Aj0HwFj/vypuprImdU
+         SfEmQMf0MA75Xg+169L6fBOu1X5ner4rKkY3rYsg+yVFRp0pwJxJgql6e58pk1ZfB61t
+         kOaA==
+X-Gm-Message-State: AOAM532osL8tFblvW5wFSp4wdrQ7DGZIMiX+7tY+IrhluGkfWVkEi9xV
+        RUrGurhzlGTuZ1IHACyA7SGb6X7fgBV6biNHf4c=
+X-Google-Smtp-Source: ABdhPJw3iwV719X7OIEfwicnBrMZGxd0LD92mUfXEwUjCF3iCUpNxI2NGN+wbzPxQwEmCL+UMLhYy6ikHZWjE1NKqOY=
+X-Received: by 2002:aa7:c5d0:: with SMTP id h16mr30637307eds.380.1617619075963;
+ Mon, 05 Apr 2021 03:37:55 -0700 (PDT)
+MIME-Version: 1.0
+Sender: rh924272@gmail.com
+Received: by 2002:a17:906:1242:0:0:0:0 with HTTP; Mon, 5 Apr 2021 03:37:55
+ -0700 (PDT)
+From:   Lila Lucas <lila.luca112@gmail.com>
+Date:   Mon, 5 Apr 2021 12:37:55 +0200
+X-Google-Sender-Auth: ZAKkmf-IcZy65OSXg4mnmS13LVs
+Message-ID: <CAEJ7tdo+sncvgm1wc-EvquM83wpNHE_c=nAOoPQ+6hekS+f2dg@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> The HPB spec defines 2 control modes - device control mode and host
-> control mode. In oppose to device control mode, in which the host obey
-> to whatever recommendation received from the device - In host control
-> mode, the host uses its own algorithms to decide which regions should
-> be activated or inactivated.
->  
-> We kept the host managed heuristic simple and concise.
->  
-> Aside from adding a by-spec functionality, host control mode entails
-> some further potential benefits: makes the hpb logic transparent and
-> readable, while allow tuning / scaling its various parameters, and
-> utilize system-wide info to optimize HPB potential.
->  
-> This series is based on Samsung's V32 device-control HPB2.0 driver
->  
-> This version was tested on Galaxy S20, and Xiaomi Mi10 pro.
-> Your meticulous review and testing is mostly welcome and appreciated.
->  
-> Thanks,
-> Avri
->  
->  
-> Avri Altman (11):
->   scsi: ufshpb: Cache HPB Control mode on init
->   scsi: ufshpb: Add host control mode support to rsp_upiu
->   scsi: ufshpb: Transform set_dirty to iterate_rgn
->   scsi: ufshpb: Add reads counter
->   scsi: ufshpb: Make eviction depends on region's reads
->   scsi: ufshpb: Region inactivation in host mode
->   scsi: ufshpb: Add hpb dev reset response
->   scsi: ufshpb: Add "Cold" regions timer
->   scsi: ufshpb: Limit the number of inflight map requests
->   scsi: ufshpb: Add support for host control mode
->   scsi: ufshpb: Make host mode parameters configurable
->  
->  Documentation/ABI/testing/sysfs-driver-ufs |  84 ++-
->  drivers/scsi/ufs/ufshcd.h                  |   2 +
->  drivers/scsi/ufs/ufshpb.c                  | 568 ++++++++++++++++++++-
->  drivers/scsi/ufs/ufshpb.h                  |  44 ++
->  4 files changed, 663 insertions(+), 35 deletions(-)
->  
+Very Urgent
 
-The patches in this series look good to me.
+May the peace of God be with you
 
-Reviewed-by: Daejun Park <daejun7.park@samsung.com>
+I am glad to know you, but God knows you better and he knows why he
+has directed me to you at this point in time so do not be surprised at
+all. My name is Mrs.Lila Lucas, a widow, i have been suffering from
+ovarian cancer disease. At this moment i am about to end the race like
+this because the illness has gotten to a very bad stage, without any
+family members and no child. I hope that you will not expose or betray
+this trust and confidence that I am about to entrust to you for the
+mutual benefit of the orphans and the less privileged ones. I have
+some funds I inherited from my late husband,the sum of ($11.000.000
+Eleven million dollars.) deposited in the Bank. Having known my
+present health status, I decided to entrust this fund to you believing
+that you will utilize it the way i am going to instruct
+herein.Therefore I need you to assist me and reclaim this money and
+use it for Charity works, for orphanages and giving justice and help
+to the poor, needy and to promote the words of God and the effort that
+the house of God will be maintained says The Lord." Jeremiah
+22:15-16.=E2=80=9C
+
+It will be my great pleasure to compensate you with 35 % percent of
+the total money for your personal use, 5 % percent for any expenses
+that may occur during the international transfer process while 60% of
+the money will go to the charity project. All I require from you is
+sincerity and the ability to complete God's task without any failure.
+It will be my pleasure to see that the bank has finally released and
+transferred the fund into your bank account therein your country even
+before I die here in the hospital, because of my present health status
+everything needs to be processed rapidly as soon as possible. Please
+kindly respond quickly. Thanks and God bless you,
+
+May God Bless you for your kind help.
+Yours sincerely sister Mrs. Lila Lucas.
