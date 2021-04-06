@@ -2,70 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02303552C2
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Apr 2021 13:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4723557C6
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Apr 2021 17:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343537AbhDFLw5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Apr 2021 07:52:57 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:16361 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbhDFLw4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Apr 2021 07:52:56 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FF5SY3BDjz93fR;
-        Tue,  6 Apr 2021 19:50:37 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 6 Apr 2021 19:52:38 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.orgc>,
-        <linuxarm@huawei.com>, Luo Jiaxing <luojiaxing@huawei.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH 6/6] scsi: hisi_sas: Print SATA device SAS address for soft reset failure
-Date:   Tue, 6 Apr 2021 19:48:31 +0800
-Message-ID: <1617709711-195853-7-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1617709711-195853-1-git-send-email-john.garry@huawei.com>
-References: <1617709711-195853-1-git-send-email-john.garry@huawei.com>
+        id S233168AbhDFP26 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Apr 2021 11:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229648AbhDFP25 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Apr 2021 11:28:57 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A335FC061756
+        for <linux-scsi@vger.kernel.org>; Tue,  6 Apr 2021 08:28:48 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id g15so10693766pfq.3
+        for <linux-scsi@vger.kernel.org>; Tue, 06 Apr 2021 08:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tF6CUcXpDbuAErZj+N46Yk25H9mtpHvG+8qfiMxKbKU=;
+        b=Bn2+6Kr/JILCfY9KCOAIzAHAOAGagzdl2B5myfm9+iNCnlqdBNKLt0Utw/vwFi2BOw
+         +Y/3JeiL3hPpByyQ6U+n158Az5HijEuoMx1kM/9D6tLX4IheCNv3ecUZuGqvqZYwZV4/
+         kOZawMX9OBQ3uj5m6tYiGG21KkIa4IKXFUuUzn+91NMLOtRW76pwvGGdqo+OiCYL8Lrb
+         VW37guDHBJBPpUYMqr9wl5IRGh4AHr7UTLAmD26OPUiYQhXAqkPkydC98zEKISO7wgnH
+         M8JBKFao74fizTutzYEHHQwbBMbGNlLglmLRkG7aANcbDOGcS8G3Q8Sz3DbfZsBl9pZy
+         enBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tF6CUcXpDbuAErZj+N46Yk25H9mtpHvG+8qfiMxKbKU=;
+        b=IAWPlKPx+FAj0IFQbIpuZlGc9EarA6T4/UsBNftRP0YmjrnfPAy4KWTO1vPF7bMs6F
+         93Sr7gxDmoVdcpk1/JcUaFtpx0B3XSfX9MZZTMYEmi6l390L9XVHxAlrxhbXJRz1Scd1
+         u/zXr8pBy2cG28or8xe5pnMo8cIVzEI8uGyxA0hOP0dcCKIqE39rjdeo5JO9uYyOH/wF
+         zA05rI4d/RQvd0bsu7JzhGqmGwWFJsvQcVBJjPRFSyedSahiB/V8tK7yGv5P0B1dsl0w
+         z6veqD3Jd3cADULKxhi6hdbFxd5Xqbw4DFg+PLOEh98dGLxBe4Bl/jJEBUaTFQOME2Ig
+         4ubw==
+X-Gm-Message-State: AOAM531TclcBiG/a7YA3c01CMmT1b+u49gqzCY7OBjFWLUQ9k3jpnBjh
+        nTtrtsykljMPvgs0QMG/hMQ86891I96oNg==
+X-Google-Smtp-Source: ABdhPJx2qHg/FttuBAn2osLaKJ1OJTMxTAM4fMtZXL0k+4IEXtlKOhbPcpdi1h48369ylF8Q/VFQAw==
+X-Received: by 2002:a63:e63:: with SMTP id 35mr27016911pgo.27.1617722927995;
+        Tue, 06 Apr 2021 08:28:47 -0700 (PDT)
+Received: from [192.168.4.41] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id h7sm19254868pfo.45.2021.04.06.08.28.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Apr 2021 08:28:47 -0700 (PDT)
+Subject: Re: start removing block bounce buffering support v3
+To:     Christoph Hellwig <hch@lst.de>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Ondrej Zary <linux@rainbow-software.org>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20210331073001.46776-1-hch@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <11664576-758d-7e8e-bf95-ff9c82cab927@kernel.dk>
+Date:   Tue, 6 Apr 2021 09:28:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210331073001.46776-1-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Luo Jiaxing <luojiaxing@huawei.com>
+On 3/31/21 1:29 AM, Christoph Hellwig wrote:
+> Hi all,
+> 
+> this series starts to clean up and remove the impact of the legacy old
+> block layer bounce buffering code.
+> 
+> First it removes support for ISA bouncing.  This was used by three SCSI
+> drivers.  One of them actually had an active user and developer 5 years
+> ago so I've converted it to use a local bounce buffer - Ondrej, can you
+> test the coversion?  The next one has been known broken for years, and
+> the third one looks like it has no users for the ISA support so they
+> are just dropped.
+> 
+> It then removes support for dealing with bounce buffering highmem pages
+> for passthrough requests as we can just use the copy instead of the map
+> path for them.  This will reduce efficiency for such setups on highmem
+> systems (e.g. usb-storage attached DVD drives), but then again that is
+> what you get for using a driver not using modern interfaces on a 32-bit
+> highmem system.  It does allow to streamline the common path pretty nicely.
 
-Add (pseudo) SAS address for ATA software reset failure log to assist
-debugging.
+Applied, thanks.
 
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 4c90d91d47f4..5a204074099c 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1341,10 +1341,12 @@ static int hisi_sas_softreset_ata_disk(struct domain_device *device)
- 			rc = hisi_sas_exec_internal_tmf_task(device, fis,
- 							     s, NULL);
- 			if (rc != TMF_RESP_FUNC_COMPLETE)
--				dev_err(dev, "ata disk de-reset failed\n");
-+				dev_err(dev, "ata disk %016llx de-reset failed\n",
-+					SAS_ADDR(device->sas_addr));
- 		}
- 	} else {
--		dev_err(dev, "ata disk reset failed\n");
-+		dev_err(dev, "ata disk %016llx reset failed\n",
-+			SAS_ADDR(device->sas_addr));
- 	}
- 
- 	if (rc == TMF_RESP_FUNC_COMPLETE)
 -- 
-2.26.2
+Jens Axboe
 
