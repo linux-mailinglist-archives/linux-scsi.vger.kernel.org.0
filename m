@@ -2,112 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD20356053
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Apr 2021 02:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B913560AA
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Apr 2021 03:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242821AbhDGAba (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Apr 2021 20:31:30 -0400
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:41032 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236581AbhDGAb3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Apr 2021 20:31:29 -0400
-X-Greylist: delayed 393 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Apr 2021 20:31:29 EDT
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4FFQBl6ndBz9vCBq
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Apr 2021 00:24:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WxsHpYgdGB9r for <linux-scsi@vger.kernel.org>;
-        Tue,  6 Apr 2021 19:24:47 -0500 (CDT)
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4FFQBl58N7z9vCBs
-        for <linux-scsi@vger.kernel.org>; Tue,  6 Apr 2021 19:24:47 -0500 (CDT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4FFQBl58N7z9vCBs
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4FFQBl58N7z9vCBs
-Received: by mail-il1-f199.google.com with SMTP id o8so1807280ilg.18
-        for <linux-scsi@vger.kernel.org>; Tue, 06 Apr 2021 17:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCJcxMq9XZ++9qNavNyMD/aAoy0l305S7aiP1i3rmqg=;
-        b=mb2tJAXU29fdFTkxo7nqslpfvc0HvmFoXGjkGRtJnPe1+AIgtWfzE9payVst0jmkgX
-         O+0zJKAN0XUgyUbXSGZMX782GZNrXRenDyhV172TH0C1tX5oiytfgwnx7AaDxzgg0SSr
-         Ice1JG1vM0e6U46szVk6XUt8fPdETgeCCF8DjT21SccvBO7ADxrGhDu4ND+EWAz30k0o
-         r8G6kh5cMHVgAac+6/kLxSO+gLSvNoivr6/YaIZ+qNyfPawFuCv1rOPnSwTZlY3PWYUn
-         z5LGV+ukBHuQ3U4t4pLbKJj+qczPPnW7zE8xJOtbCV91NxVjJvxQb4RxGReDAMfiHpGp
-         H5zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCJcxMq9XZ++9qNavNyMD/aAoy0l305S7aiP1i3rmqg=;
-        b=K8jIxWIw932tvK4sco2Cy3DBDGLy6BUShQc/XLM5dCkCBNXFkmuncdqKkA70flRgct
-         OsVjUdER7nzXRFJ1CQFIlNzd3cterk351sC2pbXlNoNzifpkdel2GIoPYvl9tI8fs8p4
-         eic3EP0ebIxl4FtJ99aSs2/K5qgiVeEY49pORt3J5xrOhL8ldAXf7svOCIpLm6ZkmxBd
-         1FsTzZKZ6he8nBCT2Hsb2tYGiQE6z08RazcBCc9VyD3J/nnH61O9Wc9mBY16Ur98KOjy
-         fk0kZGJYxvtxbn3wEfejQEZDCqrQqz9YJcOZ4tiqb9BAgpj2iH54KmmEczqekMZagJBa
-         ux6A==
-X-Gm-Message-State: AOAM533wsBI+/nHVz+H2N7ZEAReDUqhv3MWE+IFPpf/S6ZnQ+yssih1Q
-        qXPMDTKU3WN//OJY5tj4nHGdbZdrUdoBmTQaKeFO14D+2AgQoMOK9vNIy2CriX83UjyKlgainvV
-        Kw/ouzf0wxSlIu8XscVUx/o5QFw==
-X-Received: by 2002:a05:6e02:15c7:: with SMTP id q7mr693313ilu.228.1617755087374;
-        Tue, 06 Apr 2021 17:24:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxGRsolhynPcwdmdikCWxWk9mcbSGu+Qg83CUnO520JGA9T6/ph1a5RkcqsyebjW9+7sR0qcw==
-X-Received: by 2002:a05:6e02:15c7:: with SMTP id q7mr693303ilu.228.1617755087216;
-        Tue, 06 Apr 2021 17:24:47 -0700 (PDT)
-Received: from syssec1.cs.umn.edu ([2607:ea00:101:3c74:6ecd:6512:5d03:eeb6])
-        by smtp.googlemail.com with ESMTPSA id r7sm9530767ilj.72.2021.04.06.17.24.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 17:24:46 -0700 (PDT)
-From:   Aditya Pakki <pakki001@umn.edu>
-To:     pakki001@umn.edu
-Cc:     Subbu Seetharaman <subbu.seetharaman@broadcom.com>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>,
-        Jitendra Bhivare <jitendra.bhivare@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: be2iscsi: Reset the address passed in beiscsi_iface_create_default
-Date:   Tue,  6 Apr 2021 19:24:45 -0500
-Message-Id: <20210407002445.2209330-1-pakki001@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        id S1347677AbhDGBY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Apr 2021 21:24:57 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:15141 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbhDGBYx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Apr 2021 21:24:53 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FFRSj1DtGzpVNB;
+        Wed,  7 Apr 2021 09:21:57 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.498.0; Wed, 7 Apr 2021
+ 09:24:32 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Wu Bo <wubo40@huawei.com>,
+        <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
+Subject: [PATCH 0/2] Fix use-after-free in iscsi_sw_tcp_host_get_param()
+Date:   Wed, 7 Apr 2021 09:24:48 +0800
+Message-ID: <20210407012450.97754-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-if_info is a local variable that is passed to beiscsi_if_get_info. In
-case of failure, the variable is free'd but not reset to NULL. The patch
-avoids security issue by passing NULL to if_info.
+Following stack is reported by KASAN:
 
-Signed-off-by: Aditya Pakki <pakki001@umn.edu>
----
- drivers/scsi/be2iscsi/be_iscsi.c | 2 ++
- 1 file changed, 2 insertions(+)
+[29844.848044] sd 2:0:0:1: [sdj] Synchronizing SCSI cache
+[29844.923745] scsi 2:0:0:1: alua: Detached
+[29844.927840] ==================================================================
+[29844.927861] BUG: KASAN: use-after-free in iscsi_sw_tcp_host_get_param+0xf4/0x218 [iscsi_tcp]
+[29844.927864] Read of size 8 at addr ffff80002c0b8f68 by task iscsiadm/523945
+[29844.927871] CPU: 1 PID: 523945 Comm: iscsiadm Kdump: loaded Not tainted 4.19.90.kasan.aarch64
+[29844.927873] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+[29844.927875] Call trace:
+[29844.927884]  dump_backtrace+0x0/0x270
+[29844.927886]  show_stack+0x24/0x30
+[29844.927895]  dump_stack+0xc4/0x120
+[29844.927902]  print_address_description+0x68/0x278
+[29844.927904]  kasan_report+0x20c/0x338
+[29844.927906]  __asan_load8+0x88/0xb0
+[29844.927910]  iscsi_sw_tcp_host_get_param+0xf4/0x218 [iscsi_tcp]
+[29844.927932]  show_host_param_ISCSI_HOST_PARAM_IPADDRESS+0x84/0xa0 [scsi_transport_iscsi]
+[29844.927938]  dev_attr_show+0x48/0x90
+[29844.927943]  sysfs_kf_seq_show+0x100/0x1e0
+[29844.927946]  kernfs_seq_show+0x88/0xa0
+[29844.927949]  seq_read+0x164/0x748
+[29844.927951]  kernfs_fop_read+0x204/0x308
+[29844.927956]  __vfs_read+0xd4/0x2d8
+[29844.927958]  vfs_read+0xa8/0x198
+[29844.927960]  ksys_read+0xd0/0x180
+[29844.927962]  __arm64_sys_read+0x4c/0x60
+[29844.927966]  el0_svc_common+0xa8/0x230
+[29844.927969]  el0_svc_handler+0xdc/0x138
+[29844.927971]  el0_svc+0x10/0x218
 
-diff --git a/drivers/scsi/be2iscsi/be_iscsi.c b/drivers/scsi/be2iscsi/be_iscsi.c
-index a13c203ef7a9..1ff9d2a2a876 100644
---- a/drivers/scsi/be2iscsi/be_iscsi.c
-+++ b/drivers/scsi/be2iscsi/be_iscsi.c
-@@ -274,11 +274,13 @@ void beiscsi_iface_create_default(struct beiscsi_hba *phba)
- 	if (!beiscsi_if_get_info(phba, BEISCSI_IP_TYPE_V4, &if_info)) {
- 		beiscsi_iface_create_ipv4(phba);
- 		kfree(if_info);
-+		if_info = NULL;
- 	}
- 
- 	if (!beiscsi_if_get_info(phba, BEISCSI_IP_TYPE_V6, &if_info)) {
- 		beiscsi_iface_create_ipv6(phba);
- 		kfree(if_info);
-+		if_info = NULL;
- 	}
- }
- 
+[29844.928063] Freed by task 53358:
+[29844.928066]  __kasan_slab_free+0x120/0x228
+[29844.928068]  kasan_slab_free+0x10/0x18
+[29844.928069]  kfree+0x98/0x278
+[29844.928083]  iscsi_session_release+0x84/0xa0 [scsi_transport_iscsi]
+[29844.928085]  device_release+0x4c/0x100
+[29844.928089]  kobject_put+0xc4/0x288
+[29844.928091]  put_device+0x24/0x30
+[29844.928105]  iscsi_free_session+0x60/0x70 [scsi_transport_iscsi]
+[29844.928112]  iscsi_session_teardown+0x134/0x158 [libiscsi]
+[29844.928116]  iscsi_sw_tcp_session_destroy+0x7c/0xd8 [iscsi_tcp]
+[29844.928129]  iscsi_if_rx+0x1538/0x1f00 [scsi_transport_iscsi]
+[29844.928131]  netlink_unicast+0x338/0x3c8
+[29844.928133]  netlink_sendmsg+0x51c/0x588
+[29844.928135]  sock_sendmsg+0x74/0x98
+[29844.928137]  ___sys_sendmsg+0x434/0x470
+[29844.928139]  __sys_sendmsg+0xd4/0x148
+[29844.928141]  __arm64_sys_sendmsg+0x50/0x60
+[29844.928143]  el0_svc_common+0xa8/0x230
+[29844.928146]  el0_svc_handler+0xdc/0x138
+[29844.928147]  el0_svc+0x10/0x218
+[29844.928148]
+[29844.928150] The buggy address belongs to the object at ffff80002c0b8880#012 which belongs to the cache kmalloc-2048 of size 2048
+[29844.928153] The buggy address is located 1768 bytes inside of#012 2048-byte region [ffff80002c0b8880, ffff80002c0b9080)
+[29844.928154] The buggy address belongs to the page:
+[29844.928158] page:ffff7e0000b02e00 count:1 mapcount:0 mapping:ffff8000d8402600 index:0x0 compound_mapcount: 0
+[29844.928902] flags: 0x7fffe0000008100(slab|head)
+[29844.929215] raw: 07fffe0000008100 ffff7e0003535e08 ffff7e00024a9408 ffff8000d8402600
+[29844.929217] raw: 0000000000000000 00000000000f000f 00000001ffffffff 0000000000000000
+[29844.929219] page dumped because: kasan: bad access detected
+[29844.929219]
+[29844.929221] Memory state around the buggy address:
+[29844.929223]  ffff80002c0b8e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[29844.929225]  ffff80002c0b8e80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[29844.929227] >ffff80002c0b8f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[29844.929228]
+^
+[29844.929230]  ffff80002c0b8f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[29844.929232]  ffff80002c0b9000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[29844.929232]
+==================================================================
+[29844.929234] Disabling lock debugging due to kernel taint
+[29844.969534] scsi host2: iSCSI Initiator over TCP/IP
+
+Fix this issue by freeing iscsi session after host already removed from sysfs.
+
+Wenchao Hao (2):
+  scsi: libiscsi: Split iscsi_session_teardown() to destroy and free
+  scsi: iscsi_tcp: Fix use-after-free in iscsi_sw_tcp_host_get_param()
+
+ drivers/scsi/iscsi_tcp.c | 27 ++++++++++++++++++---------
+ drivers/scsi/libiscsi.c  | 19 ++++++++++++-------
+ include/scsi/libiscsi.h  |  1 +
+ 3 files changed, 31 insertions(+), 16 deletions(-)
+
 -- 
-2.25.1
+2.27.0
 
