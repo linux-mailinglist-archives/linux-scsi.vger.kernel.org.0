@@ -2,82 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A646357BC4
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Apr 2021 07:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539B8357C6A
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Apr 2021 08:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbhDHFVb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 8 Apr 2021 01:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhDHFVa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Apr 2021 01:21:30 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E1CC061760
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Apr 2021 22:21:20 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u21so809524ejo.13
-        for <linux-scsi@vger.kernel.org>; Wed, 07 Apr 2021 22:21:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nGWRQqNs4FsH45AetKkDEjtm5WFfnPk7zZ0gqFXvhh8=;
-        b=Uw0wyDlDkX20XvZ04T5dHZqo5VGShg0gXBPk8VWktFBqbuh8MEOldhu336XT0Jj8qe
-         erW3R8ZVjiVRhajwAiA8SXe+QHfkmsEskKtMV5Ic9ct0qKcfMb0IeGPhFJYoA9qG4PNE
-         sFn+c5OONjJuFXY4MEBgDV47slIgQAmqs+Zm/rOlq9/jl4eVtNaCBs5pdB44UiyFa/ur
-         48mdaV9f84mfoqmEh37U7uo9aLuBzCzGcoDWMs1H2rYV7dVFf9A7lD4Y1vMrSAc4fzfR
-         SOdpisPlDqANC9kxZPy69cDbpdlDm6FPgMVva5v2Rv4QpKGq8YzBBKotytK4HauPnjDf
-         bKtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nGWRQqNs4FsH45AetKkDEjtm5WFfnPk7zZ0gqFXvhh8=;
-        b=CH3pyw8e7cJ+33lx6e9QVltJW5xEd958AgnEsQin9ieAsLoGlm+2KefzEqD/aE85RT
-         /QckWJddrJwKfgVyYMqWFeVSqKcn6Y2vBAKFacYvc6+cGBbPD/jM58ZZIsaLHGQdQnII
-         FjpKwSA5Ok7LqjaLrmWWHMuIsUVykGuBXn3yCUNuz3LGabKcCDS7qyVd72C+anwCBfOC
-         HkySSjCAe1lmNMqUhBbRqCU7ftKdS9LYdnkik/wyWr4NdviFIFskSTNmMccTd2xa3UiK
-         KHczT6UnxzybMeq3rED+nUglvpQUHJvvUpNFrTh/OcivXDvK38Zb9lKthu0apDzucRxi
-         f8xw==
-X-Gm-Message-State: AOAM530e/zWOEHWGUVvMrGSruNG5ygAvrpUe2aikkH63Glqtq3sGTtrh
-        kBNEl3bqiv8681KX/WMGb5tQY8uaP34ZUuFd7zTqTw==
-X-Google-Smtp-Source: ABdhPJwuJvePArsi0X3BVbiNySrXNJpCSX0975uBH+S9j2G7lCMCRLzU27dIjhNhw3Kxzuk9GAjVnHp7xGCcEBJ+Kfo=
-X-Received: by 2002:a17:906:8242:: with SMTP id f2mr7851357ejx.478.1617859277448;
- Wed, 07 Apr 2021 22:21:17 -0700 (PDT)
+        id S230426AbhDHGTk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 8 Apr 2021 02:19:40 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:16035 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230494AbhDHGTa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Apr 2021 02:19:30 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FG9y701fQzPp0P;
+        Thu,  8 Apr 2021 14:16:31 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.179.202) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 8 Apr 2021 14:19:07 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "MPT-FusionLinux . pdl" <MPT-FusionLinux.pdl@broadcom.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 0/3] scsi: mptfusion: Clear the warnings indicating that the variable is not used
+Date:   Thu, 8 Apr 2021 14:18:48 +0800
+Message-ID: <20210408061851.3089-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-References: <20210407135840.494747-1-colin.king@canonical.com> <yq1blaq9fyx.fsf@ca-mkp.ca.oracle.com>
-In-Reply-To: <yq1blaq9fyx.fsf@ca-mkp.ca.oracle.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Thu, 8 Apr 2021 07:21:06 +0200
-Message-ID: <CAMGffEmFxJduY71sGzXNMoQzq0PZT1dtELfviZf9CZdkRj=nNQ@mail.gmail.com>
-Subject: Re: [PATCH][next] scsi: pm80xx: Fix potential infinite loop
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Colin King <colin.king@canonical.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Viswas G <Viswas.G@microchip.com>,
-        Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.202]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Apr 7, 2021 at 7:18 PM Martin K. Petersen
-<martin.petersen@oracle.com> wrote:
->
->
-> Hi Colin!
->
-> > The for-loop iterates with a u8 loop counter i and compares this with
-> > the loop upper limit of pm8001_ha->max_q_num which is a u32 type.
-> > There is a potential infinite loop if pm8001_ha->max_q_num is larger
-> > than the u8 loop counter. Fix this by making the loop counter the same
-> > type as pm8001_ha->max_q_num.
->
-> No particular objections to the patch for future-proofing. However, as
-> far as I can tell max_q_num is capped at 64 (PM8001_MAX_MSIX_VEC).
-Exactly.
->
-> --
-> Martin K. Petersen      Oracle Linux Engineering
+Fix below warnings:
+drivers/message/fusion/mptctl.c: In function ‘mptctl_do_taskmgmt’:
+drivers/message/fusion/mptctl.c:324:17: warning: variable ‘time_count’ set but not used [-Wunused-but-set-variable]
+  324 |  unsigned long  time_count;
+      |                 ^~~~~~~~~~
+drivers/message/fusion/mptctl.c: In function ‘mptctl_gettargetinfo’:
+drivers/message/fusion/mptctl.c:1372:7: warning: variable ‘port’ set but not used [-Wunused-but-set-variable]
+ 1372 |  u8   port;
+      |       ^~~~
+drivers/message/fusion/mptctl.c: In function ‘mptctl_hp_hostinfo’:
+drivers/message/fusion/mptctl.c:2337:8: warning: variable ‘retval’ set but not used [-Wunused-but-set-variable]
+ 2337 |  int   retval;
+      |        ^~~~~~
+
+
+Zhen Lei (3):
+  scsi: mptfusion: Remove unused local variable 'time_count'
+  scsi: mptfusion: Remove unused local variable 'port'
+  scsi: mptfusion: Fix error return code of mptctl_hp_hostinfo()
+
+ drivers/message/fusion/mptctl.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
+
+-- 
+2.21.1
+
+
