@@ -2,103 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E553579CE
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Apr 2021 03:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966D9357AE4
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Apr 2021 05:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbhDHBrG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Apr 2021 21:47:06 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:45303 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231321AbhDHBqs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 7 Apr 2021 21:46:48 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 9104B20418F;
-        Thu,  8 Apr 2021 03:46:31 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GQ4JANH4vdqJ; Thu,  8 Apr 2021 03:46:30 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-45-58-219-4.dyn.295.ca [45.58.219.4])
-        by smtp.infotech.no (Postfix) with ESMTPA id ABF5320423B;
-        Thu,  8 Apr 2021 03:46:25 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: [PATCH v17 45/45] sg: bump version to 4.0.12
-Date:   Wed,  7 Apr 2021 21:45:31 -0400
-Message-Id: <20210408014531.248890-46-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210408014531.248890-1-dgilbert@interlog.com>
-References: <20210408014531.248890-1-dgilbert@interlog.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229644AbhDHDsP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Apr 2021 23:48:15 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:34706 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229469AbhDHDsO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Apr 2021 23:48:14 -0400
+Received: from epcas3p1.samsung.com (unknown [182.195.41.19])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210408034802epoutp028546ff4b915c8db8bcc0de33d117e8f7~zxVo7kXrK0078000780epoutp02T
+        for <linux-scsi@vger.kernel.org>; Thu,  8 Apr 2021 03:48:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210408034802epoutp028546ff4b915c8db8bcc0de33d117e8f7~zxVo7kXrK0078000780epoutp02T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1617853682;
+        bh=9fGWhB+v9isEydrW5hTeP0L3q8QLyyS/uf5D/3S4w2s=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=WYa/F7WOwIriGIIZWQa7PLoAQSWZw/h/iNm2R0xyu3wInkNqbkvQ3UlBXzlI/BVep
+         bdBQorHvknQTpYrbYJHrtaSG3n7CzW7sQNSV+eSrZNCpY9m7IhYJXRx0GPv0e5oI4A
+         O3K6QnDDRwE8GJVdTAyFZIcqrLHoHRLTco2WCJv4=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas3p4.samsung.com (KnoxPortal) with ESMTP id
+        20210408034801epcas3p4bb2b24f6fb915bd6a0353feb079e95ac~zxVoMnzSu0757807578epcas3p4h;
+        Thu,  8 Apr 2021 03:48:01 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp4.localdomain
+        (Postfix) with ESMTP id 4FG6fn4jfMz4x9Pq; Thu,  8 Apr 2021 03:48:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: RE: [PATCH v16 1/2] scsi: ufs: Enable power management for wlun
+Reply-To: daejun7.park@samsung.com
+Sender: Daejun Park <daejun7.park@samsung.com>
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     "cang@codeaurora.org" <cang@codeaurora.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+CC:     Asutosh Das <asutoshd@codeaurora.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bean Huo <beanhuo@micron.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yue Hu <huyue2@yulong.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Satya Tangirala <satyat@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <7be92c0bc3e5f07d5e17bd3b78c01496686ef31e.1617818557.git.asutoshd@codeaurora.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <2038148563.21617853681644.JavaMail.epsvc@epcpadp4>
+Date:   Thu, 08 Apr 2021 12:43:52 +0900
+X-CMS-MailID: 20210408034352epcms2p4187835e84c3282cb60e17258007ba145
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20210407180927epcas2p480eb9ff12823e1740e4188497c3a11ca
+References: <7be92c0bc3e5f07d5e17bd3b78c01496686ef31e.1617818557.git.asutoshd@codeaurora.org>
+        <cover.1617818557.git.asutoshd@codeaurora.org>
+        <CGME20210407180927epcas2p480eb9ff12823e1740e4188497c3a11ca@epcms2p4>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that the sg version 4 interface is supported:
-  - with ioctl(SG_IO) for synchronous/blocking use
-  - with ioctl(SG_IOSUBMIT) and ioctl(SG_IORECEIVE) for
-    async/non-blocking use
-Plus new ioctl(SG_IOSUBMIT_V3) and ioctl(SG_IORECEIVE_V3)
-potentially replace write() and read() for the sg
-version 3 interface. Bump major driver version number
-from 3 to 4.
+Hi Asutosh Das,
 
-The main new feature is the removal of the fixed 16 element
-array of requests per file descriptor. It is replaced by
-a xarray (eXtensible array) in their parent which is a
-sg_fd object (i.e. a file descriptor). The sg_request
-objects are not freed until the owning file descriptor is
-closed; instead these objects are re-used when multiple
-commands are sent to the same file descriptor.
+>+static inline bool is_rpmb_wlun(struct scsi_device *sdev)
+>+{
+>+        return (sdev->lun == ufshcd_upiu_wlun_to_scsi_wlun(UFS_UPIU_RPMB_WLUN));
+>+}
+>+
+>+static inline bool is_device_wlun(struct scsi_device *sdev)
+>+{
+>+        return (sdev->lun ==
+>+                ufshcd_upiu_wlun_to_scsi_wlun(UFS_UPIU_UFS_DEVICE_WLUN));
+>+}
+>+
+> static void ufshcd_init_lrb(struct ufs_hba *hba, struct ufshcd_lrb *lrb, int i)
+> {
+>         struct utp_transfer_cmd_desc *cmd_descp = hba->ucdl_base_addr;
+>@@ -4099,11 +4113,11 @@ void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
+>         spin_unlock_irqrestore(hba->host->host_lock, flags);
+> 
+>         if (update && !pm_runtime_suspended(hba->dev)) {
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/sg.c      | 11 ++++++-----
- include/uapi/scsi/sg.h |  4 ++--
- 2 files changed, 8 insertions(+), 7 deletions(-)
+Could it be changed hba->sdev_ufs_device->sdev_gendev instead of hba->dev?
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 19aafd8e23f1..f5ab61d19f01 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -7,13 +7,14 @@
-  *
-  * Original driver (sg.c):
-  *        Copyright (C) 1992 Lawrence Foard
-- * Version 2 and 3 extensions to driver:
-- *        Copyright (C) 1998 - 2019 Douglas Gilbert
-+ * Version 2, 3 and 4 extensions to driver:
-+ *        Copyright (C) 1998 - 2021 Douglas Gilbert
-+ *
-  */
- 
--static int sg_version_num = 30901;  /* [x]xyyzz where [x] empty when x=0 */
--#define SG_VERSION_STR "3.9.01"		/* [x]x.[y]y.zz */
--static char *sg_version_date = "20190606";
-+static int sg_version_num = 40012;  /* [x]xyyzz where [x] empty when x=0 */
-+#define SG_VERSION_STR "4.0.12"		/* [x]x.[y]y.zz */
-+static char *sg_version_date = "20210402";
- 
- #include <linux/module.h>
- 
-diff --git a/include/uapi/scsi/sg.h b/include/uapi/scsi/sg.h
-index 11b58b279241..33109f3d5ed3 100644
---- a/include/uapi/scsi/sg.h
-+++ b/include/uapi/scsi/sg.h
-@@ -12,9 +12,9 @@
-  *   Copyright (C) 1992 Lawrence Foard
-  *
-  * Later extensions (versions 2, 3 and 4) to driver:
-- *   Copyright (C) 1998 - 2018 Douglas Gilbert
-+ *   Copyright (C) 1998 - 2021 Douglas Gilbert
-  *
-- * Version 4.0.11 (20190502)
-+ * Version 4.0.12 (20210111)
-  *  This version is for Linux 4 and 5 series kernels.
-  *
-  * Documentation
--- 
-2.25.1
-
+Thanks,
+Daejun
