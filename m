@@ -2,76 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D82535AB72
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BAD35AB82
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbhDJGsO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Apr 2021 02:48:14 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:16882 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbhDJGsJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 02:48:09 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHQWJ5wYMzkhsK;
-        Sat, 10 Apr 2021 14:46:04 +0800 (CST)
-Received: from huawei.com (10.69.192.56) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Sat, 10 Apr 2021
- 14:47:45 +0800
-From:   Luo Jiaxing <luojiaxing@huawei.com>
-To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
-        <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <megaraidlinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <luojiaxing@huawei.com>
-Subject: [PATCH v1 8/8] scsi: megaraid: clean up for static variable initialise to 0
-Date:   Sat, 10 Apr 2021 14:48:07 +0800
-Message-ID: <1618037287-460-9-git-send-email-luojiaxing@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
-References: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
+        id S234192AbhDJGwt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Apr 2021 02:52:49 -0400
+Received: from verein.lst.de ([213.95.11.211]:42647 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231933AbhDJGwt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 10 Apr 2021 02:52:49 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 77DB367373; Sat, 10 Apr 2021 08:52:31 +0200 (CEST)
+Date:   Sat, 10 Apr 2021 08:52:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Steffen Maier <maier@linux.ibm.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Ondrej Zary <linux@rainbow-software.org>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Subject: Re: [PATCH 5/8] scsi: remove the unchecked_isa_dma flag
+Message-ID: <20210410065231.GA16173@lst.de>
+References: <20210331073001.46776-1-hch@lst.de> <20210331073001.46776-6-hch@lst.de> <2fa7fad0-2689-24c9-d356-50f98ca3535d@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2fa7fad0-2689-24c9-d356-50f98ca3535d@linux.ibm.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Following error is reported by checkpatch.pl:
+On Fri, Apr 09, 2021 at 05:46:09PM +0200, Steffen Maier wrote:
+> Is it OK to remove a long standing sysfs attribute?
+> Was there any deprecation phase?
+>
+> I just noticed it in our CI reporting fails due to this change since at 
+> least linux-next 20210409. Suppose it came via 
+> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-5.13/block&id=aaff5ebaa2694f283b7d07fdd55fb287ffc4f1e9
+>
+> Wanted to ask before I adapt the test cases.
 
-ERROR: do not initialise statics to 0
-+static int megaraid_expose_unconf_disks = 0;
+What does your CI do with it?
 
-So fix them.
-
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
----
- drivers/scsi/megaraid/megaraid_mbox.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
-index 486c01d..0f8fcbf 100644
---- a/drivers/scsi/megaraid/megaraid_mbox.c
-+++ b/drivers/scsi/megaraid/megaraid_mbox.c
-@@ -146,7 +146,7 @@ MODULE_VERSION(MEGARAID_VERSION);
- /*
-  * Set to enable driver to expose unconfigured disk to kernel
-  */
--static int megaraid_expose_unconf_disks = 0;
-+static int megaraid_expose_unconf_disks;
- module_param_named(unconf_disks, megaraid_expose_unconf_disks, int, 0);
- MODULE_PARM_DESC(unconf_disks,
- 	"Set to expose unconfigured disks to kernel (default=0)");
-@@ -181,7 +181,7 @@ MODULE_PARM_DESC(cmd_per_lun,
-  * This would result in non-disk devices being skipped during driver load
-  * time. These can be later added though, using /proc/scsi/scsi
-  */
--static unsigned int megaraid_fast_load = 0;
-+static unsigned int megaraid_fast_load;
- module_param_named(fast_load, megaraid_fast_load, int, 0);
- MODULE_PARM_DESC(fast_load,
- 	"Faster loading of the driver, skips physical devices! (default=0)");
--- 
-2.7.4
-
+It would be kinda of sad to carry around this baggage, but if real
+userspace is broken by the chance we'll have to do it.  I'm just not
+entirely sure testcases qualify as real userspace yet.
