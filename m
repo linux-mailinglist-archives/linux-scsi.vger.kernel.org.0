@@ -2,544 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F051735AF64
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 19:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05ED35AF9F
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 20:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234944AbhDJRs6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Apr 2021 13:48:58 -0400
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:52388 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234392AbhDJRs5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 10 Apr 2021 13:48:57 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9F946128070F;
-        Sat, 10 Apr 2021 10:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1618076922;
-        bh=aX7QDgE/sTlDUQzq9DNL4K3OTw1Z2TNvV9ZDGCdVuXc=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=JyHHtge9a1Se840x9FKU7dKBFekzSQ2kobQLjxXLGsbCZy0NSlmrVUoRv5eJBUnVE
-         xmYKWOnNXf/74kGrkZj56Fvf8MyeLmCVhKrvslptb3OXGLkREc8y1XbWMZJJoPFJ5b
-         Pws5mV5qtLx8M1lqngiz+OjpF81seGrjZDg2tRqU=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id v5Vv9TaMvUSQ; Sat, 10 Apr 2021 10:48:42 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 40AD2128070B;
-        Sat, 10 Apr 2021 10:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1618076922;
-        bh=aX7QDgE/sTlDUQzq9DNL4K3OTw1Z2TNvV9ZDGCdVuXc=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=JyHHtge9a1Se840x9FKU7dKBFekzSQ2kobQLjxXLGsbCZy0NSlmrVUoRv5eJBUnVE
-         xmYKWOnNXf/74kGrkZj56Fvf8MyeLmCVhKrvslptb3OXGLkREc8y1XbWMZJJoPFJ5b
-         Pws5mV5qtLx8M1lqngiz+OjpF81seGrjZDg2tRqU=
-Message-ID: <dd2a3e71111fc7d1e35fa1a22de3e79adf09e26f.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.12-rc6
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sat, 10 Apr 2021 10:48:41 -0700
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S234874AbhDJSk5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Apr 2021 14:40:57 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:41850 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234831AbhDJSkz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 14:40:55 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13AIY0V0007846;
+        Sat, 10 Apr 2021 18:40:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2020-01-29;
+ bh=vYo4C3opuKKE5Qt3NDdqY+DbOHJfWIVjc2DsL9eT1PE=;
+ b=gu/RvQ204itY7cU7AWPWJ57bHBhrubNsDSMVAO9xtuUZ8rEjlUCYGFGQJZRn28t1a3gI
+ V24hEmgmtzIr5a2DFJrfeS2ZdVF1qzvMXZ+cynomnwN29grBdl8dWDUFBD9vDOstPvW9
+ RN1REkGauk5RYytP1uvNwX7VL5stFCBXpPYrt1MfzyQOYmBjFAA2KrmM5xsIddLdeHzl
+ LHU9ZpcxFDAS97w1dboCDGMcbz6Ju8eaqi9Wt//NHHx5+ug6Ejjh4be//C/g7euXhS2s
+ s4acQ3IzpChV0WW2q5elutzyk7AiGbEz4o2p48MQPBlU6Uw2rnRmLJogEPWiTVWX5to/ kQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 37u4nn8r83-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 10 Apr 2021 18:40:28 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13AIThCQ176756;
+        Sat, 10 Apr 2021 18:40:27 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2103.outbound.protection.outlook.com [104.47.70.103])
+        by aserp3020.oracle.com with ESMTP id 37u3u1q4cu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 10 Apr 2021 18:40:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lkD9NXyfeh+48GKFsjD3Z9CdyCTtfvPTcLHAQaqBbKHSmwSaTcmI5uF1JjzERcE/kOnKSFTBLbzinVI10U6ZUqtIXgvM1l5AcVQ+AgvnU1gJaRhU6kcqYHNDfS0cHJ4Wt2NfGFnNTdaeLsSf09gFXR9YwvXoh++4jxSlJCIyVp3DctgDCzSQeF5xmDLvWt2KPVX0c2eeMvcvWD7cmDODlQza11wT7KYm6Z9SHg+ApRxp7ujTUM8rxQzeC23m0J/6/wa27UcbNWAlCJ2K993IlaNezYqMyDHCL+zbmSbMtw0fqff2IVNYdVonBIK7dXA6mW8lrLjyESVDvqmbyrgUiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vYo4C3opuKKE5Qt3NDdqY+DbOHJfWIVjc2DsL9eT1PE=;
+ b=Xwo0rsuCM/zatmUbMIj0JUQLqhDrCXG1RdEw1qLqdIAFOY0jT5q9LBGR8yoP2RakDo6JZUpnr4SEL6UIWklpgW5Eq/C/K5Ejl4vhmbvgITBS0hzjkW4hcIgbSPBkCnKf8tc1vwu7dSlXUFRrvGYA6k3pqDmeWjBGhpP/gzdCyJsU+rnGYLdZjFLh5r6ifwSSW6SFjbKi11yHHoUAIxbn2sO6JZbdePj0YsjyF9VVm9U7DlkXQ5D3vV/upZhVU2PqdC2K3avVfuRte8FwVHXVjUBGZAsEdF3QUKgR58cHIK5ooOfIqFf11BRmKQTODm4Y9XJVnmUQvwyQguNxckUePQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vYo4C3opuKKE5Qt3NDdqY+DbOHJfWIVjc2DsL9eT1PE=;
+ b=fkTGVQQQNyIxJ9zmF4zVL9yunoJ2y6OJirB6+tkFVd8/1clWAeBmG9J8/zcGBJWK73XQH+SykBNSFN9R9jDYgZ5ouEB9dvGDc+RrqFlsUYc0IKVX2BO0G4BjwefZdVRKiFil1gmbiXfTA7IiWDVZ6Pl0qy+puM/iuqRgMc/UEtc=
+Authentication-Results: suse.com; dkim=none (message not signed)
+ header.d=none;suse.com; dmarc=none action=none header.from=oracle.com;
+Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
+ by BY5PR10MB4324.namprd10.prod.outlook.com (2603:10b6:a03:205::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.18; Sat, 10 Apr
+ 2021 18:40:25 +0000
+Received: from BYAPR10MB3573.namprd10.prod.outlook.com
+ ([fe80::50bb:7b66:35ee:4a4]) by BYAPR10MB3573.namprd10.prod.outlook.com
+ ([fe80::50bb:7b66:35ee:4a4%7]) with mapi id 15.20.4020.018; Sat, 10 Apr 2021
+ 18:40:25 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     lduncan@suse.com, martin.petersen@oracle.com,
+        mrangankar@marvell.com, svernekar@marvell.com,
+        linux-scsi@vger.kernel.org, jejb@linux.ibm.com
+Subject: [RFC PATCH 0/13]: qedi tmf fixes
+Date:   Sat, 10 Apr 2021 13:40:03 -0500
+Message-Id: <20210410184016.21603-1-michael.christie@oracle.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [73.88.28.6]
+X-ClientProxiedBy: DM5PR15CA0036.namprd15.prod.outlook.com
+ (2603:10b6:4:4b::22) To BYAPR10MB3573.namprd10.prod.outlook.com
+ (2603:10b6:a03:11e::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (73.88.28.6) by DM5PR15CA0036.namprd15.prod.outlook.com (2603:10b6:4:4b::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend Transport; Sat, 10 Apr 2021 18:40:24 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c580e896-3de1-4c3f-1a29-08d8fc501ad4
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4324:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BY5PR10MB43244E81D9D08BBE8BB78A00F1729@BY5PR10MB4324.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5Ne3rV/Y2ckmi2BoZp10Pyoa89R9ZFP4vqVXpp1zBENNmIzQMBt+LUQ+yb1bBLQC49BCnkVAxb4xDMvLVvZ6sNtwIY0sYZrNnEuE3monqaw0HjcKtZmnNOj+uXdKp6EMvyyf5fGAXvYN5yz8bvWjPKa3371MMGLdcdc6HpxJDjb+HqzGnePOUTFxkQ0EILlce9pUVympu5k623cGsWtANwP/hB9iv7pCxhF7fzpJD8moy15J8sA7O34/+uuE+ydB9S2V9/rqGHMHJikg169FYM8pZKIN1PbQ3Yt5BYYmO1IJnPejfBDSftp7v1AfW0o74NxF8nm/QppJpQ++TLXODe9LqDyI2gtHfkcx3KpsX7KZVCgnllO8M7cA0mqX9eY+VMn9/H2Q2QHjBgEwcI2YEOhnLzIrpolW7wgTqnhkcp5hKSwO/txzWHE//xtonpJheAhFPRJeetLHVKdfoBD1zME4BENL4XJw5usf04UNjL8o0U6Zkbsn2pGs/NUXaS2WRlnRzAMvqxnBxvbbWytP32M3OgqtdgYExS49uH9aoC0Hubnm88ATopPZ+G76IhTjI0blejRxjRtcG/uxg7O3MVb0/CKDVz6AFhApQpVuR+yP5d+7FRe9sXdhoI9wx0PNoz1F9XuO/lAAoLpsvYAsU+M0JlgWy1cXEL4bZ+vjjV/eIWPXscUqEbHzkwhJHObd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(376002)(366004)(346002)(136003)(66946007)(66556008)(66476007)(69590400012)(6486002)(2616005)(8676002)(8936002)(16526019)(186003)(956004)(38100700002)(38350700002)(316002)(6512007)(1076003)(478600001)(52116002)(4744005)(26005)(6666004)(86362001)(6506007)(5660300002)(36756003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?+atEhMcOenliWKo0712pibkMM2hB/r6jKEOeiRGqdKpbTEiWD+ooEvK6lTWp?=
+ =?us-ascii?Q?PjscgelP9xwn96c38/8IybN693G3ja7OJiPG9yXmrFMn6a4hPWeNk7bGRDUb?=
+ =?us-ascii?Q?79VG4mzkAE1GJVEUiMVo9c1msQ/UAgkt6ju3o0WKaNOEFOCjZoeUmjfq0czY?=
+ =?us-ascii?Q?Pu1JViJPk0F3JmF4POPy9q40K7JdHhA5pARLDjP33ct2KHt79Zu5rZqSTpI4?=
+ =?us-ascii?Q?vnQIBszmDDwXFZMrrolr6ITUeARhywaYzYk6fN3fllWpoNQVYClTn1kj5vYj?=
+ =?us-ascii?Q?1dl/ruaTSOdD2xbNuHv+paFPXT1WjAVLLwWVs6HMHD8l1X+giQqacYm9m/AP?=
+ =?us-ascii?Q?2NPad8pax3OF4oAecv6eLMXJ2awiv1u2lRMWi/EIfDTj5J8ooip6KuvLNR8D?=
+ =?us-ascii?Q?C14RXO9qlr3P9RhffNPF6GbVi7nr/Hg3rFiAkc+5SVozO5K+JuQIh4c9khEk?=
+ =?us-ascii?Q?9g0m0KguP52Jy59AYBe6tdOaQS824VMbQLlnFW3aHRzBqSIbarDmLWf8mqTG?=
+ =?us-ascii?Q?Ej8CnMKFmP41UVnHz0baS8G8EFMa4SwgevP1dW+RXE4jLLmnBCLWy2VDB83K?=
+ =?us-ascii?Q?fk31GwqjrjdlHqDRCgT6Rk4Js9Edgp183MozAbGnL3ZNFFgJEWe7XsvLroiX?=
+ =?us-ascii?Q?n6NE8W2cxSEM/iMJVpu6PJ1B6Y1qVGK2h2f3xQR1roX0l/ZD5XKQBjxxrUqv?=
+ =?us-ascii?Q?I6KmlMrmwSSQ0n9XR0IDVTSzMxKVe858YYruGN3T0hbq7jTH1JAAcSBsBybz?=
+ =?us-ascii?Q?btgDhJ7zpRHtAprIxcwAW0LBP0Cd1ZQSspeMJ+bD3R9tPBbinzS2xd3U1Orf?=
+ =?us-ascii?Q?Hz9SFsTH6+ds+GJYY/ZhCRS8H2CM3/zcxoAPAlUfyhSRW6mgZ7WI4O8HswwZ?=
+ =?us-ascii?Q?qkt3frORQpEysLQrfKRrO9XGMWaljUy3mnbWlPZL4KQX2yfx0WvrTPXoZd/U?=
+ =?us-ascii?Q?HqZnMwbRw7fsYimFcrs/Qc+AlgvaK0gte/WDkycXlWnY7LkD7bRq1+0ILnDC?=
+ =?us-ascii?Q?Zc31fcFDFFyGtqdihHbN+4VnnxLGd+fKUshfJ6y6goJh01omX6MCK1rLICCi?=
+ =?us-ascii?Q?OF9+pUqEAsBioZaG2gut6RcWD68fn1QRq5TxyOEKraH40WlV23/goXhFYygD?=
+ =?us-ascii?Q?6h4P6TLFPUGYYd8fogP+b485ypNA87j4LSteQ7Luz9ZFEa/PhCcqPLXaJrCR?=
+ =?us-ascii?Q?ASIr33hbmIurXaeK9TRwF8zLS+TFF9055IsyKTbdNbrEq+aBuq1WNJL6jzC/?=
+ =?us-ascii?Q?rdcPbvZtUJOX3pV7xdA88pyzK4BkjrEXNkC3ZdumEyLl4dMI5VyoX0NAeAik?=
+ =?us-ascii?Q?Frx3O+23pKjiFowTy9SMnUW/?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c580e896-3de1-4c3f-1a29-08d8fc501ad4
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2021 18:40:25.2985
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1vT9UMQ/DudCbgeuA2DEBB/1lqCrgJphktKKUPuypYr13koakfnsXf0ZlU0x1E20UE/T0aux17+BKCOkVi2MXLKPbtFQQ6tIpB51oihCeV0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4324
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9950 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 mlxlogscore=999 suspectscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104100140
+X-Proofpoint-ORIG-GUID: Pzxgb7jwO_mC9z7aNSfEnJ-Dx3rXzwxu
+X-Proofpoint-GUID: Pzxgb7jwO_mC9z7aNSfEnJ-Dx3rXzwxu
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9950 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ phishscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
+ clxscore=1015 lowpriorityscore=0 spamscore=0 impostorscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104100140
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Seven fixes all in drivers.  The hpsa three are the most extensive and
-the most problematic: it's a packed structure misalignment that oopses
-on ia64 but looks like it would also oops on quite a few non-x86
-architectures.  The pm80xx is a regression and the rest are bug fixes
-for patches in the misc tree.
+The following patches made over Linus's tree fixes a bunch of issues
+in qedi's tmf handling.
 
-The patch is available here:
+Manish, I did some tests here. Please test it out and review.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+The first patch is maybe just a temp patch, but assume that eventually
+those issues will be fixed one way or another. I just reverted it here
+to make it easier to test qedi and not worry about if we are hitting
+issues in qedi or with that patch.
 
-The short changelog is:
 
-Can Guo (2):
-      scsi: ufs: core: Fix wrong Task Tag used in task management request UPIUs
-      scsi: ufs: core: Fix task management request completion timeout
-
-Martin Wilck (1):
-      scsi: scsi_transport_srp: Don't block target in SRP_PORT_LOST state
-
-Roman Bolshakov (1):
-      scsi: target: iscsi: Fix zero tag inside a trace event
-
-Sergei Trofimovich (3):
-      scsi: hpsa: Add an assert to prevent __packed reintroduction
-      scsi: hpsa: Fix boot on ia64 (atomic_t alignment)
-      scsi: hpsa: Use __packed on individual structs, not header-wide
-
-Viswas G (1):
-      scsi: pm80xx: Fix chip initialization failure
-
-And the diffstat:
-
- drivers/scsi/hpsa_cmd.h             | 78 +++++++++++++++++++++----------------
- drivers/scsi/pm8001/pm8001_hwi.c    |  8 ++--
- drivers/scsi/scsi_transport_srp.c   |  2 +-
- drivers/scsi/ufs/ufshcd.c           | 31 +++++++--------
- drivers/target/iscsi/iscsi_target.c |  3 +-
- 5 files changed, 65 insertions(+), 57 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/hpsa_cmd.h b/drivers/scsi/hpsa_cmd.h
-index d126bb877250..ba6a3aa8d954 100644
---- a/drivers/scsi/hpsa_cmd.h
-+++ b/drivers/scsi/hpsa_cmd.h
-@@ -20,6 +20,11 @@
- #ifndef HPSA_CMD_H
- #define HPSA_CMD_H
- 
-+#include <linux/compiler.h>
-+
-+#include <linux/build_bug.h> /* static_assert */
-+#include <linux/stddef.h> /* offsetof */
-+
- /* general boundary defintions */
- #define SENSEINFOBYTES          32 /* may vary between hbas */
- #define SG_ENTRIES_IN_CMD	32 /* Max SG entries excluding chain blocks */
-@@ -200,12 +205,10 @@ union u64bit {
- 	MAX_EXT_TARGETS + 1) /* + 1 is for the controller itself */
- 
- /* SCSI-3 Commands */
--#pragma pack(1)
--
- #define HPSA_INQUIRY 0x12
- struct InquiryData {
- 	u8 data_byte[36];
--};
-+} __packed;
- 
- #define HPSA_REPORT_LOG 0xc2    /* Report Logical LUNs */
- #define HPSA_REPORT_PHYS 0xc3   /* Report Physical LUNs */
-@@ -221,7 +224,7 @@ struct raid_map_disk_data {
- 	u8    xor_mult[2];            /**< XOR multipliers for this position,
- 					*  valid for data disks only */
- 	u8    reserved[2];
--};
-+} __packed;
- 
- struct raid_map_data {
- 	__le32   structure_size;	/* Size of entire structure in bytes */
-@@ -247,14 +250,14 @@ struct raid_map_data {
- 	__le16   dekindex;		/* Data encryption key index. */
- 	u8    reserved[16];
- 	struct raid_map_disk_data data[RAID_MAP_MAX_ENTRIES];
--};
-+} __packed;
- 
- struct ReportLUNdata {
- 	u8 LUNListLength[4];
- 	u8 extended_response_flag;
- 	u8 reserved[3];
- 	u8 LUN[HPSA_MAX_LUN][8];
--};
-+} __packed;
- 
- struct ext_report_lun_entry {
- 	u8 lunid[8];
-@@ -269,20 +272,20 @@ struct ext_report_lun_entry {
- 	u8 lun_count; /* multi-lun device, how many luns */
- 	u8 redundant_paths;
- 	u32 ioaccel_handle; /* ioaccel1 only uses lower 16 bits */
--};
-+} __packed;
- 
- struct ReportExtendedLUNdata {
- 	u8 LUNListLength[4];
- 	u8 extended_response_flag;
- 	u8 reserved[3];
- 	struct ext_report_lun_entry LUN[HPSA_MAX_PHYS_LUN];
--};
-+} __packed;
- 
- struct SenseSubsystem_info {
- 	u8 reserved[36];
- 	u8 portname[8];
- 	u8 reserved1[1108];
--};
-+} __packed;
- 
- /* BMIC commands */
- #define BMIC_READ 0x26
-@@ -317,7 +320,7 @@ union SCSI3Addr {
- 		u8 Targ:6;
- 		u8 Mode:2;        /* b10 */
- 	} LogUnit;
--};
-+} __packed;
- 
- struct PhysDevAddr {
- 	u32             TargetId:24;
-@@ -325,20 +328,20 @@ struct PhysDevAddr {
- 	u32             Mode:2;
- 	/* 2 level target device addr */
- 	union SCSI3Addr  Target[2];
--};
-+} __packed;
- 
- struct LogDevAddr {
- 	u32            VolId:30;
- 	u32            Mode:2;
- 	u8             reserved[4];
--};
-+} __packed;
- 
- union LUNAddr {
- 	u8               LunAddrBytes[8];
- 	union SCSI3Addr    SCSI3Lun[4];
- 	struct PhysDevAddr PhysDev;
- 	struct LogDevAddr  LogDev;
--};
-+} __packed;
- 
- struct CommandListHeader {
- 	u8              ReplyQueue;
-@@ -346,7 +349,7 @@ struct CommandListHeader {
- 	__le16          SGTotal;
- 	__le64		tag;
- 	union LUNAddr     LUN;
--};
-+} __packed;
- 
- struct RequestBlock {
- 	u8   CDBLen;
-@@ -365,18 +368,18 @@ struct RequestBlock {
- #define GET_DIR(tad) (((tad) >> 6) & 0x03)
- 	u16  Timeout;
- 	u8   CDB[16];
--};
-+} __packed;
- 
- struct ErrDescriptor {
- 	__le64 Addr;
- 	__le32 Len;
--};
-+} __packed;
- 
- struct SGDescriptor {
- 	__le64 Addr;
- 	__le32 Len;
- 	__le32 Ext;
--};
-+} __packed;
- 
- union MoreErrInfo {
- 	struct {
-@@ -390,7 +393,8 @@ union MoreErrInfo {
- 		u8  offense_num;  /* byte # of offense 0-base */
- 		u32 offense_value;
- 	} Invalid_Cmd;
--};
-+} __packed;
-+
- struct ErrorInfo {
- 	u8               ScsiStatus;
- 	u8               SenseLen;
-@@ -398,7 +402,7 @@ struct ErrorInfo {
- 	u32              ResidualCnt;
- 	union MoreErrInfo  MoreErrInfo;
- 	u8               SenseInfo[SENSEINFOBYTES];
--};
-+} __packed;
- /* Command types */
- #define CMD_IOCTL_PEND  0x01
- #define CMD_SCSI	0x03
-@@ -453,6 +457,15 @@ struct CommandList {
- 	atomic_t refcount; /* Must be last to avoid memset in hpsa_cmd_init() */
- } __aligned(COMMANDLIST_ALIGNMENT);
- 
-+/*
-+ * Make sure our embedded atomic variable is aligned. Otherwise we break atomic
-+ * operations on architectures that don't support unaligned atomics like IA64.
-+ *
-+ * The assert guards against reintroductin against unwanted __packed to
-+ * the struct CommandList.
-+ */
-+static_assert(offsetof(struct CommandList, refcount) % __alignof__(atomic_t) == 0);
-+
- /* Max S/G elements in I/O accelerator command */
- #define IOACCEL1_MAXSGENTRIES           24
- #define IOACCEL2_MAXSGENTRIES		28
-@@ -489,7 +502,7 @@ struct io_accel1_cmd {
- 	__le64 host_addr;		/* 0x70 - 0x77 */
- 	u8  CISS_LUN[8];		/* 0x78 - 0x7F */
- 	struct SGDescriptor SG[IOACCEL1_MAXSGENTRIES];
--} __aligned(IOACCEL1_COMMANDLIST_ALIGNMENT);
-+} __packed __aligned(IOACCEL1_COMMANDLIST_ALIGNMENT);
- 
- #define IOACCEL1_FUNCTION_SCSIIO        0x00
- #define IOACCEL1_SGLOFFSET              32
-@@ -519,7 +532,7 @@ struct ioaccel2_sg_element {
- 	u8 chain_indicator;
- #define IOACCEL2_CHAIN 0x80
- #define IOACCEL2_LAST_SG 0x40
--};
-+} __packed;
- 
- /*
-  * SCSI Response Format structure for IO Accelerator Mode 2
-@@ -559,7 +572,7 @@ struct io_accel2_scsi_response {
- 	u8 sense_data_len;		/* sense/response data length */
- 	u8 resid_cnt[4];		/* residual count */
- 	u8 sense_data_buff[32];		/* sense/response data buffer */
--};
-+} __packed;
- 
- /*
-  * Structure for I/O accelerator (mode 2 or m2) commands.
-@@ -592,7 +605,7 @@ struct io_accel2_cmd {
- 	__le32 tweak_upper;		/* Encryption tweak, upper 4 bytes */
- 	struct ioaccel2_sg_element sg[IOACCEL2_MAXSGENTRIES];
- 	struct io_accel2_scsi_response error_data;
--} __aligned(IOACCEL2_COMMANDLIST_ALIGNMENT);
-+} __packed __aligned(IOACCEL2_COMMANDLIST_ALIGNMENT);
- 
- /*
-  * defines for Mode 2 command struct
-@@ -618,7 +631,7 @@ struct hpsa_tmf_struct {
- 	__le64 abort_tag;	/* cciss tag of SCSI cmd or TMF to abort */
- 	__le64 error_ptr;		/* Error Pointer */
- 	__le32 error_len;		/* Error Length */
--} __aligned(IOACCEL2_COMMANDLIST_ALIGNMENT);
-+} __packed __aligned(IOACCEL2_COMMANDLIST_ALIGNMENT);
- 
- /* Configuration Table Structure */
- struct HostWrite {
-@@ -626,7 +639,7 @@ struct HostWrite {
- 	__le32		command_pool_addr_hi;
- 	__le32		CoalIntDelay;
- 	__le32		CoalIntCount;
--};
-+} __packed;
- 
- #define SIMPLE_MODE     0x02
- #define PERFORMANT_MODE 0x04
-@@ -675,7 +688,7 @@ struct CfgTable {
- #define		HPSA_EVENT_NOTIFY_ACCEL_IO_PATH_STATE_CHANGE (1 << 30)
- #define		HPSA_EVENT_NOTIFY_ACCEL_IO_PATH_CONFIG_CHANGE (1 << 31)
- 	__le32		clear_event_notify;
--};
-+} __packed;
- 
- #define NUM_BLOCKFETCH_ENTRIES 8
- struct TransTable_struct {
-@@ -686,14 +699,14 @@ struct TransTable_struct {
- 	__le32		RepQCtrAddrHigh32;
- #define MAX_REPLY_QUEUES 64
- 	struct vals32  RepQAddr[MAX_REPLY_QUEUES];
--};
-+} __packed;
- 
- struct hpsa_pci_info {
- 	unsigned char	bus;
- 	unsigned char	dev_fn;
- 	unsigned short	domain;
- 	u32		board_id;
--};
-+} __packed;
- 
- struct bmic_identify_controller {
- 	u8	configured_logical_drive_count;	/* offset 0 */
-@@ -702,7 +715,7 @@ struct bmic_identify_controller {
- 	u8	pad2[136];
- 	u8	controller_mode;	/* offset 292 */
- 	u8	pad3[32];
--};
-+} __packed;
- 
- 
- struct bmic_identify_physical_device {
-@@ -845,7 +858,7 @@ struct bmic_identify_physical_device {
- 	u8     max_link_rate[256];
- 	u8     neg_phys_link_rate[256];
- 	u8     box_conn_name[8];
--} __attribute((aligned(512)));
-+} __packed __attribute((aligned(512)));
- 
- struct bmic_sense_subsystem_info {
- 	u8	primary_slot_number;
-@@ -858,7 +871,7 @@ struct bmic_sense_subsystem_info {
- 	u8	secondary_array_serial_number[32];
- 	u8	secondary_cache_serial_number[32];
- 	u8	pad[332];
--};
-+} __packed;
- 
- struct bmic_sense_storage_box_params {
- 	u8	reserved[36];
-@@ -870,7 +883,6 @@ struct bmic_sense_storage_box_params {
- 	u8	reserver_3[84];
- 	u8	phys_connector[2];
- 	u8	reserved_4[296];
--};
-+} __packed;
- 
--#pragma pack()
- #endif /* HPSA_CMD_H */
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 49bf2f70a470..31e5455d280c 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -223,7 +223,7 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
- 		PM8001_EVENT_LOG_SIZE;
- 	pm8001_ha->main_cfg_tbl.pm8001_tbl.iop_event_log_option		= 0x01;
- 	pm8001_ha->main_cfg_tbl.pm8001_tbl.fatal_err_interrupt		= 0x01;
--	for (i = 0; i < PM8001_MAX_INB_NUM; i++) {
-+	for (i = 0; i < pm8001_ha->max_q_num; i++) {
- 		pm8001_ha->inbnd_q_tbl[i].element_pri_size_cnt	=
- 			PM8001_MPI_QUEUE | (pm8001_ha->iomb_size << 16) | (0x00<<30);
- 		pm8001_ha->inbnd_q_tbl[i].upper_base_addr	=
-@@ -249,7 +249,7 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
- 		pm8001_ha->inbnd_q_tbl[i].producer_idx		= 0;
- 		pm8001_ha->inbnd_q_tbl[i].consumer_index	= 0;
- 	}
--	for (i = 0; i < PM8001_MAX_OUTB_NUM; i++) {
-+	for (i = 0; i < pm8001_ha->max_q_num; i++) {
- 		pm8001_ha->outbnd_q_tbl[i].element_size_cnt	=
- 			PM8001_MPI_QUEUE | (pm8001_ha->iomb_size << 16) | (0x01<<30);
- 		pm8001_ha->outbnd_q_tbl[i].upper_base_addr	=
-@@ -671,9 +671,9 @@ static int pm8001_chip_init(struct pm8001_hba_info *pm8001_ha)
- 	read_outbnd_queue_table(pm8001_ha);
- 	/* update main config table ,inbound table and outbound table */
- 	update_main_config_table(pm8001_ha);
--	for (i = 0; i < PM8001_MAX_INB_NUM; i++)
-+	for (i = 0; i < pm8001_ha->max_q_num; i++)
- 		update_inbnd_queue_table(pm8001_ha, i);
--	for (i = 0; i < PM8001_MAX_OUTB_NUM; i++)
-+	for (i = 0; i < pm8001_ha->max_q_num; i++)
- 		update_outbnd_queue_table(pm8001_ha, i);
- 	/* 8081 controller donot require these operations */
- 	if (deviceid != 0x8081 && deviceid != 0x0042) {
-diff --git a/drivers/scsi/scsi_transport_srp.c b/drivers/scsi/scsi_transport_srp.c
-index 1e939a2a387f..98a34ed10f1a 100644
---- a/drivers/scsi/scsi_transport_srp.c
-+++ b/drivers/scsi/scsi_transport_srp.c
-@@ -541,7 +541,7 @@ int srp_reconnect_rport(struct srp_rport *rport)
- 	res = mutex_lock_interruptible(&rport->mutex);
- 	if (res)
- 		goto out;
--	if (rport->state != SRP_RPORT_FAIL_FAST)
-+	if (rport->state != SRP_RPORT_FAIL_FAST && rport->state != SRP_RPORT_LOST)
- 		/*
- 		 * sdev state must be SDEV_TRANSPORT_OFFLINE, transition
- 		 * to SDEV_BLOCK is illegal. Calling scsi_target_unblock()
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index c86760788c72..d3d05e997c13 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -6386,37 +6386,34 @@ static int __ufshcd_issue_tm_cmd(struct ufs_hba *hba,
- 	DECLARE_COMPLETION_ONSTACK(wait);
- 	struct request *req;
- 	unsigned long flags;
--	int free_slot, task_tag, err;
-+	int task_tag, err;
- 
- 	/*
--	 * Get free slot, sleep if slots are unavailable.
--	 * Even though we use wait_event() which sleeps indefinitely,
--	 * the maximum wait time is bounded by %TM_CMD_TIMEOUT.
-+	 * blk_get_request() is used here only to get a free tag.
- 	 */
- 	req = blk_get_request(q, REQ_OP_DRV_OUT, 0);
- 	if (IS_ERR(req))
- 		return PTR_ERR(req);
- 
- 	req->end_io_data = &wait;
--	free_slot = req->tag;
--	WARN_ON_ONCE(free_slot < 0 || free_slot >= hba->nutmrs);
- 	ufshcd_hold(hba, false);
- 
- 	spin_lock_irqsave(host->host_lock, flags);
--	task_tag = hba->nutrs + free_slot;
-+	blk_mq_start_request(req);
- 
-+	task_tag = req->tag;
- 	treq->req_header.dword_0 |= cpu_to_be32(task_tag);
- 
--	memcpy(hba->utmrdl_base_addr + free_slot, treq, sizeof(*treq));
--	ufshcd_vops_setup_task_mgmt(hba, free_slot, tm_function);
-+	memcpy(hba->utmrdl_base_addr + task_tag, treq, sizeof(*treq));
-+	ufshcd_vops_setup_task_mgmt(hba, task_tag, tm_function);
- 
- 	/* send command to the controller */
--	__set_bit(free_slot, &hba->outstanding_tasks);
-+	__set_bit(task_tag, &hba->outstanding_tasks);
- 
- 	/* Make sure descriptors are ready before ringing the task doorbell */
- 	wmb();
- 
--	ufshcd_writel(hba, 1 << free_slot, REG_UTP_TASK_REQ_DOOR_BELL);
-+	ufshcd_writel(hba, 1 << task_tag, REG_UTP_TASK_REQ_DOOR_BELL);
- 	/* Make sure that doorbell is committed immediately */
- 	wmb();
- 
-@@ -6436,24 +6433,24 @@ static int __ufshcd_issue_tm_cmd(struct ufs_hba *hba,
- 		ufshcd_add_tm_upiu_trace(hba, task_tag, UFS_TM_ERR);
- 		dev_err(hba->dev, "%s: task management cmd 0x%.2x timed-out\n",
- 				__func__, tm_function);
--		if (ufshcd_clear_tm_cmd(hba, free_slot))
--			dev_WARN(hba->dev, "%s: unable clear tm cmd (slot %d) after timeout\n",
--					__func__, free_slot);
-+		if (ufshcd_clear_tm_cmd(hba, task_tag))
-+			dev_WARN(hba->dev, "%s: unable to clear tm cmd (slot %d) after timeout\n",
-+					__func__, task_tag);
- 		err = -ETIMEDOUT;
- 	} else {
- 		err = 0;
--		memcpy(treq, hba->utmrdl_base_addr + free_slot, sizeof(*treq));
-+		memcpy(treq, hba->utmrdl_base_addr + task_tag, sizeof(*treq));
- 
- 		ufshcd_add_tm_upiu_trace(hba, task_tag, UFS_TM_COMP);
- 	}
- 
- 	spin_lock_irqsave(hba->host->host_lock, flags);
--	__clear_bit(free_slot, &hba->outstanding_tasks);
-+	__clear_bit(task_tag, &hba->outstanding_tasks);
- 	spin_unlock_irqrestore(hba->host->host_lock, flags);
- 
-+	ufshcd_release(hba);
- 	blk_put_request(req);
- 
--	ufshcd_release(hba);
- 	return err;
- }
- 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index d0e7ed8f28cc..e5c443bfbdf9 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -1166,6 +1166,7 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 
- 	target_get_sess_cmd(&cmd->se_cmd, true);
- 
-+	cmd->se_cmd.tag = (__force u32)cmd->init_task_tag;
- 	cmd->sense_reason = target_cmd_init_cdb(&cmd->se_cmd, hdr->cdb);
- 	if (cmd->sense_reason) {
- 		if (cmd->sense_reason == TCM_OUT_OF_RESOURCES) {
-@@ -1180,8 +1181,6 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 	if (cmd->sense_reason)
- 		goto attach_cmd;
- 
--	/* only used for printks or comparing with ->ref_task_tag */
--	cmd->se_cmd.tag = (__force u32)cmd->init_task_tag;
- 	cmd->sense_reason = target_cmd_parse_cdb(&cmd->se_cmd);
- 	if (cmd->sense_reason)
- 		goto attach_cmd;
 
