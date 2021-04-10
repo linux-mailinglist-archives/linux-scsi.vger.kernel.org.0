@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FED435AB6D
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D92535AB79
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbhDJGsK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Apr 2021 02:48:10 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:16883 "EHLO
+        id S234548AbhDJGsZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Apr 2021 02:48:25 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:16889 "EHLO
         szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbhDJGsJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 02:48:09 -0400
+        with ESMTP id S234367AbhDJGsM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 02:48:12 -0400
 Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHQWJ5KSGzkhsB;
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHQWJ4L90zkhq0;
         Sat, 10 Apr 2021 14:46:04 +0800 (CST)
 Received: from huawei.com (10.69.192.56) by DGGEMS411-HUB.china.huawei.com
  (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Sat, 10 Apr 2021
@@ -24,9 +24,9 @@ To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
 CC:     <megaraidlinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
         <luojiaxing@huawei.com>
-Subject: [PATCH v1 5/8] scsi: megaraid: clean up for "foo * bar"
-Date:   Sat, 10 Apr 2021 14:48:04 +0800
-Message-ID: <1618037287-460-6-git-send-email-luojiaxing@huawei.com>
+Subject: [PATCH v1 6/8] scsi: megaraid: clean up for code indent
+Date:   Sat, 10 Apr 2021 14:48:05 +0800
+Message-ID: <1618037287-460-7-git-send-email-luojiaxing@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
 References: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
@@ -38,101 +38,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Following error is reported by checkpatch.pl:
+Following error is reported by checkpatch.pl
 
-"foo * bar" should be "foo *bar"
-+                     struct megasas_iocpacket __user * user_ioc,
+ERROR: code indent should use tabs where possible
++^I^I        unsigned long arg)$
 
-The format of the pointer variable must be "foo *bar", so fix
-them.
+So fix them all.
 
 Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 ---
- drivers/scsi/megaraid/megaraid_ioctl.h    | 4 ++--
- drivers/scsi/megaraid/megaraid_mbox.h     | 2 +-
- drivers/scsi/megaraid/megaraid_mm.c       | 4 ++--
- drivers/scsi/megaraid/megaraid_sas_base.c | 4 ++--
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/megaraid/mega_common.h       | 2 +-
+ drivers/scsi/megaraid/megaraid_mm.c       | 2 +-
+ drivers/scsi/megaraid/megaraid_sas_base.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_ioctl.h b/drivers/scsi/megaraid/megaraid_ioctl.h
-index 87b880fe..9bc0250 100644
---- a/drivers/scsi/megaraid/megaraid_ioctl.h
-+++ b/drivers/scsi/megaraid/megaraid_ioctl.h
-@@ -126,7 +126,7 @@ typedef struct uioc {
- 	uint8_t			reserved[128];
+diff --git a/drivers/scsi/megaraid/mega_common.h b/drivers/scsi/megaraid/mega_common.h
+index 2a0981b..9a19eec 100644
+--- a/drivers/scsi/megaraid/mega_common.h
++++ b/drivers/scsi/megaraid/mega_common.h
+@@ -249,7 +249,7 @@ typedef struct {
+  * ### Helper routines ###
+  */
+ #define LSI_DBGLVL mraid_debug_level	// each LLD must define a global
+- 					// mraid_debug_level
++					// mraid_debug_level
  
- /* Driver Data: */
--	void __user *		user_data;
-+	void __user		*user_data;
- 	uint32_t		user_data_len;
- 
- 	/* 64bit alignment */
-@@ -138,7 +138,7 @@ typedef struct uioc {
- 	dma_addr_t		pthru32_h;
- 
- 	struct list_head	list;
--	void			(*done)(struct uioc*);
-+	void			(*done)(struct uioc *);
- 
- 	caddr_t			buf_vaddr;
- 	dma_addr_t		buf_paddr;
-diff --git a/drivers/scsi/megaraid/megaraid_mbox.h b/drivers/scsi/megaraid/megaraid_mbox.h
-index d2fe7f6..3c16d38 100644
---- a/drivers/scsi/megaraid/megaraid_mbox.h
-+++ b/drivers/scsi/megaraid/megaraid_mbox.h
-@@ -189,7 +189,7 @@ typedef struct {
- 	dma_addr_t			mbox_dma;
- 	spinlock_t			mailbox_lock;
- 	unsigned long			baseport;
--	void __iomem *			baseaddr;
-+	void __iomem			*baseaddr;
- 	struct mraid_pci_blk		mbox_pool[MBOX_MAX_SCSI_CMDS];
- 	struct dma_pool			*mbox_pool_handle;
- 	struct mraid_pci_blk		epthru_pool[MBOX_MAX_SCSI_CMDS];
+ #ifdef DEBUG
+ #if defined (_ASSERT_PANIC)
 diff --git a/drivers/scsi/megaraid/megaraid_mm.c b/drivers/scsi/megaraid/megaraid_mm.c
-index 864cbb6..234885c 100644
+index 234885c..1d6244e 100644
 --- a/drivers/scsi/megaraid/megaraid_mm.c
 +++ b/drivers/scsi/megaraid/megaraid_mm.c
-@@ -582,7 +582,7 @@ static uioc_t *
- mraid_mm_alloc_kioc(mraid_mmadp_t *adp)
- {
- 	uioc_t			*kioc;
--	struct list_head*	head;
-+	struct list_head	*head;
- 	unsigned long		flags;
+@@ -213,7 +213,7 @@ mraid_mm_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
  
- 	down(&adp->kioc_semaphore);
-@@ -722,7 +722,7 @@ ioctl_done(uioc_t *kioc)
+ static long
+ mraid_mm_unlocked_ioctl(struct file *filep, unsigned int cmd,
+-		        unsigned long arg)
++			unsigned long arg)
  {
- 	uint32_t	adapno;
- 	int		iterator;
--	mraid_mmadp_t*	adapter;
-+	mraid_mmadp_t	*adapter;
+ 	int err;
  
- 	/*
- 	 * When the kioc returns from driver, make sure it still doesn't
 diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 40c77bb..2b17529 100644
+index 2b17529..f29a3716 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_base.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -4402,7 +4402,7 @@ int megasas_alloc_cmds(struct megasas_instance *instance)
- 	 * Allocate the dynamic array first and then allocate individual
- 	 * commands.
- 	 */
--	instance->cmd_list = kcalloc(max_cmd, sizeof(struct megasas_cmd*), GFP_KERNEL);
-+	instance->cmd_list = kcalloc(max_cmd, sizeof(struct megasas_cmd *), GFP_KERNEL);
+@@ -4821,7 +4821,7 @@ megasas_ld_list_query(struct megasas_instance *instance, u8 query_type)
  
- 	if (!instance->cmd_list) {
- 		dev_printk(KERN_DEBUG, &instance->pdev->dev, "out of memory\n");
-@@ -8150,7 +8150,7 @@ static int megasas_set_crash_dump_params_ioctl(struct megasas_cmd *cmd)
-  */
- static int
- megasas_mgmt_fw_ioctl(struct megasas_instance *instance,
--		      struct megasas_iocpacket __user * user_ioc,
-+		      struct megasas_iocpacket __user *user_ioc,
- 		      struct megasas_iocpacket *ioc)
- {
- 	struct megasas_sge64 *kern_sge64 = NULL;
+ 	if (!cmd) {
+ 		dev_warn(&instance->pdev->dev,
+-		         "megasas_ld_list_query: Failed to get cmd\n");
++			 "%s: Failed to get cmd\n", __func__);
+ 		return -ENOMEM;
+ 	}
+ 
 -- 
 2.7.4
 
