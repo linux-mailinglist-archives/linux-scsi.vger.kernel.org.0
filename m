@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD9C35AB78
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FED435AB6D
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbhDJGsY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Apr 2021 02:48:24 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:16887 "EHLO
+        id S234334AbhDJGsK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Apr 2021 02:48:10 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:16883 "EHLO
         szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbhDJGsL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 02:48:11 -0400
+        with ESMTP id S233527AbhDJGsJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 02:48:09 -0400
 Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHQWJ4dlRzkhqZ;
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHQWJ5KSGzkhsB;
         Sat, 10 Apr 2021 14:46:04 +0800 (CST)
 Received: from huawei.com (10.69.192.56) by DGGEMS411-HUB.china.huawei.com
  (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Sat, 10 Apr 2021
- 14:47:44 +0800
+ 14:47:45 +0800
 From:   Luo Jiaxing <luojiaxing@huawei.com>
 To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
         <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
@@ -24,9 +24,9 @@ To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
 CC:     <megaraidlinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
         <luojiaxing@huawei.com>
-Subject: [PATCH v1 4/8] scsi: megaraid: clean up for open/close brace
-Date:   Sat, 10 Apr 2021 14:48:03 +0800
-Message-ID: <1618037287-460-5-git-send-email-luojiaxing@huawei.com>
+Subject: [PATCH v1 5/8] scsi: megaraid: clean up for "foo * bar"
+Date:   Sat, 10 Apr 2021 14:48:04 +0800
+Message-ID: <1618037287-460-6-git-send-email-luojiaxing@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
 References: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
@@ -38,314 +38,101 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There are few kinds of error about open/close brace is reported by
-checkpatch.pl:
+Following error is reported by checkpatch.pl:
 
-ERROR: open brace '{' following function definitions go on the next line
-int
-megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
+"foo * bar" should be "foo *bar"
++                     struct megasas_iocpacket __user * user_ioc,
 
-ERROR: else should follow close brace '}'
-+       }
-+       else
+The format of the pointer variable must be "foo *bar", so fix
+them.
 
-So fix them all.
-
-Signed-off-by: Jianqin Xie <xiejianqin@hisilicon.com>
 Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 ---
- drivers/scsi/megaraid/megaraid_mbox.c       | 57 ++++++++++-------------------
- drivers/scsi/megaraid/megaraid_mm.c         | 10 ++---
- drivers/scsi/megaraid/megaraid_sas_base.c   |  7 ++--
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 11 +++---
- 4 files changed, 31 insertions(+), 54 deletions(-)
+ drivers/scsi/megaraid/megaraid_ioctl.h    | 4 ++--
+ drivers/scsi/megaraid/megaraid_mbox.h     | 2 +-
+ drivers/scsi/megaraid/megaraid_mm.c       | 4 ++--
+ drivers/scsi/megaraid/megaraid_sas_base.c | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
-index 6d76b15..d3fcaca 100644
---- a/drivers/scsi/megaraid/megaraid_mbox.c
-+++ b/drivers/scsi/megaraid/megaraid_mbox.c
-@@ -537,8 +537,7 @@ megaraid_detach_one(struct pci_dev *pdev)
- 			pdev->subsystem_device));
+diff --git a/drivers/scsi/megaraid/megaraid_ioctl.h b/drivers/scsi/megaraid/megaraid_ioctl.h
+index 87b880fe..9bc0250 100644
+--- a/drivers/scsi/megaraid/megaraid_ioctl.h
++++ b/drivers/scsi/megaraid/megaraid_ioctl.h
+@@ -126,7 +126,7 @@ typedef struct uioc {
+ 	uint8_t			reserved[128];
  
- 		return;
--	}
--	else {
-+	} else {
- 		con_log(CL_ANN, (KERN_NOTICE
- 		"megaraid: detaching device %#4.04x:%#4.04x:%#4.04x:%#4.04x\n",
- 			pdev->vendor, pdev->device, pdev->subsystem_vendor,
-@@ -1545,8 +1544,7 @@ megaraid_mbox_build_cmd(adapter_t *adapter, struct scsi_cmnd *scp, int *busy)
- 				vaddr = (caddr_t) sg_virt(&sgl[0]);
+ /* Driver Data: */
+-	void __user *		user_data;
++	void __user		*user_data;
+ 	uint32_t		user_data_len;
  
- 				memset(vaddr, 0, scp->cmnd[4]);
--			}
--			else {
-+			} else {
- 				con_log(CL_ANN, (KERN_WARNING
- 						 "megaraid mailbox: invalid sg:%d\n",
- 						 __LINE__));
-@@ -1705,8 +1703,7 @@ megaraid_mbox_build_cmd(adapter_t *adapter, struct scsi_cmnd *scp, int *busy)
- 					((uint32_t)scp->cmnd[7] << 16) |
- 					((uint32_t)scp->cmnd[8] << 8) |
- 					(uint32_t)scp->cmnd[9];
--			}
--			else {
-+			} else {
- 				con_log(CL_ANN, (KERN_WARNING
- 					"megaraid: unsupported CDB length\n"));
+ 	/* 64bit alignment */
+@@ -138,7 +138,7 @@ typedef struct uioc {
+ 	dma_addr_t		pthru32_h;
  
-@@ -1762,8 +1759,7 @@ megaraid_mbox_build_cmd(adapter_t *adapter, struct scsi_cmnd *scp, int *busy)
- 			scp->result = (DID_BAD_TARGET << 16);
- 			return NULL;
- 		}
--	}
--	else { // Passthru device commands
-+	} else { // Passthru device commands
+ 	struct list_head	list;
+-	void			(*done)(struct uioc*);
++	void			(*done)(struct uioc *);
  
- 		// Do not allow access to target id > 15 or LUN > 7
- 		if (target > 15 || SCP2LUN(scp) > 7) {
-@@ -1830,8 +1826,7 @@ megaraid_mbox_build_cmd(adapter_t *adapter, struct scsi_cmnd *scp, int *busy)
- 			mbox64->xferaddr_lo	= (uint32_t)ccb->epthru_dma_h;
- 			mbox64->xferaddr_hi	= 0;
- 			mbox->xferaddr		= 0xFFFFFFFF;
--		}
--		else {
-+		} else {
- 			mbox->cmd = MBOXCMD_PASSTHRU64;
- 
- 			megaraid_mbox_prepare_pthru(adapter, scb, scp);
-@@ -1961,8 +1956,7 @@ megaraid_mbox_prepare_pthru(adapter_t *adapter, scb_t *scb,
- 		pthru->dataxferlen	= scsi_bufflen(scp);
- 		pthru->dataxferaddr	= ccb->sgl_dma_h;
- 		pthru->numsge		= megaraid_mbox_mksgl(adapter, scb);
--	}
--	else {
-+	} else {
- 		pthru->dataxferaddr	= 0;
- 		pthru->dataxferlen	= 0;
- 		pthru->numsge		= 0;
-@@ -2010,8 +2004,7 @@ megaraid_mbox_prepare_epthru(adapter_t *adapter, scb_t *scb,
- 		epthru->dataxferlen	= scsi_bufflen(scp);
- 		epthru->dataxferaddr	= ccb->sgl_dma_h;
- 		epthru->numsge		= megaraid_mbox_mksgl(adapter, scb);
--	}
--	else {
-+	} else {
- 		epthru->dataxferaddr	= 0;
- 		epthru->dataxferlen	= 0;
- 		epthru->numsge		= 0;
-@@ -2100,8 +2093,7 @@ megaraid_ack_sequence(adapter_t *adapter)
- 				// a cmm command
- 				scb = adapter->uscb_list + (completed[i] -
- 						MBOX_MAX_SCSI_CMDS);
--			}
--			else {
-+			} else {
- 				// an os command
- 				scb = adapter->kscb_list + completed[i];
- 			}
-@@ -2303,8 +2295,7 @@ megaraid_mbox_dpc(unsigned long devp)
- 
- 				scp->result = DRIVER_SENSE << 24 |
- 					DID_OK << 16 | CHECK_CONDITION << 1;
--			}
--			else {
-+			} else {
- 				if (mbox->cmd == MBOXCMD_EXTPTHRU) {
- 
- 					memcpy(scp->sense_buffer,
-@@ -2335,8 +2326,7 @@ megaraid_mbox_dpc(unsigned long devp)
- 			if (scp->cmnd[0] == TEST_UNIT_READY) {
- 				scp->result = DID_ERROR << 16 |
- 					RESERVATION_CONFLICT << 1;
--			}
--			else
-+			} else
- 			/*
- 			 * Error code returned is 1 if Reserve or Release
- 			 * failed or the input parameter is invalid
-@@ -2346,8 +2336,7 @@ megaraid_mbox_dpc(unsigned long devp)
- 
- 				scp->result = DID_ERROR << 16 |
- 					RESERVATION_CONFLICT << 1;
--			}
--			else {
-+			} else {
- 				scp->result = DID_BAD_TARGET << 16 | status;
- 			}
- 		}
-@@ -2485,8 +2474,7 @@ megaraid_abort_handler(struct scsi_cmnd *scp)
- 				"megaraid abort: %d[%d:%d], invalid state\n",
- 				scb->sno, scb->dev_channel, scb->dev_target));
- 				BUG();
--			}
--			else {
-+			} else {
- 				con_log(CL_ANN, (KERN_WARNING
- 				"megaraid abort: %d[%d:%d], fw owner\n",
- 				scb->sno, scb->dev_channel, scb->dev_target));
-@@ -2621,8 +2609,7 @@ megaraid_reset_handler(struct scsi_cmnd *scp)
- 
- 		rval = FAILED;
- 		goto out;
--	}
--	else {
-+	} else {
- 		con_log(CL_ANN, (KERN_NOTICE
- 		"megaraid mbox: reset sequence completed successfully\n"));
- 	}
-@@ -2642,8 +2629,7 @@ megaraid_reset_handler(struct scsi_cmnd *scp)
- 	if (mbox_post_sync_cmd_fast(adapter, raw_mbox) == 0) {
- 		con_log(CL_ANN,
- 			(KERN_INFO "megaraid: reservation reset\n"));
--	}
--	else {
-+	} else {
- 		rval = FAILED;
- 		con_log(CL_ANN, (KERN_WARNING
- 				"megaraid: reservation reset failed\n"));
-@@ -3147,8 +3133,7 @@ megaraid_mbox_get_max_sg(adapter_t *adapter)
- 	// Issue the command
- 	if (mbox_post_sync_cmd(adapter, raw_mbox) == 0) {
- 		nsg =  *(uint8_t *)adapter->ibuf;
--	}
--	else {
-+	} else {
- 		nsg =  MBOX_DEFAULT_SG_SIZE;
- 	}
- 
-@@ -3940,21 +3925,18 @@ megaraid_sysfs_get_ldmap(adapter_t *adapter)
- 				"megaraid: sysfs get ld map timed out\n"));
- 
- 			rval = -ETIME;
--		}
--		else {
-+		} else {
- 			rval = mbox->status;
- 		}
- 
- 		if (rval == 0) {
- 			memcpy(raid_dev->curr_ldmap, ldmap,
- 				sizeof(raid_dev->curr_ldmap));
--		}
--		else {
-+		} else {
- 			con_log(CL_ANN, (KERN_NOTICE
- 				"megaraid: get ld map failed with %x\n", rval));
- 		}
--	}
--	else {
-+	} else {
- 		con_log(CL_ANN, (KERN_NOTICE
- 			"megaraid: could not issue ldmap command:%x\n", rval));
- 	}
-@@ -4050,8 +4032,7 @@ megaraid_sysfs_show_ldnum(struct device *dev, struct device_attribute *attr, cha
- 					break;
- 				}
- 			}
--		}
--		else {
-+		} else {
- 			con_log(CL_ANN, (KERN_NOTICE
- 				"megaraid: sysfs get ld map failed: %x\n",
- 				rval));
+ 	caddr_t			buf_vaddr;
+ 	dma_addr_t		buf_paddr;
+diff --git a/drivers/scsi/megaraid/megaraid_mbox.h b/drivers/scsi/megaraid/megaraid_mbox.h
+index d2fe7f6..3c16d38 100644
+--- a/drivers/scsi/megaraid/megaraid_mbox.h
++++ b/drivers/scsi/megaraid/megaraid_mbox.h
+@@ -189,7 +189,7 @@ typedef struct {
+ 	dma_addr_t			mbox_dma;
+ 	spinlock_t			mailbox_lock;
+ 	unsigned long			baseport;
+-	void __iomem *			baseaddr;
++	void __iomem			*baseaddr;
+ 	struct mraid_pci_blk		mbox_pool[MBOX_MAX_SCSI_CMDS];
+ 	struct dma_pool			*mbox_pool_handle;
+ 	struct mraid_pci_blk		epthru_pool[MBOX_MAX_SCSI_CMDS];
 diff --git a/drivers/scsi/megaraid/megaraid_mm.c b/drivers/scsi/megaraid/megaraid_mm.c
-index 2939f0e..864cbb6 100644
+index 864cbb6..234885c 100644
 --- a/drivers/scsi/megaraid/megaraid_mm.c
 +++ b/drivers/scsi/megaraid/megaraid_mm.c
-@@ -390,8 +390,7 @@ mimd_to_kioc(mimd_t __user *umimd, mraid_mmadp_t *adp, uioc_t *kioc)
+@@ -582,7 +582,7 @@ static uioc_t *
+ mraid_mm_alloc_kioc(mraid_mmadp_t *adp)
+ {
+ 	uioc_t			*kioc;
+-	struct list_head*	head;
++	struct list_head	*head;
+ 	unsigned long		flags;
  
- 			if (mraid_mm_attach_buf(adp, kioc, kioc->xferlen))
- 				return (-ENOMEM);
--		}
--		else {
-+		} else {
- 			con_log(CL_ANN, (KERN_WARNING
- 					"megaraid cmm: Invalid subop\n"));
- 			return (-EINVAL);
-@@ -539,8 +538,7 @@ mraid_mm_attach_buf(mraid_mmadp_t *adp, uioc_t *kioc, int xferlen)
+ 	down(&adp->kioc_semaphore);
+@@ -722,7 +722,7 @@ ioctl_done(uioc_t *kioc)
+ {
+ 	uint32_t	adapno;
+ 	int		iterator;
+-	mraid_mmadp_t*	adapter;
++	mraid_mmadp_t	*adapter;
  
- 			spin_unlock_irqrestore(&pool->lock, flags);
- 			return 0;
--		}
--		else {
-+		} else {
- 			spin_unlock_irqrestore(&pool->lock, flags);
- 			continue;
- 		}
-@@ -760,10 +758,8 @@ ioctl_done(uioc_t *kioc)
- 		if (adapter) {
- 			mraid_mm_dealloc_kioc(adapter, kioc);
- 		}
--	}
--	else {
-+	} else
- 		wake_up(&wait_q);
--	}
- }
- 
- 
+ 	/*
+ 	 * When the kioc returns from driver, make sure it still doesn't
 diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 7ff5820..40c77bb 100644
+index 40c77bb..2b17529 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_base.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3199,8 +3199,7 @@ megasas_service_aen(struct megasas_instance *instance, struct megasas_cmd *cmd)
- 		spin_unlock_irqrestore(&poll_aen_lock, flags);
- 		wake_up(&megasas_poll_wait);
- 		kill_fasync(&megasas_async_queue, SIGIO, POLL_IN);
--	}
--	else
-+	} else
- 		cmd->abort_aen = 0;
+@@ -4402,7 +4402,7 @@ int megasas_alloc_cmds(struct megasas_instance *instance)
+ 	 * Allocate the dynamic array first and then allocate individual
+ 	 * commands.
+ 	 */
+-	instance->cmd_list = kcalloc(max_cmd, sizeof(struct megasas_cmd*), GFP_KERNEL);
++	instance->cmd_list = kcalloc(max_cmd, sizeof(struct megasas_cmd *), GFP_KERNEL);
  
- 	instance->aen_cmd = NULL;
-@@ -5686,8 +5685,8 @@ megasas_setup_irqs_msix(struct megasas_instance *instance, u8 is_probe)
-  * return:				void
+ 	if (!instance->cmd_list) {
+ 		dev_printk(KERN_DEBUG, &instance->pdev->dev, "out of memory\n");
+@@ -8150,7 +8150,7 @@ static int megasas_set_crash_dump_params_ioctl(struct megasas_cmd *cmd)
   */
- static void
--megasas_destroy_irqs(struct megasas_instance *instance) {
--
-+megasas_destroy_irqs(struct megasas_instance *instance)
-+{
- 	int i;
- 	int count;
- 	struct megasas_irq_context *irq_ctx;
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index 7d10448..4591262 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -908,8 +908,8 @@ megasas_alloc_rdpq_fusion(struct megasas_instance *instance)
- }
- 
- static void
--megasas_free_rdpq_fusion(struct megasas_instance *instance) {
--
-+megasas_free_rdpq_fusion(struct megasas_instance *instance)
-+{
- 	int i;
- 	struct fusion_context *fusion;
- 
-@@ -932,8 +932,8 @@ megasas_free_rdpq_fusion(struct megasas_instance *instance) {
- }
- 
- static void
--megasas_free_reply_fusion(struct megasas_instance *instance) {
--
-+megasas_free_reply_fusion(struct megasas_instance *instance)
-+{
- 	struct fusion_context *fusion;
- 
- 	fusion = instance->ctrl_context;
-@@ -1296,7 +1296,8 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
-  * issue and receive command.
-  */
- int
--megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
-+megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend)
-+{
- 	int ret = 0;
- 	size_t pd_seq_map_sz;
- 	struct megasas_cmd *cmd;
+ static int
+ megasas_mgmt_fw_ioctl(struct megasas_instance *instance,
+-		      struct megasas_iocpacket __user * user_ioc,
++		      struct megasas_iocpacket __user *user_ioc,
+ 		      struct megasas_iocpacket *ioc)
+ {
+ 	struct megasas_sge64 *kern_sge64 = NULL;
 -- 
 2.7.4
 
