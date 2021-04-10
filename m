@@ -2,72 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D8035AFA0
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 20:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A738C35AFA5
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 20:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234941AbhDJSlC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Apr 2021 14:41:02 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:47586 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbhDJSlB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 14:41:01 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13AIVXQt061819;
+        id S234969AbhDJSlH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Apr 2021 14:41:07 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:41986 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234911AbhDJSlE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 14:41:04 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13AIY0TA007849;
         Sat, 10 Apr 2021 18:40:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2020-01-29; bh=IfTfffQlU/V7fQY6H9Hl6sSPUi57WdNa1UE/7KZ1eZ0=;
- b=I6Bq7sD8zndRPI1e3neAcOCSEtPxSj+rJC8NtIVSPMhzraeR70eNG0LwliPzaIWGEtPA
- C46u1EryE2+ZclrvSZvem8RMy0+ngbSLctoAkA7cWJqehfWJubo74Znjyr408wRzodbd
- k3erv360gfr3FsbDde97d7guV5kUQwkV8Nl1bQLBWsolNIze1Z2TndYr0XY+O+38vFR5
- dhDjdgMJQwl0r8RXPlS6UBMDVsUTv/II1EyuY/YUGoTRlQ3UCkSd/fjkbSrQ2x9y8ZdT
- 63vUVqI6cr0Wn0ElMhfB6Wf/fSsUyi3nXmru0UOMkauDcKqNr3cwTGfo9HOoiKcIOmF/ Wg== 
+ s=corp-2020-01-29; bh=qGYOd4dDWIfBfGK7m5i1lx1pmsIPaW+4NzfN408mE0A=;
+ b=GOUX6ajXVCug5Sryh3Az5tIQD5FAj69wyT/dPlw64NuM5KtCFaT26fWIS2s/UAn0K3Fr
+ Ui1mWs2KBOSWG96u2khwvZlb/QvAVPIh8Ckf16Q75QPL75yh88xXxlie6xwFt1wCgybT
+ H5Xws8bF3djrEi1kwP51in5XumI3W3pSRpwtlz3hRe+07JLJLNf/Nl1aKe69Qp3AefHk
+ 5yzfPCXeu6ZZSnj1vPTfG66cLDwFLAG7XQTIhiU7H6hIQs7dMJK9zHjgZH52MFWTR7lk
+ eAMwyRgS9tfqncIiX0kM0ohnLW4WwNQqGXu/F1rqoakNgSfTrmxEBU0zyur0wj/7VlmF OA== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 37u3er8stn-1
+        by userp2120.oracle.com with ESMTP id 37u4nn8r85-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 10 Apr 2021 18:40:33 +0000
+        Sat, 10 Apr 2021 18:40:34 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13AIThiZ176766;
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13AIThia176766;
         Sat, 10 Apr 2021 18:40:33 GMT
 Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        by aserp3020.oracle.com with ESMTP id 37u3u1q4dr-1
+        by aserp3020.oracle.com with ESMTP id 37u3u1q4dr-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 10 Apr 2021 18:40:32 +0000
+        Sat, 10 Apr 2021 18:40:33 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N7cmcfGAnF0B0b0QPINW0RL5iOG+Y+TCUDG0Cm38BvQj2oxFC3TkPPW448D+7OOSL1KFtSikidIRrjsaiw9xaa+JQ6RGSHyLEHdKIgrT7G6MAXQFnYH4naiQ4No+MQQW25w5R0oSZ65WRNUvmPhgwSUbxplykSBLuhd4CPY2gKOrxTIt6ytYI3lDaX+rfHPI2LtLo4DYxMyrElQZlP89NMDq00yFALSceUBea4TQnIClgCKJV/cy8KB96cH/fc+tmAJdrLTWaOqrmIktlKudowWAyL6jAt16Kse1HiXmbWg8xHv9wfldj3WkJYtnyhT4I49nuVKPfVLf0eFMzG9W0Q==
+ b=DOEn9kQ//AhmavZTZfBmoao166kgvqnR7QOYxmD1WykinpjGzdeqL3Twf/aGtPZIiHflQ1JNN10yoK+jHhbafVBfa/2ScBosWY4gmJhnETg1xM/9Am0giqh+3SXqwqUhAGjfxw2Ym72HcBVy+vnRNFvjdXCJ1bSGWc4VCgFx5PqWJxdZ5Z4BkBMj3vohGEKehUWIm5DFwKa5IlTCH3RZwm2mSXAH/3+MI6pUYkM/P5Rjiwc2BpOTsZ+kf0US7TX6Uby6yE1PMsL0wSq+U92lRk15ZJyenGtmwYu9r/Bl+PZ9jWuHpEI7MEz9/Lc9g8GsppxZnfm0Qv+6iRoVrvzMSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IfTfffQlU/V7fQY6H9Hl6sSPUi57WdNa1UE/7KZ1eZ0=;
- b=VeavsTsZVsTzKowBLSYXi8A7/wz5MhZz6Gl7ixWq3I/fvMFVccvPJ9VY5u/B0RCNSHew6yO+wqkH8UjrlyuMksjwBvRqSPC9qAMbo4BO+cTcuWLCO9CqudQoQLCah7GQTYhi7lCJZC2e9pgv7GPHyxRgqajthiWi63XYThk1njpJeRs196UozLBdSWqrnvPz+jZ64kaOpLOXrBvypVCHNQxTOOyq8055J4VKlygoAt7opmJUVJhFFIoQVy8r0jU12woy65b/FSsIQ35TI9ug3Squ+iEirlL9YDy07z/MLhk06G58fG9Cs/kBKjLpO1N1UEgKKAtAwpNy5nVd7Tjfuw==
+ bh=qGYOd4dDWIfBfGK7m5i1lx1pmsIPaW+4NzfN408mE0A=;
+ b=Rln2VQR4pG4qAF5+EoLO+Nom+15PS8KddtOK9liYThfVAriRR7QwV7CPb3rFjIoxs3WH403dmANmURWBPeKh30emGAdwkXEyPn/krr3pNj9lbdjHmFFJI/8KPUpQ9a3vxn7/y0VuIIADjdgJZkAwUltlQC6OTtu4nY/XRz/RSEkb8rfnCxEbk3CReMiw/yEeR5FMeYx8+oOQGtQSJdOshC08oSHK5BhzUQd+0fo9g97j+IMjFyRZ/alqXoqHaBANnqYbEpamx+wfQh3Xv2/Pmb9zRcliWz90VWHlQaXlure6HnabwvFB6jHAqg/8xjSXTBY4bgmJg/6L3a1S9z5JgA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IfTfffQlU/V7fQY6H9Hl6sSPUi57WdNa1UE/7KZ1eZ0=;
- b=KRoTLEfYGj5A1mq4HraP+OyeIEuaNQuuulG9eOYYs0vNDeKOBejT5YF2gzJUWsAI21BAALOj1FDLJROp7J4kM8KLNddhJFO0Vjh/2AhlyI7Ph1RZrD/1OhLC60Z6l56wtzotHd8DHx8vXeRQOVCtxNadONxqNpnFihad2vSzuAI=
+ bh=qGYOd4dDWIfBfGK7m5i1lx1pmsIPaW+4NzfN408mE0A=;
+ b=lzUvpVCoIYvALUgOzn09ZQjNP3sz3PnFPem9D13eh3F2NpbxN/cRwgSqhD+s0TSznEr23yyXgBH0/96uM8SJhQfiX0mt4PVX2bb3nSFRQ3d0WACaCFJ4qM/SVv6jVeeIQFPMYmhAw3+O+b0z8cg8yN9eh2eif5cVQoxr1KxxUbA=
 Authentication-Results: suse.com; dkim=none (message not signed)
  header.d=none;suse.com; dmarc=none action=none header.from=oracle.com;
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
  by BY5PR10MB4324.namprd10.prod.outlook.com (2603:10b6:a03:205::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.18; Sat, 10 Apr
- 2021 18:40:31 +0000
+ 2021 18:40:32 +0000
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::50bb:7b66:35ee:4a4]) by BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::50bb:7b66:35ee:4a4%7]) with mapi id 15.20.4020.018; Sat, 10 Apr 2021
- 18:40:31 +0000
+ 18:40:32 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, martin.petersen@oracle.com,
         mrangankar@marvell.com, svernekar@marvell.com,
         linux-scsi@vger.kernel.org, jejb@linux.ibm.com
 Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH 05/13] scsi: qedi: fix use after free during abort cleanup
-Date:   Sat, 10 Apr 2021 13:40:08 -0500
-Message-Id: <20210410184016.21603-6-michael.christie@oracle.com>
+Subject: [PATCH 06/13] scsi: qedi: fix tmf tid allocation
+Date:   Sat, 10 Apr 2021 13:40:09 -0500
+Message-Id: <20210410184016.21603-7-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210410184016.21603-1-michael.christie@oracle.com>
 References: <20210410184016.21603-1-michael.christie@oracle.com>
@@ -79,302 +79,257 @@ X-ClientProxiedBy: DM5PR15CA0036.namprd15.prod.outlook.com
  (2603:10b6:a03:11e::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (73.88.28.6) by DM5PR15CA0036.namprd15.prod.outlook.com (2603:10b6:4:4b::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend Transport; Sat, 10 Apr 2021 18:40:30 +0000
+Received: from localhost.localdomain (73.88.28.6) by DM5PR15CA0036.namprd15.prod.outlook.com (2603:10b6:4:4b::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend Transport; Sat, 10 Apr 2021 18:40:31 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b472931a-011b-46a4-2a8d-08d8fc501e61
+X-MS-Office365-Filtering-Correlation-Id: 466ab399-18de-4fdd-2d96-08d8fc501ef4
 X-MS-TrafficTypeDiagnostic: BY5PR10MB4324:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR10MB4324D9775C32908156E47137F1729@BY5PR10MB4324.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <BY5PR10MB43241B955483553D22E4F448F1729@BY5PR10MB4324.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vRFnhBnxsgww0YO3ab7G7mvH31q5y92G9ZAg8zVPMBfwcD5bYkEL/a9OabqXa2UdkqxdNUfzrP88aDoYErwfIg88/1BcxJbot1YF5Y/za/A+7AiPAQUyMAqfK2+ZBBEtCXJV+ePr7RZU967QVRSxhg1FBnQMla8q9gY0lDiCnCjqG78iWG0JdA3sGZgkR+lypK0z3tjdi9XC3ts1Cm+1qZm8pEovDPq0zdH48cCX3hWzGAefdmnhIWS4lDTUcXRyCrJtLHdTy20rFN4b4ZX2aa2Z+YUVYHICK8CE3jkqlzw+K+c2G5TlK5VjBsDqmlSfOv43oqj3Gi605ScQqLi+teDplD4d/uc44/ukcTLP3HN34NJ4kVmTIovkrPOle8t1EgMKLHC7uB3gnG/2XxSNh+7OXgyExR3ohf9nsNAQkCcvsTf6AdRLdiuJH/lPr00B6lAhTT+epQCornV8BbGvFFRQE8VDu/xBbIEx7bMunn2fP3l7PA/oJyK87ExZTUrcFJ7VVAmz4aEmWqyBB4mMh+CLuAkyetPwF+PTWJHG/ZFi3d/esIF75O8jxI0e2+MC19eq1CS963xzzFlHlGuXh47AnYaDZu9TFY8DKNNjLIAOoJc3+vDjU6ZSKa7Tpg1RtdyKjOajEVyIcnmIniZENuoHUJUHQSMbZlexrDP2c6R0RJBjKaC7oNhSe6zusxoH
+X-Microsoft-Antispam-Message-Info: YlaND1PeWSlXB52xlbh5HpHxKJurT6EVM56PfynI9p68ZuZP7zwbvaff6LA+dWEBqWJahkuU8xkhtsMKvd6effn7Y+hk884ie85zZYC8lehT78Rl5FaZWJMaiOSf5IuOYF3g4dkmnwrKUlmg6EvtV0csRTJiQfnBVwk9wF8zq93DlZH51ZqKjXD/5yM+GYKIx9uHqdO+cny7tS2+i2umTldYXWVWZ+laCt329UYQdVU2/wZ5xe4XiAgYOl9MtlnAuokR6yiGyi8N91h5Dxls+UxduJk/ra718SO/yT1XaXRj3SrzojNDFwoHLj72pBZo+BomqXlPMJCo1ld2VzS0lOzQfSWzuYXbnfttBo4b/7VAidaYBMrlm05wSF7dgmVwT+PIvAZvmuwbjZpljkzySWlaMBoTyq/dyb81/mnQq2iqMfjp1HYimxejNXf8YJkgqAYHv41y9AK4bA5BisWIMkVgDV3go7oKSWmmCvdLSdtr9OxUkVqQfyEuRLbQlC2RuO2uYPfBUPaUTyGLWhATpHvHU/dbHAV2iVIgBwIJ52N5ch5/sR4CLtkZmou0rtmX5BJE1+fxWzKjV/JBsGPSQ0iiHrax02skzKUDkK9NZwRyxten/01OsL2qUokvdgVLeZRZpVO/mCT18PoYXSFNLeNZ/o4TW3FFsb/XnrHVyXLXH4D/ODcBtreAHZeWi4Bl
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(376002)(366004)(346002)(136003)(66946007)(66556008)(66476007)(69590400012)(6486002)(83380400001)(2616005)(8676002)(8936002)(16526019)(186003)(956004)(38100700002)(38350700002)(316002)(6512007)(1076003)(478600001)(52116002)(107886003)(26005)(4326008)(6666004)(86362001)(6506007)(5660300002)(36756003)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?IohmCHUeRTwA2lQKD+HA6zoccd2wnBXewqWOVyUDU5/geHZg96RI4hKvTiiq?=
- =?us-ascii?Q?wose9aTgQj0pWwXsPcBEvXd3l/BYt7UsGE6zJwfygvtSjCbfvvi63NiPbhPA?=
- =?us-ascii?Q?L1ghnnBk/dXcQLH8Tg0wUU8CsjpoR0bdoTo8lIcl1h02/Szv+XBmhlpvQGl7?=
- =?us-ascii?Q?iLuKkqT0gQCNArIBfgU10KDPs0cCxNlr8tRO76Arfaon9ZBDlm4r6eNwXZ1y?=
- =?us-ascii?Q?w9GoSicUPIryF/roKOACsQHZFDvWOfignz89caoZFBCnsxEPix742YM5Ycye?=
- =?us-ascii?Q?s6OY1YOYKOOzatPRf/kGvHbUl2R2WK5V3OHHIZI1YLxEgc2MYZRwhFeHDBrZ?=
- =?us-ascii?Q?UtgDw2KdAhNRm+Qv8yI4e+MEmwBcLwyw0ViAo2N7CydAXmqukN9zgNucPV5T?=
- =?us-ascii?Q?dhrAZ1z49mc+oaFOLIylCTuSK70Fn7TMr/RX1IpebIDIjU0Kug35lPepAkNj?=
- =?us-ascii?Q?cqrox7v7osEbVN7+lJKvIB7pbIedP0D3haG+Gyx66iBAV5av5Vdg19dg/JFV?=
- =?us-ascii?Q?aHfeDafc9D+C352VC2qCqC2TpPyjUR4whfZrDtrwhljgJu5GBnwdzoNBUBZB?=
- =?us-ascii?Q?bYTTLX8S6SZKpeo2A1zYAyrRFNq7pAQ5KAwLacsQFL2RQnTZ1TFSyT4R38b6?=
- =?us-ascii?Q?m3HbVZ+kRqD+6IEgIjDQYZ9Nm/U9NqO5MPqyri67h3L9F6vXHwVKjMokBzyQ?=
- =?us-ascii?Q?L69qYp26g45FPGTPqUCF0uYNFsnzPoFJMsCIAL93E8QlVCAwCprpEFpMOYTP?=
- =?us-ascii?Q?MZALHS9K7xbOtsv8CqJoNgM0qKOAaHScHob+kGWCvwvXFYGnhnRxKlZxtm7P?=
- =?us-ascii?Q?o7KSbDeKAriiulXHu9rt2tlwoNAISanPfr1mpL6oDCZHQBkC3wu4QIdyPgJO?=
- =?us-ascii?Q?wmwuYuEyZUrmnAbYzllDGZm+zvyrWhjvjE0mHx7M65PTK8evRvV0+MShjiPl?=
- =?us-ascii?Q?xx0DaclWkeQnfSEOW5hgTToJ8x/Y/KkwlXsYRF0ie3nfjxyiJQfe2VO8dQx4?=
- =?us-ascii?Q?oSHueVyez8w3a3I59ZFnmlUdIRPCS2LbUB7NFi5GWatLTnmdyUFNEmwE5ApU?=
- =?us-ascii?Q?jj7Axxo7Mj3CnYCI3zYdhFXBgVGIW61TdHFZbYpLZcM5ROSG21hb5DD9tHZR?=
- =?us-ascii?Q?XLF/rRnl9kMbPfiZzuYv5S1l13HCb+O/poEFZUAq2QcpZTGQmYi29gecglt6?=
- =?us-ascii?Q?FNYm2rHBytWS26flVYlDJ3APHTjntmva5Wa1yObkW2hh0y9hGHpQaRGsUSwJ?=
- =?us-ascii?Q?5ABwePRCBz8MjFrEnopjIfarfzQXSMGwGALrjEcgfiPcPNj/2NJy1n/02c2C?=
- =?us-ascii?Q?Uu1OmtI2qtB7SOlpnbRPfwT/?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?rBamCyle9wbcZuHdVu2NFenElgzYuckxTMIzeXOhCmlobHB7Hl1dvrdsNNPH?=
+ =?us-ascii?Q?r4MHkldHUhi0phcnTWzEnfXOy5hgEWSN7O0iLirij74Rznt7K2C2e6wFb99B?=
+ =?us-ascii?Q?NhNgNoVqVeqPyBQhPRLBC0fmfUIHN8r2NCOKOB5ZB2Qg8+2BXHmY9jgzdCN9?=
+ =?us-ascii?Q?QZI4WeABp8UYxv4YPHDVaQM7ZfcqUlLKDkYrBYzCScWhs2gEJc8fUo4cgO7w?=
+ =?us-ascii?Q?dPWem3ttez9mz0c+AANfkE6eInChI6lnzBAowByCigHEzDOCcsifMZZ5wjo4?=
+ =?us-ascii?Q?Are+h58CleHcpUCUkvpWnpDKKU9URyf5OQpJrQGedEU0wjwnO4rjWRyJLOJr?=
+ =?us-ascii?Q?xjis4QCZRfKzfIAVx4FIU8K9RMaQul2BkxIEq7EbRuJR+Np6P7ZaVo3xG8DA?=
+ =?us-ascii?Q?A7Laj0DC3bnV6weEvgXNJlmSCaUj/9cZ5NeA+YUp9rjYKeCS57wNMOaL+ddT?=
+ =?us-ascii?Q?yu0Fyh+ZMH+lj2nxp/nle9trxjeb06wk76hOPQ5bMU2HYfgmS/rgDN1tFERj?=
+ =?us-ascii?Q?ipCMYpiIR1p+RGsovVjCbUr/jWm64jbyx1sWdlqaUPf29aSKrYQNIJS6oFLn?=
+ =?us-ascii?Q?Mb1VULN+LqQVxYO2upjN3EhXuqxWb7dcwnySFnaJUnYm8aweqKGBIkRbZbhW?=
+ =?us-ascii?Q?Cy7miWbI4/gtQGfOSY94T4bYFRs4WcN2mR/oEwoZPezFL2KgdQZQYa/7il8Y?=
+ =?us-ascii?Q?C1M5WGMee7mbyjAcgu+Ot8y+ZeIHzB/MJAUJ8+XQrf81tquW2gicdvzipC6u?=
+ =?us-ascii?Q?0RCk7JOw3Tu3TAbrf1D6yL9Z0duygOKTFid2bVKAzsNND6kLyM3tLzAkb3NX?=
+ =?us-ascii?Q?Y4yGHL9yuc+bVo2aoBYSp1E3FWKo+XEvj1FE544C3MOz/wIB0T/JhFL7Gkn2?=
+ =?us-ascii?Q?fIBrN0mvTCZZPwO5pM52GeaFbQay8tp8gSfiF+rjy96MbdvY+VjXrn/nI3Bm?=
+ =?us-ascii?Q?WTllyJGJ81/Ufu08/xChn/xG361g+MWv8P/JF6uHC1jD2OLZVO9PHqNzE1HZ?=
+ =?us-ascii?Q?2RLSrexYsb4zY3DIP1Wwgdxt6GBVQEWr0EhQDPTDBQaBM10QeFziLn29k8lW?=
+ =?us-ascii?Q?j7snYzTaKQyvUn3YdpwRBB0ZhP+N0SPyLaqGhgFtzfNwvTqKT6zSa7GXEaT+?=
+ =?us-ascii?Q?nK6q+qoaJsDwAVvARpFbjhFEPtpf0CjMLmB4TPyk5bss+GiA90R0THvDm5Nk?=
+ =?us-ascii?Q?vZYIDv0kS0GLY+ZVLxJHqi2rqqYCXocEU139+ouWXEgS3Sdt0u3EXkxnnxUa?=
+ =?us-ascii?Q?8z7CZ8XhMxDow9kqYaW5ww+MZ5biLuvt6RYHmJM7BUPYI+2VDkNgN7kDpMDx?=
+ =?us-ascii?Q?3Wd11vFnoc3RTm88rShXysbA?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b472931a-011b-46a4-2a8d-08d8fc501e61
+X-MS-Exchange-CrossTenant-Network-Message-Id: 466ab399-18de-4fdd-2d96-08d8fc501ef4
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2021 18:40:31.2001
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2021 18:40:32.1716
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nx5JYZTkr3JXsEdb+DsRS/+uDdPgV8bQ+6EX/bUuHOfYQ1iwEo2CCrDLYf+MoafCteEIOz6ut+t/GplQMQ4eH4Zt99q5Ew8HrNq54ayMuXY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9LVRK4RVhVYTDTgjkvVBVcg734cl9UZEqgK3x8zubRGyoiTUAieFfitiChgoGafh9dptBi8a36cZrqufpBdO7wGZXV9TyI5caawOlswXaZQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4324
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9950 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 adultscore=0
  malwarescore=0 mlxlogscore=999 suspectscore=0 mlxscore=0 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
  definitions=main-2104100140
-X-Proofpoint-ORIG-GUID: IxPhgS05bxsktd_1ArdTUdUdYW_s88_O
-X-Proofpoint-GUID: IxPhgS05bxsktd_1ArdTUdUdYW_s88_O
+X-Proofpoint-ORIG-GUID: 2kTWpnsd4INXBzftpnHUNK_oYVWLrLkt
+X-Proofpoint-GUID: 2kTWpnsd4INXBzftpnHUNK_oYVWLrLkt
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9950 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 clxscore=1015
- adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 spamscore=0
- impostorscore=0 suspectscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
- definitions=main-2104100140
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ phishscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
+ clxscore=1015 lowpriorityscore=0 spamscore=0 impostorscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104100140
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This fixes two bugs:
-
-1. The scsi cmd task could be completed and the abort could timeout
-while we are running qedi_tmf_work so we need to get a ref to the task.
-
-2. If qedi_tmf_work's qedi_wait_for_cleanup_request call times out then
-we will also force the clean up of the qedi_work_map but
-qedi_process_cmd_cleanup_resp could still be accessing the qedi_cmd
-for the abort tmf. We can then race where qedi_process_cmd_cleanup_resp is
-still accessing the mtask's qedi_cmd but libiscsi has escalated to session
-level cleanup and is cleaning up the mtask while we are still accessing it.
+qedi_iscsi_abort_work and qedi_tmf_work allocates a tid then calls
+qedi_send_iscsi_tmf which also allcoates a tid. This removes the tid
+allocation from the callers.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/scsi/qedi/qedi_fw.c    | 110 ++++++++++++++++++---------------
- drivers/scsi/qedi/qedi_iscsi.h |   1 +
- 2 files changed, 61 insertions(+), 50 deletions(-)
+ drivers/scsi/qedi/qedi_fw.c    | 76 ++++++++++------------------------
+ drivers/scsi/qedi/qedi_gbl.h   |  3 +-
+ drivers/scsi/qedi/qedi_iscsi.c |  2 +-
+ 3 files changed, 25 insertions(+), 56 deletions(-)
 
 diff --git a/drivers/scsi/qedi/qedi_fw.c b/drivers/scsi/qedi/qedi_fw.c
-index ad4357e4c15d..c5699421ec37 100644
+index c5699421ec37..542255c94d96 100644
 --- a/drivers/scsi/qedi/qedi_fw.c
 +++ b/drivers/scsi/qedi/qedi_fw.c
-@@ -729,7 +729,6 @@ static void qedi_process_nopin_local_cmpl(struct qedi_ctx *qedi,
+@@ -14,8 +14,8 @@
+ #include "qedi_fw_iscsi.h"
+ #include "qedi_fw_scsi.h"
  
- static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
- 					  struct iscsi_cqe_solicited *cqe,
--					  struct iscsi_task *task,
- 					  struct iscsi_conn *conn)
+-static int qedi_send_iscsi_tmf(struct qedi_conn *qedi_conn,
+-			       struct iscsi_task *mtask);
++static int send_iscsi_tmf(struct qedi_conn *qedi_conn,
++			  struct iscsi_task *mtask);
+ 
+ void qedi_iscsi_unmap_sg_list(struct qedi_cmd *cmd)
  {
- 	struct qedi_work_map *work, *work_tmp;
-@@ -742,7 +741,7 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
- 	u32 iscsi_cid;
- 	struct qedi_conn *qedi_conn;
- 	struct qedi_cmd *dbg_cmd;
--	struct iscsi_task *mtask;
-+	struct iscsi_task *mtask, *task;
- 	struct iscsi_tm *tmf_hdr = NULL;
+@@ -1350,7 +1350,7 @@ static int qedi_wait_for_cleanup_request(struct qedi_ctx *qedi,
+ 	return 0;
+ }
  
- 	iscsi_cid = cqe->conn_id;
-@@ -768,6 +767,7 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
- 			}
- 			found = 1;
- 			mtask = qedi_cmd->task;
-+			task = work->ctask;
- 			tmf_hdr = (struct iscsi_tm *)mtask->hdr;
- 			rtid = work->rtid;
+-static void qedi_tmf_work(struct work_struct *work)
++static void qedi_abort_work(struct work_struct *work)
+ {
+ 	struct qedi_cmd *qedi_cmd =
+ 		container_of(work, struct qedi_cmd, tmf_work);
+@@ -1363,7 +1363,6 @@ static void qedi_tmf_work(struct work_struct *work)
+ 	struct iscsi_task *ctask;
+ 	struct iscsi_tm *tmf_hdr;
+ 	s16 rval = 0;
+-	s16 tid = 0;
  
-@@ -776,52 +776,47 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
- 			qedi_cmd->list_tmf_work = NULL;
- 		}
- 	}
--	spin_unlock_bh(&qedi_conn->tmf_work_lock);
--
--	if (found) {
--		QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
--			  "TMF work, cqe->tid=0x%x, tmf flags=0x%x, cid=0x%x\n",
--			  proto_itt, tmf_hdr->flags, qedi_conn->iscsi_conn_id);
--
--		if ((tmf_hdr->flags & ISCSI_FLAG_TM_FUNC_MASK) ==
--		    ISCSI_TM_FUNC_ABORT_TASK) {
--			spin_lock_bh(&conn->session->back_lock);
- 
--			protoitt = build_itt(get_itt(tmf_hdr->rtt),
--					     conn->session->age);
--			task = iscsi_itt_to_task(conn, protoitt);
--
--			spin_unlock_bh(&conn->session->back_lock);
-+	if (!found) {
-+		spin_unlock_bh(&qedi_conn->tmf_work_lock);
-+		goto check_cleanup_reqs;
-+	}
- 
--			if (!task) {
--				QEDI_NOTICE(&qedi->dbg_ctx,
--					    "IO task completed, tmf rtt=0x%x, cid=0x%x\n",
--					    get_itt(tmf_hdr->rtt),
--					    qedi_conn->iscsi_conn_id);
--				return;
--			}
-+	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
-+		  "TMF work, cqe->tid=0x%x, tmf flags=0x%x, cid=0x%x\n",
-+		  proto_itt, tmf_hdr->flags, qedi_conn->iscsi_conn_id);
-+
-+	spin_lock_bh(&conn->session->back_lock);
-+	if (iscsi_task_is_completed(task)) {
-+		QEDI_NOTICE(&qedi->dbg_ctx,
-+			    "IO task completed, tmf rtt=0x%x, cid=0x%x\n",
-+			   get_itt(tmf_hdr->rtt), qedi_conn->iscsi_conn_id);
-+		goto unlock;
-+	}
- 
--			dbg_cmd = task->dd_data;
-+	dbg_cmd = task->dd_data;
- 
--			QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
--				  "Abort tmf rtt=0x%x, i/o itt=0x%x, i/o tid=0x%x, cid=0x%x\n",
--				  get_itt(tmf_hdr->rtt), get_itt(task->itt),
--				  dbg_cmd->task_id, qedi_conn->iscsi_conn_id);
-+	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
-+		  "Abort tmf rtt=0x%x, i/o itt=0x%x, i/o tid=0x%x, cid=0x%x\n",
-+		  get_itt(tmf_hdr->rtt), get_itt(task->itt), dbg_cmd->task_id,
-+		  qedi_conn->iscsi_conn_id);
- 
--			if (qedi_cmd->state == CLEANUP_WAIT_FAILED)
--				qedi_cmd->state = CLEANUP_RECV;
-+	spin_lock(&qedi_conn->list_lock);
-+	if (likely(dbg_cmd->io_cmd_in_list)) {
-+		dbg_cmd->io_cmd_in_list = false;
-+		list_del_init(&dbg_cmd->io_cmd);
-+		qedi_conn->active_cmd_count--;
-+	}
-+	spin_unlock(&qedi_conn->list_lock);
-+	qedi_cmd->state = CLEANUP_RECV;
-+unlock:
-+	spin_unlock_bh(&conn->session->back_lock);
-+	spin_unlock_bh(&qedi_conn->tmf_work_lock);
-+	wake_up_interruptible(&qedi_conn->wait_queue);
-+	return;
- 
--			spin_lock(&qedi_conn->list_lock);
--			if (likely(dbg_cmd->io_cmd_in_list)) {
--				dbg_cmd->io_cmd_in_list = false;
--				list_del_init(&dbg_cmd->io_cmd);
--				qedi_conn->active_cmd_count--;
--			}
--			spin_unlock(&qedi_conn->list_lock);
--			qedi_cmd->state = CLEANUP_RECV;
--			wake_up_interruptible(&qedi_conn->wait_queue);
--		}
--	} else if (qedi_conn->cmd_cleanup_req > 0) {
-+check_cleanup_reqs:
-+	if (qedi_conn->cmd_cleanup_req > 0) {
- 		spin_lock_bh(&conn->session->back_lock);
- 		qedi_get_proto_itt(qedi, cqe->itid, &ptmp_itt);
- 		protoitt = build_itt(ptmp_itt, conn->session->age);
-@@ -844,6 +839,7 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
- 		QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_TID,
- 			  "Freeing tid=0x%x for cid=0x%x\n",
- 			  cqe->itid, qedi_conn->iscsi_conn_id);
-+		qedi_clear_task_idx(qedi_conn->qedi, cqe->itid);
- 
- 	} else {
- 		qedi_get_proto_itt(qedi, cqe->itid, &ptmp_itt);
-@@ -946,8 +942,7 @@ void qedi_fp_process_cqes(struct qedi_work *work)
- 		goto exit_fp_process;
- 	case ISCSI_CQE_TYPE_TASK_CLEANUP:
- 		QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM, "CleanUp CqE\n");
--		qedi_process_cmd_cleanup_resp(qedi, &cqe->cqe_solicited, task,
--					      conn);
-+		qedi_process_cmd_cleanup_resp(qedi, &cqe->cqe_solicited, conn);
- 		goto exit_fp_process;
- 	default:
- 		QEDI_ERR(&qedi->dbg_ctx, "Error cqe.\n");
-@@ -1374,12 +1369,22 @@ static void qedi_tmf_work(struct work_struct *work)
+ 	mtask = qedi_cmd->task;
  	tmf_hdr = (struct iscsi_tm *)mtask->hdr;
- 	set_bit(QEDI_CONN_FW_CLEANUP, &qedi_conn->flags);
- 
--	ctask = iscsi_itt_to_task(conn, tmf_hdr->rtt);
--	if (!ctask || !ctask->sc) {
-+	spin_lock_bh(&conn->session->back_lock);
-+	ctask = iscsi_itt_to_ctask(conn, tmf_hdr->rtt);
-+	if (!ctask || iscsi_task_is_completed(ctask)) {
-+		spin_unlock_bh(&conn->session->back_lock);
- 		QEDI_ERR(&qedi->dbg_ctx, "Task already completed\n");
--		goto abort_ret;
-+		goto clear_cleanup;
- 	}
- 
-+	/*
-+	 * libiscsi gets a ref before sending the abort, but if libiscsi times
-+	 * it out then it could release it and the cmd could complete from
-+	 * under us.
-+	 */
-+	__iscsi_get_task(ctask);
-+	spin_unlock_bh(&conn->session->back_lock);
-+
- 	cmd = (struct qedi_cmd *)ctask->dd_data;
- 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_INFO,
- 		  "Abort tmf rtt=0x%x, cmd itt=0x%x, cmd tid=0x%x, cid=0x%x\n",
-@@ -1389,19 +1394,20 @@ static void qedi_tmf_work(struct work_struct *work)
- 	if (qedi_do_not_recover) {
- 		QEDI_ERR(&qedi->dbg_ctx, "DONT SEND CLEANUP/ABORT %d\n",
- 			 qedi_do_not_recover);
--		goto abort_ret;
-+		goto put_task;
- 	}
- 
- 	list_work = kzalloc(sizeof(*list_work), GFP_ATOMIC);
- 	if (!list_work) {
- 		QEDI_ERR(&qedi->dbg_ctx, "Memory allocation failed\n");
--		goto abort_ret;
-+		goto put_task;
+@@ -1404,6 +1403,7 @@ static void qedi_tmf_work(struct work_struct *work)
  	}
  
  	qedi_cmd->type = TYPEIO;
++	qedi_cmd->state = CLEANUP_WAIT;
  	list_work->qedi_cmd = qedi_cmd;
  	list_work->rtid = cmd->task_id;
  	list_work->state = QEDI_WORK_SCHEDULED;
-+	list_work->ctask = ctask;
- 	qedi_cmd->list_tmf_work = list_work;
- 
- 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
-@@ -1434,7 +1440,9 @@ static void qedi_tmf_work(struct work_struct *work)
- 	qedi_cmd->task_id = tid;
- 	qedi_send_iscsi_tmf(qedi_conn, qedi_cmd->task);
- 
--abort_ret:
-+put_task:
-+	iscsi_put_task(ctask);
-+clear_cleanup:
- 	clear_bit(QEDI_CONN_FW_CLEANUP, &qedi_conn->flags);
- 	return;
- 
-@@ -1455,6 +1463,8 @@ static void qedi_tmf_work(struct work_struct *work)
+@@ -1430,15 +1430,7 @@ static void qedi_tmf_work(struct work_struct *work)
+ 		goto ldel_exit;
  	}
- 	spin_unlock(&qedi_conn->list_lock);
  
-+	iscsi_put_task(ctask);
-+
+-	tid = qedi_get_task_idx(qedi);
+-	if (tid == -1) {
+-		QEDI_ERR(&qedi->dbg_ctx, "Invalid tid, cid=0x%x\n",
+-			 qedi_conn->iscsi_conn_id);
+-		goto ldel_exit;
+-	}
+-
+-	qedi_cmd->task_id = tid;
+-	qedi_send_iscsi_tmf(qedi_conn, qedi_cmd->task);
++	send_iscsi_tmf(qedi_conn, qedi_cmd->task);
+ 
+ put_task:
+ 	iscsi_put_task(ctask);
+@@ -1468,8 +1460,7 @@ static void qedi_tmf_work(struct work_struct *work)
  	clear_bit(QEDI_CONN_FW_CLEANUP, &qedi_conn->flags);
  }
  
-diff --git a/drivers/scsi/qedi/qedi_iscsi.h b/drivers/scsi/qedi/qedi_iscsi.h
-index 39dc27c85e3c..68ef519f5480 100644
---- a/drivers/scsi/qedi/qedi_iscsi.h
-+++ b/drivers/scsi/qedi/qedi_iscsi.h
-@@ -212,6 +212,7 @@ struct qedi_cmd {
- struct qedi_work_map {
- 	struct list_head list;
- 	struct qedi_cmd *qedi_cmd;
-+	struct iscsi_task *ctask;
- 	int rtid;
+-static int qedi_send_iscsi_tmf(struct qedi_conn *qedi_conn,
+-			       struct iscsi_task *mtask)
++static int send_iscsi_tmf(struct qedi_conn *qedi_conn, struct iscsi_task *mtask)
+ {
+ 	struct iscsi_tmf_request_hdr tmf_pdu_header;
+ 	struct iscsi_task_params task_params;
+@@ -1484,7 +1475,6 @@ static int qedi_send_iscsi_tmf(struct qedi_conn *qedi_conn,
+ 	u32 scsi_lun[2];
+ 	s16 tid = 0;
+ 	u16 sq_idx = 0;
+-	int rval = 0;
  
- 	int state;
+ 	tmf_hdr = (struct iscsi_tm *)mtask->hdr;
+ 	qedi_cmd = (struct qedi_cmd *)mtask->dd_data;
+@@ -1548,10 +1538,7 @@ static int qedi_send_iscsi_tmf(struct qedi_conn *qedi_conn,
+ 	task_params.sqe = &ep->sq[sq_idx];
+ 
+ 	memset(task_params.sqe, 0, sizeof(struct iscsi_wqe));
+-	rval = init_initiator_tmf_request_task(&task_params,
+-					       &tmf_pdu_header);
+-	if (rval)
+-		return -1;
++	init_initiator_tmf_request_task(&task_params, &tmf_pdu_header);
+ 
+ 	spin_lock(&qedi_conn->list_lock);
+ 	list_add_tail(&qedi_cmd->io_cmd, &qedi_conn->active_cmd_list);
+@@ -1563,47 +1550,30 @@ static int qedi_send_iscsi_tmf(struct qedi_conn *qedi_conn,
+ 	return 0;
+ }
+ 
+-int qedi_iscsi_abort_work(struct qedi_conn *qedi_conn,
+-			  struct iscsi_task *mtask)
++int qedi_send_iscsi_tmf(struct qedi_conn *qedi_conn, struct iscsi_task *mtask)
+ {
++	struct iscsi_tm *tmf_hdr = (struct iscsi_tm *)mtask->hdr;
++	struct qedi_cmd *qedi_cmd = mtask->dd_data;
+ 	struct qedi_ctx *qedi = qedi_conn->qedi;
+-	struct iscsi_tm *tmf_hdr;
+-	struct qedi_cmd *qedi_cmd = (struct qedi_cmd *)mtask->dd_data;
+-	s16 tid = 0;
++	int rc = 0;
+ 
+-	tmf_hdr = (struct iscsi_tm *)mtask->hdr;
+-	qedi_cmd->task = mtask;
+-
+-	/* If abort task then schedule the work and return */
+-	if ((tmf_hdr->flags & ISCSI_FLAG_TM_FUNC_MASK) ==
+-	    ISCSI_TM_FUNC_ABORT_TASK) {
+-		qedi_cmd->state = CLEANUP_WAIT;
+-		INIT_WORK(&qedi_cmd->tmf_work, qedi_tmf_work);
++	switch (tmf_hdr->flags & ISCSI_FLAG_TM_FUNC_MASK) {
++	case ISCSI_TM_FUNC_ABORT_TASK:
++		INIT_WORK(&qedi_cmd->tmf_work, qedi_abort_work);
+ 		queue_work(qedi->tmf_thread, &qedi_cmd->tmf_work);
+-
+-	} else if (((tmf_hdr->flags & ISCSI_FLAG_TM_FUNC_MASK) ==
+-		    ISCSI_TM_FUNC_LOGICAL_UNIT_RESET) ||
+-		   ((tmf_hdr->flags & ISCSI_FLAG_TM_FUNC_MASK) ==
+-		    ISCSI_TM_FUNC_TARGET_WARM_RESET) ||
+-		   ((tmf_hdr->flags & ISCSI_FLAG_TM_FUNC_MASK) ==
+-		    ISCSI_TM_FUNC_TARGET_COLD_RESET)) {
+-		tid = qedi_get_task_idx(qedi);
+-		if (tid == -1) {
+-			QEDI_ERR(&qedi->dbg_ctx, "Invalid tid, cid=0x%x\n",
+-				 qedi_conn->iscsi_conn_id);
+-			return -1;
+-		}
+-		qedi_cmd->task_id = tid;
+-
+-		qedi_send_iscsi_tmf(qedi_conn, qedi_cmd->task);
+-
+-	} else {
++		break;
++	case ISCSI_TM_FUNC_LOGICAL_UNIT_RESET:
++	case ISCSI_TM_FUNC_TARGET_WARM_RESET:
++	case ISCSI_TM_FUNC_TARGET_COLD_RESET:
++		rc = send_iscsi_tmf(qedi_conn, mtask);
++		break;
++	default:
+ 		QEDI_ERR(&qedi->dbg_ctx, "Invalid tmf, cid=0x%x\n",
+ 			 qedi_conn->iscsi_conn_id);
+-		return -1;
++		return -EINVAL;
+ 	}
+ 
+-	return 0;
++	return rc;
+ }
+ 
+ int qedi_send_iscsi_text(struct qedi_conn *qedi_conn,
+diff --git a/drivers/scsi/qedi/qedi_gbl.h b/drivers/scsi/qedi/qedi_gbl.h
+index 116645c08c71..fb44a282613e 100644
+--- a/drivers/scsi/qedi/qedi_gbl.h
++++ b/drivers/scsi/qedi/qedi_gbl.h
+@@ -31,8 +31,7 @@ int qedi_send_iscsi_login(struct qedi_conn *qedi_conn,
+ 			  struct iscsi_task *task);
+ int qedi_send_iscsi_logout(struct qedi_conn *qedi_conn,
+ 			   struct iscsi_task *task);
+-int qedi_iscsi_abort_work(struct qedi_conn *qedi_conn,
+-			  struct iscsi_task *mtask);
++int qedi_send_iscsi_tmf(struct qedi_conn *qedi_conn, struct iscsi_task *mtask);
+ int qedi_send_iscsi_text(struct qedi_conn *qedi_conn,
+ 			 struct iscsi_task *task);
+ int qedi_send_iscsi_nopout(struct qedi_conn *qedi_conn,
+diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
+index d1da34a938da..821225f9beb0 100644
+--- a/drivers/scsi/qedi/qedi_iscsi.c
++++ b/drivers/scsi/qedi/qedi_iscsi.c
+@@ -742,7 +742,7 @@ static int qedi_iscsi_send_generic_request(struct iscsi_task *task)
+ 		rc = qedi_send_iscsi_logout(qedi_conn, task);
+ 		break;
+ 	case ISCSI_OP_SCSI_TMFUNC:
+-		rc = qedi_iscsi_abort_work(qedi_conn, task);
++		rc = qedi_send_iscsi_tmf(qedi_conn, task);
+ 		break;
+ 	case ISCSI_OP_TEXT:
+ 		rc = qedi_send_iscsi_text(qedi_conn, task);
 -- 
 2.25.1
 
