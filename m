@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D92535AB79
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E2635AB6C
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Apr 2021 08:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbhDJGsZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Apr 2021 02:48:25 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:16889 "EHLO
+        id S234245AbhDJGsJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Apr 2021 02:48:09 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:16884 "EHLO
         szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbhDJGsM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 02:48:12 -0400
+        with ESMTP id S234059AbhDJGsJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Apr 2021 02:48:09 -0400
 Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHQWJ4L90zkhq0;
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHQWJ40w9zkhnw;
         Sat, 10 Apr 2021 14:46:04 +0800 (CST)
 Received: from huawei.com (10.69.192.56) by DGGEMS411-HUB.china.huawei.com
  (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Sat, 10 Apr 2021
@@ -24,9 +24,9 @@ To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
 CC:     <megaraidlinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
         <luojiaxing@huawei.com>
-Subject: [PATCH v1 6/8] scsi: megaraid: clean up for code indent
-Date:   Sat, 10 Apr 2021 14:48:05 +0800
-Message-ID: <1618037287-460-7-git-send-email-luojiaxing@huawei.com>
+Subject: [PATCH v1 7/8] scsi: megaraid: clean up for trailing statements
+Date:   Sat, 10 Apr 2021 14:48:06 +0800
+Message-ID: <1618037287-460-8-git-send-email-luojiaxing@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
 References: <1618037287-460-1-git-send-email-luojiaxing@huawei.com>
@@ -38,59 +38,185 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Following error is reported by checkpatch.pl
+Following error is reported by checkpatch.pl:
+ERROR: trailing statements should be on next line
++               if (iterator++ == adapno) break;
 
-ERROR: code indent should use tabs where possible
-+^I^I        unsigned long arg)$
-
-So fix them all.
+So fix them.
 
 Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
 ---
- drivers/scsi/megaraid/mega_common.h       | 2 +-
- drivers/scsi/megaraid/megaraid_mm.c       | 2 +-
- drivers/scsi/megaraid/megaraid_sas_base.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/megaraid/megaraid_mbox.c | 30 ++++++++++++++++++++----------
+ drivers/scsi/megaraid/megaraid_mm.c   | 24 ++++++++++++++++--------
+ 2 files changed, 36 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/mega_common.h b/drivers/scsi/megaraid/mega_common.h
-index 2a0981b..9a19eec 100644
---- a/drivers/scsi/megaraid/mega_common.h
-+++ b/drivers/scsi/megaraid/mega_common.h
-@@ -249,7 +249,7 @@ typedef struct {
-  * ### Helper routines ###
-  */
- #define LSI_DBGLVL mraid_debug_level	// each LLD must define a global
-- 					// mraid_debug_level
-+					// mraid_debug_level
+diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
+index d3fcaca..486c01d 100644
+--- a/drivers/scsi/megaraid/megaraid_mbox.c
++++ b/drivers/scsi/megaraid/megaraid_mbox.c
+@@ -709,7 +709,8 @@ megaraid_init_mbox(adapter_t *adapter)
+ 	 * controllers
+ 	 */
+ 	raid_dev = kzalloc(sizeof(mraid_device_t), GFP_KERNEL);
+-	if (raid_dev == NULL) return -1;
++	if (!raid_dev)
++		return -1;
  
- #ifdef DEBUG
- #if defined (_ASSERT_PANIC)
-diff --git a/drivers/scsi/megaraid/megaraid_mm.c b/drivers/scsi/megaraid/megaraid_mm.c
-index 234885c..1d6244e 100644
---- a/drivers/scsi/megaraid/megaraid_mm.c
-+++ b/drivers/scsi/megaraid/megaraid_mm.c
-@@ -213,7 +213,7 @@ mraid_mm_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
  
- static long
- mraid_mm_unlocked_ioctl(struct file *filep, unsigned int cmd,
--		        unsigned long arg)
-+			unsigned long arg)
- {
- 	int err;
+ 	/*
+@@ -2051,7 +2052,8 @@ megaraid_ack_sequence(adapter_t *adapter)
+ 		 * interrupt line low.
+ 		 */
+ 		dword = RDOUTDOOR(raid_dev);
+-		if (dword != 0x10001234) break;
++		if (dword != 0x10001234)
++			break;
  
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 2b17529..f29a3716 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -4821,7 +4821,7 @@ megasas_ld_list_query(struct megasas_instance *instance, u8 query_type)
+ 		handled = 1;
  
- 	if (!cmd) {
- 		dev_warn(&instance->pdev->dev,
--		         "megasas_ld_list_query: Failed to get cmd\n");
-+			 "%s: Failed to get cmd\n", __func__);
- 		return -ENOMEM;
+@@ -2074,7 +2076,8 @@ megaraid_ack_sequence(adapter_t *adapter)
+ 
+ 			// wait for valid command index to post
+ 			for (j = 0; j < 0xFFFFF; j++) {
+-				if (mbox->completed[i] != 0xFF) break;
++				if (mbox->completed[i] != 0xFF)
++					break;
+ 				rmb();
+ 			}
+ 			completed[i]		= mbox->completed[i];
+@@ -2182,7 +2185,8 @@ megaraid_mbox_dpc(unsigned long devp)
+ 	uioc_t			*kioc;
+ 
+ 
+-	if (!adapter) return;
++	if (!adapter)
++		return;
+ 
+ 	raid_dev = ADAP2RAIDDEV(adapter);
+ 
+@@ -2796,7 +2800,8 @@ mbox_post_sync_cmd_fast(adapter_t *adapter, uint8_t raw_mbox[])
+ 	mbox	= raid_dev->mbox;
+ 
+ 	// return immediately if the mailbox is busy
+-	if (mbox->busy) return -1;
++	if (mbox->busy)
++		return -1;
+ 
+ 	// Copy mailbox data into host structure
+ 	memcpy((caddr_t)mbox, (caddr_t)raw_mbox, 14);
+@@ -2811,7 +2816,8 @@ mbox_post_sync_cmd_fast(adapter_t *adapter, uint8_t raw_mbox[])
+ 	WRINDOOR(raid_dev, raid_dev->mbox_dma | 0x1);
+ 
+ 	for (i = 0; i < MBOX_SYNC_WAIT_CNT; i++) {
+-		if (mbox->numstatus != 0xFF) break;
++		if (mbox->numstatus != 0xFF)
++			break;
+ 		rmb();
+ 		udelay(MBOX_SYNC_DELAY_200);
+ 	}
+@@ -2848,8 +2854,10 @@ megaraid_busywait_mbox(mraid_device_t *raid_dev)
+ 			msleep(1);
  	}
  
+-	if (i < 1000) return 0;
+-	else return -1;
++	if (i < 1000)
++		return 0;
++	else
++		return -1;
+ }
+ 
+ 
+@@ -3137,7 +3145,8 @@ megaraid_mbox_get_max_sg(adapter_t *adapter)
+ 		nsg =  MBOX_DEFAULT_SG_SIZE;
+ 	}
+ 
+-	if (nsg > MBOX_MAX_SG_SIZE) nsg = MBOX_MAX_SG_SIZE;
++	if (nsg > MBOX_MAX_SG_SIZE)
++		nsg = MBOX_MAX_SG_SIZE;
+ 
+ 	return nsg;
+ }
+@@ -3317,7 +3326,8 @@ megaraid_mbox_display_scb(adapter_t *adapter, scb_t *scb)
+ 		mbox->numsectors, mbox->lba, mbox->xferaddr, mbox->logdrv,
+ 		mbox->numsge));
+ 
+-	if (!scp) return;
++	if (!scp)
++		return;
+ 
+ 	con_log(level, (KERN_NOTICE "scsi cmnd: "));
+ 
+diff --git a/drivers/scsi/megaraid/megaraid_mm.c b/drivers/scsi/megaraid/megaraid_mm.c
+index 1d6244e..5e889cb 100644
+--- a/drivers/scsi/megaraid/megaraid_mm.c
++++ b/drivers/scsi/megaraid/megaraid_mm.c
+@@ -88,7 +88,8 @@ mraid_mm_open(struct inode *inode, struct file *filep)
+ 	/*
+ 	 * Only allow superuser to access private ioctl interface
+ 	 */
+-	if (!capable(CAP_SYS_ADMIN)) return (-EACCES);
++	if (!capable(CAP_SYS_ADMIN))
++		return (-EACCES);
+ 
+ 	return 0;
+ }
+@@ -256,7 +257,8 @@ mraid_mm_get_adapter(mimd_t __user *umimd, int *rval)
+ 	iterator = 0;
+ 
+ 	list_for_each_entry(adapter, &adapters_list_g, list) {
+-		if (iterator++ == adapno) break;
++		if (iterator++ == adapno)
++			break;
+ 	}
+ 
+ 	if (!adapter) {
+@@ -408,8 +410,10 @@ mimd_to_kioc(mimd_t __user *umimd, mraid_mmadp_t *adp, uioc_t *kioc)
+ 		if (mraid_mm_attach_buf(adp, kioc, kioc->xferlen))
+ 			return (-ENOMEM);
+ 
+-		if (mimd.outlen) kioc->data_dir  = UIOC_RD;
+-		if (mimd.inlen) kioc->data_dir |= UIOC_WR;
++		if (mimd.outlen)
++			kioc->data_dir  = UIOC_RD;
++		if (mimd.inlen)
++			kioc->data_dir |= UIOC_WR;
+ 
+ 		break;
+ 
+@@ -424,8 +428,10 @@ mimd_to_kioc(mimd_t __user *umimd, mraid_mmadp_t *adp, uioc_t *kioc)
+ 		if (mraid_mm_attach_buf(adp, kioc, kioc->xferlen))
+ 			return (-ENOMEM);
+ 
+-		if (mimd.outlen) kioc->data_dir  = UIOC_RD;
+-		if (mimd.inlen) kioc->data_dir |= UIOC_WR;
++		if (mimd.outlen)
++			kioc->data_dir  = UIOC_RD;
++		if (mimd.inlen)
++			kioc->data_dir |= UIOC_WR;
+ 
+ 		break;
+ 
+@@ -677,7 +683,8 @@ lld_ioctl(mraid_mmadp_t *adp, uioc_t *kioc)
+ 	kioc->status	= -ENODATA;
+ 	rval		= adp->issue_uioc(adp->drvr_data, kioc, IOCTL_ISSUE);
+ 
+-	if (rval) return rval;
++	if (rval)
++		return rval;
+ 
+ 	/*
+ 	 * Start the timer
+@@ -750,7 +757,8 @@ ioctl_done(uioc_t *kioc)
+ 					"ioctl that was timedout before\n"));
+ 
+ 		list_for_each_entry(adapter, &adapters_list_g, list) {
+-			if (iterator++ == adapno) break;
++			if (iterator++ == adapno)
++				break;
+ 		}
+ 
+ 		kioc->timedout = 0;
 -- 
 2.7.4
 
