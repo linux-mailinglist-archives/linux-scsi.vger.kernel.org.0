@@ -2,70 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D16AA35B29B
-	for <lists+linux-scsi@lfdr.de>; Sun, 11 Apr 2021 11:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2961335B2C9
+	for <lists+linux-scsi@lfdr.de>; Sun, 11 Apr 2021 11:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbhDKJWA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 11 Apr 2021 05:22:00 -0400
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:59519 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbhDKJWA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 05:22:00 -0400
-Received: from localhost.localdomain ([90.126.11.170])
-        by mwinf5d20 with ME
-        id rMMh2400e3g7mfN03MMhju; Sun, 11 Apr 2021 11:21:43 +0200
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 11 Apr 2021 11:21:43 +0200
-X-ME-IP: 90.126.11.170
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     njavali@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] scsi: qla2xxx: Re-use existing error handling path
-Date:   Sun, 11 Apr 2021 11:21:40 +0200
-Message-Id: <6973844a1532ec2dc8e86f3533362e79d78ed774.1618132821.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.27.0
+        id S235318AbhDKJfJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 11 Apr 2021 05:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235310AbhDKJfD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 05:35:03 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06143C061574
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 02:34:42 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id j26so10314233iog.13
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 02:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6uFlNhp9AEb270lOfa5fXrMWT/gAGcsjjz9E/7U1oC4=;
+        b=eE24YUEgYysXm4dwrZdNnH/jkFN8RK/CaV9bXyGwgaxqQd/WGADdfnXxBfnRvo/kvi
+         x6KZzoV6g/BF9HMZmb+NtFo9qQEPsqT3LWsdiWbF9M3yL8rcVHoyCcoh/Tw/yA13B3EX
+         XYrgCpM9GeMVZfJgGpsR47Xf1ZMQzCmU6kJwwovZj4ohhPSR+F8Sq+RZb4qEaUNZkgzh
+         fMAPTA96Fy9svkwPgyFCMR5KSS2sqs+yUwE0oRJIp7AfeLjO5pa8zROmWNV1WbYzFb4q
+         O6wUqwRhnWMh2nuZbEDqCJBUSWAr0vV1H5rvF1hP2kxqWNvnXI8QZ8mMTZkur6uQgjt2
+         7hmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=6uFlNhp9AEb270lOfa5fXrMWT/gAGcsjjz9E/7U1oC4=;
+        b=Jo/HAwPPoJJN9ObotnAdFqJOTYjPzfoT7/pQOOFpDJGcxYJvU6C7ISnYmYerN66d44
+         Nfpnc0mCxAFq/58lPVXcsc9wAd4KHp0PBi7xSmH5dHC09/eQFP+WpC+3YLs79H9RX+Z5
+         WCyo89y77/kT7jUEGlliAwq5llNWv1pqX+GknXdkesnSskiPVefqG/OzFY3woyj76MsB
+         +Eih15VIsnSyIM4v1Q5fPf17SsL5uv0fwmthURQIig82QvAtwUYWwNa9qtPLs1Ejx4A5
+         D/N5FXRGqvl6PKymXp9FpbAG6J54igrj5+GFDmAfrpQsTvMUBSqWIB1Wz2rSeOHKpfDh
+         w5yg==
+X-Gm-Message-State: AOAM530tnSwe5GWeuVVTkpTrvllAZ0kJK50eA4M/2EgiKwHEDuLQ7ESX
+        U3sESh8k2+9k4eA5BAFgqQMfDP26IlgTY3Va/Qg=
+X-Google-Smtp-Source: ABdhPJwhb4yJPOHRpiSssKho2J3CAob0cgG9kKA0fkbHlC00LqOoCDHPZqoVHXwxjYnPSV+puLTZuR5iL1f2mYpPbw4=
+X-Received: by 2002:a6b:6308:: with SMTP id p8mr19173997iog.172.1618133682405;
+ Sun, 11 Apr 2021 02:34:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: anitajoseph199211@gmail.com
+Received: by 2002:a05:6638:25d0:0:0:0:0 with HTTP; Sun, 11 Apr 2021 02:34:42
+ -0700 (PDT)
+From:   Liz Johnson <lizj6718@gmail.com>
+Date:   Sun, 11 Apr 2021 02:34:42 -0700
+X-Google-Sender-Auth: 2AJm7_mcia91M6KYPDX7LZRxZAs
+Message-ID: <CAEdDLtHvyLph10yksNHoYRnAFB_uW4mSdvuxvaZSMmymJVhZ9g@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is no need to duplicate some code, use the existing error handling
-path to free some resources.
-This is more future-proof.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-The code above this hunk looks spurious to me.
-
-It looks like an error handling path (i.e.
-"if (response_len > bsg_job->reply_payload.payload_len)")
-but returns 0, which is the initial value of 'ret'.
-
-Shouldn't we have ret = -<something> here?
----
- drivers/scsi/qla2xxx/qla_bsg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
-index aef2f7cc89d3..d42b2ad84049 100644
---- a/drivers/scsi/qla2xxx/qla_bsg.c
-+++ b/drivers/scsi/qla2xxx/qla_bsg.c
-@@ -2585,8 +2585,8 @@ qla2x00_get_host_stats(struct bsg_job *bsg_job)
- 
- 	data = kzalloc(response_len, GFP_KERNEL);
- 	if (!data) {
--		kfree(req_data);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto host_stat_out;
- 	}
- 
- 	ret = qla2xxx_get_ini_stats(fc_bsg_to_shost(bsg_job), req_data->stat_type,
--- 
-2.27.0
-
+5L2g5aW9DQrkvaDlpb3lkJfvvJ8g5oiR5pivTGl677yM5oiR55yL5Yiw5LqG5oKo55qE55S15a2Q
+6YKu5Lu26IGU57O75Lq677yM5Zug5q2k5Yaz5a6a5LiO5oKo6IGU57O777yM5oiR6K6k5Li65oKo
+5piv5LiA5Liq5aW95Lq677yM5aaC5p6c5Y+v5Lul77yM5oiR5oOz5oiQ5Li65oKo55qE5pyL5Y+L
+44CCDQrlvZPmiJHmlLbliLDmgqjnmoTlvZXlj5bpgJrnn6Xml7bvvIzmiJHkvJrlkYror4nmgqjm
+m7TlpJrlhbPkuo7miJHnmoTkv6Hmga8NCg0K6LCi6LCi77yBDQoNCuaDs+imgeaIkOS4uuS9oOea
+hOaci+WPi+OAgg0KDQrpl67lgJnjgIINCg0K5Li95YW5DQoNCkhpDQpIb3cgYXJlIHlvdT8gSeKA
+mW0gTGl6LCAgSSBzYXcgeW91ciBlbWFpbCBjb250YWN0IGFuZCBJIGRlY2lkZWQgdG8NCmNvbnRh
+Y3QgeW91LCBJIHRoaW5rIHlvdSBhcmUgYSBraW5kIHBlcnNvbiwgSWYgeW91IG1heSwgSSB3b3Vs
+ZCBsaWtlDQp0byBiZSB5b3VyIGZyaWVuZC4gSSB3aWxsIHRlbGwgeW91IG1vcmUgYWJvdXQgbWUs
+IHdoZW4gaSByZWNlaXZlIHlvdXINCmFjY2VwdGFuY2UNCg0KVGhhbmtzIQ0KDQpXYW50aW5nIHRv
+IGJlIHlvdXIgZnJpZW5kLg0KDQpSZWdhcmRzLg0KDQpMaXouDQo=
