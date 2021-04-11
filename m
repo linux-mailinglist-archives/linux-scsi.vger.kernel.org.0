@@ -2,71 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2961335B2C9
-	for <lists+linux-scsi@lfdr.de>; Sun, 11 Apr 2021 11:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A7835B5F2
+	for <lists+linux-scsi@lfdr.de>; Sun, 11 Apr 2021 17:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235318AbhDKJfJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 11 Apr 2021 05:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbhDKJfD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 05:35:03 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06143C061574
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 02:34:42 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id j26so10314233iog.13
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 02:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=6uFlNhp9AEb270lOfa5fXrMWT/gAGcsjjz9E/7U1oC4=;
-        b=eE24YUEgYysXm4dwrZdNnH/jkFN8RK/CaV9bXyGwgaxqQd/WGADdfnXxBfnRvo/kvi
-         x6KZzoV6g/BF9HMZmb+NtFo9qQEPsqT3LWsdiWbF9M3yL8rcVHoyCcoh/Tw/yA13B3EX
-         XYrgCpM9GeMVZfJgGpsR47Xf1ZMQzCmU6kJwwovZj4ohhPSR+F8Sq+RZb4qEaUNZkgzh
-         fMAPTA96Fy9svkwPgyFCMR5KSS2sqs+yUwE0oRJIp7AfeLjO5pa8zROmWNV1WbYzFb4q
-         O6wUqwRhnWMh2nuZbEDqCJBUSWAr0vV1H5rvF1hP2kxqWNvnXI8QZ8mMTZkur6uQgjt2
-         7hmg==
+        id S236350AbhDKP7M (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 11 Apr 2021 11:59:12 -0400
+Received: from mail-pj1-f52.google.com ([209.85.216.52]:43778 "EHLO
+        mail-pj1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236267AbhDKP7L (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 11:59:11 -0400
+Received: by mail-pj1-f52.google.com with SMTP id x21-20020a17090a5315b029012c4a622e4aso5660664pjh.2;
+        Sun, 11 Apr 2021 08:58:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=6uFlNhp9AEb270lOfa5fXrMWT/gAGcsjjz9E/7U1oC4=;
-        b=Jo/HAwPPoJJN9ObotnAdFqJOTYjPzfoT7/pQOOFpDJGcxYJvU6C7ISnYmYerN66d44
-         Nfpnc0mCxAFq/58lPVXcsc9wAd4KHp0PBi7xSmH5dHC09/eQFP+WpC+3YLs79H9RX+Z5
-         WCyo89y77/kT7jUEGlliAwq5llNWv1pqX+GknXdkesnSskiPVefqG/OzFY3woyj76MsB
-         +Eih15VIsnSyIM4v1Q5fPf17SsL5uv0fwmthURQIig82QvAtwUYWwNa9qtPLs1Ejx4A5
-         D/N5FXRGqvl6PKymXp9FpbAG6J54igrj5+GFDmAfrpQsTvMUBSqWIB1Wz2rSeOHKpfDh
-         w5yg==
-X-Gm-Message-State: AOAM530tnSwe5GWeuVVTkpTrvllAZ0kJK50eA4M/2EgiKwHEDuLQ7ESX
-        U3sESh8k2+9k4eA5BAFgqQMfDP26IlgTY3Va/Qg=
-X-Google-Smtp-Source: ABdhPJwhb4yJPOHRpiSssKho2J3CAob0cgG9kKA0fkbHlC00LqOoCDHPZqoVHXwxjYnPSV+puLTZuR5iL1f2mYpPbw4=
-X-Received: by 2002:a6b:6308:: with SMTP id p8mr19173997iog.172.1618133682405;
- Sun, 11 Apr 2021 02:34:42 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=v5B/SxQlFrHLo+Ii4FhwOsO2iGqGZQI3Qni9NgWHOwA=;
+        b=s+X8kFgFjEUe3xgZZS7i6Fe+zjv9WWh4fPN6iv/vS/y9AvH2WaPBUiCVEefxfZgLX3
+         OySx7bRU/W160yFEZidVHVRfqBumCOzgd36JNyN6PoKrsys5B5jv49S4XFzM4kHVA2C/
+         jsVKjBMMiLuqig9dmvEST9jEIiYQVnsLsWU8GDo5OQrnhrt3YDpG4UAd//wO2+yrfNAW
+         OgY4Y5beMh7HO6k7ReCjYnFuSuLEZJrxXDijI0b5WeBI36tJO0oFsDlN+srUenw7BprH
+         tS9vQyGTWGe8vAFV4UWO26QgfdrEWucnJCpDc0nEwzZq5UvXsezlVFcyFRhx65X9qzaB
+         n99w==
+X-Gm-Message-State: AOAM532pGcCARdeLL1wE5PNYMnlZrtKd/D0Xp1a2r/PW4D00lU4N70m6
+        Aj70r52KEAfX0gI7g6tLsXuqfMIMhuo=
+X-Google-Smtp-Source: ABdhPJyK2adZtQk/OjYeR4ypZP0ipNQSXpvgS28NGUzoqoncHcOmb7mHAUFjXjUg9wBfeqt2vA6IpA==
+X-Received: by 2002:a17:90a:55ca:: with SMTP id o10mr23382029pjm.173.1618156734486;
+        Sun, 11 Apr 2021 08:58:54 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:7c41:980e:bfa1:bbb4? ([2601:647:4000:d7:7c41:980e:bfa1:bbb4])
+        by smtp.gmail.com with ESMTPSA id j3sm7224630pfc.49.2021.04.11.08.58.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Apr 2021 08:58:53 -0700 (PDT)
+Subject: Re: [PATCH] scsi: qla2xxx: Re-use existing error handling path
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        njavali@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <6973844a1532ec2dc8e86f3533362e79d78ed774.1618132821.git.christophe.jaillet@wanadoo.fr>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <f237fbd4-2ebf-0105-2a1a-93672cd446cb@acm.org>
+Date:   Sun, 11 Apr 2021 08:58:52 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Sender: anitajoseph199211@gmail.com
-Received: by 2002:a05:6638:25d0:0:0:0:0 with HTTP; Sun, 11 Apr 2021 02:34:42
- -0700 (PDT)
-From:   Liz Johnson <lizj6718@gmail.com>
-Date:   Sun, 11 Apr 2021 02:34:42 -0700
-X-Google-Sender-Auth: 2AJm7_mcia91M6KYPDX7LZRxZAs
-Message-ID: <CAEdDLtHvyLph10yksNHoYRnAFB_uW4mSdvuxvaZSMmymJVhZ9g@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+In-Reply-To: <6973844a1532ec2dc8e86f3533362e79d78ed774.1618132821.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-5L2g5aW9DQrkvaDlpb3lkJfvvJ8g5oiR5pivTGl677yM5oiR55yL5Yiw5LqG5oKo55qE55S15a2Q
-6YKu5Lu26IGU57O75Lq677yM5Zug5q2k5Yaz5a6a5LiO5oKo6IGU57O777yM5oiR6K6k5Li65oKo
-5piv5LiA5Liq5aW95Lq677yM5aaC5p6c5Y+v5Lul77yM5oiR5oOz5oiQ5Li65oKo55qE5pyL5Y+L
-44CCDQrlvZPmiJHmlLbliLDmgqjnmoTlvZXlj5bpgJrnn6Xml7bvvIzmiJHkvJrlkYror4nmgqjm
-m7TlpJrlhbPkuo7miJHnmoTkv6Hmga8NCg0K6LCi6LCi77yBDQoNCuaDs+imgeaIkOS4uuS9oOea
-hOaci+WPi+OAgg0KDQrpl67lgJnjgIINCg0K5Li95YW5DQoNCkhpDQpIb3cgYXJlIHlvdT8gSeKA
-mW0gTGl6LCAgSSBzYXcgeW91ciBlbWFpbCBjb250YWN0IGFuZCBJIGRlY2lkZWQgdG8NCmNvbnRh
-Y3QgeW91LCBJIHRoaW5rIHlvdSBhcmUgYSBraW5kIHBlcnNvbiwgSWYgeW91IG1heSwgSSB3b3Vs
-ZCBsaWtlDQp0byBiZSB5b3VyIGZyaWVuZC4gSSB3aWxsIHRlbGwgeW91IG1vcmUgYWJvdXQgbWUs
-IHdoZW4gaSByZWNlaXZlIHlvdXINCmFjY2VwdGFuY2UNCg0KVGhhbmtzIQ0KDQpXYW50aW5nIHRv
-IGJlIHlvdXIgZnJpZW5kLg0KDQpSZWdhcmRzLg0KDQpMaXouDQo=
+On 4/11/21 2:21 AM, Christophe JAILLET wrote:
+> The code above this hunk looks spurious to me.
+> 
+> It looks like an error handling path (i.e.
+> "if (response_len > bsg_job->reply_payload.payload_len)")
+> but returns 0, which is the initial value of 'ret'.
+> 
+> Shouldn't we have ret = -<something> here?
+
+Hmm ... if I read that code path correctly it is on purpose that that
+code path returns 0 and error reporting happens by reporting the
+EXT_STATUS_BUFFER_TOO_SMALL error code to user space.
+
+> ---
+>  drivers/scsi/qla2xxx/qla_bsg.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
+> index aef2f7cc89d3..d42b2ad84049 100644
+> --- a/drivers/scsi/qla2xxx/qla_bsg.c
+> +++ b/drivers/scsi/qla2xxx/qla_bsg.c
+> @@ -2585,8 +2585,8 @@ qla2x00_get_host_stats(struct bsg_job *bsg_job)
+>  
+>  	data = kzalloc(response_len, GFP_KERNEL);
+>  	if (!data) {
+> -		kfree(req_data);
+> -		return -ENOMEM;
+> +		ret = -ENOMEM;
+> +		goto host_stat_out;
+>  	}
+>  
+>  	ret = qla2xxx_get_ini_stats(fc_bsg_to_shost(bsg_job), req_data->stat_type,
+
+Since the above looks good to me:
+
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
