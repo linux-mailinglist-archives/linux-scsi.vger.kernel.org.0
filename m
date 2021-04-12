@@ -2,170 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C479735B7DA
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Apr 2021 02:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E0835B819
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Apr 2021 03:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236216AbhDLAve (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 11 Apr 2021 20:51:34 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:53020 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbhDLAvc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 20:51:32 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13C0p2sc018777;
-        Mon, 12 Apr 2021 00:51:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2020-01-29; bh=sZtKNpnhKUcmJnY0/M6obBbjXko1kEOYVNmLXouY9SY=;
- b=V3CoXgMhrwLDxYvae32Dv2CwvUlt6ALSUJabpY//XeupYmOhjQnGzsZLNww4okkv5NMa
- 1N3IRMltwiYAnA1wV+xdEcmuL5HC3FAFwKlnz1vmtLIH398k7FirRBlaBAeZtrRRtyaU
- iJhnLmizLu3h1Zh+z3InMMhdjLFIFLvOkK+H0RD9G7HczR2yqmhnRuHkBQWNbWBQ9jSH
- kUVR2TG7puU12SstOrh0/qvlTxLhAuNGAi7qmzBi/4dl2pRoOhPnl1BPW6dZOETej8Ko
- zHBxrSd6bUSfmIxc3jl+rDs+LwUUIiwN8VCZPOFoe0JgoV4sf91YygPVVvhB21bTJbUT aw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 37u3ym9ywh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Apr 2021 00:51:02 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13C0aGvI037388;
-        Mon, 12 Apr 2021 00:51:01 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
-        by userp3030.oracle.com with ESMTP id 37unxur477-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Apr 2021 00:51:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fXAAIei9msD1bgnbF0S17MKlTFaGpU34yMyHnmGcfYG+oRdU3YS/a3jMHyKSVdqBjg6Swx64393zbBKkkEcBhDc/nhS+BYAjoxWN9iy4T0KhLF7Mpbdy3qWdmMRJfifNM9rkX6lXSAY91XTOHmkfbOngltghjHeybgNARufIPAiHJaEwoL6YPYUYpzhWmkoT14YIPXYbOxg4cWUtl4r7Zz9i5SWQ3SGnXQVlNcODi8wRtkr0Nyt/IixBAI1ICZtaKEblV60rEcOdGLaEnrQyrNToTbQ2THc4mZdjEigoboUs7rbinkCU2R5YZS6AsI+vxqEE1HBGpvft5e9xf8nDXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sZtKNpnhKUcmJnY0/M6obBbjXko1kEOYVNmLXouY9SY=;
- b=GJzZw3h4FIMCFGjJXxPSxryPzVUWKXDKMxiBbXxJlolxC0G74eTvNmeUeuMHxvrqYGs4ybDOOoukvqkeLGyv5UUh0gN+Q0+r5QWxtvEnrej32W4UJ0XJN+iyz4R8UMqACyvCh3XqfXgtXnq07s060BM6QFkrYwf83sGX6RYqZLmEulWj12dPROO4Sa9T7Hs9iAD70+79qg31/mj6v9A0d4msnEGYDOiAOFjDLUuYDcM2Pm2B+Mebg+HHwQ9jmKzy7GjHolUT1C8Anuo8aSYPO5D7JuLJUunkJobwUM5j5VWQHgymRjZqFmWdUNW+PbEwUFGosprBMpNqP5uStrrXxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        id S236550AbhDLBcR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 11 Apr 2021 21:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236548AbhDLBcR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 21:32:17 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D18C061574
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:00 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id z16so8154594pga.1
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sZtKNpnhKUcmJnY0/M6obBbjXko1kEOYVNmLXouY9SY=;
- b=OtOpLEiEyzESpmyJE89b4bgkAXvjGRp3Tb7aeoM24thEQFfmwzPjB+XlFu9hDZUbD3ICR4Zfcse7ZUeaTapKBGqmitEZKNuVrrzNiarVfwoW2Xm7Bugr3w3FPZxoec7xejyc7pXxulCfkBtH8WxdRBv3mxa3NfxuH/j8xENgNwU=
-Authentication-Results: google.com; dkim=none (message not signed)
- header.d=none;google.com; dmarc=none action=none header.from=oracle.com;
-Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
- by BY5PR10MB4307.namprd10.prod.outlook.com (2603:10b6:a03:212::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.21; Mon, 12 Apr
- 2021 00:50:59 +0000
-Received: from BYAPR10MB3573.namprd10.prod.outlook.com
- ([fe80::50bb:7b66:35ee:4a4]) by BYAPR10MB3573.namprd10.prod.outlook.com
- ([fe80::50bb:7b66:35ee:4a4%7]) with mapi id 15.20.4020.018; Mon, 12 Apr 2021
- 00:50:59 +0000
-From:   Mike Christie <michael.christie@oracle.com>
-To:     khazhy@google.com, lduncan@suse.com, martin.petersen@oracle.com,
-        rbharath@google.com, krisman@collabora.com,
-        linux-scsi@vger.kernel.org, jejb@linux.ibm.com
-Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [RFC v2 7/7] scsi: iscsi_tcp: start socket shutdown during conn stop
-Date:   Sun, 11 Apr 2021 19:50:43 -0500
-Message-Id: <20210412005043.5121-8-michael.christie@oracle.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210412005043.5121-1-michael.christie@oracle.com>
-References: <20210412005043.5121-1-michael.christie@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [73.88.28.6]
-X-ClientProxiedBy: DM6PR06CA0062.namprd06.prod.outlook.com
- (2603:10b6:5:54::39) To BYAPR10MB3573.namprd10.prod.outlook.com
- (2603:10b6:a03:11e::32)
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uDVYP+td5XfXpgELl3AjKKZtCAeYi9s7kGdxM31Pipk=;
+        b=WQGmQjDkFLY3de0YaJNoms2VIKRnQM1VArS8GqSwTjg+6xj7hElio9niI+J46NGkci
+         tHGqby4vPkqEC6KCeJ8JF+ZTiU6n13eO0TSXqKrZipGQUYaZX/MXfdJdhl9F/E+Kvi+c
+         Yx0mbdR2thKtllt9v8DithSGnRrldyQ9WTLkURXiDwPzQBRHe879CwZhO5HMe0+0g0Fr
+         hV9ke0wLJNXGeq59z0sLidYoYomMqwrbJknu3fFW7NUp3UJBHa5eLkH1nCbO7UnOZ5xR
+         FWs/p0Ytb8kTc3jU8FsAj2mnYcmij0u8vAjP+7yYS2oaI9x1WWaZWPqNCvZlR/IFOrYl
+         QNKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uDVYP+td5XfXpgELl3AjKKZtCAeYi9s7kGdxM31Pipk=;
+        b=gFhJkIDCT/M8yi5q5LbMzXDG7fMAoF3FeBMzRkBbhiHyr/StHO7xfhSTPl+/Yj/7kj
+         RTnmLtE9GA0mZtbVT3+trMR8QOd9bfyYRHVj8h3r62k14tTB9uGf5oT7IN2r1yqrS9Zc
+         HD1rL3PaekneVNtYGkMCGas3AEWDEGH0eRR1JTW/enEcF/EHQs5DpvZGge5tb6HoVPDz
+         BKFrbxdBWDt8YSoGY5wJCYtzzFNEEiYhXk7rtUN2yzTrPe92D7Ocdjv3zmpgUiB9KhRT
+         3ub/UBnTEldChO3gNeludHFCxT8h1Ko3kclHf5YgMiJ+94iqfiK4rCm/8OMNekNZdqVx
+         kAyw==
+X-Gm-Message-State: AOAM530pJarjMk9VC5XqhzS2a3EwkkD89ccS3Do6s1QFhu4K4vEnJacK
+        3gEvl+aGMGxMUQUtdaZMUHCbx+1NyOU=
+X-Google-Smtp-Source: ABdhPJwNj2XmzpU3GSWMxed1DoOhXpcd0yNTv9R1RdGqov48I1yKgeyvKiwf5hk8RzAr2bEP1/Z6oQ==
+X-Received: by 2002:a62:874e:0:b029:244:4080:8c7a with SMTP id i75-20020a62874e0000b029024440808c7amr18194167pfe.54.1618191119904;
+        Sun, 11 Apr 2021 18:31:59 -0700 (PDT)
+Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
+        by smtp.gmail.com with ESMTPSA id i17sm8153163pfd.84.2021.04.11.18.31.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Apr 2021 18:31:59 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH v2 00/16] lpfc: Update lpfc to revision 12.8.0.9
+Date:   Sun, 11 Apr 2021 18:31:11 -0700
+Message-Id: <20210412013127.2387-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (73.88.28.6) by DM6PR06CA0062.namprd06.prod.outlook.com (2603:10b6:5:54::39) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend Transport; Mon, 12 Apr 2021 00:50:58 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3b8db375-af10-4b89-3c2c-08d8fd4d0a00
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4307:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR10MB43074E8AC7C2426FE7F27DD7F1709@BY5PR10MB4307.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:506;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n4YSzRzFNQ9uQUAdySaZZ/+owY6TFYxxFFWYr0o093VGy+/upAFC//P3lJEZYDEhoyLLGBs5hgw8Hl/5BR3NHHTcHqRUhMwDsk/tgYy99FfBd/MaXaDdW/RQ5OTkyQRZXidG1Qto5O/QJMr/Tmy3J1uikxQL1I+GsbLP+gwfUULDHNPCoF9CybOwJnke9scyFy9Fz1u+yFWVq8RscIBBnmHpVbdTGBnQFA9eFOZpGEY3ZmrP0muvPw5AXfQSq97V1WEaDMgxdwvFGw/jNTZZXnNcDvYtTzuEs7XarUw8XnxIOnhIjwBuvTc1jRA1/zWrqpSlLqBZ6V8SyTgtv7NqcHBoP00s+WaUrww3EkDe7uPpILSTtXoDpn7lcI94iw5otK7+AzhRB7dEyxsRlxOcoCLMW4Zc/kF/S0X4GuB+uVVtsDcexxtxBzHa5k/EYO27Ggp1dCztGfQQNFw3Biukkzx2KEdSjvaQ01xk5VMbcQIwTKY1cdCODleuSCsJ6veyTSEEiwl5pkGot/wXkb2k0HHaPxYnBITcNNdxrPLenw0Y3sLV3sm847MBu4LjvGIxG6U4qMwnbB0T/WmuLUEEBAynvetnLGaWzcjNBFtYj93GZ/SrE4+zUSwfHc8vkSGZIyLpvZWPP1gvvg43iTG6hw40gYje0r1kKbY/2eb2SDEAYVe2x1p2Z/sxASTWbTP+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(136003)(376002)(396003)(366004)(39860400002)(26005)(316002)(186003)(16526019)(2906002)(86362001)(83380400001)(1076003)(4326008)(107886003)(956004)(66556008)(478600001)(8676002)(38100700002)(8936002)(69590400012)(2616005)(66946007)(5660300002)(6506007)(6486002)(38350700002)(6512007)(6666004)(36756003)(52116002)(66476007)(4744005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?6/ar9TEDSOncqWKDQSLN6BmUMIlNPcHWIbX8DoIXCRpDUz7KCQNWeLNiFDOt?=
- =?us-ascii?Q?Lw8SY585B2p/uMeXqSYEkZ7L1kTJaCBC16XRe1i8lqMOmOtmUe7onChvHxfZ?=
- =?us-ascii?Q?z9aDH8XIfhQxF1sJGiUZGjHOFcFGOWslzZ9cejAUguFSnA2iFuGMsLxtfUTD?=
- =?us-ascii?Q?MSc7l/wCkyJdySyhpCiQ16GBPkpgZQwwjNs5bgsP2gPaSU+rsPu8hytJDTdo?=
- =?us-ascii?Q?zbj+vV3Ez4HmYy0fC7v63acVdThkcPd/w7hQp1mS0iuh9TcOeLQicH2+P/37?=
- =?us-ascii?Q?RLOnX2tQJAyPRlPZ6XV11x9TbngCAm0aF5gErlqb6vaPKxPvI1pymr13NOgX?=
- =?us-ascii?Q?3ArTzANWW7RaXrY1N7nLvEUoUwKWVC8u9eHfEudG9ZZPKsoGkP2yOs5LpgDA?=
- =?us-ascii?Q?iSLoHiXEsix/65ikHHIUA0oAgbC8SlPZ35nPl+uG7YAJD7n5mW/jSzJwTV97?=
- =?us-ascii?Q?YUALeezdKpg1Q+arBHPku7D5+3VjosRs/hubLE6Hdabt01NKItEtqcnPbaTO?=
- =?us-ascii?Q?DRzkEhCFCnZlRbu0KwF4Xufug/W6y6D+SDtGlT//eWSgUtx10Gbd7/ctJVUR?=
- =?us-ascii?Q?AtFqn1wXAhX3FQOkWmRmBGi/qFnA+vUgQQYniGgjtCcAsdYm3ClYrPA9QKRi?=
- =?us-ascii?Q?357k18G74FpXlvAjRlrgPsbyuBMgoCuuRUGZ8jm4H/DgJd2BB7geENS/34sK?=
- =?us-ascii?Q?BJUIOz2IXS1x7MwYFuM6eO2MROv/yLIY8HmmwhAMbj3oPcII7AaIQUJ2+6xN?=
- =?us-ascii?Q?RD0ynTL8akFQE04qApjHE6yaSHM8iBb3/kHbab+vkwkNzlcdaRTlcyqnako6?=
- =?us-ascii?Q?Lta8+bde0X9CYg/Xex9v9d28ie0MZ1KgiaYN0IQlHlx+Qz4OirSItgREA3mG?=
- =?us-ascii?Q?uWgvup5XMdr7JkT+76nYoK0TW5reakCs9kx7OUq6gJFp0za0xr+lvw+BGkXe?=
- =?us-ascii?Q?08hnxzam/vkaRBMExtwBmYvTQBp81S7VgR7UkJ5XnYKZdjk8AD0Yird+x+mJ?=
- =?us-ascii?Q?2vkiJR8DpFfWAqoe6smEyYctXqdBKd1ZDsgFVWn+RY/Ca+lwjDy8zp76itYF?=
- =?us-ascii?Q?vyEPbDV6nOsMxdud2ELo6QqKiwhIQbP2pBT/VvqZTuFfK/jxS0Sjma6Vsj80?=
- =?us-ascii?Q?2reE8HEX3nGSkzqh2b+i6yvUh4m3zsDJzJg6mLuGWIKHGtpEY3pdmmB+UADe?=
- =?us-ascii?Q?/+JHnFiRpdOQBzh2FuEnLjldnUpKUQwyZ+f5uxUsajtMh7bQsK3Twrp2QBc2?=
- =?us-ascii?Q?x013gYEsW0k/PjU8SqTI+HNWR418qgKJV0EFMmCZcVKtf9JgTR3x17w5wBeb?=
- =?us-ascii?Q?TyezPac5AKzp8agOFfV/ZCTt?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b8db375-af10-4b89-3c2c-08d8fd4d0a00
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2021 00:50:59.7090
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VVFp6KkfaTL8EPQGlo55ulIR/CUhJr5rARJAjbiKpGB5p5Qrb1fDDx9/ti6P68RhoF0uKkfM5usRWAMO2YWfdCNXSBywMIp01Vh+EDnIZU8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4307
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9951 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 malwarescore=0
- spamscore=0 adultscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
- definitions=main-2104120001
-X-Proofpoint-GUID: eQoY-t68V8_gnbNjB1CMN2kwz8JOSDu8
-X-Proofpoint-ORIG-GUID: eQoY-t68V8_gnbNjB1CMN2kwz8JOSDu8
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9951 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 spamscore=0
- impostorscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
- definitions=main-2104120001
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make sure the conn socket shutdown starts before we start the timer
-to fail commands to upper layers.
+Update lpfc to revision 12.8.0.9
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/iscsi_tcp.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+This patch set contains fixes and a cleanup patches.
 
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index 553e95ad6197..1bc37593c88f 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -600,6 +600,12 @@ static void iscsi_sw_tcp_release_conn(struct iscsi_conn *conn)
- 	if (!sock)
- 		return;
- 
-+	/*
-+	 * Make sure we start socket shutdown now in case userspace is up
-+	 * but delayed in releasing the socket.
-+	 */
-+	kernel_sock_shutdown(sock, SHUT_RDWR);
-+
- 	sock_hold(sock->sk);
- 	iscsi_sw_tcp_conn_restore_callbacks(conn);
- 	sock_put(sock->sk);
+The patches were cut against Martin's 5.13/scsi-queue tree
+
+V2:
+ Reworked patch 3, Fix reference countiner errors in
+  lpfc_cmpl_els_rsp(), for kernel checkers warning on ls_rjt set but
+  not used.
+
+James Smart (16):
+  lpfc: Fix rmmod crash due to bad ring pointers to abort_iotag
+  lpfc: Fix crash when a REG_RPI mailbox fails triggering a LOGO
+    response
+  lpfc: Fix reference counting errors in lpfc_cmpl_els_rsp()
+  lpfc: Fix NMI crash during rmmod due to circular hbalock dependency
+  lpfc: Fix lack of device removal on port swaps with PRLIs
+  lpfc: Fix error handling for mailboxes completed in MBX_POLL mode
+  lpfc: Fix use-after-free on unused nodes after port swap
+  lpfc: Fix silent memory allocation failure in
+    lpfc_sli4_bsg_link_diag_test()
+  lpfc: Fix missing FDMI registrations after Mgmt Svc login
+  lpfc: Fix lpfc_hdw_queue attribute being ignored
+  lpfc: Remove unsupported mbox PORT_CAPABILITIES logic
+  lpfc: Fix various trivial errors in comments and log messages
+  lpfc: Standardize discovery object logging format
+  lpfc: Eliminate use of LPFC_DRIVER_NAME in lpfc_attr.c
+  lpfc: Update lpfc version to 12.8.0.9
+  lpfc: Copyright updates for 12.8.0.9 patches
+
+ drivers/scsi/lpfc/lpfc_attr.c      | 120 ++++++++++++--------
+ drivers/scsi/lpfc/lpfc_bsg.c       |  22 ++--
+ drivers/scsi/lpfc/lpfc_crtn.h      |   7 +-
+ drivers/scsi/lpfc/lpfc_ct.c        |  32 +++---
+ drivers/scsi/lpfc/lpfc_els.c       | 114 +++++--------------
+ drivers/scsi/lpfc/lpfc_hbadisc.c   |  26 ++---
+ drivers/scsi/lpfc/lpfc_hw4.h       | 176 +----------------------------
+ drivers/scsi/lpfc/lpfc_init.c      | 140 +++--------------------
+ drivers/scsi/lpfc/lpfc_mbox.c      |  38 +------
+ drivers/scsi/lpfc/lpfc_nportdisc.c |  10 +-
+ drivers/scsi/lpfc/lpfc_nvme.c      |  16 +--
+ drivers/scsi/lpfc/lpfc_nvmet.c     |  26 ++---
+ drivers/scsi/lpfc/lpfc_scsi.c      |   2 +-
+ drivers/scsi/lpfc/lpfc_sli.c       |  77 +++++++------
+ drivers/scsi/lpfc/lpfc_version.h   |   2 +-
+ 15 files changed, 233 insertions(+), 575 deletions(-)
+
 -- 
-2.25.1
+2.26.2
 
