@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA3935B821
+	by mail.lfdr.de (Postfix) with ESMTP id EE52535B822
 	for <lists+linux-scsi@lfdr.de>; Mon, 12 Apr 2021 03:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbhDLBc0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 11 Apr 2021 21:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S236588AbhDLBc1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 11 Apr 2021 21:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236563AbhDLBcV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 21:32:21 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23D1C06138F
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:04 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id x21-20020a17090a5315b029012c4a622e4aso6172198pjh.2
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:04 -0700 (PDT)
+        with ESMTP id S236564AbhDLBcW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 21:32:22 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F1BC061342
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:05 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id t22so8184787pgu.0
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5vRobdnpZluxJTk6UdxYGceuRCeU43Gs6G/oYigCUvE=;
-        b=e6rI+iqZ34qgzJHNrSxkDG/7gUp/HAGSjlx2UW5bg8MBP+u5JnAI5G1/5yH+ZEWq/G
-         ee4Xfmd5ltjtOrIsHoNRy2pjfe60Me3ckMD+Xwwl0hlJiv3IACsK4C+3Yqc2VEWEPOgM
-         GP+BAvyVfWrHoTUvIGC2Te8k4EcSlT4FhoBtacftrKyh88JXrBLPlDdYytjE9dP5qHdY
-         0EjL2+YZHUwjXXDwPqpWbPUsVvAEGkjyjgP3qzx9HS+knmC1g/5hqYpXlhRIRKGf9d2w
-         XxsGu4TTeRg2m/zT/7Y9deMhjk0LeV3602MzCfQwyZf3VLkXrSc90ALCIsxVwhBefuR/
-         hqYQ==
+        bh=e14H//ZExwZjjG3XlbWrBxfMo9QPyT+IgqonFSeGhWg=;
+        b=KYNhy2JTvvYXgT+erDGP3rpBaM9BfRwmlQCChLCgK581YEYit/DB/u/k3YKxhDgiNK
+         4hw/SzzceY4R32LUOcuqnEgcD1MGQF1nYrFfNK8oS3uiqEpwneJbacIAC4+QgnRMHsT/
+         bvEtF/grmAA6tWQGBnCee0NmcX7nNQogBLqTWdo5mMcaxQxTR6wWVVU1pMv7+Mi6w6KM
+         PvYA2bUZqevYtVyLAjI5h44neeC93Wo61cI3Iql5Aek6vsaoBdH1dkKoT/4wfv194DMA
+         fiO4Hy+fU8nw6cKavcKJH4E4Qa15XTTe65xyaxNtHyjwIFcnCfwASRqZgmUasceF/Qq5
+         4yHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5vRobdnpZluxJTk6UdxYGceuRCeU43Gs6G/oYigCUvE=;
-        b=d2LCmlrd8dojv4ZXwXAWS1z0w4gJtLRAE8sOY8/dCpHwnA6szKW4oGyypFJHUectRd
-         dIsd3fTNNxBMWE5VFYQSTNkseXga6PGo/QerK/tgZP2yKqdd8k+NVEJsFGRt/WbUB0lJ
-         iGAgBZ1SapjzZ2/0sjPiQsZv+O27ywiB8RoUi/lR4kIm1fRPS13HcdJgmg7AxIA8kx55
-         Z53aClgmWaculvPbzoii3ktk5XVNkMRiaFr8G05Jttpwegld/5TGofZd1lsFam1607Aw
-         +JMLAs5ZSjMOsGZOPZ6Oq//YU57PrGSYL6bUuCXba1wk5S21O+A95CkRlAspRqPfGUCX
-         C9rQ==
-X-Gm-Message-State: AOAM533Kft9r1d6ZW3iVRmaZPsdaK3MhFCHJDSGRjEoHJ/qr6wXRoBCF
-        eFWUi5pcbGkKPX+re8aNjN6NTgjJQqU=
-X-Google-Smtp-Source: ABdhPJxnnlvloLU3oh4dUhzZjDKkHWlfVcOpzKhuDzXdNVNdndwFykzVf2jRa6QbkKgMB+WL4AmMIw==
-X-Received: by 2002:a17:902:e2d1:b029:e9:ec4:e0da with SMTP id l17-20020a170902e2d1b02900e90ec4e0damr24223520plc.85.1618191124212;
+        bh=e14H//ZExwZjjG3XlbWrBxfMo9QPyT+IgqonFSeGhWg=;
+        b=SiWV5rGzjG+H+NSsNZjT+oEb+r1WPjEAGhbJb97BdJP/chvhF5rrQMXY8lR+2K9Q4A
+         SmDc/0QQ0r4obkzJpi2jGVMRcp0Lh9VrT/nHJSNjdecMiJXQhit6Ss1jdzU36+3WmpD6
+         k1+FH/SVzb2ZPBtFvRZDWyEEmOaemKqv5sMT7okPxphmPl6KEbd6y6WKorBQQ4eW+7sr
+         VFUnNzq9PWR03PK+ttffEN5mWCqFeyhsTXx/bZC4v+qWsbmx7dXja36NRQ60I7+gTBAj
+         CW83rDWt30++O9dNVCrCdNFialf6lmUvBzeiDAXydm00A0O3RReaQCR5CNJeVbBsiFI0
+         wRaQ==
+X-Gm-Message-State: AOAM532V3XUrdWcJ3womDNSab6vS11MfZ8yO0yavoOsBgUvIE8WafWsJ
+        PnPpP+mDccsu9dcXtoo4VtqyU71Vmxc=
+X-Google-Smtp-Source: ABdhPJzXAegeSVpn91e2n2OhZi3J7MCCVxyL0NZr0ZX0lzKyym62N0BnjyregjFwOXgJzPqVzNVx1w==
+X-Received: by 2002:a05:6a00:1585:b029:203:6bc9:3ca6 with SMTP id u5-20020a056a001585b02902036bc93ca6mr22792178pfk.79.1618191124797;
         Sun, 11 Apr 2021 18:32:04 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id i17sm8153163pfd.84.2021.04.11.18.32.03
+        by smtp.gmail.com with ESMTPSA id i17sm8153163pfd.84.2021.04.11.18.32.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 11 Apr 2021 18:32:04 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH v2 07/16] lpfc: Fix use-after-free on unused nodes after port swap
-Date:   Sun, 11 Apr 2021 18:31:18 -0700
-Message-Id: <20210412013127.2387-8-jsmart2021@gmail.com>
+Subject: [PATCH v2 08/16] lpfc: Fix silent memory allocation failure in lpfc_sli4_bsg_link_diag_test()
+Date:   Sun, 11 Apr 2021 18:31:19 -0700
+Message-Id: <20210412013127.2387-9-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210412013127.2387-1-jsmart2021@gmail.com>
 References: <20210412013127.2387-1-jsmart2021@gmail.com>
@@ -63,57 +63,35 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-During target port swap, the swap logic ignores the DROPPED flag in
-the nodes. As a node then moves into the UNUSED state, the reference
-count will be dropped. If a node is later reused and moved out of the
-UNUSED state, an access can result in a use-after-free assert.
+In the unlikely case of a failure to allocate an LPFC_MBOXQ_t structure,
+no return status is set, thus the routine never logs an error and
+returns success to the callee.
 
-Fix by having the port swap logic propagate the DROPPED flag when
-switching nodes. This will avoid reference from being dropped.
+Fix by setting a return code on failure.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/scsi/lpfc/lpfc_bsg.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index ed57d92e96e1..c919bedd931c 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -1691,6 +1691,15 @@ lpfc_plogi_confirm_nport(struct lpfc_hba *phba, uint32_t *prsp,
- 	else
- 		new_ndlp->nlp_flag &= ~NLP_RPI_REGISTERED;
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index 503540cf2041..48a6b0cc58ef 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -2435,8 +2435,10 @@ lpfc_sli4_bsg_link_diag_test(struct bsg_job *job)
+ 		goto job_error;
  
-+	/*
-+	 * Retain the DROPPED flag. This will take care of the init
-+	 * refcount when affecting the state change
-+	 */
-+	if (keep_new_nlp_flag & NLP_DROPPED)
-+		new_ndlp->nlp_flag |= NLP_DROPPED;
-+	else
-+		new_ndlp->nlp_flag &= ~NLP_DROPPED;
-+
- 	ndlp->nlp_flag = keep_new_nlp_flag;
+ 	pmboxq = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
+-	if (!pmboxq)
++	if (!pmboxq) {
++		rc = -ENOMEM;
+ 		goto link_diag_test_exit;
++	}
  
- 	/* if ndlp had NLP_UNREG_INP set, keep it */
-@@ -1705,6 +1714,15 @@ lpfc_plogi_confirm_nport(struct lpfc_hba *phba, uint32_t *prsp,
- 	else
- 		ndlp->nlp_flag &= ~NLP_RPI_REGISTERED;
- 
-+	/*
-+	 * Retain the DROPPED flag. This will take care of the init
-+	 * refcount when affecting the state change
-+	 */
-+	if (keep_nlp_flag & NLP_DROPPED)
-+		ndlp->nlp_flag |= NLP_DROPPED;
-+	else
-+		ndlp->nlp_flag &= ~NLP_DROPPED;
-+
- 	spin_unlock_irq(&new_ndlp->lock);
- 	spin_unlock_irq(&ndlp->lock);
- 
+ 	req_len = (sizeof(struct lpfc_mbx_set_link_diag_state) -
+ 		   sizeof(struct lpfc_sli4_cfg_mhdr));
 -- 
 2.26.2
 
