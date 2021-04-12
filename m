@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFCF35B81D
+	by mail.lfdr.de (Postfix) with ESMTP id D729535B81F
 	for <lists+linux-scsi@lfdr.de>; Mon, 12 Apr 2021 03:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236572AbhDLBcX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 11 Apr 2021 21:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S236558AbhDLBcY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 11 Apr 2021 21:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbhDLBcT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 21:32:19 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EF5C06138C
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:02 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id g35so8131122pgg.9
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:02 -0700 (PDT)
+        with ESMTP id S236552AbhDLBcV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 21:32:21 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C83C06138D
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:03 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id a85so7716798pfa.0
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Af0EVa6qgaoImVHiw8HNNJfHEzShruXKXmQGKEkM3V8=;
-        b=JG6GzTKw7X3plkn72p0It0sg6IHsb7IMLx0qU5eU81r/MmiYtq4IHgzQMmSBPF5wh+
-         esbASbOHjYikKLUpqIP1/idZhSXjMWCbzb480uE7nR1ydtwdOOLphTcoFoHOkydhLZtf
-         iQCYJznHs2Mu/h8aANe5ZlQqDwbLPb8Fca/OyDIP31JROUdA2HRYYinu+EEGq3ig2m8Y
-         GxFdI3UZG18rEr/M/ftB3MsZ01Y98rCnXnl4lka3GSsThi+NhZ/okQZp+RAXxLwiwn3f
-         SnLsn+tUHzMjyo1eursJKjlHOqISYHa0mbd1dLllPpZo2ltBEBrFYLWfrIs9ohXQ3wQI
-         lalg==
+        bh=EKObJA53CzZ7C7CLj5HUqeGQzhdG7yHMhNMuqlUmKKs=;
+        b=TkqmnuLCvDCi6tFC8YTEJ9VLJCsPzzEpx23lCG0itmyV0NgM5HAXYeht4/lpeWH+2P
+         0CRzY1XMIF54wJr2i1Pe9mencFPlhqvuBW5uxrHKOfOgUZ56o2kMkDkqDNfTYKYUMkF/
+         EGifx7Vzoh0qEpgtk2arfJplzA0dv+WH89Pri8YyZIKiKJmZQ0j9ry4CgdHZPqb3h7ip
+         ULgsU3pXds2G/R/ajSYlD/nVfPp75Fi3vlVdr8Nlunrpzl9oosgpfFx9QUWPOGA2vGsY
+         Djx9J61UK1XhB+7vYKNgIB9OY8aY3tvSwgQovg7XZNU3tNBHa6upBjHdVHLzb0kCfqlT
+         kvhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Af0EVa6qgaoImVHiw8HNNJfHEzShruXKXmQGKEkM3V8=;
-        b=GYk1QFxp9MHXUDiSZrL0GrfhHtx1c6BQsj9V5vDLYMzzzkQ/DtjuIqakplr+RrqUIi
-         n9f986/r4Hvw0z3vwXNgzcT5HtEBEl+oarCEhzysnCG6PfaflumQigG/kn6ZTWjNuum9
-         1ceQvNGnY7cgrlNYiNptb3VzkYqV9tirj7do+Sq01Y7QHTbbVwUvvsIzq7iWqmujCLvY
-         Xm3eWDavrKuWiC6ahzbCd4jtJf5XbpuJISH61msKeBfWYsV+kRNGCdbjVxzemtHQdCKv
-         8Qrgxhl6OCC62lp0ut9MvunCFjVxsOKvXScx6RB5QXpY7JWcoqHt87t8IUQ14a2kdL89
-         bxJA==
-X-Gm-Message-State: AOAM530etDKyAy8wVD0HxkmsgrTJYmJOGRbs9XeAM5FoP/OW62TJPFPK
-        p0mJ+S8MnOvTvHWr2FmF0sJodO+6EDA=
-X-Google-Smtp-Source: ABdhPJx1Ag4agNaAok+GFb2vWngVoxVz+8amCk84g4/FBgWeNs1omXFJfeMjPycWc4EjAmw2nSvxpQ==
-X-Received: by 2002:a05:6a00:d41:b029:241:6449:e96 with SMTP id n1-20020a056a000d41b029024164490e96mr22057921pfv.75.1618191121809;
-        Sun, 11 Apr 2021 18:32:01 -0700 (PDT)
+        bh=EKObJA53CzZ7C7CLj5HUqeGQzhdG7yHMhNMuqlUmKKs=;
+        b=R5S1JTYRzwlqkYcGHnZxEGsZfm7MghUdJ9mTePefVSL850OgSDYigpwZkiBQNXTfA0
+         cMY67x+JM3WpQbd3XBhx0cuHxdoGdTEqUDYLXbjaGbc7zCbCHdOm6REmHZSLErd+9ZAU
+         bkm0bTUJkOk/s3FV34pgpunynBO37AuzcZJtmrnG5jIu6Ju8Xp3JIyLBYDtr0W/hoeOi
+         NVq7t26d0veDuCjMhXXkfa70y9c6vzTVgAwy2/vXL6GtpDnTeAYw7XgybPULu22yGTFt
+         kjlYMQ8CCGfcQkvlDLDuEx58VG1y51h3wtlp+v7SJs7xE556QYfetWnCrhNlhwo3BFxc
+         YU/w==
+X-Gm-Message-State: AOAM532/yy2J8SQ91a0nrfTIpmgyJIRRsQ4teEX2Mmdkw4NiiEQb8r8H
+        JdXQTC3yHv5qtw53IsjVcrRlJNUt6Xo=
+X-Google-Smtp-Source: ABdhPJx0L9PPK44V52m+5/FOw4WCWZF3iHtjSn43vg+XSt0+jILswnyfOso9xXINhOykNA3pfTNyLQ==
+X-Received: by 2002:a62:7bc4:0:b029:1f1:58ea:4010 with SMTP id w187-20020a627bc40000b02901f158ea4010mr23430803pfc.70.1618191122459;
+        Sun, 11 Apr 2021 18:32:02 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
         by smtp.gmail.com with ESMTPSA id i17sm8153163pfd.84.2021.04.11.18.32.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Apr 2021 18:32:01 -0700 (PDT)
+        Sun, 11 Apr 2021 18:32:02 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH v2 03/16] lpfc: Fix reference counting errors in lpfc_cmpl_els_rsp()
-Date:   Sun, 11 Apr 2021 18:31:14 -0700
-Message-Id: <20210412013127.2387-4-jsmart2021@gmail.com>
+Subject: [PATCH v2 04/16] lpfc: Fix NMI crash during rmmod due to circular hbalock dependency
+Date:   Sun, 11 Apr 2021 18:31:15 -0700
+Message-Id: <20210412013127.2387-5-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210412013127.2387-1-jsmart2021@gmail.com>
 References: <20210412013127.2387-1-jsmart2021@gmail.com>
@@ -63,144 +63,254 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Call traces are being seen that result from a nodelist structure ref
-counting error. They are typically seen after transmission of an LS_RJT
-ELS response.
-
-Aged code in lpfc_cmpl_els_rsp() calls lpfc_nlp_not_used() which, if the
-ndlp reference count is exactly 1, will decrement the reference count.
-Previously lpfc_nlp_put() was within lpfc_els_free_iocb, and the 'put'
-within the free would only be invoked if cmdiocb->context1 was not NULL.
-Since the nodelist structure reference count is decremented when exiting
-lpfc_cmpl_els_rsp() the lpfc_nlp_not_used() calls are no longer required.
-Calling them is causing the reference count issue.
-
-Fix by removing the lpfc_nlp_not_used() calls
+Remove hbalock dependency for lpfc_abts_els_sgl_list and
+lpfc_abts_nvmet_ctx_list.  The lists are adaquately synchronized with
+the sgl_list_lock and abts_nvmet_buf_list_lock.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
-
 ---
-v2:
- Remove ls_rjt code that is now set and not used.
- When that code was removed, also removed pcmd.
----
- drivers/scsi/lpfc/lpfc_els.c | 64 +-----------------------------------
- 1 file changed, 1 insertion(+), 63 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c   | 24 +++++++++---------------
+ drivers/scsi/lpfc/lpfc_init.c  | 26 ++++++++++----------------
+ drivers/scsi/lpfc/lpfc_nvmet.c | 26 +++++++++++---------------
+ 3 files changed, 30 insertions(+), 46 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index a04546eca18f..c62c141342a6 100644
+index c62c141342a6..1bb1e3cf7113 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4444,10 +4444,7 @@ lpfc_mbx_cmpl_dflt_rpi(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
-  * nlp_flag bitmap in the ndlp data structure, if the mbox command reference
-  * field in the command IOCB is not NULL, the referred mailbox command will
-  * be send out, and then invokes the lpfc_els_free_iocb() routine to release
-- * the IOCB. Under error conditions, such as when a LS_RJT is returned or a
-- * link down event occurred during the discovery, the lpfc_nlp_not_used()
-- * routine shall be invoked trying to release the ndlp if no other threads
-- * are currently referring it.
-+ * the IOCB.
-  **/
- static void
- lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
-@@ -4457,10 +4454,8 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	struct lpfc_vport *vport = ndlp ? ndlp->vport : NULL;
- 	struct Scsi_Host  *shost = vport ? lpfc_shost_from_vport(vport) : NULL;
- 	IOCB_t  *irsp;
--	uint8_t *pcmd;
- 	LPFC_MBOXQ_t *mbox = NULL;
- 	struct lpfc_dmabuf *mp = NULL;
--	uint32_t ls_rjt = 0;
+@@ -10072,8 +10072,7 @@ lpfc_sli4_vport_delete_els_xri_aborted(struct lpfc_vport *vport)
+ 	struct lpfc_sglq *sglq_entry = NULL, *sglq_next = NULL;
+ 	unsigned long iflag = 0;
  
- 	irsp = &rspiocb->iocb;
+-	spin_lock_irqsave(&phba->hbalock, iflag);
+-	spin_lock(&phba->sli4_hba.sgl_list_lock);
++	spin_lock_irqsave(&phba->sli4_hba.sgl_list_lock, iflag);
+ 	list_for_each_entry_safe(sglq_entry, sglq_next,
+ 			&phba->sli4_hba.lpfc_abts_els_sgl_list, list) {
+ 		if (sglq_entry->ndlp && sglq_entry->ndlp->vport == vport) {
+@@ -10081,8 +10080,7 @@ lpfc_sli4_vport_delete_els_xri_aborted(struct lpfc_vport *vport)
+ 			sglq_entry->ndlp = NULL;
+ 		}
+ 	}
+-	spin_unlock(&phba->sli4_hba.sgl_list_lock);
+-	spin_unlock_irqrestore(&phba->hbalock, iflag);
++	spin_unlock_irqrestore(&phba->sli4_hba.sgl_list_lock, iflag);
+ 	return;
+ }
  
-@@ -4472,18 +4467,6 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	if (cmdiocb->context_un.mbox)
- 		mbox = cmdiocb->context_un.mbox;
+@@ -10109,8 +10107,7 @@ lpfc_sli4_els_xri_aborted(struct lpfc_hba *phba,
  
--	/* First determine if this is a LS_RJT cmpl. Note, this callback
--	 * function can have cmdiocb->contest1 (ndlp) field set to NULL.
--	 */
--	pcmd = (uint8_t *) (((struct lpfc_dmabuf *) cmdiocb->context2)->virt);
--	if (ndlp && (*((uint32_t *) (pcmd)) == ELS_CMD_LS_RJT)) {
--		/* A LS_RJT associated with Default RPI cleanup has its own
--		 * separate code path.
--		 */
--		if (!(ndlp->nlp_flag & NLP_RM_DFLT_RPI))
--			ls_rjt = 1;
+ 	pring = lpfc_phba_elsring(phba);
+ 
+-	spin_lock_irqsave(&phba->hbalock, iflag);
+-	spin_lock(&phba->sli4_hba.sgl_list_lock);
++	spin_lock_irqsave(&phba->sli4_hba.sgl_list_lock, iflag);
+ 	list_for_each_entry_safe(sglq_entry, sglq_next,
+ 			&phba->sli4_hba.lpfc_abts_els_sgl_list, list) {
+ 		if (sglq_entry->sli4_xritag == xri) {
+@@ -10120,8 +10117,8 @@ lpfc_sli4_els_xri_aborted(struct lpfc_hba *phba,
+ 			list_add_tail(&sglq_entry->list,
+ 				&phba->sli4_hba.lpfc_els_sgl_list);
+ 			sglq_entry->state = SGL_FREED;
+-			spin_unlock(&phba->sli4_hba.sgl_list_lock);
+-			spin_unlock_irqrestore(&phba->hbalock, iflag);
++			spin_unlock_irqrestore(&phba->sli4_hba.sgl_list_lock,
++					       iflag);
+ 
+ 			if (ndlp) {
+ 				lpfc_set_rrq_active(phba, ndlp,
+@@ -10136,21 +10133,18 @@ lpfc_sli4_els_xri_aborted(struct lpfc_hba *phba,
+ 			return;
+ 		}
+ 	}
+-	spin_unlock(&phba->sli4_hba.sgl_list_lock);
++	spin_unlock_irqrestore(&phba->sli4_hba.sgl_list_lock, iflag);
+ 	lxri = lpfc_sli4_xri_inrange(phba, xri);
+-	if (lxri == NO_XRI) {
+-		spin_unlock_irqrestore(&phba->hbalock, iflag);
++	if (lxri == NO_XRI)
+ 		return;
 -	}
--
- 	/* Check to see if link went down during discovery */
- 	if (!ndlp || lpfc_els_chk_latt(vport)) {
- 		if (mbox) {
-@@ -4494,15 +4477,6 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 			}
- 			mempool_free(mbox, phba->mbox_mem_pool);
+-	spin_lock(&phba->sli4_hba.sgl_list_lock);
++
++	spin_lock_irqsave(&phba->hbalock, iflag);
+ 	sglq_entry = __lpfc_get_active_sglq(phba, lxri);
+ 	if (!sglq_entry || (sglq_entry->sli4_xritag != xri)) {
+-		spin_unlock(&phba->sli4_hba.sgl_list_lock);
+ 		spin_unlock_irqrestore(&phba->hbalock, iflag);
+ 		return;
+ 	}
+ 	sglq_entry->state = SGL_XRI_ABORTED;
+-	spin_unlock(&phba->sli4_hba.sgl_list_lock);
+ 	spin_unlock_irqrestore(&phba->hbalock, iflag);
+ 	return;
+ }
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 5ea43c527e08..631f22baf45f 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -1043,12 +1043,11 @@ lpfc_hba_down_post_s4(struct lpfc_hba *phba)
+ 	 * driver is unloading or reposted if the driver is restarting
+ 	 * the port.
+ 	 */
+-	spin_lock_irq(&phba->hbalock);  /* required for lpfc_els_sgl_list and */
+-					/* scsl_buf_list */
++
+ 	/* sgl_list_lock required because worker thread uses this
+ 	 * list.
+ 	 */
+-	spin_lock(&phba->sli4_hba.sgl_list_lock);
++	spin_lock_irq(&phba->sli4_hba.sgl_list_lock);
+ 	list_for_each_entry(sglq_entry,
+ 		&phba->sli4_hba.lpfc_abts_els_sgl_list, list)
+ 		sglq_entry->state = SGL_FREED;
+@@ -1057,11 +1056,12 @@ lpfc_hba_down_post_s4(struct lpfc_hba *phba)
+ 			&phba->sli4_hba.lpfc_els_sgl_list);
+ 
+ 
+-	spin_unlock(&phba->sli4_hba.sgl_list_lock);
++	spin_unlock_irq(&phba->sli4_hba.sgl_list_lock);
+ 
+ 	/* abts_xxxx_buf_list_lock required because worker thread uses this
+ 	 * list.
+ 	 */
++	spin_lock_irq(&phba->hbalock);
+ 	cnt = 0;
+ 	for (idx = 0; idx < phba->cfg_hdw_queue; idx++) {
+ 		qp = &phba->sli4_hba.hdwq[idx];
+@@ -3804,12 +3804,10 @@ lpfc_sli4_els_sgl_update(struct lpfc_hba *phba)
+ 			sglq_entry->state = SGL_FREED;
+ 			list_add_tail(&sglq_entry->list, &els_sgl_list);
  		}
--		if (ndlp && (ndlp->nlp_flag & NLP_RM_DFLT_RPI))
--			if (lpfc_nlp_not_used(ndlp)) {
--				ndlp = NULL;
--				/* Indicate the node has already released,
--				 * should not reference to it from within
--				 * the routine lpfc_els_free_iocb.
--				 */
--				cmdiocb->context1 = NULL;
--			}
- 		goto out;
+-		spin_lock_irq(&phba->hbalock);
+-		spin_lock(&phba->sli4_hba.sgl_list_lock);
++		spin_lock_irq(&phba->sli4_hba.sgl_list_lock);
+ 		list_splice_init(&els_sgl_list,
+ 				 &phba->sli4_hba.lpfc_els_sgl_list);
+-		spin_unlock(&phba->sli4_hba.sgl_list_lock);
+-		spin_unlock_irq(&phba->hbalock);
++		spin_unlock_irq(&phba->sli4_hba.sgl_list_lock);
+ 	} else if (els_xri_cnt < phba->sli4_hba.els_xri_cnt) {
+ 		/* els xri-sgl shrinked */
+ 		xri_cnt = phba->sli4_hba.els_xri_cnt - els_xri_cnt;
+@@ -3817,8 +3815,7 @@ lpfc_sli4_els_sgl_update(struct lpfc_hba *phba)
+ 				"3158 ELS xri-sgl count decreased from "
+ 				"%d to %d\n", phba->sli4_hba.els_xri_cnt,
+ 				els_xri_cnt);
+-		spin_lock_irq(&phba->hbalock);
+-		spin_lock(&phba->sli4_hba.sgl_list_lock);
++		spin_lock_irq(&phba->sli4_hba.sgl_list_lock);
+ 		list_splice_init(&phba->sli4_hba.lpfc_els_sgl_list,
+ 				 &els_sgl_list);
+ 		/* release extra els sgls from list */
+@@ -3833,8 +3830,7 @@ lpfc_sli4_els_sgl_update(struct lpfc_hba *phba)
+ 		}
+ 		list_splice_init(&els_sgl_list,
+ 				 &phba->sli4_hba.lpfc_els_sgl_list);
+-		spin_unlock(&phba->sli4_hba.sgl_list_lock);
+-		spin_unlock_irq(&phba->hbalock);
++		spin_unlock_irq(&phba->sli4_hba.sgl_list_lock);
+ 	} else
+ 		lpfc_printf_log(phba, KERN_INFO, LOG_SLI,
+ 				"3163 ELS xri-sgl count unchanged: %d\n",
+@@ -7388,11 +7384,9 @@ lpfc_free_els_sgl_list(struct lpfc_hba *phba)
+ 	LIST_HEAD(sglq_list);
+ 
+ 	/* Retrieve all els sgls from driver list */
+-	spin_lock_irq(&phba->hbalock);
+-	spin_lock(&phba->sli4_hba.sgl_list_lock);
++	spin_lock_irq(&phba->sli4_hba.sgl_list_lock);
+ 	list_splice_init(&phba->sli4_hba.lpfc_els_sgl_list, &sglq_list);
+-	spin_unlock(&phba->sli4_hba.sgl_list_lock);
+-	spin_unlock_irq(&phba->hbalock);
++	spin_unlock_irq(&phba->sli4_hba.sgl_list_lock);
+ 
+ 	/* Now free the sgl list */
+ 	lpfc_free_sgl_list(phba, &sglq_list);
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index c84da8e6b65d..f2d9a3580887 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -1440,7 +1440,10 @@ __lpfc_nvmet_clean_io_for_cpu(struct lpfc_hba *phba,
+ 		list_del_init(&ctx_buf->list);
+ 		spin_unlock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
+ 
++		spin_lock(&phba->hbalock);
+ 		__lpfc_clear_active_sglq(phba, ctx_buf->sglq->sli4_lxritag);
++		spin_unlock(&phba->hbalock);
++
+ 		ctx_buf->sglq->state = SGL_FREED;
+ 		ctx_buf->sglq->ndlp = NULL;
+ 
+@@ -1787,8 +1790,7 @@ lpfc_sli4_nvmet_xri_aborted(struct lpfc_hba *phba,
+ 		atomic_inc(&tgtp->xmt_fcp_xri_abort_cqe);
  	}
  
-@@ -4580,29 +4554,6 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 				"Data: x%x x%x x%x\n",
- 				ndlp->nlp_DID, ndlp->nlp_flag, ndlp->nlp_state,
- 				ndlp->nlp_rpi);
--
--			if (lpfc_nlp_not_used(ndlp)) {
--				ndlp = NULL;
--				/* Indicate node has already been released,
--				 * should not reference to it from within
--				 * the routine lpfc_els_free_iocb.
--				 */
--				cmdiocb->context1 = NULL;
--			}
--		} else {
--			/* Do not drop node for lpfc_els_abort'ed ELS cmds */
--			if (!lpfc_error_lost_link(irsp) &&
--			    ndlp->nlp_flag & NLP_ACC_REGLOGIN) {
--				if (lpfc_nlp_not_used(ndlp)) {
--					ndlp = NULL;
--					/* Indicate node has already been
--					 * released, should not reference
--					 * to it from within the routine
--					 * lpfc_els_free_iocb.
--					 */
--					cmdiocb->context1 = NULL;
--				}
--			}
+-	spin_lock_irqsave(&phba->hbalock, iflag);
+-	spin_lock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
++	spin_lock_irqsave(&phba->sli4_hba.abts_nvmet_buf_list_lock, iflag);
+ 	list_for_each_entry_safe(ctxp, next_ctxp,
+ 				 &phba->sli4_hba.lpfc_abts_nvmet_ctx_list,
+ 				 list) {
+@@ -1806,10 +1808,10 @@ lpfc_sli4_nvmet_xri_aborted(struct lpfc_hba *phba,
  		}
- 		mp = (struct lpfc_dmabuf *)mbox->ctx_buf;
- 		if (mp) {
-@@ -4618,19 +4569,6 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 			ndlp->nlp_flag &= ~NLP_ACC_REGLOGIN;
- 		ndlp->nlp_flag &= ~NLP_RM_DFLT_RPI;
- 		spin_unlock_irq(&ndlp->lock);
--
--		/* If the node is not being used by another discovery thread,
--		 * and we are sending a reject, we are done with it.
--		 * Release driver reference count here and free associated
--		 * resources.
--		 */
--		if (ls_rjt)
--			if (lpfc_nlp_not_used(ndlp))
--				/* Indicate node has already been released,
--				 * should not reference to it from within
--				 * the routine lpfc_els_free_iocb.
--				 */
--				cmdiocb->context1 = NULL;
- 	}
+ 		ctxp->flag &= ~LPFC_NVME_XBUSY;
+ 		spin_unlock(&ctxp->ctxlock);
+-		spin_unlock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
++		spin_unlock_irqrestore(&phba->sli4_hba.abts_nvmet_buf_list_lock,
++				       iflag);
  
- 	/* Release the originating I/O reference. */
+ 		rrq_empty = list_empty(&phba->active_rrq_list);
+-		spin_unlock_irqrestore(&phba->hbalock, iflag);
+ 		ndlp = lpfc_findnode_did(phba->pport, ctxp->sid);
+ 		if (ndlp &&
+ 		    (ndlp->nlp_state == NLP_STE_UNMAPPED_NODE ||
+@@ -1830,9 +1832,7 @@ lpfc_sli4_nvmet_xri_aborted(struct lpfc_hba *phba,
+ 			lpfc_worker_wake_up(phba);
+ 		return;
+ 	}
+-	spin_unlock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
+-	spin_unlock_irqrestore(&phba->hbalock, iflag);
+-
++	spin_unlock_irqrestore(&phba->sli4_hba.abts_nvmet_buf_list_lock, iflag);
+ 	ctxp = lpfc_nvmet_get_ctx_for_xri(phba, xri);
+ 	if (ctxp) {
+ 		/*
+@@ -1876,8 +1876,7 @@ lpfc_nvmet_rcv_unsol_abort(struct lpfc_vport *vport,
+ 	sid = sli4_sid_from_fc_hdr(fc_hdr);
+ 	oxid = be16_to_cpu(fc_hdr->fh_ox_id);
+ 
+-	spin_lock_irqsave(&phba->hbalock, iflag);
+-	spin_lock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
++	spin_lock_irqsave(&phba->sli4_hba.abts_nvmet_buf_list_lock, iflag);
+ 	list_for_each_entry_safe(ctxp, next_ctxp,
+ 				 &phba->sli4_hba.lpfc_abts_nvmet_ctx_list,
+ 				 list) {
+@@ -1886,9 +1885,8 @@ lpfc_nvmet_rcv_unsol_abort(struct lpfc_vport *vport,
+ 
+ 		xri = ctxp->ctxbuf->sglq->sli4_xritag;
+ 
+-		spin_unlock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
+-		spin_unlock_irqrestore(&phba->hbalock, iflag);
+-
++		spin_unlock_irqrestore(&phba->sli4_hba.abts_nvmet_buf_list_lock,
++				       iflag);
+ 		spin_lock_irqsave(&ctxp->ctxlock, iflag);
+ 		ctxp->flag |= LPFC_NVME_ABTS_RCV;
+ 		spin_unlock_irqrestore(&ctxp->ctxlock, iflag);
+@@ -1907,9 +1905,7 @@ lpfc_nvmet_rcv_unsol_abort(struct lpfc_vport *vport,
+ 		lpfc_sli4_seq_abort_rsp(vport, fc_hdr, 1);
+ 		return 0;
+ 	}
+-	spin_unlock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
+-	spin_unlock_irqrestore(&phba->hbalock, iflag);
+-
++	spin_unlock_irqrestore(&phba->sli4_hba.abts_nvmet_buf_list_lock, iflag);
+ 	/* check the wait list */
+ 	if (phba->sli4_hba.nvmet_io_wait_cnt) {
+ 		struct rqb_dmabuf *nvmebuf;
 -- 
 2.26.2
 
