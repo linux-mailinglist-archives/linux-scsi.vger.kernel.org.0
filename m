@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B662235B824
+	by mail.lfdr.de (Postfix) with ESMTP id 45BA235B823
 	for <lists+linux-scsi@lfdr.de>; Mon, 12 Apr 2021 03:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236592AbhDLBc3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S236591AbhDLBc3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Sun, 11 Apr 2021 21:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236574AbhDLBcY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 21:32:24 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4F3C061343
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:05 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id p16so1546558plf.12
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:05 -0700 (PDT)
+        with ESMTP id S236573AbhDLBcX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Apr 2021 21:32:23 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F57BC061574
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:06 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d17so211666plg.0
+        for <linux-scsi@vger.kernel.org>; Sun, 11 Apr 2021 18:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3VicCZ4n6Ofck7CJ6XpD1VuqTGfGUv3jny6IOfNGjYs=;
-        b=W7519NPT79aomD9SdPomPKLWgnWn2e7A8zL/zsam1nqlsHOFeYy2JvAM6cfJV9E7I7
-         GZIfipDmfdyJF9+FI657P3RRqCpWRJQRMjvEuC+D9zhjGM5STD5SUPL7/fokuzhw6kYn
-         5h1v9Cevmv2/x+0wShzg1FhP+bgLpJ1cD7l2jC2oSHFFDh5w8pTiat02qywEg1oWmlRx
-         W2twbPwqA/uhUCBBRVVwwn2qAK9r0i+HfmW1Mehm3cscgzsp5lc4Ft4n0MZqeKNfKfAr
-         qSbfs7GClt3bj4MHlxmHM8BgE+Gxyw5ncUKolmgpfgHNd8cQQIJ8EqQMlwjBcgM7N/uo
-         oEFw==
+        bh=CuOK/zBaEnVVdGmIefjj3o+dvgCyOXYDZJlw+s5a920=;
+        b=YrakYJ4tuMClWTVXS4p5wIkDZIyD06OaUvQWRh8mQLbCGH2SBSChYS6d0WGVvqnuk+
+         1A5IF9pw5qrYYE7Ck65EqYqrupMTDcwebYaETqMSvyHpSZ6FwBzd/yz8wc3iTGK7k1wK
+         4rygGCIPIQBWxWLuyTA2iftgypF1Ft/tKdjapCmGrVLCJTYwg27IgAJo2Bvm0s0bnfAZ
+         tJqKj3dSpyBRq/Bfzif93fJm3GijtmAfQTARVE/CU/zdDCdgJiYRhmVNdzNkAnvTyiGD
+         r1eIVubzmhC3qixHelVh0JaB5HTx9tdxxbMT25XNLC6dlX5bi2Jz42sOI2ouG9R42GHy
+         +N4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3VicCZ4n6Ofck7CJ6XpD1VuqTGfGUv3jny6IOfNGjYs=;
-        b=kaNp3UjBQiml3T2nNXTQLtWjmwzr76C8hP/pLVeiiFL/AXZ5FqOZUCYgbayIO6FAlf
-         DGVJCSDwCPayUtsvWI+peDx3rvJL7f79UpYY6vwmyT+GnNkX+pOiBo2bqeSMfkYNJybt
-         ONM0tmJPl3gIniXMS6PqqrGfAM+UK2nwfqwsZ/NmFJrhBwjJZk78S2pq71qCnGbXq8n7
-         ZWsLqCcoGetmIZ/8qgJF9yPBO2JVoROUWyc1VYPxkSJjM+x4BjDwFlSuTJay6tw35ZeP
-         4KAPV8e+yHqVBGol3AIOc1es2ZUPLKef2Ov3rhxw6Au5AcrfVwgziekov9lp8rQfER/l
-         cnuQ==
-X-Gm-Message-State: AOAM531D4Wkc9vBJe2sn/2q9pISv+OrYdMvxUpOhjrTWV/k9cJYcFL4K
-        EVVzwO+R2MAT6mS863NXspyItpxqWWg=
-X-Google-Smtp-Source: ABdhPJwb+oWaI+Cbt+zLP1pXw90gS7IEXHEYQlDvxscwe8QZgDYw3WMcCuSIqRC/AVN4o6wMG2fY4g==
-X-Received: by 2002:a17:902:525:b029:e8:e347:b07f with SMTP id 34-20020a1709020525b02900e8e347b07fmr23931516plf.34.1618191125363;
-        Sun, 11 Apr 2021 18:32:05 -0700 (PDT)
+        bh=CuOK/zBaEnVVdGmIefjj3o+dvgCyOXYDZJlw+s5a920=;
+        b=h3ZygIFtHW5DHyduxTE8znVh15Qj4DzAPvNDNSuFN+amzJBYP1rgZiv4l7XUM4Ivxt
+         NDe2D5a2RowgLrEkIq943FIukuc+nesfnwgoJo4iCXe6+b27eIzTeGdGtafHHi1C1njM
+         rz20IxanbUm/4EdmlTKE+nzVOW7zzreCmjuOBzneN4TZaWiet+ZqVyG+GJ3R6wl3rmrN
+         Lb3SO2Yg06EccwjUl8DKIve7yGY1ig9/sQ9JKjysJq6WB6u2uk1nRJXMCnl+bua4Mu2Z
+         UxEOe17Mt3IufL7/hF4jEKkadaLMJnuNmfrr0XVVTGDvGkAVqw4ielWxkUhmEJadJAkb
+         CeuQ==
+X-Gm-Message-State: AOAM531sNRZbok+ZytpUF2SByKvhARDz1xVb5xIMoAbfBzNz7JSArCw5
+        TKXCPiAbQEREJEY7ct6157jgbND7oV0=
+X-Google-Smtp-Source: ABdhPJxfsboz7lQMhH8U7N9HAwPdYzBaWgAyGwxW8yMo0rUG6kGdly+QmP6GJ+B9CqgGJmw6aLmHRw==
+X-Received: by 2002:a17:902:8344:b029:ea:fc89:fa72 with SMTP id z4-20020a1709028344b02900eafc89fa72mr2354091pln.45.1618191126000;
+        Sun, 11 Apr 2021 18:32:06 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id i17sm8153163pfd.84.2021.04.11.18.32.04
+        by smtp.gmail.com with ESMTPSA id i17sm8153163pfd.84.2021.04.11.18.32.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 11 Apr 2021 18:32:05 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH v2 09/16] lpfc: Fix missing FDMI registrations after Mgmt Svc login
-Date:   Sun, 11 Apr 2021 18:31:20 -0700
-Message-Id: <20210412013127.2387-10-jsmart2021@gmail.com>
+Subject: [PATCH v2 10/16] lpfc: Fix lpfc_hdw_queue attribute being ignored
+Date:   Sun, 11 Apr 2021 18:31:21 -0700
+Message-Id: <20210412013127.2387-11-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210412013127.2387-1-jsmart2021@gmail.com>
 References: <20210412013127.2387-1-jsmart2021@gmail.com>
@@ -63,112 +63,67 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-FDMI registration needs to be performed after every login with the FC
-Mgmt service. The flag the driver is using to track registration is
-cleared on link up, but never on Mgmt service logout/re-login.
+The lpfc_hdw_queue attribute is to set the number of hardware queues
+to be created on the adapter. Normally, the value is set to a default,
+which allows the hw queue count to be sized dynamically based on
+adapter capabilities, cpu/platform architecture, or cpu type. Currently,
+when lpfc_hdw_queue is set to a specific value, is has no effect and
+the dynamic sizing occurs.
 
-Fix by clearing the flag whenever a new login is completed with the
-FC Mgmt service.
+The routine checking whether parameters are default or not ignores the
+lpfc_hdw_queue setting and invokes the dynamic logic.
 
-While perusing the flag use, logging was performed as if FDMI
-registration occurred on vports. However, it is limited to the physical
-port only. Revise the logging to reflect physical port based.
+Fix the routine to additionally check the lpfc_hdw_queue attribute value
+before using dynamic scaling. Additionally, SLI-3 supports only a small
+number of queues with dedicated functions, thus it needs to be exempted
+from the variable scaling and set to the expected values.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_ct.c      | 28 ++++++++++++++++------------
- drivers/scsi/lpfc/lpfc_hbadisc.c |  6 ++++--
- 2 files changed, 20 insertions(+), 14 deletions(-)
+ drivers/scsi/lpfc/lpfc_attr.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index 37b0c2024998..8da9e18a1fde 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -2253,12 +2253,12 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 			return;
- 
- 		case SLI_MGMT_RPA:
--			/* No retry on Vendor RPA */
-+			/* No retry on Vendor, RPA only done on physical port */
- 			if (phba->link_flag & LS_CT_VEN_RPA) {
--				lpfc_printf_vlog(vport, KERN_ERR,
--						 LOG_DISCOVERY | LOG_ELS,
--						 "6460 VEN FDMI RPA failure\n");
- 				phba->link_flag &= ~LS_CT_VEN_RPA;
-+				lpfc_printf_log(phba, KERN_ERR,
-+						LOG_DISCOVERY | LOG_ELS,
-+						"6460 VEN FDMI RPA failure\n");
- 				return;
- 			}
- 			if (vport->fdmi_port_mask == LPFC_FDMI2_PORT_ATTR) {
-@@ -2306,23 +2306,24 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 			if (phba->link_flag & LS_CT_VEN_RPA) {
- 				lpfc_printf_vlog(vport, KERN_INFO,
- 						 LOG_DISCOVERY | LOG_ELS,
--						 "6449 VEN RPA Success\n");
-+						 "6449 VEN RPA FDMI Success\n");
-+				phba->link_flag &= ~LS_CT_VEN_RPA;
- 				break;
- 			}
- 
- 			if (lpfc_fdmi_cmd(vport, ndlp, cmd,
- 					  LPFC_FDMI_VENDOR_ATTR_mi) == 0)
- 				phba->link_flag |= LS_CT_VEN_RPA;
--			lpfc_printf_vlog(vport, KERN_INFO,
-+			lpfc_printf_log(phba, KERN_INFO,
- 					LOG_DISCOVERY | LOG_ELS,
- 					"6458 Send MI FDMI:%x Flag x%x\n",
- 					phba->sli4_hba.pc_sli4_params.mi_value,
- 					phba->link_flag);
- 		} else {
--			lpfc_printf_vlog(vport, KERN_INFO,
--					 LOG_DISCOVERY | LOG_ELS,
--					 "6459 No FDMI VEN MI support - "
--					 "RPA Success\n");
-+			lpfc_printf_log(phba, KERN_INFO,
-+					LOG_DISCOVERY | LOG_ELS,
-+					"6459 No FDMI VEN MI support - "
-+					"RPA Success\n");
- 		}
- 		break;
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index b253be355b4f..b703fe3b606e 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -5815,7 +5815,9 @@ lpfc_irq_chann_init(struct lpfc_hba *phba, uint32_t val)
  	}
-@@ -2369,10 +2370,13 @@ lpfc_fdmi_change_check(struct lpfc_vport *vport)
- 		 * DHBA -> DPRT -> RHBA -> RPA  (physical port)
- 		 * DPRT -> RPRT (vports)
- 		 */
--		if (vport->port_type == LPFC_PHYSICAL_PORT)
-+		if (vport->port_type == LPFC_PHYSICAL_PORT) {
-+			/* For extra Vendor RPA */
-+			phba->link_flag &= ~LS_CT_VEN_RPA;
- 			lpfc_fdmi_cmd(vport, ndlp, SLI_MGMT_DHBA, 0);
--		else
+ 
+ 	/* Check if default setting was passed */
+-	if (val == LPFC_IRQ_CHANN_DEF)
++	if (val == LPFC_IRQ_CHANN_DEF &&
++	    phba->cfg_hdw_queue == LPFC_HBA_HDWQ_DEF &&
++	    phba->sli_rev == LPFC_SLI_REV4)
+ 		lpfc_assign_default_irq_chann(phba);
+ 
+ 	if (phba->irq_chann_mode != NORMAL_MODE) {
+@@ -5854,7 +5856,12 @@ lpfc_irq_chann_init(struct lpfc_hba *phba, uint32_t val)
+ 			phba->cfg_irq_chann = LPFC_IRQ_CHANN_DEF;
+ 			return -EINVAL;
+ 		}
+-		phba->cfg_irq_chann = val;
++		if (phba->sli_rev == LPFC_SLI_REV4) {
++			phba->cfg_irq_chann = val;
 +		} else {
- 			lpfc_fdmi_cmd(vport, ndlp, SLI_MGMT_DPRT, 0);
++			phba->cfg_irq_chann = 2;
++			phba->cfg_hdw_queue = 1;
 +		}
+ 	}
  
- 		/* Since this code path registers all the port attributes
- 		 * we can just return without further checking.
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 85633eb7524f..03977a2268fe 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -5952,10 +5952,12 @@ lpfc_mbx_cmpl_fdmi_reg_login(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
- 	 * DHBA -> DPRT -> RHBA -> RPA  (physical port)
- 	 * DPRT -> RPRT (vports)
- 	 */
--	if (vport->port_type == LPFC_PHYSICAL_PORT)
-+	if (vport->port_type == LPFC_PHYSICAL_PORT) {
-+		phba->link_flag &= ~LS_CT_VEN_RPA; /* For extra Vendor RPA */
- 		lpfc_fdmi_cmd(vport, ndlp, SLI_MGMT_DHBA, 0);
--	else
-+	} else {
- 		lpfc_fdmi_cmd(vport, ndlp, SLI_MGMT_DPRT, 0);
-+	}
+ 	return 0;
+@@ -7411,7 +7418,8 @@ lpfc_get_cfgparam(struct lpfc_hba *phba)
+ 		phba->cfg_hdw_queue = phba->sli4_hba.num_present_cpu;
+ 	if (phba->cfg_irq_chann == 0)
+ 		phba->cfg_irq_chann = phba->sli4_hba.num_present_cpu;
+-	if (phba->cfg_irq_chann > phba->cfg_hdw_queue)
++	if (phba->cfg_irq_chann > phba->cfg_hdw_queue &&
++	    phba->sli_rev == LPFC_SLI_REV4)
+ 		phba->cfg_irq_chann = phba->cfg_hdw_queue;
  
- 
- 	/* decrement the node reference count held for this callback
+ 	phba->cfg_soft_wwnn = 0L;
 -- 
 2.26.2
 
