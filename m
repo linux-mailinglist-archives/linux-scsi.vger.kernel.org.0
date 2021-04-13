@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F33B635E4B2
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Apr 2021 19:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A43935E4B3
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Apr 2021 19:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347131AbhDMRIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1347133AbhDMRIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Tue, 13 Apr 2021 13:08:11 -0400
-Received: from mail-pg1-f179.google.com ([209.85.215.179]:38735 "EHLO
-        mail-pg1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347115AbhDMRIC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Apr 2021 13:08:02 -0400
-Received: by mail-pg1-f179.google.com with SMTP id w10so12400836pgh.5
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Apr 2021 10:07:43 -0700 (PDT)
+Received: from mail-pg1-f177.google.com ([209.85.215.177]:38735 "EHLO
+        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347120AbhDMRIE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Apr 2021 13:08:04 -0400
+Received: by mail-pg1-f177.google.com with SMTP id w10so12400868pgh.5
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Apr 2021 10:07:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QoCVFea0rBzcHUxlyOuca8dkEEiPNeb8FPBb/uBAino=;
-        b=ONsxeWq8NEtQzuwUeiDsCkX07ribWknIHx3KgLNbpD5DQLOjWndA0sIzYDfSAq651H
-         /cBH0p8nQAGaRfgYvoNLXxrfBYJQSLnRX4DRvpCQiqprrxgbNSN9X4AFluWpShmYo1M6
-         lzzk7rxDFn3Kv0rgeDiUEwgxCR1hV3u+z3Uchy7zo3qe4lLaRhfvSOaGcHMGUK0G71Bz
-         9yL2/HAI3gyz1WukjotyNdIYJw8OFYzagqRLT/h6BMNN8ne8JGShxwkqWIyfwOwUbqN5
-         rUDb5kArc3puI6C3icNw7qmzqQH2ZihtaFy66LnWcWYmoF9RFS/7BSV7O5nvkT7tG8nc
-         IHwQ==
-X-Gm-Message-State: AOAM531fuiP6IMeBAShlfsUXsK+HJQWBzDmtU0c1p60YO8V1J1W2B31z
-        rxF79n5lBNvQZAF1wa6VXDU=
-X-Google-Smtp-Source: ABdhPJxsUGgxGibxaLa0ulhjD70k7xQQeOU90VCG9/bQlXcZW9qUGBthZZ4QazDJXzLGV5WkiWiIhg==
-X-Received: by 2002:a62:ab06:0:b029:249:db1c:3d7d with SMTP id p6-20020a62ab060000b0290249db1c3d7dmr15612945pff.72.1618333662633;
-        Tue, 13 Apr 2021 10:07:42 -0700 (PDT)
+        bh=rFXmVizIQL6C4Iz8cpLnIDm4ABF9jZDW6wKSe2yCIWU=;
+        b=mkorC6Lti5awlJMtTy4T6ovjOWEJcvvJpzdguCKSIjYcpDEDtV1+fVkHc2fHoJ8Jga
+         KsuvAAupaCoWhOfzQuU52rPt9T9Z7xKEdHDo8mgGiZCY4jP3oeHN4oeyn7WUlHOQM7Wo
+         k35yTPSbrvx/08TCpnqv9J5BBhLvtVEJLuqOItVdSihy/vEM6hOn3Z8eV+oirNL3F+Ss
+         eCdLevP2WnWxoM4yFJ3VuP359fcEQycVH6VMtzD5YvB8rNv4VYzkodCF90VUgwx99uwa
+         Mg8rYDSHZyp/s08HPFj4hU1wr3GTvehx69jsMr4GvQk1qtNfvvAacWyFXx6MRn25bndi
+         DiEQ==
+X-Gm-Message-State: AOAM530I8IVzNcukBkIf7QHSCmSkOPBBxUf09fXNQvgrwz/9Bwak5Ay0
+        2QwLsFD7q/WM7qkz+4xI1gI=
+X-Google-Smtp-Source: ABdhPJzA/O6U3qzBBt0SRWMjhILbReHXBiHpnIrzd8wlObcYGvlCJt2kNbV/57rWiW0OsD9ao54TDg==
+X-Received: by 2002:a63:145a:: with SMTP id 26mr23823559pgu.300.1618333663857;
+        Tue, 13 Apr 2021 10:07:43 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:345f:c70d:97e0:e2ef])
-        by smtp.gmail.com with ESMTPSA id z10sm6736078pfe.218.2021.04.13.10.07.41
+        by smtp.gmail.com with ESMTPSA id z10sm6736078pfe.218.2021.04.13.10.07.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 10:07:42 -0700 (PDT)
+        Tue, 13 Apr 2021 10:07:43 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
         Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH 18/20] target: Compare explicitly with SAM_STAT_GOOD
-Date:   Tue, 13 Apr 2021 10:07:12 -0700
-Message-Id: <20210413170714.2119-19-bvanassche@acm.org>
+Subject: [PATCH 19/20] target: Fix several format specifiers
+Date:   Tue, 13 Apr 2021 10:07:13 -0700
+Message-Id: <20210413170714.2119-20-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210413170714.2119-1-bvanassche@acm.org>
 References: <20210413170714.2119-1-bvanassche@acm.org>
@@ -51,25 +51,68 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of leaving it implicit that SAM_STAT_GOOD == 0, compare explicitly
-with SAM_STAT_GOOD.
+Use format specifier '%u' to format the u32 and int data types instead of
+'%hu'.
 
 Cc: Mike Christie <michael.christie@oracle.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/target/target_core_pscsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/target/target_core_configfs.c | 6 +++---
+ drivers/target/target_core_pr.c       | 6 ++----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
-index 1c9aeab93477..dac44caf77a3 100644
---- a/drivers/target/target_core_pscsi.c
-+++ b/drivers/target/target_core_pscsi.c
-@@ -1046,7 +1046,7 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
- 	int result = scsi_req(req)->result;
- 	u8 scsi_status = status_byte(result) << 1;
+diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
+index 9cb1ca8421c8..01005a9e5128 100644
+--- a/drivers/target/target_core_configfs.c
++++ b/drivers/target/target_core_configfs.c
+@@ -2746,7 +2746,7 @@ static ssize_t target_tg_pt_gp_alua_access_state_store(struct config_item *item,
  
--	if (scsi_status) {
-+	if (scsi_status != SAM_STAT_GOOD) {
- 		pr_debug("PSCSI Status Byte exception at cmd: %p CDB:"
- 			" 0x%02x Result: 0x%08x\n", cmd, pt->pscsi_cdb[0],
- 			result);
+ 	if (!tg_pt_gp->tg_pt_gp_valid_id) {
+ 		pr_err("Unable to do implicit ALUA on non valid"
+-			" tg_pt_gp ID: %hu\n", tg_pt_gp->tg_pt_gp_valid_id);
++			" tg_pt_gp ID: %u\n", tg_pt_gp->tg_pt_gp_valid_id);
+ 		return -EINVAL;
+ 	}
+ 	if (!target_dev_configured(dev)) {
+@@ -2798,7 +2798,7 @@ static ssize_t target_tg_pt_gp_alua_access_status_store(
+ 
+ 	if (!tg_pt_gp->tg_pt_gp_valid_id) {
+ 		pr_err("Unable to do set ALUA access status on non"
+-			" valid tg_pt_gp ID: %hu\n",
++			" valid tg_pt_gp ID: %u\n",
+ 			tg_pt_gp->tg_pt_gp_valid_id);
+ 		return -EINVAL;
+ 	}
+@@ -2853,7 +2853,7 @@ static ssize_t target_tg_pt_gp_alua_support_##_name##_store(		\
+ 									\
+ 	if (!t->tg_pt_gp_valid_id) {					\
+ 		pr_err("Unable to do set " #_name " ALUA state on non"	\
+-		       " valid tg_pt_gp ID: %hu\n",			\
++		       " valid tg_pt_gp ID: %u\n",			\
+ 		       t->tg_pt_gp_valid_id);				\
+ 		return -EINVAL;						\
+ 	}								\
+diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
+index d61dc166bc5f..6fd5fec95539 100644
+--- a/drivers/target/target_core_pr.c
++++ b/drivers/target/target_core_pr.c
+@@ -1637,8 +1637,7 @@ core_scsi3_decode_spec_i_port(
+ 			}
+ 
+ 			dest_tpg = tmp_tpg;
+-			pr_debug("SPC-3 PR SPEC_I_PT: Located %s Node:"
+-				" %s Port RTPI: %hu\n",
++			pr_debug("SPC-3 PR SPEC_I_PT: Located %s Node: %s Port RTPI: %u\n",
+ 				dest_tpg->se_tpg_tfo->fabric_name,
+ 				dest_node_acl->initiatorname, dest_rtpi);
+ 
+@@ -1675,8 +1674,7 @@ core_scsi3_decode_spec_i_port(
+ 		dest_se_deve = core_get_se_deve_from_rtpi(dest_node_acl,
+ 					dest_rtpi);
+ 		if (!dest_se_deve) {
+-			pr_err("Unable to locate %s dest_se_deve"
+-				" from destination RTPI: %hu\n",
++			pr_err("Unable to locate %s dest_se_deve from destination RTPI: %u\n",
+ 				dest_tpg->se_tpg_tfo->fabric_name,
+ 				dest_rtpi);
+ 
