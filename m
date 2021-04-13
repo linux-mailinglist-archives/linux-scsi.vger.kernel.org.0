@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A17C35E49F
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Apr 2021 19:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEDA35E4A6
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Apr 2021 19:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347085AbhDMRHq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Apr 2021 13:07:46 -0400
-Received: from mail-pl1-f171.google.com ([209.85.214.171]:34484 "EHLO
-        mail-pl1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347074AbhDMRHo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Apr 2021 13:07:44 -0400
-Received: by mail-pl1-f171.google.com with SMTP id t22so8252188ply.1
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Apr 2021 10:07:24 -0700 (PDT)
+        id S1347092AbhDMRH6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Apr 2021 13:07:58 -0400
+Received: from mail-pj1-f54.google.com ([209.85.216.54]:39613 "EHLO
+        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347094AbhDMRHu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Apr 2021 13:07:50 -0400
+Received: by mail-pj1-f54.google.com with SMTP id ot17-20020a17090b3b51b0290109c9ac3c34so11016660pjb.4
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Apr 2021 10:07:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BbsHqAvEVr9VbDf2IgwsYK0bUo+eQhPGe0xVCw3XxEM=;
-        b=QizS3za0RJMfw4j1uQqija54Ci6H9VFKfrKR8bKgw61CAU2vHiX1DOnbIttaR2DMx0
-         ZHoouPcx2ytxigiX9jjvNtG8F7+2E4UVyaw6ZvlmCR/NCPX5ucDQNQA8x+Bmx3ow+mkL
-         4K7t+JNepMZicNf9gqgl2kVxcAPPoVZvLJxWY8hgX2nS+ryybpGNtPgAtOuceq5zKUmI
-         8MGiyMMtEk2K+jvaQoNGdvljzC/3NR/cL5qs3h7R4VyqrCa3xqs0BWqrfLW2WYicCJH2
-         b/4BH6EIVv1C5ocqVinvOYde1J25er0UKDrhp5fxsGp2KlGFZF3F0B0G8TGKyrGMjqYa
-         vnpg==
-X-Gm-Message-State: AOAM533jO9N2Oo7r+sQYohzx2kAW1wjGrtVUhDjNrsps9Mrnh0cLUCBR
-        iMoXv+kL9bh4JxLTH0OqIK8=
-X-Google-Smtp-Source: ABdhPJzsO797x7VYuKEyiJoLEuexqAA0t4fgsf4OMKmMXu6lwnl6K9X5LtPM+0EDa1hUmQTqCE8cZw==
-X-Received: by 2002:a17:90a:588b:: with SMTP id j11mr1040962pji.170.1618333644532;
-        Tue, 13 Apr 2021 10:07:24 -0700 (PDT)
+        bh=vpvIXFMO2/MgdDMwxCoeYsr1AYU+YR9iqCp/6zOQB3U=;
+        b=pM2Mgptbo9ZHN9U8GVWTTJWRRwno3EMpwAEgvQW/5GcTQZQesA+CrqbBJvT0FveFb4
+         0GJc5dKOAoPT3ObbsPmBEOoyShPZ0DZlrJcHYbVUepzostDosvHltAPHhMNBO4qZB1Ww
+         vPA4AvTL+nT7RWGuoxE39rW771PhmFglflN6Vh21NkbW+ulzWUKr51aolldit+tQhaog
+         5/rF+jDWgDzMkWSqFK4rt6YXFvW6ecrl1C0YwB2WdNVBM/iAsNNc6THjHqBAr/xo43mR
+         8QdpzxhWK9vbO7brLt2fcjGvxPFVDTp1K9TDKgrAgNVHwMJhvVH8/39XfzZ26gW0WoNh
+         jOkA==
+X-Gm-Message-State: AOAM531hAF5qH4+7yR21PusRbA5EgmYMgynS+CJIGMrdFI96g1W0QTG2
+        44FjyH61ZnwvGJretzrvbAc=
+X-Google-Smtp-Source: ABdhPJwyCCqe0YYdjhkRPfnwII+pA/ccpXV0woiJZKGot6KT40d1nBfFqiAVK6bMNqsMipcRA4KTFw==
+X-Received: by 2002:a17:902:b709:b029:e7:49bd:6833 with SMTP id d9-20020a170902b709b02900e749bd6833mr33446183pls.57.1618333645696;
+        Tue, 13 Apr 2021 10:07:25 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:345f:c70d:97e0:e2ef])
-        by smtp.gmail.com with ESMTPSA id z10sm6736078pfe.218.2021.04.13.10.07.23
+        by smtp.gmail.com with ESMTPSA id z10sm6736078pfe.218.2021.04.13.10.07.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 10:07:24 -0700 (PDT)
+        Tue, 13 Apr 2021 10:07:25 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -40,9 +40,9 @@ Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
         Johannes Thumshirn <johannes.thumshirn@wdc.com>,
         Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH 03/20] Rename scsi_softirq_done() into scsi_complete()
-Date:   Tue, 13 Apr 2021 10:06:57 -0700
-Message-Id: <20210413170714.2119-4-bvanassche@acm.org>
+Subject: [PATCH 04/20] Modify the scsi_send_eh_cmnd() return value for the SDEV_BLOCK case
+Date:   Tue, 13 Apr 2021 10:06:58 -0700
+Message-Id: <20210413170714.2119-5-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210413170714.2119-1-bvanassche@acm.org>
 References: <20210413170714.2119-1-bvanassche@acm.org>
@@ -52,13 +52,14 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Commit 320ae51feed5 ("blk-mq: new multi-queue block IO queueing mechanism";
-v3.13) introduced a code path that calls the blk-mq completion function from
-interrupt context. scsi-mq was introduced by commit d285203cf647 ("scsi:
-add support for a blk-mq based I/O path."; v3.17). Since the introduction of
-scsi-mq scsi_softirq_done() can be called from interrupt context. Because
-that made the name of that function misleading, rename it into
-scsi_complete().
+The comment above scsi_send_eh_cmnd() says: "Returns SUCCESS or FAILED or
+NEEDS_RETRY". This patch makes all values returned by scsi_send_eh_cmnd()
+match the documentation of this function. This change does not affect the
+behavior of scsi_eh_tur() nor of scsi_eh_try_stu() nor of the
+scsi_request_sense() callers.
+
+See also commit bbe9fb0d04b9 ("scsi: Avoid that .queuecommand() gets called
+for a blocked SCSI device"; v5.3).
 
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
@@ -66,41 +67,19 @@ Cc: Hannes Reinecke <hare@suse.de>
 Cc: Daniel Wagner <dwagner@suse.de>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi_lib.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/scsi/scsi_error.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 985ed427445f..c4d6157e8051 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1434,7 +1434,11 @@ static bool scsi_mq_lld_busy(struct request_queue *q)
- 	return false;
- }
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index c0a3497fc474..28b287e9f50a 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -1112,7 +1112,7 @@ static int scsi_send_eh_cmnd(struct scsi_cmnd *scmd, unsigned char *cmnd,
+ 	if (sdev->sdev_state != SDEV_BLOCK)
+ 		rtn = shost->hostt->queuecommand(shost, scmd);
+ 	else
+-		rtn = SCSI_MLQUEUE_DEVICE_BUSY;
++		rtn = FAILED;
+ 	mutex_unlock(&sdev->state_mutex);
  
--static void scsi_softirq_done(struct request *rq)
-+/*
-+ * Block layer request completion callback. May be called from interrupt
-+ * context.
-+ */
-+static void scsi_complete(struct request *rq)
- {
- 	struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(rq);
- 	int disposition;
-@@ -1889,7 +1893,7 @@ static const struct blk_mq_ops scsi_mq_ops_no_commit = {
- 	.get_budget	= scsi_mq_get_budget,
- 	.put_budget	= scsi_mq_put_budget,
- 	.queue_rq	= scsi_queue_rq,
--	.complete	= scsi_softirq_done,
-+	.complete	= scsi_complete,
- 	.timeout	= scsi_timeout,
- #ifdef CONFIG_BLK_DEBUG_FS
- 	.show_rq	= scsi_show_rq,
-@@ -1919,7 +1923,7 @@ static const struct blk_mq_ops scsi_mq_ops = {
- 	.put_budget	= scsi_mq_put_budget,
- 	.queue_rq	= scsi_queue_rq,
- 	.commit_rqs	= scsi_commit_rqs,
--	.complete	= scsi_softirq_done,
-+	.complete	= scsi_complete,
- 	.timeout	= scsi_timeout,
- #ifdef CONFIG_BLK_DEBUG_FS
- 	.show_rq	= scsi_show_rq,
+ 	if (rtn) {
