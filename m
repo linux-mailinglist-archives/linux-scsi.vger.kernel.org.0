@@ -2,49 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5F836148F
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B136F361491
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbhDOWJN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 18:09:13 -0400
-Received: from mail-pg1-f176.google.com ([209.85.215.176]:40819 "EHLO
-        mail-pg1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbhDOWJK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:10 -0400
-Received: by mail-pg1-f176.google.com with SMTP id b17so17859902pgh.7
-        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:46 -0700 (PDT)
+        id S236574AbhDOWJP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 18:09:15 -0400
+Received: from mail-pf1-f180.google.com ([209.85.210.180]:46732 "EHLO
+        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236566AbhDOWJL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:11 -0400
+Received: by mail-pf1-f180.google.com with SMTP id d124so16972041pfa.13
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XIUJE859cpBexslJPbo7ax8YhKkhM8C9hNE+KPJButo=;
-        b=PecJCWQH9pjZQhM7d4hihsrYXgVT3yldlmIYVj1Tc2Zc0yLH6gNGLOV7LLknIUEVN+
-         iQROuC74VzAUJyn75L+l6yCCJe9lZdxIjb5AImFd1zrH9znJBugbwvKTASHq3zg3LXVy
-         Td+RpP9GMCzBBhwV8UDmJ2OaQoCALgGD+0dt509G/P4+gNl3Ny29aztOPiP67unviua8
-         DHiqcL39z9+Y9IrEXKFERfwZucALsnHRXgPgs6LZ3ms8fId1ML9qLF9uV089aF/uYk2q
-         PaDZ2JKRuMlEJHXfyO8fjHTe45XTC6nHmk/KuB3f17DFRiIYt2b1ks46JcnWAuUmOkC+
-         F6Nw==
-X-Gm-Message-State: AOAM530otk+6MLbjj/Y6TuiqW4OjoOUCZf/uYV52TesYnVBdOXp7OQ49
-        K+uZ0iSbJVg5qLDnUIFnXQ0=
-X-Google-Smtp-Source: ABdhPJyjMtPY9sgzuFuxJNnuu0RTaFtE9zy/0nwKdQCtPpkkEQQ4mooIip6b97d3zS282aW+Mea6xw==
-X-Received: by 2002:aa7:9316:0:b029:244:7616:edc7 with SMTP id 22-20020aa793160000b02902447616edc7mr5202466pfj.19.1618524526377;
-        Thu, 15 Apr 2021 15:08:46 -0700 (PDT)
+        bh=/GbOGUYJwLlMuH2QMVoGsRNi6a0V4INR/immqPAYXWw=;
+        b=RkMoCzCXaKZXl0jcCf09OPGFwfzRl90gGkrs4nll/qZgY/020cD0DilrdPnV6wGeFA
+         tSCaUtK+IkPKHIvR1XPVDHw9j/wPwNmqrPcVQ5UG6j+eT3ORsJz39j56+KqHSSQSi8t9
+         QO1q77QYsdsn0ffFzA/rjgmvGDnuC4eh3v5HSxYnvjJpMTKUd0hdRUU95i63aztbjhhB
+         bBU0LB5VKwYFRCC+z+bwqQFxEyD39rzXRA2QwSHWS47W7NjfdyJiKxrey5sCTMkmjchL
+         eY2hnyEfm+ZOyjQKOdjA1XD9ReZBDvc9Su1YT4TLRELl/1xBOEa9JGRj8xdRia4xZAbl
+         4B4w==
+X-Gm-Message-State: AOAM531hE3YJfbcIMQQSh9b/dXbkblnr/sNsxYtIfO6iM96UIJmBxBch
+        jv9O9AZZgEYOGL4qJLYcXXEfHEQ5PJ0=
+X-Google-Smtp-Source: ABdhPJxbXRx0UT76B3RRbD93aSAsg+Zrt59b4Ub3pJUGNu1YEdJi9wz+ED+rGSAAGK5F+xg66f4O+g==
+X-Received: by 2002:a05:6a00:acb:b029:23d:60f9:5471 with SMTP id c11-20020a056a000acbb029023d60f95471mr5040394pfl.77.1618524527582;
+        Thu, 15 Apr 2021 15:08:47 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:f031:1d3a:7e95:2876])
-        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.45
+        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 15:08:45 -0700 (PDT)
+        Thu, 15 Apr 2021 15:08:46 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>
-Subject: [PATCH v2 09/20] mpt3sas: Fix two kernel-doc headers
-Date:   Thu, 15 Apr 2021 15:08:15 -0700
-Message-Id: <20210415220826.29438-10-bvanassche@acm.org>
+        Hannes Reinecke <hare@kernel.org>
+Subject: [PATCH v2 10/20] myrb: Remove unused functions
+Date:   Thu, 15 Apr 2021 15:08:16 -0700
+Message-Id: <20210415220826.29438-11-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210415220826.29438-1-bvanassche@acm.org>
 References: <20210415220826.29438-1-bvanassche@acm.org>
@@ -54,40 +51,170 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix the following warnings:
+This was detected by building the kernel with clang and W=1.
 
-drivers/scsi/mpt3sas/mpt3sas_base.c:5430: warning: Excess function parameter 'ct' description in '_base_allocate_pcie_sgl_pool'
-drivers/scsi/mpt3sas/mpt3sas_base.c:5493: warning: Excess function parameter 'ctr' description in '_base_allocate_chain_dma_pool'
-
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Fixes: d6adc251dd2f ("scsi: mpt3sas: Force PCIe scatterlist allocations to be within same 4 GB region")
-Fixes: 7dd847dae1c4 ("scsi: mpt3sas: Force chain buffer allocations to be within same 4 GB region")
+Cc: Hannes Reinecke <hare@kernel.org>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/myrb.c | 71 ---------------------------------------------
+ 1 file changed, 71 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 84c507587166..5779f313f6f8 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -5421,7 +5421,7 @@ _base_reduce_hba_queue_depth(struct MPT3SAS_ADAPTER *ioc)
-  *			for pcie sgl pools.
-  * @ioc: Adapter object
-  * @sz: DMA Pool size
-- * @ct: Chain tracker
-+ *
-  * Return: 0 for success, non-zero for failure.
-  */
+diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
+index 56767f8610d4..d9c82e211ae7 100644
+--- a/drivers/scsi/myrb.c
++++ b/drivers/scsi/myrb.c
+@@ -2552,11 +2552,6 @@ static inline void DAC960_LA_ack_hw_mbox_status(void __iomem *base)
+ 	writeb(DAC960_LA_IDB_HWMBOX_ACK_STS, base + DAC960_LA_IDB_OFFSET);
+ }
  
-@@ -5485,7 +5485,7 @@ _base_allocate_pcie_sgl_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
-  *			for chain dma pool.
-  * @ioc: Adapter object
-  * @sz: DMA Pool size
-- * @ctr: Chain tracker
-+ *
-  * Return: 0 for success, non-zero for failure.
-  */
- static int
+-static inline void DAC960_LA_gen_intr(void __iomem *base)
+-{
+-	writeb(DAC960_LA_IDB_GEN_IRQ, base + DAC960_LA_IDB_OFFSET);
+-}
+-
+ static inline void DAC960_LA_reset_ctrl(void __iomem *base)
+ {
+ 	writeb(DAC960_LA_IDB_CTRL_RESET, base + DAC960_LA_IDB_OFFSET);
+@@ -2586,11 +2581,6 @@ static inline void DAC960_LA_ack_hw_mbox_intr(void __iomem *base)
+ 	writeb(DAC960_LA_ODB_HWMBOX_ACK_IRQ, base + DAC960_LA_ODB_OFFSET);
+ }
+ 
+-static inline void DAC960_LA_ack_mem_mbox_intr(void __iomem *base)
+-{
+-	writeb(DAC960_LA_ODB_MMBOX_ACK_IRQ, base + DAC960_LA_ODB_OFFSET);
+-}
+-
+ static inline void DAC960_LA_ack_intr(void __iomem *base)
+ {
+ 	writeb(DAC960_LA_ODB_HWMBOX_ACK_IRQ | DAC960_LA_ODB_MMBOX_ACK_IRQ,
+@@ -2604,13 +2594,6 @@ static inline bool DAC960_LA_hw_mbox_status_available(void __iomem *base)
+ 	return odb & DAC960_LA_ODB_HWMBOX_STS_AVAIL;
+ }
+ 
+-static inline bool DAC960_LA_mem_mbox_status_available(void __iomem *base)
+-{
+-	unsigned char odb = readb(base + DAC960_LA_ODB_OFFSET);
+-
+-	return odb & DAC960_LA_ODB_MMBOX_STS_AVAIL;
+-}
+-
+ static inline void DAC960_LA_enable_intr(void __iomem *base)
+ {
+ 	unsigned char odb = 0xFF;
+@@ -2627,13 +2610,6 @@ static inline void DAC960_LA_disable_intr(void __iomem *base)
+ 	writeb(odb, base + DAC960_LA_IRQMASK_OFFSET);
+ }
+ 
+-static inline bool DAC960_LA_intr_enabled(void __iomem *base)
+-{
+-	unsigned char imask = readb(base + DAC960_LA_IRQMASK_OFFSET);
+-
+-	return !(imask & DAC960_LA_IRQMASK_DISABLE_IRQ);
+-}
+-
+ static inline void DAC960_LA_write_cmd_mbox(union myrb_cmd_mbox *mem_mbox,
+ 		union myrb_cmd_mbox *mbox)
+ {
+@@ -2656,11 +2632,6 @@ static inline void DAC960_LA_write_hw_mbox(void __iomem *base,
+ 	writeb(mbox->bytes[12], base + DAC960_LA_MBOX12_OFFSET);
+ }
+ 
+-static inline unsigned char DAC960_LA_read_status_cmd_ident(void __iomem *base)
+-{
+-	return readb(base + DAC960_LA_STSID_OFFSET);
+-}
+-
+ static inline unsigned short DAC960_LA_read_status(void __iomem *base)
+ {
+ 	return readw(base + DAC960_LA_STS_OFFSET);
+@@ -2828,11 +2799,6 @@ static inline void DAC960_PG_ack_hw_mbox_status(void __iomem *base)
+ 	writel(DAC960_PG_IDB_HWMBOX_ACK_STS, base + DAC960_PG_IDB_OFFSET);
+ }
+ 
+-static inline void DAC960_PG_gen_intr(void __iomem *base)
+-{
+-	writel(DAC960_PG_IDB_GEN_IRQ, base + DAC960_PG_IDB_OFFSET);
+-}
+-
+ static inline void DAC960_PG_reset_ctrl(void __iomem *base)
+ {
+ 	writel(DAC960_PG_IDB_CTRL_RESET, base + DAC960_PG_IDB_OFFSET);
+@@ -2862,11 +2828,6 @@ static inline void DAC960_PG_ack_hw_mbox_intr(void __iomem *base)
+ 	writel(DAC960_PG_ODB_HWMBOX_ACK_IRQ, base + DAC960_PG_ODB_OFFSET);
+ }
+ 
+-static inline void DAC960_PG_ack_mem_mbox_intr(void __iomem *base)
+-{
+-	writel(DAC960_PG_ODB_MMBOX_ACK_IRQ, base + DAC960_PG_ODB_OFFSET);
+-}
+-
+ static inline void DAC960_PG_ack_intr(void __iomem *base)
+ {
+ 	writel(DAC960_PG_ODB_HWMBOX_ACK_IRQ | DAC960_PG_ODB_MMBOX_ACK_IRQ,
+@@ -2880,13 +2841,6 @@ static inline bool DAC960_PG_hw_mbox_status_available(void __iomem *base)
+ 	return odb & DAC960_PG_ODB_HWMBOX_STS_AVAIL;
+ }
+ 
+-static inline bool DAC960_PG_mem_mbox_status_available(void __iomem *base)
+-{
+-	unsigned char odb = readl(base + DAC960_PG_ODB_OFFSET);
+-
+-	return odb & DAC960_PG_ODB_MMBOX_STS_AVAIL;
+-}
+-
+ static inline void DAC960_PG_enable_intr(void __iomem *base)
+ {
+ 	unsigned int imask = (unsigned int)-1;
+@@ -2902,13 +2856,6 @@ static inline void DAC960_PG_disable_intr(void __iomem *base)
+ 	writel(imask, base + DAC960_PG_IRQMASK_OFFSET);
+ }
+ 
+-static inline bool DAC960_PG_intr_enabled(void __iomem *base)
+-{
+-	unsigned int imask = readl(base + DAC960_PG_IRQMASK_OFFSET);
+-
+-	return !(imask & DAC960_PG_IRQMASK_DISABLE_IRQ);
+-}
+-
+ static inline void DAC960_PG_write_cmd_mbox(union myrb_cmd_mbox *mem_mbox,
+ 		union myrb_cmd_mbox *mbox)
+ {
+@@ -2931,12 +2878,6 @@ static inline void DAC960_PG_write_hw_mbox(void __iomem *base,
+ 	writeb(mbox->bytes[12], base + DAC960_PG_MBOX12_OFFSET);
+ }
+ 
+-static inline unsigned char
+-DAC960_PG_read_status_cmd_ident(void __iomem *base)
+-{
+-	return readb(base + DAC960_PG_STSID_OFFSET);
+-}
+-
+ static inline unsigned short
+ DAC960_PG_read_status(void __iomem *base)
+ {
+@@ -3106,11 +3047,6 @@ static inline void DAC960_PD_ack_hw_mbox_status(void __iomem *base)
+ 	writeb(DAC960_PD_IDB_HWMBOX_ACK_STS, base + DAC960_PD_IDB_OFFSET);
+ }
+ 
+-static inline void DAC960_PD_gen_intr(void __iomem *base)
+-{
+-	writeb(DAC960_PD_IDB_GEN_IRQ, base + DAC960_PD_IDB_OFFSET);
+-}
+-
+ static inline void DAC960_PD_reset_ctrl(void __iomem *base)
+ {
+ 	writeb(DAC960_PD_IDB_CTRL_RESET, base + DAC960_PD_IDB_OFFSET);
+@@ -3152,13 +3088,6 @@ static inline void DAC960_PD_disable_intr(void __iomem *base)
+ 	writeb(0, base + DAC960_PD_IRQEN_OFFSET);
+ }
+ 
+-static inline bool DAC960_PD_intr_enabled(void __iomem *base)
+-{
+-	unsigned char imask = readb(base + DAC960_PD_IRQEN_OFFSET);
+-
+-	return imask & DAC960_PD_IRQMASK_ENABLE_IRQ;
+-}
+-
+ static inline void DAC960_PD_write_cmd_mbox(void __iomem *base,
+ 		union myrb_cmd_mbox *mbox)
+ {
