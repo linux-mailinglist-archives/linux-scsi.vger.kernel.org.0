@@ -2,47 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C34361496
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4079B361497
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbhDOWJT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 18:09:19 -0400
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:36494 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236637AbhDOWJS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:18 -0400
-Received: by mail-pl1-f173.google.com with SMTP id z22so7753496plo.3
-        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:54 -0700 (PDT)
+        id S236613AbhDOWJU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 18:09:20 -0400
+Received: from mail-pj1-f50.google.com ([209.85.216.50]:37655 "EHLO
+        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236580AbhDOWJT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:19 -0400
+Received: by mail-pj1-f50.google.com with SMTP id e8-20020a17090a7288b029014e51f5a6baso8188316pjg.2
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Xaz2gGbraDbegGathgoxn2YQGI6l3GdxLG9x+mNykh0=;
-        b=DbGsYQCeC++LW9SYkLq6tHNK8rXF2A9P25IHWZnK22MZTITQr9l5Yi/S7Cqmbju/CL
-         6r0viubOCXWTjjNaGtzGesmhf2UHweaett2TByuVWAx2b/gUiqgtm+CTAgB+vSr9FVWz
-         1SM2ZIbQnvzEmcNq8IGF/fz0NUUocmjRyasFbfG6+zu9N1dzH1GXN4jpXFCnTt8C3ZOT
-         UmqwhhRMvSsboBV2SE7o8QABbHkIVSEx4C3Rp8Rqph2RMjZkgzqbWK6DxHUDtXVMOzYN
-         Gpme0W3RhuJ6B5sEhcZwZtDBYukCPb5gLcYZ+PQyz4gFyrnpdRur7VGfcEsI+Al0Jkqh
-         uP+g==
-X-Gm-Message-State: AOAM533jqheLBKRQqyi8DTdXnoP8351qNAT15D0yT/CHttTxTTuggu5v
-        f5UrqrEebmdINBDhHm4KZ6U=
-X-Google-Smtp-Source: ABdhPJzMHQB7/eiDViaz+17nZ63PhBcwpDYgSf3JacnJHqTcHr8I3EykZg5jya0Hyo33MfVYBR20Qw==
-X-Received: by 2002:a17:90a:6407:: with SMTP id g7mr5950512pjj.206.1618524534437;
-        Thu, 15 Apr 2021 15:08:54 -0700 (PDT)
+        bh=ocHOwrYqm9AUi6V9vYkRBF8Zd84TLHxRiJTc4dUOmZ8=;
+        b=INwkp8aWmKKgyJHKZFhIawj0+ZITcP08y4OBrluDWedi2zgeyyVWin4BqQDn+eQc4p
+         24oXiDsasNpIjam2jSjVQv81h0gH/MPlUZfGPQtqGjWY6IMK4R1QmUoYRJVNpvVJuniA
+         9kq7ubzQ+IQ4JrQz/dpbyZVtdWaiqtDRQMYPMMId8tmv5Y78F+6GXpnFfYf90HPre/xY
+         tFekHfam1kf7ibD8Fwzhds96wnUmtQ0OEnF9LDqD8kMKmMBtZ+Gr7qQ8MYrVTgiGz/rP
+         Iu4SdX/co26pajWjhJMH+3uCyMLRb/E1xuuuyXaxYtMRcye4PCsuFavpuF56WdowlLRB
+         O15A==
+X-Gm-Message-State: AOAM531h0X6YDyGaAlgfjb5EkMYbLmjT9A/l/zFwUyhdi6liItRxBEJs
+        3cXk1PhwVA3OfvnJUWphIW0=
+X-Google-Smtp-Source: ABdhPJz1uZOoLBkyrT/MzjBeJgkqOQYLcMbLtFjETQKAckF3hB8t+ET02vv+fHDM5InTT03vZSA2kw==
+X-Received: by 2002:a17:90a:5407:: with SMTP id z7mr6346470pjh.228.1618524535534;
+        Thu, 15 Apr 2021 15:08:55 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:f031:1d3a:7e95:2876])
-        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.53
+        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 15:08:53 -0700 (PDT)
+        Thu, 15 Apr 2021 15:08:54 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v2 16/20] sd: Introduce a new local variable in sd_check_events()
-Date:   Thu, 15 Apr 2021 15:08:22 -0700
-Message-Id: <20210415220826.29438-17-bvanassche@acm.org>
+        Mike Christie <michael.christie@oracle.com>
+Subject: [PATCH v2 17/20] target: Compare explicitly with SAM_STAT_GOOD
+Date:   Thu, 15 Apr 2021 15:08:23 -0700
+Message-Id: <20210415220826.29438-18-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210415220826.29438-1-bvanassche@acm.org>
 References: <20210415220826.29438-1-bvanassche@acm.org>
@@ -52,41 +51,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of using 'retval' to represent first a SCSI status and later
-whether or not a disk change event occurred, introduce a new variable for
-the latter purpose.
+Instead of leaving it implicit that SAM_STAT_GOOD == 0, compare explicitly
+with SAM_STAT_GOOD.
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: Daniel Wagner <dwagner@suse.de>
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/sd.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/target/target_core_pscsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 91c34ee972c7..cb3c37d1e009 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -1623,6 +1623,7 @@ static unsigned int sd_check_events(struct gendisk *disk, unsigned int clearing)
- 	struct scsi_disk *sdkp = scsi_disk_get(disk);
- 	struct scsi_device *sdp;
- 	int retval;
-+	bool disk_changed;
+diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
+index 1c9aeab93477..dac44caf77a3 100644
+--- a/drivers/target/target_core_pscsi.c
++++ b/drivers/target/target_core_pscsi.c
+@@ -1046,7 +1046,7 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
+ 	int result = scsi_req(req)->result;
+ 	u8 scsi_status = status_byte(result) << 1;
  
- 	if (!sdkp)
- 		return 0;
-@@ -1680,10 +1681,10 @@ static unsigned int sd_check_events(struct gendisk *disk, unsigned int clearing)
- 	 *	Medium present state has changed in either direction.
- 	 *	Device has indicated UNIT_ATTENTION.
- 	 */
--	retval = sdp->changed ? DISK_EVENT_MEDIA_CHANGE : 0;
-+	disk_changed = sdp->changed;
- 	sdp->changed = 0;
- 	scsi_disk_put(sdkp);
--	return retval;
-+	return disk_changed ? DISK_EVENT_MEDIA_CHANGE : 0;
- }
- 
- static int sd_sync_cache(struct scsi_disk *sdkp, struct scsi_sense_hdr *sshdr)
+-	if (scsi_status) {
++	if (scsi_status != SAM_STAT_GOOD) {
+ 		pr_debug("PSCSI Status Byte exception at cmd: %p CDB:"
+ 			" 0x%02x Result: 0x%08x\n", cmd, pt->pscsi_cdb[0],
+ 			result);
