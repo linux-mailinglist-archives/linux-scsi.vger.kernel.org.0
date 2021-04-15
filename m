@@ -2,46 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1C5361494
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C34361496
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236606AbhDOWJS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 18:09:18 -0400
-Received: from mail-pj1-f49.google.com ([209.85.216.49]:35782 "EHLO
-        mail-pj1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236569AbhDOWJR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:17 -0400
-Received: by mail-pj1-f49.google.com with SMTP id il9-20020a17090b1649b0290114bcb0d6c2so15227379pjb.0
-        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:53 -0700 (PDT)
+        id S236569AbhDOWJT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 18:09:19 -0400
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:36494 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236637AbhDOWJS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:18 -0400
+Received: by mail-pl1-f173.google.com with SMTP id z22so7753496plo.3
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YMKuvSuStmi+Y5MBD+/AJkPa4jmcUESw9esKkMO9iHU=;
-        b=lRiNefsJwfkuD5Iukdwq5Pyi7tnzbRkMxAGB5/oadpDbH16JEoBsxSfcrEwub8pHBa
-         deS9H6bPFq1yOb68V1KRyPnS3oWHlZuTD3sOFSoYOmB0zZTZzGreeML0UMVt8I/59cXn
-         azhKra95FE3AoqlhWyd+EZKr7kmASbmUuzrufYNHbO7QubUFgHbH5Ngxl1ps1sc873jg
-         Zdy4ShAf2Z2PkTk8xkfP4WJCacIyBlfBknBOjc9B3V13eJT1lYEJ68frOk+WSk9LkHGA
-         xMVHSX/r+okjdPtTTdssWKwBdyrreXF76HHtHLNyZZPdGzT4U64R73rOyDae2qAnOwAp
-         86ew==
-X-Gm-Message-State: AOAM532wYN2rNnv8Y3RaiV7bIg/o6i5EHyBPTArZSpmJGP3+bsnr1UIs
-        2i0MGQ6xhtZiWfUGkgqMt28=
-X-Google-Smtp-Source: ABdhPJxWdD9RjVlrKoUWvN1jQUIT3V2tNmDDDFiM40lx1Zn/ck6l08cAd6k6mJW/i+I59tMp6x88Aw==
-X-Received: by 2002:a17:90a:a589:: with SMTP id b9mr2265139pjq.80.1618524533270;
-        Thu, 15 Apr 2021 15:08:53 -0700 (PDT)
+        bh=Xaz2gGbraDbegGathgoxn2YQGI6l3GdxLG9x+mNykh0=;
+        b=DbGsYQCeC++LW9SYkLq6tHNK8rXF2A9P25IHWZnK22MZTITQr9l5Yi/S7Cqmbju/CL
+         6r0viubOCXWTjjNaGtzGesmhf2UHweaett2TByuVWAx2b/gUiqgtm+CTAgB+vSr9FVWz
+         1SM2ZIbQnvzEmcNq8IGF/fz0NUUocmjRyasFbfG6+zu9N1dzH1GXN4jpXFCnTt8C3ZOT
+         UmqwhhRMvSsboBV2SE7o8QABbHkIVSEx4C3Rp8Rqph2RMjZkgzqbWK6DxHUDtXVMOzYN
+         Gpme0W3RhuJ6B5sEhcZwZtDBYukCPb5gLcYZ+PQyz4gFyrnpdRur7VGfcEsI+Al0Jkqh
+         uP+g==
+X-Gm-Message-State: AOAM533jqheLBKRQqyi8DTdXnoP8351qNAT15D0yT/CHttTxTTuggu5v
+        f5UrqrEebmdINBDhHm4KZ6U=
+X-Google-Smtp-Source: ABdhPJzMHQB7/eiDViaz+17nZ63PhBcwpDYgSf3JacnJHqTcHr8I3EykZg5jya0Hyo33MfVYBR20Qw==
+X-Received: by 2002:a17:90a:6407:: with SMTP id g7mr5950512pjj.206.1618524534437;
+        Thu, 15 Apr 2021 15:08:54 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:f031:1d3a:7e95:2876])
-        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.52
+        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 15:08:52 -0700 (PDT)
+        Thu, 15 Apr 2021 15:08:53 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH v2 15/20] dc395x: Open-code status_byte(u8) calls
-Date:   Thu, 15 Apr 2021 15:08:21 -0700
-Message-Id: <20210415220826.29438-16-bvanassche@acm.org>
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH v2 16/20] sd: Introduce a new local variable in sd_check_events()
+Date:   Thu, 15 Apr 2021 15:08:22 -0700
+Message-Id: <20210415220826.29438-17-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210415220826.29438-1-bvanassche@acm.org>
 References: <20210415220826.29438-1-bvanassche@acm.org>
@@ -51,30 +52,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The dc395x driver is one of the two drivers that passes an u8 argument
-to status_byte() instead of an s32 argument. Open-code status_byte() in
-preparation of changing SCSI status values into a structure.
+Instead of using 'retval' to represent first a SCSI status and later
+whether or not a disk change event occurred, introduce a new variable for
+the latter purpose.
 
-Cc: Hannes Reinecke <hare@suse.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Daniel Wagner <dwagner@suse.de>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/dc395x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/sd.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index 1e9ec4d8c605..be87d5a7583d 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -3258,10 +3258,10 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		/*
- 		 * target status..........................
- 		 */
--		if (status_byte(status) == CHECK_CONDITION) {
-+		if (status >> 1 == CHECK_CONDITION) {
- 			request_sense(acb, dcb, srb);
- 			return;
--		} else if (status_byte(status) == QUEUE_FULL) {
-+		} else if (status >> 1 == QUEUE_FULL) {
- 			tempcnt = (u8)list_size(&dcb->srb_going_list);
- 			dprintkl(KERN_INFO, "QUEUE_FULL for dev <%02i-%i> with %i cmnds\n",
- 			     dcb->target_id, dcb->target_lun, tempcnt);
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index 91c34ee972c7..cb3c37d1e009 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -1623,6 +1623,7 @@ static unsigned int sd_check_events(struct gendisk *disk, unsigned int clearing)
+ 	struct scsi_disk *sdkp = scsi_disk_get(disk);
+ 	struct scsi_device *sdp;
+ 	int retval;
++	bool disk_changed;
+ 
+ 	if (!sdkp)
+ 		return 0;
+@@ -1680,10 +1681,10 @@ static unsigned int sd_check_events(struct gendisk *disk, unsigned int clearing)
+ 	 *	Medium present state has changed in either direction.
+ 	 *	Device has indicated UNIT_ATTENTION.
+ 	 */
+-	retval = sdp->changed ? DISK_EVENT_MEDIA_CHANGE : 0;
++	disk_changed = sdp->changed;
+ 	sdp->changed = 0;
+ 	scsi_disk_put(sdkp);
+-	return retval;
++	return disk_changed ? DISK_EVENT_MEDIA_CHANGE : 0;
+ }
+ 
+ static int sd_sync_cache(struct scsi_disk *sdkp, struct scsi_sense_hdr *sshdr)
