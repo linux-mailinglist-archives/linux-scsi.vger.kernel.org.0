@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B136F361491
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF74836149F
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236574AbhDOWJP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 18:09:15 -0400
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:46732 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbhDOWJL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:11 -0400
-Received: by mail-pf1-f180.google.com with SMTP id d124so16972041pfa.13
-        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:48 -0700 (PDT)
+        id S236613AbhDOWKv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 18:10:51 -0400
+Received: from mail-pl1-f180.google.com ([209.85.214.180]:39770 "EHLO
+        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236614AbhDOWJM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:12 -0400
+Received: by mail-pl1-f180.google.com with SMTP id u7so11069058plr.6
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/GbOGUYJwLlMuH2QMVoGsRNi6a0V4INR/immqPAYXWw=;
-        b=RkMoCzCXaKZXl0jcCf09OPGFwfzRl90gGkrs4nll/qZgY/020cD0DilrdPnV6wGeFA
-         tSCaUtK+IkPKHIvR1XPVDHw9j/wPwNmqrPcVQ5UG6j+eT3ORsJz39j56+KqHSSQSi8t9
-         QO1q77QYsdsn0ffFzA/rjgmvGDnuC4eh3v5HSxYnvjJpMTKUd0hdRUU95i63aztbjhhB
-         bBU0LB5VKwYFRCC+z+bwqQFxEyD39rzXRA2QwSHWS47W7NjfdyJiKxrey5sCTMkmjchL
-         eY2hnyEfm+ZOyjQKOdjA1XD9ReZBDvc9Su1YT4TLRELl/1xBOEa9JGRj8xdRia4xZAbl
-         4B4w==
-X-Gm-Message-State: AOAM531hE3YJfbcIMQQSh9b/dXbkblnr/sNsxYtIfO6iM96UIJmBxBch
-        jv9O9AZZgEYOGL4qJLYcXXEfHEQ5PJ0=
-X-Google-Smtp-Source: ABdhPJxbXRx0UT76B3RRbD93aSAsg+Zrt59b4Ub3pJUGNu1YEdJi9wz+ED+rGSAAGK5F+xg66f4O+g==
-X-Received: by 2002:a05:6a00:acb:b029:23d:60f9:5471 with SMTP id c11-20020a056a000acbb029023d60f95471mr5040394pfl.77.1618524527582;
-        Thu, 15 Apr 2021 15:08:47 -0700 (PDT)
+        bh=zH1LRW1VV4uLIOqSdoK6cThqjnNjGNHpFlDzcl/ziE8=;
+        b=PBQcI+FSjvNoZU0hrHo7dzoV0k5h5eatqHAPEgnpLUb33hjUCWZGHLe0dBTwuS0h0X
+         xnSYGSV014nIcfSQoqH6Fpg/JO8UFpAAn+LbY4UTDVtSOYCBm9Cnf8WlVRHoU7azqXin
+         urNIpgI76xs/kAOz3FjRvAruLG1lTMoo3B9x1Gn1Wrs6pil/+BYcbp/sBaVbPXoMdZn5
+         iTDADK14AKdy7708Iw8LRT9jEN1XldCc+CXXm87bbt8pj8mzQ/Kw+DAeuxANfyi6s20+
+         BIdSugM+tXs4j8+EAahqDoY4TKWznJMammRML/wmPkrrLQd1IcNIdwpHn1QZGkgEI780
+         ivZQ==
+X-Gm-Message-State: AOAM530o4e8VXXlUm/NFDTtDz7RhO5Opmm+IKPrK3WMFgdCjIUla8Kyh
+        /Eo/D8C/XiGAnKAdK/v8X26/aZARqJc=
+X-Google-Smtp-Source: ABdhPJyPNC2X8iYfYzLvB/NVJkxEaZSlvcckgfT+NKMk//kIuJBylHcprmhapeuMpCWGlY1S+o38EQ==
+X-Received: by 2002:a17:903:1c3:b029:e6:a15:751f with SMTP id e3-20020a17090301c3b02900e60a15751fmr6310059plh.44.1618524528752;
+        Thu, 15 Apr 2021 15:08:48 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:f031:1d3a:7e95:2876])
-        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.46
+        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 15:08:46 -0700 (PDT)
+        Thu, 15 Apr 2021 15:08:48 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@kernel.org>
-Subject: [PATCH v2 10/20] myrb: Remove unused functions
-Date:   Thu, 15 Apr 2021 15:08:16 -0700
-Message-Id: <20210415220826.29438-11-bvanassche@acm.org>
+Subject: [PATCH v2 11/20] myrs: Remove unused functions
+Date:   Thu, 15 Apr 2021 15:08:17 -0700
+Message-Id: <20210415220826.29438-12-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210415220826.29438-1-bvanassche@acm.org>
 References: <20210415220826.29438-1-bvanassche@acm.org>
@@ -56,165 +56,214 @@ This was detected by building the kernel with clang and W=1.
 Cc: Hannes Reinecke <hare@kernel.org>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/myrb.c | 71 ---------------------------------------------
- 1 file changed, 71 deletions(-)
+ drivers/scsi/myrs.c | 99 ---------------------------------------------
+ 1 file changed, 99 deletions(-)
 
-diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
-index 56767f8610d4..d9c82e211ae7 100644
---- a/drivers/scsi/myrb.c
-+++ b/drivers/scsi/myrb.c
-@@ -2552,11 +2552,6 @@ static inline void DAC960_LA_ack_hw_mbox_status(void __iomem *base)
- 	writeb(DAC960_LA_IDB_HWMBOX_ACK_STS, base + DAC960_LA_IDB_OFFSET);
+diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+index d5ec1cdea0e1..3b68c68d1716 100644
+--- a/drivers/scsi/myrs.c
++++ b/drivers/scsi/myrs.c
+@@ -2410,13 +2410,6 @@ static inline void DAC960_GEM_ack_hw_mbox_status(void __iomem *base)
+ 	writel(val, base + DAC960_GEM_IDB_CLEAR_OFFSET);
  }
  
--static inline void DAC960_LA_gen_intr(void __iomem *base)
+-static inline void DAC960_GEM_gen_intr(void __iomem *base)
 -{
--	writeb(DAC960_LA_IDB_GEN_IRQ, base + DAC960_LA_IDB_OFFSET);
+-	__le32 val = cpu_to_le32(DAC960_GEM_IDB_GEN_IRQ << 24);
+-
+-	writel(val, base + DAC960_GEM_IDB_READ_OFFSET);
 -}
 -
- static inline void DAC960_LA_reset_ctrl(void __iomem *base)
+ static inline void DAC960_GEM_reset_ctrl(void __iomem *base)
  {
- 	writeb(DAC960_LA_IDB_CTRL_RESET, base + DAC960_LA_IDB_OFFSET);
-@@ -2586,11 +2581,6 @@ static inline void DAC960_LA_ack_hw_mbox_intr(void __iomem *base)
- 	writeb(DAC960_LA_ODB_HWMBOX_ACK_IRQ, base + DAC960_LA_ODB_OFFSET);
+ 	__le32 val = cpu_to_le32(DAC960_GEM_IDB_CTRL_RESET << 24);
+@@ -2454,13 +2447,6 @@ static inline void DAC960_GEM_ack_hw_mbox_intr(void __iomem *base)
+ 	writel(val, base + DAC960_GEM_ODB_CLEAR_OFFSET);
  }
  
--static inline void DAC960_LA_ack_mem_mbox_intr(void __iomem *base)
+-static inline void DAC960_GEM_ack_mem_mbox_intr(void __iomem *base)
 -{
--	writeb(DAC960_LA_ODB_MMBOX_ACK_IRQ, base + DAC960_LA_ODB_OFFSET);
+-	__le32 val = cpu_to_le32(DAC960_GEM_ODB_MMBOX_ACK_IRQ << 24);
+-
+-	writel(val, base + DAC960_GEM_ODB_CLEAR_OFFSET);
 -}
 -
- static inline void DAC960_LA_ack_intr(void __iomem *base)
+ static inline void DAC960_GEM_ack_intr(void __iomem *base)
  {
- 	writeb(DAC960_LA_ODB_HWMBOX_ACK_IRQ | DAC960_LA_ODB_MMBOX_ACK_IRQ,
-@@ -2604,13 +2594,6 @@ static inline bool DAC960_LA_hw_mbox_status_available(void __iomem *base)
- 	return odb & DAC960_LA_ODB_HWMBOX_STS_AVAIL;
+ 	__le32 val = cpu_to_le32((DAC960_GEM_ODB_HWMBOX_ACK_IRQ |
+@@ -2477,14 +2463,6 @@ static inline bool DAC960_GEM_hw_mbox_status_available(void __iomem *base)
+ 	return (le32_to_cpu(val) >> 24) & DAC960_GEM_ODB_HWMBOX_STS_AVAIL;
  }
  
--static inline bool DAC960_LA_mem_mbox_status_available(void __iomem *base)
+-static inline bool DAC960_GEM_mem_mbox_status_available(void __iomem *base)
 -{
--	unsigned char odb = readb(base + DAC960_LA_ODB_OFFSET);
+-	__le32 val;
 -
--	return odb & DAC960_LA_ODB_MMBOX_STS_AVAIL;
+-	val = readl(base + DAC960_GEM_ODB_READ_OFFSET);
+-	return (le32_to_cpu(val) >> 24) & DAC960_GEM_ODB_MMBOX_STS_AVAIL;
 -}
 -
- static inline void DAC960_LA_enable_intr(void __iomem *base)
+ static inline void DAC960_GEM_enable_intr(void __iomem *base)
  {
- 	unsigned char odb = 0xFF;
-@@ -2627,13 +2610,6 @@ static inline void DAC960_LA_disable_intr(void __iomem *base)
- 	writeb(odb, base + DAC960_LA_IRQMASK_OFFSET);
+ 	__le32 val = cpu_to_le32((DAC960_GEM_IRQMASK_HWMBOX_IRQ |
+@@ -2499,16 +2477,6 @@ static inline void DAC960_GEM_disable_intr(void __iomem *base)
+ 	writel(val, base + DAC960_GEM_IRQMASK_READ_OFFSET);
  }
  
--static inline bool DAC960_LA_intr_enabled(void __iomem *base)
+-static inline bool DAC960_GEM_intr_enabled(void __iomem *base)
 -{
--	unsigned char imask = readb(base + DAC960_LA_IRQMASK_OFFSET);
+-	__le32 val;
 -
--	return !(imask & DAC960_LA_IRQMASK_DISABLE_IRQ);
+-	val = readl(base + DAC960_GEM_IRQMASK_READ_OFFSET);
+-	return !((le32_to_cpu(val) >> 24) &
+-		 (DAC960_GEM_IRQMASK_HWMBOX_IRQ |
+-		  DAC960_GEM_IRQMASK_MMBOX_IRQ));
 -}
 -
- static inline void DAC960_LA_write_cmd_mbox(union myrb_cmd_mbox *mem_mbox,
- 		union myrb_cmd_mbox *mbox)
+ static inline void DAC960_GEM_write_cmd_mbox(union myrs_cmd_mbox *mem_mbox,
+ 		union myrs_cmd_mbox *mbox)
  {
-@@ -2656,11 +2632,6 @@ static inline void DAC960_LA_write_hw_mbox(void __iomem *base,
- 	writeb(mbox->bytes[12], base + DAC960_LA_MBOX12_OFFSET);
+@@ -2527,11 +2495,6 @@ static inline void DAC960_GEM_write_hw_mbox(void __iomem *base,
+ 	dma_addr_writeql(cmd_mbox_addr, base + DAC960_GEM_CMDMBX_OFFSET);
  }
  
--static inline unsigned char DAC960_LA_read_status_cmd_ident(void __iomem *base)
+-static inline unsigned short DAC960_GEM_read_cmd_ident(void __iomem *base)
 -{
--	return readb(base + DAC960_LA_STSID_OFFSET);
+-	return readw(base + DAC960_GEM_CMDSTS_OFFSET);
 -}
 -
- static inline unsigned short DAC960_LA_read_status(void __iomem *base)
+ static inline unsigned char DAC960_GEM_read_cmd_status(void __iomem *base)
  {
- 	return readw(base + DAC960_LA_STS_OFFSET);
-@@ -2828,11 +2799,6 @@ static inline void DAC960_PG_ack_hw_mbox_status(void __iomem *base)
- 	writel(DAC960_PG_IDB_HWMBOX_ACK_STS, base + DAC960_PG_IDB_OFFSET);
+ 	return readw(base + DAC960_GEM_CMDSTS_OFFSET + 2);
+@@ -2676,11 +2639,6 @@ static inline void DAC960_BA_ack_hw_mbox_status(void __iomem *base)
+ 	writeb(DAC960_BA_IDB_HWMBOX_ACK_STS, base + DAC960_BA_IDB_OFFSET);
  }
  
--static inline void DAC960_PG_gen_intr(void __iomem *base)
+-static inline void DAC960_BA_gen_intr(void __iomem *base)
 -{
--	writel(DAC960_PG_IDB_GEN_IRQ, base + DAC960_PG_IDB_OFFSET);
+-	writeb(DAC960_BA_IDB_GEN_IRQ, base + DAC960_BA_IDB_OFFSET);
 -}
 -
- static inline void DAC960_PG_reset_ctrl(void __iomem *base)
+ static inline void DAC960_BA_reset_ctrl(void __iomem *base)
  {
- 	writel(DAC960_PG_IDB_CTRL_RESET, base + DAC960_PG_IDB_OFFSET);
-@@ -2862,11 +2828,6 @@ static inline void DAC960_PG_ack_hw_mbox_intr(void __iomem *base)
- 	writel(DAC960_PG_ODB_HWMBOX_ACK_IRQ, base + DAC960_PG_ODB_OFFSET);
+ 	writeb(DAC960_BA_IDB_CTRL_RESET, base + DAC960_BA_IDB_OFFSET);
+@@ -2712,11 +2670,6 @@ static inline void DAC960_BA_ack_hw_mbox_intr(void __iomem *base)
+ 	writeb(DAC960_BA_ODB_HWMBOX_ACK_IRQ, base + DAC960_BA_ODB_OFFSET);
  }
  
--static inline void DAC960_PG_ack_mem_mbox_intr(void __iomem *base)
+-static inline void DAC960_BA_ack_mem_mbox_intr(void __iomem *base)
 -{
--	writel(DAC960_PG_ODB_MMBOX_ACK_IRQ, base + DAC960_PG_ODB_OFFSET);
+-	writeb(DAC960_BA_ODB_MMBOX_ACK_IRQ, base + DAC960_BA_ODB_OFFSET);
 -}
 -
- static inline void DAC960_PG_ack_intr(void __iomem *base)
+ static inline void DAC960_BA_ack_intr(void __iomem *base)
  {
- 	writel(DAC960_PG_ODB_HWMBOX_ACK_IRQ | DAC960_PG_ODB_MMBOX_ACK_IRQ,
-@@ -2880,13 +2841,6 @@ static inline bool DAC960_PG_hw_mbox_status_available(void __iomem *base)
- 	return odb & DAC960_PG_ODB_HWMBOX_STS_AVAIL;
+ 	writeb(DAC960_BA_ODB_HWMBOX_ACK_IRQ | DAC960_BA_ODB_MMBOX_ACK_IRQ,
+@@ -2731,14 +2684,6 @@ static inline bool DAC960_BA_hw_mbox_status_available(void __iomem *base)
+ 	return val & DAC960_BA_ODB_HWMBOX_STS_AVAIL;
  }
  
--static inline bool DAC960_PG_mem_mbox_status_available(void __iomem *base)
+-static inline bool DAC960_BA_mem_mbox_status_available(void __iomem *base)
 -{
--	unsigned char odb = readl(base + DAC960_PG_ODB_OFFSET);
+-	u8 val;
 -
--	return odb & DAC960_PG_ODB_MMBOX_STS_AVAIL;
+-	val = readb(base + DAC960_BA_ODB_OFFSET);
+-	return val & DAC960_BA_ODB_MMBOX_STS_AVAIL;
 -}
 -
- static inline void DAC960_PG_enable_intr(void __iomem *base)
+ static inline void DAC960_BA_enable_intr(void __iomem *base)
  {
- 	unsigned int imask = (unsigned int)-1;
-@@ -2902,13 +2856,6 @@ static inline void DAC960_PG_disable_intr(void __iomem *base)
- 	writel(imask, base + DAC960_PG_IRQMASK_OFFSET);
+ 	writeb(~DAC960_BA_IRQMASK_DISABLE_IRQ, base + DAC960_BA_IRQMASK_OFFSET);
+@@ -2749,14 +2694,6 @@ static inline void DAC960_BA_disable_intr(void __iomem *base)
+ 	writeb(0xFF, base + DAC960_BA_IRQMASK_OFFSET);
  }
  
--static inline bool DAC960_PG_intr_enabled(void __iomem *base)
+-static inline bool DAC960_BA_intr_enabled(void __iomem *base)
 -{
--	unsigned int imask = readl(base + DAC960_PG_IRQMASK_OFFSET);
+-	u8 val;
 -
--	return !(imask & DAC960_PG_IRQMASK_DISABLE_IRQ);
+-	val = readb(base + DAC960_BA_IRQMASK_OFFSET);
+-	return !(val & DAC960_BA_IRQMASK_DISABLE_IRQ);
 -}
 -
- static inline void DAC960_PG_write_cmd_mbox(union myrb_cmd_mbox *mem_mbox,
- 		union myrb_cmd_mbox *mbox)
+ static inline void DAC960_BA_write_cmd_mbox(union myrs_cmd_mbox *mem_mbox,
+ 		union myrs_cmd_mbox *mbox)
  {
-@@ -2931,12 +2878,6 @@ static inline void DAC960_PG_write_hw_mbox(void __iomem *base,
- 	writeb(mbox->bytes[12], base + DAC960_PG_MBOX12_OFFSET);
+@@ -2776,11 +2713,6 @@ static inline void DAC960_BA_write_hw_mbox(void __iomem *base,
+ 	dma_addr_writeql(cmd_mbox_addr, base + DAC960_BA_CMDMBX_OFFSET);
  }
  
--static inline unsigned char
--DAC960_PG_read_status_cmd_ident(void __iomem *base)
+-static inline unsigned short DAC960_BA_read_cmd_ident(void __iomem *base)
 -{
--	return readb(base + DAC960_PG_STSID_OFFSET);
+-	return readw(base + DAC960_BA_CMDSTS_OFFSET);
 -}
 -
- static inline unsigned short
- DAC960_PG_read_status(void __iomem *base)
+ static inline unsigned char DAC960_BA_read_cmd_status(void __iomem *base)
  {
-@@ -3106,11 +3047,6 @@ static inline void DAC960_PD_ack_hw_mbox_status(void __iomem *base)
- 	writeb(DAC960_PD_IDB_HWMBOX_ACK_STS, base + DAC960_PD_IDB_OFFSET);
+ 	return readw(base + DAC960_BA_CMDSTS_OFFSET + 2);
+@@ -2926,11 +2858,6 @@ static inline void DAC960_LP_ack_hw_mbox_status(void __iomem *base)
+ 	writeb(DAC960_LP_IDB_HWMBOX_ACK_STS, base + DAC960_LP_IDB_OFFSET);
  }
  
--static inline void DAC960_PD_gen_intr(void __iomem *base)
+-static inline void DAC960_LP_gen_intr(void __iomem *base)
 -{
--	writeb(DAC960_PD_IDB_GEN_IRQ, base + DAC960_PD_IDB_OFFSET);
+-	writeb(DAC960_LP_IDB_GEN_IRQ, base + DAC960_LP_IDB_OFFSET);
 -}
 -
- static inline void DAC960_PD_reset_ctrl(void __iomem *base)
+ static inline void DAC960_LP_reset_ctrl(void __iomem *base)
  {
- 	writeb(DAC960_PD_IDB_CTRL_RESET, base + DAC960_PD_IDB_OFFSET);
-@@ -3152,13 +3088,6 @@ static inline void DAC960_PD_disable_intr(void __iomem *base)
- 	writeb(0, base + DAC960_PD_IRQEN_OFFSET);
+ 	writeb(DAC960_LP_IDB_CTRL_RESET, base + DAC960_LP_IDB_OFFSET);
+@@ -2962,11 +2889,6 @@ static inline void DAC960_LP_ack_hw_mbox_intr(void __iomem *base)
+ 	writeb(DAC960_LP_ODB_HWMBOX_ACK_IRQ, base + DAC960_LP_ODB_OFFSET);
  }
  
--static inline bool DAC960_PD_intr_enabled(void __iomem *base)
+-static inline void DAC960_LP_ack_mem_mbox_intr(void __iomem *base)
 -{
--	unsigned char imask = readb(base + DAC960_PD_IRQEN_OFFSET);
--
--	return imask & DAC960_PD_IRQMASK_ENABLE_IRQ;
+-	writeb(DAC960_LP_ODB_MMBOX_ACK_IRQ, base + DAC960_LP_ODB_OFFSET);
 -}
 -
- static inline void DAC960_PD_write_cmd_mbox(void __iomem *base,
- 		union myrb_cmd_mbox *mbox)
+ static inline void DAC960_LP_ack_intr(void __iomem *base)
  {
+ 	writeb(DAC960_LP_ODB_HWMBOX_ACK_IRQ | DAC960_LP_ODB_MMBOX_ACK_IRQ,
+@@ -2981,14 +2903,6 @@ static inline bool DAC960_LP_hw_mbox_status_available(void __iomem *base)
+ 	return val & DAC960_LP_ODB_HWMBOX_STS_AVAIL;
+ }
+ 
+-static inline bool DAC960_LP_mem_mbox_status_available(void __iomem *base)
+-{
+-	u8 val;
+-
+-	val = readb(base + DAC960_LP_ODB_OFFSET);
+-	return val & DAC960_LP_ODB_MMBOX_STS_AVAIL;
+-}
+-
+ static inline void DAC960_LP_enable_intr(void __iomem *base)
+ {
+ 	writeb(~DAC960_LP_IRQMASK_DISABLE_IRQ, base + DAC960_LP_IRQMASK_OFFSET);
+@@ -2999,14 +2913,6 @@ static inline void DAC960_LP_disable_intr(void __iomem *base)
+ 	writeb(0xFF, base + DAC960_LP_IRQMASK_OFFSET);
+ }
+ 
+-static inline bool DAC960_LP_intr_enabled(void __iomem *base)
+-{
+-	u8 val;
+-
+-	val = readb(base + DAC960_LP_IRQMASK_OFFSET);
+-	return !(val & DAC960_LP_IRQMASK_DISABLE_IRQ);
+-}
+-
+ static inline void DAC960_LP_write_cmd_mbox(union myrs_cmd_mbox *mem_mbox,
+ 		union myrs_cmd_mbox *mbox)
+ {
+@@ -3025,11 +2931,6 @@ static inline void DAC960_LP_write_hw_mbox(void __iomem *base,
+ 	dma_addr_writeql(cmd_mbox_addr, base + DAC960_LP_CMDMBX_OFFSET);
+ }
+ 
+-static inline unsigned short DAC960_LP_read_cmd_ident(void __iomem *base)
+-{
+-	return readw(base + DAC960_LP_CMDSTS_OFFSET);
+-}
+-
+ static inline unsigned char DAC960_LP_read_cmd_status(void __iomem *base)
+ {
+ 	return readw(base + DAC960_LP_CMDSTS_OFFSET + 2);
