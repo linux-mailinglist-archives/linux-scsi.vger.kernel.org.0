@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB70361493
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2F7361495
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbhDOWJR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 18:09:17 -0400
-Received: from mail-pj1-f42.google.com ([209.85.216.42]:34611 "EHLO
-        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbhDOWJP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:15 -0400
-Received: by mail-pj1-f42.google.com with SMTP id em21-20020a17090b0155b029014e204a81e6so5391672pjb.1
-        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:51 -0700 (PDT)
+        id S236573AbhDOWJS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 18:09:18 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:41979 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236606AbhDOWJQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:16 -0400
+Received: by mail-pl1-f181.google.com with SMTP id e2so8571938plh.8
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ao+1gjnM4zv5kQxaxG+NtayTZuJSXP+ga3mJvJUCkuU=;
-        b=cKNwO/i22thQco+gc3aSmmqPFuET/R4bCuMRMTEoTzxTT0fJPL9GDh+EBLBCTQFRIZ
-         lQ6IqbgihnFNeVosCwzue1GTVHTTZMM/1Hv2ZICiHSWXG2W7qb8PFXRctgq/jygMPtGP
-         cIloBwreOm5OLZ9OWKUSyX0eeOepb5EJtjvwXPsH/k8o1jm2YmhjoeDqqX6IhR5ZKG52
-         SmcHMmea57LZ0wsfV9iCWE8GbmjoJlh9CcDDiAqCIEqNoVY+o05X/uaRbyALDj3xFqgM
-         4MYNZfTqgm18Ole58UfuaiSrvjQzRV1IOFSdCTZbAbwyMrjV+Cs5n77Q9jYoRGbun7Oi
-         eOHQ==
-X-Gm-Message-State: AOAM532F2EfHNtICkrq3X0jK/IoJ9O+69syHPUxZ78lsvrlQUXcKc8dS
-        rz3CWQDbe3BQNUOCuLTuOP4=
-X-Google-Smtp-Source: ABdhPJzd6VTG7eqg8bXCFP1SLrHCVfklRBQ64U++r7XNB0Hmk9ur12A+7XHeIHPPQvlKrXIZOruJWA==
-X-Received: by 2002:a17:90a:5b11:: with SMTP id o17mr6436408pji.32.1618524531063;
-        Thu, 15 Apr 2021 15:08:51 -0700 (PDT)
+        bh=ZN3MZuHTHJ4rNU+gilbE6/v3nJ1AHPWmwmhT/kjNJ/I=;
+        b=tvfip9zHVZvwMTy9nOkrM01ytI0PpRbKuMYfWVy2A0X71hmUnrG254TMF2zwrTtui6
+         Jy9QSzXJ0jN6P+Ja57Xzm2EeWM4DAwub5PdPJ2cx0qwHRJxevv3Ct9XTd3hQYCSdBDIZ
+         dYpVpLVrTsCj2D4r4Tmm8DmWjMQMcaR3Y4TLagO2ZRKN1tQt4/T6mlCI6Px42xKhMRIq
+         g27V7Py8rkxCYfs9oHP6sVWvAxmxgide2CbkEJNQnCJ3xzutuHkBXf3EEWCNM1mpCxdV
+         JMCWqZEAqMXxxX0lFVJzNVNEvIARmLI6bYwXDUbciSZ8aNL3LwbI/AppRdGWMks1NmDT
+         Q1Xg==
+X-Gm-Message-State: AOAM532pB5AgzB7Fjs/fLpxOEaZaqVZZwXUF48x0zjPtI6+z0SAbyNuH
+        S3fC1S80xergLp6DfeWSS2Q=
+X-Google-Smtp-Source: ABdhPJwVXuv+15PpvqrVNlTFY4/6swCwGRfSvKsxF7Gm/ci6pyq4sqc8SyMrZqUFA/iB3t8VK2fWjQ==
+X-Received: by 2002:a17:90a:c781:: with SMTP id gn1mr6262083pjb.205.1618524532181;
+        Thu, 15 Apr 2021 15:08:52 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:f031:1d3a:7e95:2876])
-        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.50
+        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 15:08:50 -0700 (PDT)
+        Thu, 15 Apr 2021 15:08:51 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Don Brace <don.brace@microchip.com>
-Subject: [PATCH v2 13/20] smartpqi: Remove unused functions
-Date:   Thu, 15 Apr 2021 15:08:19 -0700
-Message-Id: <20210415220826.29438-14-bvanassche@acm.org>
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v2 14/20] 53c700: Open-code status_byte(u8) calls
+Date:   Thu, 15 Apr 2021 15:08:20 -0700
+Message-Id: <20210415220826.29438-15-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210415220826.29438-1-bvanassche@acm.org>
 References: <20210415220826.29438-1-bvanassche@acm.org>
@@ -51,39 +51,28 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This was detected by building the kernel with clang and W=1.
+The 53c700 driver is one of the two drivers that passes an u8 argument
+to status_byte() instead of an s32 argument. Open-code status_byte in
+preparation of changing SCSI status values into a structure.
 
-Cc: Don Brace <don.brace@microchip.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/scsi/53c700.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 3b0f281daa2b..80d5c00379ee 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -443,11 +443,6 @@ static inline void pqi_cancel_rescan_worker(struct pqi_ctrl_info *ctrl_info)
- 	cancel_delayed_work_sync(&ctrl_info->rescan_work);
- }
- 
--static inline void pqi_cancel_event_worker(struct pqi_ctrl_info *ctrl_info)
--{
--	cancel_work_sync(&ctrl_info->event_work);
--}
--
- static inline u32 pqi_read_heartbeat_counter(struct pqi_ctrl_info *ctrl_info)
- {
- 	if (!ctrl_info->heartbeat_counter)
-@@ -4828,11 +4823,6 @@ static inline int pqi_enable_events(struct pqi_ctrl_info *ctrl_info)
- 	return pqi_configure_events(ctrl_info, true);
- }
- 
--static inline int pqi_disable_events(struct pqi_ctrl_info *ctrl_info)
--{
--	return pqi_configure_events(ctrl_info, false);
--}
--
- static void pqi_free_all_io_requests(struct pqi_ctrl_info *ctrl_info)
- {
- 	unsigned int i;
+diff --git a/drivers/scsi/53c700.c b/drivers/scsi/53c700.c
+index 4fd91f81244d..ab42feab233f 100644
+--- a/drivers/scsi/53c700.c
++++ b/drivers/scsi/53c700.c
+@@ -981,8 +981,8 @@ process_script_interrupt(__u32 dsps, __u32 dsp, struct scsi_cmnd *SCp,
+ 						  NCR_700_FINISHED_TAG_NEGOTIATION);
+ 			
+ 		/* check for contingent allegiance conditions */
+-		if(status_byte(hostdata->status[0]) == CHECK_CONDITION ||
+-		   status_byte(hostdata->status[0]) == COMMAND_TERMINATED) {
++		if (hostdata->status[0] >> 1 == CHECK_CONDITION ||
++		    hostdata->status[0] >> 1 == COMMAND_TERMINATED) {
+ 			struct NCR_700_command_slot *slot =
+ 				(struct NCR_700_command_slot *)SCp->host_scribble;
+ 			if(slot->flags == NCR_700_FLAG_AUTOSENSE) {
