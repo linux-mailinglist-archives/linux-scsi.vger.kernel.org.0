@@ -2,47 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30067361492
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB70361493
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 00:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbhDOWJQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 18:09:16 -0400
-Received: from mail-pg1-f173.google.com ([209.85.215.173]:43999 "EHLO
-        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbhDOWJN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:13 -0400
-Received: by mail-pg1-f173.google.com with SMTP id p12so17851799pgj.10
-        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:50 -0700 (PDT)
+        id S236649AbhDOWJR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 18:09:17 -0400
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:34611 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236589AbhDOWJP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 18:09:15 -0400
+Received: by mail-pj1-f42.google.com with SMTP id em21-20020a17090b0155b029014e204a81e6so5391672pjb.1
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 15:08:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/40ULsOzuBJGbirgNhlsl95kB4g+ICHnH0SncregTg0=;
-        b=ANWnxpZQAfso126LYe1i/A8y87ndXY987rCqOQ7UMWFKRfkhy7EPnYCZg+RmxEfVj6
-         r0Mnwy+78wRmsDRwHP4fi+U3G7S/W+Mosialf9fxaXvAgFdiQ4r+s7HFd3uDVlKwGQy/
-         fcWvZq4ALBAfLSkCGbZrqf3Rigbc8hZUqTYElyC56V3U6SxXAfJ1vEPV3jtJ+58q6qcE
-         4Z+x60X9zlgbqPQYOCB1vC/S+esLtlcgnCrVZS6rpBaLX+zX03D/XJnK9gIuGGsllXuH
-         fPWe+jA7LYZGOzdFy0fsWW+KAAzm+2+6mK4Uzky1YCZG5JfJwktdZ0UpO8rRCDfRy3mM
-         Ldig==
-X-Gm-Message-State: AOAM532/OqO4NS1Q+nYZWzEE/iPSRdTSO6v9gUdFvQjevbFJfBzruSfT
-        +72NZTm2Qz7GvfjRKvivLso=
-X-Google-Smtp-Source: ABdhPJzp1L4XpqBsEJvyA6Iq5R+eH+nIX3rclPx4Y5CMqJdxRGCxxn8xNwXjI0+BGSUOdAgjil6UWA==
-X-Received: by 2002:aa7:88c6:0:b029:250:bf78:a4a3 with SMTP id k6-20020aa788c60000b0290250bf78a4a3mr4947740pff.70.1618524529931;
-        Thu, 15 Apr 2021 15:08:49 -0700 (PDT)
+        bh=Ao+1gjnM4zv5kQxaxG+NtayTZuJSXP+ga3mJvJUCkuU=;
+        b=cKNwO/i22thQco+gc3aSmmqPFuET/R4bCuMRMTEoTzxTT0fJPL9GDh+EBLBCTQFRIZ
+         lQ6IqbgihnFNeVosCwzue1GTVHTTZMM/1Hv2ZICiHSWXG2W7qb8PFXRctgq/jygMPtGP
+         cIloBwreOm5OLZ9OWKUSyX0eeOepb5EJtjvwXPsH/k8o1jm2YmhjoeDqqX6IhR5ZKG52
+         SmcHMmea57LZ0wsfV9iCWE8GbmjoJlh9CcDDiAqCIEqNoVY+o05X/uaRbyALDj3xFqgM
+         4MYNZfTqgm18Ole58UfuaiSrvjQzRV1IOFSdCTZbAbwyMrjV+Cs5n77Q9jYoRGbun7Oi
+         eOHQ==
+X-Gm-Message-State: AOAM532F2EfHNtICkrq3X0jK/IoJ9O+69syHPUxZ78lsvrlQUXcKc8dS
+        rz3CWQDbe3BQNUOCuLTuOP4=
+X-Google-Smtp-Source: ABdhPJzd6VTG7eqg8bXCFP1SLrHCVfklRBQ64U++r7XNB0Hmk9ur12A+7XHeIHPPQvlKrXIZOruJWA==
+X-Received: by 2002:a17:90a:5b11:: with SMTP id o17mr6436408pji.32.1618524531063;
+        Thu, 15 Apr 2021 15:08:51 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:f031:1d3a:7e95:2876])
-        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.48
+        by smtp.gmail.com with ESMTPSA id w4sm3311155pjk.55.2021.04.15.15.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 15:08:49 -0700 (PDT)
+        Thu, 15 Apr 2021 15:08:50 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>
-Subject: [PATCH v2 12/20] qla4xxx: Remove an unused function
-Date:   Thu, 15 Apr 2021 15:08:18 -0700
-Message-Id: <20210415220826.29438-13-bvanassche@acm.org>
+        Don Brace <don.brace@microchip.com>
+Subject: [PATCH v2 13/20] smartpqi: Remove unused functions
+Date:   Thu, 15 Apr 2021 15:08:19 -0700
+Message-Id: <20210415220826.29438-14-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210415220826.29438-1-bvanassche@acm.org>
 References: <20210415220826.29438-1-bvanassche@acm.org>
@@ -54,27 +53,37 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 This was detected by building the kernel with clang and W=1.
 
-Cc: Nilesh Javali <njavali@marvell.com>
-Acked-by: Manish Rangankar <mrangankar@marvell.com>
+Cc: Don Brace <don.brace@microchip.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla4xxx/ql4_nx.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_nx.c b/drivers/scsi/qla4xxx/ql4_nx.c
-index e6e35e6958f6..66a487795c53 100644
---- a/drivers/scsi/qla4xxx/ql4_nx.c
-+++ b/drivers/scsi/qla4xxx/ql4_nx.c
-@@ -3634,12 +3634,6 @@ flash_conf_addr(struct ql82xx_hw_data *hw, uint32_t faddr)
- 	return hw->flash_conf_off | faddr;
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 3b0f281daa2b..80d5c00379ee 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -443,11 +443,6 @@ static inline void pqi_cancel_rescan_worker(struct pqi_ctrl_info *ctrl_info)
+ 	cancel_delayed_work_sync(&ctrl_info->rescan_work);
  }
  
--static inline uint32_t
--flash_data_addr(struct ql82xx_hw_data *hw, uint32_t faddr)
+-static inline void pqi_cancel_event_worker(struct pqi_ctrl_info *ctrl_info)
 -{
--	return hw->flash_data_off | faddr;
+-	cancel_work_sync(&ctrl_info->event_work);
 -}
 -
- static uint32_t *
- qla4_82xx_read_flash_data(struct scsi_qla_host *ha, uint32_t *dwptr,
-     uint32_t faddr, uint32_t length)
+ static inline u32 pqi_read_heartbeat_counter(struct pqi_ctrl_info *ctrl_info)
+ {
+ 	if (!ctrl_info->heartbeat_counter)
+@@ -4828,11 +4823,6 @@ static inline int pqi_enable_events(struct pqi_ctrl_info *ctrl_info)
+ 	return pqi_configure_events(ctrl_info, true);
+ }
+ 
+-static inline int pqi_disable_events(struct pqi_ctrl_info *ctrl_info)
+-{
+-	return pqi_configure_events(ctrl_info, false);
+-}
+-
+ static void pqi_free_all_io_requests(struct pqi_ctrl_info *ctrl_info)
+ {
+ 	unsigned int i;
