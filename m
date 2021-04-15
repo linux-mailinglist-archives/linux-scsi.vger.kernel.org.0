@@ -2,149 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E598736070F
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Apr 2021 12:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4935B360739
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Apr 2021 12:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbhDOKY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 06:24:57 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:46140 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbhDOKY5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 06:24:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1618482274; x=1650018274;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=LNl35VTJtEBNoBz192iHt+t3NKyIkV3J4HMxtpymTpE=;
-  b=oSZ9OlGSYkRhHMRrsIw79JhyXQiPWrNkDGJWGHMo/9Rar4cUq26ELv5n
-   18LbOVa/nMGMOJ93gpk/Pbi95ZC4TTx17ZoLJ2pLrSkTu1rxfSBTSVyFG
-   1sqqOyFud3Z0R8YFGLfOdJTVbB+CEnMwzXeQR4iAyM1dvRylYjozQ6R6o
-   6aZdNdbOU2TR0zz/SGAjH+pAZdzAUMdcKx4X3dmU8BVKDw5xrVxnPTP/N
-   CQhGjnn/kpeM606Mko+ZVcSEB73tIk9XXI6q9pfO8HdqNY1W/SLnVadsg
-   MED1PRVrGXHyAXBtf4Ls2RFXjLIjG2W0EjvvpjA10X6JV1zRX2EruBf0C
-   Q==;
-IronPort-SDR: +Xdn+T7ViZiWWEg+BjqnpYTJd9NPPcEpqCul4Z7LXCRxiIPoq10m8KflyYNQpsDKyNWu181zH0
- urdwXYV3yASXsLgLOmWWxQLGYrjL2Ey8ApLNZFCVclwFg6OMdKl0pVp161SaHQhX22i06gzDdX
- De+3FTFv/qXWZv2NjmGvyJA1mnTxqeOZLHkE0FM+Cefq+VhFvV3Z3HWDFO9DpI7gX3eLNOBZvE
- TRhvVMqYJX4Mi9wmaH06yjM1U7Z10mfPPrm5yweXEIZN1HwtYwBoIKK/glVbW6C+8nQUnRWmEc
- r50=
-X-IronPort-AV: E=Sophos;i="5.82,223,1613458800"; 
-   d="scan'208";a="51231528"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Apr 2021 03:24:34 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 15 Apr 2021 03:24:33 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Thu, 15 Apr 2021 03:24:33 -0700
-From:   Viswas G <Viswas.G@microchip.com>
-To:     <linux-scsi@vger.kernel.org>
-CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        <Viswas.G@microchip.com>, <Ruksar.devadi@microchip.com>,
-        <vishakhavc@google.com>, <radha@google.com>,
-        <jinpu.wang@cloud.ionos.com>,
-        Ashokkumar N <Ashokkumar.N@microchip.com>,
-        "John Garry" <john.garry@huawei.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH v4 8/8] pm80xx: remove global lock from outbound queue processing
-Date:   Thu, 15 Apr 2021 16:03:52 +0530
-Message-ID: <20210415103352.3580-9-Viswas.G@microchip.com>
-X-Mailer: git-send-email 2.16.3
-In-Reply-To: <20210415103352.3580-1-Viswas.G@microchip.com>
-References: <20210415103352.3580-1-Viswas.G@microchip.com>
+        id S230474AbhDOKf5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 06:35:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34233 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229457AbhDOKfz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 15 Apr 2021 06:35:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618482932;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CHBCW5YcJ5tcw/4Tfg8AMNz24UDpSX/WpBMuM5oWSv8=;
+        b=cnhyzbTp9joPo76NKbnbhmeUvqfRgm7gt02U83J7nDfrTo/jbBr+hjjNkt8FD3ib4Heuw2
+        BWL2096SIzvmCZj0PxVb7l4TUFU4JtXj0P6+6Bv0TrS+7Tf1Eq93uq00gF10j820/2N9Cn
+        iO0pL2+E3psJ4DRHDdr4Zq3aTGflRcc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-197-jP5sBDAwNn-7XOAzWwwh_w-1; Thu, 15 Apr 2021 06:35:30 -0400
+X-MC-Unique: jP5sBDAwNn-7XOAzWwwh_w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 406C86D581;
+        Thu, 15 Apr 2021 10:35:29 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.40.193.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B7C75D9DC;
+        Thu, 15 Apr 2021 10:35:28 +0000 (UTC)
+Subject: Re: [PATCH v2 03/24] mpi3mr: create operational request and reply
+ queue pair
+To:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        linux-scsi@vger.kernel.org
+Cc:     sathya.prakash@broadcom.com
+References: <20210407020451.924822-1-kashyap.desai@broadcom.com>
+ <20210407020451.924822-4-kashyap.desai@broadcom.com>
+From:   Tomas Henzl <thenzl@redhat.com>
+Message-ID: <e47ff8f2-4741-9ed0-93e4-7a14a6300450@redhat.com>
+Date:   Thu, 15 Apr 2021 12:35:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20210407020451.924822-4-kashyap.desai@broadcom.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Introduced spin lock for outbound queue. With this, driver need not
-acquire hba global lock for outbound queue processing.
+On 4/7/21 4:04 AM, Kashyap Desai wrote:
+> Create operational request and reply queue pair.
+> 
+> The MPI3 transport interface consists of an Administrative Request Queue,
+> an Administrative Reply Queue, and Operational Messaging Queues.
+> The Operational Messaging Queues are the primary communication mechanism
+> between the host and the I/O Controller (IOC).
+> Request messages, allocated in host memory, identify I/O operations to be
+> performed by the IOC. These operations are queued on an Operational
+> Request Queue by the host driver.
+> Reply descriptors track I/O operations as they complete.
+> The IOC queues these completions in an Operational Reply Queue.
+> 
+> To fulfil large contiguous memory requirement, driver creates multiple
+> segments and provide the list of segments. Each segment size should be 4K
+> which is h/w requirement. An element array is contiguous or segmented.
+> A contiguous element array is located in contiguous physical memory.
+> A contiguous element array must be aligned on an element size boundary.
+> An element's physical address within the array may be directly calculated
+> from the base address, the Producer/Consumer index, and the element size.
+> 
+> Expected phased identifier bit is used to find out valid entry on reply queue.
+> Driver set <ephase> bit and IOC invert the value of this bit on each pass.
+> 
+> Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
+> Cc: sathya.prakash@broadcom.com
 
-Signed-off-by: Viswas G <Viswas.G@microchip.com>
-Signed-off-by: Ruksar Devadi <Ruksar.devadi@microchip.com>
-Signed-off-by: Ashokkumar N <Ashokkumar.N@microchip.com>
-Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
----
- drivers/scsi/pm8001/pm8001_init.c | 9 ++++++---
- drivers/scsi/pm8001/pm8001_sas.h  | 1 +
- drivers/scsi/pm8001/pm80xx_hwi.c  | 4 ++--
- 3 files changed, 9 insertions(+), 5 deletions(-)
+Looks good
 
-diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
-index bd626ef876da..a3c8fb9a885f 100644
---- a/drivers/scsi/pm8001/pm8001_init.c
-+++ b/drivers/scsi/pm8001/pm8001_init.c
-@@ -267,7 +267,8 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
- {
- 	int i, count = 0, rc = 0;
- 	u32 ci_offset, ib_offset, ob_offset, pi_offset;
--	struct inbound_queue_table *circularQ;
-+	struct inbound_queue_table *ibq;
-+	struct outbound_queue_table *obq;
- 
- 	spin_lock_init(&pm8001_ha->lock);
- 	spin_lock_init(&pm8001_ha->bitmap_lock);
-@@ -315,8 +316,8 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
- 	pm8001_ha->memoryMap.region[IOP].alignment = 32;
- 
- 	for (i = 0; i < count; i++) {
--		circularQ = &pm8001_ha->inbnd_q_tbl[i];
--		spin_lock_init(&circularQ->iq_lock);
-+		ibq = &pm8001_ha->inbnd_q_tbl[i];
-+		spin_lock_init(&ibq->iq_lock);
- 		/* MPI Memory region 3 for consumer Index of inbound queues */
- 		pm8001_ha->memoryMap.region[ci_offset+i].num_elements = 1;
- 		pm8001_ha->memoryMap.region[ci_offset+i].element_size = 4;
-@@ -345,6 +346,8 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
- 	}
- 
- 	for (i = 0; i < count; i++) {
-+		obq = &pm8001_ha->outbnd_q_tbl[i];
-+		spin_lock_init(&obq->oq_lock);
- 		/* MPI Memory region 4 for producer Index of outbound queues */
- 		pm8001_ha->memoryMap.region[pi_offset+i].num_elements = 1;
- 		pm8001_ha->memoryMap.region[pi_offset+i].element_size = 4;
-diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
-index 36cd37c8c29a..f835557ee354 100644
---- a/drivers/scsi/pm8001/pm8001_sas.h
-+++ b/drivers/scsi/pm8001/pm8001_sas.h
-@@ -457,6 +457,7 @@ struct outbound_queue_table {
- 	u32			dinterrup_to_pci_offset;
- 	__le32			producer_index;
- 	u32			consumer_idx;
-+	spinlock_t		oq_lock;
- };
- struct pm8001_hba_memspace {
- 	void __iomem  		*memvirtaddr;
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 0f2c57e054ac..f1276baebe1d 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4133,8 +4133,8 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
- 			return ret;
- 		}
- 	}
--	spin_lock_irqsave(&pm8001_ha->lock, flags);
- 	circularQ = &pm8001_ha->outbnd_q_tbl[vec];
-+	spin_lock_irqsave(&circularQ->oq_lock, flags);
- 	do {
- 		/* spurious interrupt during setup if kexec-ing and
- 		 * driver doing a doorbell access w/ the pre-kexec oq
-@@ -4160,7 +4160,7 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
- 				break;
- 		}
- 	} while (1);
--	spin_unlock_irqrestore(&pm8001_ha->lock, flags);
-+	spin_unlock_irqrestore(&circularQ->oq_lock, flags);
- 	return ret;
- }
- 
--- 
-2.16.3
+Reviewed-by: Tomas Henzl <thenzl@redhat.com>
 
