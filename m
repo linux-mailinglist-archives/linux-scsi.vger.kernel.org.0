@@ -2,34 +2,34 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAE1361BED
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 11:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78BD361BEA
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 11:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239944AbhDPIlQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 16 Apr 2021 04:41:16 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:41996 "EHLO mta-01.yadro.com"
+        id S239928AbhDPIlN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 16 Apr 2021 04:41:13 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:42012 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239810AbhDPIlH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S239860AbhDPIlH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 16 Apr 2021 04:41:07 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 4580C4138E;
+        by mta-01.yadro.com (Postfix) with ESMTP id AFB374138F;
         Fri, 16 Apr 2021 08:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1618562437; x=1620376838; bh=zZESbv+4UpXk0G5Dotj4UFxELuy0p+G4mzP
-        cSbWnPM4=; b=diDZw5zgO3HBhdgeYVnjNj+WGYhS2ZdI8JV6sdSzvzUWoApPHCy
-        6k9m7iPqdoNhAqXqOcO2ioFFT7sI+rInTrZuoS+pYFmU/eGbrhSye7zs+aEsQsOU
-        lqMw6C1p3yRKgKduJhtsrZTyZQfn+9okxQNuGzj/6z+bsJeK+ZHwUcrg=
+        1618562437; x=1620376838; bh=bV/6uRr6ol8405aCmVR4VHGwMPUTvmSN3wC
+        /bs6uw7g=; b=tuhXhcX86Y0+aUtasjuthL1HBYm3VK2jHJ2718m73w6j07ykKCG
+        ygZvUicjc6paNysEkVDbdK/9/Kp1uG+DURUuaJxcJUXMYa/42vO7yTKyUhftOw/g
+        VS1RDgSLUpi3uIvmvZ84Ah3EhskQWfvHjjLCjROcQtAoV55yn8x05eW4=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id uUW7SbhnFVUV; Fri, 16 Apr 2021 11:40:37 +0300 (MSK)
+        with ESMTP id HNHfX3dbasMu; Fri, 16 Apr 2021 11:40:37 +0300 (MSK)
 Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 3C12A4137A;
+        by mta-01.yadro.com (Postfix) with ESMTPS id A4FAB41377;
         Fri, 16 Apr 2021 11:40:36 +0300 (MSK)
 Received: from NB-591.corp.yadro.com (10.199.0.63) by T-EXCH-03.corp.yadro.com
  (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
@@ -47,9 +47,9 @@ CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
         Felipe Balbi <balbi@kernel.org>,
         Dmitry Bogdanov <d.bogdanov@yadro.com>,
         Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: [PATCH v4 2/7] target: iscsi: replace enable attr to ops.enable
-Date:   Fri, 16 Apr 2021 11:26:27 +0300
-Message-ID: <20210416082632.2000-3-d.bogdanov@yadro.com>
+Subject: [PATCH v4 3/7] target: qla2xx: replace enable attr to ops.enable
+Date:   Fri, 16 Apr 2021 11:26:28 +0300
+Message-ID: <20210416082632.2000-4-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210416082632.2000-1-d.bogdanov@yadro.com>
 References: <20210416082632.2000-1-d.bogdanov@yadro.com>
@@ -64,142 +64,178 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Remove tpg/enable attribute.
-Add fabric ops enable_tpg impalmentation instead.
+Add fabric ops enable_tpg implementation instead.
 
 Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
-v3:
- fix identation issue
----
- drivers/target/iscsi/iscsi_target_configfs.c | 91 +++++++-------------
- 1 file changed, 32 insertions(+), 59 deletions(-)
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c | 73 +++++-------------------------
+ 1 file changed, 12 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/target/iscsi/iscsi_target_configfs.c
-index 0fa1d57b26fa..28b5acf83c80 100644
---- a/drivers/target/iscsi/iscsi_target_configfs.c
-+++ b/drivers/target/iscsi/iscsi_target_configfs.c
-@@ -1006,74 +1006,15 @@ static struct configfs_attribute *lio_target_tpg_param_attrs[] = {
+diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+index 8b4890cdd4ca..5beb6dfdade5 100644
+--- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
++++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+@@ -906,40 +906,17 @@ static struct configfs_attribute *tcm_qla2xxx_tpg_attrib_attrs[] = {
  
- /* Start items for lio_target_tpg_cit */
+ /* End items for tcm_qla2xxx_tpg_attrib_cit */
  
--static ssize_t lio_target_tpg_enable_show(struct config_item *item, char *page)
+-static ssize_t tcm_qla2xxx_tpg_enable_show(struct config_item *item,
+-		char *page)
 -{
 -	struct se_portal_group *se_tpg = to_tpg(item);
--	struct iscsi_portal_group *tpg = container_of(se_tpg,
--			struct iscsi_portal_group, tpg_se_tpg);
--	ssize_t len;
+-	struct tcm_qla2xxx_tpg *tpg = container_of(se_tpg,
+-			struct tcm_qla2xxx_tpg, se_tpg);
 -
--	spin_lock(&tpg->tpg_state_lock);
--	len = sprintf(page, "%d\n",
--			(tpg->tpg_state == TPG_STATE_ACTIVE) ? 1 : 0);
--	spin_unlock(&tpg->tpg_state_lock);
--
--	return len;
+-	return snprintf(page, PAGE_SIZE, "%d\n",
+-			atomic_read(&tpg->lport_tpg_enabled));
 -}
 -
--static ssize_t lio_target_tpg_enable_store(struct config_item *item,
+-static ssize_t tcm_qla2xxx_tpg_enable_store(struct config_item *item,
 -		const char *page, size_t count)
--{
++static int tcm_qla2xxx_enable_tpg(struct se_portal_group *se_tpg,
++				  bool enable)
+ {
 -	struct se_portal_group *se_tpg = to_tpg(item);
--	struct iscsi_portal_group *tpg = container_of(se_tpg,
--			struct iscsi_portal_group, tpg_se_tpg);
--	u32 op;
--	int ret;
--
--	ret = kstrtou32(page, 0, &op);
--	if (ret)
--		return ret;
+ 	struct se_wwn *se_wwn = se_tpg->se_tpg_wwn;
+ 	struct tcm_qla2xxx_lport *lport = container_of(se_wwn,
+ 			struct tcm_qla2xxx_lport, lport_wwn);
+ 	struct scsi_qla_host *vha = lport->qla_vha;
+ 	struct tcm_qla2xxx_tpg *tpg = container_of(se_tpg,
+ 			struct tcm_qla2xxx_tpg, se_tpg);
+-	unsigned long op;
+-	int rc;
+ 
+-	rc = kstrtoul(page, 0, &op);
+-	if (rc < 0) {
+-		pr_err("kstrtoul() returned %d\n", rc);
+-		return -EINVAL;
+-	}
 -	if ((op != 1) && (op != 0)) {
--		pr_err("Illegal value for tpg_enable: %u\n", op);
+-		pr_err("Illegal value for tpg_enable: %lu\n", op);
 -		return -EINVAL;
 -	}
--
--	ret = iscsit_get_tpg(tpg);
--	if (ret < 0)
--		return -EINVAL;
--
 -	if (op) {
--		ret = iscsit_tpg_enable_portal_group(tpg);
--		if (ret < 0)
--			goto out;
--	} else {
--		/*
--		 * iscsit_tpg_disable_portal_group() assumes force=1
--		 */
--		ret = iscsit_tpg_disable_portal_group(tpg, 1);
--		if (ret < 0)
--			goto out;
--	}
--
--	iscsit_put_tpg(tpg);
++	if (enable) {
+ 		if (atomic_read(&tpg->lport_tpg_enabled))
+ 			return -EEXIST;
+ 
+@@ -947,14 +924,14 @@ static ssize_t tcm_qla2xxx_tpg_enable_store(struct config_item *item,
+ 		qlt_enable_vha(vha);
+ 	} else {
+ 		if (!atomic_read(&tpg->lport_tpg_enabled))
+-			return count;
++			return 0;
+ 
+ 		atomic_set(&tpg->lport_tpg_enabled, 0);
+ 		qlt_stop_phase1(vha->vha_tgt.qla_tgt);
+ 		qlt_stop_phase2(vha->vha_tgt.qla_tgt);
+ 	}
+ 
 -	return count;
--out:
--	iscsit_put_tpg(tpg);
--	return -EINVAL;
++	return 0;
+ }
+ 
+ static ssize_t tcm_qla2xxx_tpg_dynamic_sessions_show(struct config_item *item,
+@@ -995,12 +972,10 @@ static ssize_t tcm_qla2xxx_tpg_fabric_prot_type_show(struct config_item *item,
+ 	return sprintf(page, "%d\n", tpg->tpg_attrib.fabric_prot_type);
+ }
+ 
+-CONFIGFS_ATTR(tcm_qla2xxx_tpg_, enable);
+ CONFIGFS_ATTR_RO(tcm_qla2xxx_tpg_, dynamic_sessions);
+ CONFIGFS_ATTR(tcm_qla2xxx_tpg_, fabric_prot_type);
+ 
+ static struct configfs_attribute *tcm_qla2xxx_tpg_attrs[] = {
+-	&tcm_qla2xxx_tpg_attr_enable,
+ 	&tcm_qla2xxx_tpg_attr_dynamic_sessions,
+ 	&tcm_qla2xxx_tpg_attr_fabric_prot_type,
+ 	NULL,
+@@ -1074,35 +1049,17 @@ static void tcm_qla2xxx_drop_tpg(struct se_portal_group *se_tpg)
+ 	kfree(tpg);
+ }
+ 
+-static ssize_t tcm_qla2xxx_npiv_tpg_enable_show(struct config_item *item,
+-		char *page)
+-{
+-	return tcm_qla2xxx_tpg_enable_show(item, page);
 -}
 -
--
- static ssize_t lio_target_tpg_dynamic_sessions_show(struct config_item *item,
- 		char *page)
+-static ssize_t tcm_qla2xxx_npiv_tpg_enable_store(struct config_item *item,
+-		const char *page, size_t count)
++static int tcm_qla2xxx_npiv_enable_tpg(struct se_portal_group *se_tpg,
++				    bool enable)
  {
- 	return target_show_dynamic_sessions(to_tpg(item), page);
- }
+-	struct se_portal_group *se_tpg = to_tpg(item);
+ 	struct se_wwn *se_wwn = se_tpg->se_tpg_wwn;
+ 	struct tcm_qla2xxx_lport *lport = container_of(se_wwn,
+ 			struct tcm_qla2xxx_lport, lport_wwn);
+ 	struct scsi_qla_host *vha = lport->qla_vha;
+ 	struct tcm_qla2xxx_tpg *tpg = container_of(se_tpg,
+ 			struct tcm_qla2xxx_tpg, se_tpg);
+-	unsigned long op;
+-	int rc;
  
--CONFIGFS_ATTR(lio_target_tpg_, enable);
- CONFIGFS_ATTR_RO(lio_target_tpg_, dynamic_sessions);
- 
- static struct configfs_attribute *lio_target_tpg_attrs[] = {
--	&lio_target_tpg_attr_enable,
- 	&lio_target_tpg_attr_dynamic_sessions,
- 	NULL,
- };
-@@ -1130,6 +1071,37 @@ static struct se_portal_group *lio_target_tiqn_addtpg(struct se_wwn *wwn,
- 	return NULL;
- }
- 
-+static int lio_target_tiqn_enabletpg(struct se_portal_group *se_tpg,
-+				     bool enable)
-+{
-+	struct iscsi_portal_group *tpg = container_of(se_tpg,
-+			struct iscsi_portal_group, tpg_se_tpg);
-+	int ret;
-+
-+	ret = iscsit_get_tpg(tpg);
-+	if (ret < 0)
-+		return -EINVAL;
-+
+-	rc = kstrtoul(page, 0, &op);
+-	if (rc < 0) {
+-		pr_err("kstrtoul() returned %d\n", rc);
+-		return -EINVAL;
+-	}
+-	if ((op != 1) && (op != 0)) {
+-		pr_err("Illegal value for tpg_enable: %lu\n", op);
+-		return -EINVAL;
+-	}
+-	if (op) {
 +	if (enable) {
-+		ret = iscsit_tpg_enable_portal_group(tpg);
-+		if (ret < 0)
-+			goto out;
-+	} else {
-+		/*
-+		 * iscsit_tpg_disable_portal_group() assumes force=1
-+		 */
-+		ret = iscsit_tpg_disable_portal_group(tpg, 1);
-+		if (ret < 0)
-+			goto out;
-+	}
-+
-+	iscsit_put_tpg(tpg);
+ 		if (atomic_read(&tpg->lport_tpg_enabled))
+ 			return -EEXIST;
+ 
+@@ -1110,23 +1067,16 @@ static ssize_t tcm_qla2xxx_npiv_tpg_enable_store(struct config_item *item,
+ 		qlt_enable_vha(vha);
+ 	} else {
+ 		if (!atomic_read(&tpg->lport_tpg_enabled))
+-			return count;
++			return 0;
+ 
+ 		atomic_set(&tpg->lport_tpg_enabled, 0);
+ 		qlt_stop_phase1(vha->vha_tgt.qla_tgt);
+ 		qlt_stop_phase2(vha->vha_tgt.qla_tgt);
+ 	}
+ 
+-	return count;
 +	return 0;
-+out:
-+	iscsit_put_tpg(tpg);
-+	return -EINVAL;
-+}
-+
- static void lio_target_tiqn_deltpg(struct se_portal_group *se_tpg)
+ }
+ 
+-CONFIGFS_ATTR(tcm_qla2xxx_npiv_tpg_, enable);
+-
+-static struct configfs_attribute *tcm_qla2xxx_npiv_tpg_attrs[] = {
+-        &tcm_qla2xxx_npiv_tpg_attr_enable,
+-        NULL,
+-};
+-
+ static struct se_portal_group *tcm_qla2xxx_npiv_make_tpg(struct se_wwn *wwn,
+ 							 const char *name)
  {
- 	struct iscsi_portal_group *tpg;
-@@ -1557,6 +1529,7 @@ const struct target_core_fabric_ops iscsi_ops = {
- 	.fabric_drop_wwn		= lio_target_call_coredeltiqn,
- 	.add_wwn_groups			= lio_target_add_wwn_groups,
- 	.fabric_make_tpg		= lio_target_tiqn_addtpg,
-+	.fabric_enable_tpg		= lio_target_tiqn_enabletpg,
- 	.fabric_drop_tpg		= lio_target_tiqn_deltpg,
- 	.fabric_make_np			= lio_target_call_addnptotpg,
- 	.fabric_drop_np			= lio_target_call_delnpfromtpg,
+@@ -1869,6 +1819,7 @@ static const struct target_core_fabric_ops tcm_qla2xxx_ops = {
+ 	.fabric_make_wwn		= tcm_qla2xxx_make_lport,
+ 	.fabric_drop_wwn		= tcm_qla2xxx_drop_lport,
+ 	.fabric_make_tpg		= tcm_qla2xxx_make_tpg,
++	.fabric_enable_tpg		= tcm_qla2xxx_enable_tpg,
+ 	.fabric_drop_tpg		= tcm_qla2xxx_drop_tpg,
+ 	.fabric_init_nodeacl		= tcm_qla2xxx_init_nodeacl,
+ 
+@@ -1909,11 +1860,11 @@ static const struct target_core_fabric_ops tcm_qla2xxx_npiv_ops = {
+ 	.fabric_make_wwn		= tcm_qla2xxx_npiv_make_lport,
+ 	.fabric_drop_wwn		= tcm_qla2xxx_npiv_drop_lport,
+ 	.fabric_make_tpg		= tcm_qla2xxx_npiv_make_tpg,
++	.fabric_enable_tpg		= tcm_qla2xxx_npiv_enable_tpg,
+ 	.fabric_drop_tpg		= tcm_qla2xxx_drop_tpg,
+ 	.fabric_init_nodeacl		= tcm_qla2xxx_init_nodeacl,
+ 
+ 	.tfc_wwn_attrs			= tcm_qla2xxx_wwn_attrs,
+-	.tfc_tpg_base_attrs		= tcm_qla2xxx_npiv_tpg_attrs,
+ };
+ 
+ static int tcm_qla2xxx_register_configfs(void)
 -- 
 2.25.1
 
