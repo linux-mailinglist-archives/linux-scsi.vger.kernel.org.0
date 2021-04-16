@@ -2,154 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CFC361808
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 05:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2383036183F
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 05:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237979AbhDPDGI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 23:06:08 -0400
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:63371 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237760AbhDPDGF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 23:06:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1618542340; x=1650078340;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uVfh8D4+sBBq64E108Yvid21+UPvhkglPh0NjleQvb4=;
-  b=cThEWTTds6021zuFqFhubo7E8SPoXUnhO+Padd4+Yh8/KN5/lgy0oDYg
-   pJILsXn9FTc60mJ8DPdzi/QP9DjdOngo1QoPTtX0KFQyXOFwpxIoTTnxr
-   HryykFIewOWozTMb3lVedMnBbrecEGNaMW2rIIudaijf19sgZK3ohUW4x
-   6bN6DJU6rByUtAk3yvOv6sfJBebBaXQsMvEj9Im1jTDnIG7sUuW8Inx2d
-   2qcNvhdFqCfWBYeaIho9NzwBAori/whJXBcpD8U8ydJMbpY7MPzJ18Kqj
-   gNJ7C+y7Q5AuS8B3pehr+YQa4Ekh2UKnk8JJoywNSawnzjzrxz3HCzJag
-   Q==;
-IronPort-SDR: Wjd0C07/CyaIOAtTIRGTCXKKfLlLsF+PtYnIkpg7JP0T1sqP2a6JP1IS+xpCQM2bzZ76HW9ZTb
- my0i22KrIx/fz9yOU9rqXVJKINZQ1riztKi3nTydkiJ/D4nbIbii9hufetEIjaZU46f5AFT6Sy
- xCC3F/QPl1vhzNSYRGkcaXj8PEbSI5BS+7fAj7o+bSZ2bBLHsEnevhC0bUQmS4UCAUe+ZMGs3N
- BSHZFs2bYJYpoP8zXAOXYQTlXtuygXIZl9JbajVdqH8jf6cpYTcQJGRcOV70gWJdJAU65IEIZj
- h4c=
-X-IronPort-AV: E=Sophos;i="5.82,226,1613404800"; 
-   d="scan'208";a="169567899"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 16 Apr 2021 11:05:40 +0800
-IronPort-SDR: N+JLvR0N5aYsv7emEsPhN/tT0NVNgPJXcdSt0E/2pqaQSxIRvosiojEcT4wsXreg7GhNlGIuNn
- maxJ/SaKb8G03efUnWVERc3DJtdFC1Kmcf9YG+SNyuBKLvv9AR7Em3nrF5XZOu0WXz2BdxPKXF
- 6MlOxoZOeju++9BiwlhDA8CJAAfusx0RQCCF0fXUWbt7JYc0dMNLr1j3JyPCUxqiI3nNDdY197
- tE8O9A4oGznyoshkejuYLBYSZeUFvY0NNsQ/ciR5CuTzBfztJFRpCKYXnjnkHTovmG7N4XoSJG
- DId+xOXwdD9L035ADnw0oVgo
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 19:44:59 -0700
-IronPort-SDR: u5Gc1810z5GreDYJpvaZDBd+bkB81RNJhYok8IDgPhe6JYgYj4b/4/fYIpyX1cNfJVEHlvUAnA
- MvOAeuVc8FBQZXEYMRwsr7AEl4o9EH4ZWc0IZfF4PcbzBOhhh0kx5kXMSJLHk9aqaOUbscvFQO
- cnR+SMMtVcof5L8EjlIR/eC/8XN0d4vx2Lzk9Lhsnt21cd/URva91ybcVwFbQqbeHdz6R/7aav
- OkHZyDzHZ5SnIdccJAHt+KUB7t7KMxH5k97pMJAwdRTYfFo0Amj59jJpiDg1hrSqHsfS+f5qTA
- 0pc=
-WDCIronportException: Internal
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip02.wdc.com with ESMTP; 15 Apr 2021 20:05:40 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     dm-devel@redhat.com, Mike Snitzer <snitzer@redhat.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>,
+        id S237031AbhDPDia (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 23:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236943AbhDPDi3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 23:38:29 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A6BC061756
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 20:38:03 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id u14-20020a17090a1f0eb029014e38011b09so9013333pja.5
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Apr 2021 20:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=areca-com-tw.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:date:mime-version
+         :content-transfer-encoding;
+        bh=9YrdWgC2SFRBEtg49JT1X0HhBm78LmIvkwcHdeoziQA=;
+        b=JsZPk/tojGvPw0Ly046RGV1Ws4CtLQ7QucqbfbuT0QIcjjs9f5EjQKArpdXFi8hV+i
+         a/xGS5MYSXm8kFeM7OU0YAiCP5EF42/t3QDKFqKYMqE7CNc6DVe334Sjfq8ljFaVnOhA
+         yf+RzOEKovd5lAAM5XshlojbIL+qcrj523XzvTtBSUKintg12FziDbtkEHu2GzzsXlf7
+         uVPPW5nksO89xPiyzvUymSiF7PSFTUfo84eVZjd4MFPQuj6aczNTpnOxDgw1jejTyS/5
+         4UvwsKfSOIUv02IIi1iTIn0s9/Yhrp9FV+d4WQTMKXdB2FCkNb7E8Gc6Lb3UF+eT1c7r
+         Aabw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:date:mime-version
+         :content-transfer-encoding;
+        bh=9YrdWgC2SFRBEtg49JT1X0HhBm78LmIvkwcHdeoziQA=;
+        b=gYPlmLyNelpmRw2o8vaYqqI0ZLhjRMDM2MfopFQeA/0DQkD9Jai6zNqcH+vGCVB/4v
+         4Ng/tY/q9+TOQgVIhfABIus0F9VkHyK1+UqSDH//976AwFjIK8JJWjfoj5MEP9mlvbmb
+         0JEivkkWqj0LvUoIdL9A8SZNdgzurUlE5QTvodMrgFXd1vJO1nrnsugFqNl2wQmzBjfD
+         q8Y673/6SM+7UIED1pjG+U/3hNaL/Mp0tue9xoOSzqJpjQIhe91i+QChq5k2b8TmgtpC
+         USuB+0/hA5HgUFN/wrlkOTqguJpsmhJmLuk8cxxUOT0Yr7GsNw56HHMej/Z2rlD0SR/F
+         03eA==
+X-Gm-Message-State: AOAM530DmakNnKmrrS304EkYJQPRnY7sPOUtc1ppZFuCm9GuzeD9BFeK
+        qss6LJq6b+kAJv/SD1dbx5LwPg==
+X-Google-Smtp-Source: ABdhPJzwuHP98jFLc7VDRXgO6t852ZA7yohI3crumgP2QljiMkwxyYJ+NbQNftjPqjT4gd92JCL+Zg==
+X-Received: by 2002:a17:90b:1647:: with SMTP id il7mr6979963pjb.132.1618544283266;
+        Thu, 15 Apr 2021 20:38:03 -0700 (PDT)
+Received: from centos78 (60-248-88-209.HINET-IP.hinet.net. [60.248.88.209])
+        by smtp.gmail.com with ESMTPSA id 14sm3308259pfl.1.2021.04.15.20.38.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Apr 2021 20:38:02 -0700 (PDT)
+Message-ID: <0b1571666e97dd121da59b2861d389550ab86597.camel@areca.com.tw>
+Subject: [PATCH 0/2] scsi: arcmsr: fix SCSI command timeout on ARC-1886
+From:   ching Huang <ching2048@areca.com.tw>
+To:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
         linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-fsdevel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        David Sterba <dsterba@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>
-Cc:     Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>
-Subject: [PATCH 4/4] zonefs: fix synchronous write to sequential zone files
-Date:   Fri, 16 Apr 2021 12:05:28 +0900
-Message-Id: <20210416030528.757513-5-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210416030528.757513-1-damien.lemoal@wdc.com>
-References: <20210416030528.757513-1-damien.lemoal@wdc.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 16 Apr 2021 11:38:00 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Synchronous writes to sequential zone files cannot use zone append
-operations if the underlying zoned device queue limit
-max_zone_append_sectors is 0, indicating that the device does not
-support this operation. In this case, fall back to using regular write
-operations.
+This patch is against to mkp's 5.13/scsi-staging.
 
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+This patch fixed the wrong cdb payload report to IOP, that cause scsi command
+timeout when scatter-gather count is large than some number.
 ---
- fs/zonefs/super.c  | 16 ++++++++++++----
- fs/zonefs/zonefs.h |  2 ++
- 2 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/fs/zonefs/super.c b/fs/zonefs/super.c
-index 049e36c69ed7..b97566b9dff7 100644
---- a/fs/zonefs/super.c
-+++ b/fs/zonefs/super.c
-@@ -689,14 +689,15 @@ static ssize_t zonefs_file_dio_append(struct kiocb *iocb, struct iov_iter *from)
- {
- 	struct inode *inode = file_inode(iocb->ki_filp);
- 	struct zonefs_inode_info *zi = ZONEFS_I(inode);
--	struct block_device *bdev = inode->i_sb->s_bdev;
--	unsigned int max;
-+	struct super_block *sb = inode->i_sb;
-+	struct zonefs_sb_info *sbi = ZONEFS_SB(sb);
-+	struct block_device *bdev = sb->s_bdev;
-+	sector_t max = sbi->s_max_zone_append_sectors;
- 	struct bio *bio;
- 	ssize_t size;
- 	int nr_pages;
- 	ssize_t ret;
- 
--	max = queue_max_zone_append_sectors(bdev_get_queue(bdev));
- 	max = ALIGN_DOWN(max << SECTOR_SHIFT, inode->i_sb->s_blocksize);
- 	iov_iter_truncate(from, max);
- 
-@@ -853,6 +854,8 @@ static ssize_t zonefs_file_dio_write(struct kiocb *iocb, struct iov_iter *from)
- 
- 	/* Enforce sequential writes (append only) in sequential zones */
- 	if (zi->i_ztype == ZONEFS_ZTYPE_SEQ) {
-+		struct zonefs_sb_info *sbi = ZONEFS_SB(sb);
-+
- 		mutex_lock(&zi->i_truncate_mutex);
- 		if (iocb->ki_pos != zi->i_wpoffset) {
- 			mutex_unlock(&zi->i_truncate_mutex);
-@@ -860,7 +863,7 @@ static ssize_t zonefs_file_dio_write(struct kiocb *iocb, struct iov_iter *from)
- 			goto inode_unlock;
- 		}
- 		mutex_unlock(&zi->i_truncate_mutex);
--		append = sync;
-+		append = sync && sbi->s_max_zone_append_sectors;
- 	}
- 
- 	if (append)
-@@ -1683,6 +1686,11 @@ static int zonefs_fill_super(struct super_block *sb, void *data, int silent)
- 		sbi->s_mount_opts &= ~ZONEFS_MNTOPT_EXPLICIT_OPEN;
- 	}
- 
-+	sbi->s_max_zone_append_sectors =
-+		queue_max_zone_append_sectors(bdev_get_queue(sb->s_bdev));
-+	if (!sbi->s_max_zone_append_sectors)
-+		zonefs_info(sb, "Zone append is not supported: falling back to using regular writes\n");
-+
- 	ret = zonefs_read_super(sb);
- 	if (ret)
- 		return ret;
-diff --git a/fs/zonefs/zonefs.h b/fs/zonefs/zonefs.h
-index 51141907097c..2b8c3b1a32ea 100644
---- a/fs/zonefs/zonefs.h
-+++ b/fs/zonefs/zonefs.h
-@@ -185,6 +185,8 @@ struct zonefs_sb_info {
- 
- 	unsigned int		s_max_open_zones;
- 	atomic_t		s_open_zones;
-+
-+	sector_t		s_max_zone_append_sectors;
- };
- 
- static inline struct zonefs_sb_info *ZONEFS_SB(struct super_block *sb)
--- 
-2.30.2
 
