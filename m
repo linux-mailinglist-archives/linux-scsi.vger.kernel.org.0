@@ -2,149 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B537E361657
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 01:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369E13616E4
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 02:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237921AbhDOXhS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 19:37:18 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:58332 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237906AbhDOXhP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 19:37:15 -0400
-IronPort-SDR: OvRAyKoR5xO1em7skCFNLn+6n55pKJHfHCTdhuuS1LcgdvN8WEFna+j8BzbwXncYawydca1Nlu
- oavyTzDuvTQHEtHq8gL7AgWZc+eTYvfdIkh37I0S0V6z/yKBIl0LJ2FRQJ7AgyZxkMeBm2Po4L
- JgBHywcxvi/tjylYLKvRIY03436tknDH58SBwqdCn0gspLB/mYMSJ7rLG+eRRJdc76xD0Vx9Hb
- kJlPGVhQFCS6puL3vqB5nCDcZyKILW9lfCBO9T2bNFXyGlhnN5TgcWxRot2ku40lwxLQ1Jx9Kx
- 334=
-X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
-   d="scan'208";a="29751641"
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by labrats.qualcomm.com with ESMTP; 15 Apr 2021 16:36:52 -0700
-X-QCInternal: smtphost
-Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
-  by ironmsg04-sd.qualcomm.com with ESMTP; 15 Apr 2021 16:36:51 -0700
-Received: by stor-presley.qualcomm.com (Postfix, from userid 92687)
-        id 27A9921BA5; Thu, 15 Apr 2021 16:36:51 -0700 (PDT)
-From:   Asutosh Das <asutoshd@codeaurora.org>
-To:     cang@codeaurora.org, martin.petersen@oracle.com,
-        adrian.hunter@intel.com, linux-scsi@vger.kernel.org
-Cc:     Asutosh Das <asutoshd@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "Bao D. Nguyen" <nguyenb@codeaurora.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v19 2/2] ufs: sysfs: Resume the proper scsi device
-Date:   Thu, 15 Apr 2021 16:36:08 -0700
-Message-Id: <3086cac6c9e949fd9a42a8bc0988c055ab3c2c77.1618529652.git.asutoshd@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1618529652.git.asutoshd@codeaurora.org>
-References: <cover.1618529652.git.asutoshd@codeaurora.org>
-In-Reply-To: <cover.1618529652.git.asutoshd@codeaurora.org>
-References: <cover.1618529652.git.asutoshd@codeaurora.org>
+        id S237081AbhDPAqp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 20:46:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30183 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234971AbhDPAqp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 15 Apr 2021 20:46:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618533981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=01LPAj7XxOOANKuCrrektCT/ftNV3bWQ3VJcfLmFrwc=;
+        b=M/aY353wSw6MHv5s6PtGKqh/hlCZS7LCjAXaosSvRw7IaIE9e3snWxugSlEtrB73plh+W2
+        fCwAF5bK1NxLiNrqaJ4y5jdK03PGX7H7Th1Q8OQlZjvWrU0+UoKPHjxOD2G1j1SnfX1ivY
+        5tqh4OX15zTwgsmEa1hT0gUOdbDu/1w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-200-nIRONt64MA2CVxRIwnLCqQ-1; Thu, 15 Apr 2021 20:46:19 -0400
+X-MC-Unique: nIRONt64MA2CVxRIwnLCqQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0A5FA801814;
+        Fri, 16 Apr 2021 00:46:18 +0000 (UTC)
+Received: from T590 (ovpn-12-36.pek2.redhat.com [10.72.12.36])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E9DFB6A032;
+        Fri, 16 Apr 2021 00:46:14 +0000 (UTC)
+Date:   Fri, 16 Apr 2021 08:46:10 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Douglas Gilbert <dgilbert@interlog.com>
+Subject: Re: [bug report] shared tags causes IO hang and performance drop
+Message-ID: <YHjeUrCTbrSft18t@T590>
+References: <YHaez6iN2HHYxYOh@T590>
+ <9a6145a5-e6ac-3d33-b52a-0823bfc3b864@huawei.com>
+ <cb326d404c6e0785d03a7dfadc42832c@mail.gmail.com>
+ <YHbOOfGNHwO4SMS7@T590>
+ <87ceccf2-287b-9bd1-899a-f15026c9e65b@huawei.com>
+ <YHe3M62agQET6o6O@T590>
+ <3e76ffc7-1d71-83b6-ef5b-3986e947e372@huawei.com>
+ <YHgvMAHqIq9f6pQn@T590>
+ <f66f9204-83ff-48d4-dbf4-4a5e1dc100b7@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f66f9204-83ff-48d4-dbf4-4a5e1dc100b7@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Resumes the actual scsi device the unit descriptor of which
-is being accessed instead of the hba alone.
+On Thu, Apr 15, 2021 at 04:41:06PM +0100, John Garry wrote:
+> On 15/04/2021 13:18, Ming Lei wrote:
+> > On Thu, Apr 15, 2021 at 11:41:52AM +0100, John Garry wrote:
+> > > Hi Ming,
+> > > 
+> > > I'll have a look.
+> > > 
+> > > BTW, are you intentionally using scsi_debug over null_blk? null_blk supports
+> > > shared sbitmap as well, and performance figures there are generally higher
+> > > than scsi_debug for similar fio settings.
+> > I use both, but scsi_debug can cover scsi stack test.
+> > 
+> 
+> Hi Ming,
+> 
+> I can't seem to recreate your same issue. Are you mainline defconfig, or a
+> special disto config?
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-Reviewed-by: Can Guo <cang@codeaurora.org>
-Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
----
- drivers/scsi/ufs/ufs-sysfs.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+The config is rhel8 config.
 
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index d7c3cff..4d9d4d8 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -245,9 +245,9 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	ufshcd_rpm_get_sync(hba);
- 	res = ufshcd_wb_toggle(hba, wb_enable);
--	pm_runtime_put_sync(hba->dev);
-+	ufshcd_rpm_put_sync(hba);
- out:
- 	up(&hba->host_sem);
- 	return res < 0 ? res : count;
-@@ -297,10 +297,10 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	ufshcd_rpm_get_sync(hba);
- 	ret = ufshcd_read_desc_param(hba, desc_id, desc_index,
- 				param_offset, desc_buf, param_size);
--	pm_runtime_put_sync(hba->dev);
-+	ufshcd_rpm_put_sync(hba);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -678,7 +678,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		up(&hba->host_sem);					\
- 		return -ENOMEM;						\
- 	}								\
--	pm_runtime_get_sync(hba->dev);					\
-+	ufshcd_rpm_get_sync(hba);					\
- 	ret = ufshcd_query_descriptor_retry(hba,			\
- 		UPIU_QUERY_OPCODE_READ_DESC, QUERY_DESC_IDN_DEVICE,	\
- 		0, 0, desc_buf, &desc_len);				\
-@@ -695,7 +695,7 @@ static ssize_t _name##_show(struct device *dev,				\
- 		goto out;						\
- 	ret = sysfs_emit(buf, "%s\n", desc_buf);			\
- out:									\
--	pm_runtime_put_sync(hba->dev);					\
-+	ufshcd_rpm_put_sync(hba);					\
- 	kfree(desc_buf);						\
- 	up(&hba->host_sem);						\
- 	return ret;							\
-@@ -744,10 +744,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_flags(QUERY_FLAG_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	ufshcd_rpm_get_sync(hba);					\
- 	ret = ufshcd_query_flag(hba, UPIU_QUERY_OPCODE_READ_FLAG,	\
- 		QUERY_FLAG_IDN##_uname, index, &flag);			\
--	pm_runtime_put_sync(hba->dev);					\
-+	ufshcd_rpm_put_sync(hba);					\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -813,10 +813,10 @@ static ssize_t _name##_show(struct device *dev,				\
- 	}								\
- 	if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	pm_runtime_get_sync(hba->dev);					\
-+	ufshcd_rpm_get_sync(hba);					\
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,	\
- 		QUERY_ATTR_IDN##_uname, index, 0, &value);		\
--	pm_runtime_put_sync(hba->dev);					\
-+	ufshcd_rpm_put_sync(hba);					\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
-@@ -964,10 +964,10 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	ufshcd_rpm_get_sync(hba);
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
- 		QUERY_ATTR_IDN_DYN_CAP_NEEDED, lun, 0, &value);
--	pm_runtime_put_sync(hba->dev);
-+	ufshcd_rpm_put_sync(hba);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+As I mentioned, with deadline, IOPS drop is observed on one hardware(ibm-x3850x6)
+which is exactly the machine Yanhui reported the cpu utilization issue.
+
+On another machine(HP DL380G10), still 32cores, dual numa nodes, IOPS drop can't be
+observed, but cpu utilization difference is still obserable.
+
+I use scsi_debug just because it is hard to run the virt workloads on
+that machine. And the reported issue is on megaraid_sas, which is a scsi
+device, so null_blk isn't good to simulate here because it can't cover
+scsi stack.
+
+
+Thanks,
+Ming
 
