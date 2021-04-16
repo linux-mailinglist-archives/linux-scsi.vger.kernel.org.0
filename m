@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A9E361BE7
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 11:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAE1361BED
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 11:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbhDPIlN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 16 Apr 2021 04:41:13 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:41976 "EHLO mta-01.yadro.com"
+        id S239944AbhDPIlQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 16 Apr 2021 04:41:16 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:41996 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239462AbhDPIlH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S239810AbhDPIlH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 16 Apr 2021 04:41:07 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 4D37D41369;
-        Fri, 16 Apr 2021 08:40:37 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 4580C4138E;
+        Fri, 16 Apr 2021 08:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1618562435; x=1620376836; bh=pRsUU++uSRO5QyygIcIYhEj0Qo03md9bSxV
-        UAdFfiQA=; b=X0bj405XoyK1PVnjxzdgg5CFCDQaX5MU2S87a+0OHqXCBjVXciA
-        VUl9YZsnmkSiLMHxhrzHHzawESuv5PX3obsGN1SA8AywTqXgnBKdekE4l9qC52cp
-        /OKaI9nR+LrRHGIhvQrSfHNbxVVlQ8lA1Jjo1/Riq5s80jaLHlll8ZN8=
+        1618562437; x=1620376838; bh=zZESbv+4UpXk0G5Dotj4UFxELuy0p+G4mzP
+        cSbWnPM4=; b=diDZw5zgO3HBhdgeYVnjNj+WGYhS2ZdI8JV6sdSzvzUWoApPHCy
+        6k9m7iPqdoNhAqXqOcO2ioFFT7sI+rInTrZuoS+pYFmU/eGbrhSye7zs+aEsQsOU
+        lqMw6C1p3yRKgKduJhtsrZTyZQfn+9okxQNuGzj/6z+bsJeK+ZHwUcrg=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id re9opPZ-0vGF; Fri, 16 Apr 2021 11:40:35 +0300 (MSK)
+        with ESMTP id uUW7SbhnFVUV; Fri, 16 Apr 2021 11:40:37 +0300 (MSK)
 Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id E0AD441373;
-        Fri, 16 Apr 2021 11:40:35 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 3C12A4137A;
+        Fri, 16 Apr 2021 11:40:36 +0300 (MSK)
 Received: from NB-591.corp.yadro.com (10.199.0.63) by T-EXCH-03.corp.yadro.com
  (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Fri, 16
- Apr 2021 11:40:34 +0300
+ Apr 2021 11:40:35 +0300
 From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
 To:     Martin Petersen <martin.petersen@oracle.com>,
         <target-devel@vger.kernel.org>
@@ -47,9 +47,9 @@ CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
         Felipe Balbi <balbi@kernel.org>,
         Dmitry Bogdanov <d.bogdanov@yadro.com>,
         Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: [PATCH v4 1/7] target: core: add common tpg/enable attribute
-Date:   Fri, 16 Apr 2021 11:26:26 +0300
-Message-ID: <20210416082632.2000-2-d.bogdanov@yadro.com>
+Subject: [PATCH v4 2/7] target: iscsi: replace enable attr to ops.enable
+Date:   Fri, 16 Apr 2021 11:26:27 +0300
+Message-ID: <20210416082632.2000-3-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210416082632.2000-1-d.bogdanov@yadro.com>
 References: <20210416082632.2000-1-d.bogdanov@yadro.com>
@@ -63,168 +63,143 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Many fabric modules provide their own implementation of enable
-attribute in tpg.
-The change provides a way to remove code duplication in the fabric
-modules and automatically add "enable" attribute if a fabric module has
-an implementation of fabric_enable_tpg() ops.
+Remove tpg/enable attribute.
+Add fabric ops enable_tpg impalmentation instead.
 
 Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
-v4:
- fix compilation error
 v3:
- refactor tfc_tpg_base_attrs creation
- avoid alloc of attrs if there are no attributes
- fix newlines
- move enable attribute to target_core_fabric_configfs.c
-v2:
- create enable atribute only for modules with enable_tpg ops
+ fix identation issue
 ---
- drivers/target/target_core_configfs.c        |  1 +
- drivers/target/target_core_fabric_configfs.c | 78 +++++++++++++++++++-
- include/target/target_core_base.h            |  1 +
- include/target/target_core_fabric.h          |  1 +
- 4 files changed, 79 insertions(+), 2 deletions(-)
+ drivers/target/iscsi/iscsi_target_configfs.c | 91 +++++++-------------
+ 1 file changed, 32 insertions(+), 59 deletions(-)
 
-diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index f04352285155..fc3949e91f9c 100644
---- a/drivers/target/target_core_configfs.c
-+++ b/drivers/target/target_core_configfs.c
-@@ -490,6 +490,7 @@ void target_unregister_template(const struct target_core_fabric_ops *fo)
- 			 * fabric driver unload of TFO->module to proceed.
- 			 */
- 			rcu_barrier();
-+			kfree(t->tf_tpg_base_cit.ct_attrs);
- 			kfree(t);
- 			return;
- 		}
-diff --git a/drivers/target/target_core_fabric_configfs.c b/drivers/target/target_core_fabric_configfs.c
-index ee85602213f7..38a0658df370 100644
---- a/drivers/target/target_core_fabric_configfs.c
-+++ b/drivers/target/target_core_fabric_configfs.c
-@@ -815,8 +815,76 @@ static struct configfs_item_operations target_fabric_tpg_base_item_ops = {
- 	.release		= target_fabric_tpg_release,
- };
+diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/target/iscsi/iscsi_target_configfs.c
+index 0fa1d57b26fa..28b5acf83c80 100644
+--- a/drivers/target/iscsi/iscsi_target_configfs.c
++++ b/drivers/target/iscsi/iscsi_target_configfs.c
+@@ -1006,74 +1006,15 @@ static struct configfs_attribute *lio_target_tpg_param_attrs[] = {
  
--TF_CIT_SETUP_DRV(tpg_base, &target_fabric_tpg_base_item_ops, NULL);
-+static ssize_t target_fabric_tpg_base_enable_show(struct config_item *item,
-+						  char *page)
-+{
-+	return sysfs_emit(page, "%d\n", to_tpg(item)->enabled);
-+}
-+
-+static ssize_t target_fabric_tpg_base_enable_store(struct config_item *item,
-+						   const char *page,
-+						   size_t count)
-+{
-+	struct se_portal_group *se_tpg = to_tpg(item);
-+	int ret;
-+	bool op;
-+
-+	ret = strtobool(page, &op);
-+	if (ret)
-+		return ret;
-+
-+	if (se_tpg->enabled == op)
-+		return count;
-+
-+	ret = se_tpg->se_tpg_tfo->fabric_enable_tpg(se_tpg, op);
-+	if (ret)
-+		return ret;
-+
-+	se_tpg->enabled = op;
-+
-+	return count;
-+}
-+
-+CONFIGFS_ATTR(target_fabric_tpg_base_, enable);
+ /* Start items for lio_target_tpg_cit */
  
-+static int
-+target_fabric_setup_tpg_base_cit(struct target_fabric_configfs *tf)
-+{
-+	struct config_item_type *cit = &tf->tf_tpg_base_cit;
-+	struct configfs_attribute **attrs = NULL;
-+	size_t nr_attrs = 0;
-+	int i = 0;
-+
-+	if (tf->tf_ops->tfc_tpg_base_attrs)
-+		while (tf->tf_ops->tfc_tpg_base_attrs[nr_attrs] != NULL)
-+			nr_attrs++;
-+
-+	if (tf->tf_ops->fabric_enable_tpg)
-+		nr_attrs++;
-+
-+	if (nr_attrs == 0)
-+		goto done;
-+
-+	/* + 1 for final NULL in the array */
-+	attrs = kcalloc(nr_attrs + 1, sizeof(*attrs), GFP_KERNEL);
-+	if (!attrs)
-+		return -ENOMEM;
-+
-+	if (tf->tf_ops->tfc_tpg_base_attrs)
-+		for (; tf->tf_ops->tfc_tpg_base_attrs[i] != NULL; i++)
-+			attrs[i] = tf->tf_ops->tfc_tpg_base_attrs[i];
-+
-+	if (tf->tf_ops->fabric_enable_tpg)
-+		attrs[i] = &target_fabric_tpg_base_attr_enable;
-+
-+done:
-+	cit->ct_item_ops = &target_fabric_tpg_base_item_ops;
-+	cit->ct_attrs = attrs;
-+	cit->ct_owner = tf->tf_ops->module;
-+	pr_debug("Setup generic tpg_base\n");
-+
-+	return 0;
-+}
- /* End of tfc_tpg_base_cit */
- 
- /* Start of tfc_tpg_cit */
-@@ -971,11 +1039,17 @@ TF_CIT_SETUP_DRV(discovery, NULL, NULL);
- 
- int target_fabric_setup_cits(struct target_fabric_configfs *tf)
+-static ssize_t lio_target_tpg_enable_show(struct config_item *item, char *page)
+-{
+-	struct se_portal_group *se_tpg = to_tpg(item);
+-	struct iscsi_portal_group *tpg = container_of(se_tpg,
+-			struct iscsi_portal_group, tpg_se_tpg);
+-	ssize_t len;
+-
+-	spin_lock(&tpg->tpg_state_lock);
+-	len = sprintf(page, "%d\n",
+-			(tpg->tpg_state == TPG_STATE_ACTIVE) ? 1 : 0);
+-	spin_unlock(&tpg->tpg_state_lock);
+-
+-	return len;
+-}
+-
+-static ssize_t lio_target_tpg_enable_store(struct config_item *item,
+-		const char *page, size_t count)
+-{
+-	struct se_portal_group *se_tpg = to_tpg(item);
+-	struct iscsi_portal_group *tpg = container_of(se_tpg,
+-			struct iscsi_portal_group, tpg_se_tpg);
+-	u32 op;
+-	int ret;
+-
+-	ret = kstrtou32(page, 0, &op);
+-	if (ret)
+-		return ret;
+-	if ((op != 1) && (op != 0)) {
+-		pr_err("Illegal value for tpg_enable: %u\n", op);
+-		return -EINVAL;
+-	}
+-
+-	ret = iscsit_get_tpg(tpg);
+-	if (ret < 0)
+-		return -EINVAL;
+-
+-	if (op) {
+-		ret = iscsit_tpg_enable_portal_group(tpg);
+-		if (ret < 0)
+-			goto out;
+-	} else {
+-		/*
+-		 * iscsit_tpg_disable_portal_group() assumes force=1
+-		 */
+-		ret = iscsit_tpg_disable_portal_group(tpg, 1);
+-		if (ret < 0)
+-			goto out;
+-	}
+-
+-	iscsit_put_tpg(tpg);
+-	return count;
+-out:
+-	iscsit_put_tpg(tpg);
+-	return -EINVAL;
+-}
+-
+-
+ static ssize_t lio_target_tpg_dynamic_sessions_show(struct config_item *item,
+ 		char *page)
  {
+ 	return target_show_dynamic_sessions(to_tpg(item), page);
+ }
+ 
+-CONFIGFS_ATTR(lio_target_tpg_, enable);
+ CONFIGFS_ATTR_RO(lio_target_tpg_, dynamic_sessions);
+ 
+ static struct configfs_attribute *lio_target_tpg_attrs[] = {
+-	&lio_target_tpg_attr_enable,
+ 	&lio_target_tpg_attr_dynamic_sessions,
+ 	NULL,
+ };
+@@ -1130,6 +1071,37 @@ static struct se_portal_group *lio_target_tiqn_addtpg(struct se_wwn *wwn,
+ 	return NULL;
+ }
+ 
++static int lio_target_tiqn_enabletpg(struct se_portal_group *se_tpg,
++				     bool enable)
++{
++	struct iscsi_portal_group *tpg = container_of(se_tpg,
++			struct iscsi_portal_group, tpg_se_tpg);
 +	int ret;
 +
- 	target_fabric_setup_discovery_cit(tf);
- 	target_fabric_setup_wwn_cit(tf);
- 	target_fabric_setup_wwn_fabric_stats_cit(tf);
- 	target_fabric_setup_tpg_cit(tf);
--	target_fabric_setup_tpg_base_cit(tf);
++	ret = iscsit_get_tpg(tpg);
++	if (ret < 0)
++		return -EINVAL;
 +
-+	ret = target_fabric_setup_tpg_base_cit(tf);
-+	if (ret)
-+		return ret;
++	if (enable) {
++		ret = iscsit_tpg_enable_portal_group(tpg);
++		if (ret < 0)
++			goto out;
++	} else {
++		/*
++		 * iscsit_tpg_disable_portal_group() assumes force=1
++		 */
++		ret = iscsit_tpg_disable_portal_group(tpg, 1);
++		if (ret < 0)
++			goto out;
++	}
 +
- 	target_fabric_setup_tpg_port_cit(tf);
- 	target_fabric_setup_tpg_port_stat_cit(tf);
- 	target_fabric_setup_tpg_lun_cit(tf);
-diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
-index 54dcc0eb25fa..fabc9dccfeb2 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -885,6 +885,7 @@ struct se_portal_group {
- 	 * Negative values can be used by fabric drivers for internal use TPGs.
- 	 */
- 	int			proto_id;
-+	bool			enabled;
- 	/* Used for PR SPEC_I_PT=1 and REGISTER_AND_MOVE */
- 	atomic_t		tpg_pr_ref_count;
- 	/* Spinlock for adding/removing ACLed Nodes */
-diff --git a/include/target/target_core_fabric.h b/include/target/target_core_fabric.h
-index d60a3eb7517a..b7e409e9e13e 100644
---- a/include/target/target_core_fabric.h
-+++ b/include/target/target_core_fabric.h
-@@ -89,6 +89,7 @@ struct target_core_fabric_ops {
- 	void (*add_wwn_groups)(struct se_wwn *);
- 	struct se_portal_group *(*fabric_make_tpg)(struct se_wwn *,
- 						   const char *);
-+	int (*fabric_enable_tpg)(struct se_portal_group *se_tpg, bool enable);
- 	void (*fabric_drop_tpg)(struct se_portal_group *);
- 	int (*fabric_post_link)(struct se_portal_group *,
- 				struct se_lun *);
++	iscsit_put_tpg(tpg);
++	return 0;
++out:
++	iscsit_put_tpg(tpg);
++	return -EINVAL;
++}
++
+ static void lio_target_tiqn_deltpg(struct se_portal_group *se_tpg)
+ {
+ 	struct iscsi_portal_group *tpg;
+@@ -1557,6 +1529,7 @@ const struct target_core_fabric_ops iscsi_ops = {
+ 	.fabric_drop_wwn		= lio_target_call_coredeltiqn,
+ 	.add_wwn_groups			= lio_target_add_wwn_groups,
+ 	.fabric_make_tpg		= lio_target_tiqn_addtpg,
++	.fabric_enable_tpg		= lio_target_tiqn_enabletpg,
+ 	.fabric_drop_tpg		= lio_target_tiqn_deltpg,
+ 	.fabric_make_np			= lio_target_call_addnptotpg,
+ 	.fabric_drop_np			= lio_target_call_delnpfromtpg,
 -- 
 2.25.1
 
