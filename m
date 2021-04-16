@@ -2,91 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9F4361B7F
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 10:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA64361BE5
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 11:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbhDPIUN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 16 Apr 2021 04:20:13 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2869 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbhDPIUM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 16 Apr 2021 04:20:12 -0400
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FM8BT6V6Qz68BBZ;
-        Fri, 16 Apr 2021 16:14:25 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Fri, 16 Apr 2021 10:19:45 +0200
-Received: from [10.47.83.179] (10.47.83.179) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Fri, 16 Apr
- 2021 09:19:44 +0100
-Subject: Re: [PATCH] scsi_debug: fix cmd_per_lun, set to max_queue
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     Douglas Gilbert <dgilbert@interlog.com>,
-        <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <jejb@linux.vnet.ibm.com>, <kashyap.desai@broadcom.com>,
-        <axboe@kernel.dk>
-References: <20210415015031.607153-1-dgilbert@interlog.com>
- <580349dc-0152-8f39-5f3c-be9115e3bf12@huawei.com> <YHjsXaVJJsQXwEPW@T590>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <bd33c000-905a-b881-06ea-eef51c77566e@huawei.com>
-Date:   Fri, 16 Apr 2021 09:17:09 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S235226AbhDPIlM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 16 Apr 2021 04:41:12 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:41958 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236538AbhDPIlH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 16 Apr 2021 04:41:07 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 004C941382;
+        Fri, 16 Apr 2021 08:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1618562435; x=
+        1620376836; bh=knud8S94iMsB19LeDeWDF34jgQI7lma43gvsa7P61j4=; b=e
+        GM/SLwIJnDs9SKRUWsjG01w0WpaFOZewfNtyXP39amo87AgKbWgu+Eg8sftkMAbk
+        7Ph2X2PadFKBmebvXbSwHw9chrkO2vS8OL8lvLpkgHRcaB18NYxfwgz0lqDe3UPZ
+        COecXJDvdNzpa7oVE+1ivSvHOqMybja4j4121WM+U4=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KxoVDSPTghPj; Fri, 16 Apr 2021 11:40:35 +0300 (MSK)
+Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 8EFCE41369;
+        Fri, 16 Apr 2021 11:40:34 +0300 (MSK)
+Received: from NB-591.corp.yadro.com (10.199.0.63) by T-EXCH-03.corp.yadro.com
+ (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Fri, 16
+ Apr 2021 11:40:34 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>
+CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Chris Boot <bootc@bootc.net>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Michael Cyr <mikecyr@linux.ibm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>
+Subject: [PATCH v4 0/7 target: make tpg/enable attribute
+Date:   Fri, 16 Apr 2021 11:26:25 +0300
+Message-ID: <20210416082632.2000-1-d.bogdanov@yadro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YHjsXaVJJsQXwEPW@T590>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.179]
-X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.0.63]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-03.corp.yadro.com (172.17.100.103)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 16/04/2021 02:46, Ming Lei wrote:
->>   	int display_failure_msg = 1, ret;
->>   	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
->> +	int depth;
->>
->>   	sdev = kzalloc(sizeof(*sdev) + shost->transportt->device_size,
->>   		       GFP_KERNEL);
->> @@ -276,8 +277,13 @@ static struct scsi_device *scsi_alloc_sdev(struct
->> scsi_target *starget,
->>   	WARN_ON_ONCE(!blk_get_queue(sdev->request_queue));
->>   	sdev->request_queue->queuedata = sdev;
->>
->> -	scsi_change_queue_depth(sdev, sdev->host->cmd_per_lun ?
->> -					sdev->host->cmd_per_lun : 1);
->> +	if (sdev->host->cmd_per_lun)
->> +		depth = min_t(int, sdev->host->cmd_per_lun,
->> +			      sdev->host->can_queue);
->> +	else
->> +		depth = 1;
->> +
->> +	scsi_change_queue_depth(sdev, depth);
-> 'cmd_per_lun' should have been set as correct from the beginning instead
-> of capping it for changing queue depth:
-> 
-> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-> index 697c09ef259b..0d9954eabbb8 100644
-> --- a/drivers/scsi/hosts.c
-> +++ b/drivers/scsi/hosts.c
-> @@ -414,7 +414,7 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
->   	shost->can_queue = sht->can_queue;
->   	shost->sg_tablesize = sht->sg_tablesize;
->   	shost->sg_prot_tablesize = sht->sg_prot_tablesize;
-> -	shost->cmd_per_lun = sht->cmd_per_lun;
-> +	shost->cmd_per_lun = min_t(int, sht->cmd_per_lun, shost->can_queue);
->   	shost->no_write_same = sht->no_write_same;
->   	shost->host_tagset = sht->host_tagset;
+Many fabric modules provide their own implementation of enable
+attribute in tpg.
+The change set removes the code duplication and automatically adds
+"enable" attribute for fabric modules that has an implementation of
+fabric_enable_tpg() ops.
 
-My concern here is that it is a common pattern in LLDDs to overwrite the 
-initial shost member values between scsi_host_alloc() and scsi_add_host().
+This patchset is intended for scsi-queue.
 
-Thanks,
-John
+v4:
+ fix compilation error and warning
+v3:
+ refactor tfc_tpg_base_attrs creation
+ avoid alloc of attrs if there are no attributes
+ fix newlines
+ move enable attribute to target_core_fabric_configfs.c
+v2:
+ create enable atribute only for modules with enable_tpg ops
+ add patches for srpt, usb and ibmvscsi
+
+Dmitry Bogdanov (7):
+  target: core: add common tpg/enable attribute
+  target: iscsi: replace enable attr to ops.enable
+  target: qla2xx: replace enable attr to ops.enable
+  target: sbp: replace enable attr to ops.enable
+  target: srpt replace enable attr to ops.enable
+  target: ibm_vscsi: replace enable attr to ops.enable
+  target: usb: replace enable attr to ops.enable
+
+ drivers/infiniband/ulp/srpt/ib_srpt.c        | 38 +-------
+ drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c     | 42 +--------
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c           | 73 +++-------------
+ drivers/target/iscsi/iscsi_target_configfs.c | 91 +++++++-------------
+ drivers/target/sbp/sbp_target.c              | 30 ++-----
+ drivers/target/target_core_configfs.c        |  1 +
+ drivers/target/target_core_fabric_configfs.c | 78 ++++++++++++++++-
+ drivers/usb/gadget/function/f_tcm.c          | 31 ++-----
+ include/target/target_core_base.h            |  1 +
+ include/target/target_core_fabric.h          |  1 +
+ 10 files changed, 142 insertions(+), 244 deletions(-)
+
+-- 
+2.25.1
+
