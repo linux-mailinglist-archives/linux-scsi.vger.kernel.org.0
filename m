@@ -2,72 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E58FE361751
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 04:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835B3361752
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Apr 2021 04:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237992AbhDPCFZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Apr 2021 22:05:25 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:36132 "EHLO
+        id S237996AbhDPCF1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Apr 2021 22:05:27 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:36140 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237984AbhDPCFY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 22:05:24 -0400
+        with ESMTP id S237661AbhDPCFZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Apr 2021 22:05:25 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13G1xwdc172162;
-        Fri, 16 Apr 2021 02:04:54 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13G204g3172519;
+        Fri, 16 Apr 2021 02:04:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2020-01-29; bh=Q8A2WbSbpHpNPX18bxDHQyE7Ssqo3u/ZDKWnzfbqhKc=;
- b=RtUoYz/VPQGg8kKpJ/576VqiXvVTOCGkKmwqEPEqIBoEoXAxGbKdqsapr+4ZM0DUtWSY
- RoJbT5fZM6M99YM92sr+Fc6CPyJs3ZzV2ubObABHBbH3JZgwhTYNE8DT8FlwXLdKlMaL
- yy1VKRZIDcR5BoOGrawuVTF835hEsrN3PFHeaXHc9c/lDP1oc3njnhBWQXqjEPEvdYdq
- OsqvK8RRTlZQuxzC4O2CLgjW7nKwne48PN3n+TLzjrECyc23ay4batm6rw32bJfccx3K
- hpsuBVlBXqzXg5NVRFfEPO58oO2TSRkx1wzc4o0N31aDE7fTTsRZ/PqVQwXMyYLMvC+f KA== 
+ s=corp-2020-01-29; bh=cEyImvyJHUDcTp32d8itBoFJ3+WXNTwKne8zp3GHllU=;
+ b=Pxd9dBK9kgIvuP1RFHhMJK+kwt7KIzC0Vp2nOTNJcRs6xlKcUMd/3c5R3J3BxBlZAv7+
+ 2AR1WFsN6bE1sfgBRbSDP+VBTOHlYu23Mw5wzaGLnNiDVHXc4/6LqP5Tz43jCZ6BMTBp
+ a3RMK2VaJrxH4zugZduxfpO/KTt1KaJ2lzSGA2UKpFCZMBUF3q+aMidb0c3QZQpnmf3Z
+ o8mvk5vU0SZQKi/+w8rncuIVFLHotf+1U9qt8wXS9k2PiZS/J/ZH2crxliN7h/ohaSzz
+ bx+ALxBOU0Yl9AQNedYOu0KU1N65A/V/o3DTYUozdWQYFmpCddIq/C9174pVy0AJNxW0 XA== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 37u4nnqmff-1
+        by userp2120.oracle.com with ESMTP id 37u4nnqmfh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 16 Apr 2021 02:04:54 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13G20eZF001033;
-        Fri, 16 Apr 2021 02:04:53 GMT
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13G20eZG001033;
+        Fri, 16 Apr 2021 02:04:54 GMT
 Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
-        by aserp3030.oracle.com with ESMTP id 37unktfb62-1
+        by aserp3030.oracle.com with ESMTP id 37unktfb62-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 16 Apr 2021 02:04:53 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=di9yFx4lSnl8goG3pqNxmUzXjVPdkPxuGd7W7xv5yd9wP3VvC131gPwwBOkH3BW0W0ppZRdc4DfQXqI/179RnvkxgZs9fXD+6ixDnZGRI9E2NH3EQQAjh+doK8Dm17ECp7kfA5fYzK3jQH1c+n3OStlIGlC8XT/l6tfAQCdGsCEVOU+kTtL/dxkf+9xw6ifH5aeP7sO2P07a3Q6zxz67NwiRvRgk+b75Pl9nbxs2LmKM0H9mTk22UoUhpsZekn/n3VxmzZdy224eJM0yMt04T4Faa8z+7V8fg4lLi5eOjH9F5So/bPS+qpEAEwUutfofUcjIF2X1L+7np2Sg+ec1tA==
+ b=OnXiUb8zBYu3pINeLrhZ4fVfyu3E2fpq4TU3CY9HHA2P+rybd5COMJRddyznMNWmkzPmfMcy9fo+CWMKn3JvlaVK5b6Oc39x9Uu/Y9ibVrGDNw+J947lkuq2sQTnGRJeFJYXYiMZ+Jp7hRPSyXKaoJ5Jki+JcvXL89ZXORA9C87g/aG0W4fT/i1T7vd2IfC0RsXwu3jCdKwZEZTuSQmy6MpxshytK+xMLdgFfYaO+8wCBsurwURuSqwCQ9aD4F6Ze+mfUJB36KHSkvEiDxqwz27XW7nYmLG4aoHhNdUt0YPG2cmjVWkvRHFXqlChJ/RnekbW5O8+8kBlK4yFEoUroQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q8A2WbSbpHpNPX18bxDHQyE7Ssqo3u/ZDKWnzfbqhKc=;
- b=Avc9Mv+EZsjUo+lqUBkMYvWQWof+Z7BzIYd2QXgTm5KO8jWa5N7yYUycUIegl8r7nr+oQJ41NiSQcOI3vCB98RY5LiwB6HKei35keJo8EPFKi9w7BLkFMAzGXbXsAzgZ1w+4CkAQGj2aHv/8031wg9i9CRv3XyGCtOvY9KzI9BuG7CXDDKea26KQoTGfgmeRPiYZsFhK8yJHjf60RxkleHck14Jraz4c4DRMeWYLCIWqyVlhSKVqGd1uMcsCOuAbv/DtBRqszq+BZI4U5a8pYrZVHD9JoGxPw8g40G2YUusP0x5A0RDy5EzotvrZrdI2uYyhW/8GSp3MQMg9ltRvbQ==
+ bh=cEyImvyJHUDcTp32d8itBoFJ3+WXNTwKne8zp3GHllU=;
+ b=Y4gN4FfPB+HP8eBgwWCsTevo1B1yoZ8yy/D8PxgwduilR0WI+HcPmIkYxeGz/o1jSMw1tXGdLEVnDnUqpeECYoycPIS3BTjgfTFQUS2IpUTh89Luf9fVdUfspPEI2e+bU6RGaChLv69BAi9goKzdlZkh/ID6fpcv391CFCb/H3eUMU40JuUnitHn5DUyTEaA24spMwNSMmfNR95F1TA6PYTQJsm4/Swf/ktdXQ+cF0SIbRXek19/uW43VpHo83iD9gnRap/Q10Cn6LOcHLqVR/VSGkd/El4guuq/bi/ObMPHaZ9e6a7qv8Y4FxaHrQaUuMos2A86MrQY+UTKurf80w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q8A2WbSbpHpNPX18bxDHQyE7Ssqo3u/ZDKWnzfbqhKc=;
- b=qwy1+BTz+xdh9jRbROT3t8hT5M77KyVLdcTGXxhbymxBz2jhUFhvl3rIF9HqTPTZ28bsVEgztAM1AUZ+n3mRZ7rOAMuPCzfW7OR+Zq9pFCSHdHcuELbx8VOVYaEDCh4TcdGLjmHTt/k+PAES6S18Dawc8b0JcNNxvGBFQ9t20bQ=
+ bh=cEyImvyJHUDcTp32d8itBoFJ3+WXNTwKne8zp3GHllU=;
+ b=m97R+KCmnctCK3bqA9/j+ZdY82fXMpDAINBREqGQrx622mcU59tvONUIMHVqHte5IDPsLwTRxRXE4N9QamzIaNCfCH5mz8+/H113mXwmlktBts0N+FjYcwnswxTYsl/V+ax/G+xojn0aZqxyVtrsMnodTxjIWPobOoVv3NNNIqY=
 Authentication-Results: suse.com; dkim=none (message not signed)
  header.d=none;suse.com; dmarc=none action=none header.from=oracle.com;
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
  by BYAPR10MB2421.namprd10.prod.outlook.com (2603:10b6:a02:b3::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17; Fri, 16 Apr
- 2021 02:04:51 +0000
+ 2021 02:04:52 +0000
 Received: from BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::50bb:7b66:35ee:4a4]) by BYAPR10MB3573.namprd10.prod.outlook.com
  ([fe80::50bb:7b66:35ee:4a4%7]) with mapi id 15.20.4042.019; Fri, 16 Apr 2021
- 02:04:51 +0000
+ 02:04:52 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     lduncan@suse.com, martin.petersen@oracle.com,
         mrangankar@marvell.com, svernekar@marvell.com,
         linux-scsi@vger.kernel.org, jejb@linux.ibm.com
 Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH v3 02/17] scsi: iscsi: sync libiscsi and driver reset cleanup
-Date:   Thu, 15 Apr 2021 21:04:25 -0500
-Message-Id: <20210416020440.259271-3-michael.christie@oracle.com>
+Subject: [PATCH v3 03/17] scsi: iscsi: stop queueing during ep_disconnect
+Date:   Thu, 15 Apr 2021 21:04:26 -0500
+Message-Id: <20210416020440.259271-4-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210416020440.259271-1-michael.christie@oracle.com>
 References: <20210416020440.259271-1-michael.christie@oracle.com>
@@ -79,58 +79,58 @@ X-ClientProxiedBy: DM6PR02CA0100.namprd02.prod.outlook.com
  (2603:10b6:a03:11e::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (73.88.28.6) by DM6PR02CA0100.namprd02.prod.outlook.com (2603:10b6:5:1f4::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Fri, 16 Apr 2021 02:04:50 +0000
+Received: from localhost.localdomain (73.88.28.6) by DM6PR02CA0100.namprd02.prod.outlook.com (2603:10b6:5:1f4::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Fri, 16 Apr 2021 02:04:51 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0118303c-1a44-4942-b577-08d9007c0541
+X-MS-Office365-Filtering-Correlation-Id: 694313ff-2e41-456f-17cb-08d9007c05d6
 X-MS-TrafficTypeDiagnostic: BYAPR10MB2421:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR10MB2421EEFAEB00ED03C61FCEF6F14C9@BYAPR10MB2421.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <BYAPR10MB2421D9EE1E7569FA4BE0B348F14C9@BYAPR10MB2421.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8QD+tfNgWuWSW/RPlKKhOnQr6JFe74ei20qB39EkIGU1a1oA0tT9H52xj+/l4egmlGIOmbpktuDyLEhRgW/U1bUqrPzfe8u1ec+wWsEWtJi27PGURsTjIPywbT1ASw518+AjXtk3DKa2Er5mmzt2JUwM0+fH+FfPLXpDlVfv0zNtWitx+FYRyV0pal+d1CaJP1xNPamTvU+LNi6QQjpoZQ/FVHTnmIJvCXxsZgkbERVeIfQ5fQ600OWHkYE5+BVf/Q4UVDFc5kktK0wmFKvNsYaC74dZbAby3sa2YDGZ3TXR8W0sMdo/7KciocxuLHqJOpjQRw1MVsIhLMV4GE1IBCc4AT1lBelYZgeKBZc89mhldBrIhfVG//l9yZPOEWmAffvqnb3BKv1YwET7ys1zM6cmHeaELgbI2EgSQuiOnaelxUHCVa27hAEnEAKr+kNF7uQ09ZUBA2G71rPHwdofQ+ubDmzSanCWJU5zprtPQvFl32s14WBeKeTKUmcWOzpU6IzaHKaUQiTcL04jWMgIZxul6UiEmpMsoxaB5OWX5JRxWJBd/g5SLMtg0eLMg660yv17JXYI6dXCRzCXAj7hfFrEYbYP7Cuy0ulIhfmfk/7vpqums0CUHp9UpQIO4goN85d6UeZQzuTt1rpgmU/aPnkD0glTSWEabu+46gfYIEtJLTlhVp5tAsglALxHv0uL
+X-Microsoft-Antispam-Message-Info: tUALTP1xQFQXSg40o8jqFtjkbweaHGRUgBKpc0WI+/ozUhdf2EKF47ejPQgBmrwJnpRS98px0k/dlJibqoha2/eYs4x/nrcOw5BlAKkVWmGb4nTiEx1SlxsJumU/HXS5/7e96jbjkLoMidrlIwK7Tp3akWVOlT/yZe7bvIaHc0AgRG5g1kwqrUmMkfoDd2hkT/S+tICwvriFLmYO0d3EGtueLjNvgW81fYIR62NKZAYutudLCSEIW2wpGt7RZLg18UhWE/avYzvxFNV8ev7S2++eY7NUhubLm0N4PvoHAe8gVWrWxLTQl1Px3dTWpkZZx+ay4YvXY0pb9hWXIbaiK54TVUh1Q49Q1HtRJIqXHbAOC0SEHcF4AIf6B4TX55SECGzPC4JSIU/ydBbxNEwOhDknnpK+CL/r8Kl0O6260UFq+pvmvhgWagID43cmMgqIfUbw2gH5OjNmc5XMaZDk71e/v5oXXlzSoFBpiuz2Ys1M+2U1F+7vSXEPS1wKdD7w4pYI7SJ7hR8YGsQ8MOW5T/fNGxFW2iqczqNNT7Chn8jN14mPNsh63A1W2Az5s4JG1IP4X4B3EHY3MojLyYMdwADeHdUdCSoopn+GSYkn0UdJfeN+uK5bW5lDxcsG0YDXJa3iuxXbezaNkOA3/hR362aJAPw4qGSaXPZyV6ZIFLW5jfkCMUckeYYgYHf6vFR2
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(39860400002)(366004)(136003)(396003)(186003)(69590400012)(16526019)(5660300002)(1076003)(6666004)(36756003)(26005)(107886003)(83380400001)(4326008)(52116002)(2906002)(6486002)(2616005)(6512007)(956004)(8936002)(8676002)(316002)(478600001)(66556008)(38350700002)(66476007)(6506007)(38100700002)(86362001)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?3NDzssDymi/fBw9YaTuFDPmJ/jhaq0boxaZF2My9ad7uRQysfYAnvP8LFfFV?=
- =?us-ascii?Q?FvNcT8hoy4WUoofInXbn2AE/zZxZRhaiFVEC+xZukjjhbM9VZHPhW83IcioH?=
- =?us-ascii?Q?ip4C8554bveFtI6+daQNEY54jHh8dwXmGKvzNKLlTR8mOoTgbeA0Ubj4ZPB0?=
- =?us-ascii?Q?scnYiyNv7R+c4yllMaDSafyGV5LZMMnjfWQAJKdlPqa5Q1h81slY2reEkspl?=
- =?us-ascii?Q?U7EPvv+meGmPCzrb4zCgcdh5iPZnIQY9CgN3GR8seiRoRpgIpOxOC8a6JEyK?=
- =?us-ascii?Q?s9E+FVcp/vjtxhcsFbpCAHbbXoir46+dPCd6k++y9NvMi2JBie446haegDTU?=
- =?us-ascii?Q?0pc5F4r7YUa+L5x8vpb6bI+JkWGp1E3AcFTG4B8AU0+oSebvfriadXF4m4oi?=
- =?us-ascii?Q?SaMwERguKUleIpIVzDdE3oWpMIrP2NgG4oT6pCMRM9jjADgKAVBlqGqTuBVX?=
- =?us-ascii?Q?zllSOc49aWQzt3CJu1ylI3cxX0/tDL8pD7alMYtyD9q2YJZVe4XFF9TWYCnD?=
- =?us-ascii?Q?paB35m5R5ZAlrc80jOGN4w0/e0lwGZI+qsxKWM8wO0DQZZtMNpooxurlkz8t?=
- =?us-ascii?Q?z18BPV19FWfqCsEQOII9u6nvggT30UsCKP/POLVln2iT6owKBvGTpL9Zgq0c?=
- =?us-ascii?Q?D7lLcBUrsUQWc0Pwx/6tLBVj8Yr1mLte75wtc1gul9/sG+cMLKkAzj6c7CWa?=
- =?us-ascii?Q?s17GMWfH0CGLLiOjpf+kIJySiLK6E32NoaAhJRh16JpnkmQq2f5ikJyAfoQX?=
- =?us-ascii?Q?Df9FgCLtkcqrlGUcPfPHms0Uz73SgmOgofZ3D5cXUF3Sfr00hK8mK3DVEoiJ?=
- =?us-ascii?Q?uZi9H1UzW3Cvdc2iHTScNyBpiqHrb4HZgnZy9mp/2sE5bEOGj1t0S2etYYkn?=
- =?us-ascii?Q?KkBmJT3XGiBMDA98AFE2r4KGbIlCLWrMsEqTxYKFs/67DsJ3/O1xzhFk7vRx?=
- =?us-ascii?Q?IBuM8VGqdhZgxaHpYSvSkjbxE6ihe5J6bWjHOiikLxnM6LwGCiruJvkKBES3?=
- =?us-ascii?Q?HqZN/fm+LfDvfZlVnw4mNRzI0fDEBdWUSEOPv7R5jsPUc1OYEmyOSITl8lGI?=
- =?us-ascii?Q?mEF3RZtcRWGAwN1xeE2TjyYB8ptIRGoPZFm7KZw4jYzEt0a0giqp+QUMaOJD?=
- =?us-ascii?Q?s0LHWmWBTHNCZ+flRepXacS7Ng+2iNbyWkGzsrUG2NUg3IjYE8khJfta8tww?=
- =?us-ascii?Q?ovjdYy1NNm3whOaWnBeH65ruGm3+y51U8wVMQz0O8zu1n7VVvghzo6fpwOVo?=
- =?us-ascii?Q?F55hqC7RsQ56cO7Cn1Mk33QArl0YWVCXkyhETGRcYp4Azqlq9yw7lq4thVlh?=
- =?us-ascii?Q?hdvIK+69Kl3yjVJKW7RFf6CO?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?0Jo63ZB6c5ZpVM2+DdYThaYnaj6gu0hJdMz7t+yARrt93yDIDUaCDgkXvvMD?=
+ =?us-ascii?Q?gX+grKzrQijgTpts+Bp3I2IU1IO43ZXd+0EPzhtNt2qPIqI7mGnyI2Ck1oya?=
+ =?us-ascii?Q?8aoIonErZ8h4luHjzPgO2FsEeMKor0ywZW51tuxnz6/Qe791QDaKYEy4w9SB?=
+ =?us-ascii?Q?PDkjy0Nf3aBy2gBzcK9YIcfac7pAwdCKyxSCCcGnAIlrQOfyjCKdHLZS3jCI?=
+ =?us-ascii?Q?7GJqjSXNTMv/bqvFTeEjVHtuSh2wKNyWz3SWUoMm7xLwyn4ZdyZWKGfORbaZ?=
+ =?us-ascii?Q?D7ui8aSTkAEkGaxRUvlxTQIDN8nwzDAwT1FNKr9ZDJIkNmRUmG7SlgJBii6Y?=
+ =?us-ascii?Q?80p5/iBdu+O0gLWb30S5S6wQsdgnfh9AqbYb5Za48/A0Pefrahp64PahfU2j?=
+ =?us-ascii?Q?uoXObd3RjROKtNFKuJ0/5FOaecdH/M62A8oBri0LnTduWmnDm0YjiJJnN/28?=
+ =?us-ascii?Q?iKNCx8YPNiVtjzg2zkzVUoVRrjuvxrYm8a/nfpoMAj/HA0XXZjv9fAtQUPC6?=
+ =?us-ascii?Q?eEaE+7MOpQPLjhB7nT77aeYXsZZv0hj0bhKMo0AaHVeQ2S8FXiC11v5xdSpP?=
+ =?us-ascii?Q?sQj0vbxB3MRzgUMiM87UUvSMZfcql+LO202fg1SrmEcFrFDYnGnImmsf8L+/?=
+ =?us-ascii?Q?8M5PdbPh5SAjN2cSmtL9UlPUpsO10KUBhACgyyUZZXvW4cPm7gvgK3Lz7ITY?=
+ =?us-ascii?Q?N9DK1zok5d+CXSPnGfBKWgNxP+6J7E5h/ZdxWl8uRIrgPp0RHgmPL2tEND6j?=
+ =?us-ascii?Q?cB9fERhhU3YgvLa6eS7k6LXvQGYoEMFXATbnQBI8Pjm6xzDvvdRzSilc5oxu?=
+ =?us-ascii?Q?lnI454NgLEUIy0hATrNKbhoEmxMSi0ZKHBXFMjDhZE4KYvtoy16oW6Ok4SQq?=
+ =?us-ascii?Q?A4gEEvVSFTJovPyJPzYJqfchNJaDVxXqISkNN5sWdFUt+sxsIviYCrq8bLuo?=
+ =?us-ascii?Q?ArZR8fHShpyl5gEx72SoDq+e8uCxhJa2fXks/gOdbzDneHbilWkvVqqEyW88?=
+ =?us-ascii?Q?BrRjRdw6FzD2KpqJkzDDK8gjnTLf3oJEiTXk7cQTJWBx4ATG4wgSY/rWL4WB?=
+ =?us-ascii?Q?c8i9hZyCGi5BSIAP0JMdIzHOl/N02mxcFTGqkXw8mP5Uhm1ftROBb5CtnFtL?=
+ =?us-ascii?Q?pXIfxR2i0ZrFLf4jzxcsyko1ya2siZjgR9jSyQbn/K+tBhLaEgSXTBmP6X7Y?=
+ =?us-ascii?Q?YAMt6FcLWCscHBch6DciCrHTNrFCwnlQhQopd3+BFFHgfz4Xwz3T4PLcItW9?=
+ =?us-ascii?Q?J7Vf8G4aS+F4iCJTaj+88xA2A01jCeBva3h7rb1xyBW7HvZXpofinMHIf7rz?=
+ =?us-ascii?Q?62bwqTtl7cJXvHUlzeow2xFi?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0118303c-1a44-4942-b577-08d9007c0541
+X-MS-Exchange-CrossTenant-Network-Message-Id: 694313ff-2e41-456f-17cb-08d9007c05d6
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 02:04:51.5362
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 02:04:52.5826
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JQDxrpv3LeXOzy3mQZIbqP2mOBdJWcMzJFFen+OSBTgUdluOcn2gQ1wBIgdNHjw11d+U3rJd/ss2L09bOAPShul4MT6+yqGdNocbDLxOnEo=
+X-MS-Exchange-CrossTenant-UserPrincipalName: e4KX6KSC8NwkE2ybfac16pzrxtF2dgtaQ5TtLGRJbuY/cG75xCgdNygDRoj2U3hQ+MMSncDgOb6QQmS2HviOkkG2ftv25qh+dlpkO/SaKWY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2421
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9955 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
  adultscore=0 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2104060000 definitions=main-2104160014
-X-Proofpoint-ORIG-GUID: WRg1M0RtJC1xxooOpBe2qNyfPDst1Kvb
-X-Proofpoint-GUID: WRg1M0RtJC1xxooOpBe2qNyfPDst1Kvb
+X-Proofpoint-ORIG-GUID: E3Rvyc0UtoCt6DlxddcmDUVAH9V2MnNa
+X-Proofpoint-GUID: E3Rvyc0UtoCt6DlxddcmDUVAH9V2MnNa
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9955 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
  phishscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
@@ -141,173 +141,250 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If we are handling a sg io reset there is a small window where cmds can
-sneak into iscsi_queuecommand even though libiscsi has sent a TMF to the
-driver. This does seems to not be a problem for normal drivers because they
-know exactly what was sent to the FW. For libiscsi this is a problem
-because it knows what it has sent to the driver but not what the driver
-sent to the FW. When we go to cleanup the running tasks, libiscsi might
-cleanup the sneaky cmd but the driver/FQ may not have seen the sneaky cmd
-and it's left running in FW.
+During ep_disconnect we have been doing iscsi_suspend_tx/queue to block
+new IO but every driver except cxgbi and iscsi_tcp can still get IO from
+__iscsi_conn_send_pdu if we haven't called iscsi_conn_failure before
+ep_disconnect. This could happen if we were terminating the session, and
+the logout timedout before it was even sent to libiscsi.
 
-This has libiscsi just stop queueing cmds when it sends the TMF down to the
-driver. Both then know they see the same set of cmds.
+This patch fixes the issue by adding a helper which reverses the bind_conn
+call that allows new IO to be queued. Drivers implementing ep_disconnect
+can use this to make sure new IO is not queued to them when handling the
+disconnect.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/scsi/libiscsi.c | 104 +++++++++++++++++++++++++++-------------
- 1 file changed, 72 insertions(+), 32 deletions(-)
+ drivers/infiniband/ulp/iser/iscsi_iser.c |  1 +
+ drivers/scsi/be2iscsi/be_main.c          |  1 +
+ drivers/scsi/bnx2i/bnx2i_iscsi.c         |  1 +
+ drivers/scsi/cxgbi/cxgb3i/cxgb3i.c       |  1 +
+ drivers/scsi/cxgbi/cxgb4i/cxgb4i.c       |  1 +
+ drivers/scsi/libiscsi.c                  | 61 +++++++++++++++++++++---
+ drivers/scsi/qedi/qedi_iscsi.c           |  1 +
+ drivers/scsi/qla4xxx/ql4_os.c            |  1 +
+ drivers/scsi/scsi_transport_iscsi.c      |  3 ++
+ include/scsi/libiscsi.h                  |  1 +
+ include/scsi/scsi_transport_iscsi.h      |  1 +
+ 11 files changed, 67 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
+index 8fcaa1136f2c..6baebcb6d14d 100644
+--- a/drivers/infiniband/ulp/iser/iscsi_iser.c
++++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
+@@ -1002,6 +1002,7 @@ static struct iscsi_transport iscsi_iser_transport = {
+ 	/* connection management */
+ 	.create_conn            = iscsi_iser_conn_create,
+ 	.bind_conn              = iscsi_iser_conn_bind,
++	.unbind_conn		= iscsi_conn_unbind,
+ 	.destroy_conn           = iscsi_conn_teardown,
+ 	.attr_is_visible	= iser_attr_is_visible,
+ 	.set_param              = iscsi_iser_set_param,
+diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
+index 90fcddb76f46..e9658a67d9da 100644
+--- a/drivers/scsi/be2iscsi/be_main.c
++++ b/drivers/scsi/be2iscsi/be_main.c
+@@ -5809,6 +5809,7 @@ struct iscsi_transport beiscsi_iscsi_transport = {
+ 	.destroy_session = beiscsi_session_destroy,
+ 	.create_conn = beiscsi_conn_create,
+ 	.bind_conn = beiscsi_conn_bind,
++	.unbind_conn = iscsi_conn_unbind,
+ 	.destroy_conn = iscsi_conn_teardown,
+ 	.attr_is_visible = beiscsi_attr_is_visible,
+ 	.set_iface_param = beiscsi_iface_set_param,
+diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+index 1e6d8f62ea3c..b6c1da46d582 100644
+--- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
++++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+@@ -2276,6 +2276,7 @@ struct iscsi_transport bnx2i_iscsi_transport = {
+ 	.destroy_session	= bnx2i_session_destroy,
+ 	.create_conn		= bnx2i_conn_create,
+ 	.bind_conn		= bnx2i_conn_bind,
++	.unbind_conn		= iscsi_conn_unbind,
+ 	.destroy_conn		= bnx2i_conn_destroy,
+ 	.attr_is_visible	= bnx2i_attr_is_visible,
+ 	.set_param		= iscsi_set_param,
+diff --git a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
+index 37d99357120f..edcd3fab6973 100644
+--- a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
++++ b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
+@@ -117,6 +117,7 @@ static struct iscsi_transport cxgb3i_iscsi_transport = {
+ 	/* connection management */
+ 	.create_conn	= cxgbi_create_conn,
+ 	.bind_conn	= cxgbi_bind_conn,
++	.unbind_conn	= iscsi_conn_unbind,
+ 	.destroy_conn	= iscsi_tcp_conn_teardown,
+ 	.start_conn	= iscsi_conn_start,
+ 	.stop_conn	= iscsi_conn_stop,
+diff --git a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+index 2c3491528d42..efb3e2b3398e 100644
+--- a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
++++ b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+@@ -134,6 +134,7 @@ static struct iscsi_transport cxgb4i_iscsi_transport = {
+ 	/* connection management */
+ 	.create_conn	= cxgbi_create_conn,
+ 	.bind_conn		= cxgbi_bind_conn,
++	.unbind_conn	= iscsi_conn_unbind,
+ 	.destroy_conn	= iscsi_tcp_conn_teardown,
+ 	.start_conn		= iscsi_conn_start,
+ 	.stop_conn		= iscsi_conn_stop,
 diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 4834219497ee..aa5ceaffc697 100644
+index aa5ceaffc697..ce3898fdb10f 100644
 --- a/drivers/scsi/libiscsi.c
 +++ b/drivers/scsi/libiscsi.c
-@@ -1669,29 +1669,11 @@ enum {
- 	FAILURE_SESSION_NOT_READY,
- };
+@@ -1387,22 +1387,28 @@ void iscsi_session_failure(struct iscsi_session *session,
+ }
+ EXPORT_SYMBOL_GPL(iscsi_session_failure);
  
--int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
-+static bool iscsi_eh_running(struct iscsi_conn *conn, struct scsi_cmnd *sc,
-+			     int *reason)
+-void iscsi_conn_failure(struct iscsi_conn *conn, enum iscsi_err err)
++static void iscsi_set_conn_failed(struct iscsi_conn *conn)
  {
--	struct iscsi_cls_session *cls_session;
--	struct iscsi_host *ihost;
--	int reason = 0;
--	struct iscsi_session *session;
--	struct iscsi_conn *conn;
--	struct iscsi_task *task = NULL;
--
--	sc->result = 0;
--	sc->SCp.ptr = NULL;
--
--	ihost = shost_priv(host);
--
--	cls_session = starget_to_session(scsi_target(sc->device));
--	session = cls_session->dd_data;
--	spin_lock_bh(&session->frwd_lock);
--
--	reason = iscsi_session_chkready(cls_session);
--	if (reason) {
--		sc->result = reason;
--		goto fault;
--	}
-+	struct iscsi_session *session = conn->session;
-+	struct iscsi_tm *tmf;
+ 	struct iscsi_session *session = conn->session;
  
- 	if (session->state != ISCSI_STATE_LOGGED_IN) {
- 		/*
-@@ -1707,31 +1689,92 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 			 * state is bad, allowing completion to happen
- 			 */
- 			if (unlikely(system_state != SYSTEM_RUNNING)) {
--				reason = FAILURE_SESSION_FAILED;
-+				*reason = FAILURE_SESSION_FAILED;
- 				sc->result = DID_NO_CONNECT << 16;
- 				break;
- 			}
- 			fallthrough;
- 		case ISCSI_STATE_IN_RECOVERY:
--			reason = FAILURE_SESSION_IN_RECOVERY;
-+			*reason = FAILURE_SESSION_IN_RECOVERY;
- 			sc->result = DID_IMM_RETRY << 16;
- 			break;
- 		case ISCSI_STATE_LOGGING_OUT:
--			reason = FAILURE_SESSION_LOGGING_OUT;
-+			*reason = FAILURE_SESSION_LOGGING_OUT;
- 			sc->result = DID_IMM_RETRY << 16;
- 			break;
- 		case ISCSI_STATE_RECOVERY_FAILED:
--			reason = FAILURE_SESSION_RECOVERY_TIMEOUT;
-+			*reason = FAILURE_SESSION_RECOVERY_TIMEOUT;
- 			sc->result = DID_TRANSPORT_FAILFAST << 16;
- 			break;
- 		case ISCSI_STATE_TERMINATE:
--			reason = FAILURE_SESSION_TERMINATE;
-+			*reason = FAILURE_SESSION_TERMINATE;
- 			sc->result = DID_NO_CONNECT << 16;
- 			break;
- 		default:
--			reason = FAILURE_SESSION_FREED;
-+			*reason = FAILURE_SESSION_FREED;
- 			sc->result = DID_NO_CONNECT << 16;
- 		}
-+		goto eh_running;
-+	}
-+
-+	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx)) {
-+		*reason = FAILURE_SESSION_IN_RECOVERY;
-+		sc->result = DID_REQUEUE << 16;
-+		goto eh_running;
-+	}
-+
-+	/*
-+	 * For sg resets make sure libiscsi, the drivers and their fw see the
-+	 * same cmds. Once we get a TMF that can affect multiple cmds stop
-+	 * queueing.
-+	 */
-+	if (conn->tmf_state != TMF_INITIAL) {
-+		tmf = &conn->tmhdr;
-+
-+		switch (ISCSI_TM_FUNC_VALUE(tmf)) {
-+		case ISCSI_TM_FUNC_LOGICAL_UNIT_RESET:
-+			if (sc->device->lun != scsilun_to_int(&tmf->lun))
-+				break;
-+
-+			ISCSI_DBG_EH(conn->session,
-+				     "Requeue cmd sent during LU RESET processing.\n");
-+			sc->result = DID_REQUEUE << 16;
-+			goto eh_running;
-+		case ISCSI_TM_FUNC_TARGET_WARM_RESET:
-+			ISCSI_DBG_EH(conn->session,
-+				     "Requeue cmd sent during TARGET RESET processing.\n");
-+			sc->result = DID_REQUEUE << 16;
-+			goto eh_running;
-+		}
-+	}
-+
-+	return false;
-+
-+eh_running:
-+	return true;
+-	spin_lock_bh(&session->frwd_lock);
+-	if (session->state == ISCSI_STATE_FAILED) {
+-		spin_unlock_bh(&session->frwd_lock);
++	if (session->state == ISCSI_STATE_FAILED)
+ 		return;
+-	}
+ 
+ 	if (conn->stop_stage == 0)
+ 		session->state = ISCSI_STATE_FAILED;
+-	spin_unlock_bh(&session->frwd_lock);
+ 
+ 	set_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx);
+ 	set_bit(ISCSI_SUSPEND_BIT, &conn->suspend_rx);
 +}
 +
-+int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
++void iscsi_conn_failure(struct iscsi_conn *conn, enum iscsi_err err)
 +{
-+	struct iscsi_cls_session *cls_session;
-+	struct iscsi_host *ihost;
-+	int reason = 0;
++	struct iscsi_session *session = conn->session;
++
++	spin_lock_bh(&session->frwd_lock);
++	iscsi_set_conn_failed(conn);
++	spin_unlock_bh(&session->frwd_lock);
++
+ 	iscsi_conn_error_event(conn->cls_conn, err);
+ }
+ EXPORT_SYMBOL_GPL(iscsi_conn_failure);
+@@ -2220,6 +2226,49 @@ static void iscsi_check_transport_timeouts(struct timer_list *t)
+ 	spin_unlock(&session->frwd_lock);
+ }
+ 
++/*
++ * iscsi_conn_unbind - prevent queueing to conn.
++ * @conn: iscsi conn ep is bound to.
++ *
++ * This must be called by drivers implementing the ep_disconnect callout.
++ * It disables queueing to the connection from libiscsi in preparation for
++ * an ep_disconnect call.
++ */
++void iscsi_conn_unbind(struct iscsi_cls_conn *cls_conn)
++{
 +	struct iscsi_session *session;
 +	struct iscsi_conn *conn;
-+	struct iscsi_task *task = NULL;
 +
-+	sc->result = 0;
-+	sc->SCp.ptr = NULL;
++	if (!cls_conn)
++		return;
 +
-+	ihost = shost_priv(host);
++	conn = cls_conn->dd_data;
++	session = conn->session;
++	/*
++	 * Wait for iscsi_eh calls to exit. We don't wait for the tmf to
++	 * complete or timeout. The caller just wants to know what's running
++	 * is everything that needs to be cleaned up, and no cmds will be
++	 * queued.
++	 */
++	mutex_lock(&session->eh_mutex);
 +
-+	cls_session = starget_to_session(scsi_target(sc->device));
-+	session = cls_session->dd_data;
++	iscsi_suspend_queue(conn);
++	iscsi_suspend_tx(conn);
++
 +	spin_lock_bh(&session->frwd_lock);
++	/*
++	 * if logout timed out before userspace could even send a PDU the
++	 * state might still be in ISCSI_STATE_LOGGED_IN and allowing new cmds
++	 * and TMFs.
++	 */
++	if (session->state == ISCSI_STATE_LOGGED_IN)
++		iscsi_set_conn_failed(conn);
 +
-+	reason = iscsi_session_chkready(cls_session);
-+	if (reason) {
-+		sc->result = reason;
- 		goto fault;
++	spin_unlock_bh(&session->frwd_lock);
++	mutex_unlock(&session->eh_mutex);
++}
++EXPORT_SYMBOL_GPL(iscsi_conn_unbind);
++
+ static void iscsi_prep_abort_task_pdu(struct iscsi_task *task,
+ 				      struct iscsi_tm *hdr)
+ {
+diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
+index 08c05403cd72..ef16537c523c 100644
+--- a/drivers/scsi/qedi/qedi_iscsi.c
++++ b/drivers/scsi/qedi/qedi_iscsi.c
+@@ -1401,6 +1401,7 @@ struct iscsi_transport qedi_iscsi_transport = {
+ 	.destroy_session = qedi_session_destroy,
+ 	.create_conn = qedi_conn_create,
+ 	.bind_conn = qedi_conn_bind,
++	.unbind_conn = iscsi_conn_unbind,
+ 	.start_conn = qedi_conn_start,
+ 	.stop_conn = iscsi_conn_stop,
+ 	.destroy_conn = qedi_conn_destroy,
+diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
+index 7bd9a4a04ad5..ff663cb330c2 100644
+--- a/drivers/scsi/qla4xxx/ql4_os.c
++++ b/drivers/scsi/qla4xxx/ql4_os.c
+@@ -259,6 +259,7 @@ static struct iscsi_transport qla4xxx_iscsi_transport = {
+ 	.start_conn             = qla4xxx_conn_start,
+ 	.create_conn            = qla4xxx_conn_create,
+ 	.bind_conn              = qla4xxx_conn_bind,
++	.unbind_conn		= iscsi_conn_unbind,
+ 	.stop_conn              = iscsi_conn_stop,
+ 	.destroy_conn           = qla4xxx_conn_destroy,
+ 	.set_param              = iscsi_set_param,
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 441f0152193f..833114c8e197 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2981,6 +2981,8 @@ static int iscsi_if_ep_disconnect(struct iscsi_transport *transport,
+ 		conn->ep = NULL;
+ 		mutex_unlock(&conn->ep_mutex);
+ 		conn->state = ISCSI_CONN_FAILED;
++
++		transport->unbind_conn(conn);
  	}
  
-@@ -1742,11 +1785,8 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 		goto fault;
- 	}
+ 	transport->ep_disconnect(ep);
+@@ -4656,6 +4658,7 @@ iscsi_register_transport(struct iscsi_transport *tt)
+ 	int err;
  
--	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx)) {
--		reason = FAILURE_SESSION_IN_RECOVERY;
--		sc->result = DID_REQUEUE << 16;
-+	if (iscsi_eh_running(conn, sc, &reason))
- 		goto fault;
--	}
+ 	BUG_ON(!tt);
++	WARN_ON(tt->ep_disconnect && !tt->unbind_conn);
  
- 	if (iscsi_check_cmdsn_window_closed(conn)) {
- 		reason = FAILURE_WINDOW_CLOSED;
+ 	priv = iscsi_if_transport_lookup(tt);
+ 	if (priv)
+diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
+index 8c6d358a8abc..ec6d508e7a4a 100644
+--- a/include/scsi/libiscsi.h
++++ b/include/scsi/libiscsi.h
+@@ -431,6 +431,7 @@ extern int iscsi_conn_start(struct iscsi_cls_conn *);
+ extern void iscsi_conn_stop(struct iscsi_cls_conn *, int);
+ extern int iscsi_conn_bind(struct iscsi_cls_session *, struct iscsi_cls_conn *,
+ 			   int);
++extern void iscsi_conn_unbind(struct iscsi_cls_conn *cls_conn);
+ extern void iscsi_conn_failure(struct iscsi_conn *conn, enum iscsi_err err);
+ extern void iscsi_session_failure(struct iscsi_session *session,
+ 				  enum iscsi_err err);
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index fc5a39839b4b..afc61a23628d 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -82,6 +82,7 @@ struct iscsi_transport {
+ 	void (*destroy_session) (struct iscsi_cls_session *session);
+ 	struct iscsi_cls_conn *(*create_conn) (struct iscsi_cls_session *sess,
+ 				uint32_t cid);
++	void (*unbind_conn) (struct iscsi_cls_conn *conn);
+ 	int (*bind_conn) (struct iscsi_cls_session *session,
+ 			  struct iscsi_cls_conn *cls_conn,
+ 			  uint64_t transport_eph, int is_leading);
 -- 
 2.25.1
 
