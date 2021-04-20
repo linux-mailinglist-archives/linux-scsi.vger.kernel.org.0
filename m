@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80918364F15
+	by mail.lfdr.de (Postfix) with ESMTP id 274B9364F13
 	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 02:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233511AbhDTAKG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Apr 2021 20:10:06 -0400
-Received: from mail-pf1-f169.google.com ([209.85.210.169]:42560 "EHLO
-        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbhDTAJw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:09:52 -0400
-Received: by mail-pf1-f169.google.com with SMTP id w8so20841821pfn.9
-        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:09:21 -0700 (PDT)
+        id S233258AbhDTAKJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Apr 2021 20:10:09 -0400
+Received: from mail-pf1-f182.google.com ([209.85.210.182]:40632 "EHLO
+        mail-pf1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233253AbhDTAJy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:09:54 -0400
+Received: by mail-pf1-f182.google.com with SMTP id a12so24310466pfc.7
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:09:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NbaU7m/47T/9oIGXELzbbJnhWBWeeCW/DYssGvSOsUw=;
-        b=sPPz+szxFBlIkVK/D6abhjWfxmVmfeie80V/yUZq/vBOkU+Drj3ikmkZPDE/h+LXQ+
-         IdxslMzhQmgijDLsDK2SeVyl9LIXq99X990YzwGxsjHdU5WxzKWk9TzTKK9PnVckU2g/
-         EXcP5VN90AOKgK1DDyTCjTcOdB9Qr/2yjHPgt7a8rTPyLchhMu3/XZ7I11+JDa68FdsO
-         eWjOB6c7MQiS9JYYOrGo68ty/D4DN2qpP3fp5Fk6n19A4YwU8+hbUTZRGe/LfC/3GhqB
-         ckzk+gEVLIO+p6S0Yg1GP7uz60aGR0mjg1xtu155n0M2bhtWDTu6vD4babgvesO7b2aU
-         9Obg==
-X-Gm-Message-State: AOAM531xjUJIAU70QuGCshKOSIFLf4LwyKBzyo2Eb09GaybAtFI8EqxZ
-        p8HINkqN7rKBqsZZSavgyaU=
-X-Google-Smtp-Source: ABdhPJyGHJeegiEToLYA8wQgEy7b19wvsFAMSFhh3emi5bobbny8/jEEM1dvz8qf21UezW7mhEO0cg==
-X-Received: by 2002:a63:da10:: with SMTP id c16mr4729268pgh.221.1618877361269;
-        Mon, 19 Apr 2021 17:09:21 -0700 (PDT)
+        bh=SsLXhOzfHBDNZCZ7nQTSILMlUeGYRY2L9BeG/9n7EB0=;
+        b=novhX6Uh9MoNBUPAXGS4zi84yvQZD4rd7NVLBUTjh6QMPzHA9pM3d51H1sF5wjkK6l
+         vXX7aIep7hFpcFuUk/UGQkKGrAE5vAAUWHbJ3VnXYPbUtFBnQJgyiGJW4SbeSbrTuPsT
+         eOgW1byI9tM+pQB/139i0aOZOSLeb9toS44ZJlNZNZqiEKO0W2piSSPKoQoRX0HpF/Qg
+         63RFZIAp0cktQ1OQSPLC6X8j4ZaoRDQ4Da15qwibXmw+8a8djDMEPcU5g30ZT/0S6/KA
+         uU1fk+BogFVvWYqoMVhz3ElTAjGx9Jao5CCprfn/7cerjpsD3sg52sH2qqCT7pAXs6+X
+         fjyA==
+X-Gm-Message-State: AOAM533yZhbDsR5xNzlXNBVIBhR5IfyQXs/CkESuQpqR5R+fjwizKMzC
+        kSrcQHN13Sdlo3BJvPLy8kI=
+X-Google-Smtp-Source: ABdhPJzflTSorFy+QVf49kfd1b7lJ7lx3nA0gLLTIb2CxbmFyzmYfaJUyHgnOv3qbREHmAh3KP8arQ==
+X-Received: by 2002:a63:c806:: with SMTP id z6mr13877527pgg.240.1618877362376;
+        Mon, 19 Apr 2021 17:09:22 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:3e77:56a4:910b:42a9])
-        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.09.20
+        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.09.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 17:09:20 -0700 (PDT)
+        Mon, 19 Apr 2021 17:09:21 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
         Russell King <linux@armlinux.org.uk>
-Subject: [PATCH 025/117] acornscsi: Annotate fallthrough
-Date:   Mon, 19 Apr 2021 17:07:13 -0700
-Message-Id: <20210420000845.25873-26-bvanassche@acm.org>
+Subject: [PATCH 026/117] acornscsi: Convert to the scsi_status union
+Date:   Mon, 19 Apr 2021 17:07:14 -0700
+Message-Id: <20210420000845.25873-27-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210420000845.25873-1-bvanassche@acm.org>
 References: <20210420000845.25873-1-bvanassche@acm.org>
@@ -51,42 +51,110 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch suppresses the following compiler warning:
-
-In file included from ./include/linux/bitops.h:32:0,
-                 from ./include/linux/kernel.h:11,
-                 from ./include/linux/list.h:9,
-                 from ./include/linux/module.h:12,
-                 from drivers/scsi/arm/acornscsi.c:116:
-drivers/scsi/arm/acornscsi.c: In function 'acornscsi_abort':
-./arch/arm/include/asm/bitops.h:181:55: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-./arch/arm/include/asm/bitops.h:190:27: note: in expansion of macro 'ATOMIC_BITOP'
- #define clear_bit(nr,p)   ATOMIC_BITOP(clear_bit,nr,p)
-                           ^~~~~~~~~~~~
-drivers/scsi/arm/acornscsi.c:2667:3: note: in expansion of macro 'clear_bit'
-   clear_bit(SCpnt->device->id * 8 +
-   ^~~~~~~~~
-drivers/scsi/arm/acornscsi.c:2675:2: note: here
-  case res_success:
-  ^~~~
+An explanation of the purpose of this patch is available in the patch
+"scsi: Introduce the scsi_status union".
 
 Cc: Russell King <linux@armlinux.org.uk>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/arm/acornscsi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/arm/acornscsi.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
-index 248a5bfad153..912828d1dcad 100644
+index 912828d1dcad..dd111ec4d7db 100644
 --- a/drivers/scsi/arm/acornscsi.c
 +++ b/drivers/scsi/arm/acornscsi.c
-@@ -2664,6 +2664,7 @@ int acornscsi_abort(struct scsi_cmnd *SCpnt)
- //#endif
- 		clear_bit(SCpnt->device->id * 8 +
- 			  (u8)(SCpnt->device->lun & 0x7), host->busyluns);
-+		fallthrough;
+@@ -168,7 +168,7 @@ unsigned int sdtr_period = SDTR_PERIOD;
+ unsigned int sdtr_size   = SDTR_SIZE;
+ 
+ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
+-			   unsigned int result);
++			   enum host_status result);
+ static int acornscsi_reconnect_finish(AS_Host *host);
+ static void acornscsi_dma_cleanup(AS_Host *host);
+ static void acornscsi_abortcmd(AS_Host *host, unsigned char tag);
+@@ -773,14 +773,13 @@ intr_ret_t acornscsi_kick(AS_Host *host)
+     return INTR_PROCESSING;
+ }    
+ 
+-/*
+- * Function: void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp, unsigned int result)
+- * Purpose : complete processing for command
+- * Params  : host   - interface that completed
+- *	     result - driver byte of result
++/**
++ * acornscsi_done - complete processing for command
++ * @host: interface that completed
++ * @result: host status byte (DID_...)
+  */
+ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
+-			   unsigned int result)
++			   enum host_status result)
+ {
+ 	struct scsi_cmnd *SCpnt = *SCpntp;
+ 
+@@ -794,7 +793,9 @@ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
+ 
+ 	acornscsi_dma_cleanup(host);
+ 
+-	SCpnt->result = result << 16 | host->scsi.SCp.Message << 8 | host->scsi.SCp.Status;
++	SCpnt->status = (union scsi_status){
++		.b.host = result, .b.msg = host->scsi.SCp.Message,
++		.b.status = host->scsi.SCp.Status};
  
  	/*
- 	 * We found the command, and cleared it out.  Either
+ 	 * In theory, this should not happen.  In practice, it seems to.
+@@ -833,7 +834,7 @@ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
+ 			xfer_warn = 0;
+ 
+ 		if (xfer_warn) {
+-		    switch (status_byte(SCpnt->result)) {
++		    switch (status_byte(SCpnt->status)) {
+ 		    case CHECK_CONDITION:
+ 		    case COMMAND_TERMINATED:
+ 		    case BUSY:
+@@ -844,7 +845,7 @@ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
+ 		    default:
+ 			scmd_printk(KERN_ERR, SCpnt,
+ 				    "incomplete data transfer detected: "
+-				    "result=%08X", SCpnt->result);
++				    "result=%08X", SCpnt->status.combined);
+ 			scsi_print_command(SCpnt);
+ 			acornscsi_dumpdma(host, "done");
+ 			acornscsi_dumplog(host, SCpnt->device->id);
+@@ -2470,7 +2471,7 @@ static int acornscsi_queuecmd_lck(struct scsi_cmnd *SCpnt,
+     if (acornscsi_cmdtype(SCpnt->cmnd[0]) == CMD_WRITE && (NO_WRITE & (1 << SCpnt->device->id))) {
+ 	printk(KERN_CRIT "scsi%d.%c: WRITE attempted with NO_WRITE flag set\n",
+ 	    host->host->host_no, '0' + SCpnt->device->id);
+-	SCpnt->result = DID_NO_CONNECT << 16;
++	SCpnt->status.combined = DID_NO_CONNECT << 16;
+ 	done(SCpnt);
+ 	return 0;
+     }
+@@ -2478,7 +2479,7 @@ static int acornscsi_queuecmd_lck(struct scsi_cmnd *SCpnt,
+ 
+     SCpnt->scsi_done = done;
+     SCpnt->host_scribble = NULL;
+-    SCpnt->result = 0;
++    SCpnt->status.combined = 0;
+     SCpnt->tag = 0;
+     SCpnt->SCp.phase = (int)acornscsi_datadirection(SCpnt->cmnd[0]);
+     SCpnt->SCp.sent_command = 0;
+@@ -2492,7 +2493,7 @@ static int acornscsi_queuecmd_lck(struct scsi_cmnd *SCpnt,
+ 	unsigned long flags;
+ 
+ 	if (!queue_add_cmd_ordered(&host->queues.issue, SCpnt)) {
+-	    SCpnt->result = DID_ERROR << 16;
++	    SCpnt->status.combined = DID_ERROR << 16;
+ 	    done(SCpnt);
+ 	    return 0;
+ 	}
+@@ -2523,7 +2524,7 @@ static inline void acornscsi_reportstatus(struct scsi_cmnd **SCpntp1,
+     if (SCpnt) {
+ 	*SCpntp1 = NULL;
+ 
+-	SCpnt->result = result;
++	SCpnt->status.combined = result;
+ 	SCpnt->scsi_done(SCpnt);
+     }
+ 
