@@ -2,213 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B98CC365FEA
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 21:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742AF366056
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 21:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbhDTTAt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 20 Apr 2021 15:00:49 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:52998 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233541AbhDTTAm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 20 Apr 2021 15:00:42 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 572CE413A2;
-        Tue, 20 Apr 2021 19:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from:received:received:received; s=mta-01; t=
-        1618945208; x=1620759609; bh=c1tS4oeh7lbe3X2QVse23nsU2MfIanOAt/b
-        YyhlsNbg=; b=u7mYeDR7E2nX3+hcTpaxvWpm5cC0rsVmbFHltMGCpwsHPtm1Dh+
-        gW/4LSCk7DUpsVvSVyI1Q0YtnvvMWwDGDjMmgp20CRZj44O35GIXiucMQ5q9KbZI
-        bYkPJoOotdsK6g4u07uZpIA3SeC2xi8dagSj9OR6v6nDeueE0YQOUj6I=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 6BL9g7FJGqtb; Tue, 20 Apr 2021 22:00:08 +0300 (MSK)
-Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 0846A41318;
-        Tue, 20 Apr 2021 22:00:08 +0300 (MSK)
-Received: from yadro.com (10.199.0.227) by T-EXCH-03.corp.yadro.com
- (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Tue, 20
- Apr 2021 22:00:07 +0300
-From:   Sergey Samoylenko <s.samoylenko@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     David Disseldorp <ddiss@suse.de>, <linux-scsi@vger.kernel.org>,
-        <linux@yadro.com>, Sergey Samoylenko <s.samoylenko@yadro.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: [PATCH RESEND 2/2] scsi: target: core: Add IEEE Company ID attribute
-Date:   Tue, 20 Apr 2021 21:59:20 +0300
-Message-ID: <20210420185920.42431-3-s.samoylenko@yadro.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210420185920.42431-1-s.samoylenko@yadro.com>
-References: <20210420185920.42431-1-s.samoylenko@yadro.com>
+        id S233619AbhDTTkM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 20 Apr 2021 15:40:12 -0400
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:33697 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233541AbhDTTkL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 20 Apr 2021 15:40:11 -0400
+Received: by mail-wr1-f48.google.com with SMTP id g9so22884259wrx.0
+        for <linux-scsi@vger.kernel.org>; Tue, 20 Apr 2021 12:39:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R+fRjganmD0Za5jtkx9OW3xS0KFUJi864IsL/gBz6Qs=;
+        b=pl9IDR6y915/j6pt+mANnySlhjhPWvDSJ+npEIbLFkX9SKCh5sSmxGRx+rijobZVBg
+         7EpIyqWd0Aw+Tjr8+Rqw9rKDvC59M/VXxskqka6S7CApoxSNNpw3LuVNmd0ni8prKx6w
+         sLWwaxYiUtK+Op+txoQY3nChPUHZ3scNj5xY5dxDL4p7jbh5rPjMpBLPeLeG+UpfmOgP
+         LCwD/2ow59UlvL8U0Z4skbUlSmOLOMF43F/4Xm823b6MxqtBLIsNvYEby0JYgcVW/P+x
+         NsJkPPi4/AbqzxNa6vb777APbMkRMaGodoRatEqHqmTk9I0VayZiLlbgjjQsFGX9hOxv
+         I8Kw==
+X-Gm-Message-State: AOAM531lHsR4SOfq4UXerQZuZR4Oq+xqg/2zDRRKAhe7/3X3v0wh2/2t
+        Iz9k3ouiJfz51oktHJ6kTzk=
+X-Google-Smtp-Source: ABdhPJzvId3kfMsPCwMVreqfCA81lgfLtjMk1zkZ2fdJ/KTV6942QWp6/+8upxU1xv+QWT4M/P0WYA==
+X-Received: by 2002:a5d:47cc:: with SMTP id o12mr22350255wrc.227.1618947577827;
+        Tue, 20 Apr 2021 12:39:37 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id c18sm28447922wrn.92.2021.04.20.12.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Apr 2021 12:39:37 -0700 (PDT)
+Date:   Tue, 20 Apr 2021 19:39:35 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Don Brace <don.brace@microchip.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH 095/117] storvsc: Convert to the scsi_status union
+Message-ID: <20210420193935.abhufyr77nlbfsca@liuwe-devbox-debian-v2>
+References: <20210420000845.25873-1-bvanassche@acm.org>
+ <20210420021402.27678-5-bvanassche@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.0.227]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-03.corp.yadro.com (172.17.100.103)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210420021402.27678-5-bvanassche@acm.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The attribute provides a way to set a company specific WWN
-in configfs via:
+On Mon, Apr 19, 2021 at 07:13:40PM -0700, Bart Van Assche wrote:
+> An explanation of the purpose of this patch is available in the patch
+> "scsi: Introduce the scsi_status union".
+> 
+> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+> Cc: Haiyang Zhang <haiyangz@microsoft.com>
+> Cc: Stephen Hemminger <sthemmin@microsoft.com>
+> Cc: Wei Liu <wei.liu@kernel.org>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-  target/core/$backstore/$name/wwn/company_id
+If this is ever needed:
 
-001405h remains default value for company id.
-
-Signed-off-by: Sergey Samoylenko <s.samoylenko@yadro.com>
-Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
----
- drivers/target/target_core_configfs.c | 50 +++++++++++++++++++++++++++
- drivers/target/target_core_device.c   |  5 +++
- drivers/target/target_core_spc.c      | 14 ++++----
- include/target/target_core_base.h     |  1 +
- 4 files changed, 63 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index 4b2e49341ad6..d6fd2779355a 100644
---- a/drivers/target/target_core_configfs.c
-+++ b/drivers/target/target_core_configfs.c
-@@ -1479,6 +1479,54 @@ static ssize_t target_wwn_revision_store(struct config_item *item,
- 	return count;
- }
- 
-+static ssize_t
-+target_wwn_company_id_show(struct config_item *item,
-+				char *page)
-+{
-+	return snprintf(page, PAGE_SIZE, "%#08x\n",
-+			to_t10_wwn(item)->company_id);
-+}
-+
-+static ssize_t
-+target_wwn_company_id_store(struct config_item *item,
-+				 const char *page, size_t count)
-+{
-+	struct t10_wwn *t10_wwn = to_t10_wwn(item);
-+	struct se_device *dev = t10_wwn->t10_dev;
-+	u32 val;
-+	int ret;
-+
-+	/*
-+	 * The IEEE COMPANY_ID field should contain a 24-bit canonical
-+	 * form OUI assigned by the IEEE.
-+	 */
-+	ret = kstrtou32(page, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (val >= 0x1000000)
-+		return -EOVERFLOW;
-+
-+	/*
-+	 * Check to see if any active exports exist. If they do exist, fail
-+	 * here as changing this information on the fly (underneath the
-+	 * initiator side OS dependent multipath code) could cause negative
-+	 * effects.
-+	 */
-+	if (dev->export_count) {
-+		pr_err("Unable to set Company ID while %d exports exist\n",
-+		       dev->export_count);
-+		return -EINVAL;
-+	}
-+
-+	t10_wwn->company_id = val;
-+
-+	pr_debug("Target_Core_ConfigFS: Set IEEE Company ID: %#08x\n",
-+		 t10_wwn->company_id);
-+
-+	return count;
-+}
-+
- /*
-  * VPD page 0x80 Unit serial
-  */
-@@ -1625,6 +1673,7 @@ DEF_DEV_WWN_ASSOC_SHOW(vpd_assoc_scsi_target_device, 0x20);
- CONFIGFS_ATTR(target_wwn_, vendor_id);
- CONFIGFS_ATTR(target_wwn_, product_id);
- CONFIGFS_ATTR(target_wwn_, revision);
-+CONFIGFS_ATTR(target_wwn_, company_id);
- CONFIGFS_ATTR(target_wwn_, vpd_unit_serial);
- CONFIGFS_ATTR_RO(target_wwn_, vpd_protocol_identifier);
- CONFIGFS_ATTR_RO(target_wwn_, vpd_assoc_logical_unit);
-@@ -1635,6 +1684,7 @@ static struct configfs_attribute *target_core_dev_wwn_attrs[] = {
- 	&target_wwn_attr_vendor_id,
- 	&target_wwn_attr_product_id,
- 	&target_wwn_attr_revision,
-+	&target_wwn_attr_company_id,
- 	&target_wwn_attr_vpd_unit_serial,
- 	&target_wwn_attr_vpd_protocol_identifier,
- 	&target_wwn_attr_vpd_assoc_logical_unit,
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index a8df9f0a82fa..8cb1fa0c0585 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -773,6 +773,11 @@ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
- 	spin_lock_init(&dev->t10_alua.lba_map_lock);
- 
- 	dev->t10_wwn.t10_dev = dev;
-+	/*
-+	 * Use OpenFabrics IEEE Company ID: 00 14 05
-+	 */
-+	dev->t10_wwn.company_id = 0x001405;
-+
- 	dev->t10_alua.t10_dev = dev;
- 
- 	dev->dev_attrib.da_dev = dev;
-diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
-index b2d19493a994..fe5d5ce4099c 100644
---- a/drivers/target/target_core_spc.c
-+++ b/drivers/target/target_core_spc.c
-@@ -136,20 +136,20 @@ void spc_gen_naa_6h_vendor_specific(struct se_device *dev,
- 				    unsigned char *buf)
- {
- 	unsigned char *p = &dev->t10_wwn.unit_serial[0];
-+	u32 company_id = dev->t10_wwn.company_id;
- 	int cnt, off = 0;
- 	bool next = true;
- 
- 	/*
- 	 * Start NAA IEEE Registered Extended Identifier/Designator
- 	 */
--	buf[off++] = 0x6 << 4;
-+	buf[off] = 0x6 << 4;
- 
--	/*
--	 * Use OpenFabrics IEEE Company ID: 00 14 05
--	 */
--	buf[off++] = 0x01;
--	buf[off++] = 0x40;
--	buf[off] = (0x5 << 4);
-+	/* IEEE COMPANY_ID */
-+	buf[off++] |= (company_id >> 20) & 0xf;
-+	buf[off++] = (company_id >> 12) & 0xff;
-+	buf[off++] = (company_id >> 4) & 0xff;
-+	buf[off] = (company_id & 0xf) << 4;
- 
- 	/*
- 	 * Generate up to 36 bits of VENDOR SPECIFIC IDENTIFIER starting on
-diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
-index d1f7d2a45354..85c16c266eac 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -326,6 +326,7 @@ struct t10_wwn {
- 	char model[INQUIRY_MODEL_LEN + 1];
- 	char revision[INQUIRY_REVISION_LEN + 1];
- 	char unit_serial[INQUIRY_VPD_SERIAL_LEN];
-+	u32 company_id;
- 	spinlock_t t10_vpd_lock;
- 	struct se_device *t10_dev;
- 	struct config_group t10_wwn_group;
--- 
-2.27.0
-
+Acked-by: Wei Liu <wei.liu@kernel.org>
