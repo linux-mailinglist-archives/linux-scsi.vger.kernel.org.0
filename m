@@ -2,48 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 151A7364F21
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 02:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91C5364F24
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 02:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbhDTAKY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Apr 2021 20:10:24 -0400
-Received: from mail-pg1-f181.google.com ([209.85.215.181]:39445 "EHLO
-        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbhDTAKI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:10:08 -0400
-Received: by mail-pg1-f181.google.com with SMTP id s22so4290808pgk.6
-        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:09:37 -0700 (PDT)
+        id S230382AbhDTAKZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Apr 2021 20:10:25 -0400
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:41956 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233570AbhDTAKK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:10:10 -0400
+Received: by mail-pj1-f44.google.com with SMTP id y22-20020a17090a8b16b0290150ae1a6d2bso2541592pjn.0
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:09:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yGpyfe1y9hdi7f1v0mhsqFa9PYwPbUjfmXXPgGJ412U=;
-        b=Fx9EZsRi59vBf8GHvF26EUVHBdsmOZtei13gw2VJ1zx2GtdlQZ11OQzkfT9KI8t/Or
-         b9u39v/NkiiGJRqbvZVNx5RGlyHQ0TJulX/aNOmsFPEh/eXKO4U33OGKXiHXF9Ax0hdj
-         OVwiqwJhtlghFBY0BWAx0hNuhlR6/rqc0c7tTwdnap914LCsl7bYXszEI7OiCqzqvqPE
-         uW503o8kRbB2A0v+nNdgNKN+13rDUo3aDyYgDmgvglWHAHR6Xv29j9BEM6KXKP5Kb24B
-         gIGJKlnhdSXZ8CdNGGwvzXgoIVYhpnQB5gSwnvom97kCMIS+wwq8fCIOni7P6I4O5XZK
-         zxUw==
-X-Gm-Message-State: AOAM533Ode7xBaS5efsHlsMhAHI7l/ZPdnJN/VKn37p00AFfenImAT1h
-        0TNw4o9gQHYMlKhAArEz+a0=
-X-Google-Smtp-Source: ABdhPJxLBV+gkulKQ6zpaWxp9+GKQN5rHrOuOvGyzkWA+gL0aOcRyYAzw6NDx0DCm8gEOctXAsgbWg==
-X-Received: by 2002:a63:ff0a:: with SMTP id k10mr14530972pgi.303.1618877377405;
-        Mon, 19 Apr 2021 17:09:37 -0700 (PDT)
+        bh=d9FdBKQgIaEDCc3LsQu6uWep6uErvCjZ3+grnSx6rQQ=;
+        b=p9IE9WUHs7epBaIuSH7ofzobqd7xNYDtreWE3NF72QiZLY6y5KohXXdHBG8j2InyS4
+         vWil/r595c74muh2zkegMEDfeBOJTHTVGzRa4Uocpznq1OstVFxc7j5ld4jY+JrQIAVy
+         yKTrRjkBMPKsyFkUgEwYDWltwnY8Hza3+7oz9PSxc60+ued+lOwJyBlIrRNp6L6U9wU4
+         Na41FlcisU5PpU42mgfxpOH2eY8WqW1ezooaEOt4ZwTYgrAhML2gd63o47jk5vo2GYzC
+         a7Mu3zL/6S1ivIn6Vun8Hhk9Ch4I9t6h6nvZuJMiR/Fzs1aUvSMGGMk3zNcGcgYco5Mv
+         5xzg==
+X-Gm-Message-State: AOAM531mznJH7nQrNUdF93oJ5bjcowXwQ1U0+b+AvAHoT7moYeyJh2Hp
+        T1xiRLtqAL0p8KNXjpq01RU=
+X-Google-Smtp-Source: ABdhPJyS3XEXAW6Y8bo9W0R9Jm1rWxqd+3PoXLj+BI4ZzizcQF8bUrOAA3fhlPGqiuQxmw7pyudwJw==
+X-Received: by 2002:a17:902:dacd:b029:e5:cf71:3901 with SMTP id q13-20020a170902dacdb02900e5cf713901mr25021154plx.23.1618877378581;
+        Mon, 19 Apr 2021 17:09:38 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:3e77:56a4:910b:42a9])
-        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.09.36
+        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.09.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 17:09:36 -0700 (PDT)
+        Mon, 19 Apr 2021 17:09:38 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        "Manoj N . Kumar" <manoj@linux.ibm.com>,
-        "Matthew R . Ochs" <mrochs@linux.ibm.com>,
-        Uma Krishnan <ukrishn@linux.ibm.com>
-Subject: [PATCH 039/117] cxlflash: Convert to the scsi_status union
-Date:   Mon, 19 Apr 2021 17:07:27 -0700
-Message-Id: <20210420000845.25873-40-bvanassche@acm.org>
+        Oliver Neukum <oliver@neukum.org>,
+        Ali Akcaagac <aliakc@web.de>,
+        Jamie Lenehan <lenehan@twibble.org>
+Subject: [PATCH 040/117] dc395x: Use the set_{host,msg,status}_byte() functions
+Date:   Mon, 19 Apr 2021 17:07:28 -0700
+Message-Id: <20210420000845.25873-41-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210420000845.25873-1-bvanassche@acm.org>
 References: <20210420000845.25873-1-bvanassche@acm.org>
@@ -53,190 +53,85 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-An explanation of the purpose of this patch is available in the patch
-"scsi: Introduce the scsi_status union".
+Use the set_{host,msg,status}_byte() functions instead of the
+SET_RES_*() macros. This patch does not change any functionality.
 
-Cc: Manoj N. Kumar <manoj@linux.ibm.com>
-Cc: Matthew R. Ochs <mrochs@linux.ibm.com>
-Cc: Uma Krishnan <ukrishn@linux.ibm.com>
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: Ali Akcaagac <aliakc@web.de>
+Cc: Jamie Lenehan <lenehan@twibble.org>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/cxlflash/main.c      | 32 +++++++++++++++----------------
- drivers/scsi/cxlflash/superpipe.c | 16 ++++++++--------
- 2 files changed, 24 insertions(+), 24 deletions(-)
+ drivers/scsi/dc395x.c | 29 +++++++++--------------------
+ 1 file changed, 9 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/scsi/cxlflash/main.c b/drivers/scsi/cxlflash/main.c
-index dc36531d589e..8c5c28f29911 100644
---- a/drivers/scsi/cxlflash/main.c
-+++ b/drivers/scsi/cxlflash/main.c
-@@ -59,7 +59,7 @@ static void process_cmd_err(struct afu_cmd *cmd, struct scsi_cmnd *scp)
- 	if (ioasa->rc.flags & SISL_RC_FLAGS_OVERRUN) {
- 		dev_dbg(dev, "%s: cmd underrun cmd = %p scp = %p\n",
- 			__func__, cmd, scp);
--		scp->result = (DID_ERROR << 16);
-+		scp->status.combined = (DID_ERROR << 16);
- 	}
+diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
+index be87d5a7583d..6252352ddd96 100644
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -160,22 +160,11 @@
+ #define DC395x_write16(acb,address,value)	outw((value), acb->io_port_base + (address))
+ #define DC395x_write32(acb,address,value)	outl((value), acb->io_port_base + (address))
  
- 	dev_dbg(dev, "%s: cmd failed afu_rc=%02x scsi_rc=%02x fc_rc=%02x "
-@@ -72,20 +72,20 @@ static void process_cmd_err(struct afu_cmd *cmd, struct scsi_cmnd *scp)
- 		if (ioasa->rc.flags & SISL_RC_FLAGS_SENSE_VALID) {
- 			memcpy(scp->sense_buffer, ioasa->sense_data,
- 			       SISL_SENSE_DATA_LEN);
--			scp->result = ioasa->rc.scsi_rc;
-+			scp->status.combined = ioasa->rc.scsi_rc;
- 		} else
--			scp->result = ioasa->rc.scsi_rc | (DID_ERROR << 16);
-+			scp->status.combined = ioasa->rc.scsi_rc | (DID_ERROR << 16);
- 	}
+-/* cmd->result */
+-#define RES_TARGET		0x000000FF	/* Target State */
+-#define RES_TARGET_LNX  STATUS_MASK	/* Only official ... */
+-#define RES_ENDMSG		0x0000FF00	/* End Message */
+ #define RES_DID			0x00FF0000	/* DID_ codes */
+-#define RES_DRV			0xFF000000	/* DRIVER_ codes */
  
- 	/*
--	 * We encountered an error. Set scp->result based on nature
-+	 * We encountered an error. Set scp->status based on nature
- 	 * of error.
- 	 */
- 	if (ioasa->rc.fc_rc) {
- 		/* We have an FC status */
- 		switch (ioasa->rc.fc_rc) {
- 		case SISL_FC_RC_LINKDOWN:
--			scp->result = (DID_REQUEUE << 16);
-+			scp->status.combined = (DID_REQUEUE << 16);
- 			break;
- 		case SISL_FC_RC_RESID:
- 			/* This indicates an FCP resid underrun */
-@@ -95,7 +95,7 @@ static void process_cmd_err(struct afu_cmd *cmd, struct scsi_cmnd *scp)
- 				 * If not then we must handle it here.
- 				 * This is probably an AFU bug.
- 				 */
--				scp->result = (DID_ERROR << 16);
-+				scp->status.combined = (DID_ERROR << 16);
- 			}
- 			break;
- 		case SISL_FC_RC_RESIDERR:
-@@ -108,7 +108,7 @@ static void process_cmd_err(struct afu_cmd *cmd, struct scsi_cmnd *scp)
- 		case SISL_FC_RC_WRABORTPEND:
- 		case SISL_FC_RC_NOEXP:
- 		case SISL_FC_RC_INUSE:
--			scp->result = (DID_ERROR << 16);
-+			scp->status.combined = (DID_ERROR << 16);
- 			break;
- 		}
- 	}
-@@ -117,25 +117,25 @@ static void process_cmd_err(struct afu_cmd *cmd, struct scsi_cmnd *scp)
- 		/* We have an AFU error */
- 		switch (ioasa->rc.afu_rc) {
- 		case SISL_AFU_RC_NO_CHANNELS:
--			scp->result = (DID_NO_CONNECT << 16);
-+			scp->status.combined = (DID_NO_CONNECT << 16);
- 			break;
- 		case SISL_AFU_RC_DATA_DMA_ERR:
- 			switch (ioasa->afu_extra) {
- 			case SISL_AFU_DMA_ERR_PAGE_IN:
- 				/* Retry */
--				scp->result = (DID_IMM_RETRY << 16);
-+				scp->status.combined = (DID_IMM_RETRY << 16);
- 				break;
- 			case SISL_AFU_DMA_ERR_INVALID_EA:
- 			default:
--				scp->result = (DID_ERROR << 16);
-+				scp->status.combined = (DID_ERROR << 16);
- 			}
- 			break;
- 		case SISL_AFU_RC_OUT_OF_DATA_BUFS:
- 			/* Retry */
--			scp->result = (DID_ALLOC_FAILURE << 16);
-+			scp->status.combined = (DID_ALLOC_FAILURE << 16);
- 			break;
- 		default:
--			scp->result = (DID_ERROR << 16);
-+			scp->status.combined = (DID_ERROR << 16);
- 		}
- 	}
- }
-@@ -167,10 +167,10 @@ static void cmd_complete(struct afu_cmd *cmd)
- 		if (unlikely(cmd->sa.ioasc))
- 			process_cmd_err(cmd, scp);
+ #define MK_RES(drv,did,msg,tgt) ((int)(drv)<<24 | (int)(did)<<16 | (int)(msg)<<8 | (int)(tgt))
+ #define MK_RES_LNX(drv,did,msg,tgt) ((int)(drv)<<24 | (int)(did)<<16 | (int)(msg)<<8 | (int)(tgt)<<1)
+ 
+-#define SET_RES_TARGET(who,tgt) { who &= ~RES_TARGET; who |= (int)(tgt); }
+-#define SET_RES_TARGET_LNX(who,tgt) { who &= ~RES_TARGET_LNX; who |= (int)(tgt) << 1; }
+-#define SET_RES_MSG(who,msg) { who &= ~RES_ENDMSG; who |= (int)(msg) << 8; }
+-#define SET_RES_DID(who,did) { who &= ~RES_DID; who |= (int)(did) << 16; }
+-#define SET_RES_DRV(who,drv) { who &= ~RES_DRV; who |= (int)(drv) << 24; }
+-
+ #define TAG_NONE 255
+ 
+ /*
+@@ -3244,7 +3233,7 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 			cmd->result =
+ 			    MK_RES_LNX(DRIVER_SENSE, DID_OK,
+ 				       srb->end_message, CHECK_CONDITION);
+-		/*SET_RES_DID(cmd->result,DID_OK) */
++		/*set_host_byte(cmd,DID_OK) */
  		else
--			scp->result = (DID_OK << 16);
-+			scp->status.combined = (DID_OK << 16);
- 
- 		dev_dbg_ratelimited(dev, "%s:scp=%p result=%08x ioasc=%08x\n",
--				    __func__, scp, scp->result, cmd->sa.ioasc);
-+				    __func__, scp, scp->status.combined, cmd->sa.ioasc);
- 		scp->scsi_done(scp);
- 	} else if (cmd->cmd_tmf) {
- 		spin_lock_irqsave(&cfg->tmf_slock, lock_flags);
-@@ -204,7 +204,7 @@ static void flush_pending_cmds(struct hwq *hwq)
- 
- 		if (cmd->scp) {
- 			scp = cmd->scp;
--			scp->result = (DID_IMM_RETRY << 16);
-+			scp->status.combined = (DID_IMM_RETRY << 16);
- 			scp->scsi_done(scp);
+ 			cmd->result =
+ 			    MK_RES_LNX(DRIVER_SENSE, DID_OK,
+@@ -3280,9 +3269,9 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 			cmd->result = DID_NO_CONNECT << 16;
  		} else {
- 			cmd->cmd_aborted = true;
-@@ -600,7 +600,7 @@ static int cxlflash_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scp)
- 		goto out;
- 	case STATE_FAILTERM:
- 		dev_dbg_ratelimited(dev, "%s: device has failed\n", __func__);
--		scp->result = (DID_NO_CONNECT << 16);
-+		scp->status.combined = (DID_NO_CONNECT << 16);
- 		scp->scsi_done(scp);
- 		rc = 0;
- 		goto out;
-diff --git a/drivers/scsi/cxlflash/superpipe.c b/drivers/scsi/cxlflash/superpipe.c
-index ee11ec340654..4a19a154e237 100644
---- a/drivers/scsi/cxlflash/superpipe.c
-+++ b/drivers/scsi/cxlflash/superpipe.c
-@@ -336,7 +336,7 @@ static int read_cap16(struct scsi_device *sdev, struct llun_info *lli)
- 	u8 *cmd_buf = NULL;
- 	u8 *scsi_cmd = NULL;
- 	int rc = 0;
--	int result = 0;
-+	union scsi_status result;
- 	int retry_cnt = 0;
- 	u32 to = CMD_TIMEOUT * HZ;
+ 			srb->adapter_status = 0;
+-			SET_RES_DID(cmd->result, DID_ERROR);
+-			SET_RES_MSG(cmd->result, srb->end_message);
+-			SET_RES_TARGET(cmd->result, status);
++			set_host_byte(cmd, DID_ERROR);
++			set_msg_byte(cmd, srb->end_message);
++			set_status_byte(cmd, status);
  
-@@ -357,26 +357,26 @@ static int read_cap16(struct scsi_device *sdev, struct llun_info *lli)
+ 		}
+ 	} else {
+@@ -3292,16 +3281,16 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 		status = srb->adapter_status;
+ 		if (status & H_OVER_UNDER_RUN) {
+ 			srb->target_status = 0;
+-			SET_RES_DID(cmd->result, DID_OK);
+-			SET_RES_MSG(cmd->result, srb->end_message);
++			set_host_byte(cmd, DID_OK);
++			set_msg_byte(cmd, srb->end_message);
+ 		} else if (srb->status & PARITY_ERROR) {
+-			SET_RES_DID(cmd->result, DID_PARITY);
+-			SET_RES_MSG(cmd->result, srb->end_message);
++			set_host_byte(cmd, DID_PARITY);
++			set_msg_byte(cmd, srb->end_message);
+ 		} else {	/* No error */
  
- 	/* Drop the ioctl read semahpore across lengthy call */
- 	up_read(&cfg->ioctl_rwsem);
--	result = scsi_execute(sdev, scsi_cmd, DMA_FROM_DEVICE, cmd_buf,
-+	result.combined = scsi_execute(sdev, scsi_cmd, DMA_FROM_DEVICE, cmd_buf,
- 			      CMD_BUFSIZE, NULL, &sshdr, to, CMD_RETRIES,
- 			      0, 0, NULL);
- 	down_read(&cfg->ioctl_rwsem);
- 	rc = check_state(cfg);
- 	if (rc) {
- 		dev_err(dev, "%s: Failed state result=%08x\n",
--			__func__, result);
-+			__func__, result.combined);
- 		rc = -ENODEV;
- 		goto out;
- 	}
- 
- 	if (driver_byte(result) == DRIVER_SENSE) {
--		result &= ~(0xFF<<24); /* DRIVER_SENSE is not an error */
--		if (result & SAM_STAT_CHECK_CONDITION) {
-+		result.b.driver = DRIVER_OK; /* DRIVER_SENSE is not an error */
-+		if (result.b.status & SAM_STAT_CHECK_CONDITION) {
- 			switch (sshdr.sense_key) {
- 			case NO_SENSE:
- 			case RECOVERED_ERROR:
- 			case NOT_READY:
--				result &= ~SAM_STAT_CHECK_CONDITION;
-+				result.b.status &= ~SAM_STAT_CHECK_CONDITION;
- 				break;
- 			case UNIT_ATTENTION:
- 				switch (sshdr.asc) {
-@@ -398,9 +398,9 @@ static int read_cap16(struct scsi_device *sdev, struct llun_info *lli)
+ 			srb->adapter_status = 0;
+ 			srb->target_status = 0;
+-			SET_RES_DID(cmd->result, DID_OK);
++			set_host_byte(cmd, DID_OK);
  		}
  	}
  
--	if (result) {
-+	if (result.combined) {
- 		dev_err(dev, "%s: command failed, result=%08x\n",
--			__func__, result);
-+			__func__, result.combined);
- 		rc = -EIO;
- 		goto out;
- 	}
