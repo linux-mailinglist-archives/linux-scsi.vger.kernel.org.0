@@ -2,46 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AFD364F4B
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 02:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF616364F4D
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 02:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbhDTALT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Apr 2021 20:11:19 -0400
-Received: from mail-pf1-f179.google.com ([209.85.210.179]:35514 "EHLO
-        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbhDTAKz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:10:55 -0400
-Received: by mail-pf1-f179.google.com with SMTP id h15so6629092pfv.2
-        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:10:25 -0700 (PDT)
+        id S234098AbhDTALY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Apr 2021 20:11:24 -0400
+Received: from mail-pj1-f41.google.com ([209.85.216.41]:42937 "EHLO
+        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234073AbhDTAK5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:10:57 -0400
+Received: by mail-pj1-f41.google.com with SMTP id j6-20020a17090adc86b02900cbfe6f2c96so19465391pjv.1
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:10:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DUfvHdsajaZVu35LKcKGz0ETJBRszLXKGnaU5jF/o8A=;
-        b=PNrOpOFrw7AxPbAoK03xth6f3qDNl2U02ycHXuZDMEfi1elxoL0JXv+e4V/5hK6HpV
-         TuMMZuQtbp5yrzpyq4IA75kz38LFiE9OEQFEYlUl/lLUgDwsVucgmc1I49NAL7/WLIJx
-         TFw2DLVBg79t3AMajgXa+0zVhR/XMi59NINuLwKZ/UrwF7aFtRWf6MoFx8i3rn4WLWMq
-         dSfrqw32gblhhmaA0rs0CErpYp7WpYArkaLfL8w+OQBxytz4jJEoEaQ+4pnbgU2BWqJQ
-         xA3iy1myfHoqu/EVf1vkiMLFPM+VeFEVTJBH2AZP6LB+svX4dFpb7UhOG/eh5i/jqjzC
-         JSgg==
-X-Gm-Message-State: AOAM530BAar9m4uZWEXFoGq9FWNhY7ynydHwBxH05jzR+Mx470ApShVY
-        DOut/064rqlfG2eUQr3v/AM=
-X-Google-Smtp-Source: ABdhPJx913ApOsh9Y0fnNqSoicrH9drTz0V2p36sXfQRmHvcggD6l35KG+ab76GcIhv3HC7mHILQ3A==
-X-Received: by 2002:a05:6a00:d4a:b029:262:3d64:3cf1 with SMTP id n10-20020a056a000d4ab02902623d643cf1mr3507314pfv.14.1618877425236;
-        Mon, 19 Apr 2021 17:10:25 -0700 (PDT)
+        bh=UtlmJJI5MORHp23o76O3idYuBPuvZL4faGy6iwNmgrk=;
+        b=JPGJ9OAERYoBG8numyU4ENcSlLlkRjXGJWOgAV6K0KfVanyxGWpblIPhBCLNhPxCZ0
+         pq1VWLmcV9w/Dg5mvBhM74I4+9tyr2EXe60spzP+j4gtRUJ1dBCwj3woFIlQuGpA1Yyv
+         Gp0D5dtjve7esLbTQcYygwjmAqSHYh5F+7+FTsjy1fBI80yp2Iu08pG2spqAIqKy4kM9
+         H0rmPyBQDXKDl9Q7reiwJez0coGbsx/AP4wP6O9avEC0PYVeb5Z2zyceK7K/VEs8SULd
+         O+XiFPnjms2jiFxpsycTpAN2u6uB0+pUZIn2AptJnx9w6/ZGzIEsd5K8WRoTLCxQCbcV
+         In8g==
+X-Gm-Message-State: AOAM530igUA9k6qpwzaXLt7Ghjqp4xo+DhQFiRYTwM14jZU5dEI/hS6h
+        bwANc2xGILaez98Qy47trWY=
+X-Google-Smtp-Source: ABdhPJwbIeR3t6dCMYr9gwE4b2MPFDwf6NtZeD/vxGAO7LXDirYl5zo0rwNU5OUsNVfvpz2HJ2PVJA==
+X-Received: by 2002:a17:90a:df10:: with SMTP id gp16mr1740740pjb.209.1618877426407;
+        Mon, 19 Apr 2021 17:10:26 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:3e77:56a4:910b:42a9])
-        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.10.24
+        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.10.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 17:10:24 -0700 (PDT)
+        Mon, 19 Apr 2021 17:10:25 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Geoff Levand <geoff@infradead.org>
-Subject: [PATCH 081/117] ps3rom: Convert to the scsi_status union
-Date:   Mon, 19 Apr 2021 17:08:09 -0700
-Message-Id: <20210420000845.25873-82-bvanassche@acm.org>
+        Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com
+Subject: [PATCH 082/117] qedf: Convert to the scsi_status union
+Date:   Mon, 19 Apr 2021 17:08:10 -0700
+Message-Id: <20210420000845.25873-83-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210420000845.25873-1-bvanassche@acm.org>
 References: <20210420000845.25873-1-bvanassche@acm.org>
@@ -54,52 +56,115 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 An explanation of the purpose of this patch is available in the patch
 "scsi: Introduce the scsi_status union".
 
-Cc: Geoff Levand <geoff@infradead.org>
+Cc: Saurav Kashyap <skashyap@marvell.com>
+Cc: Javed Hasan <jhasan@marvell.com>
+Cc: GR-QLogic-Storage-Upstream@marvell.com
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ps3rom.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/qedf/qedf_io.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/ps3rom.c b/drivers/scsi/ps3rom.c
-index ccb5771f1cb7..0721a989d3de 100644
---- a/drivers/scsi/ps3rom.c
-+++ b/drivers/scsi/ps3rom.c
-@@ -235,7 +235,7 @@ static int ps3rom_queuecommand_lck(struct scsi_cmnd *cmd,
+diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
+index 4869ef813dc4..8312a75fdd2e 100644
+--- a/drivers/scsi/qedf/qedf_io.c
++++ b/drivers/scsi/qedf/qedf_io.c
+@@ -825,7 +825,7 @@ static void qedf_trace_io(struct qedf_rport *fcport, struct qedf_ioreq *io_req,
+ 	io_log->lba[3] = sc_cmd->cmnd[5];
+ 	io_log->bufflen = scsi_bufflen(sc_cmd);
+ 	io_log->sg_count = scsi_sg_count(sc_cmd);
+-	io_log->result = sc_cmd->result;
++	io_log->result = sc_cmd->status.combined;
+ 	io_log->jiffies = jiffies;
+ 	io_log->refcount = kref_read(&io_req->refcount);
  
- 	if (res) {
- 		memset(cmd->sense_buffer, 0, SCSI_SENSE_BUFFERSIZE);
--		cmd->result = res;
-+		cmd->status.combined = res;
- 		cmd->sense_buffer[0] = 0x70;
- 		cmd->sense_buffer[2] = ILLEGAL_REQUEST;
- 		priv->curr_cmd = NULL;
-@@ -302,7 +302,7 @@ static irqreturn_t ps3rom_interrupt(int irq, void *data)
- 
- 			scsi_set_resid(cmd, scsi_bufflen(cmd) - len);
- 		}
--		cmd->result = DID_OK << 16;
-+		cmd->status.combined = DID_OK << 16;
- 		goto done;
+@@ -951,7 +951,7 @@ qedf_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc_cmd)
+ 		QEDF_ERR(&qedf->dbg_ctx,
+ 			 "Number of SG elements %d exceeds what hardware limitation of %d.\n",
+ 			 num_sgs, QEDF_MAX_BDS_PER_CMD);
+-		sc_cmd->result = DID_ERROR;
++		sc_cmd->status.combined = DID_ERROR;
+ 		sc_cmd->scsi_done(sc_cmd);
+ 		return 0;
+ 	}
+@@ -961,7 +961,7 @@ qedf_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc_cmd)
+ 		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_IO,
+ 			  "Returning DNC as unloading or stop io, flags 0x%lx.\n",
+ 			  qedf->flags);
+-		sc_cmd->result = DID_NO_CONNECT << 16;
++		sc_cmd->status.combined = DID_NO_CONNECT << 16;
+ 		sc_cmd->scsi_done(sc_cmd);
+ 		return 0;
+ 	}
+@@ -970,7 +970,7 @@ qedf_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc_cmd)
+ 		QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_IO,
+ 		    "Completing sc_cmd=%p DID_NO_CONNECT as MSI-X is not enabled.\n",
+ 		    sc_cmd);
+-		sc_cmd->result = DID_NO_CONNECT << 16;
++		sc_cmd->status.combined = DID_NO_CONNECT << 16;
+ 		sc_cmd->scsi_done(sc_cmd);
+ 		return 0;
+ 	}
+@@ -980,7 +980,7 @@ qedf_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc_cmd)
+ 		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_IO,
+ 			  "fc_remote_port_chkready failed=0x%x for port_id=0x%06x.\n",
+ 			  rval, rport->port_id);
+-		sc_cmd->result = rval;
++		sc_cmd->status.combined = rval;
+ 		sc_cmd->scsi_done(sc_cmd);
+ 		return 0;
+ 	}
+@@ -1204,7 +1204,7 @@ void qedf_scsi_completion(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
+ 		    "FCP I/O protocol failure xid=0x%x fcp_rsp_len=%d "
+ 		    "fcp_rsp_code=%d.\n", io_req->xid, io_req->fcp_rsp_len,
+ 		    io_req->fcp_rsp_code);
+-		sc_cmd->result = DID_BUS_BUSY << 16;
++		sc_cmd->status.combined = DID_BUS_BUSY << 16;
+ 		goto out;
  	}
  
-@@ -310,17 +310,17 @@ static irqreturn_t ps3rom_interrupt(int irq, void *data)
- 		/* SCSI spec says request sense should never get error */
- 		dev_err(&dev->sbd.core, "%s:%u: end error without autosense\n",
- 			__func__, __LINE__);
--		cmd->result = DID_ERROR << 16 | SAM_STAT_CHECK_CONDITION;
-+		cmd->status.combined = DID_ERROR << 16 | SAM_STAT_CHECK_CONDITION;
- 		goto done;
- 	}
+@@ -1219,9 +1219,9 @@ void qedf_scsi_completion(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
+ 			 sc_cmd->cmnd[3], sc_cmd->cmnd[4], sc_cmd->cmnd[5]);
  
- 	if (decode_lv1_status(status, &sense_key, &asc, &ascq)) {
--		cmd->result = DID_ERROR << 16;
-+		cmd->status.combined = DID_ERROR << 16;
- 		goto done;
- 	}
+ 		if (io_req->cdb_status == 0)
+-			sc_cmd->result = (DID_ERROR << 16) | io_req->cdb_status;
++			sc_cmd->status.combined = (DID_ERROR << 16) | io_req->cdb_status;
+ 		else
+-			sc_cmd->result = (DID_OK << 16) | io_req->cdb_status;
++			sc_cmd->status.combined = (DID_OK << 16) | io_req->cdb_status;
  
- 	scsi_build_sense_buffer(0, cmd->sense_buffer, sense_key, asc, ascq);
--	cmd->result = SAM_STAT_CHECK_CONDITION;
-+	cmd->status.combined = SAM_STAT_CHECK_CONDITION;
+ 		/*
+ 		 * Set resid to the whole buffer length so we won't try to resue
+@@ -1235,7 +1235,7 @@ void qedf_scsi_completion(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
+ 	case FC_GOOD:
+ 		if (io_req->cdb_status == 0) {
+ 			/* Good I/O completion */
+-			sc_cmd->result = DID_OK << 16;
++			sc_cmd->status.combined = DID_OK << 16;
+ 		} else {
+ 			refcount = kref_read(&io_req->refcount);
+ 			QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_IO,
+@@ -1248,7 +1248,7 @@ void qedf_scsi_completion(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
+ 			    sc_cmd->cmnd[4], sc_cmd->cmnd[5],
+ 			    io_req->cdb_status, io_req->fcp_resid,
+ 			    refcount);
+-			sc_cmd->result = (DID_OK << 16) | io_req->cdb_status;
++			sc_cmd->status.combined = (DID_OK << 16) | io_req->cdb_status;
  
- done:
- 	priv->curr_cmd = NULL;
+ 			if (io_req->cdb_status == SAM_STAT_TASK_SET_FULL ||
+ 			    io_req->cdb_status == SAM_STAT_BUSY) {
+@@ -1406,13 +1406,13 @@ void qedf_scsi_done(struct qedf_ctx *qedf, struct qedf_ioreq *io_req,
+ 
+ 	qedf_unmap_sg_list(qedf, io_req);
+ 
+-	sc_cmd->result = result << 16;
++	sc_cmd->status.combined = result << 16;
+ 	refcount = kref_read(&io_req->refcount);
+ 	QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_IO, "%d:0:%d:%lld: Completing "
+ 	    "sc_cmd=%p result=0x%08x op=0x%02x lba=0x%02x%02x%02x%02x, "
+ 	    "allowed=%d retries=%d refcount=%d.\n",
+ 	    qedf->lport->host->host_no, sc_cmd->device->id,
+-	    sc_cmd->device->lun, sc_cmd, sc_cmd->result, sc_cmd->cmnd[0],
++	    sc_cmd->device->lun, sc_cmd, sc_cmd->status.combined, sc_cmd->cmnd[0],
+ 	    sc_cmd->cmnd[2], sc_cmd->cmnd[3], sc_cmd->cmnd[4],
+ 	    sc_cmd->cmnd[5], sc_cmd->allowed, sc_cmd->retries,
+ 	    refcount);
