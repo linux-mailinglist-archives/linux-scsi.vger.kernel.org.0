@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00068364F25
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 02:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EDA364F27
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Apr 2021 02:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbhDTAK0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Apr 2021 20:10:26 -0400
-Received: from mail-pf1-f181.google.com ([209.85.210.181]:41903 "EHLO
-        mail-pf1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbhDTAKL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:10:11 -0400
-Received: by mail-pf1-f181.google.com with SMTP id w6so9773669pfc.8
-        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:09:41 -0700 (PDT)
+        id S233604AbhDTAK1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Apr 2021 20:10:27 -0400
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:33774 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233632AbhDTAKN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Apr 2021 20:10:13 -0400
+Received: by mail-pj1-f42.google.com with SMTP id kb13-20020a17090ae7cdb02901503d67f0beso397725pjb.0
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Apr 2021 17:09:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0TwEJi+WVV7aYATsNLmd7donpiIIqPRjM15W38iQPEc=;
-        b=T+3A+XgGoj5uapm/35bp4YYVuAcMFkUXYIxMxhfkY7wPM03dmUvY8a0QG40uJvXszM
-         4tnXN3COjnPHuxUi0DQpXZyG8R5SO9Lo/W/4Lj1wUielW/+1pW/I01oehhnOVyifFR0H
-         adpEq601qdKL8Vm5J7YH+JM8Vmd1b6DlLlYTXJdeBBBz/P/0FbpCfDSyq0irbtWvEtE1
-         TPmnbm3l503p7uMKhl+0eqlIdPM82Yzdj9sDy+ahGIdNyYLdHC00CntMA1Em4apXXtXj
-         DPj+ZvC0fCYf7wGnBbbJhldpdeev0GDlCAKpGx1jDHolRAPhihAV2rSBRx8OL4mLVD6D
-         fcJg==
-X-Gm-Message-State: AOAM532w37D2A4gpkloDLk5Uhf+knqmBA2ERQ0q+No/Rk3P2W90fqucr
-        gy4MiE2mEVAC99fmkWa+3rw=
-X-Google-Smtp-Source: ABdhPJw0Z+mRgmHUDEzccEX9I+7+y6oAxduy4SyFmA0/KcN3S1EJyGSjNDisKXqDljkCfd+kcYAuGg==
-X-Received: by 2002:aa7:9190:0:b029:22d:6789:cc83 with SMTP id x16-20020aa791900000b029022d6789cc83mr22604715pfa.9.1618877380814;
-        Mon, 19 Apr 2021 17:09:40 -0700 (PDT)
+        bh=6i3dul2nqK3b2IAOlko0yNKzep22prs4WbyldnpEDUU=;
+        b=dYXeN7fEx0sDiXkR51MDHtCzgc17Ag1JVG1RYaVXNjKD9rdWVVH3s2K/QkGFtmJOqS
+         RfvSv0/cGWq/T+/h3IsaAdqBQ5YqXR2IVYx/dlYgGJsfuBXvxYfvosGJcSZ6H2xzu4Vf
+         kI5LLKdWxJ6NBy7xoqZZRUsTdnUbSoV06sdlsG21bd12dLLqlVoseVsAV5jm10nVvCN9
+         W54r3h6+7nVt0HwPLyGPwVqhxTqhfk3J/SHLaHEhs/tl4dEWN78S/IoJb5AtZDZ42xv3
+         75a9W2Fnsz11WKyriO8gkVo9CvsmBXyUTV7YfLs+IPcrRJCJSAP3FHGEaMRZ2+TBMRU7
+         gozw==
+X-Gm-Message-State: AOAM531RRcfR3uqIQEPK8m2CqGFYtoY2zr2B7UBZqHi3ulWSFptqXFFG
+        H1TgIzolGgKi8WT08m7X7rR1FbwEodXgMw==
+X-Google-Smtp-Source: ABdhPJxJ7kKtcNN8tTSOHKAMe0MXA6sSUBVbeV+Ki7aPjdXWklOUoOnrcrMattIYHpnJ8ItPttg5HQ==
+X-Received: by 2002:a17:902:7795:b029:ec:b1ca:de75 with SMTP id o21-20020a1709027795b02900ecb1cade75mr3468572pll.70.1618877381912;
+        Mon, 19 Apr 2021 17:09:41 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:3e77:56a4:910b:42a9])
-        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.09.39
+        by smtp.gmail.com with ESMTPSA id 33sm14006787pgq.21.2021.04.19.17.09.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 17:09:40 -0700 (PDT)
+        Mon, 19 Apr 2021 17:09:41 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Subject: [PATCH 042/117] dpt_i2o: Convert to the scsi_status union
-Date:   Mon, 19 Apr 2021 17:07:30 -0700
-Message-Id: <20210420000845.25873-43-bvanassche@acm.org>
+        Bradley Grove <linuxdrivers@attotech.com>
+Subject: [PATCH 043/117] esas2r: Convert to the scsi_status union
+Date:   Mon, 19 Apr 2021 17:07:31 -0700
+Message-Id: <20210420000845.25873-44-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210420000845.25873-1-bvanassche@acm.org>
 References: <20210420000845.25873-1-bvanassche@acm.org>
@@ -54,117 +54,76 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 An explanation of the purpose of this patch is available in the patch
 "scsi: Introduce the scsi_status union".
 
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Cc: Bradley Grove <linuxdrivers@attotech.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/dpt_i2o.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/scsi/esas2r/esas2r.h      |  2 +-
+ drivers/scsi/esas2r/esas2r_main.c | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
-index a18a4a08f049..30a8d4817dab 100644
---- a/drivers/scsi/dpt_i2o.c
-+++ b/drivers/scsi/dpt_i2o.c
-@@ -430,7 +430,7 @@ static int adpt_queue_lck(struct scsi_cmnd * cmd, void (*done) (struct scsi_cmnd
- 	 */
+diff --git a/drivers/scsi/esas2r/esas2r.h b/drivers/scsi/esas2r/esas2r.h
+index ed63f7a9ea54..3823ec7909c4 100644
+--- a/drivers/scsi/esas2r/esas2r.h
++++ b/drivers/scsi/esas2r/esas2r.h
+@@ -1010,7 +1010,7 @@ void esas2r_complete_request_cb(struct esas2r_adapter *a,
+ void esas2r_reset_detected(struct esas2r_adapter *a);
+ void esas2r_target_state_changed(struct esas2r_adapter *ha, u16 targ_id,
+ 				 u8 state);
+-int esas2r_req_status_to_error(u8 req_stat);
++enum host_status esas2r_req_status_to_error(u8 req_stat);
+ void esas2r_kill_adapter(int i);
+ void esas2r_free_request(struct esas2r_adapter *a, struct esas2r_request *rq);
+ struct esas2r_request *esas2r_alloc_request(struct esas2r_adapter *a);
+diff --git a/drivers/scsi/esas2r/esas2r_main.c b/drivers/scsi/esas2r/esas2r_main.c
+index a9dd6345f064..0967bfc751cc 100644
+--- a/drivers/scsi/esas2r/esas2r_main.c
++++ b/drivers/scsi/esas2r/esas2r_main.c
+@@ -824,10 +824,10 @@ int esas2r_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+ 	unsigned bufflen;
  
- 	if ((cmd->cmnd[0] == REQUEST_SENSE) && (cmd->sense_buffer[0] != 0)) {
--		cmd->result = (DID_OK << 16);
-+		cmd->status.combined = (DID_OK << 16);
+ 	/* Assume success, if it fails we will fix the result later. */
+-	cmd->result = DID_OK << 16;
++	cmd->status.combined = DID_OK << 16;
+ 
+ 	if (unlikely(test_bit(AF_DEGRADED_MODE, &a->flags))) {
+-		cmd->result = DID_NO_CONNECT << 16;
++		cmd->status.combined = DID_NO_CONNECT << 16;
  		cmd->scsi_done(cmd);
  		return 0;
  	}
-@@ -455,7 +455,7 @@ static int adpt_queue_lck(struct scsi_cmnd * cmd, void (*done) (struct scsi_cmnd
- 		if ((pDev = adpt_find_device(pHba, (u32)cmd->device->channel, (u32)cmd->device->id, cmd->device->lun)) == NULL) {
- 			// TODO: if any luns are at this bus, scsi id then fake a TEST_UNIT_READY and INQUIRY response 
- 			// with type 7F (for all luns less than the max for this bus,id) so the lun scan will continue.
--			cmd->result = (DID_NO_CONNECT << 16);
-+			cmd->status.combined = (DID_NO_CONNECT << 16);
- 			cmd->scsi_done(cmd);
- 			return 0;
- 		}
-@@ -2226,7 +2226,7 @@ static s32 adpt_scsi_to_i2o(adpt_hba* pHba, struct scsi_cmnd* cmd, struct adpt_d
- 		default:
- 			printk(KERN_WARNING"%s: scsi opcode 0x%x not supported.\n",
- 			     pHba->name, cmd->cmnd[0]);
--			cmd->result = (DID_ERROR <<16);
-+			cmd->status.combined = DID_ERROR << 16;
- 			cmd->scsi_done(cmd);
- 			return 	0;
- 		}
-@@ -2359,15 +2359,15 @@ static void adpt_i2o_scsi_complete(void __iomem *reply, struct scsi_cmnd *cmd)
- 	if(!(reply_flags & MSG_FAIL)) {
- 		switch(detailed_status & I2O_SCSI_DSC_MASK) {
- 		case I2O_SCSI_DSC_SUCCESS:
--			cmd->result = (DID_OK << 16);
-+			cmd->status.combined = (DID_OK << 16);
- 			// handle underflow
- 			if (readl(reply+20) < cmd->underflow) {
--				cmd->result = (DID_ERROR <<16);
-+				cmd->status.combined = DID_ERROR << 16;
- 				printk(KERN_WARNING"%s: SCSI CMD underflow\n",pHba->name);
- 			}
- 			break;
- 		case I2O_SCSI_DSC_REQUEST_ABORTED:
--			cmd->result = (DID_ABORT << 16);
-+			cmd->status.combined = (DID_ABORT << 16);
- 			break;
- 		case I2O_SCSI_DSC_PATH_INVALID:
- 		case I2O_SCSI_DSC_DEVICE_NOT_PRESENT:
-@@ -2377,19 +2377,19 @@ static void adpt_i2o_scsi_complete(void __iomem *reply, struct scsi_cmnd *cmd)
- 		case I2O_SCSI_DSC_RESOURCE_UNAVAILABLE:
- 			printk(KERN_WARNING"%s: SCSI Timeout-Device (%d,%d,%llu) hba status=0x%x, dev status=0x%x, cmd=0x%x\n",
- 				pHba->name, (u32)cmd->device->channel, (u32)cmd->device->id, cmd->device->lun, hba_status, dev_status, cmd->cmnd[0]);
--			cmd->result = (DID_TIME_OUT << 16);
-+			cmd->status.combined = (DID_TIME_OUT << 16);
- 			break;
- 		case I2O_SCSI_DSC_ADAPTER_BUSY:
- 		case I2O_SCSI_DSC_BUS_BUSY:
--			cmd->result = (DID_BUS_BUSY << 16);
-+			cmd->status.combined = (DID_BUS_BUSY << 16);
- 			break;
- 		case I2O_SCSI_DSC_SCSI_BUS_RESET:
- 		case I2O_SCSI_DSC_BDR_MESSAGE_SENT:
--			cmd->result = (DID_RESET << 16);
-+			cmd->status.combined = (DID_RESET << 16);
- 			break;
- 		case I2O_SCSI_DSC_PARITY_ERROR_FAILURE:
- 			printk(KERN_WARNING"%s: SCSI CMD parity error\n",pHba->name);
--			cmd->result = (DID_PARITY << 16);
-+			cmd->status.combined = (DID_PARITY << 16);
- 			break;
- 		case I2O_SCSI_DSC_UNABLE_TO_ABORT:
- 		case I2O_SCSI_DSC_COMPLETE_WITH_ERROR:
-@@ -2418,7 +2418,7 @@ static void adpt_i2o_scsi_complete(void __iomem *reply, struct scsi_cmnd *cmd)
- 			printk(KERN_WARNING"%s: SCSI error %0x-Device(%d,%d,%llu) hba_status=0x%x, dev_status=0x%x, cmd=0x%x\n",
- 				pHba->name, detailed_status & I2O_SCSI_DSC_MASK, (u32)cmd->device->channel, (u32)cmd->device->id, cmd->device->lun,
- 			       hba_status, dev_status, cmd->cmnd[0]);
--			cmd->result = (DID_ERROR << 16);
-+			cmd->status.combined = (DID_ERROR << 16);
- 			break;
- 		}
+@@ -984,7 +984,7 @@ int esas2r_eh_abort(struct scsi_cmnd *cmd)
+ 	esas2r_log(ESAS2R_LOG_INFO, "eh_abort (%p)", cmd);
  
-@@ -2431,7 +2431,7 @@ static void adpt_i2o_scsi_complete(void __iomem *reply, struct scsi_cmnd *cmd)
- 			if(cmd->sense_buffer[0] == 0x70 /* class 7 */ && 
- 			   cmd->sense_buffer[2] == DATA_PROTECT ){
- 				/* This is to handle an array failed */
--				cmd->result = (DID_TIME_OUT << 16);
-+				cmd->status.combined = (DID_TIME_OUT << 16);
- 				printk(KERN_WARNING"%s: SCSI Data Protect-Device (%d,%d,%llu) hba_status=0x%x, dev_status=0x%x, cmd=0x%x\n",
- 					pHba->name, (u32)cmd->device->channel, (u32)cmd->device->id, cmd->device->lun,
- 					hba_status, dev_status, cmd->cmnd[0]);
-@@ -2443,13 +2443,13 @@ static void adpt_i2o_scsi_complete(void __iomem *reply, struct scsi_cmnd *cmd)
- 		 * the card rejected it.  We should signal a retry
- 		 * for a limitted number of retries.
- 		 */
--		cmd->result = (DID_TIME_OUT << 16);
-+		cmd->status.combined = (DID_TIME_OUT << 16);
- 		printk(KERN_WARNING"%s: I2O MSG_FAIL - Device (%d,%d,%llu) tid=%d, cmd=0x%x\n",
- 			pHba->name, (u32)cmd->device->channel, (u32)cmd->device->id, cmd->device->lun,
- 			((struct adpt_device*)(cmd->device->hostdata))->tid, cmd->cmnd[0]);
- 	}
+ 	if (test_bit(AF_DEGRADED_MODE, &a->flags)) {
+-		cmd->result = DID_ABORT << 16;
++		cmd->status.combined = DID_ABORT << 16;
  
--	cmd->result |= (dev_status);
-+	cmd->status.combined |= (dev_status);
+ 		scsi_set_resid(cmd, 0);
  
- 	if(cmd->scsi_done != NULL){
- 		cmd->scsi_done(cmd);
+@@ -1050,7 +1050,7 @@ int esas2r_eh_abort(struct scsi_cmnd *cmd)
+ 	 * freed it, or we didn't find it at all.  Either way, success!
+ 	 */
+ 
+-	cmd->result = DID_ABORT << 16;
++	cmd->status.combined = DID_ABORT << 16;
+ 
+ 	scsi_set_resid(cmd, 0);
+ 
+@@ -1523,7 +1523,7 @@ void esas2r_complete_request_cb(struct esas2r_adapter *a,
+ 			     rq->func_rsp.scsi_rsp.scsi_stat,
+ 			     rq->cmd);
+ 
+-		rq->cmd->result =
++		rq->cmd->status.combined =
+ 			((esas2r_req_status_to_error(rq->req_stat) << 16)
+ 			 | (rq->func_rsp.scsi_rsp.scsi_stat & STATUS_MASK));
+ 
+@@ -1873,7 +1873,7 @@ void esas2r_target_state_changed(struct esas2r_adapter *a, u16 targ_id,
+ }
+ 
+ /* Translate status to a Linux SCSI mid-layer error code */
+-int esas2r_req_status_to_error(u8 req_stat)
++enum host_status esas2r_req_status_to_error(u8 req_stat)
+ {
+ 	switch (req_stat) {
+ 	case RS_OVERRUN:
