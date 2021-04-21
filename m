@@ -2,28 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424BF3671D4
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 19:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821DE3671F4
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 19:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244920AbhDURtY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Apr 2021 13:49:24 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52334 "EHLO mx2.suse.de"
+        id S244946AbhDURvH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Apr 2021 13:51:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52396 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245068AbhDURtN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S245075AbhDURtN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Wed, 21 Apr 2021 13:49:13 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 050ABB2F5;
-        Wed, 21 Apr 2021 17:48:02 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id F1523B2E6;
+        Wed, 21 Apr 2021 17:48:01 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 29/42] mesh: translate message to host byte status
-Date:   Wed, 21 Apr 2021 19:47:36 +0200
-Message-Id: <20210421174749.11221-30-hare@suse.de>
+Subject: [PATCH 30/42] acornscsi: use standard macros to set SCSI result
+Date:   Wed, 21 Apr 2021 19:47:37 +0200
+Message-Id: <20210421174749.11221-31-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210421174749.11221-1-hare@suse.de>
 References: <20210421174749.11221-1-hare@suse.de>
@@ -33,31 +33,72 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of setting the message byte translate it to a host byte
-status. As the error recovery would map it to DID_ERROR anyway
-the translation doesn't change the SCSI error handling.
+Use standard macros to set the SCSI result to avoid shift and mask
+error.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/mesh.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/arm/acornscsi.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/mesh.c b/drivers/scsi/mesh.c
-index 6052a47b03dc..5be587dd75ea 100644
---- a/drivers/scsi/mesh.c
-+++ b/drivers/scsi/mesh.c
-@@ -597,8 +597,9 @@ static void mesh_done(struct mesh_state *ms, int start_next)
- 	if (cmd) {
- 		set_host_byte(cmd, ms->stat);
- 		set_status_byte(cmd, cmd->SCp.Status);
--		if (ms->stat == DID_OK)
--			set_msg_byte(cmd, cmd->SCp.Message);
-+		if (get_host_byte(cmd) == DID_OK &&
-+		    cmd->SCp.Message != COMMAND_COMPLETE)
-+			translate_msg_byte(cmd, cmd->SCp.Message);
- 		if (DEBUG_TARGET(cmd)) {
- 			printk(KERN_DEBUG "mesh_done: result = %x, data_ptr=%d, buflen=%d\n",
- 			       scsi_get_compat_result(cmd), ms->data_ptr, scsi_bufflen(cmd));
+diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
+index 248a5bfad153..6a49a75e94ff 100644
+--- a/drivers/scsi/arm/acornscsi.c
++++ b/drivers/scsi/arm/acornscsi.c
+@@ -794,7 +794,9 @@ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
+ 
+ 	acornscsi_dma_cleanup(host);
+ 
+-	SCpnt->result = result << 16 | host->scsi.SCp.Message << 8 | host->scsi.SCp.Status;
++	set_host_byte(SCpnt, result);
++	set_msg_byte(SCpnt, host->scsi.SCp.Message);
++	set_status_byte(SCpnt, host->scsi.SCp.Status);
+ 
+ 	/*
+ 	 * In theory, this should not happen.  In practice, it seems to.
+@@ -844,7 +846,8 @@ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
+ 		    default:
+ 			scmd_printk(KERN_ERR, SCpnt,
+ 				    "incomplete data transfer detected: "
+-				    "result=%08X", SCpnt->result);
++				    "result=%08X",
++				    scsi_get_compat)result(SCpnt));
+ 			scsi_print_command(SCpnt);
+ 			acornscsi_dumpdma(host, "done");
+ 			acornscsi_dumplog(host, SCpnt->device->id);
+@@ -2466,11 +2469,14 @@ static int acornscsi_queuecmd_lck(struct scsi_cmnd *SCpnt,
+ 	return -EINVAL;
+     }
+ 
++    set_host_byte(SCpnt, DID_OK);
++    set_status_byte(SCpnt, SAM_STAT_GOOD);
++
+ #if (DEBUG & DEBUG_NO_WRITE)
+     if (acornscsi_cmdtype(SCpnt->cmnd[0]) == CMD_WRITE && (NO_WRITE & (1 << SCpnt->device->id))) {
+ 	printk(KERN_CRIT "scsi%d.%c: WRITE attempted with NO_WRITE flag set\n",
+ 	    host->host->host_no, '0' + SCpnt->device->id);
+-	SCpnt->result = DID_NO_CONNECT << 16;
++	set_host_byte(SCpnt, DID_NO_CONNECT);
+ 	done(SCpnt);
+ 	return 0;
+     }
+@@ -2478,7 +2484,6 @@ static int acornscsi_queuecmd_lck(struct scsi_cmnd *SCpnt,
+ 
+     SCpnt->scsi_done = done;
+     SCpnt->host_scribble = NULL;
+-    SCpnt->result = 0;
+     SCpnt->tag = 0;
+     SCpnt->SCp.phase = (int)acornscsi_datadirection(SCpnt->cmnd[0]);
+     SCpnt->SCp.sent_command = 0;
+@@ -2492,7 +2497,7 @@ static int acornscsi_queuecmd_lck(struct scsi_cmnd *SCpnt,
+ 	unsigned long flags;
+ 
+ 	if (!queue_add_cmd_ordered(&host->queues.issue, SCpnt)) {
+-	    SCpnt->result = DID_ERROR << 16;
++		set_host_byte(SCpnt, DID_ERROR);
+ 	    done(SCpnt);
+ 	    return 0;
+ 	}
 -- 
 2.29.2
 
