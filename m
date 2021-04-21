@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BA43671F5
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 19:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E31F3671E9
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 19:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245043AbhDURvI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Apr 2021 13:51:08 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52394 "EHLO mx2.suse.de"
+        id S245012AbhDURu7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Apr 2021 13:50:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52390 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245074AbhDURtN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S245072AbhDURtN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Wed, 21 Apr 2021 13:49:13 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DE542B2E4;
+        by mx2.suse.de (Postfix) with ESMTP id D7D32B2E3;
         Wed, 21 Apr 2021 17:48:01 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 26/42] wd33c93: use standard macros to set SCSI result
-Date:   Wed, 21 Apr 2021 19:47:33 +0200
-Message-Id: <20210421174749.11221-27-hare@suse.de>
+Subject: [PATCH 27/42] wd33c93: translate message byte to host byte
+Date:   Wed, 21 Apr 2021 19:47:34 +0200
+Message-Id: <20210421174749.11221-28-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210421174749.11221-1-hare@suse.de>
 References: <20210421174749.11221-1-hare@suse.de>
@@ -33,119 +33,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use standard macros to set the SCSI result to avoid shift and mask
-error.
+Instead of setting the message byte translate it to the appropriate
+host byte. As error recovery would return DID_ERROR for any non-zero
+message byte the translation doesn't change the error handling.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/wd33c93.c | 45 +++++++++++++++++++++---------------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
+ drivers/scsi/wd33c93.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/wd33c93.c b/drivers/scsi/wd33c93.c
-index a23277bb870e..0a5bb238f001 100644
+index 0a5bb238f001..e886e17fbf45 100644
 --- a/drivers/scsi/wd33c93.c
 +++ b/drivers/scsi/wd33c93.c
-@@ -381,7 +381,8 @@ wd33c93_queuecommand_lck(struct scsi_cmnd *cmd,
-  */
- 	cmd->host_scribble = NULL;
- 	cmd->scsi_done = done;
--	cmd->result = 0;
-+	set_host_byte(cmd, DID_OK);
-+	set_status_byte(cmd, SAM_STAT_GOOD);
- 
- /* We use the Scsi_Pointer structure that's included with each command
-  * as a scratchpad (as it's intended to be used!). The handy thing about
-@@ -853,7 +854,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 			hostdata->selecting = NULL;
- 		}
- 
--		cmd->result = DID_NO_CONNECT << 16;
-+		set_host_byte(cmd, DID_NO_CONNECT);
- 		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
- 		hostdata->state = S_UNCONNECTED;
- 		cmd->scsi_done(cmd);
-@@ -1177,12 +1178,11 @@ wd33c93_intr(struct Scsi_Host *instance)
- 				cmd->SCp.Status = lun;
- 			if (cmd->cmnd[0] == REQUEST_SENSE
+@@ -1168,7 +1168,6 @@ wd33c93_intr(struct Scsi_Host *instance)
+ 		write_wd33c93(regs, WD_SOURCE_ID, SRCID_ER);
+ 		if (phs == 0x60) {
+ 			DB(DB_INTR, printk("SX-DONE"))
+-			    cmd->SCp.Message = COMMAND_COMPLETE;
+ 			lun = read_wd33c93(regs, WD_TARGET_LUN);
+ 			DB(DB_INTR, printk(":%d.%d", cmd->SCp.Status, lun))
+ 			    hostdata->connected = NULL;
+@@ -1180,8 +1179,8 @@ wd33c93_intr(struct Scsi_Host *instance)
  			    && cmd->SCp.Status != SAM_STAT_GOOD)
--				cmd->result =
--				    (cmd->
--				     result & 0x00ffff) | (DID_ERROR << 16);
--			else
--				cmd->result =
--				    cmd->SCp.Status | (cmd->SCp.Message << 8);
-+				set_host_byte(cmd, DID_ERROR);
-+			else {
-+				set_status_byte(cmd, cmd->SCp.Status);
-+				set_msg_byte(cmd, cmd->SCp.Message);
-+			}
+ 				set_host_byte(cmd, DID_ERROR);
+ 			else {
++				set_host_byte(cmd, DID_OK);
+ 				set_status_byte(cmd, cmd->SCp.Status);
+-				set_msg_byte(cmd, cmd->SCp.Message);
+ 			}
  			cmd->scsi_done(cmd);
  
- /* We are no longer  connected to a target - check to see if
-@@ -1262,11 +1262,13 @@ wd33c93_intr(struct Scsi_Host *instance)
- 		    hostdata->connected = NULL;
- 		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
- 		hostdata->state = S_UNCONNECTED;
--		if (cmd->cmnd[0] == REQUEST_SENSE && cmd->SCp.Status != SAM_STAT_GOOD)
--			cmd->result =
--			    (cmd->result & 0x00ffff) | (DID_ERROR << 16);
--		else
--			cmd->result = cmd->SCp.Status | (cmd->SCp.Message << 8);
-+		if (cmd->cmnd[0] == REQUEST_SENSE &&
-+		    cmd->SCp.Status != SAM_STAT_GOOD)
-+			set_host_byte(cmd, DID_ERROR);
-+		else {
-+			set_status_byte(cmd, cmd->SCp.Status);
-+			set_msg_byte(cmd, cmd->SCp.Message);
-+		}
+@@ -1266,8 +1265,9 @@ wd33c93_intr(struct Scsi_Host *instance)
+ 		    cmd->SCp.Status != SAM_STAT_GOOD)
+ 			set_host_byte(cmd, DID_ERROR);
+ 		else {
++			set_host_byte(cmd, DID_OK);
++			translate_msg_byte(cmd, cmd->SCp.Message);
+ 			set_status_byte(cmd, cmd->SCp.Status);
+-			set_msg_byte(cmd, cmd->SCp.Message);
+ 		}
  		cmd->scsi_done(cmd);
  
- /* We are no longer connected to a target - check to see if
-@@ -1297,12 +1299,11 @@ wd33c93_intr(struct Scsi_Host *instance)
- 			DB(DB_INTR, printk(":%d", cmd->SCp.Status))
- 			    if (cmd->cmnd[0] == REQUEST_SENSE
+@@ -1301,8 +1301,9 @@ wd33c93_intr(struct Scsi_Host *instance)
  				&& cmd->SCp.Status != SAM_STAT_GOOD)
--				cmd->result =
--				    (cmd->
--				     result & 0x00ffff) | (DID_ERROR << 16);
--			else
--				cmd->result =
--				    cmd->SCp.Status | (cmd->SCp.Message << 8);
-+				    set_host_byte(cmd, DID_ERROR);
-+			    else {
-+				    set_status_byte(cmd, cmd->SCp.Status);
-+				    set_msg_byte(cmd, cmd->SCp.Message);
-+			    }
+ 				    set_host_byte(cmd, DID_ERROR);
+ 			    else {
++				    set_host_byte(cmd, DID_OK);
++				    translate_msg_byte(cmd, cmd->SCp.Message);
+ 				    set_status_byte(cmd, cmd->SCp.Status);
+-				    set_msg_byte(cmd, cmd->SCp.Message);
+ 			    }
  			cmd->scsi_done(cmd);
  			break;
- 		case S_PRE_TMP_DISC:
-@@ -1593,7 +1594,7 @@ wd33c93_host_reset(struct scsi_cmnd * SCpnt)
- 	hostdata->outgoing_len = 0;
- 
- 	reset_wd33c93(instance);
--	SCpnt->result = DID_RESET << 16;
-+	set_host_byte(SCpnt, DID_RESET);
- 	enable_irq(instance->irq);
- 	spin_unlock_irq(instance->host_lock);
- 	return SUCCESS;
-@@ -1628,7 +1629,7 @@ wd33c93_abort(struct scsi_cmnd * cmd)
- 				hostdata->input_Q =
- 				    (struct scsi_cmnd *) cmd->host_scribble;
- 			cmd->host_scribble = NULL;
--			cmd->result = DID_ABORT << 16;
-+			set_host_byte(cmd, DID_ABORT);
- 			printk
- 			    ("scsi%d: Abort - removing command from input_Q. ",
- 			     instance->host_no);
-@@ -1702,7 +1703,7 @@ wd33c93_abort(struct scsi_cmnd * cmd)
- 		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
- 		hostdata->connected = NULL;
- 		hostdata->state = S_UNCONNECTED;
--		cmd->result = DID_ABORT << 16;
-+		set_host_byte(cmd, DID_ABORT);
- 
- /*      sti();*/
- 		wd33c93_execute(instance);
 -- 
 2.29.2
 
