@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 105B13671ED
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 19:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9694D3671D7
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 19:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244889AbhDURvB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Apr 2021 13:51:01 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52332 "EHLO mx2.suse.de"
+        id S244985AbhDURt1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Apr 2021 13:49:27 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52402 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245069AbhDURtN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S245077AbhDURtN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Wed, 21 Apr 2021 13:49:13 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0A9B6B2F6;
+        by mx2.suse.de (Postfix) with ESMTP id 0E6CAB2F9;
         Wed, 21 Apr 2021 17:48:02 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 32/42] acornscsi: translate message byte to host byte
-Date:   Wed, 21 Apr 2021 19:47:39 +0200
-Message-Id: <20210421174749.11221-33-hare@suse.de>
+Subject: [PATCH 33/42] aha152x: modify done() to use separate status bytes
+Date:   Wed, 21 Apr 2021 19:47:40 +0200
+Message-Id: <20210421174749.11221-34-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210421174749.11221-1-hare@suse.de>
 References: <20210421174749.11221-1-hare@suse.de>
@@ -33,29 +33,138 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of setting the message byte translate it to the appropriate
-host byte. As error recovery would return DID_ERROR for any non-zero
-message byte the translation doesn't change the error handling.
+Instead of passing in the combined SCSI result value split them
+off into separate status, message, and host byte values.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/arm/acornscsi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/aha152x.c | 43 ++++++++++++++++++++++++++++--------------
+ 1 file changed, 29 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
-index 17590b1053a8..784d18077752 100644
---- a/drivers/scsi/arm/acornscsi.c
-+++ b/drivers/scsi/arm/acornscsi.c
-@@ -795,7 +795,8 @@ static void acornscsi_done(AS_Host *host, struct scsi_cmnd **SCpntp,
- 	acornscsi_dma_cleanup(host);
+diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+index d8e19afa7a14..f59d11f8080a 100644
+--- a/drivers/scsi/aha152x.c
++++ b/drivers/scsi/aha152x.c
+@@ -619,7 +619,8 @@ static struct {
+ static irqreturn_t intr(int irq, void *dev_id);
+ static void reset_ports(struct Scsi_Host *shpnt);
+ static void aha152x_error(struct Scsi_Host *shpnt, char *msg);
+-static void done(struct Scsi_Host *shpnt, int error);
++static void done(struct Scsi_Host *shpnt, unsigned char status_byte,
++		 unsigned char msg_byte, unsigned char host_byte);
  
- 	set_host_byte(SCpnt, result);
--	set_msg_byte(SCpnt, host->scsi.SCp.Message);
-+	if (result != DID_OK)
-+		translate_msg_byte(SCpnt, host->scsi.SCp.Message);
- 	set_status_byte(SCpnt, host->scsi.SCp.Status);
+ /* diagnostics */
+ static void show_command(struct scsi_cmnd * ptr);
+@@ -1271,7 +1272,8 @@ static int aha152x_biosparam(struct scsi_device *sdev, struct block_device *bdev
+  *  Internal done function
+  *
+  */
+-static void done(struct Scsi_Host *shpnt, int error)
++static void done(struct Scsi_Host *shpnt, unsigned char status_byte,
++		 unsigned char msg_byte, unsigned char host_byte)
+ {
+ 	if (CURRENT_SC) {
+ 		if(DONE_SC)
+@@ -1281,7 +1283,9 @@ static void done(struct Scsi_Host *shpnt, int error)
  
- 	/*
+ 		DONE_SC = CURRENT_SC;
+ 		CURRENT_SC = NULL;
+-		DONE_SC->result = error;
++		DONE_SC->result = status_byte;
++		set_msg_byte(DONE_SC, msg_byte);
++		set_host_byte(DONE_SC, host_byte);
+ 	} else
+ 		printk(KERN_ERR "aha152x: done() called outside of command\n");
+ }
+@@ -1376,13 +1380,16 @@ static void busfree_run(struct Scsi_Host *shpnt)
+ 
+ 		if(CURRENT_SC->SCp.phase & completed) {
+ 			/* target sent COMMAND COMPLETE */
+-			done(shpnt, (CURRENT_SC->SCp.Status & 0xff) | ((CURRENT_SC->SCp.Message & 0xff) << 8) | (DID_OK << 16));
++			done(shpnt, CURRENT_SC->SCp.Status,
++			     CURRENT_SC->SCp.Message, DID_OK);
+ 
+ 		} else if(CURRENT_SC->SCp.phase & aborted) {
+-			done(shpnt, (CURRENT_SC->SCp.Status & 0xff) | ((CURRENT_SC->SCp.Message & 0xff) << 8) | (DID_ABORT << 16));
++			done(shpnt, CURRENT_SC->SCp.Status,
++			     CURRENT_SC->SCp.Message, DID_ABORT);
+ 
+ 		} else if(CURRENT_SC->SCp.phase & resetted) {
+-			done(shpnt, (CURRENT_SC->SCp.Status & 0xff) | ((CURRENT_SC->SCp.Message & 0xff) << 8) | (DID_RESET << 16));
++			done(shpnt, CURRENT_SC->SCp.Status,
++			     CURRENT_SC->SCp.Message, DID_RESET);
+ 
+ 		} else if(CURRENT_SC->SCp.phase & disconnected) {
+ 			/* target sent DISCONNECT */
+@@ -1394,7 +1401,8 @@ static void busfree_run(struct Scsi_Host *shpnt)
+ 			CURRENT_SC = NULL;
+ 
+ 		} else {
+-			done(shpnt, DID_ERROR << 16);
++			done(shpnt, SAM_STAT_GOOD,
++			     COMMAND_COMPLETE, DID_ERROR);
+ 		}
+ #if defined(AHA152X_STAT)
+ 	} else {
+@@ -1515,7 +1523,8 @@ static void seldo_run(struct Scsi_Host *shpnt)
+ 	if (TESTLO(SSTAT0, SELDO)) {
+ 		scmd_printk(KERN_ERR, CURRENT_SC,
+ 			    "aha152x: passing bus free condition\n");
+-		done(shpnt, DID_NO_CONNECT << 16);
++		done(shpnt, SAM_STAT_GOOD,
++		     COMMAND_COMPLETE, DID_NO_CONNECT);
+ 		return;
+ 	}
+ 
+@@ -1552,12 +1561,15 @@ static void selto_run(struct Scsi_Host *shpnt)
+ 	CURRENT_SC->SCp.phase &= ~selecting;
+ 
+ 	if (CURRENT_SC->SCp.phase & aborted)
+-		done(shpnt, DID_ABORT << 16);
++		done(shpnt, SAM_STAT_GOOD,
++		     COMMAND_COMPLETE, DID_ABORT);
+ 	else if (TESTLO(SSTAT0, SELINGO))
+-		done(shpnt, DID_BUS_BUSY << 16);
++		done(shpnt, SAM_STAT_GOOD,
++		     COMMAND_COMPLETE, DID_BUS_BUSY);
+ 	else
+ 		/* ARBITRATION won, but SELECTION failed */
+-		done(shpnt, DID_NO_CONNECT << 16);
++		done(shpnt, SAM_STAT_GOOD,
++		     COMMAND_COMPLETE, DID_NO_CONNECT);
+ }
+ 
+ /*
+@@ -1891,7 +1903,8 @@ static void cmd_init(struct Scsi_Host *shpnt)
+ 	if (CURRENT_SC->SCp.sent_command) {
+ 		scmd_printk(KERN_ERR, CURRENT_SC,
+ 			    "command already sent\n");
+-		done(shpnt, DID_ERROR << 16);
++		done(shpnt, SAM_STAT_GOOD,
++		     COMMAND_COMPLETE, DID_ERROR);
+ 		return;
+ 	}
+ 
+@@ -2231,7 +2244,8 @@ static int update_state(struct Scsi_Host *shpnt)
+ static void parerr_run(struct Scsi_Host *shpnt)
+ {
+ 	scmd_printk(KERN_ERR, CURRENT_SC, "parity error\n");
+-	done(shpnt, DID_PARITY << 16);
++	done(shpnt, SAM_STAT_GOOD,
++	     COMMAND_COMPLETE, DID_PARITY);
+ }
+ 
+ /*
+@@ -2262,7 +2276,8 @@ static void rsti_run(struct Scsi_Host *shpnt)
+ 	}
+ 
+ 	if(CURRENT_SC && !CURRENT_SC->device->soft_reset)
+-		done(shpnt, DID_RESET << 16 );
++		done(shpnt, SAM_STAT_GOOD,
++		     COMMAND_COMPLETE, DID_RESET);
+ }
+ 
+ 
 -- 
 2.29.2
 
