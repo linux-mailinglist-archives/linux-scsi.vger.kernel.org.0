@@ -2,70 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 263A436694A
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 12:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231C836695E
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 12:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235222AbhDUKe5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Apr 2021 06:34:57 -0400
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:56014 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234554AbhDUKe4 (ORCPT
+        id S235335AbhDUKmG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Apr 2021 06:42:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36408 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237591AbhDUKlx (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 21 Apr 2021 06:34:56 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UWI5XGV_1619001242;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UWI5XGV_1619001242)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 21 Apr 2021 18:34:22 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH v2] scsi: a100u2w: Remove useless variable
-Date:   Wed, 21 Apr 2021 18:33:59 +0800
-Message-Id: <1619001239-129796-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 21 Apr 2021 06:41:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619001679;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b8Ujol5mN7ZzvqVRwMcsGKjcwTJCR/GnEtT0N9vldXE=;
+        b=Xybf8lrsO/1Y6JIpOt2mY0+qcwlEbo6bMOp9fJKgzvQMjNyZuYuANOe2xdEGaQv4Ipv4m0
+        XA3crWqH/Wj93LdpnZfMvKGJD8YERHqqkaCABvMUW0r1COcLT3h8LdahfFbJs6vk7a0dTt
+        1P6rTWeEihDHNUMxMrOvOOxo6tqhkB8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-27-4DlTmKMqObebdfDfUHyNJg-1; Wed, 21 Apr 2021 06:41:11 -0400
+X-MC-Unique: 4DlTmKMqObebdfDfUHyNJg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8B8C787A841;
+        Wed, 21 Apr 2021 10:41:09 +0000 (UTC)
+Received: from T590 (ovpn-13-15.pek2.redhat.com [10.72.13.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1DDE4614FD;
+        Wed, 21 Apr 2021 10:40:59 +0000 (UTC)
+Date:   Wed, 21 Apr 2021 18:40:59 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Martin Wilck <mwilck@suse.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Satish Kharat <satishkh@cisco.com>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        David Jeffery <djeffery@redhat.com>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: Re: [PATCH 0/5] scsi: fnic: use blk_mq_tagset_busy_iter() to walk
+ scsi commands
+Message-ID: <YIABO6e3VLDCFU1b@T590>
+References: <20210421075543.1919826-1-ming.lei@redhat.com>
+ <fce30dfdee0eed3959358d4b8b826ecc20f5f7bd.camel@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <fce30dfdee0eed3959358d4b8b826ecc20f5f7bd.camel@suse.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix the following gcc warning:
+On Wed, Apr 21, 2021 at 12:19:00PM +0200, Martin Wilck wrote:
+> On Wed, 2021-04-21 at 15:55 +0800, Ming Lei wrote:
+> > Hello Guys,
+> > 
+> > fnic uses the following way to walk scsi commands in failure handling,
+> > which is obvious wrong, because caller of scsi_host_find_tag has to
+> > guarantee that the tag is active.
+> > 
+> >         for (tag = 0; tag < fnic->fnic_max_tag_id; tag++) {
+> >                                 ...
+> >                 sc = scsi_host_find_tag(fnic->lport->host, tag);
+> >                                 ...
+> >                 }
+> > 
+> > Fix the issue by using blk_mq_tagset_busy_iter() to walk
+> > request/scsi_command.
+> 
+> How does this relate to Hannes' previous patch?
+> https://marc.info/?l=linux-scsi&m=161400059528859&w=2
 
-drivers/scsi/a100u2w.c:1092:8: warning: variable â€˜bios_physâ€™ set but not
-used [-Wunused-but-set-variable].
+oops, this patch is actually same or similar with Hannes's.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
-Changes in v2:
-  - Delete phys_to_virt().
+Given these patches are bug fix, can we cherry-pick them for 5.13?
 
- drivers/scsi/a100u2w.c | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
-index 66c5143..c99224a 100644
---- a/drivers/scsi/a100u2w.c
-+++ b/drivers/scsi/a100u2w.c
-@@ -1089,7 +1089,6 @@ static int inia100_probe_one(struct pci_dev *pdev,
- 	int error = -ENODEV;
- 	u32 sz;
- 	unsigned long biosaddr;
--	char *bios_phys;
- 
- 	if (pci_enable_device(pdev))
- 		goto out;
-@@ -1141,7 +1140,6 @@ static int inia100_probe_one(struct pci_dev *pdev,
- 
- 	biosaddr = host->BIOScfg;
- 	biosaddr = (biosaddr << 4);
--	bios_phys = phys_to_virt(biosaddr);
- 	if (init_orchid(host)) {	/* Initialize orchid chip */
- 		printk("inia100: initial orchid fail!!\n");
- 		goto out_free_escb_array;
--- 
-1.8.3.1
+Thanks,
+Ming
 
