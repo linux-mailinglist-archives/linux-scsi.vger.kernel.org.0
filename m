@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 733503666A7
-	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 10:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B6F3666A9
+	for <lists+linux-scsi@lfdr.de>; Wed, 21 Apr 2021 10:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbhDUIDR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Apr 2021 04:03:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49757 "EHLO
+        id S234202AbhDUIDU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Apr 2021 04:03:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26166 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234193AbhDUICp (ORCPT
+        by vger.kernel.org with ESMTP id S234160AbhDUIDG (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 21 Apr 2021 04:02:45 -0400
+        Wed, 21 Apr 2021 04:03:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618992131;
+        s=mimecast20190719; t=1618992153;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X4HexoTyGHWd89nZ9hhiPgbKCQdbnM1+vT1JnkCOLJM=;
-        b=OXHwjVrAIX4bfPiOUnisfUvRGjJ1a5YQWJWrovv+RPRUxcDFj7rjPE67vzQxCBNXATnByR
-        ZGHoCdVX9pUuwN9GV3k8y+hk17qfkC2fyRJ+l4bMsMIrLRKQjn9Eh3H5drR+nYsIzKkVHD
-        jbWm8hUTiNDbROXzzADNROFi2bEGi6s=
+        bh=5O/1WT/nJmCgZV1GTGTm/Hp3TOh6bWTc8vjsZOKmgZM=;
+        b=LXc1YXViJ8Cujeyct8Lg751KoVn157j6cYhtpSgQl/izz5zeKf5AiiCNjybDs7k2zRVHON
+        CsYVnlPo4HlkMB5ciXvuf86S6/mNR5B3FiHyfXM1rguF6uBpYDgWwYcU4FKCfClETZxjjY
+        AxhUXMRpH8ReQr6oVVTOBbD8ZXFJF/I=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-101-Aw2qmczbMByhmGgnq3K6Ww-1; Wed, 21 Apr 2021 04:02:10 -0400
-X-MC-Unique: Aw2qmczbMByhmGgnq3K6Ww-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-137-abXYSjNbN2m_j3-jKdcYPg-1; Wed, 21 Apr 2021 04:02:24 -0400
+X-MC-Unique: abXYSjNbN2m_j3-jKdcYPg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1BF3B8E2E8;
-        Wed, 21 Apr 2021 07:57:28 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 10A021087FEB;
+        Wed, 21 Apr 2021 07:57:35 +0000 (UTC)
 Received: from localhost (ovpn-13-15.pek2.redhat.com [10.72.13.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 123A860C05;
-        Wed, 21 Apr 2021 07:57:23 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B39935C1A1;
+        Wed, 21 Apr 2021 07:57:30 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
 Cc:     Ming Lei <ming.lei@redhat.com>, Satish Kharat <satishkh@cisco.com>,
         Karan Tilak Kumar <kartilak@cisco.com>,
         David Jeffery <djeffery@redhat.com>
-Subject: [PATCH 4/5] scsi: fnic: use blk_mq_tagset_busy_iter() to walk scsi commands in fnic_rport_exch_reset
-Date:   Wed, 21 Apr 2021 15:55:42 +0800
-Message-Id: <20210421075543.1919826-5-ming.lei@redhat.com>
+Subject: [PATCH 5/5] scsi: fnic: use blk_mq_tagset_busy_iter() to walk scsi commands in fnic_is_abts_pending
+Date:   Wed, 21 Apr 2021 15:55:43 +0800
+Message-Id: <20210421075543.1919826-6-ming.lei@redhat.com>
 In-Reply-To: <20210421075543.1919826-1-ming.lei@redhat.com>
 References: <20210421075543.1919826-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -63,245 +63,127 @@ Cc: Karan Tilak Kumar <kartilak@cisco.com>
 Cc: David Jeffery <djeffery@redhat.com>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/scsi/fnic/fnic_scsi.c | 202 ++++++++++++++++++----------------
- 1 file changed, 107 insertions(+), 95 deletions(-)
+ drivers/scsi/fnic/fnic_scsi.c | 96 ++++++++++++++++++++---------------
+ 1 file changed, 55 insertions(+), 41 deletions(-)
 
 diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
-index f052526066c1..ecbf4f5c5a07 100644
+index ecbf4f5c5a07..af8e860f488e 100644
 --- a/drivers/scsi/fnic/fnic_scsi.c
 +++ b/drivers/scsi/fnic/fnic_scsi.c
-@@ -1559,124 +1559,136 @@ static inline int fnic_queue_abort_io_req(struct fnic *fnic, int tag,
- 	return 0;
+@@ -2814,58 +2814,72 @@ void fnic_exch_mgr_reset(struct fc_lport *lp, u32 sid, u32 did)
+ 
  }
  
--static void fnic_rport_exch_reset(struct fnic *fnic, u32 port_id)
-+struct fnic_reset_data {
-+	u32 port_id;
-+	int term_cnt;
+-/*
+- * fnic_is_abts_pending() is a helper function that
+- * walks through tag map to check if there is any IOs pending,if there is one,
+- * then it returns 1 (true), otherwise 0 (false)
+- * if @lr_sc is non NULL, then it checks IOs specific to particular LUN,
+- * otherwise, it checks for all IOs.
+- */
+-int fnic_is_abts_pending(struct fnic *fnic, struct scsi_cmnd *lr_sc)
++struct fnic_is_abts_pending_data {
++	struct scsi_cmnd *lr_sc;
++	int ret;
 +};
 +
-+static bool fnic_reset_cmd(struct request *req, void *data, bool reserved)
++static bool __fnic_is_abts_pending(struct request *req, void *data,
++		bool reserved)
  {
-+	struct fnic_reset_data *reset_data = data;
- 	int tag;
- 	int abt_tag;
--	int term_cnt = 0;
+-	int tag;
++	struct fnic_is_abts_pending_data *pdata = data;
  	struct fnic_io_req *io_req;
  	spinlock_t *io_lock;
  	unsigned long flags;
+-	int ret = 0;
 -	struct scsi_cmnd *sc;
--	struct reset_stats *reset_stats = &fnic->fnic_stats.reset_stats;
--	struct terminate_stats *term_stats = &fnic->fnic_stats.term_stats;
- 	struct scsi_lun fc_lun;
- 	enum fnic_ioreq_state old_ioreq_state;
+ 	struct scsi_device *lun_dev = NULL;
 +	struct scsi_cmnd *sc = blk_mq_rq_to_pdu(req);
 +	struct fc_lport *lp = shost_priv(sc->device->host);
 +	struct fnic *fnic = lport_priv(lp);
-+	struct reset_stats *reset_stats = &fnic->fnic_stats.reset_stats;
-+	struct terminate_stats *term_stats = &fnic->fnic_stats.term_stats;
  
--	FNIC_SCSI_DBG(KERN_DEBUG,
--		      fnic->lport->host,
--		      "fnic_rport_exch_reset called portid 0x%06x\n",
--		      port_id);
-+	tag = req->tag;
-+	abt_tag = tag;
-+	io_lock = fnic_io_lock_tag(fnic, tag);
+-	if (lr_sc)
+-		lun_dev = lr_sc->device;
++	if (pdata->lr_sc)
++		lun_dev = pdata->lr_sc->device;
+ 
+-	/* walk again to check, if IOs are still pending in fw */
+-	for (tag = 0; tag < fnic->fnic_max_tag_id; tag++) {
+-		sc = scsi_host_find_tag(fnic->lport->host, tag);
+-		/*
+-		 * ignore this lun reset cmd or cmds that do not belong to
+-		 * this lun
+-		 */
+-		if (!sc || (lr_sc && (sc->device != lun_dev || sc == lr_sc)))
+-			continue;
++	/*
++	 * ignore this lun reset cmd or cmds that do not belong to
++	 * this lun
++	 */
++	if (!sc || (pdata->lr_sc && (sc->device != lun_dev ||
++					sc == pdata->lr_sc)))
++		return true;
+ 
+-		io_lock = fnic_io_lock_hash(fnic, sc);
+-		spin_lock_irqsave(io_lock, flags);
++	io_lock = fnic_io_lock_hash(fnic, sc);
 +	spin_lock_irqsave(io_lock, flags);
  
--	if (fnic->in_remove)
--		return;
+-		io_req = (struct fnic_io_req *)CMD_SP(sc);
 +	io_req = (struct fnic_io_req *)CMD_SP(sc);
  
--	for (tag = 0; tag < fnic->fnic_max_tag_id; tag++) {
--		abt_tag = tag;
--		io_lock = fnic_io_lock_tag(fnic, tag);
--		spin_lock_irqsave(io_lock, flags);
--		sc = scsi_host_find_tag(fnic->lport->host, tag);
--		if (!sc) {
+-		if (!io_req || sc->device != lun_dev) {
 -			spin_unlock_irqrestore(io_lock, flags);
 -			continue;
 -		}
-+	if (!io_req || io_req->port_id != reset_data->port_id)
++	if (!io_req || sc->device != lun_dev)
 +		goto unlock;
- 
--		io_req = (struct fnic_io_req *)CMD_SP(sc);
-+	if ((CMD_FLAGS(sc) & FNIC_DEVICE_RESET) &&
-+		(!(CMD_FLAGS(sc) & FNIC_DEV_RST_ISSUED))) {
-+		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
-+		"fnic_rport_exch_reset dev rst not pending sc 0x%p\n",
-+		sc);
-+		goto unlock;
-+	}
- 
--		if (!io_req || io_req->port_id != port_id) {
--			spin_unlock_irqrestore(io_lock, flags);
--			continue;
--		}
-+	/*
-+	 * Found IO that is still pending with firmware and
-+	 * belongs to rport that went away
-+	 */
-+	if (CMD_STATE(sc) == FNIC_IOREQ_ABTS_PENDING)
-+		goto unlock;
- 
--		if ((CMD_FLAGS(sc) & FNIC_DEVICE_RESET) &&
--			(!(CMD_FLAGS(sc) & FNIC_DEV_RST_ISSUED))) {
--			FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			"fnic_rport_exch_reset dev rst not pending sc 0x%p\n",
--			sc);
--			spin_unlock_irqrestore(io_lock, flags);
--			continue;
--		}
-+	if (io_req->abts_done) {
-+		shost_printk(KERN_ERR, fnic->lport->host,
-+		"fnic_rport_exch_reset: io_req->abts_done is set "
-+		"state is %s\n",
-+		fnic_ioreq_state_to_str(CMD_STATE(sc)));
-+	}
  
 -		/*
 -		 * Found IO that is still pending with firmware and
--		 * belongs to rport that went away
+-		 * belongs to the LUN that we are resetting
 -		 */
--		if (CMD_STATE(sc) == FNIC_IOREQ_ABTS_PENDING) {
--			spin_unlock_irqrestore(io_lock, flags);
--			continue;
--		}
--		if (io_req->abts_done) {
--			shost_printk(KERN_ERR, fnic->lport->host,
--			"fnic_rport_exch_reset: io_req->abts_done is set "
--			"state is %s\n",
--			fnic_ioreq_state_to_str(CMD_STATE(sc)));
--		}
-+	if (!(CMD_FLAGS(sc) & FNIC_IO_ISSUED)) {
-+		shost_printk(KERN_ERR, fnic->lport->host,
-+			  "rport_exch_reset "
-+			  "IO not yet issued %p tag 0x%x flags "
-+			  "%x state %d\n",
-+			  sc, tag, CMD_FLAGS(sc), CMD_STATE(sc));
-+	}
-+	old_ioreq_state = CMD_STATE(sc);
-+	CMD_STATE(sc) = FNIC_IOREQ_ABTS_PENDING;
-+	CMD_ABTS_STATUS(sc) = FCPIO_INVALID_CODE;
-+	if (CMD_FLAGS(sc) & FNIC_DEVICE_RESET) {
-+		atomic64_inc(&reset_stats->device_reset_terminates);
-+		abt_tag = (tag | FNIC_TAG_DEV_RST);
-+		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
-+		"fnic_rport_exch_reset dev rst sc 0x%p\n",
-+		sc);
-+	}
+-		FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
+-			      "Found IO in %s on lun\n",
+-			      fnic_ioreq_state_to_str(CMD_STATE(sc)));
++	/*
++	 * Found IO that is still pending with firmware and
++	 * belongs to the LUN that we are resetting
++	 */
++	FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host,
++		      "Found IO in %s on lun\n",
++		      fnic_ioreq_state_to_str(CMD_STATE(sc)));
  
--		if (!(CMD_FLAGS(sc) & FNIC_IO_ISSUED)) {
--			shost_printk(KERN_ERR, fnic->lport->host,
--				  "rport_exch_reset "
--				  "IO not yet issued %p tag 0x%x flags "
--				  "%x state %d\n",
--				  sc, tag, CMD_FLAGS(sc), CMD_STATE(sc));
--		}
--		old_ioreq_state = CMD_STATE(sc);
--		CMD_STATE(sc) = FNIC_IOREQ_ABTS_PENDING;
--		CMD_ABTS_STATUS(sc) = FCPIO_INVALID_CODE;
--		if (CMD_FLAGS(sc) & FNIC_DEVICE_RESET) {
--			atomic64_inc(&reset_stats->device_reset_terminates);
--			abt_tag = (tag | FNIC_TAG_DEV_RST);
--			FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			"fnic_rport_exch_reset dev rst sc 0x%p\n",
--			sc);
--		}
-+	BUG_ON(io_req->abts_done);
- 
--		BUG_ON(io_req->abts_done);
-+	FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
-+		      "fnic_rport_reset_exch: Issuing abts\n");
- 
--		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
--			      "fnic_rport_reset_exch: Issuing abts\n");
-+	spin_unlock_irqrestore(io_lock, flags);
- 
-+	/* Now queue the abort command to firmware */
-+	int_to_scsilun(sc->device->lun, &fc_lun);
-+
-+	if (fnic_queue_abort_io_req(fnic, abt_tag,
-+				    FCPIO_ITMF_ABT_TASK_TERM,
-+				    fc_lun.scsi_lun, io_req)) {
-+		/*
-+		 * Revert the cmd state back to old state, if
-+		 * it hasn't changed in between. This cmd will get
-+		 * aborted later by scsi_eh, or cleaned up during
-+		 * lun reset
-+		 */
-+		spin_lock_irqsave(io_lock, flags);
-+		if (CMD_STATE(sc) == FNIC_IOREQ_ABTS_PENDING)
-+			CMD_STATE(sc) = old_ioreq_state;
- 		spin_unlock_irqrestore(io_lock, flags);
-+	} else {
-+		spin_lock_irqsave(io_lock, flags);
-+		if (CMD_FLAGS(sc) & FNIC_DEVICE_RESET)
-+			CMD_FLAGS(sc) |= FNIC_DEV_RST_TERM_ISSUED;
-+		else
-+			CMD_FLAGS(sc) |= FNIC_IO_INTERNAL_TERM_ISSUED;
-+		spin_unlock_irqrestore(io_lock, flags);
-+		atomic64_inc(&term_stats->terminates);
-+		reset_data->term_cnt++;
-+	}
-+	return true;
-+unlock:
+-		if (CMD_STATE(sc) == FNIC_IOREQ_ABTS_PENDING)
+-			ret = 1;
+-		spin_unlock_irqrestore(io_lock, flags);
+-	}
++	if (CMD_STATE(sc) == FNIC_IOREQ_ABTS_PENDING)
++		pdata->ret = 1;
++ unlock:
 +	spin_unlock_irqrestore(io_lock, flags);
 +	return true;
 +}
  
--		/* Now queue the abort command to firmware */
--		int_to_scsilun(sc->device->lun, &fc_lun);
-+static void fnic_rport_exch_reset(struct fnic *fnic, u32 port_id)
+-	return ret;
++/*
++ * fnic_is_abts_pending() is a helper function that
++ * walks through tag map to check if there is any IOs pending,if there is one,
++ * then it returns 1 (true), otherwise 0 (false)
++ * if @lr_sc is non NULL, then it checks IOs specific to particular LUN,
++ * otherwise, it checks for all IOs.
++ */
++int fnic_is_abts_pending(struct fnic *fnic, struct scsi_cmnd *lr_sc)
 +{
-+	struct fnic_reset_data data = {
-+		.port_id	=	port_id,
-+		.term_cnt	=	0,
++	struct fnic_is_abts_pending_data data = {
++		.lr_sc	=	lr_sc,
++		.ret	=	0,
 +	};
- 
--		if (fnic_queue_abort_io_req(fnic, abt_tag,
--					    FCPIO_ITMF_ABT_TASK_TERM,
--					    fc_lun.scsi_lun, io_req)) {
--			/*
--			 * Revert the cmd state back to old state, if
--			 * it hasn't changed in between. This cmd will get
--			 * aborted later by scsi_eh, or cleaned up during
--			 * lun reset
--			 */
--			spin_lock_irqsave(io_lock, flags);
--			if (CMD_STATE(sc) == FNIC_IOREQ_ABTS_PENDING)
--				CMD_STATE(sc) = old_ioreq_state;
--			spin_unlock_irqrestore(io_lock, flags);
--		} else {
--			spin_lock_irqsave(io_lock, flags);
--			if (CMD_FLAGS(sc) & FNIC_DEVICE_RESET)
--				CMD_FLAGS(sc) |= FNIC_DEV_RST_TERM_ISSUED;
--			else
--				CMD_FLAGS(sc) |= FNIC_IO_INTERNAL_TERM_ISSUED;
--			spin_unlock_irqrestore(io_lock, flags);
--			atomic64_inc(&term_stats->terminates);
--			term_cnt++;
--		}
--	}
--	if (term_cnt > atomic64_read(&term_stats->max_terminates))
--		atomic64_set(&term_stats->max_terminates, term_cnt);
-+	FNIC_SCSI_DBG(KERN_DEBUG,
-+		      fnic->lport->host,
-+		      "fnic_rport_exch_reset called portid 0x%06x\n",
-+		      port_id);
-+
-+	if (fnic->in_remove)
-+		return;
 +
 +	blk_mq_tagset_busy_iter(&fnic->lport->host->tag_set,
-+			fnic_reset_cmd, &data);
- 
-+	if (data.term_cnt > atomic64_read(&fnic->fnic_stats.term_stats.max_terminates))
-+		atomic64_set(&fnic->fnic_stats.term_stats.max_terminates, data.term_cnt);
++			__fnic_is_abts_pending, &data);
++	return data.ret;
  }
- 
- static bool fnic_terminate_cmd(struct request *req, void *data, bool reserved)
 -- 
 2.29.2
 
