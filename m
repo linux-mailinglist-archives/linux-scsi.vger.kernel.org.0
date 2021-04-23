@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE3536915E
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Apr 2021 13:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E42369160
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Apr 2021 13:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242329AbhDWLlL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Apr 2021 07:41:11 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46930 "EHLO mx2.suse.de"
+        id S242334AbhDWLlM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Apr 2021 07:41:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46918 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242328AbhDWLkw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S242335AbhDWLkw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 23 Apr 2021 07:40:52 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id EA49AB200;
+        by mx2.suse.de (Postfix) with ESMTP id F1335B201;
         Fri, 23 Apr 2021 11:39:55 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Bart van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 38/39] target: use standard SAM status types
-Date:   Fri, 23 Apr 2021 13:39:43 +0200
-Message-Id: <20210423113944.42672-39-hare@suse.de>
+Subject: [PATCH 39/39] scsi: drop obsolete linux-specific SCSI status codes
+Date:   Fri, 23 Apr 2021 13:39:44 +0200
+Message-Id: <20210423113944.42672-40-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210423113944.42672-1-hare@suse.de>
 References: <20210423113944.42672-1-hare@suse.de>
@@ -33,245 +33,463 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-target_complete_cmd() and friends requires a SAM status type,
-so passing GOOD here is actually wrong.
+Original the SCSI subsystem has been using 'special' SCSI status
+codes, which were the SAM-specified ones but shifted by 1.
+As most drivers have now been modified to use the SAM-specified
+ones having two nearly identical sets of definitions only causes
+confusion for no good reason.
+And the linux-specifed SCSI status codes are marked obsolete since
+several years now.
+So drop them and use the SAM-specified status codes throughout.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/target/target_core_alua.c   |  6 +++---
- drivers/target/target_core_iblock.c |  2 +-
- drivers/target/target_core_pr.c     |  8 ++++----
- drivers/target/target_core_pscsi.c  |  2 +-
- drivers/target/target_core_sbc.c    | 10 +++++-----
- drivers/target/target_core_spc.c    | 14 +++++++-------
- drivers/target/target_core_xcopy.c  |  2 +-
- 7 files changed, 22 insertions(+), 22 deletions(-)
+ drivers/ata/libata-scsi.c             |  2 +-
+ drivers/infiniband/ulp/srp/ib_srp.c   |  2 +-
+ drivers/scsi/3w-9xxx.c                |  2 +-
+ drivers/scsi/3w-xxxx.c                |  4 +--
+ drivers/scsi/53c700.c                 |  6 ++--
+ drivers/scsi/NCR5380.c                |  2 +-
+ drivers/scsi/arcmsr/arcmsr_hba.c      |  4 +--
+ drivers/scsi/esas2r/esas2r_main.c     |  2 +-
+ drivers/scsi/megaraid.c               |  4 +--
+ drivers/scsi/megaraid/megaraid_mbox.c |  4 +--
+ drivers/scsi/scsi_error.c             | 48 +++++++++++++--------------
+ drivers/scsi/scsi_lib.c               |  2 +-
+ drivers/scsi/sr.c                     |  2 +-
+ drivers/scsi/sr_ioctl.c               |  2 +-
+ drivers/xen/xen-scsiback.c            |  2 +-
+ include/scsi/scsi.h                   |  1 -
+ include/scsi/scsi_proto.h             | 22 +-----------
+ include/scsi/sg.h                     | 20 +++++++++++
+ 18 files changed, 65 insertions(+), 66 deletions(-)
 
-diff --git a/drivers/target/target_core_alua.c b/drivers/target/target_core_alua.c
-index 5517c7dd5144..3bb921345bce 100644
---- a/drivers/target/target_core_alua.c
-+++ b/drivers/target/target_core_alua.c
-@@ -123,7 +123,7 @@ target_emulate_report_referrals(struct se_cmd *cmd)
- 
- 	transport_kunmap_data_sg(cmd);
- 
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -255,7 +255,7 @@ target_emulate_report_target_port_groups(struct se_cmd *cmd)
- 	}
- 	transport_kunmap_data_sg(cmd);
- 
--	target_complete_cmd_with_length(cmd, GOOD, rd_len + 4);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, rd_len + 4);
- 	return 0;
- }
- 
-@@ -424,7 +424,7 @@ target_emulate_set_target_port_groups(struct se_cmd *cmd)
- out:
- 	transport_kunmap_data_sg(cmd);
- 	if (!rc)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return rc;
- }
- 
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index d6fdd1c61f90..deb2b8b64d20 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -474,7 +474,7 @@ iblock_execute_zero_out(struct block_device *bdev, struct se_cmd *cmd)
- 	if (ret)
- 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
- 
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index 6fd5fec95539..4b94b085625b 100644
---- a/drivers/target/target_core_pr.c
-+++ b/drivers/target/target_core_pr.c
-@@ -234,7 +234,7 @@ target_scsi2_reservation_release(struct se_cmd *cmd)
- out_unlock:
- 	spin_unlock(&dev->dev_reservation_lock);
- out:
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -297,7 +297,7 @@ target_scsi2_reservation_reserve(struct se_cmd *cmd)
- 	spin_unlock(&dev->dev_reservation_lock);
- out:
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-@@ -3676,7 +3676,7 @@ target_scsi3_emulate_pr_out(struct se_cmd *cmd)
+diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+index 401990e87d50..3aa4bb666616 100644
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -642,7 +642,7 @@ static struct ata_queued_cmd *ata_scsi_qc_new(struct ata_device *dev,
+ 		if (cmd->request->rq_flags & RQF_QUIET)
+ 			qc->flags |= ATA_QCFLAG_QUIET;
+ 	} else {
+-		cmd->result = (DID_OK << 16) | (QUEUE_FULL << 1);
++		cmd->result = (DID_OK << 16) | SAM_STAT_TASK_SET_FULL;
+ 		cmd->scsi_done(cmd);
  	}
  
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-@@ -4073,7 +4073,7 @@ target_scsi3_emulate_pr_in(struct se_cmd *cmd)
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index 31f8aa2c40ed..62d9b70f7c63 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -2232,7 +2232,7 @@ static int srp_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scmnd)
+ 		 * to reduce queue depth temporarily.
+ 		 */
+ 		scmnd->result = len == -ENOMEM ?
+-			DID_OK << 16 | QUEUE_FULL << 1 : DID_ERROR << 16;
++			DID_OK << 16 | SAM_STAT_TASK_SET_FULL : DID_ERROR << 16;
+ 		goto err_iu;
  	}
  
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
+diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
+index 47028f5e57ab..259393726ecb 100644
+--- a/drivers/scsi/3w-9xxx.c
++++ b/drivers/scsi/3w-9xxx.c
+@@ -1342,7 +1342,7 @@ static irqreturn_t twa_interrupt(int irq, void *dev_instance)
+ 				/* If error, command failed */
+ 				if (error == 1) {
+ 					/* Ask for a host reset */
+-					cmd->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++					cmd->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+ 				}
  
-diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
-index dac44caf77a3..7e5e4ab3c126 100644
---- a/drivers/target/target_core_pscsi.c
-+++ b/drivers/target/target_core_pscsi.c
-@@ -1044,7 +1044,7 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
- 	struct se_cmd *cmd = req->end_io_data;
- 	struct pscsi_plugin_task *pt = cmd->priv;
- 	int result = scsi_req(req)->result;
--	u8 scsi_status = status_byte(result) << 1;
-+	u8 scsi_status = (result & 0xff);
+ 				/* Report residual bytes for single sgl */
+diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
+index 7a0b4a44395d..4ee485ab2714 100644
+--- a/drivers/scsi/3w-xxxx.c
++++ b/drivers/scsi/3w-xxxx.c
+@@ -429,7 +429,7 @@ static int tw_decode_sense(TW_Device_Extension *tw_dev, int request_id, int fill
+ 					/* Additional sense code qualifier */
+ 					tw_dev->srb[request_id]->sense_buffer[13] = tw_sense_table[i][3];
  
- 	if (scsi_status != SAM_STAT_GOOD) {
- 		pr_debug("PSCSI Status Byte exception at cmd: %p CDB:"
-diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
-index 7b07e557dc8d..b32f4ee88e79 100644
---- a/drivers/target/target_core_sbc.c
-+++ b/drivers/target/target_core_sbc.c
-@@ -67,7 +67,7 @@ sbc_emulate_readcapacity(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
- 	}
+-					tw_dev->srb[request_id]->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++					tw_dev->srb[request_id]->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+ 					return TW_ISR_DONT_RESULT; /* Special case for isr to not over-write result */
+ 				}
+ 			}
+@@ -2159,7 +2159,7 @@ static irqreturn_t tw_interrupt(int irq, void *dev_instance)
+ 				/* If error, command failed */
+ 				if (error == 1) {
+ 					/* Ask for a host reset */
+-					tw_dev->srb[request_id]->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++					tw_dev->srb[request_id]->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+ 				}
  
--	target_complete_cmd_with_length(cmd, GOOD, 8);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 8);
- 	return 0;
- }
+ 				/* Now complete the io */
+diff --git a/drivers/scsi/53c700.c b/drivers/scsi/53c700.c
+index ab42feab233f..601a8df0bef3 100644
+--- a/drivers/scsi/53c700.c
++++ b/drivers/scsi/53c700.c
+@@ -979,10 +979,10 @@ process_script_interrupt(__u32 dsps, __u32 dsp, struct scsi_cmnd *SCp,
+ 		if (NCR_700_get_tag_neg_state(SCp->device) == NCR_700_DURING_TAG_NEGOTIATION)
+ 			NCR_700_set_tag_neg_state(SCp->device,
+ 						  NCR_700_FINISHED_TAG_NEGOTIATION);
+-			
++
+ 		/* check for contingent allegiance conditions */
+-		if (hostdata->status[0] >> 1 == CHECK_CONDITION ||
+-		    hostdata->status[0] >> 1 == COMMAND_TERMINATED) {
++		if (hostdata->status[0] == SAM_STAT_CHECK_CONDITION ||
++		    hostdata->status[0] == SAM_STAT_COMMAND_TERMINATED) {
+ 			struct NCR_700_command_slot *slot =
+ 				(struct NCR_700_command_slot *)SCp->host_scribble;
+ 			if(slot->flags == NCR_700_FLAG_AUTOSENSE) {
+diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+index 1aea164c535c..0c1dccd8b3e5 100644
+--- a/drivers/scsi/NCR5380.c
++++ b/drivers/scsi/NCR5380.c
+@@ -538,7 +538,7 @@ static void complete_cmd(struct Scsi_Host *instance,
  
-@@ -130,7 +130,7 @@ sbc_emulate_readcapacity_16(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
- 	}
+ 	if (hostdata->sensing == cmd) {
+ 		/* Autosense processing ends here */
+-		if (status_byte(cmd->result) != GOOD) {
++		if (get_status_byte(cmd) != SAM_STAT_GOOD) {
+ 			scsi_eh_restore_cmnd(cmd, &hostdata->ses);
+ 		} else {
+ 			scsi_eh_restore_cmnd(cmd, &hostdata->ses);
+diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
+index 8e4d7d0e649c..5ea5e6010449 100644
+--- a/drivers/scsi/arcmsr/arcmsr_hba.c
++++ b/drivers/scsi/arcmsr/arcmsr_hba.c
+@@ -1326,7 +1326,7 @@ static void arcmsr_report_sense_info(struct CommandControlBlock *ccb)
  
--	target_complete_cmd_with_length(cmd, GOOD, 32);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 32);
- 	return 0;
- }
- 
-@@ -202,14 +202,14 @@ sbc_execute_write_same_unmap(struct se_cmd *cmd)
- 			return ret;
- 	}
- 
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
- static sense_reason_t
- sbc_emulate_noop(struct se_cmd *cmd)
- {
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -1245,7 +1245,7 @@ sbc_execute_unmap(struct se_cmd *cmd)
- err:
- 	transport_kunmap_data_sg(cmd);
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
-index 70a661801cb9..0756a690ea84 100644
---- a/drivers/target/target_core_spc.c
-+++ b/drivers/target/target_core_spc.c
-@@ -750,7 +750,7 @@ spc_emulate_inquiry(struct se_cmd *cmd)
- 	kfree(buf);
- 
- 	if (!ret)
--		target_complete_cmd_with_length(cmd, GOOD, len);
-+		target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, len);
- 	return ret;
- }
- 
-@@ -1104,7 +1104,7 @@ static sense_reason_t spc_emulate_modesense(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
- 	}
- 
--	target_complete_cmd_with_length(cmd, GOOD, length);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, length);
- 	return 0;
- }
- 
-@@ -1122,7 +1122,7 @@ static sense_reason_t spc_emulate_modeselect(struct se_cmd *cmd)
- 	int i;
- 
- 	if (!cmd->data_length) {
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	struct scsi_cmnd *pcmd = ccb->pcmd;
+ 	struct SENSE_DATA *sensebuffer = (struct SENSE_DATA *)pcmd->sense_buffer;
+-	pcmd->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++	pcmd->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+ 	if (sensebuffer) {
+ 		int sense_data_length =
+ 			sizeof(struct SENSE_DATA) < SCSI_SENSE_BUFFERSIZE
+@@ -3242,7 +3242,7 @@ static int arcmsr_queue_command_lck(struct scsi_cmnd *cmd,
+ 	if (!ccb)
+ 		return SCSI_MLQUEUE_HOST_BUSY;
+ 	if (arcmsr_build_ccb( acb, ccb, cmd ) == FAILED) {
+-		cmd->result = (DID_ERROR << 16) | (RESERVATION_CONFLICT << 1);
++		cmd->result = (DID_ERROR << 16) | SAM_STAT_RESERVATION_CONFLICT;
+ 		cmd->scsi_done(cmd);
  		return 0;
  	}
+diff --git a/drivers/scsi/esas2r/esas2r_main.c b/drivers/scsi/esas2r/esas2r_main.c
+index a9dd6345f064..f7818df175a5 100644
+--- a/drivers/scsi/esas2r/esas2r_main.c
++++ b/drivers/scsi/esas2r/esas2r_main.c
+@@ -1525,7 +1525,7 @@ void esas2r_complete_request_cb(struct esas2r_adapter *a,
  
-@@ -1165,7 +1165,7 @@ static sense_reason_t spc_emulate_modeselect(struct se_cmd *cmd)
- 	transport_kunmap_data_sg(cmd);
+ 		rq->cmd->result =
+ 			((esas2r_req_status_to_error(rq->req_stat) << 16)
+-			 | (rq->func_rsp.scsi_rsp.scsi_stat & STATUS_MASK));
++			 | rq->func_rsp.scsi_rsp.scsi_stat);
  
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
+ 		if (rq->req_stat == RS_UNDERRUN)
+ 			scsi_set_resid(rq->cmd,
+diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
+index 1880471c632a..56910e94dbf2 100644
+--- a/drivers/scsi/megaraid.c
++++ b/drivers/scsi/megaraid.c
+@@ -1611,7 +1611,7 @@ mega_cmd_done(adapter_t *adapter, u8 completed[], int nstatus, int status)
+ 			 */
+ 			if( cmd->cmnd[0] == TEST_UNIT_READY ) {
+ 				cmd->result |= (DID_ERROR << 16) |
+-					(RESERVATION_CONFLICT << 1);
++					SAM_STAT_RESERVATION_CONFLICT;
+ 			}
+ 			else
+ 			/*
+@@ -1623,7 +1623,7 @@ mega_cmd_done(adapter_t *adapter, u8 completed[], int nstatus, int status)
+ 					 cmd->cmnd[0] == RELEASE) ) {
  
-@@ -1198,7 +1198,7 @@ static sense_reason_t spc_emulate_request_sense(struct se_cmd *cmd)
- 	memcpy(rbuf, buf, min_t(u32, sizeof(buf), cmd->data_length));
- 	transport_kunmap_data_sg(cmd);
+ 				cmd->result |= (DID_ERROR << 16) |
+-					(RESERVATION_CONFLICT << 1);
++					SAM_STAT_RESERVATION_CONFLICT;
+ 			}
+ 			else
+ #endif
+diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
+index 674f1c6829f5..db36e4369c2d 100644
+--- a/drivers/scsi/megaraid/megaraid_mbox.c
++++ b/drivers/scsi/megaraid/megaraid_mbox.c
+@@ -2327,7 +2327,7 @@ megaraid_mbox_dpc(unsigned long devp)
+ 			 */
+ 			if (scp->cmnd[0] == TEST_UNIT_READY) {
+ 				scp->result = DID_ERROR << 16 |
+-					RESERVATION_CONFLICT << 1;
++					SAM_STAT_RESERVATION_CONFLICT;
+ 			}
+ 			else
+ 			/*
+@@ -2338,7 +2338,7 @@ megaraid_mbox_dpc(unsigned long devp)
+ 					 scp->cmnd[0] == RELEASE)) {
  
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
+ 				scp->result = DID_ERROR << 16 |
+-					RESERVATION_CONFLICT << 1;
++					SAM_STAT_RESERVATION_CONFLICT;
+ 			}
+ 			else {
+ 				scp->result = DID_BAD_TARGET << 16 | status;
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index 3e6e456816fc..c6cd5a8e5c85 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -745,32 +745,32 @@ static enum scsi_disposition scsi_eh_completed_normally(struct scsi_cmnd *scmd)
+ 	 * now, check the status byte to see if this indicates
+ 	 * anything special.
+ 	 */
+-	switch (status_byte(scmd->result)) {
+-	case GOOD:
++	switch (get_status_byte(scmd)) {
++	case SAM_STAT_GOOD:
+ 		scsi_handle_queue_ramp_up(scmd->device);
+ 		fallthrough;
+-	case COMMAND_TERMINATED:
++	case SAM_STAT_COMMAND_TERMINATED:
+ 		return SUCCESS;
+-	case CHECK_CONDITION:
++	case SAM_STAT_CHECK_CONDITION:
+ 		return scsi_check_sense(scmd);
+-	case CONDITION_GOOD:
+-	case INTERMEDIATE_GOOD:
+-	case INTERMEDIATE_C_GOOD:
++	case SAM_STAT_CONDITION_MET:
++	case SAM_STAT_INTERMEDIATE:
++	case SAM_STAT_INTERMEDIATE_CONDITION_MET:
+ 		/*
+ 		 * who knows?  FIXME(eric)
+ 		 */
+ 		return SUCCESS;
+-	case RESERVATION_CONFLICT:
++	case SAM_STAT_RESERVATION_CONFLICT:
+ 		if (scmd->cmnd[0] == TEST_UNIT_READY)
+ 			/* it is a success, we probed the device and
+ 			 * found it */
+ 			return SUCCESS;
+ 		/* otherwise, we failed to send the command */
+ 		return FAILED;
+-	case QUEUE_FULL:
++	case SAM_STAT_TASK_SET_FULL:
+ 		scsi_handle_queue_full(scmd->device);
+ 		fallthrough;
+-	case BUSY:
++	case SAM_STAT_BUSY:
+ 		return NEEDS_RETRY;
+ 	default:
+ 		return FAILED;
+@@ -1760,7 +1760,7 @@ int scsi_noretry_cmd(struct scsi_cmnd *scmd)
+ 	case DID_PARITY:
+ 		return (scmd->request->cmd_flags & REQ_FAILFAST_DEV);
+ 	case DID_ERROR:
+-		if (status_byte(scmd->result) == RESERVATION_CONFLICT)
++		if (get_status_byte(scmd) == SAM_STAT_RESERVATION_CONFLICT)
+ 			return 0;
+ 		fallthrough;
+ 	case DID_SOFT_ERROR:
+@@ -1876,7 +1876,7 @@ enum scsi_disposition scsi_decide_disposition(struct scsi_cmnd *scmd)
+ 		 */
+ 		return SUCCESS;
+ 	case DID_ERROR:
+-		if (status_byte(scmd->result) == RESERVATION_CONFLICT)
++		if (get_status_byte(scmd) == SAM_STAT_RESERVATION_CONFLICT)
+ 			/*
+ 			 * execute reservation conflict processing code
+ 			 * lower down
+@@ -1907,15 +1907,15 @@ enum scsi_disposition scsi_decide_disposition(struct scsi_cmnd *scmd)
+ 	/*
+ 	 * check the status byte to see if this indicates anything special.
+ 	 */
+-	switch (status_byte(scmd->result)) {
+-	case QUEUE_FULL:
++	switch (get_status_byte(scmd)) {
++	case SAM_STAT_TASK_SET_FULL:
+ 		scsi_handle_queue_full(scmd->device);
+ 		/*
+ 		 * the case of trying to send too many commands to a
+ 		 * tagged queueing device.
+ 		 */
+ 		fallthrough;
+-	case BUSY:
++	case SAM_STAT_BUSY:
+ 		/*
+ 		 * device can't talk to us at the moment.  Should only
+ 		 * occur (SAM-3) when the task queue is empty, so will cause
+@@ -1923,16 +1923,16 @@ enum scsi_disposition scsi_decide_disposition(struct scsi_cmnd *scmd)
+ 		 * device.
+ 		 */
+ 		return ADD_TO_MLQUEUE;
+-	case GOOD:
++	case SAM_STAT_GOOD:
+ 		if (scmd->cmnd[0] == REPORT_LUNS)
+ 			scmd->device->sdev_target->expecting_lun_change = 0;
+ 		scsi_handle_queue_ramp_up(scmd->device);
+ 		fallthrough;
+-	case COMMAND_TERMINATED:
++	case SAM_STAT_COMMAND_TERMINATED:
+ 		return SUCCESS;
+-	case TASK_ABORTED:
++	case SAM_STAT_TASK_ABORTED:
+ 		goto maybe_retry;
+-	case CHECK_CONDITION:
++	case SAM_STAT_CHECK_CONDITION:
+ 		rtn = scsi_check_sense(scmd);
+ 		if (rtn == NEEDS_RETRY)
+ 			goto maybe_retry;
+@@ -1941,16 +1941,16 @@ enum scsi_disposition scsi_decide_disposition(struct scsi_cmnd *scmd)
+ 		 * to collect the sense and redo the decide
+ 		 * disposition */
+ 		return rtn;
+-	case CONDITION_GOOD:
+-	case INTERMEDIATE_GOOD:
+-	case INTERMEDIATE_C_GOOD:
+-	case ACA_ACTIVE:
++	case SAM_STAT_CONDITION_MET:
++	case SAM_STAT_INTERMEDIATE:
++	case SAM_STAT_INTERMEDIATE_CONDITION_MET:
++	case SAM_STAT_ACA_ACTIVE:
+ 		/*
+ 		 * who knows?  FIXME(eric)
+ 		 */
+ 		return SUCCESS;
  
-@@ -1265,7 +1265,7 @@ sense_reason_t spc_emulate_report_luns(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
+-	case RESERVATION_CONFLICT:
++	case SAM_STAT_RESERVATION_CONFLICT:
+ 		sdev_printk(KERN_INFO, scmd->device,
+ 			    "reservation conflict\n");
+ 		set_host_byte(scmd, DID_NEXUS_FAILURE);
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index f5b439ba3216..d5ea9f26e6c4 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -907,7 +907,7 @@ static int scsi_io_completion_nz_result(struct scsi_cmnd *cmd, int result,
+ 	 * if it can't fit). Treat SAM_STAT_CONDITION_MET and the related
+ 	 * intermediate statuses (both obsolete in SAM-4) as good.
+ 	 */
+-	if (status_byte(result) && scsi_status_is_good(result)) {
++	if ((result & 0xff) && scsi_status_is_good(result)) {
+ 		result = 0;
+ 		*blk_statp = BLK_STS_OK;
  	}
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index e9cb874f6891..482a07b662a9 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -338,7 +338,7 @@ static int sr_done(struct scsi_cmnd *SCpnt)
+ 	 * care is taken to avoid unnecessary additional work such as
+ 	 * memcpy's that could be avoided.
+ 	 */
+-	if (status_byte(result) == SAM_STAT_CHECK_CONDITION &&
++	if (scsi_status_is_check_condition(result) &&
+ 	    (SCpnt->sense_buffer[0] & 0x7f) == 0x70) { /* Sense current */
+ 		switch (SCpnt->sense_buffer[2]) {
+ 		case MEDIUM_ERROR:
+diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
+index 74348ead5b11..b34a5332fd2d 100644
+--- a/drivers/scsi/sr_ioctl.c
++++ b/drivers/scsi/sr_ioctl.c
+@@ -209,7 +209,7 @@ int sr_do_ioctl(Scsi_CD *cd, struct packet_command *cgc)
+ 		err = result;
+ 		goto out;
+ 	}
+-	if (status_byte(result) == SAM_STAT_CHECK_CONDITION) {
++	if (scsi_status_is_check_condition(result)) {
+ 		switch (sshdr->sense_key) {
+ 		case UNIT_ATTENTION:
+ 			SDev->changed = 1;
+diff --git a/drivers/xen/xen-scsiback.c b/drivers/xen/xen-scsiback.c
+index bea22f71c782..61ce0d142eea 100644
+--- a/drivers/xen/xen-scsiback.c
++++ b/drivers/xen/xen-scsiback.c
+@@ -224,7 +224,7 @@ static void scsiback_print_status(char *sense_buffer, int errors,
  
--	target_complete_cmd_with_length(cmd, GOOD, 8 + lun_count * 8);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 8 + lun_count * 8);
- 	return 0;
+ 	pr_err("[%s:%d] cmnd[0]=%02x -> st=%02x msg=%02x host=%02x\n",
+ 	       tpg->tport->tport_name, pending_req->v2p->lun,
+-	       pending_req->cmnd[0], status_byte(errors), COMMAND_COMPLETE,
++	       pending_req->cmnd[0], errors & 0xff, COMMAND_COMPLETE,
+ 	       host_byte(errors));
  }
- EXPORT_SYMBOL(spc_emulate_report_luns);
-@@ -1273,7 +1273,7 @@ EXPORT_SYMBOL(spc_emulate_report_luns);
- static sense_reason_t
- spc_emulate_testunitready(struct se_cmd *cmd)
- {
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
  
-diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
-index d31ed071cb08..44d76c304701 100644
---- a/drivers/target/target_core_xcopy.c
-+++ b/drivers/target/target_core_xcopy.c
-@@ -1011,7 +1011,7 @@ static sense_reason_t target_rcr_operating_parameters(struct se_cmd *se_cmd)
- 	put_unaligned_be32(42, &p[0]);
+diff --git a/include/scsi/scsi.h b/include/scsi/scsi.h
+index bd1d1bc5d1b7..8a96f824923a 100644
+--- a/include/scsi/scsi.h
++++ b/include/scsi/scsi.h
+@@ -212,7 +212,6 @@ enum scsi_disposition {
+  *      msg_byte    (unused)
+  *      host_byte   = set by low-level driver to indicate status.
+  */
+-#define status_byte(result) (((result) >> 1) & 0x7f)
+ #define host_byte(result)   (((result) >> 16) & 0xff)
  
- 	transport_kunmap_data_sg(se_cmd);
--	target_complete_cmd(se_cmd, GOOD);
-+	target_complete_cmd(se_cmd, SAM_STAT_GOOD);
+ #define sense_class(sense)  (((sense) >> 4) & 0x7)
+diff --git a/include/scsi/scsi_proto.h b/include/scsi/scsi_proto.h
+index c36860111932..80bb1c5f11f1 100644
+--- a/include/scsi/scsi_proto.h
++++ b/include/scsi/scsi_proto.h
+@@ -202,27 +202,7 @@ struct scsi_varlen_cdb_hdr {
+ #define SAM_STAT_ACA_ACTIVE      0x30
+ #define SAM_STAT_TASK_ABORTED    0x40
  
- 	return TCM_NO_SENSE;
- }
+-/*
+- *  Status codes. These are deprecated as they are shifted 1 bit right
+- *  from those found in the SCSI standards. This causes confusion for
+- *  applications that are ported to several OSes. Prefer SAM Status codes
+- *  above.
+- */
+-
+-#define GOOD                 0x00
+-#define CHECK_CONDITION      0x01
+-#define CONDITION_GOOD       0x02
+-#define BUSY                 0x04
+-#define INTERMEDIATE_GOOD    0x08
+-#define INTERMEDIATE_C_GOOD  0x0a
+-#define RESERVATION_CONFLICT 0x0c
+-#define COMMAND_TERMINATED   0x11
+-#define QUEUE_FULL           0x14
+-#define ACA_ACTIVE           0x18
+-#define TASK_ABORTED         0x20
+-
+-#define STATUS_MASK          0xfe
+-
++#define STATUS_MASK         0xfe
+ /*
+  *  SENSE KEYS
+  */
+diff --git a/include/scsi/sg.h b/include/scsi/sg.h
+index 350470298aef..b4cc2bdffd95 100644
+--- a/include/scsi/sg.h
++++ b/include/scsi/sg.h
+@@ -136,6 +136,26 @@ struct compat_sg_io_hdr {
+ /* Obsolete driver_byte() declaration */
+ #define driver_byte(result) (((result) >> 24) & 0xff)
+ 
++/*
++ *  Original linux SCS Status codes. They are shifted 1 bit right
++ *  from those found in the SCSI standards.
++ */
++
++#define GOOD                 0x00
++#define CHECK_CONDITION      0x01
++#define CONDITION_GOOD       0x02
++#define BUSY                 0x04
++#define INTERMEDIATE_GOOD    0x08
++#define INTERMEDIATE_C_GOOD  0x0a
++#define RESERVATION_CONFLICT 0x0c
++#define COMMAND_TERMINATED   0x11
++#define QUEUE_FULL           0x14
++#define ACA_ACTIVE           0x18
++#define TASK_ABORTED         0x20
++
++/* Obsolete status_byte() declaration */
++#define status_byte(result) (((result) >> 1) & 0x7f)
++
+ typedef struct sg_scsi_id { /* used by SG_GET_SCSI_ID ioctl() */
+     int host_no;        /* as in "scsi<n>" where 'n' is one of 0, 1, 2 etc */
+     int channel;
 -- 
 2.29.2
 
