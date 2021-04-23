@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF30A36914E
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Apr 2021 13:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619D2369152
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Apr 2021 13:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242264AbhDWLlA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Apr 2021 07:41:00 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47136 "EHLO mx2.suse.de"
+        id S242390AbhDWLlB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Apr 2021 07:41:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47184 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242261AbhDWLkj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 23 Apr 2021 07:40:39 -0400
+        id S242270AbhDWLkl (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 23 Apr 2021 07:40:41 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 8399EB1D0;
+        by mx2.suse.de (Postfix) with ESMTP id 895DAB1D5;
         Fri, 23 Apr 2021 11:39:55 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Bart van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 23/39] nsp32: do not set message byte
-Date:   Fri, 23 Apr 2021 13:39:28 +0200
-Message-Id: <20210423113944.42672-24-hare@suse.de>
+Subject: [PATCH 24/39] wd33c93: translate message byte to host byte
+Date:   Fri, 23 Apr 2021 13:39:29 +0200
+Message-Id: <20210423113944.42672-25-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210423113944.42672-1-hare@suse.de>
 References: <20210423113944.42672-1-hare@suse.de>
@@ -33,56 +33,86 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The message byte always devolves to COMMAND_COMPLETE, so there
-is no point in setting it.
+Instead of setting the message byte translate it to the appropriate
+host byte. As error recovery would return DID_ERROR for any non-zero
+message byte the translation doesn't change the error handling.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/nsp32.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/scsi/wd33c93.c | 46 ++++++++++++++++++++++++------------------
+ 1 file changed, 26 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
-index 6d29908017f0..56009eb248a7 100644
---- a/drivers/scsi/nsp32.c
-+++ b/drivers/scsi/nsp32.c
-@@ -948,7 +948,6 @@ static int nsp32_queuecommand_lck(struct scsi_cmnd *SCpnt,
- 	SCpnt->scsi_done     = done;
- 	data->CurrentSC      = SCpnt;
- 	SCpnt->SCp.Status    = SAM_STAT_CHECK_CONDITION;
--	SCpnt->SCp.Message   = 0;
- 	scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
+diff --git a/drivers/scsi/wd33c93.c b/drivers/scsi/wd33c93.c
+index a23277bb870e..187b363db00e 100644
+--- a/drivers/scsi/wd33c93.c
++++ b/drivers/scsi/wd33c93.c
+@@ -1176,13 +1176,14 @@ wd33c93_intr(struct Scsi_Host *instance)
+ 			if (cmd->SCp.Status == ILLEGAL_STATUS_BYTE)
+ 				cmd->SCp.Status = lun;
+ 			if (cmd->cmnd[0] == REQUEST_SENSE
+-			    && cmd->SCp.Status != SAM_STAT_GOOD)
+-				cmd->result =
+-				    (cmd->
+-				     result & 0x00ffff) | (DID_ERROR << 16);
+-			else
+-				cmd->result =
+-				    cmd->SCp.Status | (cmd->SCp.Message << 8);
++			    && cmd->SCp.Status != SAM_STAT_GOOD) {
++				set_host_byte(cmd, DID_ERROR);
++				set_status_byte(cmd, SAM_STAT_GOOD);
++			} else {
++				set_host_byte(cmd, DID_OK);
++				translate_msg_byte(cmd, cmd->SCp.Message);
++				set_status_byte(cmd, cmd->SCp.Status);
++			}
+ 			cmd->scsi_done(cmd);
  
- 	SCpnt->SCp.ptr		    = (char *)scsi_sglist(SCpnt);
-@@ -1690,12 +1689,10 @@ static int nsp32_busfree_occur(struct scsi_cmnd *SCpnt, unsigned short execph)
- 		nsp32_dbg(NSP32_DEBUG_BUSFREE, "command complete");
+ /* We are no longer  connected to a target - check to see if
+@@ -1262,11 +1263,15 @@ wd33c93_intr(struct Scsi_Host *instance)
+ 		    hostdata->connected = NULL;
+ 		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
+ 		hostdata->state = S_UNCONNECTED;
+-		if (cmd->cmnd[0] == REQUEST_SENSE && cmd->SCp.Status != SAM_STAT_GOOD)
+-			cmd->result =
+-			    (cmd->result & 0x00ffff) | (DID_ERROR << 16);
+-		else
+-			cmd->result = cmd->SCp.Status | (cmd->SCp.Message << 8);
++		if (cmd->cmnd[0] == REQUEST_SENSE &&
++		    cmd->SCp.Status != SAM_STAT_GOOD) {
++			set_host_byte(cmd, DID_ERROR);
++			set_status_byte(cmd, SAM_STAT_GOOD);
++		} else {
++			set_host_byte(cmd, DID_OK);
++			translate_msg_byte(cmd, cmd->SCp.Message);
++			set_status_byte(cmd, cmd->SCp.Status);
++		}
+ 		cmd->scsi_done(cmd);
  
- 		SCpnt->SCp.Status  = nsp32_read1(base, SCSI_CSB_IN);
--		SCpnt->SCp.Message = 0;
- 		nsp32_dbg(NSP32_DEBUG_BUSFREE,
- 			  "normal end stat=0x%x resid=0x%x\n",
- 			  SCpnt->SCp.Status, scsi_get_resid(SCpnt));
- 		SCpnt->result = (DID_OK << 16) |
--			(SCpnt->SCp.Message << 8) |
- 			(SCpnt->SCp.Status << 0);
- 		nsp32_scsi_done(SCpnt);
- 		/* All operation is done */
-@@ -1703,7 +1700,6 @@ static int nsp32_busfree_occur(struct scsi_cmnd *SCpnt, unsigned short execph)
- 	} else if (execph & MSGIN_04_VALID) {
- 		/* MsgIn 04: Disconnect */
- 		SCpnt->SCp.Status  = nsp32_read1(base, SCSI_CSB_IN);
--		SCpnt->SCp.Message = 4;
- 
- 		nsp32_dbg(NSP32_DEBUG_BUSFREE, "disconnect");
- 		return TRUE;
-@@ -1712,7 +1708,7 @@ static int nsp32_busfree_occur(struct scsi_cmnd *SCpnt, unsigned short execph)
- 		nsp32_msg(KERN_WARNING, "unexpected bus free occurred");
- 
- 		/* DID_ERROR? */
--		//SCpnt->result   = (DID_OK << 16) | (SCpnt->SCp.Message << 8) | (SCpnt->SCp.Status << 0);
-+		//SCpnt->result   = (DID_OK << 16) | (SCpnt->SCp.Status << 0);
- 		SCpnt->result = DID_ERROR << 16;
- 		nsp32_scsi_done(SCpnt);
- 		return TRUE;
+ /* We are no longer connected to a target - check to see if
+@@ -1295,14 +1300,15 @@ wd33c93_intr(struct Scsi_Host *instance)
+ 			hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
+ 			hostdata->state = S_UNCONNECTED;
+ 			DB(DB_INTR, printk(":%d", cmd->SCp.Status))
+-			    if (cmd->cmnd[0] == REQUEST_SENSE
+-				&& cmd->SCp.Status != SAM_STAT_GOOD)
+-				cmd->result =
+-				    (cmd->
+-				     result & 0x00ffff) | (DID_ERROR << 16);
+-			else
+-				cmd->result =
+-				    cmd->SCp.Status | (cmd->SCp.Message << 8);
++			if (cmd->cmnd[0] == REQUEST_SENSE
++			    && cmd->SCp.Status != SAM_STAT_GOOD) {
++				set_host_byte(cmd, DID_ERROR);
++				set_status_byte(cmd, SAM_STAT_GOOD);
++			} else {
++				set_host_byte(cmd, DID_OK);
++				translate_msg_byte(cmd, cmd->SCp.Message);
++				set_status_byte(cmd, cmd->SCp.Status);
++			}
+ 			cmd->scsi_done(cmd);
+ 			break;
+ 		case S_PRE_TMP_DISC:
 -- 
 2.29.2
 
