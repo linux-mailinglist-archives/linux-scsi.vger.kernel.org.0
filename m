@@ -2,106 +2,188 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB153369D6F
-	for <lists+linux-scsi@lfdr.de>; Sat, 24 Apr 2021 01:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3ED1369D87
+	for <lists+linux-scsi@lfdr.de>; Sat, 24 Apr 2021 01:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244249AbhDWXhl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Apr 2021 19:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244170AbhDWXgK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Apr 2021 19:36:10 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC002C061358
-        for <linux-scsi@vger.kernel.org>; Fri, 23 Apr 2021 16:35:25 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id h20so25974250plr.4
-        for <linux-scsi@vger.kernel.org>; Fri, 23 Apr 2021 16:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pAHGSrP/507ov+QTkI3sRQ13dI9YjW5wXUt8fslUa14=;
-        b=H0maWWVEeM6GwHfnIkCOaqq0wBK5eBeByVfXETJ5dbnpahHIGFeq97rsvLvcBY2tOH
-         n+14RAjAUtm+pvhl46mdfrlUp7z8gb1cQ2EsfcHmeTbUPEf/Q7TmNMyeaC9mEERmxewk
-         XDqR3rQkT+nVtt1p8OGJ4SJ3ugZfwRq39OuMaLyye2phibzHGfgylRclIGJYT2kgwb9R
-         ZklgHG9VmMFbmmTlVdG1qdTDxTZM09LfFT5EzmiF7PqZx5FOXlkOi/gOIA8bUbe39Qms
-         c1Dw0rprtDGiASdBAUqka/hPpjDLMygZvMlZ+Vh/db7/m8n0PiQhnDHQLrDuSvclc58+
-         uKbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pAHGSrP/507ov+QTkI3sRQ13dI9YjW5wXUt8fslUa14=;
-        b=H2MkRfPVHbUN4YETeutCb2Horl1zfzvr79J/SUwiZYTU51+cGeWvCwVNlBrf9Z1p4B
-         lubE7YiIjdqR4e1ZwXkHYnzmYnFGCmyA5XMFTKYd3xShMVhiyfXoDkEGwjBd1w+j1tHK
-         i+nDZMv6c38mXM+jfooJzHucLIBigfx4/ywVzY+6Mc9p08DDO1k3/t9ghJ6Fiye3IixI
-         0zQlaGt8lcaEY15SWw1vqKWG5XadALCwqsp//ya8wh1wI3h8tJikz58OPqyQTsfOd6Z9
-         LL2VPppyvAJx1uNrTo08LMWQ69tdjnsNU3OoDLh6LimPBf2VMe4qYy02ym2904x1hbpA
-         UCvg==
-X-Gm-Message-State: AOAM5318Ta57wg/6fj11sP80c8zL2x2DOTVbVGQB383QvGZ+OiArLRWA
-        5h5HxfjNP6kzouHXuTrOhdxrxFav7a0=
-X-Google-Smtp-Source: ABdhPJwPgfLvw4O97lxwJNkg35NY7L4AKzopOyKFFlJrklkKoaz1zpZwYmmF7E5zyE5MW72CbOThfQ==
-X-Received: by 2002:a17:90a:2e03:: with SMTP id q3mr3421002pjd.206.1619220924750;
-        Fri, 23 Apr 2021 16:35:24 -0700 (PDT)
-Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v123sm5346892pfb.80.2021.04.23.16.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Apr 2021 16:35:24 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v8 31/31] elx: efct: Tie into kernel Kconfig and build process
-Date:   Fri, 23 Apr 2021 16:34:55 -0700
-Message-Id: <20210423233455.27243-32-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210423233455.27243-1-jsmart2021@gmail.com>
-References: <20210423233455.27243-1-jsmart2021@gmail.com>
+        id S235898AbhDWXpM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Apr 2021 19:45:12 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:50463 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231740AbhDWXpK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Apr 2021 19:45:10 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1619221472; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=1rAl4/SGpigHk/EP46KWRcz1cpKU6hDAhQ42+J5NZgM=; b=AM2+gIq8vSPxCgpWDjC0NRVHT2Hgv2zNf5cBhI7rOimIHtpau/uoGcqOezGH2UD1DSMpJGlD
+ XQPeZr7rZYdORMWI1SccDOdk5kESOac6UKo205bWkovZGPp42QeSbPZlNBl62ojlLi0BMWt9
+ CjDZoog6n/AV3LGRaePqPTKBlf8=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60835bde215b831afb965f6c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 23 Apr 2021 23:44:30
+ GMT
+Sender: asutoshd=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 27212C43145; Fri, 23 Apr 2021 23:44:29 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.8.168] (cpe-70-95-149-85.san.res.rr.com [70.95.149.85])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: asutoshd)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 40434C433D3;
+        Fri, 23 Apr 2021 23:44:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 40434C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=asutoshd@codeaurora.org
+Subject: Re: [PATCH v20 1/2] scsi: ufs: Enable power management for wlun
+To:     Adrian Hunter <adrian.hunter@intel.com>, cang@codeaurora.org,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bean Huo <beanhuo@micron.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yue Hu <huyue2@yulong.com>,
+        Bart van Assche <bvanassche@acm.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Satya Tangirala <satyat@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
+        <linux-mediatek@lists.infradead.org>
+References: <cover.1618600985.git.asutoshd@codeaurora.org>
+ <d660b8d4e1fb192810abd09a8ff0ef4d9f6b96cd.1618600985.git.asutoshd@codeaurora.org>
+ <fdadd467-b613-d800-18c5-be064396fd10@intel.com>
+ <07e3ea07-e1c3-7b8c-e398-8b008f873e6d@codeaurora.org>
+ <90809796-1c32-3709-13d3-65e4d5c387cc@intel.com>
+ <1bc4a73e-b22a-6bad-2583-3a0ffa979414@intel.com>
+ <651f5d8a-5ab7-77dd-3fed-05feb3fd3e1a@codeaurora.org>
+ <efe71230-5b6a-22a8-1aef-f1cae046df22@intel.com>
+ <e6f3946a-dbe7-6b42-e43c-d3f8d705c732@intel.com>
+ <973e0bbb-ac2d-7196-2e25-37aee2b77b46@intel.com>
+From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
+Message-ID: <a71d6ac3-0dc6-4fa8-3643-6d3473d08797@codeaurora.org>
+Date:   Fri, 23 Apr 2021 16:44:26 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <973e0bbb-ac2d-7196-2e25-37aee2b77b46@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This final patch ties the efct driver into the kernel Kconfig
-and build linkages in the drivers/scsi directory.
+On 4/23/2021 1:01 AM, Adrian Hunter wrote:
+>>
+>>
+> 
 
-Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Daniel Wagner <dwagner@suse.de>
----
- drivers/scsi/Kconfig  | 2 ++
- drivers/scsi/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+Hi Adrian,
+Thanks for the help.
+I made the changes and tried to reproduce it.
+My setup becomes non-responsive and resets.
+I don't think it's related to this issue though.
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 06b87c7f6bab..b3d10b2950b0 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1157,6 +1157,8 @@ config SCSI_LPFC_DEBUG_FS
- 	  This makes debugging information from the lpfc driver
- 	  available via the debugfs filesystem.
- 
-+source "drivers/scsi/elx/Kconfig"
-+
- config SCSI_SIM710
- 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
- 	depends on EISA && SCSI
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index bc3882f5cc69..8504478fa793 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -85,6 +85,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
- obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
- obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
- obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
-+obj-$(CONFIG_SCSI_EFCT)		+= elx/
- obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
- obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
- obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
+I hadn't set rpm_lvl and spm_lvl to 0 while testing the other day.
+Setting those to 0, it proceeds further and now it becomes unresponsive. 
+So I still don't clearly see the issue that you're seeing. However, I'd 
+make the suggested changes and push it in next version.
+
+> I think we also need to runtime resume RPMB WLUN before system suspend.
+> e.g.
+> 
+> +static int ufshcd_rpmb_rpm_get_sync(struct ufs_hba *hba)
+> +{
+> +	return pm_runtime_get_sync(&hba->sdev_rpmb->sdev_gendev);
+> +}
+> +
+> +static int ufshcd_rpmb_rpm_put(struct ufs_hba *hba)
+> +{
+> +	return pm_runtime_put(&hba->sdev_rpmb->sdev_gendev);
+> +}
+> +
+>   void ufshcd_resume_complete(struct device *dev)
+>   {
+>   	struct ufs_hba *hba = dev_get_drvdata(dev);
+>   
+> +	if (hba->rpmb_complete_put) {
+> +		hba->rpmb_complete_put = false;
+> +		ufshcd_rpmb_rpm_put(hba);
+> +	}
+>   	if (hba->complete_put) {
+>   		hba->complete_put = false;
+>   		ufshcd_rpm_put(hba);
+> @@ -9611,6 +9625,11 @@ int ufshcd_suspend_prepare(struct device *dev)
+>   		return ret;
+>   	}
+>   	hba->complete_put = true;
+> +
+> +	if (hba->sdev_rpmb) {
+> +		ufshcd_rpmb_rpm_get_sync(hba);
+> +		hba->rpmb_complete_put = true;
+> +	}
+>   	return 0;
+>   }
+> 
+> That also avoids another issue: if RPMB WLUN is runtime suspended at system resume, we have to skip clearing UAC, but SCSI PM will force the runtime status to RPM_ACTIVE after system resume, so the UAC never gets cleared in that case.
+> 
+> Furthermore, it seems better not to report errors from RPMB resume and instead let the error handler sort it out.
+> So, with the above change, we can simplify a bit:
+> 
+> -static int ufshcd_rpmb_runtime_resume(struct device *dev)
+> -{
+> -	struct ufs_hba *hba = wlun_dev_to_hba(dev);
+> -
+> -	if (hba->sdev_rpmb)
+> -		return ufshcd_clear_rpmb_uac(hba);
+> -	return 0;
+> -}
+> -
+>   static int ufshcd_rpmb_resume(struct device *dev)
+>   {
+>   	struct ufs_hba *hba = wlun_dev_to_hba(dev);
+>   
+> -	if (hba->sdev_rpmb && !pm_runtime_suspended(dev))
+> -		return ufshcd_clear_rpmb_uac(hba);
+> +	if (hba->sdev_rpmb)
+> +		ufshcd_clear_rpmb_uac(hba);
+>   	return 0;
+>   }
+>   
+>   static const struct dev_pm_ops ufs_rpmb_pm_ops = {
+> -	SET_RUNTIME_PM_OPS(NULL, ufshcd_rpmb_runtime_resume, NULL)
+> +	SET_RUNTIME_PM_OPS(NULL, ufshcd_rpmb_resume, NULL)
+>   	SET_SYSTEM_SLEEP_PM_OPS(NULL, ufshcd_rpmb_resume)
+>   };
+> 
+> 
+
+
 -- 
-2.26.2
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+Linux Foundation Collaborative Project
