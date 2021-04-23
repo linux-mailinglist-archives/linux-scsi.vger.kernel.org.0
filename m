@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BD936915D
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Apr 2021 13:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826A4369158
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Apr 2021 13:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242152AbhDWLlK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Apr 2021 07:41:10 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47474 "EHLO mx2.suse.de"
+        id S242338AbhDWLlH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Apr 2021 07:41:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46944 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238429AbhDWLks (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S236905AbhDWLks (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 23 Apr 2021 07:40:48 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B976EB1F6;
+        by mx2.suse.de (Postfix) with ESMTP id C0A5DB1F7;
         Fri, 23 Apr 2021 11:39:55 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Bart van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 31/39] fas216: translate message to host byte status
-Date:   Fri, 23 Apr 2021 13:39:36 +0200
-Message-Id: <20210423113944.42672-32-hare@suse.de>
+Subject: [PATCH 32/39] fas216: Use get_status_byte() to avoid using linux-specific status codes
+Date:   Fri, 23 Apr 2021 13:39:37 +0200
+Message-Id: <20210423113944.42672-33-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210423113944.42672-1-hare@suse.de>
 References: <20210423113944.42672-1-hare@suse.de>
@@ -33,39 +33,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of setting the message byte translate it to the appropriate
-host byte. As error recovery would return DID_ERROR for any non-zero
-message byte the translation doesn't change the error handling.
+The driver should be using the standard SAM_STAT_ values, and not
+the linux-specific ones.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/arm/fas216.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/scsi/arm/fas216.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/arm/fas216.c b/drivers/scsi/arm/fas216.c
-index 2e687ce60753..96db9058d61b 100644
+index 96db9058d61b..a2337863e3d8 100644
 --- a/drivers/scsi/arm/fas216.c
 +++ b/drivers/scsi/arm/fas216.c
-@@ -2042,8 +2042,10 @@ fas216_std_done(FAS216_Info *info, struct scsi_cmnd *SCpnt, unsigned int result)
- {
- 	info->stats.fins += 1;
- 
--	SCpnt->result = result << 16 | info->scsi.SCp.Message << 8 |
--			info->scsi.SCp.Status;
-+	set_host_byte(SCpnt, result);
-+	if (result == DID_OK)
-+		translate_msg_byte(SCpnt, info->scsi.SCp.Message);
-+	set_status_byte(SCpnt, info->scsi.SCp.Status);
- 
- 	fas216_log_command(info, LOG_CONNECT, SCpnt,
- 		"command complete, result=0x%08x", SCpnt->result);
-@@ -2051,8 +2053,7 @@ fas216_std_done(FAS216_Info *info, struct scsi_cmnd *SCpnt, unsigned int result)
- 	/*
- 	 * If the driver detected an error, we're all done.
+@@ -2060,15 +2060,15 @@ fas216_std_done(FAS216_Info *info, struct scsi_cmnd *SCpnt, unsigned int result)
+ 	 * If the command returned CHECK_CONDITION or COMMAND_TERMINATED
+ 	 * status, request the sense information.
  	 */
--	if (host_byte(SCpnt->result) != DID_OK ||
--	    msg_byte(SCpnt->result) != COMMAND_COMPLETE)
-+	if (get_host_byte(SCpnt->result) != DID_OK)
+-	if (status_byte(SCpnt->result) == CHECK_CONDITION ||
+-	    status_byte(SCpnt->result) == COMMAND_TERMINATED)
++	if (get_status_byte(SCpnt) == SAM_STAT_CHECK_CONDITION ||
++	    get_status_byte(SCpnt) == SAM_STAT_COMMAND_TERMINATED)
+ 		goto request_sense;
+ 
+ 	/*
+ 	 * If the command did not complete with GOOD status,
+ 	 * we are all done here.
+ 	 */
+-	if (status_byte(SCpnt->result) != GOOD)
++	if (get_status_byte(SCpnt) != SAM_STAT_GOOD)
  		goto done;
  
  	/*
