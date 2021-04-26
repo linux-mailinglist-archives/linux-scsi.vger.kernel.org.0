@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 544D436AB3F
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Apr 2021 05:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A37D36AB50
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Apr 2021 05:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbhDZDtj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 25 Apr 2021 23:49:39 -0400
-Received: from mail-pj1-f44.google.com ([209.85.216.44]:56279 "EHLO
-        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbhDZDti (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Apr 2021 23:49:38 -0400
-Received: by mail-pj1-f44.google.com with SMTP id s14so21341733pjl.5
-        for <linux-scsi@vger.kernel.org>; Sun, 25 Apr 2021 20:48:58 -0700 (PDT)
+        id S231422AbhDZD6Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 25 Apr 2021 23:58:25 -0400
+Received: from mail-il1-f170.google.com ([209.85.166.170]:41576 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231330AbhDZD6Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Apr 2021 23:58:25 -0400
+Received: by mail-il1-f170.google.com with SMTP id v13so5751148ilj.8
+        for <linux-scsi@vger.kernel.org>; Sun, 25 Apr 2021 20:57:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Ms72d9MVOeAEJQAK/BrVUmi2vCOzvZMJr92vJ5NTjnU=;
-        b=buBqnU1hcdc7BfRm5zKW4WLDkmjuxMiLVmGblKDL+YuIhzWUycvxkudpBUCovxY6yk
-         DtxelkU72sRtJIDosCzWbMIhSPeDyDs4qAlbhSpDz2PUFvvY9/qbdRyd9sk5rWzJqzIY
-         PLJE5I//g1OMw3gbzrrq3+y2Z/Gb8mnAO2OEIm4O0Ewkorg+deZxSLRfKsbtSFgKUZRQ
-         iRZ6cl78AtWh997RsIRrdSI9XV45mapSc4d19Gmnqnj9kLF1TVBHZYPQ3gpBVDYuJ4YA
-         lHtF8DcDiEqwfTuwpb8Nu5l+DQId9Hhbi2vuQXhv+sPv8CJqOZUlr8yidMjM0SQ1nea4
-         8x6A==
-X-Gm-Message-State: AOAM5301OXTpW/1k7Mqn71aLta4LfI9EkGMiljoam3/tpeS/Q9UN6m5C
-        /wDcqOfT9w0zfW9+u7sIJIj0Y7womFq8Gg==
-X-Google-Smtp-Source: ABdhPJzMtEzssSnMd3ZpI9HkQKJKwjf+1zWLLA6GBcduAjNN0lgSEsT7ysC3aBNHUxQSwDrRVAWYIQ==
-X-Received: by 2002:a17:90a:ea92:: with SMTP id h18mr8943108pjz.105.1619408937522;
-        Sun, 25 Apr 2021 20:48:57 -0700 (PDT)
+        bh=qTI3p45sDNv5hgHsg9e8XxrSo6tk6kUTWA1AzIhH8vQ=;
+        b=J1QLwrnwNAWKK2+XrwpTAX0x21eLxqDDBdBg5RQr3TlGRDV/+kVSIcgnEKQGk+YlB1
+         /fIE1Ulr/woCh2xXQANOG/nkpHG4DznnLUEPxAeNSrOpjuuaaM/tPRGGtyuaPgFQjixr
+         hsvQf0XwW9KPqfa5p9GcY++itpqE1lDGhESpGQ6w12EayOmGI3r1p4xEKZNanHzqfGcU
+         tKBZhkQ0e4qM5c6VvjjxQrjoha5739aGRQX5B8b2qCM7GwfhNUur2nrjU3fZywx1HslC
+         5nXtpFji5c2FO38pM7ho0Saoqrbv71jjG8xPLUHS/RgcV2leVn3LuFSUsO5buVPHTQDY
+         nLEw==
+X-Gm-Message-State: AOAM531aUEh6V2CStt6vb6HlU6/wlTLk/D0Oy+TAzGDm8MKDXr2EKb0W
+        OoGdfoj4zwZ1H6ZFCZWeatuwV3jiwnw8yw==
+X-Google-Smtp-Source: ABdhPJxClhB58qTGt7bbc4gpkC0mQuzViIb6NqVUiL+0Cu5rwse52WBriyThbgM7xTOh7umYxcBZKQ==
+X-Received: by 2002:a63:db53:: with SMTP id x19mr8036756pgi.327.1619409021617;
+        Sun, 25 Apr 2021 20:50:21 -0700 (PDT)
 Received: from [192.168.3.219] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id p126sm10035838pga.86.2021.04.25.20.48.56
+        by smtp.gmail.com with ESMTPSA id x13sm11911455pja.3.2021.04.25.20.50.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Apr 2021 20:48:56 -0700 (PDT)
-Subject: Re: [PATCH 36/39] scsi: drop message byte helper
+        Sun, 25 Apr 2021 20:50:21 -0700 (PDT)
+Subject: Re: [PATCH 37/39] scsi: kill message byte
 To:     Hannes Reinecke <hare@suse.de>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org
 References: <20210423113944.42672-1-hare@suse.de>
- <20210423113944.42672-37-hare@suse.de>
+ <20210423113944.42672-38-hare@suse.de>
 From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <4303e45c-4dae-e11f-2f84-2e0c6a61eb56@acm.org>
-Date:   Sun, 25 Apr 2021 20:48:55 -0700
+Message-ID: <cec38a4b-55bc-9859-816c-32819715c09b@acm.org>
+Date:   Sun, 25 Apr 2021 20:50:19 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.9.1
 MIME-Version: 1.0
-In-Reply-To: <20210423113944.42672-37-hare@suse.de>
+In-Reply-To: <20210423113944.42672-38-hare@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,7 +57,8 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 4/23/21 4:39 AM, Hannes Reinecke wrote:
-> The message byte is now unused, so we can drop the helper to set
-> the message byte and the check for message bytes during error recovery.
+> Remove last vestigies of SCSI status message bytes.
+              ^^^^^^^^^ typo?
+Anyway:
 
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
