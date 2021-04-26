@@ -2,53 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1CB36AB4E
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Apr 2021 05:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB7536AB3D
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Apr 2021 05:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbhDZDzr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 25 Apr 2021 23:55:47 -0400
-Received: from mail-vs1-f48.google.com ([209.85.217.48]:46702 "EHLO
-        mail-vs1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbhDZDzp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Apr 2021 23:55:45 -0400
-Received: by mail-vs1-f48.google.com with SMTP id y22so3634921vsd.13
-        for <linux-scsi@vger.kernel.org>; Sun, 25 Apr 2021 20:55:04 -0700 (PDT)
+        id S231346AbhDZDsn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 25 Apr 2021 23:48:43 -0400
+Received: from mail-pf1-f169.google.com ([209.85.210.169]:46068 "EHLO
+        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231530AbhDZDsn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Apr 2021 23:48:43 -0400
+Received: by mail-pf1-f169.google.com with SMTP id i190so38040018pfc.12
+        for <linux-scsi@vger.kernel.org>; Sun, 25 Apr 2021 20:47:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3fc+a+tu3htlxcisCqChIGX7WNZpIEf9XEskn82ykvE=;
-        b=olsRJUjNGr+9Z8/odTA9rhOINFEJbGFGDAK7j0pph3uWJWmnLSFhDewYX8JjXPdKjo
-         R1rmPJLg6V7hQOZ77lyGfSfbTjaB20iQEHZ3CWIDjT/iyWpzsmFbTkmNF1mBmPKUDjbR
-         Rcw6hS1W8bRkfAQDEHKRe/RIiYHmPuspP1mc5vE4Z2vAhmPcmYa13mcdU1i6xOu3nOJl
-         yyBFH1Yx8gt9uY05VMECb1zpXxcV8jwofrEiqN/POSqMXrwj4O4VpFDA5GP2Rp0bZAtX
-         +ZiTL9XAD1L0InreQSgoZ1p7wjd74We77qYHQVDbgz6cAyf6mIyBwMPSoU6eYtHcE9R6
-         eV0g==
-X-Gm-Message-State: AOAM532hVNEmy4g4ncMPPswAQsKTZKi2+L6sba/7V7MQkcF9NxcvGuJ5
-        wY6vdaMgF7rPETKuUDHATCBm2WcZRlQkYw==
-X-Google-Smtp-Source: ABdhPJxBYxMPs9KllnSgCuLD3Ft6nH3XxmeIVNmZS21hRe0YEJP6Q7nYsWxh9CJ/xuxAIb9pHGko8w==
-X-Received: by 2002:a17:902:9f88:b029:ed:2b48:3a2c with SMTP id g8-20020a1709029f88b02900ed2b483a2cmr3630981plq.45.1619408770591;
-        Sun, 25 Apr 2021 20:46:10 -0700 (PDT)
+        bh=Hkx/72I582eElwO04BWZ5n3o0BI2RVNZAxi9Eu8OiEE=;
+        b=omX2XIsEXhtg3CQtnCoF0Gh9FHLPqdfAeOQyy9E0fUeTIFvGp8vegeNge8cA/c+QPI
+         qlNOpN6LR5EooeWweLciPD9fawcBu6eVRoP7zkJKJ3YPFOziUgM07cUA22nHUKu+9BWj
+         EV/uAOBIszoVkj2dMdPRuYjN/M5Ukcn6bp8i/Osf+BRAq8nkU61CXPM7KIlM/spiIT5e
+         cNXRKIc0CR/i0gziZzxD2A+f6y77/DJzmYkr+65X6lVr4ccyVSZK2B0lXM83IXL/0l2m
+         CnXz+shKBwcwYLwWt4vVCtJJoNvaJgzGXyoR8KAHOWsxlUAUl6Xdfhw8m1RXWvp7u+sY
+         deqA==
+X-Gm-Message-State: AOAM532dg4Hm+s1MIU7NjcGKc53vDV51heugf7lQH88vu0ICKag5zc4i
+        /R/zB7dpuwAZ7y0ot7JW70rFjd32uVFA+A==
+X-Google-Smtp-Source: ABdhPJy9CdKg4r0/o9/Ob6shGoSbcPFd3iolwEchtZO7NY0WhSyJQ6pio6KtyvaA1evuL7LD3xBRng==
+X-Received: by 2002:a05:6a00:1742:b029:275:c27c:6df0 with SMTP id j2-20020a056a001742b0290275c27c6df0mr4386715pfc.32.1619408851047;
+        Sun, 25 Apr 2021 20:47:31 -0700 (PDT)
 Received: from [192.168.3.219] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id q5sm9312354pfu.5.2021.04.25.20.46.09
+        by smtp.gmail.com with ESMTPSA id nh10sm2117470pjb.49.2021.04.25.20.47.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Apr 2021 20:46:09 -0700 (PDT)
-Subject: Re: [PATCH 13/39] scsi: Drop the now obsolete driver_byte definitions
+        Sun, 25 Apr 2021 20:47:30 -0700 (PDT)
+Subject: Re: [PATCH 15/39] scsi: add get_{status,host}_byte() accessor
+ function
 To:     Hannes Reinecke <hare@suse.de>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+        linux-scsi@vger.kernel.org
 References: <20210423113944.42672-1-hare@suse.de>
- <20210423113944.42672-14-hare@suse.de>
+ <20210423113944.42672-16-hare@suse.de>
 From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <73ff4fe8-4835-7cd2-d7bf-f707fb538107@acm.org>
-Date:   Sun, 25 Apr 2021 20:46:08 -0700
+Message-ID: <4711fd13-a8a7-0cc3-c56f-53d65c47d45f@acm.org>
+Date:   Sun, 25 Apr 2021 20:47:29 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.9.1
 MIME-Version: 1.0
-In-Reply-To: <20210423113944.42672-14-hare@suse.de>
+In-Reply-To: <20210423113944.42672-16-hare@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,7 +58,24 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 4/23/21 4:39 AM, Hannes Reinecke wrote:
-> The driver_byte field in the result is now unused, so we can drop
-> the definitions.
+> +static inline unsigned char get_status_byte(struct scsi_cmnd *cmd)
+> +{
+> +	return cmd->result & 0xff;
+> +}
+> +
+>  static inline void set_msg_byte(struct scsi_cmnd *cmd, char status)
+>  {
+>  	cmd->result = (cmd->result & 0xffff00ff) | (status << 8);
+> @@ -326,6 +331,11 @@ static inline void set_host_byte(struct scsi_cmnd *cmd, char status)
+>  	cmd->result = (cmd->result & 0xff00ffff) | (status << 16);
+>  }
+>  
+> +static inline unsigned char get_host_byte(struct scsi_cmnd *cmd)
+> +{
+> +	return (cmd->result >> 16) & 0xff;
+> +}
+
+How about using 'u8' instead of 'unsigned char' to make it more clear
+that the returned value is an integer instead of a character? Anyway:
 
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
