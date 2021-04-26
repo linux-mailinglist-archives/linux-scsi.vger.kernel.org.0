@@ -2,82 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4219A36AB46
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Apr 2021 05:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544D436AB3F
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Apr 2021 05:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbhDZDt4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 25 Apr 2021 23:49:56 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:3644 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbhDZDty (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Apr 2021 23:49:54 -0400
-IronPort-SDR: Mz0+g2QATWyjFtvhcy8T3ikHAIlypk/4nWXTqPRGKEUjAehJFv8TP0tBqGjQ5u+FhitYFXnPqb
- omq43wHwiZQ3SrFOUF9mXMHSB78jWteRMOC4p/9u+1gENnPugcB8p9F6mGdeWdqNNWoY7/xwDA
- L4tgEre/CXBy1eWPJnlSg4DAcsI6hWB40zj/WR41PrE9P2eSp4sVPUxId+vLDXEGrr5YMv26ez
- UaZOB6QOwgeicW8Zf7W+5RJuNRfN6PLZVWYItaxq0s4WawENLoS7i6PJ4/t21QgD6Lf/nwg9Ov
- YKc=
-X-IronPort-AV: E=Sophos;i="5.82,251,1613462400"; 
-   d="scan'208";a="29759517"
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by labrats.qualcomm.com with ESMTP; 25 Apr 2021 20:49:13 -0700
-X-QCInternal: smtphost
-Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 25 Apr 2021 20:49:13 -0700
-Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 3E4642121E; Sun, 25 Apr 2021 20:49:13 -0700 (PDT)
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, ziqichen@codeaurora.org,
-        nguyenb@codeaurora.org, hongwus@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Gilad Broner <gbroner@codeaurora.org>,
-        Subhash Jadavani <subhashj@codeaurora.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 3/3] scsi: ufs: Narrow down fast pass in system suspend path
-Date:   Sun, 25 Apr 2021 20:48:40 -0700
-Message-Id: <1619408921-30426-4-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1619408921-30426-1-git-send-email-cang@codeaurora.org>
-References: <1619408921-30426-1-git-send-email-cang@codeaurora.org>
+        id S231588AbhDZDtj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 25 Apr 2021 23:49:39 -0400
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:56279 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231431AbhDZDti (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Apr 2021 23:49:38 -0400
+Received: by mail-pj1-f44.google.com with SMTP id s14so21341733pjl.5
+        for <linux-scsi@vger.kernel.org>; Sun, 25 Apr 2021 20:48:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ms72d9MVOeAEJQAK/BrVUmi2vCOzvZMJr92vJ5NTjnU=;
+        b=buBqnU1hcdc7BfRm5zKW4WLDkmjuxMiLVmGblKDL+YuIhzWUycvxkudpBUCovxY6yk
+         DtxelkU72sRtJIDosCzWbMIhSPeDyDs4qAlbhSpDz2PUFvvY9/qbdRyd9sk5rWzJqzIY
+         PLJE5I//g1OMw3gbzrrq3+y2Z/Gb8mnAO2OEIm4O0Ewkorg+deZxSLRfKsbtSFgKUZRQ
+         iRZ6cl78AtWh997RsIRrdSI9XV45mapSc4d19Gmnqnj9kLF1TVBHZYPQ3gpBVDYuJ4YA
+         lHtF8DcDiEqwfTuwpb8Nu5l+DQId9Hhbi2vuQXhv+sPv8CJqOZUlr8yidMjM0SQ1nea4
+         8x6A==
+X-Gm-Message-State: AOAM5301OXTpW/1k7Mqn71aLta4LfI9EkGMiljoam3/tpeS/Q9UN6m5C
+        /wDcqOfT9w0zfW9+u7sIJIj0Y7womFq8Gg==
+X-Google-Smtp-Source: ABdhPJzMtEzssSnMd3ZpI9HkQKJKwjf+1zWLLA6GBcduAjNN0lgSEsT7ysC3aBNHUxQSwDrRVAWYIQ==
+X-Received: by 2002:a17:90a:ea92:: with SMTP id h18mr8943108pjz.105.1619408937522;
+        Sun, 25 Apr 2021 20:48:57 -0700 (PDT)
+Received: from [192.168.3.219] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id p126sm10035838pga.86.2021.04.25.20.48.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Apr 2021 20:48:56 -0700 (PDT)
+Subject: Re: [PATCH 36/39] scsi: drop message byte helper
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org
+References: <20210423113944.42672-1-hare@suse.de>
+ <20210423113944.42672-37-hare@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <4303e45c-4dae-e11f-2f84-2e0c6a61eb56@acm.org>
+Date:   Sun, 25 Apr 2021 20:48:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
+MIME-Version: 1.0
+In-Reply-To: <20210423113944.42672-37-hare@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If spm_lvl is set to 0 or 1, when system suspend kicks start and hba is
-runtime active, system suspend may just bail without doing anything (the
-fast pass), leaving other contexts still running, e.g., clock gating and
-clock scaling. When system resume kicks start, concurrency can happen btw
-ufshcd_resume() and these contexts, leading to various stability issues.
-Fix it by adding a check against hba's runtime status and allowing fast
-pass only if hba is runtime suspended, otherwise let system suspend go
-ahead call ufshcd_suspend(). This can guarantee that these contexts are
-stopped by either runtime suspend or system suspend.
+On 4/23/21 4:39 AM, Hannes Reinecke wrote:
+> The message byte is now unused, so we can drop the helper to set
+> the message byte and the check for message bytes during error recovery.
 
-Fixes: 0b257734344aa ("scsi: ufs: optimize system suspend handling")
-Signed-off-by: Can Guo <cang@codeaurora.org>
----
- drivers/scsi/ufs/ufshcd.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index a2f9c8e..c480f88 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -9050,6 +9050,7 @@ int ufshcd_system_suspend(struct ufs_hba *hba)
- 	     hba->curr_dev_pwr_mode) &&
- 	    (ufs_get_pm_lvl_to_link_pwr_state(hba->spm_lvl) ==
- 	     hba->uic_link_state) &&
-+	     pm_runtime_suspended(hba->dev) &&
- 	     !hba->dev_info.b_rpm_dev_flush_capable)
- 		goto out;
- 
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
