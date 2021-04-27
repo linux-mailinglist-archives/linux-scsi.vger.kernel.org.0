@@ -2,111 +2,194 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6542936CC72
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 22:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE7D36CE07
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 23:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236058AbhD0Uml (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 16:42:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59631 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235412AbhD0Umk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Apr 2021 16:42:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619556116;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wah8BXWEHmh129hIyOkat2n9eNbkovFJ91S4NlUMPNo=;
-        b=W63AZ+T4wgplJ96ccpe2+b2JL3FDObS0eWnEQj3z+sjkiyNA+XN1wXNC2SIeB8/gUPfrXW
-        ZsnOpGdvhL/mV9OJ6ejNjKw68aFEU0GuoEm5WwCHlS5foDQQY+jIJu6Vwl1R8Z4XzkEUMe
-        ARmXFvOF2qY/58jaN/GgBUNGIUlxejM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-415-v-sD3U7RMsemS63l-4Z-dw-1; Tue, 27 Apr 2021 16:41:52 -0400
-X-MC-Unique: v-sD3U7RMsemS63l-4Z-dw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE37B107ACF5;
-        Tue, 27 Apr 2021 20:41:50 +0000 (UTC)
-Received: from ovpn-112-203.phx2.redhat.com (ovpn-112-203.phx2.redhat.com [10.3.112.203])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3C65C100763B;
-        Tue, 27 Apr 2021 20:41:46 +0000 (UTC)
-Message-ID: <c8ede601244e1710dbf320c33c0f7853e249bbee.camel@redhat.com>
-Subject: Re: RFC: one more time: SCSI device identification
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     Martin Wilck <martin.wilck@suse.com>,
-        "Ulrich.Windl@rz.uni-regensburg.de" 
-        <Ulrich.Windl@rz.uni-regensburg.de>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc:     Hannes Reinecke <hare@suse.com>, "hch@lst.de" <hch@lst.de>,
-        "dgilbert@interlog.com" <dgilbert@interlog.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "jejb@linux.vnet.ibm.com" <jejb@linux.vnet.ibm.com>,
-        "systemd-devel@lists.freedesktop.org" 
-        <systemd-devel@lists.freedesktop.org>,
-        "bmarzins@redhat.com" <bmarzins@redhat.com>
-Date:   Tue, 27 Apr 2021 16:41:45 -0400
-In-Reply-To: <488ef3e7fa0cca4f0a0cb2e9307ddaa08385d3f7.camel@suse.com>
-References: <c524ce68d9a9582732db8350f8a1def461a1a847.camel@suse.com>
-         <yq135w4cam3.fsf@ca-mkp.ca.oracle.com>
-         <06489ea37311fe7bf73b27a41b5209ee4cca85fe.camel@suse.com>
-         <yq1pmynt6f6.fsf@ca-mkp.ca.oracle.com>
-         <685c40341d2ddef2fe5a54dd656d10104b0c1bfa.camel@suse.com>
-         <yq1im4dre94.fsf@ca-mkp.ca.oracle.com>
-         <e3184501cbf23ab0ae94d664725e72b693c64ba9.camel@suse.com>
-         <6086A0B2020000A100040BBE@gwsmtp.uni-regensburg.de>
-         <59dc346de26997a6b8e3ae3d86d84ada60b3d26b.camel@suse.com>
-         <65f66a5e03081dd3b470fa9aeff9a77dbc41743c.camel@redhat.com>
-         <488ef3e7fa0cca4f0a0cb2e9307ddaa08385d3f7.camel@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        id S239033AbhD0V6a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 17:58:30 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:38698 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235440AbhD0V63 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Apr 2021 17:58:29 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 138E320426F;
+        Tue, 27 Apr 2021 23:57:44 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VpNMmLP6ARZ0; Tue, 27 Apr 2021 23:57:36 +0200 (CEST)
+Received: from xtwo70.bingwo.ca (host-45-58-219-4.dyn.295.ca [45.58.219.4])
+        by smtp.infotech.no (Postfix) with ESMTPA id 6FBBD20416A;
+        Tue, 27 Apr 2021 23:57:34 +0200 (CEST)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
+Subject: [PATCH v18 00/83] sg: add v4 interface, request sharing
+Date:   Tue, 27 Apr 2021 17:56:09 -0400
+Message-Id: <20210427215733.417746-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2021-04-27 at 20:33 +0000, Martin Wilck wrote:
-> On Tue, 2021-04-27 at 16:14 -0400, Ewan D. Milne wrote:
-> > 
-> > There's no way to do that, in principle.  Because there could be
-> > other I/Os in flight.  You might (somehow) avoid retrying an I/O
-> > that got a UA until you figured out if something changed, but other
-> > I/Os can already have been sent to the target, or issued before you
-> > get to look at the status.
-> 
-> Right. But in practice, a WWID change will hardly happen under full
-> IO
-> load. The storage side will probably have to block IO while this
-> happens, at least for a short time period. So blocking and quiescing
-> the queue upon an UA might still work, most of the time. Even if we
-> were too late already, the sooner we stop the queue, the better.
-> 
-> The current algorithm in multipath-tools needs to detect a path going
-> down and being reinstated. The time interval during which a WWID
-> change
-> will go unnoticed is one or more path checker intervals, typically on
-> the order of 5-30 seconds. If we could decrease this interval to a
-> sub-
-> second or even millisecond range by blocking the queue in the kernel
-> quickly, we'd have made a big step forward.
+This is the combined patchset showing the additions in the
+second half patchset, that will be presented after the first
+half patchset is accepted.
 
-Yes, and in many situations this may help.  But in the general case
-we can't protect against a storage array misconfiguration,
-where something like this can happen.  So I worry about people
-believing the host software will protect them against a mistake,
-when we can't really do that.
+Patches 1 to 45 (inclusive) are a new version (v18) of the
+first half patchset and have their own cover letter whose
+subject line is:
+    [PATCH v18 00/45] sg: add v4 interface
 
-All it takes is one I/O (a discard) to make a thorough mess of the LUN.
+The idea behind releasing the combined patchset is so they can
+be run through the kernel's code sanity checking mechanisms.
+So expect some noise.
 
--Ewan
+The additions in the second half patchset are more fully described
+in:    https://sg.danny.cz/sg/sg_v40.html  which is mirrored at:
+       https://doug-gilbert.github.io/sg_v40.html
+       
 
-> 
-> Regards
-> Martin
-> 
+The following list is a summary of features in the second patchset:
+
+    - add (sg) file descriptor sharing; this is used by:
+      - request sharing
+      - multiple requests (mrq) use of SGV4_FLAG_DO_ON_OTHER flag
+
+    - add request sharing, mainly to expedite copying. READ bio
+      handed off to paired WRITE with no data to user space unless
+      requested. Also capable of using VERIFY(BytChk=1) instead of
+      the WRITE (what NVMe does in its Compare NVM command).
+
+    - extend the request sharing logic so SGV4_FLAG_KEEP_SHARE
+      will keep bio after a WRITE. This allows for a single
+      source, multiple destinations copy 
+
+    - add an extensible SG_SET_GET_EXTENDED ioctl(2) that takes a
+      fixed size structure (96 byte).
+
+    - add multiple requests capability (mrq) in a single ioctl(SG_IO)
+      or ioctl(SG_IOSUBMIT) invocation. Can be combined with request
+      sharing.
+
+    - add a SGV4_FLAG_IMMED flag for ioctl(SG_IORECEIVE) or
+      ioctl(SG_IORECEIVE_V3) so they don't wait
+
+    - add logic for (block layer generated) tag handling and keep
+      existing pack_id (packet id) logic which plays a similar role
+
+    - add ioctl(SG_IOABORT) to abort an inflight command/request
+      using its pack-id or tag.
+
+    - add shared variable blocking (svb) method to the mrq. Assumes
+      it is doing copy-like request sharing. By default WRITEs are
+      unordered (wrt to each other). With SGV4_FLAG_ORDERED_WR flag
+      WRITEs are ordered as required for ZBC disks.
+
+    - add support to pass a fd generated by eventfd(2) to the driver
+      via an ioctl(2).
+
+    - use iopoll/hipri/blk_poll with mrq, especially svb.
+
+    - bump the driver version number to 4.0.47
+
+Most of the above are _only_ implemented for the sg version 4
+(i.e. based on struct sg_io_v4) interface.
+
+
+Douglas Gilbert (83):
+  sg: move functions around
+  sg: remove typedefs, type+formatting cleanup
+  sg: sg_log and is_enabled
+  sg: rework sg_poll(), minor changes
+  sg: bitops in sg_device
+  sg: make open count an atomic
+  sg: move header to uapi section
+  sg: speed sg_poll and sg_get_num_waiting
+  sg: sg_allow_if_err_recovery and renames
+  sg: improve naming
+  sg: change rwlock to spinlock
+  sg: ioctl handling
+  sg: split sg_read
+  sg: sg_common_write add structure for arguments
+  sg: rework sg_vma_fault
+  sg: rework sg_mmap
+  sg: replace sg_allow_access
+  sg: rework scatter gather handling
+  sg: introduce request state machine
+  sg: sg_find_srp_by_id
+  sg: sg_fill_request_element
+  sg: printk change %p to %pK
+  sg: xarray for fds in device
+  sg: xarray for reqs in fd
+  sg: replace rq array with xarray
+  sg: sense buffer rework
+  sg: add sg v4 interface support
+  sg: rework debug info
+  sg: add 8 byte SCSI LUN to sg_scsi_id
+  sg: expand sg_comm_wr_t
+  sg: add sg_iosubmit_v3 and sg_ioreceive_v3 ioctls
+  sg: add some __must_hold macros
+  sg: move procfs objects to avoid forward decls
+  sg: protect multiple receivers
+  sg: first debugfs support
+  sg: rework mmap support
+  sg: defang allow_dio
+  sg: warn v3 write system call users
+  sg: add mmap_sz tracking
+  sg: remove rcv_done request state
+  sg: track lowest inactive and await indexes
+  sg: remove unit attention check for device changed
+  sg: no_dxfer: move to/from kernel buffers
+  sg: add blk_poll support
+  sg: bump version to 4.0.12
+  sg: add sg_ioabort ioctl
+  sg: add sg_set_get_extended ioctl
+  sg: sgat_elem_sz and sum_fd_dlens
+  sg: tag and more_async
+  sg: add fd sharing , change, unshare
+  sg: add shared requests
+  sg: add multiple request support
+  sg: rename some mrq variables
+  sg: unlikely likely
+  sg: mrq abort
+  sg: reduce atomic operations
+  sg: add excl_wait flag
+  sg: tweak sg_find_sfp_by_fd()
+  sg: add snap_dev flag and snapped in debugfs
+  sg: compress usercontext to uc
+  sg: optionally output sg_request.frq_bm flags
+  sg: work on sg_mrq_sanity()
+  sg: shared variable blocking
+  sg: device timestamp
+  sg: condition met is not an error
+  sg: split sg_setup_req
+  sg: finish after read-side request
+  sg: keep share and dout offset flags
+  sg: add dlen to sg_comm_wr_t
+  sg: make use of struct sg_mrq_hold
+  sg: add mmap IO option for mrq metadata
+  sg: add eventfd support
+  sg: table of error number explanations
+  sg: add ordered write flag
+  sg: expand source line length to 100 characters
+  sg: add no_attach_msg parameter
+  sg: add SGV4_FLAG_REC_ORDER
+  sg: max to read for mrq sg_ioreceive
+  sg: mrq: if uniform svb then re-use bio_s
+  sg: expand bvec usage; re-use bio_s
+  sg: blk_poll/hipri work for mrq
+  sg: pollable and non-pollable requests
+  sg: bump version to 4.0.47
+
+ drivers/scsi/sg.c      | 10003 +++++++++++++++++++++++++++++++--------
+ include/scsi/sg.h      |   273 +-
+ include/uapi/scsi/sg.h |   491 ++
+ 3 files changed, 8440 insertions(+), 2327 deletions(-)
+ create mode 100644 include/uapi/scsi/sg.h
+
+-- 
+2.25.1
 
