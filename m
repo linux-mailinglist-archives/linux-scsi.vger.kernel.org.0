@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D5136C0ED
+	by mail.lfdr.de (Postfix) with ESMTP id 02BF336C0EC
 	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235236AbhD0IcP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S235235AbhD0IcP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Tue, 27 Apr 2021 04:32:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49422 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:49680 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235182AbhD0IcB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S235180AbhD0IcB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Tue, 27 Apr 2021 04:32:01 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7DCBFB123;
+        by mx2.suse.de (Postfix) with ESMTP id 7D40BB122;
         Tue, 27 Apr 2021 08:31:06 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 17/40] scsi: add scsi_msg_to_host_byte()
-Date:   Tue, 27 Apr 2021 10:30:23 +0200
-Message-Id: <20210427083046.31620-18-hare@suse.de>
+Subject: [PATCH 19/40] dc395: translate message bytes
+Date:   Tue, 27 Apr 2021 10:30:25 +0200
+Message-Id: <20210427083046.31620-20-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210427083046.31620-1-hare@suse.de>
 References: <20210427083046.31620-1-hare@suse.de>
@@ -33,51 +33,48 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add helper to convert message byte into a host byte code.
+Drop message byte setting if the host byte is already set, and
+translate message bytes into the related host bytes when evaluating
+an overrun or underrun.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- include/scsi/scsi_cmnd.h | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/scsi/dc395x.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 2c7b4102aa14..69055c2044ff 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -336,6 +336,32 @@ static inline u8 get_host_byte(struct scsi_cmnd *cmd)
- 	return (cmd->result >> 16) & 0xff;
- }
+diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
+index 598448ece8d0..24c7cefb0b78 100644
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -3226,7 +3226,6 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 		}
+ 		dprintkdbg(DBG_0, "srb_done: AUTO_REQSENSE2\n");
  
-+/**
-+ * scsi_msg_to_host_byte() - translate message byte
-+ *
-+ * Translate the SCSI parallel message byte to a matching
-+ * host byte setting. A message of COMMAND_COMPLETE indicates
-+ * a successful command execution, any other message indicate
-+ * an error. As the messages themselves only have a meaning
-+ * for the SCSI parallel protocol this function translates
-+ * them into a matching host byte value for SCSI EH.
-+ */
-+static inline void scsi_msg_to_host_byte(struct scsi_cmnd *cmd, u8 msg)
-+{
-+	switch (msg) {
-+	case COMMAND_COMPLETE:
-+		break;
-+	case ABORT_TASK_SET:
-+		set_host_byte(cmd, DID_ABORT);
-+		break;
-+	case TARGET_RESET:
-+		set_host_byte(cmd, DID_RESET);
-+		break;
-+	default:
-+		set_host_byte(cmd, DID_ERROR);
-+		break;
-+	}
-+}
+-		set_msg_byte(cmd, srb->end_message);
+ 		set_status_byte(cmd, SAM_STAT_CHECK_CONDITION);
  
- static inline unsigned scsi_transfer_length(struct scsi_cmnd *scmd)
- {
+ 		goto ckc_e;
+@@ -3260,7 +3259,6 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 		} else {
+ 			srb->adapter_status = 0;
+ 			set_host_byte(cmd, DID_ERROR);
+-			set_msg_byte(cmd, srb->end_message);
+ 			set_status_byte(cmd, status);
+ 		}
+ 	} else {
+@@ -3270,10 +3268,9 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 		status = srb->adapter_status;
+ 		if (status & H_OVER_UNDER_RUN) {
+ 			srb->target_status = 0;
+-			set_msg_byte(cmd, srb->end_message);
++			scsi_msg_to_host_byte(cmd, srb->end_message);
+ 		} else if (srb->status & PARITY_ERROR) {
+ 			set_host_byte(cmd, DID_PARITY);
+-			set_msg_byte(cmd, srb->end_message);
+ 		} else {	/* No error */
+ 
+ 			srb->adapter_status = 0;
 -- 
 2.29.2
 
