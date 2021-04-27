@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F054E36C0E5
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7466E36C0E3
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235221AbhD0IcG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 04:32:06 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49452 "EHLO mx2.suse.de"
+        id S235145AbhD0IcF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 04:32:05 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49446 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235153AbhD0Ibw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Apr 2021 04:31:52 -0400
+        id S235144AbhD0Ibv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Apr 2021 04:31:51 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 74907B10B;
+        by mx2.suse.de (Postfix) with ESMTP id 74F98B114;
         Tue, 27 Apr 2021 08:31:06 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 18/40] dc395: use standard macros to set SCSI result
-Date:   Tue, 27 Apr 2021 10:30:24 +0200
-Message-Id: <20210427083046.31620-19-hare@suse.de>
+Subject: [PATCH 20/40] qlogicfas408: make ql_pcmd() a void function
+Date:   Tue, 27 Apr 2021 10:30:26 +0200
+Message-Id: <20210427083046.31620-21-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210427083046.31620-1-hare@suse.de>
 References: <20210427083046.31620-1-hare@suse.de>
@@ -33,222 +33,183 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use standard macros to set the SCSI result and drop the internal ones.
+Make ql_pcmd() a void function and set the SCSI result directly.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/dc395x.c | 76 ++++++++++++++++---------------------------
- 1 file changed, 28 insertions(+), 48 deletions(-)
+ drivers/scsi/qlogicfas408.c | 75 ++++++++++++++++++++++++-------------
+ 1 file changed, 49 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index a713fe605dda..598448ece8d0 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -160,22 +160,6 @@
- #define DC395x_write16(acb,address,value)	outw((value), acb->io_port_base + (address))
- #define DC395x_write32(acb,address,value)	outl((value), acb->io_port_base + (address))
+diff --git a/drivers/scsi/qlogicfas408.c b/drivers/scsi/qlogicfas408.c
+index 136681ad18a5..a1eabdc7db09 100644
+--- a/drivers/scsi/qlogicfas408.c
++++ b/drivers/scsi/qlogicfas408.c
+@@ -256,7 +256,7 @@ static void ql_icmd(struct scsi_cmnd *cmd)
+  *	Process scsi command - usually after interrupt 
+  */
  
--/* cmd->result */
--#define RES_TARGET		0x000000FF	/* Target State */
--#define RES_TARGET_LNX  STATUS_MASK	/* Only official ... */
--#define RES_ENDMSG		0x0000FF00	/* End Message */
--#define RES_DID			0x00FF0000	/* DID_ codes */
--#define RES_DRV			0xFF000000	/* DRIVER_ codes */
--
--#define MK_RES(drv,did,msg,tgt) ((int)(drv)<<24 | (int)(did)<<16 | (int)(msg)<<8 | (int)(tgt))
--#define MK_RES_LNX(drv,did,msg,tgt) ((int)(drv)<<24 | (int)(did)<<16 | (int)(msg)<<8 | (int)(tgt)<<1)
--
--#define SET_RES_TARGET(who,tgt) { who &= ~RES_TARGET; who |= (int)(tgt); }
--#define SET_RES_TARGET_LNX(who,tgt) { who &= ~RES_TARGET_LNX; who |= (int)(tgt) << 1; }
--#define SET_RES_MSG(who,msg) { who &= ~RES_ENDMSG; who |= (int)(msg) << 8; }
--#define SET_RES_DID(who,did) { who &= ~RES_DID; who |= (int)(did) << 16; }
--#define SET_RES_DRV(who,drv) { who &= ~RES_DRV; who |= (int)(drv) << 24; }
--
- #define TAG_NONE 255
+-static unsigned int ql_pcmd(struct scsi_cmnd *cmd)
++static void ql_pcmd(struct scsi_cmnd *cmd)
+ {
+ 	unsigned int i, j;
+ 	unsigned long k;
+@@ -274,13 +274,15 @@ static unsigned int ql_pcmd(struct scsi_cmnd *cmd)
+ 	j = inb(qbase + 6);
+ 	i = inb(qbase + 5);
+ 	if (i == 0x20) {
+-		return (DID_NO_CONNECT << 16);
++		set_host_byte(cmd, DID_NO_CONNECT);
++		return;
+ 	}
+ 	i |= inb(qbase + 5);	/* the 0x10 bit can be set after the 0x08 */
+ 	if (i != 0x18) {
+ 		printk(KERN_ERR "Ql:Bad Interrupt status:%02x\n", i);
+ 		ql_zap(priv);
+-		return (DID_BAD_INTR << 16);
++		set_host_byte(cmd, DID_BAD_INTR);
++		return;
+ 	}
+ 	j &= 7;			/* j = inb( qbase + 7 ) >> 5; */
+ 
+@@ -293,9 +295,10 @@ static unsigned int ql_pcmd(struct scsi_cmnd *cmd)
+ 		printk(KERN_ERR "Ql:Bad sequence for command %d, int %02X, cmdleft = %d\n",
+ 		     j, i, inb(qbase + 7) & 0x1f);
+ 		ql_zap(priv);
+-		return (DID_ERROR << 16);
++		set_host_byte (cmd, DID_ERROR);
++		return;
+ 	}
+-	result = DID_OK;
++
+ 	if (inb(qbase + 7) & 0x1f)	/* if some bytes in fifo */
+ 		outb(1, qbase + 3);	/* clear fifo */
+ 	/* note that request_bufflen is the total xfer size when sg is used */
+@@ -314,21 +317,24 @@ static unsigned int ql_pcmd(struct scsi_cmnd *cmd)
+ 		scsi_for_each_sg(cmd, sg, scsi_sg_count(cmd), i) {
+ 			if (priv->qabort) {
+ 				REG0;
+-				return ((priv->qabort == 1 ?
+-					 DID_ABORT : DID_RESET) << 16);
++				set_host_byte(cmd,
++					      priv->qabort == 1 ?
++					      DID_ABORT : DID_RESET);
+ 			}
+ 			buf = sg_virt(sg);
+ 			if (ql_pdma(priv, phase, buf, sg->length))
+ 				break;
+ 		}
+ 		REG0;
+-		rtrc(2)
++		rtrc(2);
+ 		/*
+ 		 *	Wait for irq (split into second state of irq handler
+ 		 *	if this can take time) 
+ 		 */
+-		if ((k = ql_wai(priv)))
+-			return (k << 16);
++		if ((k = ql_wai(priv))) {
++			set_host_byte(cmd, k);
++			return;
++		}
+ 		k = inb(qbase + 5);	/* should be 0x10, bus service */
+ 	}
+ 
+@@ -344,19 +350,25 @@ static unsigned int ql_pcmd(struct scsi_cmnd *cmd)
+ 
+ 	if (time_after_eq(jiffies, k)) {
+ 		ql_zap(priv);
+-		return (DID_TIME_OUT << 16);
++		set_host_byte(cmd, DID_TIME_OUT);
++		return;
+ 	}
+ 
+ 	/* FIXME: timeout ?? */
+ 	while (inb(qbase + 5))
+ 		cpu_relax();	/* clear pending ints */
+ 
+-	if (priv->qabort)
+-		return ((priv->qabort == 1 ? DID_ABORT : DID_RESET) << 16);
++	if (priv->qabort) {
++		set_host_byte(cmd,
++			      priv->qabort == 1 ? DID_ABORT : DID_RESET);
++		return;
++	}
+ 
+ 	outb(0x11, qbase + 3);	/* get status and message */
+-	if ((k = ql_wai(priv)))
+-		return (k << 16);
++	if ((k = ql_wai(priv))) {
++		set_host_byte(cmd, k);
++		return;
++	}
+ 	i = inb(qbase + 5);	/* get chip irq stat */
+ 	j = inb(qbase + 7) & 0x1f;	/* and bytes rec'd */
+ 	status = inb(qbase + 2);
+@@ -368,12 +380,14 @@ static unsigned int ql_pcmd(struct scsi_cmnd *cmd)
+ 	 */
+ 	if (!((i == 8 && j == 2) || (i == 0x10 && j == 1))) {
+ 		printk(KERN_ERR "Ql:Error during status phase, int=%02X, %d bytes recd\n", i, j);
+-		result = DID_ERROR;
++		set_host_byte(cmd, DID_ERROR);
+ 	}
+ 	outb(0x12, qbase + 3);	/* done, disconnect */
+-	rtrc(1)
+-	if ((k = ql_wai(priv)))
+-		return (k << 16);
++	rtrc(1);
++	if ((k = ql_wai(priv))) {
++		set_host_byte(cmd, k);
++		return;
++	}
+ 
+ 	/*
+ 	 *	Should get bus service interrupt and disconnect interrupt 
+@@ -385,12 +399,18 @@ static unsigned int ql_pcmd(struct scsi_cmnd *cmd)
+ 		cpu_relax();
+ 		i |= inb(qbase + 5);
+ 	}
+-	rtrc(0)
++	rtrc(0);
+ 
+-	if (priv->qabort)
+-		return ((priv->qabort == 1 ? DID_ABORT : DID_RESET) << 16);
+-		
+-	return (result << 16) | (message << 8) | (status & STATUS_MASK);
++	if (priv->qabort) {
++		set_host_byte(cmd,
++			      priv->qabort == 1 ? DID_ABORT : DID_RESET);
++		return;
++	}
++
++	set_host_byte(cmd, result);
++	set_msg_byte(cmd, message);
++	set_status_byte(cmd, status);
++	return;
+ }
  
  /*
-@@ -986,7 +970,7 @@ static int dc395x_queue_command_lck(struct scsi_cmnd *cmd, void (*done)(struct s
- 		cmd, cmd->device->id, (u8)cmd->device->lun, cmd->cmnd[0]);
- 
- 	/* Assume BAD_TARGET; will be cleared later */
--	cmd->result = DID_BAD_TARGET << 16;
-+	set_host_byte(cmd, DID_BAD_TARGET);
- 
- 	/* ignore invalid targets */
- 	if (cmd->device->id >= acb->scsi_host->max_id ||
-@@ -1013,7 +997,8 @@ static int dc395x_queue_command_lck(struct scsi_cmnd *cmd, void (*done)(struct s
- 
- 	/* set callback and clear result in the command */
- 	cmd->scsi_done = done;
--	cmd->result = 0;
+@@ -415,7 +435,7 @@ static void ql_ihandl(void *dev_id)
+ 		return;
+ 	}
+ 	icmd = priv->qlcmd;
+-	icmd->result = ql_pcmd(icmd);
++	ql_pcmd(icmd);
+ 	priv->qlcmd = NULL;
+ 	/*
+ 	 *	If result is CHECK CONDITION done calls qcommand to request 
+@@ -443,8 +463,11 @@ static int qlogicfas408_queuecommand_lck(struct scsi_cmnd *cmd,
+ 			      void (*done) (struct scsi_cmnd *))
+ {
+ 	struct qlogicfas408_priv *priv = get_priv_by_cmd(cmd);
++
 +	set_host_byte(cmd, DID_OK);
 +	set_status_byte(cmd, SAM_STAT_GOOD);
- 
- 	srb = list_first_entry_or_null(&acb->srb_free_list,
- 			struct ScsiReqBlk, list);
-@@ -1250,7 +1235,7 @@ static int dc395x_eh_abort(struct scsi_cmnd *cmd)
- 		free_tag(dcb, srb);
- 		list_add_tail(&srb->list, &acb->srb_free_list);
- 		dprintkl(KERN_DEBUG, "eh_abort: Command was waiting\n");
--		cmd->result = DID_ABORT << 16;
-+		set_host_byte(cmd, DID_ABORT);
- 		return SUCCESS;
+ 	if (scmd_id(cmd) == priv->qinitid) {
+-		cmd->result = DID_BAD_TARGET << 16;
++		set_host_byte(cmd, DID_BAD_TARGET);
+ 		done(cmd);
+ 		return 0;
  	}
- 	srb = find_cmd(cmd, &dcb->srb_going_list);
-@@ -3178,6 +3163,8 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		   srb, scsi_sg_count(cmd), srb->sg_index, srb->sg_count,
- 		   scsi_sgtalbe(cmd));
- 	status = srb->target_status;
-+	set_host_byte(cmd, DID_OK);
-+	set_status_byte(cmd, SAM_STAT_GOOD);
- 	if (srb->flag & AUTO_REQSENSE) {
- 		dprintkdbg(DBG_0, "srb_done: AUTO_REQSENSE1\n");
- 		pci_unmap_srb_sense(acb, srb);
-@@ -3186,7 +3173,7 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		 */
- 		srb->flag &= ~AUTO_REQSENSE;
- 		srb->adapter_status = 0;
--		srb->target_status = CHECK_CONDITION << 1;
-+		srb->target_status = SAM_STAT_CHECK_CONDITION;
- 		if (debug_enabled(DBG_1)) {
- 			switch (cmd->sense_buffer[2] & 0x0f) {
- 			case NOT_READY:
-@@ -3233,15 +3220,14 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 					*((unsigned int *)(cmd->sense_buffer + 3)));
- 		}
- 
--		if (status == (CHECK_CONDITION << 1)) {
--			cmd->result = DID_BAD_TARGET << 16;
-+		if (status == SAM_STAT_CHECK_CONDITION) {
-+			set_host_byte(cmd, DID_BAD_TARGET);
- 			goto ckc_e;
- 		}
- 		dprintkdbg(DBG_0, "srb_done: AUTO_REQSENSE2\n");
- 
--		cmd->result =
--		    MK_RES(0, DID_OK,
--			   srb->end_message, SAM_STAT_CHECK_CONDITION);
-+		set_msg_byte(cmd, srb->end_message);
-+		set_status_byte(cmd, SAM_STAT_CHECK_CONDITION);
- 
- 		goto ckc_e;
- 	}
-@@ -3251,10 +3237,10 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		/*
- 		 * target status..........................
- 		 */
--		if (status >> 1 == CHECK_CONDITION) {
-+		if (status == SAM_STAT_CHECK_CONDITION) {
- 			request_sense(acb, dcb, srb);
- 			return;
--		} else if (status >> 1 == QUEUE_FULL) {
-+		} else if (status == SAM_STAT_TASK_SET_FULL) {
- 			tempcnt = (u8)list_size(&dcb->srb_going_list);
- 			dprintkl(KERN_INFO, "QUEUE_FULL for dev <%02i-%i> with %i cmnds\n",
- 			     dcb->target_id, dcb->target_lun, tempcnt);
-@@ -3270,13 +3256,12 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		} else if (status == SCSI_STAT_SEL_TIMEOUT) {
- 			srb->adapter_status = H_SEL_TIMEOUT;
- 			srb->target_status = 0;
--			cmd->result = DID_NO_CONNECT << 16;
-+			set_host_byte(cmd, DID_NO_CONNECT);
- 		} else {
- 			srb->adapter_status = 0;
--			SET_RES_DID(cmd->result, DID_ERROR);
--			SET_RES_MSG(cmd->result, srb->end_message);
--			SET_RES_TARGET(cmd->result, status);
--
-+			set_host_byte(cmd, DID_ERROR);
-+			set_msg_byte(cmd, srb->end_message);
-+			set_status_byte(cmd, status);
- 		}
- 	} else {
- 		/*
-@@ -3285,16 +3270,14 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		status = srb->adapter_status;
- 		if (status & H_OVER_UNDER_RUN) {
- 			srb->target_status = 0;
--			SET_RES_DID(cmd->result, DID_OK);
--			SET_RES_MSG(cmd->result, srb->end_message);
-+			set_msg_byte(cmd, srb->end_message);
- 		} else if (srb->status & PARITY_ERROR) {
--			SET_RES_DID(cmd->result, DID_PARITY);
--			SET_RES_MSG(cmd->result, srb->end_message);
-+			set_host_byte(cmd, DID_PARITY);
-+			set_msg_byte(cmd, srb->end_message);
- 		} else {	/* No error */
- 
- 			srb->adapter_status = 0;
- 			srb->target_status = 0;
--			SET_RES_DID(cmd->result, DID_OK);
- 		}
- 	}
- 
-@@ -3315,15 +3298,15 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		base = scsi_kmap_atomic_sg(sg, scsi_sg_count(cmd), &offset, &len);
- 		ptr = (struct ScsiInqData *)(base + offset);
- 
--		if (!ckc_only && (cmd->result & RES_DID) == 0
-+		if (!ckc_only && get_host_byte(cmd) == DID_OK
- 		    && cmd->cmnd[2] == 0 && scsi_bufflen(cmd) >= 8
- 		    && dir != DMA_NONE && ptr && (ptr->Vers & 0x07) >= 2)
- 			dcb->inquiry7 = ptr->Flags;
- 
- 	/*if( srb->cmd->cmnd[0] == INQUIRY && */
- 	/*  (host_byte(cmd->result) == DID_OK || status_byte(cmd->result) & CHECK_CONDITION) ) */
--		if ((cmd->result == (DID_OK << 16) ||
--		     status_byte(cmd->result) == CHECK_CONDITION)) {
-+		if ((get_host_byte(cmd) == DID_OK) ||
-+		    (get_status_byte(cmd) == SAM_STAT_CHECK_CONDITION)) {
- 			if (!dcb->init_tcq_flag) {
- 				add_dev(acb, dcb, ptr);
- 				dcb->init_tcq_flag = 1;
-@@ -3350,7 +3333,7 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 	if (srb != acb->tmp_srb) {
- 		/* Add to free list */
- 		dprintkdbg(DBG_0, "srb_done: (0x%p) done result=0x%08x\n",
--			cmd, cmd->result);
-+			   cmd, cmd->result);
- 		list_move_tail(&srb->list, &acb->srb_free_list);
- 	} else {
- 		dprintkl(KERN_ERR, "srb_done: ERROR! Completed cmd with tmp_srb\n");
-@@ -3374,16 +3357,14 @@ static void doing_srb_done(struct AdapterCtlBlk *acb, u8 did_flag,
- 		struct scsi_cmnd *p;
- 
- 		list_for_each_entry_safe(srb, tmp, &dcb->srb_going_list, list) {
--			int result;
--
- 			p = srb->cmd;
--			result = MK_RES(0, did_flag, 0, 0);
- 			printk("G:%p(%02i-%i) ", p,
- 			       p->device->id, (u8)p->device->lun);
- 			list_del(&srb->list);
- 			free_tag(dcb, srb);
- 			list_add_tail(&srb->list, &acb->srb_free_list);
--			p->result = result;
-+			set_host_byte(p, did_flag);
-+			set_status_byte(p, SAM_STAT_GOOD);
- 			pci_unmap_srb_sense(acb, srb);
- 			pci_unmap_srb(acb, srb);
- 			if (force) {
-@@ -3404,14 +3385,13 @@ static void doing_srb_done(struct AdapterCtlBlk *acb, u8 did_flag,
- 
- 		/* Waiting queue */
- 		list_for_each_entry_safe(srb, tmp, &dcb->srb_waiting_list, list) {
--			int result;
- 			p = srb->cmd;
- 
--			result = MK_RES(0, did_flag, 0, 0);
- 			printk("W:%p<%02i-%i>", p, p->device->id,
- 			       (u8)p->device->lun);
- 			list_move_tail(&srb->list, &acb->srb_free_list);
--			p->result = result;
-+			set_host_byte(p, did_flag);
-+			set_status_byte(p, SAM_STAT_GOOD);
- 			pci_unmap_srb_sense(acb, srb);
- 			pci_unmap_srb(acb, srb);
- 			if (force) {
 -- 
 2.29.2
 
