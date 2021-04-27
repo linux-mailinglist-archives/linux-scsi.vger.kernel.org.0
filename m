@@ -2,85 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA7F36CE61
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Apr 2021 00:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A9036CE97
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Apr 2021 00:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239522AbhD0WAx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 18:00:53 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:38966 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239530AbhD0WAh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Apr 2021 18:00:37 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 2B813204199;
-        Tue, 27 Apr 2021 23:59:49 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dIMAPy0+fqEP; Tue, 27 Apr 2021 23:59:47 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-45-58-219-4.dyn.295.ca [45.58.219.4])
-        by smtp.infotech.no (Postfix) with ESMTPA id C4B3C2042AE;
-        Tue, 27 Apr 2021 23:59:43 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: [PATCH v18 83/83] sg: bump version to 4.0.47
-Date:   Tue, 27 Apr 2021 17:57:33 -0400
-Message-Id: <20210427215733.417746-85-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210427215733.417746-1-dgilbert@interlog.com>
-References: <20210427215733.417746-1-dgilbert@interlog.com>
+        id S236015AbhD0Wgo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 18:36:44 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:29082 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235382AbhD0Wgo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Apr 2021 18:36:44 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13RMVCPd027582;
+        Tue, 27 Apr 2021 15:35:50 -0700
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 386tcrr6es-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 27 Apr 2021 15:35:50 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 27 Apr
+ 2021 15:35:48 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 27 Apr 2021 15:35:48 -0700
+Received: from irv1user01.caveonetworks.com (unknown [10.104.116.179])
+        by maili.marvell.com (Postfix) with ESMTP id 678803F7040;
+        Tue, 27 Apr 2021 15:35:48 -0700 (PDT)
+Received: from localhost (aeasi@localhost)
+        by irv1user01.caveonetworks.com (8.14.4/8.14.4/Submit) with ESMTP id 13RMZlGh010696;
+        Tue, 27 Apr 2021 15:35:47 -0700
+X-Authentication-Warning: irv1user01.caveonetworks.com: aeasi owned process doing -bs
+Date:   Tue, 27 Apr 2021 15:35:47 -0700
+From:   Arun Easi <aeasi@marvell.com>
+X-X-Sender: aeasi@irv1user01.caveonetworks.com
+To:     Daniel Wagner <dwagner@suse.de>
+CC:     Roman Bolshakov <r.bolshakov@yadro.com>,
+        <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        <linux-nvme@lists.infradead.org>, Hannes Reinecke <hare@suse.de>,
+        Nilesh Javali <njavali@marvell.com>,
+        "James Smart" <james.smart@broadcom.com>
+Subject: Re: [EXT] Re: [RFC] qla2xxx: Add dev_loss_tmo kernel module
+ options
+In-Reply-To: <20210427095131.zf6c4siewnrhv7qd@beryllium.lan>
+Message-ID: <alpine.LRH.2.21.9999.2104271531440.24132@irv1user01.caveonetworks.com>
+References: <20210419100014.47144-1-dwagner@suse.de>
+ <YH8QzgWiec8vka20@SPB-NB-133.local>
+ <20210420182830.fbipix3l7hwlyfx3@beryllium.lan>
+ <alpine.LRH.2.21.9999.2104201642290.24132@irv1user01.caveonetworks.com>
+ <20210421075659.dwaz7gt6hyqlzpo4@beryllium.lan>
+ <20210427095131.zf6c4siewnrhv7qd@beryllium.lan>
+User-Agent: Alpine 2.21.9999 (LRH 334 2019-03-29)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+X-Proofpoint-GUID: LUWLFQulvNyKwWs_EhlnyiiH9jAd-9vm
+X-Proofpoint-ORIG-GUID: LUWLFQulvNyKwWs_EhlnyiiH9jAd-9vm
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-27_12:2021-04-27,2021-04-27 signatures=0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Version is bumped to > 4.0.30 so test tools is sg3_utils (beta 1.45
-revision 827 and later) can distinguish between this full
-featured driver and a reduced featured version. The full featured
-driver has request sharing and multiple requests (in a single
-invocation) support. The reduced featured driver only adds sg v4
-interface support and its version numbers
-are >= 4.0.00 and < 4.0.30 .
+On Tue, 27 Apr 2021, 2:51am, Daniel Wagner wrote:
 
-Both versions of the sg v4 driver are described on this webpage:
-    https://sg.danny.cz/sg/sg_v40.html
+> On Wed, Apr 21, 2021 at 09:56:59AM +0200, Daniel Wagner wrote:
+> > Ah, didn't know about nvmediscovery until very recentetly. I try to get
+> > it working with this approach (as this patch is not really a proper
+> > solution).
+> 
+> Finally found some time to play with this. FTR, the nvmediscovery
+> carries following information:
+> 
+>   UDEV  [65238.364677] change   /devices/virtual/fc/fc_udev_device (fc)
+>   ACTION=change
+>   DEVPATH=/devices/virtual/fc/fc_udev_device
+>   FC_EVENT=nvmediscovery
+>   NVMEFC_HOST_TRADDR=nn-0x20000024ff7fa448:pn-0x21000024ff7fa448
+>   NVMEFC_TRADDR=nn-0x200200a09890f5bf:pn-0x203800a09890f5bf
+>   SEQNUM=12357
+>   SUBSYSTEM=fc
+>   USEC_INITIALIZED=65238333374
+> 
+> The udev rule I came up is:
+> 
+>   ACTION=="change", SUBSYSTEM=="fc", ENV{FC_EVENT}=="nvmediscovery", \
+>       ENV{NVMEFC_TRADDR}=="*", \
+>       RUN+="/usr/local/sbin/qla2xxx_dev_loss_tmo.sh $env{NVMEFC_TRADDR} 4294967295"
+> 
+> and the script is:
+> 
+>   #!/bin/sh
+> 
+>   TRADDR=$1
+>   TMO=$2
+> 
+>   id=$(echo $TRADDR | sed -n "s/.*pn-0x\([0-9a-f]\+\)/\1/p")
+>   find /sys/kernel/debug/qla2xxx -name pn-$id -exec /bin/sh -c "echo $TMO > {}/dev_loss_tmo" \;
+> 
+> I am sure this can be done in a more elegant way. Anyway, I am testing
+> this right now, the first 30 minutes look good...
+> 
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/sg.c      | 4 ++--
- include/uapi/scsi/sg.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Looks ok to me. Just keep in mind that, with this you'd be setting all 
+instances of pn-XXX (multiple initiator ports seeing the same target 
+scenario). It looks like this is what you want, but thought I'd point that 
+out.
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 5328befc0893..f10b252fc091 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -12,8 +12,8 @@
-  *
-  */
- 
--static int sg_version_num = 40012;  /* [x]xyyzz where [x] empty when x=0 */
--#define SG_VERSION_STR "4.0.12"		/* [x]x.[y]y.zz */
-+static int sg_version_num = 40047;  /* [x]xyyzz where [x] empty when x=0 */
-+#define SG_VERSION_STR "4.0.47"		/* [x]x.[y]y.zz */
- static char *sg_version_date = "20210421";
- 
- #include <linux/module.h>
-diff --git a/include/uapi/scsi/sg.h b/include/uapi/scsi/sg.h
-index 871073d1a8d3..22ed1e1ad91e 100644
---- a/include/uapi/scsi/sg.h
-+++ b/include/uapi/scsi/sg.h
-@@ -14,7 +14,7 @@
-  * Later extensions (versions 2, 3 and 4) to driver:
-  *   Copyright (C) 1998 - 2021 Douglas Gilbert
-  *
-- * Version 4.0.12 (20210111)
-+ * Version 4.0.46 (20210111)
-  *  This version is for Linux 4 and 5 series kernels.
-  *
-  * Documentation
--- 
-2.25.1
-
+Regards,
+-Arun
