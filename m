@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F6A36C0FB
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2AF36C0FE
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbhD0Ic3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 04:32:29 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49452 "EHLO mx2.suse.de"
+        id S235263AbhD0Ica (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 04:32:30 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49410 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235215AbhD0IcG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Apr 2021 04:32:06 -0400
+        id S235164AbhD0IcL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Apr 2021 04:32:11 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D5ACFB16B;
+        by mx2.suse.de (Postfix) with ESMTP id DC5B8B16C;
         Tue, 27 Apr 2021 08:31:06 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 37/40] scsi: drop message byte helper
-Date:   Tue, 27 Apr 2021 10:30:43 +0200
-Message-Id: <20210427083046.31620-38-hare@suse.de>
+Subject: [PATCH 38/40] scsi: kill message byte
+Date:   Tue, 27 Apr 2021 10:30:44 +0200
+Message-Id: <20210427083046.31620-39-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210427083046.31620-1-hare@suse.de>
 References: <20210427083046.31620-1-hare@suse.de>
@@ -33,142 +33,100 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The message byte is now unused, so we can drop the helper to set
-the message byte and the check for message bytes during error recovery.
+Remove last vestiges of SCSI status message bytes.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 ---
- block/scsi_ioctl.c         |  2 +-
- drivers/scsi/scsi_error.c  | 18 ++----------------
- drivers/scsi/sg.c          |  2 +-
- drivers/xen/xen-scsiback.c |  2 +-
- include/scsi/scsi.h        |  3 +--
- include/scsi/scsi_cmnd.h   |  5 -----
- 6 files changed, 6 insertions(+), 26 deletions(-)
+ Documentation/scsi/scsi_mid_low_api.rst |  6 ++---
+ drivers/scsi/scsi_lib.c                 |  5 +---
+ include/trace/events/scsi.h             | 33 +------------------------
+ 3 files changed, 5 insertions(+), 39 deletions(-)
 
-diff --git a/block/scsi_ioctl.c b/block/scsi_ioctl.c
-index 4dd61e36ee29..d3089951afe6 100644
---- a/block/scsi_ioctl.c
-+++ b/block/scsi_ioctl.c
-@@ -254,7 +254,7 @@ static int blk_complete_sghdr_rq(struct request *rq, struct sg_io_hdr *hdr,
- 	 */
- 	hdr->status = req->result & 0xff;
- 	hdr->masked_status = status_byte(req->result);
--	hdr->msg_status = msg_byte(req->result);
-+	hdr->msg_status = COMMAND_COMPLETE;
- 	hdr->host_status = host_byte(req->result);
- 	hdr->driver_status = 0;
- 	if (scsi_status_is_check_condition(hdr->status))
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 689ee628eff9..3e6e456816fc 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -741,12 +741,6 @@ static enum scsi_disposition scsi_eh_completed_normally(struct scsi_cmnd *scmd)
- 	if (host_byte(scmd->result) != DID_OK)
- 		return FAILED;
- 
--	/*
--	 * next, check the message byte.
--	 */
--	if (msg_byte(scmd->result) != COMMAND_COMPLETE)
--		return FAILED;
--
- 	/*
- 	 * now, check the status byte to see if this indicates
- 	 * anything special.
-@@ -1766,8 +1760,7 @@ int scsi_noretry_cmd(struct scsi_cmnd *scmd)
- 	case DID_PARITY:
- 		return (scmd->request->cmd_flags & REQ_FAILFAST_DEV);
- 	case DID_ERROR:
--		if (msg_byte(scmd->result) == COMMAND_COMPLETE &&
--		    status_byte(scmd->result) == RESERVATION_CONFLICT)
-+		if (status_byte(scmd->result) == RESERVATION_CONFLICT)
- 			return 0;
- 		fallthrough;
- 	case DID_SOFT_ERROR:
-@@ -1883,8 +1876,7 @@ enum scsi_disposition scsi_decide_disposition(struct scsi_cmnd *scmd)
- 		 */
- 		return SUCCESS;
- 	case DID_ERROR:
--		if (msg_byte(scmd->result) == COMMAND_COMPLETE &&
--		    status_byte(scmd->result) == RESERVATION_CONFLICT)
-+		if (status_byte(scmd->result) == RESERVATION_CONFLICT)
- 			/*
- 			 * execute reservation conflict processing code
- 			 * lower down
-@@ -1912,12 +1904,6 @@ enum scsi_disposition scsi_decide_disposition(struct scsi_cmnd *scmd)
- 		return FAILED;
- 	}
- 
--	/*
--	 * next, check the message byte.
--	 */
--	if (msg_byte(scmd->result) != COMMAND_COMPLETE)
--		return FAILED;
--
- 	/*
- 	 * check the status byte to see if this indicates anything special.
- 	 */
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 6b7d5f03fb2b..065d9e682f06 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -1376,7 +1376,7 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
- 
- 		srp->header.status = 0xff & result;
- 		srp->header.masked_status = status_byte(result);
--		srp->header.msg_status = msg_byte(result);
-+		srp->header.msg_status = COMMAND_COMPLETE;
- 		srp->header.host_status = host_byte(result);
- 		srp->header.driver_status = driver_byte(result);
- 		if ((sdp->sgdebug > 0) &&
-diff --git a/drivers/xen/xen-scsiback.c b/drivers/xen/xen-scsiback.c
-index a6bb2600a2d7..bea22f71c782 100644
---- a/drivers/xen/xen-scsiback.c
-+++ b/drivers/xen/xen-scsiback.c
-@@ -224,7 +224,7 @@ static void scsiback_print_status(char *sense_buffer, int errors,
- 
- 	pr_err("[%s:%d] cmnd[0]=%02x -> st=%02x msg=%02x host=%02x\n",
- 	       tpg->tport->tport_name, pending_req->v2p->lun,
--	       pending_req->cmnd[0], status_byte(errors), msg_byte(errors),
-+	       pending_req->cmnd[0], status_byte(errors), COMMAND_COMPLETE,
- 	       host_byte(errors));
- }
- 
-diff --git a/include/scsi/scsi.h b/include/scsi/scsi.h
-index 59c5e729f40c..8fe0c628d20b 100644
---- a/include/scsi/scsi.h
-+++ b/include/scsi/scsi.h
-@@ -210,11 +210,10 @@ enum scsi_disposition {
-  *  These are set by:
-  *
-  *      status byte = set from target device
-- *      msg_byte    = return status from host adapter itself.
-+ *      msg_byte    (unused)
-  *      host_byte   = set by low-level driver to indicate status.
-  */
- #define status_byte(result) (((result) >> 1) & 0x7f)
--#define msg_byte(result)    (((result) >> 8) & 0xff)
- #define host_byte(result)   (((result) >> 16) & 0xff)
- 
- #define sense_class(sense)  (((sense) >> 4) & 0x7)
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 69055c2044ff..598b98e4702d 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -321,11 +321,6 @@ static inline u8 get_status_byte(struct scsi_cmnd *cmd)
- 	return cmd->result & 0xff;
- }
- 
--static inline void set_msg_byte(struct scsi_cmnd *cmd, char status)
--{
--	cmd->result = (cmd->result & 0xffff00ff) | (status << 8);
--}
--
- static inline void set_host_byte(struct scsi_cmnd *cmd, char status)
+diff --git a/Documentation/scsi/scsi_mid_low_api.rst b/Documentation/scsi/scsi_mid_low_api.rst
+index 2c87eaa36296..8728204e2b76 100644
+--- a/Documentation/scsi/scsi_mid_low_api.rst
++++ b/Documentation/scsi/scsi_mid_low_api.rst
+@@ -1176,9 +1176,9 @@ Members of interest:
+                    of 0 implies a successfully completed command (and all
+                    data (if any) has been transferred to or from the SCSI
+                    target device). 'result' is a 32 bit unsigned integer that
+-                   can be viewed as 4 related bytes. The SCSI status value is
+-                   in the LSB. See include/scsi/scsi.h status_byte(),
+-                   msg_byte() and host_byte() macros and related constants.
++                   can be viewed as 2 related bytes. The SCSI status value is
++                   in the LSB. See include/scsi/scsi.h status_byte() and
++                   host_byte() macros and related constants.
+     sense_buffer
+ 		 - an array (maximum size: SCSI_SENSE_BUFFERSIZE bytes) that
+                    should be written when the SCSI status (LSB of 'result')
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 612decaccfb5..e8617c6bbf7a 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -625,10 +625,7 @@ static blk_status_t scsi_result_to_blk_status(struct scsi_cmnd *cmd, int result)
  {
- 	cmd->result = (cmd->result & 0xff00ffff) | (status << 16);
+ 	switch (host_byte(result)) {
+ 	case DID_OK:
+-		/*
+-		 * Also check the other bytes than the status byte in result
+-		 */
+-		if (scsi_status_is_good(result) && (result & ~0xff) == 0)
++		if (scsi_status_is_good(result))
+ 			return BLK_STS_OK;
+ 		return BLK_STS_IOERR;
+ 	case DID_TRANSPORT_FAILFAST:
+diff --git a/include/trace/events/scsi.h b/include/trace/events/scsi.h
+index 428cca71c2ba..370ade0d4093 100644
+--- a/include/trace/events/scsi.h
++++ b/include/trace/events/scsi.h
+@@ -124,37 +124,6 @@
+ 		scsi_hostbyte_name(DID_TRANSPORT_DISRUPTED),	\
+ 		scsi_hostbyte_name(DID_TRANSPORT_FAILFAST))
+ 
+-#define scsi_msgbyte_name(result)	{ result, #result }
+-#define show_msgbyte_name(val)					\
+-	__print_symbolic(val,					\
+-		scsi_msgbyte_name(COMMAND_COMPLETE),		\
+-		scsi_msgbyte_name(EXTENDED_MESSAGE),		\
+-		scsi_msgbyte_name(SAVE_POINTERS),		\
+-		scsi_msgbyte_name(RESTORE_POINTERS),		\
+-		scsi_msgbyte_name(DISCONNECT),			\
+-		scsi_msgbyte_name(INITIATOR_ERROR),		\
+-		scsi_msgbyte_name(ABORT_TASK_SET),		\
+-		scsi_msgbyte_name(MESSAGE_REJECT),		\
+-		scsi_msgbyte_name(NOP),				\
+-		scsi_msgbyte_name(MSG_PARITY_ERROR),		\
+-		scsi_msgbyte_name(LINKED_CMD_COMPLETE),		\
+-		scsi_msgbyte_name(LINKED_FLG_CMD_COMPLETE),	\
+-		scsi_msgbyte_name(TARGET_RESET),		\
+-		scsi_msgbyte_name(ABORT_TASK),			\
+-		scsi_msgbyte_name(CLEAR_TASK_SET),		\
+-		scsi_msgbyte_name(INITIATE_RECOVERY),		\
+-		scsi_msgbyte_name(RELEASE_RECOVERY),		\
+-		scsi_msgbyte_name(CLEAR_ACA),			\
+-		scsi_msgbyte_name(LOGICAL_UNIT_RESET),		\
+-		scsi_msgbyte_name(SIMPLE_QUEUE_TAG),		\
+-		scsi_msgbyte_name(HEAD_OF_QUEUE_TAG),		\
+-		scsi_msgbyte_name(ORDERED_QUEUE_TAG),		\
+-		scsi_msgbyte_name(IGNORE_WIDE_RESIDUE),		\
+-		scsi_msgbyte_name(ACA),				\
+-		scsi_msgbyte_name(QAS_REQUEST),			\
+-		scsi_msgbyte_name(BUS_DEVICE_RESET),		\
+-		scsi_msgbyte_name(ABORT))
+-
+ #define scsi_statusbyte_name(result)	{ result, #result }
+ #define show_statusbyte_name(val)				\
+ 	__print_symbolic(val,					\
+@@ -316,7 +285,7 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
+ 		  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
+ 		  "DRIVER_OK",
+ 		  show_hostbyte_name(((__entry->result) >> 16) & 0xff),
+-		  show_msgbyte_name(((__entry->result) >> 8) & 0xff),
++		  "COMMAND_COMPLETE",
+ 		  show_statusbyte_name(__entry->result & 0xff))
+ );
+ 
 -- 
 2.29.2
 
