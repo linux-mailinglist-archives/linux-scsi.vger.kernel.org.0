@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81ECA36CE5C
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Apr 2021 00:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE3036CE5D
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Apr 2021 00:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239511AbhD0WAp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 18:00:45 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:39154 "EHLO smtp.infotech.no"
+        id S239020AbhD0WAt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 18:00:49 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:38843 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239510AbhD0WAZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Apr 2021 18:00:25 -0400
+        id S239504AbhD0WAd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Apr 2021 18:00:33 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 93E262042AC;
-        Tue, 27 Apr 2021 23:59:39 +0200 (CEST)
+        by smtp.infotech.no (Postfix) with ESMTP id 8CC692042AD;
+        Tue, 27 Apr 2021 23:59:41 +0200 (CEST)
 X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
 Received: from smtp.infotech.no ([127.0.0.1])
         by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bOaQrI+pQdhQ; Tue, 27 Apr 2021 23:59:38 +0200 (CEST)
+        with ESMTP id VpheI3HCMxW5; Tue, 27 Apr 2021 23:59:39 +0200 (CEST)
 Received: from xtwo70.bingwo.ca (host-45-58-219-4.dyn.295.ca [45.58.219.4])
-        by smtp.infotech.no (Postfix) with ESMTPA id 12E582042A4;
-        Tue, 27 Apr 2021 23:59:33 +0200 (CEST)
+        by smtp.infotech.no (Postfix) with ESMTPA id 95C59204197;
+        Tue, 27 Apr 2021 23:59:35 +0200 (CEST)
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: [PATCH v18 77/83] sg: add SGV4_FLAG_REC_ORDER
-Date:   Tue, 27 Apr 2021 17:57:27 -0400
-Message-Id: <20210427215733.417746-79-dgilbert@interlog.com>
+Subject: [PATCH v18 78/83] sg: max to read for mrq sg_ioreceive
+Date:   Tue, 27 Apr 2021 17:57:28 -0400
+Message-Id: <20210427215733.417746-80-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210427215733.417746-1-dgilbert@interlog.com>
 References: <20210427215733.417746-1-dgilbert@interlog.com>
@@ -36,136 +36,189 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-By default, when ioctl(SG_IORECEIVE) is used in multiple requests
-mode (mrq) the response array is built in completion order. And the
-completion order isn't necessarily submission order which can be a
-nuisance. This new flag allows the user to specify where (via an
-index in the v4::request_priority field) a given request's response
-will be placed in the response array associated with a mrq
-ioctl(SG_IORECEIVE) call.
+When using a multiple request (mrq) ioctl(SG_IORECEIVE) the size of the
+supplied response array dictates an implicit maximum number of
+responses that can be read by an invocation. An explicit maximum number
+to read can be given in the control object's request_priority field. A
+value of 0 in this field uses the implicit maximum value.
+
+The mrq ioctl(SG_IORECEIVE) control object can now take the
+SGV4_FLAG_IMMED flag, if so only those responses associated with
+completed requests will be reported.
 
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 ---
- drivers/scsi/sg.c      | 43 +++++++++++++++++++++++++++---------------
- include/uapi/scsi/sg.h |  1 +
- 2 files changed, 29 insertions(+), 15 deletions(-)
+ drivers/scsi/sg.c | 56 ++++++++++++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index a76ab2c59553..37a3361dec31 100644
+index 37a3361dec31..ac7321ffbd05 100644
 --- a/drivers/scsi/sg.c
 +++ b/drivers/scsi/sg.c
-@@ -1552,8 +1552,11 @@ sg_mrq_sanity(struct sg_mrq_hold *mhp, bool is_svb)
- 			hp->response = cop->response;
- 			hp->max_response_len = cop->max_response_len;
- 		}
--		if (!is_svb)
-+		if (!is_svb) {
-+			if (cop->flags & SGV4_FLAG_REC_ORDER)
-+				hp->flags |= SGV4_FLAG_REC_ORDER;
- 			continue;
-+		}
- 		/* mrq share variable blocking (svb) additional constraints checked here */
- 		if (unlikely(flags & (SGV4_FLAG_COMPLETE_B4 | SGV4_FLAG_KEEP_SHARE))) {
- 			SG_LOG(1, sfp, "%s: %s %u: no KEEP_SHARE with svb\n", __func__, rip, k);
-@@ -2775,7 +2778,7 @@ sg_common_write(struct sg_comm_wr_t *cwrp)
- 		srp->s_hdr4.cmd_len = h4p->request_len;
- 		srp->s_hdr4.dir = dir;
- 		srp->s_hdr4.out_resid = 0;
--		srp->s_hdr4.mrq_ind = 0;
-+		srp->s_hdr4.mrq_ind = (rq_flags & SGV4_FLAG_REC_ORDER) ? h4p->request_priority : 0;
- 		if (dir == SG_DXFER_TO_DEV) {
- 			srp->s_hdr4.wr_offset = cwrp->wr_offset;
- 			srp->s_hdr4.wr_len = dlen;
-@@ -3053,7 +3056,7 @@ sg_receive_v4(struct sg_fd *sfp, struct sg_request *srp, void __user *p, struct
- static int
- sg_mrq_iorec_complets(struct sg_fd *sfp, bool non_block, int max_mrqs, struct sg_io_v4 *rsp_arr)
+@@ -1314,6 +1314,7 @@ sg_wait_poll_for_given_srp(struct sg_fd *sfp, struct sg_request *srp, bool do_po
+ 	if (SG_IS_DETACHING(sdp))
+ 		goto detaching;
+ 	return sg_rq_chg_state(srp, SG_RQ_AWAIT_RCV, SG_RQ_BUSY);
++
+ poll_loop:
+ 	if (srp->rq_flags & SGV4_FLAG_HIPRI) {
+ 		long state = current->state;
+@@ -1367,37 +1368,34 @@ sg_wait_poll_for_given_srp(struct sg_fd *sfp, struct sg_request *srp, bool do_po
+ static struct sg_request *
+ sg_mrq_poll_either(struct sg_fd *sfp, struct sg_fd *sec_sfp, bool *on_sfp)
  {
--	int k;
-+	int k, idx;
+-	bool sig_pending = false;
+ 	long state = current->state;
+ 	struct sg_request *srp;
+ 
+ 	do {		/* alternating polling loop */
+ 		if (sfp) {
+ 			if (sg_mrq_get_ready_srp(sfp, &srp)) {
++				__set_current_state(TASK_RUNNING);
+ 				if (!srp)
+ 					return ERR_PTR(-ENODEV);
+ 				*on_sfp = true;
+-				__set_current_state(TASK_RUNNING);
+ 				return srp;
+ 			}
+ 		}
+ 		if (sec_sfp && sfp != sec_sfp) {
+ 			if (sg_mrq_get_ready_srp(sec_sfp, &srp)) {
++				__set_current_state(TASK_RUNNING);
+ 				if (!srp)
+ 					return ERR_PTR(-ENODEV);
+ 				*on_sfp = false;
+-				__set_current_state(TASK_RUNNING);
+ 				return srp;
+ 			}
+ 		}
+ 		if (signal_pending_state(state, current)) {
+-			sig_pending = true;
+-			break;
++			__set_current_state(TASK_RUNNING);
++			return ERR_PTR(-ERESTARTSYS);
+ 		}
+ 		cpu_relax();
+-	} while (!need_resched());
+-	__set_current_state(TASK_RUNNING);
+-	return ERR_PTR(sig_pending ? -ERESTARTSYS : -EAGAIN);
++	} while (true);
+ }
+ 
+ /*
+@@ -3054,21 +3052,25 @@ sg_receive_v4(struct sg_fd *sfp, struct sg_request *srp, void __user *p, struct
+  * of elements written to rsp_arr, which may be 0 if mrqs submitted but none waiting
+  */
+ static int
+-sg_mrq_iorec_complets(struct sg_fd *sfp, bool non_block, int max_mrqs, struct sg_io_v4 *rsp_arr)
++sg_mrq_iorec_complets(struct sg_fd *sfp, bool non_block, int max_rcv, int num_rsp_arr,
++		      struct sg_io_v4 *rsp_arr)
+ {
+ 	int k, idx;
  	int res = 0;
  	struct sg_request *srp;
  
-@@ -3062,8 +3065,15 @@ sg_mrq_iorec_complets(struct sg_fd *sfp, bool non_block, int max_mrqs, struct sg
+-	SG_LOG(3, sfp, "%s: max_mrqs=%d\n", __func__, max_mrqs);
+-	for (k = 0; k < max_mrqs; ++k) {
++	SG_LOG(3, sfp, "%s: num_rsp_arr=%d, max_rcv=%d", __func__, num_rsp_arr, max_rcv);
++	if (max_rcv == 0 || max_rcv > num_rsp_arr)
++		max_rcv = num_rsp_arr;
++	k = 0;
++	for ( ; k < max_rcv; ++k) {
  		if (!sg_mrq_get_ready_srp(sfp, &srp))
  			break;
  		if (IS_ERR(srp))
--			return k ? k : PTR_ERR(srp);
--		res = sg_receive_v4(sfp, srp, NULL, rsp_arr + k);
-+			return k ? k /* some but not all */ : PTR_ERR(srp);
-+		if (srp->rq_flags & SGV4_FLAG_REC_ORDER) {
-+			idx = srp->s_hdr4.mrq_ind;
-+			if (idx >= max_mrqs)
-+				idx = 0;	/* overwrite index 0 when trouble */
-+		} else {
-+			idx = k;	/* completion order */
-+		}
-+		res = sg_receive_v4(sfp, srp, NULL, rsp_arr + idx);
+ 			return k ? k /* some but not all */ : PTR_ERR(srp);
+ 		if (srp->rq_flags & SGV4_FLAG_REC_ORDER) {
+ 			idx = srp->s_hdr4.mrq_ind;
+-			if (idx >= max_mrqs)
++			if (idx >= num_rsp_arr)
+ 				idx = 0;	/* overwrite index 0 when trouble */
+ 		} else {
+ 			idx = k;	/* completion order */
+@@ -3076,12 +3078,12 @@ sg_mrq_iorec_complets(struct sg_fd *sfp, bool non_block, int max_mrqs, struct sg
+ 		res = sg_receive_v4(sfp, srp, NULL, rsp_arr + idx);
  		if (unlikely(res))
  			return res;
- 		rsp_arr[k].info |= SG_INFO_MRQ_FINI;
-@@ -3077,7 +3087,14 @@ sg_mrq_iorec_complets(struct sg_fd *sfp, bool non_block, int max_mrqs, struct sg
+-		rsp_arr[k].info |= SG_INFO_MRQ_FINI;
++		rsp_arr[idx].info |= SG_INFO_MRQ_FINI;
+ 	}
+-	if (non_block)
++	if (non_block || k >= max_rcv)
+ 		return k;
+-
+-	for ( ; k < max_mrqs; ++k) {
++	SG_LOG(6, sfp, "%s: received=%d, max=%d\n", __func__, k, max_rcv);
++	for ( ; k < max_rcv; ++k) {
+ 		res = sg_wait_any_mrq(sfp, &srp);
+ 		if (unlikely(res))
  			return res;	/* signal --> -ERESTARTSYS */
- 		if (IS_ERR(srp))
+@@ -3089,7 +3091,7 @@ sg_mrq_iorec_complets(struct sg_fd *sfp, bool non_block, int max_mrqs, struct sg
  			return k ? k : PTR_ERR(srp);
--		res = sg_receive_v4(sfp, srp, NULL, rsp_arr + k);
-+		if (srp->rq_flags & SGV4_FLAG_REC_ORDER) {
-+			idx = srp->s_hdr4.mrq_ind;
-+			if (idx >= max_mrqs)
-+				idx = 0;
-+		} else {
-+			idx = k;
-+		}
-+		res = sg_receive_v4(sfp, srp, NULL, rsp_arr + idx);
- 		if (unlikely(res))
- 			return res;
- 		rsp_arr[k].info |= SG_INFO_MRQ_FINI;
-@@ -7619,7 +7636,8 @@ sg_proc_seq_show_devstrs(struct seq_file *s, void *v)
- 
- /* Writes debug info for one sg_request in obp buffer */
- static int
--sg_proc_debug_sreq(struct sg_request *srp, int to, bool t_in_ns, bool inactive, char *obp, int len)
-+sg_proc_debug_sreq(struct sg_request *srp, int to, bool t_in_ns, bool inactive, char *obp,
-+		   int len)
+ 		if (srp->rq_flags & SGV4_FLAG_REC_ORDER) {
+ 			idx = srp->s_hdr4.mrq_ind;
+-			if (idx >= max_mrqs)
++			if (idx >= num_rsp_arr)
+ 				idx = 0;
+ 		} else {
+ 			idx = k;
+@@ -3111,6 +3113,7 @@ static int
+ sg_mrq_ioreceive(struct sg_fd *sfp, struct sg_io_v4 *cop, void __user *p, bool non_block)
  {
- 	bool is_v3v4, v4, is_dur;
- 	int n = 0;
-@@ -7659,13 +7677,8 @@ sg_proc_debug_sreq(struct sg_request *srp, int to, bool t_in_ns, bool inactive,
- 		n += scnprintf(obp + n, len - n, " sgat=%d", srp->sgatp->num_sgat);
- 	cp = (srp->rq_flags & SGV4_FLAG_HIPRI) ? "hipri " : "";
- 	n += scnprintf(obp + n, len - n, " %sop=0x%02x\n", cp, srp->cmd_opcode);
--	if (inactive && rq_st != SG_RQ_INACTIVE) {
--		if (xa_get_mark(&srp->parentfp->srp_arr, srp->rq_idx, SG_XA_RQ_INACTIVE))
--			cp = "still marked inactive, BAD";
--		else
--			cp = "no longer marked inactive";
--		n += scnprintf(obp + n, len - n, "       <<< xarray %s >>>\n", cp);
--	}
-+	if (inactive && rq_st != SG_RQ_INACTIVE)
-+		n += scnprintf(obp + n, len - n, "       <<< inconsistent state >>>\n");
- 	return n;
+ 	int res = 0;
++	int max_rcv;
+ 	u32 len, n;
+ 	struct sg_io_v4 *rsp_v4_arr;
+ 	void __user *pp;
+@@ -3123,14 +3126,16 @@ sg_mrq_ioreceive(struct sg_fd *sfp, struct sg_io_v4 *cop, void __user *p, bool n
+ 		return -ERANGE;
+ 	n /= SZ_SG_IO_V4;
+ 	len = n * SZ_SG_IO_V4;
+-	SG_LOG(3, sfp, "%s: %s, num_reqs=%u\n", __func__, (non_block ? "IMMED" : "blocking"), n);
++	max_rcv = cop->din_iovec_count;
++	SG_LOG(3, sfp, "%s: %s, num_reqs=%u, max_rcv=%d\n", __func__,
++	       (non_block ? "IMMED" : "blocking"), n, max_rcv);
+ 	rsp_v4_arr = kcalloc(n, SZ_SG_IO_V4, GFP_KERNEL);
+ 	if (unlikely(!rsp_v4_arr))
+ 		return -ENOMEM;
+ 
+ 	sg_v4h_partial_zero(cop);
+ 	cop->din_resid = n;
+-	res = sg_mrq_iorec_complets(sfp, non_block, n, rsp_v4_arr);
++	res = sg_mrq_iorec_complets(sfp, non_block, max_rcv, n, rsp_v4_arr);
+ 	if (unlikely(res < 0))
+ 		goto fini;
+ 	cop->din_resid -= res;
+@@ -3164,7 +3169,6 @@ sg_wait_poll_by_id(struct sg_fd *sfp, struct sg_request **srpp, int id,
+ 	return __wait_event_interruptible(sfp->cmpl_wait, sg_get_ready_srp(sfp, srpp, id, is_tag));
+ poll_loop:
+ 	{
+-		bool sig_pending = false;
+ 		long state = current->state;
+ 		struct sg_request *srp;
+ 
+@@ -3175,14 +3179,16 @@ sg_wait_poll_by_id(struct sg_fd *sfp, struct sg_request **srpp, int id,
+ 				*srpp = srp;
+ 				return 0;
+ 			}
++			if (SG_IS_DETACHING(sfp->parentdp)) {
++				__set_current_state(TASK_RUNNING);
++				return -ENODEV;
++			}
+ 			if (signal_pending_state(state, current)) {
+-				sig_pending = true;
+-				break;
++				__set_current_state(TASK_RUNNING);
++				return -ERESTARTSYS;
+ 			}
+ 			cpu_relax();
+-		} while (!need_resched());
+-		__set_current_state(TASK_RUNNING);
+-		return sig_pending ? -ERESTARTSYS : -EAGAIN;
++		} while (true);
+ 	}
  }
  
-@@ -7749,7 +7762,7 @@ sg_proc_debug_fd(struct sg_fd *fp, char *obp, int len, unsigned long idx, bool r
- 			n += scnprintf(obp + n, len - n, "     rq_bm=0x%lx", srp->frq_bm[0]);
- 		n += sg_proc_debug_sreq(srp, fp->timeout, t_in_ns, true, obp + n, len - n);
- 		++k;
--		if ((k % 8) == 0) {	/* don't hold up isr_s too long */
-+		if ((k % 8) == 0) {	/* don't hold up things too long */
- 			xa_unlock_irqrestore(&fp->srp_arr, iflags);
- 			cpu_relax();
- 			xa_lock_irqsave(&fp->srp_arr, iflags);
-diff --git a/include/uapi/scsi/sg.h b/include/uapi/scsi/sg.h
-index 236ac4678f71..871073d1a8d3 100644
---- a/include/uapi/scsi/sg.h
-+++ b/include/uapi/scsi/sg.h
-@@ -128,6 +128,7 @@ typedef struct sg_io_hdr {
- #define SGV4_FLAG_KEEP_SHARE 0x20000  /* ... buffer for another dout command */
- #define SGV4_FLAG_MULTIPLE_REQS 0x40000	/* 1 or more sg_io_v4-s in data-in */
- #define SGV4_FLAG_ORDERED_WR 0x80000	/* svb: issue in-order writes */
-+#define SGV4_FLAG_REC_ORDER 0x100000 /* receive order in v4:request_priority */
- 
- /* Output (potentially OR-ed together) in v3::info or v4::info field */
- #define SG_INFO_OK_MASK 0x1
 -- 
 2.25.1
 
