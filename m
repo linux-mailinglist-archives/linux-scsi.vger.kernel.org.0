@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BF336C0EC
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A526C36C0E9
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbhD0IcP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 04:32:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49680 "EHLO mx2.suse.de"
+        id S235172AbhD0IcO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 04:32:14 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49420 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235180AbhD0IcB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Apr 2021 04:32:01 -0400
+        id S235174AbhD0IcA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Apr 2021 04:32:00 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7D40BB122;
+        by mx2.suse.de (Postfix) with ESMTP id 7B379B118;
         Tue, 27 Apr 2021 08:31:06 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 19/40] dc395: translate message bytes
-Date:   Tue, 27 Apr 2021 10:30:25 +0200
-Message-Id: <20210427083046.31620-20-hare@suse.de>
+Subject: [PATCH 21/40] qlogicfas408: whitespace cleanup
+Date:   Tue, 27 Apr 2021 10:30:27 +0200
+Message-Id: <20210427083046.31620-22-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210427083046.31620-1-hare@suse.de>
 References: <20210427083046.31620-1-hare@suse.de>
@@ -33,48 +33,218 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Drop message byte setting if the host byte is already set, and
-translate message bytes into the related host bytes when evaluating
-an overrun or underrun.
-
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/dc395x.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/scsi/qlogicfas408.c | 61 +++++++++++++++++++------------------
+ 1 file changed, 31 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index 598448ece8d0..24c7cefb0b78 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -3226,7 +3226,6 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+diff --git a/drivers/scsi/qlogicfas408.c b/drivers/scsi/qlogicfas408.c
+index a1eabdc7db09..86de400ca81a 100644
+--- a/drivers/scsi/qlogicfas408.c
++++ b/drivers/scsi/qlogicfas408.c
+@@ -4,9 +4,9 @@
+    Use at your own risk.  Support Tort Reform so you won't have to read all
+    these silly disclaimers.
+ 
+-   Copyright 1994, Tom Zerucha.   
++   Copyright 1994, Tom Zerucha.
+    tz@execpc.com
+-   
++
+    Additional Code, and much appreciated help by
+    Michael A. Griffith
+    grif@cs.ucr.edu
+@@ -22,12 +22,12 @@
+ 
+    Functions as standalone, loadable, and PCMCIA driver, the latter from
+    Dave Hinds' PCMCIA package.
+-   
++
+    Cleaned up 26/10/2002 by Alan Cox <alan@lxorguk.ukuu.org.uk> as part of the 2.5
+    SCSI driver cleanup and audit. This driver still needs work on the
+    following
+-   	-	Non terminating hardware waits
+-   	-	Some layering violations with its pcmcia stub
++	-	Non terminating hardware waits
++	-	Some layering violations with its pcmcia stub
+ 
+    Redistributable under terms of the GNU General Public License
+ 
+@@ -92,8 +92,9 @@ static void ql_zap(struct qlogicfas408_priv *priv)
+ /*
+  *	Do a pseudo-dma tranfer
+  */
+- 
+-static int ql_pdma(struct qlogicfas408_priv *priv, int phase, char *request, int reqlen)
++
++static int ql_pdma(struct qlogicfas408_priv *priv, int phase, char *request,
++		   int reqlen)
+ {
+ 	int j;
+ 	int qbase = priv->qbase;
+@@ -108,7 +109,7 @@ static int ql_pdma(struct qlogicfas408_priv *priv, int phase, char *request, int
+ 			request += 128;
  		}
- 		dprintkdbg(DBG_0, "srb_done: AUTO_REQSENSE2\n");
+ 		while (reqlen >= 84 && !(j & 0xc0))	/* 2/3 */
+-			if ((j = inb(qbase + 8)) & 4) 
++			if ((j = inb(qbase + 8)) & 4)
+ 			{
+ 				insl(qbase + 4, request, 21);
+ 				reqlen -= 84;
+@@ -123,11 +124,11 @@ static int ql_pdma(struct qlogicfas408_priv *priv, int phase, char *request, int
+ 		/* until both empty and int (or until reclen is 0) */
+ 		rtrc(7)
+ 		j = 0;
+-		while (reqlen && !((j & 0x10) && (j & 0xc0))) 
++		while (reqlen && !((j & 0x10) && (j & 0xc0)))
+ 		{
+ 			/* while bytes to receive and not empty */
+ 			j &= 0xc0;
+-			while (reqlen && !((j = inb(qbase + 8)) & 0x10)) 
++			while (reqlen && !((j = inb(qbase + 8)) & 0x10))
+ 			{
+ 				*request++ = inb(qbase + 4);
+ 				reqlen--;
+@@ -161,7 +162,7 @@ static int ql_pdma(struct qlogicfas408_priv *priv, int phase, char *request, int
+ 		    j = 0;
+ 		while (reqlen && !((j & 2) && (j & 0xc0))) {
+ 			/* while bytes to send and not full */
+-			while (reqlen && !((j = inb(qbase + 8)) & 2)) 
++			while (reqlen && !((j = inb(qbase + 8)) & 2))
+ 			{
+ 				outb(*request++, qbase + 4);
+ 				reqlen--;
+@@ -175,7 +176,7 @@ static int ql_pdma(struct qlogicfas408_priv *priv, int phase, char *request, int
+ }
  
--		set_msg_byte(cmd, srb->end_message);
- 		set_status_byte(cmd, SAM_STAT_CHECK_CONDITION);
+ /*
+- *	Wait for interrupt flag (polled - not real hardware interrupt) 
++ *	Wait for interrupt flag (polled - not real hardware interrupt)
+  */
  
- 		goto ckc_e;
-@@ -3260,7 +3259,6 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		} else {
- 			srb->adapter_status = 0;
- 			set_host_byte(cmd, DID_ERROR);
--			set_msg_byte(cmd, srb->end_message);
- 			set_status_byte(cmd, status);
- 		}
- 	} else {
-@@ -3270,10 +3268,9 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
- 		status = srb->adapter_status;
- 		if (status & H_OVER_UNDER_RUN) {
- 			srb->target_status = 0;
--			set_msg_byte(cmd, srb->end_message);
-+			scsi_msg_to_host_byte(cmd, srb->end_message);
- 		} else if (srb->status & PARITY_ERROR) {
- 			set_host_byte(cmd, DID_PARITY);
--			set_msg_byte(cmd, srb->end_message);
- 		} else {	/* No error */
+ static int ql_wai(struct qlogicfas408_priv *priv)
+@@ -205,14 +206,14 @@ static int ql_wai(struct qlogicfas408_priv *priv)
+ }
  
- 			srb->adapter_status = 0;
+ /*
+- *	Initiate scsi command - queueing handler 
++ *	Initiate scsi command - queueing handler
+  *	caller must hold host lock
+  */
+ 
+ static void ql_icmd(struct scsi_cmnd *cmd)
+ {
+ 	struct qlogicfas408_priv *priv = get_priv_by_cmd(cmd);
+-	int 	qbase = priv->qbase;
++	int	qbase = priv->qbase;
+ 	int	int_type = priv->int_type;
+ 	unsigned int i;
+ 
+@@ -253,7 +254,7 @@ static void ql_icmd(struct scsi_cmnd *cmd)
+ }
+ 
+ /*
+- *	Process scsi command - usually after interrupt 
++ *	Process scsi command - usually after interrupt
+  */
+ 
+ static void ql_pcmd(struct scsi_cmnd *cmd)
+@@ -329,7 +330,7 @@ static void ql_pcmd(struct scsi_cmnd *cmd)
+ 		rtrc(2);
+ 		/*
+ 		 *	Wait for irq (split into second state of irq handler
+-		 *	if this can take time) 
++		 *	if this can take time)
+ 		 */
+ 		if ((k = ql_wai(priv))) {
+ 			set_host_byte(cmd, k);
+@@ -339,9 +340,9 @@ static void ql_pcmd(struct scsi_cmnd *cmd)
+ 	}
+ 
+ 	/*
+-	 *	Enter Status (and Message In) Phase 
++	 *	Enter Status (and Message In) Phase
+ 	 */
+-	 
++
+ 	k = jiffies + WATCHDOG;
+ 
+ 	while (time_before(jiffies, k) && !priv->qabort &&
+@@ -375,8 +376,8 @@ static void ql_pcmd(struct scsi_cmnd *cmd)
+ 	message = inb(qbase + 2);
+ 
+ 	/*
+-	 *	Should get function complete int if Status and message, else 
+-	 *	bus serv if only status 
++	 *	Should get function complete int if Status and message, else
++	 *	bus serv if only status
+ 	 */
+ 	if (!((i == 8 && j == 2) || (i == 0x10 && j == 1))) {
+ 		printk(KERN_ERR "Ql:Error during status phase, int=%02X, %d bytes recd\n", i, j);
+@@ -390,9 +391,9 @@ static void ql_pcmd(struct scsi_cmnd *cmd)
+ 	}
+ 
+ 	/*
+-	 *	Should get bus service interrupt and disconnect interrupt 
++	 *	Should get bus service interrupt and disconnect interrupt
+ 	 */
+-	 
++
+ 	i = inb(qbase + 5);	/* should be bus service */
+ 	while (!priv->qabort && ((i & 0x20) != 0x20)) {
+ 		barrier();
+@@ -414,7 +415,7 @@ static void ql_pcmd(struct scsi_cmnd *cmd)
+ }
+ 
+ /*
+- *	Interrupt handler 
++ *	Interrupt handler
+  */
+ 
+ static void ql_ihandl(void *dev_id)
+@@ -438,8 +439,8 @@ static void ql_ihandl(void *dev_id)
+ 	ql_pcmd(icmd);
+ 	priv->qlcmd = NULL;
+ 	/*
+-	 *	If result is CHECK CONDITION done calls qcommand to request 
+-	 *	sense 
++	 *	If result is CHECK CONDITION done calls qcommand to request
++	 *	sense
+ 	 */
+ 	(icmd->scsi_done) (icmd);
+ }
+@@ -484,8 +485,8 @@ static int qlogicfas408_queuecommand_lck(struct scsi_cmnd *cmd,
+ 
+ DEF_SCSI_QCMD(qlogicfas408_queuecommand)
+ 
+-/* 
+- *	Return bios parameters 
++/*
++ *	Return bios parameters
+  */
+ 
+ int qlogicfas408_biosparam(struct scsi_device *disk, struct block_device *dev,
+@@ -510,7 +511,7 @@ int qlogicfas408_biosparam(struct scsi_device *disk, struct block_device *dev,
+ /*
+  *	Abort a command in progress
+  */
+- 
++
+ int qlogicfas408_abort(struct scsi_cmnd *cmd)
+ {
+ 	struct qlogicfas408_priv *priv = get_priv_by_cmd(cmd);
+@@ -589,9 +590,9 @@ void qlogicfas408_setup(int qbase, int id, int int_type)
+ 
+ int qlogicfas408_detect(int qbase, int int_type)
+ {
+-        REG1;
++	REG1;
+ 	return (((inb(qbase + 0xe) ^ inb(qbase + 0xe)) == 7) &&
+-	       ((inb(qbase + 0xe) ^ inb(qbase + 0xe)) == 7));		
++		((inb(qbase + 0xe) ^ inb(qbase + 0xe)) == 7));
+ }
+ 
+ /*
 -- 
 2.29.2
 
