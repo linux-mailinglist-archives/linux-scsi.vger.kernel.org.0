@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 432CD36C0F0
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E8736C0EE
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbhD0IcR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 04:32:17 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49442 "EHLO mx2.suse.de"
+        id S235242AbhD0IcQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 04:32:16 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49418 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235184AbhD0IcB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S235183AbhD0IcB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Tue, 27 Apr 2021 04:32:01 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9AA86B133;
+        by mx2.suse.de (Postfix) with ESMTP id 9633AB12C;
         Tue, 27 Apr 2021 08:31:06 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 25/40] wd33c93: translate message byte to host byte
-Date:   Tue, 27 Apr 2021 10:30:31 +0200
-Message-Id: <20210427083046.31620-26-hare@suse.de>
+Subject: [PATCH 26/40] mesh: translate message to host byte status
+Date:   Tue, 27 Apr 2021 10:30:32 +0200
+Message-Id: <20210427083046.31620-27-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210427083046.31620-1-hare@suse.de>
 References: <20210427083046.31620-1-hare@suse.de>
@@ -33,83 +33,50 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of setting the message byte translate it to the appropriate
-host byte. As error recovery would return DID_ERROR for any non-zero
-message byte the translation doesn't change the error handling.
+Instead of setting the message byte translate it to a host byte
+status. As the error recovery would map it to DID_ERROR anyway
+the translation doesn't change the SCSI error handling.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/wd33c93.c | 43 ++++++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 20 deletions(-)
+ drivers/scsi/mesh.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/wd33c93.c b/drivers/scsi/wd33c93.c
-index a23277bb870e..4468bc45aaa4 100644
---- a/drivers/scsi/wd33c93.c
-+++ b/drivers/scsi/wd33c93.c
-@@ -1176,13 +1176,13 @@ wd33c93_intr(struct Scsi_Host *instance)
- 			if (cmd->SCp.Status == ILLEGAL_STATUS_BYTE)
- 				cmd->SCp.Status = lun;
- 			if (cmd->cmnd[0] == REQUEST_SENSE
--			    && cmd->SCp.Status != SAM_STAT_GOOD)
--				cmd->result =
--				    (cmd->
--				     result & 0x00ffff) | (DID_ERROR << 16);
--			else
--				cmd->result =
--				    cmd->SCp.Status | (cmd->SCp.Message << 8);
-+			    && cmd->SCp.Status != SAM_STAT_GOOD) {
-+				set_host_byte(cmd, DID_ERROR);
-+			} else {
-+				set_host_byte(cmd, DID_OK);
-+				scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
-+				set_status_byte(cmd, cmd->SCp.Status);
-+			}
- 			cmd->scsi_done(cmd);
- 
- /* We are no longer  connected to a target - check to see if
-@@ -1262,11 +1262,14 @@ wd33c93_intr(struct Scsi_Host *instance)
- 		    hostdata->connected = NULL;
- 		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
- 		hostdata->state = S_UNCONNECTED;
--		if (cmd->cmnd[0] == REQUEST_SENSE && cmd->SCp.Status != SAM_STAT_GOOD)
--			cmd->result =
--			    (cmd->result & 0x00ffff) | (DID_ERROR << 16);
--		else
--			cmd->result = cmd->SCp.Status | (cmd->SCp.Message << 8);
-+		if (cmd->cmnd[0] == REQUEST_SENSE &&
-+		    cmd->SCp.Status != SAM_STAT_GOOD) {
-+			set_host_byte(cmd, DID_ERROR);
-+		} else {
-+			set_host_byte(cmd, DID_OK);
+diff --git a/drivers/scsi/mesh.c b/drivers/scsi/mesh.c
+index 0a9f4e44ab2c..78b72bcf58fe 100644
+--- a/drivers/scsi/mesh.c
++++ b/drivers/scsi/mesh.c
+@@ -595,9 +595,10 @@ static void mesh_done(struct mesh_state *ms, int start_next)
+ 	ms->current_req = NULL;
+ 	tp->current_req = NULL;
+ 	if (cmd) {
+-		cmd->result = (ms->stat << 16) | cmd->SCp.Status;
++		set_host_byte(cmd, ms->stat);
++		set_status_byte(cmd, cmd->SCp.Status);
+ 		if (ms->stat == DID_OK)
+-			cmd->result |= cmd->SCp.Message << 8;
 +			scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
-+			set_status_byte(cmd, cmd->SCp.Status);
-+		}
- 		cmd->scsi_done(cmd);
- 
- /* We are no longer connected to a target - check to see if
-@@ -1295,14 +1298,14 @@ wd33c93_intr(struct Scsi_Host *instance)
- 			hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
- 			hostdata->state = S_UNCONNECTED;
- 			DB(DB_INTR, printk(":%d", cmd->SCp.Status))
--			    if (cmd->cmnd[0] == REQUEST_SENSE
--				&& cmd->SCp.Status != SAM_STAT_GOOD)
--				cmd->result =
--				    (cmd->
--				     result & 0x00ffff) | (DID_ERROR << 16);
--			else
--				cmd->result =
--				    cmd->SCp.Status | (cmd->SCp.Message << 8);
-+			if (cmd->cmnd[0] == REQUEST_SENSE
-+			    && cmd->SCp.Status != SAM_STAT_GOOD) {
-+				set_host_byte(cmd, DID_ERROR);
-+			} else {
-+				set_host_byte(cmd, DID_OK);
-+				scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
-+				set_status_byte(cmd, cmd->SCp.Status);
-+			}
- 			cmd->scsi_done(cmd);
- 			break;
- 		case S_PRE_TMP_DISC:
+ 		if (DEBUG_TARGET(cmd)) {
+ 			printk(KERN_DEBUG "mesh_done: result = %x, data_ptr=%d, buflen=%d\n",
+ 			       cmd->result, ms->data_ptr, scsi_bufflen(cmd));
+@@ -993,7 +994,7 @@ static void handle_reset(struct mesh_state *ms)
+ 	for (tgt = 0; tgt < 8; ++tgt) {
+ 		tp = &ms->tgts[tgt];
+ 		if ((cmd = tp->current_req) != NULL) {
+-			cmd->result = DID_RESET << 16;
++			set_host_byte(cmd, DID_RESET);
+ 			tp->current_req = NULL;
+ 			mesh_completed(ms, cmd);
+ 		}
+@@ -1003,7 +1004,7 @@ static void handle_reset(struct mesh_state *ms)
+ 	ms->current_req = NULL;
+ 	while ((cmd = ms->request_q) != NULL) {
+ 		ms->request_q = (struct scsi_cmnd *) cmd->host_scribble;
+-		cmd->result = DID_RESET << 16;
++		set_host_byte(cmd, DID_RESET);
+ 		mesh_completed(ms, cmd);
+ 	}
+ 	ms->phase = idle;
 -- 
 2.29.2
 
