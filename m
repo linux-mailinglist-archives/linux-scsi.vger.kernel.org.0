@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2AF36C0FE
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF6336C0FD
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Apr 2021 10:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235263AbhD0Ica (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Apr 2021 04:32:30 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49410 "EHLO mx2.suse.de"
+        id S235257AbhD0Ic3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Apr 2021 04:32:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50090 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235164AbhD0IcL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 27 Apr 2021 04:32:11 -0400
+        id S235218AbhD0IcG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 27 Apr 2021 04:32:06 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DC5B8B16C;
+        by mx2.suse.de (Postfix) with ESMTP id DC804B16D;
         Tue, 27 Apr 2021 08:31:06 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 38/40] scsi: kill message byte
-Date:   Tue, 27 Apr 2021 10:30:44 +0200
-Message-Id: <20210427083046.31620-39-hare@suse.de>
+Subject: [PATCH 39/40] target: use standard SAM status types
+Date:   Tue, 27 Apr 2021 10:30:45 +0200
+Message-Id: <20210427083046.31620-40-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210427083046.31620-1-hare@suse.de>
 References: <20210427083046.31620-1-hare@suse.de>
@@ -33,100 +33,246 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove last vestiges of SCSI status message bytes.
+target_complete_cmd() and friends requires a SAM status type,
+so passing GOOD here is actually wrong.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 ---
- Documentation/scsi/scsi_mid_low_api.rst |  6 ++---
- drivers/scsi/scsi_lib.c                 |  5 +---
- include/trace/events/scsi.h             | 33 +------------------------
- 3 files changed, 5 insertions(+), 39 deletions(-)
+ drivers/target/target_core_alua.c   |  6 +++---
+ drivers/target/target_core_iblock.c |  2 +-
+ drivers/target/target_core_pr.c     |  8 ++++----
+ drivers/target/target_core_pscsi.c  |  2 +-
+ drivers/target/target_core_sbc.c    | 10 +++++-----
+ drivers/target/target_core_spc.c    | 14 +++++++-------
+ drivers/target/target_core_xcopy.c  |  2 +-
+ 7 files changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/Documentation/scsi/scsi_mid_low_api.rst b/Documentation/scsi/scsi_mid_low_api.rst
-index 2c87eaa36296..8728204e2b76 100644
---- a/Documentation/scsi/scsi_mid_low_api.rst
-+++ b/Documentation/scsi/scsi_mid_low_api.rst
-@@ -1176,9 +1176,9 @@ Members of interest:
-                    of 0 implies a successfully completed command (and all
-                    data (if any) has been transferred to or from the SCSI
-                    target device). 'result' is a 32 bit unsigned integer that
--                   can be viewed as 4 related bytes. The SCSI status value is
--                   in the LSB. See include/scsi/scsi.h status_byte(),
--                   msg_byte() and host_byte() macros and related constants.
-+                   can be viewed as 2 related bytes. The SCSI status value is
-+                   in the LSB. See include/scsi/scsi.h status_byte() and
-+                   host_byte() macros and related constants.
-     sense_buffer
- 		 - an array (maximum size: SCSI_SENSE_BUFFERSIZE bytes) that
-                    should be written when the SCSI status (LSB of 'result')
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 612decaccfb5..e8617c6bbf7a 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -625,10 +625,7 @@ static blk_status_t scsi_result_to_blk_status(struct scsi_cmnd *cmd, int result)
+diff --git a/drivers/target/target_core_alua.c b/drivers/target/target_core_alua.c
+index 5517c7dd5144..3bb921345bce 100644
+--- a/drivers/target/target_core_alua.c
++++ b/drivers/target/target_core_alua.c
+@@ -123,7 +123,7 @@ target_emulate_report_referrals(struct se_cmd *cmd)
+ 
+ 	transport_kunmap_data_sg(cmd);
+ 
+-	target_complete_cmd(cmd, GOOD);
++	target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return 0;
+ }
+ 
+@@ -255,7 +255,7 @@ target_emulate_report_target_port_groups(struct se_cmd *cmd)
+ 	}
+ 	transport_kunmap_data_sg(cmd);
+ 
+-	target_complete_cmd_with_length(cmd, GOOD, rd_len + 4);
++	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, rd_len + 4);
+ 	return 0;
+ }
+ 
+@@ -424,7 +424,7 @@ target_emulate_set_target_port_groups(struct se_cmd *cmd)
+ out:
+ 	transport_kunmap_data_sg(cmd);
+ 	if (!rc)
+-		target_complete_cmd(cmd, GOOD);
++		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return rc;
+ }
+ 
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index d6fdd1c61f90..deb2b8b64d20 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -474,7 +474,7 @@ iblock_execute_zero_out(struct block_device *bdev, struct se_cmd *cmd)
+ 	if (ret)
+ 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
+ 
+-	target_complete_cmd(cmd, GOOD);
++	target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
+index 6fd5fec95539..4b94b085625b 100644
+--- a/drivers/target/target_core_pr.c
++++ b/drivers/target/target_core_pr.c
+@@ -234,7 +234,7 @@ target_scsi2_reservation_release(struct se_cmd *cmd)
+ out_unlock:
+ 	spin_unlock(&dev->dev_reservation_lock);
+ out:
+-	target_complete_cmd(cmd, GOOD);
++	target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return 0;
+ }
+ 
+@@ -297,7 +297,7 @@ target_scsi2_reservation_reserve(struct se_cmd *cmd)
+ 	spin_unlock(&dev->dev_reservation_lock);
+ out:
+ 	if (!ret)
+-		target_complete_cmd(cmd, GOOD);
++		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return ret;
+ }
+ 
+@@ -3676,7 +3676,7 @@ target_scsi3_emulate_pr_out(struct se_cmd *cmd)
+ 	}
+ 
+ 	if (!ret)
+-		target_complete_cmd(cmd, GOOD);
++		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return ret;
+ }
+ 
+@@ -4073,7 +4073,7 @@ target_scsi3_emulate_pr_in(struct se_cmd *cmd)
+ 	}
+ 
+ 	if (!ret)
+-		target_complete_cmd(cmd, GOOD);
++		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return ret;
+ }
+ 
+diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
+index dac44caf77a3..d468343bd095 100644
+--- a/drivers/target/target_core_pscsi.c
++++ b/drivers/target/target_core_pscsi.c
+@@ -1044,7 +1044,7 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
+ 	struct se_cmd *cmd = req->end_io_data;
+ 	struct pscsi_plugin_task *pt = cmd->priv;
+ 	int result = scsi_req(req)->result;
+-	u8 scsi_status = status_byte(result) << 1;
++	u8 scsi_status = result & 0xff;
+ 
+ 	if (scsi_status != SAM_STAT_GOOD) {
+ 		pr_debug("PSCSI Status Byte exception at cmd: %p CDB:"
+diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
+index 7b07e557dc8d..b32f4ee88e79 100644
+--- a/drivers/target/target_core_sbc.c
++++ b/drivers/target/target_core_sbc.c
+@@ -67,7 +67,7 @@ sbc_emulate_readcapacity(struct se_cmd *cmd)
+ 		transport_kunmap_data_sg(cmd);
+ 	}
+ 
+-	target_complete_cmd_with_length(cmd, GOOD, 8);
++	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 8);
+ 	return 0;
+ }
+ 
+@@ -130,7 +130,7 @@ sbc_emulate_readcapacity_16(struct se_cmd *cmd)
+ 		transport_kunmap_data_sg(cmd);
+ 	}
+ 
+-	target_complete_cmd_with_length(cmd, GOOD, 32);
++	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 32);
+ 	return 0;
+ }
+ 
+@@ -202,14 +202,14 @@ sbc_execute_write_same_unmap(struct se_cmd *cmd)
+ 			return ret;
+ 	}
+ 
+-	target_complete_cmd(cmd, GOOD);
++	target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return 0;
+ }
+ 
+ static sense_reason_t
+ sbc_emulate_noop(struct se_cmd *cmd)
  {
- 	switch (host_byte(result)) {
- 	case DID_OK:
--		/*
--		 * Also check the other bytes than the status byte in result
--		 */
--		if (scsi_status_is_good(result) && (result & ~0xff) == 0)
-+		if (scsi_status_is_good(result))
- 			return BLK_STS_OK;
- 		return BLK_STS_IOERR;
- 	case DID_TRANSPORT_FAILFAST:
-diff --git a/include/trace/events/scsi.h b/include/trace/events/scsi.h
-index 428cca71c2ba..370ade0d4093 100644
---- a/include/trace/events/scsi.h
-+++ b/include/trace/events/scsi.h
-@@ -124,37 +124,6 @@
- 		scsi_hostbyte_name(DID_TRANSPORT_DISRUPTED),	\
- 		scsi_hostbyte_name(DID_TRANSPORT_FAILFAST))
+-	target_complete_cmd(cmd, GOOD);
++	target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return 0;
+ }
  
--#define scsi_msgbyte_name(result)	{ result, #result }
--#define show_msgbyte_name(val)					\
--	__print_symbolic(val,					\
--		scsi_msgbyte_name(COMMAND_COMPLETE),		\
--		scsi_msgbyte_name(EXTENDED_MESSAGE),		\
--		scsi_msgbyte_name(SAVE_POINTERS),		\
--		scsi_msgbyte_name(RESTORE_POINTERS),		\
--		scsi_msgbyte_name(DISCONNECT),			\
--		scsi_msgbyte_name(INITIATOR_ERROR),		\
--		scsi_msgbyte_name(ABORT_TASK_SET),		\
--		scsi_msgbyte_name(MESSAGE_REJECT),		\
--		scsi_msgbyte_name(NOP),				\
--		scsi_msgbyte_name(MSG_PARITY_ERROR),		\
--		scsi_msgbyte_name(LINKED_CMD_COMPLETE),		\
--		scsi_msgbyte_name(LINKED_FLG_CMD_COMPLETE),	\
--		scsi_msgbyte_name(TARGET_RESET),		\
--		scsi_msgbyte_name(ABORT_TASK),			\
--		scsi_msgbyte_name(CLEAR_TASK_SET),		\
--		scsi_msgbyte_name(INITIATE_RECOVERY),		\
--		scsi_msgbyte_name(RELEASE_RECOVERY),		\
--		scsi_msgbyte_name(CLEAR_ACA),			\
--		scsi_msgbyte_name(LOGICAL_UNIT_RESET),		\
--		scsi_msgbyte_name(SIMPLE_QUEUE_TAG),		\
--		scsi_msgbyte_name(HEAD_OF_QUEUE_TAG),		\
--		scsi_msgbyte_name(ORDERED_QUEUE_TAG),		\
--		scsi_msgbyte_name(IGNORE_WIDE_RESIDUE),		\
--		scsi_msgbyte_name(ACA),				\
--		scsi_msgbyte_name(QAS_REQUEST),			\
--		scsi_msgbyte_name(BUS_DEVICE_RESET),		\
--		scsi_msgbyte_name(ABORT))
--
- #define scsi_statusbyte_name(result)	{ result, #result }
- #define show_statusbyte_name(val)				\
- 	__print_symbolic(val,					\
-@@ -316,7 +285,7 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
- 		  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
- 		  "DRIVER_OK",
- 		  show_hostbyte_name(((__entry->result) >> 16) & 0xff),
--		  show_msgbyte_name(((__entry->result) >> 8) & 0xff),
-+		  "COMMAND_COMPLETE",
- 		  show_statusbyte_name(__entry->result & 0xff))
- );
+@@ -1245,7 +1245,7 @@ sbc_execute_unmap(struct se_cmd *cmd)
+ err:
+ 	transport_kunmap_data_sg(cmd);
+ 	if (!ret)
+-		target_complete_cmd(cmd, GOOD);
++		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return ret;
+ }
  
+diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+index 70a661801cb9..0756a690ea84 100644
+--- a/drivers/target/target_core_spc.c
++++ b/drivers/target/target_core_spc.c
+@@ -750,7 +750,7 @@ spc_emulate_inquiry(struct se_cmd *cmd)
+ 	kfree(buf);
+ 
+ 	if (!ret)
+-		target_complete_cmd_with_length(cmd, GOOD, len);
++		target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, len);
+ 	return ret;
+ }
+ 
+@@ -1104,7 +1104,7 @@ static sense_reason_t spc_emulate_modesense(struct se_cmd *cmd)
+ 		transport_kunmap_data_sg(cmd);
+ 	}
+ 
+-	target_complete_cmd_with_length(cmd, GOOD, length);
++	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, length);
+ 	return 0;
+ }
+ 
+@@ -1122,7 +1122,7 @@ static sense_reason_t spc_emulate_modeselect(struct se_cmd *cmd)
+ 	int i;
+ 
+ 	if (!cmd->data_length) {
+-		target_complete_cmd(cmd, GOOD);
++		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 		return 0;
+ 	}
+ 
+@@ -1165,7 +1165,7 @@ static sense_reason_t spc_emulate_modeselect(struct se_cmd *cmd)
+ 	transport_kunmap_data_sg(cmd);
+ 
+ 	if (!ret)
+-		target_complete_cmd(cmd, GOOD);
++		target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return ret;
+ }
+ 
+@@ -1198,7 +1198,7 @@ static sense_reason_t spc_emulate_request_sense(struct se_cmd *cmd)
+ 	memcpy(rbuf, buf, min_t(u32, sizeof(buf), cmd->data_length));
+ 	transport_kunmap_data_sg(cmd);
+ 
+-	target_complete_cmd(cmd, GOOD);
++	target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return 0;
+ }
+ 
+@@ -1265,7 +1265,7 @@ sense_reason_t spc_emulate_report_luns(struct se_cmd *cmd)
+ 		transport_kunmap_data_sg(cmd);
+ 	}
+ 
+-	target_complete_cmd_with_length(cmd, GOOD, 8 + lun_count * 8);
++	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 8 + lun_count * 8);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(spc_emulate_report_luns);
+@@ -1273,7 +1273,7 @@ EXPORT_SYMBOL(spc_emulate_report_luns);
+ static sense_reason_t
+ spc_emulate_testunitready(struct se_cmd *cmd)
+ {
+-	target_complete_cmd(cmd, GOOD);
++	target_complete_cmd(cmd, SAM_STAT_GOOD);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
+index d31ed071cb08..44d76c304701 100644
+--- a/drivers/target/target_core_xcopy.c
++++ b/drivers/target/target_core_xcopy.c
+@@ -1011,7 +1011,7 @@ static sense_reason_t target_rcr_operating_parameters(struct se_cmd *se_cmd)
+ 	put_unaligned_be32(42, &p[0]);
+ 
+ 	transport_kunmap_data_sg(se_cmd);
+-	target_complete_cmd(se_cmd, GOOD);
++	target_complete_cmd(se_cmd, SAM_STAT_GOOD);
+ 
+ 	return TCM_NO_SENSE;
+ }
 -- 
 2.29.2
 
