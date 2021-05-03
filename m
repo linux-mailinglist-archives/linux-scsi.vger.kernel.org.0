@@ -2,30 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 228B0371772
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 May 2021 17:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D9C37176E
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 May 2021 17:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbhECPEw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 May 2021 11:04:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40912 "EHLO mx2.suse.de"
+        id S230213AbhECPEt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 May 2021 11:04:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40902 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230198AbhECPEk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S230188AbhECPEk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Mon, 3 May 2021 11:04:40 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id AED30B1EC;
+        by mx2.suse.de (Postfix) with ESMTP id A0703B1C8;
         Mon,  3 May 2021 15:03:44 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
-        Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>,
-        Don Brace <don.brace@microchip.com>
-Subject: [PATCH 14/18] hpsa: drop refcount field from CommandList
-Date:   Mon,  3 May 2021 17:03:29 +0200
-Message-Id: <20210503150333.130310-15-hare@suse.de>
+        Hannes Reinecke <hare@suse.de>, Hannes Reinecke <hare@suse.com>
+Subject: [PATCH 15/18] aacraid: move scsi_add_host()
+Date:   Mon,  3 May 2021 17:03:30 +0200
+Message-Id: <20210503150333.130310-16-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210503150333.130310-1-hare@suse.de>
 References: <20210503150333.130310-1-hare@suse.de>
@@ -35,82 +33,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Field is now unused, so drop it.
+Move the call to scsi_add_host() so that the Scsi_Host structure
+is initialized before any I/O is sent.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
-Acked-by: Don Brace <don.brace@microchip.com>
-Tested-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/hpsa.c     | 11 ++---------
- drivers/scsi/hpsa_cmd.h | 10 ----------
- 2 files changed, 2 insertions(+), 19 deletions(-)
+ drivers/scsi/aacraid/linit.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 282338944a85..61f993704e23 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -5533,8 +5533,8 @@ static void hpsa_cmd_init(struct ctlr_info *h, int index,
- {
- 	dma_addr_t cmd_dma_handle, err_dma_handle;
+diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+index 3168915adaa7..e5d89b309c3a 100644
+--- a/drivers/scsi/aacraid/linit.c
++++ b/drivers/scsi/aacraid/linit.c
+@@ -1639,6 +1639,9 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	shost->irq = pdev->irq;
+ 	shost->unique_id = unique_id;
+ 	shost->max_cmd_len = 16;
++	shost->max_id = MAXIMUM_NUM_CONTAINERS;
++	shost->max_lun = AAC_MAX_LUN;
++	shost->sg_tablesize = HBA_MAX_SG_SEPARATE;
  
--	/* Zero out all of commandlist except the last field, refcount */
--	memset(c, 0, offsetof(struct CommandList, refcount));
-+	/* Zero out all of commandlist */
-+	memset(c, 0, sizeof(struct CommandList));
- 	c->Header.tag = cpu_to_le64((u64) (index << DIRECT_LOOKUP_SHIFT));
- 	cmd_dma_handle = h->cmd_pool_dhandle + index * sizeof(*c);
- 	c->err_info = h->errinfo_pool + index;
-@@ -5556,7 +5556,6 @@ static void hpsa_preinitialize_commands(struct ctlr_info *h)
- 		struct CommandList *c = h->cmd_pool + i;
- 
- 		hpsa_cmd_init(h, i, c);
--		atomic_set(&c->refcount, 0);
- 	}
- }
- 
-@@ -6172,7 +6171,6 @@ static struct CommandList *cmd_tagged_alloc(struct ctlr_info *h,
- 		return NULL;
+ 	if (aac_cfg_major == AAC_CHARDEV_NEEDS_REINIT)
+ 		aac_init_char();
+@@ -1677,7 +1680,7 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	aac->base_size = AAC_MIN_FOOTPRINT_SIZE;
+ 	if ((*aac_drivers[index].init)(aac)) {
+ 		error = -ENODEV;
+-		goto out_unmap;
++		goto out_free_fibs;
  	}
  
--	atomic_inc(&c->refcount);
- 	hpsa_cmd_partial_init(h, idx, c);
+ 	if (aac->sync_mode) {
+@@ -1703,9 +1706,15 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		printk(KERN_ERR "aacraid: Unable to create command thread.\n");
+ 		error = PTR_ERR(aac->thread);
+ 		aac->thread = NULL;
+-		goto out_deinit;
++		goto out_unmap;
+ 	}
  
- 	/*
-@@ -6186,11 +6184,6 @@ static struct CommandList *cmd_tagged_alloc(struct ctlr_info *h,
++	pci_set_drvdata(pdev, shost);
++
++	error = scsi_add_host(shost, &pdev->dev);
++	if (error)
++		goto out_deinit;
++
+ 	aac->maximum_num_channels = aac_drivers[index].channels;
+ 	error = aac_get_adapter_info(aac);
+ 	if (error < 0)
+@@ -1764,18 +1773,6 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (!aac->sa_firmware && aac_drivers[index].quirks & AAC_QUIRK_SRC)
+ 		aac_intr_normal(aac, 0, 2, 0, NULL);
  
- static void cmd_tagged_free(struct ctlr_info *h, struct CommandList *c)
- {
 -	/*
--	 * Release our reference to the block.  We don't need to do anything
--	 * else to free it, because it is accessed by index.
+-	 * dmb - we may need to move the setting of these parms somewhere else once
+-	 * we get a fib that can report the actual numbers
 -	 */
--	(void)atomic_dec(&c->refcount);
- 	c->scsi_cmd = NULL;
- }
- 
-diff --git a/drivers/scsi/hpsa_cmd.h b/drivers/scsi/hpsa_cmd.h
-index ba6a3aa8d954..04c92c94cc6c 100644
---- a/drivers/scsi/hpsa_cmd.h
-+++ b/drivers/scsi/hpsa_cmd.h
-@@ -454,18 +454,8 @@ struct CommandList {
- 
- 	bool retry_pending;
- 	struct hpsa_scsi_dev_t *device;
--	atomic_t refcount; /* Must be last to avoid memset in hpsa_cmd_init() */
- } __aligned(COMMANDLIST_ALIGNMENT);
- 
--/*
-- * Make sure our embedded atomic variable is aligned. Otherwise we break atomic
-- * operations on architectures that don't support unaligned atomics like IA64.
-- *
-- * The assert guards against reintroductin against unwanted __packed to
-- * the struct CommandList.
-- */
--static_assert(offsetof(struct CommandList, refcount) % __alignof__(atomic_t) == 0);
+-	shost->max_lun = AAC_MAX_LUN;
 -
- /* Max S/G elements in I/O accelerator command */
- #define IOACCEL1_MAXSGENTRIES           24
- #define IOACCEL2_MAXSGENTRIES		28
+-	pci_set_drvdata(pdev, shost);
+-
+-	error = scsi_add_host(shost, &pdev->dev);
+-	if (error)
+-		goto out_deinit;
+-
+ 	aac_scan_host(aac);
+ 
+ 	pci_enable_pcie_error_reporting(pdev);
+@@ -1792,10 +1789,12 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 				  aac->comm_addr, aac->comm_phys);
+ 	kfree(aac->queues);
+ 	aac_adapter_ioremap(aac, 0);
+-	kfree(aac->fibs);
+ 	kfree(aac->fsa_dev);
++ out_free_fibs:
++	kfree(aac->fibs);
+  out_free_host:
+ 	scsi_host_put(shost);
++	pci_set_drvdata(pdev, NULL);
+  out_disable_pdev:
+ 	pci_disable_device(pdev);
+  out:
+@@ -1903,9 +1902,9 @@ static void aac_remove_one(struct pci_dev *pdev)
+ 	struct aac_dev *aac = (struct aac_dev *)shost->hostdata;
+ 
+ 	aac_cancel_rescan_worker(aac);
+-	scsi_remove_host(shost);
+ 
+ 	__aac_shutdown(aac);
++	scsi_remove_host(shost);
+ 	aac_fib_map_free(aac);
+ 	dma_free_coherent(&aac->pdev->dev, aac->comm_size, aac->comm_addr,
+ 			  aac->comm_phys);
 -- 
 2.29.2
 
