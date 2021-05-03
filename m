@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDE9371D64
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 May 2021 19:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81C8371D66
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 May 2021 19:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbhECQ6v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 May 2021 12:58:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43314 "EHLO mail.kernel.org"
+        id S233314AbhECQ6x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 May 2021 12:58:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43040 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234820AbhECQzC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 May 2021 12:55:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2AD5761954;
-        Mon,  3 May 2021 16:42:28 +0000 (UTC)
+        id S235080AbhECQzq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 May 2021 12:55:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8650061948;
+        Mon,  3 May 2021 16:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620060149;
-        bh=3Qtkq3OoeZGNQEuCvvaZiKOFn4jy2VcAcLXyZRnIjZo=;
+        s=k20201202; t=1620060168;
+        bh=l8yuecNHOrleM1sXka6sDMR2nkAdygJgohEMeZhx4BY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ha3Ii+ea2iuYytPb975ku0cfHp7ezWDyP1yv862q17WMJ4whzXggoVmv0juvNZY3/
-         MTchUGezl6Y0Mri8wqn1L0A0k/d74Q/OmNRfQXU2B//e9Z1XiqDhKop9CSsDOax3Ud
-         0MDdUcW1ri6jbo/0g5x7lB72DM7Cnas5cjATj7E1DK+7AniniDozk3m13Knqkptxsc
-         x+E27uGvuATTNN3clpt7lCZDYjVMDK2c9H/Cj7dkAJ6PbJCJtJXuTSFkpOCDBQ9VJH
-         J6yMStKtS04hH+CCbtLkD8IAYTzyMx8xYtBPSqa1mvYQx8G2LLl7qQW1Y3d3bstwiz
-         g0CsWyhIHuGwg==
+        b=ei1BWXgi6n256GXBJfgvvLgWDTVyYs5KVmHnpkbkDwGJ4m8/uGJU37JouXQ2HXyQV
+         pw4mNGnWs9mVcpSkMt3lbrYzaSKWtUkdXOwBhTFLWDEZU4wi0pHpr3FQILKfa9fpVU
+         eHC1xeq1Km45nTlod+4UBIWESr6LCxGudaEglRHGmSWt9ygByXm8CUWNAhIXJfPRvP
+         TWzR/pKvBjpxhJbmTe/0f2SEOuUeU05h/2sXG0Ah99/nhIChyix7WQos2Y9nDXiGww
+         4dNfUwQBuV1lHlURDnHKNrAjpRHmcPzIUFb0b2pxROqzD1q/Jd8eUd3u5a0tpTSsN5
+         iPEe83rYmQb8A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Ewan D. Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 16/31] scsi: scsi_dh_alua: Remove check for ASC 24h in alua_rtpg()
-Date:   Mon,  3 May 2021 12:41:49 -0400
-Message-Id: <20210503164204.2854178-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 29/31] scsi: lpfc: Fix crash when a REG_RPI mailbox fails triggering a LOGO response
+Date:   Mon,  3 May 2021 12:42:02 -0400
+Message-Id: <20210503164204.2854178-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210503164204.2854178-1-sashal@kernel.org>
 References: <20210503164204.2854178-1-sashal@kernel.org>
@@ -43,40 +43,57 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: "Ewan D. Milne" <emilne@redhat.com>
+From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit bc3f2b42b70eb1b8576e753e7d0e117bbb674496 ]
+[ Upstream commit fffd18ec6579c2d9c72b212169259062fe747888 ]
 
-Some arrays return ILLEGAL_REQUEST with ASC 00h if they don't support the
-RTPG extended header so remove the check for INVALID FIELD IN CDB.
+Fix a crash caused by a double put on the node when the driver completed an
+ACC for an unsolicted abort on the same node.  The second put was executed
+by lpfc_nlp_not_used() and is wrong because the completion routine executes
+the nlp_put when the iocbq was released.  Additionally, the driver is
+issuing a LOGO then immediately calls lpfc_nlp_set_state to put the node
+into NPR.  This call does nothing.
 
-Link: https://lore.kernel.org/r/20210331201154.20348-1-emilne@redhat.com
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Ewan D. Milne <emilne@redhat.com>
+Remove the lpfc_nlp_not_used call and additional set_state in the
+completion routine.  Remove the lpfc_nlp_set_state post issue_logo.  Isn't
+necessary.
+
+Link: https://lore.kernel.org/r/20210412013127.2387-3-jsmart2021@gmail.com
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/device_handler/scsi_dh_alua.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 2 --
+ drivers/scsi/lpfc/lpfc_sli.c       | 1 -
+ 2 files changed, 3 deletions(-)
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-index ba68454109ba..2cf5579a9ad9 100644
---- a/drivers/scsi/device_handler/scsi_dh_alua.c
-+++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -560,10 +560,11 @@ static int alua_rtpg(struct scsi_device *sdev, struct alua_port_group *pg)
- 		 * even though it shouldn't according to T10.
- 		 * The retry without rtpg_ext_hdr_req set
- 		 * handles this.
-+		 * Note:  some arrays return a sense key of ILLEGAL_REQUEST
-+		 * with ASC 00h if they don't support the extended header.
- 		 */
- 		if (!(pg->flags & ALUA_RTPG_EXT_HDR_UNSUPP) &&
--		    sense_hdr.sense_key == ILLEGAL_REQUEST &&
--		    sense_hdr.asc == 0x24 && sense_hdr.ascq == 0) {
-+		    sense_hdr.sense_key == ILLEGAL_REQUEST) {
- 			pg->flags |= ALUA_RTPG_EXT_HDR_UNSUPP;
- 			goto retry;
- 		}
+diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
+index 40c6d6eacea9..da6685700b04 100644
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -1707,8 +1707,6 @@ lpfc_cmpl_reglogin_reglogin_issue(struct lpfc_vport *vport,
+ 		ndlp->nlp_last_elscmd = ELS_CMD_PLOGI;
+ 
+ 		lpfc_issue_els_logo(vport, ndlp, 0);
+-		ndlp->nlp_prev_state = NLP_STE_REG_LOGIN_ISSUE;
+-		lpfc_nlp_set_state(vport, ndlp, NLP_STE_NPR_NODE);
+ 		return ndlp->nlp_state;
+ 	}
+ 
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 45445dafc80c..27578816d852 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -16637,7 +16637,6 @@ lpfc_sli4_seq_abort_rsp_cmpl(struct lpfc_hba *phba,
+ 	if (cmd_iocbq) {
+ 		ndlp = (struct lpfc_nodelist *)cmd_iocbq->context1;
+ 		lpfc_nlp_put(ndlp);
+-		lpfc_nlp_not_used(ndlp);
+ 		lpfc_sli_release_iocbq(phba, cmd_iocbq);
+ 	}
+ 
 -- 
 2.30.2
 
