@@ -2,50 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2F8373419
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 May 2021 05:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA9E3734CE
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 May 2021 07:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbhEED7M (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 May 2021 23:59:12 -0400
-Received: from smtp.beryl.synacor.com ([69.168.106.129]:16113 "EHLO
-        smtp.gci.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231313AbhEED7L (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 4 May 2021 23:59:11 -0400
-X-Greylist: delayed 1215 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 May 2021 23:59:11 EDT
-DKIM-Signature: v=1; a=rsa-sha1; d=gci.net; s=20190430; c=relaxed/simple;
-        q=dns/txt; i=@gci.net; t=1620185879;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=/yIeym//NXPQY8O7wcN1ynOvG/c=;
-        b=KI4n8LEE58mSKKd96q4ntW6zDXqP0dMIM9vFduj1NubN1kvAxewwIC98nYMKiCJ6
-        xi/ZyCt1C4qUqWdJOOfee2MOPUA6EmTGki5KWZHql70gqHwaN3eYoUmjEg+wWOk9
-        PkW34YtFs3z0uPTH6FT7w6tSHQxYrz8Ce0IOAp19Mx8=;
-Feedback-ID: bos:gci:res:beryl
-Received: from [10.80.81.16] ([10.80.81.16:51278] helo=md10.beryl.bos.sync.lan)
-        by smtp.beryl.synacor.com (envelope-from <dcamacho9@gci.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id E1/EB-28980-51312906; Tue, 04 May 2021 23:37:58 -0400
-Date:   Tue, 4 May 2021 23:37:57 -0400 (EDT)
-From:   priya mehta <dcamacho9@gci.net>
-Message-ID: <425227041.9789855.1620185877751.JavaMail.zimbra@gci.net>
-In-Reply-To: <875689306.9776786.1620185089384.JavaMail.zimbra@gci.net>
-References: <875689306.9776786.1620185089384.JavaMail.zimbra@gci.net>
-Subject: Re: hi
+        id S231520AbhEEF5r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 May 2021 01:57:47 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52276 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229592AbhEEF5q (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 5 May 2021 01:57:46 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id F25CBADEF;
+        Wed,  5 May 2021 05:56:49 +0000 (UTC)
+Subject: Re: [PATCH 10/18] scsi: implement reserved command handling
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org
+References: <20210503150333.130310-1-hare@suse.de>
+ <20210503150333.130310-11-hare@suse.de>
+ <583ea6ee-f8ce-7063-ca2a-409fee83a2b6@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+Organization: SUSE Linux GmbH
+Message-ID: <1baf8877-efe6-a901-e939-7d949f961fc6@suse.de>
+Date:   Wed, 5 May 2021 07:56:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
+In-Reply-To: <583ea6ee-f8ce-7063-ca2a-409fee83a2b6@acm.org>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [84.17.35.29]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Topic: hi
-Thread-Index: jN/e5rIgY1IfEfjv7nxdL1ibqE6T5i6FaZAU
-X-Vade-Verditct: clean
-X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgeduledrvdefjedgieejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuufgjpfetvefqtfdpuefgtfgjnfdpqfgfvfenuceurghilhhouhhtmecufedtudenuchmihhsshhinhhgucfvqfcufhhivghlugculdeftddmnecujfgurhepfffhkfgjfhfugggtgfhiofhtsehtjegttdertdejnecuhfhrohhmpehprhhihigruchmvghhthgruceouggtrghmrggthhholeesghgtihdrnhgvtheqnecuggftrfgrthhtvghrnhepheejvdettdehfeevgeduveduhffhhffgffejleejheeifffgffffudevvdefiedvnecukfhppedutddrkedtrdekuddrudeipdekgedrudejrdefhedrvdelnecuvehluhhsthgvrhfuihiivgepvddvnecurfgrrhgrmhepihhnvghtpedutddrkedtrdekuddrudeipdhhvghlohepmhguuddtrdgsvghrhihlrdgsohhsrdhshihntgdrlhgrnhdpmhgrihhlfhhrohhmpegutggrmhgrtghhohelsehgtghirdhnvghtpdhrtghpthhtoheplhhkmhgrrhhsseihrghhohhordgtohdrihhnpdhhohhsthepshhmthhprdgsvghrhihlrdgsohhsrdhshihntgdrlhgrnhdpshhpfhepshhofhhtfhgrihhlpdgukhhimhep
-X-Vade-Client: BERYL
-To:     unlisted-recipients:; (no To-header on input)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 5/5/21 2:45 AM, Bart Van Assche wrote:
+> On 5/3/21 8:03 AM, Hannes Reinecke wrote:
+>>  struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
+>>  	unsigned int op, blk_mq_req_flags_t flags)
+>> @@ -2005,6 +2009,10 @@ struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
+>>  
+>>  	WARN_ON_ONCE(((op & REQ_OP_MASK) != REQ_OP_SCSI_IN) &&
+>>  		     ((op & REQ_OP_MASK) != REQ_OP_SCSI_OUT));
+>> +
+>> +	if (sdev->host->nr_reserved_cmds)
+>> +		flags |= BLK_MQ_REQ_RESERVED;
+>> +
+>>  	rq = blk_mq_alloc_request(sdev->request_queue, op, flags);
+>>  	if (IS_ERR(rq))
+>>  		return NULL;
+> 
+> Can the if-statement be removed such that scsi_get_internal_cmd() fails
+> if sdev->host->nr_reserved_cmds == 0? I'm concerned that otherwise it
+> will be very hard to determine which requests are internal and which
+> ones not from inside a blk_mq_tagset_busy_iter() callback.
+> 
+Original idea was that one could use scsi_get_internal_cmd() even with
+nr_reserved_cmds == 0, but you are right that this will probably just
+lead to confusion.
 
-  
+Will be modifying it for the next round.
 
-   is the movement there 6-10am
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		        Kernel Storage Architect
+hare@suse.de			               +49 911 74053 688
+SUSE Software Solutions Germany GmbH, 90409 Nürnberg
+GF: F. Imendörffer, HRB 36809 (AG Nürnberg)
