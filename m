@@ -2,81 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B7E376CC7
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 May 2021 00:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0699376CE4
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 May 2021 00:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbhEGW1m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 May 2021 18:27:42 -0400
-Received: from bosmailout01.eigbox.net ([66.96.190.1]:36027 "EHLO
-        bosmailout01.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhEGW1h (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 May 2021 18:27:37 -0400
-X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:27:30 EDT
-Received: from bosmailscan09.eigbox.net ([10.20.15.9])
-        by bosmailout01.eigbox.net with esmtp (Exim)
-        id 1lf8QO-00068o-JJ; Fri, 07 May 2021 17:54:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=bjgKomV6NO5Eg5D3qsCBps1llx
-        tj4k2teSfIdfo/duBtOSoC/FW1+C1nXiYJbrvf2JDobx8fDCsgnxHFoPWOCb5eI+OJOIgvnnfKlpl
-        ZqidIuDnjEPTMao1vFwrg6M9FUKU/cz6TT5/KN4ccsk+aQli3Wgs3G1cQz5vdbC1Y2SXULFY8Mu2t
-        1PShwmiDRn71EPzgUHUVu0GG39z6uSTEuRgOXhiNl9ekuZ5QXUAEykoocvC5/DkORRmERAA91o1HY
-        Sl76pPWw9UBVGbuFbfdVPfVcFxJM5xZDrmgt6uCf9J+dn/n7LFOSOxBaL9svxxYdhOkJwdz4uh075
-        2gI+xJSw==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan09.eigbox.net with esmtp (Exim)
-        id 1lf8QO-0003aD-AI; Fri, 07 May 2021 17:54:20 -0400
-Received: from boswebmail06.eigbox.net ([10.20.16.6])
-        by bosimpout12 with 
-        id 1xuH2500407qujN01xuLVi; Fri, 07 May 2021 17:54:20 -0400
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail06.eigbox.net with esmtp (Exim)
-        id 1lf8QL-0006fx-UG; Fri, 07 May 2021 17:54:17 -0400
-Received: from [197.239.81.229]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:54:17 -0400
+        id S229812AbhEGWii (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 May 2021 18:38:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229470AbhEGWih (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 7 May 2021 18:38:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5199E60FF2
+        for <linux-scsi@vger.kernel.org>; Fri,  7 May 2021 22:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620427057;
+        bh=CWzN/Z+ogaoNWjBg79EnR1n6llBZJyrXcc2SNf4ORsE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Vd3U49lQ0CzvKFrcueAqESl4H9fcU+MNeWWufNDLPqQ3lBE+buniXmwx9ReEKmPEc
+         zaQt7An6k/3MomqS/Tr781PzDiUlaw2sFkZCbA3SwMCH0IALqMGVvAEdsiaGYmX54A
+         e0Q6BgPdhypJzZd0Fga70Wp+xTmlyN9NfNQvYJpUFRDMv4uwCc9xq0IOcYol6Qj6YY
+         GsU39h1BffZ1PcK2zJbUzVOaoRVlx6qGPawveDQQe2mUboszbcUBuUmCgs3yFAP5vq
+         I56oGGu9Ssv7IRevmZnzlg7Hy48qsxZEiJoPUAmCupG2CgY3ur17jp8fY3eZSIUMdf
+         8d0Je6rjTEiFg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 4400F60F25; Fri,  7 May 2021 22:37:37 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 212337] scsi_debug: race at module load and module unload
+Date:   Fri, 07 May 2021 22:37:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mcgrof@kernel.org
+X-Bugzilla-Status: REOPENED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-212337-11613-F7Ifcrj5Ci@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-212337-11613@https.bugzilla.kernel.org/>
+References: <bug-212337-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Date:   Fri, 07 May 2021 21:54:17 +0000
-From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
-To:     undisclosed-recipients:;
-Subject: URGENT REPLY NEEDED
-Reply-To: suzara2017malingwan@gmail.com
-Mail-Reply-To: suzara2017malingwan@gmail.com
-Message-ID: <36acfe805efde59f3f399df1324ce6b9@godsofu4.com>
-X-Sender: fast65@godsofu4.com
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: fast65@godsofu4.com
-Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212337
 
+--- Comment #18 from Luis Chamberlain (mcgrof@kernel.org) ---
+(In reply to d gilbert from comment #17)
+> > It should appear right away if we attach sysfs stuff prior to the devic=
+es
+> > which probe asynchronously.
+> >=20
+>=20
+> Yes, it does appear pretty early,=20
 
-My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
-of the Philippine presently base in West Africa B/F, dealing with
-exportation of Gold, I was diagnose of blood Causal decease, and my
-doctor have announce to me that I have few days to leave due to the
-condition of my sickness.
+I thought scsi_debug had generic sysfs files to control adding new scsi dev=
+ices
+at run time or removing them, or controlling the scsi_debug driver generica=
+lly,
+but correct me if I'm wrong, I don't see them. If so then my statement was
+incorrect in that "should" is an assumption.
 
-I have a desire to build an orphanage home in your country of which i
-cannot execute the project myself due to my present health condition,
-I am willing to hand over the project under your care for you to help
-me fulfill my dreams and desire of building an orphanage home in your
-country.
+All the sysfs knobs I'm seeing are per scsi device, not generic. And so I t=
+ake
+it back. Since scsi probes asynchronously its by chance they appear by the =
+time
+modprobe completes.
 
-Reply in you are will to help so that I can direct you to my bank for
-the urgent transfer of the fund/money require for the project to your
-account as I have already made the fund/money available.
+--=20
+You may reply to this email to add a comment.
 
-With kind regards
-Mrs Suzara Maling Wan
+You are receiving this mail because:
+You are watching the assignee of the bug.=
