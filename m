@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E24B7376526
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 May 2021 14:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B00F376527
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 May 2021 14:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbhEGMcG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 May 2021 08:32:06 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46840 "EHLO mx2.suse.de"
+        id S236712AbhEGMcH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 May 2021 08:32:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46848 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233468AbhEGMcF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S236688AbhEGMcF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 7 May 2021 08:32:05 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6B08FB17F;
+        by mx2.suse.de (Postfix) with ESMTP id 6E24DB181;
         Fri,  7 May 2021 12:31:04 +0000 (UTC)
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-scsi@vger.kernel.org
@@ -21,9 +21,11 @@ Cc:     GR-QLogic-Storage-Upstream@marvell.com,
         linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
         Arun Easi <aeasi@marvell.com>, Daniel Wagner <dwagner@suse.de>
 Subject: [RFC 0/2] Serialize timeout handling and done callback.
-Date:   Fri,  7 May 2021 14:31:00 +0200
-Message-Id: <20210507123103.10265-1-dwagner@suse.de>
+Date:   Fri,  7 May 2021 14:31:01 +0200
+Message-Id: <20210507123103.10265-2-dwagner@suse.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210507123103.10265-1-dwagner@suse.de>
+References: <20210507123103.10265-1-dwagner@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
