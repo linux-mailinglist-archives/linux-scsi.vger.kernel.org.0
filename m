@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 267623790A9
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 May 2021 16:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A5B3790B7
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 May 2021 16:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235670AbhEJO06 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 May 2021 10:26:58 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2675 "EHLO
+        id S238232AbhEJO2R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 May 2021 10:28:17 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2680 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235453AbhEJOXq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 May 2021 10:23:46 -0400
+        with ESMTP id S238906AbhEJOZr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 May 2021 10:25:47 -0400
 Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ff39B2nMzz1BKvg;
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ff39B5PH8z1BKwK;
         Mon, 10 May 2021 22:19:58 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
@@ -24,9 +24,9 @@ CC:     <iommu@lists.linux-foundation.org>, <baolu.lu@linux.intel.com>,
         <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <linuxarm@huawei.com>, <sai.praneeth.prakhya@intel.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 09/15] iova: Add init_iova_domain_ext()
-Date:   Mon, 10 May 2021 22:17:23 +0800
-Message-ID: <1620656249-68890-10-git-send-email-john.garry@huawei.com>
+Subject: [PATCH v2 10/15] dma-iommu: Use init_iova_domain_ext() for IOVA domain init
+Date:   Mon, 10 May 2021 22:17:24 +0800
+Message-ID: <1620656249-68890-11-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1620656249-68890-1-git-send-email-john.garry@huawei.com>
 References: <1620656249-68890-1-git-send-email-john.garry@huawei.com>
@@ -38,109 +38,46 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add extended version of init_iova_domain() which accepts an max opt
-iova length argument, and use it to set the rcaches range.
+Pass the max opt iova len to init the IOVA domain, if set.
 
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/iommu/iova.c | 29 +++++++++++++++++++++++------
- include/linux/iova.h |  9 +++++++++
- 2 files changed, 32 insertions(+), 6 deletions(-)
+ drivers/iommu/dma-iommu.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 95892a0433cc..273a689006c3 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -23,7 +23,7 @@ static bool iova_rcache_insert(struct iova_domain *iovad,
- static unsigned long iova_rcache_get(struct iova_domain *iovad,
- 				     unsigned long size,
- 				     unsigned long limit_pfn);
--static void init_iova_rcaches(struct iova_domain *iovad);
-+static void init_iova_rcaches(struct iova_domain *iovad, unsigned long iova_len);
- static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
- static void free_iova_rcaches(struct iova_domain *iovad);
- static void fq_destroy_all_entries(struct iova_domain *iovad);
-@@ -47,8 +47,8 @@ static struct iova *to_iova(struct rb_node *node)
- }
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 4fb82c554ede..574d7a901fd2 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -358,6 +358,8 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+ 	struct iommu_dma_cookie *cookie = domain->iova_cookie;
+ 	unsigned long order, base_pfn;
+ 	struct iova_domain *iovad;
++	size_t max_opt_dma_size;
++	unsigned long iova_len;
  
- void
--init_iova_domain(struct iova_domain *iovad, unsigned long granule,
--	unsigned long start_pfn)
-+__init_iova_domain(struct iova_domain *iovad, unsigned long granule,
-+	unsigned long start_pfn, unsigned long iova_len)
- {
- 	/*
- 	 * IOVA granularity will normally be equal to the smallest
-@@ -71,7 +71,21 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
- 	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
- 	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
- 	cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD, &iovad->cpuhp_dead);
--	init_iova_rcaches(iovad);
-+	init_iova_rcaches(iovad, iova_len);
-+}
+ 	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
+ 		return -EINVAL;
+@@ -391,7 +393,18 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+ 		return 0;
+ 	}
+ 
+-	init_iova_domain(iovad, 1UL << order, base_pfn);
++	max_opt_dma_size = iommu_group_get_max_opt_dma_size(dev->iommu_group);
 +
-+void
-+init_iova_domain_ext(struct iova_domain *iovad, unsigned long granule,
-+	unsigned long start_pfn, unsigned long iova_len)
-+{
-+	__init_iova_domain(iovad, granule, start_pfn, iova_len);
-+}
++	if (max_opt_dma_size) {
++		unsigned long shift = __ffs(1UL << order);
 +
-+void
-+init_iova_domain(struct iova_domain *iovad, unsigned long granule,
-+	unsigned long start_pfn)
-+{
-+	__init_iova_domain(iovad, granule, start_pfn, 0);
- }
- EXPORT_SYMBOL_GPL(init_iova_domain);
- 
-@@ -883,14 +897,17 @@ bool iova_domain_len_is_cached(struct iova_domain *iovad, unsigned long iova_len
- 	return iova_len_to_rcache_max(iova_len) == iovad->rcache_max_size;
- }
- 
--static void init_iova_rcaches(struct iova_domain *iovad)
-+static void init_iova_rcaches(struct iova_domain *iovad, unsigned long iova_len)
- {
- 	struct iova_cpu_rcache *cpu_rcache;
- 	struct iova_rcache *rcache;
- 	unsigned int cpu;
- 	int i;
- 
--	iovad->rcache_max_size = IOVA_RANGE_CACHE_MAX_SIZE;
-+	if (iova_len)
-+		iovad->rcache_max_size = iova_len_to_rcache_max(iova_len);
-+	else
-+		iovad->rcache_max_size = IOVA_RANGE_CACHE_MAX_SIZE;
- 
- 	iovad->rcaches = kcalloc(iovad->rcache_max_size,
- 				 sizeof(*iovad->rcaches), GFP_KERNEL);
-diff --git a/include/linux/iova.h b/include/linux/iova.h
-index 04cc8eb6de38..cfe416b6a8c7 100644
---- a/include/linux/iova.h
-+++ b/include/linux/iova.h
-@@ -154,6 +154,8 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
- 	unsigned long pfn_hi);
- void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
- 	unsigned long start_pfn);
-+void init_iova_domain_ext(struct iova_domain *iovad, unsigned long granule,
-+	unsigned long start_pfn, unsigned long iova_len);
- int init_iova_flush_queue(struct iova_domain *iovad,
- 			  iova_flush_cb flush_cb, iova_entry_dtor entry_dtor);
- struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
-@@ -222,6 +224,13 @@ static inline void init_iova_domain(struct iova_domain *iovad,
- {
- }
- 
-+static inline void init_iova_domain_ext(struct iova_domain *iovad,
-+				    unsigned long granule,
-+				    unsigned long start_pfn,
-+				    unsigned long iova_len)
-+{
-+}
++		iova_len = max_opt_dma_size >> shift;
++		iova_len = roundup_pow_of_two(iova_len);
++	} else {
++		iova_len = 0;
++	}
 +
- static inline int init_iova_flush_queue(struct iova_domain *iovad,
- 					iova_flush_cb flush_cb,
- 					iova_entry_dtor entry_dtor)
++	init_iova_domain_ext(iovad, 1UL << order, base_pfn, iova_len);
+ 
+ 	if (!cookie->fq_domain && (!dev || !dev_is_untrusted(dev)) &&
+ 	    domain->ops->flush_iotlb_all && !iommu_get_dma_strict(domain)) {
 -- 
 2.26.2
 
