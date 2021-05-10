@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8D13790B8
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 May 2021 16:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381673790A7
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 May 2021 16:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241872AbhEJO2T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 May 2021 10:28:19 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2760 "EHLO
+        id S231341AbhEJO0x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 May 2021 10:26:53 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2758 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238905AbhEJOZr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 May 2021 10:25:47 -0400
+        with ESMTP id S235168AbhEJOXq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 May 2021 10:23:46 -0400
 Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ff38H3LXdzqTrV;
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ff38H4mTnzqTrf;
         Mon, 10 May 2021 22:19:11 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
@@ -24,9 +24,9 @@ CC:     <iommu@lists.linux-foundation.org>, <baolu.lu@linux.intel.com>,
         <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <linuxarm@huawei.com>, <sai.praneeth.prakhya@intel.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 05/15] iova: Add iova_domain_len_is_cached()
-Date:   Mon, 10 May 2021 22:17:19 +0800
-Message-ID: <1620656249-68890-6-git-send-email-john.garry@huawei.com>
+Subject: [PATCH v2 06/15] iommu: Allow iommu_change_dev_def_domain() realloc default domain for same type
+Date:   Mon, 10 May 2021 22:17:20 +0800
+Message-ID: <1620656249-68890-7-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1620656249-68890-1-git-send-email-john.garry@huawei.com>
 References: <1620656249-68890-1-git-send-email-john.garry@huawei.com>
@@ -38,63 +38,101 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add a function to check whether an IOVA domain currently caches a given
-upper IOVA len exactly.
+Allow iommu_change_dev_def_domain() to create a new default domain, keeping
+the same as current in case type argument is not set.
+
+Also remove comment about function purpose, which will become stale.
 
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/iommu/iova.c | 11 +++++++++++
- include/linux/iova.h |  8 +++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ drivers/iommu/iommu.c | 53 ++++++++++++++++++++++---------------------
+ 1 file changed, 27 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 0e4c0e55178a..95892a0433cc 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -872,6 +872,17 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
- 	mag->pfns[mag->size++] = pfn;
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 62e4491f32e0..f7253a973ab9 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -3065,16 +3065,13 @@ EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+  * @prev_dev: The device in the group (this is used to make sure that the device
+  *	 hasn't changed after the caller has called this function)
+  * @type: The type of the new default domain that gets associated with the group
++ * @new: Allocate new default domain, keeping same type when no type passed
+  *
+  * Returns 0 on success and error code on failure
+  *
+- * Note:
+- * 1. Presently, this function is called only when user requests to change the
+- *    group's default domain type through /sys/kernel/iommu_groups/<grp_id>/type
+- *    Please take a closer look if intended to use for other purposes.
+  */
+ static int iommu_change_dev_def_domain(struct iommu_group *group,
+-				       struct device *prev_dev, int type)
++				       struct device *prev_dev, int type, bool new)
+ {
+ 	struct iommu_domain *prev_dom;
+ 	struct group_device *grp_dev;
+@@ -3127,28 +3124,32 @@ static int iommu_change_dev_def_domain(struct iommu_group *group,
+ 		goto out;
+ 	}
+ 
+-	dev_def_dom = iommu_get_def_domain_type(dev);
+-	if (!type) {
++	if (new && !type) {
++		type = prev_dom->type;
++	} else {
++		dev_def_dom = iommu_get_def_domain_type(dev);
++		if (!type) {
++			/*
++			 * If the user hasn't requested any specific type of domain and
++			 * if the device supports both the domains, then default to the
++			 * domain the device was booted with
++			 */
++			type = dev_def_dom ? : iommu_def_domain_type;
++		} else if (dev_def_dom && type != dev_def_dom) {
++			dev_err_ratelimited(prev_dev, "Device cannot be in %s domain\n",
++					    iommu_domain_type_str(type));
++			ret = -EINVAL;
++			goto out;
++		}
++
+ 		/*
+-		 * If the user hasn't requested any specific type of domain and
+-		 * if the device supports both the domains, then default to the
+-		 * domain the device was booted with
++		 * Switch to a new domain only if the requested domain type is different
++		 * from the existing default domain type
+ 		 */
+-		type = dev_def_dom ? : iommu_def_domain_type;
+-	} else if (dev_def_dom && type != dev_def_dom) {
+-		dev_err_ratelimited(prev_dev, "Device cannot be in %s domain\n",
+-				    iommu_domain_type_str(type));
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-
+-	/*
+-	 * Switch to a new domain only if the requested domain type is different
+-	 * from the existing default domain type
+-	 */
+-	if (prev_dom->type == type) {
+-		ret = 0;
+-		goto out;
++		if (prev_dom->type == type) {
++			ret = 0;
++			goto out;
++		}
+ 	}
+ 
+ 	/* Sets group->default_domain to the newly allocated domain */
+@@ -3292,7 +3293,7 @@ static int iommu_group_store_type_cb(const char *buf,
+ 	else
+ 		return -EINVAL;
+ 
+-	return iommu_change_dev_def_domain(group, dev, type);
++	return iommu_change_dev_def_domain(group, dev, type, false);
  }
  
-+static unsigned long iova_len_to_rcache_max(unsigned long iova_len)
-+{
-+	return order_base_2(iova_len) + 1;
-+}
-+
-+/* Test if iova_len range cached upper limit matches that of IOVA domain */
-+bool iova_domain_len_is_cached(struct iova_domain *iovad, unsigned long iova_len)
-+{
-+	return iova_len_to_rcache_max(iova_len) == iovad->rcache_max_size;
-+}
-+
- static void init_iova_rcaches(struct iova_domain *iovad)
- {
- 	struct iova_cpu_rcache *cpu_rcache;
-diff --git a/include/linux/iova.h b/include/linux/iova.h
-index 9974e1d3e2bc..04cc8eb6de38 100644
---- a/include/linux/iova.h
-+++ b/include/linux/iova.h
-@@ -136,7 +136,8 @@ static inline unsigned long iova_pfn(struct iova_domain *iovad, dma_addr_t iova)
- #if IS_ENABLED(CONFIG_IOMMU_IOVA)
- int iova_cache_get(void);
- void iova_cache_put(void);
--
-+bool iova_domain_len_is_cached(struct iova_domain *iovad,
-+			       unsigned long iova_len);
- void free_iova(struct iova_domain *iovad, unsigned long pfn);
- void __free_iova(struct iova_domain *iovad, struct iova *iova);
- struct iova *alloc_iova(struct iova_domain *iovad, unsigned long size,
-@@ -158,6 +159,11 @@ int init_iova_flush_queue(struct iova_domain *iovad,
- struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
- void put_iova_domain(struct iova_domain *iovad);
- #else
-+static inline bool iova_domain_len_is_cached(struct iova_domain *iovad,
-+					     unsigned long iova_len)
-+{
-+	return false;
-+}
- static inline int iova_cache_get(void)
- {
- 	return -ENOTSUPP;
+ static ssize_t iommu_group_store_type(struct iommu_group *group,
 -- 
 2.26.2
 
