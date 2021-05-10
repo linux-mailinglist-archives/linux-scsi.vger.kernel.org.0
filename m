@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E85D03790A6
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 May 2021 16:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BAF3790BB
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 May 2021 16:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbhEJO0v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 May 2021 10:26:51 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2676 "EHLO
+        id S242223AbhEJO2Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 May 2021 10:28:24 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2679 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235354AbhEJOXq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 May 2021 10:23:46 -0400
+        with ESMTP id S238909AbhEJOZr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 May 2021 10:25:47 -0400
 Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ff39B4WTgz1BKvs;
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ff39B5ghvz1BKw7;
         Mon, 10 May 2021 22:19:58 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
@@ -24,9 +24,9 @@ CC:     <iommu@lists.linux-foundation.org>, <baolu.lu@linux.intel.com>,
         <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <linuxarm@huawei.com>, <sai.praneeth.prakhya@intel.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 07/15] iommu: Add iommu_realloc_dev_group()
-Date:   Mon, 10 May 2021 22:17:21 +0800
-Message-ID: <1620656249-68890-8-git-send-email-john.garry@huawei.com>
+Subject: [PATCH v2 08/15] dma-iommu: Add iommu_reconfig_dev_group_dma()
+Date:   Mon, 10 May 2021 22:17:22 +0800
+Message-ID: <1620656249-68890-9-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1620656249-68890-1-git-send-email-john.garry@huawei.com>
 References: <1620656249-68890-1-git-send-email-john.garry@huawei.com>
@@ -38,61 +38,75 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add a function to re-alloc IOMMU group default domain.
+Add a function to reconfigure the IOMMU group for a device, if necessary.
+
+IOVAs are cached in power-of-2 granules, so there is no point in allocating
+a new IOMMU domain if the current range is suitable.
 
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/iommu/iommu.c | 12 ++++++++++++
- include/linux/iommu.h |  6 ++++++
- 2 files changed, 18 insertions(+)
+ drivers/iommu/dma-iommu.c | 25 +++++++++++++++++++++++++
+ include/linux/dma-iommu.h |  4 ++++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index f7253a973ab9..bdb9aa47dfca 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -3191,6 +3191,18 @@ static int iommu_change_dev_def_domain(struct iommu_group *group,
- 	return ret;
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index f6d3302bb829..4fb82c554ede 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -315,6 +315,31 @@ static bool dev_is_untrusted(struct device *dev)
+ 	return dev_is_pci(dev) && to_pci_dev(dev)->untrusted;
  }
  
-+int iommu_realloc_dev_group(struct device *dev)
++void iommu_reconfig_dev_group_dma(struct device *dev)
 +{
-+	struct iommu_group *group;
-+	int ret;
++	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
++	struct iommu_dma_cookie *cookie = domain->iova_cookie;
++	unsigned long shift, iova_len;
++	struct iova_domain *iovad;
++	size_t max_opt_dma_size;
 +
-+	group = iommu_group_get(dev);
-+	ret = iommu_change_dev_def_domain(group, dev, 0, true);
-+	iommu_group_put(group);
++	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
++		return;
 +
-+	return ret;
++	max_opt_dma_size = iommu_group_get_max_opt_dma_size(dev->iommu_group);
++	if (!max_opt_dma_size)
++		return;
++
++	iovad = &cookie->iovad;
++	shift = iova_shift(iovad);
++	iova_len = max_opt_dma_size >> shift;
++
++	if (iova_domain_len_is_cached(iovad, iova_len))
++		return;
++
++	iommu_realloc_dev_group(dev);
 +}
 +
+ /**
+  * iommu_dma_init_domain - Initialise a DMA mapping domain
+  * @domain: IOMMU domain previously prepared by iommu_get_dma_cookie()
+diff --git a/include/linux/dma-iommu.h b/include/linux/dma-iommu.h
+index 6e75a2d689b4..097398b76dcc 100644
+--- a/include/linux/dma-iommu.h
++++ b/include/linux/dma-iommu.h
+@@ -20,6 +20,7 @@ void iommu_put_dma_cookie(struct iommu_domain *domain);
+ 
+ /* Setup call for arch DMA mapping code */
+ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 size);
++void iommu_reconfig_dev_group_dma(struct device *dev);
+ 
+ /* The DMA API isn't _quite_ the whole story, though... */
  /*
-  * Changing the default domain or any other IOMMU group attribute through sysfs
-  * requires the users to unbind the drivers from the devices in the IOMMU group.
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index e26abda94792..6e187746af0f 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -482,6 +482,7 @@ bool iommu_get_dma_strict(struct iommu_domain *domain);
- 
- extern int report_iommu_fault(struct iommu_domain *domain, struct device *dev,
- 			      unsigned long iova, int flags);
-+extern int iommu_realloc_dev_group(struct device *dev);
- 
- static inline void iommu_flush_iotlb_all(struct iommu_domain *domain)
+@@ -53,6 +54,9 @@ static inline void iommu_setup_dma_ops(struct device *dev, u64 dma_base,
+ 		u64 size)
  {
-@@ -699,6 +700,11 @@ static inline size_t iommu_map_sg_atomic(struct iommu_domain *domain,
- 	return 0;
  }
- 
-+static inline int iommu_realloc_dev_group(struct device *dev)
++static inline void iommu_reconfig_dev_group_dma(struct device *dev)
 +{
-+	return -ENODEV;
 +}
-+
- static inline void iommu_flush_iotlb_all(struct iommu_domain *domain)
+ 
+ static inline int iommu_get_dma_cookie(struct iommu_domain *domain)
  {
- }
 -- 
 2.26.2
 
