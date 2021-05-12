@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8365C37EACE
+	by mail.lfdr.de (Postfix) with ESMTP id F082237EACF
 	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 00:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237888AbhELTLp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 May 2021 15:11:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55754 "EHLO mail.kernel.org"
+        id S238351AbhELTLw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 May 2021 15:11:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55756 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353162AbhELSHH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 May 2021 14:07:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F1FB61624;
-        Wed, 12 May 2021 18:04:35 +0000 (UTC)
+        id S241918AbhELSJS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 12 May 2021 14:09:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4662E616EA;
+        Wed, 12 May 2021 18:05:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620842676;
-        bh=cBDFQ6T9nKMjY6cs3VgPOYNoVcPxNaiHvrAWiXC657Y=;
+        s=k20201202; t=1620842713;
+        bh=aSQKIBYutKB3cmHT41pmeTCqDhF70hCYvJxhGPDoI00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t4sfUXOLy6BunrBbITJt4vpymS5fYp9tB9NFN37K4SYF0d3vqJ4dmO6fu0qkYO3ST
-         ns6bySyg7xm2Rb6BssHEHf4m+hYKdvymyaM72Qsl56K35E5moYyiBVMoPsssLy2Z+l
-         +TVjZsUSyKvxtjA3AbZFKomnwnRwA8aq79vgKb6RiGz3WJVTl1Fq0YU8QEKzeHouxA
-         EKQpGSTOZf+0P5rhr3eC6xtQANGIo61PtHOydWovM6/gInpigrsYaK6pZN+7rvtf4t
-         v9Cw+uUy7Y9n/kX/QvMO1IUBgONeSSim+I8b+o6ShIAVPdFlGyIeUH5CnaGbewImsD
-         Mk0G2W3DtA38g==
+        b=f89gBTArzL34ZZ5DrU+HZ/+yqdPAtQ9Gptc34bLwqLpVsdNF/gWGnUfs6FGSZy2UE
+         3Fogqxo6BgbSZBYdsTfdgV3nFoRCEQvEiYZrcgj79qw4N5wlPex78PBH4BEt9i7LQz
+         0QWbLWVHJmdnVqxbrzSmJkVZUGCPoJdRGhhMzQIlV/8dnwsy2Sereo4Zvm5gU04/+/
+         G/qKXAhg4JVNEYdfKSwkWCNVaQ4YbAJNnH/wxzFLNcNM87TBfuy+cQh1vrBiVF51g+
+         wCj74f0UK0dbGHA/sLQnnHv7kCK2mKy+RARF7yTK0KZkVlB4lXEKj+4pSAYwBt3987
+         cKQGg7SPazvXg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Bodo Stroesser <bostroesser@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 16/23] scsi: target: tcmu: Return from tcmu_handle_completions() if cmd_id not found
-Date:   Wed, 12 May 2021 14:04:00 -0400
-Message-Id: <20210512180408.665338-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 13/18] scsi: target: tcmu: Return from tcmu_handle_completions() if cmd_id not found
+Date:   Wed, 12 May 2021 14:04:44 -0400
+Message-Id: <20210512180450.665586-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210512180408.665338-1-sashal@kernel.org>
-References: <20210512180408.665338-1-sashal@kernel.org>
+In-Reply-To: <20210512180450.665586-1-sashal@kernel.org>
+References: <20210512180450.665586-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index d6634baebb47..71144e33272a 100644
+index 0219b5a865be..dd7307375504 100644
 --- a/drivers/target/target_core_user.c
 +++ b/drivers/target/target_core_user.c
-@@ -1205,7 +1205,7 @@ static void tcmu_set_next_deadline(struct list_head *queue,
+@@ -1216,7 +1216,7 @@ static void tcmu_set_next_deadline(struct list_head *queue,
  		del_timer(timer);
  }
  
@@ -77,7 +77,7 @@ index d6634baebb47..71144e33272a 100644
  {
  	struct tcmu_mailbox *mb;
  	struct tcmu_cmd *cmd;
-@@ -1245,7 +1245,7 @@ static unsigned int tcmu_handle_completions(struct tcmu_dev *udev)
+@@ -1256,7 +1256,7 @@ static unsigned int tcmu_handle_completions(struct tcmu_dev *udev)
  			pr_err("cmd_id %u not found, ring is broken\n",
  			       entry->hdr.cmd_id);
  			set_bit(TCMU_DEV_BIT_BROKEN, &udev->flags);
