@@ -2,60 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1988B37EFDB
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 01:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A42137EFDC
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 01:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbhELXdm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 May 2021 19:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444051AbhELWxZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 May 2021 18:53:25 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BC1C06134C
-        for <linux-scsi@vger.kernel.org>; Wed, 12 May 2021 15:47:37 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id a5so12830248pfa.11
-        for <linux-scsi@vger.kernel.org>; Wed, 12 May 2021 15:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=NLbq5sm7qnQbZPjjI4rxXzEPDhmzU/W/bodPkyrwn+E=;
-        b=URaYuXkZ5rZBHA1Y5Ux79MmKkQh1IVB6Oq/luIE6LQ3q+3xGq0QuaPdPCCDuY715Hy
-         Ts0KsNtsvjVvkhIUEVL5KCkAmcSBH5KKJ1xTWkmAcS/QFW1Apk39gEvll91aYzhIF/og
-         N0knHGJZi1nXcVABBVjvBaIqnPLPAJrxOjYiRy0Ce8ntTvQYlDyTDAIVzrNrNu9zNGwC
-         i6gROgjncs7u4GWNYS1QZmyZ2z590IqTUVRqoCGuxqYENVr5Usb//wlRkaajenna5+nv
-         NkUsgTwCXVRB0AyF8ucrvilpWpUlMwDOnRS79P8u6/D8+u7nUAJ6UI48GcZnvhXqsrsn
-         L9cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=NLbq5sm7qnQbZPjjI4rxXzEPDhmzU/W/bodPkyrwn+E=;
-        b=C+Oh4BR0Zo9B1ABlToPORVT+Smd5y0BHh/fPAK+vU33aZ/MK0luGP2wvlwCwvsTuGi
-         HNfxWduZXfRsHhLgRXC21XDqm4qS3In6CqGSmAQ64wnClWotkXF5ZEXkkj+3WeKLnpDk
-         9/jyrkryhIJXDq8q7sBm+o2tQqcxop32jN4Ps/rLpFkPFKTIToXaBEkJSj5J0YAFobFX
-         /G4dQq157bLn5RTHmcf/hBYF1ldaWUtEYRVyWB4gbYmlmxM0DZI29C6OjwM3f0IPNAbF
-         EJHcxrFIwHVrHOHT6NP0Hl/qerXAIEO8S7ORbKMkLfhG2LUOxqqRDIlN9cZknEb9sAd6
-         6ttw==
-X-Gm-Message-State: AOAM533Vrv8K1jmHVdvig0kJkRp3/f58TyeYNX9RhTYAi22nEzkDsqKH
-        jzuydhmkLqnC/4GXJs6N930xPfQaRguk6fGQr6I=
-X-Google-Smtp-Source: ABdhPJweWWLfDdcLfeun6OGjVuiae1DKA4rx0RX6UkxTvol/KVjKE4lLGgRTHN4Nhaty36cKRyt+1PfUX2/WBWvKGxw=
-X-Received: by 2002:a62:3246:0:b029:224:6c6f:b3f2 with SMTP id
- y67-20020a6232460000b02902246c6fb3f2mr37399914pfy.68.1620859657376; Wed, 12
- May 2021 15:47:37 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6a10:eb83:0:0:0:0 with HTTP; Wed, 12 May 2021 15:47:37
- -0700 (PDT)
-Reply-To: fionahill578@outlook.com
-From:   Fiona Hill <angelacoulibaly5@gmail.com>
-Date:   Wed, 12 May 2021 22:47:37 +0000
-Message-ID: <CAHipQu4fPE2jdFXB=U+Bizz45JS_DJz+LYV5fBLJzXUTH-NYXQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        id S1347098AbhELXdx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 May 2021 19:33:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2030 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236480AbhELXYb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 12 May 2021 19:24:31 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14CNIWtc030569;
+        Wed, 12 May 2021 19:23:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=zwbYixYUXT8/7XAkgJ3HWr5gpF5ALyKjA88iCuFqMwc=;
+ b=A/y+WSkcBMI1pyQWac0d6XAsstQFw614JKNj8eM4al5x5mwwmiitkMOOn19qyNg4dtD0
+ HlrJLx931iIhk4DccFu8tieXRY9GhA+E5crvzhgcaeBPFw4wUUTOHB1pehiB6UhXpfrp
+ Bx6thxoPkPmSByZFOSBMjW99zrn8qm1gRBS04Voz4hL4QpgHLFqbTvZw7HgE87/oFkme
+ RF+pRVIGh32N07tJ7nTpq/XbxYATVuR+PPVj5eUlCQKkGNFhP/U8eXtcUyl0phUggKca
+ YcAAcazIEyRYCxcN/qUh36EMIE4pHace99eeRStMd0vi/wnpThAdDG4ddQkmiCfrNTGa hA== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38grk102pe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 May 2021 19:23:06 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14CNMFEP021504;
+        Wed, 12 May 2021 23:23:05 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma04dal.us.ibm.com with ESMTP id 38dj9a1383-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 May 2021 23:23:05 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14CNN4TV10092872
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 May 2021 23:23:04 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CE5978060;
+        Wed, 12 May 2021 23:23:04 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1F657805F;
+        Wed, 12 May 2021 23:23:02 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.80.227.209])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 12 May 2021 23:23:02 +0000 (GMT)
+Message-ID: <5967066117ed90e6f72bee006ee7e66722a5d1b3.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 0/7] Rename scsi_get_lba() into scsi_get_pos()
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Can Guo <cang@codeaurora.org>, linux-scsi@vger.kernel.org
+Date:   Wed, 12 May 2021 16:23:01 -0700
+In-Reply-To: <b27a3c7d-1c10-faaa-4c33-273a463faa80@acm.org>
+References: <20210512200849.9002-1-bvanassche@acm.org>
+         <96a253f8776a7736b480bdf190840440ffb4e53c.camel@linux.vnet.ibm.com>
+         <b27a3c7d-1c10-faaa-4c33-273a463faa80@acm.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: gfFJYPFQeJwhQiBJ2riGl7kaOV-z5pSR
+X-Proofpoint-GUID: gfFJYPFQeJwhQiBJ2riGl7kaOV-z5pSR
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-12_13:2021-05-12,2021-05-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 suspectscore=0 malwarescore=0 clxscore=1011 phishscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=657 impostorscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105120150
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello did you see my message?
+On Wed, 2021-05-12 at 15:20 -0700, Bart Van Assche wrote:
+> On 5/12/21 3:10 PM, James Bottomley wrote:
+> > On Wed, 2021-05-12 at 13:08 -0700, Bart Van Assche wrote:
+> > > This patch series renames scsi_get_lba() into scsi_get_pos(). The
+> > > name of scsi_get_lba() is confusing since it does not return an
+> > > LBA but instead the start offset divided by 512.
+> > 
+> > OK, I'll bite: given the logical block size for all drives is 512
+> > why is logical block address not the start offset in bytes divided
+> > by 512?
+> 
+> My understanding is that LBA = logical block address = (start offset
+> in  bytes) / (logical block size) and also that the Linux kernel
+> supports  logical block sizes between 512 bytes and 4 KiB.
+
+No, we support physical sector sizes up to 4k.  The logical block size
+internal to the kernel and the block layer is always 512.  I can see
+the utility in using consistent naming to the block layer, but I can't
+see that logical block address is confusing ... especially now
+manufacturers seem all to have aligned on 512 for the logical block
+size even when it's usually 4k physical.
+
+James
+
+
