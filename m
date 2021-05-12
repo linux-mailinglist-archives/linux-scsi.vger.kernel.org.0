@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 561BC37EE41
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 00:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4EB37EE43
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 00:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344089AbhELVXW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 May 2021 17:23:22 -0400
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:46721 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385588AbhELUKK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 May 2021 16:10:10 -0400
-Received: by mail-pl1-f173.google.com with SMTP id s20so13104373plr.13
-        for <linux-scsi@vger.kernel.org>; Wed, 12 May 2021 13:09:00 -0700 (PDT)
+        id S1344867AbhELVXY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 May 2021 17:23:24 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:42618 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385591AbhELUKL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 May 2021 16:10:11 -0400
+Received: by mail-pg1-f173.google.com with SMTP id z4so1763985pgb.9
+        for <linux-scsi@vger.kernel.org>; Wed, 12 May 2021 13:09:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nSv5X4y9sOkTjDLwOr2XKXeP6Cfhir7BXtEsp9sc/Hc=;
-        b=nS6T8vi+B9FiX2Rio8uJYEeFsSRxWBHsSVrxPeyD7Nk7SNYCXMGbkW+MLrjVcOsBI5
-         GvWgiv9dmBDVwIhl0wYG4K2Rxb8aGH2JYkKAnYVesF5CUw2JvSTL3PTuxN4JmIwNYX30
-         UjXvW2W6SQoyuRjfOJyo5Mpi1F8bi8TPlFEJYOIQgVhA4IkB3x35umal6IIxN9v8HYN+
-         9V9ATl7PfImkOSroAZ+uif6o9hTji4IQK1jnsMNl+a5BVV257Kky6dGtVIQkFMZBifs/
-         S5+mJPoKm2Sjw9gRmRCIymOts7kUEciGp+go3FVtKfuLzTc3ZC3XN82AZ/3lgozCdZnX
-         HJTw==
-X-Gm-Message-State: AOAM531AezpH+e/4cLk1KktwzfU4SE7LatrSMuHe3Dvx6NKuz87CugPc
-        nanO1nWRL3u3rY8UTajUocw=
-X-Google-Smtp-Source: ABdhPJwMLaYLfxASh0NwVOlRQzmJVoc8uaxg5nZHWJmGAIikYD3hHgpTFTo6/azOSDIguSFrXdyZLw==
-X-Received: by 2002:a17:902:7402:b029:ef:7d5c:62c1 with SMTP id g2-20020a1709027402b02900ef7d5c62c1mr5780178pll.4.1620850139701;
-        Wed, 12 May 2021 13:08:59 -0700 (PDT)
+        bh=zneIuWKx5plbkVRnqUaXhx2tWvAwP5VCwlHKgsx7wvc=;
+        b=USscm2SEfmugMjTs7sKDnS0pZjUPyh2Xp0i5BaviHxa7N7NZ+gQYpb4hTIxpPHk/I8
+         h9EMBEdwocGvA+iB9xCC2AlVrgaklJxY9JfuTIO6I6lSZjRZyh6KfX4Q3Sv4cvSAz0FB
+         85SGivSxK2FDZboTOm5A/fB3NwwPrFKzppEDuPEYWPhr/IVkAwbkftT+GINrrbJJ9I2K
+         Q4jtW7/EoaO5zg53y6rnihGo8wr+tGvYH9MuILYUHnfdyA6FLegi9EauygGqSxNh2CDE
+         cscsyT6BpgkuaWFN7u8Kb7WaA1zoxM6UtNIrLzcY3ZkfaH0uKrd98Pq00pg2N5m4V4Yw
+         jRhw==
+X-Gm-Message-State: AOAM532l+/Buc7J550duk8alBh1esxGhYZNifijPyCvgkeaqHqLtvvRx
+        jyo309Ec1f1LqV6+Qo1Bihw=
+X-Google-Smtp-Source: ABdhPJyamml6Ey56saKuH6hhOL3smOcA7MK/a6BFYkGq2mKvYf1qtgHfoIzYQASZnp4lqDOpU3yYYQ==
+X-Received: by 2002:a17:90a:17c5:: with SMTP id q63mr26789477pja.136.1620850141476;
+        Wed, 12 May 2021 13:09:01 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:993e:1516:b2ba:76fe])
-        by smtp.gmail.com with ESMTPSA id l21sm513948pfc.114.2021.05.12.13.08.58
+        by smtp.gmail.com with ESMTPSA id l21sm513948pfc.114.2021.05.12.13.08.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 13:08:59 -0700 (PDT)
+        Wed, 12 May 2021 13:09:00 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
@@ -43,10 +43,10 @@ Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Can Guo <cang@codeaurora.org>, linux-scsi@vger.kernel.org,
         Bart Van Assche <bvanassche@acm.org>,
-        Sagi Grimberg <sagi@grimberg.me>
-Subject: [PATCH v2 2/7] iser: Use scsi_get_pos() instead of scsi_get_lba()
-Date:   Wed, 12 May 2021 13:08:44 -0700
-Message-Id: <20210512200849.9002-3-bvanassche@acm.org>
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: [PATCH v2 3/7] zfcp: Use scsi_get_pos() instead of scsi_get_lba()
+Date:   Wed, 12 May 2021 13:08:45 -0700
+Message-Id: <20210512200849.9002-4-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210512200849.9002-1-bvanassche@acm.org>
 References: <20210512200849.9002-1-bvanassche@acm.org>
@@ -57,24 +57,25 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Use scsi_get_pos() instead of scsi_get_lba() since the name of the latter
-is confusing. This patch does not change any functionality.
+is confusing. Additionally, use lower_32_bits() instead of open-coding it.
+This patch does not change any functionality.
 
-Cc: Sagi Grimberg <sagi@grimberg.me>
+Cc: Benjamin Block <bblock@linux.ibm.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/infiniband/ulp/iser/iser_verbs.c | 2 +-
+ drivers/s390/scsi/zfcp_fsf.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/ulp/iser/iser_verbs.c b/drivers/infiniband/ulp/iser/iser_verbs.c
-index 136f6c4492e0..c33e113eeee5 100644
---- a/drivers/infiniband/ulp/iser/iser_verbs.c
-+++ b/drivers/infiniband/ulp/iser/iser_verbs.c
-@@ -949,7 +949,7 @@ u8 iser_check_task_pi_status(struct iscsi_iser_task *iser_task,
- 			sector_t sector_off = mr_status.sig_err.sig_err_offset;
+diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
+index 2e4804ef2fb9..ae308ef06714 100644
+--- a/drivers/s390/scsi/zfcp_fsf.c
++++ b/drivers/s390/scsi/zfcp_fsf.c
+@@ -2600,7 +2600,7 @@ int zfcp_fsf_fcp_cmnd(struct scsi_cmnd *scsi_cmnd)
  
- 			sector_div(sector_off, sector_size + 8);
--			*sector = scsi_get_lba(iser_task->sc) + sector_off;
-+			*sector = scsi_get_pos(iser_task->sc) + sector_off;
+ 	if (scsi_get_prot_op(scsi_cmnd) != SCSI_PROT_NORMAL) {
+ 		io->data_block_length = scsi_cmnd->device->sector_size;
+-		io->ref_tag_value = scsi_get_lba(scsi_cmnd) & 0xFFFFFFFF;
++		io->ref_tag_value = lower_32_bits(scsi_get_pos(scsi_cmnd));
+ 	}
  
- 			iser_err("PI error found type %d at sector %llx "
- 			       "expected %x vs actual %x\n",
+ 	if (zfcp_fsf_set_data_dir(scsi_cmnd, &io->data_direction))
