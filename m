@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC13037F2A8
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 07:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B9337F2AA
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 07:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbhEMF4s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 May 2021 01:56:48 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:2361 "EHLO
+        id S231243AbhEMF44 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 May 2021 01:56:56 -0400
+Received: from labrats.qualcomm.com ([199.106.110.90]:35000 "EHLO
         labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbhEMF4r (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 May 2021 01:56:47 -0400
-IronPort-SDR: oXL6WAk3Hr8JkojSEw0UcSvp1qieH02IoJuFmUbgmN5xj6h2KHnSouo7LyX2ZYRdo2PWmPMBFS
- Exb1N7CTfQ3FBKnag1W6HppRCRHIxNlTGE01o3ukVymsox3ziZLXD8AWO3Q8w74fU35wRCg8Im
- 8XbH6O4aXfcdxTSlE2MplBaKS8nkCa11t7ds9JTj0vKazClgL57RvFagAu2NLetmt5qD46bh35
- d9LE3iOk1Ycgf9YlMta777BgwloT4w7XvklKKbjY6Z5I39ol8bOJA6nmtWWwLuDFBAFgyS+iHX
- 9Ik=
+        with ESMTP id S229935AbhEMF4z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 May 2021 01:56:55 -0400
+IronPort-SDR: JOcm2tonOhdQv+oTR2A8wHjCK7wnPCEfJWmCf6RgT+TVk1XWDi1Heau4CkTEO3GDgPg5Okd4qQ
+ fVK68wH8XenVI/wLZs3Y+jNlcNzXOTGcAcoJVretcmB7RvWfiijM1PZJ2KzcS8Tp5yzN0ZGzZB
+ p5Wm1IKaXvaDOjehhOfuZbSGARhVamkRR4eDefYQHNmtPvoNB6EBZ6+CzpsQaXfnkv17U6fiQI
+ 3l1trb7MtRLWx9pSEUB5mfQloxCyJAEfBkKqzQFD82s9Yz48YwW11chExS3aey/CZ/SnPJs1vx
+ q1Y=
 X-IronPort-AV: E=Sophos;i="5.82,296,1613462400"; 
-   d="scan'208";a="47866513"
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by labrats.qualcomm.com with ESMTP; 12 May 2021 22:55:39 -0700
+   d="scan'208";a="29767595"
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by labrats.qualcomm.com with ESMTP; 12 May 2021 22:55:46 -0700
 X-QCInternal: smtphost
-Received: from stor-presley.qualcomm.com ([192.168.140.85])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 12 May 2021 22:55:37 -0700
+Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
+  by ironmsg05-sd.qualcomm.com with ESMTP; 12 May 2021 22:55:45 -0700
 Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 45E2E21A85; Wed, 12 May 2021 22:55:38 -0700 (PDT)
+        id 7DAF521A85; Wed, 12 May 2021 22:55:45 -0700 (PDT)
 From:   Can Guo <cang@codeaurora.org>
 To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
         hongwus@codeaurora.org, ziqichen@codeaurora.org,
@@ -41,9 +41,9 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         Kiwoong Kim <kwmad.kim@samsung.com>,
         Satya Tangirala <satyat@google.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 1/6] scsi: ufs: Differentiate status between hba pm ops and wl pm ops
-Date:   Wed, 12 May 2021 22:55:13 -0700
-Message-Id: <1620885319-15151-2-git-send-email-cang@codeaurora.org>
+Subject: [PATCH v1 1/6] scsi: ufs: Differentiate status of hba and wl pm ops
+Date:   Wed, 12 May 2021 22:55:14 -0700
+Message-Id: <1620885319-15151-3-git-send-email-cang@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1620885319-15151-1-git-send-email-cang@codeaurora.org>
 References: <1620885319-15151-1-git-send-email-cang@codeaurora.org>
