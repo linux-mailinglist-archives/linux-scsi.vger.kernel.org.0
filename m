@@ -2,319 +2,282 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E9937F763
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 14:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D64C37F79E
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 14:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbhEMMGf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 May 2021 08:06:35 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2652 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbhEMMGc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 May 2021 08:06:32 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FgqyW6893zQkmX;
-        Thu, 13 May 2021 20:01:55 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 13 May 2021 20:05:13 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <ming.lei@redhat.com>,
-        <kashyap.desai@broadcom.com>, <chenxiang66@hisilicon.com>,
-        <yama@redhat.com>, <dgilbert@interlog.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v3 2/2] blk-mq: Use request queue-wide tags for tagset-wide sbitmap
-Date:   Thu, 13 May 2021 20:00:58 +0800
-Message-ID: <1620907258-30910-3-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1620907258-30910-1-git-send-email-john.garry@huawei.com>
-References: <1620907258-30910-1-git-send-email-john.garry@huawei.com>
+        id S232768AbhEMMPM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 13 May 2021 08:15:12 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:46756 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233894AbhEMMO1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 May 2021 08:14:27 -0400
+Received: by mail-ot1-f49.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso23329750otb.13;
+        Thu, 13 May 2021 05:13:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cfu+G88A7ksmOYdqu84Yte0FWyTjPFm8Qx7BVEu+4z0=;
+        b=JKWmP7yRNJ88JNm3X6FTptdD8qs/GtBnATYE/AtbnN8a8p7UDQEnq9kPHPcrfsL5cL
+         timuUCeiTdN7+bW1btnEJ1yWmOnUYkPSwlr2ywJ+vvgF6G7s/Dqt7trsllJ1dDnj2dec
+         TkRXkm1B8XBAIJ/Br5D/JusXKcA4/XUsdJF1nH7+YOc4eeV0377pnWCLkgxQv/ED9HAq
+         8j2U5jD/EEKcXTe+D9cWdrBMw8/ytcGWkStuCXPEA5vFgW+z92rZbDP9uAW0MBb1QqzB
+         Da9iBrKfuJtIRVxrCoKEc4IcjviVuYTmqE77YqfdY4c4L/vEPbOJqJd1DnbXFI6zfxed
+         2RNw==
+X-Gm-Message-State: AOAM5306ElLcTAPdnLIdNqZl+y/hDTfj8fwHGKrzdDZbp0NQQqTqkwZA
+        8JHFrYysiNWpRweugdhkcVcNFRbbgjqSCYMKqPQ=
+X-Google-Smtp-Source: ABdhPJx2HzWIdfAJolob1XkHPkCE/lMB0RE9Tdk32R0yy/IXlEmpZWRvEYRWocnxEnJ5q0eBHKnUbKmbe9BUcZ73go4=
+X-Received: by 2002:a9d:5a7:: with SMTP id 36mr35478919otd.321.1620907996122;
+ Thu, 13 May 2021 05:13:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+References: <3c88cf35-6725-1bfa-9e1e-8e9d69147e3b@hisilicon.com>
+ <2149723.iZASKD2KPV@kreacher> <1c1cd889-7e6f-79f7-2650-cd181abc56b2@hisilicon.com>
+ <11764789.O9o76ZdvQC@kreacher> <CAGETcx8=VuwW0-GXDEbyt7qGrZJvUw=eyVXXJQxzOn9KszxhMQ@mail.gmail.com>
+In-Reply-To: <CAGETcx8=VuwW0-GXDEbyt7qGrZJvUw=eyVXXJQxzOn9KszxhMQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 13 May 2021 14:13:04 +0200
+Message-ID: <CAJZ5v0jds+Etr6CSy0QwZM1yUaeukUA-03h+8d8zVieQmkOv=Q@mail.gmail.com>
+Subject: Re: Qestion about device link
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "chenxiang (M)" <chenxiang66@hisilicon.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The tags used for an IO scheduler are currently per hctx.
+On Thu, May 13, 2021 at 12:24 AM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Wed, May 12, 2021 at 7:04 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > On Wednesday, May 12, 2021 5:24:53 AM CEST chenxiang (M) wrote:
+> > > Hi Rafael,
+> > >
+> > >
+> > > 在 2021/5/12 3:16, Rafael J. Wysocki 写道:
+> > > > On Tuesday, May 11, 2021 4:39:31 PM CEST Rafael J. Wysocki wrote:
+> > > >> On 5/11/2021 5:59 AM, chenxiang (M) wrote:
+> > > >>> Hi Rafael and other guys,
+> > > >>>
+> > > >>> I am trying to add a device link between scsi_host->shost_gendev and
+> > > >>> hisi_hba->dev to support runtime PM for hisi_hba driver
+> > > >>>
+> > > >>> (as it supports runtime PM for scsi host in some scenarios such as
+> > > >>> error handler etc, we can avoid to do them again if adding a
+> > > >>>
+> > > >>> device link between scsi_host->shost_gendev and hisi_hba->dev) as
+> > > >>> follows (hisi_sas driver is under directory drivers/scsi/hisi_sas):
+> > > >>>
+> > > >>> device_link_add(&shost->shost_gendev, hisi_hba->dev,
+> > > >>> DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE)
+> > > >>>
+> > > >>> We have a full test on it, and it works well except when rmmod the
+> > > >>> driver, some call trace occurs as follows:
+> > > >>>
+> > > >>> [root@localhost ~]# rmmod hisi_sas_v3_hw
+> > > >>> [  105.377944] BUG: scheduling while atomic: kworker/113:1/811/0x00000201
+> > > >>> [  105.384469] Modules linked in: bluetooth rfkill ib_isert
+> > > >>> iscsi_target_mod ib_ipoib ib_umad iptable_filter vfio_iommu_type1
+> > > >>> vfio_pci vfio_virqfd vfio rpcrdma ib_is                         er
+> > > >>> libiscsi scsi_transport_iscsi crct10dif_ce sbsa_gwdt hns_roce_hw_v2
+> > > >>> hisi_sec2 hisi_hpre hisi_zip hisi_qm uacce spi_hisi_sfc_v3xx
+> > > >>> hisi_trng_v2 rng_core hisi_uncore                         _hha_pmu
+> > > >>> hisi_uncore_ddrc_pmu hisi_uncore_l3c_pmu spi_dw_mmio hisi_uncore_pmu
+> > > >>> hns3 hclge hnae3 hisi_sas_v3_hw(-) hisi_sas_main libsas
+> > > >>> [  105.424841] CPU: 113 PID: 811 Comm: kworker/113:1 Kdump: loaded
+> > > >>> Tainted: G        W         5.12.0-rc1+ #1
+> > > >>> [  105.434454] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS
+> > > >>> 2280-V2 CS V5.B143.01 04/22/2021
+> > > >>> [  105.443287] Workqueue: rcu_gp srcu_invoke_callbacks
+> > > >>> [  105.448154] Call trace:
+> > > >>> [  105.450593]  dump_backtrace+0x0/0x1a4
+> > > >>> [  105.454245]  show_stack+0x24/0x40
+> > > >>> [  105.457548]  dump_stack+0xc8/0x104
+> > > >>> [  105.460939]  __schedule_bug+0x68/0x80
+> > > >>> [  105.464590]  __schedule+0x73c/0x77c
+> > > >>> [  105.465700] BUG: scheduling while atomic: kworker/96:1/791/0x00000201
+> > > >>> [  105.468066]  schedule+0x7c/0x110
+> > > >>> [  105.468068]  schedule_timeout+0x194/0x1d4
+> > > >>> [  105.474490] Modules linked in:
+> > > >>> [  105.477692]  wait_for_completion+0x8c/0x12c
+> > > >>> [  105.477695]  rcu_barrier+0x1e0/0x2fc
+> > > >>> [  105.477697]  scsi_host_dev_release+0x50/0xf0
+> > > >>> [  105.477701]  device_release+0x40/0xa0
+> > > >>> [  105.477704]  kobject_put+0xac/0x100
+> > > >>> [  105.477707]  __device_link_free_srcu+0x50/0x74
+> > > >>> [  105.477709]  srcu_invoke_callbacks+0x108/0x1a4
+> > > >>> [  105.484743]  process_one_work+0x1dc/0x48c
+> > > >>> [  105.492468]  worker_thread+0x7c/0x464
+> > > >>> [  105.492471]  kthread+0x168/0x16c
+> > > >>> [  105.492473]  ret_from_fork+0x10/0x18
+> > > >>> ...
+> > > >>>
+> > > >>> After analyse the process, we find that it will
+> > > >>> device_del(&shost->gendev) in function scsi_remove_host() and then
+> > > >>>
+> > > >>> put_device(&shost->shost_gendev) in function scsi_host_put() when
+> > > >>> removing the driver, if there is a link between shost and hisi_hba->dev,
+> > > >>>
+> > > >>> it will try to delete the link in device_del(), and also will
+> > > >>> call_srcu(__device_link_free_srcu) to put_device() link->consumer and
+> > > >>> supplier.
+> > > >>>
+> > > >>> But if put device() for shost_gendev in device_link_free() is later
+> > > >>> than in scsi_host_put(), it will call scsi_host_dev_release() in
+> > > >>>
+> > > >>> srcu_invoke_callbacks() while it is atomic and there are scheduling in
+> > > >>> scsi_host_dev_release(),
+> > > >>>
+> > > >>> so it reports the BUG "scheduling while atomic:...".
+> > > >>>
+> > > >>> thread 1                                                   thread2
+> > > >>> hisi_sas_v3_remove
+> > > >>>      ...
+> > > >>>      sas_remove_host()
+> > > >>>          ...
+> > > >>>          scsi_remove_host()
+> > > >>>              ...
+> > > >>>              device_del(&shost->shost_gendev)
+> > > >>>                  ...
+> > > >>>                  device_link_purge()
+> > > >>>                      __device_link_del()
+> > > >>>                          device_unregister(&link->link_dev)
+> > > >>>                              devlink_dev_release
+> > > >>> call_srcu(__device_link_free_srcu)    ----------->
+> > > >>> srcu_invoke_callbacks  (atomic)
+> > > >>>          __device_link_free_srcu
+> > > >>>      ...
+> > > >>>      scsi_host_put()
+> > > >>>          put_device(&shost->shost_gendev) (ref = 1)
+> > > >>>                  device_link_free()
+> > > >>>                                put_device(link->consumer)
+> > > >>> //shost->gendev ref = 0
+> > > >>>                                            ...
+> > > >>>                                            scsi_host_dev_release
+> > > >>>                                                        ...
+> > > >>> rcu_barrier
+> > > >>> kthread_stop()
+> > > >>>
+> > > >>>
+> > > >>> We can check kref of shost->shost_gendev to make sure scsi_host_put()
+> > > >>> to release scsi host device in LLDD driver to avoid the issue,
+> > > >>>
+> > > >>> but it seems be a common issue:  function __device_link_free_srcu
+> > > >>> calls put_device() for consumer and supplier,
+> > > >>>
+> > > >>> but if it's ref =0 at that time and there are scheduling or sleep in
+> > > >>> dev_release, it may have the issue.
+> > > >>>
+> > > >>> Do you have any idea about the issue?
+> > > >>>
+> > > >> Yes, this is a general issue.
+> > > >>
+> > > >> If I'm not mistaken, it can be addressed by further deferring the
+> > > >> device_link_free() invocation through a workqueue.
+> > > >>
+> > > >> Let me cut a patch doing this.
+> > > > Please test the patch below and let me know if it works for you.
+> > >
+> > > I have a test on the patch, and it solves my issue.
+> >
+> > Great, thanks!
+> >
+> > Please also test the patch appended below (it uses a slightly different approach).
+> >
+> > ---
+> >  drivers/base/core.c    |   37 +++++++++++++++++++++++--------------
+> >  include/linux/device.h |    6 ++----
+> >  2 files changed, 25 insertions(+), 18 deletions(-)
+> >
+> > Index: linux-pm/drivers/base/core.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/core.c
+> > +++ linux-pm/drivers/base/core.c
+> > @@ -193,6 +193,11 @@ int device_links_read_lock_held(void)
+> >  {
+> >         return srcu_read_lock_held(&device_links_srcu);
+> >  }
+> > +
+> > +void device_link_synchronize_removal(void)
+> > +{
+> > +       synchronize_srcu(&device_links_srcu);
+> > +}
+> >  #else /* !CONFIG_SRCU */
+> >  static DECLARE_RWSEM(device_links_lock);
+> >
+> > @@ -223,6 +228,10 @@ int device_links_read_lock_held(void)
+> >         return lockdep_is_held(&device_links_lock);
+> >  }
+> >  #endif
+> > +
+> > +static inline void device_link_synchronize_removal(void)
+> > +{
+> > +}
+> >  #endif /* !CONFIG_SRCU */
+> >
+> >  static bool device_is_ancestor(struct device *dev, struct device *target)
+> > @@ -444,8 +453,13 @@ static struct attribute *devlink_attrs[]
+> >  };
+> >  ATTRIBUTE_GROUPS(devlink);
+> >
+> > -static void device_link_free(struct device_link *link)
+> > +static void device_link_release_fn(struct work_struct *work)
+> >  {
+> > +       struct device_link *link = container_of(work, struct device_link, rm_work);
+> > +
+> > +       /* Ensure that all references to the link object have been dropped. */
+> > +       device_link_synchronize_removal();
+> > +
+> >         while (refcount_dec_not_one(&link->rpm_active))
+> >                 pm_runtime_put(link->supplier);
+> >
+> > @@ -454,24 +468,19 @@ static void device_link_free(struct devi
+> >         kfree(link);
+> >  }
+> >
+> > -#ifdef CONFIG_SRCU
+> > -static void __device_link_free_srcu(struct rcu_head *rhead)
+> > -{
+> > -       device_link_free(container_of(rhead, struct device_link, rcu_head));
+> > -}
+> > -
+> >  static void devlink_dev_release(struct device *dev)
+> >  {
+> >         struct device_link *link = to_devlink(dev);
+> >
+> > -       call_srcu(&device_links_srcu, &link->rcu_head, __device_link_free_srcu);
+> > -}
+> > -#else
+> > -static void devlink_dev_release(struct device *dev)
+> > -{
+> > -       device_link_free(to_devlink(dev));
+> > +       INIT_WORK(&link->rm_work, device_link_release_fn);
+> > +       /*
+> > +        * It may take a while to complete this work because of the SRCU
+> > +        * synchronization in device_link_release_fn() and if the consumer or
+> > +        * supplier devices get deleted when it runs, so put it into the "long"
+> > +        * workqueue.
+> > +        */
+> > +       queue_work(system_long_wq, &link->rm_work);
+>
+> Not too strong of an opinion, but this seems like an unnecessary work
+> queue when SRCUs aren't enabled.
 
-As such, when q->nr_hw_queues grows, so does the request queue total IO
-scheduler tag depth.
+It is not strictly necessary then, but I want the code with and
+without SRCU to be as similar as possible and it doesn't really hurt
+to defer the freeing of memory associated with the device link even in
+the non-SRCU case, because whoever drops the last reference to the
+device link doesn't really care when that memory gets released and may
+not want to wait until that actually happens.
 
-This may cause problems for SCSI MQ HBAs whose total driver depth is
-fixed.
+> We could just leave this part as is and limit your changes to the SRCU implementation?
 
-Ming and Yanhui report higher CPU usage and lower throughput in scenarios
-where the fixed total driver tag depth is appreciably lower than the total
-scheduler tag depth:
-https://lore.kernel.org/linux-block/440dfcfc-1a2c-bd98-1161-cec4d78c6dfc@huawei.com/T/#mc0d6d4f95275a2743d1c8c3e4dc9ff6c9aa3a76b
-
-In that scenario, since the scheduler tag is got first, much contention
-is introduced since a driver tag may not be available after we have got
-the sched tag.
-
-Improve this scenario by introducing request queue-wide tags for when
-a tagset-wide sbitmap is used. The static sched requests are still
-allocated per hctx, as requests are initialised per hctx, as in
-blk_mq_init_request(..., hctx_idx, ...) ->
-set->ops->init_request(.., hctx_idx, ...).
-
-For simplicity of resizing the request queue sbitmap when updating the
-request queue depth, just init at the max possible size, so we don't need
-to deal with the possibly with swapping out a new sbitmap for old if
-we need to grow.
-
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- block/blk-mq-sched.c   | 67 ++++++++++++++++++++++++++++++++++--------
- block/blk-mq-sched.h   |  2 ++
- block/blk-mq-tag.c     | 11 ++++---
- block/blk-mq.c         | 13 ++++++--
- include/linux/blkdev.h |  4 +++
- 5 files changed, 76 insertions(+), 21 deletions(-)
-
-diff --git a/block/blk-mq-sched.c b/block/blk-mq-sched.c
-index 42a365b1b9c0..6485969fce9c 100644
---- a/block/blk-mq-sched.c
-+++ b/block/blk-mq-sched.c
-@@ -507,11 +507,9 @@ static void blk_mq_sched_free_tags(struct blk_mq_tag_set *set,
- 				   struct blk_mq_hw_ctx *hctx,
- 				   unsigned int hctx_idx)
- {
--	unsigned int flags = set->flags & ~BLK_MQ_F_TAG_HCTX_SHARED;
--
- 	if (hctx->sched_tags) {
- 		blk_mq_free_rqs(set, hctx->sched_tags, hctx_idx);
--		blk_mq_free_rq_map(hctx->sched_tags, flags);
-+		blk_mq_free_rq_map(hctx->sched_tags, set->flags);
- 		hctx->sched_tags = NULL;
- 	}
- }
-@@ -521,12 +519,10 @@ static int blk_mq_sched_alloc_tags(struct request_queue *q,
- 				   unsigned int hctx_idx)
- {
- 	struct blk_mq_tag_set *set = q->tag_set;
--	/* Clear HCTX_SHARED so tags are init'ed */
--	unsigned int flags = set->flags & ~BLK_MQ_F_TAG_HCTX_SHARED;
- 	int ret;
- 
- 	hctx->sched_tags = blk_mq_alloc_rq_map(set, hctx_idx, q->nr_requests,
--					       set->reserved_tags, flags);
-+					       set->reserved_tags, set->flags);
- 	if (!hctx->sched_tags)
- 		return -ENOMEM;
- 
-@@ -544,16 +540,50 @@ static void blk_mq_sched_tags_teardown(struct request_queue *q)
- 	int i;
- 
- 	queue_for_each_hw_ctx(q, hctx, i) {
--		/* Clear HCTX_SHARED so tags are freed */
--		unsigned int flags = hctx->flags & ~BLK_MQ_F_TAG_HCTX_SHARED;
--
- 		if (hctx->sched_tags) {
--			blk_mq_free_rq_map(hctx->sched_tags, flags);
-+			blk_mq_free_rq_map(hctx->sched_tags, hctx->flags);
- 			hctx->sched_tags = NULL;
- 		}
- 	}
- }
- 
-+static int blk_mq_init_sched_shared_sbitmap(struct request_queue *queue)
-+{
-+	struct blk_mq_tag_set *set = queue->tag_set;
-+	int alloc_policy = BLK_MQ_FLAG_TO_ALLOC_POLICY(set->flags);
-+	struct blk_mq_hw_ctx *hctx;
-+	int ret, i;
-+
-+	/*
-+	 * Set initial depth at max so that we don't need to reallocate for
-+	 * updating nr_requests.
-+	 */
-+	ret = blk_mq_init_bitmaps(&queue->sched_bitmap_tags,
-+				  &queue->sched_breserved_tags,
-+				  MAX_SCHED_RQ, set->reserved_tags,
-+				  set->numa_node, alloc_policy);
-+	if (ret)
-+		return ret;
-+
-+	queue_for_each_hw_ctx(queue, hctx, i) {
-+		hctx->sched_tags->bitmap_tags =
-+					&queue->sched_bitmap_tags;
-+		hctx->sched_tags->breserved_tags =
-+					&queue->sched_breserved_tags;
-+	}
-+
-+	sbitmap_queue_resize(&queue->sched_bitmap_tags,
-+			     queue->nr_requests - set->reserved_tags);
-+
-+	return 0;
-+}
-+
-+static void blk_mq_exit_sched_shared_sbitmap(struct request_queue *queue)
-+{
-+	sbitmap_queue_free(&queue->sched_bitmap_tags);
-+	sbitmap_queue_free(&queue->sched_breserved_tags);
-+}
-+
- int blk_mq_init_sched(struct request_queue *q, struct elevator_type *e)
- {
- 	struct blk_mq_hw_ctx *hctx;
-@@ -578,12 +608,18 @@ int blk_mq_init_sched(struct request_queue *q, struct elevator_type *e)
- 	queue_for_each_hw_ctx(q, hctx, i) {
- 		ret = blk_mq_sched_alloc_tags(q, hctx, i);
- 		if (ret)
--			goto err;
-+			goto err_free_tags;
-+	}
-+
-+	if (blk_mq_is_sbitmap_shared(q->tag_set->flags)) {
-+		ret = blk_mq_init_sched_shared_sbitmap(q);
-+		if (ret)
-+			goto err_free_tags;
- 	}
- 
- 	ret = e->ops.init_sched(q, e);
- 	if (ret)
--		goto err;
-+		goto err_free_sbitmap;
- 
- 	blk_mq_debugfs_register_sched(q);
- 
-@@ -603,7 +639,10 @@ int blk_mq_init_sched(struct request_queue *q, struct elevator_type *e)
- 
- 	return 0;
- 
--err:
-+err_free_sbitmap:
-+	if (blk_mq_is_sbitmap_shared(q->tag_set->flags))
-+		blk_mq_exit_sched_shared_sbitmap(q);
-+err_free_tags:
- 	blk_mq_sched_free_requests(q);
- 	blk_mq_sched_tags_teardown(q);
- 	q->elevator = NULL;
-@@ -641,5 +680,7 @@ void blk_mq_exit_sched(struct request_queue *q, struct elevator_queue *e)
- 	if (e->type->ops.exit_sched)
- 		e->type->ops.exit_sched(e);
- 	blk_mq_sched_tags_teardown(q);
-+	if (blk_mq_is_sbitmap_shared(q->tag_set->flags))
-+		blk_mq_exit_sched_shared_sbitmap(q);
- 	q->elevator = NULL;
- }
-diff --git a/block/blk-mq-sched.h b/block/blk-mq-sched.h
-index 5b18ab915c65..aff037cfd8e7 100644
---- a/block/blk-mq-sched.h
-+++ b/block/blk-mq-sched.h
-@@ -5,6 +5,8 @@
- #include "blk-mq.h"
- #include "blk-mq-tag.h"
- 
-+#define MAX_SCHED_RQ (16 * BLKDEV_MAX_RQ)
-+
- void blk_mq_sched_assign_ioc(struct request *rq);
- 
- bool blk_mq_sched_try_merge(struct request_queue *q, struct bio *bio,
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 45479c0f88a2..c65d1b8891cf 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -13,6 +13,7 @@
- #include <linux/delay.h>
- #include "blk.h"
- #include "blk-mq.h"
-+#include "blk-mq-sched.h"
- #include "blk-mq-tag.h"
- 
- /*
-@@ -563,8 +564,6 @@ int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
- 	 */
- 	if (tdepth > tags->nr_tags) {
- 		struct blk_mq_tag_set *set = hctx->queue->tag_set;
--		/* Only sched tags can grow, so clear HCTX_SHARED flag  */
--		unsigned int flags = set->flags & ~BLK_MQ_F_TAG_HCTX_SHARED;
- 		struct blk_mq_tags *new;
- 		bool ret;
- 
-@@ -575,21 +574,21 @@ int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
- 		 * We need some sort of upper limit, set it high enough that
- 		 * no valid use cases should require more.
- 		 */
--		if (tdepth > 16 * BLKDEV_MAX_RQ)
-+		if (tdepth > MAX_SCHED_RQ)
- 			return -EINVAL;
- 
- 		new = blk_mq_alloc_rq_map(set, hctx->queue_num, tdepth,
--				tags->nr_reserved_tags, flags);
-+				tags->nr_reserved_tags, set->flags);
- 		if (!new)
- 			return -ENOMEM;
- 		ret = blk_mq_alloc_rqs(set, new, hctx->queue_num, tdepth);
- 		if (ret) {
--			blk_mq_free_rq_map(new, flags);
-+			blk_mq_free_rq_map(new, set->flags);
- 			return -ENOMEM;
- 		}
- 
- 		blk_mq_free_rqs(set, *tagsptr, hctx->queue_num);
--		blk_mq_free_rq_map(*tagsptr, flags);
-+		blk_mq_free_rq_map(*tagsptr, set->flags);
- 		*tagsptr = new;
- 	} else {
- 		/*
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 499ad5462f7e..8b5ecc801d3f 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -3564,15 +3564,24 @@ int blk_mq_update_nr_requests(struct request_queue *q, unsigned int nr)
- 		} else {
- 			ret = blk_mq_tag_update_depth(hctx, &hctx->sched_tags,
- 							nr, true);
-+			if (blk_mq_is_sbitmap_shared(set->flags)) {
-+				hctx->sched_tags->bitmap_tags =
-+					&q->sched_bitmap_tags;
-+				hctx->sched_tags->breserved_tags =
-+					&q->sched_breserved_tags;
-+			}
- 		}
- 		if (ret)
- 			break;
- 		if (q->elevator && q->elevator->type->ops.depth_updated)
- 			q->elevator->type->ops.depth_updated(hctx);
- 	}
--
--	if (!ret)
-+	if (!ret) {
- 		q->nr_requests = nr;
-+		if (q->elevator && blk_mq_is_sbitmap_shared(set->flags))
-+			sbitmap_queue_resize(&q->sched_bitmap_tags,
-+					     nr - set->reserved_tags);
-+	}
- 
- 	blk_mq_unquiesce_queue(q);
- 	blk_mq_unfreeze_queue(q);
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 1255823b2bc0..4092c2a38f10 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -25,6 +25,7 @@
- #include <linux/scatterlist.h>
- #include <linux/blkzoned.h>
- #include <linux/pm.h>
-+#include <linux/sbitmap.h>
- 
- struct module;
- struct scsi_ioctl_command;
-@@ -493,6 +494,9 @@ struct request_queue {
- 
- 	atomic_t		nr_active_requests_shared_sbitmap;
- 
-+	struct sbitmap_queue	sched_bitmap_tags;
-+	struct sbitmap_queue	sched_breserved_tags;
-+
- 	struct list_head	icq_list;
- #ifdef CONFIG_BLK_CGROUP
- 	DECLARE_BITMAP		(blkcg_pols, BLKCG_MAX_POLS);
--- 
-2.26.2
-
+I don't really see why that would be better.
