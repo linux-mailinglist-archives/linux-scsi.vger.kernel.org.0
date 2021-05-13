@@ -2,59 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DB537FC9E
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 19:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B0E37FE19
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 May 2021 21:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbhEMRkF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 May 2021 13:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbhEMRkE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 May 2021 13:40:04 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB14C061574
-        for <linux-scsi@vger.kernel.org>; Thu, 13 May 2021 10:38:53 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id c22so12882090ejd.12
-        for <linux-scsi@vger.kernel.org>; Thu, 13 May 2021 10:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=efxDK1uU7DkE4cVJ9myazVuQ4eaJnIyftNcM+xFzvi0=;
-        b=nK3+uIiYKCtfayCo3Pg6wEJiFFnK7HK314JUzgfiZ/rxZRH/G9WkrPGPSOqg40NSIW
-         9YSaxHJVhz1LH5rEyNuntAU3ivIqjvYc92QDp4j9O7IJnCJxF002NEfIG0v9R30oorx+
-         cBTpYPwsupck7L91srsEz9bqcmfHcW3QfFump5mhvOu2NmE6AceF5R+bz4VYN87YypIS
-         swqcj+ib3+ZmdFA1+a3+VYqRYyH9QNLutpyJu5BqzEkj0gABIPD+uyS8Oinnwsd2fm24
-         DUg3zlJyo7qoJEDCt8dkydLKtgqAEOHWRqpDH+CWiGjMkztya8fMuR+XjqkwVbQKyQah
-         +Nsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=efxDK1uU7DkE4cVJ9myazVuQ4eaJnIyftNcM+xFzvi0=;
-        b=YulCSIqcZNVgU7YVo54ohZVnXtxfiTSs0YfUh2GDKModZVZURWUJ+snP+eIdpe+we5
-         aXOlyY9F9Qw6o2doATvOjGKYPtW0iTfzS6fn3Vuyr3nBpmMSOQKRwHR46CKBlnkJbaZL
-         /wcAMIvOegkigxZfFttxBuQPM70IvKl44W9OEo+rRNvY8n6mCABu6a3Iu3F6fzo5WPRa
-         UKXRj8A7OgPn3S8bCEwLfIX5NwnJ/NEt5jHRoPbwm9qeElnozc2WZjtcJ6bqVjgh+VjI
-         nBlJFho+i5dGRS8VGlI5BrVjybOIfXABfWtaIThTYuYIGeg9Xc/wViaS/CWYG0udCK5O
-         Ex7Q==
-X-Gm-Message-State: AOAM5306rs6kT9g7+Q+MzHN8fG07A7rGexzx/c2vLIY0ke4qTUQQ/B09
-        DKgoz4zxgB2LJIUisgZFfMArxyI2P16ZNhas/Ig=
-X-Google-Smtp-Source: ABdhPJzfVclfgm5wYC8PcE9EuH/+vrcZh/GFhOXK0ALMOkd3CScyit7LGZrX1QqHzbQPjZWTrymBw6PN6NHQpnZCMB4=
-X-Received: by 2002:a17:906:f01:: with SMTP id z1mr43660796eji.535.1620927532604;
- Thu, 13 May 2021 10:38:52 -0700 (PDT)
+        id S230415AbhEMT3k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 May 2021 15:29:40 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:44448 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230309AbhEMT3k (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 May 2021 15:29:40 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 9F8A741339;
+        Thu, 13 May 2021 19:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1620934107; x=
+        1622748508; bh=N0OIeACEXus3MdtjW8P9hqZEB1TLbMvkJzDapKB/C6I=; b=k
+        yM8Vp+HpmmeCLGLq3pAkA02TlruKIV8P9e6BV72dwjISf4m4GnN2A9lxncI+LfGg
+        w474GLRolDXcyaKLhxtnY7s+yZ7wqz+7Z4at7jLAdhDJt/aIroONRscVb1I1ngL8
+        pJApSZtAFqEInRjEqkJ3uQG0QwSjkJOv/tROi0c1P4=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NOcHvCGT_pVs; Thu, 13 May 2021 22:28:27 +0300 (MSK)
+Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 898D64131C;
+        Thu, 13 May 2021 22:28:27 +0300 (MSK)
+Received: from yadro.com (10.199.0.46) by T-EXCH-03.corp.yadro.com
+ (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 13
+ May 2021 22:28:17 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     Martin Petersen <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        <target-devel@vger.kernel.org>
+CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>
+Subject: [PATCH 0/2] scsi: target: Introduce the version descriptors
+Date:   Thu, 13 May 2021 22:28:02 +0300
+Message-ID: <20210513192804.1252142-1-k.shelekhin@yadro.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:a17:906:9498:0:0:0:0 with HTTP; Thu, 13 May 2021 10:38:52
- -0700 (PDT)
-Reply-To: aaliyah.ahmes@gmail.com
-From:   Aaliyah Ahmed <drivanrobert81@gmail.com>
-Date:   Thu, 13 May 2021 17:38:52 +0000
-Message-ID: <CAJp5pin5-wh7jMsmD+O4QoPG3ff66UsSTH9zh_MkTZAu0eVJWw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.0.46]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-03.corp.yadro.com (172.17.100.103)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This patch series adds the VERSION DESCRIPTOR fields to the standard INQUIRY
+data. The SCSI primary command set standard bumped to SPC-4 for consistency
+since the version descriptor values for SBC-3 and some other standards are not
+defined in SPC-3.
+
+While not essential for normal operation, the version descriptors values are
+often queried as an additional sanity check. For example, Windows Server
+requires proper SCSI transport protocol standard during the iSCSI qualification
+tests.
+
+The layout follows SPC-4:
+
+  SCSI architecture standard
+  SCSI transport protocol standard
+  SCSI primary command set standard
+  SCSI device type command set standard
+
+The physical transport standard is not reported because it requires
+driver-specific probing to be accurate and I'm not aware of any use-case
+to justify the additional complexity.
+
+The values are reported "unclaimed" because I faced several issues with the
+specific ones during the interoperability testing. For example, Windows Server
+2016 fails to parse recent iSCSI standards, libiscsi failed to recognize the
+final SBC-3 standard (however this is fixed now) and so on. Plus both FreeBSD
+and SCST use (or were using) the same values, so the chance of breaking
+something is much smaller.
+
+Konstantin Shelekhin (2):
+  scsi: target: Bump INQUIRY VERSION to SPC-4
+  scsi: target: Add the VERSION DESCRIPTOR fields to the INQUIRY data
+
+ drivers/target/target_core_spc.c | 36 ++++++++++++++++++++++++++++++--
+ include/scsi/scsi_proto.h        | 12 +++++++++++
+ 2 files changed, 46 insertions(+), 2 deletions(-)
+
 -- 
-Diid you see my  message i send to you ? I'm waiting for your urgent respond,
+2.31.1
+
