@@ -2,46 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BD0380076
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 00:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76597380078
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 00:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbhEMWjZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 May 2021 18:39:25 -0400
-Received: from mail-pf1-f170.google.com ([209.85.210.170]:38846 "EHLO
-        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbhEMWjX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 May 2021 18:39:23 -0400
-Received: by mail-pf1-f170.google.com with SMTP id k19so23024915pfu.5
-        for <linux-scsi@vger.kernel.org>; Thu, 13 May 2021 15:38:13 -0700 (PDT)
+        id S233706AbhEMWjg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 May 2021 18:39:36 -0400
+Received: from mail-pj1-f53.google.com ([209.85.216.53]:54215 "EHLO
+        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233688AbhEMWjZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 May 2021 18:39:25 -0400
+Received: by mail-pj1-f53.google.com with SMTP id p17so14289776pjz.3
+        for <linux-scsi@vger.kernel.org>; Thu, 13 May 2021 15:38:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jnR4DC0GInW4O0dC8OWaA+yRYG0YljiNTsBIUHiO75k=;
-        b=hStWdimjwTy/QD3HVCgmJUSeD+IA92jewK93iiHgAng4Hplrn4GKKP18GWe87vesdR
-         Aj7/pcvi6mM1jjtVpVoBJvJXs9N+p+P3uzbE+Mdp8Hp8Go47i+R9xTTil9f4rO3mi3kf
-         8IzoUX8028H7YbKAJTlxJ+J9KxwunlGLM3vHcpLTdQfvzP6g+afnl3JQUGTeeswLipLQ
-         LwTkDEy6jvm1juCRil//0PLMtXFuDk7dYuua4dXX798M5DBqbJslPOLIcpt8R6GUV4YW
-         XIypJn9fRlY+d8MuuUyql1rwKnT6CRZKumaP7wMVLwZAo7wS2eLJvVYnR41NgAkyyD2o
-         CCnQ==
-X-Gm-Message-State: AOAM533FXxlKClwvCUIxyaqrnTUo4i0+jqpT4zmwTyoD6vWiX5BCOfwB
-        Exwh4UA4x8pm2LdW+jH4A768DGmvtB8=
-X-Google-Smtp-Source: ABdhPJxtXenSxPIlpsBB+Cd14mmi15KzXfDc5L0BLNMhMfMDOcL0DL4yukGavan7M3OLi+mCPAkerA==
-X-Received: by 2002:a62:8389:0:b029:27d:28f4:d583 with SMTP id h131-20020a6283890000b029027d28f4d583mr42939393pfe.33.1620945493094;
-        Thu, 13 May 2021 15:38:13 -0700 (PDT)
+        bh=qmOu6yPUVAiTvr3F59u7miUtgTGmA7jI0Rn33W48iFc=;
+        b=K8LxL1QNiEidk/LYCO1bPM7YrSNYObUg7QReioEJE2MN3GC2tTqmJNHs5cAI+Sd9Zw
+         sMCvZC57J/pRf65q/nr6uFs1VLNM71aYul+9zAhLYRYxLS6lF6NqyHRnchHBnzQwEgOG
+         ZH5W+0npuxlSKlIXNd8xKa9jDoLzUZI2vFKA0vzY9PyQLwChUen33QQ2G5it+mSzGNnx
+         FIIQEVLwM3zy551RkVY5KiqAgfqId83t8XLrSWtqrIl9ebrzRlc7j07swF3CPwutEtit
+         K148u51W2Z98V0dSaMLItUtgAVi6RDQfIcepHStbHQNTNcXKoWGU+pUAO9abVF/XxNL6
+         lj6A==
+X-Gm-Message-State: AOAM532bGR79bV12IkfR/4wxSzYfTmE/si/87shXnODh5/DKOoVFltPR
+        /Gvru892oGov4r/5pkw/WtU=
+X-Google-Smtp-Source: ABdhPJwnR90Cz57iKrYkodxmlfIvCfT7JGEav8hVx15wkJMDRSUmQ3XTZDBJW1rT1ya8VxBEODIv6g==
+X-Received: by 2002:a17:90a:8902:: with SMTP id u2mr48474902pjn.143.1620945494663;
+        Thu, 13 May 2021 15:38:14 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:54a8:4531:57a:cfd8])
-        by smtp.gmail.com with ESMTPSA id j23sm2852582pfh.179.2021.05.13.15.38.11
+        by smtp.gmail.com with ESMTPSA id j23sm2852582pfh.179.2021.05.13.15.38.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 May 2021 15:38:12 -0700 (PDT)
+        Thu, 13 May 2021 15:38:14 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
         Bart Van Assche <bvanassche@acm.org>,
-        Nilesh Javali <njavali@marvell.com>
-Subject: [PATCH v3 6/8] qla2xxx: Use scsi_get_sector() instead of scsi_get_lba()
-Date:   Thu, 13 May 2021 15:37:55 -0700
-Message-Id: <20210513223757.3938-7-bvanassche@acm.org>
+        Can Guo <cang@codeaurora.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: [PATCH v3 7/8] ufs: Fix the tracing code
+Date:   Thu, 13 May 2021 15:37:56 -0700
+Message-Id: <20210513223757.3938-8-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210513223757.3938-1-bvanassche@acm.org>
 References: <20210513223757.3938-1-bvanassche@acm.org>
@@ -52,82 +57,134 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Use scsi_get_sector() instead of scsi_get_lba() since the name of the
-latter is confusing. Additionally, use lower_32_bits() instead of
-open-coding it. This patch does not change any functionality.
+latter is confusing. Use scsi_get_sector() for all SCSI requests since all
+SCSI requests have a block layer request attached and hence calling
+scsi_get_sector() is allowed. Convert the scsi_get_sector() result
+from sector_t into an LBA with sectors_to_logical(). Since READ(10),
+WRITE(10), READ(16) and WRITE(16) all have a GROUP NUMBER field, extract
+the GROUP NUMBER field for all four SCSI commands. Apply the 0x3f mask to
+that field since the upper two bits are reserved. Rename the 'transfer_len'
+variable into 'affected_bytes' since it represents the number of bytes
+affected on the storage medium instead of the size of the SCSI data buffer.
 
-Cc: Nilesh Javali <njavali@marvell.com>
+Cc: Can Guo <cang@codeaurora.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Avri Altman <avri.altman@wdc.com>
+Cc: Stanley Chu <stanley.chu@mediatek.com>
+Cc: Bean Huo <beanhuo@micron.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_iocb.c | 9 +++------
- drivers/scsi/qla2xxx/qla_isr.c  | 8 ++++----
- 2 files changed, 7 insertions(+), 10 deletions(-)
+ drivers/scsi/ufs/ufshcd.c  | 34 +++++++++++++++-------------------
+ include/trace/events/ufs.h | 10 +++++-----
+ 2 files changed, 20 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 38b5bdde2405..28e30a7e8883 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -778,8 +778,7 @@ qla24xx_set_t10dif_tags(srb_t *sp, struct fw_dif_context *pkt,
- 		 * No check for ql2xenablehba_err_chk, as it would be an
- 		 * I/O error if hba tag generation is not done.
- 		 */
--		pkt->ref_tag = cpu_to_le32((uint32_t)
--		    (0xffffffff & scsi_get_lba(cmd)));
-+		pkt->ref_tag = cpu_to_le32(lower_32_bits(scsi_get_sector(cmd)));
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index ab707a2c3796..75310ac95b3d 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -17,6 +17,8 @@
+ #include <linux/blk-pm.h>
+ #include <linux/blkdev.h>
+ #include <scsi/scsi_driver.h>
++#include <scsi/scsi_cmnd.h>
++#include "../sd.h"
+ #include "ufshcd.h"
+ #include "ufs_quirks.h"
+ #include "unipro.h"
+@@ -369,7 +371,7 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 	u32 intr, doorbell;
+ 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
+ 	struct scsi_cmnd *cmd = lrbp->cmd;
+-	int transfer_len = -1;
++	int affected_bytes = -1;
  
- 		if (!qla2x00_hba_err_chk_enabled(sp))
- 			break;
-@@ -799,8 +798,7 @@ qla24xx_set_t10dif_tags(srb_t *sp, struct fw_dif_context *pkt,
- 		pkt->app_tag_mask[0] = 0x0;
- 		pkt->app_tag_mask[1] = 0x0;
+ 	if (!trace_ufshcd_command_enabled()) {
+ 		/* trace UPIU W/O tracing command */
+@@ -381,30 +383,24 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 	if (cmd) { /* data phase exists */
+ 		/* trace UPIU also */
+ 		ufshcd_add_cmd_upiu_trace(hba, tag, str_t);
+-		opcode = cmd->cmnd[0];
+-		if ((opcode == READ_10) || (opcode == WRITE_10)) {
+-			/*
+-			 * Currently we only fully trace read(10) and write(10)
+-			 * commands
+-			 */
+-			if (cmd->request && cmd->request->bio)
+-				lba = cmd->request->bio->bi_iter.bi_sector;
+-			transfer_len = be32_to_cpu(
+-				lrbp->ucd_req_ptr->sc.exp_data_transfer_len);
+-			if (opcode == WRITE_10)
+-				group_id = lrbp->cmd->cmnd[6];
+-		} else if (opcode == UNMAP) {
+-			if (cmd->request) {
+-				lba = scsi_get_lba(cmd);
+-				transfer_len = blk_rq_bytes(cmd->request);
+-			}
++		lba = sectors_to_logical(cmd->device, scsi_get_sector(cmd));
++		affected_bytes = blk_rq_bytes(cmd->request);
++		switch (cmd->cmnd[0]) {
++		case READ_10:
++		case WRITE_10:
++			group_id = lrbp->cmd->cmnd[6] & 0x3f;
++			break;
++		case READ_16:
++		case WRITE_16:
++			group_id = lrbp->cmd->cmnd[14] & 0x3f;
++			break;
+ 		}
+ 	}
  
--		pkt->ref_tag = cpu_to_le32((uint32_t)
--		    (0xffffffff & scsi_get_lba(cmd)));
-+		pkt->ref_tag = cpu_to_le32(lower_32_bits(scsi_get_sector(cmd)));
+ 	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
+ 	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+ 	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
+-			doorbell, transfer_len, intr, lba, opcode, group_id);
++			doorbell, affected_bytes, intr, lba, opcode, group_id);
+ }
  
- 		if (!qla2x00_hba_err_chk_enabled(sp))
- 			break;
-@@ -824,8 +822,7 @@ qla24xx_set_t10dif_tags(srb_t *sp, struct fw_dif_context *pkt,
- 	 * 16 bit app tag.
- 	 */
- 	case SCSI_PROT_DIF_TYPE1:
--		pkt->ref_tag = cpu_to_le32((uint32_t)
--		    (0xffffffff & scsi_get_lba(cmd)));
-+		pkt->ref_tag = cpu_to_le32(lower_32_bits(scsi_get_sector(cmd)));
- 		pkt->app_tag = cpu_to_le16(0);
- 		pkt->app_tag_mask[0] = 0x0;
- 		pkt->app_tag_mask[1] = 0x0;
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 67229af4c142..24d406411f81 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -2632,7 +2632,7 @@ qla2x00_handle_dif_error(srb_t *sp, struct sts_entry_24xx *sts24)
- 	    "DIF ERROR in cmd 0x%x lba 0x%llx act ref"
- 	    " tag=0x%x, exp ref_tag=0x%x, act app tag=0x%x, exp app"
- 	    " tag=0x%x, act guard=0x%x, exp guard=0x%x.\n",
--	    cmd->cmnd[0], (u64)scsi_get_lba(cmd), a_ref_tag, e_ref_tag,
-+	    cmd->cmnd[0], (u64)scsi_get_sector(cmd), a_ref_tag, e_ref_tag,
- 	    a_app_tag, e_app_tag, a_guard, e_guard);
+ static void ufshcd_print_clk_freqs(struct ufs_hba *hba)
+diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+index 599739ee7b20..71055021de91 100644
+--- a/include/trace/events/ufs.h
++++ b/include/trace/events/ufs.h
+@@ -268,10 +268,10 @@ DEFINE_EVENT(ufshcd_template, ufshcd_wl_runtime_resume,
  
- 	/*
-@@ -2644,10 +2644,10 @@ qla2x00_handle_dif_error(srb_t *sp, struct sts_entry_24xx *sts24)
- 	    (scsi_get_prot_type(cmd) != SCSI_PROT_DIF_TYPE3 ||
- 	     a_ref_tag == be32_to_cpu(T10_PI_REF_ESCAPE))) {
- 		uint32_t blocks_done, resid;
--		sector_t lba_s = scsi_get_lba(cmd);
-+		sector_t sector = scsi_get_sector(cmd);
+ TRACE_EVENT(ufshcd_command,
+ 	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t,
+-		 unsigned int tag, u32 doorbell, int transfer_len, u32 intr,
++		 unsigned int tag, u32 doorbell, int affected_bytes, u32 intr,
+ 		 u64 lba, u8 opcode, u8 group_id),
  
- 		/* 2TB boundary case covered automatically with this */
--		blocks_done = e_ref_tag - (uint32_t)lba_s + 1;
-+		blocks_done = e_ref_tag - (uint32_t)sector + 1;
+-	TP_ARGS(dev_name, str_t, tag, doorbell, transfer_len,
++	TP_ARGS(dev_name, str_t, tag, doorbell, affected_bytes,
+ 				intr, lba, opcode, group_id),
  
- 		resid = scsi_bufflen(cmd) - (blocks_done *
- 		    cmd->device->sector_size);
-@@ -2677,7 +2677,7 @@ qla2x00_handle_dif_error(srb_t *sp, struct sts_entry_24xx *sts24)
- 			if (k != blocks_done) {
- 				ql_log(ql_log_warn, vha, 0x302f,
- 				    "unexpected tag values tag:lba=%x:%llx)\n",
--				    e_ref_tag, (unsigned long long)lba_s);
-+				    e_ref_tag, (u64)sector);
- 				return 1;
- 			}
- 
+ 	TP_STRUCT__entry(
+@@ -279,7 +279,7 @@ TRACE_EVENT(ufshcd_command,
+ 		__field(enum ufs_trace_str_t, str_t)
+ 		__field(unsigned int, tag)
+ 		__field(u32, doorbell)
+-		__field(int, transfer_len)
++		__field(int, affected_bytes)
+ 		__field(u32, intr)
+ 		__field(u64, lba)
+ 		__field(u8, opcode)
+@@ -291,7 +291,7 @@ TRACE_EVENT(ufshcd_command,
+ 		__entry->str_t = str_t;
+ 		__entry->tag = tag;
+ 		__entry->doorbell = doorbell;
+-		__entry->transfer_len = transfer_len;
++		__entry->affected_bytes = affected_bytes;
+ 		__entry->intr = intr;
+ 		__entry->lba = lba;
+ 		__entry->opcode = opcode;
+@@ -301,7 +301,7 @@ TRACE_EVENT(ufshcd_command,
+ 	TP_printk(
+ 		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x",
+ 		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
+-		__entry->tag, __entry->doorbell, __entry->transfer_len,
++		__entry->tag, __entry->doorbell, __entry->affected_bytes,
+ 		__entry->intr, __entry->lba, (u32)__entry->opcode,
+ 		str_opcode(__entry->opcode), (u32)__entry->group_id
+ 	)
