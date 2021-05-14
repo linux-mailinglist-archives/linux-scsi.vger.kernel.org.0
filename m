@@ -2,46 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EAC3812FC
+	by mail.lfdr.de (Postfix) with ESMTP id 71AEC3812FD
 	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbhENVf5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 May 2021 17:35:57 -0400
-Received: from mail-pl1-f169.google.com ([209.85.214.169]:37860 "EHLO
-        mail-pl1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbhENVf5 (ORCPT
+        id S233153AbhENVf6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 May 2021 17:35:58 -0400
+Received: from mail-pl1-f182.google.com ([209.85.214.182]:37873 "EHLO
+        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233140AbhENVf5 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:35:57 -0400
-Received: by mail-pl1-f169.google.com with SMTP id h20so105062plr.4
-        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:34:44 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id h20so105086plr.4
+        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:34:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NeWkHCvNgyn7u3PNQUIeXJvghqPHu+F/KuNw5psQyjU=;
-        b=sKMozZrAMDim/Hv7W7i/1DG/sf7+oXE7YxPlSPvGTYIOjyMOE4krpipeVXQLoWEMQ/
-         M409RXNlOSbSVVVHmJli0rrkmqDtV1xMIkz8JgFYmvNBfSL+w8e6H38DSqrWNqhuHpio
-         0jmyevBW3FILjpq7ue6ySco/IYtRzES5x8g6v+Y4h0lMANcXi1vzK7EzTPoaB8sixjLn
-         RvgRaQvUj3aYahBPiBpyveU9uCR/Pb9wHKye/5Gb5kysFyIdVJsoxbYYTcjL+ouWxvkL
-         jgfKV4lP8l3HEkWBL5xGcncTmpoq4ZcFlXc0Y1fvBgUiokSJvKgq+2cYnRvUzHtSBnMH
-         Vbog==
-X-Gm-Message-State: AOAM531LVkaoPovmVRoI4HDaDfYlJ49pYFTwGnmr5gg9HSZj6cAxjhpb
-        rpULkl75wLjy2n7BXuwRWlY=
-X-Google-Smtp-Source: ABdhPJyV0ozVH2YfSgjvAxSrj3eSjy9uxw3FlftE0tiXQtw43+BQz3xa6L6wnwU8dvPJ9FMegWV49Q==
-X-Received: by 2002:a17:90b:3b92:: with SMTP id pc18mr43391604pjb.218.1621028084107;
-        Fri, 14 May 2021 14:34:44 -0700 (PDT)
+        bh=39CFdvPUx2YylU5fmmA6ia5kiG8IPH28yP2o/gwmaNE=;
+        b=jF5mAamObq4WjFYzenL2/ir1yDkatGGD9PS6dWMb72pLp/U3WWLwRB49jRx06CbknJ
+         QrVStJP2OF+KPMJ2cH6erSoV7avL94LndxDIDtU+FjsaHGy0NVVqv8OchMV7CAziBI34
+         MoJ3SNOlYJDksjBgft47jtLPIpJj1HRqaqYLu1fRZIPPd2EWnMElYcGOWYUG5IAbchlk
+         U/gd3josYePUeD6pEKf6FXasSKTdnehMk9FRWCJPHU3lBFeuKjk7UbP40dfydAw2h70l
+         szvdkaqUVPkjz4I+dq8WiN94oFm34xdQk2ZMo3LRfUxEIxJ5fkPNupruZ7itchB8QKvd
+         m/Hw==
+X-Gm-Message-State: AOAM532PEKEtwm2bDdl8t7YNTrE4kbrKTh6KSHXRSF71HeUOuPwFses2
+        RLZYjRf1JuiHQPLpnhJRlts=
+X-Google-Smtp-Source: ABdhPJypq4+Him1LGOE2G3yyZhpZpPSb/x2XxLN8t8MpnTnhrvC1YHii8CGH1r3g9uXtXsLk8uiH2A==
+X-Received: by 2002:a17:90a:e2cb:: with SMTP id fr11mr21909887pjb.56.1621028085575;
+        Fri, 14 May 2021 14:34:45 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:e40c:c579:7cd8:c046])
-        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.34.42
+        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.34.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 14:34:43 -0700 (PDT)
+        Fri, 14 May 2021 14:34:45 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 23/50] ibmvscsi: Use blk_req() instead of scsi_cmnd.request
-Date:   Fri, 14 May 2021 14:32:38 -0700
-Message-Id: <20210514213356.5264-24-bvanassche@acm.org>
+Subject: [PATCH 24/50] ips: Use blk_req() instead of scsi_cmnd.request
+Date:   Fri, 14 May 2021 14:32:39 -0700
+Message-Id: <20210514213356.5264-25-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210514213356.5264-1-bvanassche@acm.org>
 References: <20210514213356.5264-1-bvanassche@acm.org>
@@ -56,19 +55,19 @@ patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ibmvscsi/ibmvscsi.c | 2 +-
+ drivers/scsi/ips.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
-index e75b0068ad84..48e07b8a6b63 100644
---- a/drivers/scsi/ibmvscsi/ibmvscsi.c
-+++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
-@@ -1072,7 +1072,7 @@ static int ibmvscsi_queuecommand_lck(struct scsi_cmnd *cmnd,
- 	init_event_struct(evt_struct,
- 			  handle_cmd_rsp,
- 			  VIOSRP_SRP_FORMAT,
--			  cmnd->request->timeout/HZ);
-+			  blk_req(cmnd)->timeout / HZ);
+diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
+index bc33d54a4011..6bcc655d1f15 100644
+--- a/drivers/scsi/ips.c
++++ b/drivers/scsi/ips.c
+@@ -3733,7 +3733,7 @@ ips_send_cmd(ips_ha_t * ha, ips_scb_t * scb)
+ 		scb->cmd.dcdb.segment_4G = 0;
+ 		scb->cmd.dcdb.enhanced_sg = 0;
  
- 	evt_struct->cmnd = cmnd;
- 	evt_struct->cmnd_done = done;
+-		TimeOut = scb->scsi_cmd->request->timeout;
++		TimeOut = blk_req(scb->scsi_cmd)->timeout;
+ 
+ 		if (ha->subsys->param[4] & 0x00100000) {	/* If NEW Tape DCDB is Supported */
+ 			if (!scb->sg_len) {
