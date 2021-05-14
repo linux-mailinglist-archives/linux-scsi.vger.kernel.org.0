@@ -2,45 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9160381321
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F8C381323
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbhENVhF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 May 2021 17:37:05 -0400
-Received: from mail-pg1-f181.google.com ([209.85.215.181]:36480 "EHLO
+        id S233524AbhENVhG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 May 2021 17:37:06 -0400
+Received: from mail-pg1-f181.google.com ([209.85.215.181]:42971 "EHLO
         mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbhENVg7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:36:59 -0400
-Received: by mail-pg1-f181.google.com with SMTP id c21so264026pgg.3
-        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:46 -0700 (PDT)
+        with ESMTP id S233480AbhENVhA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:37:00 -0400
+Received: by mail-pg1-f181.google.com with SMTP id z4so246350pgb.9
+        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IH/r9AOycjnWvxZ4S6rtMcxkeQP9ikVB0ZSiMJZU0ak=;
-        b=dKkMdOwtRWEF04nM8Czumpp/o6hNGPTSIIJ5lzT41p2mZiSuXs7vuHTQmZtBi/E82n
-         hPTqDxiJbE8Wfn624ITIcgbo4xg58wlpRJJzZBctQCURxDZpLjTPg77QspvuMzgAZh6w
-         yjqJ/pneUXnCng38ZqhVHLwJ8TjANvXC1AA1oGdeHKCyV3nCdEVFeuKVUMxhoN3grVyS
-         F9BsIUh5e+DAFHbf8rPVrbtdd5PbvTKf6sVuSpNQQCiwQIE1hxUBjJp5uzkFQA5M368X
-         xHAMUlgXXTkRLId38mKPgfjN2vQQdsr/1SJIVVDRRSGh2gRHGu3CLg8Xw4xNj8QnZ07o
-         2qAg==
-X-Gm-Message-State: AOAM531yvPVO4ocrpsKFkmQAkEYSURXrl+WRYUf5dukoh3Le6sRCw8AU
-        15DRWYzKjLPewIb1WX9i0hY=
-X-Google-Smtp-Source: ABdhPJzDqHTbJ5nW7QiIDc0ztLXXP+KkL4C+pUjhji6c5VJ1gGZtD5dPANfQSLZCD8U91Kur7PumJA==
-X-Received: by 2002:a63:ed4d:: with SMTP id m13mr48709584pgk.433.1621028146092;
-        Fri, 14 May 2021 14:35:46 -0700 (PDT)
+        bh=Hnj1CAegSg+E8lSbWvNGlsAIyJElNAUfG3sSIJO2hUQ=;
+        b=eQU6svEchdy/Dzw80iHsgSe8tgSI9nAbN7hbdtE4X8mIf3+MBqvJfTNJBKSaBNvQ5n
+         BKk7t+c1GM6IqX2IjNm0QehLlArfIn9ocDYR6GWGZ7Og6rDzQZ4Qp8bTH7MIlrSf1gjN
+         yOEY3D6kw58Wskl2m3pF578pEcc5c35wJ72uaGyqqVEYXTW0NVfB2MLKN1k3UZh3DDKr
+         FGvkkKmmWUs6AROLWQi7zB1LzUwyp5/yS2xz4zADXrJxFH0x9r9RyJByhv+nzVPjH+QH
+         QJXyh5MIO7hCGrczcf37zRKEFHoT+OWeKVswL3zeNIIzAmFnDjamVqhurbsltPpI+t+6
+         KqYg==
+X-Gm-Message-State: AOAM533fiAiNxPwRRm0RgXhiX1vmpARtA5S+okJSpe+Wn8OlAXT2ta+/
+        GCAXwBVZEzR4VmF2/lrQlCp+BMCDm8Giiw==
+X-Google-Smtp-Source: ABdhPJyikEulo8kOVrT1f3dDISvgIbyiTtKlizcHWfPvKDYQ8PKBqdr6HSkIieHj5xW8EY/GunJuSg==
+X-Received: by 2002:a63:3f8f:: with SMTP id m137mr28791680pga.56.1621028147626;
+        Fri, 14 May 2021 14:35:47 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:e40c:c579:7cd8:c046])
-        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.44
+        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 14:35:45 -0700 (PDT)
+        Fri, 14 May 2021 14:35:47 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 07/50] ata: Use blk_req() instead of scsi_cmnd.request
-Date:   Fri, 14 May 2021 14:33:13 -0700
-Message-Id: <20210514213356.5264-59-bvanassche@acm.org>
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: [PATCH 08/50] rdma/iser: Use blk_req() instead of scsi_cmnd.request
+Date:   Fri, 14 May 2021 14:33:14 -0700
+Message-Id: <20210514213356.5264-60-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210514213356.5264-1-bvanassche@acm.org>
 References: <20210514213356.5264-1-bvanassche@acm.org>
@@ -53,85 +55,21 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Prepare for removal of the request pointer by using blk_req() instead. This
 patch does not change any functionality.
 
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: Ming Lei <ming.lei@redhat.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/ata/libata-eh.c   |  5 ++---
- drivers/ata/libata-scsi.c | 10 +++++-----
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ drivers/infiniband/ulp/iser/iser_memory.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-index bb3637762985..4b007c9adfcb 100644
---- a/drivers/ata/libata-eh.c
-+++ b/drivers/ata/libata-eh.c
-@@ -912,7 +912,7 @@ void ata_qc_schedule_eh(struct ata_queued_cmd *qc)
- 	 * Note that ATA_QCFLAG_FAILED is unconditionally set after
- 	 * this function completes.
- 	 */
--	blk_abort_request(qc->scsicmd->request);
-+	blk_abort_request(blk_req(qc->scsicmd));
- }
- 
- /**
-@@ -1893,8 +1893,7 @@ static inline int ata_eh_worth_retry(struct ata_queued_cmd *qc)
-  */
- static inline bool ata_eh_quiet(struct ata_queued_cmd *qc)
+diff --git a/drivers/infiniband/ulp/iser/iser_memory.c b/drivers/infiniband/ulp/iser/iser_memory.c
+index afec40da9b58..37c5cffaeaa1 100644
+--- a/drivers/infiniband/ulp/iser/iser_memory.c
++++ b/drivers/infiniband/ulp/iser/iser_memory.c
+@@ -159,7 +159,7 @@ iser_set_dif_domain(struct scsi_cmnd *sc, struct ib_sig_domain *domain)
  {
--	if (qc->scsicmd &&
--	    qc->scsicmd->request->rq_flags & RQF_QUIET)
-+	if (qc->scsicmd && blk_req(qc->scsicmd)->rq_flags & RQF_QUIET)
- 		qc->flags |= ATA_QCFLAG_QUIET;
- 	return qc->flags & ATA_QCFLAG_QUIET;
- }
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index fd8b6febbf70..108c2f0b3e17 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -627,7 +627,7 @@ static struct ata_queued_cmd *ata_scsi_qc_new(struct ata_device *dev,
- {
- 	struct ata_queued_cmd *qc;
- 
--	qc = ata_qc_new_init(dev, cmd->request->tag);
-+	qc = ata_qc_new_init(dev, blk_req(cmd)->tag);
- 	if (qc) {
- 		qc->scsicmd = cmd;
- 		qc->scsidone = cmd->scsi_done;
-@@ -635,7 +635,7 @@ static struct ata_queued_cmd *ata_scsi_qc_new(struct ata_device *dev,
- 		qc->sg = scsi_sglist(cmd);
- 		qc->n_elem = scsi_sg_count(cmd);
- 
--		if (cmd->request->rq_flags & RQF_QUIET)
-+		if (blk_req(cmd)->rq_flags & RQF_QUIET)
- 			qc->flags |= ATA_QCFLAG_QUIET;
- 	} else {
- 		cmd->result = (DID_OK << 16) | (QUEUE_FULL << 1);
-@@ -1497,7 +1497,7 @@ static unsigned int ata_scsi_verify_xlat(struct ata_queued_cmd *qc)
- 
- static bool ata_check_nblocks(struct scsi_cmnd *scmd, u32 n_blocks)
- {
--	struct request *rq = scmd->request;
-+	struct request *rq = blk_req(scmd);
- 	u32 req_blocks;
- 
- 	if (!blk_rq_is_passthrough(rq))
-@@ -1532,7 +1532,7 @@ static unsigned int ata_scsi_rw_xlat(struct ata_queued_cmd *qc)
- {
- 	struct scsi_cmnd *scmd = qc->scsicmd;
- 	const u8 *cdb = scmd->cmnd;
--	struct request *rq = scmd->request;
-+	struct request *rq = blk_req(scmd);
- 	int class = IOPRIO_PRIO_CLASS(req_get_ioprio(rq));
- 	unsigned int tf_flags = 0;
- 	u64 block;
-@@ -3182,7 +3182,7 @@ static unsigned int ata_scsi_write_same_xlat(struct ata_queued_cmd *qc)
- 	 * as it modifies the DATA OUT buffer, which would corrupt user
- 	 * memory for SG_IO commands.
- 	 */
--	if (unlikely(blk_rq_is_passthrough(scmd->request)))
-+	if (unlikely(blk_rq_is_passthrough(blk_req(scmd))))
- 		goto invalid_opcode;
- 
- 	if (unlikely(scmd->cmd_len < 16)) {
+ 	domain->sig_type = IB_SIG_TYPE_T10_DIF;
+ 	domain->sig.dif.pi_interval = scsi_prot_interval(sc);
+-	domain->sig.dif.ref_tag = t10_pi_ref_tag(sc->request);
++	domain->sig.dif.ref_tag = t10_pi_ref_tag(blk_req(sc));
+ 	/*
+ 	 * At the moment we hard code those, but in the future
+ 	 * we will take them from sc.
