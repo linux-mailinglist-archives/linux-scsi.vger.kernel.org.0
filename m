@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1692C381316
+	by mail.lfdr.de (Postfix) with ESMTP id 89F57381317
 	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbhENVgs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 May 2021 17:36:48 -0400
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:43968 "EHLO
-        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbhENVgj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:36:39 -0400
-Received: by mail-pf1-f173.google.com with SMTP id b21so637470pft.10
-        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:26 -0700 (PDT)
+        id S233419AbhENVgt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 May 2021 17:36:49 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:41490 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233411AbhENVgm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:36:42 -0400
+Received: by mail-pg1-f173.google.com with SMTP id t30so247567pgl.8
+        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Qc2024KrSNi9X/MmdEEPfFIpG0meC/1WijHNe78H61c=;
-        b=crDmqmWvF7dx/9LwYJpG1hYF780FOXcEXmmpWDYR3/KS+LffDHnB8+HgW4h38tjjmJ
-         c3GQLRxOUA61dzttfGsBYjvJRO8CC1VyrBv5b33mEAAO9BEh39ZiT4/4HUDxbmoqLuas
-         JyaThswb0G9jl4I31W+agl9XgHm94JOW3GK9Ynw0DyHWqqnNWz9VeL/azpvibbnUxi4G
-         bqoAKd5lRMt9HUSRR1hGFAlRbUXsZA+WK95WY5QvIiINwTyjMWUlFOIpPg66Um8R7An5
-         zuz51UzlYhktseZEeCYq7tLV68rYpVU4RJvngmPtBLDfr4U8kdjVXeFu2VPfnXz7FnNJ
-         rhdw==
-X-Gm-Message-State: AOAM5303dpZ6lkYw1K7VtIAuq9GO5cFgJCsbGSm1vo8szj1LrvusSYKU
-        SqdSTcSn8X52NvsSOdbWS+g=
-X-Google-Smtp-Source: ABdhPJyK4aqhllCA22UhDrX3LHEjtF6KlN4BA1moECkPnGNu6z7Wdugf4MBQo1ItYZjIqAzlbOcA8Q==
-X-Received: by 2002:a05:6a00:b46:b029:2d3:3504:88d9 with SMTP id p6-20020a056a000b46b02902d3350488d9mr8132850pfo.39.1621028126401;
-        Fri, 14 May 2021 14:35:26 -0700 (PDT)
+        bh=vJiWrRK/gssXKJ/acngQthRIJI+9PzFLnYjOWh9yIdY=;
+        b=QSmmZLBgJiOyT8nc4UxyQWI1ufWpT6zldSshT3NhDbgow7fRTr2eWU4AAlKAim2CSc
+         jrkV20wxS47v3oClpczn2AoasAyLN0Z6eZwkdG0yl+BBGojK9OwPFsGxEJuA7aZkTRF+
+         3TY7C0idVKONBY9PMfAfauYsInpd9b1Ig+UQZA/FkfxW/9esugF56qb/D05vQetl4Em0
+         bQjF65yYmuLqoHiIrzzj7mn2bprbnWBBfe9f2HWVQcAmxotdqPLLlocIKJZC4eKtMNa4
+         d6+7Pr9xn9SryXCeB/THR8pmHtHz56URQpVdZyJq7CF0hDyFPXEjbKRcJ473tnfZVLOD
+         RITQ==
+X-Gm-Message-State: AOAM532c2c1id57Ch+RETORwLR/Yth1jZiLNA4iQ42S+QpFObvxpUnwh
+        tUn/mYZG7yZYMuAxj5X5xjI=
+X-Google-Smtp-Source: ABdhPJxfggWRDhpaSXfGtZS9SHjd8vNoFB2Vt1lbpMv7PrOc2ce2d8U+p/oMENLiYq7K2pGZm9AHYg==
+X-Received: by 2002:a63:b211:: with SMTP id x17mr41249114pge.106.1621028129543;
+        Fri, 14 May 2021 14:35:29 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:e40c:c579:7cd8:c046])
-        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.25
+        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 14:35:25 -0700 (PDT)
+        Fri, 14 May 2021 14:35:29 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 47/50] xen-scsifront: Use blk_req() instead of scsi_cmnd.request
-Date:   Fri, 14 May 2021 14:33:02 -0700
-Message-Id: <20210514213356.5264-48-bvanassche@acm.org>
+        Mike Christie <michael.christie@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: [PATCH 48/50] tcm_loop: Use blk_req() instead of scsi_cmnd.request
+Date:   Fri, 14 May 2021 14:33:03 -0700
+Message-Id: <20210514213356.5264-49-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210514213356.5264-1-bvanassche@acm.org>
 References: <20210514213356.5264-1-bvanassche@acm.org>
@@ -56,19 +56,28 @@ patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/xen-scsifront.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/target/loopback/tcm_loop.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
-index 259fc248d06c..785b39cbe0f7 100644
---- a/drivers/scsi/xen-scsifront.c
-+++ b/drivers/scsi/xen-scsifront.c
-@@ -212,7 +212,7 @@ static int scsifront_do_request(struct vscsifrnt_info *info,
- 	memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
+diff --git a/drivers/target/loopback/tcm_loop.c b/drivers/target/loopback/tcm_loop.c
+index 2687fd7d45db..19c4f21d4d10 100644
+--- a/drivers/target/loopback/tcm_loop.c
++++ b/drivers/target/loopback/tcm_loop.c
+@@ -183,7 +183,7 @@ static int tcm_loop_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *sc)
  
- 	ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
--	ring_req->timeout_per_command = sc->request->timeout / HZ;
-+	ring_req->timeout_per_command = blk_req(sc)->timeout / HZ;
+ 	memset(tl_cmd, 0, sizeof(*tl_cmd));
+ 	tl_cmd->sc = sc;
+-	tl_cmd->sc_cmd_tag = sc->request->tag;
++	tl_cmd->sc_cmd_tag = blk_req(sc)->tag;
  
- 	for (i = 0; i < (shadow->nr_segments & ~VSCSIIF_SG_GRANT); i++)
- 		ring_req->seg[i] = shadow->seg[i];
+ 	tcm_loop_target_queue_cmd(tl_cmd);
+ 	return 0;
+@@ -249,7 +249,7 @@ static int tcm_loop_abort_task(struct scsi_cmnd *sc)
+ 	tl_hba = *(struct tcm_loop_hba **)shost_priv(sc->device->host);
+ 	tl_tpg = &tl_hba->tl_hba_tpgs[sc->device->id];
+ 	ret = tcm_loop_issue_tmr(tl_tpg, sc->device->lun,
+-				 sc->request->tag, TMR_ABORT_TASK);
++				 blk_req(sc)->tag, TMR_ABORT_TASK);
+ 	return (ret == TMR_FUNCTION_COMPLETE) ? SUCCESS : FAILED;
+ }
+ 
