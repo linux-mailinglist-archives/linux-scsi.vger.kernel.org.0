@@ -2,46 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE8B381310
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA0C381311
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbhENVgj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 May 2021 17:36:39 -0400
-Received: from mail-pf1-f170.google.com ([209.85.210.170]:45910 "EHLO
-        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbhENVg2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:36:28 -0400
-Received: by mail-pf1-f170.google.com with SMTP id d16so631721pfn.12
-        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:15 -0700 (PDT)
+        id S232810AbhENVgl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 May 2021 17:36:41 -0400
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:34333 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233317AbhENVg3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:36:29 -0400
+Received: by mail-pg1-f178.google.com with SMTP id l70so267410pga.1
+        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=G6kMAN24fqhfCuFIs/fTfEJbJ8y6iXQyQjJVLriGxIQ=;
-        b=OgEN5w63pfOhIgRhKWcWFtqMgM+fuAXmWUg1V67X3WfSTJ+5r+3lB75VyNP6wu2R3I
-         ZWYeQVIZPR/Nqg/DcWeY2a3EXx9kt+Hb1gyP0S7DvZXojq8C2VZvLvgsmlv+io0vs2aB
-         vPo8Lcm0vt9Yl5K8h9Jzc0Ja72UEMuPRdMf+6auegrXCuhZDkGbq97wk1bAc/fpspZWU
-         ILi2rqN7HBk4O83JeEObC6+vumqHkkg5ULbKK0Pwg8ce4k6uDVmst2fMz/GkL+mJjpna
-         jjXWN9MTPsdhF22wHvLsvNcJ0NAc5JP8Yy9Z5Bzg8Ndet8lFxWtyzFsfSfZHTbi26eqJ
-         82yQ==
-X-Gm-Message-State: AOAM531DI7V7ZLnzbUuDYuIeulIkVkx6o/RlsOKBphE2oASCqtiBSTLm
-        VwB0h7jm3c/86a7Lb4f08HQ=
-X-Google-Smtp-Source: ABdhPJwnSOA3kt5tbY3Ljo3gR0RCMow9AZuyDXglCAIKNHh/IvQ4KvWqIIkgCPYmN+2fz2b0BAfRQg==
-X-Received: by 2002:a62:16c9:0:b029:24b:a41e:cd6 with SMTP id 192-20020a6216c90000b029024ba41e0cd6mr48576107pfw.52.1621028115138;
-        Fri, 14 May 2021 14:35:15 -0700 (PDT)
+        bh=Rbi4RBWBtWCkssVY425acRwWnCeDYmzAVGpgZKT4/7Q=;
+        b=AoL3dfRR1LBE3gu6dJrsCgVbB8Tz/Xdw34y6pN7srKati8U1WkpY3VInKhGIniM+LX
+         aQiw9aQbKTaLCSLrDEJxgQbebYhwyA+pK2Z4hz48/J5eENSpSZFXaYLoYsY+dwZGXA26
+         +Pv3gRMrOiQx4lo6Cl/c3XoNfmMwQKeEVrLIFlZv7YtfmBaO5FSmGpZuss8U2+KFP8KA
+         85OTxfdUpOP3kIKAcJOv+OlmCa55HKRrkS5N+XQfrheUsL1uKGdaZVYYZxXkbfzWX/ya
+         wGaTxVPnotR8BzEKq+obFXub8tsUWko89IdCZO3q1ciZz/+Th5FlNVJ9xAK64Myhepck
+         k3ww==
+X-Gm-Message-State: AOAM532wwu+1OduNUc2MZMqXR0dmKjyPDoFu/tM81nrHUzMRwgvEWzWE
+        2ZTivfpNajABQj9jSl7WGl4=
+X-Google-Smtp-Source: ABdhPJz9+dRiknmnsULkPejcbtQEI8m2M9hQbb4kZwcZmzTT22rp7AZ2Q/vkSGTylROie0d13BEetg==
+X-Received: by 2002:a05:6a00:c88:b029:23f:376d:a2f8 with SMTP id a8-20020a056a000c88b029023f376da2f8mr13117110pfv.20.1621028116521;
+        Fri, 14 May 2021 14:35:16 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:e40c:c579:7cd8:c046])
-        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.13
+        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 14:35:14 -0700 (PDT)
+        Fri, 14 May 2021 14:35:15 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 41/50] snic: Use blk_req() instead of scsi_cmnd.request
-Date:   Fri, 14 May 2021 14:32:56 -0700
-Message-Id: <20210514213356.5264-42-bvanassche@acm.org>
+Subject: [PATCH 42/50] stex: Use blk_req() instead of scsi_cmnd.request
+Date:   Fri, 14 May 2021 14:32:57 -0700
+Message-Id: <20210514213356.5264-43-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210514213356.5264-1-bvanassche@acm.org>
 References: <20210514213356.5264-1-bvanassche@acm.org>
@@ -56,55 +54,37 @@ patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/snic/snic_scsi.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/stex.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/snic/snic_scsi.c b/drivers/scsi/snic/snic_scsi.c
-index 6dd0ff188bb4..72175072351a 100644
---- a/drivers/scsi/snic/snic_scsi.c
-+++ b/drivers/scsi/snic/snic_scsi.c
-@@ -33,7 +33,7 @@
- #include "snic_io.h"
- #include "snic.h"
+diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
+index 12471208c7a8..8a4fad8c775d 100644
+--- a/drivers/scsi/stex.c
++++ b/drivers/scsi/stex.c
+@@ -543,7 +543,7 @@ stex_ss_send_cmd(struct st_hba *hba, struct req_msg *req, u16 tag)
+ 	msg_h = (struct st_msg_header *)req - 1;
+ 	if (likely(cmd)) {
+ 		msg_h->channel = (u8)cmd->device->channel;
+-		msg_h->timeout = cpu_to_le16(cmd->request->timeout/HZ);
++		msg_h->timeout = cpu_to_le16(blk_req(cmd)->timeout / HZ);
+ 	}
+ 	addr = hba->dma_handle + hba->req_head * hba->rq_size;
+ 	addr += (hba->ccb[tag].sg_count+4)/11;
+@@ -693,7 +693,7 @@ stex_queuecommand_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd *))
  
--#define snic_cmd_tag(sc)	(((struct scsi_cmnd *) sc)->request->tag)
-+#define snic_cmd_tag(sc)	(blk_req(sc)->tag)
+ 	cmd->scsi_done = done;
  
- const char *snic_state_str[] = {
- 	[SNIC_INIT]	= "SNIC_INIT",
-@@ -1636,7 +1636,7 @@ snic_abort_cmd(struct scsi_cmnd *sc)
- 	u32 start_time = jiffies;
+-	tag = cmd->request->tag;
++	tag = blk_req(cmd)->tag;
  
- 	SNIC_SCSI_DBG(snic->shost, "abt_cmd:sc %p :0x%x :req = %p :tag = %d\n",
--		       sc, sc->cmnd[0], sc->request, tag);
-+		       sc, sc->cmnd[0], blk_req(sc), tag);
- 
- 	if (unlikely(snic_get_state(snic) != SNIC_ONLINE)) {
- 		SNIC_HOST_ERR(snic->shost,
-@@ -2152,7 +2152,7 @@ snic_device_reset(struct scsi_cmnd *sc)
- 	int dr_supp = 0;
- 
- 	SNIC_SCSI_DBG(shost, "dev_reset:sc %p :0x%x :req = %p :tag = %d\n",
--		      sc, sc->cmnd[0], sc->request,
-+		      sc, sc->cmnd[0], blk_req(sc),
- 		      snic_cmd_tag(sc));
- 	dr_supp = snic_dev_reset_supported(sc->device);
- 	if (!dr_supp) {
-@@ -2387,7 +2387,7 @@ snic_host_reset(struct scsi_cmnd *sc)
- 
- 	SNIC_SCSI_DBG(shost,
- 		      "host reset:sc %p sc_cmd 0x%x req %p tag %d flags 0x%llx\n",
--		      sc, sc->cmnd[0], sc->request,
-+		      sc, sc->cmnd[0], blk_req(sc),
- 		      snic_cmd_tag(sc), CMD_FLAGS(sc));
- 
- 	ret = snic_reset(shost, sc);
-@@ -2494,7 +2494,7 @@ snic_scsi_cleanup(struct snic *snic, int ex_tag)
- 		sc->result = DID_TRANSPORT_DISRUPTED << 16;
- 		SNIC_HOST_INFO(snic->shost,
- 			       "sc_clean: DID_TRANSPORT_DISRUPTED for sc %p, Tag %d flags 0x%llx rqi %p duration %u msecs\n",
--			       sc, sc->request->tag, CMD_FLAGS(sc), rqi,
-+			       sc, blk_req(sc)->tag, CMD_FLAGS(sc), rqi,
- 			       jiffies_to_msecs(jiffies - st_time));
- 
- 		/* Update IO stats */
+ 	if (unlikely(tag >= host->can_queue))
+ 		return SCSI_MLQUEUE_HOST_BUSY;
+@@ -1249,7 +1249,7 @@ static int stex_abort(struct scsi_cmnd *cmd)
+ {
+ 	struct Scsi_Host *host = cmd->device->host;
+ 	struct st_hba *hba = (struct st_hba *)host->hostdata;
+-	u16 tag = cmd->request->tag;
++	u16 tag = blk_req(cmd)->tag;
+ 	void __iomem *base;
+ 	u32 data;
+ 	int result = SUCCESS;
