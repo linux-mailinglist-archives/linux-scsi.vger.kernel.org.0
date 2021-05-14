@@ -2,50 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9630381314
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08ED381315
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 May 2021 23:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbhENVgp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 May 2021 17:36:45 -0400
-Received: from mail-pf1-f174.google.com ([209.85.210.174]:38553 "EHLO
-        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233288AbhENVgg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:36:36 -0400
-Received: by mail-pf1-f174.google.com with SMTP id k19so655531pfu.5
-        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:24 -0700 (PDT)
+        id S233360AbhENVgr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 May 2021 17:36:47 -0400
+Received: from mail-pl1-f182.google.com ([209.85.214.182]:42533 "EHLO
+        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233357AbhENVgh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 May 2021 17:36:37 -0400
+Received: by mail-pl1-f182.google.com with SMTP id v13so94347ple.9
+        for <linux-scsi@vger.kernel.org>; Fri, 14 May 2021 14:35:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/w/3FajyRueFFZTeb5dJrM2lkPjosqY1xTFZi9O7qqQ=;
-        b=X86gOYPU+e6WiGtT0hhzmQpFsH5YaYBa4pxgdUCPPiYqfhvbmXMEN+KF1QQRX9stGC
-         V2Ni7oDDiZPiqbatYCHdUZ/SDfbDvo0csxK/GOY6QVncbC9L8y7vngMfJicxPsqyKtiZ
-         mic3TAW+6QlM57B17hikXUnXdXdlp2lI0CxgLSylkYw40JjAmncYlhtu/loBj07n0mtD
-         d6d3IWapRA02WPHO3uIsjNRu2CJnKgDiDD9llS2+/X1vqzzh5jOOFsvfiC219b9nQ34R
-         hzxJP37frKu0VAmdwXDIyteVdS3NgPTyNz4hD77frSkzECcLXBF4l5bSkh2hYbmyZNlF
-         sQCA==
-X-Gm-Message-State: AOAM532nwGaaIEWdgRL+kAyREYXUb4RGgPV0pO8TdDIgN7OoSsM/J/d9
-        QWUz/Tu3wdqK41lh/I6IsnU=
-X-Google-Smtp-Source: ABdhPJye4je6V0N2XzorJx8j5G210S3C0iHJj0A6DlJPmKhTPNnMMJQCUd3IJB1wBK7wJ8LdThwq7Q==
-X-Received: by 2002:a62:1796:0:b029:2d5:91b4:642d with SMTP id 144-20020a6217960000b02902d591b4642dmr5082568pfx.7.1621028123335;
-        Fri, 14 May 2021 14:35:23 -0700 (PDT)
+        bh=+BoxzK18WDiATfbb117226xoMEe0eHeSjJScLd24Qys=;
+        b=FI2/rKCguoo0wjwRLU9B20o7w++psGQTvbwBrbrwYyKyuz+QWqfd+9NmnQlMs7c0lF
+         V9OeOUeWUTMQ7lH3bGB1XNuRqHmejjNu531OVRlC6FMsqBLfndGf+hM8lMd13MaiMSc1
+         3qha4KzLdQJIFxR2V9G3GggvNTLTdqIMZWkt+4pkqaa7KI2spEM//KLfH3cDSt+pVh1i
+         1QrewiC7uLszgUOYve7N70G+yRfQPRxOLytfb5+CXS5gNjpA4CXpnq2Uslz4mxD+Q1dm
+         T4/MvUEC0teNGmCZ9f5+w/ENDrnWIQDa8qpWIZXTgRgVeDKiOM+g9V7AmQM1bxg1Awla
+         pkjg==
+X-Gm-Message-State: AOAM531bEcW5AN6rjen0/Ow5OS0wnsN7FkWd3zlzCU46F7YtqAeUfNAr
+        S40hWftCwo5yuPqZoCr3OOE=
+X-Google-Smtp-Source: ABdhPJwtEG+7t4OOyH6jy/3kNHe4rISHGdIdEutFSEXy4WgwQpbu8PSSq5sWRbzeN6/LI5PTIwscXA==
+X-Received: by 2002:a17:90b:1a92:: with SMTP id ng18mr55338283pjb.213.1621028124876;
+        Fri, 14 May 2021 14:35:24 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:e40c:c579:7cd8:c046])
-        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.21
+        by smtp.gmail.com with ESMTPSA id js6sm9307262pjb.0.2021.05.14.14.35.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 14:35:22 -0700 (PDT)
+        Fri, 14 May 2021 14:35:24 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Asutosh Das <asutoshd@codeaurora.org>
-Subject: [PATCH 45/50] ufs: Use blk_req() instead of scsi_cmnd.request
-Date:   Fri, 14 May 2021 14:33:00 -0700
-Message-Id: <20210514213356.5264-46-bvanassche@acm.org>
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: [PATCH 46/50] virtio_scsi: Use blk_req() instead of scsi_cmnd.request
+Date:   Fri, 14 May 2021 14:33:01 -0700
+Message-Id: <20210514213356.5264-47-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210514213356.5264-1-bvanassche@acm.org>
 References: <20210514213356.5264-1-bvanassche@acm.org>
@@ -60,71 +56,28 @@ patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/scsi/virtio_scsi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index ab707a2c3796..18d8e48e739a 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -387,16 +387,16 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- 			 * Currently we only fully trace read(10) and write(10)
- 			 * commands
- 			 */
--			if (cmd->request && cmd->request->bio)
--				lba = cmd->request->bio->bi_iter.bi_sector;
-+			if (blk_req(cmd) && blk_req(cmd)->bio)
-+				lba = blk_req(cmd)->bio->bi_iter.bi_sector;
- 			transfer_len = be32_to_cpu(
- 				lrbp->ucd_req_ptr->sc.exp_data_transfer_len);
- 			if (opcode == WRITE_10)
- 				group_id = lrbp->cmd->cmnd[6];
- 		} else if (opcode == UNMAP) {
--			if (cmd->request) {
-+			if (blk_req(cmd)) {
- 				lba = scsi_get_lba(cmd);
--				transfer_len = blk_rq_bytes(cmd->request);
-+				transfer_len = blk_rq_bytes(blk_req(cmd));
- 			}
- 		}
- 	}
-@@ -2617,11 +2617,11 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+index b9c86a7e3b97..a7cd82d5620f 100644
+--- a/drivers/scsi/virtio_scsi.c
++++ b/drivers/scsi/virtio_scsi.c
+@@ -521,7 +521,7 @@ static void virtio_scsi_init_hdr_pi(struct virtio_device *vdev,
+ 				    struct virtio_scsi_cmd_req_pi *cmd_pi,
+ 				    struct scsi_cmnd *sc)
+ {
+-	struct request *rq = sc->request;
++	struct request *rq = blk_req(sc);
+ 	struct blk_integrity *bi;
  
- 	hba = shost_priv(host);
+ 	virtio_scsi_init_hdr(vdev, (struct virtio_scsi_cmd_req *)cmd_pi, sc);
+@@ -545,7 +545,7 @@ static void virtio_scsi_init_hdr_pi(struct virtio_device *vdev,
+ static struct virtio_scsi_vq *virtscsi_pick_vq_mq(struct virtio_scsi *vscsi,
+ 						  struct scsi_cmnd *sc)
+ {
+-	u32 tag = blk_mq_unique_tag(sc->request);
++	u32 tag = blk_mq_unique_tag(blk_req(sc));
+ 	u16 hwq = blk_mq_unique_tag_to_hwq(tag);
  
--	tag = cmd->request->tag;
-+	tag = blk_req(cmd)->tag;
- 	if (!ufshcd_valid_tag(hba, tag)) {
- 		dev_err(hba->dev,
--			"%s: invalid command tag %d: cmd=0x%p, cmd->request=0x%p",
--			__func__, tag, cmd, cmd->request);
-+			"%s: invalid command tag %d: cmd=0x%p, blk_req=0x%p",
-+			__func__, tag, cmd, blk_req(cmd));
- 		BUG();
- 	}
- 
-@@ -2656,7 +2656,7 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 	lrbp->lun = ufshcd_scsi_to_upiu_lun(cmd->device->lun);
- 	lrbp->intr_cmd = !ufshcd_is_intr_aggr_allowed(hba) ? true : false;
- 
--	ufshcd_prepare_lrbp_crypto(cmd->request, lrbp);
-+	ufshcd_prepare_lrbp_crypto(blk_req(cmd), lrbp);
- 
- 	lrbp->req_abort_skip = false;
- 
-@@ -6903,12 +6903,12 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
- 
- 	host = cmd->device->host;
- 	hba = shost_priv(host);
--	tag = cmd->request->tag;
-+	tag = blk_req(cmd)->tag;
- 	lrbp = &hba->lrb[tag];
- 	if (!ufshcd_valid_tag(hba, tag)) {
- 		dev_err(hba->dev,
--			"%s: invalid command tag %d: cmd=0x%p, cmd->request=0x%p",
--			__func__, tag, cmd, cmd->request);
-+			"%s: invalid command tag %d: cmd=0x%p, blk_req=0x%p",
-+			__func__, tag, cmd, blk_req(cmd));
- 		BUG();
- 	}
- 
+ 	return &vscsi->req_vqs[hwq];
