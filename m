@@ -2,104 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA80387EFB
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7168B387F14
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351312AbhERRvq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 13:51:46 -0400
-Received: from mail-pl1-f172.google.com ([209.85.214.172]:36437 "EHLO
-        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351306AbhERRvo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:51:44 -0400
-Received: by mail-pl1-f172.google.com with SMTP id a11so5532323plh.3
-        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:50:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kV5vH/2k+9lAn7dKl0YEjewBuVTafj5BJ9f1mVS5sYY=;
-        b=LTGUaqWYx4SEDlpiUpwIuNDCcqs+MP2vmPnBGgak+xFxIg92I4fOqnxoqbmjVKaAOI
-         SZpJ5KgaDr2r7NAX0zGNjrHBlVjjSc2XqkPXJ1+L5jIodSR+6WDIdhpK02HbH/JnCdkq
-         4TFSyejLcijzgZNVm/4KFXv/I422YacQjLj0u+tyFzL/yXQYaz7CriDK/bGCKmHRrpX8
-         +2V4xcjr/LucyWV6xgTR/EWqG+B0l+jng8LhN2umnFPlzIqlvHQgU5qSDmwzUPjo0DsC
-         DVQ7NE93OnvDFla5izeJ9stkaupU9a+nTSpueLRLkrMKqEvQAo8afaKaDB3jzgPbFLik
-         uG8Q==
-X-Gm-Message-State: AOAM532I4F//q8oFzn26DDmn7kL41pMo4DX5stF8boKR71IXY/y3oqph
-        SVdPKkbPth6+tF1zkDLyr1A=
-X-Google-Smtp-Source: ABdhPJw8lPdgvMHSheksvaCw9YScXPLlROH6k4Dc6yYX73jsGVhZUTWpoGIZVFENecLLCC4ZQ9JONQ==
-X-Received: by 2002:a17:90a:c42:: with SMTP id u2mr6573275pje.76.1621360226242;
-        Tue, 18 May 2021 10:50:26 -0700 (PDT)
-Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:4ae4:fc49:eafe:4150])
-        by smtp.gmail.com with ESMTPSA id a2sm613762pfv.156.2021.05.18.10.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 10:50:25 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 3/3] Change the type of the second argument of scsi_host_complete_all_commands()
-Date:   Tue, 18 May 2021 10:50:06 -0700
-Message-Id: <20210518175006.21308-4-bvanassche@acm.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210518175006.21308-1-bvanassche@acm.org>
-References: <20210518175006.21308-1-bvanassche@acm.org>
+        id S1345036AbhERR5N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 13:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245549AbhERR5N (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:57:13 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370C5C061573
+        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:55:55 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D6074128085A;
+        Tue, 18 May 2021 10:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1621360554;
+        bh=apDhDtlHY7d2Uz2L6bA1Ig1mqsN1sJl/KfLF7DIb9tI=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=ks0+HZvNETSJhoHdkwPhS5VK/DmUhVA8oHxHCq21DyvnUESUvweA7ti9Bq9l8m5Zm
+         grrRPo+zIWsscJLqITZxmx0PAAvuGavpu6Gu7YhclsSWGz9L1p29dZhe6sYo6JMziQ
+         9tBNe1uepKXSqhYpDSuDqHO6VDyZsT03bcCOUNGw=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pr1hpSwTn-Ld; Tue, 18 May 2021 10:55:54 -0700 (PDT)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 7E2C312807CC;
+        Tue, 18 May 2021 10:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1621360554;
+        bh=apDhDtlHY7d2Uz2L6bA1Ig1mqsN1sJl/KfLF7DIb9tI=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=ks0+HZvNETSJhoHdkwPhS5VK/DmUhVA8oHxHCq21DyvnUESUvweA7ti9Bq9l8m5Zm
+         grrRPo+zIWsscJLqITZxmx0PAAvuGavpu6Gu7YhclsSWGz9L1p29dZhe6sYo6JMziQ
+         9tBNe1uepKXSqhYpDSuDqHO6VDyZsT03bcCOUNGw=
+Message-ID: <af39cb904e0f0450549f9fdcee3c256e61bfab93.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 00/50] Remove the request pointer from struct
+ scsi_cmnd
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org
+Date:   Tue, 18 May 2021 10:55:53 -0700
+In-Reply-To: <20210518174450.20664-1-bvanassche@acm.org>
+References: <20210518174450.20664-1-bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Allow the compiler to verify the type of the second argument passed to
-scsi_host_complete_all_commands().
+On Tue, 2021-05-18 at 10:44 -0700, Bart Van Assche wrote:
+> Hi Martin,
+> 
+> This patch series implements the following two changes for all SCSI
+> drivers:
+> - Use blk_mq_rq_from_pdu() instead of the request member of struct
+> scsi_cmnd
+>   since adding an offset to a pointer is faster than pointer
+> indirection.
 
-Cc: Hannes Reinecke <hare@suse.com>
-Cc: John Garry <john.garry@huawei.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/hosts.c     | 8 +++++---
- include/scsi/scsi_host.h | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Are there any performance results to back up this assertion?  It's
+quite a lot of churn so it would be nice to know it's worth it.
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index ba72bd4202a2..145e5672397a 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -652,10 +652,11 @@ EXPORT_SYMBOL_GPL(scsi_flush_work);
- static bool complete_all_cmds_iter(struct request *rq, void *data, bool rsvd)
- {
- 	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(rq);
--	int status = *(int *)data;
-+	enum scsi_host_status status = *(enum scsi_host_status *)data;
- 
- 	scsi_dma_unmap(scmd);
--	scmd->result = status << 16;
-+	scmd->result = 0;
-+	set_host_byte(scmd, status);
- 	scmd->scsi_done(scmd);
- 	return true;
- }
-@@ -670,7 +671,8 @@ static bool complete_all_cmds_iter(struct request *rq, void *data, bool rsvd)
-  * caller to ensure that concurrent I/O submission and/or
-  * completion is stopped when calling this function.
-  */
--void scsi_host_complete_all_commands(struct Scsi_Host *shost, int status)
-+void scsi_host_complete_all_commands(struct Scsi_Host *shost,
-+				     enum scsi_host_status status)
- {
- 	blk_mq_tagset_busy_iter(&shost->tag_set, complete_all_cmds_iter,
- 				&status);
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index d0bf88d77f02..75363707b73f 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -764,7 +764,7 @@ extern void scsi_host_put(struct Scsi_Host *t);
- extern struct Scsi_Host *scsi_host_lookup(unsigned short);
- extern const char *scsi_host_state_name(enum scsi_host_state);
- extern void scsi_host_complete_all_commands(struct Scsi_Host *shost,
--					    int status);
-+					    enum scsi_host_status status);
- 
- static inline int __must_check scsi_add_host(struct Scsi_Host *host,
- 					     struct device *dev)
+James
+
+
