@@ -2,46 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5939387EB9
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C768387EBA
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351215AbhERRqc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 13:46:32 -0400
-Received: from mail-pl1-f177.google.com ([209.85.214.177]:41729 "EHLO
-        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351218AbhERRqa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:30 -0400
-Received: by mail-pl1-f177.google.com with SMTP id z4so3324428plg.8
-        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:12 -0700 (PDT)
+        id S1351240AbhERRqe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 13:46:34 -0400
+Received: from mail-pl1-f169.google.com ([209.85.214.169]:40915 "EHLO
+        mail-pl1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351200AbhERRqb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:31 -0400
+Received: by mail-pl1-f169.google.com with SMTP id n8so293159plf.7
+        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=O26m5ff/UM4P7ukUgVUUUql3+v4hDno01O90uSqt7+M=;
-        b=DM5tK65AJkFHToJ7xUb4DwI/nFM09QIwiNHg7LPWzZ29ho7fhPcIg8ZXteZN0LlYHr
-         QRAAxR7Z6h4TlZawRU+gcsIzAVB/cctoVY3KzY9/3obhOuBIfoCcLeImJ5kVSHQF7Nos
-         +B9sw41G59WMjy9c5ObpigENxBm6kyvjNmmgV+hUKS47DNW3UYnkcXaFLgZ8lyxIaO9t
-         BmrleP5fUIB6WGJl5p585vFf+HJ+MNi8z+yPLbbfx+M6D2Bi9z/yS2M6DOanj11dM3bY
-         NsNToZIC4nkt1jZbOgfNMiTApH9MH+stJiXhDJELvVSReJtuAbGTkFvkSp8tODXQ44P4
-         iKRg==
-X-Gm-Message-State: AOAM532W0eh1/DTA4mxRtgptMtf1Uki6vPy8ax1JI9/yTWgzwDh8UGvx
-        2t9+IwGj8db9SgSvuyAmC48=
-X-Google-Smtp-Source: ABdhPJyVrbQ47Ev0Pz5AHhQorAbmUqee8PBcfwVk2x50KgMATT37hAAlNX4Md4M8wiazxMyDIPvJ4w==
-X-Received: by 2002:a17:90a:5406:: with SMTP id z6mr6452506pjh.130.1621359912327;
-        Tue, 18 May 2021 10:45:12 -0700 (PDT)
+        bh=q36SflnryTrObAIdoPQMJHITJRxt4At+O2hiMdePM0I=;
+        b=oHlRj7xQh9Yte/YlkKnxV3T7Y26nERBHZNO8fG3xvwzyo/eAE7TeFr3pzeWlyYT/3K
+         ZKnxFSB2/mm2R7ZSU0/a+Ei7eGWzT6CfNSD5hVgXzMjdPTTBdY9IXTpXAOGvTxTIScET
+         /xdVmsmTBiTB9pavaddtHRf1gSqNfNc9OQ9z/iRDypHbpQfoejqs9FQDLjxSSVmm3jrD
+         FMyUVupPGM0GxbJnd22nGF2E2RCDz5bayo8IxPO1QEpr4wRFoOCI9NnrsC5Pki+70pH8
+         5OavQ9Xw6cFXldPALCrV90bJt/BWlV2FZ7TvIxx4Ot0ROKRyrUaom58vlfLQbL8TSYAN
+         zTvQ==
+X-Gm-Message-State: AOAM531RJnCLY2m9tbACoKOWwkzZt72rAuOx8c6dtlOQ3P6q+uAOTmb6
+        gnodJXvxso5r2uKaoAy3M2k=
+X-Google-Smtp-Source: ABdhPJx/Kb01dwpJwQawC0GbZTZwyhp8UCAetWSZZYEJQ9N7FVC51VPYyn1Qq88z0rX6TBVHjeavPg==
+X-Received: by 2002:a17:90b:1e46:: with SMTP id pi6mr6409781pjb.212.1621359913356;
+        Tue, 18 May 2021 10:45:13 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:4ae4:fc49:eafe:4150])
-        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.11
+        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 10:45:12 -0700 (PDT)
+        Tue, 18 May 2021 10:45:13 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hannes Reinecke <hare@suse.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 14/50] advansys: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Tue, 18 May 2021 10:44:14 -0700
-Message-Id: <20210518174450.20664-15-bvanassche@acm.org>
+Subject: [PATCH v2 15/50] bnx2i: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Tue, 18 May 2021 10:44:15 -0700
+Message-Id: <20210518174450.20664-16-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210518174450.20664-1-bvanassche@acm.org>
 References: <20210518174450.20664-1-bvanassche@acm.org>
@@ -56,28 +57,19 @@ instead. This patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/advansys.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/bnx2i/bnx2i_hwi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index 800052f10699..dd6355382c62 100644
---- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -7427,7 +7427,7 @@ static int asc_build_req(struct asc_board *boardp, struct scsi_cmnd *scp,
- 	 * Set the srb_tag to the command tag + 1, as
- 	 * srb_tag '0' is used internally by the chip.
- 	 */
--	srb_tag = scp->request->tag + 1;
-+	srb_tag = scsi_cmd_to_rq(scp)->tag + 1;
- 	asc_scsi_q->q2.srb_tag = srb_tag;
+diff --git a/drivers/scsi/bnx2i/bnx2i_hwi.c b/drivers/scsi/bnx2i/bnx2i_hwi.c
+index 43e8a1dafec0..5521469ce678 100644
+--- a/drivers/scsi/bnx2i/bnx2i_hwi.c
++++ b/drivers/scsi/bnx2i/bnx2i_hwi.c
+@@ -1918,7 +1918,7 @@ static int bnx2i_queue_scsi_cmd_resp(struct iscsi_session *session,
  
- 	/*
-@@ -7641,7 +7641,7 @@ static int
- adv_build_req(struct asc_board *boardp, struct scsi_cmnd *scp,
- 	      adv_req_t **adv_reqpp)
- {
--	u32 srb_tag = scp->request->tag;
-+	u32 srb_tag = scsi_cmd_to_rq(scp)->tag;
- 	adv_req_t *reqp;
- 	ADV_SCSI_REQ_Q *scsiqp;
- 	int ret;
+ 	spin_unlock(&session->back_lock);
+ 
+-	p = &per_cpu(bnx2i_percpu, blk_mq_rq_cpu(sc->request));
++	p = &per_cpu(bnx2i_percpu, blk_mq_rq_cpu(scsi_cmd_to_rq(sc)));
+ 	spin_lock(&p->p_work_lock);
+ 	if (unlikely(!p->iothread)) {
+ 		rc = -EINVAL;
