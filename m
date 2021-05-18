@@ -2,46 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E97387EB7
+	by mail.lfdr.de (Postfix) with ESMTP id D5B97387EB8
 	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351230AbhERRqb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 13:46:31 -0400
-Received: from mail-pj1-f49.google.com ([209.85.216.49]:41793 "EHLO
-        mail-pj1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351211AbhERRq2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:28 -0400
-Received: by mail-pj1-f49.google.com with SMTP id b15-20020a17090a550fb029015dad75163dso1978720pji.0
-        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:10 -0700 (PDT)
+        id S1351233AbhERRqc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 13:46:32 -0400
+Received: from mail-pj1-f54.google.com ([209.85.216.54]:52739 "EHLO
+        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351215AbhERRq3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:29 -0400
+Received: by mail-pj1-f54.google.com with SMTP id q6so5921055pjj.2
+        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LXPFyN7HL/YvhI+SDs8OvanjEXM60MW2yKKeGDCzmRM=;
-        b=KO4bK9BZjLwX36G0oTPoMa8fMMfHeLsHQeM5eUrpFMRzbtszBfqS+4Ae0NjcQGmwRl
-         WZuJN39mWchgp/w7B76hd0Dm+8wBXohz/jrlo5GQTO/sMok1TzEczRXUUKvet2WPvj87
-         lTdgbt1wERV4Pf4FUx5wma4ojWD96ouTGpLimaDRbWcimdBsy0xCjwqwJt/ymykJ0QR+
-         zHfDNA3UWQG3yFA80BAHP2N1ow5jJ63S8Om6mkONvrunBZU3cGSoNUwJ8q2kL8DrZLYs
-         CoOXJaAClfciP8PCWgJ98kl6Ms8PiSx5AgDiC6nuinYbH3PNA6KqdXV8M8hUqbW1pxcg
-         +llg==
-X-Gm-Message-State: AOAM531hbWUrsH6GQMwDE1QbOCtDSGiI2qRUpjNmW8sQjN5OKhdTSKfP
-        4FXjcSv1T5/XL1QimrJwvzk=
-X-Google-Smtp-Source: ABdhPJzql8gbU5+aJuPmmgPbfp5Dab163mTopsKEDjRd9UyioBc9Kttzl6asnBy5PzZPXxD9Azi+dA==
-X-Received: by 2002:a17:90b:14d7:: with SMTP id jz23mr6791243pjb.105.1621359910145;
-        Tue, 18 May 2021 10:45:10 -0700 (PDT)
+        bh=6VDMqIL9H4Vn/0bg6+sZt18TM3BKAyfd8LmUZUGrSQk=;
+        b=fTWGoKXnYGGuPCZe6cRxaz7iVmh0ymYLgETwCwrJLEyf5HvL+9Su+boSiGO3Q0m2/b
+         9oF83CaAvJe9db3/K4UQH6mr+XU1yGu4ePFJv9bMIlBPtwLnZvRvkyHWsfTLrVoeH3nC
+         VqSWVehGstKDPuQF7omxrC3e+Fd4sMGAlM4Ar/nbgal/TRzFaxJuMHmRc086yp3Tvpl/
+         qHehlBVzjxt/pcPwRsfzsbLdpYLzsKnm8YbcstiBGf7INJv6DnkHpp60BQIt0S0P15h1
+         1RdSXgDiEvkwypriouF9CnDE72cAjlED/J+cipzHrumTBMrHhCKPtp0ZbGV4RQLAUAkU
+         +n2g==
+X-Gm-Message-State: AOAM532OX7V0mPpkBUQ4YoeJ+RK8MpLKLhjBVjv5cbTGNKM5benHb+Kz
+        0lZfQfgk2kokDFyUXCT0QjY=
+X-Google-Smtp-Source: ABdhPJxe2WZRb3rSqS+yx0C5vC8Jum+u5BxIaa8Q4vQsD5cXAaxrrrP851HjLiXuk8BtF54IFITGpA==
+X-Received: by 2002:a17:902:d503:b029:f2:c88c:6349 with SMTP id b3-20020a170902d503b02900f2c88c6349mr5918419plg.84.1621359911333;
+        Tue, 18 May 2021 10:45:11 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:4ae4:fc49:eafe:4150])
-        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.09
+        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 10:45:09 -0700 (PDT)
+        Tue, 18 May 2021 10:45:10 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 12/50] NCR5380: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Tue, 18 May 2021 10:44:12 -0700
-Message-Id: <20210518174450.20664-13-bvanassche@acm.org>
+Subject: [PATCH v2 13/50] aacraid: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Tue, 18 May 2021 10:44:13 -0700
+Message-Id: <20210518174450.20664-14-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210518174450.20664-1-bvanassche@acm.org>
 References: <20210518174450.20664-1-bvanassche@acm.org>
@@ -56,37 +55,33 @@ instead. This patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/NCR5380.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/aacraid/aachba.c  | 2 +-
+ drivers/scsi/aacraid/commsup.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-index 2ddbcaa667d1..47502f63a167 100644
---- a/drivers/scsi/NCR5380.c
-+++ b/drivers/scsi/NCR5380.c
-@@ -778,7 +778,7 @@ static void NCR5380_dma_complete(struct Scsi_Host *instance)
- 	}
+diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+index 46b8dffce2dd..567d305d3ab4 100644
+--- a/drivers/scsi/aacraid/aachba.c
++++ b/drivers/scsi/aacraid/aachba.c
+@@ -1505,7 +1505,7 @@ static struct aac_srb * aac_scsi_common(struct fib * fib, struct scsi_cmnd * cmd
+ 	srbcmd->id       = cpu_to_le32(scmd_id(cmd));
+ 	srbcmd->lun      = cpu_to_le32(cmd->device->lun);
+ 	srbcmd->flags    = cpu_to_le32(flag);
+-	timeout = cmd->request->timeout/HZ;
++	timeout = scsi_cmd_to_rq(cmd)->timeout / HZ;
+ 	if (timeout == 0)
+ 		timeout = (dev->sa_firmware ? AAC_SA_TIMEOUT : AAC_ARC_TIMEOUT);
+ 	srbcmd->timeout  = cpu_to_le32(timeout);  // timeout in seconds
+diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
+index 54eb4d41bc2c..deb32c9f4b3e 100644
+--- a/drivers/scsi/aacraid/commsup.c
++++ b/drivers/scsi/aacraid/commsup.c
+@@ -224,7 +224,7 @@ struct fib *aac_fib_alloc_tag(struct aac_dev *dev, struct scsi_cmnd *scmd)
+ {
+ 	struct fib *fibptr;
  
- #ifdef CONFIG_SUN3
--	if ((sun3scsi_dma_finish(rq_data_dir(hostdata->connected->request)))) {
-+	if ((sun3scsi_dma_finish(rq_data_dir(scsi_cmd_to_rq(hostdata->connected))))) {
- 		pr_err("scsi%d: overrun in UDC counter -- not prepared to deal with this!\n",
- 		       instance->host_no);
- 		BUG();
-@@ -1710,7 +1710,7 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 				count = sun3scsi_dma_xfer_len(hostdata, cmd);
- 
- 				if (count > 0) {
--					if (rq_data_dir(cmd->request))
-+					if (rq_data_dir(scsi_cmd_to_rq(cmd)))
- 						sun3scsi_dma_send_setup(hostdata,
- 						                        cmd->SCp.ptr, count);
- 					else
-@@ -2158,7 +2158,7 @@ static void NCR5380_reselect(struct Scsi_Host *instance)
- 		count = sun3scsi_dma_xfer_len(hostdata, tmp);
- 
- 		if (count > 0) {
--			if (rq_data_dir(tmp->request))
-+			if (rq_data_dir(scsi_cmd_to_rq(tmp)))
- 				sun3scsi_dma_send_setup(hostdata,
- 				                        tmp->SCp.ptr, count);
- 			else
+-	fibptr = &dev->fibs[scmd->request->tag];
++	fibptr = &dev->fibs[scsi_cmd_to_rq(scmd)->tag];
+ 	/*
+ 	 *	Null out fields that depend on being zero at the start of
+ 	 *	each I/O
