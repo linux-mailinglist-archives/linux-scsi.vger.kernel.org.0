@@ -2,46 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531A7387ED7
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E996F387ED8
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351325AbhERRrM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 13:47:12 -0400
-Received: from mail-pj1-f49.google.com ([209.85.216.49]:45007 "EHLO
-        mail-pj1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351319AbhERRrG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:47:06 -0400
-Received: by mail-pj1-f49.google.com with SMTP id h20-20020a17090aa894b029015db8f3969eso1333960pjq.3
-        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:48 -0700 (PDT)
+        id S1351312AbhERRrN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 13:47:13 -0400
+Received: from mail-pg1-f172.google.com ([209.85.215.172]:43928 "EHLO
+        mail-pg1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351320AbhERRrH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:47:07 -0400
+Received: by mail-pg1-f172.google.com with SMTP id k15so7519967pgb.10
+        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qjkKBA4uNCWH2mTP+yZ3vIfvVwLp3WuZYDfjgLtrzT4=;
-        b=uYkJwwvyVk5GuVDfTAWuGue8Jgx0lqI1oxYtWTSd4UYSAsT0RQeT4tlWRMxMOPpS0P
-         hIG29XS++1BPnRGCEHUj2k0qt2A14J//QKpgPAiHVt7QLaa0b4AIxDZ6uuJGNQ+9plTn
-         mN/Q/8chFTHUvNq+5vrM01D0Bu1TbBD2mIk8osbUKHbxKid15ZQutprpZmEotsvZcDM5
-         lHiYSMl7bJ4mmRmbBQQ13lEw4QRZ2QKAiODIeSdUBbErY61+qVRhj3iWceKIJlN16iQt
-         Y4QB75qa1sAQuLZ3ATUP719ZyY1P3VFsWN5ix61U0UqYCkEtuSNfgmQdbjvd9jqNnBGk
-         r1Dg==
-X-Gm-Message-State: AOAM532jWe4gh/Z7xkQGJkGdvRtOM4ixElDDRrZL4Nl3ysPOvOthFeGO
-        rJ2PF8FRaUBxRjQPxMfTEH0=
-X-Google-Smtp-Source: ABdhPJz14/cQARLna4JV80ZZ1Ae+K3H0sjdkEzkhZXW9+RPl+WSw2hmQAYkQY7HVKLNDYrCZhGX8KQ==
-X-Received: by 2002:a17:902:bc88:b029:ee:7ef1:e770 with SMTP id bb8-20020a170902bc88b02900ee7ef1e770mr5884922plb.19.1621359948034;
+        bh=UMCYnVrhY8njikYx66obtRsVTDVDJ+hpIeqxgmK/N90=;
+        b=pVg9BWJuSNKjRodgaAtBG6LUUDPjCTvq9l8IVDiZE9DI6mUmJ3G1QreaJh5clDREDb
+         DNzyt02N5Z5xgW2M2Ak3Lz3mQxWAR+2kvEshZsZhpU3da2Y4ujmg9vbR+4tXJbp7MetT
+         P90jxv18bfKZa9hrxek4yVhfSwq3sgSmf0eXTzrRwFxFLV6OwBXlkZdWitZjlFeJSd1p
+         4F1a8flM6VHBBlg3bmUJuJ2EW4MD1CLTj5SdnlarRPVkfoZnmIlnWpbC2odaUrrgftmT
+         u+mg3VhWCVbLhpZ3uGToBrrEvSnOLNkcQperisgNIMQHeWO2veaxb68RrjVqKpP6gVkl
+         1FLQ==
+X-Gm-Message-State: AOAM531qwKGWFml85uBg9gJluliE2kR1qO3Vo0Ykho6UMmtYZOPpRyPY
+        zrsEDE/MsmYIy3vmHHlsJMI=
+X-Google-Smtp-Source: ABdhPJzsZiaCBSdlPwT9O86drrTtkKKxRf641z6ST4t6bodvU+3sSnL8rTCfKRQ6jDNnWubdXx5A+Q==
+X-Received: by 2002:a65:4548:: with SMTP id x8mr6218790pgr.413.1621359948987;
         Tue, 18 May 2021 10:45:48 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:4ae4:fc49:eafe:4150])
-        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.47
+        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 10:45:47 -0700 (PDT)
+        Tue, 18 May 2021 10:45:48 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 43/50] sun3_scsi: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Tue, 18 May 2021 10:44:43 -0700
-Message-Id: <20210518174450.20664-44-bvanassche@acm.org>
+Subject: [PATCH v2 44/50] sym53c8xx: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Tue, 18 May 2021 10:44:44 -0700
+Message-Id: <20210518174450.20664-45-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210518174450.20664-1-bvanassche@acm.org>
 References: <20210518174450.20664-1-bvanassche@acm.org>
@@ -56,19 +55,21 @@ instead. This patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/sun3_scsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/sym53c8xx_2/sym_glue.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/sun3_scsi.c b/drivers/scsi/sun3_scsi.c
-index 2e3fbc2fae97..d6000a397f73 100644
---- a/drivers/scsi/sun3_scsi.c
-+++ b/drivers/scsi/sun3_scsi.c
-@@ -336,7 +336,7 @@ static int sun3scsi_dma_xfer_len(struct NCR5380_hostdata *hostdata,
- {
- 	int wanted_len = cmd->SCp.this_residual;
- 
--	if (wanted_len < DMA_MIN_SIZE || blk_rq_is_passthrough(cmd->request))
-+	if (wanted_len < DMA_MIN_SIZE || blk_rq_is_passthrough(scsi_cmd_to_rq(cmd)))
- 		return 0;
- 
- 	return wanted_len;
+diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
+index d9a045f9858c..04cd28c268f2 100644
+--- a/drivers/scsi/sym53c8xx_2/sym_glue.c
++++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
+@@ -502,8 +502,8 @@ static int sym53c8xx_queue_command_lck(struct scsi_cmnd *cmd,
+ 	 *  Shorten our settle_time if needed for 
+ 	 *  this command not to time out.
+ 	 */
+-	if (np->s.settle_time_valid && cmd->request->timeout) {
+-		unsigned long tlimit = jiffies + cmd->request->timeout;
++	if (np->s.settle_time_valid && scsi_cmd_to_rq(cmd)->timeout) {
++		unsigned long tlimit = jiffies + scsi_cmd_to_rq(cmd)->timeout;
+ 		tlimit -= SYM_CONF_TIMER_INTERVAL*2;
+ 		if (time_after(np->s.settle_time, tlimit)) {
+ 			np->s.settle_time = tlimit;
