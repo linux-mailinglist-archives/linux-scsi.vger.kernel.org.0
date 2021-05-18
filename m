@@ -2,45 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C793387ECB
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2C1387ED0
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351322AbhERRrB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 13:47:01 -0400
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:34575 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351285AbhERRq6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:58 -0400
-Received: by mail-pg1-f171.google.com with SMTP id l70so7552822pga.1
-        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:40 -0700 (PDT)
+        id S1351305AbhERRrE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 13:47:04 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:46779 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351306AbhERRq7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:59 -0400
+Received: by mail-pl1-f181.google.com with SMTP id s20so5507830plr.13
+        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=c+J3FMBmkv9QBxtbKvY2a7P5tftYk6T/5jWRZacFAdY=;
-        b=QvwzHYGQmvrnA4lLTF5pTe+5S+LKjU5LbWGxZqtzBVFWPHEuJ7ZBSoJ+o93YNmUB6z
-         QmH6/038JCtTpI5/e3DrYDURvkbrFhbG3nLxDIE18j3LMszR9OOhM6AYsuJ461TfzPJo
-         SmAMaKIeBHdLY8/6bDBYJHGIABoBAiAuhADd6e4QDaaNRcf3hxrWicUdqgFZ1GLD4EJE
-         y7dVXqCRKRYnkzi3cDowxpsHcW+pYbCWK7PV0D9wYKV4N2iNgF0MEcFhnmYzm0yRHUxu
-         S3Hx4oYM6gOrjoV6b/SIuATYJ0PJ9lOo7thO18R36M+AhLLG7CaUR0J6j/EMRwEwGUeu
-         SNQw==
-X-Gm-Message-State: AOAM532If4NfwfEBff038cr/+ddxmKYryxLWLtmrNzxiEMeI7SMo5n1F
-        tzOAkR1/zb7b1xarXdBh400=
-X-Google-Smtp-Source: ABdhPJwThUu0IG2/5fggtu7SMPiCyjnwa7qnuMRCvlJXZd+SvhAGXVsjkAL9r/78x3UQDWW7UqVEEA==
-X-Received: by 2002:aa7:9252:0:b029:2ae:bde3:621f with SMTP id 18-20020aa792520000b02902aebde3621fmr6272719pfp.18.1621359940009;
+        bh=bPGevx85bLU+6qi7Uvzpo6mDMJ9dy3nzpBNYNSqgdm8=;
+        b=qf1ESwsit7Z5JOOfhqE+di8enD6ZFG8NvHf+cOkzmG5eFPm+oh+Sx07SItzZfs7EwD
+         +GJxeG1GWUh8naz6CNvomcoljSM/b8U0PMxAm/dpdEMHCXIw9fL+AnKV8JM9AQVT+lfH
+         cRUhhEluHn3wlJPn0jv8AOA8gCCYMvSUPBRQUoqFecDXx2FgXbshJzoVPvFQWyBTS8RU
+         ANYLUFYH0NeRXo8sUuKNHST6SbUNNlMDIQkQKV8BoH7sb0EayxQEvP8dew86Z+4RMgz4
+         oCOLpRXvULUnrf6QzOJYL6fLgzhlNMLmx6g2621GajzDQcRKuZkcdwwnUMdpWjIwMJZF
+         045Q==
+X-Gm-Message-State: AOAM532IRvV/Xd7bbzwzQABuHdecizRbGVy0XBYLMF10cyE7SyXKRNPI
+        QdpRXaedDBhG/c7GTsN2fp4=
+X-Google-Smtp-Source: ABdhPJy3SaevF2aChsJ5AdA7QAk31Vrj8dKj63x3sbhPAxEhciWBJ+Lt6MRpvshrj0zSHsSLdNkmtQ==
+X-Received: by 2002:a17:902:7284:b029:ee:a57c:1dc9 with SMTP id d4-20020a1709027284b02900eea57c1dc9mr5885901pll.36.1621359940958;
         Tue, 18 May 2021 10:45:40 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:4ae4:fc49:eafe:4150])
-        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.39
+        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 10:45:39 -0700 (PDT)
+        Tue, 18 May 2021 10:45:40 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Michael Reed <mdr@sgi.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 35/50] qla1280: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Tue, 18 May 2021 10:44:35 -0700
-Message-Id: <20210518174450.20664-36-bvanassche@acm.org>
+Subject: [PATCH v2 36/50] qla2xxx: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Tue, 18 May 2021 10:44:36 -0700
+Message-Id: <20210518174450.20664-37-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210518174450.20664-1-bvanassche@acm.org>
 References: <20210518174450.20664-1-bvanassche@acm.org>
@@ -55,37 +56,28 @@ instead. This patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla1280.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
-index 928da90b79be..15d564076707 100644
---- a/drivers/scsi/qla1280.c
-+++ b/drivers/scsi/qla1280.c
-@@ -490,7 +490,7 @@ __setup("qla1280=", qla1280_setup);
- #define	CMD_SNSLEN(Cmnd)	SCSI_SENSE_BUFFERSIZE
- #define	CMD_RESULT(Cmnd)	Cmnd->result
- #define	CMD_HANDLE(Cmnd)	Cmnd->host_scribble
--#define CMD_REQUEST(Cmnd)	Cmnd->request->cmd
-+#define CMD_REQUEST(Cmnd)	scsi_cmd_to_rq(Cmnd)->cmd
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 4eab564ea6a0..c65e85db87d5 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -849,7 +849,7 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+ 		uint16_t hwq;
+ 		struct qla_qpair *qpair = NULL;
  
- #define CMD_HOST(Cmnd)		Cmnd->device->host
- #define SCSI_BUS_32(Cmnd)	Cmnd->device->channel
-@@ -2827,7 +2827,7 @@ qla1280_64bit_start_scsi(struct scsi_qla_host *ha, struct srb * sp)
- 	memset(((char *)pkt + 8), 0, (REQUEST_ENTRY_SIZE - 8));
+-		tag = blk_mq_unique_tag(cmd->request);
++		tag = blk_mq_unique_tag(scsi_cmd_to_rq(cmd));
+ 		hwq = blk_mq_unique_tag_to_hwq(tag);
+ 		qpair = ha->queue_pair_map[hwq];
  
- 	/* Set ISP command timeout. */
--	pkt->timeout = cpu_to_le16(cmd->request->timeout/HZ);
-+	pkt->timeout = cpu_to_le16(scsi_cmd_to_rq(cmd)->timeout / HZ);
+@@ -1742,7 +1742,7 @@ static void qla2x00_abort_srb(struct qla_qpair *qp, srb_t *sp, const int res,
+ 		}
  
- 	/* Set device target ID and LUN */
- 	pkt->lun = SCSI_LUN_32(cmd);
-@@ -3082,7 +3082,7 @@ qla1280_32bit_start_scsi(struct scsi_qla_host *ha, struct srb * sp)
- 	memset(((char *)pkt + 8), 0, (REQUEST_ENTRY_SIZE - 8));
- 
- 	/* Set ISP command timeout. */
--	pkt->timeout = cpu_to_le16(cmd->request->timeout/HZ);
-+	pkt->timeout = cpu_to_le16(scsi_cmd_to_rq(cmd)->timeout / HZ);
- 
- 	/* Set device target ID and LUN */
- 	pkt->lun = SCSI_LUN_32(cmd);
+ 		spin_lock_irqsave(qp->qp_lock_ptr, *flags);
+-		if (ret_cmd && blk_mq_request_started(cmd->request))
++		if (ret_cmd && blk_mq_request_started(scsi_cmd_to_rq(cmd)))
+ 			sp->done(sp, res);
+ 	} else {
+ 		sp->done(sp, res);
