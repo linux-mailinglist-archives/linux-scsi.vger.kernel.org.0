@@ -2,69 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237773879B5
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 15:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0FF387C82
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 17:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349504AbhERNTX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 09:19:23 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:2972 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbhERNTX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 09:19:23 -0400
-Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.60])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FkxLr10j8zCv5C;
-        Tue, 18 May 2021 21:15:16 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggems702-chm.china.huawei.com (10.3.19.179) with Microsoft SMTP Server
+        id S1344110AbhERPgu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 11:36:50 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4737 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238479AbhERPgt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 11:36:49 -0400
+Received: from dggems705-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Fl0Nb5GVLzqVCC;
+        Tue, 18 May 2021 23:31:59 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ dggems705-chm.china.huawei.com (10.3.19.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 18 May 2021 21:18:01 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ 15.1.2176.2; Tue, 18 May 2021 23:35:27 +0800
+Received: from [10.47.83.99] (10.47.83.99) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 18 May
- 2021 21:18:01 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
-CC:     <martin.petersen@oracle.com>, <skashyap@marvell.com>
-Subject: [PATCH -next] scsi: qedf: use vzalloc() instead of vmalloc()/memset(0)
-Date:   Tue, 18 May 2021 21:20:18 +0800
-Message-ID: <20210518132018.1312995-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+ 2021 16:35:25 +0100
+Subject: Re: [PATCH -next] scsi: hisi_sas: drop free_irq of devm_request_irq
+ allocated irq
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        "luojiaxing@huawei.com" <luojiaxing@huawei.com>
+References: <20210518130902.1307494-1-yangyingliang@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <cf6a6fb8-e9e6-967e-a012-8e25a40922ec@huawei.com>
+Date:   Tue, 18 May 2021 16:34:24 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500017.china.huawei.com (7.185.36.243)
+In-Reply-To: <20210518130902.1307494-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.83.99]
+X-ClientProxiedBy: lhreml716-chm.china.huawei.com (10.201.108.67) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use vzalloc() instead of vmalloc() and memset(0) to simpify
-the code.
+On 18/05/2021 14:09, Yang Yingliang wrote:
+> irq allocated with devm_request_irq should not be freed using
+> free_irq, because doing so causes a dangling pointer, and a
+> subsequent double free.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> index 499c770d405c..684f762bcfb3 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> @@ -4811,9 +4811,9 @@ hisi_sas_v3_destroy_irqs(struct pci_dev *pdev, struct hisi_hba *hisi_hba)
+>   {
+>   	int i;
+>   
+> -	free_irq(pci_irq_vector(pdev, 1), hisi_hba);
+> -	free_irq(pci_irq_vector(pdev, 2), hisi_hba);
+> -	free_irq(pci_irq_vector(pdev, 11), hisi_hba);
+> +	devm_free_irq(&pdev->dev, pci_irq_vector(pdev, 1), hisi_hba);
+> +	devm_free_irq(&pdev->dev, pci_irq_vector(pdev, 2), hisi_hba);
+> +	devm_free_irq(&pdev->dev, pci_irq_vector(pdev, 11), hisi_hba);
+>   	for (i = 0; i < hisi_hba->cq_nvecs; i++) {
+>   		struct hisi_sas_cq *cq = &hisi_hba->cq[i];
+>   		int nr = hisi_sas_intr_conv ? 16 : 16 + i;
+> 
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/scsi/qedf/qedf_dbg.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Does the free_irq(pci_irq_vector(pdev, nr, cq)) call also need to change 
+(not shown)?
 
-diff --git a/drivers/scsi/qedf/qedf_dbg.c b/drivers/scsi/qedf/qedf_dbg.c
-index e0387e495261..0d2aed82882a 100644
---- a/drivers/scsi/qedf/qedf_dbg.c
-+++ b/drivers/scsi/qedf/qedf_dbg.c
-@@ -106,11 +106,10 @@ qedf_dbg_info(struct qedf_dbg_ctx *qedf, const char *func, u32 line,
- int
- qedf_alloc_grc_dump_buf(u8 **buf, uint32_t len)
- {
--		*buf = vmalloc(len);
-+		*buf = vzalloc(len);
- 		if (!(*buf))
- 			return -ENOMEM;
- 
--		memset(*buf, 0, len);
- 		return 0;
- }
- 
--- 
-2.25.1
+Having said that, why have these at all if we use devm_request_irq()? 
+devm_irq_release() calls free_irq().
+
+Thanks,
+John
 
