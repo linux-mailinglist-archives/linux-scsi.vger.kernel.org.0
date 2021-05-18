@@ -2,89 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1395138710E
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 07:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1632E387110
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 07:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241456AbhERFSd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 01:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S241489AbhERFSf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 01:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240631AbhERFS1 (ORCPT
+        with ESMTP id S241356AbhERFS1 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 01:18:27 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6B4C061756
-        for <linux-scsi@vger.kernel.org>; Mon, 17 May 2021 22:16:39 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id g6-20020a17090adac6b029015d1a9a6f1aso1102948pjx.1
-        for <linux-scsi@vger.kernel.org>; Mon, 17 May 2021 22:16:39 -0700 (PDT)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86878C06175F
+        for <linux-scsi@vger.kernel.org>; Mon, 17 May 2021 22:16:42 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q15so6173502pgg.12
+        for <linux-scsi@vger.kernel.org>; Mon, 17 May 2021 22:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=ESfLlSpw3dD1OkY5qIquniVN61DIZKW/knPHUYIzoMw=;
-        b=hzNNKmtN+/4zIDs5y07SCQ4tlqjgvw+DVU1l/2F3P80k88zxYSWVr4OYyT7g9LmwB0
-         ZPakfUAEe2J5ySpv8m6Ek7fPwzC4FE8EZgxQ2EGnOdctSTKaxJnc3Pd5oa2AXBwllIrf
-         89LOwL0lw0qhRst45A/J1chbuLNiswfKkvVXI=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=4JVupst1A19UNL/R6oG3nMjTe13P1z5gHVkbVj3baWk=;
+        b=LWmWrUp0w8aXGpz206TkMZcAyxdrQpCnZaikTKXoXxp+b9JOLav/KOP8ASHyNVKsPD
+         ulYdatylXBTXMIrKcXRiFNbv365WamaVfUI4GK3T+WYEU11nVil2NzldiW+hopLUzh3j
+         RF+E59yho0pNM1yxWis4m/gwdOy51HV3zjZAE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=ESfLlSpw3dD1OkY5qIquniVN61DIZKW/knPHUYIzoMw=;
-        b=Rbopqw6480m1rdzIaPU4Jq+jM6cIsNTf9DFRrzReb+uVDMcQ35QR7ZcgAkoxazCdjU
-         yjkKiAc+DbTK4k4SNeRnoP6RMsqj/NzOXIce7N3NpqfLj8NsgJc85SvpvLU4hhBix4Ny
-         tS3/WiHCWb+r2aOUKh5Z73tSRjhrjhlpkIArmxbBNqvjvWnsS64RaGRU/TsNQYx9hL3Z
-         pvE/koBkDBOPZigt6zJ/aKrc+fJSTw/tWC95Yhsdzc0QHWREeXt17SQJFiF7TENC3lt/
-         d2qIkMlUCVasjpE93e218Ee/W5DxxqnQyNSgU/9Wr4mqpIu1FEjUbtVmzMWIkZqBzhOR
-         /a8g==
-X-Gm-Message-State: AOAM533X5D0P8GkfnPM1YvkRJ93HElnZdQm+Zkqq3QSPmVoI6PWEL0jz
-        TsKu3JKx+kTdLiRraLGMLchNO4BxZpTw/ruNvE0FJML2t0Xuz+N9AnOKlBrcQ4E28f16zF1eDA/
-        qcFBHj14iSgeH1C2NRWyapqZnv/WAeeJETwoaCVNMU3US7qcvhdP4WgW+TMHW15HnB/PBUgZ+Yp
-        o30pNt0VF6/c9vcXd1rEcR
-X-Google-Smtp-Source: ABdhPJx0NXJb5wEU4G7PP/w6rpUDbvlAVHGy4moEr2i0qdxwN/seln2LbKMXdkev7Blo5vHsnvqELA==
-X-Received: by 2002:a17:90b:f0e:: with SMTP id br14mr3136799pjb.121.1621314997754;
-        Mon, 17 May 2021 22:16:37 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=4JVupst1A19UNL/R6oG3nMjTe13P1z5gHVkbVj3baWk=;
+        b=AjSJDqNtjgTZE5eC+HCQqTbEXhhCe6ELG/aUErxTGaFt3UDTqXPdioJ2RTDkBgBC5q
+         1fX/Fkd5VAYbKX367ZCVcw7kWZk4F3kF/ylxa0c6WF8toHmBIxz2E/BO9qrsUi0rl3U3
+         EJD2sstlGSqNyYXzKK5lOc2c8B0HAK09Wp423c/0vvCcp5AKz3yuyeesdrCOSF8s/yt9
+         AtfRrFrZ7V6iRnku7cDfiqmfWXHmEM2ZwjCOceOcIqFvzb7OoBT8SRGa7ai5yM4IcfVS
+         +kjkkD0v6Agi2yo4+pG6LyUqAHTy9/BTcPzN3MjBrhAEldNDjQIdiUcMIcDx2YzuiOVa
+         KQwQ==
+X-Gm-Message-State: AOAM532+z+PTSTwzjaROnyfO01ebQ+m4BpYixm5qZmh5gqL55hGzmE+m
+        UiTCOfhDyXoH/Tq2CIX4n38iV8yBzdKNx1Su1mlH0Sc+VboKw6d7ZF/XeXw8Ka8fxVeepMqyd33
+        N85Sr0o84BUPxqYInuLSKJAQpnZUOsuy86+5o7aiLf9hW6HoHEAgDKel+QRXYGoQnY6FuU/kaWX
+        +XLxcGZTuYfaxzO/9BnL+y
+X-Google-Smtp-Source: ABdhPJyf5+UU0k/sl95GQxejcQm2Ydd+DS7t7DjunkRDVbwXsEMvU0rWNV4BHpMf0c2xeBcuP3frhA==
+X-Received: by 2002:a62:3242:0:b029:2d5:5913:7fd with SMTP id y63-20020a6232420000b02902d5591307fdmr3242707pfy.30.1621315001016;
+        Mon, 17 May 2021 22:16:41 -0700 (PDT)
 Received: from dhcp-10-123-20-76.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id hk15sm437556pjb.53.2021.05.17.22.16.34
+        by smtp.gmail.com with ESMTPSA id hk15sm437556pjb.53.2021.05.17.22.16.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 22:16:36 -0700 (PDT)
+        Mon, 17 May 2021 22:16:40 -0700 (PDT)
 From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
 Cc:     Sathya.Prakash@broadcom.com, sreekanth.reddy@broadcom.com,
         Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-Subject: [Patch 0/3] Gracefully handle FW faults during HBA initialization
-Date:   Tue, 18 May 2021 10:46:22 +0530
-Message-Id: <20210518051625.1596742-1-suganath-prabu.subramani@broadcom.com>
+Subject: [Patch 1/3] mpt3sas: Fix deadlock while cancelling the running FW  event
+Date:   Tue, 18 May 2021 10:46:23 +0530
+Message-Id: <20210518051625.1596742-2-suganath-prabu.subramani@broadcom.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210518051625.1596742-1-suganath-prabu.subramani@broadcom.com>
+References: <20210518051625.1596742-1-suganath-prabu.subramani@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008d59af05c293d0ca"
+        boundary="000000000000c2dad505c293d001"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000008d59af05c293d0ca
+--000000000000c2dad505c293d001
 Content-Transfer-Encoding: 8bit
 
-During IOC initialization driver may observe some firmware faults.
-Currently the driver is not handling the firmware faults gracefully,
-most of the time the driver is terminating the IOC initialization
-without trying to recover the IOC from the fault. Instead of terminating
-the IOC initialization, driver has to try to recover the IOC at least
-for one time before terminating the IOC initialization.
+Don't cancel current running Firmware event work if the
+FW event type is other than MPT3SAS_REMOVE_UNRESPONDING_DEVICES.
+Otherwise user may observe deadlock while cancelling the current
+FW event work if hard reset operation is called as part of
+processing the current FW event.
 
-Suganath Prabu S (3):
-  mpt3sas: Fix deadlock while cancelling the running FW  event
-  mpt3sas: Handle FW faults during first half of IOC  init
-  mpt3sas: Handle FWfault while second half of IOC Init
+Signed-off-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
- drivers/scsi/mpt3sas/mpt3sas_base.c   | 261 ++++++++++++++++++--------
- drivers/scsi/mpt3sas/mpt3sas_base.h   |   8 +
- drivers/scsi/mpt3sas/mpt3sas_config.c |  18 +-
- drivers/scsi/mpt3sas/mpt3sas_scsih.c  | 174 +++++++++++++++--
- 4 files changed, 368 insertions(+), 93 deletions(-)
-
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index d00aca3..79e34b5 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -3697,6 +3697,28 @@ _scsih_fw_event_cleanup_queue(struct MPT3SAS_ADAPTER *ioc)
+ 	ioc->fw_events_cleanup = 1;
+ 	while ((fw_event = dequeue_next_fw_event(ioc)) ||
+ 	     (fw_event = ioc->current_event)) {
++
++		/*
++		 * Don't call cancel_work_sync() for current_event
++		 * other than MPT3SAS_REMOVE_UNRESPONDING_DEVICES;
++		 * otherwise we may observe deadlock if current
++		 * hard reset issued as part of processing the current_event.
++		 *
++		 * Orginal logic of cleaning the current_event is added
++		 * for handling the back to back host reset issued by the user.
++		 * i.e. during back to back host reset, driver use to process
++		 * the two instances of MPT3SAS_REMOVE_UNRESPONDING_DEVICES
++		 * event back to back and this made the drives to unregister
++		 * the devices from SML.
++		 */
++
++		if (fw_event == ioc->current_event &&
++		    ioc->current_event->event !=
++		    MPT3SAS_REMOVE_UNRESPONDING_DEVICES) {
++			ioc->current_event = NULL;
++			continue;
++		}
++
+ 		/*
+ 		 * Wait on the fw_event to complete. If this returns 1, then
+ 		 * the event was never executed, and we need a put for the
 -- 
 2.27.0
 
 
---0000000000008d59af05c293d0ca
+--000000000000c2dad505c293d001
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -156,13 +186,13 @@ dDLaJg39U0ikF3NHtNMaXXHgh6TMs3OsWhH4+zlvkC0eSC6dvasGxmpPQPQe/0huBB8gDbzGrRg/
 cRn2ctMmNHxZO4EBJ5SzsV/lHimTk+5K39lzkzYxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQ
 ZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwgHNo/eviKB1udONIwDQYJYIZIAWUDBAIBBQCggdQwLwYJ
-KoZIhvcNAQkEMSIEIPHwGW0f0laX/1SgApzU2jcmsEhAkmPinZTdpH6cRS/VMBgGCSqGSIb3DQEJ
-AzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIxMDUxODA1MTYzOFowaQYJKoZIhvcNAQkP
+KoZIhvcNAQkEMSIEIK+kDPkSpVG+2DlhLb6Hxs18c544B9ZZawpa5D8sXW1+MBgGCSqGSIb3DQEJ
+AzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIxMDUxODA1MTY0MVowaQYJKoZIhvcNAQkP
 MVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAL
-BgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCU
-bYNGrdN0COjIizw3UzJkQ3elfWV6iCIRifLcchA3Cu6lZjaDgHLBnwaIkH6L0knbk3aUfFd17j8z
-g2Bc/GYLDT8nkXJA4am25zza98JKV0ln5qMGSElWi89bvcRLReuY0XiDDh2TTa9FA0dwqBwzmOZT
-cBOkaxfj9+4qAXMzeCGvEO90oGNSosps4WUs8+ZnWjgt3i7J08v1xEplOgy9PIJRjfGx0lM5u67m
-jT0uV8RidWVpUD9/XyEHrKuw0oNuDuyP1zunZTwIIu+U2JEi8R4WKGDi55bwahVmQBkFzdut+j4w
-3H2wsBKIOdcKpFp0Hv2WPgB0rV8iRfT9QZgk
---0000000000008d59af05c293d0ca--
+BgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAn
+QkXxd2XbeSNSu1JJnhOGSAhp3BA2jcMcyvONdjbShLstuP7jnKojZE55EhY6nqY1t3MEhy4CI2/o
+i+eL4HgvxeGjmKcooEv6Xe13NaqXAGGFHSfRQjDJnmLDziLrFDYfQ0KdzapC5p19w766xgg7lANO
+0PWU0xJi1/CLhU0FjwIMBH7/N90f0uoVgqUtm8ASzVFYstyW8UcSt7R9veLa48VZm8l6+McHJp3T
+MwBw1IVDOJsIJ6V19ax71TnY50NmDSyhGowziyxKbhRpC/yBfAmtXCMK4Rr/LJmN2y1Cf+Gz9bAY
+rRnx6vueePBCmwlBbx/LtDL1v8f63/OqyzI+
+--000000000000c2dad505c293d001--
