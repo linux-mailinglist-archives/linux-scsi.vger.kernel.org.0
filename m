@@ -2,72 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B3E387984
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 15:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E533879B7
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 15:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243287AbhERNIN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 09:08:13 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4734 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbhERNIL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 09:08:11 -0400
-Received: from dggems705-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Fkx573XYCzqVBP;
-        Tue, 18 May 2021 21:03:23 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggems705-chm.china.huawei.com (10.3.19.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 18 May 2021 21:06:52 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 18 May
- 2021 21:06:51 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
-CC:     <john.garry@huawei.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-Subject: [PATCH -next] scsi: hisi_sas: drop free_irq of devm_request_irq allocated irq
-Date:   Tue, 18 May 2021 21:09:02 +0800
-Message-ID: <20210518130902.1307494-1-yangyingliang@huawei.com>
+        id S1349504AbhERNTy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 09:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233079AbhERNTw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 09:19:52 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1FCC061573;
+        Tue, 18 May 2021 06:18:33 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id b7so909793plg.0;
+        Tue, 18 May 2021 06:18:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=db+i81oaJnqS/hNDj62vMgPodT5DS9VOJUhp6l/b6qc=;
+        b=VBHgtNKexUwXXXOMp4zZcF8Rs7S0TxJ2MPoNFs+lhYCMI7tpE9DLBsebzzgmtYkhZl
+         aLVIW4QuT+5BgYrbcTFIkLdCLXCPJQvM7F+YWMISGVSrSMsaYP9qum+kPoNSNiWezREb
+         kwSfy9BLZbZLxJT7kwpawYCXlfBEgBL0kpNVdej/lF/QARYz4oHVSxQBFkTZTK427wsW
+         TZlWbcClNY5lZ2fENRI2BFvb8lSl3oDLFJp0BQFQSVyFPEHp+gBeqjQxRXli4Ik6JR9n
+         ah3Fs34aIDQGST1kbsFxht4jwdKMy+JcYlJxYVFNTZc8BXkpfxeNAF0v4CvGDLVIl2J6
+         4wqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=db+i81oaJnqS/hNDj62vMgPodT5DS9VOJUhp6l/b6qc=;
+        b=KIyouPbnMOs5/zxTciTkQ2t8OoxnCx9Ao1hOdNK3ggyv+lvmgIcDQOfX8qIH/XTwFF
+         ga+wLGm6DShgEZgwKrruPHiN/HmB34Gt/ZFD6g2TgVtXuQgD0sL/RyTRr91JK/dxOosU
+         R6xh8a6ktlOfDy+kTWD03/pQ8PjddImw0TBUlSUsZVen9QFTZcEnhvwmrRsoUayiFMoJ
+         mbGJWJjOmt/6sYSQm5eCzMsOnLzIcjgmzj2rkthEEIatAXjM5vWVLK8sH+N3q9CCvSS5
+         GDhsyKwrsx4CrnjnG+1/RSqmMI0DmDOxYRmAaxxG1Xtugo8KU5OoXMGHWfCn2TSJ43DG
+         Cu2A==
+X-Gm-Message-State: AOAM5335LabvYArSnglJ2cmwAINUex4zdp7VTSNPPuMO2G/fgOC0Lyk9
+        zmL2rTpCrAxTeLME7yXpI+GHgcR+aE4RbRRNAoY=
+X-Google-Smtp-Source: ABdhPJy1mcOissW029MvyEYLfMk/bt/BpgcFgjlGuUcufWga93NKMgt3dUfL3OA5tjt6pLfS7k6GUA==
+X-Received: by 2002:a17:902:c104:b029:ef:836e:15d6 with SMTP id 4-20020a170902c104b02900ef836e15d6mr4626212pli.39.1621343912730;
+        Tue, 18 May 2021 06:18:32 -0700 (PDT)
+Received: from localhost.localdomain (host-219-71-67-82.dynamic.kbtelecom.net. [219.71.67.82])
+        by smtp.gmail.com with ESMTPSA id y190sm7776782pfb.69.2021.05.18.06.18.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 May 2021 06:18:32 -0700 (PDT)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-scsi@vger.kernel.org, linux@armlinux.org.uk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH] scsi: fas216: Use fallthrough pseudo-keyword
+Date:   Tue, 18 May 2021 21:18:23 +0800
+Message-Id: <20210518131823.2586-1-jj251510319013@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-irq allocated with devm_request_irq should not be freed using
-free_irq, because doing so causes a dangling pointer, and a
-subsequent double free.
+Replace /* FALLTHROUGH */ comment with pseudo-keyword macro fallthrough[1]
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/arm/fas216.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 499c770d405c..684f762bcfb3 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -4811,9 +4811,9 @@ hisi_sas_v3_destroy_irqs(struct pci_dev *pdev, struct hisi_hba *hisi_hba)
- {
- 	int i;
+diff --git a/drivers/scsi/arm/fas216.c b/drivers/scsi/arm/fas216.c
+index 2e687ce60753..9402cdce7cc5 100644
+--- a/drivers/scsi/arm/fas216.c
++++ b/drivers/scsi/arm/fas216.c
+@@ -1479,7 +1479,7 @@ static void fas216_busservice_intr(FAS216_Info *info, unsigned int stat, unsigne
  
--	free_irq(pci_irq_vector(pdev, 1), hisi_hba);
--	free_irq(pci_irq_vector(pdev, 2), hisi_hba);
--	free_irq(pci_irq_vector(pdev, 11), hisi_hba);
-+	devm_free_irq(&pdev->dev, pci_irq_vector(pdev, 1), hisi_hba);
-+	devm_free_irq(&pdev->dev, pci_irq_vector(pdev, 2), hisi_hba);
-+	devm_free_irq(&pdev->dev, pci_irq_vector(pdev, 11), hisi_hba);
- 	for (i = 0; i < hisi_hba->cq_nvecs; i++) {
- 		struct hisi_sas_cq *cq = &hisi_hba->cq[i];
- 		int nr = hisi_sas_intr_conv ? 16 : 16 + i;
+ 		if (msgqueue_msglength(&info->scsi.msgs) > 1)
+ 			fas216_cmd(info, CMD_SETATN);
+-		/*FALLTHROUGH*/
++		fallthrough;
+ 
+ 	/*
+ 	 * Any          -> Message Out
 -- 
 2.25.1
 
