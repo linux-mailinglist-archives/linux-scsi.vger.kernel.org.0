@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F72387EBF
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18051387EC0
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351264AbhERRqm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 13:46:42 -0400
-Received: from mail-pl1-f174.google.com ([209.85.214.174]:42608 "EHLO
-        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351246AbhERRqi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:38 -0400
-Received: by mail-pl1-f174.google.com with SMTP id v13so5510833ple.9
-        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:20 -0700 (PDT)
+        id S1351268AbhERRqn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 13:46:43 -0400
+Received: from mail-pg1-f169.google.com ([209.85.215.169]:40495 "EHLO
+        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351251AbhERRqk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:40 -0400
+Received: by mail-pg1-f169.google.com with SMTP id j12so7532368pgh.7
+        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BXtTQ2I0chGLVFDPUBP1oOczi6q1HSGnELz/RdjTOaQ=;
-        b=UbqEcEtEbQGValI0qB8ID1gtFlR5nq2ijNzewE+q79/dVFrxrfquPDjzjDP628VEpK
-         FAsL0OzhL7FycfICrIhBFiSRSqve3cXSMYt+IEvzFepBOrtOqoRja5sQtQzTkvMSQnxk
-         2hpE0noYYBUiCAWN2rxiTSHu+gfp2RLPTI8PSAE0mWFGykKwZT4pWw+raZpuyEKlJ9ut
-         0t/NdVoxX70tYulbZUwt2Z4x1wC0SGNs4X5LQKszWOSRreh24h2XZPyyj/Cf7o+Y4nGy
-         RlHW1QDi8AQEmSGbsptO/9eQoo6o82byWoRYhhkLsHbct1dJZoT0G8N61XWZwL0lpCO4
-         pb5w==
-X-Gm-Message-State: AOAM532kZMnnKnTXl4Xc3fZcRClKIN9aVrjaPy8YBZE90eGPzdO0ZHhN
-        E7BYJcYwApDtvdF8fgSFSvk=
-X-Google-Smtp-Source: ABdhPJxgBU182PYyMnddM8Y/TD+GiFCZtyRK10W8jNLhBlrbe2sdiWVWL/WJ2f+9YxK19V9fzFW1FQ==
-X-Received: by 2002:a17:90a:a087:: with SMTP id r7mr6384541pjp.84.1621359920406;
-        Tue, 18 May 2021 10:45:20 -0700 (PDT)
+        bh=lCKW2l7mY7+VHiX8bOSqsDYSuMRCMjaHYqY3c+w6fbk=;
+        b=gm/Ax9p/Ui6c88VuXwZxc7dpC2fpwi6gCjZ11Psa6agkUDZUbmp1sgd1g1b02pcW7O
+         YIcytDEZS3Ndazi5GTS23pfy+U3iRX3IcV4mpelPMWvuctRmw5+UKtqh92OfVPLVnpxj
+         Rkm8pFC/70L0Dgqp9yGZWkaMXzqYgUsut0wTh8OnSCrCXxuZPtD+WtDu3R+GWHHEVj50
+         46nrPPcOeqDArapb74lFkD8rWeaVGK2XKBaOO6J1EvBEUYeg+Asn63zf/2tux6ocwqxn
+         PgIIMixZxi3OfXE4/mHB+a/QhGP2r3WpM080idOYVxmj4SqOu2QNittIzqAm6QfHiCS3
+         BnDQ==
+X-Gm-Message-State: AOAM531FwrqNlbMWS+nFoRI7U0BNBM01/hhmm8U9ihkTDjfItPP6VMPs
+        PihVKbashGxZDPcv0KYv1lE=
+X-Google-Smtp-Source: ABdhPJzBBnx+lr/i7oHcgMOJeAHmx2P9wDLU6XkgJDe80b5CoxJ1YuDi+inQSYMWzmuz67MXJCPBKQ==
+X-Received: by 2002:a63:4550:: with SMTP id u16mr6265116pgk.440.1621359921409;
+        Tue, 18 May 2021 10:45:21 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:4ae4:fc49:eafe:4150])
-        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.19
+        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 10:45:20 -0700 (PDT)
+        Tue, 18 May 2021 10:45:21 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        John Garry <john.garry@huawei.com>,
+        Don Brace <don.brace@microchip.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 20/50] hisi_sas: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Tue, 18 May 2021 10:44:20 -0700
-Message-Id: <20210518174450.20664-21-bvanassche@acm.org>
+Subject: [PATCH v2 21/50] hpsa: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Tue, 18 May 2021 10:44:21 -0700
+Message-Id: <20210518174450.20664-22-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210518174450.20664-1-bvanassche@acm.org>
 References: <20210518174450.20664-1-bvanassche@acm.org>
@@ -53,45 +53,39 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Prepare for removal of the request pointer by using scsi_cmd_to_rq()
 instead. This patch does not change any functionality.
 
-Acked-by: John Garry <john.garry@huawei.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 4 ++--
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/hpsa.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 5a204074099c..b9337aa6cf8b 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -185,7 +185,7 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
- 	void *bitmap = hisi_hba->slot_index_tags;
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index f135a10f582b..3faa87fa296a 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -5686,7 +5686,7 @@ static int hpsa_scsi_queue_command(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
+ 	/* Get the ptr to our adapter structure out of cmd->host. */
+ 	h = sdev_to_hba(cmd->device);
  
- 	if (scsi_cmnd)
--		return scsi_cmnd->request->tag;
-+		return scsi_cmd_to_rq(scsi_cmnd)->tag;
+-	BUG_ON(cmd->request->tag < 0);
++	BUG_ON(scsi_cmd_to_rq(cmd)->tag < 0);
  
- 	spin_lock(&hisi_hba->lock);
- 	index = find_next_zero_bit(bitmap, hisi_hba->slot_index_count,
-@@ -449,7 +449,7 @@ static int hisi_sas_task_prep(struct sas_task *task,
- 		unsigned int dq_index;
- 		u32 blk_tag;
- 
--		blk_tag = blk_mq_unique_tag(scmd->request);
-+		blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
- 		dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
- 		*dq_pointer = dq = &hisi_hba->dq[dq_index];
- 	} else {
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 499c770d405c..6ef7e950226c 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -1153,7 +1153,7 @@ static void fill_prot_v3_hw(struct scsi_cmnd *scsi_cmnd,
+ 	dev = cmd->device->hostdata;
+ 	if (!dev) {
+@@ -5729,7 +5729,7 @@ static int hpsa_scsi_queue_command(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
+ 	 *       and is therefore a brand-new command.
+ 	 */
+ 	if (likely(cmd->retries == 0 &&
+-			!blk_rq_is_passthrough(cmd->request) &&
++			!blk_rq_is_passthrough(scsi_cmd_to_rq(cmd)) &&
+ 			h->acciopath_status)) {
+ 		/* Submit with the retry_pending flag unset. */
+ 		rc = hpsa_ioaccel_submit(h, c, cmd, false);
+@@ -5894,7 +5894,7 @@ static int hpsa_scsi_add_host(struct ctlr_info *h)
+  */
+ static int hpsa_get_cmd_index(struct scsi_cmnd *scmd)
  {
- 	unsigned char prot_op = scsi_get_prot_op(scsi_cmnd);
- 	unsigned int interval = scsi_prot_interval(scsi_cmnd);
--	u32 lbrt_chk_val = t10_pi_ref_tag(scsi_cmnd->request);
-+	u32 lbrt_chk_val = t10_pi_ref_tag(scsi_cmd_to_rq(scsi_cmnd));
+-	int idx = scmd->request->tag;
++	int idx = scsi_cmd_to_rq(scmd)->tag;
  
- 	switch (prot_op) {
- 	case SCSI_PROT_READ_INSERT:
+ 	if (idx < 0)
+ 		return idx;
