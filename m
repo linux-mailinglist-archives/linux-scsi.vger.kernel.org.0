@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD6D387EC7
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB73387ECE
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 May 2021 19:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351277AbhERRq4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 May 2021 13:46:56 -0400
-Received: from mail-pj1-f43.google.com ([209.85.216.43]:41817 "EHLO
-        mail-pj1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351261AbhERRqx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:53 -0400
-Received: by mail-pj1-f43.google.com with SMTP id b15-20020a17090a550fb029015dad75163dso1979411pji.0
-        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:35 -0700 (PDT)
+        id S1351303AbhERRq6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 May 2021 13:46:58 -0400
+Received: from mail-pg1-f180.google.com ([209.85.215.180]:40527 "EHLO
+        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351273AbhERRqy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 May 2021 13:46:54 -0400
+Received: by mail-pg1-f180.google.com with SMTP id j12so7532914pgh.7
+        for <linux-scsi@vger.kernel.org>; Tue, 18 May 2021 10:45:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lWCkbl9gtDCSQSGnzA3xMbegNxrAgeyKupcSi9N6TCY=;
-        b=ens4Rx1Xph2YDqHy2hXjKHdVf0h64yVkX3jQkqyQM5PJs5gOtWX/yE1us7FfTENdx4
-         0BElkIxVZ1S8kfK+C1gk4mbt0SCaZltOS5y3CxqZ4g+AUBYT6kTGt/fCcZIYFZAbHfff
-         36PuwN58KODnjn0jBIPSUD8fx0q5AbITHInQPNsbKapOfsPbjDvdk9MF4D1B3QyK74yy
-         qqmdtpdSgbCRnqOGbcO5c/DwQ2ift7Nf2Xe5G0q0Z4mzcMbXgJRHSbjn/VeVuov6eIvT
-         +jhpZScAkj50RtxYbd48Wz4fOnBDY1O3NnyDqN1LWNtn4B2jIx40J4bmeXbu4OLTHzO/
-         /9+w==
-X-Gm-Message-State: AOAM532EK+Pul51t4JH+icKkg20mUlU/fkT7UccSPXKRmUNuT2bY+xCr
-        CywZ9dzsq6V2K94byTwoDEbc3fLbxbAb6w==
-X-Google-Smtp-Source: ABdhPJym3Npcg1wflzuXvDASOWCPL9mpy2q2u4lqLvYnvPiI8moTdrl5zE1PzdFPPuw/Embn0zATKw==
-X-Received: by 2002:a17:902:d204:b029:f0:b65d:a14d with SMTP id t4-20020a170902d204b02900f0b65da14dmr5819308ply.25.1621359934565;
-        Tue, 18 May 2021 10:45:34 -0700 (PDT)
+        bh=z/V8pQL9mMuI1DxSA21Jm+mA2NPyWWoO8bpgWSewBgw=;
+        b=Hv0X1nyp0m/VltY+St2d8Zjp/ETU6HMDm1TIBZ4ZqRIiT2AxhkpL1vBjf0z4UUAap5
+         gpPFKF2Vc5yDLKyd1VWzgWcHK0gDK5WXYyx8kWRRPayWB3UjnE4DsRHSxWnxBfbp00Co
+         EmOPq1nwcrOd/mwo2D3hwI0dpkoFcHVIW/FyFoHyxpSbiVd0oo/KoYr2eU2LTK0rr9j+
+         ZA50henzsTMwrjHtKYOfks1BI22jL2+yelhEK9NfxfKcKWUsBMS1qjqyOPhO4aCOOqtE
+         vcY04Htjda7XbfnmgtlVniHGGp24hC6p0vqVqMY8fSkVdV87twedWf33tQHY3f4XING6
+         Da+A==
+X-Gm-Message-State: AOAM533UfiNydpxzY/8fSkrQRZty6kHJ/B9a8dtX8o215E07cjyxtXm5
+        CLF77GTrevT1WLGLDqd/xD4=
+X-Google-Smtp-Source: ABdhPJzp3EYjWoI3B8zvj+XnbI4AZaNaJpFSY9VSU7Bm9+5Cmv2XWwhJ65A4ySZygDMZy0Sy+CI9mQ==
+X-Received: by 2002:a63:1109:: with SMTP id g9mr6399863pgl.88.1621359936179;
+        Tue, 18 May 2021 10:45:36 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:4ae4:fc49:eafe:4150])
-        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.33
+        by smtp.gmail.com with ESMTPSA id z27sm12656920pfr.46.2021.05.18.10.45.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 10:45:34 -0700 (PDT)
+        Tue, 18 May 2021 10:45:35 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@kernel.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 30/50] myrb: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Tue, 18 May 2021 10:44:30 -0700
-Message-Id: <20210518174450.20664-31-bvanassche@acm.org>
+Subject: [PATCH v2 31/50] myrs: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Tue, 18 May 2021 10:44:31 -0700
+Message-Id: <20210518174450.20664-32-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210518174450.20664-1-bvanassche@acm.org>
 References: <20210518174450.20664-1-bvanassche@acm.org>
@@ -55,51 +55,53 @@ instead. This patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/myrb.c | 11 ++++++-----
+ drivers/scsi/myrs.c | 11 ++++++-----
  1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
-index d9c82e211ae7..27aabe1e635a 100644
---- a/drivers/scsi/myrb.c
-+++ b/drivers/scsi/myrb.c
-@@ -1263,6 +1263,7 @@ static int myrb_host_reset(struct scsi_cmnd *scmd)
- static int myrb_pthru_queuecommand(struct Scsi_Host *shost,
+diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+index 3b68c68d1716..9b3090d59bb9 100644
+--- a/drivers/scsi/myrs.c
++++ b/drivers/scsi/myrs.c
+@@ -1582,6 +1582,7 @@ static void myrs_mode_sense(struct myrs_hba *cs, struct scsi_cmnd *scmd,
+ static int myrs_queuecommand(struct Scsi_Host *shost,
  		struct scsi_cmnd *scmd)
  {
 +	struct request *rq = scsi_cmd_to_rq(scmd);
- 	struct myrb_hba *cb = shost_priv(shost);
- 	struct myrb_cmdblk *cmd_blk = scsi_cmd_priv(scmd);
- 	union myrb_cmd_mbox *mbox = &cmd_blk->mbox;
-@@ -1286,7 +1287,7 @@ static int myrb_pthru_queuecommand(struct Scsi_Host *shost,
- 	}
+ 	struct myrs_hba *cs = shost_priv(shost);
+ 	struct myrs_cmdblk *cmd_blk = scsi_cmd_priv(scmd);
+ 	union myrs_cmd_mbox *mbox = &cmd_blk->mbox;
+@@ -1633,7 +1634,7 @@ static int myrs_queuecommand(struct Scsi_Host *shost,
+ 		return SCSI_MLQUEUE_HOST_BUSY;
+ 	cmd_blk->sense_addr = sense_addr;
  
- 	mbox->type3.opcode = MYRB_CMD_DCDB;
--	mbox->type3.id = scmd->request->tag + 3;
-+	mbox->type3.id = rq->tag + 3;
- 	mbox->type3.addr = dcdb_addr;
- 	dcdb->channel = sdev->channel;
- 	dcdb->target = sdev->id;
-@@ -1305,11 +1306,11 @@ static int myrb_pthru_queuecommand(struct Scsi_Host *shost,
- 		break;
- 	}
- 	dcdb->early_status = false;
--	if (scmd->request->timeout <= 10)
-+	if (rq->timeout <= 10)
- 		dcdb->timeout = MYRB_DCDB_TMO_10_SECS;
--	else if (scmd->request->timeout <= 60)
-+	else if (rq->timeout <= 60)
- 		dcdb->timeout = MYRB_DCDB_TMO_60_SECS;
--	else if (scmd->request->timeout <= 600)
-+	else if (rq->timeout <= 600)
- 		dcdb->timeout = MYRB_DCDB_TMO_10_MINS;
- 	else
- 		dcdb->timeout = MYRB_DCDB_TMO_24_HRS;
-@@ -1577,7 +1578,7 @@ static int myrb_ldev_queuecommand(struct Scsi_Host *shost,
- 	}
- 
- 	myrb_reset_cmd(cmd_blk);
--	mbox->type5.id = scmd->request->tag + 3;
-+	mbox->type5.id = scsi_cmd_to_rq(scmd)->tag + 3;
- 	if (scmd->sc_data_direction == DMA_NONE)
- 		goto submit;
- 	nsge = scsi_dma_map(scmd);
+-	timeout = scmd->request->timeout;
++	timeout = rq->timeout;
+ 	if (scmd->cmd_len <= 10) {
+ 		if (scmd->device->channel >= cs->ctlr_info->physchan_present) {
+ 			struct myrs_ldev_info *ldev_info = sdev->hostdata;
+@@ -1649,10 +1650,10 @@ static int myrs_queuecommand(struct Scsi_Host *shost,
+ 			mbox->SCSI_10.pdev.target = sdev->id;
+ 			mbox->SCSI_10.pdev.channel = sdev->channel;
+ 		}
+-		mbox->SCSI_10.id = scmd->request->tag + 3;
++		mbox->SCSI_10.id = rq->tag + 3;
+ 		mbox->SCSI_10.control.dma_ctrl_to_host =
+ 			(scmd->sc_data_direction == DMA_FROM_DEVICE);
+-		if (scmd->request->cmd_flags & REQ_FUA)
++		if (rq->cmd_flags & REQ_FUA)
+ 			mbox->SCSI_10.control.fua = true;
+ 		mbox->SCSI_10.dma_size = scsi_bufflen(scmd);
+ 		mbox->SCSI_10.sense_addr = cmd_blk->sense_addr;
+@@ -1695,10 +1696,10 @@ static int myrs_queuecommand(struct Scsi_Host *shost,
+ 			mbox->SCSI_255.pdev.target = sdev->id;
+ 			mbox->SCSI_255.pdev.channel = sdev->channel;
+ 		}
+-		mbox->SCSI_255.id = scmd->request->tag + 3;
++		mbox->SCSI_255.id = rq->tag + 3;
+ 		mbox->SCSI_255.control.dma_ctrl_to_host =
+ 			(scmd->sc_data_direction == DMA_FROM_DEVICE);
+-		if (scmd->request->cmd_flags & REQ_FUA)
++		if (rq->cmd_flags & REQ_FUA)
+ 			mbox->SCSI_255.control.fua = true;
+ 		mbox->SCSI_255.dma_size = scsi_bufflen(scmd);
+ 		mbox->SCSI_255.sense_addr = cmd_blk->sense_addr;
