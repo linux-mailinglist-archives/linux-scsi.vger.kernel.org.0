@@ -2,20 +2,20 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3CE38D481
-	for <lists+linux-scsi@lfdr.de>; Sat, 22 May 2021 10:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF26B38D47C
+	for <lists+linux-scsi@lfdr.de>; Sat, 22 May 2021 10:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbhEVImX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 22 May 2021 04:42:23 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4580 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbhEVImH (ORCPT
+        id S230336AbhEVImU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 22 May 2021 04:42:20 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5728 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230236AbhEVImH (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Sat, 22 May 2021 04:42:07 -0400
-Received: from dggems705-chm.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FnH0v6zY7zsT63;
-        Sat, 22 May 2021 16:37:51 +0800 (CST)
+Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FnH035FpXzqVFc;
+        Sat, 22 May 2021 16:37:07 +0800 (CST)
 Received: from dggemi760-chm.china.huawei.com (10.1.198.146) by
- dggems705-chm.china.huawei.com (10.3.19.182) with Microsoft SMTP Server
+ dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
  15.1.2176.2; Sat, 22 May 2021 16:40:40 +0800
 Received: from localhost.localdomain (10.67.165.24) by
@@ -26,9 +26,9 @@ From:   Hui Tang <tanghui20@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <tanghui20@huawei.com>
-Subject: [PATCH 14/24] scsi: proc: remove leading spaces before tabs
-Date:   Sat, 22 May 2021 16:37:18 +0800
-Message-ID: <1621672648-39955-15-git-send-email-tanghui20@huawei.com>
+Subject: [PATCH 15/24] scsi: qlogicfas408: remove leading spaces before tabs
+Date:   Sat, 22 May 2021 16:37:19 +0800
+Message-ID: <1621672648-39955-16-git-send-email-tanghui20@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1621672648-39955-1-git-send-email-tanghui20@huawei.com>
 References: <1621672648-39955-1-git-send-email-tanghui20@huawei.com>
@@ -49,22 +49,24 @@ the following commard:
 
 Signed-off-by: Hui Tang <tanghui20@huawei.com>
 ---
- drivers/scsi/scsi_proc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qlogicfas408.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/scsi_proc.c b/drivers/scsi/scsi_proc.c
-index d6982d3..7cab3d7 100644
---- a/drivers/scsi/scsi_proc.c
-+++ b/drivers/scsi/scsi_proc.c
-@@ -106,7 +106,7 @@ void scsi_proc_hostdir_add(struct scsi_host_template *sht)
- 	mutex_lock(&global_host_template_mutex);
- 	if (!sht->present++) {
- 		sht->proc_dir = proc_mkdir(sht->proc_name, proc_scsi);
--        	if (!sht->proc_dir)
-+		if (!sht->proc_dir)
- 			printk(KERN_ERR "%s: proc_mkdir failed for %s\n",
- 			       __func__, sht->proc_name);
- 	}
+diff --git a/drivers/scsi/qlogicfas408.c b/drivers/scsi/qlogicfas408.c
+index 136681a..e020182 100644
+--- a/drivers/scsi/qlogicfas408.c
++++ b/drivers/scsi/qlogicfas408.c
+@@ -26,8 +26,8 @@
+    Cleaned up 26/10/2002 by Alan Cox <alan@lxorguk.ukuu.org.uk> as part of the 2.5
+    SCSI driver cleanup and audit. This driver still needs work on the
+    following
+-   	-	Non terminating hardware waits
+-   	-	Some layering violations with its pcmcia stub
++	-	Non terminating hardware waits
++	-	Some layering violations with its pcmcia stub
+ 
+    Redistributable under terms of the GNU General Public License
+ 
 -- 
 2.8.1
 
