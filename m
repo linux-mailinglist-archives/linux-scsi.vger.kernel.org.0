@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B112838D473
-	for <lists+linux-scsi@lfdr.de>; Sat, 22 May 2021 10:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F08A38D46E
+	for <lists+linux-scsi@lfdr.de>; Sat, 22 May 2021 10:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbhEVImK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 22 May 2021 04:42:10 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4578 "EHLO
+        id S230314AbhEVImI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 22 May 2021 04:42:08 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4579 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbhEVImF (ORCPT
+        with ESMTP id S230171AbhEVImF (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Sat, 22 May 2021 04:42:05 -0400
 Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FnH0t47v1zsT65;
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FnH0t6CZqzsT67;
         Sat, 22 May 2021 16:37:50 +0800 (CST)
 Received: from dggemi760-chm.china.huawei.com (10.1.198.146) by
  dggems702-chm.china.huawei.com (10.3.19.179) with Microsoft SMTP Server
@@ -25,10 +25,10 @@ Received: from localhost.localdomain (10.67.165.24) by
 From:   Hui Tang <tanghui20@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tanghui20@huawei.com>, Nilesh Javali <njavali@marvell.com>
-Subject: [PATCH 05/24] scsi: qla2xxx: remove leading spaces before tabs
-Date:   Sat, 22 May 2021 16:37:09 +0800
-Message-ID: <1621672648-39955-6-git-send-email-tanghui20@huawei.com>
+        <tanghui20@huawei.com>, ching Huang <ching2048@areca.com.tw>
+Subject: [PATCH 06/24] scsi: arcmsr: remove leading spaces before tabs
+Date:   Sat, 22 May 2021 16:37:10 +0800
+Message-ID: <1621672648-39955-7-git-send-email-tanghui20@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1621672648-39955-1-git-send-email-tanghui20@huawei.com>
 References: <1621672648-39955-1-git-send-email-tanghui20@huawei.com>
@@ -47,81 +47,25 @@ the following commard:
 
     $ find . -name '*.[ch]' | xargs sed -r -i 's/^[ ]+\t/\t/'
 
-Cc: Nilesh Javali <njavali@marvell.com>
+Cc: ching Huang <ching2048@areca.com.tw>
 Signed-off-by: Hui Tang <tanghui20@huawei.com>
 ---
- drivers/scsi/qla2xxx/qla_dbg.c |  4 ++--
- drivers/scsi/qla2xxx/qla_mbx.c | 32 ++++++++++++++++----------------
- 2 files changed, 18 insertions(+), 18 deletions(-)
+ drivers/scsi/arcmsr/arcmsr_hba.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_dbg.c b/drivers/scsi/qla2xxx/qla_dbg.c
-index f2d0559..03c248a 100644
---- a/drivers/scsi/qla2xxx/qla_dbg.c
-+++ b/drivers/scsi/qla2xxx/qla_dbg.c
-@@ -1032,12 +1032,12 @@ qla2100_fw_dump(scsi_qla_host_t *vha)
- 	if (rval == QLA_SUCCESS) {
- 		/* Get RISC SRAM. */
- 		risc_address = 0x1000;
-- 		WRT_MAILBOX_REG(ha, reg, 0, MBC_READ_RAM_WORD);
-+		WRT_MAILBOX_REG(ha, reg, 0, MBC_READ_RAM_WORD);
- 		clear_bit(MBX_INTERRUPT, &ha->mbx_cmd_flags);
+diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
+index 930972c..b9a6883 100644
+--- a/drivers/scsi/arcmsr/arcmsr_hba.c
++++ b/drivers/scsi/arcmsr/arcmsr_hba.c
+@@ -1026,7 +1026,7 @@ static int arcmsr_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  	}
- 	for (cnt = 0; cnt < ARRAY_SIZE(fw->risc_ram) && rval == QLA_SUCCESS;
- 	    cnt++, risc_address++) {
-- 		WRT_MAILBOX_REG(ha, reg, 1, risc_address);
-+		WRT_MAILBOX_REG(ha, reg, 1, risc_address);
- 		wrt_reg_word(&reg->hccr, HCCR_SET_HOST_INT);
- 
- 		for (timer = 6000000; timer != 0; timer--) {
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 0bcd8af..1a7891c 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -2708,28 +2708,28 @@ qla2x00_login_local_device(scsi_qla_host_t *vha, fc_port_t *fcport,
- 		mcp->mb[1] = fcport->loop_id << 8;
- 	mcp->mb[2] = opt;
- 	mcp->out_mb = MBX_2|MBX_1|MBX_0;
-- 	mcp->in_mb = MBX_7|MBX_6|MBX_1|MBX_0;
-+	mcp->in_mb = MBX_7|MBX_6|MBX_1|MBX_0;
- 	mcp->tov = (ha->login_timeout * 2) + (ha->login_timeout / 2);
- 	mcp->flags = 0;
- 	rval = qla2x00_mailbox_command(vha, mcp);
- 
-- 	/* Return mailbox statuses. */
-- 	if (mb_ret != NULL) {
-- 		mb_ret[0] = mcp->mb[0];
-- 		mb_ret[1] = mcp->mb[1];
-- 		mb_ret[6] = mcp->mb[6];
-- 		mb_ret[7] = mcp->mb[7];
-- 	}
-+	/* Return mailbox statuses. */
-+	if (mb_ret != NULL) {
-+		mb_ret[0] = mcp->mb[0];
-+		mb_ret[1] = mcp->mb[1];
-+		mb_ret[6] = mcp->mb[6];
-+		mb_ret[7] = mcp->mb[7];
-+	}
- 
- 	if (rval != QLA_SUCCESS) {
-- 		/* AV tmp code: need to change main mailbox_command function to
-- 		 * return ok even when the mailbox completion value is not
-- 		 * SUCCESS. The caller needs to be responsible to interpret
-- 		 * the return values of this mailbox command if we're not
-- 		 * to change too much of the existing code.
-- 		 */
-- 		if (mcp->mb[0] == 0x4005 || mcp->mb[0] == 0x4006)
-- 			rval = QLA_SUCCESS;
-+		/* AV tmp code: need to change main mailbox_command function to
-+		 * return ok even when the mailbox completion value is not
-+		 * SUCCESS. The caller needs to be responsible to interpret
-+		 * the return values of this mailbox command if we're not
-+		 * to change too much of the existing code.
-+		 */
-+		if (mcp->mb[0] == 0x4005 || mcp->mb[0] == 0x4006)
-+			rval = QLA_SUCCESS;
- 
- 		ql_dbg(ql_dbg_mbx, vha, 0x106b,
- 		    "Failed=%x mb[0]=%x mb[1]=%x mb[6]=%x mb[7]=%x.\n",
+ 	host = scsi_host_alloc(&arcmsr_scsi_host_template, sizeof(struct AdapterControlBlock));
+ 	if(!host){
+-    		goto pci_disable_dev;
++		goto pci_disable_dev;
+ 	}
+ 	init_waitqueue_head(&wait_q);
+ 	bus = pdev->bus->number;
 -- 
 2.8.1
 
