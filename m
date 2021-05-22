@@ -2,22 +2,22 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3194738D474
-	for <lists+linux-scsi@lfdr.de>; Sat, 22 May 2021 10:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482E538D478
+	for <lists+linux-scsi@lfdr.de>; Sat, 22 May 2021 10:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbhEVImM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 22 May 2021 04:42:12 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5729 "EHLO
+        id S230185AbhEVImR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 22 May 2021 04:42:17 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5730 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbhEVImH (ORCPT
+        with ESMTP id S230247AbhEVImH (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Sat, 22 May 2021 04:42:07 -0400
-Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FnH041YyPzqVJH;
+Received: from dggems703-chm.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FnH042hvKzqVJM;
         Sat, 22 May 2021 16:37:08 +0800 (CST)
 Received: from dggemi760-chm.china.huawei.com (10.1.198.146) by
- dggems702-chm.china.huawei.com (10.3.19.179) with Microsoft SMTP Server
+ dggems703-chm.china.huawei.com (10.3.19.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Sat, 22 May 2021 16:40:40 +0800
+ 15.1.2176.2; Sat, 22 May 2021 16:40:41 +0800
 Received: from localhost.localdomain (10.67.165.24) by
  dggemi760-chm.china.huawei.com (10.1.198.146) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
@@ -26,9 +26,9 @@ From:   Hui Tang <tanghui20@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <tanghui20@huawei.com>
-Subject: [PATCH 18/24] scsi: ncr53c8xx: remove leading spaces before tabs
-Date:   Sat, 22 May 2021 16:37:22 +0800
-Message-ID: <1621672648-39955-19-git-send-email-tanghui20@huawei.com>
+Subject: [PATCH 19/24] scsi: mesh: remove leading spaces before tabs
+Date:   Sat, 22 May 2021 16:37:23 +0800
+Message-ID: <1621672648-39955-20-git-send-email-tanghui20@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1621672648-39955-1-git-send-email-tanghui20@huawei.com>
 References: <1621672648-39955-1-git-send-email-tanghui20@huawei.com>
@@ -49,106 +49,173 @@ the following commard:
 
 Signed-off-by: Hui Tang <tanghui20@huawei.com>
 ---
- drivers/scsi/ncr53c8xx.c | 32 ++++++++++++++++----------------
- drivers/scsi/ncr53c8xx.h |  2 +-
- 2 files changed, 17 insertions(+), 17 deletions(-)
+ drivers/scsi/mesh.c | 54 ++++++++++++++++++++++++++---------------------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index c76e9f0..0024bc5 100644
---- a/drivers/scsi/ncr53c8xx.c
-+++ b/drivers/scsi/ncr53c8xx.c
-@@ -2214,7 +2214,7 @@ static	struct script script0 __initdata = {
- 		RADDR (scratcha),
- 		RADDR (scratcha),
- 	SCR_RETURN,
-- 		0,
-+		0,
- 	SCR_JUMP ^ IFTRUE (IF (SCR_STATUS)),
- 		PADDR (status),
- 	SCR_JUMP ^ IFTRUE (IF (SCR_COMMAND)),
-@@ -3760,7 +3760,7 @@ static void __init ncr_prepare_setting(struct ncb *np)
- 
- 	np->maxwide	= (np->features & FE_WIDE)? 1 : 0;
- 
-- 	/*
-+	/*
- 	 *  Guess the frequency of the chip's clock.
- 	 */
- 	if (np->features & FE_ULTRA)
-@@ -3770,7 +3770,7 @@ static void __init ncr_prepare_setting(struct ncb *np)
- 
- 	/*
- 	 *  Get the clock multiplier factor.
-- 	 */
-+	 */
- 	if	(np->features & FE_QUAD)
- 		np->multiplier	= 4;
- 	else if	(np->features & FE_DBLR)
-@@ -4541,7 +4541,7 @@ static void ncr_start_reset(struct ncb *np)
- {
- 	if (!np->settle_time) {
- 		ncr_reset_scsi_bus(np, 1, driver_setup.settle_delay);
-- 	}
-+	}
- }
-  
- /*==========================================================
-@@ -5204,11 +5204,11 @@ static void ncr_chip_reset(struct ncb *np, int delay)
- 
- void ncr_init (struct ncb *np, int reset, char * msg, u_long code)
- {
-- 	int	i;
-+	int	i;
- 
-- 	/*
-+	/*
- 	**	Reset chip if asked, otherwise just clear fifos.
-- 	*/
-+	*/
- 
- 	if (reset) {
- 		OUTB (nc_istat,  SRST);
-@@ -7880,18 +7880,18 @@ static unsigned __init ncrgetfreq (struct ncb *np, int gen)
- 			udelay(100);	/* count ms */
+diff --git a/drivers/scsi/mesh.c b/drivers/scsi/mesh.c
+index 0a9f4e4..c6aa5a6 100644
+--- a/drivers/scsi/mesh.c
++++ b/drivers/scsi/mesh.c
+@@ -914,10 +914,10 @@ static void reselected(struct mesh_state *ms)
+ 		     MKWORD(0, mr->error, mr->exception, mr->fifo_count));
  	}
- 	OUTB (nc_stime1, 0);	/* disable general purpose timer */
-- 	/*
-- 	 * set prescaler to divide by whatever 0 means
-- 	 * 0 ought to choose divide by 2, but appears
-- 	 * to set divide by 3.5 mode in my 53c810 ...
-- 	 */
-- 	OUTB (nc_scntl3, 0);
-+	/*
-+	 * set prescaler to divide by whatever 0 means
-+	 * 0 ought to choose divide by 2, but appears
-+	 * to set divide by 3.5 mode in my 53c810 ...
-+	 */
-+	OUTB (nc_scntl3, 0);
+ 	out_8(&mr->interrupt, INT_ERROR | INT_EXCEPTION | INT_CMDDONE);
+-       	mesh_flush_io(mr);
++	mesh_flush_io(mr);
+ 	udelay(1);
+ 	out_8(&mr->sequence, SEQ_ENBRESEL);
+-       	mesh_flush_io(mr);
++	mesh_flush_io(mr);
+ 	udelay(1);
+ 	out_8(&mr->sync_params, ASYNC_PARAMS);
  
- 	if (bootverbose >= 2)
- 		printk ("%s: Delay (GEN=%d): %u msec\n", ncr_name(np), gen, ms);
--  	/*
-- 	 * adjust for prescaler, and convert into KHz 
--  	 */
-+	/*
-+	 * adjust for prescaler, and convert into KHz
-+	 */
- 	return ms ? ((1 << gen) * 4340) / ms : 0;
- }
+@@ -1010,7 +1010,7 @@ static void handle_reset(struct mesh_state *ms)
+ 	ms->msgphase = msg_none;
+ 	out_8(&mr->interrupt, INT_ERROR | INT_EXCEPTION | INT_CMDDONE);
+ 	out_8(&mr->sequence, SEQ_FLUSHFIFO);
+-       	mesh_flush_io(mr);
++	mesh_flush_io(mr);
+ 	udelay(1);
+ 	out_8(&mr->sync_params, ASYNC_PARAMS);
+ 	out_8(&mr->sequence, SEQ_ENBRESEL);
+@@ -1723,7 +1723,7 @@ static int mesh_host_reset(struct scsi_cmnd *cmd)
+ 	out_8(&mr->exception, 0xff);	/* clear all exception bits */
+ 	out_8(&mr->error, 0xff);	/* clear all error bits */
+ 	out_8(&mr->sequence, SEQ_RESETMESH);
+-       	mesh_flush_io(mr);
++	mesh_flush_io(mr);
+ 	udelay(1);
+ 	out_8(&mr->intr_mask, INT_ERROR | INT_EXCEPTION | INT_CMDDONE);
+ 	out_8(&mr->source_id, ms->host->this_id);
+@@ -1732,7 +1732,7 @@ static int mesh_host_reset(struct scsi_cmnd *cmd)
  
-diff --git a/drivers/scsi/ncr53c8xx.h b/drivers/scsi/ncr53c8xx.h
-index fa14b5c..b1567e8 100644
---- a/drivers/scsi/ncr53c8xx.h
-+++ b/drivers/scsi/ncr53c8xx.h
-@@ -757,7 +757,7 @@ struct ncr_reg {
- 	#define   IRQM    0x08  /* mod: irq mode (1 = totem pole !) */
- 	#define   STD     0x04  /* cmd: start dma mode              */
- 	#define   IRQD    0x02  /* mod: irq disable                 */
-- 	#define	  NOCOM   0x01	/* cmd: protect sfbr while reselect */
-+	#define	  NOCOM   0x01	/* cmd: protect sfbr while reselect */
- 				/* bits 0-1 rsvd for C1010          */
+ 	/* Reset the bus */
+ 	out_8(&mr->bus_status1, BS1_RST);	/* assert RST */
+-       	mesh_flush_io(mr);
++	mesh_flush_io(mr);
+ 	udelay(30);			/* leave it on for >= 25us */
+ 	out_8(&mr->bus_status1, 0);	/* negate RST */
  
- /*3c*/  u32	nc_adder;
+@@ -1821,9 +1821,9 @@ static int mesh_shutdown(struct macio_dev *mdev)
+ 	volatile struct mesh_regs __iomem *mr;
+ 	unsigned long flags;
+ 
+-       	printk(KERN_INFO "resetting MESH scsi bus(es)\n");
++	printk(KERN_INFO "resetting MESH scsi bus(es)\n");
+ 	spin_lock_irqsave(ms->host->host_lock, flags);
+-       	mr = ms->mesh;
++	mr = ms->mesh;
+ 	out_8(&mr->intr_mask, 0);
+ 	out_8(&mr->interrupt, INT_ERROR | INT_EXCEPTION | INT_CMDDONE);
+ 	out_8(&mr->bus_status1, BS1_RST);
+@@ -1870,17 +1870,17 @@ static int mesh_probe(struct macio_dev *mdev, const struct of_device_id *match)
+ 	}
+ 
+ 	if (macio_resource_count(mdev) != 2 || macio_irq_count(mdev) != 2) {
+-       		printk(KERN_ERR "mesh: expected 2 addrs and 2 intrs"
++		printk(KERN_ERR "mesh: expected 2 addrs and 2 intrs"
+ 	       	       " (got %d,%d)\n", macio_resource_count(mdev),
+ 		       macio_irq_count(mdev));
+ 		return -ENODEV;
+ 	}
+ 
+ 	if (macio_request_resources(mdev, "mesh") != 0) {
+-       		printk(KERN_ERR "mesh: unable to request memory resources");
++		printk(KERN_ERR "mesh: unable to request memory resources");
+ 		return -EBUSY;
+ 	}
+-       	mesh_host = scsi_host_alloc(&mesh_template, sizeof(struct mesh_state));
++	mesh_host = scsi_host_alloc(&mesh_template, sizeof(struct mesh_state));
+ 	if (mesh_host == NULL) {
+ 		printk(KERN_ERR "mesh: couldn't register host");
+ 		goto out_release;
+@@ -1888,12 +1888,12 @@ static int mesh_probe(struct macio_dev *mdev, const struct of_device_id *match)
+ 	
+ 	/* Old junk for root discovery, that will die ultimately */
+ #if !defined(MODULE)
+-       	note_scsi_host(mesh, mesh_host);
++	note_scsi_host(mesh, mesh_host);
+ #endif
+ 
+ 	mesh_host->base = macio_resource_start(mdev, 0);
+ 	mesh_host->irq = macio_irq(mdev, 0);
+-       	ms = (struct mesh_state *) mesh_host->hostdata;
++	ms = (struct mesh_state *) mesh_host->hostdata;
+ 	macio_set_drvdata(mdev, ms);
+ 	ms->host = mesh_host;
+ 	ms->mdev = mdev;
+@@ -1911,11 +1911,11 @@ static int mesh_probe(struct macio_dev *mdev, const struct of_device_id *match)
+ 		goto out_free;
+ 	}
+ 
+-       	ms->meshintr = macio_irq(mdev, 0);
+-       	ms->dmaintr = macio_irq(mdev, 1);
++	ms->meshintr = macio_irq(mdev, 0);
++	ms->dmaintr = macio_irq(mdev, 1);
+ 
+-       	/* Space for dma command list: +1 for stop command,
+-       	 * +1 to allow for aligning.
++	/* Space for dma command list: +1 for stop command,
++	 * +1 to allow for aligning.
+ 	 */
+ 	ms->dma_cmd_size = (mesh_host->sg_tablesize + 2) * sizeof(struct dbdma_cmd);
+ 
+@@ -1931,25 +1931,25 @@ static int mesh_probe(struct macio_dev *mdev, const struct of_device_id *match)
+ 	}
+ 
+ 	ms->dma_cmds = (struct dbdma_cmd *) DBDMA_ALIGN(dma_cmd_space);
+-       	ms->dma_cmd_space = dma_cmd_space;
++	ms->dma_cmd_space = dma_cmd_space;
+ 	ms->dma_cmd_bus = dma_cmd_bus + ((unsigned long)ms->dma_cmds)
+ 		- (unsigned long)dma_cmd_space;
+ 	ms->current_req = NULL;
+-       	for (tgt = 0; tgt < 8; ++tgt) {
++	for (tgt = 0; tgt < 8; ++tgt) {
+ 	       	ms->tgts[tgt].sdtr_state = do_sdtr;
+ 	       	ms->tgts[tgt].sync_params = ASYNC_PARAMS;
+ 	       	ms->tgts[tgt].current_req = NULL;
+-       	}
++	}
+ 
+ 	if ((cfp = of_get_property(mesh, "clock-frequency", NULL)))
+-       		ms->clk_freq = *cfp;
++		ms->clk_freq = *cfp;
+ 	else {
+-       		printk(KERN_INFO "mesh: assuming 50MHz clock frequency\n");
++		printk(KERN_INFO "mesh: assuming 50MHz clock frequency\n");
+ 	       	ms->clk_freq = 50000000;
+-       	}
++	}
+ 
+-       	/* The maximum sync rate is clock / 5; increase
+-       	 * mesh_sync_period if necessary.
++	/* The maximum sync rate is clock / 5; increase
++	 * mesh_sync_period if necessary.
+ 	 */
+ 	minper = 1000000000 / (ms->clk_freq / 5); /* ns */
+ 	if (mesh_sync_period < minper)
+@@ -1959,10 +1959,10 @@ static int mesh_probe(struct macio_dev *mdev, const struct of_device_id *match)
+ 	set_mesh_power(ms, 1);
+ 
+ 	/* Set it up */
+-       	mesh_init(ms);
++	mesh_init(ms);
+ 
+ 	/* Request interrupt */
+-       	if (request_irq(ms->meshintr, do_mesh_interrupt, 0, "MESH", ms)) {
++	if (request_irq(ms->meshintr, do_mesh_interrupt, 0, "MESH", ms)) {
+ 	       	printk(KERN_ERR "MESH: can't get irq %d\n", ms->meshintr);
+ 		goto out_shutdown;
+ 	}
+@@ -2012,7 +2012,7 @@ static int mesh_remove(struct macio_dev *mdev)
+ 
+ 	/* Unmap registers & dma controller */
+ 	iounmap(ms->mesh);
+-       	iounmap(ms->dma);
++	iounmap(ms->dma);
+ 
+ 	/* Free DMA commands memory */
+ 	dma_free_coherent(&macio_get_pci_dev(mdev)->dev, ms->dma_cmd_size,
 -- 
 2.8.1
 
