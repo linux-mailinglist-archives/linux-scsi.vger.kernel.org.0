@@ -2,48 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 526D038DF97
+	by mail.lfdr.de (Postfix) with ESMTP id 5415E38DF98
 	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 05:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbhEXDKs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 23 May 2021 23:10:48 -0400
-Received: from mail-pf1-f179.google.com ([209.85.210.179]:34588 "EHLO
-        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbhEXDKo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 May 2021 23:10:44 -0400
-Received: by mail-pf1-f179.google.com with SMTP id q25so1627567pfn.1
-        for <linux-scsi@vger.kernel.org>; Sun, 23 May 2021 20:09:16 -0700 (PDT)
+        id S232253AbhEXDKt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 23 May 2021 23:10:49 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:39734 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232200AbhEXDKq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 May 2021 23:10:46 -0400
+Received: by mail-pg1-f173.google.com with SMTP id v14so16330688pgi.6
+        for <linux-scsi@vger.kernel.org>; Sun, 23 May 2021 20:09:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=R5KclDvO9a6xFzsM5jOel7yG2fn1Fo/rLdTZNwbuFTA=;
-        b=FMsgXeS/J/GRwYKdrEOjmiTYuyrHYkEq9qEF5hfzqyijJhZ1rKd06fifJPhUe23ViT
-         CLdZru0Bqk9Ib19/P44+KfqrMPkY+5jDi8/9Fr5KXNrqhw8qgaaMMIG1ucbm+JUnLeUW
-         3bmerCD2Vfb/VcsrQ3yIbxZen1y+9+R6NqB9T4ez9uACg8XrmuS1lL3yCSiYN50trJ4B
-         3Ya2AYR00cs7G0bj3mbtOFHFvUXW/ZSx9OmjyLvL1/Guihdjii9rk9tBW+vYlSnZoqWZ
-         EynivHYShHNlCgjsMLgX+aH8tDYHV5vZi3Swn9htLmW8RsifZa/oNvFBoNSbSGgcw7Sc
-         xDdg==
-X-Gm-Message-State: AOAM531/Efr/RXvyMZS/z4+NQqNGP+scEnzKJAJUJNZTFWM2lZKJQEcX
-        1jwtPKBpi20N4eczI7tb0q8=
-X-Google-Smtp-Source: ABdhPJy0wpFaZggBYu3EYPUOkn7miTZP+dzREJnhDysjVagqcWDi1AQ3VpWM6cri1+Qr5mnLMFMOGA==
-X-Received: by 2002:a65:4d44:: with SMTP id j4mr11135598pgt.275.1621825756078;
-        Sun, 23 May 2021 20:09:16 -0700 (PDT)
+        bh=KYyvj8sPypakZuMmZlRPWY8QgoYwTR2Pr8+T7m6OEgU=;
+        b=mCQnlit0Ft4DO3d1MJeGXqPhPHr/gSupF7hqG/q9LXIhtcrAnLFBx+P6bOneClnsHB
+         dUWOUcOpNzU649sWgd5p1tlMYJPgnuhhYijDUJg+jpLgCvSoPoSkyNPj/fIpezku3J8t
+         Mn7RM0vLWesmVWHk7CtvcfXMEsSAPpAAim4zjp1XMByASxDbZ5pgpbCSEO2iUwfGU68L
+         eJxcFXapZ82BDK3etCrMGQHPcdw51TJMqPAU3SblPwpB8H3D+RX6MD+eJ4imFk09YpTf
+         d3qZ+Rn4JbDO9EUrpBFu9IJbMbQKlXJzA5NYRPMwiOJ+YIvxj1jyY7S5XYw0MntgiJzx
+         i5TA==
+X-Gm-Message-State: AOAM5336LUb5Kz55rL7EnmxPcs60iUjCoPHX/gjb4ywwQr874zBDe0Hm
+        1tgHEGw/WjRXIYs/BQ6Phws=
+X-Google-Smtp-Source: ABdhPJyTWDnGKSmb/TQifXANyVjsKw0gFakYyFQ4ydQwaYdgbK5Z6ATCGyG2C7eExo4qH9YJ06jD1Q==
+X-Received: by 2002:a63:1e64:: with SMTP id p36mr11138126pgm.105.1621825757513;
+        Sun, 23 May 2021 20:09:17 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id v9sm11131863pjd.26.2021.05.23.20.09.14
+        by smtp.gmail.com with ESMTPSA id v9sm11131863pjd.26.2021.05.23.20.09.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 May 2021 20:09:15 -0700 (PDT)
+        Sun, 23 May 2021 20:09:17 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
         Bart Van Assche <bvanassche@acm.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
         Doug Ledford <dledford@redhat.com>,
         Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [PATCH v3 08/51] RDMA/iser: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Sun, 23 May 2021 20:08:13 -0700
-Message-Id: <20210524030856.2824-9-bvanassche@acm.org>
+Subject: [PATCH v3 09/51] RDMA/srp: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Sun, 23 May 2021 20:08:14 -0700
+Message-Id: <20210524030856.2824-10-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210524030856.2824-1-bvanassche@acm.org>
 References: <20210524030856.2824-1-bvanassche@acm.org>
@@ -56,22 +54,32 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Prepare for removal of the request pointer by using scsi_cmd_to_rq()
 instead. This patch does not change any functionality.
 
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/infiniband/ulp/iser/iser_memory.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/ulp/srp/ib_srp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/infiniband/ulp/iser/iser_memory.c b/drivers/infiniband/ulp/iser/iser_memory.c
-index afec40da9b58..9776b755d848 100644
---- a/drivers/infiniband/ulp/iser/iser_memory.c
-+++ b/drivers/infiniband/ulp/iser/iser_memory.c
-@@ -159,7 +159,7 @@ iser_set_dif_domain(struct scsi_cmnd *sc, struct ib_sig_domain *domain)
- {
- 	domain->sig_type = IB_SIG_TYPE_T10_DIF;
- 	domain->sig.dif.pi_interval = scsi_prot_interval(sc);
--	domain->sig.dif.ref_tag = t10_pi_ref_tag(sc->request);
-+	domain->sig.dif.ref_tag = t10_pi_ref_tag(scsi_cmd_to_rq(sc));
- 	/*
- 	 * At the moment we hard code those, but in the future
- 	 * we will take them from sc.
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index 31f8aa2c40ed..e3a7ee8d451d 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -2182,8 +2182,8 @@ static int srp_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scmnd)
+ 	if (unlikely(scmnd->result))
+ 		goto err;
+ 
+-	WARN_ON_ONCE(scmnd->request->tag < 0);
+-	tag = blk_mq_unique_tag(scmnd->request);
++	WARN_ON_ONCE(scsi_cmd_to_rq(scmnd)->tag < 0);
++	tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmnd));
+ 	ch = &target->ch[blk_mq_unique_tag_to_hwq(tag)];
+ 	idx = blk_mq_unique_tag_to_tag(tag);
+ 	WARN_ONCE(idx >= target->req_ring_size, "%s: tag %#x: idx %d >= %d\n",
+@@ -2814,7 +2814,7 @@ static int srp_abort(struct scsi_cmnd *scmnd)
+ 
+ 	if (!req)
+ 		return SUCCESS;
+-	tag = blk_mq_unique_tag(scmnd->request);
++	tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmnd));
+ 	ch_idx = blk_mq_unique_tag_to_hwq(tag);
+ 	if (WARN_ON_ONCE(ch_idx >= target->ch_count))
+ 		return SUCCESS;
