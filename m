@@ -2,49 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 604E338DF99
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 05:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A798238DF9A
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 05:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbhEXDKu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 23 May 2021 23:10:50 -0400
-Received: from mail-pj1-f42.google.com ([209.85.216.42]:36694 "EHLO
-        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbhEXDKr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 May 2021 23:10:47 -0400
-Received: by mail-pj1-f42.google.com with SMTP id n6-20020a17090ac686b029015d2f7aeea8so10436674pjt.1
-        for <linux-scsi@vger.kernel.org>; Sun, 23 May 2021 20:09:19 -0700 (PDT)
+        id S232246AbhEXDKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 23 May 2021 23:10:52 -0400
+Received: from mail-pl1-f174.google.com ([209.85.214.174]:38544 "EHLO
+        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232238AbhEXDKt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 May 2021 23:10:49 -0400
+Received: by mail-pl1-f174.google.com with SMTP id 69so13910532plc.5
+        for <linux-scsi@vger.kernel.org>; Sun, 23 May 2021 20:09:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TXPzkzuJQGE01JowfjgEICCjDt9e86KsHwCasja+Oho=;
-        b=YXxWVEBT3OGNFsjqWw/4/3BgsfNLvTCLxtd+cZB8sunepvJHbmmaQHzSIn71pOUyKE
-         m4JI3DQYDBNrd2xAy1tTGlDQ1aSE+wtENawyXp6PhGjQxJc7Zco17wNLKQy/EFpUVV+J
-         3e2kNlJmTjuy/oSMIu7BcS+AB4xsh7DakYkhHCo3KRM4G7ty+YqJzTu9BfcTqkKZWr8c
-         Mpe9nB1269oDar3r53z5DHNV4lUczofYqGQyLocbpTRVL0ocM9nJ7wZBXNBg/n2gWQbz
-         J62cGBPBgx5aZRV/n/Ltu1WZaWa6UcM6r7GveTTO6R4mVLzzEhwp7SKW+g2CeJZM06aX
-         A+QQ==
-X-Gm-Message-State: AOAM533Aez2LizEO6Kb/lMHM9EUsQE7cRxqRe9XlkxIZfxwI062H1fGV
-        0kJWb5OKJQCcGLjbzQkUq3M=
-X-Google-Smtp-Source: ABdhPJz5ncnMjO9qqN/oiUY4AfBEExJZXzLi3LUqTSM3rJVDpTUvmTVQgQyOm9spwc+Ec5cQD5wPXw==
-X-Received: by 2002:a17:90a:6402:: with SMTP id g2mr22411025pjj.82.1621825759152;
-        Sun, 23 May 2021 20:09:19 -0700 (PDT)
+        bh=bzKvqzuA/WFu9Oar88tH0h8JNjeKZGFwFrdGi+tFRcQ=;
+        b=Ra9jPBq+bSfncZx9SUYttxJ0ujhvZwXF6kfQp+1mZJWtBlNnzNtgYpyouXyExi11oY
+         c1NUdPVeCCYDDPjaT0T15B0CchnwWNeqAj+LEaBsDkzeq3aJAM5FF1aeCulusYHPEqJ+
+         L1U/dYfEiqO0BKAFzW+wByfLzFVlDVvI7FlLAsBJFYQdvMVW4nyKBCie2fa/sIw14diR
+         syephU4LYct1fhXMQwstCHqsDjyYJp1fZ2cRvJuBJp6A8jDJwryB3vqlX4FpFyOonbVk
+         eFiHm787muvmPPpTPuEWnZNcMybLr0mLzkkiFFpYsdMfJPAOl5RFgX41to+A5jI284Ku
+         hL5g==
+X-Gm-Message-State: AOAM532P+YMAT5uoqMvshZADsf/WljOk6r+zVuxxW6for/SBhTwENrO2
+        OIhJme2L8OxabK84sKXPNIE=
+X-Google-Smtp-Source: ABdhPJxTHJs5+YXvKD1nYrFhC157OfU6zv362qEQnt4moEwLm8pWTq4ddEbk0PdQGGt+IyStC3xh3g==
+X-Received: by 2002:a17:90a:8902:: with SMTP id u2mr22516976pjn.143.1621825760801;
+        Sun, 23 May 2021 20:09:20 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id v9sm11131863pjd.26.2021.05.23.20.09.17
+        by smtp.gmail.com with ESMTPSA id v9sm11131863pjd.26.2021.05.23.20.09.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 May 2021 20:09:18 -0700 (PDT)
+        Sun, 23 May 2021 20:09:20 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
         Bart Van Assche <bvanassche@acm.org>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: [PATCH v3 10/51] zfcp: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Sun, 23 May 2021 20:08:15 -0700
-Message-Id: <20210524030856.2824-11-bvanassche@acm.org>
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v3 11/51] 53c700: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Sun, 23 May 2021 20:08:16 -0700
+Message-Id: <20210524030856.2824-12-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210524030856.2824-1-bvanassche@acm.org>
 References: <20210524030856.2824-1-bvanassche@acm.org>
@@ -57,22 +53,21 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Prepare for removal of the request pointer by using scsi_cmd_to_rq()
 instead. This patch does not change any functionality.
 
-Acked-by: Benjamin Block <bblock@linux.ibm.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/s390/scsi/zfcp_fsf.c | 2 +-
+ drivers/scsi/53c700.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
-index 2e4804ef2fb9..9e3f37b4423d 100644
---- a/drivers/s390/scsi/zfcp_fsf.c
-+++ b/drivers/s390/scsi/zfcp_fsf.c
-@@ -2377,7 +2377,7 @@ static void zfcp_fsf_req_trace(struct zfcp_fsf_req *req, struct scsi_cmnd *scsi)
- 		}
- 	}
+diff --git a/drivers/scsi/53c700.c b/drivers/scsi/53c700.c
+index 77ccb96e5ed4..4bff29169f19 100644
+--- a/drivers/scsi/53c700.c
++++ b/drivers/scsi/53c700.c
+@@ -1823,7 +1823,7 @@ NCR_700_queuecommand_lck(struct scsi_cmnd *SCp, void (*done)(struct scsi_cmnd *)
  
--	blk_add_driver_data(scsi->request, &blktrc, sizeof(blktrc));
-+	blk_add_driver_data(scsi_cmd_to_rq(scsi), &blktrc, sizeof(blktrc));
- }
- 
- /**
+ 	if ((hostdata->tag_negotiated & (1<<scmd_id(SCp))) &&
+ 	    SCp->device->simple_tags) {
+-		slot->tag = SCp->request->tag;
++		slot->tag = scsi_cmd_to_rq(SCp)->tag;
+ 		CDEBUG(KERN_DEBUG, SCp, "sending out tag %d, slot %p\n",
+ 		       slot->tag, slot);
+ 	} else {
