@@ -2,163 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B147338ECE6
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 17:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFE338ECE4
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 17:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbhEXP2y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 May 2021 11:28:54 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:58488 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbhEXP1f (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 May 2021 11:27:35 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14OF8qkw170062;
-        Mon, 24 May 2021 15:25:31 GMT
+        id S233373AbhEXP2x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 May 2021 11:28:53 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:58192 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233170AbhEXP1Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 May 2021 11:27:24 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14OFA4Sj184467;
+        Mon, 24 May 2021 15:25:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
  references : from : message-id : date : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=corp-2020-01-29;
- bh=hglqfDCnpLBfA4KBOBFMHqutJ5wVOLyt3kfT+nTLaZc=;
- b=hX8HW7xnS0SvV7NMDMOp9bhyNfy1EWdnT8agR8a35xbJSv1NA1kOdXSB6DFf8Z55swyD
- kaAooQLbDJiJgOpRplZulRLQ2mVmCms3LSFuQKys3lxz7WipHJKDdfnc1CW/l5tMACDd
- xQEke2sbaJDp2AbQcDEXMBF+Lu0M/aRfUtqe3uEsNpfwX7/vXcErmSnPM6bntzkIhm4C
- LWb/FFy4zvtZENCloO9RMmsmX9SWO40x8BihrIViGSRvFJLMCEXcjqrCyvGNE3xxOdYj
- vaWVgd/5dOK7dnDKYRM46qAIFhsJnROrd/xavf44wg9g149Vttg8MYg1nPHbDOcnrrWz iQ== 
+ bh=8TXS2tBo67VkRpohQsYCapsLjSGTmrsjK6TmKiFkzrs=;
+ b=iSqJ3FcesSOq2dbUFnJ5rSVF5R+X0kEUcKE69wGN6nmwsnUPcLLBP6ZLpokD4RyGfYio
+ PoE8UmPB/SBmYKryMK1sZ4jB71fAtKjMpFtlZe2fD0UYJtk2gnDFPLavJvYZNQh97uXY
+ MzSgHRD4bA80UZBp1rxnVHERoPaTBzdvmSeAL9sEK93gQfizFIpYtnx1O3hJM7WgHWED
+ W4zy81B0itT7MDMIpkXVRU1GWEN8LNI1yu7u6K9BPDe3KQFyf/GZEA+eDJjGNtDUTF2v
+ JO/IDyXXIhKXgyCvQFKcXAtx7zWYUwSObO6RKzL2krspc8f70kY5s1El7z4M8op5/eaw sw== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 38pqfcbf8w-1
+        by userp2130.oracle.com with ESMTP id 38q3q8tvs6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 May 2021 15:25:30 +0000
+        Mon, 24 May 2021 15:25:35 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14OFBwB3143952;
-        Mon, 24 May 2021 15:25:30 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by aserp3030.oracle.com with ESMTP id 38pr0b3hf0-1
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14OFBxtr144006;
+        Mon, 24 May 2021 15:25:34 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
+        by aserp3030.oracle.com with ESMTP id 38pr0b3hfx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 May 2021 15:25:30 +0000
+        Mon, 24 May 2021 15:25:34 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NZhyiYZs3T+Eg1UvrkxrYB+7qycR2lW9t0qbtGBJuro27LpI/cEVr9kRn8xCfOGs1oy+OssKfJlYLo66dyLfr/dwdgSV1c1xF7i4xjCfoLC6P6mJjTmwiJxq3EYb8U3+sqKf6fwU7TZIeBEEj9tKMPySFxAS5/Xa0vAPOaQI8hGDrIiiB4gVEactne6gKPj5zGj08T5ChpyM3Xr0c6DVmIMSZ3OEaGK4gy2SNlJU3wArJJ3+mKrMnr623r3ca7qOYta+KGz16kYh4eqZzZCmIlmS75dX7cEgVtKtTTbXeCVQHs2zULMb9tmXTxlpgWblv38tuE3DA3ScQOG23dN/NQ==
+ b=DFXQORyDGsNaYpYFyMR9Yq3vVH/LbI79zcI3M+cIQTRly66XrHVK/aHlaQKCdbmo74AOv7AfBw9R8phk2aV1QcKlszC5A7eNnyGX4jbG9tfDHU/jyZGAG0dl1tHNYkdFusHCz/ktc6BaS3U2gwkDfTNUDWKmvnWhmkJYLXFG2glWhnAzOySb/5++LOQcz9lhbFR0oIUn1H+X6Jasa6IHTNdhShxk3jRX1Pn+1SjFngYNPoBQgxVnpjpzcNnbcWlrBVPCqwYQ2H0w7V06mayF91QcRc6ho+qyVJ7M2wToUU/qMaZ6kYM8uusmiVazqccRWI3BH3+OD/eR1mPX3KEXpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hglqfDCnpLBfA4KBOBFMHqutJ5wVOLyt3kfT+nTLaZc=;
- b=BAIxaSAdbSlYSkQlyEFJM7xEePvcOUTxUp6CiNs8E5T9UOZ8UqQ4eMdWB2STZKkOAFibRnk0t8yYm4NFiXIUgnPp3nckJNjCrNi8XTDSHvHflN50jtPhjzVKQ5Thz6uoOo9A9DtglW2Uziovbn7xa5jqdeTkBUiTWrFUEAzqVtEH8Brq16ryj+ZbZaTRckK17OGNjeRNZLejzZwdirJLjxIa6Y2YrcUNoiQy4V2VcfDrbalzrKdEL+7wr1rBXf8MCQcA3DWAYkIUI8a2Eauvz0EotOrMkd/wQkpmIPeTbHuUNjncoK712USwLaRsRuXGwWWV2BQVh+cKPCjA6+VX5Q==
+ bh=8TXS2tBo67VkRpohQsYCapsLjSGTmrsjK6TmKiFkzrs=;
+ b=HTFUZ0NjJVG9hCVNAkXqfJMNsXBToXMf+dqvSqQYFfzHNpCP7HZAhNYpkk9N1WLdQqeRi359wyRcBSrLn63pU4oWauOPJYWSfLubcE8XIUCtGZ7PsohSRrt1Wtrehbg4ueAdZhqlVf8lfeIhs2/rrUYvQHF7npNesJKdlJRslXu2mk7CRPVfVmpvBh1n/xKiutj2zOICdGux6cKSM7udOZK3xkCEECGFM/pc/PW65d1EOxsp/6O43yexocO863KFZkyiS0Yzuj1SHrl/hRG5vGleoIoggCbUH/8lRZs8xXXi2jZ7P7VdAdYUUPN5lAvDWrAePWkEiAabwlA5CBSuHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hglqfDCnpLBfA4KBOBFMHqutJ5wVOLyt3kfT+nTLaZc=;
- b=RxfmTMRf0QZTpeRo7iz44ttOqCCd+wkMfhnzx/Go7aQQfW8U8MnV8gS0yDpcJK3HxakolTurl+LanaiZnk26EzaD7SFnECnMEbVGRmxtFWC+JWjc2r5WS8hNN+TvixWu8aCgZ8WWdtdNzGDakMTLPzzcf3NKNcABL838vYPq/W4=
-Authentication-Results: linutronix.de; dkim=none (message not signed)
- header.d=none;linutronix.de; dmarc=none action=none header.from=oracle.com;
+ bh=8TXS2tBo67VkRpohQsYCapsLjSGTmrsjK6TmKiFkzrs=;
+ b=U5Fuznmz6c9IzgY5oKdLtekQe9prRd8Zm1hfObi1QUJSK5Bg8oqxHjAhOskpDX6aCX5tTTo/aueMzqknXteKn6GMEUQStySRy5ZM7dzBDYg2+tw5dKucKjZPMEgn1F6kfQ7nsv6tPhIvy9KJ6F/FArReFdx6KBO90kVvB0M3RS8=
+Authentication-Results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=oracle.com;
 Received: from SN6PR10MB2943.namprd10.prod.outlook.com (2603:10b6:805:d4::19)
  by SN6PR10MB2573.namprd10.prod.outlook.com (2603:10b6:805:48::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.26; Mon, 24 May
- 2021 15:25:27 +0000
+ 2021 15:25:32 +0000
 Received: from SN6PR10MB2943.namprd10.prod.outlook.com
  ([fe80::168:1a9:228:46f3]) by SN6PR10MB2943.namprd10.prod.outlook.com
  ([fe80::168:1a9:228:46f3%7]) with mapi id 15.20.4150.027; Mon, 24 May 2021
- 15:25:27 +0000
-Subject: Re: [PATCH v3 1/3] libsas: Introduce more SAM status code aliases in
- enum exec_status
+ 15:25:32 +0000
+Subject: Re: [PATCH v3 2/3] Introduce enums for the SAM, message, host and
+ driver status codes
 To:     Bart Van Assche <bvanassche@acm.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
-        Jack Wang <jinpu.wang@ionos.com>,
         John Garry <john.garry@huawei.com>,
         Hannes Reinecke <hare@suse.com>,
-        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Tom Rix <trix@redhat.com>, Luo Jiaxing <luojiaxing@huawei.com>,
-        Jolly Shah <jollys@google.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
 References: <20210524025457.11299-1-bvanassche@acm.org>
- <20210524025457.11299-2-bvanassche@acm.org>
+ <20210524025457.11299-3-bvanassche@acm.org>
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
 Organization: Oracle
-Message-ID: <1b972359-a16e-d146-7a29-6f2609fb19f7@oracle.com>
-Date:   Mon, 24 May 2021 10:25:23 -0500
+Message-ID: <5298aba0-045d-32dd-76a5-cc699940768d@oracle.com>
+Date:   Mon, 24 May 2021 10:25:29 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
-In-Reply-To: <20210524025457.11299-2-bvanassche@acm.org>
+In-Reply-To: <20210524025457.11299-3-bvanassche@acm.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [2606:b400:8004:44::1c]
-X-ClientProxiedBy: BYAPR01CA0033.prod.exchangelabs.com (2603:10b6:a02:80::46)
+X-ClientProxiedBy: BYAPR01CA0008.prod.exchangelabs.com (2603:10b6:a02:80::21)
  To SN6PR10MB2943.namprd10.prod.outlook.com (2603:10b6:805:d4::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2606:b400:2001:91:8000::ab8] (2606:b400:8004:44::1c) by BYAPR01CA0033.prod.exchangelabs.com (2603:10b6:a02:80::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.24 via Frontend Transport; Mon, 24 May 2021 15:25:25 +0000
+Received: from [IPv6:2606:b400:2001:91:8000::ab8] (2606:b400:8004:44::1c) by BYAPR01CA0008.prod.exchangelabs.com (2603:10b6:a02:80::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.23 via Frontend Transport; Mon, 24 May 2021 15:25:31 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 055ffe29-3743-4df1-1892-08d91ec82896
+X-MS-Office365-Filtering-Correlation-Id: 2d7d60cb-a6ca-40ac-2bd9-08d91ec82b61
 X-MS-TrafficTypeDiagnostic: SN6PR10MB2573:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SN6PR10MB25731CB2DE177F402F98BCFBE6269@SN6PR10MB2573.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:298;
+X-Microsoft-Antispam-PRVS: <SN6PR10MB2573ED7D2363E3605E3BA3F7E6269@SN6PR10MB2573.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EgA9cEkPJCVXMvzCqrZkUMfw8g2sm/bKOdf2Z0kbWE5m65fGE9VqTnojf1cGJDd7TXCxfEKnOba3P7+R7LTq4/cEVLbYf0NcZ7xfi/C45YdFQ7TuZQzuiKaf6DpaWZfFX1o/v/z2XsrtG74kjls8WPBIA4t1nainvHHYlOfZo23kiSjF4r+zH91Ls4Bx8ccVwa5a/mVrChdKpSkwjTToO3QpXFR0hyJ0RVKynhqVHlwSvy2bCaexyxAHA1e9shHGmaPWGLzxKJjyXE9dfmS1A6uGQU0r3/negfFdTiUyi0XjJuYPuQLboxZZJAy52rj5L6dNXvubhayu18zsE0yXCWGjeSTn+Gq9quzF8MhDiedJW/vvfM+ih24s4H+y/jxV/3CXiEEsh+XN+IAUT8zrQngd4w3goRu2pItL9rZosSH46L4PMvwXYGRrkluoBs4xPaM5k+pD2j0T8j1VXedJ0IQzOAWzLqT+i6FQmJ54rdbtkzfOnINJPRhQIHHy1HSWydkeTLk/OISThZno6ZCJdMu+K24vYH40fhdvK4eSZYBSCmzvCcAleQaBFz2yPUsxspbowxfUpWQeYsCoQBSOz7nqLOLTwfD7L/XBe4LCXAppCqXaj0VgGRM861Dnpr+VI0NmoBHi/ZdslRc17v4XTQZeIaEqTdasLG4Z/TaAGc4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2943.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(376002)(136003)(366004)(346002)(53546011)(83380400001)(8936002)(4326008)(54906003)(186003)(66556008)(110136005)(6486002)(478600001)(8676002)(36916002)(316002)(31696002)(5660300002)(86362001)(6636002)(66476007)(66946007)(16526019)(7416002)(38100700002)(36756003)(2616005)(30864003)(44832011)(31686004)(2906002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?U0F2Y2s1blo5bElYNWNMMHg0SUpHTmd3dTBtK1NwN2dNU1lIS2hKSzUxclhL?=
- =?utf-8?B?ZHJ6Z0lJQ1Vad0prbVNoTUZ4NmtEQU9JRXhTcURxS3pNWXB4YWRSNW9IcXI0?=
- =?utf-8?B?eVpxMXJVVnhwa1BPNVlIbkZOckhlZ0hxK2Nmb2ZBcytid1FLUzVDaTNObitZ?=
- =?utf-8?B?OExuVzM1N0svdGtKaWtRS0hwRXJ4TmZEMDlxMTlFNHZScjBoTFJCSXFMblRE?=
- =?utf-8?B?dEVuZjY1d3FIUzlvOCszelFpTlYyWFFTRTl1MUZkbzY1dlgreEFkN1hJdVE3?=
- =?utf-8?B?ZE15aFlqSFVxTVIrVEZrNHZsWEVpWk1Cd1FKNUtGRWVzTDRLMHZWMFh6VjNG?=
- =?utf-8?B?TTMvc000U2JMUXVKRVpJbkJ3d2c5R3B3L216K2FGbGpYU2ppY2hWMDFJd04z?=
- =?utf-8?B?K3R1YkxCQ0tKd0VQZlgxczFjNlVka3FxUUJnVkdpbWVXMkhVUnl1ZHpFYWNm?=
- =?utf-8?B?aFZRc2RlQlgxNGw3QzdLT0lwT3o4K05nKzEwMmpVbmdYYkVJREtWSEIrMWx1?=
- =?utf-8?B?akt3WWV1RUxuWVRCcWtoTDJJMDlBU1pNTVI0RjRibkhwQ2NOcDBhcUh4VE1H?=
- =?utf-8?B?N0RWS3lmZW41UmJyZlZjK2lmaitqK1VValMvS2RRSlNWMTFSNWN5ZElSamZy?=
- =?utf-8?B?anB5VDlNdDRzdDMrWnhNdVdJdWo2OFpSNytTZWZQUk9rV3F3dWJQK25hVFBp?=
- =?utf-8?B?NjExd1BQYmwwcXR3NEI1VU5SSWRGcjdMQnZsdUlTODJKNkVuR0V6OExsN0l1?=
- =?utf-8?B?UExVZHRRSVQ5V0VUd1FxVk45cTZrTHRHWFdpTm0zTERoazcrV3FUZU9GQ0I5?=
- =?utf-8?B?WkRLYkxVUGhkNXoxSjU5cHJuMUF1ME1Mbm93ektlYWpEUmF2VWJtK3JWZEl0?=
- =?utf-8?B?dzdKeGwwcE5TM0QyUnJNMlhvaHIyWnZDQ0ZmcktZTkJyUlpTMHZLemlWT3RJ?=
- =?utf-8?B?cThXQUtuakdwVkV1RmU1eUgzck52UCtSVHNPTU5kZmxtZzNsRG5weXhveDBB?=
- =?utf-8?B?Um5sZi9RTS93dS9GYkxkcnZHMXBOZTRRNFFnb1UwWnQ5MU14TG1ZaFROUjRB?=
- =?utf-8?B?dmY3K3lkQkNDZHE0dEp0QjhWOUk0bk1vWHRHdHN3RUQrcjBNdDdUeThVYmoz?=
- =?utf-8?B?YmVIRVdzb2FOd2c5YnhXazcvWEI1SW1MMWwwY2x1TXRjeWJoTTdqaGRLUjFh?=
- =?utf-8?B?d0dKOHljYVRyZ3A3cTdwRXhya0oyakJDanVIZ1lMUXJQV2Q4VXluV2Y0Wkk5?=
- =?utf-8?B?K1NJa091R00zdS9iTE9zaWVTUmFiY3B4WnRpanlPdVJhaHI0QU1sUk9ZdzVK?=
- =?utf-8?B?M0ZVQitzOElMYnA3N3BPeXNseGtlWWhYclBmNUZtVjczMlRLanhmdXA4RlhK?=
- =?utf-8?B?QzVXK3VMa3pyRnZ4eXdkTXVGcmJRM3R4aW5Kb1J3WjVJcC9oS3JzWWdHb0Er?=
- =?utf-8?B?Ykc4YWxGdGY2MzQvYnFBUzRXRUNDeUVGNzFtQUgvbkVIV1RIdkI4OXVTbkk4?=
- =?utf-8?B?cWlCeGNlR0MzTzgxRnZmeFFhUDFEZmZCcnhTY0JCVWo3WXpaWG15WmxoSDlC?=
- =?utf-8?B?dGx6NEdGUWRSTWJNdDBLTlFhSyt5RXU3bjVwZEJqaEhXT1hrOHJ5ZG9HUU5z?=
- =?utf-8?B?L3E4VXlJSHdpWUp1bUNIN21TazB1NmJKQUUzZW9JNUdORmRzSm1LRWZTRWkv?=
- =?utf-8?B?cHhKcGhIcEZxcU5ybTMwZ0U1NXdjeFFxOUl6Nk5TSDFLMWJXclcwYkdvbzN5?=
- =?utf-8?B?VEpxbWYzUWVPMDJNREdXclNNaXhTV2ZRNTJIUU94TFprWTE2WW5FNGsySWhK?=
- =?utf-8?B?TEtiSi82eis0cWJ1am0rUT09?=
+X-Microsoft-Antispam-Message-Info: E4EoS8Ik45x/feA1nkMIcSsE+RDd2PagUOSk2S2CsORQ1RPhbUVBsLJMRKh0n7pglM5sXmf2tqIrUj7nqshhwVfvD2ufweQtAxmomTzciUos6mFHHl0H1yVGRiQ/la6VvHK7RnmKFSCvX3itqlzBmKSEGsq6vZ3QP8pTxvPvrpKBcqn5hOLwHHbfqEojNCn6sIjHAYszfBk3dN5loHLIvObtstjEvhJ5aLPcbiRXUK7zoalhRH3up1Y3QlDaEenKrq6P3QWzA+DyzBdm1Vrj6tTF+IDXKuC9MbUkS0A6FRqY4Xk9ctbXBOblkZUMBh8EWZqJiUMP3OV2vGm5GujH/rcHpz1Gx1g71fvDWccWCtMXiuUN+RrVyU3EZdIWnIwhUYWOhmx40BlJeqJR73i0DUndGcEDuc0937KSNN3KP1ZY/GwCpKzxAqAUmz7a2MYWY6qJJNxGGvri2q2+5Pd2L2EHUXSMFQBk4L6Wk9CzVu+PeeM6KdlhBjOj5HjBAegITkTQgqWCj8Z2MM3YiTCPR9W2haLBgCZ1cK/Ln0zxV6q7PD5FFk16GMWi6ci+MJNNonxaac7vEiJ/uVOWx+usBAZSn/3KfUt+oJ73x1wLr4b5KRiiOVBJqBsOQXejNPNInlK/S5DhiRMAR6ei1giXiInelaMb3sBQt9o/stErB64=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2943.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(376002)(136003)(366004)(346002)(53546011)(83380400001)(8936002)(4326008)(54906003)(186003)(66556008)(110136005)(6486002)(478600001)(8676002)(36916002)(316002)(31696002)(5660300002)(86362001)(6636002)(66476007)(66946007)(16526019)(38100700002)(36756003)(2616005)(30864003)(15650500001)(44832011)(31686004)(2906002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?MEI2MGJVMStWS1UvcmdLa2orV0pHUFlHT01IZWZVUDR1VmdwNGxjTERrUE5y?=
+ =?utf-8?B?ZG5nL0FsekZ6OW01WUd2UmRleFJHa3VtdmM2OWpabGNPSzMrZzgvZVJqVEE5?=
+ =?utf-8?B?VTQzT2pnV3FpWVlBK1dwclp0aTZETmNEVUxHU0hyZ0FJN001YUZXVFBpVGYx?=
+ =?utf-8?B?UDcyZkZONERFM2xuS1hUWFV1b1krdzcwYWg1NytQQzNvbHdqRm1BZTdSbCts?=
+ =?utf-8?B?M3NIU3RBekUxaTBnWThnTUxzN3c0b01KZHBFb3QvWkNyMmdaRElRUytOZnhO?=
+ =?utf-8?B?cnFMakY3T1NRN3dOZHl2elNLR2taM0daN1hzOUprZDF4Zm5zemdIY0o5azNl?=
+ =?utf-8?B?UVpqTG0wQjZveWlFdzJHZW9TVW1wZ1JKRkZoYk9LZUdkUDV0K2dBVHFDbnYy?=
+ =?utf-8?B?UVY3RGZ1dXorN3lOZk1ITFJ1MVpzcm8zOWY5NW9CTVZqM1FObDdhMFBMRUxI?=
+ =?utf-8?B?ekFhQ2RhTHJBV2YwazUzdmxLcS9SaTR4Mk95ZEUrd3JpK0hlTktaNWo1Z0E4?=
+ =?utf-8?B?djUvK2FBSzYwN3FBVEIzbTdsQnpiR0kra1k1RlBHVDFHOGhhVDVyOVgzTFp2?=
+ =?utf-8?B?SzQrVG5wVUpzWE1ZWjNwaEhrVDg5R1BXdzZyY3pVNUJiWFhBYnhvUmpETzQ2?=
+ =?utf-8?B?MElvTkltQUNWKzBUR1RVd2dpcXMyamZySDE5Ni9GWno0WjJBbTNyY1N2NEdZ?=
+ =?utf-8?B?VmxuT2xvK250NVRZVUlQUnNWTVpieDM2eGVIc0xyVkIzNGNIUWNvdG1BT3Vj?=
+ =?utf-8?B?VWpBWE5mYUo2NGJiT3FTZldQZkg5alRJVUcreUVXNDU1U2ZhNmlNVFFJMk8w?=
+ =?utf-8?B?R3BLNjVsbXpGN1hZenJsMXhzcW9mWG9VbGZuVkp4UERZZE81dmo3QUQxcXN1?=
+ =?utf-8?B?Z2FVUTNPa0xYNVVzb2NqeEN6M0ZKME5HSkh1UG45UnVEazI4MjIyTWY3K0NI?=
+ =?utf-8?B?R2VzN3ZHUDEwbDNicG1McFdDeEM2UXFpd0E2RmdXK2N6UFFUL1RQUEM4SmxX?=
+ =?utf-8?B?aGJvOVR1U1UxQ3pFdC84QmFGTlovU3k1V00yWEUzeFNxcnNSK2JIU3V5bW1r?=
+ =?utf-8?B?RkY3WWNkUHcwbnlWZHoyaFBnekdqcndQcWhCbVY5Z0VlUDFvRHVBblRqRWlU?=
+ =?utf-8?B?OE9sRXk1elJjZXVOam91cmY1UVYzdDdBcU1SZGtXSW9QZVhSODJKRGxJYi9v?=
+ =?utf-8?B?dXVyMVlXU2Jla3FaZXdYNW9BSmJIYTl5K3IzYzhSajdFMnVaK3prdGw3dkc4?=
+ =?utf-8?B?MnA0MmxNbTRPUWJMZ1g5Qys1eHdWV0lGMThFTGdBM2V5ZkE2Q1A5UTFKTkdX?=
+ =?utf-8?B?ODhYUytPdE1hdndTQ0VoWWFKSDY0cTMyM010VTRldEt3bU9GUFBJdis3UkhY?=
+ =?utf-8?B?R1pIYWE4Si85SzNHaWpvUVhMeVJjK3loUjJsaFMyZWpaY2s4akxRWXE5OS9P?=
+ =?utf-8?B?WmQ3QlBERjJNTHBBcTlkM01VNmJ4MVFJbVdkenY3STJSZ2ZJTWEzcDJ0emZX?=
+ =?utf-8?B?UzFST3NGZk1XUWJtS1dwQ1dUUEY3NU1WeEdpei9VNnFrc2g1TnNhRVFWYlZB?=
+ =?utf-8?B?WUhtZnhLV0VYaFMweGloY0tlaFBlMHBYb2YvTDcrbFVkN2R5azh5SkVURGhV?=
+ =?utf-8?B?Y2J5RmFZOVYwUFkzVVU0VHRXZEtoVjZXNytJdW1JUXJ2b1dUT3pSdWlnQmdK?=
+ =?utf-8?B?Z1N0MVpiM2FxYXJOUE1nTFZaSEJLK1FCMFkvR0h3R1cwVUl6b041eklMWnY1?=
+ =?utf-8?B?dzRpZklycWN5elpVWlpScUFuZ3NBY0k1TW9wemhYZlFVUXlwY2FSZmpyYzl6?=
+ =?utf-8?B?ZEsybTNOR1dnOVVSR0FxQT09?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 055ffe29-3743-4df1-1892-08d91ec82896
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d7d60cb-a6ca-40ac-2bd9-08d91ec82b61
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2943.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2021 15:25:27.5402
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2021 15:25:32.1365
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pgzzw92uM5ZvO5EmehzXlk67BRWqu1YDSNeZAe7FseaqQe+FG5pzU+/2TAvKTZw1k9SK4dYDhDEJQCI3WzGike4hJop7U2zNvGElnzOL0MY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: gfZpSlh7z+UtvnXU2ktz1tFN/tul1zvMdw9zt6oo6hYuhM6x32f8qDDQFO+ZQcpuhxmNqUJCHkglqAyXGuOmgP8ue8Xidj7zFBLMGGMU5es=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2573
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9993 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
  mlxlogscore=999 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
  definitions=main-2105240094
-X-Proofpoint-ORIG-GUID: M2EfeXVtZT6av8TLd1Ko-Pd2KxGo-xxt
-X-Proofpoint-GUID: M2EfeXVtZT6av8TLd1Ko-Pd2KxGo-xxt
+X-Proofpoint-GUID: IpxLcoSrRBnRqdOarcT58odVHmZ1Fhfe
+X-Proofpoint-ORIG-GUID: IpxLcoSrRBnRqdOarcT58odVHmZ1Fhfe
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9993 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- adultscore=0 phishscore=0 priorityscore=1501 clxscore=1011 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 impostorscore=0 phishscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
  definitions=main-2105240094
 Precedence: bulk
@@ -168,500 +158,299 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 
 On 5/23/21 9:54 PM, Bart Van Assche wrote:
-> This patch prepares for converting SAM status codes into an enum. Without
-> this patch converting SAM status codes into an enumeration type would
-> trigger complaints about enum type mismatches for the SAS code.
+> Make it possible for the compiler to verify whether SAM, message, host
+> and driver status codes are used correctly.
 > 
-> Acked-by: Jack Wang <jinpu.wang@ionos.com>
 > Reviewed-by: John Garry <john.garry@huawei.com>
 > Cc: Hannes Reinecke <hare@suse.com>
-> Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
-> Cc: Jason Yan <yanaijie@huawei.com>
 > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 > ---
->   drivers/scsi/aic94xx/aic94xx_task.c    |  2 +-
->   drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |  8 ++++----
->   drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  8 ++++----
->   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  8 ++++----
->   drivers/scsi/isci/request.c            | 10 +++++-----
->   drivers/scsi/isci/task.c               |  2 +-
->   drivers/scsi/libsas/sas_ata.c          |  7 ++++---
->   drivers/scsi/libsas/sas_expander.c     |  2 +-
->   drivers/scsi/libsas/sas_task.c         |  4 ++--
->   drivers/scsi/mvsas/mv_sas.c            | 10 +++++-----
->   drivers/scsi/pm8001/pm8001_hwi.c       | 16 ++++++++--------
->   drivers/scsi/pm8001/pm8001_sas.c       |  4 ++--
->   drivers/scsi/pm8001/pm80xx_hwi.c       | 14 +++++++-------
->   include/scsi/libsas.h                  | 12 +++++++++---
->   14 files changed, 57 insertions(+), 50 deletions(-)
+>   drivers/scsi/constants.c           |  4 +-
+>   drivers/target/target_core_pscsi.c |  2 +-
+>   include/scsi/scsi.h                | 81 +--------------------------
+>   include/scsi/scsi_proto.h          | 24 ++++----
+>   include/scsi/scsi_status.h         | 89 ++++++++++++++++++++++++++++++
+>   5 files changed, 107 insertions(+), 93 deletions(-)
+>   create mode 100644 include/scsi/scsi_status.h
 > 
-> diff --git a/drivers/scsi/aic94xx/aic94xx_task.c b/drivers/scsi/aic94xx/aic94xx_task.c
-> index 71d18f607dae..c6b63eae28f5 100644
-> --- a/drivers/scsi/aic94xx/aic94xx_task.c
-> +++ b/drivers/scsi/aic94xx/aic94xx_task.c
-> @@ -205,7 +205,7 @@ static void asd_task_tasklet_complete(struct asd_ascb *ascb,
->   	switch (opcode) {
->   	case TC_NO_ERROR:
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
->   		break;
->   	case TC_UNDERRUN:
->   		ts->resp = SAS_TASK_COMPLETE;
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-> index 3cba7bfba296..9e58009369f9 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-> @@ -1152,14 +1152,14 @@ static void slot_err_v1_hw(struct hisi_hba *hisi_hba,
->   		}
->   		default:
->   		{
-> -			ts->stat = SAM_STAT_CHECK_CONDITION;
-> +			ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   			break;
->   		}
->   		}
->   	}
->   		break;
->   	case SAS_PROTOCOL_SMP:
-> -		ts->stat = SAM_STAT_CHECK_CONDITION;
-> +		ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
+> diff --git a/drivers/scsi/constants.c b/drivers/scsi/constants.c
+> index 84d73f57292b..28ef83868478 100644
+> --- a/drivers/scsi/constants.c
+> +++ b/drivers/scsi/constants.c
+> @@ -412,8 +412,8 @@ static const char * const driverbyte_table[]={
 >   
->   	case SAS_PROTOCOL_SATA:
-> @@ -1281,7 +1281,7 @@ static void slot_complete_v1_hw(struct hisi_hba *hisi_hba,
->   		struct scatterlist *sg_resp = &task->smp_task.smp_resp;
->   		void *to = page_address(sg_page(sg_resp));
+>   const char *scsi_hostbyte_string(int result)
+>   {
+> +	enum scsi_host_status hb = host_byte(result);
+>   	const char *hb_string = NULL;
+> -	int hb = host_byte(result);
 >   
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
+>   	if (hb < ARRAY_SIZE(hostbyte_table))
+>   		hb_string = hostbyte_table[hb];
+> @@ -423,8 +423,8 @@ EXPORT_SYMBOL(scsi_hostbyte_string);
 >   
->   		dma_unmap_sg(dev, &task->smp_task.smp_req, 1,
->   			     DMA_TO_DEVICE);
-> @@ -1298,7 +1298,7 @@ static void slot_complete_v1_hw(struct hisi_hba *hisi_hba,
->   		break;
+>   const char *scsi_driverbyte_string(int result)
+>   {
+> +	enum scsi_driver_status db = driver_byte(result);
+>   	const char *db_string = NULL;
+> -	int db = driver_byte(result);
 >   
->   	default:
-> -		ts->stat = SAM_STAT_CHECK_CONDITION;
-> +		ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
->   	}
+>   	if (db < ARRAY_SIZE(driverbyte_table))
+>   		db_string = driverbyte_table[db];
+> diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
+> index f2a11414366d..6e08673dc583 100644
+> --- a/drivers/target/target_core_pscsi.c
+> +++ b/drivers/target/target_core_pscsi.c
+> @@ -1044,7 +1044,7 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
+>   	struct se_cmd *cmd = req->end_io_data;
+>   	struct pscsi_plugin_task *pt = cmd->priv;
+>   	int result = scsi_req(req)->result;
+> -	u8 scsi_status = status_byte(result) << 1;
+> +	enum sam_status scsi_status = status_byte(result) << 1;
 >   
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-> index 46f60fc2a069..af51ac49d9fb 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-> @@ -2168,7 +2168,7 @@ static void slot_err_v2_hw(struct hisi_hba *hisi_hba,
->   	}
->   		break;
->   	case SAS_PROTOCOL_SMP:
-> -		ts->stat = SAM_STAT_CHECK_CONDITION;
-> +		ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
+>   	if (scsi_status != SAM_STAT_GOOD) {
+>   		pr_debug("PSCSI Status Byte exception at cmd: %p CDB:"
+> diff --git a/include/scsi/scsi.h b/include/scsi/scsi.h
+> index 7f392405991b..268fe1730d6b 100644
+> --- a/include/scsi/scsi.h
+> +++ b/include/scsi/scsi.h
+> @@ -11,6 +11,7 @@
+>   #include <linux/kernel.h>
+>   #include <scsi/scsi_common.h>
+>   #include <scsi/scsi_proto.h>
+> +#include <scsi/scsi_status.h>
 >   
->   	case SAS_PROTOCOL_SATA:
-> @@ -2427,7 +2427,7 @@ static void slot_complete_v2_hw(struct hisi_hba *hisi_hba,
->   		struct scatterlist *sg_resp = &task->smp_task.smp_resp;
->   		void *to = page_address(sg_page(sg_resp));
+>   struct scsi_cmnd;
 >   
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
+> @@ -64,92 +65,14 @@ static inline int scsi_is_wlun(u64 lun)
 >   
->   		dma_unmap_sg(dev, &task->smp_task.smp_req, 1,
->   			     DMA_TO_DEVICE);
-> @@ -2441,12 +2441,12 @@ static void slot_complete_v2_hw(struct hisi_hba *hisi_hba,
->   	case SAS_PROTOCOL_STP:
->   	case SAS_PROTOCOL_SATA | SAS_PROTOCOL_STP:
->   	{
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
->   		hisi_sas_sata_done(task, slot);
->   		break;
->   	}
->   	default:
-> -		ts->stat = SAM_STAT_CHECK_CONDITION;
-> +		ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
->   	}
 >   
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> index 499c770d405c..932afd690183 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> @@ -2178,7 +2178,7 @@ slot_err_v3_hw(struct hisi_hba *hisi_hba, struct sas_task *task,
->   		hisi_sas_sata_done(task, slot);
->   		break;
->   	case SAS_PROTOCOL_SMP:
-> -		ts->stat = SAM_STAT_CHECK_CONDITION;
-> +		ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
->   	default:
->   		break;
-> @@ -2285,7 +2285,7 @@ static void slot_complete_v3_hw(struct hisi_hba *hisi_hba,
->   		struct scatterlist *sg_resp = &task->smp_task.smp_resp;
->   		void *to = page_address(sg_page(sg_resp));
+>   /*
+> - *  MESSAGE CODES
+> + * Extended message codes.
+>    */
+> -
+> -#define COMMAND_COMPLETE    0x00
+> -#define EXTENDED_MESSAGE    0x01
+>   #define     EXTENDED_MODIFY_DATA_POINTER    0x00
+>   #define     EXTENDED_SDTR                   0x01
+>   #define     EXTENDED_EXTENDED_IDENTIFY      0x02    /* SCSI-I only */
+>   #define     EXTENDED_WDTR                   0x03
+>   #define     EXTENDED_PPR                    0x04
+>   #define     EXTENDED_MODIFY_BIDI_DATA_PTR   0x05
+> -#define SAVE_POINTERS       0x02
+> -#define RESTORE_POINTERS    0x03
+> -#define DISCONNECT          0x04
+> -#define INITIATOR_ERROR     0x05
+> -#define ABORT_TASK_SET      0x06
+> -#define MESSAGE_REJECT      0x07
+> -#define NOP                 0x08
+> -#define MSG_PARITY_ERROR    0x09
+> -#define LINKED_CMD_COMPLETE 0x0a
+> -#define LINKED_FLG_CMD_COMPLETE 0x0b
+> -#define TARGET_RESET        0x0c
+> -#define ABORT_TASK          0x0d
+> -#define CLEAR_TASK_SET      0x0e
+> -#define INITIATE_RECOVERY   0x0f            /* SCSI-II only */
+> -#define RELEASE_RECOVERY    0x10            /* SCSI-II only */
+> -#define TERMINATE_IO_PROC   0x11            /* SCSI-II only */
+> -#define CLEAR_ACA           0x16
+> -#define LOGICAL_UNIT_RESET  0x17
+> -#define SIMPLE_QUEUE_TAG    0x20
+> -#define HEAD_OF_QUEUE_TAG   0x21
+> -#define ORDERED_QUEUE_TAG   0x22
+> -#define IGNORE_WIDE_RESIDUE 0x23
+> -#define ACA                 0x24
+> -#define QAS_REQUEST         0x55
+> -
+> -/* Old SCSI2 names, don't use in new code */
+> -#define BUS_DEVICE_RESET    TARGET_RESET
+> -#define ABORT               ABORT_TASK_SET
+> -
+> -/*
+> - * Host byte codes
+> - */
+> -
+> -#define DID_OK          0x00	/* NO error                                */
+> -#define DID_NO_CONNECT  0x01	/* Couldn't connect before timeout period  */
+> -#define DID_BUS_BUSY    0x02	/* BUS stayed busy through time out period */
+> -#define DID_TIME_OUT    0x03	/* TIMED OUT for other reason              */
+> -#define DID_BAD_TARGET  0x04	/* BAD target.                             */
+> -#define DID_ABORT       0x05	/* Told to abort for some other reason     */
+> -#define DID_PARITY      0x06	/* Parity error                            */
+> -#define DID_ERROR       0x07	/* Internal error                          */
+> -#define DID_RESET       0x08	/* Reset by somebody.                      */
+> -#define DID_BAD_INTR    0x09	/* Got an interrupt we weren't expecting.  */
+> -#define DID_PASSTHROUGH 0x0a	/* Force command past mid-layer            */
+> -#define DID_SOFT_ERROR  0x0b	/* The low level driver just wish a retry  */
+> -#define DID_IMM_RETRY   0x0c	/* Retry without decrementing retry count  */
+> -#define DID_REQUEUE	0x0d	/* Requeue command (no immediate retry) also
+> -				 * without decrementing the retry count	   */
+> -#define DID_TRANSPORT_DISRUPTED 0x0e /* Transport error disrupted execution
+> -				      * and the driver blocked the port to
+> -				      * recover the link. Transport class will
+> -				      * retry or fail IO */
+> -#define DID_TRANSPORT_FAILFAST	0x0f /* Transport class fastfailed the io */
+> -#define DID_TARGET_FAILURE 0x10 /* Permanent target failure, do not retry on
+> -				 * other paths */
+> -#define DID_NEXUS_FAILURE 0x11  /* Permanent nexus failure, retry on other
+> -				 * paths might yield different results */
+> -#define DID_ALLOC_FAILURE 0x12  /* Space allocation on the device failed */
+> -#define DID_MEDIUM_ERROR  0x13  /* Medium error */
+> -#define DID_TRANSPORT_MARGINAL 0x14 /* Transport marginal errors */
+> -#define DRIVER_OK       0x00	/* Driver status                           */
+> -
+> -/*
+> - *  These indicate the error that occurred, and what is available.
+> - */
+> -
+> -#define DRIVER_BUSY         0x01
+> -#define DRIVER_SOFT         0x02
+> -#define DRIVER_MEDIA        0x03
+> -#define DRIVER_ERROR        0x04
+> -
+> -#define DRIVER_INVALID      0x05
+> -#define DRIVER_TIMEOUT      0x06
+> -#define DRIVER_HARD         0x07
+> -#define DRIVER_SENSE	    0x08
 >   
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
+>   /*
+>    * Internal return values.
+> diff --git a/include/scsi/scsi_proto.h b/include/scsi/scsi_proto.h
+> index 5c106c4f249e..84d4a3a14963 100644
+> --- a/include/scsi/scsi_proto.h
+> +++ b/include/scsi/scsi_proto.h
+> @@ -190,17 +190,19 @@ struct scsi_varlen_cdb_hdr {
+>    *  SCSI Architecture Model (SAM) Status codes. Taken from SAM-3 draft
+>    *  T10/1561-D Revision 4 Draft dated 7th November 2002.
+>    */
+> -#define SAM_STAT_GOOD            0x00
+> -#define SAM_STAT_CHECK_CONDITION 0x02
+> -#define SAM_STAT_CONDITION_MET   0x04
+> -#define SAM_STAT_BUSY            0x08
+> -#define SAM_STAT_INTERMEDIATE    0x10
+> -#define SAM_STAT_INTERMEDIATE_CONDITION_MET 0x14
+> -#define SAM_STAT_RESERVATION_CONFLICT 0x18
+> -#define SAM_STAT_COMMAND_TERMINATED 0x22	/* obsolete in SAM-3 */
+> -#define SAM_STAT_TASK_SET_FULL   0x28
+> -#define SAM_STAT_ACA_ACTIVE      0x30
+> -#define SAM_STAT_TASK_ABORTED    0x40
+> +enum sam_status {
+> +	SAM_STAT_GOOD				= 0x00,
+> +	SAM_STAT_CHECK_CONDITION		= 0x02,
+> +	SAM_STAT_CONDITION_MET			= 0x04,
+> +	SAM_STAT_BUSY				= 0x08,
+> +	SAM_STAT_INTERMEDIATE			= 0x10,
+> +	SAM_STAT_INTERMEDIATE_CONDITION_MET	= 0x14,
+> +	SAM_STAT_RESERVATION_CONFLICT		= 0x18,
+> +	SAM_STAT_COMMAND_TERMINATED		= 0x22,	/* obsolete in SAM-3 */
+> +	SAM_STAT_TASK_SET_FULL			= 0x28,
+> +	SAM_STAT_ACA_ACTIVE			= 0x30,
+> +	SAM_STAT_TASK_ABORTED			= 0x40,
+> +};
 >   
->   		dma_unmap_sg(dev, &task->smp_task.smp_req, 1,
->   			     DMA_TO_DEVICE);
-> @@ -2298,11 +2298,11 @@ static void slot_complete_v3_hw(struct hisi_hba *hisi_hba,
->   	case SAS_PROTOCOL_SATA:
->   	case SAS_PROTOCOL_STP:
->   	case SAS_PROTOCOL_SATA | SAS_PROTOCOL_STP:
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
->   		hisi_sas_sata_done(task, slot);
->   		break;
->   	default:
-> -		ts->stat = SAM_STAT_CHECK_CONDITION;
-> +		ts->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
->   	}
->   
-> diff --git a/drivers/scsi/isci/request.c b/drivers/scsi/isci/request.c
-> index e7c6cb4c1556..e1ff79464131 100644
-> --- a/drivers/scsi/isci/request.c
-> +++ b/drivers/scsi/isci/request.c
-> @@ -2566,7 +2566,7 @@ static void isci_request_handle_controller_specific_errors(
->   			if (!idev)
->   				*status_ptr = SAS_DEVICE_UNKNOWN;
->   			else
-> -				*status_ptr = SAM_STAT_TASK_ABORTED;
-> +				*status_ptr = SAS_SAM_STAT_TASK_ABORTED;
->   
->   			clear_bit(IREQ_COMPLETE_IN_TARGET, &request->flags);
->   		}
-> @@ -2696,7 +2696,7 @@ static void isci_request_handle_controller_specific_errors(
->   	default:
->   		/* Task in the target is not done. */
->   		*response_ptr = SAS_TASK_UNDELIVERED;
-> -		*status_ptr = SAM_STAT_TASK_ABORTED;
-> +		*status_ptr = SAS_SAM_STAT_TASK_ABORTED;
->   
->   		if (task->task_proto == SAS_PROTOCOL_SMP)
->   			set_bit(IREQ_COMPLETE_IN_TARGET, &request->flags);
-> @@ -2719,7 +2719,7 @@ static void isci_process_stp_response(struct sas_task *task, struct dev_to_host_
->   	if (ac_err_mask(fis->status))
->   		ts->stat = SAS_PROTO_RESPONSE;
->   	else
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
->   
->   	ts->resp = SAS_TASK_COMPLETE;
->   }
-> @@ -2782,7 +2782,7 @@ static void isci_request_io_request_complete(struct isci_host *ihost,
->   	case SCI_IO_SUCCESS_IO_DONE_EARLY:
->   
->   		response = SAS_TASK_COMPLETE;
-> -		status   = SAM_STAT_GOOD;
-> +		status   = SAS_SAM_STAT_GOOD;
->   		set_bit(IREQ_COMPLETE_IN_TARGET, &request->flags);
->   
->   		if (completion_status == SCI_IO_SUCCESS_IO_DONE_EARLY) {
-> @@ -2852,7 +2852,7 @@ static void isci_request_io_request_complete(struct isci_host *ihost,
->   
->   		/* Fail the I/O. */
->   		response = SAS_TASK_UNDELIVERED;
-> -		status = SAM_STAT_TASK_ABORTED;
-> +		status = SAS_SAM_STAT_TASK_ABORTED;
->   
->   		clear_bit(IREQ_COMPLETE_IN_TARGET, &request->flags);
->   		break;
-> diff --git a/drivers/scsi/isci/task.c b/drivers/scsi/isci/task.c
-> index 62062ed6cd9a..2fbcc597c13c 100644
-> --- a/drivers/scsi/isci/task.c
-> +++ b/drivers/scsi/isci/task.c
-> @@ -160,7 +160,7 @@ int isci_task_execute_task(struct sas_task *task, gfp_t gfp_flags)
->   
->   			isci_task_refuse(ihost, task,
->   					 SAS_TASK_UNDELIVERED,
-> -					 SAM_STAT_TASK_ABORTED);
-> +					 SAS_SAM_STAT_TASK_ABORTED);
->   		} else {
->   			task->task_state_flags |= SAS_TASK_AT_INITIATOR;
->   			spin_unlock_irqrestore(&task->task_state_lock, flags);
-> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-> index e9a86128f1f1..4aa1fda95f35 100644
-> --- a/drivers/scsi/libsas/sas_ata.c
-> +++ b/drivers/scsi/libsas/sas_ata.c
-> @@ -116,9 +116,10 @@ static void sas_ata_task_done(struct sas_task *task)
->   		}
->   	}
->   
-> -	if (stat->stat == SAS_PROTO_RESPONSE || stat->stat == SAM_STAT_GOOD ||
-> -	    ((stat->stat == SAM_STAT_CHECK_CONDITION &&
-> -	      dev->sata_dev.class == ATA_DEV_ATAPI))) {
-> +	if (stat->stat == SAS_PROTO_RESPONSE ||
-> +	    stat->stat == SAS_SAM_STAT_GOOD ||
-> +	    (stat->stat == SAS_SAM_STAT_CHECK_CONDITION &&
-> +	      dev->sata_dev.class == ATA_DEV_ATAPI)) {
->   		memcpy(dev->sata_dev.fis, resp->ending_fis, ATA_RESP_FIS_SIZE);
->   
->   		if (!link->sactive) {
-> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-> index 6d583e8c403a..e00688540219 100644
-> --- a/drivers/scsi/libsas/sas_expander.c
-> +++ b/drivers/scsi/libsas/sas_expander.c
-> @@ -101,7 +101,7 @@ static int smp_execute_task_sg(struct domain_device *dev,
->   			}
->   		}
->   		if (task->task_status.resp == SAS_TASK_COMPLETE &&
-> -		    task->task_status.stat == SAM_STAT_GOOD) {
-> +		    task->task_status.stat == SAS_SAM_STAT_GOOD) {
->   			res = 0;
->   			break;
->   		}
-> diff --git a/drivers/scsi/libsas/sas_task.c b/drivers/scsi/libsas/sas_task.c
-> index e2d42593ce52..2966ead1d421 100644
-> --- a/drivers/scsi/libsas/sas_task.c
-> +++ b/drivers/scsi/libsas/sas_task.c
-> @@ -20,7 +20,7 @@ void sas_ssp_task_response(struct device *dev, struct sas_task *task,
->   	else if (iu->datapres == 1)
->   		tstat->stat = iu->resp_data[3];
->   	else if (iu->datapres == 2) {
-> -		tstat->stat = SAM_STAT_CHECK_CONDITION;
-> +		tstat->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		tstat->buf_valid_size =
->   			min_t(int, SAS_STATUS_BUF_SIZE,
->   			      be32_to_cpu(iu->sense_data_len));
-> @@ -32,7 +32,7 @@ void sas_ssp_task_response(struct device *dev, struct sas_task *task,
->   	}
->   	else
->   		/* when datapres contains corrupt/unknown value... */
-> -		tstat->stat = SAM_STAT_CHECK_CONDITION;
-> +		tstat->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   }
->   EXPORT_SYMBOL_GPL(sas_ssp_task_response);
->   
-> diff --git a/drivers/scsi/mvsas/mv_sas.c b/drivers/scsi/mvsas/mv_sas.c
-> index 1acea528f27f..31d1ea5a5dd2 100644
-> --- a/drivers/scsi/mvsas/mv_sas.c
-> +++ b/drivers/scsi/mvsas/mv_sas.c
-> @@ -1314,7 +1314,7 @@ static int mvs_exec_internal_tmf_task(struct domain_device *dev,
->   		}
->   
->   		if (task->task_status.resp == SAS_TASK_COMPLETE &&
-> -		    task->task_status.stat == SAM_STAT_GOOD) {
-> +		    task->task_status.stat == SAS_SAM_STAT_GOOD) {
->   			res = TMF_RESP_FUNC_COMPLETE;
->   			break;
->   		}
-> @@ -1764,7 +1764,7 @@ int mvs_slot_complete(struct mvs_info *mvi, u32 rx_desc, u32 flags)
->   	case SAS_PROTOCOL_SSP:
->   		/* hw says status == 0, datapres == 0 */
->   		if (rx_desc & RXQ_GOOD) {
-> -			tstat->stat = SAM_STAT_GOOD;
-> +			tstat->stat = SAS_SAM_STAT_GOOD;
->   			tstat->resp = SAS_TASK_COMPLETE;
->   		}
->   		/* response frame present */
-> @@ -1773,12 +1773,12 @@ int mvs_slot_complete(struct mvs_info *mvi, u32 rx_desc, u32 flags)
->   						sizeof(struct mvs_err_info);
->   			sas_ssp_task_response(mvi->dev, task, iu);
->   		} else
-> -			tstat->stat = SAM_STAT_CHECK_CONDITION;
-> +			tstat->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
->   
->   	case SAS_PROTOCOL_SMP: {
->   			struct scatterlist *sg_resp = &task->smp_task.smp_resp;
-> -			tstat->stat = SAM_STAT_GOOD;
-> +			tstat->stat = SAS_SAM_STAT_GOOD;
->   			to = kmap_atomic(sg_page(sg_resp));
->   			memcpy(to + sg_resp->offset,
->   				slot->response + sizeof(struct mvs_err_info),
-> @@ -1795,7 +1795,7 @@ int mvs_slot_complete(struct mvs_info *mvi, u32 rx_desc, u32 flags)
->   		}
->   
->   	default:
-> -		tstat->stat = SAM_STAT_CHECK_CONDITION;
-> +		tstat->stat = SAS_SAM_STAT_CHECK_CONDITION;
->   		break;
->   	}
->   	if (!slot->port->port_attached) {
-> diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-> index ecd06d2d7e81..0fb04cec5fe2 100644
-> --- a/drivers/scsi/pm8001/pm8001_hwi.c
-> +++ b/drivers/scsi/pm8001/pm8001_hwi.c
-> @@ -1930,7 +1930,7 @@ mpi_ssp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   			   param);
->   		if (param == 0) {
->   			ts->resp = SAS_TASK_COMPLETE;
-> -			ts->stat = SAM_STAT_GOOD;
-> +			ts->stat = SAS_SAM_STAT_GOOD;
->   		} else {
->   			ts->resp = SAS_TASK_COMPLETE;
->   			ts->stat = SAS_PROTO_RESPONSE;
-> @@ -2390,7 +2390,7 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   		pm8001_dbg(pm8001_ha, IO, "IO_SUCCESS\n");
->   		if (param == 0) {
->   			ts->resp = SAS_TASK_COMPLETE;
-> -			ts->stat = SAM_STAT_GOOD;
-> +			ts->stat = SAS_SAM_STAT_GOOD;
->   			/* check if response is for SEND READ LOG */
->   			if (pm8001_dev &&
->   				(pm8001_dev->id & NCQ_READ_LOG_FLAG)) {
-> @@ -2912,7 +2912,7 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   	case IO_SUCCESS:
->   		pm8001_dbg(pm8001_ha, IO, "IO_SUCCESS\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
->   		if (pm8001_dev)
->   			atomic_dec(&pm8001_dev->running_req);
->   		break;
-> @@ -2939,17 +2939,17 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   	case IO_ERROR_HW_TIMEOUT:
->   		pm8001_dbg(pm8001_ha, IO, "IO_ERROR_HW_TIMEOUT\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_BUSY;
-> +		ts->stat = SAS_SAM_STAT_BUSY;
->   		break;
->   	case IO_XFER_ERROR_BREAK:
->   		pm8001_dbg(pm8001_ha, IO, "IO_XFER_ERROR_BREAK\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_BUSY;
-> +		ts->stat = SAS_SAM_STAT_BUSY;
->   		break;
->   	case IO_XFER_ERROR_PHY_NOT_READY:
->   		pm8001_dbg(pm8001_ha, IO, "IO_XFER_ERROR_PHY_NOT_READY\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_BUSY;
-> +		ts->stat = SAS_SAM_STAT_BUSY;
->   		break;
->   	case IO_OPEN_CNX_ERROR_PROTOCOL_NOT_SUPPORTED:
->   		pm8001_dbg(pm8001_ha, IO,
-> @@ -3710,7 +3710,7 @@ int pm8001_mpi_task_abort_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   	case IO_SUCCESS:
->   		pm8001_dbg(pm8001_ha, EH, "IO_SUCCESS\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
->   		break;
->   	case IO_NOT_VALID:
->   		pm8001_dbg(pm8001_ha, EH, "IO_NOT_VALID\n");
-> @@ -4355,7 +4355,7 @@ static int pm8001_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
->   
->   			spin_lock_irqsave(&task->task_state_lock, flags);
->   			ts->resp = SAS_TASK_COMPLETE;
-> -			ts->stat = SAM_STAT_GOOD;
-> +			ts->stat = SAS_SAM_STAT_GOOD;
->   			task->task_state_flags &= ~SAS_TASK_STATE_PENDING;
->   			task->task_state_flags &= ~SAS_TASK_AT_INITIATOR;
->   			task->task_state_flags |= SAS_TASK_STATE_DONE;
-> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-> index d28af413b93a..01122993c943 100644
-> --- a/drivers/scsi/pm8001/pm8001_sas.c
-> +++ b/drivers/scsi/pm8001/pm8001_sas.c
-> @@ -753,7 +753,7 @@ static int pm8001_exec_internal_tmf_task(struct domain_device *dev,
->   		}
->   
->   		if (task->task_status.resp == SAS_TASK_COMPLETE &&
-> -			task->task_status.stat == SAM_STAT_GOOD) {
-> +			task->task_status.stat == SAS_SAM_STAT_GOOD) {
->   			res = TMF_RESP_FUNC_COMPLETE;
->   			break;
->   		}
-> @@ -838,7 +838,7 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_info *pm8001_ha,
->   		}
->   
->   		if (task->task_status.resp == SAS_TASK_COMPLETE &&
-> -			task->task_status.stat == SAM_STAT_GOOD) {
-> +			task->task_status.stat == SAS_SAM_STAT_GOOD) {
->   			res = TMF_RESP_FUNC_COMPLETE;
->   			break;
->   
-> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-> index 4e980830f9f5..57c8394cd1b5 100644
-> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> @@ -1952,7 +1952,7 @@ mpi_ssp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   			   param);
->   		if (param == 0) {
->   			ts->resp = SAS_TASK_COMPLETE;
-> -			ts->stat = SAM_STAT_GOOD;
-> +			ts->stat = SAS_SAM_STAT_GOOD;
->   		} else {
->   			ts->resp = SAS_TASK_COMPLETE;
->   			ts->stat = SAS_PROTO_RESPONSE;
-> @@ -2487,7 +2487,7 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   		pm8001_dbg(pm8001_ha, IO, "IO_SUCCESS\n");
->   		if (param == 0) {
->   			ts->resp = SAS_TASK_COMPLETE;
-> -			ts->stat = SAM_STAT_GOOD;
-> +			ts->stat = SAS_SAM_STAT_GOOD;
->   			/* check if response is for SEND READ LOG */
->   			if (pm8001_dev &&
->   				(pm8001_dev->id & NCQ_READ_LOG_FLAG)) {
-> @@ -3042,7 +3042,7 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   	case IO_SUCCESS:
->   		pm8001_dbg(pm8001_ha, IO, "IO_SUCCESS\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_GOOD;
-> +		ts->stat = SAS_SAM_STAT_GOOD;
->   		if (pm8001_dev)
->   			atomic_dec(&pm8001_dev->running_req);
->   		if (pm8001_ha->smp_exp_mode == SMP_DIRECT) {
-> @@ -3084,17 +3084,17 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->   	case IO_ERROR_HW_TIMEOUT:
->   		pm8001_dbg(pm8001_ha, IO, "IO_ERROR_HW_TIMEOUT\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_BUSY;
-> +		ts->stat = SAS_SAM_STAT_BUSY;
->   		break;
->   	case IO_XFER_ERROR_BREAK:
->   		pm8001_dbg(pm8001_ha, IO, "IO_XFER_ERROR_BREAK\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_BUSY;
-> +		ts->stat = SAS_SAM_STAT_BUSY;
->   		break;
->   	case IO_XFER_ERROR_PHY_NOT_READY:
->   		pm8001_dbg(pm8001_ha, IO, "IO_XFER_ERROR_PHY_NOT_READY\n");
->   		ts->resp = SAS_TASK_COMPLETE;
-> -		ts->stat = SAM_STAT_BUSY;
-> +		ts->stat = SAS_SAM_STAT_BUSY;
->   		break;
->   	case IO_OPEN_CNX_ERROR_PROTOCOL_NOT_SUPPORTED:
->   		pm8001_dbg(pm8001_ha, IO,
-> @@ -4699,7 +4699,7 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
->   
->   			spin_lock_irqsave(&task->task_state_lock, flags);
->   			ts->resp = SAS_TASK_COMPLETE;
-> -			ts->stat = SAM_STAT_GOOD;
-> +			ts->stat = SAS_SAM_STAT_GOOD;
->   			task->task_state_flags &= ~SAS_TASK_STATE_PENDING;
->   			task->task_state_flags &= ~SAS_TASK_AT_INITIATOR;
->   			task->task_state_flags |= SAS_TASK_STATE_DONE;
-> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-> index 9271d7a49b90..6fe125a71b60 100644
-> --- a/include/scsi/libsas.h
-> +++ b/include/scsi/libsas.h
-> @@ -474,10 +474,16 @@ enum service_response {
->   };
->   
->   enum exec_status {
-> -	/* The SAM_STAT_.. codes fit in the lower 6 bits, alias some of
-> -	 * them here to silence 'case value not in enumerated type' warnings
-> +	/*
-> +	 * Values 0..0x7f are used to return the SAM_STAT_* codes.  To avoid
-> +	 * 'case value not in enumerated type' compiler warnings every value
-> +	 * returned through the exec_status enum needs an alias with the SAS_
-> +	 * prefix here.
->   	 */
-> -	__SAM_STAT_CHECK_CONDITION = SAM_STAT_CHECK_CONDITION,
-> +	SAS_SAM_STAT_GOOD = SAM_STAT_GOOD,
-> +	SAS_SAM_STAT_BUSY = SAM_STAT_BUSY,
-> +	SAS_SAM_STAT_TASK_ABORTED = SAM_STAT_TASK_ABORTED,
-> +	SAS_SAM_STAT_CHECK_CONDITION = SAM_STAT_CHECK_CONDITION,
->   
->   	SAS_DEV_NO_RESPONSE = 0x80,
->   	SAS_DATA_UNDERRUN,
+>   /*
+>    *  Status codes. These are deprecated as they are shifted 1 bit right
+> diff --git a/include/scsi/scsi_status.h b/include/scsi/scsi_status.h
+> new file mode 100644
+> index 000000000000..66d2d421ad2d
+> --- /dev/null
+> +++ b/include/scsi/scsi_status.h
+> @@ -0,0 +1,89 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef _SCSI_SCSI_STATUS_H
+> +#define _SCSI_SCSI_STATUS_H
+> +
+> +#include <linux/types.h>
+> +#include <scsi/scsi_proto.h>
+> +
+> +/* Message codes. */
+> +enum scsi_msg_byte {
+> +	COMMAND_COMPLETE	= 0x00,
+> +	EXTENDED_MESSAGE	= 0x01,
+> +	SAVE_POINTERS		= 0x02,
+> +	RESTORE_POINTERS	= 0x03,
+> +	DISCONNECT		= 0x04,
+> +	INITIATOR_ERROR		= 0x05,
+> +	ABORT_TASK_SET		= 0x06,
+> +	MESSAGE_REJECT		= 0x07,
+> +	NOP			= 0x08,
+> +	MSG_PARITY_ERROR	= 0x09,
+> +	LINKED_CMD_COMPLETE	= 0x0a,
+> +	LINKED_FLG_CMD_COMPLETE	= 0x0b,
+> +	TARGET_RESET		= 0x0c,
+> +	ABORT_TASK		= 0x0d,
+> +	CLEAR_TASK_SET		= 0x0e,
+> +	INITIATE_RECOVERY	= 0x0f,            /* SCSI-II only */
+> +	RELEASE_RECOVERY	= 0x10,            /* SCSI-II only */
+> +	TERMINATE_IO_PROC	= 0x11,            /* SCSI-II only */
+> +	CLEAR_ACA		= 0x16,
+> +	LOGICAL_UNIT_RESET	= 0x17,
+> +	SIMPLE_QUEUE_TAG	= 0x20,
+> +	HEAD_OF_QUEUE_TAG	= 0x21,
+> +	ORDERED_QUEUE_TAG	= 0x22,
+> +	IGNORE_WIDE_RESIDUE	= 0x23,
+> +	ACA			= 0x24,
+> +	QAS_REQUEST		= 0x55,
+> +
+> +	/* Old SCSI2 names, don't use in new code */
+> +	BUS_DEVICE_RESET	= TARGET_RESET,
+> +	ABORT			= ABORT_TASK_SET,
+> +};
+> +
+> +/* Host byte codes. */
+> +enum scsi_host_status {
+> +	DID_OK		= 0x00,	/* NO error                                */
+> +	DID_NO_CONNECT	= 0x01,	/* Couldn't connect before timeout period  */
+> +	DID_BUS_BUSY	= 0x02,	/* BUS stayed busy through time out period */
+> +	DID_TIME_OUT	= 0x03,	/* TIMED OUT for other reason              */
+> +	DID_BAD_TARGET	= 0x04,	/* BAD target.                             */
+> +	DID_ABORT	= 0x05,	/* Told to abort for some other reason     */
+> +	DID_PARITY	= 0x06,	/* Parity error                            */
+> +	DID_ERROR	= 0x07,	/* Internal error                          */
+> +	DID_RESET	= 0x08,	/* Reset by somebody.                      */
+> +	DID_BAD_INTR	= 0x09,	/* Got an interrupt we weren't expecting.  */
+> +	DID_PASSTHROUGH	= 0x0a,	/* Force command past mid-layer            */
+> +	DID_SOFT_ERROR	= 0x0b,	/* The low level driver just wish a retry  */
+> +	DID_IMM_RETRY	= 0x0c,	/* Retry without decrementing retry count  */
+> +	DID_REQUEUE	= 0x0d,	/* Requeue command (no immediate retry) also
+> +				 * without decrementing the retry count	   */
+> +	DID_TRANSPORT_DISRUPTED = 0x0e, /* Transport error disrupted execution
+> +					 * and the driver blocked the port to
+> +					 * recover the link. Transport class will
+> +					 * retry or fail IO */
+> +	DID_TRANSPORT_FAILFAST = 0x0f, /* Transport class fastfailed the io */
+> +	DID_TARGET_FAILURE = 0x10, /* Permanent target failure, do not retry on
+> +				    * other paths */
+> +	DID_NEXUS_FAILURE = 0x11,  /* Permanent nexus failure, retry on other
+> +				    * paths might yield different results */
+> +	DID_ALLOC_FAILURE = 0x12,  /* Space allocation on the device failed */
+> +	DID_MEDIUM_ERROR = 0x13,  /* Medium error */
+> +	DID_TRANSPORT_MARGINAL = 0x14, /* Transport marginal errors */
+> +};
+> +
+> +/* Driver byte codes. */
+> +enum scsi_driver_status {
+> +	DRIVER_OK	= 0x00,
+> +
+> +	DRIVER_BUSY	= 0x01,
+> +	DRIVER_SOFT	= 0x02,
+> +	DRIVER_MEDIA	= 0x03,
+> +	DRIVER_ERROR	= 0x04,
+> +
+> +	DRIVER_INVALID	= 0x05,
+> +	DRIVER_TIMEOUT	= 0x06,
+> +	DRIVER_HARD	= 0x07,
+> +	DRIVER_SENSE	= 0x08,
+> +};
+> +
+> +#endif /* _SCSI_SCSI_STATUS_H */
 > 
 
-Looks Good.
+Looks Good to me.
 
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+
 -- 
 Himanshu Madhani                                Oracle Linux Engineering
