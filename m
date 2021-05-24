@@ -2,103 +2,156 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAF638DD1C
-	for <lists+linux-scsi@lfdr.de>; Sun, 23 May 2021 23:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF4438DE95
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 03:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbhEWVQA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 23 May 2021 17:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbhEWVP4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 May 2021 17:15:56 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A42C06138A;
-        Sun, 23 May 2021 14:14:26 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id y7so12052940eda.2;
-        Sun, 23 May 2021 14:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=k3/TbwNFI9HmhMLl8iv6vlhOjkQhUhwgc45VnlZgXpQ=;
-        b=W60V5nAxC/JJPeu1DW7gBrxEGdxhUWLNPrg2O2rkZl67RCJ+HvU0phYa7k5Sf8WOwW
-         ilnq+zzKGrhTudnFETqltfNgqpXUcyrlbbjsqwhxbalkAr/EADGhzIo6Xe1os4/YoFzq
-         xheCGLK5CWii2vcbJhX8nqOfpKQ6X+KjblXGJ6JoNAI9z5pK3cYo6qH8tA2Z3SfT8J19
-         7L95w0AU63Auzu5u2vS8XV1r/Sw7dYukc7LNgJLzrL5aQJ6XZ1NBaZa7Y8kO8ITpuIaQ
-         IOwC6A4yopMIenaE0bbqM4LUdS5p7FqJoRvMqaHc53KC8tg+8B5oLjYEKElqQUHufUnQ
-         LkEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k3/TbwNFI9HmhMLl8iv6vlhOjkQhUhwgc45VnlZgXpQ=;
-        b=gUHN6LsOU5Lb16yJQl7gLNw6IRnJZ7j8Pbqbt6HPp361PWFfZGZN6OCqhLuIiEZmWl
-         2yybUbGV6zbhTKIRQ5vJi2P+x7cJD9VBX0Gq7XbYQtdtRGxPbcgkMlhDNvCe45svk31W
-         fEg5HiEFF6IJUIlKLJyjdN2hFRaeLGSg3KDxiINhHaDygfHhB1b1qYBiS9jCJx/Fhy41
-         9T41474YejYxHBpz01PCVH9E3ZdATVH58a6kiOfdXEccGqfxjQSvWkjMZCsnBEzgMLWW
-         ZWLzX2rKflSTIXFYqjfAqqw0HOSFUJTo/5TkVlu/oCaz68Sblba3Nvcc7FWhl7e/gAai
-         VQHw==
-X-Gm-Message-State: AOAM533Vslh+mLUPlPGEB2sZafkoHnQRAwPDNU87OW3IMJsmhJCdocVt
-        HshuoE4KvFL/NQ/Jatjoxys=
-X-Google-Smtp-Source: ABdhPJzA4DXJYm8b5VzpVVtlpASJZhCgZcVxGeOxmgM1eUCgnntKC/ExCbE6z0LbIqxWqSS+6eKpvg==
-X-Received: by 2002:a50:fd17:: with SMTP id i23mr22962801eds.54.1621804465083;
-        Sun, 23 May 2021 14:14:25 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5bec5d.dynamic.kabel-deutschland.de. [95.91.236.93])
-        by smtp.gmail.com with ESMTPSA id t6sm2444ejd.123.2021.05.23.14.14.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 May 2021 14:14:24 -0700 (PDT)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] scsi: ufs: Use UPIU query trace in devman_upiu_cmd
-Date:   Sun, 23 May 2021 23:14:09 +0200
-Message-Id: <20210523211409.210304-4-huobean@gmail.com>
+        id S232129AbhEXBD1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 23 May 2021 21:03:27 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:33080 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232072AbhEXBD0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 23 May 2021 21:03:26 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 96EE1204275;
+        Mon, 24 May 2021 03:01:58 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3LjiGDAr+HlD; Mon, 24 May 2021 03:01:50 +0200 (CEST)
+Received: from xtwo70.bingwo.ca (host-45-58-219-4.dyn.295.ca [45.58.219.4])
+        by smtp.infotech.no (Postfix) with ESMTPA id BDF7E204155;
+        Mon, 24 May 2021 03:01:49 +0200 (CEST)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
+Subject: [PATCH v19 00/45] sg: add v4 interface
+Date:   Sun, 23 May 2021 21:01:02 -0400
+Message-Id: <20210524010147.94845-1-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210523211409.210304-1-huobean@gmail.com>
-References: <20210523211409.210304-1-huobean@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+This patchset is the first stage of a two stage rewrite of the scsi
+generic (sg) driver. The main goal of the first stage is to introduce
+the sg v4 interface that uses 'struct sg_io_v4' as well as keeping and
+modernizing the sg v3 interface (based on 'struct sg_io_hdr'). The
+async interface formerly requiring the use of write() and read()
+system calls now have ioctl(SG_IOSUBMIT) and ioctl(SG_IORECEIVE)
+replacements.
 
-Since devman_upiu_cmd is not COMMAND UPIU, and doesn't have
-CDB, it is better to use UPIU query trace, which provides more
-helpful information for issue shooting.
+For documentation see either url:
+    https://sg.danny.cz/sg/sg_v40.html
+    https://doug-gilbert.github.io/sg_v40.html
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/ufs/ufshcd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This patchset is against Martin Petersen's 5.14/scsi-queue branch.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index ed9059b3e63d..e8756a4fb972 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -6697,6 +6697,7 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
- 
- 	hba->dev_cmd.complete = &wait;
- 
-+	ufshcd_add_query_upiu_trace(hba, UFS_QUERY_SEND, lrbp->ucd_req_ptr);
- 	/* Make sure descriptors are ready before ringing the doorbell */
- 	wmb();
- 	spin_lock_irqsave(hba->host->host_lock, flags);
-@@ -6729,6 +6730,9 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
- 		}
- 	}
- 
-+	ufshcd_add_query_upiu_trace(hba, err ? UFS_QUERY_ERR : UFS_QUERY_COMP,
-+				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
-+
- out:
- 	blk_put_request(req);
- out_unlock:
+
+Changes since v18 (sent to linux-scsi list on 20210407)
+  - a request queue's QUEUE_FLAG_POLL flag can be cleared via
+    sysfs, overriding the ability to use blk_poll() even when the
+    associated LLD allows it. Check that flag and, only when it
+    is set and the sg user gives SGV4_FLAG_HIPRI, set REQ_HIPRI
+    on a request.
+  - simplify the functions supporting ioctl(SG_SET_RESERVED_SIZE)
+  - replace blk_rq_append_bio() calls with the simpler
+    blk_rq_bio_prep() calls
+    [see lk: a4fe2d3afe3ce77edeadb567c0d0a8d102c6b159]
+  - rebase on 5.14/scsi-queue branch [lk 5.13-0-rc1]
+    - unchecked_isa_dma removed
+    - BIO_MAX_PAGES renamed to BIO_MAX_VECS
+
+Changes since v17 (sent to linux-scsi list on 20210407)
+  - make clearer distinction between user pollable (i.e. async)
+    requests and (user) non-pollable requests (e.g. those injected
+    with ioctl(SG_IO), IOWs sync requests)
+  - fix crash is sg_start_req() when blk_get_request() yields an
+    error (e.g. -EAGAIN when low on resources)
+  - sg_finish_scsi_blk_rq(): remove now_zero variable as suggested
+    by Hannes R.
+  - change deprecation warning url reference from http to https
+
+Changes since v16 (sent to linux-scsi list on 20210208)
+  - sg_start_req() fix double free on error path [KASAN]
+  - sg_rq_map_kern() fix uninitialized variable [coverity]
+  - sg_add_sfp() fix use after free [coverity]
+  - sg_remove_sfp_usercontext(): remove pointless NULL check [coverity]
+  - fix misuse of WARN_ONCE in sg_rq_end_io_usercontext() [D. Carpenter]
+  - remove unused error checks: tracking blk_put_request() calls and
+    multiple SG_XA_RQ_FREE calls
+  - hipri: as blk_poll() can return > 0 for requests other than the one
+    that is being checked for, need to re-check that request is ready
+  - rebased on MKP's 5.13/scsi-queue
+
+Changes since v15 (sent to linux-scsi list on 20210125)
+  - tweak state machine which sets INFLIGHT state _before_
+    blk_execute_rq_nowait() is called. Add a bit flag that indicates
+    the logic flow has returned from that call. This guards against
+    blk_poll() being called before the block layer has really
+    launched the request.
+  - fix bug clearing SG_FFD_HIPRI_SEEN bit as
+    atomic_dec_and_test() returns true when the post-decrement value
+    is zero, the opposite of what a C conditional does.
+
+Changes since v14 and earlier
+  - see: the v18 patchset sent to linux-scsi on 20210427
+
+
+Douglas Gilbert (45):
+  sg: move functions around
+  sg: remove typedefs, type+formatting cleanup
+  sg: sg_log and is_enabled
+  sg: rework sg_poll(), minor changes
+  sg: bitops in sg_device
+  sg: make open count an atomic
+  sg: move header to uapi section
+  sg: speed sg_poll and sg_get_num_waiting
+  sg: sg_allow_if_err_recovery and renames
+  sg: improve naming
+  sg: change rwlock to spinlock
+  sg: ioctl handling
+  sg: split sg_read
+  sg: sg_common_write add structure for arguments
+  sg: rework sg_vma_fault
+  sg: rework sg_mmap
+  sg: replace sg_allow_access
+  sg: rework scatter gather handling
+  sg: introduce request state machine
+  sg: sg_find_srp_by_id
+  sg: sg_fill_request_element
+  sg: printk change %p to %pK
+  sg: xarray for fds in device
+  sg: xarray for reqs in fd
+  sg: replace rq array with xarray
+  sg: sense buffer rework
+  sg: add sg v4 interface support
+  sg: rework debug info
+  sg: add 8 byte SCSI LUN to sg_scsi_id
+  sg: expand sg_comm_wr_t
+  sg: add sg_iosubmit_v3 and sg_ioreceive_v3 ioctls
+  sg: add some __must_hold macros
+  sg: move procfs objects to avoid forward decls
+  sg: protect multiple receivers
+  sg: first debugfs support
+  sg: rework mmap support
+  sg: defang allow_dio
+  sg: warn v3 write system call users
+  sg: add mmap_sz tracking
+  sg: remove rcv_done request state
+  sg: track lowest inactive and await indexes
+  sg: remove unit attention check for device changed
+  sg: no_dxfer: move to/from kernel buffers
+  sg: add blk_poll support
+  sg: bump version to 4.0.12
+
+ drivers/scsi/sg.c      | 5353 +++++++++++++++++++++++++++-------------
+ include/scsi/sg.h      |  273 +-
+ include/uapi/scsi/sg.h |  375 +++
+ 3 files changed, 4065 insertions(+), 1936 deletions(-)
+ create mode 100644 include/uapi/scsi/sg.h
+
 -- 
 2.25.1
 
