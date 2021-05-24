@@ -2,47 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7099138DFC3
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 05:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA0438DFC2
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 May 2021 05:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbhEXDMD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 23 May 2021 23:12:03 -0400
-Received: from mail-pg1-f170.google.com ([209.85.215.170]:37841 "EHLO
-        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232235AbhEXDL6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 May 2021 23:11:58 -0400
-Received: by mail-pg1-f170.google.com with SMTP id t193so19064715pgb.4
-        for <linux-scsi@vger.kernel.org>; Sun, 23 May 2021 20:10:30 -0700 (PDT)
+        id S232125AbhEXDMC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 23 May 2021 23:12:02 -0400
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:42957 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232211AbhEXDMA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 May 2021 23:12:00 -0400
+Received: by mail-pf1-f176.google.com with SMTP id x18so15375608pfi.9
+        for <linux-scsi@vger.kernel.org>; Sun, 23 May 2021 20:10:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=laV2E24Fm3RHSV+xjoxc9ZAJGQpQIIm4wmdw1Gavwm0=;
-        b=gDOBPKMW/sxpyB9HyVjIKIAYzkDqJ78E07bMk2XOscLvQq6Mi1vmK97fg4+Q6SouK0
-         fokMwQHA2GjkZo9WmDUIigaNe7u/SF5MFtijZ83DbwpZMzym/P4JfNIu9ZlriSe5QKsq
-         ixw/Ua+V4UmAV1O1QL5b5NP+7fZGRWUT08IWZQmhPIEVUy/czGY6JbhG5g5dUYNHSrUk
-         F+a7ff1HHtAw1EqoH3A7dd4R6pYRMaA8XsQLX6Vlb/3WDuqwCangi36dPFhkdLcKKqFn
-         ihtPco/YP30eXUMs7c5jgY51ueASBkF5slZDuiKISjOGwKrY4b2BAMSAKzr7/XKFJfCa
-         DXbw==
-X-Gm-Message-State: AOAM532mo57YSNetYqVZWiY5G5VzGexdbW/4Of089fcbXwUOMtUmsdGa
-        aY3afbc40wM4LOOcvoE/7InavT69SYCS2w==
-X-Google-Smtp-Source: ABdhPJyeXkBrOspPzf0EUkDSBdl1VOx6SEvbyiiiT+EEh61KrxXdQTUoVD3VWxfePdQDSRmq4lbHeQ==
-X-Received: by 2002:a05:6a00:c84:b029:2e4:e4da:788b with SMTP id a4-20020a056a000c84b02902e4e4da788bmr14211398pfv.72.1621825829990;
-        Sun, 23 May 2021 20:10:29 -0700 (PDT)
+        bh=yjbZV+3MrAdmbLBg1BOHv8e475oZ5SyVoPXmEaezYSc=;
+        b=ba2VTeReMkiiit+xhdUEiYeDnBJpc++9K+/OVZwK1MHFkAXKWDvZTSZTWinfD391yB
+         r7iIvGNTFIjDXLLEcacE+RaJUkV461hMkQrKS/QMpWj0VmY2C1uvWfzWh6ORL6n2Bs13
+         yi2Kn+nhb+S+77ceQU7aW0NnopesoIIfuuskCXvJ3+cTSiNEayATEbfPeD6WxcQsi1TG
+         hm1kVlgYx7RzwRaJUxwUAs3fgqA6NcG7forzFGNG8pSQwx+fRMs58gGnNZIURu4syeo2
+         XBHJs0vOpCBedbbj/XeTWSsODD7gu6AbuUbqwJJ+JPmKl6etZiUZIBphOPiHOo5vvKCe
+         4BgA==
+X-Gm-Message-State: AOAM531O287Lam7HuJt7yVZGiC44TWRCCfvoUuSLlO/ssUcEpmxAgdli
+        MBV909ijxWGGECcy4f+Z500=
+X-Google-Smtp-Source: ABdhPJzqf7iJq0195dB5kR9HRaHxHgCtofA02Frax9LP6Wa3ord6bayb96Rfis2qsTOw3HvlTrF/kw==
+X-Received: by 2002:aa7:80d3:0:b029:28e:f117:4961 with SMTP id a19-20020aa780d30000b029028ef1174961mr22740060pfn.37.1621825831552;
+        Sun, 23 May 2021 20:10:31 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id v9sm11131863pjd.26.2021.05.23.20.10.28
+        by smtp.gmail.com with ESMTPSA id v9sm11131863pjd.26.2021.05.23.20.10.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 May 2021 20:10:29 -0700 (PDT)
+        Sun, 23 May 2021 20:10:30 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
         Bart Van Assche <bvanassche@acm.org>,
-        Bodo Stroesser <bostroesser@gmail.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>
-Subject: [PATCH v3 49/51] tcm_loop: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Sun, 23 May 2021 20:08:54 -0700
-Message-Id: <20210524030856.2824-50-bvanassche@acm.org>
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v3 50/51] usb-storage: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Sun, 23 May 2021 20:08:55 -0700
+Message-Id: <20210524030856.2824-51-bvanassche@acm.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210524030856.2824-1-bvanassche@acm.org>
 References: <20210524030856.2824-1-bvanassche@acm.org>
@@ -55,31 +54,22 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Prepare for removal of the request pointer by using scsi_cmd_to_rq()
 instead. This patch does not change any functionality.
 
-Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/target/loopback/tcm_loop.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/storage/transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/target/loopback/tcm_loop.c b/drivers/target/loopback/tcm_loop.c
-index 2687fd7d45db..834eceaac9cd 100644
---- a/drivers/target/loopback/tcm_loop.c
-+++ b/drivers/target/loopback/tcm_loop.c
-@@ -183,7 +183,7 @@ static int tcm_loop_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *sc)
- 
- 	memset(tl_cmd, 0, sizeof(*tl_cmd));
- 	tl_cmd->sc = sc;
--	tl_cmd->sc_cmd_tag = sc->request->tag;
-+	tl_cmd->sc_cmd_tag = scsi_cmd_to_rq(sc)->tag;
- 
- 	tcm_loop_target_queue_cmd(tl_cmd);
- 	return 0;
-@@ -249,7 +249,7 @@ static int tcm_loop_abort_task(struct scsi_cmnd *sc)
- 	tl_hba = *(struct tcm_loop_hba **)shost_priv(sc->device->host);
- 	tl_tpg = &tl_hba->tl_hba_tpgs[sc->device->id];
- 	ret = tcm_loop_issue_tmr(tl_tpg, sc->device->lun,
--				 sc->request->tag, TMR_ABORT_TASK);
-+				 scsi_cmd_to_rq(sc)->tag, TMR_ABORT_TASK);
- 	return (ret == TMR_FUNCTION_COMPLETE) ? SUCCESS : FAILED;
- }
- 
+diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+index f4304ce69350..4c5a0a49035f 100644
+--- a/drivers/usb/storage/transport.c
++++ b/drivers/usb/storage/transport.c
+@@ -551,7 +551,7 @@ static void last_sector_hacks(struct us_data *us, struct scsi_cmnd *srb)
+ 	/* Did this command access the last sector? */
+ 	sector = (srb->cmnd[2] << 24) | (srb->cmnd[3] << 16) |
+ 			(srb->cmnd[4] << 8) | (srb->cmnd[5]);
+-	disk = srb->request->rq_disk;
++	disk = scsi_cmd_to_rq(srb)->rq_disk;
+ 	if (!disk)
+ 		goto done;
+ 	sdkp = scsi_disk(disk);
