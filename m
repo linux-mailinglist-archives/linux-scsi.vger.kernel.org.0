@@ -2,200 +2,220 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0468B38FAB3
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 May 2021 08:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6995B38FAFA
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 May 2021 08:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbhEYGPI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 May 2021 02:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbhEYGPA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 May 2021 02:15:00 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267C9C06138E;
-        Mon, 24 May 2021 23:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=1b/+kPpC0gWa+qCdzwzRwr9t+/S2EMpAXYWNtAFl89A=; b=i2mo92Ut5ocgXwbndXXtuUlXz1
-        mEAJmy0rn2adgc00jwLROIzcY68BDh0Zv2L2UyFPX27xx+kzWTiQcBeH49S9cT6ZPnG2YlpYIkzjC
-        27Hz89iS9j56fyGM/gxngTH7QzQ0Sx32LdnjsGZIpqeGbfeCRkIChRJM+9gDJHKMELNw/hU8uRAmh
-        rYiysyi/kGy8naLBggwUSLNnv7TF7Qn6rMxKRLFVTU+OeeTGGR2L3mrszrjCn07IcJRAyw37Hkxin
-        etwci6HWfWrXLq+IjojWHQbhaDY8yz8fV5qvEkgJBf0hlwzBcKaSFvC/BbqdLSj2YcTNeExXSI3ic
-        TUe+gnAQ==;
-Received: from [2001:4bb8:190:7543:af90:8b76:7e65:6578] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1llQJj-003ZG7-11; Tue, 25 May 2021 06:13:27 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>, Song Liu <song@kernel.org>
-Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        linux-block@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: [PATCH 8/8] block: remove bdget_disk
-Date:   Tue, 25 May 2021 08:13:01 +0200
-Message-Id: <20210525061301.2242282-9-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210525061301.2242282-1-hch@lst.de>
-References: <20210525061301.2242282-1-hch@lst.de>
+        id S231238AbhEYGfV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 May 2021 02:35:21 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:35592 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230500AbhEYGfT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 May 2021 02:35:19 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14P6Pnax044303;
+        Tue, 25 May 2021 06:33:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2020-01-29;
+ bh=kpqBswRmoTBz1yb+1jyhPzKy3jjw5mNq5lnu6kg/TkM=;
+ b=eDnycDiIODBIJK55WrhOiPnuDpsp80S9sSgv2mGtfPbuBqdgxD+Dzgz4G26RxrNE8Ayw
+ JOlJQM4x9AYaNXjpY3WU5Ax3oOBOFdPvw7jx0XxOB2yFSveF9dSYetRiVlpJxUon8CkO
+ lK88k6b7A+l+tQ7r/1gpIDlbsuk8c5A4EheDdse+ShZ8X/ls6ORECNwwzaHj+/5bzQkW
+ nWT26IdFwyoFlntMdch0d459LRVZMbq63jCil2ZluZ6eGAKqN44Br47bs4+idn2zfBWZ
+ RKqdQJAphsluClWLRMFCTb0B8VyShWxYcuighQs019KABu+4MnhBHlF5x8dl4dH5AWTd Dg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 38q3q8vesq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 May 2021 06:33:40 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14P6OoIY084263;
+        Tue, 25 May 2021 06:33:39 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+        by aserp3020.oracle.com with ESMTP id 38reh8yn26-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 May 2021 06:33:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UpCu35oFZnsNOcoS6clsaHrDkdepSF3cKjDSOGddp+vEk8r8jZn1Z6sYTaceF6/kCjZzHXWTETkRpEIdlTQ0OykBdSzgNbZvwXmP/uuoIVvDoqtI47xxp9FEVYd8tkeDmSG6kVOqbalujg+vUWlrlOjCcHSdmh/qfUaV4L57Kv+NOm8fRSfiL0UcpR2MHe6zY2Iz0FiXuyy87/jvzmxidJFL/w/cBvWdGIFqdTT7iGHh8dI9mBP+MDicyxSsuziu8Gwek7RTCAdOScECImo2jfnOxi3zEnL0T4q5jZea6nRdrTFZ0wcqSzt0LJOC4tftVYJC9842W7Wk8dPvl6Ko4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kpqBswRmoTBz1yb+1jyhPzKy3jjw5mNq5lnu6kg/TkM=;
+ b=V8zFxoGUfCLRaeluwfHTYuLSiCfNpbSIOrOqTEE6tsNraB/mkOGab18YGofX8yHKcmMlR7ZoqLGUty4NHBYK6SD0wHAUwMjiKVNbQ2rLHkPKvUodtZkb5abOd1tqKpfUr7gHVofoMFEfcRgCSk1DB5nA7Fr8Gw1kXuWfm8FSVIZo8bp48SXUv4VmzIDYylXMB0TvXtNhr/PdT9BZPkXegk4G90SW6gOOdpAtNGMYtdeblEW5IxsmB8m9iEJHtA0CTegboJ2lpSnUhPh2qhWrN5fCVfKtDhr2ZsoYGvAk05bw5zdlgSGAQGHEm2thxR5pspWaxtzgIviFhMi8Gffslg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kpqBswRmoTBz1yb+1jyhPzKy3jjw5mNq5lnu6kg/TkM=;
+ b=ldYqu3cJWTelUlBiDt6s7H1d9GGJ4KDxo4aZaCMgvih1Hrt02rS4NSefF2wQjn82shxs39RG/HuJXCh3o6UnahsiKUhzOwsBfSoIIZq4ATU+VCnt+JglJEWJqb5VFsHIPURh1RRruiZNPas8GsfV7tt1jtJh3Fbs/U8qe9zUEak=
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
+ by BYAPR10MB3448.namprd10.prod.outlook.com (2603:10b6:a03:88::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.27; Tue, 25 May
+ 2021 06:33:36 +0000
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::18a:7c1f:bf20:ba6c]) by BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::18a:7c1f:bf20:ba6c%3]) with mapi id 15.20.4129.034; Tue, 25 May 2021
+ 06:33:35 +0000
+Subject: Re: [RFC] virtio_scsi: to poll and kick the virtqueue in timeout
+ handler
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Hannes Reinecke <hare@suse.de>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        pbonzini@redhat.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, joe.jin@oracle.com,
+        junxiao.bi@oracle.com, srinivas.eeda@oracle.com
+References: <20210523063843.1177-1-dongli.zhang@oracle.com>
+ <ac161748-15d2-2962-402e-23abca469623@suse.de>
+ <YKupFeOtc6Pr5KS2@stefanha-x1.localdomain>
+From:   Dongli Zhang <dongli.zhang@oracle.com>
+Message-ID: <a0404035-2ab7-6b9c-f393-0bb0417c4b3d@oracle.com>
+Date:   Mon, 24 May 2021 23:33:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+In-Reply-To: <YKupFeOtc6Pr5KS2@stefanha-x1.localdomain>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2601:646:c303:6700:18ee:a622:17a0:6b68]
+X-ClientProxiedBy: SJ0PR03CA0038.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::13) To BYAPR10MB2663.namprd10.prod.outlook.com
+ (2603:10b6:a02:a9::20)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2601:646:c303:6700:18ee:a622:17a0:6b68] (2601:646:c303:6700:18ee:a622:17a0:6b68) by SJ0PR03CA0038.namprd03.prod.outlook.com (2603:10b6:a03:33e::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.23 via Frontend Transport; Tue, 25 May 2021 06:33:35 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: acf4e2e3-2c6e-4847-ad0b-08d91f47061b
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3448:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR10MB3448647A046CB4FFFDB92298F0259@BYAPR10MB3448.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rOkf0PwIBoBtSpPJ0ilpEGu6P+PX12ftBJAFzb9+B8Ki2xwCaoGL6yshhrstfPE5lsoGBXLShOrkq3u0DC/2iELaf0TsbyXLGc+iyiCxgw+1lCcMf5q7lvPWzwpJygKItaoOK7EOJjTROWYEXQR2Mbqq8akeW5+zYKfbor62joVgdmRqlCApZ7Ka0lzhdIAteYGM1M2m2zzKT0ufbvL6WrVFXGP3xfg98B2TYUffNJF3qdusict0BhTZrsTb3SMB7yq+6+js6s94ZWVsD72I6z/ImUJysoWlm9N1APkqATXh7SLuQgJFGZhQpPCJPCJSAQ39TvqEvsZOQG0Uy3caii1Q0BD8bGIQ1SfpSXRI9OQPEPLwfAjr65PUJTmO6ZV6+cnEz5vS3tvL2mOsv6El/yHspzhLVgZefufXl9X5lQMKDG97w3xBUSdzFXT5N0V8hMJFkDDwEzl/h9RGLWlLnzAuWJAOG1/zG2TgdEIkfleptI2obx2b6YmT5isyA0gG7POlGA+evAQ7S2jblkz9/aUjU2ytEbagMVDjN7Gt8/6Y4zmOsQ0bEvShj2qmgAqZ9AHOAwyc7Dp+/8TlfpY9/Y87aBVERmoeQSEguQnCp462XE609I976JUxEcWtsD+4vQ2MXCIBWNGPWC1Nv1IRH6TwOMKcOYOo4Os4VjGNmPk3YahiRV9RSwuODNNYkMYH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(396003)(136003)(366004)(346002)(39860400002)(44832011)(7416002)(2616005)(66556008)(38100700002)(53546011)(66946007)(66476007)(86362001)(8936002)(83380400001)(110136005)(8676002)(107886003)(5660300002)(4326008)(31686004)(2906002)(16526019)(316002)(186003)(6486002)(31696002)(36756003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?OnIE3aOShigdwpy0cC9uNmtqILGgAQ7i4ctGBAkNXG2q5UpJ97xpaauq?=
+ =?Windows-1252?Q?Ef45/sTkJD0h93YpGvN4KamZ87D6ZQ/Sd2Wg8BLdmE/42WHRQvw9J6Pr?=
+ =?Windows-1252?Q?xbT2b9zyRkU5mKq4Gu3qFSZZVbO4LWoOeRheVvfnL42Rhn6wKHyTMBYY?=
+ =?Windows-1252?Q?WhwTqxZ23RKQ9qxvg1UghrFZabxydiCEiJwn3Wm3xzktcjbj995+9Z08?=
+ =?Windows-1252?Q?4XHzRgPBAmIIrzVxg46H7pn2fQDw2yH2ecLe4s7Od4nfOSBcKVtkkK2J?=
+ =?Windows-1252?Q?McsWBQCdE+0u0jAu9GJY4o17UF5z1fBjJEFevaFWJWWVoW49VFeBdgyw?=
+ =?Windows-1252?Q?O/jqlOicBp4Nfz2cAC7EKD9d09LAdpbjGZNb+XJN0pIc/LLnVGQQdRvh?=
+ =?Windows-1252?Q?Qd7d3zGYTIk4pbgFq+rrpmhE4UAwjCVM44XuBDGDkq59r2RN9BcX0VHV?=
+ =?Windows-1252?Q?D/Mmyy4YI7ygMAqFCkpHVaMK8pEHcSOnfoZ6zPhTocCSXzRhcGG/DYRQ?=
+ =?Windows-1252?Q?6M7sTrHOC/WOXC1szgUHbPCSF3SmJ+2epBUcsCKbZ2R9lGt5WzXWZuXy?=
+ =?Windows-1252?Q?LQEnnBxjM8ToNMr1JR7AEgOo7dX7fObbbrAJoXpPBXBtxRNhEAaUyjKH?=
+ =?Windows-1252?Q?eEETrJAeERvabfnbm5IcpTIdeSIkD2g/NSzxmsOpJvaCY1xzhthMT7lU?=
+ =?Windows-1252?Q?lap/ubU3NghWQzfarqDSXtYO2hHYai/ALFtww0EGVO8W+QtiUbFIseBZ?=
+ =?Windows-1252?Q?15vujXj+ddikFtTD/tQuilBXe8YZ8Nc546W54PBvF6YIN5U/e2FQojUU?=
+ =?Windows-1252?Q?YWFXQZkJn3EQJ1zV9KroW18eaiVWHdLpHWDxbwJKIF2/i+XLu877DAZj?=
+ =?Windows-1252?Q?xqPW/e5ACsm67iGL9wtkY2udUHligIv3wf6bOAXC7vuxFzF8Hwpqz79/?=
+ =?Windows-1252?Q?OO3Q5ggJXwsDU4JL0hqUJtnLIbRDt1qJWaFYFrmdJF0AZcM0AoL+lNQH?=
+ =?Windows-1252?Q?GUlea83oDCSvKxdgRblVF+hqUojMfcgOpiq5N0q7Th7cZr16ByEq/Ls8?=
+ =?Windows-1252?Q?0an/Kho719MU8OvuJOOhdSdwUXN6c0vt4qZKpnhwgb13Vp1S05x7dHGN?=
+ =?Windows-1252?Q?H4VmBC+MR+opzRrStinMmmiSqOgBIetklHqhrIfDRJjLot9BcYQZArsn?=
+ =?Windows-1252?Q?aoTFmJp7u9ivJAKGv+wBdG5TCDL4yH1WpSuyWPmjv5+F4m177TcMxSIJ?=
+ =?Windows-1252?Q?QxoeveXNacF9MTQXv/CLa4GVx1vK59mYkPim1xVPg0b/8j5So0rhV+I9?=
+ =?Windows-1252?Q?Rt5AqF1ESp5ikslPDSWo0RhhAkeWWgngToTP2Lf2A17Wq3BB0ilnAOql?=
+ =?Windows-1252?Q?ktRyWVDAJHYRclIDd1lHEqVN6Nf7gQWsK7VxlqgbhkwhlY13Y1kQK1Uj?=
+ =?Windows-1252?Q?Om8BaPGIBA7a7pSPqYG6H5JEW5wHn3ap/v/p6psrnfmlna0osiOFvir4?=
+ =?Windows-1252?Q?T4IoJUYI?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acf4e2e3-2c6e-4847-ad0b-08d91f47061b
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2021 06:33:35.7120
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nZA49KYLNmvLMRjDO68zYAHtp+gTBqz2JJiVQgojHJ7VXFqyBpi1FQon2Izi4licCajaNZx5LijSySMe8CfGzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3448
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9994 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2105250045
+X-Proofpoint-GUID: 0MW9WyoUiD-fseeOGX88lu-a8XISUoDk
+X-Proofpoint-ORIG-GUID: 0MW9WyoUiD-fseeOGX88lu-a8XISUoDk
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9994 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 impostorscore=0 phishscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2105250045
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Just opencode the xa_load in the callers, as none of them actually
-needs a reference to the bdev.
+Hi Stefan and Hannes,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- block/genhd.c           | 35 +++++------------------------------
- block/partitions/core.c | 25 ++++++++++++-------------
- include/linux/genhd.h   |  1 -
- 3 files changed, 17 insertions(+), 44 deletions(-)
+On 5/24/21 6:24 AM, Stefan Hajnoczi wrote:
+> On Sun, May 23, 2021 at 09:39:51AM +0200, Hannes Reinecke wrote:
+>> On 5/23/21 8:38 AM, Dongli Zhang wrote:
+>>> This RFC is to trigger the discussion about to poll and kick the
+>>> virtqueue on purpose in virtio-scsi timeout handler.
+>>>
+>>> The virtio-scsi relies on the virtio vring shared between VM and host.
+>>> The VM side produces requests to vring and kicks the virtqueue, while the
+>>> host side produces responses to vring and interrupts the VM side.
+>>>
+>>> By default the virtio-scsi handler depends on the host timeout handler
+>>> by BLK_EH_RESET_TIMER to give host a chance to perform EH.
+>>>
+>>> However, this is not helpful for the case that the responses are available
+>>> on vring but the notification from host to VM is lost.
+>>>
+>> How can this happen?
+>> If responses are lost the communication between VM and host is broken, and
+>> we should rather reset the virtio rings themselves.
+> 
+> I agree. In principle it's fine to poll the virtqueue at any time, but I
+> don't understand the failure scenario here. It's not clear to me why the
+> device-to-driver vq notification could be lost.
+> 
 
-diff --git a/block/genhd.c b/block/genhd.c
-index e3de476797de..2abafe44bf4b 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -692,32 +692,6 @@ void blk_request_module(dev_t devt)
- 		request_module("block-major-%d", MAJOR(devt));
- }
- 
--/**
-- * bdget_disk - do bdget() by gendisk and partition number
-- * @disk: gendisk of interest
-- * @partno: partition number
-- *
-- * Find partition @partno from @disk, do bdget() on it.
-- *
-- * CONTEXT:
-- * Don't care.
-- *
-- * RETURNS:
-- * Resulting block_device on success, NULL on failure.
-- */
--struct block_device *bdget_disk(struct gendisk *disk, int partno)
--{
--	struct block_device *bdev = NULL;
--
--	rcu_read_lock();
--	bdev = xa_load(&disk->part_tbl, partno);
--	if (bdev && !bdgrab(bdev))
--		bdev = NULL;
--	rcu_read_unlock();
--
--	return bdev;
--}
--
- /*
-  * print a full list of all partitions - intended for places where the root
-  * filesystem can't be mounted and thus to give the victim some idea of what
-@@ -1244,13 +1218,14 @@ module_init(proc_genhd_init);
- 
- dev_t part_devt(struct gendisk *disk, u8 partno)
- {
--	struct block_device *part = bdget_disk(disk, partno);
-+	struct block_device *part;
- 	dev_t devt = 0;
- 
--	if (part) {
-+	rcu_read_lock();
-+	part = xa_load(&disk->part_tbl, partno);
-+	if (part)
- 		devt = part->bd_dev;
--		bdput(part);
--	}
-+	rcu_read_unlock();
- 
- 	return devt;
- }
-diff --git a/block/partitions/core.c b/block/partitions/core.c
-index 0d33f55a7d78..325368b9de29 100644
---- a/block/partitions/core.c
-+++ b/block/partitions/core.c
-@@ -325,6 +325,8 @@ static struct block_device *add_partition(struct gendisk *disk, int partno,
- 	const char *dname;
- 	int err;
- 
-+	lockdep_assert_held(&disk->open_mutex);
-+
- 	/*
- 	 * disk_max_parts() won't be zero, either GENHD_FL_EXT_DEVT is set
- 	 * or 'minors' is passed to alloc_disk().
-@@ -464,14 +466,13 @@ int bdev_add_partition(struct block_device *bdev, int partno,
- 
- int bdev_del_partition(struct block_device *bdev, int partno)
- {
--	struct block_device *part;
--	int ret;
--
--	part = bdget_disk(bdev->bd_disk, partno);
--	if (!part)
--		return -ENXIO;
-+	struct block_device *part = NULL;
-+	int ret = -ENXIO;
- 
- 	mutex_lock(&bdev->bd_disk->open_mutex);
-+	part = xa_load(&bdev->bd_disk->part_tbl, partno);
-+	if (!part)
-+		goto out_unlock;
- 
- 	ret = -EBUSY;
- 	if (part->bd_openers)
-@@ -481,21 +482,20 @@ int bdev_del_partition(struct block_device *bdev, int partno)
- 	ret = 0;
- out_unlock:
- 	mutex_unlock(&bdev->bd_disk->open_mutex);
--	bdput(part);
- 	return ret;
- }
- 
- int bdev_resize_partition(struct block_device *bdev, int partno,
- 		sector_t start, sector_t length)
- {
--	struct block_device *part;
--	int ret = 0;
-+	struct block_device *part = NULL;
-+	int ret = -ENXIO;
- 
--	part = bdget_disk(bdev->bd_disk, partno);
-+	mutex_lock(&bdev->bd_disk->open_mutex);
-+	part = xa_load(&bdev->bd_disk->part_tbl, partno);
- 	if (!part)
--		return -ENXIO;
-+		goto out_unlock;
- 
--	mutex_lock(&bdev->bd_disk->open_mutex);
- 	ret = -EINVAL;
- 	if (start != part->bd_start_sect)
- 		goto out_unlock;
-@@ -509,7 +509,6 @@ int bdev_resize_partition(struct block_device *bdev, int partno,
- 	ret = 0;
- out_unlock:
- 	mutex_unlock(&bdev->bd_disk->open_mutex);
--	bdput(part);
- 	return ret;
- }
- 
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 96d55cd06cf6..d06892a0a9ef 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -222,7 +222,6 @@ static inline void add_disk_no_queue_reg(struct gendisk *disk)
- }
- 
- extern void del_gendisk(struct gendisk *gp);
--extern struct block_device *bdget_disk(struct gendisk *disk, int partno);
- 
- void set_disk_ro(struct gendisk *disk, bool read_only);
- 
--- 
-2.30.2
+One example is the CPU hotplug issue before the commit bf0beec0607d ("blk-mq:
+drain I/O when all CPUs in a hctx are offline") was available. The issue is
+equivalent to loss of interrupt. Without the CPU hotplug fix, while NVMe driver
+relies on the timeout handler to complete inflight IO requests, the PV
+virtio-scsi may hang permanently.
 
+In addition, as the virtio/vhost/QEMU are complex software, we are not able to
+guarantee there is no further lost of interrupt/kick issue in the future. It is
+really painful if we encounter such issue in production environment.
+
+
+About to reset vring, if this is just due to loss of interrupt, I do not think
+it is necessary to reset the entire vring. To poll the vring should be enough.
+The NVMe PCI does the same by assuming there may be loss of interrupt.
+
+Once there is request timeout, the NVMe PCI driver first polls the ring buffer
+and confirm if the request is completed, instead of reset/abort immediately.
+
+
+1254 static enum blk_eh_timer_return nvme_timeout(struct request *req, bool
+reserved)
+... ...
+1280         /*
+1281          * Did we miss an interrupt?
+1282          */
+1283         if (test_bit(NVMEQ_POLLED, &nvmeq->flags))
+1284                 nvme_poll(req->mq_hctx);
+1285         else
+1286                 nvme_poll_irqdisable(nvmeq);
+1287
+1288         if (blk_mq_request_completed(req)) {
+1289                 dev_warn(dev->ctrl.device,
+1290                          "I/O %d QID %d timeout, completion polled\n",
+1291                          req->tag, nvmeq->qid);
+1292                 return BLK_EH_DONE;
+1293         }
+
+
+Thank you very much!
+
+Dongli Zhang
