@@ -2,69 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBB03914DE
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 May 2021 12:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648873914EB
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 May 2021 12:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbhEZK2i convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 26 May 2021 06:28:38 -0400
-Received: from mx2.uni-regensburg.de ([194.94.157.147]:45512 "EHLO
-        mx2.uni-regensburg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbhEZK2f (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 May 2021 06:28:35 -0400
-Received: from mx2.uni-regensburg.de (localhost [127.0.0.1])
-        by localhost (Postfix) with SMTP id C2327600005D
-        for <linux-scsi@vger.kernel.org>; Wed, 26 May 2021 12:27:02 +0200 (CEST)
-Received: from gwsmtp.uni-regensburg.de (gwsmtp1.uni-regensburg.de [132.199.5.51])
-        by mx2.uni-regensburg.de (Postfix) with ESMTP id A37E0600004D
-        for <linux-scsi@vger.kernel.org>; Wed, 26 May 2021 12:27:02 +0200 (CEST)
-Received: from uni-regensburg-smtp1-MTA by gwsmtp.uni-regensburg.de
-        with Novell_GroupWise; Wed, 26 May 2021 12:27:02 +0200
-Message-Id: <60AE2272020000A100041478@gwsmtp.uni-regensburg.de>
-X-Mailer: Novell GroupWise Internet Agent 18.3.1 
-Date:   Wed, 26 May 2021 12:26:58 +0200
-From:   "Ulrich Windl" <Ulrich.Windl@rz.uni-regensburg.de>
-To:     <open-iscsi@googlegroups.com>, <thunder.leizhen@huawei.com>,
-        <dgilbert@interlog.com>, <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>
-Subject: Aw:  [EXT] Re: [PATCH 1/1] scsi: Fix spelling mistakes in
- header files
-References: <20210517095945.7363-1-thunder.leizhen@huawei.com>
- <162200196243.11962.5629932935575912565.b4-ty@oracle.com>
-In-Reply-To: <162200196243.11962.5629932935575912565.b4-ty@oracle.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
-Content-Disposition: inline
+        id S233950AbhEZKa5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 May 2021 06:30:57 -0400
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:47544 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233830AbhEZKa4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 26 May 2021 06:30:56 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Ua9losT_1622024957;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Ua9losT_1622024957)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 26 May 2021 18:29:23 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     alim.akhtar@samsung.com
+Cc:     avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] scsi: ufs: Fix missing error code in ufshcd_hba_init_crypto_capabilities()
+Date:   Wed, 26 May 2021 18:29:16 +0800
+Message-Id: <1622024956-39680-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-(Amazingly I also did think "busses" is correct -- seems to be a common mistake; maybe only for Germans that would pronounce "busses" differently from "buses"...)
+Eliminate the follow smatch warning:
 
+drivers/scsi/ufs/ufshcd-crypto.c:167
+ufshcd_hba_init_crypto_capabilities() warn: missing error code 'err'.
 
->>> Martin K. Petersen 26.05.2021, 06:08 >>>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/scsi/ufs/ufshcd-crypto.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Mon, 17 May 2021 17:59:45 +0800, Zhen Lei wrote:
-
-> Fix some spelling mistakes in comments:
-> pathes ==> paths
-> Resouce ==> Resource
-> retreived ==> retrieved
-> keep-alives ==> keep-alive
-> recevied ==> received
-> busses ==> buses
-> interruped ==> interrupted
-
-Applied to 5.14/scsi-queue, thanks!
-
-[1/1] scsi: Fix spelling mistakes in header files
-https://git.kernel.org/mkp/scsi/c/40d6b939e4df
-
---
-Martin K. Petersen Oracle Linux Engineering
-
---
-You received this message because you are subscribed to the Google Groups "open-iscsi" group.
-To unsubscribe from this group and stop receiving emails from it, send an email to open-iscsi+unsubscribe@googlegroups.com.
-To view this discussion on the web visit https://groups.google.com/d/msgid/open-iscsi/162200196243.11962.5629932935575912565.b4-ty%40oracle.com.
+diff --git a/drivers/scsi/ufs/ufshcd-crypto.c b/drivers/scsi/ufs/ufshcd-crypto.c
+index d70cdcd..c0163a3 100644
+--- a/drivers/scsi/ufs/ufshcd-crypto.c
++++ b/drivers/scsi/ufs/ufshcd-crypto.c
+@@ -163,8 +163,10 @@ int ufshcd_hba_init_crypto_capabilities(struct ufs_hba *hba)
+ 	 * hasn't advertised that crypto is supported.
+ 	 */
+ 	if (!(hba->capabilities & MASK_CRYPTO_SUPPORT) ||
+-	    !(hba->caps & UFSHCD_CAP_CRYPTO))
++	    !(hba->caps & UFSHCD_CAP_CRYPTO)) {
++		err = -EINVAL;
+ 		goto out;
++	}
+ 
+ 	hba->crypto_capabilities.reg_val =
+ 			cpu_to_le32(ufshcd_readl(hba, REG_UFS_CCAP));
+-- 
+1.8.3.1
 
