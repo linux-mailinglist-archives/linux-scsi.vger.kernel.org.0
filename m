@@ -2,201 +2,178 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA6A393DEE
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 May 2021 09:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21E6393ED2
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 May 2021 10:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236051AbhE1HcL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 May 2021 03:32:11 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:30286 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234715AbhE1HcK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 May 2021 03:32:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1622187035; x=1653723035;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=XC4OCbdPT/OgR8xq5cUX1oiAdTgZflA/RbTm6sJCNOM=;
-  b=cTDn97zb3DXjL8fbvofn02/Sibx3PNWblZETAodDADipVaWpaoDP4MoY
-   1AztQXHJ4k5WSAsIfIqXl89XvqFESCNoCANFdGXp29Rjy4T++pfznrOam
-   bZyzPkd44nQYJeQeIXKwRI3S+pZ6z51wXMV4ufxduM5XUyM/lbYyO206z
-   d5gMurNO7IhXKCdXh7spk4P54elE0ShZ6uotnFMH7mwjM5G6mrgddfcJS
-   0JsscchY0lywqjbGmPPFuJ99Txv/bl77EOA6oDYQuNeKCA0x+YfEZxWTk
-   8jK3GW4mW0QY998d0vIeKymASDL/QUoE0ahH/SSR6phI8yGU8ayzOrWVF
-   A==;
-IronPort-SDR: 5+QNhbE5zmXP//EUXrEjci0AJ57OgxNoafyZWB1OD3HncNeRZAXt9r0IqUzf2Zz0LZr9rZLnUN
- YR4MhkDNxjPL5Cl7rgdDMtL+bTfA1YuGEQU7pl+us6pRgIRgAB5oF+iln/hElO0BXQncWeTsa7
- m17Be0mH3SPuymU95twrBBRHz6oJesd7yruRyiL+izmLLhlxiASO+y2qM3cuBlHDFj9iZzM4I2
- 2oAnfO/JtWCOjftadqvXQnYIxP8I6dpAk0lK9y+whvGlMjntAA0S18hPX4Nt0nMvjpZtJJT6gB
- 2So=
-X-IronPort-AV: E=Sophos;i="5.83,229,1616428800"; 
-   d="scan'208";a="281126130"
-Received: from mail-bn8nam12lp2168.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.168])
-  by ob1.hgst.iphmx.com with ESMTP; 28 May 2021 15:30:33 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=afe0oCL0eEGJbs5sQEFIa98/4rcjRMVjLr6/3LN4YJtjQmj21IhFIVKOV30d3X3dAfvfwIHouYMfDftq4NaxGG/4ryagBsZ8XF5aL7ryGyNB+zJqpgNBH3/0Q+m4bXV1lPix4hqhmtrWVhzCLuKnf+wIYEncfiBFv0NKD9+zuNt2HpyCmMDBFUiue9B5amD+/RQA2649DPqIDRwd9RgwOMiEA0RLJ9+EPBKvmoMkV1IQTEAo4WulU1XQJ7FQXxm7WgCg/zo/SHsr7HWXUgZtsr84fld4K26eZYkOQobTaTpd496g/VxmxyBKb+ab3QUg0gpofrc5T3/zq3E27/F6tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XC4OCbdPT/OgR8xq5cUX1oiAdTgZflA/RbTm6sJCNOM=;
- b=LIt+rS1TTwvSPJjgwNAz9l9VMrOFeUGsP4cmev4Cw6q/qrRm0bdd8jsdLSWynfrq7AMuCBtdh0fFdY6wGwAL3jLEiTm+UAXL4EEXmROcE//hS9jguZ0JTVxnNpKeRb6F4luhI11PtXyIybu4NcbHmXz6jX4W3gt1D33lQ6ulGRHRlPeu1zxCTQTXmx2wyw/3bZiez6EPMcAtXk7jUt2Bi9fNKkbq/vlLrtZ7afgsaDdlM2VOU0qKzK6SjZvXNk6wa9roY0tg+lh98Z8c2tESDhaF3uh9NmgGX6YtZlX85lJ94PB7SgreSNSz1vhPuT7OJE1mifY+Tv1D7OMmmLuMXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XC4OCbdPT/OgR8xq5cUX1oiAdTgZflA/RbTm6sJCNOM=;
- b=RxWW0XypVXmFoSWyQ+8NZDw2VLOTn2NQgGE/dmNoyyXGYrWQvjTfRAtUqQE8h68mMY9freg5HCUfnLcZppJFWTsJG5R9kFBcyC04UMZXjqeUYLbLkgsCDSU0ZXrzworlSqqWc/l9kCV/q7iyDKangTQ0RX8UcH5ub/oeHzlBBmc=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- DM5PR0401MB3654.namprd04.prod.outlook.com (2603:10b6:4:79::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4173.24; Fri, 28 May 2021 07:30:32 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::ed2d:4ccc:f42b:9966]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::ed2d:4ccc:f42b:9966%6]) with mapi id 15.20.4173.022; Fri, 28 May 2021
- 07:30:32 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     "Asutosh Das (asd)" <asutoshd@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Can Guo <cang@codeaurora.org>,
-        "nguyenb@codeaurora.org" <nguyenb@codeaurora.org>,
-        "hongwus@codeaurora.org" <hongwus@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>
-CC:     Stanley Chu <stanley.chu@mediatek.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Satya Tangirala <satyat@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: RE: [PATCH v1 2/3] scsi: ufs: Optimize host lock on transfer requests
- send/compl paths
-Thread-Topic: [PATCH v1 2/3] scsi: ufs: Optimize host lock on transfer
- requests send/compl paths
-Thread-Index: AQHXUHgHUX4+5y22lkmg8exJdO90rKrzENmAgABaTgCAAHAxUIAEqb/w
-Date:   Fri, 28 May 2021 07:30:32 +0000
-Message-ID: <DM6PR04MB657525D67B70FF3418511694FC229@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <1621845419-14194-1-git-send-email-cang@codeaurora.org>
- <1621845419-14194-3-git-send-email-cang@codeaurora.org>
- <41a08b3e-122d-4f1a-abbd-4b5730f880b2@acm.org>
- <d4ff8e1a-f368-6720-798a-a2a31a4d41fb@codeaurora.org>
- <DM6PR04MB65752DD2F442C178B2D0233AFC259@DM6PR04MB6575.namprd04.prod.outlook.com>
-In-Reply-To: <DM6PR04MB65752DD2F442C178B2D0233AFC259@DM6PR04MB6575.namprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: codeaurora.org; dkim=none (message not signed)
- header.d=none;codeaurora.org; dmarc=none action=none header.from=wdc.com;
-x-originating-ip: [77.138.4.172]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: aade9801-e71c-4c21-3c3e-08d921aa7a0f
-x-ms-traffictypediagnostic: DM5PR0401MB3654:
-x-microsoft-antispam-prvs: <DM5PR0401MB3654CA2BCD99998F24F70841FC229@DM5PR0401MB3654.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fXHFAEjhMPTaFbNoJ2uVKeDRzePC97T7wRVzpmx6m3QW19lk7BK8W+GsySuMcCQivPk8QTeA4GyC6IRDQfIaT9LnrvlLOrGjgrAYNNFpx2q6O1QUlwPWb87rtl1/ntRTyKAMQUJRzkPWWxm5LSGeFM0q5/LTrHuPf5OkYLlIxf1EMbngz4Wc0Wg/fIhSrbbdz3dUlTL0U/GywEktrX8kz2U5JClYF9CGcT8WM2vAMaX6Qug9ewiEm71bd5YcQrFqN5Us029T+z9IVRRQ1uyWdZRno4LVpwtAv/0q8hG4A/BDNWIcwVFnqKBDgBnlM1Ezt3n9lMJ18WjOPio5gUj/odIOKKW48GEy6LZjvY+ClO3hq8HcyNQ3AHXH77tYegKXHXpoJuTD+oZ+HxJnzVXB5Tu0dnckSAAeJSdiwmD0ADF9R6mYt+t/1cyEX7ZGHlN6D4dllhjLyeL6r3QIrregRp8RN99bOWlskHoOSdAJtNuNBZW0VKE2L2Wk0pHojHSJoI8wNa9f6o/KbEee0x7HDCCMbQfVujrT+AUvYzAepq2OGKdlTjtWjhSvi58mIvdzA8ZFEW/rs80CGRODUiooKWTXpdIVyExM83ZXT3MeBTQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(39860400002)(136003)(346002)(376002)(7416002)(53546011)(7696005)(26005)(6506007)(54906003)(110136005)(478600001)(83380400001)(316002)(55016002)(71200400001)(66946007)(76116006)(8676002)(64756008)(66556008)(66476007)(4326008)(5660300002)(8936002)(52536014)(122000001)(2906002)(86362001)(66446008)(38100700002)(9686003)(186003)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?TFJZcnhHRXo5VTg2c29nanNnQXdDQi80bjRyVkQ1Z2kyVU50RE5IWEd3S09O?=
- =?utf-8?B?N0wxVm5ZOE9NbHBab2Q1VFZ1cDc5d0FhVGFQdE9oek5KcE9YeW04b0ZOOWl2?=
- =?utf-8?B?eFF4WXlZZ0dlTit0NExmOGR1cmFFVXMwSTE2MDJEWVFzaUw1d3k2U3dlS0Nr?=
- =?utf-8?B?ZkV5OWlIWkNFS1FzUUZkQS9USzJBNldxOStJeU1jRURyOWR2aWk4VGNHNW9S?=
- =?utf-8?B?dEtYRmpPRStlK0VKbnN6bmZYRENvOFJtRys4eFprVzJyQUgwa2d0bnJ6YW9u?=
- =?utf-8?B?d2FMS1YvM1FsWWVIVS9YRE51L0dVUnJFRGxsMFk1MENkTVoxa3EyUlFQNUlB?=
- =?utf-8?B?ZlRtM1RCa21vd3phUTZ4T1pBaVBIWktjeDkwa25CMFMwUCtiZ1dYSi9va2dD?=
- =?utf-8?B?SE5EMzlUNUpubjNZUXd4SXdyR1VqUWVSVjg4NlFkdUl4Sk0xaUNicHl3bzdw?=
- =?utf-8?B?amZSeDl6N3pWNjJtMmlGc2Fma3NueWUwSjNMeG14UEZWajd2R2ZURmp1ZmY0?=
- =?utf-8?B?cEp4MzlHUUo3bTlKS0xnaksrek1oZTdJMWZDK3RRbDNlUGZKMGdGeE4xb204?=
- =?utf-8?B?UFEyOVEvdFFaRHhHcU1rWmxyd2tqMFJ0LzVlb3ZKd2tuZEpmN05La1paUGEz?=
- =?utf-8?B?QXo5OHN3Zlh4bHFGR05HdlA0Vkx2ZVVkTk5qU1BWbW1Lb0FiYW1NVnpqUmJG?=
- =?utf-8?B?VjNXazkvTDBRUmc5QlZmemhZcjVuaU1EMmJOVHJTU2lrSEx3OXV2YnRPdHNq?=
- =?utf-8?B?ZUZMTkIvZnB6cS9sbUVJM282bHRYL2NvK2wyMEhJdGtZODdzNE9SbFdYYTdp?=
- =?utf-8?B?OXdoL1JOcnlHL1NPR0ZEYjEwOTREaTRJMWgwUDlPQUp1V1hncGVsMWhqeU1D?=
- =?utf-8?B?VGNqUjdOM212YkRNTUgvanJlcG05cXk0eFBKc0p6U2I4Nit1M2NNZ3pucytJ?=
- =?utf-8?B?ZmZlakIzMGJYdm45cllycXJOYUNOdTliQXBoa3Mxc0g0VXM4bytaTTNicENY?=
- =?utf-8?B?L0NwT3J2bTNYY3BWamVOUjdRL3JHRVZ5Sk1lbzVPQ0k1ZDRSOUFhcU0zRFBk?=
- =?utf-8?B?bUZybExJWkVZRFZGalVENS9QL3VGNGtyeU1TbVhVbVNEci9XTTNPcVhxZDVC?=
- =?utf-8?B?MitPT3BTMXJEZkNTWXZoOWFLYnM2anhyZkNhY2QraFdvaFZkNm9KTk1YeGlN?=
- =?utf-8?B?RXFKZjdINnRZQUxRMEpHRjNKMFNlR01BVnR5QURzRVlZNG1XTmlQNEs2blRv?=
- =?utf-8?B?Ri9aWFdJZURKMXAzYzZsWldiVmlPMFIxOTlBS3hQclJsVFZ6RmtPczFnRFls?=
- =?utf-8?B?N0xxTUZ6c3VYOUVQV2lOYnJsNXFpRy9HR2MyZXM0TGNlVkVTRExtSk16OWtQ?=
- =?utf-8?B?VEh6dkhBbXRYdWdkcTIwNkg1emowMzJwQUpQTFdhM243WXhkZnhERzNPem1U?=
- =?utf-8?B?bzA4bzMyNW13by9hdmlYdWlsWTFkY2Mzb2lvcGJNRGd4eVBxaThTOTd0blZZ?=
- =?utf-8?B?anlHM1hKVFJra3NuU2llcVRHWW54QzNaRGdsdlA4ek9LMVgrUzZwVzYzalNW?=
- =?utf-8?B?K2kyditCbkQ1VHEwREVJL3J5ZXVDR1hFZ3c0OGRiMXduYzUyK0xCMk5xSElB?=
- =?utf-8?B?RUZwYk9NQWV2cXhHVjdldTRLU01nOWY1c0ZzU0V4SXQ5Tnl3cDhpTndEejMz?=
- =?utf-8?B?Y1MxRmcwTXV0WGt5Z0E4T1dRMWJzQzh4UllPZmx0VlQ5TEZKMFQ2N3dBOUlH?=
- =?utf-8?Q?NlZJwSYsVKqJX1+52M=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S232481AbhE1IhC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 May 2021 04:37:02 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3105 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231564AbhE1Ig7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 May 2021 04:36:59 -0400
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FryWv6RSvz6N3rw;
+        Fri, 28 May 2021 16:28:59 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 28 May 2021 10:35:22 +0200
+Received: from [10.47.88.230] (10.47.88.230) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 28 May
+ 2021 09:35:22 +0100
+Subject: Re: [PATCH V2 1/2] scsi: core: fix failure handling of
+ scsi_add_host_with_dma
+To:     Ming Lei <ming.lei@redhat.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.de>
+References: <20210528011838.2122559-1-ming.lei@redhat.com>
+ <20210528011838.2122559-2-ming.lei@redhat.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <0e3a05ab-2dba-cafd-2840-70a0559a9140@huawei.com>
+Date:   Fri, 28 May 2021 09:34:44 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aade9801-e71c-4c21-3c3e-08d921aa7a0f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2021 07:30:32.4705
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: z3lTjVv5IXDpvbInHVBiCPLiMwcbBBQbM7QXHOZIPXkSKVlEs7atBrBf+PnGTGU7kNlz5hjMv6F7aTRMbYFXew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0401MB3654
+In-Reply-To: <20210528011838.2122559-2-ming.lei@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.88.230]
+X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-PiA+IE9uIDUvMjQvMjAyMSAxOjEwIFBNLCBCYXJ0IFZhbiBBc3NjaGUgd3JvdGU6DQo+ID4gPiBP
-biA1LzI0LzIxIDE6MzYgQU0sIENhbiBHdW8gd3JvdGU6DQo+ID4gPj4gQ3VycmVudCBVRlMgSVJR
-IGhhbmRsZXIgaXMgY29tcGxldGVseSB3cmFwcGVkIGJ5IGhvc3QgbG9jaywgYW5kDQo+IGJlY2F1
-c2UNCj4gPiA+PiB1ZnNoY2Rfc2VuZF9jb21tYW5kKCkgaXMgYWxzbyBwcm90ZWN0ZWQgYnkgaG9z
-dCBsb2NrLCB3aGVuIElSUQ0KPiBoYW5kbGVyDQo+ID4gPj4gZmlyZXMsIG5vdCBvbmx5IHRoZSBD
-UFUgcnVubmluZyB0aGUgSVJRIGhhbmRsZXIgY2Fubm90IHNlbmQgbmV3DQo+ID4gcmVxdWVzdHMs
-DQo+ID4gPj4gdGhlIHJlc3QgQ1BVcyBjYW4gbmVpdGhlci4gTW92ZSB0aGUgaG9zdCBsb2NrIHdy
-YXBwaW5nIHRoZSBJUlEgaGFuZGxlcg0KPiA+IGludG8NCj4gPiA+PiBzcGVjaWZpYyBicmFuY2hl
-cywgaS5lLiwgdWZzaGNkX3VpY19jbWRfY29tcGwoKSwgdWZzaGNkX2NoZWNrX2Vycm9ycygpLA0K
-PiA+ID4+IHVmc2hjZF90bWNfaGFuZGxlcigpIGFuZCB1ZnNoY2RfdHJhbnNmZXJfcmVxX2NvbXBs
-KCkuIE1lYW53aGlsZSwgdG8NCj4gPiBmdXJ0aGVyDQo+ID4gPj4gcmVkdWNlIG9jY3B1YXRpb24g
-b2YgaG9zdCBsb2NrIGluIHVmc2hjZF90cmFuc2Zlcl9yZXFfY29tcGwoKSwgaG9zdA0KPiBsb2Nr
-DQo+ID4gaXMNCj4gPiA+PiBubyBsb25nZXIgcmVxdWlyZWQgdG8gY2FsbCBfX3Vmc2hjZF90cmFu
-c2Zlcl9yZXFfY29tcGwoKS4gQXMgcGVyIHRlc3QsDQo+IHRoZQ0KPiA+ID4+IG9wdGltaXphdGlv
-biBjYW4gYnJpbmcgY29uc2lkZXJhYmxlIGdhaW4gdG8gcmFuZG9tIHJlYWQvd3JpdGUNCj4gPiBw
-ZXJmb3JtYW5jZS4NCj4gPiA+DQo+ID4NCj4gPiA+IEFuIGFkZGl0aW9uYWwgcXVlc3Rpb24gaXMg
-d2hldGhlciBpdCBpcyBuZWNlc3NhcnkgZm9yIHYzLjAgVUZTIGRldmljZXMNCj4gPiA+IHRvIHNl
-cmlhbGl6ZSB0aGUgc3VibWlzc2lvbiBwYXRoIGFnYWluc3QgdGhlIGNvbXBsZXRpb24gcGF0aD8g
-TXVsdGlwbGUNCj4gPiA+IGhpZ2gtcGVyZm9ybWFuY2UgU0NTSSBMTERzIHN1cHBvcnQgaGFyZHdh
-cmUgd2l0aCBzZXBhcmF0ZSBzdWJtaXNzaW9uDQo+ID4gYW5kDQo+ID4gPiBjb21wbGV0aW9uIHF1
-ZXVlcyBhbmQgaGVuY2UgZG8gbm90IG5lZWQgYW55IHNlcmlhbGl6YXRpb24gYmV0d2VlbiB0aGUN
-Cj4gPiA+IHN1Ym1pc3Npb24gYW5kIHRoZSBjb21wbGV0aW9uIHBhdGguIEknbSBhc2tpbmcgdGhp
-cyBiZWNhdXNlIGl0IGlzIGxpa2VseQ0KPiA+ID4gdGhhdCBzb29uZXIgb3IgbGF0ZXIgbXVsdGlx
-dWV1ZSBzdXBwb3J0IHdpbGwgYmUgYWRkZWQgaW4gdGhlIFVGUw0KPiA+ID4gc3BlY2lmaWNhdGlv
-bi4gQmVuZWZpdGluZyBmcm9tIG11bHRpcXVldWUgc3VwcG9ydCB3aWxsIHJlcXVpcmUgdG8gcmV3
-b3JrDQo+ID4gPiBsb2NraW5nIGluIHRoZSBVRlMgZHJpdmVyIGFueXdheS4NCj4gPiA+DQo+ID4g
-SGkgQmFydCwNCj4gPiBObyBpdCdzIG5vdCBuZWNlc3NhcnkgdG8gc2VyaWFsaXplIGJvdGggdGhl
-IHBhdGhzLiBJIHRoaW5rIHRoaXMgc2VyaWVzDQo+ID4gYXR0ZW1wdHMgdG8gcmVtb3ZlIHRoaXMg
-c2VyaWFsaXphdGlvbiB0byBhIGNlcnRhaW4gZGVncmVlLCB3aGljaCBpcw0KPiA+IHdoYXQncyBn
-aXZpbmcgdGhlIHBlcmZvcm1hbmNlIGltcHJvdmVtZW50Lg0KQnR3LCBJcyB0aGlzIHBlcmZvcm1h
-bmNlIGltcHJvdmVtZW50IGlzIG9uIHRvcCBvZiBycV9hZmZpbml0eSAyIG9yIDE/DQoNClRoYW5r
-cywNCkF2cmkNCg0KPiA+DQo+ID4gRXZlbiBpZiBtdWx0aXF1ZXVlIHN1cHBvcnQgd291bGQgYmUg
-YXZhaWxhYmxlIGluIHRoZSBmdXR1cmUsIEkgdGhpbmsNCj4gPiB0aGlzIGNoYW5nZSBpcyBhcHQg
-bm93IGZvciB0aGUgY3VycmVudCBhdmFpbGFibGUgc3BlY2lmaWNhdGlvbi4NCj4gSSBhZ3JlZSAt
-IHRoaXMgbG9va3MgbGlrZSB0aGUgaGFyYmluZ2VyIG9mIGEgbWFqb3IgY2hhbmdlLA0KPiBBbmQg
-Z29pbmcgZnVydGhlciB3aXRoIHJlc3BlY3Qgb2YgaHcgcXVldWVzLA0KPiB3aWxsIG5lZWQgdGhl
-IHNwZWMgc3VwcG9ydCAtIGUuZy4gZG9vcmJlbGwgcGVyIGxhbmUsIGV0Yy4NCj4gDQo+IFRoYW5r
-cywNCj4gQXZyaQ0KPiANCj4gPiA+IFRoYW5rcywNCj4gPiA+DQo+ID4gPiBCYXJ0Lg0KPiA+ID4N
-Cj4gPg0KPiA+DQo+ID4gVGhhbmtzLA0KPiA+IC1hc2QNCj4gPg0KPiA+IC0tDQo+ID4gVGhlIFF1
-YWxjb21tIElubm92YXRpb24gQ2VudGVyLCBJbmMuIGlzIGEgbWVtYmVyIG9mIHRoZSBDb2RlIEF1
-cm9yYQ0KPiA+IEZvcnVtLA0KPiA+IExpbnV4IEZvdW5kYXRpb24gQ29sbGFib3JhdGl2ZSBQcm9q
-ZWN0DQo=
+On 28/05/2021 02:18, Ming Lei wrote:
+> When scsi_add_host_with_dma() return failure, the caller will call
+> scsi_host_put(shost) to release everything allocated for this host
+> instance. So we can't free allocated stuff in scsi_add_host_with_dma(),
+> otherwise double free will be caused.
+> 
+> Strictly speaking, these host resources allocation should have been
+> moved to scsi_host_alloc(), but the allocation may need driver's
+> info which can be built between calling scsi_host_alloc() and
+> scsi_add_host(), so just keep the allocations in
+> scsi_add_host_with_dma().
+> 
+> Fixes the problem by relying on host device's release handler to
+> release everything.
+> 
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Cc: John Garry <john.garry@huawei.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+
+It now looks like we have a memory leak:
+
+unreferenced object 0xffff0410070a4e00 (size 128):
+   comm "swapper/0", pid 1, jiffies 4294894100 (age 90.744s)
+   hex dump (first 32 bytes):
+68 6f 73 74 30 00 00 00 00 00 00 00 00 00 00 00  host0...........
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   backtrace:
+[<(____ptrval____)>] __kmalloc_track_caller+0x25c/0x380
+[<(____ptrval____)>] kvasprintf+0xe8/0x1a4
+[<(____ptrval____)>] kvasprintf_const+0xc8/0x17c
+[<(____ptrval____)>] kobject_set_name_vargs+0x58/0xf4
+[<(____ptrval____)>] dev_set_name+0xa4/0xe0
+[<(____ptrval____)>] scsi_host_alloc+0x45c/0x5d0
+[<(____ptrval____)>] hisi_sas_probe+0x40/0x570
+[<(____ptrval____)>] hisi_sas_v2_probe+0x1c/0x2c
+[<(____ptrval____)>] platform_probe+0x90/0x110
+[<(____ptrval____)>] really_probe+0x148/0x744
+[<(____ptrval____)>] driver_probe_device+0x8c/0xfc
+[<(____ptrval____)>] device_driver_attach+0x11c/0x12c
+[<(____ptrval____)>] __driver_attach+0xc8/0x1a0
+[<(____ptrval____)>] bus_for_each_dev+0xe4/0x154
+[<(____ptrval____)>] driver_attach+0x38/0x50
+[<(____ptrval____)>] bus_add_driver+0x1bc/0x2c4
+unreferenced object 0xffff001056581800 (size 256):
+   comm "swapper/0", pid 1, jiffies 4294894398 (age 89.560s)
+   hex dump (first 32 bytes):
+00 00 00 00 00 00 00 00 08 18 58 56 10 00 ff ff  ..........XV....
+08 18 58 56 10 00 ff ff c0 f4 b4 10 00 80 ff ff  ..XV............
+   backtrace:
+[<(____ptrval____)>] kmem_cache_alloc+0x298/0x350
+[<(____ptrval____)>] device_add+0x6d8/0xc4c
+[<(____ptrval____)>] scsi_add_host_with_dma+0x370/0x5dc
+[<(____ptrval____)>] hisi_sas_probe+0x418/0x570
+[<(____ptrval____)>] hisi_sas_v2_probe+0x1c/0x2c
+[<(____ptrval____)>] platform_probe+0x90/0x110
+[<(____ptrval____)>] really_probe+0x148/0x744
+[<(____ptrval____)>] driver_probe_device+0x8c/0xfc
+[<(____ptrval____)>] device_driver_attach+0x11c/0x12c
+[<(____ptrval[  101.941505] random: fast init done
+____)>] __driver_attach+0xc8/0x1a0
+[<(____ptrval____)>] bus_for_each_dev+0xe4/0x154
+[<(____ptrval____)>] driver_attach+0x38/0x50
+[<(____ptrval____)>] bus_add_driver+0x1bc/0x2c4
+[<(____ptrval____)>] driver_register+0xe4/0x210
+[<(____ptrval____)>] __platform_driver_register+0x48/0x60
+[<(____ptrval____)>] hisi_sas_v2_driver_init+0x20/0x2c
+
+I think that the release for the shost_dev dev name memory needs fixing.
+
+In scsi_host_dev_release(), for my experiment, shost state is running, 
+so we miss the kfree(dev_name(&shost->shost_dev)), I guess. Not sure on 
+the proper fix.
+
+> ---
+>   drivers/scsi/hosts.c | 14 ++++++--------
+>   1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+> index 697c09ef259b..ea50856cb203 100644
+> --- a/drivers/scsi/hosts.c
+> +++ b/drivers/scsi/hosts.c
+> @@ -278,23 +278,22 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
+>   
+>   		if (!shost->work_q) {
+>   			error = -EINVAL;
+> -			goto out_free_shost_data;
+> +			goto out_del_dev;
+>   		}
+>   	}
+>   
+>   	error = scsi_sysfs_add_host(shost);
+>   	if (error)
+> -		goto out_destroy_host;
+> +		goto out_del_dev;
+>   
+>   	scsi_proc_host_add(shost);
+>   	scsi_autopm_put_host(shost);
+>   	return error;
+>   
+> - out_destroy_host:
+> -	if (shost->work_q)
+> -		destroy_workqueue(shost->work_q);
+> - out_free_shost_data:
+> -	kfree(shost->shost_data);
+> +	/*
+> +	 * any host allocation in this function will be freed in
+> +	 * scsi_host_dev_release, so not free them in the failure path
+
+nit: "so do not free them"
+
+> +	 */
+>    out_del_dev:
+>   	device_del(&shost->shost_dev);
+>    out_del_gendev:
+> @@ -304,7 +303,6 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
+>   	pm_runtime_disable(&shost->shost_gendev);
+>   	pm_runtime_set_suspended(&shost->shost_gendev);
+>   	pm_runtime_put_noidle(&shost->shost_gendev);
+> -	scsi_mq_destroy_tags(shost);
+>    fail:
+>   	return error;
+>   }
+> 
+
+Thanks,
+John
+
