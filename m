@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA3439482C
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 May 2021 23:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8B1394850
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 May 2021 23:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbhE1VNs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 May 2021 17:13:48 -0400
-Received: from gateway31.websitewelcome.com ([192.185.143.51]:22965 "EHLO
-        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229612AbhE1VNs (ORCPT
+        id S229528AbhE1VZi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 May 2021 17:25:38 -0400
+Received: from gateway20.websitewelcome.com ([192.185.50.28]:49109 "EHLO
+        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229481AbhE1VZh (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 May 2021 17:13:48 -0400
-X-Greylist: delayed 1494 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 May 2021 17:13:48 EDT
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id BAA4F37389
-        for <linux-scsi@vger.kernel.org>; Fri, 28 May 2021 15:25:25 -0500 (CDT)
+        Fri, 28 May 2021 17:25:37 -0400
+X-Greylist: delayed 1802 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 May 2021 17:25:37 EDT
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 12772400DC332
+        for <linux-scsi@vger.kernel.org>; Fri, 28 May 2021 15:15:57 -0500 (CDT)
 Received: from gator4166.hostgator.com ([108.167.133.22])
         by cmsmtp with SMTP
-        id mj2rlNHcF8ElSmj2rllfEL; Fri, 28 May 2021 15:25:25 -0500
+        id mj6EltxHwx8Dpmj6ElftYc; Fri, 28 May 2021 15:28:54 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -26,18 +26,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rq70nIWsmoQ2YZEIR9/oT6C24kx+FJeD2kfZR6jODaE=; b=DRFqCW0Hsul78XaW39HA9Gviu5
-        bEkO/lDjLxUt5F9gH8w52Iw+pwrSrlqroO2RswZ7bELqwI/OTBUJRXtLbqu4/fImECv7XQrYlCflW
-        653fUi5h04xYitH+V77aO3J4jcPwPgKlRlynF1KGNGgKHsFP2zIshZVQiOUJNgBoufHBs8VWEoW2F
-        qsoPy3nqvVnM+j/d0Yycih543jmpv0ZI/LanPp/XSSDOTJgKAxBI67THE4/bHn7uU5lhnKaqijUPr
-        4OjBVXLpFuJwuXp7LLKo4nX/8xy+egY2LANn8ml2Gd9QW3hsCoCb5NYalp218a/Ud1MBvZFRxVFVN
-        RdnzImTQ==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:38336 helo=[192.168.15.8])
+        bh=L3zwx02/a4qpuCrv9Ng4KVesaQf7X0hbM+48SL7llOw=; b=BXiFY5HalugiWU9BTfssC7wnet
+        kLkPs6B0zXCSMe5NRtPgkGtGzAk1YnInlYGzLbgWUZIQdRv161BcZJxn85KtCVRuK4J0l5z26e7VB
+        6jfy7MlnGhyhPzFH0R6qUkGqWcllxR7/Je5vqmVw/sQ0EKVdRk/WBgwuxedo8ngYHZaNfM2pc4n7u
+        O6B4cNG/QgZ9UpQLnzu5MPAYEhKsXwkSY6d4LKVf90acuNJPu3TUk9inxU0lmN3lQgrq/f1GsuzNx
+        8wYoRRsFGbcM4aJEy9AzE5ldF09UryO6pcWHo15B85Z27agBNorK5+w233Wbwo/5Ns1jgbXeELtSG
+        SzEXm2yA==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:38342 helo=[192.168.15.8])
         by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.94.2)
         (envelope-from <gustavo@embeddedor.com>)
-        id 1lmj2n-003gin-Ht; Fri, 28 May 2021 15:25:21 -0500
-Subject: Re: [PATCH 2/3] scsi: esas2r: Switch to flexible array member
+        id 1lmj6A-003lbU-Ig; Fri, 28 May 2021 15:28:50 -0500
+Subject: Re: [PATCH 3/3] scsi: isci: Use correctly sized target buffer for
+ memcpy()
 To:     Kees Cook <keescook@chromium.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Hannes Reinecke <hare@suse.de>,
@@ -48,14 +49,14 @@ Cc:     Hannes Reinecke <hare@suse.de>,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         linux-hardening@vger.kernel.org
 References: <20210528181337.792268-1-keescook@chromium.org>
- <20210528181337.792268-3-keescook@chromium.org>
+ <20210528181337.792268-4-keescook@chromium.org>
 From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Message-ID: <d35acc33-bade-ffac-3f00-ed2ecb451316@embeddedor.com>
-Date:   Fri, 28 May 2021 15:26:18 -0500
+Message-ID: <5741ac53-81ef-5106-0b58-51ddf5f65851@embeddedor.com>
+Date:   Fri, 28 May 2021 15:29:46 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210528181337.792268-3-keescook@chromium.org>
+In-Reply-To: <20210528181337.792268-4-keescook@chromium.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -67,13 +68,13 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 187.162.31.110
 X-Source-L: No
-X-Exim-ID: 1lmj2n-003gin-Ht
+X-Exim-ID: 1lmj6A-003lbU-Ig
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:38336
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:38342
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 14
+X-Email-Count: 24
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
 Precedence: bulk
@@ -87,29 +88,8 @@ On 5/28/21 13:13, Kees Cook wrote:
 > field bounds checking for memcpy(), avoid intentionally writing across
 > neighboring array fields.
 > 
-> Remove old-style 1-byte array in favor of a flexible array[1] to avoid
-> future false-positive cross-field memcpy() warning in:
-> 
-> esas2r_vda.c:
-> 	memcpy(vi->cmd.gsv.version_info, esas2r_vdaioctl_versions, ...)
-> 
-> The change in struct size doesn't change other structure sizes (it is
-> already maxed out to 256 bytes, for example here:
-> 
->         union {
->                 struct atto_ioctl_vda_scsi_cmd scsi;
->                 struct atto_ioctl_vda_flash_cmd flash;
->                 struct atto_ioctl_vda_diag_cmd diag;
->                 struct atto_ioctl_vda_cli_cmd cli;
->                 struct atto_ioctl_vda_smp_cmd smp;
->                 struct atto_ioctl_vda_cfg_cmd cfg;
->                 struct atto_ioctl_vda_mgt_cmd mgt;
->                 struct atto_ioctl_vda_gsv_cmd gsv;
->                 u8 cmd_info[256];
->         } cmd;
-> 
-> No sizes are calculated using the enclosing structure, so no other
-> updates are needed.
+> Switch from rsp_ui to resp_buf, since resp_ui isn't SSP_RESP_IU_MAX_SIZE
+> bytes in length. This avoids future compile-time warnings.
 > 
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
@@ -120,20 +100,22 @@ Thanks
 Gustavo
 
 > ---
->  drivers/scsi/esas2r/atioctl.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/scsi/isci/task.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/scsi/esas2r/atioctl.h b/drivers/scsi/esas2r/atioctl.h
-> index 4aca3d52c851..ff2ad9b38575 100644
-> --- a/drivers/scsi/esas2r/atioctl.h
-> +++ b/drivers/scsi/esas2r/atioctl.h
-> @@ -1141,7 +1141,7 @@ struct __packed atto_ioctl_vda_gsv_cmd {
+> diff --git a/drivers/scsi/isci/task.c b/drivers/scsi/isci/task.c
+> index 62062ed6cd9a..eeaec26ac324 100644
+> --- a/drivers/scsi/isci/task.c
+> +++ b/drivers/scsi/isci/task.c
+> @@ -709,8 +709,8 @@ isci_task_request_complete(struct isci_host *ihost,
+>  		tmf->status = completion_status;
 >  
->  	u8 rsp_len;
->  	u8 reserved[7];
-> -	u8 version_info[1];
-> +	u8 version_info[];
->  	#define ATTO_VDA_VER_UNSUPPORTED 0xFF
->  
->  };
+>  		if (tmf->proto == SAS_PROTOCOL_SSP) {
+> -			memcpy(&tmf->resp.resp_iu,
+> -			       &ireq->ssp.rsp,
+> +			memcpy(tmf->resp.rsp_buf,
+> +			       ireq->ssp.rsp_buf,
+>  			       SSP_RESP_IU_MAX_SIZE);
+>  		} else if (tmf->proto == SAS_PROTOCOL_SATA) {
+>  			memcpy(&tmf->resp.d2h_fis,
 > 
