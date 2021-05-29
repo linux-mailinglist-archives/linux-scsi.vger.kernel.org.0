@@ -2,61 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4243949AF
-	for <lists+linux-scsi@lfdr.de>; Sat, 29 May 2021 02:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A7839532A
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 May 2021 00:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbhE2Awi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 May 2021 20:52:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229656AbhE2Awh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 May 2021 20:52:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id EE40F613F9;
-        Sat, 29 May 2021 00:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622249462;
-        bh=wiw9q3+IDlVsUDyQBfgSyA13jwm/K45CLwX4fNsw50o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CY7XdAj72/8VltAqX6ZuW70WZ0Tk/stQT7XGyWF7Un9+zY5S22IbK6w4HfTb7KbG6
-         4AFZcSXMHUruMpuQCGhFshWh90Dkt3VPx8hRtDwhyhqOBQ9J+DAW8iktRJQYiIRRl9
-         DhlIDKDQQCh6DfVQOdHxKGYWkLG3ipY7/E0dXTr98ZmCw6flBshaYDsNJexBmtJvmF
-         GAgANZuWnWr2sJA3uhPs1PqXDrXj/HQ1FUcYfKZZ4eGxtbVrIPtOY0VuRoEdboaCSq
-         UOUnntbp3AEfI7nNVv+53DXIa93/ZTvsTM+m0nSQL5SVzq1ufi/L+mnC9u2zvG4wpi
-         5C1HUp0oPQM6Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E7454609EA;
-        Sat, 29 May 2021 00:51:01 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 5.13-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <153a81f4d08a49071194ce7d626a8fe8e71f17b5.camel@HansenPartnership.com>
-References: <153a81f4d08a49071194ce7d626a8fe8e71f17b5.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <153a81f4d08a49071194ce7d626a8fe8e71f17b5.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 2ef7665dfd88830f15415ba007c7c9a46be7acd8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6799d4f2da496cab9b3fd26283a8ce3639b1a88d
-Message-Id: <162224946194.17808.4451144014209633397.pr-tracker-bot@kernel.org>
-Date:   Sat, 29 May 2021 00:51:01 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S229853AbhE3WXZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sun, 30 May 2021 18:23:25 -0400
+Received: from 177-131-1-103.netfacil.center ([177.131.1.103]:45678 "EHLO
+        mail.netfacil.net.br" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S229940AbhE3WXY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 30 May 2021 18:23:24 -0400
+X-Greylist: delayed 98458 seconds by postgrey-1.27 at vger.kernel.org; Sun, 30 May 2021 18:23:24 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.netfacil.net.br (Postfix) with ESMTP id C103AA9C503;
+        Sun, 30 May 2021 13:52:49 -0300 (-03)
+Received: from mail.netfacil.net.br ([127.0.0.1])
+        by localhost (mail.netfacil.net.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 8hgjgToUjfnQ; Sun, 30 May 2021 13:52:49 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.netfacil.net.br (Postfix) with ESMTP id 5AF63AC3513;
+        Sun, 30 May 2021 07:23:01 -0300 (-03)
+X-Virus-Scanned: amavisd-new at mail.netfacil.net.br
+Received: from mail.netfacil.net.br ([127.0.0.1])
+        by localhost (mail.netfacil.net.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eKEzk0CqqTop; Sun, 30 May 2021 07:23:01 -0300 (-03)
+Received: from [192.168.0.108] (unknown [93.182.109.79])
+        by mail.netfacil.net.br (Postfix) with ESMTPSA id D39F7A9B310;
+        Sat, 29 May 2021 18:42:58 -0300 (-03)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Donation
+To:     Recipients <yane.ntos@netfacil.net.br>
+From:   =?utf-8?b?IlNwZW5kZSBmw7xyIFNpZSI8eWFuZS5udG9zQG5ldGZhY2lsLm5ldC5icj4=?=@mail.netfacil.net.br
+Date:   Sun, 30 May 2021 00:42:50 +0300
+Reply-To: francoispinault03@outlook.com
+X-Antivirus: Avast (VPS 210529-0, 05/29/2021), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20210529214259.D39F7A9B310@mail.netfacil.net.br>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Fri, 28 May 2021 16:42:57 -0700:
+$3.5 Million Has Been Donated To You,By François Pinault due to the covid-19 pandemic this is Real Get back For More Info
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+WhatsApp: +447452035105
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6799d4f2da496cab9b3fd26283a8ce3639b1a88d
+3,5 Millionen US-Dollar wurden Ihnen von François Pinault aufgrund der Covid-19-Pandemie gespendet
 
-Thank you!
+WhatsApp: +447452035105
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
