@@ -2,137 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 518F839587D
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 May 2021 11:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A293A395927
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 May 2021 12:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbhEaJ50 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 May 2021 05:57:26 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:48676 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbhEaJ5Y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 May 2021 05:57:24 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DEFED1FD2F;
-        Mon, 31 May 2021 09:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622454943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PsaOqiqoXWrjn0nPj1JATIKpBDJ2qCcY94qyg0GadOw=;
-        b=NezQa7NJybwjplXcWX9vrOS2UW9g00TyrtNiCZImeZaK8lAZohe3QRiobS62x0Tny3gwiP
-        sSqyKJAWHqE8z+WAeam+AX1O+cFltVNEB7lhrdBICZ9cILT09eq77ouyy39rI+azmE1UDS
-        ouLcV67Sn43Xn/aDCj6FTwJFR2/SsUw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622454943;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PsaOqiqoXWrjn0nPj1JATIKpBDJ2qCcY94qyg0GadOw=;
-        b=okgtpgith/oJaA98g3skKG1aSJDOVEW9UhEwlSjcEmm1vX7hr+rbFGgiDk+ZAzw05ALHwl
-        bx/JgRNCORmf0oBw==
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id BBD13118DD;
-        Mon, 31 May 2021 09:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622454943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PsaOqiqoXWrjn0nPj1JATIKpBDJ2qCcY94qyg0GadOw=;
-        b=NezQa7NJybwjplXcWX9vrOS2UW9g00TyrtNiCZImeZaK8lAZohe3QRiobS62x0Tny3gwiP
-        sSqyKJAWHqE8z+WAeam+AX1O+cFltVNEB7lhrdBICZ9cILT09eq77ouyy39rI+azmE1UDS
-        ouLcV67Sn43Xn/aDCj6FTwJFR2/SsUw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622454943;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PsaOqiqoXWrjn0nPj1JATIKpBDJ2qCcY94qyg0GadOw=;
-        b=okgtpgith/oJaA98g3skKG1aSJDOVEW9UhEwlSjcEmm1vX7hr+rbFGgiDk+ZAzw05ALHwl
-        bx/JgRNCORmf0oBw==
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id qm3iLJ+ytGAIaAAALh3uQQ
-        (envelope-from <dwagner@suse.de>); Mon, 31 May 2021 09:55:43 +0000
-Date:   Mon, 31 May 2021 11:55:43 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Arun Easi <aeasi@marvell.com>
-Cc:     linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com,
-        linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>
-Subject: Re: [EXT] [RFC 0/2] Serialize timeout handling and done callback.
-Message-ID: <20210531095543.gszkwzrmx4nhpfqn@beryllium.lan>
-References: <20210507123103.10265-1-dwagner@suse.de>
- <alpine.LRH.2.21.9999.2105310148300.17918@irv1user01.caveonetworks.com>
+        id S231370AbhEaKpF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 May 2021 06:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231349AbhEaKpD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 May 2021 06:45:03 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F1EC061574;
+        Mon, 31 May 2021 03:43:22 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id h24so12079241ejy.2;
+        Mon, 31 May 2021 03:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KRDWLXAck1raFp8VVUs1f+mKxKULvRviPycYi4op11g=;
+        b=m7XodNLph4OruuhYIefg83obccGHvKBocm2gLu9zwfuxGpyDF6izlQEsgL7d8Or9W4
+         XirSMhU2x7KqxLD/r8YDhtI8NBqmACPnpQR5VnElxvS3KdG9IZJUWlxgq114rWEs15xk
+         iZTX8SkVmaxM4L97H9+lOnIvlIlbnKrwP98tGluWZSADdli5DFrM5uHdfNiV1xO2idLf
+         lK41Y7Rpcbu8wn+8URGQ/1XVEDkCbSlhs0bsfZ0S9j+oWl42EdPHMe2bDkEnehHsIlH2
+         1qrABwYZyhQdinjbqy7K/IeNwsk9L4+hFQ95/TitqV+27Pfi4FqvszjwZaogHIXUq5iB
+         lJ2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KRDWLXAck1raFp8VVUs1f+mKxKULvRviPycYi4op11g=;
+        b=CCkEVOhrUELVPcp8s8XTSHHtbXyNw2GVO+pOUr7/yv301/XS5RtJks3H7Iwa3WlH2S
+         TkXERkWAA2KMDOF6HTCaArb8XLn27QIe3EBsdV+6xPjMjANa7LKIcKCh5UOG/mQtwvjG
+         z+MWucLHsc5l3U4g2u8D02oUcdL1N940STkPVGToEPQPNyjNxwWmULtltwJy/5qfAqL7
+         zX/Q29z4cOCJYZWgp/jSoh/Z2faAoZuT6gYtRyfWCSkhYvgeZ9JGCPqm/M5HQcsUhAbI
+         eYYApZExC3zQQAgLi6KbRrK91PBjQecZiPUHAIUW1SenOb5kCorrth3JZ8PhtB/uga2B
+         509g==
+X-Gm-Message-State: AOAM533CBKhYGo25d9NN9P11EZc03UiGi89mYmhN40eVH8xRE6Z/nj8I
+        DEE9RQUhdQEWjmaUXMdWcJA=
+X-Google-Smtp-Source: ABdhPJzHtsIy12jh8754dJy0wkqagMnp5PySrjvyTlgRvRehHxswmkwVRAgePbfAW6dCALlI9c//Zg==
+X-Received: by 2002:a17:907:7713:: with SMTP id kw19mr3821943ejc.249.1622457800884;
+        Mon, 31 May 2021 03:43:20 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5bec5d.dynamic.kabel-deutschland.de. [95.91.236.93])
+        by smtp.gmail.com with ESMTPSA id dk9sm5741035ejb.91.2021.05.31.03.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 May 2021 03:43:20 -0700 (PDT)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] Several minor changes for UFS
+Date:   Mon, 31 May 2021 12:43:04 +0200
+Message-Id: <20210531104308.391842-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.21.9999.2105310148300.17918@irv1user01.caveonetworks.com>
-Authentication-Results: imap.suse.de;
-        none
-X-Spam-Level: 
-X-Spam-Score: 0.00
-X-Spamd-Result: default: False [0.00 / 100.00];
-         ARC_NA(0.00)[];
-         DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         RCVD_NO_TLS_LAST(0.10)[];
-         RCVD_COUNT_TWO(0.00)[2];
-         RCPT_COUNT_FIVE(0.00)[5]
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Arun,
+From: Bean Huo <beanhuo@micron.com>
 
-On Mon, May 31, 2021 at 02:06:24AM -0700, Arun Easi wrote:
-> Thanks Daniel for the report and your effort here. Agree, this needs to be 
-> fixed.
+Changelog:
+ v1--v2:
+    1. Add a new cleanup patch 1/4
+    2. Make the patch 3/4 much readable by initializing a variable
+    'header'.
 
-Good to hear!
 
-> If you do not mind, can I take this from here? This touches quite a 
-> number of paths, and I would like to have this go through a full 
-> regression cycle before this is merged.
+Bean Huo (4):
+  scsi: ufs: Cleanup ufshcd_add_command_trace()
+  scsi: ufs: Let UPIU completion trace print RSP UPIU header
+  scsi: ufs: Let command trace only for the cmd != null case
+  scsi: ufs: Use UPIU query trace in devman_upiu_cmd
 
-Sure, that is what I hoped for. It is an invasive change and this needs
-to be properly tested with a few different setups. Something I can't really
-do. So I would be glad if you could pick up the patches and fix them up.
+ drivers/scsi/ufs/ufshcd.c | 59 ++++++++++++++++++++++-----------------
+ 1 file changed, 34 insertions(+), 25 deletions(-)
 
-> That said, I had some general comments:
-> 
-> 1. I see sp->lock was introduced, but could not locate where it was
-> used.
+-- 
+2.25.1
 
-I thought I needed it for serializing the kref operations. The lock
-itself is not used in the driver. After re-reading the documentation,
-the lock is not necessary as kref_put() is able to serialize the ref
-counter inc/dec operation correctly. The lock would only be useful to
-serialize the kref_put() with something which runs in the driver
-concurrently.
-
-> 2. I did not see a release of lock after a successful kref_put_lock, maybe 
->    that piece was missed out.
-
-I think you got it right. The lock is not necessary.
-
-> 3. The sp->done should be invoked only once, and I do not see if this is
->    taken care of.
-
-qla2x00_sp_release() will only be called when the ref counter gets 0.
-This makes sure we only call sp->done() once.
-
-> 4. sp->cmd_sp could be a SCSI IO too, where sp is not allocated 
->    separately, so qla2x00_sp_release shall not be called for it.
-
-Okay, didn't realize this.
-
-Thanks,
-Daniel
