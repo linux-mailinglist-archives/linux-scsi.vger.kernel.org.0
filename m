@@ -2,73 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E18397D5E
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Jun 2021 01:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1251397D60
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Jun 2021 01:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbhFAX5g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Jun 2021 19:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S235323AbhFAX5k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Jun 2021 19:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235289AbhFAX5Y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Jun 2021 19:57:24 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AD9C061761
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Jun 2021 16:55:42 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d16so732484pfn.12
-        for <linux-scsi@vger.kernel.org>; Tue, 01 Jun 2021 16:55:42 -0700 (PDT)
+        with ESMTP id S235245AbhFAX5Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Jun 2021 19:57:25 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53505C061763
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Jun 2021 16:55:43 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c13so185086plz.0
+        for <linux-scsi@vger.kernel.org>; Tue, 01 Jun 2021 16:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kh1yKrWnwb0DPbX5N7wOKrUUIpbyN7AyFREIrCh8Ki0=;
-        b=YJY95v+lAWCeFz/hSqgfOKEDXhl++P/eBJw71cu6RF83orifVwanKyBOc32C5Rcr+0
-         wLMj1uPbeWHxsZvk2/ATfXHaMRym4aWmTg0v35XhHWvvIZhucHTkCAQhq54Ir4yVkYE3
-         Ih0tfnRdn8PGZDHqofbw8GMM3iN2zqZU4t/HTDVHWo6/kvkq/Y/Fn3YzO/yLOSXq1Htg
-         5+tYC/Krl2iwPSncCDwvZNKUKy5+8W5aLVh8vA/CFNGnWv8DgMlF3OTHSPJk6RHre2Qe
-         CZL1we6JlsGbkFUY9bZafmR3XfluIJ/RjngdefpMLhWIVyo/xq/SRxsjPpVLcty0F9Jw
-         dy0Q==
+        bh=hPC2AqEUAF6lP9izsmD6p0UQ7jcYGVTPjC7LCgAimEo=;
+        b=Y6q7KZjnV8VQJ8U+OnbmwHlVVDpOsUYpt0wZkhwhb8xUO76vzk69Cs2qXu++hMR4Mk
+         xf2iU6vtPQSM1ECrcfgxi/8Zn0wuTk9U8rW3qyRiMMZcGtnDMEicQVKlkln/7ruz9FF7
+         rFVheb5DMKJTQp5+HdEHyafbfonHabU+6QFXFNpSpxBKQ9YMGl2FOFxWMSp/1PyPGLDU
+         hb2mWlEpYRmqYjQjktNRlMUxkHeWeZ1FJMBMh5PhAh059ujh87WoaL3lgEZyjJiJPn/P
+         h8RDX5v71VbpfGISzIPafoj2eDJ68B73BLq3S9Oo2jMqXlYOTFtMsIdw0EHCbLOPjiQa
+         j2sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kh1yKrWnwb0DPbX5N7wOKrUUIpbyN7AyFREIrCh8Ki0=;
-        b=SJBe3Edm+6J6sFdNp+v2wVZgAT7Ztea46+69izGiBL9ntSBSnk1NUjqvXpW6SI7Nao
-         TAhLqGEx8RTo2EI1WvcpvPzFhkwcZQk2FE8clhFWDMGRt4o7td4hO+p7T5XP5N416ohg
-         Dbn6FD5Ood4D4D6Dxu2Zmt/3ee3WNkZWm58UyIFi7n4d3iHVfrym675ckw0JXhO4/gvP
-         JLWWSiJ5B0dYWVdzgQ2hqBJEav7vol4MIBUHY3RFsq8a+iJaK0vXYssylg2LhqhYzV/8
-         6A7EqvH8euVaikoy+J270X3wEOa6TPHT/2rMo3P2TVgzM/QqUhr0ac7Dn4ytKyajMHgx
-         70qw==
-X-Gm-Message-State: AOAM532tM5CsEYZdz3gUm3+/jvyX+Gv8pEq50o4GzhEiQpwurw9Jz2t7
-        bq687UhwuwDpbiTuyA2OwfIgSTlgrXU=
-X-Google-Smtp-Source: ABdhPJwfwwzZoCiBjY7fheh/SaU5zOzSBGnp6Egicw9TWLt26leX/wol/5jTbxEmatVudYb2dqo4zw==
-X-Received: by 2002:a63:eb02:: with SMTP id t2mr30566337pgh.413.1622591742024;
+        bh=hPC2AqEUAF6lP9izsmD6p0UQ7jcYGVTPjC7LCgAimEo=;
+        b=UK0Bjcvhdqn2UeA4/FTMYZEJ2YqcieTqYOXS425sYgZ4Vqf25To6+v4ArDLvmZs+y/
+         zk1s3+OLjozt/Rab3HnNq1keMTOnD8NumufGedKZmhG1bpD0OM12gxNCU5HzayY692EF
+         uP5DfwGiI5v0uK/ffk29zWc55QZEID4db0G/8yf2oUJ2K0au1K7Y2J7tCy7TvjG8nEbM
+         AITJS3nueVP9gan451uAKhtVS3y8ZGRNGJ7DzQMmpu6Y+fxRmlpMGGHfRnYJlWrxi/Vy
+         rcMer9xQp83uJLit+bmSlElbmgMnZCBGxXGVq1HJgpceDmiRDEiV2zmoz2ggG6o8KP9R
+         UlnQ==
+X-Gm-Message-State: AOAM533r2fc71io5WzzDCbkvXxTLC7mDNjYCAYupWERJNz4tNe3xnU2i
+        2IG8KNAGxf/s7MJf5iAT7ZdpXViMais=
+X-Google-Smtp-Source: ABdhPJz5gTJ2XY71JQfchIMwJuwlpz0yqW8Aj8mASzB+CE46Rk/bpR1+vU9ar/5csu9Us15CoejUcg==
+X-Received: by 2002:a17:902:8505:b029:ec:b451:71cd with SMTP id bj5-20020a1709028505b02900ecb45171cdmr28652928plb.23.1622591742814;
         Tue, 01 Jun 2021 16:55:42 -0700 (PDT)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v15sm13915357pfm.187.2021.06.01.16.55.41
+        by smtp.gmail.com with ESMTPSA id v15sm13915357pfm.187.2021.06.01.16.55.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 16:55:41 -0700 (PDT)
+        Tue, 01 Jun 2021 16:55:42 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>,
         Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v9 30/31] elx: efct: Add Makefile and Kconfig for efct driver
-Date:   Tue,  1 Jun 2021 16:55:11 -0700
-Message-Id: <20210601235512.20104-31-jsmart2021@gmail.com>
+Subject: [PATCH v9 31/31] elx: efct: Tie into kernel Kconfig and build process
+Date:   Tue,  1 Jun 2021 16:55:12 -0700
+Message-Id: <20210601235512.20104-32-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210601235512.20104-1-jsmart2021@gmail.com>
 References: <20210601235512.20104-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch completes the efct driver population.
-
-This patch adds driver definitions for:
-Adds the efct driver Kconfig and Makefiles
+This final patch ties the efct driver into the kernel Kconfig
+and build linkages in the drivers/scsi directory.
 
 Co-developed-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
@@ -76,51 +73,35 @@ Signed-off-by: James Smart <jsmart2021@gmail.com>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Daniel Wagner <dwagner@suse.de>
 ---
- drivers/scsi/elx/Kconfig  |  9 +++++++++
- drivers/scsi/elx/Makefile | 18 ++++++++++++++++++
- 2 files changed, 27 insertions(+)
- create mode 100644 drivers/scsi/elx/Kconfig
- create mode 100644 drivers/scsi/elx/Makefile
+ drivers/scsi/Kconfig  | 2 ++
+ drivers/scsi/Makefile | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/scsi/elx/Kconfig b/drivers/scsi/elx/Kconfig
-new file mode 100644
-index 000000000000..831daea7a951
---- /dev/null
-+++ b/drivers/scsi/elx/Kconfig
-@@ -0,0 +1,9 @@
-+config SCSI_EFCT
-+	tristate "Emulex Fibre Channel Target"
-+	depends on PCI && SCSI
-+	depends on TARGET_CORE
-+	depends on SCSI_FC_ATTRS
-+	select CRC_T10DIF
-+	help
-+	  The efct driver provides enhanced SCSI Target Mode
-+	  support for specific SLI-4 adapters.
-diff --git a/drivers/scsi/elx/Makefile b/drivers/scsi/elx/Makefile
-new file mode 100644
-index 000000000000..a8537d7a2a6e
---- /dev/null
-+++ b/drivers/scsi/elx/Makefile
-@@ -0,0 +1,18 @@
-+#// SPDX-License-Identifier: GPL-2.0
-+#/*
-+# * Copyright (C) 2021 Broadcom. All Rights Reserved. The term
-+# * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
-+# */
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index c5612896cdb9..4d937995c88e 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -1157,6 +1157,8 @@ config SCSI_LPFC_DEBUG_FS
+ 	  This makes debugging information from the lpfc driver
+ 	  available via the debugfs filesystem.
+ 
++source "drivers/scsi/elx/Kconfig"
 +
-+
-+obj-$(CONFIG_SCSI_EFCT) := efct.o
-+
-+efct-objs := efct/efct_driver.o efct/efct_io.o efct/efct_scsi.o \
-+	     efct/efct_xport.o efct/efct_hw.o efct/efct_hw_queues.o \
-+	     efct/efct_lio.o efct/efct_unsol.o
-+
-+efct-objs += libefc/efc_cmds.o libefc/efc_domain.o libefc/efc_fabric.o \
-+	     libefc/efc_node.o libefc/efc_nport.o libefc/efc_device.o \
-+	     libefc/efclib.o libefc/efc_sm.o libefc/efc_els.o
-+
-+efct-objs += libefc_sli/sli4.o
+ config SCSI_SIM710
+ 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
+ 	depends on EISA && SCSI
+diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
+index bc3882f5cc69..8504478fa793 100644
+--- a/drivers/scsi/Makefile
++++ b/drivers/scsi/Makefile
+@@ -85,6 +85,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
+ obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
+ obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
+ obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
++obj-$(CONFIG_SCSI_EFCT)		+= elx/
+ obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
+ obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
+ obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
 -- 
 2.26.2
 
