@@ -2,30 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2B8397503
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Jun 2021 16:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F70397507
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Jun 2021 16:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbhFAOIW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Jun 2021 10:08:22 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:2936 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbhFAOIU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Jun 2021 10:08:20 -0400
+        id S234074AbhFAOJ1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Jun 2021 10:09:27 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:6122 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234016AbhFAOJ1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Jun 2021 10:09:27 -0400
 Received: from dggeme760-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FvYmD1wrwz68cB;
-        Tue,  1 Jun 2021 22:03:40 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FvYnm1m2BzYpfx;
+        Tue,  1 Jun 2021 22:05:00 +0800 (CST)
 Received: from localhost.localdomain (10.175.104.82) by
  dggeme760-chm.china.huawei.com (10.3.19.106) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Tue, 1 Jun 2021 22:06:35 +0800
+ 15.1.2176.2; Tue, 1 Jun 2021 22:07:42 +0800
 From:   Zheng Yongjun <zhengyongjun3@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
         <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <satishkh@cisco.com>, <sebaddel@cisco.com>, <kartilak@cisco.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] scsi: fnic: Remove unneeded if-null-free check
-Date:   Tue, 1 Jun 2021 22:20:15 +0800
-Message-ID: <20210601142015.4132087-1-zhengyongjun3@huawei.com>
+CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH -next] scsi: qlogicpti: Remove unneeded semicolon
+Date:   Tue, 1 Jun 2021 22:21:22 +0800
+Message-ID: <20210601142122.4132250-1-zhengyongjun3@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -38,30 +37,26 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Eliminate the following coccicheck warning:
-
-drivers/scsi/fnic/fnic_debugfs.c:90:2-7: WARNING:
-NULL check before some freeing functions is not needed.
+Remove unneeded semicolon.
 
 Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
 ---
- drivers/scsi/fnic/fnic_debugfs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/qlogicpti.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
-index e7326505cabb..866b4c983ace 100644
---- a/drivers/scsi/fnic/fnic_debugfs.c
-+++ b/drivers/scsi/fnic/fnic_debugfs.c
-@@ -86,8 +86,7 @@ void fnic_debugfs_terminate(void)
- 	debugfs_remove(fnic_trace_debugfs_root);
- 	fnic_trace_debugfs_root = NULL;
+diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
+index d84e218d32cb..3da58263cab3 100644
+--- a/drivers/scsi/qlogicpti.c
++++ b/drivers/scsi/qlogicpti.c
+@@ -1150,7 +1150,7 @@ static struct scsi_cmnd *qlogicpti_intr_handler(struct qlogicpti *qpti)
+ 		case COMMAND_ERROR:
+ 		case COMMAND_PARAM_ERROR:
+ 			break;
+-		};
++		}
+ 		sbus_writew(0, qpti->qregs + SBUS_SEMAPHORE);
+ 	}
  
--	if (fc_trc_flag)
--		vfree(fc_trc_flag);
-+	vfree(fc_trc_flag);
- }
- 
- /*
 -- 
 2.25.1
 
