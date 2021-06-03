@@ -2,124 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EE439A8D7
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Jun 2021 19:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44FD39A910
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Jun 2021 19:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbhFCRSD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Jun 2021 13:18:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43650 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233695AbhFCRQT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:16:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C41F9613F8;
-        Thu,  3 Jun 2021 17:11:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622740286;
-        bh=NcClO2qhll0tcwIBkMTz8t4nm6/LZs5IVVsCDQxn3UY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S2coQUMBI2N1Y0wBDdVmIEABPuqF5xzMLvDuhhmwoOTK+50A/X7fBHC4j2vaINEf/
-         0mz2CmzK0eJ1WC64blGhhWLWjAcR6MNhnRwkjTHFSrcepVu1Q/Urvag8aEQmwbj4Hb
-         e8SxtM2X6YUBm2kPoiy82jcDtYI++6NHyAF6kYCnWrcb1iP7LwjkmpcHv1TRiz7RcV
-         fyLR+CBdxTfW8N06UGWkNTSqU6XMdGXkX76RLTnceNjmkCBSlAV8t66/Z1K1PduC5N
-         vAP7k706m+wm521C0FP2SssUzbmawK7AfT1DWr2xjPU5BphyzNs11c/PYyAFZ35bmh
-         CV/TuJpdfsvXw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 09/15] scsi: target: qla2xxx: Wait for stop_phase1 at WWN removal
-Date:   Thu,  3 Jun 2021 13:11:08 -0400
-Message-Id: <20210603171114.3170086-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210603171114.3170086-1-sashal@kernel.org>
-References: <20210603171114.3170086-1-sashal@kernel.org>
+        id S231530AbhFCRUv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Jun 2021 13:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234335AbhFCRTk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Jun 2021 13:19:40 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2752FC061345;
+        Thu,  3 Jun 2021 10:13:32 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id c124so6670993qkd.8;
+        Thu, 03 Jun 2021 10:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dV2nvNFqWCItqaPHOOaQlyC8Sahyat7unUPVc/qQTb0=;
+        b=q/uyctJuVSawxJTjQwcklgDmZWijiqGU5hk4GnWdbpHEAYWCz6RTkJIQg90XNjURQY
+         oVpatxMEP/WTlxM9UeL1Tw1YQG1KYPwR8rVMCXxLcL15oiJAbWpidYzyApW+Q3FMtwjz
+         gGLKoDU9wZFdzKnn/ddV4JYOaM9exAl9nX9+Erp60Y+kqpQSB22TbleIWAOqUJ2nYYHM
+         QGpOBTVEG45Ej4ACHWIm3Ugc6esxig+3CyJfUgRSiGxy6AO7cCgi0mvCHKsDCfVUN7kz
+         /wOFZE1wCfyUvE+YRh6NZdDf4S/tOkwgfz9qONhNEssVB+UbYhKoxCjzyTP7HPipjvED
+         /uww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=dV2nvNFqWCItqaPHOOaQlyC8Sahyat7unUPVc/qQTb0=;
+        b=BEfYh0yh/z7OTGgEogzSaP1lSI7wXgk5vbBQALWTWDm6wHY9Vu+yK6oNSirP2bEFVq
+         arjogHP0HnIb+PIHEQXzgcTsKglGb1zIvqjFbGXQpGIcRc1VPqUjtY9v4eajUHXc6rLC
+         oNSp1j6nOux5VxFuerN1MHZKUvbWZ+JK3EtVcUWrwB4h2ByyAjQzr7jZFK3Gvgs0CfdI
+         1gBIrQ6cpv1adj62E9nRNnx+k1Qf7+6f07E11DUgYpWCqh6j9YBODhoafQoQ4Fkp+4IZ
+         n2+BZJ/KGuNToQI2SKNMQF+llVGqM5JJahaJqSwCie7PMwIao0TqI25peeoWx7CTCYvU
+         B+XA==
+X-Gm-Message-State: AOAM533kH48GqWq73ydqAGaSj/CXmo/X5WdelGEJnD8QpOTRUQA0nsmL
+        zISmWAbkezgCqvu1ZyYCils=
+X-Google-Smtp-Source: ABdhPJzg1+W24yf1MiTVbm2XpyVW6BbFpyPinuEE2R4B5bav57ttUworCcoTkXayBkYZIpOqoOwucw==
+X-Received: by 2002:a05:620a:1198:: with SMTP id b24mr263594qkk.212.1622740411182;
+        Thu, 03 Jun 2021 10:13:31 -0700 (PDT)
+Received: from localhost ([199.192.137.73])
+        by smtp.gmail.com with ESMTPSA id m4sm2050209qtg.21.2021.06.03.10.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jun 2021 10:13:30 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 3 Jun 2021 13:13:29 -0400
+From:   Tejun Heo <tj@kernel.org>
+To:     Muneendra <muneendra.kumar@broadcom.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvme@lists.infradead.org, hare@suse.de, jsmart2021@gmail.com,
+        emilne@redhat.com, mkumar@redhat.com
+Subject: Re: [PATCH v10 01/13] cgroup: Added cgroup_get_from_id
+Message-ID: <YLkNufxDIv3Mlle6@slm.duckdns.org>
+References: <1619562897-14062-1-git-send-email-muneendra.kumar@broadcom.com>
+ <1619562897-14062-2-git-send-email-muneendra.kumar@broadcom.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1619562897-14062-2-git-send-email-muneendra.kumar@broadcom.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Dmitry Bogdanov <d.bogdanov@yadro.com>
+On Wed, Apr 28, 2021 at 04:04:45AM +0530, Muneendra wrote:
+> Added a new function cgroup_get_from_id  to retrieve the cgroup
+> associated with cgroup id.
+> Exported the same as this can be used by blk-cgorup.c
+> 
+> Added function declaration of cgroup_get_from_id in cgorup.h
+> 
+> This patch also exported the function cgroup_get_e_css
+> as this is getting used in blk-cgroup.h
+> 
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
+> Signed-off-by: Muneendra <muneendra.kumar@broadcom.com>
 
-[ Upstream commit 2ef7665dfd88830f15415ba007c7c9a46be7acd8 ]
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Target de-configuration panics at high CPU load because TPGT and WWPN can
-be removed on separate threads.
+Thanks.
 
-TPGT removal requests a reset HBA on a separate thread and waits for reset
-complete (phase1). Due to high CPU load that HBA reset can be delayed for
-some time.
-
-WWPN removal does qlt_stop_phase2(). There it is believed that phase1 has
-already completed and thus tgt.tgt_ops is subsequently cleared. However,
-tgt.tgt_ops is needed to process incoming traffic and therefore this will
-cause one of the following panics:
-
-NIP qlt_reset+0x7c/0x220 [qla2xxx]
-LR  qlt_reset+0x68/0x220 [qla2xxx]
-Call Trace:
-0xc000003ffff63a78 (unreliable)
-qlt_handle_imm_notify+0x800/0x10c0 [qla2xxx]
-qlt_24xx_atio_pkt+0x208/0x590 [qla2xxx]
-qlt_24xx_process_atio_queue+0x33c/0x7a0 [qla2xxx]
-qla83xx_msix_atio_q+0x54/0x90 [qla2xxx]
-
-or
-
-NIP qlt_24xx_handle_abts+0xd0/0x2a0 [qla2xxx]
-LR  qlt_24xx_handle_abts+0xb4/0x2a0 [qla2xxx]
-Call Trace:
-qlt_24xx_handle_abts+0x90/0x2a0 [qla2xxx] (unreliable)
-qlt_24xx_process_atio_queue+0x500/0x7a0 [qla2xxx]
-qla83xx_msix_atio_q+0x54/0x90 [qla2xxx]
-
-or
-
-NIP qlt_create_sess+0x90/0x4e0 [qla2xxx]
-LR  qla24xx_do_nack_work+0xa8/0x180 [qla2xxx]
-Call Trace:
-0xc0000000348fba30 (unreliable)
-qla24xx_do_nack_work+0xa8/0x180 [qla2xxx]
-qla2x00_do_work+0x674/0xbf0 [qla2xxx]
-qla2x00_iocb_work_fn
-
-The patch fixes the issue by serializing qlt_stop_phase1() and
-qlt_stop_phase2() functions to make WWPN removal wait for phase1
-completion.
-
-Link: https://lore.kernel.org/r/20210415203554.27890-1-d.bogdanov@yadro.com
-Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/qla2xxx/qla_target.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 1d9f19e5e0f8..0a8a5841e1b8 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -1042,6 +1042,7 @@ void qlt_stop_phase2(struct qla_tgt *tgt)
- 	    "Waiting for %d IRQ commands to complete (tgt %p)",
- 	    tgt->irq_cmd_count, tgt);
- 
-+	mutex_lock(&tgt->ha->optrom_mutex);
- 	mutex_lock(&vha->vha_tgt.tgt_mutex);
- 	spin_lock_irqsave(&ha->hardware_lock, flags);
- 	while (tgt->irq_cmd_count != 0) {
-@@ -1053,6 +1054,7 @@ void qlt_stop_phase2(struct qla_tgt *tgt)
- 	tgt->tgt_stopped = 1;
- 	spin_unlock_irqrestore(&ha->hardware_lock, flags);
- 	mutex_unlock(&vha->vha_tgt.tgt_mutex);
-+	mutex_unlock(&tgt->ha->optrom_mutex);
- 
- 	ql_dbg(ql_dbg_tgt_mgt, vha, 0xf00c, "Stop of tgt %p finished",
- 	    tgt);
 -- 
-2.30.2
-
+tejun
