@@ -2,143 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC65739B132
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Jun 2021 06:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94FB39B1EB
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Jun 2021 07:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbhFDEI2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Jun 2021 00:08:28 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:64563 "EHLO
+        id S230041AbhFDFXw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Jun 2021 01:23:52 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:35855 "EHLO
         mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbhFDEI1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Jun 2021 00:08:27 -0400
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210604040640epoutp01a6d32183c9781eecebe22a9b116acddc~FRXLf6uy61943319433epoutp014
-        for <linux-scsi@vger.kernel.org>; Fri,  4 Jun 2021 04:06:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210604040640epoutp01a6d32183c9781eecebe22a9b116acddc~FRXLf6uy61943319433epoutp014
+        with ESMTP id S229917AbhFDFXu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Jun 2021 01:23:50 -0400
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210604052202epoutp01646a9be338d6e60c4a0c367f863e4ea0~FSY_w4IyR1500815008epoutp01R
+        for <linux-scsi@vger.kernel.org>; Fri,  4 Jun 2021 05:22:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210604052202epoutp01646a9be338d6e60c4a0c367f863e4ea0~FSY_w4IyR1500815008epoutp01R
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1622779600;
-        bh=uGYoBs1H20g7voD4bG564WPjR6hSkS1XhBtI4UMg76w=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=cUNovKDk+1+JLHTYuzMCBseWTeNlwStcf2qudIHeRnjfv1urEysGzx2kwTGIR1IBC
-         3FUZVly/fTvBRGNC++j+ORxcH951bM4N8ADE3hSt8zg3haiPXRg6AvTg9KVhc/7+Zc
-         e1RFUDv4iMdGuAZe6C0w7uZQIvVJuVY3EXfkRveg=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20210604040639epcas2p42b15f2f9de2bb703478c991d9aefcfab~FRXKxrX0w0482404824epcas2p49;
-        Fri,  4 Jun 2021 04:06:39 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.40.191]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Fx8Mw6JPXz4x9Q7; Fri,  4 Jun
-        2021 04:06:36 +0000 (GMT)
-X-AuditID: b6c32a48-4fbff700000025f5-44-60b9a6ccc11e
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        43.ED.09717.CC6A9B06; Fri,  4 Jun 2021 13:06:36 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: Re: [PATCH v35 3/4] scsi: ufs: Prepare HPB read for cached
- sub-region
-Reply-To: daejun7.park@samsung.com
-Sender: Daejun Park <daejun7.park@samsung.com>
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "huobean@gmail.com" <huobean@gmail.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        JinHwan Park <jh.i.park@samsung.com>,
-        Javier Gonzalez <javier.gonz@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Dukhyun Kwon <d_hyun.kwon@samsung.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        Jaemyung Lee <jaemyung.lee@samsung.com>,
-        Jieon Seol <jieon.seol@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <4bf317c8-4c74-2207-95e2-34c59b14c454@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20210604040636epcms2p7bcf940a2cd060336f79250de0060e08c@epcms2p7>
-Date:   Fri, 04 Jun 2021 13:06:36 +0900
-X-CMS-MailID: 20210604040636epcms2p7bcf940a2cd060336f79250de0060e08c
-Content-Transfer-Encoding: 7bit
+        s=mail20170921; t=1622784122;
+        bh=xIm3aFjGQprvNSpIKhJskjSxpv48qOcDAw+UzFJ00I4=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=LB+Ma9pUY4CvhuFhWaNMwe8A+Bj608hGuW9fyyP3Lzq2Egf4x84+csCC/o12BZP4N
+         z/YJjYHL6JX65Rrpc68Ftwh5hrb1v7uVNPF+NK5f/mkrTKtZ+QuabN8ZVu3Ow+xaKM
+         dI8i3B9RBtNeZX+C/3h1NNIDy5JNlmgSstQBtMa4=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20210604052159epcas1p266b65ec2e99b2280a3e5bbb9806a81fd~FSY8nK1aT1203712037epcas1p21;
+        Fri,  4 Jun 2021 05:21:59 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.159]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4FxB2t3QWvz4x9QH; Fri,  4 Jun
+        2021 05:21:58 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0E.65.09578.678B9B06; Fri,  4 Jun 2021 14:21:58 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210604052157epcas1p2e5eebb52d08b06174696290e11fdd5a4~FSY6ZysVc1437414374epcas1p2M;
+        Fri,  4 Jun 2021 05:21:57 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210604052157epsmtrp1de035d3a8191cb7cbb13b9945aa3eb62~FSY6YMqBN0498504985epsmtrp1c;
+        Fri,  4 Jun 2021 05:21:57 +0000 (GMT)
+X-AuditID: b6c32a35-fb9ff7000000256a-07-60b9b87663b3
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2E.5E.08163.578B9B06; Fri,  4 Jun 2021 14:21:57 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.253.99.105]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20210604052157epsmtip11bf4527e3425d5fcd9695093b7d6884a~FSY6Aopb50192801928epsmtip1-;
+        Fri,  4 Jun 2021 05:21:57 +0000 (GMT)
+From:   Changheun Lee <nanich.lee@samsung.com>
+To:     Johannes.Thumshirn@wdc.com, alex_y_xu@yahoo.ca,
+        asml.silence@gmail.com, axboe@kernel.dk, bgoncalv@redhat.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        cang@codeaurora.org, avri.altman@wdc.com, alim.akhtar@samsung.com,
+        bvanassche@acm.org, damien.lemoal@wdc.com,
+        gregkh@linuxfoundation.org, hch@infradead.org, jaegeuk@kernel.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ming.lei@redhat.com, osandov@fb.com,
+        patchwork-bot@kernel.org, tj@kernel.org, tom.leiming@gmail.com,
+        yi.zhang@redhat.com
+Cc:     jisoo2146.oh@samsung.com, junho89.kim@samsung.com,
+        mj0123.lee@samsung.com, seunghwan.hyun@samsung.com,
+        sookwan7.kim@samsung.com, woosung2.lee@samsung.com,
+        yt0928.kim@samsung.com, Changheun Lee <nanich.lee@samsung.com>
+Subject: [PATCH v12 0/3] bio: control bio max size
+Date:   Fri,  4 Jun 2021 14:03:21 +0900
+Message-Id: <20210604050324.28670-1-nanich.lee@samsung.com>
+X-Mailer: git-send-email 2.29.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxTVxjeuff2thCBrjB3wpywBhVwVAoWjw6MC8Tdzf0gmC3Zkq00cIHG
+        0ta2OMe+nB0gFIEKlozPDRBZRQsFSoExSBkQEHGufGxEQAJIZOOrBAZTl5UWNv69z/M+z/vk
+        fU8OC+fcYXqzxFIVrZCKJFzSlTB1BfCCLphbYoPXfvVCdx7WMtGjMhOJSvQmgJ5sDpPo1ngu
+        iVoflAOkW97Ekc1QzUBpGesYUlcaSHQ3rwJDM4YiHFX8ZsJQ9sxlBnqeNYGhtSklah87jKyt
+        JSTSjJpJdLP3HwxZ8tUYKmwowdHI5AATdU0ME2iqSoujwT4bA5VNn0J/3+wGaGljlIn6zfk4
+        Gh3UkcjQvkme8qWsQ2coa85VjNKqF5lUS9E4k2qoCaSs91Iooz6TpPIqOgHVUVrLpFZmxwhq
+        6adhkspp1ANq1bifyujUYJTFUo1He3woCU+iRfG0wpeWxsnixdLECO6Zs8JIoSAsmB/EP46O
+        cX2lomQ6ghv1bnTQabHEfi+u7wWRJMVORYuUSu6Rk+EKWYqK9k2SKVURXFoeL5Hzg+U8pShZ
+        mSJN5MXJkk/wg4NDBHZlrCRpfnwak5tYFwfUbcQlUEBmARcWZB+FhXV/2WtXFodtBvCPfh3T
+        CWwA1mfoMSdYBbBtwYjvWHpGWglnoxXAyq4axn+qsW6NQ0WyX4c5C2OOwV5sIwGtmVfAFsDZ
+        0wAO9aU74j3ZIbB0YhZs1QT7AGzK23C43dhvwOLlesKZ5wOfTWZv8y/Cvm9nHDxu59VNxfjW
+        UMjucoHdPzRv7xQFTSuabbMnnO9tZDprb/gkN53pNGgAVKeXAyfIA7BqrhpzqkKhbXXV3mDZ
+        IwKgofWIk34NtjwtBc5kd7i4ls3YkkC2G7ySznFK/ODAN5P4Ttbc7ZbtiRQcbtAxtmoO+yPY
+        MZoB8oBP0a59inbtU/R/8HcA14O9tFyZnEgr+XL+7pc1AsfHCRSYgXZhmWcBGAtYAGThXC+3
+        Hw+aYzlu8aJPU2mFTKhIkdBKCxDYL6zFvV+Kk9l/nlQl5AtCQkND0dGwY2GCUO7LbomRn8Vy
+        2IkiFX2OpuW0YseHsVy8L2Ht3td+9rv2aiH//F5NDKf34Vl5uqJCXHBow/D1iOvz/UXvhATz
+        5oLq/KfaPlZ2HIzRF36ha6us4gQJTqj0Tcd7iVTNfJ/IAwija1f8AoxfHdYSYp9n79Erdefu
+        E9+/Tc74a3//M1t8Y1LNCmvITWA8LempjelrH3xrOaI9PPrWCC8tdfmXwWbz54+NCZdZuYcO
+        LFoCr6ZpO+viu/u/FOy5G19qW9/HeaH5+mxkc+lm2fWZ9emskja/qT02r3pxW0NPVrl7X8JS
+        6cn822/eP0+ZanLTPyD2BZFD9VHWByqe/ycX75le6TY0PkrSeUiKe8szC264+ycKl8uGH9vc
+        Fyffb/LkEsokET8QVyhF/wJasF+UwQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02RWUwTYRSF+Wem07FaGIroiIliFYmoZZHEP65EY5xEY3yQuESxFUZEaK0z
+        VAWXKGXRithGUYEqWhWwbEKlls2lqCwiamqpEKkL8CCL4BrAvaKJb98530nuwyVQURvmQ8Qo
+        4hlWIYsT4wLMXCeeMldlqZQGdV2bAEteFPHhqwtmHOqNZgDfDttxWNhxEodVT3MBPDM4jMIP
+        pXk8mJL2BYHqy6U4fKg1ILCrNBuFhudmBKZ3JfHgd40TgZ9fc7C2fTa0VelxeNxhwWF+/Q8E
+        Wk+pEXjWpEdh68tmPqxz2jH4+ooOhS2NH3jwQmcYHMm/D+DAkIMPmyynUOhoOYPD0tphPMyX
+        tj1bRdsyTiC0Tv2OT1dmd/BpU0EAbXukosuNx3Baa7gD6Nvni/j0++52jB64ZcfpjBtGQH8s
+        n0Kn3TmO0FZrHrrWY5NgURQTF7OHYQOXSAU7ejo6EaWZ2NesrsYOg9O4BowhKDKUetBahWmA
+        gBCRFkBZ0hv4o8KHqm/o52kA8Zu9qLo6bnTzHlBvtOd4rg1OzqEy+ttxlxhPPsGo66l9qCug
+        ZC+gNJ0GzLXyIkOo885u4GKM9KMqtEOoi4XkQipnsAwbvTaV+vYy/W/vSTVmdf3p0d+9uiIH
+        1QL37P9U9n/qIkCMYBKj5OTRci5YGaJg9ko4mZxTKaIlkbvk5eDP9wMCLKDGOCixAoQAVkAR
+        qHi8sGamRSoSRskSEhl211ZWFcdwVjCZwMQThU80jVtFZLQsnollGCXD/rMIMcbnMGJ+9mm/
+        YGTFUpV0wJsNz1296ZLfz0L3zb1NBcFuyeDL3ZTw4plbHoeHZl2J9Z6PpK3cZgRuWYFtS5IP
+        Lp8W6tXtu7S/zV9uT2h8qBtpiZDXfxyXmbOo2MPrc2Lu0Kx1L0ILgtxLjvJvJwwkdvTWe/5s
+        Wuk7o/ZomKmheGNssp/pZnBFlMlZdCDeoG+TL0ytVDgD3YIWH6peTsTsG9vds8ywRtRT4O0Z
+        tfNp2PQRoeRVvjMyU5+mcvRFLKD1Zaw06ZvHkRJGkokptaK8rzZ2dyyu1bW/9cfX2cI36Ndv
+        356aUn7oahm5od9e7ThxQK4TeewOuTcvqbVZ5Rhy9BWu1ieIMW6HLDgAZTnZL52be1BsAwAA
+X-CMS-MailID: 20210604052157epcas1p2e5eebb52d08b06174696290e11fdd5a4
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA12Te0xbVRzHc3ovtxdMzaU8PGLcWNEFxqMPuewMYW4OzMWpIRnRZMbRG3ql
-        zNLWPnzhlMjGUx6SbLCOx0RkWyUytrW0PBy0kzEz2Hgpq7wmEsWECfLP6mSTPnCL/33yPd9z
-        ft/f75xDYsIlIoLMUxs4nZpViYgg3OqMoeOvt9nlkqVlCZpvshKor3iIj5bckwQ6seLG0F8d
-        bQFoyRGDugcGCGSefwMVfdVBoIbhQh6qrLYQ6OLAeQwtTK/xUcuUlYeq75fgyLoWjK5euwPQ
-        eHcDgSp+shHozNX7PPS15RZAZXXt+J5wZnxiPzNeVclj7KYZPlPT0g+Yy43tfObotcs4s7ro
-        wpmqS2bArF3YwpT0V/Aygw6qUpQcq+B0kZw6R6PIU+emivYfyN6XTSdJpPHSXWinKFLN5nOp
-        orRXMuNfylNttCmKfI9VGTekTFavF4l3p+g0RgMXqdToDakiTqtQaaVSbYKezdcb1bkJOZr8
-        ZKlEIqM3nHKV8qSzFtdO8D+4WbuKF4ITRDkIJCGVCL+/PomXgyBSSNkAPFtYBMoBSQqoYLhu
-        C/F4QqgseG9u2usXUiLYMWri+/QE6LrdDjxMUHGwbmiO7zknlPoMh3bnsvdQjLqBwd6pEuCr
-        JoD1JYu4j5+CXWcsXj2Qeh6Wmef8nmh4t60S83EYvPXNMn+T/xxs9ntC4bHZYb8nGM67e/z6
-        k3CwZ4Xn40+hZfpv4AkBqc8BdNpdAb4FMfyxtNMbQkC9Cq21Di/j1LNworXRHy4NNlvKvIxR
-        W2HXcgPmmQpGxcCObrEHIRUFr7jwzbYKO+/x/88Y9Tgsda7/p9uafvVH2w6/dXfwakCU6eGo
-        TY/UMj2sdRpgZhDOafX5uZxepk189HYvAO+b38HYwKnllQQH4JHAASCJiUIFvdttcqFAwX74
-        EafTZOuMKk7vAPRGl19gEWE5mo1PozZkS2lZUpJkF43oJBkSPSFwc5/IhVQua+De4Tgtp9vc
-        xyMDIwp5Awtszz/RucdmhKbxB6d+SAmradHJwgUPwo9s6x3PWh1uVPa/uwgmE8RBamWP/Jm+
-        WeOe+JGst75rXriSPhyWc2D9NDsnLhi50zrGkfWlU8at9X/07G5X9P1c+vri/C+ZT5u37b3E
-        hIgLzPRvFfNjOw9l1GUfkVaZpuDZ5LLzc/myqb0lC50ZBPXm8cCiyC8dbzP9KfbXXKNxeZMW
-        zaorlgiI7TLQg31jz8XSs4fDjzuPmlsOxrwoOBn9cvQL+L6l3wceKyv+eIFx3062KqoE5+QX
-        tTlRW26k3y06fE76flWgcrCh+JCzWmuJ61cOybXRZPpIaOtoBlVAp9lvNs0kEiJcr2SlOzCd
-        nv0XHi4c/3wEAAA=
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210524084345epcms2p63dde85f3fdc127c29d25ada7d7f539cb
-References: <4bf317c8-4c74-2207-95e2-34c59b14c454@acm.org>
-        <12392bef-e018-8260-5279-16b7b43f5a8f@acm.org>
-        <20210524084345epcms2p63dde85f3fdc127c29d25ada7d7f539cb@epcms2p6>
-        <20210524084546epcms2p2c91dc1df482fd593307892825532c6dd@epcms2p2>
-        <20210604011124epcms2p39a466db169ebbfd2c889e25fba9aa0b4@epcms2p3>
-        <CGME20210524084345epcms2p63dde85f3fdc127c29d25ada7d7f539cb@epcms2p7>
+X-CMS-RootMailID: 20210604052157epcas1p2e5eebb52d08b06174696290e11fdd5a4
+References: <CGME20210604052157epcas1p2e5eebb52d08b06174696290e11fdd5a4@epcas1p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->>> +/*
->>>> + * This function will set up HPB read command using host-side L2P map data.
->>>> + * In HPB v1.0, maximum size of HPB read command is 4KB.
->>>> + */
->>>> +void ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
->>>> +{
->>> [ ... ]
->>>> +
->>>> +        ufshpb_set_hpb_read_to_upiu(hpb, lrbp, lpn, ppn, transfer_len);
->>>
->>> 'transfer_len' has type int and is truncated to type 'u8' when passed as
->>> an argument to ufshpb_set_hpb_read_to_upiu(). Please handle transfer_len
->>> values >= 256 properly.
->> 
->> Before entering the function, ufshpb_is_supported_chunk() checks whether
->> transfer_len <= hpb->pre_req_max_tr_len which is set to
->> HPB_MULTI_CHUNK_HIGH (128) on initalization.
-> 
->How about adding a WARN_ON_ONCE() in ufshpb_prep() that verifies that
->transfer_len is <= HPB_MULTI_CHUNK_HIGH?
+bio size can grow up to 4GB after muli-page bvec has been enabled.
+But sometimes large size of bio would lead to inefficient behaviors.
+Control of bio max size will be helpful to improve inefficiency.
 
-Sure, I will add WARN_ON_ONCE() just after calling ufshpb_is_supported_chunk().
+blk_queue_max_bio_bytes() is added to enable be set the max_bio_bytes in
+each driver layer. And max_bio_bytes sysfs is added to show current
+max_bio_bytes for each request queue.
+bio size can be controlled via max_bio_bytes.
 
-Thanks
+Changheun Lee (3):
+  bio: control bio max size
+  blk-sysfs: add max_bio_bytes
+  ufs: set max_bio_bytes with queue max sectors
 
-> 
->Thanks,
-> 
->Bart.
-> 
-> 
->  
+ Documentation/ABI/testing/sysfs-block | 10 ++++++++++
+ Documentation/block/queue-sysfs.rst   |  7 +++++++
+ block/bio.c                           | 17 ++++++++++++++---
+ block/blk-settings.c                  | 19 +++++++++++++++++++
+ block/blk-sysfs.c                     |  7 +++++++
+ drivers/scsi/ufs/ufshcd.c             |  5 +++++
+ include/linux/bio.h                   |  4 +++-
+ include/linux/blkdev.h                |  3 +++
+ 8 files changed, 68 insertions(+), 4 deletions(-)
+
+-- 
+2.29.0
+
