@@ -2,246 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1833739CFDF
-	for <lists+linux-scsi@lfdr.de>; Sun,  6 Jun 2021 17:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1975B39D0F1
+	for <lists+linux-scsi@lfdr.de>; Sun,  6 Jun 2021 21:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbhFFPvF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 6 Jun 2021 11:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbhFFPvE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Jun 2021 11:51:04 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BCCC061766;
-        Sun,  6 Jun 2021 08:49:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id E4EA21280946;
-        Sun,  6 Jun 2021 08:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1622994552;
-        bh=FYl7mwu6LLvSpk3rnuHAfiCIgSiclVR/MbkXA3/WIEQ=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=W0bKIKp5rhOQNfnbJy8PsMAVgCrijhuZ2Yn3MPEarIeoDyjlkyq1/xjVs0vJ0BOYp
-         G0keR26GLTFCWaM3Y4pbZyS9tJ8K6DsoiF0gts1C4TZ8xZCgGg2oc5kbzS2O9tBNIY
-         We3o0RUjO3B8ZOpKk4XCzKEncJ7imvCuY8NOdFoA=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TTzNMhhgMJha; Sun,  6 Jun 2021 08:49:12 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 23526128093E;
-        Sun,  6 Jun 2021 08:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1622994552;
-        bh=FYl7mwu6LLvSpk3rnuHAfiCIgSiclVR/MbkXA3/WIEQ=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=W0bKIKp5rhOQNfnbJy8PsMAVgCrijhuZ2Yn3MPEarIeoDyjlkyq1/xjVs0vJ0BOYp
-         G0keR26GLTFCWaM3Y4pbZyS9tJ8K6DsoiF0gts1C4TZ8xZCgGg2oc5kbzS2O9tBNIY
-         We3o0RUjO3B8ZOpKk4XCzKEncJ7imvCuY8NOdFoA=
-Message-ID: <22894c5d4fd4bcfa29bd945ce81112606d2fe5fc.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.13-rc4
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sun, 06 Jun 2021 08:49:10 -0700
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S229839AbhFFTVK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 6 Jun 2021 15:21:10 -0400
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:35822 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229772AbhFFTVJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Jun 2021 15:21:09 -0400
+Received: by mail-oi1-f177.google.com with SMTP id v22so15864636oic.2
+        for <linux-scsi@vger.kernel.org>; Sun, 06 Jun 2021 12:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xLGoQIPZIFDXjr1i49vy3wnndvak3AtM/1fURFoYTto=;
+        b=Hx6Nbg66GY2l0PmGR9FMFx88QJDQK0L7bxGmBakuzDJf6PSxQ7bUH+CfcBhoixaapy
+         ozXzjRvuumDZl6bn96STZ/wgjqTYpDwMSaSJNgdsrO/aPDO0CxkimcfUON+OmMeBbKfE
+         J8PM09aawVIppXDz5OL/fMouoNMWZCqUodbamClpTP6HRh7m54zu7kcVwR7gUNv/1sNK
+         1o2hq8MEmBti1Ryeh/SdgcxgLyGu2yl69cMuXIq7blBHGp3WKnzHHUfiPGKwQq6pXtBK
+         4U2Qlzu47sFKF0TtKOrACRY6Jn1KZCpmcDP1j9P5wwKRAZV3n1SRg2gZqebih17eOwEY
+         tl0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xLGoQIPZIFDXjr1i49vy3wnndvak3AtM/1fURFoYTto=;
+        b=Gfm8M1CtEl9aM1Mk+9LSm8lbBQX7pXRTm8UjudakuGUNdc10oWMqvmNXafEGGFML0n
+         3k942XxOylX6AQaN6iWgrlnKu7jr6vMH6ZaHCl4X6Lbi7jawHXbeigFMJXp6YPKYSlh1
+         lq8XNpM322IrSw7wchdzDrzyEjvj5T4rnS59LtsL83SEu7oAGjaObDGe6WC7CTHPe4g7
+         81tUWLqCqV7vp6lYzd1vjhbTtYea8TtwcLNzUy0YWBbXR52yrQixxdIWl0S6xvEfLQun
+         BqxAENcOJ3P8PX8JcnZDbARKYbRPWepAh2MDA4GccipoOyxU+ZJuFMWdcyD9yppcSlJT
+         vcUA==
+X-Gm-Message-State: AOAM532xrACX2Y6sGJq6bt1Q7O8U50oAlXMh9LRQhsTGT1a3p+yFy+dJ
+        HChGCInFI1s0nLfodg1ViZv6jE1guX5oAt/+l/s=
+X-Google-Smtp-Source: ABdhPJyx0XaqdrHXHol1aDlrkkhxaMRkkTWol4HKjqIiDJEpRyNB8FVvIVPlNLnhqgnO5eacgb6uhAPoefb4cbBYu58=
+X-Received: by 2002:aca:758f:: with SMTP id q137mr4978823oic.108.1623007099035;
+ Sun, 06 Jun 2021 12:18:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Received: by 2002:aca:3485:0:0:0:0:0 with HTTP; Sun, 6 Jun 2021 12:18:18 -0700 (PDT)
+Reply-To: Bill.Chantal.Lawrence20@europe.com
+From:   mrs bill chantal <mrschantalabubakar2021@gmail.com>
+Date:   Sun, 6 Jun 2021 19:18:18 +0000
+Message-ID: <CABHxZ1oXBy_oQrSjAowoC=HNhyQo=1CbrBryMtD3Fe+SUyypWw@mail.gmail.com>
+Subject: =?UTF-8?Q?Carte_visa_ATM_compens=C3=A9e?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Five small and fairly minor fixes, all in drivers.
+Dear Friend
 
-The patch is available here:
+You have been compensated with the sum of 4.4 million dollars in this
+united nation the payment will be Issue into atm visa card and send to
+you from the Santander bank we need your address passport and your
+whatsapp number.
+Thanks
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-
-The short changelog is:
-
-Daniel Wagner (1):
-      scsi: qedf: Do not put host in qedf_vport_create() unconditionally
-
-Ewan D. Milne (1):
-      scsi: scsi_devinfo: Add blacklist entry for HPE OPEN-V
-
-James Smart (1):
-      scsi: lpfc: Fix failure to transmit ABTS on FC link
-
-Maurizio Lombardi (1):
-      scsi: target: core: Fix warning on realtime kernels
-
-Stanley Chu (1):
-      scsi: ufs: ufs-mediatek: Fix HCI version in some platforms
-
-And the diffstat:
-
- drivers/scsi/lpfc/lpfc_sli.c           |  4 +---
- drivers/scsi/qedf/qedf_main.c          | 20 +++++++++-----------
- drivers/scsi/scsi_devinfo.c            |  1 +
- drivers/scsi/ufs/ufs-mediatek.c        | 15 ++++++++++++++-
- drivers/target/target_core_transport.c |  4 +---
- 5 files changed, 26 insertions(+), 18 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 573c8599d71c..fc3682f15f50 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -20589,10 +20589,8 @@ lpfc_sli4_issue_abort_iotag(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	abtswqe = &abtsiocb->wqe;
- 	memset(abtswqe, 0, sizeof(*abtswqe));
- 
--	if (lpfc_is_link_up(phba))
-+	if (!lpfc_is_link_up(phba))
- 		bf_set(abort_cmd_ia, &abtswqe->abort_cmd, 1);
--	else
--		bf_set(abort_cmd_ia, &abtswqe->abort_cmd, 0);
- 	bf_set(abort_cmd_criteria, &abtswqe->abort_cmd, T_XRI_TAG);
- 	abtswqe->abort_cmd.rsrvd5 = 0;
- 	abtswqe->abort_cmd.wqe_com.abort_tag = xritag;
-diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 756231151882..b92570a7c309 100644
---- a/drivers/scsi/qedf/qedf_main.c
-+++ b/drivers/scsi/qedf/qedf_main.c
-@@ -1827,22 +1827,20 @@ static int qedf_vport_create(struct fc_vport *vport, bool disabled)
- 		fcoe_wwn_to_str(vport->port_name, buf, sizeof(buf));
- 		QEDF_WARN(&(base_qedf->dbg_ctx), "Failed to create vport, "
- 			   "WWPN (0x%s) already exists.\n", buf);
--		goto err1;
-+		return rc;
- 	}
- 
- 	if (atomic_read(&base_qedf->link_state) != QEDF_LINK_UP) {
- 		QEDF_WARN(&(base_qedf->dbg_ctx), "Cannot create vport "
- 			   "because link is not up.\n");
--		rc = -EIO;
--		goto err1;
-+		return -EIO;
- 	}
- 
- 	vn_port = libfc_vport_create(vport, sizeof(struct qedf_ctx));
- 	if (!vn_port) {
- 		QEDF_WARN(&(base_qedf->dbg_ctx), "Could not create lport "
- 			   "for vport.\n");
--		rc = -ENOMEM;
--		goto err1;
-+		return -ENOMEM;
- 	}
- 
- 	fcoe_wwn_to_str(vport->port_name, buf, sizeof(buf));
-@@ -1866,7 +1864,7 @@ static int qedf_vport_create(struct fc_vport *vport, bool disabled)
- 	if (rc) {
- 		QEDF_ERR(&(base_qedf->dbg_ctx), "Could not allocate memory "
- 		    "for lport stats.\n");
--		goto err2;
-+		goto err;
- 	}
- 
- 	fc_set_wwnn(vn_port, vport->node_name);
-@@ -1884,7 +1882,7 @@ static int qedf_vport_create(struct fc_vport *vport, bool disabled)
- 	if (rc) {
- 		QEDF_WARN(&base_qedf->dbg_ctx,
- 			  "Error adding Scsi_Host rc=0x%x.\n", rc);
--		goto err2;
-+		goto err;
- 	}
- 
- 	/* Set default dev_loss_tmo based on module parameter */
-@@ -1925,9 +1923,10 @@ static int qedf_vport_create(struct fc_vport *vport, bool disabled)
- 	vport_qedf->dbg_ctx.host_no = vn_port->host->host_no;
- 	vport_qedf->dbg_ctx.pdev = base_qedf->pdev;
- 
--err2:
-+	return 0;
-+
-+err:
- 	scsi_host_put(vn_port->host);
--err1:
- 	return rc;
- }
- 
-@@ -1968,8 +1967,7 @@ static int qedf_vport_destroy(struct fc_vport *vport)
- 	fc_lport_free_stats(vn_port);
- 
- 	/* Release Scsi_Host */
--	if (vn_port->host)
--		scsi_host_put(vn_port->host);
-+	scsi_host_put(vn_port->host);
- 
- out:
- 	return 0;
-diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
-index d92cec12454c..d33355ab6e14 100644
---- a/drivers/scsi/scsi_devinfo.c
-+++ b/drivers/scsi/scsi_devinfo.c
-@@ -184,6 +184,7 @@ static struct {
- 	{"HP", "C3323-300", "4269", BLIST_NOTQ},
- 	{"HP", "C5713A", NULL, BLIST_NOREPORTLUN},
- 	{"HP", "DISK-SUBSYSTEM", "*", BLIST_REPORTLUN2},
-+	{"HPE", "OPEN-", "*", BLIST_REPORTLUN2 | BLIST_TRY_VPD_PAGES},
- 	{"IBM", "AuSaV1S2", NULL, BLIST_FORCELUN},
- 	{"IBM", "ProFibre 4000R", "*", BLIST_SPARSELUN | BLIST_LARGELUN},
- 	{"IBM", "2105", NULL, BLIST_RETRY_HWERROR},
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index aee3cfc7142a..0a84ec9e7cea 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -603,11 +603,23 @@ static void ufs_mtk_get_controller_version(struct ufs_hba *hba)
- 
- 	ret = ufshcd_dme_get(hba, UIC_ARG_MIB(PA_LOCALVERINFO), &ver);
- 	if (!ret) {
--		if (ver >= UFS_UNIPRO_VER_1_8)
-+		if (ver >= UFS_UNIPRO_VER_1_8) {
- 			host->hw_ver.major = 3;
-+			/*
-+			 * Fix HCI version for some platforms with
-+			 * incorrect version
-+			 */
-+			if (hba->ufs_version < ufshci_version(3, 0))
-+				hba->ufs_version = ufshci_version(3, 0);
-+		}
- 	}
- }
- 
-+static u32 ufs_mtk_get_ufs_hci_version(struct ufs_hba *hba)
-+{
-+	return hba->ufs_version;
-+}
-+
- /**
-  * ufs_mtk_init - find other essential mmio bases
-  * @hba: host controller instance
-@@ -1048,6 +1060,7 @@ static void ufs_mtk_event_notify(struct ufs_hba *hba,
- static const struct ufs_hba_variant_ops ufs_hba_mtk_vops = {
- 	.name                = "mediatek.ufshci",
- 	.init                = ufs_mtk_init,
-+	.get_ufs_hci_version = ufs_mtk_get_ufs_hci_version,
- 	.setup_clocks        = ufs_mtk_setup_clocks,
- 	.hce_enable_notify   = ufs_mtk_hce_enable_notify,
- 	.link_startup_notify = ufs_mtk_link_startup_notify,
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 05d7ffd59df6..7e35eddd9eb7 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -3121,9 +3121,7 @@ __transport_wait_for_tasks(struct se_cmd *cmd, bool fabric_stop,
- 	__releases(&cmd->t_state_lock)
- 	__acquires(&cmd->t_state_lock)
- {
--
--	assert_spin_locked(&cmd->t_state_lock);
--	WARN_ON_ONCE(!irqs_disabled());
-+	lockdep_assert_held(&cmd->t_state_lock);
- 
- 	if (fabric_stop)
- 		cmd->transport_state |= CMD_T_FABRIC_STOP;
-
+Mrs. bill Chantal
