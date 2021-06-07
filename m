@@ -2,140 +2,188 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0863339D6DF
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Jun 2021 10:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8992339D8FA
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Jun 2021 11:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbhFGIR5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Jun 2021 04:17:57 -0400
-Received: from mail-pj1-f54.google.com ([209.85.216.54]:53199 "EHLO
-        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhFGIR4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Jun 2021 04:17:56 -0400
-Received: by mail-pj1-f54.google.com with SMTP id h16so9344558pjv.2;
-        Mon, 07 Jun 2021 01:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=c5tZw1PE5ja1kIfp0A9CThFtz7RTJJ96vn5JKsdn4zo=;
-        b=XoQyLvz24OoCRIOShkQNcu9DiR7bBkokC0zH2y0VsTYjxJfKw7R0siA80dncjT3YUK
-         wAQolPJ8LMP2QAHMUANfaqPmSCX0C5CGSEEQPtRRcQTl1EKUo8gRIPdRN/yizwXOvk7a
-         MyxLl0xOVUFh4CzE2lkyyns1y8zU/3BfW8wnjMepLuBa14dDIuRlcgHvnJy9KhXaOr8X
-         f1b1b3SWDcQzR8oj41QVFoJZ6XqUPNURZphda8kDAwgTk/UUkxjzRis3jA/H1Gt2YM49
-         MOGgQu1k2QTfbhGmrfPyoKrM3mYFHKWoquCiDY9UKYa1vj3gMvLKx5aFnrcD/cKhHcp4
-         J8+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=c5tZw1PE5ja1kIfp0A9CThFtz7RTJJ96vn5JKsdn4zo=;
-        b=U5B5//UCw1NXbo2scwqBFg38TxwRH3IiycN05CUTa6Am23xPa9mLhy3mtLnJGvNv/Q
-         s42PMnrkoWbfp7t9Ryd7RFn4aVpXpDPyvHf520aKDpkiNSL/x2OyS6CKzpxTf3Anc4zj
-         8joYLjNtX2CqCr9PmkA2D5u9Zepe5ChMRSJO/BqtlijT6+K39sUD+RTCTSET7kc44taA
-         oxwbYtndMH4dTHzRn5QfFF76fWLvJDIO25FHvtV8IrSoZASfOt94QPZjA89R0g8gWPGK
-         csXopPcXTsn7ihQwWEiPZOgMs4PxqnvEBcrgfUvrdVKUcN79twhv4Gy3vwXptmFr3X9F
-         UVzg==
-X-Gm-Message-State: AOAM531xCCSZT9paFIA/Oe0RszpZIcYjNxmBHGU3BR9sy8HQWUC3s1yC
-        0wlKPicluEu0K5glcRAQaA0=
-X-Google-Smtp-Source: ABdhPJz5DsUF3lCnv8yQA4dIwCqwn7lOEnqmDAyx9VQ48+J+hBL0/9GZGiwWD3mDm4r9zCHOflaTmA==
-X-Received: by 2002:a17:902:9a42:b029:f5:1cf7:2e52 with SMTP id x2-20020a1709029a42b02900f51cf72e52mr16701852plv.25.1623053690127;
-        Mon, 07 Jun 2021 01:14:50 -0700 (PDT)
-Received: from ?IPv6:2404:f801:0:5:8000::4b1? ([2404:f801:9000:1a:efea::4b1])
-        by smtp.gmail.com with ESMTPSA id r11sm8236573pgl.34.2021.06.07.01.14.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Jun 2021 01:14:49 -0700 (PDT)
-Subject: Re: [RFC PATCH V3 01/11] x86/HV: Initialize GHCB page in Isolation VM
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, rppt@kernel.org,
-        hannes@cmpxchg.org, cai@lca.pw, krish.sadhukhan@oracle.com,
-        saravanand@fb.com, Tianyu.Lan@microsoft.com,
-        konrad.wilk@oracle.com, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, joro@8bytes.org, will@kernel.org,
-        xen-devel@lists.xenproject.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, thomas.lendacky@amd.com,
-        brijesh.singh@amd.com, sunilmut@microsoft.com
-References: <20210530150628.2063957-1-ltykernel@gmail.com>
- <20210530150628.2063957-2-ltykernel@gmail.com>
- <20210607064142.GA24478@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-Message-ID: <37260f47-bd32-08f7-b006-f75f4d3c408a@gmail.com>
-Date:   Mon, 7 Jun 2021 16:14:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230353AbhFGJm3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Jun 2021 05:42:29 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:52803 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230231AbhFGJm2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Jun 2021 05:42:28 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210607094035epoutp020e5808052868cf809a7006e85263b84f~GQ2lMrdHc0455204552epoutp02y
+        for <linux-scsi@vger.kernel.org>; Mon,  7 Jun 2021 09:40:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210607094035epoutp020e5808052868cf809a7006e85263b84f~GQ2lMrdHc0455204552epoutp02y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1623058835;
+        bh=5QbUxacVjicXIUqFWDDC3OxkkBRcg5dBU0ahGmISkxc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VRt9crE4KIfg5K8Tzy3M6lokB52HhlOlBoIbcNU1hH+rCDP+6A4U1fJkDTne26ofx
+         rpyE7tPdwgu8/XnILRd5z8uMT4iEKk/LiWXgmbWeIM0Pc4pCwKHECHFP92a8umj/tp
+         9VjfImk3K9//EAlXF8C2r4kDyBHTcmhxbQi8GRqg=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20210607094033epcas1p2769ecd2b169e74dbb9a9cf5cac9566c3~GQ2j0mu5m2009220092epcas1p2b;
+        Mon,  7 Jun 2021 09:40:33 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.165]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Fz7dr3Hlpz4x9Py; Mon,  7 Jun
+        2021 09:40:32 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.67.09736.099EDB06; Mon,  7 Jun 2021 18:40:32 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210607094031epcas1p1f4a9ee01eaa4652ba0e8eb6a4964c952~GQ2hwV9LS2551625516epcas1p1r;
+        Mon,  7 Jun 2021 09:40:31 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210607094031epsmtrp2ba1e4997e34ef5f4867334171326fc37~GQ2hvEmsB1681416814epsmtrp2g;
+        Mon,  7 Jun 2021 09:40:31 +0000 (GMT)
+X-AuditID: b6c32a39-8d9ff70000002608-43-60bde9909318
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AB.43.08637.F89EDB06; Mon,  7 Jun 2021 18:40:31 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.253.99.105]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20210607094031epsmtip16d3917880caace85b863b6dcd8582d28~GQ2hZaeAF1612816128epsmtip1Y;
+        Mon,  7 Jun 2021 09:40:31 +0000 (GMT)
+From:   Changheun Lee <nanich.lee@samsung.com>
+To:     bvanassche@acm.org
+Cc:     Johannes.Thumshirn@wdc.com, alex_y_xu@yahoo.ca,
+        alim.akhtar@samsung.com, asml.silence@gmail.com,
+        avri.altman@wdc.com, axboe@kernel.dk, bgoncalv@redhat.com,
+        cang@codeaurora.org, damien.lemoal@wdc.com,
+        gregkh@linuxfoundation.org, hch@infradead.org, jaegeuk@kernel.org,
+        jejb@linux.ibm.com, jisoo2146.oh@samsung.com,
+        junho89.kim@samsung.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, ming.lei@redhat.com,
+        mj0123.lee@samsung.com, nanich.lee@samsung.com, osandov@fb.com,
+        patchwork-bot@kernel.org, seunghwan.hyun@samsung.com,
+        sookwan7.kim@samsung.com, tj@kernel.org, tom.leiming@gmail.com,
+        woosung2.lee@samsung.com, yi.zhang@redhat.com,
+        yt0928.kim@samsung.com
+Subject: Re: [PATCH v12 3/3] ufs: set max_bio_bytes with queue max sectors
+Date:   Mon,  7 Jun 2021 18:21:56 +0900
+Message-Id: <20210607092156.16774-1-nanich.lee@samsung.com>
+X-Mailer: git-send-email 2.29.0
+In-Reply-To: <004bef40-1667-3b60-adaf-bea2b15f2514@acm.org>
 MIME-Version: 1.0
-In-Reply-To: <20210607064142.GA24478@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf0xTVxTHd99rXwsR7QpjN4RJV7dsMPlRELygMBKNPsFkkM1lY1tKhbfC
+        6K+0xSkzSqiUDRBKjBg7fjhgyFAHQegKA9QSbZBSR8qvIcoYMAYbv4VRcGQtDzP+u+fcz/d+
+        zzk3h41zDSwvdqpMTSllIgmfcGUYOnz9/XVTbYlBa6Uc9OPwTRb6rcxAoJJaA0BT9j4C3XhS
+        SKCWnnKAiuftOFqsq2ai7JwVDGkq6wjUpavA0HidHkcVgwYM5Y9nMdG/uU8xtDyqQm1D7yBb
+        SwmB8gaMBLpu3sCQ6ZIGQ1dul+Cof8TCQh1P+xhotKoIR9bORSYqG4tGa9fvAzS3OsBCD42X
+        cDRgLSZQXZudiOaRtt5Y0lZwESOLNLMssln/hEXervEjbd3pZEPtNwSpq7gLyDulN1nkwsQQ
+        g5xr7yPIgsZaQC417CZz7uZhpMlUjcftSpAcTKFEyZSSR8mS5MmpMnEkP/Z94SFhaFiQwF8Q
+        jvbzeTKRlIrkHz4e538kVeKYF593SiRJd6TiRCoVPzDqoFKerqZ4KXKVOpJPKZIlCkGQIkAl
+        kqrSZeKAJLk0QhAUFBzqIBMlKYYOK6Hocj89PXIPZIJnu3IBmw05+2B/f0wucGFzOUYAH5ik
+        ucDVcV4EsOhxHYMOVgC0P75FOCmnYK31GpO+aAPwvrZyK1gC0KRZwJwUwdkLC2aGNhUeHE9o
+        e7YCnBDOmWHCekshcHq7c2Jg5eSnTobBeRPaF2ybvBvnALywoGfQbj7w+Ug+7sRdHPm5R540
+        8jLsvDq+ieAORNP0Le58HnL+cIHtpVaM1h6GP2k1W1W7w2lzI4s+e8Gl2TaCFuQBqNGWAzrQ
+        AVg1Wb2lDoGLS0ubheIcX1jXEkinX4fN66WAdt4JZ5fzmfQc3eDXWi6NvAEtF0bwF16Tt5q3
+        XiThX4XNBD2sAgBnxkZxHeDptzWk39aQ/n/nawCvBZ6UQiUVUyqBInT7DzeAzQXyCzeCKzPz
+        ASaAsYEJQDbO93CL8W5N5Loli85kUEq5UJkuoVQmEOqYdhHu9UqS3LGBMrVQEBocEhKC9oXt
+        DwsN4b/qJj70VSKXIxapqTSKUlDKFzqM7eKVieWci31QFJHicj5cG7ZT2Dk8re3d4Xvgy5qu
+        73S/W3nLtSuv5XrzWVm6mB7QdARGV73tP22eP7ZafJbnHd1YHMJzvVHs41Hf8PmHINuU/XNR
+        4Mfl4uYT8Z/9UPOwv37GKu1mLGc0nGSVLcTbuPnhf34SxTypWW8yl6whon49Stnzvdh8Lj5b
+        dOeopU9/PK0+w2d3QoN2cNy7bEq4IuvJUX7xd5k6fTrh9NmWxGDBoziVeU+r6Iw5x3hvw55m
+        ic/K8zlvX5hQJF/WtQ++d+qXw7WNV/f+80FmbLxh+GLvxAnf/EK2VX050Tj6UVXXu3vGnr+l
+        6XbpWj06FvfShqUH7Ij4tY3PUKWIBH64UiX6Dwympl7JBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDIsWRmVeSWpSXmKPExsWy7bCSnG7/y70JBjvXSVisu7OG3eLBvG1s
+        FnNWbWO0ePnzKpvF6rv9bBa7Ls5ntJj24Sezxaf1y1gtWtu/MVk0L17PZnF6wiImiyfrZzFb
+        LLqxjcmi50kTq8XfrntMFl8fFlvsvaVtcXnXHDaL7us72CyWH//HZHFocjOTxfTNc5gtrt0/
+        w25x+N5VFouHSyYyW5w7+YnVYt5jB4tfy48yWrz/cZ3d4tSOycwW189NY7NYv/cnm4OCx+Ur
+        3h6X+3qZPCY2v2P32DnrLrvH5hVaHpfPlnpsWtXJ5jFh0QFGj/1z17B7fHx6i8Xj/b6rbB59
+        W1YxenzeJOfRfqCbyePQoWXMAfxRXDYpqTmZZalF+nYJXBnbDp9jKzgtXPHq/kHGBsYv/F2M
+        nBwSAiYSv/YsYO1i5OIQEtjNKNH4s48JIiElcfzEW6AEB5AtLHH4cDFIWEjgI6NEc382iM0m
+        oCPR9/YWG4gtIiAmcfnLN0aQOcwCU9kkZj0/wwTSKyzgJbH4eQxIDYuAqsTPj5fB6nkFrCVa
+        Ps5igVglL/Hnfg8zSDknUPz9eTEQU0jASmLf9wiIakGJkzOfgFUzA1U3b53NPIFRYBaS1Cwk
+        qQWMTKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYIThJbmDsbtqz7oHWJk4mA8xCjB
+        wawkwuslsydBiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6p
+        BqatK+wnrfG+tW6P2/7nFiKR4R55vM9vbXbfaHFHravD8PGsv3tNYzezOLhPm6H8JdXNlmcb
+        S4b+xavK/42mnalbo2axccc+IR6n50+0eo8cTuSdsMTk/QwhsdtXfql+Tk8w+PbzTVdOztYd
+        Ju6PZ/ivel8qejSK/+fHpTJP36WyHq4Pun4tYmUG28284HsHXV2Lp7SLWf/NYg1m2vjMk8fj
+        i/0avluM13wOWG+S43AxabA98OG8368Gb2Gnx1IJ/nY/ZoQ8zFg8+6HxriAZ2f8nXli6nbC+
+        L1H24/RxmXP6SRNjGVp7ZZiPRzpfsmO3t/229EV+Q8Ph2qWJv0v1l3+YELLowtQDvq5KWdEf
+        1nUpsRRnJBpqMRcVJwIAtf7lrn8DAAA=
+X-CMS-MailID: 20210607094031epcas1p1f4a9ee01eaa4652ba0e8eb6a4964c952
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210607094031epcas1p1f4a9ee01eaa4652ba0e8eb6a4964c952
+References: <004bef40-1667-3b60-adaf-bea2b15f2514@acm.org>
+        <CGME20210607094031epcas1p1f4a9ee01eaa4652ba0e8eb6a4964c952@epcas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Christoph:
-	Thanks for your review.
-
-On 6/7/2021 2:41 PM, Christoph Hellwig wrote:
-> On Sun, May 30, 2021 at 11:06:18AM -0400, Tianyu Lan wrote:
->> +	if (ms_hyperv.ghcb_base) {
->> +		rdmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
->> +
->> +		ghcb_va = ioremap_cache(ghcb_gpa, HV_HYP_PAGE_SIZE);
->> +		if (!ghcb_va)
->> +			return -ENOMEM;
+> On 6/3/21 10:03 PM, Changheun Lee wrote:
+> > Set max_bio_bytes same with queue max sectors. It will lead to fast bio
+> > submit when bio size is over than queue max sectors. And it might be helpful
+> > to align submit bio size in some case.
+> > 
+> > Signed-off-by: Changheun Lee <nanich.lee@samsung.com>
+> > ---
+> >  drivers/scsi/ufs/ufshcd.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> > index 3eb54937f1d8..37365a726517 100644
+> > --- a/drivers/scsi/ufs/ufshcd.c
+> > +++ b/drivers/scsi/ufs/ufshcd.c
+> > @@ -4858,6 +4858,7 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
+> >  {
+> >  	struct ufs_hba *hba = shost_priv(sdev->host);
+> >  	struct request_queue *q = sdev->request_queue;
+> > +	unsigned int max_bio_bytes;
+> >  
+> >  	blk_queue_update_dma_pad(q, PRDT_DATA_BYTE_COUNT_PAD - 1);
+> >  	if (hba->quirks & UFSHCD_QUIRK_ALIGN_SG_WITH_PAGE_SIZE)
+> > @@ -4868,6 +4869,10 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
+> >  
+> >  	ufshcd_crypto_setup_rq_keyslot_manager(hba, q);
+> >  
+> > +	if (!check_shl_overflow(queue_max_sectors(q),
+> > +				SECTOR_SHIFT, &max_bio_bytes))
+> > +		blk_queue_max_bio_bytes(q, max_bio_bytes);
+> > +
+> >  	return 0;
+> >  }
 > 
-> Can you explain this a bit more?  We've very much deprecated
-> ioremap_cache in favor of memremap.  Why yo you need a __iomem address
-> here?  Why do we need the remap here at all? >
+> Just like previous versions of this patch series, this approach will
+> trigger data corruption if dm-crypt is stacked on top of the UFS driver
+> since ufs_max_sectors << SECTOR_SHIFT = 1024 * 512 is less than the size
+> of the dm-crypt buffer (BIO_MAX_VECS << PAGE_SHIFT = 256 * 4096).
 
-GHCB physical address is an address in extra address space which is 
-above shared gpa boundary reported by Hyper-V CPUID. The addresses below
-shared gpa boundary treated as encrypted and the one above is treated as 
-decrypted. System memory is remapped in the extra address space and it 
-starts from the boundary. The shared memory with host needs to use 
-address in the extra address(pa + shared_gpa_boundary) in Linux guest.
+max_bio_bytes can't be smaller than "BIO_MAX_VECS * PAGE_SIZE". Large value
+will be selected between input parameter and  "BIO_MAX_VECS * PAGE_SIZE" in
+blk_queue_max_bio_bytes(). I think bio max size should be larger than
+"BIO_MAX_VECS * PAGE_SIZE" for kernel stability.
 
-Here is to map ghcb page for the communication operations with 
-Hypervisor(e.g, hypercall and read/write MSR) via GHCB page.
+void blk_queue_max_bio_bytes(struct request_queue *q, unsigned int bytes)
+{
+	struct queue_limits *limits = &q->limits;
+	unsigned int max_bio_bytes = round_up(bytes, PAGE_SIZE);
 
-memremap() will go through iomem_resource list and the address in extra 
-address space will not be in the list. So I used ioremap_cache(). I will
-memremap() instead of ioremap() here.
-
-> Does the data structure at this address not have any types that we
-> could use a struct for?
-
-The struct will be added in the following patch. I will refresh the 
-following patch and use the struct hv_ghcb for the mapped point.
-> 
->> +
->> +		rdmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
->> +		ghcb_va = ioremap_cache(ghcb_gpa, HV_HYP_PAGE_SIZE);
->> +		if (!ghcb_va) {
-> 
-> This seems to duplicate the above code.
-
-The above is to map ghcb for BSP and here does the same thing for APs
-Will add a new function to avoid the duplication.
+	limits->max_bio_bytes = max_t(unsigned int, max_bio_bytes,
+				      BIO_MAX_VECS * PAGE_SIZE);
+}
+EXPORT_SYMBOL(blk_queue_max_bio_bytes);
 
 > 
->> +bool hv_isolation_type_snp(void)
->> +{
->> +	return static_branch_unlikely(&isolation_type_snp);
->> +}
->> +EXPORT_SYMBOL_GPL(hv_isolation_type_snp);
+> I am not recommending to increase max_sectors for the UFS driver. We
+> need a solution that is independent of the dm-crypt internals.
 > 
-> This probably wants a kerneldoc explaining when it should be used. >
+> Bart.
 
-OK. I will add.
+No need to increase max_sectors in driver to set max_bio_bytes. There are
+no dependency with dm-crypt I think.
 
+Thank you,
+Changheun Lee
