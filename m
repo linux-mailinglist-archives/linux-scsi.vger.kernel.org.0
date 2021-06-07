@@ -2,82 +2,155 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F4739D482
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Jun 2021 07:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCBE39D4B2
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Jun 2021 08:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbhFGFzd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Jun 2021 01:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhFGFzc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Jun 2021 01:55:32 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9BFC061787
-        for <linux-scsi@vger.kernel.org>; Sun,  6 Jun 2021 22:53:28 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id b13so23237186ybk.4
-        for <linux-scsi@vger.kernel.org>; Sun, 06 Jun 2021 22:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=/wBNVO8p0L0MwynFVGAli8Yo7FoOthJf6Cs8txsgWCg=;
-        b=T+8t6Az6PdvMfB+yzyglPyo+yaQBf6oVO96/QMyWzMG9Whc2t6ZjlxAK0ZEdTJ3xTO
-         coTL24OJNPdvory6l+4xFSF/qsq7Nb3HH5bkzUBNEGHdIhBPbSE93GbkBAEIvgEipwPx
-         dg9cgAQzUmWds97kD7nqSGt/3h21zDyjLJHlNv5paTeAaAulAsawJxUzj8UK4Nr3L6Lr
-         GVfo+DlDUFWKekQsRjvuPcIr9i/GVr54grKQEVTFYlyxzwyOKsNH2ezM7YaM/FSTgjlZ
-         O1uq8LS6A80kGCLdHADG+0mWYNtyQwkL5u2I8Gdf6PA3j8TtOYzwQqvs63q9H/YPT0ec
-         QxXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=/wBNVO8p0L0MwynFVGAli8Yo7FoOthJf6Cs8txsgWCg=;
-        b=RQEsLOb1s2ZZLAVuuCL21Vezje/Z2Vg62WoCxYPGVDs7PdT5VEE97V/0xOOh2G3pED
-         X5IqtexmfwNa0td70RIrj3V2sUbvWl7qG7FeIR9OcrVi6swWbQ8GF1izlXisUDVjoSyt
-         gq6VfwQ/iY06Tk0xCSgYSkNs/aVhIiG8fDUXd4spiST9BrHWwxYG+Diuc/Kp6Psc9MSf
-         Jm9piLIB+qDaXZ6bp4VUro1tDQKoYmnR9WuDHs5urOZHiEgqohIfHo8Uha+e6MAUqFEP
-         31wD7cnotugpzHf+JpE2sWUpghyMiLUakoSi07+9Qe58AcNRyBAU7ajwRNlDNYoDADY5
-         is4g==
-X-Gm-Message-State: AOAM532PxEzXkoP4Mhd8+KOK8cdo4Kn2JUxp3qEjquVBd3XeLGE+teWX
-        KcYaVDv99TpgPsXSSrF3m+HXHyIvfLpe7c3qNDM=
-X-Google-Smtp-Source: ABdhPJwYOXOPH/EVoY4DKl+MttJrtHc87hRcOQb1taGIusu8b5K/kI3iijLlnwHlPGXM65hsUCGtpZUzv/b6/0WV4+Q=
-X-Received: by 2002:a25:e68c:: with SMTP id d134mr22215196ybh.477.1623045206417;
- Sun, 06 Jun 2021 22:53:26 -0700 (PDT)
+        id S229923AbhFGGQE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Jun 2021 02:16:04 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:10189 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhFGGQE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Jun 2021 02:16:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1623046455; x=1654582455;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vuaswDbaidKLYaIA+Zp2XtKHg8qhzvV9cfCPWEkQu9E=;
+  b=JphTXmqku5dD0Fqh5etEpZt5mYidUboQv/tn/GpXgTrLyQ4sFnYY7rud
+   /CejpKdoKXrZmgnd35L4F1mnc/y67GleJEYLFpf9Bpg45/VUkWcH6t+BA
+   oJd/WwDVVA3kElxC8PnjdUzbYKgpccLF2cuAHBlxz3Y+IBchxby3vV/IH
+   xmEx/+xfdI6/5hLdy8/bWsZZRMOK6SW1XqbwOPhfuiglCBDW6Z2tcul8V
+   lwdYBXOsqonoy+kxHoDbDql25IQydcuzr+qTGEuX2hx1dfbY0TXOydsfk
+   jgW1838uI0VOtdYiid41hfq2deUzLvU8i1E4DK5NLb90SYMGdPid9TGpN
+   w==;
+IronPort-SDR: lPTetB8ep/HLWBqQ5KruA3hAeC4e7ZaVEsUr5l+mKBjD51P3xkIwWOMryy02Mh1piNy7V4AwF/
+ jrBWLoDZ0xMIIt+ayRKrqLyXiJEaqio8u9WuQ12TIAWCTMJea66D/t4FXj+8zrh6tSTC/j2KI/
+ m5mYnzDe/hRIzLj9J7hdLONprU0neIZ0U9gSk5E/Q6OqilmArhLQIcFyoqu9NWSJGdjRuGutDE
+ 20J3Hvxu9LO78tleTtSOLLgzGTlznlXpFdZyNLVcmZlM2sAwmi7cDvuUV6BjO4NCbkQFsNXlyy
+ YYk=
+X-IronPort-AV: E=Sophos;i="5.83,254,1616428800"; 
+   d="scan'208";a="274818136"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Jun 2021 14:14:14 +0800
+IronPort-SDR: JRDkid2HDwpawKSyPMJF0uY5BZp9n3S8GXXWlhERJW8Sv2lLmEfJWpHSP27LgdVddQqAOaEOt7
+ OGp6Arw9/0/3Ko8ZwUUJ71VTbvNo8zIbY6uI+6r2xS6JjbJRaDkEZe5r7u2dOD5cJMZFkn2mbT
+ GRF9xdJKUmM2diygGkrIvhIcsNMjMZZk8BuefbL5QuMJwf0WZCj8TFDOpdIMzGwsoxn3/Wylgb
+ bo8wSAIFpWKGES71mo6j1ATJuz8miXmhgfA902PRGUcXpK8+Ontcw89/GjIrQ83B1AfYuYp7VX
+ mwiEizmtaZlFUtlpE4r19qnz
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2021 22:51:55 -0700
+IronPort-SDR: hqujrADHr8iicKa59l6VT3ScbLqzMFVWfLbMaCHMzxXwjtbwPztvs/wiznphqgTZlaORHuXgk4
+ s3hCT6q/QWlRxJaW4uhLHQ+r39Q/F4TEvOR3jMLKOIT1JC+Knwai7rCzP6GqacNcbLcAufH/IJ
+ j+/FfCb3BOnDvB4cpIYXuiNHSauiQSizVmbknn3IjONKzqzd3qYZynd6S2CoIdP6vtufbA11QM
+ 5IP1yUtctQdKD5MUJ4sG9mCiMfWfvCbVXbbhvPTJ0eTGvX1XAPtu7fEZlAbsFIAK1dtPfSvrmn
+ 4Iw=
+WDCIronportException: Internal
+Received: from bxygm33.sdcorp.global.sandisk.com ([10.0.231.247])
+  by uls-op-cesaip02.wdc.com with ESMTP; 06 Jun 2021 23:14:09 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, Bart Van Assche <bvanassche@acm.org>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        alim.akhtar@samsung.com, asutoshd@codeaurora.org,
+        Zang Leigang <zangleigang@hisilicon.com>,
+        Avi Shchislowski <avi.shchislowski@wdc.com>,
+        Bean Huo <beanhuo@micron.com>, cang@codeaurora.org,
+        stanley.chu@mediatek.com, Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH v10 00/12] Add Host control mode to HPB 
+Date:   Mon,  7 Jun 2021 09:13:49 +0300
+Message-Id: <20210607061401.58884-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:7110:a0c8:b029:cd:fa89:89f1 with HTTP; Sun, 6 Jun 2021
- 22:53:25 -0700 (PDT)
-Reply-To: rita44303@yahoo.co.jp
-From:   Rita Williams <wirita98@gmail.com>
-Date:   Mon, 7 Jun 2021 06:53:26 +0100
-Message-ID: <CAJQGmc7CW19NFeau76T5Tah+mN_+yTAOmX5dWyEKkMKZ=P1Lgw@mail.gmail.com>
-Subject: Von Frau Rita Williams
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-860 / 5000
-Translation results
-Liebster in Christus,
+v9 -> v10:
+ - rebase on Daejun's v36
 
-Ich bin Frau Rita Williams, ich habe Herrn David Williams 19 Jahre
-ohne Kind geheiratet und mein Mann ist 2007 gestorben von meinem
-verstorbenen Ehemann an eine Wohlt=C3=A4tigkeitsorganisation, derzeit ist
-der Fonds noch auf der Bank. K=C3=BCrzlich sagte mir mein Arzt, dass ich
-eine schwere Krankheit habe, die ein Krebsproblem ist und dass ich die
-n=C3=A4chsten 2 Monate nicht durchhalten werde.
-Ich m=C3=B6chte eine Person, die diesen Fonds f=C3=BCr Waisenh=C3=A4user, S=
-chulen,
-Kirchen, Witwen verwendet, um das Wort Gottes in seinem Land zu
-verbreiten.
-Antworten Sie mir f=C3=BCr weitere Informationen und senden Sie mir auch
-die folgenden Informationen, wie unten beschrieben.
-Ihren vollst=C3=A4ndigen Namen ..........
-Adresse ...........
-Foto ................
-Bleib gesegnet
-Deine Schwester in Christus
+v8 -> v9:
+ - Add one more patch: do not send unmap_all in host mode
+ - rebase on Daejun's v35
+ - tested on one more platform - Galaxy S21
 
-Frau Rita Williams
+v7 -> v8:
+ - restore Daejun atomic argument to ufshpb_get_req (v31)
+ - Add Daejun's Reviewed-by tag
+
+v6 -> v7:
+ - attend CanG's comments
+ - add one more patch to transform set_dirty to iterate_rgn
+ - rebase on Daejun's v32
+
+v5 -> v6:
+ - attend CanG's comments
+ - rebase on Daejun's v29
+
+v4 -> v5:
+ - attend Daejun's comments
+ - Control the number of inflight map requests
+
+v3 -> v4:
+ - rebase on Daejun's v25
+
+v2 -> v3:
+ - Attend Greg's and Can's comments
+ - rebase on Daejun's v21
+
+v1 -> v2:
+ - attend Greg's and Daejun's comments
+ - add patch 9 making host mode parameters configurable
+ - rebase on Daejun's v19
+
+
+The HPB spec defines 2 control modes - device control mode and host
+control mode. In oppose to device control mode, in which the host obey
+to whatever recommendation received from the device - In host control
+mode, the host uses its own algorithms to decide which regions should
+be activated or inactivated.
+
+We kept the host managed heuristic simple and concise.
+
+Aside from adding a by-spec functionality, host control mode entails
+some further potential benefits: makes the hpb logic transparent and
+readable, while allow tuning / scaling its various parameters, and
+utilize system-wide info to optimize HPB potential.
+
+This series is based on Samsung's device-control HPB2.0 driver
+
+This version was tested on Galaxy S21, Galaxy S20, and Xiaomi Mi10 pro.
+Your meticulous review and testing is mostly welcome and appreciated.
+
+Thanks,
+Avri
+
+
+Avri Altman (12):
+  scsi: ufshpb: Cache HPB Control mode on init
+  scsi: ufshpb: Add host control mode support to rsp_upiu
+  scsi: ufshpb: Transform set_dirty to iterate_rgn
+  scsi: ufshpb: Add reads counter
+  scsi: ufshpb: Make eviction depends on region's reads
+  scsi: ufshpb: Region inactivation in host mode
+  scsi: ufshpb: Add hpb dev reset response
+  scsi: ufshpb: Add "Cold" regions timer
+  scsi: ufshpb: Limit the number of inflight map requests
+  scsi: ufshpb: Do not send umap_all in host control mode
+  scsi: ufshpb: Add support for host control mode
+  scsi: ufshpb: Make host mode parameters configurable
+
+ Documentation/ABI/testing/sysfs-driver-ufs |  76 ++-
+ drivers/scsi/ufs/ufshcd.h                  |   2 +
+ drivers/scsi/ufs/ufshpb.c                  | 582 ++++++++++++++++++++-
+ drivers/scsi/ufs/ufshpb.h                  |  44 ++
+ 4 files changed, 675 insertions(+), 29 deletions(-)
+
+-- 
+2.25.1
+
