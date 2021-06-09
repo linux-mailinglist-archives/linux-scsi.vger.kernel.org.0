@@ -2,86 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 345A83A0ADE
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 05:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6633A0C00
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 07:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236623AbhFIDwe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Jun 2021 23:52:34 -0400
-Received: from m12-11.163.com ([220.181.12.11]:50425 "EHLO m12-11.163.com"
+        id S233357AbhFIFyi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Jun 2021 01:54:38 -0400
+Received: from m12-12.163.com ([220.181.12.12]:35121 "EHLO m12-12.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236625AbhFIDwd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 8 Jun 2021 23:52:33 -0400
+        id S233313AbhFIFyh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 9 Jun 2021 01:54:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=RJ4fd
-        jimFMvS3XV/vDOCbbbkesEyGJABjAOIjnI8IZI=; b=TEXyxLyZJ5i+KMxJsOzHc
-        n2JSn3L3isxgOc5JbxjZtTLsvKEE5t2U/7xXNE+yOF/M4fVL+admRXvB/9PRh5qk
-        TaR0PBX3VAHOpxI4bhSSWj7kdbS15VJMYRyWSndyiKwVGEF1EccdUzvbMtq1cdtW
-        kKGhPinRGqlofqpTcfP83I=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tLIZd
+        92qh67BbrTqsD9RiSadHJtSHsVSduEWRoYIY9Q=; b=HSOEiSOwpIt2T+uX+ETs1
+        gIUX8rdt8rT6ynVG8TkAhV3S/bV7Yi2u1jNaJ0+BgVm8lyIknAzTG1AFJuMddG7w
+        7LrN4if130csPMWK9gfxhNOkNEvR9GKH1Targ7npi7hqX+Qfxt/dT3q5sdIXi5fE
+        kT1q+su3AY2OlS/H2AxWaA=
 Received: from localhost.localdomain (unknown [218.17.89.92])
-        by smtp7 (Coremail) with SMTP id C8CowAC3vWVpOsBgeNMZhA--.891S2;
-        Wed, 09 Jun 2021 11:50:02 +0800 (CST)
+        by smtp8 (Coremail) with SMTP id DMCowAC3uwcjM8Bgr3d7Iw--.33312S2;
+        Wed, 09 Jun 2021 11:19:00 +0800 (CST)
 From:   lijian_8010a29@163.com
 To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
         jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         lijian <lijian@yulong.com>
-Subject: [PATCH] scsi: lpfc: lpfc_debugfs: deleted these repeated words
-Date:   Wed,  9 Jun 2021 11:49:00 +0800
-Message-Id: <20210609034900.382363-1-lijian_8010a29@163.com>
+Subject: [PATCH] scsi: lpfc: lpfc_ct: deleted the repeated word
+Date:   Wed,  9 Jun 2021 11:18:03 +0800
+Message-Id: <20210609031803.351918-1-lijian_8010a29@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowAC3vWVpOsBgeNMZhA--.891S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CF1Dtw1xKFy7WF17JFy8AFb_yoW8Ar13pa
-        93Ka4rJr1kCF1IyF13Cw4rAF9Yya93XF4UCFWjk34rAF4rGr1ftF95trWFqFWFkF1rZFnF
-        yrs09rW5Gr4DurJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bjPEfUUUUU=
+X-CM-TRANSID: DMCowAC3uwcjM8Bgr3d7Iw--.33312S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jw4DuFyDXw1xuFyftryDAwb_yoW3XFg_ur
+        48Zr12qw4qka1qvFy7JrW3Z3sFkrWrXFn2k3Z0qr93ur18Xr4UXrWqqry3ury8Ar98XFnr
+        C3WkXr1Fyw45tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5YksDUUUUU==
 X-Originating-IP: [218.17.89.92]
-X-CM-SenderInfo: 5olmxttqbyiikqdsmqqrwthudrp/xtbBEQusUFaEEqWA2wAAsY
+X-CM-SenderInfo: 5olmxttqbyiikqdsmqqrwthudrp/1tbiLwSsUFUMY3wgPwAAsO
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: lijian <lijian@yulong.com>
 
-deleted these repeated words 'while' and 'from' in the comments.
+deleted the repeated word 'in' in the comments.
 
 Signed-off-by: lijian <lijian@yulong.com>
 ---
- drivers/scsi/lpfc/lpfc_debugfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/lpfc/lpfc_ct.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index 658a962832b3..c67e8a0e0b32 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -136,7 +136,7 @@ static struct lpfc_idiag idiag;
-  * gather from the beginning of the log and process until the current entry.
-  *
-  * Notes:
-- * Discovery logging will be disabled while while this routine dumps the log.
-+ * Discovery logging will be disabled while this routine dumps the log.
-  *
-  * Return Value:
-  * This routine returns the amount of bytes that were dumped into @buf and will
-@@ -202,7 +202,7 @@ lpfc_debugfs_disc_trc_data(struct lpfc_vport *vport, char *buf, int size)
-  * gather from the beginning of the log and process until the current entry.
-  *
-  * Notes:
-- * Slow ring logging will be disabled while while this routine dumps the log.
-+ * Slow ring logging will be disabled while this routine dumps the log.
-  *
-  * Return Value:
-  * This routine returns the amount of bytes that were dumped into @buf and will
-@@ -2541,7 +2541,7 @@ lpfc_debugfs_lseek(struct file *file, loff_t off, int whence)
-  * @ppos: The position in the file to start reading from.
-  *
-  * Description:
-- * This routine reads data from from the buffer indicated in the private_data
-+ * This routine reads data from the buffer indicated in the private_data
-  * field of @file. It will start reading at @ppos and copy up to @nbytes of
-  * data to @buf.
-  *
+diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
+index 3bbefa225484..450f3a3fa911 100644
+--- a/drivers/scsi/lpfc/lpfc_ct.c
++++ b/drivers/scsi/lpfc/lpfc_ct.c
+@@ -909,7 +909,7 @@ lpfc_ns_rsp(struct lpfc_vport *vport, struct lpfc_dmabuf *mp, uint8_t fc4_type,
+ 
+ 	}
+ 
+-	/* All GID_FT entries processed.  If the driver is running in
++	/* All GID_FT entries processed.  If the driver is running
+ 	 * in target mode, put impacted nodes into recovery and drop
+ 	 * the RPI to flush outstanding IO.
+ 	 */
 -- 
 2.25.1
+
 
