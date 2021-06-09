@@ -2,77 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD043A0D4B
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 09:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297A93A0D11
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 09:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbhFIHNJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Jun 2021 03:13:09 -0400
-Received: from m12-12.163.com ([220.181.12.12]:42063 "EHLO m12-12.163.com"
+        id S237004AbhFIHEt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Jun 2021 03:04:49 -0400
+Received: from m12-17.163.com ([220.181.12.17]:44703 "EHLO m12-17.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234969AbhFIHNI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 9 Jun 2021 03:13:08 -0400
+        id S236977AbhFIHEn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 9 Jun 2021 03:04:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ZhXBU
-        Uhb8IEEd5BfnTokZalclItqpdzTrKmB683qQ6k=; b=oSVvRZmA5/8pTz33ZVDB+
-        vlpYKz2Sp4teJUgS2jGA4+dOlL8ayzisaM4tjHbHE9gGblgBFtuFTten52dTdPUA
-        IVw2EJaiELoyvOALvdWTDqHENyCVFHYoNLdPqz4gaRItkwiBhnk1QVaNAo9Pu4tq
-        5+39TJ8JFc4bDGlwhIZs7M=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1DIJp
+        HP+Eol0S9hpb7lABrWGpCIi+rnoAxnOQ9OdNvQ=; b=Ni9HIpxYDueZW94cD2MYO
+        o6m91F52K88gBCuWSdU8/1G89qFWyyM0qrCPRk7pZOHBsHTExaDc5qPVhLZpK8HC
+        oQz+7sQeklqMYl8dWOANunwzuanrzmBMOmkzWLlX6UxRALIGUTjoJkp7m7mI/MZK
+        hOUOOWvdY69/uPOUY4ENdk=
 Received: from localhost.localdomain (unknown [218.17.89.92])
-        by smtp8 (Coremail) with SMTP id DMCowADnuCmsZcBgWI2WIw--.37107S2;
-        Wed, 09 Jun 2021 14:54:36 +0800 (CST)
+        by smtp13 (Coremail) with SMTP id EcCowABnTXVyZ8Bgitlc6Q--.23071S2;
+        Wed, 09 Jun 2021 15:02:10 +0800 (CST)
 From:   lijian_8010a29@163.com
 To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
         jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         lijian <lijian@yulong.com>
-Subject: [PATCH] scsi: lpfc: lpfc_bsg: deleted these repeated words
-Date:   Wed,  9 Jun 2021 14:53:39 +0800
-Message-Id: <20210609065339.428697-1-lijian_8010a29@163.com>
+Subject: [PATCH] scsi: lpfc: lpfc_hbadisc: deleted these repeated words
+Date:   Wed,  9 Jun 2021 15:01:13 +0800
+Message-Id: <20210609070113.443914-1-lijian_8010a29@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMCowADnuCmsZcBgWI2WIw--.37107S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww1fWFy3uFW3XFWrWF48Zwb_yoW8XrWfpF
-        W8Cay7CrykXa1kKa4fA34UZ3s0va97JFy7CFs0v3s5ZFWUJrykXFWrtr1UXFWUWFWv9r9I
-        qrs3KrWDuF1qvrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bbZXrUUUUU=
+X-CM-TRANSID: EcCowABnTXVyZ8Bgitlc6Q--.23071S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF4UXr47tr1DuFy3Zw47Arb_yoW8WFWDpr
+        Z7KF1UAr1vkF42k3W3AryUZF90k3s3WFZFyF4qy345WrWrJrW0qr10q34fJay5WF4Fvw1q
+        vFsFkF9xua1kZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b8b1bUUUUU=
 X-Originating-IP: [218.17.89.92]
-X-CM-SenderInfo: 5olmxttqbyiikqdsmqqrwthudrp/1tbiSg2sUFPAOoUs4AAAsb
+X-CM-SenderInfo: 5olmxttqbyiikqdsmqqrwthudrp/1tbiLxKsUFUMY37LWgAAsU
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: lijian <lijian@yulong.com>
 
-deleted these repeated words 'the' and 'is' in the comments.
+deleted these repeated words 'the' and 'random' in the comments.
 
 Signed-off-by: lijian <lijian@yulong.com>
 ---
- drivers/scsi/lpfc/lpfc_bsg.c | 4 ++--
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index 38cfe1bc6a4d..08be16e7a60a 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -1766,7 +1766,7 @@ lpfc_bsg_diag_mode_exit(struct lpfc_hba *phba)
-  * This function is responsible for placing an sli3  port into diagnostic
-  * loopback mode in order to perform a diagnostic loopback test.
-  * All new scsi requests are blocked, a small delay is used to allow the
-- * scsi requests to complete then the link is brought down. If the link is
-+ * scsi requests to complete then the link is brought down. If the link
-  * is placed in loopback mode then scsi requests are again allowed
-  * so the scsi mid-layer doesn't give up on the port.
-  * All of this is done in-line.
-@@ -5883,7 +5883,7 @@ lpfc_bsg_timeout(struct bsg_job *job)
- 		return -EIO;
- 
- 	/* if job's driver data is NULL, the command completed or is in the
--	 * the process of completing.  In this case, return status to request
-+	 * process of completing.  In this case, return status to request
- 	 * so the timeout is retried.  This avoids double completion issues
- 	 * and the request will be pulled off the timer queue when the
- 	 * command's completion handler executes.  Otherwise, prevent the
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index f5a898c2c904..40a5a7f02fa2 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -1837,7 +1837,7 @@ lpfc_check_pending_fcoe_event(struct lpfc_hba *phba, uint8_t unreg_fcf)
+  * use through a sequence of @fcf_cnt eligible FCF records with equal
+  * probability. To perform integer manunipulation of random numbers with
+  * size unit32_t, the lower 16 bits of the 32-bit random number returned
+- * from prandom_u32() are taken as the random random number generated.
++ * from prandom_u32() are taken as the random number generated.
+  *
+  * Returns true when outcome is for the newly read FCF record should be
+  * chosen; otherwise, return false when outcome is for keeping the previously
+@@ -2138,7 +2138,7 @@ static void lpfc_sli4_fcf_pri_list_del(struct lpfc_hba *phba,
+  * @phba: pointer to lpfc hba data structure.
+  * @fcf_index: the index of the fcf record to update
+  * This routine acquires the hbalock and then set the LPFC_FCF_FLOGI_FAILED
+- * flag so the the round robin slection for the particular priority level
++ * flag so the round robin slection for the particular priority level
+  * will try a different fcf record that does not have this bit set.
+  * If the fcf record is re-read for any reason this flag is cleared brfore
+  * adding it to the priority list.
 -- 
 2.25.1
 
