@@ -2,174 +2,258 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F15BF3A1111
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 12:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4D73A10A2
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 12:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236717AbhFIK2m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Jun 2021 06:28:42 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:38552 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234515AbhFIK2l (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Jun 2021 06:28:41 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D7E45219AF;
-        Wed,  9 Jun 2021 09:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1623232234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=SvW0mHPDOY2f5vF2VERxSgZ7iWKgInFYzb+o7n87p3Y=;
-        b=IwHRgY2gpyS8zg3lLb7hhAOoCeF335f24+a6gmGqKFAUrl93rdww0hcU4QNJwrPax8S3MW
-        6zXB5NNBi5h2kv+uhMTMBHGPIYdPXV59SewYrtGxKbnmiL79N9JLTCxNRgiVlfRfsvoCzR
-        5GAiIdWEB/1EchUuS3Td3mzTC79NQFY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1623232234;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=SvW0mHPDOY2f5vF2VERxSgZ7iWKgInFYzb+o7n87p3Y=;
-        b=VmxFXjatL1IpMgt1H1mGLL6m4tJ53rwtrocntVoh7KVdBcf2xnuOHjH3xkpUO617hV8GUw
-        l3fzSjN1H7fYARBQ==
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id BD5FE118DD;
-        Wed,  9 Jun 2021 09:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1623232234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=SvW0mHPDOY2f5vF2VERxSgZ7iWKgInFYzb+o7n87p3Y=;
-        b=IwHRgY2gpyS8zg3lLb7hhAOoCeF335f24+a6gmGqKFAUrl93rdww0hcU4QNJwrPax8S3MW
-        6zXB5NNBi5h2kv+uhMTMBHGPIYdPXV59SewYrtGxKbnmiL79N9JLTCxNRgiVlfRfsvoCzR
-        5GAiIdWEB/1EchUuS3Td3mzTC79NQFY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1623232234;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=SvW0mHPDOY2f5vF2VERxSgZ7iWKgInFYzb+o7n87p3Y=;
-        b=VmxFXjatL1IpMgt1H1mGLL6m4tJ53rwtrocntVoh7KVdBcf2xnuOHjH3xkpUO617hV8GUw
-        l3fzSjN1H7fYARBQ==
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id PjKULuqOwGDUGAAALh3uQQ
-        (envelope-from <dwagner@suse.de>); Wed, 09 Jun 2021 09:50:34 +0000
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-scsi@vger.kernel.org, Nilesh Javali <njavali@marvell.com>
-Cc:     linux-kernel@vger.kernel.org,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Arun Easi <aeasi@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>,
-        James Smart <jsmart2021@gmail.com>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH] qla2xxx: synchronize rport dev_loss_tmo setting
-Date:   Wed,  9 Jun 2021 11:49:56 +0200
-Message-Id: <20210609094956.11286-1-dwagner@suse.de>
-X-Mailer: git-send-email 2.31.1
+        id S238454AbhFIJzq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Jun 2021 05:55:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42276 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238448AbhFIJzp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 9 Jun 2021 05:55:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9764361375;
+        Wed,  9 Jun 2021 09:53:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623232431;
+        bh=CVI19HxzerQeBdqOZMyU8l7Pa/R+AWrO+Xskvkm82ow=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0q0hDIW6DgWFP3COy3bpinX0qTjr+6iKVpsHISrNUxE7IIrUk4rXaqZah55x1pN08
+         9ZdCII9XR0QthdPaOc7TRDyDCZ8hnVr/VDTC5MvFQjtlpEh9p0fa6gzqs5EN7MM3+2
+         Fqc72US1TwbjDy/Mw5lj1r7q+dsSAIJH7nuj63jM=
+Date:   Wed, 9 Jun 2021 11:53:48 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Daejun Park <daejun7.park@samsung.com>
+Cc:     "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "huobean@gmail.com" <huobean@gmail.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        JinHwan Park <jh.i.park@samsung.com>,
+        Javier Gonzalez <javier.gonz@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Dukhyun Kwon <d_hyun.kwon@samsung.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        Jaemyung Lee <jaemyung.lee@samsung.com>,
+        Jieon Seol <jieon.seol@samsung.com>
+Subject: Re: [PATCH v36 0/4] scsi: ufs: Add Host Performance Booster Support
+Message-ID: <YMCPrE+Fq+ee+vBS@kroah.com>
+References: <CGME20210607041650epcms2p29002c9d072738bbf21fb4acf31847e8e@epcms2p2>
+ <20210607041650epcms2p29002c9d072738bbf21fb4acf31847e8e@epcms2p2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210607041650epcms2p29002c9d072738bbf21fb4acf31847e8e@epcms2p2>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.de>
+On Mon, Jun 07, 2021 at 01:16:50PM +0900, Daejun Park wrote:
+> Changelog:
+> 
+> v35 -> v36
+> 1. Changed ppn variable type from u64 to __be64.
+> 2. Added WARN_ON_ONCE() to check for HPB read IO size exceeded.
+> 
+> v34 -> v35
+> 1. Addressed Bart's comments (type casting)
+> 2. Rebase 5.14 scsi-queue
+> 
+> v33 -> v34
+> Fix warning about NULL check before some freeing functions is not needed.
+> 
+> v32 -> v33
+> 1. Fix wrong usage of scsi_command_normalize_sense.
+> 2. Addressed Bart's comments (func. name, type casting, parentheses)
+> 
+> v31 -> v32
+> Delete unused parameter of unmap API.
+> 
+> v30 -> v31
+> Delete unnecessary debug message.
+> 
+> v29 -> v30
+> 1. Add support to reuse bio of pre-request.
+> 2. Delete unreached code in the ufshpb_issue_map_req.
+> 
+> v28 -> v29
+> 1. Remove unused variable that reported by kernel test robot.
+> 
+> v27 -> v28
+> 1. Fix wrong return value of ufshpb_prep.
+> 
+> v26 -> v27
+> 1. Fix wrong refernce of sense buffer in pre_req complete function.
+> 2. Fix read_id error.
+> 3. Fix chunk size checking for HPB 1.0.
+> 4. Mute unnecessary messages before HPB initialization.
+> 
+> v25 -> v26
+> 1. Fix wrong chunk size checking for HPB 1.0.
+> 2. Fix wrong max data size for HPB single command.
+> 3. Fix typo error.
+> 
+> v24 -> v25
+> 1. Change write buffer API for unmap region.
+> 2. Add checking hpb_enable for avoiding unnecessary memory allocation.
+> 3. Change pr_info to dev_info.
+> 4. Change default requeue timeout value for HPB read.
+> 5. Fix wrong offset manipulation on ufshpb_prep_entry.
+> 
+> v23 -> v24
+> 1. Fix build error reported by kernel test robot.
+> 
+> v22 -> v23
+> 1. Add support compatibility of HPB 1.0.
+> 2. Fix read id for single HPB read command.
+> 3. Fix number of pre-allocated requests for write buffer.
+> 4. Add fast path for response UPIU that has same LUN in sense data.
+> 5. Remove WARN_ON for preventing kernel crash.
+> 7. Fix wrong argument for read buffer command.
+> 
+> v21 -> v22
+> 1. Add support processing response UPIU in suspend state.
+> 2. Add support HPB hint from other LU.
+> 3. Add sending write buffer with 0x03 after HPB init.
+> 
+> v20 -> v21
+> 1. Add bMAX_DATA_SIZE_FOR_HPB_SINGLE_CMD attr. and fHPBen flag support.
+> 
+> v19 -> v20
+> 1. Add documentation for sysfs entries of hpb->stat.
+> 2. Fix read buffer command for under-sized sub-region.
+> 3. Fix wrong condition checking for kick map work.
+> 4. Delete redundant response UPIU checking.
+> 5. Add LUN checking in response UPIU.
+> 6. Fix possible deadlock problem due to runtime PM.
+> 7. Add instant changing of sub-region state from response UPIU.
+> 8. Fix endian problem in prefetched PPN.
+> 9. Add JESD220-3A (HPB v2.0) support.
+> 
+> v18 -> 19
+> 1. Fix null pointer error when printing sysfs from non-HPB LU.
+> 2. Apply HPB read opcode in lrbp->cmd->cmnd (from Can Guo's review).
+> 3. Rebase the patch on 5.12/scsi-queue.
+> 
+> v17 -> v18
+> Fix build error which reported by kernel test robot.
+> 
+> v16 -> v17
+> 1. Rename hpb_state_lock to rgn_state_lock and move it to corresponding
+> patch.
+> 2. Remove redundant information messages.
+> 
+> v15 -> v16
+> 1. Add missed sysfs ABI documentation.
+> 
+> v14 -> v15
+> 1. Remove duplicated sysfs ABI entries in documentation.
+> 2. Add experiment result of HPB performance testing with iozone.
+> 
+> v13 -> v14
+> 1. Cleanup codes by commentted in Greg's review.
+> 2. Add documentation for sysfs entries (from Greg's review).
+> 3. Add experiment result of HPB performance testing.
+> 
+> v12 -> v13
+> 1. Cleanup codes by comments from Can Guo.
+> 2. Add HPB related descriptor/flag/attributes in sysfs.
+> 3. Change base commit from 5.10/scsi-queue to 5.11/scsi-queue.
+> 
+> v11 -> v12
+> 1. Fixed to return error value when HPB fails to initialize pinned active 
+> region.
+> 2. Fixed to disable HPB feature if HPB fails to allocate essential memory
+> and workqueue.
+> 3. Fixed to change proper sub-region state when region is already evicted.
+> 
+> v10 -> v11
+> Add a newline at end the last line on Kconfig file.
+> 
+> v9 -> v10
+> 1. Fixed 64-bit division error
+> 2. Fixed problems commentted in Bart's review.
+> 
+> v8 -> v9
+> 1. Change sysfs initialization.
+> 2. Change reading descriptor during HPB initialization
+> 3. Fixed problems commentted in Bart's review.
+> 4. Change base commit from 5.9/scsi-queue to 5.10/scsi-queue.
+> 
+> v7 -> v8
+> Remove wrongly added tags.
+> 
+> v6 -> v7
+> 1. Remove UFS feature layer.
+> 2. Cleanup for sparse error.
+> 
+> v5 -> v6
+> Change base commit to b53293fa662e28ae0cdd40828dc641c09f133405
+> 
+> v4 -> v5
+> Delete unused macro define.
+> 
+> v3 -> v4
+> 1. Cleanup.
+> 
+> v2 -> v3
+> 1. Add checking input module parameter value.
+> 2. Change base commit from 5.8/scsi-queue to 5.9/scsi-queue.
+> 3. Cleanup for unused variables and label.
+> 
+> v1 -> v2
+> 1. Change the full boilerplate text to SPDX style.
+> 2. Adopt dynamic allocation for sub-region data structure.
+> 3. Cleanup.
+> 
+> NAND flash memory-based storage devices use Flash Translation Layer (FTL)
+> to translate logical addresses of I/O requests to corresponding flash
+> memory addresses. Mobile storage devices typically have RAM with
+> constrained size, thus lack in memory to keep the whole mapping table.
+> Therefore, mapping tables are partially retrieved from NAND flash on
+> demand, causing random-read performance degradation.
+> 
+> To improve random read performance, JESD220-3 (HPB v1.0) proposes HPB
+> (Host Performance Booster) which uses host system memory as a cache for the
+> FTL mapping table. By using HPB, FTL data can be read from host memory
+> faster than from NAND flash memory. 
+> 
+> The current version only supports the DCM (device control mode).
+> This patch consists of 3 parts to support HPB feature.
+> 
+> 1) HPB probe and initialization process
+> 2) READ -> HPB READ using cached map information
+> 3) L2P (logical to physical) map management
+> 
+> In the HPB probe and init process, the device information of the UFS is
+> queried. After checking supported features, the data structure for the HPB
+> is initialized according to the device information.
+> 
+> A read I/O in the active sub-region where the map is cached is changed to
+> HPB READ by the HPB.
+> 
+> The HPB manages the L2P map using information received from the
+> device. For active sub-region, the HPB caches through ufshpb_map
+> request. For the in-active region, the HPB discards the L2P map.
+> When a write I/O occurs in an active sub-region area, associated dirty
+> bitmap checked as dirty for preventing stale read.
+> 
+> HPB is shown to have a performance improvement of 58 - 67% for random read
+> workload. [1]
+> 
+> [1]:
+> https://www.usenix.org/conference/hotstorage17/program/presentation/jeong
+> 
+> Daejun Park (4):
+>   scsi: ufs: Introduce HPB feature
+>   scsi: ufs: L2P map management for HPB read
+>   scsi: ufs: Prepare HPB read for cached sub-region
+>   scsi: ufs: Add HPB 2.0 support
 
-Currently, the dev_loss_tmo setting is only ever used for SCSI
-devices. This patch reshuffles initialisation such that the SCSI
-remote ports are registered before the NVMe ones, allowing the
-dev_loss_tmo setting to be synchronized between SCSI and NVMe.
-
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
-Hi,
-
-This is a followup on
-
-  https://lore.kernel.org/linux-scsi/20210419100014.47144-1-dwagner@suse.de/
-
-Hannes and I started to play with this patch. After a few iterations
-on getting the right dev_loss_tmo variables set, it works as
-hoped. With this change, it's possible to use the same udev rule for
-qla2xxx as we currently use for lpfc driver. And it survived serious
-testing sessions.
-
-Thanks,
-Daniel
-
- drivers/scsi/qla2xxx/qla_attr.c |  6 ++++++
- drivers/scsi/qla2xxx/qla_init.c | 10 +++-------
- drivers/scsi/qla2xxx/qla_nvme.c |  5 ++++-
- 3 files changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index 3aa9869f6fae..c762c940970f 100644
---- a/drivers/scsi/qla2xxx/qla_attr.c
-+++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -2648,7 +2648,13 @@ qla2x00_get_starget_port_id(struct scsi_target *starget)
- static inline void
- qla2x00_set_rport_loss_tmo(struct fc_rport *rport, uint32_t timeout)
- {
-+	fc_port_t *fcport = *(fc_port_t **)rport->dd_data;
-+
- 	rport->dev_loss_tmo = timeout ? timeout : 1;
-+
-+	if (fcport->nvme_remote_port)
-+		nvme_fc_set_remoteport_devloss(fcport->nvme_remote_port,
-+					       rport->dev_loss_tmo);
- }
- 
- static void
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index eb825318e3f5..7f5b64a5ec90 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5629,13 +5629,6 @@ qla2x00_update_fcport(scsi_qla_host_t *vha, fc_port_t *fcport)
- 
- 	qla2x00_dfs_create_rport(vha, fcport);
- 
--	if (NVME_TARGET(vha->hw, fcport)) {
--		qla_nvme_register_remote(vha, fcport);
--		qla2x00_set_fcport_disc_state(fcport, DSC_LOGIN_COMPLETE);
--		qla2x00_set_fcport_state(fcport, FCS_ONLINE);
--		return;
--	}
--
- 	qla24xx_update_fcport_fcp_prio(vha, fcport);
- 
- 	switch (vha->host->active_mode) {
-@@ -5657,6 +5650,9 @@ qla2x00_update_fcport(scsi_qla_host_t *vha, fc_port_t *fcport)
- 		break;
- 	}
- 
-+	if (NVME_TARGET(vha->hw, fcport))
-+		qla_nvme_register_remote(vha, fcport);
-+
- 	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
- 
- 	if (IS_IIDMA_CAPABLE(vha->hw) && vha->hw->flags.gpsc_supported) {
-diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
-index e119f8b24e33..5cc58957dbec 100644
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -41,7 +41,7 @@ int qla_nvme_register_remote(struct scsi_qla_host *vha, struct fc_port *fcport)
- 	req.port_name = wwn_to_u64(fcport->port_name);
- 	req.node_name = wwn_to_u64(fcport->node_name);
- 	req.port_role = 0;
--	req.dev_loss_tmo = 0;
-+	req.dev_loss_tmo = fcport->dev_loss_tmo;
- 
- 	if (fcport->nvme_prli_service_param & NVME_PRLI_SP_INITIATOR)
- 		req.port_role = FC_PORT_ROLE_NVME_INITIATOR;
-@@ -68,6 +68,9 @@ int qla_nvme_register_remote(struct scsi_qla_host *vha, struct fc_port *fcport)
- 		return ret;
- 	}
- 
-+	nvme_fc_set_remoteport_devloss(fcport->nvme_remote_port,
-+				       fcport->dev_loss_tmo);
-+
- 	if (fcport->nvme_prli_service_param & NVME_PRLI_SP_SLER)
- 		ql_log(ql_log_info, vha, 0x212a,
- 		       "PortID:%06x Supports SLER\n", req.port_id);
--- 
-2.29.2
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
