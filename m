@@ -2,82 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0BD3A0C98
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 08:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD043A0D4B
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Jun 2021 09:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236828AbhFIGmh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Jun 2021 02:42:37 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:15277 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbhFIGmh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Jun 2021 02:42:37 -0400
-IronPort-SDR: xD2eZaohPZeG4KU0pQSvgHxwAEOLtyzjPOMOF3vdv/PoVtXqLgCs7AH8RukZUs42DQX72FXlMt
- A7/nIBkIQvZa2Byr9zBggnawlJU1Pm587Vp3npX2+8wjuWIwXfdQGhXcZ6wqy9Cc+vrMT1xj24
- Gm3MNqEJIiJzxc9c7rWFd46ATTM4xEg7fBEuR4x3LAxAn9fjAT/NLoTs4xEoB81WeRoCR8gsl5
- tB0/xXzuRQ4cjk0xD2A5G4h/o77XsJkEJcZVoy0Mh0teg2p7euUFj83GxqOizdX0+p/YD58mXC
- eV0=
-X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="29778252"
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by labrats.qualcomm.com with ESMTP; 08 Jun 2021 23:40:43 -0700
-X-QCInternal: smtphost
-Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
-  by ironmsg02-sd.qualcomm.com with ESMTP; 08 Jun 2021 23:40:42 -0700
-Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 687E321B1D; Tue,  8 Jun 2021 23:40:42 -0700 (PDT)
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, ziqichen@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support)
-Subject: [PATCH v2 1/1] scsi: ufs: Fix a possible use before initialization case
-Date:   Tue,  8 Jun 2021 23:39:34 -0700
-Message-Id: <1623220779-22030-1-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S235522AbhFIHNJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Jun 2021 03:13:09 -0400
+Received: from m12-12.163.com ([220.181.12.12]:42063 "EHLO m12-12.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234969AbhFIHNI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 9 Jun 2021 03:13:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ZhXBU
+        Uhb8IEEd5BfnTokZalclItqpdzTrKmB683qQ6k=; b=oSVvRZmA5/8pTz33ZVDB+
+        vlpYKz2Sp4teJUgS2jGA4+dOlL8ayzisaM4tjHbHE9gGblgBFtuFTten52dTdPUA
+        IVw2EJaiELoyvOALvdWTDqHENyCVFHYoNLdPqz4gaRItkwiBhnk1QVaNAo9Pu4tq
+        5+39TJ8JFc4bDGlwhIZs7M=
+Received: from localhost.localdomain (unknown [218.17.89.92])
+        by smtp8 (Coremail) with SMTP id DMCowADnuCmsZcBgWI2WIw--.37107S2;
+        Wed, 09 Jun 2021 14:54:36 +0800 (CST)
+From:   lijian_8010a29@163.com
+To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lijian <lijian@yulong.com>
+Subject: [PATCH] scsi: lpfc: lpfc_bsg: deleted these repeated words
+Date:   Wed,  9 Jun 2021 14:53:39 +0800
+Message-Id: <20210609065339.428697-1-lijian_8010a29@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMCowADnuCmsZcBgWI2WIw--.37107S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww1fWFy3uFW3XFWrWF48Zwb_yoW8XrWfpF
+        W8Cay7CrykXa1kKa4fA34UZ3s0va97JFy7CFs0v3s5ZFWUJrykXFWrtr1UXFWUWFWv9r9I
+        qrs3KrWDuF1qvrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bbZXrUUUUU=
+X-Originating-IP: [218.17.89.92]
+X-CM-SenderInfo: 5olmxttqbyiikqdsmqqrwthudrp/1tbiSg2sUFPAOoUs4AAAsb
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In ufshcd_exec_dev_cmd(), if error happens before lrpb is initialized,
-then we should bail out instead of letting trace record the error.
+From: lijian <lijian@yulong.com>
 
-Fixes: a45f937110fa6 ("scsi: ufs: Optimize host lock on transfer requests send/compl paths")
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Can Guo <cang@codeaurora.org>
+deleted these repeated words 'the' and 'is' in the comments.
+
+Signed-off-by: lijian <lijian@yulong.com>
 ---
-Change since V1:
-- Use codeaurora mail in Signed-off-by tag.
+ drivers/scsi/lpfc/lpfc_bsg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/scsi/ufs/ufshcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index fe1b5f4..0d54ab7 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -2972,7 +2972,7 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index 38cfe1bc6a4d..08be16e7a60a 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -1766,7 +1766,7 @@ lpfc_bsg_diag_mode_exit(struct lpfc_hba *phba)
+  * This function is responsible for placing an sli3  port into diagnostic
+  * loopback mode in order to perform a diagnostic loopback test.
+  * All new scsi requests are blocked, a small delay is used to allow the
+- * scsi requests to complete then the link is brought down. If the link is
++ * scsi requests to complete then the link is brought down. If the link
+  * is placed in loopback mode then scsi requests are again allowed
+  * so the scsi mid-layer doesn't give up on the port.
+  * All of this is done in-line.
+@@ -5883,7 +5883,7 @@ lpfc_bsg_timeout(struct bsg_job *job)
+ 		return -EIO;
  
- 	if (unlikely(test_bit(tag, &hba->outstanding_reqs))) {
- 		err = -EBUSY;
--		goto out;
-+		goto out_put_tag;
- 	}
- 
- 	init_completion(&wait);
+ 	/* if job's driver data is NULL, the command completed or is in the
+-	 * the process of completing.  In this case, return status to request
++	 * process of completing.  In this case, return status to request
+ 	 * so the timeout is retried.  This avoids double completion issues
+ 	 * and the request will be pulled off the timer queue when the
+ 	 * command's completion handler executes.  Otherwise, prevent the
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+2.25.1
+
 
