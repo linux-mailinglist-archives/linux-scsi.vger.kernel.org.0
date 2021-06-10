@@ -2,575 +2,247 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C82C03A239C
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Jun 2021 06:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C5E3A238F
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Jun 2021 06:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbhFJErD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Jun 2021 00:47:03 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:17149 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbhFJErC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Jun 2021 00:47:02 -0400
-IronPort-SDR: 9ZxkIA9BUeH8WF1atT1heVdvVZvMcfhcklU25BRDOH6cg0alSaGr58o4Sk30JLBrtL8xolty2R
- CrLga3xU5bruQ2ZxasIenK4pO6tIBSqi4F7860XpAEJgzXxPISPkMK6WeoF50+AoG1w9tz6Jip
- B5lsrelE5cPC3fyzLcTBYveS9uIGFOxp+vP1DjCrOkDE7mJOtTAxFln4YaQcZ9iIaONdEYgXib
- chdZ4VHKwC9GUHXUZOn+jKOLh3oZeWaHbCuF8G+4IwOc2kjfVy28lRjt51NeXFe7aKmOoLNmnP
- a9s=
-X-IronPort-AV: E=Sophos;i="5.83,262,1616482800"; 
-   d="scan'208";a="29778433"
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by labrats.qualcomm.com with ESMTP; 09 Jun 2021 21:45:07 -0700
-X-QCInternal: smtphost
-Received: from stor-presley.qualcomm.com ([192.168.140.85])
-  by ironmsg02-sd.qualcomm.com with ESMTP; 09 Jun 2021 21:45:06 -0700
-Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 3DB5E21AF7; Wed,  9 Jun 2021 21:45:06 -0700 (PDT)
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, ziqichen@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Bart van Assche <bvanassche@acm.org>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Satya Tangirala <satyat@google.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 9/9] scsi: ufs: Apply more limitations to user access
-Date:   Wed,  9 Jun 2021 21:43:37 -0700
-Message-Id: <1623300218-9454-10-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1623300218-9454-1-git-send-email-cang@codeaurora.org>
-References: <1623300218-9454-1-git-send-email-cang@codeaurora.org>
+        id S229979AbhFJEqF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Jun 2021 00:46:05 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:10582 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229941AbhFJEqD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 10 Jun 2021 00:46:03 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15A4expk006766
+        for <linux-scsi@vger.kernel.org>; Wed, 9 Jun 2021 21:44:07 -0700
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-0016f401.pphosted.com with ESMTP id 3934fv1jds-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Wed, 09 Jun 2021 21:44:07 -0700
+Received: from m0045851.ppops.net (m0045851.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15A4fJUL007278
+        for <linux-scsi@vger.kernel.org>; Wed, 9 Jun 2021 21:44:07 -0700
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
+        by mx0b-0016f401.pphosted.com with ESMTP id 3934fv1jdj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Jun 2021 21:44:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QyMPyaM0YhF77zZkFIcg1VPtmNTbA6p0NcN6QBYJ7xH93sZxDQ4aBp2tkSLP5++brWG8IHQ+2cQ63ohLrbEHT0k9I+rk4iNgXLN5tbN1QhWdB4onCGgks8oYIjmLvDzwZei3BuGMit3fbYiOYWtcnl1HfRfgyYFd6rTdvnJUhRuphsA1ToyqBRRElajjCZBrD2mnQw1NDmTJI/1iZQA/M2wsE5w3eLtkdL2obJSb3t7wkjc4FWvcPDL1Cn+sSwBom3l8FAeODGu+cabdvZef8vURTf3wg+43wfQknGM3mbEsphoAlWW98NF28GO0Ah9361PKe86p7MJch6r1OHkU6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hn3C8WvWDSj/14NNKhkWWKWJdl6qTOFn918w7DDdxgo=;
+ b=i4R6Nk/UIqE/9mrsbkm5ftiRZn0dfeUK3OGmPoAjZBKSaf4OgEQ7lw1BdAMqjzOZ4a6ozyvGdN9h/4UfjCRvLRfQGyCeA3+TtBDTj6WYaz+/HiLmBySEqF2Aht/I5nPonGApDSFDcqaJaeswVssFrR82MAl3SMmQF0dgtiPYpTgX7q5DqnkbCLNXU0Qqi8KmBYlRKklDnhiHw5IAkrcG/2Av2PuD10S9HllIoc/qGXIJTfPJzl6p89Ffe+ELQLBBO9z//eAasPO0Pfp5U9XYJ3OTktcQqpmJCj28q9qxhjwbCA1A5JlHEVVwzBe/s0Ik9CoP6wppUMVkLUInYIxQ1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hn3C8WvWDSj/14NNKhkWWKWJdl6qTOFn918w7DDdxgo=;
+ b=nr4C1YGKdrg9KXTKMmYLmTtmbezcpeqq+UT0Lf+MhLOlTM5w9YMaros8Eh1B8KRRG/L46soI+ye27Vt1A6/sVIe4UUTwX0b4SftRwDao4/pbeIksjqh9J4pWO57zbH7vH8YdKikKl69nKHOLCYdMulDxQHnAcAaM+13R70Frkfk=
+Received: from CO6PR18MB4419.namprd18.prod.outlook.com (2603:10b6:5:35a::11)
+ by CO6PR18MB4419.namprd18.prod.outlook.com (2603:10b6:5:35a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.21; Thu, 10 Jun
+ 2021 04:44:04 +0000
+Received: from CO6PR18MB4419.namprd18.prod.outlook.com
+ ([fe80::382e:7359:ff37:8478]) by CO6PR18MB4419.namprd18.prod.outlook.com
+ ([fe80::382e:7359:ff37:8478%5]) with mapi id 15.20.4219.021; Thu, 10 Jun 2021
+ 04:44:04 +0000
+From:   Manish Rangankar <mrangankar@marvell.com>
+To:     Mike Christie <michael.christie@oracle.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: RE: [EXT] [PATCH 1/1] scsi: qedi: Fix host removal with running
+ sessions
+Thread-Topic: [EXT] [PATCH 1/1] scsi: qedi: Fix host removal with running
+ sessions
+Thread-Index: AQHXXWV6dmhbFBwsRUSNjHR1LVzYCKsMq1ZA
+Date:   Thu, 10 Jun 2021 04:44:04 +0000
+Message-ID: <CO6PR18MB441958AAFC6772ABABDBC55FD8359@CO6PR18MB4419.namprd18.prod.outlook.com>
+References: <20210609192709.5094-1-michael.christie@oracle.com>
+In-Reply-To: <20210609192709.5094-1-michael.christie@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: oracle.com; dkim=none (message not signed)
+ header.d=none;oracle.com; dmarc=none action=none header.from=marvell.com;
+x-originating-ip: [116.75.141.201]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 31763750-83ed-4577-62c8-08d92bca6025
+x-ms-traffictypediagnostic: CO6PR18MB4419:
+x-microsoft-antispam-prvs: <CO6PR18MB44197B63B36EDF0A2A0B1CBCD8359@CO6PR18MB4419.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1247;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mo8uD4vLTgQ1IEfkEnroigCBmMxA3Vq/pcZpu/hOxsEkgy70ac21CIhntOEYVZ7+CwS5gcevEMaXVIN7PS1rj/G0/+tjPomcVJKnYcsRnwtc2Ugx+f5493TeqUaqBcLYhV2ofuMJgriwplQiTAMNLNRLrLt8Zu9E0awsLCYFzGY1N6FlxcYJE8iASxE6w9Hc+Tdeddp/RuBV9pPgw2edvOnaTzmdmWeZ2drqy3PYgraTJiPmUCFjr0pa2NzSz5feVsv6UGbvYfsJdHouQeKwCYzPujsGVyfC64+IgV76J1gvpI1wX+2UO5XPsLEfuoIqf5CwhTfR+THEW/lR9lQItU+5xQv97TkTdJY5LbwTijKELUTvMUPor7h+3YlOYTkDgH7GamduBVghIP8IkUHJ5RAT4hb85sVFmaL4qjhxDAC6xIjxdqnJJZEp5SW2uQUzS5ohNjCQTesI8Tn7NYl5eNbcaLrmdGX+RSBDX4kL0Xsov+ICmBlpZUOrmM5bnqKpqLK/sObzjP0h4QHo2l9j4E412nuqD9TgFZLl9hc/L+/IQDZoBRkvrciXgEQbidKAr82IWf0Ce44quMRMhg3OmFnLwO+abeEguzmbPfWrywQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR18MB4419.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(39850400004)(346002)(376002)(9686003)(8936002)(33656002)(38100700002)(55016002)(26005)(478600001)(66446008)(2906002)(7696005)(53546011)(55236004)(6506007)(76116006)(5660300002)(66556008)(66946007)(186003)(64756008)(122000001)(66476007)(71200400001)(52536014)(86362001)(110136005)(83380400001)(8676002)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XsFzL9wf1m65/uWQrVphLCyItCcqUj432orTysL9GUUKY85EAKva8KIDs7vt?=
+ =?us-ascii?Q?ZSIInEGxnePji24VWUpYeFO9W50Mkf45XyqkgPwNcq7jj3g57nLVw8VQzikr?=
+ =?us-ascii?Q?66nz+A064Jr6PM03KTcl0LM9mA5T+UwbuvC9vKhx2eGTfq1o12pd6mvCkxop?=
+ =?us-ascii?Q?V8RS2IPgfPCy+UbR/wc9b4/9MxlxD0l5InXG33v/XaGYqF9KfjftHTwxADBA?=
+ =?us-ascii?Q?g+h1pfJpF7ZjXboLg/YPgkWI55Rm79JNmjE4pGOsJPyadhG3HTuJFKyt752J?=
+ =?us-ascii?Q?zj2IWQ2SaELNi7SWarZgnwk6HUEVJ1b+W9GO26f1ILX1eODa9HGay5hGU/Av?=
+ =?us-ascii?Q?Ag38hAm1cwgi5PBuvYq2PZmNSclBBVLTtAv2FFwXJH1RRhh2NF2CNSSalU34?=
+ =?us-ascii?Q?pOL2Z+7eVffS27nEXt7vk73V7Pb7d39+k/ytBBakCOapUtGbwwPnuWovOi1l?=
+ =?us-ascii?Q?pTL7j14LUPhpawor1c6oGQxd5K7Kqx8UBaztBIMmSzfD8W8nQifg6pCK/LFP?=
+ =?us-ascii?Q?SOX3KbGlfFpbvI9U5wbnV/WUQxf2XrmNZ63n5y87A+z3BmGKQ8et9MugQLZw?=
+ =?us-ascii?Q?b7ZBdU8hG4rx7W0RE4sQYnqZvHMaF8huOHDAqK3rKVvtDdQphUyxPq7s0Duf?=
+ =?us-ascii?Q?KD+ceBMTbPpNJ2iqbFUfoFrcT0aYuV2wMLs8QKsSUz0Y0zVgT5M7sAhCckfX?=
+ =?us-ascii?Q?SJvng1wafcKERqS4jqRWmXgs5HsENvUEHe3j8M+lvCJ1Vmj7Fk/d21KnIY+N?=
+ =?us-ascii?Q?0fuzuYZqfFe7murF9X3OaBXki+bzI2Aoju/gRpPQQOa7Ft9zpygG1HxPb9+T?=
+ =?us-ascii?Q?R+pWZ+Fn3hEtvRvkTJTVCR6tzI9l1xcl7xV9RjlM0sAU56DDVLCbxbCb82rN?=
+ =?us-ascii?Q?ts6J3nhfgreJq/FSCdkHI64GIMkzoVBPOWgSAxn2+ahIBn2n8oo5ogWrHMaD?=
+ =?us-ascii?Q?JFmTZPizepRi3jue2oWlAvKB8ks2GUWJzQE9qUQLgMCLIPBKshCM8ifqxMOL?=
+ =?us-ascii?Q?i5NqPVOBBtY9Q7b8HlMytPxJhV8wpP2I38nSmuYysJnXcuc2gMX3kHAnRGcZ?=
+ =?us-ascii?Q?LizNObwmp2lVYFK9Mzg9LZCKPm1eWQrt2H3R2Uy7uGRdejPhYSVg+80rLcTx?=
+ =?us-ascii?Q?4qqtuoqPVbiSCpS+0pxvIPTc6WPINmX367r4zhvqRlreNRb7bxDYomokA5t0?=
+ =?us-ascii?Q?MZNeOaPAismc2wf3cGL7fHuAINqXkAbYxEigTyvan+grNJ0MaUaLevPFAjxw?=
+ =?us-ascii?Q?dxXti1rOqYk9PkmMDiDNBqGPSrNgiO7gky9dIPZqrLZUgqOXfWTJvHDRrIKG?=
+ =?us-ascii?Q?EDOMqOdTODt3QTRzUfJW50fv?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR18MB4419.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31763750-83ed-4577-62c8-08d92bca6025
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2021 04:44:04.4663
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dXf1JImA3iMYtx+3tZS9siLY5K91UPDBvyv9S3ljiy8RomY/6pQ9n6b8ZSZBl+L2PQieVtZdoqp+IZKEeD7SfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR18MB4419
+X-Proofpoint-ORIG-GUID: C1NWp1vLA-2J45wfJzazBpwh_JBVRT6C
+X-Proofpoint-GUID: 6P0BydyKlPUkGuPh5X0E527MY4vhnFRu
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-10_03:2021-06-10,2021-06-10 signatures=0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Do not let user access HW if hba resume fails or hba is not in good state,
-otherwise it may lead to various stability issues.
 
-Signed-off-by: Can Guo <cang@codeaurora.org>
----
- drivers/scsi/ufs/ufs-debugfs.c |  27 ++---------
- drivers/scsi/ufs/ufs-sysfs.c   | 105 ++++++++++++++---------------------------
- drivers/scsi/ufs/ufs_bsg.c     |  16 +++----
- drivers/scsi/ufs/ufshcd.c      |  63 +++++++++++++++----------
- drivers/scsi/ufs/ufshcd.h      |  17 ++++++-
- 5 files changed, 101 insertions(+), 127 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-debugfs.c b/drivers/scsi/ufs/ufs-debugfs.c
-index 4e1ff20..42c1c8b 100644
---- a/drivers/scsi/ufs/ufs-debugfs.c
-+++ b/drivers/scsi/ufs/ufs-debugfs.c
-@@ -52,25 +52,6 @@ static int ee_usr_mask_get(void *data, u64 *val)
- 	return 0;
- }
- 
--static int ufs_debugfs_get_user_access(struct ufs_hba *hba)
--__acquires(&hba->host_sem)
--{
--	down(&hba->host_sem);
--	if (!ufshcd_is_user_access_allowed(hba)) {
--		up(&hba->host_sem);
--		return -EBUSY;
--	}
--	ufshcd_rpm_get_sync(hba);
--	return 0;
--}
--
--static void ufs_debugfs_put_user_access(struct ufs_hba *hba)
--__releases(&hba->host_sem)
--{
--	ufshcd_rpm_put_sync(hba);
--	up(&hba->host_sem);
--}
--
- static int ee_usr_mask_set(void *data, u64 val)
- {
- 	struct ufs_hba *hba = data;
-@@ -78,11 +59,11 @@ static int ee_usr_mask_set(void *data, u64 val)
- 
- 	if (val & ~(u64)MASK_EE_STATUS)
- 		return -EINVAL;
--	err = ufs_debugfs_get_user_access(hba);
-+	err = ufshcd_get_user_access(hba);
- 	if (err)
- 		return err;
- 	err = ufshcd_update_ee_usr_mask(hba, val, MASK_EE_STATUS);
--	ufs_debugfs_put_user_access(hba);
-+	ufshcd_put_user_access(hba);
- 	return err;
- }
- 
-@@ -120,10 +101,10 @@ static void ufs_debugfs_restart_ee(struct work_struct *work)
- 	struct ufs_hba *hba = container_of(work, struct ufs_hba, debugfs_ee_work.work);
- 
- 	if (!hba->ee_usr_mask || pm_runtime_suspended(hba->dev) ||
--	    ufs_debugfs_get_user_access(hba))
-+	    ufshcd_get_user_access(hba))
- 		return;
- 	ufshcd_write_ee_control(hba);
--	ufs_debugfs_put_user_access(hba);
-+	ufshcd_put_user_access(hba);
- }
- 
- void ufs_debugfs_hba_init(struct ufs_hba *hba)
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index 52bd807..b8732b9 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -160,22 +160,14 @@ static ssize_t auto_hibern8_show(struct device *dev,
- 	if (!ufshcd_is_auto_hibern8_supported(hba))
- 		return -EOPNOTSUPP;
- 
--	down(&hba->host_sem);
--	if (!ufshcd_is_user_access_allowed(hba)) {
--		ret = -EBUSY;
--		goto out;
--	}
--
--	pm_runtime_get_sync(hba->dev);
-+	ret = ufshcd_get_user_access(hba);
-+	if (ret)
-+		return ret;
- 	ufshcd_hold(hba, false);
- 	ahit = ufshcd_readl(hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
- 	ufshcd_release(hba);
--	pm_runtime_put_sync(hba->dev);
--
- 	ret = sysfs_emit(buf, "%d\n", ufshcd_ahit_to_us(ahit));
--
--out:
--	up(&hba->host_sem);
-+	ufshcd_put_user_access(hba);
- 	return ret;
- }
- 
-@@ -202,7 +194,7 @@ static ssize_t auto_hibern8_store(struct device *dev,
- 		goto out;
- 	}
- 
--	ufshcd_auto_hibern8_update(hba, ufshcd_us_to_ahit(timer));
-+	ret = ufshcd_auto_hibern8_update(hba, ufshcd_us_to_ahit(timer));
- 
- out:
- 	up(&hba->host_sem);
-@@ -239,17 +231,11 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 	if (wb_enable != 0 && wb_enable != 1)
- 		return -EINVAL;
- 
--	down(&hba->host_sem);
--	if (!ufshcd_is_user_access_allowed(hba)) {
--		res = -EBUSY;
--		goto out;
--	}
--
--	ufshcd_rpm_get_sync(hba);
-+	res = ufshcd_get_user_access(hba);
-+	if (res)
-+		return res;
- 	res = ufshcd_wb_toggle(hba, wb_enable);
--	ufshcd_rpm_put_sync(hba);
--out:
--	up(&hba->host_sem);
-+	ufshcd_put_user_access(hba);
- 	return res < 0 ? res : count;
- }
- 
-@@ -527,16 +513,11 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
- 	if (param_size > 8)
- 		return -EINVAL;
- 
--	down(&hba->host_sem);
--	if (!ufshcd_is_user_access_allowed(hba)) {
--		ret = -EBUSY;
--		goto out;
--	}
--
--	ufshcd_rpm_get_sync(hba);
-+	ret = ufshcd_get_user_access(hba);
-+	if (ret)
-+		return ret;
- 	ret = ufshcd_read_desc_param(hba, desc_id, desc_index,
- 				param_offset, desc_buf, param_size);
--	ufshcd_rpm_put_sync(hba);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -561,7 +542,7 @@ static ssize_t ufs_sysfs_read_desc_param(struct ufs_hba *hba,
- 	}
- 
- out:
--	up(&hba->host_sem);
-+	ufshcd_put_user_access(hba);
- 	return ret;
- }
- 
-@@ -904,23 +885,20 @@ static ssize_t _name##_show(struct device *dev,				\
- 	int desc_len = QUERY_DESC_MAX_SIZE;				\
- 	u8 *desc_buf;							\
- 									\
--	down(&hba->host_sem);						\
--	if (!ufshcd_is_user_access_allowed(hba)) {			\
--		up(&hba->host_sem);					\
--		return -EBUSY;						\
--	}								\
-+	ret = ufshcd_get_user_access(hba);				\
-+	if (ret)							\
-+		return ret;						\
- 	desc_buf = kzalloc(QUERY_DESC_MAX_SIZE, GFP_ATOMIC);		\
- 	if (!desc_buf) {						\
--		up(&hba->host_sem);					\
--		return -ENOMEM;						\
-+		ret = -ENOMEM;						\
-+		goto out;						\
- 	}								\
--	ufshcd_rpm_get_sync(hba);					\
- 	ret = ufshcd_query_descriptor_retry(hba,			\
- 		UPIU_QUERY_OPCODE_READ_DESC, QUERY_DESC_IDN_DEVICE,	\
- 		0, 0, desc_buf, &desc_len);				\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
--		goto out;						\
-+		goto out_free;						\
- 	}								\
- 	index = desc_buf[DEVICE_DESC_PARAM##_pname];			\
- 	kfree(desc_buf);						\
-@@ -928,12 +906,12 @@ static ssize_t _name##_show(struct device *dev,				\
- 	ret = ufshcd_read_string_desc(hba, index, &desc_buf,		\
- 				      SD_ASCII_STD);			\
- 	if (ret < 0)							\
--		goto out;						\
-+		goto out_free;						\
- 	ret = sysfs_emit(buf, "%s\n", desc_buf);			\
--out:									\
--	ufshcd_rpm_put_sync(hba);					\
-+out_free:								\
- 	kfree(desc_buf);						\
--	up(&hba->host_sem);						\
-+out:									\
-+	ufshcd_put_user_access(hba);					\
- 	return ret;							\
- }									\
- static DEVICE_ATTR_RO(_name)
-@@ -973,24 +951,20 @@ static ssize_t _name##_show(struct device *dev,				\
- 	int ret;							\
- 	struct ufs_hba *hba = dev_get_drvdata(dev);			\
- 									\
--	down(&hba->host_sem);						\
--	if (!ufshcd_is_user_access_allowed(hba)) {			\
--		up(&hba->host_sem);					\
--		return -EBUSY;						\
--	}								\
-+	ret = ufshcd_get_user_access(hba);				\
-+	if (ret)							\
-+		return ret;						\
- 	if (ufshcd_is_wb_flags(QUERY_FLAG_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	ufshcd_rpm_get_sync(hba);					\
- 	ret = ufshcd_query_flag(hba, UPIU_QUERY_OPCODE_READ_FLAG,	\
- 		QUERY_FLAG_IDN##_uname, index, &flag);			\
--	ufshcd_rpm_put_sync(hba);					\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
- 	}								\
- 	ret = sysfs_emit(buf, "%s\n", flag ? "true" : "false");		\
- out:									\
--	up(&hba->host_sem);						\
-+	ufshcd_put_user_access(hba);					\
- 	return ret;							\
- }									\
- static DEVICE_ATTR_RO(_name)
-@@ -1042,24 +1016,20 @@ static ssize_t _name##_show(struct device *dev,				\
- 	int ret;							\
- 	u8 index = 0;							\
- 									\
--	down(&hba->host_sem);						\
--	if (!ufshcd_is_user_access_allowed(hba)) {			\
--		up(&hba->host_sem);					\
--		return -EBUSY;						\
--	}								\
-+	ret = ufshcd_get_user_access(hba);				\
-+	if (ret)							\
-+		return ret;						\
- 	if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN##_uname))			\
- 		index = ufshcd_wb_get_query_index(hba);			\
--	ufshcd_rpm_get_sync(hba);					\
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,	\
- 		QUERY_ATTR_IDN##_uname, index, 0, &value);		\
--	ufshcd_rpm_put_sync(hba);					\
- 	if (ret) {							\
- 		ret = -EINVAL;						\
- 		goto out;						\
- 	}								\
- 	ret = sysfs_emit(buf, "0x%08X\n", value);			\
- out:									\
--	up(&hba->host_sem);						\
-+	ufshcd_put_user_access(hba);					\
- 	return ret;							\
- }									\
- static DEVICE_ATTR_RO(_name)
-@@ -1195,16 +1165,11 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
- 	u8 lun = ufshcd_scsi_to_upiu_lun(sdev->lun);
- 	int ret;
- 
--	down(&hba->host_sem);
--	if (!ufshcd_is_user_access_allowed(hba)) {
--		ret = -EBUSY;
--		goto out;
--	}
--
--	ufshcd_rpm_get_sync(hba);
-+	ret = ufshcd_get_user_access(hba);
-+	if (ret)
-+		return ret;
- 	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
- 		QUERY_ATTR_IDN_DYN_CAP_NEEDED, lun, 0, &value);
--	ufshcd_rpm_put_sync(hba);
- 	if (ret) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -1213,7 +1178,7 @@ static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
- 	ret = sysfs_emit(buf, "0x%08X\n", value);
- 
- out:
--	up(&hba->host_sem);
-+	ufshcd_put_user_access(hba);
- 	return ret;
- }
- static DEVICE_ATTR_RO(dyn_cap_needed_attribute);
-diff --git a/drivers/scsi/ufs/ufs_bsg.c b/drivers/scsi/ufs/ufs_bsg.c
-index 39bf204..c5b3eb8 100644
---- a/drivers/scsi/ufs/ufs_bsg.c
-+++ b/drivers/scsi/ufs/ufs_bsg.c
-@@ -97,7 +97,9 @@ static int ufs_bsg_request(struct bsg_job *job)
- 
- 	bsg_reply->reply_payload_rcv_len = 0;
- 
--	ufshcd_rpm_get_sync(hba);
-+	ret = ufshcd_get_user_access(hba);
-+	if (ret)
-+		goto out;
- 
- 	msgcode = bsg_request->msgcode;
- 	switch (msgcode) {
-@@ -105,10 +107,8 @@ static int ufs_bsg_request(struct bsg_job *job)
- 		desc_op = bsg_request->upiu_req.qr.opcode;
- 		ret = ufs_bsg_alloc_desc_buffer(hba, job, &desc_buff,
- 						&desc_len, desc_op);
--		if (ret) {
--			ufshcd_rpm_put_sync(hba);
--			goto out;
--		}
-+		if (ret)
-+			goto out_put_access;
- 
- 		fallthrough;
- 	case UPIU_TRANSACTION_NOP_OUT:
-@@ -138,10 +138,8 @@ static int ufs_bsg_request(struct bsg_job *job)
- 		break;
- 	}
- 
--	ufshcd_rpm_put_sync(hba);
--
- 	if (!desc_buff)
--		goto out;
-+		goto out_put_access;
- 
- 	if (desc_op == UPIU_QUERY_OPCODE_READ_DESC && desc_len)
- 		bsg_reply->reply_payload_rcv_len =
-@@ -151,6 +149,8 @@ static int ufs_bsg_request(struct bsg_job *job)
- 
- 	kfree(desc_buff);
- 
-+out_put_access:
-+	ufshcd_put_user_access(hba);
- out:
- 	bsg_reply->result = ret;
- 	job->reply_len = sizeof(struct ufs_bsg_reply);
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index cf24ec2..5ec829c 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -128,15 +128,6 @@ enum {
- 	UFSHCD_CAN_QUEUE	= 32,
- };
- 
--/* UFSHCD states */
--enum {
--	UFSHCD_STATE_RESET,
--	UFSHCD_STATE_ERROR,
--	UFSHCD_STATE_OPERATIONAL,
--	UFSHCD_STATE_EH_SCHEDULED_FATAL,
--	UFSHCD_STATE_EH_SCHEDULED_NON_FATAL,
--};
--
- /* UFSHCD error handling flags */
- enum {
- 	UFSHCD_EH_IN_PROGRESS = (1 << 0),
-@@ -254,6 +245,31 @@ static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
- 
-+int ufshcd_get_user_access(struct ufs_hba *hba)
-+__acquires(&hba->host_sem)
-+{
-+	down(&hba->host_sem);
-+	if (!ufshcd_is_user_access_allowed(hba)) {
-+		up(&hba->host_sem);
-+		return -EBUSY;
-+	}
-+	if (ufshcd_rpm_get_sync(hba)) {
-+		ufshcd_rpm_put_sync(hba);
-+		up(&hba->host_sem);
-+		return -EBUSY;
-+	}
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_get_user_access);
-+
-+void ufshcd_put_user_access(struct ufs_hba *hba)
-+__releases(&hba->host_sem)
-+{
-+	ufshcd_rpm_put_sync(hba);
-+	up(&hba->host_sem);
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_put_user_access);
-+
- static inline bool ufshcd_valid_tag(struct ufs_hba *hba, int tag)
- {
- 	return tag >= 0 && tag < hba->nutrs;
-@@ -1553,19 +1569,14 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
- 	if (kstrtou32(buf, 0, &value))
- 		return -EINVAL;
- 
--	down(&hba->host_sem);
--	if (!ufshcd_is_user_access_allowed(hba)) {
--		err = -EBUSY;
--		goto out;
--	}
-+	err = ufshcd_get_user_access(hba);
-+	if (err)
-+		return err;
-+	ufshcd_hold(hba, false);
- 
- 	value = !!value;
- 	if (value == hba->clk_scaling.is_enabled)
- 		goto out;
--
--	ufshcd_rpm_get_sync(hba);
--	ufshcd_hold(hba, false);
--
- 	hba->clk_scaling.is_enabled = value;
- 
- 	if (value) {
-@@ -1578,10 +1589,9 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
- 					__func__, err);
- 	}
- 
--	ufshcd_release(hba);
--	ufshcd_rpm_put_sync(hba);
- out:
--	up(&hba->host_sem);
-+	ufshcd_release(hba);
-+	ufshcd_put_user_access(hba);
- 	return err ? err : count;
- }
- 
-@@ -4180,13 +4190,13 @@ int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
- }
- EXPORT_SYMBOL_GPL(ufshcd_uic_hibern8_exit);
- 
--void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
-+int ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
- {
- 	unsigned long flags;
- 	bool update = false;
- 
- 	if (!ufshcd_is_auto_hibern8_supported(hba))
--		return;
-+		return 0;
- 
- 	spin_lock_irqsave(hba->host->host_lock, flags);
- 	if (hba->ahit != ahit) {
-@@ -4197,12 +4207,17 @@ void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
- 
- 	if (update &&
- 	    !pm_runtime_suspended(&hba->sdev_ufs_device->sdev_gendev)) {
--		ufshcd_rpm_get_sync(hba);
-+		if (ufshcd_rpm_get_sync(hba)) {
-+			ufshcd_rpm_put_sync(hba);
-+			return -EBUSY;
-+		}
- 		ufshcd_hold(hba, false);
- 		ufshcd_auto_hibern8_enable(hba);
- 		ufshcd_release(hba);
- 		ufshcd_rpm_put_sync(hba);
- 	}
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(ufshcd_auto_hibern8_update);
- 
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 47da47c..5cd1484 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -101,6 +101,15 @@ struct uic_command {
- 	struct completion done;
- };
- 
-+/* UFSHCD states */
-+enum {
-+	UFSHCD_STATE_RESET,
-+	UFSHCD_STATE_ERROR,
-+	UFSHCD_STATE_OPERATIONAL,
-+	UFSHCD_STATE_EH_SCHEDULED_FATAL,
-+	UFSHCD_STATE_EH_SCHEDULED_NON_FATAL,
-+};
-+
- /* Used to differentiate the power management options */
- enum ufs_pm_op {
- 	UFS_RUNTIME_PM,
-@@ -931,7 +940,9 @@ static inline bool ufshcd_is_wb_allowed(struct ufs_hba *hba)
- 
- static inline bool ufshcd_is_user_access_allowed(struct ufs_hba *hba)
- {
--	return !hba->shutting_down;
-+	return !hba->shutting_down && !hba->is_sys_suspended &&
-+		!hba->is_wl_sys_suspended &&
-+		hba->ufshcd_state == UFSHCD_STATE_OPERATIONAL;
- }
- 
- #define ufshcd_writel(hba, val, reg)	\
-@@ -1104,7 +1115,7 @@ int ufshcd_query_flag(struct ufs_hba *hba, enum query_opcode opcode,
- 	enum flag_idn idn, u8 index, bool *flag_res);
- 
- void ufshcd_auto_hibern8_enable(struct ufs_hba *hba);
--void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit);
-+int ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit);
- void ufshcd_fixup_dev_quirks(struct ufs_hba *hba, struct ufs_dev_fix *fixups);
- #define SD_ASCII_STD true
- #define SD_RAW false
-@@ -1131,6 +1142,8 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
- int ufshcd_suspend_prepare(struct device *dev);
- void ufshcd_resume_complete(struct device *dev);
-+int ufshcd_get_user_access(struct ufs_hba *hba);
-+void ufshcd_put_user_access(struct ufs_hba *hba);
- 
- /* Wrapper functions for safely calling variant operations */
- static inline const char *ufshcd_get_var_name(struct ufs_hba *hba)
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+> -----Original Message-----
+> From: Mike Christie <michael.christie@oracle.com>
+> Sent: Thursday, June 10, 2021 12:57 AM
+> To: Manish Rangankar <mrangankar@marvell.com>;
+> martin.petersen@oracle.com; linux-scsi@vger.kernel.org
+> Cc: Mike Christie <michael.christie@oracle.com>
+> Subject: [EXT] [PATCH 1/1] scsi: qedi: Fix host removal with running sess=
+ions
+>=20
+> External Email
+>=20
+> ----------------------------------------------------------------------
+> qedi_clear_session_ctx could race with the in-kernel or userspace driven
+> recovery/removal and we could access a NULL conn or do a double free.
+>=20
+> We should be using iscsi_host_remove to start the removal process from th=
+e
+> driver. It will start the in-kernel recovery and notify userspace that th=
+e driver's
+> scsi_hosts are being removed. iscsid will then drive the session removal =
+like is
+> done when the logout command is run. When the sessions are removed,
+> iscsi_host_remove will return so qedi can finish knowing there are no run=
+ning
+> sessions and no new sessions will be allowed.
+>=20
+> This also fixes an issue where we check for a NULL conn after already acc=
+essing
+> it introduced in commit 27e986289e73 ("scsi: iscsi: Drop suspend calls fr=
+om
+> ep_disconnect") by just removing the function completely.
+>=20
+> Fixes: 27e986289e73 ("scsi: iscsi: Drop suspend calls from ep_disconnect"=
+)
+> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+> ---
+>  drivers/scsi/qedi/qedi_gbl.h   |  1 -
+>  drivers/scsi/qedi/qedi_iscsi.c | 17 -----------------  drivers/scsi/qedi=
+/qedi_main.c
+> |  7 ++-----
+>  3 files changed, 2 insertions(+), 23 deletions(-)
+>=20
+> diff --git a/drivers/scsi/qedi/qedi_gbl.h b/drivers/scsi/qedi/qedi_gbl.h =
+index
+> fb44a282613e..9f8e8ef405a1 100644
+> --- a/drivers/scsi/qedi/qedi_gbl.h
+> +++ b/drivers/scsi/qedi/qedi_gbl.h
+> @@ -72,6 +72,5 @@ void qedi_remove_sysfs_ctx_attr(struct qedi_ctx *qedi);
+> void qedi_clearsq(struct qedi_ctx *qedi,
+>  		  struct qedi_conn *qedi_conn,
+>  		  struct iscsi_task *task);
+> -void qedi_clear_session_ctx(struct iscsi_cls_session *cls_sess);
+>=20
+>  #endif
+> diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscs=
+i.c index
+> bf581ecea897..97f83760da88 100644
+> --- a/drivers/scsi/qedi/qedi_iscsi.c
+> +++ b/drivers/scsi/qedi/qedi_iscsi.c
+> @@ -1659,23 +1659,6 @@ void qedi_process_iscsi_error(struct qedi_endpoint
+> *ep,
+>  		qedi_start_conn_recovery(qedi_conn->qedi, qedi_conn);  }
+>=20
+> -void qedi_clear_session_ctx(struct iscsi_cls_session *cls_sess) -{
+> -	struct iscsi_session *session =3D cls_sess->dd_data;
+> -	struct iscsi_conn *conn =3D session->leadconn;
+> -	struct qedi_conn *qedi_conn =3D conn->dd_data;
+> -
+> -	if (iscsi_is_session_online(cls_sess)) {
+> -		if (conn)
+> -			iscsi_suspend_queue(conn);
+> -		qedi_ep_disconnect(qedi_conn->iscsi_ep);
+> -	}
+> -
+> -	qedi_conn_destroy(qedi_conn->cls_conn);
+> -
+> -	qedi_session_destroy(cls_sess);
+> -}
+> -
+>  void qedi_process_tcp_error(struct qedi_endpoint *ep,
+>  			    struct iscsi_eqe_data *data)
+>  {
+> diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.=
+c index
+> edf915432704..0b0acb827071 100644
+> --- a/drivers/scsi/qedi/qedi_main.c
+> +++ b/drivers/scsi/qedi/qedi_main.c
+> @@ -2417,11 +2417,9 @@ static void __qedi_remove(struct pci_dev *pdev, in=
+t
+> mode)
+>  	int rval;
+>  	u16 retry =3D 10;
+>=20
+> -	if (mode =3D=3D QEDI_MODE_SHUTDOWN)
+> -		iscsi_host_for_each_session(qedi->shost,
+> -					    qedi_clear_session_ctx);
+> -
+>  	if (mode =3D=3D QEDI_MODE_NORMAL || mode =3D=3D
+> QEDI_MODE_SHUTDOWN) {
+> +		iscsi_host_remove(qedi->shost);
+> +
+>  		if (qedi->tmf_thread) {
+>  			flush_workqueue(qedi->tmf_thread);
+>  			destroy_workqueue(qedi->tmf_thread);
+> @@ -2482,7 +2480,6 @@ static void __qedi_remove(struct pci_dev *pdev, int
+> mode)
+>  		if (qedi->boot_kset)
+>  			iscsi_boot_destroy_kset(qedi->boot_kset);
+>=20
+> -		iscsi_host_remove(qedi->shost);
+>  		iscsi_host_free(qedi->shost);
+>  	}
+>  }
+> --
+> 2.25.1
 
+Thanks,
+Reviewed-by: Manish Rangankar <mrangankar@marvell.com>
