@@ -2,81 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EE83A3F52
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Jun 2021 11:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDA23A3F72
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Jun 2021 11:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbhFKJqy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Jun 2021 05:46:54 -0400
-Received: from lucky1.263xmail.com ([211.157.147.131]:47410 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhFKJqx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Jun 2021 05:46:53 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 90DDDBAA71;
-        Fri, 11 Jun 2021 17:44:51 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by smtp.263.net (postfix) whith ESMTP id P15326T140654319490816S1623404677729545_;
-        Fri, 11 Jun 2021 17:44:51 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <7cb6ee5a5d2345daf20d82e5eb4eab98>
-X-RL-SENDER: limanyi@uniontech.com
-X-SENDER: limanyi@uniontech.com
-X-LOGIN-NAME: limanyi@uniontech.com
-X-FST-TO: axboe@kernel.dk
-X-RCPT-COUNT: 6
-X-SENDER-IP: 58.240.82.166
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   ManYi Li <limanyi@uniontech.com>
-To:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        ManYi Li <limanyi@uniontech.com>
-Subject: [PATCH] sr: Fix get the error media event code
-Date:   Fri, 11 Jun 2021 17:44:02 +0800
-Message-Id: <20210611094402.23884-1-limanyi@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S230212AbhFKJtW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Jun 2021 05:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231639AbhFKJtU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Jun 2021 05:49:20 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537B1C0617AF
+        for <linux-scsi@vger.kernel.org>; Fri, 11 Jun 2021 02:47:20 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id s6so36368725edu.10
+        for <linux-scsi@vger.kernel.org>; Fri, 11 Jun 2021 02:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=PNkaCI+EACWPpByPyDAelMUBtTBs7A/1pH5LZ7kcEOk=;
+        b=C9QQhGko/LRVuh/g0f4IIYVHp52RqIJBOS+9Exkg93Mw6IQniJsjELLC2DDFuhiulo
+         AJ5JuA6e8sXcnkHSLakcKy60XsjjQuSIQJ6b0vo9btLDV30jkU2+kAVydrN2b4yxLO7W
+         k3+Qu7wMPcuaG3IQP9yw4erjdpEkTiDpgrrvBgAC0IXOaYcLvzU7+af0NO3RpUqMNJ3B
+         HmCIagSqb9+g8+j1StBbUqcdOdHJS5laMORRDCr7Hg8EmsSJ4tUMeVql/raj/S42zQzF
+         hrs8fo0LnXJOaYYHQysf5piyDU9Y0LhqD8AOUN77yA15lx51Sxl133eBC7uvMBkHcZvA
+         AweQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=PNkaCI+EACWPpByPyDAelMUBtTBs7A/1pH5LZ7kcEOk=;
+        b=V3xfJSMGD4mN/kwF9oh5xrfviWVn8RgPtz+NqFT527I0ZHqgFiJPBbPV3SPiMyqyim
+         1EEss+Izht2nSvcFW9vpzkQdLTKcQVOaZKNluYXP3e0JZBff3Q/RqhBnICTkS0ibz6xL
+         yXb7JX3IucYi0Y/6bgymPcxDJrS61RPE2fNeQXLOIUisk1txS/SmojkoUSDs3SCV0Z+i
+         4pSKhtsefRzWpFj5SkR3NBTy/qGTk/HrzRq1KPCId9reUu2MptGhAUMrzpHB8y7WSwoh
+         iCheZuRtgubL7wneNXishz/ynPtnJX9ScCMZUOHd1c8n+Ne0BV1ApHFy+7bkJFBA9pTT
+         kVGg==
+X-Gm-Message-State: AOAM533M4+nB9Do6TamWeYKqUZJxTPG7pbk/qLcptreyEhO135UE3mJe
+        fyYxb6u33aqRQrEKFT3YQfInwRMp/wdIkoH6+R4=
+X-Google-Smtp-Source: ABdhPJzGF6oYN6dEm4387vRmI5qk5A1l8HDBPlmxbkJrX4wfGsrHvOYc3TDQwysdARHcPuUe3MJ8Sz8sFB8cEsjBuy4=
+X-Received: by 2002:a05:6402:702:: with SMTP id w2mr2775486edx.189.1623404839519;
+ Fri, 11 Jun 2021 02:47:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a54:2b11:0:0:0:0:0 with HTTP; Fri, 11 Jun 2021 02:47:19
+ -0700 (PDT)
+From:   "Flora D. Darpino" <fddarpino271@gmail.com>
+Date:   Fri, 11 Jun 2021 10:47:19 +0100
+Message-ID: <CAOj27p9D-ZNg1Eye-QOKbHTqKcjg1fNYqEHZGCg0TO1purdCSw@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Eject the specified slot or media through a mechanical switch on the Drive,
-med->media_event_code is 3 not 1 in the sr_get_events().
-
-If disk_flush_events() and sr_block_open() are called,
-clearing is 1 or 3 in the sr_check_events(),then it report
-DISK_EVENT_MEDIA_CHANGE not DISK_EVENT_EJECT_REQUEST.
-
-If disk_flush_events() and sr_block_open() aren't called,
-clearing is 0 in the sr_check_events(),then it doesn't
-report any event.
-
-Signed-off-by: ManYi Li <limanyi@uniontech.com>
----
- drivers/scsi/sr.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 482a07b662a9..94c254e9012e 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -220,6 +220,8 @@ static unsigned int sr_get_events(struct scsi_device *sdev)
- 		return DISK_EVENT_EJECT_REQUEST;
- 	else if (med->media_event_code == 2)
- 		return DISK_EVENT_MEDIA_CHANGE;
-+	else if (med->media_event_code == 3)
-+		return DISK_EVENT_EJECT_REQUEST;
- 	return 0;
- }
- 
 -- 
-2.20.1
-
-
-
+Hello sir,
+I have a transaction that involves transfer of $4.8million for foreign
+investment, if you're interested kindly reply for more specific
+details to: adamsbrown2015@gmail.com
+Thanks
