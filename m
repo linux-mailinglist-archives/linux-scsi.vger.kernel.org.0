@@ -2,124 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9113A4F67
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Jun 2021 16:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B13E3A4F8C
+	for <lists+linux-scsi@lfdr.de>; Sat, 12 Jun 2021 17:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbhFLPAS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Jun 2021 11:00:18 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:44622 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbhFLPAS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Jun 2021 11:00:18 -0400
-Received: by mail-il1-f193.google.com with SMTP id i17so8152556ilj.11
-        for <linux-scsi@vger.kernel.org>; Sat, 12 Jun 2021 07:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=pYbNpjnnqjc+Xi/bRrpptmfJ508WVQ/5TiSYG5equZ4=;
-        b=sjLsNqf871cpoS5eyMRIOysH4SDb+MVAWx0bCNUkJ8Ng9h0nT3GYi378jY/l1ChFRp
-         8pgEdHGUeNS5F9h1UUPAckd7koW1opYSDOnEyNH2F9L84OuIeNX1cq4xebxPHG4Ee/Ls
-         alWOVRcKuSMgO/q6hm8zjDcmf2b0Jbe8A+umetdDSNzlZ/Xu89225M+U2psrgTg31SBU
-         erArgEihTCTZvEVKalg5Mc1WG4/ekWdXPYZI7KT1Vvh03mHv9b8mgiOQNoXin2cCEAIg
-         uAjYoqfUGM6559anGRVqG0/pefDvooNfG5EXLzycys+lfJsGGb+G9pwZVhUzxsEwAjDz
-         H3vg==
+        id S231327AbhFLPwa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 12 Jun 2021 11:52:30 -0400
+Received: from mail-pj1-f45.google.com ([209.85.216.45]:33656 "EHLO
+        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230200AbhFLPw3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Jun 2021 11:52:29 -0400
+Received: by mail-pj1-f45.google.com with SMTP id k22-20020a17090aef16b0290163512accedso8671628pjz.0;
+        Sat, 12 Jun 2021 08:50:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=pYbNpjnnqjc+Xi/bRrpptmfJ508WVQ/5TiSYG5equZ4=;
-        b=maDvfLgFZ85FlMs7hYc/e/hmdO6bA7II0xKDLk2S45ohgcDlDnw45+HhZ630dkBu/U
-         tFxCin0X+tLPmSeqZzT6OhktanCSVRJtPa3ZHG4lMMsuQEbSo3zHrJg5Y2Pk1yW7RNwr
-         IBzJkLCd1uxQszhqdpgLw/aiByk8stOIYp7mMEf4s5Q2YJdp7LgRHMkshtEBtWiuIuIx
-         eNehEfxqIf7UX16JMuoVcz4K+kOfQ9SkZRmWnkzT50Sp3wKnTkkkYFLx5MPsqClqupYO
-         vHLH/NmuIVW5h7XTpjWJhiAUrgJytknTkmz25K+t/maELw4kife8P3YOEjf9jtSUDemO
-         nVPw==
-X-Gm-Message-State: AOAM530zEch9KkgfCki2sTyLHyJOCLnQXmlMx2BmVGE0F5OvEPBstTcg
-        J5btYYrDUJDC83plqnnmFHF6adopFhe6yhdRPDQ=
-X-Google-Smtp-Source: ABdhPJz9XFp8TBHauycH3uKC0dtjU+AxEyOvf2GVgE+VI5NwSRgwat2xcqtN5IMATCH3Kh0bdLO2U8VgXCeXd9IninI=
-X-Received: by 2002:a05:6e02:f48:: with SMTP id y8mr7463111ilj.85.1623509822931;
- Sat, 12 Jun 2021 07:57:02 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jYWQ4IpIFoKpqkBqG4Rq5tI1Pt9rQIq1/vzDb2TcU+A=;
+        b=GAM6pUZBDI1eZl+J9GOjlz5wSf8wPdVvlopWhcki/Xi5ijjF3LZAA0HOaxAAAsHZ0h
+         ruxmo4L5hlQydalgYJVIg5XGMz3mUXg7RmBrRDCB7mOzhcYZJT/j+/I7OLwGv8WaQ8U4
+         5sMtTGjmBLwEerUPqKEg7To/v+uvd7joM1XJLHfnmNSMFwWNCVmjK1ZUSajX/JHF41aV
+         ITC+9AfsbTHQ2j0Y75XyOat99G0o/TxVfNIjmyr41Ot6j223tChMBOEC61WyAG3wKtb+
+         FbN+6GaAp1tNVAeTE/ZXGJ5mcN3VXmaPhChjiRmtrVp2c+bH+FdB5Wv8X/c4Y+gJaOjD
+         In1Q==
+X-Gm-Message-State: AOAM530gFq72B4Bav6ZUyknABGliSWGnwKblrsAcJIWbdxb0smOHRpsg
+        ffqC5plkJouB7tU/HuPTUACkS0jX9uNDzw==
+X-Google-Smtp-Source: ABdhPJx5WKKc7tjw+9JZuQ6kPsbL3GuLOqTHoUnFGIfWVxLM17eY478PtcHk2e673XLWRvGuvdhkCg==
+X-Received: by 2002:a17:90a:ca8e:: with SMTP id y14mr9690200pjt.186.1623513015228;
+        Sat, 12 Jun 2021 08:50:15 -0700 (PDT)
+Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id u7sm8489632pgl.39.2021.06.12.08.50.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Jun 2021 08:50:14 -0700 (PDT)
+Subject: Re: [PATCH v3 4/9] scsi: ufs: Complete the cmd before returning in
+ queuecommand
+To:     Can Guo <cang@codeaurora.org>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, ziqichen@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1623300218-9454-1-git-send-email-cang@codeaurora.org>
+ <1623300218-9454-5-git-send-email-cang@codeaurora.org>
+ <d017548a-16fb-8ad0-2363-09dad00c9642@acm.org>
+ <80926df7e3e41088e59ce5e0dbdec28a@codeaurora.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <5df201d5-ab7f-a9fc-36aa-6dd174e9cee2@acm.org>
+Date:   Sat, 12 Jun 2021 08:50:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Sender: drwwgosh@gmail.com
-Received: by 2002:a92:cc4b:0:0:0:0:0 with HTTP; Sat, 12 Jun 2021 07:57:02
- -0700 (PDT)
-From:   "Mr. Dabire Basole" <mrdabirebsole@gmail.com>
-Date:   Sat, 12 Jun 2021 10:57:02 -0400
-X-Google-Sender-Auth: KOH_1xxe8NgmUrlnrBAluEV2M1M
-Message-ID: <CACC9pSfQJfQ6Zh5hyV67_4q-Re6tVAo0QVJDzkUvZidwS6dofA@mail.gmail.com>
-Subject: PERSONAL TREAT AS URGENT.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <80926df7e3e41088e59ce5e0dbdec28a@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-FROM MR. DABIRE BASOLE
-AUDIT & ACCOUNT MANAGER
-BANK OF AFRICA (B.O.A)
-OUAGADOUGOU BURKINA FASO
-WEST AFRICA.
+On 6/12/21 12:38 AM, Can Guo wrote:
+> On 2021-06-12 04:52, Bart Van Assche wrote:
+>> On 6/9/21 9:43 PM, Can Guo wrote:
+>>> @@ -2768,15 +2778,6 @@ static int ufshcd_queuecommand(struct
+>>> Scsi_Host *host, struct scsi_cmnd *cmd)
+>>>      WARN_ON(ufshcd_is_clkgating_allowed(hba) &&
+>>>          (hba->clk_gating.state != CLKS_ON));
+>>>
+>>> -    if (unlikely(test_bit(tag, &hba->outstanding_reqs))) {
+>>> -        if (hba->wl_pm_op_in_progress)
+>>> -            set_host_byte(cmd, DID_BAD_TARGET);
+>>> -        else
+>>> -            err = SCSI_MLQUEUE_HOST_BUSY;
+>>> -        ufshcd_release(hba);
+>>> -        goto out;
+>>> -    }
+>>> -
+>>>      lrbp = &hba->lrb[tag];
+>>>      WARN_ON(lrbp->cmd);
+>>>      lrbp->cmd = cmd;
+>>
+>> Can the code under "if (unlikely(test_bit(tag,
+>> &hba->outstanding_reqs)))" be deleted instead of moving it? I don't
+>> think that it is useful to verify whether the block layer tag allocator
+>> works correctly. Additionally, I'm not aware of any similar code in any
+>> other SCSI LLD.
+> 
+> ufshcd_abort() aborts PM requests differently from other requests -
+> it simply evicts the cmd from lrbp [1], schedules error handler and
+> returns SUCCESS (the reason why I am doing it this way is in patch #8).
+> 
+> After ufshcd_abort() returns, the tag shall be released, the logic
+> here is to prevent subsequent cmds re-use the lrbp [1] before error
+> handler recovers the device and host.
 
-Dear Friend,
+Thanks for the background information. However, this approach sounds
+cumbersome to me. For PM requests, please change the UFS driver such
+that calling scsi_done() for aborted requests is postponed until error
+handling has finished and delete the code shown above from
+ufshcd_queuecommand().
 
-With due respect, I have decided to contact you on a business
-transaction that will be beneficial to both of us. At the bank last
-account and auditing evaluation, my staffs came across an old account
-which was being maintained by a foreign client who we learn was among
-the deceased passengers of motor accident on November.2003, the
-deceased was unable to run this account since his death. The account
-has remained dormant without the knowledge of his family since it was
-put in a safe deposit account in the bank for future investment by the
-client.
+Thanks,
 
-Since his demise, even the members of his family haven't applied for
-claims over this fund and it has been in the safe deposit account
-until I discovered that it cannot be claimed since our client is a
-foreign national and we are sure that he has no next of kin here to
-file claims over the money. As the director of the department, this
-discovery was brought to my office so as to decide what is to be done.
-I decided to seek ways through which to transfer this money out of the
-bank and out of the country too.
-
-The total amount in the account is USD$18.6 ( Eighteen Million Six Hundred
-Thousand United Stated Dollars) with my positions as
-staffs of the bank, I am handicapped because I cannot operate foreign
-accounts and cannot lay bonafide claim over this money. The client was
-a foreign national and you will only be asked to act as his next of
-kin and I will supply you with all the necessary information and bank
-data to assist you in being able to transfer this money to any bank of
-your choice where this money could be transferred into.
-
-The total sum will be shared as follows: 50% for me, 50% for you,
-while 10% will map aside for any expenses incidental occur during the
-transfering of this fund into your bank account. and the expenses
-should be the first thing to be remove before sharing of this fund
-according to our percentages . The transfer is risk free on both sides
-hence you are going to follow my instruction till the fund transfer to
-your account. Since I work in this bank that is why you should be
-confident in the success of this transaction because you will be
-updated with information as at when desired.
-
-I will wish you to keep this transaction secret and confidential as I
-am hoping to retire with my share of this money at the end of
-transaction which will be when this money is safety in your account. I
-will then come over to your country for sharing according to the
-previously agreed percentages. You might even have to advise me on
-possibilities of investment in your country or elsewhere of our
-choice. May God help you to help me to a restive retirement, Amen,
-
-Please for further information and inquires feel free to contact me
-back immediately for more explanation and better understanding I want
-you to assure me your capability of handling this project with trust
-by providing me your following information details such as:
-
-(1)NAME..............
-(2)AGE:................
-(3)SEX:.....................
-(4)PHONE NUMBER:.................
-(5)OCCUPATION:................ .....
-(6)YOUR COUNTRY:.....................
-
-Yours sincerely,
-
-Mr. Dabire Basole.
+Bart.
