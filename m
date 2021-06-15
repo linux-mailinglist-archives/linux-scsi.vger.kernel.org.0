@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6993A8564
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Jun 2021 17:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C663A857F
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Jun 2021 17:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbhFOPzR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Jun 2021 11:55:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46518 "EHLO mail.kernel.org"
+        id S232075AbhFOPz5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Jun 2021 11:55:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232614AbhFOPxP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:53:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B94326148E;
-        Tue, 15 Jun 2021 15:50:32 +0000 (UTC)
+        id S232386AbhFOPx4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:53:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D5956191F;
+        Tue, 15 Jun 2021 15:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623772233;
-        bh=BXqbO/3hSN0O+87xxgMK2Wo2HMEZbe4wHZhYsHfIvJ8=;
+        s=k20201202; t=1623772243;
+        bh=RxjF1xbG9ANpsK/YTtQljWk3fyHQrVucUpRieOFd7Ew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NdPplwchECYwfvm8O0XamMhNRhuwNwOjjdRbyNm+BLFOjkbZh6DUoBobuxNd3up11
-         sL3lOCa3oAJSZPz2fRQpPOJB9J7yuoogZ++6SDzXSVsP0BVENJOrUGOTECChzoJorL
-         LCMu8E/OOIfcwEeGDaAY5ViOYLv0+30Cize7ZoYi8w1uPE2BEiQDEJqd9fIS8jfVL9
-         ZiN698v39tNwYFvEce6QISDEMMhofzs5yXN+BNBHTOiu7kBFPV4IFn3Yld0WV4de58
-         +PlxX4uLWFsUboALgN3LsVXe9m4YrcOITQA5bmMhw4lFf/RAqaEwgYWF2gTL668P+h
-         HFoe9EmT86/mw==
+        b=CIWMzKbpe84ImZqwk+1h/nhdBSJabyQKMOzWVKS7XIdOwzjjYe2BaxMMwCVqgfWdi
+         ENmnOCttkflNCfVOJIfGM73Qamn4jCwpcZXzFOIET1F3x35Y4F0crXzx/tP6EMLQ5H
+         lWgUQBLEkoZOYRpsNSL7eSNZswDomH5w+sNXWsntPedjImesaHIVVxuzH8Rt/xN2In
+         b1Uz5jOi0Ekzu8WgSaLt8DfD37jpdkyy0IHnXPZKLD/cXU2GGwQTGG633/jfvCPh18
+         nMiyRVUzJvUkVp2EU3SjJ6FSgiKZkaJMd1mDrx2HMQOwkNTfu92Bw9HMAMd797u88n
+         lYywdHV6ew/Lg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ming Lei <ming.lei@redhat.com>,
@@ -31,12 +31,12 @@ Cc:     Ming Lei <ming.lei@redhat.com>,
         Hannes Reinecke <hare@suse.de>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 4/8] scsi: core: Only put parent device if host state differs from SHOST_CREATED
-Date:   Tue, 15 Jun 2021 11:50:23 -0400
-Message-Id: <20210615155027.63048-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 2/5] scsi: core: Fix error handling of scsi_host_alloc()
+Date:   Tue, 15 Jun 2021 11:50:36 -0400
+Message-Id: <20210615155039.63348-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210615155027.63048-1-sashal@kernel.org>
-References: <20210615155027.63048-1-sashal@kernel.org>
+In-Reply-To: <20210615155039.63348-1-sashal@kernel.org>
+References: <20210615155039.63348-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -47,38 +47,84 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Ming Lei <ming.lei@redhat.com>
 
-[ Upstream commit 1e0d4e6225996f05271de1ebcb1a7c9381af0b27 ]
+[ Upstream commit 66a834d092930cf41d809c0e989b13cd6f9ca006 ]
 
-get_device(shost->shost_gendev.parent) is called after host state has
-switched to SHOST_RUNNING. scsi_host_dev_release() shouldn't release the
-parent device if host state is still SHOST_CREATED.
+After device is initialized via device_initialize(), or its name is set via
+dev_set_name(), the device has to be freed via put_device().  Otherwise
+device name will be leaked because it is allocated dynamically in
+dev_set_name().
 
-Link: https://lore.kernel.org/r/20210602133029.2864069-5-ming.lei@redhat.com
+Fix the leak by replacing kfree() with put_device(). Since
+scsi_host_dev_release() properly handles IDA and kthread removal, remove
+special-casing these from the error handling as well.
+
+Link: https://lore.kernel.org/r/20210602133029.2864069-2-ming.lei@redhat.com
 Cc: Bart Van Assche <bvanassche@acm.org>
 Cc: John Garry <john.garry@huawei.com>
 Cc: Hannes Reinecke <hare@suse.de>
 Tested-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 Reviewed-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/hosts.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/hosts.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index ff92df3fe401..5788a2ce3571 100644
+index 258a3f9a2519..5722ee66d3aa 100644
 --- a/drivers/scsi/hosts.c
 +++ b/drivers/scsi/hosts.c
-@@ -355,7 +355,7 @@ static void scsi_host_dev_release(struct device *dev)
+@@ -421,8 +421,10 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
+ 	mutex_init(&shost->scan_mutex);
  
- 	ida_simple_remove(&host_index_ida, shost->host_no);
+ 	index = ida_simple_get(&host_index_ida, 0, 0, GFP_KERNEL);
+-	if (index < 0)
+-		goto fail_kfree;
++	if (index < 0) {
++		kfree(shost);
++		return NULL;
++	}
+ 	shost->host_no = index;
  
--	if (parent)
-+	if (shost->shost_state != SHOST_CREATED)
- 		put_device(parent);
- 	kfree(shost);
+ 	shost->dma_channel = 0xff;
+@@ -509,7 +511,7 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
+ 		shost_printk(KERN_WARNING, shost,
+ 			"error handler thread failed to spawn, error = %ld\n",
+ 			PTR_ERR(shost->ehandler));
+-		goto fail_index_remove;
++		goto fail;
+ 	}
+ 
+ 	shost->tmf_work_q = alloc_workqueue("scsi_tmf_%d",
+@@ -518,17 +520,18 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
+ 	if (!shost->tmf_work_q) {
+ 		shost_printk(KERN_WARNING, shost,
+ 			     "failed to create tmf workq\n");
+-		goto fail_kthread;
++		goto fail;
+ 	}
+ 	scsi_proc_hostdir_add(shost->hostt);
+ 	return shost;
++ fail:
++	/*
++	 * Host state is still SHOST_CREATED and that is enough to release
++	 * ->shost_gendev. scsi_host_dev_release() will free
++	 * dev_name(&shost->shost_dev).
++	 */
++	put_device(&shost->shost_gendev);
+ 
+- fail_kthread:
+-	kthread_stop(shost->ehandler);
+- fail_index_remove:
+-	ida_simple_remove(&host_index_ida, shost->host_no);
+- fail_kfree:
+-	kfree(shost);
+ 	return NULL;
  }
+ EXPORT_SYMBOL(scsi_host_alloc);
 -- 
 2.30.2
 
