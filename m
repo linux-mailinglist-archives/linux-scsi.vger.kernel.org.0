@@ -2,26 +2,26 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9975B3A92C8
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD873A92CA
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbhFPGkQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Jun 2021 02:40:16 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:7290 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbhFPGkM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:12 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4G4b3L4QFKz1BN4J;
-        Wed, 16 Jun 2021 14:33:02 +0800 (CST)
+        id S231589AbhFPGkV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Jun 2021 02:40:21 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:7325 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231644AbhFPGkT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:19 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4G4b4j2Lpgz6y7X;
+        Wed, 16 Jun 2021 14:34:13 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:38:03 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:38:04 +0800
 Received: from thunder-town.china.huawei.com (10.174.179.0) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:38:02 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:38:03 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Vishal Bhakta <vbhakta@vmware.com>,
         VMware PV-Drivers <pv-drivers@vmware.com>,
@@ -39,9 +39,9 @@ To:     Vishal Bhakta <vbhakta@vmware.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi <linux-scsi@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2 16/20] scsi: bnx2i: remove unnecessary oom message
-Date:   Wed, 16 Jun 2021 14:37:10 +0800
-Message-ID: <20210616063714.778-17-thunder.leizhen@huawei.com>
+Subject: [PATCH v2 17/20] scsi: aic94xx: remove unnecessary oom message
+Date:   Wed, 16 Jun 2021 14:37:11 +0800
+Message-ID: <20210616063714.778-18-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20210616063714.778-1-thunder.leizhen@huawei.com>
 References: <20210616063714.778-1-thunder.leizhen@huawei.com>
@@ -63,29 +63,42 @@ Remove it can help us save a bit of memory.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/scsi/bnx2i/bnx2i_iscsi.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/aic94xx/aic94xx_init.c | 4 +---
+ drivers/scsi/aic94xx/aic94xx_sds.c  | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-index 1b5f3e143f0710b..a66ca1ebba15f01 100644
---- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
-+++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-@@ -529,7 +529,6 @@ static int bnx2i_setup_mp_bdt(struct bnx2i_hba *hba)
- 	hba->mp_bd_tbl = dma_alloc_coherent(&hba->pcidev->dev, CNIC_PAGE_SIZE,
- 					    &hba->mp_bd_dma, GFP_KERNEL);
- 	if (!hba->mp_bd_tbl) {
--		printk(KERN_ERR "unable to allocate Middle Path BDT\n");
- 		rc = -1;
- 		goto out;
- 	}
-@@ -538,7 +537,6 @@ static int bnx2i_setup_mp_bdt(struct bnx2i_hba *hba)
- 					       CNIC_PAGE_SIZE,
- 					       &hba->dummy_buf_dma, GFP_KERNEL);
- 	if (!hba->dummy_buffer) {
--		printk(KERN_ERR "unable to alloc Middle Path Dummy Buffer\n");
- 		dma_free_coherent(&hba->pcidev->dev, CNIC_PAGE_SIZE,
- 				  hba->mp_bd_tbl, hba->mp_bd_dma);
- 		hba->mp_bd_tbl = NULL;
+diff --git a/drivers/scsi/aic94xx/aic94xx_init.c b/drivers/scsi/aic94xx/aic94xx_init.c
+index a195bfe9eccc073..9edd6008bbdec03 100644
+--- a/drivers/scsi/aic94xx/aic94xx_init.c
++++ b/drivers/scsi/aic94xx/aic94xx_init.c
+@@ -725,10 +725,8 @@ static int asd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	asd_dev = &asd_pcidev_data[asd_id];
+ 
+ 	asd_ha = kzalloc(sizeof(*asd_ha), GFP_KERNEL);
+-	if (!asd_ha) {
+-		asd_printk("out of memory\n");
++	if (!asd_ha)
+ 		goto Err_put;
+-	}
+ 	asd_ha->pcidev = dev;
+ 	asd_ha->sas_ha.dev = &asd_ha->pcidev->dev;
+ 	asd_ha->sas_ha.lldd_ha = asd_ha;
+diff --git a/drivers/scsi/aic94xx/aic94xx_sds.c b/drivers/scsi/aic94xx/aic94xx_sds.c
+index 297a66770260ccf..1b46f0018e0bfe5 100644
+--- a/drivers/scsi/aic94xx/aic94xx_sds.c
++++ b/drivers/scsi/aic94xx/aic94xx_sds.c
+@@ -342,10 +342,8 @@ int asd_read_ocm(struct asd_ha_struct *asd_ha)
+ 		return -1;
+ 
+ 	dir = kmalloc(sizeof(*dir), GFP_KERNEL);
+-	if (!dir) {
+-		asd_printk("no memory for ocm dir\n");
++	if (!dir)
+ 		return -ENOMEM;
+-	}
+ 
+ 	err = asd_read_ocm_dir(asd_ha, dir, 0);
+ 	if (err)
 -- 
 2.26.0.106.g9fadedd
 
