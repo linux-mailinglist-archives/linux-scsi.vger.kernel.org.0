@@ -2,26 +2,26 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB483A92C7
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5573A92C9
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbhFPGkP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Jun 2021 02:40:15 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:4797 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbhFPGkL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:11 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G4b3N0hjQzWtHr;
-        Wed, 16 Jun 2021 14:33:04 +0800 (CST)
+        id S231621AbhFPGkQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Jun 2021 02:40:16 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:7452 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231536AbhFPGkM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:12 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G4b5p4QqlzZhmC;
+        Wed, 16 Jun 2021 14:35:10 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:38:05 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:38:06 +0800
 Received: from thunder-town.china.huawei.com (10.174.179.0) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:38:04 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:38:05 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Vishal Bhakta <vbhakta@vmware.com>,
         VMware PV-Drivers <pv-drivers@vmware.com>,
@@ -39,9 +39,9 @@ To:     Vishal Bhakta <vbhakta@vmware.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi <linux-scsi@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2 18/20] scsi: aacraid: remove unnecessary oom message
-Date:   Wed, 16 Jun 2021 14:37:12 +0800
-Message-ID: <20210616063714.778-19-thunder.leizhen@huawei.com>
+Subject: [PATCH v2 19/20] scsi: a100u2w: remove unnecessary oom message
+Date:   Wed, 16 Jun 2021 14:37:13 +0800
+Message-ID: <20210616063714.778-20-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20210616063714.778-1-thunder.leizhen@huawei.com>
 References: <20210616063714.778-1-thunder.leizhen@huawei.com>
@@ -63,37 +63,35 @@ Remove it can help us save a bit of memory.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/scsi/aacraid/comminit.c | 8 ++------
+ drivers/scsi/a100u2w.c | 8 ++------
  1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/aacraid/comminit.c b/drivers/scsi/aacraid/comminit.c
-index 355b16f0b1456bd..282519ccd4a22da 100644
---- a/drivers/scsi/aacraid/comminit.c
-+++ b/drivers/scsi/aacraid/comminit.c
-@@ -85,10 +85,8 @@ static int aac_alloc_comm(struct aac_dev *dev, void **commaddr, unsigned long co
- 			printfbufsiz + host_rrq_size;
- 
- 	base = dma_alloc_coherent(&dev->pdev->dev, size, &phys, GFP_KERNEL);
--	if (base == NULL) {
--		printk(KERN_ERR "aacraid: unable to create mapping.\n");
-+	if (!base)
- 		return 0;
+diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
+index 028af6b1057c606..7bcb8889c085e0a 100644
+--- a/drivers/scsi/a100u2w.c
++++ b/drivers/scsi/a100u2w.c
+@@ -1123,19 +1123,15 @@ static int inia100_probe_one(struct pci_dev *pdev,
+ 	sz = ORC_MAXQUEUE * sizeof(struct orc_scb);
+ 	host->scb_virt = dma_alloc_coherent(&pdev->dev, sz, &host->scb_phys,
+ 					    GFP_KERNEL);
+-	if (!host->scb_virt) {
+-		printk("inia100: SCB memory allocation error\n");
++	if (!host->scb_virt)
+ 		goto out_host_put;
 -	}
  
- 	dev->comm_addr = (void *)base;
- 	dev->comm_phys = phys;
-@@ -635,10 +633,8 @@ struct aac_dev *aac_init_adapter(struct aac_dev *dev)
- 	 */
- 
- 	dev->queues = kzalloc(sizeof(struct aac_queue_block), GFP_KERNEL);
--	if (dev->queues == NULL) {
--		printk(KERN_ERR "Error could not allocate comm region.\n");
-+	if (!dev->queues)
- 		return NULL;
+ 	/* Get total memory needed for ESCB */
+ 	sz = ORC_MAXQUEUE * sizeof(struct orc_extended_scb);
+ 	host->escb_virt = dma_alloc_coherent(&pdev->dev, sz, &host->escb_phys,
+ 					     GFP_KERNEL);
+-	if (!host->escb_virt) {
+-		printk("inia100: ESCB memory allocation error\n");
++	if (!host->escb_virt)
+ 		goto out_free_scb_array;
 -	}
  
- 	if (aac_comm_init(dev)<0){
- 		kfree(dev->queues);
+ 	if (init_orchid(host)) {	/* Initialize orchid chip */
+ 		printk("inia100: initial orchid fail!!\n");
 -- 
 2.26.0.106.g9fadedd
 
