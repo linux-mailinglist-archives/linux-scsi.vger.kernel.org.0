@@ -2,97 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A3C3AA9B2
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Jun 2021 05:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4563AAA1A
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Jun 2021 06:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbhFQDrD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Jun 2021 23:47:03 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:4817 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhFQDqE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 23:46:04 -0400
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G577x1pXYzWkZ1;
-        Thu, 17 Jun 2021 11:38:53 +0800 (CST)
-Received: from [127.0.0.1] (10.40.193.166) by dggeme756-chm.china.huawei.com
- (10.3.19.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 17
- Jun 2021 11:43:55 +0800
-Subject: Re: remove ->revalidate_disk (resend)
-To:     Christoph Hellwig <hch@lst.de>
-References: <20210308074550.422714-1-hch@lst.de>
- <96011dbd-084f-8a07-3506-fc7717122866@hisilicon.com>
- <20210616135015.GA30671@lst.de>
-CC:     Jens Axboe <axboe@kernel.dk>, Tim Waugh <tim@cyberelk.net>,
-        <martin.petersen@oracle.com>, <linux-block@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <709468de-c8fd-0eeb-a3f9-5eb40650034b@hisilicon.com>
-Date:   Thu, 17 Jun 2021 11:43:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        id S229616AbhFQEbi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 17 Jun 2021 00:31:38 -0400
+Received: from mail.rembat24.ru ([185.59.102.178]:48056 "EHLO mail.rembat24.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229515AbhFQEbh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Jun 2021 00:31:37 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rembat24.ru (Postfix) with ESMTP id 88F771E483B;
+        Thu, 17 Jun 2021 05:21:04 +0300 (MSK)
+Received: from mail.rembat24.ru ([127.0.0.1])
+        by localhost (mail.rembat24.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Q6HOwEMrEWd5; Thu, 17 Jun 2021 05:21:03 +0300 (MSK)
+Received: from mail.rembat24.ru (localhost [127.0.0.1])
+        by mail.rembat24.ru (Postfix) with ESMTPS id 87C291D7053;
+        Thu, 17 Jun 2021 02:25:32 +0300 (MSK)
+Received: from cris-PC.wifi (unknown [105.9.118.225])
+        by mail.rembat24.ru (Postfix) with ESMTPSA id 1FD32232116;
+        Thu, 17 Jun 2021 01:28:57 +0300 (MSK)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210616135015.GA30671@lst.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <har@rembat24.ru>
+From:   ''Tayeb souami'' <har@rembat24.ru>
+Date:   Thu, 17 Jun 2021 00:28:52 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210616222859.1FD32232116@mail.rembat24.ru>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Christoph,
+Lieber Freund,
+
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
+
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
 
-在 2021/6/16 21:50, Christoph Hellwig 写道:
-> On Wed, Jun 16, 2021 at 05:41:54PM +0800, chenxiang (M) wrote:
->> Hi,
->>
->> Before i reported a issue related to revalidate disk
->> (https://www.spinics.net/lists/linux-scsi/msg151610.html), and no one
->> replies, but the issue is still.
->>
->> And i plan to resend it, but i find that revalidate_disk interface is
->> completely removed in this patchset.
->>
->> Do you have any idea about the above issue?
-> bdev_disk_changed still calls into sd_revalidate_disk through sd_open.
-> How did bdev_disk_changed get called for you previously?  If it was
-> through the BLKRRPART ioctl please try latest mainline, which ensures
-> that ->open is called for that case.
-
-I use the latest mainline (Linux Euler 5.13.0-rc6-next-20210616), and 
-the issue is still.
-It is through BLKRRPART ioctl, and the call stack is as follows:
-
-BLKRRPART ->
-         block_ioctl ->
-                 blkdev_ioctl ->
-                         blkdev_common_ioctl ->
-                                 blkdev_get_by_dev ->
-                                         __blkdev_get ->
-                                                 ...
-disk->fops->open() ->
-                                                         sd_open()
-                                                 ...
-                                                 dev_disk_changed()
-                                                 ...
+Das ist dein Spendencode: [TS530342018]
 
 
+Antworten Sie mit dem SPENDE-CODE an diese
 
-In function sd_open(), it calls sd_revalidate_disk() when 
-sdev->removable or sdkp-> write_prot is true, but for our disk, 
-sdev->removable = 0 and
-sdkp->write_prot = 0, so sd_revalidate_disk() is not called actually.
-For previous code, it will call sd_revalidate_disk() in 
-bdev_disk_changed() from here 
-(https://elixir.bootlin.com/linux/v5.10-rc1/source/fs/block_dev.c#L1411).
-
->
-> .
->
+E-Mail:Tayebsouam.spende@gmail.com
 
 
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
