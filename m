@@ -2,22 +2,22 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CC93A92C6
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879E03A92C5
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbhFPGkO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S231499AbhFPGkO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Wed, 16 Jun 2021 02:40:14 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:4934 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbhFPGkL (ORCPT
+Received: from szxga08-in.huawei.com ([45.249.212.255]:7289 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231453AbhFPGkL (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:11 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G4b5S24Dnz70Mc;
-        Wed, 16 Jun 2021 14:34:52 +0800 (CST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4G4b3K5gZGz1BN48;
+        Wed, 16 Jun 2021 14:33:01 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:38:01 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:38:02 +0800
 Received: from thunder-town.china.huawei.com (10.174.179.0) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -39,9 +39,9 @@ To:     Vishal Bhakta <vbhakta@vmware.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi <linux-scsi@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2 14/20] scsi: fcoe: remove unnecessary oom message
-Date:   Wed, 16 Jun 2021 14:37:08 +0800
-Message-ID: <20210616063714.778-15-thunder.leizhen@huawei.com>
+Subject: [PATCH v2 15/20] scsi: libcxgbi: remove unnecessary oom message
+Date:   Wed, 16 Jun 2021 14:37:09 +0800
+Message-ID: <20210616063714.778-16-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20210616063714.778-1-thunder.leizhen@huawei.com>
 References: <20210616063714.778-1-thunder.leizhen@huawei.com>
@@ -63,25 +63,29 @@ Remove it can help us save a bit of memory.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/scsi/fcoe/fcoe_transport.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/scsi/cxgbi/libcxgbi.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/fcoe/fcoe_transport.c b/drivers/scsi/fcoe/fcoe_transport.c
-index 4d0e19e7c84b91a..815915734d88d43 100644
---- a/drivers/scsi/fcoe/fcoe_transport.c
-+++ b/drivers/scsi/fcoe/fcoe_transport.c
-@@ -639,10 +639,8 @@ static int fcoe_add_netdev_mapping(struct net_device *netdev,
- 	struct fcoe_netdev_mapping *nm;
+diff --git a/drivers/scsi/cxgbi/libcxgbi.c b/drivers/scsi/cxgbi/libcxgbi.c
+index 8c7d4dda4cf2994..df370fb5dd86f96 100644
+--- a/drivers/scsi/cxgbi/libcxgbi.c
++++ b/drivers/scsi/cxgbi/libcxgbi.c
+@@ -556,12 +556,11 @@ EXPORT_SYMBOL_GPL(cxgbi_sock_free_cpl_skbs);
  
- 	nm = kmalloc(sizeof(*nm), GFP_KERNEL);
--	if (!nm) {
--		printk(KERN_ERR "Unable to allocate netdev_mapping");
-+	if (!nm)
- 		return -ENOMEM;
+ static struct cxgbi_sock *cxgbi_sock_create(struct cxgbi_device *cdev)
+ {
+-	struct cxgbi_sock *csk = kzalloc(sizeof(*csk), GFP_NOIO);
++	struct cxgbi_sock *csk;
+ 
+-	if (!csk) {
+-		pr_info("alloc csk %zu failed.\n", sizeof(*csk));
++	csk = kzalloc(sizeof(*csk), GFP_NOIO);
++	if (!csk)
+ 		return NULL;
 -	}
  
- 	nm->netdev = netdev;
- 	nm->ft = ft;
+ 	if (cdev->csk_alloc_cpls(csk) < 0) {
+ 		pr_info("csk 0x%p, alloc cpls failed.\n", csk);
 -- 
 2.26.0.106.g9fadedd
 
