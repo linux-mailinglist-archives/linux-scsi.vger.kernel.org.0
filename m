@@ -2,26 +2,26 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 879E03A92C5
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9975B3A92C8
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbhFPGkO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Jun 2021 02:40:14 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:7289 "EHLO
+        id S231617AbhFPGkQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Jun 2021 02:40:16 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:7290 "EHLO
         szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbhFPGkL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:11 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4G4b3K5gZGz1BN48;
-        Wed, 16 Jun 2021 14:33:01 +0800 (CST)
+        with ESMTP id S231570AbhFPGkM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:12 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4G4b3L4QFKz1BN4J;
+        Wed, 16 Jun 2021 14:33:02 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:38:02 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:38:03 +0800
 Received: from thunder-town.china.huawei.com (10.174.179.0) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:38:01 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:38:02 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Vishal Bhakta <vbhakta@vmware.com>,
         VMware PV-Drivers <pv-drivers@vmware.com>,
@@ -39,9 +39,9 @@ To:     Vishal Bhakta <vbhakta@vmware.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi <linux-scsi@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2 15/20] scsi: libcxgbi: remove unnecessary oom message
-Date:   Wed, 16 Jun 2021 14:37:09 +0800
-Message-ID: <20210616063714.778-16-thunder.leizhen@huawei.com>
+Subject: [PATCH v2 16/20] scsi: bnx2i: remove unnecessary oom message
+Date:   Wed, 16 Jun 2021 14:37:10 +0800
+Message-ID: <20210616063714.778-17-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20210616063714.778-1-thunder.leizhen@huawei.com>
 References: <20210616063714.778-1-thunder.leizhen@huawei.com>
@@ -63,29 +63,29 @@ Remove it can help us save a bit of memory.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/scsi/cxgbi/libcxgbi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/scsi/bnx2i/bnx2i_iscsi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/cxgbi/libcxgbi.c b/drivers/scsi/cxgbi/libcxgbi.c
-index 8c7d4dda4cf2994..df370fb5dd86f96 100644
---- a/drivers/scsi/cxgbi/libcxgbi.c
-+++ b/drivers/scsi/cxgbi/libcxgbi.c
-@@ -556,12 +556,11 @@ EXPORT_SYMBOL_GPL(cxgbi_sock_free_cpl_skbs);
- 
- static struct cxgbi_sock *cxgbi_sock_create(struct cxgbi_device *cdev)
- {
--	struct cxgbi_sock *csk = kzalloc(sizeof(*csk), GFP_NOIO);
-+	struct cxgbi_sock *csk;
- 
--	if (!csk) {
--		pr_info("alloc csk %zu failed.\n", sizeof(*csk));
-+	csk = kzalloc(sizeof(*csk), GFP_NOIO);
-+	if (!csk)
- 		return NULL;
--	}
- 
- 	if (cdev->csk_alloc_cpls(csk) < 0) {
- 		pr_info("csk 0x%p, alloc cpls failed.\n", csk);
+diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+index 1b5f3e143f0710b..a66ca1ebba15f01 100644
+--- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
++++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
+@@ -529,7 +529,6 @@ static int bnx2i_setup_mp_bdt(struct bnx2i_hba *hba)
+ 	hba->mp_bd_tbl = dma_alloc_coherent(&hba->pcidev->dev, CNIC_PAGE_SIZE,
+ 					    &hba->mp_bd_dma, GFP_KERNEL);
+ 	if (!hba->mp_bd_tbl) {
+-		printk(KERN_ERR "unable to allocate Middle Path BDT\n");
+ 		rc = -1;
+ 		goto out;
+ 	}
+@@ -538,7 +537,6 @@ static int bnx2i_setup_mp_bdt(struct bnx2i_hba *hba)
+ 					       CNIC_PAGE_SIZE,
+ 					       &hba->dummy_buf_dma, GFP_KERNEL);
+ 	if (!hba->dummy_buffer) {
+-		printk(KERN_ERR "unable to alloc Middle Path Dummy Buffer\n");
+ 		dma_free_coherent(&hba->pcidev->dev, CNIC_PAGE_SIZE,
+ 				  hba->mp_bd_tbl, hba->mp_bd_dma);
+ 		hba->mp_bd_tbl = NULL;
 -- 
 2.26.0.106.g9fadedd
 
