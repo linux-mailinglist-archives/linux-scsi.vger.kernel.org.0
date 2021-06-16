@@ -2,22 +2,22 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC853A92BF
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4203A92C0
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Jun 2021 08:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbhFPGkI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Jun 2021 02:40:08 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:4930 "EHLO
+        id S231548AbhFPGkJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Jun 2021 02:40:09 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:4931 "EHLO
         szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbhFPGkD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:03 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G4b5M2PVNz70MW;
-        Wed, 16 Jun 2021 14:34:47 +0800 (CST)
+        with ESMTP id S230508AbhFPGkE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Jun 2021 02:40:04 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G4b5N1074z70Mh;
+        Wed, 16 Jun 2021 14:34:48 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 16 Jun 2021 14:37:56 +0800
+ 15.1.2176.2; Wed, 16 Jun 2021 14:37:57 +0800
 Received: from thunder-town.china.huawei.com (10.174.179.0) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -39,9 +39,9 @@ To:     Vishal Bhakta <vbhakta@vmware.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi <linux-scsi@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2 08/20] scsi: pmcraid: remove unnecessary oom message
-Date:   Wed, 16 Jun 2021 14:37:02 +0800
-Message-ID: <20210616063714.778-9-thunder.leizhen@huawei.com>
+Subject: [PATCH v2 09/20] scsi: mvme16x: remove unnecessary oom message
+Date:   Wed, 16 Jun 2021 14:37:03 +0800
+Message-ID: <20210616063714.778-10-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20210616063714.778-1-thunder.leizhen@huawei.com>
 References: <20210616063714.778-1-thunder.leizhen@huawei.com>
@@ -63,39 +63,26 @@ Remove it can help us save a bit of memory.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/scsi/pmcraid.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/scsi/mvme16x_scsi.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index bffd9a9349e7245..4754e72babc82cf 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -3601,11 +3601,8 @@ static long pmcraid_ioctl_passthrough(
+diff --git a/drivers/scsi/mvme16x_scsi.c b/drivers/scsi/mvme16x_scsi.c
+index 21d638299ab8e56..5c2f5aa572d5677 100644
+--- a/drivers/scsi/mvme16x_scsi.c
++++ b/drivers/scsi/mvme16x_scsi.c
+@@ -50,11 +50,8 @@ static int mvme16x_probe(struct platform_device *dev)
+ 	}
  
- 	buffer_size = sizeof(struct pmcraid_passthrough_ioctl_buffer);
- 	buffer = kmalloc(buffer_size, GFP_KERNEL);
--
--	if (!buffer) {
--		pmcraid_err("no memory for passthrough buffer\n");
-+	if (!buffer)
- 		return -ENOMEM;
+ 	hostdata = kzalloc(sizeof(struct NCR_700_Host_Parameters), GFP_KERNEL);
+-	if (hostdata == NULL) {
+-		printk(KERN_ERR "mvme16x-scsi: "
+-				"Failed to allocate host data\n");
++	if (!hostdata)
+ 		goto out;
 -	}
  
- 	request_offset =
- 	    offsetof(struct pmcraid_passthrough_ioctl_buffer, request_buffer);
-@@ -3903,11 +3900,8 @@ static long pmcraid_chr_ioctl(
- 	int retval = -ENOTTY;
- 
- 	hdr = kmalloc(sizeof(struct pmcraid_ioctl_header), GFP_KERNEL);
--
--	if (!hdr) {
--		pmcraid_err("failed to allocate memory for ioctl header\n");
-+	if (!hdr)
- 		return -ENOMEM;
--	}
- 
- 	retval = pmcraid_check_ioctl_buffer(cmd, argp, hdr);
- 
+ 	/* Fill in the required pieces of hostdata */
+ 	hostdata->base = (void __iomem *)0xfff47000UL;
 -- 
 2.26.0.106.g9fadedd
 
