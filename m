@@ -2,81 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB723AAC5A
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Jun 2021 08:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB98E3AAE20
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Jun 2021 09:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbhFQGd4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Jun 2021 02:33:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38590 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229515AbhFQGdz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Jun 2021 02:33:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 75B786113E;
-        Thu, 17 Jun 2021 06:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623911508;
-        bh=YILoBGVrZQOZ4FbylM8RJobU8kGORYQY+xjqKdy/rOs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Jst4nC2b4C+0qKz1peyabKj43TC9wpNJa44uk2miXSvvXpYq5HIpGJfu1J3SWNUwn
-         SKD4eGi0EONzsrj0g6TgFBsmC4xF+zq2J/C2AvOZvzSTQk2IFF8Ljk8tq1eJBTDCd1
-         EXt21ZWOr7SUJOyGrm5WxG6ITXsqohrKGZT5p8oM4Rkz3yR0YULWpl0I/mIhuVYSg4
-         D4TMGNNgfGK84bSCAwF9lCMeXcOtSSkR9Rd65OQ6haTCBOeLzhDKkpAF6QxcMABbqS
-         /kytz6FUnaSATLhvYE+LGpJsa27ioCMwnhd3z7CHLEIaSJyNXB5byaJz4iU6Kjr0bi
-         s+joS2Nk+lFGw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] scsi: elx: efct: Eliminate unnecessary boolean check in efct_hw_command_cancel()
-Date:   Wed, 16 Jun 2021 23:31:23 -0700
-Message-Id: <20210617063123.21239-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.32.0.93.g670b81a890
+        id S230351AbhFQH6j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Jun 2021 03:58:39 -0400
+Received: from [122.15.141.162] ([122.15.141.162]:42940 "EHLO
+        UPCDCDAMX02.upcl.org" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229666AbhFQH6g (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Jun 2021 03:58:36 -0400
+Received: from UPCDCDAMX02.upcl.org (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF84AC3EEC;
+        Thu, 17 Jun 2021 12:51:17 +0530 (IST)
+Received: from UPCDCDAMX02.upcl.org (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D8C1C318F;
+        Thu, 17 Jun 2021 12:50:14 +0530 (IST)
+Received: from User (unknown [210.212.82.37])
+        by UPCDCDAMX02.upcl.org (Postfix) with SMTP;
+        Thu, 17 Jun 2021 12:50:14 +0530 (IST)
+Reply-To: <marielthiago102@gmail.com>
+From:   "Mariel Thiago" <info@infotools.in>
+Subject: Re:: Please contact me it's very urgent.
+Date:   Thu, 17 Jun 2021 07:20:41 -0000
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20210617072014.9D8C1C318F@UPCDCDAMX02.upcl.org>
+To:     undisclosed-recipients:;
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSVA-9.1.0.1960-8.6.0.1013-26224.006
+X-TM-AS-Result: No-2.497-5.0-31-10
+X-imss-scan-details: No-2.497-5.0-31-10
+X-TMASE-Version: IMSVA-9.1.0.1960-8.6.1013-26224.006
+X-TMASE-Result: 10-2.496900-10.000000
+X-TMASE-MatchedRID: PEpoWB/n4wPoJ7ZHxnJI6/6CJzEkJBKDVOXpHWpii+ddyparHcc9UIhu
+        TvsiBEc/JfjcKHKDDk8K4MBRf7I7puawzjZNF/+9gM4D72plZiep43A0ENmZJqRrhpwKFLjUkZO
+        l7WKIImpu9tOD27u7FNTHX+rg7MGt505jRA97RdWRSAi45KhHyaxczqyf2GA9LHdIgRft8S1QSp
+        LfxZGQcl8vMu11r33KXPP583vQDYF3yrRBFBiPVS2s/H4x5wHg3QfwsVk0UbuGrPnef/I+ej6N5
+        5/6MNSnpdDo0PaPyGFHwD2XNKdI8sVZh7bvPcyg0m3qDro1rgcxP1evyC/00KVBBtW+D6/IR7CD
+        JBvMFOms6dZMAot5Yg==
+X-IMSS-DKIM-White-List: No
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-clang warns:
-
-drivers/scsi/elx/efct/efct_hw.c:1523:17: warning: address of array
-'ctx->buf' will always evaluate to 'true' [-Wpointer-bool-conversion]
-                              (!ctx->buf ? U32_MAX : *((u32 *)ctx->buf)));
-                               ~~~~~~^~~
-
-buf is an array in the middle of a struct so deferencing it is not a
-problem as long as ctx is not NULL. Eliminate the check, which fixes the
-warning.
-
-Fixes: 580c0255e4ef ("scsi: elx: efct: RQ buffer, memory pool allocation and deallocation APIs")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1398
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/scsi/elx/efct/efct_hw.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/elx/efct/efct_hw.c b/drivers/scsi/elx/efct/efct_hw.c
-index ce4736c41564..5b508d49e5a5 100644
---- a/drivers/scsi/elx/efct/efct_hw.c
-+++ b/drivers/scsi/elx/efct/efct_hw.c
-@@ -1519,8 +1519,7 @@ efct_hw_command_cancel(struct efct_hw *hw)
- 				       struct efct_command_ctx, list_entry);
- 
- 		efc_log_debug(hw->os, "hung command %08x\n",
--			      !ctx ? U32_MAX :
--			      (!ctx->buf ? U32_MAX : *((u32 *)ctx->buf)));
-+			      !ctx ? U32_MAX : *((u32 *)ctx->buf));
- 		spin_unlock_irqrestore(&hw->cmd_lock, flags);
- 		rc = efct_hw_command_process(hw, -1, mqe, SLI4_BMBX_SIZE);
- 		spin_lock_irqsave(&hw->cmd_lock, flags);
-
-base-commit: ebc076b3eddc807729bd81f7bc48e798a3ddc477
--- 
-2.32.0.93.g670b81a890
-
+ I think I have something huge you might be interested in.
