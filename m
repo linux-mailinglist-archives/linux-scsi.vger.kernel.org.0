@@ -2,386 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F10C13B503A
-	for <lists+linux-scsi@lfdr.de>; Sat, 26 Jun 2021 23:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586923B50D2
+	for <lists+linux-scsi@lfdr.de>; Sun, 27 Jun 2021 04:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbhFZVVX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 26 Jun 2021 17:21:23 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:47328 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230439AbhFZVVS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 26 Jun 2021 17:21:18 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 01602413B4;
-        Sat, 26 Jun 2021 21:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-transfer-encoding:content-type:content-type:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from:received:received:received; s=mta-01; t=
-        1624742332; x=1626556733; bh=s6lDsQktPgY555UnSshQR3ZqaHQ3iDSnDQU
-        7QjnimJ8=; b=YczVUdW6xwJHXUlazEu1WEjVLfjAj2M65UCr58fUSyYZDZutL04
-        YyhobO5ORQ6KKFvwk+9Bo4Zp1OhIL6DmxrdXFo4jclQLyI6x4VSTYNlU5d9l1e/K
-        tAE9jPVJXfw/iSNbRf7gLzNgoa0oNvg9Ou/RIP7fIlxfZk2AZkrklhfE=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dM5H7JoxMI11; Sun, 27 Jun 2021 00:18:52 +0300 (MSK)
-Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 45ED941374;
-        Sun, 27 Jun 2021 00:18:52 +0300 (MSK)
-Received: from localhost.localdomain (10.199.0.6) by T-EXCH-03.corp.yadro.com
- (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Sun, 27
- Jun 2021 00:18:51 +0300
-From:   Igor Kononenko <i.kononenko@yadro.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>
-CC:     <openbmc@lists.ozlabs.org>, Igor Kononenko <i.kononenko@yadro.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>
-Subject: [PATCH 6/6] FMS: Add SCSI Read Disc Information command.
-Date:   Sun, 27 Jun 2021 00:18:19 +0300
-Message-ID: <20210626211820.107310-7-i.kononenko@yadro.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210626211820.107310-1-i.kononenko@yadro.com>
-References: <20210626211820.107310-1-i.kononenko@yadro.com>
+        id S230463AbhF0C4L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sat, 26 Jun 2021 22:56:11 -0400
+Received: from [210.180.118.67] ([210.180.118.67]:34182 "EHLO blank.cafe24.com"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230186AbhF0C4L (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 26 Jun 2021 22:56:11 -0400
+Received: from IP-130-143.dataclub.eu (ip-130-143.dataclub.info [84.38.130.143] (may be forged))
+        (authenticated bits=0)
+        by blank.cafe24.com (8.14.7/8.14.7) with ESMTP id 15H5Ycb1002662
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Jun 2021 14:34:54 +0900
+Message-Id: <202106170534.15H5Ycb1002662@blank.cafe24.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.199.0.6]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-03.corp.yadro.com (172.17.100.103)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: BUSINESS LOAN/PROJECT FUNDING...67
+To:     linux-scsi@vger.kernel.org
+From:   "Smith Green" <ssbinvestmentsllc@citromail.hu>
+Date:   Thu, 17 Jun 2021 08:34:48 +0300
+Reply-To: ssbinvestmentsllc@citromail.hu
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Adds the SCSI Read Disc Information command, which should be given for
-multimedia device consumers to retrieve the DVD/BD disk information
-about:
-* Total tracks contained at the disc Total and active sessions Border
-* status(incomplete, damaged, etc.)
-This information is wanted for supporting the DVD-ROM and BD-ROM
-devices.
+Dear Sir/Madam,
 
-End-user-impact: Now, multimedia device consumers have a way to retrieve
-                 the multimedia disk information.
+Our Investors are based in the middle east with a profound track record. We invite you to take advantage of our investment loan program to fund your existing or intending projects. We offer a straight or convertible loan investment program for projects with high-returns and payback prospects without the usual rigid procedures of conventional lenders.
+ 
+Kindly forward a copy of your Executive business summary for our review: info@ssbinvestmentsllc.us
 
-Signed-off-by: Igor Kononenko <i.kononenko@yadro.com>
----
- drivers/usb/gadget/function/f_mass_storage.c |  37 ++++
- include/scsi/scsi_proto.h                    |   1 +
- include/uapi/linux/cdrom.h                   | 195 +++++++++++++++++--
- 3 files changed, 212 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 7e736e5594f9..d3d8a806b5e6 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -1932,6 +1932,40 @@ static void send_status(struct fsg_common *common)
- 	return;
- }
  
-+static int do_read_disc_info(struct fsg_common *common, struct fsg_buffhd *bh)
-+{
-+	struct fsg_lun *curlun = common->curlun;
-+	struct cdb_disc_info *cdb = (struct cdb_disc_info *)common->cmnd;
-+	disc_information *info = (disc_information *)bh->buf;
-+
-+	if (cdb->type != DISC_TYPE_STANDARD) {
-+		LERROR(curlun,
-+		       "Unsupported disc information type(%02Xh) requested\n",
-+		       cdb->type);
-+		return -EINVAL;
-+	}
-+	memset(info, 0, sizeof(disc_information));
-+	info->disc_information_length = cpu_to_be16(
-+		sizeof(*info) - sizeof(info->disc_information_length));
-+
-+	info->border_status = DISC_LAST_SESS_COMPLETE;
-+	info->disc_status = DISC_STATUS_FINALIZED;
-+
-+	/* We only support one session per disk */
-+	info->n_first_track = 1;
-+	info->n_sessions_lsb = 1;
-+	info->first_track_lsb = 1;
-+	info->last_track_lsb = 1;
-+
-+	/* Setting the unrestricted use because we only support (CD/DVD/BD)-ROM */
-+	info->uru = 1;
-+
-+	info->disc_type = DISC_FIELD_DA_ROM;
-+
-+	common->data_size_to_handle = sizeof(*info);
-+	return 0;
-+}
-+
- /**
-  * Attempts to guess medium type by looking at the length of the disc layout.
-  */
-@@ -2253,6 +2287,8 @@ static struct cdb_command_check cdb_checker_table[] = {
- 	{ CDB_REG_CHECKER(TEST_UNIT_READY, 6, CDB_NO_SIZE_FIELD, DATA_DIR_NONE,
- 			  0x0000, MEDIUM_REQUIRED) },
- 
-+	{ CDB_REG_NO_CHECKER(READ_DISC_INFORMATION, CDB_SIZE_FIELD_7,
-+			     DATA_DIR_TO_HOST, MEDIUM_REQUIRED) },
- 	{ CDB_REG_NO_CHECKER(GET_CONFIGURATION, CDB_SIZE_FIELD_7,
- 			     DATA_DIR_TO_HOST, MEDIUM_REQUIRED) },
- 
-@@ -2286,6 +2322,7 @@ static struct cdb_handler cdb_handlers_table[] = {
- 	{ CDB_REG_HANDLER(SYNCHRONIZE_CACHE, &do_synchronize_cache) },
- 	{ CDB_REG_HANDLER(TEST_UNIT_READY, NULL) },
- 
-+	{ CDB_REG_HANDLER_BUFFHD(READ_DISC_INFORMATION, &do_read_disc_info) },
- 	{ CDB_REG_HANDLER_BUFFHD(GET_CONFIGURATION, &do_get_configuration) },
- 	/*
- 	 * Although optional, this command is used by MS-Windows.  We
-diff --git a/include/scsi/scsi_proto.h b/include/scsi/scsi_proto.h
-index 6b2a8ee1f0a3..6728fcbd73e4 100644
---- a/include/scsi/scsi_proto.h
-+++ b/include/scsi/scsi_proto.h
-@@ -77,6 +77,7 @@
- #define GET_EVENT_STATUS_NOTIFICATION 0x4a
- #define LOG_SELECT            0x4c
- #define LOG_SENSE             0x4d
-+#define READ_DISC_INFORMATION 0x51
- #define XDWRITEREAD_10        0x53
- #define MODE_SELECT_10        0x55
- #define RESERVE_10            0x56
-diff --git a/include/uapi/linux/cdrom.h b/include/uapi/linux/cdrom.h
-index 442693fdc059..460377e1a532 100644
---- a/include/uapi/linux/cdrom.h
-+++ b/include/uapi/linux/cdrom.h
-@@ -816,51 +816,204 @@ struct rwrt_feature_desc {
- 	__u8 reserved3;
- };
- 
-+/* Disc Information Data Types */
-+#define DISC_TYPE_STANDARD			(0x00U)
-+#define DISC_TYPE_TRACK				(0x01U)
-+#define DISC_TYPE_POW				(0x02U)
-+
-+/* Disc Status */
-+#define DISC_STATUS_EMPTY			(0x00U)
-+#define DISC_STATUS_INCOMPLETE		(0x01U)
-+#define DISC_STATUS_FINALIZED		(0x02U)
-+#define DISC_STATUS_OTHER			(0x03U)
-+
-+/* State of Last Session */
-+#define DISC_LAST_SESS_EMPTY		(0x00U)
-+#define DISC_LAST_SESS_INCOMPLETE	(0x01U)
-+#define DISC_LAST_SESS_DAMAGED		(0x02U)
-+#define DISC_LAST_SESS_COMPLETE		(0x03U)
-+
-+/* Background Format Status Codes */
-+#define DISC_BACK_FMT_NEITHER		(0x00U)
-+#define DISC_BACK_FMT_STARTED		(0x01U)
-+#define DISC_BACK_FMT_PROGRESS		(0x02U)
-+#define DISC_BACK_FMT_COMPLETED		(0x03U)
-+
-+/* Disc Type Field */
-+#define DISC_FIELD_DA_ROM			(0x00U)
-+#define DISC_FIELD_I				(0x10U)
-+#define DISC_FIELD_ROM_XA			(0x20U)
-+#define DISC_FIELD_UNDEF			(0xFFU)
-+
-+/**
-+ * @brief The READ DISC INFORMATION CDB(0051h)
-+ * The READ DISC INFORMATION command allows the Host to request information about
-+ * the currently mounted MM disc.
-+ */
-+struct cdb_disc_info {
-+	__u8 code;
-+
-+#if defined(__BIG_ENDIAN_BITFIELD)
-+	__u8 reserved1 : 5;
-+	/**
-+	 * When a disc is present, Data Type defines the specific information requested
-+	 */
-+	__u8 type : 3;
-+#elif defined(__LITTLE_ENDIAN_BITFIELD)
-+	__u8 type : 3;
-+	__u8 reserved1 : 5;
-+#endif
-+
-+	__u8 reserved2[5];
-+
-+	__be16 length;
-+
-+	__u8 control;
-+}  __packed;
-+
- typedef struct {
- 	__be16 disc_information_length;
- #if defined(__BIG_ENDIAN_BITFIELD)
--	__u8 reserved1			: 3;
--        __u8 erasable			: 1;
--        __u8 border_status		: 2;
--        __u8 disc_status		: 2;
-+	/**
-+	 * The Disc Information Data Type field shall be set to the reported
-+	 * Disc Information Type
-+	 */
-+	__u8 info_data_type : 3;
-+	/**
-+	 * The Erasable bit, when set to one, indicates that CD-RW, DVD-RAM, DVD-RW, DVD+RW,
-+	 * HD DVD-RAM, or BD-RE media is present and the Drive is capable of writing the media.
-+	 * If the Erasable bit is set to zero, then either the medium is not erasable or the
-+	 * Drive is unable to write the media.
-+	 */
-+	__u8 erasable : 1;
-+	/**
-+	 * The State of Last Session field specifies the recorded state of the last
-+	 * session, regardless of the number of sessions on the disc.
-+	 */
-+	__u8 border_status : 2;
-+	/* The Disc Status field indicates the recorded status of the disc */
-+	__u8 disc_status : 2;
- #elif defined(__LITTLE_ENDIAN_BITFIELD)
--        __u8 disc_status		: 2;
--        __u8 border_status		: 2;
--        __u8 erasable			: 1;
--	__u8 reserved1			: 3;
-+	__u8 disc_status : 2;
-+	__u8 border_status : 2;
-+	__u8 erasable : 1;
-+	__u8 info_data_type : 3;
- #else
- #error "Please fix <asm/byteorder.h>"
- #endif
-+	/**
-+	 * The Number of First Track on Disc is the track number of the Logical Track that
-+	 * contains LBA 0
-+	 */
- 	__u8 n_first_track;
- 	__u8 n_sessions_lsb;
-+	/**
-+	 * First Track Number in Last Session (bytes 5 & 10) is the track number of the
-+	 * first Logical Track in the last session.
-+	 * This includes the incomplete logical track.
-+	 */
- 	__u8 first_track_lsb;
-+	/**
-+	 * Last Track Number in Last Session (bytes 6 & 11) is the track number of the last
-+	 * Logical Track in the last session.
-+	 * This includes the incomplete logical track.
-+	 */
- 	__u8 last_track_lsb;
- #if defined(__BIG_ENDIAN_BITFIELD)
--	__u8 did_v			: 1;
--        __u8 dbc_v			: 1;
--        __u8 uru			: 1;
--        __u8 reserved2			: 2;
--	__u8 dbit			: 1;
--	__u8 mrw_status			: 2;
-+	/**
-+	 * The DID_V (Disc ID Valid) bit, when set to one, indicates that the Disc
-+	 * Identification field is valid
-+	 */
-+	__u8 did_v : 1;
-+	/**
-+	 * The DBC_V (Disc Bar Code Valid bit, when set to one, indicates that the Disc Bar
-+	 * Code field (bytes 24 through 31) is valid
-+	 */
-+	__u8 dbc_v : 1;
-+	/**
-+	 * The URU (Unrestricted Use Disc) bit may be zero for special use CD-R, CD-RW,
-+	 * or DVD-R, medium.
-+	 * For all other media types, URU shall be set to one. When URU is zero, the mounted
-+	 * disc is defined for restricted use.
-+	 */
-+	__u8 uru : 1;
-+	/**
-+	 * DAC_V indicates the validity of the Disc Application Code in byte 32. If DAC_V is
-+	 * set to zero, then the Disc Application Code is not valid. If DAC_V is set to one,
-+	 * the Disc Application Code is valid.
-+	 */
-+	__u8 dac_v: 1;
-+	__u8 reserved2 : 1;
-+	/**
-+	 * If the disc is MRW formatted or MRW formatting (state = 01b, 10b, or 11b),
-+	 * then bit 2 of byte 7 (Dbit) is a copy of the “dirty bit” from the defect table.
-+	 * If Dbit is set to zero, then the MRW structures are current.
-+	 * If Dbit is set to one, then the MRW structures may not be current.
-+	 * When BG format status = 00b, Dbit shall be set to zero.
-+	 */
-+	__u8 dbit : 1;
-+	/**
-+	 * The BG format status is the background format status of the mounted disc.
-+	 * Drives that report the Formattable Feature and either the MRW Feature or the DVD+RW
-+	 * Feature, or both are required to implement Background format.
-+	 * For all other Drives, this field shall be @param DISC_BACK_FMT_NEITHER.
-+	 */
-+	__u8 mrw_status : 2;
- #elif defined(__LITTLE_ENDIAN_BITFIELD)
--	__u8 mrw_status			: 2;
--	__u8 dbit			: 1;
--        __u8 reserved2			: 2;
--        __u8 uru			: 1;
--        __u8 dbc_v			: 1;
--	__u8 did_v			: 1;
-+	__u8 mrw_status : 2;
-+	__u8 dbit : 1;
-+	__u8 reserved2 : 1;
-+	__u8 dac_v: 1;
-+	__u8 uru : 1;
-+	__u8 dbc_v : 1;
-+	__u8 did_v : 1;
- #endif
-+	/**
-+	 * The Disc Type field is associated only with CD media type
-+	 */
- 	__u8 disc_type;
- 	__u8 n_sessions_msb;
- 	__u8 first_track_msb;
- 	__u8 last_track_msb;
-+
-+	/**
-+	 * For CD-R/RW, the Disc Identification number recorded in the PMA is returned.
-+	 * The Disc Identification Number is recorded in the PMA as a six-digit BCD number.
-+	 * It is returned in the Disc Information Block as a 32 bit binary integer.
-+	 * This value should be zero filled for all other media types.
-+	 */
- 	__u32 disc_id;
-+	/**
-+	 * The Last Session Lead-in Start Address field is dependent on medium and
-+	 * recorded status.
-+	 */
- 	__u32 lead_in;
-+	/**
-+	 * The Last Possible Lead-out Start Address field is dependent on medium and
-+	 * recorded status.
-+	 */
- 	__u32 lead_out;
-+	/**
-+	 * For CD, the Disc Bar Code field contains the hexadecimal value of the bar code
-+	 * if the Drive has the ability to read Disc Bar Code and a bar code is present.
-+	 * For all other media this field should be set to zeros.
-+	 */
- 	__u8 disc_bar_code[8];
-+	/**
-+	 *
-+	 */
- 	__u8 reserved3;
-+	/**
-+	 * The Number of OPC Tables field is the number of OPC tables that follow this field.
-+	 * If OPC has not been determined for the currently mounted medium, the Number of
-+	 * OPC Tables field is set to zero.
-+	 * The Number of OPC Tables represents the number of disc speeds for which the OPC
-+	 * values are known.
-+	 * Since each OPC Table is 8 bytes in length, then the number of bytes that follow
-+	 * the Number of OPC Tables field is 8 x Number of OPC Tables.
-+	 */
- 	__u8 n_opc;
--} disc_information;
-+} __packed disc_information;
- 
- typedef struct {
- 	__be16 track_information_length;
--- 
-2.32.0
-
+Best Regards.
+Smith Green
+E:info@ssbinvestmentsllc.us
+International investment broker
