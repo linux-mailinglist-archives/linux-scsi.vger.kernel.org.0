@@ -2,97 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5293AB312
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Jun 2021 13:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4E33AB5C1
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Jun 2021 16:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbhFQL5b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Jun 2021 07:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbhFQL52 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Jun 2021 07:57:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3EAC061574
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Jun 2021 04:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=yV/fGYh1B9uhMroJQJxoF4hGJ1/kJQCy137cbxQm+S0=; b=lD3Qv5gqooSZrqQNoKtNMLyYBa
-        65jcLUmrUP3o79BMRwSZCJn5YA5JlDUPs/UAPG4RG4GOoGd/bZUKWEceCPR4tuLeZTBk7rq0WLviA
-        8Xpnm3ql16cbLUX6+DvYOZl83rpWFGiKg9ERFkpryvjYfsUyyZ0pxDk2KuxjHM2WT64NB7fIMdY2X
-        T2ArLITvu/SHYuJ/56QYLEYuwDphoQM9eFImIAh/AvEGC5pLYTvXOtWrDIQpNTJ86AKSZ/g4cW7o9
-        WGbKxA7qPunoyyjtXb14R8n+Cdnnma4OGqkUWptrnk8O4KNighjT9pbTnlT1o+g9lcd40fUIHpS45
-        i7uhXHug==;
-Received: from [2001:4bb8:19b:fdce:dccf:26cc:e207:71f6] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ltqbx-0095fi-CK; Thu, 17 Jun 2021 11:55:07 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH] sd: call sd_revalidate_disk ioctl(BLKRRPART)
-Date:   Thu, 17 Jun 2021 13:55:04 +0200
-Message-Id: <20210617115504.1732350-1-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
+        id S232073AbhFQOY6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 17 Jun 2021 10:24:58 -0400
+Received: from 6-200-5-45.rpnnetprovedor.com.br ([45.5.200.6]:52044 "EHLO
+        srv01.rpnnetprovedor.com.br" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231654AbhFQOY6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 17 Jun 2021 10:24:58 -0400
+Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
+        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <robertnellsona@citromail.hu>)
+        id 1ltkuS-000150-IX
+        for linux-scsi@vger.kernel.org; Thu, 17 Jun 2021 02:49:48 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: CAN YOU INVEST WITH ME?...6
+To:     linux-scsi@vger.kernel.org
+From:   "Mr.  Robert" <robertnellsona@citromail.hu>
+Date:   Thu, 17 Jun 2021 08:49:40 +0300
+Reply-To: robertnellsona@citromail.hu
+Message-Id: <E1ltkuS-000150-IX@srv01.rpnnetprovedor.com.br>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-While the disk state has nothing to do with partitions, BLKRRPART is used
-to force a full revalidate after things like a format for historical
-reasons.  Restore that behavior.
 
-Fixes: 471bd0af544b ("sd: use bdev_check_media_change")
-Reported-by: Xiang Chen <chenxiang66@hisilicon.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Tested-by: Xiang Chen <chenxiang66@hisilicon.com>
----
- drivers/scsi/sd.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ATTENTION; linux-scsi@vger.kernel.org,
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 5c8b5c5356a3..6d2d63629a90 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -1387,6 +1387,22 @@ static void sd_uninit_command(struct scsi_cmnd *SCpnt)
- 	}
- }
- 
-+static bool sd_need_revalidate(struct block_device *bdev,
-+		struct scsi_disk *sdkp)
-+{
-+	if (sdkp->device->removable || sdkp->write_prot) {
-+		if (bdev_check_media_change(bdev))
-+			return true;
-+	}
-+
-+	/*
-+	 * Force a full rescan after ioctl(BLKRRPART).  While the disk state has
-+	 * nothing to do with partitions, BLKRRPART is used to force a full
-+	 * revalidate after things like a format for historical reasons.
-+	 */
-+	return test_bit(GD_NEED_PART_SCAN, &bdev->bd_disk->state);
-+}
-+
- /**
-  *	sd_open - open a scsi disk device
-  *	@bdev: Block device of the scsi disk to open
-@@ -1423,10 +1439,8 @@ static int sd_open(struct block_device *bdev, fmode_t mode)
- 	if (!scsi_block_when_processing_errors(sdev))
- 		goto error_out;
- 
--	if (sdev->removable || sdkp->write_prot) {
--		if (bdev_check_media_change(bdev))
--			sd_revalidate_disk(bdev->bd_disk);
--	}
-+	if (sd_need_revalidate(bdev, sdkp))
-+		sd_revalidate_disk(bdev->bd_disk);
- 
- 	/*
- 	 * If the drive is empty, just let the open fail.
--- 
-2.30.2
+IMPORTANT INVESTMENT INFORMATION
 
+We have a good investment program going on now.
+We have $95m USD for Investment in your Country.
+We use this opportunity to invest you to join the investment program and you will never regret it.
+Please kindly invest with us and you will be receiving monthly income/return/profit every month.
+We can also give you Loan, 
+
+We have: 
+
+1. Short Term Loan, 
+
+2. Medium Term Loan 
+
+3. and Long Term Loan, 
+
+There is no need of collateral security. We will use our company to sign agreement and guarantee on your behalf and our Lawyer will sign on your behalf.
+
+Reply for more detail.
+
+Thank you Sir.
+
+Robert Nellson.
+INVESTMENT MANAGER.
