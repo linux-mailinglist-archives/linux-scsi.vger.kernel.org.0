@@ -2,103 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B364D3ADECD
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Jun 2021 15:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F6E3ADF2D
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Jun 2021 17:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbhFTNi6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Jun 2021 09:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
+        id S229875AbhFTPZf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Jun 2021 11:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbhFTNis (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Jun 2021 09:38:48 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381A7C061768
-        for <linux-scsi@vger.kernel.org>; Sun, 20 Jun 2021 06:36:16 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id h2so866584iob.11
-        for <linux-scsi@vger.kernel.org>; Sun, 20 Jun 2021 06:36:16 -0700 (PDT)
+        with ESMTP id S229866AbhFTPZf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Jun 2021 11:25:35 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A2DC061574
+        for <linux-scsi@vger.kernel.org>; Sun, 20 Jun 2021 08:23:21 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id f10so5062117plg.0
+        for <linux-scsi@vger.kernel.org>; Sun, 20 Jun 2021 08:23:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=uDIEtWfgl91FDet7ZYX1u1ozW0abpKvg4acx3thqXBCDoYcWKg7eyNZSXNk+51VeuJ
-         sYbwx77CCJt/Xl1UBy7P++4/uHOQjQcptGzc4BiJd5A/7x+FLCtsFr6R08yAScCPxE/G
-         ycRitdP5UZQCPHBcljPWiYz9qooX9+o9VlIcE1iBIKjgWFsG58IfpnIZmKh5Mer/et0Q
-         Wvv2McVtUA6rn+iTugaAQulni5t+7gIBWkpgi42U+JEUmcEEUifIxcViVFyKhDEEgfNV
-         A33afccbptAYxVMQ3XRd6cg8QS8Vl2AEYQyihFbFLRpIaiCXlHMQE4BSfPfytvzUMqcd
-         FXMw==
+        h=message-id:date:from:mime-version:content-transfer-encoding:to
+         :subject;
+        bh=ypAl3lmrI5jukQJOrNpPkY/LSGAqKfZDGORc31mb7QQ=;
+        b=UYiv6YohVnYYn8HBUjZWoiAmicL7TnpWUgHTl64UAJyVFDIxpokE9yUkFgAvOQNIf1
+         5v4i2XTE5iJ6lh4UvWe3cgXvsEm04XEEtUI5eIGQ4QSknYIfqhKl19IsGjQ4+rwTMaSj
+         6Fp9Iixf2RReTXLAzMDbgfFae1RVKag8Kf2908wE/MX6tMhkyXws9ZsH3SmuK1iMKk5x
+         23K5zpMGDHvwuqAYIc4pugSZQSEhKTDntF3C+oKHcVIeWrFjf33b2Ix2SICiqPKplPat
+         tMivzFNezzE+rffpLNQ4am0zEpLHj8E/YiWyprfLU6NLgNjzOGzWNHn9JBpTNuQkJ4/V
+         X6Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=oSJijczPVgw4uyqYE2jPeKbGjxKu4jFedlVz4MIEwXs6V26NLyBqVnFj5vDae51QB3
-         20LS4+nM4q2OGEL8WM1tNnNEMNzffXUJE/o4jr0FUHyNhcrqrNOT0BbvQfXjdj/vCif1
-         8v11JFiAl2/GnCyPCYB0q+KlOKwTYZdjUumsvE+/28ErKirarMTaMznq3f+wNT/mHCbJ
-         aduJuh7I+WI8RvlyfnCi/KvFmP7jyuE3G0m7u3M0WKsnB6ieeZy2F8ujXJ9NpT9gBO37
-         TMslkjj9qkE4bgW+aNsJRNJwhHBKuD07XF2iAKA5lYLo3YUP8XdTYoLGuq7ptIllap/Q
-         NjCQ==
-X-Gm-Message-State: AOAM531HEXDvuGgzlwORBo1XsAautPJAGUcgGd67GEWofbGeZQURvFDc
-        5t6Xg4RZ9fX9jTI0+pL7u7mnDzj3rhq7bgbpnDQ=
-X-Google-Smtp-Source: ABdhPJwOQ5lA8oaPxit1UXNypL8Kah2QWj0jtAWNuj5/Z8/Rl7T8YsfxHtOIriCZuXo1tXOWzxp5d5YlbnVjDFRsY5Q=
-X-Received: by 2002:a02:a810:: with SMTP id f16mr12630337jaj.64.1624196175568;
- Sun, 20 Jun 2021 06:36:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:mime-version
+         :content-transfer-encoding:to:subject;
+        bh=ypAl3lmrI5jukQJOrNpPkY/LSGAqKfZDGORc31mb7QQ=;
+        b=uVxVxbExIcRVDpRUIxOInzNMPwTrbVs0xfB4cZIOpFN8IYEUE7+p1ktjweZeTROLLv
+         IV4WwhZIed+oOZcxuMiFKVBHJOmFVz4iOX5ZCGytt4N9HivqQ+hu8B29PUDFf3lrWJ90
+         +ffnyPCofdWWnu7zRtPQyu5KRt80VnGZH7BKuTVTWNQUmS3HK70te1SArSrT/8b9zkhT
+         +IvEqxvc2H4c/ZJaL1XM2S3A8JS3/Yz/2dIMysffEdt5cM5a42y6mEJYStA8E+suSGpl
+         LBA+t9xaz5nkjLxHBDEzXC4LC+HYIwlUVJOhAk/YEqgsmUaxGsGaNkZ8ySDusqADyaWt
+         MNmw==
+X-Gm-Message-State: AOAM5332by7S3Nvv7yvvC0uXO6eZSCT+X9NxT/zxAxQKc3sPlGAVtw1I
+        huiW/CdcQA1PFOt+6jhBE4DH1j6TGkE=
+X-Google-Smtp-Source: ABdhPJzhEDJRMopLonJHnArC3spKoZMNe2XFTtZlUpveuRYxqGQOZzdMWjEZxCZ3ihYXD+C8w6My3A==
+X-Received: by 2002:a17:902:263:b029:110:e758:2748 with SMTP id 90-20020a1709020263b0290110e7582748mr13637215plc.53.1624202601064;
+        Sun, 20 Jun 2021 08:23:21 -0700 (PDT)
+Received: from [192.168.170.55] ([47.56.132.27])
+        by smtp.gmail.com with ESMTPSA id gi20sm6822080pjb.20.2021.06.20.08.23.20
+        for <linux-scsi@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 20 Jun 2021 08:23:20 -0700 (PDT)
+Message-ID: <60cf5d68.1c69fb81.6154e.19da@mx.google.com>
+Date:   Sun, 20 Jun 2021 08:23:20 -0700 (PDT)
+From:   "=?utf-8?q?ellen?=" <laurenmitc73@gmail.com>
+X-Google-Original-From: =?utf-8?q?ellen?=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1baf:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:36:14
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <sarah.koffi101@gmail.com>
-Date:   Sun, 20 Jun 2021 15:36:14 +0200
-Message-ID: <CA+ifgLE1g7jgi567M2HhZfvRSUF63Hu6stsW+ysX=3U-=qnn6Q@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+To:     =?utf-8?q?linux-scsi=40vger=2Ekernel=2Eorg?=@vger.kernel.org
+Subject: =?utf-8?q?Blog_Collaboration?=
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
-
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
-
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
-
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
-
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
-
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
-
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
-
-I will wait to hear from you so as to give you details.With love from
-
- i need you to contact me here sarahkoffi389@yahoo.co.jp
-
-Mrs. Sarah Koffi
+SGksIAoKTGlrZSB5b3VyIGJsb2cgdmVyeSBtdWNoIQoKV2UgYXJlIFNQT1RPLCAgYW4gb3V0c3Rh
+bmRpbmcgSVQgQ2VydGlmaWNhdGlvbiBPbmxpbmUgVHJhaW5pbmcgd2l0aCAxOCBZZWFycyBPZiBF
+ZHVjYXRpb25hbCBFeHBlcmllbmNlLiBIZXJlIElzIE91ciBTaXRlOiBjY2llZHVtcCpzcG90bypu
+ZXQKClNpbmNlcmVseSBpbnZpdGUgeW91IHRvIGNvb3BlcmF0ZSB3aXRoIHVzIGZvciBhIHBvc3Qu
+CipZb3Ugd3JpdGUgYSAzMDAtNTAwIHdvcmRzIGFydGljbGUgYmFzZWQgb24ga2V5d29yZHMgd2l0
+aCBkby1mb2xsb3cgbGlua3MgcHJvdmlkZWQgYnkgdXMgYW5kIHBvc3QgaXQgb24geW91ciBibG9n
+IG9yIHNvY2lhbCB3ZWJzaXRlKEZhY2Vib29rLCBJbnN0YWdyYW0sIFlvdVR1YmUsIGV0YyksIHdl
+J2xsIHBheSBmb3IgaXQhCgpXYWl0aW5nIGZvciB5b3VyIHBvc2l0aXZlIHJlcGx5LgoKQmVzdCBS
+ZWdhcmRzIQ==
