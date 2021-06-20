@@ -2,77 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEC23ADB96
-	for <lists+linux-scsi@lfdr.de>; Sat, 19 Jun 2021 22:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0553B3ADDAA
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Jun 2021 10:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbhFSULH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 19 Jun 2021 16:11:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42522 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229887AbhFSULG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 19 Jun 2021 16:11:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 7A7F56113C
-        for <linux-scsi@vger.kernel.org>; Sat, 19 Jun 2021 20:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624133335;
-        bh=A/gvqJoj0CyKVEiQQCyRq6WC4IY5/FYKHAV6YiWfjFE=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=JiBl+RGlFtrVQe+5PSfKqK+/2ad8AP2Eu4n4/MVLHPsqpS0AHYqWQtgBBHQrdnZF3
-         ZGPa95IXpy7FXAPQ4dyv5KVOLCoY797c1MCDf232o2JLWeUP9TkoZKD0Yk/XzrnPLR
-         ymqW8Wkm3toSxP6JX9rTrwYfG+734wDxHRmo7cTXkiEZnbi5cu6W7nvqoojO4uG6Md
-         xeWcq4gLSVhrBsd+CItxUHBM0zU2vjwmqtsTFXFokJnV7Ky1QhPbi7Fh99ixUhUxpN
-         /xGbvITzW/OMuS1JVBhQq3KWAuSAt9cBL6BqWeIQLy5lIyoXW+9pCuY9VpXRyKGijp
-         wYJoX+qr3c4wg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 6B8B7611CB; Sat, 19 Jun 2021 20:08:55 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 204685] Sometimes Lenovo Yoga C630 WOS boot is delayed due to
- UFS initialization error
-Date:   Sat, 19 Jun 2021 20:08:55 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: russianneuromancer@ya.ru
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: UNREPRODUCIBLE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-204685-11613-OrkcmnR8ST@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-204685-11613@https.bugzilla.kernel.org/>
-References: <bug-204685-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229779AbhFTIIQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sun, 20 Jun 2021 04:08:16 -0400
+Received: from 6-200-5-45.rpnnetprovedor.com.br ([45.5.200.6]:59481 "EHLO
+        srv01.rpnnetprovedor.com.br" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229767AbhFTIHy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 20 Jun 2021 04:07:54 -0400
+Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
+        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <robertnellsona@citromail.hu>)
+        id 1lusSZ-00068r-WB
+        for linux-scsi@vger.kernel.org; Sun, 20 Jun 2021 05:05:40 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: CAN YOU INVEST WITH ME?...6
+To:     linux-scsi@vger.kernel.org
+From:   "Mr.  Robert" <robertnellsona@citromail.hu>
+Date:   Sun, 20 Jun 2021 11:05:38 +0300
+Reply-To: robertnellsona@citromail.hu
+Message-Id: <E1lusSZ-00068r-WB@srv01.rpnnetprovedor.com.br>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D204685
 
-RussianNeuroMancer (russianneuromancer@ya.ru) changed:
+ATTENTION; linux-scsi@vger.kernel.org,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |UNREPRODUCIBLE
+IMPORTANT INVESTMENT INFORMATION
 
---- Comment #1 from RussianNeuroMancer (russianneuromancer@ya.ru) ---
-Not reproducible anymore on 5.12 and 5.13 (although 5.11 still fail for me =
-with
-different UFS-related error this is no longer matter).
+We have a good investment program going on now.
+We have $95m USD for Investment in your Country.
+We use this opportunity to invest you to join the investment program and you will never regret it.
+Please kindly invest with us and you will be receiving monthly income/return/profit every month.
+We can also give you Loan, 
 
---=20
-You may reply to this email to add a comment.
+We have: 
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+1. Short Term Loan, 
+
+2. Medium Term Loan 
+
+3. and Long Term Loan, 
+
+There is no need of collateral security. We will use our company to sign agreement and guarantee on your behalf and our Lawyer will sign on your behalf.
+
+Reply for more detail.
+
+Thank you Sir.
+
+Robert Nellson.
+INVESTMENT MANAGER.
