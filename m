@@ -2,104 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 338A23AE60B
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Jun 2021 11:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4AC3AE62A
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Jun 2021 11:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbhFUJby (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Jun 2021 05:31:54 -0400
-Received: from mga03.intel.com ([134.134.136.65]:61365 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229641AbhFUJbx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 21 Jun 2021 05:31:53 -0400
-IronPort-SDR: LXQOWgJ/mlYlUEDVJwRL7C16qmAHJgiCdKZ23+/cqtGklLGjzmP5dicC8VPQqCiYWBRzNLcVzd
- hEvYi+9PVaGw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10021"; a="206850143"
-X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="206850143"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2021 02:29:38 -0700
-IronPort-SDR: KC3R/4G2ArhR9KURjfmKrolji4DpjaOi0FVZinQwAdqqOeEH+z7NxaJIuYxHaQBqQqs4xzsVgB
- JYTIJAQla1zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,289,1616482800"; 
-   d="scan'208";a="405565750"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.79]) ([10.237.72.79])
-  by orsmga006.jf.intel.com with ESMTP; 21 Jun 2021 02:29:34 -0700
-Subject: Re: [PATCH] scsi: ufs: Refactor ufshcd_is_intr_aggr_allowed()
-To:     keosung.park@samsung.com, "joe@perches.com" <joe@perches.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        "satyat@google.com" <satyat@google.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20210621085158epcms2p46170ba48174547df00b9720dbc843110@epcms2p4>
- <1891546521.01624267081897.JavaMail.epsvc@epcpadp4>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <ed6d8c44-295e-aaa7-4b5f-7929c1c797d1@intel.com>
-Date:   Mon, 21 Jun 2021 12:29:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230076AbhFUJla (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Jun 2021 05:41:30 -0400
+Received: from mail.consorciolp.com.pe ([161.132.100.45]:48276 "EHLO
+        mail.consorciolp.com.pe" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229576AbhFUJl1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Jun 2021 05:41:27 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.consorciolp.com.pe (Postfix) with ESMTP id 3D6F5349BDBB7;
+        Mon, 21 Jun 2021 02:09:41 -0500 (-05)
+Received: from mail.consorciolp.com.pe ([127.0.0.1])
+        by localhost (mail.consorciolp.com.pe [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 59ZMpAKcO11w; Mon, 21 Jun 2021 02:09:41 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.consorciolp.com.pe (Postfix) with ESMTP id B7D6B349BDB80;
+        Mon, 21 Jun 2021 02:09:40 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.consorciolp.com.pe B7D6B349BDB80
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=consorciolp.com.pe;
+        s=385AFFDC-4679-11E8-8471-31738CA36BC0; t=1624259380;
+        bh=C8QAyTcsD881hLy9t4ROdoc9g4v8HLu/xXhaEziKW/U=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=n7p4+URkdvnP3kUXTl0QfNfSgtOQhtCpGo/IyGEMue7CGKZVcK7NmgQhPjsb/6UN/
+         esO/tTXypkUcUflaz6QEM/DVfOQA5Jdlod10G0fSP4uEbZ09TLHwbIwh3I+cJvb3Hr
+         zkKcrygtXE6C5+o/H1w7r6chiNFeVj8pBE6YCSlQJY4OkfscypFTLyle2WZmjT9JIP
+         chuWIznmli8hud/N/l4IbgLNMlM5hT9OfjR/BP6gSmCB5vgEK4TGqt2ZALe+RWo2wQ
+         D4c2UiS+gFmfthF4HidJJBGEMh84WpKlZfTA4EP9yD6Mb0RuBohKrnVWhZuLPboMjR
+         BA8tQ5ad9qnww==
+X-Virus-Scanned: amavisd-new at consorciolp.com.pe
+Received: from mail.consorciolp.com.pe ([127.0.0.1])
+        by localhost (mail.consorciolp.com.pe [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Y-AratexNutN; Mon, 21 Jun 2021 02:09:40 -0500 (-05)
+Received: from Hp-??.tendawifi.com (unknown [31.202.16.82])
+        by mail.consorciolp.com.pe (Postfix) with ESMTPSA id D2DC5349BDB84;
+        Mon, 21 Jun 2021 02:09:22 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <1891546521.01624267081897.JavaMail.epsvc@epcpadp4>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: my subject
+To:     Recipients <vmantari@consorciolp.com.pe>
+From:   Mavis Wanczyk <vmantari@consorciolp.com.pe>
+Date:   Mon, 21 Jun 2021 10:10:55 +0300
+Reply-To: maviswanczyk11@hotmail.com
+Message-Id: <20210621070922.D2DC5349BDB84@mail.consorciolp.com.pe>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 21/06/21 11:51 am, Keoseong Park wrote:
-> Change conditional compilation to IS_ENABLED macro,
-> and simplify if else statement to return statement.
-> No functional change.
-> 
-> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
-> ---
->  drivers/scsi/ufs/ufshcd.h | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index c98d540ac044..6d239a855753 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -893,16 +893,15 @@ static inline bool ufshcd_is_rpm_autosuspend_allowed(struct ufs_hba *hba)
->  
->  static inline bool ufshcd_is_intr_aggr_allowed(struct ufs_hba *hba)
->  {
-> -/* DWC UFS Core has the Interrupt aggregation feature but is not detectable*/
-> -#ifndef CONFIG_SCSI_UFS_DWC
-> -	if ((hba->caps & UFSHCD_CAP_INTR_AGGR) &&
-> -	    !(hba->quirks & UFSHCD_QUIRK_BROKEN_INTR_AGGR))
-> +	/*
-> +	 * DWC UFS Core has the Interrupt aggregation feature
-> +	 * but is not detectable.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_SCSI_UFS_DWC))
-
-Why is this needed?  It seems like you could just set UFSHCD_CAP_INTR_AGGR
-and clear UFSHCD_QUIRK_BROKEN_INTR_AGGR instead?
-
->  		return true;
-> -	else
-> -		return false;
-> -#else
-> -return true;
-> -#endif
-> +
-> +	return (hba->caps & UFSHCD_CAP_INTR_AGGR) &&
-> +		!(hba->quirks & UFSHCD_QUIRK_BROKEN_INTR_AGGR);
->  }
->  
->  static inline bool ufshcd_can_aggressive_pc(struct ufs_hba *hba)
-> 
-
+Sie haben eine Spende von 2.800.000,00. von Mavis Wanczyk antworten Sie mit=
+ diesem Code [MW530342021], um die Spende zu erhalten
