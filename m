@@ -2,87 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1053E3AF214
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Jun 2021 19:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459C03AF6FE
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Jun 2021 22:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbhFURko (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Jun 2021 13:40:44 -0400
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:39616 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbhFURkn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Jun 2021 13:40:43 -0400
-Received: by mail-pf1-f180.google.com with SMTP id g192so6538938pfb.6
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Jun 2021 10:38:29 -0700 (PDT)
+        id S231185AbhFUUvJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Jun 2021 16:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230290AbhFUUvH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Jun 2021 16:51:07 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000A5C061574
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Jun 2021 13:48:50 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id c20so645889uar.12
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Jun 2021 13:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Qn5S53UFMZfQRfdlbN9Ht8/+wVtzEqAn3gOmPbc3gbg=;
+        b=RkzqdDC5wwDJ/qaR4NHWFEeG1xPQHGeTTtgMhRdXxLCJCupcyhnWqsOvyYRiFl2MqV
+         MoCKYaXAoBu8VLtjpBw3psoM22r8Ib/tPftCzcrQqgIERMatpXLMOC1nDE+uLgNhKJXq
+         ejESitrjSfyfcxcEV0IshO639brQJCxiNOSkCXR09K3r3roro7CDQZZ+PpLcM22LwtpQ
+         /YM/7vxnTuwb8SVGcrt9dz8I7VdA2w9Ij4YeUn1cg64xVtY95Ng/fiX9ZZMmWRXtGNbT
+         V3eS2SXlsoePzEpLWWoXIXthcPJQNU34CXak4RjUdySUM2V/G+Ri+wFRr2ak9JwGlLi9
+         rzRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MpjA8FtIdT2XLGo++5VCqj6J3VwxYGuyTO95u8yP58U=;
-        b=MRIJVze+QvJkiuAky01VSD5s3OhM4IbPSFOfSdnhTpTn5h+2VueeHYnh9Mv2GVtxnt
-         tzO5zO6MPi/fqaccwknT/b4unFkocNFgKFkOlU5mrSnXcaTmdur5YKzDwPgBHwKbBGVg
-         azw7RmO9JtDFi9E/1iaRb94skRxoOsNaYo8cpCqsz7qn3NDwuW9TruwSGwIt9/ExtkIc
-         z0+Q0GCozqjSRJFKNOADafu1zSQp3iOsMGQ70xTp1Cj/sw9pdqG5dwvcfWB6fWOZ05U3
-         BsbvQWrWmeEBQHF3GlixoN4YsG+nNapCgW1r3zyCekJrWQfkX/PTm7mRFSFhUMRunUMk
-         Kj2w==
-X-Gm-Message-State: AOAM533JkXDFU8RAGTE40a808ysBEnIH7VG0dL/b74CbUse3RBumrmIB
-        IA7sdL0E5VL/3js61X2gREc=
-X-Google-Smtp-Source: ABdhPJz6+xvd79ieIv+meCDvgqmmQtnq1Y9z6r4MUwecHauezg8HL2I3g1SbsKpkdksOQH+thADNVg==
-X-Received: by 2002:a63:1141:: with SMTP id 1mr17895527pgr.217.1624297109187;
-        Mon, 21 Jun 2021 10:38:29 -0700 (PDT)
-Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id p26sm6762123pgc.53.2021.06.21.10.38.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 10:38:28 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH RFC 4/4] ufs: Make host controller state change handling
- more systematic
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Can Guo <cang@codeaurora.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Asutosh Das <asutoshd@codeaurora.org>
-References: <20210619005228.28569-1-bvanassche@acm.org>
- <20210619005228.28569-5-bvanassche@acm.org>
- <DM6PR04MB65756FC4B5BA216BB72FF22BFC0A9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Message-ID: <d2585c1a-8af9-409b-597e-54e94de581dc@acm.org>
-Date:   Mon, 21 Jun 2021 10:38:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Qn5S53UFMZfQRfdlbN9Ht8/+wVtzEqAn3gOmPbc3gbg=;
+        b=ZQ6eu2ih0kn8tY0hA1EBvowT0BuVHAi0eqGJ+rLYQ1buKLvOq71bnsk8VoweGraVnk
+         +uqgYwlZblezXca6q0akHyf7i7P6ar0DzUtGsDAPhwfEZKEV6B8b2iXFDo5bz47bvqRB
+         yrl6l3ZAfGmK2MWIuQBFDJ4efViKE94GG4GCcBFT1W7+Jq/bMFIqdvYt99H7oDk4lUAN
+         WB4OEftGsfR+8YuJE7bd+pWKsWkDFsfEJ8lGfwmgdUWoOn+4tOQYAZYhrSi0hvCNU774
+         pV6pkcw5++wB5lseOeBjCUphY0+LOrvz2zPgBbfVHbbpQXSNOJnQ8ROJWHjKwSVQu/1j
+         KoWw==
+X-Gm-Message-State: AOAM531WRUvuwIppVz2salw/Fp1sjG6JfpnosditzXLINui/k7Wir+JG
+        3P0NLvjS1IAdcvdPYhdkCRv1iRV/ZkJuCaW9zIY=
+X-Google-Smtp-Source: ABdhPJwlDyP6/yXToEs2Ep0yESBZz833Bi5OGlTxx0UIuNIW3UnM/7H3H8y/X6zqcZsejl769LiuaGmVa6apu7jNJAE=
+X-Received: by 2002:ab0:138e:: with SMTP id m14mr596303uae.130.1624308530141;
+ Mon, 21 Jun 2021 13:48:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <DM6PR04MB65756FC4B5BA216BB72FF22BFC0A9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ab0:4325:0:0:0:0:0 with HTTP; Mon, 21 Jun 2021 13:48:49
+ -0700 (PDT)
+Reply-To: sgtkaylam28@gmail.com
+From:   SgtKayla Manthey <maichibigracemichael@gmail.com>
+Date:   Mon, 21 Jun 2021 13:48:49 -0700
+Message-ID: <CAN8GoAbzEP+UAshT66qLbkMkkh1zK9PK_Ke7NwXSssZLhFu5XA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/21/21 1:55 AM, Avri Altman wrote:
->> +static bool ufshcd_set_state(struct ufs_hba *hba, enum ufshcd_state
->> new_state)
->> +{
->> +       lockdep_assert_held(hba->host->host_lock);
->> +
->> +       if (old_state != UFSHCD_STATE_ERROR || new_state ==
->> UFSHCD_STATE_ERROR)
->
-> old_state ?
-
-Thanks for having taken a look. This function should look as follows:
-
-static bool ufshcd_set_state(struct ufs_hba *hba, enum ufshcd_state new_state)
-{
-	lockdep_assert_held(hba->host->host_lock);
-
-	if (hba->ufshcd_state != UFSHCD_STATE_ERROR ||
-	    new_state == UFSHCD_STATE_ERROR) {
-		hba->ufshcd_state = new_state;
-		return true;
-	}
-	return false;
-}
+Pozdravi,
+Prosim, ste prejeli moje prej=C5=A1nje sporo=C4=8Dilo? Napi=C5=A1i mi nazaj
