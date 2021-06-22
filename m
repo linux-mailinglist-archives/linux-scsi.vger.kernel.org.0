@@ -2,61 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E775A3B001F
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jun 2021 11:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C326F3B0155
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jun 2021 12:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbhFVJ1F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Jun 2021 05:27:05 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3299 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhFVJ1E (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Jun 2021 05:27:04 -0400
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4G8LQG6qcyz6DBWj;
-        Tue, 22 Jun 2021 17:17:26 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 22 Jun 2021 11:24:47 +0200
-Received: from [10.47.93.67] (10.47.93.67) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 22 Jun
- 2021 10:24:46 +0100
-Subject: Re: [PATCH v3] scsi: libsas: add lun number check in .slave_alloc
- callback
-To:     Jason Yan <yanaijie@huawei.com>, Yufen Yu <yuyufen@huawei.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, Wu Bo <wubo40@huawei.com>
-References: <20210622034037.1467088-1-yuyufen@huawei.com>
- <af233a61-76a5-d4fe-e190-2f4d020df31a@huawei.com>
- <d9757dc3-851d-e7bf-e59a-58e7f761d4bd@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <723bc6cd-157c-5b8c-842e-8bbd836042dd@huawei.com>
-Date:   Tue, 22 Jun 2021 10:18:19 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S229682AbhFVK3T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Jun 2021 06:29:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29857 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229702AbhFVK3R (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 22 Jun 2021 06:29:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624357621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=siR5F5coGX/fvj955knbP4EoltfJ1YJx6jJhEHOgFcw=;
+        b=cPq+HYVTRpXpPLGOvzjM/EzpzBUWAVSxAj9tDPgorY6SjOogncLRKlqMHm8FqqljGizl09
+        SYPC8VQn7cr2IwBsQ8pyThnqx1v6pJonKViCSQ1G9/Q/MYS10nV6eaTQiEAgA8bJiRdN/O
+        ZZ+hBP+tEeLh/oHKds76nlYuagCZxkY=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-513-dKl7KSCHPxiIsPLAESb5Hw-1; Tue, 22 Jun 2021 06:26:58 -0400
+X-MC-Unique: dKl7KSCHPxiIsPLAESb5Hw-1
+Received: by mail-qv1-f71.google.com with SMTP id k12-20020a0cfd6c0000b029020df9543019so17543085qvs.14
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Jun 2021 03:26:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=siR5F5coGX/fvj955knbP4EoltfJ1YJx6jJhEHOgFcw=;
+        b=o/cXCzCxcQ4t1hLlGUG+Cn9qJQg74qXoG3b2Svi5CDRikg+L2HkJaIL3AzZ6Wkwtor
+         /A/meq+XFuAwmvynyLxkGl7D30DbaH9DssD23dOjJM8fyPNHPIrWlafrJzh89no7iy5x
+         drFDJMUJsJmDZu0Go0kjQRjP02wt/qt5N3mv9xea6u3jNLsFVR9c79P1MBoVWUdZRiMp
+         OcxanllRmtmDz5HqY7Hea7YWjwtd7JBubkJliOXOrT6tih8mcBRdziZc/PxuFhA0sncY
+         IueYdxgHiodEgspj6vgTT5QOAzXXCzkfBTKAKqFfvulhxjFAPAAqfqSzja8jni248gh/
+         99JA==
+X-Gm-Message-State: AOAM532/Hr14cb8KWpLxe5cLfuyRIf2QJqRldjj+bfweTJBiPgQSAiYz
+        aXhlUs6vq4jGgCCPRRhU/jT1zcrGn/GVjAfOtZeNOzBXfcrhcN/AhKuuIK8uFepAK9lbBQirdya
+        z44SMouQ99RdsM+ksqJrid/+Eh8UvBZ+o+LtFhA==
+X-Received: by 2002:a25:6b51:: with SMTP id o17mr3764571ybm.149.1624357618001;
+        Tue, 22 Jun 2021 03:26:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx51iJzo3VQdY7wvp65huVXeoq6ZRKEMI6FlXVXnnznFYjauaClofHKuKy4zgoJo/B0s4g+7Wgoq/dtKokW8Ds=
+X-Received: by 2002:a25:6b51:: with SMTP id o17mr3764548ybm.149.1624357617775;
+ Tue, 22 Jun 2021 03:26:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <d9757dc3-851d-e7bf-e59a-58e7f761d4bd@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.93.67]
-X-ClientProxiedBy: lhreml747-chm.china.huawei.com (10.201.108.197) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <20210622024654.12543-1-bvanassche@acm.org>
+In-Reply-To: <20210622024654.12543-1-bvanassche@acm.org>
+From:   Ming Lei <ming.lei@redhat.com>
+Date:   Tue, 22 Jun 2021 18:26:46 +0800
+Message-ID: <CAFj5m9LeEKBqFb684r1GuojWW0TuMLgvHd8bwiVq=qekyxZb7g@mail.gmail.com>
+Subject: Re: [PATCH] scsi: Inline scsi_mq_alloc_queue()
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ed Tsai <ed.tsai@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 22/06/2021 10:15, Jason Yan wrote:
->>
->> I thought that we would mention why we don't change aic7xxx driver.
-> 
-> We are talking about libsas here. aic7xxx is not even a libsas driver,
-> so I don't think we need to mention it.
+On Tue, Jun 22, 2021 at 10:47 AM Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> Since scsi_mq_alloc_queue() only has one caller, inline it. This change
+> was suggested by Christoph Hellwig.
+>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Ed Tsai <ed.tsai@mediatek.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-Ah, right. I don't know why it was mentioned when we were talking about 
-the v2 of this patch.
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-Thanks,
-John
