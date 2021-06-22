@@ -2,61 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 459C03AF6FE
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Jun 2021 22:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE583AFAA1
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Jun 2021 03:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbhFUUvJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Jun 2021 16:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhFUUvH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Jun 2021 16:51:07 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000A5C061574
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Jun 2021 13:48:50 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id c20so645889uar.12
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Jun 2021 13:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Qn5S53UFMZfQRfdlbN9Ht8/+wVtzEqAn3gOmPbc3gbg=;
-        b=RkzqdDC5wwDJ/qaR4NHWFEeG1xPQHGeTTtgMhRdXxLCJCupcyhnWqsOvyYRiFl2MqV
-         MoCKYaXAoBu8VLtjpBw3psoM22r8Ib/tPftCzcrQqgIERMatpXLMOC1nDE+uLgNhKJXq
-         ejESitrjSfyfcxcEV0IshO639brQJCxiNOSkCXR09K3r3roro7CDQZZ+PpLcM22LwtpQ
-         /YM/7vxnTuwb8SVGcrt9dz8I7VdA2w9Ij4YeUn1cg64xVtY95Ng/fiX9ZZMmWRXtGNbT
-         V3eS2SXlsoePzEpLWWoXIXthcPJQNU34CXak4RjUdySUM2V/G+Ri+wFRr2ak9JwGlLi9
-         rzRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Qn5S53UFMZfQRfdlbN9Ht8/+wVtzEqAn3gOmPbc3gbg=;
-        b=ZQ6eu2ih0kn8tY0hA1EBvowT0BuVHAi0eqGJ+rLYQ1buKLvOq71bnsk8VoweGraVnk
-         +uqgYwlZblezXca6q0akHyf7i7P6ar0DzUtGsDAPhwfEZKEV6B8b2iXFDo5bz47bvqRB
-         yrl6l3ZAfGmK2MWIuQBFDJ4efViKE94GG4GCcBFT1W7+Jq/bMFIqdvYt99H7oDk4lUAN
-         WB4OEftGsfR+8YuJE7bd+pWKsWkDFsfEJ8lGfwmgdUWoOn+4tOQYAZYhrSi0hvCNU774
-         pV6pkcw5++wB5lseOeBjCUphY0+LOrvz2zPgBbfVHbbpQXSNOJnQ8ROJWHjKwSVQu/1j
-         KoWw==
-X-Gm-Message-State: AOAM531WRUvuwIppVz2salw/Fp1sjG6JfpnosditzXLINui/k7Wir+JG
-        3P0NLvjS1IAdcvdPYhdkCRv1iRV/ZkJuCaW9zIY=
-X-Google-Smtp-Source: ABdhPJwlDyP6/yXToEs2Ep0yESBZz833Bi5OGlTxx0UIuNIW3UnM/7H3H8y/X6zqcZsejl769LiuaGmVa6apu7jNJAE=
-X-Received: by 2002:ab0:138e:: with SMTP id m14mr596303uae.130.1624308530141;
- Mon, 21 Jun 2021 13:48:50 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab0:4325:0:0:0:0:0 with HTTP; Mon, 21 Jun 2021 13:48:49
- -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   SgtKayla Manthey <maichibigracemichael@gmail.com>
-Date:   Mon, 21 Jun 2021 13:48:49 -0700
-Message-ID: <CAN8GoAbzEP+UAshT66qLbkMkkh1zK9PK_Ke7NwXSssZLhFu5XA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+        id S230495AbhFVBeb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Jun 2021 21:34:31 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:39711 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230059AbhFVBe3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Jun 2021 21:34:29 -0400
+X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Jun 2021 21:34:28 EDT
+X-UUID: c27ddc43ccc34fe0a8d1eaad25cd91df-20210622
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ZLVdaGmik40Ze2v/CYmLtbOEykgp/qCj3I8UybRZ4Vs=;
+        b=YZOeNfpEG6upWTdbl3Rac5oYxNHiTVt88w2Y7MPl+hJyG6Sp48ZOJjyKI6ziTu3HbNj8B+lRbmmG8M81N6CZzSSucTmFqKxgQrroz+xdqIqrj5bynpYd4Mmc8mg6whZID7gfqXU3mfKAM7oIAcULJGW7nYlpfBvmRlt6A6IPMWM=;
+X-UUID: c27ddc43ccc34fe0a8d1eaad25cd91df-20210622
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <ed.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1410397488; Tue, 22 Jun 2021 09:27:07 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 22 Jun 2021 09:27:05 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 22 Jun 2021 09:27:05 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 22 Jun 2021 09:27:05 +0800
+Message-ID: <9bbe52d3f21b91eadf7ba30be5054cf64ba47739.camel@mediatek.com>
+Subject: Re: [PATCH] scsi: remove reduntant assignment when alloc sdev
+From:   Ed Tsai <ed.tsai@mediatek.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 22 Jun 2021 09:27:05 +0800
+In-Reply-To: <9e1d5f1f-b51e-8f1a-d052-d6debed116e6@acm.org>
+References: <20210621034555.4039-1-ed.tsai@mediatek.com>
+         <9e1d5f1f-b51e-8f1a-d052-d6debed116e6@acm.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Pozdravi,
-Prosim, ste prejeli moje prej=C5=A1nje sporo=C4=8Dilo? Napi=C5=A1i mi nazaj
+T24gVHVlLCAyMDIxLTA2LTIyIGF0IDAxOjIxICswODAwLCBCYXJ0IFZhbiBBc3NjaGUgd3JvdGU6
+DQo+IE9uIDYvMjAvMjEgODo0NSBQTSwgRWQgVHNhaSB3cm90ZToNCj4gPiBzZGV2LT5yZXFldXN0
+X3F1ZXVlIGFuZCBpdHMgcXVldWVkYXRhIGhhdmUgYmVlbiBzZXQgdXAgaW4NCj4gPiBzY3NpX21x
+X2FsbG9jX3F1ZXVlKCkuIE5vIG5lZWQgdG8gZG8gdGhhdCBhZ2Fpbi4NCj4gPiANCj4gPiBTaWdu
+ZWQtb2ZmLWJ5OiBFZCBUc2FpIDxlZC50c2FpQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAg
+ZHJpdmVycy9zY3NpL3Njc2lfc2Nhbi5jIHwgNCArLS0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAx
+IGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9zY3NpL3Njc2lfc2Nhbi5jIGIvZHJpdmVycy9zY3NpL3Njc2lfc2Nhbi5jDQo+ID4gaW5k
+ZXggMTJmNTQ1NzFiODNlLi44MmMxNzkyZjFkZTIgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9z
+Y3NpL3Njc2lfc2Nhbi5jDQo+ID4gKysrIGIvZHJpdmVycy9zY3NpL3Njc2lfc2Nhbi5jDQo+ID4g
+QEAgLTI2Niw4ICsyNjYsNyBAQCBzdGF0aWMgc3RydWN0IHNjc2lfZGV2aWNlDQo+ID4gKnNjc2lf
+YWxsb2Nfc2RldihzdHJ1Y3Qgc2NzaV90YXJnZXQgKnN0YXJnZXQsDQo+ID4gIAkgKi8NCj4gPiAg
+CXNkZXYtPmJvcmtlbiA9IDE7DQo+ID4gIA0KPiA+IC0Jc2Rldi0+cmVxdWVzdF9xdWV1ZSA9IHNj
+c2lfbXFfYWxsb2NfcXVldWUoc2Rldik7DQo+ID4gLQlpZiAoIXNkZXYtPnJlcXVlc3RfcXVldWUp
+IHsNCj4gPiArCWlmICghc2NzaV9tcV9hbGxvY19xdWV1ZShzZGV2KSkgew0KPiA+ICAJCS8qIHJl
+bGVhc2UgZm4gaXMgc2V0IHVwIGluDQo+ID4gc2NzaV9zeXNmc19kZXZpY2VfaW5pdGlhbGlzZSwg
+c28NCj4gPiAgCQkgKiBoYXZlIHRvIGZyZWUgYW5kIHB1dCBtYW51YWxseSBoZXJlICovDQo+ID4g
+IAkJcHV0X2RldmljZSgmc3RhcmdldC0+ZGV2KTsNCj4gPiBAQCAtMjc1LDcgKzI3NCw2IEBAIHN0
+YXRpYyBzdHJ1Y3Qgc2NzaV9kZXZpY2UNCj4gPiAqc2NzaV9hbGxvY19zZGV2KHN0cnVjdCBzY3Np
+X3RhcmdldCAqc3RhcmdldCwNCj4gPiAgCQlnb3RvIG91dDsNCj4gPiAgCX0NCj4gPiAgCVdBUk5f
+T05fT05DRSghYmxrX2dldF9xdWV1ZShzZGV2LT5yZXF1ZXN0X3F1ZXVlKSk7DQo+ID4gLQlzZGV2
+LT5yZXF1ZXN0X3F1ZXVlLT5xdWV1ZWRhdGEgPSBzZGV2Ow0KPiA+ICANCj4gPiAgCWRlcHRoID0g
+c2Rldi0+aG9zdC0+Y21kX3Blcl9sdW4gPzogMTsNCj4gDQo+IFNpbmNlIHNjc2lfbXFfYWxsb2Nf
+cXVldWUoKSBvbmx5IGhhcyBvbmUgY2FsbGVyLCBwbGVhc2UgaW5saW5lDQo+IHNjc2lfbXFfYWxs
+b2NfcXVldWUoKSBpbnN0ZWFkIG9mIG1ha2luZyB0aGlzIGNoYW5nZS4gU2VlIGFsc28NCj4gDQpo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1zY3NpLzIwMjAxMTIzMDMxNzQ5LjE0OTEyLTUt
+YnZhbmFzc2NoZUBhY20ub3JnLw0KPiANCj4gVGhhbmtzLA0KPiANCj4gQmFydC4NCg0KaGF2ZSBw
+bGFubmVkIHRvIHJlLXN1Ym1pdCBpdD8NCg==
+
