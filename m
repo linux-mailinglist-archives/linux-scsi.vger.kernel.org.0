@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE483B14DC
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Jun 2021 09:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B544C3B14E0
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Jun 2021 09:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbhFWHj3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Jun 2021 03:39:29 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:1336 "EHLO
+        id S231235AbhFWHjj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Jun 2021 03:39:39 -0400
+Received: from labrats.qualcomm.com ([199.106.110.90]:1666 "EHLO
         labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbhFWHjO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Jun 2021 03:39:14 -0400
-IronPort-SDR: yr2W6pfUiVo9FEI9d2LqouW+cLcrY70qPmPHgWIsWYCxe8stBc0y0UEH0UdHQ9eMYvjAx1jeEg
- hUifsXn6Gy99tgmRx4fe/etgVmLeo1v7cGtp5nWmvJ/WzWJ7YFtOcRCWEwddak0/d7ecz51koE
- c44gT3jo8joKPPubAlY1tT4HY4azvE71aYYDfLoTO5VIT/aQioZ28vbww213WQcp0b2+lgYDEa
- 0k4iCBGetTg2A66hQhptH2yswW89leyNmPh9c0OLmaAKnOnWKEqPIiDNGWNtd2sIIaRQHBBch0
- MVk=
+        with ESMTP id S230363AbhFWHjT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Jun 2021 03:39:19 -0400
+IronPort-SDR: M6TRVFwkS6FOV6qff0MiXiwDGxCYMI6QeciZCr6r/nzZ2LyTUwFjjCx3z1aAc6lUN5EWFiOAkr
+ UvDV+CraFZoTQtSQGA0V/Y1lNfw5xGqKJmZZlvoyaRBRvyP0GEJbG7qJBxN8mcc5k/cbaKrlWW
+ UKmvewxRIrOe5VBdFzKwaPH9XcI+SYro7bzENHa5m7H5c4f6445KoggB6WUTLU5vdnnJlbqslb
+ NpKk/0r3FEwCPcCePzBHHj5if3THNiYv26deN8EN6OVzF6d7Sr4Z1JHCYQA2Ggyf/qjHDCV+Ru
+ p3g=
 X-IronPort-AV: E=Sophos;i="5.83,293,1616482800"; 
-   d="scan'208";a="29780819"
+   d="scan'208";a="29780820"
 Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by labrats.qualcomm.com with ESMTP; 23 Jun 2021 00:36:56 -0700
+  by labrats.qualcomm.com with ESMTP; 23 Jun 2021 00:37:00 -0700
 X-QCInternal: smtphost
 Received: from stor-presley.qualcomm.com ([192.168.140.85])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 23 Jun 2021 00:36:56 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP; 23 Jun 2021 00:36:59 -0700
 Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 1B06421BE2; Wed, 23 Jun 2021 00:36:56 -0700 (PDT)
+        id BC2E921BC1; Wed, 23 Jun 2021 00:36:59 -0700 (PDT)
 From:   Can Guo <cang@codeaurora.org>
 To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
         hongwus@codeaurora.org, ziqichen@codeaurora.org,
@@ -38,9 +38,9 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         Bean Huo <beanhuo@micron.com>,
         Jaegeuk Kim <jaegeuk@kernel.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 03/10] scsi: ufs: Update the return value of supplier pm ops
-Date:   Wed, 23 Jun 2021 00:35:02 -0700
-Message-Id: <1624433711-9339-4-git-send-email-cang@codeaurora.org>
+Subject: [PATCH v4 04/10] scsi: ufs: Enable IRQ after enabling clocks in error handling preparation
+Date:   Wed, 23 Jun 2021 00:35:03 -0700
+Message-Id: <1624433711-9339-5-git-send-email-cang@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1624433711-9339-1-git-send-email-cang@codeaurora.org>
 References: <1624433711-9339-1-git-send-email-cang@codeaurora.org>
@@ -48,39 +48,36 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-rpm_get_suppliers() is returning an error only if the error is negative.
-However, ufshcd_wl_resume() may return a positive error code, e.g., when
-hibern8 or SSU cmd fails. Make the positive return value a negative error
-code so that consumers are aware of any resume failure from their supplier.
-Make the same change to ufshcd_wl_suspend() just to keep symmetry.
+In error handling preparation, enable IRQ after enabling clocks in case
+unclocked register access happens.
 
+Fixes: c72e79c0ad2bd ("scsi: ufs: Recover HBA runtime PM error in error handler")
 Signed-off-by: Can Guo <cang@codeaurora.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index abe5f2d..ee70522 100644
+index ee70522..5f837c4 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -8922,7 +8922,7 @@ static int __ufshcd_wl_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+@@ -5927,13 +5927,14 @@ static void ufshcd_err_handling_prepare(struct ufs_hba *hba)
+ 		 * can be OFF or in LPM.
+ 		 */
+ 		ufshcd_setup_hba_vreg(hba, true);
+-		ufshcd_enable_irq(hba);
+ 		ufshcd_setup_vreg(hba, true);
+ 		ufshcd_config_vreg_hpm(hba, hba->vreg_info.vccq);
+ 		ufshcd_config_vreg_hpm(hba, hba->vreg_info.vccq2);
+ 		ufshcd_hold(hba, false);
+-		if (!ufshcd_is_clkgating_allowed(hba))
++		if (!ufshcd_is_clkgating_allowed(hba)) {
+ 			ufshcd_setup_clocks(hba, true);
++			ufshcd_enable_irq(hba);
++		}
  		ufshcd_release(hba);
- 	}
- 	hba->wlu_pm_op_in_progress = false;
--	return ret;
-+	return ret <= 0 ? ret : -EINVAL;
- }
- 
- static int __ufshcd_wl_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
-@@ -9009,7 +9009,7 @@ static int __ufshcd_wl_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	hba->clk_gating.is_suspended = false;
- 	ufshcd_release(hba);
- 	hba->wlu_pm_op_in_progress = false;
--	return ret;
-+	return ret <= 0 ? ret : -EINVAL;
- }
- 
- static int ufshcd_wl_runtime_suspend(struct device *dev)
+ 		pm_op = hba->is_wlu_sys_suspended ? UFS_SYSTEM_PM : UFS_RUNTIME_PM;
+ 		ufshcd_vops_resume(hba, pm_op);
 -- 
 Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
