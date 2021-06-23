@@ -2,66 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6137E3B1E15
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Jun 2021 17:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEE93B1E56
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Jun 2021 18:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbhFWP45 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 23 Jun 2021 11:56:57 -0400
-Received: from [183.90.58.236] ([183.90.58.236]:51764 "EHLO ns1.zackeruz.tk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231524AbhFWP44 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 23 Jun 2021 11:56:56 -0400
-Received: from johnlewis.com (unknown [192.168.20.1])
-        by ns1.zackeruz.tk (Postfix) with ESMTPSA id DB48B846335
-        for <linux-scsi@vger.kernel.org>; Wed, 23 Jun 2021 23:54:37 +0800 (+08)
-Reply-To: robert_turner@johnlewis-trading.com,
-          pippawicks.sales@johnlewis-trading.com
-From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
-To:     linux-scsi@vger.kernel.org
-Subject: 6/23/2021 Product Inquiry 
-Date:   23 Jun 2021 15:54:37 +0000
-Message-ID: <20210623094114.9F93BF24ABA73281@johnlewis.com>
+        id S230046AbhFWQL6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Jun 2021 12:11:58 -0400
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:44898 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230122AbhFWQL4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Jun 2021 12:11:56 -0400
+Received: by mail-pg1-f178.google.com with SMTP id t13so2143898pgu.11
+        for <linux-scsi@vger.kernel.org>; Wed, 23 Jun 2021 09:09:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Gj6dYb/dDvQS7990nnwYIw5LCj0RlqsWgicXodrjM8I=;
+        b=osrru+BhZYxQV0KiQ7+3gKuoDi//TDU49nFoKlRnkanZS9tlJ6H3u0L4Ob0DZqxxKS
+         fTpYX40xx5OW83BtFxb17AG0Q4rN/Hm+uS4YfW2Qf2Hf9namiWDc/HHWltuTv8RwpzZW
+         M/HuiF58jLREQyRCtVqPgIYm1/YvprnhPy88DxkxKiOSJjCwzR0TNzxWKomy3D4t9zah
+         TbMWnVIk1BzXc3D4yIsOeNDqoSnJEeU525YB2b9jrRhwBZhjjxJOA8FUwfFZfiZPzJM/
+         vfIcvpEOIzzolfkzoEv2udV6uHy1DaNqjNEiHopCtFMSr0nFkc637+RxSyZC7CY3ruX7
+         faOg==
+X-Gm-Message-State: AOAM530ag5SaFJEid5P2rmC2udzV2+Avu2mHYpoqLXFGbL9Z1Ud/PDmK
+        wegbE4vzXZHbd27VA/mJUxFffimc8+k=
+X-Google-Smtp-Source: ABdhPJw/QhEJekMwkZcriLfurK8DAfsNMKWaSj374cMXFHnJCH5Fy8sS7auWvp00k0hzASDNRG2Fxw==
+X-Received: by 2002:aa7:8d01:0:b029:2f0:88da:1821 with SMTP id j1-20020aa78d010000b02902f088da1821mr447542pfe.67.1624464576652;
+        Wed, 23 Jun 2021 09:09:36 -0700 (PDT)
+Received: from [192.168.51.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id p14sm346677pgb.2.2021.06.23.09.09.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Jun 2021 09:09:36 -0700 (PDT)
+Subject: Re: [PATCH 03/18] scsi: add scsi_{get,put}_internal_cmd() helper
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org
+References: <20210503150333.130310-1-hare@suse.de>
+ <20210503150333.130310-4-hare@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <cf177d09-fb2d-fc9f-b0ee-cdd75360413f@acm.org>
+Date:   Wed, 23 Jun 2021 09:09:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20210503150333.130310-4-hare@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear linux-scsi
+On 5/3/21 8:03 AM, Hannes Reinecke wrote:
+> +struct scsi_cmnd *scsi_get_internal_cmd(struct scsi_device *sdev,
+> +	unsigned int op, blk_mq_req_flags_t flags)
+> +{
+> +	struct request *rq;
+> +	struct scsi_cmnd *scmd;
+> +
+> +	WARN_ON_ONCE(((op & REQ_OP_MASK) != REQ_OP_SCSI_IN) &&
+> +		     ((op & REQ_OP_MASK) != REQ_OP_SCSI_OUT));
 
-The famous brand John Lewis Partnership, is UK's largest multi-
-channel retailer with over 126 shops and multiple expansion in 
-Africa furnished by European/Asian/American products. We are 
-sourcing new products to attract new customers and also retain 
-our existing ones, create new partnerships with companies dealing 
-with different kinds of goods globally.
+Consider using blk_op_is_scsi() instead of open-coding it.
 
-Your company's products are of interest to our market as we have 
-an amazing market for your products.
+Thanks,
 
-Provide us your current catalog through email to review more. We 
-hope to be able to order with you and start a long-term friendly,
-respectable and solid business partnership. Please we would 
-appreciate it if you could send us your stock availability via 
-email if any.
-
-Our payment terms are 15 days net in Europe, 30 days Net in UK 
-and 30 days net in Asia/USA as we operate with over 5297 
-suppliers around the globe for the past 50 years now. For 
-immediate response Send your reply to robert_turner@johnlewis-
-trading.com for us to be able to 
-treat with care and urgency.
-
-
-Best Regards
-
-Rob Turner
-Head Of Procurement Operations
-John Lewis & Partners.
-robert_turner@johnlewis-trading.com
-Tel: +44-7451-274090
-WhatsApp: +447497483925
-www.johnlewis.com
-REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
+Bart.
