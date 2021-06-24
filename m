@@ -2,93 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1F03B6F4D
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jun 2021 10:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E643B725B
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jun 2021 14:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbhF2IZJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 29 Jun 2021 04:25:09 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3328 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbhF2IYz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 29 Jun 2021 04:24:55 -0400
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GDcdd4jBLz6GBS1;
-        Tue, 29 Jun 2021 16:12:05 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 29 Jun 2021 10:22:26 +0200
-Received: from [10.47.83.88] (10.47.83.88) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 29 Jun
- 2021 09:22:26 +0100
-Subject: Re: [PATCH] scsi: Delete scsi_{get,free}_host_dev()
-To:     Hannes Reinecke <hare@suse.de>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <bvanassche@acm.org>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hch@lst.de>, <ming.lei@redhat.com>
-References: <1624640314-93055-1-git-send-email-john.garry@huawei.com>
- <044a31ed-f6e9-3017-4973-3a02765933e0@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <77afd764-4195-188d-ef0e-c4adcfa38f8b@huawei.com>
-Date:   Tue, 29 Jun 2021 09:15:37 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S233792AbhF2MxC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 29 Jun 2021 08:53:02 -0400
+Received: from [218.75.92.58] ([218.75.92.58]:65147 "EHLO WIN-VTPUBHNS72V"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232755AbhF2Mw7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 29 Jun 2021 08:52:59 -0400
+Received: from [192.168.43.47] (Unknown [197.210.84.10])
+        by WIN-VTPUBHNS72V with ESMTPA
+        ; Thu, 24 Jun 2021 20:46:28 +0800
+Message-ID: <9A845A47-7571-4588-B7D6-EB33577619B5@WIN-VTPUBHNS72V>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <044a31ed-f6e9-3017-4973-3a02765933e0@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.88]
-X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: URGENT ATTENTION
+To:     Recipients <wjjt@wjjt.cn>
+From:   "Andres Auchincloss" <wjjt@wjjt.cn>
+Date:   Thu, 24 Jun 2021 14:45:50 +0200
+Reply-To: andresauchincloss926@gmail.com
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 26/06/2021 12:55, Hannes Reinecke wrote:
-> On 6/25/21 6:58 PM, John Garry wrote:
->> Functions scsi_{get,free}_host_dev() no longer have any in-tree users, so
->> delete them.
->>
->> Signed-off-by: John Garry <john.garry@huawei.com>
->> ---
->> An alt agenda of this patch is to get clarification on whether this API
->> should be used for Hannes' reserved commands series.
->>
->> Originally the recommendation was to use it, but now it seems to be to
->> not use it:
->> https://lore.kernel.org/linux-scsi/55918d68-7385-0153-0bd9-d822d3ce4c21@suse.de/ 
->>
->>
-> Please don't.
+Hi,
 
-ok, we can take that as a nacked-by for now.
+I will like to use this opportunity to wish you a productive time in 2021 and also confide in you to finalize this transaction of mutual benefits. It may seem strange to you, but it is real. This is a transaction that has no risk at all, due process shall be followed and it shall be carried out under the ambit of the financial laws. Being the Chief Financial Officer, BP Plc. I want to trust and put in your care Eighteen Million British Pounds Sterling, The funds were acquired from an over-invoiced payment from a past contract executed in one of my departments.
 
-> 
-> Before we're doing something like this I would like to have 
-> clarification from Christoph which way he prefers for reserved commands. 
-> Personally I _do_ like the host dev approach for reserved commands as it 
-> allows us to re-use existing infrastructure.
+I can't successfully achieve this transaction without presenting you as foreign contractor who will provide a bank account to receive the funds.
 
-So when you deleted the gdth driver, the request there was to delete 
-this API. And in the v8 series, again, the request was not to use it, 
-and use the dedicated request queue instead - I do know that this 
-conflicts with the much earlier suggestion not to do that, but that was 
-when gdth existed.
+Documentation for the claim of the funds will be legally processed and documented, so I will need your full cooperation on this matter for our mutual benefits. We will discuss details if you are interested to work with me to secure this funds. I will appreciate your prompt response in every bit of our communication. Stay Blessed and Stay Safe.
 
-As for reuse of existing infrastructure, using this API seems to add 
-more code than it reuses.
 
-So don't we just need to add a dedicated request_queue for host? I don't 
-know the use in having the scsi_device. Having said all that, we don't 
-seem to have a host request_queue sysfs entry with either solution, 
-which would be good.
 
-> 
-> Christoph?
-> 
+Best Regards
 
-Thanks,
-John
+
+
+
+Tel: +1 (587) 770-0485
+Andres .B. Auchincloss
+Chief financial officerBP Petroleum p.l.c.
+
+
+
+
+                                  Copyright ©? 1996-2021
+
