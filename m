@@ -2,98 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B723B343B
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Jun 2021 18:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0113B346E
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Jun 2021 19:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbhFXRAC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Jun 2021 13:00:02 -0400
-Received: from mail-pl1-f172.google.com ([209.85.214.172]:41604 "EHLO
-        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbhFXRAC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Jun 2021 13:00:02 -0400
-Received: by mail-pl1-f172.google.com with SMTP id y13so3266335plc.8;
-        Thu, 24 Jun 2021 09:57:43 -0700 (PDT)
+        id S232398AbhFXRL6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Jun 2021 13:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232435AbhFXRL4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Jun 2021 13:11:56 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2320C0613A3
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Jun 2021 10:09:32 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id b5so7029939ilc.12
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Jun 2021 10:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
+        b=p95plxgcKdT8+TUJCmcKdAyJL6L8C+j3muAeTI6tbvEOMwKUFZvBH22Z3GEGxdnUZH
+         d9XkDasjcz/bUj2n1PkWxPPQL/Sxtf1a7ckN43IkWwU4a9v6DYeOi9Tg8DPYHl700hH/
+         xlmv54Ir2NUVB8zwaX1UsxTzP5GUW3mdywmszCeflzWKbXzDgkMNhx+qVsi3FklHnD5x
+         fSDWvxz3POXOJ/0yZM+F2G99rPMTFJK+bPA5TWYu0VJpvpEjmQwRSgXLB6dx+kXpC0Uz
+         JX+JhI0lSB7VkwJTdkbApCrUx6TGzp99N5mAm/d0lil4hmexz93RFAPSpMzmwkjNchKB
+         rXTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TfRjZvIBnPtJhX/lgcvHWYZI8ch0mIRl4NSCn+C67WM=;
-        b=Ys+Iyin2PUlvbC8bgxiZog9SBj3J3DPNJ1UnXwwtOIa005SPcB+Gz0JGfhs5svRPQu
-         n+Faaq7PuV+VluOAv5IQBAg8u4Y8ZfslG6Pz6FYHqCGmCxuhA9W0v8ZijQaF8awKfc+n
-         WpSaoCHeKKcXwG4t5RLsqFJUI4eNE7yPcs6ZDmPbUgcNfO4++fWhNtBKm0pwo8NXxvo6
-         NXNUQjdf/lmtWEzZseKuC0BitD5KE/tG5OzwRJTtN5DPbpLN7Et+MmSuFN9ssMHAElF8
-         LHReSqHO4/kWbPnTIOU3aQlZWBasS+kGtNGguwEKhxcf95uwQz/6BNGlGEPEUo8jR1iN
-         WQhw==
-X-Gm-Message-State: AOAM533u8iqnDc9WACfj3OP+r7uR5+sMyRlEySoxyEfrQEzdKGFLn3Vo
-        l96YwUDYInTTlaBD350YTPRUvB/24IU=
-X-Google-Smtp-Source: ABdhPJyva/tfDQP/x1AkV7nS3quqJUIsvyAIEb59eMLgNPdJFSnNBOYNQt62WwGAPlhnQmy8KAfMEw==
-X-Received: by 2002:a17:90a:6be6:: with SMTP id w93mr6321800pjj.171.1624553862063;
-        Thu, 24 Jun 2021 09:57:42 -0700 (PDT)
-Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id k20sm8937899pji.3.2021.06.24.09.57.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jun 2021 09:57:41 -0700 (PDT)
-Subject: Re: [PATCH v4 09/10] scsi: ufs: Update the fast abort path in
- ufshcd_abort() for PM requests
-To:     Can Guo <cang@codeaurora.org>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, ziqichen@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1624433711-9339-1-git-send-email-cang@codeaurora.org>
- <1624433711-9339-11-git-send-email-cang@codeaurora.org>
- <b28d71a7-3839-2c07-2630-6196ea10951f@acm.org>
- <5ff72cfab707b571ef395d52931edd0f@codeaurora.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <da7f134c-3a2a-e3b9-72a1-56a19f720c70@acm.org>
-Date:   Thu, 24 Jun 2021 09:57:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
+        b=kgadwHNxMjkVBdWnF2DFZ3ozPgD5/u3F5XkehCtaoRWp9Uzotvn50674cpivWfhN2N
+         srPCXeUFhbRBEem/HYkVDz1BSDiZeqCAbNkfh9zvZsY9ZBhumXctUcZWiboKaHnebNaR
+         RmjAi5g2lFj/UZSo0PrVV1sElZLpK6zSrdp/AEoZWqDaVCvJoFiG9E7wwynSK0q8jguj
+         UNMAMOn3wl3J0JeGH1OJrPSh3tEtteIuILqdjVtzSw1j8ca3PYTI3DLcEfSlyNOBJAKe
+         qvFhMieQ5uO4moPYM4dZK0rwXlxwz6PWjl5uF5WgChsR2HrzcU7Ck3SEVpIFT4M/eRfU
+         nCbg==
+X-Gm-Message-State: AOAM530tetBVW8LaqOYZ6yFN+et9QcJM2So3OT+HZQYVW5mIH6pebX6s
+        qlsBKlkM55c2pSAFelJf0OwjL8b0Sd2x9MTag4EVtm34j1cPug==
+X-Google-Smtp-Source: ABdhPJzkYUuO368jts0QgMQyJe9SHzg0U698qd8KdfojEfYsXnHtwMfPGxVHmw7fwQ64+IhHRhAEJH5nusdeW4BWzcA=
+X-Received: by 2002:a05:6e02:524:: with SMTP id h4mr4098121ils.255.1624554560853;
+ Thu, 24 Jun 2021 10:09:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5ff72cfab707b571ef395d52931edd0f@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6638:3aa:0:0:0:0 with HTTP; Thu, 24 Jun 2021 10:09:20
+ -0700 (PDT)
+Reply-To: tutywoolgar021@gmail.com
+In-Reply-To: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
+References: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
+From:   tuty woolgar <faridaamadoubas@gmail.com>
+Date:   Thu, 24 Jun 2021 17:09:20 +0000
+Message-ID: <CADB47+607zNBfYFb4bj0nUhuuYgAdwT=G_wJ9-EeV0ESHe56Jg@mail.gmail.com>
+Subject: greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/23/21 9:16 PM, Can Guo wrote:
-> On 2021-06-24 05:33, Bart Van Assche wrote:
->> On 6/23/21 12:35 AM, Can Guo wrote:
->>> @@ -2737,7 +2737,7 @@ static int ufshcd_queuecommand(struct Scsi_Host
->>> *host, struct scsi_cmnd *cmd)
->>>           * err handler blocked for too long. So, just fail the scsi cmd
->>>           * sent from PM ops, err handler can recover PM error anyways.
->>>           */
->>> -        if (hba->wlu_pm_op_in_progress) {
->>> +        if (cmd->request->rq_flags & RQF_PM) {
->>>              hba->force_reset = true;
->>>              set_host_byte(cmd, DID_BAD_TARGET);
->>>              cmd->scsi_done(cmd);
->>
->> I'm still concerned that the above code may trigger data corruption. I
->> prefer that the above code is removed instead of being modified.
-> 
-> Removing the change will lead to deadlock when error handling prepare
-> calls pm_runtime_get_sync().
-> 
-> RQF_PM is only given to requests sent from power management operations,
-> during which the specific device/LU is suspending/resuming, meaning no
-> data transaction is ongoing. How can fast failing a PM request trigger
-> data corruption?
-
-Right, the above code only affects power management requests so there is
-no risk for data corruption.
-
-Thanks,
-
-Bart.
+My greetings to you my friend i hope you are fine and good please respond
+back to me thanks,
