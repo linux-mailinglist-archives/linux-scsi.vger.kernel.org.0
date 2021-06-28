@@ -2,63 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF883B53A8
-	for <lists+linux-scsi@lfdr.de>; Sun, 27 Jun 2021 16:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767FB3B58DE
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Jun 2021 08:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbhF0OOp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 27 Jun 2021 10:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbhF0OOo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 27 Jun 2021 10:14:44 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2279DC061574
-        for <linux-scsi@vger.kernel.org>; Sun, 27 Jun 2021 07:12:20 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id c7-20020a17090ad907b029016faeeab0ccso11041892pjv.4
-        for <linux-scsi@vger.kernel.org>; Sun, 27 Jun 2021 07:12:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=b0LgkSZ876vJfRsqKWxjQtT34QeHRV0Qtd5HtjaemhM=;
-        b=iyr+pvwJmhdQbwYuQ1TPt0GxXonTqETrie0eIEcv8VMKfy+xB4xi5CIadNMTBPRNMj
-         tPUIjV81v1m6mYwjUi6bLuEZGEfAWmSBHXutPgxzSnERDPveYT3UJNsiZWS6K0TTVlr3
-         HiYpn0jHWMHRIvJX76J6Q9Nj10dsQawg3LVJRtpoc5MC1kVuTRvo4JLr1n07kholQMPZ
-         Wmd7HGtHQcbU7PH6B5F/1mO+4ZkXaJqnCeUtF2PXto65qDLM/qptT1A4CNV1c0nEIdZ5
-         zeZqvI+ZZTL087hBnj2rbftMC1QUWU6KH+z06gDatmcLS2i4+XhHont6A5NWoot30+ks
-         untA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=b0LgkSZ876vJfRsqKWxjQtT34QeHRV0Qtd5HtjaemhM=;
-        b=R9fPmq6KmTF1PYLnFjo7WYF5nMKBdxU8Q2IKgCB7lARI4IWNiHpfRnoc9+qKU/fNaR
-         aBKG7fdUSe3TXfV3wwOz3uGK2OdZzBPwWRo4lgO8hHQSnDax8VNpQG2bPtsy9eq5+2PF
-         RFrBtYN1THOgYeixdP+KZGh/KdB7Pg8ecN904L7niLSFLAokDUb9PlJdgr3KDRkgZ/58
-         fAoeTly6nWub4ZWA6vHm0eEh66b6UaJiEJTZyj+GypOMVxVNFd/4aiZchUEUM3x6zZkB
-         c9qdLH5n70SCKD0RXLmzcnCk4RmuiyFdIe2W+N1g9ll2KCPBscuGIz+dQ/43/9i9OFl4
-         dwlg==
-X-Gm-Message-State: AOAM532L55HVUtPUkLQ+Ii3MfknOn8u4KCW4DYKQcuixCQcwJAsyCXn0
-        WPHA3b3RN0lLljoi/bGfwMBitZkUG7VmgT6TUx4=
-X-Google-Smtp-Source: ABdhPJxwoZ0gfbIQnc1ssPjqPg5kA4SlEq/J99BmFeRNpYWc3Fc0G7l7D+HZuWSlptdZPyGkbqvgLibsN7WHqLa1PcY=
-X-Received: by 2002:a17:90a:3b0d:: with SMTP id d13mr1054151pjc.32.1624803139598;
- Sun, 27 Jun 2021 07:12:19 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6a10:1788:0:0:0:0 with HTTP; Sun, 27 Jun 2021 07:12:19
- -0700 (PDT)
-Reply-To: tracymedicinemed3@gmail.com
-From:   Dr Tracy William <williams12tracy@gmail.com>
-Date:   Sun, 27 Jun 2021 16:12:19 +0200
-Message-ID: <CAETYfskwZwUBtr6BHZjENxO4oT-UibwsihZiMWzTSjfCh4Hiww@mail.gmail.com>
-Subject: From Dr Tracy from United States
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S232248AbhF1GCa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Jun 2021 02:02:30 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:44689 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232035AbhF1GC3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Jun 2021 02:02:29 -0400
+Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210628060003epoutp04777ea62521d383027f1b1a22838b8dcf~MqZBi4tun2978929789epoutp04H
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Jun 2021 06:00:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210628060003epoutp04777ea62521d383027f1b1a22838b8dcf~MqZBi4tun2978929789epoutp04H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1624860003;
+        bh=ZBOaOnM5XEPFGcC55XN4dpE+X+wQQkFTm3DwUDgOvdE=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=MpmJLGRbgtwsqQ4a9ugeeVwbsgYImWzKsP0rdvFV6zJIeRumR8hCvQ6F31jKRVRZK
+         L6n3rmb2OS2aLf2mIT+WjwjUC7aV7XSrVdQA/3gcaCKnLJ5P4IgG9fJHAwy06xRkf4
+         86fAzJSyIulcel4kSSpynAx9iJdr9J1DvsIkYzcU=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas3p2.samsung.com (KnoxPortal) with ESMTP id
+        20210628060001epcas3p2c38c4026db1fbb6c43a167d8095aab09~MqZAVAEGW1026810268epcas3p21;
+        Mon, 28 Jun 2021 06:00:01 +0000 (GMT)
+Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp4.localdomain
+        (Postfix) with ESMTP id 4GCxlj5qcBz4x9QP; Mon, 28 Jun 2021 06:00:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: [PATCH v2] scsi: ufs: Refactor ufshcd_is_intr_aggr_allowed()
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        "satyat@google.com" <satyat@google.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jpinto@synopsys.com" <jpinto@synopsys.com>,
+        "joe@perches.com" <joe@perches.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01624860001810.JavaMail.epsvc@epcpadp3>
+Date:   Mon, 28 Jun 2021 14:58:01 +0900
+X-CMS-MailID: 20210628055801epcms2p449fdffa1a6c801497d7e65bae2896b79
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20210628055801epcms2p449fdffa1a6c801497d7e65bae2896b79
+References: <CGME20210628055801epcms2p449fdffa1a6c801497d7e65bae2896b79@epcms2p4>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Simplify if else statement to return statement,
+and remove code related to CONFIG_SCSI_UFS_DWC that is not in use.
+
+v1 -> v2
+Remove code related to CONFIG_SCSI_UFS_DWC that is not in use.
+
+Cc: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.h | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index c98d540ac044..c9faca237290 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -893,16 +893,8 @@ static inline bool ufshcd_is_rpm_autosuspend_allowed(struct ufs_hba *hba)
+ 
+ static inline bool ufshcd_is_intr_aggr_allowed(struct ufs_hba *hba)
+ {
+-/* DWC UFS Core has the Interrupt aggregation feature but is not detectable*/
+-#ifndef CONFIG_SCSI_UFS_DWC
+-	if ((hba->caps & UFSHCD_CAP_INTR_AGGR) &&
+-	    !(hba->quirks & UFSHCD_QUIRK_BROKEN_INTR_AGGR))
+-		return true;
+-	else
+-		return false;
+-#else
+-return true;
+-#endif
++	return (hba->caps & UFSHCD_CAP_INTR_AGGR) &&
++		!(hba->quirks & UFSHCD_QUIRK_BROKEN_INTR_AGGR);
+ }
+ 
+ static inline bool ufshcd_can_aggressive_pc(struct ufs_hba *hba)
 -- 
-Hello Dear,
-how are you today,I hope you are good.
-My name is Tracy William from the United States, Am an English and
-French nationalities
-Waiting to hear from you Tracy.
+2.17.1
