@@ -2,53 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E643B725B
-	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jun 2021 14:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E473B72B1
+	for <lists+linux-scsi@lfdr.de>; Tue, 29 Jun 2021 14:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbhF2MxC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 29 Jun 2021 08:53:02 -0400
-Received: from [218.75.92.58] ([218.75.92.58]:65147 "EHLO WIN-VTPUBHNS72V"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232755AbhF2Mw7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 29 Jun 2021 08:52:59 -0400
-Received: from [192.168.43.47] (Unknown [197.210.84.10])
-        by WIN-VTPUBHNS72V with ESMTPA
-        ; Thu, 24 Jun 2021 20:46:28 +0800
-Message-ID: <9A845A47-7571-4588-B7D6-EB33577619B5@WIN-VTPUBHNS72V>
-Content-Type: text/plain; charset="iso-8859-1"
+        id S233523AbhF2M5w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 29 Jun 2021 08:57:52 -0400
+Received: from m12-17.163.com ([220.181.12.17]:33832 "EHLO m12-17.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233006AbhF2M5v (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 29 Jun 2021 08:57:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EXz6v
+        pDzMzYn5VZ9oPlYoMts/4MVeH8md+BmGncxj50=; b=AfuDWrt2ib7K4YLeFCBcO
+        zyu1788spbyi7H012DjZTzl2nOvfvaDNdvWGDDdk3yubglzw6idcN3xvMZxUtzUQ
+        +rYl3b8sd++fFHgiNzJNahcZz0/myIJBQyJ1EbUypNrvEHhxoCcZ64qqhqbrh4hb
+        UllmImMJAypol/YebESuoo=
+Received: from ubuntu.localdomain (unknown [218.17.89.92])
+        by smtp13 (Coremail) with SMTP id EcCowAB3n4MxGNtg_N+_+A--.31644S2;
+        Tue, 29 Jun 2021 20:55:14 +0800 (CST)
+From:   gushengxian <13145886936@163.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gushengxian <gushengxian@yulong.com>
+Subject: [PATCH] scsi: aha1542: Remove unneeded semicolons
+Date:   Tue, 29 Jun 2021 05:55:08 -0700
+Message-Id: <20210629125508.728580-1-13145886936@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: URGENT ATTENTION
-To:     Recipients <wjjt@wjjt.cn>
-From:   "Andres Auchincloss" <wjjt@wjjt.cn>
-Date:   Thu, 24 Jun 2021 14:45:50 +0200
-Reply-To: andresauchincloss926@gmail.com
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowAB3n4MxGNtg_N+_+A--.31644S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWF4fJr1rXw1ktF4UArWfGrg_yoW5ZFykpF
+        W3G3yjyw4UtF47GrZ8AF1F9r45AFykJ34xGw1vg34fWFZ3GF1qgrZF9ryYvr9xGFZ7Wa43
+        XrWFy3W7u3WUAwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jiDGOUUUUU=
+X-Originating-IP: [218.17.89.92]
+X-CM-SenderInfo: 5zrdx5xxdq6xppld0qqrwthudrp/1tbiyhLAg1QHMjyUSQAAsb
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+From: gushengxian <gushengxian@yulong.com>
 
-I will like to use this opportunity to wish you a productive time in 2021 and also confide in you to finalize this transaction of mutual benefits. It may seem strange to you, but it is real. This is a transaction that has no risk at all, due process shall be followed and it shall be carried out under the ambit of the financial laws. Being the Chief Financial Officer, BP Plc. I want to trust and put in your care Eighteen Million British Pounds Sterling, The funds were acquired from an over-invoiced payment from a past contract executed in one of my departments.
+Remove some unneeded semicolons.
 
-I can't successfully achieve this transaction without presenting you as foreign contractor who will provide a bank account to receive the funds.
+Signed-off-by: gushengxian <gushengxian@yulong.com>
+---
+ drivers/scsi/aha1542.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Documentation for the claim of the funds will be legally processed and documented, so I will need your full cooperation on this matter for our mutual benefits. We will discuss details if you are interested to work with me to secure this funds. I will appreciate your prompt response in every bit of our communication. Stay Blessed and Stay Safe.
+diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
+index 1210e61afb18..7229748a57b9 100644
+--- a/drivers/scsi/aha1542.c
++++ b/drivers/scsi/aha1542.c
+@@ -304,7 +304,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 		if (flag & SCRD)
+ 			printk("SCRD ");
+ 		printk("status %02x\n", inb(STATUS(sh->io_port)));
+-	};
++	}
+ #endif
+ 	number_serviced = 0;
+ 
+@@ -346,7 +346,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 			if (!number_serviced)
+ 				shost_printk(KERN_WARNING, sh, "interrupt received, but no mail.\n");
+ 			return IRQ_HANDLED;
+-		};
++		}
+ 
+ 		mbo = (scsi2int(mb[mbi].ccbptr) - (unsigned long)aha1542->ccb_handle) / sizeof(struct ccb);
+ 		mbistatus = mb[mbi].status;
+@@ -411,7 +411,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 						 */
+ 		my_done(tmp_cmd);
+ 		number_serviced++;
+-	};
++	}
+ }
+ 
+ static int aha1542_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
+@@ -537,7 +537,7 @@ static void setup_mailboxes(struct Scsi_Host *sh)
+ 		any2scsi(aha1542->mb[i].ccbptr,
+ 			 aha1542->ccb_handle + i * sizeof(struct ccb));
+ 		aha1542->mb[AHA1542_MAILBOXES + i].status = 0;
+-	};
++	}
+ 	aha1542_intr_reset(sh->io_port);	/* reset interrupts, so they don't block */
+ 	any2scsi(mb_cmd + 2, aha1542->mb_handle);
+ 	if (aha1542_out(sh->io_port, mb_cmd, 5))
+@@ -552,7 +552,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
+ 	i = inb(STATUS(sh->io_port));
+ 	if (i & DF) {
+ 		i = inb(DATA(sh->io_port));
+-	};
++	}
+ 	aha1542_outb(sh->io_port, CMD_RETCONF);
+ 	aha1542_in(sh->io_port, inquiry_result, 3, 0);
+ 	if (!wait_mask(INTRFLAGS(sh->io_port), INTRMASK, HACC, 0, 0))
+@@ -581,7 +581,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
+ 	default:
+ 		shost_printk(KERN_ERR, sh, "Unable to determine DMA channel.\n");
+ 		return -1;
+-	};
++	}
+ 	switch (inquiry_result[1]) {
+ 	case 0x40:
+ 		sh->irq = 15;
+@@ -604,7 +604,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
+ 	default:
+ 		shost_printk(KERN_ERR, sh, "Unable to determine IRQ level.\n");
+ 		return -1;
+-	};
++	}
+ 	sh->this_id = inquiry_result[2] & 7;
+ 	return 0;
+ }
+@@ -639,7 +639,7 @@ static int aha1542_mbenable(struct Scsi_Host *sh)
+ 
+ 		if (aha1542_out(sh->io_port, mbenable_cmd, 3))
+ 			goto fail;
+-	};
++	}
+ 	while (0) {
+ fail:
+ 		shost_printk(KERN_ERR, sh, "Mailbox init failed\n");
+@@ -657,7 +657,7 @@ static int aha1542_query(struct Scsi_Host *sh)
+ 	i = inb(STATUS(sh->io_port));
+ 	if (i & DF) {
+ 		i = inb(DATA(sh->io_port));
+-	};
++	}
+ 	aha1542_outb(sh->io_port, CMD_INQUIRY);
+ 	aha1542_in(sh->io_port, inquiry_result, 4, 0);
+ 	if (!wait_mask(INTRFLAGS(sh->io_port), INTRMASK, HACC, 0, 0))
+@@ -676,7 +676,7 @@ static int aha1542_query(struct Scsi_Host *sh)
+ 	if (inquiry_result[0] == 0x43) {
+ 		shost_printk(KERN_INFO, sh, "Emulation mode not supported for AHA-1740 hardware, use aha1740 driver instead.\n");
+ 		return 1;
+-	};
++	}
+ 
+ 	/*
+ 	 * Always call this - boards that do not support extended bios translation
+-- 
+2.25.1
 
-
-
-Best Regards
-
-
-
-
-Tel: +1 (587) 770-0485
-Andres .B. Auchincloss
-Chief financial officerBP Petroleum p.l.c.
-
-
-
-
-                                  Copyright ©? 1996-2021
 
