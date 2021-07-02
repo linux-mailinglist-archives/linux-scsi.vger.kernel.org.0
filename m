@@ -2,112 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250A13BA316
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Jul 2021 18:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D983BA35F
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Jul 2021 18:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbhGBQMT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Jul 2021 12:12:19 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13804 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229455AbhGBQMT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Jul 2021 12:12:19 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 162G35aq110585;
-        Fri, 2 Jul 2021 12:09:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=HAiqlY+tPDpmV3CsWOuGwaS6YOetITX/IXrdESmZaxQ=;
- b=V3k7sbtyM0gOWIcRm3yP7t8+r0BXrSfrr5p3zv6kz0QwiILl0kykqkHdGDIayihJ4S0V
- 4cjY7LdFCP0mJWOXr0sIa9NuDqQUSsMKWQcWH7kpTJ0hg1Cfks680e47Tx03msJW6rDh
- IbsVVUxwZR5iyz3Aq58GXWsgQ0ikjK7JYG8un/ktCkV6rIOzsZIHagkfVDtPkJc11uFO
- paY+zmUAzhmktjaR9GV5xGrNXXj96wMTg6stqBXkuCD8Oi5jRvR4mb9TZYKdap1skAao
- 33KnH4XLZcKR/Xz9zC2MuvEg7H++EqFpT6Tb55kZjOLi4228TxMnqtiIReVGxxq7OGIL ew== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39j5yvg46s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jul 2021 12:09:45 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 162FeB9P005525;
-        Fri, 2 Jul 2021 16:09:43 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 39ft8es0jp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jul 2021 16:09:43 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 162G9bhd30081410
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 2 Jul 2021 16:09:37 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D49E152050;
-        Fri,  2 Jul 2021 16:09:37 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8C6345204F;
-        Fri,  2 Jul 2021 16:09:37 +0000 (GMT)
-From:   Steffen Maier <maier@linux.ibm.com>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>
-Subject: [PATCH] zfcp: report port fc_security as unknown early during remote cable pull
-Date:   Fri,  2 Jul 2021 18:09:22 +0200
-Message-Id: <20210702160922.2667874-1-maier@linux.ibm.com>
-X-Mailer: git-send-email 2.25.1
+        id S230101AbhGBQwN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Jul 2021 12:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbhGBQwM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Jul 2021 12:52:12 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DBBC061762
+        for <linux-scsi@vger.kernel.org>; Fri,  2 Jul 2021 09:49:39 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id p22so17332925yba.7
+        for <linux-scsi@vger.kernel.org>; Fri, 02 Jul 2021 09:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=64vad65nr7tpIYS8HCMA5JwGAkE117+9+C40DtsHkZk=;
+        b=UotgbOU2kfIY3nihzczYBBCm6kA41CQAcV4GYbbM4nnU5bDq8fCBnxyHRcld35jfPs
+         IFyn/+9CMwkqwA2+JSrKm5v3TF4TSGgboVnZ0f3C2MjDr995xPAyCwsVg2xNAAVe1GLA
+         F3VOOY+cHXFk0vO7xFX7iir/JHu4UXId61nw7NzueMAVIE4tLoie43RqDun8cONUqCWV
+         gqUdXs18CcNhxHYSSP/E7eMPI0dHj9jGdwmZH/KsEvAs2DRexQPzmBxjduddOdCA6mS7
+         KXHyd2lkRc6I7VTNH9vWKqT8MiP+222DE5yb8VJyrUPJRsjiH3CPI9NuzXxMgbs8rr8P
+         +Xpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=64vad65nr7tpIYS8HCMA5JwGAkE117+9+C40DtsHkZk=;
+        b=Tddq0FRFtXy9gMtHq5HLH2ebCPioIBuPsApvVYuE/rqeVd1bNKwh7w0gpe6xysSSfc
+         WzjWuLe6nhXrRH+jMlu5cJIvNtzHbfrILstwnMLKe209xeS8vQXw7oGC9McMpGdBJ5uQ
+         OGz0XT5DELg43jVo1hYsLhkoghSjuOLHRv65oTExxBPQTDeBczFyZ/qaVp8LzD3MUacI
+         /C5V80FFgW52xxd2mC9bCpDbaKEWt7BoQYlE/oEAXYEwDBq0QWn91wEx17AjBUVxFqIL
+         R6fbguWOFEVftR5IEflJXz9EnlXsjsh9Xk5tRvY6F7/Fzlo24zYHBs31BQuSFxU+EFRV
+         9K3w==
+X-Gm-Message-State: AOAM530dk+8fhCRvmF8fF/SChw1LeDsgW6sNPCNt5PKevAhuTP0XF6H6
+        Q0bV6J0gjWg+idZXi96VLr2hbc8BgpWKujNAB2E=
+X-Google-Smtp-Source: ABdhPJzIc5iuUZyIDhhN1uc+FzHQ2cE2hNgTwtrWc1IDFzfifYByBwC3OE6+XwjiieAECdZ6PC4r18RDy3wFaXXitR8=
+X-Received: by 2002:a25:c243:: with SMTP id s64mr392153ybf.171.1625244579149;
+ Fri, 02 Jul 2021 09:49:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tGK4XpK653FCDN84mAgwGaw8Se5lKLG_
-X-Proofpoint-ORIG-GUID: tGK4XpK653FCDN84mAgwGaw8Se5lKLG_
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-02_08:2021-07-02,2021-07-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=999
- clxscore=1011 impostorscore=0 bulkscore=0 mlxscore=0 malwarescore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107020086
+Received: by 2002:a05:7010:730e:b029:be:8883:5ed4 with HTTP; Fri, 2 Jul 2021
+ 09:49:38 -0700 (PDT)
+Reply-To: bazaatg@gmail.com
+From:   Tchao Ago Bazaa <johansenfiska@gmail.com>
+Date:   Fri, 2 Jul 2021 09:49:38 -0700
+Message-ID: <CANkY9L_fsBUuxuOGeX7+JfXaeDK1j9Ezb_109_66s2kyy33RKQ@mail.gmail.com>
+Subject: Proposal
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On remote cable pull, a zfcp_port keeps its status and only gets
-ZFCP_STATUS_PORT_LINK_TEST added. Only after an ADISC timeout,
-we would actually start port recovery and remove
-ZFCP_STATUS_COMMON_UNBLOCKED which zfcp_sysfs_port_fc_security_show()
-detected and reported as "unknown" instead of the old and possibly stale
-zfcp_port->connection_info.
+Hello
 
-Add check for ZFCP_STATUS_PORT_LINK_TEST for timely "unknown" report.
+I apologize for using this medium to contact you. My name is Barrister
+Tchao Ago Bazaa and I am a lawyer by profession. I am contacting you
+in respect of my late client who bears the same surname as you and a
+citizen of your country, my late client died in a car accident along
+with his family some years back, leaving no next of kin. My late
+client  was a business man who was into the oil and gold business here
+in my country.
 
-Signed-off-by: Steffen Maier <maier@linux.ibm.com>
-Fixes: a17c78460093 ("scsi: zfcp: report FC Endpoint Security in sysfs")
-Cc: <stable@vger.kernel.org> #5.7+
-Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
----
+He left behind a fund deposit value of  ( Five Million Nine Hundred
+Thousand United States Dollars only ) the bank where this money was
+deposited is trying to confiscate it, since i cannot locate any member
+of the family a long time after his demise, I therefore seek your
+since partnership since you share the same family names with my late
+client and probably from the same country, do not hesitate to send me
+the following information below for easy  communication and endeavor
+to reply through my private email address for more details:
 
-Martin, James, we have a small zfcp bugfix.
-Would be nice if it could still make it into v5.14-rc1 merge window,
-but I'm probably too late for that. v5.14-rc2 is fine, too.
-Applies to 5.14/scsi-staging or 5.14/scsi-queue or James' misc branch,
-or to the corresponding fixes branch(es).
+Your full names
+Your private Telephone Number
 
- drivers/s390/scsi/zfcp_sysfs.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks
 
-diff --git a/drivers/s390/scsi/zfcp_sysfs.c b/drivers/s390/scsi/zfcp_sysfs.c
-index 544efd4c42f0..b8cd75a872ee 100644
---- a/drivers/s390/scsi/zfcp_sysfs.c
-+++ b/drivers/s390/scsi/zfcp_sysfs.c
-@@ -487,6 +487,7 @@ static ssize_t zfcp_sysfs_port_fc_security_show(struct device *dev,
- 	if (0 == (status & ZFCP_STATUS_COMMON_OPEN) ||
- 	    0 == (status & ZFCP_STATUS_COMMON_UNBLOCKED) ||
- 	    0 == (status & ZFCP_STATUS_PORT_PHYS_OPEN) ||
-+	    0 != (status & ZFCP_STATUS_PORT_LINK_TEST) ||
- 	    0 != (status & ZFCP_STATUS_COMMON_ERP_FAILED) ||
- 	    0 != (status & ZFCP_STATUS_COMMON_ACCESS_BOXED))
- 		i = sprintf(buf, "unknown\n");
--- 
-2.25.4
-
+Tchao Ago Bazaa
