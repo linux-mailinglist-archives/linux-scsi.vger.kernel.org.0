@@ -2,125 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FFF3BB609
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Jul 2021 05:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6CF3BB6B7
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Jul 2021 07:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhGEEC0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Jul 2021 00:02:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39370 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229495AbhGEECZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Jul 2021 00:02:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625457589;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WXgO0oXmvf/9A/1qL8w68Z6/mTqGpM66mMODKwc4Vbo=;
-        b=Y/9V0wYz2D2UIwkSGFcyEkae9nfVeIZazhC/ybBGmZ76jxea1C92woiXcSOen/XYnaM1Cp
-        C9VS2LKHpIHzhdR/n/vx5Td5FeH4LQY30XVvFNLLIrT6SZKq1e/wUxyi9dhVYn23U6qzGh
-        sQcwgICOrDsmIY0YNtWNTGQhN24rcKE=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-436-ntdPBo4RMzWjEfKAgrvhnQ-1; Sun, 04 Jul 2021 23:59:48 -0400
-X-MC-Unique: ntdPBo4RMzWjEfKAgrvhnQ-1
-Received: by mail-pf1-f200.google.com with SMTP id f9-20020a056a0022c9b029030058c72fafso11105200pfj.1
-        for <linux-scsi@vger.kernel.org>; Sun, 04 Jul 2021 20:59:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=WXgO0oXmvf/9A/1qL8w68Z6/mTqGpM66mMODKwc4Vbo=;
-        b=EaYR6nJz9csU6/EuYx6IsI7FqQ2ow7R9Vm+N4tAxAXldBUYo+oZFAKNi3++ZEqnvfo
-         /cHWavgTAo2HB141cMTTKjsRt7GEvlN36EEckUiqE7ymVrFZu69VvLVq32Ro+za7Vulf
-         sl2DbYdNg3+p/3r7T0i6CHirq/1oE4XnX7Mkru4+0hAIWFtI84oVwttJ+pzBoX2x62+Z
-         Es0UlBhFQbOQVMR7L51R88XkSNEWjDr5XJYXLiYq7Gp/hX6r7WWUdCMxR7oZzae/dWiA
-         p7HYw/CV2pJfP5z997KMBmZyLSQW7H5i5xQyxA2TzjvKOorAlGajYpxdW2rlWbYsPCpk
-         BjSw==
-X-Gm-Message-State: AOAM532MfO5UGZ0ObYgJnSXGs85gnd4NbeQBZgHu/aiawbEECbMIzdJC
-        fjx1pfl54ZsUBXy9J16/CbmZ+nzG/kJ+hQ/uLPOk9f9WG8vvFls7UYjwsjTYLjsOIfkojiiqVkw
-        fs1A6SnNmzfzbw7JYTIF1fA==
-X-Received: by 2002:a17:90a:af90:: with SMTP id w16mr13185184pjq.129.1625457587010;
-        Sun, 04 Jul 2021 20:59:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy7m1tdef3U/fD1ZeJXGh6nhQJM7pMQfOcmUl03cSHKc5dhYUnHwmNe0pBMkiHdPgpxcvo9fQ==
-X-Received: by 2002:a17:90a:af90:: with SMTP id w16mr13185164pjq.129.1625457586781;
-        Sun, 04 Jul 2021 20:59:46 -0700 (PDT)
-Received: from wangxiaodeMacBook-Air.local ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id k9sm526132pfu.100.2021.07.04.20.59.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jul 2021 20:59:46 -0700 (PDT)
-Subject: Re: [PATCH V2 5/6] virtio: add one field into virtio_device for
- recording if device uses managed irq
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org
-Cc:     Sagi Grimberg <sagi@grimberg.me>, Daniel Wagner <dwagner@suse.de>,
-        Wen Xiong <wenxiong@us.ibm.com>,
-        John Garry <john.garry@huawei.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization@lists.linux-foundation.org
-References: <20210702150555.2401722-1-ming.lei@redhat.com>
- <20210702150555.2401722-6-ming.lei@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <fbe8e661-86c7-ef79-1c61-884715b64e87@redhat.com>
-Date:   Mon, 5 Jul 2021 11:59:21 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.11.0
+        id S229771AbhGEFUj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Jul 2021 01:20:39 -0400
+Received: from static-190-25-223-138.static.etb.net.co ([190.25.223.138]:55122
+        "EHLO correo.hdv.gov.co" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229744AbhGEFUi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Jul 2021 01:20:38 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id 7D5111879450;
+        Sat,  3 Jul 2021 12:39:23 -0500 (-05)
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id rZmeYcrpDuqR; Sat,  3 Jul 2021 12:39:23 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id EE7FA1E4031B;
+        Sat,  3 Jul 2021 10:10:03 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 correo.hdv.gov.co EE7FA1E4031B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hdv.gov.co;
+        s=11DF984A-9D1F-11E6-B193-F2669FC4C452; t=1625325004;
+        bh=YlrueNvYvQTA/rsidM4wE66HE6f1WhuqcZM/LO2K65o=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=I73l51VAYxF6bwuZnkRyIRzkk+lDes1PrQrIowQ/fwmNXfgc93DlRqw1Re2vOXMyH
+         Q6xpO0kT56Dx5fc3aM/vya953lGwZWS4LrZDkrnHyCcoDsbax7fMPvotNnZecF85lg
+         UNuHYpxbKX6xlQ9+cubSUUzG8keQ1/wxbsAB/w70=
+X-Virus-Scanned: amavisd-new at correo.hdv.gov.co
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 8Mgb3La0Al-1; Sat,  3 Jul 2021 10:10:03 -0500 (-05)
+Received: from [172.20.10.6] (unknown [41.147.1.129])
+        by correo.hdv.gov.co (Postfix) with ESMTPSA id 1AA481D851E4;
+        Sat,  3 Jul 2021 07:44:42 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <20210702150555.2401722-6-ming.lei@redhat.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: my subject
+To:     Recipients <planeacion.arquitecto@hdv.gov.co>
+From:   planeacion.arquitecto@hdv.gov.co
+Date:   Sat, 03 Jul 2021 05:44:32 -0700
+Reply-To: callumfoundation001@gmail.com
+Message-Id: <20210703124443.1AA481D851E4@correo.hdv.gov.co>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hallo,
 
-ÔÚ 2021/7/2 ÏÂÎç11:05, Ming Lei Ð´µÀ:
-> blk-mq needs to know if the device uses managed irq, so add one field
-> to virtio_device for recording if device uses managed irq.
->
-> If the driver use managed irq, this flag has to be set so it can be
-> passed to blk-mq.
->
-> Cc: "Michael S. Tsirkin"<mst@redhat.com>
-> Cc: Jason Wang<jasowang@redhat.com>
-> Cc:virtualization@lists.linux-foundation.org
-> Signed-off-by: Ming Lei<ming.lei@redhat.com>
-> ---
->   drivers/block/virtio_blk.c         | 2 ++
->   drivers/scsi/virtio_scsi.c         | 1 +
->   drivers/virtio/virtio_pci_common.c | 1 +
->   include/linux/virtio.h             | 1 +
->   4 files changed, 5 insertions(+)
->
-> diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-> index e4bd3b1fc3c2..33b9c80ac475 100644
-> --- a/drivers/block/virtio_blk.c
-> +++ b/drivers/block/virtio_blk.c
-> @@ -764,6 +764,8 @@ static int virtblk_probe(struct virtio_device *vdev)
->   	vblk->tag_set.queue_depth = queue_depth;
->   	vblk->tag_set.numa_node = NUMA_NO_NODE;
->   	vblk->tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
-> +	if (vdev->use_managed_irq)
-> +		vblk->tag_set.flags |= BLK_MQ_F_MANAGED_IRQ;
+ Sie haben eine Spende von 2.800.000,00 USD. Ich gewann die amerikanische L=
+otterie im Wert von 343 Millionen US-Dollar in Amerika und spendete einen T=
+eil davon an f=FCnf gl=FCckliche Menschen und Wohlt=E4tigkeitsorganisatione=
+n, die sich an meinen verstorbenen Enkel erinnern, der Anfang April vorzeit=
+ig geboren wurde und nur einen Tag lebte. F=FCr weitere Informationen wende=
+n Sie sich bitte an: callumfoundation001@gmail.com
+
+ =
 
 
-I'm not familiar with blk mq.
-
-But the name is kind of confusing, I guess 
-"BLK_MQ_F_AFFINITY_MANAGED_IRQ" is better? (Consider we had 
-"IRQD_AFFINITY_MANAGED")
-
-This helps me to differ this from the devres (device managed IRQ) at least.
-
-Thanks
-
-
+Mit freundlichen Gr=FC=DFen
+Frau Lerynne West
