@@ -2,60 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F913BABE9
-	for <lists+linux-scsi@lfdr.de>; Sun,  4 Jul 2021 09:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 144EF3BAC26
+	for <lists+linux-scsi@lfdr.de>; Sun,  4 Jul 2021 10:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhGDH5A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 4 Jul 2021 03:57:00 -0400
-Received: from comms.puri.sm ([159.203.221.185]:33930 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229614AbhGDH47 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 4 Jul 2021 03:56:59 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 6F293DF4A4;
-        Sun,  4 Jul 2021 00:54:24 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZQPgz9CQlyPN; Sun,  4 Jul 2021 00:54:23 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     martin.kepplinger@puri.sm, bvanassche@acm.org
-Cc:     hch@infradead.org, jejb@linux.ibm.com, kernel@puri.sm,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        stern@rowland.harvard.edu
-Subject: [PATCH v6 3/3] scsi: devinfo: add BLIST_MEDIA_CHANGE for Ultra HS-SD/MMC usb cardreaders
-Date:   Sun,  4 Jul 2021 09:54:03 +0200
-Message-Id: <20210704075403.147114-4-martin.kepplinger@puri.sm>
-In-Reply-To: <20210704075403.147114-1-martin.kepplinger@puri.sm>
-References: <20210704075403.147114-1-martin.kepplinger@puri.sm>
-Content-Transfer-Encoding: 8bit
+        id S229502AbhGDIsa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 4 Jul 2021 04:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229492AbhGDIsa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Jul 2021 04:48:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C252C061762
+        for <linux-scsi@vger.kernel.org>; Sun,  4 Jul 2021 01:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7PP6p0F8q9jYwNxRZoT6R7IPAy+bbP8SEbqlPdThlCk=; b=dAn3teqSnfZcXKgHx5k9e8ZMFS
+        KoJG6pjSt0x7HK/Oly0pvwvySdJ1rOkDkEA/WcjzTEgtHDfztPy2n1pnkMQ3cabVJl/Mrcdk8E41R
+        VTsciOJ3EKBVYlc0Omj10ZpuKcJlM35676fQe16SJDc78YHQqWobyDuDnTCsgYTrgOHA1fyidouRg
+        QVC32ihFJv8XKdPCzjnpCnAqyx5sATKeOLhTz50ewq8u7K9lXvdjjUOrk71KndX3vrUFajhOCzzck
+        Z9fY45rAovyYF1cdDApB/P397lzqdaRTPnTQjrPJVdP5OGjot6ucV0koUrAM+cTcshV5M4nUpmVPC
+        qvCByW9Q==;
+Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lzxkS-009B6f-Gh; Sun, 04 Jul 2021 08:45:23 +0000
+Date:   Sun, 4 Jul 2021 09:45:08 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, torvalds@linux-foundation.org,
+        muneendra.kumar@broadcom.com
+Subject: Re: [PATCH] scsi: blkcg: Fix application ID config options
+Message-ID: <YOF1FBdMd65S6L57@infradead.org>
+References: <20210703155833.3267-1-martin.petersen@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210703155833.3267-1-martin.petersen@oracle.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-These cardreader devices issue a MEDIA CHANGE unit attention not only
-when actually a medium changed but also simply when resuming from suspend.
+On Sat, Jul 03, 2021 at 11:58:33AM -0400, Martin K. Petersen wrote:
+> -	depends on BLK_CGROUP=y
+> +	depends on BLK_CGROUP=y && NVME_FC
 
-Setting the BLIST_MEDIA_CHANGE flag enables using runtime pm for SD cardreaders.
+BLK_CGROUP is a bool, so I think this can simply be:
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/scsi_devinfo.c | 1 +
- 1 file changed, 1 insertion(+)
+	depends on BLK_CGROUP && NVME_FC
 
-diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
-index d33355ab6e14..8ac0a11ac541 100644
---- a/drivers/scsi/scsi_devinfo.c
-+++ b/drivers/scsi/scsi_devinfo.c
-@@ -171,6 +171,7 @@ static struct {
- 	{"FUJITSU", "ETERNUS_DXM", "*", BLIST_RETRY_ASC_C1},
- 	{"Generic", "USB SD Reader", "1.00", BLIST_FORCELUN | BLIST_INQUIRY_36},
- 	{"Generic", "USB Storage-SMC", NULL, BLIST_FORCELUN | BLIST_INQUIRY_36}, /* FW: 0180 and 0207 */
-+	{"Generic", "Ultra HS-SD/MMC", "2.09", BLIST_MEDIA_CHANGE | BLIST_INQUIRY_36},
- 	{"HITACHI", "DF400", "*", BLIST_REPORTLUN2},
- 	{"HITACHI", "DF500", "*", BLIST_REPORTLUN2},
- 	{"HITACHI", "DISK-SUBSYSTEM", "*", BLIST_REPORTLUN2},
--- 
-2.30.2
+Otherwise this looks much better:
 
+Reviewed-by: Christoph Hellwig <hch@lst.de>
