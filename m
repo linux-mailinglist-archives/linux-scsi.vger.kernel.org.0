@@ -2,174 +2,196 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACDF3BD892
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jul 2021 16:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B683BD90C
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jul 2021 16:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbhGFOpG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Jul 2021 10:45:06 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:61778 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232395AbhGFOoG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jul 2021 10:44:06 -0400
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 166EZZk8003195;
-        Tue, 6 Jul 2021 14:41:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2020-01-29;
- bh=awwcBrcsoTb7EFRfvUxWJDz62aQpd3P60lF63yPHPE4=;
- b=A3uOwrgHMacRo/mD8ixVUqeTCxkEdB5heoXAakHLOxA2yGixk5eI9pvMo+9enG30GE0U
- sHpvvfTZBzYrLx2IVFn/rDhpDisn2YZGOuonxn65SAd43zU+n4w2i79wFfJxlFJ+GLuD
- nuBUkzSCKcaVU0R8ovoXNFznU57QTewvhGx2I3QHHqZAMInN/Lw1rEP6IP91oO/v2vR3
- WnKkosdW9gxdMAryIk858c3OGA+kixlqdkRwU7sJ/j/GipgKBhiN3okAv2IRLJsSE2tj
- vpehdD1mu8zLkw2lKLlOfSrvFlq3BJp3zyqPu72o/lpKaAH5m2XwgLnE+TY+HQ9l5FEs Dg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39m2smj0p9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 06 Jul 2021 14:41:20 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 166Ea68T092534;
-        Tue, 6 Jul 2021 14:41:19 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
-        by userp3030.oracle.com with ESMTP id 39jd11enb2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 06 Jul 2021 14:41:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LwpM4wFZB2m+EcNC332Gr8JRLly9etwX2Bgt2fr2HcK2RgpVrx/EffAac+80PteEkH1Kvgm+fUVnJScK0o/tMAbNb+tsW1Ksrc6EdgnHGs8y0+gg1sMa9apXCt8S+dSyjodyRpjjzPuMvJhH1lalJRIqdrAPhw5PgLloh60MbfPkWPsZuBfSMtvgEUfGiVih9MX2xYW6HiruD+Kx8+5VS0xu7F0U7Lz+KS2OzrKBGoyC9mp9M3qF5fYIgugYFb6iTwLe7AQ5uACPsRegwgAw/WWYgpm1U3JliVno1MCo+bOh/nvbr05k5V14yMMPqkW+tOBT2wOjMkwC3pJ22uYm8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=awwcBrcsoTb7EFRfvUxWJDz62aQpd3P60lF63yPHPE4=;
- b=W6cRk1LvAVi0uRKFoptKrL33uPuT0d1JVslt/lzuoJujpfFqZfBt+fI8pw/WZb5xK+McnxYCKAzu8m5+0ovdb+WxYTCT3n8rBqgOWwNUw5LaS8kDN/HiydFX/YmKSc3ZdCrtpQ4fvU6SYKZ7bSVAQPGOCxcjY/O/lHdYse72p2Iyk3HAqNA4cyulWDFDGlnqenyCW1H8WzabnqMGG5uB0o4kKE5OxpMzsyGcFLoyyvYz3h4WdfthOR2JI3rWreJwfwq6SJYs3RR11mU6nYMyimqHTFttrc3JfIpw0/7t9Tqx/NN6fc/ctZvSE7Rk+1g/f3U4yHICnNco5GTpGFPSkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=awwcBrcsoTb7EFRfvUxWJDz62aQpd3P60lF63yPHPE4=;
- b=yv43WjXo9+VcCsjaRD08CICMC7qzAoWkIiJ7kYbgAF1Qor/ONKpJdFdHuOibP8/gvqQmk2shd7IcOPvQZJQHyqW66XExS8V7DPZwvcyOocqGK0IXF5tIgwxGmpKfKfDngHQVRm0Jfn9oOHPhXttko+8qVO3nqHS0hC/V1AvPoLE=
-Authentication-Results: google.com; dkim=none (message not signed)
- header.d=none;google.com; dmarc=none action=none header.from=oracle.com;
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR1001MB2256.namprd10.prod.outlook.com
- (2603:10b6:301:31::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.23; Tue, 6 Jul
- 2021 14:41:16 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::3413:3c61:5067:ba73]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::3413:3c61:5067:ba73%5]) with mapi id 15.20.4287.033; Tue, 6 Jul 2021
- 14:41:16 +0000
-Date:   Tue, 6 Jul 2021 17:40:56 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Marco Elver <elver@google.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, hare@suse.de,
-        martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [GIT PULL] first round of SCSI updates for the 5.13+ merge window
-Message-ID: <20210706144056.GE26651@kadam>
-References: <e118d4b2fb924156f791564483336e7125276c47.camel@HansenPartnership.com>
- <YORh1+8Mk5RYCzx7@elver.google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YORh1+8Mk5RYCzx7@elver.google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0023.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::16)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        id S232443AbhGFOzM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Jul 2021 10:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231248AbhGFOzH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jul 2021 10:55:07 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDE3C0617AB;
+        Tue,  6 Jul 2021 07:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=1ayrkKf5NvJjQdfUl2A/VO9K+bU0q5/9ZgivWetFS3o=; b=JbK3meFocLJ6fB6QYONBPtOQk9
+        DJh8XYIRvVsq19DtaRbOde3Pqt+U3mVhAJRiVq9/pLYYfHRPetQ2VwkvtOK63TFIov9LQtN9N9PJt
+        W7/r5BUcb6i86u+BjFat8OYQU9y2P1DA/EDcTwU14mU2aPtj4aDiy4zBQ/DSm0rkTEqy36baSOqyA
+        V4yYgj7JmTV6DLtcs5VRxDGb3q6cP0CLL/po4JfkE8jt0lxs+Hs+g3d6AcmGzyEozq//QEL4RnMt8
+        byUYd3U5VUmkthiwr4pU7QnYiaWZQxohw6U15DrlSostKCZf7pcDzFMvg9GIfhVhYyVE4cG/tyrih
+        3mmB/xNA==;
+Received: from [2602:306:c5a2:a380:b447:81b0:ffaa:defc]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m0mQg-00F4IY-8x; Tue, 06 Jul 2021 14:52:06 +0000
+Subject: Re: [PATCH] bus: Make remove callback return void
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joey Pabalan <jpabalanb@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Frank Li <lznuaa@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        SeongJae Park <sjpark@amazon.de>,
+        Julien Grall <jgrall@amazon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+From:   Geoff Levand <geoff@infradead.org>
+Message-ID: <7a68b536-302c-0374-848f-4b9535ff1306@infradead.org>
+Date:   Tue, 6 Jul 2021 07:51:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kadam (102.222.70.252) by JNAP275CA0023.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.19 via Frontend Transport; Tue, 6 Jul 2021 14:41:09 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6796fb74-422e-4ffe-c848-08d9408c1c3b
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2256:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR1001MB225641F602023A67E4D00DD48E1B9@MWHPR1001MB2256.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PfoQovxupyW6h/edQL/lLvoJ51NCdySvNPtQKyfomv/IiN/kqbTwsm1TTKbhi4TRy7mXKQprGHDS2FKb/TCISKr0bcIhJ9a7OIjzUI48zQksOWAn5+1PvZdhM29UT/h4sF2vVAPBziB7pe23AO8hKpK7RlE3QRIc4i/5+j7vLKRwa+VtQ0YKyWzqvVJtax44nq/8GqDvulHyipZWbjyEHrFZ5jPDRB246t5UFYcuyIxFXhHsICaTfyVvFXFewTKTJF+yADUNahdUbLqtK2XLxuI2Wms8acRUJ32mn8KTFEMxd3zzSEY7k0jyR+GxH65xITCuFOBeq99UZSE18TvMBp1SI449eUNtloaB0UXoOqIquGiTVHjLaoga1gF1bO2hl+/fRGZJdkjhMdx6Ytx2HCvwWj5ctEvGzUWvK1CgNYxJrVMfNNNxyy5Ua+PGGB+u4ctNslYXd/y5jhNboY0iRLcShrfyxAR/XM+6LRZ3WNssEypLsKLTH5jA0OqWdEe2VBJDRJQ+PWWgt6iRLN42R0gZc0crtLfhK1wr0h9CMb3l4AYwpwLUR55G62ep7bXM9SHAQ/6JofnAAHk6F71kO9Y2cF4MMvL9yRPULhLOGPyGxDkTYUw/6xSrO2RnIpSsOuSEujQfEWdwDiSaPi6Tc+wyuYjPfxVkL9Zw0VrOVSoqi/7DflVaUKU3T/bLF/Lqcn3xrnjmqSPRSnR8k60ZrkPNOsOotJKPc7SJI3Osp9ff9KMk7yfkwRt+sJ3n1r9YSFoyr8+vlguogOhHUNkDgA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(136003)(39860400002)(366004)(346002)(376002)(66556008)(316002)(5660300002)(478600001)(2906002)(966005)(8676002)(83380400001)(9576002)(66946007)(6916009)(8936002)(54906003)(6666004)(4326008)(86362001)(55016002)(66476007)(9686003)(26005)(6496006)(1076003)(186003)(38100700002)(956004)(44832011)(33716001)(52116002)(33656002)(38350700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PogvlLlcDf2Nifte6plDCRgxvz3+qfEvO2F0w9mFKHY4agksEdA1ifp6XdLt?=
- =?us-ascii?Q?8UKmRcdOwdrNps2OFfzw94yuJO/PuHlGjqbREHkVox/jQojipyYHZfEgwf3f?=
- =?us-ascii?Q?50YUCjCdCNlNrACHr8DwKIrA01ZT2J5O0jbKUzirhf9M6/ws7znoJqmeYE97?=
- =?us-ascii?Q?ShIohBWMySlv5X/yigL7u6zlMxq+aK7ZFhY/ill9nJXxkMx9Ee6Zi7UBSiLA?=
- =?us-ascii?Q?tjVRWerDq8KOiEpCqz6Q/vhwVo/kymCd3LefNj90I5aDEvYAC45sfpIKjT4G?=
- =?us-ascii?Q?VbPdiCZdr4F/5g/1ogG7XMtye8MzEOiLRjWxkPhE/lEkGk5LDVaixGZ2fz/V?=
- =?us-ascii?Q?LnQ2KnnJZsalVj3QNFbUOfJrDuYPOsgn+aO83G+Eg71tG6Mm//WZ7v8G3taX?=
- =?us-ascii?Q?UEPyEgwBhixUwRiGAFguAAP6I4i6/OvYMG3/CT2p5YuEGvk+y5C6ylOC1s8O?=
- =?us-ascii?Q?t4yJu0nna4ArXgi5Ma6pXPsT/Tqai0xjz5dYmhTFNCPwAm/wmOQkIS7Ozc3e?=
- =?us-ascii?Q?UVdx3yp29Tu5cTi65YoXrMi5QRKhz6oNtHus/Cytw/8ds93iIbb10sioF1TQ?=
- =?us-ascii?Q?NpXQWxJjFgCC7EKkJePLRgNUWOECYjRQzpw2YMKCCU4XdNnB2ogoH8r9Sr0N?=
- =?us-ascii?Q?g9370Viwpo4p9DeycZYPv5HMsMXxil6YpNK5R4iUJRahjOgNlYdemRWYEnXe?=
- =?us-ascii?Q?UEho0f6G7cMwGC+PVitP1dH3x2qR/zDBlFJl6V71gXJIBDE66U1TVeQsqR5+?=
- =?us-ascii?Q?WLrGtAkauSkgZHeTD+nTe4bYOWOnAbWqxn28M7pckXX0cGzHMWxEwwf3DRdT?=
- =?us-ascii?Q?JAillafzs//AiL6NMNDJynswRbtTR1TDuPKmVYk6VfeVQ4cTHXR8C2bOsvro?=
- =?us-ascii?Q?w+Vm2Iiena3K3kCaf4BNFwhch8/3ykzPcf3OYXoK2v25NvbGkPRkMmzNK0/M?=
- =?us-ascii?Q?/Ha8KPCSqqvmH/dAtzII3pOogUnOqOPVAN+R/mB5tYsleD+FH7WIKQmx6NDT?=
- =?us-ascii?Q?U+pYm827CEgb8GM2Kux4h1Xf+p776WEq2aNg9bo0JsdyESAa9uj7SToXT7Fa?=
- =?us-ascii?Q?vvbmiQpW60Xe2O2QtTJGfrMDJOEAn0XavdEi2/s4VJrPSqPWihIDG+8vKR1L?=
- =?us-ascii?Q?C0fwQQ6v5DVG4etToSS7jvPzkEi4ONGLrIuTLZn/lTkljM8q5DppiD1tG8qx?=
- =?us-ascii?Q?zpa6jUD/nFMz/l7ShzYBvJgGz8GEPZVuAiFNtgbKs0BWJ5RzdtAfu9kB3JjC?=
- =?us-ascii?Q?LpD/sAZ4v3ADV1t7SUQN4Hpncb9Mi+nvT2f8nQyKRRMkBPP6tWae14s6vfev?=
- =?us-ascii?Q?Kz582ze+t7PqQNNgqtZlLVin?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6796fb74-422e-4ffe-c848-08d9408c1c3b
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2021 14:41:16.6023
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z89EEP7WhcwEIT7224roXeNC/l+PLTAWlvn8/pvgnW6KGwLJn/U+cMPCUkHSXYK3TZc+zsprBz9kHrL6hMTmKi2J/oPdv6PU5J/p6zasnH0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2256
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10037 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
- suspectscore=0 phishscore=0 mlxscore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107060068
-X-Proofpoint-GUID: CX-z2UKS6lA8nN_cpItW-nZsnA1BD3tU
-X-Proofpoint-ORIG-GUID: CX-z2UKS6lA8nN_cpItW-nZsnA1BD3tU
+In-Reply-To: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jul 06, 2021 at 03:59:51PM +0200, 'Marco Elver' via syzkaller-bugs wrote:
-> On Fri, Jul 02, 2021 at 09:11AM +0100, James Bottomley wrote:
-> [...]
-> >       scsi: core: Kill DRIVER_SENSE
-> [...]
-> 
-> As of this being merged, most of our syzbot instances are broken with:
-> 
-> | Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
-> | CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.13.0-syzkaller #0
-> | Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> | Call Trace:
-> |  __dump_stack lib/dump_stack.c:79 [inline]
-> |  dump_stack_lvl+0x6e/0x91 lib/dump_stack.c:96
-> |  panic+0x192/0x4c7 kernel/panic.c:232
-> |  mount_block_root+0x268/0x31a init/do_mounts.c:439
-> |  mount_root+0x162/0x18d init/do_mounts.c:555
-> |  prepare_namespace+0x1ff/0x234 init/do_mounts.c:607
-> |  kernel_init_freeable+0x2c4/0x2d6 init/main.c:1604
-> |  kernel_init+0x1a/0x1c0 init/main.c:1483
-> |  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-> 
-> I've bisected the problem to 464a00c9e0ad ("scsi: core: Kill DRIVER_SENSE"):
+On 7/6/21 2:50 AM, Uwe Kleine-König wrote:
 
-Here is one of syzbot reports.
+> --- a/arch/powerpc/platforms/ps3/system-bus.c
+> +++ b/arch/powerpc/platforms/ps3/system-bus.c
+> @@ -381,7 +381,7 @@ static int ps3_system_bus_probe(struct device *_dev)
+>  	return result;
+>  }
+>  
+> -static int ps3_system_bus_remove(struct device *_dev)
+> +static void ps3_system_bus_remove(struct device *_dev)
+>  {
+>  	struct ps3_system_bus_device *dev = ps3_dev_to_system_bus_dev(_dev);
+>  	struct ps3_system_bus_driver *drv;
+> @@ -399,7 +399,6 @@ static int ps3_system_bus_remove(struct device *_dev)
+>  			__func__, __LINE__, drv->core.name);
+>  
+>  	pr_debug(" <- %s:%d: %s\n", __func__, __LINE__, dev_name(&dev->core));
+> -	return 0;
+>  }
 
-https://groups.google.com/g/syzkaller-bugs/c/6aqmRNRYI7E/m/V7BNerRfDAAJ
+PS3 part looks fine.
 
-If you look at the console output link, init_mount() is failing with
--ENXIO.  It looks the sda drive is not found at all.  It's supposed to
-print a list of available partitions but the list is empty.
-
-regards,
-dan carpenter
-
+Acked-by: Geoff Levand <geoff@infradead.org>
