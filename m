@@ -2,56 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7EC3BC3D9
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jul 2021 00:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B477F3BC504
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jul 2021 05:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbhGEWQ5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Jul 2021 18:16:57 -0400
-Received: from static-190-25-223-138.static.etb.net.co ([190.25.223.138]:45434
-        "EHLO correo.hdv.gov.co" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233128AbhGEWQ5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Jul 2021 18:16:57 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by correo.hdv.gov.co (Postfix) with ESMTP id B8BD322047EA;
-        Mon,  5 Jul 2021 15:42:51 -0500 (-05)
-Received: from correo.hdv.gov.co ([127.0.0.1])
-        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id x2mUaLOGGdrs; Mon,  5 Jul 2021 15:42:51 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.hdv.gov.co (Postfix) with ESMTP id 1B6ED22047C3;
-        Mon,  5 Jul 2021 15:42:48 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 correo.hdv.gov.co 1B6ED22047C3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hdv.gov.co;
-        s=11DF984A-9D1F-11E6-B193-F2669FC4C452; t=1625517768;
-        bh=Po3+jYC7/Rg7V8Ibt2yKIqN5eintSYPogxawXJ1TVGE=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=SjS8+3S6btHv/j4EPmEcHk/IquAHx4UZolUph+GAo+CU219khrNccQlbKwuWFpI1T
-         3xz9oZdiDy1Qw/l0L8+aU6aSlBtXH6126Mo9rK5aFzxcEC9V/0qHdwHcEUMUK4u1N/
-         h9IwxGQApsu1uIXEh6vlfnc4OmXTdq10Rr5ROs/0=
-X-Virus-Scanned: amavisd-new at correo.hdv.gov.co
-Received: from correo.hdv.gov.co ([127.0.0.1])
-        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TeJoKQwBS-hp; Mon,  5 Jul 2021 15:42:48 -0500 (-05)
-Received: from [10.1.237.235] (unknown [154.13.1.139])
-        by correo.hdv.gov.co (Postfix) with ESMTPSA id CF4062204771;
-        Mon,  5 Jul 2021 15:42:41 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S229919AbhGFDON (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Jul 2021 23:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229827AbhGFDOM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Jul 2021 23:14:12 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04767C061574
+        for <linux-scsi@vger.kernel.org>; Mon,  5 Jul 2021 20:11:35 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id 21so18253878pfp.3
+        for <linux-scsi@vger.kernel.org>; Mon, 05 Jul 2021 20:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=KN5Dq3VA+/OK1czIe0yr+RPnDgcQ25YkL9hr4K2AuxQ=;
+        b=FbVlosVGAhF2T6PbGoyZZARHDAwjMwIpt3FNw1ekVJ+XmMI1+ZamoDfeWjFUHawEfC
+         46/cNs0JkmNw3vvdf57w/nlsupI7oLAh42FvEz9zqK2+cVfkvxclUy1pWPjTG+jz0Al9
+         f8AJ0O3icq2SH1G4OYhIXPAd4gciEIQ3eU0sbeWqxmtd/njqb79EAXia0kyGseQkWBUn
+         msgzF7zHuiTRT/CiGjJYK1dk7VJFV4YK/xI0hha5LAt2LcBIgc2vkfYepbTN+wsyunSo
+         jDzBCM99o+GP2VQk1aL/flnMk2DNhSWQ/K32Gst94HfNPYBFqwCXZN+NwuyH8IxGR6nM
+         hY7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=KN5Dq3VA+/OK1czIe0yr+RPnDgcQ25YkL9hr4K2AuxQ=;
+        b=ZfOQDwuLFUvnSPpYW1snV/SFSJq4oNl8PfTe4q2PHjcNlAJ4fDH3U9MuNhoADEZ2aY
+         7+ag7+8kPBxZ6Ij5xYWJmsI5EFXyDti7TNzr4b+0HVJdhWrIowzmBmrfIXVR1BlFwy5u
+         hbhxPuXpacJNnWQ61/pl/vX/3g9OIPHpTVWjS5noTuGQSYwZGmYsSNat8Y4HdDLC6hc3
+         qPujXOfhOTd2441mY6ooM9HSaYuh/hXNGmZCJe8lG+kqMMWh28taYLqmhUHKQxtMlaok
+         sRzDZFiJCNpAUHyNIFYQ8RoQF/RoBsjfd6kFYgkUKq3AWf2au0g6QbYgEF8Io48jtexI
+         zNjQ==
+X-Gm-Message-State: AOAM533gFN0fpB/D6JvjGi0goSNNYsvX5uV0nObgSyDdeC91r8bfPQii
+        tyOApIdXOtrFKnD+9J159MVmPmHCEro=
+X-Google-Smtp-Source: ABdhPJxOx466+SDypIkdhWOH43VDZXHJ52iYosJzhttWfk3yW3ZZvGuxLxAeo/K0egb4q5DVSgr3Pg==
+X-Received: by 2002:a62:7a08:0:b029:323:c5f:6503 with SMTP id v8-20020a627a080000b02903230c5f6503mr1504362pfc.59.1625541094527;
+        Mon, 05 Jul 2021 20:11:34 -0700 (PDT)
+Received: from jianchwadeMacBook-Pro.local ([154.86.159.246])
+        by smtp.gmail.com with ESMTPSA id b33sm3699584pgb.92.2021.07.05.20.11.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jul 2021 20:11:34 -0700 (PDT)
+To:     martin.petersen@oracle.com
+Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org
+From:   Wang Jianchao <jianchao.wan9@gmail.com>
+Subject: Discard performance regression after "scsi: sd: Remove LBPRZ
+ dependency for discards"
+Message-ID: <279cb008-4c92-0535-efdd-6e877bea7349@gmail.com>
+Date:   Tue, 6 Jul 2021 11:11:25 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: RE:
-To:     Recipients <planeacion.arquitecto@hdv.gov.co>
-From:   planeacion.arquitecto@hdv.gov.co
-Date:   Mon, 05 Jul 2021 22:42:27 +0200
-Reply-To: callumfoundation18@gmail.com
-Message-Id: <20210705204241.CF4062204771@correo.hdv.gov.co>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-F=C3=BCr Sie wurde eine Spende in H=C3=B6he von 2.800.000,00 =E2=82=AC gesp=
-endet. Bitte antworten Sie auf diese E-Mail, um die Spenderin (MRS. LERYNNE=
- WEST) f=C3=BCr weitere Informationen zu gespendeten Mitteln zu kontaktiere=
-n.
+Hi Martin
 
-Sch=C3=B6ne Gr=C3=BC=C3=9Fe
+We have a sata ssd with following parameters,
+
+  max_ws_blocks = 0
+  max_unmap_blocks = 262143
+  lbprz = 1
+  lbpu = 1
+  unmap_limit_for_ws = 0
+
+But the discard performance is very different on 3.10 and 4.18 series,
+On 3.10 series, the bw of discard is ~60G/s, but on 4.18, it is only ~2.7G/s
+The reason is the discard_max_bytes,
+3.10 series : 4294966784
+4.18 series : 134217216
+
+This difference happen after commit 
+commit bcd069bb250acf6088b60d189ab3ec3ae8dd11a5 (scsi: sd: Remove LBPRZ dependency for discards)
+
+@@ -2842,7 +2829,7 @@ static void sd_read_block_limits(struct scsi_disk *sdkp)
+                                sd_config_discard(sdkp, SD_LBP_WS16);
+ 
+                } else {        /* LBP VPD page tells us what to use */
+-                       if (sdkp->lbpu && sdkp->max_unmap_blocks && !sdkp->lbprz)
++                       if (sdkp->lbpu && sdkp->max_unmap_blocks)
+                                sd_config_discard(sdkp, SD_LBP_UNMAP);
+                        else if (sdkp->lbpws)
+                                sd_config_discard(sdkp, SD_LBP_WS16);
+
+Before this commit, it enters SD_LBP_WS16 case, but after the patch, it enters SD_LBP_UNMAP.
+
+Which should be the correct case ?
+
+Thanks and Best regards
+Jianchao
