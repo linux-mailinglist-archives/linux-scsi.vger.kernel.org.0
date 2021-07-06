@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 193A23BDCDD
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jul 2021 20:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4204D3BDCE2
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jul 2021 20:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbhGFSS7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Jul 2021 14:18:59 -0400
+        id S231286AbhGFSTB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Jul 2021 14:19:01 -0400
 Received: from esa.microchip.iphmx.com ([68.232.153.233]:47117 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbhGFSS6 (ORCPT
+        with ESMTP id S231246AbhGFSS6 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jul 2021 14:18:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
   t=1625595379; x=1657131379;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zRLm1m85t9VWbNKqEZHfeP3cKUleVf2WkqeWJ1Wz34k=;
-  b=W6H3E4EFdxaRTk/dd9vrxDHkukCCgbieyu80KSxCXCduFKhIj8cc9q0F
-   VaVErFXcMnUsdzYvG6tEyS4wfrMglMZx51DEwnKGTEmssNOy2bK4LT7O8
-   Gu4H23FAk+7HbdPsnVM910zba6BScfSA7qk0yL6XAOv6SNsUI5nhlI45V
-   f/qm/h9i4rbYFECwbJ7fkmvDAZUUhW59Db0pkSALQ1N4rOpu3WvcAms+S
-   h7zgZEOjdEOUbrPZS/o2Co12QxDzQwoucHb7e7DQCInSIG3tbS/i/WUMF
-   IR5AIZSkMHBHsuiEUsYqbkxX0tNXhv2pNKcUm1PCppSSpZnfGw2hsaxlh
-   w==;
-IronPort-SDR: AihNXkbkY0ZO227P7vqAnF6nacR7OwPYnAasfqB9jh4eTzRwuxP44vVR0j46JNnodCJyW5Y14m
- CEPS70G7ly4u7CKDhTAhX8oDNuI3D6btRBO6d2j4neIKzxzC9lwJC1OPZBU5TdFXVVhgc+P6sm
- SyJYJB/nm0woZe8yKnGJqJFDd3WPKqdtzGPzzIZ7ponVNu6ZMUlNVi/1M0ZUORwYpUFIMyu+cd
- q7h12uoD2/eNO8GW8xvO8pHPIiYF/T7MUZPCkd4TRAuHlK0n/q0ElcYexAFmfRJiAyVmODA4Za
- xlM=
+  bh=Va5Tn4D1ElEIsTt42mitEm2Zc+DYV4qL4YotBj8gr5Q=;
+  b=vC6RxBN3py7PLNgRUMnmGG4gbDYtUO/QICeAQmyr+QBb2MO6wzFmOh/c
+   q3qBmJQs9O0Jojs0I5zJhBlTzmlIWYX9UpuUnUIUzID33mwe5GDyCIzJ+
+   1BozkWNDFXpnD4B2WEcgcPkUmHaU5m0RUyZe/Mehn28I2hKY8HX2xF8Aq
+   vKO1Q4q3Z2NHnlhxev93tM+IS56PwQo1WDIzOgS+cvGrLYkGPh0VD2CaJ
+   dOlaY5ZpgETVp8U2XgVdVeYJHop1BGM1CjPvNGDmHYnluJ6kwXz71nBVI
+   pb4E5JoJKCFGody5rpdTnWlB/lWFN747WngANPkak7AK/+kqHK67104oL
+   Q==;
+IronPort-SDR: WIblwKlWmPODgDevCcx7j2OBYr0gaBHioLmRXgFPvzM3iU07m9iYSZY+mO2Q3R4aMcETDDzWg2
+ 1Qrkm/+VOpHrvbIVMIZ601kRQaMKVDY8o9ykfy98CEF0nZzqbwEsiHChBI4hZMpc7UM5sqRCSa
+ Ivd5AgFHCUKb/gIyaagXTs13SnbiKQyHS0TEkj3N91VJRM+AYgb9Q5lUzrViq8QCBvItAxIwsA
+ 78f3QOIDjNo7F+DDNhqBMvM9pC5zwtN6HPcX9n7xNV1TrwYGxotIN1mrXHXRchTopozRUkyuy4
+ 1pY=
 X-IronPort-AV: E=Sophos;i="5.83,329,1616482800"; 
-   d="scan'208";a="134786018"
-Received: from smtpout.microchip.com (HELO smtp.microsemi.com) ([198.175.253.82])
+   d="scan'208";a="134786019"
+Received: from f5out.microchip.com (HELO smtp.microsemi.com) ([198.175.253.81])
   by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jul 2021 11:16:18 -0700
-Received: from AVMBX1.microsemi.net (10.10.46.67) by AUSMBX1.microsemi.net
- (10.10.76.217) with Microsoft SMTP Server (version=TLS1_2,
+Received: from AUSMBX2.microsemi.net (10.10.76.218) by AVMBX2.microsemi.net
+ (10.10.46.68) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 6 Jul 2021
  11:16:18 -0700
-Received: from brunhilda.pdev.net (10.238.32.34) by avmbx1.microsemi.net
- (10.10.46.67) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+Received: from brunhilda.pdev.net (10.238.32.34) by ausmbx2.microsemi.net
+ (10.10.76.218) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
  Transport; Tue, 6 Jul 2021 11:16:18 -0700
 Received: by brunhilda.pdev.net (Postfix, from userid 1467)
-        id 5907770249B; Tue,  6 Jul 2021 13:16:18 -0500 (CDT)
+        id 5DC9D7024C2; Tue,  6 Jul 2021 13:16:18 -0500 (CDT)
 From:   Don Brace <don.brace@microchip.com>
 To:     <hch@infradead.org>, <martin.peterson@oracle.com>,
         <jejb@linux.vnet.ibm.com>, <linux-scsi@vger.kernel.org>
@@ -53,9 +53,9 @@ CC:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jeff@canonical.com>, <POSWALD@suse.com>,
         <john.p.donnelly@oracle.com>, <mwilck@suse.com>,
         <pmenzel@molgen.mpg.de>, <linux-kernel@vger.kernel.org>
-Subject: [smartpqi updates  PATCH 1/9] smartpqi: add pci id for H3C controller
-Date:   Tue, 6 Jul 2021 13:16:10 -0500
-Message-ID: <20210706181618.27960-2-don.brace@microchip.com>
+Subject: [smartpqi updates  PATCH 2/9] smartpqi: rm unsupported controller features msgs
+Date:   Tue, 6 Jul 2021 13:16:11 -0500
+Message-ID: <20210706181618.27960-3-don.brace@microchip.com>
 X-Mailer: git-send-email 2.28.0.rc1.9.ge7ae437ac1
 In-Reply-To: <20210706181618.27960-1-don.brace@microchip.com>
 References: <20210706181618.27960-1-don.brace@microchip.com>
@@ -66,37 +66,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
+From: Kevin Barnett <kevin.barnett@microchip.com>
 
-Add support for H3C P4408-Ma-8i-2GB device ID
-     VID_9005, DID_028F, SVID_193D and SDID_1108
+Remove "Feature XYZ not supported by controller" messages.
 
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+During driver initialization, the driver examines the PQI Table Feature bits.
+These bits are used by the controller to advertise features supported by the
+controller. For any features not supported by the controller, the driver would
+display a message in the form:
+        "Feature XYZ not supported by controller"
+Some of these "negative" messages were causing customer confusion.
+
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
-Reviewed-by: Murthy Bhat <Murthy.Bhat@microchip.com>
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Signed-off-by: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
+Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/smartpqi/smartpqi_init.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index dcc0b9618a64..d977c7b30d5c 100644
+index d977c7b30d5c..7958316841a4 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -8711,6 +8711,10 @@ static const struct pci_device_id pqi_pci_id_table[] = {
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x193d, 0x1107)
- 	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x193d, 0x1108)
-+	},
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x193d, 0x8460)
+@@ -7255,11 +7255,8 @@ struct pqi_firmware_feature {
+ static void pqi_firmware_feature_status(struct pqi_ctrl_info *ctrl_info,
+ 	struct pqi_firmware_feature *firmware_feature)
+ {
+-	if (!firmware_feature->supported) {
+-		dev_info(&ctrl_info->pci_dev->dev, "%s not supported by controller\n",
+-			firmware_feature->feature_name);
++	if (!firmware_feature->supported)
+ 		return;
+-	}
+ 
+ 	if (firmware_feature->enabled) {
+ 		dev_info(&ctrl_info->pci_dev->dev,
 -- 
 2.28.0.rc1.9.ge7ae437ac1
 
