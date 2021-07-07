@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E68EB3BEFB1
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70183BEFB3
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbhGGSqn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Jul 2021 14:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S232516AbhGGSqo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Jul 2021 14:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbhGGSql (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:41 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FA2C06175F
+        with ESMTP id S232602AbhGGSqn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:43 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD753C06175F
         for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:44:01 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id f20so3058673pfa.1
+Received: by mail-pf1-x431.google.com with SMTP id 145so3082433pfv.0
         for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:44:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eVVRgO9DeBF+eScGT7dgkxmiF2ifh9NrcFNE73jGyQg=;
-        b=BwhQe63LJhUI0EhEzB8NQ/qUNNxfvDICXP1LyCe4Va+oUXhWsUunGxuqu1t3dWxsJe
-         ur6IYCizSQViw3ikzLYzv/0x/a0eYMoNvjF48N68oj9VN4t2NZaIXlaUZFDEpTRO7Je0
-         RlGATrqbzvEHBLDhkWmwsEWc+ZJUUsvMZDFR9Mgkf2Odq4fznvrZOz/KjvXfBh1wXeaE
-         2h/HUpHIbfGwA8jE3aklc0w881QI9HffM4gkfXpV//DaHCyNy0Q5aGEqA0/8PYxo8KAY
-         suKDi+NdoIXEJdZ1OgiOsmrM/hGeP8JZezhaYfYproJeS4gt+1ksTtwhTBfl3MqvnevB
-         jvjQ==
+        bh=IBBGqilqsoY3KWB5nmZAVsYzQTTL8XNkKqSSRvVOtP8=;
+        b=RmMI0Bvo5Vyad/FWdWJC3UBhKmuTeUkAqGXE+us+Xo/kaYN0HTpGjhQkvSdwF6GuLE
+         95KaOMyJjsEN+W7fbiWHk3dgutSSjPB2qDtuYngx1Se99nQLwXlg2OSZZHuXvz3zjvlU
+         dSYdjrjnvMdOvdOy/RXiL0p+myFGEDkpWC8gleyKbpzpdzLNroKKtI2UvIX7APRN2mH0
+         sKb7RHsxZ5n+R2BtvPkxAaxEVs85bVvLWB85TiPIqYtutRlQ7zrcB1tTfFCvrb5t8WTS
+         mdOh94/i7Tvms+xUhGNOpF9HnD3OEyhU1ZYRIT2JQFqd3+h99ZyQtwi3gor47u1nqzbo
+         kxZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eVVRgO9DeBF+eScGT7dgkxmiF2ifh9NrcFNE73jGyQg=;
-        b=uR7EaIxI3aGMilpSmHn+AloO5zFFTPAZke9i0pXHjac5nsbftFLsL5yDTTbpUlzXiz
-         qMiAx1JtR2hw0MhtmJ/AAENC855xe+ofhPYqtHw9LbtrRwYFNpCDSleOo+qlOw6r2Xbo
-         cSHGss1JSv//bioYdLKY3fttM4wrFcbJtwzk1zUkJ86LHjAWjuOpg8XbQFfQeIbrQGBj
-         iX6wQnRpMzLaNfp2InZ1vcnCL3u4BqT7yGpnSQ6zXC0MAJoq0LbqrGA8CExopwwAXSKn
-         lRohKLmnIGnTYtdsdeBcYPyg6QEusuqKGMF1V5DwAXEuJfLj0Kjh94YoHE7JWQbUppSj
-         dDyA==
-X-Gm-Message-State: AOAM533HsguvLBwkZK2VHDEl0K95tI5xIa9Xj2g6st5WuKW2lslRmFNn
-        c82Z2ojNyquheP+lZKnLcv7zhM8gBqw=
-X-Google-Smtp-Source: ABdhPJy7eEfrIVoVtRFQCp4gFsgIwiZlP2gLkZO+G42aa5YhnCGc05KZ+DquaLz8oKGdKDl5kd8fEg==
-X-Received: by 2002:a65:4949:: with SMTP id q9mr26835408pgs.327.1625683440750;
-        Wed, 07 Jul 2021 11:44:00 -0700 (PDT)
+        bh=IBBGqilqsoY3KWB5nmZAVsYzQTTL8XNkKqSSRvVOtP8=;
+        b=UUs8/rjzsuQ3wqpxwuN5dWgO+5dHubYxyTZZzmXB+u7RptPw6Gx6g9bVKIoJlAMoSL
+         zWsJJgytudCVkhksE1ianRy0pByQi5S+CsPaGPh2v1SO36XggN0k0CsZEZ8GwgHuS8hi
+         l2oU5rK8YBSrkyDln9oy6jvAIbmTM6gNMHWGHk/+k074YlCOe1NGf7XGZTaUg7VUjVcr
+         IhJIjL6iXt7w1hnCdma3r+TtCjmymKfsUKfpNv/8fmua4tzwXvHyOLJV65nz6JdnUBIe
+         FMFdAPDbM7PKBQzC6Co+oXRaJQ3cgofT6OjtDEXtjVArMqzuHGsHe27lRndYXnBmTIsQ
+         c1oQ==
+X-Gm-Message-State: AOAM532tqZQsH/mDmfFLIm7z8hWeVxF99aMMJ4r23/AAgbgX3gre2E69
+        lB2bRIsYzyOhD0q0p9w2K/L0122nmuE=
+X-Google-Smtp-Source: ABdhPJw+nAHD9Y0wShIY4DPERs0pQbCjU0XCs33Q1PF69iMbGn5n4CIg29gSwC8f9nutjFBHVhDc1g==
+X-Received: by 2002:a63:505d:: with SMTP id q29mr18817313pgl.137.1625683441332;
+        Wed, 07 Jul 2021 11:44:01 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
         by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 11:44:00 -0700 (PDT)
+        Wed, 07 Jul 2021 11:44:01 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 08/20] lpfc: Fix null ptr dereference with NPIV ports for RDF handling
-Date:   Wed,  7 Jul 2021 11:43:39 -0700
-Message-Id: <20210707184351.67872-9-jsmart2021@gmail.com>
+Subject: [PATCH 09/20] lpfc: Fix memory leaks in error paths while issuing ELS RDF/SCR request
+Date:   Wed,  7 Jul 2021 11:43:40 -0700
+Message-Id: <20210707184351.67872-10-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210707184351.67872-1-jsmart2021@gmail.com>
 References: <20210707184351.67872-1-jsmart2021@gmail.com>
@@ -63,46 +63,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-RDF ELS handling for NPIV ports may result in an incorrect ndlp
-reference count.  In the event of a persistent link down, this may lead
-to premature release of an ndlp structure and subsequent null ptr
-dereference panic.
+The els job request structure, that is allocated while issuing els rdf/scr
+requests path, is not being released in an error path causing a memory leak
+message on driver unload.
 
-Remove extraneous lpfc_nlp_put() call in NPIV port RDF processing.
+Free the els job structure in the error paths.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index b0c443a0cf92..b1ca6f8e5970 100644
+index b1ca6f8e5970..3381912bf982 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -3413,7 +3413,6 @@ lpfc_issue_els_scr(struct lpfc_vport *vport, uint8_t retry)
- 		return 1;
- 	}
+@@ -3375,6 +3375,7 @@ lpfc_issue_els_scr(struct lpfc_vport *vport, uint8_t retry)
+ 	if (phba->sli_rev == LPFC_SLI_REV4) {
+ 		rc = lpfc_reg_fab_ctrl_node(vport, ndlp);
+ 		if (rc) {
++			lpfc_els_free_iocb(phba, elsiocb);
+ 			lpfc_printf_vlog(vport, KERN_ERR, LOG_NODE,
+ 					 "0937 %s: Failed to reg fc node, rc %d\n",
+ 					 __func__, rc);
+@@ -3667,6 +3668,7 @@ lpfc_issue_els_rdf(struct lpfc_vport *vport, uint8_t retry)
  
--	/* Keep the ndlp just in case RDF is being sent */
- 	return 0;
- }
- 
-@@ -3657,11 +3656,9 @@ lpfc_issue_els_rdf(struct lpfc_vport *vport, uint8_t retry)
- 		lpfc_enqueue_node(vport, ndlp);
- 	}
- 
--	/* RDF ELS is not required on an NPIV VN_Port.  */
--	if (vport->port_type == LPFC_NPIV_PORT) {
--		lpfc_nlp_put(ndlp);
-+	/* RDF ELS is not required on an NPIV VN_Port. */
-+	if (vport->port_type == LPFC_NPIV_PORT)
- 		return -EACCES;
--	}
- 
- 	elsiocb = lpfc_prep_els_iocb(vport, 1, cmdsize, retry, ndlp,
- 				     ndlp->nlp_DID, ELS_CMD_RDF);
+ 	if (phba->sli_rev == LPFC_SLI_REV4 &&
+ 	    !(ndlp->nlp_flag & NLP_RPI_REGISTERED)) {
++		lpfc_els_free_iocb(phba, elsiocb);
+ 		lpfc_printf_vlog(vport, KERN_ERR, LOG_NODE,
+ 				 "0939 %s: FC_NODE x%x RPI x%x flag x%x "
+ 				 "ste x%x type x%x Not registered\n",
 -- 
 2.26.2
 
