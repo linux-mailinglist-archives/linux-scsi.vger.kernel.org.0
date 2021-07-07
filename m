@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4BC3BEFB0
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834733BEFB2
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbhGGSqn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S231755AbhGGSqn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Wed, 7 Jul 2021 14:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232066AbhGGSqk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:40 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1805C061574
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:43:59 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id b5-20020a17090a9905b029016fc06f6c5bso2216729pjp.5
-        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:43:59 -0700 (PDT)
+        with ESMTP id S232575AbhGGSqm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:42 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDCCC061574
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:44:00 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v7so3256725pgl.2
+        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:44:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HpTK0Ngh8TzknRVT34FEqY8VYWrDYSmyhcMUIVCJs4k=;
-        b=EcSXSy4e6HndTKpb3MdY4Zwsxc0Wky50OtQViKdxxx6Kps6lznl06xkKjINKtikr8t
-         R5+JnIZwdl5XVMMehsGLmXEO1kGJCzjL3Es5iC2L7JAuKi+hejiRbDtNMXiUAvcFot4V
-         pKdwfYsoOF6yAvd4QVtwaz+QfvxMw7FhL2Ii8irfd6aynwqdJ3UZmSz28Hxm99TOWbxP
-         ztIMm9zpWvTkZOCBedbTwRcBJG0GSfq/hNqrVQMf7vE3toJk+4l+JflSrGphReKZ1XiE
-         DAzDpflk3NTmU+i3PIJeKuR9x9VUOq+d5+sERbhRzoVP1LQIpQT2DttzrsVVhbEGQ1D5
-         1V5Q==
+        bh=ie7Q3EUThRYmD8OZDb/784xCrGi7UhZ9Y/1ovsnX6cg=;
+        b=GHlnkcDyD1pa5qzLXywmcCyXl7KK+DgZmblSyajuh1Pou8Qrb43JvJABPRNkpfNoH/
+         +GPCdG/ayQMqzuEUWFhYkJR0yOIt8S3Jzw/XGdizQsA57k75GGAjKssEeb/reVv1CoWl
+         lTz+r2ORAXxdi0ZaY7PjAw7fwL2r3aV5tIhdPsc2kWJH3x2eIX9k7MhqMc8dIhWUpLdy
+         P1DDIX5aoyt5PoZ7GdnG27jdv7K2vrCTX2o8b+5k4b5qs2mT2ForAtBdddXu9gWHL/4W
+         OiwSBSr91Rj5d+Gtf+344w1kySrmmQw+XcUzw10LP7S+AhTifGB/Q/N2yVldm2srVfzB
+         /PeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HpTK0Ngh8TzknRVT34FEqY8VYWrDYSmyhcMUIVCJs4k=;
-        b=eJ8HaVn8YUfVPzz1Cmqfy3vRQP6Sne+zqOJwYHq7Oxzh4LKwtoYkCGEmjMvENcQpB/
-         aRLg1geuD0ejdMQi+CHs5PjCtNZ92DgxgE7zZxYW9CV6+cnIT8sFCkS6cWS27r2tboRg
-         eJJ0JsMLNm8+Qxbt+MjDdbwOi5PXMDzvFfUR3Bqlh8eksA7yPJ2d6JJAr5bLEFNaWVIy
-         VBuHmGq0iSeo+6itivSOFyxOVPwscGCYtn8AB6kTC15Iad6RcK8EG8lmiLQYSxOMZQsN
-         ujmqIPNpfTOMGYTsefRzEsaP4fhZZlMGQme9oWHjv5Vv62tN46Bna6fJWc/BbobozsSR
-         LW3A==
-X-Gm-Message-State: AOAM5328bxWsdwEPOOyXvYEamlIi3COx8YBL/qrhZRKY30YV3NiSbpBP
-        WVREwI2ljk8PF04T5SB0ovhyRgyUU+k=
-X-Google-Smtp-Source: ABdhPJxQMChuMIkpzAZghviaxtq8zPpzPJPgcX/uXLkdqRZ5GpX+ZP1TrKUakUVpCxN7VHJ2z+hBZA==
-X-Received: by 2002:a17:902:dad0:b029:129:c3fa:715 with SMTP id q16-20020a170902dad0b0290129c3fa0715mr4099845plx.45.1625683439348;
-        Wed, 07 Jul 2021 11:43:59 -0700 (PDT)
+        bh=ie7Q3EUThRYmD8OZDb/784xCrGi7UhZ9Y/1ovsnX6cg=;
+        b=QpfYB1iTtXiu2EwnPv8EyulDSDHSNiJPK8girkLD0JJuoqhorl8bLylq0uHSfFdUNX
+         MiUrkarDjRVjsLgpEZp+THKQ86i6b7hm/fvgdnXVYM1t+amGcxrH2H+A5paWq3MKQYJF
+         cc+hwayek9XDemC09rtHEUL97VWJcQXlbf+8EtS7JF7RMrjwI4j+HaX4xjEXIXSCYsvh
+         XKn8PjeAlHLNClM9nnxOvgHln2HTYDHkxLtRtie3utfjB1nL+hy2ouhY3yVm1f76oq5s
+         tZaX+GFXVtI4SAGWgX3QVrg2dKYg7BHNK6xhzqrtTqXje+2GUCEoRT9sUCgLyK5k6eZy
+         Klgg==
+X-Gm-Message-State: AOAM533zWIrbNnSECSYo5fgFIFr0aoauuFkS01YG2mWbs2rK5m3I6hlw
+        HCegQeK3/FHsQNF9eojZBSQtcHtCvAw=
+X-Google-Smtp-Source: ABdhPJzQNzZctsuKDLQr6PljW8z4XD1yiOO4yU40XHGuW/qSyVRojEcVjKB1btcIYvlh3aDuya9mbg==
+X-Received: by 2002:a63:338d:: with SMTP id z135mr27619710pgz.314.1625683440133;
+        Wed, 07 Jul 2021 11:44:00 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.43.58
+        by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.43.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 07 Jul 2021 11:43:59 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 06/20] lpfc: Fix target reset handler from falsely returning FAILURE
-Date:   Wed,  7 Jul 2021 11:43:37 -0700
-Message-Id: <20210707184351.67872-7-jsmart2021@gmail.com>
+Subject: [PATCH 07/20] lpfc: Keep ndlp reference until after freeing the iocb after els handling
+Date:   Wed,  7 Jul 2021 11:43:38 -0700
+Message-Id: <20210707184351.67872-8-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210707184351.67872-1-jsmart2021@gmail.com>
 References: <20210707184351.67872-1-jsmart2021@gmail.com>
@@ -63,107 +63,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Previous logic accidentally overrides the status variable to
-FAILURE when target reset status is SUCCESS.
+In the routine that generically cleans up an els after completion, the
+ndlp put is done prior to the freeing of the iocb. The iocb may reference
+the ndlp.
 
-Refactor the non-SUCCESS logic of lpfc_vmid_vport_cleanup(), which
-resolves the false override.
+Move the lpfc_nlp_put after freeing the iocb.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 68 +++++++++++++++++++----------------
- 1 file changed, 37 insertions(+), 31 deletions(-)
+ drivers/scsi/lpfc/lpfc_sli.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index 1b248c237be1..10002a13c5c6 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -6273,6 +6273,7 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
- 	struct lpfc_scsi_event_header scsi_event;
- 	int status;
- 	u32 logit = LOG_FCP;
-+	u32 dev_loss_tmo = vport->cfg_devloss_tmo;
- 	unsigned long flags;
- 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index b5c224aafea0..1abf63c85c4b 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -11623,6 +11623,7 @@ void
+ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		     struct lpfc_iocbq *rspiocb)
+ {
++	struct lpfc_nodelist *ndlp = (struct lpfc_nodelist *) cmdiocb->context1;
+ 	IOCB_t *irsp = &rspiocb->iocb;
  
-@@ -6314,39 +6315,44 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+ 	/* ELS cmd tag <ulpIoTag> completes */
+@@ -11631,11 +11632,16 @@ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 			"x%x x%x x%x\n",
+ 			irsp->ulpIoTag, irsp->ulpStatus,
+ 			irsp->un.ulpWord[4], irsp->ulpTimeout);
+-	lpfc_nlp_put((struct lpfc_nodelist *)cmdiocb->context1);
++	/*
++	 * Deref the ndlp after free_iocb. sli_release_iocb will access the ndlp
++	 * if exchange is busy.
++	 */
+ 	if (cmdiocb->iocb.ulpCommand == CMD_GEN_REQUEST64_CR)
+ 		lpfc_ct_free_iocb(phba, cmdiocb);
+ 	else
+ 		lpfc_els_free_iocb(phba, cmdiocb);
++
++	lpfc_nlp_put(ndlp);
+ }
  
- 	status = lpfc_send_taskmgmt(vport, cmnd, tgt_id, lun_id,
- 					FCP_TARGET_RESET);
--	if (status != SUCCESS)
--		logit =  LOG_TRACE_EVENT;
--	spin_lock_irqsave(&pnode->lock, flags);
--	if (status != SUCCESS &&
--	    (!(pnode->upcall_flags & NLP_WAIT_FOR_LOGO)) &&
--	     !pnode->logo_waitq) {
--		pnode->logo_waitq = &waitq;
--		pnode->nlp_fcp_info &= ~NLP_FCP_2_DEVICE;
--		pnode->nlp_flag |= NLP_ISSUE_LOGO;
--		pnode->upcall_flags |= NLP_WAIT_FOR_LOGO;
--		spin_unlock_irqrestore(&pnode->lock, flags);
--		lpfc_unreg_rpi(vport, pnode);
--		wait_event_timeout(waitq,
--				   (!(pnode->upcall_flags & NLP_WAIT_FOR_LOGO)),
--				    msecs_to_jiffies(vport->cfg_devloss_tmo *
--				    1000));
--
--		if (pnode->upcall_flags & NLP_WAIT_FOR_LOGO) {
--			lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
--				"0725 SCSI layer TGTRST failed & LOGO TMO "
--				" (%d, %llu) return x%x\n", tgt_id,
--				 lun_id, status);
--			spin_lock_irqsave(&pnode->lock, flags);
--			pnode->upcall_flags &= ~NLP_WAIT_FOR_LOGO;
-+	if (status != SUCCESS) {
-+		logit = LOG_TRACE_EVENT;
-+
-+		/* Issue LOGO, if no LOGO is outstanding */
-+		spin_lock_irqsave(&pnode->lock, flags);
-+		if (!(pnode->upcall_flags & NLP_WAIT_FOR_LOGO) &&
-+		    !pnode->logo_waitq) {
-+			pnode->logo_waitq = &waitq;
-+			pnode->nlp_fcp_info &= ~NLP_FCP_2_DEVICE;
-+			pnode->nlp_flag |= NLP_ISSUE_LOGO;
-+			pnode->upcall_flags |= NLP_WAIT_FOR_LOGO;
-+			spin_unlock_irqrestore(&pnode->lock, flags);
-+			lpfc_unreg_rpi(vport, pnode);
-+			wait_event_timeout(waitq,
-+					   (!(pnode->upcall_flags &
-+					      NLP_WAIT_FOR_LOGO)),
-+					   msecs_to_jiffies(dev_loss_tmo *
-+							    1000));
-+
-+			if (pnode->upcall_flags & NLP_WAIT_FOR_LOGO) {
-+				lpfc_printf_vlog(vport, KERN_ERR, logit,
-+						 "0725 SCSI layer TGTRST "
-+						 "failed & LOGO TMO (%d, %llu) "
-+						 "return x%x\n",
-+						 tgt_id, lun_id, status);
-+				spin_lock_irqsave(&pnode->lock, flags);
-+				pnode->upcall_flags &= ~NLP_WAIT_FOR_LOGO;
-+			} else {
-+				spin_lock_irqsave(&pnode->lock, flags);
-+			}
-+			pnode->logo_waitq = NULL;
-+			spin_unlock_irqrestore(&pnode->lock, flags);
-+			status = SUCCESS;
-+
- 		} else {
--			spin_lock_irqsave(&pnode->lock, flags);
-+			spin_unlock_irqrestore(&pnode->lock, flags);
-+			status = FAILED;
- 		}
--		pnode->logo_waitq = NULL;
--		spin_unlock_irqrestore(&pnode->lock, flags);
--		status = SUCCESS;
--	} else {
--		status = FAILED;
--		spin_unlock_irqrestore(&pnode->lock, flags);
- 	}
- 
- 	lpfc_printf_vlog(vport, KERN_ERR, logit,
+ /**
 -- 
 2.26.2
 
