@@ -2,114 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E45DB3BEFAB
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FAEA3BEFAF
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbhGGSqk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Jul 2021 14:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S232596AbhGGSqm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Jul 2021 14:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbhGGSqg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:36 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F081CC061574
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:43:55 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id f17so3041401pfj.8
-        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:43:55 -0700 (PDT)
+        with ESMTP id S232561AbhGGSqh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:37 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE78C061762
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:43:56 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id p17so1038833plf.12
+        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=16fTH8Lr76lfrx4h8UEFhnvpJS9wU8DQjTREB35Y1ps=;
-        b=qNS6EXEtTLXeDSClNgnfc4r0U450iBkMCPk3Hp7HueAACuZ1vsmCUxMyslsI1PMBtJ
-         sX6dwTUYpvAW79cqU9QP1AGswDETssKWaJbAuI2X2gt2CuErWZcOb8EkGxqiI2bLcS6v
-         tb/LZZgrmC6XhqFhwoom4ww9EA5/YiV6A4sJlwlsRW+c9Xo1FygsUYOzQH206DmC+Qo/
-         DoQFhRlp9OPASpbULThg+rab6bh7QSbnbUDB2gQUYuTnktAJT15DCAntolD5CDDPyKIx
-         mN1kF+//ILGN8Y0289V96vNc6q79obHyC4e1rwjrmKqpSzjI5rh6jYAf3docLLqqiLVj
-         BZHA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=D6XRAuY/qlTjtwcXcEbweRU62gteERcsO/R3U9yidbo=;
+        b=RWa7w5lmK5ToHOWKHaEWYNqyo/9RPV9ulEnMWys+M+KvTrBoSm7GcLtPlzdnw7GqeA
+         5I3BveyWVZlgSqhSbHATU1D3oNh0v3RSvsiPpGIl+q47fAUrvbDh6KtChD/dXC/pf3kJ
+         vWLN7Wjjc25PWBLApunC7F2gGxdTqEzeM+ll5jUdST+gh5ZtJnMEK3pGqBjcuDTn0zIr
+         OUSobYTcDLsXnlQodgqF2kO2T/achUirzjo9NQyMiUaTJZFtgSCtW6J06f27J7cBC/FB
+         aHi/StPUeXy5e4qS2sWwf90iuRvEKRtDOvFAtdylN6RaiYleYs1eLzuk9HYVnXVB7AHx
+         z2PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=16fTH8Lr76lfrx4h8UEFhnvpJS9wU8DQjTREB35Y1ps=;
-        b=jMr28f9oAIQjUW1zkKTO7Gd8P5IMHgNupjXX3XAFo3M0aF9ZXccXF9RLsF737g71+W
-         qM7I7Zggv8c+yoJ48obEhT353qJh0IlD9byh3HarAz/wlKkfI9Xw+ydgnZg+mGkM6cK9
-         GFgwGM3qWvAHwi1U7Dge9bEqpVj7R5UYGkU6TptiwP+HYy/GkJAzNZjIr06ZNvEsfyID
-         4UeMQ79AMcmqUfPqScwnroFZ0gwlHM4TSfGW1oWJVRyQRyJaStYwyZDuniaeQzSO3oLD
-         dfniYOfSnD34U7GkiacurWDqcM6IKDAaPebG9IGSgYl5udwhO+bobGlxr11a6eBaDek3
-         Ua2Q==
-X-Gm-Message-State: AOAM531nnYRNAisS/MNSqMR+qXZpvjp2rTc9aK25kB3WErtMg63fMqV7
-        P3Ei1M/UYLkjVly+ZzLNk+anXCZ3pv0=
-X-Google-Smtp-Source: ABdhPJwJq0HccFxbXdihXWUR4IaM1Y7zdKyf1ugnbctQvTLAJGDcsRqVL07QYhKwLEcrjgJ7Min/BQ==
-X-Received: by 2002:a63:5d5c:: with SMTP id o28mr27648394pgm.22.1625683435467;
-        Wed, 07 Jul 2021 11:43:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=D6XRAuY/qlTjtwcXcEbweRU62gteERcsO/R3U9yidbo=;
+        b=kiHQlekxMZZdIm+o595rLopIKsvUNQ178KvFov0TYM17/4nI1SdyBu8bA4SmzeWpbd
+         FSGmp8ue9kz1RHxn6wEoO2yq5Bb6KN9PfdMOI3bJAPgil70qmY0FJyK77NmxxlLvCUK/
+         tCt4t5q/uP8MZsUW+gBqbQRW4F4FCgvMtKaAR+aLnTFlj8Xx9oE1dN3rjGAjjg4zMx4u
+         P/QbHjpz/2IoHfxEvxJmfELqwn2XOeeV8l74LhyYd0oZYzZqIgzWu8gBhPyXVs66Dgaf
+         ZpR5pbZTUrMrnCUwxYm6gWXD/YBlHZY+V/S1T1H774O7tvtfZkTcS9ze9RbSfBOrK0Cs
+         9lvg==
+X-Gm-Message-State: AOAM532ANfQ6K7EkCz3lXfYBYmouBg/pDHseV3k1gMjhqkV1eNQ3tbe0
+        DBnMMal9BufHCDa5W7r+bFf7UWwZU8o=
+X-Google-Smtp-Source: ABdhPJxG/D5kGpe6XOI8/h1X8GUQOl1+VD8wxcbxIE/FsUB3uApUEbTfxTJVr5G649WoVm3vTSALhQ==
+X-Received: by 2002:a17:902:8d92:b029:113:91e7:89d6 with SMTP id v18-20020a1709028d92b029011391e789d6mr22514127plo.85.1625683436064;
+        Wed, 07 Jul 2021 11:43:56 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.43.54
+        by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.43.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 07 Jul 2021 11:43:55 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>
-Subject: [PATCH 00/20] lpfc: Update lpfc to revision 12.8.0.11
-Date:   Wed,  7 Jul 2021 11:43:31 -0700
-Message-Id: <20210707184351.67872-1-jsmart2021@gmail.com>
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>
+Subject: [PATCH 01/20] lpfc: Fix NVME support reporting in log message
+Date:   Wed,  7 Jul 2021 11:43:32 -0700
+Message-Id: <20210707184351.67872-2-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210707184351.67872-1-jsmart2021@gmail.com>
+References: <20210707184351.67872-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc to revision 12.8.0.11
+The NVME support indicator in log message 6422 is displaying a field
+that was initialized but never set to indicate NVME support.  Remove
+obsolete nvme_support element from the lpfc_hba structure and change
+log message to display NVME support status as reported in SLI4 Config
+Parameters mailbox command.
 
-This patch set contains fixes and improvements for the lpfc driver
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc.h      | 1 -
+ drivers/scsi/lpfc/lpfc_init.c | 3 +--
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-The patches were cut against Martin's 5.14/scsi-queue tree
-
-James Smart (20):
-  lpfc: Fix NVME support reporting in log message
-  lpfc: Remove use of kmalloc in trace event logging
-  lpfc: Improve firmware download logging
-  lpfc: Fix function description comments for vmid routines
-  lpfc: Discovery state machine fixes for LOGO handling
-  lpfc: Fix target reset handler from falsely returning FAILURE
-  lpfc: Keep ndlp reference until after freeing the iocb after els
-    handling
-  lpfc: Fix null ptr dereference with NPIV ports for RDF handling
-  lpfc: Fix memory leaks in error paths while issuing ELS RDF/SCR
-    request
-  lpfc: Remove REG_LOGIN check requirement to issue an ELS RDF
-  lpfc: Fix KASAN slab-out-of-bounds in lpfc_unreg_rpi routine
-  lpfc: Clear outstanding active mailbox during PCI function reset
-  lpfc: Use PBDE feature enabled bit to determine PBDE support
-  lpfc: Enable adisc discovery after RSCN by default
-  lpfc: Delay unregistering from transport until GIDFT or ADISC
-    completes
-  lpfc: Call discovery state machine when handling PLOGI/ADISC
-    completions
-  lpfc: Skip reg_vpi when link is down for SLI3 in ADISC cmpl path
-  lpfc: Skip issuing ADISC when node is in NPR state
-  lpfc: Update lpfc version to 12.8.0.11
-  lpfc: Copyright updates for 12.8.0.11 patches
-
- drivers/scsi/lpfc/lpfc.h           |   1 -
- drivers/scsi/lpfc/lpfc_attr.c      |   4 +-
- drivers/scsi/lpfc/lpfc_crtn.h      |   2 +
- drivers/scsi/lpfc/lpfc_ct.c        |   5 +-
- drivers/scsi/lpfc/lpfc_disc.h      |   9 +-
- drivers/scsi/lpfc/lpfc_els.c       | 120 ++++++++++--------
- drivers/scsi/lpfc/lpfc_hbadisc.c   | 197 ++++++++++++++++++++++-------
- drivers/scsi/lpfc/lpfc_hw4.h       |  20 ++-
- drivers/scsi/lpfc/lpfc_init.c      |  51 +++++---
- drivers/scsi/lpfc/lpfc_nportdisc.c |  43 ++++---
- drivers/scsi/lpfc/lpfc_nvme.c      |  10 +-
- drivers/scsi/lpfc/lpfc_nvme.h      |   6 +-
- drivers/scsi/lpfc/lpfc_scsi.c      |  68 +++++-----
- drivers/scsi/lpfc/lpfc_sli.c       | 192 +++++++++++++++++++++-------
- drivers/scsi/lpfc/lpfc_sli4.h      |   4 +-
- drivers/scsi/lpfc/lpfc_version.h   |   2 +-
- 16 files changed, 497 insertions(+), 237 deletions(-)
-
+diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
+index 17028861234b..dd3ddfa5f761 100644
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -922,7 +922,6 @@ struct lpfc_hba {
+ 	uint8_t  wwpn[8];
+ 	uint32_t RandomData[7];
+ 	uint8_t  fcp_embed_io;
+-	uint8_t  nvme_support;	/* Firmware supports NVME */
+ 	uint8_t  nvmet_support;	/* driver supports NVMET */
+ #define LPFC_NVMET_MAX_PORTS	32
+ 	uint8_t  mds_diags_support;
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index f3032e30c3e4..cf5bfd27058a 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -12241,7 +12241,6 @@ lpfc_get_sli4_parameters(struct lpfc_hba *phba, LPFC_MBOXQ_t *mboxq)
+ 					bf_get(cfg_xib, mbx_sli4_parameters),
+ 					phba->cfg_enable_fc4_type);
+ fcponly:
+-			phba->nvme_support = 0;
+ 			phba->nvmet_support = 0;
+ 			phba->cfg_nvmet_mrq = 0;
+ 			phba->cfg_nvme_seg_cnt = 0;
+@@ -12299,7 +12298,7 @@ lpfc_get_sli4_parameters(struct lpfc_hba *phba, LPFC_MBOXQ_t *mboxq)
+ 			"6422 XIB %d PBDE %d: FCP %d NVME %d %d %d\n",
+ 			bf_get(cfg_xib, mbx_sli4_parameters),
+ 			phba->cfg_enable_pbde,
+-			phba->fcp_embed_io, phba->nvme_support,
++			phba->fcp_embed_io, sli4_params->nvme,
+ 			phba->cfg_nvme_embed_cmd, phba->cfg_suppress_rsp);
+ 
+ 	if ((bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) ==
 -- 
 2.26.2
 
