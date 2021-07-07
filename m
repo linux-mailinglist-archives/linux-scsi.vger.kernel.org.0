@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E31C3BEFB4
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA703BEFB6
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbhGGSqr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Jul 2021 14:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S232684AbhGGSqt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Jul 2021 14:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbhGGSqn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:43 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E2AC061574
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:44:02 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id t9so3243151pgn.4
-        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:44:02 -0700 (PDT)
+        with ESMTP id S232606AbhGGSqo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:44 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A512C06175F
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:44:03 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id a2so3226153pgi.6
+        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lP9b1Oygjgq82OieErigQ+Dy8BCsov17Z5zbGNZ7w/k=;
-        b=nqhcrbGYLbcGzEvqM2MQZbd5KBqpdjJ2pe6wWMDjheU2ZE4ADVIQiJC2zGFcCB54b0
-         9XR/zzBb0AySLPsX+IcGL5UtBpUXfR7C9CTFY0C9O6NmmgTmsUvrtWT+Ebzg7LrcX9Z5
-         cGm9ahMGG6ThuCbNzzko4kNJZURPmN+MdaSqRsmxdN963vpEhAJFg+xb4x4k7fEFDDsq
-         tWE3sHroz8VqoHRIAvVvQGpkXCMVmstI/QieRmpEf54LwYz+uF1bbPFvzPeiaFI99vPN
-         7OQcpQu1NAk/llwprhVbIwI0HGGaUrzAnN/powz4dVu9t0womLx57R4l+CgkAtBsJQok
-         BbZA==
+        bh=l41WL1YRoN8UoHaOEQ52H1qf3qJEJ4Rqkq6dPkmzcag=;
+        b=rW/xBG0jjFaCQSyY8r0WQA5fRTn7LAhORPYarkXG79GzOBuTGH5Abc5WTmwL/xShIz
+         YSRBXe/TXL97pqs/RSaDpq50tZkZSStt4lxRA1xK3QIyZkk9QO6hPVJ8ytkI5UsFc/Ht
+         PTvaKJRQuKQQnZ2tGPZW4CVO7QAptg8jFvFJrEFPa3hJemhIA88QcTF/3iXoE6Ajo/dT
+         SKTIwMSnUXWd7Yo5WW59IYdwR3IeTnZ4zRMKdlga7UIm65QEPKze/wJuFfG226caAt2n
+         v83D+J4kbUkXAjpXgnWJqjrMEq4sd5IchE93y/lcimFJLd1UGNrGRn+T5/HsJWFACmuF
+         2Ffw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lP9b1Oygjgq82OieErigQ+Dy8BCsov17Z5zbGNZ7w/k=;
-        b=REjux4hd1zcB06n+A6kFeq33NjxIznSYQw0wH0cAdx6DN5UjAzL6+JXmvAA9UuheVE
-         9ulP1AL1sbOeAdRO9Ap1A0uqKRa9dHR4yBLcla89xBtQ0o+mvJ1Zqn9Ue5/ol3AvQalO
-         mpOwjWLlbtN+uScMtUlZpWFgZcmWZ6uYshUjiINNMFvP9blJmoS67dXxIUSn65IJnCZr
-         3KTJaN96TQkRSjDbvxYJUskw9AC04zJxMyXXhC3lhVhalzUItybEoAuVwrFu15jKWZkU
-         BNrUKzBYh4stFRqZxIdC82WSVMYQRADiXmKyiaSXOTSBr6bA8PWydXVbT8Lq/5jcmk7U
-         Yv+g==
-X-Gm-Message-State: AOAM530D+6JKZp8yNUQSFUarie7l6eAPGv4cMdC978OicGZzbUAE6GU0
-        a9rrq65KyuPuqvV1swk+7KH6DNKsboM=
-X-Google-Smtp-Source: ABdhPJzGlhRxAFp/7b7k3LUb17EI4nnpUjptJ8sgzKzVgH9ZuqIEGAC/N9XC+P9h3y2KChzknGQPyw==
-X-Received: by 2002:a05:6a00:22c1:b029:31c:f694:6f4e with SMTP id f1-20020a056a0022c1b029031cf6946f4emr20196572pfj.65.1625683441996;
-        Wed, 07 Jul 2021 11:44:01 -0700 (PDT)
+        bh=l41WL1YRoN8UoHaOEQ52H1qf3qJEJ4Rqkq6dPkmzcag=;
+        b=MERg5LeVMytKUiQ60aH8izgtbDU5o9AdB/0HHqeORdaPoZWlW2K2LiGjCJDOpN+zOx
+         lPGldT46o+JiPmIcgHeNga0s6jlDWnKlu9yvOqAZCi2fjYg4e/fXpHWFPkTFG847CPvD
+         d4CWsUKfmIfcZ+xCy+UASemvPGLkKJElFFkn8G2SReuzT/3dvnMY2XAfxM7PF/AMFU5k
+         ZkOV3MwPXmNqPWtWRAK7TaMG6nttPNA+wTaR+adBAHDdPNOYs9mXO3pinhnnQSI+dWjl
+         tC8IvtSttuRgWg9MQtbyNB+5LSUnz4bP3KDDozHAdgaAC/DoOZqdPqrOP0xUpLDz/R4w
+         osyg==
+X-Gm-Message-State: AOAM532+ihRZOJv2FOrQEp8h4+MDMks0o7Ux3X/LzmxrxniET8nn7m/i
+        /plpXgTxN9RTCcdV4UXVemCwdZ0392c=
+X-Google-Smtp-Source: ABdhPJy5sWP5fKHuJ+2plojnaMeGM7eha14HZGEYX9QxA1CYs/0sni3u3SKqkQQIy8Brmag8Igfnuw==
+X-Received: by 2002:a65:6248:: with SMTP id q8mr28005665pgv.279.1625683442750;
+        Wed, 07 Jul 2021 11:44:02 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.44.01
+        by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.44.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 11:44:01 -0700 (PDT)
+        Wed, 07 Jul 2021 11:44:02 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 10/20] lpfc: Remove REG_LOGIN check requirement to issue an ELS RDF
-Date:   Wed,  7 Jul 2021 11:43:41 -0700
-Message-Id: <20210707184351.67872-11-jsmart2021@gmail.com>
+Subject: [PATCH 11/20] lpfc: Fix KASAN slab-out-of-bounds in lpfc_unreg_rpi routine
+Date:   Wed,  7 Jul 2021 11:43:42 -0700
+Message-Id: <20210707184351.67872-12-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210707184351.67872-1-jsmart2021@gmail.com>
 References: <20210707184351.67872-1-jsmart2021@gmail.com>
@@ -63,43 +63,40 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Since the REG_LOGIN to the fabric controller happens in parallel with
-SCR, it may or may not be completed by the time RDF is sent.  RDF and
-SCR are sent to the fabric in parallel, so checking for a completed
-REG_LOGIN in the RDF submit path is not needed.
+In lpfc_offline_prep() an RPI is freed and nlp_rpi set to 0xFFFF
+before calling lpfc_unreg_rpi().  Unfortunately, lpfc_unreg_rpi()
+uses nlp_rpi to index the sli4_hba.rpi_ids[] array.
 
-Remove the REG_LOGI check from the RDF submission path.
+In lpfc_offline_prep, the unreg rpi before freeing the rpi.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 12 ------------
- 1 file changed, 12 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 3381912bf982..94dc80dc99b7 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -3666,18 +3666,6 @@ lpfc_issue_els_rdf(struct lpfc_vport *vport, uint8_t retry)
- 	if (!elsiocb)
- 		return -ENOMEM;
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 6867b02219b0..2d277979a56a 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -3541,6 +3541,8 @@ lpfc_offline_prep(struct lpfc_hba *phba, int mbx_action)
+ 				spin_lock_irq(&ndlp->lock);
+ 				ndlp->nlp_flag &= ~NLP_NPR_ADISC;
+ 				spin_unlock_irq(&ndlp->lock);
++
++				lpfc_unreg_rpi(vports[i], ndlp);
+ 				/*
+ 				 * Whenever an SLI4 port goes offline, free the
+ 				 * RPI. Get a new RPI when the adapter port
+@@ -3556,7 +3558,6 @@ lpfc_offline_prep(struct lpfc_hba *phba, int mbx_action)
+ 					lpfc_sli4_free_rpi(phba, ndlp->nlp_rpi);
+ 					ndlp->nlp_rpi = LPFC_RPI_ALLOC_ERROR;
+ 				}
+-				lpfc_unreg_rpi(vports[i], ndlp);
  
--	if (phba->sli_rev == LPFC_SLI_REV4 &&
--	    !(ndlp->nlp_flag & NLP_RPI_REGISTERED)) {
--		lpfc_els_free_iocb(phba, elsiocb);
--		lpfc_printf_vlog(vport, KERN_ERR, LOG_NODE,
--				 "0939 %s: FC_NODE x%x RPI x%x flag x%x "
--				 "ste x%x type x%x Not registered\n",
--				 __func__, ndlp->nlp_DID, ndlp->nlp_rpi,
--				 ndlp->nlp_flag, ndlp->nlp_state,
--				 ndlp->nlp_type);
--		return -ENODEV;
--	}
--
- 	/* Configure the payload for the supported FPIN events. */
- 	prdf = (struct lpfc_els_rdf_req *)
- 		(((struct lpfc_dmabuf *)elsiocb->context2)->virt);
+ 				if (ndlp->nlp_type & NLP_FABRIC) {
+ 					lpfc_disc_state_machine(vports[i], ndlp,
 -- 
 2.26.2
 
