@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EAF3BEFAD
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4BC3BEFB0
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbhGGSql (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Jul 2021 14:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S232597AbhGGSqn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Jul 2021 14:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231940AbhGGSqj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:39 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F1AC06175F
+        with ESMTP id S232066AbhGGSqk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:40 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1805C061574
         for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:43:59 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id y2so1564279plc.8
+Received: by mail-pj1-x102e.google.com with SMTP id b5-20020a17090a9905b029016fc06f6c5bso2216729pjp.5
         for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:43:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1gxjOzlQ6knQQqEHTUDa6isoqPdVaG9gPW6rV1r+7Is=;
-        b=jkydFR+ak9LSqHYSzKfxL6Vraodn9UaqGW6sKG6WTSrgFqGqXupBxLQEVjm5H1nwGd
-         h42EKDe+e+d4A3WzS0Ctevof6V71PSdBvq2mxW/6AyVRGgn0Bt/JHH2BYrA9FOgtzJ/Q
-         jkCRHzkSL4M56MBjquqLwZgTc/0+MmfSuxYEQoe6z0CtAcPweoa4xR8q5f4H8um9mFou
-         c3HTrb0WOCg3RTDEUYhe2/o+iNYEZhiPJb7E7iTmDalv9Utj/ahZB/130lP0IJ3wkYNM
-         xVvUUFT7BVU9DH/iaSw7zs+o/I3Xh0Bklg8LS2VYc4NomSCfJz/55Y/eTHx8EbvRHIaj
-         5ZUg==
+        bh=HpTK0Ngh8TzknRVT34FEqY8VYWrDYSmyhcMUIVCJs4k=;
+        b=EcSXSy4e6HndTKpb3MdY4Zwsxc0Wky50OtQViKdxxx6Kps6lznl06xkKjINKtikr8t
+         R5+JnIZwdl5XVMMehsGLmXEO1kGJCzjL3Es5iC2L7JAuKi+hejiRbDtNMXiUAvcFot4V
+         pKdwfYsoOF6yAvd4QVtwaz+QfvxMw7FhL2Ii8irfd6aynwqdJ3UZmSz28Hxm99TOWbxP
+         ztIMm9zpWvTkZOCBedbTwRcBJG0GSfq/hNqrVQMf7vE3toJk+4l+JflSrGphReKZ1XiE
+         DAzDpflk3NTmU+i3PIJeKuR9x9VUOq+d5+sERbhRzoVP1LQIpQT2DttzrsVVhbEGQ1D5
+         1V5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1gxjOzlQ6knQQqEHTUDa6isoqPdVaG9gPW6rV1r+7Is=;
-        b=iL3wLTFYUHn2Luk9zklkwa8nlKvtvj02Yw5UwKsWO2qMtNaHcbYwdA+aovAV4jBDi2
-         e3H+ri8eJlAy3bhIBFOOr5nrMBR1nKldBxN0gMuKTlwD6VKlUp03ZAAOjlREhTxHibVO
-         aPNeLVT8CX77sCgjoKaoBv8hXheckknhene1mNMYjXpR7pZniDiFytabi+jIurcoh1RS
-         NhgxJlNqnoWL9/8a+vQFaWCBkgpNSEkmaAfZQ1YXafniws1WGwJeUGVYdcS8masW/hGe
-         Hhn1GGK++3L1RzKapDrYz/vVbs4CsdAApUio3cJbohJopo9zg1LDnK1R/cK+1UmZXfjU
-         281Q==
-X-Gm-Message-State: AOAM533IEYvBDLElVGdq0LnjtjhcpGIpTWFkDR3lw4HYdhyG5Cpj2/NS
-        tq++uEd52fU0g0VyR/rGqEa2L5YMxdU=
-X-Google-Smtp-Source: ABdhPJzYOnoCN1XEeUBeg9HPZcdKBvNDgsgWy6ar6cxWOLlh6FuCP3xx9c/j6JrGBGssVXYgIkbfrA==
-X-Received: by 2002:a17:90b:384f:: with SMTP id nl15mr27841422pjb.88.1625683438661;
-        Wed, 07 Jul 2021 11:43:58 -0700 (PDT)
+        bh=HpTK0Ngh8TzknRVT34FEqY8VYWrDYSmyhcMUIVCJs4k=;
+        b=eJ8HaVn8YUfVPzz1Cmqfy3vRQP6Sne+zqOJwYHq7Oxzh4LKwtoYkCGEmjMvENcQpB/
+         aRLg1geuD0ejdMQi+CHs5PjCtNZ92DgxgE7zZxYW9CV6+cnIT8sFCkS6cWS27r2tboRg
+         eJJ0JsMLNm8+Qxbt+MjDdbwOi5PXMDzvFfUR3Bqlh8eksA7yPJ2d6JJAr5bLEFNaWVIy
+         VBuHmGq0iSeo+6itivSOFyxOVPwscGCYtn8AB6kTC15Iad6RcK8EG8lmiLQYSxOMZQsN
+         ujmqIPNpfTOMGYTsefRzEsaP4fhZZlMGQme9oWHjv5Vv62tN46Bna6fJWc/BbobozsSR
+         LW3A==
+X-Gm-Message-State: AOAM5328bxWsdwEPOOyXvYEamlIi3COx8YBL/qrhZRKY30YV3NiSbpBP
+        WVREwI2ljk8PF04T5SB0ovhyRgyUU+k=
+X-Google-Smtp-Source: ABdhPJxQMChuMIkpzAZghviaxtq8zPpzPJPgcX/uXLkdqRZ5GpX+ZP1TrKUakUVpCxN7VHJ2z+hBZA==
+X-Received: by 2002:a17:902:dad0:b029:129:c3fa:715 with SMTP id q16-20020a170902dad0b0290129c3fa0715mr4099845plx.45.1625683439348;
+        Wed, 07 Jul 2021 11:43:59 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
         by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.43.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 11:43:58 -0700 (PDT)
+        Wed, 07 Jul 2021 11:43:59 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 05/20] lpfc: Discovery state machine fixes for LOGO handling
-Date:   Wed,  7 Jul 2021 11:43:36 -0700
-Message-Id: <20210707184351.67872-6-jsmart2021@gmail.com>
+Subject: [PATCH 06/20] lpfc: Fix target reset handler from falsely returning FAILURE
+Date:   Wed,  7 Jul 2021 11:43:37 -0700
+Message-Id: <20210707184351.67872-7-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210707184351.67872-1-jsmart2021@gmail.com>
 References: <20210707184351.67872-1-jsmart2021@gmail.com>
@@ -63,52 +63,107 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-- If a LOGO is received for a node that is in the NPR state, post a
-  DEVICE_RM event to allow clean up of the logged out node.
+Previous logic accidentally overrides the status variable to
+FAILURE when target reset status is SUCCESS.
 
-- Clearing the NLP_NPR_2B_DISC flag upon receipt of a LOGO ACC may cause
-  skipping of processing outstanding PLOGIs triggered by parallel RSCN
-  events.  If an outstanding PLOGI is being retried and receipt of a
-  LOGO ACC occurs, then allow the discovery state machine's PLOGI
-  completion to clean up the node.
+Refactor the non-SUCCESS logic of lpfc_vmid_vport_cleanup(), which
+resolves the false override.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/scsi/lpfc/lpfc_scsi.c | 68 +++++++++++++++++++----------------
+ 1 file changed, 37 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index e481f5fe29d7..b0c443a0cf92 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4612,6 +4612,15 @@ lpfc_cmpl_els_logo_acc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		goto out;
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 1b248c237be1..10002a13c5c6 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -6273,6 +6273,7 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+ 	struct lpfc_scsi_event_header scsi_event;
+ 	int status;
+ 	u32 logit = LOG_FCP;
++	u32 dev_loss_tmo = vport->cfg_devloss_tmo;
+ 	unsigned long flags;
+ 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
  
- 	if (ndlp->nlp_state == NLP_STE_NPR_NODE) {
+@@ -6314,39 +6315,44 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+ 
+ 	status = lpfc_send_taskmgmt(vport, cmnd, tgt_id, lun_id,
+ 					FCP_TARGET_RESET);
+-	if (status != SUCCESS)
+-		logit =  LOG_TRACE_EVENT;
+-	spin_lock_irqsave(&pnode->lock, flags);
+-	if (status != SUCCESS &&
+-	    (!(pnode->upcall_flags & NLP_WAIT_FOR_LOGO)) &&
+-	     !pnode->logo_waitq) {
+-		pnode->logo_waitq = &waitq;
+-		pnode->nlp_fcp_info &= ~NLP_FCP_2_DEVICE;
+-		pnode->nlp_flag |= NLP_ISSUE_LOGO;
+-		pnode->upcall_flags |= NLP_WAIT_FOR_LOGO;
+-		spin_unlock_irqrestore(&pnode->lock, flags);
+-		lpfc_unreg_rpi(vport, pnode);
+-		wait_event_timeout(waitq,
+-				   (!(pnode->upcall_flags & NLP_WAIT_FOR_LOGO)),
+-				    msecs_to_jiffies(vport->cfg_devloss_tmo *
+-				    1000));
+-
+-		if (pnode->upcall_flags & NLP_WAIT_FOR_LOGO) {
+-			lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
+-				"0725 SCSI layer TGTRST failed & LOGO TMO "
+-				" (%d, %llu) return x%x\n", tgt_id,
+-				 lun_id, status);
+-			spin_lock_irqsave(&pnode->lock, flags);
+-			pnode->upcall_flags &= ~NLP_WAIT_FOR_LOGO;
++	if (status != SUCCESS) {
++		logit = LOG_TRACE_EVENT;
 +
-+		/* If PLOGI is being retried, PLOGI completion will cleanup the
-+		 * node. The NLP_NPR_2B_DISC flag needs to be retained to make
-+		 * progress on nodes discovered from last RSCN.
-+		 */
-+		if ((ndlp->nlp_flag & NLP_DELAY_TMO) &&
-+		    (ndlp->nlp_last_elscmd == ELS_CMD_PLOGI))
-+			goto out;
++		/* Issue LOGO, if no LOGO is outstanding */
++		spin_lock_irqsave(&pnode->lock, flags);
++		if (!(pnode->upcall_flags & NLP_WAIT_FOR_LOGO) &&
++		    !pnode->logo_waitq) {
++			pnode->logo_waitq = &waitq;
++			pnode->nlp_fcp_info &= ~NLP_FCP_2_DEVICE;
++			pnode->nlp_flag |= NLP_ISSUE_LOGO;
++			pnode->upcall_flags |= NLP_WAIT_FOR_LOGO;
++			spin_unlock_irqrestore(&pnode->lock, flags);
++			lpfc_unreg_rpi(vport, pnode);
++			wait_event_timeout(waitq,
++					   (!(pnode->upcall_flags &
++					      NLP_WAIT_FOR_LOGO)),
++					   msecs_to_jiffies(dev_loss_tmo *
++							    1000));
 +
- 		/* NPort Recovery mode or node is just allocated */
- 		if (!lpfc_nlp_not_used(ndlp)) {
- 			/* A LOGO is completing and the node is in NPR state.
-@@ -8948,6 +8957,9 @@ lpfc_els_unsol_buffer(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
- 			break;
++			if (pnode->upcall_flags & NLP_WAIT_FOR_LOGO) {
++				lpfc_printf_vlog(vport, KERN_ERR, logit,
++						 "0725 SCSI layer TGTRST "
++						 "failed & LOGO TMO (%d, %llu) "
++						 "return x%x\n",
++						 tgt_id, lun_id, status);
++				spin_lock_irqsave(&pnode->lock, flags);
++				pnode->upcall_flags &= ~NLP_WAIT_FOR_LOGO;
++			} else {
++				spin_lock_irqsave(&pnode->lock, flags);
++			}
++			pnode->logo_waitq = NULL;
++			spin_unlock_irqrestore(&pnode->lock, flags);
++			status = SUCCESS;
++
+ 		} else {
+-			spin_lock_irqsave(&pnode->lock, flags);
++			spin_unlock_irqrestore(&pnode->lock, flags);
++			status = FAILED;
  		}
- 		lpfc_disc_state_machine(vport, ndlp, elsiocb, NLP_EVT_RCV_LOGO);
-+		if (newnode)
-+			lpfc_disc_state_machine(vport, ndlp, NULL,
-+					NLP_EVT_DEVICE_RM);
- 		break;
- 	case ELS_CMD_PRLO:
- 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_UNSOL,
+-		pnode->logo_waitq = NULL;
+-		spin_unlock_irqrestore(&pnode->lock, flags);
+-		status = SUCCESS;
+-	} else {
+-		status = FAILED;
+-		spin_unlock_irqrestore(&pnode->lock, flags);
+ 	}
+ 
+ 	lpfc_printf_vlog(vport, KERN_ERR, logit,
 -- 
 2.26.2
 
