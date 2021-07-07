@@ -2,93 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F9B3BEE35
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45DB3BEFAB
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jul 2021 20:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbhGGSTq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Jul 2021 14:19:46 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:51124 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbhGGSTb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:19:31 -0400
-Received: by mail-pj1-f41.google.com with SMTP id ie21so2061068pjb.0
-        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:16:49 -0700 (PDT)
+        id S231814AbhGGSqk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Jul 2021 14:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232606AbhGGSqg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jul 2021 14:46:36 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F081CC061574
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Jul 2021 11:43:55 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id f17so3041401pfj.8
+        for <linux-scsi@vger.kernel.org>; Wed, 07 Jul 2021 11:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=16fTH8Lr76lfrx4h8UEFhnvpJS9wU8DQjTREB35Y1ps=;
+        b=qNS6EXEtTLXeDSClNgnfc4r0U450iBkMCPk3Hp7HueAACuZ1vsmCUxMyslsI1PMBtJ
+         sX6dwTUYpvAW79cqU9QP1AGswDETssKWaJbAuI2X2gt2CuErWZcOb8EkGxqiI2bLcS6v
+         tb/LZZgrmC6XhqFhwoom4ww9EA5/YiV6A4sJlwlsRW+c9Xo1FygsUYOzQH206DmC+Qo/
+         DoQFhRlp9OPASpbULThg+rab6bh7QSbnbUDB2gQUYuTnktAJT15DCAntolD5CDDPyKIx
+         mN1kF+//ILGN8Y0289V96vNc6q79obHyC4e1rwjrmKqpSzjI5rh6jYAf3docLLqqiLVj
+         BZHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XQUIWVvNpv1olJcESftJWFjgJgeNmLc5ZZ30mInFVeY=;
-        b=Qf9/S86i2d4Z17HWFyqIOt9kMtEGVrXw3Khc7535KLlv3WCn/otET7+kXRM0Z55fkb
-         sDNObZYaOYu9CmRCTHAiX8FyHyTbmW3z9lb3bDmragBlNdXt6NKG+qA7ADCO1jE5t9K4
-         bRC8JkiOmWiBUtxKw9a+8UMWz22vmjP4tsSzkA0hLHZZvkflLRglIXUmiar6iHXM2iXG
-         n2kXdpJr8tRPuxeV+py4HFK58gGRc+5FwGt5X9JvHWgSWyHklkEXecMWSYITYyHUaLen
-         L8fraQD+k2jxf9NLmRnWsb6xZ9MLvDH25c+PtlxIhrQC7Ysp91mfjrEgeSgyD3u2qjHw
-         uxfQ==
-X-Gm-Message-State: AOAM533YbECVUYbApbU1WU2Gi6QfjwC1Epq4EIhXJZHGJ9i7a4mDQoIS
-        NeaNkAmct9ucSmd9cQom7y0=
-X-Google-Smtp-Source: ABdhPJwDeoHCO/nRerDHjJxkbZHrVZg3T+qGdqA5ddb+Mh1YkxGQAC5nWk8qoRRkXWZu6Z0M8aqN+A==
-X-Received: by 2002:a17:90a:eb11:: with SMTP id j17mr28549266pjz.177.1625681808422;
-        Wed, 07 Jul 2021 11:16:48 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:6679:27d9:f7a8:3b7e? ([2601:647:4000:d7:6679:27d9:f7a8:3b7e])
-        by smtp.gmail.com with ESMTPSA id c64sm20953403pfb.166.2021.07.07.11.16.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jul 2021 11:16:47 -0700 (PDT)
-Subject: Re: [PATCH 00/21] UFS patches for kernel v5.15
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>
-References: <DM6PR04MB65755CE992094A6CDA56EDFDFC1B9@DM6PR04MB6575.namprd04.prod.outlook.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <57717c9d-1b1c-18f4-8443-0abdcb116705@acm.org>
-Date:   Wed, 7 Jul 2021 11:16:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        bh=16fTH8Lr76lfrx4h8UEFhnvpJS9wU8DQjTREB35Y1ps=;
+        b=jMr28f9oAIQjUW1zkKTO7Gd8P5IMHgNupjXX3XAFo3M0aF9ZXccXF9RLsF737g71+W
+         qM7I7Zggv8c+yoJ48obEhT353qJh0IlD9byh3HarAz/wlKkfI9Xw+ydgnZg+mGkM6cK9
+         GFgwGM3qWvAHwi1U7Dge9bEqpVj7R5UYGkU6TptiwP+HYy/GkJAzNZjIr06ZNvEsfyID
+         4UeMQ79AMcmqUfPqScwnroFZ0gwlHM4TSfGW1oWJVRyQRyJaStYwyZDuniaeQzSO3oLD
+         dfniYOfSnD34U7GkiacurWDqcM6IKDAaPebG9IGSgYl5udwhO+bobGlxr11a6eBaDek3
+         Ua2Q==
+X-Gm-Message-State: AOAM531nnYRNAisS/MNSqMR+qXZpvjp2rTc9aK25kB3WErtMg63fMqV7
+        P3Ei1M/UYLkjVly+ZzLNk+anXCZ3pv0=
+X-Google-Smtp-Source: ABdhPJwJq0HccFxbXdihXWUR4IaM1Y7zdKyf1ugnbctQvTLAJGDcsRqVL07QYhKwLEcrjgJ7Min/BQ==
+X-Received: by 2002:a63:5d5c:: with SMTP id o28mr27648394pgm.22.1625683435467;
+        Wed, 07 Jul 2021 11:43:55 -0700 (PDT)
+Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
+        by smtp.gmail.com with ESMTPSA id z3sm23578631pgl.77.2021.07.07.11.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jul 2021 11:43:55 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH 00/20] lpfc: Update lpfc to revision 12.8.0.11
+Date:   Wed,  7 Jul 2021 11:43:31 -0700
+Message-Id: <20210707184351.67872-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <DM6PR04MB65755CE992094A6CDA56EDFDFC1B9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/6/21 4:28 AM, Avri Altman wrote:
-> May I suggest to re-group the ufs part of this series so it can be reviewed more effectively:
->  - Cleanups (relatively simple & intuitive, so can it be picked up ?)
->   ufs: Reduce power management code duplication
->   ufs: Only include power management code if necessary
->   ufs: Rename the second ufshcd_probe_hba() argument
->   ufs: Use DECLARE_COMPLETION_ONSTACK() where appropriate
->   ufs: Remove ufshcd_valid_tag()
->   ufs: Verify UIC locking requirements at runtime
->   ufs: Improve static type checking for the host controller state
->   ufs: Remove several wmb() calls
->   ufs: Inline ufshcd_outstanding_req_clear()
->   ufs: Rename __ufshcd_transfer_req_compl()
-> 
-> - Fixes of "Optimize host lock" (can those 2 be squashed ?)
->   ufs: Fix a race in the completion path
->   ufs: Use the doorbell register instead of the UTRLCNR register
->   
->  - Revamping ufs error handling
->   ufs: Fix the SCSI abort handler
->   ufs: Request sense data asynchronously
->   ufs: Synchronize SCSI and UFS error handling
->   ufs: Retry aborted SCSI commands instead of completing these successfully
+Update lpfc to revision 12.8.0.11
 
-So this comes down to moving the "ufs: Fix the SCSI abort handler" later
-in this series? I will make this change.
+This patch set contains fixes and improvements for the lpfc driver
 
-Thanks,
+The patches were cut against Martin's 5.14/scsi-queue tree
 
-Bart.
+James Smart (20):
+  lpfc: Fix NVME support reporting in log message
+  lpfc: Remove use of kmalloc in trace event logging
+  lpfc: Improve firmware download logging
+  lpfc: Fix function description comments for vmid routines
+  lpfc: Discovery state machine fixes for LOGO handling
+  lpfc: Fix target reset handler from falsely returning FAILURE
+  lpfc: Keep ndlp reference until after freeing the iocb after els
+    handling
+  lpfc: Fix null ptr dereference with NPIV ports for RDF handling
+  lpfc: Fix memory leaks in error paths while issuing ELS RDF/SCR
+    request
+  lpfc: Remove REG_LOGIN check requirement to issue an ELS RDF
+  lpfc: Fix KASAN slab-out-of-bounds in lpfc_unreg_rpi routine
+  lpfc: Clear outstanding active mailbox during PCI function reset
+  lpfc: Use PBDE feature enabled bit to determine PBDE support
+  lpfc: Enable adisc discovery after RSCN by default
+  lpfc: Delay unregistering from transport until GIDFT or ADISC
+    completes
+  lpfc: Call discovery state machine when handling PLOGI/ADISC
+    completions
+  lpfc: Skip reg_vpi when link is down for SLI3 in ADISC cmpl path
+  lpfc: Skip issuing ADISC when node is in NPR state
+  lpfc: Update lpfc version to 12.8.0.11
+  lpfc: Copyright updates for 12.8.0.11 patches
+
+ drivers/scsi/lpfc/lpfc.h           |   1 -
+ drivers/scsi/lpfc/lpfc_attr.c      |   4 +-
+ drivers/scsi/lpfc/lpfc_crtn.h      |   2 +
+ drivers/scsi/lpfc/lpfc_ct.c        |   5 +-
+ drivers/scsi/lpfc/lpfc_disc.h      |   9 +-
+ drivers/scsi/lpfc/lpfc_els.c       | 120 ++++++++++--------
+ drivers/scsi/lpfc/lpfc_hbadisc.c   | 197 ++++++++++++++++++++++-------
+ drivers/scsi/lpfc/lpfc_hw4.h       |  20 ++-
+ drivers/scsi/lpfc/lpfc_init.c      |  51 +++++---
+ drivers/scsi/lpfc/lpfc_nportdisc.c |  43 ++++---
+ drivers/scsi/lpfc/lpfc_nvme.c      |  10 +-
+ drivers/scsi/lpfc/lpfc_nvme.h      |   6 +-
+ drivers/scsi/lpfc/lpfc_scsi.c      |  68 +++++-----
+ drivers/scsi/lpfc/lpfc_sli.c       | 192 +++++++++++++++++++++-------
+ drivers/scsi/lpfc/lpfc_sli4.h      |   4 +-
+ drivers/scsi/lpfc/lpfc_version.h   |   2 +-
+ 16 files changed, 497 insertions(+), 237 deletions(-)
+
+-- 
+2.26.2
+
