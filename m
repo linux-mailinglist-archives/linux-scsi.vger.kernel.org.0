@@ -2,85 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7878C3C2A44
-	for <lists+linux-scsi@lfdr.de>; Fri,  9 Jul 2021 22:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0583C2A46
+	for <lists+linux-scsi@lfdr.de>; Fri,  9 Jul 2021 22:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbhGIU3c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 9 Jul 2021 16:29:32 -0400
-Received: from mail-pl1-f172.google.com ([209.85.214.172]:37417 "EHLO
-        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhGIU3b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Jul 2021 16:29:31 -0400
-Received: by mail-pl1-f172.google.com with SMTP id a14so5626263pls.4
-        for <linux-scsi@vger.kernel.org>; Fri, 09 Jul 2021 13:26:48 -0700 (PDT)
+        id S229703AbhGIU3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 9 Jul 2021 16:29:36 -0400
+Received: from mail-pg1-f177.google.com ([209.85.215.177]:45908 "EHLO
+        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229750AbhGIU3e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Jul 2021 16:29:34 -0400
+Received: by mail-pg1-f177.google.com with SMTP id y17so11065813pgf.12
+        for <linux-scsi@vger.kernel.org>; Fri, 09 Jul 2021 13:26:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Wpe7pq4aVg7ucsvY4mN5cBs5bzV8w5kf4tTHNcQD3vs=;
-        b=ZCRy8A0GH5fMfmmGEpWVW6mY+x9sR7IZo/wPHkMccZP7jMZyp4z2wHxLnNZlLJTbuz
-         uxPzo1nJYLsb2TUoeFXSLtQKI5nHoG0I70NPiJ0ZaBI5ZknZKFTRyZgpXymryA0Sgvys
-         LsR5RTj3P4Fldqqm0mOVURSaG11lnsmsvx6ojFTThZK6IDOTrTcWz2NXdj5BR3gI2pZI
-         vgnKS2eTSjndUMvg9rqmsULXkl4xrT045I0quIl5FPleINmxqD2WbQYllQocnu94Fa2Y
-         vX1iO57AXftwkmT+xlsMpZ3VX5/8HzW5QPHXVwnSuyXPtyWnDYL1J4mLmPGKVYzzsZVN
-         DBrw==
-X-Gm-Message-State: AOAM530my1/34ZlHuPrkNymRZ9KnpH30xH7gSlAWnbRXkLays6hhbQkm
-        HlOKlkIzMwEdmpoj+IPzeNA=
-X-Google-Smtp-Source: ABdhPJwKNNaaK1ZeHsXVfDmNOI1u3r0tIjqP+pKJSysyXSSKH3FeJtrNOKHxZVOYejTtp71BGYhYxQ==
-X-Received: by 2002:a17:902:bb90:b029:11a:cf7c:997c with SMTP id m16-20020a170902bb90b029011acf7c997cmr32268614pls.80.1625862407544;
-        Fri, 09 Jul 2021 13:26:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WrrW2VOhcqp9kLuf4rx/H2lci5g7a/+vkKyVP+UB7dY=;
+        b=mkG/YeqFPwflsbGvC/55tDLVfeexWA5qMW2waFKx3Kmk5LiR1Fh0K3LvlAWHeks0/1
+         +DxzriN7u7Fft19x4AuYrXdVYR1zuOS+m4sOOV7TQp4OlUi9QcVJ3bsjFrYKhjov3Ewt
+         cM/REsG2Qu7CU21JaBjhe/WJCMa3/TLhvlRkEfnHlLrdD2mW7rroErOP6VHL3/FnBj1V
+         UdOethWl8uus6jhdjuZgWqmmJvb30zfVLzjk0GmlZH7PK9jFA6P8+GvSGddkaF4aldEE
+         xfPbIBeqtCbOgFCGUakgYpqpus8NSP3/CHe+XA8FOoKyxRz2nYicy9j1pUpjdFP/LQLf
+         BOHg==
+X-Gm-Message-State: AOAM531kkvIfZBYn6Ug+2N8StMgjDYniyPMPB/VLSWzazrNeiWqZ53wZ
+        1HlKIi7bv6RDCGUJq1kmDDg=
+X-Google-Smtp-Source: ABdhPJxBiSSDUld9gI/zKkwCuHQwJdcwePDQEjtZ59jif3As0k1RCY3ejOOiPuYCpI+64lNxku4i2Q==
+X-Received: by 2002:a63:a18:: with SMTP id 24mr5912428pgk.309.1625862409179;
+        Fri, 09 Jul 2021 13:26:49 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:eeaf:c266:e6cc:b591])
-        by smtp.gmail.com with ESMTPSA id e16sm8812927pgl.54.2021.07.09.13.26.45
+        by smtp.gmail.com with ESMTPSA id e16sm8812927pgl.54.2021.07.09.13.26.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 13:26:46 -0700 (PDT)
+        Fri, 09 Jul 2021 13:26:48 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
         Bart Van Assche <bvanassche@acm.org>,
         Akinobu Mita <akinobu.mita@gmail.com>
-Subject: [PATCH] fault-inject: Declare the second argument of setup_fault_attr() const
-Date:   Fri,  9 Jul 2021 13:26:18 -0700
-Message-Id: <20210709202638.9480-1-bvanassche@acm.org>
+Subject: [PATCH v2 00/19] UFS patches for kernel v5.15
+Date:   Fri,  9 Jul 2021 13:26:19 -0700
+Message-Id: <20210709202638.9480-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210709202638.9480-1-bvanassche@acm.org>
+References: <20210709202638.9480-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch makes it possible to pass a const char * argument to
-setup_fault_attr() without having to cast away constness.
+Hi Martin,
 
-Cc: Akinobu Mita <akinobu.mita@gmail.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- include/linux/fault-inject.h | 2 +-
- lib/fault-inject.c           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Please consider the patches in this series for kernel v5.15.
 
-diff --git a/include/linux/fault-inject.h b/include/linux/fault-inject.h
-index e525f6957c49..afc649f0102b 100644
---- a/include/linux/fault-inject.h
-+++ b/include/linux/fault-inject.h
-@@ -42,7 +42,7 @@ struct fault_attr {
- 	}
- 
- #define DECLARE_FAULT_ATTR(name) struct fault_attr name = FAULT_ATTR_INITIALIZER
--int setup_fault_attr(struct fault_attr *attr, char *str);
-+int setup_fault_attr(struct fault_attr *attr, const char *str);
- bool should_fail(struct fault_attr *attr, ssize_t size);
- 
- #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
-diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-index ce12621b4275..45520151b32d 100644
---- a/lib/fault-inject.c
-+++ b/lib/fault-inject.c
-@@ -15,7 +15,7 @@
-  * setup_fault_attr() is a helper function for various __setup handlers, so it
-  * returns 0 on error, because that is what __setup handlers do.
-  */
--int setup_fault_attr(struct fault_attr *attr, char *str)
-+int setup_fault_attr(struct fault_attr *attr, const char *str)
- {
- 	unsigned long probability;
- 	unsigned long interval;
+Thanks,
+
+Bart.
+
+Changes compared to v1:
+- Left out the SCSI core patches for the SCSI error handler in order not to
+  delay the UFS patches by the conversation around the SCSI error handler
+  patches.
+- Restored the WARN_ON_ONCE(tag < 0) statements in the patch that removes
+  ufshcd_valid_tag().
+- Split "Fix a race in the completion path" in two patches.
+- Added a fault injection patch.
+
+Bart Van Assche (19):
+  scsi: Fix the documentation of the scsi_execute() time parameter
+  scsi: ufs: Reduce power management code duplication
+  scsi: ufs: Only include power management code if necessary
+  scsi: ufs: Rename the second ufshcd_probe_hba() argument
+  scsi: ufs: Use DECLARE_COMPLETION_ONSTACK() where appropriate
+  scsi: ufs: Remove ufshcd_valid_tag()
+  scsi: ufs: Verify UIC locking requirements at runtime
+  scsi: ufs: Improve static type checking for the host controller state
+  scsi: ufs: Remove several wmb() calls
+  scsi: ufs: Inline ufshcd_outstanding_req_clear()
+  scsi: ufs: Rename __ufshcd_transfer_req_compl()
+  scsi: ufs: Remove a local variable
+  scsi: ufs: Fix a race in the completion path
+  scsi: ufs: Use the doorbell register instead of the UTRLCNR register
+  scsi: ufs: Fix the SCSI abort handler
+  scsi: ufs: Request sense data asynchronously
+  scsi: ufs: Synchronize SCSI and UFS error handling
+  scsi: ufs: Retry aborted SCSI commands instead of completing these
+    successfully
+  scsi: ufs: Add fault injection support
+
+ drivers/scsi/scsi_lib.c                |   2 +-
+ drivers/scsi/ufs/Kconfig               |   7 +
+ drivers/scsi/ufs/Makefile              |   1 +
+ drivers/scsi/ufs/cdns-pltfrm.c         |   7 +-
+ drivers/scsi/ufs/tc-dwc-g210-pci.c     |  32 +-
+ drivers/scsi/ufs/tc-dwc-g210-pltfrm.c  |   7 +-
+ drivers/scsi/ufs/ufs-exynos.c          |   7 +-
+ drivers/scsi/ufs/ufs-fault-injection.c |  67 ++++
+ drivers/scsi/ufs/ufs-fault-injection.h |  24 ++
+ drivers/scsi/ufs/ufs-hisi.c            |   7 +-
+ drivers/scsi/ufs/ufs-mediatek.c        |   7 +-
+ drivers/scsi/ufs/ufs-qcom.c            |   7 +-
+ drivers/scsi/ufs/ufshcd-pci.c          |  48 +--
+ drivers/scsi/ufs/ufshcd-pltfrm.c       |  47 ---
+ drivers/scsi/ufs/ufshcd-pltfrm.h       |  18 -
+ drivers/scsi/ufs/ufshcd.c              | 485 +++++++++++--------------
+ drivers/scsi/ufs/ufshcd.h              |  48 ++-
+ 17 files changed, 370 insertions(+), 451 deletions(-)
+ create mode 100644 drivers/scsi/ufs/ufs-fault-injection.c
+ create mode 100644 drivers/scsi/ufs/ufs-fault-injection.h
+
