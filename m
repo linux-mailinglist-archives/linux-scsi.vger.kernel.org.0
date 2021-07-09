@@ -2,45 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0583C2A46
+	by mail.lfdr.de (Postfix) with ESMTP id 669CD3C2A47
 	for <lists+linux-scsi@lfdr.de>; Fri,  9 Jul 2021 22:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbhGIU3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S229854AbhGIU3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Fri, 9 Jul 2021 16:29:36 -0400
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:45908 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbhGIU3e (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Jul 2021 16:29:34 -0400
-Received: by mail-pg1-f177.google.com with SMTP id y17so11065813pgf.12
-        for <linux-scsi@vger.kernel.org>; Fri, 09 Jul 2021 13:26:49 -0700 (PDT)
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:43621 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229909AbhGIU3f (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Jul 2021 16:29:35 -0400
+Received: by mail-pj1-f44.google.com with SMTP id x21-20020a17090aa395b029016e25313bfcso6723287pjp.2
+        for <linux-scsi@vger.kernel.org>; Fri, 09 Jul 2021 13:26:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WrrW2VOhcqp9kLuf4rx/H2lci5g7a/+vkKyVP+UB7dY=;
-        b=mkG/YeqFPwflsbGvC/55tDLVfeexWA5qMW2waFKx3Kmk5LiR1Fh0K3LvlAWHeks0/1
-         +DxzriN7u7Fft19x4AuYrXdVYR1zuOS+m4sOOV7TQp4OlUi9QcVJ3bsjFrYKhjov3Ewt
-         cM/REsG2Qu7CU21JaBjhe/WJCMa3/TLhvlRkEfnHlLrdD2mW7rroErOP6VHL3/FnBj1V
-         UdOethWl8uus6jhdjuZgWqmmJvb30zfVLzjk0GmlZH7PK9jFA6P8+GvSGddkaF4aldEE
-         xfPbIBeqtCbOgFCGUakgYpqpus8NSP3/CHe+XA8FOoKyxRz2nYicy9j1pUpjdFP/LQLf
-         BOHg==
-X-Gm-Message-State: AOAM531kkvIfZBYn6Ug+2N8StMgjDYniyPMPB/VLSWzazrNeiWqZ53wZ
-        1HlKIi7bv6RDCGUJq1kmDDg=
-X-Google-Smtp-Source: ABdhPJxBiSSDUld9gI/zKkwCuHQwJdcwePDQEjtZ59jif3As0k1RCY3ejOOiPuYCpI+64lNxku4i2Q==
-X-Received: by 2002:a63:a18:: with SMTP id 24mr5912428pgk.309.1625862409179;
-        Fri, 09 Jul 2021 13:26:49 -0700 (PDT)
+        bh=1DtGlfo68SFtzRKcdMwNBvWjsRGvEXgsFbZoOOszlFQ=;
+        b=eaWQyu3X53BXKUbiFlVqh0hettdt9dtA4uItxcPyGJqRiTVy3+irlzrcoZ1fpHDjes
+         qQ82cKJkF32WkiWE0HInEklz8P1ffv0VghXU9t5VBjzkBDE89m5jp5380szbFNjst88F
+         wCD+p7uNkx61+MdH516qSZgHfLz5MkpcKcm2hqZMnbmjFWQ9gg13C3gSxhAoS143+0CY
+         61d+b1cv9X3opR21d/U7lF8wfJMto+eWpc08zlbp3H0d27uE/iyj6d8hq0JZXOCiCEhJ
+         zmCMzJMLNufpmzO+4yF0mrTWW4L0sInSsHTY/MfUSJXEox42sJbjeEb28u/TxgEi8aql
+         /fig==
+X-Gm-Message-State: AOAM530MaNVQcI8l9NFo7mLr1Skiwsr74YGTte0AzF6/VIoI6tNF9tsf
+        BoHk0xomHgsgMmd81iGnpCo=
+X-Google-Smtp-Source: ABdhPJyG1igKpzebMICABML9ZtuCBGOihk/fzN203zU4C14su9OF91zXmKv28ePUEhHM4XENygnFOA==
+X-Received: by 2002:a17:90a:4490:: with SMTP id t16mr656740pjg.183.1625862410937;
+        Fri, 09 Jul 2021 13:26:50 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:eeaf:c266:e6cc:b591])
-        by smtp.gmail.com with ESMTPSA id e16sm8812927pgl.54.2021.07.09.13.26.47
+        by smtp.gmail.com with ESMTPSA id e16sm8812927pgl.54.2021.07.09.13.26.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 13:26:48 -0700 (PDT)
+        Fri, 09 Jul 2021 13:26:50 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
         Bart Van Assche <bvanassche@acm.org>,
-        Akinobu Mita <akinobu.mita@gmail.com>
-Subject: [PATCH v2 00/19] UFS patches for kernel v5.15
-Date:   Fri,  9 Jul 2021 13:26:19 -0700
-Message-Id: <20210709202638.9480-2-bvanassche@acm.org>
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v2 01/19] scsi: Fix the documentation of the scsi_execute() time parameter
+Date:   Fri,  9 Jul 2021 13:26:20 -0700
+Message-Id: <20210709202638.9480-3-bvanassche@acm.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210709202638.9480-1-bvanassche@acm.org>
 References: <20210709202638.9480-1-bvanassche@acm.org>
@@ -50,63 +54,31 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+The unit of the scsi_execute() timeout parameter is 1/HZ seconds instead of
+one second, just like the timeouts used in the block layer. Fix the
+documentation header above the definition of the scsi_execute() macro.
 
-Please consider the patches in this series for kernel v5.15.
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Ming Lei <ming.lei@redhat.com>
+Cc: John Garry <john.garry@huawei.com>
+Fixes: "[SCSI] use scatter lists for all block pc requests and simplify hw handlers" # v2.6.16.28
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/scsi_lib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-Bart.
-
-Changes compared to v1:
-- Left out the SCSI core patches for the SCSI error handler in order not to
-  delay the UFS patches by the conversation around the SCSI error handler
-  patches.
-- Restored the WARN_ON_ONCE(tag < 0) statements in the patch that removes
-  ufshcd_valid_tag().
-- Split "Fix a race in the completion path" in two patches.
-- Added a fault injection patch.
-
-Bart Van Assche (19):
-  scsi: Fix the documentation of the scsi_execute() time parameter
-  scsi: ufs: Reduce power management code duplication
-  scsi: ufs: Only include power management code if necessary
-  scsi: ufs: Rename the second ufshcd_probe_hba() argument
-  scsi: ufs: Use DECLARE_COMPLETION_ONSTACK() where appropriate
-  scsi: ufs: Remove ufshcd_valid_tag()
-  scsi: ufs: Verify UIC locking requirements at runtime
-  scsi: ufs: Improve static type checking for the host controller state
-  scsi: ufs: Remove several wmb() calls
-  scsi: ufs: Inline ufshcd_outstanding_req_clear()
-  scsi: ufs: Rename __ufshcd_transfer_req_compl()
-  scsi: ufs: Remove a local variable
-  scsi: ufs: Fix a race in the completion path
-  scsi: ufs: Use the doorbell register instead of the UTRLCNR register
-  scsi: ufs: Fix the SCSI abort handler
-  scsi: ufs: Request sense data asynchronously
-  scsi: ufs: Synchronize SCSI and UFS error handling
-  scsi: ufs: Retry aborted SCSI commands instead of completing these
-    successfully
-  scsi: ufs: Add fault injection support
-
- drivers/scsi/scsi_lib.c                |   2 +-
- drivers/scsi/ufs/Kconfig               |   7 +
- drivers/scsi/ufs/Makefile              |   1 +
- drivers/scsi/ufs/cdns-pltfrm.c         |   7 +-
- drivers/scsi/ufs/tc-dwc-g210-pci.c     |  32 +-
- drivers/scsi/ufs/tc-dwc-g210-pltfrm.c  |   7 +-
- drivers/scsi/ufs/ufs-exynos.c          |   7 +-
- drivers/scsi/ufs/ufs-fault-injection.c |  67 ++++
- drivers/scsi/ufs/ufs-fault-injection.h |  24 ++
- drivers/scsi/ufs/ufs-hisi.c            |   7 +-
- drivers/scsi/ufs/ufs-mediatek.c        |   7 +-
- drivers/scsi/ufs/ufs-qcom.c            |   7 +-
- drivers/scsi/ufs/ufshcd-pci.c          |  48 +--
- drivers/scsi/ufs/ufshcd-pltfrm.c       |  47 ---
- drivers/scsi/ufs/ufshcd-pltfrm.h       |  18 -
- drivers/scsi/ufs/ufshcd.c              | 485 +++++++++++--------------
- drivers/scsi/ufs/ufshcd.h              |  48 ++-
- 17 files changed, 370 insertions(+), 451 deletions(-)
- create mode 100644 drivers/scsi/ufs/ufs-fault-injection.c
- create mode 100644 drivers/scsi/ufs/ufs-fault-injection.h
-
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 7184f93dfe15..4b56e06faa5e 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -194,7 +194,7 @@ void scsi_queue_insert(struct scsi_cmnd *cmd, int reason)
+  * @bufflen:	len of buffer
+  * @sense:	optional sense buffer
+  * @sshdr:	optional decoded sense header
+- * @timeout:	request timeout in seconds
++ * @timeout:	request timeout in HZ
+  * @retries:	number of times to retry request
+  * @flags:	flags for ->cmd_flags
+  * @rq_flags:	flags for ->rq_flags
