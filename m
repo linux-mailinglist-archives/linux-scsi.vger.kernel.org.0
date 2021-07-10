@@ -2,83 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1EDD3C33F1
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 11:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609253C342E
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 12:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbhGJJXb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 10 Jul 2021 05:23:31 -0400
-Received: from mxout04.lancloud.ru ([45.84.86.114]:54206 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbhGJJXb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 10 Jul 2021 05:23:31 -0400
-X-Greylist: delayed 353 seconds by postgrey-1.27 at vger.kernel.org; Sat, 10 Jul 2021 05:23:30 EDT
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 2035420ABA32
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH AUTOSEL 4.19 05/39] scsi: hisi_sas: Propagate errors in
- interrupt_init_v1_hw()
-To:     Sasha Levin <sashal@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-CC:     John Garry <john.garry@huawei.com>,
+        id S232646AbhGJKk5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 10 Jul 2021 06:40:57 -0400
+Received: from mga14.intel.com ([192.55.52.115]:34009 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232387AbhGJKk4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 10 Jul 2021 06:40:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10040"; a="209638432"
+X-IronPort-AV: E=Sophos;i="5.84,229,1620716400"; 
+   d="scan'208";a="209638432"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2021 03:38:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,229,1620716400"; 
+   d="scan'208";a="429090400"
+Received: from ahunter-desktop.fi.intel.com ([10.237.72.79])
+  by orsmga002.jf.intel.com with ESMTP; 10 Jul 2021 03:38:06 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-References: <20210710023204.3171428-1-sashal@kernel.org>
- <20210710023204.3171428-5-sashal@kernel.org>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <3e2af821-00e3-6db9-5820-696fdbe003d6@omp.ru>
-Date:   Sat, 10 Jul 2021 12:20:43 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210710023204.3171428-5-sashal@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V3 0/3] driver core: Add ability to delete device links of unregistered devices
+Date:   Sat, 10 Jul 2021 13:38:16 +0300
+Message-Id: <20210710103819.12532-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.17.1
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10.07.2021 5:31, Sasha Levin wrote:
+Hi
 
-> From: Sergey Shtylyov <s.shtylyov@omp.ru>
-> 
-> [ Upstream commit ab17122e758ef68fb21033e25c041144067975f5 ]
-> 
-> After commit 6c11dc060427 ("scsi: hisi_sas: Fix IRQ checks") we have the
-> error codes returned by platform_get_irq() ready for the propagation
-> upsream in interrupt_init_v1_hw() -- that will fix still broken deferred
-> probing. Let's propagate the error codes from devm_request_irq() as well
-> since I don't see the reason to override them with -ENOENT...
-> 
-> Link: https://lore.kernel.org/r/49ba93a3-d427-7542-d85a-b74fe1a33a73@omp.ru
-> Acked-by: John Garry <john.garry@huawei.com>
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-> index 8aa3222fe486..5a777e48963b 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-[...]
-> @@ -1717,7 +1717,7 @@ static int interrupt_init_v1_hw(struct hisi_hba *hisi_hba)
->   		if (!irq) {
->   			dev_err(dev, "irq init: could not map cq interrupt %d\n",
->   				idx);
-> -			return -ENOENT;
-> +			return irq;
+There is an issue with the SCSI UFS driver when the optional
+BOOT well-known LUN fails to probe, which is not a fatal error.
+The issue is that the device and its "managed" device link do not
+then get deleted.  The device because the device link has a
+reference to it.  The device link because it can only be deleted
+by device_del(), but device_add() was never called, so device_del()
+never will be either.
 
-    This patch is borked too, we don't want to return 0 here...
+Since V2, these patches fix the issue by amending device link removal to
+accept removal of a link with an unregistered consumer device, as suggested
+by Rafael.
 
-[...]
 
-MBR, Sergei
+Changes in V3:
+
+    driver core: Prevent warning when removing a device link from unregistered consumer
+	New patch split from "driver core: Add ability to delete device
+	links of unregistered devices" except first chunk from that patch
+	dropped as unnecessary
+
+    driver core: Add ability to delete device links of unregistered devices
+	Move warning fix to separate patch.
+
+
+Changes in V2:
+
+    Take approach suggested by Rafael
+
+
+Adrian Hunter (3):
+      driver core: Prevent warning when removing a device link from unregistered consumer
+      driver core: Add ability to delete device links of unregistered devices
+      scsi: ufshcd: Fix device links when BOOT WLUN fails to probe
+
+ drivers/base/core.c       |  8 ++++++--
+ drivers/scsi/ufs/ufshcd.c | 23 +++++++++++++++++++++--
+ 2 files changed, 27 insertions(+), 4 deletions(-)
+
+
+Regards
+Adrian
