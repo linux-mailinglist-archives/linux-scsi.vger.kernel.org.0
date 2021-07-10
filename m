@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E72A33C2CBA
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 04:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A1E3C2D06
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 04:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbhGJCUl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 9 Jul 2021 22:20:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36990 "EHLO mail.kernel.org"
+        id S232021AbhGJCV3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 9 Jul 2021 22:21:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37850 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229606AbhGJCUk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:20:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 677E0613CC;
-        Sat, 10 Jul 2021 02:17:55 +0000 (UTC)
+        id S231879AbhGJCVM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:21:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 40A4B613D1;
+        Sat, 10 Jul 2021 02:18:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625883476;
-        bh=IYoubfj/OlkMZZB5SY71eKlG6nEiNmDXtp7ZUMa6i/A=;
+        s=k20201202; t=1625883507;
+        bh=HXXsm6bDL23ZwcCamIIW0m6ncof559sel1rCAX8ztzU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aavYFtroZ2SF1hetHju66MbxSQsoP5wlOzooVrGeJ1UenmsYmc14AO0LIGju7V6Tu
-         nlTLhVEOOluVJU7XWo1A+Al8ScoUJAglJsm6cHdBpAl68dEl+w/GrdhEd2JFldwUb1
-         aRavOQB4agC81zUWPtIs1yvwBMBlO3xch3dzMHmDAvnUdSzHzgADiilFsxELtseGYY
-         oJoRn0QLCU99V2c0SRWAsEKxQvD4KzOWIkEYTNjVLsMHZAkPO6x0a5dquawtFVXVi0
-         2qA/NL44ARc6DC17U6CXkWbNJPQFIsDj5HAam1vOV/4RJBIisEbdCEty8rTBrhHziW
-         li8zBKiNItBrg==
+        b=Io8nl7/MFpyrZhnaOsrJGLvOA786UIJ/EccOL3zPTgxKImhdDRI4G00yd3nEqMii9
+         eZM8rxlVo9I/04EghOtYLJh0AfMlO2OLYcevU4wfNBN44r2oa07PZv3AR6WS+bOxHP
+         pdYemckiDXqLru1jl2lCL76jDGTRqUh+Cxwu3do1E96Jr9YIb5Q3qykywJ6yMJvk4i
+         kHGVkW4tNSFVvBDfFH6rLOLDYmCqQgV6z5LcBwPcfCdBTfKRvrA8L2yub7JGIW4xIQ
+         ETlKh7lFUI0a789PtdYDX6NlDquGNKcOXwJyONsEmJkuT/N8d+hnRLdnunoNMBReGo
+         pgR0W+MTxH0Sw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     ching Huang <ching2048@areca.com.tw>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 005/114] scsi: arcmsr: Fix the wrong CDB payload report to IOP
-Date:   Fri,  9 Jul 2021 22:15:59 -0400
-Message-Id: <20210710021748.3167666-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 028/114] scsi: arcmsr: Fix doorbell status being updated late on ARC-1886
+Date:   Fri,  9 Jul 2021 22:16:22 -0400
+Message-Id: <20210710021748.3167666-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710021748.3167666-1-sashal@kernel.org>
 References: <20210710021748.3167666-1-sashal@kernel.org>
@@ -44,37 +44,44 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: ching Huang <ching2048@areca.com.tw>
 
-[ Upstream commit 5b8644968d2ca85abb785e83efec36934974b0c2 ]
+[ Upstream commit d9a231226f28261a787535e08d0c78669e1ad010 ]
 
-This patch fixes the wrong CDB payload report to IOP.
+It is possible for the IOP to be delayed in updating the doorbell
+status. The doorbell status should not be 0 so loop until the value
+changes.
 
-Link: https://lore.kernel.org/r/d2c97df3c817595c6faf582839316209022f70da.camel@areca.com.tw
+Link: https://lore.kernel.org/r/afdfdf7eabecf14632492c4987a6b9ac6312a7ad.camel@areca.com.tw
 Signed-off-by: ching Huang <ching2048@areca.com.tw>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/arcmsr/arcmsr_hba.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/scsi/arcmsr/arcmsr_hba.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
-index 4b79661275c9..930972cda38c 100644
+index 930972cda38c..42e494a7106c 100644
 --- a/drivers/scsi/arcmsr/arcmsr_hba.c
 +++ b/drivers/scsi/arcmsr/arcmsr_hba.c
-@@ -1923,8 +1923,12 @@ static void arcmsr_post_ccb(struct AdapterControlBlock *acb, struct CommandContr
+@@ -2419,10 +2419,17 @@ static void arcmsr_hbaD_doorbell_isr(struct AdapterControlBlock *pACB)
  
- 		if (ccb->arc_cdb_size <= 0x300)
- 			arc_cdb_size = (ccb->arc_cdb_size - 1) >> 6 | 1;
--		else
--			arc_cdb_size = (((ccb->arc_cdb_size + 0xff) >> 8) + 2) << 1 | 1;
-+		else {
-+			arc_cdb_size = ((ccb->arc_cdb_size + 0xff) >> 8) + 2;
-+			if (arc_cdb_size > 0xF)
-+				arc_cdb_size = 0xF;
-+			arc_cdb_size = (arc_cdb_size << 1) | 1;
+ static void arcmsr_hbaE_doorbell_isr(struct AdapterControlBlock *pACB)
+ {
+-	uint32_t outbound_doorbell, in_doorbell, tmp;
++	uint32_t outbound_doorbell, in_doorbell, tmp, i;
+ 	struct MessageUnit_E __iomem *reg = pACB->pmuE;
+ 
+-	in_doorbell = readl(&reg->iobound_doorbell);
++	if (pACB->adapter_type == ACB_ADAPTER_TYPE_F) {
++		for (i = 0; i < 5; i++) {
++			in_doorbell = readl(&reg->iobound_doorbell);
++			if (in_doorbell != 0)
++				break;
 +		}
- 		ccb_post_stamp = (ccb->smid | arc_cdb_size);
- 		writel(0, &pmu->inbound_queueport_high);
- 		writel(ccb_post_stamp, &pmu->inbound_queueport_low);
++	} else
++		in_doorbell = readl(&reg->iobound_doorbell);
+ 	outbound_doorbell = in_doorbell ^ pACB->in_doorbell;
+ 	do {
+ 		writel(0, &reg->host_int_status); /* clear interrupt */
 -- 
 2.30.2
 
