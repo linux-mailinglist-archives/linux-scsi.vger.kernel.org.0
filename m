@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2290C3C2F00
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 04:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FCC3C2F2F
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 04:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbhGJCaH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 9 Jul 2021 22:30:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41906 "EHLO mail.kernel.org"
+        id S233598AbhGJCaw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 9 Jul 2021 22:30:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43262 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234004AbhGJC2K (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:28:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DAE9E613FC;
-        Sat, 10 Jul 2021 02:25:03 +0000 (UTC)
+        id S233655AbhGJC2P (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:28:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6ADF26141A;
+        Sat, 10 Jul 2021 02:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625883904;
-        bh=Hy9kKlJWwUkCQ/3hWKbyzb+3jJ97A1OvJQWsXTDd0n8=;
+        s=k20201202; t=1625883908;
+        bh=xcdolrNeNMaw5/ECuZ9AThaPRl2bBtKdmrWZmvYR+2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WlSlfqV7/NpWUWDLyT6Hkww0JTNMnbRrZ0xWDRmC+T4Umc26HqStEUpE7WlODfX1G
-         xtiroG/ZVAT/MuOX2iwlB3CWLS9aJCC4AulnSr0MYRnWxTOPdU22ZzoQnxmRU7fqa+
-         OBa8nM8yIpuyavxRaNIdPiv8oaBxzxBqDRxdsjMyEP349QL0H81fgOYJlDE6Xx1zUC
-         G5Pn/9yhc6iept/Iodr2MJUjbYd/WYhFFbUEegcyXFMi9jxP5yYBVgjbqrudYXTwY4
-         YGWuIfXco7mPqeTUZ4FNyiV8kiabTeMgYcLLEo46uOrY1jmFNx19q6w1HQIuPq/Qqx
-         2AUBwPf7QWLWA==
+        b=vQCDnv/o/Jh2VoOLVlyuSHJ+WqRgtcyQsY2QYHoikgD7QUeGd9FXDPaUOl1rl1BEw
+         XUUQld9kFRKO/jUOrsxwep+q/ysptQi8pCClkU4aSyxdRSM4JQBTh8X0wm3aJ3oR5N
+         GZUGtuaMXjEVvSzNZzzP4PPzRi+MNUFhdnUY8xABZLMWI+5ihEuMLiH57oXuRQiHO5
+         oQOosBwqa/oCIIMQVpj2KL4g5L5MPrsPAT2wTqIbFv2Vxc8V4X6VtSzrObnmBZFl0X
+         o7Ae8NPsM2Zc3KK9Ag7XzOUf262WaUrUPe/Nt7V3xRxLc8IgvYxOp3L4KI6Ms20oCZ
+         cfPUMQJf02bxA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Garry <john.garry@huawei.com>, Ming Lei <ming.lei@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
+Cc:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 27/93] scsi: core: Cap scsi_host cmd_per_lun at can_queue
-Date:   Fri,  9 Jul 2021 22:23:21 -0400
-Message-Id: <20210710022428.3169839-27-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 30/93] scsi: mpt3sas: Fix deadlock while cancelling the running firmware event
+Date:   Fri,  9 Jul 2021 22:23:24 -0400
+Message-Id: <20210710022428.3169839-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710022428.3169839-1-sashal@kernel.org>
 References: <20210710022428.3169839-1-sashal@kernel.org>
@@ -43,49 +43,56 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: John Garry <john.garry@huawei.com>
+From: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 
-[ Upstream commit ea2f0f77538c50739b9fb4de4700cee5535e1f77 ]
+[ Upstream commit e2fac6c44ae06e58ac02181b048af31195883c31 ]
 
-The sysfs handling function sdev_store_queue_depth() enforces that the sdev
-queue depth cannot exceed shost can_queue. The initial sdev queue depth
-comes from shost cmd_per_lun. However, the LLDD may manually set
-cmd_per_lun to be larger than can_queue, which leads to an initial sdev
-queue depth greater than can_queue.
+Do not cancel current running firmware event work if the event type is
+different from MPT3SAS_REMOVE_UNRESPONDING_DEVICES.  Otherwise a deadlock
+can be observed while cancelling the current firmware event work if a hard
+reset operation is called as part of processing the current event.
 
-Such an issue was reported in [0], which caused a hang. That has since been
-fixed in commit fc09acb7de31 ("scsi: scsi_debug: Fix cmd_per_lun, set to
-max_queue").
-
-Stop this possibly happening for other drivers by capping shost cmd_per_lun
-at shost can_queue.
-
-[0] https://lore.kernel.org/linux-scsi/YHaez6iN2HHYxYOh@T590/
-
-Link: https://lore.kernel.org/r/1621434662-173079-1-git-send-email-john.garry@huawei.com
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: John Garry <john.garry@huawei.com>
+Link: https://lore.kernel.org/r/20210518051625.1596742-2-suganath-prabu.subramani@broadcom.com
+Signed-off-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/hosts.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index b93dd8ef4ac8..ce34da53af1b 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -220,6 +220,9 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
- 		goto fail;
- 	}
- 
-+	shost->cmd_per_lun = min_t(short, shost->cmd_per_lun,
-+				   shost->can_queue);
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index 5f845d7094fc..738b71653e9c 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -3526,6 +3526,28 @@ _scsih_fw_event_cleanup_queue(struct MPT3SAS_ADAPTER *ioc)
+ 	ioc->fw_events_cleanup = 1;
+ 	while ((fw_event = dequeue_next_fw_event(ioc)) ||
+ 	     (fw_event = ioc->current_event)) {
 +
- 	error = scsi_init_sense_cache(shost);
- 	if (error)
- 		goto fail;
++		/*
++		 * Don't call cancel_work_sync() for current_event
++		 * other than MPT3SAS_REMOVE_UNRESPONDING_DEVICES;
++		 * otherwise we may observe deadlock if current
++		 * hard reset issued as part of processing the current_event.
++		 *
++		 * Orginal logic of cleaning the current_event is added
++		 * for handling the back to back host reset issued by the user.
++		 * i.e. during back to back host reset, driver use to process
++		 * the two instances of MPT3SAS_REMOVE_UNRESPONDING_DEVICES
++		 * event back to back and this made the drives to unregister
++		 * the devices from SML.
++		 */
++
++		if (fw_event == ioc->current_event &&
++		    ioc->current_event->event !=
++		    MPT3SAS_REMOVE_UNRESPONDING_DEVICES) {
++			ioc->current_event = NULL;
++			continue;
++		}
++
+ 		/*
+ 		 * Wait on the fw_event to complete. If this returns 1, then
+ 		 * the event was never executed, and we need a put for the
 -- 
 2.30.2
 
