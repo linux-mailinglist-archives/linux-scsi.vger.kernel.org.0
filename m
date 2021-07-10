@@ -2,35 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D3F3C3091
-	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 04:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257C53C30B0
+	for <lists+linux-scsi@lfdr.de>; Sat, 10 Jul 2021 04:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbhGJCfx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 9 Jul 2021 22:35:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53588 "EHLO mail.kernel.org"
+        id S232875AbhGJCg2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 9 Jul 2021 22:36:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235756AbhGJCfD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:35:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 82C8E613E6;
-        Sat, 10 Jul 2021 02:32:17 +0000 (UTC)
+        id S233721AbhGJCfY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:35:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D766A613EB;
+        Sat, 10 Jul 2021 02:32:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625884338;
-        bh=FouFDJmTwQE7solqH69bOIMe0yKX0MOK+I9G50PhMqM=;
+        s=k20201202; t=1625884340;
+        bh=ueO+DyAUuyzO2QJUmIGDwazdbbXNYoUKKL9SK3kwnhQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lYeYOLeKTdtAk0Cb8j9xSdl3PX4D+P/OEQHztIq1ajMlP5Q6sxojZMTGxQbVM9u6T
-         S5EA0oTO3f0vwnHGMWkYUCyiXvNuxYk6/EiyHNmW0hGB+4prAwq7yOTx7iNYN1x5BP
-         SGiv/UhGcNJMh90W8Gs3Uy9q5c3VhVzdPAyC4Qz9roZLV6OoSOQl2eKQDZCm5/7Y4a
-         ohrMb/7QS+yzBljUQ9bdzko2CCLsSDMOVxBtIBgZCr4m69XpnmqDb8Xn4UvNzYMxZe
-         LJw3nuRG5i+U4vjnUyy7ncsyRop1imBol+SOvTV8gixGaeNkfn+auD1vu2yg0l1CJw
-         WQEyYeSYpoxLw==
+        b=fMp18Kx1inItIGZSh4Yclg1fQS7hx/Nu25eeXR+9xMx6BUCHIIH4rLpZSNmsDWxQF
+         cFNQSSohMVw3xiKSVvVthlAOgq0Eai+hNQ2qHlDeBvgBETFkeyqUyklS3MAleAg3ft
+         Xy4+rZ/yNxyFE9J3fJpG6VeNIluQ5m1tVPt6L0jV/WIIVaqP5rbW3/3I7ujmwcLgut
+         StnuSmlj3rBUeWQ9O354MQAGz1ADgDmx0G5kfeapw5ij/fOcF9aWbMmepc9oIQrTxm
+         NjlMTQwv6xIFnJ4OmFGhcrQ0z32OBrk3tUkKLUWHDD6c7rfUfq68I1CeCQLFYBd82x
+         26kYHZNkHO8IA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hannes Reinecke <hare@suse.de>,
+Cc:     Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 11/39] scsi: scsi_dh_alua: Check for negative result value
-Date:   Fri,  9 Jul 2021 22:31:36 -0400
-Message-Id: <20210710023204.3171428-11-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 13/39] scsi: iscsi: Add iscsi_cls_conn refcount helpers
+Date:   Fri,  9 Jul 2021 22:31:38 -0400
+Message-Id: <20210710023204.3171428-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710023204.3171428-1-sashal@kernel.org>
 References: <20210710023204.3171428-1-sashal@kernel.org>
@@ -42,56 +44,95 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.de>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit 7e26e3ea028740f934477ec01ba586ab033c35aa ]
+[ Upstream commit b1d19e8c92cfb0ded180ef3376c20e130414e067 ]
 
-scsi_execute() will now return a negative error if there was an error prior
-to command submission; evaluate that instead if checking for DRIVER_ERROR.
+There are a couple places where we could free the iscsi_cls_conn while it's
+still in use. This adds some helpers to get/put a refcount on the struct
+and converts an exiting user. Subsequent commits will then use the helpers
+to fix 2 bugs in the eh code.
 
-[mkp: build fix]
-
-Link: https://lore.kernel.org/r/20210427083046.31620-6-hare@suse.de
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Link: https://lore.kernel.org/r/20210525181821.7617-11-michael.christie@oracle.com
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/device_handler/scsi_dh_alua.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/scsi/libiscsi.c             |  7 ++-----
+ drivers/scsi/scsi_transport_iscsi.c | 12 ++++++++++++
+ include/scsi/scsi_transport_iscsi.h |  2 ++
+ 3 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-index efd2b4312528..41e8c9e68878 100644
---- a/drivers/scsi/device_handler/scsi_dh_alua.c
-+++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -562,12 +562,12 @@ static int alua_rtpg(struct scsi_device *sdev, struct alua_port_group *pg)
- 			kfree(buff);
- 			return SCSI_DH_OK;
- 		}
--		if (!scsi_sense_valid(&sense_hdr)) {
-+		if (retval < 0 || !scsi_sense_valid(&sense_hdr)) {
- 			sdev_printk(KERN_INFO, sdev,
- 				    "%s: rtpg failed, result %d\n",
- 				    ALUA_DH_NAME, retval);
- 			kfree(buff);
--			if (driver_byte(retval) == DRIVER_ERROR)
-+			if (retval < 0)
- 				return SCSI_DH_DEV_TEMP_BUSY;
- 			return SCSI_DH_IO;
- 		}
-@@ -789,11 +789,11 @@ static unsigned alua_stpg(struct scsi_device *sdev, struct alua_port_group *pg)
- 	retval = submit_stpg(sdev, pg->group_id, &sense_hdr);
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index 81471c304991..52521b68f0a7 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -1385,7 +1385,6 @@ void iscsi_session_failure(struct iscsi_session *session,
+ 			   enum iscsi_err err)
+ {
+ 	struct iscsi_conn *conn;
+-	struct device *dev;
  
- 	if (retval) {
--		if (!scsi_sense_valid(&sense_hdr)) {
-+		if (retval < 0 || !scsi_sense_valid(&sense_hdr)) {
- 			sdev_printk(KERN_INFO, sdev,
- 				    "%s: stpg failed, result %d",
- 				    ALUA_DH_NAME, retval);
--			if (driver_byte(retval) == DRIVER_ERROR)
-+			if (retval < 0)
- 				return SCSI_DH_DEV_TEMP_BUSY;
- 		} else {
- 			sdev_printk(KERN_INFO, sdev, "%s: stpg failed\n",
+ 	spin_lock_bh(&session->frwd_lock);
+ 	conn = session->leadconn;
+@@ -1394,10 +1393,8 @@ void iscsi_session_failure(struct iscsi_session *session,
+ 		return;
+ 	}
+ 
+-	dev = get_device(&conn->cls_conn->dev);
++	iscsi_get_conn(conn->cls_conn);
+ 	spin_unlock_bh(&session->frwd_lock);
+-	if (!dev)
+-	        return;
+ 	/*
+ 	 * if the host is being removed bypass the connection
+ 	 * recovery initialization because we are going to kill
+@@ -1407,7 +1404,7 @@ void iscsi_session_failure(struct iscsi_session *session,
+ 		iscsi_conn_error_event(conn->cls_conn, err);
+ 	else
+ 		iscsi_conn_failure(conn, err);
+-	put_device(dev);
++	iscsi_put_conn(conn->cls_conn);
+ }
+ EXPORT_SYMBOL_GPL(iscsi_session_failure);
+ 
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index e340b05278b6..2aaa5a2bd613 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2306,6 +2306,18 @@ int iscsi_destroy_conn(struct iscsi_cls_conn *conn)
+ }
+ EXPORT_SYMBOL_GPL(iscsi_destroy_conn);
+ 
++void iscsi_put_conn(struct iscsi_cls_conn *conn)
++{
++	put_device(&conn->dev);
++}
++EXPORT_SYMBOL_GPL(iscsi_put_conn);
++
++void iscsi_get_conn(struct iscsi_cls_conn *conn)
++{
++	get_device(&conn->dev);
++}
++EXPORT_SYMBOL_GPL(iscsi_get_conn);
++
+ /*
+  * iscsi interface functions
+  */
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index b266d2a3bcb1..484e9787d817 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -436,6 +436,8 @@ extern void iscsi_remove_session(struct iscsi_cls_session *session);
+ extern void iscsi_free_session(struct iscsi_cls_session *session);
+ extern struct iscsi_cls_conn *iscsi_create_conn(struct iscsi_cls_session *sess,
+ 						int dd_size, uint32_t cid);
++extern void iscsi_put_conn(struct iscsi_cls_conn *conn);
++extern void iscsi_get_conn(struct iscsi_cls_conn *conn);
+ extern int iscsi_destroy_conn(struct iscsi_cls_conn *conn);
+ extern void iscsi_unblock_session(struct iscsi_cls_session *session);
+ extern void iscsi_block_session(struct iscsi_cls_session *session);
 -- 
 2.30.2
 
