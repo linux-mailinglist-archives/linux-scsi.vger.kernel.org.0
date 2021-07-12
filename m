@@ -2,44 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1663C43C7
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jul 2021 07:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA4B3C43EF
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jul 2021 08:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbhGLGCD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Jul 2021 02:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S231968AbhGLGNy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Jul 2021 02:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbhGLGCD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Jul 2021 02:02:03 -0400
+        with ESMTP id S231351AbhGLGNx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Jul 2021 02:13:53 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BFCC0613DD;
-        Sun, 11 Jul 2021 22:59:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98353C0613DD;
+        Sun, 11 Jul 2021 23:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=S6KqZsCf1nAFCvGGUaqcH4vcppwFZbWTX55tGzGo+4E=; b=NmDg0gR0ai9Aww/SnX95jHbrVV
-        Tg8c7GvKXoSHyIAkt9eH9iIerMlAmPwlrcc9OZW/1OA6OPdMJEehTurq6gim0Q5v29GLSUXGbR6vc
-        6c1DeCW+W3rsTGY5qgahjSEMv/bQboypjSbtvE1DyLYaTSwAG6mpQGzDVuzltjJ0CTpkoUBEYJfvX
-        DAwmYlyBJX7WBnFmefT9B/mQ+qFXne/eXgyTZd7/fYYeiaqAe/REXbF8ffD0lA7ZXok/r4PiiKrDZ
-        vNZqjN8QYcGwiTP8MvKz1WRxjzNfFQGUUG4ju4ikfFPDqsymCX8EjjJVNW/e13cWIjsH+7YVTaYAc
-        aN/bzWbw==;
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=1YkOQcBdgxi62ZhLA0NtO1y6SKPDgvnlI06PbOB4DUw=; b=cj+KTjXg8AMbD8rtYBj+8r7Cxt
+        BIPIRTp20D9LAr4qWIr6U0JC/xVHlXyiIcTpi382wli87gwzL3Ky+H3KogILv29OKGQofxk4HKyqR
+        AiEUkF3fz0flDZ/xb4lpGW1WDvCD6qxQc+HkKDLMWs17uNkI25ouMldR4GbfUgdqhRyD1eO7ejeUK
+        aRa9JYOKdeAzKqSD8RqQQWjuHagl0GUOGEO14F0eiDyAnchuvTZcMJ5utjbxVMfjBg0n7t7VaNAiA
+        Q5H0LUAnMpixjTv1WRiUcuxUg02RkZHPFt7pajAXdDqcjOppur2vp3jUMn2VfXHojK49J5ypV42jW
+        60ew9ukQ==;
 Received: from [2001:4bb8:184:8b7c:bd9:61b8:39ba:d78a] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m2oxM-00GvgI-Sw; Mon, 12 Jul 2021 05:58:30 +0000
+        id 1m2p8D-00GwBl-3g; Mon, 12 Jul 2021 06:09:34 +0000
 From:   Christoph Hellwig <hch@lst.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        FUJITA Tomonori <fujita.tomonori@lab.ntt.co.jp>
-Cc:     Doug Gilbert <dgilbert@interlog.com>,
-        =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: [PATCH 24/24] scsi: unexport sg_scsi_ioctl
-Date:   Mon, 12 Jul 2021 07:48:16 +0200
-Message-Id: <20210712054816.4147559-25-hch@lst.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc:     Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geoff Levand <geoff@infradead.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alex Shi <alexs@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org
+Subject: flush_kernel_dcache_page fixes and removal
+Date:   Mon, 12 Jul 2021 08:09:22 +0200
+Message-Id: <20210712060928.4161649-1-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210712054816.4147559-1-hch@lst.de>
-References: <20210712054816.4147559-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
@@ -47,64 +59,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Just call scsi_ioctl in sg as that has the same effect.
+Hi all,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/scsi/scsi_ioctl.c | 5 ++---
- drivers/scsi/sg.c         | 2 +-
- include/scsi/scsi_ioctl.h | 2 --
- 3 files changed, 3 insertions(+), 6 deletions(-)
+while looking to convert the block layer away from kmap_atomic towards
+kmap_local_page and prefeably the helpers that abstract it away I noticed
+that a few block drivers directly or implicitly call
+flush_kernel_dcache_page before kunmapping a page that has been written
+to.  flush_kernel_dcache_page is documented to to be used in such cases,
+but flush_dcache_page is actually required when the page could be in
+the page cache and mapped to userspace, which is pretty much always the
+case when kmapping an arbitrary page.  Unfortunately the documentation
+doesn't exactly make that clear, which lead to this misused.  And it turns
+out that only the copy_strings / copy_string_kernel in the exec code
+were actually correct users of flush_kernel_dcache_page, which is why
+I think we should just remove it and eat the very minor overhead in
+exec rather than confusing poor driver writers.
 
-diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c
-index 2492c628fd38..2cbbd49760f8 100644
---- a/drivers/scsi/scsi_ioctl.c
-+++ b/drivers/scsi/scsi_ioctl.c
-@@ -524,8 +524,8 @@ static int sg_io(struct request_queue *q, struct gendisk *bd_disk,
-  *      Positive numbers returned are the compacted SCSI error codes (4
-  *      bytes in one int) where the lowest byte is the SCSI status.
-  */
--int sg_scsi_ioctl(struct request_queue *q, struct gendisk *disk, fmode_t mode,
--		struct scsi_ioctl_command __user *sic)
-+static int sg_scsi_ioctl(struct request_queue *q, struct gendisk *disk,
-+		fmode_t mode, struct scsi_ioctl_command __user *sic)
- {
- 	enum { OMAX_SB_LEN = 16 };	/* For backward compatibility */
- 	struct request *rq;
-@@ -637,7 +637,6 @@ int sg_scsi_ioctl(struct request_queue *q, struct gendisk *disk, fmode_t mode,
- 
- 	return err;
- }
--EXPORT_SYMBOL_GPL(sg_scsi_ioctl);
- 
- int put_sg_io_hdr(const struct sg_io_hdr *hdr, void __user *argp)
- {
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index c86fa4476334..9be76deea242 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -1109,7 +1109,7 @@ sg_ioctl_common(struct file *filp, Sg_device *sdp, Sg_fd *sfp,
- 	case SCSI_IOCTL_SEND_COMMAND:
- 		if (atomic_read(&sdp->detaching))
- 			return -ENODEV;
--		return sg_scsi_ioctl(sdp->device->request_queue, NULL, filp->f_mode, p);
-+		return scsi_ioctl(sdp->device, NULL, filp->f_mode, cmd_in, p);
- 	case SG_SET_DEBUG:
- 		result = get_user(val, ip);
- 		if (result)
-diff --git a/include/scsi/scsi_ioctl.h b/include/scsi/scsi_ioctl.h
-index b3918fded464..d2cb9aeaf1f1 100644
---- a/include/scsi/scsi_ioctl.h
-+++ b/include/scsi/scsi_ioctl.h
-@@ -47,8 +47,6 @@ int scsi_ioctl_block_when_processing_errors(struct scsi_device *sdev,
- 		int cmd, bool ndelay);
- int scsi_ioctl(struct scsi_device *sdev, struct gendisk *disk, fmode_t mode,
- 		int cmd, void __user *arg);
--int sg_scsi_ioctl(struct request_queue *q, struct gendisk *disk, fmode_t mode,
--			 struct scsi_ioctl_command __user *argp);
- int get_sg_io_hdr(struct sg_io_hdr *hdr, const void __user *argp);
- int put_sg_io_hdr(const struct sg_io_hdr *hdr, void __user *argp);
- bool scsi_cmd_allowed(unsigned char *cmd, fmode_t mode);
--- 
-2.30.2
-
+Diffstat:
+ Documentation/core-api/cachetlb.rst                    |   86 +++++++----------
+ Documentation/translations/zh_CN/core-api/cachetlb.rst |    9 -
+ arch/arm/include/asm/cacheflush.h                      |    4 
+ arch/arm/mm/flush.c                                    |   33 ------
+ arch/arm/mm/nommu.c                                    |    6 -
+ arch/csky/abiv1/cacheflush.c                           |   11 --
+ arch/csky/abiv1/inc/abi/cacheflush.h                   |    4 
+ arch/mips/include/asm/cacheflush.h                     |    8 -
+ arch/nds32/include/asm/cacheflush.h                    |    3 
+ arch/nds32/mm/cacheflush.c                             |    9 -
+ arch/parisc/include/asm/cacheflush.h                   |    8 -
+ arch/parisc/kernel/cache.c                             |    3 
+ arch/sh/include/asm/cacheflush.h                       |    8 -
+ block/blk-map.c                                        |    2 
+ drivers/block/ps3disk.c                                |    2 
+ drivers/mmc/host/jz4740_mmc.c                          |    4 
+ drivers/mmc/host/mmc_spi.c                             |    2 
+ drivers/scsi/aacraid/aachba.c                          |    1 
+ fs/exec.c                                              |    6 -
+ include/linux/highmem.h                                |    5 
+ lib/scatterlist.c                                      |    5 
+ tools/testing/scatterlist/linux/mm.h                   |    1 
+ 22 files changed, 55 insertions(+), 165 deletions(-)
