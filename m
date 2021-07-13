@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 300323C7867
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jul 2021 23:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871063C7871
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jul 2021 23:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbhGMVFg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Jul 2021 17:05:36 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:8300 "EHLO
+        id S235936AbhGMVFm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Jul 2021 17:05:42 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:24255 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbhGMVFe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jul 2021 17:05:34 -0400
+        with ESMTP id S235536AbhGMVFf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jul 2021 17:05:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1626210164; x=1657746164;
+  t=1626210165; x=1657746165;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hXxOvXw4eeJpjDBFqXC+wHjs9TywmXrN9BduamjpANo=;
-  b=ZTBfYZsFMDQx2qAZvO+c1M5k+fGNS8gCmHFhwVBosHctbZkv2BCNCGfJ
-   b5QfSf+aygW8gwvXiMfYbAnhkjLAwfByJCqYCDNJks+mMBxHeqhQcrxoT
-   V2MkzVZW6C/J69xSBBEJe4fwgJZKE8GLAb65/E3dE7MT1RKobWnB6BC4/
-   Lowf7c8k8WLetozIkF/R3NTdCSEE/a8NU1jh5ZSV6agEPQBE+iR52MN09
-   dQ2T5rgqqdpvDR/sAIPwGJaLLjVjMNMrgF4LbAJuMsZlhz60+q78BAB/A
-   B0Kao0gbD+BxQkFtbHXsagcHJGJiWwONR3/eKO26SZPk+cYiAkJO03gI2
-   Q==;
-IronPort-SDR: IhsL5cQhikQeaQ8DZnSaerswgEfwS6AOAthUx9lAbBbyE4vVY4Tu1sSR8+R/uC0BG+VjfUbBfR
- Mn/d1cl21NxswkXXIm56wsqBBR2naE2/hp8H6wbr3GYfqrI1amP12qzostnrADhVaCvrts6YYF
- Yi9I+8xk5SXiRwL9JlPaIvims0CDPSFOGv9CFmH7CfT/YBdOEjX44u3p6aJrYrs1N37PDwpMVt
- VKMlq5AgdoMYfuAwnNoi/E0uhk2lwY5fi3rYeGU+PjmrlT9oxU4ELpNP4j6DmzpwuGJ6TESJif
- vcY=
+  bh=A12LawP3oulzMcsMcOVjEE4RtDeE3oxjrT+YdNBnJlM=;
+  b=LADUZM0wnjXRMzVwURsfEVbJReyvgmy2leGDl+sLrQfBTa/ltKbP7aJx
+   NeUf9js9WeywV6Zk9R6ZIda9noE1/11MOfHKRyvb34xJjXmemTH4l1GEF
+   ihvYC+lGT9DDx6SFy1cAeLhwRm9GXnbQ3BhACK07QoRfsaUglSqWcG9Nr
+   9dwxl1Mn26Wwcv9zhMwgyW38D4+2I4XqylPPoIczPwE2z076V5aUB0eTL
+   nDxNsea3m4s+36EUr6w5Bt2boIK/F8t/NZleCPV2tdAnk3jEKQ487Nt3+
+   4wWT7Qilo6ywCNH8e73SqyU+h6eoMk4rXgNlqzmAv6nufVwnnu4ELpACz
+   w==;
+IronPort-SDR: DcXKj7Lq9JsM241q2cq5ZpnN7AUjfhFioe/gs/OfeUnHM121s/OouebGIG1VXf2AZwIpxE7iTH
+ xGYo6COJlupNqTEUUXjzOtKb13cgTHZSK0H/AEw+3ZTjAfrkoPtqsZpg5F1Mb2DVtzculhqXkZ
+ zCspJb1qSObGBnkcLQYlTQexjf6sRLwGMZfaqq69rprDL1VX6SwJwyY8mTTxufCdsp+ZBoF8e0
+ o2o5vGNpM+ymW0pHTcdXASIipOFUWqfzeZdKUUCIdowylFcYI2Jxsyxqy1cK/gAWc89f6fDR76
+ 61E=
 X-IronPort-AV: E=Sophos;i="5.84,237,1620716400"; 
-   d="scan'208";a="121925986"
+   d="scan'208";a="124447486"
 Received: from f5out.microchip.com (HELO smtp.microsemi.com) ([198.175.253.81])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jul 2021 14:02:43 -0700
-Received: from AUSMBX1.microsemi.net (10.10.76.217) by AVMBX2.microsemi.net
- (10.10.46.68) with Microsoft SMTP Server (version=TLS1_2,
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jul 2021 14:02:45 -0700
+Received: from AUSMBX1.microsemi.net (10.10.76.217) by AVMBX1.microsemi.net
+ (10.10.46.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 13 Jul
  2021 14:02:43 -0700
 Received: from brunhilda.pdev.net (10.238.32.34) by ausmbx1.microsemi.net
  (10.10.76.217) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
  Transport; Tue, 13 Jul 2021 14:02:43 -0700
 Received: by brunhilda.pdev.net (Postfix, from userid 1467)
-        id 782A470349B; Tue, 13 Jul 2021 16:02:43 -0500 (CDT)
+        id 7E37B7034C6; Tue, 13 Jul 2021 16:02:43 -0500 (CDT)
 From:   Don Brace <don.brace@microchip.com>
 To:     <hch@infradead.org>, <martin.peterson@oracle.com>,
         <jejb@linux.vnet.ibm.com>, <linux-scsi@vger.kernel.org>
@@ -53,9 +53,9 @@ CC:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jeff@canonical.com>, <POSWALD@suse.com>,
         <john.p.donnelly@oracle.com>, <mwilck@suse.com>,
         <pmenzel@molgen.mpg.de>, <linux-kernel@vger.kernel.org>
-Subject: [smartpqi updates V2 PATCH 4/9] smartpqi: change Kconfig menu entry to microchip
-Date:   Tue, 13 Jul 2021 16:02:38 -0500
-Message-ID: <20210713210243.40594-5-don.brace@microchip.com>
+Subject: [smartpqi updates V2 PATCH 5/9] smartpqi: add SCSI cmd info for resets
+Date:   Tue, 13 Jul 2021 16:02:39 -0500
+Message-ID: <20210713210243.40594-6-don.brace@microchip.com>
 X-Mailer: git-send-email 2.28.0.rc1.9.ge7ae437ac1
 In-Reply-To: <20210713210243.40594-1-don.brace@microchip.com>
 References: <20210713210243.40594-1-don.brace@microchip.com>
@@ -66,33 +66,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Change Microsemi to Microchip
----
- drivers/scsi/smartpqi/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+From: Murthy Bhat <Murthy.Bhat@microchip.com>
 
-diff --git a/drivers/scsi/smartpqi/Kconfig b/drivers/scsi/smartpqi/Kconfig
-index eac7baecf42f..6f83e2df4d64 100644
---- a/drivers/scsi/smartpqi/Kconfig
-+++ b/drivers/scsi/smartpqi/Kconfig
-@@ -38,14 +38,14 @@
- # HEREUNDER, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES
+Report on SCSI command that has triggered the reset.
+ - Also add check for NULL SCSI commands resulting from
+   issuing sg_reset when there is no outstanding commands.
+
+   Example:
+   sg_reset -d /dev/sgXY
+   smartpqi 0000:39:00.0: resetting scsi 4:0:1:0 due to cmd 0x12
+
+Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
+Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Signed-off-by: Murthy Bhat <Murthy.Bhat@microchip.com>
+Signed-off-by: Don Brace <don.brace@microchip.com>
+---
+ drivers/scsi/smartpqi/smartpqi_init.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 29382b290243..ffc7ca221e27 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -6033,8 +6033,10 @@ static int pqi_eh_device_reset_handler(struct scsi_cmnd *scmd)
+ 	mutex_lock(&ctrl_info->lun_reset_mutex);
  
- config SCSI_SMARTPQI
--	tristate "Microsemi PQI Driver"
-+	tristate "Microchip PQI Driver"
- 	depends on PCI && SCSI && !S390
- 	select SCSI_SAS_ATTRS
- 	select RAID_ATTRS
- 	help
--	This driver supports Microsemi PQI controllers.
-+	This driver supports Microchip PQI controllers.
+ 	dev_err(&ctrl_info->pci_dev->dev,
+-		"resetting scsi %d:%d:%d:%d\n",
+-		shost->host_no, device->bus, device->target, device->lun);
++		"resetting scsi %d:%d:%d:%d due to cmd 0x%02x\n",
++		shost->host_no,
++		device->bus, device->target, device->lun,
++		scmd->cmd_len > 0 ? scmd->cmnd[0] : 0xff);
  
--	<http://www.microsemi.com>
-+	<http://www.microchip.com>
- 
- 	To compile this driver as a module, choose M here: the
- 	module will be called smartpqi.
+ 	pqi_check_ctrl_health(ctrl_info);
+ 	if (pqi_ctrl_offline(ctrl_info))
 -- 
 2.28.0.rc1.9.ge7ae437ac1
 
