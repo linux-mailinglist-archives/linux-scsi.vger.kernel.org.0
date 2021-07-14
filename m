@@ -2,38 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 291DE3C9101
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 22:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EC23C9107
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 22:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbhGNT5g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Jul 2021 15:57:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48880 "EHLO mail.kernel.org"
+        id S240909AbhGNT5j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Jul 2021 15:57:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234332AbhGNTu4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 14 Jul 2021 15:50:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0AB426044F;
-        Wed, 14 Jul 2021 19:48:02 +0000 (UTC)
+        id S240044AbhGNTvV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 14 Jul 2021 15:51:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A6C5D613F9;
+        Wed, 14 Jul 2021 19:48:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626292083;
-        bh=+OfU/LJ9KZPWgq3uZIEVOwwSPfgU91jbdLpo/Sf86zc=;
+        s=k20201202; t=1626292109;
+        bh=EOn9u7CR6/zKn+iKpJ5wP4mwdhdoEP+PkurRyOi8y00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e7aHaOkCwnwHVO+mnhOcZjMKqIECQa3ABHjHh9sLsxTfbKGfkdQ1E5RGIzDthHuK2
-         fDZ1UxsWtwotlxau54BCgWkQACCK1CZ+1O7V/esikBJP8MZuPAm/3PBtwQFNKPx2v0
-         Dcc51MKlE9GYJ7VYDOv97Hul7+mBx2wqIGV+3D6+3TlO6wkvD6/XuHH5TvtVRW4Pir
-         RNfwygqKkm0N9XSfLiyMl0VpIkTVc2EzpazMdv8CHenb0JcrA2yjew12hwATD6lqv6
-         j/krZmjDHSywcKNmp2UHAZUisG3EAsvbKrqA2dJGcG0bHTjaYjnaXs/z4zvxiHF3Hg
-         tWFJ1Mi3cbqBA==
+        b=DChLe3WAtSEF0ex689hlhk7t0B3kkLBj5RwIxMr/31laxQl1b5j81v2htHpqtSIU3
+         Pi6vR9ancqCcN+Y3uHfuInim8HyTgsE5DV50C5BEf5zipjg9An1Vq8jD8QYfnVXtTf
+         vvaxuP1wPQC4+MOUdP9c+5uejOQszx+gyNlWCuq5J1n6U2e4VY6dmsZhL1ZDMHpAQz
+         /9NjDmhSU6i1cgwABTyW1qKcMidkeU00WPQ99LIPJyMdln6XFiSoZXy32Io3hplY4K
+         jlUgitZDE4Q9qomAheuZfD0f7WtQdvkrAm47m8MiBkMWkvoT0Ru6vdeUnaEa6xO++X
+         VkL0EljyfYceA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Javed Hasan <jhasan@marvell.com>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 27/28] scsi: libfc: Fix array index out of bound exception
-Date:   Wed, 14 Jul 2021 15:47:22 -0400
-Message-Id: <20210714194723.55677-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 16/18] scsi: aic7xxx: Fix unintentional sign extension issue on left shift of u8
+Date:   Wed, 14 Jul 2021 15:48:04 -0400
+Message-Id: <20210714194806.55962-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210714194723.55677-1-sashal@kernel.org>
-References: <20210714194723.55677-1-sashal@kernel.org>
+In-Reply-To: <20210714194806.55962-1-sashal@kernel.org>
+References: <20210714194806.55962-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,51 +42,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Javed Hasan <jhasan@marvell.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit b27c4577557045f1ab3cdfeabfc7f3cd24aca1fe ]
+[ Upstream commit 332a9dd1d86f1e7203fc7f0fd7e82f0b304200fe ]
 
-Fix array index out of bound exception in fc_rport_prli_resp().
+The shifting of the u8 integer returned fom ahc_inb(ahc, port+3) by 24 bits
+to the left will be promoted to a 32 bit signed int and then sign-extended
+to a u64. In the event that the top bit of the u8 is set then all then all
+the upper 32 bits of the u64 end up as also being set because of the
+sign-extension. Fix this by casting the u8 values to a u64 before the 24
+bit left shift.
 
-Link: https://lore.kernel.org/r/20210615165939.24327-1-jhasan@marvell.com
-Signed-off-by: Javed Hasan <jhasan@marvell.com>
+[ This dates back to 2002, I found the offending commit from the git
+history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
+commit f58eb66c0b0a ("Update aic7xxx driver to 6.2.10...") ]
+
+Link: https://lore.kernel.org/r/20210621151727.20667-1-colin.king@canonical.com
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Addresses-Coverity: ("Unintended sign extension")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/libfc/fc_rport.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/scsi/aic7xxx/aic7xxx_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/libfc/fc_rport.c b/drivers/scsi/libfc/fc_rport.c
-index 669cf3553a77..ef2fa6b10a9c 100644
---- a/drivers/scsi/libfc/fc_rport.c
-+++ b/drivers/scsi/libfc/fc_rport.c
-@@ -1174,6 +1174,7 @@ static void fc_rport_prli_resp(struct fc_seq *sp, struct fc_frame *fp,
- 		resp_code = (pp->spp.spp_flags & FC_SPP_RESP_MASK);
- 		FC_RPORT_DBG(rdata, "PRLI spp_flags = 0x%x spp_type 0x%x\n",
- 			     pp->spp.spp_flags, pp->spp.spp_type);
-+
- 		rdata->spp_type = pp->spp.spp_type;
- 		if (resp_code != FC_SPP_RESP_ACK) {
- 			if (resp_code == FC_SPP_RESP_CONF)
-@@ -1194,11 +1195,13 @@ static void fc_rport_prli_resp(struct fc_seq *sp, struct fc_frame *fp,
- 		/*
- 		 * Call prli provider if we should act as a target
- 		 */
--		prov = fc_passive_prov[rdata->spp_type];
--		if (prov) {
--			memset(&temp_spp, 0, sizeof(temp_spp));
--			prov->prli(rdata, pp->prli.prli_spp_len,
--				   &pp->spp, &temp_spp);
-+		if (rdata->spp_type < FC_FC4_PROV_SIZE) {
-+			prov = fc_passive_prov[rdata->spp_type];
-+			if (prov) {
-+				memset(&temp_spp, 0, sizeof(temp_spp));
-+				prov->prli(rdata, pp->prli.prli_spp_len,
-+					   &pp->spp, &temp_spp);
-+			}
- 		}
- 		/*
- 		 * Check if the image pair could be established
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index def3208dd290..9b5832b46dec 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -500,7 +500,7 @@ ahc_inq(struct ahc_softc *ahc, u_int port)
+ 	return ((ahc_inb(ahc, port))
+ 	      | (ahc_inb(ahc, port+1) << 8)
+ 	      | (ahc_inb(ahc, port+2) << 16)
+-	      | (ahc_inb(ahc, port+3) << 24)
++	      | (((uint64_t)ahc_inb(ahc, port+3)) << 24)
+ 	      | (((uint64_t)ahc_inb(ahc, port+4)) << 32)
+ 	      | (((uint64_t)ahc_inb(ahc, port+5)) << 40)
+ 	      | (((uint64_t)ahc_inb(ahc, port+6)) << 48)
 -- 
 2.30.2
 
