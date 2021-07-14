@@ -2,83 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05AC3C910B
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 22:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AE03C9240
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 22:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240977AbhGNT5l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Jul 2021 15:57:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49364 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241125AbhGNTw0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 14 Jul 2021 15:52:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B7C4261412;
-        Wed, 14 Jul 2021 19:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626292126;
-        bh=EOn9u7CR6/zKn+iKpJ5wP4mwdhdoEP+PkurRyOi8y00=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jpiYSKLtz60+k0nuV34sK+KqUhgF+hE6ru8PafTBY84OqMV29QjcUp41UImhreH70
-         N4ef8rMLKzUt0bdKzZxcsCyEXa4vmF2oSpo+JNM/BVAie92vUMw9FCMnKcAXGE0D+M
-         Z8EisE9PMpta7ZoYIgszL5C+nejtuufVhc5StlGphW1ZUl/CTCfjzR6gh4kAxee1BV
-         NV0xZA3nNRS3RnpuwosYgIscjlCGT1OXno/5skJcwsJ01K9OM25CDr+ji570VKiO24
-         Z/v2OiWWkwGcp7EPP/wqwq91YAIyGxxgXS8YcXVOJ+Bo8uEHdj81xhjEOhi/tYV0nf
-         5ueHGBxMsdTXA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Colin Ian King <colin.king@canonical.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 09/10] scsi: aic7xxx: Fix unintentional sign extension issue on left shift of u8
-Date:   Wed, 14 Jul 2021 15:48:32 -0400
-Message-Id: <20210714194833.56197-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210714194833.56197-1-sashal@kernel.org>
-References: <20210714194833.56197-1-sashal@kernel.org>
+        id S231544AbhGNUlm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Jul 2021 16:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230166AbhGNUll (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Jul 2021 16:41:41 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E505CC06175F
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Jul 2021 13:38:47 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id l4-20020a05600c4f04b0290220f8455631so2245012wmq.1
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Jul 2021 13:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=oOza+3c27xARRe7PtEIyYeQJyWBBSuYs0gMsoyn58X8=;
+        b=ciyopdVdk/Udg5los5yUDU9qMh2zsRSKAkD7y2eEsTcT7QnUcwdqwxO/EoIAZa1CbW
+         DNNNOvzgKP70DUPjYPjG59qaL2XimZzS6+ZBsUb/Cx4a2qt2Bik8w3TuufPKkHhJXnww
+         68HM/zRuFI/82ObGDTnjlN+6IHl3MurM1qyBvhtYlpA2Dr6J99wqEObdQHUcA70KZhyD
+         GvY1fOEoTNeTqMb3V/E2OSA4CM9bJJ9/GrMufVfvNe5fGBWDwUf5odXBkyYHwTYKN6KD
+         B1bz1PQkbRShAdr7O8hQUvJ8RUgiKeDMrlH2NswZSyi0w9e9f6FxcBOcmQFnng7hHzxD
+         VG2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=oOza+3c27xARRe7PtEIyYeQJyWBBSuYs0gMsoyn58X8=;
+        b=Zq+Mpkt/KN6daxd+g1sbckFdpRRuHLbhOKG5IEX6LECUlI2INZ+AIhtto9E3OQNUSp
+         mYoMJwlFCs0rnPn2JgQTew1Ea2wsLgNL3hrBZSbhyR+fsbUqoz8ToDXZjADpjXKX+hTd
+         rTZJROikOCv0hqA0dInz5HMqBTOUkm+lR9VxLXvRppMJOSLS+IhnZ+Rytmfo5xdimF3I
+         xIWYZRaxmdjFbZRAMZ9Odm0CKgVqoP147OH7TbBvPV7jxFTO7/DK0CIgy0f5E7gluInZ
+         6n85TXr6bNxRZeb31ZZeuYFTHgV4q/3urofnA8a3w7oO8Sc9uDo5HL7F1zKo1ADdt5Aq
+         CJ+A==
+X-Gm-Message-State: AOAM530svYntSzRvGn+AgFLCACE5sW3W4y+dm/Gb+sGV6JD/kZ1blqLF
+        lSKe3yLEGA3s/zTwK7xfkkM=
+X-Google-Smtp-Source: ABdhPJyIq4wrMHCCS2KOp45kuiVodVBfTSHY/Aty1hniwMn79ruTpvAvPpIUzHDpxf7Q7mk+6d8PUw==
+X-Received: by 2002:a7b:c5d2:: with SMTP id n18mr6067657wmk.97.1626295126486;
+        Wed, 14 Jul 2021 13:38:46 -0700 (PDT)
+Received: from ubuntu-laptop (ip5f5bec65.dynamic.kabel-deutschland.de. [95.91.236.101])
+        by smtp.googlemail.com with ESMTPSA id s13sm3748727wrm.13.2021.07.14.13.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jul 2021 13:38:45 -0700 (PDT)
+Message-ID: <d88ad4532d2b1931adf533cd08c0af9dedc38c55.camel@gmail.com>
+Subject: Re: [PATCH v2 03/19] scsi: ufs: Only include power management code
+ if necessary
+From:   Bean Huo <huobean@gmail.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>
+Date:   Wed, 14 Jul 2021 22:38:44 +0200
+In-Reply-To: <20210709202638.9480-5-bvanassche@acm.org>
+References: <20210709202638.9480-1-bvanassche@acm.org>
+         <20210709202638.9480-5-bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Fri, 2021-07-09 at 13:26 -0700, Bart Van Assche wrote:
+> This patch slightly reduces the UFS driver size if built with power
+> 
+> management support disabled.
+> 
+> 
+> 
+> Reviewed-by: Avri Altman <avri.altman@wdc.com>
+> 
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> 
+> Cc: Stanley Chu <stanley.chu@mediatek.com>
+> 
+> Cc: Can Guo <cang@codeaurora.org>
+> 
+> Cc: Asutosh Das <asutoshd@codeaurora.org>
+> 
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit 332a9dd1d86f1e7203fc7f0fd7e82f0b304200fe ]
-
-The shifting of the u8 integer returned fom ahc_inb(ahc, port+3) by 24 bits
-to the left will be promoted to a 32 bit signed int and then sign-extended
-to a u64. In the event that the top bit of the u8 is set then all then all
-the upper 32 bits of the u64 end up as also being set because of the
-sign-extension. Fix this by casting the u8 values to a u64 before the 24
-bit left shift.
-
-[ This dates back to 2002, I found the offending commit from the git
-history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
-commit f58eb66c0b0a ("Update aic7xxx driver to 6.2.10...") ]
-
-Link: https://lore.kernel.org/r/20210621151727.20667-1-colin.king@canonical.com
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Addresses-Coverity: ("Unintended sign extension")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/aic7xxx/aic7xxx_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
-index def3208dd290..9b5832b46dec 100644
---- a/drivers/scsi/aic7xxx/aic7xxx_core.c
-+++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
-@@ -500,7 +500,7 @@ ahc_inq(struct ahc_softc *ahc, u_int port)
- 	return ((ahc_inb(ahc, port))
- 	      | (ahc_inb(ahc, port+1) << 8)
- 	      | (ahc_inb(ahc, port+2) << 16)
--	      | (ahc_inb(ahc, port+3) << 24)
-+	      | (((uint64_t)ahc_inb(ahc, port+3)) << 24)
- 	      | (((uint64_t)ahc_inb(ahc, port+4)) << 32)
- 	      | (((uint64_t)ahc_inb(ahc, port+5)) << 40)
- 	      | (((uint64_t)ahc_inb(ahc, port+6)) << 48)
--- 
-2.30.2
+Reviewed-by: Bean Huo <beanhuo@micron.com>
 
