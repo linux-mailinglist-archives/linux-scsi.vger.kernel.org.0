@@ -2,733 +2,198 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD1A3C7AFF
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 03:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C09A3C7B06
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 03:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237310AbhGNBYS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Jul 2021 21:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237198AbhGNBYS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jul 2021 21:24:18 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64630C0613DD
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Jul 2021 18:21:27 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a6so868322ljq.3
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Jul 2021 18:21:27 -0700 (PDT)
+        id S237335AbhGNB0v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Jul 2021 21:26:51 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:24756 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237223AbhGNB0u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 13 Jul 2021 21:26:50 -0400
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16E1HdKu026658;
+        Wed, 14 Jul 2021 01:21:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2020-01-29;
+ bh=HhDOIGrF6r01BnNMu3friLwwAliKi2199b9QlnH9NoI=;
+ b=OXjYQrUfbPRHSOnID18VpTv+VBv4F1N+BFE7VgCGPKAOWG9Y7OVQ91UK+9g+o5v/lfT1
+ cE0o/0H/P4WiYPMWSNJwHeckki7YecqB0uO4A8Gp1b8dWesEJHIt7y57mXIDsQR93UXh
+ 240JB/DdXVWiimAy2ooh9+Owwt38Rzumey13IkeIlRMK+RyiN7hJrLbP7LfhwZDW0yJQ
+ KgLcLwcjwJJigA8w3rsBm4fXFewRrY8W3X/weDFcXm+qjPHhvOKEya+BkWmvKfDkTEZh
+ LflBM6jgSPx6Q6pKJoxqpNS3WH3RIWsdHuyYPjH/QpiIHvsApEUquGzXy+kUyVYECeHO ZQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 39rnxdktpp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jul 2021 01:21:24 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16E1Glat051196;
+        Wed, 14 Jul 2021 01:21:23 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2047.outbound.protection.outlook.com [104.47.74.47])
+        by userp3030.oracle.com with ESMTP id 39q0p6jn64-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jul 2021 01:21:23 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bqj2eur5iJqKY4/S8ZMvY9BDpaNNBvewmLkKvol7DRm6aTU2itiIRBVTB0fzlYkBNjLwY4jXEEs4zWBwkao1eHGL+P0jfhdk72r0IUY8N0uROg4Mu5k8U8MLGYk6PSCwqGex74Pz+QrofMdblpxhjeDPOfIqvoUlgzu7bVR9ZY+C//4aE/8NrIQlHUDEkJZfVOPO0dmiC6R6cYZTpa1pkQRBo46ChvjeA91oZY6K3VvDBs+kbneq5RiE2qxbj3ZA9yg7Fj2jXWVbJn6dMFrgm48jYe8xaqjRU60/LSMzxr+F5LgDFMRqP+SyC8bikTlm7xk3MY901zxEGDI4fg5NTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HhDOIGrF6r01BnNMu3friLwwAliKi2199b9QlnH9NoI=;
+ b=FOQ5C38Q4GZEtr90COF5BUdg6yk/6CDW4ba+KgsS/sDISOouzrxbIVx3r2HohJV1SR/RrJX9wpAXSZWTrWPH6lLE6VyHoiQmSJy254Cn+p+Je5PjIWQkTlhtwYaDK8js7ieMOW+DAk4S/g+miPr0OfbI2QEWinavJ9L9a7vTmjrY9yersPovhJrj4kmtj3t+ytG/lULcKyDOu2DL63M+9TIzI7uK2HHIiIi5DqldJ7mphKieaJxRtM7ZK3tlyizg+CDou3/a1XZbkBGg13Nd9rRhHi7SD5g53BTwMim+81NBij4JWYvd+x9EBYuZWguBGxnMuT1GgYAyQ4CggY238g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=NRnxrOCgHG4wcC+kxAa3PYFsa1gETBXfv7Mz8LLaKFk=;
-        b=hU+skSCwfNManDdL4EwLzayhRdhco92+/0uQYK5kGKUAQYZmRPJoyr+zPMnQbQL5jh
-         4eGItvWantJRBPsIGRULKSSGm3yEp8OsD10rnXC60SRwUpCuqDgurkEINStuvSnmN5Tm
-         5KiDGhACTqMvPk9PiCSRKPK3RYR7e1it0mU8CFADFvN2JPHgKnmRYRH7sXP38Aip4Cz1
-         C3pzcb3jG4kOrfvy7OwVrPVKwR62rD+RyuZZJHe4D35ZAMzjGZHWK4tkM2LQ/WLnvlYU
-         fjo1mklcijJc1+/wCFxVsZRBtkQK8sibInZnom0k/UN01TjA47J1bkL4Vfn3gaNTXnuT
-         ywQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=NRnxrOCgHG4wcC+kxAa3PYFsa1gETBXfv7Mz8LLaKFk=;
-        b=jLxWK55PXvKkSfIpdhYj2uzlmJaXnYfI4OkANdv2klHHssp01V8aXXmrl2DhefuA6A
-         EciqimA9e3c2RhBjMCJkMBMInR08UQHitnSAQVi5xilTUIic/JHHsNXzAwP+txYfrk4Z
-         XYQen+zuKgSb98x4/O7kLlNGWDQ8B7mCGEPz7G2QB12A5YeaNyx+eDcvZBCL7l43Gv/t
-         5JeN/xm7AA5e5CTwDBi0JVfHa7qrnd7ycN+lObZGLNh9JTCp1r1zzIFZgb8OD/YGW8d/
-         Nc+35AJj4inCi4YqZ0RJSuRCXEqdXs+En1bnYZAGa9JUAanhFharZLgYttF//E+gQqyR
-         oOaw==
-X-Gm-Message-State: AOAM530ShESD1Mo/7E6DJjaL1BP4MS7pawCjbI/L25miUuXr12VxA8hZ
-        G2yxKLstuvMrToQwyNz7AgiDIsubUbFILJyEXlFL2oSzYELhvA==
-X-Google-Smtp-Source: ABdhPJzAYRlDq9/mV2UWB7nDZHYYz69K3K1aMmSIja9Ohj/C20Z8502aM/ztxfyT3rOsRzTZjO7FWH0neq496I+RM2A=
-X-Received: by 2002:a2e:6e09:: with SMTP id j9mr6642621ljc.319.1626225685442;
- Tue, 13 Jul 2021 18:21:25 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HhDOIGrF6r01BnNMu3friLwwAliKi2199b9QlnH9NoI=;
+ b=VZLkmQhKKJk7NSljS58cz4hW76WNjMCPQmNmIjJ/Hv8ZdPhaovFC+GghkJ2iQ0ASEi0GL8yWiTT1saAwFGja/uWz6OP/L8nS0GvKBSKpq7NqLPHMu1rW4+0S/AX8aaZAObG0msKpJYai3mMHkps/2mpcwbs8gwjrahGOio02eZE=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=oracle.com;
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com (2603:10b6:303:9e::12)
+ by MWHPR1001MB2349.namprd10.prod.outlook.com (2603:10b6:301:30::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.26; Wed, 14 Jul
+ 2021 01:21:18 +0000
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::f8c1:a59:f070:5a5f]) by CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::f8c1:a59:f070:5a5f%3]) with mapi id 15.20.4308.027; Wed, 14 Jul 2021
+ 01:21:18 +0000
+Subject: Re: [smartpqi updates V2 PATCH 5/9] smartpqi: add SCSI cmd info for
+ resets
+To:     Don Brace <don.brace@microchip.com>, hch@infradead.org,
+        martin.peterson@oracle.com, jejb@linux.vnet.ibm.com,
+        linux-scsi@vger.kernel.org
+Cc:     Kevin.Barnett@microchip.com, scott.teel@microchip.com,
+        Justin.Lindley@microchip.com, scott.benesh@microchip.com,
+        gerry.morong@microchip.com, mahesh.rajashekhara@microchip.com,
+        mike.mcgowen@microchip.com, murthy.bhat@microchip.com,
+        balsundar.p@microchip.com, joseph.szczypek@hpe.com,
+        jeff@canonical.com, POSWALD@suse.com, mwilck@suse.com,
+        pmenzel@molgen.mpg.de, linux-kernel@vger.kernel.org
+References: <20210713210243.40594-1-don.brace@microchip.com>
+ <20210713210243.40594-6-don.brace@microchip.com>
+From:   John Donnelly <john.p.donnelly@oracle.com>
+Message-ID: <0b7233d7-4b4f-61e7-ec31-8a5de59f4628@oracle.com>
+Date:   Tue, 13 Jul 2021 20:21:14 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <20210713210243.40594-6-don.brace@microchip.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM5PR04CA0030.namprd04.prod.outlook.com
+ (2603:10b6:3:12b::16) To CO1PR10MB4722.namprd10.prod.outlook.com
+ (2603:10b6:303:9e::12)
 MIME-Version: 1.0
-From:   Bryce Evans <bryceevans@gmail.com>
-Date:   Tue, 13 Jul 2021 18:21:13 -0700
-Message-ID: <CAMRENR2g+nCaxfFGcgaMLm0TxQ+aTZA4E_UZarhRMoPAB3Uxhg@mail.gmail.com>
-Subject: PROBLEM: sas_address sysfs attribute empty on E208i-p SR Gen10
-To:     don.brace@microsemi.com
-Cc:     esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.1.106] (47.220.66.60) by DM5PR04CA0030.namprd04.prod.outlook.com (2603:10b6:3:12b::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.20 via Frontend Transport; Wed, 14 Jul 2021 01:21:16 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5081156c-3053-49c5-296f-08d94665ae82
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2349:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB2349C22A87C40F88099B46B5C7139@MWHPR1001MB2349.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e3GIOGc1gD51XcYcOxyfXEXVlj5Vno3wIxSpVI8fV46wbw76XVcG8U+WBF2vxx/n/CmiSe0CJnZmfv9tkQUBr77sOHm9Q2g3o0i5JDg15TC/UMRuQyR/aDTXOn9mHB9m+v/NjL3Gz18Y7odi3HF7+Y1ypDfTWkQMzijaxd4xBlXoBJyD8mMUM4K18W+o6i/cNEgluDJruBsvwAFIEdXorrbpiH7XSdnMpcWsitC7xwfGpiCkKpDP8e4ygKXCccsk80gyVoayVNeFnl+kHn7ePDTa7Spcx90R9LDeve9hIuacUfw8E9+nFojD4xvK/yjcR/SPNvDqJy8ZN/zPgQZxi26nCG0vEDI0TxzETOtaWO0skM8FO9JyHtOd9WOGAADkOp3ePT1IlXB4WRoV1lxWLrGwjCq/sCiYxmHVItyfbgkVUdWBLtIoWkF+EHt7r5E7qsr0XmXJXjQnVWlKw8US5y9G1HsN2FoIPgU55pYwhnQVEU4MpKCz8UpHaN6uSUf0DDPcRnUCNrYjI6mSnz/kmuuHQOsw9Ilqm4h+1l9LbX3OhNBQ9WzE1tmXZKtMJHqJDCJMHLEyrhumHEjvRUSPGHcdsHi7jfmcpnAF8ksh9aiHcen6/gzoVadhmbfN8EWuRnrj1fTMRA1hPABqvxS5XT1F+Y6/2IfHDwkLZagBiEWyfTh1XMPYkamTzZvislMB0syqhHLPZpAd/I3lpw6eXE6i+y067BEz85YkT1CGJwA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4722.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(376002)(136003)(39860400002)(346002)(4326008)(478600001)(86362001)(186003)(31686004)(5660300002)(316002)(16576012)(6486002)(26005)(38100700002)(7416002)(2616005)(66556008)(956004)(2906002)(66476007)(66946007)(53546011)(8676002)(83380400001)(36756003)(8936002)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dDJKUE1ueDhpU09TM1NZU3p1dkUrTm50V0krdVY4Qkd5ckthdkVOQnQ0N2o1?=
+ =?utf-8?B?ejZLLzR5TjBZNzRpZ1RYT2lVOXA3TENKM0szazAzbTNtOUJMVXBIY01ubHFV?=
+ =?utf-8?B?OE42WVd3bWM3c1k2WlhIa1d4enJlbDRrN3lKeVVKdy9jMDI0cGV1WmVtb2Qw?=
+ =?utf-8?B?NVZTNzFEcjdTL1ZTSEdYOWJsaWloYXVHUHg0UHRWYkNuRHBTWjFXRUlMd083?=
+ =?utf-8?B?bzFZa3EwczBZSElqOXhDWTgrNGhER3V5eHBhSW9nQ3NhZVFYM2QvTStDbVZ5?=
+ =?utf-8?B?bkNTWkthNW9QNGZoSkREN2tGaE9vVy8vc2ZacFFSOFlhSCtBd1hHYWIwdDRU?=
+ =?utf-8?B?dXRKSzVNU240QXV6R0ozWGFIL0oyeUVHcWlCWUVwOStUNExzU3BOdHp2MDA5?=
+ =?utf-8?B?eXIwTXV2UmRSTTBFVXpvZm1LSkUzaGFNejJPa0o4VlF2KzRNcWYwSGh2TnBE?=
+ =?utf-8?B?VzIxZHYyN3R1dkRYWHJqRFRXdVViZGRGTUcwa1RvZXJhY2xaZHVCU3d6eHpG?=
+ =?utf-8?B?bk9wSlRaNEZjNnFxdEhnZDQ2bjdzVHAyTXJ1UDR5dWVrbzVMQ05IWngyaXht?=
+ =?utf-8?B?SkNpZ3pSR09wZTVvS29IZGVUVlQ3ZVlRR05QYzVaN2lkZDFOcXYyQ2RqUk9l?=
+ =?utf-8?B?d09jWkVKNk8wNmRaUk1YUGdLcThGTG80ZmVvbVQyNzhWcy85THVMYXdXQWNM?=
+ =?utf-8?B?ZlhmbWUzT2xucWhrS0VCNTIzdHNGM29LZXN6a3RiOXMxcm9lU2hVOE9RMExB?=
+ =?utf-8?B?UkJwZkN1WmZRb1dDOFJLYkZmbTNjL3BTcnRTWk5ZZjBNU1JNVkhKUTJEblZH?=
+ =?utf-8?B?aGZCZDdpV0VUSFB4dTFZV2ZlTzZHOFUydC9vZ2ZwK0thb3BUb1htTkU4Q2tU?=
+ =?utf-8?B?cmczc0pUZ1J5bWtCZHZtM1VQekkybEcvZFUzM0d2eTF4LzZkRStKU2h5QlZt?=
+ =?utf-8?B?TE1CLzdMU2d3cnlhMWdEZndwQjYxMy93WGVRTEdPSWd1Z2tHTWN5Q2tXL0Zi?=
+ =?utf-8?B?dFplYStCdUc2ZkRSY3h4TDRVMWpIVlFLUS95anMraTQ3enJ0WVZIaHQ4VzVB?=
+ =?utf-8?B?WHdKL0ZpRUhTOUJnVGdkMDBIVlExcnJMRWN5eEJ6bkZxT1U3RzZMS3EyNVJN?=
+ =?utf-8?B?aktDZ3NNTDl4SjVpWW9nUEhjbitLSTZKVDh6QUNlQ2hKY1A4T1YvbUZUOE5s?=
+ =?utf-8?B?dDBadURLVHJwUGpGQ044dFJTUGRXWCt3elMzYnRIR1g5d2NVaG1oZFFXbm1W?=
+ =?utf-8?B?UEE2ZzZ5bi9SL1JPQllmSFlWZHk3WkVMeTlhVDQveEVOaWJpbEpUQ3pSZjRY?=
+ =?utf-8?B?OFZlMWJzNTBDT2J4MkxyN0lpRVNTdjVzVHlmclZ1VTZFUUVrUGdTbEl4ZXpT?=
+ =?utf-8?B?MWZZNkd3VDJnOWlhdmU1UHl5ZUphOVovYlNJUkVhYUQ0cWlTc3Q1MUZWSHVr?=
+ =?utf-8?B?VkJ1NkMxMVp3SStuNmJFNmFDZWxoemxQTU9BeCtMRk5scSt3VVJNM0lwdHcx?=
+ =?utf-8?B?NFlKcVY4eGM0RFhBWjlSbWRjTGhkWllqcERSZUhsZFFVLyt6ekFFK2tGU2Qv?=
+ =?utf-8?B?QlppcWsvRzYvenJ0SlVNM2lqbEx3dHdWaVl1ZlExOEswVEFpT0lmajlQbWlj?=
+ =?utf-8?B?bnJ5bng3QW5DdDVoL21UZGFVM1hmaGxBdFgvU3p2TXZXdm9UR2tLa0llUFZX?=
+ =?utf-8?B?dlZzZGphdExBN2RQSnFHYmIzSjFjT1ZPSDE3YkFPQkM4S3FPSC92SDJxc1Zt?=
+ =?utf-8?Q?nTg9PGbIDF2EYOJs4K4YeDUfZeOIC1Fkhxuru7H?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5081156c-3053-49c5-296f-08d94665ae82
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4722.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2021 01:21:18.4516
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BO3Oo8SaAlWxLMKLkdjOqPvYJOW8O2Eh0HtOTP4PW68tPkGYpHMbzztsEjX8/Xc0id6lkpF7h3/12u2WYcY7SyTR7XSVzqGDEHZYG1aOC4w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2349
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10044 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107140004
+X-Proofpoint-GUID: qfeZL3A3tzLlGIBfhSprGp5Vb3bLnQiu
+X-Proofpoint-ORIG-GUID: qfeZL3A3tzLlGIBfhSprGp5Vb3bLnQiu
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The sas_address device attribute in sas_device sysfs in is 0x0, and
-missing (empty or null?) in scsi_disk sysfs on LTS kernel 5.10.x, and
-Stable 5.13.1
-
-Specifically  /sys/class/scsi_disk/X:X/device/sas_address and
-/sys/class/sas_device/end_device-X:X/sas_address are null and 0x0
-respectively
-
-Using this device in hba mode (pass through) - Serial Attached SCSI
-controller: Adaptec Smart Storage PQI 12G SAS/PCIe 3 (rev 01)
-Subsystem: Hewlett-Packard Company Smart Array E208i-p SR Gen10
-
-This appears to have regressed some time after 4.19 (expected results
-from 4.19 below)
-
-It seems that systemd udev depends on this attribute from sysfs to
-populate /dev/disk/by-path, and when it is unavailable the sas_address
-shows as 0x0, which breaks population of this directory, potentially
-breaking userspace tools that rely on this
-
-==================================================================
-udevadm uses 0x0 for the address variable of ID_PATH, causing unique
-disks to have the same identifier used for ID_PATH, which breaks
-population of /dev/disk/by-path
-
-[bryce@myhost ~]$ udevadm info /dev/sdy | grep "ID_PATH=""
-E: ID_PATH=pci-0000:5c:00.0-sas-0x0000000000000000-lun-0
-
-[bryce@myhost ~]$ udevadm info /dev/sdx | grep "ID_PATH=""
-E: ID_PATH=pci-0000:5c:00.0-sas-0x0000000000000000-lun-0
-
-you can see the above 2 disks, should have a unique ID_PATH, and do not.
+On 7/13/21 4:02 PM, Don Brace wrote:
+> From: Murthy Bhat <Murthy.Bhat@microchip.com>
+> 
+> Report on SCSI command that has triggered the reset.
+>   - Also add check for NULL SCSI commands resulting from
+>     issuing sg_reset when there is no outstanding commands.
+> 
+>     Example:
+>     sg_reset -d /dev/sgXY
+>     smartpqi 0000:39:00.0: resetting scsi 4:0:1:0 due to cmd 0x12
+> 
+> Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+> Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
+> Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+> Reviewed-by: Scott Teel <scott.teel@microchip.com>
+> Signed-off-by: Murthy Bhat <Murthy.Bhat@microchip.com>
+> Signed-off-by: Don Brace <don.brace@microchip.com>
 
 
-==================================================================
-In kernel sysfs, we see empty sas_address attribute for each disk
-attached to the hba in the scsi_disk sysfs
+Acked-by:  John Donnelly <john.p.donnelly@oracle.com>
 
-[bryce@myhost ~]$ cat /sys/class/scsi_disk/*/device/sas_address
-cat: /sys/class/scsi_disk/0:0:0:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/0:0:1:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:0:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:10:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:1:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:11:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:12:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:13:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:14:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:15:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:16:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:17:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:18:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:19:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:20:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:2:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:21:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:22:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:23:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:3:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:4:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:5:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:6:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:7:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:8:0/device/sas_address: No such device
-cat: /sys/class/scsi_disk/1:0:9:0/device/sas_address: No such device
-==================================================================
+> ---
+>   drivers/scsi/smartpqi/smartpqi_init.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+> index 29382b290243..ffc7ca221e27 100644
+> --- a/drivers/scsi/smartpqi/smartpqi_init.c
+> +++ b/drivers/scsi/smartpqi/smartpqi_init.c
+> @@ -6033,8 +6033,10 @@ static int pqi_eh_device_reset_handler(struct scsi_cmnd *scmd)
+>   	mutex_lock(&ctrl_info->lun_reset_mutex);
+>   
+>   	dev_err(&ctrl_info->pci_dev->dev,
+> -		"resetting scsi %d:%d:%d:%d\n",
+> -		shost->host_no, device->bus, device->target, device->lun);
+> +		"resetting scsi %d:%d:%d:%d due to cmd 0x%02x\n",
+> +		shost->host_no,
+> +		device->bus, device->target, device->lun,
+> +		scmd->cmd_len > 0 ? scmd->cmnd[0] : 0xff);
+>   
+>   	pqi_check_ctrl_health(ctrl_info);
+>   	if (pqi_ctrl_offline(ctrl_info))
+> 
 
-See the following end device to pci device  mapping
-[bryce@myhost ~]$ ls -al /sys/class/sas_device/
-total 0
-drwxr-xr-x  2 root root 0 Jul 13 16:06 .
-drwxr-xr-x 77 root root 0 Jul 13 16:06 ..
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-0:1 ->
-../../devices/pci0000:36/0000:36:02.0/0000:38:00.0/host0/scsi_host/host0/port-0:1/end_device-0:1/sas_device/end_device-0:1
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-0:2 ->
-../../devices/pci0000:36/0000:36:02.0/0000:38:00.0/host0/scsi_host/host0/port-0:2/end_device-0:2/sas_device/end_device-0:2
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-0:3 ->
-../../devices/pci0000:36/0000:36:02.0/0000:38:00.0/host0/scsi_host/host0/port-0:3/end_device-0:3/sas_device/end_device-0:3
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:1 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:1/end_device-1:1/sas_device/end_device-1:1
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:10 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:10/end_device-1:10/sas_device/end_device-1:10
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:11 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:11/end_device-1:11/sas_device/end_device-1:11
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:12 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:12/end_device-1:12/sas_device/end_device-1:12
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:13 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:13/end_device-1:13/sas_device/end_device-1:13
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:14 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:14/end_device-1:14/sas_device/end_device-1:14
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:15 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:15/end_device-1:15/sas_device/end_device-1:15
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:16 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:16/end_device-1:16/sas_device/end_device-1:16
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:17 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:17/end_device-1:17/sas_device/end_device-1:17
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:18 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:18/end_device-1:18/sas_device/end_device-1:18
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:19 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:19/end_device-1:19/sas_device/end_device-1:19
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:2 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:2/end_device-1:2/sas_device/end_device-1:2
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:20 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:20/end_device-1:20/sas_device/end_device-1:20
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:21 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:21/end_device-1:21/sas_device/end_device-1:21
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:22 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:22/end_device-1:22/sas_device/end_device-1:22
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:23 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:23/end_device-1:23/sas_device/end_device-1:23
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:24 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:24/end_device-1:24/sas_device/end_device-1:24
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:25 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:25/end_device-1:25/sas_device/end_device-1:25
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:26 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:26/end_device-1:26/sas_device/end_device-1:26
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:27 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:27/end_device-1:27/sas_device/end_device-1:27
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:3 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:3/end_device-1:3/sas_device/end_device-1:3
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:4 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:4/end_device-1:4/sas_device/end_device-1:4
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:5 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:5/end_device-1:5/sas_device/end_device-1:5
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:6 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:6/end_device-1:6/sas_device/end_device-1:6
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:7 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:7/end_device-1:7/sas_device/end_device-1:7
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:8 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:8/end_device-1:8/sas_device/end_device-1:8
-lrwxrwxrwx  1 root root 0 Jul 13 16:06 end_device-1:9 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/scsi_host/host1/port-1:9/end_device-1:9/sas_device/end_device-1:9
-==================================================================
-
-and 0x0 in sysfs for sas_device/end_device sas_addresses (this is what
-breaks udev)
-
-[bryce@myhost ~]$ for d in $(ls
-/sys/class/sas_device/end_device*/sas_address); do echo $d; cat
-$d;done
-/sys/class/sas_device/end_device-0:1/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-0:2/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-0:3/sas_address
-0x51402ec0130545a8
-/sys/class/sas_device/end_device-1:10/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:11/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:12/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:13/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:14/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:15/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:16/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:17/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:18/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:19/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:1/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:20/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:21/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:22/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:23/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:24/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:25/sas_address
-0x50014380436ed4bc
-/sys/class/sas_device/end_device-1:26/sas_address
-0x50014380436ec7fc
-/sys/class/sas_device/end_device-1:27/sas_address
-0x51402ec013612638
-/sys/class/sas_device/end_device-1:2/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:3/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:4/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:5/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:6/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:7/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:8/sas_address
-0x0000000000000000
-/sys/class/sas_device/end_device-1:9/sas_address
-0x0000000000000000
-
-==================================================================
-lspci -vvv output
-
-38:00.0 Serial Attached SCSI controller: Adaptec Smart Storage PQI 12G
-SAS/PCIe 3 (rev 01)
-Subsystem: Hewlett-Packard Company Smart Array E208i-a SR Gen10
-Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr+
-Stepping- SERR+ FastB2B- DisINTx+
-Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-Latency: 0, Cache Line Size: 64 bytes
-Interrupt: pin A routed to IRQ 30
-NUMA node: 0
-Region 0: Memory at e2800000 (64-bit, non-prefetchable) [size=32K]
-Region 4: I/O ports at 6000 [size=256]
-Capabilities: [80] Power Management version 3
-Flags: PMEClk- DSI- D1+ D2- AuxCurrent=0mA PME(D0+,D1+,D2-,D3hot+,D3cold-)
-Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-Capabilities: [b0] MSI-X: Enable+ Count=64 Masked-
-Vector table: BAR=0 offset=00002000
-PBA: BAR=0 offset=00003000
-Capabilities: [c0] Express (v2) Endpoint, MSI 00
-DevCap: MaxPayload 512 bytes, PhantFunc 0, Latency L0s <4us, L1 <1us
-ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit 0.000W
-DevCtl: Report errors: Correctable- Non-Fatal+ Fatal+ Unsupported-
-RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
-MaxPayload 256 bytes, MaxReadReq 4096 bytes
-DevSta: CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr- TransPend-
-LnkCap: Port #0, Speed 8GT/s, Width x8, ASPM L1, Exit Latency L0s <1us, L1 <1us
-ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp+
-LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk+
-ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-LnkSta: Speed 8GT/s, Width x8, TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
-DevCap2: Completion Timeout: Range B, TimeoutDis+, LTR-, OBFF Via message
-DevCtl2: Completion Timeout: 65ms to 210ms, TimeoutDis-, LTR-, OBFF Disabled
-LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
-Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
-Compliance De-emphasis: -6dB
-LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+,
-EqualizationPhase1+
-EqualizationPhase2+, EqualizationPhase3+, LinkEqualizationRequest-
-Capabilities: [100 v2] Advanced Error Reporting
-UESta: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
-MalfTLP- ECRC- UnsupReq- ACSViol-
-UEMsk: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
-MalfTLP- ECRC- UnsupReq- ACSViol-
-UESvrt: DLP- SDES+ TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
-MalfTLP- ECRC- UnsupReq- ACSViol-
-CESta: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr+
-CEMsk: RxErr+ BadTLP+ BadDLLP+ Rollover+ Timeout+ NonFatalErr+
-AERCap: First Error Pointer: 00, GenCap+ CGenEn- ChkCap+ ChkEn-
-Capabilities: [300 v1] #19
-Kernel driver in use: smartpqi
-
-5c:00.0 Serial Attached SCSI controller: Adaptec Smart Storage PQI 12G
-SAS/PCIe 3 (rev 01)
-Subsystem: Hewlett-Packard Company Smart Array E208i-p SR Gen10
-Physical Slot: 1
-Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr+
-Stepping- SERR+ FastB2B- DisINTx+
-Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-Latency: 0, Cache Line Size: 64 bytes
-Interrupt: pin A routed to IRQ 32
-NUMA node: 1
-Region 0: Memory at e6c00000 (64-bit, non-prefetchable) [size=32K]
-Region 4: I/O ports at 8000 [size=256]
-Capabilities: [80] Power Management version 3
-Flags: PMEClk- DSI- D1+ D2- AuxCurrent=0mA PME(D0+,D1+,D2-,D3hot+,D3cold-)
-Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-Capabilities: [b0] MSI-X: Enable+ Count=64 Masked-
-Vector table: BAR=0 offset=00002000
-PBA: BAR=0 offset=00003000
-Capabilities: [c0] Express (v2) Endpoint, MSI 00
-DevCap: MaxPayload 512 bytes, PhantFunc 0, Latency L0s <4us, L1 <1us
-ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit 0.000W
-DevCtl: Report errors: Correctable- Non-Fatal+ Fatal+ Unsupported-
-RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
-MaxPayload 256 bytes, MaxReadReq 4096 bytes
-DevSta: CorrErr+ UncorrErr- FatalErr- UnsuppReq+ AuxPwr- TransPend-
-LnkCap: Port #0, Speed 8GT/s, Width x8, ASPM L1, Exit Latency L0s <1us, L1 <1us
-ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp+
-LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk+
-ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-LnkSta: Speed 8GT/s, Width x8, TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
-DevCap2: Completion Timeout: Range B, TimeoutDis+, LTR-, OBFF Via message
-DevCtl2: Completion Timeout: 65ms to 210ms, TimeoutDis-, LTR-, OBFF Disabled
-LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
-Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
-Compliance De-emphasis: -6dB
-LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+,
-EqualizationPhase1+
-EqualizationPhase2+, EqualizationPhase3+, LinkEqualizationRequest-
-Capabilities: [100 v2] Advanced Error Reporting
-UESta: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
-MalfTLP- ECRC- UnsupReq- ACSViol-
-UEMsk: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
-MalfTLP- ECRC- UnsupReq- ACSViol-
-UESvrt: DLP- SDES+ TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
-MalfTLP- ECRC- UnsupReq- ACSViol-
-CESta: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr+
-CEMsk: RxErr+ BadTLP+ BadDLLP+ Rollover+ Timeout+ NonFatalErr+
-AERCap: First Error Pointer: 00, GenCap+ CGenEn- ChkCap+ ChkEn-
-Capabilities: [300 v1] #19
-Kernel driver in use: smartpqi
-
-==================================================================
-linux version
-Linux version 5.13.1-1.el7.x86_64 (bryce@myhost2) (gcc (GCC) 9.3.1
-20200408 (Red Hat 9.3.1-2), GNU ld version 2.32-16.el7) #1 SMP Tue Jul
-13 15:46:58 UTC 2021
-
-==================================================================
-.config
-I Think the only relevant thing in .config are the following, I can
-paste the entire .config if you think necessary
-
-CONFIG_SCSI_SMARTPQI=y
-CONFIG_SCSI_SAS_ATTRS=y
-CONFIG_SCSI_SAS_LIBSAS=m
-CONFIG_SCSI_SAS_ATA=y
-==================================================================
-[bryce@myhost ~]$ sudo cat /proc/scsi/scsi
-
-Attached devices:
-Host: scsi0 Channel: 00 Id: 00 Lun: 00
-  Vendor: ATA      Model: MK000480GWSSC    Rev: HPG0
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi0 Channel: 00 Id: 01 Lun: 00
-  Vendor: ATA      Model: MK000480GWSSC    Rev: HPG0
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi0 Channel: 00 Id: 02 Lun: 00
-  Vendor: HPE      Model: Smart Adapter    Rev: 3.53
-  Type:   Enclosure                        ANSI  SCSI revision: 05
-Host: scsi0 Channel: 02 Id: 00 Lun: 00
-  Vendor: HPE      Model: E208i-a SR Gen10 Rev: 3.53
-  Type:   RAID                             ANSI  SCSI revision: 05
-Host: scsi1 Channel: 00 Id: 00 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 01 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 02 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 03 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 04 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 05 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 06 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 07 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 08 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 09 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 10 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 11 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 12 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 13 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 14 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 15 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 16 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 17 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 18 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 19 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 20 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 21 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 22 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 23 Lun: 00
-  Vendor: ATA      Model: MB012000GWDFE    Rev: HPG2
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 24 Lun: 00
-  Vendor: HPE      Model: Apollo 4200 LFF  Rev: 1.78
-  Type:   Enclosure                        ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 25 Lun: 00
-  Vendor: HPE      Model: Apollo 4200 LFF  Rev: 1.78
-  Type:   Enclosure                        ANSI  SCSI revision: 06
-Host: scsi1 Channel: 00 Id: 26 Lun: 00
-  Vendor: HPE      Model: Smart Adapter    Rev: 3.53
-  Type:   Enclosure                        ANSI  SCSI revision: 05
-Host: scsi1 Channel: 02 Id: 00 Lun: 00
-  Vendor: HPE      Model: E208i-p SR Gen10 Rev: 3.53
-  Type:   RAID                             ANSI  SCSI revision: 05
-Host: scsi2 Channel: 00 Id: 00 Lun: 00
-  Vendor: Generic- Model: SD/MMC CRW       Rev: 1.00
-  Type:   Direct-Access                    ANSI  SCSI revision: 06
-
-==================================================================
- modules (shouldn't matter, using kernel driver)
-
-  [bryce@myhost ~]$ cat /proc/modules
-binfmt_misc 24576 1 - Live 0x0000000000000000
-fuse 143360 5 - Live 0x0000000000000000
-scsi_transport_iscsi 139264 1 - Live 0x0000000000000000
-bonding 196608 0 - Live 0x0000000000000000
-tls 110592 1 bonding, Live 0x0000000000000000
-xt_TCPMSS 16384 4 - Live 0x0000000000000000
-xt_multiport 20480 4 - Live 0x0000000000000000
-ip6table_mangle 16384 1 - Live 0x0000000000000000
-ip6t_REJECT 16384 2 - Live 0x0000000000000000
-nf_reject_ipv6 20480 1 ip6t_REJECT, Live 0x0000000000000000
-ip6table_filter 16384 1 - Live 0x0000000000000000
-ip6table_raw 16384 1 - Live 0x0000000000000000
-ip6_tables 28672 3 ip6table_mangle,ip6table_filter,ip6table_raw, Live
-0x0000000000000000
-ipt_REJECT 16384 2 - Live 0x0000000000000000
-nf_reject_ipv4 16384 1 ipt_REJECT, Live 0x0000000000000000
-xt_conntrack 16384 2 - Live 0x0000000000000000
-iptable_filter 16384 1 - Live 0x0000000000000000
-xt_CT 16384 42 - Live 0x0000000000000000
-nf_conntrack 163840 2 xt_conntrack,xt_CT, Live 0x0000000000000000
-nf_defrag_ipv6 24576 1 nf_conntrack, Live 0x0000000000000000
-nf_defrag_ipv4 16384 1 nf_conntrack, Live 0x0000000000000000
-iptable_raw 16384 1 - Live 0x0000000000000000
-intel_powerclamp 20480 0 - Live 0x0000000000000000
-coretemp 20480 0 - Live 0x0000000000000000
-kvm_intel 339968 0 - Live 0x0000000000000000
-kvm 1007616 1 kvm_intel, Live 0x0000000000000000
-irqbypass 16384 1 kvm, Live 0x0000000000000000
-crct10dif_pclmul 16384 1 - Live 0x0000000000000000
-mgag200 36864 0 - Live 0x0000000000000000
-crc32_pclmul 16384 0 - Live 0x0000000000000000
-mlx5_ib 389120 0 - Live 0x0000000000000000
-ib_uverbs 167936 1 mlx5_ib, Live 0x0000000000000000
-drm_kms_helper 278528 1 mgag200, Live 0x0000000000000000
-ghash_clmulni_intel 16384 0 - Live 0x0000000000000000
-drm 663552 2 mgag200,drm_kms_helper, Live 0x0000000000000000
-syscopyarea 16384 1 drm_kms_helper, Live 0x0000000000000000
-sysfillrect 16384 1 drm_kms_helper, Live 0x0000000000000000
-aesni_intel 380928 0 - Live 0x0000000000000000
-crypto_simd 16384 1 aesni_intel, Live 0x0000000000000000
-sysimgblt 16384 1 drm_kms_helper, Live 0x0000000000000000
-acpi_ipmi 20480 0 - Live 0x0000000000000000
-ib_core 413696 2 mlx5_ib,ib_uverbs, Live 0x0000000000000000
-pcspkr 16384 0 - Live 0x0000000000000000
-cryptd 24576 2 ghash_clmulni_intel,crypto_simd, Live 0x0000000000000000
-mei_me 45056 0 - Live 0x0000000000000000
-fb_sys_fops 16384 1 drm_kms_helper, Live 0x0000000000000000
-ipmi_si 77824 2 - Live 0x0000000000000000
-i2c_algo_bit 16384 1 mgag200, Live 0x0000000000000000
-ses 20480 0 - Live 0x0000000000000000
-lpc_ich 28672 0 - Live 0x0000000000000000
-ipmi_devintf 20480 2 - Live 0x0000000000000000
-ioatdma 65536 0 - Live 0x0000000000000000
-enclosure 16384 1 ses, Live 0x0000000000000000
-mfd_core 20480 1 lpc_ich, Live 0x0000000000000000
-hpilo 24576 4 - Live 0x0000000000000000
-i2c_core 102400 4 mgag200,drm_kms_helper,drm,i2c_algo_bit, Live
-0x0000000000000000
-hpwdt 20480 0 - Live 0x0000000000000000
-mei 151552 1 mei_me, Live 0x0000000000000000
-dca 16384 1 ioatdma, Live 0x0000000000000000
-wmi 32768 0 - Live 0x0000000000000000
-ipmi_msghandler 118784 3 acpi_ipmi,ipmi_si,ipmi_devintf, Live 0x0000000000000000
-acpi_power_meter 20480 0 - Live 0x0000000000000000
-brd 16384 1 - Live 0x0000000000000000
-ip_tables 28672 2 iptable_filter,iptable_raw, Live 0x0000000000000000
-crc32c_intel 24576 2 - Live 0x0000000000000000
-mlx5_core 1298432 1 mlx5_ib, Live 0x0000000000000000
-mlxfw 36864 1 mlx5_core, Live 0x0000000000000000
-psample 20480 1 mlx5_core, Live 0x0000000000000000
-uas 32768 0 - Live 0x0000000000000000
-usb_storage 81920 1 uas, Live 0x0000000000000000
-dummy 16384 0 - Live 0x0000000000000000
-
-==================================================================
-********** 4.19 kernel expected results ****************
-********** Everything below here is working as expected, with kernel
-version 4.19 **********
-
-[bryce@myhost ~]$ uname -r
-4.19.132-1.el7.x86_64
-
-[bryce@myhost ~]$ sudo udevadm info /dev/sdy | grep "ID_PATH="
-E: ID_PATH=pci-0000:5c:00.0-sas-0x50014380436ed48a-lun-0
-[bryce@myhost ~]$ sudo udevadm info /dev/sdx | grep "ID_PATH="
-E: ID_PATH=pci-0000:5c:00.0-sas-0x50014380436ed489-lun-0
-
-note the ID_PATH var for udev is unique, and matches what sysfs shows
-in /sys/class/scsi_disk/X:X/device/sas_address
-
-==================================================================
-[bryce@myhost ~]$ cat /sys/class/scsi_disk/*/device/sas_address
-0x31402ec0130545a0
-0x31402ec0130545a2
-0x50014380436ec7c0
-0x50014380436ec7ca
-0x50014380436ec7c1
-0x50014380436ec7cb
-0x50014380436ed480
-0x50014380436ed481
-0x50014380436ed482
-0x50014380436ed483
-0x50014380436ed484
-0x50014380436ed485
-0x50014380436ed486
-0x50014380436ed487
-0x50014380436ed488
-0x50014380436ec7c2
-0x50014380436ed489
-0x50014380436ed48a
-0x50014380436ed48b
-0x50014380436ec7c3
-0x50014380436ec7c4
-0x50014380436ec7c5
-0x50014380436ec7c6
-0x50014380436ec7c7
-0x50014380436ec7c8
-0x50014380436ec7c9
-
-
-==================================================================
-[bryce@myhost ~]$  ls -al /sys/class/sas_device/
-total 0
-drwxr-xr-x  2 root root 0 Jul 13 20:40 .
-drwxr-xr-x 73 root root 0 Jul 13 20:35 ..
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-0:1 ->
-../../devices/pci0000:36/0000:36:02.0/0000:38:00.0/host0/port-0:1/end_device-0:1/sas_device/end_device-0:1
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-0:2 ->
-../../devices/pci0000:36/0000:36:02.0/0000:38:00.0/host0/port-0:2/end_device-0:2/sas_device/end_device-0:2
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-0:3 ->
-../../devices/pci0000:36/0000:36:02.0/0000:38:00.0/host0/port-0:3/end_device-0:3/sas_device/end_device-0:3
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:1 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:1/end_device-1:1/sas_device/end_device-1:1
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:10 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:10/end_device-1:10/sas_device/end_device-1:10
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:11 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:11/end_device-1:11/sas_device/end_device-1:11
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:12 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:12/end_device-1:12/sas_device/end_device-1:12
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:13 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:13/end_device-1:13/sas_device/end_device-1:13
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:14 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:14/end_device-1:14/sas_device/end_device-1:14
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:15 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:15/end_device-1:15/sas_device/end_device-1:15
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:16 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:16/end_device-1:16/sas_device/end_device-1:16
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:17 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:17/end_device-1:17/sas_device/end_device-1:17
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:18 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:18/end_device-1:18/sas_device/end_device-1:18
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:19 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:19/end_device-1:19/sas_device/end_device-1:19
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:2 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:2/end_device-1:2/sas_device/end_device-1:2
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:20 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:20/end_device-1:20/sas_device/end_device-1:20
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:21 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:21/end_device-1:21/sas_device/end_device-1:21
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:22 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:22/end_device-1:22/sas_device/end_device-1:22
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:23 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:23/end_device-1:23/sas_device/end_device-1:23
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:24 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:24/end_device-1:24/sas_device/end_device-1:24
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:25 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:25/end_device-1:25/sas_device/end_device-1:25
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:26 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:26/end_device-1:26/sas_device/end_device-1:26
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:27 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:27/end_device-1:27/sas_device/end_device-1:27
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:3 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:3/end_device-1:3/sas_device/end_device-1:3
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:4 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:4/end_device-1:4/sas_device/end_device-1:4
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:5 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:5/end_device-1:5/sas_device/end_device-1:5
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:6 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:6/end_device-1:6/sas_device/end_device-1:6
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:7 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:7/end_device-1:7/sas_device/end_device-1:7
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:8 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:8/end_device-1:8/sas_device/end_device-1:8
-lrwxrwxrwx  1 root root 0 Jul 13 20:35 end_device-1:9 ->
-../../devices/pci0000:5b/0000:5b:00.0/0000:5c:00.0/host1/port-1:9/end_device-1:9/sas_device/end_device-1:9
-==================================================================
-[bryce@myhost ~]$ for d in $(ls
-/sys/class/sas_device/end_device*/sas_address); do echo $d; cat
-$d;done
-/sys/class/sas_device/end_device-0:1/sas_address
-0x31402ec0130545a0
-/sys/class/sas_device/end_device-0:2/sas_address
-0x31402ec0130545a2
-/sys/class/sas_device/end_device-0:3/sas_address
-0x51402ec0130545a8
-/sys/class/sas_device/end_device-1:10/sas_address
-0x50014380436ec7c9
-/sys/class/sas_device/end_device-1:11/sas_address
-0x50014380436ec7ca
-/sys/class/sas_device/end_device-1:12/sas_address
-0x50014380436ec7cb
-/sys/class/sas_device/end_device-1:13/sas_address
-0x50014380436ed480
-/sys/class/sas_device/end_device-1:14/sas_address
-0x50014380436ed481
-/sys/class/sas_device/end_device-1:15/sas_address
-0x50014380436ed482
-/sys/class/sas_device/end_device-1:16/sas_address
-0x50014380436ed483
-/sys/class/sas_device/end_device-1:17/sas_address
-0x50014380436ed484
-/sys/class/sas_device/end_device-1:18/sas_address
-0x50014380436ed485
-/sys/class/sas_device/end_device-1:19/sas_address
-0x50014380436ed486
-/sys/class/sas_device/end_device-1:1/sas_address
-0x50014380436ec7c0
-/sys/class/sas_device/end_device-1:20/sas_address
-0x50014380436ed487
-/sys/class/sas_device/end_device-1:21/sas_address
-0x50014380436ed488
-/sys/class/sas_device/end_device-1:22/sas_address
-0x50014380436ed489
-/sys/class/sas_device/end_device-1:23/sas_address
-0x50014380436ed48a
-/sys/class/sas_device/end_device-1:24/sas_address
-0x50014380436ed48b
-/sys/class/sas_device/end_device-1:25/sas_address
-0x50014380436ed4bc
-/sys/class/sas_device/end_device-1:26/sas_address
-0x50014380436ec7fc
-/sys/class/sas_device/end_device-1:27/sas_address
-0x51402ec013612638
-/sys/class/sas_device/end_device-1:2/sas_address
-0x50014380436ec7c1
-/sys/class/sas_device/end_device-1:3/sas_address
-0x50014380436ec7c2
-/sys/class/sas_device/end_device-1:4/sas_address
-0x50014380436ec7c3
-/sys/class/sas_device/end_device-1:5/sas_address
-0x50014380436ec7c4
-/sys/class/sas_device/end_device-1:6/sas_address
-0x50014380436ec7c5
-/sys/class/sas_device/end_device-1:7/sas_address
-0x50014380436ec7c6
-/sys/class/sas_device/end_device-1:8/sas_address
-0x50014380436ec7c7
-/sys/class/sas_device/end_device-1:9/sas_address
-0x50014380436ec7c8
